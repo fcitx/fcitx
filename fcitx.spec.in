@@ -42,9 +42,6 @@ make
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install-strip
-mkdir -p %{buildroot}%{_datadir}/fcitx
-install -m 644 data/*.mb %{buildroot}%{_datadir}/fcitx
-install -m 644 data/*.dat %{buildroot}%{_datadir}/fcitx
 
 %clean
 [ ${RPM_BUILD_ROOT} != "/" ] && rm -rf ${RPM_BUILD_ROOT}
@@ -54,8 +51,8 @@ install -m 644 data/*.dat %{buildroot}%{_datadir}/fcitx
 %doc AUTHORS ChangeLog COPYING INSTALL README
 %doc doc/*.txt doc/*.htm
 %{_bindir}/*
-%{_datadir}/fcitx/*.mb
-%{_datadir}/fcitx/*.dat
+%{_datadir}/fcitx/data/*.mb
+%{_datadir}/fcitx/data/*.dat
 
 %changelog
 * Mon Feb 2 2004 xyb <xyb76@sina.com>
