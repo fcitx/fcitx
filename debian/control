@@ -1,0 +1,13 @@
+Source: fcitx
+Section: utils
+Priority: optional
+Maintainer: Xie Yanbo <xyb76@sina.com>
+Build-Depends: debhelper (>> 3.0.0), xlibs-dev, libxft-dev, libfreetype6-dev
+Standards-Version: 3.5.8
+
+Package: fcitx
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Free Chinese Input Toy for X (XIM)
+ FCITX is a simplified Chinese input server. It supports WuBi,
+ Pinyin and QuWei input method. It's small and fast.

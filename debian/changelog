@@ -1,0 +1,41 @@
+fcitx (2.0.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Wang WenRui <wangwr@ustc.edu>  Fri,  9 Jan 2004 22:25:38 +0800
+
+fcitx (2.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Su Yong <yoyosu@ustc.edu.cn>  Thu,  8 Jan 2004 20:19:34 +0800
+
+fcitx (1.8.5-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Yu Guanghui <ygh@debian.org>  Fri, 23 May 2003 00:43:04 +0800
+
+fcitx (1.8.4-3) unstable; urgency=low
+
+  * Fixed build error on arch without SIGUNUSED.
+
+ -- Yu Guanghui <ygh@debian.org>  Thu,  8 May 2003 11:18:28 +0800
+
+fcitx (1.8.4-2) unstable; urgency=low
+
+  * Remove gbk fonts.
+  * minor fixes.
+  * Just found it in wnpp, close it. (Closes:Bug#189271)
+
+ -- Yu Guanghui <ygh@debian.org>  Sat,  3 May 2003 15:56:54 +0800
+
+fcitx (1.8.4-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Yu Guanghui <ygh@debian.org>  Sat,  3 May 2003 14:24:40 +0800
+
+Local variables:
+mode: debian-changelog
+End:

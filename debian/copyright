@@ -1,0 +1,16 @@
+This package was debianized by Su Yong <yoyosu@ustc.edu.cn> on
+Thu,  8 Jan 2004 20:13:44 +0800
+based on the work of Yu Guanghui <ygh@debian.org>, who
+debianized fcitx-1.8.5 .
+
+It was downloaded from  http://www.fcitx.org
+
+Upstream Author: Yuking <yuking_net@sohu.com>
+
+Copyright:
+
+The programs in this package may be copied under the terms of the GNU
+General Public Licence (see below).
+
+On Debian systems, you can find the complete GNU GPL at
+/usr/share/common-licenses/GPL.

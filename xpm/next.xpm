@@ -1,0 +1,21 @@
+/* XPM */
+char            strXPMColor[] = "# c #0000ff";
+char            strXPMBackColor[] = ". c #ffffff";
+
+static char    *xpm_next[] = {
+    "6 12 2 1",
+    strXPMBackColor,
+    strXPMColor,
+    "#.....",
+    "##....",
+    "###...",
+    "####..",
+    "#####.",
+    "######",
+    "######",
+    "#####.",
+    "####..",
+    "###...",
+    "##....",
+    "#....."
+};
