@@ -79,6 +79,7 @@ binary-arch: build install
 	dh_installchangelogs ChangeLog
 	dh_installdocs
 	install -m 644 data/*.dat data/*.mb $(CURDIR)/debian/tmp/usr/share/fcitx/data/
+	install -m 644 xpm/logo.xpm $(CURDIR)/debian/tmp/usr/share/fcitx/xpm/
 	dh_installexamples
 #	dh_install
 #	dh_installmenu
