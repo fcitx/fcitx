@@ -42,6 +42,8 @@ extern HOTKEYS  hkCorner[];
 extern HOTKEYS  hkPunc[];
 extern HOTKEYS  hkPrevPage[];
 extern HOTKEYS  hkNextPage[];
+extern HOTKEYS  hkERBIPrevPage[];
+extern HOTKEYS  hkERBINextPage[];
 extern HOTKEYS  hkWBAddPhrase[];
 extern HOTKEYS  hkWBDelPhrase[];
 extern HOTKEYS  hkWBAdjustOrder[];
@@ -99,7 +101,6 @@ extern Bool     bUseAA;
 
 /*
  * 读取用户的设置文件
- * bMode: 是否读入所有的设置 ---- 在用户按ctrl_5读取设置时，有些设置不能马上生效
  */
 void LoadConfig (Bool bMode)
 {
@@ -116,7 +117,7 @@ void LoadConfig (Bool bMode)
 
     if (!fp) {
 	SaveConfig ();
-	LoadConfig (True);	//读入默认值
+	LoadConfig (True);		//读入默认值
 	return;
     }
 
@@ -295,10 +296,10 @@ void LoadConfig (Bool bMode)
 	    pstr += 17;
 	    bEngAfterCap = atoi (pstr);
 	}
-	else if (strstr (pstr, "联想方式禁止翻页=")) {
-	    pstr += 17;
-	    bDisablePagingInLegend = atoi (pstr);
-	}
+    else if (strstr (pstr, "联想方式禁止翻页=")) {
+        pstr += 17;
+        bDisablePagingInLegend = atoi (pstr);
+    }
 	else if (strstr (pstr, "联想支持=")) {
 	    pstr += 9;
 	    SetHotKey (pstr, hkLegend);
@@ -375,7 +376,16 @@ void LoadConfig (Bool bMode)
 	    pstr += 13;
 	    SetHotKey (pstr, hkWBDelPhrase);
 	}
-
+	
+	else if (strstr (pstr, "向前翻页=")) {
+	    pstr += 9;
+	    SetHotKey (pstr, hkERBIPrevPage);
+	}
+	else if (strstr (pstr, "向后翻页=")) {
+	    pstr += 9;
+	    SetHotKey (pstr, hkERBINextPage);
+	}
+	
 	else if (strstr (str, "使用全拼=")) {
 	    pstr += 9;
 	    bFullPY = atoi (pstr);
@@ -384,10 +394,10 @@ void LoadConfig (Bool bMode)
 	    pstr += 13;
 	    bPYCreateAuto = atoi (pstr);
 	}
-	else if (strstr (str, "保存自动组词=")) {
-	    pstr += 13;
-	    bPYSaveAutoAsPhrase = atoi (pstr);
-	}
+    else if (strstr (str, "保存自动组词=")) {
+        pstr += 13;
+        bPYSaveAutoAsPhrase = atoi (pstr);
+    }
 	else if (strstr (str, "增加拼音常用字=")) {
 	    pstr += 15;
 	    SetHotKey (pstr, hkPYAddFreq);
@@ -544,6 +554,10 @@ void SaveConfig (void)
     fprintf (fp, "增加五笔词组=CTRL_8\n");
     fprintf (fp, "调整五笔顺序=CTRL_6\n");
     fprintf (fp, "删除五笔词组=CTRL_7\n");
+
+	fprintf (fp, "\n[二笔]\n");
+    fprintf (fp, "向前翻页=[\n");
+    fprintf (fp, "向后翻页=]\n");
 
     fprintf (fp, "\n[拼音]\n");
     fprintf (fp, "使用全拼=0\n");
@@ -763,7 +777,7 @@ int CalculateRecordNumber (FILE * fpDict)
     for (;;) {
 	if (!fgets (strText, 100, fpDict))
 	    break;
-	
+
 	nNumber++;
     }
     rewind (fpDict);

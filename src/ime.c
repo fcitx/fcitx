@@ -5,6 +5,7 @@
 #include "IC.h"
 #include "punc.h"
 #include "wbx.h"
+#include "erbi.h"
 #include "py.h"
 #include "tools.h"
 
@@ -68,6 +69,9 @@ HOTKEYS         hkPunc[HOT_KEY_COUNT] = { ALT_SPACE, 0 };	//中文标点
 HOTKEYS         hkNextPage[HOT_KEY_COUNT] = { '.', 0 };	//下一页
 HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };	//上一页
 
+HOTKEYS         hkERBINextPage[HOT_KEY_COUNT] = { ']', 0 };
+HOTKEYS         hkERBIPrevPage[HOT_KEY_COUNT] = { '[', 0 };
+
 SINGLE_HZ       hzLastInput[MAX_HZ_SAVED];	//记录最近输入的汉字
 BYTE            iHZLastInputCount = 0;
 
@@ -128,6 +132,7 @@ void ResetInput (void)
     else {
 	bShowCursor = False;
 	ResetWBStatus ();
+	ResetEBStatus ();
     }
 }
 
@@ -286,7 +291,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			sprintf (strStringGet, "%c%c", 0xa3, 0xa0 + iKey - 32);
 			retVal = IRV_GET_CANDWORDS;
 		    }
-		    else if (iKey >= 'A' && iKey <= 'Z' && bEngAfterCap) {
+		    else if (iKey >= 'A' && iKey <= 'Z' && bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
 			bInCap = True;
 			if (!bIsInLegend && iCandWordCount) {
 			    pstr = GetCandWord (0);
@@ -307,10 +312,23 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			retVal = ChangePunc ();
 		    else if (IsHotKey (iKey, hkGBK))
 			retVal = ChangeGBK ();
-		    else if (IsHotKey (iKey, hkPrevPage))
-			retVal = GetCandWords (SM_PREV);
-		    else if (IsHotKey (iKey, hkNextPage))
-			retVal = GetCandWords (SM_NEXT);
+//need to adjust here for PrevPage & NetxPage Hotkey of different IMEs
+		    else if (IsHotKey (iKey, hkPrevPage)) {
+			if (imeIndex != IME_ERBI)
+			    retVal = GetCandWords (SM_PREV);
+		    }
+		    else if (IsHotKey (iKey, hkNextPage)) {
+			if (imeIndex != IME_ERBI)
+			    retVal = GetCandWords (SM_NEXT);
+		    }
+		    else if (IsHotKey (iKey, hkERBIPrevPage)) {
+			if (imeIndex == IME_ERBI)
+			    retVal = GetCandWords (SM_PREV);
+		    }
+		    else if (IsHotKey (iKey, hkERBINextPage)) {
+			if (imeIndex == IME_ERBI)
+			    retVal = GetCandWords (SM_NEXT);
+		    }
 		    else if (IsHotKey (iKey, hkLegend))
 			retVal = ChangeLegend ();
 
@@ -408,6 +426,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					    strStringGet[count + 1] = '\0';
 					    retVal = IRV_ENG;
 					}
+
 				    }
 				}
 			    }
@@ -490,20 +509,39 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 	else {
-	    if (iCodeInputCount == 1 && strCodeInput[0] == 'z' && !iCandWordCount) {
-		uMessageUp = 1;
-		messageUp[0].strMsg[0] = 'z';
-		messageUp[0].strMsg[1] = '\0';
-		messageUp[0].type = MSG_INPUT;
-		uMessageDown = 1;
-		strcpy (messageDown[0].strMsg, strStringGet);
-		messageDown[0].type = MSG_TIPS;
+	    if (imeIndex == IME_ERBI) {
+		if (iCodeInputCount == 1 && strCodeInput[0] == '`' && !iCandWordCount) {
+		    uMessageUp = 1;
+		    messageUp[0].strMsg[0] = '`';
+		    messageUp[0].strMsg[1] = '\0';
+		    messageUp[0].type = MSG_INPUT;
+		    uMessageDown = 1;
+		    strcpy (messageDown[0].strMsg, strStringGet);
+		    messageDown[0].type = MSG_TIPS;
+		}
+		else {
+		    if (iCurrentCandPage > 0)
+			bShowPrev = True;
+		    if (iCurrentCandPage < iCandPageCount)
+			bShowNext = True;
+		}
 	    }
 	    else {
-		if (iCurrentCandPage > 0)
-		    bShowPrev = True;
-		if (iCurrentCandPage < iCandPageCount)
-		    bShowNext = True;
+		if (iCodeInputCount == 1 && strCodeInput[0] == 'z' && !iCandWordCount) {
+		    uMessageUp = 1;
+		    messageUp[0].strMsg[0] = 'z';
+		    messageUp[0].strMsg[1] = '\0';
+		    messageUp[0].type = MSG_INPUT;
+		    uMessageDown = 1;
+		    strcpy (messageDown[0].strMsg, strStringGet);
+		    messageDown[0].type = MSG_TIPS;
+		}
+		else {
+		    if (iCurrentCandPage > 0)
+			bShowPrev = True;
+		    if (iCurrentCandPage < iCandPageCount)
+			bShowNext = True;
+		}
 	    }
 	}
 
@@ -561,7 +599,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 	;
     }
 
-    //不知道这个函数能不能解决双字母的问题    
+    //不知道这个函数能不能解决双字母的问题 ----- 看来是不行的了 -----暂时保留
     fflush (NULL);
 }
 
@@ -571,6 +609,7 @@ Bool IsHotKey (int iKey, HOTKEYS * hotkey)
 	return True;
     return False;
 }
+
 void UpdateHZLastInput (void)
 {
     int             iCount;
@@ -643,7 +682,7 @@ INPUT_RETURN_VALUE ChangeLegend (void)
 void SwitchIME (BYTE index)
 {
     if (index == (BYTE) - 1) {
-	if (imeIndex == IME_PINYIN)
+	if (imeIndex == IME_ERBI)
 	    imeIndex = IME_WUBI;
 	else
 	    imeIndex++;
@@ -663,7 +702,12 @@ void SwitchIME (BYTE index)
 	GetCandWords = PYGetCandWords;
 	GetCandWord = PYGetCandWord;
 	PhraseTips = NULL;
-
+	break;
+    case IME_ERBI:
+	DoInput = DoEBInput;
+	GetCandWords = EBGetCandWords;
+	GetCandWord = EBGetCandWord;
+	PhraseTips = EBPhraseTips;
 	break;
     }
 
@@ -673,6 +717,7 @@ void SwitchIME (BYTE index)
 	MAINWND_WIDTH = _MAINWND_WIDTH;
 
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
+    DisplayMainWindow();
 
     ResetInput ();
     XUnmapWindow (dpy, inputWindow);

@@ -18,6 +18,7 @@
 #include "SetLocale.h"
 #include "ime.h"
 #include "wbx.h"
+#include "erbi.h"
 #include "punc.h"
 #include "py.h"
 
@@ -60,7 +61,7 @@ int main (int argc, char *argv[])
     LoadConfig (True);
     GetLocale ();
     CreateFont ();
-    SetLocale ();    
+    SetLocale ();
 
     if (!LoadPuncDict ())
 	fprintf (stderr, "无法打开中文标点文件，将无法输入中文标点！\n");
@@ -81,7 +82,7 @@ int main (int argc, char *argv[])
 
 	id = fork ();
 	if (id == -1) {
-	    fprintf (stderr, "无法以后台方式运行 FCITX！\n");
+	    fprintf (stderr,"无法以后台方式运行 FCITX！\n");
 	    exit (1);
 	}
 	else if (id > 0)

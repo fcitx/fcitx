@@ -196,9 +196,10 @@ void InitInputWindowColor (void)
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, inputWindowLineColor.gc, iPixel);
 
-    cursorColor.color.red = cursorColor.color.red ^ inputWindowColor.backColor.red;
-    cursorColor.color.green = cursorColor.color.green ^ inputWindowColor.backColor.green;
-    cursorColor.color.blue = cursorColor.color.blue ^ inputWindowColor.backColor.blue;
+
+    cursorColor.color.red= cursorColor.color.red ^ inputWindowColor.backColor.red;
+    cursorColor.color.green= cursorColor.color.green ^ inputWindowColor.backColor.green;
+    cursorColor.color.blue= cursorColor.color.blue ^ inputWindowColor.backColor.blue;
     cursorColor.gc = XCreateGC (dpy, inputWindow, 0, &values);
     //为了画绿色光标
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &cursorColor.color))
@@ -252,13 +253,13 @@ void DisplayMessage (void)
     if ((wa.x + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
     else if (wa.x < 0) {
-	if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
-	    i = 0;
-	else
-	    i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+       if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
+           i = 0;
+       else
+           i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
     }
     else
-	i = wa.x;
+       i = wa.x;
 
     XMoveWindow (dpy, inputWindow, i, wa.y);
     XResizeWindow (dpy, inputWindow, iInputWindowWidth, iInputWindowHeight);
@@ -272,7 +273,7 @@ void DisplayMessage (void)
  */
 void DisplayMessageUp (void)
 {
-    int             i = 0;
+    int             i=0;
     int             iPos;
     int             iCursorPixPos = 0;
     int             iChar;

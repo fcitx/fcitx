@@ -208,9 +208,7 @@ void MyXEventHandler (Window im_window, XEvent * event)
 		DisplayInputWindow ();
 		bIsResizingInputWindow = False;
 	    }
-	    break;
 	}
-
 	break;
     case DestroyNotify:
 	break;

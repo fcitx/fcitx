@@ -6,11 +6,13 @@
 #include <wait.h>
 
 #include "wbx.h"
+#include "erbi.h"
 #include "py.h"
 
 XErrorHandler   oldXErrorHandler;
 
 extern BYTE     iWBChanged;
+extern BYTE		iEBChanged;
 extern BYTE     iNewPYPhraseCount;
 extern BYTE     iOrderCount;
 extern BYTE     iNewFreqCount;
@@ -27,9 +29,11 @@ void OnException (int signo)
 {
     //   int             status;
     fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
-
+	
     if (iWBChanged)
 	SaveWubiDict ();
+	if (iEBChanged)
+	SaveErbiDict ();
     if (iNewPYPhraseCount)
 	SavePYUserPhrase ();
     if (iOrderCount)
@@ -54,6 +58,8 @@ int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 
     if (iWBChanged)
 	SaveWubiDict ();
+	if (iEBChanged)
+	SaveErbiDict ();
     if (iNewPYPhraseCount)
 	SavePYUserPhrase ();
     if (iOrderCount)

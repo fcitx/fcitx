@@ -8,6 +8,7 @@
 #include "MainWindow.h"
 #include "InputWindow.h"
 #include "wbx.h"
+#include "erbi.h"
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC;
@@ -215,6 +216,7 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 	ResetInput ();
 	ResetInputWindow ();
 	ResetWBStatus ();
+	ResetEBStatus ();
 	CurrentIC->imeState = IS_CHN;
 	DisplayInputWindow ();
 	DisplayMainWindow ();

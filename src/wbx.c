@@ -211,7 +211,7 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 	bIsInLegend = False;
 
 	if (!bIsWBAddPhrase && !bIsWBDelPhrase && !bIsWBAdjustOrder) {
-	    if (strCodeInput[0] == 'z' ) {
+	    if (strCodeInput[0] == 'z') {
 		if (iCodeInputCount != (MAX_PY_LENGTH + 1)) {
 		    strCodeInput[iCodeInputCount++] = iKey;
 		    strCodeInput[iCodeInputCount] = '\0';
@@ -226,9 +226,9 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 		    strCodeInput[iCodeInputCount] = '\0';
 
 		    if (iCodeInputCount == 1 && strCodeInput[0] == 'z') {
-			iCandWordCount = 0;
+			iCandWordCount = 0;	
 			retVal = IRV_DISPLAY_CANDWORDS;
-		    }
+			}
 		    else {
 			retVal = WBGetCandWords (SM_FIRST);
 			if (bWBAutoSendToClient && (iCodeInputCount == WB_CODE_LENGTH)) {
@@ -395,7 +395,7 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 		strCodeInput[iCodeInputCount] = '\0';
 
 		if (!strcmp (strCodeInput, "z")) {
-		    iCandWordCount = 0;
+			iCandWordCount = 0;
 		    retVal = IRV_DISPLAY_CANDWORDS;
 		}
 		else if (iCodeInputCount)
@@ -991,7 +991,7 @@ INPUT_RETURN_VALUE WBGetLegendCandWords (SEARCH_MODE iMode)
 	    WBLegend = WBLegend->next;
 	}
 
-	if (!bDisablePagingInLegend && iCurrentLegendCandPage == iLegendCandPageCount) {
+    if (!bDisablePagingInLegend && iCurrentLegendCandPage == iLegendCandPageCount) {
 	    if (WBLegend != wubiDictHead) {
 		recTemp = WBLegend->next;
 		while (recTemp != wubiDictHead) {
