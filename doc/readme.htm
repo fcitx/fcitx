@@ -1,0 +1,285 @@
+<html>
+<head>
+  <title>小企鹅中文输入法(版本2)使用说明</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+</head>
+<body>
+<div align="center">
+<h2>小企鹅中文输入法(fcitx)使用说明(版本2)</h2>
+ <a href="mailto:yuking_net@sohu.com">Yuking</a></div>
+<p><font color="#ff0000"><b>！！XIM程序崩溃会导致应用程序和X的崩溃，因此请随时保存数据。</b></font></p>
+<p><b>一、小企鹅中文输入法(fcitx)是什么？</b></p>
+<p>　　小企鹅中文输入法是一个以GPL方式发布的XIM简体中文输入法，包括五笔和拼音输入法。您可以从<a
+ href="http://www.fcitx.org">www.fcitx.org</a>下载最新版。</p>
+<p><b>二、安装</b></p>
+<p>　　如果您正确安装了gcc编译器和XFree86的开发包(通常名为XFree86-devel)，就可以正常编译fcitx。<br>
+ 　　首先到<a href="http://www.fcitx.org">www.fcitx.org</a>下载fcitx的源码包，文件名为fcitx-2.0.tar.gz或fcitx-2.0.tar.bz2，存放在目录/temp下。如果是tar.gz文件，利用以下命令解包：<br>
+</p>
+<ul>
+cd /temp<br>
+tar zxvf fcitx-2.0.tar.gz<br>
+</ul>
+　　如果是tar.bz2文件，利用以下命令解包：<br>
+<ul>
+cd /temp<br>
+tar jxvf fcitx-2.0.tar.gz<br>
+</ul>
+　　这样会建立目录fcitx-2.0，所有的源码都在该目录中。<br>
+　　如果您的系统中已经安装好了gcc和XFree86的开发包，就可以利用以下命令编译安装fcitx(需要root用户)：<br>
+<ul>
+ cd fcitx-2.0<br>
+ make clean<br>
+ make && make install<br>
+</ul>
+　　这样会安装XFT版的fcitx。如果您不想使用XFT，也可以选择完装使用X核心字体的fcitx：
+<ul>
+ cd fcitx-2.0<br>
+ make clean<br>
+ make -f Makefile.noxft && make install<br>
+</ul>
+　　编译安装完成后，会在系统中复制以下文件：<br>
+
+<ul>
+ /usr/bin/fcitx<br>
+ /usr/share/fcitx/punc.mb<br>
+ /usr/share/fcitx/pybase.mb<br>
+ /usr/share/fcitx/pyphrase.mb<br>
+ /usr/share/fcitx/wbx.mb<br>
+</ul>
+　　如果您没有root权限，上述安装过程需要用“make install_local”来代替“make install”，此时，fcitx会在您的用户目录下复制以下文件：
+<ul>
+ bin/fcitx<br>
+ fcitx/fcitx<br>
+ fcitx/punc.mb<br>
+ fcitx/pybase.mb<br>
+ fcitx/pyphrase.mb<br>
+ fcitx/wbx.mb<br>
+</ul>
+
+<p><b>三、配置</b></p>
+
+<p>　　应用程序通过环境变量XMODIFIERS与XIM沟通，设置XMODIFIERS的方法如下(以bash为例)：</p>
+<ul>
+ export XMODIFIERS="@im=YOUR_XIM_NAME"
+</ul>
+　　上面的YOUR_XIM_NAME为XIM程序在系统注册的名字。应用程序启动时会根据该变量查找相应的XIM服务器。因此，即便系统中同时运行了若干个XIM程序，一个应用程序在某个时刻也只能使用一个XIM输入法。有时候您会遇到这种情况，明明XIM已经启动了，但应用程序就是无法使用。这往往是因为XMODIFIERS设置不正确所致，如您配置系统时在不同的脚本文件中修改了XMODIFIERS，从而导致X启动时与启动完成后该变量不一致。
+<p></p>
+
+<p>　　fcitx缺省注册的XIM名为fcitx，但如果fcitx启动时XMODIFIERS已经设置好，fcitx会自动以系统的设置来注册合适的名字。因此，对于新安装的Mandrake和RedHat，最简单的方法是执行以下命令：</p>
+
+<ul>
+ cd /usr/bin<br>
+ ln -sf fcitx chinput<br>
+</ul>
+　　然后重新启动X即可。如果该方法不行，那您需要手工设置环境变量。一般可以在~/.bashrc增加行：
+<ul>
+ export XMODIFIERS="@im=fcitx"<br>
+ export XIM=fcitx<br>
+ export XIM_PROGRAM=fcitx<br>
+</ul>
+　　然后重新登录当前用户，启动X即可。如果fcitx没有自动启动，您需要在X下的命令行上执行：<br>
+
+<ul>
+ fcitx<br>
+</ul>
+　　fcitx默认以后台方式运行，如果您不想以这种方式运行，可以按以下方式运行：
+<ul>
+ fcitx -nb<br>
+</ul>
+
+<p><b>四、配置文件</b></p>
+<p>　　fcitx的配置文件为~/.fcitx/config，其中的选项均为中文(编码为gb2312)，从中可以了解几乎所有的功能。下面是默认的配置文件内容：</p>
+<hr>
+<blockquote>
+<pre>
+[程序]
+#区域设置=zh_CN
+显示字体=*
+显示字体大小=18
+是否使用Ctrl_Shift打开输入法=1
+
+[输出]
+数字后跟半角符号=1
+Enter键行为=2
+分号输入英文=1
+大写字母输入英文=1
+联想方式禁止翻页=1
+
+[界面]
+候选词个数=5
+是否使用3D界面=2
+是否自动隐藏输入条=1
+主窗口隐藏模式=1
+是否光标跟随=1
+光标色=92 210 131
+主窗口背景色=230 230 230
+主窗口线条色=255 0 0
+输入窗背景色=240 240 240
+输入窗线条色=100 200 255
+输入窗箭头色=255 150 255
+输入窗用户输入色=0 0 255
+输入窗提示色=255 0 0
+输入窗序号色=200 0 0
+输入窗第一个候选字色=0 150 100
+#该颜色值只用于拼音中的用户自造词
+输入窗用户词组色=0 0 255
+输入窗提示编码色=100 100 255
+#五笔、拼音的单字/系统词组均使用该颜色
+输入窗其它文本色=0 0 0
+
+[热键]
+#中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT
+中英文快速切换键=L_CTRL
+GBK支持=CTRL_M
+联想支持=CTRL_L
+全半角=SHIFT_SPACE
+中文标点=ALT_SPACE
+上一页=- ,
+下一页== .
+第二三候选词选择键=SHIFT
+
+[五笔]
+五笔四键自动上屏=1
+自动调整五笔顺序=0
+提示词库中已有的词组=0
+五笔精确匹配=0
+提示五笔编码=1
+增加五笔词组=CTRL_8
+调整五笔顺序=CTRL_6
+删除五笔词组=CTRL_7
+
+[拼音]
+使用全拼=0
+拼音自动组词=1
+保存自动组词=0
+增加拼音常用字=CTRL_8
+删除拼音常用字=CTRL_7
+删除拼音用户词组=CTRL_DELETE
+#重码调整方式说明：0-->不调整  1-->快速调整  2-->按频率调整
+拼音单字重码调整方式=2
+拼音词组重码调整方式=1
+拼音常用词重码调整方式=0
+是否模糊an和ang=0
+是否模糊en和eng=0
+是否模糊ian和iang=0
+是否模糊in和ing=0
+是否模糊ou和u=0
+是否模糊uan和uang=0
+是否模糊c和ch=0
+是否模糊f和h=0
+是否模糊l和n=0
+是否模糊s和sh=0
+是否模糊z和zh=0
+</pre>
+</blockquote>
+<hr>
+<p>下面对其中一些设置加以说明：</p>
+<ul>
+  <li>区域设置：正常情况下，该项不必修改。</li>
+  <LI>显示字体：显示字体，如'simsun'等.</LI>
+  <LI>是否使用Ctrl_Shift打开输入法：正常情况下，按CTRL+空格键打开/关闭输入法；该项设置为1时，可以用Ctrl_Shift打开/关闭输入法。</LI>
+  <LI>数字后跟半角符号：当输入阿拉伯数字后，紧接输入的'.'和','会以半角方式输出，而不会输出'。'和'，'；该功能主要是为方便录入数字而设的。</LI>
+  <LI>联想方式禁止翻页：由于默认的,/.为翻页键，因此联想方式下会导致标点符号输入不方便，打开该选项会使得在联想方式下不翻页。</LI>
+  <LI>候选词个数：选择范围为1~10，如果大于10，则为10。</LI>
+  <LI>是否使用3D界面：0-->不使用3D界面；1-->输入条使用凸出效果；2-->输入条使用凹进效果。</LI>
+  <LI>是否自动隐藏输入条：设置为1时，只有当输入条有提示信息前才会显示。</LI>
+  <LI>主窗口隐藏模式：0-->一直显示在顶层；1-->只有在中文输入状态下才显示；2-->不显示。</LI>
+  <LI>是否光标跟随：是否使用Over the Spot方式的光标跟随，只有当应用程序本身支持时才有效。</LI>
+  <LI>五笔四键自动上屏：设置为0时，只有按空格或候选字/词前的序号才录入相应的字。</LI>
+  <LI>自动调整五笔顺序：设置为1时，刚刚录入的字或词会调整到相同五笔编码字/词的最前面。</LI>
+  <LI>提示词库中已有的词组：打开此选项的话，程序会提醒用户词库已经有的词组。</LI>
+  <LI>五笔精确匹配：打开此选项的话，输入条只显示与用户录入完全匹配的候选字/词。</LI>
+  <LI>Enter键行为：当有用户输入时，0-->不处理；1-->清除用户输入；2-->用户输入的字母上屏。</LI>
+  <LI>使用全拼：打开该选项的话，拼音将以全拼的方式工作，此时不进行简拼的匹配。</LI>
+  <LI>拼音自动组词：该功能指定是否进行拼音的短语输入。</LI>
+  <LI>保存自动组词：是否保存自动组成的拼音短句。</LI>
+</ul>
+<p>颜色是按照‘R G B'的方式设置。</p>
+<p>仅输入'z'可以重复录入上次的字、词或符号。</p>
+
+<p><b>五、其它</b></p>
+<p>　　1、五笔输入</p>
+
+<blockquote>
+<ul>
+<li>标准的五笔86输入功能</li>
+<li>快速拼音输入：按z键即可进入全拼录入状态，以方便不会打的字词，并提示五笔编码</li>
+<li>模糊输入：支持z模糊录入 </li>
+<LI>特殊符号录入：输入zzzz可录入特殊符号。您需要将特殊符号制作成一个文件，每个符号一行，放在~/.fcitx或/usr/share/fcitx(前者优先)下，名为wbfh.mb。</LI>
+</ul>
+</blockquote>
+
+<p>　　* 五笔编码中已经增加了某些特殊符号，请查看<a href="wb_fh.htm">特殊符号表</a>。</p>
+<p>　　* 用户添加词组时，可以用左右键增加/减少字数。</p>
+
+<p>　　2、拼音输入</p>
+<blockquote>
+  <ul>
+    <li>双拼，可自定义键盘方案</li>
+    <li>常用字表</li>
+    <li>特殊符号输入</li>
+    <li>完善的预编辑</li>
+  </ul>
+</blockquote>
+
+<p>　　<b>* 常用字表</b>：<br>
+ 　　设置常用字表的目的是为了方便录入某些常用字。在候选字中，处于该表中的字总是排在其它字的前面。刚刚使用fcitx时，常用字表是空的。您可以用左ctrl+8/7来添加/删除常用字。例如，您希望录入“d”时，“的”总放在第一个，可以按一下操作：<br>
+</p>
+
+<blockquote>
+  <ul>
+    <li>进入拼音状态</li>
+    <li>输入“d”，用翻页键-=/,.查找“的”字，直到它显示在候选字表中</li>
+    <li>按ctrl+8，然后按“的”前面的数字序号即可</li>
+  </ul>
+</blockquote>
+
+　　按上述操作可以为某个拼音编码设置多个常用字。您可以设置常用字表内的字频调节方式。
+<p>　　<b>* 双拼输入</b>：<br>
+ 　　如果在配置文件打开双拼选项，即可进行双拼输入。您可以定义双拼键盘方案，如果您没有定义，程序将采用自然码的双拼方案。如果您需要自定义，请将存放双拼方案的文件放在~/.fcitx下，名为sp.dat。程序源码包中的data目录下有一个名为sp.dat的文件，该文件定义了自然码方案，您可以参考修改它。注意模糊拼音的设置也会在双拼中生效。点<a href="sp.htm">此处</a>可以查看该文件的内容。</p>
+<p>　　<b>* 特殊符号输入</b>：<br>
+ 　　为了录入特殊符号，您必须将特殊符号按下列格式放在一个文件中：</p>
+<blockquote>编码 符号</blockquote>
+<p></p>
+
+<p>　　每个符号占一行。编码部分必须是英文小写字母，且经拼音解析后的长度不应超过10个汉字(如zzz是3个汉字长度，而zhangzhangzhang也是3个汉字长度)，fcitx的源码包中有一个例子(文件pySym.mb)。<br>
+　　编辑号特殊符号后，将其保存为文件pySym.mb，并放在当前用户目录下的.fcitx中，重新启动fcitx即可。<br>
+  　　*<b>建议：</b>特殊符号的编码应该足够长，免得影响正常的汉字录入。<br>
+  　　*<b>注意：</b>如果定义的编码与常用字表的编码相同，该特殊符号将无法使用。 </p>
+<p>　　4、其它</p>
+<ul>
+ <li>可以任意拖动fcitx显示的图标和输入条 </li>
+  <li>可以用鼠标左键单击输入条的相应部分切换输入法/改变标点状态/改变全半角设置/改变GBK状态/改变联想状态/改变双拼状态</li>
+  <li>支持zh_CN.UTF-8的中文输入</li>
+</ul>
+<p></p>
+
+<p>　　*中文标点：<br>
+  　　fcitx的中文标点由一个文本文件设置，您可以修改以满足自己的需要。该文件即/usr/share/fcitx/punc.mb(或用户目录下的fcitx/punc.mb)。格式如下：</p>
+<blockquote>对应的英文符号 中文标点 &lt;中文标点&gt;</blockquote>
+<br>
+其中英文符号应该是类似“&amp;*()”这样的符号，而中文标点最长为两个汉字，最多有两组，中间由空格隔开。如：
+<blockquote>_ ……<br>
+" “ ”</blockquote>
+
+<p><b>六、其它说明</b></p>
+
+<p>　　由于本人的精力有限，无法一一调整字/词序，开始使用时的字/词序可能不是很好，且词组数量有限(甚至没有很多常用词)，但我相信您使用一段时间后就没有这个问题了。如果您有更好的五笔/拼音码表，且没有什么不方便的话，请<a
+ href="mailto:yuking_net@sohu.com">寄给本人</a>，非常感谢。<br>
+ <br>　　fcitx的五笔86码表来自于cjkvinput项目(<a
+ href="http://sourceforge.net/projects/cjkvinput">http://sourceforge.net/projects/cjkvinput</a>)，请<a
+ href="cjkvinput.txt">阅读有关说明</a>。<br> 
+</p>
+
+<p><b>七、致谢</b></p>
+
+<p>　　本程序的界面部分的许多代码都参考了rfinput-2.x的源码，在此向其作者Zhao yang(zyang@redflag-linux.com)致谢。<br>
+ 　　感谢<a href="http://www.linuxsir.com">www.linuxsir.com</a>的北南南北为fcitx提供一个家。同时，他与小凡为gWuBi/fcitx的推广和测试做了很多工作。<br>
+ 　　感谢xsim的作者楚狂向我提供了宝贵的技术支持。<br>
+ 　　感谢二笔输入法(ebf)的作者tram，他为fcitx做了很多工作。<br>
+ 　　感谢winix多次为gWuBi/fcitx提出宝贵的意见和建议。<br>
+ 　　感谢windrose精心测试了双拼功能。<br>
+ 　　感谢Wang Yin为拼音输入提出了宝贵的意见。<br>
+ 　　同时感谢所有其它测试gWuBi/fcitx的朋友，希望大家以后多多支持fcitx，非常感谢。</p>
+</body>
+</html>
