@@ -1,3 +1,29 @@
+2004-03-01  Xiao Huo  <xiaohuo@mail.com>
+
+	* src/xim.c: Make this XIM server serve clients using zh_CN and
+	en_US.UTF-8 locales.  It is simply done by setting the line
+            IMLocale, "zh_CN,en_US.UTF-8",
+	with locales to be served.
+
+2004-03-01  Xiao Huo  <xiaohuo@mail.com>
+
+	* src/SetLocale.[ch] main.c: Remove SetLocale(), GetLocale() and
+	strDefaultLocale.  Use setlocale() and nl_langinfo() instead.
+
+2004-03-01  Xiao Huo  <xiaohuo@mail.com>
+
+	* src/Makefile.am: Define PKGDATADIR.  It is used as a prefix
+	to all the data files.
+	* src/erbi.c punc.c py.c wbx.c: Data files are installed under
+	PKGDATADIR/data directory.  Remove DATA_DIR and bRunLocal which
+	are no longer needed.
+	* src/ime.h main.c xim.c: Remove DATA_DIR and bRunLocal which
+	are no longer needed.
+
+2004-03-01  Xiao Huo  <xiaohuo@mail.com>
+
+	* configure.in: Define _USE_XFT if Xft is enabled.
+
 2004-02-02  Xie Yanbo  <xyb@users.cosoft.org.cn>
 
 	* configure.in created(based on fcitx2.0.1).

@@ -58,7 +58,7 @@ AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
 if test "x$have_xft" = "xtrue"; then
   LIBS="$LIBS $X_LIBS $XFT_LIBS"
-  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS"
+  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS -D_USE_XFT"
 else
   LIBS="$LIBS $X_LIBS -lX11"
   CFLAGS="$CFLAGS $X_CFLAGS"
