@@ -30,23 +30,25 @@ AC_SUBST(X_CFLAGS)
 AC_ARG_ENABLE(xft,
 [  --enable-xft            Enable Xft for Freetype font support],
 [case "${enableval}" in
-  yes) xft=true ;;
-  no)  xft=false ;;
-  *) AC_MSG_ERROR(bad value ${enableval} for --enable-xft, use "yes" or "no".) ;;
+  yes)  enable_xft=yes ;;
+  no)   enable_xft=no ;;
+  auto) enable_xft=auto ;;
+  *) AC_MSG_ERROR([bad value "${enableval}" for --enable-xft, use "yes" or "no" or "auto"(default).]) ;;
 esac],[])
 
-if test "x$xft" = "xfalse"; then
+if test "x$enable_xft" = "xno"; then
   # --enable-xft=no
   :
 else
   # Checks for Xft/XRender
   PKG_CHECK_MODULES(XFT, xft >= 0.0.0, have_xft=true, :)
+
   if test "x$have_xft" = "xtrue"; then
     AC_SUBST(XFT_LIBS)
     AC_SUBST(XFT_CFLAGS)
     :
   else
-    if test "x$xft" = "xtrue"; then
+    if test "x$enable_xft" = "xyes"; then
       # Must use xft, raise a error.
       AC_MSG_ERROR([No xft found, configure for FreeType and Xft failed!])
     else

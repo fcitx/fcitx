@@ -3905,15 +3905,16 @@ test -n "$x_includes" && X_CFLAGS="-I$x_includes"
 if test "${enable_xft+set}" = set; then
   enableval="$enable_xft"
   case "${enableval}" in
-  yes) xft=true ;;
-  no)  xft=false ;;
-  *) { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-xft" >&5
-echo "$as_me: error: bad value ${enableval} for --enable-xft" >&2;}
-   { (exit use "yes" or "no".); exit use "yes" or "no".; }; } ;;
+  yes)  enable_xft=yes ;;
+  no)   enable_xft=no ;;
+  auto) enable_xft=auto ;;
+  *) { { echo "$as_me:$LINENO: error: bad value \"${enableval}\" for --enable-xft, use \"yes\" or \"no\" or \"auto\"(default)." >&5
+echo "$as_me: error: bad value \"${enableval}\" for --enable-xft, use \"yes\" or \"no\" or \"auto\"(default)." >&2;}
+   { (exit 1); exit 1; }; } ;;
 esac
 fi;
 
-if test "x$xft" = "xfalse"; then
+if test "x$enable_xft" = "xno"; then
   # --enable-xft=no
   :
 else
@@ -4014,12 +4015,13 @@ echo "${ECHO_T}$XFT_LIBS" >&6
      :
   fi
 
+
   if test "x$have_xft" = "xtrue"; then
 
 
     :
   else
-    if test "x$xft" = "xtrue"; then
+    if test "x$enable_xft" = "xyes"; then
       # Must use xft, raise a error.
       { { echo "$as_me:$LINENO: error: No xft found, configure for FreeType and Xft failed!" >&5
 echo "$as_me: error: No xft found, configure for FreeType and Xft failed!" >&2;}
