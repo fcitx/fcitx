@@ -15,7 +15,8 @@
 
 typedef enum {
     IME_WUBI = 0,
-    IME_PINYIN = 1
+    IME_PINYIN = 1,
+    IME_ERBI = 2
 } IME;
 
 typedef enum _SEARCH_MODE {

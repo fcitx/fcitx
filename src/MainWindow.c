@@ -11,6 +11,9 @@
 #include "wb-0.xpm"
 #include "wb-1.xpm"
 #include "wb-2.xpm"
+#include "eb-0.xpm"
+#include "eb-1.xpm"
+#include "eb-2.xpm"
 #include "py-0.xpm"
 #include "py-1.xpm"
 #include "py-2.xpm"
@@ -35,10 +38,11 @@ WINDOW_COLOR    mainWindowColor;
 MESSAGE_COLOR   mainWindowLineColor;	//ÏßÌõÉ«
 
 XImage         *pLogo = NULL;
-XImage         *pIME[2][3] = { {NULL, NULL, NULL}, {NULL, NULL, NULL} };
-char           *IMELogo[2][3] = {
+XImage         *pIME[3][3] = { {NULL, NULL, NULL}, {NULL, NULL, NULL}, {NULL, NULL, NULL} };
+char           *IMELogo[3][3] = {
     {(char *) wb_0_xpm, (char *) wb_2_xpm, (char *) wb_1_xpm},
-    {(char *) py_0_xpm, (char *) py_2_xpm, (char *) py_1_xpm}
+    {(char *) py_0_xpm, (char *) py_2_xpm, (char *) py_1_xpm},
+    {(char *) eb_0_xpm, (char *) eb_2_xpm, (char *) eb_1_xpm}
 };
 
 XImage         *pCorner[2] = { NULL, NULL };
@@ -126,7 +130,7 @@ void DisplayMainWindow (void)
 	    FillImageByXPMData (pGBK[bUseGBK], GBKLogo[bUseGBK]);
 	}
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pGBK[bUseGBK], 0, 0, 56, 2, 15, 16);
-	
+
 	if (!pLX[bUseLegend]) {
 	    pLX[bUseLegend] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pLX[bUseLegend], LXLogo[bUseLegend]);

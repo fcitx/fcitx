@@ -7,5 +7,5 @@ fcitx_SOURCES = \
   MyErrorsHandlers.c MyErrorsHandlers.h punc.c punc.h py.c PYFA.c \
   PYFA.h py.h pyMapTable.c pyMapTable.h pyParser.c pyParser.h \
   SetLocale.c SetLocale.h sp.c sp.h tools.c tools.h ui.c ui.h \
-  version.h wbx.c wbx.h xim.c xim.h
+  version.h wbx.c wbx.h xim.c xim.h erbi.c erbi.h
 fcitx_LDADD = ../lib/libXimd.a
