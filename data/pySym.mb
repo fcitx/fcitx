@@ -1,0 +1,264 @@
+#第一个字符为“#”的行是注释
+#格式：	编码 符号
+#编码只能为小写字母，经拼音解析后最长为10(如py为2，pinyin也为2)
+#数学符号
+sxfh ＋
+sxfh －
+sxfh ＜
+sxfh ＝
+sxfh ＞
+sxfh ±
+sxfh ×
+sxfh ÷
+sxfh ∈
+sxfh ∏
+sxfh ∑
+sxfh ∕
+sxfh √
+sxfh ∝
+sxfh ∞
+sxfh ∟
+sxfh ∠
+sxfh ∣
+sxfh ∥
+sxfh ∧
+sxfh ∨
+sxfh ∩
+sxfh ∪
+sxfh ∫
+sxfh ∮
+sxfh ∴
+sxfh ∵
+sxfh ∶
+sxfh ∷
+sxfh ∽
+sxfh ≈
+sxfh ≌
+sxfh ≒
+sxfh ≠
+sxfh ≡
+sxfh ≤
+sxfh ≥
+sxfh ≦
+sxfh ≧
+sxfh ≮
+sxfh ≯
+sxfh ⊕
+sxfh ⊙
+sxfh ⊥
+sxfh ⊿
+#罗马数字
+lmsz ⅰ
+lmsz ⅱ
+lmsz ⅲ
+lmsz ⅳ
+lmsz ⅴ
+lmsz ⅵ
+lmsz ⅶ
+lmsz ⅷ
+lmsz ⅸ
+lmsz ⅹ
+lmsz ⅰ
+lmsz ⅱ
+lmsz ⅲ
+lmsz ⅳ
+lmsz ⅴ
+lmsz ⅵ
+lmsz ⅶ
+lmsz ⅷ
+lmsz ⅸ
+lmsz ⅹ
+#大写希腊字母
+dxxl Α
+dxxl Β
+dxxl Γ
+dxxl Δ
+dxxl Ε
+dxxl Ζ
+dxxl Η
+dxxl Θ
+dxxl Ι
+dxxl Κ
+dxxl Λ
+dxxl Μ
+dxxl Ν
+dxxl Ξ
+dxxl Ο
+dxxl Π
+dxxl Ρ
+dxxl Σ
+dxxl Τ
+dxxl Υ
+dxxl Φ
+dxxl Χ
+dxxl Ψ
+dxxl Ω
+#小写希腊字母
+xxxl α
+xxxl β
+xxxl γ
+xxxl δ
+xxxl ε
+xxxl ζ
+xxxl η
+xxxl θ
+xxxl ι
+xxxl κ
+xxxl λ
+xxxl μ
+xxxl ν
+xxxl ξ
+xxxl ο
+xxxl π
+xxxl ρ
+xxxl σ
+xxxl τ
+xxxl υ
+xxxl φ
+xxxl χ
+xxxl ψ
+xxxl ω
+#大写俄文字母
+dxew А
+dxew Б
+dxew В
+dxew Г
+dxew Д
+dxew Е
+dxew Ж
+dxew З
+dxew И
+dxew Й
+dxew К
+dxew Л
+dxew М
+dxew Н
+dxew О
+dxew П
+dxew Р
+dxew С
+dxew Т
+dxew У
+dxew Ф
+dxew Х
+dxew Ц
+dxew Ч
+dxew Ш
+dxew Щ
+dxew Ъ
+dxew Ы
+dxew Ь
+dxew Э
+dxew Ю
+dxew Я
+dxew Ё
+#小写俄文字母
+xxew а
+xxew б
+xxew в
+xxew г
+xxew д
+xxew е
+xxew ж
+xxew з
+xxew и
+xxew й
+xxew к
+xxew л
+xxew м
+xxew н
+xxew о
+xxew п
+xxew р
+xxew с
+xxew т
+xxew у
+xxew ф
+xxew х
+xxew ц
+xxew ч
+xxew ш
+xxew щ
+xxew ъ
+xxew ы
+xxew ь
+xxew э
+xxew ю
+xxew я
+xxew ё
+#数字序号
+szxh ①
+szxh ②
+szxh ③
+szxh ④
+szxh ⑤
+szxh ⑥
+szxh ⑦
+szxh ⑧
+szxh ⑨
+szxh ⑩
+szxh ⑴
+szxh ⑵
+szxh ⑶
+szxh ⑷
+szxh ⑸
+szxh ⑹
+szxh ⑺
+szxh ⑻
+szxh ⑼
+szxh ⑽
+szxh ⑾
+szxh ⑿
+szxh ⒀
+szxh ⒁
+szxh ⒂
+szxh ⒃
+szxh ⒄
+szxh ⒅
+szxh ⒆
+szxh ⒇
+szxh ⒈
+szxh ⒉
+szxh ⒊
+szxh ⒋
+szxh ⒌
+szxh ⒍
+szxh ⒎
+szxh ⒏
+szxh ⒐
+szxh ⒑
+szxh ⒒
+szxh ⒓
+szxh ⒔
+szxh ⒕
+szxh ⒖
+szxh ⒗
+szxh ⒘
+szxh ⒙
+szxh ⒚
+szxh ⒛
+szxh ㈠
+szxh ㈡
+szxh ㈢
+szxh ㈣
+szxh ㈤
+szxh ㈥
+szxh ㈦
+szxh ㈧
+szxh ㈨
+szxh ㈩
+#货币符号
+hbfh ＄
+hbfh ￠
+hbfh ￡
+hbfh ￥
+hbfh ¤ 
+#方向箭头
+fxjt ←
+fxjt ↑
+fxjt →
+fxjt ↓
+fxjt ↖
+fxjt ↗
+fxjt ↘
+fxjt ↙

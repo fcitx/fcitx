@@ -1,0 +1,46 @@
+# fcitx  双拼编码方案
+
+# 以'#'打头的行是注释。
+#
+# 双拼编码范围为英文字母键(A到Z)和分号键“;”。在此文件中，为了看起来醒目起见，双拼编码
+# 采用大写英文字母(此处也可以用小写字母)；而在实际输入过程中，只能使用小写英文字母。
+
+[零声母标识]
+=O
+
+[声母]
+# 双拼编码就是它本身的声母不必列出
+ch=I
+sh=U
+zh=V
+
+[韵母]
+# 双拼编码就是它本身的韵母不必列出
+ai=L
+an=J
+ang=H
+ao=K
+ei=Z
+en=F
+eng=G
+er=R
+ia=W
+ian=M
+iang=D
+iao=C
+ie=X
+in=N
+ing=Y
+iong=S
+iu=Q
+ng=G
+ong=S
+ou=B
+ua=W
+uai=Y
+uan=R
+uang=D
+ue=T
+ui=V
+un=P
+uo=O
