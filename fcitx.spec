@@ -1,5 +1,5 @@
 %define name		fcitx
-%define version		2.0.1
+%define version		2.0.2
 %define release		3
 
 %define prefix		/usr

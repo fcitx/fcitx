@@ -80,16 +80,34 @@ X_LIBS = @X_LIBS@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
-bin_PROGRAMS = fcitx
-AM_CFLAGS = -O2 -fno-strength-reduce
+DEFS = -DPKGDATADIR=\"$(pkgdatadir)\"
+
 INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/xpm
-fcitx_SOURCES = \
-  IC.c IC.h ime.c ime.h InputWindow.c InputWindow.h KeyList.c \
-  KeyList.h main.c main.h MainWindow.c MainWindow.h \
-  MyErrorsHandlers.c MyErrorsHandlers.h punc.c punc.h py.c PYFA.c \
-  PYFA.h py.h pyMapTable.c pyMapTable.h pyParser.c pyParser.h \
-  SetLocale.c SetLocale.h sp.c sp.h tools.c tools.h ui.c ui.h \
-  version.h wbx.c wbx.h xim.c xim.h
+
+AM_CFLAGS = -O2 -fno-strength-reduce
+
+bin_PROGRAMS = fcitx
+
+fcitx_SOURCES = erbi.c erbi.h \
+                IC.c IC.h \
+                ime.c ime.h \
+                InputWindow.c InputWindow.h \
+                KeyList.c KeyList.h \
+                main.c main.h \
+                MainWindow.c MainWindow.h \
+                MyErrorsHandlers.c MyErrorsHandlers.h \
+                punc.c punc.h \
+                py.c py.h \
+                PYFA.c PYFA.h \
+                pyMapTable.c pyMapTable.h \
+                pyParser.c pyParser.h \
+                SetLocale.c SetLocale.h \
+                sp.c sp.h \
+                tools.c tools.h \
+                ui.c ui.h \
+                version.h \
+                wbx.c wbx.h \
+                xim.c xim.h
 
 fcitx_LDADD = ../lib/libXimd.a
 subdir = src
@@ -98,17 +116,15 @@ CONFIG_CLEAN_FILES = version.h
 bin_PROGRAMS = fcitx$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_fcitx_OBJECTS = IC.$(OBJEXT) ime.$(OBJEXT) InputWindow.$(OBJEXT) \
-	KeyList.$(OBJEXT) main.$(OBJEXT) MainWindow.$(OBJEXT) \
-	MyErrorsHandlers.$(OBJEXT) punc.$(OBJEXT) py.$(OBJEXT) \
-	PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) pyParser.$(OBJEXT) \
-	SetLocale.$(OBJEXT) sp.$(OBJEXT) tools.$(OBJEXT) ui.$(OBJEXT) \
-	wbx.$(OBJEXT) xim.$(OBJEXT)
+am_fcitx_OBJECTS = erbi.$(OBJEXT) IC.$(OBJEXT) ime.$(OBJEXT) \
+	InputWindow.$(OBJEXT) KeyList.$(OBJEXT) main.$(OBJEXT) \
+	MainWindow.$(OBJEXT) MyErrorsHandlers.$(OBJEXT) punc.$(OBJEXT) \
+	py.$(OBJEXT) PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) \
+	pyParser.$(OBJEXT) SetLocale.$(OBJEXT) sp.$(OBJEXT) \
+	tools.$(OBJEXT) ui.$(OBJEXT) wbx.$(OBJEXT) xim.$(OBJEXT)
 fcitx_OBJECTS = $(am_fcitx_OBJECTS)
 fcitx_DEPENDENCIES = ../lib/libXimd.a
 fcitx_LDFLAGS =
-
-DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
@@ -118,12 +134,13 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/IC.Po ./$(DEPDIR)/InputWindow.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/KeyList.Po ./$(DEPDIR)/MainWindow.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/MyErrorsHandlers.Po ./$(DEPDIR)/PYFA.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/SetLocale.Po ./$(DEPDIR)/ime.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/main.Po ./$(DEPDIR)/punc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/py.Po ./$(DEPDIR)/pyMapTable.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/pyParser.Po ./$(DEPDIR)/sp.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/tools.Po ./$(DEPDIR)/ui.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/wbx.Po ./$(DEPDIR)/xim.Po
+@AMDEP_TRUE@	./$(DEPDIR)/SetLocale.Po ./$(DEPDIR)/erbi.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/ime.Po ./$(DEPDIR)/main.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/punc.Po ./$(DEPDIR)/py.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/pyMapTable.Po ./$(DEPDIR)/pyParser.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/sp.Po ./$(DEPDIR)/tools.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/ui.Po ./$(DEPDIR)/wbx.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/xim.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -185,6 +202,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MyErrorsHandlers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PYFA.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SetLocale.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/erbi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ime.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/punc.Po@am__quote@
