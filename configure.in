@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
-AM_INIT_AUTOMAKE(fcitx, 2.0.1)
+AM_INIT_AUTOMAKE(fcitx, 2.0.2)
 
 # Checks for programs.
 AC_PROG_CC
@@ -40,7 +40,7 @@ if test "x$xft" = "xfalse"; then
   :
 else
   # Checks for Xft/XRender
-  PKG_CHECK_MODULES(XFT, xft >= 2.0.0, have_xft=true, :)
+  PKG_CHECK_MODULES(XFT, xft >= 0.0.0, have_xft=true, :)
   if test "x$have_xft" = "xtrue"; then
     AC_SUBST(XFT_LIBS)
     AC_SUBST(XFT_CFLAGS)
