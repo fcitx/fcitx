@@ -2,7 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
+AC_CANONICAL_BUILD
 AM_INIT_AUTOMAKE(fcitx, 2.0.2)
+AM_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CC
@@ -10,12 +12,21 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
+# checks for build platform
+case $build in
+	*-*-darwin*)
+	AC_DEFINE(_ON_DARWIN, [], Running on Darwin)
+	;;
+esac
+
 # Checks for libraries.
+AC_SEARCH_LIBS(libiconv, iconv)
+AC_SEARCH_LIBS(iconv, iconv)
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([limits.h malloc.h stdlib.h string.h sys/param.h unistd.h])
+AC_CHECK_HEADERS([limits.h malloc.h malloc/malloc.h stdlib.h string.h sys/param.h unistd.h wait.h sys/wait.h])
 
 # x11
 AC_PATH_X
@@ -59,7 +70,7 @@ fi
 AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
 if test "x$have_xft" = "xtrue"; then
-  LIBS="$LIBS $X_LIBS $XFT_LIBS"
+  LIBS="$LIBS $X_LIBS -lX11 $XFT_LIBS"
   CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS -D_USE_XFT"
 else
   LIBS="$LIBS $X_LIBS -lX11"
