@@ -3,8 +3,6 @@
 
 #include "xim.h"
 
-void            GetLocale (void);
-void            SetLocale (void);
 Bool            CheckLocale (char *strHZ);
 
 #endif

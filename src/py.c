@@ -65,7 +65,6 @@ extern Bool     bIsInLegend;
 extern Bool     bUseLegend;
 extern Bool     bSP_UseSemicolon;
 extern Bool     bSP;
-extern Bool     bRunLocal;
 extern int      iCandWordCount;
 extern int      iCandPageCount;
 extern int      iCodeInputCount;
@@ -95,12 +94,7 @@ Bool LoadPYBaseDict (void)
     char            strPath[PATH_MAX];
     int             i, j, iLen;
 
-    if (bRunLocal) {
-	strcpy (strPath, (char *) getenv ("HOME"));
-	strcat (strPath, "/fcitx/");
-    }
-    else
-	strcpy (strPath, DATA_DIR);
+    strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_BASE_FILE);
     fp = fopen (strPath, "rb");
     if (!fp)
@@ -155,12 +149,7 @@ Bool LoadPYOtherDict (void)
 
     bPYOtherDictLoaded = True;
 
-    if (bRunLocal) {
-	strcpy (strPath, (char *) getenv ("HOME"));
-	strcat (strPath, "/fcitx/");
-    }
-    else
-	strcpy (strPath, DATA_DIR);
+    strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_PHRASE_FILE);
     fp = fopen (strPath, "rb");
     if (!fp)

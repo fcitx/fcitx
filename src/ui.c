@@ -54,7 +54,6 @@ extern WINDOW_COLOR inputWindowColor;
 extern Bool     bIsResizingInputWindow;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern IC      *CurrentIC;
-extern char    *strDefaultLocale;
 
 Bool InitX (void)
 {

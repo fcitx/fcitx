@@ -12,8 +12,6 @@
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC;
-Bool            bRunLocal = False;
-char           *strDefaultLocale;
 Bool            bUseCtrlShift = False;
 Bool            bBackground = True;
 
@@ -363,7 +361,6 @@ Bool InitXIM (char *imname, Window im_window)
     XIMStyles      *input_styles;	//, *styles2;
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;	//, *encoding2;
-    char            transport[80];	/* enough */
 
     if (!imname) {
 	imname = getenv ("XMODIFIERS");
@@ -388,9 +385,15 @@ Bool InitXIM (char *imname, Window im_window)
     encodings = (XIMEncodings *) malloc (sizeof (XIMEncodings));
     encodings->count_encodings = sizeof (zhEncodings) / sizeof (XIMEncoding) - 1;
     encodings->supported_encodings = zhEncodings;
-    strcpy (transport, "X/");
 
-    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, (strcasecmp (strDefaultLocale, "zh_CN.gb2312")) ? strDefaultLocale : "zh_CN", IMServerTransport, transport, IMInputStyles, input_styles, NULL);
+    ims = IMOpenIM (dpy,
+                    IMModifiers, "Xi18n",
+                    IMServerWindow, im_window,
+                    IMServerName, imname,
+                    IMLocale, "zh_CN,en_US.UTF-8",
+                    IMServerTransport, "X/",
+                    IMInputStyles, input_styles,
+                    NULL);
     if (ims == (XIMS) NULL) {
 	fprintf (stderr, "已经存在另一个同名服务程序 %s\n", imname);
 	return False;

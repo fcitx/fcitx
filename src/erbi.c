@@ -47,7 +47,6 @@ extern Window   inputWindow;
 
 extern SINGLE_HZ legendCandWords[];
 extern char     strCodeInput[];
-extern Bool     bRunLocal;
 extern Bool     bIsDoInputOnly;
 extern int      iCandPageCount;
 extern int      iCurrentCandPage;
@@ -94,12 +93,7 @@ Bool LoadEBDict (void)
 
     //∂¡»ÎŒÂ± ¬Î±Ì
     if (access (strPath, 0)) {
-	if (bRunLocal) {
-	    strcpy (strPath, (char *) getenv ("HOME"));
-	    strcat (strPath, "/fcitx/");
-	}
-	else
-	    strcpy (strPath, DATA_DIR);
+        strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, ERBI_DICT_FILENAME);
 	fpDict = fopen (strPath, "rt");
     }
@@ -135,12 +129,7 @@ Bool LoadEBDict (void)
     strcat (strPath, ERBI_FH_FILENAME);
 
     if (access (strPath, 0)) {
-	if (bRunLocal) {
-	    strcpy (strPath, (char *) getenv ("HOME"));
-	    strcat (strPath, "/fcitx/");
-	}
-	else
-	    strcpy (strPath, DATA_DIR);
+        strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, ERBI_FH_FILENAME);
 	fpDict = fopen (strPath, "rt");
     }

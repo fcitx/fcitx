@@ -3,6 +3,8 @@
 
 /*Program closes with a mouse click or keypress */
 
+#include <langinfo.h>
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
@@ -33,8 +35,8 @@ char           *(*GetLegendCandWord) (int);
 
 extern IME      imeIndex;
 extern Bool     bBackground;
+extern Bool     bIsUtf8;
 extern HIDE_MAINWINDOW hideMainWindow;
-extern Bool     bRunLocal;
 
 int main (int argc, char *argv[])
 {
@@ -47,21 +49,20 @@ int main (int argc, char *argv[])
 	    imname = argv[++i];
 /*	else if (!strcmp (argv[i], "-kl"))
 	    filter_mask = (KeyPressMask | KeyReleaseMask);*/
-	else if (!strcmp (argv[i], "-local"))
-	    bRunLocal = True;
 	else if (!strcmp (argv[i], "-nb"))
 	    bBackground = False;
     }
 
     SetMyExceptionHandler ();
 
+    setlocale (LC_ALL, "");
+    bIsUtf8 = (strcmp(nl_langinfo(CODESET), "UTF-8") == 0);
+
     InitX ();
 
     LoadProfile ();
     LoadConfig (True);
-    GetLocale ();
     CreateFont ();
-    SetLocale ();
 
     if (!LoadPuncDict ())
 	fprintf (stderr, "无法打开中文标点文件，将无法输入中文标点！\n");

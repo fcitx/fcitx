@@ -8,7 +8,6 @@
 #define MAX_CAND_WORD	10
 #define MAX_USER_INPUT 300
 // #define MAX_PHRASE_LENGTH 10 //最大词组长度----与拼音词组长度相同
-#define DATA_DIR                "/usr/share/fcitx/data/"
 
 #define HOT_KEY_COUNT	2
 #define MAX_HZ_SAVED    10

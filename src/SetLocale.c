@@ -6,29 +6,7 @@
 
 char            strUserLocale[20];
 
-extern Bool     bIsUtf8;
-extern char    *strDefaultLocale;
 extern Bool     bUseGBK;
-
-void GetLocale (void)
-{
-    if (strUserLocale[0] != '\0')
-	strDefaultLocale = strUserLocale;
-    else {
-	strDefaultLocale = (char *) getenv ("LC_CTYPE");
-	if (!strDefaultLocale)
-	    strDefaultLocale = (char *) getenv ("LANG");
-    }
-
-    if (!strcasecmp (strDefaultLocale, "zh_CN.UTF8") || !strcasecmp (strDefaultLocale, "zh_CN.UTF-8"))
-	bIsUtf8 = True;
-}
-
-void SetLocale (void)
-{
-//    GetLocale ();
-    setlocale (LC_CTYPE, strDefaultLocale);
-}
 
 Bool CheckLocale (char *strHZ)
 {

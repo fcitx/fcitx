@@ -11,7 +11,6 @@
 ChnPunc        *chnPunc = NULL;
 
 extern int      iCodeInputCount;
-extern Bool     bRunLocal;
 
 int LoadPuncDict (void)
 {
@@ -22,12 +21,7 @@ int LoadPuncDict (void)
     char           *pstr;
     int             i;
 
-    if (bRunLocal) {
-	strcpy (strPath, (char *) getenv ("HOME"));
-	strcat (strPath, "/fcitx/");
-    }
-    else
-	strcpy (strPath, DATA_DIR);
+    strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PUNC_DICT_FILENAME);
     fpDict = fopen (strPath, "rt");
 
