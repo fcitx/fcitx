@@ -16,7 +16,7 @@ Group(zh_CN):	用户界面/桌面
 License:	GPL
 Source:		%{name}-%{version}.tar.gz
 #BuildRequires:	XFree86, fontconfig
-BuildRequires:	XFree86
+BuildRequires:	XFree86-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 
 %description
