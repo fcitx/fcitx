@@ -86,6 +86,8 @@ Bool LoadEBDict (void)
     FILE           *fpDict;
     EBRECORD       *recTemp;
     char            strPath[PATH_MAX];
+    int             i = 0;
+
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
@@ -138,8 +140,6 @@ Bool LoadEBDict (void)
     if (fpDict) {
 	iEBFH = CalculateRecordNumber (fpDict);
 	ebfh = (EBFH *) malloc (sizeof (EBFH) * iEBFH);
-
-	int             i = 0;
 
 	for (i = 0; i < iEBFH; i++) {
 	    if (EOF == fscanf (fpDict, "%s\n", ebfh[i].strEBFH))
@@ -481,10 +481,10 @@ INPUT_RETURN_VALUE DoEBInput (int iKey)
 
 char           *EBGetCandWord (int iIndex)
 {
+    char           *pCandWord;
+
     if (!strcmp (strCodeInput, "````"))
 	return EBGetFHCandWord (iIndex);
-
-    char           *pCandWord;
 
     bIsInLegend = False;
 
@@ -514,6 +514,9 @@ char           *EBGetCandWord (int iIndex)
 
 INPUT_RETURN_VALUE EBGetPinyinCandWords (SEARCH_MODE mode)
 {
+    int             i;
+    EBRECORD       *pEB;
+ 
     if (mode == SM_FIRST) {
 	bSingleHZMode = True;
 	strcpy (strFindString, strCodeInput + 1);
@@ -530,9 +533,6 @@ INPUT_RETURN_VALUE EBGetPinyinCandWords (SEARCH_MODE mode)
 	PYGetCandWords (mode);
 
     //下面将拼音的候选字表转换为五笔的样式
-    int             i;
-    EBRECORD       *pEB;
- 
     for (i = 0; i < iCandWordCount; i++) {
 	pEB = FindErBiCode (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].strHZ, False);
 	if (pEB)
@@ -731,10 +731,10 @@ int CompareEBCode (char *strUser, char *strDict)
 
 int EBFindFirstMatchCode (void)
 {
+    int             i = 0;
+
     if (!erbiDictHead)
 	return -1;
-
-    int             i = 0;
 
     erbiDictCurrent = erbiDictHead->next;
     while (erbiDictCurrent != erbiDictHead) {
@@ -755,10 +755,10 @@ int EBFindFirstMatchCode (void)
  */
 EBRECORD       *FindErBiCode (char *strHZ, Bool bMode)
 {
+    EBRECORD       *recTemp;
+
     if (!erbiDictHead)
 	return NULL;
-
-    EBRECORD       *recTemp;
 
     recTemp = erbiDictHead->next;
     while (recTemp != erbiDictHead) {
@@ -1076,10 +1076,11 @@ char           *EBGetLegendCandWord (int iIndex)
 
 INPUT_RETURN_VALUE EBGetFHCandWords (SEARCH_MODE mode)
 {
+    char            strTemp[2];
+    int             i;
+
     if (!iEBFH)
 	return IRV_DO_NOTHING;
-
-    char            strTemp[2];
 
     strTemp[1] = '\0';
     uMessageDown = 0;
@@ -1105,8 +1106,6 @@ INPUT_RETURN_VALUE EBGetFHCandWords (SEARCH_MODE mode)
 	    iCurrentCandPage--;
 	}
     }
-
-    int             i;
 
     for (i = 0; i < iMaxCandWord; i++) {
 	strTemp[0] = i + 1 + '0';
@@ -1152,6 +1151,9 @@ char           *EBGetFHCandWord (int iIndex)
 
 Bool EBPhraseTips (char *strPhrase)
 {
+    EBRECORD       *recTemp = NULL;
+    INT8            i;
+
     if (!erbiDictHead)
 	return False;
 
@@ -1164,9 +1166,6 @@ Bool EBPhraseTips (char *strPhrase)
 	return False;
 
     //首先要判断是不是已经在词库中
-    EBRECORD       *recTemp = NULL;
-    INT8            i;
-
     for (i = 0; i < (strlen (strPhrase) - 2); i += 2) {
 	recTemp = erbiDictHead->next;
 	while (recTemp != erbiDictHead) {
