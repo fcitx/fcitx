@@ -51,6 +51,7 @@ make DESTDIR=$RPM_BUILD_ROOT install-strip
 %doc AUTHORS ChangeLog COPYING INSTALL README
 %doc doc/*.txt doc/*.htm
 %{_bindir}/*
+%dir %{_datadir}/fcitx/data
 %{_datadir}/fcitx/data/*.mb
 %{_datadir}/fcitx/data/*.dat
 
