@@ -71,9 +71,9 @@ AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
-#AC_FUNC_FORK    # Can not use in autoconf-2.13(redhat 7.2)
-#AC_FUNC_MALLOC
-AC_CHECK_FUNCS([fork vfork malloc])
+AC_FUNC_FORK                         # Not work: autoconf-2.13(redhat 7.2)
+AC_FUNC_MALLOC
+#AC_CHECK_FUNCS([fork vfork malloc]) # Does work: redhat7.2
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([memmove memset mkdir setlocale strcasecmp strstr strtol])
 
