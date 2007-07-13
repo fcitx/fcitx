@@ -37,6 +37,8 @@
 #include "ui.h"
 #include "ime.h"
 
+#include "tools.h"
+
 //下面的顺序不能颠倒
 #include "next.xpm"
 #include "prev.xpm"
@@ -47,7 +49,7 @@ int             iInputWindowY = INPUTWND_STARTY;
 int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
-uint            iFixedInputWindowWidth = 400;
+uint            iFixedInputWindowWidth = 0;
 uint            iInputWindowWidth = INPUTWND_WIDTH;
 uint            iInputWindowUpWidth = INPUTWND_WIDTH;
 uint            iInputWindowDownWidth = INPUTWND_WIDTH;
@@ -83,7 +85,7 @@ Bool            bShowPrev = False;
 Bool            bShowNext = False;
 Bool            bTrackCursor = True;
 Bool            bCenterInputWindow = True;
-Bool		bShowInputWindowTriggering=True;
+Bool            bShowInputWindowTriggering = True;
 
 int             iCursorPos = 0;
 Bool            bShowCursor = False;
@@ -104,11 +106,14 @@ extern XFontSet fontSet;
 extern GC       dimGC;
 extern GC       lightGC;
 
+extern Bool     bUseGBKT;
+
+/* 计算速度
 extern Bool     bStartRecordType;
 extern Bool     bShowUserSpeed;
 extern time_t   timeStart;
 extern uint     iHZInputed;
-
+*/
 Bool CreateInputWindow (void)
 {
     XSetWindowAttributes attrib;
@@ -265,32 +270,33 @@ void DisplayMessage (void)
 	strcat (messageUp[0].strMsg, FCITX_VERSION);
 	messageUp[0].type = MSG_TIPS;
 
-	if (bStartRecordType && bShowUserSpeed) {
-	    double          timePassed;
+	/* 显示打字速度
+	   if (bStartRecordType && bShowUserSpeed) {
+	   double          timePassed;
 
-	    timePassed = difftime (time (NULL), timeStart);
-	    if (((int) timePassed) == 0)
-		timePassed = 1.0;
+	   timePassed = difftime (time (NULL), timeStart);
+	   if (((int) timePassed) == 0)
+	   timePassed = 1.0;
 
-	    uMessageDown = 6;
-	    strcpy (messageDown[0].strMsg, "打字速度：");
-	    messageDown[0].type = MSG_OTHER;
-	    sprintf (messageDown[1].strMsg, "%d", (int) (iHZInputed * 60 / timePassed));
-	    messageDown[1].type = MSG_CODE;
-	    strcpy (messageDown[2].strMsg, "/分  用时：");
-	    messageDown[2].type = MSG_OTHER;
-	    sprintf (messageDown[3].strMsg, "%d", (int) timePassed);
-	    messageDown[3].type = MSG_CODE;
-	    strcpy (messageDown[4].strMsg, "秒  字数：");
-	    messageDown[4].type = MSG_OTHER;
-	    sprintf (messageDown[5].strMsg, "%u", iHZInputed);
-	    messageDown[5].type = MSG_CODE;
-	}
-	else {
-	    uMessageDown = 1;
-	    strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
-	    messageDown[0].type = MSG_CODE;
-	}
+	   uMessageDown = 6;
+	   strcpy (messageDown[0].strMsg, "打字速度：");
+	   messageDown[0].type = MSG_OTHER;
+	   sprintf (messageDown[1].strMsg, "%d", (int) (iHZInputed * 60 / timePassed));
+	   messageDown[1].type = MSG_CODE;
+	   strcpy (messageDown[2].strMsg, "/分  用时：");
+	   messageDown[2].type = MSG_OTHER;
+	   sprintf (messageDown[3].strMsg, "%d", (int) timePassed);
+	   messageDown[3].type = MSG_CODE;
+	   strcpy (messageDown[4].strMsg, "秒  字数：");
+	   messageDown[4].type = MSG_OTHER;
+	   sprintf (messageDown[5].strMsg, "%u", iHZInputed);
+	   messageDown[5].type = MSG_CODE;
+	   }
+	   else { */
+	uMessageDown = 1;
+	strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
+	messageDown[0].type = MSG_CODE;
+	//}
     }
 
     iInputWindowUpWidth = 2 * INPUTWND_START_POS_UP + 1;
@@ -423,6 +429,8 @@ void DisplayMessageUp (void)
     Bool            bEn;
 #endif
 
+    char           *strGBKT;
+
     iPos = INPUTWND_START_POS_UP;
     iChar = iCursorPos;
 
@@ -453,14 +461,25 @@ void DisplayMessageUp (void)
 	    }
 	    *p2 = '\0';
 
-	    iInputWindowUpWidth = StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
-	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strTemp, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
+	    strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (strTemp) : strTemp;
+
+	    iInputWindowUpWidth = StringWidth (strGBKT, (bEn) ? xftFontEn : xftFont);
+	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strGBKT, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
 	    iPos += iInputWindowUpWidth;
+
+	    if (bUseGBKT)
+		free (strGBKT);
 	}
 #else
-	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg, fontSet);
-	OutputString (inputWindow, fontSet, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
+	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (messageUp[i].strMsg) : messageUp[i].strMsg;
+
+	iInputWindowUpWidth = StringWidth (strGBKT, fontSet);
+	OutputString (inputWindow, fontSet, strGBKT, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
 	iPos += iInputWindowUpWidth;
+
+	if (bUseGBKT)
+	    free (strGBKT);
+
 #endif
 
 	if (bShowCursor && iChar) {
@@ -525,13 +544,15 @@ void DisplayMessageDown (void)
     Bool            bEn;
 #endif
 
+    char           *strGBKT;
+
     iPos = INPUTWND_START_POS_DOWN;
     for (i = 0; i < uMessageDown; i++) {
 	//借用iInputWindowDownWidth作为一个临时变量
 
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
-	
+
 	while (*p1) {
 	    p2 = strTemp;
 	    if (isprint (*p1))	//使用中文字体
@@ -556,18 +577,28 @@ void DisplayMessageDown (void)
 	    }
 	    *p2 = '\0';
 
-	    iInputWindowDownWidth = StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
-	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strTemp, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
+	    strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (strTemp) : strTemp;
+
+	    iInputWindowDownWidth = StringWidth (strGBKT, (bEn) ? xftFontEn : xftFont);
+	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strGBKT, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
 	    iPos += iInputWindowDownWidth;
+
+	    if (bUseGBKT)
+		free (strGBKT);
 	}
 
 	/*iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
 	   OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
 	   iPos += iInputWindowDownWidth; */
 #else
-	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, fontSet);
-	OutputString (inputWindow, fontSet, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
+	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (messageDown[i].strMsg) : messageDown[i].strMsg;
+
+	iInputWindowDownWidth = StringWidth (strGBKT, fontSet);
+	OutputString (inputWindow, fontSet, strGBKT, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
 	iPos += iInputWindowDownWidth;
+
+	if (bUseGBKT)
+	    free (strGBKT);
 #endif
     }
 }

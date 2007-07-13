@@ -21,10 +21,13 @@
 #include <string.h>
 
 #define PARSE_INPUT_SYSTEM ' '
-#include "../src/pyParser.c"
-#include "../src/pyMapTable.c"
-#include "../src/PYFA.c"
-#include "../src/sp.c"
+
+#include "pyParser.h"
+#include "pyMapTable.h"
+#include "PYFA.h"
+#include "sp.h"
+
+extern PYTABLE PYTable[];
 
 FILE           *fps, *fpt, *fp1, *fp2;
 Bool		bSingleHZMode = False;
@@ -143,7 +146,7 @@ void CreatePYPhrase (void)
 	if (strlen (strPhrase) < 3)
 	    continue;
 	
-	ParsePY (strPY, &strTemp, (PYPARSEINPUTMODE)PARSE_INPUT_SYSTEM);
+	ParsePY (strPY, &strTemp, PY_PARSE_INPUT_SYSTEM);
 	s2++;
 	kkk = 0;
 	//printf("%s  %s  %s   %d\n",strPY,strPhrase,strTemp.strMap,strTemp.iHZCount);
@@ -249,7 +252,7 @@ void CreatePYBase (void)
 	fscanf (fps, "%s", strPY);
 	fscanf (fps, "%s\n", strHZ);
 
-	if (MapPY (strPY, strMap, (PYPARSEINPUTMODE)PARSE_INPUT_SYSTEM)) {
+	if (MapPY (strPY, strMap, PARSE_INPUT_SYSTEM)) {
 	    for (i = 0; i < iBaseCount; i++)
 		if ((!strcmp (PYTable[i].strPY, strPY)) && PYTable[i].pMH == NULL)
 		    YY[i] += 1;

@@ -35,5 +35,6 @@ typedef struct TCHNPUNC {
 
 Bool            LoadPuncDict (void);
 char           *GetPunc (int iKey);
+void		FreePunc (void);
 
 #endif

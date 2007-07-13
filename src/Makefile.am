@@ -1,7 +1,6 @@
 DEFS = -DPKGDATADIR=\"$(pkgdatadir)\"
 
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/xpm
-
+INCLUDES = -I. -I$(top_srcdir)/lib -I$(top_srcdir)/xpm
 AM_CFLAGS = -O2 -fno-strength-reduce
 
 

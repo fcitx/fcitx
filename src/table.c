@@ -56,7 +56,7 @@ INT8            iTableCount;
 Bool            bTableDictLoaded = False;	//Loads tables only if needed
 
 RECORD         *currentRecord = NULL, *recordHead = NULL;
-RECORD        **tableSingleHZ;			//Records the single characters in table to speed auto phrase
+RECORD        **tableSingleHZ;	//Records the single characters in table to speed auto phrase
 unsigned int    iSingleHZCount;
 TABLECANDWORD   tableCandWord[MAX_CAND_WORD];
 
@@ -347,7 +347,7 @@ Bool LoadTableDict (void)
 
     fpDict = fopen (strPath, "rb");
     if (!fpDict) {
-	    fprintf (stderr, "Cannot load table file: %s\n", strPath);
+	fprintf (stderr, "Cannot load table file: %s\n", strPath);
 	return False;
     }
 
@@ -503,27 +503,27 @@ Bool LoadTableDict (void)
     /*
      * 呵呵，借用一下这儿来为一个词库文件生成五笔编码
      */
-    
+
     /*
-    FILE *temp1,*temp2;
-    char str[100];
-    temp1=fopen("phrase.txt","rt");
-    temp2=fopen("table.txt","wt");
-    
-    while (!feof(temp1)) {
-	fscanf(temp1,"%s\n",str);
-	TableCreatePhraseCode(str);
-	printf("\nProcessing %s ...  ",str);
-	if ( !bCanntFindCode ) 
-	    fprintf(temp2,"%s %s\n", strNewPhraseCode,str);
-	else
-	    puts("ERROR!");
-    }
-    printf("\nCreate table.txt ok!\n");
-    fclose(temp2);
-    fclose(temp1);    */
-    /* ********************************************** */    
-    
+       FILE *temp1,*temp2;
+       char str[100];
+       temp1=fopen("phrase.txt","rt");
+       temp2=fopen("table.txt","wt");
+
+       while (!feof(temp1)) {
+       fscanf(temp1,"%s\n",str);
+       TableCreatePhraseCode(str);
+       printf("\nProcessing %s ...  ",str);
+       if ( !bCanntFindCode ) 
+       fprintf(temp2,"%s %s\n", strNewPhraseCode,str);
+       else
+       puts("ERROR!");
+       }
+       printf("\nCreate table.txt ok!\n");
+       fclose(temp2);
+       fclose(temp1);    */
+    /* ********************************************** */
+
     return True;
 }
 
@@ -630,7 +630,7 @@ void SaveTableDict (void)
     strcat (strPathTemp, TEMP_FILE);
     fpDict = fopen (strPathTemp, "wb");
     if (!fpDict) {
-	    fprintf (stderr, "Cannot create table file: %s\n", strPathTemp);
+	fprintf (stderr, "Cannot create table file: %s\n", strPathTemp);
 	return;
     }
 
@@ -717,7 +717,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
     if (!bTableDictLoaded)
 	LoadTableDict ();
-    
+
     if (bTablePhraseTips) {
 	if (iKey == CTRL_DELETE) {
 	    bTablePhraseTips = False;
@@ -733,7 +733,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		DisplayInputWindow ();
 	}
     }
-    
+
     retVal = IRV_DO_NOTHING;
     if (IsInputKey (iKey) || iKey == table[iTableIMIndex].cMatchingKey || iKey == table[iTableIMIndex].cPinyin) {
 	bIsInLegend = False;
@@ -758,12 +758,13 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			retVal = IRV_DISPLAY_LAST;
 		    }
 		    else {
-			char *strTemp;
+			char           *strTemp;
+
 			retVal = TableGetCandWords (SM_FIRST);
-			strTemp=GetPunc(strCodeInput[0]);
-			
+			strTemp = GetPunc (strCodeInput[0]);
+
 			if (table[iTableIMIndex].bTableAutoSendToClient && (iCodeInputCount == table[iTableIMIndex].iCodeLength)) {
-			    if ((iCandWordCount == 1 && tableCandWord[0].flag) || (!tableCandWord[0].flag && !table[iTableIMIndex].iSaveAutoPhraseAfter)) {	//如果只有一个候选词，则送到客户程序中
+			    if (iCandWordCount == 1 && (tableCandWord[0].flag || (!tableCandWord[0].flag && !table[iTableIMIndex].iSaveAutoPhraseAfter))) {	//如果只有一个候选词，则送到客户程序中
 				strcpy (strStringGet, TableGetCandWord (0));
 				iCandWordCount = 0;
 				if (bIsInLegend)
@@ -772,8 +773,8 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 				    retVal = IRV_GET_CANDWORDS;
 			    }
 			}
-			else if ( (iCodeInputCount==1) && strTemp && !iCandWordCount) { //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
-			    strcpy (strStringGet, strTemp); 
+			else if ((iCodeInputCount == 1) && strTemp && !iCandWordCount) {	//如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
+			    strcpy (strStringGet, strTemp);
 			    retVal = IRV_PUNC;
 			}
 		    }
@@ -898,14 +899,14 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		return IRV_CLEAN;
 	}
 	else if (iKey >= '0' && iKey <= '9') {
-	    if (!iCandWordCount)
-		return IRV_TO_PROCESS;
-
 	    iKey -= '0';
 	    if (iKey == 0)
 		iKey = 10;
-	    
+
 	    if (!bIsInLegend) {
+		if (!iCandWordCount)
+		    return IRV_TO_PROCESS;
+
 		if (iKey > iCandWordCount)
 		    return IRV_DO_NOTHING;
 		else {
@@ -923,7 +924,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    PYGetCandWord (iKey - 1);
 
 			strcpy (strStringGet, TableGetCandWord (iKey - 1));
-		
+
 			if (bIsInLegend)
 			    retVal = IRV_GET_LEGEND;
 			else
@@ -957,7 +958,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		messageUp[0].type = MSG_TIPS;
 		retVal = IRV_DISPLAY_MESSAGE;
 	    }
-	    else if (iKey == (XK_BackSpace & 0x00FF)) {
+	    else if (iKey == (XK_BackSpace & 0x00FF) || iKey==CTRL_H) {
 		if (!iCodeInputCount) {
 		    bIsInLegend = False;
 		    return IRV_DONOT_PROCESS_CLEAN;
@@ -1140,7 +1141,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 {
     int             i;
     char            strTemp[3], *pstr;
-    
+
     if (bIsInLegend)
 	return TableGetLegendCandWords (mode);
     if (!strcmp (strCodeInput, table[iTableIMIndex].strSymbol))
@@ -1153,25 +1154,27 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	    iCandWordCount = 0;
 	    iTableCandDisplayed = 0;
 	    iTableTotalCandCount = 0;
+	    iCurrentCandPage = 0;
+	    iCandPageCount = 0;
 
 	    TableResetFlags ();
-	    
-	    if ( TableFindFirstMatchCode ()==-1 && !iAutoPhrase) {
+
+	    if (TableFindFirstMatchCode () == -1 && !iAutoPhrase) {
 		uMessageDown = 0;
 		return IRV_DISPLAY_CANDWORDS;	//Not Found
-	    }	
+	    }
 	}
 	else {
 	    if (!iCandWordCount)
 		return IRV_TO_PROCESS;
 
 	    if (mode == SM_NEXT) {
-		if (iTableCandDisplayed == iTableTotalCandCount)
-		    return IRV_DO_NOTHING;
+		if (iTableCandDisplayed >= iTableTotalCandCount)
+		    return IRV_TO_PROCESS;
 	    }
 	    else {
 		if (iTableCandDisplayed == iCandWordCount)
-		    return IRV_DO_NOTHING;
+		    return IRV_TO_PROCESS;
 
 		iTableCandDisplayed -= iCandWordCount;
 		TableSetCandWordsFlag (iCandWordCount, False);
@@ -1189,7 +1192,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		}
 	    }
 	}
-	
+
 	if (iCandWordCount < iMaxCandWord) {
 	    while (currentRecord && currentRecord != recordHead) {
 		if ((mode == SM_PREV) ^ (!currentRecord->flag)) {
@@ -1203,7 +1206,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		currentRecord = currentRecord->next;
 	    }
 	}
-	
+
 	if (table[iTableIMIndex].bRule && table[iTableIMIndex].bAutoPhrase && mode != SM_PREV && iCodeInputCount == table[iTableIMIndex].iCodeLength) {
 	    for (i = 0; i < iAutoPhrase; i++) {
 		if (!TableCompareCode (strCodeInput, autoPhrase[i].strCode) && !autoPhrase[i].flag) {
@@ -1215,8 +1218,18 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		}
 	    }
 	}
-	
+
 	TableSetCandWordsFlag (iCandWordCount, True);
+
+	if (mode != SM_PREV)
+	    iTableCandDisplayed += iCandWordCount;
+
+	//由于iCurrentCandPage和iCandPageCount用来指示是否显示上/下翻页图标，因此，此处需要设置一下
+	iCurrentCandPage = (iTableCandDisplayed == iCandWordCount) ? 0 : 1;
+	iCandPageCount = (iTableCandDisplayed >= iTableTotalCandCount) ? 1 : 2;
+	if (iCandWordCount == iTableTotalCandCount)
+	    iCandPageCount = 0;
+	/* **************************************************** */
     }
 
     if (bPointAfterNumber) {
@@ -1332,16 +1345,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 
 	    iCandWordCount = i;
 	}
-
-	if (mode != SM_PREV)
-	    iTableCandDisplayed += iCandWordCount;
-	//由于iCurrentCandPage和iCandPageCount用来指示是否显示上/下翻页图标，因此，此处需要设置一下
-	iCurrentCandPage = (iTableCandDisplayed == iCandWordCount) ? 0 : 1;
-	iCandPageCount = (iTableCandDisplayed == iTableTotalCandCount) ? 1 : 2;
-	if (iCandWordCount == iTableTotalCandCount)
-	    iCandPageCount = 0;
     }
-    /* **************************************************** */
 
     uMessageDown = 0;
     for (i = 0; i < iCandWordCount; i++) {
@@ -1605,10 +1609,10 @@ int TableFindFirstMatchCode (void)
 	    i++;
     }
     currentRecord = recordIndex[i].record;
-    if ( !currentRecord )
+    if (!currentRecord)
 	return -1;
-    
-    while (currentRecord != recordHead ) {
+
+    while (currentRecord != recordHead) {
 	if (!TableCompareCode (strCodeInput, currentRecord->strCode)) {
 	    if (CheckHZCharset (currentRecord->strHZ))
 		return i;
@@ -1651,6 +1655,7 @@ RECORD         *TableFindCode (char *strHZ, Bool bMode)
 void TableAdjustOrderByIndex (int iIndex)
 {
     RECORD         *recTemp;
+    int		iTemp;
 
     if (!(tableCandWord[iIndex - 1].flag))
 	return;
@@ -1670,6 +1675,17 @@ void TableAdjustOrderByIndex (int iIndex)
     tableCandWord[iIndex - 1].candWord.record->next = recTemp;
 
     iTableChanged++;
+    
+    //需要的话，更新索引
+    if ( tableCandWord[iIndex - 1].candWord.record->strCode[1]=='\0') {
+        for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++) {
+		if ( recordIndex[iTemp].cCode == tableCandWord[iIndex - 1].candWord.record->strCode[0] ) {
+			recordIndex[iTemp].record = tableCandWord[iIndex - 1].candWord.record;
+			break;
+		}
+	}
+    }
+    
     if (iTableChanged == 5)
 	SaveTableDict ();
 }
@@ -2159,7 +2175,7 @@ void TableCreateAutoPhrase (INT8 iCount)
     j = iHZLastInputCount - table[iTableIMIndex].iAutoPhrase - iCount;
     if (j < 0)
 	j = 0;
-    
+
     for (; j < iHZLastInputCount - 1; j++) {
 	for (i = table[iTableIMIndex].iAutoPhrase; i >= 2; i--) {
 	    if ((j + i - 1) > iHZLastInputCount)
@@ -2194,9 +2210,12 @@ void TableCreateAutoPhrase (INT8 iCount)
 	}
     }
 
-    /*   for (i=0;i<iAutoPhrase;i++ )
+    /*
+    for (i=0;i<iAutoPhrase;i++ ) {
        printf("%d: %s  %s\n",i+1,autoPhrase[i].strCode,autoPhrase[i].strHZ);
-       puts("==========================================="); */
+       puts("===========================================");
+    }
+    */
 }
 
 void UpdateHZLastInput (char *str)

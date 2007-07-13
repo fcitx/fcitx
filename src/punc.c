@@ -27,7 +27,7 @@
 #include "ime.h"
 #include "tools.h"
 
-ChnPunc        *chnPunc = NULL;
+ChnPunc        *chnPunc = (ChnPunc *)NULL;
 
 extern int      iCodeInputCount;
 
@@ -40,8 +40,15 @@ int LoadPuncDict (void)
     char           *pstr;
     int             i;
 
-    strcpy (strPath, PKGDATADIR "/data/");
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
     strcat (strPath, PUNC_DICT_FILENAME);
+
+    if (access (strPath, 0)) {
+	strcpy (strPath, PKGDATADIR "/data/");
+	strcat (strPath, PUNC_DICT_FILENAME);
+    }
+    
     fpDict = fopen (strPath, "rt");
 
     if (!fpDict) {	
@@ -98,6 +105,15 @@ int LoadPuncDict (void)
     fclose (fpDict);
 
     return True;
+}
+
+void		FreePunc (void)
+{
+    if (!chnPunc )
+	return;
+    
+    free(chnPunc);    
+    chnPunc = (ChnPunc *)NULL;
 }
 
 /*

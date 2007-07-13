@@ -69,7 +69,7 @@ typedef struct _TABLE {
     Bool            bAutoPhrasePhrase;		//词组是否参与造词
     INT8            iAutoPhrase;		//自动造词长度
     Bool            bTableExactMatch;		//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;		//输入完毕后是否提示编码--使用拼音时总有提示
+    Bool            bPromptTableCode;		//输入完毕后是否提示编码
 } TABLE;
 
 typedef struct _RECORD {

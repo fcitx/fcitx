@@ -47,6 +47,7 @@ extern int      iTempInputWindowY;
 extern int      iInputWindowWidth;
 extern int      iInputWindowHeight;
 
+extern char     strUserLocale[];
 extern int      iMaxCandWord;
 extern Bool     _3DEffectMainWindow;
 extern _3D_EFFECT _3DEffectInputWindow;
@@ -94,6 +95,8 @@ extern HIDE_MAINWINDOW hideMainWindow;
 extern int      iFontSize;
 extern int      iMainWindowFontSize;
 
+extern Bool     bUseGBKT;
+
 extern Bool     bChnPunc;
 extern Bool     bCorner;
 extern Bool     bUseLegend;
@@ -101,10 +104,13 @@ extern Bool     bUseLegend;
 extern Bool     bPYCreateAuto;
 extern Bool     bPYSaveAutoAsPhrase;
 extern Bool     bPhraseTips;
-extern SEMICOLON_TO_DO     semicolonToDo;
+extern SEMICOLON_TO_DO semicolonToDo;
 extern Bool     bEngAfterCap;
+
+/*
 extern Bool     bShowUserSpeed;
-extern Bool	bShowVK;
+*/
+extern Bool     bShowVK;
 
 extern Bool     bFullPY;
 extern Bool     bDisablePagingInLegend;
@@ -138,13 +144,15 @@ extern Bool     bPointAfterNumber;
 extern Bool     bConvertPunc;
 extern unsigned int iTimeInterval;
 extern uint     iFixedInputWindowWidth;
-extern Bool	bShowInputWindowTriggering;
+extern Bool     bShowInputWindowTriggering;
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
 #else
 extern char     strUserLocale[];
 #endif
+
+extern INT8     iOffsetY;
 
 /*
 #if defined(DARWIN)*/
@@ -204,11 +212,17 @@ void LoadConfig (Bool bMode)
 	if (pstr[0] == '#')
 	    continue;
 
-	if (MyStrcmp (pstr, "显示字体(中)=")) {
+	if (MyStrcmp (pstr, "字体区域=")) {
+	    pstr += 9;
+	    if (*pstr == ' ')
+		pstr++;
+	    strcpy (strUserLocale, pstr);
+	}
+	else if (MyStrcmp (pstr, "显示字体(中)=")) {
 	    pstr += 13;
 	    strcpy (strFontName, pstr);
 	}
-	if (MyStrcmp (pstr, "显示字体(英)=")) {
+	else if (MyStrcmp (pstr, "显示字体(英)=")) {
 	    pstr += 13;
 	    strcpy (strFontEnName, pstr);
 	}
@@ -242,9 +256,9 @@ void LoadConfig (Bool bMode)
 	    bEngPuncAfterNumber = atoi (pstr);
 	}
 	/*else if (MyStrcmp (pstr, "LumaQQ支持=")) {
-	    pstr += 11;
-	    bLumaQQ = atoi (pstr);
-	}*/
+	   pstr += 11;
+	   bLumaQQ = atoi (pstr);
+	   } */
 	else if (MyStrcmp (pstr, "主窗口是否使用3D界面=")) {
 	    pstr += 21;
 	    _3DEffectMainWindow = atoi (pstr);
@@ -269,21 +283,27 @@ void LoadConfig (Bool bMode)
 	    pstr += 15;
 	    bShowInputWindowTriggering = atoi (pstr);
 	}
+	// 临时解决方案
+	else if (MyStrcmp (pstr, "输入条高度偏移量=")) {
+	    pstr += 17;
+	    iOffsetY = atoi (pstr);
+	}
+	//********************************************
 	else if (MyStrcmp (pstr, "序号后加点=")) {
 	    pstr += 11;
 	    bPointAfterNumber = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "显示打字速度=")) {
-	    pstr += 13;
-	    bShowUserSpeed = atoi (pstr);
-	}
+	/*else if (MyStrcmp (pstr, "显示打字速度=")) {
+	   pstr += 13;
+	   bShowUserSpeed = atoi (pstr);
+	   } */
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
 	    hideMainWindow = (HIDE_MAINWINDOW) atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "显示虚拟键盘=")) {
-		pstr += 13;
-		bShowVK = atoi(pstr);
+	    pstr += 13;
+	    bShowVK = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "光标色=") && bMode) {
 	    pstr += 7;
@@ -640,21 +660,20 @@ void SaveConfig (void)
     fprintf (fp, "显示字体(英)=%s\n", strFontEnName);
     fprintf (fp, "显示字体大小=%d\n", iFontSize);
     fprintf (fp, "主窗口字体大小=%d\n", iMainWindowFontSize);
-#ifdef _USE_XFT
-    fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
-#else
     if (strUserLocale[0])
 	fprintf (fp, "字体区域=%s\n", strUserLocale);
     else
-	fprintf (fp, "#字体区域=zh_CN.gb2312\n");
+	fprintf (fp, "#字体区域=zh_CN.gb18030\n");
+#ifdef _USE_XFT
+    fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
 #endif
 
     fprintf (fp, "\n[输出]\n");
     fprintf (fp, "数字后跟半角符号=%d\n", bEngPuncAfterNumber);
     fprintf (fp, "Enter键行为=%d\n", enterToDo);
-    fprintf (fp, "分号键行为=%d\n", (int)semicolonToDo);
+    fprintf (fp, "分号键行为=%d\n", (int) semicolonToDo);
     fprintf (fp, "大写字母输入英文=%d\n", bEngAfterCap);
-    fprintf (fp, "转换英文中的标点=%d\n", bConvertPunc );
+    fprintf (fp, "转换英文中的标点=%d\n", bConvertPunc);
     fprintf (fp, "联想方式禁止翻页=%d\n", bDisablePagingInLegend);
     //fprintf (fp, "LumaQQ支持=%d\n", bLumaQQ);
 
@@ -665,12 +684,12 @@ void SaveConfig (void)
     fprintf (fp, "主窗口隐藏模式=%d\n", (int) hideMainWindow);
     fprintf (fp, "显示虚拟键盘=%d\n", (int) bShowVK);
     fprintf (fp, "是否自动隐藏输入条=%d\n", bAutoHideInputWindow);
-    fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
-    fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering );
-    fprintf (fp, "#输入条固定宽度仅适用于码表输入法，0表示不固定宽度\n");
+    fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow);
+    fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering);
+    fprintf (fp, "#输入条固定宽度(仅适用于码表输入法)，0表示不固定宽度\n");
     fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
     fprintf (fp, "序号后加点=%d\n", bPointAfterNumber);
-    fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
+    //fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
 
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);
     fprintf (fp, "主窗口背景色=%d %d %d\n", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
@@ -706,8 +725,8 @@ void SaveConfig (void)
     fprintf (fp, "反查拼音=CTRL_ALT_E\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
     fprintf (fp, "中文标点=ALT_SPACE\n");
-    fprintf (fp, "上一页=-\n");
-    fprintf (fp, "下一页==\n");
+    fprintf (fp, "上一页=- ,\n");
+    fprintf (fp, "下一页== .\n");
     fprintf (fp, "第二三候选词选择键=SHIFT\n");
 
     fprintf (fp, "\n[输入法]\n");
@@ -845,6 +864,10 @@ void LoadProfile (void)
 		pstr += 9;
 		bCompactMainWindow = atoi (pstr);
 	    }
+	    else if (MyStrcmp (str, "是否输出GBK繁体=")) {
+		pstr += 16;
+		bUseGBKT = atoi (pstr);
+	    }
 	}
 
 	fclose (fp);
@@ -888,6 +911,8 @@ void SaveProfile (void)
     fprintf (fp, "当前输入法=%d\n", iIMIndex);
     fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
     fprintf (fp, "简洁模式=%d\n", bCompactMainWindow);
+
+    fprintf (fp, "是否输出GBK繁体=%d\n", bUseGBKT);
 
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
@@ -1063,4 +1088,76 @@ Bool CheckHZCharset (char *strHZ)
     }
 
     return True;
+}
+
+static char    *gGBKS2TTable = NULL;
+static int      gGBKS2TTableSize = -1;
+
+/**
+ * 该函数装载data/gbks2t.tab的简体转繁体的码表，
+ * 然后按码表将GBK字符转换成GBK繁体字符。
+ *
+ * WARNING： 该函数返回新分配内存字符串，请调用者
+ * 注意释放。
+ */
+char           *ConvertGBKSimple2Tradition (char *strHZ)
+{
+    FILE           *fp;
+    char           *ret;
+    char            strPath[PATH_MAX];
+    int             i, len;
+    unsigned int    idx;
+
+    if (strHZ == NULL)
+	return NULL;
+
+    if (!gGBKS2TTable) {
+	len = 0;
+
+	strcpy (strPath, PKGDATADIR "/data/");
+	strcat (strPath, TABLE_GBKS2T);
+	fp = fopen (strPath, "rb");
+	if (!fp) {
+	    ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
+	    strcpy (ret, strHZ);
+	    return ret;
+	}
+
+	fseek (fp, 0, SEEK_END);
+	fgetpos (fp, (fpos_t *) & len);
+	if (len > 0) {
+	    gGBKS2TTable = (char *) malloc (sizeof (char) * len);
+	    gGBKS2TTableSize = len;
+	    fseek (fp, 0, SEEK_SET);
+	    fread (gGBKS2TTable, sizeof (char), len, fp);
+	}
+	fclose (fp);
+    }
+
+    i = 0;
+    len = strlen (strHZ);
+    ret = (char *) malloc (sizeof (char) * (len + 1));
+    for (; i < len; ++i) {
+	if (i < (len - 1))
+	    if ((unsigned char) strHZ[i] >= (unsigned char) 0x81
+		&& (unsigned char) strHZ[i] <= (unsigned char) 0xfe &&
+		(((unsigned char) strHZ[i + 1] >= (unsigned char) 0x40 && (unsigned char) strHZ[i + 1] <= (unsigned char) 0x7e) || ((unsigned char) strHZ[i + 1] > (unsigned char) 0x7f && (unsigned char) strHZ[i + 1] <= (unsigned char) 0xfe))) {
+		idx = (((unsigned char) strHZ[i] - (unsigned char) 0x81)
+		       * (unsigned char) 0xbe + ((unsigned char) strHZ[i + 1] - (unsigned char) 0x40)
+		       - ((unsigned char) strHZ[i + 1] / (unsigned char) 0x80)) * 2;
+		if (idx >= 0 && idx < gGBKS2TTableSize - 1) {
+		    if (	/*(unsigned char)gGBKS2TTable[idx] != (unsigned char)0xa1 
+				   && */ (unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
+			ret[i] = gGBKS2TTable[idx];
+			ret[i + 1] = gGBKS2TTable[idx + 1];
+			i += 1;
+			continue;
+		    }
+		}
+	    }
+	ret[i] = strHZ[i];
+    }
+    ret[len] = '\0';
+
+    return ret;
 }

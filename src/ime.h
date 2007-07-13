@@ -107,13 +107,14 @@ typedef int     HOTKEYS;
 void            ProcessKey (IMForwardEventStruct * call_data);
 void            ResetInput (void);
 void            CloseIM (IMForwardEventStruct * call_data);
-void            ChangeIMState (IMForwardEventStruct * call_data);
+void            ChangeIMState ( CARD16 call_data);
 Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
 INPUT_RETURN_VALUE ChangeGBK (void);
 INPUT_RETURN_VALUE ChangeLegend (void);
 INPUT_RETURN_VALUE ChangeTrack (void);
+INPUT_RETURN_VALUE ChangeGBKT (void);
 
 void            RegisterNewIM (char *strName, void (*ResetIM) (void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),
 			       Bool (*PhraseTips) (void), void (*Init) (void), void (*Destroy) (void));

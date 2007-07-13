@@ -502,7 +502,7 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
-	else if (iKey == (XK_BackSpace & 0x00FF)) {
+	else if (iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) {
 	    if (iPYInsertPoint) {
 		val = ((iPYInsertPoint > 1) && (strFindString[iPYInsertPoint - 2] == PY_SEPARATOR)) ? 2 : 1;
 		strcpy (strFindString + iPYInsertPoint - val, strFindString + iPYInsertPoint);
@@ -2573,7 +2573,7 @@ void SavePYIndex (void)
     strcat (strPathTemp, "/.fcitx/");
     if (access (strPathTemp, 0))
 	mkdir (strPathTemp, S_IRWXU);
-    strcat (strPathTemp, PY_INDEX_FILE);
+    strcat (strPathTemp, TEMP_FILE);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
 	fprintf (stderr, "无法保存索引文件：%s\n", strPathTemp);

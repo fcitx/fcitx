@@ -119,8 +119,10 @@ void LoadSPData (void)
 {
     FILE           *fp;
     char            strPath[PATH_MAX];
-    char            str[20], strS[5], *pstr;
+    char            str[100], strS[5], *pstr;
+    char	    strDefault[100]="\0";
     int             i;
+    Bool	    bIsDefault=False;
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
@@ -135,7 +137,7 @@ void LoadSPData (void)
 	return;
 
     while (1) {
-	if (!fgets (str, 20, fp))
+	if (!fgets (str, 100, fp))
 	    break;
 
 	i = strlen (str) - 1;
@@ -146,7 +148,26 @@ void LoadSPData (void)
 	    pstr++;
 	if (!strlen (pstr) || pstr[0] == '#')
 	    continue;
-
+	
+	if (!strncmp(pstr,"默认方案=",9)) {
+		pstr+=9;
+		if (*pstr == ' ' || *pstr == '\t')
+			pstr++;
+		strcpy(strDefault,pstr);
+		continue;
+	}
+	
+	if (!strncmp(pstr,"方案名称=",9)) {
+		pstr+=9;
+		if (*pstr == ' ' || *pstr == '\t')
+			pstr++;
+		bIsDefault = !(strcmp(strDefault,pstr));
+		continue;
+	}
+	
+	if ( !bIsDefault )
+		continue;
+	
 	if (pstr[0] == '=')	//是零声母设置
 	    cNonS = tolower (pstr[1]);
 	else {

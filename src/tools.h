@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include "ime.h"
 
+#define TABLE_GBKS2T "gbks2t.tab"
+
 void            LoadConfig (Bool bMode);
 void            SaveConfig (void);
 void            LoadProfile (void);
@@ -34,6 +36,7 @@ void            SetTriggerKeys (char *str);
 Bool            CheckHZCharset (char *strHZ);
 Bool   		MyStrcmp(char *str1, char *str2);
 
+char            *ConvertGBKSimple2Tradition(char * text);
 /*
 #if defined(DARWIN)
 int             ReverseInt (unsigned int pc_int);

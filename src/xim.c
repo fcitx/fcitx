@@ -45,7 +45,8 @@ long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC = NULL;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
-//int y=0;
+//该变量是GTK+ OverTheSpot光标跟随的临时解决方案
+INT8            iOffsetY = 12;
 
 //extern Bool     bLumaQQ;
 
@@ -74,9 +75,13 @@ extern iconv_t  convUTF8;
 extern uint     uMessageDown;
 extern Bool     bVK;
 
+/* 计算打字速度
 extern Bool     bStartRecordType;
-extern uint	iHZInputed;
-extern Bool	bShowInputWindowTriggering;
+extern uint     iHZInputed;
+*/
+extern Bool     bShowInputWindowTriggering;
+
+extern Bool     bUseGBKT;
 
 /*extern char	strUserLocale[];*/
 //+++++++++++++++++++++++++++++++++
@@ -156,14 +161,14 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		if (iTempInputWindowX < 0)
 		    iTempInputWindowX = 0;
 		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-			iTempInputWindowX = iTempInputWindowX - iInputWindowWidth;
-		else
-		    iTempInputWindowX += 5;
+		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
 		else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
 		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
+		else
+		    iTempInputWindowY += iOffsetY;
 
 		XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 
@@ -188,43 +193,42 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
     icid = call_data->icid;
-    
-    
+
     /* It seems this section is useless
-    if (bTrackCursor) {
-	    int             i;
-	    Window          window;
-	    XICAttribute   *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
+       if (bTrackCursor) {
+       int             i;
+       Window          window;
+       XICAttribute   *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
 
-	    for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
-		    if (!strcmp (XNSpotLocation, pre_attr->name)) {
-			    if (CurrentIC->focus_win)
-				    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
-			    else if (CurrentIC->client_win)
-			            XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
-			    else
-				    return True;
+       for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
+       if (!strcmp (XNSpotLocation, pre_attr->name)) {
+       if (CurrentIC->focus_win)
+       XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+       else if (CurrentIC->client_win)
+       XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+       else
+       return True;
 
-			    if (iTempInputWindowX < 0)
-				    iTempInputWindowX = 0;
-			    else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-				    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
-			    else
-				    iTempInputWindowX += 5;
+       if (iTempInputWindowX < 0)
+       iTempInputWindowX = 0;
+       else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+       iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+       else
+       iTempInputWindowX += 5;
 
-			    if (iTempInputWindowY < 0)
-				    iTempInputWindowY = 0;
-			    else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
-				    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
+       if (iTempInputWindowY < 0)
+       iTempInputWindowY = 0;
+       else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
+       iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
 
-			    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+       XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 
-			    ConnectIDSetTrackCursor (call_data->connect_id, True);
-		    }
-	    }
-	} */
+       ConnectIDSetTrackCursor (call_data->connect_id, True);
+       }
+       }
+       } */
     /* ************************************************************************ */
-    
+
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
@@ -252,13 +256,15 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 
     lastConnectID = connect_id;
     /*if (bLumaQQ && ConnectIDGetReset (connect_id)) {
-	SendHZtoClient ((IMForwardEventStruct *) call_data, "\0");
-	ConnectIDSetReset (connect_id, False);
-    }*/
+       SendHZtoClient ((IMForwardEventStruct *) call_data, "\0");
+       ConnectIDSetReset (connect_id, False);
+       } */
 
     //When application gets the focus, rerecord the time.
-    bStartRecordType = False;
-    iHZInputed = 0;
+    /*
+       bStartRecordType = False;
+       iHZInputed = 0;
+     */
 
     return True;
 }
@@ -336,7 +342,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
-	if ( bShowInputWindowTriggering)
+	if (bShowInputWindowTriggering)
 	    DisplayInputWindow ();
     }
 
@@ -418,6 +424,10 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     XTextProperty   tp;
     char            strOutput[300];
     char           *ps;
+    char           *pS2T = (char *) NULL;
+
+    if (bUseGBKT)
+	pS2T = strHZ = ConvertGBKSimple2Tradition (strHZ);
 
     if (bIsUtf8) {
 	size_t          l1, l2;
@@ -431,12 +441,14 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     }
     else
 	ps = strHZ;
-    
+
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
     ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
     ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
     IMCommitString (ims, (XPointer) call_data);
     XFree (tp.value);
+    if (bUseGBKT)
+	free (pS2T);
 }
 
 Bool InitXIM (char *imname, Window im_window)

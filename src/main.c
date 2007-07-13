@@ -49,6 +49,8 @@
 #define CODESET 14
 #endif
 
+extern char strUserLocale[];
+
 extern Display *dpy;
 extern Window   inputWindow;
 extern Window   mainWindow;
@@ -84,7 +86,6 @@ int main (int argc, char *argv[])
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
     LoadConfig (True);
-
     if (!InitX ())
 	exit (1);
 

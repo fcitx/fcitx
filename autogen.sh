@@ -10,7 +10,7 @@ if [ -z "$1" ] ; then
   echo FCITX sources are now prepared. To build here, run:
   echo " ./configure && make"
 else
-  ./configure $* || exit 4
+  ./configure "$@" || exit 4
   make || exit 5
 fi
 

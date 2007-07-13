@@ -80,7 +80,10 @@ extern IC      *CurrentIC;
 extern CARD16   connect_id;
 extern CARD16   icid;
 extern XIMS     ims;
+
+/*
 extern uint     iHZInputed;
+*/
 
 Bool CreateVKWindow (void)
 {
@@ -352,7 +355,7 @@ Bool VKMouseKey (int x, int y)
 
 	if (pstr) {
 	    SendHZtoClient (&forwardEvent, pstr);
-	    iHZInputed += (int) (strlen (pstr) / 2);	//粗略统计字数
+	    // iHZInputed += (int) (strlen (pstr) / 2);  //粗略统计字数
 	}
     }
 

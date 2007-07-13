@@ -56,19 +56,21 @@ XftFont        *xftMainWindowFont = NULL;
 XftFont        *xftMainWindowFontEn = NULL;
 XftFont        *xftVKWindowFont = NULL;
 Bool            bUseAA = True;
-int             iMainWindowFontSize = 11;
+int             iMainWindowFontSize = 9;
 int             iVKWindowFontSize = 11;
+int             iFontSize = 12;
+char            strUserLocale[50] = "zh_CN.UTF-8";
 #else
 XFontSet        fontSet = NULL;
 XFontSet        fontSetMainWindow = NULL;
 XFontSet        fontSetVKWindow = NULL;
-char            strUserLocale[50] = "zh_CN.gb18030";
-int             iMainWindowFontSize = 14;
+int             iMainWindowFontSize = 12;
 int             iVKWindowFontSize = 12;
+int             iFontSize = 16;
+char            strUserLocale[50] = "zh_CN.gb2312";
 #endif
 
 iconv_t         convUTF8;
-int             iFontSize = 16;
 
 GC              dimGC;
 GC              lightGC;
@@ -218,6 +220,10 @@ void InitGC (Window window)
 #ifdef _USE_XFT
 void CreateFont (void)
 {
+    //为了让界面能够正常显示，必须设置为中文模式
+    if (strUserLocale[0])
+	setlocale (LC_CTYPE, strUserLocale);
+
     if (xftFont)
 	XftFontClose (dpy, xftFont);
     xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
@@ -241,6 +247,8 @@ void CreateFont (void)
     if (xftDraw)
 	XftDrawDestroy (xftDraw);
     xftDraw = XftDrawCreate (dpy, inputWindow, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)));
+
+    setlocale (LC_CTYPE, "");
 }
 #else
 void CreateFont (void)
@@ -250,10 +258,9 @@ void CreateFont (void)
     char           *default_string;
     char            strFont[256];
 
+    //为了让界面能够正常显示，必须设置为中文模式
     if (strUserLocale[0])
 	setlocale (LC_CTYPE, strUserLocale);
-    else
-	setlocale (LC_CTYPE, "");
 
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontEnName, iMainWindowFontSize, strFontName, iMainWindowFontSize);
     if (fontSetMainWindow)
@@ -295,8 +302,6 @@ void CreateFont (void)
     }
 
     setlocale (LC_CTYPE, "");
-/*
-   SetLocale();*/
 }
 #endif
 
@@ -336,7 +341,7 @@ void Draw3DEffect (Window window, int x, int y, int width, int height, _3D_EFFEC
  */
 void MyXEventHandler (XEvent * event)
 {
-    INT8            iPos;
+    unsigned char   iPos;
 
     switch (event->type) {
 	//added by yunfan
@@ -355,7 +360,7 @@ void MyXEventHandler (XEvent * event)
 	    break;
 	}
 	if (event->xexpose.window == VKWindow) {
-	    //DisplayVKWindow ();
+	    DisplayVKWindow ();
 	    break;
 	}
 	if (event->xexpose.window == inputWindow) {
@@ -383,8 +388,12 @@ void MyXEventHandler (XEvent * event)
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
 		    iMainWindowX = event->xbutton.x;
 		    iMainWindowY = event->xbutton.y;
-		    if (!MouseClick (&iMainWindowX, &iMainWindowY, mainWindow))
-			SetIMState ((ConnectIDGetState (connect_id) == IS_CHN) ? False : True);
+		    if (!MouseClick (&iMainWindowX, &iMainWindowY, mainWindow)) {
+			if (ConnectIDGetState (connect_id) != IS_CHN)
+			    SetIMState ((ConnectIDGetState (connect_id) == IS_ENG) ? False : True);
+			else
+			    ChangeIMState (connect_id);
+		    }
 		}
 	    }
 	    else if (event->xbutton.window == VKWindow) {
@@ -423,7 +432,10 @@ void MyXEventHandler (XEvent * event)
 			ChangeGBK ();
 		    else if (IsInBox (event->xbutton.x, event->xbutton.y, 74, 1, 91, 19))
 			ChangeLegend ();
-		    iPos = 92;
+		    else if (IsInBox (event->xbutton.x, event->xbutton.y, 92, 1, 109, 19))
+			ChangeGBKT ();
+
+		    iPos = 110;
 		}
 		if (IsInBox (event->xbutton.x, event->xbutton.y, iPos, 1, iPos + 10, 19))
 		    ChangeLock ();
@@ -433,6 +445,7 @@ void MyXEventHandler (XEvent * event)
 			    SwitchVK ();
 			iPos += 20;
 		    }
+
 		    if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 11, 1, MAINWND_WIDTH, 19))
 			SwitchIM (-1);
 		}
@@ -469,8 +482,8 @@ Bool IsInBox (int x0, int y0, int x1, int y1, int x2, int y2)
 {
     if (x0 >= x1 && x0 <= x2 && y0 >= y1 && y0 <= y2)
 	return True;
-    else
-	return False;
+
+    return False;
 }
 
 #ifdef _USE_XFT
@@ -699,15 +712,15 @@ Bool MouseClick (int *x, int *y, Window window)
 	    bMoved = True;
 	    LastTime = evtGrabbed.xmotion.time;
 	}
-
-	if (window == mainWindow)
-	    DisplayMainWindow ();
-	else if (window == inputWindow)
-	    DisplayInputWindow ();
-	else if (window == VKWindow)
-	    DisplayVKWindow ();
     }
-
+    
+    if (window == mainWindow)
+	DisplayMainWindow ();
+    else if (window == inputWindow)
+	DisplayInputWindow ();
+    else if (window == VKWindow)
+	DisplayVKWindow ();
+    
     *x = evtGrabbed.xmotion.x_root - *x;
     *y = evtGrabbed.xmotion.y_root - *y;
 

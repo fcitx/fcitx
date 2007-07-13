@@ -23,7 +23,7 @@
 #include <X11/Xlib.h>
 
 #define INPUTWND_STARTX	300
-#define INPUTWND_WIDTH	200
+#define INPUTWND_WIDTH	50
 #define INPUTWND_STARTY	420
 #define INPUTWND_HEIGHT	40
 

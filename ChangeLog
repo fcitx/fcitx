@@ -1,3 +1,41 @@
+2006-08-18: Yuking <yuking_net@sohu.com>
+	   * src/ime.c: 更改全角的输入方式
+	   * 版本3.3
+
+2006-08-15: Yuking <yuking_net@sohu.com>
+	   * 将CTRL_H按退格键处理
+	   * src/main.c: 修正在非zh_CN*状态下不能输入或不能正常显示的问题
+
+2006-08-14: Yuking <yuking_net@sohu.com>
+	   * src/sp.c: 将双拼码表的双拼方案按指定的名字进行。
+
+2006-08-10: Yuking <yuking_net@sohu.com>
+	   * src/xim.c: 修正无法读取繁体字映射表，使用繁体转换功能时导致程序崩溃的问题
+	   
+2006-07-27: Yuking <yuking_net@sohu.com>
+	   * src/punc.c: 首先从用户目录读取标点信息
+	   
+2006-07-25: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 修正了翻页时的一个小错误
+
+2006-07-17: wpyh <wpyh@linuxsir>
+	   * autogen.sh
+	   * 加入*2fcitx 的编译支持
+	   * 修改了tools下的某些源代码，替换#include *.c
+	   * 修改src/Makefile.*，修正可能找不到头文件的问题
+	   * src/MyErrorsHandlers.c: 修改为运行kill -s SIGUSR1 <fcitx-pid>的时候，可以保存输入法的文件
+	   * src/py.c: 修正保存拼音索引文件时没有先保存为临时文件的BUG
+	   * tools/: 增加三个提取用户的词库（个人词库）的工具
+	   
+2006-07-03: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 修改了翻页键的处理方式
+	   
+2006-06-25: Yuking <yuking_net@sohu.com>
+	   * 将默认的翻页键改为-/= ,/.
+	   
+2006-06-23: Yuking <yuking_net@sohu.com>
+	   * 去掉计算打字速度的功能，没有什么用
+	   
 2006-06-22: Yuking <yuking_net@sohu.com>
 	   * tools/txt2mb.c: 修正生成码表的一个排序错误
 	   * src/ui.c: 当虚拟键盘打开时，按右键可能会导致界面显示错误

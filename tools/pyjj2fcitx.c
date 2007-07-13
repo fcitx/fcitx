@@ -21,10 +21,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../src/pyParser.c"
-#include "../src/pyMapTable.c"
-#include "../src/PYFA.c"
-#include "../src/sp.c"
+
+#include <ctype.h>
+#include "pyParser.h"
+#include "pyMapTable.h"
+#include "PYFA.h"
+#include "sp.h"
 
 Bool            bSingleHZMode = False;
 Bool            bFullPY = False;

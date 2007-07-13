@@ -59,24 +59,35 @@ void OnException (int signo)
 {
     fprintf (stdout, "\nFCITX -- Get Signal No.: %d\n", signo);
 
-    if (signo == SIGHUP) {
+    switch (signo) {
+	/* 出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件，所以不能调用SaveIM () */
+    case SIGSEGV:
+	break;
+    case SIGHUP:
 	LoadConfig (False);
-	SetIM ();	
-/*
-	if (bLumaQQ)
-	    ConnectIDResetReset ();*/
-
+	SetIM ();
+	/*if (bLumaQQ)
+	   ConnectIDResetReset ();
+	 */
 	return;
+    default:
+	SaveIM ();
+    case SIGUSR1:
+    case SIGCHLD:
+    case SIGQUIT:
+    case SIGWINCH:
+    case SIGTTIN:
+    case SIGSTOP:
+    case SIGTSTP:
+	return;
+    case SIGINT:
+    case SIGTERM:
+    case SIGKILL:
+	break;
     }
 
-    //出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件
-    if (signo != SIGSEGV)
-	SaveIM ();
-    
-    if (signo != SIGCHLD && signo != SIGQUIT && signo != SIGWINCH && signo != SIGTTIN && signo != SIGSTOP && signo != SIGTSTP) {
-	fprintf (stdout, "FCITX -- Exit Signal No.: %d\n\n", signo);
-	exit (0);
-    }
+    fprintf (stdout, "FCITX -- Exit Signal No.: %d\n\n", signo);
+    exit (0);
 }
 
 void SetMyXErrorHandler (void)
@@ -87,11 +98,11 @@ void SetMyXErrorHandler (void)
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
     /*这个错误信息没有任何用处，去掉好了
-    char            str[256];
+       char            str[256];
 
-    XGetErrorText (dpy, event->error_code, str, 255);
-    fprintf (stdout, "fcitx: %s\n", str);
-    */
+       XGetErrorText (dpy, event->error_code, str, 255);
+       fprintf (stdout, "fcitx: %s\n", str);
+     */
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
 
