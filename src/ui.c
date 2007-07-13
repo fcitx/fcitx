@@ -383,6 +383,7 @@ void MyXEventHandler (XEvent * event)
 		iInputWindowX = event->xbutton.x;
 		iInputWindowY = event->xbutton.y;
 		MouseClick (&iInputWindowX, &iInputWindowY, inputWindow);
+		DisplayInputWindow ();
 	    }
 	    else if (event->xbutton.window == mainWindow) {
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
@@ -401,6 +402,7 @@ void MyXEventHandler (XEvent * event)
 		    iVKWindowX = event->xbutton.x;
 		    iVKWindowY = event->xbutton.y;
 		    MouseClick (&iVKWindowX, &iVKWindowY, VKWindow);
+		    DisplayVKWindow ();
 		}
 	    }
 	    //added by yunfan
@@ -713,14 +715,7 @@ Bool MouseClick (int *x, int *y, Window window)
 	    LastTime = evtGrabbed.xmotion.time;
 	}
     }
-    
-    if (window == mainWindow)
-	DisplayMainWindow ();
-    else if (window == inputWindow)
-	DisplayInputWindow ();
-    else if (window == VKWindow)
-	DisplayVKWindow ();
-    
+
     *x = evtGrabbed.xmotion.x_root - *x;
     *y = evtGrabbed.xmotion.y_root - *y;
 

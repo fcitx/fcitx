@@ -69,9 +69,7 @@ void OnException (int signo)
 	/*if (bLumaQQ)
 	   ConnectIDResetReset ();
 	 */
-	return;
-    default:
-	SaveIM ();
+	return;    
     case SIGUSR1:
     case SIGCHLD:
     case SIGQUIT:
@@ -83,7 +81,8 @@ void OnException (int signo)
     case SIGINT:
     case SIGTERM:
     case SIGKILL:
-	break;
+    default:
+	SaveIM ();
     }
 
     fprintf (stdout, "FCITX -- Exit Signal No.: %d\n\n", signo);

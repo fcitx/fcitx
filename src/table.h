@@ -31,6 +31,7 @@
 #define PHRASE_MAX_LENGTH 10
 #define FH_MAX_LENGTH  10
 #define TABLE_AUTO_SAVE_AFTER 1024
+#define SINGLE_HZ_COUNT 33000
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> ÕýÐò   0 --> ÄæÐò
@@ -131,7 +132,9 @@ char           *TableGetFHCandWord (int iIndex);
 Bool            HasMatchingKey (void);
 int             TableCompareCode (char *strUser, char *strDict);
 int             TableFindFirstMatchCode (void);
-RECORD         *TableFindCode (char *strHZ, Bool bMode);
+
+//RECORD         *TableFindCode (char *strHZ, Bool bMode);
+
 void            TableAdjustOrderByIndex (int iIndex);
 void            TableDelPhraseByIndex (int iIndex);
 void            TableDelPhraseByHZ (char *strHZ);

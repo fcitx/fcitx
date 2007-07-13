@@ -27,11 +27,11 @@
 #include "PYFA.h"
 #include "sp.h"
 
-extern PYTABLE PYTable[];
+extern PYTABLE  PYTable[];
 
 FILE           *fps, *fpt, *fp1, *fp2;
-Bool		bSingleHZMode = False;
-Bool		bFullPY = False;
+Bool            bSingleHZMode = False;
+Bool            bFullPY = False;
 
 typedef struct _PY {
     char            strPY[3];
@@ -43,6 +43,7 @@ typedef struct _PyPhrase {
     char           *strPhrase;
     char           *strMap;
     struct _PyPhrase *next;
+    unsigned int    uIndex;
 } _PyPhrase;
 
 typedef struct _PyBase {
@@ -60,7 +61,7 @@ typedef struct {
 } __PYFA;
 
 int             iPYFACount;
-__PYFA          *PYFAList;
+__PYFA         *PYFAList;
 int             YY[1000];
 int             iAllCount;
 
@@ -137,28 +138,30 @@ void CreatePYPhrase (void)
     FILE           *f = fopen ("pyERROR", "wt");
     FILE           *fg = fopen ("pyPhrase.ok", "wt");
     int             kkk;
+    unsigned int    uIndex, uTemp;
 
     s1 = 0;
     s2 = 0;
+    uIndex = 0;
     while (!feof (fpt)) {
 	fscanf (fpt, "%s", strPY);
 	fscanf (fpt, "%s\n", strPhrase);
 	if (strlen (strPhrase) < 3)
 	    continue;
-	
+
 	ParsePY (strPY, &strTemp, PY_PARSE_INPUT_SYSTEM);
 	s2++;
 	kkk = 0;
 	//printf("%s  %s  %s   %d\n",strPY,strPhrase,strTemp.strMap,strTemp.iHZCount);
-	if (strTemp.iHZCount != strlen (strPhrase)/2 || (strTemp.iMode & PARSE_ABBR)) {
+	if (strTemp.iHZCount != strlen (strPhrase) / 2 || (strTemp.iMode & PARSE_ABBR)) {
 	    //if ( strlen(strPhrase)==4 )
-	    fprintf (f, "%s %s\n",strPY,strPhrase);//"%s %s %s\n", strPY, strPhrase, strTemp.strPYParsed);
+	    fprintf (f, "%s %s\n", strPY, strPhrase);	//"%s %s %s\n", strPY, strPhrase, strTemp.strPYParsed);
 	    continue;
-	}	
-	
-	strMap[0]='\0';
-	for (iIndex=0;iIndex<strTemp.iHZCount;iIndex++)
-		strcat (strMap, strTemp.strMap[iIndex]);
+	}
+
+	strMap[0] = '\0';
+	for (iIndex = 0; iIndex < strTemp.iHZCount; iIndex++)
+	    strcat (strMap, strTemp.strMap[iIndex]);
 
 	for (iIndex = 0; iIndex < iPYFACount; iIndex++) {
 	    if (!strncmp (PYFAList[iIndex].strMap, strMap, 2)) {
@@ -168,11 +171,11 @@ void CreatePYPhrase (void)
 			for (j = 0; j < PYFAList[iIndex].pyBase[i].iPhraseCount; j++) {
 			    tt = t;
 			    t = t->next;
-			    if ( !strcmp(t->strMap,strMap+2) && !strcmp(t->strPhrase,strPhrase + 2)) {
-			    	printf("%d: %s %s ----->deleted.\n", s2, strPY,strPhrase);
-			    	goto _next;
+			    if (!strcmp (t->strMap, strMap + 2) && !strcmp (t->strPhrase, strPhrase + 2)) {
+				printf ("%d: %s %s ----->deleted.\n", s2, strPY, strPhrase);
+				goto _next;
 			    }
-			    if (strcmp (t->strMap, strMap+2) > 0) {
+			    if (strcmp (t->strMap, strMap + 2) > 0) {
 				t = tt;
 				break;
 			    }
@@ -180,24 +183,25 @@ void CreatePYPhrase (void)
 
 			phrase = (_PyPhrase *) malloc (sizeof (_PyPhrase));
 			phrase->strPhrase = (char *) malloc (sizeof (char) * (strlen (strPhrase) - 1));
-			phrase->strMap = (char *) malloc (sizeof (char) * (strTemp.iHZCount*2 - 1));
+			phrase->strMap = (char *) malloc (sizeof (char) * (strTemp.iHZCount * 2 - 1));
+			phrase->uIndex = uIndex++;
 			strcpy (phrase->strPhrase, strPhrase + 2);
 			strcpy (phrase->strMap, strMap + 2);
-			
+
 			tt = t->next;
 			t->next = phrase;
 			phrase->next = tt;
 			PYFAList[iIndex].pyBase[i].iPhraseCount++;
 			s1++;
 			kkk = 1;
-		    _next:
+		      _next:
 			;
 		    }
 		}
 	    }
 	}
 	if (!kkk)
-	    fprintf (f, "%s %s %s\n", strPY, strPhrase, (char *)(strTemp.strPYParsed));
+	    fprintf (f, "%s %s %s\n", strPY, strPhrase, (char *) (strTemp.strPYParsed));
 	else
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
@@ -216,6 +220,8 @@ void CreatePYPhrase (void)
 		    fwrite (&iIndex, sizeof (int), 1, fp2);
 		    fwrite (t->strMap, sizeof (char), iIndex, fp2);
 		    fwrite (t->strPhrase, sizeof (char), strlen (t->strPhrase), fp2);
+		    uTemp = uIndex - 1 - t->uIndex;
+		    fwrite (&uTemp, sizeof (unsigned int), 1, fp2);
 		    t = t->next;
 		}
 	    }
@@ -235,7 +241,6 @@ void CreatePYBase (void)
     int             iBaseCount;
     int             s = 0;
     int             tt = 0;
-
 
     head = (_PyStruct *) malloc (sizeof (_PyStruct));
     head->prev = head;
@@ -331,7 +336,7 @@ int main (int argc, char *argv[])
     fpt = fopen (argv[2], "rt");
     fp1 = fopen ("pybase.mb", "wb");
     fp2 = fopen ("pyphrase.mb", "wb");
-    if (fps && fpt && fp1  && fp2) {
+    if (fps && fpt && fp1 && fp2) {
 	CreatePYBase ();
 	LoadPY ();
 	CreatePYPhrase ();

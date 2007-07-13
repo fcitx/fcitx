@@ -78,6 +78,7 @@ extern HOTKEYS  hkPYDelUserPhr[];
 extern HOTKEYS  hkLegend[];
 extern HOTKEYS  hkTrack[];
 extern HOTKEYS  hkGetPY[];
+extern HOTKEYS  hkGBT[];
 
 extern KEYCODE  switchKey;
 extern XIMTriggerKey *Trigger_Keys;
@@ -453,6 +454,10 @@ void LoadConfig (Bool bMode)
 	    pstr += 17;
 	    SetSwitchKey (pstr);
 	}
+	else if (MyStrcmp (pstr, "GBK繁体切换键=")) {
+	    pstr += 14;
+	    SetHotKey (pstr,hkGBT);
+	}
 	else if (MyStrcmp (pstr, "双击中英文切换=")) {
 	    pstr += 15;
 	    bDoubleSwitchKey = atoi (pstr);
@@ -739,6 +744,7 @@ void SaveConfig (void)
     fprintf (fp, "击键时间间隔=%u\n", iTimeInterval);
     fprintf (fp, "光标跟随=CTRL_K\n");
     fprintf (fp, "GBK支持=CTRL_M\n");
+    fprintf (fp, "GBK繁体切换键=CTRL_ALT_F\n");
     fprintf (fp, "联想支持=CTRL_L\n");
     fprintf (fp, "反查拼音=CTRL_ALT_E\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
@@ -1179,4 +1185,9 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
     ret[len] = '\0';
 
     return ret;
+}
+
+int CalHZIndex(char *strHZ)
+{
+    return (strHZ[0] + 127) * 255 + strHZ[1] + 127;
 }

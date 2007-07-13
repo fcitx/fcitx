@@ -34,9 +34,11 @@ int             CalculateRecordNumber (FILE * fpDict);
 void            SetSwitchKey (char *str);
 void            SetTriggerKeys (char *str);
 Bool            CheckHZCharset (char *strHZ);
-Bool   		MyStrcmp(char *str1, char *str2);
+Bool            MyStrcmp (char *str1, char *str2);
+int             CalHZIndex (char *strHZ);
 
-char            *ConvertGBKSimple2Tradition(char * text);
+char           *ConvertGBKSimple2Tradition (char *text);
+
 /*
 #if defined(DARWIN)
 int             ReverseInt (unsigned int pc_int);

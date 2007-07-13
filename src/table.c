@@ -56,8 +56,7 @@ INT8            iTableCount;
 Bool            bTableDictLoaded = False;	//Loads tables only if needed
 
 RECORD         *currentRecord = NULL, *recordHead = NULL;
-RECORD        **tableSingleHZ;	//Records the single characters in table to speed auto phrase
-unsigned int    iSingleHZCount;
+RECORD         *tableSingleHZ[SINGLE_HZ_COUNT];	//Records the single characters in table to speed auto phrase
 TABLECANDWORD   tableCandWord[MAX_CAND_WORD];
 
 RECORD_INDEX   *recordIndex = NULL;
@@ -201,6 +200,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bUsePY = True;
 	table[iTableIMIndex].cPinyin = '\0';
 	table[iTableIMIndex].bTableAutoSendToClient = True;
+	table[iTableIMIndex].rule = NULL;
 	table[iTableIMIndex].bUseMatchingKey = False;
 	table[iTableIMIndex].cMatchingKey = '\0';
 	table[iTableIMIndex].bTableExactMatch = False;
@@ -313,8 +313,6 @@ void LoadTableInfo (void)
 	}
     }
 
-    table[iTableIMIndex].rule = NULL;
-
     fclose (fp);
 }
 
@@ -391,16 +389,14 @@ Bool LoadTableDict (void)
     currentRecord = recordHead;
 
     fread (&(table[iTableIMIndex].iRecordCount), sizeof (unsigned int), 1, fpDict);
-    iSingleHZCount = 0;
+
+    for (i = 0; i < SINGLE_HZ_COUNT; i++)
+	tableSingleHZ[i] = (RECORD *) NULL;
 
     for (i = 0; i < table[iTableIMIndex].iRecordCount; i++) {
 	fread (strCode, sizeof (char), table[iTableIMIndex].iCodeLength + 1, fpDict);
 	fread (&iTemp, sizeof (unsigned int), 1, fpDict);
 	fread (strHZ, sizeof (char), iTemp, fpDict);
-
-	//如果iTemp为3，说明这是个单字
-	if (iTemp == 3)
-	    iSingleHZCount++;
 
 	recTemp = (RECORD *) malloc (sizeof (RECORD));
 	recTemp->strCode = (char *) malloc (sizeof (char) * (table[iTableIMIndex].iCodeLength + 1));
@@ -423,6 +419,17 @@ Bool LoadTableDict (void)
 	    recordIndex[iTemp].record = recTemp;
 	}
 	/* **************************************************************** */
+
+	/** 为单字生成一个表   */
+	if (strlen (strHZ) == 2 && !IsIgnoreChar (strCode[0])) {
+	    iTemp = CalHZIndex (strHZ);
+	    if (tableSingleHZ[iTemp]) {
+		if (strlen (strCode) > strlen (tableSingleHZ[iTemp]->strCode))
+		    tableSingleHZ[iTemp] = recTemp;
+	    }
+	    else
+		tableSingleHZ[iTemp] = recTemp;
+	}
 
 	currentRecord->next = recTemp;
 	recTemp->prev = currentRecord;
@@ -484,18 +491,6 @@ Bool LoadTableDict (void)
     insertPoint = &autoPhrase[0];
 
     /*
-     * 为单字生成一个表
-     */
-    tableSingleHZ = (RECORD **) malloc (sizeof (RECORD *) * iSingleHZCount);
-    recTemp = recordHead->next;
-    i = 0;
-    while (recTemp != recordHead) {
-	if (strlen (recTemp->strHZ) == 2)
-	    tableSingleHZ[i++] = recTemp;
-	recTemp = recTemp->next;
-    }
-
-    /*
      * 然后初始化码表输入法
      TableInit();
      */
@@ -531,7 +526,6 @@ void TableInit (void)
 {
     bSP = False;
     PYBaseOrder = baseOrder;
-    baseOrder = AD_FAST;
     strPYAuto[0] = '\0';
 }
 
@@ -599,9 +593,6 @@ void FreeTableIM (void)
     free (autoPhrase);
 
     baseOrder = PYBaseOrder;
-
-    //释放单字表
-    free (tableSingleHZ);
 }
 
 void TableResetStatus (void)
@@ -958,7 +949,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		messageUp[0].type = MSG_TIPS;
 		retVal = IRV_DISPLAY_MESSAGE;
 	    }
-	    else if (iKey == (XK_BackSpace & 0x00FF) || iKey==CTRL_H) {
+	    else if (iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) {
 		if (!iCodeInputCount) {
 		    bIsInLegend = False;
 		    return IRV_DONOT_PROCESS_CLEAN;
@@ -1078,7 +1069,7 @@ char           *TableGetCandWord (int iIndex)
 
 	    strcpy (messageDown[0].strMsg, pCandWord);
 	    messageDown[0].type = MSG_TIPS;
-	    temp = TableFindCode (pCandWord, False);
+	    temp = tableSingleHZ[CalHZIndex (pCandWord)];
 	    if (temp) {
 		strcpy (messageDown[1].strMsg, temp->strCode);
 		messageDown[1].type = MSG_CODE;
@@ -1126,7 +1117,7 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (SEARCH_MODE mode)
 
     //下面将拼音的候选字表转换为码表输入法的样式
     for (i = 0; i < iCandWordCount; i++) {
-	pRec = TableFindCode (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].strHZ, False);
+	pRec = tableSingleHZ[CalHZIndex (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].strHZ)];
 	tableCandWord[i].flag = True;
 	if (pRec)
 	    tableCandWord[i].candWord.record = pRec;
@@ -1628,7 +1619,7 @@ int TableFindFirstMatchCode (void)
  * 反查编码
  * bMode=True表示用于组词，此时不查一、二级简码。但如果只有二级简码时返回二级简码，不查一级简码
  */
-RECORD         *TableFindCode (char *strHZ, Bool bMode)
+/*RECORD         *TableFindCode (char *strHZ, Bool bMode)
 {
     RECORD         *recShort = NULL;	//记录二级简码的位置
     int             i;
@@ -1646,7 +1637,7 @@ RECORD         *TableFindCode (char *strHZ, Bool bMode)
     }
 
     return recShort;
-}
+}*/
 
 /*
  * 根据序号调整词组顺序，序号从1开始
@@ -1655,7 +1646,7 @@ RECORD         *TableFindCode (char *strHZ, Bool bMode)
 void TableAdjustOrderByIndex (int iIndex)
 {
     RECORD         *recTemp;
-    int		iTemp;
+    int             iTemp;
 
     if (!(tableCandWord[iIndex - 1].flag))
 	return;
@@ -1675,17 +1666,17 @@ void TableAdjustOrderByIndex (int iIndex)
     tableCandWord[iIndex - 1].candWord.record->next = recTemp;
 
     iTableChanged++;
-    
+
     //需要的话，更新索引
-    if ( tableCandWord[iIndex - 1].candWord.record->strCode[1]=='\0') {
-        for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++) {
-		if ( recordIndex[iTemp].cCode == tableCandWord[iIndex - 1].candWord.record->strCode[0] ) {
-			recordIndex[iTemp].record = tableCandWord[iIndex - 1].candWord.record;
-			break;
-		}
+    if (tableCandWord[iIndex - 1].candWord.record->strCode[1] == '\0') {
+	for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++) {
+	    if (recordIndex[iTemp].cCode == tableCandWord[iIndex - 1].candWord.record->strCode[0]) {
+		recordIndex[iTemp].record = tableCandWord[iIndex - 1].candWord.record;
+		break;
+	    }
 	}
     }
-    
+
     if (iTableChanged == 5)
 	SaveTableDict ();
 }
@@ -1771,7 +1762,7 @@ RECORD         *TableFindPhrase (char *strHZ)
     strTemp[1] = strHZ[1];
     strTemp[2] = '\0';
 
-    recTemp = TableFindCode (strTemp, True);
+    recTemp = tableSingleHZ[CalHZIndex (strTemp)];
     if (!recTemp)
 	return (RECORD *) NULL;
 
@@ -1871,7 +1862,7 @@ void TableCreatePhraseCode (char *strHZ)
 	    strTemp[1] = strHZ[(iLen - table[iTableIMIndex].rule[i].rule[i1].iWhich) * 2 + 1];
 	}
 
-	recTemp = TableFindCode (strTemp, True);
+	recTemp = tableSingleHZ[CalHZIndex (strTemp)];
 
 	if (!recTemp) {
 	    bCanntFindCode = True;
@@ -2211,11 +2202,11 @@ void TableCreateAutoPhrase (INT8 iCount)
     }
 
     /*
-    for (i=0;i<iAutoPhrase;i++ ) {
+       for (i=0;i<iAutoPhrase;i++ ) {
        printf("%d: %s  %s\n",i+1,autoPhrase[i].strCode,autoPhrase[i].strHZ);
        puts("===========================================");
-    }
-    */
+       }
+     */
 }
 
 void UpdateHZLastInput (char *str)

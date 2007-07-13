@@ -226,7 +226,10 @@ Bool LoadPYOtherDict (void)
 		PYFAList[i].pyBase[j].phrase[k].strPhrase = (char *) malloc (sizeof (char) * (iLen + 1));
 		fread (PYFAList[i].pyBase[j].phrase[k].strPhrase, sizeof (char) * iLen, 1, fp);
 		PYFAList[i].pyBase[j].phrase[k].strPhrase[iLen] = '\0';
-		PYFAList[i].pyBase[j].phrase[k].iIndex = 0;
+		fread (&iLen, sizeof (unsigned int), 1, fp);
+		PYFAList[i].pyBase[j].phrase[k].iIndex = iLen;
+		if (iLen > iCounter)
+		    iCounter = iLen;
 		PYFAList[i].pyBase[j].phrase[k].iHit = 0;
 		PYFAList[i].pyBase[j].phrase[k].flag = 0;
 	    }
@@ -297,15 +300,22 @@ Bool LoadPYOtherDict (void)
 	    fread (&iIndex, sizeof (uint), 1, fp);
 	    fread (&iLen, sizeof (uint), 1, fp);
 
-	    if (k >= 0) {
-		PYFAList[i].pyBase[j].phrase[k].iIndex = iIndex;
-		PYFAList[i].pyBase[j].phrase[k].iHit = iLen;
-	    }
-	    else {
-		PYFAList[i].pyBase[j].iIndex = iIndex;
-		PYFAList[i].pyBase[j].iHit = iLen;
+	    if (i < iPYFACount) {
+		if (j < PYFAList[i].iBase) {
+		    if (k < PYFAList[i].pyBase[j].iPhrase) {
+			if (k >= 0) {
+			    PYFAList[i].pyBase[j].phrase[k].iIndex = iIndex;
+			    PYFAList[i].pyBase[j].phrase[k].iHit = iLen;
+			}
+			else {
+			    PYFAList[i].pyBase[j].iIndex = iIndex;
+			    PYFAList[i].pyBase[j].iHit = iLen;
+			}
+		    }
+		}
 	    }
 	}
+	
 	fclose (fp);
     }
 
@@ -1634,8 +1644,7 @@ void PYGetPhraseCandWords (SEARCH_MODE mode)
 			if (CheckHZCharset (phrase->strPhrase)) {
 			    val = CmpMap (phrase->strMap, strMap, &iMatchedLength);
 			    if (!val || (val && (strlen (phrase->strMap) == iMatchedLength))) {
-				if ((mode != SM_PREV && !phrase->flag)
-				    || (mode == SM_PREV && phrase->flag)) {
+				if ((mode != SM_PREV && !phrase->flag) || (mode == SM_PREV && phrase->flag)) {
 				    if (!PYAddPhraseCandWord (candPos, phrase, mode, False))
 					goto _end;
 				}
@@ -1652,14 +1661,16 @@ void PYGetPhraseCandWords (SEARCH_MODE mode)
     for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 	if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 	    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-		for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iPhrase; candPos.iPhrase++) {
-		    if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
-			val = CmpMap (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap, strMap, &iMatchedLength);
-			if (!val || (val && (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) == iMatchedLength))) {
-			    if ((mode != SM_PREV && !PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag)
-				|| (mode == SM_PREV && PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag)) {
-				if (!PYAddPhraseCandWord (candPos, &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase]), mode, True))
-				    goto _end;
+		if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+		    for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iPhrase; candPos.iPhrase++) {
+			if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase)) {
+			    val = CmpMap (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap, strMap, &iMatchedLength);
+			    if (!val || (val && (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) == iMatchedLength))) {
+				if ((mode != SM_PREV && !PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag)
+				    || (mode == SM_PREV && PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag)) {
+				    if (!PYAddPhraseCandWord (candPos, &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase]), mode, True))
+					goto _end;
+				}
 			    }
 			}
 		    }
@@ -1741,9 +1752,15 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 			break;
 		    }
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
-			if (phrase->iIndex <= PYCandWords[i].cand.phrase.phrase->iIndex) {
+			if (phrase->iIndex < PYCandWords[i].cand.phrase.phrase->iIndex) {
 			    i++;
 			    break;
+			}
+			if (phrase->iIndex == PYCandWords[i].cand.phrase.phrase->iIndex) {
+			    if (phrase->iHit <= PYCandWords[i].cand.phrase.phrase->iHit) {
+				i++;
+				break;
+			    }
 			}
 		    }
 		}
@@ -1761,11 +1778,15 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
 		if (PYCandWords[i].iWhich == PY_CAND_USERPHRASE || PYCandWords[i].iWhich == PY_CAND_SYMPHRASE) {
-		    if (strlen (phrase->strPhrase) > strlen (PYCandWords[i].cand.phrase.phrase->strPhrase))
+		    if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) < strlen (phrase->strPhrase))
 			break;
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
 			if (phrase->iIndex > PYCandWords[i].cand.phrase.phrase->iIndex)
 			    break;
+			if (phrase->iIndex == PYCandWords[i].cand.phrase.phrase->iIndex) {
+			    if (phrase->iHit > PYCandWords[i].cand.phrase.phrase->iHit)
+				break;
+			}
 		    }
 		}
 	    }
@@ -1778,8 +1799,7 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 	if (mode == SM_PREV) {
 	    for (i = (iCandWordCount - 1); i >= 0; i--) {
 		if (PYCandWords[i].iWhich == PY_CAND_AUTO) {
-		    iStart = i + 1;
-		    i++;
+		    iStart = ++i;
 		    break;
 		}
 		else if (PYCandWords[i].iWhich == PY_CAND_USERPHRASE || PYCandWords[i].iWhich == PY_CAND_SYMPHRASE) {
@@ -1788,9 +1808,16 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 			break;
 		    }
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
-			if (PYCandWords[i].cand.phrase.phrase->iHit >= phrase->iHit)
+			if (phrase->iHit < PYCandWords[i].cand.phrase.phrase->iHit) {
 			    i++;
-			break;
+			    break;
+			}
+			if (phrase->iHit == PYCandWords[i].cand.phrase.phrase->iHit) {
+			    if (phrase->iIndex <= PYCandWords[i].cand.phrase.phrase->iIndex) {
+				i++;
+				break;
+			    }
+			}
 		    }
 		}
 	    }
@@ -1808,12 +1835,18 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 		if (PYCandWords[i].iWhich == PY_CAND_USERPHRASE || PYCandWords[i].iWhich == PY_CAND_SYMPHRASE) {
 		    if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) < strlen (phrase->strPhrase))
 			break;
-		    else if ((strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) && (PYCandWords[i].cand.phrase.phrase->iHit < phrase->iHit))
-			break;
+		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
+			if (phrase->iHit > PYCandWords[i].cand.phrase.phrase->iHit)
+			    break;
+			if (phrase->iHit == PYCandWords[i].cand.phrase.phrase->iHit) {
+			    if (phrase->iIndex > PYCandWords[i].cand.phrase.phrase->iIndex)
+				break;
+			}
+		    }
 		}
 	    }
 	    if (i == iMaxCandWord)
-		return False;
+		return True;
 	}
 	break;
     }
@@ -2015,9 +2048,17 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 		    i++;
 		    break;
 		}
-		else if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex)) {
-		    i++;
-		    break;
+		else if (PYCandWords[i].iWhich == PY_CAND_BASE) {
+		    if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex > PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex) {
+			i++;
+			break;
+		    }
+		    else if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex == PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex) {
+			if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit) {
+			    i++;
+			    break;
+			}
+		    }
 		}
 	    }
 
@@ -2031,8 +2072,14 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 	}
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
-		if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex < PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex))
-		    break;
+		if (PYCandWords[i].iWhich == PY_CAND_BASE) {
+		    if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex < PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex)
+			break;
+		    else if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex == PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex) {
+			if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit < PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit)
+			    break;
+		    }
+		}
 	    }
 
 	    if (i == iMaxCandWord)

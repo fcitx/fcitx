@@ -100,6 +100,7 @@ HOTKEYS         hkPunc[HOT_KEY_COUNT] = { ALT_SPACE, 0 };	//中文标点
 HOTKEYS         hkNextPage[HOT_KEY_COUNT] = { '.', 0 };	//下一页
 HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };	//上一页
 HOTKEYS         hkTrack[HOT_KEY_COUNT] = { CTRL_K, 0 };
+HOTKEYS         hkGBT[HOT_KEY_COUNT] = { CTRL_ALT_F, 0 };
 
 Bool            bUseLegend = False;
 Bool            bIsInLegend = False;
@@ -665,6 +666,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			retVal = ChangeLegend ();
 		    else if (IsHotKey (iKey, hkTrack))
 			retVal = ChangeTrack ();
+		    else if (IsHotKey (iKey, hkGBT))
+			retVal = ChangeGBKT ();
 		}
 	    }
 	    else
