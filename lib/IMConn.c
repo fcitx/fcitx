@@ -29,12 +29,19 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  
 ******************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <X11/Xlib.h>
-#if defined(DARWIN)
-#include <sys/malloc.h>
-#else
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif
+
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
 #include <string.h>
 #include "IMdkit.h"
 #include <stdarg.h>

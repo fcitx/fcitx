@@ -19,9 +19,20 @@ typedef enum _IME_STATE {
     IS_CHN
 } IME_STATE;
 
-void            MyXEventHandler (Window, XEvent *);
+typedef struct _CONNECT_ID {
+    struct _CONNECT_ID	*next;
+    CARD16	connect_id;
+    IME_STATE	imState;
+    //char	*strLocale;
+} CONNECT_ID;
+
 Bool            InitXIM (char *, Window);
 void            SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ);
-Bool            IsKey (XIMS ims, IMForwardEventStruct * call_data, XIMTriggerKey * trigger);
+void		EnterChineseMode(void);
+void            CreateConnectID(IMOpenStruct *call_data);
+void            DestroyConnectID(CARD16 connect_id);
+void            SetConnectID(CARD16 connect_id, IME_STATE	imState);
+IME_STATE       ConnectIDGetState(CARD16 connect_id);
+//char           *ConnectIDGetLocale(CARD16 connect_id);
 
 #endif

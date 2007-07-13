@@ -11,7 +11,7 @@ typedef struct _SP_S {
     char            cJP;
 } SP_S;
 
-void		SPInit (void);
+void            SPInit (void);
 void            LoadSPData (void);
 
 //void            QP2SP (char *strQP, char *strSP);

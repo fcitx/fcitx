@@ -1,3 +1,42 @@
+2004-09-5 Yuking <yuking_net@sohu.com>
+	   * 重写文档
+	   * 发布3.0
+	   
+2004-08   Yuking <yuking_net@sohu.com>
+	   * 将分号输入英文恢复到2.X的情形
+	   * 修正全角空格
+	   * 修正xft模式下字间距过宽的问题
+	   * ……
+	   
+2004-07-21 Yuking <yuking_net@sohu.com>
+	   * 修正双拼翻页中的一个问题
+
+2004-07-19 Yuking <yuking_net@sohu.com>
+	   * 修改打开/关闭输入法的一个小问题
+	   * 修改自动词组中的一个重复操作，提高速度
+
+2004-07-16 "Xie Yanbo"<xyb76@sina.com> 
+           * (打印错误改为 fprint(stderr, ...)，这是做osx patch的jeff改的
+	   * 添加 config.h，好象也是jeff加的
+	   * 在需要的文件里添加对config.h的调用和一些必要的宏
+	   * 增加对 iconv 函数的检测
+	   * tools 目录中的程序整理，比如变量定义，fcloseall 没有太大用处，去除
+	   
+2004-07-12 Yuking <yuking_net@sohu.com>
+	   * 将针对lumaQQ的兼容代码改为一个选项
+
+2004-07-08 Yuking <yuking_net@sohu.com>
+	   * 整理拼音码表制作模块，并去掉原有的DARWIN的支持。
+
+2004-07-07 Yuking <yuking_net@sohu.com>
+	   * 版本号改为3.0.0-rc
+	   * 针对LumaQQ进行了修改，现在可以和它正常地协同工作
+	   * 查明出现双字符的原因，并添加一些代码试图阻止出这种情况<但可能会有问题>
+	   * 添加区位输入法
+	   * 添加码表输入模块，将五笔、二笔等作为码表
+	   * 为码表输入添加自动造词的功能(取自极点五笔的构思)
+	   * ……
+	   
 2004-05-20 Yuking <yuking_net@sohu.com>
            * 为主窗口增加一个简洁模式。
 

@@ -1,11 +1,13 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT(src/main.c)
-AM_INIT_AUTOMAKE(fcitx, 2.1.0rc)
+AC_INIT
+AC_CONFIG_SRCDIR([src/main.c])
+AM_INIT_AUTOMAKE(fcitx, 3.0.0)
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
@@ -14,11 +16,12 @@ AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
 # Checks for libraries.
+AM_ICONV
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([limits.h malloc.h stdlib.h string.h sys/param.h unistd.h])
+AC_CHECK_HEADERS([limits.h malloc.h malloc/malloc.h stdlib.h string.h sys/param.h unistd.h wait.h sys/wait.h machine/endian.h])
 
 # x11
 AC_PATH_X
@@ -62,29 +65,29 @@ fi
 AM_CONDITIONAL(HAVE_XFT, $have_xft)
 
 if test "x$have_xft" = "xtrue"; then
-  LIBS="$LIBS $X_LIBS $XFT_LIBS"
+  LIBS="$LIBS $X_LIBS $XFT_LIBS -lX11 $LIBICONV"
   CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS -D_USE_XFT"
 else
-  LIBS="$LIBS $X_LIBS -lX11"
+  LIBS="$LIBS $X_LIBS -lX11 $LIBICONV"
   CFLAGS="$CFLAGS $X_CFLAGS"
 fi
 
-AC_MSG_CHECKING(for OS-dependent information)
-case "$host" in
-  *-linux* )
-    AC_MSG_RESULT([Linux ($host) found.])
-    ;;
-  *-darwin* )
-    AC_MSG_RESULT([Darwin (Mac OS X) ($host) found.])
-    AC_DEFINE(DARWIN)
-    LIBS="$LIBS -liconv"
-    ;;
-  *)
-    AC_MSG_RESULT([Unknown system type $host found.])
-    ;;
-esac
+#AC_MSG_CHECKING(for OS-dependent information)
+#case "$host" in
+#  *-linux* )
+#    AC_MSG_RESULT([Linux ($host) found.])
+#    ;;
+#  *-darwin* )
+#    AC_MSG_RESULT([Darwin (Mac OS X) ($host) found.])
+#    AC_DEFINE(DARWIN)
+#    LIBS="$LIBS -liconv"
+#    ;;
+#  *)
+#    AC_MSG_RESULT([Unknown system type $host found.])
+#    ;;
+#esac
 
-CFLAGS="$CFLAGS -Wall -Werror"
+CFLAGS="$CFLAGS -Wall"
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_PID_T
@@ -96,7 +99,7 @@ AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
 AC_CHECK_FUNCS([memmove memset mkdir setlocale strcasecmp strstr strtol])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
            Makefile
            fcitx.spec
            doc/Makefile
@@ -106,4 +109,6 @@ AC_OUTPUT([
            lib/Makefile
            src/version.h
            src/Makefile
+           tools/Makefile
 ])
+AC_OUTPUT

@@ -132,6 +132,7 @@ void ParsePY (char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode)
 
 	do {
 	    iIndex = FindPYFAIndex (strP, 1);
+
 	    if (iIndex != -1) {
 		strTemp[0] = PYTable[iIndex].strPY[strlen (PYTable[iIndex].strPY) - 1];
 		iTemp = -1;

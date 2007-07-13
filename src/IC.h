@@ -71,10 +71,7 @@ typedef struct _IC {
     char           *resource_class;	/* resource class */
     PreeditAttributes pre_attr;	/* preedit attributes */
     StatusAttributes sts_attr;	/* status attributes */
-    struct _IC     *next;
-    /****************************************************************************/
-    IME_STATE       imeState;
-    /****************************************************************************/
+    struct _IC     *next;    
 } IC;
 
 extern IC      *FindIC (CARD16);

@@ -8,7 +8,7 @@
 #define MAX_PUNC_LENGTH		4
 
 typedef struct TCHNPUNC {
-    int            ASCII;
+    int             ASCII;
     char            strChnPunc[MAX_PUNC_NO][MAX_PUNC_LENGTH + 1];
     unsigned        iCount:2;
     unsigned        iWhich:2;

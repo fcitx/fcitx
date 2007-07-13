@@ -1,30 +1,29 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "MyErrorsHandlers.h"
 
 #include <stdio.h>
 #include <signal.h>
+
+#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#if defined(DARWIN)
-#include <sys/wait.h>
-#else
-#include <wait.h>
 #endif
 
-#include "wbx.h"
-#include "erbi.h"
-#include "py.h"
+#ifdef HAVE_WAIT_H
+#include <wait.h>
+#else
+#include <sys/wait.h>
+#endif
 
-#if defined(DARWIN)
+#include "ime.h"
+
+#ifndef SIGUNUSED
 #define SIGUNUSED 32
 #endif
 
 XErrorHandler   oldXErrorHandler;
-
-extern BYTE     iWBChanged;
-extern BYTE	iEBChanged;
-extern BYTE     iNewPYPhraseCount;
-extern BYTE     iOrderCount;
-extern BYTE     iNewFreqCount;
-extern BYTE	iWBOrderChanged;
 
 void SetMyExceptionHandler (void)
 {
@@ -37,17 +36,9 @@ void SetMyExceptionHandler (void)
 void OnException (int signo)
 {
     fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
-	
-    if (iWBChanged || iWBOrderChanged)
-	SaveWubiDict ();
-    if (iEBChanged)
-	SaveErbiDict ();
-    if (iNewPYPhraseCount)
-	SavePYUserPhrase ();
-    if (iOrderCount)
-	SavePYIndex ();
-    if (iNewFreqCount)
-	SavePYFreq ();
+
+    if (signo != SIGSEGV)	//出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件
+	SaveIM ();
 
     if (signo != SIGCHLD && signo != SIGQUIT && signo != SIGWINCH) {
 	fprintf (stderr, "FCITX -- Exit Signal No.: %d\n\n", signo);
@@ -62,20 +53,11 @@ void SetMyXErrorHandler (void)
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
-    char            str[1025];
+    char            str[256];
 
-    if (iWBChanged)
-	SaveWubiDict ();
-	if (iEBChanged)
-	SaveErbiDict ();
-    if (iNewPYPhraseCount)
-	SavePYUserPhrase ();
-    if (iOrderCount)
-	SavePYIndex ();
-    if (iNewFreqCount)
-	SavePYFreq ();
+    SaveIM ();
 
-    XGetErrorText (dpy, event->error_code, str, 1024);
+    XGetErrorText (dpy, event->error_code, str, 255);
     fprintf (stderr, "fcitx: %s\n", str);
 
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3

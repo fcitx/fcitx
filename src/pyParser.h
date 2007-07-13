@@ -27,10 +27,10 @@ typedef enum {
 } PYPARSEINPUTMODE;		//这个值不能随意修改
 
 typedef struct {
-    char            strPYParsed[MAX_WORDS_USER_INPUT+3][MAX_PY_LENGTH + 2];
-    char            strMap[MAX_WORDS_USER_INPUT+3][3];
-    BYTE            iHZCount;
-    BYTE            iMode;
+    char            strPYParsed[MAX_WORDS_USER_INPUT + 3][MAX_PY_LENGTH + 2];
+    char            strMap[MAX_WORDS_USER_INPUT + 3][3];
+    INT8            iHZCount;
+    INT8            iMode;
 } ParsePYStruct;
 
 typedef struct {

@@ -10,14 +10,13 @@
 // #define MAX_PHRASE_LENGTH 10 //最大词组长度----与拼音词组长度相同
 
 #define HOT_KEY_COUNT	2
-#define MAX_HZ_SAVED    10
+#define MAX_HZ_SAVED    1024
 
-#define MAX_IM_NAME	10
+#define MAX_IM_NAME	12
 
 #define NAME_OF_PINYIN		"拼音"
 #define NAME_OF_SHUANGPIN	"双拼"
-#define NAME_OF_WUBI		"五笔"
-#define NAME_OF_ERBI		"二笔"
+#define NAME_OF_QUWEI		"区位"
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
@@ -40,6 +39,7 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_TO_PROCESS,
     IRV_DISPLAY_MESSAGE,
     IRV_DISPLAY_CANDWORDS,
+    IRV_DISPLAY_LAST,
     IRV_PUNC,
     IRV_ENG,
     IRV_GET_LEGEND,
@@ -65,32 +65,35 @@ typedef enum _KEY_RELEASED {
 } KEY_RELEASED;
 
 typedef struct {
-	char strName[MAX_IM_NAME+1];
-	void (*ResetIM) (void);
-	INPUT_RETURN_VALUE (*DoInput) (int);
-	INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
-	char *(*GetCandWord) (int);
-	char *(*GetLegendCandWord) (int);
-	Bool (*PhraseTips) (char *strPhrase);
-	void (*Init) (void);
+    char            strName[MAX_IM_NAME + 1];
+    void            (*ResetIM) (void);
+                    INPUT_RETURN_VALUE (*DoInput) (int);
+                    INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
+    char           *(*GetCandWord) (int);
+    char           *(*GetLegendCandWord) (int);
+                    Bool (*PhraseTips) (void);
+    void            (*Init) (void);
+    void            (*Destroy) (void);
 } IM;
 
 typedef int     HOTKEYS;
 
 void            ProcessKey (XIMS ims, IMForwardEventStruct * call_data);
 void            ResetInput (void);
-void            CloseIME (XIMS ims, IMForwardEventStruct * call_data);
+void            CloseIM (XIMS ims, IMForwardEventStruct * call_data);
 Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
-void            UpdateHZLastInput (void);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
 INPUT_RETURN_VALUE ChangeGBK (void);
 INPUT_RETURN_VALUE ChangeLegend (void);
-void		RegisterNewIM ( char *strName, void (*ResetIM)(void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),Bool (*PhraseTips) (char *strPhrase),void (*Init)(void));
+INPUT_RETURN_VALUE ChangeTrack (void);
 
-void            SwitchIME (BYTE index);
+void            RegisterNewIM (char *strName, void (*ResetIM) (void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),
+			       Bool (*PhraseTips) (void), void (*Init) (void), void (*Destroy) (void));
+void            SwitchIM (INT8 index);
 void            DoPhraseTips ();
-
-Bool		IsIM(char *strName);
+Bool            IsIM (char *strName);
+void            SaveIM (void);
+void            SetIM (void);
 
 #endif

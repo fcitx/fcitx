@@ -132,7 +132,7 @@ typedef struct {
     char            strMap[MAX_PY_PHRASE_LENGTH * 2 + 1];
 } PY_SELECTED;
 
-void		PYInit (void);
+void            PYInit (void);
 Bool            LoadPYBaseDict (void);
 Bool            LoadPYOtherDict (void);
 void            ResetPYStatus ();
@@ -145,6 +145,7 @@ void            CalculateCursorPosition (void);
 void            PYResetFlags (void);
 void            PYCreateAuto (void);
 INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode);
+void		PYCreateCandString(void);
 char           *PYGetCandWord (int iIndex);
 void            PYGetSymCandWords (SEARCH_MODE mode);
 Bool            PYAddSymCandWord (HZ * hz, SEARCH_MODE mode);
@@ -171,7 +172,7 @@ void            PYDelFreq (int iIndex);
 Bool            PYIsInFreq (char *strHZ);
 
 INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE iMode);
-Bool            PYAddLengendCandWord (PyPhrase * phrase, INPUT_RETURN_VALUE mode);
+Bool            PYAddLengendCandWord (PyPhrase * phrase, SEARCH_MODE mode);
 char           *PYGetLegendCandWord (int iIndex);
 void            PYSetLegendCandWordsFlag (Bool flag);
 

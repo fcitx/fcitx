@@ -65,7 +65,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/fcitx.
-	$(MAKE) install-strip DESTDIR="$(CURDIR)/debian/fcitx"
+	$(MAKE) install-strip DESTDIR="$(CURDIR)/debian/tmp"
 
 
 # Build architecture-independent files here.
@@ -78,12 +78,12 @@ binary-arch: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog
 	dh_installdocs
-	install -m 644 data/*.dat data/*.mb $(CURDIR)/debian/tmp/usr/share/fcitx/data/
+	install -m 644 data/*.dat data/*.mb data/tables.conf $(CURDIR)/debian/tmp/usr/share/fcitx/data/
 	install -m 644 xpm/logo.xpm $(CURDIR)/debian/tmp/usr/share/fcitx/xpm/
 	dh_installexamples
 #	dh_install
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam

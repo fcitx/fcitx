@@ -1,4 +1,4 @@
 docdir = $(pkgdatadir)/doc
 doc_DATA = \
-        cjkvinput.txt hf_wb98.txt Makefile.am readme.htm wb_fh.htm
+        cjkvinput.txt wb_fh.htm fcitx3.pdf
 EXTRA_DIST = $(doc_DATA)

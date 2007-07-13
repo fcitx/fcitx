@@ -1,6 +1,6 @@
 %define name		fcitx
 %define version		@VERSION@
-%define release		3
+%define release		1
 
 %define prefix		/usr
 %define fcitxbindir	/usr/bin
@@ -54,8 +54,12 @@ make DESTDIR=$RPM_BUILD_ROOT install-strip
 %dir %{_datadir}/fcitx/data
 %{_datadir}/fcitx/data/*.mb
 %{_datadir}/fcitx/data/*.dat
+%{_datadir}/fcitx/data/tables.conf
 
 %changelog
+* Fri Jun 11 2004 xyb <xyb76@sina.com>
+- Add data/tables.conf
+
 * Mon Feb 2 2004 xyb <xyb76@sina.com>
 - Fix spec bug(patch by hamigua <hamigua@linuxsir.org>).
 

@@ -75,7 +75,7 @@ IMListOfAttr Default_ICattr[] =
     {XNLineSpace,               XimType_CARD32},
     {XNPreeditState,            XimType_CARD32},
     {XNSeparatorofNestedList,   XimType_SeparatorOfNestedList},
-    {(char *) NULL, (CARD16) NULL}
+    {(char *)NULL, (CARD16) NULL}
 };
 
 IMExtList Default_Extension[] =

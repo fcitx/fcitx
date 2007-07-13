@@ -7,8 +7,7 @@ AM_CFLAGS = -O2 -fno-strength-reduce
 
 bin_PROGRAMS = fcitx
 
-fcitx_SOURCES = erbi.c erbi.h \
-                IC.c IC.h \
+fcitx_SOURCES = IC.c IC.h \
                 ime.c ime.h \
                 InputWindow.c InputWindow.h \
                 KeyList.c KeyList.h \
@@ -24,6 +23,7 @@ fcitx_SOURCES = erbi.c erbi.h \
                 tools.c tools.h \
                 ui.c ui.h \
                 version.h \
-                wbx.c wbx.h \
-                xim.c xim.h
+                table.c table.h \
+                xim.c xim.h \
+                qw.c qw.h
 fcitx_LDADD = ../lib/libXimd.a

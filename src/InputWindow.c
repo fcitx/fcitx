@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "InputWindow.h"
 
 #include <string.h>
@@ -24,12 +28,21 @@ uint            iInputWindowWidth = INPUTWND_WIDTH;
 uint            iInputWindowUpWidth = INPUTWND_WIDTH;
 uint            iInputWindowDownWidth = INPUTWND_WIDTH;
 
-MESSAGE_COLOR   messageColor[MESSAGE_TYPE_COUNT];
-MESSAGE_COLOR   inputWindowLineColor;	//输入框中的线条色
-XColor          colorArrow = { 0, 0, 255 };	//箭头的颜色
+MESSAGE_COLOR   messageColor[MESSAGE_TYPE_COUNT] = {
+    {NULL, {0, 255 << 8, 0, 0}},
+    {NULL, {0, 0, 0, 255 << 8}},
+    {NULL, {0, 200 << 8, 0, 0}},
+    {NULL, {0, 0, 150 << 8, 100 << 8}},
+    {NULL, {0, 0, 0, 255 << 8}},
+    {NULL, {0, 100 << 8, 100 << 8, 255 << 8}},
+    {NULL, {0, 0, 0, 0}}
+};
 
-WINDOW_COLOR    inputWindowColor;
-MESSAGE_COLOR   cursorColor;
+MESSAGE_COLOR   inputWindowLineColor = { NULL, {0, 100 << 8, 200 << 8, 255 << 8} };	//输入框中的线条色
+XColor          colorArrow = { 0, 255 << 8, 150 << 8, 255 << 8 };	//箭头的颜色
+
+WINDOW_COLOR    inputWindowColor = { NULL, NULL, {0, 240 << 8, 240 << 8, 240 << 8} };
+MESSAGE_COLOR   cursorColor = { NULL, {0, 92 << 8, 210 << 8, 131 << 8} };
 
 // *************************************************************
 MESSAGE         messageUp[32];	//输入条上部分显示的内容
@@ -66,6 +79,7 @@ extern XFontSet fontSet;
 #endif
 
 extern GC       dimGC;
+extern GC       lightGC;
 
 Bool CreateInputWindow (void)
 {
@@ -103,42 +117,18 @@ Bool CreateInputWindow (void)
 /*
  * 根据字体的大小来调整窗口的高度
  */
+void CalculateInputWindowHeight (void)
+{
+    int             iHeight;
+
 #ifdef _USE_XFT
-void CalculateInputWindowHeight (void)
-{
-    XGlyphInfo      extents;
-    char            str1[] = "Ay中";
-    char            str2[10];
-    char           *ps1, *ps2;
-    int             l1, l2;
-
-    if (!xftFont)
-	return;
-
-    l1 = strlen (str1);
-    l2 = 9;
-    ps2 = str2;
-    ps1 = str1;
-
-    l1 = iconv (convUTF8, (char **) &ps1, &l1, &ps2, &l2);
-
-    XftTextExtentsUtf8 (dpy, xftFont, str2, strlen (str2), &extents);
-    iInputWindowHeight = extents.height * 2 + extents.height / 2 + 8;
-}
+    iHeight = FontHeight (xftFont);
 #else
-void CalculateInputWindowHeight (void)
-{
-    XRectangle      InkBox, LogicalBox;
-    char            str[] = "Ay中";
-
-    if (!fontSet)
-	return;
-
-    XmbTextExtents (fontSet, str, strlen (str), &InkBox, &LogicalBox);
-
-    iInputWindowHeight = LogicalBox.height * 2 + LogicalBox.height / 2 + 8;
-}
+    iHeight = FontHeight (fontSet);
 #endif
+
+    iInputWindowHeight = iHeight * 2 + iHeight / 2 + 8;
+}
 
 void DisplayInputWindow (void)
 {
@@ -147,8 +137,6 @@ void DisplayInputWindow (void)
     DrawInputWindow ();
 }
 
-extern GC              dimGC;
-extern GC              lightGC;
 void DrawInputWindow (void)
 {
     if (_3DEffectInputWindow == _3D_UPPER)
@@ -158,9 +146,9 @@ void DrawInputWindow (void)
 
     XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
     //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
-    XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2-1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2-1);
+    XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
     XDrawLine (dpy, inputWindow, inputWindowLineColor.gc, 2 + 5, iInputWindowHeight / 2, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2);
-    XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2+1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2+1);
+    XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
 
     if (bShowPrev) {
 	if (!pPrev) {
@@ -200,10 +188,9 @@ void InitInputWindowColor (void)
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, inputWindowLineColor.gc, iPixel);
 
-
-    cursorColor.color.red= cursorColor.color.red ^ inputWindowColor.backColor.red;
-    cursorColor.color.green= cursorColor.color.green ^ inputWindowColor.backColor.green;
-    cursorColor.color.blue= cursorColor.color.blue ^ inputWindowColor.backColor.blue;
+    cursorColor.color.red = cursorColor.color.red ^ inputWindowColor.backColor.red;
+    cursorColor.color.green = cursorColor.color.green ^ inputWindowColor.backColor.green;
+    cursorColor.color.blue = cursorColor.color.blue ^ inputWindowColor.backColor.blue;
     cursorColor.gc = XCreateGC (dpy, inputWindow, 0, &values);
     //为了画绿色光标
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &cursorColor.color))
@@ -233,7 +220,7 @@ void DisplayMessage (void)
 
     iInputWindowUpWidth = 0;
     for (i = 0; i < uMessageUp; i++)
-#ifdef _USE_XFT    
+#ifdef _USE_XFT
 	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, xftFont);
 #else
 	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, fontSet);
@@ -247,7 +234,7 @@ void DisplayMessage (void)
 
     iInputWindowDownWidth = 0;
     for (i = 0; i < uMessageDown; i++)
-#ifdef _USE_XFT    
+#ifdef _USE_XFT
 	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, xftFont);
 #else
 	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, fontSet);
@@ -265,15 +252,15 @@ void DisplayMessage (void)
 
     XGetWindowAttributes (dpy, inputWindow, &wa);
     if ((wa.x + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-    	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 2;
+	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 2;
     else if (wa.x < 0) {
-    	if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
-        	i = 0;
-       	else
-           	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+	if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
+	    i = 0;
+	else
+	    i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
     }
     else
-       i = wa.x;
+	i = wa.x;
 
     XMoveWindow (dpy, inputWindow, i, wa.y);
     XResizeWindow (dpy, inputWindow, iInputWindowWidth, iInputWindowHeight);
@@ -287,7 +274,7 @@ void DisplayMessage (void)
  */
 void DisplayMessageUp (void)
 {
-    int             i=0;
+    int             i = 0;
     int             iPos;
     int             iCursorPixPos = 0;
     int             iChar;
@@ -309,12 +296,11 @@ void DisplayMessageUp (void)
 	    if (strlen (messageUp[i].strMsg) > iChar) {
 		strncpy (strText, messageUp[i].strMsg, iChar);
 		strText[iChar] = '\0';
-#ifdef _USE_XFT    
+#ifdef _USE_XFT
 		iCursorPixPos += StringWidth (strText, xftFont);
 #else
 		iCursorPixPos += StringWidth (strText, fontSet);
 #endif
-		
 		iChar = 0;
 	    }
 	    else {
@@ -340,10 +326,8 @@ void DisplayMessageDown (void)
 
     iPos = INPUTWND_START_POS_DOWN;
     for (i = 0; i < uMessageDown; i++) {
-    	//借用iInputWindowDownWidth作为一个临时变量
+	//借用iInputWindowDownWidth作为一个临时变量
 
-
-	
 #ifdef _USE_XFT
 	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
 	OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
@@ -351,11 +335,12 @@ void DisplayMessageDown (void)
 	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, fontSet);
 	OutputString (inputWindow, fontSet, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
 #endif
-	iPos += iInputWindowDownWidth;	
+	iPos += iInputWindowDownWidth;
     }
 }
 
 void DrawCursor (int iPos)
 {
-    XDrawLine (dpy, inputWindow, cursorColor.gc, iPos, 4, iPos, iInputWindowHeight / 2 - 4);
+    XDrawLine (dpy, inputWindow, cursorColor.gc, iPos, 8, iPos, iInputWindowHeight / 2 - 4);
+    XDrawLine (dpy, inputWindow, cursorColor.gc, iPos+1, 8, iPos+1, iInputWindowHeight / 2 - 4);
 }

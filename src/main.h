@@ -4,8 +4,8 @@
 #include <X11/Xlib.h>
 #include <stdio.h>
 
-int main(int argc, char *argv[]);
-void Usage(void);
-void Version(void);
+int             main (int argc, char *argv[]);
+void            Usage (void);
+void            Version (void);
 
 #endif

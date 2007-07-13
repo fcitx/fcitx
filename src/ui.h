@@ -21,8 +21,8 @@ typedef enum {
 typedef struct {
     GC              foreGC;
     GC              backGC;
-    XColor          foreColor;
     XColor          backColor;
+    XColor          foreColor;
 } WINDOW_COLOR;
 
 typedef struct {
@@ -39,17 +39,20 @@ Bool            InitX (void);
 void            Draw3DEffect (Window window, int x, int y, int width, int height, _3D_EFFECT effect);
 void            InitGC (Window window);
 void            CreateFont (void);
-void            MyXEventHandler (Window im_window, XEvent * event);
+void            MyXEventHandler (XEvent * event);
 Bool            IsInBox (int x0, int y0, int x1, int y1, int x2, int y2);
 
+/*void		SetLocale (void);*/
+
 #ifdef _USE_XFT
-void            OutputString (Window window, XftFont *font, char *str, int x, int y, XColor);
-int		StringWidth(char *str, XftFont *font);
+void            OutputString (Window window, XftFont * font, char *str, int x, int y, XColor);
+int             StringWidth (char *str, XftFont * font);
+int             FontHeight (XftFont * font);
 #else
 void            OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc);
-int		StringWidth(char *str, XFontSet font);
+int             StringWidth (char *str, XFontSet font);
+int             FontHeight (XFontSet font);
 #endif
-
 
 int             FillImageByXPMData (XImage * pImage, char **apcData);
 XPoint          MouseClick (int *x, int *y, int iWnd);

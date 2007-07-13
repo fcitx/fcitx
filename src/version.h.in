@@ -1,6 +1,10 @@
 #ifndef _VERSION_H
 #define _VERSION_H
 
-#define FCITX_VERSION		"@VERSION@"
+#ifdef _USE_XFT
+#define FCITX_VERSION		"@VERSION@-xft"
+#else
+#define FCITX_VERSION		"@VERSION@-noxft"
+#endif
 
 #endif

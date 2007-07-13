@@ -1,14 +1,9 @@
 #!/bin/sh
-if test -f /etc/debian_version; then
-  # in my debian/unstable, i use these:
-  aclocal-1.6 || exit 1
-  autoconf2.50 || exit 2
-  automake-1.6 --add-missing || exit 3
-else
-  aclocal || exit 1
-  autoconf || exit 2
-  automake --add-missing || exit 3
-fi
+
+aclocal || exit 1
+autoheader || exit 2
+automake --add-missing --copy --include-deps || exit 3
+autoconf || exit 4
 
 if [ -z "$1" ] ; then
   echo

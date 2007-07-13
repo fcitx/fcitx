@@ -28,7 +28,7 @@ enum {
     K_PGDN = 86
 };
 
-typedef struct _KEY_LIST{
+typedef struct _KEY_LIST {
     char           *strKey;
     int             code;
 } KEY_LIST;
@@ -84,7 +84,7 @@ typedef enum _KEY {
     ALT_LSHIFT,
     ALT_ALT,
     ALT_RCTRL,
-    ALT_RSHIFT,
+    ALT_RSHIFT = 314,
 
     CTRL_A = 1065,
     CTRL_B,

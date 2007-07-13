@@ -75,7 +75,7 @@ KEY_LIST        keyList[] = {
 int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
 {
     if (!iCount) {		//是SHIFT、CTRL、ALT或它们的组合，或其它诸如HOME、END之类的键
-	if (iKeyState == KEY_NONE) {	    
+	if (iKeyState == KEY_NONE) {
 	    if (iKeyCode >= 80 && iKeyCode <= 99)	//上、下、左、右、HOME、END、PGUP、PGDN、INSERT等
 		return 8000 + iKeyCode;
 	    if (iKeyCode >= 225 && iKeyCode <= 233)	//单按SHIFT、CTRL、ALT
@@ -138,7 +138,7 @@ int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
     }
     else {
 	//由于大小写字母有区别，此处应该将其处理为等同
-	if (iKeyState != KEY_NONE && iKeyState<KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
+	if (iKeyState != KEY_NONE && iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
 	    iKeyCode -= 32;
 
 	if (iKeyState == KEY_CTRL_COMP)

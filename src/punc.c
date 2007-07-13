@@ -32,6 +32,7 @@ int LoadPuncDict (void)
     chnPunc = (ChnPunc *) malloc (sizeof (ChnPunc) * (iRecordNo + 1));
 
     iRecordNo = 0;
+
     for (;;) {
 	if (!fgets (strText, 10, fpDict))
 	    break;
@@ -46,9 +47,9 @@ int LoadPuncDict (void)
 	if (i) {
 	    strText[i + 1] = '\0';
 	    pstr = strText;
-	    while (*pstr != ' ')
-		chnPunc[iRecordNo].ASCII = *pstr++;
-
+	    while (*pstr == ' ')
+		pstr++;
+	    chnPunc[iRecordNo].ASCII = *pstr++;
 	    while (*pstr == ' ')
 		pstr++;
 
@@ -56,20 +57,25 @@ int LoadPuncDict (void)
 	    chnPunc[iRecordNo].iWhich = 0;
 	    while (*pstr) {
 		i = 0;
-		while (*pstr != ' ' && *pstr)
-		    chnPunc[iRecordNo].strChnPunc[chnPunc[iRecordNo].iCount][i++] = *pstr++;
+		while (*pstr != ' ' && *pstr) {
+		    chnPunc[iRecordNo].strChnPunc[chnPunc[iRecordNo].iCount][i] = *pstr;
+		    i++;
+		    pstr++;
+		}
+
 		chnPunc[iRecordNo].strChnPunc[chnPunc[iRecordNo].iCount][i] = '\0';
 		while (*pstr == ' ')
 		    pstr++;
 		chnPunc[iRecordNo].iCount++;
 	    }
+
 	    iRecordNo++;
 	}
     }
 
     chnPunc[iRecordNo].ASCII = '\0';
-
     fclose (fpDict);
+
     return True;
 }
 
@@ -81,9 +87,9 @@ int IsPunc (int iKey)
 {
     int             iIndex = 0;
 
-    if ( !chnPunc )
+    if (!chnPunc)
 	return -1;
-    
+
     while (chnPunc[iIndex].ASCII) {
 	if (chnPunc[iIndex].ASCII == iKey)
 	    return iIndex;

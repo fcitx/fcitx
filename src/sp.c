@@ -86,14 +86,14 @@ Bool            bSP_UseSemicolon = False;
 Bool            bSP = False;
 char            cNonS = 'o';
 
-extern Bool	bSingleHZMode;
+extern Bool     bSingleHZMode;
 
-void SPInit(void)
+void SPInit (void)
 {
-	bSP = True;
-	bSingleHZMode = False;
-	
-	LoadSPData ();
+    bSP = True;
+    bSingleHZMode = False;
+
+    LoadSPData ();
 }
 
 void LoadSPData (void)
