@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "pyParser.h"
 #include "ime.h"
 
@@ -305,7 +324,7 @@ Bool MapToPY (char strMap[3], char *strPY)
     int             i;
 
     strPY[0] = '\0';
-    if (strMap[0] != '0') {
+    if (strMap[0] != ' ') {
 	i = 0;
 	while (syllabaryMapTable[i].cMap) {
 	    if (syllabaryMapTable[i].cMap == strMap[0]) {
@@ -318,7 +337,7 @@ Bool MapToPY (char strMap[3], char *strPY)
 	    return False;
     }
 
-    if (strMap[1] != '0') {
+    if (strMap[1] != ' ') {
 	i = 0;
 	while (consonantMapTable[i].cMap) {
 	    if (consonantMapTable[i].cMap == strMap[1]) {
@@ -328,6 +347,8 @@ Bool MapToPY (char strMap[3], char *strPY)
 	    i++;
 	}
     }
+    else
+	    return True;
 
     return False;
 }

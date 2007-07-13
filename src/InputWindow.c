@@ -1,3 +1,23 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -5,6 +25,7 @@
 #include "InputWindow.h"
 
 #include <string.h>
+#include <version.h>
 
 #ifdef _USE_XFT
 #include <ft2build.h>
@@ -63,9 +84,10 @@ Bool            bIsResizingInputWindow = False;	//窗口在改变尺寸时不要重绘
 Bool            bShowPrev = False;
 Bool            bShowNext = False;
 Bool            bTrackCursor = True;
+Bool            bCenterInputWindow = True;
 
 int             iCursorPos = 0;
-Bool            bShowCursor = True;
+Bool            bShowCursor = False;
 
 _3D_EFFECT      _3DEffectInputWindow = _3D_LOWER;
 
@@ -232,6 +254,18 @@ void DisplayMessage (void)
     XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
     XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
+    if (!uMessageUp && !uMessageDown ) {
+	bShowCursor = False;
+	uMessageUp = 1;
+	strcpy (messageUp[0].strMsg, "小企鹅中文输入法 (FCITX) V");
+	strcat (messageUp[0].strMsg, FCITX_VERSION);
+	messageUp[0].type = MSG_TIPS;
+
+	uMessageDown = 1;
+	strcpy (messageDown[0].strMsg, "CopyRight: Yuking (yuking_net@sohu.com)");
+	messageDown[0].type = MSG_CODE;
+    }
+
     iInputWindowUpWidth = 0;
     for (i = 0; i < uMessageUp; i++) {
 #ifdef _USE_XFT
@@ -239,7 +273,7 @@ void DisplayMessage (void)
 	while (*p1) {
 	    p2 = strTemp;
 	    if (isprint (*p1))	//使用中文字体
-	    	bEn = True;
+		bEn = True;
 	    else {
 		*p2++ = *p1++;
 		*p2++ = *p1++;
@@ -248,7 +282,7 @@ void DisplayMessage (void)
 	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
-		        break;
+			break;
 		    *p2++ = *p1++;
 		}
 		else {
@@ -259,7 +293,7 @@ void DisplayMessage (void)
 		}
 	    }
 	    *p2 = '\0';
-	    
+
 	    iInputWindowUpWidth += StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
 	}
 #else
@@ -278,10 +312,10 @@ void DisplayMessage (void)
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
 	while (*p1) {
-	   p2 = strTemp;
-	   if (isprint (*p1))	//使用中文字体
+	    p2 = strTemp;
+	    if (isprint (*p1))	//使用中文字体
 		bEn = True;
-	   else {
+	    else {
 		*p2++ = *p1++;
 		*p2++ = *p1++;
 		bEn = False;
@@ -295,8 +329,8 @@ void DisplayMessage (void)
 		else {
 		    if (bEn)
 			break;
-			*p2++ = *p1++;
-			*p2++ = *p1++;
+		    *p2++ = *p1++;
+		    *p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';
@@ -330,6 +364,12 @@ void DisplayMessage (void)
 	i = wa.x;
 
     XMoveWindow (dpy, inputWindow, i, wa.y);
+    if (bCenterInputWindow && !bTrackCursor) {
+	iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+	if (iInputWindowX < 0)
+	    iInputWindowX = 0;
+	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+    }
     XResizeWindow (dpy, inputWindow, iInputWindowWidth, iInputWindowHeight);
 
     DisplayMessageUp ();
@@ -466,7 +506,7 @@ void DisplayMessageDown (void)
 	    if (isprint (*p1))	//使用中文字体
 		bEn = True;
 	    else {
-	        *p2++ = *p1++;
+		*p2++ = *p1++;
 		*p2++ = *p1++;
 		bEn = False;
 	    }

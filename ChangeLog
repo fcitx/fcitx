@@ -1,3 +1,38 @@
+2005-8-27: Yuking <yukig_net@sohu.com>
+	   * src/vk.c:完善虚拟键盘功能
+	   * src/table.c:更改反查拼音的方式
+	   * 3.2-050827
+
+2005-8-24: Yuking <yukig_net@sohu.com>
+	   * src/table.c:解决输入法切换时，可能会导致拼音无法输入词组的问题
+
+2005-8-21: Yuking <yukig_net@sohu.com>
+	   * 增加了N个虚拟键盘方案
+
+2005-8-19: Yuking <yukig_net@sohu.com>
+	   * 发布3.2第一公开测试版3.2-050819
+
+2005-8-17: Yuking <yukig_net@sohu.com>
+	   * src/ime.c,src/punc.c:将中文输入状态下按大写键/回车的英文输出中的标点设置为全角（中文标点状态）
+
+2005-8-15: Yuking <yukig_net@sohu.com>
+	   * 增加虚拟键盘的功能
+	   * 其它一些小的BUG修正
+	   * 版本为3.2
+
+2005-7-23: Yuking <yukig_net@sohu.com>
+	   * 修正“角色”的拼音错误。 （Archetype@linuxsir）
+
+2005-7-7: Yuking <yukig_net@sohu.com>
+	   * src/xim.c,src/InputWindow.c,src/tools.c:将输入条一直居中（非光标跟随状态下）
+	   
+2005-5-4 jeff_yecnYuking <sinomac.net>
+	   * 修正无法在Mac OS X(Darwin)编译的问题
+	   
+2005-4-23 Yuking <yukig_net@sohu.com>
+	   * src/tools.c:遗漏了光标跟随键的设置
+	   * 将输入条数字后的点设置为可选
+
 2005-3-24 Yuking <yukig_net@sohu.com>
 	   * 版本为3.1.1
 	   

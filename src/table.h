@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifndef _TABLE_H
 #define _TABLE_H
 
@@ -11,7 +30,7 @@
 #define MAX_CODE_LENGTH  12
 #define PHRASE_MAX_LENGTH 10
 #define FH_MAX_LENGTH  10
-#define TABLE_AUTO_SAVE_AFTER 48
+#define TABLE_AUTO_SAVE_AFTER 256
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> 正序   0 --> 逆序
@@ -42,16 +61,15 @@ typedef struct _TABLE {
     unsigned int    iRecordCount;
     ADJUSTORDER     tableOrder;
 
-    Bool            bUsePY;	//使用拼音
-    Bool	    bGetPY;	//查拼音读音
+    Bool            bUsePY;			//使用拼音
     Bool            bTableAutoSendToClient;	//自动上屏
-    Bool            bUseMatchingKey;	//是否模糊匹配
-    Bool            bAutoPhrase;	//是否自动造词
+    Bool            bUseMatchingKey;		//是否模糊匹配
+    Bool            bAutoPhrase;		//是否自动造词
     INT8            iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
-    Bool            bAutoPhrasePhrase;	//词组是否参与造词
-    INT8            iAutoPhrase;	//自动造词长度
-    Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;	//输入完毕后是否提示编码--使用拼音时总有提示
+    Bool            bAutoPhrasePhrase;		//词组是否参与造词
+    INT8            iAutoPhrase;		//自动造词长度
+    Bool            bTableExactMatch;		//是否只显示精确匹配的候选字/词
+    Bool            bPromptTableCode;		//输入完毕后是否提示编码--使用拼音时总有提示
 } TABLE;
 
 typedef struct _RECORD {

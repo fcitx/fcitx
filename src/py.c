@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -27,7 +46,7 @@ uint            iCounter = 0;
 Bool            bPYBaseDictLoaded = False;
 Bool            bPYOtherDictLoaded = False;
 
-Bool            bSingleHZMode = True;	//这种情况下，只进行单字输入，不进行词组的匹配、生成及保存，用于码表输入法中的拼音输入
+Bool            bSingleHZMode = False;	//这种情况下，只进行单字输入，不进行词组的匹配、生成及保存，用于码表输入法中的拼音输入
 
 PyFreq         *pyFreq = NULL, *pCurFreq = NULL;
 uint            iPYFreqCount = 0;
@@ -96,6 +115,7 @@ extern int      iLegendCandWordCount;
 extern int      iLegendCandPageCount;
 extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
+extern Bool	bPointAfterNumber;
 
 void PYInit (void)
 {
@@ -173,7 +193,7 @@ Bool LoadPYOtherDict (void)
     strcat (strPath, PY_PHRASE_FILE);
     fp = fopen (strPath, "rb");
     if (!fp)
-	fprintf (stderr, "\n没有系统词库文件！\n");
+	fprintf (stderr, "\nCan not find System Database of Pinyin!\n");
     else {
 	while (!feof (fp)) {
 	    if (!fread (&i, sizeof (int), 1, fp))
@@ -411,6 +431,7 @@ void ResetPYStatus ()
     bIsPYAddFreq = False;
     bIsPYDelFreq = False;
     bIsPYDelUserPhr = False;
+    bSingleHZMode = False;	
 
     findMap.iMode = PARSE_SINGLEHZ;	//只要不是PARSE_ERROR就可以
 }
@@ -423,6 +444,7 @@ int GetBaseIndex (int iPYFA, char *strBase)
 	if (!strcmp (strBase, PYFAList[iPYFA].pyBase[i].strHZ))
 	    return i;
     }
+
     return -1;
 }
 
@@ -968,8 +990,12 @@ void PYCreateCandString (void)
     char           *pBase = NULL, *pPhrase;
     int             iType, iVal;
 
-    str[1] = '.';
-    str[2] = '\0';
+    if ( bPointAfterNumber ) {
+	    str[1] = '.';
+	    str[2] = '\0';
+    }
+    else
+	    str[1]='\0';
     uMessageDown = 0;
 
     for (iVal = 0; iVal < iCandWordCount; iVal++) {
@@ -2847,14 +2873,14 @@ void PYGetPYByHZ (char *strHZ, char *strPY)
     char            str_PY[MAX_PY_LENGTH + 1];
 
     strPY[0] = '\0';
-    for (i = 0; i < iPYFACount; i++) {
-	if (MapToPY (PYFAList[i].strMap, str_PY)) {	
+    for (i = iPYFACount-1; i>=0; i--) {
+	if (MapToPY (PYFAList[i].strMap, str_PY)) {
 	    for (j = 0; j < PYFAList[i].iBase; j++) {
 		if (!strcmp (PYFAList[i].pyBase[j].strHZ, strHZ)) {
 		    if (strPY[0])
 			strcat(strPY," ");
 		    strcat (strPY, str_PY);
-		    }
+		}
 	    }
 	}
     }

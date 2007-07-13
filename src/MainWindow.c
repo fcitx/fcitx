@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "MainWindow.h"
 
 #include <stdio.h>
@@ -19,7 +38,10 @@
 #include "lx-1.xpm"
 #include "lock-0.xpm"
 #include "lock-1.xpm"
+#include "vk-1.xpm"
+
 #include "ui.h"
+#include "vk.h"
 
 Window          mainWindow;
 int             MAINWND_WIDTH = _MAINWND_WIDTH;
@@ -49,6 +71,8 @@ char          **LXLogo[2] = { lx_0_xpm, lx_1_xpm };
 XImage         *pLock[2] = { NULL, NULL };
 char          **LockLogo[2] = { lock_0_xpm, lock_1_xpm };
 
+XImage         *pVK = NULL;
+
 HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
 Bool            bLocked = True;
@@ -73,6 +97,10 @@ extern XftFont *xftMainWindowFontEn;
 #else
 extern XFontSet fontSetMainWindow;
 #endif
+
+extern VKS      vks[];
+extern unsigned char      iCurrentVK;
+extern Bool     bVK;
 
 Bool CreateMainWindow (void)
 {
@@ -116,13 +144,17 @@ void DisplayMainWindow (void)
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
 	XMapRaised (dpy, mainWindow);
 
-	XDrawRectangle (dpy, mainWindow, mainWindowLineColor.gc, 0, 0, MAINWND_WIDTH - 1, MAINWND_HEIGHT - 1);
-
 	if (!pLogo) {
 	    pLogo = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pLogo, logo_xpm);
 	}
+	if (!pVK) {
+	    pVK = XGetImage (dpy, mainWindow, 0, 0, 19, 16, AllPlanes, XYPixmap);
+	    FillImageByXPMData (pVK, vk_1_xpm);
+	}
+
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLogo, 0, 0, 2, 2, 15, 16);
+	XDrawRectangle (dpy, mainWindow, mainWindowLineColor.gc, 0, 0, MAINWND_WIDTH - 1, MAINWND_HEIGHT - 1);
 
 	iPos = 20;
 	if (!bCompactMainWindow) {
@@ -160,12 +192,16 @@ void DisplayMainWindow (void)
 	    FillImageByXPMData (pLock[bLocked], LockLogo[bLocked]);
 	}
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, iPos, 2, 15, 16);
-	iPos += 13;
+	iPos += 11;
+
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pVK, 0, 0, iPos, 2, 19, 16);
+	iPos += 23;
 
 	iIndex = ConnectIDGetState (connect_id);
 	XClearArea (dpy, mainWindow, iPos, 2, MAINWND_WIDTH - iPos - 2, MAINWND_HEIGHT - 4, False);
 #ifdef _USE_XFT
-	p1 = im[iIMIndex].strName;
+	iPos += 2;
+	p1 = (bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName;
 	while (*p1) {
 	    if (isprint (*p1))
 		bEn = True;
@@ -189,7 +225,7 @@ void DisplayMainWindow (void)
 	    iPos += StringWidth (strTemp, (bEn) ? xftMainWindowFontEn : xftMainWindowFont);
 	}
 #else
-	OutputString (mainWindow, fontSetMainWindow, im[iIMIndex].strName, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
+	OutputString (mainWindow, fontSetMainWindow, (bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
 #endif
 
 	if (_3DEffectMainWindow) {
@@ -201,6 +237,7 @@ void DisplayMainWindow (void)
 		Draw3DEffect (mainWindow, 55, 1, 18, 18, _3D_UPPER);
 		Draw3DEffect (mainWindow, 73, 1, 18, 18, _3D_UPPER);
 		Draw3DEffect (mainWindow, 91, 1, 11, 18, _3D_UPPER);
+		Draw3DEffect (mainWindow, 102, 1, 22, 18, _3D_UPPER);
 	    }
 	}
 	else {
@@ -214,6 +251,8 @@ void DisplayMainWindow (void)
 		iPos = 90;
 	    }
 	    iPos += 11;
+	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
+	    iPos += 21;
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
 	}
     }

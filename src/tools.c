@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "tools.h"
 
 #include <stdio.h>
@@ -53,7 +72,8 @@ extern HOTKEYS  hkPYAddFreq[];
 extern HOTKEYS  hkPYDelFreq[];
 extern HOTKEYS  hkPYDelUserPhr[];
 extern HOTKEYS  hkLegend[];
-extern HOTKEYS	hkTrack[];
+extern HOTKEYS  hkTrack[];
+extern HOTKEYS  hkGetPY[];
 
 extern KEYCODE  switchKey;
 extern XIMTriggerKey *Trigger_Keys;
@@ -63,7 +83,8 @@ extern Bool     bUseGBK;
 extern Bool     bEngPuncAfterNumber;
 extern Bool     bAutoHideInputWindow;
 extern XColor   colorArrow;
-extern Bool	bTrackCursor;
+extern Bool     bTrackCursor;
+extern Bool     bCenterInputWindow;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern Bool     bCompactMainWindow;
 extern HIDE_MAINWINDOW hideMainWindow;
@@ -104,10 +125,12 @@ extern Bool     bUseSP;
 extern Bool     bUseQW;
 extern Bool     bUseTable;
 
-extern Bool	bLumaQQ;
-extern char	cPYYCDZ[];
+extern Bool     bLumaQQ;
+extern char     cPYYCDZ[];
 
-extern Bool	bDoubleSwitchKey;
+extern Bool     bDoubleSwitchKey;
+extern Bool     bPointAfterNumber;
+extern Bool     bConvertPunc;
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
@@ -131,6 +154,12 @@ this is required for Mac machine*/
 }
 #endif
 */
+
+Bool MyStrcmp (char *str1, char *str2)
+{
+    return !strncmp (str1, str2, strlen (str2));
+}
+
 /*
  * 读取用户的设置文件
  */
@@ -167,85 +196,93 @@ void LoadConfig (Bool bMode)
 	if (pstr[0] == '#')
 	    continue;
 
-	if (strstr (pstr, "显示字体(中)=") && bMode) {
+	if (MyStrcmp (pstr, "显示字体(中)=") && bMode) {
 	    pstr += 13;
 	    strcpy (strFontName, pstr);
 	}
-	if (strstr (pstr, "显示字体(英)=") && bMode) {
+	if (MyStrcmp (pstr, "显示字体(英)=") && bMode) {
 	    pstr += 13;
 	    strcpy (strFontEnName, pstr);
 	}
-	else if (strstr (pstr, "显示字体大小=") && bMode) {
+	else if (MyStrcmp (pstr, "显示字体大小=") && bMode) {
 	    pstr += 13;
 	    iFontSize = atoi (pstr);
 	}
-	else if (strstr (pstr, "主窗口字体大小=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口字体大小=") && bMode) {
 	    pstr += 15;
 	    iMainWindowFontSize = atoi (pstr);
 	}
 #ifdef _USE_XFT
-	else if (strstr (pstr, "是否使用AA字体=") && bMode) {
+	else if (MyStrcmp (pstr, "是否使用AA字体=") && bMode) {
 	    pstr += 15;
 	    bUseAA = atoi (pstr);
 	}
 #else
-	else if (strstr (pstr, "字体区域=") && bMode) {
+	else if (MyStrcmp (pstr, "字体区域=") && bMode) {
 	    pstr += 9;
 	    strcpy (strUserLocale, pstr);
 	}
 #endif
-	else if (strstr (pstr, "候选词个数=")) {
+	else if (MyStrcmp (pstr, "候选词个数=")) {
 	    pstr += 11;
 	    iMaxCandWord = atoi (pstr);
 	    if (iMaxCandWord > 10)
 		iMaxCandWord = MAX_CAND_WORD;
 	}
-	else if (strstr (pstr, "数字后跟半角符号=")) {
+	else if (MyStrcmp (pstr, "数字后跟半角符号=")) {
 	    pstr += 17;
 	    bEngPuncAfterNumber = atoi (pstr);
 	}
-	else if (strstr (pstr, "LumaQQ支持=") ) {
+	else if (MyStrcmp (pstr, "LumaQQ支持=")) {
 	    pstr += 11;
-	    bLumaQQ = atoi(pstr);
+	    bLumaQQ = atoi (pstr);
 	}
-	else if (strstr (pstr, "主窗口是否使用3D界面=")) {
+	else if (MyStrcmp (pstr, "主窗口是否使用3D界面=")) {
 	    pstr += 21;
 	    _3DEffectMainWindow = atoi (pstr);
 	}
-	else if (strstr (pstr, "输入条使用3D界面=")) {
+	else if (MyStrcmp (pstr, "输入条使用3D界面=")) {
 	    pstr += 17;
-	    _3DEffectInputWindow = (_3D_EFFECT)atoi (pstr);
+	    _3DEffectInputWindow = (_3D_EFFECT) atoi (pstr);
 	}
-	else if (strstr (pstr, "是否自动隐藏输入条=")) {
+	else if (MyStrcmp (pstr, "是否自动隐藏输入条=")) {
 	    pstr += 19;
 	    bAutoHideInputWindow = atoi (pstr);
 	}
-	else if (strstr (pstr, "主窗口隐藏模式=")) {
+	else if (MyStrcmp (pstr, "输入条是否居中=")) {
+	    pstr += 15;
+	    bCenterInputWindow = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "序号前加点==")) {
+	    pstr += 11;
+	    bPointAfterNumber = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
 	    hideMainWindow = (HIDE_MAINWINDOW) atoi (pstr);
 	}
-	else if (strstr (pstr, "光标色=") && bMode) {
+	else if (MyStrcmp (pstr, "光标色=") && bMode) {
 	    pstr += 7;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    cursorColor.color.red = (r << 8);
 	    cursorColor.color.green = (g << 8);
 	    cursorColor.color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "主窗口背景色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口背景色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    mainWindowColor.backColor.red = (r << 8);
 	    mainWindowColor.backColor.green = (g << 8);
 	    mainWindowColor.backColor.blue = (b << 8);
 	}
-	else if (strstr (pstr, "主窗口线条色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口线条色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    mainWindowLineColor.color.red = (r << 8);
 	    mainWindowLineColor.color.green = (g << 8);
 	    mainWindowLineColor.color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "主窗口输入法名称色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口输入法名称色=") && bMode) {
 	    int             r1, r2, g1, g2, b1, b2;
 
 	    pstr += 19;
@@ -260,70 +297,70 @@ void LoadConfig (Bool bMode)
 	    IMNameColor[2].color.green = (g2 << 8);
 	    IMNameColor[2].color.blue = (b2 << 8);
 	}
-	else if (strstr (pstr, "输入窗背景色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗背景色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    inputWindowColor.backColor.red = (r << 8);
 	    inputWindowColor.backColor.green = (g << 8);
 	    inputWindowColor.backColor.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗提示色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗提示色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[0].color.red = (r << 8);
 	    messageColor[0].color.green = (g << 8);
 	    messageColor[0].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗用户输入色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗用户输入色=") && bMode) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[1].color.red = (r << 8);
 	    messageColor[1].color.green = (g << 8);
 	    messageColor[1].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗序号色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗序号色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[2].color.red = (r << 8);
 	    messageColor[2].color.green = (g << 8);
 	    messageColor[2].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗第一个候选字色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗第一个候选字色=") && bMode) {
 	    pstr += 21;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[3].color.red = (r << 8);
 	    messageColor[3].color.green = (g << 8);
 	    messageColor[3].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗用户词组色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗用户词组色=") && bMode) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[4].color.red = (r << 8);
 	    messageColor[4].color.green = (g << 8);
 	    messageColor[4].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗提示编码色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗提示编码色=") && bMode) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[5].color.red = (r << 8);
 	    messageColor[5].color.green = (g << 8);
 	    messageColor[5].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗其它文本色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗其它文本色=") && bMode) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[6].color.red = (r << 8);
 	    messageColor[6].color.green = (g << 8);
 	    messageColor[6].color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗线条色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗线条色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    inputWindowLineColor.color.red = (r << 8);
 	    inputWindowLineColor.color.green = (g << 8);
 	    inputWindowLineColor.color.blue = (b << 8);
 	}
-	else if (strstr (pstr, "输入窗箭头色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗箭头色=") && bMode) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    colorArrow.red = (r << 8);
@@ -331,60 +368,72 @@ void LoadConfig (Bool bMode)
 	    colorArrow.blue = (b << 8);
 	}
 
-	else if (strstr (pstr, "打开/关闭输入法=") && bMode) {
+	else if (MyStrcmp (pstr, "打开/关闭输入法=") && bMode) {
 	    pstr += 16;
 	    SetTriggerKeys (pstr);
 	    SetHotKey (pstr, hkTrigger);
 	}
-	else if (strstr (pstr, "中英文快速切换键=")) {
+	else if (MyStrcmp (pstr, "中英文快速切换键=")) {
 	    pstr += 17;
 	    SetSwitchKey (pstr);
 	}
-	else if (strstr (pstr, "双击中英文切换=")) {
+	else if (MyStrcmp (pstr, "双击中英文切换=")) {
 	    pstr += 15;
 	    bDoubleSwitchKey = atoi (pstr);
 	}
-	else if (strstr (pstr, "GBK支持=")) {
+	else if (MyStrcmp (pstr, "光标跟随=")) {
+	    pstr += 9;
+	    SetHotKey (pstr, hkTrack);
+	}
+	else if (MyStrcmp (pstr, "GBK支持=")) {
 	    pstr += 8;
 	    SetHotKey (pstr, hkGBK);
 	}
-	else if (strstr (pstr, "分号输入英文=")) {
+	else if (MyStrcmp (pstr, "分号输入英文=")) {
 	    pstr += 13;
 	    bEngAfterSemicolon = atoi (pstr);
 	}
-	else if (strstr (pstr, "大写字母输入英文=")) {
+	else if (MyStrcmp (pstr, "大写字母输入英文=")) {
 	    pstr += 17;
 	    bEngAfterCap = atoi (pstr);
 	}
-	else if (strstr (pstr, "联想方式禁止翻页=")) {
+	else if (MyStrcmp (pstr, "转换英文中的标点=")) {
+	    pstr += 17;
+	    bConvertPunc = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "联想方式禁止翻页=")) {
 	    pstr += 17;
 	    bDisablePagingInLegend = atoi (pstr);
 	}
-	else if (strstr (pstr, "联想支持=")) {
+	else if (MyStrcmp (pstr, "联想支持=")) {
 	    pstr += 9;
 	    SetHotKey (pstr, hkLegend);
 	}
-	else if (strstr (pstr, "Enter键行为=")) {
+	else if (MyStrcmp (pstr, "反查拼音=")) {
+	    pstr += 9;
+	    SetHotKey (pstr, hkGetPY);
+	}
+	else if (MyStrcmp (pstr, "Enter键行为=")) {
 	    pstr += 12;
 	    enterToDo = (ENTER_TO_DO) atoi (pstr);
 	}
-	else if (strstr (pstr, "全半角=")) {
+	else if (MyStrcmp (pstr, "全半角=")) {
 	    pstr += 7;
 	    SetHotKey (pstr, hkCorner);
 	}
-	else if (strstr (pstr, "中文标点=")) {
+	else if (MyStrcmp (pstr, "中文标点=")) {
 	    pstr += 9;
 	    SetHotKey (pstr, hkPunc);
 	}
-	else if (strstr (pstr, "上一页=")) {
+	else if (MyStrcmp (pstr, "上一页=")) {
 	    pstr += 7;
 	    SetHotKey (pstr, hkPrevPage);
 	}
-	else if (strstr (pstr, "下一页=")) {
+	else if (MyStrcmp (pstr, "下一页=")) {
 	    pstr += 7;
 	    SetHotKey (pstr, hkNextPage);
 	}
-	else if (strstr (pstr, "第二三候选词选择键=")) {
+	else if (MyStrcmp (pstr, "第二三候选词选择键=")) {
 	    pstr += 19;
 	    if (!strcasecmp (pstr, "SHIFT")) {
 		i2ndSelectKey = 50;	//左SHIFT的扫描码
@@ -396,110 +445,110 @@ void LoadConfig (Bool bMode)
 	    }
 	}
 
-	else if (strstr (pstr, "使用拼音=")) {
+	else if (MyStrcmp (pstr, "使用拼音=")) {
 	    pstr += 9;
 	    bUsePinyin = atoi (pstr);
 	}
-	else if (strstr (pstr, "使用双拼=")) {
+	else if (MyStrcmp (pstr, "使用双拼=")) {
 	    pstr += 9;
 	    bUseSP = atoi (pstr);
 	}
-	else if (strstr (pstr, "使用区位=")) {
+	else if (MyStrcmp (pstr, "使用区位=")) {
 	    pstr += 9;
 	    bUseQW = atoi (pstr);
 	}
-	else if (strstr (pstr, "使用码表=")) {
+	else if (MyStrcmp (pstr, "使用码表=")) {
 	    pstr += 9;
 	    bUseTable = atoi (pstr);
 	}
-	else if (strstr (pstr, "提示词库中的词组=")) {
+	else if (MyStrcmp (pstr, "提示词库中的词组=")) {
 	    pstr += 17;
 	    bPhraseTips = atoi (pstr);
 	}
 
-	else if (strstr (str, "使用全拼=")) {
+	else if (MyStrcmp (str, "使用全拼=")) {
 	    pstr += 9;
 	    bFullPY = atoi (pstr);
 	}
-	else if (strstr (str, "拼音自动组词=")) {
+	else if (MyStrcmp (str, "拼音自动组词=")) {
 	    pstr += 13;
 	    bPYCreateAuto = atoi (pstr);
 	}
-	else if (strstr (str, "保存自动组词=")) {
+	else if (MyStrcmp (str, "保存自动组词=")) {
 	    pstr += 13;
 	    bPYSaveAutoAsPhrase = atoi (pstr);
 	}
-	else if (strstr (str, "增加拼音常用字=")) {
+	else if (MyStrcmp (str, "增加拼音常用字=")) {
 	    pstr += 15;
 	    SetHotKey (pstr, hkPYAddFreq);
 	}
-	else if (strstr (str, "删除拼音常用字=")) {
+	else if (MyStrcmp (str, "删除拼音常用字=")) {
 	    pstr += 15;
 	    SetHotKey (pstr, hkPYDelFreq);
 	}
-	else if (strstr (str, "删除拼音用户词组=")) {
+	else if (MyStrcmp (str, "删除拼音用户词组=")) {
 	    pstr += 17;
 	    SetHotKey (pstr, hkPYDelUserPhr);
 	}
-	else if (strstr (str, "拼音以词定字键=")) {
+	else if (MyStrcmp (str, "拼音以词定字键=")) {
 	    pstr += 15;
 	    cPYYCDZ[0] = pstr[0];
 	    cPYYCDZ[1] = pstr[1];
 	}
-	else if (strstr (str, "拼音单字重码调整方式=")) {
+	else if (MyStrcmp (str, "拼音单字重码调整方式=")) {
 	    pstr += 21;
 	    baseOrder = (ADJUSTORDER) atoi (pstr);
 	}
-	else if (strstr (str, "拼音词组重码调整方式=")) {
+	else if (MyStrcmp (str, "拼音词组重码调整方式=")) {
 	    pstr += 21;
 	    phraseOrder = (ADJUSTORDER) atoi (pstr);
 	}
-	else if (strstr (str, "拼音常用词重码调整方式=")) {
+	else if (MyStrcmp (str, "拼音常用词重码调整方式=")) {
 	    pstr += 23;
 	    freqOrder = (ADJUSTORDER) atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊an和ang=")) {
+	else if (MyStrcmp (str, "是否模糊an和ang=")) {
 	    pstr += 16;
 	    MHPY_C[0].bMode = atoi (pstr);
 	    MHPY_S[5].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊en和eng=")) {
+	else if (MyStrcmp (str, "是否模糊en和eng=")) {
 	    pstr += 16;
 	    MHPY_C[1].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊ian和iang=")) {
+	else if (MyStrcmp (str, "是否模糊ian和iang=")) {
 	    pstr += 18;
 	    MHPY_C[2].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊in和ing=")) {
+	else if (MyStrcmp (str, "是否模糊in和ing=")) {
 	    pstr += 16;
 	    MHPY_C[3].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊ou和u=")) {
+	else if (MyStrcmp (str, "是否模糊ou和u=")) {
 	    pstr += 14;
 	    MHPY_C[4].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊uan和uang=")) {
+	else if (MyStrcmp (str, "是否模糊uan和uang=")) {
 	    pstr += 18;
 	    MHPY_C[5].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊c和ch=")) {
+	else if (MyStrcmp (str, "是否模糊c和ch=")) {
 	    pstr += 14;
 	    MHPY_S[0].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊f和h=")) {
+	else if (MyStrcmp (str, "是否模糊f和h=")) {
 	    pstr += 13;
 	    MHPY_S[1].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊l和n=")) {
+	else if (MyStrcmp (str, "是否模糊l和n=")) {
 	    pstr += 13;
 	    MHPY_S[2].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊s和sh=")) {
+	else if (MyStrcmp (str, "是否模糊s和sh=")) {
 	    pstr += 14;
 	    MHPY_S[3].bMode = atoi (pstr);
 	}
-	else if (strstr (str, "是否模糊z和zh=")) {
+	else if (MyStrcmp (str, "是否模糊z和zh=")) {
 	    pstr += 14;
 	    MHPY_S[4].bMode = atoi (pstr);
 	}
@@ -545,10 +594,10 @@ void SaveConfig (void)
 #ifdef _USE_XFT
     fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
 #else
-    if ( strUserLocale[0] )
-    	fprintf (fp, "字体区域=%s\n", strUserLocale);
+    if (strUserLocale[0])
+	fprintf (fp, "字体区域=%s\n", strUserLocale);
     else
-    	fprintf (fp, "#字体区域=zh_CN.gb2312\n");
+	fprintf (fp, "#字体区域=zh_CN.gb2312\n");
 #endif
 
     fprintf (fp, "\n[输出]\n");
@@ -556,6 +605,9 @@ void SaveConfig (void)
     fprintf (fp, "Enter键行为=%d\n", enterToDo);
     fprintf (fp, "分号输入英文=%d\n", bEngAfterSemicolon);
     fprintf (fp, "大写字母输入英文=%d\n", bEngAfterCap);
+    /* 这个设置暂时隐藏起来
+       fprintf (fp, "转换英文中的标点=%d\n", bConvertPunc );
+       *********************************************************************** */
     fprintf (fp, "联想方式禁止翻页=%d\n", bDisablePagingInLegend);
     fprintf (fp, "LumaQQ支持=%d\n", bLumaQQ);
 
@@ -565,7 +617,11 @@ void SaveConfig (void)
     fprintf (fp, "输入条使用3D界面=%d\n", _3DEffectInputWindow);
     fprintf (fp, "主窗口隐藏模式=%d\n", (int) hideMainWindow);
     fprintf (fp, "是否自动隐藏输入条=%d\n", bAutoHideInputWindow);
-    
+    /* 这个设置暂时隐藏起来
+       fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
+       *********************************************************************** */
+    fprintf (fp, "序号前加点=%d\n", bPointAfterNumber);
+
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);
     fprintf (fp, "主窗口背景色=%d %d %d\n", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
     fprintf (fp, "主窗口线条色=%d %d %d\n", mainWindowLineColor.color.red >> 8, mainWindowLineColor.color.green >> 8, mainWindowLineColor.color.blue >> 8);
@@ -593,6 +649,7 @@ void SaveConfig (void)
     fprintf (fp, "光标跟随=CTRL_K\n");
     fprintf (fp, "GBK支持=CTRL_M\n");
     fprintf (fp, "联想支持=CTRL_L\n");
+    fprintf (fp, "反查拼音=CTRL_ALT_E\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
     fprintf (fp, "中文标点=ALT_SPACE\n");
     fprintf (fp, "上一页=-\n");
@@ -664,13 +721,13 @@ void LoadProfile (void)
 
 	    pstr = str;
 
-	    if (strstr (str, "版本=")) {
+	    if (MyStrcmp (str, "版本=")) {
 		pstr += 5;
 
 		if (!strcasecmp (FCITX_VERSION, pstr))
 		    bRetVal = True;
 	    }
-	    else if (strstr (str, "主窗口位置X=")) {
+	    else if (MyStrcmp (str, "主窗口位置X=")) {
 		pstr += 12;
 		iMainWindowX = atoi (pstr);
 		if (iMainWindowX < 0)
@@ -678,7 +735,7 @@ void LoadProfile (void)
 		else if ((iMainWindowX + MAINWND_WIDTH) > DisplayWidth (dpy, iScreen))
 		    iMainWindowX = DisplayWidth (dpy, iScreen) - MAINWND_WIDTH;
 	    }
-	    else if (strstr (str, "主窗口位置Y=")) {
+	    else if (MyStrcmp (str, "主窗口位置Y=")) {
 		pstr += 12;
 		iMainWindowY = atoi (pstr);
 		if (iMainWindowY < 0)
@@ -686,7 +743,7 @@ void LoadProfile (void)
 		else if ((iMainWindowY + MAINWND_HEIGHT) > DisplayHeight (dpy, iScreen))
 		    iMainWindowY = DisplayHeight (dpy, iScreen) - MAINWND_HEIGHT;
 	    }
-	    else if (strstr (str, "输入窗口位置X=")) {
+	    else if (MyStrcmp (str, "输入窗口位置X=")) {
 		pstr += 14;
 		iInputWindowX = atoi (pstr);
 		if (iInputWindowX < 0)
@@ -694,7 +751,7 @@ void LoadProfile (void)
 		else if ((iInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 		    iInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 3;
 	    }
-	    else if (strstr (str, "输入窗口位置Y=")) {
+	    else if (MyStrcmp (str, "输入窗口位置Y=")) {
 		pstr += 14;
 		iInputWindowY = atoi (pstr);
 		if (iInputWindowY < 0)
@@ -702,35 +759,35 @@ void LoadProfile (void)
 		else if ((iInputWindowY + INPUTWND_HEIGHT) > DisplayHeight (dpy, iScreen))
 		    iInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
 	    }
-	    else if (strstr (str, "是否全角=")) {
+	    else if (MyStrcmp (str, "是否全角=")) {
 		pstr += 9;
 		bCorner = atoi (pstr);
 	    }
-	    else if (strstr (str, "是否中文标点=")) {
+	    else if (MyStrcmp (str, "是否中文标点=")) {
 		pstr += 13;
 		bChnPunc = atoi (pstr);
 	    }
-	    else if (strstr (str, "是否GBK=")) {
+	    else if (MyStrcmp (str, "是否GBK=")) {
 		pstr += 8;
 		bUseGBK = atoi (pstr);
 	    }
-	    else if (strstr (str, "是否光标跟随=")) {
+	    else if (MyStrcmp (str, "是否光标跟随=")) {
 		pstr += 13;
 		bTrackCursor = atoi (pstr);
 	    }
-	    else if (strstr (str, "是否联想=")) {
+	    else if (MyStrcmp (str, "是否联想=")) {
 		pstr += 9;
 		bUseLegend = atoi (pstr);
 	    }
-	    else if (strstr (str, "当前输入法=")) {
+	    else if (MyStrcmp (str, "当前输入法=")) {
 		pstr += 11;
 		iIMIndex = atoi (pstr);
 	    }
-	    else if (strstr (str, "禁止用键盘切换=")) {
+	    else if (MyStrcmp (str, "禁止用键盘切换=")) {
 		pstr += 15;
 		bLocked = atoi (pstr);
 	    }
-	    else if (strstr (str, "主窗口简洁模式=")) {
+	    else if (MyStrcmp (str, "主窗口简洁模式=")) {
 		pstr += 15;
 		bCompactMainWindow = atoi (pstr);
 	    }
@@ -777,7 +834,7 @@ void SaveProfile (void)
     fprintf (fp, "当前输入法=%d\n", iIMIndex);
     fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
     fprintf (fp, "主窗口简洁模式=%d\n", bCompactMainWindow);
-    
+
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
 
@@ -889,15 +946,15 @@ void SetTriggerKeys (char *str)
     }
 
     for (i = 0; i <= iTriggerKeyCount; i++) {
-	if (strstr (strKey[i], "CTRL_")) {
+	if (MyStrcmp (strKey[i], "CTRL_")) {
 	    Trigger_Keys[i].modifier = Trigger_Keys[i].modifier | ControlMask;
 	    Trigger_Keys[i].modifier_mask = Trigger_Keys[i].modifier_mask | ControlMask;
 	}
-	else if (strstr (strKey[i], "SHIFT_")) {
+	else if (MyStrcmp (strKey[i], "SHIFT_")) {
 	    Trigger_Keys[i].modifier = Trigger_Keys[i].modifier | ShiftMask;
 	    Trigger_Keys[i].modifier_mask = Trigger_Keys[i].modifier_mask | ShiftMask;
 	}
-	else if (strstr (strKey[i], "ALT_")) {
+	else if (MyStrcmp (strKey[i], "ALT_")) {
 	    Trigger_Keys[i].modifier = Trigger_Keys[i].modifier | Mod1Mask;
 	    Trigger_Keys[i].modifier_mask = Trigger_Keys[i].modifier_mask | Mod1Mask;
 	}

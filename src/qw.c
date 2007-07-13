@@ -1,5 +1,24 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 /*
- * 区位的主要代码来自rfinput-2.0
+ * 区位的算法来自于rfinput-2.0
  */
 #include <string.h>
 
@@ -16,6 +35,7 @@ extern MESSAGE  messageUp[];
 extern uint     uMessageUp;
 extern MESSAGE  messageDown[];
 extern uint     uMessageDown;
+extern Bool	bPointAfterNumber;
 
 INPUT_RETURN_VALUE DoQWInput(int iKey)
 {
@@ -88,8 +108,12 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
     int             i;
     char            strTemp[3];
 
-    strTemp[1] = '.';
-    strTemp[2] = '\0';
+    if ( bPointAfterNumber ) {
+	    strTemp[1] = '.';
+	    strTemp[2] = '\0';
+    }
+    else
+	    strTemp[1]='\0';
 
     iQu = (strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0';
     

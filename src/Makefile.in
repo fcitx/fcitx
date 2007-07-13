@@ -57,7 +57,7 @@ am_fcitx_OBJECTS = IC.$(OBJEXT) ime.$(OBJEXT) InputWindow.$(OBJEXT) \
 	MyErrorsHandlers.$(OBJEXT) punc.$(OBJEXT) py.$(OBJEXT) \
 	PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) pyParser.$(OBJEXT) \
 	sp.$(OBJEXT) tools.$(OBJEXT) ui.$(OBJEXT) table.$(OBJEXT) \
-	xim.$(OBJEXT) qw.$(OBJEXT)
+	xim.$(OBJEXT) qw.$(OBJEXT) vk.$(OBJEXT)
 fcitx_OBJECTS = $(am_fcitx_OBJECTS)
 fcitx_DEPENDENCIES = ../lib/libXimd.a
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -182,7 +182,8 @@ fcitx_SOURCES = IC.c IC.h \
                 version.h \
                 table.c table.h \
                 xim.c xim.h \
-                qw.c qw.h
+                qw.c qw.h \
+		vk.c vk.h
 
 fcitx_LDADD = ../lib/libXimd.a
 all: all-am
@@ -271,6 +272,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tools.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xim.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vk.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

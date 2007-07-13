@@ -17,17 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _PY_MAP_TABLE_H
-#define _PY_MAP_TABLE_H
+#ifndef _VK_WINDOW_H
+#define _VK_WINDOW_H
+
+#include <X11/Xlib.h>
+#include "ime.h"
+
+#define VK_FILE	"vk.conf"
+
+#define VK_WINDOW_WIDTH		354
+#define VK_WINDOW_HEIGHT	164
+#define VK_NUMBERS		47
+#define VK_MAX			50
 
 typedef struct {
-    char            strPY[5];
-    char            cMap;
-} ConsonantMap;
+    char            strSymbol[VK_NUMBERS][2][3];	//相应的符号
+    char            strName[13];
+} VKS;
 
-typedef struct {
-    char            strPY[4];
-    char            cMap;
-} SyllabaryMap;
+Bool            CreateVKWindow (void);
+void            InitVKWindowColor (void);
+void            DisplayVKWindow (void);
+char           *VKGetSymbol (char cChar);
+void            LoadVKMapFile (void);
+void            ChangVK (void);
+INPUT_RETURN_VALUE DoVKInput (int iKey);
+int             MyToLower (int iChar);
+int             MyToUpper (int iChar);
+void            SwitchVK (void);
+Bool            VKMouseKey (int x, int y);
 
 #endif

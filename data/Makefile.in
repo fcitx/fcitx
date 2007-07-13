@@ -149,7 +149,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 tabledir = $(pkgdatadir)/data
 table_DATA = cj.mb erbi.mb punc.mb pybase.mb pyphrase.mb pySym.mb sp.dat \
-	     wbx.mb tables.conf
+	     wbx.mb tables.conf vk.conf
 
 EXTRA_DIST = $(table_DATA)
 all: all-am

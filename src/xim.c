@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -10,11 +29,14 @@
 #include "tools.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
+#include "vk.h"
 
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
-XIMS		ims;
+XIMS            ims;
+
 //************************************************
 CARD16          connect_id = 0;
+CARD16		icid = 0;
 CARD16          lastConnectID = 0;
 
 //************************************************
@@ -35,6 +57,7 @@ extern Display *dpy;
 extern int      iScreen;
 extern Window   mainWindow;
 extern Window   inputWindow;
+extern Window   VKWindow;
 
 extern int      iMainWindowX;
 extern int      iMainWindowY;
@@ -45,10 +68,12 @@ extern int      iTempInputWindowY;
 extern uint     iInputWindowHeight;
 extern uint     iInputWindowWidth;
 extern Bool     bTrackCursor;
+extern Bool     bCenterInputWindow;
 extern Bool     bIsUtf8;
 extern int      iCodeInputCount;
 extern iconv_t  convUTF8;
 extern uint     uMessageDown;
+extern Bool     bVK;
 
 /*extern char	strUserLocale[];*/
 //+++++++++++++++++++++++++++++++++
@@ -93,7 +118,7 @@ static XIMEncoding zhEncodings[] = {
 Bool MyOpenHandler (IMOpenStruct * call_data)
 {
     CreateConnectID (call_data);
-    
+
     return True;
 }
 
@@ -130,7 +155,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
 		else
-		    iTempInputWindowX += 3;
+		    iTempInputWindowX += 5;
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
@@ -143,6 +168,12 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 	    }
 	}
     }
+    else if (bCenterInputWindow) {
+	iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+	if (iInputWindowX < 0)
+	    iInputWindowX = 0;
+	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+    }
 
     SetIC (call_data);
 
@@ -153,14 +184,21 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 {
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
+    icid = call_data->icid;
 
-    if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
+    if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
-	if (ConnectIDGetState (call_data->connect_id) == IS_CHN && uMessageDown > 1 && lastConnectID == connect_id)
-	    DisplayInputWindow ();
-	else
+	if (ConnectIDGetState (connect_id) == IS_CHN) {
+	    if (bVK)
+		DisplayVKWindow ();
+	    else if (uMessageDown > 1 && lastConnectID == connect_id)
+		DisplayInputWindow ();
+	}
+	else {
 	    XUnmapWindow (dpy, inputWindow);
+	    XUnmapWindow (dpy, VKWindow);
+	}
 
 	if (ConnectIDGetTrackCursor (connect_id))
 	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
@@ -182,6 +220,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, VKWindow);
 
     return True;
 }
@@ -189,8 +228,10 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, VKWindow);
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
+    icid = 0;
 
     return True;
 }
@@ -202,6 +243,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
     if (!CurrentIC) {
 	CurrentIC = (IC *) FindIC (call_data->icid);;
 	connect_id = call_data->connect_id;
+	icid= call_data->icid;
     }
 
     return True;
@@ -209,8 +251,10 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
-    if (CurrentIC == (IC *) FindIC (call_data->icid))
+    if (CurrentIC == (IC *) FindIC (call_data->icid)) {
 	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
+    }
 
     DestroyIC (call_data);
 
@@ -245,6 +289,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+
+	DisplayInputWindow ();
     }
 
     return True;
@@ -333,7 +379,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	ps = strOutput;
 	l1 = strlen (strHZ);
 	l2 = 299;
-	l1 = iconv (convUTF8, (char **) (&strHZ), &l1, &ps, &l2);
+	l1 = iconv (convUTF8, (ICONV_CONST char **) (&strHZ), &l1, &ps, &l2);
 	*ps = '\0';
 	ps = strOutput;
     }
@@ -410,26 +456,31 @@ Bool InitXIM (char *imname, Window im_window)
 
 void SetIMState (Bool bState)
 {
-	IMChangeFocusStruct call_data;
-	
-	if ( !CurrentIC )
-		return;
-	
-	if ( connect_id && CurrentIC->id ) {
-		call_data.connect_id = connect_id;
-		call_data.icid = CurrentIC->id;
-	
-		if ( bState ) {
-			IMPreeditStart (ims, (XPointer) &call_data);
-			SetConnectID (connect_id, IS_CHN);
-		}
-		else {
-			IMPreeditEnd (ims, (XPointer) &call_data);
-			SetConnectID (connect_id, IS_CLOSED);
-		}
-	
-		DisplayMainWindow();
+    IMChangeFocusStruct call_data;
+
+    if (!CurrentIC)
+	return;
+
+    if (connect_id && CurrentIC->id) {
+	call_data.connect_id = connect_id;
+	call_data.icid = CurrentIC->id;
+
+	if (bState) {
+	    IMPreeditStart (ims, (XPointer) & call_data);
+	    SetConnectID (connect_id, IS_CHN);
 	}
+	else {
+	    IMPreeditEnd (ims, (XPointer) & call_data);
+	    SetConnectID (connect_id, IS_CLOSED);
+	    bVK = False;
+	    XUnmapWindow (dpy, inputWindow);
+	    XUnmapWindow (dpy, VKWindow);
+
+	    SwitchIM (-2);
+	}
+
+	DisplayMainWindow ();
+    }
 }
 
 void CreateConnectID (IMOpenStruct * call_data)
@@ -472,7 +523,7 @@ void DestroyConnectID (CARD16 connect_id)
     }
 
     if (!temp)
-        return;
+	return;
 
     if (temp == connectIDsHead)
 	connectIDsHead = temp->next;

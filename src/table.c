@@ -1,19 +1,40 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
+//========================================
 #include "table.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+/*
 #ifdef HAVE_MACHINE_ENDIAN_H
 #include <machine/endian.h>
 #endif
-
+*/
 #include <X11/Xlib.h>
 
 #include "tools.h"
@@ -40,7 +61,7 @@ AUTOPHRASE     *insertPoint = NULL;
 INT16           iAutoPhrase = 0;
 INT16           iTotalAutoPhrase;
 
-INT8            iTableOrderChanged = 0;
+INT16           iTableOrderChanged = 0;
 char            strTableLegendSource[PHRASE_MAX_LENGTH * 2 + 1] = "\0";
 
 FH             *fh;
@@ -53,6 +74,7 @@ Bool            bIsTableAdjustOrder = False;
 HOTKEYS         hkTableAdjustOrder[HOT_KEY_COUNT] = { CTRL_6, 0 };
 Bool            bIsTableAddPhrase = False;
 HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT] = { CTRL_8, 0 };
+HOTKEYS         hkGetPY[HOT_KEY_COUNT] = { CTRL_ALT_E, 0 };
 
 INT8            iTableChanged = 0;
 INT8            iTableNewPhraseHZCount;
@@ -84,6 +106,7 @@ extern MESSAGE  messageUp[];
 extern uint     uMessageUp;
 extern MESSAGE  messageDown[];
 extern uint     uMessageDown;
+extern Bool     bPointAfterNumber;
 
 extern INT8     iIMIndex;
 extern Bool     bUseLegend;
@@ -94,6 +117,7 @@ extern Bool     bShowCursor;
 extern Bool     bAutoHideInputWindow;
 extern ADJUSTORDER baseOrder;
 extern Bool     bSP;
+extern Bool     bPYBaseDictLoaded;
 
 //----------------------------------------
 extern PYFA    *PYFAList;
@@ -158,7 +182,6 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].strPath[0] = '\0';
 	table[iTableIMIndex].strSymbolFile[0] = '\0';
 	table[iTableIMIndex].tableOrder = AD_NO;
-	table[iTableIMIndex].bGetPY = True;
 	table[iTableIMIndex].bUsePY = True;
 	table[iTableIMIndex].cPinyin = '\0';
 	table[iTableIMIndex].bTableAutoSendToClient = True;
@@ -214,10 +237,6 @@ void LoadTableInfo (void)
 	    else if (!strncmp (pstr, "调频=", 5)) {
 		pstr += 5;
 		table[iTableIMIndex].tableOrder = (ADJUSTORDER) atoi (pstr);
-	    }
-	    else if (!strncmp (pstr, "反查拼音=", 9)) {
-		pstr += 9;
-		table[iTableIMIndex].bGetPY = atoi (pstr);
 	    }
 	    else if (!strncmp (pstr, "拼音=", 5)) {
 		pstr += 5;
@@ -430,7 +449,7 @@ Bool LoadTableDict (void)
      * 计算需要多少个记录来保存自动生成的词组
      */
     iTotalAutoPhrase = 0;
-    for (i = 2; i < table[iTableIMIndex].iAutoPhrase; i++)
+    for (i = 2; i <= table[iTableIMIndex].iAutoPhrase; i++)
 	iTotalAutoPhrase += MAX_HZ_SAVED - i + 1;
 
     autoPhrase = (AUTOPHRASE *) malloc (sizeof (AUTOPHRASE) * iTotalAutoPhrase);
@@ -462,12 +481,6 @@ Bool LoadTableDict (void)
      * 然后初始化码表输入法
      TableInit();
      */
-
-    /* 
-     * 如果处于反查码表的状态，应加载拼音单字库
-     */
-    if (table[iTableIMIndex].bGetPY)
-	LoadPYBaseDict ();
 
     return True;
 }
@@ -555,6 +568,7 @@ void TableResetStatus (void)
     bIsTableDelPhrase = False;
     bIsTableAdjustOrder = False;
     bIsDoInputOnly = False;
+    bSingleHZMode = True;
 }
 
 void SaveTableDict (void)
@@ -798,6 +812,31 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 	    return retVal;
 	}
+	else if (IsHotKey (iKey, hkGetPY)) {
+	    char            strPY[100];
+	    
+	    //如果拼音单字字库没有读入，则读入它
+	    if (!bPYBaseDictLoaded)
+		LoadPYBaseDict ();
+	    
+	    //如果刚刚输入的是个词组，刚不查拼音
+	    if (strlen (strStringGet) != 2)
+		return IRV_DO_NOTHING;
+
+	    iCodeInputCount = 0;
+	    uMessageUp = 1;
+	    strcpy (messageUp[0].strMsg, strStringGet);
+	    messageUp[0].type = MSG_INPUT;
+	    uMessageDown = 2;
+	    strcpy (messageDown[0].strMsg, "读音：");
+	    messageDown[0].type = MSG_CODE;
+	    PYGetPYByHZ (strStringGet, strPY);
+	    strcpy (messageDown[1].strMsg, (strPY[0]) ? strPY : "无法查到该字读音");
+	    messageDown[1].type = MSG_TIPS;
+	    bShowCursor = False;
+	    
+	    return IRV_DISPLAY_MESSAGE;
+	}
 
 	if (!iCodeInputCount && !bIsInLegend)
 	    return IRV_TO_PROCESS;
@@ -923,6 +962,9 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		uMessageUp = 1;
 		strcpy (messageUp[0].strMsg, strCodeInput);
 		messageUp[0].type = MSG_INPUT;
+/*		strcpy (messageUp[1].strMsg, "  --  ");
+		strcat (messageUp[1].strMsg, strerror(errno));
+		messageUp[1].type = MSG_TIPS;*/
 	    }
 	    else
 		uMessageUp = 0;
@@ -969,11 +1011,8 @@ char           *TableGetCandWord (int iIndex)
 	if (table[iTableIMIndex].iSaveAutoPhraseAfter) {
 	    if (table[iTableIMIndex].iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected)
 		tableCandWord[iIndex].candWord.autoPhrase->iSelected++;
-	    if (table[iTableIMIndex].iSaveAutoPhraseAfter == tableCandWord[iIndex].candWord.autoPhrase->iSelected) {
-		//保存自动词组
+	    if (table[iTableIMIndex].iSaveAutoPhraseAfter == tableCandWord[iIndex].candWord.autoPhrase->iSelected)	//保存自动词组
 		TableInsertPhrase (tableCandWord[iIndex].candWord.autoPhrase->strCode, tableCandWord[iIndex].candWord.autoPhrase->strHZ);
-		tableCandWord[iIndex].candWord.autoPhrase->iSelected = 0;
-	    }
 	}
 	pCandWord = tableCandWord[iIndex].candWord.autoPhrase->strHZ;
     }
@@ -1025,7 +1064,6 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (SEARCH_MODE mode)
     RECORD         *pRec;
 
     if (mode == SM_FIRST) {
-	bSingleHZMode = True;
 	strcpy (strFindString, strCodeInput + 1);
 
 	DoPYInput (-1);
@@ -1057,7 +1095,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
     int             i;
     char            strTemp[3], *pstr;
     unsigned int    iTableTotalCandCount = 0;
-    char            strPY[10 * MAX_PY_LENGTH + 10];	//一个字有没有十个不同的读音呢？
 
     if (bIsInLegend)
 	return TableGetLegendCandWords (mode);
@@ -1143,8 +1180,12 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	    iCandPageCount = iTableTotalCandCount / iMaxCandWord - ((iTableTotalCandCount % iMaxCandWord) ? 0 : 1);
     }
 
-    strTemp[1] = '.';
-    strTemp[2] = '\0';
+    if (bPointAfterNumber) {
+	strTemp[1] = '.';
+	strTemp[2] = '\0';
+    }
+    else
+	strTemp[1] = '\0';
     uMessageDown = 0;
 
     for (i = 0; i < iCandWordCount; i++) {
@@ -1164,16 +1205,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	else
 	    pstr = ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
 	strcpy (messageDown[uMessageDown].strMsg, pstr);
-
-	//加入反查得到的拼音
-	if ((table[iTableIMIndex].bGetPY) && (strlen (tableCandWord[i].candWord.record->strHZ) == 2)) {
-	    PYGetPYByHZ (tableCandWord[i].candWord.record->strHZ, strPY);
-	    if (strPY[0]) {
-		strcat (messageDown[uMessageDown].strMsg, "(");
-		strcat (messageDown[uMessageDown].strMsg, strPY);
-		strcat (messageDown[uMessageDown].strMsg, ")");
-	    }
-	}
 
 	if (i != (iCandWordCount - 1)) {
 #ifdef _USE_XFT
@@ -1541,18 +1572,6 @@ RECORD         *TableHasPhrase (char *strCode, char *strHZ)
     while (strCode[0] != recordIndex[i].cCode)
 	i++;
 
-    /*recTemp = recordIndex[i].record->prev;
-       do {
-       if (strcmp (recTemp->strCode, strCode) > 0)
-       break;
-       else if (!strcmp (recTemp->strCode, strCode)) {
-       if (!strcmp (recTemp->strHZ, strHZ))     //该词组已经在词库中
-       return NULL;
-       }
-
-       recTemp = recTemp->next;
-       } while (recTemp != recordHead);
-     */
     recTemp = recordIndex[i].record;
     while (recTemp != recordHead) {
 	if (strcmp (recTemp->strCode, strCode) > 0)
@@ -1649,7 +1668,6 @@ void TableCreateNewPhrase (void)
 
 void TableCreatePhraseCode (char *strHZ)
 {
-    char           *str[table[iTableIMIndex].iCodeLength];
     unsigned char   i;
     unsigned char   i1, i2;
     int             iLen;
@@ -1690,8 +1708,7 @@ void TableCreatePhraseCode (char *strHZ)
 	    break;
 	}
 
-	str[i1] = recTemp->strCode;
-	strNewPhraseCode[i1] = str[i1][table[iTableIMIndex].rule[i].rule[i1].iIndex - 1];
+	strNewPhraseCode[i1] = recTemp->strCode[table[iTableIMIndex].rule[i].rule[i1].iIndex - 1];
     }
 }
 
@@ -2019,6 +2036,10 @@ void TableCreateAutoPhrase (INT8 iCount)
 	    continue;
 	}
     }
+
+    /*   for (i=0;i<iAutoPhrase;i++ )
+       printf("%d: %s  %s\n",i+1,autoPhrase[i].strCode,autoPhrase[i].strHZ);
+       puts("==========================================="); */
 }
 
 void UpdateHZLastInput (char *str)

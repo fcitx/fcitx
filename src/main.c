@@ -1,13 +1,27 @@
-/* 
- * 小企鹅中文输入法(Free Chinese Input Toys for X, FCITX)
- * 由Yuking(yuking_net@sohu.com)编写
- * 协议: GPL
- *
- * FCITX( A Chinese XIM Input Method) by Yuking (yuking_net@sohu.com)
- * Licence: GPL
- * 
- */
-
+/***************************************************************************
+ *   小企鹅中文输入法(Free Chinese Input Toys for X, FCITX)                   *
+ *   由Yuking(yuking_net@sohu.com)编写                                           *
+ *   协议: GPL                                                              *
+ *   FCITX( A Chinese XIM Input Method) by Yuking (yuking_net@sohu.com)    *   
+ *                                                                         *
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include <langinfo.h>
 
 #ifdef HAVE_CONFIG_H
@@ -22,6 +36,7 @@
 #include "ui.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
+#include "vk.h"
 #include "ime.h"
 #include "table.h"
 #include "punc.h"
@@ -58,23 +73,24 @@ int main (int argc, char *argv[])
 	}
     }
 
-    setlocale(LC_CTYPE,"");
+    setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
     LoadConfig (True);
 
-    if (!InitX () )
-    	exit(1);
+    if (!InitX ())
+	exit (1);
 
     CreateFont ();
     CalculateInputWindowHeight ();
     LoadProfile ();
 
     if (!LoadPuncDict ())
-	printf ("无法打开中文标点文件，将无法输入中文标点！\n");
+	printf ("Can't open Chinese punc file!\n");
 
     CreateMainWindow ();
     InitGC (mainWindow);
+    CreateVKWindow ();
     CreateInputWindow ();
 
     SetIM ();
@@ -90,7 +106,7 @@ int main (int argc, char *argv[])
 
 	id = fork ();
 	if (id == -1) {
-	    printf ("无法以后台方式运行 FCITX！\n");
+	    printf ("Can't run as a daemon！\n");
 	    exit (1);
 	}
 	else if (id > 0)
@@ -98,9 +114,8 @@ int main (int argc, char *argv[])
     }
 
     SetMyExceptionHandler ();
-    XFlush(dpy);
     for (;;) {
-    	XNextEvent (dpy, &event);
+	XNextEvent (dpy, &event);
 
 	if (XFilterEvent (&event, None) == True)
 	    continue;

@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "punc.h"
 
 #include <stdio.h>
@@ -80,21 +99,28 @@ int LoadPuncDict (void)
 }
 
 /*
- * 判断字符是不是标点符号
- * 是则返回标点符号的索引，否则返回-1
+ * 根据字符得到相应的标点符号
+ * 如果该字符不在标点符号集中，则返回NULL
  */
-int IsPunc (int iKey)
+char *GetPunc (int iKey)
 {
-    int             iIndex = 0;
+    int          iIndex = 0;
+    char	*pPunc;
 
     if (!chnPunc)
-	return -1;
+	    return (char*)NULL;
 
+	       
     while (chnPunc[iIndex].ASCII) {
-	if (chnPunc[iIndex].ASCII == iKey)
-	    return iIndex;
+    	if (chnPunc[iIndex].ASCII == iKey) {
+		pPunc=chnPunc[iIndex].strChnPunc[chnPunc[iIndex].iWhich];
+		chnPunc[iIndex].iWhich++;
+		if (chnPunc[iIndex].iWhich >= chnPunc[iIndex].iCount)
+			chnPunc[iIndex].iWhich = 0;
+	    	return pPunc;
+	}
 	iIndex++;
     }
 
-    return -1;
+    return (char*)NULL;
 }
