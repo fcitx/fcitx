@@ -20,6 +20,12 @@
 #ifndef _SP_H
 #define _SP_H
 
+typedef enum {
+    SP_FROM_USER=0,
+    SP_FROM_SYSTEM_CONFIG,
+    SP_FROM_SYSTEM_SP_CONFIG
+} SP_FROM;
+
 typedef struct _SP_C {
     char            strQP[5];
     char            cJP;

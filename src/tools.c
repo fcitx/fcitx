@@ -136,6 +136,9 @@ extern Bool     bUseSP;
 extern Bool     bUseQW;
 extern Bool     bUseTable;
 
+extern char	strDefaultSP[];
+extern SP_FROM	iSPFrom;
+
 //extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
 
@@ -186,14 +189,22 @@ void LoadConfig (Bool bMode)
     char            strPath[PATH_MAX];
     int             i;
     int             r, g, b;	//代表红绿蓝
+    Bool	    bFromUser=True;
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/config");
 
+    if (access (strPath, 0)) {
+	strcpy (strPath, PKGDATADIR "/data/config");
+	bFromUser = False;
+    }
+
     fp = fopen (strPath, "rt");
 
+    if (!fp || !bFromUser)
+	SaveConfig();
+
     if (!fp) {
-	SaveConfig ();
 	LoadConfig (True);	//读入默认值
 	return;
     }
@@ -522,6 +533,13 @@ void LoadConfig (Bool bMode)
 	    pstr += 9;
 	    bUseSP = atoi (pstr);
 	}
+	else if (MyStrcmp (pstr, "默认双拼方案=")) {
+	    pstr += 13;
+	    if (*pstr == ' ')
+		pstr++;
+	    strcpy (strDefaultSP, pstr);
+	    iSPFrom = SP_FROM_SYSTEM_CONFIG;
+	}
 	else if (MyStrcmp (pstr, "使用区位=")) {
 	    pstr += 9;
 	    bUseQW = atoi (pstr);
@@ -732,6 +750,7 @@ void SaveConfig (void)
     fprintf (fp, "\n[输入法]\n");
     fprintf (fp, "使用拼音=%d\n", bUsePinyin);
     fprintf (fp, "使用双拼=%d\n", bUseSP);
+    fprintf (fp, "默认双拼方案=%s\n",strDefaultSP);
     fprintf (fp, "使用区位=%d\n", bUseQW);
     fprintf (fp, "使用码表=%d\n", bUseTable);
     fprintf (fp, "提示词库中的词组=%d\n", bPhraseTips);

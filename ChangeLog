@@ -1,3 +1,15 @@
+2006-08-30: Yuking <yuking_net@sohu.com>
+	   * src/: 改进双拼的设置
+	   * src/tools.c: 默认从数据目录读取配置文件
+	   * 版本3.3.1（06七夕版）
+
+2006-08-27: Yuking <yuking_net@sohu.com>
+	   * src/py.c: 优化候选字的排序
+	   * src/py.c: 修正某些时候HOME/END键不起作用的问题（预编辑状态）
+
+2006-08-25: Yuking <yuking_net@sohu.com>
+	   * tools/txt2mb.c: 修正一个排序错误
+
 2006-08-18: Yuking <yuking_net@sohu.com>
 	   * src/ime.c: 更改全角的输入方式
 	   * 版本3.3

@@ -64,10 +64,10 @@ MESSAGE_COLOR   messageColor[MESSAGE_TYPE_COUNT] = {
     {NULL, {0, 0, 0, 0}}
 };
 
-MESSAGE_COLOR   inputWindowLineColor = { NULL, {0, 100 << 8, 200 << 8, 255 << 8} };	//输入框中的线条色
-XColor          colorArrow = { 0, 255 << 8, 150 << 8, 255 << 8 };	//箭头的颜色
+MESSAGE_COLOR   inputWindowLineColor = { NULL, {0, 255 << 8, 0, 0} };	//输入框中的线条色
+XColor          colorArrow = { 0, 255 << 8, 0, 0 };	//箭头的颜色
 
-WINDOW_COLOR    inputWindowColor = { NULL, NULL, {0, 240 << 8, 240 << 8, 240 << 8} };
+WINDOW_COLOR    inputWindowColor = { NULL, NULL, {0, 255 << 8, 240 << 8, 255 << 8} };
 MESSAGE_COLOR   cursorColor = { NULL, {0, 92 << 8, 210 << 8, 131 << 8} };
 
 // *************************************************************

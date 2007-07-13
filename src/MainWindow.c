@@ -51,8 +51,8 @@ int             MAINWND_WIDTH = _MAINWND_WIDTH;
 int             iMainWindowX = MAINWND_STARTX;
 int             iMainWindowY = MAINWND_STARTY;
 
-WINDOW_COLOR    mainWindowColor = { NULL, NULL, {0, 220 << 8, 220 << 8, 220 << 8} };
-MESSAGE_COLOR   mainWindowLineColor = { NULL, {0, 100 << 8, 180 << 8, 255 << 8} };	//线条色
+WINDOW_COLOR    mainWindowColor = { NULL, NULL, {0, 255 << 8, 240 << 8, 255 << 8} };
+MESSAGE_COLOR   mainWindowLineColor = { NULL, {0, 220 << 8, 0, 0} };	//线条色
 MESSAGE_COLOR   IMNameColor[3] = {	//输入法名称的颜色
     {NULL, {0, 170 << 8, 170 << 8, 170 << 8}},
     {NULL, {0, 150 << 8, 200 << 8, 150 << 8}},

@@ -68,7 +68,7 @@ typedef struct PYFREQ {
     HZ             *HZList;
     char            strPY[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1];
     uint            iCount;
-    Bool            bIsSym;	//该变量用于实现特殊符号表
+    Bool            bIsSym;	//For special symbols
     struct PYFREQ  *next;
 } PyFreq;
 
@@ -136,7 +136,7 @@ typedef union {
 
 typedef struct PYCANDWORD {
     PCand           cand;
-    uint            iWhich:3;	//0->Auto 1->系统单字 2->系统词组 3->用户词组 4->常用字
+    uint            iWhich:3;	//0->Auto 1->System single HZ 2->System phrase 3->User phrase 4->frequent HZ
 } PYCandWord;
 
 typedef struct PYCANDINDEX {

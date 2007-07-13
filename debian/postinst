@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+update-alternatives \
+        --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN \
+        /etc/X11/xinit/xinput.d/fcitx 40
+
+#DEBHELPER#
+

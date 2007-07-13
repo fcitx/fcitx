@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, 3.3)
+AM_INIT_AUTOMAKE(fcitx, 3.3.1£¨06ÆßÏ¦°æ£©)
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
@@ -107,7 +107,6 @@ AC_CONFIG_FILES([
            fcitx.spec
            doc/Makefile
            data/Makefile
-           debian/Makefile
            xpm/Makefile
            lib/Makefile
            src/version.h

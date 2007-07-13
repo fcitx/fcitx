@@ -1,0 +1,6 @@
+XIM=fcitx
+XIM_PROGRAM=/usr/bin/fcitx
+XIM_ARGS=""
+GTK_IM_MODULE=XIM
+QT_IM_MODULE=XIM
+DEPENDS="fcitx"

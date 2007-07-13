@@ -115,7 +115,7 @@ extern int      iLegendCandWordCount;
 extern int      iLegendCandPageCount;
 extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
-extern Bool	bPointAfterNumber;
+extern Bool     bPointAfterNumber;
 
 void PYInit (void)
 {
@@ -359,17 +359,17 @@ Bool LoadPYOtherDict (void)
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_SYMBOL_FILE);
-    
+
     if (access (strPath, 0)) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PY_SYMBOL_FILE);
     }
-    
+
     fp = fopen (strPath, "rt");
     if (fp) {
 	char            strTxt[256];
 	char            str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * 2 + 1];
-	char 		*str;
+	char           *str;
 
 	for (;;) {
 	    if (!fgets (strTxt, 255, fp))
@@ -379,8 +379,8 @@ Bool LoadPYOtherDict (void)
 		continue;
 	    if (strTxt[i] == '\n')
 		strTxt[i] = '\0';
-	    str=strTxt;
-	    while (*str==' ' || *str=='\t')
+	    str = strTxt;
+	    while (*str == ' ' || *str == '\t')
 		str++;
 	    if (!strlen (str))
 		continue;
@@ -440,7 +440,7 @@ void ResetPYStatus ()
     bIsPYAddFreq = False;
     bIsPYDelFreq = False;
     bIsPYDelUserPhr = False;
-    bSingleHZMode = False;	
+    bSingleHZMode = False;
 
     findMap.iMode = PARSE_SINGLEHZ;	//只要不是PARSE_ERROR就可以
 }
@@ -537,14 +537,14 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
 	else if (iKey == HOME) {
-	    if (!iCandWordCount)
-		return IRV_TO_PROCESS;
+	    if (iCodeInputCount == 0)
+		return IRV_DONOT_PROCESS;
 	    iPYInsertPoint = 0;
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
 	else if (iKey == END) {
-	    if (!iCandWordCount)
-		return IRV_TO_PROCESS;
+	    if (iCodeInputCount == 0)
+		return IRV_DONOT_PROCESS;
 	    iPYInsertPoint = strlen (strFindString);
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
@@ -991,12 +991,12 @@ void PYCreateCandString (void)
     char           *pBase = NULL, *pPhrase;
     int             iType, iVal;
 
-    if ( bPointAfterNumber ) {
-	    str[1] = '.';
-	    str[2] = '\0';
+    if (bPointAfterNumber) {
+	str[1] = '.';
+	str[2] = '\0';
     }
     else
-	    str[1]='\0';
+	str[1] = '\0';
     uMessageDown = 0;
 
     for (iVal = 0; iVal < iCandWordCount; iVal++) {
@@ -1241,7 +1241,6 @@ void PYCreateAuto (void)
     int             iStart,iEnd;
     int             val;
     int             iMatchedLength;
-
 
     if (findMap.iHZCount == 1)
 	return;
@@ -1961,7 +1960,7 @@ Bool PYAddSymCandWord (HZ * hz, SEARCH_MODE mode)
 
 void PYGetBaseCandWords (SEARCH_MODE mode)
 {
-    PYCandIndex     candPos={0,0,0};
+    PYCandIndex     candPos = { 0, 0, 0 };
     char            str[3];
 
     str[0] = findMap.strMap[0][0];
@@ -2049,9 +2048,17 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 		    i++;
 		    break;
 		}
-		else if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit)) {
-		    i++;
-		    break;
+		else if (PYCandWords[i].iWhich == PY_CAND_BASE) {
+		    if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit > PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit) {
+			i++;
+			break;
+		    }
+		    else if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit == PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit) {
+			if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex) {
+			    i++;
+			    break;
+			}
+		    }
 		}
 	    }
 
@@ -2065,8 +2072,14 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 	}
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
-		if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit < PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit))
-		    break;
+		if (PYCandWords[i].iWhich == PY_CAND_BASE) {
+		    if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit < PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit)
+			break;
+		    else if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit == PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit) {
+			if (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex < PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex)
+			    break;
+		    }
+		}
 	    }
 	    if (i == iMaxCandWord)
 		return True;
@@ -3005,12 +3018,12 @@ void PYGetPYByHZ (char *strHZ, char *strPY)
     char            str_PY[MAX_PY_LENGTH + 1];
 
     strPY[0] = '\0';
-    for (i = iPYFACount-1; i>=0; i--) {
+    for (i = iPYFACount - 1; i >= 0; i--) {
 	if (MapToPY (PYFAList[i].strMap, str_PY)) {
 	    for (j = 0; j < PYFAList[i].iBase; j++) {
 		if (!strcmp (PYFAList[i].pyBase[j].strHZ, strHZ)) {
 		    if (strPY[0])
-			strcat(strPY," ");
+			strcat (strPY, " ");
 		    strcat (strPY, str_PY);
 		}
 	    }

@@ -203,7 +203,7 @@ void ResetInput (void)
 
     bShowPrev = False;
     bShowNext = False;
-
+   
     bIsInLegend = False;
     iInCap = 0;
 
@@ -496,7 +496,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 							retVal = IRV_DISPLAY_MESSAGE;
 						}
 					    }
-					    else if (iKey == (XK_BackSpace & 0x00FF) && iCodeInputCount) {
+					    else if ((iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) && iCodeInputCount) {
 						iCodeInputCount--;
 						strCodeInput[iCodeInputCount] = '\0';
 						iCursorPos = iCodeInputCount;
@@ -549,6 +549,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						if (pstr)
 						    strcpy (strStringGet, pstr);
 						strcat (strStringGet, pPunc);
+						uMessageDown = uMessageUp = 0;
+
 						retVal = IRV_PUNC;
 					    }
 					    else if (isprint (iKey) && iKey < 128) {

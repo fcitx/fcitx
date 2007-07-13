@@ -1,10 +1,2 @@
-doc/cjkvinput.txt
-doc/fcitx3.pdf
-doc/wb_fh.htm
-data/erbi.mb
-data/punc.mb
-data/pybase.mb
-data/pyphrase.mb
-data/pySym.mb
-data/sp.dat
-data/wbx.mb
+README
+TODO

@@ -1,3 +1,10 @@
+键码=abcdefghijklmnopqrstuvwxy
+码长=4
+[组词规则]
+e2=p11+p12+p21+p22
+e3=p11+p21+p31+p32
+a4=p11+p21+p31+n11
+[数据]
 a 工
 aa 式
 aaa 工
