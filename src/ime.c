@@ -38,6 +38,7 @@
 #include "tools.h"
 #include "ui.h"
 #include "vk.h"
+#include "QuickPhrase.h"
 
 IM             *im = NULL;
 INT8            iIMCount = 0;
@@ -72,7 +73,7 @@ Bool            bEngPuncAfterNumber = True;	//数字后面输出半角符号(只对'.'/','有
 Bool            bPhraseTips = False;
 INT8            lastIsSingleHZ = 0;
 
-Bool            bEngAfterSemicolon = False;
+SEMICOLON_TO_DO semicolonToDo = K_SEMICOLON_QUICKPHRASE;
 Bool            bEngAfterCap = True;
 Bool            bConvertPunc = True;
 Bool            bDisablePagingInLegend = True;
@@ -108,7 +109,9 @@ Bool            bUseSP = False;
 Bool            bUseQW = True;
 Bool            bUseTable = True;
 
+/* 新的LumaQQ已经不需要特意支持了
 Bool            bLumaQQ = False;
+*/
 Bool            bPointAfterNumber = False;
 
 /* 计算打字速度 */
@@ -429,6 +432,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    if (!IsIM (NAME_OF_PINYIN) && !IsIM (NAME_OF_SHUANGPIN))
 				iCursorPos = iCodeInputCount;
 			}
+			else if (iInCap==2 && semicolonToDo==K_SEMICOLON_QUICKPHRASE) {
+				retVal=QuickPhraseDoInput(iKey);
+			}
 
 			if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
 			    if (bCorner && (iKey >= 32 && iKey <= 126)) {
@@ -455,7 +461,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    }
 				}
 			    }
-			    else if (iKey == ';' && bEngAfterSemicolon && !iCodeInputCount)
+			    else if (iKey == ';' && semicolonToDo!=K_SEMICOLON_NOCHANGE && !iCodeInputCount)
 				iInCap = 2;
 			    else if (IsHotKey (iKey, hkCorner))
 				retVal = ChangeCorner ();
@@ -463,15 +469,22 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				retVal = ChangePunc ();
 			    else if (IsHotKey (iKey, hkGBK))
 				retVal = ChangeGBK ();
-			    else if (IsHotKey (iKey, hkPrevPage))
-				retVal = im[iIMIndex].GetCandWords (SM_PREV);
-			    else if (IsHotKey (iKey, hkNextPage))
-				retVal = im[iIMIndex].GetCandWords (SM_NEXT);
+			    else if (IsHotKey (iKey, hkPrevPage)) {
+				if ( iInCap==2 && semicolonToDo==K_SEMICOLON_QUICKPHRASE )
+				    retVal = QuickPhraseGetCandWords(SM_PREV);
+				else
+				    retVal = im[iIMIndex].GetCandWords (SM_PREV);
+			    }
+			    else if (IsHotKey (iKey, hkNextPage)) {
+				if ( iInCap==2 && semicolonToDo==K_SEMICOLON_QUICKPHRASE )
+				    retVal = QuickPhraseGetCandWords(SM_NEXT);
+				else
+				    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
+			    }
 			    else if (IsHotKey (iKey, hkLegend))
 				retVal = ChangeLegend ();
 			    else if (IsHotKey (iKey, hkTrack))
 				retVal = ChangeTrack ();
-
 			    if (retVal == IRV_TO_PROCESS) {
 				if (iInCap) {
 				    if (iKey == ' ') {
@@ -488,35 +501,54 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    if (iCodeInputCount == MAX_USER_INPUT)
 						retVal = IRV_DO_NOTHING;
 					    else {
-						if (!bEngAfterSemicolon || !(bEngAfterSemicolon && (iCodeInputCount == 0 && iKey == ';'))) {
+						if (!(iInCap==2 && !iCodeInputCount && iKey==';') ) {
 						    strCodeInput[iCodeInputCount++] = iKey;
 						    strCodeInput[iCodeInputCount] = '\0';
 						    bShowCursor = True;
 						    iCursorPos = iCodeInputCount;
+						    if (semicolonToDo==K_SEMICOLON_QUICKPHRASE && iInCap==2)
+						        retVal = QuickPhraseGetCandWords(SM_FIRST);
+						    else
+							retVal = IRV_DISPLAY_MESSAGE;
 						}
-						retVal = IRV_DISPLAY_MESSAGE;
+						else
+						    retVal = IRV_DISPLAY_MESSAGE;
 					    }
 					}
-					else if (iKey == (XK_BackSpace & 0x00FF)
-						 && iCodeInputCount) {
+					else if (iKey == (XK_BackSpace & 0x00FF) && iCodeInputCount) {
 					    iCodeInputCount--;
 					    strCodeInput[iCodeInputCount] = '\0';
+					    iCursorPos = iCodeInputCount;
 					    retVal = IRV_DISPLAY_MESSAGE;
 					    if (!iCodeInputCount)
 						retVal = IRV_CLEAN;
+					    else if (semicolonToDo==K_SEMICOLON_QUICKPHRASE && iInCap==2)
+						retVal = QuickPhraseGetCandWords(SM_FIRST);
 					}
+
 					uMessageUp = 1;
-					uMessageDown = 1;
-					if (bEngAfterSemicolon && !iCodeInputCount) {
-					    strcpy (messageUp[0].strMsg, "进入英文输入状态");
-					    strcpy (messageDown[0].strMsg, "空格输入；Enter输入;");
+					if (iInCap==2) {
+					    strcpy (messageUp[0].strMsg, strCodeInput);
+					    if (semicolonToDo==K_SEMICOLON_ENG)
+						strcat (messageUp[0].strMsg, "英文输入：");
+					    else {
+						if ( iCodeInputCount )
+							strcat (messageUp[0].strMsg, "  ");
+						strcat (messageUp[0].strMsg, "自定义输入");
+					    }
+					    if (!iCodeInputCount ) {
+						strcpy (messageDown[0].strMsg,"空格输入；Enter输入;");
+						uMessageDown = 1;
+						messageDown[0].type = MSG_TIPS;
+					    }
 					}
 					else {
+					    uMessageDown = 1;
+					    messageDown[0].type = MSG_TIPS;
 					    strcpy (messageUp[0].strMsg, strCodeInput);
 					    strcpy (messageDown[0].strMsg, "按 Enter/空格 输入英文");
 					}
 					messageUp[0].type = MSG_INPUT;
-					messageDown[0].type = MSG_TIPS;
 				    }
 				}
 				else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',') && !iCandWordCount) {
@@ -585,17 +617,19 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				SetIM ();
 				LoadConfig (False);
 
-				if (bLumaQQ)
-				    ConnectIDResetReset ();
+				/*if (bLumaQQ)
+				    ConnectIDResetReset ();*/
 
 				CreateFont ();
 				CalculateInputWindowHeight ();
 
+				FreeQuickPhrase();
+				LoadQuickPhrase();
 				retVal = IRV_DO_NOTHING;
 			    }
 			    else if (iKey == ENTER) {
 				if (iInCap) {
-				    if (bEngAfterSemicolon && !iCodeInputCount)
+				    if (!iCodeInputCount)
 					strcpy (strStringGet, ";");
 				    else
 					strcpy (strStringGet, strCodeInput);
@@ -642,7 +676,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
 	if (call_data->event.type == KeyRelease) {
-	    if (!bLumaQQ && (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER))))
+	    // if (!bLumaQQ && (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER))))
+	    if (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER)))
 		IMForwardEvent (ims, (XPointer) call_data);
 	}
 	else

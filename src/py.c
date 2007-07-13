@@ -369,6 +369,7 @@ Bool LoadPYOtherDict (void)
     if (fp) {
 	char            strTxt[256];
 	char            str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * 2 + 1];
+	char 		*str;
 
 	for (;;) {
 	    if (!fgets (strTxt, 255, fp))
@@ -378,9 +379,12 @@ Bool LoadPYOtherDict (void)
 		continue;
 	    if (strTxt[i] == '\n')
 		strTxt[i] = '\0';
-	    if (!strlen (strTxt))
+	    str=strTxt;
+	    while (*str==' ' || *str=='\t')
+		str++;
+	    if (!strlen (str))
 		continue;
-	    sscanf (strTxt, "%s %s", str1, str2);
+	    sscanf (str, "%s %s", str1, str2);
 
 	    //首先看看str1是否已经在列表中
 	    pyFreqTemp = pyFreq->next;

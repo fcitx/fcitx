@@ -73,6 +73,12 @@ typedef enum _ENTER_TO_DO {
     K_ENTER_SEND
 } ENTER_TO_DO;
 
+typedef enum _SEMICOLON_TO_DO {
+    K_SEMICOLON_NOCHANGE,
+    K_SEMICOLON_ENG,
+    K_SEMICOLON_QUICKPHRASE
+} SEMICOLON_TO_DO;
+
 typedef struct _SINGLE_HZ {
     char            strHZ[3];
 } SINGLE_HZ;

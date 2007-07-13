@@ -83,6 +83,7 @@ Bool            bShowPrev = False;
 Bool            bShowNext = False;
 Bool            bTrackCursor = True;
 Bool            bCenterInputWindow = True;
+Bool		bShowInputWindowTriggering=True;
 
 int             iCursorPos = 0;
 Bool            bShowCursor = False;

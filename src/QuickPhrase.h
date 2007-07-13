@@ -17,58 +17,24 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _xim_h
-#define _xim_h
+#ifndef _QUICKPHRASE_H
+#define _QUICKPHRASE_H
 
-#include <stdio.h>
-#include <X11/Xlocale.h>
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+#include"ime.h"
 
-#include "IMdkit.h"
-#include "Xi18n.h"
+#define QUICKPHRASE_CODE_LEN	10
+#define QUICKPHRASE_PHRASE_LEN  20
 
-#define DEFAULT_IMNAME "fcitx"
-#define STRBUFLEN 64
+typedef struct _QUICK_PHRASE {
+    char strCode[QUICKPHRASE_CODE_LEN+1];
+    char strPhrase[QUICKPHRASE_PHRASE_LEN*2+1];
+    struct _QUICK_PHRASE *prev;
+    struct _QUICK_PHRASE *next;
+} QUICK_PHRASE;
 
-#ifndef ICONV_CONST
-	#define ICONV_CONST
-#endif
-
-typedef enum _IME_STATE {
-    IS_CLOSED = 0,
-    IS_ENG,
-    IS_CHN
-} IME_STATE;
-
-typedef struct _CONNECT_ID {
-    struct _CONNECT_ID *next;
-    CARD16          connect_id;
-    IME_STATE       imState;
-    /* 该变量用于lumaqq支持
-    Bool            bReset:1;
-    */
-    Bool	    bTrackCursor:1;	//if in 'over the spot' mode
-    //char      *strLocale;
-} CONNECT_ID;
-
-Bool            InitXIM (char *, Window);
-void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
-void            EnterChineseMode (Bool bState);
-void            CreateConnectID (IMOpenStruct * call_data);
-void            DestroyConnectID (CARD16 connect_id);
-void            SetConnectID (CARD16 connect_id, IME_STATE imState);
-IME_STATE       ConnectIDGetState (CARD16 connect_id);
-/* 用于lumaqq支持
-Bool            ConnectIDGetReset (CARD16 connect_id);
-void            ConnectIDSetReset (CARD16 connect_id, Bool bReset);
-void            ConnectIDResetReset (void);
-*/
-void		ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrack);
-Bool		ConnectIDGetTrackCursor (CARD16 connect_id);
-void		SetIMState (Bool bState);
-
-//char           *ConnectIDGetLocale(CARD16 connect_id);
+void LoadQuickPhrase(void);
+void FreeQuickPhrase(void);
+INPUT_RETURN_VALUE QuickPhraseDoInput (int iKey);
+INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode);
 
 #endif

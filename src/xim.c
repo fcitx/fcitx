@@ -47,7 +47,7 @@ char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_
 
 //int y=0;
 
-extern Bool     bLumaQQ;
+//extern Bool     bLumaQQ;
 
 extern IM      *im;
 extern INT8     iIMIndex;
@@ -76,6 +76,7 @@ extern Bool     bVK;
 
 extern Bool     bStartRecordType;
 extern uint	iHZInputed;
+extern Bool	bShowInputWindowTriggering;
 
 /*extern char	strUserLocale[];*/
 //+++++++++++++++++++++++++++++++++
@@ -211,12 +212,12 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	DisplayMainWindow ();
 
     lastConnectID = connect_id;
-    if (bLumaQQ && ConnectIDGetReset (connect_id)) {
+    /*if (bLumaQQ && ConnectIDGetReset (connect_id)) {
 	SendHZtoClient ((IMForwardEventStruct *) call_data, "\0");
 	ConnectIDSetReset (connect_id, False);
-    }
+    }*/
 
-    //程序获得焦点时，重新开始计算打字速度
+    //程序获得焦点时，重新弄1�7始计算打字�1�7�度
     bStartRecordType = False;
     iHZInputed = 0;
 
@@ -296,7 +297,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
-	DisplayInputWindow ();
+	if ( bShowInputWindowTriggering)
+	    DisplayInputWindow ();
     }
 
     return True;
@@ -503,7 +505,7 @@ void CreateConnectID (IMOpenStruct * call_data)
     connectIDNew->next = (CONNECT_ID *) NULL;
     connectIDNew->connect_id = call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
-    connectIDNew->bReset = !bLumaQQ;
+    //connectIDNew->bReset = !bLumaQQ;
     connectIDNew->bTrackCursor = False;
     //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
     //strcpy(connectIDNew->strLocale,call_data->lang.name);
@@ -571,6 +573,7 @@ IME_STATE ConnectIDGetState (CARD16 connect_id)
     return IS_CLOSED;
 }
 
+/*����lumaqq֧��
 Bool ConnectIDGetReset (CARD16 connect_id)
 {
     CONNECT_ID     *temp;
@@ -603,6 +606,18 @@ void ConnectIDSetReset (CARD16 connect_id, Bool bReset)
     }
 }
 
+void ConnectIDResetReset (void)
+{
+    CONNECT_ID     *temp;
+
+    temp = connectIDsHead;
+
+    while (temp) {
+	temp->bReset = True;
+	temp = temp->next;
+    }
+}
+*/
 Bool ConnectIDGetTrackCursor (CARD16 connect_id)
 {
     CONNECT_ID     *temp;
@@ -617,18 +632,6 @@ Bool ConnectIDGetTrackCursor (CARD16 connect_id)
     }
 
     return False;
-}
-
-void ConnectIDResetReset (void)
-{
-    CONNECT_ID     *temp;
-
-    temp = connectIDsHead;
-
-    while (temp) {
-	temp->bReset = True;
-	temp = temp->next;
-    }
 }
 
 void ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrackCursor)

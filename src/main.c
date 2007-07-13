@@ -43,6 +43,7 @@
 #include "py.h"
 #include "sp.h"
 #include "about.h"
+#include "QuickPhrase.h"
 
 #ifndef CODESET
 #define CODESET 14
@@ -92,11 +93,12 @@ int main (int argc, char *argv[])
     LoadProfile ();
 
     LoadPuncDict ();
+    LoadQuickPhrase ();
 
     CreateMainWindow ();
     InitGC (mainWindow);
     CreateVKWindow ();
-    CreateInputWindow ();    
+    CreateInputWindow ();
     CreateAboutWindow ();
 
     SetIM ();

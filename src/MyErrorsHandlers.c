@@ -45,7 +45,7 @@
 
 XErrorHandler   oldXErrorHandler;
 
-extern Bool     bLumaQQ;
+//extern Bool     bLumaQQ;
 
 void SetMyExceptionHandler (void)
 {
@@ -62,9 +62,9 @@ void OnException (int signo)
     if (signo == SIGHUP) {
 	SetIM ();
 	LoadConfig (False);
-
+/*
 	if (bLumaQQ)
-	    ConnectIDResetReset ();
+	    ConnectIDResetReset ();*/
 
 	return;
     }

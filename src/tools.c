@@ -101,7 +101,7 @@ extern Bool     bUseLegend;
 extern Bool     bPYCreateAuto;
 extern Bool     bPYSaveAutoAsPhrase;
 extern Bool     bPhraseTips;
-extern Bool     bEngAfterSemicolon;
+extern SEMICOLON_TO_DO     semicolonToDo;
 extern Bool     bEngAfterCap;
 extern Bool     bShowUserSpeed;
 
@@ -129,7 +129,7 @@ extern Bool     bUseSP;
 extern Bool     bUseQW;
 extern Bool     bUseTable;
 
-extern Bool     bLumaQQ;
+//extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
 
 extern Bool     bDoubleSwitchKey;
@@ -137,6 +137,7 @@ extern Bool     bPointAfterNumber;
 extern Bool     bConvertPunc;
 extern unsigned int iTimeInterval;
 extern uint     iFixedInputWindowWidth;
+extern Bool	bShowInputWindowTriggering;
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
@@ -239,10 +240,10 @@ void LoadConfig (Bool bMode)
 	    pstr += 17;
 	    bEngPuncAfterNumber = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "LumaQQ支持=")) {
+	/*else if (MyStrcmp (pstr, "LumaQQ支持=")) {
 	    pstr += 11;
 	    bLumaQQ = atoi (pstr);
-	}
+	}*/
 	else if (MyStrcmp (pstr, "主窗口是否使用3D界面=")) {
 	    pstr += 21;
 	    _3DEffectMainWindow = atoi (pstr);
@@ -262,6 +263,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "输入条固定宽度=")) {
 	    pstr += 15;
 	    iFixedInputWindowWidth = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "首次显示输入条=")) {
+	    pstr += 15;
+	    bShowInputWindowTriggering = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "序号后加点=")) {
 	    pstr += 11;
@@ -428,9 +433,9 @@ void LoadConfig (Bool bMode)
 	    pstr += 8;
 	    SetHotKey (pstr, hkGBK);
 	}
-	else if (MyStrcmp (pstr, "分号输入英文=")) {
-	    pstr += 13;
-	    bEngAfterSemicolon = atoi (pstr);
+	else if (MyStrcmp (pstr, "分号键行为=")) {
+	    pstr += 11;
+	    semicolonToDo = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "大写字母输入英文=")) {
 	    pstr += 17;
@@ -642,13 +647,11 @@ void SaveConfig (void)
     fprintf (fp, "\n[输出]\n");
     fprintf (fp, "数字后跟半角符号=%d\n", bEngPuncAfterNumber);
     fprintf (fp, "Enter键行为=%d\n", enterToDo);
-    fprintf (fp, "分号输入英文=%d\n", bEngAfterSemicolon);
+    fprintf (fp, "分号键行为=%d\n", (int)semicolonToDo);
     fprintf (fp, "大写字母输入英文=%d\n", bEngAfterCap);
-    /* 这个设置暂时隐藏起来
-       fprintf (fp, "转换英文中的标点=%d\n", bConvertPunc );
-       *********************************************************************** */
+    fprintf (fp, "转换英文中的标点=%d\n", bConvertPunc );
     fprintf (fp, "联想方式禁止翻页=%d\n", bDisablePagingInLegend);
-    fprintf (fp, "LumaQQ支持=%d\n", bLumaQQ);
+    //fprintf (fp, "LumaQQ支持=%d\n", bLumaQQ);
 
     fprintf (fp, "\n[界面]\n");
     fprintf (fp, "候选词个数=%d\n", iMaxCandWord);
@@ -656,9 +659,8 @@ void SaveConfig (void)
     fprintf (fp, "输入条使用3D界面=%d\n", _3DEffectInputWindow);
     fprintf (fp, "主窗口隐藏模式=%d\n", (int) hideMainWindow);
     fprintf (fp, "是否自动隐藏输入条=%d\n", bAutoHideInputWindow);
-    /* 这个设置暂时隐藏起来
-       fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
-       *********************************************************************** */
+    fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
+    fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering );
     fprintf (fp, "#输入条固定宽度仅适用于码表输入法，0表示不固定宽度\n");
     fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
     fprintf (fp, "序号后加点=%d\n", bPointAfterNumber);
@@ -833,8 +835,8 @@ void LoadProfile (void)
 		pstr += 15;
 		bLocked = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "主窗口简洁模式=")) {
-		pstr += 15;
+	    else if (MyStrcmp (str, "简洁模式=")) {
+		pstr += 9;
 		bCompactMainWindow = atoi (pstr);
 	    }
 	}
@@ -879,7 +881,7 @@ void SaveProfile (void)
     fprintf (fp, "是否联想=%d\n", bUseLegend);
     fprintf (fp, "当前输入法=%d\n", iIMIndex);
     fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
-    fprintf (fp, "主窗口简洁模式=%d\n", bCompactMainWindow);
+    fprintf (fp, "简洁模式=%d\n", bCompactMainWindow);
 
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
