@@ -107,6 +107,8 @@ extern Bool     bUseTable;
 extern Bool	bLumaQQ;
 extern char	cPYYCDZ[];
 
+extern Bool	bDoubleSwitchKey;
+
 #ifdef _USE_XFT
 extern Bool     bUseAA;
 #else
@@ -337,6 +339,10 @@ void LoadConfig (Bool bMode)
 	else if (strstr (pstr, "中英文快速切换键=")) {
 	    pstr += 17;
 	    SetSwitchKey (pstr);
+	}
+	else if (strstr (pstr, "双击中英文切换=")) {
+	    pstr += 15;
+	    bDoubleSwitchKey = atoi (pstr);
 	}
 	else if (strstr (pstr, "GBK支持=")) {
 	    pstr += 8;
@@ -582,7 +588,8 @@ void SaveConfig (void)
     fprintf (fp, "[热键]\n");
     fprintf (fp, "打开/关闭输入法=CTRL_SPACE\n");
     fprintf (fp, "#中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT\n");
-    fprintf (fp, "中英文快速切换键=L_SHIFT\n");
+    fprintf (fp, "中英文快速切换键=L_CTRL\n");
+    fprintf (fp, "双击中英文切换=%d\n", bDoubleSwitchKey);
     fprintf (fp, "光标跟随=CTRL_K\n");
     fprintf (fp, "GBK支持=CTRL_M\n");
     fprintf (fp, "联想支持=CTRL_L\n");
@@ -590,7 +597,7 @@ void SaveConfig (void)
     fprintf (fp, "中文标点=ALT_SPACE\n");
     fprintf (fp, "上一页=-\n");
     fprintf (fp, "下一页==\n");
-    fprintf (fp, "第二三候选词选择键=CTRL\n");
+    fprintf (fp, "第二三候选词选择键=SHIFT\n");
 
     fprintf (fp, "\n[输入法]\n");
     fprintf (fp, "使用拼音=%d\n", bUsePinyin);

@@ -59,7 +59,7 @@ INT8            iOrderCount = 0;
 INT8            iNewFreqCount = 0;
 
 INT8            iYCDZ = 0;
-char		cPYYCDZ[3]="[]";	//以词定字
+char            cPYYCDZ[3] = "[]";	//以词定字
 
 HOTKEYS         hkPYAddFreq[HOT_KEY_COUNT] = { CTRL_8, 0 };
 Bool            bIsPYAddFreq = False;
@@ -704,7 +704,7 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 
 	    //下面实现以词定字
 	    if (iCandWordCount) {
-	    	if (iKey == cPYYCDZ[0] || iKey == cPYYCDZ[1]) {
+		if (iKey == cPYYCDZ[0] || iKey == cPYYCDZ[1]) {
 		    if (PYCandWords[iYCDZ].iWhich == PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich == PY_CAND_SYMPHRASE) {
 			char           *pBase, *pPhrase;
 
@@ -804,10 +804,10 @@ void CalculateCursorPosition (void)
     for (i = 0; i < iPYSelected; i++)
 	iCursorPos += strlen (pySelected[i].strHZ);
 
-    if ( iPYInsertPoint>strlen(strFindString) )
-	iPYInsertPoint = strlen(strFindString);
+    if (iPYInsertPoint > strlen (strFindString))
+	iPYInsertPoint = strlen (strFindString);
     iTemp = iPYInsertPoint;
-    
+
     for (i = 0; i < findMap.iHZCount; i++) {
 	if (strlen (findMap.strPYParsed[i]) >= iTemp) {
 	    iCursorPos += iTemp;
@@ -2839,6 +2839,25 @@ void PYSetLegendCandWordsFlag (Bool flag)
 
     for (i = 0; i < iLegendCandWordCount; i++)
 	PYLegendCandWords[i].phrase->flag = flag;
+}
+
+void PYGetPYByHZ (char *strHZ, char *strPY)
+{
+    int             i, j;
+    char            str_PY[MAX_PY_LENGTH + 1];
+
+    strPY[0] = '\0';
+    for (i = 0; i < iPYFACount; i++) {
+	if (MapToPY (PYFAList[i].strMap, str_PY)) {	
+	    for (j = 0; j < PYFAList[i].iBase; j++) {
+		if (!strcmp (PYFAList[i].pyBase[j].strHZ, strHZ)) {
+		    if (strPY[0])
+			strcat(strPY," ");
+		    strcat (strPY, str_PY);
+		    }
+	    }
+	}
+    }
 }
 
 /*

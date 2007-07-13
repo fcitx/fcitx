@@ -61,7 +61,8 @@ int             i3rdSelectKey = 0;	//第三个候选词选择键，为扫描码
 Time            lastKeyPressedTime;
 
 KEY_RELEASED    keyReleased = KR_OTHER;
-KEYCODE         switchKey = L_SHIFT;
+Bool		bDoubleSwitchKey = False;
+KEYCODE         switchKey = L_CTRL;
 
 //热键定义
 HOTKEYS         hkTrigger[HOT_KEY_COUNT] = { CTRL_SPACE, 0 };
@@ -90,6 +91,7 @@ INT8		iKeyPressed = 0;
 Bool		bRelease = True;
 */
 
+extern XIMS     ims;
 extern IC      *CurrentIC;
 extern Display *dpy;
 extern ChnPunc *chnPunc;
@@ -167,7 +169,7 @@ void ResetInput (void)
 	im[iIMIndex].ResetIM ();
 }
 
-void CloseIM (XIMS ims, IMForwardEventStruct * call_data)
+void CloseIM (IMForwardEventStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
     IMPreeditEnd (ims, (XPointer) call_data);
@@ -175,8 +177,29 @@ void CloseIM (XIMS ims, IMForwardEventStruct * call_data)
     DisplayMainWindow ();
 }
 
+void ChangeIMState(IMForwardEventStruct * call_data)
+{
+    if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
+	SetConnectID (call_data->connect_id, IS_CHN);
+	DisplayInputWindow ();
+	
+	if ( ConnectIDGetTrackCursor (call_data->connect_id) )
+	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+	else
+	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+    }
+    else {
+	SetConnectID (call_data->connect_id, IS_ENG);
+	ResetInput ();
+	ResetInputWindow ();
+	XUnmapWindow (dpy, inputWindow);
+    }
+    if (hideMainWindow != HM_HIDE)
+	DisplayMainWindow ();
+}
+
 //FILE           *fd;
-void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
+void ProcessKey (IMForwardEventStruct * call_data)
 {
     KeySym          keysym;
     XKeyEvent      *kev;
@@ -219,32 +242,16 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
 		    SwitchIM (-1);
 		else if (IsHotKey (iKey, hkTrigger))
-		    CloseIM (ims, call_data);
+		    CloseIM (call_data);
 	    }
 	    else if (!bLocked && iKey == CTRL_LSHIFT) {
 		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
 		    SwitchIM (-1);
 		else if (IsHotKey (iKey, hkTrigger))
-		    CloseIM (ims, call_data);
+		    CloseIM (call_data);
 	    }
-	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL) {
-		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
-		    SetConnectID (call_data->connect_id, IS_CHN);
-		    DisplayInputWindow ();
-		    
-		    if ( ConnectIDGetTrackCursor (call_data->connect_id) )
-			XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-		    else
-			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
-		}
-		else {
-		    SetConnectID (call_data->connect_id, IS_ENG);
-		    ResetInput ();
-		    ResetInputWindow ();
-		    XUnmapWindow (dpy, inputWindow);
-		}
-		if (hideMainWindow != HM_HIDE)
-		    DisplayMainWindow ();
+	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
+	        ChangeIMState(call_data);
 		retVal = IRV_DO_NOTHING;
 	    }
 	    else if (kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) {
@@ -262,6 +269,11 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		    else
 			retVal = IRV_TO_PROCESS;
 		}
+		else {
+			strcpy(strStringGet, " ");
+			uMessageDown = 0;
+			retVal = IRV_GET_CANDWORDS;
+		}
 	    }
 	    else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
 		if (!bIsInLegend) {
@@ -276,21 +288,48 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		    else if (iCandWordCount)
 			retVal = IRV_DISPLAY_CANDWORDS;
 		}
+		else {
+			strcpy(strStringGet, "　");
+			uMessageDown = 0;
+			retVal = IRV_GET_CANDWORDS;
+		}
 	    }
 	}
     }
 
     if (retVal == IRV_TO_PROCESS) {
 	if (call_data->event.type == KeyPress) {
+	    if (kev->keycode != switchKey )
+		keyReleased = KR_OTHER;
+	    else {
+	        if ( (keyReleased == KR_CTRL) && (kev->time-lastKeyPressedTime<250) && bDoubleSwitchKey) 
+		    ChangeIMState(call_data);
+	    }
+	    
 	    lastKeyPressedTime = kev->time;
-	    keyReleased = KR_OTHER;
 	    if (kev->keycode == switchKey) {
 		keyReleased = KR_CTRL;
+		//retVal = (bDoubleSwitchKey)? IRV_CLEAN:IRV_DO_NOTHING;
 		retVal = IRV_DO_NOTHING;
 	    }
 	    else if (IsHotKey (iKey, hkTrigger)) {
-		CloseIM (ims, call_data);
-		retVal = IRV_DO_NOTHING;
+		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
+		    SetConnectID (call_data->connect_id, IS_CHN);
+		    DisplayInputWindow ();
+		    
+		    if ( ConnectIDGetTrackCursor (call_data->connect_id) )
+			XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+		    else
+			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+
+		    if (hideMainWindow != HM_HIDE)
+			DisplayMainWindow ();
+
+		}
+		else {
+			CloseIM (call_data);
+			retVal = IRV_DO_NOTHING;
+		}
 	    }
 	}
 	if (retVal == IRV_TO_PROCESS && (ConnectIDGetState (call_data->connect_id) == IS_CHN)) {
@@ -331,7 +370,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				iCandWordCount = 0;
 				if (pstr) {
 				    strcpy (strStringGet, pstr);
-				    SendHZtoClient (ims, call_data, strStringGet);
+				    SendHZtoClient (call_data, strStringGet);
 				    iCodeInputCount = 0;
 				}
 			    }
@@ -573,7 +612,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 	DisplayInputWindow ();
 	break;
     case IRV_GET_LEGEND:
-	SendHZtoClient (ims, call_data, strStringGet);
+	SendHZtoClient (call_data, strStringGet);
 	if (iLegendCandWordCount) {
 	    bShowNext = bShowPrev = False;
 	    if (iCurrentLegendCandPage > 0)
@@ -607,7 +646,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     case IRV_GET_CANDWORDS_NEXT:
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1)
 	    DisplayInputWindow ();
-	SendHZtoClient (ims, call_data, strStringGet);
+	SendHZtoClient (call_data, strStringGet);
 	bLastIsNumber = False;
 	lastIsSingleHZ = 0;
 

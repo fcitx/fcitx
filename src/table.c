@@ -158,6 +158,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].strPath[0] = '\0';
 	table[iTableIMIndex].strSymbolFile[0] = '\0';
 	table[iTableIMIndex].tableOrder = AD_NO;
+	table[iTableIMIndex].bGetPY = True;
 	table[iTableIMIndex].bUsePY = True;
 	table[iTableIMIndex].cPinyin = '\0';
 	table[iTableIMIndex].bTableAutoSendToClient = True;
@@ -213,6 +214,10 @@ void LoadTableInfo (void)
 	    else if (!strncmp (pstr, "调频=", 5)) {
 		pstr += 5;
 		table[iTableIMIndex].tableOrder = (ADJUSTORDER) atoi (pstr);
+	    }
+	    else if (!strncmp (pstr, "反查拼音=", 9)) {
+		pstr += 9;
+		table[iTableIMIndex].bGetPY = atoi (pstr);
 	    }
 	    else if (!strncmp (pstr, "拼音=", 5)) {
 		pstr += 5;
@@ -457,6 +462,13 @@ Bool LoadTableDict (void)
      * 然后初始化码表输入法
      TableInit();
      */
+
+    /* 
+     * 如果处于反查码表的状态，应加载拼音单字库
+     */
+    if (table[iTableIMIndex].bGetPY)
+	LoadPYBaseDict ();
+
     return True;
 }
 
@@ -820,9 +832,9 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		    }
 		    else {
 			//如果是拼音，进入快速调整字频方式
-		        if (strcmp (strCodeInput, table[iTableIMIndex].strSymbol) && strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
+			if (strcmp (strCodeInput, table[iTableIMIndex].strSymbol) && strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
 			    PYGetCandWord (iKey - 1);
-			
+
 			strcpy (strStringGet, TableGetCandWord (iKey - 1));
 			if (bIsInLegend)
 			    retVal = IRV_GET_LEGEND;
@@ -923,7 +935,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	bShowCursor = False;
     else
 	bShowCursor = True;
-    
+
     return retVal;
 }
 
@@ -1045,6 +1057,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
     int             i;
     char            strTemp[3], *pstr;
     unsigned int    iTableTotalCandCount = 0;
+    char            strPY[10 * MAX_PY_LENGTH + 10];	//一个字有没有十个不同的读音呢？
 
     if (bIsInLegend)
 	return TableGetLegendCandWords (mode);
@@ -1151,6 +1164,17 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	else
 	    pstr = ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
 	strcpy (messageDown[uMessageDown].strMsg, pstr);
+
+	//加入反查得到的拼音
+	if ((table[iTableIMIndex].bGetPY) && (strlen (tableCandWord[i].candWord.record->strHZ) == 2)) {
+	    PYGetPYByHZ (tableCandWord[i].candWord.record->strHZ, strPY);
+	    if (strPY[0]) {
+		strcat (messageDown[uMessageDown].strMsg, "(");
+		strcat (messageDown[uMessageDown].strMsg, strPY);
+		strcat (messageDown[uMessageDown].strMsg, ")");
+	    }
+	}
+
 	if (i != (iCandWordCount - 1)) {
 #ifdef _USE_XFT
 	    strcat (messageDown[uMessageDown].strMsg, "  ");
@@ -1517,8 +1541,20 @@ RECORD         *TableHasPhrase (char *strCode, char *strHZ)
     while (strCode[0] != recordIndex[i].cCode)
 	i++;
 
-    recTemp = recordIndex[i].record->prev;
-    do {
+    /*recTemp = recordIndex[i].record->prev;
+       do {
+       if (strcmp (recTemp->strCode, strCode) > 0)
+       break;
+       else if (!strcmp (recTemp->strCode, strCode)) {
+       if (!strcmp (recTemp->strHZ, strHZ))     //该词组已经在词库中
+       return NULL;
+       }
+
+       recTemp = recTemp->next;
+       } while (recTemp != recordHead);
+     */
+    recTemp = recordIndex[i].record;
+    while (recTemp != recordHead) {
 	if (strcmp (recTemp->strCode, strCode) > 0)
 	    break;
 	else if (!strcmp (recTemp->strCode, strCode)) {
@@ -1527,8 +1563,8 @@ RECORD         *TableHasPhrase (char *strCode, char *strHZ)
 	}
 
 	recTemp = recTemp->next;
-    } while (recTemp != recordHead);
-    
+    }
+
     return recTemp;
 }
 

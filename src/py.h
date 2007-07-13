@@ -49,7 +49,7 @@ typedef struct PYFREQ {
     HZ             *HZList;
     char            strPY[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1];
     uint            iCount;
-    Bool            bIsSym;	//¸Ã±äÁ¿ÓÃÓÚÊµÏÖÌØÊâ·ûºÅ±í
+    Bool            bIsSym;	//è¯¥å˜é‡ç”¨äºŽå®žçŽ°ç‰¹æ®Šç¬¦å·è¡¨
     struct PYFREQ  *next;
 } PyFreq;
 
@@ -117,7 +117,7 @@ typedef union {
 
 typedef struct PYCANDWORD {
     PCand           cand;
-    uint            iWhich:3;	//0->Auto 1->ÏµÍ³µ¥×Ö 2->ÏµÍ³´Ê×é 3->ÓÃ»§´Ê×é 4->³£ÓÃ×Ö
+    uint            iWhich:3;	//0->Auto 1->ç³»ç»Ÿå•å­— 2->ç³»ç»Ÿè¯ç»„ 3->ç”¨æˆ·è¯ç»„ 4->å¸¸ç”¨å­—
 } PYCandWord;
 
 typedef struct PYCANDINDEX {
@@ -175,6 +175,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE iMode);
 Bool            PYAddLengendCandWord (PyPhrase * phrase, SEARCH_MODE mode);
 char           *PYGetLegendCandWord (int iIndex);
 void            PYSetLegendCandWordsFlag (Bool flag);
+void		PYGetPYByHZ(char *strHZ, char *strPY);
 
 //void            PP ();
 #endif

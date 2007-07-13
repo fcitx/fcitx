@@ -43,6 +43,7 @@ typedef struct _TABLE {
     ADJUSTORDER     tableOrder;
 
     Bool            bUsePY;	//使用拼音
+    Bool	    bGetPY;	//查拼音读音
     Bool            bTableAutoSendToClient;	//自动上屏
     Bool            bUseMatchingKey;	//是否模糊匹配
     Bool            bAutoPhrase;	//是否自动造词

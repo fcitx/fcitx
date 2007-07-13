@@ -55,7 +55,9 @@ int             FontHeight (XFontSet font);
 #endif
 
 int             FillImageByXPMData (XImage * pImage, char **apcData);
-void            MouseClick (int *x, int *y, int iWnd);
+Bool            MouseClick (int *x, int *y, int iWnd);
+/*
 void            WaitButtonRelease (XPoint * point);
+*/
 
 #endif

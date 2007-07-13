@@ -12,7 +12,7 @@
 #include "InputWindow.h"
 
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
-
+XIMS		ims;
 //************************************************
 CARD16          connect_id = 0;
 CARD16          lastConnectID = 0;
@@ -90,21 +90,21 @@ static XIMEncoding zhEncodings[] = {
     NULL
 };
 
-Bool MyOpenHandler (XIMS ims, IMOpenStruct * call_data)
+Bool MyOpenHandler (IMOpenStruct * call_data)
 {
     CreateConnectID (call_data);
-
+    
     return True;
 }
 
-Bool MyGetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
+Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 {
     GetIC (call_data);
 
     return True;
 }
 
-Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
+Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
     if (CurrentIC == NULL)
 	return True;
@@ -129,13 +129,13 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 		    iTempInputWindowX = 0;
 		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+		else
+		    iTempInputWindowX += 3;
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
 		else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
 		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
-		else
-		    iTempInputWindowY += 3;
 
 		XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 
@@ -149,7 +149,7 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
     return True;
 }
 
-Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
+Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 {
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
@@ -157,9 +157,8 @@ Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
     if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
-	if (ConnectIDGetState (call_data->connect_id) == IS_CHN && uMessageDown > 1 && lastConnectID == connect_id) {
+	if (ConnectIDGetState (call_data->connect_id) == IS_CHN && uMessageDown > 1 && lastConnectID == connect_id)
 	    DisplayInputWindow ();
-	}
 	else
 	    XUnmapWindow (dpy, inputWindow);
 
@@ -173,29 +172,30 @@ Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
 
     lastConnectID = connect_id;
     if (bLumaQQ && ConnectIDGetReset (connect_id)) {
-	SendHZtoClient (ims, (IMForwardEventStruct *) call_data, "\0");
+	SendHZtoClient ((IMForwardEventStruct *) call_data, "\0");
 	ConnectIDSetReset (connect_id, False);
     }
 
     return True;
 }
 
-Bool MyUnsetFocusHandler (XIMS ims, IMChangeICStruct * call_data)
+Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
 
     return True;
 }
 
-Bool MyCloseHandler (XIMS ims, IMOpenStruct * call_data)
+Bool MyCloseHandler (IMOpenStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
     DestroyConnectID (call_data->connect_id);
+    connect_id = 0;
 
     return True;
 }
 
-Bool MyCreateICHandler (XIMS ims, IMChangeICStruct * call_data)
+Bool MyCreateICHandler (IMChangeICStruct * call_data)
 {
     CreateIC (call_data);
 
@@ -207,7 +207,7 @@ Bool MyCreateICHandler (XIMS ims, IMChangeICStruct * call_data)
     return True;
 }
 
-Bool MyDestroyICHandler (XIMS ims, IMChangeICStruct * call_data)
+Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
     if (CurrentIC == (IC *) FindIC (call_data->icid))
 	XUnmapWindow (dpy, inputWindow);
@@ -230,7 +230,7 @@ void EnterChineseMode (Bool bState)
     DisplayMainWindow ();
 }
 
-Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
+Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 {
     if (call_data->flag == 0) {	/* on key */
 	/*
@@ -253,45 +253,45 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 /*
 #define _PRINT_MESSAGE
 */
-Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
+Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 {
     switch (call_data->major_code) {
     case XIM_OPEN:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_OPEN\n");
 #endif
-	return MyOpenHandler (ims, (IMOpenStruct *) call_data);
+	return MyOpenHandler ((IMOpenStruct *) call_data);
     case XIM_CLOSE:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_CLOSE\n");
 #endif
-	return MyCloseHandler (ims, (IMOpenStruct *) call_data);
+	return MyCloseHandler ((IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_CREATE_IC\n");
 #endif
-	return MyCreateICHandler (ims, (IMChangeICStruct *) call_data);
+	return MyCreateICHandler ((IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
-	return MyDestroyICHandler (ims, (IMChangeICStruct *) call_data);
+	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _PRINT_MESSAGE
 //      printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
-	return MySetICValuesHandler (ims, (IMChangeICStruct *) call_data);
+	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_GET_IC_VALUES\n");
 #endif
-	return MyGetICValuesHandler (ims, (IMChangeICStruct *) call_data);
+	return MyGetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	//if ( connect_id == ((IMForwardEventStruct *)call_data)->connect_id )
-	ProcessKey (ims, (IMForwardEventStruct *) call_data);
+	ProcessKey ((IMForwardEventStruct *) call_data);
 	XSync (dpy, False);
 
 	return True;
@@ -299,12 +299,12 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_SET_IC_FOCUS:conn=%d   ic=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-	return MySetFocusHandler (ims, (IMChangeFocusStruct *) call_data);
+	return MySetFocusHandler ((IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_UNSET_IC_FOCUS:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
-	return MyUnsetFocusHandler (ims, (IMChangeICStruct *) call_data);;
+	return MyUnsetFocusHandler ((IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_RESET_IC\n");
@@ -314,13 +314,13 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_TRIGGER_NOTIFY\n");
 #endif
-	return MyTriggerNotifyHandler (ims, (IMTriggerNotifyStruct *) call_data);
+	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
     default:
 	return True;
     }
 }
 
-void SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ)
+void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
     Display        *display = ims->core.display;
@@ -349,7 +349,6 @@ void SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ)
 
 Bool InitXIM (char *imname, Window im_window)
 {
-    XIMS            ims;
     XIMStyles      *input_styles;
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;
@@ -361,12 +360,12 @@ Bool InitXIM (char *imname, Window im_window)
 	    if (strstr (imname, "@im="))
 		imname += 4;
 	    else {
-		fprintf (stderr, "XMODIFIERS设置不正确！\n");
+		fprintf (stderr, "XMODIFIERS Error...\n");
 		imname = DEFAULT_IMNAME;
 	    }
 	}
 	else {
-	    fprintf (stderr, "没有设置XMODIFIERS！\n");
+	    fprintf (stderr, "Please set XMODIFIERS...\n");
 	    imname = DEFAULT_IMNAME;
 	}
     }
@@ -399,7 +398,7 @@ Bool InitXIM (char *imname, Window im_window)
 
     ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
     if (ims == (XIMS) NULL) {
-	fprintf (stderr, "已经存在另一个同名服务程序 %s\n", imname);
+	fprintf (stderr, "Start FCITX error. Another XIM daemon named %s is running?\n", imname);
 	return False;
     }
 
@@ -407,6 +406,30 @@ Bool InitXIM (char *imname, Window im_window)
     IMSetIMValues (ims, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, IMFilterEventMask, filter_mask, NULL);
 
     return True;
+}
+
+void SetIMState (Bool bState)
+{
+	IMChangeFocusStruct call_data;
+	
+	if ( !CurrentIC )
+		return;
+	
+	if ( connect_id && CurrentIC->id ) {
+		call_data.connect_id = connect_id;
+		call_data.icid = CurrentIC->id;
+	
+		if ( bState ) {
+			IMPreeditStart (ims, (XPointer) &call_data);
+			SetConnectID (connect_id, IS_CHN);
+		}
+		else {
+			IMPreeditEnd (ims, (XPointer) &call_data);
+			SetConnectID (connect_id, IS_CLOSED);
+		}
+	
+		DisplayMainWindow();
+	}
 }
 
 void CreateConnectID (IMOpenStruct * call_data)
@@ -448,8 +471,8 @@ void DestroyConnectID (CARD16 connect_id)
 	temp = temp->next;
     }
 
-    if (!temp)			//按说这种情况不会发生的
-	return;
+    if (!temp)
+        return;
 
     if (temp == connectIDsHead)
 	connectIDsHead = temp->next;

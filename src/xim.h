@@ -29,7 +29,7 @@ typedef struct _CONNECT_ID {
 } CONNECT_ID;
 
 Bool            InitXIM (char *, Window);
-void            SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ);
+void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
 void            CreateConnectID (IMOpenStruct * call_data);
 void            DestroyConnectID (CARD16 connect_id);
@@ -40,6 +40,7 @@ void            ConnectIDSetReset (CARD16 connect_id, Bool bReset);
 void            ConnectIDResetReset (void);
 void		ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrack);
 Bool		ConnectIDGetTrackCursor (CARD16 connect_id);
+void		SetIMState (Bool bState);
 
 //char           *ConnectIDGetLocale(CARD16 connect_id);
 

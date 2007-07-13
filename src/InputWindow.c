@@ -237,23 +237,29 @@ void DisplayMessage (void)
 #ifdef _USE_XFT
 	p1 = messageUp[i].strMsg;
 	while (*p1) {
-	    if (isprint (*p1))
-		bEn = True;
-	    else
-		bEn = False;
 	    p2 = strTemp;
-	    while (*p1) {
+	    if (isprint (*p1))	//使用中文字体
+	    	bEn = True;
+	    else {
 		*p2++ = *p1++;
+		*p2++ = *p1++;
+		bEn = False;
+	    }
+	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
-			break;
+		        break;
+		    *p2++ = *p1++;
 		}
 		else {
 		    if (bEn)
 			break;
+		    *p2++ = *p1++;
+		    *p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';
+	    
 	    iInputWindowUpWidth += StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
 	}
 #else
@@ -272,20 +278,25 @@ void DisplayMessage (void)
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
 	while (*p1) {
-	    if (isprint (*p1))
+	   p2 = strTemp;
+	   if (isprint (*p1))	//使用中文字体
 		bEn = True;
-	    else
-		bEn = False;
-	    p2 = strTemp;
-	    while (*p1) {
+	   else {
 		*p2++ = *p1++;
+		*p2++ = *p1++;
+		bEn = False;
+	    }
+	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
 			break;
+		    *p2++ = *p1++;
 		}
 		else {
 		    if (bEn)
 			break;
+			*p2++ = *p1++;
+			*p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';
@@ -349,20 +360,25 @@ void DisplayMessageUp (void)
 #ifdef _USE_XFT
 	p1 = messageUp[i].strMsg;
 	while (*p1) {
-	    if (isprint (*p1))
-		bEn = True;
-	    else
-		bEn = False;
 	    p2 = strTemp;
-	    while (*p1) {
+	    if (isprint (*p1))	//使用中文字体
+		bEn = True;
+	    else {
 		*p2++ = *p1++;
+		*p2++ = *p1++;
+		bEn = False;
+	    }
+	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
 			break;
+		    *p2++ = *p1++;
 		}
 		else {
 		    if (bEn)
 			break;
+		    *p2++ = *p1++;
+		    *p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';
@@ -384,20 +400,25 @@ void DisplayMessageUp (void)
 #ifdef _USE_XFT
 		p1 = strText;
 		while (*p1) {
-		    if (isprint (*p1))
-			bEn = True;
-		    else
-			bEn = False;
 		    p2 = strTemp;
-		    while (*p1) {
+		    if (isprint (*p1))	//使用中文字体
+			bEn = True;
+		    else {
 			*p2++ = *p1++;
+			*p2++ = *p1++;
+			bEn = False;
+		    }
+		    while (*p1) {
 			if (isprint (*p1)) {
 			    if (!bEn)
 				break;
+			    *p2++ = *p1++;
 			}
 			else {
 			    if (bEn)
 				break;
+			    *p2++ = *p1++;
+			    *p2++ = *p1++;
 			}
 		    }
 		    *p2 = '\0';
@@ -441,20 +462,25 @@ void DisplayMessageDown (void)
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
 	while (*p1) {
+	    p2 = strTemp;
 	    if (isprint (*p1))	//使用中文字体
 		bEn = True;
-	    else
-		bEn = False;
-	    p2 = strTemp;
-	    while (*p1) {
+	    else {
+	        *p2++ = *p1++;
 		*p2++ = *p1++;
+		bEn = False;
+	    }
+	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
 			break;
+		    *p2++ = *p1++;
 		}
 		else {
 		    if (bEn)
 			break;
+		    *p2++ = *p1++;
+		    *p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';

@@ -7,7 +7,6 @@
 
 #define MAX_CAND_WORD	10
 #define MAX_USER_INPUT 300
-// #define MAX_PHRASE_LENGTH 10 //最大词组长度----与拼音词组长度相同
 
 #define HOT_KEY_COUNT	2
 #define MAX_HZ_SAVED    1024
@@ -80,9 +79,10 @@ typedef struct {
 
 typedef int     HOTKEYS;
 
-void            ProcessKey (XIMS ims, IMForwardEventStruct * call_data);
+void            ProcessKey (IMForwardEventStruct * call_data);
 void            ResetInput (void);
-void            CloseIM (XIMS ims, IMForwardEventStruct * call_data);
+void            CloseIM (IMForwardEventStruct * call_data);
+void		ChangeIMState (IMForwardEventStruct * call_data);
 Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);

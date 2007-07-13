@@ -300,7 +300,7 @@ Bool MapPY (char *strPY, char strMap[3], PYPARSEINPUTMODE mode)
  * 将一个完整的拼音映射转换为拼音，返回False表示失败，
  * 一般原因是拼音映射不正确
  */
-/*Bool MapToPY (char strMap[3], char *strPY)
+Bool MapToPY (char strMap[3], char *strPY)
 {
     int             i;
 
@@ -330,7 +330,7 @@ Bool MapPY (char *strPY, char strMap[3], PYPARSEINPUTMODE mode)
     }
 
     return False;
-}*/
+}
 
 /*
  * 比较一位拼音映射

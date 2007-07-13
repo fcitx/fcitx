@@ -286,7 +286,8 @@ void MyXEventHandler (XEvent * event)
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
 		    iMainWindowX = event->xbutton.x;
 		    iMainWindowY = event->xbutton.y;
-		    MouseClick (&iMainWindowX, &iMainWindowY, 0);
+		    if ( !MouseClick (&iMainWindowX, &iMainWindowY, 0) )
+			    SetIMState((ConnectIDGetState (connect_id) == IS_CHN)? False : True);
 		}
 	    }
 	    SaveProfile ();
@@ -547,17 +548,17 @@ int FillImageByXPMData (XImage * pImage, char **apcData)
     return 0;
 }
 
-void MouseClick (int *x, int *y, int iWnd)
+Bool MouseClick (int *x, int *y, int iWnd)
 {
     XEvent          evtGrabbed;
+    Bool	    bMoved = False;
 
     // To motion the  window
     while (1) {
 	XMaskEvent (dpy, PointerMotionMask | ButtonReleaseMask | ButtonPressMask, &evtGrabbed);
 	if (ButtonRelease == evtGrabbed.xany.type) {
-	    if (Button1 == evtGrabbed.xbutton.button) {
+	    if (Button1 == evtGrabbed.xbutton.button)
 		break;
-	    }
 	}
 	else if (MotionNotify == evtGrabbed.xany.type) {
 	    static Time     LastTime;
@@ -575,7 +576,8 @@ void MouseClick (int *x, int *y, int iWnd)
 		XRaiseWindow (dpy, inputWindow);
 		break;
 	    }
-
+	    
+	    bMoved = True;
 	    LastTime = evtGrabbed.xmotion.time;
 	}
 
@@ -591,9 +593,11 @@ void MouseClick (int *x, int *y, int iWnd)
 
     *x = evtGrabbed.xmotion.x_root - *x;
     *y = evtGrabbed.xmotion.y_root - *y;
+    
+    return bMoved;
 }
 
-void WaitButtonRelease (XPoint * point)
+/*void WaitButtonRelease (XPoint * point)
 {
     XEvent          ev;
 
@@ -609,5 +613,5 @@ void WaitButtonRelease (XPoint * point)
 	}
     }
 }
-
+*/
 /* ****************************************************************** */
