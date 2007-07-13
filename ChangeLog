@@ -1,3 +1,14 @@
+2006-12-01: Yuking <yuking_net@sohu.com>
+	   * 用libxpm替换原有的xpm处理方法
+	   * 版本 'GirlDog' 3.4.2
+
+2006-11-29: Yuking <yuking_net@sohu.com>
+           * src/table.c: 修正手动调整词频失效的错误
+	   * src/InputWindow.c, tools.c, ime.c: 增加是否显示版本的开关	   
+
+2006-11-02: Yuking <yuking_net@sohu.com>
+           * src/table.c: 修正某些时候不保存用户词频信息的问题
+
 2006-11-01: Yuking <yuking_net@sohu.com>
            * tools/txt2mb.c: 修正码表排序的一个问题
 	   * src/xim.c,tools.c: 给输入条的位置设置了X/Y的偏移量

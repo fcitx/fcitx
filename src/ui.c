@@ -25,6 +25,7 @@
 
 #include <X11/Xlocale.h>
 #include <X11/Xutil.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,7 +57,7 @@ XftFont        *xftMainWindowFont = NULL;
 XftFont        *xftMainWindowFontEn = NULL;
 XftFont        *xftVKWindowFont = NULL;
 Bool            bUseAA = True;
-int             iMainWindowFontSize = 11;
+int             iMainWindowFontSize = 12;
 int             iVKWindowFontSize = 11;
 int             iFontSize = 12;
 char            strUserLocale[50] = "zh_CN.UTF-8";
@@ -118,7 +119,7 @@ Bool InitX (void)
 	fprintf (stderr, "Error: FCITX can only run under X\n");
 	return False;
     }
-
+    
     SetMyXErrorHandler ();
     iScreen = DefaultScreen (dpy);
 
@@ -607,7 +608,7 @@ void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
 /*
  * 从xpm图形文件中图形数据填入到XImage变量中
  */
-int FillImageByXPMData (XImage * pImage, char **apcData)
+/*int FillImageByXPMData (XImage * pImage, char **apcData)
 {
     int             iWidth, iHeight;
     int             iColorCount;
@@ -686,6 +687,7 @@ int FillImageByXPMData (XImage * pImage, char **apcData)
     }
     return 0;
 }
+*/
 
 Bool MouseClick (int *x, int *y, Window window)
 {

@@ -1080,11 +1080,10 @@ char           *TableGetCandWord (int iIndex)
 	tableCandWord[iIndex].candWord.record->iHit++;
 	tableCandWord[iIndex].candWord.record->iIndex = ++iTableIndex;
     }
-    if (table[iTableIMIndex].tableOrder != AD_NO) {
-	iTableOrderChanged++;
-	if (iTableOrderChanged == TABLE_AUTO_SAVE_AFTER)
-	    SaveTableDict ();
-    }
+
+    iTableOrderChanged++;
+    if (iTableOrderChanged == TABLE_AUTO_SAVE_AFTER)
+	SaveTableDict ();
 
     switch (tableCandWord[iIndex].flag) {
     case CT_NORMAL:
@@ -1743,7 +1742,7 @@ void TableAdjustOrderByIndex (int iIndex)
     RECORD         *recTemp;
     int             iTemp;
 
-    if (!(tableCandWord[iIndex - 1].flag))
+    if (tableCandWord[iIndex - 1].flag != CT_NORMAL)
 	return;
 
     recTemp = tableCandWord[iIndex - 1].candWord.record;

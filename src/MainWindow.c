@@ -20,6 +20,7 @@
 #include "MainWindow.h"
 
 #include <stdio.h>
+#include <X11/xpm.h>
 
 #include "IC.h"
 #include "ui.h"
@@ -119,7 +120,7 @@ Bool CreateMainWindow (void)
     attrib.override_redirect = True;
     attribmask = CWOverrideRedirect;
 
-    sprintf (strMainWindowXPMBackColor, ". 	c #%2x%2x%2x", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
+    sprintf (strMainWindowXPMBackColor, ". 	c #%02x%02x%02x", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
 
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(mainWindowColor.backColor)))
 	iBackPixel = mainWindowColor.backColor.pixel;
@@ -143,6 +144,10 @@ void DisplayMainWindow (void)
     INT8            iIndex = 0;
     INT16           iPos;
 
+    int             rv;
+    XImage         *mask;
+    XpmAttributes   attrib;
+
 #ifdef _USE_XFT
     char            strTemp[MAX_IM_NAME + 1];
     char           *p1, *p2;
@@ -151,16 +156,19 @@ void DisplayMainWindow (void)
     char           *strGBKT;
 
     iIndex = IS_CLOSED;
+    attrib.valuemask = 0;
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
 	XMapRaised (dpy, mainWindow);
 
 	if (!pLogo) {
-	    pLogo = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-	    FillImageByXPMData (pLogo, logo_xpm);
+	    rv = XpmCreateImageFromData (dpy, logo_xpm, &pLogo, &mask, &attrib);
+	    if (rv != XpmSuccess)
+		fprintf (stderr, "Failed to read xpm file: Logo\n");
 	}
 	if (!pVK) {
-	    pVK = XGetImage (dpy, mainWindow, 0, 0, 19, 16, AllPlanes, XYPixmap);
-	    FillImageByXPMData (pVK, vk_1_xpm);
+	    rv = XpmCreateImageFromData (dpy, vk_1_xpm, &pVK, &mask, &attrib);
+	    if (rv != XpmSuccess)
+		fprintf (stderr, "Failed to read xpm file: VK\n");
 	}
 
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLogo, 0, 0, 2, 2, 15, 16);
@@ -169,44 +177,50 @@ void DisplayMainWindow (void)
 	iPos = 20;
 	if (!bCompactMainWindow) {
 	    if (!pPunc[bChnPunc]) {
-		pPunc[bChnPunc] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pPunc[bChnPunc], PuncLogo[bChnPunc]);
+		rv = XpmCreateImageFromData (dpy, PuncLogo[bChnPunc], &pPunc[bChnPunc], &mask, &attrib);
+		if (rv != XpmSuccess)
+		    fprintf (stderr, "Failed to read xpm file: Punc\n");
 	    }
 	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pPunc[bChnPunc], 0, 0, iPos, 2, 15, 16);
 	    iPos += 18;
 
 	    if (!pCorner[bCorner]) {
-		pCorner[bCorner] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pCorner[bCorner], CornerLogo[bCorner]);
+		rv = XpmCreateImageFromData (dpy, CornerLogo[bCorner], &pCorner[bCorner], &mask, &attrib);
+		if (rv != XpmSuccess)
+		    fprintf (stderr, "Failed to read xpm file: Corner\n");
 	    }
 	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pCorner[bCorner], 0, 0, iPos, 2, 15, 16);
 	    iPos += 18;
 
 	    if (!pGBK[bUseGBK]) {
-		pGBK[bUseGBK] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pGBK[bUseGBK], GBKLogo[bUseGBK]);
+		rv = XpmCreateImageFromData (dpy, GBKLogo[bUseGBK], &pGBK[bUseGBK], &mask, &attrib);
+		if (rv != XpmSuccess)
+		    fprintf (stderr, "Failed to read xpm file: GBKLogo\n");
 	    }
 	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pGBK[bUseGBK], 0, 0, iPos, 2, 15, 16);
 	    iPos += 18;
 
 	    if (!pLX[bUseLegend]) {
-		pLX[bUseLegend] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pLX[bUseLegend], LXLogo[bUseLegend]);
+		rv = XpmCreateImageFromData (dpy, LXLogo[bUseLegend], &pLX[bUseLegend], &mask, &attrib);
+		if (rv != XpmSuccess)
+		    fprintf (stderr, "Failed to read xpm file: LXLogo\n");
 	    }
 	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLX[bUseLegend], 0, 0, iPos, 2, 15, 16);
 	    iPos += 18;
 
 	    if (!pGBKT[bUseGBKT]) {
-		pGBKT[bUseGBKT] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pGBKT[bUseGBKT], GBKTLogo[bUseGBKT]);
+		rv = XpmCreateImageFromData (dpy, GBKTLogo[bUseGBKT], &pGBKT[bUseGBKT], &mask, &attrib);
+		if (rv != XpmSuccess)
+		    fprintf (stderr, "Failed to read xpm file: GBKTLogo\n");
 	    }
 	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pGBKT[bUseGBKT], 0, 0, iPos, 2, 15, 16);
 	    iPos += 18;
 	}
 
 	if (!pLock[bLocked]) {
-	    pLock[bLocked] = XGetImage (dpy, mainWindow, 0, 0, 8, 16, AllPlanes, XYPixmap);
-	    FillImageByXPMData (pLock[bLocked], LockLogo[bLocked]);
+	    rv = XpmCreateImageFromData (dpy, LockLogo[bLocked], &pLock[bLocked], &mask, &attrib);
+	    if (rv != XpmSuccess)
+		fprintf (stderr, "Failed to read xpm file: LockLogo\n");
 	}
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, iPos, 2, 15, 16);
 	iPos += 11;

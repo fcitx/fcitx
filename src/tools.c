@@ -80,7 +80,7 @@ extern HOTKEYS  hkTrack[];
 extern HOTKEYS  hkGetPY[];
 extern HOTKEYS  hkGBT[];
 
-extern KEYCODE  switchKey;
+extern KEY_CODE switchKey;
 extern XIMTriggerKey *Trigger_Keys;
 extern INT8     iTriggerKeyCount;
 
@@ -110,6 +110,7 @@ extern Bool     bEngAfterCap;
 
 //显示打字速度
 extern Bool     bShowUserSpeed;
+extern Bool     bShowVersion;
 extern Bool     bShowVK;
 
 extern char     strNameOfPinyin[];
@@ -307,7 +308,7 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "输入条偏移量Y=")) {
 	    pstr += 14;
 	    iOffsetY = atoi (pstr);
-	}	
+	}
 	//********************************************
 	else if (MyStrcmp (pstr, "序号后加点=")) {
 	    pstr += 11;
@@ -317,6 +318,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "显示打字速度=")) {
 	    pstr += 13;
 	    bShowUserSpeed = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "显示版本=")) {
+	    pstr += 13;
+	    bShowVersion = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
@@ -545,16 +550,16 @@ void LoadConfig (Bool bMode)
 	}
 	else if (MyStrcmp (pstr, "拼音名称=")) {
 	    pstr += 9;
-	    strcpy(strNameOfPinyin, pstr);
+	    strcpy (strNameOfPinyin, pstr);
 	}
-	
+
 	else if (MyStrcmp (pstr, "使用双拼=")) {
 	    pstr += 9;
 	    bUseSP = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "双拼名称=")) {
 	    pstr += 9;
-	    strcpy(strNameOfShuangpin, pstr);
+	    strcpy (strNameOfShuangpin, pstr);
 	}
 	else if (MyStrcmp (pstr, "默认双拼方案=")) {
 	    pstr += 13;
@@ -569,7 +574,7 @@ void LoadConfig (Bool bMode)
 	}
 	else if (MyStrcmp (pstr, "区位名称=")) {
 	    pstr += 9;
-	    strcpy(strNameOfQuwei, pstr);
+	    strcpy (strNameOfQuwei, pstr);
 	}
 	else if (MyStrcmp (pstr, "使用码表=")) {
 	    pstr += 9;
@@ -737,6 +742,7 @@ void SaveConfig (void)
     fprintf (fp, "输入条偏移量Y=%d\n", iOffsetY);
     fprintf (fp, "序号后加点=%d\n", bPointAfterNumber);
     fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
+    fprintf (fp, "显示版本=%d\n", bShowVersion);
 
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);
     fprintf (fp, "主窗口背景色=%d %d %d\n", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);

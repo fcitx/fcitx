@@ -31,7 +31,7 @@ typedef enum _KEYCODE_LIST {
     R_CTRL = 109,
     L_SHIFT = 50,
     R_SHIFT = 62
-} KEYCODE;
+} KEY_CODE;
 
 enum {
     K_LCTRL = 227,

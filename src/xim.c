@@ -198,7 +198,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
     icid = call_data->icid;
-
+    
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
@@ -324,6 +324,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 /*
 #define _PRINT_MESSAGE
 */
+
 Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 {
     switch (call_data->major_code) {
@@ -385,7 +386,7 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 #ifdef _PRINT_MESSAGE
 	printf ("XIM_TRIGGER_NOTIFY\n");
 #endif
-	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
+    	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
     default:
 	return True;
     }

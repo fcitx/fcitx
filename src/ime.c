@@ -89,7 +89,7 @@ unsigned int    iTimeInterval = 250;
 
 KEY_RELEASED    keyReleased = KR_OTHER;
 Bool            bDoubleSwitchKey = False;
-KEYCODE         switchKey = L_CTRL;
+KEY_CODE        switchKey = L_CTRL;
 
 //热键定义
 HOTKEYS         hkTrigger[HOT_KEY_COUNT] = { CTRL_SPACE, 0 };
@@ -120,11 +120,12 @@ Bool            bPointAfterNumber = True;
 time_t          timeStart;
 Bool            bStartRecordType;
 Bool            bShowUserSpeed = True;
+Bool		bShowVersion = True;
 uint            iHZInputed = 0;
 
-char		strNameOfPinyin[41]="智能拼音";
-char		strNameOfShuangpin[41]="智能双拼";
-char		strNameOfQuwei[41]="区位";
+char            strNameOfPinyin[41] = "智能拼音";
+char            strNameOfShuangpin[41] = "智能双拼";
+char            strNameOfQuwei[41] = "区位";
 
 /*
 INT8		iKeyPressed = 0;

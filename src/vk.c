@@ -30,6 +30,7 @@
 
 #include <limits.h>
 #include <ctype.h>
+#include <X11/xpm.h>
 
 #ifdef _USE_XFT
 #include <ft2build.h>
@@ -94,8 +95,8 @@ Bool CreateVKWindow (void)
     attrib.override_redirect = True;
     attribmask = CWOverrideRedirect;
 
-    sprintf (strVKWindowXPMBackColor, "@\tc #%2x%2x%2x", VKWindowColor.backColor.red >> 8, VKWindowColor.backColor.green >> 8, VKWindowColor.backColor.blue >> 8);
-    sprintf (strVKWindowAlphaXPMColor, "-\tc #%2x%2x%2x", VKWindowAlphaColor.color.red >> 8, VKWindowAlphaColor.color.green >> 8, VKWindowAlphaColor.color.blue >> 8);
+    sprintf (strVKWindowXPMBackColor, "@\tc #%02x%02x%02x", VKWindowColor.backColor.red >> 8, VKWindowColor.backColor.green >> 8, VKWindowColor.backColor.blue >> 8);
+    sprintf (strVKWindowAlphaXPMColor, "-\tc #%02x%02x%02x", VKWindowAlphaColor.color.red >> 8, VKWindowAlphaColor.color.green >> 8, VKWindowAlphaColor.color.blue >> 8);
 
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(VKWindowColor.backColor)))
 	iBackPixel = VKWindowColor.backColor.pixel;
@@ -132,11 +133,16 @@ void DisplayVKWindow (void)
 {
     int             i;
     int             iPos;
+    int             rv;
+    XImage         *mask;
+    XpmAttributes   attrib;
 
+    attrib.valuemask = 0;
     XMapRaised (dpy, VKWindow);
     if (!pVKLogo) {
-	pVKLogo = XGetImage (dpy, VKWindow, 0, 0, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT, AllPlanes, XYPixmap);
-	FillImageByXPMData (pVKLogo, vk_xpm);
+	rv = XpmCreateImageFromData (dpy, vk_xpm, &pVKLogo, &mask, &attrib);
+	if (rv != XpmSuccess)
+	    fprintf (stderr, "Failed to read xpm file: VK::VKLogo\n");
     }
     XPutImage (dpy, VKWindow, VKWindowColor.backGC, pVKLogo, 0, 0, 0, 0, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT);
 
