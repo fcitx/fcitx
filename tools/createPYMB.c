@@ -289,7 +289,7 @@ void CreatePYBase (void)
     }
 
     fwrite (&iCount, sizeof (int), 1, fp1);
-//    printf ("转换了 %d 个汉字，共 %d 组。\n正在保存拼音码表……", iIndex, iCount);
+    printf ("Groups: %d\n", iCount);
     iAllCount = iIndex;
 
     pyList = head->next;

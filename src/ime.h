@@ -28,7 +28,7 @@
 #define MAX_USER_INPUT	300
 
 #define HOT_KEY_COUNT	2
-#define MAX_HZ_SAVED    1024
+#define MAX_HZ_SAVED    2048
 
 #define MAX_IM_NAME	12
 

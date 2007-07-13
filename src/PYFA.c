@@ -551,6 +551,8 @@ PYTABLE         PYTable[] = {
     ,
     {"m", NULL}
     ,
+    {"lve", NULL}
+    ,
     {"lv", NULL}
     ,
     {"luo", NULL}

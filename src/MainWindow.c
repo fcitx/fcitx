@@ -51,8 +51,8 @@ int             MAINWND_WIDTH = _MAINWND_WIDTH;
 int             iMainWindowX = MAINWND_STARTX;
 int             iMainWindowY = MAINWND_STARTY;
 
-WINDOW_COLOR    mainWindowColor = { NULL, NULL, {0, 255 << 8, 240 << 8, 255 << 8} };
-MESSAGE_COLOR   mainWindowLineColor = { NULL, {0, 220 << 8, 0, 0} };	//线条色
+WINDOW_COLOR    mainWindowColor = { NULL, NULL, {0, 240 << 8, 255 << 8, 240 << 8} };
+MESSAGE_COLOR   mainWindowLineColor = { NULL, {0, 150 << 8, 220 << 8, 150 << 8} };	//线条色
 MESSAGE_COLOR   IMNameColor[3] = {	//输入法名称的颜色
     {NULL, {0, 170 << 8, 170 << 8, 170 << 8}},
     {NULL, {0, 150 << 8, 200 << 8, 150 << 8}},
@@ -148,6 +148,8 @@ void DisplayMainWindow (void)
     char           *p1, *p2;
     Bool            bEn;
 #endif
+    char           *strGBKT;
+
     iIndex = IS_CLOSED;
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
 	XMapRaised (dpy, mainWindow);
@@ -220,29 +222,41 @@ void DisplayMainWindow (void)
 	iPos += 2;
 	p1 = (bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName;
 	while (*p1) {
-	    if (isprint (*p1))
-		bEn = True;
-	    else
-		bEn = False;
 	    p2 = strTemp;
-	    while (*p1) {
+	    if (isprint (*p1))	//使用中文字体
+		bEn = True;
+	    else {
 		*p2++ = *p1++;
+		*p2++ = *p1++;
+		bEn = False;
+	    }
+	    while (*p1) {
 		if (isprint (*p1)) {
 		    if (!bEn)
 			break;
+		    *p2++ = *p1++;
 		}
 		else {
 		    if (bEn)
 			break;
+		    *p2++ = *p1++;
+		    *p2++ = *p1++;
 		}
 	    }
 	    *p2 = '\0';
 
-	    OutputString (mainWindow, (bEn) ? xftMainWindowFontEn : xftMainWindowFont, strTemp, iPos, FontHeight (xftMainWindowFont) + (MAINWND_HEIGHT - FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
-	    iPos += StringWidth (strTemp, (bEn) ? xftMainWindowFontEn : xftMainWindowFont);
+	    strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (strTemp) : strTemp;
+	    OutputString (mainWindow, (bEn) ? xftMainWindowFontEn : xftMainWindowFont, strGBKT, iPos, FontHeight (xftMainWindowFont) + (MAINWND_HEIGHT - FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
+	    iPos += StringWidth (strGBKT, (bEn) ? xftMainWindowFontEn : xftMainWindowFont);
+
+	    if (bUseGBKT)
+		free (strGBKT);
 	}
 #else
-	OutputString (mainWindow, fontSetMainWindow, (bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
+	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName) : ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName);
+	OutputString (mainWindow, fontSetMainWindow, strGBKT, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
+	if (bUseGBKT)
+	    free (strGBKT);
 #endif
 
 	if (_3DEffectMainWindow) {

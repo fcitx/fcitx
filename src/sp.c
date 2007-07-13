@@ -107,12 +107,12 @@ char            cNonS = 'o';
 char	    	strDefaultSP[100]="自然码";
 SP_FROM	        iSPFrom=SP_FROM_USER;	//从何处读取的双拼方案，0：用户目录，1：系统设置，2：系统双拼设置文件
 
-extern Bool     bSingleHZMode;
+//extern Bool     bSingleHZMode;
 
 void SPInit (void)
 {
     bSP = True;
-    bSingleHZMode = False;
+    //SingleHZMode = False;
 
     LoadSPData ();
 }

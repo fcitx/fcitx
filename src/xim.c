@@ -73,7 +73,9 @@ extern Bool     bIsUtf8;
 extern int      iCodeInputCount;
 extern iconv_t  convUTF8;
 extern uint     uMessageDown;
+extern uint     uMessageUp;
 extern Bool     bVK;
+extern Bool     bAutoHideInputWindow;
 
 /* 计算打字速度
 extern Bool     bStartRecordType;
@@ -165,8 +167,8 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
-		else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
-		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
+		else if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
+		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight;
 		else
 		    iTempInputWindowY += iOffsetY;
 
@@ -228,15 +230,18 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
        }
        } */
     /* ************************************************************************ */
-
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else if (uMessageDown > 1 && lastConnectID == connect_id)
-		DisplayInputWindow ();
+	    else if (lastConnectID != connect_id) {
+		if (!bAutoHideInputWindow)
+		    DisplayInputWindow ();
+		else
+		    XUnmapWindow (dpy, inputWindow);
+	    }
 	}
 	else {
 	    XUnmapWindow (dpy, inputWindow);
@@ -526,6 +531,7 @@ void SetIMState (Bool bState)
 	if (bState) {
 	    IMPreeditStart (ims, (XPointer) & call_data);
 	    SetConnectID (connect_id, IS_CHN);
+	    DisplayMainWindow ();
 	}
 	else {
 	    IMPreeditEnd (ims, (XPointer) & call_data);
@@ -536,8 +542,6 @@ void SetIMState (Bool bState)
 
 	    SwitchIM (-2);
 	}
-
-	DisplayMainWindow ();
     }
 }
 

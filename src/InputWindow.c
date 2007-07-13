@@ -64,10 +64,10 @@ MESSAGE_COLOR   messageColor[MESSAGE_TYPE_COUNT] = {
     {NULL, {0, 0, 0, 0}}
 };
 
-MESSAGE_COLOR   inputWindowLineColor = { NULL, {0, 255 << 8, 0, 0} };	//输入框中的线条色
+MESSAGE_COLOR   inputWindowLineColor = { NULL, {0, 90 << 8, 160 << 8, 90 << 8} };	//输入框中的线条色
 XColor          colorArrow = { 0, 255 << 8, 0, 0 };	//箭头的颜色
 
-WINDOW_COLOR    inputWindowColor = { NULL, NULL, {0, 255 << 8, 240 << 8, 255 << 8} };
+WINDOW_COLOR    inputWindowColor = { NULL, NULL, {0, 240 << 8, 255 << 8, 240 << 8} };
 MESSAGE_COLOR   cursorColor = { NULL, {0, 92 << 8, 210 << 8, 131 << 8} };
 
 // *************************************************************
@@ -80,7 +80,6 @@ uint            uMessageDown = 0;
 
 XImage         *pNext = NULL, *pPrev = NULL;
 
-Bool            bIsResizingInputWindow = False;	//窗口在改变尺寸时不要重绘
 Bool            bShowPrev = False;
 Bool            bShowNext = False;
 Bool            bTrackCursor = True;
@@ -258,15 +257,13 @@ void DisplayMessage (void)
 #endif
     XWindowAttributes wa;
 
-    bIsResizingInputWindow = True;	//由于改变窗口的属性可能会引起窗口重画，利用此变量来防止窗口抖动
-
     XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
     XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
     if (!uMessageUp && !uMessageDown) {
 	bShowCursor = False;
 	uMessageUp = 1;
-	strcpy (messageUp[0].strMsg, "FCITX V");
+	strcpy (messageUp[0].strMsg, "FCITX ");
 	strcat (messageUp[0].strMsg, FCITX_VERSION);
 	messageUp[0].type = MSG_TIPS;
 

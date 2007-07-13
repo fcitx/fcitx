@@ -103,11 +103,9 @@ int main (int argc, char *argv[])
     CreateAboutWindow ();
 
     SetIM ();
-
+    
     if (!InitXIM (imname, inputWindow))
 	exit (4);
-
-    DisplayMainWindow ();
 
     //以后台方式运行
     if (bBackground) {

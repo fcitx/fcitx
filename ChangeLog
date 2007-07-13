@@ -1,4 +1,10 @@
-2005-09-10: Yuking <yuking_net@sohu.com>
+2006-09-13: Yuking <yuking_net@sohu.com>
+           * src/table.c,py.c: 码表输入方式下，临时拼音可以输入词组
+           * src/table.c: 修正码表输入法的一个翻页错误
+	   * src/ime.c: 修正打开/关闭输入法时，码表自动组词丢失的问题
+	   * src/MainWindow.c: 修正主窗口显示的一个错误
+           
+2006-09-10: Yuking <yuking_net@sohu.com>
 	   * 版本060910
 	   
 2006-09-05: Yuking <yuking_net@sohu.com>

@@ -146,7 +146,8 @@ extern Bool     bShowPrev;
 extern Bool     bShowNext;
 extern Bool     bShowCursor;
 extern Bool     bTrackCursor;
-extern Bool     bSingleHZMode;
+
+//extern Bool     bSingleHZMode;
 extern Window   inputWindow;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern XIMTriggerKey *Trigger_Keys;
@@ -204,13 +205,15 @@ void ResetInput (void)
 
     bShowPrev = False;
     bShowNext = False;
-   
+
     bIsInLegend = False;
     iInCap = 0;
 
-    if (IsIM (NAME_OF_PINYIN))
-	bSingleHZMode = False;
-    else
+    /*if (IsIM (NAME_OF_PINYIN))
+       bSingleHZMode = False;
+       else
+       bShowCursor = False; */
+    if (!IsIM (NAME_OF_PINYIN))
 	bShowCursor = False;
 
     if (im[iIMIndex].ResetIM)
@@ -905,14 +908,15 @@ void SwitchIM (INT8 index)
 
     DisplayMainWindow ();
 
-    if (im[iIMIndex].Init)
-	im[iIMIndex].Init ();
-
     if (iIMCount == 1)
 	return;
 
-    if (im[iLastIM].Destroy != NULL)
-	im[iLastIM].Destroy ();
+    if (index != (INT8) - 2) {
+	if (im[iLastIM].Destroy)
+	    im[iLastIM].Destroy ();
+	if (im[iIMIndex].Init)
+	    im[iIMIndex].Init ();
+    }
 
     ResetInput ();
     XUnmapWindow (dpy, inputWindow);

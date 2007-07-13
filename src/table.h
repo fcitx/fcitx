@@ -62,15 +62,15 @@ typedef struct _TABLE {
     unsigned int    iRecordCount;
     ADJUSTORDER     tableOrder;
 
-    Bool            bUsePY;			//使用拼音
+    Bool            bUsePY;	//使用拼音
     Bool            bTableAutoSendToClient;	//自动上屏
-    Bool            bUseMatchingKey;		//是否模糊匹配
-    Bool            bAutoPhrase;		//是否自动造词
+    Bool            bUseMatchingKey;	//是否模糊匹配
+    Bool            bAutoPhrase;	//是否自动造词
     INT8            iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
-    Bool            bAutoPhrasePhrase;		//词组是否参与造词
-    INT8            iAutoPhrase;		//自动造词长度
-    Bool            bTableExactMatch;		//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;		//输入完毕后是否提示编码
+    Bool            bAutoPhrasePhrase;	//词组是否参与造词
+    INT8            iAutoPhrase;	//自动造词长度
+    Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
+    Bool            bPromptTableCode;	//输入完毕后是否提示编码
 } TABLE;
 
 typedef struct _RECORD {
@@ -104,12 +104,19 @@ typedef struct _AUTOPHRASE {
 typedef union {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
+    char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
 } CANDWORD;
 
 typedef struct _TABLECANDWORD {
-    unsigned int    flag:1;	//指示该候选字/词是自动组的词还是正常的字/词
+    unsigned int    flag:2;	//指示该候选字/词是自动组的词还是正常的字/词
     CANDWORD        candWord;
 } TABLECANDWORD;
+
+typedef enum {
+    CT_NORMAL = 0,
+    CT_AUTOPHRASE,
+    CT_PYPHRASE
+} CANDTYPE;
 
 void            LoadTableInfo (void);
 Bool            LoadTableDict (void);
@@ -132,15 +139,11 @@ char           *TableGetFHCandWord (int iIndex);
 Bool            HasMatchingKey (void);
 int             TableCompareCode (char *strUser, char *strDict);
 int             TableFindFirstMatchCode (void);
-
-//RECORD         *TableFindCode (char *strHZ, Bool bMode);
-
 void            TableAdjustOrderByIndex (int iIndex);
 void            TableDelPhraseByIndex (int iIndex);
 void            TableDelPhraseByHZ (char *strHZ);
 void            TableDelPhrase (RECORD * record);
 RECORD         *TableHasPhrase (char *strCode, char *strHZ);
-Bool            TableCandHasPhrase (char *strHZ);
 RECORD         *TableFindPhrase (char *strHZ);
 void            TableInsertPhrase (char *strCode, char *strHZ);
 char           *TableGetCandWord (int iIndex);

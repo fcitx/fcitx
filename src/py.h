@@ -165,6 +165,7 @@ void            PYResetFlags (void);
 void            PYCreateAuto (void);
 INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode);
 void		PYCreateCandString(void);
+void		PYGetCandText(int iIndex, char *strText);
 char           *PYGetCandWord (int iIndex);
 void            PYGetSymCandWords (SEARCH_MODE mode);
 Bool            PYAddSymCandWord (HZ * hz, SEARCH_MODE mode);
