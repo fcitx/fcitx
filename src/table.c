@@ -53,10 +53,10 @@ TABLE          *table;
 INT8            iTableIMIndex = 0;
 INT8            iTableCount;
 
-Bool            bTableDictLoaded = False;	//需要用的时候再读入码表
+Bool            bTableDictLoaded = False;	//Loads tables only if needed
 
 RECORD         *currentRecord = NULL, *recordHead = NULL;
-RECORD        **tableSingleHZ;	//记录码表中的单字，以提高自动词组的速度
+RECORD        **tableSingleHZ;			//Records the single characters in table to speed auto phrase
 unsigned int    iSingleHZCount;
 TABLECANDWORD   tableCandWord[MAX_CAND_WORD];
 
@@ -86,10 +86,10 @@ HOTKEYS         hkGetPY[HOT_KEY_COUNT] = { CTRL_ALT_E, 0 };
 
 INT8            iTableChanged = 0;
 INT8            iTableNewPhraseHZCount;
-Bool            bCanntFindCode;	//记录新组成的词能否生成五笔编码--一般情况下都是可以的
+Bool            bCanntFindCode;	//Records if new phrase has corresponding code - should be always false
 char           *strNewPhraseCode;
 
-SINGLE_HZ       hzLastInput[MAX_HZ_SAVED + PHRASE_MAX_LENGTH];	//记录最近输入的汉字
+SINGLE_HZ       hzLastInput[MAX_HZ_SAVED + PHRASE_MAX_LENGTH];	//Records last HZ input
 INT16           iHZLastInputCount = 0;
 Bool            bTablePhraseTips = False;
 
@@ -206,7 +206,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bTableExactMatch = False;
 	table[iTableIMIndex].bAutoPhrase = True;
 	table[iTableIMIndex].bAutoPhrasePhrase = True;
-	table[iTableIMIndex].iSaveAutoPhraseAfter = 1;
+	table[iTableIMIndex].iSaveAutoPhraseAfter = 0;
 	table[iTableIMIndex].iAutoPhrase = 4;
 	table[iTableIMIndex].bPromptTableCode = True;
 	table[iTableIMIndex].strSymbol[0] = '\0';
@@ -236,7 +236,7 @@ void LoadTableInfo (void)
 		    if (table[iTableIMIndex].strName[0] == '\0' || table[iTableIMIndex].strPath[0] == '\0') {
 			iTableCount = 0;
 			free (table);
-			fprintf (stderr, "第%d个码表配置文件有错，无法加载输入码表！\n", iTableIMIndex);
+			fprintf (stderr, "The config file of No.%d table errors!\n", iTableIMIndex);
 			return;
 		    }
 		}
@@ -347,7 +347,7 @@ Bool LoadTableDict (void)
 
     fpDict = fopen (strPath, "rb");
     if (!fpDict) {
-	fprintf (stderr, "无法打开码表文件: %s\n", strPath);
+	    fprintf (stderr, "Cannot load table file: %s\n", strPath);
 	return False;
     }
 
@@ -630,7 +630,7 @@ void SaveTableDict (void)
     strcat (strPathTemp, TEMP_FILE);
     fpDict = fopen (strPathTemp, "wb");
     if (!fpDict) {
-	fprintf (stderr, "无法创建码表文件: %s\n", strPathTemp);
+	    fprintf (stderr, "Cannot create table file: %s\n", strPathTemp);
 	return;
     }
 
@@ -763,7 +763,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			strTemp=GetPunc(strCodeInput[0]);
 			
 			if (table[iTableIMIndex].bTableAutoSendToClient && (iCodeInputCount == table[iTableIMIndex].iCodeLength)) {
-			    if (iCandWordCount == 1 && tableCandWord[0].flag) {	//如果只有一个候选词，则送到客户程序中
+			    if ((iCandWordCount == 1 && tableCandWord[0].flag) || (!tableCandWord[0].flag && !table[iTableIMIndex].iSaveAutoPhraseAfter)) {	//如果只有一个候选词，则送到客户程序中
 				strcpy (strStringGet, TableGetCandWord (0));
 				iCandWordCount = 0;
 				if (bIsInLegend)

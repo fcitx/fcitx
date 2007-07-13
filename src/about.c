@@ -69,8 +69,10 @@ extern Bool     bIsUtf8;
 Bool CreateAboutWindow (void)
 {
     strcpy (strTitle, AboutTitle);
-    strcpy (strTitle + strlen (AboutTitle), " ");
-    strcpy (strTitle + strlen (AboutTitle) + 2, FCITX_VERSION);
+    strcat (strTitle, " ");
+    strcat (strTitle, FCITX_VERSION);
+    strcat (strTitle, "-");
+    strcat (strTitle, USE_XFT);
 
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(AboutWindowColor.backColor)))
 	iBackPixel = AboutWindowColor.backColor.pixel;

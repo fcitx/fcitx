@@ -198,7 +198,7 @@ void CreatePYPhrase (void)
 	else
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
-    printf ("\n共读入 %d 个词组，成功转换 %d 个！\n正在写入词组文件……  ", s2, s1);
+//    printf ("\n共读入 %d 个词组，成功转换 %d 个！\n正在写入词组文件……  ", s2, s1);
 
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iHZCount; j++) {
@@ -281,7 +281,7 @@ void CreatePYBase (void)
     }
 
     fwrite (&iCount, sizeof (int), 1, fp1);
-    printf ("转换了 %d 个汉字，共 %d 组。\n正在保存拼音码表……", iIndex, iCount);
+//    printf ("转换了 %d 个汉字，共 %d 组。\n正在保存拼音码表……", iIndex, iCount);
     iAllCount = iIndex;
 
     pyList = head->next;
@@ -317,7 +317,6 @@ void CreatePYBase (void)
 	t = t->next;
     }
     s += iCount;
-    printf ("\nOK!\n\n");
 
     fclose (fp1);
     fclose (fps);

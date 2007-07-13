@@ -77,6 +77,7 @@ HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
 Bool            bLocked = True;
 Bool            bCompactMainWindow = False;
+Bool		bShowVK = True;
 
 extern Display *dpy;
 extern GC       dimGC;
@@ -194,8 +195,10 @@ void DisplayMainWindow (void)
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, iPos, 2, 15, 16);
 	iPos += 11;
 
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pVK, 0, 0, iPos, 2, 19, 16);
-	iPos += 23;
+	if ( bShowVK || !bCompactMainWindow ) {
+		XPutImage (dpy, mainWindow, mainWindowColor.backGC, pVK, 0, 0, iPos, 2, 19, 16);
+		iPos += 23;
+	}
 
 	iIndex = ConnectIDGetState (connect_id);
 	XClearArea (dpy, mainWindow, iPos, 2, MAINWND_WIDTH - iPos - 2, MAINWND_HEIGHT - 4, False);
@@ -251,8 +254,10 @@ void DisplayMainWindow (void)
 		iPos = 90;
 	    }
 	    iPos += 11;
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
-	    iPos += 21;
+	    if ( bShowVK || !bCompactMainWindow ) {
+	    	XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
+	    	iPos += 21;
+	    }
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
 	}
     }

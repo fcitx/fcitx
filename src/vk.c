@@ -254,6 +254,7 @@ Bool VKMouseKey (int x, int y)
 		xEvent.xkey.keycode = 22;
 		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
 		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		return True;
 	    }
 	    else {
 		iIndex = x / 24;
@@ -274,6 +275,7 @@ Bool VKMouseKey (int x, int y)
 		xEvent.xkey.keycode = 23;
 		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
 		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		return True;
 	    }
 	    else {
 		iIndex = 13 + (x - 38) / 24;
@@ -330,11 +332,13 @@ Bool VKMouseKey (int x, int y)
 		xEvent.xkey.keycode = 106;
 		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
 		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		return True;
 	    }
 	    else if (x >= 61 && x < 98) {	//DEL
 		xEvent.xkey.keycode = 107;
 		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
 		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		return True;
 	    }
 	    else if (x >= 99 && x < 270)	//¿Õ¸ñ
 		strcpy (strKey, "\xa1\xa1");

@@ -156,7 +156,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		if (iTempInputWindowX < 0)
 		    iTempInputWindowX = 0;
 		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+			iTempInputWindowX = iTempInputWindowX - iInputWindowWidth;
 		else
 		    iTempInputWindowX += 5;
 
@@ -188,7 +188,43 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
     icid = call_data->icid;
+    
+    
+    /* It seems this section is useless
+    if (bTrackCursor) {
+	    int             i;
+	    Window          window;
+	    XICAttribute   *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
 
+	    for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
+		    if (!strcmp (XNSpotLocation, pre_attr->name)) {
+			    if (CurrentIC->focus_win)
+				    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+			    else if (CurrentIC->client_win)
+			            XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+			    else
+				    return True;
+
+			    if (iTempInputWindowX < 0)
+				    iTempInputWindowX = 0;
+			    else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+				    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+			    else
+				    iTempInputWindowX += 5;
+
+			    if (iTempInputWindowY < 0)
+				    iTempInputWindowY = 0;
+			    else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
+				    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
+
+			    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+
+			    ConnectIDSetTrackCursor (call_data->connect_id, True);
+		    }
+	    }
+	} */
+    /* ************************************************************************ */
+    
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
@@ -208,8 +244,11 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
-    else
+    else {
+	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
 	DisplayMainWindow ();
+    }
 
     lastConnectID = connect_id;
     /*if (bLumaQQ && ConnectIDGetReset (connect_id)) {
@@ -573,7 +612,7 @@ IME_STATE ConnectIDGetState (CARD16 connect_id)
     return IS_CLOSED;
 }
 
-/*��֧�umaqq
+/*New Lumaqq need not be supported specially
 Bool ConnectIDGetReset (CARD16 connect_id)
 {
     CONNECT_ID     *temp;

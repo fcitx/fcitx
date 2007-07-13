@@ -104,6 +104,7 @@ extern Bool     bPhraseTips;
 extern SEMICOLON_TO_DO     semicolonToDo;
 extern Bool     bEngAfterCap;
 extern Bool     bShowUserSpeed;
+extern Bool	bShowVK;
 
 extern Bool     bFullPY;
 extern Bool     bDisablePagingInLegend;
@@ -279,6 +280,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
 	    hideMainWindow = (HIDE_MAINWINDOW) atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "显示虚拟键盘=")) {
+		pstr += 13;
+		bShowVK = atoi(pstr);
 	}
 	else if (MyStrcmp (pstr, "光标色=") && bMode) {
 	    pstr += 7;
@@ -658,6 +663,7 @@ void SaveConfig (void)
     fprintf (fp, "主窗口是否使用3D界面=%d\n", _3DEffectMainWindow);
     fprintf (fp, "输入条使用3D界面=%d\n", _3DEffectInputWindow);
     fprintf (fp, "主窗口隐藏模式=%d\n", (int) hideMainWindow);
+    fprintf (fp, "显示虚拟键盘=%d\n", (int) bShowVK);
     fprintf (fp, "是否自动隐藏输入条=%d\n", bAutoHideInputWindow);
     fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
     fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering );

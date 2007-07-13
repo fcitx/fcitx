@@ -1,3 +1,13 @@
+2006-06-07: Yuking <yuking_net@sohu.com>
+	   * 给了一个GTK程序光标跟随的临时解决方案：也许是GTK的问题（ubuntu 5.1测试）
+	   * 更新文档
+	   * src/table.c: 当自动词组保存次数设置为0时，自动词组将按一般词组处理（当候选字表中只有一个自动词组时，它会自动上屏）
+	   * 版本3.2
+
+2006-03-05: Yuking <yuking_net@sohu.com>
+	   * 简洁模式下，将虚拟键盘图标设置为可选
+	   * ……
+
 2006-01-08: Yuking <yukig_net@sohu.com>
 	   * src/ime.c: 修正无法输入半角分号的问题
 

@@ -353,7 +353,7 @@ void MyXEventHandler (XEvent * event)
 	    break;
 	}
 	if (event->xexpose.window == VKWindow) {
-	    DisplayVKWindow ();
+	    //DisplayVKWindow ();
 	    break;
 	}
 	if (event->xexpose.window == inputWindow) {

@@ -156,6 +156,7 @@ extern Bool     bVK;
 extern int      MAINWND_WIDTH;
 extern Bool     bLocked;
 extern Bool     bCompactMainWindow;
+extern Bool	bShowVK;
 
 extern INT8     iTableChanged;
 extern INT8     iNewPYPhraseCount;
@@ -623,7 +624,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 				CreateFont ();
 				CalculateInputWindowHeight ();
-
 				FreeQuickPhrase();
 				LoadQuickPhrase();
 				retVal = IRV_DO_NOTHING;
@@ -877,6 +877,9 @@ void SwitchIM (INT8 index)
 #else
     MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName, fontSetMainWindow) + 4;
 #endif
+    if ( !bShowVK && bCompactMainWindow )
+    	MAINWND_WIDTH -= 24;
+    	
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
 
     DisplayMainWindow ();

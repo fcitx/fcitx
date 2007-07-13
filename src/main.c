@@ -141,5 +141,5 @@ void Usage ()
 
 void Version ()
 {
-    printf ("fcitx version: %s\n", FCITX_VERSION);
+    printf ("fcitx version: %s-%s\n", FCITX_VERSION,USE_XFT);
 }

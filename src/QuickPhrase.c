@@ -59,10 +59,10 @@ void LoadQuickPhrase(void)
     fp = fopen (strPath, "rt");
     if (!fp)
 	return;
-    
+
     quickPhrase=quickPhraseHead=(QUICK_PHRASE *)malloc(sizeof(QUICK_PHRASE));
     quickPhraseHead->prev=NULL;
-    
+
     for (;;) {
 	if (EOF==fscanf (fp, "%s", strCode))
 	    break;
@@ -78,21 +78,24 @@ void LoadQuickPhrase(void)
 	quickPhrase=tempQuickPhrase;
     }
     quickPhrase->next=NULL;
-    
+
     fclose(fp);
 }
 
 void FreeQuickPhrase(void)
 {
     QUICK_PHRASE *tempQuickPhrase,*quickPhrase;
-    
+
+    if ( !quickPhraseHead )
+	return;
+
     quickPhrase=quickPhraseHead->next;
     while (quickPhrase) {
 	tempQuickPhrase=quickPhrase->next;
 	free(quickPhrase);
 	quickPhrase=tempQuickPhrase;
     }
-    
+
     free(quickPhraseHead);
     quickPhraseHead = NULL;
 }

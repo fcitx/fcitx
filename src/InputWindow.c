@@ -25,7 +25,7 @@
 #include "InputWindow.h"
 
 #include <string.h>
-#include <version.h>
+#include "version.h"
 #include <time.h>
 
 #ifdef _USE_XFT
@@ -261,7 +261,7 @@ void DisplayMessage (void)
     if (!uMessageUp && !uMessageDown) {
 	bShowCursor = False;
 	uMessageUp = 1;
-	strcpy (messageUp[0].strMsg, "小企鹅中文输入法 (FCITX) V");
+	strcpy (messageUp[0].strMsg, "FCITX V");
 	strcat (messageUp[0].strMsg, FCITX_VERSION);
 	messageUp[0].type = MSG_TIPS;
 
@@ -287,11 +287,9 @@ void DisplayMessage (void)
 	    messageDown[5].type = MSG_CODE;
 	}
 	else {
-	    uMessageDown = 2;
-	    strcpy (messageDown[0].strMsg, "欢迎访问");
-	    messageDown[0].type = MSG_OTHER;
-	    strcpy (messageDown[1].strMsg, "http://www.fcitx.org");
-	    messageDown[1].type = MSG_CODE;
+	    uMessageDown = 1;
+	    strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
+	    messageDown[0].type = MSG_CODE;
 	}
     }
 
