@@ -212,7 +212,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	IMPreeditEnd (ims, (XPointer) call_data);
+	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
@@ -236,7 +236,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 */
-	IMPreeditStart (ims, (XPointer) call_data);
 	//有时不能输入的临时解决方案-执行一条IMForwardEvent
 	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }

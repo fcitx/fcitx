@@ -65,18 +65,18 @@ typedef struct _TABLE {
     unsigned int    iRecordCount;
     ADJUSTORDER     tableOrder;
 
-    Bool            bUsePY;				//使用拼音
-    INT8            iTableAutoSendToClient;		//自动上屏
+    Bool            bUsePY;	//使用拼音
+    INT8            iTableAutoSendToClient;	//自动上屏
     INT8            iTableAutoSendToClientWhenNone;	//空码自动上屏
-    Bool            bUseMatchingKey;			//是否模糊匹配
-    Bool            bAutoPhrase;			//是否自动造词
-    INT8            iSaveAutoPhraseAfter;		//选择N次后保存自动词组，0-不保存，1-立即保存
-    Bool            bAutoPhrasePhrase;			//词组是否参与造词
-    INT8            iAutoPhrase;			//自动造词长度
-    Bool            bTableExactMatch;			//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;			//输入完毕后是否提示编码
+    Bool            bUseMatchingKey;	//是否模糊匹配
+    Bool            bAutoPhrase;	//是否自动造词
+    INT8            iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
+    Bool            bAutoPhrasePhrase;	//词组是否参与造词
+    INT8            iAutoPhrase;	//自动造词长度
+    Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
+    Bool            bPromptTableCode;	//输入完毕后是否提示编码
 
-    Bool            bHasPinyin;				//标记该码表中是否有拼音
+    Bool            bHasPinyin;	//标记该码表中是否有拼音
 } TABLE;
 
 typedef struct _RECORD {
@@ -111,7 +111,7 @@ typedef struct _AUTOPHRASE {
 typedef union {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
-    char            strPYPhrase[PHRASE_MAX_LENGTH * 20 + 1];
+    char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
 } CANDWORD;
 
 typedef struct _TABLECANDWORD {
@@ -122,7 +122,7 @@ typedef struct _TABLECANDWORD {
 typedef enum {
     CT_NORMAL = 0,
     CT_AUTOPHRASE,
-    CT_PYPHRASE
+    CT_PYPHRASE			//临时拼音转换过来的候选字/词
 } CANDTYPE;
 
 void            LoadTableInfo (void);

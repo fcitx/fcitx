@@ -293,6 +293,9 @@ int main (int argc, char *argv[])
 		break;
 	}
     }
+    
+    if (iPYCodeLength < iCodeLength)
+	iPYCodeLength = iCodeLength;
 
     if (!strstr (pstr, "[Êý¾Ý]")) {
 	printf ("Source File Format Error!\n");
@@ -411,6 +414,7 @@ int main (int argc, char *argv[])
 
     fwrite (&s, sizeof (unsigned int), 1, fpNew);
     current = head->next;
+
     while (current != head) {
 	fwrite (current->strCode, sizeof (char), iPYCodeLength + 1, fpNew);
 	s = strlen (current->strHZ) + 1;

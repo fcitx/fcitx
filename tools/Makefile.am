@@ -17,6 +17,7 @@ all:
 	./txt2mb $(srcdir)/../data/wbx.txt ../data/wbx.mb
 	./txt2mb $(srcdir)/../data/wanfeng.txt ../data/wanfeng.mb
 	./txt2mb $(srcdir)/../data/wbpy.txt ../data/wbpy.mb
+	./txt2mb $(srcdir)/../data/qxm.txt ../data/qxm.mb
 	./createPYMB $(srcdir)/../data/gbkpy.org $(srcdir)/../data/pyPhrase.org
 	mv *.mb ../data
 	rm -f pyERROR

@@ -1,7 +1,15 @@
+2007-07-02: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 修正了空码上屏的一个错误
+	   * src/table.c: 调整空码上屏的一个设置
+	   * 增加冰蝉全息码表
+	   
+2007-07-01: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 修正了码表/拼音混合输入中的一个大BUG
+	   
 2007-06-30: Yuking <yuking_net@sohu.com>
 	   * xpm/fullcorner.xpm: 使用wpyh@linuxsir修改过的图标
 	   * data/pyphrase.org: 修正读音哦lve的拼音错误(谢谢 邢东升dsdsdds AT １２６.ｃｏｍ)
-	   * 初步实现码表/拼音的混合输入
+	   * src/table.c: 初步实现码表/拼音的混合输入
 	   
 2007-06-28: Yuking <yuking_net@sohu.com>
 	   * data/erbi.txt: 使用了新的标准二笔码表（esixth提供）

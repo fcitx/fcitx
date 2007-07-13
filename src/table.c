@@ -344,6 +344,7 @@ Bool LoadTableDict (void)
     unsigned int    iTemp, iTempCount;
     char            cChar = 0, cTemp;
     INT8            iVersion = 1;
+    int             iRecordIndex;
 
 #ifdef _DEBUG
     fprintf (stderr, "LOAD Table Dict\n");
@@ -382,13 +383,11 @@ Bool LoadTableDict (void)
     table[iTableIMIndex].strInputCode = (char *) malloc (sizeof (char) * (iTemp + 1));
     fread (table[iTableIMIndex].strInputCode, sizeof (char), iTemp + 1, fpDict);
     /*
-     * 建立索引
+     * 建立索引，加26是为了为拼音编码预留空间
      */
-    recordIndex = (RECORD_INDEX *) malloc (strlen (table[iTableIMIndex].strInputCode) * sizeof (RECORD_INDEX));
-    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++) {
-	recordIndex[iTemp].cCode = table[iTableIMIndex].strInputCode[iTemp];
+    recordIndex = (RECORD_INDEX *) malloc ((strlen (table[iTableIMIndex].strInputCode) + 26) * sizeof (RECORD_INDEX));
+    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode) + 26; iTemp++)
 	recordIndex[iTemp].record = NULL;
-    }
     /* ********************************************************************** */
 
     fread (&(table[iTableIMIndex].iCodeLength), sizeof (unsigned char), 1, fpDict);
@@ -430,6 +429,7 @@ Bool LoadTableDict (void)
     for (i = 0; i < SINGLE_HZ_COUNT; i++)
 	tableSingleHZ[i] = (RECORD *) NULL;
 
+    iRecordIndex = 0;
     for (i = 0; i < table[iTableIMIndex].iRecordCount; i++) {
 	fread (strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 	fread (&iTemp, sizeof (unsigned int), 1, fpDict);
@@ -455,10 +455,9 @@ Bool LoadTableDict (void)
 	/* 建立索引 */
 	if (cChar != recTemp->strCode[0]) {
 	    cChar = recTemp->strCode[0];
-	    iTemp = 0;
-	    while (cChar != recordIndex[iTemp].cCode)
-		iTemp++;
-	    recordIndex[iTemp].record = recTemp;
+	    recordIndex[iRecordIndex].cCode = cChar;
+	    recordIndex[iRecordIndex].record = recTemp;
+	    iRecordIndex++;
 	}
 	/* **************************************************************** */
 	/** 为单字生成一个表   */
@@ -902,9 +901,10 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 			    return IRV_DISPLAY_CANDWORDS;
 			}
-			else if (table[iTableIMIndex].iTableAutoSendToClientWhenNone && (iCodeInputCount > table[iTableIMIndex].iTableAutoSendToClientWhenNone) && !iCandWordCount) {
+			else if (table[iTableIMIndex].iTableAutoSendToClientWhenNone && (iCodeInputCount == (table[iTableIMIndex].iTableAutoSendToClientWhenNone + 1)) && !iCandWordCount) {
 			    strCodeInput[iCodeInputCount - 1] = '\0';
 			    TableGetCandWords (SM_FIRST);
+
 			    if (iCandWordCount) {
 				strcpy (strStringGet, TableGetCandWord (0));
 				retVal = IRV_GET_CANDWORDS_NEXT;
@@ -917,18 +917,29 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 				TableGetCandWords (SM_FIRST);
 			    }
 			    else {
-				strCodeInput[iCodeInputCount] = '\0';
-				retVal = IRV_GET_CANDWORDS;
+				strCodeInput[0] = iKey;
+				strCodeInput[1] = '\0';
+				iCodeInputCount = 1;
+				TableGetCandWords (SM_FIRST);
+				retVal = IRV_DISPLAY_CANDWORDS;
 			    }
 			}
-			else if (iCodeInputCount >= table[iTableIMIndex].iTableAutoSendToClient) {
+			else if (table[iTableIMIndex].iTableAutoSendToClient && (iCodeInputCount >= table[iTableIMIndex].iTableAutoSendToClient)) {
 			    if (iCandWordCount == 1 && (tableCandWord[0].flag != CT_AUTOPHRASE || (tableCandWord[0].flag == CT_AUTOPHRASE && !table[iTableIMIndex].iSaveAutoPhraseAfter))) {	//如果只有一个候选词，则送到客户程序中
-				strcpy (strStringGet, TableGetCandWord (0));
-				iCandWordCount = 0;
-				if (bIsInLegend)
-				    retVal = IRV_GET_LEGEND;
-				else
-				    retVal = IRV_GET_CANDWORDS;
+				retVal = IRV_DO_NOTHING;
+				if (tableCandWord[0].flag == CT_NORMAL) {
+				    if (tableCandWord[0].candWord.record->bPinyin)
+					retVal = IRV_DISPLAY_CANDWORDS;
+				}
+
+				if (retVal != IRV_DISPLAY_CANDWORDS) {
+				    strcpy (strStringGet, TableGetCandWord (0));
+				    iCandWordCount = 0;
+				    if (bIsInLegend)
+					retVal = IRV_GET_LEGEND;
+				    else
+					retVal = IRV_GET_CANDWORDS;
+				}
 			    }
 			}
 			else if ((iCodeInputCount == 1) && strTemp && !iCandWordCount) {	//如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
@@ -1235,7 +1246,6 @@ char           *TableGetCandWord (int iIndex)
     if (bUseLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
-
 #warning **********************************************************
 #warning FIX ME!
 #warning **********************************************************
@@ -2242,7 +2252,6 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 
     if (iLegendCandWordCount != iMaxCandWord)
 	iLegendCandWordCount++;
-
 }
 
 char           *TableGetLegendCandWord (int iIndex)
