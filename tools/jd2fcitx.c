@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     int s;
     
     if ( argc!=2 ) {
-	fprintf(stderr,"Usage: jd2fcitx <Âë±íÎÄ¼ş>\n");
+	fprintf(stderr,"Usage: jd2fcitx <source file>\n");
 	return -1;
     }
     

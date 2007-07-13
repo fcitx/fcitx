@@ -622,7 +622,7 @@ void SaveTableDict (void)
     unsigned int    iTemp;
     unsigned int    i;
 
-    //先将码表保存在一个临时文件中，如杲保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
+    //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
     strcpy (strPathTemp, (char *) getenv ("HOME"));
     strcat (strPathTemp, "/.fcitx/");
     if (access (strPathTemp, 0))

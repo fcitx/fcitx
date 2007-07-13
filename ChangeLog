@@ -1,3 +1,14 @@
+2006-06-22: Yuking <yuking_net@sohu.com>
+	   * tools/txt2mb.c: 修正生成码表的一个排序错误
+	   * src/ui.c: 当虚拟键盘打开时，按右键可能会导致界面显示错误
+	   * 版本3.2.1
+	   
+2006-06-18: Yuking <yuking_net@sohu.com>
+	   * 替换新的五笔码表（来自kardinal@linuxsir）
+	   * src/MyErrorsHandlers.c: 去掉了X的错误信息，没有什么用
+	   * src/ime.c: 修正单独指定双拼不生效的问题
+	   * src/ime.c, src/MyErrorsHandlers.c: 修正重新读入配置的一个顺序错误
+
 2006-06-07: Yuking <yuking_net@sohu.com>
 	   * 给了一个GTK程序光标跟随的临时解决方案：也许是GTK的问题（ubuntu 5.1测试）
 	   * 更新文档

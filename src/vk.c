@@ -40,7 +40,7 @@
 Window          VKWindow;
 WINDOW_COLOR    VKWindowColor = { NULL, NULL, {0, 220 << 8, 220 << 8, 220 << 8}
 };
-MESSAGE_COLOR   VKWindowAlphaColor = { NULL, {0, 80<<8, 0, 0}
+MESSAGE_COLOR   VKWindowAlphaColor = { NULL, {0, 80 << 8, 0, 0}
 };
 MESSAGE_COLOR   VKWindowFontColor = { NULL, {0, 0, 0, 0}
 };
@@ -52,7 +52,7 @@ unsigned char   iCurrentVK = 0;
 unsigned char   iVKCount = 0;
 
 VKS             vks[VK_MAX];
-char            vkTable[VK_NUMBERS+1] = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
+char            vkTable[VK_NUMBERS + 1] = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
 
 char            strCharTable[] = "`~1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|;:'\",<.>/?";	//用于转换上/下档键
 
@@ -80,7 +80,7 @@ extern IC      *CurrentIC;
 extern CARD16   connect_id;
 extern CARD16   icid;
 extern XIMS     ims;
-extern uint	iHZInputed;
+extern uint     iHZInputed;
 
 Bool CreateVKWindow (void)
 {
@@ -93,7 +93,7 @@ Bool CreateVKWindow (void)
 
     sprintf (strVKWindowXPMBackColor, "@\tc #%2x%2x%2x", VKWindowColor.backColor.red >> 8, VKWindowColor.backColor.green >> 8, VKWindowColor.backColor.blue >> 8);
     sprintf (strVKWindowAlphaXPMColor, "-\tc #%2x%2x%2x", VKWindowAlphaColor.color.red >> 8, VKWindowAlphaColor.color.green >> 8, VKWindowAlphaColor.color.blue >> 8);
-                        
+
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(VKWindowColor.backColor)))
 	iBackPixel = VKWindowColor.backColor.pixel;
     else

@@ -97,6 +97,8 @@ extern int      MAINWND_WIDTH;
 extern Bool     bCompactMainWindow;
 extern INT8     iIMIndex;
 extern CARD16   connect_id;
+extern Bool     bShowVK;
+extern Bool     bVK;
 
 //added by yunfan
 extern Window   aboutWindow;
@@ -425,10 +427,15 @@ void MyXEventHandler (XEvent * event)
 		}
 		if (IsInBox (event->xbutton.x, event->xbutton.y, iPos, 1, iPos + 10, 19))
 		    ChangeLock ();
-		else if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 11, 1, iPos + 30, 19))
-		    SwitchVK ();
-		else if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 31, 1, MAINWND_WIDTH, 19))
-		    SwitchIM (-1);
+		else {
+		    if (bShowVK || !bCompactMainWindow) {
+			if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 11, 1, iPos + 30, 19))
+			    SwitchVK ();
+			iPos += 20;
+		    }
+		    if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 11, 1, MAINWND_WIDTH, 19))
+			SwitchIM (-1);
+		}
 		break;
 		//added by yunfan
 	    case Button2:
@@ -436,8 +443,10 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		bCompactMainWindow = !bCompactMainWindow;
-		SwitchIM (iIMIndex);
+		if (!bVK) {
+		    bCompactMainWindow = !bCompactMainWindow;
+		    SwitchIM (iIMIndex);
+		}
 		break;
 	    }
 	}

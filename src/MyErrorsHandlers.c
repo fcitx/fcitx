@@ -60,8 +60,8 @@ void OnException (int signo)
     fprintf (stdout, "\nFCITX -- Get Signal No.: %d\n", signo);
 
     if (signo == SIGHUP) {
-	SetIM ();
 	LoadConfig (False);
+	SetIM ();	
 /*
 	if (bLumaQQ)
 	    ConnectIDResetReset ();*/
@@ -86,11 +86,12 @@ void SetMyXErrorHandler (void)
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
+    /*这个错误信息没有任何用处，去掉好了
     char            str[256];
 
     XGetErrorText (dpy, event->error_code, str, 255);
     fprintf (stdout, "fcitx: %s\n", str);
-
+    */
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
 

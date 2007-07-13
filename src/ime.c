@@ -70,7 +70,7 @@ Bool            bLastIsNumber = False;	//上一次输入是不是阿拉伯数字
 INT8            iInCap = 0;	//是不是处于大写后的英文状态,0--不，1--按下大写键，2--按下分号键
 Bool            bAutoHideInputWindow = False;	//是否自动隐藏输入条
 Bool            bEngPuncAfterNumber = True;	//数字后面输出半角符号(只对'.'/','有效)
-Bool            bPhraseTips = False;
+Bool            bPhraseTips = True;
 INT8            lastIsSingleHZ = 0;
 
 SEMICOLON_TO_DO semicolonToDo = K_SEMICOLON_QUICKPHRASE;
@@ -105,7 +105,7 @@ Bool            bIsInLegend = False;
 
 INT8            iIMIndex = 0;
 Bool            bUsePinyin = True;
-Bool            bUseSP = False;
+Bool            bUseSP = True;
 Bool            bUseQW = True;
 Bool            bUseTable = True;
 
@@ -616,8 +616,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    retVal = IRV_DONOT_PROCESS;
 			    }
 			    else if (iKey == CTRL_5) {
-				SetIM ();
 				LoadConfig (False);
+				SetIM ();				
 
 				/*if (bLumaQQ)
 				    ConnectIDResetReset ();*/
@@ -884,6 +884,9 @@ void SwitchIM (INT8 index)
 
     DisplayMainWindow ();
 
+    if (im[iIMIndex].Init)
+	    im[iIMIndex].Init ();
+
     if (iIMCount == 1)
 	return;
 
@@ -894,9 +897,6 @@ void SwitchIM (INT8 index)
     XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
-
-    if (im[iIMIndex].Init)
-	im[iIMIndex].Init ();
 }
 
 void DoPhraseTips (void)
