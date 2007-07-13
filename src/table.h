@@ -30,7 +30,7 @@
 #define MAX_CODE_LENGTH  12
 #define PHRASE_MAX_LENGTH 10
 #define FH_MAX_LENGTH  10
-#define TABLE_AUTO_SAVE_AFTER 256
+#define TABLE_AUTO_SAVE_AFTER 1024
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> е§ађ   0 --> Фцађ

@@ -26,6 +26,7 @@
 
 #include <string.h>
 #include <version.h>
+#include <time.h>
 
 #ifdef _USE_XFT
 #include <ft2build.h>
@@ -46,6 +47,7 @@ int             iInputWindowY = INPUTWND_STARTY;
 int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
+uint            iFixedInputWindowWidth = 400;
 uint            iInputWindowWidth = INPUTWND_WIDTH;
 uint            iInputWindowUpWidth = INPUTWND_WIDTH;
 uint            iInputWindowDownWidth = INPUTWND_WIDTH;
@@ -68,14 +70,10 @@ MESSAGE_COLOR   cursorColor = { NULL, {0, 92 << 8, 210 << 8, 131 << 8} };
 
 // *************************************************************
 MESSAGE         messageUp[32];	//输入条上部分显示的内容
-
-// *************************************************************
 uint            uMessageUp = 0;
 
 // *************************************************************
 MESSAGE         messageDown[32];	//输入条下部分显示的内容
-
-// *************************************************************
 uint            uMessageDown = 0;
 
 XImage         *pNext = NULL, *pPrev = NULL;
@@ -104,6 +102,11 @@ extern XFontSet fontSet;
 
 extern GC       dimGC;
 extern GC       lightGC;
+
+extern Bool     bStartRecordType;
+extern Bool     bShowUserSpeed;
+extern time_t   timeStart;
+extern uint     iHZInputed;
 
 Bool CreateInputWindow (void)
 {
@@ -254,19 +257,44 @@ void DisplayMessage (void)
     XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
     XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
-    if (!uMessageUp && !uMessageDown ) {
+    if (!uMessageUp && !uMessageDown) {
 	bShowCursor = False;
 	uMessageUp = 1;
 	strcpy (messageUp[0].strMsg, "小企鹅中文输入法 (FCITX) V");
 	strcat (messageUp[0].strMsg, FCITX_VERSION);
 	messageUp[0].type = MSG_TIPS;
 
-	uMessageDown = 1;
-	strcpy (messageDown[0].strMsg, "CopyRight: Yuking (yuking_net@sohu.com)");
-	messageDown[0].type = MSG_CODE;
+	if (bStartRecordType && bShowUserSpeed) {
+	    double          timePassed;
+
+	    timePassed = difftime (time (NULL), timeStart);
+	    if (((int) timePassed) == 0)
+		timePassed = 1.0;
+
+	    uMessageDown = 6;
+	    strcpy (messageDown[0].strMsg, "打字速度：");
+	    messageDown[0].type = MSG_OTHER;
+	    sprintf (messageDown[1].strMsg, "%d", (int) (iHZInputed * 60 / timePassed));
+	    messageDown[1].type = MSG_CODE;
+	    strcpy (messageDown[2].strMsg, "/分  用时：");
+	    messageDown[2].type = MSG_OTHER;
+	    sprintf (messageDown[3].strMsg, "%d", (int) timePassed);
+	    messageDown[3].type = MSG_CODE;
+	    strcpy (messageDown[4].strMsg, "秒  字数：");
+	    messageDown[4].type = MSG_OTHER;
+	    sprintf (messageDown[5].strMsg, "%u", iHZInputed);
+	    messageDown[5].type = MSG_CODE;
+	}
+	else {
+	    uMessageDown = 2;
+	    strcpy (messageDown[0].strMsg, "欢迎访问 ");
+	    messageDown[0].type = MSG_OTHER;
+	    strcpy (messageDown[1].strMsg, "http://www.fcitx.org");
+	    messageDown[1].type = MSG_CODE;
+	}
     }
 
-    iInputWindowUpWidth = 0;
+    iInputWindowUpWidth = 2 * INPUTWND_START_POS_UP + 1;
     for (i = 0; i < uMessageUp; i++) {
 #ifdef _USE_XFT
 	p1 = messageUp[i].strMsg;
@@ -301,13 +329,12 @@ void DisplayMessage (void)
 #endif
     }
 
-    iInputWindowUpWidth += 2 * INPUTWND_START_POS_UP + 1;
     if (bShowPrev)
 	iInputWindowUpWidth += 16;
     else if (bShowNext)
 	iInputWindowUpWidth += 8;
 
-    iInputWindowDownWidth = 0;
+    iInputWindowDownWidth = 2 * INPUTWND_START_POS_DOWN + 1;
     for (i = 0; i < uMessageDown; i++) {
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
@@ -341,7 +368,6 @@ void DisplayMessage (void)
 	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, fontSet);
 #endif
     }
-    iInputWindowDownWidth += 2 * INPUTWND_START_POS_DOWN + 1;
 
     if (iInputWindowUpWidth < iInputWindowDownWidth)
 	iInputWindowWidth = iInputWindowDownWidth;
@@ -350,6 +376,10 @@ void DisplayMessage (void)
 
     if (iInputWindowWidth < INPUTWND_WIDTH)
 	iInputWindowWidth = INPUTWND_WIDTH;
+    if (iFixedInputWindowWidth) {
+	if (iInputWindowWidth < iFixedInputWindowWidth)
+	    iInputWindowWidth = iFixedInputWindowWidth;
+    }
 
     XGetWindowAttributes (dpy, inputWindow, &wa);
     if ((wa.x + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
@@ -370,6 +400,7 @@ void DisplayMessage (void)
 	    iInputWindowX = 0;
 	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
+
     XResizeWindow (dpy, inputWindow, iInputWindowWidth, iInputWindowHeight);
 
     DisplayMessageUp ();

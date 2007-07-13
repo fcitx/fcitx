@@ -1,3 +1,21 @@
+2005-10-09: Yuking <yukig_net@sohu.com>
+	   * 使用来自linuxfans上的极点二笔码表
+	   
+2005-9-23: Yuking <yukig_net@sohu.com>
+	   * 为码表输入法增加固定输入条的功能，为拼音增加要麻烦一些，因此暂时不做了
+
+2005-9-10: Yuking <yukig_net@sohu.com>
+	   * 修改字体将不必再重新启动，按ctrl_5即可
+	   * 修正编译不成功的问题
+	   * 3.2-050910
+	   
+2005-9-9: Yuking <yukig_net@sohu.com>
+	   * 增加粗略计算打字速度的功能
+
+2005-9-7: Yuking <yukig_net@sohu.com>
+	   * src/vk.c:修正一个重要的内存溢出问题
+	   * 增加yunfan@linuxfans的关于窗口
+	   
 2005-8-27: Yuking <yukig_net@sohu.com>
 	   * src/vk.c:完善虚拟键盘功能
 	   * src/table.c:更改反查拼音的方式

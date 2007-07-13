@@ -42,10 +42,16 @@
 #include "punc.h"
 #include "py.h"
 #include "sp.h"
+#include "about.h"
+
+#ifndef CODESET
+#define CODESET 14
+#endif
 
 extern Display *dpy;
 extern Window   inputWindow;
 extern Window   mainWindow;
+extern Window   aboutWindow;
 
 extern Bool     bBackground;
 extern Bool     bIsUtf8;
@@ -85,13 +91,13 @@ int main (int argc, char *argv[])
     CalculateInputWindowHeight ();
     LoadProfile ();
 
-    if (!LoadPuncDict ())
-	printf ("Can't open Chinese punc file!\n");
+    LoadPuncDict ();
 
     CreateMainWindow ();
     InitGC (mainWindow);
     CreateVKWindow ();
-    CreateInputWindow ();
+    CreateInputWindow ();    
+    CreateAboutWindow ();
 
     SetIM ();
 

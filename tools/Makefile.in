@@ -128,6 +128,7 @@ X_LIBS = @X_LIBS@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
+ac_pt_PKG_CONFIG = @ac_pt_PKG_CONFIG@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__include = @am__include@
@@ -227,17 +228,12 @@ clean-binPROGRAMS:
 createPYMB$(EXEEXT): $(createPYMB_OBJECTS) $(createPYMB_DEPENDENCIES) 
 	@rm -f createPYMB$(EXEEXT)
 	$(LINK) $(createPYMB_LDFLAGS) $(createPYMB_OBJECTS) $(createPYMB_LDADD) $(LIBS)
-	./createPYMB $(srcdir)/../data/gbkpy.org $(srcdir)/../data/pyPhrase.org
-	@mv pybase.mb pyphrase.mb $(srcdir)/../data/
 mb2txt$(EXEEXT): $(mb2txt_OBJECTS) $(mb2txt_DEPENDENCIES) 
 	@rm -f mb2txt$(EXEEXT)
 	$(LINK) $(mb2txt_LDFLAGS) $(mb2txt_OBJECTS) $(mb2txt_LDADD) $(LIBS)
 txt2mb$(EXEEXT): $(txt2mb_OBJECTS) $(txt2mb_DEPENDENCIES) 
 	@rm -f txt2mb$(EXEEXT)
 	$(LINK) $(txt2mb_LDFLAGS) $(txt2mb_OBJECTS) $(txt2mb_LDADD) $(LIBS)
-	./txt2mb $(srcdir)/../data/wbx.txt ../data/wbx.mb
-	./txt2mb $(srcdir)/../data/erbi.txt ../data/erbi.mb
-	./txt2mb $(srcdir)/../data/cj.txt ../data/cj.mb
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -430,6 +426,12 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 	mostlyclean-generic pdf pdf-am ps ps-am tags uninstall \
 	uninstall-am uninstall-binPROGRAMS uninstall-info-am
 
+
+all: 
+	./txt2mb ../data/cj.txt ../data/cj.mb
+	./txt2mb ../data/erbi.txt ../data/erbi.mb
+	./txt2mb ../data/wbx.txt ../data/wbx.mb
+	./createPYMB ../data/gbkpy.org ../data/pyPhrase.org && mv *.mb ../data && rm -f pyERROR ; rm -f pyPhrase.ok
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

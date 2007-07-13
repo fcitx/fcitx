@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include <ctype.h>
+#include <time.h>
 
 #ifdef _USE_XFT
 #include <ft2build.h>
@@ -60,13 +61,13 @@ char            strStringGet[MAX_USER_INPUT + 1];	//保存输入法返回的需要送到客户
 
 ENTER_TO_DO     enterToDo = K_ENTER_SEND;
 
-Bool            bCorner = False;		//全半角切换
-Bool            bChnPunc = True;		//中英文标点切换
-Bool            bUseGBK = False;		//是否支持GBK
-Bool            bIsDoInputOnly = False;		//表明是否只由输入法来处理键盘
-Bool            bLastIsNumber = False;		//上一次输入是不是阿拉伯数字
-Bool            bInCap = False;			//是不是处于大写后的英文状态
-Bool            bAutoHideInputWindow = True;	//是否自动隐藏输入条
+Bool            bCorner = False;	//全半角切换
+Bool            bChnPunc = True;	//中英文标点切换
+Bool            bUseGBK = False;	//是否支持GBK
+Bool            bIsDoInputOnly = False;	//表明是否只由输入法来处理键盘
+Bool            bLastIsNumber = False;	//上一次输入是不是阿拉伯数字
+INT8            iInCap = 0;	//是不是处于大写后的英文状态,0--不，1--按下大写键，2--按下分号键
+Bool            bAutoHideInputWindow = False;	//是否自动隐藏输入条
 Bool            bEngPuncAfterNumber = True;	//数字后面输出半角符号(只对'.'/','有效)
 Bool            bPhraseTips = False;
 INT8            lastIsSingleHZ = 0;
@@ -78,10 +79,11 @@ Bool            bDisablePagingInLegend = True;
 
 Bool            bVK = False;
 
-int             i2ndSelectKey = 0;		//第二个候选词选择键，为扫描码
-int             i3rdSelectKey = 0;		//第三个候选词选择键，为扫描码
+int             i2ndSelectKey = 0;	//第二个候选词选择键，为扫描码
+int             i3rdSelectKey = 0;	//第三个候选词选择键，为扫描码
 
 Time            lastKeyPressedTime;
+unsigned int    iTimeInterval = 250;
 
 KEY_RELEASED    keyReleased = KR_OTHER;
 Bool            bDoubleSwitchKey = False;
@@ -93,8 +95,8 @@ HOTKEYS         hkGBK[HOT_KEY_COUNT] = { CTRL_M, 0 };
 HOTKEYS         hkLegend[HOT_KEY_COUNT] = { CTRL_L, 0 };
 HOTKEYS         hkCorner[HOT_KEY_COUNT] = { SHIFT_SPACE, 0 };	//全半角切换
 HOTKEYS         hkPunc[HOT_KEY_COUNT] = { ALT_SPACE, 0 };	//中文标点
-HOTKEYS         hkNextPage[HOT_KEY_COUNT] = { '.', 0 };		//下一页
-HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };		//上一页
+HOTKEYS         hkNextPage[HOT_KEY_COUNT] = { '.', 0 };	//下一页
+HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };	//上一页
 HOTKEYS         hkTrack[HOT_KEY_COUNT] = { CTRL_K, 0 };
 
 Bool            bUseLegend = False;
@@ -108,6 +110,14 @@ Bool            bUseTable = True;
 
 Bool            bLumaQQ = False;
 Bool            bPointAfterNumber = False;
+
+/* 计算打字速度 */
+time_t          timeStart;
+Bool            bStartRecordType;
+Bool            bShowUserSpeed = True;
+uint            iHZInputed = 0;
+
+/* ************************ */
 
 //++++++++++++++++++++++++++++++++++++++++
 /*
@@ -187,7 +197,7 @@ void ResetInput (void)
     bShowNext = False;
 
     bIsInLegend = False;
-    bInCap = False;
+    iInCap = 0;
 
     if (IsIM (NAME_OF_PINYIN))
 	bSingleHZMode = False;
@@ -233,6 +243,32 @@ void ChangeIMState (IMForwardEventStruct * call_data)
 
     if (hideMainWindow != HM_HIDE)
 	DisplayMainWindow ();
+}
+
+/*
+ * 转换strStringGet中的标点为中文标点
+ */
+void ConvertPunc (void)
+{
+    char            strTemp[MAX_USER_INPUT + 1] = "\0";
+    char           *s1, *s2, *pPunc;
+
+    s1 = strTemp;
+    s2 = strStringGet;
+
+    while (*s2) {
+	pPunc = GetPunc (*s2);
+	if (pPunc) {
+	    strcat (s1, pPunc);
+	    s1 += strlen (pPunc);
+	}
+	else
+	    *s1++ = *s2;
+	s2++;
+    }
+    *s2 = '\0';
+
+    strcpy (strStringGet, strTemp);
 }
 
 //FILE           *fd;
@@ -340,7 +376,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    if (kev->keycode != switchKey)
 		keyReleased = KR_OTHER;
 	    else {
-		if ((keyReleased == KR_CTRL) && (kev->time - lastKeyPressedTime < 250) && bDoubleSwitchKey)
+		if ((keyReleased == KR_CTRL) && (kev->time - lastKeyPressedTime < iTimeInterval) && bDoubleSwitchKey)
 		    ChangeIMState (call_data);
 	    }
 
@@ -388,7 +424,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    retVal = IRV_TO_PROCESS;
 		    }
 		    else {
-			if (!bInCap && !bCorner) {
+			if (!iInCap && !bCorner) {
 			    retVal = im[iIMIndex].DoInput (iKey);
 			    if (!IsIM (NAME_OF_PINYIN) && !IsIM (NAME_OF_SHUANGPIN))
 				iCursorPos = iCodeInputCount;
@@ -406,19 +442,21 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				retVal = IRV_GET_CANDWORDS;
 			    }
 			    else if (iKey >= 'A' && iKey <= 'Z' && bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
-				bInCap = True;
+				iInCap = 1;
 				if (!bIsInLegend && iCandWordCount) {
 				    pstr = im[iIMIndex].GetCandWord (0);
 				    iCandWordCount = 0;
 				    if (pstr) {
 					strcpy (strStringGet, pstr);
+					//粗略统计字数
+					iHZInputed += (int) (strlen (strStringGet) / 2);
 					SendHZtoClient (call_data, strStringGet);
 					iCodeInputCount = 0;
 				    }
 				}
 			    }
 			    else if (iKey == ';' && bEngAfterSemicolon && !iCodeInputCount)
-				bInCap = True;
+				iInCap = 2;
 			    else if (IsHotKey (iKey, hkCorner))
 				retVal = ChangeCorner ();
 			    else if (IsHotKey (iKey, hkPunc))
@@ -435,7 +473,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				retVal = ChangeTrack ();
 
 			    if (retVal == IRV_TO_PROCESS) {
-				if (bInCap) {
+				if (iInCap) {
 				    if (iKey == ' ') {
 					if (iCodeInputCount == 0)
 					    strcpy (strStringGet, "；");
@@ -443,7 +481,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    strcpy (strStringGet, strCodeInput);
 					retVal = IRV_ENG;
 					uMessageUp = uMessageDown = 0;
-					bInCap = False;
+					iInCap = 0;
 				    }
 				    else {
 					if (isprint (iKey) && iKey < 128) {
@@ -481,9 +519,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					messageDown[0].type = MSG_TIPS;
 				    }
 				}
-				else if ((bLastIsNumber && bEngPuncAfterNumber)
-					 && (iKey == '.' || iKey == ',')
-					 && !iCandWordCount) {
+				else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',') && !iCandWordCount) {
 				    retVal = IRV_TO_PROCESS;
 				    bLastIsNumber = False;
 				}
@@ -540,7 +576,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 			if (retVal == IRV_TO_PROCESS) {
 			    if (iKey == ESC) {
-				if (iCodeInputCount || bInCap || bIsInLegend)
+				if (iCodeInputCount || iInCap || bIsInLegend)
 				    retVal = IRV_CLEAN;
 				else
 				    retVal = IRV_DONOT_PROCESS;
@@ -552,17 +588,20 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				if (bLumaQQ)
 				    ConnectIDResetReset ();
 
+				CreateFont ();
+				CalculateInputWindowHeight ();
+
 				retVal = IRV_DO_NOTHING;
 			    }
 			    else if (iKey == ENTER) {
-				if (bInCap) {
+				if (iInCap) {
 				    if (bEngAfterSemicolon && !iCodeInputCount)
 					strcpy (strStringGet, ";");
 				    else
 					strcpy (strStringGet, strCodeInput);
 				    retVal = IRV_ENG;
 				    uMessageUp = uMessageDown = 0;
-				    bInCap = False;
+				    iInCap = 0;
 				}
 				else if (!iCodeInputCount)
 				    retVal = IRV_DONOT_PROCESS;
@@ -595,7 +634,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		retVal = IRV_DONOT_PROCESS;
 	}
     }
-    
+
     switch (retVal) {
     case IRV_DO_NOTHING:
 	break;
@@ -655,6 +694,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	break;
     case IRV_GET_LEGEND:
 	SendHZtoClient (call_data, strStringGet);
+	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	if (iLegendCandWordCount) {
 	    bShowNext = bShowPrev = False;
 	    if (iCurrentLegendCandPage > 0)
@@ -679,28 +719,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    DoPhraseTips ();
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
-	if (bChnPunc && bConvertPunc) {
-	    char            strTemp[MAX_USER_INPUT + 1] = "\0";
-	    char           *s1, *s2, *pPunc;
-
-	    s1 = strTemp;
-	    s2 = strStringGet;
-
-	    while (*s2) {
-		pPunc = GetPunc (*s2);
-		if (pPunc) {
-		    strcat (s1, pPunc);
-		    s1 += strlen (pPunc);
-		}
-		else
-		    *s1++ = *s2;
-		s2++;
-	    }
-	    *s2 = '\0';
-
-	    strcpy (strStringGet, strTemp);
-	}
+	if (bChnPunc && bConvertPunc)
+	    ConvertPunc ();
     case IRV_PUNC:
+	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 	if (bVK || (!(uMessageDown && retVal == IRV_GET_CANDWORDS)
 		    && bAutoHideInputWindow && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))))
@@ -708,8 +730,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	else
 	    DisplayInputWindow ();
     case IRV_GET_CANDWORDS_NEXT:
-	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1)
+	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
+	    iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	    DisplayInputWindow ();
+	}
 	SendHZtoClient (call_data, strStringGet);
 	bLastIsNumber = False;
 	lastIsSingleHZ = 0;
@@ -717,6 +741,13 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	break;
     default:
 	;
+    }
+
+    if (retVal == IRV_DISPLAY_MESSAGE || retVal == IRV_DISPLAY_CANDWORDS || retVal == IRV_PUNC) {
+	if (!bStartRecordType) {
+	    bStartRecordType = True;
+	    timeStart = time (NULL);
+	}
     }
 }
 

@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE RANLIB ac_ct_RANLIB LIBICONV LTLIBICONV CPP EGREP X_LIBS X_CFLAGS PKG_CONFIG XFT_CFLAGS XFT_LIBS HAVE_XFT_TRUE HAVE_XFT_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE RANLIB ac_ct_RANLIB LIBICONV LTLIBICONV CPP EGREP X_LIBS X_CFLAGS PKG_CONFIG ac_pt_PKG_CONFIG XFT_CFLAGS XFT_LIBS HAVE_XFT_TRUE HAVE_XFT_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -770,6 +770,18 @@ ac_env_CPP_set=${CPP+set}
 ac_env_CPP_value=$CPP
 ac_cv_env_CPP_set=${CPP+set}
 ac_cv_env_CPP_value=$CPP
+ac_env_PKG_CONFIG_set=${PKG_CONFIG+set}
+ac_env_PKG_CONFIG_value=$PKG_CONFIG
+ac_cv_env_PKG_CONFIG_set=${PKG_CONFIG+set}
+ac_cv_env_PKG_CONFIG_value=$PKG_CONFIG
+ac_env_XFT_CFLAGS_set=${XFT_CFLAGS+set}
+ac_env_XFT_CFLAGS_value=$XFT_CFLAGS
+ac_cv_env_XFT_CFLAGS_set=${XFT_CFLAGS+set}
+ac_cv_env_XFT_CFLAGS_value=$XFT_CFLAGS
+ac_env_XFT_LIBS_set=${XFT_LIBS+set}
+ac_env_XFT_LIBS_value=$XFT_LIBS
+ac_cv_env_XFT_LIBS_set=${XFT_LIBS+set}
+ac_cv_env_XFT_LIBS_value=$XFT_LIBS
 
 #
 # Report the --help message.
@@ -874,6 +886,9 @@ Some influential environment variables:
   CPPFLAGS    C/C++ preprocessor flags, e.g. -I<include dir> if you have
               headers in a nonstandard directory <include dir>
   CPP         C preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  XFT_CFLAGS  C compiler flags for XFT, overriding pkg-config
+  XFT_LIBS    linker flags for XFT, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -1621,7 +1636,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=fcitx
- VERSION=3.2-050827
+ VERSION=3.2-051010
 
 
 cat >>confdefs.h <<_ACEOF
@@ -3236,6 +3251,7 @@ with_gnu_ld=$acl_cv_prog_gnu_ld
 
 
 
+
                                                 echo "$as_me:$LINENO: checking for shared library run path origin" >&5
 echo $ECHO_N "checking for shared library run path origin... $ECHO_C" >&6
 if test "${acl_cv_rpath+set}" = set; then
@@ -3481,7 +3497,7 @@ fi;
                 if test "X$additional_includedir" = "X/usr/local/include"; then
                   if test -n "$GCC"; then
                     case $host_os in
-                      linux*) haveit=yes;;
+                      linux* | gnu* | k*bsd*-gnu) haveit=yes;;
                     esac
                   fi
                 fi
@@ -3525,7 +3541,7 @@ fi;
                       if test "X$additional_libdir" = "X/usr/local/lib"; then
                         if test -n "$GCC"; then
                           case $host_os in
-                            linux*) haveit=yes;;
+                            linux* | gnu* | k*bsd*-gnu) haveit=yes;;
                           esac
                         fi
                       fi
@@ -4876,11 +4892,11 @@ if test "x$enable_xft" = "xno"; then
 else
   # Checks for Xft/XRender
 
-  succeeded=no
 
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
@@ -4905,7 +4921,6 @@ do
 done
 done
 
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
   ;;
 esac
 fi
@@ -4919,58 +4934,117 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
   fi
+done
+done
 
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for xft >= 0.0.0" >&5
-echo $ECHO_N "checking for xft >= 0.0.0... $ECHO_C" >&6
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
 
-        if $PKG_CONFIG --exists "xft >= 0.0.0" ; then
-            echo "$as_me:$LINENO: result: yes" >&5
+if test -n "$ac_pt_PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
+echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  PKG_CONFIG=$ac_pt_PKG_CONFIG
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
+echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-            succeeded=yes
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+		PKG_CONFIG=""
+	fi
 
-            echo "$as_me:$LINENO: checking XFT_CFLAGS" >&5
-echo $ECHO_N "checking XFT_CFLAGS... $ECHO_C" >&6
-            XFT_CFLAGS=`$PKG_CONFIG --cflags "xft >= 0.0.0"`
-            echo "$as_me:$LINENO: result: $XFT_CFLAGS" >&5
-echo "${ECHO_T}$XFT_CFLAGS" >&6
+fi
 
-            echo "$as_me:$LINENO: checking XFT_LIBS" >&5
-echo $ECHO_N "checking XFT_LIBS... $ECHO_C" >&6
-            XFT_LIBS=`$PKG_CONFIG --libs "xft >= 0.0.0"`
-            echo "$as_me:$LINENO: result: $XFT_LIBS" >&5
-echo "${ECHO_T}$XFT_LIBS" >&6
-        else
-            XFT_CFLAGS=""
-            XFT_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            XFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xft >= 0.0.0"`
+pkg_failed=no
+echo "$as_me:$LINENO: checking for XFT" >&5
+echo $ECHO_N "checking for XFT... $ECHO_C" >&6
 
-        fi
+if test -n "$PKG_CONFIG"; then
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"xft >= 0.0.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "xft >= 0.0.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_XFT_CFLAGS=`$PKG_CONFIG --cflags "xft >= 0.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+        if test -n "$PKG_CONFIG" && \
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"xft >= 0.0.0\"") >&5
+  ($PKG_CONFIG --exists --print-errors "xft >= 0.0.0") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; then
+  pkg_cv_XFT_LIBS=`$PKG_CONFIG --libs "xft >= 0.0.0" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+else
+	pkg_failed=untried
+fi
 
+if test $pkg_failed = yes; then
+	XFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xft >= 0.0.0"`
+	# Put the nasty error message in config.log where it belongs
+	echo "$XFT_PKG_ERRORS" 1>&5
 
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-     have_xft=true
-  else
-     :
-  fi
-
+	:
+elif test $pkg_failed = untried; then
+	:
+else
+	XFT_CFLAGS=$pkg_cv_XFT_CFLAGS
+	XFT_LIBS=$pkg_cv_XFT_LIBS
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+	have_xft=true
+fi
 
   if test "x$have_xft" = "xtrue"; then
 
@@ -6763,6 +6837,7 @@ s,@EGREP@,$EGREP,;t t
 s,@X_LIBS@,$X_LIBS,;t t
 s,@X_CFLAGS@,$X_CFLAGS,;t t
 s,@PKG_CONFIG@,$PKG_CONFIG,;t t
+s,@ac_pt_PKG_CONFIG@,$ac_pt_PKG_CONFIG,;t t
 s,@XFT_CFLAGS@,$XFT_CFLAGS,;t t
 s,@XFT_LIBS@,$XFT_LIBS,;t t
 s,@HAVE_XFT_TRUE@,$HAVE_XFT_TRUE,;t t

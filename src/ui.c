@@ -43,26 +43,27 @@
 #include "IC.h"
 #include "tools.h"
 #include "sp.h"
+#include "about.h"
 
 Display        *dpy;
 int             iScreen;
 
 #ifdef _USE_XFT
-XftFont        *xftFont;
-XftFont        *xftFontEn;
-XftDraw        *xftDraw;
-XftFont        *xftMainWindowFont;
-XftFont        *xftMainWindowFontEn;
-XftFont        *xftVKWindowFont;
+XftFont        *xftFont = NULL;
+XftFont        *xftFontEn = NULL;
+XftDraw        *xftDraw = NULL;
+XftFont        *xftMainWindowFont = NULL;
+XftFont        *xftMainWindowFontEn = NULL;
+XftFont        *xftVKWindowFont = NULL;
 Bool            bUseAA = True;
 int             iDefaultWidth = 0;
 int             iMainWindowFontSize = 11;
 int             iVKWindowFontSize = 11;
 #else
-XFontSet        fontSet;
-XFontSet        fontSetMainWindow;
-XFontSet        fontSetVKWindow;
-char            strUserLocale[50] = "zh_CN.gb2312";
+XFontSet        fontSet = NULL;
+XFontSet        fontSetMainWindow = NULL;
+XFontSet        fontSetVKWindow = NULL;
+char            strUserLocale[50] = "zh_CN.gb18030";
 int             iMainWindowFontSize = 14;
 int             iVKWindowFontSize = 12;
 #endif
@@ -98,6 +99,13 @@ extern Bool     bCompactMainWindow;
 extern INT8     iIMIndex;
 extern CARD16   connect_id;
 
+//added by yunfan
+extern Window   aboutWindow;
+extern Atom     about_protocol_atom;
+extern Atom     about_kill_atom;
+
+//**********************************
+
 Bool InitX (void)
 {
     if ((dpy = XOpenDisplay ((char *) NULL)) == NULL) {
@@ -108,7 +116,7 @@ Bool InitX (void)
     SetMyXErrorHandler ();
     iScreen = DefaultScreen (dpy);
 
-    convUTF8 = iconv_open ("UTF-8", "GBK");
+    convUTF8 = iconv_open ("UTF-8", "GB18030");
 
     return True;
 }
@@ -209,12 +217,28 @@ void InitGC (Window window)
 #ifdef _USE_XFT
 void CreateFont (void)
 {
+    if (xftFont)
+	XftFontClose (dpy, xftFont);
     xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+
+    if (xftFontEn)
+	XftFontClose (dpy, xftFont);
     xftFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+
+    if (xftMainWindowFont)
+	XftFontClose (dpy, xftMainWindowFont);
     xftMainWindowFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_BOLD, NULL);
+
+    if (xftMainWindowFontEn)
+	XftFontClose (dpy, xftMainWindowFontEn);
     xftMainWindowFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_BOLD, NULL);
+
+    if (xftVKWindowFont)
+	XftFontClose (dpy, xftVKWindowFont);
     xftVKWindowFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iVKWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
 
+    if (xftDraw)
+	XftDrawDestroy (xftDraw);
     xftDraw = XftDrawCreate (dpy, inputWindow, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)));
 
     iDefaultWidth = StringWidth ("¹ú", xftFont) / 2 - 2;
@@ -233,6 +257,8 @@ void CreateFont (void)
 	setlocale (LC_CTYPE, "");
 
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iMainWindowFontSize, strFontEnName, iMainWindowFontSize);
+    if (fontSetMainWindow)
+	XFreeFontSet (dpy, fontSetMainWindow);
     fontSetMainWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
     if (num_missing_charsets > 0) {
 	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
@@ -244,6 +270,8 @@ void CreateFont (void)
     }
 
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iFontSize, strFontEnName, iFontSize);
+    if (fontSet)
+	XFreeFontSet (dpy, fontSet);
     fontSet = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
     if (num_missing_charsets > 0) {
 	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
@@ -255,6 +283,8 @@ void CreateFont (void)
     }
 
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iVKWindowFontSize, strFontEnName, iVKWindowFontSize);
+    if (fontSetVKWindow)
+	XFreeFontSet (dpy, fontSetVKWindow);
     fontSetVKWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
     if (num_missing_charsets > 0) {
 	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
@@ -310,6 +340,14 @@ void MyXEventHandler (XEvent * event)
     INT8            iPos;
 
     switch (event->type) {
+	//added by yunfan
+    case ClientMessage:
+	if ((event->xclient.message_type == about_protocol_atom) && ((Atom) event->xclient.data.l[0] == about_kill_atom)) {
+	    XUnmapWindow (dpy, aboutWindow);
+	    DisplayMainWindow ();
+	}
+	break;
+	//*********************
     case Expose:
 	if (event->xexpose.count > 0)
 	    break;
@@ -327,6 +365,10 @@ void MyXEventHandler (XEvent * event)
 		bIsResizingInputWindow = False;
 	    }
 	}
+	//added by yunfan
+	if (event->xexpose.window == aboutWindow)
+	    DisplayAboutWindow ();
+	//******************************
 	break;
     case DestroyNotify:
 	break;
@@ -353,8 +395,19 @@ void MyXEventHandler (XEvent * event)
 		    MouseClick (&iVKWindowX, &iVKWindowY, VKWindow);
 		}
 	    }
+	    //added by yunfan
+	    else if (event->xbutton.window == aboutWindow) {
+		XUnmapWindow (dpy, aboutWindow);
+		DisplayMainWindow ();
+	    }
+	    //****************************
 	    SaveProfile ();
 	    break;
+	case Button2:
+	    if (event->xbutton.window == mainWindow) {
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
+		    XUnmapWindow (dpy, mainWindow);
+	    }
 	}
 	break;
     case ButtonRelease:
@@ -380,6 +433,11 @@ void MyXEventHandler (XEvent * event)
 		else if (IsInBox (event->xbutton.x, event->xbutton.y, iPos + 31, 1, MAINWND_WIDTH, 19))
 		    SwitchIM (-1);
 		break;
+		//added by yunfan
+	    case Button2:
+		DisplayAboutWindow ();
+		break;
+		//********************
 	    case Button3:
 		bCompactMainWindow = !bCompactMainWindow;
 		SwitchIM (iIMIndex);

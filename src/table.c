@@ -41,6 +41,12 @@
 #include "InputWindow.h"
 #include "py.h"
 #include "pyParser.h"
+#include "ui.h"
+
+#ifdef _USE_XFT
+#include <ft2build.h>
+#include <X11/Xft/Xft.h>
+#endif
 
 TABLE          *table;
 INT8            iTableIMIndex = 0;
@@ -60,7 +66,8 @@ AUTOPHRASE     *insertPoint = NULL;
 
 INT16           iAutoPhrase = 0;
 INT16           iTotalAutoPhrase;
-
+uint            iTableCandDisplayed;
+uint            iTableTotalCandCount;
 INT16           iTableOrderChanged = 0;
 char            strTableLegendSource[PHRASE_MAX_LENGTH * 2 + 1] = "\0";
 
@@ -91,6 +98,13 @@ extern char     strPYAuto[];
 extern Display *dpy;
 extern Window   inputWindow;
 
+#ifdef _USE_XFT
+extern XftFont *xftFont;
+extern XftFont *xftFontEn;
+#else
+extern XFontSet fontSet;
+#endif
+
 extern char     strCodeInput[];
 extern Bool     bIsDoInputOnly;
 extern int      iCandPageCount;
@@ -118,6 +132,7 @@ extern Bool     bAutoHideInputWindow;
 extern ADJUSTORDER baseOrder;
 extern Bool     bSP;
 extern Bool     bPYBaseDictLoaded;
+extern uint     iFixedInputWindowWidth;
 
 //----------------------------------------
 extern PYFA    *PYFAList;
@@ -814,11 +829,11 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	}
 	else if (IsHotKey (iKey, hkGetPY)) {
 	    char            strPY[100];
-	    
+
 	    //如果拼音单字字库没有读入，则读入它
 	    if (!bPYBaseDictLoaded)
 		LoadPYBaseDict ();
-	    
+
 	    //如果刚刚输入的是个词组，刚不查拼音
 	    if (strlen (strStringGet) != 2)
 		return IRV_DO_NOTHING;
@@ -834,7 +849,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    strcpy (messageDown[1].strMsg, (strPY[0]) ? strPY : "无法查到该字读音");
 	    messageDown[1].type = MSG_TIPS;
 	    bShowCursor = False;
-	    
+
 	    return IRV_DISPLAY_MESSAGE;
 	}
 
@@ -889,7 +904,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	}
 	else if (!bIsTableDelPhrase && !bIsTableAdjustOrder) {
 	    if (IsHotKey (iKey, hkTableAdjustOrder)) {
-		if ((iCurrentCandPage == 0 && iCandWordCount < 2) || bIsInLegend)
+		if ((iTableCandDisplayed == iCandWordCount && iCandWordCount < 2) || bIsInLegend)
 		    return IRV_DO_NOTHING;
 
 		bIsTableAdjustOrder = True;
@@ -962,9 +977,6 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		uMessageUp = 1;
 		strcpy (messageUp[0].strMsg, strCodeInput);
 		messageUp[0].type = MSG_INPUT;
-/*		strcpy (messageUp[1].strMsg, "  --  ");
-		strcat (messageUp[1].strMsg, strerror(errno));
-		messageUp[1].type = MSG_TIPS;*/
 	    }
 	    else
 		uMessageUp = 0;
@@ -1094,7 +1106,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 {
     int             i;
     char            strTemp[3], *pstr;
-    unsigned int    iTableTotalCandCount = 0;
 
     if (bIsInLegend)
 	return TableGetLegendCandWords (mode);
@@ -1106,8 +1117,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
     else {
 	if (mode == SM_FIRST) {
 	    iCandWordCount = 0;
-	    iCandPageCount = 0;
-	    iCurrentCandPage = 0;
+	    iTableCandDisplayed = 0;
 	    iTableTotalCandCount = 0;
 
 	    TableResetFlags ();
@@ -1118,21 +1128,19 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	    }
 	}
 	else {
-	    if (!iCandPageCount)
+	    if (!iCandWordCount)
 		return IRV_TO_PROCESS;
 
 	    if (mode == SM_NEXT) {
-		if (iCurrentCandPage == iCandPageCount)
+		if (iTableCandDisplayed == iTableTotalCandCount)
 		    return IRV_DO_NOTHING;
-
-		iCurrentCandPage++;
 	    }
 	    else {
-		if (!iCurrentCandPage)
+		if (iTableCandDisplayed == iCandWordCount)
 		    return IRV_DO_NOTHING;
 
+		iTableCandDisplayed -= iCandWordCount;
 		TableSetCandWordsFlag (iCandWordCount, False);
-		iCurrentCandPage--;
 	    }
 
 	    TableFindFirstMatchCode ();
@@ -1175,9 +1183,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	}
 
 	TableSetCandWordsFlag (iCandWordCount, True);
-
-	if (mode == SM_FIRST)
-	    iCandPageCount = iTableTotalCandCount / iMaxCandWord - ((iTableTotalCandCount % iMaxCandWord) ? 0 : 1);
     }
 
     if (bPointAfterNumber) {
@@ -1186,8 +1191,125 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
     }
     else
 	strTemp[1] = '\0';
-    uMessageDown = 0;
 
+    /* 如果用户设置了固定输入条宽度，就在此进行处理 */
+    if (iFixedInputWindowWidth && !(strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)) {
+	uint            iWidth = 2 * INPUTWND_START_POS_DOWN + 1;
+
+	if (mode == SM_PREV) {
+	    for (i = (iCandWordCount - 1); i >= 0; i--) {
+		strTemp[0] = i + 1 + '0';
+		if (i == 9)
+		    strTemp[0] = '0';
+
+		if (HasMatchingKey () || strCodeInput[0] == table[iTableIMIndex].cPinyin)
+		    pstr = (tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode;
+		else
+		    pstr = ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
+#ifdef _USE_XFT
+		iWidth += StringWidth (pstr, xftFontEn);
+		iWidth += StringWidth (strTemp, xftFontEn);
+		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, xftFont);
+		iWidth += StringWidth ("  ", xftFontEn);
+#else
+		iWidth += StringWidth (pstr, fontSet);
+		iWidth += StringWidth (strTemp, fontSet);
+		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, fontSet);
+		iWidth += StringWidth (" ", fontSet);
+#endif
+
+		if (iWidth > iFixedInputWindowWidth) {
+		    if (i == 0) {
+#ifdef _USE_XFT
+			iWidth -= StringWidth ("  ", xftFontEn);
+#else
+			iWidth -= StringWidth (" ", fontSet);
+#endif
+			if (iWidth > iFixedInputWindowWidth)
+			    i = 1;
+		    }
+		    else
+			i++;
+		    break;
+		}
+	    }
+
+	    if (i < 0)
+		i = 0;
+	    for (iWidth = 0; iWidth < i; iWidth++) {
+		if (tableCandWord[iWidth].flag)
+		    tableCandWord[iWidth].candWord.record->flag = True;
+		else
+		    tableCandWord[iWidth].candWord.autoPhrase->flag = True;
+	    }
+	    for (iWidth = 0; iWidth < (iCandWordCount - i); iWidth++) {
+		tableCandWord[iWidth].flag = tableCandWord[iWidth + i].flag;
+		if (tableCandWord[iWidth].flag)
+		    tableCandWord[iWidth].candWord.record = tableCandWord[iWidth + i].candWord.record;
+		else
+		    tableCandWord[iWidth].candWord.autoPhrase = tableCandWord[iWidth + i].candWord.autoPhrase;
+	    }
+
+	    iCandWordCount -= i;
+	}
+	else {
+	    //如果是向后翻，需要从前往后计算长度
+	    for (i = 0; i < iCandWordCount; i++) {
+		strTemp[0] = i + 1 + '0';
+		if (i == 9)
+		    strTemp[0] = '0';
+
+		if (HasMatchingKey () || strCodeInput[0] == table[iTableIMIndex].cPinyin)
+		    pstr = (tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode;
+		else
+		    pstr = ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
+
+#ifdef _USE_XFT
+		iWidth += StringWidth (pstr, xftFontEn);
+		iWidth += StringWidth (strTemp, xftFontEn);
+		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, xftFont);
+		iWidth += StringWidth ("  ", xftFontEn);
+#else
+		iWidth += StringWidth (pstr, fontSet);
+		iWidth += StringWidth (strTemp, fontSet);
+		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, fontSet);
+		iWidth += StringWidth (" ", fontSet);
+#endif
+		if (iWidth > iFixedInputWindowWidth) {
+		    if (i == (iCandWordCount - 1)) {
+#ifdef _USE_XFT
+			iWidth -= StringWidth ("  ", xftFontEn);
+#else
+			iWidth -= StringWidth (" ", fontSet);
+#endif
+			if (iWidth <= iFixedInputWindowWidth)
+			    i = iCandWordCount;
+		    }
+		    break;
+		}
+	    }
+
+	    for (iWidth = i; iWidth < iCandWordCount; iWidth++) {
+		if (tableCandWord[iWidth].flag)
+		    tableCandWord[iWidth].candWord.record->flag = False;
+		else
+		    tableCandWord[iWidth].candWord.autoPhrase->flag = False;
+	    }
+
+	    iCandWordCount = i;
+	}
+
+	if (mode != SM_PREV)
+	    iTableCandDisplayed += iCandWordCount;
+	//由于iCurrentCandPage和iCandPageCount用来指示是否显示上/下翻页图标，因此，此处需要设置一下
+	iCurrentCandPage = (iTableCandDisplayed == iCandWordCount) ? 0 : 1;
+	iCandPageCount = (iTableCandDisplayed == iTableTotalCandCount) ? 1 : 2;
+	if (iCandWordCount == iTableTotalCandCount)
+	    iCandPageCount = 0;
+    }
+    /* **************************************************** */
+
+    uMessageDown = 0;
     for (i = 0; i < iCandWordCount; i++) {
 	strTemp[0] = i + 1 + '0';
 	if (i == 9)
@@ -1778,8 +1900,13 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
     strcpy (messageUp[1].strMsg, strTableLegendSource);
     messageUp[1].type = MSG_INPUT;
 
-    strTemp[1] = '.';
-    strTemp[2] = '\0';
+    if (bPointAfterNumber) {
+	strTemp[1] = '.';
+	strTemp[2] = '\0';
+    }
+    else
+	strTemp[1] = '\0';
+    
     uMessageDown = 0;
     for (i = 0; i < iLegendCandWordCount; i++) {
 	if (i == 9)
@@ -1880,8 +2007,13 @@ INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode)
     if (!iFH)
 	return IRV_DISPLAY_MESSAGE;
 
-    strTemp[1] = '.';
-    strTemp[2] = '\0';
+   if (bPointAfterNumber) {
+	strTemp[1] = '.';
+	strTemp[2] = '\0';
+    }
+    else
+	strTemp[1] = '\0';
+    
     uMessageDown = 0;
 
     if (mode == SM_FIRST) {

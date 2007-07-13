@@ -101,7 +101,7 @@ typedef int     HOTKEYS;
 void            ProcessKey (IMForwardEventStruct * call_data);
 void            ResetInput (void);
 void            CloseIM (IMForwardEventStruct * call_data);
-void		ChangeIMState (IMForwardEventStruct * call_data);
+void            ChangeIMState (IMForwardEventStruct * call_data);
 Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
@@ -116,5 +116,6 @@ void            DoPhraseTips ();
 Bool            IsIM (char *strName);
 void            SaveIM (void);
 void            SetIM (void);
+void            ConvertPunc (void);
 
 #endif

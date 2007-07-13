@@ -358,8 +358,13 @@ Bool LoadPYOtherDict (void)
     //下面读取特殊符号表
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
-
     strcat (strPath, PY_SYMBOL_FILE);
+    
+    if (access (strPath, 0)) {
+	strcpy (strPath, PKGDATADIR "/data/");
+	strcat (strPath, PY_SYMBOL_FILE);
+    }
+    
     fp = fopen (strPath, "rt");
     if (fp) {
 	char            strTxt[256];
@@ -1825,7 +1830,7 @@ Bool PYAddSymCandWord (HZ * hz, SEARCH_MODE mode)
 
 void PYGetBaseCandWords (SEARCH_MODE mode)
 {
-    PYCandIndex     candPos;
+    PYCandIndex     candPos={0,0,0};
     char            str[3];
 
     str[0] = findMap.strMap[0][0];

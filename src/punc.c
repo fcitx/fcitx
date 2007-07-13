@@ -44,8 +44,10 @@ int LoadPuncDict (void)
     strcat (strPath, PUNC_DICT_FILENAME);
     fpDict = fopen (strPath, "rt");
 
-    if (!fpDict)
+    if (!fpDict) {	
+	printf ("Can't open Chinese punc file: %s\n", strPath);
 	return False;
+    }
 
     iRecordNo = CalculateRecordNumber (fpDict);
     chnPunc = (ChnPunc *) malloc (sizeof (ChnPunc) * (iRecordNo + 1));

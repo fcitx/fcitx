@@ -36,7 +36,7 @@ XIMS            ims;
 
 //************************************************
 CARD16          connect_id = 0;
-CARD16		icid = 0;
+CARD16          icid = 0;
 CARD16          lastConnectID = 0;
 
 //************************************************
@@ -74,6 +74,9 @@ extern int      iCodeInputCount;
 extern iconv_t  convUTF8;
 extern uint     uMessageDown;
 extern Bool     bVK;
+
+extern Bool     bStartRecordType;
+extern uint	iHZInputed;
 
 /*extern char	strUserLocale[];*/
 //+++++++++++++++++++++++++++++++++
@@ -214,6 +217,10 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	ConnectIDSetReset (connect_id, False);
     }
 
+    //程序获得焦点时，重新开始计算打字速度
+    bStartRecordType = False;
+    iHZInputed = 0;
+
     return True;
 }
 
@@ -243,7 +250,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
     if (!CurrentIC) {
 	CurrentIC = (IC *) FindIC (call_data->icid);;
 	connect_id = call_data->connect_id;
-	icid= call_data->icid;
+	icid = call_data->icid;
     }
 
     return True;
@@ -369,7 +376,6 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
-    Display        *display = ims->core.display;
     char            strOutput[300];
     char           *ps;
 
@@ -386,7 +392,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     else
 	ps = strHZ;
 
-    XmbTextListToTextProperty (display, (char **) &ps, 1, XCompoundTextStyle, &tp);
+    XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
     ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
     ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
     IMCommitString (ims, (XPointer) call_data);

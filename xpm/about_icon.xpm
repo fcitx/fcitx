@@ -1,10 +1,10 @@
-char strMainWindowXPMBackColor[17]=". 	c #FF0000";
+char strAboutWindowXPMBackColor[17]=". 	c #FF0000";
 
 /* XPM */
-static char * logo_xpm[] = {
+static char * about_icon_xpm[] = {
 "15 16 129 2",
 "  	c None",
-strMainWindowXPMBackColor,
+strAboutWindowXPMBackColor,
 "+ 	c #FAFAFA",
 "@ 	c #C1C1C1",
 "# 	c #AEAEAE",

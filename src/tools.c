@@ -57,6 +57,9 @@ extern MESSAGE_COLOR messageColor[];
 extern MESSAGE_COLOR inputWindowLineColor;
 extern MESSAGE_COLOR mainWindowLineColor;
 extern MESSAGE_COLOR cursorColor;
+extern WINDOW_COLOR VKWindowColor;
+extern MESSAGE_COLOR VKWindowFontColor;
+extern MESSAGE_COLOR VKWindowAlphaColor;
 extern ENTER_TO_DO enterToDo;
 
 extern HOTKEYS  hkTrigger[];
@@ -100,6 +103,7 @@ extern Bool     bPYSaveAutoAsPhrase;
 extern Bool     bPhraseTips;
 extern Bool     bEngAfterSemicolon;
 extern Bool     bEngAfterCap;
+extern Bool     bShowUserSpeed;
 
 extern Bool     bFullPY;
 extern Bool     bDisablePagingInLegend;
@@ -131,6 +135,8 @@ extern char     cPYYCDZ[];
 extern Bool     bDoubleSwitchKey;
 extern Bool     bPointAfterNumber;
 extern Bool     bConvertPunc;
+extern unsigned int iTimeInterval;
+extern uint     iFixedInputWindowWidth;
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
@@ -196,29 +202,29 @@ void LoadConfig (Bool bMode)
 	if (pstr[0] == '#')
 	    continue;
 
-	if (MyStrcmp (pstr, "显示字体(中)=") && bMode) {
+	if (MyStrcmp (pstr, "显示字体(中)=")) {
 	    pstr += 13;
 	    strcpy (strFontName, pstr);
 	}
-	if (MyStrcmp (pstr, "显示字体(英)=") && bMode) {
+	if (MyStrcmp (pstr, "显示字体(英)=")) {
 	    pstr += 13;
 	    strcpy (strFontEnName, pstr);
 	}
-	else if (MyStrcmp (pstr, "显示字体大小=") && bMode) {
+	else if (MyStrcmp (pstr, "显示字体大小=")) {
 	    pstr += 13;
 	    iFontSize = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "主窗口字体大小=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口字体大小=")) {
 	    pstr += 15;
 	    iMainWindowFontSize = atoi (pstr);
 	}
 #ifdef _USE_XFT
-	else if (MyStrcmp (pstr, "是否使用AA字体=") && bMode) {
+	else if (MyStrcmp (pstr, "是否使用AA字体=")) {
 	    pstr += 15;
 	    bUseAA = atoi (pstr);
 	}
 #else
-	else if (MyStrcmp (pstr, "字体区域=") && bMode) {
+	else if (MyStrcmp (pstr, "字体区域=")) {
 	    pstr += 9;
 	    strcpy (strUserLocale, pstr);
 	}
@@ -253,9 +259,17 @@ void LoadConfig (Bool bMode)
 	    pstr += 15;
 	    bCenterInputWindow = atoi (pstr);
 	}
+	else if (MyStrcmp (pstr, "输入条固定宽度=")) {
+	    pstr += 15;
+	    iFixedInputWindowWidth = atoi (pstr);
+	}
 	else if (MyStrcmp (pstr, "序号前加点==")) {
 	    pstr += 11;
 	    bPointAfterNumber = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "显示打字速度=")) {
+	    pstr += 13;
+	    bShowUserSpeed = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
@@ -367,6 +381,27 @@ void LoadConfig (Bool bMode)
 	    colorArrow.green = (g << 8);
 	    colorArrow.blue = (b << 8);
 	}
+	else if (MyStrcmp (pstr, "虚拟键盘窗背景色=") && bMode) {
+	    pstr += 17;
+	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
+	    VKWindowColor.backColor.red = (r << 8);
+	    VKWindowColor.backColor.green = (g << 8);
+	    VKWindowColor.backColor.blue = (b << 8);
+	}
+	else if (MyStrcmp (pstr, "虚拟键盘窗字母色=") && bMode) {
+	    pstr += 17;
+	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
+	    VKWindowAlphaColor.color.red = (r << 8);
+	    VKWindowAlphaColor.color.green = (g << 8);
+	    VKWindowAlphaColor.color.blue = (b << 8);
+	}
+	else if (MyStrcmp (pstr, "虚拟键盘窗符号色=") && bMode) {
+	    pstr += 17;
+	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
+	    VKWindowFontColor.color.red = (r << 8);
+	    VKWindowFontColor.color.green = (g << 8);
+	    VKWindowFontColor.color.blue = (b << 8);
+	}
 
 	else if (MyStrcmp (pstr, "打开/关闭输入法=") && bMode) {
 	    pstr += 16;
@@ -380,6 +415,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "双击中英文切换=")) {
 	    pstr += 15;
 	    bDoubleSwitchKey = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "击键时间间隔=")) {
+	    pstr += 13;
+	    iTimeInterval = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "光标跟随=")) {
 	    pstr += 9;
@@ -620,7 +659,10 @@ void SaveConfig (void)
     /* 这个设置暂时隐藏起来
        fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow );
        *********************************************************************** */
+    fprintf (fp, "#输入条固定宽度仅适用于码表输入法，0表示不固定宽度\n");
+    fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
     fprintf (fp, "序号前加点=%d\n", bPointAfterNumber);
+    fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
 
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);
     fprintf (fp, "主窗口背景色=%d %d %d\n", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
@@ -639,6 +681,9 @@ void SaveConfig (void)
     fprintf (fp, "输入窗其它文本色=%d %d %d\n", messageColor[6].color.red >> 8, messageColor[6].color.green >> 8, messageColor[6].color.blue >> 8);
     fprintf (fp, "输入窗线条色=%d %d %d\n", inputWindowLineColor.color.red >> 8, inputWindowLineColor.color.green >> 8, inputWindowLineColor.color.blue >> 8);
     fprintf (fp, "输入窗箭头色=%d %d %d\n", colorArrow.red >> 8, colorArrow.green >> 8, colorArrow.blue >> 8);
+    fprintf (fp, "虚拟键盘窗背景色=%d %d %d\n", VKWindowColor.backColor.red >> 8, VKWindowColor.backColor.green >> 8, VKWindowColor.backColor.blue >> 8);
+    fprintf (fp, "虚拟键盘窗字母色=%d %d %d\n", VKWindowAlphaColor.color.red >> 8, VKWindowAlphaColor.color.green >> 8, VKWindowAlphaColor.color.blue >> 8);
+    fprintf (fp, "虚拟键盘窗符号色=%d %d %d\n", VKWindowFontColor.color.red >> 8, VKWindowFontColor.color.green >> 8, VKWindowFontColor.color.blue >> 8);
 
     fprintf (fp, "\n#除了“中英文快速切换键”外，其它的热键均可设置为两个，中间用空格分隔\n");
     fprintf (fp, "[热键]\n");
@@ -646,6 +691,7 @@ void SaveConfig (void)
     fprintf (fp, "#中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT\n");
     fprintf (fp, "中英文快速切换键=L_CTRL\n");
     fprintf (fp, "双击中英文切换=%d\n", bDoubleSwitchKey);
+    fprintf (fp, "击键时间间隔=%u\n", iTimeInterval);
     fprintf (fp, "光标跟随=CTRL_K\n");
     fprintf (fp, "GBK支持=CTRL_M\n");
     fprintf (fp, "联想支持=CTRL_L\n");
