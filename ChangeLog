@@ -1,3 +1,27 @@
+2004-12-5  Yuking <yukig_net@sohu.com>
+	   * 版本为3.0.3
+
+
+2004-12-5  Yuking <yukig_net@sohu.com>
+	   * 修改仓颉码表中的错误
+	   * 改进码表输入法匹配的速度
+	   
+2004-12-5  Yuking <yukig_net@sohu.com>
+	   * src/table.c:改进查找词组的算法
+
+2004-12-3  Yuking <yukig_net@sohu.com>
+	   * src/MyErrorsHandlers.c:程序接到SIGHUP后将重新读取配置文件
+	   * src/xim.c:修改了lumaQQ支持，以解决打开支持时会删除QT程序中选中文字的问题
+
+2004-12-2  Yuking <yukig_net@sohu.com>
+	   * src/table.c:改进自动组词的查重
+
+2004-10-29 Yuking <yukig_net@sohu.com>
+	   * src/table.c:增加一个单字表，以便提高自动组词的速度
+
+2004-10-24 Yuking <yukig_net@sohu.com>
+	   * src/table.c:使用临时拼音功能时，按空格键所选择的字不能调整到第一个
+	   
 2004-10-20 Yuking <yukig_net@sohu.com>
 	   * 候选字与序号间加入一个小数点
 	   * 更新文档

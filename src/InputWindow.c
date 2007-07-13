@@ -342,5 +342,5 @@ void DisplayMessageDown (void)
 void DrawCursor (int iPos)
 {
     XDrawLine (dpy, inputWindow, cursorColor.gc, iPos, 8, iPos, iInputWindowHeight / 2 - 4);
-    XDrawLine (dpy, inputWindow, cursorColor.gc, iPos+1, 8, iPos+1, iInputWindowHeight / 2 - 4);
+    XDrawLine (dpy, inputWindow, cursorColor.gc, iPos + 1, 8, iPos + 1, iInputWindowHeight / 2 - 4);
 }

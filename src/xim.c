@@ -20,7 +20,7 @@ CARD16		connect_id = 0;
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC = NULL;
 Bool            bBackground = True;
-char 		strLocale[150]="zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
+char 		strLocale[201]="zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 //int y=0;
 
 extern Bool	bLumaQQ;
@@ -410,7 +410,7 @@ void CreateConnectID(IMOpenStruct *call_data)
     connectIDNew->next=(CONNECT_ID *)NULL;
     connectIDNew->connect_id=call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
-    connectIDNew->bReset = True;
+    connectIDNew->bReset = !bLumaQQ;
     //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
     //strcpy(connectIDNew->strLocale,call_data->lang.name);
 

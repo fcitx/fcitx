@@ -6,12 +6,12 @@
 
 #include "ime.h"
 
-#define TABLE_CONFIG_FILENAME	"tables.conf"
+#define TABLE_CONFIG_FILENAME "tables.conf"
 
-#define	MAX_CODE_LENGTH		12
-#define PHRASE_MAX_LENGTH	10
-#define FH_MAX_LENGTH		10
-#define TABLE_AUTO_SAVE_AFTER	48
+#define MAX_CODE_LENGTH  12
+#define PHRASE_MAX_LENGTH 10
+#define FH_MAX_LENGTH  10
+#define TABLE_AUTO_SAVE_AFTER 48
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> 正序   0 --> 逆序
@@ -63,6 +63,12 @@ typedef struct _RECORD {
     unsigned int    flag:1;
 } RECORD;
 
+/* 根据键码生成一个简单的索引，指向该键码起始的第一个记录本 */
+typedef struct _RECORD_INDEX {
+    RECORD         *record;
+    char            cCode;
+} RECORD_INDEX;
+
 typedef struct _FH {
     char            strFH[FH_MAX_LENGTH * 2 + 1];
 } FH;
@@ -112,6 +118,7 @@ void            TableDelPhraseByIndex (int iIndex);
 void            TableDelPhraseByHZ (char *strHZ);
 void            TableDelPhrase (RECORD * record);
 RECORD         *TableHasPhrase (char *strCode, char *strHZ);
+Bool            TableCandHasPhrase (char *strHZ);
 RECORD         *TableFindPhrase (char *strHZ);
 void            TableInsertPhrase (char *strCode, char *strHZ);
 char           *TableGetCandWord (int iIndex);

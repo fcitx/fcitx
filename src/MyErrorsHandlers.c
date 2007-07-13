@@ -18,12 +18,15 @@
 #endif
 
 #include "ime.h"
+#include "tools.h"
 
 #ifndef SIGUNUSED
 #define SIGUNUSED 32
 #endif
 
 XErrorHandler   oldXErrorHandler;
+
+extern Bool     bLumaQQ;
 
 void SetMyExceptionHandler (void)
 {
@@ -36,6 +39,16 @@ void SetMyExceptionHandler (void)
 void OnException (int signo)
 {
     fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
+
+    if (signo == SIGHUP) {
+	SetIM ();
+	LoadConfig (False);
+
+	if (bLumaQQ)
+	    ConnectIDResetReset ();
+
+	return;
+    }
 
     if (signo != SIGSEGV)	//出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件
 	SaveIM ();
