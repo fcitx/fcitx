@@ -1,3 +1,17 @@
+2004-10-20 Yuking <yukig_net@sohu.com>
+	   * 候选字与序号间加入一个小数点
+	   * 更新文档
+	   * 版本为3.0.2
+ 
+2004-10-11 Yuking <yuking_net@sohu.com>
+	   * src/table.c:将词组是否参与组词以及自动组词保存条件设置为选项
+
+2004-10-5 Yuking <yuking_net@sohu.com>
+	   * src/table.c:修正自动组词的一个内存溢出问题
+
+2004-09-27 Yuking <yuking_net@sohu.com>
+	   * src/py.c:在联想方式下，按下以词定字键会出问题
+
 2004-09-18 Yuking <yuking_net@sohu.com>
 	   * 将码表输入法临时使用拼音时，拼音单字按快速排序排列
 	   * 修正其它一些小问题
@@ -128,4 +142,3 @@
 2004-02-02  Xie Yanbo  <xyb@users.cosoft.org.cn>
 
 	* configure.in created(based on fcitx2.0.1).
-

@@ -86,9 +86,10 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
 {
     int             iQu, iWei;
     int             i;
-    char            strTemp[2];
+    char            strTemp[3];
 
-    strTemp[1] = '\0';
+    strTemp[1] = '.';
+    strTemp[2] = '\0';
 
     iQu = (strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0';
     

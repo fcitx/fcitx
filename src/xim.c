@@ -309,47 +309,28 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 void SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
+    Display        *display = ims->core.display;
     char            strOutput[300];
     char           *ps;
-    IMCommitStruct  temp;
 
-    //ps=ConnectIDGetLocale(call_data->connect_id);
-    /*
-     * XIM只能记录语言，却不记录编码(或是我不知道？)，因此无法识别目前是否处于UTF8状态
-     */
-    if ( bIsUtf8 ) { //|| (strstr(ps,"UTF") || strstr(ps,"utf"))) {
-    	size_t             l1, l2;
+    if (bIsUtf8) {
+	int             l1, l2;
 
 	ps = strOutput;
 	l1 = strlen (strHZ);
 	l2 = 299;
-	iconv (convUTF8, &strHZ, &l1, &ps, &l2);
+	iconv (convUTF8, (char **) (&strHZ), (size_t *) & l1, &ps, (size_t *) & l2);
 	*ps = '\0';
 	ps = strOutput;
-	Xutf8TextListToTextProperty (ims->core.display, (char **) &ps, 1, XCompoundTextStyle, &tp);    
     }
-    else {
-//    	setlocale(LC_CTYPE,ps);
-    	ps = strHZ;
-	XmbTextListToTextProperty (ims->core.display, (char **) &ps, 1, XCompoundTextStyle, &tp);    
-    }
+    else
+	ps = strHZ;
 
-    memset (&temp, 0, sizeof (temp));
-    temp.major_code = XIM_COMMIT;
-    /*temp.icid = (CurrentIC)?CurrentIC->id:call_data->icid;
-    temp.connect_id = (connect_id)? connect_id:call_data->connect_id;*/
-    temp.icid = call_data->icid;
-    temp.connect_id = call_data->connect_id;
-    temp.flag = XimLookupChars;
-    temp.commit_string = (char *) tp.value;
-    IMCommitString (ims, (XPointer) & temp);
-
+    XmbTextListToTextProperty (display, (char **) &ps, 1, XCompoundTextStyle, &tp);
+    ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
+    ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
+    IMCommitString (ims, (XPointer) call_data);
     XFree (tp.value);
-
-//    setlocale(LC_CTYPE,"");
- /*
-    if (strlen(strHZ) )
-	y++;*/
 }
 
 Bool InitXIM (char *imname, Window im_window)

@@ -40,12 +40,12 @@ char            strStringGet[MAX_USER_INPUT + 1];	//保存输入法返回的需要送到客户
 
 ENTER_TO_DO     enterToDo = K_ENTER_SEND;
 
-Bool            bCorner = False;		//全半角切换
-Bool            bChnPunc = True;		//中英文标点切换
-Bool            bUseGBK = False;		//是否支持GBK
-Bool            bIsDoInputOnly = False;		//表明是否只由输入法来处理键盘
-Bool            bLastIsNumber = False;		//上一次输入是不是阿拉伯数字
-Bool            bInCap = False;			//是不是处于大写后的英文状态
+Bool            bCorner = False;	//全半角切换
+Bool            bChnPunc = True;	//中英文标点切换
+Bool            bUseGBK = False;	//是否支持GBK
+Bool            bIsDoInputOnly = False;	//表明是否只由输入法来处理键盘
+Bool            bLastIsNumber = False;	//上一次输入是不是阿拉伯数字
+Bool            bInCap = False;	//是不是处于大写后的英文状态
 Bool            bAutoHideInputWindow = True;	//是否自动隐藏输入条
 Bool            bEngPuncAfterNumber = True;	//数字后面输出半角符号(只对'.'/','有效)
 Bool            bPhraseTips = False;
@@ -79,10 +79,10 @@ Bool            bIsInLegend = False;
 INT8            iIMIndex = 0;
 Bool            bUsePinyin = True;
 Bool            bUseSP = False;
-Bool		bUseQW = True;
+Bool            bUseQW = True;
 Bool            bUseTable = True;
 
-Bool		bLumaQQ = True;
+Bool            bLumaQQ = True;
 
 //++++++++++++++++++++++++++++++++++++++++
 /*
@@ -122,7 +122,8 @@ extern INT8     iTableOrderChanged;
 extern TABLE   *table;
 extern INT8     iTableCount;
 
-extern Bool	bTrigger;
+extern Bool     bTrigger;
+
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
 #else
@@ -158,14 +159,14 @@ void ResetInput (void)
 	bShowCursor = False;
 
     if (im[iIMIndex].ResetIM)
-	im[iIMIndex].ResetIM();
+	im[iIMIndex].ResetIM ();
 }
 
 void CloseIM (XIMS ims, IMForwardEventStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
     IMPreeditEnd (ims, (XPointer) call_data);
-    SetConnectID( call_data->connect_id, IS_CLOSED);
+    SetConnectID (call_data->connect_id, IS_CLOSED);
     DisplayMainWindow ();
 }
 
@@ -180,15 +181,13 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     char            strbuf[STRBUFLEN];
     int             iKey;
     char           *pstr;
-    int 	    iLen;
+    int             iLen;
 
     kev = (XKeyEvent *) & call_data->event;
     memset (strbuf, 0, STRBUFLEN);
     keyCount = XLookupString (kev, strbuf, STRBUFLEN, &keysym, NULL);
 
-    iKeyState =
-	kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) -
-	(kev->state & KEY_SCROLLLOCK);
+    iKeyState = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
 
     iKey = GetKey (keysym, iKeyState, keyCount);
 
@@ -201,9 +200,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
      * 解决xine中候选字自动选中的问题
      * xine每秒钟产生一个左SHIFT键的释放事件
      */
-    if (kev->same_screen &&
-	(kev->keycode == switchKey || kev->keycode == i2ndSelectKey ||
-	 kev->keycode == i3rdSelectKey))
+    if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey))
 	return;
 
     retVal = IRV_TO_PROCESS;
@@ -211,24 +208,24 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     if (call_data->event.type == KeyRelease) {
 	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
 	    if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
-		if (ConnectIDGetState(call_data->connect_id) == IS_CHN)
+		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
 		    SwitchIM (-1);
 		else if (IsHotKey (iKey, hkTrigger))
 		    CloseIM (ims, call_data);
 	    }
 	    else if (!bLocked && iKey == CTRL_LSHIFT) {
-		if (ConnectIDGetState(call_data->connect_id) == IS_CHN)
+		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
 		    SwitchIM (-1);
 		else if (IsHotKey (iKey, hkTrigger))
 		    CloseIM (ims, call_data);
 	    }
 	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL) {
-		if (ConnectIDGetState(call_data->connect_id) == IS_ENG) {
-		    SetConnectID(call_data->connect_id, IS_CHN);
+		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
+		    SetConnectID (call_data->connect_id, IS_CHN);
 		    DisplayInputWindow ();
 		}
 		else {
-		    SetConnectID(call_data->connect_id, IS_ENG);
+		    SetConnectID (call_data->connect_id, IS_ENG);
 		    ResetInput ();
 		    ResetInputWindow ();
 		    XUnmapWindow (dpy, inputWindow);
@@ -271,19 +268,19 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     }
 
     if (retVal == IRV_TO_PROCESS) {
-    	if (call_data->event.type == KeyPress) {
-		lastKeyPressedTime = kev->time;
-		keyReleased = KR_OTHER;
-		if (kev->keycode == switchKey) {
-			keyReleased = KR_CTRL;
-			retVal = IRV_DO_NOTHING;
-		}
-		else if (IsHotKey (iKey, hkTrigger)) {
-		    CloseIM (ims, call_data);
-		    retVal = IRV_DO_NOTHING;
-		}
+	if (call_data->event.type == KeyPress) {
+	    lastKeyPressedTime = kev->time;
+	    keyReleased = KR_OTHER;
+	    if (kev->keycode == switchKey) {
+		keyReleased = KR_CTRL;
+		retVal = IRV_DO_NOTHING;
+	    }
+	    else if (IsHotKey (iKey, hkTrigger)) {
+		CloseIM (ims, call_data);
+		retVal = IRV_DO_NOTHING;
+	    }
 	}
-	if (retVal == IRV_TO_PROCESS && (ConnectIDGetState(call_data->connect_id) == IS_CHN)) {
+	if (retVal == IRV_TO_PROCESS && (ConnectIDGetState (call_data->connect_id) == IS_CHN)) {
 	    if (call_data->event.type == KeyPress) {
 		if (iKeyState == KEY_NONE) {
 		    if (kev->keycode == i2ndSelectKey)
@@ -293,25 +290,25 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		}
 
 		if (iKey == CTRL_LSHIFT || iKey == SHIFT_LCTRL) {
-			if ( bLocked )
-				retVal = IRV_TO_PROCESS;
+		    if (bLocked)
+			retVal = IRV_TO_PROCESS;
 		}
 		else {
 		    if (!bInCap && !bCorner) {
 			retVal = im[iIMIndex].DoInput (iKey);
-			if ( !IsIM(NAME_OF_PINYIN) && !IsIM(NAME_OF_SHUANGPIN) )
+			if (!IsIM (NAME_OF_PINYIN) && !IsIM (NAME_OF_SHUANGPIN))
 			    iCursorPos = iCodeInputCount;
 		    }
 
 		    if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-		    	if (bCorner && (iKey >= 32 && iKey <= 126)) {
+			if (bCorner && (iKey >= 32 && iKey <= 126)) {
 			    //有人报 空格 的全角不对，正确的是0xa1 0xa1
 			    //但查资料却说全角符号总是以0xa3开始。
 			    //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
-			    if ( iKey == ' ' )
-			    	sprintf (strStringGet, "%c%c", 0xa1, 0xa1);
+			    if (iKey == ' ')
+				sprintf (strStringGet, "%c%c", 0xa1, 0xa1);
 			    else
-			    	sprintf (strStringGet, "%c%c", 0xa3, 0xa0 + iKey - 32);
+				sprintf (strStringGet, "%c%c", 0xa3, 0xa0 + iKey - 32);
 			    retVal = IRV_GET_CANDWORDS;
 			}
 			else if (iKey >= 'A' && iKey <= 'Z' && bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
@@ -354,14 +351,9 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				    if (iCodeInputCount == MAX_USER_INPUT)
 					retVal = IRV_DO_NOTHING;
 				    else {
-					if (!bEngAfterSemicolon ||
-					    !(bEngAfterSemicolon &&
-					      (iCodeInputCount == 0 &&
-					       iKey == ';'))) {
-					    strCodeInput[iCodeInputCount++] =
-						iKey;
-					    strCodeInput[iCodeInputCount] =
-						'\0';
+					if (!bEngAfterSemicolon || !(bEngAfterSemicolon && (iCodeInputCount == 0 && iKey == ';'))) {
+					    strCodeInput[iCodeInputCount++] = iKey;
+					    strCodeInput[iCodeInputCount] = '\0';
 					}
 					retVal = IRV_DISPLAY_MESSAGE;
 				    }
@@ -377,15 +369,12 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				uMessageUp = 1;
 				uMessageDown = 1;
 				if (bEngAfterSemicolon && !iCodeInputCount) {
-				    strcpy (messageUp[0].strMsg,
-					    "进入英文输入状态");
-				    strcpy (messageDown[0].strMsg,
-					    "空格输入；Enter输入;");
+				    strcpy (messageUp[0].strMsg, "进入英文输入状态");
+				    strcpy (messageDown[0].strMsg, "空格输入；Enter输入;");
 				}
 				else {
 				    strcpy (messageUp[0].strMsg, strCodeInput);
-				    strcpy (messageDown[0].strMsg,
-					    "按 Enter 输入英文");
+				    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
 				}
 				messageUp[0].type = MSG_INPUT;
 				messageDown[0].type = MSG_TIPS;
@@ -408,10 +397,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					    pstr = im[iIMIndex].GetCandWord (0);
 					if (pstr)
 					    strcpy (strStringGet, pstr);
-					strcat (strStringGet,
-						chnPunc[iPunc].
-						strChnPunc[chnPunc[iPunc].
-							   iWhich]);
+					strcat (strStringGet, chnPunc[iPunc].strChnPunc[chnPunc[iPunc].iWhich]);
 
 					uMessageUp = 1;
 					messageUp[0].strMsg[0] = iKey;
@@ -419,15 +405,11 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					messageUp[0].type = MSG_INPUT;
 
 					uMessageDown = 1;
-					strcpy (messageDown[0].strMsg,
-						chnPunc[iPunc].
-						strChnPunc[chnPunc[iPunc].
-							   iWhich]);
+					strcpy (messageDown[0].strMsg, chnPunc[iPunc].strChnPunc[chnPunc[iPunc].iWhich]);
 					messageDown[0].type = MSG_OTHER;
 
 					chnPunc[iPunc].iWhich++;
-					if (chnPunc[iPunc].iWhich >=
-					    chnPunc[iPunc].iCount)
+					if (chnPunc[iPunc].iWhich >= chnPunc[iPunc].iCount)
 					    chnPunc[iPunc].iWhich = 0;
 
 					retVal = IRV_PUNC;
@@ -442,9 +424,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					    else {
 						strStringGet[0] = '\0';
 						if (!bIsInLegend)
-						    pstr =
-							im[iIMIndex].
-							GetCandWord (0);
+						    pstr = im[iIMIndex].GetCandWord (0);
 						if (pstr)
 						    strcpy (strStringGet, pstr);
 						iLen = strlen (strStringGet);
@@ -470,10 +450,10 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			else if (iKey == CTRL_5) {
 			    SetIM ();
 			    LoadConfig (False);
-			    
-			    if ( bLumaQQ )
-			    	ConnectIDResetReset();
-				
+
+			    if (bLumaQQ)
+				ConnectIDResetReset ();
+
 			    retVal = IRV_DO_NOTHING;
 			}
 			else if (iKey == ENTER) {
@@ -498,8 +478,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				    break;
 				case K_ENTER_SEND:
 				    uMessageDown = 1;
-				    strcpy (messageDown[0].strMsg,
-					    strCodeInput);
+				    strcpy (messageDown[0].strMsg, strCodeInput);
 				    strcpy (strStringGet, strCodeInput);
 				    retVal = IRV_ENG;
 				    break;
@@ -524,12 +503,12 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     case IRV_TO_PROCESS:
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
-	if (call_data->event.type==KeyRelease ) {
-	    if ( !bLumaQQ && (!keyCount || (!iKeyState && (iKey==ESC || iKey==ENTER ))) )
+	if (call_data->event.type == KeyRelease) {
+	    if (!bLumaQQ && (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER))))
 		IMForwardEvent (ims, (XPointer) call_data);
 	}
 	else
-	     IMForwardEvent (ims, (XPointer) call_data);
+	    IMForwardEvent (ims, (XPointer) call_data);
 
 	if (retVal != IRV_DONOT_PROCESS_CLEAN)
 	    return;
@@ -603,9 +582,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     case IRV_PUNC:
 	ResetInput ();
 	if (!(uMessageDown && retVal == IRV_GET_CANDWORDS)
-	    && bAutoHideInputWindow && (retVal == IRV_PUNC ||
-					(!bPhraseTips ||
-					 (bPhraseTips && !lastIsSingleHZ))))
+	    && bAutoHideInputWindow && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
 	    XUnmapWindow (dpy, inputWindow);
 	else
 	    DisplayInputWindow ();
@@ -687,7 +664,7 @@ void SwitchIM (INT8 index)
 {
     INT8            iLastIM;
 
-    iLastIM = (iIMIndex>=iIMCount)? (iIMCount-1):iIMIndex;
+    iLastIM = (iIMIndex >= iIMCount) ? (iIMCount - 1) : iIMIndex;
 
     if (index == (INT8) - 1) {
 	if (iIMIndex == (iIMCount - 1))
@@ -701,13 +678,9 @@ void SwitchIM (INT8 index)
     }
 
 #ifdef _USE_XFT
-    MAINWND_WIDTH =
-	((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) +
-	StringWidth (im[iIMIndex].strName, xftMainWindowFont) + 4;
+    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (im[iIMIndex].strName, xftMainWindowFont) + 4;
 #else
-    MAINWND_WIDTH =
-	((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) +
-	StringWidth (im[iIMIndex].strName, fontSetMainWindow) + 4;
+    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (im[iIMIndex].strName, fontSetMainWindow) + 4;
 #endif
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
 
@@ -743,11 +716,7 @@ void DoPhraseTips (void)
 #define _DEBUG
 */
 void RegisterNewIM (char *strName, void (*ResetIM) (void),
-	       INPUT_RETURN_VALUE (*DoInput) (int),
-	       INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE),
-	       char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),
-	       Bool (*PhraseTips) (void), void (*Init) (void),
-	       void (*Destroy) (void))
+		    INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int), Bool (*PhraseTips) (void), void (*Init) (void), void (*Destroy) (void))
 {
 #ifdef _DEBUG
     printf ("REGISTER %s\n", strName);
@@ -789,11 +758,11 @@ void SetIM (void)
 {
     INT8            i;
 
-    if ( im )
-    	free(im);
+    if (im)
+	free (im);
 
     if (bUseTable)
-    	LoadTableInfo ();
+	LoadTableInfo ();
 
     iIMCount = iTableCount;
     if (bUsePinyin)
@@ -801,29 +770,21 @@ void SetIM (void)
     if (bUseSP)
 	iIMCount++;
     if (bUseQW)
-    	iIMCount++;
+	iIMCount++;
 
     im = (IM *) malloc (sizeof (IM) * iIMCount);
     iIMCount = 0;
 
     /* 加入输入法 */
     if (bUsePinyin || (!bUseSP && (!bUseTable || !iTableCount)))	//至少应该有一种输入法
-	RegisterNewIM (NAME_OF_PINYIN, ResetPYStatus, DoPYInput, PYGetCandWords,
-		       PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);
+	RegisterNewIM (NAME_OF_PINYIN, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);
     if (bUseSP)
-	RegisterNewIM (NAME_OF_SHUANGPIN, ResetPYStatus, DoPYInput,
-		       PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL,
-		       SPInit, NULL);
+	RegisterNewIM (NAME_OF_SHUANGPIN, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, NULL);
     if (bUseQW)
-    	RegisterNewIM (NAME_OF_QUWEI, NULL, DoQWInput,
-		       QWGetCandWords, QWGetCandWord, NULL, NULL,
-		       NULL, NULL);
+	RegisterNewIM (NAME_OF_QUWEI, NULL, DoQWInput, QWGetCandWords, QWGetCandWord, NULL, NULL, NULL, NULL);
     if (bUseTable) {
 	for (i = 0; i < iTableCount; i++) {
-	    RegisterNewIM (table[i].strName, TableResetStatus, DoTableInput,
-			   TableGetCandWords, TableGetCandWord,
-			   TableGetLegendCandWord, TablePhraseTips, TableInit,
-			   FreeTableIM);
+	    RegisterNewIM (table[i].strName, TableResetStatus, DoTableInput, TableGetCandWords, TableGetCandWord, TableGetLegendCandWord, TablePhraseTips, TableInit, FreeTableIM);
 	    table[i].iIMIndex = iIMCount - 1;
 	}
     }

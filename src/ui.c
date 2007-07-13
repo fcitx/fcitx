@@ -526,10 +526,9 @@ int FillImageByXPMData (XImage * pImage, char **apcData)
     return 0;
 }
 
-XPoint MouseClick (int *x, int *y, int iWnd)
+void MouseClick (int *x, int *y, int iWnd)
 {
     XEvent          evtGrabbed;
-    XPoint          point;
 
     // To motion the  window
     while (1) {
@@ -571,8 +570,6 @@ XPoint MouseClick (int *x, int *y, int iWnd)
 
     *x = evtGrabbed.xmotion.x_root - *x;
     *y = evtGrabbed.xmotion.y_root - *y;
-
-    return point;
 }
 
 void WaitButtonRelease (XPoint * point)

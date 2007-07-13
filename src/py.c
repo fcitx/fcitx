@@ -58,7 +58,7 @@ INT8            iNewPYPhraseCount = 0;
 INT8            iOrderCount = 0;
 INT8            iNewFreqCount = 0;
 
-INT8		iYCDZ = 0;
+INT8            iYCDZ = 0;
 
 HOTKEYS         hkPYAddFreq[HOT_KEY_COUNT] = { CTRL_8, 0 };
 Bool            bIsPYAddFreq = False;
@@ -111,6 +111,7 @@ Bool LoadPYBaseDict (void)
     unsigned int    i, j, iLen;
 #else*/
     int             i, j, iLen;
+
 /*
 #endif
 */
@@ -175,17 +176,17 @@ Bool LoadPYOtherDict (void)
     else {
 	while (!feof (fp)) {
 	    if (!fread (&i, sizeof (int), 1, fp))
-	    	break;
+		break;
 /*
 #if defined(DARWIN)
             i = ReverseInt (i);
 #endif
-*/	    
+*/
 	    if (!fread (strBase, sizeof (char) * 2, 1, fp))
 		break;
 	    strBase[2] = '\0';
 	    if (!fread (&k, sizeof (int), 1, fp))
-	        break;
+		break;
 /*
 #if defined(DARWIN)
             k = ReverseInt (k);
@@ -701,59 +702,59 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 
 	    //下面实现以词定字
 	    if (iCandWordCount) {
-	    	if ( iKey=='[' || iKey==']' ) {
-	    		if (PYCandWords[iYCDZ].iWhich==PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich==PY_CAND_SYMPHRASE ) {			
-				char *pBase, *pPhrase;
+		if (iKey == '[' || iKey == ']') {
+		    if (PYCandWords[iYCDZ].iWhich == PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich == PY_CAND_SYMPHRASE) {
+			char           *pBase, *pPhrase;
 
-				pBase = PYFAList[PYCandWords[iYCDZ].cand.phrase.iPYFA].pyBase[PYCandWords[iYCDZ].cand.phrase.iBase].strHZ;
-				pPhrase = PYCandWords[iYCDZ].cand.phrase.phrase->strPhrase;
+			pBase = PYFAList[PYCandWords[iYCDZ].cand.phrase.iPYFA].pyBase[PYCandWords[iYCDZ].cand.phrase.iBase].strHZ;
+			pPhrase = PYCandWords[iYCDZ].cand.phrase.phrase->strPhrase;
 
-				if ( iKey=='[' )
-					strcpy(strStringGet, pBase);
-				else {
-					strncpy(strStringGet, pPhrase, 2 );
-					strStringGet[2]='\0';
-				}
-				uMessageDown = 0;
-				return IRV_GET_CANDWORDS;
+			if (iKey == '[')
+			    strcpy (strStringGet, pBase);
+			else {
+			    strncpy (strStringGet, pPhrase, 2);
+			    strStringGet[2] = '\0';
 			}
+			uMessageDown = 0;
+			return IRV_GET_CANDWORDS;
+		    }
 		}
-		else {
+		else if ( !bIsInLegend ) {
 		    val = -1;
 		    switch (iKey) {
-			case ')':
+		    case ')':
 			val++;
-			case '(':
+		    case '(':
 			val++;
-			case '*':
+		    case '*':
 			val++;
-			case '&':
+		    case '&':
 			val++;
-			case '^':
+		    case '^':
 			val++;
-			case '%':
+		    case '%':
 			val++;
-			case '$':
+		    case '$':
 			val++;
-			case '#':
+		    case '#':
 			val++;
-			case '@':
+		    case '@':
 			val++;
-			case '!':
+		    case '!':
 			val++;
 		    }
-		    
-		    if ( val!=-1 && val<iCandWordCount ) {
+
+		    if (val != -1 && val < iCandWordCount) {
 			iYCDZ = val;
-			PYCreateCandString();
+			PYCreateCandString ();
 			return IRV_DISPLAY_CANDWORDS;
 		    }
-		    
+
 		    return IRV_TO_PROCESS;
 		}
 	    }
 	    else
-	    	return IRV_TO_PROCESS;
+		return IRV_TO_PROCESS;
 	}
     }
 
@@ -786,7 +787,7 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	return PYGetCandWords (SM_FIRST);
     }
 
-    return (INPUT_RETURN_VALUE)val;
+    return (INPUT_RETURN_VALUE) val;
 }
 
 /*
@@ -879,7 +880,7 @@ void UpdateFindString (void)
 
 INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
 {
-    int iVal;
+    int             iVal;
 
     if (findMap.iMode == PARSE_ERROR || (bSingleHZMode && findMap.iHZCount > 1)) {
 	uMessageDown = 0;
@@ -951,18 +952,19 @@ INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
     else
 	PYGetCandWordsBackward ();
 
-    PYCreateCandString();
+    PYCreateCandString ();
 
     return IRV_DISPLAY_CANDWORDS;
 }
 
-void PYCreateCandString(void)
+void PYCreateCandString (void)
 {
-    char            str[2];
+    char            str[3];
     char           *pBase = NULL, *pPhrase;
     int             iType, iVal;
 
-    str[1] = '\0';
+    str[1] = '.';
+    str[2] = '\0';
     uMessageDown = 0;
 
     for (iVal = 0; iVal < iCandWordCount; iVal++) {
@@ -1013,7 +1015,7 @@ void PYCreateCandString(void)
 	if (PYCandWords[iVal].iWhich != PY_CAND_AUTO && iVal == iYCDZ)
 	    iType = MSG_FIRSTCAND;
 
-	messageDown[uMessageDown++].type = (MSG_TYPE)iType;
+	messageDown[uMessageDown++].type = (MSG_TYPE) iType;
     }
 }
 
@@ -1170,7 +1172,8 @@ void PYCreateAuto (void)
 		if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 		    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
 			if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
-			    if ((int) (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iHit) > val) {
+			    if ((int)
+				(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iHit) > val) {
 				val = PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iHit;
 				baseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase]);
 				pPYFA = &PYFAList[candPos.iPYFA];
@@ -1839,7 +1842,7 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 	}
 	break;
     case AD_FAST:
-    	if (mode == SM_PREV) {
+	if (mode == SM_PREV) {
 	    for (i = (iCandWordCount - 1); i >= 0; i--) {
 		if (PYCandWords[i].iWhich == PY_CAND_AUTO || PYCandWords[i].iWhich == PY_CAND_FREQ) {
 		    iStart = i + 1;
@@ -2289,7 +2292,7 @@ void SavePYUserPhrase (void)
     strcat (strPathTemp, TEMP_FILE);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存拼音用户词库：%s\n",strPathTemp);
+	fprintf (stderr, "无法保存拼音用户词库：%s\n", strPathTemp);
 	return;
     }
 
@@ -2322,7 +2325,7 @@ void SavePYUserPhrase (void)
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_USERPHRASE_FILE);
     if (access (strPath, 0))
-    	unlink(strPath);
+	unlink (strPath);
     rename (strPathTemp, strPath);
 }
 
@@ -2343,7 +2346,7 @@ void SavePYFreq (void)
 
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存常用词表：%s\n",strPathTemp);
+	fprintf (stderr, "无法保存常用词表：%s\n", strPathTemp);
 	return;
     }
     i = 0;
@@ -2385,7 +2388,7 @@ void SavePYFreq (void)
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_FREQ_FILE);
     if (access (strPath, 0))
-    	unlink(strPath);
+	unlink (strPath);
     rename (strPathTemp, strPath);
 }
 
@@ -2406,7 +2409,7 @@ void SavePYIndex (void)
     strcat (strPathTemp, PY_INDEX_FILE);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存索引文件：%s\n",strPathTemp);
+	fprintf (stderr, "无法保存索引文件：%s\n", strPathTemp);
 	return;
     }
 
@@ -2452,7 +2455,7 @@ void SavePYIndex (void)
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_INDEX_FILE);
     if (access (strPath, 0))
-    	unlink(strPath);
+	unlink (strPath);
     rename (strPathTemp, strPath);
 }
 
