@@ -107,7 +107,7 @@ int main (int argc, char *argv[])
 	    break;
 
 	i = strlen (str) - 1;
-	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\r')
+	while ((i >= 0) && (str[i] == ' ' || str[i] == '\n' || str[i] == '\r'))
 	    str[i--] = '\0';
 
 	pstr = str;
@@ -144,21 +144,21 @@ int main (int argc, char *argv[])
 		}
 	    }
 	}
-	
-	if ( strlen(strHZs)>20 ) {
+
+	if (strlen (strHZs) > 20) {
 	    fprintf (stderr, "%d - Can not process(>10): %s\n", s, str);
 	    t++;
 	}
 	else
-	    printf ("%s %s\n", strPYs+1, strHZs);
-	
-	_next:
+	    printf ("%s %s\n", strPYs + 1, strHZs);
+
+      _next:
 	;
     }
 
     fclose (fp);
-    
-    fprintf(stderr,"Total: %d  Error: %d\n",s,t);
+
+    fprintf (stderr, "Total: %d  Error: %d\n", s, t);
 
     return 0;
 }

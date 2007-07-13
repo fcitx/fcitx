@@ -1,3 +1,10 @@
+2007-07-13: Yuking <yuking_net@sohu.com>
+	   * 黑色星期五版
+	   
+2007-07-05: Yuking <yuking_net@sohu.com>
+	   * src/ime.c: 试图解决在QT-immodule情况下丢字的问题
+	   * src/table.c 修正某些情况下按标点导致崩溃的问题
+	   
 2007-07-02: Yuking <yuking_net@sohu.com>
 	   * src/table.c: 修正了空码上屏的一个错误
 	   * src/table.c: 调整空码上屏的一个设置

@@ -82,11 +82,12 @@ int main (int argc, char *argv[])
     setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
-    if (!InitX ())
-	exit (1);
     /* 先初始化 X 再加载配置文件，因为设置快捷键从 keysym 转换到
      * keycode 的时候需要 Display
      */
+    if (!InitX ())
+	exit (1);
+
     LoadConfig (True);
 
     CreateFont ();

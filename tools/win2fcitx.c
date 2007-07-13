@@ -52,7 +52,7 @@ int main (int argc, char *argv[])
 	    break;
 
 	i = strlen (str) - 1;
-	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\r')
+	while ((i >= 0) && (str[i] == ' ' || str[i] == '\n' || str[i] == '\r'))
 	    str[i--] = '\0';
 
 	pstr = str;

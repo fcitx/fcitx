@@ -820,8 +820,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 
-	DisplayInputWindow ();
 	DrawInputWindow ();
+	DisplayInputWindow ();
 
 	break;
     case IRV_DISPLAY_LAST:
@@ -833,14 +833,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	uMessageDown = 1;
 	strcpy (messageDown[0].strMsg, strStringGet);
 	messageDown[0].type = MSG_TIPS;
-	DisplayInputWindow ();
 	DrawInputWindow ();
+	DisplayInputWindow ();
 	break;
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
 	bShowPrev = False;
-	DisplayInputWindow ();
 	DrawInputWindow ();
+	DisplayInputWindow ();
 	break;
     case IRV_GET_LEGEND:
 	SendHZtoClient (call_data, strStringGet);
@@ -854,6 +854,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
 	    DrawInputWindow ();
+	    DisplayInputWindow ();
 	}
 	else {
 	    ResetInput ();
@@ -866,30 +867,41 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	break;
     case IRV_GET_CANDWORDS:
+	SendHZtoClient (call_data, strStringGet);
+	bLastIsNumber = False;
 	if (bPhraseTips && im[iIMIndex].PhraseTips && !bVK)
 	    DoPhraseTips ();
+	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
+	ResetInput ();
+
+	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
+	    XUnmapWindow (dpy, inputWindow);
+	else
+	    DrawInputWindow ();
+
+	lastIsSingleHZ = 0;
+	break;
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
-	if (retVal != IRV_GET_CANDWORDS && bChnPunc && bConvertPunc)
+	if (bChnPunc && bConvertPunc)
 	    ConvertPunc ();
     case IRV_PUNC:
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
-	if (bVK || (!(uMessageDown && retVal == IRV_GET_CANDWORDS)
-		    /*&& bAutoHideInputWindow */
-		    && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))))
+	if (!uMessageDown)
 	    XUnmapWindow (dpy, inputWindow);
-	else if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
-	    DrawInputWindow ();
     case IRV_GET_CANDWORDS_NEXT:
+	SendHZtoClient (call_data, strStringGet);
+	bLastIsNumber = False;
+	lastIsSingleHZ = 0;
+
+	if (retVal == IRV_GET_CANDWORDS_NEXT)
+	    im[iIMIndex].GetCandWords (SM_FIRST);
+
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	    DrawInputWindow ();
 	}
-
-	SendHZtoClient (call_data, strStringGet);
-	bLastIsNumber = False;
-	lastIsSingleHZ = 0;
 
 	break;
     default:

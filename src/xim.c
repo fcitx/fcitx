@@ -252,11 +252,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     }
 
     lastConnectID = connect_id;
-    /*if (bLumaQQ && ConnectIDGetReset (connect_id)) {
-       SendHZtoClient ((IMForwardEventStruct *) call_data, "\0");
-       ConnectIDSetReset (connect_id, False);
-       } */
-
     //When application gets the focus, rerecord the time.
     bStartRecordType = False;
     iHZInputed = 0;
@@ -339,8 +334,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
 	if (bShowInputWindowTriggering && !bCorner) {
-	    DisplayInputWindow ();
 	    DrawInputWindow ();
+	    DisplayInputWindow ();
 	}
     }
 
@@ -386,11 +381,11 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 //      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	//Sometimes, the main window may show a wrong state of IM 
-	if (connect_id != ((IMForwardEventStruct *) call_data)->connect_id) {
-	    CurrentIC = (IC *) FindIC (((IMForwardEventStruct *) call_data)->icid);
-	    connect_id = ((IMForwardEventStruct *) call_data)->connect_id;
-	    SetIMState (!(ConnectIDGetState (connect_id) == IS_CLOSED));
-	}
+	/*if (connect_id != ((IMForwardEventStruct *) call_data)->connect_id) {
+	   CurrentIC = (IC *) FindIC (((IMForwardEventStruct *) call_data)->icid);
+	   connect_id = ((IMForwardEventStruct *) call_data)->connect_id;
+	   SetIMState (!(ConnectIDGetState (connect_id) == IS_CLOSED));
+	   } */
 
 	ProcessKey ((IMForwardEventStruct *) call_data);
 
@@ -462,7 +457,6 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
-    IMCommitStruct  cms;
     char            strOutput[300];
     char           *ps;
     char           *pS2T = (char *) NULL;
@@ -488,16 +482,10 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	ps = strHZ;
 
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
-
-    memset (&cms, 0, sizeof (cms));
-    cms.major_code = XIM_COMMIT;
-    cms.icid = call_data->icid;
-    cms.connect_id = call_data->connect_id;
-    cms.flag = XimLookupChars;
-    cms.commit_string = (char *) tp.value;
-    IMCommitString (ims, (XPointer) & cms);
+    ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
+    ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
+    IMCommitString (ims, (XPointer) call_data);
     XFree (tp.value);
-
     if (bUseGBKT)
 	free (pS2T);
 }
@@ -582,7 +570,6 @@ void SetIMState (Bool bState)
 	call_data.icid = CurrentIC->id;
 
 	if (bState) {
-	    IMPreeditEnd (ims, (XPointer) & call_data);
 	    IMPreeditStart (ims, (XPointer) & call_data);
 	    SetConnectID (connect_id, IS_CHN);
 	}

@@ -180,7 +180,7 @@ void LoadTableInfo (void)
 	    break;
 
 	i = strlen (strPath) - 1;
-	while (strPath[i] == ' ' || strPath[i] == '\n')
+	while ((i >= 0) && (strPath[i] == ' ' || strPath[i] == '\n'))
 	    strPath[i--] = '\0';
 
 	pstr = strPath;
@@ -228,7 +228,7 @@ void LoadTableInfo (void)
 		break;
 
 	    i = strlen (strPath) - 1;
-	    while (strPath[i] == ' ' || strPath[i] == '\n')
+	    while ((i >= 0) && (strPath[i] == ' ' || strPath[i] == '\n'))
 		strPath[i--] = '\0';
 
 	    pstr = strPath;
@@ -386,8 +386,10 @@ Bool LoadTableDict (void)
      * 建立索引，加26是为了为拼音编码预留空间
      */
     recordIndex = (RECORD_INDEX *) malloc ((strlen (table[iTableIMIndex].strInputCode) + 26) * sizeof (RECORD_INDEX));
-    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode) + 26; iTemp++)
+    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode) + 26; iTemp++) {
+	recordIndex[iTemp].cCode = 0;
 	recordIndex[iTemp].record = NULL;
+    }
     /* ********************************************************************** */
 
     fread (&(table[iTableIMIndex].iCodeLength), sizeof (unsigned char), 1, fpDict);
@@ -514,7 +516,7 @@ Bool LoadTableDict (void)
     strNewPhraseCode[table[iTableIMIndex].iCodeLength] = '\0';
     bTableDictLoaded = True;
 
-    //为自动词组分配空间
+    //为自动词组分配空间    
     autoPhrase = (AUTOPHRASE *) malloc (sizeof (AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
     //读取上次保存的自动词组信息
@@ -633,6 +635,7 @@ void FreeTableIM (void)
 	free (fh);
 	iFH = 0;
     }
+
     free (table[iTableIMIndex].strInputCode);
     free (table[iTableIMIndex].strIgnoreChars);
     free (table[iTableIMIndex].strEndCode);
@@ -657,11 +660,15 @@ void FreeTableIM (void)
     }
 
     //释放自动词组的空间
-    for (i = 0; i < AUTO_PHRASE_COUNT; i++) {
-	free (autoPhrase[i].strCode);
-	free (autoPhrase[i].strHZ);
+    if (autoPhrase) {
+	for (i = 0; i < AUTO_PHRASE_COUNT; i++) {
+	    free (autoPhrase[i].strCode);
+	    free (autoPhrase[i].strHZ);
+	}
+	free (autoPhrase);
+
+	autoPhrase = (AUTOPHRASE *) NULL;
     }
-    free (autoPhrase);
 
     baseOrder = PYBaseOrder;
 }
@@ -848,11 +855,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	else if (iKey != LCTRL && iKey != RCTRL && iKey != LSHIFT && iKey != RSHIFT) {
 	    uMessageUp = uMessageDown = 0;
 	    bTablePhraseTips = False;
-	    //if (bAutoHideInputWindow)
 	    XUnmapWindow (dpy, inputWindow);
-	    /* else
-	       DisplayInputWindow ();
-	     */
 	}
     }
 
@@ -884,7 +887,6 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 			retVal = TableGetCandWords (SM_FIRST);
 			strTemp = GetPunc (strCodeInput[0]);
-
 			if (IsEndKey (iKey)) {
 			    if (iCodeInputCount == 1)
 				return IRV_TO_PROCESS;
@@ -902,26 +904,29 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    return IRV_DISPLAY_CANDWORDS;
 			}
 			else if (table[iTableIMIndex].iTableAutoSendToClientWhenNone && (iCodeInputCount == (table[iTableIMIndex].iTableAutoSendToClientWhenNone + 1)) && !iCandWordCount) {
-			    strCodeInput[iCodeInputCount - 1] = '\0';
-			    TableGetCandWords (SM_FIRST);
-
-			    if (iCandWordCount) {
-				strcpy (strStringGet, TableGetCandWord (0));
-				retVal = IRV_GET_CANDWORDS_NEXT;
-
-				iCodeInputCount = 1;
-				strCodeInput[0] = iKey;
-				strCodeInput[1] = '\0';
-				bIsInLegend = False;
-
-				TableGetCandWords (SM_FIRST);
+			    retVal = IRV_DO_NOTHING;
+			    if (tableCandWord[0].flag == CT_NORMAL) {
+				if (tableCandWord[0].candWord.record->bPinyin)
+				    retVal = IRV_DISPLAY_CANDWORDS;
 			    }
-			    else {
+
+			    if (retVal == IRV_DO_NOTHING) {
+				strCodeInput[iCodeInputCount - 1] = '\0';
+				TableGetCandWords (SM_FIRST);
+
+				if (iCandWordCount) {
+				    strcpy (strStringGet, TableGetCandWord (0));
+				    retVal = IRV_GET_CANDWORDS_NEXT;
+				    bIsInLegend = False;
+				}
+				else {
+				    retVal = IRV_DISPLAY_CANDWORDS;
+				    TableGetCandWords (SM_FIRST);
+				}
+
+				iCodeInputCount = 1;
 				strCodeInput[0] = iKey;
 				strCodeInput[1] = '\0';
-				iCodeInputCount = 1;
-				TableGetCandWords (SM_FIRST);
-				retVal = IRV_DISPLAY_CANDWORDS;
 			    }
 			}
 			else if (table[iTableIMIndex].iTableAutoSendToClient && (iCodeInputCount >= table[iTableIMIndex].iTableAutoSendToClient)) {
@@ -966,7 +971,8 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			strCodeInput[1] = '\0';
 			bIsInLegend = False;
 
-			TableGetCandWords (SM_FIRST);
+			if (retVal == IRV_DISPLAY_CANDWORDS)
+			    TableGetCandWords (SM_FIRST);
 		    }
 		    else
 			retVal = IRV_DO_NOTHING;
@@ -1021,8 +1027,6 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		messageDown[1].type = MSG_CODE;
 
 		TableCreateNewPhrase ();
-		DisplayInputWindow ();
-
 		retVal = IRV_DISPLAY_MESSAGE;
 	    }
 	    else
@@ -1246,10 +1250,11 @@ char           *TableGetCandWord (int iIndex)
     if (bUseLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
-#warning **********************************************************
+#warning *****************************************
 #warning FIX ME!
-#warning **********************************************************
-	//临时解决一个问题，似乎是出现了内存泄露
+#warning *****************************************
+	//临时解决一个问题，似乎是出现了内存泄露:
+	//pCandWord经过上面这个函数调用后就变了
 	pCandWord = strTableLegendSource;
     }
     else {
@@ -1336,9 +1341,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	    iTableTotalCandCount = 0;
 	    iCurrentCandPage = 0;
 	    iCandPageCount = 0;
-
 	    TableResetFlags ();
-
 	    if (TableFindFirstMatchCode () == -1 && !iAutoPhrase) {
 		uMessageDown = 0;
 		return IRV_DISPLAY_CANDWORDS;	//Not Found
@@ -1833,9 +1836,13 @@ int TableFindFirstMatchCode (void)
     if (table[iTableIMIndex].bUseMatchingKey && (strCodeInput[0] == table[iTableIMIndex].cMatchingKey))
 	i = 0;
     else {
-	while (strCodeInput[0] != recordIndex[i].cCode)
+	while (strCodeInput[0] != recordIndex[i].cCode) {
+	    if (!recordIndex[i].cCode)
+		break;
 	    i++;
+	}
     }
+
     currentRecord = recordIndex[i].record;
     if (!currentRecord)
 	return -1;
@@ -2247,6 +2254,10 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 	    tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
     }
 
+#warning *****************************************
+#warning FIX ME!
+#warning *****************************************
+    //第一个FIX ME！处的问题与下面这行代码好象有关系
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 
@@ -2404,9 +2415,11 @@ void TableCreateAutoPhrase (INT8 iCount)
 	j = 0;
 
     for (; j < iHZLastInputCount - 1; j++) {
+
 	for (i = table[iTableIMIndex].iAutoPhrase; i >= 2; i--) {
 	    if ((j + i - 1) > iHZLastInputCount)
 		continue;
+
 	    strcpy (strHZ, hzLastInput[j].strHZ);
 	    for (k = 1; k < i; k++)
 		strcat (strHZ, hzLastInput[j + k].strHZ);
@@ -2432,9 +2445,11 @@ void TableCreateAutoPhrase (INT8 iCount)
 		insertPoint->iSelected = 0;
 		insertPoint = insertPoint->next;
 	    }
+
 	  _next:
 	    continue;
 	}
+
     }
 
     /*

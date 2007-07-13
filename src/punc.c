@@ -27,7 +27,7 @@
 #include "ime.h"
 #include "tools.h"
 
-ChnPunc        *chnPunc = (ChnPunc *)NULL;
+ChnPunc        *chnPunc = (ChnPunc *) NULL;
 
 extern int      iCodeInputCount;
 
@@ -48,10 +48,10 @@ int LoadPuncDict (void)
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PUNC_DICT_FILENAME);
     }
-    
+
     fpDict = fopen (strPath, "rt");
 
-    if (!fpDict) {	
+    if (!fpDict) {
 	printf ("Can't open Chinese punc file: %s\n", strPath);
 	return False;
     }
@@ -107,37 +107,37 @@ int LoadPuncDict (void)
     return True;
 }
 
-void		FreePunc (void)
+void FreePunc (void)
 {
-    if (!chnPunc )
+    if (!chnPunc)
 	return;
-    
-    free(chnPunc);    
-    chnPunc = (ChnPunc *)NULL;
+
+    free (chnPunc);
+    chnPunc = (ChnPunc *) NULL;
 }
 
 /*
  * 根据字符得到相应的标点符号
  * 如果该字符不在标点符号集中，则返回NULL
  */
-char *GetPunc (int iKey)
+char           *GetPunc (int iKey)
 {
-    int          iIndex = 0;
-    char	*pPunc;
+    int             iIndex = 0;
+    char           *pPunc;
 
     if (!chnPunc)
-	    return (char*)NULL;
-    
+	return (char *) NULL;
+
     while (chnPunc[iIndex].ASCII) {
-    	if (chnPunc[iIndex].ASCII == iKey) {
-		pPunc=chnPunc[iIndex].strChnPunc[chnPunc[iIndex].iWhich];
-		chnPunc[iIndex].iWhich++;
-		if (chnPunc[iIndex].iWhich >= chnPunc[iIndex].iCount)
-			chnPunc[iIndex].iWhich = 0;
-	    	return pPunc;
+	if (chnPunc[iIndex].ASCII == iKey) {
+	    pPunc = chnPunc[iIndex].strChnPunc[chnPunc[iIndex].iWhich];
+	    chnPunc[iIndex].iWhich++;
+	    if (chnPunc[iIndex].iWhich >= chnPunc[iIndex].iCount)
+		chnPunc[iIndex].iWhich = 0;
+	    return pPunc;
 	}
 	iIndex++;
     }
 
-    return (char*)NULL;
+    return (char *) NULL;
 }

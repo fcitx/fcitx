@@ -47,7 +47,6 @@ extern int      iTempInputWindowY;
 extern int      iInputWindowWidth;
 extern int      iInputWindowHeight;
 
-extern char     strUserLocale[];
 extern int      iMaxCandWord;
 extern Bool     _3DEffectMainWindow;
 extern _3D_EFFECT _3DEffectInputWindow;
@@ -224,7 +223,7 @@ void LoadConfig (Bool bMode)
 	    break;
 
 	i = strlen (str) - 1;
-	while (str[i] == ' ' || str[i] == '\n')
+	while ((i >= 0) && (str[i] == ' ' || str[i] == '\n'))
 	    str[i--] = '\0';
 
 	pstr = str;
@@ -866,7 +865,7 @@ void LoadProfile (void)
 		break;
 
 	    i = strlen (str) - 1;
-	    while (str[i] == ' ' || str[i] == '\n')
+	    while ((i >= 0) && (str[i] == ' ' || str[i] == '\n'))
 		str[i--] = '\0';
 
 	    pstr = str;

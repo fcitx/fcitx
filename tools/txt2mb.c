@@ -131,7 +131,7 @@ int main (int argc, char *argv[])
 	    break;
 
 	i = strlen (strCode) - 1;
-	while (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r')
+	while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
 	    strCode[i--] = '\0';
 
 	pstr = strCode;
@@ -190,7 +190,7 @@ int main (int argc, char *argv[])
 	    rule[iTemp].rule = (RULE_RULE *) malloc (sizeof (RULE_RULE) * iCodeLength);
 
 	    i = strlen (strCode) - 1;
-	    while (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r')
+	    while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
 		strCode[i--] = '\0';
 
 	    pstr = strCode;
@@ -280,7 +280,7 @@ int main (int argc, char *argv[])
 		break;
 
 	    i = strlen (strCode) - 1;
-	    while (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r')
+	    while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
 		strCode[i--] = '\0';
 
 	    pstr = strCode;
@@ -293,7 +293,7 @@ int main (int argc, char *argv[])
 		break;
 	}
     }
-    
+
     if (iPYCodeLength < iCodeLength)
 	iPYCodeLength = iCodeLength;
 
