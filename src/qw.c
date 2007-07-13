@@ -146,11 +146,7 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
 	
 	strcpy (messageDown[uMessageDown].strMsg, GetQuWei (iQu, iWei + i + 1));
 	if (i != 9)
-#ifdef _USE_XFT
-		strcat (messageDown[uMessageDown].strMsg, "  ");
-#else
 		strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
 	messageDown[uMessageDown++].type = (i)? MSG_OTHER:MSG_FIRSTCAND;	
     }    
     

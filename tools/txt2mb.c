@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
   char		strIgnoreChars[100]="\0";
 
   if ( argc!=3 ) {
-    printf("\nUsage: mb2txt <Source File> <IM File>\n\n");
+    printf("\nUsage: txt2mb <Source File> <IM File>\n\n");
     exit (1);
   }
 

@@ -53,7 +53,6 @@ extern Window   inputWindow;
 extern Window   mainWindow;
 extern Window   aboutWindow;
 
-extern Bool     bBackground;
 extern Bool     bIsUtf8;
 
 extern HIDE_MAINWINDOW hideMainWindow;
@@ -63,6 +62,7 @@ int main (int argc, char *argv[])
     XEvent          event;
     char           *imname = NULL;
     int             i;
+    Bool     bBackground=True;
 
     for (i = 1; i < argc; i++) {
 	if (!strcmp (argv[i], "-name"))

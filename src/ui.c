@@ -56,7 +56,6 @@ XftFont        *xftMainWindowFont = NULL;
 XftFont        *xftMainWindowFontEn = NULL;
 XftFont        *xftVKWindowFont = NULL;
 Bool            bUseAA = True;
-int             iDefaultWidth = 0;
 int             iMainWindowFontSize = 11;
 int             iVKWindowFontSize = 11;
 #else
@@ -240,8 +239,6 @@ void CreateFont (void)
     if (xftDraw)
 	XftDrawDestroy (xftDraw);
     xftDraw = XftDrawCreate (dpy, inputWindow, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)));
-
-    iDefaultWidth = StringWidth ("¹ú", xftFont) / 2 - 2;
 }
 #else
 void CreateFont (void)
@@ -489,7 +486,7 @@ int StringWidth (char *str, XftFont * font)
     if (font == xftMainWindowFont)
 	return extents.width;
 
-    return ((extents.width < (il * iDefaultWidth)) ? (il * iDefaultWidth) : extents.width);
+    return extents.xOff;
 }
 
 int FontHeight (XftFont * font)

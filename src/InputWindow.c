@@ -287,7 +287,7 @@ void DisplayMessage (void)
 	}
 	else {
 	    uMessageDown = 2;
-	    strcpy (messageDown[0].strMsg, "ª∂”≠∑√Œ  ");
+	    strcpy (messageDown[0].strMsg, "ª∂”≠∑√Œ ");
 	    messageDown[0].type = MSG_OTHER;
 	    strcpy (messageDown[1].strMsg, "http://www.fcitx.org");
 	    messageDown[1].type = MSG_CODE;

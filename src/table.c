@@ -22,6 +22,7 @@
 #endif
 //========================================
 #include "table.h"
+#include "punc.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -359,8 +360,10 @@ Bool LoadTableDict (void)
      * 建立索引
      */
     recordIndex = (RECORD_INDEX *) malloc (strlen (table[iTableIMIndex].strInputCode) * sizeof (RECORD_INDEX));
-    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++)
+    for (iTemp = 0; iTemp < strlen (table[iTableIMIndex].strInputCode); iTemp++) {
 	recordIndex[iTemp].cCode = table[iTableIMIndex].strInputCode[iTemp];
+	recordIndex[iTemp].record = NULL;
+    }
     /* ********************************************************************** */
 
     fread (&(table[iTableIMIndex].iCodeLength), sizeof (unsigned char), 1, fpDict);
@@ -497,6 +500,30 @@ Bool LoadTableDict (void)
      TableInit();
      */
 
+    /*
+     * 呵呵，借用一下这儿来为一个词库文件生成五笔编码
+     */
+    
+    /*
+    FILE *temp1,*temp2;
+    char str[100];
+    temp1=fopen("phrase.txt","rt");
+    temp2=fopen("table.txt","wt");
+    
+    while (!feof(temp1)) {
+	fscanf(temp1,"%s\n",str);
+	TableCreatePhraseCode(str);
+	printf("\nProcessing %s ...  ",str);
+	if ( !bCanntFindCode ) 
+	    fprintf(temp2,"%s %s\n", strNewPhraseCode,str);
+	else
+	    puts("ERROR!");
+    }
+    printf("\nCreate table.txt ok!\n");
+    fclose(temp2);
+    fclose(temp1);    */
+    /* ********************************************** */    
+    
     return True;
 }
 
@@ -731,8 +758,11 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			retVal = IRV_DISPLAY_LAST;
 		    }
 		    else {
+			char *strTemp;
+			
 			retVal = TableGetCandWords (SM_FIRST);
-
+			strTemp=GetPunc(strCodeInput[0]);
+			
 			if (table[iTableIMIndex].bTableAutoSendToClient && (iCodeInputCount == table[iTableIMIndex].iCodeLength)) {
 			    if (iCandWordCount == 1 && tableCandWord[0].flag) {	//如果只有一个候选词，则送到客户程序中
 				strcpy (strStringGet, TableGetCandWord (0));
@@ -742,6 +772,10 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 				else
 				    retVal = IRV_GET_CANDWORDS;
 			    }
+			}
+			else if ( (iCodeInputCount==1) && strTemp && !iCandWordCount) { //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
+			    strcpy (strStringGet, strTemp); 
+			    retVal = IRV_PUNC;
 			}
 		    }
 		}
@@ -1121,7 +1155,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	    iTableTotalCandCount = 0;
 
 	    TableResetFlags ();
-
+	    
 	    if (TableFindFirstMatchCode () == -1 && !iAutoPhrase) {
 		uMessageDown = 0;
 		return IRV_DISPLAY_CANDWORDS;	//Not Found
@@ -1210,7 +1244,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		iWidth += StringWidth (pstr, xftFontEn);
 		iWidth += StringWidth (strTemp, xftFontEn);
 		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, xftFont);
-		iWidth += StringWidth ("  ", xftFontEn);
+		iWidth += StringWidth (" ", xftFontEn);
 #else
 		iWidth += StringWidth (pstr, fontSet);
 		iWidth += StringWidth (strTemp, fontSet);
@@ -1221,7 +1255,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		if (iWidth > iFixedInputWindowWidth) {
 		    if (i == 0) {
 #ifdef _USE_XFT
-			iWidth -= StringWidth ("  ", xftFontEn);
+			iWidth -= StringWidth (" ", xftFontEn);
 #else
 			iWidth -= StringWidth (" ", fontSet);
 #endif
@@ -1268,7 +1302,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		iWidth += StringWidth (pstr, xftFontEn);
 		iWidth += StringWidth (strTemp, xftFontEn);
 		iWidth += StringWidth ((tableCandWord[i].flag) ? tableCandWord[i].candWord.record->strHZ : tableCandWord[i].candWord.autoPhrase->strHZ, xftFont);
-		iWidth += StringWidth ("  ", xftFontEn);
+		iWidth += StringWidth (" ", xftFontEn);
 #else
 		iWidth += StringWidth (pstr, fontSet);
 		iWidth += StringWidth (strTemp, fontSet);
@@ -1278,7 +1312,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		if (iWidth > iFixedInputWindowWidth) {
 		    if (i == (iCandWordCount - 1)) {
 #ifdef _USE_XFT
-			iWidth -= StringWidth ("  ", xftFontEn);
+			iWidth -= StringWidth (" ", xftFontEn);
 #else
 			iWidth -= StringWidth (" ", fontSet);
 #endif
@@ -1329,11 +1363,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	strcpy (messageDown[uMessageDown].strMsg, pstr);
 
 	if (i != (iCandWordCount - 1)) {
-#ifdef _USE_XFT
-	    strcat (messageDown[uMessageDown].strMsg, "  ");
-#else
 	    strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
 	}
 	messageDown[uMessageDown++].type = MSG_CODE;
     }
@@ -1574,9 +1604,11 @@ int TableFindFirstMatchCode (void)
 	while (strCodeInput[0] != recordIndex[i].cCode)
 	    i++;
     }
-
     currentRecord = recordIndex[i].record;
-    while (currentRecord != recordHead) {
+    if ( !currentRecord )
+	return -1;
+    
+    while (currentRecord != recordHead ) {
 	if (!TableCompareCode (strCodeInput, currentRecord->strCode)) {
 	    if (CheckHZCharset (currentRecord->strHZ))
 		return i;
@@ -1906,7 +1938,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
     }
     else
 	strTemp[1] = '\0';
-    
+
     uMessageDown = 0;
     for (i = 0; i < iLegendCandWordCount; i++) {
 	if (i == 9)
@@ -1918,11 +1950,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
 
 	strcpy (messageDown[uMessageDown].strMsg, tableCandWord[i].candWord.record->strHZ + strlen (strTableLegendSource));
 	if (i != (iLegendCandWordCount - 1)) {
-#ifdef _USE_XFT
-	    strcat (messageDown[uMessageDown].strMsg, "  ");
-#else
 	    strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
 	}
 	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
     }
@@ -2007,13 +2035,13 @@ INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode)
     if (!iFH)
 	return IRV_DISPLAY_MESSAGE;
 
-   if (bPointAfterNumber) {
+    if (bPointAfterNumber) {
 	strTemp[1] = '.';
 	strTemp[2] = '\0';
     }
     else
 	strTemp[1] = '\0';
-    
+
     uMessageDown = 0;
 
     if (mode == SM_FIRST) {
@@ -2046,11 +2074,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode)
 	messageDown[uMessageDown++].type = MSG_INDEX;
 	strcpy (messageDown[uMessageDown].strMsg, fh[iCurrentCandPage * iMaxCandWord + i].strFH);
 	if (i != (iMaxCandWord - 1)) {
-#ifdef _USE_XFT
-	    strcat (messageDown[uMessageDown].strMsg, "  ");
-#else
 	    strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
 	}
 	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
 	if ((iCurrentCandPage * iMaxCandWord + i) >= (iFH - 1)) {

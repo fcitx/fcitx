@@ -69,7 +69,7 @@ extern Bool     bIsUtf8;
 Bool CreateAboutWindow (void)
 {
     strcpy (strTitle, AboutTitle);
-    strcpy (strTitle + strlen (AboutTitle), "  ");
+    strcpy (strTitle + strlen (AboutTitle), " ");
     strcpy (strTitle + strlen (AboutTitle) + 2, FCITX_VERSION);
 
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(AboutWindowColor.backColor)))

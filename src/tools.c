@@ -263,7 +263,7 @@ void LoadConfig (Bool bMode)
 	    pstr += 15;
 	    iFixedInputWindowWidth = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "序号前加点==")) {
+	else if (MyStrcmp (pstr, "序号后加点=")) {
 	    pstr += 11;
 	    bPointAfterNumber = atoi (pstr);
 	}
@@ -661,7 +661,7 @@ void SaveConfig (void)
        *********************************************************************** */
     fprintf (fp, "#输入条固定宽度仅适用于码表输入法，0表示不固定宽度\n");
     fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
-    fprintf (fp, "序号前加点=%d\n", bPointAfterNumber);
+    fprintf (fp, "序号后加点=%d\n", bPointAfterNumber);
     fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
 
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);

@@ -22,8 +22,8 @@
 
 #include "py.h"
 
-#define PY_SEPERATOR '\''
-#define PY_SEPERATOR_S "'"
+#define PY_SEPARATOR '\''
+#define PY_SEPARATOR_S "'"
 
 typedef enum PARSEPYMODE {
     PARSE_ERROR = 0,

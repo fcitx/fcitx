@@ -43,7 +43,6 @@ CARD16          lastConnectID = 0;
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC = NULL;
-Bool            bBackground = True;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
 //int y=0;

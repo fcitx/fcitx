@@ -1,5 +1,19 @@
+2005-11-03: Yuking <yukig_net@sohu.com>
+	   * 合并拼音佳佳4.0词库（经作者许可）
+	   * 3.2-20051108
+
+2005-11-03: Yuking <yukig_net@sohu.com>
+	   * 加入wpyh@linuxsir的几个补丁，包括：
+	       输入条显示补丁
+	       配置文件错误修正
+	       tools/Makefile.in tools/Makefile.am的修正
+	   
+2005-10-23: Yuking <yukig_net@sohu.com>
+	   * table.c:解决二笔标点符号需要按空格的问题
+
 2005-10-09: Yuking <yukig_net@sohu.com>
 	   * 使用来自linuxfans上的极点二笔码表
+	   * 3.2-051010
 	   
 2005-9-23: Yuking <yukig_net@sohu.com>
 	   * 为码表输入法增加固定输入条的功能，为拼音增加要麻烦一些，因此暂时不做了

@@ -1636,7 +1636,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=fcitx
- VERSION=3.2-051010
+ VERSION=3.2-051108
 
 
 cat >>confdefs.h <<_ACEOF
