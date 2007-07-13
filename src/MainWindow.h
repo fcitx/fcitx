@@ -4,7 +4,8 @@
 #include <X11/Xlib.h>
 
 #define MAINWND_STARTX	500
-#define _MAINWND_WIDTH	121
+#define _MAINWND_WIDTH	104
+#define _MAINWND_WIDTH_COMPACT	32
 #define MAINWND_STARTY	1
 #define MAINWND_HEIGHT	20
 

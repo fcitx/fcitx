@@ -20,7 +20,6 @@ fcitx_SOURCES = erbi.c erbi.h \
                 PYFA.c PYFA.h \
                 pyMapTable.c pyMapTable.h \
                 pyParser.c pyParser.h \
-                SetLocale.c SetLocale.h \
                 sp.c sp.h \
                 tools.c tools.h \
                 ui.c ui.h \

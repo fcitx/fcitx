@@ -53,9 +53,10 @@ Bool            bTrackCursor = True;
 int             iCursorPos = 0;
 Bool            bShowCursor = True;
 
+_3D_EFFECT      _3DEffectInputWindow = _3D_LOWER;
+
 extern Display *dpy;
 extern int      iScreen;
-extern int      iFontSize;
 
 #ifdef _USE_XFT
 extern iconv_t  convUTF8;
@@ -65,7 +66,6 @@ extern XFontSet fontSet;
 #endif
 
 extern GC       dimGC;
-extern int      i3DEffect;
 
 Bool CreateInputWindow (void)
 {
@@ -147,16 +147,20 @@ void DisplayInputWindow (void)
     DrawInputWindow ();
 }
 
+extern GC              dimGC;
+extern GC              lightGC;
 void DrawInputWindow (void)
 {
-    if (i3DEffect == _3D_UPPER)
+    if (_3DEffectInputWindow == _3D_UPPER)
 	Draw3DEffect (inputWindow, 2, 2, iInputWindowWidth - 4, iInputWindowHeight - 4, _3D_UPPER);
-    else if (i3DEffect == _3D_LOWER)
+    else if (_3DEffectInputWindow == _3D_LOWER)
 	Draw3DEffect (inputWindow, 0, 0, iInputWindowWidth, iInputWindowHeight, _3D_LOWER);
 
     XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
     //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
+    XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2-1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2-1);
     XDrawLine (dpy, inputWindow, inputWindowLineColor.gc, 2 + 5, iInputWindowHeight / 2, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2);
+    XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2+1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2+1);
 
     if (bShowPrev) {
 	if (!pPrev) {
@@ -229,8 +233,13 @@ void DisplayMessage (void)
 
     iInputWindowUpWidth = 0;
     for (i = 0; i < uMessageUp; i++)
-	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg);
-    iInputWindowUpWidth += 2 * INPUTWND_START_POS_UP - 1;
+#ifdef _USE_XFT    
+	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, xftFont);
+#else
+	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, fontSet);
+#endif
+
+    iInputWindowUpWidth += 2 * INPUTWND_START_POS_UP + 1;
     if (bShowPrev)
 	iInputWindowUpWidth += 16;
     else if (bShowNext)
@@ -238,8 +247,13 @@ void DisplayMessage (void)
 
     iInputWindowDownWidth = 0;
     for (i = 0; i < uMessageDown; i++)
-	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg);
-    iInputWindowDownWidth += 2 * INPUTWND_START_POS_DOWN - 1;
+#ifdef _USE_XFT    
+	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, xftFont);
+#else
+	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, fontSet);
+#endif
+
+    iInputWindowDownWidth += 2 * INPUTWND_START_POS_DOWN + 1;
 
     if (iInputWindowUpWidth < iInputWindowDownWidth)
 	iInputWindowWidth = iInputWindowDownWidth;
@@ -251,12 +265,12 @@ void DisplayMessage (void)
 
     XGetWindowAttributes (dpy, inputWindow, &wa);
     if ((wa.x + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+    	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 2;
     else if (wa.x < 0) {
-       if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
-           i = 0;
-       else
-           i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+    	if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
+        	i = 0;
+       	else
+           	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
     }
     else
        i = wa.x;
@@ -283,19 +297,24 @@ void DisplayMessageUp (void)
     iChar = iCursorPos;
 
     for (i = 0; i < uMessageUp; i++) {
-	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg);
-
 #ifdef _USE_XFT
-	OutputString (inputWindow, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
+	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg, xftFont);
+	OutputString (inputWindow, xftFont, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
 #else
-	OutputString (inputWindow, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
+	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg, fontSet);
+	OutputString (inputWindow, fontSet, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
 #endif
 
 	if (bShowCursor && iChar) {
 	    if (strlen (messageUp[i].strMsg) > iChar) {
 		strncpy (strText, messageUp[i].strMsg, iChar);
 		strText[iChar] = '\0';
-		iCursorPixPos += StringWidth (strText);
+#ifdef _USE_XFT    
+		iCursorPixPos += StringWidth (strText, xftFont);
+#else
+		iCursorPixPos += StringWidth (strText, fontSet);
+#endif
+		
 		iChar = 0;
 	    }
 	    else {
@@ -321,13 +340,18 @@ void DisplayMessageDown (void)
 
     iPos = INPUTWND_START_POS_DOWN;
     for (i = 0; i < uMessageDown; i++) {
-	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg);
+    	//借用iInputWindowDownWidth作为一个临时变量
+
+
+	
 #ifdef _USE_XFT
-	OutputString (inputWindow, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
+	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
+	OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
 #else
-	OutputString (inputWindow, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
+	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, fontSet);
+	OutputString (inputWindow, fontSet, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
 #endif
-	iPos += iInputWindowDownWidth;
+	iPos += iInputWindowDownWidth;	
     }
 }
 

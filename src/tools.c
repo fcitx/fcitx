@@ -27,17 +27,16 @@ extern int      iInputWindowWidth;
 extern int      iInputWindowHeight;
 
 extern int      iMaxCandWord;
-extern int      i3DEffect;
+extern Bool	_3DEffectMainWindow;
+extern _3D_EFFECT      _3DEffectInputWindow;
 extern WINDOW_COLOR inputWindowColor;
 extern WINDOW_COLOR mainWindowColor;
-extern char     strUserLocale[];
+extern MESSAGE_COLOR IMNameColor[];
 extern MESSAGE_COLOR messageColor[];
 extern MESSAGE_COLOR inputWindowLineColor;
 extern MESSAGE_COLOR mainWindowLineColor;
 extern MESSAGE_COLOR cursorColor;
 extern ENTER_TO_DO enterToDo;
-
-extern Bool     bSP;
 
 extern HOTKEYS  hkTrigger[];
 extern HOTKEYS  hkGBK[];
@@ -62,13 +61,14 @@ extern Bool     bUseGBK;
 extern Bool     bEngPuncAfterNumber;
 extern Bool     bAutoHideInputWindow;
 extern Bool     bTrackCursor;
-extern Bool     bWBAutoSendToClient;
+extern ADJUSTORDER wbOrder;
 extern Bool     bWBExactMatch;
 extern Bool     bUseZPY;
 extern Bool     bWBUseZ;
 extern XColor   colorArrow;
 extern HIDE_MAINWINDOW hideMainWindow;
-extern Bool     bWBAutoAdjustOrder;
+extern Bool	bCompactMainWindow;
+extern Bool     bWBAutoSendToClient;
 extern Bool     bPromptWBCode;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern int      iFontSize;
@@ -95,7 +95,7 @@ extern ADJUSTORDER baseOrder;
 extern ADJUSTORDER phraseOrder;
 extern ADJUSTORDER freqOrder;
 
-extern IME      imeIndex;
+extern INT8     iIMIndex;
 extern Bool 	bLocked;
 
 extern MHPY     MHPY_C[];
@@ -103,6 +103,21 @@ extern MHPY     MHPY_S[];
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
+#endif
+
+#if defined(DARWIN)
+/* function to reverse byte order for integer
+this is required for Mac machine*/
+int ReverseInt (unsigned int pc_int)
+{
+    int mac_int;
+    unsigned char * p;
+
+    mac_int = pc_int;
+    p = (unsigned char*) &pc_int;
+    mac_int = (p[3] << 24) + (p[2] << 16) + (p[1] << 8) + p[0];
+    return mac_int;
+}
 #endif
 
 /*
@@ -127,8 +142,6 @@ void LoadConfig (Bool bMode)
         return;
     }
 
-    strUserLocale[0] = '\0';
-
     for (;;) {
         if (!fgets (str, PATH_MAX, fp))
             break;
@@ -143,10 +156,7 @@ void LoadConfig (Bool bMode)
         if (pstr[0] == '#')
             continue;
 
-        if (strstr (pstr, "区域设置=") && bMode) {
-            pstr += 9;
-            strcpy (strUserLocale, pstr);
-        } else if (strstr (pstr, "显示字体=") && bMode) {
+	if (strstr (pstr, "显示字体=") && bMode) {
             pstr += 9;
             strcpy (strFontName, pstr);
         } else if (strstr (pstr, "显示字体大小=") && bMode) {
@@ -169,9 +179,13 @@ void LoadConfig (Bool bMode)
             pstr += 17;
             bEngPuncAfterNumber = atoi (pstr);
         }
-        else if (strstr (pstr, "是否使用3D界面=")) {
-            pstr += 15;
-            i3DEffect = atoi (pstr);
+	else if (strstr (pstr, "主窗口是否使用3D界面=")) {
+            pstr += 21;
+            _3DEffectMainWindow = atoi (pstr);
+        }
+        else if (strstr (pstr, "输入条使用3D界面=")) {
+            pstr += 17;
+            _3DEffectInputWindow = atoi (pstr);
         } else if (strstr (pstr, "是否自动隐藏输入条=")) {
             pstr += 19;
             bAutoHideInputWindow = atoi (pstr);
@@ -199,6 +213,19 @@ void LoadConfig (Bool bMode)
             mainWindowLineColor.color.red = (r << 8);
             mainWindowLineColor.color.green = (g << 8);
             mainWindowLineColor.color.blue = (b << 8);
+        } else if (strstr (pstr, "主窗口输入法名称色=") && bMode) {
+	    int r1, r2, g1, g2, b1 ,b2;
+            pstr += 19;
+            sscanf (pstr, "%d %d %d %d %d %d %d %d %d", &r, &g, &b, &r1, &g1, &b1,&r2, &g2, &b2);
+            IMNameColor[0].color.red = (r << 8);
+            IMNameColor[0].color.green = (g << 8);
+            IMNameColor[0].color.blue = (b << 8);
+	    IMNameColor[1].color.red = (r1 << 8);
+            IMNameColor[1].color.green = (g1 << 8);
+            IMNameColor[1].color.blue = (b1 << 8);
+	    IMNameColor[2].color.red = (r2 << 8);
+            IMNameColor[2].color.green = (g2 << 8);
+            IMNameColor[2].color.blue = (b2 << 8);
         } else if (strstr (pstr, "输入窗背景色=") && bMode) {
             pstr += 13;
             sscanf (pstr, "%d %d %d\n", &r, &g, &b);
@@ -312,10 +339,11 @@ void LoadConfig (Bool bMode)
         else if (strstr (pstr, "五笔四键自动上屏=")) {
             pstr += 17;
             bWBAutoSendToClient = atoi (pstr);
-        } else if (strstr (pstr, "自动调整五笔顺序=")) {
+        } else if (strstr (pstr, "五笔重码调整方式=")) {
             pstr += 17;
-            bWBAutoAdjustOrder = atoi (pstr);
-        } else if (strstr (pstr, "提示词库中已有的词组=")) {
+            wbOrder = atoi (pstr);
+	}
+	else if (strstr (pstr, "提示词库中已有的词组=")) {
             pstr += 21;
             bPhraseTips = atoi (pstr);
         } else if (strstr (pstr, "使用Z输入拼音=")) {
@@ -445,11 +473,9 @@ void SaveConfig (void)
     }
 
     fprintf (fp, "[程序]\n");
-    fprintf (fp, "#区域设置=zh_CN\n");
     fprintf (fp, "显示字体=*\n");
-    fprintf (fp, "显示字体大小=18\n");
+    fprintf (fp, "显示字体大小=24\n");
 #ifdef _USE_XFT
-
     fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
 #endif
 
@@ -457,20 +483,22 @@ void SaveConfig (void)
     fprintf (fp, "数字后跟半角符号=%d\n", bEngPuncAfterNumber);
     fprintf (fp, "Enter键行为=2\n");
     fprintf (fp, "分号输入英文=1\n");
-    fprintf (fp, "大写字母输入英文=1\n");
+    fprintf (fp, "大写字母输入英文=0\n");
     fprintf (fp, "联想方式禁止翻页=1\n");
 
     fprintf (fp, "\n[界面]\n");
     fprintf (fp, "候选词个数=5\n");
-    fprintf (fp, "是否使用3D界面=2\n");
-    fprintf (fp, "是否自动隐藏输入条=1\n");
-    fprintf (fp, "主窗口隐藏模式=1\n");
+    fprintf (fp, "主窗口是否使用3D界面=%d\n", _3DEffectMainWindow);
+    fprintf (fp, "输入条使用3D界面=%d\n", _3DEffectInputWindow);
+    fprintf (fp, "主窗口隐藏模式=0\n");
+    fprintf (fp, "是否自动隐藏输入条=1\n");    
 
     fprintf (fp, "是否光标跟随=1\n");
 
     fprintf (fp, "光标色=92 210 131\n");
-    fprintf (fp, "主窗口背景色=230 230 230\n");
-    fprintf (fp, "主窗口线条色=255 0 0\n");
+    fprintf (fp, "主窗口背景色=220 220 220\n");
+    fprintf (fp, "主窗口线条色=100 180 255\n");
+    fprintf (fp, "主窗口输入法名称色=170 170 170 150 200 150 0 0 255\n");
     fprintf (fp, "输入窗背景色=240 240 240\n");
     fprintf (fp, "输入窗线条色=100 200 255\n");
     fprintf (fp, "输入窗箭头色=255 150 255\n");
@@ -494,13 +522,13 @@ void SaveConfig (void)
     fprintf (fp, "联想支持=CTRL_L\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
     fprintf (fp, "中文标点=ALT_SPACE\n");
-    fprintf (fp, "上一页=- ,\n");
-    fprintf (fp, "下一页== .\n");
+    fprintf (fp, "上一页=-\n");
+    fprintf (fp, "下一页==\n");
     fprintf (fp, "第二三候选词选择键=SHIFT\n");
 
     fprintf (fp, "\n[五笔]\n");
     fprintf (fp, "五笔四键自动上屏=1\n");
-    fprintf (fp, "自动调整五笔顺序=0\n");
+    fprintf (fp, "五笔重码调整方式=%d\n", wbOrder);
     fprintf (fp, "提示词库中已有的词组=0\n");
     fprintf (fp, "五笔精确匹配=0\n");
     fprintf (fp, "提示五笔编码=1\n");
@@ -595,14 +623,14 @@ void LoadProfile (void)
                 if (iInputWindowX < 0)
                     iInputWindowX = 0;
                 else if ((iInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-                    iInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+                    iInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 3;
             } else if (strstr (str, "输入窗口位置Y=")) {
                 pstr += 14;
                 iInputWindowY = atoi (pstr);
                 if (iInputWindowY < 0)
                     iInputWindowY = 0;
                 else if ((iInputWindowY + INPUTWND_HEIGHT) > DisplayHeight (dpy, iScreen))
-                    iInputWindowY = DisplayHeight (dpy, iScreen) - INPUTWND_HEIGHT;
+                    iInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
             } else if (strstr (str, "是否全角=")) {
                 pstr += 9;
                 bCorner = atoi (pstr);
@@ -617,15 +645,13 @@ void LoadProfile (void)
                 bUseLegend = atoi (pstr);
             } else if (strstr (str, "当前输入法=")) {
                 pstr += 11;
-                imeIndex = atoi (pstr);
-            } else if (strstr (str, "是否使用双拼=")) {
-                pstr += 13;
-                bSP = atoi (pstr);
-                if (bSP)
-                    LoadSPData ();
+                iIMIndex = atoi (pstr);
             } else if (strstr (str, "禁止用键盘切换=")) {
                 pstr += 15;
                 bLocked = atoi (pstr);
+            } else if (strstr (str, "主窗口简洁模式=")) {
+                pstr += 15;
+                bCompactMainWindow = atoi (pstr);
             }
         }
 
@@ -665,10 +691,10 @@ void SaveProfile (void)
     fprintf (fp, "是否全角=%d\n", (bCorner) ? 1 : 0);
     fprintf (fp, "是否中文标点=%d\n", (bChnPunc) ? 1 : 0);
     fprintf (fp, "是否GBK=%d\n", (bUseGBK) ? 1 : 0);
-    fprintf (fp, "是否联想=%d\n", (bUseLegend) ? 1 : 0);
-    fprintf (fp, "当前输入法=%d\n", imeIndex);
-    fprintf (fp, "是否使用双拼=%d\n", bSP);
+    fprintf (fp, "是否联想=%d\n", (bUseLegend) ? 1 : 0);    
+    fprintf (fp, "当前输入法=%d\n", iIMIndex);
     fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
+    fprintf (fp, "主窗口简洁模式=%d\n", bCompactMainWindow);
 
     fclose (fp);
 }
@@ -824,4 +850,22 @@ void SetTriggerKeys (char *str)
 	    Trigger_Keys[i].keysym = XK_space;
     }   
 }
+
+Bool CheckHZCharset (char *strHZ)
+{
+    if (!bUseGBK) {
+	//GB2312的汉字编码规则为：第一个字节的值在0xA1到0xFE之间(实际为0xF7)，第二个字节的值在0xA1到0xFE之间
+	//由于查到的资料说法不一，懒得核实，就这样吧
+	int             i;
+
+	for (i = 0; i < strlen (strHZ); i++) {
+	    if ((unsigned char) strHZ[i] < (unsigned char) 0xA1 || (unsigned char) strHZ[i] > (unsigned char) 0xF7 || (unsigned char) strHZ[i + 1] < (unsigned char) 0xA1 || (unsigned char) strHZ[i + 1] > (unsigned char) 0xFE)
+		return False;
+	    i++;
+	}
+    }
+
+    return True;
+}
+
 

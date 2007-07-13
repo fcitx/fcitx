@@ -11,9 +11,7 @@
 #include "py.h"
 #include "PYFA.h"
 #include "pyParser.h"
-#include "wbx.h"
 #include "sp.h"
-#include "SetLocale.h"
 
 int             iPYFACount;
 PYFA           *PYFAList;
@@ -88,20 +86,10 @@ extern int      iLegendCandPageCount;
 extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
 
-#if defined(DARWIN)
-/* function to reverse byte order for integer
-this is required for Mac machine*/
-int ReverseInt (unsigned int pc_int)
+void PYInit (void)
 {
-    int mac_int;
-    unsigned char * p;
-
-    mac_int = pc_int;
-    p = (unsigned char*) &pc_int;
-    mac_int = (p[3] << 24) + (p[2] << 16) + (p[1] << 8) + p[0];
-    return mac_int;
+	bSP=False;
 }
-#endif
 
 Bool LoadPYBaseDict (void)
 {
@@ -1038,7 +1026,7 @@ void PYCreateAuto (void)
 			    if (!val && iMatchedLength == (findMap.iHZCount - 1) * 2)
 				return;
 			    if (!val || (val && (strlen (phrase->strMap) == iMatchedLength))) {
-				if (CheckLocale (phrase->strPhrase) && CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+				if (CheckHZCharset (phrase->strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 				    if (!phraseSelected) {
 					baseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase]);
 					pPYFA = &PYFAList[candPos.iPYFA];
@@ -1070,7 +1058,7 @@ void PYCreateAuto (void)
 		if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 		    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
 			for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iPhrase; candPos.iPhrase++) {
-			    if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+			    if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 				val = CmpMap (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap, strMap, &iMatchedLength);
 				if (!val && iMatchedLength == (findMap.iHZCount - 1) * 2)
 				    return;
@@ -1114,7 +1102,7 @@ void PYCreateAuto (void)
 	    for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 		if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 		    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-			if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
+			if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
 			    if ((int) (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iHit) > val) {
 				val = PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iHit;
 				baseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase]);
@@ -1163,7 +1151,7 @@ char           *PYGetCandWord (int iIndex)
 	pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
 	pBaseMap = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].strMap;
 	pIndex = &(PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iIndex);
-	PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iHit = iCounter++;
+	PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iHit++;
 	iOrderCount++;
 	break;
     case PY_CAND_SYMPHRASE:	//是系统词组    
@@ -1173,7 +1161,7 @@ char           *PYGetCandWord (int iIndex)
 	pPhrase = PYCandWords[iIndex].cand.phrase.phrase->strPhrase;
 	pPhraseMap = PYCandWords[iIndex].cand.phrase.phrase->strMap;
 	pIndex = &(PYCandWords[iIndex].cand.phrase.phrase->iIndex);
-	PYCandWords[iIndex].cand.phrase.phrase->iHit = iCounter++;
+	PYCandWords[iIndex].cand.phrase.phrase->iHit++;
 	iOrderCount++;
 	break;
     case PY_CAND_FREQ:		//是常用字
@@ -1331,7 +1319,7 @@ Bool PYCheckNextCandPage (void)
 			for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iUserPhrase; candPos.iPhrase++) {
 			    val = CmpMap (phrase->strMap, strMap, &iMatchedLength);
 			    if (!val || (val && (strlen (phrase->strMap) == iMatchedLength))) {
-				if (CheckLocale (phrase->strPhrase) && CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+				if (CheckHZCharset (phrase->strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 				    if (!phrase->flag)
 					return True;
 				}
@@ -1349,7 +1337,7 @@ Bool PYCheckNextCandPage (void)
 			    if (!PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag) {
 				val = CmpMap (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap, strMap, &iMatchedLength);
 				if (!val || (val && (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) == iMatchedLength))) {
-				    if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
+				    if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
 					return True;
 				}
 			    }
@@ -1372,7 +1360,7 @@ Bool PYCheckNextCandPage (void)
 	    if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 		for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
 		    if (!PYFAList[candPos.iPYFA].pyBase[candPos.iBase].flag) {
-			if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ) && !PYIsInFreq (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
+			if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ) && !PYIsInFreq (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ))
 			    return True;
 		    }
 		}
@@ -1405,10 +1393,10 @@ void PYGetPhraseCandWords (SEARCH_MODE mode)
     for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 	if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 	    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-		if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+		if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 		    phrase = PYFAList[candPos.iPYFA].pyBase[candPos.iBase].userPhrase->next;
 		    for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iUserPhrase; candPos.iPhrase++) {
-			if (CheckLocale (phrase->strPhrase)) {
+			if (CheckHZCharset (phrase->strPhrase)) {
 			    val = CmpMap (phrase->strMap, strMap, &iMatchedLength);
 			    if (!val || (val && (strlen (phrase->strMap) == iMatchedLength))) {
 				if ((mode != SM_PREV && !phrase->flag)
@@ -1430,7 +1418,7 @@ void PYGetPhraseCandWords (SEARCH_MODE mode)
 	if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 	    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
 		for (candPos.iPhrase = 0; candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iPhrase; candPos.iPhrase++) {
-		    if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+		    if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strPhrase) && CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 			val = CmpMap (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap, strMap, &iMatchedLength);
 			if (!val || (val && (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) == iMatchedLength))) {
 			    if ((mode != SM_PREV && !PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].flag)
@@ -1518,7 +1506,7 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 			break;
 		    }
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
-			if (phrase->iHit <= PYCandWords[i].cand.phrase.phrase->iHit) {
+			if (phrase->iIndex <= PYCandWords[i].cand.phrase.phrase->iIndex) {
 			    i++;
 			    break;
 			}
@@ -1541,7 +1529,7 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 		    if (strlen (phrase->strPhrase) > strlen (PYCandWords[i].cand.phrase.phrase->strPhrase))
 			break;
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
-			if (phrase->iHit > PYCandWords[i].cand.phrase.phrase->iHit)
+			if (phrase->iIndex > PYCandWords[i].cand.phrase.phrase->iIndex)
 			    break;
 		    }
 		}
@@ -1565,7 +1553,7 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 			break;
 		    }
 		    else if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) {
-			if (PYCandWords[i].cand.phrase.phrase->iIndex >= phrase->iIndex)
+			if (PYCandWords[i].cand.phrase.phrase->iHit >= phrase->iHit)
 			    i++;
 			break;
 		    }
@@ -1585,7 +1573,7 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 		if (PYCandWords[i].iWhich == PY_CAND_USERPHRASE || PYCandWords[i].iWhich == PY_CAND_SYMPHRASE) {
 		    if (strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) < strlen (phrase->strPhrase))
 			break;
-		    else if ((strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) && (PYCandWords[i].cand.phrase.phrase->iIndex < phrase->iIndex))
+		    else if ((strlen (PYCandWords[i].cand.phrase.phrase->strPhrase) == strlen (phrase->strPhrase)) && (PYCandWords[i].cand.phrase.phrase->iHit < phrase->iHit))
 			break;
 		}
 	    }
@@ -1746,7 +1734,7 @@ void PYGetBaseCandWords (SEARCH_MODE mode)
     for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 	if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 	    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-		if (CheckLocale (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
+		if (CheckHZCharset (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 		    if ((mode != SM_PREV && !PYFAList[candPos.iPYFA].pyBase[candPos.iBase].flag) || (mode == SM_PREV && PYFAList[candPos.iPYFA].pyBase[candPos.iBase].flag)) {
 			if (!PYIsInFreq (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].strHZ)) {
 			    if (!PYAddBaseCandWord (candPos, mode))
@@ -1796,39 +1784,6 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 		    i++;
 		    break;
 		}
-		else if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit)) {
-		    i++;
-		    break;
-		}
-	    }
-
-	    if (i < 0) {
-		if (iCandWordCount == iMaxCandWord)
-		    return True;
-		i = 0;
-	    }
-	    else if (iCandWordCount == iMaxCandWord)
-		i--;
-	}
-	else {
-	    for (i = 0; i < iCandWordCount; i++) {
-		if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit < PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit))
-		    break;
-	    }
-
-	    if (i == iMaxCandWord)
-		return True;
-	}
-
-	break;
-    case AD_FREQ:
-	if (mode == SM_PREV) {
-	    for (i = (iCandWordCount - 1); i >= 0; i--) {
-		if (PYCandWords[i].iWhich == PY_CAND_AUTO || PYCandWords[i].iWhich == PY_CAND_FREQ) {
-		    iStart = i + 1;
-		    i++;
-		    break;
-		}
 		else if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex)) {
 		    i++;
 		    break;
@@ -1846,6 +1801,39 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
 		if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iIndex < PYFAList[pos.iPYFA].pyBase[pos.iBase].iIndex))
+		    break;
+	    }
+
+	    if (i == iMaxCandWord)
+		return True;
+	}
+
+	break;
+    case AD_FREQ:
+	if (mode == SM_PREV) {
+	    for (i = (iCandWordCount - 1); i >= 0; i--) {
+		if (PYCandWords[i].iWhich == PY_CAND_AUTO || PYCandWords[i].iWhich == PY_CAND_FREQ) {
+		    iStart = i + 1;
+		    i++;
+		    break;
+		}
+		else if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit >= PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit)) {
+		    i++;
+		    break;
+		}
+	    }
+
+	    if (i < 0) {
+		if (iCandWordCount == iMaxCandWord)
+		    return True;
+		i = 0;
+	    }
+	    else if (iCandWordCount == iMaxCandWord)
+		i--;
+	}
+	else {
+	    for (i = 0; i < iCandWordCount; i++) {
+		if (PYCandWords[i].iWhich == PY_CAND_BASE && (PYFAList[PYCandWords[i].cand.base.iPYFA].pyBase[PYCandWords[i].cand.base.iBase].iHit < PYFAList[pos.iPYFA].pyBase[pos.iBase].iHit))
 		    break;
 	    }
 	    if (i == iMaxCandWord)
@@ -1980,37 +1968,6 @@ Bool PYAddFreqCandWord (HZ * hz, char *strPY, SEARCH_MODE mode)
 		    i++;
 		    break;
 		}
-		else if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit <= PYCandWords[i].cand.freq.hz->iHit)) {
-		    i++;
-		    break;
-		}
-	    }
-
-	    if (i < 0) {
-		if (iCandWordCount == iMaxCandWord)
-		    return True;
-		i = 0;
-	    }
-	    else if (iCandWordCount == iMaxCandWord)
-		i--;
-	}
-	else {
-	    for (i = 0; i < iCandWordCount; i++) {
-		if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit > PYCandWords[i].cand.freq.hz->iHit))
-		    break;
-	    }
-	    if (i == iMaxCandWord)
-		return True;
-	}
-	break;
-    case AD_FREQ:
-	if (mode == SM_PREV) {
-	    for (i = (iCandWordCount - 1); i >= 0; i--) {
-		if (PYCandWords[i].iWhich == PY_CAND_AUTO) {
-		    iStart = i + 1;
-		    i++;
-		    break;
-		}
 		else if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iIndex <= PYCandWords[i].cand.freq.hz->iIndex)) {
 		    i++;
 		    break;
@@ -2028,6 +1985,37 @@ Bool PYAddFreqCandWord (HZ * hz, char *strPY, SEARCH_MODE mode)
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
 		if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iIndex > PYCandWords[i].cand.freq.hz->iIndex))
+		    break;
+	    }
+	    if (i == iMaxCandWord)
+		return True;
+	}
+	break;
+    case AD_FREQ:
+	if (mode == SM_PREV) {
+	    for (i = (iCandWordCount - 1); i >= 0; i--) {
+		if (PYCandWords[i].iWhich == PY_CAND_AUTO) {
+		    iStart = i + 1;
+		    i++;
+		    break;
+		}
+		else if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit <= PYCandWords[i].cand.freq.hz->iHit)) {
+		    i++;
+		    break;
+		}
+	    }
+
+	    if (i < 0) {
+		if (iCandWordCount == iMaxCandWord)
+		    return True;
+		i = 0;
+	    }
+	    else if (iCandWordCount == iMaxCandWord)
+		i--;
+	}
+	else {
+	    for (i = 0; i < iCandWordCount; i++) {
+		if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit > PYCandWords[i].cand.freq.hz->iHit))
 		    break;
 	    }
 	    if (i == iMaxCandWord)
@@ -2673,7 +2661,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
 	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
     }
 
-    bIsInLegend = (iLegendCandWordCount != 0);
+    bIsInLegend = (iLegendCandWordCount != 0);    
 
     return IRV_DISPLAY_CANDWORDS;
 }
@@ -2707,14 +2695,25 @@ Bool PYAddLengendCandWord (PyPhrase * phrase, INPUT_RETURN_VALUE mode)
 	    return True;
     }
 
-    if (iLegendCandWordCount == iMaxCandWord) {
-	for (j = 0; j < i; j++) {
-	    PYLegendCandWords[j].phrase = PYLegendCandWords[j + 1].phrase;
-	    PYLegendCandWords[j].iLength = PYLegendCandWords[j + 1].iLength;
+    if (mode == SM_PREV) {
+    	if (iLegendCandWordCount == iMaxCandWord) {
+	    for (j = 0; j < i; j++) {
+	    	PYLegendCandWords[j].phrase = PYLegendCandWords[j + 1].phrase;
+	    	PYLegendCandWords[j].iLength = PYLegendCandWords[j + 1].iLength;
+	    }
+	}
+	else {
+	    for (j = iLegendCandWordCount; j > i; j--) {
+	    	PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
+	    	PYLegendCandWords[j].iLength = PYLegendCandWords[j - 1].iLength;
+	    }
 	}
     }
     else {
-	for (j = iLegendCandWordCount; j > i; j--) {
+    	j = iLegendCandWordCount;
+	if (iLegendCandWordCount == iMaxCandWord)
+	    j--;
+	for (; j > i; j--) {
 	    PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
 	    PYLegendCandWords[j].iLength = PYLegendCandWords[j - 1].iLength;
 	}

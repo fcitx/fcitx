@@ -19,12 +19,6 @@
 #define AUTOSAVE_ORDER_COUNT  10
 #define AUTOSAVE_FREQ_COUNT  1
 
-typedef enum ADJUST_ORDER {
-    AD_NO,
-    AD_FAST,
-    AD_FREQ
-} ADJUSTORDER;
-
 typedef enum FIND_MODE {
     FIND_PHRASE,
     FIND_BASE,
@@ -138,6 +132,7 @@ typedef struct {
     char            strMap[MAX_PY_PHRASE_LENGTH * 2 + 1];
 } PY_SELECTED;
 
+void		PYInit (void);
 Bool            LoadPYBaseDict (void);
 Bool            LoadPYOtherDict (void);
 void            ResetPYStatus ();

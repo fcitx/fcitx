@@ -11,6 +11,7 @@ typedef struct _SP_S {
     char            cJP;
 } SP_S;
 
+void		SPInit (void);
 void            LoadSPData (void);
 
 //void            QP2SP (char *strQP, char *strSP);
@@ -19,6 +20,5 @@ int             GetSPIndexQP_C (char *str);
 int             GetSPIndexQP_S (char *str);
 int             GetSPIndexJP_C (char c, int iStart);
 int             GetSPIndexJP_S (char c);
-void            SwitchSP (void);
 
 #endif

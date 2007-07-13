@@ -1,5 +1,41 @@
+2004-05-20 Yuking <yuking_net@sohu.com>
+           * 为主窗口增加一个简洁模式。
+
+2004-05-19 Yuking <yuking_net@sohu.com>
+           * src/ime.c：更改分号的输出，改为回车输入全角分号，空格输出半角分号。
+
+2004-05-17 Yuking <yuking_net@sohu.com>
+           * 更改界面，将输入法名称用文字显示。
+	   * 主窗口和输入条是否使用3D显示可以分别设置。
+
+2004-05-16 Yuking <yuking_net@sohu.com>
+           * 去掉设置“区域设置”；
+	   * 将五笔码表从文本文件改为格式文件；
+	   * 增加一个工具，将原来的五笔码表文件转换为新的格式；
+	   * 五笔重码的自动调频可以设置为不调/快速/按频率；
+	   * 版本号改为2.1.0.
+
+2004-05-15 Yuking <yuking_net@sohu.com>
+           * 将添加新输入法改为调用函数RegisterNewIM，以便为以后可能的应用作准备。
+	   * src/ui.c:XFT创建字体的函数改为调用XftFontOpen(CreateFont);
+	   * 将CheckLocale改名为CheckHZCharset，并移入文件tools.c中，去掉SetLocale.c/.h。
+
+2004-05-09 Yuking <yuking_net@sohu.com>
+           * src/xim.c:修正UnsetFocus时有关CurrentIC的一个判断错误(MyUnsetFocusHandler)。
+
+2004-04-30 Yuking <yuking_net@sohu.com>
+           * src/main.c:修改了命令行参数。
+
+2004-04-29 Yuking <yuking_net@sohu.com>
+           * src/ime.c:修正xine播放时，第二个候选字/词自动上屏的问题(ProcessKey)。
+	   * src/py.c:修正拼音输入法中候选字词排序错误。
+
 2004-04-25 Yuking <yuking_net@sohu.com>
-           * 取自共创的包，其中包括对BIGENDIAN的修正。
+           * 用户可以自定义打开/关闭输入法的热键--配置文件中增加选项“打开/关闭输入法”。
+           * 修改了readme.htm文档。
+
+2004-04-25 Yuking <yuking_net@sohu.com>
+           * 取自共创联盟的包，其中包括对BIGENDIAN的修正。
            * src/xim.c: 修改生成IC时将CurrentIC设置为新的值的问题(MyCreateICHandler)。
            * src/xim.c: 如果动作的IC值与CurrentIC不相同，将不处理(MyForwardEventHandler)──试图解决出现双字母的问题。
            * src/InputWindow.h: 将INPUTWND_WIDTH的默认值设置为200。

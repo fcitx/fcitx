@@ -3,6 +3,11 @@
 
 #include <X11/Xlib.h>
 
+#ifdef _USE_XFT
+#include <ft2build.h>
+#include <X11/Xft/Xft.h>
+#endif
+
 #define LIGHT_COLOR	0xffff
 #define BACK_COLOR	0x0000
 #define DIM_COLOR	0x6666
@@ -38,12 +43,13 @@ void            MyXEventHandler (Window im_window, XEvent * event);
 Bool            IsInBox (int x0, int y0, int x1, int y1, int x2, int y2);
 
 #ifdef _USE_XFT
-void            OutputString (Window window, char *str, int x, int y, XColor);
+void            OutputString (Window window, XftFont *font, char *str, int x, int y, XColor);
+int		StringWidth(char *str, XftFont *font);
 #else
-void            OutputString (Window window, char *str, int x, int y, GC gc);
+void            OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc);
+int		StringWidth(char *str, XFontSet font);
 #endif
 
-int		StringWidth(char *str);
 
 int             FillImageByXPMData (XImage * pImage, char **apcData);
 XPoint          MouseClick (int *x, int *y, int iWnd);

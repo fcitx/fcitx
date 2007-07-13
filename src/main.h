@@ -5,5 +5,7 @@
 #include <stdio.h>
 
 int main(int argc, char *argv[]);
+void Usage(void);
+void Version(void);
 
 #endif

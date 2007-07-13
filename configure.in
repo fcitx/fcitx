@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
-AM_INIT_AUTOMAKE(fcitx, 2.0.2)
+AM_INIT_AUTOMAKE(fcitx, 2.1.0rc)
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST

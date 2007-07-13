@@ -4,48 +4,32 @@
 
 #include "IC.h"
 #include "ui.h"
+#include "ime.h"
 
 //下面的顺序不能改变
 #include "logo.xpm"
-// #include "eng.xpm"
-#include "wb-0.xpm"
-#include "wb-1.xpm"
-#include "wb-2.xpm"
-#include "eb-0.xpm"
-#include "eb-1.xpm"
-#include "eb-2.xpm"
-#include "py-0.xpm"
-#include "py-1.xpm"
-#include "py-2.xpm"
 #include "fullcorner.xpm"
 #include "halfcorner.xpm"
 #include "chnPunc.xpm"
 #include "engPunc.xpm"
 #include "gbk-0.xpm"
 #include "gbk-1.xpm"
-#include "sp-0.xpm"
-#include "sp-1.xpm"
 #include "lx-0.xpm"
 #include "lx-1.xpm"
 #include "lock-0.xpm"
 #include "lock-1.xpm"
+#include "ui.h"
 
 Window          mainWindow;
-
 int             MAINWND_WIDTH = _MAINWND_WIDTH;
 
 int             iMainWindowX = MAINWND_STARTX;
 int             iMainWindowY = MAINWND_STARTY;
 WINDOW_COLOR    mainWindowColor;
 MESSAGE_COLOR   mainWindowLineColor;	//线条色
-
+MESSAGE_COLOR	IMNameColor[3];		//输入法名称的颜色
+Bool 		_3DEffectMainWindow = False;
 XImage         *pLogo = NULL;
-XImage         *pIME[3][3] = { {NULL, NULL, NULL}, {NULL, NULL, NULL}, {NULL, NULL, NULL} };
-char           *IMELogo[3][3] = {
-    {(char *) wb_0_xpm, (char *) wb_2_xpm, (char *) wb_1_xpm},
-    {(char *) py_0_xpm, (char *) py_2_xpm, (char *) py_1_xpm},
-    {(char *) eb_0_xpm, (char *) eb_2_xpm, (char *) eb_1_xpm}
-};
 
 XImage         *pCorner[2] = { NULL, NULL };
 char          **CornerLogo[2] = { halfcorner_xpm, fullcorner_xpm };
@@ -53,8 +37,6 @@ XImage         *pPunc[2] = { NULL, NULL };
 char          **PuncLogo[2] = { engPunc_xpm, chnPunc_xpm };
 XImage         *pGBK[2] = { NULL, NULL };
 char          **GBKLogo[2] = { gbk_0_xpm, gbk_1_xpm };
-XImage         *pSP[2] = { NULL, NULL };
-char          **SPLogo[2] = { sp_0_xpm, sp_1_xpm };
 XImage         *pLX[2] = { NULL, NULL };
 char          **LXLogo[2] = { lx_0_xpm, lx_1_xpm };
 XImage         *pLock[2] = { NULL, NULL };
@@ -62,7 +44,8 @@ char          **LockLogo[2] = { lock_0_xpm, lock_1_xpm };
 
 HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
-Bool 	bLocked = False;
+Bool 	bLocked = True;
+Bool	bCompactMainWindow = True;
 
 extern Display *dpy;
 extern GC       dimGC;
@@ -70,10 +53,17 @@ extern int      i3DEffect;
 extern IC      *CurrentIC;
 extern Bool     bCorner;
 extern Bool     bChnPunc;
-extern IME      imeIndex;
+extern INT8     iIMIndex;
 extern Bool     bUseGBK;
 extern Bool     bSP;
 extern Bool     bUseLegend;
+
+#ifdef _USE_XFT
+extern XftFont	*xftMainWindowFont;
+#else
+extern XFontSet fontSetMainWindow;
+#endif
+extern IM	im[10];
 
 Bool CreateMainWindow (void)
 {
@@ -105,7 +95,8 @@ Bool CreateMainWindow (void)
 
 void DisplayMainWindow (void)
 {
-    unsigned char   iIndex;
+    unsigned char   iIndex=0;
+    unsigned char   iPos;
 
     iIndex = IS_CLOSED;
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (CurrentIC && CurrentIC->imeState != IS_CLOSED))) {
@@ -119,74 +110,76 @@ void DisplayMainWindow (void)
 	}
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLogo, 0, 0, 2, 2, 15, 16);
 
-	if (!pPunc[bChnPunc]) {
-	    pPunc[bChnPunc] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-	    FillImageByXPMData (pPunc[bChnPunc], PuncLogo[bChnPunc]);
-	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pPunc[bChnPunc], 0, 0, 20, 2, 15, 16);
-
+	iPos = 20;
+	if ( !bCompactMainWindow ) {
+	    if (!pPunc[bChnPunc]) {
+	    	pPunc[bChnPunc] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
+	    	FillImageByXPMData (pPunc[bChnPunc], PuncLogo[bChnPunc]);
+	    }
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pPunc[bChnPunc], 0, 0, iPos, 2, 15, 16);
+	iPos += 18;
+	
 	if (!pCorner[bCorner]) {
 	    pCorner[bCorner] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pCorner[bCorner], CornerLogo[bCorner]);
 	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pCorner[bCorner], 0, 0, 38, 2, 15, 16);
-
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pCorner[bCorner], 0, 0, iPos, 2, 15, 16);
+	iPos += 18;
+	
 	if (!pGBK[bUseGBK]) {
 	    pGBK[bUseGBK] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pGBK[bUseGBK], GBKLogo[bUseGBK]);
 	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pGBK[bUseGBK], 0, 0, 56, 2, 15, 16);
-
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pGBK[bUseGBK], 0, 0, iPos, 2, 15, 16);
+	iPos += 18;
+	
 	if (!pLX[bUseLegend]) {
 	    pLX[bUseLegend] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pLX[bUseLegend], LXLogo[bUseLegend]);
 	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLX[bUseLegend], 0, 0, 74, 2, 15, 16);
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLX[bUseLegend], 0, 0, iPos, 2, 15, 16);
+	iPos += 18;
+	}
 	
 	if (!pLock[bLocked]) {
 	    pLock[bLocked] = XGetImage (dpy, mainWindow, 0, 0, 8, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pLock[bLocked], LockLogo[bLocked]);
 	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, 92, 2, 15, 16);
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, iPos, 2, 15, 16);
+	iPos += 13;
 
 	if (CurrentIC)
 	    iIndex = CurrentIC->imeState;
-	if (!pIME[imeIndex][iIndex]) {
-	    pIME[imeIndex][iIndex] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-	    FillImageByXPMData (pIME[imeIndex][iIndex], (char **) IMELogo[imeIndex][iIndex]);
-	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pIME[imeIndex][iIndex], 0, 0, 103, 2, 15, 16);
-
-	if (imeIndex == IME_PINYIN) {
-	    if (!pSP[bSP]) {
-		pSP[bSP] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
-		FillImageByXPMData (pSP[bSP], SPLogo[bSP]);
-	    }
-	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pSP[bSP], 0, 0, 121, 2, 15, 16);
-	}
-
-	if (i3DEffect) {
+	XClearArea (dpy, mainWindow, iPos, 2, MAINWND_WIDTH - iPos-2, MAINWND_HEIGHT - 4, False);
+#ifdef _USE_XFT	
+	OutputString(mainWindow,xftMainWindowFont, im[iIMIndex].strName,iPos,15,IMNameColor[iIndex].color);
+#else
+	OutputString(mainWindow,fontSetMainWindow, im[iIMIndex].strName,iPos,15,IMNameColor[iIndex].gc);
+#endif
+	
+	if (_3DEffectMainWindow) {
 	    Draw3DEffect (mainWindow, 1, 1, MAINWND_WIDTH - 2, MAINWND_HEIGHT - 2, _3D_UPPER);
-
-	    Draw3DEffect (mainWindow, 1, 1, 18, 18, _3D_UPPER);
+	if ( !bCompactMainWindow ) {
+	    Draw3DEffect (mainWindow, 1, 1, 18, 18, _3D_UPPER); 	    
 	    Draw3DEffect (mainWindow, 19, 1, 18, 18, _3D_UPPER);
 	    Draw3DEffect (mainWindow, 37, 1, 18, 18, _3D_UPPER);
 	    Draw3DEffect (mainWindow, 55, 1, 18, 18, _3D_UPPER);
-	    Draw3DEffect (mainWindow, 73, 1, 18, 18, _3D_UPPER);
+	    Draw3DEffect (mainWindow, 73, 1, 18, 18, _3D_UPPER);	    
 	    Draw3DEffect (mainWindow, 91, 1, 11, 18, _3D_UPPER);
-	    Draw3DEffect (mainWindow, 102, 1, 18, 18, _3D_UPPER);
-	    if (imeIndex == IME_PINYIN)
-		Draw3DEffect (mainWindow, 120, 1, 18, 18, _3D_UPPER);
+	    }
 	}
 	else {
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 19, 4, 19, MAINWND_HEIGHT - 4);
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 37, 4, 37, MAINWND_HEIGHT - 4);
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 55, 4, 55, MAINWND_HEIGHT - 4);
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 73, 4, 73, MAINWND_HEIGHT - 4);
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 91, 4, 91, MAINWND_HEIGHT - 4);
-	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 102, 4, 102, MAINWND_HEIGHT - 4);
-	    if (imeIndex == IME_PINYIN)
-		XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 120, 4, 120, MAINWND_HEIGHT - 4);
+	    iPos=19;
+	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 18, 4, 18, MAINWND_HEIGHT - 4);
+	    if ( !bCompactMainWindow ) {
+	    	XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 36, 4, 36, MAINWND_HEIGHT - 4);
+	    	XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 54, 4, 54, MAINWND_HEIGHT - 4);
+	    	XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 72, 4, 72, MAINWND_HEIGHT - 4);
+	    	XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 89, 4, 89, MAINWND_HEIGHT - 4);
+		iPos=90;
+	    }
+	    iPos+=11;
+	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
 	}
     }
     else
@@ -197,6 +190,7 @@ void InitMainWindowColor (void)
 {
     XGCValues       values;
     int             iPixel;
+    int		    i;
 
     mainWindowLineColor.gc = XCreateGC (dpy, mainWindow, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(mainWindowLineColor.color)))
@@ -204,6 +198,15 @@ void InitMainWindowColor (void)
     else
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, mainWindowLineColor.gc, iPixel);
+    
+    for (i = 0; i < 3; i++) {
+	IMNameColor[i].gc = XCreateGC (dpy, mainWindow, 0, &values);
+	if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(IMNameColor[i].color)))
+	    iPixel = IMNameColor[i].color.pixel;
+	else
+	    iPixel = WhitePixel (dpy, DefaultScreen (dpy));
+	XSetForeground (dpy, IMNameColor[i].gc, iPixel);
+    }
 }
 
 void ChangeLock (void )

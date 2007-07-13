@@ -12,22 +12,30 @@
 
 #define WB_FH_MAX_LENGTH	10
 
-typedef struct _WBRECORD {
-    char            strCode[WB_CODE_LENGTH + 1];
-    char            *strHZ;
-    //char            strHZ[WB_PHRASE_MAX_LENGTH * 2 + 1];
-    struct _WBRECORD *next;
-    struct _WBRECORD *prev;
+#define WB_AUTO_SAVE_AFTER	48
+
+typedef struct _WBRECORD
+{
+  char            strCode[WB_CODE_LENGTH + 1];
+  char            *strHZ;
+  //char            strHZ[WB_PHRASE_MAX_LENGTH * 2 + 1];
+  struct _WBRECORD *next;
+  struct _WBRECORD *prev;
+  unsigned int	iHit;
+  unsigned int	iIndex;
+  unsigned int	flag:1;
 } WBRECORD;
 
-typedef struct _WBFH {
-    char            strWBFH[WB_FH_MAX_LENGTH*2 + 1];
+typedef struct _WBFH
+{
+  char            strWBFH[WB_FH_MAX_LENGTH*2 + 1];
 } WBFH;
 
 Bool            LoadWBDict (void);
 void            SaveWubiDict (void);
 INPUT_RETURN_VALUE DoWBInput (int iKey);
 INPUT_RETURN_VALUE WBGetCandWords (SEARCH_MODE mode);
+Bool WBAddCanWord(WBRECORD *wbRecord, SEARCH_MODE mode);
 INPUT_RETURN_VALUE WBGetLegendCandWords (SEARCH_MODE mode);
 INPUT_RETURN_VALUE WBGetFHCandWords (SEARCH_MODE mode);
 INPUT_RETURN_VALUE WBGetPinyinCandWords (SEARCH_MODE mode);
@@ -46,5 +54,7 @@ void            WBCreateNewPhrase (void);
 void            CreatePhraseWBCode (void);
 
 Bool		WBPhraseTips(char *strPhrase);
+void 		WBSetCandWordsFlag(Bool flag);
+void 		WBResetFlags(void);
 
 #endif

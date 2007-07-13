@@ -14,5 +14,10 @@ void            SetHotKey (char *strKey, HOTKEYS * hotkey);
 int             CalculateRecordNumber (FILE * fpDict);
 void            SetSwitchKey (char *str);
 void		SetTriggerKeys (char *str);
+Bool		CheckHZCharset (char *strHZ);
+
+#if defined(DARWIN)
+int 		ReverseInt (unsigned int pc_int);
+#endif
 
 #endif

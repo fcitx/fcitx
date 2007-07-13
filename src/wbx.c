@@ -9,17 +9,21 @@
 
 #include "tools.h"
 #include "InputWindow.h"
-#include "SetLocale.h"
 #include "py.h"
 #include "pyParser.h"
 
+unsigned int	iWBCount;
 WBRECORD       *wubiDictCurrent = NULL, *wubiDictHead = NULL;
 WBRECORD       *WBCandWord[MAX_CAND_WORD];
+unsigned int	iWBTotalCandCount;
+BYTE		iWBOrderChanged = 0;
+ADJUSTORDER	wbOrder = AD_NO;
 WBRECORD       *WBLegend = NULL;
 char            strWBLegendSource[WB_PHRASE_MAX_LENGTH * 2 + 1] = "";
 
 WBFH           *wbfh;
 int             iWBFH = 0;
+unsigned int    iWBIndex;
 
 Bool            bIsWBDelPhrase = False;
 HOTKEYS         hkWBDelPhrase[HOT_KEY_COUNT] = { CTRL_7, 0 };
@@ -33,7 +37,6 @@ BYTE            iWBNewPhraseHZCount;
 Bool            bCanntFindWuBi;	//记录新组成的词能否生成五笔编码--一般情况下都是可以的
 char            strNewPhraseWBCode[WB_CODE_LENGTH + 1];
 
-Bool            bWBAutoAdjustOrder = False;
 Bool            bWBAutoSendToClient = True;	//4键自动上屏
 Bool            bUseZPY = True;	//用Z键输入拼音
 Bool            bWBUseZ = True;	//是否用Z来模糊匹配
@@ -76,7 +79,6 @@ extern PYCandWord PYCandWords[];
 extern Bool     bSingleHZMode;
 extern char     strFindString[];
 extern ParsePYStruct findMap;
-
 //----------------------------------------
 
 Bool LoadWBDict (void)
@@ -86,7 +88,8 @@ Bool LoadWBDict (void)
     FILE           *fpDict;
     WBRECORD       *recTemp;
     char            strPath[PATH_MAX];
-    int             i = 0;
+    unsigned int    i = 0;
+    unsigned int    iTemp;
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
@@ -96,34 +99,41 @@ Bool LoadWBDict (void)
     if (access (strPath, 0)) {
         strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, WUBI_DICT_FILENAME);
-	fpDict = fopen (strPath, "rt");
     }
-    else
-	fpDict = fopen (strPath, "rt");
+    
+    fpDict = fopen (strPath, "rb");
     if (!fpDict)
 	return False;
 
     wubiDictHead = (WBRECORD *) malloc (sizeof (WBRECORD));
     wubiDictCurrent = wubiDictHead;
 
-    for (;;) {
-	if (EOF == fscanf (fpDict, "%s %s\n", strCode, strHZ))
-	    break;
+    fread(&iWBCount,sizeof(unsigned int),1,fpDict);
+    
+    for ( i=0; i<iWBCount; i++) {
+    	fread(strCode, sizeof(char), WB_CODE_LENGTH+1, fpDict);
+	fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+	fread(strHZ, sizeof(char), iTemp, fpDict);
+	
 	recTemp = (WBRECORD *) malloc (sizeof (WBRECORD));
 	wubiDictCurrent->next = recTemp;
 	recTemp->prev = wubiDictCurrent;
 	wubiDictCurrent = recTemp;
 	strcpy (recTemp->strCode, strCode);
-	/****************************************/
 	recTemp->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
-	/****************************************/
+	recTemp->flag = 0;
 	strcpy (recTemp->strHZ, strHZ);
+	
+	fread(&(recTemp->iHit),sizeof(unsigned int),1,fpDict);
+	fread(&(recTemp->iIndex),sizeof(unsigned int),1,fpDict);
+	if ( recTemp->iIndex>iWBIndex )
+		iWBIndex=recTemp->iIndex;
     }
     wubiDictCurrent->next = wubiDictHead;
     wubiDictHead->prev = wubiDictCurrent;
 
     fclose (fpDict);
-
+    
     //读取五笔特殊符号表
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
@@ -150,8 +160,8 @@ Bool LoadWBDict (void)
     }
 
     strNewPhraseWBCode[4] = '\0';
-    bWBDictLoaded = True;
-
+    bWBDictLoaded=True;
+    
     return True;
 }
 
@@ -168,21 +178,27 @@ void SaveWubiDict (void)
     WBRECORD       *recTemp;
     char            strPath[PATH_MAX];
     FILE           *fp;
+    unsigned int    iTemp;
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/wbx.mb");
 
-    fp = fopen (strPath, "wt");
+    fp = fopen (strPath, "wb");
     if (!fp) {
 	fprintf (stderr, "Cannot create WuBi table file\n");
 	return;
     }
 
+    fwrite(&iWBCount,sizeof(unsigned int),1,fp);
     recTemp = wubiDictHead->next;
-
-    while (recTemp != wubiDictHead) {
-	fprintf (fp, "%s %s\n", recTemp->strCode, recTemp->strHZ);
-	recTemp = recTemp->next;
+    while (recTemp!=wubiDictHead) {
+    	fwrite(recTemp->strCode,sizeof(char),WB_CODE_LENGTH + 1,fp);
+	iTemp=strlen(recTemp->strHZ)+1;
+	fwrite(&iTemp,sizeof(unsigned int),1,fp);
+	fwrite(recTemp->strHZ,sizeof(char),iTemp,fp);
+	fwrite(&(recTemp->iHit),sizeof(unsigned int),1,fp);
+	fwrite(&(recTemp->iIndex),sizeof(unsigned int),1,fp);
+	recTemp=recTemp->next;
     }
 
     fclose (fp);
@@ -194,7 +210,7 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 
     if (!bWBDictLoaded)
 	LoadWBDict ();
-
+	
     retVal = IRV_DO_NOTHING;
     if (iKey >= 'a' && iKey <= 'z') {
 	bIsInLegend = False;
@@ -251,7 +267,7 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 	}
     }
     else {
-	if (bIsWBAddPhrase) {
+    	if (bIsWBAddPhrase) {
 	    switch (iKey) {
 	    case LEFT:
 		if (iWBNewPhraseHZCount < iHZLastInputCount) {
@@ -332,12 +348,10 @@ INPUT_RETURN_VALUE DoWBInput (int iKey)
 		    if (bIsWBDelPhrase) {
 			DelWBPhraseByIndex (iKey);
 			retVal = WBGetCandWords (SM_FIRST);
-//                      retVal = IRV_DISPLAY_MESSAGE;
 		    }
 		    else if (bIsWBAdjustOrder) {
 			AdjustWBOrderByIndex (iKey);
 			retVal = WBGetCandWords (SM_FIRST);
-//                      retVal = IRV_DISPLAY_MESSAGE;
 		    }
 		    else {
 			strcpy (strStringGet, WBGetCandWord (iKey - 1));
@@ -468,9 +482,18 @@ char           *WBGetCandWord (int iIndex)
 	if (iIndex > (iCandWordCount - 1))
 	    iIndex = iCandWordCount - 1;
 
+	WBCandWord[iIndex]->iHit++;
+	WBCandWord[iIndex]->iIndex=++iWBIndex;
+	
+	if ( wbOrder!=AD_NO ) {
+		iWBOrderChanged++;
+		if ( iWBOrderChanged==WB_AUTO_SAVE_AFTER ) {
+			SaveWubiDict();
+			iWBOrderChanged = 0;
+		}
+	}
+	
 	pCandWord = WBCandWord[iIndex]->strHZ;
-	if (bWBAutoAdjustOrder)
-	    AdjustWBOrderByIndex (iIndex + 1);
 
 	if (bUseLegend) {
 	    strcpy (strWBLegendSource, WBCandWord[iIndex]->strHZ);
@@ -529,14 +552,15 @@ INPUT_RETURN_VALUE WBGetCandWords (SEARCH_MODE mode)
 	return WBGetLegendCandWords (mode);
     if (!strcmp (strCodeInput, "zzzz"))
 	return WBGetFHCandWords (mode);
+	
     if (strCodeInput[0] == 'z' && bUseZPY)
 	WBGetPinyinCandWords (mode);
     else {
-	WBRECORD       *recTemp;
-
 	if (mode == SM_FIRST) {
 	    iCandPageCount = 0;
 	    iCurrentCandPage = 0;
+	    iWBTotalCandCount = 0;
+	    WBResetFlags ();
 	    if (WBFindFirstMatchCode () == -1) {
 		iCandWordCount = 0;
 		uMessageDown = 0;
@@ -556,118 +580,192 @@ INPUT_RETURN_VALUE WBGetCandWords (SEARCH_MODE mode)
 	    else {
 		if (!iCurrentCandPage)
 		    return IRV_DO_NOTHING;
-
+		    
+		WBSetCandWordsFlag (False);
 		iCurrentCandPage--;
 	    }
 	}
 
-	if (mode == SM_PREV) {
-	    WBFindFirstMatchCode ();
-	    for (i = 0; i < iCurrentCandPage; i++) {
-		iCandWordCount = 0;
-		for (;;) {
-		    for (;;) {
-			if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode) && CheckLocale (wubiDictCurrent->strHZ)) {
-			    iCandWordCount++;
-			    break;
+	iCandWordCount = 0;	
+	WBFindFirstMatchCode ();    
+	while ( wubiDictCurrent!=wubiDictHead ) {
+		if ( (mode==SM_PREV) ^ (!wubiDictCurrent->flag) ) {
+			if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode) && CheckHZCharset (wubiDictCurrent->strHZ)) {
+				if ( mode==SM_FIRST )
+					iWBTotalCandCount++;
+				if ( !WBAddCanWord(wubiDictCurrent,mode) )
+					break;
 			}
-			wubiDictCurrent = wubiDictCurrent->next;
-		    }
-		    wubiDictCurrent = wubiDictCurrent->next;
-		    if (iCandWordCount == iMaxCandWord)
-			break;
 		}
-	    }
-	    iCandWordCount = 0;
-	    for (;;) {
-		for (;;) {
-		    if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode) && CheckLocale (wubiDictCurrent->strHZ)) {
-			WBCandWord[iCandWordCount++] = wubiDictCurrent;
-			break;
-		    }
-
-		    wubiDictCurrent = wubiDictCurrent->next;
-		}
+		
 		wubiDictCurrent = wubiDictCurrent->next;
-		if (iCandWordCount == iMaxCandWord)
-		    break;
 	    }
+	}
+	WBSetCandWordsFlag (True);
+
+	if ( wbOrder == AD_NO ) {
+		if ((wubiDictCurrent!=wubiDictHead && wubiDictCurrent->next!=wubiDictHead) && mode!=SM_PREV && iCurrentCandPage==iCandPageCount) {
+			wubiDictCurrent = wubiDictCurrent->next;
+			while (wubiDictCurrent!=wubiDictHead) {
+				if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode) && CheckHZCharset (wubiDictCurrent->strHZ)) { 
+					iCandPageCount++;
+					break;
+				}
+				wubiDictCurrent = wubiDictCurrent->next;
+			}
+		}
+	}
+	else if (mode == SM_FIRST)
+		iCandPageCount = iWBTotalCandCount / iMaxCandWord - ((iWBTotalCandCount % iMaxCandWord )? 0:1);
+
+    	strTemp[1] = '\0';
+    	uMessageDown = 0;
+
+    	for (i = 0; i < iCandWordCount; i++) {
+		strTemp[0] = i + 1 + '0';
+		if (i == 9)
+	    		strTemp[0] = '0';
+		strcpy (messageDown[uMessageDown].strMsg, strTemp);
+#ifdef _USE_XFT
+		strcat (messageDown[uMessageDown].strMsg, " ");
+#endif
+		messageDown[uMessageDown++].type = MSG_INDEX;
+
+		strcpy (messageDown[uMessageDown].strMsg, WBCandWord[i]->strHZ);
+		messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
+		if (HasZ ())
+	    		pstr = WBCandWord[i]->strCode;
+		else
+	    		pstr = WBCandWord[i]->strCode + iCodeInputCount;
+		strcpy (messageDown[uMessageDown].strMsg, pstr);
+		if (i != (iCandWordCount - 1)) {
+#ifdef _USE_XFT
+	    		strcat (messageDown[uMessageDown].strMsg, "  ");
+#else
+	    		strcat (messageDown[uMessageDown].strMsg, " ");
+#endif
+		}
+		messageDown[uMessageDown++].type = MSG_CODE;
+    	}
+
+    	return IRV_DISPLAY_CANDWORDS;
+}
+
+Bool WBAddCanWord(WBRECORD *wbRecord, SEARCH_MODE mode)
+{
+	int i=0, j;
+	
+	switch ( wbOrder ) {
+		case AD_NO:
+			if ( mode==SM_PREV ) {
+				if ( iCandWordCount == iMaxCandWord )
+					i = iCandWordCount -1;
+				else
+					i = iCandWordCount;
+			}
+			else {
+				WBCandWord[iCandWordCount++]=wbRecord;
+				if ( iCandWordCount == iMaxCandWord )
+					return False;
+				return True;
+			}
+			break;
+			
+		case AD_FREQ:
+			if ( mode==SM_PREV ) {
+				for ( i=iCandWordCount-1; i>=0; i-- ) {
+					if ( strcmp(WBCandWord[i]->strCode,wbRecord->strCode)<=0 && WBCandWord[i]->iHit>=wbRecord->iHit )
+						break;
+				}
+				
+				if (i < 0) {
+					if (iCandWordCount == iMaxCandWord)
+		    				return True;
+					i = 0;
+	    			}
+				else if (iCandWordCount == iMaxCandWord)
+					i--;				
+			}
+			else {
+				for ( ; i<iCandWordCount; i++) {
+					if ( strcmp(WBCandWord[i]->strCode,wbRecord->strCode)>=0 && WBCandWord[i]->iHit<wbRecord->iHit )
+						break;
+				}
+				if (i == iMaxCandWord)
+					return True;
+			}
+			break;
+		
+		case AD_FAST:
+			if ( mode==SM_PREV ) {
+				for (i = (iCandWordCount - 1); i >= 0; i--) {
+					if (strcmp(WBCandWord[i]->strCode,wbRecord->strCode)<=0 && WBCandWord[i]->iIndex >=wbRecord->iIndex ) {
+		    				i++;
+		    				break;
+					}
+				}
+
+	    			if (i < 0) {
+					if (iCandWordCount == iMaxCandWord)
+		    				return True;
+					i = 0;
+	    			}
+	    			else if (iCandWordCount == iMaxCandWord)
+					i--;
+			}
+			else {
+				for (i = 0; i < iCandWordCount; i++) {
+					if (strcmp(WBCandWord[i]->strCode,wbRecord->strCode)>=0 && WBCandWord[i]->iIndex < wbRecord->iIndex )
+		    				break;
+	    			}
+
+				if (i == iMaxCandWord)
+					return True;
+			}
+			break;
+	}
+	
+    	if (mode == SM_PREV) {
+		if (iCandWordCount == iMaxCandWord) {
+	    		for (j = 0; j < i; j++)
+				WBCandWord[j] = WBCandWord[j + 1];
+		}
+		else {
+	    		for (j = iCandWordCount; j > i; j--)
+				WBCandWord[j] = WBCandWord[j - 1];
+		}
 	}
 	else {
-	    iCandWordCount = 0;
-
-	    for (;;) {
-		for (;;) {
-		    if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode) && CheckLocale (wubiDictCurrent->strHZ)) {
-			WBCandWord[iCandWordCount++] = wubiDictCurrent;
-			break;
-		    }
-
-		    wubiDictCurrent = wubiDictCurrent->next;
-		    if (wubiDictCurrent == wubiDictHead)
-			break;
-		}
-
-		if (wubiDictCurrent == wubiDictHead)
-		    break;
-		wubiDictCurrent = wubiDictCurrent->next;
-		if (wubiDictCurrent == wubiDictHead)
-		    break;
+		j = iCandWordCount;
 		if (iCandWordCount == iMaxCandWord)
-		    break;
-	    }
+	    		j--;
+		for (; j > i; j--)
+			WBCandWord[j] = WBCandWord[j - 1];
+    	}
+
+    	WBCandWord[i] = wbRecord;
+    	if (iCandWordCount != iMaxCandWord)
+		iCandWordCount++;
+
+    	return True;
+}
+
+void WBResetFlags (void)
+{
+	WBRECORD *record=wubiDictHead->next;
+	
+	while ( record!=wubiDictHead ) {
+		record->flag=False;
+		record=record->next;
 	}
+}
 
-	if (mode != SM_PREV) {
-	    recTemp = wubiDictCurrent;
+void WBSetCandWordsFlag (Bool flag)
+{
+    int             i;
 
-	    if (iCurrentCandPage == iCandPageCount) {
-		if (wubiDictCurrent != wubiDictHead) {
-		    while (1) {
-			if (!CompareWBCode (strCodeInput, recTemp->strCode) && CheckLocale (recTemp->strHZ)) {
-			    iCandPageCount++;
-			    break;
-			}
-			recTemp = recTemp->next;
-			if (recTemp == wubiDictHead)
-			    break;
-		    }
-		}
-	    }
-	}
-    }
-
-    strTemp[1] = '\0';
-    uMessageDown = 0;
-
-    for (i = 0; i < iCandWordCount; i++) {
-	strTemp[0] = i + 1 + '0';
-	if (i == 9)
-	    strTemp[0] = '0';
-	strcpy (messageDown[uMessageDown].strMsg, strTemp);
-#ifdef _USE_XFT
-	strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
-	messageDown[uMessageDown++].type = MSG_INDEX;
-
-	strcpy (messageDown[uMessageDown].strMsg, WBCandWord[i]->strHZ);
-	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
-	if (HasZ ())
-	    pstr = WBCandWord[i]->strCode;
-	else
-	    pstr = WBCandWord[i]->strCode + iCodeInputCount;
-	strcpy (messageDown[uMessageDown].strMsg, pstr);
-	if (i != (iCandWordCount - 1)) {
-#ifdef _USE_XFT
-	    strcat (messageDown[uMessageDown].strMsg, "  ");
-#else
-	    strcat (messageDown[uMessageDown].strMsg, " ");
-#endif
-	}
-	messageDown[uMessageDown++].type = MSG_CODE;
-    }
-
-    return IRV_DISPLAY_CANDWORDS;
+    for (i = 0; i < iCandWordCount; i++)
+	WBCandWord[i]->flag=flag;
 }
 
 Bool HasZ (void)
@@ -714,7 +812,7 @@ int WBFindFirstMatchCode (void)
     wubiDictCurrent = wubiDictHead->next;
     while (wubiDictCurrent != wubiDictHead) {
 	if (!CompareWBCode (strCodeInput, wubiDictCurrent->strCode)) {
-	    if (CheckLocale (wubiDictCurrent->strHZ))
+	    if (CheckHZCharset (wubiDictCurrent->strHZ))
 		return i;
 	}
 	wubiDictCurrent = wubiDictCurrent->next;
@@ -793,6 +891,8 @@ void DelWBPhraseByIndex (int iIndex)
 
     free (recTemp->strHZ);
     free (recTemp);
+    
+    iWBCount--;
 
     SaveWubiDict ();
 }
@@ -800,11 +900,9 @@ void DelWBPhraseByIndex (int iIndex)
 void InsertWBPhrase (char *strCode, char *strHZ)
 {
     WBRECORD       *wubiDictInsertPoint, *wubiDictNew, *recTemp;
-    Bool            bNew;
 
     wubiDictInsertPoint = wubiDictHead;
     recTemp = wubiDictHead->next;
-    bNew = True;
 
     while (recTemp != wubiDictHead) {
 	if (strcmp (recTemp->strCode, strCode) > 0) {
@@ -814,26 +912,26 @@ void InsertWBPhrase (char *strCode, char *strHZ)
 	else if (!strcmp (recTemp->strCode, strCode)) {
 	    wubiDictInsertPoint = recTemp;
 	    if (!strcmp (recTemp->strHZ, strHZ))	//该词组已经在词库中
-		bNew = False;
+		return;
 	    break;
 	}
 
 	recTemp = recTemp->next;
     }
 
-    if (bNew) {
-	wubiDictNew = (WBRECORD *) malloc (sizeof (WBRECORD));
-	strcpy (wubiDictNew->strCode, strCode);
-	wubiDictNew->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
-	strcpy (wubiDictNew->strHZ, strHZ);
+    wubiDictNew = (WBRECORD *) malloc (sizeof (WBRECORD));
+    strcpy (wubiDictNew->strCode, strCode);
+    wubiDictNew->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
+    strcpy (wubiDictNew->strHZ, strHZ);
 
-	wubiDictNew->prev = wubiDictInsertPoint->prev;
-	wubiDictInsertPoint->prev->next = wubiDictNew;
-	wubiDictInsertPoint->prev = wubiDictNew;
-	wubiDictNew->next = wubiDictInsertPoint;
+    wubiDictNew->prev = wubiDictInsertPoint->prev;
+    wubiDictInsertPoint->prev->next = wubiDictNew;
+    wubiDictInsertPoint->prev = wubiDictNew;
+    wubiDictNew->next = wubiDictInsertPoint;
 
-	SaveWubiDict ();
-    }
+    iWBCount++;
+	
+    SaveWubiDict ();	
 }
 
 void WBCreateNewPhrase (void)

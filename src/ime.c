@@ -1,15 +1,22 @@
 #include <ctype.h>
 
+#ifdef _USE_XFT
+#include <ft2build.h>
+#include <X11/Xft/Xft.h>
+#endif
+
 #include "xim.h"
 #include "ime.h"
 #include "InputWindow.h"
 #include "MainWindow.h"
 #include "IC.h"
 #include "punc.h"
-#include "wbx.h"
-#include "erbi.h"
 #include "py.h"
 #include "tools.h"
+#include "ui.h"
+
+IM		im[10];
+INT8		iIMCount = 0;
 
 int             iMaxCandWord = 5;
 int             iCandPageCount;
@@ -55,12 +62,6 @@ Time            lastKeyPressedTime;
 KEY_RELEASED    keyReleased = KR_OTHER;
 KEYCODE         switchKey = L_CTRL;
 
-INPUT_RETURN_VALUE (*DoInput) (int);
-char           *(*GetCandWord) (int);
-
-INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
-Bool (*PhraseTips) (char *strPhrase);	//提示词库中是否已经有
-
 //热键定义
 HOTKEYS         hkTrigger[HOT_KEY_COUNT] = { CTRL_SPACE, 0 };
 HOTKEYS         hkGBK[HOT_KEY_COUNT] = { CTRL_M, 0 };
@@ -80,7 +81,7 @@ Bool            bUseLegend = False;
 SINGLE_HZ       legendCandWords[MAX_CAND_WORD];
 Bool            bIsInLegend = False;
 
-IME             imeIndex = IME_WUBI;
+INT8            iIMIndex = 0;
 
 extern IC      *CurrentIC;
 extern Display *dpy;
@@ -101,6 +102,13 @@ extern Window   mainWindow;
 
 extern int      MAINWND_WIDTH;
 extern Bool	bLocked;
+extern Bool	bCompactMainWindow;
+
+#ifdef _USE_XFT
+extern XftFont	*xftMainWindowFont;
+#else
+extern XFontSet	fontSetMainWindow;
+#endif
 /*******************************************************/
 //Bool            bDebug = False;
 
@@ -125,15 +133,12 @@ void ResetInput (void)
     bIsInLegend = False;
     bInCap = False;
 
-    if (imeIndex == IME_PINYIN) {
+    if (IsIM(NAME_OF_PINYIN))
 	bSingleHZMode = False;
-	ResetPYStatus ();
-    }
-    else {
+    else
 	bShowCursor = False;
-	ResetWBStatus ();
-	ResetEBStatus ();
-    }
+	
+    im[iIMIndex].ResetIM();
 }
 
 void CloseIME (XIMS ims, IMForwardEventStruct * call_data)
@@ -163,20 +168,28 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     char           *pstr;
 
     kev = (XKeyEvent *) & call_data->event;
-
+    
     strbuf = (char *) malloc (sizeof (char) * STRBUFLEN);
     memset (strbuf, 0, STRBUFLEN);
     count = XLookupString (kev, strbuf, STRBUFLEN, &keysym, NULL);
-    free (strbuf);
+    free (strbuf);  
 
     iKeyState = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
 
     iKey = GetKey (keysym, iKeyState, count);
 
     //printf ("KEYSTATE:%d  %d KEYCODE:%d COUNT:%d KEY:%d\n", kev->state,iKeyState, (unsigned char) keysym, count, GetKey (keysym, iKeyState, count));
+    
     if (!iKey)
 	return;
-
+	
+    /*
+     * 解决xine中候选字自动选中的问题
+     * xine每秒钟产生一个左SHIFT键的释放事件
+     */
+    if ( kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey) )
+    	return;
+    
     retVal = IRV_TO_PROCESS;
     if (call_data->event.type == KeyRelease) {
 	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
@@ -208,7 +221,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 	    }
 	    else if (kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) {
 		if (!bIsInLegend) {
-		    pstr = GetCandWord (1);
+		    pstr = im[iIMIndex].GetCandWord (1);
 		    if (pstr) {
 			strcpy (strStringGet, pstr);
 			if (bIsInLegend)
@@ -224,7 +237,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 	    }
 	    else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
 		if (!bIsInLegend) {
-		    pstr = GetCandWord (2);
+		    pstr = im[iIMIndex].GetCandWord (2);
 		    if (pstr) {
 			strcpy (strStringGet, pstr);
 			if (bIsInLegend)
@@ -267,7 +280,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		IMForwardEvent (ims, (XPointer) call_data);
 	    else {
 		if (!bInCap && !bCorner) {
-		    retVal = DoInput (iKey);
+		    retVal = im[iIMIndex].DoInput (iKey);
 /*		    if (bDebug)
 			fprintf (fd, "INPUT: %d  %c\n", iKey, iKey);*/
 		}
@@ -290,7 +303,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		    else if (iKey >= 'A' && iKey <= 'Z' && bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
 			bInCap = True;
 			if (!bIsInLegend && iCandWordCount) {
-			    pstr = GetCandWord (0);
+			    pstr = im[iIMIndex].GetCandWord (0);
 			    iCandWordCount = 0;
 			    if (pstr) {
 				strcpy (strStringGet, pstr);
@@ -308,22 +321,22 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			retVal = ChangePunc ();
 		    else if (IsHotKey (iKey, hkGBK))
 			retVal = ChangeGBK ();
-//need to adjust here for PrevPage & NetxPage Hotkey of different IMEs
+//need to adjust here for PrevPage & NextPage Hotkey of different IMEs
 		    else if (IsHotKey (iKey, hkPrevPage)) {
-			if (imeIndex != IME_ERBI)
-			    retVal = GetCandWords (SM_PREV);
+			if (!IsIM(NAME_OF_ERBI))
+			    retVal = im[iIMIndex].GetCandWords (SM_PREV);
 		    }
 		    else if (IsHotKey (iKey, hkNextPage)) {
-			if (imeIndex != IME_ERBI)
-			    retVal = GetCandWords (SM_NEXT);
+			if (!IsIM(NAME_OF_ERBI))
+			    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
 		    }
 		    else if (IsHotKey (iKey, hkERBIPrevPage)) {
-			if (imeIndex == IME_ERBI)
-			    retVal = GetCandWords (SM_PREV);
+			if (IsIM(NAME_OF_ERBI) )
+			    retVal = im[iIMIndex].GetCandWords (SM_PREV);
 		    }
 		    else if (IsHotKey (iKey, hkERBINextPage)) {
-			if (imeIndex == IME_ERBI)
-			    retVal = GetCandWords (SM_NEXT);
+			if (IsIM(NAME_OF_ERBI))
+			    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
 		    }
 		    else if (IsHotKey (iKey, hkLegend))
 			retVal = ChangeLegend ();
@@ -331,7 +344,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		    if (retVal == IRV_TO_PROCESS) {
 			if (bInCap) {
 			    if (iKey == ' ' && iCodeInputCount == 0) {
-				strcpy (strStringGet, "；");
+				strcpy (strStringGet, ";");
 				retVal = IRV_ENG;
 				bInCap = False;
 			    }
@@ -357,7 +370,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			    uMessageDown = 1;
 			    if (bEngAfterSemicolon && !iCodeInputCount) {
 				strcpy (messageUp[0].strMsg, "进入英文输入状态");
-				strcpy (messageDown[0].strMsg, "空格输入；Enter输入;");
+				strcpy (messageDown[0].strMsg, "空格输入;Enter输入；");
 			    }
 			    else {
 				strcpy (messageUp[0].strMsg, strCodeInput);
@@ -379,7 +392,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				if (iPunc != -1) {
 				    strStringGet[0] = '\0';
 				    if (!bIsInLegend)
-					pstr = GetCandWord (0);
+					pstr = im[iIMIndex].GetCandWord (0);
 				    if (pstr) {
 					strcpy (strStringGet, pstr);
 					UpdateHZLastInput ();
@@ -411,7 +424,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					else {
 					    strStringGet[0] = '\0';
 					    if (!bIsInLegend)
-						pstr = GetCandWord (0);
+						pstr = im[iIMIndex].GetCandWord (0);
 					    if (pstr) {
 						strcpy (strStringGet, pstr);
 						UpdateHZLastInput ();
@@ -444,7 +457,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		    else if (iKey == ENTER) {
 			if (bInCap) {
 			    if (bEngAfterSemicolon && !iCodeInputCount)
-				strcpy (strStringGet, ";");
+				strcpy (strStringGet, "；");
 			    else
 				strcpy (strStringGet, strCodeInput);
 			    retVal = IRV_ENG;
@@ -505,7 +518,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 	else {
-	    if (imeIndex == IME_ERBI) {
+	    if (IsIM(NAME_OF_ERBI)) {
 		if (iCodeInputCount == 1 && strCodeInput[0] == '`' && !iCandWordCount) {
 		    uMessageUp = 1;
 		    messageUp[0].strMsg[0] = '`';
@@ -594,9 +607,6 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     default:			//避免编译器给一个警告
 	;
     }
-
-    //不知道这个函数能不能解决双字母的问题 ----- 看来是不行的了 -----暂时保留
-    fflush (NULL);
 }
 
 Bool IsHotKey (int iKey, HOTKEYS * hotkey)
@@ -678,40 +688,21 @@ INPUT_RETURN_VALUE ChangeLegend (void)
 void SwitchIME (BYTE index)
 {
     if (index == (BYTE) - 1) {
-	if (imeIndex == IME_ERBI)
-	    imeIndex = IME_WUBI;
+	if (iIMIndex == (iIMCount-1))
+	    iIMIndex = 0;
 	else
-	    imeIndex++;
+	    iIMIndex++;
     }
-    else
-	imeIndex = index;
-
-    switch (imeIndex) {
-    case IME_WUBI:
-	DoInput = DoWBInput;
-	GetCandWords = WBGetCandWords;
-	GetCandWord = WBGetCandWord;
-	PhraseTips = WBPhraseTips;
-	break;
-    case IME_PINYIN:
-	DoInput = DoPYInput;
-	GetCandWords = PYGetCandWords;
-	GetCandWord = PYGetCandWord;
-	PhraseTips = NULL;
-	break;
-    case IME_ERBI:
-	DoInput = DoEBInput;
-	GetCandWords = EBGetCandWords;
-	GetCandWord = EBGetCandWord;
-	PhraseTips = EBPhraseTips;
-	break;
+    else {
+    	if ( index<iIMCount )
+		iIMIndex = index;
     }
 
-    if (imeIndex == IME_PINYIN)
-	MAINWND_WIDTH = _MAINWND_WIDTH + 18;
-    else
-	MAINWND_WIDTH = _MAINWND_WIDTH;
-
+#ifdef _USE_XFT
+    MAINWND_WIDTH = ((bCompactMainWindow)? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth( im[iIMIndex].strName, xftMainWindowFont) + 4;
+#else
+    MAINWND_WIDTH = ((bCompactMainWindow)? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth( im[iIMIndex].strName, fontSetMainWindow) + 4;
+#endif
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
     DisplayMainWindow ();
 
@@ -719,6 +710,9 @@ void SwitchIME (BYTE index)
     XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
+    
+    if ( im[iIMIndex].Init )
+    	im[iIMIndex].Init();
 }
 
 void DoPhraseTips (void)
@@ -726,15 +720,43 @@ void DoPhraseTips (void)
     char            strTemp[MAX_HZ_SAVED * 2 + 1];
     INT8            count;
 
-    if (!PhraseTips)
+    if (!bPhraseTips)
 	return;
 
     strTemp[0] = '\0';
     for (count = 0; count < iHZLastInputCount; count++)
 	strcat (strTemp, hzLastInput[count].strHZ);
 
-    if (PhraseTips (strTemp))
+    if (im[iIMIndex].PhraseTips (strTemp))
 	lastIsSingleHZ = -1;
     else
 	lastIsSingleHZ = 0;
+}
+
+/*
+#define _DEBUG
+*/
+void	RegisterNewIM ( char *strName,  void (*ResetIM)(void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),Bool (*PhraseTips) (char *strPhrase),void (*Init)(void))
+{
+	#ifdef _DEBUG
+		printf("REGISTER %s\n", strName);
+	#endif
+	strcpy(im[iIMCount].strName, strName);
+	im[iIMCount].ResetIM = ResetIM;
+	im[iIMCount].DoInput=DoInput;
+	im[iIMCount].GetCandWords = GetCandWords;
+	im[iIMCount].GetCandWord = GetCandWord;
+	im[iIMCount].GetLegendCandWord = GetLegendCandWord;
+	im[iIMCount].PhraseTips = PhraseTips;
+	im[iIMCount].Init = Init;
+	
+	iIMCount++;
+}
+
+Bool IsIM(char *strName)
+{
+	if ( strstr(im[iIMIndex].strName,strName))
+		return True;
+		
+	return False;
 }

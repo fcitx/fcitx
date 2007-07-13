@@ -7,12 +7,14 @@
 #include "ime.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
-#include "wbx.h"
-#include "erbi.h"
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
-IC             *CurrentIC;
+IC             *CurrentIC = NULL;
+IC	       *LastIC = NULL;
 Bool            bBackground = True;
+
+extern IM	im[];
+extern INT8	iIMIndex;
 
 extern Display *dpy;
 extern int      iScreen;
@@ -76,9 +78,7 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 {
     int             iX, iY;
 
-    if (CurrentIC == NULL)
-	return True;
-    if (CurrentIC != (IC *) FindIC (call_data->icid))
+    if ((CurrentIC == NULL) || (CurrentIC != (IC *) FindIC (call_data->icid)) )
 	return True;
 
     if (bTrackCursor) {
@@ -97,15 +97,13 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 
 		if (iX < 0)
 		    iX = 0;
-		else if ((iX + iInputWindowWidth) > DisplayWidth (dpy, iScreen)) {
+		else if ((iX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 		    iX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
-		}
 
 		if (iY < 0)
 		    iY = 0;
-		else if ((iY + iInputWindowHeight) > DisplayHeight (dpy, iScreen)) {
+		else if ((iY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
 		    iY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
-		}
 		else
 		    iY += 3;
 
@@ -121,10 +119,12 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 
 Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
 {
-    CurrentIC = (IC *) FindIC (call_data->icid);
-    if (!CurrentIC)
+    if (!((IC *) FindIC (call_data->icid)))
 	return True;
-
+    
+    LastIC = CurrentIC;
+    CurrentIC = (IC *) FindIC (call_data->icid);
+    
     XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
     DisplayMainWindow ();
@@ -138,8 +138,10 @@ Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
 
 Bool MyUnsetFocusHandler (XIMS ims, IMChangeICStruct * call_data)
 {
-    if (CurrentIC != (IC *) FindIC (call_data->icid))
+    if (CurrentIC == (IC *) FindIC (call_data->icid)) {
+        CurrentIC = LastIC;
 	XUnmapWindow (dpy, inputWindow);
+    }
     return True;
 }
 
@@ -166,9 +168,13 @@ Bool MyCreateICHandler (XIMS ims, IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (XIMS ims, IMChangeICStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
-    DestroyIC (call_data);
-
+    if ( CurrentIC == (IC *) FindIC (call_data->icid) ) {
+    	XUnmapWindow (dpy, inputWindow);
+	CurrentIC = (IC *)NULL;
+    }
+    
+    DestroyIC (call_data);    
+    
     return True;
 }
 
@@ -200,11 +206,10 @@ Bool MyForwardEventHandler (XIMS ims, IMForwardEventStruct * call_data)
 {
     if (CurrentIC == NULL)
 	return True;
+    
     if (CurrentIC != (IC *) FindIC (call_data->icid))
 	return True;
 
-    /*if ( bDebug )
-       fprintf(fd,"PROCESS   %d\n",call_data->event.type); */
     ProcessKey (ims, call_data);
 
     return True;
@@ -220,9 +225,11 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 	 */
 	ResetInput ();
 	ResetInputWindow ();
-	ResetWBStatus ();
-	ResetEBStatus ();
+	
+	im[iIMIndex].ResetIM ();
+	
 	CurrentIC->imeState = IS_CHN;
+	
 	DisplayInputWindow ();
 	DisplayMainWindow ();
 	

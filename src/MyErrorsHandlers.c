@@ -20,10 +20,11 @@
 XErrorHandler   oldXErrorHandler;
 
 extern BYTE     iWBChanged;
-extern BYTE		iEBChanged;
+extern BYTE	iEBChanged;
 extern BYTE     iNewPYPhraseCount;
 extern BYTE     iOrderCount;
 extern BYTE     iNewFreqCount;
+extern BYTE	iWBOrderChanged;
 
 void SetMyExceptionHandler (void)
 {
@@ -35,12 +36,11 @@ void SetMyExceptionHandler (void)
 
 void OnException (int signo)
 {
-    //   int             status;
     fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
 	
-    if (iWBChanged)
+    if (iWBChanged || iWBOrderChanged)
 	SaveWubiDict ();
-	if (iEBChanged)
+    if (iEBChanged)
 	SaveErbiDict ();
     if (iNewPYPhraseCount)
 	SavePYUserPhrase ();

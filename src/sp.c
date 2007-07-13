@@ -86,6 +86,16 @@ Bool            bSP_UseSemicolon = False;
 Bool            bSP = False;
 char            cNonS = 'o';
 
+extern Bool	bSingleHZMode;
+
+void SPInit(void)
+{
+	bSP = True;
+	bSingleHZMode = False;
+	
+	LoadSPData ();
+}
+
 void LoadSPData (void)
 {
     FILE           *fp;
@@ -327,13 +337,4 @@ int GetSPIndexJP_C (char c, int iStart)
     }
 
     return -1;
-}
-
-void SwitchSP (void)
-{
-    bSP = !bSP;
-    DisplayMainWindow ();
-
-    if (bSP)
-	LoadSPData ();
 }

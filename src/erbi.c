@@ -9,7 +9,6 @@
 
 #include "tools.h"
 #include "InputWindow.h"
-#include "SetLocale.h"
 #include "py.h"
 #include "pyParser.h"
 
@@ -592,7 +591,7 @@ INPUT_RETURN_VALUE EBGetCandWords (SEARCH_MODE mode)
 		iCandWordCount = 0;
 		for (;;) {
 		    for (;;) {
-			if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckLocale (erbiDictCurrent->strHZ)) {
+			if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckHZCharset (erbiDictCurrent->strHZ)) {
 			    iCandWordCount++;
 			    break;
 			}
@@ -606,7 +605,7 @@ INPUT_RETURN_VALUE EBGetCandWords (SEARCH_MODE mode)
 	    iCandWordCount = 0;
 	    for (;;) {
 		for (;;) {
-		    if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckLocale (erbiDictCurrent->strHZ)) {
+		    if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckHZCharset (erbiDictCurrent->strHZ)) {
 			EBCandWord[iCandWordCount++] = erbiDictCurrent;
 			break;
 		    }
@@ -623,7 +622,7 @@ INPUT_RETURN_VALUE EBGetCandWords (SEARCH_MODE mode)
 
 	    for (;;) {
 		for (;;) {
-		    if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckLocale (erbiDictCurrent->strHZ)) {
+		    if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode) && CheckHZCharset (erbiDictCurrent->strHZ)) {
 			EBCandWord[iCandWordCount++] = erbiDictCurrent;
 			break;
 		    }
@@ -649,7 +648,7 @@ INPUT_RETURN_VALUE EBGetCandWords (SEARCH_MODE mode)
 	    if (iCurrentCandPage == iCandPageCount) {
 		if (erbiDictCurrent != erbiDictHead) {
 		    while (1) {
-			if (!CompareEBCode (strCodeInput, recTemp->strCode) && CheckLocale (recTemp->strHZ)) {
+			if (!CompareEBCode (strCodeInput, recTemp->strCode) && CheckHZCharset (recTemp->strHZ)) {
 			    iCandPageCount++;
 			    break;
 			}
@@ -739,7 +738,7 @@ int EBFindFirstMatchCode (void)
     erbiDictCurrent = erbiDictHead->next;
     while (erbiDictCurrent != erbiDictHead) {
 	if (!CompareEBCode (strCodeInput, erbiDictCurrent->strCode)) {
-	    if (CheckLocale (erbiDictCurrent->strHZ))
+	    if (CheckHZCharset (erbiDictCurrent->strHZ))
 		return i;
 	}
 	erbiDictCurrent = erbiDictCurrent->next;

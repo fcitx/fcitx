@@ -103,7 +103,6 @@ fcitx_SOURCES = erbi.c erbi.h \
                 PYFA.c PYFA.h \
                 pyMapTable.c pyMapTable.h \
                 pyParser.c pyParser.h \
-                SetLocale.c SetLocale.h \
                 sp.c sp.h \
                 tools.c tools.h \
                 ui.c ui.h \
@@ -122,7 +121,7 @@ am_fcitx_OBJECTS = erbi.$(OBJEXT) IC.$(OBJEXT) ime.$(OBJEXT) \
 	InputWindow.$(OBJEXT) KeyList.$(OBJEXT) main.$(OBJEXT) \
 	MainWindow.$(OBJEXT) MyErrorsHandlers.$(OBJEXT) punc.$(OBJEXT) \
 	py.$(OBJEXT) PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) \
-	pyParser.$(OBJEXT) SetLocale.$(OBJEXT) sp.$(OBJEXT) \
+	pyParser.$(OBJEXT) sp.$(OBJEXT) \
 	tools.$(OBJEXT) ui.$(OBJEXT) wbx.$(OBJEXT) xim.$(OBJEXT)
 fcitx_OBJECTS = $(am_fcitx_OBJECTS)
 fcitx_DEPENDENCIES = ../lib/libXimd.a
@@ -136,7 +135,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/IC.Po ./$(DEPDIR)/InputWindow.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/KeyList.Po ./$(DEPDIR)/MainWindow.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/MyErrorsHandlers.Po ./$(DEPDIR)/PYFA.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/SetLocale.Po ./$(DEPDIR)/erbi.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/erbi.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/ime.Po ./$(DEPDIR)/main.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/punc.Po ./$(DEPDIR)/py.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/pyMapTable.Po ./$(DEPDIR)/pyParser.Po \
@@ -203,7 +202,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MainWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MyErrorsHandlers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PYFA.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SetLocale.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/erbi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ime.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@

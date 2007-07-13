@@ -12,17 +12,24 @@
 #define HOT_KEY_COUNT	2
 #define MAX_HZ_SAVED    10
 
-typedef enum {
-    IME_WUBI = 0,
-    IME_PINYIN = 1,
-    IME_ERBI = 2
-} IME;
+#define MAX_IM_NAME	10
+
+#define NAME_OF_PINYIN		"Æ´Òô"
+#define NAME_OF_SHUANGPIN	"Ë«Æ´"
+#define NAME_OF_WUBI		"Îå±Ê"
+#define NAME_OF_ERBI		"¶þ±Ê"
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
     SM_NEXT,
     SM_PREV
 } SEARCH_MODE;
+
+typedef enum ADJUST_ORDER {
+    AD_NO,
+    AD_FAST,
+    AD_FREQ
+} ADJUSTORDER;
 
 typedef enum _INPUT_RETURN_VALUE {
     //IRV_UNKNOWN = -1,
@@ -57,6 +64,17 @@ typedef enum _KEY_RELEASED {
     KR_3RD_SELECTKEY
 } KEY_RELEASED;
 
+typedef struct {
+	char strName[MAX_IM_NAME+1];
+	void (*ResetIM) (void);
+	INPUT_RETURN_VALUE (*DoInput) (int);
+	INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
+	char *(*GetCandWord) (int);
+	char *(*GetLegendCandWord) (int);
+	Bool (*PhraseTips) (char *strPhrase);
+	void (*Init) (void);
+} IM;
+
 typedef int     HOTKEYS;
 
 void            ProcessKey (XIMS ims, IMForwardEventStruct * call_data);
@@ -68,8 +86,11 @@ INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
 INPUT_RETURN_VALUE ChangeGBK (void);
 INPUT_RETURN_VALUE ChangeLegend (void);
+void		RegisterNewIM ( char *strName, void (*ResetIM)(void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),Bool (*PhraseTips) (char *strPhrase),void (*Init)(void));
 
 void            SwitchIME (BYTE index);
 void            DoPhraseTips ();
+
+Bool		IsIM(char *strName);
 
 #endif
