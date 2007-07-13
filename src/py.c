@@ -438,7 +438,6 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	LoadPYOtherDict ();
 
     val = IRV_TO_PROCESS;
-
     if (!bIsPYAddFreq && !bIsPYDelFreq && !bIsPYDelUserPhr) {
 	if ((iKey >= 'a' && iKey <= 'z') || iKey == PY_SEPERATOR || (bSP && bSP_UseSemicolon && iKey == ';')) {
 	    bIsInLegend = False;
@@ -473,7 +472,8 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	}
 	else if (iKey == (XK_BackSpace & 0x00FF)) {
 	    if (iPYInsertPoint) {
-		strcpy (strFindString + iPYInsertPoint - 1, strFindString + iPYInsertPoint);
+		val = ((iPYInsertPoint > 1) && (strFindString[iPYInsertPoint - 2] == PY_SEPERATOR)) ? 2 : 1;
+		strcpy (strFindString + iPYInsertPoint - val, strFindString + iPYInsertPoint);
 		ParsePY (strFindString, &findMap, PY_PARSE_INPUT_USER);
 		val = IRV_DISPLAY_CANDWORDS;
 		iPYInsertPoint--;
@@ -497,7 +497,8 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	else if (iKey == (XK_Delete & 0x00FF)) {
 	    if (iPYInsertPoint == strlen (strFindString))
 		return IRV_DONOT_PROCESS;
-	    strcpy (strFindString + iPYInsertPoint, strFindString + iPYInsertPoint + 1);
+	    val = (strFindString[iPYInsertPoint + 1] == PY_SEPERATOR) ? 2 : 1;
+	    strcpy (strFindString + iPYInsertPoint, strFindString + iPYInsertPoint + val);
 	    ParsePY (strFindString, &findMap, PY_PARSE_INPUT_USER);
 	    if (!strlen (strFindString))
 		return IRV_CLEAN;
@@ -719,7 +720,7 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 			return IRV_GET_CANDWORDS;
 		    }
 		}
-		else if ( !bIsInLegend ) {
+		else if (!bIsInLegend) {
 		    val = -1;
 		    switch (iKey) {
 		    case ')':
@@ -759,8 +760,8 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
     }
 
     if (!bIsInLegend) {
-	CalculateCursorPosition ();
 	UpdateCodeInputPY ();
+	CalculateCursorPosition ();
     }
 
     if (val == IRV_DISPLAY_CANDWORDS) {
@@ -802,7 +803,10 @@ void CalculateCursorPosition (void)
     for (i = 0; i < iPYSelected; i++)
 	iCursorPos += strlen (pySelected[i].strHZ);
 
+    if ( iPYInsertPoint>strlen(strFindString) )
+	iPYInsertPoint = strlen(strFindString);
     iTemp = iPYInsertPoint;
+    
     for (i = 0; i < findMap.iHZCount; i++) {
 	if (strlen (findMap.strPYParsed[i]) >= iTemp) {
 	    iCursorPos += iTemp;

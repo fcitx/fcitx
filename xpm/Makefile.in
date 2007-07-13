@@ -147,8 +147,8 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-xpmdir = 
-xpm_DATA =
+xpmdir = $(pkgdatadir)/xpm
+xpm_DATA = 
 EXTRA_DIST = $(xpm_DATA)
 all: all-am
 

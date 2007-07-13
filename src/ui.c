@@ -31,17 +31,22 @@ XftFont        *xftFont;
 XftDraw        *xftDraw;
 XftFont        *xftMainWindowFont;
 Bool            bUseAA = True;
-int		iDefaultWidth = 0;
+int             iDefaultWidth = 0;
 #else
 XFontSet        fontSet;
 XFontSet        fontSetMainWindow;
-char		strUserLocale[50]="zh_CN.gb2312";
+char            strUserLocale[50] = "zh_CN.gb2312";
 #endif
 
 iconv_t         convUTF8;	//我只会用XFT输出UTF8中文字串，另外该变量还用于UTF8支持
 
 int             iFontSize = 16;
+
+#ifdef _USE_XFT
 int             iMainWindowFontSize = 12;
+#else
+int             iMainWindowFontSize = 14;
+#endif
 
 GC              dimGC;
 GC              lightGC;
@@ -64,7 +69,7 @@ extern IC      *CurrentIC;
 extern int      MAINWND_WIDTH;
 extern Bool     bCompactMainWindow;
 extern INT8     iIMIndex;
-extern CARD16	connect_id;
+extern CARD16   connect_id;
 
 Bool InitX (void)
 {
@@ -168,7 +173,7 @@ void CreateFont (void)
 
     xftDraw = XftDrawCreate (dpy, inputWindow, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)));
 
-    iDefaultWidth = StringWidth("国", xftFont)/2 - 2;
+    iDefaultWidth = StringWidth ("国", xftFont) / 2 - 2;
 }
 #else
 void CreateFont (void)
@@ -178,21 +183,34 @@ void CreateFont (void)
     char           *default_string;
     char            strFont[256];
 
-    if ( strUserLocale[0] )
-    	setlocale (LC_CTYPE, strUserLocale);
+    if (strUserLocale[0])
+	setlocale (LC_CTYPE, strUserLocale);
     else
-    	setlocale(LC_CTYPE,"");
+	setlocale (LC_CTYPE, "");
+    
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iMainWindowFontSize, iMainWindowFontSize);
     fontSetMainWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
-    if (num_missing_charsets > 0)
-	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\n", strFont);
+    if (num_missing_charsets > 0) {
+	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
+	iMainWindowFontSize = 14;
+	sprintf (strFont, "-*-*-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", iMainWindowFontSize, iMainWindowFontSize);
+	fontSetMainWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
+	if (num_missing_charsets > 0)
+	    fprintf (stderr, "Error: Cannot Create Chinese Fonts!\n\n");
+    }
 
     sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iFontSize, iFontSize);
     fontSet = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
-    if (num_missing_charsets > 0)
-    	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\n", strFont);
+    if (num_missing_charsets > 0) {
+	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
+	iFontSize = 16;
+	sprintf (strFont, "-*-*-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", iFontSize, iFontSize);
+	fontSet = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
+	if (num_missing_charsets > 0)
+	    fprintf (stderr, "Error: Cannot Create Chinese Fonts!\n\n");
+    }
 
-    setlocale(LC_CTYPE,"");
+    setlocale (LC_CTYPE, "");
 /*
    SetLocale();*/
 }
@@ -257,8 +275,7 @@ void MyXEventHandler (XEvent * event)
 	    if (event->xbutton.window == inputWindow) {
 		iInputWindowX = event->xbutton.x;
 		iInputWindowY = event->xbutton.y;
-		MouseClick (&iInputWindowX, &iInputWindowY, 1);
-		SaveProfile ();
+		MouseClick (&iInputWindowX, &iInputWindowY, 1);		
 	    }
 	    else if (event->xbutton.window == mainWindow) {
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
@@ -267,6 +284,7 @@ void MyXEventHandler (XEvent * event)
 		    MouseClick (&iMainWindowX, &iMainWindowY, 0);
 		}
 	    }
+	    SaveProfile ();
 	    break;
 	}
 	break;
@@ -301,8 +319,8 @@ void MyXEventHandler (XEvent * event)
 
 	break;
     case FocusIn:
-	if (ConnectIDGetState(connect_id) == IS_CHN)
-		DisplayInputWindow ();
+	if (ConnectIDGetState (connect_id) == IS_CHN)
+	    DisplayInputWindow ();
 	if (hideMainWindow != HM_HIDE)
 	    XMapRaised (dpy, mainWindow);
 	break;
@@ -326,11 +344,10 @@ Bool IsInBox (int x0, int y0, int x1, int y1, int x2, int y2)
 int StringWidth (char *str, XftFont * font)
 {
     XGlyphInfo      extents;
-    char	    str1[100];
+    char            str1[100];
     char           *ps;
     size_t          l1, l2;
-    int		il;
-
+    int             il;
 
     if (!font)
 	return 0;
@@ -341,11 +358,11 @@ int StringWidth (char *str, XftFont * font)
 
     l1 = iconv (convUTF8, &str, &l1, &ps, &l2);
     *ps = '\0';
-    XftTextExtentsUtf8 (dpy, font, (FcChar8*)str1, strlen (str1), &extents);
-    if ( font!=xftFont)
-    	return extents.width;
+    XftTextExtentsUtf8 (dpy, font, (FcChar8 *) str1, strlen (str1), &extents);
+    if (font != xftFont)
+	return extents.width;
 
-    return ((extents.width<(il*iDefaultWidth))?(il*iDefaultWidth):extents.width);
+    return ((extents.width < (il * iDefaultWidth)) ? (il * iDefaultWidth) : extents.width);
 }
 
 int FontHeight (XftFont * font)
@@ -365,9 +382,9 @@ int FontHeight (XftFont * font)
     ps1 = str1;
 
     l1 = iconv (convUTF8, &ps1, &l1, &ps2, &l2);
-    *ps2='\0';
+    *ps2 = '\0';
 
-    XftTextExtentsUtf8 (dpy, font, (FcChar8 *)str2, strlen (str2), &extents);
+    XftTextExtentsUtf8 (dpy, font, (FcChar8 *) str2, strlen (str2), &extents);
 
     return extents.height;
 }
@@ -419,7 +436,7 @@ void OutputString (Window window, XftFont * font, char *str, int x, int y, XColo
     ps = strOutput;
 
     l1 = iconv (convUTF8, (char **) (&str), &l1, &ps, &l2);
-    *ps='\0';
+    *ps = '\0';
 
     renderColor.red = color.red;
     renderColor.green = color.green;
@@ -428,7 +445,7 @@ void OutputString (Window window, XftFont * font, char *str, int x, int y, XColo
 
     XftColorAllocValue (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &renderColor, &xftColor);
     XftDrawChange (xftDraw, window);
-    XftDrawStringUtf8 (xftDraw, &xftColor, font, x, y, (FcChar8 *)strOutput, strlen (strOutput));
+    XftDrawStringUtf8 (xftDraw, &xftColor, font, x, y, (FcChar8 *) strOutput, strlen (strOutput));
 
     XftColorFree (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &xftColor);
 }

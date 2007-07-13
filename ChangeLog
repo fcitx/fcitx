@@ -1,6 +1,18 @@
+2005-1-24 Yuking <yukig_net@sohu.com>
+	   * src/ui.c:修正不能记忆状态窗口位置的问题
+
+2005-1-24 Yuking <yukig_net@sohu.com>
+	   * src/table.c:修正码表输入法添加词组的一个问题
+	   * src/ime.c,src/tools.c:将中英文快速切换键默认设置改为L_SHIFT
+
+2005-1-17 Yuking <yukig_net@sohu.com>
+	   * src/pyParser.c,src/py.c:修正拼音输入法有分隔符时的错误
+
+2005-1-1  Yuking <yukig_net@sohu.com>
+	   * src/table.c:修正码表输入法特殊符号录入的错误
+
 2004-12-5  Yuking <yukig_net@sohu.com>
 	   * 版本为3.0.3
-
 
 2004-12-5  Yuking <yukig_net@sohu.com>
 	   * 修改仓颉码表中的错误

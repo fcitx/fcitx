@@ -111,7 +111,12 @@ void ParsePY (char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode)
 	    }
 
 	    iIndex = FindPYFAIndex (strQP, 0);
-	    if (iIndex == -1) {
+	    if (iIndex != -1) {
+		strcpy (parsePY->strMap[parsePY->iHZCount], str_Map);
+		strcpy (parsePY->strPYParsed[parsePY->iHZCount++], strJP);
+		strP++;
+	    }
+	    else {
 		strJP[1] = '\0';
 		SP2QP (strJP, strQP);
 		if (!MapPY (strQP, str_Map, mode))
@@ -120,10 +125,11 @@ void ParsePY (char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode)
 		    strcpy (parsePY->strMap[parsePY->iHZCount], str_Map);
 		strcpy (parsePY->strPYParsed[parsePY->iHZCount++], strJP);
 	    }
-	    else {
-		strcpy (parsePY->strMap[parsePY->iHZCount], str_Map);
-		strcpy (parsePY->strPYParsed[parsePY->iHZCount++], strJP);
-		strP++;
+
+	    if (*strP == PY_SEPERATOR) {
+		strcat (parsePY->strPYParsed[parsePY->iHZCount - 1], PY_SEPERATOR_S);
+		while (*strP == PY_SEPERATOR )
+		    strP++;
 	    }
 	}
     }
@@ -220,7 +226,7 @@ void ParsePY (char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode)
 	} while (*strP);
     }
 
-    if (strPY[strlen (strPY) - 1] == PY_SEPERATOR)
+    if (strPY[strlen (strPY) - 1] == PY_SEPERATOR && !bSP)
 	parsePY->iHZCount++;
 
     if (parsePY->iMode != PARSE_ERROR) {

@@ -61,7 +61,7 @@ int             i3rdSelectKey = 0;	//第三个候选词选择键，为扫描码
 Time            lastKeyPressedTime;
 
 KEY_RELEASED    keyReleased = KR_OTHER;
-KEYCODE         switchKey = L_CTRL;
+KEYCODE         switchKey = L_SHIFT;
 
 //热键定义
 HOTKEYS         hkTrigger[HOT_KEY_COUNT] = { CTRL_SPACE, 0 };
@@ -82,7 +82,7 @@ Bool            bUseSP = False;
 Bool            bUseQW = True;
 Bool            bUseTable = True;
 
-Bool            bLumaQQ = True;
+Bool            bLumaQQ = False;
 
 //++++++++++++++++++++++++++++++++++++++++
 /*
@@ -354,6 +354,8 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 					if (!bEngAfterSemicolon || !(bEngAfterSemicolon && (iCodeInputCount == 0 && iKey == ';'))) {
 					    strCodeInput[iCodeInputCount++] = iKey;
 					    strCodeInput[iCodeInputCount] = '\0';
+					    bShowCursor = True;
+					    iCursorPos = iCodeInputCount;
 					}
 					retVal = IRV_DISPLAY_MESSAGE;
 				    }
@@ -635,7 +637,7 @@ INPUT_RETURN_VALUE ChangeGBK (void)
     ResetInputWindow ();
 
     DisplayMainWindow ();
-    DisplayInputWindow ();
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -645,7 +647,11 @@ INPUT_RETURN_VALUE ChangeGBK (void)
 INPUT_RETURN_VALUE ChangeLegend (void)
 {
     bUseLegend = !bUseLegend;
+    ResetInput ();
+    ResetInputWindow ();
+
     DisplayMainWindow ();
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 

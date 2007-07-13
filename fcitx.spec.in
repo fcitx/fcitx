@@ -20,12 +20,12 @@ BuildRequires:	XFree86-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 
 %description
-FCITX is a simplified Chinese input server. It supports WuBi,
+FCITX is a simplified Chinese input server. It supports Tables,
 Pinyin and QuWei input method. It's small and fast.
 
 %description -l zh_CN
 Fcitx──小企鹅输入法即Free Chinese Input Toy for X，它是一个以GPL方式
-发布的、基于XIM的简体中文输入法(即原来的G五笔)，包括五笔、全拼拼音、双拼
+发布的、基于XIM的简体中文输入法(即原来的G五笔)，包括码表、全拼拼音、双拼
 拼音输入法,并可运行在Linux及其它类UNIX平台上。
 Designed by Yuking <yuking_net@suho.com>
 

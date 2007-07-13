@@ -11,19 +11,22 @@
 #include "MainWindow.h"
 #include "InputWindow.h"
 
-CONNECT_ID     *connectIDsHead=(CONNECT_ID*)NULL;
+CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
 
 //************************************************
-CARD16		connect_id = 0;
+CARD16          connect_id = 0;
+CARD16          lastConnectID = 0;
+
 //************************************************
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC = NULL;
 Bool            bBackground = True;
-char 		strLocale[201]="zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
+char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
+
 //int y=0;
 
-extern Bool	bLumaQQ;
+extern Bool     bLumaQQ;
 
 extern IM      *im;
 extern INT8     iIMIndex;
@@ -43,22 +46,24 @@ extern Bool     bTrackCursor;
 extern Bool     bIsUtf8;
 extern int      iCodeInputCount;
 extern iconv_t  convUTF8;
+extern uint     uMessageDown;
+
 /*extern char	strUserLocale[];*/
 //+++++++++++++++++++++++++++++++++
-//extern INT8	iKeyPressed;
+//extern INT8   iKeyPressed;
 
 static XIMStyle Styles[] = {
-//    XIMPreeditCallbacks | XIMStatusCallbacks,	//OnTheSpot
-//    XIMPreeditCallbacks | XIMStatusArea,	//OnTheSpot
-//    XIMPreeditCallbacks | XIMStatusNothing,	//OnTheSpot
-    XIMPreeditPosition | XIMStatusArea,		//OverTheSpot
+//    XIMPreeditCallbacks | XIMStatusCallbacks, //OnTheSpot
+//    XIMPreeditCallbacks | XIMStatusArea,      //OnTheSpot
+//    XIMPreeditCallbacks | XIMStatusNothing,   //OnTheSpot
+    XIMPreeditPosition | XIMStatusArea,	//OverTheSpot
     XIMPreeditPosition | XIMStatusNothing,	//OverTheSpot
-    XIMPreeditPosition | XIMStatusNone,		//OverTheSpot
-//    XIMPreeditArea | XIMStatusArea,		//OffTheSpot
-//    XIMPreeditArea | XIMStatusNothing,	//OffTheSpot
-//    XIMPreeditArea | XIMStatusNone,		//OffTheSpot
+    XIMPreeditPosition | XIMStatusNone,	//OverTheSpot
+//    XIMPreeditArea | XIMStatusArea,           //OffTheSpot
+//    XIMPreeditArea | XIMStatusNothing,        //OffTheSpot
+//    XIMPreeditArea | XIMStatusNone,           //OffTheSpot
     XIMPreeditNothing | XIMStatusNothing,	//Root
-    XIMPreeditNothing | XIMStatusNone,		//Root
+    XIMPreeditNothing | XIMStatusNone,	//Root
     0
 };
 
@@ -83,11 +88,11 @@ static XIMEncoding zhEncodings[] = {
     NULL
 };
 
-Bool MyOpenHandler (XIMS ims, IMOpenStruct *call_data)
+Bool MyOpenHandler (XIMS ims, IMOpenStruct * call_data)
 {
-	CreateConnectID(call_data);
-	
-	return True;
+    CreateConnectID (call_data);
+
+    return True;
 }
 
 Bool MyGetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
@@ -102,7 +107,7 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
     int             iX, iY;
 
     if (CurrentIC == NULL)
-    	return True;
+	return True;
     if (CurrentIC != (IC *) FindIC (call_data->icid))
 	return True;
 
@@ -144,27 +149,27 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 
 Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
 {
-    CurrentIC = (IC *) FindIC (call_data->icid);    
+    CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
 
-    if (ConnectIDGetState(call_data->connect_id) == IS_CHN && iCodeInputCount) {
-	DisplayInputWindow ();
-	if ( bTrackCursor )
-    		XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
-    }
-    else
-	XUnmapWindow (dpy, inputWindow);
-
-    if (ConnectIDGetState(call_data->connect_id)!=IS_CLOSED) {
+    if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
-	EnterChineseMode();
+	EnterChineseMode (lastConnectID == connect_id);
+	if (ConnectIDGetState (call_data->connect_id) == IS_CHN && uMessageDown > 1 && lastConnectID == connect_id) {
+	    DisplayInputWindow ();
+	    if (bTrackCursor)
+		XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+	}
+	else
+	    XUnmapWindow (dpy, inputWindow);
     }
     else
 	DisplayMainWindow ();
 
-    if ( bLumaQQ && ConnectIDGetReset(connect_id) ) {
-    	SendHZtoClient(ims,(IMForwardEventStruct *)call_data,"\0");
-	ConnectIDSetReset(connect_id, False);
+    lastConnectID = connect_id;
+    if (bLumaQQ && ConnectIDGetReset (connect_id)) {
+	SendHZtoClient (ims, (IMForwardEventStruct *) call_data, "\0");
+	ConnectIDSetReset (connect_id, False);
     }
 
     return True;
@@ -180,7 +185,7 @@ Bool MyUnsetFocusHandler (XIMS ims, IMChangeICStruct * call_data)
 Bool MyCloseHandler (XIMS ims, IMOpenStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
-    DestroyConnectID(call_data->connect_id);
+    DestroyConnectID (call_data->connect_id);
 
     return True;
 }
@@ -199,25 +204,25 @@ Bool MyCreateICHandler (XIMS ims, IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (XIMS ims, IMChangeICStruct * call_data)
 {
-    if (CurrentIC == (IC *) FindIC (call_data->icid)) {
+    if (CurrentIC == (IC *) FindIC (call_data->icid))
 	XUnmapWindow (dpy, inputWindow);
-//	CurrentIC = (IC *) NULL;
-    }
 
     DestroyIC (call_data);
 
     return True;
 }
 
-void EnterChineseMode(void)
+void EnterChineseMode (Bool bState)
 {
+    if (!bState) {
 	ResetInput ();
 	ResetInputWindow ();
 
 	if (im[iIMIndex].ResetIM)
-		im[iIMIndex].ResetIM();
+	    im[iIMIndex].ResetIM ();
+    }
 
-	DisplayMainWindow ();
+    DisplayMainWindow ();
 }
 
 Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
@@ -228,9 +233,8 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 	 * * is the only way to start preediting in case of Dynamic Event
 	 * * Flow, because ON key is mandatary for Dynamic Event Flow.
 	 */
-	SetConnectID(call_data->connect_id, IS_CHN);
-	EnterChineseMode();
-	DisplayInputWindow ();
+	SetConnectID (call_data->connect_id, IS_CHN);
+	EnterChineseMode (False);
     }
 
     return True;
@@ -254,7 +258,7 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 	return MyCloseHandler (ims, (IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
 #ifdef _PRINT_MESSAGE
-	printf("XIM_CREATE_IC\n");
+	printf ("XIM_CREATE_IC\n");
 #endif
 	return MyCreateICHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
@@ -264,7 +268,7 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 	return MyDestroyICHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _PRINT_MESSAGE
-//	printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+//      printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
 	return MySetICValuesHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
@@ -277,13 +281,13 @@ Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 	printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	//if ( connect_id == ((IMForwardEventStruct *)call_data)->connect_id )
-		ProcessKey(ims, (IMForwardEventStruct *) call_data);
-	XSync(dpy, False);
-	
+	ProcessKey (ims, (IMForwardEventStruct *) call_data);
+	XSync (dpy, False);
+
 	return True;
     case XIM_SET_IC_FOCUS:
 #ifdef _PRINT_MESSAGE
-	printf ("XIM_SET_IC_FOCUS:conn=%d   ic=%d\n", ((IMForwardEventStruct *) call_data)->icid,((IMForwardEventStruct *) call_data)->connect_id);
+	printf ("XIM_SET_IC_FOCUS:conn=%d   ic=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MySetFocusHandler (ims, (IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
@@ -339,7 +343,7 @@ Bool InitXIM (char *imname, Window im_window)
     XIMStyles      *input_styles;
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;
-    char *p;
+    char           *p;
 
     if (!imname) {
 	imname = getenv ("XMODIFIERS");
@@ -362,24 +366,24 @@ Bool InitXIM (char *imname, Window im_window)
     input_styles->supported_styles = Styles;
 
     on_keys = (XIMTriggerKeys *) malloc (sizeof (XIMTriggerKeys));
-    on_keys->count_keys = iTriggerKeyCount+1;
+    on_keys->count_keys = iTriggerKeyCount + 1;
     on_keys->keylist = Trigger_Keys;
 
     encodings = (XIMEncodings *) malloc (sizeof (XIMEncodings));
     encodings->count_encodings = sizeof (zhEncodings) / sizeof (XIMEncoding) - 1;
     encodings->supported_encodings = zhEncodings;
 
-    /*ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, (strUserLocale[0])? strUserLocale:"zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,en_US.UTF-8", IMServerTransport, "X/", IMInputStyles, input_styles, NULL);*/
-    p=getenv("LC_CTYPE");
-    if ( !p ) {
-    	p=getenv("LC_ALL");
-	if ( !p)
-		p=getenv("LANG");
+    /*ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, (strUserLocale[0])? strUserLocale:"zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,en_US.UTF-8", IMServerTransport, "X/", IMInputStyles, input_styles, NULL); */
+    p = getenv ("LC_CTYPE");
+    if (!p) {
+	p = getenv ("LC_ALL");
+	if (!p)
+	    p = getenv ("LANG");
     }
-    if ( p ) {
-    	if ( !strstr(strLocale, p) ) {
-		strcat(strLocale,",");
-		strcat(strLocale,p);
+    if (p) {
+	if (!strstr (strLocale, p)) {
+	    strcat (strLocale, ",");
+	    strcat (strLocale, p);
 	}
     }
 
@@ -395,129 +399,129 @@ Bool InitXIM (char *imname, Window im_window)
     return True;
 }
 
-void CreateConnectID(IMOpenStruct *call_data)
+void CreateConnectID (IMOpenStruct * call_data)
 {
-    CONNECT_ID	*temp, *connectIDNew;
+    CONNECT_ID     *temp, *connectIDNew;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
     while (temp) {
-	if ( !temp->next )
+	if (!temp->next)
 	    break;
-	temp=temp->next;
+	temp = temp->next;
     }
 
-    connectIDNew=(CONNECT_ID *)malloc(sizeof(CONNECT_ID));
-    connectIDNew->next=(CONNECT_ID *)NULL;
-    connectIDNew->connect_id=call_data->connect_id;
+    connectIDNew = (CONNECT_ID *) malloc (sizeof (CONNECT_ID));
+    connectIDNew->next = (CONNECT_ID *) NULL;
+    connectIDNew->connect_id = call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
     connectIDNew->bReset = !bLumaQQ;
     //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
     //strcpy(connectIDNew->strLocale,call_data->lang.name);
 
-    if ( !temp )
-	connectIDsHead=connectIDNew;
+    if (!temp)
+	connectIDsHead = connectIDNew;
     else
-	temp->next=connectIDNew;
+	temp->next = connectIDNew;
 }
 
-void DestroyConnectID(CARD16 connect_id)
+void DestroyConnectID (CARD16 connect_id)
 {
-    CONNECT_ID *temp,*last;
+    CONNECT_ID     *temp, *last;
 
-    last=temp=connectIDsHead;
+    last = temp = connectIDsHead;
     while (temp) {
-	if ( temp->connect_id==connect_id )
+	if (temp->connect_id == connect_id)
 	    break;
-	
-	last=temp;;
-	temp=temp->next;
+
+	last = temp;;
+	temp = temp->next;
     }
 
-    if ( !temp ) //按说这种情况不会发生的
+    if (!temp)			//按说这种情况不会发生的
 	return;
 
-    if ( temp==connectIDsHead )
-	connectIDsHead=temp->next;
+    if (temp == connectIDsHead)
+	connectIDsHead = temp->next;
     else
-	last->next=temp->next;
+	last->next = temp->next;
 
     /*if (temp->strLocale)
-	free(temp->strLocale);*/
-    free(temp);
+       free(temp->strLocale); */
+    free (temp);
 }
 
-void SetConnectID(CARD16 connect_id, IME_STATE	imState)
+void SetConnectID (CARD16 connect_id, IME_STATE imState)
 {
-    CONNECT_ID *temp;
+    CONNECT_ID     *temp;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
     while (temp) {
-	if ( temp->connect_id==connect_id ) {
+	if (temp->connect_id == connect_id) {
 	    temp->imState = imState;
 	    return;
 	}
 
-	temp=temp->next;
+	temp = temp->next;
     }
 }
 
-IME_STATE ConnectIDGetState(CARD16 connect_id)
+IME_STATE ConnectIDGetState (CARD16 connect_id)
 {
-    CONNECT_ID *temp;
+    CONNECT_ID     *temp;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
 
     while (temp) {
-	if ( temp->connect_id==connect_id )
+	if (temp->connect_id == connect_id)
 	    return temp->imState;
 
-	temp=temp->next;
+	temp = temp->next;
     }
 
     return IS_CLOSED;
 }
 
-Bool ConnectIDGetReset(CARD16 connect_id)
+Bool ConnectIDGetReset (CARD16 connect_id)
 {
-    CONNECT_ID *temp;
+    CONNECT_ID     *temp;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
 
     while (temp) {
-	if ( temp->connect_id==connect_id )
+	if (temp->connect_id == connect_id)
 	    return temp->bReset;
 
-	temp=temp->next;
+	temp = temp->next;
     }
 
     return False;
 }
 
-void ConnectIDSetReset(CARD16 connect_id, Bool bReset)
+void ConnectIDSetReset (CARD16 connect_id, Bool bReset)
 {
-    CONNECT_ID *temp;
+    CONNECT_ID     *temp;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
 
     while (temp) {
-	if ( temp->connect_id==connect_id ) {
+	if (temp->connect_id == connect_id) {
 	    temp->bReset = bReset;
 	    return;
 	}
 
-	temp=temp->next;
+	temp = temp->next;
     }
 }
 
-void ConnectIDResetReset(void)
+void ConnectIDResetReset (void)
 {
-    CONNECT_ID *temp;
+    CONNECT_ID     *temp;
 
-    temp=connectIDsHead;
+    temp = connectIDsHead;
 
     while (temp) {
 	temp->bReset = True;
-	temp=temp->next;
+	temp = temp->next;
     }
 }
 

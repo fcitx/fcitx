@@ -820,8 +820,9 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		    }
 		    else {
 			//如果是拼音，进入快速调整字频方式
-			if (strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
+		        if (strcmp (strCodeInput, table[iTableIMIndex].strSymbol) && strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
 			    PYGetCandWord (iKey - 1);
+			
 			strcpy (strStringGet, TableGetCandWord (iKey - 1));
 			if (bIsInLegend)
 			    retVal = IRV_GET_LEGEND;
@@ -877,7 +878,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    else if (iKey == ' ') {
 		if (!bIsInLegend) {
 		    if (!(table[iTableIMIndex].bUsePY && iCodeInputCount == 1 && strCodeInput[0] == table[iTableIMIndex].cPinyin)) {
-			if (strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
+			if (strcmp (strCodeInput, table[iTableIMIndex].strSymbol) && strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY)
 			    PYGetCandWord (0);
 
 			if (!iCandWordCount) {
@@ -922,7 +923,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	bShowCursor = False;
     else
 	bShowCursor = True;
-
+    
     return retVal;
 }
 
@@ -1517,7 +1518,7 @@ RECORD         *TableHasPhrase (char *strCode, char *strHZ)
 	i++;
 
     recTemp = recordIndex[i].record->prev;
-    while (recTemp != recordHead) {
+    do {
 	if (strcmp (recTemp->strCode, strCode) > 0)
 	    break;
 	else if (!strcmp (recTemp->strCode, strCode)) {
@@ -1526,8 +1527,8 @@ RECORD         *TableHasPhrase (char *strCode, char *strHZ)
 	}
 
 	recTemp = recTemp->next;
-    }
-
+    } while (recTemp != recordHead);
+    
     return recTemp;
 }
 
@@ -1824,7 +1825,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode)
     int             i;
 
     if (!iFH)
-	return IRV_DO_NOTHING;
+	return IRV_DISPLAY_MESSAGE;
 
     strTemp[1] = '.';
     strTemp[2] = '\0';
