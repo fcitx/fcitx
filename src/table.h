@@ -52,6 +52,7 @@ typedef struct _TABLE {
     char            strName[MAX_IM_NAME + 1];
     char           *strInputCode;
     unsigned char   iCodeLength;
+    char           *strEndCode;	//中止键，按下该键相当于输入该键后再按一个空格
     char           *strIgnoreChars;
     char            cMatchingKey;
     char            strSymbol[MAX_CODE_LENGTH + 1];
@@ -65,6 +66,7 @@ typedef struct _TABLE {
 
     Bool            bUsePY;	//使用拼音
     Bool            bTableAutoSendToClient;	//自动上屏
+    Bool            bTableAutoSendToClientWhenNone;	//空码自动上屏
     Bool            bUseMatchingKey;	//是否模糊匹配
     Bool            bAutoPhrase;	//是否自动造词
     INT8            iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
@@ -126,6 +128,7 @@ void            FreeTableIM (void);
 void            SaveTableDict (void);
 Bool            IsInputKey (int iKey);
 Bool            IsIgnoreChar (char cChar);
+Bool            IsEndKey (char cChar);
 INPUT_RETURN_VALUE DoTableInput (int iKey);
 INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode);
 void            TableAddCandWord (RECORD * wbRecord, SEARCH_MODE mode);

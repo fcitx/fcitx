@@ -121,6 +121,8 @@ void InitVKWindowColor (void)
     XGCValues       values;
     int             iPixel;
 
+    if (VKWindowFontColor.gc)
+	XFreeGC (dpy, VKWindowFontColor.gc);
     VKWindowFontColor.gc = XCreateGC (dpy, VKWindow, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(VKWindowFontColor.color)))
 	iPixel = VKWindowFontColor.color.pixel;
@@ -134,7 +136,7 @@ void DisplayVKWindow (void)
     XMapRaised (dpy, VKWindow);
 }
 
-void DrawVKWindow(void)
+void DrawVKWindow (void)
 {
     int             i;
     int             iPos;

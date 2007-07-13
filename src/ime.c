@@ -309,11 +309,11 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	return;
 
     retVal = IRV_TO_PROCESS;
-    
+
 #ifdef _DEBUG
-    printf("iKeyState=%d  KEYCODE=%d  iKey=%d\n", iKeyState, kev->keycode, iKey);
+    printf ("iKeyState=%d  KEYCODE=%d  iKey=%d\n", iKeyState, kev->keycode, iKey);
 #endif
-    
+
     if (call_data->event.type == KeyRelease) {
 	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
 	    if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
@@ -332,8 +332,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		ChangeIMState (call_data->connect_id);
 		retVal = IRV_DO_NOTHING;
 	    }
-	    else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) ||
-		(iKey == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
+	    else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
 		if (!bIsInLegend) {
 		    pstr = im[iIMIndex].GetCandWord (1);
 		    if (pstr) {
@@ -353,11 +352,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    uMessageDown = 0;
 		    retVal = IRV_GET_CANDWORDS;
 		}
-		
-		keyReleased=KR_OTHER;
+
+		keyReleased = KR_OTHER;
 	    }
-	    else if ((kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) ||
-		(iKey == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY_OTHER)) {
+	    else if ((iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) || (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY)) {
 		if (!bIsInLegend) {
 		    pstr = im[iIMIndex].GetCandWord (2);
 		    if (pstr) {
@@ -375,8 +373,30 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    uMessageDown = 0;
 		    retVal = IRV_GET_CANDWORDS;
 		}
-		
-		keyReleased=KR_OTHER;
+
+		keyReleased = KR_OTHER;
+	    }
+
+	    else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
+		if (!bIsInLegend) {
+		    pstr = im[iIMIndex].GetCandWord (2);
+		    if (pstr) {
+			strcpy (strStringGet, pstr);
+			if (bIsInLegend)
+			    retVal = IRV_GET_LEGEND;
+			else
+			    retVal = IRV_GET_CANDWORDS;
+		    }
+		    else if (iCandWordCount)
+			retVal = IRV_DISPLAY_CANDWORDS;
+		}
+		else {
+		    strcpy (strStringGet, "¡¡");
+		    uMessageDown = 0;
+		    retVal = IRV_GET_CANDWORDS;
+		}
+
+		keyReleased = KR_OTHER;
 	    }
 	}
     }
@@ -393,7 +413,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    lastKeyPressedTime = kev->time;
 	    if (kev->keycode == switchKey) {
 		keyReleased = KR_CTRL;
-		//retVal = (bDoubleSwitchKey)? IRV_CLEAN:IRV_DO_NOTHING;
 		retVal = IRV_DO_NOTHING;
 	    }
 	    else if (IsHotKey (iKey, hkTrigger)) {
@@ -428,14 +447,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				keyReleased = KR_2ND_SELECTKEY;
 			    else if (kev->keycode == i3rdSelectKey)
 				keyReleased = KR_3RD_SELECTKEY;
-			    else if (iKey == i2ndSelectKey) {
-				if (iCandWordCount>=2) {
+			    else if (iKey == (i2ndSelectKey ^ 0xFF)) {
+				if (iCandWordCount >= 2) {
 				    keyReleased = KR_2ND_SELECTKEY_OTHER;
 				    return;
 				}
 			    }
-			    else if (iKey == i3rdSelectKey) {
-				if (iCandWordCount>=2) {
+			    else if (iKey == (i3rdSelectKey ^ 0xFF)) {
+				if (iCandWordCount >= 2) {
 				    keyReleased = KR_3RD_SELECTKEY_OTHER;
 				    return;
 				}
@@ -618,6 +637,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    }
 				    else if (iKey == CTRL_5) {
 					LoadConfig (False);
+					
+					InitGC (mainWindow);
+					InitMainWindowColor ();
+					InitInputWindowColor ();
+					InitVKWindowColor ();
+					
 					SetIM ();
 
 					/*if (bLumaQQ)
@@ -632,7 +657,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 					FreePunc ();
 					LoadPuncDict ();
-
+					
+					//DrawMainWindow();
+					
 					retVal = IRV_DO_NOTHING;
 				    }
 				    else if (iKey == ENTER) {

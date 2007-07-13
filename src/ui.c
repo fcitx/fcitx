@@ -50,12 +50,12 @@ Display        *dpy;
 int             iScreen;
 
 #ifdef _USE_XFT
-XftFont        *xftFont = NULL;
-XftFont        *xftFontEn = NULL;
-XftDraw        *xftDraw = NULL;
-XftFont        *xftMainWindowFont = NULL;
-XftFont        *xftMainWindowFontEn = NULL;
-XftFont        *xftVKWindowFont = NULL;
+XftFont        *xftFont = (XftFont *) NULL;
+XftFont        *xftFontEn = (XftFont *) NULL;
+XftDraw        *xftDraw = (XftDraw *) NULL;
+XftFont        *xftMainWindowFont = (XftFont *) NULL;
+XftFont        *xftMainWindowFontEn = (XftFont *) NULL;
+XftFont        *xftVKWindowFont = (XftFont *) NULL;
 Bool            bUseAA = True;
 Bool            bUseBold = True;
 int             iMainWindowFontSize = 12;
@@ -74,8 +74,8 @@ char            strUserLocale[50] = "zh_CN.gb2312";
 
 iconv_t         convUTF8;
 
-GC              dimGC;
-GC              lightGC;
+GC              dimGC = (GC) NULL;
+GC              lightGC = (GC) NULL;
 
 Bool            bIsUtf8 = False;
 
@@ -136,6 +136,8 @@ void InitGC (Window window)
     XColor          color;
     int             iPixel;
 
+    if (lightGC)
+	XFreeGC (dpy, lightGC);
     lightGC = XCreateGC (dpy, window, 0, &values);
     color.red = LIGHT_COLOR;
     color.green = LIGHT_COLOR;
@@ -146,6 +148,8 @@ void InitGC (Window window)
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, lightGC, iPixel);
 
+    if (dimGC)
+	XFreeGC (dpy, dimGC);
     dimGC = XCreateGC (dpy, window, 0, &values);
     color.red = DIM_COLOR;
     color.green = DIM_COLOR;
@@ -156,6 +160,8 @@ void InitGC (Window window)
 	iPixel = BlackPixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, dimGC, iPixel);
 
+    if (mainWindowColor.backGC)
+	XFreeGC (dpy, mainWindowColor.backGC);
     mainWindowColor.backGC = XCreateGC (dpy, window, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(mainWindowColor.backColor)))
 	iPixel = mainWindowColor.backColor.pixel;
@@ -163,6 +169,8 @@ void InitGC (Window window)
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, mainWindowColor.backGC, iPixel);
 
+    if (inputWindowColor.foreGC)
+	XFreeGC (dpy, inputWindowColor.foreGC);
     inputWindowColor.foreGC = XCreateGC (dpy, window, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(inputWindowColor.foreColor)))
 	iPixel = inputWindowColor.foreColor.pixel;
@@ -170,6 +178,8 @@ void InitGC (Window window)
 	iPixel = BlackPixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, inputWindowColor.foreGC, iPixel);
 
+    if (inputWindowColor.backGC)
+	XFreeGC (dpy, inputWindowColor.backGC);
     inputWindowColor.backGC = XCreateGC (dpy, window, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(inputWindowColor.backColor)))
 	iPixel = inputWindowColor.backColor.pixel;
@@ -177,6 +187,8 @@ void InitGC (Window window)
 	iPixel = BlackPixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, inputWindowColor.backGC, iPixel);
 
+    if (VKWindowColor.foreGC)
+	XFreeGC (dpy, VKWindowColor.foreGC);
     VKWindowColor.foreGC = XCreateGC (dpy, window, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(VKWindowColor.foreColor)))
 	iPixel = VKWindowColor.foreColor.pixel;
@@ -184,6 +196,8 @@ void InitGC (Window window)
 	iPixel = BlackPixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, VKWindowColor.foreGC, iPixel);
 
+    if (VKWindowColor.backGC)
+	XFreeGC (dpy, VKWindowColor.backGC);
     VKWindowColor.backGC = XCreateGC (dpy, window, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(VKWindowColor.backColor)))
 	iPixel = VKWindowColor.backColor.pixel;
@@ -422,11 +436,6 @@ void MyXEventHandler (XEvent * event)
 	    //****************************
 	    SaveProfile ();
 	    break;
-	case Button2:
-	    if (event->xbutton.window == mainWindow) {
-		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
-		    XUnmapWindow (dpy, mainWindow);
-	    }
 	}
 	break;
     case ButtonRelease:
@@ -467,7 +476,9 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		if (!bVK) {
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
+		    XUnmapWindow (dpy, mainWindow);
+		else if (!bVK) {
 		    bCompactMainWindow = !bCompactMainWindow;
 		    SwitchIM (iIMIndex);
 		}

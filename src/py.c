@@ -149,6 +149,7 @@ Bool LoadPYBaseDict (void)
     for (i = 0; i < iPYFACount; i++) {
 	fread (PYFAList[i].strMap, sizeof (char) * 2, 1, fp);
 	PYFAList[i].strMap[2] = '\0';
+	PYFAList[i].iChangeCount = 0;
 	fread (&(PYFAList[i].iBase), sizeof (int), 1, fp);
 	PYFAList[i].pyBase = (PyBase *) malloc (sizeof (PyBase) * PYFAList[i].iBase);
 	for (j = 0; j < PYFAList[i].iBase; j++) {
@@ -164,6 +165,7 @@ Bool LoadPYBaseDict (void)
 	    PYFAList[i].pyBase[j].iUserPhrase = 0;
 	    PYFAList[i].pyBase[j].userPhrase = (PyPhrase *) malloc (sizeof (PyPhrase));
 	    PYFAList[i].pyBase[j].userPhrase->next = PYFAList[i].pyBase[j].userPhrase;
+	    PYFAList[i].pyBase[j].iChangeCount = 0;
 	}
     }
 
@@ -316,7 +318,7 @@ Bool LoadPYOtherDict (void)
 		}
 	    }
 	}
-	
+
 	fclose (fp);
     }
 
@@ -1062,34 +1064,34 @@ void PYCreateCandString (void)
     }
 }
 
-void PYGetCandText(int iIndex, char *strText)
+void PYGetCandText (int iIndex, char *strText)
 {
-	char           *pBase = NULL, *pPhrase;
+    char           *pBase = NULL, *pPhrase;
 
-	if (PYCandWords[iIndex].iWhich == PY_CAND_AUTO)
-		strcpy (strText, strPYAuto);
-	else {
-		pPhrase = NULL;
-		switch (PYCandWords[iIndex].iWhich) {
-			case PY_CAND_BASE:	//是系统单字
-				pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
-				break;
-			case PY_CAND_USERPHRASE:	//是用户词组
-			case PY_CAND_SYMPHRASE:	//是系统词组
-				pBase = PYFAList[PYCandWords[iIndex].cand.phrase.iPYFA].pyBase[PYCandWords[iIndex].cand.phrase.iBase].strHZ;
-				pPhrase = PYCandWords[iIndex].cand.phrase.phrase->strPhrase;
-				break;
-			case PY_CAND_FREQ:	//是常用字
-				pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
-				break;
-			case PY_CAND_SYMBOL:	//是特殊符号
-				pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
-				break;
-		}
-		strcpy (strText, pBase);
-		if (pPhrase)
-			strcat (strText, pPhrase);
+    if (PYCandWords[iIndex].iWhich == PY_CAND_AUTO)
+	strcpy (strText, strPYAuto);
+    else {
+	pPhrase = NULL;
+	switch (PYCandWords[iIndex].iWhich) {
+	case PY_CAND_BASE:	//是系统单字
+	    pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
+	    break;
+	case PY_CAND_USERPHRASE:	//是用户词组
+	case PY_CAND_SYMPHRASE:	//是系统词组
+	    pBase = PYFAList[PYCandWords[iIndex].cand.phrase.iPYFA].pyBase[PYCandWords[iIndex].cand.phrase.iBase].strHZ;
+	    pPhrase = PYCandWords[iIndex].cand.phrase.phrase->strPhrase;
+	    break;
+	case PY_CAND_FREQ:	//是常用字
+	    pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
+	    break;
+	case PY_CAND_SYMBOL:	//是特殊符号
+	    pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
+	    break;
 	}
+	strcpy (strText, pBase);
+	if (pPhrase)
+	    strcat (strText, pPhrase);
+    }
 }
 
 void PYSetCandWordsFlag (Bool flag)
@@ -1432,6 +1434,7 @@ char           *PYGetCandWord (int iIndex)
 	pBaseMap = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].strMap;
 	pIndex = &(PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iIndex);
 	PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iHit++;
+	PYFAList[PYCandWords[iIndex].cand.base.iPYFA].iChangeCount++;
 	iOrderCount++;
 	break;
     case PY_CAND_SYMPHRASE:	//是系统词组    
@@ -1442,6 +1445,7 @@ char           *PYGetCandWord (int iIndex)
 	pPhraseMap = PYCandWords[iIndex].cand.phrase.phrase->strMap;
 	pIndex = &(PYCandWords[iIndex].cand.phrase.phrase->iIndex);
 	PYCandWords[iIndex].cand.phrase.phrase->iHit++;
+	PYFAList[PYCandWords[iIndex].cand.phrase.iPYFA].pyBase[PYCandWords[iIndex].cand.phrase.iBase].iChangeCount++;
 	iOrderCount++;
 	break;
     case PY_CAND_FREQ:		//是常用字
@@ -1539,13 +1543,13 @@ char           *PYGetCandWord (int iIndex)
 void PYGetCandWordsForward (void)
 {
     //if (!bSingleHZMode) {
-	if (pCurFreq && pCurFreq->bIsSym)
-	    PYGetSymCandWords (SM_NEXT);
-	else {
-	    PYGetPhraseCandWords (SM_NEXT);
-	    if (pCurFreq)
-		PYGetFreqCandWords (SM_NEXT);
-	}
+    if (pCurFreq && pCurFreq->bIsSym)
+	PYGetSymCandWords (SM_NEXT);
+    else {
+	PYGetPhraseCandWords (SM_NEXT);
+	if (pCurFreq)
+	    PYGetFreqCandWords (SM_NEXT);
+    }
     //}
 
     if (!(pCurFreq && pCurFreq->bIsSym))
@@ -1559,7 +1563,7 @@ void PYGetCandWordsBackward (void)
 	PYGetSymCandWords (SM_PREV);
     else {
 	//if (!bSingleHZMode)
-	    PYGetFreqCandWords (SM_PREV);
+	PYGetFreqCandWords (SM_PREV);
 	PYGetBaseCandWords (SM_PREV);
 	//if (iCandWordCount == iMaxCandWord || bSingleHZMode)
 	if (iCandWordCount == iMaxCandWord)
@@ -2662,7 +2666,7 @@ void SavePYFreq (void)
  */
 void SavePYIndex (void)
 {
-    int             i, j, k, l, m;
+    int             i, j, k, l;
     char            strPath[PATH_MAX];
     char            strPathTemp[PATH_MAX];
     FILE           *fp;
@@ -2684,31 +2688,37 @@ void SavePYIndex (void)
     //先保存索引不为0的单字
     k = -1;
     for (i = 0; i < iPYFACount; i++) {
-	for (j = 0; j < PYFAList[i].iBase; j++) {
-	    l = PYFAList[i].pyBase[j].iIndex;
-	    m = PYFAList[i].pyBase[j].iHit;
-	    if (l || m) {
-		fwrite (&i, sizeof (int), 1, fp);
-		fwrite (&j, sizeof (int), 1, fp);
-		fwrite (&k, sizeof (int), 1, fp);
-		fwrite (&l, sizeof (uint), 1, fp);
-		fwrite (&m, sizeof (uint), 1, fp);
+	if (PYFAList[i].iChangeCount) {
+	    for (j = 0; j < PYFAList[i].iBase; j++) {
+		if (PYFAList[i].pyBase[j].iIndex) {
+		    fwrite (&i, sizeof (int), 1, fp);
+		    fwrite (&j, sizeof (int), 1, fp);
+		    fwrite (&k, sizeof (int), 1, fp);
+		    l=PYFAList[i].pyBase[j].iIndex;
+		    fwrite (&l, sizeof (uint), 1, fp);
+		    l=PYFAList[i].pyBase[j].iHit;
+		    fwrite (&l, sizeof (uint), 1, fp);
+		}
 	    }
 	}
     }
 
     //再保存索引不为0的系统词组
     for (i = 0; i < iPYFACount; i++) {
-	for (j = 0; j < PYFAList[i].iBase; j++) {
-	    for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++) {
-		l = PYFAList[i].pyBase[j].phrase[k].iIndex;
-		m = PYFAList[i].pyBase[j].phrase[k].iHit;
-		if (l || m) {
-		    fwrite (&i, sizeof (int), 1, fp);
-		    fwrite (&j, sizeof (int), 1, fp);
-		    fwrite (&k, sizeof (int), 1, fp);
-		    fwrite (&l, sizeof (uint), 1, fp);
-		    fwrite (&m, sizeof (uint), 1, fp);
+	if (PYFAList[i].iChangeCount) {
+	    for (j = 0; j < PYFAList[i].iBase; j++) {
+		if (PYFAList[i].pyBase[j].iChangeCount) {
+		    for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++) {
+			if (PYFAList[i].pyBase[j].phrase[k].iIndex) {
+			    fwrite (&i, sizeof (int), 1, fp);
+			    fwrite (&j, sizeof (int), 1, fp);
+			    fwrite (&k, sizeof (int), 1, fp);
+			    l=PYFAList[i].pyBase[j].phrase[k].iIndex;			    
+			    fwrite (&l, sizeof (uint), 1, fp);
+			    l=PYFAList[i].pyBase[j].phrase[k].iHit;
+			    fwrite (&l, sizeof (uint), 1, fp);
+			}
+		    }
 		}
 	    }
 	}

@@ -1,3 +1,17 @@
+2007-01-12: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 增加用户自定义上屏键的功能
+	   * 默认采用vvg的“fcitx蓝紫色简单风格”（vvg@linuxsir）
+	   * 版本3.5-070112
+	   
+2007-01-08: Yuking <yuking_net@sohu.com>
+           * src/tools.c, ime.c: 修正第二三候选键设置为其它键时的一个问题
+	   * src/table.c: 码表输入法增加空码自动上屏的功能
+
+2007-01-04: Yuking <yuking_net@sohu.com>
+	   * src/ui.c: 改为在企鹅图标上按鼠标右键临时隐藏状态栏
+	   * src/ui.c: 修正了一个显示错误
+	   * src/tools.c, ime.c: 把窗口颜色设置为可即时更改
+	   
 2006-12-31: Yuking <yuking_net@sohu.com>
 	   * 版本 'GirlDog' 3.4.3 新年版
 

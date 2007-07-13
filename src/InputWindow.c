@@ -179,6 +179,8 @@ void InitInputWindowColor (void)
     int             i;
 
     for (i = 0; i < MESSAGE_TYPE_COUNT; i++) {
+	if (messageColor[i].gc)
+	    XFreeGC (dpy, messageColor[i].gc);
 	messageColor[i].gc = XCreateGC (dpy, inputWindow, 0, &values);
 	if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(messageColor[i].color)))
 	    iPixel = messageColor[i].color.pixel;
@@ -187,6 +189,8 @@ void InitInputWindowColor (void)
 	XSetForeground (dpy, messageColor[i].gc, iPixel);
     }
 
+    if (inputWindowLineColor.gc)
+	XFreeGC (dpy, inputWindowLineColor.gc);
     inputWindowLineColor.gc = XCreateGC (dpy, inputWindow, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(inputWindowLineColor.color)))
 	iPixel = inputWindowLineColor.color.pixel;
@@ -197,6 +201,9 @@ void InitInputWindowColor (void)
     cursorColor.color.red = cursorColor.color.red ^ inputWindowColor.backColor.red;
     cursorColor.color.green = cursorColor.color.green ^ inputWindowColor.backColor.green;
     cursorColor.color.blue = cursorColor.color.blue ^ inputWindowColor.backColor.blue;
+
+    if (cursorColor.gc)
+	XFreeGC (dpy, cursorColor.gc);
     cursorColor.gc = XCreateGC (dpy, inputWindow, 0, &values);
     //为了画绿色光标
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &cursorColor.color))

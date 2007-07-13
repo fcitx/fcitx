@@ -15,8 +15,8 @@ all:
 	./txt2mb $(srcdir)/../data/cj.txt ../data/cj.mb
 	./txt2mb $(srcdir)/../data/erbi.txt ../data/erbi.mb
 	./txt2mb $(srcdir)/../data/wbx.txt ../data/wbx.mb
+	./txt2mb $(srcdir)/../data/wanfeng.txt ../data/wanfeng.mb
 	./createPYMB $(srcdir)/../data/gbkpy.org $(srcdir)/../data/pyPhrase.org
 	mv *.mb ../data
 	rm -f pyERROR
 	rm -f pyPhrase.ok
-

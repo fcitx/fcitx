@@ -336,28 +336,28 @@ void LoadConfig (Bool bMode)
 	    pstr += 13;
 	    bShowVK = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "光标色=") && bMode) {
+	else if (MyStrcmp (pstr, "光标色=")) {
 	    pstr += 7;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    cursorColor.color.red = (r << 8);
 	    cursorColor.color.green = (g << 8);
 	    cursorColor.color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "主窗口背景色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口背景色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    mainWindowColor.backColor.red = (r << 8);
 	    mainWindowColor.backColor.green = (g << 8);
 	    mainWindowColor.backColor.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "主窗口线条色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口线条色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    mainWindowLineColor.color.red = (r << 8);
 	    mainWindowLineColor.color.green = (g << 8);
 	    mainWindowLineColor.color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "主窗口输入法名称色=") && bMode) {
+	else if (MyStrcmp (pstr, "主窗口输入法名称色=")) {
 	    int             r1, r2, g1, g2, b1, b2;
 
 	    pstr += 19;
@@ -372,91 +372,91 @@ void LoadConfig (Bool bMode)
 	    IMNameColor[2].color.green = (g2 << 8);
 	    IMNameColor[2].color.blue = (b2 << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗背景色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗背景色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    inputWindowColor.backColor.red = (r << 8);
 	    inputWindowColor.backColor.green = (g << 8);
 	    inputWindowColor.backColor.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗提示色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗提示色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[0].color.red = (r << 8);
 	    messageColor[0].color.green = (g << 8);
 	    messageColor[0].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗用户输入色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗用户输入色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[1].color.red = (r << 8);
 	    messageColor[1].color.green = (g << 8);
 	    messageColor[1].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗序号色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗序号色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[2].color.red = (r << 8);
 	    messageColor[2].color.green = (g << 8);
 	    messageColor[2].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗第一个候选字色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗第一个候选字色=")) {
 	    pstr += 21;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[3].color.red = (r << 8);
 	    messageColor[3].color.green = (g << 8);
 	    messageColor[3].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗用户词组色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗用户词组色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[4].color.red = (r << 8);
 	    messageColor[4].color.green = (g << 8);
 	    messageColor[4].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗提示编码色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗提示编码色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[5].color.red = (r << 8);
 	    messageColor[5].color.green = (g << 8);
 	    messageColor[5].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗其它文本色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗其它文本色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    messageColor[6].color.red = (r << 8);
 	    messageColor[6].color.green = (g << 8);
 	    messageColor[6].color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗线条色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗线条色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    inputWindowLineColor.color.red = (r << 8);
 	    inputWindowLineColor.color.green = (g << 8);
 	    inputWindowLineColor.color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "输入窗箭头色=") && bMode) {
+	else if (MyStrcmp (pstr, "输入窗箭头色=")) {
 	    pstr += 13;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    colorArrow.red = (r << 8);
 	    colorArrow.green = (g << 8);
 	    colorArrow.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "虚拟键盘窗背景色=") && bMode) {
+	else if (MyStrcmp (pstr, "虚拟键盘窗背景色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    VKWindowColor.backColor.red = (r << 8);
 	    VKWindowColor.backColor.green = (g << 8);
 	    VKWindowColor.backColor.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "虚拟键盘窗字母色=") && bMode) {
+	else if (MyStrcmp (pstr, "虚拟键盘窗字母色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    VKWindowAlphaColor.color.red = (r << 8);
 	    VKWindowAlphaColor.color.green = (g << 8);
 	    VKWindowAlphaColor.color.blue = (b << 8);
 	}
-	else if (MyStrcmp (pstr, "虚拟键盘窗符号色=") && bMode) {
+	else if (MyStrcmp (pstr, "虚拟键盘窗符号色=")) {
 	    pstr += 17;
 	    sscanf (pstr, "%d %d %d\n", &r, &g, &b);
 	    VKWindowFontColor.color.red = (r << 8);
@@ -548,8 +548,8 @@ void LoadConfig (Bool bMode)
 		i3rdSelectKey = 109;	//右CTRL的扫描码
 	    }
 	    else {
-		i2ndSelectKey = pstr[0];
-		i3rdSelectKey = pstr[1];
+		i2ndSelectKey = pstr[0] ^ 0xFF;
+		i3rdSelectKey = pstr[1] ^ 0xFF;
 	    }
 	}
 

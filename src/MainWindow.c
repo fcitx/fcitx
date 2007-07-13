@@ -291,8 +291,9 @@ void DrawMainWindow (void)
 		Draw3DEffect (mainWindow, 37, 1, 18, 18, _3D_UPPER);
 		Draw3DEffect (mainWindow, 55, 1, 18, 18, _3D_UPPER);
 		Draw3DEffect (mainWindow, 73, 1, 18, 18, _3D_UPPER);
-		Draw3DEffect (mainWindow, 91, 1, 11, 18, _3D_UPPER);
-		Draw3DEffect (mainWindow, 102, 1, 22, 18, _3D_UPPER);
+		Draw3DEffect (mainWindow, 91, 1, 18, 18, _3D_UPPER);
+		Draw3DEffect (mainWindow, 109, 1, 11, 18, _3D_UPPER);
+		Draw3DEffect (mainWindow, 120, 1, 22, 18, _3D_UPPER);
 	    }
 	}
 	else {
@@ -324,6 +325,8 @@ void InitMainWindowColor (void)
     int             iPixel;
     int             i;
 
+    if (mainWindowLineColor.gc)
+	XFreeGC (dpy, mainWindowLineColor.gc);
     mainWindowLineColor.gc = XCreateGC (dpy, mainWindow, 0, &values);
     if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(mainWindowLineColor.color)))
 	iPixel = mainWindowLineColor.color.pixel;
@@ -332,6 +335,8 @@ void InitMainWindowColor (void)
     XSetForeground (dpy, mainWindowLineColor.gc, iPixel);
 
     for (i = 0; i < 3; i++) {
+	if (IMNameColor[i].gc)
+	    XFreeGC (dpy, IMNameColor[i].gc);
 	IMNameColor[i].gc = XCreateGC (dpy, mainWindow, 0, &values);
 	if (XAllocColor (dpy, DefaultColormap (dpy, DefaultScreen (dpy)), &(IMNameColor[i].color)))
 	    iPixel = IMNameColor[i].color.pixel;
