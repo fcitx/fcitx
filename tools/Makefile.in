@@ -227,12 +227,18 @@ clean-binPROGRAMS:
 createPYMB$(EXEEXT): $(createPYMB_OBJECTS) $(createPYMB_DEPENDENCIES) 
 	@rm -f createPYMB$(EXEEXT)
 	$(LINK) $(createPYMB_LDFLAGS) $(createPYMB_OBJECTS) $(createPYMB_LDADD) $(LIBS)
+	./createPYMB ../data/gbkpy.org ../data/pyPhrase.org
+	@rm -f ../data/pybase.mb ../data/pyphrase.mb
+	mv pybase.mb pyphrase.mb ../data/
 mb2txt$(EXEEXT): $(mb2txt_OBJECTS) $(mb2txt_DEPENDENCIES) 
 	@rm -f mb2txt$(EXEEXT)
 	$(LINK) $(mb2txt_LDFLAGS) $(mb2txt_OBJECTS) $(mb2txt_LDADD) $(LIBS)
 txt2mb$(EXEEXT): $(txt2mb_OBJECTS) $(txt2mb_DEPENDENCIES) 
 	@rm -f txt2mb$(EXEEXT)
 	$(LINK) $(txt2mb_LDFLAGS) $(txt2mb_OBJECTS) $(txt2mb_LDADD) $(LIBS)
+	./txt2mb ../data/wbx.txt ../data/wbx.mb
+	./txt2mb ../data/erbi.txt ../data/erbi.mb
+	./txt2mb ../data/cj.txt ../data/cj.mb
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -368,7 +374,7 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
-
+	-rm -f pyERROR pyPhrase.ok
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile

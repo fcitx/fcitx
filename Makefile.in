@@ -164,7 +164,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = doc data debian xpm lib src tools
+SUBDIRS = doc debian xpm lib src tools data
 EXTRA_DIST = autogen.sh fcitx.spec
 MAINTAINERCLEANFILES = \
         aclocal.m4 \

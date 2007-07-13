@@ -28,8 +28,10 @@ int             iScreen;
 
 #ifdef _USE_XFT
 XftFont        *xftFont;
+XftFont        *xftFontEn;	//Ó¢ÎÄ×ÖÌå
 XftDraw        *xftDraw;
 XftFont        *xftMainWindowFont;
+XftFont        *xftMainWindowFontEn;
 Bool            bUseAA = True;
 int             iDefaultWidth = 0;
 #else
@@ -43,7 +45,7 @@ iconv_t         convUTF8;	//ÎÒÖ»»áÓÃXFTÊä³öUTF8ÖÐÎÄ×Ö´®£¬ÁíÍâ¸Ã±äÁ¿»¹ÓÃÓÚUTF8Ö§³
 int             iFontSize = 16;
 
 #ifdef _USE_XFT
-int             iMainWindowFontSize = 12;
+int             iMainWindowFontSize = 11;
 #else
 int             iMainWindowFontSize = 14;
 #endif
@@ -54,6 +56,7 @@ GC              lightGC;
 Bool            bIsUtf8 = False;
 
 char            strFontName[100] = "*";
+char            strFontEnName[100] = "Courier";
 
 extern Window   mainWindow;
 extern int      iMainWindowX;
@@ -169,7 +172,9 @@ void InitGC (Window window)
 void CreateFont (void)
 {
     xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+    xftFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
     xftMainWindowFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_BOLD, NULL);
+    xftMainWindowFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, XFT_WEIGHT_BOLD, NULL);
 
     xftDraw = XftDrawCreate (dpy, inputWindow, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)));
 
@@ -187,8 +192,8 @@ void CreateFont (void)
 	setlocale (LC_CTYPE, strUserLocale);
     else
 	setlocale (LC_CTYPE, "");
-    
-    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iMainWindowFontSize, iMainWindowFontSize);
+
+    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iMainWindowFontSize, strFontEnName, iMainWindowFontSize);
     fontSetMainWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
     if (num_missing_charsets > 0) {
 	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
@@ -199,7 +204,7 @@ void CreateFont (void)
 	    fprintf (stderr, "Error: Cannot Create Chinese Fonts!\n\n");
     }
 
-    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-*-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iFontSize, iFontSize);
+    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iFontSize, strFontEnName, iFontSize);
     fontSet = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
     if (num_missing_charsets > 0) {
 	fprintf (stderr, "Error: Cannot Create Chinese Fonts:\n\t%s\nUsing Default ...\n", strFont);
@@ -275,7 +280,7 @@ void MyXEventHandler (XEvent * event)
 	    if (event->xbutton.window == inputWindow) {
 		iInputWindowX = event->xbutton.x;
 		iInputWindowY = event->xbutton.y;
-		MouseClick (&iInputWindowX, &iInputWindowY, 1);		
+		MouseClick (&iInputWindowX, &iInputWindowY, 1);
 	    }
 	    else if (event->xbutton.window == mainWindow) {
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
@@ -359,7 +364,7 @@ int StringWidth (char *str, XftFont * font)
     l1 = iconv (convUTF8, &str, &l1, &ps, &l2);
     *ps = '\0';
     XftTextExtentsUtf8 (dpy, font, (FcChar8 *) str1, strlen (str1), &extents);
-    if (font != xftFont)
+    if (font == xftMainWindowFont)
 	return extents.width;
 
     return ((extents.width < (il * iDefaultWidth)) ? (il * iDefaultWidth) : extents.width);
@@ -434,8 +439,7 @@ void OutputString (Window window, XftFont * font, char *str, int x, int y, XColo
     l1 = strlen (str);
     l2 = 99;
     ps = strOutput;
-
-    l1 = iconv (convUTF8, (char **) (&str), &l1, &ps, &l2);
+    l1 = iconv (convUTF8, &str, &l1, &ps, &l2);
     *ps = '\0';
 
     renderColor.red = color.red;

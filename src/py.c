@@ -59,6 +59,7 @@ INT8            iOrderCount = 0;
 INT8            iNewFreqCount = 0;
 
 INT8            iYCDZ = 0;
+char		cPYYCDZ[3]="[]";	//以词定字
 
 HOTKEYS         hkPYAddFreq[HOT_KEY_COUNT] = { CTRL_8, 0 };
 Bool            bIsPYAddFreq = False;
@@ -703,14 +704,14 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 
 	    //下面实现以词定字
 	    if (iCandWordCount) {
-		if (iKey == '[' || iKey == ']') {
+	    	if (iKey == cPYYCDZ[0] || iKey == cPYYCDZ[1]) {
 		    if (PYCandWords[iYCDZ].iWhich == PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich == PY_CAND_SYMPHRASE) {
 			char           *pBase, *pPhrase;
 
 			pBase = PYFAList[PYCandWords[iYCDZ].cand.phrase.iPYFA].pyBase[PYCandWords[iYCDZ].cand.phrase.iBase].strHZ;
 			pPhrase = PYCandWords[iYCDZ].cand.phrase.phrase->strPhrase;
 
-			if (iKey == '[')
+			if (iKey == cPYYCDZ[0])
 			    strcpy (strStringGet, pBase);
 			else {
 			    strncpy (strStringGet, pPhrase, 2);

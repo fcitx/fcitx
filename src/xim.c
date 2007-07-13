@@ -40,6 +40,8 @@ extern int      iMainWindowX;
 extern int      iMainWindowY;
 extern int      iInputWindowX;
 extern int      iInputWindowY;
+extern int      iTempInputWindowX;
+extern int      iTempInputWindowY;
 extern uint     iInputWindowHeight;
 extern uint     iInputWindowWidth;
 extern Bool     bTrackCursor;
@@ -104,8 +106,6 @@ Bool MyGetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 {
-    int             iX, iY;
-
     if (CurrentIC == NULL)
 	return True;
     if (CurrentIC != (IC *) FindIC (call_data->icid))
@@ -119,25 +119,27 @@ Bool MySetICValuesHandler (XIMS ims, IMChangeICStruct * call_data)
 	for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
 	    if (!strcmp (XNSpotLocation, pre_attr->name)) {
 		if (CurrentIC->focus_win)
-		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iX, &iY, &window);
+		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
 		else if (CurrentIC->client_win)
-		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iX, &iY, &window);
+		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
 		else
 		    return True;
 
-		if (iX < 0)
-		    iX = 0;
-		else if ((iX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-		    iX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+		if (iTempInputWindowX < 0)
+		    iTempInputWindowX = 0;
+		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
 
-		if (iY < 0)
-		    iY = 0;
-		else if ((iY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
-		    iY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
+		if (iTempInputWindowY < 0)
+		    iTempInputWindowY = 0;
+		else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
+		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
 		else
-		    iY += 3;
+		    iTempInputWindowY += 3;
 
-		XMoveWindow (dpy, inputWindow, iX, iY);
+		XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+
+		ConnectIDSetTrackCursor (call_data->connect_id, True);
 	    }
 	}
     }
@@ -157,11 +159,14 @@ Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
 	EnterChineseMode (lastConnectID == connect_id);
 	if (ConnectIDGetState (call_data->connect_id) == IS_CHN && uMessageDown > 1 && lastConnectID == connect_id) {
 	    DisplayInputWindow ();
-	    if (bTrackCursor)
-		XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 	}
 	else
 	    XUnmapWindow (dpy, inputWindow);
+
+	if (ConnectIDGetTrackCursor (connect_id))
+	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+	else
+	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
     else
 	DisplayMainWindow ();
@@ -235,6 +240,11 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 	 */
 	SetConnectID (call_data->connect_id, IS_CHN);
 	EnterChineseMode (False);
+
+	if (ConnectIDGetTrackCursor (connect_id))
+	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+	else
+	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
 
     return True;
@@ -318,12 +328,12 @@ void SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ)
     char           *ps;
 
     if (bIsUtf8) {
-	int             l1, l2;
+	size_t          l1, l2;
 
 	ps = strOutput;
 	l1 = strlen (strHZ);
 	l2 = 299;
-	iconv (convUTF8, (char **) (&strHZ), (size_t *) & l1, &ps, (size_t *) & l2);
+	l1 = iconv (convUTF8, (char **) (&strHZ), &l1, &ps, &l2);
 	*ps = '\0';
 	ps = strOutput;
     }
@@ -415,6 +425,7 @@ void CreateConnectID (IMOpenStruct * call_data)
     connectIDNew->connect_id = call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
     connectIDNew->bReset = !bLumaQQ;
+    connectIDNew->bTrackCursor = False;
     //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
     //strcpy(connectIDNew->strLocale,call_data->lang.name);
 
@@ -513,6 +524,22 @@ void ConnectIDSetReset (CARD16 connect_id, Bool bReset)
     }
 }
 
+Bool ConnectIDGetTrackCursor (CARD16 connect_id)
+{
+    CONNECT_ID     *temp;
+
+    temp = connectIDsHead;
+
+    while (temp) {
+	if (temp->connect_id == connect_id)
+	    return temp->bTrackCursor;
+
+	temp = temp->next;
+    }
+
+    return False;
+}
+
 void ConnectIDResetReset (void)
 {
     CONNECT_ID     *temp;
@@ -521,6 +548,22 @@ void ConnectIDResetReset (void)
 
     while (temp) {
 	temp->bReset = True;
+	temp = temp->next;
+    }
+}
+
+void ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrackCursor)
+{
+    CONNECT_ID     *temp;
+
+    temp = connectIDsHead;
+
+    while (temp) {
+	if (temp->connect_id == connect_id) {
+	    temp->bTrackCursor = bTrackCursor;
+	    return;
+	}
+
 	temp = temp->next;
     }
 }

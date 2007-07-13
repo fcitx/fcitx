@@ -53,7 +53,7 @@ void OnException (int signo)
     if (signo != SIGSEGV)	//出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件
 	SaveIM ();
 
-    if (signo != SIGCHLD && signo != SIGQUIT && signo != SIGWINCH) {
+    if (signo != SIGCHLD && signo != SIGQUIT && signo != SIGWINCH && signo != SIGTTIN) {
 	fprintf (stderr, "FCITX -- Exit Signal No.: %d\n\n", signo);
 	exit (0);
     }

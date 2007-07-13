@@ -23,6 +23,8 @@ extern int      iMainWindowX;
 extern int      iMainWindowY;
 extern int      iInputWindowX;
 extern int      iInputWindowY;
+extern int      iTempInputWindowX;
+extern int      iTempInputWindowY;
 extern int      iInputWindowWidth;
 extern int      iInputWindowHeight;
 
@@ -85,6 +87,7 @@ extern int      i2ndSelectKey;
 extern int      i3rdSelectKey;
 
 extern char     strFontName[];
+extern char     strFontEnName[];
 
 extern ADJUSTORDER baseOrder;
 extern ADJUSTORDER phraseOrder;
@@ -102,6 +105,7 @@ extern Bool     bUseQW;
 extern Bool     bUseTable;
 
 extern Bool	bLumaQQ;
+extern char	cPYYCDZ[];
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
@@ -161,9 +165,13 @@ void LoadConfig (Bool bMode)
 	if (pstr[0] == '#')
 	    continue;
 
-	if (strstr (pstr, "显示字体=") && bMode) {
-	    pstr += 9;
+	if (strstr (pstr, "显示字体(中)=") && bMode) {
+	    pstr += 13;
 	    strcpy (strFontName, pstr);
+	}
+	if (strstr (pstr, "显示字体(英)=") && bMode) {
+	    pstr += 13;
+	    strcpy (strFontEnName, pstr);
 	}
 	else if (strstr (pstr, "显示字体大小=") && bMode) {
 	    pstr += 13;
@@ -427,6 +435,11 @@ void LoadConfig (Bool bMode)
 	    pstr += 17;
 	    SetHotKey (pstr, hkPYDelUserPhr);
 	}
+	else if (strstr (str, "拼音以词定字键=")) {
+	    pstr += 15;
+	    cPYYCDZ[0] = pstr[0];
+	    cPYYCDZ[1] = pstr[1];
+	}
 	else if (strstr (str, "拼音单字重码调整方式=")) {
 	    pstr += 21;
 	    baseOrder = (ADJUSTORDER) atoi (pstr);
@@ -519,7 +532,8 @@ void SaveConfig (void)
     }
 
     fprintf (fp, "[程序]\n");
-    fprintf (fp, "显示字体=%s\n", strFontName);
+    fprintf (fp, "显示字体(中)=%s\n", strFontName);
+    fprintf (fp, "显示字体(英)=%s\n", strFontEnName);
     fprintf (fp, "显示字体大小=%d\n", iFontSize);
     fprintf (fp, "主窗口字体大小=%d\n", iMainWindowFontSize);
 #ifdef _USE_XFT
@@ -592,6 +606,8 @@ void SaveConfig (void)
     fprintf (fp, "增加拼音常用字=CTRL_8\n");
     fprintf (fp, "删除拼音常用字=CTRL_7\n");
     fprintf (fp, "删除拼音用户词组=CTRL_DELETE\n");
+    fprintf (fp, "#拼音以词定字键，等号后面紧接键，不要有空格\n");
+    fprintf (fp, "拼音以词定字键=%c%c\n", cPYYCDZ[0], cPYYCDZ[1]);
     fprintf (fp, "#重码调整方式说明：0-->不调整  1-->快速调整  2-->按频率调整\n");
     fprintf (fp, "拼音单字重码调整方式=%d\n", baseOrder);
     fprintf (fp, "拼音词组重码调整方式=%d\n", phraseOrder);
@@ -754,6 +770,9 @@ void SaveProfile (void)
     fprintf (fp, "当前输入法=%d\n", iIMIndex);
     fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
     fprintf (fp, "主窗口简洁模式=%d\n", bCompactMainWindow);
+    
+    iTempInputWindowX = iInputWindowX;
+    iTempInputWindowY = iInputWindowY;
 
     fclose (fp);
 }

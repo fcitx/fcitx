@@ -22,6 +22,7 @@
 Window          inputWindow;
 int             iInputWindowX = INPUTWND_STARTX;
 int             iInputWindowY = INPUTWND_STARTY;
+int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
 uint            iInputWindowWidth = INPUTWND_WIDTH;
@@ -74,6 +75,7 @@ extern int      iScreen;
 #ifdef _USE_XFT
 extern iconv_t  convUTF8;
 extern XftFont *xftFont;
+extern XftFont *xftFontEn;
 #else
 extern XFontSet fontSet;
 #endif
@@ -140,15 +142,21 @@ void DisplayInputWindow (void)
 void DrawInputWindow (void)
 {
     if (_3DEffectInputWindow == _3D_UPPER)
-	Draw3DEffect (inputWindow, 2, 2, iInputWindowWidth - 4, iInputWindowHeight - 4, _3D_UPPER);
+	Draw3DEffect (inputWindow, 1, 1, iInputWindowWidth - 2, iInputWindowHeight - 2, _3D_UPPER);
     else if (_3DEffectInputWindow == _3D_LOWER)
 	Draw3DEffect (inputWindow, 0, 0, iInputWindowWidth, iInputWindowHeight, _3D_LOWER);
 
     XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
     //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
-    XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
+    if (_3DEffectInputWindow == _3D_LOWER)
+	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
+    else if (_3DEffectInputWindow == _3D_UPPER)
+	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
     XDrawLine (dpy, inputWindow, inputWindowLineColor.gc, 2 + 5, iInputWindowHeight / 2, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2);
-    XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
+    if (_3DEffectInputWindow == _3D_LOWER)
+	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
+    else if (_3DEffectInputWindow == _3D_UPPER)
+	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
 
     if (bShowPrev) {
 	if (!pPrev) {
@@ -211,6 +219,12 @@ void ResetInputWindow (void)
 void DisplayMessage (void)
 {
     int             i;
+
+#ifdef _USE_XFT
+    char            strTemp[MESSAGE_MAX_LENGTH];
+    char           *p1, *p2;
+    Bool            bEn;
+#endif
     XWindowAttributes wa;
 
     bIsResizingInputWindow = True;	//由于改变窗口的属性可能会引起窗口重画，利用此变量来防止窗口抖动
@@ -219,12 +233,33 @@ void DisplayMessage (void)
     XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
     iInputWindowUpWidth = 0;
-    for (i = 0; i < uMessageUp; i++)
+    for (i = 0; i < uMessageUp; i++) {
 #ifdef _USE_XFT
-	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, xftFont);
+	p1 = messageUp[i].strMsg;
+	while (*p1) {
+	    if (isprint (*p1))
+		bEn = True;
+	    else
+		bEn = False;
+	    p2 = strTemp;
+	    while (*p1) {
+		*p2++ = *p1++;
+		if (isprint (*p1)) {
+		    if (!bEn)
+			break;
+		}
+		else {
+		    if (bEn)
+			break;
+		}
+	    }
+	    *p2 = '\0';
+	    iInputWindowUpWidth += StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
+	}
 #else
 	iInputWindowUpWidth += StringWidth (messageUp[i].strMsg, fontSet);
 #endif
+    }
 
     iInputWindowUpWidth += 2 * INPUTWND_START_POS_UP + 1;
     if (bShowPrev)
@@ -233,13 +268,34 @@ void DisplayMessage (void)
 	iInputWindowUpWidth += 8;
 
     iInputWindowDownWidth = 0;
-    for (i = 0; i < uMessageDown; i++)
+    for (i = 0; i < uMessageDown; i++) {
 #ifdef _USE_XFT
-	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, xftFont);
+	p1 = messageDown[i].strMsg;
+	while (*p1) {
+	    if (isprint (*p1))
+		bEn = True;
+	    else
+		bEn = False;
+	    p2 = strTemp;
+	    while (*p1) {
+		*p2++ = *p1++;
+		if (isprint (*p1)) {
+		    if (!bEn)
+			break;
+		}
+		else {
+		    if (bEn)
+			break;
+		}
+	    }
+	    *p2 = '\0';
+
+	    iInputWindowDownWidth += StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
+	}
 #else
 	iInputWindowDownWidth += StringWidth (messageDown[i].strMsg, fontSet);
 #endif
-
+    }
     iInputWindowDownWidth += 2 * INPUTWND_START_POS_DOWN + 1;
 
     if (iInputWindowUpWidth < iInputWindowDownWidth)
@@ -280,16 +336,45 @@ void DisplayMessageUp (void)
     int             iChar;
     char            strText[MESSAGE_MAX_LENGTH];
 
+#ifdef _USE_XFT
+    char            strTemp[MESSAGE_MAX_LENGTH];
+    char           *p1, *p2;
+    Bool            bEn;
+#endif
+
     iPos = INPUTWND_START_POS_UP;
     iChar = iCursorPos;
 
     for (i = 0; i < uMessageUp; i++) {
 #ifdef _USE_XFT
-	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg, xftFont);
-	OutputString (inputWindow, xftFont, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
+	p1 = messageUp[i].strMsg;
+	while (*p1) {
+	    if (isprint (*p1))
+		bEn = True;
+	    else
+		bEn = False;
+	    p2 = strTemp;
+	    while (*p1) {
+		*p2++ = *p1++;
+		if (isprint (*p1)) {
+		    if (!bEn)
+			break;
+		}
+		else {
+		    if (bEn)
+			break;
+		}
+	    }
+	    *p2 = '\0';
+
+	    iInputWindowUpWidth = StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
+	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strTemp, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
+	    iPos += iInputWindowUpWidth;
+	}
 #else
 	iInputWindowUpWidth = StringWidth (messageUp[i].strMsg, fontSet);
 	OutputString (inputWindow, fontSet, messageUp[i].strMsg, iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
+	iPos += iInputWindowUpWidth;
 #endif
 
 	if (bShowCursor && iChar) {
@@ -297,7 +382,28 @@ void DisplayMessageUp (void)
 		strncpy (strText, messageUp[i].strMsg, iChar);
 		strText[iChar] = '\0';
 #ifdef _USE_XFT
-		iCursorPixPos += StringWidth (strText, xftFont);
+		p1 = strText;
+		while (*p1) {
+		    if (isprint (*p1))
+			bEn = True;
+		    else
+			bEn = False;
+		    p2 = strTemp;
+		    while (*p1) {
+			*p2++ = *p1++;
+			if (isprint (*p1)) {
+			    if (!bEn)
+				break;
+			}
+			else {
+			    if (bEn)
+				break;
+			}
+		    }
+		    *p2 = '\0';
+
+		    iCursorPixPos += StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
+		}
 #else
 		iCursorPixPos += StringWidth (strText, fontSet);
 #endif
@@ -308,8 +414,6 @@ void DisplayMessageUp (void)
 		iChar -= strlen (messageUp[i].strMsg);
 	    }
 	}
-
-	iPos += iInputWindowUpWidth;
     }
 
     if (bShowCursor)
@@ -324,18 +428,50 @@ void DisplayMessageDown (void)
     uint            i;
     uint            iPos;
 
+#ifdef _USE_XFT
+    char            strTemp[MESSAGE_MAX_LENGTH];
+    char           *p1, *p2;
+    Bool            bEn;
+#endif
+
     iPos = INPUTWND_START_POS_DOWN;
     for (i = 0; i < uMessageDown; i++) {
 	//借用iInputWindowDownWidth作为一个临时变量
 
 #ifdef _USE_XFT
-	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
-	OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
+	p1 = messageDown[i].strMsg;
+	while (*p1) {
+	    if (isprint (*p1))	//使用中文字体
+		bEn = True;
+	    else
+		bEn = False;
+	    p2 = strTemp;
+	    while (*p1) {
+		*p2++ = *p1++;
+		if (isprint (*p1)) {
+		    if (!bEn)
+			break;
+		}
+		else {
+		    if (bEn)
+			break;
+		}
+	    }
+	    *p2 = '\0';
+
+	    iInputWindowDownWidth = StringWidth (strTemp, (bEn) ? xftFontEn : xftFont);
+	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strTemp, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
+	    iPos += iInputWindowDownWidth;
+	}
+
+	/*iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
+	   OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
+	   iPos += iInputWindowDownWidth; */
 #else
 	iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, fontSet);
 	OutputString (inputWindow, fontSet, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].gc);
-#endif
 	iPos += iInputWindowDownWidth;
+#endif
     }
 }
 

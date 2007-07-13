@@ -64,11 +64,12 @@ extern INT8     iIMIndex;
 extern Bool     bUseGBK;
 extern Bool     bSP;
 extern Bool     bUseLegend;
-extern IM	*im;
-extern CARD16	connect_id;
+extern IM      *im;
+extern CARD16   connect_id;
 
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
+extern XftFont *xftMainWindowFontEn;
 #else
 extern XFontSet fontSetMainWindow;
 #endif
@@ -104,10 +105,15 @@ Bool CreateMainWindow (void)
 void DisplayMainWindow (void)
 {
     INT8            iIndex = 0;
-    INT8            iPos;
+    INT16           iPos;
 
+#ifdef _USE_XFT
+    char            strTemp[MAX_IM_NAME + 1];
+    char           *p1, *p2;
+    Bool            bEn;
+#endif
     iIndex = IS_CLOSED;
-    if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState(connect_id)!= IS_CLOSED))) {
+    if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
 	XMapRaised (dpy, mainWindow);
 
 	XDrawRectangle (dpy, mainWindow, mainWindowLineColor.gc, 0, 0, MAINWND_WIDTH - 1, MAINWND_HEIGHT - 1);
@@ -156,10 +162,32 @@ void DisplayMainWindow (void)
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, iPos, 2, 15, 16);
 	iPos += 13;
 
-	iIndex = ConnectIDGetState(connect_id);
+	iIndex = ConnectIDGetState (connect_id);
 	XClearArea (dpy, mainWindow, iPos, 2, MAINWND_WIDTH - iPos - 2, MAINWND_HEIGHT - 4, False);
 #ifdef _USE_XFT
-	OutputString (mainWindow, xftMainWindowFont, im[iIMIndex].strName, iPos, FontHeight (xftMainWindowFont) + (MAINWND_HEIGHT - FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
+	p1 = im[iIMIndex].strName;
+	while (*p1) {
+	    if (isprint (*p1))
+		bEn = True;
+	    else
+		bEn = False;
+	    p2 = strTemp;
+	    while (*p1) {
+		*p2++ = *p1++;
+		if (isprint (*p1)) {
+		    if (!bEn)
+			break;
+		}
+		else {
+		    if (bEn)
+			break;
+		}
+	    }
+	    *p2 = '\0';
+
+	    OutputString (mainWindow, (bEn) ? xftMainWindowFontEn : xftMainWindowFont, strTemp, iPos, FontHeight (xftMainWindowFont) + (MAINWND_HEIGHT - FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
+	    iPos += StringWidth (strTemp, (bEn) ? xftMainWindowFontEn : xftMainWindowFont);
+	}
 #else
 	OutputString (mainWindow, fontSetMainWindow, im[iIMIndex].strName, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
 #endif

@@ -1,5 +1,21 @@
+2005-2-26 Yuking <yukig_net@sohu.com>
+	   * src/ime.c:临时英文状态时按空格上屏
+	   * 更新说明文档
+	   * 改进的安装程序
+	   * 版本为3.1
+
+2005-2-20 Yuking <yukig_net@sohu.com>
+	   * 中英文字体分别设置
+
+2005-2-20 Yuking <yukig_net@sohu.com>
+	   * 修正拼音“仿佛”的注音错误
+
+2005-2-13 Yuking <yukig_net@sohu.com>
+	   * src/py.c,src/tools.c:将拼音以词定字键改为可设置
+	   
 2005-1-24 Yuking <yukig_net@sohu.com>
 	   * src/ui.c:修正不能记忆状态窗口位置的问题
+	   * 版本为3.0.4
 
 2005-1-24 Yuking <yukig_net@sohu.com>
 	   * src/table.c:修正码表输入法添加词组的一个问题

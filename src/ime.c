@@ -124,6 +124,11 @@ extern INT8     iTableCount;
 
 extern Bool     bTrigger;
 
+extern int      iInputWindowX;
+extern int      iInputWindowY;
+extern int      iTempInputWindowX;
+extern int      iTempInputWindowY;
+
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
 #else
@@ -182,6 +187,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     int             iKey;
     char           *pstr;
     int             iLen;
+ //   IC		   *ic;
 
     kev = (XKeyEvent *) & call_data->event;
     memset (strbuf, 0, STRBUFLEN);
@@ -200,9 +206,11 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
      * 解决xine中候选字自动选中的问题
      * xine每秒钟产生一个左SHIFT键的释放事件
      */
+    /*ic=(IC *)FindIC (call_data->icid);
+    /printf("%d %d %d %d %d %d\n",kev->same_screen,ic->focus_win,ic->client_win,kev->window,kev->root,kev->subwindow); */
     if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey))
-	return;
-
+    	return;
+    
     retVal = IRV_TO_PROCESS;
 
     if (call_data->event.type == KeyRelease) {
@@ -223,6 +231,11 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
 		    SetConnectID (call_data->connect_id, IS_CHN);
 		    DisplayInputWindow ();
+		    
+		    if ( ConnectIDGetTrackCursor (call_data->connect_id) )
+			XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
+		    else
+			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 		}
 		else {
 		    SetConnectID (call_data->connect_id, IS_ENG);
@@ -342,8 +355,11 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 
 			if (retVal == IRV_TO_PROCESS) {
 			    if (bInCap) {
-				if (iKey == ' ' && iCodeInputCount == 0) {
-				    strcpy (strStringGet, "；");
+				if (iKey == ' ') {
+				    if (iCodeInputCount == 0)
+					strcpy (strStringGet, "；");
+				    else
+					strcpy(strStringGet,strCodeInput);
 				    retVal = IRV_ENG;
 				    bInCap = False;
 				}
@@ -376,7 +392,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 				}
 				else {
 				    strcpy (messageUp[0].strMsg, strCodeInput);
-				    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
+				    strcpy (messageDown[0].strMsg, "按 Enter/空格 输入英文");
 				}
 				messageUp[0].type = MSG_INPUT;
 				messageDown[0].type = MSG_TIPS;

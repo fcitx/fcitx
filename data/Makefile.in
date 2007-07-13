@@ -148,7 +148,7 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 tabledir = $(pkgdatadir)/data
-table_DATA = cj.mb erbi.mb punc.mb pybase.mb py.mb pyphrase.mb pySym.mb sp.dat \
+table_DATA = cj.mb erbi.mb punc.mb pybase.mb pyphrase.mb pySym.mb sp.dat \
 	     wbx.mb tables.conf
 
 EXTRA_DIST = $(table_DATA)
@@ -270,7 +270,8 @@ maintainer-clean-generic:
 clean: clean-am
 
 clean-am: clean-generic mostlyclean-am
-
+	@rm -f pybase.mb pyphrase.mb wbx.mb erbi.mb cj.mb
+	
 distclean: distclean-am
 	-rm -f Makefile
 distclean-am: clean-am distclean-generic
