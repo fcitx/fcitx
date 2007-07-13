@@ -79,11 +79,11 @@ Bool CreateAboutWindow (void)
     else
 	iBackPixel = WhitePixel (dpy, DefaultScreen (dpy));
 
-    #ifdef _USE_XFT
+#ifdef _USE_XFT
     ABOUT_WINDOW_WIDTH = StringWidth (strTitle, xftVKWindowFont) + 50;
-    #else
+#else
     ABOUT_WINDOW_WIDTH = StringWidth (strTitle, fontSetVKWindow) + 50;
-    #endif
+#endif
     aboutWindow =
 	XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)),
 			     iBackPixel);
@@ -110,7 +110,7 @@ void InitWindowProperty (void)
 
     XSetTransientForHint (dpy, aboutWindow, DefaultRootWindow (dpy));
 
-    XChangeProperty (dpy, aboutWindow, about_wm_window_type, XA_ATOM, 32, PropModeReplace, (void*)&type_toolbar, 1);
+    XChangeProperty (dpy, aboutWindow, about_wm_window_type, XA_ATOM, 32, PropModeReplace, (void *) &type_toolbar, 1);
 
     about_protocol_atom = XInternAtom (dpy, "WM_PROTOCOLS", False);
     about_kill_atom = XInternAtom (dpy, "WM_DELETE_WINDOW", False);
@@ -131,7 +131,7 @@ void InitWindowProperty (void)
     else
 	ps = AboutCaption;
 
-    tp.value = (void*)ps;
+    tp.value = (void *) ps;
     tp.encoding = XA_STRING;
     tp.format = 16;
     tp.nitems = strlen (ps);
@@ -153,9 +153,12 @@ void InitAboutWindowColor (void)
 
 void DisplayAboutWindow (void)
 {
-    XMoveWindow (dpy, aboutWindow, (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2);
     XMapRaised (dpy, aboutWindow);
+    XMoveWindow (dpy, aboutWindow, (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2);
+}
 
+void DrawAboutWindow (void)
+{
 #ifdef _USE_XFT
     OutputString (aboutWindow, xftVKWindowFont, strTitle, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, xftVKWindowFont)) / 2, iVKWindowFontSize + 6 + 30, AboutWindowFontColor.color);
 #else

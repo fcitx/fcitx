@@ -2602,6 +2602,7 @@ chou ╡┐
 chou ╨N
 chou ╩I
 chou ╪≈
+chou Чr
 chou ╫[
 chou ╬I
 chou еW
@@ -21113,6 +21114,7 @@ xi о╣
 xi о╒
 xi оё
 xi о╡
+xi ┤ж
 xi о╞
 xi о╟
 xi о╦
@@ -21528,7 +21530,7 @@ xian оь
 xian ой
 xian ов
 xian оп
-xian оэ
+xian оэime.c
 xian ощ
 xian ом
 xian ои

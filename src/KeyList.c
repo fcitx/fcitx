@@ -35,6 +35,8 @@ KEYCODE_LIST    keyCodeList[] = {
 };
 
 KEY_LIST        keyList[] = {
+    {"TAB", 9}
+    ,
     {"ENTER", 13}
     ,
     {"LCTRL", 227}
@@ -58,6 +60,8 @@ KEY_LIST        keyList[] = {
     {"END", 8087}
     ,
     {"PGDN", 8086}
+    ,
+    {"SHIFT_TAB", 11032}
     ,
     {"CTRL_CTRL", 300}
     ,

@@ -159,6 +159,7 @@ extern Bool     bUseAA;
 #else
 extern char     strUserLocale[];
 #endif
+extern Bool     bUseBold;
 
 extern INT8     iOffsetX;
 extern INT8     iOffsetY;
@@ -262,6 +263,10 @@ void LoadConfig (Bool bMode)
 	    strcpy (strUserLocale, pstr);
 	}
 #endif
+	else if (MyStrcmp (pstr, "是否使用粗体=")) {
+	    pstr += 13;
+	    bUseBold = atoi (pstr);
+	}
 	else if (MyStrcmp (pstr, "候选词个数=")) {
 	    pstr += 11;
 	    iMaxCandWord = atoi (pstr);
@@ -542,6 +547,10 @@ void LoadConfig (Bool bMode)
 		i2ndSelectKey = 37;	//左CTRL的扫描码
 		i3rdSelectKey = 109;	//右CTRL的扫描码
 	    }
+	    else {
+		i2ndSelectKey = pstr[0];
+		i3rdSelectKey = pstr[1];
+	    }
 	}
 
 	else if (MyStrcmp (pstr, "使用拼音=")) {
@@ -717,6 +726,7 @@ void SaveConfig (void)
 #ifdef _USE_XFT
     fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
 #endif
+    fprintf (fp, "是否使用粗体=%d\n", bUseBold);
 
     fprintf (fp, "\n[输出]\n");
     fprintf (fp, "数字后跟半角符号=%d\n", bEngPuncAfterNumber);

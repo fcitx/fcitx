@@ -39,6 +39,7 @@ typedef enum _HIDE_MAINWINDOW {
 
 Bool            CreateMainWindow (void);
 void            DisplayMainWindow (void);
+void            DrawMainWindow (void);
 void            InitMainWindowColor (void);
 void            ChangeLock (void);
 

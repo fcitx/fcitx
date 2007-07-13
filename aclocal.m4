@@ -702,8 +702,8 @@ test -z "$LD" && AC_MSG_ERROR([no acceptable ld found in \$PATH])
 AC_LIB_PROG_LD_GNU
 ])
 
-# lib-link.m4 serial 6 (gettext-0.14.3)
-dnl Copyright (C) 2001-2005 Free Software Foundation, Inc.
+# lib-link.m4 serial 9 (gettext-0.16)
+dnl Copyright (C) 2001-2006 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -830,6 +830,7 @@ dnl the libraries corresponding to explicit and implicit dependencies.
 dnl Sets the LIB${NAME}, LTLIB${NAME} and INC${NAME} variables.
 AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
 [
+  AC_REQUIRE([AC_LIB_PREPARE_MULTILIB])
   define([NAME],[translit([$1],[abcdefghijklmnopqrstuvwxyz./-],
                                [ABCDEFGHIJKLMNOPQRSTUVWXYZ___])])
   dnl By default, look in $includedir and $libdir.
@@ -852,7 +853,7 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
         ])
       else
         additional_includedir="$withval/include"
-        additional_libdir="$withval/lib"
+        additional_libdir="$withval/$acl_libdirstem"
       fi
     fi
 ])
@@ -901,9 +902,16 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
           found_so=
           found_a=
           if test $use_additional = yes; then
-            if test -n "$shlibext" && test -f "$additional_libdir/lib$name.$shlibext"; then
+            if test -n "$shlibext" \
+               && { test -f "$additional_libdir/lib$name.$shlibext" \
+                    || { test "$shlibext" = dll \
+                         && test -f "$additional_libdir/lib$name.dll.a"; }; }; then
               found_dir="$additional_libdir"
-              found_so="$additional_libdir/lib$name.$shlibext"
+              if test -f "$additional_libdir/lib$name.$shlibext"; then
+                found_so="$additional_libdir/lib$name.$shlibext"
+              else
+                found_so="$additional_libdir/lib$name.dll.a"
+              fi
               if test -f "$additional_libdir/lib$name.la"; then
                 found_la="$additional_libdir/lib$name.la"
               fi
@@ -923,9 +931,16 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
               case "$x" in
                 -L*)
                   dir=`echo "X$x" | sed -e 's/^X-L//'`
-                  if test -n "$shlibext" && test -f "$dir/lib$name.$shlibext"; then
+                  if test -n "$shlibext" \
+                     && { test -f "$dir/lib$name.$shlibext" \
+                          || { test "$shlibext" = dll \
+                               && test -f "$dir/lib$name.dll.a"; }; }; then
                     found_dir="$dir"
-                    found_so="$dir/lib$name.$shlibext"
+                    if test -f "$dir/lib$name.$shlibext"; then
+                      found_so="$dir/lib$name.$shlibext"
+                    else
+                      found_so="$dir/lib$name.dll.a"
+                    fi
                     if test -f "$dir/lib$name.la"; then
                       found_la="$dir/lib$name.la"
                     fi
@@ -952,7 +967,7 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
               dnl Linking with a shared library. We attempt to hardcode its
               dnl directory into the executable's runpath, unless it's the
               dnl standard /usr/lib.
-              if test "$enable_rpath" = no || test "X$found_dir" = "X/usr/lib"; then
+              if test "$enable_rpath" = no || test "X$found_dir" = "X/usr/$acl_libdirstem"; then
                 dnl No hardcoding is needed.
                 LIB[]NAME="${LIB[]NAME}${LIB[]NAME:+ }$found_so"
               else
@@ -1038,8 +1053,8 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
             dnl Assume the include files are nearby.
             additional_includedir=
             case "$found_dir" in
-              */lib | */lib/)
-                basedir=`echo "X$found_dir" | sed -e 's,^X,,' -e 's,/lib/*$,,'`
+              */$acl_libdirstem | */$acl_libdirstem/)
+                basedir=`echo "X$found_dir" | sed -e 's,^X,,' -e "s,/$acl_libdirstem/"'*$,,'`
                 additional_includedir="$basedir/include"
                 ;;
             esac
@@ -1100,9 +1115,9 @@ AC_DEFUN([AC_LIB_LINKFLAGS_BODY],
                     dnl   3. if it's already present in $LDFLAGS or the already
                     dnl      constructed $LIBNAME,
                     dnl   4. if it doesn't exist as a directory.
-                    if test "X$additional_libdir" != "X/usr/lib"; then
+                    if test "X$additional_libdir" != "X/usr/$acl_libdirstem"; then
                       haveit=
-                      if test "X$additional_libdir" = "X/usr/local/lib"; then
+                      if test "X$additional_libdir" = "X/usr/local/$acl_libdirstem"; then
                         if test -n "$GCC"; then
                           case $host_os in
                             linux* | gnu* | k*bsd*-gnu) haveit=yes;;
@@ -1256,7 +1271,83 @@ AC_DEFUN([AC_LIB_APPENDTOVAR],
   done
 ])
 
-# lib-prefix.m4 serial 4 (gettext-0.14.2)
+dnl For those cases where a variable contains several -L and -l options
+dnl referring to unknown libraries and directories, this macro determines the
+dnl necessary additional linker options for the runtime path.
+dnl AC_LIB_LINKFLAGS_FROM_LIBS([LDADDVAR], [LIBSVALUE], [USE-LIBTOOL])
+dnl sets LDADDVAR to linker options needed together with LIBSVALUE.
+dnl If USE-LIBTOOL evaluates to non-empty, linking with libtool is assumed,
+dnl otherwise linking without libtool is assumed.
+AC_DEFUN([AC_LIB_LINKFLAGS_FROM_LIBS],
+[
+  AC_REQUIRE([AC_LIB_RPATH])
+  AC_REQUIRE([AC_LIB_PREPARE_MULTILIB])
+  $1=
+  if test "$enable_rpath" != no; then
+    if test -n "$hardcode_libdir_flag_spec" && test "$hardcode_minus_L" = no; then
+      dnl Use an explicit option to hardcode directories into the resulting
+      dnl binary.
+      rpathdirs=
+      next=
+      for opt in $2; do
+        if test -n "$next"; then
+          dir="$next"
+          dnl No need to hardcode the standard /usr/lib.
+          if test "X$dir" != "X/usr/$acl_libdirstem"; then
+            rpathdirs="$rpathdirs $dir"
+          fi
+          next=
+        else
+          case $opt in
+            -L) next=yes ;;
+            -L*) dir=`echo "X$opt" | sed -e 's,^X-L,,'`
+                 dnl No need to hardcode the standard /usr/lib.
+                 if test "X$dir" != "X/usr/$acl_libdirstem"; then
+                   rpathdirs="$rpathdirs $dir"
+                 fi
+                 next= ;;
+            *) next= ;;
+          esac
+        fi
+      done
+      if test "X$rpathdirs" != "X"; then
+        if test -n ""$3""; then
+          dnl libtool is used for linking. Use -R options.
+          for dir in $rpathdirs; do
+            $1="${$1}${$1:+ }-R$dir"
+          done
+        else
+          dnl The linker is used for linking directly.
+          if test -n "$hardcode_libdir_separator"; then
+            dnl Weird platform: only the last -rpath option counts, the user
+            dnl must pass all path elements in one option.
+            alldirs=
+            for dir in $rpathdirs; do
+              alldirs="${alldirs}${alldirs:+$hardcode_libdir_separator}$dir"
+            done
+            acl_save_libdir="$libdir"
+            libdir="$alldirs"
+            eval flag=\"$hardcode_libdir_flag_spec\"
+            libdir="$acl_save_libdir"
+            $1="$flag"
+          else
+            dnl The -rpath options are cumulative.
+            for dir in $rpathdirs; do
+              acl_save_libdir="$libdir"
+              libdir="$dir"
+              eval flag=\"$hardcode_libdir_flag_spec\"
+              libdir="$acl_save_libdir"
+              $1="${$1}${$1:+ }$flag"
+            done
+          fi
+        fi
+      fi
+    fi
+  fi
+  AC_SUBST([$1])
+])
+
+# lib-prefix.m4 serial 5 (gettext-0.15)
 dnl Copyright (C) 2001-2005 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
@@ -1282,6 +1373,7 @@ AC_DEFUN([AC_LIB_PREFIX],
   AC_BEFORE([$0], [AC_LIB_LINKFLAGS])
   AC_REQUIRE([AC_PROG_CC])
   AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_REQUIRE([AC_LIB_PREPARE_MULTILIB])
   AC_REQUIRE([AC_LIB_PREPARE_PREFIX])
   dnl By default, look in $includedir and $libdir.
   use_additional=yes
@@ -1303,7 +1395,7 @@ AC_DEFUN([AC_LIB_PREFIX],
         ])
       else
         additional_includedir="$withval/include"
-        additional_libdir="$withval/lib"
+        additional_libdir="$withval/$acl_libdirstem"
       fi
     fi
 ])
@@ -1345,7 +1437,7 @@ AC_DEFUN([AC_LIB_PREFIX],
     dnl   2. if it's already present in $LDFLAGS,
     dnl   3. if it's /usr/local/lib and we are using GCC on Linux,
     dnl   4. if it doesn't exist as a directory.
-    if test "X$additional_libdir" != "X/usr/lib"; then
+    if test "X$additional_libdir" != "X/usr/$acl_libdirstem"; then
       haveit=
       for x in $LDFLAGS; do
         AC_LIB_WITH_FINAL_PREFIX([eval x=\"$x\"])
@@ -1355,7 +1447,7 @@ AC_DEFUN([AC_LIB_PREFIX],
         fi
       done
       if test -z "$haveit"; then
-        if test "X$additional_libdir" = "X/usr/local/lib"; then
+        if test "X$additional_libdir" = "X/usr/local/$acl_libdirstem"; then
           if test -n "$GCC"; then
             case $host_os in
               linux*) haveit=yes;;
@@ -1408,6 +1500,37 @@ AC_DEFUN([AC_LIB_WITH_FINAL_PREFIX],
   $1
   exec_prefix="$acl_save_exec_prefix"
   prefix="$acl_save_prefix"
+])
+
+dnl AC_LIB_PREPARE_MULTILIB creates a variable acl_libdirstem, containing
+dnl the basename of the libdir, either "lib" or "lib64".
+AC_DEFUN([AC_LIB_PREPARE_MULTILIB],
+[
+  dnl There is no formal standard regarding lib and lib64. The current
+  dnl practice is that on a system supporting 32-bit and 64-bit instruction
+  dnl sets or ABIs, 64-bit libraries go under $prefix/lib64 and 32-bit
+  dnl libraries go under $prefix/lib. We determine the compiler's default
+  dnl mode by looking at the compiler's library search path. If at least
+  dnl of its elements ends in /lib64 or points to a directory whose absolute
+  dnl pathname ends in /lib64, we assume a 64-bit ABI. Otherwise we use the
+  dnl default, namely "lib".
+  acl_libdirstem=lib
+  searchpath=`(LC_ALL=C $CC -print-search-dirs) 2>/dev/null | sed -n -e 's,^libraries: ,,p' | sed -e 's,^=,,'`
+  if test -n "$searchpath"; then
+    acl_save_IFS="${IFS= 	}"; IFS=":"
+    for searchdir in $searchpath; do
+      if test -d "$searchdir"; then
+        case "$searchdir" in
+          */lib64/ | */lib64 ) acl_libdirstem=lib64 ;;
+          *) searchdir=`cd "$searchdir" && pwd`
+             case "$searchdir" in
+               */lib64 ) acl_libdirstem=lib64 ;;
+             esac ;;
+        esac
+      fi
+    done
+    IFS="$acl_save_IFS"
+  fi
 ])
 
 # Check to see how 'make' treats includes.	            -*- Autoconf -*-
@@ -1626,7 +1749,7 @@ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
 	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
 fi
 if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=m4_ifval([$1], [$1], [0.9.0])
+	_pkg_min_version=m4_default([$1], [0.9.0])
 	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
 	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
 		AC_MSG_RESULT([yes])
@@ -1662,13 +1785,29 @@ fi])
 # ---------------------------------------------
 m4_define([_PKG_CONFIG],
 [if test -n "$PKG_CONFIG"; then
+    if test -n "$$1"; then
+        pkg_cv_[]$1="$$1"
+    else
         PKG_CHECK_EXISTS([$3],
                          [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`],
 			 [pkg_failed=yes])
+    fi
 else
 	pkg_failed=untried
 fi[]dnl
 ])# _PKG_CONFIG
+
+# _PKG_SHORT_ERRORS_SUPPORTED
+# -----------------------------
+AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi[]dnl
+])# _PKG_SHORT_ERRORS_SUPPORTED
+
 
 # PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
 # [ACTION-IF-NOT-FOUND])
@@ -1691,29 +1830,39 @@ AC_MSG_CHECKING([for $1])
 _PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
 _PKG_CONFIG([$1][_LIBS], [libs], [$2])
 
+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
+and $1[]_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.])
+
 if test $pkg_failed = yes; then
-	$1[]_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$2"`
+        _PKG_SHORT_ERRORS_SUPPORTED
+        if test $_pkg_short_errors_supported = yes; then
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$2"`
+        else 
+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$2"`
+        fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$$1[]_PKG_ERRORS" 1>&AS_MESSAGE_LOG_FD
+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
 
 	ifelse([$4], , [AC_MSG_ERROR(dnl
-[Package requirements ($2) were not met.
+[Package requirements ($2) were not met:
+
+$$1_PKG_ERRORS
+
 Consider adjusting the PKG_CONFIG_PATH environment variable if you
 installed software in a non-standard prefix.
 
-Alternatively you may set the $1_CFLAGS and $1_LIBS environment variables
-to avoid the need to call pkg-config.  See the pkg-config man page for
-more details.])],
-		[$4])
+_PKG_TEXT
+])],
+		[AC_MSG_RESULT([no])
+                $4])
 elif test $pkg_failed = untried; then
 	ifelse([$4], , [AC_MSG_FAILURE(dnl
 [The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
 
-Alternatively you may set the $1_CFLAGS and $1_LIBS environment variables
-to avoid the need to call pkg-config.  See the pkg-config man page for
-more details.
+_PKG_TEXT
 
 To get pkg-config, see <http://www.freedesktop.org/software/pkgconfig>.])],
 		[$4])

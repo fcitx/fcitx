@@ -49,7 +49,7 @@
 #define CODESET 14
 #endif
 
-extern char strUserLocale[];
+extern char     strUserLocale[];
 
 extern Display *dpy;
 extern Window   inputWindow;
@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
     XEvent          event;
     char           *imname = NULL;
     int             i;
-    Bool     bBackground=True;
+    Bool            bBackground = True;
 
     for (i = 1; i < argc; i++) {
 	if (!strcmp (argv[i], "-name"))
@@ -103,7 +103,8 @@ int main (int argc, char *argv[])
     CreateAboutWindow ();
 
     SetIM ();
-    
+    DisplayMainWindow ();
+
     if (!InitXIM (imname, inputWindow))
 	exit (4);
 
@@ -140,5 +141,5 @@ void Usage ()
 
 void Version ()
 {
-    printf ("fcitx version: %s-%s\n", FCITX_VERSION,USE_XFT);
+    printf ("fcitx version: %s-%s\n", FCITX_VERSION, USE_XFT);
 }

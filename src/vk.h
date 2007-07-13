@@ -38,6 +38,7 @@ typedef struct {
 Bool            CreateVKWindow (void);
 void            InitVKWindowColor (void);
 void            DisplayVKWindow (void);
+void            DrawVKWindow (void);
 char           *VKGetSymbol (char cChar);
 void            LoadVKMapFile (void);
 void            ChangVK (void);

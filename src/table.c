@@ -327,6 +327,9 @@ Bool LoadTableDict (void)
     unsigned int    iTemp, iTempCount;
     char            cChar = 0;
 
+#ifdef _DEBUG
+    fprintf (stderr, "LOAD Table Dict\n");
+#endif
     //首先，来看看我们该调入哪个码表
     for (i = 0; i < iTableCount; i++) {
 	if (table[i].iIMIndex == iIMIndex)
@@ -420,12 +423,14 @@ Bool LoadTableDict (void)
 	/** 为单字生成一个表   */
 	if (strlen (recTemp->strHZ) == 2 && !IsIgnoreChar (strCode[0])) {
 	    iTemp = CalHZIndex (recTemp->strHZ);
-	    if (tableSingleHZ[iTemp]) {
-		if (strlen (strCode) > strlen (tableSingleHZ[iTemp]->strCode))
+	    if (iTemp >= 0 && iTemp < SINGLE_HZ_COUNT) {
+		if (tableSingleHZ[iTemp]) {
+		    if (strlen (strCode) > strlen (tableSingleHZ[iTemp]->strCode))
+			tableSingleHZ[iTemp] = recTemp;
+		}
+		else
 		    tableSingleHZ[iTemp] = recTemp;
 	    }
-	    else
-		tableSingleHZ[iTemp] = recTemp;
 	}
 	currentRecord->next = recTemp;
 	recTemp->prev = currentRecord;
@@ -536,6 +541,9 @@ Bool LoadTableDict (void)
        fclose(temp2);
        fclose(temp1);    */
     /* ********************************************** */
+#ifdef _DEBUG
+    fprintf (stderr, "LOAD Table Dict OK!\n");
+#endif
 
     return True;
 }

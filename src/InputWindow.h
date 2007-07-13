@@ -57,7 +57,6 @@ void            CalculateInputWindowHeight (void);
 void            DrawCursor (int iPos);
 void            DisplayMessageUp (void);
 void            DisplayMessageDown (void);
-void            DisplayMessage (void);
 void            DrawInputWindow (void);
 void            ResetInputWindow (void);
 

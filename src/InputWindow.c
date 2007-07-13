@@ -166,52 +166,10 @@ void CalculateInputWindowHeight (void)
 
 void DisplayInputWindow (void)
 {
+#ifdef _DEBUG
+    fprintf (stderr, "DISPLAY InputWindow\n");
+#endif
     XMapRaised (dpy, inputWindow);
-    DisplayMessage ();
-    DrawInputWindow ();
-}
-
-void DrawInputWindow (void)
-{
-    int             rv;
-    XImage         *mask;
-    XpmAttributes   attrib;
-
-    attrib.valuemask = 0;
-
-    if (_3DEffectInputWindow == _3D_UPPER)
-	Draw3DEffect (inputWindow, 1, 1, iInputWindowWidth - 2, iInputWindowHeight - 2, _3D_UPPER);
-    else if (_3DEffectInputWindow == _3D_LOWER)
-	Draw3DEffect (inputWindow, 0, 0, iInputWindowWidth, iInputWindowHeight, _3D_LOWER);
-
-    XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
-    //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
-    if (_3DEffectInputWindow == _3D_LOWER)
-	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
-    else if (_3DEffectInputWindow == _3D_UPPER)
-	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
-    XDrawLine (dpy, inputWindow, inputWindowLineColor.gc, 2 + 5, iInputWindowHeight / 2, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2);
-    if (_3DEffectInputWindow == _3D_LOWER)
-	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
-    else if (_3DEffectInputWindow == _3D_UPPER)
-	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
-
-    if (bShowPrev) {
-	if (!pPrev) {
-	    rv = XpmCreateImageFromData (dpy, xpm_prev, &pPrev, &mask, &attrib);
-	    if (rv != XpmSuccess)
-		fprintf (stderr, "Failed to read xpm file: Prev\n");
-	}
-	XPutImage (dpy, inputWindow, inputWindowColor.foreGC, pPrev, 0, 0, iInputWindowWidth - 20, (iInputWindowHeight / 2 - 12) / 2, 6, 12);
-    }
-    if (bShowNext) {
-	if (!pNext) {
-	    rv = XpmCreateImageFromData (dpy, xpm_next, &pNext, &mask, &attrib);
-	    if (rv != XpmSuccess)
-		fprintf (stderr, "Failed to read xpm file: Next\n");
-	}
-	XPutImage (dpy, inputWindow, inputWindowColor.foreGC, pNext, 0, 0, iInputWindowWidth - 10, (iInputWindowHeight / 2 - 12) / 2, 6, 12);
-    }
 }
 
 void InitInputWindowColor (void)
@@ -256,9 +214,11 @@ void ResetInputWindow (void)
     uMessageUp = 0;
 }
 
-void DisplayMessage (void)
+void DrawInputWindow (void)
 {
     int             i;
+    XImage         *mask;
+    XpmAttributes   attrib;
 
 #ifdef _USE_XFT
     char            strTemp[MESSAGE_MAX_LENGTH];
@@ -266,6 +226,10 @@ void DisplayMessage (void)
     Bool            bEn;
 #endif
     XWindowAttributes wa;
+
+#ifdef _DEBUG
+    fprintf (stderr, "DRAW InputWindow\n");
+#endif
 
     XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
     XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
@@ -421,6 +385,43 @@ void DisplayMessage (void)
 
     DisplayMessageUp ();
     DisplayMessageDown ();
+
+    //**************************
+    attrib.valuemask = 0;
+
+    if (_3DEffectInputWindow == _3D_UPPER)
+	Draw3DEffect (inputWindow, 1, 1, iInputWindowWidth - 2, iInputWindowHeight - 2, _3D_UPPER);
+    else if (_3DEffectInputWindow == _3D_LOWER)
+	Draw3DEffect (inputWindow, 0, 0, iInputWindowWidth, iInputWindowHeight, _3D_LOWER);
+
+    XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
+    //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
+    if (_3DEffectInputWindow == _3D_LOWER)
+	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
+    else if (_3DEffectInputWindow == _3D_UPPER)
+	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
+    XDrawLine (dpy, inputWindow, inputWindowLineColor.gc, 2 + 5, iInputWindowHeight / 2, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2);
+    if (_3DEffectInputWindow == _3D_LOWER)
+	XDrawLine (dpy, inputWindow, dimGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
+    else if (_3DEffectInputWindow == _3D_UPPER)
+	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 + 1);
+
+    if (bShowPrev) {
+	if (!pPrev) {
+	    i = XpmCreateImageFromData (dpy, xpm_prev, &pPrev, &mask, &attrib);
+	    if (i != XpmSuccess)
+		fprintf (stderr, "Failed to read xpm file: Prev\n");
+	}
+	XPutImage (dpy, inputWindow, inputWindowColor.foreGC, pPrev, 0, 0, iInputWindowWidth - 20, (iInputWindowHeight / 2 - 12) / 2, 6, 12);
+    }
+    if (bShowNext) {
+	if (!pNext) {
+	    i = XpmCreateImageFromData (dpy, xpm_next, &pNext, &mask, &attrib);
+	    if (i != XpmSuccess)
+		fprintf (stderr, "Failed to read xpm file: Next\n");
+	}
+	XPutImage (dpy, inputWindow, inputWindowColor.foreGC, pNext, 0, 0, iInputWindowWidth - 10, (iInputWindowHeight / 2 - 12) / 2, 6, 12);
+    }
 }
 
 /*

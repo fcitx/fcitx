@@ -81,7 +81,6 @@ XImage         *pVK = NULL;
 
 HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
-Bool            bLocked = True;
 Bool            bCompactMainWindow = False;
 Bool            bShowVK = False;
 
@@ -90,6 +89,7 @@ extern GC       dimGC;
 extern int      i3DEffect;
 extern IC      *CurrentIC;
 extern Bool     bCorner;
+extern Bool     bLocked;
 extern Bool     bChnPunc;
 extern INT8     iIMIndex;
 extern Bool     bUseGBK;
@@ -141,6 +141,15 @@ Bool CreateMainWindow (void)
 
 void DisplayMainWindow (void)
 {
+#ifdef _DEBUG
+    fprintf (stderr, "DISPLAY MainWindow\n");
+#endif
+
+    XMapRaised (dpy, mainWindow);
+}
+
+void DrawMainWindow (void)
+{
     INT8            iIndex = 0;
     INT16           iPos;
 
@@ -157,9 +166,10 @@ void DisplayMainWindow (void)
 
     iIndex = IS_CLOSED;
     attrib.valuemask = 0;
+#ifdef _DEBUG
+    fprintf (stderr, "DRAW MainWindow\n");
+#endif
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
-	XMapRaised (dpy, mainWindow);
-
 	if (!pLogo) {
 	    rv = XpmCreateImageFromData (dpy, logo_xpm, &pLogo, &mask, &attrib);
 	    if (rv != XpmSuccess)
@@ -329,12 +339,4 @@ void InitMainWindowColor (void)
 	    iPixel = WhitePixel (dpy, DefaultScreen (dpy));
 	XSetForeground (dpy, IMNameColor[i].gc, iPixel);
     }
-}
-
-void ChangeLock (void)
-{
-    bLocked = !bLocked;
-    DisplayMainWindow ();
-
-    SaveProfile ();
 }

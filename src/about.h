@@ -16,7 +16,7 @@
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/ 
+ ***************************************************************************/
 
 /* A very simple About Window for FCITX */
 
@@ -27,10 +27,11 @@
 
 #define ABOUT_WINDOW_HEIGHT	150
 
-Bool CreateAboutWindow (void);
-void InitWindowProperty(void);
-void InitAboutWindowColor (void);
-void DisplayAboutWindow (void);
-void setIcon(void);
+Bool            CreateAboutWindow (void);
+void            InitWindowProperty (void);
+void            InitAboutWindowColor (void);
+void            DisplayAboutWindow (void);
+void            DrawAboutWindow (void);
+void            setIcon (void);
 
 #endif

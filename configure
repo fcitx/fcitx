@@ -868,6 +868,7 @@ Optional Features:
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --disable-rpath         do not hardcode runtime library paths
+  --enable-debug            Enable DEBUG
   --enable-xft            Enable Xft for Freetype font support
 
 Optional Packages:
@@ -1636,7 +1637,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=fcitx
- VERSION="'GirlDog' 3.4.2"
+ VERSION="'GirlDog' 3.4.3 (ÐÂÄê°æ)"
 
 
 cat >>confdefs.h <<_ACEOF
@@ -3283,6 +3284,26 @@ else
 fi;
 
 
+                  acl_libdirstem=lib
+  searchpath=`(LC_ALL=C $CC -print-search-dirs) 2>/dev/null | sed -n -e 's,^libraries: ,,p' | sed -e 's,^=,,'`
+  if test -n "$searchpath"; then
+    acl_save_IFS="${IFS= 	}"; IFS=":"
+    for searchdir in $searchpath; do
+      if test -d "$searchdir"; then
+        case "$searchdir" in
+          */lib64/ | */lib64 ) acl_libdirstem=lib64 ;;
+          *) searchdir=`cd "$searchdir" && pwd`
+             case "$searchdir" in
+               */lib64 ) acl_libdirstem=lib64 ;;
+             esac ;;
+        esac
+      fi
+    done
+    IFS="$acl_save_IFS"
+  fi
+
+
+
 
 
 
@@ -3324,7 +3345,7 @@ if test "${with_libiconv_prefix+set}" = set; then
 
       else
         additional_includedir="$withval/include"
-        additional_libdir="$withval/lib"
+        additional_libdir="$withval/$acl_libdirstem"
       fi
     fi
 
@@ -3366,9 +3387,16 @@ fi;
           found_so=
           found_a=
           if test $use_additional = yes; then
-            if test -n "$shlibext" && test -f "$additional_libdir/lib$name.$shlibext"; then
+            if test -n "$shlibext" \
+               && { test -f "$additional_libdir/lib$name.$shlibext" \
+                    || { test "$shlibext" = dll \
+                         && test -f "$additional_libdir/lib$name.dll.a"; }; }; then
               found_dir="$additional_libdir"
-              found_so="$additional_libdir/lib$name.$shlibext"
+              if test -f "$additional_libdir/lib$name.$shlibext"; then
+                found_so="$additional_libdir/lib$name.$shlibext"
+              else
+                found_so="$additional_libdir/lib$name.dll.a"
+              fi
               if test -f "$additional_libdir/lib$name.la"; then
                 found_la="$additional_libdir/lib$name.la"
               fi
@@ -3396,9 +3424,16 @@ fi;
               case "$x" in
                 -L*)
                   dir=`echo "X$x" | sed -e 's/^X-L//'`
-                  if test -n "$shlibext" && test -f "$dir/lib$name.$shlibext"; then
+                  if test -n "$shlibext" \
+                     && { test -f "$dir/lib$name.$shlibext" \
+                          || { test "$shlibext" = dll \
+                               && test -f "$dir/lib$name.dll.a"; }; }; then
                     found_dir="$dir"
-                    found_so="$dir/lib$name.$shlibext"
+                    if test -f "$dir/lib$name.$shlibext"; then
+                      found_so="$dir/lib$name.$shlibext"
+                    else
+                      found_so="$dir/lib$name.dll.a"
+                    fi
                     if test -f "$dir/lib$name.la"; then
                       found_la="$dir/lib$name.la"
                     fi
@@ -3421,7 +3456,7 @@ fi;
           if test "X$found_dir" != "X"; then
                         LTLIBICONV="${LTLIBICONV}${LTLIBICONV:+ }-L$found_dir -l$name"
             if test "X$found_so" != "X"; then
-                                                        if test "$enable_rpath" = no || test "X$found_dir" = "X/usr/lib"; then
+                                                        if test "$enable_rpath" = no || test "X$found_dir" = "X/usr/$acl_libdirstem"; then
                                 LIBICONV="${LIBICONV}${LIBICONV:+ }$found_so"
               else
                                                                                 haveit=
@@ -3486,8 +3521,8 @@ fi;
             fi
                         additional_includedir=
             case "$found_dir" in
-              */lib | */lib/)
-                basedir=`echo "X$found_dir" | sed -e 's,^X,,' -e 's,/lib/*$,,'`
+              */$acl_libdirstem | */$acl_libdirstem/)
+                basedir=`echo "X$found_dir" | sed -e 's,^X,,' -e "s,/$acl_libdirstem/"'*$,,'`
                 additional_includedir="$basedir/include"
                 ;;
             esac
@@ -3536,9 +3571,9 @@ fi;
                 case "$dep" in
                   -L*)
                     additional_libdir=`echo "X$dep" | sed -e 's/^X-L//'`
-                                                                                                                                                                if test "X$additional_libdir" != "X/usr/lib"; then
+                                                                                                                                                                if test "X$additional_libdir" != "X/usr/$acl_libdirstem"; then
                       haveit=
-                      if test "X$additional_libdir" = "X/usr/local/lib"; then
+                      if test "X$additional_libdir" = "X/usr/local/$acl_libdirstem"; then
                         if test -n "$GCC"; then
                           case $host_os in
                             linux* | gnu* | k*bsd*-gnu) haveit=yes;;
@@ -4875,6 +4910,25 @@ test -n "$x_includes" && X_CFLAGS="-I$x_includes"
 
 
 
+# Option to enable the DEBUG
+# Check whether --enable-debug or --disable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval="$enable_debug"
+  case "${enableval}" in
+  yes)  enable_debug=yes ;;
+  no)   enable_debug=no ;;
+  *) { { echo "$as_me:$LINENO: error: bad value \"${enableval}\" for --enable-debug, use \"yes\" or \"no\" (default)." >&5
+echo "$as_me: error: bad value \"${enableval}\" for --enable-debug, use \"yes\" or \"no\" (default)." >&2;}
+   { (exit 1); exit 1; }; } ;;
+esac
+fi;
+
+if test "x$enable_debug" = "xyes"; then
+  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS -D_DEBUG"
+else
+  CFLAGS="$CFLAGS $X_CFLAGS"
+fi
+
 # Option to enable the Xft library for Freetype font support.
 # Check whether --enable-xft or --disable-xft was given.
 if test "${enable_xft+set}" = set; then
@@ -5005,6 +5059,9 @@ echo "$as_me:$LINENO: checking for XFT" >&5
 echo $ECHO_N "checking for XFT... $ECHO_C" >&6
 
 if test -n "$PKG_CONFIG"; then
+    if test -n "$XFT_CFLAGS"; then
+        pkg_cv_XFT_CFLAGS="$XFT_CFLAGS"
+    else
         if test -n "$PKG_CONFIG" && \
     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"xft >= 0.0.0\"") >&5
   ($PKG_CONFIG --exists --print-errors "xft >= 0.0.0") 2>&5
@@ -5015,10 +5072,14 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
+    fi
 else
 	pkg_failed=untried
 fi
 if test -n "$PKG_CONFIG"; then
+    if test -n "$XFT_LIBS"; then
+        pkg_cv_XFT_LIBS="$XFT_LIBS"
+    else
         if test -n "$PKG_CONFIG" && \
     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"xft >= 0.0.0\"") >&5
   ($PKG_CONFIG --exists --print-errors "xft >= 0.0.0") 2>&5
@@ -5029,16 +5090,31 @@ if test -n "$PKG_CONFIG"; then
 else
   pkg_failed=yes
 fi
+    fi
 else
 	pkg_failed=untried
 fi
 
-if test $pkg_failed = yes; then
-	XFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xft >= 0.0.0"`
-	# Put the nasty error message in config.log where it belongs
-	echo "$XFT_PKG_ERRORS" 1>&5
 
-	:
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        XFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "xft >= 0.0.0"`
+        else
+	        XFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "xft >= 0.0.0"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$XFT_PKG_ERRORS" >&5
+
+	echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+                :
 elif test $pkg_failed = untried; then
 	:
 else

@@ -137,19 +137,19 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (int iKey)
 
 INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 {
-    QUICK_PHRASE *quickPhrase;
-    int i;
+    int i, iInputLen;
     char strTemp[2];
     
     if ( !quickPhraseHead )
         return IRV_DISPLAY_MESSAGE;
 
-    if (mode==SM_FIRST) {
+//    if (mode==SM_FIRST) {
 	currentQuickPhrase=quickPhraseHead->next;
 	iCandPageCount=0;
 	iCurrentCandPage=0;
 	iCandWordCount=0;
-
+	iInputLen = strlen(strCodeInput);
+/*
 	while (currentQuickPhrase) {
 	    if (!strcmp(strCodeInput, currentQuickPhrase->strCode))
 		break;
@@ -159,7 +159,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 	
 	if ( !currentQuickPhrase ) {
 	    uMessageDown = 0;
-	    return IRV_DISPLAY_CANDWORDS;
+	    return IRV_DISPLAY_MESSAGE;
+	    //return IRV_DISPLAY_CANDWORDS;
 	}
     }
     else if (mode==SM_NEXT) {
@@ -175,23 +176,23 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
     }
     
     if ( mode!=SM_PREV) {
-	while (currentQuickPhrase ) {
-	    if (!strcmp(strCodeInput,currentQuickPhrase->strCode)) {
+*/	while (currentQuickPhrase ) {
+	    if (!strncmp(strCodeInput,currentQuickPhrase->strCode,iInputLen)) {
 		quickPhraseCandWords[iCandWordCount++]=currentQuickPhrase;
 		if (iCandPageCount==MAX_CAND_WORD) {
-		    quickPhrase=currentQuickPhrase;
+/*		    quickPhrase=currentQuickPhrase;
 		    while (quickPhrase) {
 			if (!strcmp(strCodeInput,quickPhrase->strCode)) {
 			    iCandPageCount++;
 			    break;
 			}
 		    }
-		    break;
+*/		    break;
 		}
 	    }
 	    currentQuickPhrase=currentQuickPhrase->next;
 	}
-    }
+/*    }
     else {
 	i=0;
 	
@@ -216,6 +217,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 	    currentQuickPhrase=quickPhrase;
 	}
     }
+*/    
+    if (!iCandWordCount)
+        return IRV_DISPLAY_MESSAGE;
     
     uMessageDown = 0;
     strTemp[1]='\0';
@@ -228,9 +232,13 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 	messageDown[uMessageDown++].type = MSG_INDEX;
 
 	strcpy (messageDown[uMessageDown].strMsg, quickPhraseCandWords[i]->strPhrase);
+	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
+
+	//±àÂëÌáÊ¾
+	strcpy (messageDown[uMessageDown].strMsg, quickPhraseCandWords[i]->strCode + iInputLen);
 	if (i != (iCandWordCount - 1))
 	    strcat (messageDown[uMessageDown].strMsg, " ");
-	messageDown[uMessageDown++].type = ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER);
+	messageDown[uMessageDown++].type = MSG_CODE;
     }
 
     return IRV_DISPLAY_CANDWORDS;

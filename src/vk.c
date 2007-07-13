@@ -131,6 +131,11 @@ void InitVKWindowColor (void)
 
 void DisplayVKWindow (void)
 {
+    XMapRaised (dpy, VKWindow);
+}
+
+void DrawVKWindow(void)
+{
     int             i;
     int             iPos;
     int             rv;
@@ -138,7 +143,6 @@ void DisplayVKWindow (void)
     XpmAttributes   attrib;
 
     attrib.valuemask = 0;
-    XMapRaised (dpy, VKWindow);
     if (!pVKLogo) {
 	rv = XpmCreateImageFromData (dpy, vk_xpm, &pVKLogo, &mask, &attrib);
 	if (rv != XpmSuccess)
@@ -272,7 +276,7 @@ Bool VKMouseKey (int x, int y)
 		pstr = vks[iCurrentVK].strSymbol[iIndex][bShiftPressed ^ bVKCaps];
 		if (bShiftPressed) {
 		    bShiftPressed = False;
-		    DisplayVKWindow ();
+		    DrawVKWindow ();
 		}
 	    }
 	}
@@ -291,7 +295,7 @@ Bool VKMouseKey (int x, int y)
 		pstr = vks[iCurrentVK].strSymbol[iIndex][bShiftPressed ^ bVKCaps];
 		if (bShiftPressed) {
 		    bShiftPressed = False;
-		    DisplayVKWindow ();
+		    DrawVKWindow ();
 		}
 	    }
 	}
@@ -303,7 +307,7 @@ Bool VKMouseKey (int x, int y)
 		//改变大写键状态
 		bVKCaps = !bVKCaps;
 		pstr = (char *) NULL;
-		DisplayVKWindow ();
+		DrawVKWindow ();
 	    }
 	    else if (x > 308 && x <= 350)	//Return
 		strKey[0] = '\n';
@@ -312,7 +316,7 @@ Bool VKMouseKey (int x, int y)
 		pstr = vks[iCurrentVK].strSymbol[iIndex][bShiftPressed ^ bVKCaps];
 		if (bShiftPressed) {
 		    bShiftPressed = False;
-		    DisplayVKWindow ();
+		    DrawVKWindow ();
 		}
 	    }
 	}
@@ -324,14 +328,14 @@ Bool VKMouseKey (int x, int y)
 		//改变SHIFT键状态
 		bShiftPressed = !bShiftPressed;
 		pstr = (char *) NULL;
-		DisplayVKWindow ();
+		DrawVKWindow ();
 	    }
 	    else {
 		iIndex = 37 + (x - 62) / 24;
 		pstr = vks[iCurrentVK].strSymbol[iIndex][bShiftPressed ^ bVKCaps];
 		if (bShiftPressed) {
 		    bShiftPressed = False;
-		    DisplayVKWindow ();
+		    DrawVKWindow ();
 		}
 	    }
 	}
@@ -515,9 +519,9 @@ void ChangVK (void)
     bVKCaps = False;
     bShiftPressed = False;
 
-    DisplayVKWindow ();
+    DrawVKWindow ();
     SwitchIM (-2);
-    DisplayMainWindow ();
+    DrawMainWindow ();
 }
 
 INPUT_RETURN_VALUE DoVKInput (int iKey)
@@ -565,5 +569,5 @@ void SwitchVK (void)
 	XUnmapWindow (dpy, VKWindow);
 
     SwitchIM (-2);
-    DisplayMainWindow ();
+    DrawMainWindow ();
 }
