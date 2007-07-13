@@ -39,6 +39,7 @@
 #include "ui.h"
 #include "vk.h"
 #include "QuickPhrase.h"
+#include "AutoEng.h"
 #include "extra.h"
 
 IM             *im = NULL;
@@ -114,7 +115,7 @@ Bool            bUsePinyin = True;
 Bool            bUseSP = True;
 Bool            bUseQW = True;
 Bool            bUseTable = True;
-Bool            bLocked = True;
+Bool            bLocked = False;
 
 /* 新的LumaQQ已经不需要特意支持了
 Bool            bLumaQQ = False;
@@ -182,6 +183,8 @@ extern int      iInputWindowX;
 extern int      iInputWindowY;
 extern int      iTempInputWindowX;
 extern int      iTempInputWindowY;
+
+extern Bool     bShowInputWindowTriggering;
 
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
@@ -318,7 +321,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     printf ("iKeyState=%d  KEYCODE=%d  iKey=%d\n", iKeyState, kev->keycode, iKey);
 #endif
 
-    if (call_data->event.type == KeyRelease) {
+    if ((call_data->event.type == KeyRelease) && (ConnectIDGetState (call_data->connect_id) != IS_CLOSED)) {
 	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
 	    if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
 		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
@@ -334,7 +337,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    }
 	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
 		ChangeIMState (call_data->connect_id);
-		retVal = IRV_DO_NOTHING;
+		retVal = IRV_TO_PROCESS;
 	    }
 	    else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
 		if (!bIsInLegend) {
@@ -405,6 +408,17 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
     }
 
+    /* 临时的解决方案：解决与XCB的不兼容问题 */
+    if (call_data->event.type == KeyPress) {
+	if (ConnectIDGetState (call_data->connect_id) == IS_CLOSED) {
+	    if (IsHotKey (iKey, hkTrigger))
+		SetConnectID (call_data->connect_id, IS_ENG);
+	    else
+		retVal = IRV_DONOT_PROCESS;
+	}
+    }
+    /* *********************************** */
+
     if (retVal == IRV_TO_PROCESS) {
 	if (call_data->event.type == KeyPress) {
 	    if (kev->keycode != switchKey)
@@ -422,16 +436,22 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    else if (IsHotKey (iKey, hkTrigger)) {
 		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
 		    SetConnectID (call_data->connect_id, IS_CHN);
-		    DisplayInputWindow ();
+
+		    if (bShowInputWindowTriggering && !bCorner) {
+			DrawInputWindow();
+			DisplayInputWindow ();
+		    }
 
 		    if (ConnectIDGetTrackCursor (call_data->connect_id))
 			XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 		    else
 			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
-		    if (hideMainWindow != HM_HIDE)
-			DrawMainWindow ();
+		    EnterChineseMode (False);
+		    DrawMainWindow ();
 
+		    //临时解决方案
+		    MyIMForwardEvent (call_data->connect_id, call_data->icid, 0);
 		}
 		else
 		    CloseIM (call_data);
@@ -483,9 +503,26 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    }
 			    else {
 				if (!iInCap) {
+				    char            strTemp[MAX_USER_INPUT];
+
 				    retVal = im[iIMIndex].DoInput (iKey);
 				    if (!IsIM (strNameOfPinyin) && !IsIM (strNameOfShuangpin))
 					iCursorPos = iCodeInputCount;
+
+				    //为了实现自动英文转换
+				    strcpy (strTemp, strCodeInput);
+				    if (retVal == IRV_TO_PROCESS) {
+					strTemp[strlen (strTemp) + 1] = '\0';
+					strTemp[strlen (strTemp)] = iKey;
+				    }
+
+				    if (SwitchToEng (strTemp)) {
+					iInCap = 3;
+					if (retVal != IRV_TO_PROCESS) {
+					    iCodeInputCount--;
+					    retVal = IRV_TO_PROCESS;
+					}
+				    }
 				}
 				else if (iInCap == 2 && semicolonToDo == K_SEMICOLON_QUICKPHRASE)
 				    retVal = QuickPhraseDoInput (iKey);
@@ -559,14 +596,21 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 						uMessageUp = 1;
 						if (iInCap == 2) {
-						    if (semicolonToDo == K_SEMICOLON_ENG)
-							strcpy (messageUp[0].strMsg, "英文输入");
-						    else
-							strcpy (messageUp[0].strMsg, "自定义输入");
+						    if (semicolonToDo == K_SEMICOLON_ENG) {
+							strcpy (messageUp[0].strMsg, "英文输入 ");
+							iCursorPos += 9;
+						    }
+						    else {
+							strcpy (messageUp[0].strMsg, "自定义输入 ");
+							iCursorPos += 11;
+						    }
 
 						    if (iCodeInputCount) {
-							strcat (messageUp[0].strMsg, "  ");
-							strcat (messageUp[0].strMsg, strCodeInput);
+							uMessageUp = 2;
+							//strcat (messageUp[0].strMsg, "  ");
+							strcpy (messageUp[1].strMsg, strCodeInput);
+							messageUp[1].type = MSG_INPUT;
+							iCursorPos += iCodeInputCount;
 						    }
 
 						    if (retVal != IRV_DISPLAY_CANDWORDS) {
@@ -577,14 +621,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 							uMessageDown = 1;
 							messageDown[0].type = MSG_TIPS;
 						    }
+						    messageUp[0].type = MSG_TIPS;
 						}
 						else {
 						    uMessageDown = 1;
 						    messageDown[0].type = MSG_TIPS;
 						    strcpy (messageUp[0].strMsg, strCodeInput);
 						    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
+						    messageUp[0].type = MSG_INPUT;
 						}
-						messageUp[0].type = MSG_INPUT;
 					    }
 					}
 					else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',') && !iCandWordCount) {
@@ -661,6 +706,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					FreeQuickPhrase ();
 					LoadQuickPhrase ();
 
+					FreeAutoEng ();
+					LoadAutoEng ();
+
 					FreePunc ();
 					LoadPuncDict ();
 
@@ -732,15 +780,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_TO_PROCESS:
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
-	if (call_data->event.type == KeyRelease) {
-	    // if (!bLumaQQ && (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER))))
-	    if ((!keyCount && kev->keycode != XKeysymToKeycode (dpy, XK_Control_L)
-		 && kev->keycode != XKeysymToKeycode (dpy, XK_Control_R))
-		|| (!iKeyState && (iKey == ESC || iKey == ENTER)))
-		IMForwardEvent (ims, (XPointer) call_data);
-	}
-	else
-	    IMForwardEvent (ims, (XPointer) call_data);
+	IMForwardEvent (ims, (XPointer) call_data);
 
 	if (retVal != IRV_DONOT_PROCESS_CLEAN)
 	    return;
@@ -1062,9 +1102,9 @@ void SetIM (void)
     iIMCount = 0;
 
     /*
-    LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
-    */
-    
+       LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
+     */
+
     /* 加入输入法 */
     if (bUsePinyin || (!bUseSP && (!bUseTable || !iTableCount)))	//至少应该有一种输入法
 	RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);

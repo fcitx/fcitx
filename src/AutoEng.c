@@ -17,47 +17,61 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _INPUT_WINDOW_H
-#define _INPUT_WINDOW_H
+#include "AutoEng.h"
+#include "tools.h"
 
-#include <X11/Xlib.h>
+#include <limits.h>
 
-#define INPUTWND_STARTX	300
-#define INPUTWND_WIDTH	50
-#define INPUTWND_STARTY	420
-#define INPUTWND_HEIGHT	40
+AUTO_ENG       *AutoEng = (AUTO_ENG *) NULL;
+int             iAutoEng;
 
-/* #define INPUTWND_START_POS_UP	8 */
-#define INPUTWND_START_POS_DOWN	8
+void LoadAutoEng (void)
+{
+    FILE           *fp;
+    char            strPath[PATH_MAX];
 
-#define MESSAGE_MAX_LENGTH	300	//输入条上显示的最长长度，以字符计
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
+    strcat (strPath, "AutoEng.dat");
 
-/* 将输入条上显示的内容分为以下几类 */
-#define MESSAGE_TYPE_COUNT	7
+    if (access (strPath, 0)) {
+	strcpy (strPath, PKGDATADIR "/data/");
+	strcat (strPath, "AutoEng.dat");
+    }
 
-typedef enum {
-    MSG_TIPS,			//提示文本
-    MSG_INPUT,			//用户的输入
-    MSG_INDEX,			//候选字前面的序号
-    MSG_FIRSTCAND,		//第一个候选字
-    MSG_USERPHR,		//用户词组
-    MSG_CODE,			//显示的编码
-    MSG_OTHER			//其它文本
-} MSG_TYPE;
+    fp = fopen (strPath, "rt");
+    if (!fp)
+	return;
 
-typedef struct {
-    char            strMsg[MESSAGE_MAX_LENGTH + 1];
-    MSG_TYPE        type;
-} MESSAGE;
+    iAutoEng = CalculateRecordNumber (fp);
+    AutoEng = (AUTO_ENG *) malloc (sizeof (AUTO_ENG) * iAutoEng);
 
-Bool            CreateInputWindow (void);
-void            DisplayInputWindow (void);
-void            InitInputWindowColor (void);
-void            CalculateInputWindowHeight (void);
-void            DrawCursor (int iPos);
-void            DisplayMessageUp (void);
-void            DisplayMessageDown (void);
-void            DrawInputWindow (void);
-void            ResetInputWindow (void);
+    iAutoEng = 0;
+    while  (!feof(fp)) {
+	fscanf (fp, "%s\n", strPath);
+	strcpy (AutoEng[iAutoEng++].str, strPath);
+    }
 
-#endif
+    fclose (fp);
+}
+
+void FreeAutoEng (void)
+{
+    if (AutoEng)
+	free (AutoEng);
+    
+    iAutoEng = 0;
+    AutoEng = (AUTO_ENG *) NULL;
+}
+
+Bool SwitchToEng (char *str)
+{
+    int             i;
+
+    for (i = 0; i < iAutoEng; i++) {
+	if (!strcmp (str, AutoEng[i].str))
+	    return True;
+    }
+
+    return False;
+}

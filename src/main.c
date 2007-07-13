@@ -44,12 +44,11 @@
 #include "sp.h"
 #include "about.h"
 #include "QuickPhrase.h"
+#include "AutoEng.h"
 
 #ifndef CODESET
 #define CODESET 14
 #endif
-
-extern char     strUserLocale[];
 
 extern Display *dpy;
 extern Window   inputWindow;
@@ -65,12 +64,12 @@ int main (int argc, char *argv[])
     XEvent          event;
     char           *imname = NULL;
     int             i;
-    Bool            bBackground = True;
+    Bool            bBackground = False;
 
     for (i = 1; i < argc; i++) {
 	if (!strcmp (argv[i], "-name"))
 	    imname = argv[++i];
-	else if (!strcmp (argv[i], "-nb"))
+	else if (!strcmp (argv[i], "-d"))
 	    bBackground = False;
 	else if (!strcmp (argv[i], "-h") || !strcmp (argv[i], "-?")) {
 	    Usage ();
@@ -98,6 +97,7 @@ int main (int argc, char *argv[])
 
     LoadPuncDict ();
     LoadQuickPhrase ();
+    LoadAutoEng ();
 
     CreateMainWindow ();
     InitGC (mainWindow);
@@ -108,7 +108,7 @@ int main (int argc, char *argv[])
     SetIM ();
     DisplayMainWindow ();
 
-    if (!InitXIM (imname, inputWindow))
+    if (!InitXIM (imname, mainWindow))
 	exit (4);
 
     //以后台方式运行
@@ -139,7 +139,7 @@ int main (int argc, char *argv[])
 
 void Usage ()
 {
-    printf ("fcitx usage:\n -name imename: \t specify the imename\n -nb :\t\t\t run as foreground \n -v:\t\t\t display the version information and exit.\n -h:\t\t\t display this help page and exit\n");
+    printf ("fcitx usage:\n -name imename: \t specify the imename\n -d :\t\t\t run as daemon \n -v:\t\t\t display the version information and exit.\n -h:\t\t\t display this help page and exit\n");
 }
 
 void Version ()

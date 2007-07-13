@@ -171,6 +171,7 @@ void DrawMainWindow (void)
 #ifdef _DEBUG
     fprintf (stderr, "DRAW MainWindow\n");
 #endif
+
     if (hideMainWindow == HM_SHOW || (hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED))) {
 	if (!pLogo) {
 	    rv = XpmCreateImageFromData (dpy, logo_xpm, &pLogo, &mask, &attrib);

@@ -1,4 +1,37 @@
-2007-03-0403: Yuking <yuking_net@sohu.com>
+2007-05-27: Yuking <yuking_net@sohu.com>
+	   * src/ime.c: 重新修正某些代码，试图解决不能输入的问题
+	   * 默认不再进入后台模式
+	   * 默认关闭静态模式
+	   * 版本3.5-070527
+
+2007-05-25: Yuking <yuking_net@sohu.com>
+	   * src/table.c: 临时修正码表输入时临时拼音联想崩溃的问题
+	   
+2007-05-23: Yuking <yuking_net@sohu.com>
+	   * src/tools.c: 修正“显示版本”不起作用的问题
+	   
+2007-05-22: Yuking <yuking_net@sohu.com>
+	   * 改进输入条在光标跟随模式下的行为
+
+2007-05-07: Yuking <yuking_net@sohu.com>
+	   * 解决与vim某些不兼容的问题
+	   * 继续试图解决有时不能输入的问题	   
+	   * 版本3.5-070507
+	   
+2007-04-16: Yuking <yuking_net@sohu.com>
+	   * src/xim.c: 也许解决了有时不能输入的问题
+	   
+2007-04-10: Yuking <yuking_net@sohu.com>
+	   * src/xim.c, tools.c: XIM默认设置为静态模式
+	   
+2007-04-10: Yuking <yuking_net@sohu.com>
+	   * src/InputWindows.c: 修正输入条一个光标位错误问题
+
+2007-04-06: Yuking <yuking_net@sohu.com>
+	   * src/py.c: 调整了自动组词的策略，可能会更好一些
+	   * 增加自动转入英文的功能
+	   
+2007-04-03: Yuking <yuking_net@sohu.com>
 	   * src/py.c: 修正一个可能导致程序崩溃的读取词库问题
 	   * 版本3.5-070403
 	   

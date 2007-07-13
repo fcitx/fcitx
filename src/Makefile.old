@@ -4,7 +4,7 @@ CFLAGS= -O2 -fno-strength-reduce -Wall -D_USE_XFT -DPKGDATADIR=\"/usr/share/fcit
 
 INC = `xft-config --cflags` -I../lib -I../xpm
 
-SRC = IC.c py.c ime.c InputWindow.c KeyList.c main.c MainWindow.c MyErrorsHandlers.c punc.c pyMapTable.c pyParser.c PYFA.c sp.c tools.c ui.c table.c xim.c qw.c
+SRC =  main.c
 
 LIB = `xft-config --libs`
 

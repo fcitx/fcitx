@@ -86,6 +86,7 @@ extern INT8     iTriggerKeyCount;
 
 extern Bool     bUseGBK;
 extern Bool     bEngPuncAfterNumber;
+
 //extern Bool     bAutoHideInputWindow;
 extern XColor   colorArrow;
 extern Bool     bTrackCursor;
@@ -156,13 +157,15 @@ extern Bool     bShowInputWindowTriggering;
 
 #ifdef _USE_XFT
 extern Bool     bUseAA;
-#else
-extern char     strUserLocale[];
 #endif
+extern char     strUserLocale[];
+
 extern Bool     bUseBold;
 
 extern INT8     iOffsetX;
 extern INT8     iOffsetY;
+
+extern Bool     bStaticXIM;
 
 /*
 #if defined(DARWIN)*/
@@ -230,7 +233,11 @@ void LoadConfig (Bool bMode)
 	if (pstr[0] == '#')
 	    continue;
 
-	if (MyStrcmp (pstr, "字体区域=")) {
+	if (MyStrcmp (pstr, "静态模式=")) {
+	    pstr += 9;
+	    bStaticXIM = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "字体区域=")) {
 	    pstr += 9;
 	    if (*pstr == ' ')
 		pstr++;
@@ -257,16 +264,16 @@ void LoadConfig (Bool bMode)
 	    pstr += 11;
 	    bUseAA = atoi (pstr);
 	}
-#else
+#endif
 	else if (MyStrcmp (pstr, "字体区域=")) {
 	    pstr += 9;
 	    strcpy (strUserLocale, pstr);
 	}
-#endif
 	else if (MyStrcmp (pstr, "使用粗体=")) {
 	    pstr += 9;
 	    bUseBold = atoi (pstr);
 	}
+
 	else if (MyStrcmp (pstr, "候选词个数=")) {
 	    pstr += 11;
 	    iMaxCandWord = atoi (pstr);
@@ -290,9 +297,9 @@ void LoadConfig (Bool bMode)
 	    _3DEffectInputWindow = (_3D_EFFECT) atoi (pstr);
 	}
 	/*else if (MyStrcmp (pstr, "自动隐藏输入条=")) {
-	    pstr += 15;
-	    bAutoHideInputWindow = atoi (pstr);
-	}*/
+	   pstr += 15;
+	   bAutoHideInputWindow = atoi (pstr);
+	   } */
 	else if (MyStrcmp (pstr, "输入条居中=")) {
 	    pstr += 11;
 	    bCenterInputWindow = atoi (pstr);
@@ -325,7 +332,7 @@ void LoadConfig (Bool bMode)
 	    bShowUserSpeed = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "显示版本=")) {
-	    pstr += 13;
+	    pstr += 9;
 	    bShowVersion = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
@@ -715,6 +722,8 @@ void SaveConfig (void)
     }
 
     fprintf (fp, "[程序]\n");
+    fprintf (fp, "#如果您的FCITX工作很正常，没有必要修改下面这个设置\n");
+    fprintf (fp, "静态模式=%d\n", bStaticXIM);
     fprintf (fp, "显示字体(中)=%s\n", strFontName);
     fprintf (fp, "显示字体(英)=%s\n", strFontEnName);
     fprintf (fp, "显示字体大小=%d\n", iFontSize);
@@ -1003,7 +1012,7 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
 	i++;
     strncpy (strKey, p, i);
     strKey[i] = '\0';
-    p += i + 1l;
+    p += i + 1;
     j = ParseKey (strKey);
     if (j != -1)
 	hotkey[0] = j;
@@ -1052,17 +1061,17 @@ int CalculateRecordNumber (FILE * fpDict)
 void SetSwitchKey (char *str)
 {
     if (!strcasecmp (str, "R_CTRL"))
-	switchKey = XKeysymToKeycode(dpy, XK_Control_R);
+	switchKey = XKeysymToKeycode (dpy, XK_Control_R);
     else if (!strcasecmp (str, "R_SHIFT"))
-	switchKey = XKeysymToKeycode(dpy, XK_Shift_R);
+	switchKey = XKeysymToKeycode (dpy, XK_Shift_R);
     else if (!strcasecmp (str, "L_SHIFT"))
-	switchKey = XKeysymToKeycode(dpy, XK_Shift_L);
+	switchKey = XKeysymToKeycode (dpy, XK_Shift_L);
     else if (!strcasecmp (str, "R_SUPER"))
-	switchKey = XKeysymToKeycode(dpy, XK_Super_R);
+	switchKey = XKeysymToKeycode (dpy, XK_Super_R);
     else if (!strcasecmp (str, "L_SUPER"))
-	switchKey = XKeysymToKeycode(dpy, XK_Super_L);
+	switchKey = XKeysymToKeycode (dpy, XK_Super_L);
     else
-        switchKey = XKeysymToKeycode(dpy, XK_Control_L);
+	switchKey = XKeysymToKeycode (dpy, XK_Control_L);
 }
 
 void SetTriggerKeys (char *str)

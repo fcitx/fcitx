@@ -1099,6 +1099,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    iCodeInputCount = 0;
 			    return IRV_CLEAN;
 			}
+			
 			strcpy (strStringGet, TableGetCandWord (0));
 		    }
 		    else
@@ -1108,6 +1109,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			retVal = IRV_GET_LEGEND;
 		    else
 			retVal = IRV_GET_CANDWORDS;
+
 		}
 		else {
 		    strcpy (strStringGet, TableGetLegendCandWord (0));
@@ -1188,6 +1190,10 @@ char           *TableGetCandWord (int iIndex)
     if (bUseLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
+	
+	#warning FIX ME! 
+	//临时解决一个问题，似乎是出现了内存泄露
+	pCandWord = strTableLegendSource;
     }
     else {
 	if (table[iTableIMIndex].bPromptTableCode) {
@@ -2062,7 +2068,6 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
 	return IRV_TO_PROCESS;
 
     iLength = strlen (strTableLegendSource);
-
     if (mode == SM_FIRST) {
 	iCurrentLegendCandPage = 0;
 	iLegendCandPageCount = 0;
@@ -2190,6 +2195,7 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 
     if (iLegendCandWordCount != iMaxCandWord)
 	iLegendCandWordCount++;
+
 }
 
 char           *TableGetLegendCandWord (int iIndex)

@@ -206,13 +206,13 @@ void CreatePYPhrase (void)
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
 //    printf ("\n共读入 %d 个词组，成功转换 %d 个！\n正在写入词组文件……  ", s2, s1);
-
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iHZCount; j++) {
 	    iIndex = PYFAList[i].pyBase[j].iPhraseCount;
 	    if (iIndex) {
 		fwrite (&i, sizeof (int), 1, fp2);
 		fwrite (PYFAList[i].pyBase[j].strHZ, sizeof (char) * 2, 1, fp2);
+		
 		fwrite (&iIndex, sizeof (int), 1, fp2);
 		t = PYFAList[i].pyBase[j].phrase->next;
 		for (k = 0; k < PYFAList[i].pyBase[j].iPhraseCount; k++) {
@@ -228,7 +228,7 @@ void CreatePYPhrase (void)
 	}
     }
     printf ("\nOK!\n");
-
+    
     fclose (fp2);
     fclose (fpt);
 }

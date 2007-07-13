@@ -1078,6 +1078,7 @@ void PYGetCandText (int iIndex, char *strText)
 	strcpy (strText, strPYAuto);
     else {
 	pPhrase = NULL;
+	
 	switch (PYCandWords[iIndex].iWhich) {
 	case PY_CAND_BASE:	//是系统单字
 	    pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
@@ -1094,6 +1095,7 @@ void PYGetCandText (int iIndex, char *strText)
 	    pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
 	    break;
 	}
+	
 	strcpy (strText, pBase);
 	if (pPhrase)
 	    strcat (strText, pPhrase);
@@ -1184,7 +1186,8 @@ void PYCreateAuto (void)
 				    }
 				    else if (strlen (phrase->strMap) <= (findMap.iHZCount - 1) * 2) {
 					if (strlen (phrase->strMap) == strlen (phraseSelected->strMap)) {
-					    if (phrase->iHit > phraseSelected->iHit) {
+					    //先看词频，如果词频一样，再最近优先
+					    if ((phrase->iHit > phraseSelected->iHit) || ((phrase->iHit == phraseSelected->iHit) && (phrase->iIndex > phraseSelected->iIndex))) {
 						baseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase]);
 						pPYFA = &PYFAList[candPos.iPYFA];
 						phraseSelected = phrase;
@@ -1220,7 +1223,10 @@ void PYCreateAuto (void)
 				    }
 				    else if (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) <= (findMap.iHZCount - 1) * 2) {
 					if (strlen (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].strMap) == strlen (phraseSelected->strMap)) {
-					    if (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].iHit > phraseSelected->iHit) {
+					    //先看词频，如果词频一样，再最近优先
+					    if ((PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].iHit > phraseSelected->iHit) ||
+						((PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].iHit == phraseSelected->iHit) &&
+						 (PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase].iIndex > phraseSelected->iIndex))) {
 						baseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase]);
 						pPYFA = &PYFAList[candPos.iPYFA];
 						phraseSelected = &(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].phrase[candPos.iPhrase]);
@@ -1425,10 +1431,8 @@ char           *PYGetCandWord (int iIndex)
 
     if (!iCandWordCount)
 	return NULL;
-
     if (iIndex > (iCandWordCount - 1))
 	iIndex = iCandWordCount - 1;
-
     switch (PYCandWords[iIndex].iWhich) {
     case PY_CAND_AUTO:
 	pBase = strPYAuto;
@@ -1469,7 +1473,6 @@ char           *PYGetCandWord (int iIndex)
 
     if (pIndex && (*pIndex != iCounter))
 	*pIndex = ++iCounter;
-
     if (iOrderCount == AUTOSAVE_ORDER_COUNT) {
 	SavePYIndex ();
 	iOrderCount = 0;
@@ -1482,21 +1485,17 @@ char           *PYGetCandWord (int iIndex)
     strcpy (messageDown[uMessageDown].strMsg, pBase);
     if (pPhrase)
 	strcat (messageDown[uMessageDown].strMsg, pPhrase);
-
     strcpy (strHZString, pBase);
     if (pPhrase)
 	strcat (strHZString, pPhrase);
-
     iLen = strlen (strHZString) / 2;
     if (iLen == findMap.iHZCount || PYCandWords[iIndex].iWhich == PY_CAND_SYMBOL) {
 	strPYAuto[0] = '\0';
 	for (iLen = 0; iLen < iPYSelected; iLen++)
 	    strcat (strPYAuto, pySelected[iLen].strHZ);
 	strcat (strPYAuto, strHZString);
-
 	ParsePY (strCodeInput, &findMap, PY_PARSE_INPUT_USER);
 	strHZString[0] = '\0';
-
 	for (i = 0; i < iPYSelected; i++)
 	    strcat (strHZString, pySelected[i].strMap);
 	if (pBaseMap)
@@ -1506,16 +1505,12 @@ char           *PYGetCandWord (int iIndex)
 	//if (!bSingleHZMode && bAddNewPhrase && (strlen (strPYAuto) <= (MAX_PY_PHRASE_LENGTH * 2)))
 	if (bAddNewPhrase && (strlen (strPYAuto) <= (MAX_PY_PHRASE_LENGTH * 2)))
 	    PYAddUserPhrase (strPYAuto, strHZString);
-
 	uMessageDown = 0;
 	uMessageUp = 0;
-
 	if (bUseLegend) {
 	    strcpy (strPYLegendSource, strPYAuto);
 	    strcpy (strPYLegendMap, strHZString);
-
 	    PYGetLegendCandWords (SM_FIRST);
-
 	    iPYInsertPoint = 0;
 	    strFindString[0] = '\0';
 	}
@@ -1528,27 +1523,22 @@ char           *PYGetCandWord (int iIndex)
     pySelected[iPYSelected].strMap[0] = '\0';
     for (i = 0; i < iLen; i++)
 	strcat (pySelected[iPYSelected].strPY, findMap.strPYParsed[i]);
-
     if (pBaseMap)
 	strcat (pySelected[iPYSelected].strMap, pBaseMap);
     if (pPhraseMap)
 	strcat (pySelected[iPYSelected].strMap, pPhraseMap);
     strcpy (pySelected[iPYSelected].strHZ, strHZString);
     iPYSelected++;
-
     strFindString[0] = '\0';
     for (; i < findMap.iHZCount; i++)
 	strcat (strFindString, findMap.strPYParsed[i]);
-
     DoPYInput (-1);
     iPYInsertPoint = strlen (strFindString);
-
     return NULL;
 }
 
 void PYGetCandWordsForward (void)
 {
-    //if (!bSingleHZMode) {
     if (pCurFreq && pCurFreq->bIsSym)
 	PYGetSymCandWords (SM_NEXT);
     else {
@@ -1556,7 +1546,6 @@ void PYGetCandWordsForward (void)
 	if (pCurFreq)
 	    PYGetFreqCandWords (SM_NEXT);
     }
-    //}
 
     if (!(pCurFreq && pCurFreq->bIsSym))
 	PYGetBaseCandWords (SM_NEXT);
@@ -1592,7 +1581,6 @@ Bool PYCheckNextCandPage (void)
     str[1] = findMap.strMap[0][1];
     str[2] = '\0';
     strMap[0] = '\0';
-
     if (pCurFreq && pCurFreq->bIsSym) {
 	hz = pCurFreq->HZList->next;
 	for (val = 0; val < pCurFreq->iCount; val++) {
@@ -1674,15 +1662,12 @@ void PYGetPhraseCandWords (SEARCH_MODE mode)
 
     if (findMap.iHZCount == 1)
 	return;
-
     str[0] = findMap.strMap[0][0];
     str[1] = findMap.strMap[0][1];
     str[2] = '\0';
     strMap[0] = '\0';
-
     for (val = 1; val < findMap.iHZCount; val++)
 	strcat (strMap, findMap.strMap[val]);
-
     for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 	if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 	    for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
@@ -1785,7 +1770,6 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 		return False;
 	}
 	break;
-
 	//下面两部分可以放在一起××××××××××××××××××××××××××××××××××××××××××
     case AD_FAST:
 	if (mode == SM_PREV) {
@@ -1821,7 +1805,6 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
 	    }
 	    else if (iCandWordCount == iMaxCandWord)
 		i--;
-
 	}
 	else {
 	    for (i = 0; i < iCandWordCount; i++) {
@@ -1974,10 +1957,8 @@ Bool PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, 
     PYCandWords[i].cand.phrase.phrase = phrase;
     PYCandWords[i].cand.phrase.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.phrase.iBase = pos.iBase;
-
     if (iCandWordCount != iMaxCandWord)
 	iCandWordCount++;
-
     return True;
 }
 
@@ -2021,19 +2002,15 @@ Bool PYAddSymCandWord (HZ * hz, SEARCH_MODE mode)
     else {
 	if (iCandWordCount == iMaxCandWord)
 	    return False;
-
 	i = iCandWordCount;
-
 	for (j = iCandWordCount - 1; j > i; j--)
 	    PYCandWords[j].cand.sym.hz = PYCandWords[j - 1].cand.sym.hz;
     }
 
     PYCandWords[i].iWhich = PY_CAND_SYMBOL;
     PYCandWords[i].cand.sym.hz = hz;
-
     if (iCandWordCount != iMaxCandWord)
 	iCandWordCount++;
-
     return True;
 }
 
@@ -2041,7 +2018,9 @@ Bool PYAddSymCandWord (HZ * hz, SEARCH_MODE mode)
 
 void PYGetBaseCandWords (SEARCH_MODE mode)
 {
-    PYCandIndex     candPos = { 0, 0, 0 };
+    PYCandIndex     candPos = {
+	0, 0, 0
+    };
     char            str[3];
 
     str[0] = findMap.strMap[0][0];
@@ -2254,10 +2233,8 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
     PYCandWords[i].iWhich = PY_CAND_BASE;
     PYCandWords[i].cand.base.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.base.iBase = pos.iBase;
-
     if (iCandWordCount != iMaxCandWord)
 	iCandWordCount++;
-
     return True;
 }
 
@@ -2436,10 +2413,8 @@ Bool PYAddFreqCandWord (HZ * hz, char *strPY, SEARCH_MODE mode)
     PYCandWords[i].iWhich = PY_CAND_FREQ;
     PYCandWords[i].cand.freq.hz = hz;
     PYCandWords[i].cand.freq.strPY = strPY;
-
     if (iCandWordCount != iMaxCandWord)
 	iCandWordCount++;
-
     return True;
 }
 
@@ -2456,7 +2431,6 @@ Bool PYAddUserPhrase (char *phrase, char *map)
     //如果短于两个汉字，则不能组成词组
     if (strlen (phrase) < 4)
 	return False;
-
     str[0] = map[0];
     str[1] = map[1];
     str[2] = '\0';
@@ -2464,7 +2438,6 @@ Bool PYAddUserPhrase (char *phrase, char *map)
     str[0] = phrase[0];
     str[1] = phrase[1];
     j = GetBaseIndex (i, str);;
-
     //判断该词组是否已经在库中
     //首先，看它是不是在用户词组库中
     userPhrase = PYFAList[i].pyBase[j].userPhrase->next;
@@ -2478,7 +2451,6 @@ Bool PYAddUserPhrase (char *phrase, char *map)
     for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++)
 	if (!strcmp (map + 2, PYFAList[i].pyBase[j].phrase[k].strMap) && !strcmp (phrase + 2, PYFAList[i].pyBase[j].phrase[k].strPhrase))
 	    return False;
-
     //下面将词组添加到列表中
     newPhrase = (PyPhrase *) malloc (sizeof (PyPhrase));
     newPhrase->strMap = (char *) malloc (sizeof (char) * strlen (map + 2) + 1);
@@ -2522,13 +2494,10 @@ void PYDelUserPhrase (int iPYFA, int iBase, PyPhrase * phrase)
     }
     if (!temp)
 	return;
-
     temp->next = phrase->next;
-
     free (phrase->strPhrase);
     free (phrase->strMap);
     free (phrase);
-
     PYFAList[iPYFA].pyBase[iBase].iUserPhrase--;
     iNewPYPhraseCount++;
     if (iNewPYPhraseCount == AUTOSAVE_PHRASE_COUNT) {
@@ -2595,7 +2564,6 @@ void SavePYUserPhrase (void)
     }
 
     fclose (fp);
-
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_USERPHRASE_FILE);
@@ -2618,14 +2586,12 @@ void SavePYFreq (void)
     if (access (strPathTemp, 0))
 	mkdir (strPathTemp, S_IRWXU);
     strcat (strPathTemp, TEMP_FILE);
-
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
 	fprintf (stderr, "无法保存常用词表：%s\n", strPathTemp);
 	return;
     }
     i = 0;
-
     pPyFreq = pyFreq->next;
     while (pPyFreq) {
 	if (!pPyFreq->bIsSym)
@@ -2633,14 +2599,12 @@ void SavePYFreq (void)
 	pPyFreq = pPyFreq->next;
     }
     fwrite (&i, sizeof (uint), 1, fp);
-
     pPyFreq = pyFreq->next;
     while (pPyFreq) {
 	if (!pPyFreq->bIsSym) {
 	    fwrite (pPyFreq->strPY, sizeof (char) * 11, 1, fp);
 	    j = pPyFreq->iCount;
 	    fwrite (&j, sizeof (int), 1, fp);
-
 	    hz = pPyFreq->HZList->next;
 	    for (k = 0; k < pPyFreq->iCount; k++) {
 		fwrite (hz->strHZ, sizeof (char) * 2, 1, fp);
@@ -2650,7 +2614,6 @@ void SavePYFreq (void)
 		fwrite (&j, sizeof (int), 1, fp);
 		j = hz->iIndex;
 		fwrite (&j, sizeof (int), 1, fp);
-
 		hz = hz->next;
 	    }
 	}
@@ -2658,7 +2621,6 @@ void SavePYFreq (void)
     }
 
     fclose (fp);
-
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_FREQ_FILE);
@@ -2690,7 +2652,6 @@ void SavePYIndex (void)
 
     //保存计数器
     fwrite (&iCounter, sizeof (uint), 1, fp);
-
     //先保存索引不为0的单字
     k = -1;
     for (i = 0; i < iPYFACount; i++) {
@@ -2731,7 +2692,6 @@ void SavePYIndex (void)
     }
 
     fclose (fp);
-
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, PY_INDEX_FILE);
@@ -2774,9 +2734,7 @@ void PYAddFreq (int iIndex)
     //借用i来指示是否需要添加新的常用字
     if (i < 0)
 	return;
-
     PYSetCandWordsFlag (False);
-
     //需要添加该字，此时该字必然是系统单字
     if (!pCurFreq) {
 	freq = (PyFreq *) malloc (sizeof (PyFreq));
@@ -2786,14 +2744,11 @@ void PYAddFreq (int iIndex)
 	freq->next = NULL;
 	freq->iCount = 0;
 	freq->bIsSym = False;
-
 	pCurFreq = pyFreq;
 	for (i = 0; i < iPYFreqCount; i++)
 	    pCurFreq = pCurFreq->next;
 	pCurFreq->next = freq;
-
 	iPYFreqCount++;
-
 	pCurFreq = freq;
     }
 
@@ -2804,16 +2759,13 @@ void PYAddFreq (int iIndex)
     HZTemp->iIndex = 0;
     HZTemp->flag = 0;
     HZTemp->next = NULL;
-
     //将HZTemp加到链表尾部
     hz = pCurFreq->HZList;
     for (i = 0; i < pCurFreq->iCount; i++)
 	hz = hz->next;
-
     hz->next = HZTemp;
     pCurFreq->iCount++;
     iNewFreqCount++;
-
     if (iNewFreqCount == AUTOSAVE_FREQ_COUNT) {
 	SavePYFreq ();
 	iNewFreqCount = 0;
@@ -2831,20 +2783,15 @@ void PYDelFreq (int iIndex)
     //首先，看这个字是不是已经在常用字表中
     if (PYCandWords[iIndex].iWhich != PY_CAND_FREQ)
 	return;
-
     PYSetCandWordsFlag (False);
-
     //先找到需要删除单字的位置
     hz = pCurFreq->HZList;
     while (hz->next != PYCandWords[iIndex].cand.freq.hz)
 	hz = hz->next;
-
     hz->next = PYCandWords[iIndex].cand.freq.hz->next;
     free (PYCandWords[iIndex].cand.freq.hz);
     pCurFreq->iCount--;
-
     iNewFreqCount++;
-
     if (iNewFreqCount == AUTOSAVE_FREQ_COUNT) {
 	SavePYFreq ();
 	iNewFreqCount = 0;
@@ -2861,7 +2808,6 @@ Bool PYIsInFreq (char *strHZ)
 
     if (!pCurFreq || pCurFreq->bIsSym)
 	return False;
-
     hz = pCurFreq->HZList->next;
     for (i = 0; i < pCurFreq->iCount; i++) {
 	if (!strcmp (strHZ, hz->strHZ))
@@ -2884,14 +2830,11 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
 
     if (!strPYLegendSource[0])
 	return IRV_TO_PROCESS;
-
     if (mode == SM_FIRST) {
 	iLegendCandPageCount = 0;
 	iLegendCandWordCount = 0;
 	iCurrentLegendCandPage = 0;
-
 	PYResetFlags ();
-
 	pyBaseForLengend = NULL;
 	for (i = 0; i < iPYFACount; i++) {
 	    if (!strncmp (strPYLegendMap, PYFAList[i].strMap, 2)) {
@@ -2907,24 +2850,20 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
       _HIT:
 	if (!pyBaseForLengend)
 	    return IRV_TO_PROCESS;
-
 	bShowCursor = False;
     }
     else {
 	if (!iLegendCandPageCount)
 	    return IRV_TO_PROCESS;
-
 	if (mode == SM_NEXT) {
 	    if (iCurrentLegendCandPage == iLegendCandPageCount)
 		return IRV_DO_NOTHING;
-
 	    iLegendCandWordCount = 0;
 	    iCurrentLegendCandPage++;
 	}
 	else {
 	    if (!iCurrentLegendCandPage)
 		return IRV_DO_NOTHING;
-
 	    iCurrentLegendCandPage--;
 	    PYSetLegendCandWordsFlag (False);
 	}
@@ -2964,7 +2903,6 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
     }
 
     PYSetLegendCandWordsFlag (True);
-
     if (!bDisablePagingInLegend && mode != SM_PREV && iCurrentLegendCandPage == iLegendCandPageCount) {
 	for (i = 0; i < pyBaseForLengend->iPhrase; i++) {
 	    if (strlen (strPYLegendSource) == 2) {
@@ -3006,7 +2944,6 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
     messageUp[0].type = MSG_TIPS;
     strcpy (messageUp[1].strMsg, strPYLegendSource);
     messageUp[1].type = MSG_INPUT;
-
     strTemp[1] = '\0';
     uMessageDown = 0;
     for (i = 0; i < iLegendCandWordCount; i++) {
@@ -3015,7 +2952,6 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
 	    strTemp[0] = '0';
 	strcpy (messageDown[uMessageDown].strMsg, strTemp);
 	messageDown[uMessageDown++].type = MSG_INDEX;
-
 	strcpy (messageDown[uMessageDown].strMsg, PYLegendCandWords[i].phrase->strPhrase + PYLegendCandWords[i].iLength);
 	if (i != (iLegendCandWordCount - 1)) {
 	    strcat (messageDown[uMessageDown].strMsg, " ");
@@ -3024,7 +2960,6 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
     }
 
     bIsInLegend = (iLegendCandWordCount != 0);
-
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -3083,10 +3018,8 @@ Bool PYAddLengendCandWord (PyPhrase * phrase, SEARCH_MODE mode)
 
     PYLegendCandWords[i].phrase = phrase;
     PYLegendCandWords[i].iLength = strlen (strPYLegendSource) - 2;
-
     if (iLegendCandWordCount != iMaxCandWord)
 	iLegendCandWordCount++;
-
     return True;
 }
 
@@ -3098,7 +3031,6 @@ char           *PYGetLegendCandWord (int iIndex)
 	strcpy (strPYLegendSource, PYLegendCandWords[iIndex].phrase->strPhrase + PYLegendCandWords[iIndex].iLength);
 	strcpy (strPYLegendMap, PYLegendCandWords[iIndex].phrase->strMap + PYLegendCandWords[iIndex].iLength);
 	PYGetLegendCandWords (SM_FIRST);
-
 	return strPYLegendSource;
     }
 

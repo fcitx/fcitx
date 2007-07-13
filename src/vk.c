@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "InputWindow.h"
 #include "IC.h"
+#include "xim.h"
 
 #include <limits.h>
 #include <ctype.h>
@@ -82,9 +83,7 @@ extern CARD16   connect_id;
 extern CARD16   icid;
 extern XIMS     ims;
 
-/*
 extern uint     iHZInputed;
-*/
 
 Bool CreateVKWindow (void)
 {
@@ -266,9 +265,7 @@ Bool VKMouseKey (int x, int y)
 
 	    x -= 4;
 	    if (x >= 313 && x <= 344) {	//backspace
-		xEvent.xkey.keycode = 22;
-		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		MyIMForwardEvent (connect_id, icid, 22);
 		return True;
 	    }
 	    else {
@@ -287,9 +284,7 @@ Bool VKMouseKey (int x, int y)
 		return False;
 
 	    if (x >= 4 && x < 38) {	//Tab
-		xEvent.xkey.keycode = 23;
-		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		MyIMForwardEvent (connect_id, icid, 23);
 		return True;
 	    }
 	    else {
@@ -344,15 +339,11 @@ Bool VKMouseKey (int x, int y)
 	else if (y >= 140 && y <= 162) {	//第五行         
 	    if (x >= 4 && x < 38) {	//Ins
 		//改变INS键状态
-		xEvent.xkey.keycode = 106;
-		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		MyIMForwardEvent (connect_id, icid, 106);
 		return True;
 	    }
 	    else if (x >= 61 && x < 98) {	//DEL
-		xEvent.xkey.keycode = 107;
-		memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-		IMForwardEvent (ims, (XPointer) (&forwardEvent));
+		MyIMForwardEvent (connect_id, icid, 107);
 		return True;
 	    }
 	    else if (x >= 99 && x < 270)	//空格
@@ -367,7 +358,7 @@ Bool VKMouseKey (int x, int y)
 
 	if (pstr) {
 	    SendHZtoClient (&forwardEvent, pstr);
-	    // iHZInputed += (int) (strlen (pstr) / 2);  //粗略统计字数
+	    iHZInputed += (int) (strlen (pstr) / 2);	//粗略统计字数
 	}
     }
 

@@ -23,6 +23,7 @@
 
 #include <X11/Xlib.h>
 #include <iconv.h>
+#include <string.h>
 
 #include "xim.h"
 #include "IC.h"
@@ -41,13 +42,14 @@ CARD16          lastConnectID = 0;
 
 //************************************************
 
-long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC = NULL;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
 //该变量是GTK+ OverTheSpot光标跟随的临时解决方案
 INT8            iOffsetX = 0;
 INT8            iOffsetY = 16;
+
+Bool            bStaticXIM = False;
 
 //extern Bool     bLumaQQ;
 
@@ -76,7 +78,7 @@ extern iconv_t  convUTF8;
 extern uint     uMessageDown;
 extern uint     uMessageUp;
 extern Bool     bVK;
-extern Bool	bCorner;
+extern Bool     bCorner;
 
 //extern Bool     bAutoHideInputWindow;
 
@@ -88,9 +90,11 @@ extern Bool     bShowInputWindowTriggering;
 
 extern Bool     bUseGBKT;
 
-/*extern char	strUserLocale[];*/
-//+++++++++++++++++++++++++++++++++
-//extern INT8   iKeyPressed;
+#ifdef _DEBUG
+
+char            strUserLocale[100];
+char            strXModifiers[100];
+#endif
 
 static XIMStyle Styles[] = {
 //    XIMPreeditCallbacks | XIMStatusCallbacks, //OnTheSpot
@@ -165,16 +169,20 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 
 		if (iTempInputWindowX < 0)
 		    iTempInputWindowX = 0;
-		else if ((iTempInputWindowX + iInputWindowWidth + iOffsetX) > DisplayWidth (dpy, iScreen))
-		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+		else if ((iTempInputWindowX + iInputWindowWidth + iOffsetX) > DisplayWidth (dpy, iScreen)) {
+		    if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
+			iTempInputWindowX -= iInputWindowWidth;
+		    else
+			iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+		}
 		else
 		    iTempInputWindowX += iOffsetX;
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
 		else if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
-		    //iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight;
-		    iTempInputWindowY -= iInputWindowHeight;
+		    iTempInputWindowY -= 2 * iInputWindowHeight + iOffsetY;
+		//iTempInputWindowY -= iInputWindowHeight;
 		else
 		    iTempInputWindowY += iOffsetY;
 
@@ -203,6 +211,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
+
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
 
@@ -222,10 +231,13 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    XUnmapWindow (dpy, VKWindow);
 	}
 
-	if (ConnectIDGetTrackCursor (connect_id))
+/*	if (ConnectIDGetTrackCursor (connect_id))
 	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+*/
+	//有时不能输入的临时解决方案-执行一条IMForwardEvent
+	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }
 
     else {
@@ -277,6 +289,9 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 	icid = call_data->icid;
     }
 
+    //有时不能输入的临时解决方案-执行一条IMForwardEvent
+    MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
+
     return True;
 }
 
@@ -322,8 +337,13 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
-	if (bShowInputWindowTriggering && !bCorner)
+	if (bShowInputWindowTriggering && !bCorner) {
+	    DrawInputWindow ();
 	    DisplayInputWindow ();
+	}
+
+	//有时不能输入的临时解决方案-执行一条IMForwardEvent
+	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }
 
     return True;
@@ -331,25 +351,26 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 
 Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 {
+
     switch (call_data->major_code) {
     case XIM_OPEN:
 #ifdef _DEBUG
-	printf ("XIM_OPEN\n");
+//      printf ("XIM_OPEN\n");
 #endif
 	return MyOpenHandler ((IMOpenStruct *) call_data);
     case XIM_CLOSE:
 #ifdef _DEBUG
-	printf ("XIM_CLOSE\n");
+//      printf ("XIM_CLOSE\n");
 #endif
 	return MyCloseHandler ((IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
 #ifdef _DEBUG
-	printf ("XIM_CREATE_IC\n");
+//      printf ("XIM_CREATE_IC\n");
 #endif
 	return MyCreateICHandler ((IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
 #ifdef _DEBUG
-	printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+//      printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
 	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
@@ -359,21 +380,22 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
 #ifdef _DEBUG
-	printf ("XIM_GET_IC_VALUES\n");
+//      printf ("XIM_GET_IC_VALUES\n");
 #endif
 	return MyGetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
 #ifdef _DEBUG
-	printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+//      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-        //Sometimes, the main windows may show a wrong state of IM 
-	if (connect_id != ((IMForwardEventStruct *)call_data)->connect_id) {
-	    CurrentIC = (IC *) FindIC (((IMForwardEventStruct *)call_data)->icid);
-	    connect_id = ((IMForwardEventStruct *)call_data)->connect_id;
+	//Sometimes, the main window may show a wrong state of IM 
+	if (connect_id != ((IMForwardEventStruct *) call_data)->connect_id) {
+	    CurrentIC = (IC *) FindIC (((IMForwardEventStruct *) call_data)->icid);
+	    connect_id = ((IMForwardEventStruct *) call_data)->connect_id;
 	    SetIMState (!(ConnectIDGetState (connect_id) == IS_CLOSED));
 	}
 
 	ProcessKey ((IMForwardEventStruct *) call_data);
+
 	return True;
     case XIM_SET_IC_FOCUS:
 #ifdef _DEBUG
@@ -387,25 +409,65 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 	return MyUnsetFocusHandler ((IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
 #ifdef _DEBUG
-	printf ("XIM_RESET_IC\n");
+//      printf ("XIM_RESET_IC\n");
 #endif
 	return True;
     case XIM_TRIGGER_NOTIFY:
 #ifdef _DEBUG
-	printf ("XIM_TRIGGER_NOTIFY\n");
+//      printf ("XIM_TRIGGER_NOTIFY\n");
 #endif
 	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
     default:
+#ifdef _DEBUG
+	printf ("XIM_DEFAULT\n");
+#endif
 	return True;
     }
+}
+
+void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
+{
+    IMForwardEventStruct forwardEvent;
+    XEvent          xEvent;
+
+    memset (&forwardEvent, 0, sizeof (IMForwardEventStruct));
+    forwardEvent.connect_id = connectId;
+    forwardEvent.icid = icId;
+    forwardEvent.major_code = XIM_FORWARD_EVENT;
+    forwardEvent.sync_bit = 0;
+    forwardEvent.serial_number = 0L;
+
+    xEvent.xkey.type = KeyPress;
+    xEvent.xkey.display = dpy;
+    xEvent.xkey.serial = 0L;
+    xEvent.xkey.send_event = False;
+    xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
+    xEvent.xkey.same_screen = False;
+    xEvent.xkey.subwindow = None;
+    xEvent.xkey.window = None;
+    xEvent.xkey.root = DefaultRootWindow (dpy);
+    xEvent.xkey.state = 0;
+    if (CurrentIC->focus_win)
+	xEvent.xkey.window = CurrentIC->focus_win;
+    else if (CurrentIC->client_win)
+	xEvent.xkey.window = CurrentIC->client_win;
+
+    xEvent.xkey.keycode = keycode;
+    memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
+    IMForwardEvent (ims, (XPointer) (&forwardEvent));
 }
 
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
+    IMCommitStruct  cms;
     char            strOutput[300];
     char           *ps;
     char           *pS2T = (char *) NULL;
+
+#ifdef _DEBUG
+    fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, icid, connect_id);
+#endif
 
     if (bUseGBKT)
 	pS2T = strHZ = ConvertGBKSimple2Tradition (strHZ);
@@ -424,10 +486,16 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	ps = strHZ;
 
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
-    ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
-    ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
-    IMCommitString (ims, (XPointer) call_data);
+
+    memset (&cms, 0, sizeof (cms));
+    cms.major_code = XIM_COMMIT;
+    cms.icid = call_data->icid;
+    cms.connect_id = call_data->connect_id;
+    cms.flag = XimLookupChars;
+    cms.commit_string = (char *) tp.value;
+    IMCommitString (ims, (XPointer) & cms);
     XFree (tp.value);
+
     if (bUseGBKT)
 	free (pS2T);
 }
@@ -454,6 +522,9 @@ Bool InitXIM (char *imname, Window im_window)
 	    imname = DEFAULT_IMNAME;
 	}
     }
+#ifdef _DEBUG
+    strcpy (strXModifiers, imname);
+#endif
 
     input_styles = (XIMStyles *) malloc (sizeof (XIMStyles));
     input_styles->count_styles = sizeof (Styles) / sizeof (XIMStyle) - 1;
@@ -467,7 +538,6 @@ Bool InitXIM (char *imname, Window im_window)
     encodings->count_encodings = sizeof (zhEncodings) / sizeof (XIMEncoding) - 1;
     encodings->supported_encodings = zhEncodings;
 
-    /*ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, (strUserLocale[0])? strUserLocale:"zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,en_US.UTF-8", IMServerTransport, "X/", IMInputStyles, input_styles, NULL); */
     p = getenv ("LC_CTYPE");
     if (!p) {
 	p = getenv ("LC_ALL");
@@ -475,20 +545,25 @@ Bool InitXIM (char *imname, Window im_window)
 	    p = getenv ("LANG");
     }
     if (p) {
-	if (!strstr (strLocale, p)) {
+#ifdef _DEBUG
+	strcpy (strUserLocale, p);
+#endif
+	if (!strcasestr (strLocale, p)) {
 	    strcat (strLocale, ",");
 	    strcat (strLocale, p);
 	}
     }
 
-    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
+    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname,
+		    IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, IMFilterEventMask, KeyPressMask | KeyReleaseMask, NULL);
+
     if (ims == (XIMS) NULL) {
 	fprintf (stderr, "Start FCITX error. Another XIM daemon named %s is running?\n", imname);
 	return False;
     }
 
-    IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
-    IMSetIMValues (ims, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, IMFilterEventMask, filter_mask, NULL);
+    if (!bStaticXIM)
+	IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
 
     return True;
 }

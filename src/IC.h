@@ -34,9 +34,9 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "IMdkit.h"
 #include "Xi18n.h"
-
+/*
 #include "ime.h"
-
+*/
 typedef struct {
     XRectangle      area;	/* area */
     XRectangle      area_needed;	/* area needed */

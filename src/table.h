@@ -86,7 +86,7 @@ typedef struct _RECORD {
     unsigned int    flag:1;
 } RECORD;
 
-/* 根据键码生成一个简单的索引，指向该键码起始的第一个记录本 */
+/* 根据键码生成一个简单的索引，指向该键码起始的第一个记录 */
 typedef struct _RECORD_INDEX {
     RECORD         *record;
     char            cCode;
@@ -107,7 +107,7 @@ typedef struct _AUTOPHRASE {
 typedef union {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
-    char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
+    char            strPYPhrase[PHRASE_MAX_LENGTH * 20 + 1];
 } CANDWORD;
 
 typedef struct _TABLECANDWORD {
