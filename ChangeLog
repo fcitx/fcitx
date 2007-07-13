@@ -1,3 +1,14 @@
+2007-06-30: Yuking <yuking_net@sohu.com>
+	   * xpm/fullcorner.xpm: 使用wpyh@linuxsir修改过的图标
+	   * data/pyphrase.org: 修正读音哦lve的拼音错误(谢谢 邢东升dsdsdds AT １２６.ｃｏｍ)
+	   * 初步实现码表/拼音的混合输入
+	   
+2007-06-28: Yuking <yuking_net@sohu.com>
+	   * data/erbi.txt: 使用了新的标准二笔码表（esixth提供）
+	   
+2007-06-10: Yuking <yuking_net@sohu.com>
+	   * src/ui.c: 修正非xft模式下编译失败的问题
+	   
 2007-05-28: Yuking <yuking_net@sohu.com>
 	   * src/ime.c: 再次修正某些代码，试图解决不能输入的问题
 	   * src/main.c: 修正无法通过命令行进入后台的问题

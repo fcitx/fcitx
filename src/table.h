@@ -27,7 +27,7 @@
 
 #define TABLE_CONFIG_FILENAME "tables.conf"
 
-#define MAX_CODE_LENGTH  12
+#define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10
 #define FH_MAX_LENGTH  10
 #define TABLE_AUTO_SAVE_AFTER 1024
@@ -52,11 +52,12 @@ typedef struct _TABLE {
     char            strName[MAX_IM_NAME + 1];
     char           *strInputCode;
     unsigned char   iCodeLength;
+    unsigned char   iPYCodeLength;
     char           *strEndCode;	//中止键，按下该键相当于输入该键后再按一个空格
     char           *strIgnoreChars;
     char            cMatchingKey;
     char            strSymbol[MAX_CODE_LENGTH + 1];
-    char            cPinyin;
+    char            cPinyin;	//输入该键后，表示进入临时拼音状态
     unsigned char   bRule;
 
     RULE           *rule;	//组词规则
@@ -64,16 +65,18 @@ typedef struct _TABLE {
     unsigned int    iRecordCount;
     ADJUSTORDER     tableOrder;
 
-    Bool            bUsePY;	//使用拼音
-    Bool            bTableAutoSendToClient;	//自动上屏
-    Bool            bTableAutoSendToClientWhenNone;	//空码自动上屏
-    Bool            bUseMatchingKey;	//是否模糊匹配
-    Bool            bAutoPhrase;	//是否自动造词
-    INT8            iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
-    Bool            bAutoPhrasePhrase;	//词组是否参与造词
-    INT8            iAutoPhrase;	//自动造词长度
-    Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;	//输入完毕后是否提示编码
+    Bool            bUsePY;				//使用拼音
+    INT8            iTableAutoSendToClient;		//自动上屏
+    INT8            iTableAutoSendToClientWhenNone;	//空码自动上屏
+    Bool            bUseMatchingKey;			//是否模糊匹配
+    Bool            bAutoPhrase;			//是否自动造词
+    INT8            iSaveAutoPhraseAfter;		//选择N次后保存自动词组，0-不保存，1-立即保存
+    Bool            bAutoPhrasePhrase;			//词组是否参与造词
+    INT8            iAutoPhrase;			//自动造词长度
+    Bool            bTableExactMatch;			//是否只显示精确匹配的候选字/词
+    Bool            bPromptTableCode;			//输入完毕后是否提示编码
+
+    Bool            bHasPinyin;				//标记该码表中是否有拼音
 } TABLE;
 
 typedef struct _RECORD {
@@ -84,6 +87,7 @@ typedef struct _RECORD {
     unsigned int    iHit;
     unsigned int    iIndex;
     unsigned int    flag:1;
+    unsigned int    bPinyin:1;
 } RECORD;
 
 /* 根据键码生成一个简单的索引，指向该键码起始的第一个记录 */

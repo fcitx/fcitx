@@ -27,11 +27,23 @@
 #include <stdlib.h>
 #endif
 
-#define MAX_CODE_LENGTH 12
+#include "../src/internalVersion.c"
+
+typedef int     Bool;
+
+#define MAX_CODE_LENGTH 30
+
+#define True	1
+#define False	0
+
+char            strInputCode[100] = "\0";
+char            strIgnoreChars[100] = "\0";
+char            cPinyinKey = '\0';
 
 typedef struct _RECORD {
     char           *strCode;
     char           *strHZ;
+    INT8            bPinyin;
     struct _RECORD *next;
     struct _RECORD *prev;
     unsigned int    iHit;
@@ -50,6 +62,30 @@ typedef struct _RULE {
     RULE_RULE      *rule;
 } RULE;
 
+Bool IsValidCode (char cChar)
+{
+    char           *p;
+
+    p = strInputCode;
+    while (*p) {
+	if (cChar == *p)
+	    return True;
+	p++;
+    }
+
+    p = strIgnoreChars;
+    while (*p) {
+	if (cChar == *p)
+	    return True;
+	p++;
+    }
+
+    if (cChar == cPinyinKey)
+	return True;
+
+    return False;
+}
+
 int main (int argc, char *argv[])
 {
     char            strCode[100];
@@ -63,11 +99,13 @@ int main (int argc, char *argv[])
     char           *pstr = 0;
     char            strTemp[10];
     unsigned char   bRule;
-    RULE           *rule = 0;
+    RULE           *rule = NULL;
+    unsigned int    l;
 
     unsigned char   iCodeLength = 0;
-    char            strInputCode[100] = "\0";
-    char            strIgnoreChars[100] = "\0";
+    unsigned char   iPYCodeLength = 0;
+
+    Bool            bPY;
 
     if (argc != 3) {
 	printf ("\nUsage: txt2mb <Source File> <IM File>\n\n");
@@ -86,7 +124,9 @@ int main (int argc, char *argv[])
     current = head;
 
     bRule = 0;
+    l = 0;
     for (;;) {
+	l++;
 	if (!fgets (strCode, 100, fpDict))
 	    break;
 
@@ -112,6 +152,17 @@ int main (int argc, char *argv[])
 	    pstr += 9;
 	    strcpy (strIgnoreChars, pstr);
 	}
+	else if (strstr (pstr, "拼音=")) {
+	    pstr += 5;
+	    while (*pstr == ' ')
+		pstr++;
+	    cPinyinKey = *pstr;
+	}
+	else if (strstr (pstr, "拼音长度=")) {
+	    pstr += 9;
+	    iPYCodeLength = atoi (pstr);
+	}
+
 	else if (strstr (pstr, "[数据]"))
 	    break;
 	else if (strstr (pstr, "[组词规则]")) {
@@ -127,11 +178,12 @@ int main (int argc, char *argv[])
 
     if (bRule) {
 	/*
-	 * 组词规则数应该比键码长度少1
+	 * 组词规则数应该比键码长度小1
 	 */
 	rule = (RULE *) malloc (sizeof (RULE) * (iCodeLength - 1));
 
 	for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
+	    l++;
 	    if (!fgets (strCode, 100, fpDict))
 		break;
 
@@ -208,7 +260,7 @@ int main (int argc, char *argv[])
 		if (i != (iCodeLength - 1)) {
 		    if (*p != '+') {
 			printf ("5   Phrase rules are not suitable!\n");
-			printf ("\t\t%s\n", strCode);
+			printf ("\t\t%s  %d\n", strCode, iCodeLength);
 			exit (1);
 		    }
 
@@ -223,6 +275,7 @@ int main (int argc, char *argv[])
 	}
 
 	for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
+	    l++;
 	    if (!fgets (strCode, 100, fpDict))
 		break;
 
@@ -247,13 +300,26 @@ int main (int argc, char *argv[])
     }
 
     for (;;) {
+	l++;
 	if (EOF == fscanf (fpDict, "%s %s\n", strCode, strHZ))
 	    break;
 
-	if (strlen (strCode) > iCodeLength)
+	if (!IsValidCode (strCode[0])) {
+	    printf ("Invalid Format: Line-%d  %s %s\n", l, strCode, strHZ);
+
+	    exit (1);
+	}
+
+	if (((strCode[0] != cPinyinKey) && (strlen (strCode) > iCodeLength)) || ((strCode[0] == cPinyinKey) && (strlen (strCode) > (iPYCodeLength + 1))))
 	    continue;
 	if (strlen (strHZ) > 20)	//最长词组长度为10个汉字
 	    continue;
+
+	bPY = False;
+	if (strCode[0] == cPinyinKey) {
+	    strcpy (strCode, strCode + 1);
+	    bPY = True;
+	}
 
 	//查找是否重复
 	temp = current;
@@ -269,11 +335,11 @@ int main (int argc, char *argv[])
 
 		if (temp == head)
 		    temp = temp->next;
-		
-		while (temp != head && strcmp (temp->strCode, strCode)<=0)
-			temp = temp->next;
+
+		while (temp != head && strcmp (temp->strCode, strCode) <= 0)
+		    temp = temp->next;
 	    }
-	    else {		//strcmp (temp->strCode, strCode) < 0
+	    else {
 		while (temp != head && strcmp (temp->strCode, strCode) <= 0) {
 		    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, strCode)) {
 			printf ("Delete:  %s %s\n", strCode, strHZ);
@@ -283,13 +349,14 @@ int main (int argc, char *argv[])
 		}
 	    }
 	}
+
 	//插在temp的前面
-	
 	newRec = (RECORD *) malloc (sizeof (RECORD));
-	newRec->strCode = (char *) malloc (sizeof (char) * (iCodeLength + 1));
+	newRec->strCode = (char *) malloc (sizeof (char) * (iPYCodeLength + 1));
 	newRec->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
 	strcpy (newRec->strCode, strCode);
 	strcpy (newRec->strHZ, strHZ);
+	newRec->bPinyin = bPY;
 	newRec->iHit = 0;
 	newRec->iIndex = 0;
 
@@ -315,10 +382,16 @@ int main (int argc, char *argv[])
 	exit (3);
     }
 
+    //写入版本号--如果第一个字为0,表示后面那个字节为版本号
+    iTemp = 0;
+    fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
+    fwrite (&iInternalVersion, sizeof (INT8), 1, fpDict);
+
     iTemp = (unsigned int) strlen (strInputCode);
     fwrite (&iTemp, sizeof (unsigned int), 1, fpNew);
     fwrite (strInputCode, sizeof (char), iTemp + 1, fpNew);
     fwrite (&iCodeLength, sizeof (unsigned char), 1, fpNew);
+    fwrite (&iPYCodeLength, sizeof (unsigned char), 1, fpNew);
     iTemp = (unsigned int) strlen (strIgnoreChars);
     fwrite (&iTemp, sizeof (unsigned int), 1, fpNew);
     fwrite (strIgnoreChars, sizeof (char), iTemp + 1, fpNew);
@@ -339,10 +412,11 @@ int main (int argc, char *argv[])
     fwrite (&s, sizeof (unsigned int), 1, fpNew);
     current = head->next;
     while (current != head) {
-	fwrite (current->strCode, sizeof (char), iCodeLength + 1, fpNew);
+	fwrite (current->strCode, sizeof (char), iPYCodeLength + 1, fpNew);
 	s = strlen (current->strHZ) + 1;
 	fwrite (&s, sizeof (unsigned int), 1, fpNew);
 	fwrite (current->strHZ, sizeof (char), s, fpNew);
+	fwrite (&(current->bPinyin), sizeof (char), 1, fpDict);
 	fwrite (&(current->iHit), sizeof (unsigned int), 1, fpNew);
 	fwrite (&(current->iIndex), sizeof (unsigned int), 1, fpNew);
 	current = current->next;

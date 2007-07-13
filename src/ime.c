@@ -792,7 +792,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
 	//if (!IsKeyIgnored (kev->keycode))
-	    IMForwardEvent (ims, (XPointer) call_data);
+	IMForwardEvent (ims, (XPointer) call_data);
 
 	if (retVal != IRV_DONOT_PROCESS_CLEAN)
 	    return;
@@ -822,6 +822,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	DisplayInputWindow ();
 	DrawInputWindow ();
+
 	break;
     case IRV_DISPLAY_LAST:
 	bShowNext = bShowPrev = False;

@@ -149,6 +149,8 @@ Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
+    SetIC (call_data);
+
     if (CurrentIC == NULL)
 	return True;
     if (CurrentIC != (IC *) FindIC (call_data->icid))
@@ -199,8 +201,6 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 	    iInputWindowX = 0;
 	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
-
-    SetIC (call_data);
 
     return True;
 }
@@ -340,8 +340,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
 	if (bShowInputWindowTriggering && !bCorner) {
-	    DrawInputWindow ();
 	    DisplayInputWindow ();
+	    DrawInputWindow ();
 	}
     }
 

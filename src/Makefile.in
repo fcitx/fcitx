@@ -58,7 +58,8 @@ am_fcitx_OBJECTS = IC.$(OBJEXT) ime.$(OBJEXT) InputWindow.$(OBJEXT) \
 	PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) pyParser.$(OBJEXT) \
 	sp.$(OBJEXT) tools.$(OBJEXT) ui.$(OBJEXT) table.$(OBJEXT) \
 	xim.$(OBJEXT) qw.$(OBJEXT) vk.$(OBJEXT) about.$(OBJEXT) \
-	QuickPhrase.$(OBJEXT) AutoEng.$(OBJEXT) extra.$(OBJEXT)
+	QuickPhrase.$(OBJEXT) AutoEng.$(OBJEXT) extra.$(OBJEXT) \
+	internalVersion.$(OBJEXT)
 fcitx_OBJECTS = $(am_fcitx_OBJECTS)
 fcitx_DEPENDENCIES = ../lib/libXimd.a
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -167,29 +168,30 @@ target_alias = @target_alias@
 INCLUDES = -I. -I$(top_srcdir)/lib -I$(top_srcdir)/xpm
 AM_CFLAGS = -O2 -fno-strength-reduce
 fcitx_SOURCES = IC.c IC.h \
-                ime.c ime.h \
-                InputWindow.c InputWindow.h \
-                KeyList.c KeyList.h \
-                main.c main.h \
-                MainWindow.c MainWindow.h \
-                MyErrorsHandlers.c MyErrorsHandlers.h \
-                punc.c punc.h \
-                py.c py.h \
-                PYFA.c PYFA.h \
-                pyMapTable.c pyMapTable.h \
-                pyParser.c pyParser.h \
-                sp.c sp.h \
-                tools.c tools.h \
-                ui.c ui.h \
-                version.h \
-                table.c table.h \
-                xim.c xim.h \
-                qw.c qw.h \
+		ime.c ime.h \
+		InputWindow.c InputWindow.h \
+		KeyList.c KeyList.h \
+		main.c main.h \
+		MainWindow.c MainWindow.h \
+		MyErrorsHandlers.c MyErrorsHandlers.h \
+		punc.c punc.h \
+		py.c py.h \
+		PYFA.c PYFA.h \
+		pyMapTable.c pyMapTable.h \
+		pyParser.c pyParser.h \
+		sp.c sp.h \
+		tools.c tools.h \
+		ui.c ui.h \
+		version.h \
+		table.c table.h \
+		xim.c xim.h \
+		qw.c qw.h \
 		vk.c vk.h \
 		about.c about,h \
 		QuickPhrase.c QuickPhrase.h \
 		AutoEng.c AutoEng.h \
-		fcitx.h extra.c extra.h
+		fcitx.h extra.c extra.h \
+		internalVersion.c
 
 fcitx_LDADD = ../lib/libXimd.a
 fcitx_LDFLAGS = -lXpm
@@ -283,6 +285,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vk.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xim.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AutoEng.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/internalVersion.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

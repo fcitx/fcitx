@@ -798,8 +798,8 @@ void SaveConfig (void)
     fprintf (fp, "反查拼音=CTRL_ALT_E\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
     fprintf (fp, "中文标点=ALT_SPACE\n");
-    fprintf (fp, "上一页=- ,\n");
-    fprintf (fp, "下一页== .\n");
+    fprintf (fp, "上一页=-\n");
+    fprintf (fp, "下一页==\n");
     fprintf (fp, "第二三候选词选择键=SHIFT\n");
 
     fprintf (fp, "\n[输入法]\n");

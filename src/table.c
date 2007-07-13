@@ -20,7 +20,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-//========================================
+
 #include "table.h"
 #include "punc.h"
 
@@ -93,6 +93,8 @@ Bool            bTablePhraseTips = False;
 
 ADJUSTORDER     PYBaseOrder;
 extern char     strPYAuto[];
+
+extern INT8     iInternalVersion;
 
 extern Display *dpy;
 extern Window   inputWindow;
@@ -199,10 +201,10 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].strPath[0] = '\0';
 	table[iTableIMIndex].strSymbolFile[0] = '\0';
 	table[iTableIMIndex].tableOrder = AD_NO;
-	table[iTableIMIndex].bUsePY = True;
+	table[iTableIMIndex].bUsePY = False;
 	table[iTableIMIndex].cPinyin = '\0';
-	table[iTableIMIndex].bTableAutoSendToClient = True;
-	table[iTableIMIndex].bTableAutoSendToClientWhenNone = False;
+	table[iTableIMIndex].iTableAutoSendToClient = -1;
+	table[iTableIMIndex].iTableAutoSendToClientWhenNone = -1;
 	table[iTableIMIndex].rule = NULL;
 	table[iTableIMIndex].bUseMatchingKey = False;
 	table[iTableIMIndex].cMatchingKey = '\0';
@@ -213,6 +215,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].iAutoPhrase = 4;
 	table[iTableIMIndex].bPromptTableCode = True;
 	table[iTableIMIndex].strSymbol[0] = '\0';
+	table[iTableIMIndex].bHasPinyin = False;
     }
 
     iTableIMIndex = -1;
@@ -269,11 +272,11 @@ void LoadTableInfo (void)
 	    }
 	    else if (MyStrcmp (pstr, "自动上屏=")) {
 		pstr += 9;
-		table[iTableIMIndex].bTableAutoSendToClient = atoi (pstr);
+		table[iTableIMIndex].iTableAutoSendToClient = atoi (pstr);
 	    }
 	    else if (MyStrcmp (pstr, "空码自动上屏=")) {
 		pstr += 13;
-		table[iTableIMIndex].bTableAutoSendToClientWhenNone = atoi (pstr);
+		table[iTableIMIndex].iTableAutoSendToClientWhenNone = atoi (pstr);
 	    }
 	    else if (MyStrcmp (pstr, "中止键=")) {
 		pstr += 7;
@@ -339,7 +342,8 @@ Bool LoadTableDict (void)
     char            strPath[PATH_MAX];
     unsigned int    i = 0;
     unsigned int    iTemp, iTempCount;
-    char            cChar = 0;
+    char            cChar = 0, cTemp;
+    INT8            iVersion = 1;
 
 #ifdef _DEBUG
     fprintf (stderr, "LOAD Table Dict\n");
@@ -367,10 +371,16 @@ Bool LoadTableDict (void)
     }
 
     //先读取码表的信息
+    //判断版本信息
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
+    if (!iTemp) {
+	fread (&iVersion, sizeof (INT8), 1, fpDict);
+	iVersion = (iVersion < iInternalVersion);
+	fread (&iTemp, sizeof (unsigned int), 1, fpDict);
+    }
+
     table[iTableIMIndex].strInputCode = (char *) malloc (sizeof (char) * (iTemp + 1));
     fread (table[iTableIMIndex].strInputCode, sizeof (char), iTemp + 1, fpDict);
-
     /*
      * 建立索引
      */
@@ -382,6 +392,16 @@ Bool LoadTableDict (void)
     /* ********************************************************************** */
 
     fread (&(table[iTableIMIndex].iCodeLength), sizeof (unsigned char), 1, fpDict);
+    if (table[iTableIMIndex].iTableAutoSendToClient == -1)
+	table[iTableIMIndex].iTableAutoSendToClient = table[iTableIMIndex].iCodeLength;
+    if (table[iTableIMIndex].iTableAutoSendToClientWhenNone == -1)
+	table[iTableIMIndex].iTableAutoSendToClientWhenNone = table[iTableIMIndex].iCodeLength;
+
+    if (!iVersion)
+	fread (&(table[iTableIMIndex].iPYCodeLength), sizeof (unsigned char), 1, fpDict);
+    else
+	table[iTableIMIndex].iPYCodeLength = table[iTableIMIndex].iCodeLength;
+
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     table[iTableIMIndex].strIgnoreChars = (char *) malloc (sizeof (char) * (iTemp + 1));
     fread (table[iTableIMIndex].strIgnoreChars, sizeof (char), iTemp + 1, fpDict);
@@ -411,20 +431,27 @@ Bool LoadTableDict (void)
 	tableSingleHZ[i] = (RECORD *) NULL;
 
     for (i = 0; i < table[iTableIMIndex].iRecordCount; i++) {
-	fread (strCode, sizeof (char), table[iTableIMIndex].iCodeLength + 1, fpDict);
+	fread (strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 	fread (&iTemp, sizeof (unsigned int), 1, fpDict);
 	fread (strHZ, sizeof (char), iTemp, fpDict);
 	recTemp = (RECORD *) malloc (sizeof (RECORD));
-	recTemp->strCode = (char *) malloc (sizeof (char) * (table[iTableIMIndex].iCodeLength + 1));
+	recTemp->strCode = (char *) malloc (sizeof (char) * (strlen (strCode) + 1));
 	strcpy (recTemp->strCode, strCode);
 	recTemp->strHZ = (char *) malloc (sizeof (char) * iTemp);
 	strcpy (recTemp->strHZ, strHZ);
+
+	if (!iVersion) {
+	    fread (&cTemp, sizeof (char), 1, fpDict);
+	    recTemp->bPinyin = cTemp;
+	}
+
 	recTemp->flag = 0;
 
 	fread (&(recTemp->iHit), sizeof (unsigned int), 1, fpDict);
 	fread (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
 	if (recTemp->iIndex > iTableIndex)
 	    iTableIndex = recTemp->iIndex;
+
 	/* 建立索引 */
 	if (cChar != recTemp->strCode[0]) {
 	    cChar = recTemp->strCode[0];
@@ -435,7 +462,7 @@ Bool LoadTableDict (void)
 	}
 	/* **************************************************************** */
 	/** 为单字生成一个表   */
-	if (strlen (recTemp->strHZ) == 2 && !IsIgnoreChar (strCode[0])) {
+	if (strlen (recTemp->strHZ) == 2 && !IsIgnoreChar (strCode[0]) && !recTemp->bPinyin) {
 	    iTemp = CalHZIndex (recTemp->strHZ);
 	    if (iTemp >= 0 && iTemp < SINGLE_HZ_COUNT) {
 		if (tableSingleHZ[iTemp]) {
@@ -446,6 +473,10 @@ Bool LoadTableDict (void)
 		    tableSingleHZ[iTemp] = recTemp;
 	    }
 	}
+
+	if (recTemp->bPinyin)
+	    table[iTableIMIndex].bHasPinyin = True;
+
 	currentRecord->next = recTemp;
 	recTemp->prev = currentRecord;
 	currentRecord = recTemp;
@@ -653,6 +684,7 @@ void SaveTableDict (void)
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
+    char            cTemp;
 
     //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
 #ifdef _DEBUG
@@ -670,10 +702,16 @@ void SaveTableDict (void)
 	return;
     }
 
+    //写入版本号--如果第一个字为0,表示后面那个字节为版本号，为了与老版本兼容
+    iTemp = 0;
+    fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
+    fwrite (&iInternalVersion, sizeof (INT8), 1, fpDict);
+
     iTemp = strlen (table[iTableIMIndex].strInputCode);
     fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
     fwrite (table[iTableIMIndex].strInputCode, sizeof (char), iTemp + 1, fpDict);
     fwrite (&(table[iTableIMIndex].iCodeLength), sizeof (INT8), 1, fpDict);
+    fwrite (&(table[iTableIMIndex].iPYCodeLength), sizeof (INT8), 1, fpDict);
     iTemp = strlen (table[iTableIMIndex].strIgnoreChars);
     fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
     fwrite (table[iTableIMIndex].strIgnoreChars, sizeof (char), iTemp + 1, fpDict);
@@ -694,10 +732,12 @@ void SaveTableDict (void)
     fwrite (&(table[iTableIMIndex].iRecordCount), sizeof (unsigned int), 1, fpDict);
     recTemp = recordHead->next;
     while (recTemp != recordHead) {
-	fwrite (recTemp->strCode, sizeof (char), table[iTableIMIndex].iCodeLength + 1, fpDict);
+	fwrite (recTemp->strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 	iTemp = strlen (recTemp->strHZ) + 1;
 	fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
 	fwrite (recTemp->strHZ, sizeof (char), iTemp, fpDict);
+	cTemp = recTemp->bPinyin;
+	fwrite (&cTemp, sizeof (char), 1, fpDict);
 	fwrite (&(recTemp->iHit), sizeof (unsigned int), 1, fpDict);
 	fwrite (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
 	recTemp = recTemp->next;
@@ -752,6 +792,11 @@ Bool IsInputKey (int iKey)
 	if (iKey == *p)
 	    return True;
 	p++;
+    }
+
+    if (table[iTableIMIndex].bHasPinyin) {
+	if (iKey >= 'a' && iKey <= 'z')
+	    return True;
     }
 
     return False;
@@ -827,7 +872,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		    retVal = IRV_DO_NOTHING;
 	    }
 	    else {
-		if (iCodeInputCount < table[iTableIMIndex].iCodeLength) {
+		if ((iCodeInputCount < table[iTableIMIndex].iCodeLength) || (table[iTableIMIndex].bHasPinyin && iCodeInputCount < table[iTableIMIndex].iPYCodeLength)) {
 		    strCodeInput[iCodeInputCount++] = (char) iKey;
 		    strCodeInput[iCodeInputCount] = '\0';
 
@@ -857,7 +902,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 			    return IRV_DISPLAY_CANDWORDS;
 			}
-			else if (table[iTableIMIndex].bTableAutoSendToClientWhenNone && !iCandWordCount && (iCodeInputCount > 1)) {
+			else if (table[iTableIMIndex].iTableAutoSendToClientWhenNone && (iCodeInputCount > table[iTableIMIndex].iTableAutoSendToClientWhenNone) && !iCandWordCount) {
 			    strCodeInput[iCodeInputCount - 1] = '\0';
 			    TableGetCandWords (SM_FIRST);
 			    if (iCandWordCount) {
@@ -876,7 +921,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 				retVal = IRV_GET_CANDWORDS;
 			    }
 			}
-			else if (table[iTableIMIndex].bTableAutoSendToClient && (iCodeInputCount == table[iTableIMIndex].iCodeLength)) {
+			else if (iCodeInputCount >= table[iTableIMIndex].iTableAutoSendToClient) {
 			    if (iCandWordCount == 1 && (tableCandWord[0].flag != CT_AUTOPHRASE || (tableCandWord[0].flag == CT_AUTOPHRASE && !table[iTableIMIndex].iSaveAutoPhraseAfter))) {	//如果只有一个候选词，则送到客户程序中
 				strcpy (strStringGet, TableGetCandWord (0));
 				iCandWordCount = 0;
@@ -893,7 +938,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		    }
 		}
 		else {
-		    if (table[iTableIMIndex].bTableAutoSendToClient) {
+		    if (table[iTableIMIndex].iTableAutoSendToClient) {
 			if (iCandWordCount) {
 			    if (tableCandWord[0].flag != CT_AUTOPHRASE) {
 				strcpy (strStringGet, TableGetCandWord (0));
@@ -1099,7 +1144,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    iCodeInputCount = 0;
 			    return IRV_CLEAN;
 			}
-			
+
 			strcpy (strStringGet, TableGetCandWord (0));
 		    }
 		    else
@@ -1190,10 +1235,10 @@ char           *TableGetCandWord (int iIndex)
     if (bUseLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
-	
-	#warning **********************************************************
-	#warning FIX ME! 
-	#warning **********************************************************
+
+#warning **********************************************************
+#warning FIX ME!
+#warning **********************************************************
 	//临时解决一个问题，似乎是出现了内存泄露
 	pCandWord = strTableLegendSource;
     }

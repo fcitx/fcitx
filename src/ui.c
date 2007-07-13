@@ -69,6 +69,7 @@ XFontSet        fontSetVKWindow = NULL;
 int             iMainWindowFontSize = 12;
 int             iVKWindowFontSize = 12;
 int             iFontSize = 16;
+Bool            bUseBold = True;
 char            strUserLocale[50] = "zh_CN.gb2312";
 #endif
 
