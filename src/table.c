@@ -717,7 +717,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
     if (!bTableDictLoaded)
 	LoadTableDict ();
-
+    
     if (bTablePhraseTips) {
 	if (iKey == CTRL_DELETE) {
 	    bTablePhraseTips = False;
@@ -733,7 +733,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		DisplayInputWindow ();
 	}
     }
-
+    
     retVal = IRV_DO_NOTHING;
     if (IsInputKey (iKey) || iKey == table[iTableIMIndex].cMatchingKey || iKey == table[iTableIMIndex].cPinyin) {
 	bIsInLegend = False;
@@ -759,7 +759,6 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		    }
 		    else {
 			char *strTemp;
-			
 			retVal = TableGetCandWords (SM_FIRST);
 			strTemp=GetPunc(strCodeInput[0]);
 			
@@ -905,7 +904,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    iKey -= '0';
 	    if (iKey == 0)
 		iKey = 10;
-
+	    
 	    if (!bIsInLegend) {
 		if (iKey > iCandWordCount)
 		    return IRV_DO_NOTHING;
@@ -924,6 +923,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    PYGetCandWord (iKey - 1);
 
 			strcpy (strStringGet, TableGetCandWord (iKey - 1));
+		
 			if (bIsInLegend)
 			    retVal = IRV_GET_LEGEND;
 			else
@@ -1140,7 +1140,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 {
     int             i;
     char            strTemp[3], *pstr;
-
+    
     if (bIsInLegend)
 	return TableGetLegendCandWords (mode);
     if (!strcmp (strCodeInput, table[iTableIMIndex].strSymbol))
@@ -1156,10 +1156,10 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 
 	    TableResetFlags ();
 	    
-	    if (TableFindFirstMatchCode () == -1 && !iAutoPhrase) {
+	    if ( TableFindFirstMatchCode ()==-1 && !iAutoPhrase) {
 		uMessageDown = 0;
 		return IRV_DISPLAY_CANDWORDS;	//Not Found
-	    }
+	    }	
 	}
 	else {
 	    if (!iCandWordCount)
@@ -1189,9 +1189,9 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		}
 	    }
 	}
-
+	
 	if (iCandWordCount < iMaxCandWord) {
-	    while (currentRecord != recordHead) {
+	    while (currentRecord && currentRecord != recordHead) {
 		if ((mode == SM_PREV) ^ (!currentRecord->flag)) {
 		    if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
 			if (mode == SM_FIRST)
@@ -1203,7 +1203,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		currentRecord = currentRecord->next;
 	    }
 	}
-
+	
 	if (table[iTableIMIndex].bRule && table[iTableIMIndex].bAutoPhrase && mode != SM_PREV && iCodeInputCount == table[iTableIMIndex].iCodeLength) {
 	    for (i = 0; i < iAutoPhrase; i++) {
 		if (!TableCompareCode (strCodeInput, autoPhrase[i].strCode) && !autoPhrase[i].flag) {
@@ -1215,7 +1215,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		}
 	    }
 	}
-
+	
 	TableSetCandWordsFlag (iCandWordCount, True);
     }
 
@@ -2159,6 +2159,7 @@ void TableCreateAutoPhrase (INT8 iCount)
     j = iHZLastInputCount - table[iTableIMIndex].iAutoPhrase - iCount;
     if (j < 0)
 	j = 0;
+    
     for (; j < iHZLastInputCount - 1; j++) {
 	for (i = table[iTableIMIndex].iAutoPhrase; i >= 2; i--) {
 	    if ((j + i - 1) > iHZLastInputCount)

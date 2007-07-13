@@ -111,8 +111,7 @@ char *GetPunc (int iKey)
 
     if (!chnPunc)
 	    return (char*)NULL;
-
-	       
+    
     while (chnPunc[iIndex].ASCII) {
     	if (chnPunc[iIndex].ASCII == iKey) {
 		pPunc=chnPunc[iIndex].strChnPunc[chnPunc[iIndex].iWhich];

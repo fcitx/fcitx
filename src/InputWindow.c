@@ -533,6 +533,7 @@ void DisplayMessageDown (void)
 
 #ifdef _USE_XFT
 	p1 = messageDown[i].strMsg;
+	
 	while (*p1) {
 	    p2 = strTemp;
 	    if (isprint (*p1))	//使用中文字体

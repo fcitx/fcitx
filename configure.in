@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, 3.2-051228)
+AM_INIT_AUTOMAKE(fcitx, 3.2-060108)
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
@@ -25,6 +25,9 @@ AC_CHECK_HEADERS([limits.h malloc.h malloc/malloc.h stdlib.h string.h sys/param.
 
 # x11
 AC_PATH_X
+if test "x$x_includes" = "xNONE" ; then
+    AC_MSG_ERROR([You must install XFree86 or xorg first!])
+fi
 #AC_PATH_XTRA
 test -n "$x_libraries" && X_LIBS="-L$x_libraries"
 test -n "$x_includes" && X_CFLAGS="-I$x_includes"

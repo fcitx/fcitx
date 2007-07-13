@@ -1,3 +1,14 @@
+2006-01-08: Yuking <yukig_net@sohu.com>
+	   * src/ime.c: 修正无法输入半角分号的问题
+
+2006-01-02: Yuking <yukig_net@sohu.com>
+	   * src/ime.c: 修正某些GBK汉字上屏不正常的错误(KanKer)
+	   * configure.in: 如果没有安装X开发包，将不能make
+	   
+2005-12-30: Tao Liu<liutao1980@gmail.com>
+	   * src/ui.c:修正一处笔误
+	   * src/ui.c:将非xft版本的字体改为先英文后中文
+
 2005-12-25: Yuking <yukig_net@sohu.com>
 	   * 添加快速输入的功能
 	   * 去掉LumaQQ支持，因为新的Lumaqq已经不需要这个了

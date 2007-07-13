@@ -217,7 +217,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	ConnectIDSetReset (connect_id, False);
     }*/
 
-    //绋嬪簭鑾峰緱鐒︾偣鏃讹紝閲嶆柊寮�濮嬭绠楁墦瀛楅�熷害
+    //When application gets the focus, rerecord the time.
     bStartRecordType = False;
     iHZInputed = 0;
 
@@ -392,7 +392,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     }
     else
 	ps = strHZ;
-
+    
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
     ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
     ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
@@ -573,7 +573,7 @@ IME_STATE ConnectIDGetState (CARD16 connect_id)
     return IS_CLOSED;
 }
 
-/*用于lumaqq支持
+/*锟斤拷支锟絬maqq
 Bool ConnectIDGetReset (CARD16 connect_id)
 {
     CONNECT_ID     *temp;

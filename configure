@@ -1636,7 +1636,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=fcitx
- VERSION=3.2-051228
+ VERSION=3.2-060108
 
 
 cat >>confdefs.h <<_ACEOF
@@ -4865,6 +4865,11 @@ else
 echo "${ECHO_T}libraries $x_libraries, headers $x_includes" >&6
 fi
 
+if test "x$x_includes" = "xNONE" ; then
+    { { echo "$as_me:$LINENO: error: You must install XFree86 or xorg first!" >&5
+echo "$as_me: error: You must install XFree86 or xorg first!" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 #AC_PATH_XTRA
 test -n "$x_libraries" && X_LIBS="-L$x_libraries"
 test -n "$x_includes" && X_CFLAGS="-I$x_includes"

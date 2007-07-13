@@ -221,7 +221,7 @@ void CreateFont (void)
     xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
 
     if (xftFontEn)
-	XftFontClose (dpy, xftFont);
+	XftFontClose (dpy, xftFontEn);
     xftFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
 
     if (xftMainWindowFont)
@@ -253,7 +253,7 @@ void CreateFont (void)
     else
 	setlocale (LC_CTYPE, "");
 
-    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iMainWindowFontSize, strFontEnName, iMainWindowFontSize);
+    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontEnName, iMainWindowFontSize, strFontName, iMainWindowFontSize);
     if (fontSetMainWindow)
 	XFreeFontSet (dpy, fontSetMainWindow);
     fontSetMainWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
@@ -266,7 +266,7 @@ void CreateFont (void)
 	    fprintf (stderr, "Error: Cannot Create Chinese Fonts!\n\n");
     }
 
-    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iFontSize, strFontEnName, iFontSize);
+    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontEnName, iFontSize, strFontName, iFontSize);
     if (fontSet)
 	XFreeFontSet (dpy, fontSet);
     fontSet = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);
@@ -279,7 +279,7 @@ void CreateFont (void)
 	    fprintf (stderr, "Error: Cannot Create Chinese Fonts!\n\n");
     }
 
-    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontName, iVKWindowFontSize, strFontEnName, iVKWindowFontSize);
+    sprintf (strFont, "-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*,-*-%s-medium-r-normal--%d-*-*-*-*-*-*-*", strFontEnName, iVKWindowFontSize, strFontName, iVKWindowFontSize);
     if (fontSetVKWindow)
 	XFreeFontSet (dpy, fontSetVKWindow);
     fontSetVKWindow = XCreateFontSet (dpy, strFont, &missing_charsets, &num_missing_charsets, &default_string);

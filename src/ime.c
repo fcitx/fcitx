@@ -427,6 +427,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    retVal = IRV_TO_PROCESS;
 		    }
 		    else {
+			    //调用输入法模块
 			if (!iInCap && !bCorner) {
 			    retVal = im[iIMIndex].DoInput (iKey);
 			    if (!IsIM (NAME_OF_PINYIN) && !IsIM (NAME_OF_SHUANGPIN))
@@ -633,7 +634,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					strcpy (strStringGet, ";");
 				    else
 					strcpy (strStringGet, strCodeInput);
-				    retVal = IRV_ENG;
+				    retVal = IRV_PUNC;
 				    uMessageUp = uMessageDown = 0;
 				    iInCap = 0;
 				}
@@ -668,7 +669,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		retVal = IRV_DONOT_PROCESS;
 	}
     }
-
+    
     switch (retVal) {
     case IRV_DO_NOTHING:
 	break;
@@ -752,23 +753,24 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_GET_CANDWORDS:
 	if (bPhraseTips && im[iIMIndex].PhraseTips && !bVK)
 	    DoPhraseTips ();
-    case IRV_ENG:
+   case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
-	if (bChnPunc && bConvertPunc)
-	    ConvertPunc ();
-    case IRV_PUNC:
+	if (retVal!=IRV_GET_CANDWORDS && bChnPunc && bConvertPunc)
+	   ConvertPunc ();
+   case IRV_PUNC:
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 	if (bVK || (!(uMessageDown && retVal == IRV_GET_CANDWORDS)
 		    && bAutoHideInputWindow && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))))
 	    XUnmapWindow (dpy, inputWindow);
 	else
-	    DisplayInputWindow ();
+	DisplayInputWindow ();
     case IRV_GET_CANDWORDS_NEXT:
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	    DisplayInputWindow ();
 	}
+	
 	SendHZtoClient (call_data, strStringGet);
 	bLastIsNumber = False;
 	lastIsSingleHZ = 0;
