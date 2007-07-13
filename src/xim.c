@@ -46,6 +46,7 @@ IC             *CurrentIC = NULL;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
 //该变量是GTK+ OverTheSpot光标跟随的临时解决方案
+INT8            iOffsetX = 0;
 INT8            iOffsetY = 12;
 
 //extern Bool     bLumaQQ;
@@ -77,10 +78,10 @@ extern uint     uMessageUp;
 extern Bool     bVK;
 extern Bool     bAutoHideInputWindow;
 
-/* 计算打字速度
+//计算打字速度
 extern Bool     bStartRecordType;
 extern uint     iHZInputed;
-*/
+
 extern Bool     bShowInputWindowTriggering;
 
 extern Bool     bUseGBKT;
@@ -162,8 +163,10 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 
 		if (iTempInputWindowX < 0)
 		    iTempInputWindowX = 0;
-		else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+		else if ((iTempInputWindowX + iInputWindowWidth + iOffsetX) > DisplayWidth (dpy, iScreen))
 		    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+		else
+		    iTempInputWindowX += iOffsetX;
 
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
@@ -196,40 +199,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     connect_id = call_data->connect_id;
     icid = call_data->icid;
 
-    /* It seems this section is useless
-       if (bTrackCursor) {
-       int             i;
-       Window          window;
-       XICAttribute   *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
-
-       for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
-       if (!strcmp (XNSpotLocation, pre_attr->name)) {
-       if (CurrentIC->focus_win)
-       XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
-       else if (CurrentIC->client_win)
-       XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
-       else
-       return True;
-
-       if (iTempInputWindowX < 0)
-       iTempInputWindowX = 0;
-       else if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-       iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
-       else
-       iTempInputWindowX += 5;
-
-       if (iTempInputWindowY < 0)
-       iTempInputWindowY = 0;
-       else if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
-       iTempInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
-
-       XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-
-       ConnectIDSetTrackCursor (call_data->connect_id, True);
-       }
-       }
-       } */
-    /* ************************************************************************ */
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	IMPreeditStart (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
@@ -266,10 +235,8 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
        } */
 
     //When application gets the focus, rerecord the time.
-    /*
-       bStartRecordType = False;
-       iHZInputed = 0;
-     */
+    bStartRecordType = False;
+    iHZInputed = 0;
 
     return True;
 }

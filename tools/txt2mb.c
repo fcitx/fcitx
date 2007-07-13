@@ -258,7 +258,7 @@ int main (int argc, char *argv[])
 	//查找是否重复
 	temp = current;
 	if (temp != head) {
-	    if (strcmp (temp->strCode, strCode) > 0) {
+	    if (strcmp (temp->strCode, strCode) >= 0) {
 		while (temp != head && strcmp (temp->strCode, strCode) >= 0) {
 		    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, strCode)) {
 			printf ("Delete:  %s %s\n", strCode, strHZ);
@@ -269,14 +269,11 @@ int main (int argc, char *argv[])
 
 		if (temp == head)
 		    temp = temp->next;
-		else if (strcmp (temp->strCode, strCode) <= 0)
-		    temp = temp->next;
+		
+		while (temp != head && strcmp (temp->strCode, strCode)<=0)
+			temp = temp->next;
 	    }
-	    else {
-		if ( !strcmp (temp->strCode, strCode)  ) {
-		    while (temp != head && !strcmp (temp->strCode, strCode) )
-			temp = temp->prev;
-		}
+	    else {		//strcmp (temp->strCode, strCode) < 0
 		while (temp != head && strcmp (temp->strCode, strCode) <= 0) {
 		    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, strCode)) {
 			printf ("Delete:  %s %s\n", strCode, strHZ);
@@ -287,6 +284,7 @@ int main (int argc, char *argv[])
 	    }
 	}
 	//插在temp的前面
+	
 	newRec = (RECORD *) malloc (sizeof (RECORD));
 	newRec->strCode = (char *) malloc (sizeof (char) * (iCodeLength + 1));
 	newRec->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);

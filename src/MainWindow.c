@@ -82,7 +82,7 @@ HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
 Bool            bLocked = True;
 Bool            bCompactMainWindow = False;
-Bool            bShowVK = True;
+Bool            bShowVK = False;
 
 extern Display *dpy;
 extern GC       dimGC;

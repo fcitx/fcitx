@@ -1,3 +1,27 @@
+2006-11-01: Yuking <yuking_net@sohu.com>
+           * tools/txt2mb.c: 修正码表排序的一个问题
+	   * src/xim.c,tools.c: 给输入条的位置设置了X/Y的偏移量
+	   * 版本 'GirlDog' 3.4.1
+
+2006-10-23: Yuking <yuking_net@sohu.com>
+           * 恢复速度的显示
+
+2006-10-21: Yuking <yuking_net@sohu.com>
+           * 将拼音和区位的显示名称设为可定义
+
+2006-10-20: Yuking <yuking_net@sohu.com>
+           * src/ime.c: 将全角的输入方式恢复为原来的样子
+	   * src/table.c: 改进码表输入法中的自动组词
+	   
+2006-10-13: Yuking <yuking_net@sohu.com>
+           * data/pyphrase.org: 将“陷井”修正为“陷阱”
+
+2006-10-10: Yuking <yuking_net@sohu.com>
+           * src/table.c: 码表输入方式下，记录每次生成的自动词组
+
+2006-09-21: Yuking <yuking_net@sohu.com>
+	   * 版本 'GirlDog' 3.4
+
 2006-09-13: Yuking <yuking_net@sohu.com>
            * src/table.c,py.c: 码表输入方式下，临时拼音可以输入词组
            * src/table.c: 修正码表输入法的一个翻页错误

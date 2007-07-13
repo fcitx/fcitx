@@ -108,10 +108,13 @@ extern Bool     bPhraseTips;
 extern SEMICOLON_TO_DO semicolonToDo;
 extern Bool     bEngAfterCap;
 
-/*
+//显示打字速度
 extern Bool     bShowUserSpeed;
-*/
 extern Bool     bShowVK;
+
+extern char     strNameOfPinyin[];
+extern char     strNameOfShuangpin[];;
+extern char     strNameOfQuwei[];
 
 extern Bool     bFullPY;
 extern Bool     bDisablePagingInLegend;
@@ -137,8 +140,8 @@ extern Bool     bUseSP;
 extern Bool     bUseQW;
 extern Bool     bUseTable;
 
-extern char	strDefaultSP[];
-extern SP_FROM	iSPFrom;
+extern char     strDefaultSP[];
+extern SP_FROM  iSPFrom;
 
 //extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
@@ -156,6 +159,7 @@ extern Bool     bUseAA;
 extern char     strUserLocale[];
 #endif
 
+extern INT8     iOffsetX;
 extern INT8     iOffsetY;
 
 /*
@@ -190,7 +194,7 @@ void LoadConfig (Bool bMode)
     char            strPath[PATH_MAX];
     int             i;
     int             r, g, b;	//代表红绿蓝
-    Bool	    bFromUser=True;
+    Bool            bFromUser = True;
 
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/config");
@@ -203,7 +207,7 @@ void LoadConfig (Bool bMode)
     fp = fopen (strPath, "rt");
 
     if (!fp || !bFromUser)
-	SaveConfig();
+	SaveConfig ();
 
     if (!fp) {
 	LoadConfig (True);	//读入默认值
@@ -296,19 +300,24 @@ void LoadConfig (Bool bMode)
 	    bShowInputWindowTriggering = atoi (pstr);
 	}
 	// 临时解决方案
-	else if (MyStrcmp (pstr, "输入条高度偏移量=")) {
-	    pstr += 17;
-	    iOffsetY = atoi (pstr);
+	else if (MyStrcmp (pstr, "输入条偏移量X=")) {
+	    pstr += 14;
+	    iOffsetX = atoi (pstr);
 	}
+	else if (MyStrcmp (pstr, "输入条偏移量Y=")) {
+	    pstr += 14;
+	    iOffsetY = atoi (pstr);
+	}	
 	//********************************************
 	else if (MyStrcmp (pstr, "序号后加点=")) {
 	    pstr += 11;
 	    bPointAfterNumber = atoi (pstr);
 	}
-	/*else if (MyStrcmp (pstr, "显示打字速度=")) {
-	   pstr += 13;
-	   bShowUserSpeed = atoi (pstr);
-	   } */
+	//显示速度
+	else if (MyStrcmp (pstr, "显示打字速度=")) {
+	    pstr += 13;
+	    bShowUserSpeed = atoi (pstr);
+	}
 	else if (MyStrcmp (pstr, "主窗口隐藏模式=")) {
 	    pstr += 15;
 	    hideMainWindow = (HIDE_MAINWINDOW) atoi (pstr);
@@ -456,7 +465,7 @@ void LoadConfig (Bool bMode)
 	}
 	else if (MyStrcmp (pstr, "GBK繁体切换键=")) {
 	    pstr += 14;
-	    SetHotKey (pstr,hkGBT);
+	    SetHotKey (pstr, hkGBT);
 	}
 	else if (MyStrcmp (pstr, "双击中英文切换=")) {
 	    pstr += 15;
@@ -534,9 +543,18 @@ void LoadConfig (Bool bMode)
 	    pstr += 9;
 	    bUsePinyin = atoi (pstr);
 	}
+	else if (MyStrcmp (pstr, "拼音名称=")) {
+	    pstr += 9;
+	    strcpy(strNameOfPinyin, pstr);
+	}
+	
 	else if (MyStrcmp (pstr, "使用双拼=")) {
 	    pstr += 9;
 	    bUseSP = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "双拼名称=")) {
+	    pstr += 9;
+	    strcpy(strNameOfShuangpin, pstr);
 	}
 	else if (MyStrcmp (pstr, "默认双拼方案=")) {
 	    pstr += 13;
@@ -548,6 +566,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (pstr, "使用区位=")) {
 	    pstr += 9;
 	    bUseQW = atoi (pstr);
+	}
+	else if (MyStrcmp (pstr, "区位名称=")) {
+	    pstr += 9;
+	    strcpy(strNameOfQuwei, pstr);
 	}
 	else if (MyStrcmp (pstr, "使用码表=")) {
 	    pstr += 9;
@@ -711,8 +733,10 @@ void SaveConfig (void)
     fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering);
     fprintf (fp, "#输入条固定宽度(仅适用于码表输入法)，0表示不固定宽度\n");
     fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
+    fprintf (fp, "输入条偏移量X=%d\n", iOffsetX);
+    fprintf (fp, "输入条偏移量Y=%d\n", iOffsetY);
     fprintf (fp, "序号后加点=%d\n", bPointAfterNumber);
-    //fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
+    fprintf (fp, "显示打字速度=%d\n", bShowUserSpeed);
 
     fprintf (fp, "光标色=%d %d %d\n", cursorColor.color.red >> 8, cursorColor.color.green >> 8, cursorColor.color.blue >> 8);
     fprintf (fp, "主窗口背景色=%d %d %d\n", mainWindowColor.backColor.red >> 8, mainWindowColor.backColor.green >> 8, mainWindowColor.backColor.blue >> 8);
@@ -756,7 +780,7 @@ void SaveConfig (void)
     fprintf (fp, "\n[输入法]\n");
     fprintf (fp, "使用拼音=%d\n", bUsePinyin);
     fprintf (fp, "使用双拼=%d\n", bUseSP);
-    fprintf (fp, "默认双拼方案=%s\n",strDefaultSP);
+    fprintf (fp, "默认双拼方案=%s\n", strDefaultSP);
     fprintf (fp, "使用区位=%d\n", bUseQW);
     fprintf (fp, "使用码表=%d\n", bUseTable);
     fprintf (fp, "提示词库中的词组=%d\n", bPhraseTips);
@@ -1171,8 +1195,8 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
 		       * (unsigned char) 0xbe + ((unsigned char) strHZ[i + 1] - (unsigned char) 0x40)
 		       - ((unsigned char) strHZ[i + 1] / (unsigned char) 0x80)) * 2;
 		if (idx >= 0 && idx < gGBKS2TTableSize - 1) {
-		    if (	/*(unsigned char)gGBKS2TTable[idx] != (unsigned char)0xa1 
-				   && */ (unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
+		    //if ((unsigned char)gGBKS2TTable[idx] != (unsigned char)0xa1 && (unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
+		    if ((unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
 			ret[i] = gGBKS2TTable[idx];
 			ret[i + 1] = gGBKS2TTable[idx + 1];
 			i += 1;
@@ -1187,7 +1211,7 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
     return ret;
 }
 
-int CalHZIndex(char *strHZ)
+int CalHZIndex (char *strHZ)
 {
     return (strHZ[0] + 127) * 255 + strHZ[1] + 128;
 }

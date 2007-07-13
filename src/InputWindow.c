@@ -107,12 +107,12 @@ extern GC       lightGC;
 
 extern Bool     bUseGBKT;
 
-/* 计算速度
+//计算速度
 extern Bool     bStartRecordType;
 extern Bool     bShowUserSpeed;
 extern time_t   timeStart;
 extern uint     iHZInputed;
-*/
+
 Bool CreateInputWindow (void)
 {
     XSetWindowAttributes attrib;
@@ -267,33 +267,33 @@ void DisplayMessage (void)
 	strcat (messageUp[0].strMsg, FCITX_VERSION);
 	messageUp[0].type = MSG_TIPS;
 
-	/* 显示打字速度
-	   if (bStartRecordType && bShowUserSpeed) {
-	   double          timePassed;
+	//显示打字速度
+	if (bStartRecordType && bShowUserSpeed) {
+	    double          timePassed;
 
-	   timePassed = difftime (time (NULL), timeStart);
-	   if (((int) timePassed) == 0)
-	   timePassed = 1.0;
+	    timePassed = difftime (time (NULL), timeStart);
+	    if (((int) timePassed) == 0)
+		timePassed = 1.0;
 
-	   uMessageDown = 6;
-	   strcpy (messageDown[0].strMsg, "打字速度：");
-	   messageDown[0].type = MSG_OTHER;
-	   sprintf (messageDown[1].strMsg, "%d", (int) (iHZInputed * 60 / timePassed));
-	   messageDown[1].type = MSG_CODE;
-	   strcpy (messageDown[2].strMsg, "/分  用时：");
-	   messageDown[2].type = MSG_OTHER;
-	   sprintf (messageDown[3].strMsg, "%d", (int) timePassed);
-	   messageDown[3].type = MSG_CODE;
-	   strcpy (messageDown[4].strMsg, "秒  字数：");
-	   messageDown[4].type = MSG_OTHER;
-	   sprintf (messageDown[5].strMsg, "%u", iHZInputed);
-	   messageDown[5].type = MSG_CODE;
-	   }
-	   else { */
-	uMessageDown = 1;
-	strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
-	messageDown[0].type = MSG_CODE;
-	//}
+	    uMessageDown = 6;
+	    strcpy (messageDown[0].strMsg, "打字速度：");
+	    messageDown[0].type = MSG_OTHER;
+	    sprintf (messageDown[1].strMsg, "%d", (int) (iHZInputed * 60 / timePassed));
+	    messageDown[1].type = MSG_CODE;
+	    strcpy (messageDown[2].strMsg, "/分  用时：");
+	    messageDown[2].type = MSG_OTHER;
+	    sprintf (messageDown[3].strMsg, "%d", (int) timePassed);
+	    messageDown[3].type = MSG_CODE;
+	    strcpy (messageDown[4].strMsg, "秒  字数：");
+	    messageDown[4].type = MSG_OTHER;
+	    sprintf (messageDown[5].strMsg, "%u", iHZInputed);
+	    messageDown[5].type = MSG_CODE;
+	}
+	else {
+	    uMessageDown = 1;
+	    strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
+	    messageDown[0].type = MSG_CODE;
+	}
     }
 
     iInputWindowUpWidth = 2 * INPUTWND_START_POS_UP + 1;
