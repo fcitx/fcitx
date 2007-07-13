@@ -39,6 +39,7 @@
 #include "ui.h"
 #include "vk.h"
 #include "QuickPhrase.h"
+#include "extra.h"
 
 IM             *im = NULL;
 INT8            iIMCount = 0;
@@ -68,7 +69,10 @@ Bool            bUseGBK = False;	//是否支持GBK
 Bool            bIsDoInputOnly = False;	//表明是否只由输入法来处理键盘
 Bool            bLastIsNumber = False;	//上一次输入是不是阿拉伯数字
 INT8            iInCap = 0;	//是不是处于大写后的英文状态,0--不，1--按下大写键，2--按下分号键
+
+/*
 Bool            bAutoHideInputWindow = False;	//是否自动隐藏输入条
+*/
 Bool            bEngPuncAfterNumber = True;	//数字后面输出半角符号(只对'.'/','有效)
 Bool            bPhraseTips = True;
 INT8            lastIsSingleHZ = 0;
@@ -426,7 +430,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
 		    if (hideMainWindow != HM_HIDE)
-			DisplayMainWindow ();
+			DrawMainWindow ();
 
 		}
 		else
@@ -555,14 +559,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 						uMessageUp = 1;
 						if (iInCap == 2) {
-						    strcpy (messageUp[0].strMsg, strCodeInput);
 						    if (semicolonToDo == K_SEMICOLON_ENG)
-							strcat (messageUp[0].strMsg, "英文输入");
-						    else {
-							if (iCodeInputCount)
-							    strcat (messageUp[0].strMsg, "  ");
-							strcat (messageUp[0].strMsg, "自定义输入");
+							strcpy (messageUp[0].strMsg, "英文输入");
+						    else
+							strcpy (messageUp[0].strMsg, "自定义输入");
+
+						    if (iCodeInputCount) {
+							strcat (messageUp[0].strMsg, "  ");
+							strcat (messageUp[0].strMsg, strCodeInput);
 						    }
+
 						    if (retVal != IRV_DISPLAY_CANDWORDS) {
 							if (iCodeInputCount)
 							    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
@@ -637,12 +643,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    }
 				    else if (iKey == CTRL_5) {
 					LoadConfig (False);
-					
+
 					InitGC (mainWindow);
 					InitMainWindowColor ();
 					InitInputWindowColor ();
 					InitVKWindowColor ();
-					
+
 					SetIM ();
 
 					/*if (bLumaQQ)
@@ -657,9 +663,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 					FreePunc ();
 					LoadPuncDict ();
-					
+
 					//DrawMainWindow();
-					
+
 					retVal = IRV_DO_NOTHING;
 				    }
 				    else if (iKey == ENTER) {
@@ -728,7 +734,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_DONOT_PROCESS_CLEAN:
 	if (call_data->event.type == KeyRelease) {
 	    // if (!bLumaQQ && (!keyCount || (!iKeyState && (iKey == ESC || iKey == ENTER))))
-	    if ((!keyCount && kev->keycode != L_CTRL && kev->keycode != R_CTRL) || (!iKeyState && (iKey == ESC || iKey == ENTER)))
+	    if ((!keyCount && kev->keycode != XKeysymToKeycode (dpy, XK_Control_L)
+		 && kev->keycode != XKeysymToKeycode (dpy, XK_Control_R))
+		|| (!iKeyState && (iKey == ESC || iKey == ENTER)))
 		IMForwardEvent (ims, (XPointer) call_data);
 	}
 	else
@@ -739,10 +747,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_CLEAN:
 	ResetInput ();
 	ResetInputWindow ();
-	if (bAutoHideInputWindow)
-	    XUnmapWindow (dpy, inputWindow);
-	else
-	    DrawInputWindow ();
+	//if (bAutoHideInputWindow)
+	XUnmapWindow (dpy, inputWindow);
+	/*else
+	   DrawInputWindow (); */
 
 	return;
     case IRV_DISPLAY_CANDWORDS:
@@ -773,6 +781,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	strcpy (messageDown[0].strMsg, strStringGet);
 	messageDown[0].type = MSG_TIPS;
 	DisplayInputWindow ();
+	DrawInputWindow ();
 	break;
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
@@ -795,10 +804,11 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
 	else {
 	    ResetInput ();
-	    if (bAutoHideInputWindow)
-		XUnmapWindow (dpy, inputWindow);
-	    else
-		DrawInputWindow ();
+	    //if (bAutoHideInputWindow)
+	    XUnmapWindow (dpy, inputWindow);
+	    /*else
+	       DrawInputWindow ();
+	     */
 	}
 
 	break;
@@ -813,7 +823,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 	if (bVK || (!(uMessageDown && retVal == IRV_GET_CANDWORDS)
-		    && bAutoHideInputWindow && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))))
+		    /*&& bAutoHideInputWindow */
+		    && (retVal == IRV_PUNC || (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))))
 	    XUnmapWindow (dpy, inputWindow);
 	else if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
 	    DrawInputWindow ();
@@ -1043,9 +1054,17 @@ void SetIM (void)
     if (bUseQW)
 	iIMCount++;
 
+    if (!iIMCount)
+	iIMCount = 1;
+    iIMCount += 4;
+
     im = (IM *) malloc (sizeof (IM) * iIMCount);
     iIMCount = 0;
 
+    /*
+    LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
+    */
+    
     /* 加入输入法 */
     if (bUsePinyin || (!bUseSP && (!bUseTable || !iTableCount)))	//至少应该有一种输入法
 	RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);

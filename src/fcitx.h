@@ -1,75 +1,32 @@
-/***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
-#ifndef _KEYLIST_H
-#define _KETLIST_H
+#ifndef _FCITX_H_
+#define _FCITX_H_
 
-#include <stdio.h>
-#include <X11/Xlib.h>
+#ifndef DEFAULT_IMNAME
 
-#include "xim.h"
-#include "IMdkit.h"
+#define MAX_IM_NAME	12
 
-typedef enum _KEYCODE_LIST {
-    L_CTRL = 37,
-    R_CTRL = 109,
-    L_SHIFT = 50,
-    R_SHIFT = 62,
-    L_SUPER = 115,
-    R_SUPER = 116
-} KEY_CODE;
+typedef enum _SEARCH_MODE {
+    SM_FIRST,
+    SM_NEXT,
+    SM_PREV
+} SEARCH_MODE;
 
-enum {
-    K_LCTRL = 227,
-    K_LSHIFT = 225,
-    K_LALT = 233,
-    K_RCTRL = 228,
-    K_RSHIFT = 226,
-    K_RALT = 234,
-    K_INSERT = 99,
-    K_HOME = 80,
-    K_PGUP = 85,
-    K_END = 87,
-    K_PGDN = 86
-};
-
-typedef struct _KEY_LIST {
-    char           *strKey;
-    int             code;
-} KEY_LIST;
-// typedef struct _KEY_LIST KEYCODE_LIST;
-
-typedef enum _KEY_STATE {
-    KEY_NONE = 0,
-    KEY_SHIFT_COMP = 1,
-    KEY_CAPSLOCK = 2,
-    KEY_CTRL_COMP = 4,
-    KEY_CTRL_SHIFT_COMP = 5,
-    KEY_ALT_COMP = 8,
-    KEY_ALT_SHIFT_COMP = 9,
-    KEY_CTRL_ALT_COMP = 12,
-    KEY_CTRL_ALT_SHIFT_COMP = 13,
-    KEY_NUMLOCK = 16,
-    KEY_SUPER_COMP =64,
-    KEY_SCROLLLOCK = 128,
-    KEY_MOUSE_PRESSED = 256
-} KEY_STATE;
+typedef enum _INPUT_RETURN_VALUE {
+    //IRV_UNKNOWN = -1,
+    IRV_DO_NOTHING = 0,
+    IRV_DONOT_PROCESS,
+    IRV_DONOT_PROCESS_CLEAN,
+    IRV_CLEAN,
+    IRV_TO_PROCESS,
+    IRV_DISPLAY_MESSAGE,
+    IRV_DISPLAY_CANDWORDS,
+    IRV_DISPLAY_LAST,
+    IRV_PUNC,
+    IRV_ENG,
+    IRV_GET_LEGEND,
+    IRV_GET_CANDWORDS,
+    IRV_GET_CANDWORDS_NEXT
+} INPUT_RETURN_VALUE;
 
 typedef enum _KEY {
     TAB = 9,
@@ -343,9 +300,24 @@ typedef enum _KEY {
     CTRL_ALT_SHIFT_9
 } KEY;
 
-int             GetKey (unsigned char iKeyCode, int iKeyState, int iCount);
-int             ParseKey (char *strKey);
-int             GetKeyList (char *strKey);
-//int             GetKeyCodeList (char *strKey);
-
 #endif
+
+typedef struct {
+    char Name[MAX_IM_NAME + 1];
+    void (*Reset) (void);
+    INPUT_RETURN_VALUE (*DoInput) (int);
+    INPUT_RETURN_VALUE (*GetCandWords)(SEARCH_MODE);
+    char *(*GetCandWord) (int);
+    int (*Init) (void);
+    int (*Destroy) (void);
+    char *CodeInput;
+    int *CandWordMax;
+    int *CurCandPage;
+    int *CandWordCount;
+    int *CandPageCount;
+    int *SelectIndex;
+    char *CandTable[10];
+    char *StringGet;
+}EXTRA_IM;
+
+#endif/*_FCITX_H_*/

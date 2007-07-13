@@ -76,7 +76,9 @@ extern iconv_t  convUTF8;
 extern uint     uMessageDown;
 extern uint     uMessageUp;
 extern Bool     bVK;
-extern Bool     bAutoHideInputWindow;
+extern Bool	bCorner;
+
+//extern Bool     bAutoHideInputWindow;
 
 //计算打字速度
 extern Bool     bStartRecordType;
@@ -207,12 +209,13 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else if (lastConnectID != connect_id) {
+	    else if (lastConnectID != connect_id)
+/*		{
 		if (!bAutoHideInputWindow)
 		    DisplayInputWindow ();
-		else
-		    XUnmapWindow (dpy, inputWindow);
-	    }
+		else  */
+		XUnmapWindow (dpy, inputWindow);
+	    //}
 	}
 	else {
 	    XUnmapWindow (dpy, inputWindow);
@@ -224,6 +227,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
     }
+
     else {
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
@@ -268,7 +272,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
     CreateIC (call_data);
 
     if (!CurrentIC) {
-	CurrentIC = (IC *) FindIC (call_data->icid);;
+	CurrentIC = (IC *) FindIC (call_data->icid);
 	connect_id = call_data->connect_id;
 	icid = call_data->icid;
     }
@@ -318,7 +322,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 
-	if (bShowInputWindowTriggering)
+	if (bShowInputWindowTriggering && !bCorner)
 	    DisplayInputWindow ();
     }
 
@@ -362,6 +366,13 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 #ifdef _DEBUG
 	printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
+        //Sometimes, the main windows may show a wrong state of IM 
+	if (connect_id != ((IMForwardEventStruct *)call_data)->connect_id) {
+	    CurrentIC = (IC *) FindIC (((IMForwardEventStruct *)call_data)->icid);
+	    connect_id = ((IMForwardEventStruct *)call_data)->connect_id;
+	    SetIMState (!(ConnectIDGetState (connect_id) == IS_CLOSED));
+	}
+
 	ProcessKey ((IMForwardEventStruct *) call_data);
 	return True;
     case XIM_SET_IC_FOCUS:

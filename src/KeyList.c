@@ -22,7 +22,7 @@
 #include "xim.h"
 
 //键盘扫描码列表，只用于快速切换键
-KEYCODE_LIST    keyCodeList[] = {
+/* KEYCODE_LIST    keyCodeList[] = {
     {"LCTRL", L_CTRL}
     ,
     {"RCTRL", R_CTRL}
@@ -31,8 +31,12 @@ KEYCODE_LIST    keyCodeList[] = {
     ,
     {"RSHIFT", R_SHIFT}
     ,
+    {"LSUPER", L_SUPER}    
+    ,
+    {"RSUPER", R_SUPER}
+    ,
     {"\0", 0}
-};
+}; */
 
 KEY_LIST        keyList[] = {
     {"TAB", 9}
@@ -161,27 +165,36 @@ int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
 	}
     }
     else {
-	//由于大小写字母有区别，此处应该将其处理为等同
-	if (iKeyState != KEY_NONE && iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
-	    iKeyCode -= 32;
-
-	if (iKeyState == KEY_CTRL_COMP)
-	    return iKeyCode + 1000;
-	if (iKeyState == KEY_SHIFT_COMP) {
-	    //只处理空格
-	    if (iKeyCode == 32)
-		return iKeyCode + 2000;
+	if (iKeyState == KEY_NONE) {
+	    //小键盘的数字也要处理成与大键盘上一样      
+	    if (iKeyCode >= 176 && iKeyCode <= 185)
+		iKeyCode -= 128;
 	}
-	if (iKeyState == KEY_ALT_COMP)
-	    return iKeyCode + 3000;
-	if (iKeyState == KEY_CTRL_SHIFT_COMP)
-	    return iKeyCode + 4000;
-	if (iKeyState == KEY_CTRL_ALT_COMP)
-	    return iKeyCode + 5000;
-	if (iKeyState == KEY_ALT_SHIFT_COMP)
-	    return iKeyCode + 6000;
-	if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP)
-	    return iKeyCode + 7000;
+	else {
+	    //由于大小写字母有区别，此处应该将其处理为等同;
+	    if (iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
+		iKeyCode -= 32;
+
+	    if (iKeyState == KEY_CTRL_COMP)
+		return iKeyCode + 1000;
+	    if (iKeyState == KEY_SHIFT_COMP) {
+		//只处理空格
+		if (iKeyCode == 32)
+		    return iKeyCode + 2000;
+	    }
+	    if (iKeyState == KEY_ALT_COMP)
+		return iKeyCode + 3000;
+	    if (iKeyState == KEY_CTRL_SHIFT_COMP)
+		return iKeyCode + 4000;
+	    if (iKeyState == KEY_CTRL_ALT_COMP)
+		return iKeyCode + 5000;
+	    if (iKeyState == KEY_ALT_SHIFT_COMP)
+		return iKeyCode + 6000;
+	    if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP)
+		return iKeyCode + 7000;
+	    if (iKeyState == KEY_SUPER_COMP)
+		return iKeyCode + 8000;
+	}
     }
 
     return iKeyCode;
@@ -329,6 +342,24 @@ int ParseKey (char *strKey)
 		return -1;
 	}
     }
+    else if (!strncmp (strKey, "SUPER_", 6)) {
+	iKeyState = KEY_SUPER_COMP;
+	p = strKey + 6;
+	iKeyCode = GetKeyList (p);
+	if (iKeyCode != -1)
+	    iCount = 0;
+	else {
+	    iCount = 1;
+	    if (!strcmp (p, "SPACE"))
+		iKeyCode = ' ';
+	    else if (!strcmp (p, "DELETE"))
+		iKeyCode = DELETE;
+	    else if (strlen (p) == 1)
+		iKeyCode = p[0];
+	    else
+		return -1;
+	}
+    }
     else {
 	if (strlen (strKey) == 1)
 	    return strKey[0];
@@ -355,6 +386,7 @@ int GetKeyList (char *strKey)
     return -1;
 }
 
+/*
 int GetKeyCodeList (char *strKey)
 {
     int             i;
@@ -370,3 +402,4 @@ int GetKeyCodeList (char *strKey)
 
     return -1;
 }
+*/

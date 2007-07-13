@@ -1637,7 +1637,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=fcitx
- VERSION="'GirlDog' 3.5-070112"
+ VERSION="'GirlDog' 3.5-070403"
 
 
 cat >>confdefs.h <<_ACEOF

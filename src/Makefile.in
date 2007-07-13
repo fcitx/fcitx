@@ -58,7 +58,7 @@ am_fcitx_OBJECTS = IC.$(OBJEXT) ime.$(OBJEXT) InputWindow.$(OBJEXT) \
 	PYFA.$(OBJEXT) pyMapTable.$(OBJEXT) pyParser.$(OBJEXT) \
 	sp.$(OBJEXT) tools.$(OBJEXT) ui.$(OBJEXT) table.$(OBJEXT) \
 	xim.$(OBJEXT) qw.$(OBJEXT) vk.$(OBJEXT) about.$(OBJEXT) \
-	QuickPhrase.$(OBJEXT)
+	QuickPhrase.$(OBJEXT) extra.$(OBJEXT)
 fcitx_OBJECTS = $(am_fcitx_OBJECTS)
 fcitx_DEPENDENCIES = ../lib/libXimd.a
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -187,7 +187,8 @@ fcitx_SOURCES = IC.c IC.h \
                 qw.c qw.h \
 		vk.c vk.h \
 		about.c about,h \
-		QuickPhrase.c QuickPhrase.h
+		QuickPhrase.c QuickPhrase.h \
+		fcitx.h extra.c extra.h
 
 fcitx_LDADD = ../lib/libXimd.a
 fcitx_LDFLAGS = -lXpm

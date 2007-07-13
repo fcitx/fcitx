@@ -217,6 +217,8 @@ Bool LoadPYOtherDict (void)
 #endif
 */
 	    j = GetBaseIndex (i, strBase);
+	    if (j == -1)
+		break;
 
 	    PYFAList[i].pyBase[j].iPhrase = k;
 	    PYFAList[i].pyBase[j].phrase = (PyPhrase *) malloc (sizeof (PyPhrase) * k);
@@ -563,12 +565,16 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
 	else if (iKey == RIGHT) {
+	    if (!iCodeInputCount)
+		return IRV_TO_PROCESS;
 	    if (iPYInsertPoint == strlen (strFindString))
-		return IRV_DONOT_PROCESS;
+		return IRV_DO_NOTHING;
 	    iPYInsertPoint++;
 	    val = IRV_DISPLAY_CANDWORDS;
 	}
 	else if (iKey == LEFT) {
+	    if (!iCodeInputCount)
+		return IRV_TO_PROCESS;
 	    if (iPYInsertPoint < 2) {
 		if (iPYSelected) {
 		    char            strTemp[MAX_USER_INPUT + 1];
@@ -588,7 +594,7 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 		    val = IRV_DISPLAY_CANDWORDS;
 		}
 		else
-		    val = IRV_DONOT_PROCESS;
+		    val = IRV_DO_NOTHING;
 	    }
 	    else {
 		iPYInsertPoint--;
@@ -2694,9 +2700,9 @@ void SavePYIndex (void)
 		    fwrite (&i, sizeof (int), 1, fp);
 		    fwrite (&j, sizeof (int), 1, fp);
 		    fwrite (&k, sizeof (int), 1, fp);
-		    l=PYFAList[i].pyBase[j].iIndex;
+		    l = PYFAList[i].pyBase[j].iIndex;
 		    fwrite (&l, sizeof (uint), 1, fp);
-		    l=PYFAList[i].pyBase[j].iHit;
+		    l = PYFAList[i].pyBase[j].iHit;
 		    fwrite (&l, sizeof (uint), 1, fp);
 		}
 	    }
@@ -2713,9 +2719,9 @@ void SavePYIndex (void)
 			    fwrite (&i, sizeof (int), 1, fp);
 			    fwrite (&j, sizeof (int), 1, fp);
 			    fwrite (&k, sizeof (int), 1, fp);
-			    l=PYFAList[i].pyBase[j].phrase[k].iIndex;			    
+			    l = PYFAList[i].pyBase[j].phrase[k].iIndex;
 			    fwrite (&l, sizeof (uint), 1, fp);
-			    l=PYFAList[i].pyBase[j].phrase[k].iHit;
+			    l = PYFAList[i].pyBase[j].phrase[k].iHit;
 			    fwrite (&l, sizeof (uint), 1, fp);
 			}
 		    }

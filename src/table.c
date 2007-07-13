@@ -127,7 +127,8 @@ extern Bool     bIsInLegend;
 extern INT8     lastIsSingleHZ;
 extern Bool     bDisablePagingInLegend;
 extern Bool     bShowCursor;
-extern Bool     bAutoHideInputWindow;
+
+//extern Bool     bAutoHideInputWindow;
 extern ADJUSTORDER baseOrder;
 extern Bool     bSP;
 extern Bool     bPYBaseDictLoaded;
@@ -803,10 +804,11 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	else if (iKey != LCTRL && iKey != RCTRL && iKey != LSHIFT && iKey != RSHIFT) {
 	    uMessageUp = uMessageDown = 0;
 	    bTablePhraseTips = False;
-	    if (bAutoHideInputWindow)
-		XUnmapWindow (dpy, inputWindow);
-	    else
-		DisplayInputWindow ();
+	    //if (bAutoHideInputWindow)
+	    XUnmapWindow (dpy, inputWindow);
+	    /* else
+	       DisplayInputWindow ();
+	     */
 	}
     }
 
@@ -1285,11 +1287,11 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 
 	    if (mode == SM_NEXT) {
 		if (iTableCandDisplayed >= iTableTotalCandCount)
-		    return IRV_TO_PROCESS;
+		    return IRV_DO_NOTHING;
 	    }
 	    else {
 		if (iTableCandDisplayed == iCandWordCount)
-		    return IRV_TO_PROCESS;
+		    return IRV_DO_NOTHING;
 
 		iTableCandDisplayed -= iCandWordCount;
 		TableSetCandWordsFlag (iCandWordCount, False);

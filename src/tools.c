@@ -86,7 +86,7 @@ extern INT8     iTriggerKeyCount;
 
 extern Bool     bUseGBK;
 extern Bool     bEngPuncAfterNumber;
-extern Bool     bAutoHideInputWindow;
+//extern Bool     bAutoHideInputWindow;
 extern XColor   colorArrow;
 extern Bool     bTrackCursor;
 extern Bool     bCenterInputWindow;
@@ -253,8 +253,8 @@ void LoadConfig (Bool bMode)
 	    iMainWindowFontSize = atoi (pstr);
 	}
 #ifdef _USE_XFT
-	else if (MyStrcmp (pstr, "是否使用AA字体=")) {
-	    pstr += 15;
+	else if (MyStrcmp (pstr, "使用AA字体=")) {
+	    pstr += 11;
 	    bUseAA = atoi (pstr);
 	}
 #else
@@ -263,8 +263,8 @@ void LoadConfig (Bool bMode)
 	    strcpy (strUserLocale, pstr);
 	}
 #endif
-	else if (MyStrcmp (pstr, "是否使用粗体=")) {
-	    pstr += 13;
+	else if (MyStrcmp (pstr, "使用粗体=")) {
+	    pstr += 9;
 	    bUseBold = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "候选词个数=")) {
@@ -281,20 +281,20 @@ void LoadConfig (Bool bMode)
 	   pstr += 11;
 	   bLumaQQ = atoi (pstr);
 	   } */
-	else if (MyStrcmp (pstr, "主窗口是否使用3D界面=")) {
-	    pstr += 21;
+	else if (MyStrcmp (pstr, "主窗口使用3D界面=")) {
+	    pstr += 17;
 	    _3DEffectMainWindow = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "输入条使用3D界面=")) {
 	    pstr += 17;
 	    _3DEffectInputWindow = (_3D_EFFECT) atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "是否自动隐藏输入条=")) {
-	    pstr += 19;
-	    bAutoHideInputWindow = atoi (pstr);
-	}
-	else if (MyStrcmp (pstr, "输入条是否居中=")) {
+	/*else if (MyStrcmp (pstr, "自动隐藏输入条=")) {
 	    pstr += 15;
+	    bAutoHideInputWindow = atoi (pstr);
+	}*/
+	else if (MyStrcmp (pstr, "输入条居中=")) {
+	    pstr += 11;
 	    bCenterInputWindow = atoi (pstr);
 	}
 	else if (MyStrcmp (pstr, "输入条固定宽度=")) {
@@ -509,8 +509,8 @@ void LoadConfig (Bool bMode)
 	    pstr += 17;
 	    bDisablePagingInLegend = atoi (pstr);
 	}
-	else if (MyStrcmp (pstr, "联想支持=")) {
-	    pstr += 9;
+	else if (MyStrcmp (pstr, "联想=")) {
+	    pstr += 5;
 	    SetHotKey (pstr, hkLegend);
 	}
 	else if (MyStrcmp (pstr, "反查拼音=")) {
@@ -635,49 +635,49 @@ void LoadConfig (Bool bMode)
 	    pstr += 23;
 	    freqOrder = (ADJUSTORDER) atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊an和ang=")) {
-	    pstr += 16;
+	else if (MyStrcmp (str, "模糊an和ang=")) {
+	    pstr += 12;
 	    MHPY_C[0].bMode = atoi (pstr);
 	    MHPY_S[5].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊en和eng=")) {
-	    pstr += 16;
+	else if (MyStrcmp (str, "模糊en和eng=")) {
+	    pstr += 12;
 	    MHPY_C[1].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊ian和iang=")) {
-	    pstr += 18;
+	else if (MyStrcmp (str, "模糊ian和iang=")) {
+	    pstr += 14;
 	    MHPY_C[2].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊in和ing=")) {
-	    pstr += 16;
+	else if (MyStrcmp (str, "模糊in和ing=")) {
+	    pstr += 12;
 	    MHPY_C[3].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊ou和u=")) {
-	    pstr += 14;
+	else if (MyStrcmp (str, "模糊ou和u=")) {
+	    pstr += 10;
 	    MHPY_C[4].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊uan和uang=")) {
-	    pstr += 18;
+	else if (MyStrcmp (str, "模糊uan和uang=")) {
+	    pstr += 14;
 	    MHPY_C[5].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊c和ch=")) {
-	    pstr += 14;
+	else if (MyStrcmp (str, "模糊c和ch=")) {
+	    pstr += 10;
 	    MHPY_S[0].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊f和h=")) {
-	    pstr += 13;
+	else if (MyStrcmp (str, "模糊f和h=")) {
+	    pstr += 9;
 	    MHPY_S[1].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊l和n=")) {
-	    pstr += 13;
+	else if (MyStrcmp (str, "模糊l和n=")) {
+	    pstr += 9;
 	    MHPY_S[2].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊s和sh=")) {
-	    pstr += 14;
+	else if (MyStrcmp (str, "模糊s和sh=")) {
+	    pstr += 10;
 	    MHPY_S[3].bMode = atoi (pstr);
 	}
-	else if (MyStrcmp (str, "是否模糊z和zh=")) {
-	    pstr += 14;
+	else if (MyStrcmp (str, "模糊z和zh=")) {
+	    pstr += 10;
 	    MHPY_S[4].bMode = atoi (pstr);
 	}
     }
@@ -724,9 +724,9 @@ void SaveConfig (void)
     else
 	fprintf (fp, "#字体区域=zh_CN.gb18030\n");
 #ifdef _USE_XFT
-    fprintf (fp, "是否使用AA字体=%d\n", bUseAA);
+    fprintf (fp, "使用AA字体=%d\n", bUseAA);
 #endif
-    fprintf (fp, "是否使用粗体=%d\n", bUseBold);
+    fprintf (fp, "使用粗体=%d\n", bUseBold);
 
     fprintf (fp, "\n[输出]\n");
     fprintf (fp, "数字后跟半角符号=%d\n", bEngPuncAfterNumber);
@@ -739,12 +739,12 @@ void SaveConfig (void)
 
     fprintf (fp, "\n[界面]\n");
     fprintf (fp, "候选词个数=%d\n", iMaxCandWord);
-    fprintf (fp, "主窗口是否使用3D界面=%d\n", _3DEffectMainWindow);
+    fprintf (fp, "主窗口使用3D界面=%d\n", _3DEffectMainWindow);
     fprintf (fp, "输入条使用3D界面=%d\n", _3DEffectInputWindow);
     fprintf (fp, "主窗口隐藏模式=%d\n", (int) hideMainWindow);
     fprintf (fp, "显示虚拟键盘=%d\n", (int) bShowVK);
-    fprintf (fp, "是否自动隐藏输入条=%d\n", bAutoHideInputWindow);
-    fprintf (fp, "输入条是否居中=%d\n", bCenterInputWindow);
+    //fprintf (fp, "自动隐藏输入条=%d\n", bAutoHideInputWindow);
+    fprintf (fp, "输入条居中=%d\n", bCenterInputWindow);
     fprintf (fp, "首次显示输入条=%d\n", bShowInputWindowTriggering);
     fprintf (fp, "#输入条固定宽度(仅适用于码表输入法)，0表示不固定宽度\n");
     fprintf (fp, "输入条固定宽度=%d\n", iFixedInputWindowWidth);
@@ -778,14 +778,14 @@ void SaveConfig (void)
     fprintf (fp, "\n#除了“中英文快速切换键”外，其它的热键均可设置为两个，中间用空格分隔\n");
     fprintf (fp, "[热键]\n");
     fprintf (fp, "打开/关闭输入法=CTRL_SPACE\n");
-    fprintf (fp, "#中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT\n");
+    fprintf (fp, "#中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT L_SUPER R_SUPER\n");
     fprintf (fp, "中英文快速切换键=L_CTRL\n");
     fprintf (fp, "双击中英文切换=%d\n", bDoubleSwitchKey);
     fprintf (fp, "击键时间间隔=%u\n", iTimeInterval);
     fprintf (fp, "光标跟随=CTRL_K\n");
     fprintf (fp, "GBK支持=CTRL_M\n");
     fprintf (fp, "GBK繁体切换键=CTRL_ALT_F\n");
-    fprintf (fp, "联想支持=CTRL_L\n");
+    fprintf (fp, "联想=CTRL_L\n");
     fprintf (fp, "反查拼音=CTRL_ALT_E\n");
     fprintf (fp, "全半角=SHIFT_SPACE\n");
     fprintf (fp, "中文标点=ALT_SPACE\n");
@@ -795,9 +795,12 @@ void SaveConfig (void)
 
     fprintf (fp, "\n[输入法]\n");
     fprintf (fp, "使用拼音=%d\n", bUsePinyin);
+    fprintf (fp, "拼音名称=%s\n", strNameOfPinyin);
     fprintf (fp, "使用双拼=%d\n", bUseSP);
+    fprintf (fp, "双拼名称=%s\n", strNameOfShuangpin);
     fprintf (fp, "默认双拼方案=%s\n", strDefaultSP);
     fprintf (fp, "使用区位=%d\n", bUseQW);
+    fprintf (fp, "区位名称=%s\n", strNameOfQuwei);
     fprintf (fp, "使用码表=%d\n", bUseTable);
     fprintf (fp, "提示词库中的词组=%d\n", bPhraseTips);
 
@@ -814,17 +817,17 @@ void SaveConfig (void)
     fprintf (fp, "拼音单字重码调整方式=%d\n", baseOrder);
     fprintf (fp, "拼音词组重码调整方式=%d\n", phraseOrder);
     fprintf (fp, "拼音常用词重码调整方式=%d\n", freqOrder);
-    fprintf (fp, "是否模糊an和ang=%d\n", MHPY_C[0].bMode);
-    fprintf (fp, "是否模糊en和eng=%d\n", MHPY_C[1].bMode);
-    fprintf (fp, "是否模糊ian和iang=%d\n", MHPY_C[2].bMode);
-    fprintf (fp, "是否模糊in和ing=%d\n", MHPY_C[3].bMode);
-    fprintf (fp, "是否模糊ou和u=%d\n", MHPY_C[4].bMode);
-    fprintf (fp, "是否模糊uan和uang=%d\n", MHPY_C[5].bMode);
-    fprintf (fp, "是否模糊c和ch=%d\n", MHPY_S[0].bMode);
-    fprintf (fp, "是否模糊f和h=%d\n", MHPY_S[1].bMode);
-    fprintf (fp, "是否模糊l和n=%d\n", MHPY_S[2].bMode);
-    fprintf (fp, "是否模糊s和sh=%d\n", MHPY_S[3].bMode);
-    fprintf (fp, "是否模糊z和zh=%d\n", MHPY_S[4].bMode);
+    fprintf (fp, "模糊an和ang=%d\n", MHPY_C[0].bMode);
+    fprintf (fp, "模糊en和eng=%d\n", MHPY_C[1].bMode);
+    fprintf (fp, "模糊ian和iang=%d\n", MHPY_C[2].bMode);
+    fprintf (fp, "模糊in和ing=%d\n", MHPY_C[3].bMode);
+    fprintf (fp, "模糊ou和u=%d\n", MHPY_C[4].bMode);
+    fprintf (fp, "模糊uan和uang=%d\n", MHPY_C[5].bMode);
+    fprintf (fp, "模糊c和ch=%d\n", MHPY_S[0].bMode);
+    fprintf (fp, "模糊f和h=%d\n", MHPY_S[1].bMode);
+    fprintf (fp, "模糊l和n=%d\n", MHPY_S[2].bMode);
+    fprintf (fp, "模糊s和sh=%d\n", MHPY_S[3].bMode);
+    fprintf (fp, "模糊z和zh=%d\n", MHPY_S[4].bMode);
 
     fclose (fp);
 }
@@ -897,40 +900,40 @@ void LoadProfile (void)
 		else if ((iInputWindowY + INPUTWND_HEIGHT) > DisplayHeight (dpy, iScreen))
 		    iInputWindowY = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
 	    }
-	    else if (MyStrcmp (str, "是否全角=")) {
-		pstr += 9;
+	    else if (MyStrcmp (str, "全角=")) {
+		pstr += 5;
 		bCorner = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "是否中文标点=")) {
-		pstr += 13;
+	    else if (MyStrcmp (str, "中文标点=")) {
+		pstr += 9;
 		bChnPunc = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "是否GBK=")) {
-		pstr += 8;
+	    else if (MyStrcmp (str, "GBK=")) {
+		pstr += 4;
 		bUseGBK = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "是否光标跟随=")) {
-		pstr += 13;
+	    else if (MyStrcmp (str, "光标跟随=")) {
+		pstr += 9;
 		bTrackCursor = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "是否联想=")) {
-		pstr += 9;
+	    else if (MyStrcmp (str, "联想=")) {
+		pstr += 5;
 		bUseLegend = atoi (pstr);
 	    }
 	    else if (MyStrcmp (str, "当前输入法=")) {
 		pstr += 11;
 		iIMIndex = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "禁止用键盘切换=")) {
-		pstr += 15;
+	    else if (MyStrcmp (str, "禁止键盘切换=")) {
+		pstr += 13;
 		bLocked = atoi (pstr);
 	    }
 	    else if (MyStrcmp (str, "简洁模式=")) {
 		pstr += 9;
 		bCompactMainWindow = atoi (pstr);
 	    }
-	    else if (MyStrcmp (str, "是否输出GBK繁体=")) {
-		pstr += 16;
+	    else if (MyStrcmp (str, "GBK繁体=")) {
+		pstr += 8;
 		bUseGBKT = atoi (pstr);
 	    }
 	}
@@ -968,16 +971,16 @@ void SaveProfile (void)
     fprintf (fp, "主窗口位置Y=%d\n", iMainWindowY);
     fprintf (fp, "输入窗口位置X=%d\n", iInputWindowX);
     fprintf (fp, "输入窗口位置Y=%d\n", iInputWindowY);
-    fprintf (fp, "是否全角=%d\n", bCorner);
-    fprintf (fp, "是否中文标点=%d\n", bChnPunc);
-    fprintf (fp, "是否GBK=%d\n", bUseGBK);
-    fprintf (fp, "是否光标跟随=%d\n", bTrackCursor);
-    fprintf (fp, "是否联想=%d\n", bUseLegend);
+    fprintf (fp, "全角=%d\n", bCorner);
+    fprintf (fp, "中文标点=%d\n", bChnPunc);
+    fprintf (fp, "GBK=%d\n", bUseGBK);
+    fprintf (fp, "光标跟随=%d\n", bTrackCursor);
+    fprintf (fp, "联想=%d\n", bUseLegend);
     fprintf (fp, "当前输入法=%d\n", iIMIndex);
-    fprintf (fp, "禁止用键盘切换=%d\n", bLocked);
+    fprintf (fp, "禁止键盘切换=%d\n", bLocked);
     fprintf (fp, "简洁模式=%d\n", bCompactMainWindow);
 
-    fprintf (fp, "是否输出GBK繁体=%d\n", bUseGBKT);
+    fprintf (fp, "GBK繁体=%d\n", bUseGBKT);
 
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
@@ -1049,13 +1052,17 @@ int CalculateRecordNumber (FILE * fpDict)
 void SetSwitchKey (char *str)
 {
     if (!strcasecmp (str, "R_CTRL"))
-	switchKey = R_CTRL;
+	switchKey = XKeysymToKeycode(dpy, XK_Control_R);
     else if (!strcasecmp (str, "R_SHIFT"))
-	switchKey = R_SHIFT;
+	switchKey = XKeysymToKeycode(dpy, XK_Shift_R);
     else if (!strcasecmp (str, "L_SHIFT"))
-	switchKey = L_SHIFT;
+	switchKey = XKeysymToKeycode(dpy, XK_Shift_L);
+    else if (!strcasecmp (str, "R_SUPER"))
+	switchKey = XKeysymToKeycode(dpy, XK_Super_R);
+    else if (!strcasecmp (str, "L_SUPER"))
+	switchKey = XKeysymToKeycode(dpy, XK_Super_L);
     else
-	switchKey = L_CTRL;
+        switchKey = XKeysymToKeycode(dpy, XK_Control_L);
 }
 
 void SetTriggerKeys (char *str)
@@ -1102,6 +1109,10 @@ void SetTriggerKeys (char *str)
 	    Trigger_Keys[i].modifier = Trigger_Keys[i].modifier | Mod1Mask;
 	    Trigger_Keys[i].modifier_mask = Trigger_Keys[i].modifier_mask | Mod1Mask;
 	}
+	else if (MyStrcmp (strKey[i], "SUPER_")) {
+	    Trigger_Keys[i].modifier = Trigger_Keys[i].modifier | Mod4Mask;
+	    Trigger_Keys[i].modifier_mask = Trigger_Keys[i].modifier_mask | Mod4Mask;
+	}
 
 	if (Trigger_Keys[i].modifier == 0) {
 	    Trigger_Keys[i].modifier = ControlMask;
@@ -1133,6 +1144,10 @@ void SetTriggerKeys (char *str)
 	    Trigger_Keys[i].keysym = XK_Alt_L;
 	else if (!strcasecmp (p, "RALT"))
 	    Trigger_Keys[i].keysym = XK_Alt_R;
+	else if (!strcasecmp (p, "LSUPER"))
+	    Trigger_Keys[i].keysym = XK_Super_L;
+	else if (!strcasecmp (p, "RSUPER"))
+	    Trigger_Keys[i].keysym = XK_Super_R;
 	else
 	    Trigger_Keys[i].keysym = XK_space;
     }

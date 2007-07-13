@@ -27,6 +27,7 @@ fcitx_SOURCES = IC.c IC.h \
                 qw.c qw.h \
 		vk.c vk.h \
 		about.c about,h \
-		QuickPhrase.c QuickPhrase.h
+		QuickPhrase.c QuickPhrase.h \
+		fcitx.h extra.c extra.h
 fcitx_LDADD = ../lib/libXimd.a
 fcitx_LDFLAGS = -lXpm

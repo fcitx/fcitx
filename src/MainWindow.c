@@ -84,6 +84,8 @@ HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 Bool            bCompactMainWindow = False;
 Bool            bShowVK = False;
 
+char           *strFullCorner = "全角模式";
+
 extern Display *dpy;
 extern GC       dimGC;
 extern int      i3DEffect;
@@ -244,7 +246,14 @@ void DrawMainWindow (void)
 	XClearArea (dpy, mainWindow, iPos, 2, MAINWND_WIDTH - iPos - 2, MAINWND_HEIGHT - 4, False);
 #ifdef _USE_XFT
 	iPos += 2;
-	p1 = (bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName;
+
+	if (bVK)
+	    p1 = vks[iCurrentVK].strName;
+	else if (bCorner)
+	    p1 = strFullCorner;
+	else
+	    p1 = im[iIMIndex].strName;
+
 	while (*p1) {
 	    p2 = strTemp;
 	    if (isprint (*p1))	//使用中文字体

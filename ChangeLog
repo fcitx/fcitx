@@ -1,3 +1,39 @@
+2007-03-0403: Yuking <yuking_net@sohu.com>
+	   * src/py.c: 修正一个可能导致程序崩溃的读取词库问题
+	   * 版本3.5-070403
+	   
+2007-03-27: Yuking <yuking_net@sohu.com>
+	   * src/KeyList.c,tools.c: 支持Super键及其组合
+
+2007-03-14: Yuking <yuking_net@sohu.com>
+	   * src/KeyList.c: 支持小键盘选字/词
+	   
+2007-03-06: Yuking <yuking_net@sohu.com>
+	   * src/MainWindow.c: 全角模式时在输入法名处显示“全角模式”
+
+2007-03-05: Chiyuan Zhang(pluskid DOT zju AT gmail DOT com)
+	   *用XKeysymToKeycode来替换原来的读取扫描码，以便fcitx能得到用户自定义的键
+	   * src/KeyList.c: 屏蔽函数GetKeyCodeList，因为它根本就没有用
+
+2007-03-05: dgod(dgod@linuxsir.org)
+	   * 添加使用外部输入法模块和提供开发外部输入法的接口，这样可以为fcitx编写自己的输入法了
+	   
+2007-01-31: Yuking <yuking_net@sohu.com>
+	   * src/xim.c: 修正某些情况下状态栏显示不准确的问题
+	   * 去掉自动隐藏输入条的选项，改为总是自动隐藏
+	   
+2007-01-23: Yuking <yuking_net@sohu.com>
+ 	   * src/tools.c: 修改设置文件，去掉“是否”(unicom_2@linuxsir)
+	   * src/table.c: 修正临时拼音时的一个显示错误
+	   * src/table.c: 修改翻页键的行为
+
+2007-01-15: Yuking <yuking_net@sohu.com>
+	   * src/py.c: 应kde@magiclinux的建议，更改了拼音预编辑模式下按左/右键的行为
+
+2007-01-13: Yuking <yuking_net@sohu.com>
+	   * src/tools.c: 打开拼音/区位名称设置（原来没有出现在配置文件中）
+	   * src/PYFA.c: 修正某些模糊拼音无法生效的问题
+
 2007-01-12: Yuking <yuking_net@sohu.com>
 	   * src/table.c: 增加用户自定义上屏键的功能
 	   * 默认采用vvg的“fcitx蓝紫色简单风格”（vvg@linuxsir）
