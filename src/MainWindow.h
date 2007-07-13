@@ -4,7 +4,7 @@
 #include <X11/Xlib.h>
 
 #define MAINWND_STARTX	500
-#define _MAINWND_WIDTH	110
+#define _MAINWND_WIDTH	121
 #define MAINWND_STARTY	1
 #define MAINWND_HEIGHT	20
 
@@ -17,5 +17,6 @@ typedef enum _HIDE_MAINWINDOW {
 Bool            CreateMainWindow (void);
 void            DisplayMainWindow (void);
 void            InitMainWindowColor (void);
+void		ChangeLock (void);
 
 #endif

@@ -1,61 +1,38 @@
 <html>
 <head>
-  <title>小企鹅中文输入法(版本2)使用说明</title>
+  <title>小企鹅中文输入法(版本2.0.2)使用说明</title>
   <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
 </head>
 <body>
 <div align="center">
-<h2>小企鹅中文输入法(fcitx)使用说明(版本2)</h2>
+<h2>小企鹅中文输入法(fcitx)使用说明(版本2。0.2)</h2>
  <a href="mailto:yuking_net@sohu.com">Yuking</a></div>
 <p><font color="#ff0000"><b>！！XIM程序崩溃会导致应用程序和X的崩溃，因此请随时保存数据。</b></font></p>
 <p><b>一、小企鹅中文输入法(fcitx)是什么？</b></p>
-<p>　　小企鹅中文输入法是一个以GPL方式发布的XIM简体中文输入法，包括五笔和拼音输入法。您可以从<a
+<p>　　小企鹅中文输入法是一个以GPL方式发布的XIM简体中文输入法，包括五笔、拼音和二笔输入法。您可以从<a
  href="http://www.fcitx.org">www.fcitx.org</a>下载最新版。</p>
 <p><b>二、安装</b></p>
 <p>　　如果您正确安装了gcc编译器和XFree86的开发包(通常名为XFree86-devel)，就可以正常编译fcitx。<br>
- 　　首先到<a href="http://www.fcitx.org">www.fcitx.org</a>下载fcitx的源码包，文件名为fcitx-2.0.tar.gz或fcitx-2.0.tar.bz2，存放在目录/temp下。如果是tar.gz文件，利用以下命令解包：<br>
+ 　　首先到<a href="http://www.fcitx.org">www.fcitx.org</a>下载fcitx的源码包，文件名为fcitx-2.0.2.tar.gz或fcitx-2.0.2.tar.bz2，存放在目录/temp下。如果是tar.gz文件，利用以下命令解包：<br>
 </p>
 <ul>
 cd /temp<br>
-tar zxvf fcitx-2.0.tar.gz<br>
+tar zxvf fcitx-2.0.2.tar.gz<br>
 </ul>
 　　如果是tar.bz2文件，利用以下命令解包：<br>
 <ul>
 cd /temp<br>
-tar jxvf fcitx-2.0.tar.gz<br>
+tar jxvf fcitx-2.0.2.tar.gz<br>
 </ul>
-　　这样会建立目录fcitx-2.0，所有的源码都在该目录中。<br>
+　　这样会建立目录fcitx-2.0.0，所有的源码都在该目录中。<br>
 　　如果您的系统中已经安装好了gcc和XFree86的开发包，就可以利用以下命令编译安装fcitx(需要root用户)：<br>
 <ul>
- cd fcitx-2.0<br>
- make clean<br>
- make && make install<br>
+<pre>
+ cd fcitx-2.0.2
+ ./configure --prefix=<安装目录>
+ make && make install
+ </pre>
 </ul>
-　　这样会安装XFT版的fcitx。如果您不想使用XFT，也可以选择完装使用X核心字体的fcitx：
-<ul>
- cd fcitx-2.0<br>
- make clean<br>
- make -f Makefile.noxft && make install<br>
-</ul>
-　　编译安装完成后，会在系统中复制以下文件：<br>
-
-<ul>
- /usr/bin/fcitx<br>
- /usr/share/fcitx/punc.mb<br>
- /usr/share/fcitx/pybase.mb<br>
- /usr/share/fcitx/pyphrase.mb<br>
- /usr/share/fcitx/wbx.mb<br>
-</ul>
-　　如果您没有root权限，上述安装过程需要用“make install_local”来代替“make install”，此时，fcitx会在您的用户目录下复制以下文件：
-<ul>
- bin/fcitx<br>
- fcitx/fcitx<br>
- fcitx/punc.mb<br>
- fcitx/pybase.mb<br>
- fcitx/pyphrase.mb<br>
- fcitx/wbx.mb<br>
-</ul>
-
 <p><b>三、配置</b></p>
 
 <p>　　应用程序通过环境变量XMODIFIERS与XIM沟通，设置XMODIFIERS的方法如下(以bash为例)：</p>
@@ -96,7 +73,7 @@ tar jxvf fcitx-2.0.tar.gz<br>
 #区域设置=zh_CN
 显示字体=*
 显示字体大小=18
-是否使用Ctrl_Shift打开输入法=1
+是否使用AA字体=1
 
 [输出]
 数字后跟半角符号=1
@@ -127,7 +104,9 @@ Enter键行为=2
 #五笔、拼音的单字/系统词组均使用该颜色
 输入窗其它文本色=0 0 0
 
+#除了“中英文快速切换键”外，其它的热键均可设置为两个，中间用空格分隔
 [热键]
+打开/关闭输入法=CTRL_SPACE
 #中英文快速切换键 可以设置为L_CTRL R_CTRL L_SHIFT R_SHIFT
 中英文快速切换键=L_CTRL
 GBK支持=CTRL_M
@@ -176,8 +155,7 @@ GBK支持=CTRL_M
 <p>下面对其中一些设置加以说明：</p>
 <ul>
   <li>区域设置：正常情况下，该项不必修改。</li>
-  <LI>显示字体：显示字体，如'simsun'等.</LI>
-  <LI>是否使用Ctrl_Shift打开输入法：正常情况下，按CTRL+空格键打开/关闭输入法；该项设置为1时，可以用Ctrl_Shift打开/关闭输入法。</LI>
+  <LI>显示字体：显示字体，如'simsun'等.</LI>  
   <LI>数字后跟半角符号：当输入阿拉伯数字后，紧接输入的'.'和','会以半角方式输出，而不会输出'。'和'，'；该功能主要是为方便录入数字而设的。</LI>
   <LI>联想方式禁止翻页：由于默认的,/.为翻页键，因此联想方式下会导致标点符号输入不方便，打开该选项会使得在联想方式下不翻页。</LI>
   <LI>候选词个数：选择范围为1~10，如果大于10，则为10。</LI>
@@ -264,8 +242,7 @@ GBK支持=CTRL_M
 
 <p><b>六、其它说明</b></p>
 
-<p>　　由于本人的精力有限，无法一一调整字/词序，开始使用时的字/词序可能不是很好，且词组数量有限(甚至没有很多常用词)，但我相信您使用一段时间后就没有这个问题了。如果您有更好的五笔/拼音码表，且没有什么不方便的话，请<a
- href="mailto:yuking_net@sohu.com">寄给本人</a>，非常感谢。<br>
+<p>
  <br>　　fcitx的五笔86码表来自于cjkvinput项目(<a
  href="http://sourceforge.net/projects/cjkvinput">http://sourceforge.net/projects/cjkvinput</a>)，请<a
  href="cjkvinput.txt">阅读有关说明</a>。<br> 

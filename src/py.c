@@ -88,11 +88,30 @@ extern int      iLegendCandPageCount;
 extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
 
+#if defined(DARWIN)
+/* function to reverse byte order for integer
+this is required for Mac machine*/
+int ReverseInt (unsigned int pc_int)
+{
+    int mac_int;
+    unsigned char * p;
+
+    mac_int = pc_int;
+    p = (unsigned char*) &pc_int;
+    mac_int = (p[3] << 24) + (p[2] << 16) + (p[1] << 8) + p[0];
+    return mac_int;
+}
+#endif
+
 Bool LoadPYBaseDict (void)
 {
     FILE           *fp;
     char            strPath[PATH_MAX];
+    #if defined(DARWIN)
+    unsigned int    i, j, iLen;
+    #else
     int             i, j, iLen;
+    #endif
 
     strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_BASE_FILE);
@@ -157,11 +176,17 @@ Bool LoadPYOtherDict (void)
     else {
 	while (!feof (fp)) {
 	    if (!fread (&i, sizeof (int), 1, fp))
+		#if defined(DARWIN)
+		i = ReverseInt(i);
+		#endif
 		break;
 	    if (!fread (strBase, sizeof (char) * 2, 1, fp))
 		break;
 	    strBase[2] = '\0';
 	    if (!fread (&k, sizeof (int), 1, fp))
+		#if defined(DARWIN)
+		k = ReverseInt(k);
+		#endif
 		break;
 
 	    j = GetBaseIndex (i, strBase);
@@ -2638,7 +2663,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE mode)
 	messageDown[uMessageDown++].type = MSG_INDEX;
 
 	strcpy (messageDown[uMessageDown].strMsg, PYLegendCandWords[i].phrase->strPhrase + PYLegendCandWords[i].iLength);
-	if (i != (iCandWordCount - 1)) {
+	if (i != (iLegendCandWordCount - 1)) {
 #ifdef _USE_XFT
 	    strcat (messageDown[uMessageDown].strMsg, "  ");
 #else

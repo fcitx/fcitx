@@ -3,11 +3,19 @@
 #include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
+#if defined(DARWIN)
+#include <sys/wait.h>
+#else
 #include <wait.h>
+#endif
 
 #include "wbx.h"
 #include "erbi.h"
 #include "py.h"
+
+#if defined(DARWIN)
+#define SIGUNUSED 32
+#endif
 
 XErrorHandler   oldXErrorHandler;
 

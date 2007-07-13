@@ -12,7 +12,6 @@
 
 long            filter_mask = KeyPressMask | KeyReleaseMask;
 IC             *CurrentIC;
-Bool            bUseCtrlShift = False;
 Bool            bBackground = True;
 
 extern Display *dpy;
@@ -47,7 +46,7 @@ static XIMStyle Styles[] = {
 };
 
 /* Trigger Keys List */
-static XIMTriggerKey Trigger_Keys_Ctrl_Shift[] = {
+/*static XIMTriggerKey Trigger_Keys_Ctrl_Shift[] = {
     {XK_space, ControlMask, ControlMask},
     {XK_Shift_L, ControlMask, ControlMask},
     {0L, 0L, 0L}
@@ -56,7 +55,10 @@ static XIMTriggerKey Trigger_Keys_Ctrl_Shift[] = {
 XIMTriggerKey   Trigger_Keys[] = {
     {XK_space, ControlMask, ControlMask},
     {0L, 0L, 0L}
-};
+};*/
+
+XIMTriggerKey   *Trigger_Keys=(XIMTriggerKey *)NULL;
+INT8	iTriggerKeyCount;
 
 /* Supported Chinese Encodings */
 static XIMEncoding zhEncodings[] = {
@@ -155,7 +157,10 @@ Bool MyCloseHandler (XIMS ims, IMOpenStruct * call_data)
 Bool MyCreateICHandler (XIMS ims, IMChangeICStruct * call_data)
 {
     CreateIC (call_data);
-    CurrentIC = (IC *) FindIC (call_data->icid);
+    
+    if ( !CurrentIC )
+	CurrentIC = (IC *) FindIC (call_data->icid);
+    
     return True;
 }
 
@@ -195,6 +200,8 @@ Bool MyForwardEventHandler (XIMS ims, IMForwardEventStruct * call_data)
 {
     if (CurrentIC == NULL)
 	return True;
+    if (CurrentIC != (IC *) FindIC (call_data->icid))
+	return True;
 
     /*if ( bDebug )
        fprintf(fd,"PROCESS   %d\n",call_data->event.type); */
@@ -218,7 +225,7 @@ Bool MyTriggerNotifyHandler (XIMS ims, IMTriggerNotifyStruct * call_data)
 	CurrentIC->imeState = IS_CHN;
 	DisplayInputWindow ();
 	DisplayMainWindow ();
-
+	
 	return True;
     }
 //      else if (use_offkey && call_data->flag == 1)
@@ -251,81 +258,80 @@ Bool MyPreeditCaretReplyHandler (XIMS ims, IMPreeditCBStruct * call_data)
     return True;
 }
 
+/*
+#define _PRINT_MESSAGE
+*/
 Bool MyProtoHandler (XIMS ims, IMProtocol * call_data)
 {
-    /*switch (call_data->major_code) {
-       case XIM_OPEN:
-       fprintf (stderr, "XIM_OPEN:\n");
-       return MyOpenHandler (ims, call_data);
-       case XIM_CLOSE:
-       fprintf (stderr, "XIM_CLOSE:\n");
-       return MyCloseHandler (ims, call_data);
-       case XIM_CREATE_IC:
-       fprintf (stderr, "XIM_CREATE_IC:\n");
-       return MyCreateICHandler (ims, call_data);
-       case XIM_DESTROY_IC:
-       fprintf (stderr, "XIM_DESTROY_IC.\n");
-       return MyDestroyICHandler (ims, call_data);
-       case XIM_SET_IC_VALUES:
-       fprintf (stderr, "XIM_SET_IC_VALUES:\n");
-       return MySetICValuesHandler (ims, call_data);
-       case XIM_GET_IC_VALUES:
-       fprintf (stderr, "XIM_GET_IC_VALUES:\n");
-       return MyGetICValuesHandler (ims, call_data);
-       case XIM_FORWARD_EVENT:
-       return MyForwardEventHandler (ims, call_data);
-       case XIM_SET_IC_FOCUS:
-       fprintf (stderr, "XIM_SET_IC_FOCUS()\n");
-       return MySetFocusHandler (ims, (IMChangeFocusStruct *) call_data);
-       case XIM_UNSET_IC_FOCUS:
-       fprintf (stderr, "XIM_UNSET_IC_FOCUS:\n");
-       return MyUnsetFocusHandler (ims, (IMChangeICStruct *) call_data);;
-       case XIM_RESET_IC:
-       fprintf (stderr, "XIM_RESET_IC_FOCUS:\n");
-       return True;
-       case XIM_TRIGGER_NOTIFY:
-       fprintf (stderr, "XIM_TRIGGER_NOTIFY:\n");
-       return MyTriggerNotifyHandler (ims, call_data);
-       case XIM_PREEDIT_START_REPLY:
-       fprintf (stderr, "XIM_PREEDIT_START_REPLY:\n");
-       return MyPreeditStartReplyHandler (ims, call_data);
-       case XIM_PREEDIT_CARET_REPLY:
-       fprintf (stderr, "XIM_PREEDIT_CARET_REPLY:\n");
-       return MyPreeditCaretReplyHandler (ims, call_data);
-       default:
-       fprintf (stderr, "Unknown IMDKit Protocol message type\n");
-       break;
-       } */
     switch (call_data->major_code) {
     case XIM_OPEN:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_OPEN\n");
+	#endif
 	return MyOpenHandler (ims, (IMOpenStruct *) call_data);
     case XIM_CLOSE:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_CLOSE\n");
+	#endif
 	return MyCloseHandler (ims, (IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_CREATE_IC\n");
+	#endif
 	return MyCreateICHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_DESTROY_IC\n");
+	#endif
 	return MyDestroyICHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_SET_IC_VALUES\n");
+	#endif
 	return MySetICValuesHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_GET_IC_VALUES\n");
+	#endif
 	return MyGetICValuesHandler (ims, (IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_FORWARD_EVENT\n");
+	#endif
 	return MyForwardEventHandler (ims, (IMForwardEventStruct *) call_data);
     case XIM_SET_IC_FOCUS:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_SET_IC_FOCUS\n");
+	#endif
 	return MySetFocusHandler (ims, (IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_UNSET_IC_FOCUS\n");
+	#endif
 	return MyUnsetFocusHandler (ims, (IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_RESET_IC\n");
+	#endif
 	return True;
     case XIM_TRIGGER_NOTIFY:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_TRIGGER_NOTIFY\n");
+	#endif
 	return MyTriggerNotifyHandler (ims, (IMTriggerNotifyStruct *) call_data);
     case XIM_PREEDIT_START_REPLY:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_PREEDIT_START_REPLY\n");
+	#endif
 	return MyPreeditStartReplyHandler (ims, (IMPreeditCBStruct *) call_data);
     case XIM_PREEDIT_CARET_REPLY:
+	#ifdef _PRINT_MESSAGE
+	printf("XIM_PREEDIT_CARET_REPLY\n");
+	#endif
 	return MyPreeditCaretReplyHandler (ims, (IMPreeditCBStruct *) call_data);
     default:
 	return True;
-    }
+    }    
 }
 
 void SendHZtoClient (XIMS ims, IMForwardEventStruct * call_data, char *strHZ)
@@ -386,14 +392,10 @@ Bool InitXIM (char *imname, Window im_window)
     encodings->count_encodings = sizeof (zhEncodings) / sizeof (XIMEncoding) - 1;
     encodings->supported_encodings = zhEncodings;
 
-    ims = IMOpenIM (dpy,
-                    IMModifiers, "Xi18n",
-                    IMServerWindow, im_window,
-                    IMServerName, imname,
-                    IMLocale, "zh_CN,en_US.UTF-8",
-                    IMServerTransport, "X/",
-                    IMInputStyles, input_styles,
-                    NULL);
+/*    
+    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, "zh_CN,en_US.UTF-8", IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
+*/   
+    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,en_US.UTF-8", IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
     if (ims == (XIMS) NULL) {
 	fprintf (stderr, "已经存在另一个同名服务程序 %s\n", imname);
 	return False;
@@ -401,14 +403,8 @@ Bool InitXIM (char *imname, Window im_window)
 
     on_keys = (XIMTriggerKeys *) malloc (sizeof (XIMTriggerKeys));
 
-    if (bUseCtrlShift) {
-	on_keys->count_keys = sizeof (Trigger_Keys_Ctrl_Shift) / sizeof (XIMTriggerKey) - 1;
-	on_keys->keylist = Trigger_Keys_Ctrl_Shift;
-    }
-    else {
-	on_keys->count_keys = sizeof (Trigger_Keys) / sizeof (XIMTriggerKey) - 1;
-	on_keys->keylist = Trigger_Keys;
-    }
+    on_keys->count_keys = iTriggerKeyCount + 1;      //sizeof (Trigger_Keys) / sizeof (XIMTriggerKey) - 1;
+    on_keys->keylist = Trigger_Keys;
 
     IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
     IMSetIMValues (ims, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, IMFilterEventMask, filter_mask, NULL);

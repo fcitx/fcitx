@@ -5,7 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(DARWIN)
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
 #include <iconv.h>
 
 #ifdef _USE_XFT
@@ -242,9 +246,11 @@ void MyXEventHandler (Window im_window, XEvent * event)
 		    ChangeGBK ();
 		else if (IsInBox (event->xbutton.x, event->xbutton.y, 74, 1, 91, 19))
 		    ChangeLegend ();
-		else if (IsInBox (event->xbutton.x, event->xbutton.y, 92, 1, 109, 19))
+		else if (IsInBox (event->xbutton.x, event->xbutton.y, 92, 1, 102, 19))
+		    ChangeLock ();
+		else if (IsInBox (event->xbutton.x, event->xbutton.y, 103, 1, 120, 19))
 		    SwitchIME (-1);
-		else if (IsInBox (event->xbutton.x, event->xbutton.y, 110, 1, 127, 19))
+		else if (IsInBox (event->xbutton.x, event->xbutton.y, 121, 1, 138, 19))
 		    SwitchSP ();
 
 		SaveProfile ();

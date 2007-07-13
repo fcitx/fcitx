@@ -1,3 +1,5 @@
+#include <ctype.h>
+
 #include "xim.h"
 #include "ime.h"
 #include "InputWindow.h"
@@ -8,8 +10,6 @@
 #include "erbi.h"
 #include "py.h"
 #include "tools.h"
-
-#include <ctype.h>
 
 int             iMaxCandWord = 5;
 int             iCandPageCount;
@@ -62,6 +62,7 @@ INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
 Bool (*PhraseTips) (char *strPhrase);	//提示词库中是否已经有
 
 //热键定义
+HOTKEYS         hkTrigger[HOT_KEY_COUNT] = { CTRL_SPACE, 0 };
 HOTKEYS         hkGBK[HOT_KEY_COUNT] = { CTRL_M, 0 };
 HOTKEYS         hkLegend[HOT_KEY_COUNT] = { CTRL_L, 0 };
 HOTKEYS         hkCorner[HOT_KEY_COUNT] = { SHIFT_SPACE, 0 };	//全半角切换
@@ -94,13 +95,12 @@ extern Bool     bShowNext;
 extern Bool     bShowCursor;
 extern Bool     bSingleHZMode;
 extern Window   inputWindow;
-extern Bool     bUseCtrlShift;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern XIMTriggerKey Trigger_Keys[];
 extern Window   mainWindow;
 
 extern int      MAINWND_WIDTH;
-
+extern Bool	bLocked;
 /*******************************************************/
 //Bool            bDebug = False;
 
@@ -180,13 +180,13 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     retVal = IRV_TO_PROCESS;
     if (call_data->event.type == KeyRelease) {
 	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
-	    if (iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
+	    if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
 		if (CurrentIC->imeState == IS_CHN)
 		    SwitchIME (-1);
-		else if (IsKey (ims, call_data, Trigger_Keys))
+		else if (IsHotKey (iKey, hkTrigger))
 		    CloseIME (ims, call_data);
 	    }
-	    else if (iKey == CTRL_LSHIFT) {
+	    else if (!bLocked && iKey == CTRL_LSHIFT) {
 		if (CurrentIC->imeState == IS_CHN)
 		    SwitchIME (-1);
 		else if (IsKey (ims, call_data, Trigger_Keys))
@@ -260,7 +260,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 	if (iKey == CTRL_LSHIFT || iKey == SHIFT_LCTRL) {
 	    //什么都不做
 	}
-	else if (IsKey (ims, call_data, Trigger_Keys))
+	else if (IsHotKey (iKey, hkTrigger))
 	    CloseIME (ims, call_data);
 	else {
 	    if (CurrentIC->imeState != IS_CHN)
@@ -283,11 +283,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 		}*/
 
 		if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-		    if ((iKey == CTRL_LSHIFT || iKey == CTRL_RSHIFT) && (bUseCtrlShift)) {
-			CloseIME (ims, call_data);
-			return;
-		    }
-		    else if (bCorner && (iKey >= 32 && iKey <= 126)) {
+		    if (bCorner && (iKey >= 32 && iKey <= 126)) {
 			sprintf (strStringGet, "%c%c", 0xa3, 0xa0 + iKey - 32);
 			retVal = IRV_GET_CANDWORDS;
 		    }
@@ -717,7 +713,7 @@ void SwitchIME (BYTE index)
 	MAINWND_WIDTH = _MAINWND_WIDTH;
 
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
-    DisplayMainWindow();
+    DisplayMainWindow ();
 
     ResetInput ();
     XUnmapWindow (dpy, inputWindow);

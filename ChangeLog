@@ -1,3 +1,11 @@
+2004-04-25 Yuking <yuking_net@sohu.com>
+           * 取自共创的包，其中包括对BIGENDIAN的修正。
+           * src/xim.c: 修改生成IC时将CurrentIC设置为新的值的问题(MyCreateICHandler)。
+           * src/xim.c: 如果动作的IC值与CurrentIC不相同，将不处理(MyForwardEventHandler)──试图解决出现双字母的问题。
+           * src/InputWindow.h: 将INPUTWND_WIDTH的默认值设置为200。
+           * src/py.c: 修改一处错误的变量调用，此问题会导致联想候选字表显示不正常(PYGetLegendCandWords)。
+           * src/MainWindow.c,src/tools.c,src/xim.c: 在主窗口上增加一个锁定按钮，打开时将无法用键盘来切换输入法。
+
 2004-03-01  Xiao Huo  <xiaohuo@mail.com>
 
 	* src/xim.c: Make this XIM server serve clients using zh_CN and

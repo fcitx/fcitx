@@ -45,7 +45,8 @@ typedef enum _KEY_STATE {
     KEY_CTRL_ALT_COMP = 12,
     KEY_CTRL_ALT_SHIFT_COMP = 13,
     KEY_NUMLOCK = 16,
-    KEY_SCROLLLOCK = 128
+    KEY_SCROLLLOCK = 128,
+    KEY_MOUSE_PRESSED = 256
 } KEY_STATE;
 
 typedef enum _KEY {

@@ -138,7 +138,7 @@ int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
     }
     else {
 	//由于大小写字母有区别，此处应该将其处理为等同
-	if (iKeyState != KEY_NONE && (iKeyCode >= 97 && iKeyCode <= 122))
+	if (iKeyState != KEY_NONE && iKeyState<KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
 	    iKeyCode -= 32;
 
 	if (iKeyState == KEY_CTRL_COMP)

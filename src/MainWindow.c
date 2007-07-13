@@ -27,6 +27,8 @@
 #include "sp-1.xpm"
 #include "lx-0.xpm"
 #include "lx-1.xpm"
+#include "lock-0.xpm"
+#include "lock-1.xpm"
 
 Window          mainWindow;
 
@@ -55,8 +57,12 @@ XImage         *pSP[2] = { NULL, NULL };
 char          **SPLogo[2] = { sp_0_xpm, sp_1_xpm };
 XImage         *pLX[2] = { NULL, NULL };
 char          **LXLogo[2] = { lx_0_xpm, lx_1_xpm };
+XImage         *pLock[2] = { NULL, NULL };
+char          **LockLogo[2] = { lock_0_xpm, lock_1_xpm };
 
 HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
+
+Bool 	bLocked = False;
 
 extern Display *dpy;
 extern GC       dimGC;
@@ -136,6 +142,12 @@ void DisplayMainWindow (void)
 	    FillImageByXPMData (pLX[bUseLegend], LXLogo[bUseLegend]);
 	}
 	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLX[bUseLegend], 0, 0, 74, 2, 15, 16);
+	
+	if (!pLock[bLocked]) {
+	    pLock[bLocked] = XGetImage (dpy, mainWindow, 0, 0, 8, 16, AllPlanes, XYPixmap);
+	    FillImageByXPMData (pLock[bLocked], LockLogo[bLocked]);
+	}
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pLock[bLocked], 0, 0, 92, 2, 15, 16);
 
 	if (CurrentIC)
 	    iIndex = CurrentIC->imeState;
@@ -143,14 +155,14 @@ void DisplayMainWindow (void)
 	    pIME[imeIndex][iIndex] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 	    FillImageByXPMData (pIME[imeIndex][iIndex], (char **) IMELogo[imeIndex][iIndex]);
 	}
-	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pIME[imeIndex][iIndex], 0, 0, 92, 2, 15, 16);
+	XPutImage (dpy, mainWindow, mainWindowColor.backGC, pIME[imeIndex][iIndex], 0, 0, 103, 2, 15, 16);
 
 	if (imeIndex == IME_PINYIN) {
 	    if (!pSP[bSP]) {
 		pSP[bSP] = XGetImage (dpy, mainWindow, 0, 0, 15, 16, AllPlanes, XYPixmap);
 		FillImageByXPMData (pSP[bSP], SPLogo[bSP]);
 	    }
-	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pSP[bSP], 0, 0, 110, 2, 15, 16);
+	    XPutImage (dpy, mainWindow, mainWindowColor.backGC, pSP[bSP], 0, 0, 121, 2, 15, 16);
 	}
 
 	if (i3DEffect) {
@@ -161,9 +173,10 @@ void DisplayMainWindow (void)
 	    Draw3DEffect (mainWindow, 37, 1, 18, 18, _3D_UPPER);
 	    Draw3DEffect (mainWindow, 55, 1, 18, 18, _3D_UPPER);
 	    Draw3DEffect (mainWindow, 73, 1, 18, 18, _3D_UPPER);
-	    Draw3DEffect (mainWindow, 91, 1, 18, 18, _3D_UPPER);
+	    Draw3DEffect (mainWindow, 91, 1, 11, 18, _3D_UPPER);
+	    Draw3DEffect (mainWindow, 102, 1, 18, 18, _3D_UPPER);
 	    if (imeIndex == IME_PINYIN)
-		Draw3DEffect (mainWindow, 109, 1, 18, 18, _3D_UPPER);
+		Draw3DEffect (mainWindow, 120, 1, 18, 18, _3D_UPPER);
 	}
 	else {
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 19, 4, 19, MAINWND_HEIGHT - 4);
@@ -171,8 +184,9 @@ void DisplayMainWindow (void)
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 55, 4, 55, MAINWND_HEIGHT - 4);
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 73, 4, 73, MAINWND_HEIGHT - 4);
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 91, 4, 91, MAINWND_HEIGHT - 4);
+	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 102, 4, 102, MAINWND_HEIGHT - 4);
 	    if (imeIndex == IME_PINYIN)
-		XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 109, 4, 109, MAINWND_HEIGHT - 4);
+		XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, 120, 4, 120, MAINWND_HEIGHT - 4);
 	}
     }
     else
@@ -191,3 +205,10 @@ void InitMainWindowColor (void)
 	iPixel = WhitePixel (dpy, DefaultScreen (dpy));
     XSetForeground (dpy, mainWindowLineColor.gc, iPixel);
 }
+
+void ChangeLock (void )
+{
+    bLocked = !bLocked;
+    DisplayMainWindow ();
+}
+

@@ -30,7 +30,11 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ******************************************************************/
 
 #include <X11/Xlib.h>
+#if defined(DARWIN)
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
 #include <string.h>
 #include "IMdkit.h"
 #include <stdarg.h>
