@@ -413,8 +413,12 @@ void MyXEventHandler (XEvent * event)
 		    iMainWindowX = event->xbutton.x;
 		    iMainWindowY = event->xbutton.y;
 		    if (!MouseClick (&iMainWindowX, &iMainWindowY, mainWindow)) {
-			if (ConnectIDGetState (connect_id) != IS_CHN)
+			if (ConnectIDGetState (connect_id) != IS_CHN) {
 			    SetIMState ((ConnectIDGetState (connect_id) == IS_ENG) ? False : True);
+			    XUnmapWindow (dpy, inputWindow);
+			    XUnmapWindow (dpy, VKWindow);
+			    DisplayMainWindow ();
+			}
 			else
 			    ChangeIMState (connect_id);
 		    }

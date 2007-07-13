@@ -137,6 +137,7 @@ char            strNameOfQuwei[41] = "区位";
 INT8		iKeyPressed = 0;
 Bool		bRelease = True;
 */
+int             keyIgnored[] = { 50, 62, 37, 109, 115, 116, 117, 0 };
 
 extern XIMS     ims;
 extern IC      *CurrentIC;
@@ -283,6 +284,19 @@ void ConvertPunc (void)
     *s2 = '\0';
 
     strcpy (strStringGet, strTemp);
+}
+
+Bool IsKeyIgnored (int iKeyCode)
+{
+    int             i;
+
+    i = 0;
+    while (keyIgnored[i]) {
+	if (iKeyCode == keyIgnored[i])
+	    return True;
+	i++;
+    }
+    return False;
 }
 
 //FILE           *fd;
@@ -438,7 +452,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    SetConnectID (call_data->connect_id, IS_CHN);
 
 		    if (bShowInputWindowTriggering && !bCorner) {
-			DrawInputWindow();
+			DrawInputWindow ();
 			DisplayInputWindow ();
 		    }
 
@@ -449,9 +463,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 		    EnterChineseMode (False);
 		    DrawMainWindow ();
-
-		    //临时解决方案
-		    MyIMForwardEvent (call_data->connect_id, call_data->icid, 0);
 		}
 		else
 		    CloseIM (call_data);
@@ -780,7 +791,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_TO_PROCESS:
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
-	IMForwardEvent (ims, (XPointer) call_data);
+	//if (!IsKeyIgnored (kev->keycode))
+	    IMForwardEvent (ims, (XPointer) call_data);
 
 	if (retVal != IRV_DONOT_PROCESS_CLEAN)
 	    return;

@@ -1191,7 +1191,9 @@ char           *TableGetCandWord (int iIndex)
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
 	
+	#warning **********************************************************
 	#warning FIX ME! 
+	#warning **********************************************************
 	//临时解决一个问题，似乎是出现了内存泄露
 	pCandWord = strTableLegendSource;
     }

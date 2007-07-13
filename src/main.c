@@ -51,9 +51,7 @@
 #endif
 
 extern Display *dpy;
-extern Window   inputWindow;
 extern Window   mainWindow;
-extern Window   aboutWindow;
 
 extern Bool     bIsUtf8;
 
@@ -70,7 +68,7 @@ int main (int argc, char *argv[])
 	if (!strcmp (argv[i], "-name"))
 	    imname = argv[++i];
 	else if (!strcmp (argv[i], "-d"))
-	    bBackground = False;
+	    bBackground = True;
 	else if (!strcmp (argv[i], "-h") || !strcmp (argv[i], "-?")) {
 	    Usage ();
 	    return 0;
@@ -106,7 +104,11 @@ int main (int argc, char *argv[])
     CreateAboutWindow ();
 
     SetIM ();
-    DisplayMainWindow ();
+
+    if (hideMainWindow != HM_HIDE) {
+	DisplayMainWindow ();
+	DrawMainWindow ();
+    }
 
     if (!InitXIM (imname, mainWindow))
 	exit (4);

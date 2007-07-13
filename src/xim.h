@@ -72,5 +72,8 @@ void            SetIMState (Bool bState);
 void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
 
 //char           *ConnectIDGetLocale(CARD16 connect_id);
+#ifndef __USE_GNU
+extern char    *strcasestr (__const char *__haystack, __const char *__needle);
+#endif
 
 #endif

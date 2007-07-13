@@ -79,6 +79,7 @@ extern uint     uMessageDown;
 extern uint     uMessageUp;
 extern Bool     bVK;
 extern Bool     bCorner;
+extern HIDE_MAINWINDOW hideMainWindow;
 
 //extern Bool     bAutoHideInputWindow;
 
@@ -211,10 +212,9 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-
-	IMPreeditStart (ims, (XPointer) call_data);
+	IMPreeditEnd (ims, (XPointer) call_data);
 	EnterChineseMode (lastConnectID == connect_id);
-
+	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
@@ -236,14 +236,20 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else
 	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
 */
+	IMPreeditStart (ims, (XPointer) call_data);
 	//有时不能输入的临时解决方案-执行一条IMForwardEvent
 	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }
-
     else {
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
-	DisplayMainWindow ();
+
+	if (hideMainWindow == HM_SHOW) {
+	    DisplayMainWindow ();
+	    DrawMainWindow ();
+	}
+	else
+	    XUnmapWindow (dpy, mainWindow);
     }
 
     lastConnectID = connect_id;
@@ -255,7 +261,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     //When application gets the focus, rerecord the time.
     bStartRecordType = False;
     iHZInputed = 0;
-    DrawMainWindow ();
 
     return True;
 }
@@ -288,9 +293,6 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 	connect_id = call_data->connect_id;
 	icid = call_data->icid;
     }
-
-    //有时不能输入的临时解决方案-执行一条IMForwardEvent
-    MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
 
     return True;
 }
@@ -341,9 +343,6 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    DrawInputWindow ();
 	    DisplayInputWindow ();
 	}
-
-	//有时不能输入的临时解决方案-执行一条IMForwardEvent
-	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }
 
     return True;
@@ -453,6 +452,10 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
 	xEvent.xkey.window = CurrentIC->client_win;
 
     xEvent.xkey.keycode = keycode;
+    memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
+    IMForwardEvent (ims, (XPointer) (&forwardEvent));
+
+    xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
 }
@@ -580,16 +583,14 @@ void SetIMState (Bool bState)
 	call_data.icid = CurrentIC->id;
 
 	if (bState) {
+	    IMPreeditEnd (ims, (XPointer) & call_data);
 	    IMPreeditStart (ims, (XPointer) & call_data);
 	    SetConnectID (connect_id, IS_CHN);
-	    DrawMainWindow ();
 	}
 	else {
 	    IMPreeditEnd (ims, (XPointer) & call_data);
 	    SetConnectID (connect_id, IS_CLOSED);
 	    bVK = False;
-	    XUnmapWindow (dpy, inputWindow);
-	    XUnmapWindow (dpy, VKWindow);
 
 	    SwitchIM (-2);
 	}
