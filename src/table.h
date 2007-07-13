@@ -85,6 +85,7 @@ typedef struct _TABLECANDWORD {
 
 void          LoadTableInfo (void);
 Bool	      LoadTableDict (void);
+void	      TableInit(void);
 void          FreeTableIM (void);
 void          SaveTableDict (void);
 Bool IsInputKey (int iKey);

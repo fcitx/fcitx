@@ -82,6 +82,8 @@ Bool            bUseSP = False;
 Bool		bUseQW = True;
 Bool            bUseTable = True;
 
+Bool		bLumaQQ = True;
+
 //++++++++++++++++++++++++++++++++++++++++
 /*
 INT8		iKeyPressed = 0;
@@ -468,6 +470,10 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
 			else if (iKey == CTRL_5) {
 			    SetIM ();
 			    LoadConfig (False);
+			    
+			    if ( bLumaQQ )
+			    	ConnectIDResetReset();
+				
 			    retVal = IRV_DO_NOTHING;
 			}
 			else if (iKey == ENTER) {
@@ -519,7 +525,7 @@ void ProcessKey (XIMS ims, IMForwardEventStruct * call_data)
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
 	if (call_data->event.type==KeyRelease ) {
-	    if ( !keyCount || (!iKeyState && (iKey==ESC || iKey==ENTER )))
+	    if ( !bLumaQQ && (!keyCount || (!iKeyState && (iKey==ESC || iKey==ENTER ))) )
 		IMForwardEvent (ims, (XPointer) call_data);
 	}
 	else
@@ -816,7 +822,7 @@ void SetIM (void)
 	for (i = 0; i < iTableCount; i++) {
 	    RegisterNewIM (table[i].strName, TableResetStatus, DoTableInput,
 			   TableGetCandWords, TableGetCandWord,
-			   TableGetLegendCandWord, TablePhraseTips, PYInit,
+			   TableGetLegendCandWord, TablePhraseTips, TableInit,
 			   FreeTableIM);
 	    table[i].iIMIndex = iIMCount - 1;
 	}

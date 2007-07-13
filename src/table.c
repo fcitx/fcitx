@@ -31,6 +31,8 @@ RECORD         *currentRecord = NULL, *recordHead = NULL;
 TABLECANDWORD   tableCandWord[MAX_CAND_WORD];
 
 AUTOPHRASE	*autoPhrase=NULL;
+AUTOPHRASE	*insertPoint=NULL;
+
 INT16		iAutoPhrase=0;
 INT16		iTotalAutoPhrase;
 
@@ -56,6 +58,9 @@ char           *strNewPhraseCode;
 SINGLE_HZ       hzLastInput[MAX_HZ_SAVED];	//记录最近输入的汉字
 INT16           iHZLastInputCount = 0;
 Bool            bTablePhraseTips = False;
+
+ADJUSTORDER	PYBaseOrder;
+extern char	strPYAuto[];
 
 extern Display *dpy;
 extern Window   inputWindow;
@@ -83,6 +88,8 @@ extern INT8     lastIsSingleHZ;
 extern Bool     bDisablePagingInLegend;
 extern Bool	bShowCursor;
 extern Bool	bAutoHideInputWindow;
+extern ADJUSTORDER	baseOrder;
+extern Bool     bSP;
 
 //----------------------------------------
 extern PYFA    *PYFAList;
@@ -390,12 +397,22 @@ Bool LoadTableDict (void)
 	else
 		autoPhrase[i].next=&autoPhrase[i+1];
     }
+    insertPoint = &autoPhrase[0];
 
     /*
      * 然后初始化码表输入法
     TableInit();
     */
     return True;
+}
+
+
+void TableInit (void)
+{
+    bSP = False;
+    PYBaseOrder = baseOrder;
+    baseOrder = AD_FAST;
+    strPYAuto[0] = '\0';
 }
 
 /*
@@ -454,6 +471,8 @@ void FreeTableIM(void)
 		free(autoPhrase[i].strHZ);
 	}
 	free(autoPhrase);
+	
+	baseOrder = PYBaseOrder;
 }
 
 void TableResetStatus (void)
@@ -466,21 +485,22 @@ void TableResetStatus (void)
 
 void SaveTableDict (void)
 {
-    RECORD       *recTemp;
+    RECORD	   *recTemp;
     char            strPath[PATH_MAX];
+    char            strPathTemp[PATH_MAX];
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
 
-    //读入码表
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    if (access (strPath, 0))
-	mkdir (strPath, S_IRWXU);
-    strcat (strPath, table[iTableIMIndex].strPath);
-    fpDict = fopen (strPath, "wb");
+    //先将码表保存在一个临时文件中，如杲保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
+    strcpy (strPathTemp, (char *) getenv ("HOME"));
+    strcat (strPathTemp, "/.fcitx/");
+    if (access (strPathTemp, 0))
+	mkdir (strPathTemp, S_IRWXU);
+    strcat (strPathTemp, TEMP_FILE);
+    fpDict = fopen (strPathTemp, "wb");
     if (!fpDict) {
-	fprintf (stderr, "无法创建码表文件: %s\n", strPath);
+	fprintf (stderr, "无法创建码表文件: %s\n", strPathTemp);
 	return;
     }
 
@@ -519,6 +539,13 @@ void SaveTableDict (void)
 
     fclose (fpDict);
 
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
+    strcat (strPath, table[iTableIMIndex].strPath);
+    if (access (strPath, 0))
+    	unlink(strPath);
+    rename (strPathTemp, strPath);
+    
     iTableOrderChanged = 0;
     iTableChanged = 0;
 }
@@ -727,6 +754,9 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			retVal = TableGetCandWords (SM_FIRST);
 		    }
 		    else {
+		    //如果是拼音，进入快速调整字频方式
+			if (strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY )
+				PYGetCandWord(iKey-1);
 			strcpy (strStringGet, TableGetCandWord (iKey - 1));
 			if (bIsInLegend)
 			    retVal = IRV_GET_LEGEND;
@@ -736,7 +766,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		}
 	    }
 	    else {
-		strcpy (strStringGet, TableGetLegendCandWord (iKey - 1));
+	    	strcpy (strStringGet, TableGetLegendCandWord (iKey - 1));
 		retVal = IRV_GET_LEGEND;
 	    }
 	}
@@ -771,8 +801,8 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 		strCodeInput[iCodeInputCount] = '\0';
 
 		if (iCodeInputCount == 1 && strCodeInput[0] == table[iTableIMIndex].cPinyin) {
-			iCandWordCount = 0;
-		    retVal = IRV_DISPLAY_CANDWORDS;
+		    iCandWordCount = 0;
+		    retVal = IRV_DISPLAY_LAST;
 		}
 		else if (iCodeInputCount)
 		    retVal = TableGetCandWords (SM_FIRST);
@@ -895,8 +925,8 @@ char           *TableGetCandWord (int iIndex)
     else
     	lastIsSingleHZ = 0;
 
-    //if ( strlen(pCandWord)==2 )
-    UpdateHZLastInput(pCandWord);
+    if ( strlen(pCandWord)==2 )
+    	UpdateHZLastInput(pCandWord);
 
     return pCandWord;
 }
@@ -909,7 +939,7 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (SEARCH_MODE mode)
     if (mode == SM_FIRST) {
 	bSingleHZMode = True;
 	strcpy (strFindString, strCodeInput + 1);
-
+	
 	DoPYInput (-1);
 
 	strCodeInput[0] = table[iTableIMIndex].cPinyin;
@@ -1794,12 +1824,9 @@ void TableCreateAutoPhrase(INT8 iCount)
 {
 	char strHZ[table[iTableIMIndex].iAutoPhrase*2+1];
 	INT16	i,j,k;
-	AUTOPHRASE	*insert;
-
 	/*
 	 * 为了提高效率，此处只重新生成新录入字构成的词组
 	 */
-	insert = &autoPhrase[0];
 	j = iHZLastInputCount-table[iTableIMIndex].iAutoPhrase - iCount;
 	if ( j<0 )
 		j = 0;
@@ -1825,10 +1852,10 @@ void TableCreateAutoPhrase(INT8 iCount)
 			    iAutoPhrase++;
 			}
 			else {
-			    insert->flag=False;
-			    strcpy(insert->strCode,strNewPhraseCode);
-			    strcpy(insert->strHZ,strHZ);
-			    insert=insert->next;
+			    insertPoint->flag=False;
+			    strcpy(insertPoint->strCode,strNewPhraseCode);
+			    strcpy(insertPoint->strHZ,strHZ);
+			    insertPoint=insertPoint->next;
 			}
 		_next:
 			continue;

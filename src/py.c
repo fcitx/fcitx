@@ -934,7 +934,7 @@ INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
     }
 
     if (!(pCurFreq && pCurFreq->bIsSym)) {
-	if (!iCurrentCandPage && strPYAuto[0]) {
+	if (!iCurrentCandPage && strPYAuto[0] && !bSingleHZMode) {
 	    iCandWordCount = 1;
 	    PYCandWords[0].iWhich = PY_CAND_AUTO;
 	}
@@ -1824,10 +1824,6 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
     int             i = 0, j;
     int             iStart = 0;
 
-/*    char           *s;
-
-    s = PYFAList[pos.iPYFA].pyBase[pos.iBase].strHZ;
-  */
     switch (baseOrder) {
     case AD_NO:
 	if (mode == SM_PREV) {
@@ -1843,7 +1839,7 @@ Bool PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode)
 	}
 	break;
     case AD_FAST:
-	if (mode == SM_PREV) {
+    	if (mode == SM_PREV) {
 	    for (i = (iCandWordCount - 1); i >= 0; i--) {
 		if (PYCandWords[i].iWhich == PY_CAND_AUTO || PYCandWords[i].iWhich == PY_CAND_FREQ) {
 		    iStart = i + 1;
@@ -2282,17 +2278,18 @@ void SavePYUserPhrase (void)
     int             i, j, k;
     int             iTemp;
     char            strPath[PATH_MAX];
+    char            strPathTemp[PATH_MAX];
     FILE           *fp;
     PyPhrase       *phrase;
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    if (access (strPath, 0))
-	mkdir (strPath, S_IRWXU);
-    strcat (strPath, PY_USERPHRASE_FILE);
-    fp = fopen (strPath, "wb");
+    strcpy (strPathTemp, (char *) getenv ("HOME"));
+    strcat (strPathTemp, "/.fcitx/");
+    if (access (strPathTemp, 0))
+	mkdir (strPathTemp, S_IRWXU);
+    strcat (strPathTemp, TEMP_FILE);
+    fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存用户词库！\n");
+	fprintf (stderr, "无法保存拼音用户词库：%s\n",strPathTemp);
 	return;
     }
 
@@ -2320,25 +2317,33 @@ void SavePYUserPhrase (void)
     }
 
     fclose (fp);
+
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
+    strcat (strPath, PY_USERPHRASE_FILE);
+    if (access (strPath, 0))
+    	unlink(strPath);
+    rename (strPathTemp, strPath);
 }
 
 void SavePYFreq (void)
 {
     int             i, j, k;
     char            strPath[PATH_MAX];
+    char            strPathTemp[PATH_MAX];
     FILE           *fp;
     PyFreq         *pPyFreq;
     HZ             *hz;
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    if (access (strPath, 0))
-	mkdir (strPath, S_IRWXU);
-    strcat (strPath, PY_FREQ_FILE);
+    strcpy (strPathTemp, (char *) getenv ("HOME"));
+    strcat (strPathTemp, "/.fcitx/");
+    if (access (strPathTemp, 0))
+	mkdir (strPathTemp, S_IRWXU);
+    strcat (strPathTemp, TEMP_FILE);
 
-    fp = fopen (strPath, "wb");
+    fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存常用词表！\n");
+	fprintf (stderr, "无法保存常用词表：%s\n",strPathTemp);
 	return;
     }
     i = 0;
@@ -2375,6 +2380,13 @@ void SavePYFreq (void)
     }
 
     fclose (fp);
+
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
+    strcat (strPath, PY_FREQ_FILE);
+    if (access (strPath, 0))
+    	unlink(strPath);
+    rename (strPathTemp, strPath);
 }
 
 /*
@@ -2384,16 +2396,17 @@ void SavePYIndex (void)
 {
     int             i, j, k, l, m;
     char            strPath[PATH_MAX];
+    char            strPathTemp[PATH_MAX];
     FILE           *fp;
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    if (access (strPath, 0))
-	mkdir (strPath, S_IRWXU);
-    strcat (strPath, PY_INDEX_FILE);
-    fp = fopen (strPath, "wb");
+    strcpy (strPathTemp, (char *) getenv ("HOME"));
+    strcat (strPathTemp, "/.fcitx/");
+    if (access (strPathTemp, 0))
+	mkdir (strPathTemp, S_IRWXU);
+    strcat (strPathTemp, PY_INDEX_FILE);
+    fp = fopen (strPathTemp, "wb");
     if (!fp) {
-	fprintf (stderr, "无法保存索引文件！\n");
+	fprintf (stderr, "无法保存索引文件：%s\n",strPathTemp);
 	return;
     }
 
@@ -2434,6 +2447,13 @@ void SavePYIndex (void)
     }
 
     fclose (fp);
+
+    strcpy (strPath, (char *) getenv ("HOME"));
+    strcat (strPath, "/.fcitx/");
+    strcat (strPath, PY_INDEX_FILE);
+    if (access (strPath, 0))
+    	unlink(strPath);
+    rename (strPathTemp, strPath);
 }
 
 /*

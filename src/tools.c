@@ -586,7 +586,7 @@ void SaveConfig (void)
     fprintf (fp, "提示词库中的词组=%d\n", bPhraseTips);
 
     fprintf (fp, "\n[拼音]\n");
-    fprintf (fp, "使用全拼=%d\n", bUseSP);
+    fprintf (fp, "使用全拼=%d\n", bFullPY);
     fprintf (fp, "拼音自动组词=%d\n", bPYCreateAuto);
     fprintf (fp, "保存自动组词=%d\n", bPYSaveAutoAsPhrase);
     fprintf (fp, "增加拼音常用字=CTRL_8\n");

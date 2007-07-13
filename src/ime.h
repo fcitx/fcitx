@@ -18,6 +18,8 @@
 #define NAME_OF_SHUANGPIN	"Ë«Æ´"
 #define NAME_OF_QUWEI		"ÇøÎ»"
 
+#define TEMP_FILE		"FCITX_DICT_TEMP"
+
 typedef enum _SEARCH_MODE {
     SM_FIRST,
     SM_NEXT,

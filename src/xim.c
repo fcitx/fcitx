@@ -23,7 +23,7 @@ Bool            bBackground = True;
 char 		strLocale[150]="zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 //int y=0;
 
-Bool		bLumaQQ = True;
+extern Bool	bLumaQQ;
 
 extern IM      *im;
 extern INT8     iIMIndex;
@@ -162,8 +162,10 @@ Bool MySetFocusHandler (XIMS ims, IMChangeFocusStruct * call_data)
     else
 	DisplayMainWindow ();
 
-    if ( bLumaQQ )
+    if ( bLumaQQ && ConnectIDGetReset(connect_id) ) {
     	SendHZtoClient(ims,(IMForwardEventStruct *)call_data,"\0");
+	ConnectIDSetReset(connect_id, False);
+    }
 
     return True;
 }
@@ -427,6 +429,7 @@ void CreateConnectID(IMOpenStruct *call_data)
     connectIDNew->next=(CONNECT_ID *)NULL;
     connectIDNew->connect_id=call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
+    connectIDNew->bReset = True;
     //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
     //strcpy(connectIDNew->strLocale,call_data->lang.name);
 
@@ -492,6 +495,51 @@ IME_STATE ConnectIDGetState(CARD16 connect_id)
 
     return IS_CLOSED;
 }
+
+Bool ConnectIDGetReset(CARD16 connect_id)
+{
+    CONNECT_ID *temp;
+
+    temp=connectIDsHead;
+
+    while (temp) {
+	if ( temp->connect_id==connect_id )
+	    return temp->bReset;
+
+	temp=temp->next;
+    }
+
+    return False;
+}
+
+void ConnectIDSetReset(CARD16 connect_id, Bool bReset)
+{
+    CONNECT_ID *temp;
+
+    temp=connectIDsHead;
+
+    while (temp) {
+	if ( temp->connect_id==connect_id ) {
+	    temp->bReset = bReset;
+	    return;
+	}
+
+	temp=temp->next;
+    }
+}
+
+void ConnectIDResetReset(void)
+{
+    CONNECT_ID *temp;
+
+    temp=connectIDsHead;
+
+    while (temp) {
+	temp->bReset = True;
+	temp=temp->next;
+    }
+}
+
 /*
 char *ConnectIDGetLocale(CARD16 connect_id)
 {

@@ -23,6 +23,7 @@ typedef struct _CONNECT_ID {
     struct _CONNECT_ID	*next;
     CARD16	connect_id;
     IME_STATE	imState;
+    Bool	bReset;
     //char	*strLocale;
 } CONNECT_ID;
 
@@ -33,6 +34,9 @@ void            CreateConnectID(IMOpenStruct *call_data);
 void            DestroyConnectID(CARD16 connect_id);
 void            SetConnectID(CARD16 connect_id, IME_STATE	imState);
 IME_STATE       ConnectIDGetState(CARD16 connect_id);
+Bool		ConnectIDGetReset(CARD16 connect_id);
+void		ConnectIDSetReset(CARD16 connect_id, Bool bReset);
+void		ConnectIDResetReset(void);
 //char           *ConnectIDGetLocale(CARD16 connect_id);
 
 #endif

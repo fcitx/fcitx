@@ -175,7 +175,7 @@ void CreatePYPhrase (void)
 	    }
 	}
 	if (!kkk)
-	    fprintf (f, "%s %s %s\n", strPY, strPhrase, strTemp.strPYParsed);
+	    fprintf (f, "%s %s %s\n", strPY, strPhrase, (char *)(strTemp.strPYParsed));
 	else
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
@@ -211,6 +211,9 @@ void CreatePYBase (void)
     char            strPY[7], strHZ[3], strMap[3];
     int             iIndex, iCount, i;
     int             iBaseCount;
+    int             s = 0;
+    int             tt = 0;
+
 
     head = (_PyStruct *) malloc (sizeof (_PyStruct));
     head->prev = head;
@@ -267,8 +270,6 @@ void CreatePYBase (void)
     strcpy (strPY, pyList->strPY);
     iCount = 0;
     t = pyList;
-    int             s = 0;
-    int             tt = 0;
 
     while (pyList != head) {
 	if (!strcmp (strPY, pyList->strPY)) {

@@ -1,3 +1,21 @@
+2004-09-18 Yuking <yuking_net@sohu.com>
+	   * 将码表输入法临时使用拼音时，拼音单字按快速排序排列
+	   * 修正其它一些小问题
+	   * 版本为3.0.1
+
+2004-09-15 Yuking <yuking_net@sohu.com>
+	   * 将码表的保存改为先写入临时文件，以避免码表被损坏
+	   * src/tools.c:修正使用全拼的设置
+
+2004-09-9 Yuking <yuking_net@sohu.com>
+	   * src/table.c:只对录入的单字自动组词
+	   * src/ime.c:修正支持lumaQQ时按键释放的一个问题
+	   * tools/createPYMB.c:修正在某些C编译器中不能编译的问题
+
+2004-09-6 Yuking <yuking_net@sohu.com>
+	   * src/table.c:修正码表输入法中自动组词的一个BUG
+	   * src/ime.c,src/xim.c:解决LumaQQ支持打开时与qt-3.3.3的兼容性问题
+
 2004-09-5 Yuking <yuking_net@sohu.com>
 	   * 重写文档
 	   * 发布3.0
@@ -16,7 +34,7 @@
 	   * 修改自动词组中的一个重复操作，提高速度
 
 2004-07-16 "Xie Yanbo"<xyb76@sina.com> 
-           * (打印错误改为 fprint(stderr, ...)，这是做osx patch的jeff改的
+           * (打印错误改为 fprintf(stderr, ...)，这是做osx patch的jeff改的
 	   * 添加 config.h，好象也是jeff加的
 	   * 在需要的文件里添加对config.h的调用和一些必要的宏
 	   * 增加对 iconv 函数的检测
