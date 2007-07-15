@@ -29,7 +29,7 @@
 
 #define HOT_KEY_COUNT	2
 
-#define MAX_IM_NAME	12
+#define MAX_IM_NAME	15
 
 #define TEMP_FILE		"FCITX_DICT_TEMP"
 

@@ -5,7 +5,7 @@
 
 #ifndef DEFAULT_IMNAME
 
-#define MAX_IM_NAME	12
+#define MAX_IM_NAME	15
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
