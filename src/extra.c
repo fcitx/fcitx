@@ -7,16 +7,16 @@
 #include "InputWindow.h"
 
 #include <dlfcn.h>
-
-#define EIM_MAX		4
+#include <limits.h>
 
 static EXTRA_IM *EIMS[EIM_MAX];
 static void *EIM_handle[EIM_MAX];
-static char EIM_file[EIM_MAX][256];
+static char EIM_file[EIM_MAX][PATH_MAX];
 static INT8 EIM_index[EIM_MAX];
 
 extern INT8 iIMCount;
 extern INT8 iIMIndex;
+extern INT8 iInCap;
 
 extern MESSAGE  messageUp[];
 extern uint     uMessageUp;
@@ -96,9 +96,17 @@ static void DisplayEIM(EXTRA_IM *im)
 		messageDown[uMessageDown++].type = MSG_INDEX;	
 		
 		strcpy(messageDown[uMessageDown].strMsg, im->CandTable[i]);
+		messageDown[uMessageDown].type = (i!=*im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND;
+		if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
+		{
+			uMessageDown++;
+			strcpy(messageDown[uMessageDown].strMsg,im->CodeTips[i]);
+			messageDown[uMessageDown].type=MSG_CODE;
+		}
 		if (i != 9)
 			strcat (messageDown[uMessageDown].strMsg, " ");
-		messageDown[uMessageDown++].type = (i!=*im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND;	
+		uMessageDown++;
+
 	}    
 
 	uMessageUp=0;   
@@ -180,8 +188,17 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			uMessageUp=0;
 		}
 	}
-	if(ret==IRV_DISPLAY_CANDWORDS)
+	else if(ret==IRV_DISPLAY_CANDWORDS)
+	{
 		DisplayEIM(eim);
+	}
+	else if(ret==IRV_ENG)
+	{
+		strcpy(strCodeInput,eim->CodeInput);
+		iCodeInputCount=strlen(strCodeInput);
+		iInCap=3;
+		ret=IRV_DONOT_PROCESS;
+	}
 
 	return ret;
 }
@@ -234,10 +251,14 @@ void LoadExtraIM(char *fn)
 	void *handle;
 	int i;
 	EXTRA_IM *eim;
+	char path[PATH_MAX];
+
+	if(strchr(fn,'/')) strcpy(path,fn);
+	else sprintf(path,PKGDATADIR"/data/%s",fn);
 
 	for(i=0;i<EIM_MAX;i++)
 	{
-		if(EIM_file[i][0] && !strcmp(EIM_file[i],fn))
+		if(EIM_file[i][0] && !strcmp(EIM_file[i],path))
 		{
 			ResetAll();
 			break;
@@ -245,7 +266,7 @@ void LoadExtraIM(char *fn)
 	}
 	for(i=0;i<EIM_MAX;i++)
 	{
-		if(!EIMS[0])
+		if(!EIMS[i])
 		{
 			break;
 		}
@@ -255,7 +276,7 @@ void LoadExtraIM(char *fn)
 		printf("eim: no space\n");
 		return;
 	}
-	handle=dlopen(fn,RTLD_LAZY);
+	handle=dlopen(path,RTLD_LAZY);
 	if(!handle)
 	{
 		printf("eim: open fail\n");

@@ -147,6 +147,8 @@ extern SP_FROM  iSPFrom;
 //extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
 
+extern char	strExternIM[];
+
 extern Bool     bDoubleSwitchKey;
 extern Bool     bPointAfterNumber;
 extern Bool     bConvertPunc;
@@ -217,6 +219,9 @@ void LoadConfig (Bool bMode)
 	LoadConfig (True);	//读入默认值
 	return;
     }
+
+    //dgod: 应该在这里初始化某些变量，这样在配置文件里找不到时也能正常工作
+    strExternIM[0]=0;
 
     for (;;) {
 	if (!fgets (str, PATH_MAX, fp))
@@ -685,6 +690,10 @@ void LoadConfig (Bool bMode)
 	else if (MyStrcmp (str, "模糊z和zh=")) {
 	    pstr += 10;
 	    MHPY_S[4].bMode = atoi (pstr);
+	}
+	else if(MyStrcmp (str, "其他输入法=")) {
+            pstr+=11;
+            strcpy(strExternIM,pstr);
 	}
     }
 

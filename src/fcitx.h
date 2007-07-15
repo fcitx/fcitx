@@ -1,6 +1,8 @@
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
+#define EIM_MAX		1
+
 #ifndef DEFAULT_IMNAME
 
 #define MAX_IM_NAME	12
@@ -318,6 +320,7 @@ typedef struct {
     int *SelectIndex;
     char *CandTable[10];
     char *StringGet;
+    char *CodeTips[10];
 }EXTRA_IM;
 
 #endif/*_FCITX_H_*/

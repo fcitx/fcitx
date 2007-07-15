@@ -117,6 +117,9 @@ Bool            bUseQW = True;
 Bool            bUseTable = True;
 Bool            bLocked = False;
 
+// dgod extern im
+char		strExternIM[PATH_MAX];
+
 /* 新的LumaQQ已经不需要特意支持了
 Bool            bLumaQQ = False;
 */
@@ -1119,19 +1122,18 @@ void SetIM (void)
     if (bUseQW)
 	iIMCount++;
 
+    iIMCount += EIM_MAX;
     if (!iIMCount)
-	iIMCount = 1;
-    iIMCount += 4;
+        iIMCount = 1;
+
 
     im = (IM *) malloc (sizeof (IM) * iIMCount);
     iIMCount = 0;
 
-    /*
-       LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
-     */
+    if(strExternIM[0]) LoadExtraIM(strExternIM);
 
     /* 加入输入法 */
-    if (bUsePinyin || (!bUseSP && (!bUseTable || !iTableCount)))	//至少应该有一种输入法
+    if (bUsePinyin || ((!bUseSP && (!bUseTable || !iTableCount)) && !iIMCount))	//至少应该有一种输入法
 	RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);
     if (bUseSP)
 	RegisterNewIM (strNameOfShuangpin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, NULL);
