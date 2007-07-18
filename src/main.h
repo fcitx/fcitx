@@ -22,6 +22,7 @@
 
 #include <X11/Xlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 int             main (int argc, char *argv[]);
 void            Usage (void);

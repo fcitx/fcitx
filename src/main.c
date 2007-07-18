@@ -60,23 +60,25 @@ extern HIDE_MAINWINDOW hideMainWindow;
 int main (int argc, char *argv[])
 {
     XEvent          event;
-    char           *imname = NULL;
-    int             i;
-    Bool            bBackground = False;
+    int             c;
+    Bool            bBackground = True;
 
-    for (i = 1; i < argc; i++) {
-	if (!strcmp (argv[i], "-name"))
-	    imname = argv[++i];
-	else if (!strcmp (argv[i], "-d"))
-	    bBackground = True;
-	else if (!strcmp (argv[i], "-h") || !strcmp (argv[i], "-?")) {
-	    Usage ();
-	    return 0;
-	}
-	else if (!strcmp (argv[i], "-v")) {
-	    Version ();
-	    return 0;
-	}
+    while((c = getopt(argc, argv, "dDvh")) != -1){
+        switch(c){
+            case 'd':
+                /* nothing to do */
+                break;
+            case 'D':
+                bBackground = False;
+                break;
+            case 'v':
+                Version();
+                return 0;
+            case 'h':
+            case '?':
+                Usage();
+                return 0;
+        }
     }
 
     setlocale (LC_CTYPE, "");
@@ -111,12 +113,12 @@ int main (int argc, char *argv[])
 	DrawMainWindow ();
     }
 
-    if (!InitXIM (imname, mainWindow))
+    if (!InitXIM (mainWindow))
 	exit (4);
 
     //以后台方式运行
     if (bBackground) {
-	pid_t           id;
+        pid_t   id;
 
 	id = fork ();
 	if (id == -1) {
@@ -142,7 +144,11 @@ int main (int argc, char *argv[])
 
 void Usage ()
 {
-    printf ("fcitx usage:\n -name imename: \t specify the imename\n -d :\t\t\t run as daemon \n -v:\t\t\t display the version information and exit.\n -h:\t\t\t display this help page and exit\n");
+    printf("Usage: fcitx [OPTION]\n"
+           "\t-d\trun as daemon(default)\n"
+           "\t-D\tdon't run as daemon\n"
+           "\t-v\tdisplay the version information and exit\n"
+           "\t-h\tdisplay this help and exit\n");
 }
 
 void Version ()

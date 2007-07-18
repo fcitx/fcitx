@@ -53,7 +53,7 @@ typedef struct _CONNECT_ID {
     //char      *strLocale;
 } CONNECT_ID;
 
-Bool            InitXIM (char *, Window);
+Bool            InitXIM (Window);
 void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
 void            CreateConnectID (IMOpenStruct * call_data);
