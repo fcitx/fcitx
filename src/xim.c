@@ -583,28 +583,15 @@ void SetIMState (Bool bState)
 
 void CreateConnectID (IMOpenStruct * call_data)
 {
-    CONNECT_ID     *temp, *connectIDNew;
-
-    temp = connectIDsHead;
-    while (temp) {
-	if (!temp->next)
-	    break;
-	temp = temp->next;
-    }
+    CONNECT_ID *connectIDNew;
 
     connectIDNew = (CONNECT_ID *) malloc (sizeof (CONNECT_ID));
-    connectIDNew->next = (CONNECT_ID *) NULL;
+    connectIDNew->next = connectIDsHead;
     connectIDNew->connect_id = call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
-    //connectIDNew->bReset = !bLumaQQ;
     connectIDNew->bTrackCursor = False;
-    //connectIDNew->strLocale=(char *)malloc(sizeof(char)*(call_data->lang.length+1));
-    //strcpy(connectIDNew->strLocale,call_data->lang.name);
 
-    if (!temp)
-	connectIDsHead = connectIDNew;
-    else
-	temp->next = connectIDNew;
+    connectIDsHead = connectIDNew;
 }
 
 void DestroyConnectID (CARD16 connect_id)
