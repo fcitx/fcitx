@@ -883,7 +883,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			retVal = IRV_DISPLAY_LAST;
 		    }
 		    else {
-			char           *strTemp;
+			char           *strTemp = NULL;
 
 			retVal = TableGetCandWords (SM_FIRST);
 			strTemp = GetPunc (strCodeInput[0]);
