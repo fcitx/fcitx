@@ -21,6 +21,7 @@
 #define _TOOLS_H
 
 #include <stdio.h>
+#include <errno.h>
 #include "ime.h"
 
 #define TABLE_GBKS2T "gbks2t.tab"
