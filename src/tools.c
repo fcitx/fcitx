@@ -1288,7 +1288,7 @@ inline static int get_version(Configure *c, void *a, int isread)
         if(!strcasecmp(FCITX_VERSION, (char *)a))
             bIsNeedSaveConfig = False;
     }else
-        fprintf((FILE *)a, "%s=%s\n", c->name, c->value.str_value.string);
+        fprintf((FILE *)a, "%s=%s\n", c->name, FCITX_VERSION);
 
     return 0;
 }
