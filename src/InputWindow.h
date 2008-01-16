@@ -17,6 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+/**
+ * @file   InputWindow.h
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ * 
+ * @brief   ‰»ÎÃı¥∞ø⁄
+ * 
+ * 
+ */
 #ifndef _INPUT_WINDOW_H
 #define _INPUT_WINDOW_H
 

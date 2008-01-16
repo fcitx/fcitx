@@ -22,6 +22,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+/**
+ * @file   main.c
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ * 
+ * @brief  程序主入口
+ * 
+ * 
+ */
 #include <langinfo.h>
 
 #ifdef HAVE_CONFIG_H

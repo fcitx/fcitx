@@ -17,6 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+/**
+ * @file   KeyList.h
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ * 
+ * @brief  º¸≈Ã…®√Ë¬Î¡–±Ì
+ * 
+ * 
+ */
 #ifndef _KEYLIST_H
 #define _KETLIST_H
 

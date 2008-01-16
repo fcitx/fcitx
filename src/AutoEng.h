@@ -17,6 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+/**
+ * @file   AutoEng.h
+ * @author Yuking yuking_net@sohu.com 
+ * @date   2008-1-16
+ * 
+ * @brief 自动切换到英文状态
+*
+*
+*/
 #ifndef _AUTOENG_H
 #define _AUTOENG_H
 
@@ -28,8 +37,25 @@ typedef struct {
     char            str[MAX_AUTO_TO_ENG + 1];
 } AUTO_ENG;
 
+/** 
+ * 从 ~/.fcitx/!AutoEng.dat 
+ * （如果不存在，则从 /usr/local/share/fcitx/data/!AutoEng.dat）
+ * 读取需要自动转换到英文输入状态的情况的数据。
+ */
 void            LoadAutoEng (void);
+
+/** 
+ * 释放相关资源  
+ */
 void            FreeAutoEng (void);
+
+/** 
+ * 判断是否需要自动转到英文输入状态
+ * 
+ * @param  char *
+ * 
+ * @return 
+ */ 
 Bool            SwitchToEng (char *);
 
 #endif
