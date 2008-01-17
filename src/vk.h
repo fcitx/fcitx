@@ -31,7 +31,7 @@
 #define VK_MAX			50
 
 typedef struct {
-    char            strSymbol[VK_NUMBERS][2][3];	//ç›¸åº”çš„ç¬¦å·
+    char            strSymbol[VK_NUMBERS][2][3];	//ÏàÓ¦µÄ·ûºÅ
     char            strName[13];
 } VKS;
 
