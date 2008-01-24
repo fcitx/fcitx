@@ -77,6 +77,7 @@ typedef struct _TABLE {
     Bool            bPromptTableCode;	//输入完毕后是否提示编码
 
     Bool            bHasPinyin;	//标记该码表中是否有拼音
+    char            choose[11];   //设置选择键  
 } TABLE;
 
 typedef struct _RECORD {

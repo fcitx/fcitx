@@ -216,6 +216,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bPromptTableCode = True;
 	table[iTableIMIndex].strSymbol[0] = '\0';
 	table[iTableIMIndex].bHasPinyin = False;
+       strcpy (table[iTableIMIndex].choose, "1234567890");//初始化为1234567890
     }
 
     iTableIMIndex = -1;
@@ -327,6 +328,10 @@ void LoadTableInfo (void)
 		pstr += 9;
 		strcpy (table[iTableIMIndex].strSymbolFile, pstr);
 	    }
+           else if(MyStrcmp (pstr, "候选词选择键=")){
+	       pstr += 13;
+		strncpy (table[iTableIMIndex].choose, pstr, 10);		
+		}
 	}
     }
 
@@ -1071,11 +1076,9 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    else
 		return IRV_CLEAN;
 	}
-	else if (iKey >= '0' && iKey <= '9') {
-	    iKey -= '0';
-	    if (iKey == 0)
-		iKey = 10;
-
+	else if (strchr(table[iTableIMIndex].choose, iKey )) {
+           iKey = strchr(table[iTableIMIndex].choose, iKey) -  table[iTableIMIndex].choose + 1 ;   
+	    
 	    if (!bIsInLegend) {
 		if (!iCandWordCount)
 		    return IRV_TO_PROCESS;
@@ -1568,9 +1571,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 
     uMessageDown = 0;
     for (i = 0; i < iCandWordCount; i++) {
-	strTemp[0] = i + 1 + '0';
-	if (i == 9)
-	    strTemp[0] = '0';
+	strTemp[0] = *(i + table[iTableIMIndex].choose);
 	strcpy (messageDown[uMessageDown].strMsg, strTemp);
 	messageDown[uMessageDown++].type = MSG_INDEX;
 
