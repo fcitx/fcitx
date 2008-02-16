@@ -14,6 +14,9 @@ static void *EIM_handle[EIM_MAX];
 static char EIM_file[EIM_MAX][PATH_MAX];
 static INT8 EIM_index[EIM_MAX];
 
+static char CandTableEngine[10][MAX_CAND_LEN+1];
+static char CodeTipsEngine[10][MAX_TIPS_LEN+1];
+
 extern INT8 iIMCount;
 extern INT8 iIMIndex;
 extern INT8 iInCap;
@@ -23,6 +26,7 @@ extern uint     uMessageUp;
 extern MESSAGE  messageDown[];
 extern uint     uMessageDown;
 extern Bool	bPointAfterNumber;
+extern int      iCursorPos;
 
 extern int      iMaxCandWord;
 extern int      iCandWordCount;
@@ -32,6 +36,7 @@ extern char     strStringGet[];
 extern char     strCodeInput[];
 extern int      iCodeInputCount;
 extern Bool     bShowCursor;
+extern Bool	bCursorAuto;
 
 static void ResetAll(void)
 {
@@ -70,9 +75,10 @@ static void ExtraReset(void)
 		}
 	}
 	bShowCursor=False;
+	bCursorAuto=False;
 	if(!eim) return;
-	if(eim->CandWordMax) *eim->CandWordMax=iMaxCandWord;
-	if(eim->Reset) eim->Reset();
+	eim->CandWordMax=iMaxCandWord;
+	eim->Reset();
 }
 
 static void DisplayEIM(EXTRA_IM *im)
@@ -88,7 +94,7 @@ static void DisplayEIM(EXTRA_IM *im)
 	else strTemp[1]='\0';
 
 	uMessageDown = 0;
-	for (i = 0; i < *im->CandWordCount; i++)
+	for (i = 0; i < im->CandWordCount; i++)
 	{
 		strTemp[0] = i + 1 + '0';
 		if (i == 9) strTemp[0] = '0';
@@ -96,7 +102,7 @@ static void DisplayEIM(EXTRA_IM *im)
 		messageDown[uMessageDown++].type = MSG_INDEX;	
 		
 		strcpy(messageDown[uMessageDown].strMsg, im->CandTable[i]);
-		messageDown[uMessageDown].type = (i!=*im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND;
+		messageDown[uMessageDown].type = (i!=im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND;
 		if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
 		{
 			uMessageDown++;
@@ -118,14 +124,33 @@ static void DisplayEIM(EXTRA_IM *im)
 
 		bShowCursor=True;
 		iCodeInputCount=strlen(im->CodeInput);
+		if(im->CaretPos!=-1)
+			iCursorPos=strlen(im->StringGet)+im->CaretPos;
+		else
+			iCursorPos=strlen(im->StringGet)+iCodeInputCount;
+		bCursorAuto=True;
 	}
 
-	iCandWordCount=*im->CandWordCount;
-	iCandPageCount=*im->CandPageCount;
-	iCurrentCandPage=*im->CurCandPage;
+	iCandWordCount=im->CandWordCount;
+	iCandPageCount=im->CandPageCount;
+	iCurrentCandPage=im->CurCandPage;
 	if(iCandPageCount) iCandPageCount--;
 }
 
+static int ExtraKeyConv(int key)
+{
+	if(key == (XK_BackSpace & 0x00FF))
+		key='\b';
+	switch(key){
+	case LEFT:key=XK_Left;break;
+	case RIGHT:key=XK_Right;break;
+	case UP:key=XK_Up;break;
+	case DOWN:key=XK_Down;break;
+	case HOME:key=XK_Home;break;
+	case END:key=XK_End;break;
+	};
+	return key;
+}
 
 static INPUT_RETURN_VALUE ExtraDoInput(int key)
 {
@@ -141,43 +166,11 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 		}
 	}
 	if(!eim) return IRV_TO_PROCESS;
-	if(key==ENTER)
-	{
-		strcpy(strCodeInput,eim->CodeInput);
-		iCodeInputCount=strlen(strCodeInput);
-	}
-	if(key==' ')
-	{
-		if(!eim->CodeInput[0])
-			return IRV_TO_PROCESS;
-		strcpy(strStringGet,eim->GetCandWord(*eim->SelectIndex));
-		uMessageDown=0;
-		uMessageUp=0;
-		return IRV_GET_CANDWORDS;
-	}
-	if(key>='0' && key<= '9')
-	{
-		int index;
-		if(key=='0') index=9;
-		else index=key-'0'-1;
-		if(index>=*eim->CandWordCount)
-		{
-			if(eim->CodeInput[0])
-				return IRV_DO_NOTHING;
-			else return IRV_TO_PROCESS;
-		}
-		strcpy(strStringGet,eim->GetCandWord(index));
-		uMessageDown=0;
-		uMessageUp=0;
-		return IRV_GET_CANDWORDS;
-	}
-	if(key == (XK_BackSpace & 0x00FF))
-		key='\b';
+	key=ExtraKeyConv(key);
 	if(eim->DoInput)
 		ret=eim->DoInput(key);
 	if(ret==IRV_GET_CANDWORDS||ret==IRV_GET_CANDWORDS_NEXT)
 	{
-		strcpy(strStringGet,eim->StringGet);
 		if(ret==IRV_GET_CANDWORDS_NEXT)
 		{
 			DisplayEIM(eim);
@@ -194,12 +187,62 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 	}
 	else if(ret==IRV_ENG)
 	{
-		strcpy(strCodeInput,eim->CodeInput);
 		iCodeInputCount=strlen(strCodeInput);
 		iInCap=3;
 		ret=IRV_DONOT_PROCESS;
 	}
-
+	else if(ret==IRV_TO_PROCESS)
+	{
+		if(key==ENTER)
+		{
+			iCodeInputCount=strlen(strCodeInput);
+			strcpy(strStringGet,strCodeInput);
+			ret=IRV_GET_CANDWORDS;
+		}
+		else if(key==' ')
+		{
+			if(!eim->CodeInput[0])
+				return IRV_TO_PROCESS;
+			strcpy(strStringGet,eim->GetCandWord(eim->SelectIndex));
+			uMessageDown=0;
+			uMessageUp=0;
+			ret=IRV_GET_CANDWORDS;
+		}
+		else if(key>='0' && key<= '9')
+		{
+			int index;
+			if(key=='0') index=9;
+			else index=key-'0'-1;
+			if(index>=eim->CandWordCount)
+			{
+				if(eim->CodeInput[0])
+					return IRV_DO_NOTHING;
+				else return IRV_TO_PROCESS;
+			}
+			strcpy(strStringGet,eim->GetCandWord(index));
+			uMessageDown=0;
+			uMessageUp=0;
+			ret=IRV_GET_CANDWORDS;
+		}
+		else if(key==XK_Up)
+		{
+			if(eim->SelectIndex>0)
+			{
+				eim->SelectIndex=eim->SelectIndex-1;
+				DisplayEIM(eim);
+			}
+			ret=IRV_DISPLAY_CANDWORDS;
+		}
+		else if(key==XK_Down)
+		{
+			if(eim->SelectIndex<eim->CandWordCount-1)
+			{
+				eim->SelectIndex=eim->SelectIndex+1;
+				DisplayEIM(eim);
+			}
+			ret=IRV_DISPLAY_CANDWORDS;
+		}
+	}
 	return ret;
 }
 
@@ -246,15 +289,58 @@ static char *ExtraGetCandWord(int index)
 	return 0;
 }
 
+char *ExtraGetPath(char *type)
+{
+	static char ret[256];
+	ret[0]=0;
+	if(!strcmp(type,"HOME"))
+	{
+		sprintf(ret,"%s/.fcitx",getenv("HOME"));
+	}
+	else if(!strcmp(type,"DATA"))
+	{
+		strcpy(ret,PKGDATADIR"/data");
+	}
+	else if(!strcmp(type,"LIB"))
+	{
+		strcpy(ret,PKGDATADIR"/data");
+	}
+	else if(!strcmp(type,"BIN"))
+	{
+		strcpy(ret,PKGDATADIR"/../../bin");
+	}
+	return ret;
+}
+
+int InitExtraIM(EXTRA_IM *eim,char *arg)
+{
+	eim->CodeInput=strCodeInput;
+	eim->StringGet=strStringGet;
+	eim->CandTable=CandTableEngine;
+	eim->CodeTips=CodeTipsEngine;
+	eim->GetSelect=NULL;
+	eim->GetPath=ExtraGetPath;
+	eim->CandWordMax=iMaxCandWord;
+	eim->CaretPos=-1;
+
+	if(eim->Init(arg))
+	{
+		printf("eim: init fail\n");
+		return -1;
+	}
+
+	return 0;
+}
+
 void LoadExtraIM(char *fn)
 {
 	void *handle;
 	int i;
 	EXTRA_IM *eim;
 	char path[PATH_MAX];
-
-	if(strchr(fn,'/')) strcpy(path,fn);
-	else sprintf(path,PKGDATADIR"/data/%s",fn);
+	char temp[256];
+	char *arg;
+	char fnr[256];
 
 	for(i=0;i<EIM_MAX;i++)
 	{
@@ -276,16 +362,36 @@ void LoadExtraIM(char *fn)
 		printf("eim: no space\n");
 		return;
 	}
-	handle=dlopen(path,RTLD_LAZY);
+
+	strcpy(fnr,fn);
+	arg=strstr(fnr,".so ");
+	if(arg)
+	{
+		arg[3]=0;
+		arg+=4;
+	}
+	if(fnr[0]=='~' && fnr[1]=='/')
+		sprintf(temp,"%s/%s",getenv("HOME"),fnr+2);
+	else if(strchr(fnr,'/'))
+		strcpy(temp,fnr);
+	else
+		sprintf(temp,"%s/%s",ExtraGetPath("LIB"),fnr);
+
+	handle=dlopen(temp,RTLD_LAZY);
 	if(!handle)
 	{
-		printf("eim: open fail\n");
+		printf("eim: open %s fail %s\n",temp,dlerror());
 		return;
 	}
 	eim=dlsym(handle,"EIM");
-	if(!eim || !eim->Init || eim->Init())
+	if(!eim || !eim->Init)
 	{
-		printf("eim: init fail\n");
+		printf("eim: bad im\n");
+		dlclose(handle);
+		return;
+	}
+	if(InitExtraIM(eim,arg))
+	{
 		dlclose(handle);
 		return;
 	}
@@ -294,6 +400,5 @@ void LoadExtraIM(char *fn)
 	EIM_handle[i]=handle;
 	strcpy(EIM_file[i],fn);
 	EIM_index[i]=iIMCount-1;
-	if(eim->CandWordMax) *eim->CandWordMax=iMaxCandWord; 
 }
 

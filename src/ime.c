@@ -152,6 +152,8 @@ Bool		bRelease = True;
 */
 int             keyIgnored[] = { 50, 62, 37, 109, 115, 116, 117, 0 };
 
+Bool		bCursorAuto=False;
+
 extern XIMS     ims;
 extern IC      *CurrentIC;
 extern Display *dpy;
@@ -530,7 +532,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    char            strTemp[MAX_USER_INPUT];
 
 				    retVal = im[iIMIndex].DoInput (iKey);
-				    if (!IsIM (strNameOfPinyin) && !IsIM (strNameOfShuangpin))
+				    if (!bCursorAuto && !IsIM (strNameOfPinyin) && !IsIM (strNameOfShuangpin))
 					iCursorPos = iCodeInputCount;
 
 				    //为了实现自动英文转换
@@ -1155,6 +1157,8 @@ void SetIM (void)
 	    table[i].iIMIndex = iIMCount - 1;
 	}
     }
+    if (strExternIM[0] && strExternIM[1])
+	    LoadExtraIM(strExternIM);
 
     SwitchIM (iIMIndex);
 }

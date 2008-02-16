@@ -3,9 +3,6 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
-/* Define if you have the iconv() function. */
-#undef HAVE_ICONV
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -90,9 +87,6 @@
 
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
-
-/* Define as const if the declaration of iconv() needs const. */
-#undef ICONV_CONST
 
 /* Name of package */
 #undef PACKAGE

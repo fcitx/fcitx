@@ -24,6 +24,7 @@
 
 #include "InputWindow.h"
 
+#include <ctype.h>
 #include <string.h>
 #include "version.h"
 #include <time.h>

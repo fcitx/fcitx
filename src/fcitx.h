@@ -1,7 +1,7 @@
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
-#define EIM_MAX		1
+#define EIM_MAX		4
 
 #ifndef DEFAULT_IMNAME
 
@@ -304,23 +304,35 @@ typedef enum _KEY {
 
 #endif
 
+#define MAX_CODE_LEN	63
+#define MAX_CAND_LEN	127
+#define MAX_TIPS_LEN	9
+
 typedef struct {
-    char Name[MAX_IM_NAME + 1];
-    void (*Reset) (void);
-    INPUT_RETURN_VALUE (*DoInput) (int);
-    INPUT_RETURN_VALUE (*GetCandWords)(SEARCH_MODE);
-    char *(*GetCandWord) (int);
-    int (*Init) (void);
-    int (*Destroy) (void);
-    char *CodeInput;
-    int *CandWordMax;
-    int *CurCandPage;
-    int *CandWordCount;
-    int *CandPageCount;
-    int *SelectIndex;
-    char *CandTable[10];
-    char *StringGet;
-    char *CodeTips[10];
+	char Name[MAX_IM_NAME + 1];
+
+	void (*Reset) (void);
+	int (*DoInput) (int);
+	int (*GetCandWords)(int);
+	char *(*GetCandWord) (int);
+	int (*Init) (char *arg);
+	int (*Destroy) (void);
+	void *Bihua;
+
+	char *CodeInput;
+	char *StringGet;
+	char (*CandTable)[MAX_CAND_LEN+1];
+	char (*CodeTips)[MAX_TIPS_LEN+1];
+	char *(*GetSelect)(void);
+	char *(*GetPath)(char *);
+	int CandWordMax;
+
+	int CodeLen;
+	int CurCandPage;
+	int CandWordCount;
+	int CandPageCount;
+	int SelectIndex;
+	int CaretPos;
 }EXTRA_IM;
 
 #endif/*_FCITX_H_*/

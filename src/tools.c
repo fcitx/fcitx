@@ -999,6 +999,12 @@ Configure input_method_config[] = {
         .value.integer = &bPhraseTips,
     },
     {
+        .name = "其他输入法",
+        .value_type = CONFIG_STRING,
+        .value.str_value.string = strExternIM,
+        .value.str_value.string_length = PATH_MAX,
+    },
+    {
         .name = NULL,
     },
 };
