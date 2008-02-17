@@ -16,6 +16,7 @@ static INT8 EIM_index[EIM_MAX];
 
 static char CandTableEngine[10][MAX_CAND_LEN+1];
 static char CodeTipsEngine[10][MAX_TIPS_LEN+1];
+static char StringGetEngine[MAX_CAND_LEN+1];
 
 extern INT8 iIMCount;
 extern INT8 iIMIndex;
@@ -77,6 +78,9 @@ static void ExtraReset(void)
 	bShowCursor=False;
 	bCursorAuto=False;
 	if(!eim) return;
+	eim->StringGet[0]=0;
+	eim->CodeInput[0]=0;
+	eim->CaretPos=-1;
 	eim->CandWordMax=iMaxCandWord;
 	eim->Reset();
 }
@@ -119,7 +123,8 @@ static void DisplayEIM(EXTRA_IM *im)
 	if(im->CodeInput[0])
 	{ 
 		uMessageUp = 1;	
-		strcpy (messageUp[0].strMsg, im->CodeInput);
+		strcpy (messageUp[0].strMsg, im->StringGet);
+		strcat (messageUp[0].strMsg, im->CodeInput);
 		messageUp[0].type = MSG_INPUT;
 
 		bShowCursor=True;
@@ -171,6 +176,8 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 		ret=eim->DoInput(key);
 	if(ret==IRV_GET_CANDWORDS||ret==IRV_GET_CANDWORDS_NEXT)
 	{
+		strcpy(strStringGet,eim->StringGet);
+		eim->StringGet[0]=0;
 		if(ret==IRV_GET_CANDWORDS_NEXT)
 		{
 			DisplayEIM(eim);
@@ -197,6 +204,8 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 		{
 			iCodeInputCount=strlen(strCodeInput);
 			strcpy(strStringGet,strCodeInput);
+			uMessageDown=0;
+			uMessageUp=0;
 			ret=IRV_GET_CANDWORDS;
 		}
 		else if(key==' ')
@@ -315,7 +324,7 @@ char *ExtraGetPath(char *type)
 int InitExtraIM(EXTRA_IM *eim,char *arg)
 {
 	eim->CodeInput=strCodeInput;
-	eim->StringGet=strStringGet;
+	eim->StringGet=StringGetEngine;
 	eim->CandTable=CandTableEngine;
 	eim->CodeTips=CodeTipsEngine;
 	eim->GetSelect=NULL;
