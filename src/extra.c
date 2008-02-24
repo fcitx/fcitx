@@ -8,6 +8,11 @@
 
 #include <dlfcn.h>
 #include <limits.h>
+#include <iconv.h>
+
+extern Display *dpy;
+
+iconv_t convGB=(iconv_t)-1;
 
 static EXTRA_IM *EIMS[EIM_MAX];
 static void *EIM_handle[EIM_MAX];
@@ -120,7 +125,7 @@ static void DisplayEIM(EXTRA_IM *im)
 	}    
 
 	uMessageUp=0;   
-	if(im->CodeInput[0])
+	if(im->StringGet[0] || im->CodeInput[0])
 	{ 
 		uMessageUp = 1;	
 		strcpy (messageUp[0].strMsg, im->StringGet);
@@ -147,12 +152,16 @@ static int ExtraKeyConv(int key)
 	if(key == (XK_BackSpace & 0x00FF))
 		key='\b';
 	switch(key){
-	case LEFT:key=XK_Left;break;
-	case RIGHT:key=XK_Right;break;
-	case UP:key=XK_Up;break;
-	case DOWN:key=XK_Down;break;
-	case HOME:key=XK_Home;break;
-	case END:key=XK_End;break;
+	case LEFT:key=VK_LEFT;break;
+	case RIGHT:key=VK_RIGHT;break;
+	case UP:key=VK_UP;break;
+	case DOWN:key=VK_DOWN;break;
+	case HOME:key=VK_HOME;break;
+	case END:key=VK_END;break;
+	case CTRL_INSERT:key=KEYM_CTRL|VK_INSERT;break;
+	case CTRL_DELETE:key=KEYM_CTRL|VK_DELETE;break;
+	case CTRL_0...CTRL_9:key=KEYM_CTRL|('0'+key-CTRL_0);break;
+	case CTRL_A...CTRL_Z:key=KEYM_CTRL|('A'+key-CTRL_A);break;
 	};
 	return key;
 }
@@ -187,6 +196,12 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			uMessageDown=0;
 			uMessageUp=0;
 		}
+	}
+	else if(ret==IRV_DO_NOTHING && (eim->CandWordCount ||
+		eim->StringGet[0] || eim->CodeInput[0]))
+	{
+		DisplayEIM(eim);
+		ret=IRV_DISPLAY_CANDWORDS;
 	}
 	else if(ret==IRV_DISPLAY_CANDWORDS)
 	{
@@ -233,7 +248,7 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			uMessageUp=0;
 			ret=IRV_GET_CANDWORDS;
 		}
-		else if(key==XK_Up)
+		else if(key==VK_UP)
 		{
 			if(eim->SelectIndex>0)
 			{
@@ -242,7 +257,7 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			}
 			ret=IRV_DISPLAY_CANDWORDS;
 		}
-		else if(key==XK_Down)
+		else if(key==VK_DOWN)
 		{
 			if(eim->SelectIndex<eim->CandWordCount-1)
 			{
@@ -321,13 +336,63 @@ char *ExtraGetPath(char *type)
 	return ret;
 }
 
+/* the result is slow, why? */
+char *GetClipboardString(Display *disp)
+{
+	Atom sel;
+	Window w;
+	int ret;
+	Atom target;
+	Atom type;
+	int fmt;
+	unsigned long n,after;
+	unsigned char *pret=0;
+	static char result[1024];
+
+	sel = XInternAtom(disp, "PRIMARY", 0);
+	target = XInternAtom(disp,"UTF8_STRING",0);
+	w=XGetSelectionOwner(disp,sel);
+	if(w==None)
+	{
+		//printf("None owner\n");
+		return NULL;
+	}
+	XConvertSelection(disp,sel,target,sel,w,CurrentTime);
+	ret=XGetWindowProperty(disp,w,sel,0,1023,False,target,&type,&fmt,&n,&after,&pret);
+	if(ret!=Success || !pret || fmt!=8)
+	{
+		//printf("Error %d\n",ret);
+		return NULL;
+	}
+	memcpy(result,pret,n);
+	XFree(pret);
+	result[n]=0;
+	return result;
+}
+
+char *ExtraGetSelect(void)
+{
+	static char phrase[32];
+	char *f;
+	size_t l1,l2;
+	char *ps=phrase;
+	f=GetClipboardString(dpy);
+	if(!f) return NULL;
+	l1=strlen(f);
+	if(l1>=32) return NULL;
+	l2=32;
+	l1=iconv(convGB,&f,&l1,&ps,&l2);
+	*ps=0;
+	return phrase;
+}
+
 int InitExtraIM(EXTRA_IM *eim,char *arg)
 {
 	eim->CodeInput=strCodeInput;
 	eim->StringGet=StringGetEngine;
 	eim->CandTable=CandTableEngine;
 	eim->CodeTips=CodeTipsEngine;
-	eim->GetSelect=NULL;
+	eim->GetSelect=ExtraGetSelect;
 	eim->GetPath=ExtraGetPath;
 	eim->CandWordMax=iMaxCandWord;
 	eim->CaretPos=-1;
@@ -350,6 +415,13 @@ void LoadExtraIM(char *fn)
 	char temp[256];
 	char *arg;
 	char fnr[256];
+
+	if(convGB==(iconv_t)-1)
+	{
+		convGB=iconv_open("GB18030","UTF-8");
+		if(convGB==(iconv_t)-1)
+			return;
+	}
 
 	for(i=0;i<EIM_MAX;i++)
 	{
