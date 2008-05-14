@@ -1,26 +1,19 @@
-This is fcitx, written and maintained by Jeff Zhang <completist@completist.org>
-on Sun, 27 Aug 2006 15:15:20 +0800.
+This package was debianized by Yu Guanghui <ygh@debian.org> on
+Sat,  3 May 2003 14:24:40 +0800
 
-The original source can always be found at:
-	ftp://ftp.debian.org/dists/unstable/main/source/
+It was downloaded from http://fcitx.googlecode.com/svn/trunk/
 
-Copyright Holder:  Jeff Zhang
+Copyright Holders: YuKing <yuking_net@sohu.com>       2002-2007
+	  	   Yu Fan <yufanyufan@gmail.com>      2007
+	  	   Shuqun Zhou <zhoushuqun@gmail.com> 2007-2008
+		   Lin Ming <linming04@gmail.com>     2007-2008
+		   Lee Duhem <lee.duhem@gmail.com>    2007-2008
+		   dgod <dgod.osa@gmail.com>          2007-2008
 
-License:
+Copyright:
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+The programs in this package may be copied under the terms of the GNU
+General Public Licence (see below).
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this package; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-On Debian systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL'.
+On Debian systems, you can find the complete GNU GPL at
+/usr/share/common-licenses/GPL.

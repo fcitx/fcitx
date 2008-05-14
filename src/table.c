@@ -2076,7 +2076,7 @@ void TableCreatePhraseCode (char *strHZ)
 {
     unsigned char   i;
     unsigned char   i1, i2;
-    int             iLen;
+    size_t          iLen;
     char            strTemp[3];
     RECORD         *recTemp;
 

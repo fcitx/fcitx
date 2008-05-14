@@ -1,12 +1,15 @@
 Source: fcitx
 Section: utils
 Priority: optional
-Maintainer: completist <completist@completist.org>
-Build-Depends: debhelper (>= 5), autotools-dev
+Maintainer: Kov Chai <tchaikov@gmail.org>
+Build-Depends: cdbs (>= 0.4.41), debhelper (>= 5), libx11-dev, libxft-dev, libxpm-dev
 Standards-Version: 3.7.2
+Homepage: http://code.google.com/p/fcitx/
 
 Package: fcitx
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: fcitx
- Free Chinese Input Toy for X (XIM).
+Depends: ${shlibs:Depends}
+Recommends: im-switch, ttf-arphic-gbsn00lp | ttf-arphic-gkai00mp
+Description: Free Chinese Input Toy for X (XIM)
+ fcitx is a simplified Chinese input server. It supports WuBi,
+ Pinyin and QuWei input method. It's small and fast.

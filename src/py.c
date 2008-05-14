@@ -243,9 +243,9 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面开始读取用户词库
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PY_USERPHRASE_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_USERPHRASE_FILE);
     fp = fopen (strPath, "rb");
     if (fp) {
 	while (!feof (fp)) {
@@ -289,10 +289,9 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取索引文件
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-
-    strcat (strPath, PY_INDEX_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_INDEX_FILE);
     fp = fopen (strPath, "rb");
     if (fp) {
 	fread (&iLen, sizeof (uint), 1, fp);
@@ -325,10 +324,9 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取常用词表
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-
-    strcat (strPath, PY_FREQ_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_FREQ_FILE);
     fp = fopen (strPath, "rb");
     if (fp) {
 	pPyFreq = pyFreq;
@@ -371,9 +369,9 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取特殊符号表
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PY_SYMBOL_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_SYMBOL_FILE);
 
     if (access (strPath, 0)) {
 	strcpy (strPath, PKGDATADIR "/data/");
@@ -2564,9 +2562,9 @@ void SavePYUserPhrase (void)
     }
 
     fclose (fp);
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PY_USERPHRASE_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_USERPHRASE_FILE);
     if (access (strPath, 0))
 	unlink (strPath);
     rename (strPathTemp, strPath);
@@ -2577,15 +2575,17 @@ void SavePYFreq (void)
     int             i, j, k;
     char            strPath[PATH_MAX];
     char            strPathTemp[PATH_MAX];
+    int             iStrLen = PATH_MAX;
     FILE           *fp;
     PyFreq         *pPyFreq;
     HZ             *hz;
 
-    strcpy (strPathTemp, (char *) getenv ("HOME"));
-    strcat (strPathTemp, "/.fcitx/");
+    snprintf(strPathTemp, iStrLen, "%s/.fcitx/",
+             getenv ("HOME"));
+    iStrLen -= strlen(strPathTemp);
     if (access (strPathTemp, 0))
 	mkdir (strPathTemp, S_IRWXU);
-    strcat (strPathTemp, TEMP_FILE);
+    strncat(strPathTemp, iStrLen, TEMP_FILE);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
 	fprintf (stderr, "无法保存常用词表：%s\n", strPathTemp);
@@ -2621,9 +2621,9 @@ void SavePYFreq (void)
     }
 
     fclose (fp);
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PY_FREQ_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_FREQ_FILE);
     if (access (strPath, 0))
 	unlink (strPath);
     rename (strPathTemp, strPath);
@@ -2637,13 +2637,15 @@ void SavePYIndex (void)
     int             i, j, k, l;
     char            strPath[PATH_MAX];
     char            strPathTemp[PATH_MAX];
+    int             iStrLen = PATH_MAX;
     FILE           *fp;
 
-    strcpy (strPathTemp, (char *) getenv ("HOME"));
-    strcat (strPathTemp, "/.fcitx/");
+    snprintf(strPathTemp, iStrLen, "%s/.fcitx/",
+             getenv ("HOME"));
+    iStrLen -= strlen(strPathTemp);
     if (access (strPathTemp, 0))
 	mkdir (strPathTemp, S_IRWXU);
-    strcat (strPathTemp, TEMP_FILE);
+    strncat(strPathTemp, iStrLen, TEMP_FILE);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
 	fprintf (stderr, "无法保存索引文件：%s\n", strPathTemp);
@@ -2692,9 +2694,9 @@ void SavePYIndex (void)
     }
 
     fclose (fp);
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PY_INDEX_FILE);
+    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
+             getenv ("HOME"),
+             PY_INDEX_FILE);
     if (access (strPath, 0))
 	unlink (strPath);
     rename (strPathTemp, strPath);

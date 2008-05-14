@@ -1,1 +1,4 @@
 usr/bin
+usr/share/fcitx/data
+usr/share/fcitx/xpm
+etc/X11/xinit/xinput.d

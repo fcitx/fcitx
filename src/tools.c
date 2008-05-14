@@ -1788,7 +1788,7 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
     return ret;
 }
 
-int CalHZIndex (char *strHZ)
+int CalHZIndex (signed char *strHZ)
 {
     return (strHZ[0] + 127) * 255 + strHZ[1] + 128;
 }

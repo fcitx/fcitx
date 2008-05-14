@@ -45,7 +45,7 @@ void            SetSwitchKey (char *str);
 void            SetTriggerKeys (char *str);
 Bool            CheckHZCharset (char *strHZ);
 Bool            MyStrcmp (char *str1, char *str2);
-int             CalHZIndex (char *strHZ);
+int             CalHZIndex (signed char *strHZ);
 
 char           *ConvertGBKSimple2Tradition (char *text);
 
