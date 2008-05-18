@@ -46,8 +46,9 @@ IC             *CurrentIC = NULL;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
 //该变量是GTK+ OverTheSpot光标跟随的临时解决方案
-INT8            iOffsetX = 0;
-INT8            iOffsetY = 16;
+/* Issue 11: piaoairy: 为适应generic_config_integer() , 改INT8 为int */
+int            iOffsetX = 0;
+int            iOffsetY = 16;
 
 Bool            bStaticXIM = False;
 

@@ -172,8 +172,8 @@ extern char     strUserLocale[];
 
 extern Bool     bUseBold;
 
-extern INT8     iOffsetX;
-extern INT8     iOffsetY;
+extern int     iOffsetX;
+extern int     iOffsetY;
 
 extern Bool     bStaticXIM;
 
@@ -259,7 +259,7 @@ typedef struct Configure_group {
 static int generic_config_integer(Configure *c, void *a, int isread)
  {
     if(isread)
-        *(c->value.integer) = strtol((char *)a, (char **)NULL, 0);
+        *(c->value.integer) = atoi(a);
     else
         fprintf((FILE *)a, "%s=%d\n", c->name, *(c->value.integer));
 
@@ -617,8 +617,7 @@ inline static int pinyin_get_word_from_phrase(Configure *c, void *a, int isread)
 inline static int blur_an_ang(Configure *c, void *a, int isread)
 {
     if(isread){
-        MHPY_C[0].bMode = MHPY_S[5].bMode
-            = strtol((char *)a, (char **)NULL, 0);
+        MHPY_C[0].bMode = MHPY_S[5].bMode = atoi(a);
     }else
         fprintf((FILE *)a, "%s=%d\n", c->name, MHPY_C[0].bMode);
 
@@ -677,6 +676,7 @@ Configure program_config[] = {
     },
 };
 
+/* piaoairy: gcc 默认enum 类型使用int */
 Configure output_config[] = {
     {
         .name = "数字后跟半角符号",
@@ -686,12 +686,12 @@ Configure output_config[] = {
     {
         .name = "Enter键行为",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&enterToDo, /* FIXME: 这种转换方式也许并不是个好主意，下同 */
+        .value.integer = (int *)&enterToDo, /* FIXME: 这种转换方式也许并不是个好主意，下同 */
     },
     {
         .name = "分号键行为",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&semicolonToDo,
+        .value.integer = (int *)&semicolonToDo,
     },
     {
         .name = "大写字母输入英文",
@@ -727,12 +727,12 @@ Configure interface_config[] = {
     {
         .name = "输入条使用3D界面",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&_3DEffectInputWindow,
+        .value.integer = (int *)&_3DEffectInputWindow,
     },
     {
         .name = "主窗口隐藏模式",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&hideMainWindow,
+        .value.integer = (int *)&hideMainWindow,
     },
     {
         .name = "显示虚拟键盘",
@@ -758,12 +758,12 @@ Configure interface_config[] = {
     {
         .name = "输入条偏移量X",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (int *)&iOffsetX,
+        .value.integer = &iOffsetX,
     },
     {
         .name = "输入条偏移量Y",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (int *)&iOffsetY,
+        .value.integer = &iOffsetY,
     },
     {
         .name = "序号后加点",
@@ -892,7 +892,7 @@ Configure hotkey_config[] = {
     {
         .name = "击键时间间隔",
         .value_type = CONFIG_INTEGER,
-        .value.integer = &iTimeInterval,
+        .value.integer = (int *)&iTimeInterval,
     },
     {
         .name = "光标跟随",
@@ -1050,17 +1050,17 @@ Configure pinyin_config[] = {
         .name = "拼音单字重码调整方式",
         .comment = "重码调整方式说明：0-->不调整  1-->快速调整  2-->按频率调整",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&baseOrder,
+        .value.integer = (int *)&baseOrder,
     },
     {
         .name = "拼音词组重码调整方式",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&phraseOrder,
+        .value.integer = (int *)&phraseOrder,
     },
     {
         .name = "拼音常用词重码调整方式",
         .value_type = CONFIG_INTEGER,
-        .value.integer = (void *)&freqOrder,
+        .value.integer = (int *)&freqOrder,
     },
     {
         .name = "模糊an和ang",
@@ -1312,7 +1312,7 @@ inline static int get_version(Configure *c, void *a, int isread)
 inline static int get_main_window_offset_x(Configure *c, void *a, int isread)
 {
     if(isread){
-        iMainWindowX = strtol((char *)a, (char **)NULL, 0);
+        iMainWindowX = atoi(a);
         if(iMainWindowX < 0)
             iMainWindowX = 0;
         else if((iMainWindowX + MAINWND_WIDTH) > DisplayWidth(dpy, iScreen))
@@ -1327,7 +1327,7 @@ inline static int get_main_window_offset_x(Configure *c, void *a, int isread)
 inline static int get_main_window_offset_y(Configure *c, void *a, int isread)
 {
     if(isread){
-        iMainWindowY = strtol((char *)a, (char **)NULL, 0);
+        iMainWindowY = atoi(a);
         if(iMainWindowY < 0)
             iMainWindowY = 0;
         else if((iMainWindowY + MAINWND_HEIGHT) > DisplayHeight(dpy, iScreen))
@@ -1342,7 +1342,7 @@ inline static int get_main_window_offset_y(Configure *c, void *a, int isread)
 inline static int get_input_window_offset_x(Configure *c, void *a, int isread)
 {
     if(isread){
-        iInputWindowX = strtol((char *)a, (char **)NULL, 0);
+        iInputWindowX = atoi(a);
         if(iInputWindowX < 0)
             iInputWindowX = 0;
         else if((iInputWindowX + iInputWindowWidth) > DisplayWidth(dpy, iScreen))
@@ -1357,7 +1357,7 @@ inline static int get_input_window_offset_x(Configure *c, void *a, int isread)
 inline static int get_input_window_offset_y(Configure *c, void *a, int isread)
 {
     if(isread){
-        iInputWindowY = strtol((char *)a, (char **)NULL, 0);
+        iInputWindowY = atoi(a);
         if(iInputWindowY < 0)
             iInputWindowY = 0;
         else if((iInputWindowY + iInputWindowHeight) > DisplayHeight(dpy, iScreen))
@@ -1367,6 +1367,8 @@ inline static int get_input_window_offset_y(Configure *c, void *a, int isread)
 
     return 0;
 }
+
+static int iIMIndex_tmp = 0;		/* Issue 11: piaoairy add 20080518 */
 
 Configure profiles[] = {
     {
@@ -1420,9 +1422,9 @@ Configure profiles[] = {
         .value.integer = &bUseLegend,
     },
     {
-        .name = "当前输入法",
-        .value_type = CONFIG_INTEGER,
-        .value.integer = (int *)&iIMIndex,
+        .name = "当前输入法",	//  Issue 11: piaoairy: 本来打算将iIMIndex 改为int类型,
+        .value_type = CONFIG_INTEGER,	// 无奈使用的地方太多, 
+        .value.integer = &iIMIndex_tmp,	// 只好重新定义个iIMIndex_tmp搭桥.
     },
     {
         .name = "禁止键盘切换",
@@ -1497,6 +1499,8 @@ Configure profiles[] = {
     }
     fclose(fp);
 
+    iIMIndex = iIMIndex_tmp;		/* piaoairy add 20080518 */
+
     if(bIsNeedSaveConfig){
         SaveConfig();
         SaveProfile();
@@ -1527,6 +1531,7 @@ Configure profiles[] = {
         exit(1);
     }
 
+    iIMIndex_tmp = iIMIndex;		/* piaoairy add 20080518 */
     write_configures(fp, profiles);
     fclose(fp);
 
