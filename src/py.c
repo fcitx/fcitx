@@ -2585,7 +2585,7 @@ void SavePYFreq (void)
     iStrLen -= strlen(strPathTemp);
     if (access (strPathTemp, 0))
 	mkdir (strPathTemp, S_IRWXU);
-    strncat(strPathTemp, iStrLen, TEMP_FILE);
+    strncat(strPathTemp, TEMP_FILE, iStrLen);
     fp = fopen (strPathTemp, "wb");
     if (!fp) {
 	fprintf (stderr, "无法保存常用词表：%s\n", strPathTemp);
