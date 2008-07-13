@@ -161,12 +161,12 @@ void LoadTableInfo (void)
         free (table);
     iTableCount = 0;
 
-    snprintf (strPath, "%s/.fcitx/%s",
+    snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
               getenv ("HOME"),
               TABLE_CONFIG_FILENAME);
 
     if (access (strPath, 0)) {
-        snprintf (strPath, PKGDATADIR "/data/%s", TABLE_CONFIG_FILENAME);
+        snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", TABLE_CONFIG_FILENAME);
     }
 
     fp = fopen (strPath, "rt");
@@ -360,12 +360,12 @@ Bool LoadTableDict (void)
     }
 
     //读入码表
-    snprintf (strPath, "%s/.fcitx/%s",
+    snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
               getenv ("HOME"),
               table[iTableIMIndex].strPath);
     
     if (access (strPath, 0)) {
-        snprintf (strPath, PKGDATADIR "/data/%s", table[iTableIMIndex].strPath);
+        snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", table[iTableIMIndex].strPath);
     }
 
     fpDict = fopen (strPath, "rb");
@@ -491,12 +491,12 @@ Bool LoadTableDict (void)
 
     fclose (fpDict);
     //读取相应的特殊符号表
-    snprintf (strPath, "%s/.fcitx/%s",
+    snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
               getenv ("HOME"),
               table[iTableIMIndex].strSymbolFile);
     
     if (access (strPath, 0)) {
-        snprintf (strPath, PKGDATADIR "/data/%s",
+        snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s",
                   table[iTableIMIndex].strSymbolFile);
         fpDict = fopen (strPath, "rt");
     }
