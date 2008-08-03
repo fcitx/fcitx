@@ -29,6 +29,7 @@
 #include "MainWindow.h"
 
 #include <stdio.h>
+#include <ctype.h>
 #include <X11/xpm.h>
 
 #include "IC.h"
