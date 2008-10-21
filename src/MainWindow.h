@@ -26,6 +26,7 @@
  * 
  * 
  */
+
 #ifndef _MAIN_WINDOW_H
 #define _MAIN_WINDOW_H
 

@@ -376,7 +376,8 @@ void MyXEventHandler (XEvent * event)
 	//added by yunfan
     case ClientMessage:
 	if ((event->xclient.message_type == about_protocol_atom) && ((Atom) event->xclient.data.l[0] == about_kill_atom)) {
-	    XUnmapWindow (dpy, aboutWindow);
+	    if (IsWindowVisible(aboutWindow))
+		XUnmapWindow (dpy, aboutWindow);
 	    DrawMainWindow ();
 	}
 	break;
@@ -415,10 +416,12 @@ void MyXEventHandler (XEvent * event)
 		    iMainWindowY = event->xbutton.y;
 		    if (!MouseClick (&iMainWindowX, &iMainWindowY, mainWindow)) {
 			if (ConnectIDGetState (connect_id) != IS_CHN) {
+			    if (IsWindowVisible(inputWindow))
+				XUnmapWindow (dpy, inputWindow);
+			    if (IsWindowVisible(VKWindow))
+				XUnmapWindow (dpy, VKWindow);
 			    SetIMState ((ConnectIDGetState (connect_id) == IS_ENG) ? False : True);
-			    XUnmapWindow (dpy, inputWindow);
-			    XUnmapWindow (dpy, VKWindow);
-			    DisplayMainWindow ();
+			    DrawMainWindow ();
 			}
 			else
 			    ChangeIMState (connect_id);
@@ -435,7 +438,8 @@ void MyXEventHandler (XEvent * event)
 	    }
 	    //added by yunfan
 	    else if (event->xbutton.window == aboutWindow) {
-		XUnmapWindow (dpy, aboutWindow);
+		if (IsWindowVisible(aboutWindow))
+		    XUnmapWindow (dpy, aboutWindow);
 		DrawMainWindow ();
 	    }
 	    //****************************
@@ -481,8 +485,10 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
-		    XUnmapWindow (dpy, mainWindow);
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
+		    if (IsWindowVisible(mainWindow))
+			XUnmapWindow (dpy, mainWindow);
+		}
 		else if (!bVK) {
 		    bCompactMainWindow = !bCompactMainWindow;
 		    SwitchIM (iIMIndex);
@@ -494,7 +500,7 @@ void MyXEventHandler (XEvent * event)
     case FocusIn:
 	if (ConnectIDGetState (connect_id) == IS_CHN)
 	    DisplayInputWindow ();
-	if (hideMainWindow != HM_HIDE)
+	if ((hideMainWindow != HM_HIDE) && (!IsWindowVisible(inputWindow)))
 	    XMapRaised (dpy, mainWindow);
 	break;
     default:
@@ -630,6 +636,19 @@ void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
     XmbDrawString (dpy, window, font, gc, x, y, str, strlen (str));
 }
 #endif
+
+Bool IsWindowVisible(Window window)
+{
+    XWindowAttributes wa;
+    
+    if ( !XGetWindowAttributes (dpy, window, &wa) )
+	return False;
+    
+    if ( wa.map_state==IsViewable)
+	return True;
+    
+    return False;
+}
 
 /* *************下列函数取自于 rfinput-2.0 ************************ */
 /*

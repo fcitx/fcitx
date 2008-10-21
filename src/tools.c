@@ -26,6 +26,7 @@
  * 
  * 
  */
+
 #include "tools.h"
 
 #include <stdio.h>
@@ -155,14 +156,13 @@ extern SP_FROM  iSPFrom;
 
 //extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
-
 extern char	strExternIM[];
 
 extern Bool     bDoubleSwitchKey;
 extern Bool     bPointAfterNumber;
 extern Bool     bConvertPunc;
 extern unsigned int iTimeInterval;
-extern uint     iFixedInputWindowWidth;
+extern int     iFixedInputWindowWidth;
 extern Bool     bShowInputWindowTriggering;
 
 #ifdef _USE_XFT
@@ -172,10 +172,13 @@ extern char     strUserLocale[];
 
 extern Bool     bUseBold;
 
-extern int     iOffsetX;
-extern int     iOffsetY;
+extern int      iOffsetX;
+extern int      iOffsetY;
 
+/*
 extern Bool     bStaticXIM;
+extern Bool     bNoReleaseKey;
+*/
 
 /*
 #if defined(DARWIN)*/
@@ -197,11 +200,10 @@ this is required for Mac machine*/
 Bool MyStrcmp (char *str1, char *str2)
 {
     return !strncmp (str1, str2, strlen (str2));
- }
+}
 
 /* 其他函数需要知道传递给 LoadConfig 的参数 */
 Bool    bIsReloadConfig = True;
-
 /* 在载入 profile 文件过程中传递状态信息 */
 Bool    bIsNeedSaveConfig = True;
 
@@ -340,7 +342,7 @@ static int write_configures(FILE *fp, Configure *configures)
                     exit(1);
             }
         }
-    }
+     }
     return 0;
 }
 
@@ -433,7 +435,6 @@ inline static int cursor_follow(Configure *c, void *a, int isread)
         SetHotKey((char *)a, hkTrack);
     else
         fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_K");
-
     return 0;
 }
 
@@ -625,12 +626,6 @@ inline static int blur_an_ang(Configure *c, void *a, int isread)
 }
 
 Configure program_config[] = {
-    {
-        .name = "静态模式",
-        .comment = "如果您的FCITX工作很正常，没有必要修改此设置",
-        .value_type = CONFIG_INTEGER,
-        .value.integer = &bStaticXIM,
-    },
     {
         .name = "显示字体(中)",
         .value_type = CONFIG_STRING,
@@ -1026,7 +1021,7 @@ Configure pinyin_config[] = {
         .value.integer = &bPYSaveAutoAsPhrase,
     },
     {
-        .name = "增加拼音常用字",
+       .name = "增加拼音常用字",
         .value_type = CONFIG_HOTKEY,
         .config_rw = add_pinyin_frequently_used_word,
     },
@@ -1247,7 +1242,7 @@ void LoadConfig (Bool bMode)
     fclose(fp);
 
     if (!Trigger_Keys) {
-       iTriggerKeyCount = 0;
+	iTriggerKeyCount = 0;
 	Trigger_Keys = (XIMTriggerKey *) malloc (sizeof (XIMTriggerKey) * (iTriggerKeyCount + 2));
 	Trigger_Keys[0].keysym = XK_space;
 	Trigger_Keys[0].modifier = ControlMask;
@@ -1256,13 +1251,13 @@ void LoadConfig (Bool bMode)
 	Trigger_Keys[1].modifier = 0;
 	Trigger_Keys[1].modifier_mask = 0;
     }
- }
+}
 
 /*
  * 保存配置信息
  */
- void SaveConfig (void)
- {
+void SaveConfig (void)
+{
     FILE    *fp;
     char    buf[PATH_MAX], *pbuf;
     Configure_group *tmpgroup;
@@ -1304,7 +1299,6 @@ inline static int get_version(Configure *c, void *a, int isread)
             bIsNeedSaveConfig = False;
     }else
         fprintf((FILE *)a, "%s=%s\n", c->name, FCITX_VERSION);
-
     return 0;
 }
 
@@ -1321,7 +1315,7 @@ inline static int get_main_window_offset_x(Configure *c, void *a, int isread)
         fprintf((FILE *)a, "%s=%d\n", c->name, iMainWindowX);
 
     return 0;
- }
+}
 
 /* 主窗口位置Y */
 inline static int get_main_window_offset_y(Configure *c, void *a, int isread)
@@ -1446,8 +1440,8 @@ Configure profiles[] = {
     },
 };
 
- void LoadProfile (void)
- {
+void LoadProfile (void)
+{
     FILE           *fp;
     char            buf[PATH_MAX], *pbuf, *pbuf1;
     int             i;
@@ -1497,6 +1491,7 @@ Configure profiles[] = {
             if(strncmp(tmpconfig->name, pbuf, pbuf1-pbuf) == 0)
                 read_configure(tmpconfig, ++pbuf1);
     }
+
     fclose(fp);
 
     iIMIndex = iIMIndex_tmp;		/* piaoairy add 20080518 */
@@ -1504,11 +1499,11 @@ Configure profiles[] = {
     if(bIsNeedSaveConfig){
         SaveConfig();
         SaveProfile();
-    }
- }
+     }
+}
 
- void SaveProfile (void)
- {
+void SaveProfile (void)
+{
     FILE           *fp;
     char            buf[PATH_MAX], *pbuf;
 
@@ -1523,23 +1518,24 @@ Configure profiles[] = {
         perror("mkdir");
         exit(1);
     }
-
+ 
     snprintf(buf, PATH_MAX, "%s/.fcitx/profile", pbuf);
     fp = fopen (buf, "w");
+
     if (!fp) {
-        perror("fopen");
+	perror("fopen");
         exit(1);
     }
 
     iIMIndex_tmp = iIMIndex;		/* piaoairy add 20080518 */
     write_configures(fp, profiles);
     fclose(fp);
-
+    
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
- }
+}
 
- void SetHotKey (char *strKeys, HOTKEYS * hotkey)
+void SetHotKey (char *strKeys, HOTKEYS * hotkey)
 {
     char           *p;
     char            strKey[30];
@@ -1793,7 +1789,7 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
     return ret;
 }
 
-int CalHZIndex (signed char *strHZ)
+int CalHZIndex (char *strHZ)
 {
     return (strHZ[0] + 127) * 255 + strHZ[1] + 128;
 }

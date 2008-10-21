@@ -26,6 +26,7 @@
  * 
  * 
  */
+
 #ifndef _TOOLS_H
 #define _TOOLS_H
 
@@ -45,7 +46,7 @@ void            SetSwitchKey (char *str);
 void            SetTriggerKeys (char *str);
 Bool            CheckHZCharset (char *strHZ);
 Bool            MyStrcmp (char *str1, char *str2);
-int             CalHZIndex (signed char *strHZ);
+int             CalHZIndex (char *strHZ);
 
 char           *ConvertGBKSimple2Tradition (char *text);
 

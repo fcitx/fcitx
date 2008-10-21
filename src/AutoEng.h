@@ -26,6 +26,7 @@
 *
 *
 */
+
 #ifndef _AUTOENG_H
 #define _AUTOENG_H
 
@@ -48,14 +49,6 @@ void            LoadAutoEng (void);
  * 释放相关资源  
  */
 void            FreeAutoEng (void);
-
-/** 
- * 判断是否需要自动转到英文输入状态
- * 
- * @param  char *
- * 
- * @return 
- */ 
 Bool            SwitchToEng (char *);
 
 #endif

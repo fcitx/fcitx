@@ -76,8 +76,8 @@ typedef struct _TABLE {
     Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
     Bool            bPromptTableCode;	//输入完毕后是否提示编码
 
-    Bool            bHasPinyin;	//标记该码表中是否有拼音
-    char            choose[11];   //设置选择键  
+    Bool            bHasPinyin;		//标记该码表中是否有拼音
+    char            choose[11];		//设置选择键
 } TABLE;
 
 typedef struct _RECORD {
@@ -155,7 +155,9 @@ void            TableDelPhrase (RECORD * record);
 RECORD         *TableHasPhrase (char *strCode, char *strHZ);
 RECORD         *TableFindPhrase (char *strHZ);
 void            TableInsertPhrase (char *strCode, char *strHZ);
+char	       *_TableGetCandWord (int iIndex);		//Internal
 char           *TableGetCandWord (int iIndex);
+void		TableUpdateHitFrequency (RECORD * record);
 void            TableCreateNewPhrase (void);
 void            TableCreatePhraseCode (char *strHZ);
 Bool            TablePhraseTips (void);

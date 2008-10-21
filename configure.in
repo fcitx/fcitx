@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, "'GirlDog' 3.5-070713")
+AM_INIT_AUTOMAKE(fcitx, "'GirlDog' 3.5-081021")
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
@@ -16,7 +16,7 @@ AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 
 # Checks for libraries.
-#AM_ICONV
+AM_ICONV
 
 # Checks for header files.
 AC_HEADER_STDC

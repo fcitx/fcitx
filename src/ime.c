@@ -17,7 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-/**
+/*
  * @file   ime.c
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
@@ -79,7 +79,8 @@ Bool            bChnPunc = True;	//中英文标点切换
 Bool            bUseGBK = False;	//是否支持GBK
 Bool            bIsDoInputOnly = False;	//表明是否只由输入法来处理键盘
 Bool            bLastIsNumber = False;	//上一次输入是不是阿拉伯数字
-INT8            iInCap = 0;	//是不是处于大写后的英文状态,0--不，1--按下大写键，2--按下分号键
+char		cLastIsAutoConvert = 0;	//上一次输入是不是符合数字后自动转换的符号，如'.'/','，0表示不是这样的符号
+INT8            iInCap = 0;		//是不是处于大写后的英文状态,0--不，1--按下大写键，2--按下分号键
 
 /*
 Bool            bAutoHideInputWindow = False;	//是否自动隐藏输入条
@@ -240,8 +241,11 @@ void ResetInput (void)
 
 void CloseIM (IMForwardEventStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (VKWindow))
+	XUnmapWindow (dpy, VKWindow);
+
     IMPreeditEnd (ims, (XPointer) call_data);
     SetConnectID (call_data->connect_id, IS_CLOSED);
     bVK = False;
@@ -267,8 +271,11 @@ void ChangeIMState (CARD16 _connect_id)
 	SetConnectID (_connect_id, IS_ENG);
 	ResetInput ();
 	ResetInputWindow ();
-	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
+
+	if (IsWindowVisible (inputWindow))
+	    XUnmapWindow (dpy, inputWindow);
+	if (IsWindowVisible (VKWindow))
+	    XUnmapWindow (dpy, VKWindow);
     }
 
     if (hideMainWindow != HM_HIDE)
@@ -334,20 +341,24 @@ void ProcessKey (IMForwardEventStruct * call_data)
     iKeyState = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
     iKey = GetKey (keysym, iKeyState, keyCount);
 
-    if (!iKey)
+    if (!iKey) {
+	IMForwardEvent (ims, (XPointer) call_data);
 	return;
+    }
 
     /*
      * 解决xine中候选字自动选中的问题
      * xine每秒钟产生一个左SHIFT键的释放事件
      */
-    if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey))
+     if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
+	IMForwardEvent (ims, (XPointer) call_data);
 	return;
+     }
 
     retVal = IRV_TO_PROCESS;
 
 #ifdef _DEBUG
-    printf ("iKeyState=%d  KEYCODE=%d  iKey=%d\n", iKeyState, kev->keycode, iKey);
+    printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
 #endif
 
     if ((call_data->event.type == KeyRelease) && (ConnectIDGetState (call_data->connect_id) != IS_CLOSED)) {
@@ -365,6 +376,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    CloseIM (call_data);
 	    }
 	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
+		keyReleased = KR_OTHER;
 		ChangeIMState (call_data->connect_id);
 		retVal = IRV_TO_PROCESS;
 	    }
@@ -560,10 +572,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    pstr = im[iIMIndex].GetCandWord (0);
 					    iCandWordCount = 0;
 					    if (pstr) {
+						SendHZtoClient (call_data, pstr);
 						strcpy (strStringGet, pstr);
 						//粗略统计字数
 						iHZInputed += (int) (strlen (strStringGet) / 2);
-						SendHZtoClient (call_data, strStringGet);
 						iCodeInputCount = 0;
 					    }
 					}
@@ -588,6 +600,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						retVal = IRV_ENG;
 						uMessageUp = uMessageDown = 0;
 						iInCap = 0;
+						cLastIsAutoConvert = 0;
 					    }
 					    else {
 						if (isprint (iKey) && iKey < 128) {
@@ -608,16 +621,17 @@ void ProcessKey (IMForwardEventStruct * call_data)
 							    retVal = IRV_DISPLAY_MESSAGE;
 						    }
 						}
-						else if ((iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) && (iCodeInputCount || (!iCodeInputCount && iInCap))) {
+						else if (iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) {
 						    if (iCodeInputCount)
 							iCodeInputCount--;
 						    strCodeInput[iCodeInputCount] = '\0';
 						    iCursorPos = iCodeInputCount;
-						    retVal = IRV_DISPLAY_MESSAGE;
 						    if (!iCodeInputCount)
 							retVal = IRV_CLEAN;
 						    else if (semicolonToDo == K_SEMICOLON_QUICKPHRASE && iInCap == 2)
 							retVal = QuickPhraseGetCandWords (SM_FIRST);
+						    else
+							retVal = IRV_DISPLAY_MESSAGE;
 						}
 
 						uMessageUp = 1;
@@ -650,19 +664,24 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						    messageUp[0].type = MSG_TIPS;
 						}
 						else {
+						    /*
 						    uMessageDown = 1;
 						    messageDown[0].type = MSG_TIPS;
 						    strcpy (messageUp[0].strMsg, strCodeInput);
 						    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
 						    messageUp[0].type = MSG_INPUT;
+						    */
+						    SendHZtoClient(call_data,strCodeInput);
+						    ChangeIMState (call_data->connect_id);
 						}
 					    }
 					}
 					else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',') && !iCandWordCount) {
-					    retVal = IRV_TO_PROCESS;
+					    cLastIsAutoConvert = iKey;
 					    bLastIsNumber = False;
+					    retVal = IRV_TO_PROCESS;					    
 					}
-					else {
+					else {				    
 					    if (bChnPunc) {
 						char           *pPunc;
 
@@ -679,6 +698,20 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 						    retVal = IRV_PUNC;
 						}
+						else if ((iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) && cLastIsAutoConvert ) {
+						    IMForwardEvent (ims, (XPointer) call_data);
+						    switch (cLastIsAutoConvert) {
+							case '.':
+							    SendHZtoClient(call_data, "。");
+							    break;
+							case ',':
+							    SendHZtoClient(call_data, "，");
+							    break;
+							default:
+							    ;
+						    }
+						    retVal = IRV_DO_NOTHING;
+					        }
 						else if (isprint (iKey) && iKey < 128) {
 						    if (iKey >= '0' && iKey <= '9')
 							bLastIsNumber = True;
@@ -701,6 +734,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						    }
 						}
 					    }
+					    cLastIsAutoConvert = 0;
 					}
 				    }
 				}
@@ -715,7 +749,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    else if (iKey == CTRL_5) {
 					LoadConfig (False);
 
-					InitGC (mainWindow);
+					InitGC (inputWindow);
 					InitMainWindowColor ();
 					InitInputWindowColor ();
 					InitVKWindowColor ();
@@ -726,7 +760,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					   ConnectIDResetReset (); */
 
 					CreateFont ();
-					SwitchIM (iIMIndex);
 					CalculateInputWindowHeight ();
 
 					FreeQuickPhrase ();
@@ -806,7 +839,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_TO_PROCESS:
     case IRV_DONOT_PROCESS:
     case IRV_DONOT_PROCESS_CLEAN:
-	//if (!IsKeyIgnored (kev->keycode))
 	IMForwardEvent (ims, (XPointer) call_data);
 
 	if (retVal != IRV_DONOT_PROCESS_CLEAN)
@@ -814,10 +846,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_CLEAN:
 	ResetInput ();
 	ResetInputWindow ();
-	//if (bAutoHideInputWindow)
-	XUnmapWindow (dpy, inputWindow);
-	/*else
-	   DrawInputWindow (); */
+	if (IsWindowVisible (inputWindow))
+	    XUnmapWindow (dpy, inputWindow);
 
 	return;
     case IRV_DISPLAY_CANDWORDS:
@@ -874,7 +904,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	else {
 	    ResetInput ();
 	    //if (bAutoHideInputWindow)
-	    XUnmapWindow (dpy, inputWindow);
+	    if (IsWindowVisible (inputWindow))
+		XUnmapWindow (dpy, inputWindow);
 	    /*else
 	       DrawInputWindow ();
 	     */
@@ -889,12 +920,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 
-	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
-	    XUnmapWindow (dpy, inputWindow);
+	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))) {
+	    if (IsWindowVisible (inputWindow))
+		XUnmapWindow (dpy, inputWindow);
+	}
 	else
 	    DrawInputWindow ();
 
 	lastIsSingleHZ = 0;
+
 	break;
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
@@ -903,15 +937,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_PUNC:
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
-	if (!uMessageDown)
+	if (!uMessageDown && IsWindowVisible (inputWindow))
 	    XUnmapWindow (dpy, inputWindow);
     case IRV_GET_CANDWORDS_NEXT:
 	SendHZtoClient (call_data, strStringGet);
 	bLastIsNumber = False;
 	lastIsSingleHZ = 0;
-
-	if (retVal == IRV_GET_CANDWORDS_NEXT)
-	    im[iIMIndex].GetCandWords (SM_FIRST);
 
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
@@ -968,7 +999,8 @@ INPUT_RETURN_VALUE ChangeGBK (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -982,7 +1014,8 @@ INPUT_RETURN_VALUE ChangeGBKT (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -996,7 +1029,8 @@ INPUT_RETURN_VALUE ChangeLegend (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -1061,7 +1095,8 @@ void SwitchIM (INT8 index)
     }
 
     ResetInput ();
-    XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 }
@@ -1136,14 +1171,16 @@ void SetIM (void)
 
     iIMCount += EIM_MAX;
     if (!iIMCount)
-        iIMCount = 1;
-
+	iIMCount = 1;
 
     im = (IM *) malloc (sizeof (IM) * iIMCount);
     iIMCount = 0;
 
+    /*
+       LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
+     */
     if(strExternIM[0]) LoadExtraIM(strExternIM);
-
+    
     /* 加入输入法 */
     if (bUsePinyin || ((!bUseSP && (!bUseTable || !iTableCount)) && !iIMCount))	//至少应该有一种输入法
 	RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);
@@ -1157,8 +1194,9 @@ void SetIM (void)
 	    table[i].iIMIndex = iIMCount - 1;
 	}
     }
+
     if (strExternIM[0] && strExternIM[1])
 	    LoadExtraIM(strExternIM);
-
+	    
     SwitchIM (iIMIndex);
 }

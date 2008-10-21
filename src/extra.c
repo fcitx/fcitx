@@ -10,6 +10,7 @@
 #include <limits.h>
 #include <iconv.h>
 
+#define EIM_MAX		4
 extern Display *dpy;
 
 iconv_t convGB=(iconv_t)-1;
@@ -83,6 +84,8 @@ static void ExtraReset(void)
 	bShowCursor=False;
 	bCursorAuto=False;
 	if(!eim) return;
+	if(eim->CandWordMax) eim->CandWordMax=iMaxCandWord;
+	if(eim->Reset) eim->Reset();
 	eim->StringGet[0]=0;
 	eim->CodeInput[0]=0;
 	eim->CaretPos=-1;
@@ -121,7 +124,6 @@ static void DisplayEIM(EXTRA_IM *im)
 		if (i != 9)
 			strcat (messageDown[uMessageDown].strMsg, " ");
 		uMessageDown++;
-
 	}    
 
 	uMessageUp=0;   
@@ -267,6 +269,7 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			ret=IRV_DISPLAY_CANDWORDS;
 		}
 	}
+ 
 	return ret;
 }
 
@@ -422,7 +425,7 @@ void LoadExtraIM(char *fn)
 		if(convGB==(iconv_t)-1)
 			return;
 	}
-
+	
 	for(i=0;i<EIM_MAX;i++)
 	{
 		if(EIM_file[i][0] && !strcmp(EIM_file[i],path))
@@ -459,6 +462,7 @@ void LoadExtraIM(char *fn)
 		sprintf(temp,"%s/%s",ExtraGetPath("LIB"),fnr);
 
 	handle=dlopen(temp,RTLD_LAZY);
+ 	
 	if(!handle)
 	{
 		printf("eim: open %s fail %s\n",temp,dlerror());
@@ -482,4 +486,3 @@ void LoadExtraIM(char *fn)
 	strcpy(EIM_file[i],fn);
 	EIM_index[i]=iIMCount-1;
 }
-

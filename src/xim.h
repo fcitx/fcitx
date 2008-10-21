@@ -36,6 +36,10 @@
 #define ICONV_CONST
 #endif
 
+#ifndef FALSE
+#define FALSE	0
+#endif
+
 typedef enum _IME_STATE {
     IS_CLOSED = 0,
     IS_ENG,

@@ -132,7 +132,8 @@ void InitVKWindowColor (void)
 
 void DisplayVKWindow (void)
 {
-    XMapRaised (dpy, VKWindow);
+    if (!IsWindowVisible (VKWindow))
+	XMapRaised (dpy, VKWindow);
 }
 
 void DrawVKWindow (void)
@@ -227,7 +228,6 @@ Bool VKMouseKey (int x, int y)
     IMForwardEventStruct forwardEvent;
     char            strKey[3];
     char           *pstr;
-    XEvent          xEvent;
 
     if (IsInBox (x, y, 1, 1, VK_WINDOW_WIDTH, 16))
 	ChangVK ();
@@ -236,28 +236,6 @@ Bool VKMouseKey (int x, int y)
 	    return False;
 
 	strKey[1] = '\0';
-	memset (&forwardEvent, 0, sizeof (IMForwardEventStruct));
-	forwardEvent.connect_id = connect_id;
-	forwardEvent.icid = icid;
-	forwardEvent.major_code = XIM_FORWARD_EVENT;
-	forwardEvent.sync_bit = 0;
-	forwardEvent.serial_number = 0L;
-
-	xEvent.xkey.type = KeyPress;
-	xEvent.xkey.display = dpy;
-	xEvent.xkey.serial = 0L;
-	xEvent.xkey.send_event = False;
-	xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
-	xEvent.xkey.same_screen = False;
-	xEvent.xkey.subwindow = None;
-	xEvent.xkey.window = None;
-	xEvent.xkey.root = DefaultRootWindow (dpy);
-	xEvent.xkey.state = 0;
-	if (CurrentIC->focus_win)
-	    xEvent.xkey.window = CurrentIC->focus_win;
-	else if (CurrentIC->client_win)
-	    xEvent.xkey.window = CurrentIC->client_win;
-
 	pstr = strKey;
 	if (y >= 28 && y <= 55) {	//第一行
 	    if (x < 4 || x > 348)
@@ -357,6 +335,9 @@ Bool VKMouseKey (int x, int y)
 	}
 
 	if (pstr) {
+	    memset (&forwardEvent, 0, sizeof (IMForwardEventStruct));
+	    forwardEvent.connect_id = connect_id;
+	    forwardEvent.icid = icid;
 	    SendHZtoClient (&forwardEvent, pstr);
 	    iHZInputed += (int) (strlen (pstr) / 2);	//粗略统计字数
 	}
@@ -553,12 +534,13 @@ void SwitchVK (void)
 
 	XMoveWindow (dpy, VKWindow, x, y);
 	DisplayVKWindow ();
-	XUnmapWindow (dpy, inputWindow);
+	if (IsWindowVisible (inputWindow))
+	    XUnmapWindow (dpy, inputWindow);
 
 	if (ConnectIDGetState (connect_id) == IS_CLOSED)
 	    SetIMState (True);
     }
-    else
+    else if (IsWindowVisible (VKWindow))
 	XUnmapWindow (dpy, VKWindow);
 
     SwitchIM (-2);

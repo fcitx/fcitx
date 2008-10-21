@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -22,13 +23,14 @@ int main(int argc, char *argv[])
     
     s=0;
     while (!feof(fp) ) {
+	    fscanf(fp, "%s\n", strHZ );
 	    if ( isalpha(strHZ[0]) )
 		    strcpy(strCode, strHZ);
 	    else {
 		if(strlen(strCode)>=10 || strlen(strHZ)>=50)
-			exit(0);
-		    printf("%s %s\n", strCode,strHZ);
-		    s++;
+		    exit(0);
+		printf("%s %s\n", strCode,strHZ);
+		s++;
 	    }
     }
     

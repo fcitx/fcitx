@@ -153,7 +153,8 @@ void InitAboutWindowColor (void)
 
 void DisplayAboutWindow (void)
 {
-    XMapRaised (dpy, aboutWindow);
+    if (!IsWindowVisible(aboutWindow))
+	XMapRaised (dpy, aboutWindow);
     XMoveWindow (dpy, aboutWindow, (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2);
 }
 

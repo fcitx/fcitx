@@ -57,6 +57,7 @@ void SetMyExceptionHandler (void)
 
 void OnException (int signo)
 {
+
     fprintf (stdout, "\nFCITX -- Get Signal No.: %d\n", signo);
 
     switch (signo) {
@@ -69,7 +70,7 @@ void OnException (int signo)
 	/*if (bLumaQQ)
 	   ConnectIDResetReset ();
 	 */
-	return;    
+	return;
     case SIGUSR1:
     case SIGCHLD:
     case SIGQUIT:
@@ -77,15 +78,18 @@ void OnException (int signo)
     case SIGTTIN:
     case SIGSTOP:
     case SIGTSTP:
+    case SIGTERM:
 	return;
     case SIGINT:
-    case SIGTERM:
     case SIGKILL:
-    default:
 	SaveIM ();
+	break;
+    default:
+	break;
     }
 
     fprintf (stdout, "FCITX -- Exit Signal No.: %d\n\n", signo);
+
     exit (0);
 }
 

@@ -24,8 +24,8 @@
 
 #include "InputWindow.h"
 
-#include <ctype.h>
 #include <string.h>
+#include <ctype.h>
 #include "version.h"
 #include <time.h>
 #include <X11/xpm.h>
@@ -51,7 +51,7 @@ int             iInputWindowY = INPUTWND_STARTY;
 int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
-uint            iFixedInputWindowWidth = 0;
+int            iFixedInputWindowWidth = 0;
 uint            iInputWindowWidth = INPUTWND_WIDTH;
 uint            iInputWindowUpWidth = INPUTWND_WIDTH;
 uint            iInputWindowDownWidth = INPUTWND_WIDTH;
@@ -177,7 +177,7 @@ void DisplayInputWindow (void)
 #ifdef _DEBUG
     fprintf (stderr, "DISPLAY InputWindow\n");
 #endif
-    if (uMessageUp || uMessageDown)
+    if (!IsWindowVisible (inputWindow) && (uMessageUp || uMessageDown))
 	XMapRaised (dpy, inputWindow);
 }
 

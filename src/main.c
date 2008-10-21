@@ -31,6 +31,7 @@
  * 
  * 
  */
+
 #include <langinfo.h>
 
 #ifdef HAVE_CONFIG_H
@@ -60,7 +61,7 @@
 #endif
 
 extern Display *dpy;
-extern Window   mainWindow;
+extern Window   inputWindow;
 
 extern Bool     bIsUtf8;
 
@@ -72,7 +73,7 @@ int main (int argc, char *argv[])
     int             c;
     Bool            bBackground = True;
 
-    while((c = getopt(argc, argv, "dDvh")) != -1){
+    while((c = getopt(argc, argv, "dDvh")) != -1) {
         switch(c){
             case 'd':
                 /* nothing to do */
@@ -89,7 +90,7 @@ int main (int argc, char *argv[])
                 return 0;
         }
     }
-
+ 
     setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
@@ -110,10 +111,11 @@ int main (int argc, char *argv[])
     LoadAutoEng ();
 
     CreateMainWindow ();
-    InitGC (mainWindow);
     CreateVKWindow ();
     CreateInputWindow ();
     CreateAboutWindow ();
+
+    InitGC (inputWindow);
 
     SetIM ();
 
@@ -122,12 +124,12 @@ int main (int argc, char *argv[])
 	DrawMainWindow ();
     }
 
-    if (!InitXIM (mainWindow))
+    if (!InitXIM (inputWindow))
 	exit (4);
 
     //以后台方式运行
     if (bBackground) {
-        pid_t   id;
+	pid_t           id;
 
 	id = fork ();
 	if (id == -1) {
@@ -138,7 +140,6 @@ int main (int argc, char *argv[])
 	    exit (0);
     }
 
-    SetMyExceptionHandler ();
     for (;;) {
 	XNextEvent (dpy, &event);
 

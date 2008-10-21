@@ -26,6 +26,7 @@
  * 
  * 
  */
+
 #include "MainWindow.h"
 
 #include <stdio.h>
@@ -157,7 +158,8 @@ void DisplayMainWindow (void)
     fprintf (stderr, "DISPLAY MainWindow\n");
 #endif
 
-    XMapRaised (dpy, mainWindow);
+    if (!IsWindowVisible(mainWindow))
+	XMapRaised (dpy, mainWindow);
 }
 
 void DrawMainWindow (void)
@@ -335,7 +337,7 @@ void DrawMainWindow (void)
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
 	}
     }
-    else
+    else if (IsWindowVisible(mainWindow))
 	XUnmapWindow (dpy, mainWindow);
 }
 

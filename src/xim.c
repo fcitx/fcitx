@@ -31,6 +31,7 @@
 #include "MainWindow.h"
 #include "InputWindow.h"
 #include "vk.h"
+#include "ui.h"
 
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
 XIMS            ims;
@@ -50,7 +51,10 @@ char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_
 int            iOffsetX = 0;
 int            iOffsetY = 16;
 
+/*
 Bool            bStaticXIM = False;
+Bool            bNoReleaseKey = True;
+*/
 
 //extern Bool     bLumaQQ;
 
@@ -99,17 +103,17 @@ char            strXModifiers[100];
 #endif
 
 static XIMStyle Styles[] = {
-//    XIMPreeditCallbacks | XIMStatusCallbacks, //OnTheSpot
-//    XIMPreeditCallbacks | XIMStatusArea,      //OnTheSpot
-//    XIMPreeditCallbacks | XIMStatusNothing,   //OnTheSpot
-    XIMPreeditPosition | XIMStatusArea,	//OverTheSpot
-    XIMPreeditPosition | XIMStatusNothing,	//OverTheSpot
-    XIMPreeditPosition | XIMStatusNone,	//OverTheSpot
-//    XIMPreeditArea | XIMStatusArea,           //OffTheSpot
-//    XIMPreeditArea | XIMStatusNothing,        //OffTheSpot
-//    XIMPreeditArea | XIMStatusNone,           //OffTheSpot
-    XIMPreeditNothing | XIMStatusNothing,	//Root
-    XIMPreeditNothing | XIMStatusNone,	//Root
+    XIMPreeditPosition | XIMStatusArea,		//OverTheSpot
+    XIMPreeditPosition | XIMStatusNothing,		//OverTheSpot
+    XIMPreeditPosition | XIMStatusNone,		//OverTheSpot
+    XIMPreeditNothing | XIMStatusNothing,		//Root
+    XIMPreeditNothing | XIMStatusNone,		//Root
+/*    XIMPreeditCallbacks | XIMStatusCallbacks,	//OnTheSpot
+    XIMPreeditCallbacks | XIMStatusArea,		//OnTheSpot
+    XIMPreeditCallbacks | XIMStatusNothing,		//OnTheSpot
+    XIMPreeditArea | XIMStatusArea,			//OffTheSpot
+    XIMPreeditArea | XIMStatusNothing,		//OffTheSpot
+    XIMPreeditArea | XIMStatusNone,			//OffTheSpot */
     0
 };
 
@@ -167,7 +171,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		if (CurrentIC->focus_win)
 		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
 		else if (CurrentIC->client_win)
-		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);		    
 		else
 		    return True;
 
@@ -185,8 +189,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		if (iTempInputWindowY < 0)
 		    iTempInputWindowY = 0;
 		else if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
-		    iTempInputWindowY -= 2 * iInputWindowHeight + iOffsetY;
-		//iTempInputWindowY -= iInputWindowHeight;
+		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight ;
 		else
 		    iTempInputWindowY += iOffsetY;
 
@@ -213,69 +216,91 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	IMPreeditStart (ims, (XPointer) call_data);
+	IMSyncXlibStruct syncData;
+	
+	IMPreeditStart (ims, (XPointer) call_data);	
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else if (lastConnectID != connect_id)
-/*		{
-		if (!bAutoHideInputWindow)
-		    DisplayInputWindow ();
-		else  */
+	    else if ((lastConnectID != connect_id) && IsWindowVisible (inputWindow))
 		XUnmapWindow (dpy, inputWindow);
-	    //}
 	}
 	else {
-	    XUnmapWindow (dpy, inputWindow);
-	    XUnmapWindow (dpy, VKWindow);
+	    if (IsWindowVisible (inputWindow))
+		XUnmapWindow (dpy, inputWindow);
+	    if (IsWindowVisible (VKWindow))
+		XUnmapWindow (dpy, VKWindow);
 	}
-
-/*	if (ConnectIDGetTrackCursor (connect_id))
-	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-	else
-	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
-*/
-	//有时不能输入的临时解决方案-执行一条IMForwardEvent
-	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
+	
+	/* 试图解决锁死问题 */
+    	syncData.major_code = XIM_SYNC;
+    	syncData.minor_code = 0;
+    	syncData.connect_id = call_data->connect_id;
+    	syncData.icid = icid;
+    	IMSyncXlib(ims, (XPointer)&syncData);
+    	XSync(dpy, False);        
+	/* ************************************************* */
     }
     else {
-	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
+	if (IsWindowVisible (inputWindow))
+	    XUnmapWindow (dpy, inputWindow);
+	if (IsWindowVisible (VKWindow))
+	    XUnmapWindow (dpy, VKWindow);
 
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
 	}
-	else
+	else if (IsWindowVisible (mainWindow))
 	    XUnmapWindow (dpy, mainWindow);
     }
 
     lastConnectID = connect_id;
-    //When application gets the focus, rerecord the time.
+    //When application gets the focus, re-record the time.
     bStartRecordType = False;
     iHZInputed = 0;
+
+
+    
+    XAllowEvents (dpy, AsyncKeyboard, CurrentTime);
 
     return True;
 }
 
 Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (VKWindow))
+	XUnmapWindow (dpy, VKWindow);
 
     return True;
 }
 
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);
+    IMSyncXlibStruct syncData;
+
+    if (IsWindowVisible (inputWindow))
+	XUnmapWindow (dpy, inputWindow);
+    if (IsWindowVisible (VKWindow))
+	XUnmapWindow (dpy, VKWindow);    
+    
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
     icid = 0;
 
+    /* 试图解决锁死问题 */
+    syncData.major_code = XIM_SYNC;
+    syncData.minor_code = 0;
+    syncData.connect_id = call_data->connect_id;
+    syncData.icid = icid;
+    IMSyncXlib(ims, (XPointer)&syncData);
+    XSync(dpy, False);        
+    /* ************************************************* */
+    
     return True;
 }
 
@@ -295,12 +320,15 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
-	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
+	if (IsWindowVisible (inputWindow))
+	    XUnmapWindow (dpy, inputWindow);
+	if (IsWindowVisible (VKWindow))
+	    XUnmapWindow (dpy, VKWindow);
     }
 
     DestroyIC (call_data);
-
+    XSync(dpy, False);
+    
     return True;
 }
 
@@ -339,6 +367,10 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    DisplayInputWindow ();
 	}
     }
+    else
+	return False;
+
+    XAllowEvents (dpy, AsyncKeyboard, CurrentTime);
 
     return True;
 }
@@ -381,12 +413,6 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 #ifdef _DEBUG
 //      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-	//Sometimes, the main window may show a wrong state of IM 
-	/*if (connect_id != ((IMForwardEventStruct *) call_data)->connect_id) {
-	   CurrentIC = (IC *) FindIC (((IMForwardEventStruct *) call_data)->icid);
-	   connect_id = ((IMForwardEventStruct *) call_data)->connect_id;
-	   SetIMState (!(ConnectIDGetState (connect_id) == IS_CLOSED));
-	   } */
 
 	ProcessKey ((IMForwardEventStruct *) call_data);
 
@@ -461,7 +487,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     char            strOutput[300];
     char           *ps;
     char           *pS2T = (char *) NULL;
-
+    
 #ifdef _DEBUG
     fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, icid, connect_id);
 #endif
@@ -485,9 +511,11 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
     ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
     ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
+    
     IMCommitString (ims, (XPointer) call_data);
-    XFree (tp.value);
-    if (bUseGBKT)
+    XFree (tp.value);    
+
+    if (pS2T)
 	free (pS2T);
 }
 
@@ -543,15 +571,22 @@ Bool InitXIM (Window im_window)
 	}
     }
 
-    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname,
-		    IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, IMFilterEventMask, KeyPressMask | KeyReleaseMask, NULL);
+    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
 
     if (ims == (XIMS) NULL) {
 	fprintf (stderr, "Start FCITX error. Another XIM daemon named %s is running?\n", imname);
 	return False;
     }
 
-    if (!bStaticXIM)
+    IMSetIMValues (ims, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, NULL);
+
+/*    if (bNoReleaseKey)
+	IMSetIMValues (ims, IMFilterEventMask, KeyPressMask, NULL);
+    else
+    */
+	IMSetIMValues (ims, IMFilterEventMask, KeyPressMask | KeyReleaseMask, NULL);
+
+//    if (!bStaticXIM)
 	IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
 
     return True;
@@ -584,7 +619,7 @@ void SetIMState (Bool bState)
 
 void CreateConnectID (IMOpenStruct * call_data)
 {
-    CONNECT_ID *connectIDNew;
+    CONNECT_ID     *connectIDNew;
 
     connectIDNew = (CONNECT_ID *) malloc (sizeof (CONNECT_ID));
     connectIDNew->next = connectIDsHead;

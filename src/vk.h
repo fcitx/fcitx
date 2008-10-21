@@ -31,8 +31,8 @@
 #define VK_MAX			50
 
 typedef struct {
-    char            strSymbol[VK_NUMBERS][2][3];	//相应的符号
-    char            strName[13];
+     char            strSymbol[VK_NUMBERS][2][3];	//相应的符号
+     char            strName[13];
 } VKS;
 
 Bool            CreateVKWindow (void);
