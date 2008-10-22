@@ -7,13 +7,13 @@ EXTRA_DIST = $(table_DATA)
 mb_data = cj.mb erbi.mb wanfeng.mb wbpy.mb qxm.mb db.mb wbx.mb zrm.mb
 
 %.mb: %.txt
-	@top_srcdir@/tools/txt2mb $< $@
+	../tools/txt2mb $< $@
 
 py_data = pybase.mb pyphrase.mb
-$(py_data): pyPhrase.org gbkpy.org
-	@top_srcdir@/tools/createPYMB gbkpy.org pyPhrase.org
+$(py_data): @top_srcdir@/data/pyPhrase.org @top_srcdir@/data/gbkpy.org
+	../tools/createPYMB @top_srcdir@/data/gbkpy.org @top_srcdir@/data/pyPhrase.org
 
-tools: @top_srcdir@/tools/createPYMB @top_srcdir@/tools/txt2mb
+tools: ../tools/createPYMB ../tools/txt2mb
 	$(MAKE) -C ../tools
 
 all: tools $(mb_data) $(py_data)
