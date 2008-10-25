@@ -946,7 +946,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			strLastFirstCand = (char *)NULL;
 			lastFirstCandType = CT_AUTOPHRASE;
 			if ( iCandWordCount ) {			// to realize auto-sending HZ to client
-			    strLastFirstCand = _TableGetCandWord (0);
+			    strLastFirstCand = _TableGetCandWord (0,False);
 			    lastFirstCandType = tableCandWord[0].flag;
 			    pLastCandRecord = pCurCandRecord;
 		        }
@@ -980,7 +980,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 			    iCodeInputCount = 1;
 			    strCodeInput[0] = iKey;
 			    strCodeInput[1] = '\0';
-			    TableGetCandWords (SM_FIRST);			    
+			    TableGetCandWords (SM_FIRST);
 			}
 			else if (table[iTableIMIndex].iTableAutoSendToClient && (iCodeInputCount >= table[iTableIMIndex].iTableAutoSendToClient)) {
 			    if (iCandWordCount == 1 && (tableCandWord[0].flag != CT_AUTOPHRASE || (tableCandWord[0].flag == CT_AUTOPHRASE && !table[iTableIMIndex].iSaveAutoPhraseAfter))) {	//如果只有一个候选词，则送到客户程序中
@@ -1259,7 +1259,7 @@ char           *TableGetCandWord (int iIndex)
 {
     char *str;
 	
-    str=_TableGetCandWord(iIndex);
+    str=_TableGetCandWord(iIndex, True);
     if (str) {
     	if (table[iTableIMIndex].bAutoPhrase && (strlen (str) == 2 || (strlen (str) > 2 && table[iTableIMIndex].bAutoPhrasePhrase)))
     	    UpdateHZLastInput (str);
@@ -1276,7 +1276,8 @@ void		TableUpdateHitFrequency (RECORD * record)
     record->iIndex = ++iTableIndex;
 }
 
-char           *_TableGetCandWord (int iIndex)
+//第二个参数表示是否进入联想模式，实现自动上屏功能时，不能使用模式
+char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 {
     char           *pCandWord = NULL;
     
@@ -1318,7 +1319,7 @@ char           *_TableGetCandWord (int iIndex)
 	;
     }
 
-    if (bUseLegend) {
+    if (bUseLegend && _bLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
 #warning *****************************************

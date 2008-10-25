@@ -155,7 +155,7 @@ void            TableDelPhrase (RECORD * record);
 RECORD         *TableHasPhrase (char *strCode, char *strHZ);
 RECORD         *TableFindPhrase (char *strHZ);
 void            TableInsertPhrase (char *strCode, char *strHZ);
-char	       *_TableGetCandWord (int iIndex);		//Internal
+char	       *_TableGetCandWord (int iIndex, Bool _bLegend);		//Internal
 char           *TableGetCandWord (int iIndex);
 void		TableUpdateHitFrequency (RECORD * record);
 void            TableCreateNewPhrase (void);

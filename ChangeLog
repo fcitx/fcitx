@@ -1,3 +1,6 @@
+2008-10-23: Yuking <yuking_net@sohu.com>
+	* src/table.c: 修正码表输入法打开联想功能时的错误
+	
 2008-10-21: Yuking <yuking_net@sohu.com>
 	* 增加了自然码码表/修正五笔编码中一个错误
 	* 合并google-code上的代码
