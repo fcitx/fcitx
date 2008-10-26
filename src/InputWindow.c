@@ -51,7 +51,7 @@ int             iInputWindowY = INPUTWND_STARTY;
 int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
-int            iFixedInputWindowWidth = 0;
+int		iFixedInputWindowWidth = 0;
 uint            iInputWindowWidth = INPUTWND_WIDTH;
 uint            iInputWindowUpWidth = INPUTWND_WIDTH;
 uint            iInputWindowDownWidth = INPUTWND_WIDTH;

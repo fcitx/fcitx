@@ -117,6 +117,7 @@ HOTKEYS         hkNextPage[HOT_KEY_COUNT] = { '.', 0 };	//下一页
 HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };	//上一页
 HOTKEYS         hkTrack[HOT_KEY_COUNT] = { CTRL_K, 0 };
 HOTKEYS         hkGBT[HOT_KEY_COUNT] = { CTRL_ALT_F, 0 };
+HOTKEYS         hkHideMainWindow[HOT_KEY_COUNT] = { CTRL_ALT_H, 0 };
 
 Bool            bUseLegend = False;
 Bool            bIsInLegend = False;
@@ -202,6 +203,7 @@ extern int      iTempInputWindowX;
 extern int      iTempInputWindowY;
 
 extern Bool     bShowInputWindowTriggering;
+extern Bool	bMainWindow_Hiden;
 
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
@@ -826,6 +828,17 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			retVal = ChangeTrack ();
 		    else if (IsHotKey (iKey, hkGBT))
 			retVal = ChangeGBKT ();
+		    else if (IsHotKey (iKey, hkHideMainWindow)) {
+			if (IsWindowVisible(mainWindow)) {
+			    bMainWindow_Hiden = True;
+			    XUnmapWindow(dpy,mainWindow);
+		    	}
+			else {
+			    bMainWindow_Hiden = False;
+			    DisplayMainWindow();
+			    DrawMainWindow();
+			}
+		    }
 		}
 	    }
 	    else

@@ -1,3 +1,6 @@
+2008-10-26: Yuking <yuking_net@sohu.com>
+	* 增加显示/隐藏主窗口的热键，默认为CTRL_ALT_H
+	
 2008-10-23: Yuking <yuking_net@sohu.com>
 	* src/table.c: 修正码表输入法打开联想功能时的错误
 	

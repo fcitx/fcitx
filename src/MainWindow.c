@@ -94,6 +94,7 @@ HIDE_MAINWINDOW hideMainWindow = HM_SHOW;
 
 Bool            bCompactMainWindow = False;
 Bool            bShowVK = False;
+Bool		bMainWindow_Hiden = False;
 
 char           *strFullCorner = "È«½ÇÄ£Ê½";
 
@@ -158,7 +159,7 @@ void DisplayMainWindow (void)
     fprintf (stderr, "DISPLAY MainWindow\n");
 #endif
 
-    if (!IsWindowVisible(mainWindow))
+    if (!IsWindowVisible(mainWindow) && !bMainWindow_Hiden)
 	XMapRaised (dpy, mainWindow);
 }
 
@@ -178,6 +179,9 @@ void DrawMainWindow (void)
 #endif
     char           *strGBKT;
 
+    if ( bMainWindow_Hiden )
+    	return;
+	
     iIndex = IS_CLOSED;
     attrib.valuemask = 0;
 #ifdef _DEBUG

@@ -88,6 +88,7 @@ extern HOTKEYS  hkLegend[];
 extern HOTKEYS  hkTrack[];
 extern HOTKEYS  hkGetPY[];
 extern HOTKEYS  hkGBT[];
+extern HOTKEYS	hkHideMainWindow[];
 
 extern KEY_CODE switchKey;
 extern XIMTriggerKey *Trigger_Keys;
@@ -435,6 +436,16 @@ inline static int cursor_follow(Configure *c, void *a, int isread)
         SetHotKey((char *)a, hkTrack);
     else
         fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_K");
+    return 0;
+}
+
+/* 隐藏主窗口 */
+inline static int hide_main_window(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkHideMainWindow);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_H");
     return 0;
 }
 
@@ -893,6 +904,11 @@ Configure hotkey_config[] = {
         .name = "光标跟随",
         .value_type = CONFIG_HOTKEY,
         .config_rw = cursor_follow,
+    },
+    {
+        .name = "隐藏主窗口",
+        .value_type = CONFIG_HOTKEY,
+        .config_rw = hide_main_window,
     },
     {
         .name = "GBK支持",
