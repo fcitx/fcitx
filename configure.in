@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, "'GirlDog' 3.5-081021")
+AM_INIT_AUTOMAKE(fcitx, "'GirlDog' 3.5-081026")
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
