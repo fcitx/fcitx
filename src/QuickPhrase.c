@@ -19,7 +19,7 @@
  ***************************************************************************/
 #include <stdio.h>
 #include <limits.h>
- 
+
 #include "QuickPhrase.h"
 #include "InputWindow.h"
 
@@ -31,11 +31,20 @@ QUICK_PHRASE *quickPhraseCandWords[MAX_CAND_WORD];
 extern int iCandPageCount;
 extern int iCandWordCount;
 extern int iCurrentCandPage;
-extern char strCodeInput[];	
+extern char strCodeInput[];
 extern uint uMessageDown;
 extern MESSAGE         messageDown[];
 extern char strStringGet[];
 
+/**
+ * @brief 加载快速输入词典
+ * @param void
+ * @return void
+ * @note 快速输入是在;的行为定义为2,并且输入;以后才可以使用的。
+ * 加载快速输入词典.如：输入“zg”就直接出现“中华人民共和国”等等。
+ * 文件中每一行数据的定义为：<字符组合> <短语>
+ * 如：“zg 中华人民共和国”
+ */
 void LoadQuickPhrase(void)
 {
     FILE *fp;
@@ -44,9 +53,9 @@ void LoadQuickPhrase(void)
     char strPhrase[QUICKPHRASE_PHRASE_LEN*2+1];
     QUICK_PHRASE *tempQuickPhrase;
     QUICK_PHRASE *quickPhrase;
-    
+
     uQuickPhraseCount=0;
-    
+
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, "QuickPhrase.mb");
@@ -58,11 +67,13 @@ void LoadQuickPhrase(void)
 
     fp = fopen (strPath, "rt");
     if (!fp)
-	return;
+    	return;
 
     quickPhrase=quickPhraseHead=(QUICK_PHRASE *)malloc(sizeof(QUICK_PHRASE));
     quickPhraseHead->prev=NULL;
 
+    // 这儿的处理比较简单。因为是单索引对单值。
+    // 应该注意的是，它在内存中是以单链表保存的。
     for (;;) {
 	if (EOF==fscanf (fp, "%s", strCode))
 	    break;
@@ -72,7 +83,7 @@ void LoadQuickPhrase(void)
 	tempQuickPhrase=(QUICK_PHRASE *)malloc(sizeof(QUICK_PHRASE));
 	strcpy(tempQuickPhrase->strCode,strCode);
 	strcpy(tempQuickPhrase->strPhrase,strPhrase);
-	
+
 	quickPhrase->next=tempQuickPhrase;
 	tempQuickPhrase->prev=quickPhrase;
 	quickPhrase=tempQuickPhrase;
@@ -103,7 +114,7 @@ void FreeQuickPhrase(void)
 INPUT_RETURN_VALUE QuickPhraseDoInput (int iKey)
 {
     int retVal;
-    
+
     if (iKey >= '0' && iKey <= '9') {
 	if (!iCandWordCount)
 	    return IRV_TO_PROCESS;
@@ -139,7 +150,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 {
     int i, iInputLen;
     char strTemp[2];
-    
+
     if ( !quickPhraseHead )
         return IRV_DISPLAY_MESSAGE;
 
@@ -156,7 +167,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 
 	    currentQuickPhrase=currentQuickPhrase->next;
 	}
-	
+
 	if ( !currentQuickPhrase ) {
 	    uMessageDown = 0;
 	    return IRV_DISPLAY_MESSAGE;
@@ -174,7 +185,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 	    return IRV_DO_NOTHING;
 	iCurrentCandPage--;
     }
-    
+
     if ( mode!=SM_PREV) {
 */	while (currentQuickPhrase ) {
 	    if (!strncmp(strCodeInput,currentQuickPhrase->strCode,iInputLen)) {
@@ -195,7 +206,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 /*    }
     else {
 	i=0;
-	
+
 	for (;;) {
 	    if (!strcmp(strCodeInput,currentQuickPhrase->strCode)) {
 		i++;
@@ -217,10 +228,10 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 	    currentQuickPhrase=quickPhrase;
 	}
     }
-*/    
+*/
     if (!iCandWordCount)
         return IRV_DISPLAY_MESSAGE;
-    
+
     uMessageDown = 0;
     strTemp[1]='\0';
 

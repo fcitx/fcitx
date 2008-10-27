@@ -21,10 +21,10 @@
  * @file   tools.c
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief  配置文件读写
- * 
- * 
+ *
+ *
  */
 
 #include "tools.h"
@@ -317,7 +317,7 @@ static int generic_config_hotkey(Configure *c, void *a, int isread)
 }
 #endif
 
-/* 将 configures 中的配置信息写入 fp */
+/** 将 configures 中的配置信息写入 fp */
 static int write_configures(FILE *fp, Configure *configures)
 {
     Configure *tc;
@@ -1164,24 +1164,30 @@ Configure_group configure_groups[] = {
     },
 };
 
-/*
- * 读取用户的配置文件
+/**
+ * @brief 读取用户的配置文件
+ * @param bMode 标识配置文件是用户家目录下的，还是从安装目录下拷贝过来的
+ * @return void
  */
 void LoadConfig (Bool bMode)
 {
     FILE    *fp;
     char    buf[PATH_MAX], *pbuf, *pbuf1;
     Bool    bFromUser = True;
-    int     group_idx, i;
+    //用于标示group的index，在配置文件里面配置是分组的，类似与ini文件的分组
+    int     group_idx;
+    int		i;
     Configure   *tmpconfig;
 
-    bIsReloadConfig = bMode;
+    //用以标识配置文件是用户家目录下的，还是从安装目录下拷贝过来的
+    bIsReloadConfig = bMode;	// 全局变量，定义于“src/tool.c[193]"
 
-    pbuf = getenv("HOME");
+    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
     if(!pbuf){
         fprintf(stderr, "error: get environment variable HOME\n");
-        exit(1);
+        exit(1);	// 此时可以不退出，但直接退出处理起来明了简单
     }
+    //获取配置文件的绝对路径
     snprintf(buf, PATH_MAX, "%s/.fcitx/config", pbuf);
 
     fp = fopen(buf, "r");
@@ -1191,7 +1197,8 @@ void LoadConfig (Bool bMode)
         fp = fopen(buf, "r");
         if(!fp){
             perror("fopen");
-            exit(1);
+            exit(1);	/* 如果安装目录里面也没有配置文件，那就没办法了。
+						 * 只好告诉用户，无法运行了*/
         }
     }
 
@@ -1201,8 +1208,10 @@ void LoadConfig (Bool bMode)
     group_idx = -1;
 
     /* FIXME: 也许应该用另外更恰当的缓冲区长度 */
-    while(fgets(buf, PATH_MAX, fp)){
+    while(fgets(buf, PATH_MAX, fp)){		//每次最多读入PATH_MAX大小的数据
         i = strlen(buf);
+
+        /*fcitx的配置文件每行最多是PATH_MAX个字符，因此有上面的FIXME*/
         if(buf[i-1] != '\n'){
             fprintf(stderr, "error: configure file: line length\n");
             exit(1);
@@ -1210,12 +1219,12 @@ void LoadConfig (Bool bMode)
             buf[i-1] = '\0';
 
         pbuf = buf;
-        while(*pbuf && isspace(*pbuf))
+        while(*pbuf && isspace(*pbuf))	//将pbuf指向第一个非空字符
             pbuf++;
-        if(!*pbuf || *pbuf == '#')
+        if(!*pbuf || *pbuf == '#')		//如果改行是空数据或者是注释(以#开头为注释)
             continue;
 
-        if(*pbuf == '['){ /* get a group name */
+        if(*pbuf == '['){ /* get a group name(组名的格式为"[组名]")*/
             pbuf++;
             pbuf1 = strchr(pbuf, ']');
             if(!pbuf1){
@@ -1223,6 +1232,7 @@ void LoadConfig (Bool bMode)
                 exit(1);
             }
 
+            //根据group的名字找到其在全局变量configure_groups中的index
             group_idx = -1;
             for(i = 0; configure_groups[i].name; i++)
                 if(strncmp(configure_groups[i].name, pbuf, pbuf1-pbuf) == 0){
@@ -1231,22 +1241,41 @@ void LoadConfig (Bool bMode)
                 }
             if(group_idx < 0){
                 fprintf(stderr, "error: invalid configure group name\n");
-                exit(1);
+                exit(1); /* 我认为这儿没有必要退出。此处完全可以忽略这个错误，
+                          * 并且在后面也忽略这个组的配置即可。
+                          * 因为这儿退出只会带来一个坏处，那就是扩展性。
+                          * 以后再添加新的组的时候，老版本的程序就无法使用
+                          * 新版本的配置文件了。或者，添加了一个可选扩展，
+                          * 该扩展新添加一个组等等。所以，此处应该给一个警告，
+                          * 而不是退出。*/
             }
             continue;
         }
 
+        //pbuf1指向第一个非空字符与=之间的字符
         pbuf1 = strchr(pbuf, '=');
         if(!pbuf1){
             fprintf(stderr, "error: configure file: configure entry name\n");
-            exit(1);
+            exit(1);	// 和前面一样，这儿也应该是一个警告而不应该是提示出错并退出。
         }
+
+        /*
+         * 这儿避免的是那样一种情况，即从文件头到第一个配置项(即类似与“配置名=配置值”
+         * 的一行字符串)并没有任何分组。也就是防止出现下面的“配置1”和“配置2”
+         * #文件头
+         * 配置1=123 配置2=123
+         * [组名]
+         * ...
+         * #文件尾
+         */
+
 
         if(group_idx < 0){
             fprintf(stderr, "error: configure file: no group name at beginning\n");
             exit(1);
         }
 
+        //找到该组中的配置项，并将其保存到对应的全局变量里面去
         for(tmpconfig = configure_groups[group_idx].configure;
                 tmpconfig->name; tmpconfig++)
         {
@@ -1257,6 +1286,8 @@ void LoadConfig (Bool bMode)
 
     fclose(fp);
 
+    /* Ctrl+Space就是fcitx的开关快捷键，此处构造一个结构备用。
+     * 至于为什么这样做，现在还不清楚。接下去看可能会明白作者的用意。*/
     if (!Trigger_Keys) {
 	iTriggerKeyCount = 0;
 	Trigger_Keys = (XIMTriggerKey *) malloc (sizeof (XIMTriggerKey) * (iTriggerKeyCount + 2));
@@ -1269,7 +1300,7 @@ void LoadConfig (Bool bMode)
     }
 }
 
-/*
+/**
  * 保存配置信息
  */
 void SaveConfig (void)
@@ -1297,17 +1328,20 @@ void SaveConfig (void)
         exit(1);
     }
 
+    /* 实际上，写配置文件很简单，就是从全局数组configure_groups里面分别把每个组的配置
+     * 写入到文件里面去*/
     for(tmpgroup = configure_groups; tmpgroup->name; tmpgroup++){
         if(tmpgroup->comment)
-            fprintf(fp, "# %s\n", tmpgroup->comment);
-        fprintf(fp, "[%s]\n", tmpgroup->name);
-        write_configures(fp, tmpgroup->configure);
-        fprintf(fp, "\n");
+            fprintf(fp, "# %s\n", tmpgroup->comment);	// 如果存在注释，先写入
+        fprintf(fp, "[%s]\n", tmpgroup->name);			// 接下来写入组的名字
+        write_configures(fp, tmpgroup->configure);		/* 最后将该组的每个配置项
+														 * 写入到文件中*/
+        fprintf(fp, "\n");		// 为增加可读性插入一个空行
     }
     fclose(fp);
 }
 
-/* 版本 */
+/** 版本 */
 inline static int get_version(Configure *c, void *a, int isread)
 {
     if(isread){
@@ -1318,7 +1352,7 @@ inline static int get_version(Configure *c, void *a, int isread)
     return 0;
 }
 
-/* 主窗口位置X */
+/** 主窗口位置X */
 inline static int get_main_window_offset_x(Configure *c, void *a, int isread)
 {
     if(isread){
@@ -1333,7 +1367,7 @@ inline static int get_main_window_offset_x(Configure *c, void *a, int isread)
     return 0;
 }
 
-/* 主窗口位置Y */
+/** 主窗口位置Y */
 inline static int get_main_window_offset_y(Configure *c, void *a, int isread)
 {
     if(isread){
@@ -1348,7 +1382,7 @@ inline static int get_main_window_offset_y(Configure *c, void *a, int isread)
     return 0;
 }
 
-/* 输入窗口位置X */
+/** 输入窗口位置X */
 inline static int get_input_window_offset_x(Configure *c, void *a, int isread)
 {
     if(isread){
@@ -1363,7 +1397,7 @@ inline static int get_input_window_offset_x(Configure *c, void *a, int isread)
     return 0;
 }
 
-/* 输入窗口位置Y */
+/** 输入窗口位置Y */
 inline static int get_input_window_offset_y(Configure *c, void *a, int isread)
 {
     if(isread){
@@ -1433,7 +1467,7 @@ Configure profiles[] = {
     },
     {
         .name = "当前输入法",	//  Issue 11: piaoairy: 本来打算将iIMIndex 改为int类型,
-        .value_type = CONFIG_INTEGER,	// 无奈使用的地方太多, 
+        .value_type = CONFIG_INTEGER,	// 无奈使用的地方太多,
         .value.integer = &iIMIndex_tmp,	// 只好重新定义个iIMIndex_tmp搭桥.
     },
     {
@@ -1456,6 +1490,11 @@ Configure profiles[] = {
     },
 };
 
+/**
+ * @brief 加载配置文件
+ * @param void
+ * @return void
+ */
 void LoadProfile (void)
 {
     FILE           *fp;
@@ -1463,10 +1502,12 @@ void LoadProfile (void)
     int             i;
     Configure       *tmpconfig;
 
-    iMainWindowX = MAINWND_STARTX;
-    iMainWindowY = MAINWND_STARTY;
-    iInputWindowX = INPUTWND_STARTX;
-    iInputWindowY = INPUTWND_STARTY;
+    /* 前将窗口的位置设定为最原始的默认值，接下来如果配置文件有，
+     * 会从配置文件中读取，如果没有就使用这个了*/
+    iMainWindowX = MAINWND_STARTX;		//主窗口位置X
+    iMainWindowY = MAINWND_STARTY;		//主窗口位置Y
+    iInputWindowX = INPUTWND_STARTX;	//输入窗口位置X
+    iInputWindowY = INPUTWND_STARTY;	//输入窗口位置Y
 
     pbuf = getenv("HOME");
     if(!pbuf){
@@ -1534,7 +1575,7 @@ void SaveProfile (void)
         perror("mkdir");
         exit(1);
     }
- 
+
     snprintf(buf, PATH_MAX, "%s/.fcitx/profile", pbuf);
     fp = fopen (buf, "w");
 
@@ -1546,7 +1587,7 @@ void SaveProfile (void)
     iIMIndex_tmp = iIMIndex;		/* piaoairy add 20080518 */
     write_configures(fp, profiles);
     fclose(fp);
-    
+
     iTempInputWindowX = iInputWindowX;
     iTempInputWindowY = iInputWindowY;
 }
@@ -1634,7 +1675,7 @@ void SetTriggerKeys (char *str)
     char            strKey[2][30];
     char           *p;
 
-    //首先来判断用户设置了几个热键，最多为2    
+    //首先来判断用户设置了几个热键，最多为2
     p = str;
 
     i = 0;

@@ -2,7 +2,7 @@
  *   小企鹅中文输入法(Free Chinese Input Toys for X, FCITX)                   *
  *   由Yuking(yuking_net@sohu.com)编写                                           *
  *   协议: GPL                                                              *
- *   FCITX( A Chinese XIM Input Method) by Yuking (yuking_net@sohu.com)    *   
+ *   FCITX( A Chinese XIM Input Method) by Yuking (yuking_net@sohu.com)    *
  *                                                                         *
  *   Copyright (C) 2002~2005 by Yuking                                     *
  *   yuking_net@sohu.com                                                   *
@@ -26,10 +26,10 @@
  * @file   main.c
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief  程序主入口
- * 
- * 
+ *
+ *
  */
 
 #include <langinfo.h>
@@ -70,7 +70,7 @@ extern HIDE_MAINWINDOW hideMainWindow;
 int main (int argc, char *argv[])
 {
     XEvent          event;
-    int             c;
+    int             c; 	//用于保存用户输入的参数
     Bool            bBackground = True;
 
     while((c = getopt(argc, argv, "dDvh")) != -1) {
@@ -81,16 +81,19 @@ int main (int argc, char *argv[])
             case 'D':
                 bBackground = False;
                 break;
-            case 'v':
+            case 'v':	//输出版本号
                 Version();
                 return 0;
-            case 'h':
+            case 'h':	//h或者其他任何不合法的参数均，输出参数帮助信息
             case '?':
                 Usage();
                 return 0;
         }
     }
- 
+
+    /*下面两行代码用于检查当前系统使用的是否是UTF字符集。相当于在字符终端执行
+     * “locale charmap”
+     */
     setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
@@ -100,30 +103,53 @@ int main (int argc, char *argv[])
     if (!InitX ())
 	exit (1);
 
+    /*加载用户配置文件，通常是“~/.fcitx/config”，如果该文件不存在就从安装目录中拷贝
+     * “/data/config”到“~/.fcitx/config”
+     */
     LoadConfig (True);
 
+    /*创建字体。实际上，就是根据用户的设置，使用xft读取字体的相关信息。
+     * xft是x11提供的处理字体的相关函数集
+     */
     CreateFont ();
+    //根据字体计算输入窗口的高度
     CalculateInputWindowHeight ();
+    /*加载配置文件，这个配置文件不是用户配置的，而是用于记录fctix的运行状态的，
+     * 比如是全角还是半角等等。通常是“~/.fcitx/profile”，如果该文件不存在就从安装
+     * 目录中拷贝“/data/profile”到“~/.fcitx/profile”
+     */
     LoadProfile ();
 
+    //加载字典文件
     LoadPuncDict ();
+    //加载成语
     LoadQuickPhrase ();
+    /*从 ~/.fcitx/AutoEng.dat （如果不存在，
+     * 则从 /usr/local/share/fcitx/data/AutoEng.dat）
+     * 读取需要自动转换到英文输入状态的情况的数据
+     */
     LoadAutoEng ();
 
-    CreateMainWindow ();
-    CreateVKWindow ();
-    CreateInputWindow ();
-    CreateAboutWindow ();
+    //以下是界面的处理
 
+    CreateMainWindow ();	//创建主窗口，即输入法状态窗口
+    CreateVKWindow ();		//创建候选词窗口
+    CreateInputWindow ();	//创建输入窗口
+    CreateAboutWindow ();	//创建关于窗口
+
+    //处理颜色，即候选词窗口的颜色，也就是我们在“~/.fcitx/config”定义的那些颜色信息
     InitGC (inputWindow);
 
+    //将本程序加入到输入法组，告诉系统，使用我输入字符
     SetIM ();
 
+    //处理主窗口的显示
     if (hideMainWindow != HM_HIDE) {
 	DisplayMainWindow ();
 	DrawMainWindow ();
     }
 
+    //初始化输入法
     if (!InitXIM (inputWindow))
 	exit (4);
 
@@ -140,13 +166,14 @@ int main (int argc, char *argv[])
 	    exit (0);
     }
 
+    //主循环，即XWindow的消息循环
     for (;;) {
-	XNextEvent (dpy, &event);
+	XNextEvent (dpy, &event);					//等待一个事件发生
 
-	if (XFilterEvent (&event, None) == True)
+	if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
 	    continue;
 
-	MyXEventHandler (&event);
+	MyXEventHandler (&event);					//处理事件
     }
 
     return 0;

@@ -25,6 +25,16 @@
 AUTO_ENG       *AutoEng = (AUTO_ENG *) NULL;
 int             iAutoEng;
 
+/**
+ * 从 ~/.fcitx/AutoEng.dat(如果不存在，
+ * 则从 /usr/local/share/fcitx/data/AutoEng.dat）
+ * 读取需要自动转换到英文输入状态的情况的数据。
+ *
+ * @param void
+ *
+ * @return void
+ */
+
 void LoadAutoEng (void)
 {
     FILE           *fp;
@@ -55,15 +65,33 @@ void LoadAutoEng (void)
     fclose (fp);
 }
 
+/**
+ * 释放相关资源
+ *
+ * @param void
+ *
+ * @return void
+ */
 void FreeAutoEng (void)
 {
     if (AutoEng)
 	free (AutoEng);
-    
+
     iAutoEng = 0;
     AutoEng = (AUTO_ENG *) NULL;
 }
 
+
+/**
+ * @brief 判断是否需要自动转到英文输入状态
+ * @exception <exception-object> <exception description>
+ * @return Ture则是？ False则是？
+ * @note <text>
+ * @remarks <remark text>
+ * [@deprecated <description>]
+ * [@since when(time or version)]
+ * [@see references{,references}]
+ */
 Bool SwitchToEng (char *str)
 {
     int             i;
