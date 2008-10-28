@@ -677,7 +677,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						}
 					    }
 					}
-					else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',') && !iCandWordCount) {
+					else if ((bLastIsNumber && bEngPuncAfterNumber) && (iKey == '.' || iKey == ',' || iKey == ':') && !iCandWordCount) {
 					    cLastIsAutoConvert = iKey;
 					    bLastIsNumber = False;
 					    retVal = IRV_TO_PROCESS;					    
@@ -700,17 +700,13 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						    retVal = IRV_PUNC;
 						}
 						else if ((iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) && cLastIsAutoConvert ) {
+						    char *pPunc;
+						    
 						    IMForwardEvent (ims, (XPointer) call_data);
-						    switch (cLastIsAutoConvert) {
-							case '.':
-							    SendHZtoClient(call_data, "¡£");
-							    break;
-							case ',':
-							    SendHZtoClient(call_data, "£¬");
-							    break;
-							default:
-							    ;
-						    }
+						    pPunc = GetPunc(cLastIsAutoConvert);
+						    if ( pPunc )
+						    	SendHZtoClient(call_data, pPunc);
+							
 						    retVal = IRV_DO_NOTHING;
 					        }
 						else if (isprint (iKey) && iKey < 128) {
