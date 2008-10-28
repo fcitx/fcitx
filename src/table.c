@@ -1276,7 +1276,9 @@ void		TableUpdateHitFrequency (RECORD * record)
     record->iIndex = ++iTableIndex;
 }
 
-//第二个参数表示是否进入联想模式，实现自动上屏功能时，不能使用模式
+/*
+ * 第二个参数表示是否进入联想模式，实现自动上屏功能时，不能使用联想模式
+ */
 char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 {
     char           *pCandWord = NULL;
@@ -1305,7 +1307,8 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 	break;
     case CT_AUTOPHRASE:
 	if (table[iTableIMIndex].iSaveAutoPhraseAfter) {
-	    if (table[iTableIMIndex].iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected)
+	    /* 当_bLegend为False时，不应该计算自动组词的频度，因此此时实际并没有选则这个词 */
+	    if (table[iTableIMIndex].iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected && _bLegend)
 		tableCandWord[iIndex].candWord.autoPhrase->iSelected++;
 	    if (table[iTableIMIndex].iSaveAutoPhraseAfter == tableCandWord[iIndex].candWord.autoPhrase->iSelected)	//保存自动词组
 		TableInsertPhrase (tableCandWord[iIndex].candWord.autoPhrase->strCode, tableCandWord[iIndex].candWord.autoPhrase->strHZ);
