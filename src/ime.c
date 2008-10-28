@@ -452,14 +452,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
     }
 
     /* 临时的解决方案：解决与XCB的不兼容问题 */
-    if (call_data->event.type == KeyPress) {
+    /* if (call_data->event.type == KeyPress) {
 	if (ConnectIDGetState (call_data->connect_id) == IS_CLOSED) {
 	    if (IsHotKey (iKey, hkTrigger))
 		SetConnectID (call_data->connect_id, IS_ENG);
 	    else
 		retVal = IRV_DONOT_PROCESS;
 	}
-    }
+    } */
     /* *********************************** */
 
     if (retVal == IRV_TO_PROCESS) {
@@ -665,16 +665,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						    }
 						    messageUp[0].type = MSG_TIPS;
 						}
-						else {
-						    /*
+						else {						    
 						    uMessageDown = 1;
 						    messageDown[0].type = MSG_TIPS;
 						    strcpy (messageUp[0].strMsg, strCodeInput);
 						    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
-						    messageUp[0].type = MSG_INPUT;
-						    */
+						    messageUp[0].type = MSG_INPUT;						    
+						    /* 实现自动英文上屏
 						    SendHZtoClient(call_data,strCodeInput);
-						    ChangeIMState (call_data->connect_id);
+						    ChangeIMState (call_data->connect_id);*/
 						}
 					    }
 					}
@@ -838,6 +837,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    DisplayMainWindow();
 			    DrawMainWindow();
 			}
+			retVal = IRV_DO_NOTHING;			
 		    }
 		}
 	    }

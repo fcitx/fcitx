@@ -519,26 +519,29 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	free (pS2T);
 }
 
-Bool InitXIM (Window im_window)
+Bool InitXIM (Window im_window, char *imname)
 {
     XIMStyles      *input_styles;
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;
-    char           *p, *imname;
+    char           *p;
 
-    imname = getenv ("XMODIFIERS");
-    if (imname) {
-        if (strstr (imname, "@im="))
-            imname += 4;
+    if ( !imname ) {
+    	imname = getenv ("XMODIFIERS");
+    	if (imname) {
+            if (strstr (imname, "@im="))
+            	imname += 4;
+            else {
+                fprintf (stderr, "XMODIFIERS Error...\n");
+                imname = DEFAULT_IMNAME;
+            }
+        }
         else {
-            fprintf (stderr, "XMODIFIERS Error...\n");
+            fprintf (stderr, "Please set XMODIFIERS...\n");
             imname = DEFAULT_IMNAME;
         }
     }
-    else {
-        fprintf (stderr, "Please set XMODIFIERS...\n");
-        imname = DEFAULT_IMNAME;
-    }
+    
 #ifdef _DEBUG
     strcpy (strXModifiers, imname);
 #endif

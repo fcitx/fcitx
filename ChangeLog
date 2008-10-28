@@ -1,3 +1,8 @@
+2008-10-28: Yuking <yuking_net@sohu.com>
+	* src/main.c,xim.c: 增加参数‘-n’，这样在运行的时候可以指定XIM的名字
+	* src/ime.c: 恢复原来的临时英文模式
+	* data/AutoEng.dat: 增加了几个自动转入英文的前缀
+	
 2008-10-26: Yuking <yuking_net@sohu.com>
 	* 增加显示/隐藏主窗口的热键，默认为CTRL_ALT_H
 	

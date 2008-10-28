@@ -72,8 +72,9 @@ int main (int argc, char *argv[])
     XEvent          event;
     int             c; 	//用于保存用户输入的参数
     Bool            bBackground = True;
+    char	    *imname=(char *)NULL;
 
-    while((c = getopt(argc, argv, "dDvh")) != -1) {
+    while((c = getopt(argc, argv, "dDn:vh")) != -1) {
         switch(c){
             case 'd':
                 /* nothing to do */
@@ -81,6 +82,9 @@ int main (int argc, char *argv[])
             case 'D':
                 bBackground = False;
                 break;
+	    case 'n':
+	    	imname=optarg;
+		break;
             case 'v':	//输出版本号
                 Version();
                 return 0;
@@ -150,7 +154,7 @@ int main (int argc, char *argv[])
     }
 
     //初始化输入法
-    if (!InitXIM (inputWindow))
+    if (!InitXIM (inputWindow, imname))
 	exit (4);
 
     //以后台方式运行
@@ -182,10 +186,11 @@ int main (int argc, char *argv[])
 void Usage ()
 {
     printf("Usage: fcitx [OPTION]\n"
-           "\t-d\trun as daemon(default)\n"
-           "\t-D\tdon't run as daemon\n"
-           "\t-v\tdisplay the version information and exit\n"
-           "\t-h\tdisplay this help and exit\n");
+           "\t-d\t\trun as daemon(default)\n"
+           "\t-D\t\tdon't run as daemon\n"
+	   "\t-n[im name]\trun as specified name\n"
+           "\t-v\t\tdisplay the version information and exit\n"
+           "\t-h\t\tdisplay this help and exit\n");
 }
 
 void Version ()
