@@ -370,8 +370,6 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
     else
 	return False;
 
-    XAllowEvents (dpy, AsyncKeyboard, CurrentTime);
-
     return True;
 }
 
