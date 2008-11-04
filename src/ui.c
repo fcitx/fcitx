@@ -405,10 +405,12 @@ void MyXEventHandler (XEvent * event)
 	switch (event->xbutton.button) {
 	case Button1:
 	    if (event->xbutton.window == inputWindow) {
-		iInputWindowX = event->xbutton.x;
-		iInputWindowY = event->xbutton.y;
-		MouseClick (&iInputWindowX, &iInputWindowY, inputWindow);
+		int x, y;
+		x = event->xbutton.x;
+		y = event->xbutton.y;
+		MouseClick (&x, &y, inputWindow);
 		DrawInputWindow ();
+		ConnectIDSetPos(connect_id, x, y);
 	    }
 	    else if (event->xbutton.window == mainWindow) {
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {

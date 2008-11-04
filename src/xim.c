@@ -50,14 +50,7 @@ char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_
 /* Issue 11: piaoairy: 为适应generic_config_integer() , 改INT8 为int */
 int            iOffsetX = 0;
 int            iOffsetY = 16;
-
-/*
-Bool            bStaticXIM = False;
-Bool            bNoReleaseKey = True;
-*/
-
-//extern Bool     bLumaQQ;
-
+    
 extern IM      *im;
 extern INT8     iIMIndex;
 
@@ -152,6 +145,7 @@ Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
+    
     SetIC (call_data);
 
     if (CurrentIC == NULL)
@@ -197,11 +191,17 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 	    }
 	}
     }
-    else if (bCenterInputWindow) {
-	iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
-	if (iInputWindowX < 0)
-	    iInputWindowX = 0;
-	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+
+    if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
+	if (bCenterInputWindow) {
+	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+	    if (iInputWindowX < 0)
+		iInputWindowX = 0;
+	}
+	else
+	    iInputWindowX = ConnectIDGetPos(connect_id)->x;
+	    
+	XMoveWindow (dpy, inputWindow, iInputWindowX, ConnectIDGetPos(connect_id)->y);
     }
 
     return True;
@@ -259,6 +259,18 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     //When application gets the focus, re-record the time.
     bStartRecordType = False;
     iHZInputed = 0;
+
+    if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
+	if (bCenterInputWindow) {
+	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+	    if (iInputWindowX < 0)
+		iInputWindowX = 0;
+	}
+	else
+	    iInputWindowX = ConnectIDGetPos(connect_id)->x;
+	    
+	XMoveWindow (dpy, inputWindow, iInputWindowX, ConnectIDGetPos(connect_id)->y);
+    }
 
     return True;
 }
@@ -613,6 +625,8 @@ void CreateConnectID (IMOpenStruct * call_data)
     connectIDNew->connect_id = call_data->connect_id;
     connectIDNew->imState = IS_CLOSED;
     connectIDNew->bTrackCursor = False;
+    connectIDNew->pos.x = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+    connectIDNew->pos.y = DisplayHeight (dpy, iScreen) - iInputWindowHeight;
 
     connectIDsHead = connectIDNew;
 }
@@ -670,6 +684,37 @@ IME_STATE ConnectIDGetState (CARD16 connect_id)
     }
 
     return IS_CLOSED;
+}
+
+void ConnectIDSetPos (CARD16 connect_id, int x, int y)
+{
+    CONNECT_ID     *temp;
+
+    temp = connectIDsHead;
+    while (temp) {
+	if (temp->connect_id == connect_id) {
+	    temp->pos.x = x;
+	    temp->pos.y = y;
+	    return;
+	}
+
+	temp = temp->next;
+    }
+}
+
+position *ConnectIDGetPos (CARD16 connect_id)
+{
+    CONNECT_ID     *temp;
+
+    temp = connectIDsHead;
+    while (temp) {
+	if (temp->connect_id == connect_id)
+	    return &(temp->pos);
+
+	temp = temp->next;
+    }
+
+    return (position *)NULL;
 }
 
 /*New Lumaqq need not be supported specially
