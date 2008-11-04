@@ -50,11 +50,7 @@ typedef struct _CONNECT_ID {
     struct _CONNECT_ID *next;
     CARD16          connect_id;
     IME_STATE       imState;
-    /* 该变量用于lumaqq支持
-       Bool            bReset:1;
-     */
     Bool            bTrackCursor:1;	//if in 'over the spot' mode
-    //char      *strLocale;
 } CONNECT_ID;
 
 Bool            InitXIM (Window, char *);
@@ -75,7 +71,7 @@ Bool            ConnectIDGetTrackCursor (CARD16 connect_id);
 void            SetIMState (Bool bState);
 void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
 
-//char           *ConnectIDGetLocale(CARD16 connect_id);
+/* char           *ConnectIDGetLocale(CARD16 connect_id); */
 #ifndef __USE_GNU
 extern char    *strcasestr (__const char *__haystack, __const char *__needle);
 #endif

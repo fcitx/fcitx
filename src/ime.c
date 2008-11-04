@@ -670,10 +670,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						    messageDown[0].type = MSG_TIPS;
 						    strcpy (messageUp[0].strMsg, strCodeInput);
 						    strcpy (messageDown[0].strMsg, "按 Enter 输入英文");
-						    messageUp[0].type = MSG_INPUT;						    
-						    /* 实现自动英文上屏
-						    SendHZtoClient(call_data,strCodeInput);
-						    ChangeIMState (call_data->connect_id);*/
+						    messageUp[0].type = MSG_INPUT;
 						}
 					    }
 					}

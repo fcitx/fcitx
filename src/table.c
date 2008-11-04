@@ -31,11 +31,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-/*
-#ifdef HAVE_MACHINE_ENDIAN_H
-#include <machine/endian.h>
-#endif
-*/
 #include <X11/Xlib.h>
 
 #include "tools.h"
@@ -132,21 +127,16 @@ extern INT8     lastIsSingleHZ;
 extern Bool     bDisablePagingInLegend;
 extern Bool     bShowCursor;
 
-//extern Bool     bAutoHideInputWindow;
 extern ADJUSTORDER baseOrder;
 extern Bool     bSP;
 extern Bool     bPYBaseDictLoaded;
 extern uint     iFixedInputWindowWidth;
 
-//----------------------------------------
 extern PYFA    *PYFAList;
 extern PYCandWord PYCandWords[];
 
-//extern Bool     bSingleHZMode;
 extern char     strFindString[];
 extern ParsePYStruct findMap;
-
-//----------------------------------------
 
 /*
  * 读取码表输入法的名称和文件路径

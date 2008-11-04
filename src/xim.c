@@ -86,8 +86,6 @@ extern Bool     bVK;
 extern Bool     bCorner;
 extern HIDE_MAINWINDOW hideMainWindow;
 
-//extern Bool     bAutoHideInputWindow;
-
 //计算打字速度
 extern Bool     bStartRecordType;
 extern uint     iHZInputed;
@@ -262,10 +260,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     bStartRecordType = False;
     iHZInputed = 0;
 
-
-    
-    XAllowEvents (dpy, AsyncKeyboard, CurrentTime);
-
     return True;
 }
 
@@ -281,8 +275,6 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
-    IMSyncXlibStruct syncData;
-
     if (IsWindowVisible (inputWindow))
 	XUnmapWindow (dpy, inputWindow);
     if (IsWindowVisible (VKWindow))
@@ -291,15 +283,6 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
     icid = 0;
-
-    /* 试图解决锁死问题 */
-    syncData.major_code = XIM_SYNC;
-    syncData.minor_code = 0;
-    syncData.connect_id = call_data->connect_id;
-    syncData.icid = icid;
-    IMSyncXlib(ims, (XPointer)&syncData);
-    XSync(dpy, False);        
-    /* ************************************************* */
     
     return True;
 }
@@ -319,6 +302,8 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
+    IMSyncXlibStruct syncData;
+
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
 	if (IsWindowVisible (inputWindow))
 	    XUnmapWindow (dpy, inputWindow);
@@ -326,8 +311,16 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 	    XUnmapWindow (dpy, VKWindow);
     }
 
+    /* 试图解决锁死问题 */
+    syncData.major_code = XIM_SYNC;
+    syncData.minor_code = 0;
+    syncData.connect_id = call_data->connect_id;
+    syncData.icid = icid;
+    IMSyncXlib(ims, (XPointer)&syncData);
+    XSync(dpy, False);        
+    /* ************************************************* */
+
     DestroyIC (call_data);
-    XSync(dpy, False);
     
     return True;
 }
@@ -580,15 +573,8 @@ Bool InitXIM (Window im_window, char *imname)
     }
 
     IMSetIMValues (ims, IMEncodingList, encodings, IMProtocolHandler, MyProtoHandler, NULL);
-
-/*    if (bNoReleaseKey)
-	IMSetIMValues (ims, IMFilterEventMask, KeyPressMask, NULL);
-    else
-    */
-	IMSetIMValues (ims, IMFilterEventMask, KeyPressMask | KeyReleaseMask, NULL);
-
-//    if (!bStaticXIM)
-	IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
+    IMSetIMValues (ims, IMFilterEventMask, KeyPressMask | KeyReleaseMask, NULL);
+    IMSetIMValues (ims, IMOnKeysList, on_keys, NULL);
 
     return True;
 }
@@ -651,9 +637,7 @@ void DestroyConnectID (CARD16 connect_id)
 	connectIDsHead = temp->next;
     else
 	last->next = temp->next;
-
-    /*if (temp->strLocale)
-       free(temp->strLocale); */
+	
     free (temp);
 }
 
