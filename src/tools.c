@@ -424,7 +424,7 @@ inline static int fast_chinese_english_switch(Configure *c, void *a, int isread)
     if(isread)
         SetSwitchKey((char *)a);
     else
-        fprintf((FILE *)a, "%s=%s\n", c->name, "L_CTRL");
+        fprintf((FILE *)a, "%s=%s\n", c->name, "L_SHIFT");
 
     return 0;
 }
@@ -561,7 +561,7 @@ inline static int second_third_candidate_word(Configure *c, void *a, int isread)
             i3rdSelectKey = pstr[1] ^ 0xFF;
         }
     }else
-        fprintf((FILE *)a, "%s=%s\n", c->name, "SHIFT");
+        fprintf((FILE *)a, "%s=%s\n", c->name, "0");
 
     return 0;
 }
