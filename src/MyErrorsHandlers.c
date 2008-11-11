@@ -63,6 +63,7 @@ void OnException (int signo)
     switch (signo) {
 	/* 出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件，所以不能调用SaveIM () */
     case SIGSEGV:
+    case SIGFPE:
 	break;
     case SIGHUP:
 	LoadConfig (False);
