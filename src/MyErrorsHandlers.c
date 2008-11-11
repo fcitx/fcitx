@@ -67,30 +67,21 @@ void OnException (int signo)
     case SIGHUP:
 	LoadConfig (False);
 	SetIM ();
-	/*if (bLumaQQ)
-	   ConnectIDResetReset ();
-	 */
-	return;
+	break;
     case SIGUSR1:
     case SIGCHLD:
-    case SIGQUIT:
     case SIGWINCH:
     case SIGTTIN:
+    case SIGTSTP:	
     case SIGSTOP:
-    case SIGTSTP:
     case SIGTERM:
-	return;
+    case SIGQUIT:
     case SIGINT:
     case SIGKILL:
-	SaveIM ();
-	break;
     default:
+    	SaveIM ();
 	break;
     }
-
-    fprintf (stdout, "FCITX -- Exit Signal No.: %d\n\n", signo);
-
-    exit (0);
 }
 
 void SetMyXErrorHandler (void)
