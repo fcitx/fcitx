@@ -358,7 +358,7 @@ Bool MapToPY (char strMap[3], char *strPY)
  * 0表示相等
  * b指示是声母还是韵母，True表示声母
  */
-int Cmp1Map (char map1, char map2, Bool b)
+int Cmp1Map (char map1, char map2, Bool b, Bool bUseMH)
 {
     int             iVal1, iVal2;
 
@@ -368,8 +368,8 @@ int Cmp1Map (char map1, char map2, Bool b)
     }
     else {
 	if (b) {
-	    iVal1 = GetMHIndex_S (map1);
-	    iVal2 = GetMHIndex_S (map2);
+	    iVal1 = GetMHIndex_S (map1, bUseMH);
+	    iVal2 = GetMHIndex_S (map2, bUseMH);
 	}
 	else {
 	    iVal1 = GetMHIndex_C (map1);
@@ -384,7 +384,7 @@ int Cmp1Map (char map1, char map2, Bool b)
 }
 
 /*
- * 比较两位拼音映射
+ * 比较第二位拼音映射是否和第一个相等
  * 0表示相等
  * >0表示前者大
  * <0表示后者大
@@ -393,11 +393,14 @@ int Cmp2Map (char map1[3], char map2[3])
 {
     int             i;
 
-    i = Cmp1Map (map1[0], map2[0], True);
+    if (IsZ_C_S(map2[0]) && map2[1]=='0')
+	i = Cmp1Map (map1[0], map2[0], True, True);
+    else
+	i = Cmp1Map (map1[0], map2[0], True, False);
     if (i)
 	return i;
 
-    return Cmp1Map (map1[1], map2[1], False);
+    return Cmp1Map (map1[1], map2[1], False, False);
 }
 
 /*
@@ -414,9 +417,13 @@ int CmpMap (char *strMap1, char *strMap2, int *iMatchedLength)
     for (;;) {
 	if (!strMap2[*iMatchedLength])
 	    return (strMap1[*iMatchedLength] - strMap2[*iMatchedLength]);
-	val = Cmp1Map (strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2);
+	if ( !((*iMatchedLength + 1) % 2) && (IsZ_C_S(strMap2[*iMatchedLength]) && (strMap2[*iMatchedLength + 1]=='0' || !strMap2[*iMatchedLength + 1]) ) )
+	    val = Cmp1Map (strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2, True);
+	else
+	    val = Cmp1Map (strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2, False); 
 	if (val)
-	    return Cmp1Map (strMap1[*iMatchedLength], strMap2[*iMatchedLength], (*iMatchedLength + 1) % 2);
+	    return val;
+	    
 	(*iMatchedLength)++;
     }
 

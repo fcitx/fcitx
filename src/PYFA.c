@@ -967,13 +967,13 @@ int GetMHIndex_C (char map)
     return -1;
 }
 
-int GetMHIndex_S (char map)
+int GetMHIndex_S (char map, Bool bMode)
 {
     int             i;
 
     for (i = 0; MHPY_S[i].strMap[0]; i++) {
 	if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1]) {
-	    if (MHPY_S[i].bMode)
+	    if (MHPY_S[i].bMode || bMode)
 		return i;
 	    else
 		return -1;
@@ -983,3 +983,11 @@ int GetMHIndex_S (char map)
     return -1;
 
 }
+
+Bool IsZ_C_S (char map)
+{
+    if (map=='b' || map=='G"'|| map=='A')
+	return True;
+    return False;
+}
+
