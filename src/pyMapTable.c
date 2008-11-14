@@ -134,6 +134,9 @@ ConsonantMap    consonantMapTable[] = {
     ,
 };
 
+/*
+ * ÉùÄ¸
+ */
 SyllabaryMap    syllabaryMapTable[] = {
     /*{"b", 'A'},
        {"c", 'B'},

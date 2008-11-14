@@ -1,3 +1,6 @@
+2008-11-14: Yuking <yuking_net@sohu.com>
+	* 改进拼音简写词组的匹配，比如，当输入"c'fan"时，“吃饭”也会出现在候选词中，而无论是否选择了模糊拼音
+	
 2008-10-28: Yuking <yuking_net@sohu.com>
 	* src/main.c,xim.c: 增加参数‘-n’，这样在运行的时候可以指定XIM的名字
 	* src/ime.c: 恢复原来的临时英文模式

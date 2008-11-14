@@ -986,7 +986,7 @@ int GetMHIndex_S (char map, Bool bMode)
 
 Bool IsZ_C_S (char map)
 {
-    if (map=='b' || map=='G"'|| map=='A')
+    if (map=='c' || map=='H'|| map=='B')
 	return True;
     return False;
 }
