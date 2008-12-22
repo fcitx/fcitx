@@ -69,6 +69,9 @@ void OnException (int signo)
 	LoadConfig (False);
 	SetIM ();
 	break;
+    case SIGINT:
+    	SaveIM ();
+    	exit (1);
     case SIGUSR1:
     case SIGCHLD:
     case SIGWINCH:
@@ -77,7 +80,6 @@ void OnException (int signo)
     case SIGSTOP:
     case SIGTERM:
     case SIGQUIT:
-    case SIGINT:
     case SIGKILL:
     default:
     	SaveIM ();

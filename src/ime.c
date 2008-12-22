@@ -1181,11 +1181,6 @@ void SetIM (void)
 
     im = (IM *) malloc (sizeof (IM) * iIMCount);
     iIMCount = 0;
-
-    /*
-       LoadExtraIM ("/home/yuking/fcitx/tools/libyong.so");
-     */
-    if(strExternIM[0]) LoadExtraIM(strExternIM);
     
     /* 加入输入法 */
     if (bUsePinyin || ((!bUseSP && (!bUseTable || !iTableCount)) && !iIMCount))	//至少应该有一种输入法

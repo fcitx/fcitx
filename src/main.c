@@ -169,6 +169,8 @@ int main (int argc, char *argv[])
 	else if (id > 0)
 	    exit (0);
     }
+    
+    SetMyExceptionHandler();		//处理事件
 
     //主循环，即XWindow的消息循环
     for (;;) {
@@ -177,7 +179,7 @@ int main (int argc, char *argv[])
 	if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
 	    continue;
 
-	MyXEventHandler (&event);					//处理事件
+	MyXEventHandler (&event);					//处理X事件
     }
 
     return 0;
