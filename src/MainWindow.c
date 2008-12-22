@@ -296,7 +296,7 @@ void DrawMainWindow (void)
 	    *p2 = '\0';
 
 	    strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (strTemp) : strTemp;
-	    OutputString (mainWindow, (bEn) ? xftMainWindowFontEn : xftMainWindowFont, strGBKT, iPos, FontHeight (xftMainWindowFont) + (MAINWND_HEIGHT - FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
+	    OutputString (mainWindow, (bEn) ? xftMainWindowFontEn : xftMainWindowFont, strGBKT, iPos, (MAINWND_HEIGHT + FontHeight (xftMainWindowFont)) / 2 - 1, IMNameColor[iIndex].color);
 	    iPos += StringWidth (strGBKT, (bEn) ? xftMainWindowFontEn : xftMainWindowFont);
 
 	    if (bUseGBKT)
@@ -304,7 +304,7 @@ void DrawMainWindow (void)
 	}
 #else
 	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName) : ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName);
-	OutputString (mainWindow, fontSetMainWindow, strGBKT, iPos, FontHeight (fontSetMainWindow) + (MAINWND_HEIGHT - FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
+	OutputString (mainWindow, fontSetMainWindow, strGBKT, iPos, (MAINWND_HEIGHT + FontHeight (fontSetMainWindow)) / 2 - 1, IMNameColor[iIndex].gc);
 	if (bUseGBKT)
 	    free (strGBKT);
 #endif
