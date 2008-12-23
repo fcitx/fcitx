@@ -349,13 +349,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
     }
 
     /*
-     * 解决xine中候选字自动选中的问题
-     * xine每秒钟产生一个左SHIFT键的释放事件
+     * 愿意是为了解决xine-ui中候选字自动选中的问题
+     * xine-ui每秒钟产生一个左SHIFT键的释放事件
+     * 但这段代码对新的xine-ui已经不起作用了
      */
-     if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
+     /* if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
 	IMForwardEvent (ims, (XPointer) call_data);
 	return;
-     }
+     } */
 
     retVal = IRV_TO_PROCESS;
 
@@ -378,9 +379,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    CloseIM (call_data);
 	    }
 	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
+	    	if (iCodeInputCount) {
+	    	    strcpy (strStringGet, strCodeInput);
+		    retVal = IRV_ENG;
+		}
+		else
+		    retVal = IRV_TO_PROCESS;
+		    
 		keyReleased = KR_OTHER;
-		ChangeIMState (call_data->connect_id);
-		retVal = IRV_TO_PROCESS;
+		ChangeIMState (call_data->connect_id);		
 	    }
 	    else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
 		if (!bIsInLegend) {
@@ -467,8 +474,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    if (kev->keycode != switchKey)
 		keyReleased = KR_OTHER;
 	    else {
-		if ((keyReleased == KR_CTRL) && (kev->time - lastKeyPressedTime < iTimeInterval) && bDoubleSwitchKey)
+		if ((keyReleased == KR_CTRL) && (kev->time - lastKeyPressedTime < iTimeInterval) && bDoubleSwitchKey) {
+	    	    SendHZtoClient(call_data, strCodeInput);
 		    ChangeIMState (call_data->connect_id);
+	        }
 	    }
 
 	    lastKeyPressedTime = kev->time;
@@ -765,7 +774,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					FreePunc ();
 					LoadPuncDict ();
 
-					//DrawMainWindow();
+					DrawMainWindow();
 
 					retVal = IRV_DO_NOTHING;
 				    }
