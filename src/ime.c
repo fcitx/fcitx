@@ -458,17 +458,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
     }
 
-    /* 临时的解决方案：解决与XCB的不兼容问题 */
-    /* if (call_data->event.type == KeyPress) {
-	if (ConnectIDGetState (call_data->connect_id) == IS_CLOSED) {
-	    if (IsHotKey (iKey, hkTrigger))
-		SetConnectID (call_data->connect_id, IS_ENG);
-	    else
-		retVal = IRV_DONOT_PROCESS;
-	}
-    } */
-    /* *********************************** */
-
     if (retVal == IRV_TO_PROCESS) {
 	if (call_data->event.type == KeyPress) {
 	    if (kev->keycode != switchKey)
@@ -572,6 +561,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    retVal = IRV_TO_PROCESS;
 					}
 				    }
+				    
+				    if (iKey!= (XK_BackSpace & 0x00FF))
+					cLastIsAutoConvert = 0;
 				}
 				else if (iInCap == 2 && semicolonToDo == K_SEMICOLON_QUICKPHRASE)
 				    retVal = QuickPhraseDoInput (iKey);
@@ -611,7 +603,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						retVal = IRV_ENG;
 						uMessageUp = uMessageDown = 0;
 						iInCap = 0;
-						cLastIsAutoConvert = 0;
 					    }
 					    else {
 						if (isprint (iKey) && iKey < 128) {
