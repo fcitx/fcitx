@@ -1,19 +1,38 @@
-This package was debianized by Yu Guanghui <ygh@debian.org> on
-Sat,  3 May 2003 14:24:40 +0800
+Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat?action=recall&rev=423
+Packaged-By: Yu Guanghui <ygh@debian.org>
+Packaged-Date: Sat,  3 May 2003 14:24:40 +0800
+Upstream-Name: fcitx
+Upstream-Maintainer: Yuking <yuking_net@sohu.com>
+Upstream-Source: http://fcitx.googlecode.com/
 
-It was downloaded from http://fcitx.googlecode.com/svn/trunk/
+Files: *
+Copyright: Copyright (c) 2002-2007 Yuking
+License: GPL-2
+ On Debian systems the full text of the GNU General Public License can be found
+ in the `/usr/share/common-licenses/GPL-2' file.
 
-Copyright Holders: YuKing <yuking_net@sohu.com>       2002-2007
-	  	   Yu Fan <yufanyufan@gmail.com>      2007
-	  	   Shuqun Zhou <zhoushuqun@gmail.com> 2007-2008
-		   Lin Ming <linming04@gmail.com>     2007-2008
-		   Lee Duhem <lee.duhem@gmail.com>    2007-2008
-		   dgod <dgod.osa@gmail.com>          2007-2008
+Files: lib/*
+Copyright: Copyright (C) 1994, 1995 by Sun Microsystems, Inc.
+Copyright: Copyright (C) 1993, 1994 by Hewlett-Packard Company
+License: MIT
+ Permission to use, copy, modify, distribute, and sell this software
+ and its documentation for any purpose is hereby granted without fee,
+ provided that the above copyright notice appear in all copies and
+ that both that copyright notice and this permission notice appear
+ in supporting documentation, and that the name of Sun Microsystems, Inc.
+ and Hewlett-Packard not be used in advertising or publicity pertaining to
+ distribution of the software without specific, written prior permission.
+ Sun Microsystems, Inc. and Hewlett-Packard make no representations about
+ the suitability of this software for any purpose.  It is provided "as is"
+ without express or implied warranty.
 
-Copyright:
-
-The programs in this package may be copied under the terms of the GNU
-General Public Licence (see below).
-
-On Debian systems, you can find the complete GNU GPL at
-/usr/share/common-licenses/GPL.
+Files: lib/FrameMgr.[ch]
+Copyright: Copyright (C) 1993, 1994 by Digital Equipment Corporation
+License: MIT
+ Permission to use, copy, modify, and distribute this software and its 
+ documentation for any purpose and without fee is hereby granted, 
+ provided that the above copyright notice appear in all copies and that
+ both that copyright notice and this permission notice appear in 
+ supporting documentation, and that the names of Digital or MIT not be
+ used in advertising or publicity pertaining to distribution of the
+ software without specific, written prior permission.

@@ -2,9 +2,9 @@ Source: fcitx
 Section: utils
 Priority: optional
 Maintainer: Kov Chai <tchaikov@gmail.org>
-Build-Depends: cdbs (>= 0.4.41), debhelper (>= 5), libx11-dev, libxft-dev, libxpm-dev
+Build-Depends: cdbs (>= 0.4.41), debhelper (>= 5), libx11-dev, libxft-dev, x11proto-core-dev, libxpm-dev
 DM-Upload-Allowed: yes
-Standards-Version: 3.7.2
+Standards-Version: 3.8.0
 Homepage: http://code.google.com/p/fcitx/
 
 Package: fcitx

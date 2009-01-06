@@ -1,12 +1,28 @@
-fcitx (1:3.5~svn123-1) unstable; urgency=low
+fcitx (1:3.6~rc-1) unstable; urgency=low
 
   * New upstream release
     - Drop patch 001_size_t.patch
     - Drop patch 002_im_-switch.patch
     - Drop patch 003_wubi_ppc.patch
-  * Fix GTK_IM_MODULE; closes: #454363
 
- -- Kov Chai <tchaikov@gmail.com>  Mon, 12 May 2008 22:39:36 +0800
+ -- Kov Chai <tchaikov@gmail.com>  Wed, 07 Jan 2009 01:23:24 +0800
+
+fcitx (1:3.4.3-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  [ LI Daobing ]
+  * fix lintian error:
+    - build-depends-on-obsolete-package build-depends: x-dev
+    - declares-possibly-conflicting-debhelper-compat-versions rules=5 compat=5
+  * fix im-switch conf file (Closes: #454363)
+  [ Barry deFreese ]
+  * Make clean not ignore errors.
+  * Add copyright holders in debian/copyright.
+  * Add watch file.
+  * Add Homepage in source stanza.
+  * Bump Standards Version to 3.8.0. (No changes needed).
+
+ -- Barry deFreese <bdefreese@debian.org>  Wed, 19 Nov 2008 12:31:10 -0500
 
 fcitx (1:3.4.3-1) unstable; urgency=medium
 
