@@ -5,7 +5,14 @@ EXTRA_DIST =	\
 	copyright	\
 	dirs	\
 	docs	\
-	rules
+	rules	\
+	postinst	\
+	compat	\
+	prerm	\
+	fcitx.doc-base.EX	\
+	im-switch.conf	\
+	watch	\
+	README.Debian
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

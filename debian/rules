@@ -83,7 +83,7 @@ binary-arch: build install
 	install -m 644 data/*.dat data/*.mb data/tables.conf $(CURDIR)/debian/fcitx/usr/share/fcitx/data/
 	install -m 644 xpm/logo.xpm $(CURDIR)/debian/fcitx/usr/share/fcitx/xpm/
 	install -d $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/
-	install -m 644 $(CURDIR)/debian/im-switch/fcitx $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/
+	install -m 644 $(CURDIR)/debian/im-switch.conf $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/fcitx
 
 	dh_installexamples
 #	dh_install

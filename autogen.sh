@@ -7,7 +7,7 @@ autoconf || exit 4
 
 if [ -z "$1" ] ; then
   echo
-  echo FCITX sources are now prepared. To build here, run:
+  echo 'FCITX now prepared to build. Run:'
   echo " ./configure && make"
 else
   ./configure "$@" || exit 4
@@ -25,8 +25,16 @@ echo 'Build without xft:'
 echo '  ./configure --enable-xft=no && make'
 
 echo
-echo 'Build RPM Package like these:'
+echo 'Build RPM Package:'
 echo '  ./configure && make dist'
 echo '  rpmbuild -ts fcitx-*.tar.gz   # build source package'
 echo '  rpmbuild -tb fcitx-*.tar.gz   # build binary package'
+
+echo
+echo 'Build Debian Package:'
+echo '  ./configure && fakeroot dpkg-buildpackage -uc -b -d'
+
+echo
+echo 'Create and test source distribution:'
+echo '  ./configure && make distcheck'
 

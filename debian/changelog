@@ -1,4 +1,4 @@
-fcitx (1:3.6~rc-1) unstable; urgency=low
+fcitx (1:3.6.0rc-1) unstable; urgency=low
 
   * New upstream release
     - Drop patch 001_size_t.patch
