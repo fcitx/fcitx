@@ -127,6 +127,5 @@ AC_CONFIG_FILES([
            src/version.h
            src/Makefile
            tools/Makefile
-           debian/Makefile
 ])
 AC_OUTPUT
