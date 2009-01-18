@@ -1315,12 +1315,6 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
     if (bUseLegend && _bLegend) {
 	strcpy (strTableLegendSource, pCandWord);
 	TableGetLegendCandWords (SM_FIRST);
-#warning *****************************************
-#warning FIX ME!
-#warning *****************************************
-	//临时解决一个问题，似乎是出现了内存泄露:
-	//pCandWord经过上面这个函数调用后就变了
-	pCandWord = strTableLegendSource;
     }
     else {
 	if (table[iTableIMIndex].bPromptTableCode) {
