@@ -2321,10 +2321,6 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 	    tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
     }
 
-#warning *****************************************
-#warning FIX ME!
-#warning *****************************************
-    //第一个FIX ME！处的问题与下面这行代码好象有关系
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 
