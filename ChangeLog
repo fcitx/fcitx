@@ -1,3 +1,6 @@
+2009-01-27: Yuking <yuking_net@sohu.com>
+	* src/table.c: 增加最长词组字数的选项(比如，指定为2表示只显示双字词)
+
 2008-11-14: Yuking <yuking_net@sohu.com>
 	* 改进拼音简写词组的匹配，比如，当输入"c'fan"时，“吃饭”也会出现在候选词中，而无论是否选择了模糊拼音
 	

@@ -199,6 +199,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bUseMatchingKey = False;
 	table[iTableIMIndex].cMatchingKey = '\0';
 	table[iTableIMIndex].bTableExactMatch = False;
+	table[iTableIMIndex].iMaxPhraseAllowed = 0;
 	table[iTableIMIndex].bAutoPhrase = True;
 	table[iTableIMIndex].bAutoPhrasePhrase = True;
 	table[iTableIMIndex].iSaveAutoPhraseAfter = 0;
@@ -290,6 +291,10 @@ void LoadTableInfo (void)
 		pstr += 9;
 		table[iTableIMIndex].bTableExactMatch = atoi (pstr);
 	    }
+	    else if (MyStrcmp (pstr, "最长词组字数=")) {
+		pstr += 13;
+		table[iTableIMIndex].iMaxPhraseAllowed = atoi (pstr);
+	    }	    
 	    else if (MyStrcmp (pstr, "自动词组=")) {
 		pstr += 9;
 		table[iTableIMIndex].bAutoPhrase = atoi (pstr);
@@ -1438,10 +1443,12 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	if (iCandWordCount < iMaxCandWord) {
 	    while (currentRecord && currentRecord != recordHead) {
 		if ((mode == SM_PREV) ^ (!currentRecord->flag)) {
-		    if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
-			if (mode == SM_FIRST)
-			    iTableTotalCandCount++;
-			TableAddCandWord (currentRecord, mode);
+		    if ( ((strlen(currentRecord->strHZ)/2)<=table[iTableIMIndex].iMaxPhraseAllowed) || !table[iTableIMIndex].iMaxPhraseAllowed ) {
+			if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
+			    if (mode == SM_FIRST)
+				iTableTotalCandCount++;
+			    TableAddCandWord (currentRecord, mode);
+			}
 		    }
 		}
 
