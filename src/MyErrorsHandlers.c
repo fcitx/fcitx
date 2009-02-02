@@ -51,7 +51,7 @@ void SetMyExceptionHandler (void)
 {
     int             signo;
 
-    for (signo = SIGHUP; signo < SIGUNUSED; signo++)
+    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE)); signo++)
 	signal (signo, OnException);
 }
 
@@ -61,10 +61,6 @@ void OnException (int signo)
     fprintf (stdout, "\nFCITX -- Get Signal No.: %d\n", signo);
 
     switch (signo) {
-	/* 出现SIGSEGV表明程序自己有问题，此时如果还执行保存操作，可能会损坏输入法文件，所以不能调用SaveIM () */
-    case SIGSEGV:
-    case SIGFPE:
-	break;
     case SIGHUP:
 	LoadConfig (False);
 	SetIM ();
