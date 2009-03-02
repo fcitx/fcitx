@@ -158,7 +158,7 @@ int main (int argc, char *argv[])
 	exit (4);
 
     //以后台方式运行
-    if (0) {//bBackground) {
+    if (bBackground) {
 	pid_t           id;
 
 	id = fork ();
