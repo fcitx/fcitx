@@ -54,7 +54,7 @@ RECORD         *currentRecord = (RECORD *)NULL;
 RECORD	       *recordHead = (RECORD *)NULL;
 RECORD         *tableSingleHZ[SINGLE_HZ_COUNT];		//Records the single characters in table to speed auto phrase
 RECORD	       *pCurCandRecord = (RECORD *)NULL;	//Records current cand word selected, to update the hit-frequency information
-TABLECANDWORD   tableCandWord[MAX_CAND_WORD];
+TABLECANDWORD   tableCandWord[MAX_CAND_WORD*2];
 
 RECORD_INDEX   *recordIndex = (RECORD_INDEX *)NULL;
 
@@ -1253,13 +1253,14 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 char           *TableGetCandWord (int iIndex)
 {
     char *str;
-	
+    
     str=_TableGetCandWord(iIndex, True);
     if (str) {
     	if (table[iTableIMIndex].bAutoPhrase && (strlen (str) == 2 || (strlen (str) > 2 && table[iTableIMIndex].bAutoPhrasePhrase)))
     	    UpdateHZLastInput (str);
 	    
-	TableUpdateHitFrequency (pCurCandRecord);
+	if ( pCurCandRecord )
+	    TableUpdateHitFrequency (pCurCandRecord);
     }
     
     return str;
@@ -1291,6 +1292,8 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 
     if (tableCandWord[iIndex].flag == CT_NORMAL)
 	pCurCandRecord = tableCandWord[iIndex].candWord.record;
+    else
+	pCurCandRecord = (RECORD *)NULL;
 
     iTableOrderChanged++;
     if (iTableOrderChanged == TABLE_AUTO_SAVE_AFTER)
@@ -1302,7 +1305,7 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 	break;
     case CT_AUTOPHRASE:
 	if (table[iTableIMIndex].iSaveAutoPhraseAfter) {
-	    /* 当_bLegend为False时，不应该计算自动组词的频度，因此此时实际并没有选则这个词 */
+	    /* 当_bLegend为False时，不应该计算自动组词的频度，因此此时实际并没有选择这个词 */
 	    if (table[iTableIMIndex].iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected && _bLegend)
 		tableCandWord[iIndex].candWord.autoPhrase->iSelected++;
 	    if (table[iTableIMIndex].iSaveAutoPhraseAfter == tableCandWord[iIndex].candWord.autoPhrase->iSelected)	//保存自动词组
@@ -2209,7 +2212,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
     if (mode == SM_FIRST) {
 	iCurrentLegendCandPage = 0;
 	iLegendCandPageCount = 0;
-	TableResetFlags ();
+	TableResetFlags();
     }
     else {
 	if (!iLegendCandPageCount)
@@ -2232,12 +2235,13 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
 
     iLegendCandWordCount = 0;
     tableLegend = recordHead->next;
-
+	
     while (tableLegend != recordHead) {
 	if (((mode == SM_PREV) ^ (!tableLegend->flag)) && ((iLength + 2) == strlen (tableLegend->strHZ))) {
 	    if (!strncmp (tableLegend->strHZ, strTableLegendSource, iLength) && tableLegend->strHZ[iLength] && CheckHZCharset (tableLegend->strHZ)) {
 		if (mode == SM_FIRST)
 		    iTableTotalLengendCandCount++;
+	
 		TableAddLegendCandWord (tableLegend, mode);
 	    }
 	}
@@ -2287,7 +2291,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
 void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 {
     int             i, j;
-
+    
     if (mode == SM_PREV) {
 	for (i = iLegendCandWordCount - 1; i >= 0; i--) {
 	    if (tableCandWord[i].candWord.record->iHit >= record->iHit)
@@ -2306,6 +2310,7 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 	    if (tableCandWord[i].candWord.record->iHit < record->iHit)
 		break;
 	}
+	
 	if (i == iMaxCandWord)
 	    return;
     }
@@ -2327,7 +2332,7 @@ void TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode)
 	for (; j > i; j--)
 	    tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
     }
-
+    
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 

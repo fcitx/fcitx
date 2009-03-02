@@ -110,7 +110,8 @@ typedef struct _AUTOPHRASE {
     struct _AUTOPHRASE *next;	//构造一个队列
 } AUTOPHRASE;
 
-typedef union {
+//用union就会出错，不知道是啥原因
+typedef struct {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
     char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
