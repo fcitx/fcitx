@@ -99,7 +99,6 @@ extern Display *dpy;
 extern int      iScreen;
 
 #ifdef _USE_XFT
-extern iconv_t  convUTF8;
 extern XftFont *xftFont;
 extern XftFont *xftFontEn;
 #else

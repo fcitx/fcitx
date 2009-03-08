@@ -214,7 +214,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	IMSyncXlibStruct syncData;
+	/* IMSyncXlibStruct syncData; */
 	
 	IMPreeditStart (ims, (XPointer) call_data);	
 	EnterChineseMode (lastConnectID == connect_id);
@@ -314,7 +314,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
-    IMSyncXlibStruct syncData;
+    /* IMSyncXlibStruct syncData; */
 
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
 	if (IsWindowVisible (inputWindow))
