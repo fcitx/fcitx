@@ -232,13 +232,13 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 		XUnmapWindow (dpy, VKWindow);
 	}
 	
-	/* 试图解决锁死问题 */
-    	syncData.major_code = XIM_SYNC;
+	/* 试图解决锁死问题 - 这些代码为了解决锁死的问题，但好像没用*/
+    	/* syncData.major_code = XIM_SYNC;
     	syncData.minor_code = 0;
     	syncData.connect_id = call_data->connect_id;
     	syncData.icid = icid;
     	IMSyncXlib(ims, (XPointer)&syncData);
-    	XSync(dpy, False);        
+    	XSync(dpy, False); */       
 	/* ************************************************* */
     }
     else {
@@ -323,13 +323,13 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 	    XUnmapWindow (dpy, VKWindow);
     }
 
-    /* 试图解决锁死问题 */
-    syncData.major_code = XIM_SYNC;
+    /* 试图解决锁死问题---这些代码为了解决锁死的问题，但好像没用*/
+    /* syncData.major_code = XIM_SYNC;
     syncData.minor_code = 0;
     syncData.connect_id = call_data->connect_id;
     syncData.icid = icid;
     IMSyncXlib(ims, (XPointer)&syncData);
-    XSync(dpy, False);        
+    XSync(dpy, False);   */     
     /* ************************************************* */
 
     DestroyIC (call_data);
@@ -478,10 +478,10 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
     xEvent.xkey.keycode = keycode;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
-
+/*  这些代码为了解决锁死的问题，但好像没用
     xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-    IMForwardEvent (ims, (XPointer) (&forwardEvent));
+    IMForwardEvent (ims, (XPointer) (&forwardEvent)); */
 }
 
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
