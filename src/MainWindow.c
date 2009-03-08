@@ -146,8 +146,8 @@ Bool CreateMainWindow (void)
 	return False;
 
     XChangeWindowAttributes (dpy, mainWindow, attribmask, &attrib);
-    XSelectInput (dpy, mainWindow, ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
-
+    XSelectInput (dpy, mainWindow, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
+    
     InitMainWindowColor ();
 
     return True;
