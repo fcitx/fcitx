@@ -498,6 +498,9 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 
     if (bUseGBKT)
 	free (pS2T);
+	
+    //有时不能输入的临时解决方案-执行一条IMForwardEvent
+    MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
 }
 
 Bool InitXIM (Window im_window, char *imname)

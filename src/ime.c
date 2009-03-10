@@ -760,7 +760,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 					FreePunc ();
 					LoadPuncDict ();
-
+					SwitchIM(-2);
 					DrawMainWindow();
 
 					retVal = IRV_DO_NOTHING;
