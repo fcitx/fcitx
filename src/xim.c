@@ -193,15 +193,16 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
     }
 
     if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
+	position * pos = ConnectIDGetPos(connect_id);
 	if (bCenterInputWindow) {
 	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
 	    if (iInputWindowX < 0)
 		iInputWindowX = 0;
 	}
 	else
-	    iInputWindowX = ConnectIDGetPos(connect_id)->x;
+	    iInputWindowX = pos ? pos->x : iInputWindowX;
 	    
-	XMoveWindow (dpy, inputWindow, iInputWindowX, ConnectIDGetPos(connect_id)->y);
+	XMoveWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY);
     }
 
     return True;
@@ -261,15 +262,16 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     iHZInputed = 0;
 
     if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
+	position * pos = ConnectIDGetPos(connect_id);
 	if (bCenterInputWindow) {
 	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
 	    if (iInputWindowX < 0)
 		iInputWindowX = 0;
 	}
 	else
-	    iInputWindowX = ConnectIDGetPos(connect_id)->x;
+	    iInputWindowX = pos ? pos->x : iInputWindowX;	    
 	    
-	XMoveWindow (dpy, inputWindow, iInputWindowX, ConnectIDGetPos(connect_id)->y);
+	XMoveWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY);
     }
 
     return True;

@@ -66,8 +66,6 @@ void OnException (int signo)
 	SetIM ();
 	break;
     case SIGINT:
-    	SaveIM ();
-    	exit (1);
     case SIGUSR1:
     case SIGCHLD:
     case SIGWINCH:

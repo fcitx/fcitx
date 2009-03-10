@@ -1,3 +1,6 @@
+2009-03-10: BigSnake.NET (BigSnake.NET@forum.ubuntu.org.cn)
+	* src/xim.c: fixes a potential segment fault
+	
 2009-01-27: Yuking <yuking_net@sohu.com>
 	* src/table.c: 增加最长词组字数的选项(比如，指定为2表示只显示双字词)
 
