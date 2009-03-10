@@ -243,10 +243,8 @@ void ResetInput (void)
 
 void CloseIM (IMForwardEventStruct * call_data)
 {
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
-    if (IsWindowVisible (VKWindow))
-	XUnmapWindow (dpy, VKWindow);
+    XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, VKWindow);
 
     IMPreeditEnd (ims, (XPointer) call_data);
     SetConnectID (call_data->connect_id, IS_CLOSED);
@@ -274,10 +272,8 @@ void ChangeIMState (CARD16 _connect_id)
 	ResetInput ();
 	ResetInputWindow ();
 
-	if (IsWindowVisible (inputWindow))
-	    XUnmapWindow (dpy, inputWindow);
-	if (IsWindowVisible (VKWindow))
-	    XUnmapWindow (dpy, VKWindow);
+	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
     }
 
     if (hideMainWindow != HM_HIDE)
@@ -349,14 +345,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
     }
 
     /*
-     * 愿意是为了解决xine-ui中候选字自动选中的问题
+     * 原意是为了解决xine-ui中候选字自动选中的问题
      * xine-ui每秒钟产生一个左SHIFT键的释放事件
      * 但这段代码对新的xine-ui已经不起作用了
      */
-     /* if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
+     if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
 	IMForwardEvent (ims, (XPointer) call_data);
 	return;
-     } */
+     }
 
     retVal = IRV_TO_PROCESS;
 
@@ -821,14 +817,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    else if (IsHotKey (iKey, hkGBT))
 			retVal = ChangeGBKT ();
 		    else if (IsHotKey (iKey, hkHideMainWindow)) {
-			if (IsWindowVisible(mainWindow)) {
-			    bMainWindow_Hiden = True;
-			    XUnmapWindow(dpy,mainWindow);
-		    	}
-			else {
+			if (bMainWindow_Hiden) {
 			    bMainWindow_Hiden = False;
 			    DisplayMainWindow();
 			    DrawMainWindow();
+		    	}
+			else {
+			    bMainWindow_Hiden = True;
+			    XUnmapWindow(dpy,mainWindow);
 			}
 			retVal = IRV_DO_NOTHING;			
 		    }
@@ -852,8 +848,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_CLEAN:
 	ResetInput ();
 	ResetInputWindow ();
-	if (IsWindowVisible (inputWindow))
-	    XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, inputWindow);
 
 	return;
     case IRV_DISPLAY_CANDWORDS:
@@ -909,12 +904,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
 	else {
 	    ResetInput ();
-	    //if (bAutoHideInputWindow)
-	    if (IsWindowVisible (inputWindow))
-		XUnmapWindow (dpy, inputWindow);
-	    /*else
-	       DrawInputWindow ();
-	     */
+	    XUnmapWindow (dpy, inputWindow);
 	}
 
 	break;
@@ -926,10 +916,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 
-	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))) {
-	    if (IsWindowVisible (inputWindow))
-		XUnmapWindow (dpy, inputWindow);
-	}
+	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
+	    XUnmapWindow (dpy, inputWindow);
 	else
 	    DrawInputWindow ();
 
@@ -943,7 +931,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_PUNC:
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
-	if (!uMessageDown && IsWindowVisible (inputWindow))
+	if (!uMessageDown)
 	    XUnmapWindow (dpy, inputWindow);
     case IRV_GET_CANDWORDS_NEXT:
 	SendHZtoClient (call_data, strStringGet);
@@ -1005,8 +993,7 @@ INPUT_RETURN_VALUE ChangeGBK (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -1020,8 +1007,7 @@ INPUT_RETURN_VALUE ChangeGBKT (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -1035,8 +1021,7 @@ INPUT_RETURN_VALUE ChangeLegend (void)
     ResetInputWindow ();
 
     DrawMainWindow ();
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
@@ -1101,8 +1086,7 @@ void SwitchIM (INT8 index)
     }
 
     ResetInput ();
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 }

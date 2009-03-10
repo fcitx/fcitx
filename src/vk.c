@@ -132,8 +132,7 @@ void InitVKWindowColor (void)
 
 void DisplayVKWindow (void)
 {
-    if (!IsWindowVisible (VKWindow))
-	XMapRaised (dpy, VKWindow);
+    XMapRaised (dpy, VKWindow);
 }
 
 void DrawVKWindow (void)
@@ -534,13 +533,12 @@ void SwitchVK (void)
 
 	XMoveWindow (dpy, VKWindow, x, y);
 	DisplayVKWindow ();
-	if (IsWindowVisible (inputWindow))
-	    XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, inputWindow);
 
 	if (ConnectIDGetState (connect_id) == IS_CLOSED)
 	    SetIMState (True);
     }
-    else if (IsWindowVisible (VKWindow))
+    else
 	XUnmapWindow (dpy, VKWindow);
 
     SwitchIM (-2);

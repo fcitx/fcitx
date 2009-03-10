@@ -51,7 +51,7 @@ void SetMyExceptionHandler (void)
 {
     int             signo;
 
-    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE)); signo++)
+    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE) && (signo!=SIGINT)); signo++)
 	signal (signo, OnException);
 }
 
@@ -65,7 +65,6 @@ void OnException (int signo)
 	LoadConfig (False);
 	SetIM ();
 	break;
-    case SIGINT:
     case SIGUSR1:
     case SIGCHLD:
     case SIGWINCH:

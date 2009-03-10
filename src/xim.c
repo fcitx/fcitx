@@ -215,44 +215,32 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	/* IMSyncXlibStruct syncData; */
-	
 	IMPreeditStart (ims, (XPointer) call_data);	
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else if ((lastConnectID != connect_id) && IsWindowVisible (inputWindow))
+	    else if (lastConnectID != connect_id)
 		XUnmapWindow (dpy, inputWindow);
 	}
 	else {
-	    if (IsWindowVisible (inputWindow))
-		XUnmapWindow (dpy, inputWindow);
-	    if (IsWindowVisible (VKWindow))
-		XUnmapWindow (dpy, VKWindow);
+	    XUnmapWindow (dpy, inputWindow);
+	    XUnmapWindow (dpy, VKWindow);
 	}
 	
-	/* 试图解决锁死问题 - 这些代码为了解决锁死的问题，但好像没用*/
-    	/* syncData.major_code = XIM_SYNC;
-    	syncData.minor_code = 0;
-    	syncData.connect_id = call_data->connect_id;
-    	syncData.icid = icid;
-    	IMSyncXlib(ims, (XPointer)&syncData);
-    	XSync(dpy, False); */       
-	/* ************************************************* */
+	//有时不能输入的临时解决方案-执行一条IMForwardEvent
+	MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
     }
     else {
-	if (IsWindowVisible (inputWindow))
-	    XUnmapWindow (dpy, inputWindow);
-	if (IsWindowVisible (VKWindow))
-	    XUnmapWindow (dpy, VKWindow);
+	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
 
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
 	}
-	else if (IsWindowVisible (mainWindow))
+	else
 	    XUnmapWindow (dpy, mainWindow);
     }
 
@@ -279,20 +267,16 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 
 Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
-    if (IsWindowVisible (VKWindow))
-	XUnmapWindow (dpy, VKWindow);
+    XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, VKWindow);
 
     return True;
 }
 
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
-    if (IsWindowVisible (inputWindow))
-	XUnmapWindow (dpy, inputWindow);
-    if (IsWindowVisible (VKWindow))
-	XUnmapWindow (dpy, VKWindow);    
+    XUnmapWindow (dpy, inputWindow);
+    XUnmapWindow (dpy, VKWindow);    
     
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
@@ -316,23 +300,10 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
-    /* IMSyncXlibStruct syncData; */
-
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
-	if (IsWindowVisible (inputWindow))
-	    XUnmapWindow (dpy, inputWindow);
-	if (IsWindowVisible (VKWindow))
-	    XUnmapWindow (dpy, VKWindow);
+	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
     }
-
-    /* 试图解决锁死问题---这些代码为了解决锁死的问题，但好像没用*/
-    /* syncData.major_code = XIM_SYNC;
-    syncData.minor_code = 0;
-    syncData.connect_id = call_data->connect_id;
-    syncData.icid = icid;
-    IMSyncXlib(ims, (XPointer)&syncData);
-    XSync(dpy, False);   */     
-    /* ************************************************* */
 
     DestroyIC (call_data);
     
@@ -480,19 +451,20 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
     xEvent.xkey.keycode = keycode;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
-/*  这些代码为了解决锁死的问题，但好像没用
+    
     xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-    IMForwardEvent (ims, (XPointer) (&forwardEvent)); */
+    IMForwardEvent (ims, (XPointer) (&forwardEvent));
 }
 
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
+    IMCommitStruct  cms;
     char            strOutput[300];
     char           *ps;
     char           *pS2T = (char *) NULL;
-    
+
 #ifdef _DEBUG
     fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, icid, connect_id);
 #endif
@@ -514,13 +486,17 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	ps = strHZ;
 
     XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
-    ((IMCommitStruct *) call_data)->flag |= XimLookupChars;
-    ((IMCommitStruct *) call_data)->commit_string = (char *) tp.value;
-    
-    IMCommitString (ims, (XPointer) call_data);
-    XFree (tp.value);    
 
-    if (pS2T)
+    memset (&cms, 0, sizeof (cms));
+    cms.major_code = XIM_COMMIT;
+    cms.icid = call_data->icid;
+    cms.connect_id = call_data->connect_id;
+    cms.flag = XimLookupChars;
+    cms.commit_string = (char *) tp.value;
+    IMCommitString (ims, (XPointer) & cms);
+    XFree (tp.value);
+
+    if (bUseGBKT)
 	free (pS2T);
 }
 
@@ -719,7 +695,7 @@ position *ConnectIDGetPos (CARD16 connect_id)
     return (position *)NULL;
 }
 
-/*New Lumaqq need not be supported specially
+/*
 Bool ConnectIDGetReset (CARD16 connect_id)
 {
     CONNECT_ID     *temp;

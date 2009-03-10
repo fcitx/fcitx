@@ -903,8 +903,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	else if (iKey != LCTRL && iKey != RCTRL && iKey != LSHIFT && iKey != RSHIFT) {
 	    uMessageUp = uMessageDown = 0;
 	    bTablePhraseTips = False;
-	    if (IsWindowVisible(inputWindow))
-		XUnmapWindow (dpy, inputWindow);
+	    XUnmapWindow (dpy, inputWindow);
 	}
     }
 
@@ -2532,12 +2531,6 @@ void TableCreateAutoPhrase (INT8 iCount)
     }
 
     free(strHZ);
-    /*
-       for (i=0;i<iAutoPhrase;i++ ) {
-       printf("%d: %s  %s\n",i+1,autoPhrase[i].strCode,autoPhrase[i].strHZ);
-       puts("===========================================");
-       }
-     */
 }
 
 void UpdateHZLastInput (char *str)

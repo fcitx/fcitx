@@ -177,7 +177,7 @@ void DisplayInputWindow (void)
 #ifdef _DEBUG
     fprintf (stderr, "DISPLAY InputWindow\n");
 #endif
-    if (!IsWindowVisible (inputWindow) && (uMessageUp || uMessageDown))
+    if (uMessageUp || uMessageDown)
 	XMapRaised (dpy, inputWindow);
 }
 

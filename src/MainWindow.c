@@ -159,7 +159,7 @@ void DisplayMainWindow (void)
     fprintf (stderr, "DISPLAY MainWindow\n");
 #endif
 
-    if (!IsWindowVisible(mainWindow) && !bMainWindow_Hiden)
+    if (!bMainWindow_Hiden)
 	XMapRaised (dpy, mainWindow);
 }
 
@@ -341,7 +341,7 @@ void DrawMainWindow (void)
 	    XDrawLine (dpy, mainWindow, mainWindowLineColor.gc, iPos, 4, iPos, MAINWND_HEIGHT - 4);
 	}
     }
-    else if (IsWindowVisible(mainWindow))
+    else
 	XUnmapWindow (dpy, mainWindow);
 }
 
