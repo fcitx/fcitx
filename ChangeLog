@@ -50,9 +50,6 @@
 2008-07-11: Yuking <yuking_net@sohu.com>
 	* data/wanfeng.txt: 加上wiltong@linuxsir提供的晚风码表中的部分错码修正
 	* src/table.c: 修正自动组词中的一个错误
-	
-2008-06-18: Yuking <yuking_net@sohu.com>
-	* 增加若干判断语句，以免程序执行不必要的窗口显示/隐藏操作
 
 2008-05-10: Yuking <yuking_net@sohu.com>
 	* src/table.c: 修正码表输入法中的一个错误
