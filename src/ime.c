@@ -132,9 +132,6 @@ Bool            bLocked = False;
 // dgod extern im
 char		strExternIM[PATH_MAX];
 
-/* 新的LumaQQ已经不需要特意支持了
-Bool            bLumaQQ = False;
-*/
 Bool            bPointAfterNumber = True;
 
 /* 计算打字速度 */
@@ -148,12 +145,9 @@ char            strNameOfPinyin[41] = "智能拼音";
 char            strNameOfShuangpin[41] = "智能双拼";
 char            strNameOfQuwei[41] = "区位";
 
-/*
-INT8		iKeyPressed = 0;
-Bool		bRelease = True;
-*/
+/* **************************
 int             keyIgnored[] = { 50, 62, 37, 109, 115, 116, 117, 0 };
-
+   ************************** */
 Bool		bCursorAuto=False;
 
 extern XIMS     ims;
@@ -170,7 +164,6 @@ extern Bool     bShowNext;
 extern Bool     bShowCursor;
 extern Bool     bTrackCursor;
 
-//extern Bool     bSingleHZMode;
 extern Window   inputWindow;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern XIMTriggerKey *Trigger_Keys;
@@ -306,6 +299,7 @@ void ConvertPunc (void)
     strcpy (strStringGet, strTemp);
 }
 
+/* ****************
 Bool IsKeyIgnored (int iKeyCode)
 {
     int             i;
@@ -317,7 +311,8 @@ Bool IsKeyIgnored (int iKeyCode)
 	i++;
     }
     return False;
-}
+} 
+* */
 
 //FILE           *fd;
 void ProcessKey (IMForwardEventStruct * call_data)
@@ -353,105 +348,108 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	IMForwardEvent (ims, (XPointer) call_data);
 	return;
      }
-
+	
     retVal = IRV_TO_PROCESS;
 
-#ifdef _DEBUG
+//  #ifdef _DEBUG
     printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
-#endif
+//  #endif
 
-    if ((call_data->event.type == KeyRelease) && (ConnectIDGetState (call_data->connect_id) != IS_CLOSED)) {
-	if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
-	    if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
-		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
-		    SwitchIM (-1);
-		else if (IsHotKey (iKey, hkTrigger))
-		    CloseIM (call_data);
-	    }
-	    else if (!bLocked && iKey == CTRL_LSHIFT) {
-		if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
-		    SwitchIM (-1);
-		else if (IsHotKey (iKey, hkTrigger))
-		    CloseIM (call_data);
-	    }
-	    else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
-	    	if (iCodeInputCount) {
-	    	    strcpy (strStringGet, strCodeInput);
-		    retVal = IRV_ENG;
+    if (call_data->event.type == KeyRelease) {	
+	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
+	    if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
+		if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
+		    if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
+			SwitchIM (-1);
+		    else if (IsHotKey (iKey, hkTrigger))
+			CloseIM (call_data);
 		}
-		else
-		    retVal = IRV_TO_PROCESS;
-		    
-		keyReleased = KR_OTHER;
-		ChangeIMState (call_data->connect_id);		
-	    }
-	    else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
-		if (!bIsInLegend) {
-		    pstr = im[iIMIndex].GetCandWord (1);
-		    if (pstr) {
-			strcpy (strStringGet, pstr);
-			if (bIsInLegend)
-			    retVal = IRV_GET_LEGEND;
-			else
-			    retVal = IRV_GET_CANDWORDS;
+		else if (!bLocked && iKey == CTRL_LSHIFT) {
+		    if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
+			SwitchIM (-1);
+		    else if (IsHotKey (iKey, hkTrigger))
+			CloseIM (call_data);
+		}
+		else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
+		    if (iCodeInputCount) {
+			strcpy (strStringGet, strCodeInput);
+			retVal = IRV_ENG;
 		    }
-		    else if (iCandWordCount)
-			retVal = IRV_DISPLAY_CANDWORDS;
 		    else
 			retVal = IRV_TO_PROCESS;
-		}
-		else {
-		    strcpy (strStringGet, " ");
-		    uMessageDown = 0;
-		    retVal = IRV_GET_CANDWORDS;
-		}
-
-		keyReleased = KR_OTHER;
-	    }
-	    else if ((iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) || (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY)) {
-		if (!bIsInLegend) {
-		    pstr = im[iIMIndex].GetCandWord (2);
-		    if (pstr) {
-			strcpy (strStringGet, pstr);
-			if (bIsInLegend)
-			    retVal = IRV_GET_LEGEND;
+		    
+		    keyReleased = KR_OTHER;
+		    ChangeIMState (call_data->connect_id);		
+	        }
+		else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
+		    if (!bIsInLegend) {
+			pstr = im[iIMIndex].GetCandWord (1);
+			if (pstr) {
+			    strcpy (strStringGet, pstr);
+			    if (bIsInLegend)
+				retVal = IRV_GET_LEGEND;
+			    else
+				retVal = IRV_GET_CANDWORDS;
+			}
+			else if (iCandWordCount)
+			    retVal = IRV_DISPLAY_CANDWORDS;
 			else
-			    retVal = IRV_GET_CANDWORDS;
+			    retVal = IRV_TO_PROCESS;
 		    }
-		    else if (iCandWordCount)
-			retVal = IRV_DISPLAY_CANDWORDS;
-		}
-		else {
-		    strcpy (strStringGet, "　");
-		    uMessageDown = 0;
-		    retVal = IRV_GET_CANDWORDS;
-		}
-
-		keyReleased = KR_OTHER;
-	    }
-
-	    else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
-		if (!bIsInLegend) {
-		    pstr = im[iIMIndex].GetCandWord (2);
-		    if (pstr) {
-			strcpy (strStringGet, pstr);
-			if (bIsInLegend)
-			    retVal = IRV_GET_LEGEND;
-			else
-			    retVal = IRV_GET_CANDWORDS;
+		    else {
+			strcpy (strStringGet, " ");
+			uMessageDown = 0;
+			retVal = IRV_GET_CANDWORDS;
 		    }
-		    else if (iCandWordCount)
-			retVal = IRV_DISPLAY_CANDWORDS;
-		}
-		else {
-		    strcpy (strStringGet, "　");
-		    uMessageDown = 0;
-		    retVal = IRV_GET_CANDWORDS;
-		}
 
-		keyReleased = KR_OTHER;
+		    keyReleased = KR_OTHER;
+		}
+		else if ((iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) || (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY)) {
+		    if (!bIsInLegend) {
+			pstr = im[iIMIndex].GetCandWord (2);
+			if (pstr) {
+			    strcpy (strStringGet, pstr);
+			    if (bIsInLegend)
+				retVal = IRV_GET_LEGEND;
+			    else
+				retVal = IRV_GET_CANDWORDS;
+			}
+			else if (iCandWordCount)
+			    retVal = IRV_DISPLAY_CANDWORDS;
+		    }
+		    else {
+			strcpy (strStringGet, "　");
+			uMessageDown = 0;
+			retVal = IRV_GET_CANDWORDS;
+		    }
+
+		    keyReleased = KR_OTHER;
+		}
+		else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
+		    if (!bIsInLegend) {
+			pstr = im[iIMIndex].GetCandWord (2);
+			if (pstr) {
+			    strcpy (strStringGet, pstr);
+			    if (bIsInLegend)
+				retVal = IRV_GET_LEGEND;
+			    else
+				retVal = IRV_GET_CANDWORDS;
+		        }
+			else if (iCandWordCount)
+			    retVal = IRV_DISPLAY_CANDWORDS;
+		    }
+		    else {
+			strcpy (strStringGet, "　");
+			uMessageDown = 0;
+			retVal = IRV_GET_CANDWORDS;
+		    }
+
+		    keyReleased = KR_OTHER;
+		}
 	    }
 	}
+	else
+	    call_data->event.type = KeyPress;
     }
 
     if (retVal == IRV_TO_PROCESS) {

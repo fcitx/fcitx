@@ -132,6 +132,6 @@ void            SaveIM (void);
 void            SetIM (void);
 void            ConvertPunc (void);
 
-Bool            IsKeyIgnored (int iKeyCode);
+// Bool            IsKeyIgnored (int iKeyCode);
 
 #endif
