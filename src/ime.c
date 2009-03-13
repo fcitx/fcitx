@@ -351,9 +351,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	
     retVal = IRV_TO_PROCESS;
 
-//  #ifdef _DEBUG
+#ifdef _DEBUG
     printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
-//  #endif
+#endif
 
     if (call_data->event.type == KeyRelease) {	
 	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
