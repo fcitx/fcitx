@@ -451,10 +451,11 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
     xEvent.xkey.keycode = keycode;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
-    
+    /*
     xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
+    */
 }
 
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
