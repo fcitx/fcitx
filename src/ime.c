@@ -204,7 +204,7 @@ extern XftFont *xftMainWindowFont;
 extern XFontSet fontSetMainWindow;
 #endif
 /*******************************************************/
-//Bool            bDebug = False;
+Bool            bSetFocus;
 
 void ResetInput (void)
 {
@@ -355,6 +355,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
     printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
 #endif
 
+/*
+ * 有时候，当某个程序获得焦点后的第一个按键被解释成一个KeyRelease事件，此处试图解决该问题。原因不清楚。
+ */
+    if ( bSetFocus ) {
+	call_data->event.type = KeyPress;
+	bSetFocus = False;
+    }
+  /* ************************************************************* */
+  
     if (call_data->event.type == KeyRelease) {	
 	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	    if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {

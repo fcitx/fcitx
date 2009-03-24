@@ -40,7 +40,7 @@ XIMS            ims;
 CARD16          connect_id = 0;
 CARD16          icid = 0;
 CARD16          lastConnectID = 0;
-
+Bool		bSetFocus = False;
 //************************************************
 
 IC             *CurrentIC = NULL;
@@ -215,6 +215,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
+	bSetFocus = True;
 	IMPreeditStart (ims, (XPointer) call_data);	
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
