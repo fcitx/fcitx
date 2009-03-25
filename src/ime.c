@@ -204,7 +204,7 @@ extern XftFont *xftMainWindowFont;
 extern XFontSet fontSetMainWindow;
 #endif
 /*******************************************************/
-Bool            bSetFocus;
+extern Bool            bSetFocus;
 
 void ResetInput (void)
 {

@@ -215,7 +215,9 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	bSetFocus = True;
+	if (lastConnectID != connect_id)
+	    bSetFocus = True;
+	    
 	IMPreeditStart (ims, (XPointer) call_data);	
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
