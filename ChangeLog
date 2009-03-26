@@ -1,4 +1,7 @@
 2009-03-26: Yuking <yuking_net@sohu.com>
+	* 修正拼音码表中的一些错误
+	
+2009-03-26: Yuking <yuking_net@sohu.com>
 	* tools/createPYMB.c: 转换拼音的时候增加了一些输出信息
 	* 清除一些被注释掉的无用代码
 
