@@ -574,34 +574,6 @@ Bool LoadTableDict (void)
     }
     else
 	autoPhrase = (AUTOPHRASE *) NULL;
-    /*
-     * 然后初始化码表输入法
-     TableInit();
-     */
-
-    /*
-     * 呵呵，借用一下这儿来为一个词库文件生成五笔编码
-     */
-
-    /*
-       FILE *temp1,*temp2;
-       char str[100];
-       temp1=fopen("phrase.txt","rt");
-       temp2=fopen("table.txt","wt");
-
-       while (!feof(temp1)) {
-       fscanf(temp1,"%s\n",str);
-       TableCreatePhraseCode(str);
-       printf("\nProcessing %s ...  ",str);
-       if ( !bCanntFindCode ) 
-       fprintf(temp2,"%s %s\n", strNewPhraseCode,str);
-       else
-       puts("ERROR!");
-       }
-       printf("\nCreate table.txt ok!\n");
-       fclose(temp2);
-       fclose(temp1);    */
-    /* ********************************************** */
 
     return True;
 }

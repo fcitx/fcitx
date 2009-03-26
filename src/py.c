@@ -201,11 +201,6 @@ Bool LoadPYOtherDict (void)
 	while (!feof (fp)) {
 	    if (!fread (&i, sizeof (int), 1, fp))
 		break;
-/*
-#if defined(DARWIN)
-            i = ReverseInt (i);
-#endif
-*/
 	    if (!fread (strBase, sizeof (char) * 2, 1, fp))
 		break;
 	    strBase[2] = '\0';
@@ -3065,46 +3060,3 @@ void PYGetPYByHZ (char *strHZ, char *strPY)
 	}
     }
 }
-
-/*
-void PP ()
-{
-    int             iVal;
-    char           *pBase = NULL;
-    char           *pPhrase = NULL;
-    char            ss[1000];
-
-    for (iVal = 0; iVal < iCandWordCount; iVal++) {
-	if (PYCandWords[iVal].iWhich == PY_CAND_AUTO)
-	    strcpy (ss, strPYAuto);
-	else {
-	    pPhrase = NULL;
-	    switch (PYCandWords[iVal].iWhich) {
-	    case PY_CAND_BASE:	//是系统单字
-		pBase = PYFAList[PYCandWords[iVal].cand.base.iPYFA].pyBase[PYCandWords[iVal].cand.base.iBase].strHZ;
-		break;
-	    case PY_CAND_SYMPHRASE:	//是系统词组
-		pBase = PYFAList[PYCandWords[iVal].cand.phrase.iPYFA].pyBase[PYCandWords[iVal].cand.phrase.iBase].strHZ;
-		pPhrase = PYCandWords[iVal].cand.phrase.phrase->strPhrase;
-		break;
-	    case PY_CAND_USERPHRASE:	//是用户词组
-		pBase = PYFAList[PYCandWords[iVal].cand.phrase.iPYFA].pyBase[PYCandWords[iVal].cand.phrase.iBase].strHZ;
-		pPhrase = PYCandWords[iVal].cand.phrase.phrase->strPhrase;
-		break;
-	    case PY_CAND_FREQ:	//是常用字
-		pBase = PYCandWords[iVal].cand.freq.hz->strHZ;
-		break;
-	    case PY_CAND_SYMBOL:	//是特殊符号
-		pBase = PYCandWords[iVal].cand.freq.hz->strHZ;
-		break;
-	    }
-	    strcpy (ss, pBase);
-	    if (pPhrase)
-		strcat (ss, pPhrase);
-	}
-
-	printf ("%d: %s\n", iVal, ss);
-    }
-    printf ("---------------------\n");
-}
-*/

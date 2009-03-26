@@ -108,18 +108,6 @@ static XIMStyle Styles[] = {
     0
 };
 
-/* Trigger Keys List */
-/*static XIMTriggerKey Trigger_Keys_Ctrl_Shift[] = {
-    {XK_space, ControlMask, ControlMask},
-    {XK_Shift_L, ControlMask, ControlMask},
-    {0L, 0L, 0L}
-};
-
-XIMTriggerKey   Trigger_Keys1[] = {
-    {XK_space, ControlMask, ControlMask},
-    {0L, 0L, 0L}
-};*/
-
 XIMTriggerKey  *Trigger_Keys = (XIMTriggerKey *) NULL;
 INT8            iTriggerKeyCount;
 
@@ -230,10 +218,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else {
 	    XUnmapWindow (dpy, inputWindow);
 	    XUnmapWindow (dpy, VKWindow);
-	}
-	
-	//有时不能输入的临时解决方案-执行一条IMForwardEvent
-	//MyIMForwardEvent (call_data->connect_id, call_data->icid, 37);
+	}	
     }
     else {
 	XUnmapWindow (dpy, inputWindow);
@@ -328,12 +313,7 @@ void EnterChineseMode (Bool bState)
 
 Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 {
-    if (call_data->flag == 0) {	/* on key */
-	/*
-	 * Here, the start of preediting is notified from IMlibrary, which
-	 * * is the only way to start preediting in case of Dynamic Event
-	 * * Flow, because ON key is mandatary for Dynamic Event Flow.
-	 */
+    if (call_data->flag == 0) {
 	SetConnectID (call_data->connect_id, IS_CHN);
 	EnterChineseMode (False);
 	DrawMainWindow ();
@@ -360,37 +340,37 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
     switch (call_data->major_code) {
     case XIM_OPEN:
 #ifdef _DEBUG
-//      printf ("XIM_OPEN\n");
+      printf ("XIM_OPEN\n");
 #endif
 	return MyOpenHandler ((IMOpenStruct *) call_data);
     case XIM_CLOSE:
 #ifdef _DEBUG
-//      printf ("XIM_CLOSE\n");
+      printf ("XIM_CLOSE\n");
 #endif
 	return MyCloseHandler ((IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
 #ifdef _DEBUG
-//      printf ("XIM_CREATE_IC\n");
+      printf ("XIM_CREATE_IC\n");
 #endif
 	return MyCreateICHandler ((IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
 #ifdef _DEBUG
-//      printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+      printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
 	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _DEBUG
-//      printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+      printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
 #endif
 	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
 #ifdef _DEBUG
-//      printf ("XIM_GET_IC_VALUES\n");
+      printf ("XIM_GET_IC_VALUES\n");
 #endif
 	return MyGetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
 #ifdef _DEBUG
-//      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 
 	ProcessKey ((IMForwardEventStruct *) call_data);
@@ -408,12 +388,12 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 	return MyUnsetFocusHandler ((IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
 #ifdef _DEBUG
-//      printf ("XIM_RESET_IC\n");
+      printf ("XIM_RESET_IC\n");
 #endif
 	return True;
     case XIM_TRIGGER_NOTIFY:
 #ifdef _DEBUG
-//      printf ("XIM_TRIGGER_NOTIFY\n");
+      printf ("XIM_TRIGGER_NOTIFY\n");
 #endif
 	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
     default:
@@ -454,11 +434,10 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
     xEvent.xkey.keycode = keycode;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
-    /*
+    
     xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
-    */
 }
 
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)

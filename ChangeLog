@@ -1,3 +1,7 @@
+2009-03-26: Yuking <yuking_net@sohu.com>
+	* tools/createPYMB.c: 转换拼音的时候增加了一些输出信息
+	* 清除一些被注释掉的无用代码
+
 2009-03-10: BigSnake.NET (BigSnake.NET@forum.ubuntu.org.cn)
 	* src/xim.c: fixes a potential segment fault
 	

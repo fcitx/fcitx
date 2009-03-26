@@ -145,9 +145,6 @@ char            strNameOfPinyin[41] = "智能拼音";
 char            strNameOfShuangpin[41] = "智能双拼";
 char            strNameOfQuwei[41] = "区位";
 
-/* **************************
-int             keyIgnored[] = { 50, 62, 37, 109, 115, 116, 117, 0 };
-   ************************** */
 Bool		bCursorAuto=False;
 
 extern XIMS     ims;
@@ -299,22 +296,7 @@ void ConvertPunc (void)
     strcpy (strStringGet, strTemp);
 }
 
-/* ****************
-Bool IsKeyIgnored (int iKeyCode)
-{
-    int             i;
 
-    i = 0;
-    while (keyIgnored[i]) {
-	if (iKeyCode == keyIgnored[i])
-	    return True;
-	i++;
-    }
-    return False;
-} 
-* */
-
-//FILE           *fd;
 void ProcessKey (IMForwardEventStruct * call_data)
 {
     KeySym          keysym;
@@ -754,10 +736,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					InitVKWindowColor ();
 
 					SetIM ();
-
-					/*if (bLumaQQ)
-					   ConnectIDResetReset (); */
-
 					CreateFont ();
 					CalculateInputWindowHeight ();
 

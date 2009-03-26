@@ -144,7 +144,7 @@ void CreatePYPhrase (void)
     s2 = 0;
     uIndex = 0;
     while (!feof (fpt)) {
-	printf("Reading Phrase: %d\n", s2+1);
+	printf("Reading Phrase: %d\r", s2+1);
 	fscanf (fpt, "%s", strPY);
 	fscanf (fpt, "%s\n", strPhrase);
 	if (strlen (strPhrase) < 3)
@@ -173,7 +173,7 @@ void CreatePYPhrase (void)
 			    tt = t;
 			    t = t->next;
 			    if (!strcmp (t->strMap, strMap + 2) && !strcmp (t->strPhrase, strPhrase + 2)) {
-				printf ("%d: %s %s ----->deleted.\n", s2, strPY, strPhrase);
+				printf ("\n\t%d: %s %s ----->deleted.\n", s2, strPY, strPhrase);
 				goto _next;
 			    }
 			    if (strcmp (t->strMap, strMap + 2) > 0) {
@@ -206,7 +206,7 @@ void CreatePYPhrase (void)
 	else
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
-    printf ("\n%d Phrases£¬%d Converted£¡\nWriting Phrase file¡­¡­  ", s2, s1);
+    printf ("\n%d Phrases£¬%d Converted!\nWriting Phrase file ...", s2, s1);
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iHZCount; j++) {
 	    iIndex = PYFAList[i].pyBase[j].iPhraseCount;
