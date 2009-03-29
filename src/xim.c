@@ -327,6 +327,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    DrawInputWindow ();
 	    DisplayInputWindow ();
 	}
+	
+	bSetFocus = False;
     }
     else
 	return False;

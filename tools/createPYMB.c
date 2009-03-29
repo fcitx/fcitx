@@ -206,7 +206,7 @@ void CreatePYPhrase (void)
 	else
 	    fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
-    printf ("\n%d Phrases£¬%d Converted!\nWriting Phrase file ...", s2, s1);
+    printf ("\n%d Phrases, %d Converted!\nWriting Phrase file ...", s2, s1);
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iHZCount; j++) {
 	    iIndex = PYFAList[i].pyBase[j].iPhraseCount;
