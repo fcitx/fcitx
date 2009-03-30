@@ -198,15 +198,18 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 {
+    IMSyncXlibStruct syncData;
+	
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
+	
 	if (lastConnectID != connect_id)
 	    bSetFocus = True;
-	    
 	IMPreeditStart (ims, (XPointer) call_data);	
+	    
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
@@ -237,6 +240,13 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     bStartRecordType = False;
     iHZInputed = 0;
 
+    /* 这段代码有用吗？ */
+    syncData.major_code = XIM_SYNC;
+    syncData.minor_code = 0;
+    syncData.connect_id = call_data->connect_id;
+    syncData.icid = icid;
+    IMSyncXlib(ims, (XPointer)&syncData);
+    /* ****************************************** */
     if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
 	position * pos = ConnectIDGetPos(connect_id);
 	if (bCenterInputWindow) {
@@ -269,6 +279,7 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
     icid = 0;
+    bSetFocus = False;
     
     return True;
 }
@@ -434,10 +445,6 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
 	xEvent.xkey.window = CurrentIC->client_win;
 
     xEvent.xkey.keycode = keycode;
-    memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
-    IMForwardEvent (ims, (XPointer) (&forwardEvent));
-    
-    xEvent.xkey.type = KeyRelease;
     memcpy (&(forwardEvent.event), &xEvent, sizeof (forwardEvent.event));
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
 }

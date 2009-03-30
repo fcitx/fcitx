@@ -107,7 +107,7 @@ Bool CreateVKWindow (void)
 	return False;
 
     XChangeWindowAttributes (dpy, VKWindow, attribmask, &attrib);
-    XSelectInput (dpy, VKWindow, ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
+    XSelectInput (dpy, VKWindow, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
     InitVKWindowColor ();
     LoadVKMapFile ();

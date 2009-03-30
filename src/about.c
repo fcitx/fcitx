@@ -91,7 +91,7 @@ Bool CreateAboutWindow (void)
 	return False;
 
     InitWindowProperty ();
-    XSelectInput (dpy, aboutWindow, ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask | StructureNotifyMask | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
+    XSelectInput (dpy, aboutWindow, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
     InitAboutWindowColor ();
     setIcon ();
