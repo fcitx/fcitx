@@ -40,7 +40,6 @@ XIMS            ims;
 CARD16          connect_id = 0;
 CARD16          icid = 0;
 CARD16          lastConnectID = 0;
-Bool		bSetFocus = False;
 //************************************************
 
 IC             *CurrentIC = NULL;
@@ -205,9 +204,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	
-	if (lastConnectID != connect_id)
-	    bSetFocus = True;
 	IMPreeditStart (ims, (XPointer) call_data);	
 	    
 	EnterChineseMode (lastConnectID == connect_id);
@@ -279,7 +275,6 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
     icid = 0;
-    bSetFocus = False;
     
     return True;
 }
@@ -338,8 +333,6 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	    DrawInputWindow ();
 	    DisplayInputWindow ();
 	}
-	
-	bSetFocus = False;
     }
     else
 	return False;
@@ -385,7 +378,6 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 #ifdef _DEBUG
       printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-
 	ProcessKey ((IMForwardEventStruct *) call_data);
 
 	return True;
