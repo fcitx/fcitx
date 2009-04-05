@@ -34,11 +34,11 @@
 #include "ui.h"
 
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
+ICID	       *icidsHead = (ICID *) NULL;
 XIMS            ims;
 
 //************************************************
 CARD16          connect_id = 0;
-CARD16          icid = 0;
 CARD16          lastConnectID = 0;
 //************************************************
 
@@ -197,15 +197,15 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 {
-    IMSyncXlibStruct syncData;
+    /* IMSyncXlibStruct syncData; */
 	
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
-    icid = call_data->icid;
 
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
-	IMPreeditStart (ims, (XPointer) call_data);	
-	    
+	if (icidGetIMState(call_data->icid) == IS_CLOSED)
+	    IMPreeditStart (ims, (XPointer) call_data);
+ 	    
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
@@ -220,6 +220,9 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	}	
     }
     else {
+	if (icidGetIMState(call_data->icid) != IS_CLOSED)
+	    IMPreeditEnd (ims, (XPointer) call_data);
+	    
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
 
@@ -231,17 +234,18 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    XUnmapWindow (dpy, mainWindow);
     }
 
+    icidSetIMState(call_data->icid, ConnectIDGetState (connect_id));
     lastConnectID = connect_id;
     //When application gets the focus, re-record the time.
     bStartRecordType = False;
     iHZInputed = 0;
 
     /* 这段代码有用吗？ */
-    syncData.major_code = XIM_SYNC;
+    /* syncData.major_code = XIM_SYNC;
     syncData.minor_code = 0;
     syncData.connect_id = call_data->connect_id;
     syncData.icid = icid;
-    IMSyncXlib(ims, (XPointer)&syncData);
+    IMSyncXlib(ims, (XPointer)&syncData);*/
     /* ****************************************** */
     if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
 	position * pos = ConnectIDGetPos(connect_id);
@@ -274,7 +278,6 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     
     DestroyConnectID (call_data->connect_id);
     connect_id = 0;
-    icid = 0;
     
     return True;
 }
@@ -286,9 +289,10 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
     if (!CurrentIC) {
 	CurrentIC = (IC *) FindIC (call_data->icid);
 	connect_id = call_data->connect_id;
-	icid = call_data->icid;
     }
 
+    CreateICID(call_data);
+    
     return True;
 }
 
@@ -300,6 +304,7 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
     }
 
     DestroyIC (call_data);
+    DestroyICID(call_data->icid);
     
     return True;
 }
@@ -321,6 +326,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 {
     if (call_data->flag == 0) {
 	SetConnectID (call_data->connect_id, IS_CHN);
+	icidSetIMState(call_data->icid, IS_CHN);
+	
 	EnterChineseMode (False);
 	DrawMainWindow ();
 
@@ -346,64 +353,64 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
     switch (call_data->major_code) {
     case XIM_OPEN:
 #ifdef _DEBUG
-      printf ("XIM_OPEN\n");
+        printf ("XIM_OPEN:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-	return MyOpenHandler ((IMOpenStruct *) call_data);
+        return MyOpenHandler ((IMOpenStruct *) call_data);
     case XIM_CLOSE:
 #ifdef _DEBUG
-      printf ("XIM_CLOSE\n");
+        printf ("XIM_CLOSE:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyCloseHandler ((IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
 #ifdef _DEBUG
-      printf ("XIM_CREATE_IC\n");
+        printf ("XIM_CREATE_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyCreateICHandler ((IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
 #ifdef _DEBUG
-      printf ("XIM_DESTROY_IC:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+        printf ("XIM_DESTROY_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _DEBUG
-      printf ("XIM_SET_IC_VALUES:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+//      printf ("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
 #ifdef _DEBUG
-      printf ("XIM_GET_IC_VALUES\n");
+        printf ("XIM_GET_IC_VALUES:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyGetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
 #ifdef _DEBUG
-      printf ("XIM_FORWARD_EVENT: %d  %d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+        printf ("XIM_FORWARD_EVENT:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	ProcessKey ((IMForwardEventStruct *) call_data);
 
 	return True;
     case XIM_SET_IC_FOCUS:
 #ifdef _DEBUG
-	printf ("XIM_SET_IC_FOCUS:conn=%d   ic=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+	printf ("XIM_SET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MySetFocusHandler ((IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
 #ifdef _DEBUG
-	printf ("XIM_UNSET_IC_FOCUS:%d\n", ((IMForwardEventStruct *) call_data)->icid);
+	printf ("XIM_UNSET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyUnsetFocusHandler ((IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
 #ifdef _DEBUG
-      printf ("XIM_RESET_IC\n");
+        printf ("XIM_RESET_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return True;
     case XIM_TRIGGER_NOTIFY:
 #ifdef _DEBUG
-      printf ("XIM_TRIGGER_NOTIFY\n");
+        printf ("XIM_TRIGGER_NOTIFY:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MyTriggerNotifyHandler ((IMTriggerNotifyStruct *) call_data);
     default:
 #ifdef _DEBUG
-	printf ("XIM_DEFAULT\n");
+	printf ("XIM_DEFAULT:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return True;
     }
@@ -450,7 +457,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     char           *pS2T = (char *) NULL;
 
 #ifdef _DEBUG
-    fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, icid, connect_id);
+    fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, CurrentIC->id, connect_id);
 #endif
 
     if (bUseGBKT)
@@ -775,5 +782,94 @@ char *ConnectIDGetLocale(CARD16 connect_id)
     }
 
     return strDefault;
+}
+*/
+
+void CreateICID (IMChangeICStruct * call_data)
+{
+    ICID     *icidNew;
+
+    icidNew = (ICID *) malloc (sizeof (ICID));
+    icidNew->next = icidsHead;
+    icidNew->icid = call_data->icid;
+    icidNew->connect_id = call_data->connect_id;
+    icidNew->imState = IS_CLOSED;
+    
+    icidsHead = icidNew;
+}
+
+void DestroyICID (CARD16 icid)
+{
+    ICID     *temp, *last;
+
+    last = temp = icidsHead;
+    while (temp) {
+	if (temp->icid == icid)
+	    break;
+
+	last = temp;;
+	temp = temp->next;
+    }
+
+    if (!temp)
+	return;
+
+    if (temp == icidsHead)
+	icidsHead = temp->next;
+    else
+	last->next = temp->next;
+	
+    free (temp);
+}
+
+void icidSetIMState (CARD16 icid, IME_STATE imState)
+{
+    ICID     *temp;
+
+    temp = icidsHead;
+
+    while (temp) {
+	if (temp->icid == icid) {
+	    temp->imState = imState;
+#if _DEBUG
+	    fprintf(stderr,"Set icid=%d(connect_id=%d) to %d\n",icid,temp->connect_id, imState);
+#endif	    
+	    return;
+	}
+
+	temp = temp->next;
+    }
+}
+
+IME_STATE icidGetIMState (CARD16 icid)
+{
+    ICID     *temp;
+
+    temp = icidsHead;
+
+    while (temp) {
+	if (temp->icid == icid)
+	    return temp->imState;
+
+	temp = temp->next;
+    }
+
+    return IS_CLOSED;
+}
+/*
+CARD16 icidGetConnectID (CARD16 icid)
+{
+    ICID     *temp;
+
+    temp = icidsHead;
+
+    while (temp) {
+	if (temp->icid == icid)
+	    return temp->connect_id;
+
+	temp = temp->next;
+    }
+
+    return 0;
 }
 */

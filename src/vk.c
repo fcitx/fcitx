@@ -231,7 +231,7 @@ Bool VKMouseKey (int x, int y)
     if (IsInBox (x, y, 1, 1, VK_WINDOW_WIDTH, 16))
 	ChangVK ();
     else {
-	if (!icid || !connect_id)
+	if (!CurrentIC->id || !connect_id)
 	    return False;
 
 	strKey[1] = '\0';
@@ -242,7 +242,7 @@ Bool VKMouseKey (int x, int y)
 
 	    x -= 4;
 	    if (x >= 313 && x <= 344) {	//backspace
-		MyIMForwardEvent (connect_id, icid, 22);
+		MyIMForwardEvent (connect_id, CurrentIC->id, 22);
 		return True;
 	    }
 	    else {
@@ -261,7 +261,7 @@ Bool VKMouseKey (int x, int y)
 		return False;
 
 	    if (x >= 4 && x < 38) {	//Tab
-		MyIMForwardEvent (connect_id, icid, 23);
+		MyIMForwardEvent (connect_id, CurrentIC->id, 23);
 		return True;
 	    }
 	    else {
@@ -316,11 +316,11 @@ Bool VKMouseKey (int x, int y)
 	else if (y >= 140 && y <= 162) {	//第五行         
 	    if (x >= 4 && x < 38) {	//Ins
 		//改变INS键状态
-		MyIMForwardEvent (connect_id, icid, 106);
+		MyIMForwardEvent (connect_id, CurrentIC->id, 106);
 		return True;
 	    }
 	    else if (x >= 61 && x < 98) {	//DEL
-		MyIMForwardEvent (connect_id, icid, 107);
+		MyIMForwardEvent (connect_id, CurrentIC->id, 107);
 		return True;
 	    }
 	    else if (x >= 99 && x < 270)	//空格
@@ -336,7 +336,7 @@ Bool VKMouseKey (int x, int y)
 	if (pstr) {
 	    memset (&forwardEvent, 0, sizeof (IMForwardEventStruct));
 	    forwardEvent.connect_id = connect_id;
-	    forwardEvent.icid = icid;
+	    forwardEvent.icid = CurrentIC->id;
 	    SendHZtoClient (&forwardEvent, pstr);
 	    iHZInputed += (int) (strlen (pstr) / 2);	//粗略统计字数
 	}

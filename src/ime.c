@@ -237,6 +237,7 @@ void CloseIM (IMForwardEventStruct * call_data)
 
     IMPreeditEnd (ims, (XPointer) call_data);
     SetConnectID (call_data->connect_id, IS_CLOSED);
+    icidSetIMState(call_data->icid, IS_CLOSED);
     bVK = False;
     SwitchIM (-2);
     DrawMainWindow ();
@@ -246,6 +247,7 @@ void ChangeIMState (CARD16 _connect_id)
 {
     if (ConnectIDGetState (_connect_id) == IS_ENG) {
 	SetConnectID (_connect_id, IS_CHN);
+	
 	if (bVK)
 	    DisplayVKWindow ();
 	else
