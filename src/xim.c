@@ -349,7 +349,6 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 
 Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 {
-
     switch (call_data->major_code) {
     case XIM_OPEN:
 #ifdef _DEBUG

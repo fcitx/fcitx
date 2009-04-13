@@ -366,7 +366,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    ChangeIMState (call_data->connect_id);
 		    retVal = IRV_DONOT_PROCESS;
 	        }
-		else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
+		else if (kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) {
+			 /* || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {*/
 		    if (!bIsInLegend) {
 			pstr = im[iIMIndex].GetCandWord (1);
 			if (pstr) {
@@ -389,7 +390,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 		    keyReleased = KR_OTHER;
 		}
-		else if ((iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) || (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY)) {
+		else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
+			/* || (iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) ) { */
 		    if (!bIsInLegend) {
 			pstr = im[iIMIndex].GetCandWord (2);
 			if (pstr) {
@@ -484,11 +486,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			retVal = DoVKInput (iKey);
 		    else {
 			if (iKeyState == KEY_NONE) {
-			    if (kev->keycode == i2ndSelectKey)
+			    if (kev->keycode == i2ndSelectKey) {
 				keyReleased = KR_2ND_SELECTKEY;
-			    else if (kev->keycode == i3rdSelectKey)
+				return;
+			    }
+			    else if (kev->keycode == i3rdSelectKey) {
 				keyReleased = KR_3RD_SELECTKEY;
-			    else if (iKey == (i2ndSelectKey ^ 0xFF)) {
+				return;
+			    }
+			    /*else if (iKey == (i2ndSelectKey ^ 0xFF)) {
 				if (iCandWordCount >= 2) {
 				    keyReleased = KR_2ND_SELECTKEY_OTHER;
 				    return;
@@ -499,7 +505,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    keyReleased = KR_3RD_SELECTKEY_OTHER;
 				    return;
 				}
-			    }
+			    }*/
 			}
 
 			if (iKey == CTRL_LSHIFT || iKey == SHIFT_LCTRL) {
