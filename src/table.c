@@ -199,7 +199,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bUseMatchingKey = False;
 	table[iTableIMIndex].cMatchingKey = '\0';
 	table[iTableIMIndex].bTableExactMatch = False;
-	table[iTableIMIndex].iMaxPhraseAllowed = 0;
+//	table[iTableIMIndex].iMaxPhraseAllowed = 0;
 	table[iTableIMIndex].bAutoPhrase = True;
 	table[iTableIMIndex].bAutoPhrasePhrase = True;
 	table[iTableIMIndex].iSaveAutoPhraseAfter = 0;
@@ -207,7 +207,7 @@ void LoadTableInfo (void)
 	table[iTableIMIndex].bPromptTableCode = True;
 	table[iTableIMIndex].strSymbol[0] = '\0';
 	table[iTableIMIndex].bHasPinyin = False;
-	strcpy (table[iTableIMIndex].choose, "1234567890");//初始化为1234567890
+	strcpy (table[iTableIMIndex].strChoose, "1234567890");//初始化为1234567890
     }
 
     iTableIMIndex = -1;
@@ -291,10 +291,10 @@ void LoadTableInfo (void)
 		pstr += 9;
 		table[iTableIMIndex].bTableExactMatch = atoi (pstr);
 	    }
-	    else if (MyStrcmp (pstr, "最长词组字数=")) {
+/*	    else if (MyStrcmp (pstr, "最长词组字数=")) {
 		pstr += 13;
 		table[iTableIMIndex].iMaxPhraseAllowed = atoi (pstr);
-	    }	    
+	    }*/
 	    else if (MyStrcmp (pstr, "自动词组=")) {
 		pstr += 9;
 		table[iTableIMIndex].bAutoPhrase = atoi (pstr);
@@ -325,7 +325,7 @@ void LoadTableInfo (void)
 	    }
 	    else if(MyStrcmp (pstr, "候选词选择键=")){
                 pstr += 13;
-                strncpy (table[iTableIMIndex].choose, pstr, 10);		
+                strncpy (table[iTableIMIndex].strChoose, pstr, 10);		
             }
 	}
     }
@@ -859,6 +859,19 @@ Bool IsIgnoreChar (char cChar)
     return False;
 }
 
+INT8 IsChooseKey (int iKey)
+{
+    int i = 0;
+
+    while (table[iTableIMIndex].strChoose[i]) {
+	if (iKey == table[iTableIMIndex].strChoose[i])
+	    return i + 1;
+	i++;
+    }
+
+    return 0;
+}
+
 INPUT_RETURN_VALUE DoTableInput (int iKey)
 {
     INPUT_RETURN_VALUE retVal;
@@ -1090,10 +1103,8 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    else
 		return IRV_CLEAN;
 	}
-	else if (iKey >= '0' && iKey <= '9') {
-	    iKey -= '0';
-	    if (iKey == 0)
-		iKey = 10;
+	else if (IsChooseKey(iKey)) {
+	    iKey = IsChooseKey(iKey);
 
 	    if (!bIsInLegend) {
 		if (!iCandWordCount)
@@ -1417,13 +1428,13 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	if (iCandWordCount < iMaxCandWord) {
 	    while (currentRecord && currentRecord != recordHead) {
 		if ((mode == SM_PREV) ^ (!currentRecord->flag)) {
-		    if ( ((strlen(currentRecord->strHZ)/2)<=table[iTableIMIndex].iMaxPhraseAllowed) || !table[iTableIMIndex].iMaxPhraseAllowed ) {
+		    //if ( ((strlen(currentRecord->strHZ)/2)<=table[iTableIMIndex].iMaxPhraseAllowed) || !table[iTableIMIndex].iMaxPhraseAllowed ) {
 			if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
 			    if (mode == SM_FIRST)
 				iTableTotalCandCount++;
 			    TableAddCandWord (currentRecord, mode);
 			}
-		    }
+		    //}
 		}
 
 		currentRecord = currentRecord->next;

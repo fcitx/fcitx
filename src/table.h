@@ -75,10 +75,10 @@ typedef struct _TABLE {
     INT8            iAutoPhrase;	//自动造词长度
     Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
     Bool            bPromptTableCode;	//输入完毕后是否提示编码
-    int             iMaxPhraseAllowed;	//允许的最长词组字数。0-不限
+//    int             iMaxPhraseAllowed;	//允许的最长词组字数。0-不限
 
     Bool            bHasPinyin;		//标记该码表中是否有拼音
-    char            choose[11];		//设置选择键
+    char            strChoose[11];		//设置选择键
 } TABLE;
 
 typedef struct _RECORD {
@@ -136,6 +136,8 @@ void            SaveTableDict (void);
 Bool            IsInputKey (int iKey);
 Bool            IsIgnoreChar (char cChar);
 Bool            IsEndKey (char cChar);
+INT8            IsChooseKey (int iKey);
+
 INPUT_RETURN_VALUE DoTableInput (int iKey);
 INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode);
 void            TableAddCandWord (RECORD * wbRecord, SEARCH_MODE mode);
