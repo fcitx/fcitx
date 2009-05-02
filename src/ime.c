@@ -39,6 +39,7 @@
 #include "ime.h"
 #include "InputWindow.h"
 #include "MainWindow.h"
+#include "TrayWindow.h"
 #include "IC.h"
 #include "punc.h"
 #include "py.h"
@@ -241,6 +242,7 @@ void CloseIM (IMForwardEventStruct * call_data)
     bVK = False;
     SwitchIM (-2);
     DrawMainWindow ();
+    DrawTrayWindow (INACTIVE_ICON);
 }
 
 void ChangeIMState (CARD16 _connect_id)

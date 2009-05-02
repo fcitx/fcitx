@@ -25,6 +25,8 @@ fcitx_SOURCES = IC.c IC.h \
                 table.c table.h \
                 xim.c xim.h \
                 qw.c qw.h \
+                tray.c tray.h \
+                TrayWindow.c TrayWindow.h \
 		vk.c vk.h \
 		about.c about.h \
 		QuickPhrase.c QuickPhrase.h \
@@ -33,4 +35,4 @@ fcitx_SOURCES = IC.c IC.h \
 		internalVersion.c
 		
 fcitx_LDADD = ../lib/libXimd.a
-fcitx_LDFLAGS = -lXpm
+fcitx_LDFLAGS = -lXpm -lXtst

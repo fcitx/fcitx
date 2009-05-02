@@ -30,6 +30,7 @@
 #include "tools.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
+#include "TrayWindow.h"
 #include "vk.h"
 #include "ui.h"
 
@@ -208,6 +209,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
  	    
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
+	DrawTrayWindow (ACTIVE_ICON);
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
@@ -229,6 +231,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
+	    DrawTrayWindow (ACTIVE_ICON);
 	}
 	else
 	    XUnmapWindow (dpy, mainWindow);
@@ -267,6 +270,7 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
     XUnmapWindow (dpy, VKWindow);
+    DrawTrayWindow (INACTIVE_ICON);
 
     return True;
 }
@@ -330,6 +334,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	
 	EnterChineseMode (False);
 	DrawMainWindow ();
+	DrawTrayWindow (ACTIVE_ICON);
 
 	if (ConnectIDGetTrackCursor (connect_id))
 	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);

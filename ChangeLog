@@ -1,3 +1,6 @@
+2009-05-02: Vern Sun <s5unty AT gmail.com>
+        * 增加托盘图标功能
+
 2009-04-13: Yuking <yuking_net@sohu.com>
 	* 修正五笔码表中的一些致命错误
 	* src/ime.c: 修正某些时候无法用0选择候选字的问题

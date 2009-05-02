@@ -140,6 +140,7 @@ int main (int argc, char *argv[])
     CreateVKWindow ();		//创建候选词窗口
     CreateInputWindow ();	//创建输入窗口
     CreateAboutWindow ();	//创建关于窗口
+    CreateTrayWindow ();    //创建系统托盘窗口
 
     //处理颜色，即候选词窗口的颜色，也就是我们在“~/.fcitx/config”定义的那些颜色信息
     InitGC (inputWindow);
