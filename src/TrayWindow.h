@@ -6,8 +6,6 @@
 #include <X11/Xft/Xft.h>
 #include <X11/extensions/shape.h>
 #include <string.h>
-#include "../xpm/inactive.xpm"
-#include "../xpm/active.xpm"
 #include "tray.h"
 
 #define INACTIVE_ICON 0

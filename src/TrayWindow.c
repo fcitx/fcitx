@@ -1,4 +1,6 @@
 #include "TrayWindow.h"
+#include "inactive.xpm"
+#include "active.xpm"
 
 tray_win_t tray;
 extern Display *dpy;

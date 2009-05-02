@@ -46,6 +46,7 @@
 #include "ui.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
+#include "TrayWindow.h"
 #include "vk.h"
 #include "ime.h"
 #include "table.h"
