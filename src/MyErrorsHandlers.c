@@ -21,6 +21,8 @@
 #include <config.h>
 #endif
 
+#define HAVE_LOG
+
 #include "MyErrorsHandlers.h"
 
 #include <stdio.h>
@@ -43,6 +45,10 @@
 #define SIGUNUSED 32
 #endif
 
+#ifdef HAVE_LOG
+FILE *logfile;
+#endif
+
 XErrorHandler   oldXErrorHandler;
 
 //extern Bool     bLumaQQ;
@@ -57,9 +63,19 @@ void SetMyExceptionHandler (void)
 
 void OnException (int signo)
 {
-
-    fprintf (stdout, "\nFCITX -- Get Signal No.: %d\n", signo);
-
+    fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
+    
+#ifdef HAVE_LOG    
+    struct tm  *ts;
+    time_t now=time(NULL);
+    char       buf[80];
+    
+    ts = localtime(&now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+    logfile=fopen("/tmp/fcitx.log", "a+t");     
+    fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
+    fclose(logfile);
+#endif
     switch (signo) {
     case SIGHUP:
 	LoadConfig (False);
@@ -87,12 +103,22 @@ void SetMyXErrorHandler (void)
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
-    /*这个错误信息没有任何用处，去掉好了
-       char            str[256];
+#ifdef HAVE_LOG    
+    char            str[256];
+    struct tm  *ts;
+    time_t now=time(NULL);
+    char       buf[80];
+    
+    XGetErrorText (dpy, event->error_code, str, 255);
+    
+    ts = localtime(&now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+    logfile=fopen("/tmp/fcitx.log", "a+t");
+    fprintf (logfile, "fcitx: %s\n", buf);
+    fprintf (logfile, "fcitx: %s\n", str);
+    fclose(logfile);
+#endif
 
-       XGetErrorText (dpy, event->error_code, str, 255);
-       fprintf (stdout, "fcitx: %s\n", str);
-     */
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
 
