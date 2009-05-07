@@ -118,6 +118,8 @@ extern Bool     bShowVersion;
 extern time_t   timeStart;
 extern uint     iHZInputed;
 
+extern CARD16	connect_id;
+
 #ifdef _DEBUG
 extern char     strUserLocale[];
 extern char     strXModifiers[];
@@ -178,7 +180,7 @@ void DisplayInputWindow (void)
     fprintf (stderr, "DISPLAY InputWindow\n");
 #endif
     CalInputWindow();
-    DrawInputWindow();
+    MoveInputWindow(connect_id);
     if (uMessageUp || uMessageDown)
 	XMapRaised (dpy, inputWindow);
 }
