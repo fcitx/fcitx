@@ -108,7 +108,7 @@ extern INT8     iIMIndex;
 extern CARD16   connect_id;
 extern Bool     bShowVK;
 extern Bool     bVK;
-
+extern Bool 	bIsDisplaying;
 //added by yunfan
 extern Window   aboutWindow;
 extern Atom     about_protocol_atom;
@@ -769,3 +769,15 @@ Bool MouseClick (int *x, int *y, Window window)
 }
 */
 /* ****************************************************************** */
+
+Bool IsWindowVisible(Window window)
+{
+    XWindowAttributes attrs;
+    
+    XGetWindowAttributes( dpy, window, &attrs );
+    
+    if ( attrs.map_state==IsUnmapped)
+	return False;
+
+    return True;
+}

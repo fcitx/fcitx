@@ -152,9 +152,9 @@ int main (int argc, char *argv[])
     //处理主窗口的显示
     if (hideMainWindow != HM_HIDE) {
 	DisplayMainWindow ();
-	DrawMainWindow ();
+	DrawMainWindow ();	
     }
-
+    
     //初始化输入法
     if (!InitXIM (inputWindow, imname))
 	exit (4);
@@ -173,7 +173,7 @@ int main (int argc, char *argv[])
     }
     
     SetMyExceptionHandler();		//处理事件
-
+    
     //主循环，即XWindow的消息循环
     for (;;) {
 	XNextEvent (dpy, &event);					//等待一个事件发生

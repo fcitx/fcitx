@@ -223,7 +223,8 @@ void ResetInput (void)
 
     bIsInLegend = False;
     iInCap = 0;
-
+    uMessageUp = 0;
+    
     if (!IsIM (strNameOfPinyin))
 	bShowCursor = False;
 
@@ -255,10 +256,7 @@ void ChangeIMState (CARD16 _connect_id)
 	else
 	    DisplayInputWindow ();
 
-	if (ConnectIDGetTrackCursor (_connect_id))
-	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-	else
-	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+	MoveInputWindow(_connect_id);
     }
     else {
 	SetConnectID (_connect_id, IS_ENG);
@@ -461,15 +459,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
 		    SetConnectID (call_data->connect_id, IS_CHN);
 
-		    if (bShowInputWindowTriggering && !bCorner) {
-			DrawInputWindow ();
+		    if (bShowInputWindowTriggering && !bCorner)
 			DisplayInputWindow ();
-		    }
 
-		    if (ConnectIDGetTrackCursor (call_data->connect_id))
-			XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-		    else
-			XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
+		    MoveInputWindow(call_data->connect_id);
 
 		    EnterChineseMode (False);
 		    DrawMainWindow ();
@@ -853,7 +846,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 
-	DrawInputWindow ();
 	DisplayInputWindow ();
 
 	break;
@@ -866,13 +858,11 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	uMessageDown = 1;
 	strcpy (messageDown[0].strMsg, strStringGet);
 	messageDown[0].type = MSG_TIPS;
-	DrawInputWindow ();
 	DisplayInputWindow ();
 	break;
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
 	bShowPrev = False;
-	DrawInputWindow ();
 	DisplayInputWindow ();
 	break;
     case IRV_GET_LEGEND:
@@ -886,7 +876,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
-	    DrawInputWindow ();
 	    DisplayInputWindow ();
 	}
 	else {

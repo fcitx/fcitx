@@ -31,6 +31,7 @@
 #define _INPUT_WINDOW_H
 
 #include <X11/Xlib.h>
+#include "IMdkit.h"
 
 #define INPUTWND_STARTX	300
 #define INPUTWND_WIDTH	50
@@ -61,13 +62,14 @@ typedef struct {
 } MESSAGE;
 
 Bool            CreateInputWindow (void);
-void            DisplayInputWindow (void);
+void            DisplayInputWindow (void);  //True: Call XMapWindow, False: Do not call it
+void		DrawInputWindow (void);
+void		CalInputWindow (void);
 void            InitInputWindowColor (void);
 void            CalculateInputWindowHeight (void);
 void            DrawCursor (int iPos);
 void            DisplayMessageUp (void);
 void            DisplayMessageDown (void);
-void            DrawInputWindow (void);
 void            ResetInputWindow (void);
-
+void		MoveInputWindow(CARD16 connect_id);
 #endif

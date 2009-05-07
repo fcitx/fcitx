@@ -21,7 +21,7 @@ typedef struct tray_win {
 } tray_win_t;
 
 Bool CreateTrayWindow();
-void DrawTrayWindow();
+void DrawTrayWindow(int f_state);
 void tray_win_deinit(tray_win_t *f_tray);
 
 #endif

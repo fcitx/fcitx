@@ -89,6 +89,7 @@ Bool            bShowNext = False;
 Bool            bTrackCursor = True;
 Bool            bCenterInputWindow = True;
 Bool            bShowInputWindowTriggering = True;
+Bool		bIsDisplaying = False;
 
 int             iCursorPos = 0;
 Bool            bShowCursor = False;
@@ -148,7 +149,7 @@ Bool CreateInputWindow (void)
 	return False;
 
     XChangeWindowAttributes (dpy, inputWindow, attribmask, &attrib);
-    XSelectInput (dpy, inputWindow, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
+    XSelectInput (dpy, inputWindow, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
     
     InitInputWindowColor ();
 
@@ -176,6 +177,8 @@ void DisplayInputWindow (void)
 #ifdef _DEBUG
     fprintf (stderr, "DISPLAY InputWindow\n");
 #endif
+    CalInputWindow();
+    DrawInputWindow();
     if (uMessageUp || uMessageDown)
 	XMapRaised (dpy, inputWindow);
 }
@@ -229,25 +232,19 @@ void ResetInputWindow (void)
     uMessageUp = 0;
 }
 
-void DrawInputWindow (void)
+void CalInputWindow (void)
 {
     int             i;
-    XImage         *mask;
-    XpmAttributes   attrib;
 
 #ifdef _USE_XFT
     char            strTemp[MESSAGE_MAX_LENGTH];
     char           *p1, *p2;
     Bool            bEn;
 #endif
-    XWindowAttributes wa;
 
 #ifdef _DEBUG
-    fprintf (stderr, "DRAW InputWindow\n");
+    fprintf (stderr, "CAL InputWindow\n");
 #endif
-
-    XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
-    XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
     if (!uMessageUp && !uMessageDown) {
 	bShowCursor = False;
@@ -384,28 +381,16 @@ void DrawInputWindow (void)
 	if (iInputWindowWidth < iFixedInputWindowWidth)
 	    iInputWindowWidth = iFixedInputWindowWidth;
     }
+}
 
-    XGetWindowAttributes (dpy, inputWindow, &wa);
-    if ((wa.x + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-	i = DisplayWidth (dpy, iScreen) - iInputWindowWidth - 2;
-    else if (wa.x < 0) {
-	if (iInputWindowWidth <= DisplayWidth (dpy, iScreen))
-	    i = 0;
-	else
-	    i = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
-    }
-    else
-	i = wa.x;
-
-    XMoveWindow (dpy, inputWindow, i, wa.y);
-    if (bCenterInputWindow && !bTrackCursor) {
-	iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
-	if (iInputWindowX < 0)
-	    iInputWindowX = 0;
-	XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
-    }
-
-    XResizeWindow (dpy, inputWindow, iInputWindowWidth, iInputWindowHeight);
+void DrawInputWindow(void)
+{
+    XImage         *mask;
+    XpmAttributes   attrib;
+    int	i;
+    
+    XClearArea (dpy, inputWindow, 2, 2, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
+    XClearArea (dpy, inputWindow, 2, iInputWindowHeight / 2 + 1, iInputWindowWidth - 2, iInputWindowHeight / 2 - 2, False);
 
     DisplayMessageUp ();
     DisplayMessageDown ();
@@ -642,4 +627,22 @@ void DrawCursor (int iPos)
 {
     XDrawLine (dpy, inputWindow, cursorColor.gc, iPos, 8, iPos, iInputWindowHeight / 2 - 4);
     XDrawLine (dpy, inputWindow, cursorColor.gc, iPos + 1, 8, iPos + 1, iInputWindowHeight / 2 - 4);
+}
+
+void MoveInputWindow(CARD16 connect_id)
+{
+    if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor)
+	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);  
+    else {
+	position * pos = ConnectIDGetPos(connect_id);
+	if (bCenterInputWindow) {
+	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
+	    if (iInputWindowX < 0)
+		iInputWindowX = 0;
+	}
+	else
+	    iInputWindowX = pos ? pos->x : iInputWindowX;
+
+	XMoveResizeWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY, iInputWindowWidth, iInputWindowHeight);  
+    }
 }

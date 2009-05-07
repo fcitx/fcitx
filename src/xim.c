@@ -133,7 +133,9 @@ Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
-    
+    if (!IsWindowVisible(inputWindow))
+	return True;
+
     SetIC (call_data);
 
     if (CurrentIC == NULL)
@@ -173,25 +175,12 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		else
 		    iTempInputWindowY += iOffsetY;
 
-		XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-
 		ConnectIDSetTrackCursor (call_data->connect_id, True);
 	    }
 	}
     }
-
-    if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
-	position * pos = ConnectIDGetPos(connect_id);
-	if (bCenterInputWindow) {
-	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
-	    if (iInputWindowX < 0)
-		iInputWindowX = 0;
-	}
-	else
-	    iInputWindowX = pos ? pos->x : iInputWindowX;
-	    
-	XMoveWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY);
-    }
+    
+    MoveInputWindow(call_data->connect_id);
 
     return True;
 }
@@ -209,12 +198,12 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
  	    
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
-	DrawTrayWindow (ACTIVE_ICON);
+	
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else if (lastConnectID != connect_id)
-		XUnmapWindow (dpy, inputWindow);
+	    else 
+		DisplayInputWindow();
 	}
 	else {
 	    XUnmapWindow (dpy, inputWindow);
@@ -227,13 +216,13 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
-
+	DrawTrayWindow (INACTIVE_ICON);
+	
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
-	    DrawTrayWindow (ACTIVE_ICON);
 	}
-	else
+	else 
 	    XUnmapWindow (dpy, mainWindow);
     }
 
@@ -250,27 +239,16 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     syncData.icid = icid;
     IMSyncXlib(ims, (XPointer)&syncData);*/
     /* ****************************************** */
-    if ( !bTrackCursor || !ConnectIDGetTrackCursor (call_data->connect_id) ) {
-	position * pos = ConnectIDGetPos(connect_id);
-	if (bCenterInputWindow) {
-	    iInputWindowX = (DisplayWidth (dpy, iScreen) - iInputWindowWidth) / 2;
-	    if (iInputWindowX < 0)
-		iInputWindowX = 0;
-	}
-	else
-	    iInputWindowX = pos ? pos->x : iInputWindowX;	    
-	    
-	XMoveWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY);
-    }
-
+    
     return True;
 }
 
 Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);
-    DrawTrayWindow (INACTIVE_ICON);
+    if (call_data->connect_id==connect_id) {
+	XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, VKWindow);
+    }
 
     return True;
 }
@@ -324,6 +302,7 @@ void EnterChineseMode (Bool bState)
     }
 
     DisplayMainWindow ();
+    DrawTrayWindow (ACTIVE_ICON);
 }
 
 Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
@@ -336,15 +315,8 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	DrawMainWindow ();
 	DrawTrayWindow (ACTIVE_ICON);
 
-	if (ConnectIDGetTrackCursor (connect_id))
-	    XMoveWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY);
-	else
-	    XMoveWindow (dpy, inputWindow, iInputWindowX, iInputWindowY);
-
-	if (bShowInputWindowTriggering && !bCorner) {
-	    DrawInputWindow ();
+	if (bShowInputWindowTriggering && !bCorner)
 	    DisplayInputWindow ();
-	}
     }
     else
 	return False;

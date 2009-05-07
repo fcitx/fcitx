@@ -2,6 +2,7 @@
 #include "inactive.xpm"
 #include "active.xpm"
 
+Bool tray_mapped = False;
 tray_win_t tray;
 extern Display *dpy;
 
@@ -12,6 +13,12 @@ Bool CreateTrayWindow() {
             WhitePixel (dpy, DefaultScreen (dpy)));
     if (tray.window == (Window) NULL)
         return False;
+
+    XSizeHints size_hints;
+    size_hints.flags = PWinGravity | PBaseSize;
+    size_hints.base_width = 16;
+    size_hints.base_height = 16;
+    XSetWMNormalHints(dpy, tray.window, &size_hints);
 
     tray.xpm_attr.valuemask = XpmCloseness;
     tray.xpm_attr.closeness = 40000;
@@ -40,8 +47,6 @@ Bool CreateTrayWindow() {
     gv.foreground = BlackPixel(dpy, DefaultScreen(dpy));
     tray.gc = XCreateGC(dpy, tray.window, GCFunction|GCForeground, &gv);
 
-    tray_init(dpy, tray.window);
-
     /* inital set up of shaped window */
     XCopyArea(dpy, tray.icon[INACTIVE_ICON], tray.window, tray.gc,
 	      0, 0, tray.xpm_attr.width, tray.xpm_attr.height, 0, 0);
@@ -57,6 +62,11 @@ Bool CreateTrayWindow() {
 }
 
 void DrawTrayWindow(int f_state) {
+    if (!tray_mapped) {
+        tray_mapped = True;
+        tray_init(dpy, tray.window);
+    }
+    
     XCopyArea(dpy, tray.icon[f_state], tray.window, tray.gc,
           0, 0, tray.xpm_attr.width, tray.xpm_attr.height, 0, 0);
 }
