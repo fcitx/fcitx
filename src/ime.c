@@ -891,13 +891,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    DoPhraseTips ();
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//間待由柴忖方
 	ResetInput ();
-
+        lastIsSingleHZ = 0;
+	
 	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
 	    XUnmapWindow (dpy, inputWindow);
 	else
 	    DrawInputWindow ();
-
-	lastIsSingleHZ = 0;
 
 	break;
     case IRV_ENG:

@@ -769,7 +769,7 @@ Bool MouseClick (int *x, int *y, Window window)
 }
 */
 /* ****************************************************************** */
-
+/* 
 Bool IsWindowVisible(Window window)
 {
     XWindowAttributes attrs;
@@ -781,3 +781,4 @@ Bool IsWindowVisible(Window window)
 
     return True;
 }
+*/

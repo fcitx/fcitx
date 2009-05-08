@@ -78,6 +78,8 @@ Bool            MouseClick (int *x, int *y, Window window);
 /*
 void            WaitButtonRelease (XPoint * point);
 */
+/*
 Bool		IsWindowVisible(Window window);
+*/
 
 #endif

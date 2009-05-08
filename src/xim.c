@@ -133,9 +133,9 @@ Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
-    if (!IsWindowVisible(inputWindow))
+/*    if (!IsWindowVisible(inputWindow))
 	return True;
-
+*/
     SetIC (call_data);
 
     if (CurrentIC == NULL)
@@ -179,7 +179,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 	    }
 	}
     }
-    
+
     MoveInputWindow(call_data->connect_id);
 
     return True;
