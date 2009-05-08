@@ -62,7 +62,7 @@ typedef struct {
 } MESSAGE;
 
 Bool            CreateInputWindow (void);
-void            DisplayInputWindow (void);  //True: Call XMapWindow, False: Do not call it
+void            DisplayInputWindow (void);
 void		DrawInputWindow (void);
 void		CalInputWindow (void);
 void            InitInputWindowColor (void);

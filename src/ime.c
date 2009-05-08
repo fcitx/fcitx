@@ -255,8 +255,6 @@ void ChangeIMState (CARD16 _connect_id)
 	    DisplayVKWindow ();
 	else
 	    DisplayInputWindow ();
-
-	MoveInputWindow(_connect_id);
     }
     else {
 	SetConnectID (_connect_id, IS_ENG);
@@ -461,8 +459,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 		    if (bShowInputWindowTriggering && !bCorner)
 			DisplayInputWindow ();
-
-		    MoveInputWindow(call_data->connect_id);
+		    else
+		        MoveInputWindow(call_data->connect_id);
 
 		    EnterChineseMode (False);
 		    DrawMainWindow ();
@@ -847,6 +845,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
 
 	DisplayInputWindow ();
+	DrawInputWindow();
 
 	break;
     case IRV_DISPLAY_LAST:
@@ -864,6 +863,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bShowNext = False;
 	bShowPrev = False;
 	DisplayInputWindow ();
+	DrawInputWindow();
 	break;
     case IRV_GET_LEGEND:
 	SendHZtoClient (call_data, strStringGet);

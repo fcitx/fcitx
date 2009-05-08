@@ -202,8 +202,6 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
-	    else 
-		DisplayInputWindow();
 	}
 	else {
 	    XUnmapWindow (dpy, inputWindow);
