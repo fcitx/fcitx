@@ -46,11 +46,9 @@ CARD16          lastConnectID = 0;
 IC             *CurrentIC = NULL;
 char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
-//该变量是GTK+ OverTheSpot光标跟随的临时解决方案
-/* Issue 11: piaoairy: 为适应generic_config_integer() , 改INT8 为int */
-int            iOffsetX = 0;
-int            iOffsetY = 16;
-    
+int		iClientCursorX = INPUTWND_STARTX;
+int		iClientCursorY = INPUTWND_STARTY;
+
 extern IM      *im;
 extern INT8     iIMIndex;
 
@@ -133,9 +131,6 @@ Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 
 Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
-/*    if (!IsWindowVisible(inputWindow))
-	return True;
-*/
     SetIC (call_data);
 
     if (CurrentIC == NULL)
@@ -151,30 +146,12 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 	for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
 	    if (!strcmp (XNSpotLocation, pre_attr->name)) {
 		if (CurrentIC->focus_win)
-		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);
+		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);
 		else if (CurrentIC->client_win)
-		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iTempInputWindowX, &iTempInputWindowY, &window);		    
+		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);		    
 		else
 		    return True;
-
-		if (iTempInputWindowX < 0)
-		    iTempInputWindowX = 0;
-		else if ((iTempInputWindowX + iInputWindowWidth + iOffsetX) > DisplayWidth (dpy, iScreen)) {
-		    if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
-			iTempInputWindowX -= iInputWindowWidth;
-		    else
-			iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
-		}
-		else
-		    iTempInputWindowX += iOffsetX;
-
-		if (iTempInputWindowY < 0)
-		    iTempInputWindowY = 0;
-		else if ((iTempInputWindowY + iInputWindowHeight + iOffsetY) > DisplayHeight (dpy, iScreen))
-		    iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight ;
-		else
-		    iTempInputWindowY += iOffsetY;
-
+		    
 		ConnectIDSetTrackCursor (call_data->connect_id, True);
 	    }
 	}

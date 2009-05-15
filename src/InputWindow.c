@@ -48,7 +48,7 @@
 Window          inputWindow;
 int             iInputWindowX = INPUTWND_STARTX;
 int             iInputWindowY = INPUTWND_STARTY;
-int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
+// int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
 int		iFixedInputWindowWidth = 0;
@@ -96,6 +96,11 @@ Bool            bShowCursor = False;
 
 _3D_EFFECT      _3DEffectInputWindow = _3D_LOWER;
 
+//这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
+/* Issue 11: piaoairy: 为适应generic_config_integer(), 改INT8 为int */
+int		iOffsetX = 0;
+int		iOffsetY = 16;
+
 extern Display *dpy;
 extern int      iScreen;
 
@@ -119,6 +124,9 @@ extern time_t   timeStart;
 extern uint     iHZInputed;
 
 extern CARD16	connect_id;
+
+extern int	iClientCursorX;
+extern int	iClientCursorY;
 
 #ifdef _DEBUG
 extern char     strUserLocale[];
@@ -633,8 +641,27 @@ void DrawCursor (int iPos)
 
 void MoveInputWindow(CARD16 connect_id)
 {
-    if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor)
+    if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor) {
+	int iTempInputWindowX, iTempInputWindowY;
+	    
+	if (iClientCursorX < 0)
+	    iTempInputWindowX = 0;
+	else 
+	    iTempInputWindowX = iClientCursorX + iOffsetX;
+	    
+	if (iClientCursorY < 0)
+	    iTempInputWindowY = 0;
+	else
+	    iTempInputWindowY = iClientCursorY + iOffsetY;	
+
+	if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+	    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
+
+	if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
+	    iTempInputWindowY = iClientCursorY - 2 * iInputWindowHeight ;
+
 	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);  
+    }
     else {
 	position * pos = ConnectIDGetPos(connect_id);
 	if (bCenterInputWindow) {

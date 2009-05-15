@@ -52,8 +52,6 @@ extern int      iMainWindowX;
 extern int      iMainWindowY;
 extern int      iInputWindowX;
 extern int      iInputWindowY;
-extern int      iTempInputWindowX;
-extern int      iTempInputWindowY;
 extern int      iInputWindowWidth;
 extern int      iInputWindowHeight;
 
@@ -1587,9 +1585,6 @@ void SaveProfile (void)
     iIMIndex_tmp = iIMIndex;		/* piaoairy add 20080518 */
     write_configures(fp, profiles);
     fclose(fp);
-
-    iTempInputWindowX = iInputWindowX;
-    iTempInputWindowY = iInputWindowY;
 }
 
 void SetHotKey (char *strKeys, HOTKEYS * hotkey)
