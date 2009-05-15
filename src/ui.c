@@ -45,6 +45,7 @@
 #include "tools.h"
 #include "sp.h"
 #include "about.h"
+#include "TrayWindow.h"
 
 Display        *dpy;
 int             iScreen;
@@ -101,6 +102,7 @@ extern WINDOW_COLOR mainWindowColor;
 extern WINDOW_COLOR inputWindowColor;
 extern WINDOW_COLOR VKWindowColor;
 extern HIDE_MAINWINDOW hideMainWindow;
+extern Bool	bMainWindow_Hiden;
 extern IC      *CurrentIC;
 extern int      MAINWND_WIDTH;
 extern Bool     bCompactMainWindow;
@@ -109,11 +111,13 @@ extern CARD16   connect_id;
 extern Bool     bShowVK;
 extern Bool     bVK;
 extern Bool 	bIsDisplaying;
+
+extern tray_win_t tray;
+
 //added by yunfan
 extern Window   aboutWindow;
 extern Atom     about_protocol_atom;
 extern Atom     about_kill_atom;
-
 //**********************************
 
 Bool InitX (void)
@@ -417,13 +421,16 @@ void MyXEventHandler (XEvent * event)
 		    iMainWindowY = event->xbutton.y;
 		    if (!MouseClick (&iMainWindowX, &iMainWindowY, mainWindow)) {
 			if (ConnectIDGetState (connect_id) != IS_CHN) {
-			    XUnmapWindow (dpy, inputWindow);
-			    XUnmapWindow (dpy, VKWindow);
 			    SetIMState ((ConnectIDGetState (connect_id) == IS_ENG) ? False : True);
 			    DrawMainWindow ();
 			}
 			else
 			    ChangeIMState (connect_id);
+			    
+			if (ConnectIDGetState (connect_id) == IS_CHN)
+			    DrawTrayWindow (ACTIVE_ICON);
+			else
+			    DrawTrayWindow (INACTIVE_ICON);
 		    }
 		}
 	    }
@@ -434,7 +441,7 @@ void MyXEventHandler (XEvent * event)
 		    MouseClick (&iVKWindowX, &iVKWindowY, VKWindow);
 		    DrawVKWindow ();
 		}
-	    }
+	    }	    
 	    //added by yunfan
 	    else if (event->xbutton.window == aboutWindow) {
 		XUnmapWindow (dpy, aboutWindow);
@@ -483,12 +490,38 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
 		    XUnmapWindow (dpy, mainWindow);
-		}
 		else if (!bVK) {
 		    bCompactMainWindow = !bCompactMainWindow;
 		    SwitchIM (iIMIndex);
+		}
+		break;
+	    }
+	}	
+	else if (event->xbutton.window == tray.window) {
+	    switch (event->xbutton.button) {
+	    case Button1:
+		if (ConnectIDGetState (connect_id) != IS_CHN) {
+		    SetIMState (True);
+		    DrawTrayWindow (ACTIVE_ICON);
+		    DrawMainWindow ();
+		}
+		else {
+		    SetIMState (False);
+		    DrawTrayWindow (INACTIVE_ICON);
+	        }
+
+		break;
+	    case Button2:
+		if (bMainWindow_Hiden) {
+		    bMainWindow_Hiden = False;
+		    DisplayMainWindow();
+		    DrawMainWindow();
+		}
+		else {
+		    bMainWindow_Hiden = True;
+		    XUnmapWindow(dpy,mainWindow);
 		}
 		break;
 	    }
