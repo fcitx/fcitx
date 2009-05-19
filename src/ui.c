@@ -112,7 +112,9 @@ extern Bool     bShowVK;
 extern Bool     bVK;
 extern Bool 	bIsDisplaying;
 
+#ifdef _ENABLE_TRAY
 extern tray_win_t tray;
+#endif
 
 //added by yunfan
 extern Window   aboutWindow;
@@ -426,11 +428,12 @@ void MyXEventHandler (XEvent * event)
 			}
 			else
 			    ChangeIMState (connect_id);
-			    
+#ifdef _ENABLE_TRAY			    
 			if (ConnectIDGetState (connect_id) == IS_CHN)
 			    DrawTrayWindow (ACTIVE_ICON);
 			else
 			    DrawTrayWindow (INACTIVE_ICON);
+#endif			    
 		    }
 		}
 	    }
@@ -498,14 +501,16 @@ void MyXEventHandler (XEvent * event)
 		}
 		break;
 	    }
-	}	
+	}
+#ifdef _ENABLE_TRAY	
 	else if (event->xbutton.window == tray.window) {
 	    switch (event->xbutton.button) {
 	    case Button1:
 		if (ConnectIDGetState (connect_id) != IS_CHN) {
 		    SetIMState (True);
-		    DrawTrayWindow (ACTIVE_ICON);
 		    DrawMainWindow ();
+
+		    DrawTrayWindow (ACTIVE_ICON);
 		}
 		else {
 		    SetIMState (False);
@@ -526,6 +531,7 @@ void MyXEventHandler (XEvent * event)
 		break;
 	    }
 	}
+#endif	
 	break;
     case FocusIn:
 	if (ConnectIDGetState (connect_id) == IS_CHN)

@@ -30,7 +30,9 @@
 #include "tools.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
+#ifdef _ENABLE_TRAY
 #include "TrayWindow.h"
+#endif
 #include "vk.h"
 #include "ui.h"
 
@@ -191,8 +193,9 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
+#ifdef _ENABLE_TRAY	
 	DrawTrayWindow (INACTIVE_ICON);
-	
+#endif
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
@@ -277,7 +280,9 @@ void EnterChineseMode (Bool bState)
     }
 
     DisplayMainWindow ();
+#ifdef _ENABLE_TRAY	
     DrawTrayWindow (ACTIVE_ICON);
+#endif
 }
 
 Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
@@ -288,10 +293,13 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	
 	EnterChineseMode (False);
 	DrawMainWindow ();
-	DrawTrayWindow (ACTIVE_ICON);
-
+	
 	if (bShowInputWindowTriggering && !bCorner)
 	    DisplayInputWindow ();
+	    
+#ifdef _ENABLE_TRAY	
+	DrawTrayWindow (ACTIVE_ICON);
+#endif
     }
     else
 	return False;

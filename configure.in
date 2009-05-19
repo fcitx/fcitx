@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, "3.6.0-090515")
+AM_INIT_AUTOMAKE(fcitx, "3.6.0-090519")
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
@@ -48,6 +48,21 @@ if test "x$enable_debug" = "xyes"; then
   CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS -D_DEBUG"
 else
   CFLAGS="$CFLAGS $X_CFLAGS"
+fi
+
+# Option to enable the TRAY
+AC_ARG_ENABLE(tray,
+[  --enable-tray            Enable tray icon],
+[case "${enableval}" in
+  yes)  enable_tray=yes ;;
+  no)   enable_tray=no ;;
+  *) AC_MSG_ERROR([bad value "${enableval}" for --enable-tray, use "yes" (default) or "no".]) ;;
+esac],[])
+
+if test "x$enable_tray" = "xno"; then
+  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS"
+else
+  CFLAGS="$CFLAGS $X_CFLAGS -D_ENABLE_TRAY"
 fi
 
 # Option to enable the Xft library for Freetype font support.

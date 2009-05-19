@@ -1,3 +1,5 @@
+#ifdef _ENABLE_TRAY
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -173,3 +175,4 @@ tray_map_window (Display* dpy, Window win)
     tray_set_xembed_info (dpy, win, XEMBED_MAPPED);
 }
 
+#endif

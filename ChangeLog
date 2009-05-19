@@ -1,3 +1,7 @@
+2009-05-19: Yuking <yuking_net@sohu.com>
+        * src/main.c: 修正启动时不显示托盘图标的问题
+	* configure.in: 将托盘图标作为一个可配置选项
+	
 2009-05-19: hubert_star AT forum.ubuntu.com.cn
         * src/ime.c: keycode在32到126之间时，处理keypress而忽略keyrelease
 	

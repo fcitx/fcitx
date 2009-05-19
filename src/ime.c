@@ -243,7 +243,10 @@ void CloseIM (IMForwardEventStruct * call_data)
     bVK = False;
     SwitchIM (-2);
     DrawMainWindow ();
+    
+#ifdef _ENABLE_TRAY
     DrawTrayWindow (INACTIVE_ICON);
+#endif
 }
 
 void ChangeIMState (CARD16 _connect_id)

@@ -1,3 +1,5 @@
+#ifdef _ENABLE_TRAY
+
 #include "TrayWindow.h"
 #include "inactive.xpm"
 #include "active.xpm"
@@ -66,11 +68,12 @@ void DrawTrayWindow(int f_state) {
         tray_mapped = True;
         tray_init(dpy, tray.window);
     }
-    
     XCopyArea(dpy, tray.icon[f_state], tray.window, tray.gc,
-          0, 0, tray.xpm_attr.width, tray.xpm_attr.height, 0, 0);
+	      0, 0, tray.xpm_attr.width, tray.xpm_attr.height, 0, 0);
 }
 
 void tray_win_deinit(tray_win_t *f_tray) {
     ;
 }
+
+#endif
