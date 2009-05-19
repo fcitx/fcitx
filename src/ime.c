@@ -336,6 +336,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
     printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
 #endif
 
+    /* Added by hubert_star AT forum.ubuntu.com.cn */
+    if ((iKey >= 32 ) && (iKey <= 126) && (call_data->event.type == KeyRelease)) {
+        return;
+    }
+    /* ******************************************* */
+    
     if (call_data->event.type == KeyRelease) {	
 	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	    if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {

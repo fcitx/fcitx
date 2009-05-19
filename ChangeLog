@@ -1,3 +1,6 @@
+2009-05-19: hubert_star AT forum.ubuntu.com.cn
+        * src/ime.c: keycode在32到126之间时，处理keypress而忽略keyrelease
+	
 2009-05-15: Yuking <yuking_net@sohu.com>
         * 修正光标跟随时输入条位置的一些小问题
 
