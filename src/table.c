@@ -1168,8 +1168,8 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 		iCodeInputCount--;
 		strCodeInput[iCodeInputCount] = '\0';
-
-		if (iCodeInputCount == 1 && strCodeInput[0] == table[iTableIMIndex].cPinyin) {
+		
+		if (iCodeInputCount == 1 && strCodeInput[0] == table[iTableIMIndex].cPinyin && table[iTableIMIndex].bUsePY) {
 		    iCandWordCount = 0;
 		    retVal = IRV_DISPLAY_LAST;
 		}

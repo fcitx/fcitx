@@ -866,7 +866,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	uMessageDown = 1;
 	strcpy (messageDown[0].strMsg, strStringGet);
 	messageDown[0].type = MSG_TIPS;
-	DisplayInputWindow ();
+	DrawInputWindow ();
 	break;
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
