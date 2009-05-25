@@ -852,10 +852,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    if (iCurrentCandPage < iCandPageCount)
 		bShowNext = True;
 	}
-
 	DisplayInputWindow ();
-	DrawInputWindow();
-
+	
 	break;
     case IRV_DISPLAY_LAST:
 	bShowNext = bShowPrev = False;
@@ -866,13 +864,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	uMessageDown = 1;
 	strcpy (messageDown[0].strMsg, strStringGet);
 	messageDown[0].type = MSG_TIPS;
-	DrawInputWindow ();
+	DisplayInputWindow ();
+	
 	break;
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
 	bShowPrev = False;
 	DisplayInputWindow ();
-	DrawInputWindow();
+	
 	break;
     case IRV_GET_LEGEND:
 	SendHZtoClient (call_data, strStringGet);
