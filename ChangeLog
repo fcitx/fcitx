@@ -1,3 +1,7 @@
+2009-05-26: Yuking <yuking_net@sohu.com>
+        * src/ime.c: 修正输入条有时候显示不正常的问题
+	* 当编译了托盘图标时，可选择是否显示托盘图标
+	
 2009-05-19: Yuking <yuking_net@sohu.com>
         * src/main.c: 修正启动时不显示托盘图标的问题
 	* configure.in: 将托盘图标作为一个可配置选项

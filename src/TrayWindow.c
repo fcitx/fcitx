@@ -6,6 +6,8 @@
 
 Bool tray_mapped = False;
 tray_win_t tray;
+Bool bUseTrayIcon = True;
+
 extern Display *dpy;
 
 Bool CreateTrayWindow() {
@@ -64,6 +66,9 @@ Bool CreateTrayWindow() {
 }
 
 void DrawTrayWindow(int f_state) {
+    if ( !bUseTrayIcon )
+	return;
+	
     if (!tray_mapped) {
         tray_mapped = True;
         tray_init(dpy, tray.window);

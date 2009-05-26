@@ -174,6 +174,10 @@ extern Bool     bUseBold;
 extern int      iOffsetX;
 extern int      iOffsetY;
 
+#ifdef _ENABLE_TRAY
+extern Bool	bUseTrayIcon;
+#endif
+
 /*
 extern Bool     bStaticXIM;
 extern Bool     bNoReleaseKey;
@@ -675,6 +679,13 @@ Configure program_config[] = {
         .value_type = CONFIG_INTEGER,
         .value.integer = &bUseBold,
     },
+ #ifdef _ENABLE_TRAY
+    {
+        .name = "使用托盘图标",
+        .value_type = CONFIG_INTEGER,
+        .value.integer = &bUseTrayIcon,
+    },
+ #endif
     {
         .name = NULL,
     },
@@ -1179,7 +1190,7 @@ void LoadConfig (Bool bMode)
 
     //用以标识配置文件是用户家目录下的，还是从安装目录下拷贝过来的
     bIsReloadConfig = bMode;	// 全局变量，定义于“src/tool.c[193]"
-
+    
     pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
     if(!pbuf){
         fprintf(stderr, "error: get environment variable HOME\n");
@@ -1195,8 +1206,7 @@ void LoadConfig (Bool bMode)
         fp = fopen(buf, "r");
         if(!fp){
             perror("fopen");
-            exit(1);	/* 如果安装目录里面也没有配置文件，那就没办法了。
-						 * 只好告诉用户，无法运行了*/
+            exit(1);	// 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
         }
     }
 
@@ -1272,11 +1282,11 @@ void LoadConfig (Bool bMode)
             fprintf(stderr, "error: configure file: no group name at beginning\n");
             exit(1);
         }
-
         //找到该组中的配置项，并将其保存到对应的全局变量里面去
         for(tmpconfig = configure_groups[group_idx].configure;
                 tmpconfig->name; tmpconfig++)
         {
+
             if(strncmp(tmpconfig->name, pbuf, pbuf1-pbuf) == 0)
                 read_configure(tmpconfig, ++pbuf1);
         }
@@ -1331,9 +1341,8 @@ void SaveConfig (void)
     for(tmpgroup = configure_groups; tmpgroup->name; tmpgroup++){
         if(tmpgroup->comment)
             fprintf(fp, "# %s\n", tmpgroup->comment);	// 如果存在注释，先写入
-        fprintf(fp, "[%s]\n", tmpgroup->name);			// 接下来写入组的名字
-        write_configures(fp, tmpgroup->configure);		/* 最后将该组的每个配置项
-														 * 写入到文件中*/
+        fprintf(fp, "[%s]\n", tmpgroup->name);		// 接下来写入组的名字
+        write_configures(fp, tmpgroup->configure);	// 最后将该组的每个配置项写入到文件中
         fprintf(fp, "\n");		// 为增加可读性插入一个空行
     }
     fclose(fp);

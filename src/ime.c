@@ -853,6 +853,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 	DisplayInputWindow ();
+	DrawInputWindow ();
 	
 	break;
     case IRV_DISPLAY_LAST:
@@ -871,6 +872,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bShowNext = False;
 	bShowPrev = False;
 	DisplayInputWindow ();
+	DrawInputWindow ();
 	
 	break;
     case IRV_GET_LEGEND:

@@ -145,9 +145,7 @@ int main (int argc, char *argv[])
     CreateVKWindow ();		//创建候选词窗口
     CreateInputWindow ();	//创建输入窗口
     CreateAboutWindow ();	//创建关于窗口
-#ifdef _ENABLE_TRAY
-    CreateTrayWindow ();    //创建系统托盘窗口
-#endif
+
     //处理颜色，即候选词窗口的颜色，也就是我们在“~/.fcitx/config”定义的那些颜色信息
     InitGC (inputWindow);
 
@@ -179,10 +177,10 @@ int main (int argc, char *argv[])
     
     SetMyExceptionHandler();		//处理事件
 
-#ifdef _ENABLE_TRAY    
-    //显示托盘图标
-    DrawTrayWindow (ACTIVE_ICON);
-#endif    
+#ifdef _ENABLE_TRAY
+    CreateTrayWindow ();		//创建系统托盘窗口
+    DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
+#endif
     
     //主循环，即XWindow的消息循环
     for (;;) {
