@@ -223,7 +223,6 @@ void ResetInput (void)
 
     bIsInLegend = False;
     iInCap = 0;
-    uMessageUp = 0;
     
     if (!IsIM (strNameOfPinyin))
 	bShowCursor = False;
@@ -899,15 +898,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bLastIsNumber = False;
 	if (bPhraseTips && im[iIMIndex].PhraseTips && !bVK)
 	    DoPhraseTips ();
-	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
-	ResetInput ();
-        lastIsSingleHZ = 0;
+	iHZInputed += (int) (strlen (strStringGet) / 2);	
 	
 	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
 	    XUnmapWindow (dpy, inputWindow);
 	else
-	    DrawInputWindow ();
+	    DisplayInputWindow ();
 
+	ResetInput ();
+        lastIsSingleHZ = 0;
+	
 	break;
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
