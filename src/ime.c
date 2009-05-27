@@ -956,7 +956,8 @@ INPUT_RETURN_VALUE ChangeCorner (void)
 
     bCorner = !bCorner;
     DrawMainWindow ();
-
+    XUnmapWindow (dpy, inputWindow);
+    
     SaveProfile ();
 
     return IRV_DO_NOTHING;
