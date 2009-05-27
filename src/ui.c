@@ -821,3 +821,21 @@ Bool IsWindowVisible(Window window)
     return True;
 }
 */
+
+/* For debug only
+void OutputAsUTF8(char *str)
+{
+    char            strOutput[300];
+    char           *ps;
+    size_t          l1, l2;
+
+    ps = strOutput;
+    l1 = strlen (str);
+    l2 = 299;
+    l1 = iconv (convUTF8, (ICONV_CONST char **) (&str), &l1, &ps, &l2);
+    *ps = '\0';
+    ps = strOutput;
+    
+    puts(strOutput);
+}
+*/

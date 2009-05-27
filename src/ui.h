@@ -80,6 +80,7 @@ void            WaitButtonRelease (XPoint * point);
 */
 /*
 Bool		IsWindowVisible(Window window);
+void		OutputAsUTF8(char *str);
 */
 
 #endif

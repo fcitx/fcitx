@@ -2076,9 +2076,8 @@ RECORD         *TableFindPhrase (char *strHZ)
 	if (recTemp->strCode[0] != recordIndex[i].cCode)
 	    break;
 	if (!strcmp (recTemp->strHZ, strHZ)) {
-	    if (recTemp->bPinyin)
-	        break;
-	    return recTemp;
+	    if (!recTemp->bPinyin)
+		return recTemp;
         }
 
 	recTemp = recTemp->next;

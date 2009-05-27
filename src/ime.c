@@ -344,7 +344,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     }
     /* ******************************************* */
     
-    if (call_data->event.type == KeyRelease) {	
+    if (call_data->event.type == KeyRelease) {
 	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	    if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
 		if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
