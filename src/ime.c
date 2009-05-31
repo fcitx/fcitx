@@ -927,7 +927,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//間待由柴忖方
-	    DrawInputWindow ();
+	    DisplayInputWindow ();
 	}
 
 	break;
