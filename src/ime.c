@@ -902,8 +902,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	
 	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
 	    XUnmapWindow (dpy, inputWindow);
-	else
+	else {
 	    DisplayInputWindow ();
+	    DrawInputWindow ();
+        }
 
 	ResetInput ();
         lastIsSingleHZ = 0;

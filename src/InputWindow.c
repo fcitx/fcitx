@@ -657,8 +657,12 @@ void MoveInputWindow(CARD16 connect_id)
 	if ((iTempInputWindowX + iInputWindowWidth) > DisplayWidth (dpy, iScreen))
 	    iTempInputWindowX = DisplayWidth (dpy, iScreen) - iInputWindowWidth;
 
-	if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen))
-	    iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight ;
+	if ((iTempInputWindowY + iInputWindowHeight) > DisplayHeight (dpy, iScreen)) {
+	    if ( iTempInputWindowY > DisplayHeight (dpy, iScreen) )
+	        iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * iInputWindowHeight;
+	    else
+	        iTempInputWindowY = iTempInputWindowY - 2 * iInputWindowHeight;
+	}
 
 	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);  
     }
