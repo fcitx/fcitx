@@ -258,7 +258,6 @@ void CalInputWindow (void)
 
     if (!uMessageUp && !uMessageDown) {
 	bShowCursor = False;
-
 	if (bShowVersion) {
 	    uMessageUp = 1;
 	    strcpy (messageUp[0].strMsg, "FCITX ");

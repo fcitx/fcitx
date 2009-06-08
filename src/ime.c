@@ -465,13 +465,13 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		if (ConnectIDGetState (call_data->connect_id) == IS_ENG) {
 		    SetConnectID (call_data->connect_id, IS_CHN);
 
+		    EnterChineseMode (False);
+		    DrawMainWindow ();
+
 		    if (bShowInputWindowTriggering && !bCorner)
 			DisplayInputWindow ();
 		    else
 		        MoveInputWindow(call_data->connect_id);
-
-		    EnterChineseMode (False);
-		    DrawMainWindow ();
 		}
 		else
 		    CloseIM (call_data);
