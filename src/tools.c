@@ -153,7 +153,6 @@ extern Bool     bUseTable;
 extern char     strDefaultSP[];
 extern SP_FROM  iSPFrom;
 
-//extern Bool     bLumaQQ;
 extern char     cPYYCDZ[];
 extern char	strExternIM[];
 
@@ -177,28 +176,6 @@ extern int      iOffsetY;
 #ifdef _ENABLE_TRAY
 extern Bool	bUseTrayIcon;
 #endif
-
-/*
-extern Bool     bStaticXIM;
-extern Bool     bNoReleaseKey;
-*/
-
-/*
-#if defined(DARWIN)*/
-/* function to reverse byte order for integer
-this is required for Mac machine*/
-/*int ReverseInt (unsigned int pc_int)
-{
-    int             mac_int;
-    unsigned char  *p;
-
-    mac_int = pc_int;
-    p = (unsigned char *) &pc_int;
-    mac_int = (p[3] << 24) + (p[2] << 16) + (p[1] << 8) + p[0];
-    return mac_int;
-}
-#endif
-*/
 
 Bool MyStrcmp (char *str1, char *str2)
 {
@@ -1190,7 +1167,7 @@ void LoadConfig (Bool bMode)
 
     //用以标识配置文件是用户家目录下的，还是从安装目录下拷贝过来的
     bIsReloadConfig = bMode;	// 全局变量，定义于“src/tool.c[193]"
-    
+
     pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
     if(!pbuf){
         fprintf(stderr, "error: get environment variable HOME\n");
@@ -1294,8 +1271,7 @@ void LoadConfig (Bool bMode)
 
     fclose(fp);
 
-    /* Ctrl+Space就是fcitx的开关快捷键，此处构造一个结构备用。
-     * 至于为什么这样做，现在还不清楚。接下去看可能会明白作者的用意。*/
+    /* 如果配置文件中没有设置打开/关闭输入法的热键，那么设置CTRL-SPACE为默认热键 */
     if (!Trigger_Keys) {
 	iTriggerKeyCount = 0;
 	Trigger_Keys = (XIMTriggerKey *) malloc (sizeof (XIMTriggerKey) * (iTriggerKeyCount + 2));

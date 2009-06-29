@@ -51,13 +51,11 @@ FILE *logfile;
 
 XErrorHandler   oldXErrorHandler;
 
-//extern Bool     bLumaQQ;
-
 void SetMyExceptionHandler (void)
 {
     int             signo;
 
-    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE) && (signo!=SIGINT)); signo++)
+    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE)); signo++)
 	signal (signo, OnException);
 }
 
@@ -81,6 +79,9 @@ void OnException (int signo)
 	LoadConfig (False);
 	SetIM ();
 	break;
+    case SIGINT:
+	SaveIM ();
+	exit (0);
     case SIGUSR1:
     case SIGCHLD:
     case SIGWINCH:
@@ -119,6 +120,8 @@ int MyXErrorHandler (Display * dpy, XErrorEvent * event)
     fclose(logfile);
 #endif
 
+    SaveIM();
+    
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
 
