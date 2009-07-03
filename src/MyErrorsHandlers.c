@@ -55,7 +55,7 @@ void SetMyExceptionHandler (void)
 {
     int             signo;
 
-    for (signo = SIGHUP; ((signo < SIGUNUSED) && (signo!=SIGSEGV) && (signo!=SIGFPE)); signo++)
+    for (signo = SIGHUP; signo < SIGUNUSED; signo++)
 	signal (signo, OnException);
 }
 
@@ -74,25 +74,20 @@ void OnException (int signo)
     fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
     fclose(logfile);
 #endif
+    
+    if ( signo==SIGSEGV )
+        exit (1);
+
+    SaveIM();
+    
     switch (signo) {
     case SIGHUP:
 	LoadConfig (False);
 	SetIM ();
 	break;
     case SIGINT:
-	SaveIM ();
 	exit (0);
-    case SIGUSR1:
-    case SIGCHLD:
-    case SIGWINCH:
-    case SIGTTIN:
-    case SIGTSTP:	
-    case SIGSTOP:
-    case SIGTERM:
-    case SIGQUIT:
-    case SIGKILL:
     default:
-    	SaveIM ();
 	break;
     }
 }
@@ -124,6 +119,8 @@ int MyXErrorHandler (Display * dpy, XErrorEvent * event)
     
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
+    else
+	exit (0);
 
     return 0;
 }
