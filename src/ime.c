@@ -98,8 +98,8 @@ Bool            bDisablePagingInLegend = True;
 
 Bool            bVK = False;
 
-int             i2ndSelectKey = 0;	//第二个候选词选择键，为扫描码
-int             i3rdSelectKey = 0;	//第三个候选词选择键，为扫描码
+int             i2ndSelectKey = 37;	//第二个候选词选择键，为扫描码-默认是CTRL
+int             i3rdSelectKey = 109;	//第三个候选词选择键，为扫描码
 
 Time            lastKeyPressedTime;
 unsigned int    iTimeInterval = 250;
@@ -551,7 +551,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    if (iKey!= (XK_BackSpace & 0x00FF))
 					cLastIsAutoConvert = 0;
 				}
-				else if (iInCap == 2 && semicolonToDo == K_SEMICOLON_QUICKPHRASE)
+				else if (iInCap == 2 && semicolonToDo == K_SEMICOLON_QUICKPHRASE && !iLegendCandWordCount)
 				    retVal = QuickPhraseDoInput (iKey);
 
 				if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
@@ -886,6 +886,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
 	    DisplayInputWindow ();
+	    DrawInputWindow ();
 	}
 	else {
 	    ResetInput ();
@@ -909,7 +910,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	ResetInput ();
         lastIsSingleHZ = 0;
-	
 	break;
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
