@@ -86,6 +86,7 @@ void OnException (int signo)
 	SetIM ();
 	break;
     case SIGINT:
+    case SIGTERM:
 	exit (0);
     default:
 	break;
