@@ -70,7 +70,7 @@ void OnException (int signo)
     
     ts = localtime(&now);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/tmp/fcitx.log", "a+t");     
+    logfile=fopen("/var/log/fcitx.log", "a+t");     
     fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
     fclose(logfile);
 #endif
@@ -87,6 +87,7 @@ void OnException (int signo)
 	break;
     case SIGINT:
     case SIGTERM:
+    case SIGPIPE:
 	exit (0);
     default:
 	break;
@@ -110,18 +111,14 @@ int MyXErrorHandler (Display * dpy, XErrorEvent * event)
     
     ts = localtime(&now);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/tmp/fcitx.log", "a+t");
+    logfile=fopen("/var/log/fcitx.log", "a+t");
     fprintf (logfile, "fcitx: %s\n", buf);
     fprintf (logfile, "fcitx: %s\n", str);
     fclose(logfile);
 #endif
 
-    SaveIM();
-    
     if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
 	oldXErrorHandler (dpy, event);
-    else
-	exit (0);
 
     return 0;
 }
