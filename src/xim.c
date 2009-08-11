@@ -64,8 +64,6 @@ extern int      iMainWindowX;
 extern int      iMainWindowY;
 extern int      iInputWindowX;
 extern int      iInputWindowY;
-extern int      iTempInputWindowX;
-extern int      iTempInputWindowY;
 extern uint     iInputWindowHeight;
 extern uint     iInputWindowWidth;
 extern Bool     bTrackCursor;
@@ -124,21 +122,12 @@ Bool MyOpenHandler (IMOpenStruct * call_data)
     return True;
 }
 
-Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
+void SetTrackPos(IMChangeICStruct * call_data)
 {
-    GetIC (call_data);
-
-    return True;
-}
-
-Bool MySetICValuesHandler (IMChangeICStruct * call_data)
-{
-    SetIC (call_data);
-
     if (CurrentIC == NULL)
-	return True;
+	return;
     if (CurrentIC != (IC *) FindIC (call_data->icid))
-	return True;
+	return;
 
     if (bTrackCursor) {
 	int             i;
@@ -152,7 +141,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 		else if (CurrentIC->client_win)
 		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);		    
 		else
-		    return True;
+		    return;
 		    
 		ConnectIDSetTrackCursor (call_data->connect_id, True);
 	    }
@@ -160,14 +149,25 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
     }
 
     MoveInputWindow(call_data->connect_id);
+}
 
+Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
+{
+    GetIC (call_data);
+    
+    return True;
+}
+
+Bool MySetICValuesHandler (IMChangeICStruct * call_data)
+{
+    SetIC (call_data);
+    SetTrackPos(call_data);
+    
     return True;
 }
 
 Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 {
-    /* IMSyncXlibStruct syncData; */
-	
     CurrentIC = (IC *) FindIC (call_data->icid);
     connect_id = call_data->connect_id;
 
@@ -209,15 +209,17 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     //When application gets the focus, re-record the time.
     bStartRecordType = False;
     iHZInputed = 0;
-
-    /* 这段代码有用吗？ */
-    /* syncData.major_code = XIM_SYNC;
-    syncData.minor_code = 0;
-    syncData.connect_id = call_data->connect_id;
-    syncData.icid = icid;
-    IMSyncXlib(ims, (XPointer)&syncData);*/
-    /* ****************************************** */
-    
+   
+    if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor) {
+	position * pos = ConnectIDGetPos(connect_id);
+	
+	if (pos) {
+	    iClientCursorX = pos->x;
+	    iClientCursorY = pos->y;
+	    XMoveWindow (dpy, inputWindow, iClientCursorX, iClientCursorY); 
+        }
+    }
+   
     return True;
 }
 
@@ -332,7 +334,7 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _DEBUG
-//      printf ("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+      printf ("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:

@@ -190,8 +190,6 @@ extern Bool     bTrigger;
 
 extern int      iInputWindowX;
 extern int      iInputWindowY;
-extern int      iTempInputWindowX;
-extern int      iTempInputWindowY;
 
 extern Bool     bShowInputWindowTriggering;
 extern Bool	bMainWindow_Hiden;

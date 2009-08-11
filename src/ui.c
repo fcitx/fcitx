@@ -415,7 +415,6 @@ void MyXEventHandler (XEvent * event)
 		y = event->xbutton.y;
 		MouseClick (&x, &y, inputWindow);
 		DrawInputWindow ();
-		ConnectIDSetPos(connect_id, x, y);
 	    }
 	    else if (event->xbutton.window == mainWindow) {
 		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {

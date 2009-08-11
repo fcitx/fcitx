@@ -21,6 +21,8 @@
 #include <config.h>
 #endif
 
+#define HAVE_LOG
+
 #include "table.h"
 #include "punc.h"
 
@@ -677,10 +679,17 @@ void SaveTableDict (void)
     char            cTemp;
 
     //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
-#ifdef _DEBUG
-    char            strPathDebug[PATH_MAX];
+#ifdef HAVE_LOG
     int             iDebug = 0;
-    FILE           *fpDebug;
+    FILE	   *logfile;
+    char	    buf[80];
+    struct tm  *ts;
+    time_t now=time(NULL);
+
+    ts = localtime(&now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+    logfile=fopen("/var/log/fcitx-dict.log", "a+t");     
+    fprintf (logfile, "(%s)Saving table dict...\n",buf);
 #endif
 
     strcpy (strPathTemp, (char *) getenv ("HOME"));
@@ -696,9 +705,6 @@ void SaveTableDict (void)
 
 #ifdef _DEBUG
     fprintf (stderr, "Saving TABLE Dict...\n");
-    strcpy (strPathDebug, (char *) getenv ("HOME"));
-    strcat (strPathDebug, "/.fcitx/fcitx.DEBUG");
-    fpDebug = fopen (strPathDebug, "wt");
 #endif
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号，为了与老版本兼容
@@ -733,16 +739,16 @@ void SaveTableDict (void)
     while (recTemp != recordHead) {
 	fwrite (recTemp->strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 
-#ifdef _DEBUG
-	fprintf (fpDebug, "%d:%s", iDebug, recTemp->strCode);
+#ifdef HAVE_LOG
+	fprintf (logfile, "\t%d:%s", iDebug, recTemp->strCode);
 #endif
 
 	iTemp = strlen (recTemp->strHZ) + 1;
 	fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
 	fwrite (recTemp->strHZ, sizeof (char), iTemp, fpDict);
 
-#ifdef _DEBUG
-	fprintf (fpDebug, " %s", recTemp->strHZ);
+#ifdef HAVE_LOG
+	fprintf (logfile, " %s", recTemp->strHZ);
 #endif
 
 	cTemp = recTemp->bPinyin;
@@ -750,8 +756,8 @@ void SaveTableDict (void)
 	fwrite (&(recTemp->iHit), sizeof (unsigned int), 1, fpDict);
 	fwrite (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
 
-#ifdef _DEBUG
-	fprintf (fpDebug, " %d %d\n", recTemp->iHit, recTemp->iIndex);
+#ifdef HAVE_LOG
+	fprintf (logfile, " %d %d\n", recTemp->iHit, recTemp->iIndex);
 	iDebug++;
 #endif
 
@@ -760,8 +766,9 @@ void SaveTableDict (void)
 
     fclose (fpDict);
 
-#ifdef _DEBUG
-    fprintf (fpDebug, "Save TABLE Dict OK\n");
+#ifdef HAVE_LOG
+    fprintf (logfile, "Table dict saved\n");
+    fclose (logfile);
 #endif
 
     strcpy (strPath, (char *) getenv ("HOME"));
@@ -772,8 +779,7 @@ void SaveTableDict (void)
     rename (strPathTemp, strPath);
 
 #ifdef _DEBUG
-    fprintf (fpDebug, "Rename OK\n");
-    fclose (fpDebug);
+    fprintf (stderr, "Rename OK\n");
 #endif
 
     iTableOrderChanged = 0;

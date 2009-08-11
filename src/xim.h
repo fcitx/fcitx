@@ -85,6 +85,7 @@ void            ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrack);
 Bool            ConnectIDGetTrackCursor (CARD16 connect_id);
 void            SetIMState (Bool bState);
 void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
+void		SetTrackPos(IMChangeICStruct * call_data);
 
 /* char           *ConnectIDGetLocale(CARD16 connect_id); */
 void		CreateICID (IMChangeICStruct * call_data);

@@ -1,3 +1,6 @@
+2009-08-11: Yuking <yuking_net@sohu.com>
+	* src/xim.c, InputWindow.c: 优化光标跟随
+	
 2009-07-05: Yuking <yuking_net@sohu.com>
 	* src/ime.c: 修正联想模式下显示不正常及可能导致崩溃的问题
 

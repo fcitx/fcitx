@@ -48,7 +48,6 @@
 Window          inputWindow;
 int             iInputWindowX = INPUTWND_STARTX;
 int             iInputWindowY = INPUTWND_STARTY;
-// int             iTempInputWindowX, iTempInputWindowY;	//记录输入条的临时位置，用于光标跟随模式
 
 uint            iInputWindowHeight = INPUTWND_HEIGHT;
 int		iFixedInputWindowWidth = 0;
@@ -641,8 +640,8 @@ void DrawCursor (int iPos)
 void MoveInputWindow(CARD16 connect_id)
 {
     if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor) {
-	int iTempInputWindowX, iTempInputWindowY;
-	    
+        int iTempInputWindowX, iTempInputWindowY;
+
 	if (iClientCursorX < 0)
 	    iTempInputWindowX = 0;
 	else 
@@ -664,6 +663,7 @@ void MoveInputWindow(CARD16 connect_id)
 	}
 
 	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);  
+	ConnectIDSetPos (connect_id, iTempInputWindowX - iOffsetX, iTempInputWindowY - iOffsetX);
     }
     else {
 	position * pos = ConnectIDGetPos(connect_id);
