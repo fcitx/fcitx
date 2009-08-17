@@ -129,6 +129,7 @@ Bool            bUseSP = True;
 Bool            bUseQW = True;
 Bool            bUseTable = True;
 Bool            bLocked = False;
+Bool 		isSavingIM = False;
 
 // dgod extern im
 char		strExternIM[PATH_MAX];
@@ -1061,9 +1062,6 @@ void SwitchIM (INT8 index)
 
     DrawMainWindow ();
 
-    if (iIMCount == 1)
-	return;
-
     if (index != (INT8) - 2) {
 	if (im[iLastIM].Destroy)
 	    im[iLastIM].Destroy ();
@@ -1117,6 +1115,10 @@ Bool IsIM (char *strName)
 
 void SaveIM (void)
 {
+    if (isSavingIM)
+	return;
+	
+    isSavingIM = True;
     if (iTableChanged || iTableOrderChanged)
 	SaveTableDict ();
     if (iNewPYPhraseCount)
@@ -1125,6 +1127,8 @@ void SaveIM (void)
 	SavePYIndex ();
     if (iNewFreqCount)
 	SavePYFreq ();
+	
+    isSavingIM = False;
 }
 
 void SetIM (void)
