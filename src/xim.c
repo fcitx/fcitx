@@ -290,6 +290,10 @@ void EnterChineseMode (Bool bState)
 Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 {
     if (call_data->flag == 0) {
+	/* Mainwindow always shows wrong input status, so fix it here */
+	CurrentIC = (IC *) FindIC (call_data->icid);
+        connect_id = call_data->connect_id;
+	    
 	SetConnectID (call_data->connect_id, IS_CHN);
 	icidSetIMState(call_data->icid, IS_CHN);
 	
