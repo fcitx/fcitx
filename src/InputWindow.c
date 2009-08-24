@@ -293,13 +293,13 @@ void CalInputWindow (void)
 	    sprintf (messageDown[5].strMsg, "%u", iHZInputed);
 	    messageDown[5].type = MSG_CODE;
 	}
-	else {
+/*	else {
 	    if (bShowVersion) {
 		uMessageDown = 1;
 		strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
 		messageDown[0].type = MSG_CODE;
 	    }
-	}
+	} */
 #endif
     }
 
