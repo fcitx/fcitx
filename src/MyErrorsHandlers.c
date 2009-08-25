@@ -21,8 +21,6 @@
 #include <config.h>
 #endif
 
-#define HAVE_LOG
-
 #include "MyErrorsHandlers.h"
 
 #include <stdio.h>
@@ -45,7 +43,7 @@
 #define SIGUNUSED 32
 #endif
 
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
 FILE *logfile;
 #endif
 
@@ -63,7 +61,7 @@ void OnException (int signo)
 {
     fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
     
-#ifdef HAVE_LOG    
+#ifdef _ENABLE_LOG    
     struct tm  *ts;
     time_t now=time(NULL);
     char       buf[80];
@@ -75,10 +73,8 @@ void OnException (int signo)
     fclose(logfile);
 #endif
     
-    if ( signo==SIGSEGV )
-        exit (1);
-
-    SaveIM();
+    if ( signo!=SIGSEGV && signo!=SIGCONT)
+        SaveIM();
     
     switch (signo) {
     case SIGHUP:
@@ -88,6 +84,7 @@ void OnException (int signo)
     case SIGINT:
     case SIGTERM:
     case SIGPIPE:
+    case SIGSEGV:
 	exit (0);
     default:
 	break;
@@ -101,7 +98,7 @@ void SetMyXErrorHandler (void)
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
-#ifdef HAVE_LOG    
+#ifdef _ENABLE_LOG    
     char            str[256];
     struct tm  *ts;
     time_t now=time(NULL);

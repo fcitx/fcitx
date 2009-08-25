@@ -21,8 +21,6 @@
 #include <config.h>
 #endif
 
-#define HAVE_LOG
-
 #include "table.h"
 #include "punc.h"
 
@@ -679,7 +677,7 @@ void SaveTableDict (void)
     char            cTemp;
 
     //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
     int             iDebug = 0;
     FILE	   *logfile;
     char	    buf[80];
@@ -688,7 +686,7 @@ void SaveTableDict (void)
 
     ts = localtime(&now);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/var/log/fcitx-dict.log", "a+t");     
+    logfile=fopen("/var/log/fcitx-dict.log", "wt");     
     fprintf (logfile, "(%s)Saving table dict...\n",buf);
 #endif
 
@@ -739,7 +737,7 @@ void SaveTableDict (void)
     while (recTemp != recordHead) {
 	fwrite (recTemp->strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
 	fprintf (logfile, "\t%d:%s", iDebug, recTemp->strCode);
 #endif
 
@@ -747,7 +745,7 @@ void SaveTableDict (void)
 	fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
 	fwrite (recTemp->strHZ, sizeof (char), iTemp, fpDict);
 
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
 	fprintf (logfile, " %s", recTemp->strHZ);
 #endif
 
@@ -756,7 +754,7 @@ void SaveTableDict (void)
 	fwrite (&(recTemp->iHit), sizeof (unsigned int), 1, fpDict);
 	fwrite (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
 
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
 	fprintf (logfile, " %d %d\n", recTemp->iHit, recTemp->iIndex);
 	iDebug++;
 #endif
@@ -766,7 +764,7 @@ void SaveTableDict (void)
 
     fclose (fpDict);
 
-#ifdef HAVE_LOG
+#ifdef _ENABLE_LOG
     fprintf (logfile, "Table dict saved\n");
     fclose (logfile);
 #endif
