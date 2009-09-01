@@ -527,6 +527,7 @@ void MyXEventHandler (XEvent * event)
 		    bMainWindow_Hiden = True;
 		    XUnmapWindow(dpy,mainWindow);
 		}
+		SaveProfile();
 		break;
 	    }
 	}

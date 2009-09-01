@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE(fcitx, "090824")
+AM_INIT_AUTOMAKE(fcitx, "090901")
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
