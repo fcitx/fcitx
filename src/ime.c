@@ -150,7 +150,6 @@ char            strNameOfQuwei[41] = "ÇøÎ»";
 Bool		bCursorAuto=False;
 
 extern XIMS     ims;
-extern IC      *CurrentIC;
 extern Display *dpy;
 extern ChnPunc *chnPunc;
 
@@ -182,7 +181,6 @@ extern INT8     iTableChanged;
 extern INT8     iNewPYPhraseCount;
 extern INT8     iOrderCount;
 extern INT8     iNewFreqCount;
-extern INT16    iTableOrderChanged;
 
 extern TABLE   *table;
 extern INT8     iTableCount;
@@ -1119,7 +1117,7 @@ void SaveIM (void)
 	return;
 	
     isSavingIM = True;
-    if (iTableChanged || iTableOrderChanged)
+    if (iTableChanged)
 	SaveTableDict ();
     if (iNewPYPhraseCount)
 	SavePYUserPhrase ();

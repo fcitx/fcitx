@@ -98,7 +98,7 @@ void SetMyXErrorHandler (void)
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
-#ifdef _ENABLE_LOG    
+#ifdef _ENABLE_LOG
     char            str[256];
     struct tm  *ts;
     time_t now=time(NULL);

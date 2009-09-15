@@ -1,3 +1,6 @@
+2009-09-13: Yuking <yuking_net@sohu.com>
+	* src/ui.c: 重画tray icon
+
 2009-08-17: Yuking <yuking_net@sohu.com>
 	* src/ime.c: 修正仅配置双拼时双拼工作不正常的问题
 	

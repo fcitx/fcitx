@@ -101,7 +101,6 @@ char           *strFullCorner = "È«½ÇÄ£Ê½";
 extern Display *dpy;
 extern GC       dimGC;
 extern int      i3DEffect;
-extern IC      *CurrentIC;
 extern Bool     bCorner;
 extern Bool     bLocked;
 extern Bool     bChnPunc;

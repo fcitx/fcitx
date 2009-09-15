@@ -64,7 +64,6 @@ AUTOPHRASE     *insertPoint = (AUTOPHRASE *)NULL;
 uint            iAutoPhrase = 0;
 uint            iTableCandDisplayed;
 uint            iTableTotalCandCount;
-INT16           iTableOrderChanged = 0;
 char            strTableLegendSource[PHRASE_MAX_LENGTH * 2 + 1] = "\0";
 
 FH             *fh;
@@ -597,7 +596,7 @@ void FreeTableIM (void)
     if (!recordHead)
 	return;
 
-    if (iTableChanged || iTableOrderChanged)
+    if (iTableChanged)
 	SaveTableDict ();
 
     //释放码表
@@ -780,7 +779,6 @@ void SaveTableDict (void)
     fprintf (stderr, "Rename OK\n");
 #endif
 
-    iTableOrderChanged = 0;
     iTableChanged = 0;
 
     if (autoPhrase) {
@@ -1281,8 +1279,8 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
     else
 	pCurCandRecord = (RECORD *)NULL;
 
-    iTableOrderChanged++;
-    if (iTableOrderChanged == TABLE_AUTO_SAVE_AFTER)
+    iTableChanged++;
+    if (iTableChanged >= TABLE_AUTO_SAVE_AFTER)
 	SaveTableDict ();
 
     switch (tableCandWord[iIndex].flag) {
@@ -1332,7 +1330,6 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
 	else {
 	    uMessageDown = 0;
 	    uMessageUp = 0;
-	 //   iCodeInputCount = 0;
 	}
     }
 
@@ -1432,13 +1429,11 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 	if (iCandWordCount < iMaxCandWord) {
 	    while (currentRecord && currentRecord != recordHead) {
 		if ((mode == SM_PREV) ^ (!currentRecord->flag)) {
-		    //if ( ((strlen(currentRecord->strHZ)/2)<=table[iTableIMIndex].iMaxPhraseAllowed) || !table[iTableIMIndex].iMaxPhraseAllowed ) {
-			if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
-			    if (mode == SM_FIRST)
-				iTableTotalCandCount++;
-			    TableAddCandWord (currentRecord, mode);
-			}
-		    //}
+		    if (!TableCompareCode (strCodeInput, currentRecord->strCode) && CheckHZCharset (currentRecord->strHZ)) {
+			if (mode == SM_FIRST)
+			    iTableTotalCandCount++;
+			TableAddCandWord (currentRecord, mode);
+		    }
 		}
 
 		currentRecord = currentRecord->next;
@@ -1489,17 +1484,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 
 		if (HasMatchingKey ())
 		    pstr = (tableCandWord[i].flag == CT_NORMAL) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode;
-		/*else if (tableCandWord[i].flag==CT_PYPHRASE) {
-		   if (strlen(tableCandWord[i].candWord.strPYPhrase)==2){
-		   recTemp = tableSingleHZ[CalHZIndex (tableCandWord[i].candWord.strPYPhrase)];
-		   if (!recTemp)
-		   pstr=(char *)NULL;
-		   else
-		   pstr=recTemp->strCode;
-		   }
-		   else
-		   pstr=(char *)NULL;
-		   } */
 		else
 		    pstr = ((tableCandWord[i].flag == CT_NORMAL) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
 
@@ -1513,8 +1497,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		    break;
 		case CT_AUTOPHRASE:
 		    iWidth += StringWidth (tableCandWord[i].candWord.autoPhrase->strHZ, xftFont);
-		    /*      case CT_PYPHRASE:
-		       iWidth += StringWidth (tableCandWord[i].candWord.strPhrase, xftFont); */
 		default:
 		    ;
 		}
@@ -1529,8 +1511,6 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
 		    break;
 		case CT_AUTOPHRASE:
 		    iWidth += StringWidth (tableCandWord[i].candWord.autoPhrase->strHZ, fontSet);
-		    /*case CT_PYPHRASE:
-		       iWidth += StringWidth (tableCandWord[i].candWord.strPhrase, fontSet); */
 		default:
 		    ;
 		}
@@ -1981,8 +1961,6 @@ void TableAdjustOrderByIndex (int iIndex)
 	    }
 	}
     }
-    if (iTableChanged == 5)
-	SaveTableDict ();
 }
 
 /*
@@ -2001,7 +1979,8 @@ void TableDelPhraseByIndex (int iIndex)
 
 /*
  * 根据字串删除词组
- */ void TableDelPhraseByHZ (char *strHZ)
+ */
+void TableDelPhraseByHZ (char *strHZ)
 {
     RECORD         *recTemp;
 
@@ -2020,8 +1999,6 @@ void TableDelPhrase (RECORD * record)
     free (record);
 
     table[iTableIMIndex].iRecordCount--;
-
-    SaveTableDict ();
 }
 
 /*
@@ -2113,8 +2090,6 @@ void TableInsertPhrase (char *strCode, char *strHZ)
     dictNew->next = insertPoint;
 
     table[iTableIMIndex].iRecordCount++;
-
-    SaveTableDict ();
 }
 
 void TableCreateNewPhrase (void)

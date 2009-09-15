@@ -103,7 +103,6 @@ extern WINDOW_COLOR inputWindowColor;
 extern WINDOW_COLOR VKWindowColor;
 extern HIDE_MAINWINDOW hideMainWindow;
 extern Bool	bMainWindow_Hiden;
-extern IC      *CurrentIC;
 extern int      MAINWND_WIDTH;
 extern Bool     bCompactMainWindow;
 extern INT8     iIMIndex;
@@ -399,6 +398,14 @@ void MyXEventHandler (XEvent * event)
 	    DrawVKWindow ();
 	else if (event->xexpose.window == inputWindow)
 	    DrawInputWindow ();
+#ifdef _ENABLE_TRAY
+	else if (event->xexpose.window == tray.window) {
+	    if (ConnectIDGetState (connect_id) == IS_CHN)
+		DrawTrayWindow (ACTIVE_ICON);
+	    else
+		DrawTrayWindow (INACTIVE_ICON);
+	}
+#endif		    
 	//added by yunfan
 	else if (event->xexpose.window == aboutWindow)
 	    DrawAboutWindow ();

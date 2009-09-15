@@ -293,13 +293,6 @@ void CalInputWindow (void)
 	    sprintf (messageDown[5].strMsg, "%u", iHZInputed);
 	    messageDown[5].type = MSG_CODE;
 	}
-/*	else {
-	    if (bShowVersion) {
-		uMessageDown = 1;
-		strcpy (messageDown[0].strMsg, "http://www.fcitx.org");
-		messageDown[0].type = MSG_CODE;
-	    }
-	} */
 #endif
     }
 
@@ -412,7 +405,6 @@ void DrawInputWindow(void)
 	Draw3DEffect (inputWindow, 0, 0, iInputWindowWidth, iInputWindowHeight, _3D_LOWER);
 
     XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 0, 0, iInputWindowWidth - 1, iInputWindowHeight - 1);
-    //XDrawRectangle (dpy, inputWindow, inputWindowLineColor.gc, 1, 1, iInputWindowWidth - 3, iInputWindowHeight - 3);
     if (_3DEffectInputWindow == _3D_LOWER)
 	XDrawLine (dpy, inputWindow, lightGC, 2 + 5, iInputWindowHeight / 2 - 1, iInputWindowWidth - 2 - 5, iInputWindowHeight / 2 - 1);
     else if (_3DEffectInputWindow == _3D_UPPER)
@@ -614,10 +606,6 @@ void DisplayMessageDown (void)
 	    if (bUseGBKT)
 		free (strGBKT);
 	}
-
-	/*iInputWindowDownWidth = StringWidth (messageDown[i].strMsg, xftFont);
-	   OutputString (inputWindow, xftFont, messageDown[i].strMsg, iPos, (9 * iInputWindowHeight - 12) / 10, messageColor[messageDown[i].type].color);
-	   iPos += iInputWindowDownWidth; */
 #else
 	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (messageDown[i].strMsg) : messageDown[i].strMsg;
 

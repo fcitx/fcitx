@@ -46,9 +46,6 @@ uint            iCounter = 0;
 Bool            bPYBaseDictLoaded = False;
 Bool            bPYOtherDictLoaded = False;
 
-/*
-Bool            bSingleHZMode = False;	//这种情况下，只进行单字输入，不进行词组的匹配、生成及保存，用于码表输入法中的拼音输入
-*/
 PyFreq         *pyFreq = NULL, *pCurFreq = NULL;
 uint            iPYFreqCount = 0;
 
@@ -127,16 +124,7 @@ Bool LoadPYBaseDict (void)
 {
     FILE           *fp;
     char            strPath[PATH_MAX];
-
-/*
-#if defined(DARWIN)
-    unsigned int    i, j, iLen;
-#else*/
     int             i, j, iLen;
-
-/*
-#endif
-*/
 
     strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_BASE_FILE);
@@ -206,11 +194,7 @@ Bool LoadPYOtherDict (void)
 	    strBase[2] = '\0';
 	    if (!fread (&k, sizeof (int), 1, fp))
 		break;
-/*
-#if defined(DARWIN)
-            k = ReverseInt (k);
-#endif
-*/
+
 	    j = GetBaseIndex (i, strBase);
 	    if (j == -1)
 		break;
@@ -448,7 +432,6 @@ void ResetPYStatus ()
     bIsPYAddFreq = False;
     bIsPYDelFreq = False;
     bIsPYDelUserPhr = False;
-    //bSingleHZMode = False;
 
     findMap.iMode = PARSE_SINGLEHZ;	//只要不是PARSE_ERROR就可以
 }
@@ -474,7 +457,6 @@ INPUT_RETURN_VALUE DoPYInput (int iKey)
 
     if (!bPYBaseDictLoaded)
 	LoadPYBaseDict ();
-    //if (!bSingleHZMode && !bPYOtherDictLoaded)
     if (!bPYOtherDictLoaded)
 	LoadPYOtherDict ();
 
@@ -923,7 +905,6 @@ INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
 {
     int             iVal;
 
-    //if (findMap.iMode == PARSE_ERROR || (bSingleHZMode && findMap.iHZCount > 1)) {
     if (findMap.iMode == PARSE_ERROR) {
 	uMessageDown = 0;
 	iCandPageCount = 0;
@@ -951,7 +932,6 @@ INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
 	    pCurFreq = pCurFreq->next;
 	}
 
-	//if (!bSingleHZMode && bPYCreateAuto)
 	if (bPYCreateAuto)
 	    PYCreateAuto ();
     }
@@ -978,7 +958,6 @@ INPUT_RETURN_VALUE PYGetCandWords (SEARCH_MODE mode)
     }
 
     if (!(pCurFreq && pCurFreq->bIsSym)) {
-	//if (!iCurrentCandPage && strPYAuto[0] && !bSingleHZMode) {
 	if (!iCurrentCandPage && strPYAuto[0]) {
 	    iCandWordCount = 1;
 	    PYCandWords[0].iWhich = PY_CAND_AUTO;
@@ -1466,11 +1445,11 @@ char           *PYGetCandWord (int iIndex)
 
     if (pIndex && (*pIndex != iCounter))
 	*pIndex = ++iCounter;
-    if (iOrderCount == AUTOSAVE_ORDER_COUNT) {
+    if (iOrderCount >= AUTOSAVE_ORDER_COUNT) {
 	SavePYIndex ();
 	iOrderCount = 0;
     }
-    if (iNewFreqCount == AUTOSAVE_FREQ_COUNT) {
+    if (iNewFreqCount >= AUTOSAVE_FREQ_COUNT) {
 	SavePYFreq ();
 	iNewFreqCount = 0;
     }
@@ -1495,7 +1474,6 @@ char           *PYGetCandWord (int iIndex)
 	    strcat (strHZString, pBaseMap);
 	if (pPhraseMap)
 	    strcat (strHZString, pPhraseMap);
-	//if (!bSingleHZMode && bAddNewPhrase && (strlen (strPYAuto) <= (MAX_PY_PHRASE_LENGTH * 2)))
 	if (bAddNewPhrase && (strlen (strPYAuto) <= (MAX_PY_PHRASE_LENGTH * 2)))
 	    PYAddUserPhrase (strPYAuto, strHZString);
 	uMessageDown = 0;
@@ -1546,14 +1524,11 @@ void PYGetCandWordsForward (void)
 
 void PYGetCandWordsBackward (void)
 {
-    //if (pCurFreq && pCurFreq->bIsSym && !bSingleHZMode)
     if (pCurFreq && pCurFreq->bIsSym)
 	PYGetSymCandWords (SM_PREV);
     else {
-	//if (!bSingleHZMode)
 	PYGetFreqCandWords (SM_PREV);
 	PYGetBaseCandWords (SM_PREV);
-	//if (iCandWordCount == iMaxCandWord || bSingleHZMode)
 	if (iCandWordCount == iMaxCandWord)
 	    return;
 	PYGetPhraseCandWords (SM_PREV);
