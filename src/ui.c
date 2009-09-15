@@ -499,8 +499,10 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
+		    bMainWindow_Hiden = True;
 		    XUnmapWindow (dpy, mainWindow);
+	        }
 		else if (!bVK) {
 		    bCompactMainWindow = !bCompactMainWindow;
 		    SwitchIM (iIMIndex);
@@ -534,7 +536,6 @@ void MyXEventHandler (XEvent * event)
 		    bMainWindow_Hiden = True;
 		    XUnmapWindow(dpy,mainWindow);
 		}
-		SaveProfile();
 		break;
 	    }
 	}
