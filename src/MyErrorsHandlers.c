@@ -25,6 +25,7 @@
 
 #include <stdio.h>
 #include <signal.h>
+#include <limits.h>
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -44,7 +45,7 @@
 #endif
 
 #ifdef _ENABLE_LOG
-FILE *logfile;
+FILE *logfile = (FILE *)NULL;
 #endif
 
 XErrorHandler   oldXErrorHandler;
@@ -58,20 +59,29 @@ void SetMyExceptionHandler (void)
 }
 
 void OnException (int signo)
-{
-    fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
-    
-#ifdef _ENABLE_LOG    
+{   
+#ifdef _ENABLE_LOG
+    char    buf[PATH_MAX], *pbuf;
     struct tm  *ts;
-    time_t now=time(NULL);
-    char       buf[80];
+    time_t now;
+
+    if ( !logfile ) {
+	pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+        if(pbuf) {
+	    snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx.log", pbuf);
+            logfile=fopen(buf, "wt");
+        }
+    }
     
-    ts = localtime(&now);
-    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/var/log/fcitx.log", "a+t");     
-    fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
-    fclose(logfile);
+    if ( logfile ) {
+	now=time(NULL);
+	ts = localtime(&now);
+	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
+    }
 #endif
+    
+    fprintf (stderr, "\nFCITX -- Get Signal No.: %d\n", signo);
     
     if ( signo!=SIGSEGV && signo!=SIGCONT)
         SaveIM();
@@ -85,6 +95,12 @@ void OnException (int signo)
     case SIGTERM:
     case SIGPIPE:
     case SIGSEGV:
+#ifdef _ENABLE_LOG    
+        if ( !logfile ) {
+            fclose(logfile);
+            logfile = (FILE *)NULL;
+        }
+#endif
 	exit (0);
     default:
 	break;
@@ -99,23 +115,37 @@ void SetMyXErrorHandler (void)
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
 #ifdef _ENABLE_LOG
-    char            str[256];
+    char    str[256];
+    char    buf[PATH_MAX], *pbuf;
     struct tm  *ts;
-    time_t now=time(NULL);
-    char       buf[80];
-    
-    XGetErrorText (dpy, event->error_code, str, 255);
-    
-    ts = localtime(&now);
-    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/var/log/fcitx.log", "a+t");
-    fprintf (logfile, "fcitx: %s\n", buf);
-    fprintf (logfile, "fcitx: %s\n", str);
-    fclose(logfile);
+    time_t now;
+
+    if ( !logfile ) {
+        pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+        if(pbuf) {
+            snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx.log", pbuf);
+            logfile = fopen(buf, "wt");
+	    if ( logfile ) {
+                now = time(NULL);
+	        ts = localtime(&now);
+	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	        XGetErrorText (dpy, event->error_code, str, 255);
+	        fprintf (logfile, "fcitx: %s\n", buf);
+	        fprintf (logfile, "fcitx: %s\n", str);
+	     }
+        }
+    }
 #endif
 
-    if (event->error_code != 3 && event->error_code != BadMatch)	// xterm will generate 3
+    if (event->error_code != 3 && event->error_code != BadMatch) {	// xterm will generate 3
+#ifdef _ENABLE_LOG
+	if ( !logfile ) {
+            fclose(logfile);
+            logfile = (FILE *)NULL;
+        }
+#endif	
 	oldXErrorHandler (dpy, event);
+    }
 
     return 0;
 }

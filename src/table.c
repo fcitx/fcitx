@@ -678,15 +678,22 @@ void SaveTableDict (void)
     //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
 #ifdef _ENABLE_LOG
     int             iDebug = 0;
-    FILE	   *logfile;
-    char	    buf[80];
+    char    buf[PATH_MAX], *pbuf;
     struct tm  *ts;
-    time_t now=time(NULL);
+    time_t now;
+    FILE *logfile = (FILE *)NULL;;
 
-    ts = localtime(&now);
-    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-    logfile=fopen("/var/log/fcitx-dict.log", "wt");     
-    fprintf (logfile, "(%s)Saving table dict...\n",buf);
+    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+    if(pbuf) {
+        snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx-dict.log", pbuf);
+        logfile = fopen(buf, "wt");
+        if ( logfile ) {
+	    now = time(NULL);
+	    ts = localtime(&now);
+	    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	    fprintf (logfile, "(%s)Saving table dict...\n",buf);
+        }
+    }
 #endif
 
     strcpy (strPathTemp, (char *) getenv ("HOME"));
@@ -737,7 +744,8 @@ void SaveTableDict (void)
 	fwrite (recTemp->strCode, sizeof (char), table[iTableIMIndex].iPYCodeLength + 1, fpDict);
 
 #ifdef _ENABLE_LOG
-	fprintf (logfile, "\t%d:%s", iDebug, recTemp->strCode);
+	if ( logfile )
+	    fprintf (logfile, "\t%d:%s", iDebug, recTemp->strCode);
 #endif
 
 	iTemp = strlen (recTemp->strHZ) + 1;
@@ -745,7 +753,8 @@ void SaveTableDict (void)
 	fwrite (recTemp->strHZ, sizeof (char), iTemp, fpDict);
 
 #ifdef _ENABLE_LOG
-	fprintf (logfile, " %s", recTemp->strHZ);
+	if ( logfile )
+	    fprintf (logfile, " %s", recTemp->strHZ);
 #endif
 
 	cTemp = recTemp->bPinyin;
@@ -754,8 +763,10 @@ void SaveTableDict (void)
 	fwrite (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
 
 #ifdef _ENABLE_LOG
-	fprintf (logfile, " %d %d\n", recTemp->iHit, recTemp->iIndex);
-	iDebug++;
+        if (logfile) {
+	    fprintf (logfile, " %d %d\n", recTemp->iHit, recTemp->iIndex);
+	    iDebug++;
+	}
 #endif
 
 	recTemp = recTemp->next;
@@ -764,8 +775,10 @@ void SaveTableDict (void)
     fclose (fpDict);
 
 #ifdef _ENABLE_LOG
-    fprintf (logfile, "Table dict saved\n");
-    fclose (logfile);
+    if (logfile) {
+        fprintf (logfile, "Table dict saved\n");
+        fclose (logfile);
+    }
 #endif
 
     strcpy (strPath, (char *) getenv ("HOME"));

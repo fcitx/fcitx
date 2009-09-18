@@ -192,6 +192,7 @@ extern int      iInputWindowY;
 
 extern Bool     bShowInputWindowTriggering;
 extern Bool	bMainWindow_Hiden;
+extern char    *strFullCorner;
 
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
@@ -954,6 +955,8 @@ INPUT_RETURN_VALUE ChangeCorner (void)
     ResetInputWindow ();
 
     bCorner = !bCorner;
+    
+    SwitchIM(iIMIndex);
     DrawMainWindow ();
     XUnmapWindow (dpy, inputWindow);
     
@@ -1031,7 +1034,8 @@ void ChangeLock (void)
 
 void SwitchIM (INT8 index)
 {
-    INT8            iLastIM;
+    INT8        iLastIM;
+    char	*str;
 
     if (index != (INT8) - 2 && bVK)
 	return;
@@ -1048,10 +1052,17 @@ void SwitchIM (INT8 index)
 	    iIMIndex = iIMCount - 1;
     }
 
+    if (bVK)
+        str = vks[iCurrentVK].strName;
+    else if (bCorner)
+	str = strFullCorner;
+    else
+	str = im[iIMIndex].strName;
+	
 #ifdef _USE_XFT
-    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName, xftMainWindowFont) + 4;
+    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, xftMainWindowFont) + 4;
 #else
-    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth ((bVK) ? vks[iCurrentVK].strName : im[iIMIndex].strName, fontSetMainWindow) + 4;
+    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, fontSetMainWindow) + 4;
 #endif
     if (!bShowVK && bCompactMainWindow)
 	MAINWND_WIDTH -= 24;
