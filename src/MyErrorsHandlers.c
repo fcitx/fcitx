@@ -137,6 +137,8 @@ int MyXErrorHandler (Display * dpy, XErrorEvent * event)
     }
 #endif
 
+    SaveIM();
+
     if (event->error_code != 3 && event->error_code != BadMatch) {	// xterm will generate 3
 #ifdef _ENABLE_LOG
 	if ( !logfile ) {

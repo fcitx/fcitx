@@ -1,6 +1,7 @@
 2009-09-18: Yuking <yuking_net@sohu.com>
 	* 更改LOG文件的保存路径，解决权限不对而导致崩溃的问题
 	* 修正某些情况下主窗口显示不完整的问题
+	* 修正拼音词组频率不能保存的问题
 
 2009-09-13: Yuking <yuking_net@sohu.com>
 	* src/ui.c: 重画tray icon

@@ -2644,19 +2644,17 @@ void SavePYIndex (void)
 
     //再保存索引不为0的系统词组
     for (i = 0; i < iPYFACount; i++) {
-	if (PYFAList[i].iChangeCount) {
-	    for (j = 0; j < PYFAList[i].iBase; j++) {
-		if (PYFAList[i].pyBase[j].iChangeCount) {
-		    for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++) {
-			if (PYFAList[i].pyBase[j].phrase[k].iIndex) {
-			    fwrite (&i, sizeof (int), 1, fp);
-			    fwrite (&j, sizeof (int), 1, fp);
-			    fwrite (&k, sizeof (int), 1, fp);
-			    l = PYFAList[i].pyBase[j].phrase[k].iIndex;
-			    fwrite (&l, sizeof (uint), 1, fp);
-			    l = PYFAList[i].pyBase[j].phrase[k].iHit;
-			    fwrite (&l, sizeof (uint), 1, fp);
-			}
+	for (j = 0; j < PYFAList[i].iBase; j++) {
+	    if (PYFAList[i].pyBase[j].iChangeCount) {
+		for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++) {
+		    if (PYFAList[i].pyBase[j].phrase[k].iIndex) {
+			fwrite (&i, sizeof (int), 1, fp);
+			fwrite (&j, sizeof (int), 1, fp);
+			fwrite (&k, sizeof (int), 1, fp);
+			l = PYFAList[i].pyBase[j].phrase[k].iIndex;
+			fwrite (&l, sizeof (uint), 1, fp);
+			l = PYFAList[i].pyBase[j].phrase[k].iHit;
+			fwrite (&l, sizeof (uint), 1, fp);
 		    }
 		}
 	    }
