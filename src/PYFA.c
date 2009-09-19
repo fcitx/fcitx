@@ -575,6 +575,8 @@ PYTABLE         PYTable[] = {
     ,
     {"long", NULL}
     ,
+    {"lo", NULL}
+    ,
     {"liu", NULL}
     ,
     {"ling", NULL}
