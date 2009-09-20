@@ -87,6 +87,7 @@ extern HOTKEYS  hkTrack[];
 extern HOTKEYS  hkGetPY[];
 extern HOTKEYS  hkGBT[];
 extern HOTKEYS	hkHideMainWindow[];
+extern HOTKEYS	hkSaveAll[];
 
 extern KEY_CODE switchKey;
 extern XIMTriggerKey *Trigger_Keys;
@@ -545,6 +546,17 @@ inline static int second_third_candidate_word(Configure *c, void *a, int isread)
     return 0;
 }
 
+/* 保存词库 */
+inline static int save_all(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkSaveAll);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_S");
+
+    return 0;
+}
+
 /* 默认双拼方案 */
 inline static int default_shuangpin_scheme(Configure *c, void *a, int isread)
 {
@@ -569,17 +581,6 @@ inline static int add_pinyin_frequently_used_word(Configure *c, void *a, int isr
     return 0;
 }
 
-/* 删除拼音常用字 */
-inline static int delete_pinyin_frequently_used_word(Configure *c, void *a, int isread)
-{
-    if(isread)
-        SetHotKey((char *)a, hkPYDelFreq);
-    else
-        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_7");
-
-    return 0;
-}
-
 /* 删除拼音用户词组 */
 inline static int delete_pinyin_user_create_phrase(Configure *c, void *a, int isread)
 {
@@ -587,6 +588,17 @@ inline static int delete_pinyin_user_create_phrase(Configure *c, void *a, int is
         SetHotKey((char *)a, hkPYDelUserPhr);
     else
         fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_DELETE");
+
+    return 0;
+}
+
+/* 删除拼音常用字 */
+inline static int delete_pinyin_frequently_used_word(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkPYDelFreq);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_7");
 
     return 0;
 }
@@ -940,6 +952,14 @@ Configure hotkey_config[] = {
         .name = "第二三候选词选择键",
         .value_type = CONFIG_HOTKEY,
         .config_rw = second_third_candidate_word,
+    },
+    {
+        .name = NULL,
+    },
+    {
+        .name = "保存词库",
+        .value_type = CONFIG_HOTKEY,
+        .config_rw = save_all,
     },
     {
         .name = NULL,

@@ -119,6 +119,7 @@ HOTKEYS         hkPrevPage[HOT_KEY_COUNT] = { ',', 0 };	//上一页
 HOTKEYS         hkTrack[HOT_KEY_COUNT] = { CTRL_K, 0 };
 HOTKEYS         hkGBT[HOT_KEY_COUNT] = { CTRL_ALT_F, 0 };
 HOTKEYS         hkHideMainWindow[HOT_KEY_COUNT] = { CTRL_ALT_H, 0 };
+HOTKEYS         hkSaveAll[HOT_KEY_COUNT] = { CTRL_ALT_S, 0 };
 
 Bool            bUseLegend = False;
 Bool            bIsInLegend = False;
@@ -810,7 +811,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    bMainWindow_Hiden = True;
 			    XUnmapWindow(dpy,mainWindow);
 			}
-			retVal = IRV_DO_NOTHING;			
+			retVal = IRV_DO_NOTHING;
+		    }
+		    else if (IsHotKey (iKey, hkSaveAll)) {
+			SaveIM();
+			uMessageDown = 1;
+			strcpy(messageDown[0].strMsg,"词库已保存");
+			messageDown[0].type = MSG_TIPS;
+			retVal = IRV_DISPLAY_MESSAGE;
 		    }
 		}
 	    }
