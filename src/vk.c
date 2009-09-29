@@ -503,7 +503,7 @@ INPUT_RETURN_VALUE DoVKInput (int iKey)
 
     pstr = VKGetSymbol (iKey);
     if (!pstr)
-	return IRV_DONOT_PROCESS_CLEAN;
+	return IRV_TO_PROCESS;
     else {
 	strcpy (strStringGet, pstr);
 	return IRV_GET_CANDWORDS;

@@ -120,6 +120,7 @@ HOTKEYS         hkTrack[HOT_KEY_COUNT] = { CTRL_K, 0 };
 HOTKEYS         hkGBT[HOT_KEY_COUNT] = { CTRL_ALT_F, 0 };
 HOTKEYS         hkHideMainWindow[HOT_KEY_COUNT] = { CTRL_ALT_H, 0 };
 HOTKEYS         hkSaveAll[HOT_KEY_COUNT] = { CTRL_ALT_S, 0 };
+HOTKEYS         hkVK[HOT_KEY_COUNT] = { CTRL_ALT_K, 0 };
 
 Bool            bUseLegend = False;
 Bool            bIsInLegend = False;
@@ -346,17 +347,25 @@ void ProcessKey (IMForwardEventStruct * call_data)
     if (call_data->event.type == KeyRelease) {
 	if (ConnectIDGetState (call_data->connect_id) != IS_CLOSED) {
 	    if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
-		if (!bLocked && iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
-		    if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
-			SwitchIM (-1);
-		    else if (IsHotKey (iKey, hkTrigger))
-			CloseIM (call_data);
+		if (iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
+		    if ( !bLocked ) {
+		        if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
+			    SwitchIM (-1);
+		        else if (IsHotKey (iKey, hkTrigger))
+			    CloseIM (call_data);
+		    }
+		    else if ( bVK )
+		        ChangVK();
 		}
-		else if (!bLocked && iKey == CTRL_LSHIFT) {
-		    if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
-			SwitchIM (-1);
-		    else if (IsHotKey (iKey, hkTrigger))
-			CloseIM (call_data);
+		else if (iKey == CTRL_LSHIFT) {
+		    if ( !bLocked ) {
+		        if (ConnectIDGetState (call_data->connect_id) == IS_CHN)
+			    SwitchIM (-1);
+		        else if (IsHotKey (iKey, hkTrigger))
+			    CloseIM (call_data);
+		    }
+		    else if ( bVK )
+		        ChangVK();
 		}
 		else if (kev->keycode == switchKey && keyReleased == KR_CTRL && !bDoubleSwitchKey) {
 		    /* 按下临时英文键会把已经输入的英文送到客户程序中，但实际使用发现，这种方式不具人性化
@@ -820,6 +829,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			messageDown[0].type = MSG_TIPS;
 			retVal = IRV_DISPLAY_MESSAGE;
 		    }
+		    else if (IsHotKey (iKey, hkVK) )
+		        SwitchVK ();
 		}
 	    }
 	    else

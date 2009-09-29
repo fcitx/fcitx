@@ -1,3 +1,6 @@
+2009-09-29: Yuking <yuking_net@sohu.com>
+        * src/tools.c, ime.c: 增加打开/关闭虚拟键盘的热键"CTRL_ALT_K"
+        
 2009-09-20: Yuking <yuking_net@sohu.com>
         * src/tools.c, ime.c: 增加手动保存词库的热键，默认为"CTRL_ALT_S"
 

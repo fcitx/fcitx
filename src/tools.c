@@ -88,6 +88,7 @@ extern HOTKEYS  hkGetPY[];
 extern HOTKEYS  hkGBT[];
 extern HOTKEYS	hkHideMainWindow[];
 extern HOTKEYS	hkSaveAll[];
+extern HOTKEYS	hkVK[];
 
 extern KEY_CODE switchKey;
 extern XIMTriggerKey *Trigger_Keys;
@@ -426,6 +427,17 @@ inline static int hide_main_window(Configure *c, void *a, int isread)
         SetHotKey((char *)a, hkHideMainWindow);
     else
         fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_H");
+    return 0;
+}
+
+/* ÇÐ»»ÐéÄâ¼üÅÌ */
+inline static int switch_vk(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkVK);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_K");
+
     return 0;
 }
 
@@ -907,6 +919,11 @@ Configure hotkey_config[] = {
         .name = "Òþ²ØÖ÷´°¿Ú",
         .value_type = CONFIG_HOTKEY,
         .config_rw = hide_main_window,
+    },    
+    {
+        .name = "ÇÐ»»ÐéÄâ¼üÅÌ",
+        .value_type = CONFIG_HOTKEY,
+        .config_rw = switch_vk,
     },
     {
         .name = "GBKÖ§³Ö",
