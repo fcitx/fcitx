@@ -1,3 +1,6 @@
+2009-09-30: ginkgo <ginkgo @ linuxsir>
+        * data/vk.conf: 修正中文“〇”的错误
+
 2009-09-29: Yuking <yuking_net@sohu.com>
         * src/tools.c, ime.c: 增加打开/关闭虚拟键盘的热键"CTRL_ALT_K"
         
