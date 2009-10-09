@@ -339,9 +339,9 @@ void ProcessKey (IMForwardEventStruct * call_data)
 #endif
 
     /* Added by hubert_star AT forum.ubuntu.com.cn */
-    if ((iKey >= 32 ) && (iKey <= 126) && (call_data->event.type == KeyRelease)) {
+    if ( (call_data->event.type == KeyRelease) && (((iKey >= 32 ) && (iKey <= 126)) && (iKey != (i2ndSelectKey ^ 0xFF)) && (iKey == (i2ndSelectKey ^ 0xFF))))
         return;
-    }
+
     /* ******************************************* */
     
     if (call_data->event.type == KeyRelease) {
@@ -380,8 +380,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    ChangeIMState (call_data->connect_id);
 		    retVal = IRV_DONOT_PROCESS;
 	        }
-		else if (kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY) {
-			 /* || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {*/
+		else if ((kev->keycode == i2ndSelectKey && keyReleased == KR_2ND_SELECTKEY)
+			 || (iKey == (i2ndSelectKey ^ 0xFF) && keyReleased == KR_2ND_SELECTKEY_OTHER)) {
 		    if (!bIsInLegend) {
 			pstr = im[iIMIndex].GetCandWord (1);
 			if (pstr) {
@@ -404,8 +404,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 		    keyReleased = KR_OTHER;
 		}
-		else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
-			/* || (iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) ) { */
+		else if ((kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY)
+			 || (iKey == (i3rdSelectKey ^ 0xFF) && keyReleased == KR_3RD_SELECTKEY_OTHER) ) {
 		    if (!bIsInLegend) {
 			pstr = im[iIMIndex].GetCandWord (2);
 			if (pstr) {
@@ -415,27 +415,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			    else
 				retVal = IRV_GET_CANDWORDS;
 			}
-			else if (iCandWordCount)
-			    retVal = IRV_DISPLAY_CANDWORDS;
-		    }
-		    else {
-			strcpy (strStringGet, "¡¡");
-			uMessageDown = 0;
-			retVal = IRV_GET_CANDWORDS;
-		    }
-
-		    keyReleased = KR_OTHER;
-		}
-		else if (kev->keycode == i3rdSelectKey && keyReleased == KR_3RD_SELECTKEY) {
-		    if (!bIsInLegend) {
-			pstr = im[iIMIndex].GetCandWord (2);
-			if (pstr) {
-			    strcpy (strStringGet, pstr);
-			    if (bIsInLegend)
-				retVal = IRV_GET_LEGEND;
-			    else
-				retVal = IRV_GET_CANDWORDS;
-		        }
 			else if (iCandWordCount)
 			    retVal = IRV_DISPLAY_CANDWORDS;
 		    }
@@ -503,7 +482,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				keyReleased = KR_3RD_SELECTKEY;
 				return;
 			    }
-			    /*else if (iKey == (i2ndSelectKey ^ 0xFF)) {
+			    else if (iKey == (i2ndSelectKey ^ 0xFF)) {
 				if (iCandWordCount >= 2) {
 				    keyReleased = KR_2ND_SELECTKEY_OTHER;
 				    return;
@@ -514,7 +493,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    keyReleased = KR_3RD_SELECTKEY_OTHER;
 				    return;
 				}
-			    }*/
+			    }
 			}
 
 			if (iKey == CTRL_LSHIFT || iKey == SHIFT_LCTRL) {
