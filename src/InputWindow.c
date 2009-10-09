@@ -651,7 +651,7 @@ void MoveInputWindow(CARD16 connect_id)
 	}
 
 	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);  
-	ConnectIDSetPos (connect_id, iTempInputWindowX - iOffsetX, iTempInputWindowY - iOffsetX);
+	ConnectIDSetPos (connect_id, iTempInputWindowX - iOffsetX, iTempInputWindowY - iOffsetY);
     }
     else {
 	position * pos = ConnectIDGetPos(connect_id);
