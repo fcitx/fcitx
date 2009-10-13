@@ -77,7 +77,7 @@ void OnException (int signo)
 	now=time(NULL);
 	ts = localtime(&now);
 	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-	fprintf (logfile, "FCITX -- Get Signal No.: %d (%s)\n", signo,buf);
+	fprintf (logfile, "%d: FCITX -- Get Signal No.: %d (%s)\n", getpid(), signo,buf);
     }
 #endif
     

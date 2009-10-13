@@ -127,7 +127,7 @@ void SetTrackPos(IMChangeICStruct * call_data)
     if (CurrentIC == NULL)
 	return;
     if (CurrentIC != (IC *) FindIC (call_data->icid))
-	return;
+        return;
 
     if (bTrackCursor) {
 	int             i;
@@ -351,12 +351,6 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 #ifdef _DEBUG
         printf ("XIM_FORWARD_EVENT:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
-	if (CurrentIC != FindIC (((IMChangeICStruct *)call_data)->icid)) {
-	    CurrentIC = FindIC (((IMChangeICStruct *)call_data)->icid);
-	    connect_id = ((IMChangeICStruct *)call_data)->connect_id;
-	    
-	    SetTrackPos((IMChangeICStruct *)call_data);
-        }
 	ProcessKey ((IMForwardEventStruct *) call_data);
 
 	return True;
