@@ -239,7 +239,7 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     XUnmapWindow (dpy, VKWindow);    
     
     DestroyConnectID (call_data->connect_id);
-    connect_id = 0;
+    // connect_id = 0;
     
     return True;
 }
