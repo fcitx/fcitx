@@ -32,7 +32,8 @@ fcitx_SOURCES = IC.c IC.h \
 		QuickPhrase.c QuickPhrase.h \
 		AutoEng.c AutoEng.h \
 		fcitx.h extra.c extra.h \
-		internalVersion.c
+		internalVersion.c \
+		ImeRemote.c
 		
 fcitx_LDADD = ../lib/libXimd.a
-fcitx_LDFLAGS = -lXpm -lXtst
+fcitx_LDFLAGS = -lXpm -lXtst -lpthread

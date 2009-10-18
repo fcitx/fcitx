@@ -605,8 +605,10 @@ void SetConnectID (CARD16 connect_id, IME_STATE imState)
     }
 }
 
+extern CARD16 g_last_connect_id;
 IME_STATE ConnectIDGetState (CARD16 connect_id)
 {
+	g_last_connect_id = connect_id;
     CONNECT_ID     *temp;
 
     temp = connectIDsHead;

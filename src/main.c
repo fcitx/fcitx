@@ -64,6 +64,7 @@
 #ifndef CODESET
 #define CODESET 14
 #endif
+#include <pthread.h>
 
 extern Display *dpy;
 extern Window   inputWindow;
@@ -72,12 +73,16 @@ extern Bool     bIsUtf8;
 
 extern HIDE_MAINWINDOW hideMainWindow;
 
+extern void* remoteThread(void*);
+
 int main (int argc, char *argv[])
 {
     XEvent          event;
     int             c; 	//用于保存用户输入的参数
     Bool            bBackground = True;
     char	    *imname=(char *)NULL;
+
+    SetMyExceptionHandler();		//处理事件
 
     while((c = getopt(argc, argv, "dDn:vh")) != -1) {
         switch(c){
@@ -175,13 +180,13 @@ int main (int argc, char *argv[])
 	    exit (0);
     }
     
-    SetMyExceptionHandler();		//处理事件
-
 #ifdef _ENABLE_TRAY
     CreateTrayWindow ();		//创建系统托盘窗口
     DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
 #endif
     
+	pthread_t pid;
+	pthread_create(&pid, NULL, remoteThread, NULL);
     //主循环，即XWindow的消息循环
     for (;;) {
 	XNextEvent (dpy, &event);					//等待一个事件发生
