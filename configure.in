@@ -74,10 +74,10 @@ AC_ARG_ENABLE(log,
   *) AC_MSG_ERROR([bad value "${enableval}" for --enable-log, use "yes" or "no" (default).]) ;;
 esac],[])
 
-if test "x$enable_log" = "xno"; then
-  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS"
-else
+if test "x$enable_log" = "xyes"; then
   CFLAGS="$CFLAGS $X_CFLAGS -D_ENABLE_LOG"
+else
+  CFLAGS="$CFLAGS $X_CFLAGS $XFT_CFLAGS"
 fi
 
 # Option to enable the Xft library for Freetype font support.
