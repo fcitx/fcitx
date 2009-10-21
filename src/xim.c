@@ -457,13 +457,21 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	free (pS2T);
 }
 
-Bool InitXIM (Window im_window, char *imname)
+Bool InitXIM (char *imname)
 {
     XIMStyles      *input_styles;
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;
     char           *p;
+    Window	    im_window;
 
+    im_window = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1, 1, 1, 0, 0);
+    if (im_window == (Window)NULL) {
+	fprintf(stderr, "Can't Create imWindow\n");
+	exit(1);
+    }
+    XSelectInput(dpy, im_window, ExposureMask|ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|VisibilityChangeMask);
+    
     if ( !imname ) {
     	imname = getenv ("XMODIFIERS");
     	if (imname) {
@@ -511,7 +519,7 @@ Bool InitXIM (Window im_window, char *imname)
 	    strcat (strLocale, p);
 	}
     }
-
+    
     ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
 
     if (ims == (XIMS) NULL) {

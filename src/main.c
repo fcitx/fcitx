@@ -67,7 +67,7 @@
 #include <pthread.h>
 
 extern Display *dpy;
-extern Window   inputWindow;
+extern Window   mainWindow;
 
 extern Bool     bIsUtf8;
 
@@ -81,7 +81,8 @@ int main (int argc, char *argv[])
     int             c; 	//用于保存用户输入的参数
     Bool            bBackground = True;
     char	    *imname=(char *)NULL;
-
+    pthread_t	    pid;
+    
     SetMyExceptionHandler();		//处理事件
 
     while((c = getopt(argc, argv, "dDn:vh")) != -1) {
@@ -152,7 +153,7 @@ int main (int argc, char *argv[])
     CreateAboutWindow ();	//创建关于窗口
 
     //处理颜色，即候选词窗口的颜色，也就是我们在“~/.fcitx/config”定义的那些颜色信息
-    InitGC (inputWindow);
+    InitGC (mainWindow);
 
     //将本程序加入到输入法组，告诉系统，使用我输入字符
     SetIM ();
@@ -160,11 +161,11 @@ int main (int argc, char *argv[])
     //处理主窗口的显示
     if (hideMainWindow != HM_HIDE) {
 	DisplayMainWindow ();
-	DrawMainWindow ();	
+	DrawMainWindow ();
     }
     
     //初始化输入法
-    if (!InitXIM (inputWindow, imname))
+    if (!InitXIM (imname))
 	exit (4);
 
     //以后台方式运行
@@ -185,8 +186,8 @@ int main (int argc, char *argv[])
     DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
 #endif
     
-	pthread_t pid;
-	pthread_create(&pid, NULL, remoteThread, NULL);
+    pthread_create(&pid, NULL, remoteThread, NULL);
+
     //主循环，即XWindow的消息循环
     for (;;) {
 	XNextEvent (dpy, &event);					//等待一个事件发生

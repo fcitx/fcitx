@@ -66,7 +66,7 @@ typedef struct _CONNECT_ID {
     position		pos;
 } CONNECT_ID;
 
-Bool            InitXIM (Window, char *);
+Bool            InitXIM (char *);
 void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
 void            CreateConnectID (IMOpenStruct * call_data);
