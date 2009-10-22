@@ -185,7 +185,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	else {
 	    XUnmapWindow (dpy, inputWindow);
 	    XUnmapWindow (dpy, VKWindow);
-	}	
+	}
     }
     else {
 	if (icidGetIMState(call_data->icid) != IS_CLOSED)

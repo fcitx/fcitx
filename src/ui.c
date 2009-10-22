@@ -500,10 +500,8 @@ void MyXEventHandler (XEvent * event)
 		break;
 		//********************
 	    case Button3:
-		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17)) {
-		    bMainWindow_Hiden = True;
+		if (IsInBox (event->xbutton.x, event->xbutton.y, 1, 1, 16, 17))
 		    XUnmapWindow (dpy, mainWindow);
-	        }
 		else if (!bVK) {
 		    bCompactMainWindow = !bCompactMainWindow;
 		    SwitchIM (iIMIndex);
@@ -528,14 +526,14 @@ void MyXEventHandler (XEvent * event)
 
 		break;
 	    case Button2:
-		if (bMainWindow_Hiden) {
+		if (IsWindowVisible(mainWindow)) {
+		    bMainWindow_Hiden = True;
+		    XUnmapWindow(dpy,mainWindow);
+		}
+		else {
 		    bMainWindow_Hiden = False;
 		    DisplayMainWindow();
 		    DrawMainWindow();
-		}
-		else {
-		    bMainWindow_Hiden = True;
-		    XUnmapWindow(dpy,mainWindow);
 		}
 		break;
 	    }
@@ -682,6 +680,18 @@ void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
 }
 #endif
 
+Bool IsWindowVisible(Window window)
+{
+    XWindowAttributes attrs;
+    
+    XGetWindowAttributes( dpy, window, &attrs );
+    
+    if ( attrs.map_state==IsUnmapped)
+	return False;
+
+    return True;
+}
+
 /* *************下列函数取自于 rfinput-2.0 ************************ */
 /*
  * 从xpm图形文件中图形数据填入到XImage变量中
@@ -814,20 +824,6 @@ Bool MouseClick (int *x, int *y, Window window)
 	    break;
 	}
     }
-}
-*/
-/* ****************************************************************** */
-/* 
-Bool IsWindowVisible(Window window)
-{
-    XWindowAttributes attrs;
-    
-    XGetWindowAttributes( dpy, window, &attrs );
-    
-    if ( attrs.map_state==IsUnmapped)
-	return False;
-
-    return True;
 }
 */
 
