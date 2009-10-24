@@ -90,14 +90,12 @@ typedef struct PYBASE {
     uint            iIndex;
     uint            iHit;
     uint            flag:1;
-    uint	    iChangeCount;	//Whether we have changed the Index/Hit value of this group
 } PyBase;
 
 typedef struct _PYFA {
     char            strMap[3];
     struct PYBASE  *pyBase;
     int             iBase;
-    uint	    iChangeCount;	//Whether we have changed the Index/Hit value of this group
 } PYFA;
 
 typedef struct PYINDEX {

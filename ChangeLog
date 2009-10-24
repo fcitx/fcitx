@@ -1,6 +1,9 @@
-2009-10-21: Yuking <yuking_net@sohu.com>
-        * src/xim.c, main.c: 修正与QT4.6特效时的不兼容
+2009-10-25: Yuking <yuking_net@sohu.com>
+	* src/py.c: 修正拼音词频信息保存错误问题
 	
+2009-10-21: Yuking <yuking_net@sohu.com>
+	* src/xim.c, main.c: 修正与QT4.6特效时的不兼容
+
 2009-10-18: wind (xihe), xihels@gmail.com
         * 添加VIM自动输入模式转换
 
