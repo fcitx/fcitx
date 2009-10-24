@@ -43,6 +43,7 @@
 int             iPYFACount;
 PYFA           *PYFAList;
 uint            iCounter = 0;
+uint		iOrigCounter= 0;
 Bool            bPYBaseDictLoaded = False;
 Bool            bPYOtherDictLoaded = False;
 
@@ -158,6 +159,8 @@ Bool LoadPYBaseDict (void)
     fclose (fp);
     bPYBaseDictLoaded = True;
 
+    iOrigCounter = iCounter;
+
     pyFreq = (PyFreq *) malloc (sizeof (PyFreq));
     pyFreq->next = NULL;
 
@@ -217,6 +220,7 @@ Bool LoadPYOtherDict (void)
 	    }
 	}
 	fclose (fp);
+	iOrigCounter = iCounter;
     }
 
     //下面开始读取用户词库
@@ -2626,7 +2630,7 @@ void SavePYIndex (void)
     k = -1;
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iBase; j++) {
-	    if (PYFAList[i].pyBase[j].iIndex) {
+	    if (PYFAList[i].pyBase[j].iIndex > iOrigCounter) {
 		fwrite (&i, sizeof (int), 1, fp);
 		fwrite (&j, sizeof (int), 1, fp);
 		fwrite (&k, sizeof (int), 1, fp);
@@ -2642,7 +2646,7 @@ void SavePYIndex (void)
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iBase; j++) {
 	    for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++) {
-		if (PYFAList[i].pyBase[j].phrase[k].iIndex) {
+		if (PYFAList[i].pyBase[j].phrase[k].iIndex > iOrigCounter) {
 		    fwrite (&i, sizeof (int), 1, fp);
 		    fwrite (&j, sizeof (int), 1, fp);
 		    fwrite (&k, sizeof (int), 1, fp);
