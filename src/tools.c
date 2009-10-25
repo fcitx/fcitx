@@ -404,8 +404,20 @@ inline static int fast_chinese_english_switch(Configure *c, void *a, int isread)
 {
     if(isread)
         SetSwitchKey((char *)a);
-    else
-        fprintf((FILE *)a, "%s=%s\n", c->name, "L_SHIFT");
+    else {
+	if ( switchKey == XKeysymToKeycode (dpy, XK_Control_R) )
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "R_CTRL");
+	else if ( switchKey == XKeysymToKeycode (dpy, XK_Shift_R) )
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "R_SHIFT");
+	else if ( switchKey == XKeysymToKeycode (dpy, XK_Shift_L) )
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "L_SHIFT");
+	else if ( switchKey == XKeysymToKeycode (dpy, XK_Super_R) )
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "R_SUPER");
+	else if ( switchKey == XKeysymToKeycode (dpy, XK_Super_L) )
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "L_SUPER");
+	else
+	    fprintf((FILE *)a, "%s=%s\n", c->name, "L_CTRL");
+    }
 
     return 0;
 }
@@ -1196,14 +1208,13 @@ void LoadConfig (Bool bMode)
 {
     FILE    *fp;
     char    buf[PATH_MAX], *pbuf, *pbuf1;
-    Bool    bFromUser = True;
     //用于标示group的index，在配置文件里面配置是分组的，类似与ini文件的分组
     int     group_idx;
     int		i;
     Configure   *tmpconfig;
 
-    //用以标识配置文件是用户家目录下的，还是从安装目录下拷贝过来的
-    bIsReloadConfig = bMode;	// 全局变量，定义于“src/tool.c[193]"
+    //用以标识是否是重新读取配置文件
+    bIsReloadConfig = bMode;
 
     pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
     if(!pbuf){
@@ -1216,16 +1227,12 @@ void LoadConfig (Bool bMode)
     fp = fopen(buf, "r");
     if(!fp && errno == ENOENT){ /* $HOME/.fcitx/config does not exist */
         snprintf(buf, PATH_MAX, PKGDATADIR "/data/config");
-        bFromUser = False;
         fp = fopen(buf, "r");
         if(!fp){
             perror("fopen");
             exit(1);	// 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
         }
     }
-
-    if(!bFromUser) /* create default configure file */
-        SaveConfig();
 
     group_idx = -1;
 

@@ -85,14 +85,28 @@ int main (int argc, char *argv[])
     
     SetMyExceptionHandler();		//处理事件
 
-    while((c = getopt(argc, argv, "dDn:vh")) != -1) {
+    /* 先初始化 X 再加载配置文件，因为设置快捷键从 keysym 转换到
+     * keycode 的时候需要 Display
+     */
+    if (!InitX ())
+	exit (1);
+
+    /*加载用户配置文件，通常是“~/.fcitx/config”，如果该文件不存在就从安装目录中拷贝
+     * “/data/config”到“~/.fcitx/config”
+     */
+    LoadConfig (True);
+
+    while((c = getopt(argc, argv, "cdDn:vh")) != -1) {
         switch(c){
-            case 'd':
+	    case 'd':
                 /* nothing to do */
                 break;
             case 'D':
                 bBackground = False;
                 break;
+	    case 'c':
+		SaveConfig();
+		return 0;
 	    case 'n':
 	    	imname=optarg;
 		break;
@@ -111,17 +125,6 @@ int main (int argc, char *argv[])
      */
     setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
-
-    /* 先初始化 X 再加载配置文件，因为设置快捷键从 keysym 转换到
-     * keycode 的时候需要 Display
-     */
-    if (!InitX ())
-	exit (1);
-
-    /*加载用户配置文件，通常是“~/.fcitx/config”，如果该文件不存在就从安装目录中拷贝
-     * “/data/config”到“~/.fcitx/config”
-     */
-    LoadConfig (True);
 
     /*创建字体。实际上，就是根据用户的设置，使用xft读取字体的相关信息。
      * xft是x11提供的处理字体的相关函数集
@@ -206,6 +209,7 @@ void Usage ()
     printf("Usage: fcitx [OPTION]\n"
            "\t-d\t\trun as daemon(default)\n"
            "\t-D\t\tdon't run as daemon\n"
+   	   "\t-c\t\t(re)create config file in home directory and then exit\n"
 	   "\t-n[im name]\trun as specified name\n"
            "\t-v\t\tdisplay the version information and exit\n"
            "\t-h\t\tdisplay this help and exit\n");

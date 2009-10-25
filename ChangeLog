@@ -1,5 +1,6 @@
 2009-10-25: Yuking <yuking_net@sohu.com>
 	* src/py.c: 修正拼音词频信息保存错误问题
+	* src/tools.c, main.c: 调整配置文件的读取方法，不再自动在家目录中生成配置文件，而是增加了一个命令行参数（请用fcitx -h查看）
 	
 2009-10-21: Yuking <yuking_net@sohu.com>
 	* src/xim.c, main.c: 修正与QT4.6特效时的不兼容
