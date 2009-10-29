@@ -573,10 +573,20 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    iKey = ' ';	//使用第2个分号输入中文分号
 				    }
 				    else if (!iInCap) {
-					if (IsHotKey (iKey, hkPrevPage))
+					if (IsHotKey (iKey, hkPrevPage)) {
 					    retVal = im[iIMIndex].GetCandWords (SM_PREV);
-					else if (IsHotKey (iKey, hkNextPage))
+#ifdef _ENABLE_RECORDING
+					    if ( retVal == IRV_DISPLAY_CANDWORDS )
+					        uMessageUp --;
+#endif
+				        }
+					else if (IsHotKey (iKey, hkNextPage)) {
 					    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
+#ifdef _ENABLE_RECORDING
+					    if ( retVal == IRV_DISPLAY_CANDWORDS )
+					        uMessageUp --;
+#endif
+				        }
 				    }
 
 				    if (retVal == IRV_TO_PROCESS) {
