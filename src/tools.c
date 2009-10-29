@@ -593,7 +593,8 @@ inline static int save_all(Configure *c, void *a, int isread)
     return 0;
 }
 
-/* 保存词库 */
+#ifdef _ENABLE_RECORDING
+/* 设置记录模式 */
 inline static int set_recording(Configure *c, void *a, int isread)
 {
     if(isread)
@@ -603,6 +604,7 @@ inline static int set_recording(Configure *c, void *a, int isread)
 
     return 0;
 }
+#endif
 
 /* 默认双拼方案 */
 inline static int default_shuangpin_scheme(Configure *c, void *a, int isread)
@@ -1010,11 +1012,13 @@ Configure hotkey_config[] = {
         .value_type = CONFIG_HOTKEY,
         .config_rw = save_all,
     },
+#ifdef _ENABLE_RECORDING
     {
         .name = "记录模式",
         .value_type = CONFIG_HOTKEY,
         .config_rw = set_recording,
     },
+#endif
     {
         .name = NULL,
     },

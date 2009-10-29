@@ -3,7 +3,7 @@
  *
  *       Filename:  ImRemote.c
  *
- *    Description:  
+ *    Description:
  *
  *        Version:  1.0
  *       Revision:  none
@@ -27,9 +27,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/un.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <fcntl.h>
 #include "xim.h"
+#include "MainWindow.h"
 
 static const char socketfile[]="/tmp/fcitx.socket";
 CARD16 g_last_connect_id;
