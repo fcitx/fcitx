@@ -81,11 +81,11 @@ GC              lightGC = (GC) NULL;
 
 Bool            bIsUtf8 = False;
 
-char            strFontName[100] = "*";
-
 #ifdef _USE_XFT
+char            strFontName[100] = "AR PL ShanHeiSun Uni";
 char            strFontEnName[100] = "Courier New";
 #else
+char            strFontName[100] = "*";
 char            strFontEnName[100] = "Courier";
 #endif
 
@@ -219,14 +219,14 @@ void InitGC (Window window)
 /*void SetLocale(void)
 {
 	char *p;
-	
+
 	p=getenv("LC_CTYPE");
 	if ( !p ) {
 		p=getenv("LC_ALL");
 		if ( !p)
 			p=getenv("LANG");
 	}
-	
+
 	//试验发现，当locale为zh_CN.UTF-8时，setlocale必须设置这zh_CN.UTF-8而不能是zh_CN.utf-8
 	if ( p ) {
 		strcpy(strUserLocale,p);
@@ -406,7 +406,7 @@ void MyXEventHandler (XEvent * event)
 	    else
 		DrawTrayWindow (INACTIVE_ICON);
 	}
-#endif		    
+#endif
 	//added by yunfan
 	else if (event->xexpose.window == aboutWindow)
 	    DrawAboutWindow ();
@@ -435,12 +435,12 @@ void MyXEventHandler (XEvent * event)
 			}
 			else
 			    ChangeIMState (connect_id);
-#ifdef _ENABLE_TRAY			    
+#ifdef _ENABLE_TRAY
 			if (ConnectIDGetState (connect_id) == IS_CHN)
 			    DrawTrayWindow (ACTIVE_ICON);
 			else
 			    DrawTrayWindow (INACTIVE_ICON);
-#endif			    
+#endif
 		    }
 		}
 	    }
@@ -451,7 +451,7 @@ void MyXEventHandler (XEvent * event)
 		    MouseClick (&iVKWindowX, &iVKWindowY, VKWindow);
 		    DrawVKWindow ();
 		}
-	    }	    
+	    }
 	    //added by yunfan
 	    else if (event->xbutton.window == aboutWindow) {
 		XUnmapWindow (dpy, aboutWindow);
@@ -509,7 +509,7 @@ void MyXEventHandler (XEvent * event)
 		break;
 	    }
 	}
-#ifdef _ENABLE_TRAY	
+#ifdef _ENABLE_TRAY
 	else if (event->xbutton.window == tray.window) {
 	    switch (event->xbutton.button) {
 	    case Button1:
@@ -538,7 +538,7 @@ void MyXEventHandler (XEvent * event)
 		break;
 	    }
 	}
-#endif	
+#endif
 	break;
     case FocusIn:
 	if (ConnectIDGetState (connect_id) == IS_CHN)
@@ -683,9 +683,9 @@ void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
 Bool IsWindowVisible(Window window)
 {
     XWindowAttributes attrs;
-    
+
     XGetWindowAttributes( dpy, window, &attrs );
-    
+
     if ( attrs.map_state==IsUnmapped)
 	return False;
 
@@ -840,7 +840,7 @@ void OutputAsUTF8(char *str)
     l1 = iconv (convUTF8, (ICONV_CONST char **) (&str), &l1, &ps, &l2);
     *ps = '\0';
     ps = strOutput;
-    
+
     puts(strOutput);
 }
 */

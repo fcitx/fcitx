@@ -82,7 +82,7 @@ int main (int argc, char *argv[])
     Bool            bBackground = True;
     char	    *imname=(char *)NULL;
     pthread_t	    pid;
-    
+
     SetMyExceptionHandler();		//处理事件
 
     /* 先初始化 X 再加载配置文件，因为设置快捷键从 keysym 转换到
@@ -166,7 +166,7 @@ int main (int argc, char *argv[])
 	DisplayMainWindow ();
 	DrawMainWindow ();
     }
-    
+
     //初始化输入法
     if (!InitXIM (imname))
 	exit (4);
@@ -183,12 +183,12 @@ int main (int argc, char *argv[])
 	else if (id > 0)
 	    exit (0);
     }
-    
+
 #ifdef _ENABLE_TRAY
     CreateTrayWindow ();		//创建系统托盘窗口
     DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
 #endif
-    
+
     pthread_create(&pid, NULL, remoteThread, NULL);
 
     //主循环，即XWindow的消息循环

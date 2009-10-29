@@ -55,7 +55,7 @@ void SetMyExceptionHandler (void)
     int             signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++)
-	signal (signo, OnException);
+    	signal (signo, OnException);
 }
 
 void OnException (int signo)

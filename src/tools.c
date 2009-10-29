@@ -146,12 +146,12 @@ extern Bool     bLocked;
 
 extern MHPY     MHPY_C[];
 extern MHPY     MHPY_S[];
-
+/*
 extern Bool     bUsePinyin;
 extern Bool     bUseSP;
 extern Bool     bUseQW;
 extern Bool     bUseTable;
-
+*/
 extern char     strDefaultSP[];
 extern SP_FROM  iSPFrom;
 
@@ -174,9 +174,15 @@ extern Bool     bUseBold;
 
 extern int      iOffsetX;
 extern int      iOffsetY;
+extern int	inputMethods[];
 
 #ifdef _ENABLE_TRAY
 extern Bool	bUseTrayIcon;
+#endif
+
+#ifdef _ENABLE_RECORDING
+extern HOTKEYS  hkRecording[];
+extern Bool	bRecording;
 #endif
 
 Bool MyStrcmp (char *str1, char *str2)
@@ -187,7 +193,7 @@ Bool MyStrcmp (char *str1, char *str2)
 /* 其他函数需要知道传递给 LoadConfig 的参数 */
 Bool    bIsReloadConfig = True;
 /* 在载入 profile 文件过程中传递状态信息 */
-Bool    bIsNeedSaveConfig = True;
+Bool    bNeedSaveConfig = True;
 
 /*
  * 配置项值的类型：
@@ -324,7 +330,7 @@ static int write_configures(FILE *fp, Configure *configures)
                     exit(1);
             }
         }
-     }
+    }
     return 0;
 }
 
@@ -564,8 +570,14 @@ inline static int second_third_candidate_word(Configure *c, void *a, int isread)
             i2ndSelectKey = pstr[0] ^ 0xFF;
             i3rdSelectKey = pstr[1] ^ 0xFF;
         }
-    }else
-        fprintf((FILE *)a, "%s=%s\n", c->name, "0");
+    }else {
+	if ( i2ndSelectKey == 50 )
+            fprintf((FILE *)a, "%s=%s\n", c->name, "SHIFT");
+        else if ( i2ndSelectKey == 37 )
+            fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL");
+        else
+            fprintf((FILE *)a, "%s=%c%c\n", c->name, i2ndSelectKey, i3rdSelectKey);
+    }
 
     return 0;
 }
@@ -577,6 +589,17 @@ inline static int save_all(Configure *c, void *a, int isread)
         SetHotKey((char *)a, hkSaveAll);
     else
         fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_S");
+
+    return 0;
+}
+
+/* 保存词库 */
+inline static int set_recording(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkRecording);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_J");
 
     return 0;
 }
@@ -931,7 +954,7 @@ Configure hotkey_config[] = {
         .name = "隐藏主窗口",
         .value_type = CONFIG_HOTKEY,
         .config_rw = hide_main_window,
-    },    
+    },
     {
         .name = "切换虚拟键盘",
         .value_type = CONFIG_HOTKEY,
@@ -983,12 +1006,14 @@ Configure hotkey_config[] = {
         .config_rw = second_third_candidate_word,
     },
     {
-        .name = NULL,
-    },
-    {
         .name = "保存词库",
         .value_type = CONFIG_HOTKEY,
         .config_rw = save_all,
+    },
+    {
+        .name = "记录模式",
+        .value_type = CONFIG_HOTKEY,
+        .config_rw = set_recording,
     },
     {
         .name = NULL,
@@ -999,7 +1024,7 @@ Configure input_method_config[] = {
     {
         .name = "使用拼音",
         .value_type = CONFIG_INTEGER,
-        .value.integer = &bUsePinyin,
+        .value.integer = &inputMethods[IM_PY],
     },
     {
         .name = "拼音名称",
@@ -1010,7 +1035,7 @@ Configure input_method_config[] = {
     {
         .name = "使用双拼",
         .value_type = CONFIG_INTEGER,
-        .value.integer = &bUseSP,
+        .value.integer = &inputMethods[IM_SP],
     },
     {
         .name = "双拼名称",
@@ -1026,7 +1051,7 @@ Configure input_method_config[] = {
     {
         .name = "使用区位",
         .value_type = CONFIG_INTEGER,
-        .value.integer = &bUseQW,
+        .value.integer = &inputMethods[IM_QW],
     },
     {
         .name = "区位名称",
@@ -1037,7 +1062,7 @@ Configure input_method_config[] = {
     {
         .name = "使用码表",
         .value_type = CONFIG_INTEGER,
-        .value.integer = &bUseTable,
+        .value.integer = &inputMethods[IM_TABLE],
     },
     {
         .name = "提示词库中的词组",
@@ -1213,6 +1238,9 @@ void LoadConfig (Bool bMode)
     int		i;
     Configure   *tmpconfig;
 
+    for (i = 0;i < INPUT_METHODS; i++ )
+        inputMethods[i] = 1;
+
     //用以标识是否是重新读取配置文件
     bIsReloadConfig = bMode;
 
@@ -1228,92 +1256,90 @@ void LoadConfig (Bool bMode)
     if(!fp && errno == ENOENT){ /* $HOME/.fcitx/config does not exist */
         snprintf(buf, PATH_MAX, PKGDATADIR "/data/config");
         fp = fopen(buf, "r");
-        if(!fp){
-            perror("fopen");
-            exit(1);	// 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
-        }
-    }
+        if(!fp)
+            SaveConfig();
+    }else {
+	group_idx = -1;
 
-    group_idx = -1;
+	/* FIXME: 也许应该用另外更恰当的缓冲区长度 */
+	while(fgets(buf, PATH_MAX, fp)){		//每次最多读入PATH_MAX大小的数据
+	    i = strlen(buf);
 
-    /* FIXME: 也许应该用另外更恰当的缓冲区长度 */
-    while(fgets(buf, PATH_MAX, fp)){		//每次最多读入PATH_MAX大小的数据
-        i = strlen(buf);
+            /*fcitx的配置文件每行最多是PATH_MAX个字符，因此有上面的FIXME*/
+            if(buf[i-1] != '\n'){
+		fprintf(stderr, "error: configure file: line length\n");
+		exit(1);
+	    } else
+		buf[i-1] = '\0';
 
-        /*fcitx的配置文件每行最多是PATH_MAX个字符，因此有上面的FIXME*/
-        if(buf[i-1] != '\n'){
-            fprintf(stderr, "error: configure file: line length\n");
-            exit(1);
-        }else
-            buf[i-1] = '\0';
+	    pbuf = buf;
+	    while(*pbuf && isspace(*pbuf))	//将pbuf指向第一个非空字符
+		pbuf++;
+            if(!*pbuf || *pbuf == '#')		//如果改行是空数据或者是注释(以#开头为注释)
+		continue;
 
-        pbuf = buf;
-        while(*pbuf && isspace(*pbuf))	//将pbuf指向第一个非空字符
-            pbuf++;
-        if(!*pbuf || *pbuf == '#')		//如果改行是空数据或者是注释(以#开头为注释)
-            continue;
+            if(*pbuf == '['){ /* get a group name(组名的格式为"[组名]")*/
+		pbuf++;
+		pbuf1 = strchr(pbuf, ']');
+		if(!pbuf1){
+                    fprintf(stderr, "error: configure file: configure group name\n");
+                    exit(1);
+                }
 
-        if(*pbuf == '['){ /* get a group name(组名的格式为"[组名]")*/
-            pbuf++;
-            pbuf1 = strchr(pbuf, ']');
+                //根据group的名字找到其在全局变量configure_groups中的index
+                group_idx = -1;
+                for(i = 0; configure_groups[i].name; i++)
+                    if(strncmp(configure_groups[i].name, pbuf, pbuf1-pbuf) == 0){
+                        group_idx = i;
+                        break;
+                    }
+                if(group_idx < 0){
+                    fprintf(stderr, "error: invalid configure group name\n");
+                    exit(1); /* 我认为这儿没有必要退出。此处完全可以忽略这个错误，
+                              * 并且在后面也忽略这个组的配置即可。
+                              * 因为这儿退出只会带来一个坏处，那就是扩展性。
+                              * 以后再添加新的组的时候，老版本的程序就无法使用
+                              * 新版本的配置文件了。或者，添加了一个可选扩展，
+                              * 该扩展新添加一个组等等。所以，此处应该给一个警告，
+                              * 而不是退出。*/
+		}
+		continue;
+	    }
+
+            //pbuf1指向第一个非空字符与=之间的字符
+            pbuf1 = strchr(pbuf, '=');
             if(!pbuf1){
-                fprintf(stderr, "error: configure file: configure group name\n");
+                fprintf(stderr, "error: configure file: configure entry name\n");
+                exit(1);	// 和前面一样，这儿也应该是一个警告而不应该是提示出错并退出。
+            }
+
+            /*
+	     * 这儿避免的是那样一种情况，即从文件头到第一个配置项(即类似与“配置名=配置值”
+             * 的一行字符串)并没有任何分组。也就是防止出现下面的“配置1”和“配置2”
+             * #文件头
+             * 配置1=123 配置2=123
+             * [组名]
+             * ...
+             * #文件尾
+             */
+
+
+            if(group_idx < 0){
+                fprintf(stderr, "error: configure file: no group name at beginning\n");
                 exit(1);
             }
-
-            //根据group的名字找到其在全局变量configure_groups中的index
-            group_idx = -1;
-            for(i = 0; configure_groups[i].name; i++)
-                if(strncmp(configure_groups[i].name, pbuf, pbuf1-pbuf) == 0){
-                    group_idx = i;
-                    break;
-                }
-            if(group_idx < 0){
-                fprintf(stderr, "error: invalid configure group name\n");
-                exit(1); /* 我认为这儿没有必要退出。此处完全可以忽略这个错误，
-                          * 并且在后面也忽略这个组的配置即可。
-                          * 因为这儿退出只会带来一个坏处，那就是扩展性。
-                          * 以后再添加新的组的时候，老版本的程序就无法使用
-                          * 新版本的配置文件了。或者，添加了一个可选扩展，
-                          * 该扩展新添加一个组等等。所以，此处应该给一个警告，
-                          * 而不是退出。*/
-            }
-            continue;
-        }
-
-        //pbuf1指向第一个非空字符与=之间的字符
-        pbuf1 = strchr(pbuf, '=');
-        if(!pbuf1){
-            fprintf(stderr, "error: configure file: configure entry name\n");
-            exit(1);	// 和前面一样，这儿也应该是一个警告而不应该是提示出错并退出。
-        }
-
-        /*
-         * 这儿避免的是那样一种情况，即从文件头到第一个配置项(即类似与“配置名=配置值”
-         * 的一行字符串)并没有任何分组。也就是防止出现下面的“配置1”和“配置2”
-         * #文件头
-         * 配置1=123 配置2=123
-         * [组名]
-         * ...
-         * #文件尾
-         */
-
-
-        if(group_idx < 0){
-            fprintf(stderr, "error: configure file: no group name at beginning\n");
-            exit(1);
-        }
-        //找到该组中的配置项，并将其保存到对应的全局变量里面去
-        for(tmpconfig = configure_groups[group_idx].configure;
+            //找到该组中的配置项，并将其保存到对应的全局变量里面去
+            for(tmpconfig = configure_groups[group_idx].configure;
                 tmpconfig->name; tmpconfig++)
-        {
+            {
 
-            if(strncmp(tmpconfig->name, pbuf, pbuf1-pbuf) == 0)
-                read_configure(tmpconfig, ++pbuf1);
+                if(strncmp(tmpconfig->name, pbuf, pbuf1-pbuf) == 0)
+                    read_configure(tmpconfig, ++pbuf1);
+            }
         }
-    }
 
-    fclose(fp);
+        fclose(fp);
+    }
 
     /* 如果配置文件中没有设置打开/关闭输入法的热键，那么设置CTRL-SPACE为默认热键 */
     if (!Trigger_Keys) {
@@ -1373,7 +1399,7 @@ inline static int get_version(Configure *c, void *a, int isread)
 {
     if(isread){
         if(!strcasecmp(FCITX_VERSION, (char *)a))
-            bIsNeedSaveConfig = False;
+            bNeedSaveConfig = False;
     }else
         fprintf((FILE *)a, "%s=%s\n", c->name, FCITX_VERSION);
     return 0;
@@ -1512,6 +1538,13 @@ Configure profiles[] = {
         .value_type = CONFIG_INTEGER,
         .value.integer = &bUseGBKT,
     },
+#ifdef _ENABLE_RECORDING
+    {
+        .name = "记录模式",
+        .value_type = CONFIG_INTEGER,
+        .value.integer = &bRecording,
+    },
+#endif
     {
         .name = NULL,
     },
@@ -1580,7 +1613,7 @@ void LoadProfile (void)
 
     iIMIndex = iIMIndex_tmp;		/* piaoairy add 20080518 */
 
-    if(bIsNeedSaveConfig){
+    if(bNeedSaveConfig){
         SaveConfig();
         SaveProfile();
      }

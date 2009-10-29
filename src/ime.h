@@ -21,10 +21,10 @@
  * @file   ime.h
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief  按键和输入法通用功能处理
- * 
- * 
+ *
+ *
  */
 
 #ifndef _IME_H
@@ -36,12 +36,19 @@
 
 #define MAX_CAND_WORD	10
 #define MAX_USER_INPUT	300
+#define INPUT_METHODS	5	//标示输入法的类别数量
 
 #define HOT_KEY_COUNT	2
-
 #define MAX_IM_NAME	15
-
 #define TEMP_FILE		"FCITX_DICT_TEMP"
+
+typedef enum _INPUT_METHOD {
+    IM_PY = 0,
+    IM_SP,
+    IM_QW,
+    IM_TABLE,
+    IM_EXTRA
+} INPUT_METHOD;
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
@@ -122,6 +129,11 @@ INPUT_RETURN_VALUE ChangeGBK (void);
 INPUT_RETURN_VALUE ChangeLegend (void);
 INPUT_RETURN_VALUE ChangeTrack (void);
 INPUT_RETURN_VALUE ChangeGBKT (void);
+void		ChangeLock (void);
+
+#ifdef _ENABLE_RECORDING
+void		ChangeRecording (void);
+#endif
 
 void            RegisterNewIM (char *strName, void (*ResetIM) (void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),
 			       Bool (*PhraseTips) (void), void (*Init) (void), void (*Destroy) (void));

@@ -51,6 +51,11 @@ char            strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_
 int		iClientCursorX = INPUTWND_STARTX;
 int		iClientCursorY = INPUTWND_STARTY;
 
+#ifdef _ENABLE_RECORDING
+FILE		*fpRecord = NULL;
+Bool		bRecording = True;
+#endif
+
 extern IM      *im;
 extern INT8     iIMIndex;
 
@@ -139,10 +144,10 @@ void SetTrackPos(IMChangeICStruct * call_data)
 		if (CurrentIC->focus_win)
 		    XTranslateCoordinates (dpy, CurrentIC->focus_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);
 		else if (CurrentIC->client_win)
-		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);		    
+		    XTranslateCoordinates (dpy, CurrentIC->client_win, RootWindow (dpy, iScreen), (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y, &iClientCursorX, &iClientCursorY, &window);
 		else
 		    return;
-		    
+
 		ConnectIDSetTrackCursor (call_data->connect_id, True);
 	    }
 	}
@@ -154,7 +159,7 @@ void SetTrackPos(IMChangeICStruct * call_data)
 Bool MyGetICValuesHandler (IMChangeICStruct * call_data)
 {
     GetIC (call_data);
-    
+
     return True;
 }
 
@@ -162,7 +167,7 @@ Bool MySetICValuesHandler (IMChangeICStruct * call_data)
 {
     SetIC (call_data);
     SetTrackPos(call_data);
-    
+
     return True;
 }
 
@@ -174,10 +179,10 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     if (ConnectIDGetState (connect_id) != IS_CLOSED) {
 	if (icidGetIMState(call_data->icid) == IS_CLOSED)
 	    IMPreeditStart (ims, (XPointer) call_data);
- 	    
+
 	EnterChineseMode (lastConnectID == connect_id);
 	DrawMainWindow ();
-	
+
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
 		DisplayVKWindow ();
@@ -190,17 +195,17 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     else {
 	if (icidGetIMState(call_data->icid) != IS_CLOSED)
 	    IMPreeditEnd (ims, (XPointer) call_data);
-	    
+
 	XUnmapWindow (dpy, inputWindow);
 	XUnmapWindow (dpy, VKWindow);
-#ifdef _ENABLE_TRAY	
+#ifdef _ENABLE_TRAY
 	DrawTrayWindow (INACTIVE_ICON);
 #endif
 	if (hideMainWindow == HM_SHOW) {
 	    DisplayMainWindow ();
 	    DrawMainWindow ();
 	}
-	else 
+	else
 	    XUnmapWindow (dpy, mainWindow);
     }
 
@@ -209,17 +214,17 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
     //When application gets the focus, re-record the time.
     bStartRecordType = False;
     iHZInputed = 0;
-   
+
     if (ConnectIDGetTrackCursor (connect_id) && bTrackCursor) {
 	position * pos = ConnectIDGetPos(connect_id);
-	
+
 	if (pos) {
 	    iClientCursorX = pos->x;
 	    iClientCursorY = pos->y;
-	    XMoveWindow (dpy, inputWindow, iClientCursorX, iClientCursorY); 
+	    XMoveWindow (dpy, inputWindow, iClientCursorX, iClientCursorY);
         }
     }
-   
+
     return True;
 }
 
@@ -236,11 +241,20 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);    
-    
+    XUnmapWindow (dpy, VKWindow);
+
     DestroyConnectID (call_data->connect_id);
     // connect_id = 0;
-    
+
+    SaveIM();
+
+#ifdef _ENABLE_RECORDING
+    if ( fpRecord ) {
+        fclose(fpRecord);
+        fpRecord = NULL;
+    }
+#endif
+
     return True;
 }
 
@@ -254,7 +268,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
     }
 
     CreateICID(call_data);
-    
+
     return True;
 }
 
@@ -267,7 +281,7 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 
     DestroyIC (call_data);
     DestroyICID(call_data->icid);
-    
+
     return True;
 }
 
@@ -282,7 +296,7 @@ void EnterChineseMode (Bool bState)
     }
 
     DisplayMainWindow ();
-#ifdef _ENABLE_TRAY	
+#ifdef _ENABLE_TRAY
     DrawTrayWindow (ACTIVE_ICON);
 #endif
 }
@@ -293,18 +307,18 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	/* Mainwindow always shows wrong input status, so fix it here */
 	CurrentIC = (IC *) FindIC (call_data->icid);
         connect_id = call_data->connect_id;
-	    
+
 	SetConnectID (call_data->connect_id, IS_CHN);
 	icidSetIMState(call_data->icid, IS_CHN);
-	
+
 	EnterChineseMode (False);
 	DrawMainWindow ();
-	
+
 	SetTrackPos( (IMChangeICStruct *)call_data );
 	if (bShowInputWindowTriggering && !bCorner)
 	    DisplayInputWindow ();
-	    
-#ifdef _ENABLE_TRAY	
+
+#ifdef _ENABLE_TRAY
 	DrawTrayWindow (ACTIVE_ICON);
 #endif
     }
@@ -339,7 +353,7 @@ Bool MyProtoHandler (XIMS _ims, IMProtocol * call_data)
 	return MyDestroyICHandler ((IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
 #ifdef _DEBUG
-      printf ("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
+        printf ("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid, ((IMForwardEventStruct *) call_data)->connect_id);
 #endif
 	return MySetICValuesHandler ((IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
@@ -426,6 +440,25 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, CurrentIC->id, connect_id);
 #endif
 
+#ifdef _ENABLE_RECORDING
+    if (bRecording) {
+        if ( !fpRecord ) {
+	    char    buf[PATH_MAX], *pbuf;
+
+            pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+            if (!pbuf)
+                fprintf(stderr, "error: get environment variable HOME\n");
+            else {
+	        //获取配置文件的绝对路径
+	        snprintf(buf, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
+	        fpRecord = fopen(buf, "a+");
+	    }
+        }
+        if ( fpRecord )
+	    fprintf(fpRecord, "%s", strHZ);
+    }
+#endif
+
     if (bUseGBKT)
 	pS2T = strHZ = ConvertGBKSimple2Tradition (strHZ);
 
@@ -471,7 +504,7 @@ Bool InitXIM (char *imname)
 	exit(1);
     }
     XSelectInput(dpy, im_window, ExposureMask|ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|VisibilityChangeMask);
-    
+
     if ( !imname ) {
     	imname = getenv ("XMODIFIERS");
     	if (imname) {
@@ -487,7 +520,7 @@ Bool InitXIM (char *imname)
             imname = DEFAULT_IMNAME;
         }
     }
-    
+
 #ifdef _DEBUG
     strcpy (strXModifiers, imname);
 #endif
@@ -519,7 +552,7 @@ Bool InitXIM (char *imname)
 	    strcat (strLocale, p);
 	}
     }
-    
+
     ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
 
     if (ims == (XIMS) NULL) {
@@ -594,7 +627,7 @@ void DestroyConnectID (CARD16 connect_id)
 	connectIDsHead = temp->next;
     else
 	last->next = temp->next;
-	
+
     free (temp);
 }
 
@@ -753,7 +786,7 @@ char *ConnectIDGetLocale(CARD16 connect_id)
 	    	return temp->strLocale;
 	    return strDefault;
 	}
-	
+
 	temp=temp->next;
     }
 
@@ -770,7 +803,7 @@ void CreateICID (IMChangeICStruct * call_data)
     icidNew->icid = call_data->icid;
     icidNew->connect_id = call_data->connect_id;
     icidNew->imState = IS_CLOSED;
-    
+
     icidsHead = icidNew;
 }
 
@@ -794,7 +827,7 @@ void DestroyICID (CARD16 icid)
 	icidsHead = temp->next;
     else
 	last->next = temp->next;
-	
+
     free (temp);
 }
 
@@ -809,7 +842,7 @@ void icidSetIMState (CARD16 icid, IME_STATE imState)
 	    temp->imState = imState;
 #if _DEBUG
 	    fprintf(stderr,"Set icid=%d(connect_id=%d) to %d\n",icid,temp->connect_id, imState);
-#endif	    
+#endif
 	    return;
 	}
 
