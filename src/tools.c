@@ -146,12 +146,7 @@ extern Bool     bLocked;
 
 extern MHPY     MHPY_C[];
 extern MHPY     MHPY_S[];
-/*
-extern Bool     bUsePinyin;
-extern Bool     bUseSP;
-extern Bool     bUseQW;
-extern Bool     bUseTable;
-*/
+
 extern char     strDefaultSP[];
 extern SP_FROM  iSPFrom;
 
@@ -165,11 +160,7 @@ extern unsigned int iTimeInterval;
 extern int     iFixedInputWindowWidth;
 extern Bool     bShowInputWindowTriggering;
 
-#ifdef _USE_XFT
-extern Bool     bUseAA;
-#endif
 extern char     strUserLocale[];
-
 extern Bool     bUseBold;
 
 extern int      iOffsetX;
@@ -705,13 +696,6 @@ Configure program_config[] = {
         .value.str_value.string = strUserLocale,
         .value.str_value.string_length = 50,
     },
- #ifdef _USE_XFT
-    {
-        .name = "使用AA字体",
-        .value_type = CONFIG_INTEGER,
-        .value.integer = &bUseAA,
-    },
- #endif
     {
         .name = "使用粗体",
         .value_type = CONFIG_INTEGER,

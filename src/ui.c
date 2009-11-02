@@ -57,7 +57,6 @@ XftDraw        *xftDraw = (XftDraw *) NULL;
 XftFont        *xftMainWindowFont = (XftFont *) NULL;
 XftFont        *xftMainWindowFontEn = (XftFont *) NULL;
 XftFont        *xftVKWindowFont = (XftFont *) NULL;
-Bool            bUseAA = True;
 Bool            bUseBold = True;
 int             iMainWindowFontSize = 9;
 int             iVKWindowFontSize = 11;
@@ -253,25 +252,25 @@ void CreateFont (void)
 
     if (xftFont)
 	XftFontClose (dpy, xftFont);
-    xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+    xftFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, True, NULL);
 
     if (xftFontEn)
 	XftFontClose (dpy, xftFontEn);
-    xftFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+    xftFontEn = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iFontSize, XFT_ANTIALIAS, XftTypeBool, True, NULL);
 
     if (xftMainWindowFont)
 	XftFontClose (dpy, xftMainWindowFont);
     xftMainWindowFont =
-	XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, (bUseBold) ? XFT_WEIGHT_BOLD : XFT_WEIGHT_MEDIUM, NULL);
+	XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, True, XFT_WEIGHT, XftTypeInteger, (bUseBold) ? XFT_WEIGHT_BOLD : XFT_WEIGHT_MEDIUM, NULL);
 
     if (xftMainWindowFontEn)
 	XftFontClose (dpy, xftMainWindowFontEn);
     xftMainWindowFontEn =
-	XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, XFT_WEIGHT, XftTypeInteger, (bUseBold) ? XFT_WEIGHT_BOLD : XFT_WEIGHT_MEDIUM, NULL);
+	XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontEnName, XFT_SIZE, XftTypeDouble, (double) iMainWindowFontSize, XFT_ANTIALIAS, XftTypeBool, True, XFT_WEIGHT, XftTypeInteger, (bUseBold) ? XFT_WEIGHT_BOLD : XFT_WEIGHT_MEDIUM, NULL);
 
     if (xftVKWindowFont)
 	XftFontClose (dpy, xftVKWindowFont);
-    xftVKWindowFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iVKWindowFontSize, XFT_ANTIALIAS, XftTypeBool, bUseAA, NULL);
+    xftVKWindowFont = XftFontOpen (dpy, iScreen, XFT_FAMILY, XftTypeString, strFontName, XFT_SIZE, XftTypeDouble, (double) iVKWindowFontSize, XFT_ANTIALIAS, XftTypeBool, True, NULL);
 
     if (xftDraw)
 	XftDrawDestroy (xftDraw);
