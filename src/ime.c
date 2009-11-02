@@ -133,11 +133,6 @@ INT8            iIMIndex = 0;
 Bool            bLocked = False;
 Bool 		isSavingIM = False;
 
-/*Bool            bUsePinyin = True;
-Bool            bUseSP = True;
-Bool            bUseQW = True;
-Bool            bUseTable = True;
-*/
 // dgod extern im
 char		strExternIM[PATH_MAX];
 

@@ -174,6 +174,7 @@ extern Bool	bUseTrayIcon;
 #ifdef _ENABLE_RECORDING
 extern HOTKEYS  hkRecording[];
 extern Bool	bRecording;
+extern char     strRecordingPath[];
 #endif
 
 Bool MyStrcmp (char *str1, char *str2)
@@ -701,7 +702,15 @@ Configure program_config[] = {
         .value_type = CONFIG_INTEGER,
         .value.integer = &bUseBold,
     },
- #ifdef _ENABLE_TRAY
+#ifdef _ENABLE_RECORDING
+    {
+        .name = "记录文件",
+        .value_type = CONFIG_STRING,
+        .value.str_value.string = strRecordingPath,
+        .value.str_value.string_length = PATH_MAX,
+    },
+#endif    
+#ifdef _ENABLE_TRAY
     {
         .name = "使用托盘图标",
         .value_type = CONFIG_INTEGER,

@@ -1,3 +1,6 @@
+2009-11-02: Yuking <yuking_net@sohu.com>
+	* src/tools.c, xim.c: 用户可以指定记录文件路径了，如果路径为空，则默认为~/.fcitx/record.dat
+
 2009-10-29: Yuking <yuking_net@sohu.com>
 	* src/xim.c, tools.c: 增加记录模式（默认热键CTRL_ALT_J)，并增加配置选项
 	* src/ime.c: 改进输入法设置模式，可以通过配置文件设置输入法的顺序(如，设置“使用拼音=1”、“使用区位=2”，那么拼音将在区位的前面)

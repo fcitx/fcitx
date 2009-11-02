@@ -133,6 +133,7 @@ extern char     strXModifiers[];
 #endif
 
 #ifdef _ENABLE_RECORDING
+extern FILE	*fpRecord;
 extern Bool	bRecording;
 #endif
 
@@ -301,7 +302,7 @@ void CalInputWindow (void)
     }
 
 #ifdef _ENABLE_RECORDING
-    if ( bRecording ) {
+    if ( bRecording && fpRecord ) {
 	strcpy(messageUp[uMessageUp].strMsg,"  [¼ÇÂ¼Ä£Ê½]");
 	messageUp[uMessageUp].type = MSG_TIPS;
 	uMessageUp ++;

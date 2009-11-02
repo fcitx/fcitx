@@ -54,6 +54,7 @@ int		iClientCursorY = INPUTWND_STARTY;
 #ifdef _ENABLE_RECORDING
 FILE		*fpRecord = NULL;
 Bool		bRecording = True;
+char 		strRecordingPath[PATH_MAX]="";		//空字串表示使用默认的路径~/.fcitx/record.dat
 #endif
 
 extern IM      *im;
@@ -443,17 +444,26 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 #ifdef _ENABLE_RECORDING
     if (bRecording) {
         if ( !fpRecord ) {
-	    char    buf[PATH_MAX], *pbuf;
+	    if ( strRecordingPath[0]=='\0' ) {
+		char    *pbuf;
 
-            pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-            if (!pbuf)
-                fprintf(stderr, "error: get environment variable HOME\n");
-            else {
-	        //获取配置文件的绝对路径
-	        snprintf(buf, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
-	        fpRecord = fopen(buf, "a+");
+		pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+		if (!pbuf)
+		    fprintf(stderr, "error: get environment variable HOME\n");
+		else       //获取配置文件的绝对路径
+		    snprintf(strRecordingPath, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
 	    }
+	    else if (strRecordingPath[0]!='/') {	//应该是个绝对路径
+#ifdef _DEBUG
+		fprintf (stderr, "Recording file must be an absolute path.\n");
+#endif
+		strRecordingPath[0]='\0';
+	    }
+
+	    if ( strRecordingPath[0]=='\0' )
+		fpRecord = fopen(strRecordingPath, "a+");
         }
+	
         if ( fpRecord )
 	    fprintf(fpRecord, "%s", strHZ);
     }
