@@ -795,6 +795,30 @@ void _Xi18nChangeIC (XIMS ims,
     /*endif*/
     FrameMgrFree (fm);
     XFree(reply);
+
+    /* add by hurrica...@126.com */
+    for (i = 0;  i < (int) changeic->ic_attr_num;  i++)
+    {
+        if (changeic->ic_attr[i].value)
+            XFree (changeic->ic_attr[i].value);
+        /*endif*/
+    }
+    /*endfor*/
+    for (i = 0;  i < (int) changeic->preedit_attr_num;  i++)
+    {
+	if (changeic->preedit_attr[i].value)
+	    XFree (changeic->preedit_attr[i].value);
+	/*endif*/
+    }
+    /*endfor*/
+    for (i = 0;  i < (int) changeic->status_attr_num;  i++)
+    {
+	if (changeic->status_attr[i].value)
+	    XFree (changeic->status_attr[i].value);
+	/*endif*/
+    }
+    /*endfor*/
+    /* *************************************** */
 }
 
 /* called from GetICValueMessageProc */

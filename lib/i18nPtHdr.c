@@ -622,6 +622,10 @@ static void GetIMValueFromName (Xi18n i18n_core,
             /*endfor*/
             memmove (buf, data, total_size);
             FrameMgrFree (fm);
+
+	    /* add by hurrica...@126.com */
+	    free (data);
+	    /* ************************* */
         }
         /*endif*/
     }

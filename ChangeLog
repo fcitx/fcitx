@@ -1,3 +1,6 @@
+2009-11-03: hurrica...@126.com */
+	* lib/i18nPtHdr.c, i18nIc.c: 修正两处内存泄露
+	
 2009-11-02: Yuking <yuking_net@sohu.com>
 	* src/tools.c, xim.c: 用户可以指定记录文件路径了，如果路径为空，则默认为~/.fcitx/record.dat
 
