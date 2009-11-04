@@ -344,7 +344,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 #endif
 
     /* Added by hubert_star AT forum.ubuntu.com.cn */
-    if ( (call_data->event.type == KeyRelease) && (((iKey >= 32 ) && (iKey <= 126)) && (iKey != (i2ndSelectKey ^ 0xFF)) && (iKey != (i2ndSelectKey ^ 0xFF))))
+    if ( (call_data->event.type == KeyRelease) && (((iKey >= 32 ) && (iKey <= 126)) && (iKey != (i2ndSelectKey ^ 0xFF)) && (iKey != (i3rdSelectKey ^ 0xFF))))
         return;
 
     /* ******************************************* */
