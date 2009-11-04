@@ -1056,10 +1056,10 @@ void ChangeRecording (void)
     ResetInput ();
     ResetInputWindow ();
     XUnmapWindow (dpy, inputWindow);
-    if (fpRecord) {
-        fclose( fpRecord );
-        fpRecord = NULL;
-    }
+
+    CloseRecording();
+    if ( bRecording )
+        OpenRecording();
 
     SaveProfile ();
 }

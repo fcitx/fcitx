@@ -98,4 +98,9 @@ IME_STATE	icidGetIMState (CARD16 icid);
 extern char    *strcasestr (__const char *__haystack, __const char *__needle);
 #endif
 
+#ifdef _ENABLE_RECORDING
+Bool		OpenRecording(void);
+void 		CloseRecording(void);
+#endif
+
 #endif

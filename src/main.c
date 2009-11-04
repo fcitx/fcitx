@@ -189,6 +189,10 @@ int main (int argc, char *argv[])
     DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
 #endif
 
+#ifdef _ENABLE_RECORDING
+    OpenRecording();
+#endif
+    
     pthread_create(&pid, NULL, remoteThread, NULL);
 
     //主循环，即XWindow的消息循环

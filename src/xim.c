@@ -54,6 +54,7 @@ int		iClientCursorY = INPUTWND_STARTY;
 #ifdef _ENABLE_RECORDING
 FILE		*fpRecord = NULL;
 Bool		bRecording = True;
+Bool		bWrittenRecord = False;			//是否写入过记录
 char 		strRecordingPath[PATH_MAX]="";		//空字串表示使用默认的路径~/.fcitx/record.dat
 #endif
 
@@ -92,7 +93,6 @@ extern Bool     bShowInputWindowTriggering;
 extern Bool     bUseGBKT;
 
 #ifdef _DEBUG
-
 char            strUserLocale[100];
 char            strXModifiers[100];
 #endif
@@ -250,10 +250,9 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     SaveIM();
 
 #ifdef _ENABLE_RECORDING
-    if ( fpRecord ) {
-        fclose(fpRecord);
-        fpRecord = NULL;
-    }
+    CloseRecording();
+    if ( bRecording )
+        OpenRecording();
 #endif
 
     return True;
@@ -429,6 +428,46 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
     IMForwardEvent (ims, (XPointer) (&forwardEvent));
 }
 
+#ifdef _ENABLE_RECORDING
+Bool OpenRecording(void)
+{
+    if ( !fpRecord ) {
+        if ( strRecordingPath[0]=='\0' ) {
+	    char    *pbuf;
+
+	    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
+	    if (!pbuf)
+		fprintf(stderr, "error: get environment variable HOME\n");
+	    else       //获取配置文件的绝对路径
+		snprintf(strRecordingPath, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
+	}
+	else if (strRecordingPath[0]!='/') {	//应该是个绝对路径
+#ifdef _DEBUG
+	    fprintf (stderr, "Recording file must be an absolute path.\n");
+#endif
+	    strRecordingPath[0]='\0';
+	}
+
+	if ( strRecordingPath[0]!='\0' )
+	    fpRecord = fopen(strRecordingPath, "a+");
+    }
+    
+    return (fpRecord? True:False);
+}
+
+void CloseRecording(void)
+{
+    if (fpRecord) {
+	if (bWrittenRecord ) {
+	    fprintf(fpRecord, "\n\n");
+	    bWrittenRecord = False;
+        }
+        fclose( fpRecord );
+        fpRecord = NULL;
+    }
+}
+#endif
+
 void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
@@ -443,29 +482,21 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 
 #ifdef _ENABLE_RECORDING
     if (bRecording) {
-        if ( !fpRecord ) {
-	    if ( strRecordingPath[0]=='\0' ) {
-		char    *pbuf;
+        if (OpenRecording()) {
+	    if ( !bWrittenRecord ) {
+		char    buf[20];
+		struct tm  *ts;
+		time_t now;
 
-		pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-		if (!pbuf)
-		    fprintf(stderr, "error: get environment variable HOME\n");
-		else       //获取配置文件的绝对路径
-		    snprintf(strRecordingPath, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
-	    }
-	    else if (strRecordingPath[0]!='/') {	//应该是个绝对路径
-#ifdef _DEBUG
-		fprintf (stderr, "Recording file must be an absolute path.\n");
-#endif
-		strRecordingPath[0]='\0';
-	    }
+		now=time(NULL);
+		ts = localtime(&now);
+		strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
 
-	    if ( strRecordingPath[0]=='\0' )
-		fpRecord = fopen(strRecordingPath, "a+");
-        }
-	
-        if ( fpRecord )
+		fprintf(fpRecord, "%s\n", buf);
+	    } 
 	    fprintf(fpRecord, "%s", strHZ);
+	    bWrittenRecord = True;
+	}
     }
 #endif
 

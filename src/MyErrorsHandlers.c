@@ -101,6 +101,10 @@ void OnException (int signo)
             logfile = (FILE *)NULL;
         }
 #endif
+#ifdef _ENABLE_RECORDING
+        CloseRecording();
+#endif
+
 	exit (0);
     default:
 	break;
