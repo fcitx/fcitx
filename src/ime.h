@@ -133,6 +133,7 @@ void		ChangeLock (void);
 
 #ifdef _ENABLE_RECORDING
 void		ChangeRecording (void);
+void		ResetRecording (void);
 #endif
 
 void            RegisterNewIM (char *strName, void (*ResetIM) (void), INPUT_RETURN_VALUE (*DoInput) (int), INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE), char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),

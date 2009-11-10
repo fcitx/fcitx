@@ -190,9 +190,9 @@ int main (int argc, char *argv[])
 #endif
 
 #ifdef _ENABLE_RECORDING
-    OpenRecording();
+    OpenRecording(True);
 #endif
-    
+
     pthread_create(&pid, NULL, remoteThread, NULL);
 
     //主循环，即XWindow的消息循环

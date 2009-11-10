@@ -173,6 +173,7 @@ extern Bool	bUseTrayIcon;
 
 #ifdef _ENABLE_RECORDING
 extern HOTKEYS  hkRecording[];
+extern HOTKEYS	hkResetRecording[];
 extern Bool	bRecording;
 extern char     strRecordingPath[];
 #endif
@@ -596,6 +597,17 @@ inline static int set_recording(Configure *c, void *a, int isread)
 
     return 0;
 }
+
+/* 重置记录模式 */
+inline static int reset_recording(Configure *c, void *a, int isread)
+{
+    if(isread)
+        SetHotKey((char *)a, hkResetRecording);
+    else
+        fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL_ALT_A");
+
+    return 0;
+}
 #endif
 
 /* 默认双拼方案 */
@@ -709,7 +721,7 @@ Configure program_config[] = {
         .value.str_value.string = strRecordingPath,
         .value.str_value.string_length = PATH_MAX,
     },
-#endif    
+#endif
 #ifdef _ENABLE_TRAY
     {
         .name = "使用托盘图标",
@@ -1010,6 +1022,11 @@ Configure hotkey_config[] = {
         .name = "记录模式",
         .value_type = CONFIG_HOTKEY,
         .config_rw = set_recording,
+    },
+    {
+        .name = "重置记录模式",
+        .value_type = CONFIG_HOTKEY,
+        .config_rw = reset_recording,
     },
 #endif
     {

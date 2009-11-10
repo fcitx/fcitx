@@ -252,7 +252,7 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
 #ifdef _ENABLE_RECORDING
     CloseRecording();
     if ( bRecording )
-        OpenRecording();
+        OpenRecording( True );
 #endif
 
     return True;
@@ -429,7 +429,7 @@ void MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode)
 }
 
 #ifdef _ENABLE_RECORDING
-Bool OpenRecording(void)
+Bool OpenRecording(Bool bMode)
 {
     if ( !fpRecord ) {
         if ( strRecordingPath[0]=='\0' ) {
@@ -449,9 +449,9 @@ Bool OpenRecording(void)
 	}
 
 	if ( strRecordingPath[0]!='\0' )
-	    fpRecord = fopen(strRecordingPath, "a+");
+	    fpRecord = fopen(strRecordingPath, (bMode)? "a+" : "wt");
     }
-    
+
     return (fpRecord? True:False);
 }
 
@@ -482,7 +482,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 
 #ifdef _ENABLE_RECORDING
     if (bRecording) {
-        if (OpenRecording()) {
+        if (OpenRecording(True)) {
 	    if ( !bWrittenRecord ) {
 		char    buf[20];
 		struct tm  *ts;
@@ -493,7 +493,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 		strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", ts);
 
 		fprintf(fpRecord, "%s\n", buf);
-	    } 
+	    }
 	    fprintf(fpRecord, "%s", strHZ);
 	    bWrittenRecord = True;
 	}

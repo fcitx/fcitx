@@ -99,7 +99,7 @@ extern char    *strcasestr (__const char *__haystack, __const char *__needle);
 #endif
 
 #ifdef _ENABLE_RECORDING
-Bool		OpenRecording(void);
+Bool		OpenRecording(Bool);
 void 		CloseRecording(void);
 #endif
 

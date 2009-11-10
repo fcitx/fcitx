@@ -124,6 +124,7 @@ HOTKEYS         hkVK[HOT_KEY_COUNT] = { CTRL_ALT_K, 0 };
 
 #ifdef _ENABLE_RECORDING
 HOTKEYS         hkRecording[HOT_KEY_COUNT] = { CTRL_ALT_J, 0 };
+HOTKEYS		hkResetRecording[HOT_KEY_COUNT] = { CTRL_ALT_A, 0 };
 #endif
 
 Bool            bUseLegend = False;
@@ -207,6 +208,7 @@ extern XFontSet fontSetMainWindow;
 #ifdef _ENABLE_RECORDING
 extern FILE	*fpRecord;
 extern Bool	bRecording;
+extern Bool 	bWrittenRecord;
 #endif
 
 void ResetInput (void)
@@ -828,6 +830,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 #ifdef _ENABLE_RECORDING
 		    else if (IsHotKey (iKey, hkRecording) )
 		        ChangeRecording ();
+		    else if (IsHotKey (iKey, hkResetRecording) )
+		        ResetRecording ();
 #endif
 		}
 	    }
@@ -1059,9 +1063,21 @@ void ChangeRecording (void)
 
     CloseRecording();
     if ( bRecording )
-        OpenRecording();
+        OpenRecording(True);
 
     SaveProfile ();
+}
+
+void ResetRecording (void)
+{
+    if (fpRecord) {
+        fclose(fpRecord);
+        fpRecord = NULL;
+        bWrittenRecord = False;
+    }
+
+    if ( bRecording )
+        OpenRecording(False);
 }
 #endif
 
