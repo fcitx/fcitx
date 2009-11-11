@@ -573,14 +573,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					if (IsHotKey (iKey, hkPrevPage)) {
 					    retVal = im[iIMIndex].GetCandWords (SM_PREV);
 #ifdef _ENABLE_RECORDING
-					    if ( retVal == IRV_DISPLAY_CANDWORDS )
+					    if ( retVal == IRV_DISPLAY_CANDWORDS && bRecording)
 					        uMessageUp --;
 #endif
 				        }
 					else if (IsHotKey (iKey, hkNextPage)) {
 					    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
 #ifdef _ENABLE_RECORDING
-					    if ( retVal == IRV_DISPLAY_CANDWORDS )
+					    if ( retVal == IRV_DISPLAY_CANDWORDS && bRecording)
 					        uMessageUp --;
 #endif
 				        }
