@@ -91,7 +91,7 @@ int main (int argc, char *argv[])
     if (!InitX ())
 	exit (1);
 
-    /*加载用户配置文件，通常是“~/.fcitx/config”，如果该文件不存在就从安装目录中拷贝
+    /*加载用户配置文件，如果该文件不存在就从安装目录中拷贝
      * “/data/config”到“~/.fcitx/config”
      */
     LoadConfig (True);
@@ -133,8 +133,7 @@ int main (int argc, char *argv[])
     //根据字体计算输入窗口的高度
     CalculateInputWindowHeight ();
     /*加载配置文件，这个配置文件不是用户配置的，而是用于记录fctix的运行状态的，
-     * 比如是全角还是半角等等。通常是“~/.fcitx/profile”，如果该文件不存在就从安装
-     * 目录中拷贝“/data/profile”到“~/.fcitx/profile”
+     * 比如是全角还是半角等等。
      */
     LoadProfile ();
 
@@ -142,7 +141,7 @@ int main (int argc, char *argv[])
     LoadPuncDict ();
     //加载成语
     LoadQuickPhrase ();
-    /*从 ~/.fcitx/AutoEng.dat （如果不存在，
+    /*从用户配置目录中读取AutoEng.dat （如果不存在，
      * 则从 /usr/local/share/fcitx/data/AutoEng.dat）
      * 读取需要自动转换到英文输入状态的情况的数据
      */
@@ -155,7 +154,7 @@ int main (int argc, char *argv[])
     CreateInputWindow ();	//创建输入窗口
     CreateAboutWindow ();	//创建关于窗口
 
-    //处理颜色，即候选词窗口的颜色，也就是我们在“~/.fcitx/config”定义的那些颜色信息
+    //处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
     InitGC (mainWindow);
 
     //将本程序加入到输入法组，告诉系统，使用我输入字符
@@ -184,25 +183,25 @@ int main (int argc, char *argv[])
 	    exit (0);
     }
 
-#ifdef _ENABLE_TRAY
-    CreateTrayWindow ();		//创建系统托盘窗口
-    DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
-#endif
-
 #ifdef _ENABLE_RECORDING
     OpenRecording(True);
 #endif
 
     pthread_create(&pid, NULL, remoteThread, NULL);
 
+#ifdef _ENABLE_TRAY
+    CreateTrayWindow ();		//创建系统托盘窗口
+    DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
+#endif
+
     //主循环，即XWindow的消息循环
     for (;;) {
-	XNextEvent (dpy, &event);					//等待一个事件发生
+	XNextEvent (dpy, &event);			//等待一个事件发生
 
 	if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
 	    continue;
 
-	MyXEventHandler (&event);					//处理X事件
+	MyXEventHandler (&event);			//处理X事件
     }
 
     return 0;

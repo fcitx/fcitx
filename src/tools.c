@@ -1258,18 +1258,10 @@ void LoadConfig (Bool bMode)
     //用以标识是否是重新读取配置文件
     bIsReloadConfig = bMode;
 
-    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-    if(!pbuf){
-        fprintf(stderr, "error: get environment variable HOME\n");
-        exit(1);	// 此时可以不退出，但直接退出处理起来明了简单
-    }
-    //获取配置文件的绝对路径
-    snprintf(buf, PATH_MAX, "%s/.fcitx/config", pbuf);
-
-    fp = fopen(buf, "r");
+    fp = UserConfigFile("config", "rt", NULL);
     if(!fp && errno == ENOENT){ /* $HOME/.fcitx/config does not exist */
         snprintf(buf, PATH_MAX, PKGDATADIR "/data/config");
-        fp = fopen(buf, "r");
+        fp = fopen(buf, "rt");
         if(!fp)
             SaveConfig();
     }else {
@@ -1374,27 +1366,11 @@ void LoadConfig (Bool bMode)
 void SaveConfig (void)
 {
     FILE    *fp;
-    char    buf[PATH_MAX], *pbuf;
     Configure_group *tmpgroup;
 
-    pbuf = getenv("HOME");
-    if(!pbuf){
-        fprintf(stderr, "error: get environment variable HOME\n");
-        exit(1);
-    }
-
-    snprintf(buf, PATH_MAX, "%s/.fcitx", pbuf);
-    if(mkdir(buf, S_IRWXU) < 0 && errno != EEXIST){
-        perror("mkdir");
-        exit(1);
-    }
-
-    snprintf(buf, PATH_MAX, "%s/.fcitx/config", pbuf);
-    fp = fopen (buf, "w");
-    if (!fp) {
+    fp = UserConfigFile("config", "wt", NULL);
+    if (!fp)
         perror("fopen");
-        exit(1);
-    }
 
     /* 实际上，写配置文件很简单，就是从全局数组configure_groups里面分别把每个组的配置
      * 写入到文件里面去*/
@@ -1583,14 +1559,7 @@ void LoadProfile (void)
     iInputWindowX = INPUTWND_STARTX;	//输入窗口位置X
     iInputWindowY = INPUTWND_STARTY;	//输入窗口位置Y
 
-    pbuf = getenv("HOME");
-    if(!pbuf){
-        fprintf(stderr, "error: get environment variable HOME\n");
-        exit(1);
-    }
-    snprintf(buf, PATH_MAX, "%s/.fcitx/profile", pbuf);
-
-    fp = fopen(buf, "r");
+    fp = UserConfigFile ("profile", "rt", NULL);
     if(!fp){
         if(errno == ENOENT)
             SaveProfile();
@@ -1636,23 +1605,8 @@ void LoadProfile (void)
 void SaveProfile (void)
 {
     FILE           *fp;
-    char            buf[PATH_MAX], *pbuf;
 
-    pbuf = getenv("HOME");
-    if(!pbuf){
-        fprintf(stderr, "error: get environment variable HOME\n");
-        exit(1);
-    }
-
-    snprintf(buf, PATH_MAX, "%s/.fcitx", pbuf);
-    if(mkdir(buf, S_IRWXU) < 0 && errno != EEXIST){
-        perror("mkdir");
-        exit(1);
-    }
-
-    snprintf(buf, PATH_MAX, "%s/.fcitx/profile", pbuf);
-    fp = fopen (buf, "w");
-
+    fp = UserConfigFile ("profile", "wt", NULL);
     if (!fp) {
 	perror("fopen");
         exit(1);
@@ -1920,4 +1874,36 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
 int CalHZIndex (char *strHZ)
 {
     return (strHZ[0] + 127) * 255 + strHZ[1] + 128;
+}
+
+/**
+ * 该函数访问指定的用户配置文件
+ */
+FILE *UserConfigFile (char *strFileName, char *strMode, char **strFullPath)
+{
+    static char	strPath[PATH_MAX];
+    FILE	*fp = (FILE *) NULL;
+
+    if( getenv("XDG_CONFIG_HOME") != NULL )
+        strcpy (strPath, (char *) getenv ("XDG_CONFIG_HOME"));
+    else{
+        strcpy (strPath, (char *) getenv ("HOME"));
+        strcat (strPath, "/.config");
+    }
+
+    strcat (strPath, "/fcitx/");
+    if (strMode) {
+	if (access (strPath, 0))
+	    mkdir (strPath, S_IRWXU);
+    }
+    
+    strcat (strPath, strFileName);
+
+    if ( strFullPath!=NULL )
+        (*strFullPath) = strPath;
+
+    if ( strMode )    
+	fp = fopen(strPath, strMode);
+
+    return fp;
 }

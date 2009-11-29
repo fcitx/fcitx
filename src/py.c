@@ -116,6 +116,8 @@ extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
 extern Bool     bPointAfterNumber;
 
+extern Bool	isSavingIM;
+
 void PYInit (void)
 {
     bSP = False;
@@ -224,10 +226,7 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面开始读取用户词库
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_USERPHRASE_FILE);
-    fp = fopen (strPath, "rb");
+    fp = UserConfigFile (PY_USERPHRASE_FILE, "rb", NULL);
     if (fp) {
 	while (!feof (fp)) {
 	    if (!fread (&i, sizeof (int), 1, fp))
@@ -270,10 +269,7 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取索引文件
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_INDEX_FILE);
-    fp = fopen (strPath, "rb");
+    fp = UserConfigFile (PY_INDEX_FILE, "rb" ,NULL);
     if (fp) {
 	fread (&iLen, sizeof (uint), 1, fp);
 	if (iLen > iCounter)
@@ -305,10 +301,7 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取常用词表
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_FREQ_FILE);
-    fp = fopen (strPath, "rb");
+    fp = UserConfigFile (PY_FREQ_FILE, "rb", NULL);
     if (fp) {
 	pPyFreq = pyFreq;
 
@@ -350,16 +343,12 @@ Bool LoadPYOtherDict (void)
     }
 
     //下面读取特殊符号表
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_SYMBOL_FILE);
-
-    if (access (strPath, 0)) {
+    fp = UserConfigFile (PY_SYMBOL_FILE, "rb", NULL);
+    if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PY_SYMBOL_FILE);
+	fp = fopen (strPath, "rt");
     }
-
-    fp = fopen (strPath, "rt");
     if (fp) {
 	char            strTxt[256];
 	char            str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * 2 + 1];
@@ -2494,21 +2483,20 @@ void SavePYUserPhrase (void)
 {
     int             i, j, k;
     int             iTemp;
-    char            strPath[PATH_MAX];
+    char           *pstr;
     char            strPathTemp[PATH_MAX];
     FILE           *fp;
     PyPhrase       *phrase;
 
-    strcpy (strPathTemp, (char *) getenv ("HOME"));
-    strcat (strPathTemp, "/.fcitx/");
-    if (access (strPathTemp, 0))
-	mkdir (strPathTemp, S_IRWXU);
-    strcat (strPathTemp, TEMP_FILE);
-    fp = fopen (strPathTemp, "wb");
+    if ( isSavingIM )
+	return;
+	
+    fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
-	fprintf (stderr, "无法保存拼音用户词库：%s\n", strPathTemp);
+	fprintf (stderr, "无法保存拼音用户词库：%s\n", pstr);
 	return;
     }
+    strcpy(strPathTemp, pstr);
 
     for (i = 0; i < iPYFACount; i++) {
 	for (j = 0; j < PYFAList[i].iBase; j++) {
@@ -2534,35 +2522,31 @@ void SavePYUserPhrase (void)
     }
 
     fclose (fp);
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_USERPHRASE_FILE);
-    if (access (strPath, 0))
-	unlink (strPath);
-    rename (strPathTemp, strPath);
+    fp = UserConfigFile(PY_USERPHRASE_FILE, NULL, &pstr);
+    if (access (pstr, 0))
+	unlink (pstr);
+    rename (strPathTemp, pstr);
 }
 
 void SavePYFreq (void)
 {
     int             i, j, k;
-    char            strPath[PATH_MAX];
+    char           *pstr;
     char            strPathTemp[PATH_MAX];
-    int             iStrLen = PATH_MAX;
     FILE           *fp;
     PyFreq         *pPyFreq;
     HZ             *hz;
 
-    snprintf(strPathTemp, iStrLen, "%s/.fcitx/",
-             getenv ("HOME"));
-    iStrLen -= strlen(strPathTemp);
-    if (access (strPathTemp, 0))
-	mkdir (strPathTemp, S_IRWXU);
-    strncat(strPathTemp, TEMP_FILE, iStrLen);
-    fp = fopen (strPathTemp, "wb");
+    if ( isSavingIM )
+	return;
+	
+    fp = UserConfigFile(TEMP_FILE, "wb", &pstr);
     if (!fp) {
-	fprintf (stderr, "无法保存常用词表：%s\n", strPathTemp);
+	fprintf (stderr, "无法保存常用词表：%s\n", pstr);
 	return;
     }
+    strcpy(strPathTemp, pstr);
+    
     i = 0;
     pPyFreq = pyFreq->next;
     while (pPyFreq) {
@@ -2593,12 +2577,11 @@ void SavePYFreq (void)
     }
 
     fclose (fp);
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_FREQ_FILE);
-    if (access (strPath, 0))
-	unlink (strPath);
-    rename (strPathTemp, strPath);
+
+    fp = UserConfigFile(PY_FREQ_FILE, NULL, &pstr);
+    if (access (pstr, 0))
+	unlink (pstr);
+    rename (strPathTemp, pstr);
 }
 
 /*
@@ -2607,22 +2590,19 @@ void SavePYFreq (void)
 void SavePYIndex (void)
 {
     int             i, j, k, l;
-    char            strPath[PATH_MAX];
+    char           *pstr;
     char            strPathTemp[PATH_MAX];
-    int             iStrLen = PATH_MAX;
     FILE           *fp;
 
-    snprintf(strPathTemp, iStrLen, "%s/.fcitx/",
-             getenv ("HOME"));
-    iStrLen -= strlen(strPathTemp);
-    if (access (strPathTemp, 0))
-	mkdir (strPathTemp, S_IRWXU);
-    strncat(strPathTemp, TEMP_FILE, iStrLen);
-    fp = fopen (strPathTemp, "wb");
+    if ( isSavingIM )
+	return;
+	
+    fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
-	fprintf (stderr, "无法保存索引文件：%s\n", strPathTemp);
+	fprintf (stderr, "无法保存索引文件：%s\n", pstr);
 	return;
     }
+    strcpy(strPathTemp, pstr);
 
     //保存计数器
     fwrite (&iCounter, sizeof (uint), 1, fp);
@@ -2660,12 +2640,11 @@ void SavePYIndex (void)
     }
 
     fclose (fp);
-    snprintf(strPath, sizeof(strPath), "%s/.fcitx/%s",
-             getenv ("HOME"),
-             PY_INDEX_FILE);
-    if (access (strPath, 0))
-	unlink (strPath);
-    rename (strPathTemp, strPath);
+
+    fp = UserConfigFile(PY_INDEX_FILE, NULL, &pstr);
+    if (access (pstr, 0))
+	unlink (pstr);
+    rename (strPathTemp, pstr);
 }
 
 /*
@@ -3030,4 +3009,14 @@ void PYGetPYByHZ (char *strHZ, char *strPY)
 	    }
 	}
     }
+}
+
+void SavePY(void)
+{
+    if (iNewPYPhraseCount)
+	SavePYUserPhrase ();
+    if (iOrderCount)
+	SavePYIndex ();
+    if (iNewFreqCount)
+	SavePYFreq ();
 }

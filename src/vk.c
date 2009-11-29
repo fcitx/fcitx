@@ -28,6 +28,7 @@
 #include "InputWindow.h"
 #include "IC.h"
 #include "xim.h"
+#include "tools.h"
 
 #include <limits.h>
 #include <ctype.h>
@@ -366,12 +367,12 @@ void LoadVKMapFile (void)
     strcpy (strPath, (char *) getenv ("HOME"));
     strcat (strPath, "/.fcitx/");
     strcat (strPath, VK_FILE);
-
-    if (access (strPath, 0)) {
+    fp = UserConfigFile(VK_FILE, "rt", NULL);
+    if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, VK_FILE);
+	fp = fopen (strPath, "rt");
     }
-    fp = fopen (strPath, "rt");
 
     if (!fp)
 	return;

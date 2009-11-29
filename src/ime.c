@@ -824,6 +824,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			strcpy(messageDown[0].strMsg,"´Ê¿âÒÑ±£´æ");
 			messageDown[0].type = MSG_TIPS;
 			retVal = IRV_DISPLAY_MESSAGE;
+#ifdef _ENABLE_RECORDING
+			if ( bRecording && fpRecord ) {
+			    if ( uMessageUp>0 )
+				uMessageUp --;
+			}
+#endif
 		    }
 		    else if (IsHotKey (iKey, hkVK) )
 		        SwitchVK ();
@@ -1179,12 +1185,7 @@ void SaveIM (void)
     isSavingIM = True;
     if (iTableChanged)
 	SaveTableDict ();
-    if (iNewPYPhraseCount)
-	SavePYUserPhrase ();
-    if (iOrderCount)
-	SavePYIndex ();
-    if (iNewFreqCount)
-	SavePYFreq ();
+    SavePY();
 
     isSavingIM = False;
 }
@@ -1243,10 +1244,10 @@ void SetIM (void)
 	if ( inputMethods[k]>0 ) {
 	    switch (k) {
 	    case IM_PY:
-		RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL);
+		RegisterNewIM (strNameOfPinyin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, SavePY);
 		break;
 	    case IM_SP:
-		RegisterNewIM (strNameOfShuangpin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, NULL);
+		RegisterNewIM (strNameOfShuangpin, ResetPYStatus, DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, SavePY);
 		break;
 	    case IM_QW:
 		RegisterNewIM (strNameOfQuwei, NULL, DoQWInput, QWGetCandWords, QWGetCandWord, NULL, NULL, NULL, NULL);

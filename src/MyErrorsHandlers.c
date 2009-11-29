@@ -61,18 +61,12 @@ void SetMyExceptionHandler (void)
 void OnException (int signo)
 {   
 #ifdef _ENABLE_LOG
-    char    buf[PATH_MAX], *pbuf;
-    struct tm  *ts;
-    time_t now;
+    struct tm	*ts;
+    char	buf[PATH_MAX];
+    time_t	now;
 
-    if ( !logfile ) {
-	pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-        if(pbuf) {
-	    snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx.log", pbuf);
-            logfile=fopen(buf, "wt");
-        }
-    }
-    
+    if ( !logfile )
+	logfile = UserConfigFile("fcitx.log","wt", NULL);
     if ( logfile ) {
 	now=time(NULL);
 	ts = localtime(&now);
@@ -119,25 +113,20 @@ void SetMyXErrorHandler (void)
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
 #ifdef _ENABLE_LOG
-    char    str[256];
-    char    buf[PATH_MAX], *pbuf;
-    struct tm  *ts;
-    time_t now;
+    char	str[256];
+    char	buf[PATH_MAX];
+    struct tm	*ts;
+    time_t	now;
 
-    if ( !logfile ) {
-        pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-        if(pbuf) {
-            snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx.log", pbuf);
-            logfile = fopen(buf, "wt");
-	    if ( logfile ) {
-                now = time(NULL);
-	        ts = localtime(&now);
-	        strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-	        XGetErrorText (dpy, event->error_code, str, 255);
-	        fprintf (logfile, "fcitx: %s\n", buf);
-	        fprintf (logfile, "fcitx: %s\n", str);
-	     }
-        }
+    if ( !logfile )
+        logfile = UserConfigFile("fcitx.log","wt" , NULL);
+    if ( logfile ) {
+        now = time(NULL);
+	ts = localtime(&now);
+	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	XGetErrorText (dpy, event->error_code, str, 255);
+	fprintf (logfile, "fcitx: %s\n", buf);
+	fprintf (logfile, "fcitx: %s\n", str);
     }
 #endif
 

@@ -186,6 +186,7 @@ int             GetBaseMapIndex (char *strMap);
 void            SavePYUserPhrase (void);
 void            SavePYFreq (void);
 void            SavePYIndex (void);
+void		SavePY (void);
 
 void            PYAddFreq (int iIndex);
 void            PYDelFreq (int iIndex);

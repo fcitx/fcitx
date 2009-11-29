@@ -47,23 +47,17 @@ int LoadPuncDict (void)
     char           *pstr;				// 临时指针
     int             i;
 
-    // 构造词典文件的全名
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, PUNC_DICT_FILENAME);
+    fpDict = UserConfigFile(PUNC_DICT_FILENAME, "rt", NULL);
 
     // 如果该文件不存在，就使用安装目录下的文件
-    if (access (strPath, 0)) {
+    if (!fpDict) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PUNC_DICT_FILENAME);
-    }
-
-    // 如果无论是用户目录还是安装目录下的词典文件都无法打开，就给出提示信息，并退出程序
-    fpDict = fopen (strPath, "rt");
-
-    if (!fpDict) {
-	printf ("Can't open Chinese punc file: %s\n", strPath);
-	return False;
+	fpDict = fopen (strPath, "rt");
+	if (!fpDict) {
+	    printf ("Can't open Chinese punc file: %s\n", strPath);
+	    return False;
+	}
     }
 
     /* 计算词典里面有多少的数据

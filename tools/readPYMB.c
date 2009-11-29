@@ -48,11 +48,11 @@ void usage()
 "  usage: readPYMB <mbfile>\n"
 "\n"
 "  <mbfile>    MB (MaBiao) file to be read, usually this is\n"
-"              ~/.fcitx/" PY_USERPHRASE_FILE "\n"
+"              ~/.config/fcitx/" PY_USERPHRASE_FILE "\n"
 "              if not specified, defaults to\n"
-"              ~/.fcitx/" PY_USERPHRASE_FILE "\n"
+"              ~/.config/fcitx/" PY_USERPHRASE_FILE "\n"
 "\n"
-"  The MB file can either be a user's MB file (~/.fcitx/pyuserphrase.mb),\n"
+"  The MB file can either be a user's MB file (~/.config/fcitx/pyuserphrase.mb),\n"
 "  or the system phrase pinyin MB file (/usr/share/fcitx/data/pyphrase.mb.\n"
   );
   exit(1);

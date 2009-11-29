@@ -26,7 +26,7 @@ AUTO_ENG       *AutoEng = (AUTO_ENG *) NULL;
 int             iAutoEng;
 
 /**
- * 从 ~/.fcitx/AutoEng.dat(如果不存在，
+ * 从用户配置目录中读取AutoEng.dat(如果不存在，
  * 则从 /usr/local/share/fcitx/data/AutoEng.dat）
  * 读取需要自动转换到英文输入状态的情况的数据。
  *
@@ -37,21 +37,17 @@ int             iAutoEng;
 
 void LoadAutoEng (void)
 {
-    FILE           *fp;
-    char            strPath[PATH_MAX];
+    FILE	*fp;
+    char	strPath[PATH_MAX];
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, "AutoEng.dat");
-
-    if (access (strPath, 0)) {
+    fp = UserConfigFile("AutoEng.dat", "rt", NULL);
+    if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, "AutoEng.dat");
+	fp = fopen (strPath, "rt");
+	if (!fp)
+	    return;
     }
-
-    fp = fopen (strPath, "rt");
-    if (!fp)
-	return;
 
     iAutoEng = CalculateRecordNumber (fp);
     AutoEng = (AUTO_ENG *) malloc (sizeof (AUTO_ENG) * iAutoEng);

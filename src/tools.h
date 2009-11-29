@@ -47,7 +47,7 @@ void            SetTriggerKeys (char *str);
 Bool            CheckHZCharset (char *strHZ);
 Bool            MyStrcmp (char *str1, char *str2);
 int             CalHZIndex (char *strHZ);
-
+FILE		*UserConfigFile (char *strFileName, char *strMode, char **strFullPath);
 char           *ConvertGBKSimple2Tradition (char *text);
 
 /*

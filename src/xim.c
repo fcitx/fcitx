@@ -435,11 +435,8 @@ Bool OpenRecording(Bool bMode)
         if ( strRecordingPath[0]=='\0' ) {
 	    char    *pbuf;
 
-	    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-	    if (!pbuf)
-		fprintf(stderr, "error: get environment variable HOME\n");
-	    else       //获取配置文件的绝对路径
-		snprintf(strRecordingPath, PATH_MAX, "%s/.fcitx/record.dat", pbuf);
+	    UserConfigFile("record.dat", NULL, &pbuf);
+	    strcpy(strRecordingPath, pbuf);
 	}
 	else if (strRecordingPath[0]!='/') {	//应该是个绝对路径
 #ifdef _DEBUG

@@ -22,6 +22,7 @@
 
 #include "QuickPhrase.h"
 #include "InputWindow.h"
+#include "tools.h"
 
 uint uQuickPhraseCount;
 QUICK_PHRASE *quickPhraseHead = NULL;
@@ -56,18 +57,14 @@ void LoadQuickPhrase(void)
 
     uQuickPhraseCount=0;
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, "QuickPhrase.mb");
-
-    if (access (strPath, 0)) {
+    fp = UserConfigFile("QuickPhrase.mb", "rt", NULL);
+    if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, "QuickPhrase.mb");
+	fp = fopen (strPath, "rt");
+	if (!fp)
+	    return;
     }
-
-    fp = fopen (strPath, "rt");
-    if (!fp)
-    	return;
 
     quickPhrase=quickPhraseHead=(QUICK_PHRASE *)malloc(sizeof(QUICK_PHRASE));
     quickPhraseHead->prev=NULL;

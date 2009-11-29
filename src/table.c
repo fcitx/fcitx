@@ -137,6 +137,8 @@ extern PYCandWord PYCandWords[];
 extern char     strFindString[];
 extern ParsePYStruct findMap;
 
+extern Bool	isSavingIM;
+
 /*
  * 读取码表输入法的名称和文件路径
  */
@@ -152,16 +154,13 @@ void LoadTableInfo (void)
 	free (table);
     iTableCount = 0;
 
-     snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
-              getenv ("HOME"),
-              TABLE_CONFIG_FILENAME);
-
-    if (access (strPath, 0))
+    fp = UserConfigFile(TABLE_CONFIG_FILENAME, "rt", NULL);
+    if (!fp) {
 	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", TABLE_CONFIG_FILENAME);
-
-    fp = fopen (strPath, "rt");
-    if (!fp)
-	return;
+	fp = fopen (strPath, "rt");
+	if (!fp)
+	    return;
+    }
 
     //首先来看看有多少个码表
     while (1) {
@@ -356,17 +355,14 @@ Bool LoadTableDict (void)
     fprintf (stderr, "Loading Table Dict\n");
 #endif
 
-    snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
-              getenv ("HOME"),
-              table[iTableIMIndex].strPath);;
-
-    if (access (strPath, 0))
-	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", table[iTableIMIndex].strPath);
-
-    fpDict = fopen (strPath, "rb");
+    fpDict = UserConfigFile( table[iTableIMIndex].strPath, "rb", NULL);
     if (!fpDict) {
-	fprintf (stderr, "Cannot load table file: %s\n", strPath);
-	return False;
+	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", table[iTableIMIndex].strPath);
+	fpDict = fopen (strPath, "rb");
+	if (!fpDict) {
+	    fprintf (stderr, "Cannot load table file: %s\n", strPath);
+	    return False;
+	}
     }
 
     //先读取码表的信息
@@ -490,17 +486,13 @@ Bool LoadTableDict (void)
 #endif
 
     //读取相应的特殊符号表
-    snprintf (strPath, sizeof(strPath), "%s/.fcitx/%s",
-              getenv ("HOME"),
-              table[iTableIMIndex].strSymbolFile);
-
-    if (access (strPath, 0)) {
+    fpDict = UserConfigFile (table[iTableIMIndex].strSymbolFile, "rt", NULL);
+    if (!fpDict) {
 	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s",
                   table[iTableIMIndex].strSymbolFile);
         fpDict = fopen (strPath, "rt");
     }
 
-    fpDict = fopen (strPath, "rt");
     if (fpDict) {
 	iFH = CalculateRecordNumber (fpDict);
 	fh = (FH *) malloc (sizeof (FH) * iFH);
@@ -528,11 +520,9 @@ Bool LoadTableDict (void)
 	fprintf (stderr, "Loading Autophrase...\n");
 #endif
 
-	strcpy (strPath, (char *) getenv ("HOME"));
-	strcat (strPath, "/.fcitx/");
-	strcat (strPath, table[iTableIMIndex].strName);
+	strcpy (strPath, table[iTableIMIndex].strName);
 	strcat (strPath, "_LastAutoPhrase.tmp");
-	fpDict = fopen (strPath, "rb");
+	fpDict = UserConfigFile (strPath, "rb", NULL);
 	i = 0;
 	if (fpDict) {
 	    fread (&iAutoPhrase, sizeof (unsigned int), 1, fpDict);
@@ -668,8 +658,9 @@ void TableResetStatus (void)
 void SaveTableDict (void)
 {
     RECORD         *recTemp;
-    char            strPath[PATH_MAX];
     char            strPathTemp[PATH_MAX];
+    char            strPath[PATH_MAX];
+    char	   *pstr;
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
@@ -677,35 +668,33 @@ void SaveTableDict (void)
 
     //先将码表保存在一个临时文件中，如果保存成功，再将该临时文件改名是码表名──这样可以防止码表文件被破坏
 #ifdef _ENABLE_LOG
-    int             iDebug = 0;
-    char    buf[PATH_MAX], *pbuf;
-    struct tm  *ts;
-    time_t now;
-    FILE *logfile = (FILE *)NULL;;
+    int		iDebug = 0;
+    char	buf[PATH_MAX];
+    struct tm	*ts;
+    time_t	now;
+    FILE	*logfile = (FILE *)NULL;;
+#endif
 
-    pbuf = getenv("HOME");		// 从环境变量中获取当前用户家目录的绝对路径
-    if(pbuf) {
-        snprintf(buf, PATH_MAX, "%s/.fcitx/fcitx-dict.log", pbuf);
-        logfile = fopen(buf, "wt");
-        if ( logfile ) {
-	    now = time(NULL);
-	    ts = localtime(&now);
-	    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-	    fprintf (logfile, "(%s)Saving table dict...\n",buf);
-        }
+    if (!isSavingIM )
+        return;
+        
+#ifdef _ENABLE_LOG       
+    logfile = UserConfigFile("fcitx-dict.log", "wt", NULL);
+    if ( logfile ) {
+	now = time(NULL);
+	ts = localtime(&now);
+	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
+	fprintf (logfile, "(%s)Saving table dict...\n",buf);
     }
 #endif
 
-    strcpy (strPathTemp, (char *) getenv ("HOME"));
-    strcat (strPathTemp, "/.fcitx/");
-    if (access (strPathTemp, 0))
-	mkdir (strPathTemp, S_IRWXU);
-    strcat (strPathTemp, TEMP_FILE);
-    fpDict = fopen (strPathTemp, "wb");
+    
+    fpDict = UserConfigFile(TEMP_FILE, "wb", &pstr);
     if (!fpDict) {
-	fprintf (stderr, "Cannot create table file: %s\n", strPathTemp);
+	fprintf (stderr, "Cannot create table file: %s\n", pstr);
 	return;
     }
+    strcpy(strPathTemp, pstr);
 
 #ifdef _DEBUG
     fprintf (stderr, "Saving TABLE Dict...\n");
@@ -781,12 +770,10 @@ void SaveTableDict (void)
     }
 #endif
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, table[iTableIMIndex].strPath);
-    if (access (strPath, 0))
-	unlink (strPath);
-    rename (strPathTemp, strPath);
+    fpDict = UserConfigFile(table[iTableIMIndex].strPath, NULL, &pstr);
+    if (access (pstr, 0))
+	unlink (pstr);
+    rename (strPathTemp, pstr);
 
 #ifdef _DEBUG
     fprintf (stderr, "Rename OK\n");
@@ -796,10 +783,8 @@ void SaveTableDict (void)
 
     if (autoPhrase) {
 	//保存上次的自动词组信息
-	strcpy (strPathTemp, (char *) getenv ("HOME"));
-	strcat (strPathTemp, "/.fcitx/");
-	strcat (strPathTemp, TEMP_FILE);
-	fpDict = fopen (strPathTemp, "wb");
+	fpDict = UserConfigFile(TEMP_FILE, "wb", &pstr);
+	strcpy (strPathTemp,pstr);
 	if (fpDict) {
 	    fwrite (&iAutoPhrase, sizeof (int), 1, fpDict);
 	    for (i = 0; i < iAutoPhrase; i++) {
@@ -811,13 +796,12 @@ void SaveTableDict (void)
 	    fclose (fpDict);
 	}
 
-	strcpy (strPath, (char *) getenv ("HOME"));
-	strcat (strPath, "/.fcitx/");
-	strcat (strPath, table[iTableIMIndex].strName);
+	strcpy (strPath, table[iTableIMIndex].strName);
 	strcat (strPath, "_LastAutoPhrase.tmp");
-	if (access (strPath, 0))
-	    unlink (strPath);
-	rename (strPathTemp, strPath);
+	fpDict = UserConfigFile(strPath, NULL, &pstr);
+	if (access (pstr, 0))
+	    unlink (pstr);
+	rename (strPathTemp, pstr);
     }
 }
 

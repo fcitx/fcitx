@@ -27,6 +27,7 @@
 #include "pyMapTable.h"
 #include "pyParser.h"
 #include "MainWindow.h"
+#include "tools.h"
 
 SP_C            SPMap_C[] = {
     {"ai", 'l'}
@@ -126,28 +127,18 @@ void LoadSPData (void)
     Bool            bIsDefault = False;
     Bool            bIsFromSystemSPConfig = False;
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-
-    if (access (strPath, 0))
-	mkdir (strPath, S_IRWXU);
-
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, "sp.dat");
-
-    if (access (strPath, 0)) {
+    fp = UserConfigFile("sp.dat", "rt", NULL);
+    if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, "sp.dat");
 	bIsFromSystemSPConfig = True;
 	if (iSPFrom != SP_FROM_SYSTEM_CONFIG)
 	    iSPFrom = SP_FROM_SYSTEM_SP_CONFIG;
+	fp = fopen (strPath, "rt");
+
+        if (!fp)
+	    return;
     }
-
-    fp = fopen (strPath, "rt");
-
-    if (!fp)
-	return;
 
     if (!bIsFromSystemSPConfig)
 	iSPFrom = SP_FROM_USER;
