@@ -66,15 +66,15 @@ int main ( int argc, char *argv[] )
 	int socket_fd = create_socket(socketfile);
 	if (socket_fd < 0) {
 		fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
-		return ;
+		return 0;
 	}
 
 	if (argc != 2) {
 		int o = 0;
 		write(socket_fd, &o, sizeof(o));
 		int buf;
-		int len = read(socket_fd, &buf, sizeof(buf));
-
+//		int len = read(socket_fd, &buf, sizeof(buf));
+		read(socket_fd, &buf, sizeof(buf));
 		printf("%d\n", buf);
 
 		close(socket_fd);

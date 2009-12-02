@@ -39,6 +39,15 @@ typedef struct {
 PYBASE          pyBase[30000];
 uint            iPYCount = 0;
 
+/**
+ * 该函数访问指定的用户配置文件
+ * 此处不做任何事，只是为了骗过编译器
+ */
+FILE *UserConfigFile (char *strFileName, char *strMode, char **strFullPath)
+{
+    return (FILE *) NULL;
+}
+
 Bool LoadPYBase (void)
 {
     FILE           *fp;

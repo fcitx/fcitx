@@ -15,6 +15,15 @@ Bool bSingleHZMode;
 void usage();
 char *HZToPY(struct _HZMap *, char []);
 
+/**
+ * 该函数访问指定的用户配置文件
+ * 此处不做任何事，只是为了骗过编译器
+ */
+FILE *UserConfigFile (char *strFileName, char *strMode, char **strFullPath)
+{
+    return (FILE *) NULL;
+}
+
 int main(int argc, char **argv)
 {
   FILE *fi, *fi2;

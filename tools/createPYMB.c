@@ -25,7 +25,6 @@
 #include "pyParser.h"
 #include "pyMapTable.h"
 #include "PYFA.h"
-#include "sp.h"
 
 extern PYTABLE  PYTable[];
 
@@ -64,6 +63,15 @@ int             iPYFACount;
 __PYFA         *PYFAList;
 int             YY[1000];
 int             iAllCount;
+
+/**
+ * 该函数访问指定的用户配置文件
+ * 此处不做任何事，只是为了骗过编译器
+ */
+FILE *UserConfigFile (char *strFileName, char *strMode, char **strFullPath)
+{
+    return (FILE *) NULL;
+}
 
 Bool LoadPY (void)
 {
