@@ -1,5 +1,7 @@
 #ifdef _ENABLE_TRAY
 
+#include <stdio.h>
+
 #include "TrayWindow.h"
 #include "inactive.xpm"
 #include "active.xpm"

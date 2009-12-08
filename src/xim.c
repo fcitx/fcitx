@@ -24,6 +24,7 @@
 #include <X11/Xlib.h>
 #include <iconv.h>
 #include <string.h>
+#include <limits.h>
 
 #include "xim.h"
 #include "IC.h"

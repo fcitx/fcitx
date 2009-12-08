@@ -570,20 +570,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					    iKey = ' ';	//使用第2个分号输入中文分号
 				    }
 				    else if (!iInCap) {
-					if (IsHotKey (iKey, hkPrevPage)) {
+					if (IsHotKey (iKey, hkPrevPage))
 					    retVal = im[iIMIndex].GetCandWords (SM_PREV);
-#ifdef _ENABLE_RECORDING
-					    if ( retVal == IRV_DISPLAY_CANDWORDS && bRecording)
-					        uMessageUp --;
-#endif
-				        }
-					else if (IsHotKey (iKey, hkNextPage)) {
+					else if (IsHotKey (iKey, hkNextPage))
 					    retVal = im[iIMIndex].GetCandWords (SM_NEXT);
-#ifdef _ENABLE_RECORDING
-					    if ( retVal == IRV_DISPLAY_CANDWORDS && bRecording)
-					        uMessageUp --;
-#endif
-				        }
 				    }
 
 				    if (retVal == IRV_TO_PROCESS) {
@@ -824,12 +814,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			strcpy(messageDown[0].strMsg,"词库已保存");
 			messageDown[0].type = MSG_TIPS;
 			retVal = IRV_DISPLAY_MESSAGE;
-#ifdef _ENABLE_RECORDING
-			if ( bRecording && fpRecord ) {
-			    if ( uMessageUp>0 )
-				uMessageUp --;
-			}
-#endif
 		    }
 		    else if (IsHotKey (iKey, hkVK) )
 		        SwitchVK ();

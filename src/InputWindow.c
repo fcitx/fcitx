@@ -303,8 +303,12 @@ void CalInputWindow (void)
 
 #ifdef _ENABLE_RECORDING
     if ( bRecording && fpRecord ) {
+	if ( uMessageUp > 0 ) {
+	    if ( messageUp[uMessageUp-1].type==MSG_RECORDING )
+	        uMessageUp --;
+	}
 	strcpy(messageUp[uMessageUp].strMsg,"  [¼ÇÂ¼Ä£Ê½]");
-	messageUp[uMessageUp].type = MSG_TIPS;
+	messageUp[uMessageUp].type = MSG_RECORDING;
 	uMessageUp ++;
     }
 #endif
@@ -498,7 +502,11 @@ void DisplayMessageUp (void)
 
 	    strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (strTemp) : strTemp;
 
+#ifdef _ENABLE_RECORDING
+	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strGBKT, iInputWindowUpWidth + iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[(messageUp[i].type==MSG_RECORDING)? MSG_TIPS:messageUp[i].type].color);
+#else
 	    OutputString (inputWindow, (bEn) ? xftFontEn : xftFont, strGBKT, iInputWindowUpWidth + iPos, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].color);
+#endif
 	    iPos += StringWidth (strGBKT, (bEn) ? xftFontEn : xftFont);
 
 	    if (bUseGBKT)
@@ -507,7 +515,11 @@ void DisplayMessageUp (void)
 #else
 	strGBKT = bUseGBKT ? ConvertGBKSimple2Tradition (messageUp[i].strMsg) : messageUp[i].strMsg;
 
+#ifdef _ENABLE_RECORDING
+	OutputString (inputWindow, fontSet, strGBKT, iInputWindowUpWidth, (2 * iInputWindowHeight - 1) / 5, messageColor[(messageUp[i].type==MSG_RECORDING)? MSG_TIPS:messageUp[i].type].gc);
+#else
 	OutputString (inputWindow, fontSet, strGBKT, iInputWindowUpWidth, (2 * iInputWindowHeight - 1) / 5, messageColor[messageUp[i].type].gc);
+#endif
 	iPos = StringWidth (strGBKT, fontSet);
 
 	if (bUseGBKT)

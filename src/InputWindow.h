@@ -53,7 +53,10 @@ typedef enum {
     MSG_FIRSTCAND,		//第一个候选字
     MSG_USERPHR,		//用户词组
     MSG_CODE,			//显示的编码
-    MSG_OTHER			//其它文本
+    MSG_OTHER,			//其它文本
+#ifdef _ENABLE_RECORDING
+    MSG_RECORDING		//记录提示
+#endif
 } MSG_TYPE;
 
 typedef struct {
