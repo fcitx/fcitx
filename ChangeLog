@@ -1,3 +1,6 @@
+2009-12-10: Yuking <yuking_net@sohu.com>
+	* src/KeyList.c: 修正某些按键处理错误的问题
+
 2009-11-29: Jarryson 
 	* 修改配置文件的路径，尽量靠近XDG标准
 

@@ -163,6 +163,14 @@ int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
 		return iKeyCode + 12000;
 	    }
 	}
+	else if (iKeyState == KEY_CTRL_SHIFT_COMP )
+	    return iKeyCode + 13000;
+	else if (iKeyState == KEY_ALT_SHIFT_COMP )
+	    return iKeyCode + 14000;
+	    else if (iKeyState == KEY_CTRL_ALT_COMP )
+	    return iKeyCode + 15000;
+	else if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP )
+	    return iKeyCode + 16000;
     }
     else {
 	if (iKeyState == KEY_NONE) {

@@ -342,7 +342,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     retVal = IRV_TO_PROCESS;
 
 #ifdef _DEBUG
-    printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, iKey);
+    printf ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  keyCount=%d  iKey=%d\n", (call_data->event.type == KeyRelease), iKeyState, kev->keycode, keyCount, iKey);
 #endif
 
     /* Added by hubert_star AT forum.ubuntu.com.cn */
@@ -829,7 +829,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		retVal = IRV_DONOT_PROCESS;
 	}
     }
-
+    
     switch (retVal) {
     case IRV_DO_NOTHING:
 	break;
