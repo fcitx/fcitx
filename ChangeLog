@@ -1,3 +1,6 @@
+2009-12-10: meoow <meoow AT imp3.net>
+	* data/vk.conf: 为虚拟键盘添加日文符号
+
 2009-12-10: Yuking <yuking_net@sohu.com>
 	* src/KeyList.c: 修正某些按键处理错误的问题
 
