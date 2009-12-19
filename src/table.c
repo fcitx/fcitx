@@ -157,6 +157,15 @@ void LoadTableInfo (void)
     fp = UserConfigFile(TABLE_CONFIG_FILENAME, "rt", NULL);
     if (!fp) {
 	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", TABLE_CONFIG_FILENAME);
+
+	/* zxd add begin */
+	if( access( strPath, 0 ) && getenv( "FCITXDIR") ) {
+	    strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat( strPath, "/share/fcitx/data/" );
+            strcat( strPath, TABLE_CONFIG_FILENAME );
+	}
+	/* zxd add end */
+
 	fp = fopen (strPath, "rt");
 	if (!fp)
 	    return;
@@ -358,6 +367,15 @@ Bool LoadTableDict (void)
     fpDict = UserConfigFile( table[iTableIMIndex].strPath, "rb", NULL);
     if (!fpDict) {
 	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s", table[iTableIMIndex].strPath);
+
+	/* zxd add begin */
+        if( access( strPath, 0 ) && getenv( "FCITXDIR") ) {
+            strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat( strPath, "/share/fcitx/data/" );
+            strcat( strPath, table[iTableIMIndex].strPath );
+        }
+        /* zxd add end */
+	
 	fpDict = fopen (strPath, "rb");
 	if (!fpDict) {
 	    fprintf (stderr, "Cannot load table file: %s\n", strPath);
@@ -490,6 +508,15 @@ Bool LoadTableDict (void)
     if (!fpDict) {
 	snprintf (strPath, sizeof(strPath), PKGDATADIR "/data/%s",
                   table[iTableIMIndex].strSymbolFile);
+
+	/* zxd add begin */
+	if( access( strPath, 0 ) && getenv( "FCITXDIR") ) {
+	    strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat( strPath, "/share/fcitx/data/" );
+            strcat( strPath, table[iTableIMIndex].strSymbolFile );
+	}
+	/* zxd add end */
+                  
         fpDict = fopen (strPath, "rt");
     }
 

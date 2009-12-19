@@ -371,6 +371,15 @@ void LoadVKMapFile (void)
     if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, VK_FILE);
+
+	/* zxd add begin */
+        if( access(strPath,0) && getenv( "FCITXDIR" ) ) {
+	    strcpy (strPath, getenv( "FCITXDIR" ) );
+       	    strcat (strPath, "/share/fcitx/data/");
+       	    strcat (strPath, VK_FILE );
+        }
+        /* zxd add end */
+	
 	fp = fopen (strPath, "rt");
     }
 

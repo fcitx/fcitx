@@ -131,6 +131,15 @@ Bool LoadPYBaseDict (void)
 
     strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_BASE_FILE);
+
+    /* add by zxd begin */
+    if( access( strPath,0 ) && getenv( "FCITXDIR")) {
+        strcpy( strPath, getenv( "FCITXDIR" ) );
+        strcat (strPath, "/share/fcitx/data/");
+        strcat (strPath, PY_BASE_FILE);
+    }
+    /* add by zxd end */
+
     fp = fopen (strPath, "rb");
     if (!fp)
 	return False;
@@ -171,7 +180,7 @@ Bool LoadPYBaseDict (void)
 
 Bool LoadPYOtherDict (void)
 {
-    //下面开始读系统词组    
+    //下面开始读系统词组
     FILE           *fp;
     char            strPath[PATH_MAX];
     int             i, j, k, iLen;
@@ -185,6 +194,15 @@ Bool LoadPYOtherDict (void)
 
     strcpy (strPath, PKGDATADIR "/data/");
     strcat (strPath, PY_PHRASE_FILE);
+
+    /* add by zxd begin */
+    if( access( strPath,0 ) && getenv( "FCITXDIR")) {
+        strcpy( strPath, getenv( "FCITXDIR" ) );
+        strcat (strPath, "/share/fcitx/data/");
+        strcat (strPath, PY_PHRASE_FILE);
+    }
+    /* add by zxd end */
+
     fp = fopen (strPath, "rb");
     if (!fp)
 	fprintf (stderr, "\nCan not find System Database of Pinyin!\n");
@@ -347,6 +365,15 @@ Bool LoadPYOtherDict (void)
     if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PY_SYMBOL_FILE);
+
+	/* add by zxd begin */
+        if( access( strPath,0 ) && getenv( "FCITXDIR")) {
+            strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat (strPath, "/share/fcitx/data/");
+            strcat (strPath, PY_SYMBOL_FILE);
+        }
+        /* add by zxd end */
+
 	fp = fopen (strPath, "rt");
     }
     if (fp) {
@@ -1043,7 +1070,7 @@ void PYGetCandText (int iIndex, char *strText)
 	strcpy (strText, strPYAuto);
     else {
 	pPhrase = NULL;
-	
+
 	switch (PYCandWords[iIndex].iWhich) {
 	case PY_CAND_BASE:	//是系统单字
 	    pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
@@ -1060,7 +1087,7 @@ void PYGetCandText (int iIndex, char *strText)
 	    pBase = PYCandWords[iIndex].cand.freq.hz->strHZ;
 	    break;
 	}
-	
+
 	strcpy (strText, pBase);
 	if (pPhrase)
 	    strcat (strText, pPhrase);
@@ -1260,37 +1287,37 @@ void PYCreateAuto (void)
     char            strMap[MAX_WORDS_USER_INPUT * 2 + 1];
     char strAutoTemp[MAX_WORDS_USER_INPUT * 2 + 1];
     char strAutoMapTemp[MAX_WORDS_USER_INPUT * 2 + 1];
-		    
-		    
+
+
     int             iStart,iEnd;
     int             val;
     int             iMatchedLength;
 
     if (findMap.iHZCount == 1)
 	return;
-    
+
     strPYAuto[0] = '\0';
     strPYAutoMap[0] = '\0';
     str[2] = '\0';
 
     while (strlen (strPYAuto) != findMap.iHZCount * 2) {
 	phraseSelected = NULL;
-	baseSelected = NULL;	    
+	baseSelected = NULL;
 	iStart = 0;
 	while (!baseSelected ) {
 	    str[0] = findMap.strMap[iStart][0];
 	    str[1] = findMap.strMap[iStart][1];
 	    strMap[0] = '\0';
-	    
+
 	    iEnd = (findMap.iHZCount-strlen (strPYAuto)/2);
 	    candPos.iPYFA = 0;
 	    candPos.iBase = 0;
 	    if ((iEnd - iStart) > 1) {
 		for (val = iStart + 1; val < (findMap.iHZCount-strlen (strPYAuto)/2); val++)
 		    strcat (strMap, findMap.strMap[val]);
-		
+
 		candPos.iPhrase = 0;
-	    
+
 		for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 		    if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 			for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
@@ -1311,7 +1338,7 @@ void PYCreateAuto (void)
 			}
 		    }
 		}
-		
+
 		for (candPos.iPYFA = 0; candPos.iPYFA < iPYFACount; candPos.iPYFA++) {
 		    if (!Cmp2Map (PYFAList[candPos.iPYFA].strMap, str)) {
 			for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
@@ -1332,20 +1359,20 @@ void PYCreateAuto (void)
 			}
 		    }
 		}
-		
+
 		if (baseSelected) {   //因为是逆序查找的，因此需要倒过来
 		    strcpy (strAutoTemp, baseSelected->strHZ);
-		    strcat (strAutoTemp, phraseSelected->strPhrase);		    
+		    strcat (strAutoTemp, phraseSelected->strPhrase);
 		    strcat (strAutoTemp, strPYAuto);
 		    strcpy (strPYAuto, strAutoTemp);
-		    
+
 		    strcpy (strAutoMapTemp, pPYFA->strMap);
 		    strcat (strAutoMapTemp, phraseSelected->strMap);
 		    strcat (strAutoMapTemp, strPYAutoMap);
 		    strcpy (strPYAutoMap, strAutoMapTemp);
 		}
 	    }
-	    
+
 	    if (!baseSelected) {
 		if ( (iEnd-iStart)>1 )
 		    iStart++;
@@ -1411,7 +1438,7 @@ char           *PYGetCandWord (int iIndex)
 	PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].iHit++;
 	iOrderCount++;
 	break;
-    case PY_CAND_SYMPHRASE:	//是系统词组    
+    case PY_CAND_SYMPHRASE:	//是系统词组
     case PY_CAND_USERPHRASE:	//是用户词组
 	pBase = PYFAList[PYCandWords[iIndex].cand.phrase.iPYFA].pyBase[PYCandWords[iIndex].cand.phrase.iBase].strHZ;
 	pBaseMap = PYFAList[PYCandWords[iIndex].cand.phrase.iPYFA].strMap;
@@ -1480,7 +1507,7 @@ char           *PYGetCandWord (int iIndex)
 	return strPYAuto;
     }
 
-    //此时进入自造词状态    
+    //此时进入自造词状态
     pySelected[iPYSelected].strPY[0] = '\0';
     pySelected[iPYSelected].strMap[0] = '\0';
     for (i = 0; i < iLen; i++)
@@ -2490,7 +2517,7 @@ void SavePYUserPhrase (void)
 
     if ( isSavingIM )
 	return;
-	
+
     fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
 	fprintf (stderr, "无法保存拼音用户词库：%s\n", pstr);
@@ -2539,14 +2566,14 @@ void SavePYFreq (void)
 
     if ( isSavingIM )
 	return;
-	
+
     fp = UserConfigFile(TEMP_FILE, "wb", &pstr);
     if (!fp) {
 	fprintf (stderr, "无法保存常用词表：%s\n", pstr);
 	return;
     }
     strcpy(strPathTemp, pstr);
-    
+
     i = 0;
     pPyFreq = pyFreq->next;
     while (pPyFreq) {
@@ -2596,7 +2623,7 @@ void SavePYIndex (void)
 
     if ( isSavingIM )
 	return;
-	
+
     fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
 	fprintf (stderr, "无法保存索引文件：%s\n", pstr);
@@ -2745,7 +2772,7 @@ void PYDelFreq (int iIndex)
     }
 }
 
-/* 
+/*
  * 判断一个字是否已经是常用字
  */
 Bool PYIsInFreq (char *strHZ)

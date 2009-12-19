@@ -44,6 +44,13 @@ void LoadAutoEng (void)
     if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, "AutoEng.dat");
+	/* add by zxd begin */
+        if( access( strPath,0 ) && getenv( "FCITXDIR")) {
+            strcpy( strPath, getenv( "FCITXDIR" ) );
+    	    strcat (strPath, "/share/fcitx/data/AutoEng.dat");
+        }
+        /* add by zxd end */
+
 	fp = fopen (strPath, "rt");
 	if (!fp)
 	    return;

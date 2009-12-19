@@ -131,6 +131,14 @@ void LoadSPData (void)
     if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, "sp.dat");
+
+	/* add by zxd begin */
+        if( access( strPath, 0) && getenv( "FCITXDIR") ) {
+            strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat (strPath, "/share/fcitx/data/sp.dat");
+        }
+        /* add by zxd end */
+	
 	bIsFromSystemSPConfig = True;
 	if (iSPFrom != SP_FROM_SYSTEM_CONFIG)
 	    iSPFrom = SP_FROM_SYSTEM_SP_CONFIG;

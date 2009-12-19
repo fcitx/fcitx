@@ -1,3 +1,6 @@
+2009-12-19: zxd <zhangxudong AT 163.com>
+	* 引入环境变量FCITXDIR，这样用户可以指定从何处读入数据文件
+
 2009-12-10: meoow <meoow AT imp3.net>
 	* data/vk.conf: 为虚拟键盘添加日文符号
 

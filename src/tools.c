@@ -1261,6 +1261,14 @@ void LoadConfig (Bool bMode)
     fp = UserConfigFile("config", "rt", NULL);
     if(!fp && errno == ENOENT){ /* $HOME/.fcitx/config does not exist */
         snprintf(buf, PATH_MAX, PKGDATADIR "/data/config");
+
+	/* zxd add begin */
+        if( access( buf, 0 ) && getenv( "FCITXDIR" ) ) {
+            strcpy( buf, getenv( "FCITXDIR" ) );
+            strcat( buf, "/share/fcitx/data/config" );
+        }
+        /* zxd add end */
+        
         fp = fopen(buf, "rt");
         if(!fp)
             SaveConfig();
@@ -1825,6 +1833,15 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
 
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, TABLE_GBKS2T);
+
+	/* zxd add begin */
+        if( access( strPath, 0 ) && getenv( "FCITXDIR" ) ) {
+            strcpy( strPath, getenv( "FCITXDIR" ) );
+            strcat( strPath, "/share/fcitx/data/" );
+            strcat( strPath, TABLE_GBKS2T );
+        }
+        /* zxd add end */
+	
 	fp = fopen (strPath, "rb");
 	if (!fp) {
 	    ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));

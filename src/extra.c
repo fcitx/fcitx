@@ -111,8 +111,8 @@ static void DisplayEIM(EXTRA_IM *im)
 		strTemp[0] = i + 1 + '0';
 		if (i == 9) strTemp[0] = '0';
 		strcpy(messageDown[uMessageDown].strMsg, strTemp);
-		messageDown[uMessageDown++].type = MSG_INDEX;	
-		
+		messageDown[uMessageDown++].type = MSG_INDEX;
+
 		strcpy(messageDown[uMessageDown].strMsg, im->CandTable[i]);
 		messageDown[uMessageDown].type = (i!=im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND;
 		if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
@@ -124,12 +124,12 @@ static void DisplayEIM(EXTRA_IM *im)
 		if (i != 9)
 			strcat (messageDown[uMessageDown].strMsg, " ");
 		uMessageDown++;
-	}    
+	}
 
-	uMessageUp=0;   
+	uMessageUp=0;
 	if(im->StringGet[0] || im->CodeInput[0])
-	{ 
-		uMessageUp = 1;	
+	{
+		uMessageUp = 1;
 		strcpy (messageUp[0].strMsg, im->StringGet);
 		strcat (messageUp[0].strMsg, im->CodeInput);
 		messageUp[0].type = MSG_INPUT;
@@ -269,7 +269,7 @@ static INPUT_RETURN_VALUE ExtraDoInput(int key)
 			ret=IRV_DISPLAY_CANDWORDS;
 		}
 	}
- 
+
 	return ret;
 }
 
@@ -327,14 +327,35 @@ char *ExtraGetPath(char *type)
 	else if(!strcmp(type,"DATA"))
 	{
 		strcpy(ret,PKGDATADIR"/data");
+		/* zxd add begin */
+                if (access (ret, 0) && getenv( "FCITXDIR")) {
+	            memset( ret, 0, 256 );
+                    strcpy( ret, getenv("FCTIXDIR") );
+                    strcat( ret, "/share/fcitx/data" );
+                }
+                /* zxd add end */
 	}
 	else if(!strcmp(type,"LIB"))
 	{
 		strcpy(ret,PKGDATADIR"/data");
+		/* zxd add begin */
+                if (access (ret, 0) && getenv( "FCITXDIR")) {
+	            memset( ret, 0, 256 );
+                    strcpy( ret, getenv("FCTIXDIR") );
+                    strcat( ret, "/share/fcitx/data" );
+                }
+                /* zxd add end */
 	}
 	else if(!strcmp(type,"BIN"))
 	{
 		strcpy(ret,PKGDATADIR"/../../bin");
+		/* zxd add begin */
+                if (access (ret, 0) && getenv( "FCITXDIR")) {
+	            memset( ret, 0, 256 );
+                    strcpy( ret, getenv("FCTIXDIR") );
+                    strcat( ret, "/bin" );
+                }
+                /* zxd add end */
 	}
 	return ret;
 }
@@ -425,7 +446,7 @@ void LoadExtraIM(char *fn)
 		if(convGB==(iconv_t)-1)
 			return;
 	}
-	
+
 	for(i=0;i<EIM_MAX;i++)
 	{
 		if(EIM_file[i][0] && !strcmp(EIM_file[i],path))
@@ -462,7 +483,7 @@ void LoadExtraIM(char *fn)
 		sprintf(temp,"%s/%s",ExtraGetPath("LIB"),fnr);
 
 	handle=dlopen(temp,RTLD_LAZY);
- 	
+
 	if(!handle)
 	{
 		printf("eim: open %s fail %s\n",temp,dlerror());

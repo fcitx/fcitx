@@ -53,6 +53,15 @@ int LoadPuncDict (void)
     if (!fpDict) {
 	strcpy (strPath, PKGDATADIR "/data/");
 	strcat (strPath, PUNC_DICT_FILENAME);
+
+	/* zxd add begin */
+        if (access (strPath, 0) && getenv( "FCITXDIR" ) ) {
+	    strcpy (strPath, getenv( "FCITXDIR") );
+	    strcat (strPath, "/share/fcitx/data/" );
+	    strcat (strPath, PUNC_DICT_FILENAME);
+        }
+        /* zxd add end */
+
 	fpDict = fopen (strPath, "rt");
 	if (!fpDict) {
 	    printf ("Can't open Chinese punc file: %s\n", strPath);
