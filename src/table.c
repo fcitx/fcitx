@@ -88,6 +88,8 @@ INT16           iHZLastInputCount = 0;
 Bool            bTablePhraseTips = False;
 
 ADJUSTORDER     PYBaseOrder;
+Bool		isSavingTableDic = False;
+
 extern char     strPYAuto[];
 
 extern INT8     iInternalVersion;
@@ -136,8 +138,6 @@ extern PYCandWord PYCandWords[];
 
 extern char     strFindString[];
 extern ParsePYStruct findMap;
-
-extern Bool	isSavingIM;
 
 /*
  * 读取码表输入法的名称和文件路径
@@ -702,9 +702,11 @@ void SaveTableDict (void)
     FILE	*logfile = (FILE *)NULL;;
 #endif
 
-    if (!isSavingIM )
-        return;
-        
+    if ( isSavingTableDic )
+	return;
+
+    isSavingTableDic = True;
+    
 #ifdef _ENABLE_LOG       
     logfile = UserConfigFile("fcitx-dict.log", "wt", NULL);
     if ( logfile ) {
@@ -718,6 +720,7 @@ void SaveTableDict (void)
     
     fpDict = UserConfigFile(TEMP_FILE, "wb", &pstr);
     if (!fpDict) {
+	isSavingTableDic = False;
 	fprintf (stderr, "Cannot create table file: %s\n", pstr);
 	return;
     }
@@ -830,6 +833,8 @@ void SaveTableDict (void)
 	    unlink (pstr);
 	rename (strPathTemp, pstr);
     }
+
+    isSavingTableDic = False;
 }
 
 Bool IsInputKey (int iKey)

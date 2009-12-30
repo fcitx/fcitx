@@ -1,3 +1,6 @@
+2009-12-29: Yuking <yuking_net@sohu.com>
+	* 修正无法保存用户词组和词频信息的错误
+
 2009-12-19: zxd <zhangxudong AT 163.com>
 	* 引入环境变量FCITXDIR，这样用户可以指定从何处读入数据文件
 

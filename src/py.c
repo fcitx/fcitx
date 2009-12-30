@@ -88,6 +88,10 @@ Bool            bIsPYDelUserPhr = False;
 
 Bool            bFullPY = False;	//该变量指示只要全拼输入(不使用简拼)
 
+Bool		isSavingPYUserPhrase = False;
+Bool		isSavingPYIndex = False;
+Bool		isSavingPYFreq = False;
+
 extern Bool     bIsInLegend;
 extern Bool     bUseLegend;
 extern Bool     bSP_UseSemicolon;
@@ -115,8 +119,6 @@ extern int      iLegendCandPageCount;
 extern int      iCurrentLegendCandPage;
 extern Bool     bDisablePagingInLegend;
 extern Bool     bPointAfterNumber;
-
-extern Bool	isSavingIM;
 
 void PYInit (void)
 {
@@ -2515,11 +2517,14 @@ void SavePYUserPhrase (void)
     FILE           *fp;
     PyPhrase       *phrase;
 
-    if ( isSavingIM )
-	return;
+    if ( isSavingPYUserPhrase )
+        return;
 
+    isSavingPYUserPhrase = True;
+  
     fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
+	isSavingPYUserPhrase = False;
 	fprintf (stderr, "无法保存拼音用户词库：%s\n", pstr);
 	return;
     }
@@ -2553,6 +2558,8 @@ void SavePYUserPhrase (void)
     if (access (pstr, 0))
 	unlink (pstr);
     rename (strPathTemp, pstr);
+
+    isSavingPYUserPhrase = False;
 }
 
 void SavePYFreq (void)
@@ -2564,11 +2571,13 @@ void SavePYFreq (void)
     PyFreq         *pPyFreq;
     HZ             *hz;
 
-    if ( isSavingIM )
-	return;
-
+    if ( isSavingPYFreq )
+        return;
+        
+    isSavingPYFreq = True;
     fp = UserConfigFile(TEMP_FILE, "wb", &pstr);
     if (!fp) {
+	isSavingPYFreq = False;
 	fprintf (stderr, "无法保存常用词表：%s\n", pstr);
 	return;
     }
@@ -2609,6 +2618,8 @@ void SavePYFreq (void)
     if (access (pstr, 0))
 	unlink (pstr);
     rename (strPathTemp, pstr);
+
+    isSavingPYFreq = False;
 }
 
 /*
@@ -2621,11 +2632,13 @@ void SavePYIndex (void)
     char            strPathTemp[PATH_MAX];
     FILE           *fp;
 
-    if ( isSavingIM )
-	return;
+    if ( isSavingPYIndex )
+        return;
 
+    isSavingPYIndex = True;
     fp = UserConfigFile (TEMP_FILE, "wb", &pstr);
     if (!fp) {
+	isSavingPYIndex = False;
 	fprintf (stderr, "无法保存索引文件：%s\n", pstr);
 	return;
     }
@@ -2672,6 +2685,8 @@ void SavePYIndex (void)
     if (access (pstr, 0))
 	unlink (pstr);
     rename (strPathTemp, pstr);
+
+    isSavingPYIndex = False;
 }
 
 /*

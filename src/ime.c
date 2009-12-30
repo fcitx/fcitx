@@ -132,7 +132,6 @@ Bool            bIsInLegend = False;
 
 INT8            iIMIndex = 0;
 Bool            bLocked = False;
-Bool 		isSavingIM = False;
 
 // dgod extern im
 char		strExternIM[PATH_MAX];
@@ -1163,15 +1162,9 @@ Bool IsIM (char *strName)
 
 void SaveIM (void)
 {
-    if (isSavingIM)
-	return;
-
-    isSavingIM = True;
     if (iTableChanged)
 	SaveTableDict ();
     SavePY();
-
-    isSavingIM = False;
 }
 
 void SetIM (void)
