@@ -1177,7 +1177,7 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 
 		bIsTableAdjustOrder = True;
 		uMessageUp = 1;
-		strcpy (messageUp[0].strMsg, "选择需要提前的词组序号，ESC取消");
+		strcpy (messageUp[0].strMsg, "选择需要提前的词组序号，ESC结束");
 		messageUp[0].type = MSG_TIPS;
 		retVal = IRV_DISPLAY_MESSAGE;
 	    }

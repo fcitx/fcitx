@@ -333,10 +333,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
      * xine-ui每秒钟产生一个左SHIFT键的释放事件
      * 但这段代码对新的xine-ui已经不起作用了
      */
-     if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
+     /*if (kev->same_screen && (kev->keycode == switchKey || kev->keycode == i2ndSelectKey || kev->keycode == i3rdSelectKey)) {
 	IMForwardEvent (ims, (XPointer) call_data);
 	return;
-     }
+     }*/
 
     retVal = IRV_TO_PROCESS;
 
