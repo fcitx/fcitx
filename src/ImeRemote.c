@@ -31,7 +31,11 @@
 #include <fcntl.h>
 #include "xim.h"
 #include "MainWindow.h"
-
+#ifdef _ENABLE_DBUS
+#include "DBus.h"
+extern Property state_prop;
+#endif
+extern Bool bUseDBus; 
 static const char socketfile[]="/tmp/fcitx.socket";
 CARD16 g_last_connect_id;
 
@@ -110,8 +114,15 @@ static void main_loop (int socket_fd)
 			O >>= 16;
 			SetIMState(O);
 			if (O) {
-				DisplayMainWindow();
-				DrawMainWindow();
+				if (!bUseDBus) {
+					DisplayMainWindow();
+					DrawMainWindow();
+				}
+#ifdef _ENABLE_DBUS
+				else {
+					updateProperty(&state_prop);
+				}
+#endif
 			}
 		}
 		close(client_fd);

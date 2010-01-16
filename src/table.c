@@ -120,6 +120,7 @@ extern uint     uMessageUp;
 extern MESSAGE  messageDown[];
 extern uint     uMessageDown;
 extern Bool     bPointAfterNumber;
+extern Bool		bUseDBus;
 
 extern INT8     iIMIndex;
 extern Bool     bUseLegend;
@@ -920,6 +921,11 @@ INPUT_RETURN_VALUE DoTableInput (int iKey)
 	    uMessageUp = uMessageDown = 0;
 	    bTablePhraseTips = False;
 	    XUnmapWindow (dpy, inputWindow);
+#ifdef _ENABLE_DBUS
+		if (bUseDBus) {
+			updateMessages();
+		}
+#endif
 	}
     }
 

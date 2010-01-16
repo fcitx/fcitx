@@ -93,6 +93,7 @@ void		DestroyICID (CARD16 icid);
 void		icidSetIMState (CARD16 icid, IME_STATE imState);
 IME_STATE	icidGetIMState (CARD16 icid);
 /* CARD16		icidGetConnectID (CARD16 icid); */
+CARD16 ConnectIDGetICID (CARD16 connect_id);
 
 #ifndef __USE_GNU
 extern char    *strcasestr (__const char *__haystack, __const char *__needle);

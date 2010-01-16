@@ -51,6 +51,8 @@
 #include "TrayWindow.h"
 #endif
 
+#include "DBus.h"
+
 #include "vk.h"
 #include "ime.h"
 #include "table.h"
@@ -70,6 +72,7 @@ extern Display *dpy;
 extern Window   mainWindow;
 
 extern Bool     bIsUtf8;
+extern Bool		bUseDBus;
 
 extern HIDE_MAINWINDOW hideMainWindow;
 
@@ -126,6 +129,11 @@ int main (int argc, char *argv[])
     setlocale (LC_CTYPE, "");
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
+#ifdef _ENABLE_DBUS
+	if (bUseDBus && !InitDBus ())
+	exit (5);
+#endif
+
     /*创建字体。实际上，就是根据用户的设置，使用xft读取字体的相关信息。
      * xft是x11提供的处理字体的相关函数集
      */
@@ -149,22 +157,33 @@ int main (int argc, char *argv[])
 
     //以下是界面的处理
 
-    CreateMainWindow ();	//创建主窗口，即输入法状态窗口
-    CreateVKWindow ();		//创建候选词窗口
+	if (!bUseDBus) {
+		CreateMainWindow ();	//创建主窗口，即输入法状态窗口
+    	CreateVKWindow ();		//创建候选词窗口
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		registerProperties();
+	}
+#endif
     CreateInputWindow ();	//创建输入窗口
-    CreateAboutWindow ();	//创建关于窗口
+	if (!bUseDBus) {
+	    CreateAboutWindow ();	//创建关于窗口
 
     //处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
-    InitGC (mainWindow);
+	    InitGC (mainWindow);
+	}
 
     //将本程序加入到输入法组，告诉系统，使用我输入字符
     SetIM ();
 
-    //处理主窗口的显示
-    if (hideMainWindow != HM_HIDE) {
-	DisplayMainWindow ();
-	DrawMainWindow ();
-    }
+	if (!bUseDBus) {
+    	//处理主窗口的显示
+	    if (hideMainWindow != HM_HIDE) {
+		DisplayMainWindow ();
+		DrawMainWindow ();
+    	}
+	}
 
     //初始化输入法
     if (!InitXIM (imname))
@@ -190,18 +209,30 @@ int main (int argc, char *argv[])
     pthread_create(&pid, NULL, remoteThread, NULL);
 
 #ifdef _ENABLE_TRAY
-    CreateTrayWindow ();		//创建系统托盘窗口
-    DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
+	if (!bUseDBus) {
+	    CreateTrayWindow ();		//创建系统托盘窗口
+    	DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
+	}
 #endif
 
     //主循环，即XWindow的消息循环
     for (;;) {
-	XNextEvent (dpy, &event);			//等待一个事件发生
+		while(XPending (dpy)) {
+			XNextEvent (dpy, &event);					//等待一个事件发生
 
-	if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
-	    continue;
+			if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
+			    continue;
 
-	MyXEventHandler (&event);			//处理X事件
+			if (!bUseDBus) {
+				MyXEventHandler (&event);					//处理X事件
+			}
+		}
+#ifdef _ENABLE_DBUS
+		if (bUseDBus) {
+			MyDBusEventHandler();
+		}
+#endif
+	
     }
 
     return 0;

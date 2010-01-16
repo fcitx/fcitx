@@ -37,6 +37,8 @@
 #include "vk.h"
 #include "ui.h"
 
+#include "DBus.h"
+
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
 ICID	       *icidsHead = (ICID *) NULL;
 XIMS            ims;
@@ -92,6 +94,18 @@ extern uint     iHZInputed;
 extern Bool     bShowInputWindowTriggering;
 
 extern Bool     bUseGBKT;
+
+extern Bool		bUseDBus;
+
+#ifdef _ENABLE_DBUS
+extern Property logo_prop;
+extern Property state_prop;
+extern Property punc_prop;
+extern Property corner_prop;
+extern Property gbk_prop;
+extern Property gbkt_prop;
+extern Property legend_prop;
+#endif
 
 #ifdef _DEBUG
 char            strUserLocale[100];
@@ -183,7 +197,10 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    IMPreeditStart (ims, (XPointer) call_data);
 
 	EnterChineseMode (lastConnectID == connect_id);
-	DrawMainWindow ();
+
+	if (!bUseDBus) {
+		DrawMainWindow ();
+	}
 
 	if (ConnectIDGetState (connect_id) == IS_CHN) {
 	    if (bVK)
@@ -191,7 +208,9 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	}
 	else {
 	    XUnmapWindow (dpy, inputWindow);
-	    XUnmapWindow (dpy, VKWindow);
+		if (!bUseDBus) {
+	    	XUnmapWindow (dpy, VKWindow);
+		}
 	}
     }
     else {
@@ -199,17 +218,28 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    IMPreeditEnd (ims, (XPointer) call_data);
 
 	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
-#ifdef _ENABLE_TRAY
-	DrawTrayWindow (INACTIVE_ICON);
-#endif
-	if (hideMainWindow == HM_SHOW) {
-	    DisplayMainWindow ();
-	    DrawMainWindow ();
+	if (!bUseDBus) {
+		XUnmapWindow (dpy, VKWindow);
 	}
-	else
-	    XUnmapWindow (dpy, mainWindow);
-    }
+#ifdef _ENABLE_TRAY
+	if (!bUseDBus) {
+		DrawTrayWindow (INACTIVE_ICON);
+	}
+#endif
+	if (!bUseDBus) {
+		if (hideMainWindow == HM_SHOW) {
+			    DisplayMainWindow ();
+			    DrawMainWindow ();
+		}
+		else {
+		    XUnmapWindow (dpy, mainWindow);
+	    }
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		updatePropertyByConnectID(connect_id);
+	}
+#endif
 
     icidSetIMState(call_data->icid, ConnectIDGetState (connect_id));
     lastConnectID = connect_id;
@@ -227,6 +257,12 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
         }
     }
 
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		registerProperties();
+	}
+#endif
+    }
     return True;
 }
 
@@ -234,7 +270,9 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
     if (call_data->connect_id==connect_id) {
 	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
+	if (!bUseDBus) {
+		XUnmapWindow (dpy, VKWindow);
+	}
     }
 
     return True;
@@ -243,7 +281,9 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
-    XUnmapWindow (dpy, VKWindow);
+	if (!bUseDBus) {
+    	XUnmapWindow (dpy, VKWindow);    
+	}
 
     DestroyConnectID (call_data->connect_id);
     // connect_id = 0;
@@ -268,6 +308,13 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 	connect_id = call_data->connect_id;
     }
 
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) 
+	{
+		updatePropertyByConnectID(connect_id);
+	}
+#endif
+
     CreateICID(call_data);
 
     return True;
@@ -277,11 +324,20 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
 	XUnmapWindow (dpy, inputWindow);
-	XUnmapWindow (dpy, VKWindow);
+	if (!bUseDBus) {
+		XUnmapWindow (dpy, VKWindow);
+	}
     }
 
     DestroyIC (call_data);
     DestroyICID(call_data->icid);
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		logo_prop.label = "Fcitx";
+		updateProperty(&logo_prop);
+	}
+#endif
 
     return True;
 }
@@ -296,9 +352,17 @@ void EnterChineseMode (Bool bState)
 	    im[iIMIndex].ResetIM ();
     }
 
+	if (!bUseDBus) {
     DisplayMainWindow ();
 #ifdef _ENABLE_TRAY
     DrawTrayWindow (ACTIVE_ICON);
+#endif
+	}
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updatePropertyByConnectID(connect_id);
+	}
 #endif
 }
 
@@ -313,16 +377,20 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 	icidSetIMState(call_data->icid, IS_CHN);
 
 	EnterChineseMode (False);
+	if (!bUseDBus)
 	DrawMainWindow ();
+	}
 
 	SetTrackPos( (IMChangeICStruct *)call_data );
-	if (bShowInputWindowTriggering && !bCorner)
+	if (bShowInputWindowTriggering && !bCorner) {
+		if (!bUseDBus)
 	    DisplayInputWindow ();
 
 #ifdef _ENABLE_TRAY
-	DrawTrayWindow (ACTIVE_ICON);
+	if (!bUseDBus)
+		DrawTrayWindow (ACTIVE_ICON);
 #endif
-    }
+	}
     else
 	return False;
 
@@ -904,20 +972,20 @@ IME_STATE icidGetIMState (CARD16 icid)
 
     return IS_CLOSED;
 }
-/*
-CARD16 icidGetConnectID (CARD16 icid)
+
+CARD16 ConnectIDGetICID (CARD16 connect_id)
 {
     ICID     *temp;
 
     temp = icidsHead;
 
     while (temp) {
-	if (temp->icid == icid)
-	    return temp->connect_id;
+	if (temp->connect_id == connect_id)
+	    return temp->icid;
 
 	temp = temp->next;
     }
 
     return 0;
 }
-*/
+

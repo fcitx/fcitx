@@ -53,8 +53,11 @@
 #include "AutoEng.h"
 #include "extra.h"
 
+#include "DBus.h"
+
 IM             *im = NULL;
 INT8            iIMCount = 0;
+INT8			iState = 0;
 
 int             iMaxCandWord = 5;
 int             iCandPageCount;
@@ -198,6 +201,20 @@ extern Bool     bShowInputWindowTriggering;
 extern Bool	bMainWindow_Hiden;
 extern char    *strFullCorner;
 
+extern Bool		bUseDBus;
+extern CARD16	connect_id;
+
+#ifdef _ENABLE_DBUS
+extern Property logo_prop;
+extern Property state_prop;
+extern Property punc_prop;
+extern Property corner_prop;
+extern Property gbk_prop;
+extern Property gbkt_prop;
+extern Property legend_prop;
+#endif
+
+
 #ifdef _USE_XFT
 extern XftFont *xftMainWindowFont;
 #else
@@ -219,6 +236,7 @@ void ResetInput (void)
     iCurrentLegendCandPage = 0;
     iLegendCandPageCount = 0;
     iCursorPos = 0;
+	uMessageUp = uMessageDown = 0;
 
     strCodeInput[0] = '\0';
     iCodeInputCount = 0;
@@ -241,17 +259,26 @@ void ResetInput (void)
 void CloseIM (IMForwardEventStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
+	if (!bUseDBus) {
     XUnmapWindow (dpy, VKWindow);
+	}
 
     IMPreeditEnd (ims, (XPointer) call_data);
     SetConnectID (call_data->connect_id, IS_CLOSED);
     icidSetIMState(call_data->icid, IS_CLOSED);
     bVK = False;
     SwitchIM (-2);
+	if (!bUseDBus) {
     DrawMainWindow ();
 
 #ifdef _ENABLE_TRAY
     DrawTrayWindow (INACTIVE_ICON);
+#endif
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		updateProperty(&state_prop);
+	}
 #endif
 }
 
@@ -259,23 +286,31 @@ void ChangeIMState (CARD16 _connect_id)
 {
     if (ConnectIDGetState (_connect_id) == IS_ENG) {
 	SetConnectID (_connect_id, IS_CHN);
+	iState = IS_CHN;
 
+	if (!bUseDBus) {
 	if (bVK)
 	    DisplayVKWindow ();
 	else
 	    DisplayInputWindow ();
+	}
     }
     else {
 	SetConnectID (_connect_id, IS_ENG);
+	iState = IS_ENG;
 	ResetInput ();
 	ResetInputWindow ();
 
 	XUnmapWindow (dpy, inputWindow);
+	if (!bUseDBus) {
 	XUnmapWindow (dpy, VKWindow);
+	}
     }
 
+	if (!bUseDBus) {
     if (hideMainWindow != HM_HIDE)
 	DrawMainWindow ();
+	}
 }
 
 /*
@@ -459,10 +494,13 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    SetConnectID (call_data->connect_id, IS_CHN);
 
 		    EnterChineseMode (False);
-		    DrawMainWindow ();
+			if (!bUseDBus)
+			    DrawMainWindow ();
 
-		    if (bShowInputWindowTriggering && !bCorner)
-			DisplayInputWindow ();
+		    if (bShowInputWindowTriggering && !bCorner) {
+				if (!bUseDBus)
+					DisplayInputWindow ();
+			}
 		    else
 		        MoveInputWindow(call_data->connect_id);
 		}
@@ -722,14 +760,18 @@ void ProcessKey (IMForwardEventStruct * call_data)
 				    else if (iKey == CTRL_5) {
 					LoadConfig (False);
 
-					InitGC (inputWindow);
-					InitMainWindowColor ();
-					InitInputWindowColor ();
-					InitVKWindowColor ();
+					if (!bUseDBus) {
+						InitGC (inputWindow);
+						InitMainWindowColor ();
+						InitInputWindowColor ();
+						InitVKWindowColor ();
+					}
 
 					SetIM ();
-					CreateFont ();
-					CalculateInputWindowHeight ();
+					if (!bUseDBus) {
+						CreateFont ();
+						CalculateInputWindowHeight ();
+					}
 
 					FreeQuickPhrase ();
 					LoadQuickPhrase ();
@@ -740,7 +782,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					FreePunc ();
 					LoadPuncDict ();
 					SwitchIM(-2);
-					DrawMainWindow();
+					if (!bUseDBus)
+						DrawMainWindow();
 
 					retVal = IRV_DO_NOTHING;
 				    }
@@ -798,12 +841,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    else if (IsHotKey (iKey, hkHideMainWindow)) {
 			if (bMainWindow_Hiden) {
 			    bMainWindow_Hiden = False;
-			    DisplayMainWindow();
-			    DrawMainWindow();
+				if (!bUseDBus) {
+				    DisplayMainWindow();
+				    DrawMainWindow();
+				}
 		    	}
 			else {
 			    bMainWindow_Hiden = True;
+				if (!bUseDBus) {
 			    XUnmapWindow(dpy,mainWindow);
+				}
 			}
 			retVal = IRV_DO_NOTHING;
 		    }
@@ -843,6 +890,11 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	ResetInput ();
 	ResetInputWindow ();
 	XUnmapWindow (dpy, inputWindow);
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateMessages();
+	}
+#endif
 
 	return;
     case IRV_DISPLAY_CANDWORDS:
@@ -859,8 +911,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    if (iCurrentCandPage < iCandPageCount)
 		bShowNext = True;
 	}
-	DisplayInputWindow ();
-	DrawInputWindow ();
+
+	if (!bUseDBus) {
+		DisplayInputWindow ();
+		DrawInputWindow ();
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		updateMessages();
+	}
+#endif
 
 	break;
     case IRV_DISPLAY_LAST:
@@ -878,8 +938,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_DISPLAY_MESSAGE:
 	bShowNext = False;
 	bShowPrev = False;
-	DisplayInputWindow ();
-	DrawInputWindow ();
+
+	if (!bUseDBus) {
+		DisplayInputWindow ();
+		DrawInputWindow ();
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		updateMessages();
+	}
+#endif
 
 	break;
     case IRV_GET_LEGEND:
@@ -893,12 +961,26 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
-	    DisplayInputWindow ();
-	    DrawInputWindow ();
+		if (!bUseDBus) {
+		    DisplayInputWindow ();
+		    DrawInputWindow ();
+		}
+#ifdef _ENABLE_DBUS
+		else {
+			updateMessages();
+		}
+#endif
 	}
 	else {
 	    ResetInput ();
-	    XUnmapWindow (dpy, inputWindow);
+		if (!bUseDBus) {
+		    XUnmapWindow (dpy, inputWindow);
+		}
+#ifdef _ENABLE_DBUS
+		else {
+			updateMessages();
+		}
+#endif
 	}
 
 	break;
@@ -907,14 +989,24 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bLastIsNumber = False;
 	if (bPhraseTips && im[iIMIndex].PhraseTips && !bVK)
 	    DoPhraseTips ();
-	iHZInputed += (int) (strlen (strStringGet) / 2);
+	iHZInputed += (int) (strlen (strStringGet) / 2);	
 
-	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
-	    XUnmapWindow (dpy, inputWindow);
+	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))) {
+		XUnmapWindow (dpy, inputWindow);
+		uMessageUp = 0;
+		uMessageDown = 0;
+	}
 	else {
-	    DisplayInputWindow ();
-	    DrawInputWindow ();
-        }
+		if (!bUseDBus) {
+			DisplayInputWindow ();
+			DrawInputWindow ();
+		}
+    }
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateMessages();
+	}
+#endif
 
 	ResetInput ();
         lastIsSingleHZ = 0;
@@ -935,8 +1027,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//´ÖÂÔÍ³¼Æ×ÖÊý
-	    DisplayInputWindow ();
+		if (!bUseDBus) {
+			DisplayInputWindow ();
+		}
 	}
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateMessages();
+	}
+#endif
 
 	break;
     default:
@@ -967,8 +1066,15 @@ INPUT_RETURN_VALUE ChangeCorner (void)
     bCorner = !bCorner;
 
     SwitchIM(iIMIndex);
-    DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+	if (!bUseDBus) {
+	    DrawMainWindow ();
+    	XUnmapWindow (dpy, inputWindow);
+	}
+#ifdef _ENABLE_DBUS
+	else {
+		updateProperty(&corner_prop);
+	}
+#endif
 
     SaveProfile ();
 
@@ -978,8 +1084,16 @@ INPUT_RETURN_VALUE ChangeCorner (void)
 INPUT_RETURN_VALUE ChangePunc (void)
 {
     bChnPunc = !bChnPunc;
-    DrawMainWindow ();
+	if (!bUseDBus) {   
+    	DrawMainWindow ();
+	}
     SaveProfile ();
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateProperty(&punc_prop);
+	}
+#endif
 
     return IRV_DO_NOTHING;
 }
@@ -990,10 +1104,18 @@ INPUT_RETURN_VALUE ChangeGBK (void)
     ResetInput ();
     ResetInputWindow ();
 
-    DrawMainWindow ();
+	if (!bUseDBus) {
+	    DrawMainWindow ();
+	}
     XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateProperty(&gbk_prop);
+	}
+#endif
 
     return IRV_CLEAN;
 }
@@ -1004,10 +1126,18 @@ INPUT_RETURN_VALUE ChangeGBKT (void)
     ResetInput ();
     ResetInputWindow ();
 
-    DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+	if (!bUseDBus) {
+	    DrawMainWindow ();
+    	XUnmapWindow (dpy, inputWindow);
+	}
 
     SaveProfile ();
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateProperty(&gbkt_prop);
+	}
+#endif
 
     return IRV_CLEAN;
 }
@@ -1016,13 +1146,20 @@ INPUT_RETURN_VALUE ChangeLegend (void)
 {
     bUseLegend = !bUseLegend;
     ResetInput ();
-    ResetInputWindow ();
+	if (!bUseDBus) {
+	    ResetInputWindow ();
 
-    DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+	    DrawMainWindow ();
+    	XUnmapWindow (dpy, inputWindow);
+	}
 
     SaveProfile ();
 
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		updateProperty(&legend_prop);
+	}
+#endif
     return IRV_CLEAN;
 }
 
@@ -1037,7 +1174,9 @@ INPUT_RETURN_VALUE ChangeTrack (void)
 void ChangeLock (void)
 {
     bLocked = !bLocked;
-    DrawMainWindow ();
+	if (!bUseDBus) {
+	    DrawMainWindow ();
+	}
 
     SaveProfile ();
 }
@@ -1088,6 +1227,9 @@ void SwitchIM (INT8 index)
     else if (index != (INT8) - 2) {
 	if (index >= iIMCount)
 	    iIMIndex = iIMCount - 1;
+	else {
+		iIMIndex = index;
+	}
     }
 
     if (bVK)
@@ -1097,6 +1239,7 @@ void SwitchIM (INT8 index)
     else
 	str = im[iIMIndex].strName;
 
+	if (!bUseDBus) {
 #ifdef _USE_XFT
     MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, xftMainWindowFont) + 4;
 #else
@@ -1108,6 +1251,7 @@ void SwitchIM (INT8 index)
     XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
 
     DrawMainWindow ();
+	}
 
     if (index != (INT8) - 2) {
 	if (im[iLastIM].Destroy)
@@ -1117,9 +1261,32 @@ void SwitchIM (INT8 index)
     }
 
     ResetInput ();
-    XUnmapWindow (dpy, inputWindow);
+	XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
+
+#ifdef _ENABLE_DBUS
+	if (bUseDBus) {
+		char* need_free = NULL;
+		if ((index == (INT8)-2) || (index == (INT8)-2)) {
+			logo_prop.label = "Fcitx";
+			iState = IS_ENG;
+		}
+		else {
+			int iIndex = ConnectIDGetState(connect_id);
+			if (iIndex == IS_CHN) {
+				logo_prop.label =(need_free = g2u(im[iIMIndex].strName));
+				iState = IS_CHN;
+			}
+		}
+		updateProperty(&logo_prop);
+		updateProperty(&state_prop);
+		updateMessages();
+		if (need_free) free(need_free);
+	}
+#endif
+
+
 }
 
 void DoPhraseTips (void)

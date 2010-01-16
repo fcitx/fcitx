@@ -258,6 +258,8 @@ Bool LoadPYOtherDict (void)
 		break;
 
 	    j = GetBaseIndex (i, strBase);
+		if (j == -1)
+			break;
 
 	    PYFAList[i].pyBase[j].iUserPhrase = k;
 	    temp = PYFAList[i].pyBase[j].userPhrase;
@@ -460,10 +462,13 @@ int GetBaseIndex (int iPYFA, char *strBase)
 {
     int             i;
 
-    for (i = 0; i < PYFAList[iPYFA].iBase; i++) {
-	if (!strcmp (strBase, PYFAList[iPYFA].pyBase[i].strHZ))
-	    return i;
-    }
+	if (iPYFA < iPYFACount)
+	{
+		for (i = 0; i < PYFAList[iPYFA].iBase; i++) {
+			if (!strcmp (strBase, PYFAList[iPYFA].pyBase[i].strHZ))
+				return i;
+		}
+	}
 
     return -1;
 }

@@ -171,6 +171,10 @@ extern int	inputMethods[];
 extern Bool	bUseTrayIcon;
 #endif
 
+#ifdef _ENABLE_DBUS
+extern Bool bUseDBus;
+#endif
+
 #ifdef _ENABLE_RECORDING
 extern HOTKEYS  hkRecording[];
 extern HOTKEYS	hkResetRecording[];
@@ -728,6 +732,13 @@ Configure program_config[] = {
         .value_type = CONFIG_INTEGER,
         .value.integer = &bUseTrayIcon,
     },
+ #endif
+ #ifdef _ENABLE_DBUS
+	{
+		.name = "使用DBus接口",
+		.value_type = CONFIG_INTEGER,
+		.value.integer = &bUseDBus,
+	},
  #endif
     {
         .name = NULL,
