@@ -564,8 +564,15 @@ inline static int second_third_candidate_word(Configure *c, void *a, int isread)
             i3rdSelectKey = 109;       //ÓÒCTRLµÄÉ¨ÃèÂë
         }
         else {
-            i2ndSelectKey = pstr[0] ^ 0xFF;
-            i3rdSelectKey = pstr[1] ^ 0xFF;
+	    if (pstr[0] && pstr[0]!='0')
+		i2ndSelectKey = pstr[0] ^ 0xFF;
+	    else
+		i2ndSelectKey = 0;
+	
+	    if (pstr[1] && pstr[1]!='0')
+		i3rdSelectKey = pstr[1] ^ 0xFF;
+	    else
+		i3rdSelectKey = 0;
         }
     }else {
 	if ( i2ndSelectKey == 50 )
@@ -573,7 +580,7 @@ inline static int second_third_candidate_word(Configure *c, void *a, int isread)
         else if ( i2ndSelectKey == 37 )
             fprintf((FILE *)a, "%s=%s\n", c->name, "CTRL");
         else
-            fprintf((FILE *)a, "%s=%c%c\n", c->name, i2ndSelectKey, i3rdSelectKey);
+            fprintf((FILE *)a, "%s=%c%c\n", c->name, (!i2ndSelectKey)? '0':i2ndSelectKey, (!i3rdSelectKey)? '0':i3rdSelectKey);
     }
 
     return 0;
