@@ -17,7 +17,7 @@ Bool bUseDBus = False;
 
 //#define DEBUG_DBUS
 
-Bool bUseDBus = True;
+Bool bUseDBus = False;
 DBusError err;
 DBusConnection *conn;
 int ret;

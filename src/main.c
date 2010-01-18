@@ -217,7 +217,11 @@ int main (int argc, char *argv[])
 
     //主循环，即XWindow的消息循环
     for (;;) {
-		while(XPending (dpy)) {
+#ifdef _ENABLE_DBUS
+		while(True) {
+			if (bUseDBus && !XPending (dpy))
+				break;
+#endif
 			XNextEvent (dpy, &event);					//等待一个事件发生
 
 			if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
@@ -226,8 +230,10 @@ int main (int argc, char *argv[])
 			if (!bUseDBus) {
 				MyXEventHandler (&event);					//处理X事件
 			}
-		}
 #ifdef _ENABLE_DBUS
+			if (!bUseDBus)
+				break;
+		}
 		if (bUseDBus) {
 			MyDBusEventHandler();
 		}
