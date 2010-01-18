@@ -1271,6 +1271,7 @@ void LoadConfig (Bool bMode)
 
     fp = UserConfigFile("config", "rt", NULL);
     if(!fp && errno == ENOENT){ /* $HOME/.fcitx/config does not exist */
+    
         snprintf(buf, PATH_MAX, PKGDATADIR "/data/config");
 
 	/* zxd add begin */
@@ -1283,7 +1284,9 @@ void LoadConfig (Bool bMode)
         fp = fopen(buf, "rt");
         if(!fp)
             SaveConfig();
-    }else {
+    }
+    
+    if (fp) {
 	group_idx = -1;
 
 	/* FIXME: 也许应该用另外更恰当的缓冲区长度 */

@@ -1,3 +1,7 @@
+2010-01-18: Yuking <yuking_net@sohu.com>
+	* data/cj.txt: 补漏仓颉输入法中的“这”字
+	* src/tools.c: 修正配置文件读错误
+
 2009-12-29: Yuking <yuking_net@sohu.com>
 	* 修正无法保存用户词组和词频信息的错误
 
