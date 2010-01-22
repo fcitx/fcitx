@@ -311,6 +311,14 @@ void ChangeIMState (CARD16 _connect_id)
     if (hideMainWindow != HM_HIDE)
 	DrawMainWindow ();
 	}
+
+#ifdef _ENABLE_DBUS 
+	if (bUseDBus)
+	{
+		updateMessages();
+		updateProperty(&state_prop);
+	}
+#endif
 }
 
 /*
