@@ -119,9 +119,8 @@ static void main_loop (int socket_fd)
 					DrawMainWindow();
 				}
 #ifdef _ENABLE_DBUS
-				else {
+				else
 					updateProperty(&state_prop);
-				}
 #endif
 			}
 		}

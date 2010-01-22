@@ -201,7 +201,7 @@ extern Bool     bShowInputWindowTriggering;
 extern Bool	bMainWindow_Hiden;
 extern char    *strFullCorner;
 
-extern Bool		bUseDBus;
+extern Bool	bUseDBus;
 extern CARD16	connect_id;
 
 #ifdef _ENABLE_DBUS
@@ -259,26 +259,26 @@ void ResetInput (void)
 void CloseIM (IMForwardEventStruct * call_data)
 {
     XUnmapWindow (dpy, inputWindow);
-	if (!bUseDBus) {
-    XUnmapWindow (dpy, VKWindow);
-	}
+    
+    if (!bUseDBus)
+	XUnmapWindow (dpy, VKWindow);
 
     IMPreeditEnd (ims, (XPointer) call_data);
     SetConnectID (call_data->connect_id, IS_CLOSED);
     icidSetIMState(call_data->icid, IS_CLOSED);
     bVK = False;
     SwitchIM (-2);
-	if (!bUseDBus) {
-    DrawMainWindow ();
+    
+    if (!bUseDBus) {
+	DrawMainWindow ();
 
 #ifdef _ENABLE_TRAY
-    DrawTrayWindow (INACTIVE_ICON);
+	DrawTrayWindow (INACTIVE_ICON);
 #endif
-	}
+    }
 #ifdef _ENABLE_DBUS
-	else {
-		updateProperty(&state_prop);
-	}
+    else
+	updateProperty(&state_prop);
 #endif
 }
 
@@ -289,10 +289,10 @@ void ChangeIMState (CARD16 _connect_id)
 	iState = IS_CHN;
 
 	if (!bUseDBus) {
-	if (bVK)
-	    DisplayVKWindow ();
-	else
-	    DisplayInputWindow ();
+	    if (bVK)
+		DisplayVKWindow ();
+	    else
+		DisplayInputWindow ();
 	}
     }
     else {
@@ -302,22 +302,20 @@ void ChangeIMState (CARD16 _connect_id)
 	ResetInputWindow ();
 
 	XUnmapWindow (dpy, inputWindow);
-	if (!bUseDBus) {
-	XUnmapWindow (dpy, VKWindow);
-	}
+	if (!bUseDBus)
+	    XUnmapWindow (dpy, VKWindow);
+    }
+    
+    if (!bUseDBus) {
+	if (hideMainWindow != HM_HIDE)
+	    DrawMainWindow ();
     }
 
-	if (!bUseDBus) {
-    if (hideMainWindow != HM_HIDE)
-	DrawMainWindow ();
-	}
-
 #ifdef _ENABLE_DBUS 
-	if (bUseDBus)
-	{
-		updateMessages();
-		updateProperty(&state_prop);
-	}
+    if (bUseDBus) {
+	updateMessages();
+	updateProperty(&state_prop);
+    }
 #endif
 }
 
@@ -502,13 +500,13 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    SetConnectID (call_data->connect_id, IS_CHN);
 
 		    EnterChineseMode (False);
-			if (!bUseDBus)
-			    DrawMainWindow ();
+		    if (!bUseDBus)
+			DrawMainWindow ();
 
 		    if (bShowInputWindowTriggering && !bCorner) {
-				if (!bUseDBus)
-					DisplayInputWindow ();
-			}
+			if (!bUseDBus)
+			    DisplayInputWindow ();
+		    }
 		    else
 		        MoveInputWindow(call_data->connect_id);
 		}
@@ -769,16 +767,16 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					LoadConfig (False);
 
 					if (!bUseDBus) {
-						InitGC (inputWindow);
-						InitMainWindowColor ();
-						InitInputWindowColor ();
-						InitVKWindowColor ();
+					    InitGC (inputWindow);
+					    InitMainWindowColor ();
+					    InitInputWindowColor ();
+					    InitVKWindowColor ();
 					}
 
 					SetIM ();
 					if (!bUseDBus) {
-						CreateFont ();
-						CalculateInputWindowHeight ();
+					    CreateFont ();
+					    CalculateInputWindowHeight ();
 					}
 
 					FreeQuickPhrase ();
@@ -791,7 +789,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					LoadPuncDict ();
 					SwitchIM(-2);
 					if (!bUseDBus)
-						DrawMainWindow();
+					    DrawMainWindow();
 
 					retVal = IRV_DO_NOTHING;
 				    }
@@ -849,16 +847,15 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		    else if (IsHotKey (iKey, hkHideMainWindow)) {
 			if (bMainWindow_Hiden) {
 			    bMainWindow_Hiden = False;
-				if (!bUseDBus) {
-				    DisplayMainWindow();
-				    DrawMainWindow();
-				}
+			    if (!bUseDBus) {
+				DisplayMainWindow();
+				DrawMainWindow();
+			    }
 		    	}
 			else {
 			    bMainWindow_Hiden = True;
-				if (!bUseDBus) {
-			    XUnmapWindow(dpy,mainWindow);
-				}
+			    if (!bUseDBus) 
+				XUnmapWindow(dpy,mainWindow);
 			}
 			retVal = IRV_DO_NOTHING;
 		    }
@@ -899,9 +896,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	ResetInputWindow ();
 	XUnmapWindow (dpy, inputWindow);
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateMessages();
-	}
+	if (bUseDBus)
+	    updateMessages();
 #endif
 
 	return;
@@ -921,13 +917,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	}
 
 	if (!bUseDBus) {
-		DisplayInputWindow ();
-		DrawInputWindow ();
+	    DisplayInputWindow ();
+	    DrawInputWindow ();
 	}
 #ifdef _ENABLE_DBUS
-	else {
-		updateMessages();
-	}
+	else
+	    updateMessages();
 #endif
 
 	break;
@@ -948,13 +943,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bShowPrev = False;
 
 	if (!bUseDBus) {
-		DisplayInputWindow ();
-		DrawInputWindow ();
+	    DisplayInputWindow ();
+	    DrawInputWindow ();
 	}
 #ifdef _ENABLE_DBUS
-	else {
-		updateMessages();
-	}
+	else
+	    updateMessages();
 #endif
 
 	break;
@@ -969,25 +963,22 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
-		if (!bUseDBus) {
-		    DisplayInputWindow ();
-		    DrawInputWindow ();
-		}
+	    if (!bUseDBus) {
+		DisplayInputWindow ();
+		DrawInputWindow ();
+	    }
 #ifdef _ENABLE_DBUS
-		else {
-			updateMessages();
-		}
+	    else
+		updateMessages();
 #endif
 	}
 	else {
 	    ResetInput ();
-		if (!bUseDBus) {
-		    XUnmapWindow (dpy, inputWindow);
-		}
+	    if (!bUseDBus)
+		XUnmapWindow (dpy, inputWindow);
 #ifdef _ENABLE_DBUS
-		else {
-			updateMessages();
-		}
+	    else
+		updateMessages();
 #endif
 	}
 
@@ -1005,15 +996,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		uMessageDown = 0;
 	}
 	else {
-		if (!bUseDBus) {
-			DisplayInputWindow ();
-			DrawInputWindow ();
-		}
-    }
-#ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateMessages();
+	    if (!bUseDBus) {
+		DisplayInputWindow ();
+		DrawInputWindow ();
+	    }
 	}
+#ifdef _ENABLE_DBUS
+	if (bUseDBus)
+	    updateMessages();
 #endif
 
 	ResetInput ();
@@ -1035,14 +1025,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//´ÖÂÔÍ³¼Æ×ÖÊý
-		if (!bUseDBus) {
-			DisplayInputWindow ();
-		}
+	    if (!bUseDBus)
+		DisplayInputWindow ();
 	}
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateMessages();
-	}
+	if (bUseDBus)
+	    updateMessages();
 #endif
 
 	break;
@@ -1074,14 +1062,14 @@ INPUT_RETURN_VALUE ChangeCorner (void)
     bCorner = !bCorner;
 
     SwitchIM(iIMIndex);
-	if (!bUseDBus) {
-	    DrawMainWindow ();
+    
+    if (!bUseDBus) {
+	DrawMainWindow ();
     	XUnmapWindow (dpy, inputWindow);
-	}
+    }
 #ifdef _ENABLE_DBUS
-	else {
-		updateProperty(&corner_prop);
-	}
+    else
+	updateProperty(&corner_prop);
 #endif
 
     SaveProfile ();
@@ -1092,15 +1080,15 @@ INPUT_RETURN_VALUE ChangeCorner (void)
 INPUT_RETURN_VALUE ChangePunc (void)
 {
     bChnPunc = !bChnPunc;
-	if (!bUseDBus) {   
+    
+    if (!bUseDBus) 
     	DrawMainWindow ();
-	}
+    
     SaveProfile ();
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateProperty(&punc_prop);
-	}
+    if (bUseDBus)
+	updateProperty(&punc_prop);
 #endif
 
     return IRV_DO_NOTHING;
@@ -1112,17 +1100,15 @@ INPUT_RETURN_VALUE ChangeGBK (void)
     ResetInput ();
     ResetInputWindow ();
 
-	if (!bUseDBus) {
-	    DrawMainWindow ();
-	}
+    if (!bUseDBus)
+	DrawMainWindow ();
     XUnmapWindow (dpy, inputWindow);
 
     SaveProfile ();
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateProperty(&gbk_prop);
-	}
+    if (bUseDBus)
+	updateProperty(&gbk_prop);
 #endif
 
     return IRV_CLEAN;
@@ -1134,17 +1120,16 @@ INPUT_RETURN_VALUE ChangeGBKT (void)
     ResetInput ();
     ResetInputWindow ();
 
-	if (!bUseDBus) {
-	    DrawMainWindow ();
+    if (!bUseDBus) {
+	DrawMainWindow ();
     	XUnmapWindow (dpy, inputWindow);
-	}
+    }
 
     SaveProfile ();
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateProperty(&gbkt_prop);
-	}
+    if (bUseDBus)
+	updateProperty(&gbkt_prop);
 #endif
 
     return IRV_CLEAN;
@@ -1154,19 +1139,19 @@ INPUT_RETURN_VALUE ChangeLegend (void)
 {
     bUseLegend = !bUseLegend;
     ResetInput ();
-	if (!bUseDBus) {
-	    ResetInputWindow ();
-
-	    DrawMainWindow ();
+    
+    if (!bUseDBus) {
+	ResetInputWindow ();
+	
+	DrawMainWindow ();
     	XUnmapWindow (dpy, inputWindow);
-	}
+    }
 
     SaveProfile ();
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		updateProperty(&legend_prop);
-	}
+    if (bUseDBus)
+	updateProperty(&legend_prop);
 #endif
     return IRV_CLEAN;
 }
@@ -1182,9 +1167,9 @@ INPUT_RETURN_VALUE ChangeTrack (void)
 void ChangeLock (void)
 {
     bLocked = !bLocked;
-	if (!bUseDBus) {
-	    DrawMainWindow ();
-	}
+    
+    if (!bUseDBus)
+	DrawMainWindow ();
 
     SaveProfile ();
 }
@@ -1247,19 +1232,19 @@ void SwitchIM (INT8 index)
     else
 	str = im[iIMIndex].strName;
 
-	if (!bUseDBus) {
+    if (!bUseDBus) {
 #ifdef _USE_XFT
-    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, xftMainWindowFont) + 4;
+	MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, xftMainWindowFont) + 4;
 #else
-    MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, fontSetMainWindow) + 4;
+	MAINWND_WIDTH = ((bCompactMainWindow) ? _MAINWND_WIDTH_COMPACT : _MAINWND_WIDTH) + StringWidth (str, fontSetMainWindow) + 4;
 #endif
-    if (!bShowVK && bCompactMainWindow)
-	MAINWND_WIDTH -= 24;
+	if (!bShowVK && bCompactMainWindow)
+	    MAINWND_WIDTH -= 24;
 
-    XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
+	XResizeWindow (dpy, mainWindow, MAINWND_WIDTH, MAINWND_HEIGHT);
 
-    DrawMainWindow ();
-	}
+	DrawMainWindow ();
+    }
 
     if (index != (INT8) - 2) {
 	if (im[iLastIM].Destroy)
@@ -1274,27 +1259,29 @@ void SwitchIM (INT8 index)
     SaveProfile ();
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus) {
-		char* need_free = NULL;
-		if ((index == (INT8)-2) || (index == (INT8)-2)) {
-			logo_prop.label = "Fcitx";
-			iState = IS_ENG;
-		}
-		else {
-			int iIndex = ConnectIDGetState(connect_id);
-			if (iIndex == IS_CHN) {
-				logo_prop.label =(need_free = g2u(im[iIMIndex].strName));
-				iState = IS_CHN;
-			}
-		}
-		updateProperty(&logo_prop);
-		updateProperty(&state_prop);
-		updateMessages();
-		if (need_free) free(need_free);
+    if (bUseDBus) {
+	char* need_free = NULL;
+	
+	if ((index == (INT8)-2) || (index == (INT8)-2)) {
+	    logo_prop.label = "Fcitx";
+	    iState = IS_ENG;
 	}
+	else {
+	    int iIndex = ConnectIDGetState(connect_id);
+	    
+	    if (iIndex == IS_CHN) {
+		logo_prop.label =(need_free = g2u(im[iIMIndex].strName));
+		iState = IS_CHN;
+	    }
+	}
+	
+	updateProperty(&logo_prop);
+	updateProperty(&state_prop);
+	updateMessages();
+	if (need_free)
+	    free(need_free);
+    }
 #endif
-
-
 }
 
 void DoPhraseTips (void)

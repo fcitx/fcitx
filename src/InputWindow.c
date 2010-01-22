@@ -123,7 +123,7 @@ extern Bool     bShowUserSpeed;
 extern Bool     bShowVersion;
 extern time_t   timeStart;
 extern uint     iHZInputed;
-extern Bool		bUseDBus;
+extern Bool	bUseDBus;
 
 extern CARD16	connect_id;
 
@@ -678,13 +678,11 @@ void MoveInputWindow(CARD16 connect_id)
 	        iTempInputWindowY = iTempInputWindowY - 2 * iInputWindowHeight;
 	}
 
-	if (!bUseDBus) {
-	XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);
-	}
+	if (!bUseDBus)
+	    XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);
 #ifdef _ENABLE_DBUS
-	else {
-		KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
-	}
+	else
+	    KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
 #endif
 	ConnectIDSetPos (connect_id, iTempInputWindowX - iOffsetX, iTempInputWindowY - iOffsetY);
     }
@@ -698,14 +696,12 @@ void MoveInputWindow(CARD16 connect_id)
 	else
 	    iInputWindowX = pos ? pos->x : iInputWindowX;
 
-	if (!bUseDBus) {
-	XMoveResizeWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY, iInputWindowWidth, iInputWindowHeight);
-	}
+	if (!bUseDBus)
+	    XMoveResizeWindow (dpy, inputWindow, iInputWindowX, pos ? pos->y : iInputWindowY, iInputWindowWidth, iInputWindowHeight);
 #ifdef _ENABLE_DBUS
-	else {
-		KIMUpdateSpotLocation(iInputWindowX, pos ? pos->y : iInputWindowY);
-	}
+	else
+	    KIMUpdateSpotLocation(iInputWindowX, pos ? pos->y : iInputWindowY);
 #endif
-	}
+    }
     
 }

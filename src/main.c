@@ -130,7 +130,7 @@ int main (int argc, char *argv[])
     bIsUtf8 = (strcmp (nl_langinfo (CODESET), "UTF-8") == 0);
 
 #ifdef _ENABLE_DBUS
-	if (bUseDBus && !InitDBus ())
+    if (bUseDBus && !InitDBus ())
 	exit (5);
 #endif
 
@@ -157,33 +157,31 @@ int main (int argc, char *argv[])
 
     //以下是界面的处理
 
-	if (!bUseDBus) {
-		CreateMainWindow ();	//创建主窗口，即输入法状态窗口
+    if (!bUseDBus) {
+	CreateMainWindow ();	//创建主窗口，即输入法状态窗口
     	CreateVKWindow ();		//创建候选词窗口
-	}
+    }
 #ifdef _ENABLE_DBUS
-	else {
-		registerProperties();
-	}
+    else
+	registerProperties();
 #endif
     CreateInputWindow ();	//创建输入窗口
-	if (!bUseDBus) {
-	    CreateAboutWindow ();	//创建关于窗口
-
-    //处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
-	    InitGC (mainWindow);
-	}
+    if (!bUseDBus) {
+	CreateAboutWindow ();	//创建关于窗口
+	//处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
+	InitGC (mainWindow);
+    }
 
     //将本程序加入到输入法组，告诉系统，使用我输入字符
     SetIM ();
 
-	if (!bUseDBus) {
-    	//处理主窗口的显示
-	    if (hideMainWindow != HM_HIDE) {
-		DisplayMainWindow ();
-		DrawMainWindow ();
-    	}
+    if (!bUseDBus) {
+	//处理主窗口的显示
+	if (hideMainWindow != HM_HIDE) {
+	    DisplayMainWindow ();
+	    DrawMainWindow ();
 	}
+    }
 
     //初始化输入法
     if (!InitXIM (imname))
@@ -209,36 +207,33 @@ int main (int argc, char *argv[])
     pthread_create(&pid, NULL, remoteThread, NULL);
 
 #ifdef _ENABLE_TRAY
-	if (!bUseDBus) {
-	    CreateTrayWindow ();		//创建系统托盘窗口
+    if (!bUseDBus) {
+	CreateTrayWindow ();		//创建系统托盘窗口
     	DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
-	}
+    }
 #endif
 
     //主循环，即XWindow的消息循环
     for (;;) {
 #ifdef _ENABLE_DBUS
-		while(True) {
-			if (bUseDBus && !XPending (dpy))
-				break;
+	while(True) {
+	    if (bUseDBus && !XPending (dpy))
+		break;
 #endif
-			XNextEvent (dpy, &event);					//等待一个事件发生
+	    XNextEvent (dpy, &event);					//等待一个事件发生
 
-			if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
-			    continue;
-
-			if (!bUseDBus) {
-				MyXEventHandler (&event);					//处理X事件
-			}
+	    if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
+		continue;
+	    
+	    if (!bUseDBus)
+		MyXEventHandler (&event);					//处理X事件
 #ifdef _ENABLE_DBUS
-			if (!bUseDBus)
-				break;
-		}
-		if (bUseDBus) {
-			MyDBusEventHandler();
-		}
-#endif
-	
+	    if (!bUseDBus)
+		break;
+	}
+	if (bUseDBus)
+	    MyDBusEventHandler();
+#endif	
     }
 
     return 0;

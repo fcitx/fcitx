@@ -1893,7 +1893,6 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
 		       * (unsigned char) 0xbe + ((unsigned char) strHZ[i + 1] - (unsigned char) 0x40)
 		       - ((unsigned char) strHZ[i + 1] / (unsigned char) 0x80)) * 2;
 		if (idx >= 0 && idx < gGBKS2TTableSize - 1) {
-		    //if ((unsigned char)gGBKS2TTable[idx] != (unsigned char)0xa1 && (unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
 		    if ((unsigned char) gGBKS2TTable[idx + 1] != (unsigned char) 0x7f) {
 			ret[i] = gGBKS2TTable[idx];
 			ret[i + 1] = gGBKS2TTable[idx + 1];
