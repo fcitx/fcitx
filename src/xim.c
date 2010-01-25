@@ -534,6 +534,10 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
     fprintf (stderr, "Sending %s  icid=%d connectid=%d\n", strHZ, CurrentIC->id, connect_id);
 #endif
 
+    /* avoid Seg fault */
+    if (!call_data && !CurrentIC)
+        return;
+
 #ifdef _ENABLE_RECORDING
     if (bRecording) {
         if (OpenRecording(True)) {
@@ -574,8 +578,14 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 
     memset (&cms, 0, sizeof (cms));
     cms.major_code = XIM_COMMIT;
-    cms.icid = call_data->icid;
-    cms.connect_id = call_data->connect_id;
+    if (call_data) {
+        cms.icid = call_data->icid;
+        cms.connect_id = call_data->connect_id;
+    }
+    else {
+        cms.icid = CurrentIC->id;
+        cms.connect_id = connect_id;
+    }
     cms.flag = XimLookupChars;
     cms.commit_string = (char *) tp.value;
     IMCommitString (ims, (XPointer) & cms);
@@ -977,3 +987,4 @@ CARD16 ConnectIDGetICID (CARD16 connect_id)
     return 0;
 }
 
+// vim: sw=4 sts=4 et tw=100

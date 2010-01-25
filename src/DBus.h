@@ -35,11 +35,9 @@ typedef struct Property_ {
     char *tip;
 } Property;
 
-extern DBusError err;
 extern DBusConnection *conn;
 
 Bool InitDBus();
-void MyDBusEventHandler();
 
 void KIMExecDialog(char *prop);
 void KIMExecMenu(char *props[],int n);
@@ -69,5 +67,7 @@ char* g2u(char *instr);
 char* u2g(char *instr);
 
 void updatePropertyByConnectID(CARD16 connect_id);
+
+void DBusLoop(void *val);
 
 #endif 

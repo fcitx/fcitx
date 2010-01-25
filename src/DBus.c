@@ -1,6 +1,7 @@
 #include "main.h"
 #include "InputWindow.h"
 #include "ime.h"
+#include "tools.h"
 #include "xim.h"
 #include "DBus.h"
 
@@ -18,7 +19,6 @@ Bool bUseDBus = False;
 //#define DEBUG_DBUS
 
 Bool bUseDBus = False;
-DBusError err;
 DBusConnection *conn;
 int ret;
 
@@ -59,9 +59,11 @@ extern int iLegendCandPageCount;
 
 void fixProperty(Property *prop);
 char* convertMessage(char* in);
+static void MyDBusEventHandler();
 
 Bool InitDBus()
 {
+    DBusError err;
     // first init dbus
     dbus_error_init(&err);
     conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
@@ -103,16 +105,26 @@ void TestSendSignal()
 {
 }
 
-void MyDBusEventHandler()
+void DBusLoop(void *val)
 {
-    dbus_connection_read_write(conn, 10);
+    MyDBusEventHandler();
+}
+
+static void MyDBusEventHandler()
+{
     DBusMessage *msg;
     DBusMessageIter args;
 
-    int int0, int1, int2, int3;
-    char *s0, *s1, *s2, *s3;
+    int int0;
+    char *s0;
    
-    while ((msg = dbus_connection_pop_message(conn))) {
+    for (;;) {
+        dbus_connection_read_write(conn, 0);
+        msg = dbus_connection_pop_message(conn);
+        if ( NULL == msg) {
+            usleep(300);
+            continue;
+        }
         if (dbus_message_is_signal(msg, "org.kde.impanel", "MovePreeditCaret")) {
             fprintf(stderr,"MovePreeditCaret\n");
             // read the parameters
@@ -143,23 +155,18 @@ void MyDBusEventHandler()
                         SendHZtoClient(0,pstr);
                         if (!bUseLegend) {
                             ResetInput();
-                        } else {
-                            updateMessages();
                         }
-                    } else {
-                        updateMessages();
                     }
+                    updateMessages();
                 } else {
                     pstr = im[iIMIndex].GetLegendCandWord(int0);
                     if (pstr) {
                         SendHZtoClient(0,pstr);
-                        if (iLegendCandWordCount) {
-                            updateMessages();
-                        }
-                        else {
+                        if (!iLegendCandWordCount) {
                             ResetInput ();
                         }
                     }
+                    updateMessages();
                 }
                 fprintf(stderr,"%d:%s\n", int0,pstr);
             }
@@ -201,7 +208,6 @@ void MyDBusEventHandler()
         // free the message
         dbus_message_unref(msg);
     }
-
 }
 
 
@@ -575,7 +581,6 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
     }
     dbus_message_iter_close_container(&args,&subAttrs);
 
-    int int0 = 0;
     dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &has_prev);
     dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &has_next);
 
@@ -882,7 +887,6 @@ void registerProperties()
 {
     char *props[10];
 
-    char icon[100] = "";
     int i = 0;
 
     logo_prop.key = "/Fcitx/Logo";
@@ -1107,7 +1111,7 @@ char* g2u(char *instr)
     outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
     memset(outbuf,'\0',outputbufsize);
     cd=iconv_open("utf-8","gb18030");    //将字符串编码由gtk转换为utf-8
-    if(cd==(size_t)-1)
+    if(cd==(iconv_t)-1)
     {
         return "";
     }
@@ -1131,7 +1135,7 @@ char* u2g(char *instr)
     outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
     memset(outbuf,'\0',outputbufsize);
     cd=iconv_open("gb18030","utf-8");    //将字符串编码由utf-8转换为gbk
-    if(cd==(size_t)-1)
+    if(cd==(iconv_t)-1)
     {
         return "";
     }
