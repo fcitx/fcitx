@@ -204,7 +204,9 @@ int main (int argc, char *argv[])
     OpenRecording(True);
 #endif
 
+#ifdef _ENABLE_DBUS
     dbus_threads_init_default();
+#endif
     pthread_create(&pid, NULL, remoteThread, NULL);
 
 #ifdef _ENABLE_DBUS
