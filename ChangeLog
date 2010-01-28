@@ -1,3 +1,6 @@
+2010-01-28: Yuking <yuking_net@sohu.com>
+	* 修正打开/关闭DBus模式的一些错误
+
 2010-01-18: Yuking <yuking_net@sohu.com>
 	* data/cj.txt: 补漏仓颉输入法中的“这”字
 	* src/tools.c: 修正配置文件读错误
@@ -14,12 +17,12 @@
 2009-12-10: Yuking <yuking_net@sohu.com>
 	* src/KeyList.c: 修正某些按键处理错误的问题
 
-2009-11-29: Jarryson 
+2009-11-29: Jarryson
 	* 修改配置文件的路径，尽量靠近XDG标准
 
 2009-11-03: hurrica...@126.com
 	* lib/i18nPtHdr.c, i18nIc.c: 修正两处内存泄露
-	
+
 2009-11-02: Yuking <yuking_net@sohu.com>
 	* src/tools.c, xim.c: 用户可以指定记录文件路径了，如果路径为空，则默认为~/.fcitx/record.dat
 

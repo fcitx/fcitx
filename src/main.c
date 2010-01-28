@@ -69,7 +69,7 @@
 #include <pthread.h>
 
 extern Display *dpy;
-extern Window   mainWindow;
+extern Window   inputWindow;
 
 extern Bool     bIsUtf8;
 extern Bool		bUseDBus;
@@ -77,6 +77,10 @@ extern Bool		bUseDBus;
 extern HIDE_MAINWINDOW hideMainWindow;
 
 extern void* remoteThread(void*);
+
+#ifdef _ENABLE_TRAY
+extern tray_win_t tray;
+#endif
 
 int main (int argc, char *argv[])
 {
@@ -157,20 +161,21 @@ int main (int argc, char *argv[])
 
     //以下是界面的处理
 
-    if (!bUseDBus) {
+    if (!bUseDBus)
 	CreateMainWindow ();	//创建主窗口，即输入法状态窗口
-    	CreateVKWindow ();		//创建候选词窗口
-    }
 #ifdef _ENABLE_DBUS
     else
 	registerProperties();
 #endif
+
     CreateInputWindow ();	//创建输入窗口
-    if (!bUseDBus) {
+    CreateVKWindow ();		//创建虚拟键盘窗口
+
+    if (!bUseDBus)
 	CreateAboutWindow ();	//创建关于窗口
-	//处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
-	InitGC (mainWindow);
-    }
+
+    //处理颜色，即候选词窗口的颜色，也就是我们在配置文件中定义的那些颜色信息
+    InitGC (inputWindow);
 
     //将本程序加入到输入法组，告诉系统，使用我输入字符
     SetIM ();
@@ -211,11 +216,12 @@ int main (int argc, char *argv[])
 
 #ifdef _ENABLE_DBUS
     if (bUseDBus) {
-        pthread_create(&pid, NULL, DBusLoop, NULL);
+        pthread_create(&pid, NULL, (void *)DBusLoop, NULL);
     }
 #endif
 
 #ifdef _ENABLE_TRAY
+    tray.window = (Window) NULL;
     if (!bUseDBus) {
 	CreateTrayWindow ();		//创建系统托盘窗口
     	DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
@@ -224,13 +230,12 @@ int main (int argc, char *argv[])
 
     //主循环，即XWindow的消息循环
     for (;;) {
-	    XNextEvent (dpy, &event);					//等待一个事件发生
+	    XNextEvent (dpy, &event);			//等待一个事件发生
 
 	    if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
 		continue;
 	    
-	    if (!bUseDBus)
-		MyXEventHandler (&event);					//处理X事件
+	    MyXEventHandler (&event);		//处理X事件
     }
 
     return 0;

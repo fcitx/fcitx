@@ -246,7 +246,12 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    if (pos) {
 		iClientCursorX = pos->x;
 		iClientCursorY = pos->y;
-		XMoveWindow (dpy, inputWindow, iClientCursorX, iClientCursorY);
+		if (!bUseDBus)
+		    XMoveWindow (dpy, inputWindow, iClientCursorX, iClientCursorY);
+#ifdef _ENABLE_DBUS
+		else
+		    KIMUpdateSpotLocation(iClientCursorX, iClientCursorY);
+#endif
 	    }
 	}
 
@@ -278,7 +283,6 @@ Bool MyCloseHandler (IMOpenStruct * call_data)
     	XUnmapWindow (dpy, VKWindow);
 
     DestroyConnectID (call_data->connect_id);
-    // connect_id = 0;
 
     SaveIM();
 

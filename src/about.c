@@ -45,7 +45,7 @@ extern XftFont *xftVKWindowFont;
 extern XFontSet fontSetVKWindow;
 #endif
 
-Window          aboutWindow;
+Window          aboutWindow = (Window)NULL;
 WINDOW_COLOR    AboutWindowColor = { NULL, NULL, {0, 220 << 8, 220 << 8, 220 << 8}
 };
 MESSAGE_COLOR   AboutWindowFontColor = { NULL, {0, 0, 0, 0}

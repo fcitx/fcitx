@@ -37,6 +37,7 @@
 
 #include "xim.h"
 #include "ime.h"
+#include "about.h"
 #include "InputWindow.h"
 #include "MainWindow.h"
 #include "TrayWindow.h"
@@ -57,7 +58,7 @@
 
 IM             *im = NULL;
 INT8            iIMCount = 0;
-INT8			iState = 0;
+INT8		iState = 0;
 
 int             iMaxCandWord = 5;
 int             iCandPageCount;
@@ -180,6 +181,8 @@ extern VKS      vks[];
 extern unsigned char iCurrentVK;
 extern Bool     bVK;
 
+extern Window   aboutWindow;
+
 extern int      MAINWND_WIDTH;
 extern Bool     bCompactMainWindow;
 extern Bool     bShowVK;
@@ -227,6 +230,11 @@ extern Bool	bRecording;
 extern Bool 	bWrittenRecord;
 #endif
 
+#ifdef _ENABLE_TRAY
+extern tray_win_t tray;
+extern Bool	tray_mapped;
+#endif
+
 void ResetInput (void)
 {
     iCandPageCount = 0;
@@ -236,7 +244,7 @@ void ResetInput (void)
     iCurrentLegendCandPage = 0;
     iLegendCandPageCount = 0;
     iCursorPos = 0;
-	uMessageUp = uMessageDown = 0;
+    uMessageUp = uMessageDown = 0;
 
     strCodeInput[0] = '\0';
     iCodeInputCount = 0;
@@ -767,10 +775,28 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					LoadConfig (False);
 
 					if (!bUseDBus) {
+					    if (!mainWindow)
+					        CreateMainWindow();
+					    if (hideMainWindow != HM_HIDE) {
+						DisplayMainWindow ();
+						DrawMainWindow ();
+					    }
+					    if (!tray.window) {
+					        CreateTrayWindow();
+					        DrawTrayWindow (INACTIVE_ICON);
+					    }
+					    if (!aboutWindow)
+						CreateAboutWindow();
 					    InitGC (inputWindow);
 					    InitMainWindowColor ();
 					    InitInputWindowColor ();
 					    InitVKWindowColor ();
+					}
+					else {
+					    XUnmapWindow(dpy, mainWindow);
+					    XDestroyWindow(dpy,tray.window);
+					    tray.window = (Window) NULL;
+					    tray_mapped = False;
 					}
 
 					SetIM ();
@@ -866,7 +892,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			messageDown[0].type = MSG_TIPS;
 			retVal = IRV_DISPLAY_MESSAGE;
 		    }
-		    else if (IsHotKey (iKey, hkVK) )
+		    else if (IsHotKey (iKey, hkVK) ) 
 		        SwitchVK ();
 #ifdef _ENABLE_RECORDING
 		    else if (IsHotKey (iKey, hkRecording) )
@@ -921,8 +947,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    DrawInputWindow ();
 	}
 #ifdef _ENABLE_DBUS
-	else
+	else {
+	    MoveInputWindow(call_data->connect_id);
 	    updateMessages();
+	}
 #endif
 
 	break;

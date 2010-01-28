@@ -85,6 +85,7 @@ extern CARD16   icid;
 extern XIMS     ims;
 
 extern uint     iHZInputed;
+extern Bool	bUseDBus;
 
 Bool CreateVKWindow (void)
 {
@@ -215,6 +216,7 @@ void DrawVKWindow (void)
 	iPos += 24;
 #endif
     }
+    
     if (bShiftPressed)
 	Draw3DEffect (VKWindow, 5, 113, 56, 25, _3D_LOWER);
 }
@@ -504,7 +506,9 @@ void ChangVK (void)
 
     DrawVKWindow ();
     SwitchIM (-2);
-    DrawMainWindow ();
+
+    if (!bUseDBus)
+        DrawMainWindow ();
 }
 
 INPUT_RETURN_VALUE DoVKInput (int iKey)
@@ -552,5 +556,7 @@ void SwitchVK (void)
 	XUnmapWindow (dpy, VKWindow);
 
     SwitchIM (-2);
-    DrawMainWindow ();
+
+    if ( !bUseDBus )
+	DrawMainWindow ();
 }

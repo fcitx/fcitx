@@ -57,7 +57,7 @@
 #include "ui.h"
 #include "vk.h"
 
-Window          mainWindow;
+Window          mainWindow = (Window) NULL;
 int             MAINWND_WIDTH = _MAINWND_WIDTH;
 
 int             iMainWindowX = MAINWND_STARTX;
