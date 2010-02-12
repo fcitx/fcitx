@@ -46,7 +46,6 @@ static Window Dock = None;
 static int trapped_error_code = 0;
 static int (*old_error_handler) (Display *d, XErrorEvent *e);
 
-static int tray_find_dock(Display *dpy, Window win);
 static void tray_set_xembed_info (Display* dpy, Window win, int flags);
 static void tray_send_opcode( Display* dpy,  Window w, long message,
         long data1, long data2, long data3 );
@@ -92,7 +91,7 @@ tray_init(Display* dpy, Window win)
     return tray_find_dock(dpy, win);
 }
 
-    static int
+    int
 tray_find_dock(Display *dpy, Window win)
 {
     XGrabServer (dpy);
@@ -114,7 +113,7 @@ tray_find_dock(Display *dpy, Window win)
     return 0;
 }
 
-    void
+/*    void
 tray_handle_client_message(Display *dpy, Window win, XEvent *an_event)
 {
     if (an_event->xclient.message_type == Atoms[ATOM_XEMBED]) {
@@ -131,7 +130,7 @@ tray_handle_client_message(Display *dpy, Window win, XEvent *an_event)
             tray_find_dock(dpy, win);
     }
 }
-
+*/
     void
 tray_set_xembed_info (Display* dpy, Window win, int flags)
 {
@@ -167,12 +166,12 @@ static void tray_send_opcode(Display* dpy, Window w,
                 trapped_error_code );
     }
 }
-
+/*
     void
 tray_map_window (Display* dpy, Window win)
 {
-    XMapWindow(dpy, win);  /* dock will probably do this as well */
+    XMapWindow(dpy, win);  // dock will probably do this as well
     tray_set_xembed_info (dpy, win, XEMBED_MAPPED);
 }
-
+*/
 #endif

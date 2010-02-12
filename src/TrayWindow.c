@@ -83,4 +83,8 @@ void tray_win_deinit(tray_win_t *f_tray) {
     ;
 }
 
+void tray_win_redraw(void) {
+    tray_find_dock(dpy, tray.window);
+}
+
 #endif

@@ -70,9 +70,10 @@
 
 extern Display *dpy;
 extern Window   inputWindow;
+extern Window   ximWindow;
 
 extern Bool     bIsUtf8;
-extern Bool		bUseDBus;
+extern Bool	bUseDBus;
 
 extern HIDE_MAINWINDOW hideMainWindow;
 
@@ -215,9 +216,8 @@ int main (int argc, char *argv[])
     pthread_create(&pid, NULL, remoteThread, NULL);
 
 #ifdef _ENABLE_DBUS
-    if (bUseDBus) {
+    if (bUseDBus)
         pthread_create(&pid, NULL, (void *)DBusLoop, NULL);
-    }
 #endif
 
 #ifdef _ENABLE_TRAY
@@ -230,11 +230,9 @@ int main (int argc, char *argv[])
 
     //主循环，即XWindow的消息循环
     for (;;) {
-	    XNextEvent (dpy, &event);			//等待一个事件发生
-
-	    if (XFilterEvent (&event, None) == True)	//如果是超时，等待下一个事件
-		continue;
+	XNextEvent (dpy, &event);			//等待一个事件发生
 	    
+	if (XFilterEvent (&event, None) == False)
 	    MyXEventHandler (&event);		//处理X事件
     }
 

@@ -29,6 +29,7 @@
 #include "version.h"
 #include <time.h>
 #include <X11/xpm.h>
+#include <X11/Xatom.h>
 
 #ifdef _USE_XFT
 #include <ft2build.h>
@@ -142,9 +143,11 @@ extern Bool	bRecording;
 
 Bool CreateInputWindow (void)
 {
-    XSetWindowAttributes attrib;
-    unsigned long   attribmask;
-    int             iBackPixel;
+    XSetWindowAttributes	attrib;
+    unsigned long	attribmask;
+    int			iBackPixel;
+    XTextProperty	tp;
+    char		strWindowName[]="Fcitx Input Window";
 
     //根据窗口的背景色来设置XPM的色彩
     sprintf (strXPMBackColor, ". c #%02x%02x%02x", inputWindowColor.backColor.red >> 8, inputWindowColor.backColor.green >> 8, inputWindowColor.backColor.blue >> 8);
@@ -167,6 +170,13 @@ Bool CreateInputWindow (void)
 
     XChangeWindowAttributes (dpy, inputWindow, attribmask, &attrib);
     XSelectInput (dpy, inputWindow, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
+
+    //Set the name of the window
+    tp.value = (void *)strWindowName;
+    tp.encoding = XA_STRING;
+    tp.format = 16;
+    tp.nitems = strlen(strWindowName);
+    XSetWMName (dpy, inputWindow, &tp);
 
     InitInputWindowColor ();
 

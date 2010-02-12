@@ -1,3 +1,9 @@
+2010-02-12: Yuking <yuking_net@sohu.com>
+	* src/ui.c: 修正系统托盘图标显示不正常的问题
+
+2010-02-11: Yuking <yuking_net@sohu.com>
+	* src/MainWindow.c, InputWindow.c: 为输入窗和状态窗增加了名字
+
 2010-01-28: Yuking <yuking_net@sohu.com>
 	* 修正打开/关闭DBus模式的一些错误
 

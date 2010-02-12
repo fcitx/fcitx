@@ -97,6 +97,7 @@ extern int      iInputWindowY;
 extern Window   VKWindow;
 extern int      iVKWindowX;
 extern int      iVKWindowY;
+extern Window   ximWindow;
 extern WINDOW_COLOR mainWindowColor;
 extern WINDOW_COLOR inputWindowColor;
 extern WINDOW_COLOR VKWindowColor;
@@ -372,20 +373,27 @@ void Draw3DEffect (Window window, int x, int y, int width, int height, _3D_EFFEC
 
 /*
  * 有关界面的消息都在这里处理
+ *     有关tray重画的问题，此处的解决方案似乎很dirt
  */
 void MyXEventHandler (XEvent * event)
 {
     unsigned char   iPos;
-
+    
     switch (event->type) {
-	//added by yunfan
+#ifdef _ENABLE_TRAY
+    case ReparentNotify:
+	tray_win_redraw();
+	break;
+#endif
     case ClientMessage:
 	if ((event->xclient.message_type == about_protocol_atom) && ((Atom) event->xclient.data.l[0] == about_kill_atom)) {
 	    XUnmapWindow (dpy, aboutWindow);
 	    DrawMainWindow ();
 	}
+#ifdef _ENABLE_TRAY
+	tray_win_redraw();
+#endif
 	break;
-	//*********************
     case Expose:
 #ifdef _DEBUG
 	fprintf (stderr, "XEvent--Expose\n");

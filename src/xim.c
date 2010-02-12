@@ -42,6 +42,7 @@
 CONNECT_ID     *connectIDsHead = (CONNECT_ID *) NULL;
 ICID	       *icidsHead = (ICID *) NULL;
 XIMS            ims;
+Window		ximWindow;
 
 //************************************************
 CARD16          connect_id = 0;
@@ -94,6 +95,7 @@ extern uint     iHZInputed;
 extern Bool     bShowInputWindowTriggering;
 
 extern Bool     bUseGBKT;
+extern CARD16 g_last_connect_id;
 
 extern Bool	bUseDBus;
 
@@ -605,15 +607,13 @@ Bool InitXIM (char *imname)
     XIMTriggerKeys *on_keys;
     XIMEncodings   *encodings;
     char           *p;
-    Window	    im_window;
-
-    im_window = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1, 1, 1, 0, 0);
-    if (im_window == (Window)NULL) {
+    
+    ximWindow = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1, 1, 1, 0, 0);
+    if (ximWindow == (Window)NULL) {
 	fprintf(stderr, "Can't Create imWindow\n");
 	exit(1);
     }
-    XSelectInput(dpy, im_window, ExposureMask|ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|VisibilityChangeMask);
-
+    
     if ( !imname ) {
     	imname = getenv ("XMODIFIERS");
     	if (imname) {
@@ -662,7 +662,7 @@ Bool InitXIM (char *imname)
 	}
     }
 
-    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, im_window, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
+    ims = IMOpenIM (dpy, IMModifiers, "Xi18n", IMServerWindow, ximWindow, IMServerName, imname, IMLocale, strLocale, IMServerTransport, "X/", IMInputStyles, input_styles, NULL);
 
     if (ims == (XIMS) NULL) {
 	fprintf (stderr, "Start FCITX error. Another XIM daemon named %s is running?\n", imname);
@@ -755,13 +755,12 @@ void SetConnectID (CARD16 connect_id, IME_STATE imState)
     }
 }
 
-extern CARD16 g_last_connect_id;
 IME_STATE ConnectIDGetState (CARD16 connect_id)
 {
-	g_last_connect_id = connect_id;
     CONNECT_ID     *temp;
 
     temp = connectIDsHead;
+    g_last_connect_id = connect_id;
 
     while (temp) {
 	if (temp->connect_id == connect_id)
