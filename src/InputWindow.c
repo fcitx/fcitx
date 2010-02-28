@@ -692,7 +692,19 @@ void MoveInputWindow(CARD16 connect_id)
 	    XMoveResizeWindow (dpy, inputWindow, iTempInputWindowX, iTempInputWindowY, iInputWindowWidth, iInputWindowHeight);
 #ifdef _ENABLE_DBUS
 	else
+	{
+	if (iClientCursorX < 0)
+	    iTempInputWindowX = 0;
+	else
+	    iTempInputWindowX = iClientCursorX + iOffsetX;
+
+	if (iClientCursorY < 0)
+	    iTempInputWindowY = 0;
+	else
+	    iTempInputWindowY = iClientCursorY + iOffsetY;
+
 	    KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
+	}
 #endif
 	ConnectIDSetPos (connect_id, iTempInputWindowX - iOffsetX, iTempInputWindowY - iOffsetY);
     }

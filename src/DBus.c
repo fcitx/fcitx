@@ -65,10 +65,10 @@ static void MyDBusEventHandler();
 #define debug_dbus(fmt,arg...) \
     fprintf(stderr,fmt,##arg)
 #else
-static /* inline */ debug_dbus(const char* fmt, ...)
+static int /* inline */ debug_dbus(const char* fmt, ...)
 __attribute__((format(printf, 1, 2)));
 
-static /* inline */ debug_dbus(const char* fmt, ...)
+static int /* inline */ debug_dbus(const char* fmt, ...)
 {
      return 0;
 }
