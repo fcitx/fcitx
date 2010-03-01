@@ -781,10 +781,12 @@ void ProcessKey (IMForwardEventStruct * call_data)
 						DisplayMainWindow ();
 						DrawMainWindow ();
 					    }
+#ifdef _ENABLE_TRAY
 					    if (!tray.window) {
 					        CreateTrayWindow();
 					        DrawTrayWindow (INACTIVE_ICON);
 					    }
+#endif
 					    if (!aboutWindow)
 						CreateAboutWindow();
 					    InitGC (inputWindow);
@@ -794,9 +796,11 @@ void ProcessKey (IMForwardEventStruct * call_data)
 					}
 					else {
 					    XUnmapWindow(dpy, mainWindow);
+#ifdef _ENABLE_TRAY
 					    XDestroyWindow(dpy,tray.window);
 					    tray.window = (Window) NULL;
 					    tray_mapped = False;
+#endif
 					}
 
 					SetIM ();
