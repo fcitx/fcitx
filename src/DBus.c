@@ -11,6 +11,7 @@
 #include <memory.h>
 #include <string.h>
 #include <strings.h> // bzero()
+#include <ctype.h>
 
 #ifndef _ENABLE_DBUS
 Bool bUseDBus = False;
@@ -54,10 +55,13 @@ extern int iCurrentCandPage;
 extern int iCurrentLegendCandPage;
 extern int iCandPageCount;
 extern int iLegendCandPageCount;
+extern int iCursorPos;
+extern Bool bShowCursor;
 
 void fixProperty(Property *prop);
 char* convertMessage(char* in);
 static void MyDBusEventHandler();
+int calKIMCursorPos();
 
 //#define DEBUG_DBUS
 
@@ -856,7 +860,7 @@ void updateMessages()
     }
     
     n = uMessageUp;
-    char aux[100] = "";
+    char aux[MESSAGE_MAX_LENGTH] = "";
     if (n) {
         // FIXME: buffer overflow
         for (i=0;i<n;i++) {
@@ -864,9 +868,23 @@ void updateMessages()
             free(utfmsg);
             debug_dbus("updateMesssages Up:%s\n", aux);
         }
-        KIMUpdateAux(aux);
-        KIMShowAux(True);
+        if (bShowCursor)
+        {
+            KIMUpdatePreeditText(aux);
+            KIMUpdatePreeditCaret(calKIMCursorPos());
+            KIMUpdateAux("");
+            KIMShowAux(False);
+        }
+        else {
+            KIMUpdatePreeditText("");
+            KIMUpdatePreeditCaret(0);
+            KIMUpdateAux(aux);
+            KIMShowAux(True);
+        }
     } else {
+        KIMUpdatePreeditText("");
+        KIMUpdatePreeditCaret(0);
+        KIMUpdateAux("");
         KIMShowAux(False);
     }
 
@@ -1226,6 +1244,56 @@ void updatePropertyByConnectID(CARD16 connect_id) {
 	}
     if (need_free)
         free(need_free);
+}
+
+int calKIMCursorPos()
+{
+    int             i = 0;
+    int             iChar;
+    int             iCount = 0;
+
+    const char      *p1;
+    const char      *pivot;
+    Bool            bEn;
+
+    iChar = iCursorPos;
+
+    for (i = 0; i < uMessageUp ; i++) {
+        if (bShowCursor && iChar) {
+            p1 = pivot = messageUp[i].strMsg;
+            while (*p1 && p1 < pivot + iChar) {
+                if (isprint (*p1))	//使用中文字体
+                    bEn = True;
+                else {
+                    bEn = False;
+                    p1 += 2;
+                    iCount ++;
+                }
+                while (*p1 && p1 < pivot + iChar) {
+                    if (isprint (*p1)) {
+                        if (!bEn)
+                            break;
+                        p1 ++;
+                        iCount ++;
+                    }
+                    else {
+                        if (bEn)
+                            break;
+                        p1 += 2;
+                        iCount ++;
+                    }
+                }
+            }
+            if (strlen (messageUp[i].strMsg) > iChar) {
+            iChar = 0;
+            }
+            else {
+                iChar -= strlen (messageUp[i].strMsg);
+            }
+        }
+    }
+
+    return iCount;
 }
 // vim: sw=4 sts=4 et tw=100
 #endif // DBUS_C
