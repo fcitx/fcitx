@@ -887,8 +887,6 @@ void updateMessages()
         KIMUpdateAux("");
         KIMShowAux(False);
     }
-
- 
 }
 
 char* convertMessage(char* in)

@@ -273,6 +273,13 @@ Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 	if (!bUseDBus)
 	    XUnmapWindow (dpy, VKWindow);
     }
+    
+#ifdef _ENABLE_DBUS
+    if (bUseDBus) {
+	uMessageDown = uMessageUp = 0;
+	updateMessages();
+    }
+#endif
 
     return True;
 }
