@@ -163,12 +163,42 @@ int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
 		return iKeyCode + 12000;
 	    }
 	}
-	else if (iKeyState == KEY_CTRL_SHIFT_COMP )
-	    return iKeyCode + 13000;
-	else if (iKeyState == KEY_ALT_SHIFT_COMP )
-	    return iKeyCode + 14000;
-	    else if (iKeyState == KEY_CTRL_ALT_COMP )
-	    return iKeyCode + 15000;
+	else if (iKeyState == KEY_CTRL_SHIFT_COMP ) {
+	    switch (iKeyCode) {
+	    case K_LSHIFT:
+	    case K_LCTRL:
+		return CTRL_LSHIFT;
+	    case K_RSHIFT:
+	    case K_RCTRL:
+		return CTRL_RSHIFT;
+	    default:
+		return iKeyCode + 13000;
+	    }
+	}
+	else if (iKeyState == KEY_ALT_SHIFT_COMP ) {
+	    switch (iKeyCode) {
+	    case K_LSHIFT:
+	    case K_LALT:
+		return ALT_LSHIFT;
+	    case K_RSHIFT:
+	    case K_RCTRL:
+		return ALT_RSHIFT;
+	    default:
+		return iKeyCode + 14000;
+	    }
+	}
+	else if (iKeyState == KEY_CTRL_ALT_COMP ) {
+	    switch (iKeyCode) {
+	    case K_LCTRL:
+	    case K_LALT:
+		return CTRL_LALT;
+	    case K_RCTRL:
+	    case K_RALT:
+		return CTRL_RALT;
+	    default:
+		return iKeyCode + 15000;
+	    }
+        }
 	else if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP )
 	    return iKeyCode + 16000;
     }

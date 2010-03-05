@@ -1,3 +1,6 @@
+2010-03-05: Yuking <yuking_net@sohu.com>
+	* src/KeyList.c: 修正某些组合键响应不正常的问题
+
 2010-02-12: Yuking <yuking_net@sohu.com>
 	* src/ui.c: 修正系统托盘图标显示不正常的问题
 
