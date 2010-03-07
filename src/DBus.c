@@ -855,7 +855,7 @@ void updateMessages()
         for (i = 0; i < nLabels; i++)
             free(label[i]);
     } else {
-        KIMUpdateLookupTable(NULL,0,NULL,0,bShowPrev,bShowNext);
+//      KIMUpdateLookupTable(NULL,0,NULL,0,bShowPrev,bShowNext);
         KIMShowLookupTable(False);
     }
     
@@ -871,20 +871,16 @@ void updateMessages()
         if (bShowCursor)
         {
             KIMUpdatePreeditText(aux);
+            KIMShowPreedit(True);
             KIMUpdatePreeditCaret(calKIMCursorPos());
-            KIMUpdateAux("");
             KIMShowAux(False);
         }
         else {
-            KIMUpdatePreeditText("");
-            KIMUpdatePreeditCaret(0);
-            KIMUpdateAux(aux);
+            KIMShowPreedit(False);
             KIMShowAux(True);
         }
     } else {
-        KIMUpdatePreeditText("");
-        KIMUpdatePreeditCaret(0);
-        KIMUpdateAux("");
+        KIMShowPreedit(False);
         KIMShowAux(False);
     }
 }
