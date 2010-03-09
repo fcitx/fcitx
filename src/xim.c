@@ -336,7 +336,7 @@ Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 
 #ifdef _ENABLE_DBUS
     if (bUseDBus) {
-	logo_prop.label = "Fcitx";
+	strcpy(logo_prop.label, "Fcitx");
 	updateProperty(&logo_prop);
     }
 #endif

@@ -1294,14 +1294,14 @@ void SwitchIM (INT8 index)
 	char* need_free = NULL;
 	
 	if ((index == (INT8)-2) || (index == (INT8)-2)) {
-	    logo_prop.label = "Fcitx";
+	    strcpy(logo_prop.label, "Fcitx");
 	    iState = IS_ENG;
 	}
 	else {
 	    int iIndex = ConnectIDGetState(connect_id);
 	    
 	    if (iIndex == IS_CHN) {
-		logo_prop.label =(need_free = g2u(im[iIMIndex].strName));
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
 		iState = IS_CHN;
 	    }
 	}

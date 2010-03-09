@@ -63,6 +63,8 @@ char* convertMessage(char* in);
 static void MyDBusEventHandler();
 int calKIMCursorPos();
 
+char sLogoLabel[MAX_IM_NAME * 2 + 1];
+
 //#define DEBUG_DBUS
 
 #ifdef DEBUG_DBUS
@@ -114,6 +116,8 @@ Bool InitDBus()
         debug_dbus("Match Error (%s)\n", err.message);
         return False;
     }
+
+    logo_prop.label = sLogoLabel;
 
     return True;
 }
@@ -241,7 +245,8 @@ void KIMExecDialog(char *prop)
             "ExecDialog"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus( "Message Null\n"); 
+        debug_dbus( "Message Null\n");
+        return;
     }
 
     // append arguments onto signal
@@ -275,6 +280,7 @@ void KIMExecMenu(char *props[],int n)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     if (n == -1) {
@@ -321,6 +327,7 @@ void KIMRegisterProperties(char *props[], int n)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     if (n == -1) {
@@ -367,6 +374,7 @@ void KIMUpdateProperty(char *prop)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -400,6 +408,7 @@ void KIMRemoveProperty(char *prop)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -433,6 +442,7 @@ void KIMEnable(Bool toEnable)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -466,6 +476,7 @@ void KIMShowAux(Bool toShow)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -499,6 +510,7 @@ void KIMShowPreedit(Bool toShow)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -532,6 +544,7 @@ void KIMShowLookupTable(Bool toShow)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -565,6 +578,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     int i;
@@ -626,6 +640,7 @@ void KIMUpdatePreeditCaret(int position)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -659,6 +674,7 @@ void KIMUpdatePreeditText(char *text)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     char *attr = "";
@@ -696,6 +712,7 @@ void KIMUpdateAux(char *text)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     char *attr = "";
@@ -734,6 +751,7 @@ void KIMUpdateSpotLocation(int x,int y)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -770,6 +788,7 @@ void KIMUpdateScreen(int id)
     if (NULL == msg) 
     { 
         debug_dbus( "Message Null\n"); 
+        return;
     }
 
     // append arguments onto signal
@@ -914,8 +933,9 @@ void registerProperties()
 
     int i = 0;
 
+
     logo_prop.key = "/Fcitx/Logo";
-    logo_prop.label = "Fcitx";
+    strcpy(logo_prop.label, "Fcitx");
     logo_prop.icon = PKGDATADIR "/xpm/" "Logo.png";
     logo_prop.tip = "小企鹅输入法";
     props[0] = property2string(&logo_prop);
@@ -1109,8 +1129,17 @@ void triggerProperty(char *propKey)
 
 char* property2string(Property *prop)
 {
-    char *result = (char*)malloc(500*sizeof(char));
-    bzero(result,500*sizeof(char));
+    int len;
+    char *result = NULL;
+
+    len = strlen(prop->key)
+        + strlen(prop->label)
+        + strlen(prop->icon)
+        + strlen(prop->tip)
+        + 3 + 1;
+    result = malloc(len * sizeof(char));
+
+    bzero(result,len*sizeof(char));
     strcat(result,prop->key);
     strcat(result,":");
     strcat(result,prop->label);
@@ -1128,11 +1157,11 @@ char* g2u(char *instr)
     char *outbuf;
     char *outptr;
     unsigned int insize=strlen(instr);
-    unsigned int outputbufsize=100;
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
     unsigned int avail=outputbufsize;
     unsigned int nconv;
     inbuf=instr;
-    outbuf=(char *)malloc(outputbufsize);
+    outbuf=(char *)malloc(outputbufsize * sizeof(char));
     outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
     memset(outbuf,'\0',outputbufsize);
     cd=iconv_open("utf-8","gb18030");    //将字符串编码由gtk转换为utf-8
@@ -1152,11 +1181,11 @@ char* u2g(char *instr)
     char *outbuf;
     char *outptr;
     unsigned int insize=strlen(instr);
-    unsigned int outputbufsize=100;
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
     unsigned int avail=outputbufsize;
     unsigned int nconv;
     inbuf=instr;
-    outbuf=(char *)malloc(outputbufsize);
+    outbuf=(char *)malloc(outputbufsize * sizeof(char));
     outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
     memset(outbuf,'\0',outputbufsize);
     cd=iconv_open("gb18030","utf-8");    //将字符串编码由utf-8转换为gbk
@@ -1219,19 +1248,19 @@ void updatePropertyByConnectID(CARD16 connect_id) {
 	switch (iIndex) {
 	case IS_CLOSED:
         iState = IS_ENG;
-		logo_prop.label = "Fcitx";
+        strcpy(logo_prop.label, "Fcitx");
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
 	case IS_CHN:
         iState = IS_CHN;
-		logo_prop.label =(need_free = g2u(im[iIMIndex].strName));
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
 	case IS_ENG:
         iState = IS_ENG;
-		logo_prop.label = (need_free = g2u(im[iIMIndex].strName));
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
