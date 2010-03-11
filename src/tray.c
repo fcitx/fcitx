@@ -42,7 +42,6 @@
 #define XEMBED_ACTIVATE_ACCELERATOR     14
 
 static Atom Atoms[6];
-static Window Dock = None;
 static int trapped_error_code = 0;
 static int (*old_error_handler) (Display *d, XErrorEvent *e);
 
@@ -94,6 +93,8 @@ tray_init(Display* dpy, Window win)
     int
 tray_find_dock(Display *dpy, Window win)
 {
+    Window Dock;
+    
     XGrabServer (dpy);
 
     Dock = XGetSelectionOwner(dpy, Atoms[ATOM_SYSTEM_TRAY]);
@@ -159,7 +160,7 @@ static void tray_send_opcode(Display* dpy, Window w,
     ev.xclient.data.l[4] = data3;
 
     trap_errors();
-    XSendEvent(dpy, Dock, False, NoEventMask, &ev);
+    XSendEvent(dpy, w, False, NoEventMask, &ev);
     XSync(dpy, False);
     if (untrap_errors()) {
         fprintf(stderr, "Tray.c : X error %i on opcode send\n",
