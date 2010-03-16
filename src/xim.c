@@ -81,6 +81,7 @@ extern Bool     bTrackCursor;
 extern Bool     bCenterInputWindow;
 extern Bool     bIsUtf8;
 extern int      iCodeInputCount;
+extern iconv_t  convUTF8;
 extern uint     uMessageDown;
 extern uint     uMessageUp;
 extern Bool     bVK;
@@ -107,8 +108,6 @@ extern Property gbk_prop;
 extern Property gbkt_prop;
 extern Property legend_prop;
 #endif
-
-extern char	strConvOutput[];
 
 #ifdef _DEBUG
 char            strUserLocale[100];
@@ -540,6 +539,7 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 {
     XTextProperty   tp;
     IMCommitStruct  cms;
+    char            strOutput[300];
     char           *ps;
     char           *pS2T = (char *) NULL;
 
@@ -575,32 +575,34 @@ void SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ)
 	pS2T = strHZ = ConvertGBKSimple2Tradition (strHZ);
 
     if (bIsUtf8) {
-	if ( g2u(strHZ) )
-	    ps  = strConvOutput;
-	else
-	    ps = (char *)NULL;
+	size_t          l1, l2;
+
+	ps = strOutput;
+	l1 = strlen (strHZ);
+	l2 = 299;
+	l1 = iconv (convUTF8, (ICONV_CONST char **) (&strHZ), &l1, &ps, &l2);
+	*ps = '\0';
+	ps = strOutput;
     }
     else
 	ps = strHZ;
 
-    if ( ps ) {
-	XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
+    XmbTextListToTextProperty (dpy, (char **) &ps, 1, XCompoundTextStyle, &tp);
 
-	memset (&cms, 0, sizeof (cms));
-	cms.major_code = XIM_COMMIT;
-	if (call_data) {
-	    cms.icid = call_data->icid;
-            cms.connect_id = call_data->connect_id;
-	}
-	else {
-	    cms.icid = CurrentIC->id;
-            cms.connect_id = connect_id;
-	}
-	cms.flag = XimLookupChars;
-	cms.commit_string = (char *) tp.value;
-	IMCommitString (ims, (XPointer) & cms);
-	XFree (tp.value);
+    memset (&cms, 0, sizeof (cms));
+    cms.major_code = XIM_COMMIT;
+    if (call_data) {
+        cms.icid = call_data->icid;
+        cms.connect_id = call_data->connect_id;
     }
+    else {
+        cms.icid = CurrentIC->id;
+        cms.connect_id = connect_id;
+    }
+    cms.flag = XimLookupChars;
+    cms.commit_string = (char *) tp.value;
+    IMCommitString (ims, (XPointer) & cms);
+    XFree (tp.value);
 
     if (bUseGBKT)
 	free (pS2T);

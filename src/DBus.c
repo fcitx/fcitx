@@ -4,7 +4,6 @@
 #include "tools.h"
 #include "xim.h"
 #include "DBus.h"
-#include "ui.h"
 
 #include <iconv.h>
 #include <stdio.h>
@@ -58,7 +57,6 @@ extern int iCandPageCount;
 extern int iLegendCandPageCount;
 extern int iCursorPos;
 extern Bool bShowCursor;
-extern char strConvOutput[];
 
 void fixProperty(Property *prop);
 char* convertMessage(char* in);
@@ -67,7 +65,7 @@ int calKIMCursorPos();
 
 char sLogoLabel[MAX_IM_NAME * 2 + 1];
 
-// #define DEBUG_DBUS
+//#define DEBUG_DBUS
 
 #ifdef DEBUG_DBUS
 #define debug_dbus(fmt,arg...) \
@@ -265,6 +263,7 @@ void KIMExecDialog(char *prop)
 
     // free the message 
     dbus_message_unref(msg);
+
 }
 
 void KIMExecMenu(char *props[],int n)
@@ -565,7 +564,7 @@ void KIMShowLookupTable(Bool toShow)
 
 }
 
-void KIMUpdateLookupTable(char (*labels)[MESSAGE_MAX_LENGTH], int nLabel, char (*texts)[MESSAGE_MAX_LENGTH], int nText, Bool has_prev, Bool has_next)
+void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, Bool has_prev, Bool has_next)
 {
 
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
@@ -816,40 +815,42 @@ void updateMessages()
     int n = uMessageDown;
     int nLabels = 0;
     int nTexts = 0;
-    char label[33][MESSAGE_MAX_LENGTH];
-    char text[33][MESSAGE_MAX_LENGTH];
-    char cmb[MESSAGE_MAX_LENGTH] = "";
+    char *label[33];
+    char *text[33];
+    char cmb[100] = "";
     int i;
     char* utfmsg = NULL;
 
     if (n) {
         for (i=0;i<n;i++) {
             debug_dbus("Type: %d Text: %s\n",messageDown[i].type,(utfmsg=convertMessage(messageDown[i].strMsg)));
+            free(utfmsg);
             if (messageDown[i].type == MSG_INDEX) {
                 if (nLabels) {
-                    strcpy(text[nTexts++], strdup(cmb));
+                    text[nTexts++] = strdup(cmb);
                 }
-                strcpy( label[nLabels++], convertMessage(messageDown[i].strMsg));
+                label[nLabels++] = convertMessage(messageDown[i].strMsg);
                 strcpy(cmb,"");
             } else {
                 strcat(cmb,(utfmsg=convertMessage(messageDown[i].strMsg)));
+                free(utfmsg);
             }
         }
-        strcpy(text[nTexts++],strdup(cmb));
+        text[nTexts++] = strdup(cmb);
 /*        if (nLabels < nTexts) {
             nTexts = nLabels;
         }*/
         if (nLabels < nTexts ) {
             for (; nLabels < nTexts; nLabels++) {
-                strcpy(label[nLabels],strdup(""));
+                label[nLabels] = strdup("");
             }
         }
         else if (nTexts < nLabels) {
             for (; nTexts < nLabels; nTexts++) {
-                strcpy(text[nTexts],strdup(""));
+                text[nTexts] = strdup("");
             }
         }
-        debug_dbus("Labels %d, Texts %d, CMB:%s\n",nLabels,nTexts, cmb); 
+        debug_dbus("Labels %d, Texts %d\n, CMB:%s",nLabels,nTexts, cmb); 
         if (nTexts == 0) {
             KIMShowLookupTable(False);
         }
@@ -868,6 +869,10 @@ void updateMessages()
             KIMUpdateLookupTable(label,nLabels,text,nTexts,bShowPrev,bShowNext);
             KIMShowLookupTable(True);
         }
+        for (i = 0; i < nTexts; i++)
+            free(text[i]);
+        for (i = 0; i < nLabels; i++)
+            free(label[i]);
     } else {
 //      KIMUpdateLookupTable(NULL,0,NULL,0,bShowPrev,bShowNext);
         KIMShowLookupTable(False);
@@ -879,6 +884,7 @@ void updateMessages()
         // FIXME: buffer overflow
         for (i=0;i<n;i++) {
             strcat(aux,(utfmsg=convertMessage(messageUp[i].strMsg)));
+            free(utfmsg);
             debug_dbus("updateMesssages Up:%s\n", aux);
         }
         if (bShowCursor)
@@ -901,26 +907,20 @@ void updateMessages()
 char* convertMessage(char* in)
 {
     char* strTemp = NULL;
-    Bool b;
-    
+    char* result = NULL;
     if (in) {
         if (bUseGBKT) {
             strTemp = ConvertGBKSimple2Tradition(in);
         }
         else
             strTemp = in;
-        
-        b = g2u(strTemp);
+        result = g2u(strTemp);
         if (bUseGBKT && strTemp)
             free(strTemp);
-        
-        if (b)
-	    return strConvOutput;
-	else
-	    return (char *)NULL;
+        return result;
     }
     else
-        return (char *)NULL;
+        return NULL;
 }
 
 void showMessageDown(MESSAGE *msgs, int n)
@@ -1068,23 +1068,24 @@ void updateProperty(Property *prop)
 void triggerProperty(char *propKey)
 {
     char *menu[32];
+    char *name;
     int i;
     bzero(menu,32);
     if (strcmp(propKey,logo_prop.key) == 0) {
         for (i = 0; i < iIMCount; i++) {
-            if ( g2u(im[i].strName) ) {
-		//menu[i] = (char *)malloc(100*sizeof(char));
-		Property prop;
-		prop.key = (char *)malloc(100*sizeof(char));
-		prop.icon = "";
-		sprintf(prop.key,"/Fcitx/Logo/%d",i);
-		prop.label = strConvOutput;
-		prop.tip = strConvOutput;
-		//            strcat(prop.tip,"输入法");
-		fixProperty(&prop);
-		menu[i] = property2string(&prop);
-		free(prop.key);
-	    }
+            name = g2u(im[i].strName);
+            //menu[i] = (char *)malloc(100*sizeof(char));
+            Property prop;
+            prop.key = (char *)malloc(100*sizeof(char));
+            prop.icon = "";
+            sprintf(prop.key,"/Fcitx/Logo/%d",i);
+            prop.label = name;
+            prop.tip = name;
+            //            strcat(prop.tip,"输入法");
+            fixProperty(&prop);
+            menu[i] = property2string(&prop);
+            free(name);
+            free(prop.key);
         }
         KIMExecMenu(menu,iIMCount);
         for (i = 0;i < iIMCount; i++) {
@@ -1149,6 +1150,54 @@ char* property2string(Property *prop)
     return result;
 }
 
+char* g2u(char *instr)
+{
+    iconv_t cd;
+    char *inbuf;
+    char *outbuf;
+    char *outptr;
+    unsigned int insize=strlen(instr);
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
+    unsigned int avail=outputbufsize;
+    unsigned int nconv;
+    inbuf=instr;
+    outbuf=(char *)malloc(outputbufsize * sizeof(char));
+    outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
+    memset(outbuf,'\0',outputbufsize);
+    cd=iconv_open("utf-8","gb18030");    //将字符串编码由gtk转换为utf-8
+    if(cd==(iconv_t)-1)
+    {
+        return "";
+    }
+    nconv=iconv(cd,&inbuf,&insize,&outptr,&avail);
+    iconv_close(cd);
+    return outbuf;
+}
+
+char* u2g(char *instr)
+{
+    iconv_t cd;
+    char *inbuf;
+    char *outbuf;
+    char *outptr;
+    unsigned int insize=strlen(instr);
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
+    unsigned int avail=outputbufsize;
+    unsigned int nconv;
+    inbuf=instr;
+    outbuf=(char *)malloc(outputbufsize * sizeof(char));
+    outptr=outbuf;    //使用outptr作为空闲空间指针以避免outbuf被改变
+    memset(outbuf,'\0',outputbufsize);
+    cd=iconv_open("gb18030","utf-8");    //将字符串编码由utf-8转换为gbk
+    if(cd==(iconv_t)-1)
+    {
+        return "";
+    }
+    nconv=iconv(cd,&inbuf,&insize,&outptr,&avail);
+    return outbuf;
+
+}
+
 void fixProperty(Property *prop)
 {
     if (strcmp(prop->label,"Fcitx") == 0) {
@@ -1195,32 +1244,29 @@ void fixProperty(Property *prop)
 
 void updatePropertyByConnectID(CARD16 connect_id) {
 	int iIndex = ConnectIDGetState(connect_id);
-	
+    char *need_free = NULL;
 	switch (iIndex) {
 	case IS_CLOSED:
-		iState = IS_ENG;
-		strcpy(logo_prop.label, "Fcitx");
+        iState = IS_ENG;
+        strcpy(logo_prop.label, "Fcitx");
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
 	case IS_CHN:
-		iState = IS_CHN;
-		if ( g2u(im[iIMIndex].strName) )
-		    strcpy(logo_prop.label, strConvOutput);
-		else
-		    logo_prop.label[0]='\0';
+        iState = IS_CHN;
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
 	case IS_ENG:
-		iState = IS_ENG;
-		if ( g2u(im[iIMIndex].strName) )
-		    strcpy(logo_prop.label, strConvOutput);
-		else
-		    logo_prop.label[0]='\0';updateProperty(&logo_prop);
+        iState = IS_ENG;
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
+		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
 	}
+    if (need_free)
+        free(need_free);
 }
 
 int calKIMCursorPos()

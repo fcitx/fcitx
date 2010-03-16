@@ -48,7 +48,7 @@ void KIMEnable(Bool toEnable);
 void KIMShowAux(Bool toShow);
 void KIMShowPreedit(Bool toShow);
 void KIMShowLookupTable(Bool toShow);
-void KIMUpdateLookupTable(char (*labels)[MESSAGE_MAX_LENGTH], int nLabel, char (*texts)[MESSAGE_MAX_LENGTH], int nText, Bool has_prev, Bool has_next);
+void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, Bool has_prev, Bool has_next);
 void KIMUpdatePreeditCaret(int position);
 void KIMUpdatePreeditText(char *text);
 void KIMUpdateAux(char *text);
@@ -62,6 +62,9 @@ void updateProperty(Property *prop);
 void triggerProperty(char *propKey);
 
 char* property2string(Property *prop);
+
+char* g2u(char *instr);
+char* u2g(char *instr);
 
 void updatePropertyByConnectID(CARD16 connect_id);
 

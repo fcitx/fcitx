@@ -38,7 +38,6 @@ extern Display *dpy;
 extern int      iScreen;
 
 extern int      iVKWindowFontSize;
-extern char	strConvOutput[];
 
 #ifdef _USE_XFT
 extern XftFont *xftVKWindowFont;
@@ -64,6 +63,7 @@ char            strTitle[100];
 
 int             iBackPixel;
 
+extern iconv_t  convUTF8;
 extern Bool     bIsUtf8;
 
 Bool CreateAboutWindow (void)
@@ -102,6 +102,7 @@ Bool CreateAboutWindow (void)
 void InitWindowProperty (void)
 {
     XTextProperty   tp;
+    char            strOutput[100];
     char           *ps;
 
     Atom            about_wm_window_type = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE", False);
@@ -116,20 +117,25 @@ void InitWindowProperty (void)
     XSetWMProtocols (dpy, aboutWindow, &about_kill_atom, 1);
 
     if (bIsUtf8) {
-	if ( g2u(AboutCaption) )
-	    ps = strConvOutput;
-	else
-	    ps = (char *)NULL;
+	size_t          l1, l2;
+	char           *p;
+
+	p = AboutCaption;
+	ps = strOutput;
+	l1 = strlen (AboutCaption);
+	l2 = 99;
+	l1 = iconv (convUTF8, (ICONV_CONST char **) (&p), &l1, &ps, &l2);
+	*ps = '\0';
+	ps = strOutput;
     }
     else
 	ps = AboutCaption;
-    if ( ps ) {
-	tp.value = (void *) ps;
-	tp.encoding = XA_STRING;
-	tp.format = 16;
-	tp.nitems = strlen (ps);
-	XSetWMName (dpy, aboutWindow, &tp);
-    }
+
+    tp.value = (void *) ps;
+    tp.encoding = XA_STRING;
+    tp.format = 16;
+    tp.nitems = strlen (ps);
+    XSetWMName (dpy, aboutWindow, &tp);
 }
 
 void InitAboutWindowColor (void)

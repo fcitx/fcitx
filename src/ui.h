@@ -74,12 +74,12 @@ int             FontHeight (XFontSet font);
 #endif
 
 Bool            MouseClick (int *x, int *y, Window window);
-Bool		g2u(char *instr);
-Bool		u2g(char *instr);
-/*
 Bool		IsWindowVisible(Window window);
+
+/*
 int             FillImageByXPMData (XImage * pImage, char **apcData);
 void            WaitButtonRelease (XPoint * point);
+void		OutputAsUTF8(char *str);
 */
 
 #endif

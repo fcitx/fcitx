@@ -235,8 +235,6 @@ extern tray_win_t tray;
 extern Bool	tray_mapped;
 #endif
 
-extern char	strConvOutput[];
-
 void ResetInput (void)
 {
     iCandPageCount = 0;
@@ -1293,6 +1291,8 @@ void SwitchIM (INT8 index)
 
 #ifdef _ENABLE_DBUS
     if (bUseDBus) {
+	char* need_free = NULL;
+	
 	if ((index == (INT8)-2) || (index == (INT8)-2)) {
 	    strcpy(logo_prop.label, "Fcitx");
 	    iState = IS_ENG;
@@ -1301,10 +1301,7 @@ void SwitchIM (INT8 index)
 	    int iIndex = ConnectIDGetState(connect_id);
 	    
 	    if (iIndex == IS_CHN) {
-		if ( g2u(im[iIMIndex].strName) )
-		    strcpy(logo_prop.label,strConvOutput);
-		else
-		    logo_prop.label[0] = '\0';
+		strcpy(logo_prop.label, (need_free = g2u(im[iIMIndex].strName)));
 		iState = IS_CHN;
 	    }
 	}
@@ -1312,6 +1309,8 @@ void SwitchIM (INT8 index)
 	updateProperty(&logo_prop);
 	updateProperty(&state_prop);
 	updateMessages();
+	if (need_free)
+	    free(need_free);
     }
 #endif
 }

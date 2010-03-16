@@ -5,7 +5,6 @@
 
 #include "extra.h"
 #include "InputWindow.h"
-#include "ui.h"
 
 #include <dlfcn.h>
 #include <limits.h>
@@ -13,7 +12,8 @@
 
 #define EIM_MAX		4
 extern Display *dpy;
-extern char strConvOutput[];
+
+iconv_t convGB=(iconv_t)-1;
 
 static EXTRA_IM *EIMS[EIM_MAX];
 static void *EIM_handle[EIM_MAX];
@@ -396,21 +396,18 @@ char *GetClipboardString(Display *disp)
 
 char *ExtraGetSelect(void)
 {
+	static char phrase[32];
 	char *f;
-	size_t l;
-	
+	size_t l1,l2;
+	char *ps=phrase;
 	f=GetClipboardString(dpy);
-	if(!f)
-	    return NULL;
-	    
-	l=strlen(f);
-	if(l>=32)
-	    return NULL;
-	    
-	if ( u2g(f) )
-	    return strConvOutput;
-	else
-	    return (char *)NULL;
+	if(!f) return NULL;
+	l1=strlen(f);
+	if(l1>=32) return NULL;
+	l2=32;
+	l1=iconv(convGB,&f,&l1,&ps,&l2);
+	*ps=0;
+	return phrase;
 }
 
 int InitExtraIM(EXTRA_IM *eim,char *arg)
@@ -442,6 +439,13 @@ void LoadExtraIM(char *fn)
 	char temp[256];
 	char *arg;
 	char fnr[256];
+
+	if(convGB==(iconv_t)-1)
+	{
+		convGB=iconv_open("GB18030","UTF-8");
+		if(convGB==(iconv_t)-1)
+			return;
+	}
 
 	for(i=0;i<EIM_MAX;i++)
 	{
