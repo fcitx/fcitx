@@ -381,16 +381,22 @@ void MyXEventHandler (XEvent * event)
     
     switch (event->type) {
 #ifdef _ENABLE_TRAY
-    case ReparentNotify:
-	tray_win_redraw();
-	break;
+    /*case ReparentNotify:
+	if ( event->xreparent.window == tray.window ) {
+	    if (ConnectIDGetState (connect_id) == IS_CHN)
+		DrawTrayWindow (ACTIVE_ICON);
+	    else
+		DrawTrayWindow (INACTIVE_ICON);
+	}
+	
+	break;*/
 #endif
     case ClientMessage:
 	if ((event->xclient.message_type == about_protocol_atom) && ((Atom) event->xclient.data.l[0] == about_kill_atom)) {
 	    XUnmapWindow (dpy, aboutWindow);
 	    DrawMainWindow ();
 	}
-#ifdef _ENABLE_TRAY
+#ifdef _ENABLE_TRAY	
 	tray_win_redraw();
 #endif
 	break;
@@ -412,6 +418,8 @@ void MyXEventHandler (XEvent * event)
 		DrawTrayWindow (ACTIVE_ICON);
 	    else
 		DrawTrayWindow (INACTIVE_ICON);
+	    
+	    tray_win_redraw();
 	}
 #endif
 	//added by yunfan

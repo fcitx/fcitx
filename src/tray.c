@@ -48,7 +48,7 @@ static int (*old_error_handler) (Display *d, XErrorEvent *e);
 static void tray_set_xembed_info (Display* dpy, Window win, int flags);
 static void tray_send_opcode( Display* dpy,  Window w, long message,
         long data1, long data2, long data3 );
-static void tray_map_window (Display* dpy, Window win);
+/* static void tray_map_window (Display* dpy, Window win); */
 
     static int
 error_handler(Display     *display,
