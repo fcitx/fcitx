@@ -73,7 +73,10 @@ Bool            bUseBold = True;
 char            strUserLocale[50] = "zh_CN.gbk";
 #endif
 
-iconv_t         convUTF8;
+iconv_t         convUTF8 = (iconv_t)-1;
+iconv_t         convGB = (iconv_t)-1;
+//保存转换的结果：因为转换经常发生，为了避免经常性的内存操作，设置此变量
+char		strConvOutput[MESSAGE_MAX_LENGTH];
 
 GC              dimGC = (GC) NULL;
 GC              lightGC = (GC) NULL;
@@ -131,8 +134,6 @@ Bool InitX (void)
 
     SetMyXErrorHandler ();
     iScreen = DefaultScreen (dpy);
-
-    convUTF8 = iconv_open ("UTF-8", "GB18030");
 
     return True;
 }
@@ -541,14 +542,14 @@ void MyXEventHandler (XEvent * event)
 
 		break;
 	    case Button2:
-		if (IsWindowVisible(mainWindow)) {
-		    bMainWindow_Hiden = True;
-		    XUnmapWindow(dpy,mainWindow);
-		}
-		else {
+		if (bMainWindow_Hiden) {
 		    bMainWindow_Hiden = False;
 		    DisplayMainWindow();
 		    DrawMainWindow();
+		}
+		else {
+		    bMainWindow_Hiden = True;
+		    XUnmapWindow(dpy,mainWindow);
 		}
 		break;
 	    }
@@ -581,49 +582,36 @@ Bool IsInBox (int x0, int y0, int x1, int y1, int x2, int y2)
 int StringWidth (char *str, XftFont * font)
 {
     XGlyphInfo      extents;
-    char            str1[100];
-    char           *ps;
-    size_t          l1, l2;
-    int             il;
 
     if (!font)
 	return 0;
 
-    il = l1 = strlen (str);
-    l2 = 99;
-    ps = str1;
+    if ( g2u(str) ) {
+	XftTextExtentsUtf8 (dpy, font, (FcChar8 *) strConvOutput, strlen (strConvOutput), &extents);
+	if (font == xftMainWindowFont)
+	    return extents.width;
 
-    l1 = iconv (convUTF8, (ICONV_CONST char **) &str, &l1, &ps, &l2);
-    *ps = '\0';
-    XftTextExtentsUtf8 (dpy, font, (FcChar8 *) str1, strlen (str1), &extents);
-    if (font == xftMainWindowFont)
-	return extents.width;
-
-    return extents.xOff;
+	return extents.xOff;
+    }
+    
+    return 0;
 }
 
 int FontHeight (XftFont * font)
 {
     XGlyphInfo      extents;
-    char            str1[] = "Ay中";
-    char            str2[10];
-    char           *ps1, *ps2;
-    size_t          l1, l2;
-
+    char            str[] = "Ay中";
+    
     if (!font)
 	return 0;
 
-    l1 = strlen (str1);
-    l2 = 9;
-    ps2 = str2;
-    ps1 = str1;
+    if ( g2u(str) ) {
+	XftTextExtentsUtf8 (dpy, font, (FcChar8 *) strConvOutput, strlen (strConvOutput), &extents);
 
-    l1 = iconv (convUTF8, (ICONV_CONST char **) &ps1, &l1, &ps2, &l2);
-    *ps2 = '\0';
-
-    XftTextExtentsUtf8 (dpy, font, (FcChar8 *) str2, strlen (str2), &extents);
-
-    return extents.height;
+	return extents.height;
+    }
+    
+    return 0;
 }
 #else
 int StringWidth (char *str, XFontSet font)
@@ -658,32 +646,24 @@ int FontHeight (XFontSet font)
 #ifdef _USE_XFT
 void OutputString (Window window, XftFont * font, char *str, int x, int y, XColor color)
 {
-    char            strOutput[100] = "\0";
-    size_t          l1, l2;
-    char           *ps;
     XftColor        xftColor;
     XRenderColor    renderColor;
 
     if (!font || !str)
 	return;
 
-    //使用UTF8串
-    l1 = strlen (str);
-    l2 = 99;
-    ps = strOutput;
-    l1 = iconv (convUTF8, (ICONV_CONST char **) &str, &l1, &ps, &l2);
-    *ps = '\0';
+    if ( g2u(str) ) {
+	renderColor.red = color.red;
+        renderColor.green = color.green;
+        renderColor.blue = color.blue;
+        renderColor.alpha = 0xFFFF;
 
-    renderColor.red = color.red;
-    renderColor.green = color.green;
-    renderColor.blue = color.blue;
-    renderColor.alpha = 0xFFFF;
+        XftColorAllocValue (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &renderColor, &xftColor);
+        XftDrawChange (xftDraw, window);
+        XftDrawStringUtf8 (xftDraw, &xftColor, font, x, y, (FcChar8 *) strConvOutput, strlen (strConvOutput));
 
-    XftColorAllocValue (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &renderColor, &xftColor);
-    XftDrawChange (xftDraw, window);
-    XftDrawStringUtf8 (xftDraw, &xftColor, font, x, y, (FcChar8 *) strOutput, strlen (strOutput));
-
-    XftColorFree (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &xftColor);
+        XftColorFree (dpy, DefaultVisual (dpy, DefaultScreen (dpy)), DefaultColormap (dpy, DefaultScreen (dpy)), &xftColor);
+    }
 }
 #else
 void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
@@ -695,6 +675,7 @@ void OutputString (Window window, XFontSet font, char *str, int x, int y, GC gc)
 }
 #endif
 
+/*
 Bool IsWindowVisible(Window window)
 {
     XWindowAttributes attrs;
@@ -705,6 +686,54 @@ Bool IsWindowVisible(Window window)
 	return False;
 
     return True;
+}
+*/
+
+Bool g2u(char *instr)
+{
+    char *inbuf;
+    char *outptr;
+    unsigned int insize=strlen(instr);
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
+    unsigned int avail=outputbufsize;
+    unsigned int nconv;
+   
+    if(convUTF8==(iconv_t)-1)
+	convUTF8 = iconv_open ("UTF-8", "GB18030");
+
+    inbuf=instr;
+    outptr=strConvOutput;    //使用outptr作为空闲空间指针以避免strConvOutput被改变
+    memset(strConvOutput,'\0',outputbufsize);
+    if(convUTF8==(iconv_t)-1)
+	return False;
+	
+    nconv=iconv(convUTF8,&inbuf,&insize,&outptr,&avail);
+    
+    return True;
+}
+
+Bool u2g(char *instr)
+{
+    char *inbuf;
+    char *outptr;
+    unsigned int insize=strlen(instr);
+    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
+    unsigned int avail=outputbufsize;
+    unsigned int nconv;
+
+    if(convGB==(iconv_t)-1)
+	convGB = iconv_open ("GB18030", "UTF-8");
+
+    inbuf=instr;
+    outptr=strConvOutput;    //使用outptr作为空闲空间指针以避免strConvOutput被改变
+    memset(strConvOutput,'\0',outputbufsize);
+    if(convGB==(iconv_t)-1)
+	return False;
+	
+    nconv=iconv(convGB,&inbuf,&insize,&outptr,&avail);
+    
+    return True;
+
 }
 
 /* *************下列函数取自于 rfinput-2.0 ************************ */
@@ -839,23 +868,5 @@ Bool MouseClick (int *x, int *y, Window window)
 	    break;
 	}
     }
-}
-*/
-
-/* For debug only
-void OutputAsUTF8(char *str)
-{
-    char            strOutput[300];
-    char           *ps;
-    size_t          l1, l2;
-
-    ps = strOutput;
-    l1 = strlen (str);
-    l2 = 299;
-    l1 = iconv (convUTF8, (ICONV_CONST char **) (&str), &l1, &ps, &l2);
-    *ps = '\0';
-    ps = strOutput;
-
-    puts(strOutput);
 }
 */
