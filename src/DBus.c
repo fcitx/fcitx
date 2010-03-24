@@ -917,6 +917,9 @@ char* convertMessage(char* in)
         result = g2u(strTemp);
         if (bUseGBKT && strTemp)
             free(strTemp);
+
+        if (result == NULL)
+            result = strdup("");
         return result;
     }
     else
@@ -1167,7 +1170,7 @@ char* g2u(char *instr)
     cd=iconv_open("utf-8","gb18030");    //将字符串编码由gtk转换为utf-8
     if(cd==(iconv_t)-1)
     {
-        return "";
+        return NULL;
     }
     nconv=iconv(cd,&inbuf,&insize,&outptr,&avail);
     iconv_close(cd);
@@ -1191,9 +1194,10 @@ char* u2g(char *instr)
     cd=iconv_open("gb18030","utf-8");    //将字符串编码由utf-8转换为gbk
     if(cd==(iconv_t)-1)
     {
-        return "";
+        return NULL;
     }
     nconv=iconv(cd,&inbuf,&insize,&outptr,&avail);
+    iconv_close(cd);
     return outbuf;
 
 }

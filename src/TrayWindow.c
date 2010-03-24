@@ -22,8 +22,8 @@ Bool CreateTrayWindow() {
 
     XSizeHints size_hints;
     size_hints.flags = PWinGravity | PBaseSize;
-    size_hints.base_width = 16;
-    size_hints.base_height = 16;
+    size_hints.base_width = 22;
+    size_hints.base_height = 22;
     XSetWMNormalHints(dpy, tray.window, &size_hints);
 
     tray.xpm_attr.valuemask = XpmCloseness;
