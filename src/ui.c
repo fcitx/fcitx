@@ -397,7 +397,7 @@ void MyXEventHandler (XEvent * event)
 	    DrawMainWindow ();
 	}
 #ifdef _ENABLE_TRAY	
-	tray_win_redraw();
+	tray_event_handler(event);
 #endif
 	break;
     case Expose:
@@ -414,12 +414,7 @@ void MyXEventHandler (XEvent * event)
 	    DrawInputWindow ();
 #ifdef _ENABLE_TRAY
 	else if (event->xexpose.window == tray.window) {
-	    if (ConnectIDGetState (connect_id) == IS_CHN)
-		DrawTrayWindow (ACTIVE_ICON);
-	    else
-		DrawTrayWindow (INACTIVE_ICON);
-	    
-	    tray_win_redraw();
+        tray_event_handler(event);
 	}
 #endif
 	//added by yunfan
@@ -428,6 +423,9 @@ void MyXEventHandler (XEvent * event)
 	//******************************
 	break;
     case DestroyNotify:
+#ifdef _ENABLE_TRAY	
+	tray_event_handler(event);
+#endif
 	break;
     case ButtonPress:
 	switch (event->xbutton.button) {
@@ -452,9 +450,9 @@ void MyXEventHandler (XEvent * event)
 			    ChangeIMState (connect_id);
 #ifdef _ENABLE_TRAY
 			if (ConnectIDGetState (connect_id) == IS_CHN)
-			    DrawTrayWindow (ACTIVE_ICON);
+			    DrawTrayWindow (ACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 			else
-			    DrawTrayWindow (INACTIVE_ICON);
+			    DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 #endif
 		    }
 		}
@@ -532,11 +530,11 @@ void MyXEventHandler (XEvent * event)
 		    SetIMState (True);
 		    DrawMainWindow ();
 
-		    DrawTrayWindow (ACTIVE_ICON);
+		    DrawTrayWindow (ACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 		}
 		else {
 		    SetIMState (False);
-		    DrawTrayWindow (INACTIVE_ICON);
+		    DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 	        }
 
 		break;

@@ -224,7 +224,7 @@ int main (int argc, char *argv[])
     tray.window = (Window) NULL;
     if (!bUseDBus) {
 	CreateTrayWindow ();		//创建系统托盘窗口
-    	DrawTrayWindow (INACTIVE_ICON);	//显示托盘图标
+    	DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_WIDTH, TRAY_ICON_HEIGHT);	//显示托盘图标
     }
 #endif
 

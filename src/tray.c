@@ -10,17 +10,6 @@
 
 #include "tray.h"
 
-#define ATOM_SYSTEM_TRAY 0
-#define ATOM_SYSTEM_TRAY_OPCODE 1
-#define ATOM_NET_SYSTEM_TRAY_MESSAGE_DATA 2
-#define ATOM_XEMBED_INFO 3
-#define ATOM_XEMBED 4
-#define ATOM_MANAGER 5
-
-#define SYSTEM_TRAY_REQUEST_DOCK    0
-#define SYSTEM_TRAY_BEGIN_MESSAGE   1
-#define SYSTEM_TRAY_CANCEL_MESSAGE  2
-
 #define MAX_SUPPORTED_XEMBED_VERSION 1
 
 #define XEMBED_MAPPED          (1 << 0)
@@ -41,16 +30,15 @@
 #define XEMBED_UNREGISTER_ACCELERATOR   13
 #define XEMBED_ACTIVATE_ACCELERATOR     14
 
-static Atom Atoms[6];
+Atom Atoms[6];
 static int trapped_error_code = 0;
 static int (*old_error_handler) (Display *d, XErrorEvent *e);
 
-static void tray_set_xembed_info (Display* dpy, Window win, int flags);
-static void tray_send_opcode( Display* dpy,  Window w, long message,
-        long data1, long data2, long data3 );
+extern int iScreen;
+
 /* static void tray_map_window (Display* dpy, Window win); */
 
-    static int
+static int
 error_handler(Display     *display,
         XErrorEvent *error)
 {
@@ -72,32 +60,34 @@ untrap_errors(void)
     return trapped_error_code;
 }
 
-    int
-tray_init(Display* dpy, Window win)
+int
+tray_init(Display* dpy, tray_win_t* tray)
 {
     static char *atom_names[] = {
-        "_NET_SYSTEM_TRAY_S0", "_NET_SYSTEM_TRAY_OPCODE", 
-        "_NET_SYSTEM_TRAY_MESSAGE_DATA",
-        "_XEMBED_INFO", "_XEMBED",
-        "MANAGER"
+        NULL,
+		"MANAGER", 
+		"_NET_SYSTEM_TRAY_OPCODE",
+		"_NET_SYSTEM_TRAY_ORIENTATION",
+		"_NET_SYSTEM_TRAY_VISUAL"
     };
 
-    XInternAtoms (dpy, atom_names, 6, False, Atoms);
+	atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
+	atom_names[0][17] += iScreen;
 
-    tray_set_xembed_info(dpy, win, 0);
+    XInternAtoms (dpy, atom_names, 5, False, Atoms);
+    memset(&tray->visual, 0, sizeof(XVisualInfo));
 
-    /* Find the dock */
-    return tray_find_dock(dpy, win);
+    return True;
 }
 
-    int
+int
 tray_find_dock(Display *dpy, Window win)
 {
     Window Dock;
     
     XGrabServer (dpy);
 
-    Dock = XGetSelectionOwner(dpy, Atoms[ATOM_SYSTEM_TRAY]);
+    Dock = XGetSelectionOwner(dpy, Atoms[ATOM_SELECTION]);
 
     if (!Dock)
         XSelectInput(dpy, RootWindow(dpy, DefaultScreen(dpy)),
@@ -112,6 +102,45 @@ tray_find_dock(Display *dpy, Window win)
     } 
 
     return 0;
+}
+
+XVisualInfo* tray_get_visual(Display* dpy, tray_win_t* tray)
+{
+    Window Dock;
+    Dock = XGetSelectionOwner(dpy, Atoms[ATOM_SELECTION]);
+
+    if (Dock != None) {
+        Atom actual_type;
+        int actual_format;
+        unsigned long nitems, bytes_remaining;
+        unsigned char *data = 0;
+        int result = XGetWindowProperty(dpy, Dock, Atoms[ATOM_VISUAL], 0, 1,
+                                        False, XA_VISUALID, &actual_type,
+                                        &actual_format, &nitems, &bytes_remaining, &data);
+        VisualID vid = 0;
+        if (result == Success && data && actual_type == XA_VISUALID && actual_format == 32 &&
+                nitems == 1 && bytes_remaining == 0)
+            vid = *(VisualID*)data;
+        if (data)
+            XFree(data);
+        if (vid == 0)
+            return 0;
+        
+        uint mask = VisualIDMask;
+        XVisualInfo *vi, rvi;
+        int count;
+        rvi.visualid = vid;
+        vi = XGetVisualInfo(dpy, mask, &rvi, &count);
+        if (vi) {
+            tray->visual = vi[0];
+            XFree((char*)vi);
+        }
+        if (tray->visual.depth != 32)
+            memset(&tray->visual, 0, sizeof(XVisualInfo));
+    }
+
+    return tray->visual.visual ? &tray->visual : 0;
+
 }
 
 /*    void
@@ -132,18 +161,8 @@ tray_handle_client_message(Display *dpy, Window win, XEvent *an_event)
     }
 }
 */
-    void
-tray_set_xembed_info (Display* dpy, Window win, int flags)
-{
-    CARD32 list[2];
 
-    list[0] = MAX_SUPPORTED_XEMBED_VERSION;
-    list[1] = flags;
-    XChangeProperty (dpy, win, Atoms[ATOM_XEMBED_INFO], XA_CARDINAL, 32,
-            PropModeReplace, (unsigned char *) list, 2);
-}
-
-static void tray_send_opcode(Display* dpy, Window w,
+void tray_send_opcode(Display* dpy, Window w,
         long message, long data1, long data2, long data3)
 {
     XEvent ev;
@@ -167,12 +186,11 @@ static void tray_send_opcode(Display* dpy, Window w,
                 trapped_error_code );
     }
 }
-/*
-    void
-tray_map_window (Display* dpy, Window win)
+
+Window tray_get_dock(Display* dpy)
 {
-    XMapWindow(dpy, win);  // dock will probably do this as well
-    tray_set_xembed_info (dpy, win, XEMBED_MAPPED);
+    Window dock = XGetSelectionOwner(dpy, Atoms[ATOM_SELECTION]);
+    return dock;
 }
-*/
+
 #endif

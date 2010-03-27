@@ -281,7 +281,7 @@ void CloseIM (IMForwardEventStruct * call_data)
 	DrawMainWindow ();
 
 #ifdef _ENABLE_TRAY
-	DrawTrayWindow (INACTIVE_ICON);
+	DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH);
 #endif
     }
 #ifdef _ENABLE_DBUS
@@ -783,7 +783,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 #ifdef _ENABLE_TRAY
 					    if (!tray.window) {
 					        CreateTrayWindow();
-					        DrawTrayWindow (INACTIVE_ICON);
+					        DrawTrayWindow (INACTIVE_ICON,0,0,TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH);
 					    }
 #endif
 					    if (!aboutWindow)

@@ -222,7 +222,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	    XUnmapWindow (dpy, VKWindow);
 
 #ifdef _ENABLE_TRAY
-	    DrawTrayWindow (INACTIVE_ICON);
+	    DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 #endif
 	    if (hideMainWindow == HM_SHOW) {
 		DisplayMainWindow ();
@@ -357,7 +357,7 @@ void EnterChineseMode (Bool bState)
     if (!bUseDBus) {
 	DisplayMainWindow ();
 #ifdef _ENABLE_TRAY
-	DrawTrayWindow (ACTIVE_ICON);
+	DrawTrayWindow (ACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 #endif
     }
 
@@ -389,7 +389,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 
 #ifdef _ENABLE_TRAY
 	if (!bUseDBus)
-	    DrawTrayWindow (ACTIVE_ICON);
+	    DrawTrayWindow (ACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
 #endif
     }
     else
