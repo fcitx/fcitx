@@ -366,9 +366,6 @@ void LoadVKMapFile (void)
 	vks[j].strName[0] = '\0';
     }
 
-    strcpy (strPath, (char *) getenv ("HOME"));
-    strcat (strPath, "/.fcitx/");
-    strcat (strPath, VK_FILE);
     fp = UserConfigFile(VK_FILE, "rt", NULL);
     if (!fp) {
 	strcpy (strPath, PKGDATADIR "/data/");
@@ -547,7 +544,7 @@ void SwitchVK (void)
 
 	XMoveWindow (dpy, VKWindow, x, y);
 	DisplayVKWindow ();
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 
 	if (ConnectIDGetState (connect_id) == IS_CLOSED)
 	    SetIMState (True);

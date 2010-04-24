@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  
+ *       Filename:  client-test.c
  *
- *    Description:  
+ *    Description:  use socket to check and change the fcitx state
  *
  *        Version:  1.0
  *        Created:  2009年10月14日 17时37分57秒
@@ -31,9 +31,9 @@
 #include <unistd.h> 
 #include <fcntl.h>
 #include <poll.h>
-
-
-static const char socketfile[]="/tmp/fcitx.socket";
+#include <limits.h>
+#include <X11/Xlib.h>
+#include "xim.h"
 
 int create_socket(const char *name)
 {
@@ -59,34 +59,54 @@ int create_socket(const char *name)
 	return fd;
 }
 
-
+void usage()
+{
+    printf("Usage: fcitx-remote [OPTION]\n"
+           "\t-c\t\tclose input method\n"
+           "\t-o\t\topen input method\n"
+           "\t[no option]\tdisplay fcitx state, %d for close, %d for english, %d for chinese\n"
+		   "\t-h\t\tdisplay this help and exit\n",
+		   IS_CLOSED, IS_ENG, IS_CHN);
+}
 
 int main ( int argc, char *argv[] )
 {
-	int socket_fd = create_socket(socketfile);
+    char socketfile[PATH_MAX] = "";
+	int socket_fd;
+
+    int o = 0;
+	char c;
+	while((c = getopt(argc, argv, "cho")) != -1) {
+		switch (c) {
+		case 'o':
+            o = 1;
+            o |= (1 << 16);
+            break;
+        case 'c':
+            o = 1;
+            break;
+        case 'h':
+        default:
+            usage();
+            return 0;
+            break;
+		}
+	}
+
+	sprintf(socketfile, "/tmp/fcitx-soeckt-%s", XDisplayName(NULL));
+	socket_fd = create_socket(socketfile);
 	if (socket_fd < 0) {
 		fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
 		return 0;
 	}
 
-	if (argc != 2) {
-		int o = 0;
+	if (o == 0) {
 		write(socket_fd, &o, sizeof(o));
 		int buf;
-//		int len = read(socket_fd, &buf, sizeof(buf));
 		read(socket_fd, &buf, sizeof(buf));
 		printf("%d\n", buf);
-
 		close(socket_fd);
 	} else {
-		int o = 1;
-		if (strcasecmp("-o", argv[1]) == 0)
-			o |= (1 << 16);
-		else if (strcasecmp("-c", argv[1]) != 0) {
-			close(socket_fd);
-			return 0;
-		}
-			
 		write(socket_fd, &o, sizeof(o));
 		close(socket_fd);
 	}

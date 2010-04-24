@@ -75,4 +75,5 @@ void            DisplayMessageUp (void);
 void            DisplayMessageDown (void);
 void            ResetInputWindow (void);
 void		MoveInputWindow(CARD16 connect_id);
+void            CloseInputWindow(void);
 #endif

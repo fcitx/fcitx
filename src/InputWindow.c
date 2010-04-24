@@ -207,7 +207,14 @@ void DisplayInputWindow (void)
     CalInputWindow();
     MoveInputWindow(connect_id);
     if (uMessageUp || uMessageDown)
-	XMapRaised (dpy, inputWindow);
+	{
+		if (!bUseDBus)
+			XMapRaised (dpy, inputWindow);
+#ifdef _ENABLE_DBUS
+		else
+			updateMessages();
+#endif
+	}
 }
 
 void InitInputWindowColor (void)
@@ -727,3 +734,17 @@ void MoveInputWindow(CARD16 connect_id)
     }
     
 }
+
+void CloseInputWindow()
+{
+	XUnmapWindow (dpy, inputWindow);
+#ifdef _ENABLE_DBUS
+	if (bUseDBus)
+	{
+		KIMShowAux(False);
+		KIMShowPreedit(False);
+		KIMShowLookupTable(False);
+	}
+#endif
+}
+

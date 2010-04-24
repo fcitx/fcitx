@@ -217,7 +217,7 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 	if (icidGetIMState(call_data->icid) != IS_CLOSED)
 	    IMPreeditEnd (ims, (XPointer) call_data);
 
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 	if (!bUseDBus) {
 	    XUnmapWindow (dpy, VKWindow);
 
@@ -269,24 +269,17 @@ Bool MySetFocusHandler (IMChangeFocusStruct * call_data)
 Bool MyUnsetFocusHandler (IMChangeICStruct * call_data)
 {
     if (call_data->connect_id==connect_id) {
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 	if (!bUseDBus)
 	    XUnmapWindow (dpy, VKWindow);
     }
     
-#ifdef _ENABLE_DBUS
-    if (bUseDBus) {
-	uMessageDown = uMessageUp = 0;
-	updateMessages();
-    }
-#endif
-
     return True;
 }
 
 Bool MyCloseHandler (IMOpenStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
+    CloseInputWindow();
     
     if (!bUseDBus)
     	XUnmapWindow (dpy, VKWindow);
@@ -326,7 +319,7 @@ Bool MyCreateICHandler (IMChangeICStruct * call_data)
 Bool MyDestroyICHandler (IMChangeICStruct * call_data)
 {
     if (CurrentIC == (IC *) FindIC (call_data->icid)) {
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 	if (!bUseDBus)
 	    XUnmapWindow (dpy, VKWindow);
     }
@@ -384,8 +377,7 @@ Bool MyTriggerNotifyHandler (IMTriggerNotifyStruct * call_data)
 
     SetTrackPos( (IMChangeICStruct *)call_data );
     if (bShowInputWindowTriggering && !bCorner) {
-	if (!bUseDBus)
-	    DisplayInputWindow ();
+	DisplayInputWindow ();
 
 #ifdef _ENABLE_TRAY
 	if (!bUseDBus)

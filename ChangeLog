@@ -1,3 +1,10 @@
+
+2010-04-24: CSSlayer <wengxt@gmail.com>
+	* src/ImeRemote.c: 修正fcitx远程调用socket文件名问题
+	* tools/client-test.c: fcitx-remote添加帮助信息
+	* src/ime.c: 修复Issue 190
+	* 合并UTF-8分支的DBus信息更新处理
+
 2010-03-24: CSSlayer <wengxt@gmail.com>
 	* 感谢提供新托盘图标的zdon (at) forum.ubuntu.org.cn
 

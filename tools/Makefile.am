@@ -9,6 +9,7 @@ bin_PROGRAMS = mb2txt txt2mb createPYMB jd2fcitx pyjj2fcitx win2fcitx readPYMB r
 readPYMB_SOURCES = pyTools.c pyTools.h readPYMB.c
 readPYBase_SOURCES = pyTools.c pyTools.h readPYBase.c
 fcitx_remote_SOURCES = client-test.c
+fcitx_remote_LDFLAGS = -lXpm -lXtst -lpthread
 
 createPYMB_LDADD = ../src/pyParser.o ../src/pyMapTable.o ../src/PYFA.o ../src/sp.o
 pyjj2fcitx_LDADD = ../src/pyParser.o ../src/pyMapTable.o ../src/PYFA.o ../src/sp.o

@@ -244,7 +244,6 @@ void ResetInput (void)
     iCurrentLegendCandPage = 0;
     iLegendCandPageCount = 0;
     iCursorPos = 0;
-    uMessageUp = uMessageDown = 0;
 
     strCodeInput[0] = '\0';
     iCodeInputCount = 0;
@@ -266,7 +265,7 @@ void ResetInput (void)
 
 void CloseIM (IMForwardEventStruct * call_data)
 {
-    XUnmapWindow (dpy, inputWindow);
+    CloseInputWindow();
     
     if (!bUseDBus)
 	XUnmapWindow (dpy, VKWindow);
@@ -296,12 +295,12 @@ void ChangeIMState (CARD16 _connect_id)
 	SetConnectID (_connect_id, IS_CHN);
 	iState = IS_CHN;
 
-	if (!bUseDBus) {
-	    if (bVK)
+    if (bVK) {
+		if (!bUseDBus)
 		DisplayVKWindow ();
-	    else
-		DisplayInputWindow ();
 	}
+    else
+		DisplayInputWindow ();
     }
     else {
 	SetConnectID (_connect_id, IS_ENG);
@@ -309,7 +308,7 @@ void ChangeIMState (CARD16 _connect_id)
 	ResetInput ();
 	ResetInputWindow ();
 
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 	if (!bUseDBus)
 	    XUnmapWindow (dpy, VKWindow);
     }
@@ -321,7 +320,6 @@ void ChangeIMState (CARD16 _connect_id)
 
 #ifdef _ENABLE_DBUS 
     if (bUseDBus) {
-	updateMessages();
 	updateProperty(&state_prop);
     }
 #endif
@@ -511,7 +509,6 @@ void ProcessKey (IMForwardEventStruct * call_data)
 			DrawMainWindow ();
 
 		    if (bShowInputWindowTriggering && !bCorner) {
-			if (!bUseDBus)
 			    DisplayInputWindow ();
 		    }
 		    else
@@ -923,11 +920,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
     case IRV_CLEAN:
 	ResetInput ();
 	ResetInputWindow ();
-	XUnmapWindow (dpy, inputWindow);
-#ifdef _ENABLE_DBUS
-	if (bUseDBus)
-	    updateMessages();
-#endif
+	CloseInputWindow();
 
 	return;
     case IRV_DISPLAY_CANDWORDS:
@@ -945,16 +938,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	}
 
+	DisplayInputWindow ();
 	if (!bUseDBus) {
-	    DisplayInputWindow ();
 	    DrawInputWindow ();
 	}
-#ifdef _ENABLE_DBUS
-	else {
-	    MoveInputWindow(call_data->connect_id);
-	    updateMessages();
-	}
-#endif
 
 	break;
     case IRV_DISPLAY_LAST:
@@ -973,14 +960,10 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	bShowNext = False;
 	bShowPrev = False;
 
+	DisplayInputWindow ();
 	if (!bUseDBus) {
-	    DisplayInputWindow ();
 	    DrawInputWindow ();
 	}
-#ifdef _ENABLE_DBUS
-	else
-	    updateMessages();
-#endif
 
 	break;
     case IRV_GET_LEGEND:
@@ -994,23 +977,14 @@ void ProcessKey (IMForwardEventStruct * call_data)
 		bShowNext = True;
 	    bLastIsNumber = False;
 	    iCodeInputCount = 0;
-	    if (!bUseDBus) {
 		DisplayInputWindow ();
+	    if (!bUseDBus) {
 		DrawInputWindow ();
 	    }
-#ifdef _ENABLE_DBUS
-	    else
-		updateMessages();
-#endif
 	}
 	else {
 	    ResetInput ();
-	    if (!bUseDBus)
-		XUnmapWindow (dpy, inputWindow);
-#ifdef _ENABLE_DBUS
-	    else
-		updateMessages();
-#endif
+		CloseInputWindow();
 	}
 
 	break;
@@ -1021,24 +995,17 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	    DoPhraseTips ();
 	iHZInputed += (int) (strlen (strStringGet) / 2);	
 
-	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ)))) {
-		XUnmapWindow (dpy, inputWindow);
-		uMessageUp = 0;
-		uMessageDown = 0;
-	}
+	if (bVK || (!uMessageDown && (!bPhraseTips || (bPhraseTips && !lastIsSingleHZ))))
+		CloseInputWindow();
 	else {
-	    if (!bUseDBus) {
 		DisplayInputWindow ();
+	    if (!bUseDBus) {
 		DrawInputWindow ();
 	    }
 	}
-#ifdef _ENABLE_DBUS
-	if (bUseDBus)
-	    updateMessages();
-#endif
 
 	ResetInput ();
-        lastIsSingleHZ = 0;
+    lastIsSingleHZ = 0;
 	break;
     case IRV_ENG:
 	//如果处于中文标点模式，应该将其中的标点转换为全角
@@ -1048,7 +1015,7 @@ void ProcessKey (IMForwardEventStruct * call_data)
 	iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
 	ResetInput ();
 	if (!uMessageDown)
-	    XUnmapWindow (dpy, inputWindow);
+	    CloseInputWindow();
     case IRV_GET_CANDWORDS_NEXT:
 	SendHZtoClient (call_data, strStringGet);
 	bLastIsNumber = False;
@@ -1056,13 +1023,8 @@ void ProcessKey (IMForwardEventStruct * call_data)
 
 	if (retVal == IRV_GET_CANDWORDS_NEXT || lastIsSingleHZ == -1) {
 	    iHZInputed += (int) (strlen (strStringGet) / 2);	//粗略统计字数
-	    if (!bUseDBus)
 		DisplayInputWindow ();
 	}
-#ifdef _ENABLE_DBUS
-	if (bUseDBus)
-	    updateMessages();
-#endif
 
 	break;
     default:
@@ -1096,7 +1058,7 @@ INPUT_RETURN_VALUE ChangeCorner (void)
     
     if (!bUseDBus) {
 	DrawMainWindow ();
-    	XUnmapWindow (dpy, inputWindow);
+    	CloseInputWindow();
     }
 #ifdef _ENABLE_DBUS
     else
@@ -1133,7 +1095,7 @@ INPUT_RETURN_VALUE ChangeGBK (void)
 
     if (!bUseDBus)
 	DrawMainWindow ();
-    XUnmapWindow (dpy, inputWindow);
+    CloseInputWindow();
 
     SaveProfile ();
 
@@ -1153,7 +1115,7 @@ INPUT_RETURN_VALUE ChangeGBKT (void)
 
     if (!bUseDBus) {
 	DrawMainWindow ();
-    	XUnmapWindow (dpy, inputWindow);
+    	CloseInputWindow();
     }
 
     SaveProfile ();
@@ -1175,7 +1137,7 @@ INPUT_RETURN_VALUE ChangeLegend (void)
 	ResetInputWindow ();
 	
 	DrawMainWindow ();
-    	XUnmapWindow (dpy, inputWindow);
+    	CloseInputWindow();
     }
 
     SaveProfile ();
@@ -1211,7 +1173,7 @@ void ChangeRecording (void)
     bRecording =! bRecording;
     ResetInput ();
     ResetInputWindow ();
-    XUnmapWindow (dpy, inputWindow);
+    CloseInputWindow();
 
     CloseRecording();
     if ( bRecording )
@@ -1285,7 +1247,7 @@ void SwitchIM (INT8 index)
     }
 
     ResetInput ();
-	XUnmapWindow (dpy, inputWindow);
+	CloseInputWindow();
 
     SaveProfile ();
 
@@ -1308,9 +1270,6 @@ void SwitchIM (INT8 index)
 	
 	updateProperty(&logo_prop);
 	updateProperty(&state_prop);
-	updateMessages();
-	if (need_free)
-	    free(need_free);
     }
 #endif
 }

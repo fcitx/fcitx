@@ -874,12 +874,13 @@ void updateMessages()
         for (i = 0; i < nLabels; i++)
             free(label[i]);
     } else {
-//      KIMUpdateLookupTable(NULL,0,NULL,0,bShowPrev,bShowNext);
+        KIMUpdateLookupTable(NULL,0,NULL,0,bShowPrev,bShowNext);
         KIMShowLookupTable(False);
     }
     
     n = uMessageUp;
     char aux[MESSAGE_MAX_LENGTH] = "";
+    char empty[MESSAGE_MAX_LENGTH] = "";
     if (n) {
         // FIXME: buffer overflow
         for (i=0;i<n;i++) {
@@ -890,11 +891,14 @@ void updateMessages()
         if (bShowCursor)
         {
             KIMUpdatePreeditText(aux);
+            KIMUpdateAux(empty);
             KIMShowPreedit(True);
             KIMUpdatePreeditCaret(calKIMCursorPos());
             KIMShowAux(False);
         }
         else {
+            KIMUpdatePreeditText(empty);
+            KIMUpdateAux(aux);
             KIMShowPreedit(False);
             KIMShowAux(True);
         }

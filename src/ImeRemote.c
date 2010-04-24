@@ -29,14 +29,16 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <limits.h>
 #include "xim.h"
 #include "MainWindow.h"
+#include "TrayWindow.h"
 #ifdef _ENABLE_DBUS
 #include "DBus.h"
 extern Property state_prop;
 #endif
 extern Bool bUseDBus; 
-static const char socketfile[]="/tmp/fcitx.socket";
+char socketfile[PATH_MAX]="";
 CARD16 g_last_connect_id;
 
 int create_socket(const char *name)
@@ -118,11 +120,19 @@ static void main_loop (int socket_fd)
 					DisplayMainWindow();
 					DrawMainWindow();
 				}
-#ifdef _ENABLE_DBUS
-				else
-					updateProperty(&state_prop);
-#endif
 			}
+#ifdef _ENABLE_DBUS
+			if (bUseDBus)
+				updateProperty(&state_prop);
+#endif
+#ifdef _ENABLE_TRAY
+			if (!bUseDBus) {
+				if (ConnectIDGetState (g_last_connect_id) == IS_CHN)
+					DrawTrayWindow (ACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
+				else
+					DrawTrayWindow (INACTIVE_ICON, 0, 0, TRAY_ICON_HEIGHT, TRAY_ICON_WIDTH );
+			}
+#endif
 		}
 		close(client_fd);
 	}
@@ -130,6 +140,7 @@ static void main_loop (int socket_fd)
 
 void* remoteThread (void* val)
 {
+	sprintf(socketfile, "/tmp/fcitx-soeckt-%s", XDisplayName(NULL));
 	int socket_fd = create_socket(socketfile);
 	if (socket_fd < 0) {
 		fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
