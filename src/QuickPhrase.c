@@ -153,7 +153,8 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (int iKey)
 
 INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
 {
-    int i, iInputLen;
+    int i = 0;
+    size_t iInputLen = 0;
     char strTemp[2];
 
     if ( !quickPhraseHead )

@@ -581,8 +581,7 @@ int StringWidth (char *str, XftFont * font)
     XGlyphInfo      extents;
     char            str1[100];
     char           *ps;
-    size_t          l1, l2;
-    int             il;
+    size_t          l1 = 0, il = 0, l2 = 0;
 
     if (!font)
 	return 0;

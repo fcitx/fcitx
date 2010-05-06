@@ -123,7 +123,7 @@ void LoadSPData (void)
     FILE           *fp;
     char            strPath[PATH_MAX];
     char            str[100], strS[5], *pstr;
-    int             i;
+    size_t          i = 0;
     Bool            bIsDefault = False;
     Bool            bIsFromSystemSPConfig = False;
 

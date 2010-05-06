@@ -1163,9 +1163,9 @@ char* g2u(char *instr)
     char *inbuf;
     char *outbuf;
     char *outptr;
-    unsigned int insize=strlen(instr);
-    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
-    unsigned int avail=outputbufsize;
+    size_t insize=strlen(instr);
+    size_t outputbufsize=MESSAGE_MAX_LENGTH;
+    size_t avail=outputbufsize;
     unsigned int nconv;
     inbuf=instr;
     outbuf=(char *)malloc(outputbufsize * sizeof(char));
@@ -1187,9 +1187,9 @@ char* u2g(char *instr)
     char *inbuf;
     char *outbuf;
     char *outptr;
-    unsigned int insize=strlen(instr);
-    unsigned int outputbufsize=MESSAGE_MAX_LENGTH;
-    unsigned int avail=outputbufsize;
+    size_t insize=strlen(instr);
+    size_t outputbufsize=MESSAGE_MAX_LENGTH;
+    size_t avail=outputbufsize;
     unsigned int nconv;
     inbuf=instr;
     outbuf=(char *)malloc(outputbufsize * sizeof(char));

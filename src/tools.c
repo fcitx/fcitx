@@ -1267,7 +1267,7 @@ void LoadConfig (Bool bMode)
     char    buf[PATH_MAX], *pbuf, *pbuf1;
     //用于标示group的index，在配置文件里面配置是分组的，类似与ini文件的分组
     int     group_idx;
-    int		i;
+    size_t  i = 0;
     Configure   *tmpconfig;
 
     for (i = 0;i < INPUT_METHODS; i++ )
@@ -1578,7 +1578,7 @@ void LoadProfile (void)
 {
     FILE           *fp;
     char            buf[PATH_MAX], *pbuf, *pbuf1;
-    int             i;
+    size_t          i = 0;
     Configure       *tmpconfig;
 
     /* 前将窗口的位置设定为最原始的默认值，接下来如果配置文件有，
@@ -1843,7 +1843,8 @@ char           *ConvertGBKSimple2Tradition (char *strHZ)
     FILE           *fp;
     char           *ret;
     char            strPath[PATH_MAX];
-    int             i, len;
+    int             i;
+    size_t len = 0;
     unsigned int    idx;
 
     if (strHZ == NULL)
