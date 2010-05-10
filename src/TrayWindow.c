@@ -1,6 +1,7 @@
 #ifdef _ENABLE_TRAY
 
 #include <stdio.h>
+#include <X11/Xatom.h>
 
 #include "TrayWindow.h"
 #include "xim.h"
@@ -19,6 +20,9 @@ extern CARD16 connect_id;
 Bool ProcessTrayIcon(char** data, XImage** image, Pixmap* pixmapshape, Pixmap* pixmap);
 
 Bool CreateTrayWindow() {
+     XTextProperty	tp;
+    char	strWindowName[]="Fcitx Tray Window";
+    
     tray_init(dpy, &tray);
     XVisualInfo* vi = tray_get_visual(dpy, &tray);
     Window dock = tray_get_dock(dpy);
@@ -53,6 +57,13 @@ Bool CreateTrayWindow() {
     size_hints.base_height = 22;
     XSetWMNormalHints(dpy, tray.window, &size_hints);
 
+    //Set the name of the window
+    tp.value = (void *)strWindowName;
+    tp.encoding = XA_STRING;
+    tp.format = 16;
+    tp.nitems = strlen(strWindowName);
+    XSetWMName (dpy, tray.window, &tp);
+    
     if (!ProcessTrayIcon(inactive_xpm, &tray.icon[INACTIVE_ICON], &tray.icon_mask[INACTIVE_ICON],
 				&tray.picon[INACTIVE_ICON])) {
         fprintf(stderr, "failed to get inactive icon image\n");
