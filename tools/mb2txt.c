@@ -21,7 +21,7 @@
 #include <config.h>
 #endif
 
-#include "../src/internalVersion.c"
+#include "../src/core/internalVersion.c"
 
 #include <stdio.h>
 #include <string.h>
@@ -32,17 +32,17 @@
 #endif
     
 #define MAX_CODE_LENGTH 30
-    typedef struct _RULE_RULE {
-    unsigned char   iFlag;	// 1 --> ÕıĞò   0 --> ÄæĞò
-    unsigned char   iWhich;	//µÚ¼¸¸ö×Ö
-    unsigned char   iIndex;	//µÚ¼¸¸ö±àÂë
+    typedef struct _RULE_RULE {
+    unsigned char   iFlag;	// 1 --> æ­£åº   0 --> é€†åº
+    unsigned char   iWhich;	//ç¬¬å‡ ä¸ªå­—
+    unsigned char   iIndex;	//ç¬¬å‡ ä¸ªç¼–ç 
 } RULE_RULE;
-typedef struct _RULE {
-    unsigned char   iWords;	//¶àÉÙ¸ö×Ö
-    unsigned char   iFlag;	//1 --> ´óÓÚµÈÓÚiWords  0 --> µÈÓÚiWords
+typedef struct _RULE {
+    unsigned char   iWords;	//å¤šå°‘ä¸ªå­—
+    unsigned char   iFlag;	//1 --> å¤§äºç­‰äºiWords  0 --> ç­‰äºiWords
     RULE_RULE      *rule;
 } RULE;
-int main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
     char            strCode[100];
     char            strHZ[100];
@@ -66,37 +66,37 @@
 	exit (2);
     }
 
-    //ÏÈ¶ÁÈ¡Âë±íµÄĞÅÏ¢
+    //å…ˆè¯»å–ç è¡¨çš„ä¿¡æ¯
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     if (iTemp == 0) {
 	fread (&iVersion, sizeof (char), 1, fpDict);
-	printf (";fcitx °æ±¾ 0x%02x Âë±íÎÄ¼ş\n", iVersion);
+	printf (";fcitx ç‰ˆæœ¬ 0x%02x ç è¡¨æ–‡ä»¶\n", iVersion);
 	fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     }
     else
-	printf (";fcitx °æ±¾ 0x02 Âë±íÎÄ¼ş\n");
+	printf (";fcitx ç‰ˆæœ¬ 0x02 ç è¡¨æ–‡ä»¶\n");
 
     fread (strCode, sizeof (char), iTemp + 1, fpDict);
-    printf ("¼üÂë=%s\n", strCode);
+    printf ("é”®ç =%s\n", strCode);
     fread (&iLen, sizeof (unsigned char), 1, fpDict);
-    printf ("Âë³¤=%d\n", iLen);
+    printf ("ç é•¿=%d\n", iLen);
 
     if (iVersion) {
 	fread (&iPYLen, sizeof (unsigned char), 1, fpDict);
 	if (iPYLen) {
-	    printf ("Æ´Òô=@\n");
-	    printf ("Æ´Òô³¤¶È=%d\n", iPYLen);
+	    printf ("æ‹¼éŸ³=@\n");
+	    printf ("æ‹¼éŸ³é•¿åº¦=%d\n", iPYLen);
 	}
     }
 
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     fread (strCode, sizeof (char), iTemp + 1, fpDict);
     if (iTemp)
-	printf ("¹æ±Ü×Ö·û=%s\n", strCode);
+	printf ("è§„é¿å­—ç¬¦=%s\n", strCode);
 
     fread (&iRule, sizeof (unsigned char), 1, fpDict);
-    if (iRule) {		//±íÊ¾ÓĞ×é´Ê¹æÔò
-	printf ("[×é´Ê¹æÔò]\n");
+    if (iRule) {		//è¡¨ç¤ºæœ‰ç»„è¯è§„åˆ™
+	printf ("[ç»„è¯è§„åˆ™]\n");
 	for (i = 0; i < iLen - 1; i++) {
 	    fread (&iRule, sizeof (unsigned char), 1, fpDict);
 	    printf ("%c", (iRule) ? 'a' : 'e');
@@ -116,7 +116,7 @@
 	}
     }
 
-    printf ("[Êı¾İ]\n");
+    printf ("[æ•°æ®]\n");
     fread (&j, sizeof (unsigned int), 1, fpDict);
 
     if (iVersion)

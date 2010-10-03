@@ -1,0 +1,371 @@
+[Program/FontEn]
+Type=Font
+DefaultValue=
+
+[Program/FontZh]
+Type=Font
+DefaultValue=
+
+[Program/FontLocale]
+Type=String
+DefaultValue=zh_CN.UTF-8
+Description=Font Locale to display
+
+[Program/RecordFile]
+Type=File
+DefaultValue=
+Description=Record File of Input
+
+[Program/UseTray]
+Type=Boolean
+DefaultValue=True
+Description=Use System Tray Icon
+
+[Program/UseDBus]
+Type=Boolean
+DefaultValue=False
+Description=Use DBus to display UI (Require KIMPanel)
+
+[Program/EnableAddons]
+Type=Boolean
+DefaultValue=True
+Description=Enable Addons to Fcitx
+
+[Output/HalfPuncAfterNumber]
+Type=Boolean
+DefaultValue=True
+Description=Use English Punc After a Number
+
+[Output/EnterAction]
+Type=Enum
+EnumCount=3
+Enum0=Nothing
+Enum1=Clean
+Enum2=Commit
+DefaultValue=Commit
+Description=Action after press enter
+
+[Output/SemiColonAction]
+Type=Enum
+EnumCount=3
+Enum0=NoChange
+Enum1=Eng
+Enum2=QuickPhrase
+DefaultValue=QuickPhrase
+Description=Action after press SemiColon
+
+[Output/InputEngByCapitalChar]
+Type=Boolean
+DefaultValue=True
+Description=Input English Character if you input upper case
+
+[Output/ConvertPunc]
+Type=Boolean
+DefaultValue=True
+Description=Convert Punc to Chinese Punc
+
+[Output/LegendModeDisablePaging]
+Type=Boolean
+DefaultValue=True
+Description=Disable Paging in Legend Mode
+
+[Output/SendTextWhenSwitchEng]
+Type=Boolean
+DefaultValue=False
+Description=Send inputed Text if Switch to English Mode
+
+[Appearance/CandidateWordNumber]
+Type=Integer
+DefaultValue=5
+Description=Candidate Word Number
+
+[Appearance/MainWindowHideMode]
+Type=Enum
+EnumCount=3
+Enum0=Show
+Enum1=Auto
+Enum2=Hide
+DefaultValue=Show
+Description=Main Window Hide Mode
+
+[Appearance/CenterInputWindow]
+Type=Boolean
+DefaultValue=False
+Description=Show Input Window In the center of screen
+
+[Appearance/ShowInputWindowAfterTriggering]
+Type=Boolean
+DefaultValue=True
+Description=Show Input Window After Trigger Input Mode
+
+[Appearance/ShowPointAfterIndex]
+Type=Boolean
+DefaultValue=True
+Description=Show Point After Index of Candidate Word 
+
+[Appearance/ShowInputSpeed]
+Type=Boolean
+DefaultValue=True
+Description=Show Input Speed
+
+[Appearance/ShowVersion]
+Type=Boolean
+DefaultValue=True
+Description=Show Version
+
+[Appearance/ShowHintWindow]
+Type=Boolean
+DefaultValue=True
+Description=Show Hint Window while ENV is not correctly configured.
+
+[Appearance/SkinType]
+Type=String
+DefaultValue=default
+Description=Skin Name in use
+
+[Hotkey/TriggerKey]
+Type=Hotkey
+DefaultValue=CTRL_SPACE
+Description=Hot key of Triggering Input Method
+
+[Hotkey/ChnEngSwitchKey]
+Type=Enum
+EnumCount=6
+Enum0=R_CTRL
+Enum1=R_SHIFT
+Enum2=L_SHIFT
+Enum3=R_SUPER
+Enum4=L_SUPER
+Enum5=L_CTRL
+DefaultValue=L_CTRL
+Description=Hotkey of Switching Chinese and English Mode
+
+[Hotkey/DoubleSwitchKey]
+Type=Boolean
+DefaultValue=False
+Description=Double click Switch Key to Change Mode
+
+[Hotkey/TimeInterval]
+Type=Integer
+DefaultValue=250
+Description=Interval of Two Key Input
+
+[Hotkey/FollowCursorKey]
+Type=Hotkey
+DefaultValue=CTRL_K
+Description=Hotkey of Switching Follow Cursor Mode
+
+[Hotkey/HideMainWindowKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_H
+Description=Hotkey of Hiding Main Window
+
+[Hotkey/VKSwitchKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_K
+Description=Hotkey of Switching Virtual Keyboard
+
+[Hotkey/TraditionalChnSwitchKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_F
+Description=Hotkey of Switching Traditional Chinese Input Mode On.
+
+[Hotkey/LegendSwitchKey]
+Type=Hotkey
+DefaultValue=CTRL_L
+Description=Hotkey of Switching Legend Mode
+
+[Hotkey/LookupPinyinKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_E
+Description=Hotkey of Looking up the Corresponding pinyin of Word.
+
+[Hotkey/FullWidthSwitchKey]
+Type=Hotkey
+DefaultValue=SHIFT_SPACE
+Description=Hotkey of Switching Full Width Character Mode
+
+[Hotkey/ChnPuncSwitchKey]
+Type=Hotkey
+DefaultValue=ALT_SPACE
+Description=Hotkey of Switch Chinese Punc Mode
+
+[Hotkey/PrevPageKey]
+Type=Hotkey
+DefaultValue=-
+Description=Hotkey of Going Prev Page
+
+[Hotkey/NextPageKey]
+Type=Hotkey
+DefaultValue==
+Description=Hotkey of Going Next Page
+
+[Hotkey/SecondThirdCandWordKey]
+Type=String
+DefaultValue=SHIFT
+Description=Hotkey to Choose Second and Third Candidate Word
+
+[Hotkey/SaveAllKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_S
+Description=Hotkey of Saving All Config and Input History
+
+[Hotkey/SetRecordingKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_J
+Description=Hotkey of Switching Recording Mode
+
+[Hotkey/ResetRecordingKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_A
+Description=Hotkey of Reseting Recording Mode
+
+[InputMethod/PinyinOrder]
+Type=Integer
+DefaultValue=1
+Description=Pinyin Priority Order, Zero to Disable
+
+[InputMethod/ShuangpinOrder]
+Type=Integer
+DefaultValue=1
+Description=Shuangpin Priority Order, Zero to Disable
+
+[InputMethod/DefaultShuangpinSchema]
+Type=String
+DefaultValue=自然码
+Description=Default Shuangpin Schema
+
+[InputMethod/QuweiOrder]
+Type=Integer
+DefaultValue=0
+Description=Quwei Priority Order, Zero to Disable
+
+[InputMethod/TableOrder]
+Type=Integer
+DefaultValue=Table Priority Order, Zero to Disable
+
+[InputMethod/PhraseTips]
+Type=Boolean
+DefaultValue=True
+Description=Give the tips of Phrase
+
+[InputMethod/ExtraIM]
+Type=String
+DefaultValue=
+
+[Pinyin/UseCompletePinyin]
+Type=Boolean
+DefaultValue=False
+Description=Use Complete Pinyin
+
+[Pinyin/AutoCreatePhrase]
+Type=Boolean
+DefaultValue=True
+Description=Auto Create Phrase
+
+[Pinyin/SaveAutoPhrase]
+Type=Boolean
+DefaultValue=False
+Description=Save Auto Created Phrase
+
+[Pinyin/AddFreqWordKey]
+Type=Hotkey
+DefaultValue=CTRL_8
+Description=Hotkey of Adding Frequent Word
+
+[Pinyin/DeleteFreqWordKey]
+Type=Hotkey
+DefaultValue=CTRL_7
+Description=Hotkey of Deleting Frequent Word
+
+[Pinyin/DeleteUserPhraseKey]
+Type=Hotkey
+DefaultValue=CTRL_DELETE
+Description=Hotkey of Delete User Phrase
+
+[Pinyin/InputWordFromPhraseKey]
+Type=String
+DefaultValue=[]
+Description=Hotkey of Inputing Word From Phrase
+
+[Pinyin/BaseOrder]
+Type=Enum
+EnumCount=3
+Enum0=AdjustNo
+Enum1=AdjustFast
+Enum2=AdjustFreq
+DefaultValue=AdjustFreq
+Description=Rule of Candidate Word Order
+
+[Pinyin/PhraseOrder]
+Type=Enum
+EnumCount=3
+Enum0=AdjustNo
+Enum1=AdjustFast
+Enum2=AdjustFreq
+DefaultValue=AdjustFast
+Description=Rule of Candidate Phrase Order
+
+[Pinyin/FreqOrder]
+Type=Enum
+EnumCount=3
+Enum0=AdjustNo
+Enum1=AdjustFast
+Enum2=AdjustFreq
+DefaultValue=AdjustNo
+Description=Rule of Frequent Word Order
+
+[Pinyin/FuzzyAnAng]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy an and ang
+
+[Pinyin/FuzzyEnEng]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy en and eng
+
+[Pinyin/FuzzyIanIang]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy ian and iang
+
+[Pinyin/FuzzyInIng]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy in and ing
+
+[Pinyin/FuzzyOuU]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy ou and u
+
+[Pinyin/FuzzyUanUang]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy uan and uang
+
+[Pinyin/FuzzyCCh]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy c and ch
+
+[Pinyin/FuzzyFH]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy f and h
+
+[Pinyin/FuzzyLN]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy l and n
+
+[Pinyin/FuzzySSH]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy s and sh
+
+[Pinyin/FuzzyZZH]
+Type=Boolean
+DefaultValue=False
+Description=Fuzzy z and zh

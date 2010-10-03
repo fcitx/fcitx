@@ -12,11 +12,12 @@ Summary:	Free Chinese Input Toy for X (XIM)
 Packager:	Xie Yanbo <xyb76@sina.com>
 URL:		http://www.fcitx.org/
 Group:		User Interface/X
-Group(zh_CN):	ÓÃ»§½çÃæ/×ÀÃæ
+Group(zh_CN):	ç”¨æˆ·ç•Œé¢/æ¡Œé¢
 License:	GPL
 Source:		%{name}-%{version}.tar.gz
-#BuildRequires:	XFree86, fontconfig
-BuildRequires:	XFree86-devel
+BuildRequires:	cairo-devel
+BuildRequires:	dbus-devel
+BuildRequires:	dbus-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 
 %description
@@ -24,39 +25,46 @@ FCITX is a simplified Chinese input server. It supports Tables,
 Pinyin and QuWei input method. It's small and fast.
 
 %description -l zh_CN
-Fcitx©¤©¤Ğ¡Æó¶ìÊäÈë·¨¼´Free Chinese Input Toy for X£¬ËüÊÇÒ»¸öÒÔGPL·½Ê½
-·¢²¼µÄ¡¢»ùÓÚXIMµÄ¼òÌåÖĞÎÄÊäÈë·¨(¼´Ô­À´µÄGÎå±Ê)£¬°üÀ¨Âë±í¡¢È«Æ´Æ´Òô¡¢Ë«Æ´
-Æ´ÒôÊäÈë·¨,²¢¿ÉÔËĞĞÔÚLinux¼°ÆäËüÀàUNIXÆ½Ì¨ÉÏ¡£
+Fcitxâ”€â”€å°ä¼é¹…è¾“å…¥æ³•å³Free Chinese Input Toy for Xï¼Œå®ƒæ˜¯ä¸€ä¸ªä»¥GPLæ–¹å¼
+å‘å¸ƒçš„ã€åŸºäºXIMçš„ç®€ä½“ä¸­æ–‡è¾“å…¥æ³•(å³åŸæ¥çš„Gäº”ç¬”)ï¼ŒåŒ…æ‹¬ç è¡¨ã€å…¨æ‹¼æ‹¼éŸ³ã€åŒæ‹¼
+æ‹¼éŸ³è¾“å…¥æ³•,å¹¶å¯è¿è¡Œåœ¨LinuxåŠå…¶å®ƒç±»UNIXå¹³å°ä¸Šã€‚
 Designed by Yuking <yuking_net@suho.com>
 
 %prep
 %setup -q
 
 %build
-%ifarch i386 i486 i586 i686
-CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS"		./configure --prefix=%{prefix} 	--host=i386-pc-linux-gnu
-%else
-CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS"		./configure --prefix=%{prefix}
-%endif
+%configure \
+    --enable-dbus \
+    --enable-tray
 make
 
 %install
+rm -rf $RPM_BUILD_ROOT
+
 make DESTDIR=$RPM_BUILD_ROOT install-strip
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/libfcitx-config.la
+
+%find_lang %{name}
 
 %clean
 [ ${RPM_BUILD_ROOT} != "/" ] && rm -rf ${RPM_BUILD_ROOT}
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog COPYING INSTALL README
 %doc doc/*.txt doc/*.htm
 %{_bindir}/*
-%dir %{_datadir}/fcitx/data
-%{_datadir}/fcitx/data/*.mb
-%{_datadir}/fcitx/data/*.dat
-%{_datadir}/fcitx/data/tables.conf
+%{_datadir}/fcitx/*
+%{_datadir}/pixmaps/*
+%{_libdir}/*
+%{_includedir}/*
 
 %changelog
+* Sat Sep 18 2010 CSSlayer <wengxt@gmail.com>
+- Make it works with newest
+
 * Fri Jun 11 2004 xyb <xyb76@sina.com>
 - Add data/tables.conf
 

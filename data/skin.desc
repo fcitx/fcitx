@@ -1,0 +1,210 @@
+[SkinInfo/Name]
+Type=String
+Description=Skin Name
+
+[SkinInfo/Version]
+Type=String
+Description=Skin Version
+
+[SkinInfo/Author]
+Type=String
+Description=Skin Author
+
+[SkinInfo/Desc]
+Type=String
+Description=Description of Skin
+
+[SkinFont/FontSize]
+Type=Integer
+Description=Input Font Size
+
+[SkinFont/TipColor]
+Type=Color
+Description=Tip Message Color
+
+[SkinFont/InputColor]
+Type=Color
+Description=Input Message Color
+
+[SkinFont/IndexColor]
+Type=Color
+Description=Candidate Index Color
+
+[SkinFont/FirstCandColor]
+Type=Color
+Description=First Candidate Color
+
+[SkinFont/UserPhraseColor]
+Type=Color
+Description=User Phrase Color
+
+[SkinFont/CodeColor]
+Type=Color
+Description=Table Code Color
+
+[SkinFont/OtherColor]
+Type=Color
+Description=Other Color
+
+[SkinFont/ActiveMenuColor]
+Type=Color
+Description=Active Menu Item Character Color
+
+[SkinFont/InactiveMenuColor]
+Type=Color
+Description=Inactive Menu Item Character Color
+
+[SkinMainBar/BackImg]
+Type=Image
+Description=Background Image
+
+[SkinMainBar/Logo]
+Type=Image
+Description=Logo Icon
+
+[SkinMainBar/ZhPunc]
+Type=Image
+Description=Chinese Punc Icon
+
+[SkinMainBar/EnPunc]
+Type=Image
+Description=English Punc Icon
+
+[SkinMainBar/Chs]
+Type=Image
+Description=Simplified Chinese Icon
+
+[SkinMainBar/Cht]
+Type=Image
+Description=Traditional Chinese Icon
+
+[SkinMainBar/HalfCorner]
+Type=Image
+Description=Half Width Character Icon
+
+[SkinMainBar/FullCorner]
+Type=Image
+Description=Full Width Character Icon
+
+[SkinMainBar/Unlock]
+Type=Image
+Description=UnLock Icon
+
+[SkinMainBar/Lock]
+Type=Image
+Description=Lock Icon
+
+[SkinMainBar/Legend]
+Type=Image
+Description=Legend mode Icon
+
+[SkinMainBar/NoLegend]
+Type=Image
+Description=Legend disabled Icon
+
+[SkinMainBar/VK]
+Type=Image
+Description=Virtual Keyboard enabled Icon
+
+[SkinMainBar/NoVK]
+Type=Image
+Description=Virtual Keyboard disabled Icon
+
+[SkinMainBar/Eng]
+Type=Image
+Description=English Mode Icon
+
+[SkinMainBar/Chn]
+Type=Image
+Description=Chinese Mode Icon
+
+[SkinInputBar/BackImg]
+Type=Image
+Description=Background Image
+
+[SkinInputBar/Resize]
+Type=Enum
+EnumCount=3
+Enum0=Copy
+Enum1=Resize
+Enum2=Fix
+Description=Background Resize Rule
+
+[SkinInputBar/ResizePos]
+Type=Integer
+Description=The Resize Position to Left
+
+[SkinInputBar/ResizeWidth]
+Type=Integer
+Description=Width of Resize Part 
+
+[SkinInputBar/InputPos]
+Type=Integer
+Description=Left-down position of Input
+
+[SkinInputBar/OutputPos]
+Type=Integer
+Description=Left-down position of Output
+
+[SkinInputBar/LayoutLeft]
+Type=Integer
+Description=Space to the left
+
+[SkinInputBar/LayoutRight]
+Type=Integer
+Description=Space to the right
+
+[SkinInputBar/CursorColor]
+Type=Color
+Description=Color of Cursor
+
+[SkinInputBar/BackArrow]
+Type=Image
+Description=Prev Page Icon
+
+[SkinInputBar/ForwardArrow]
+Type=Image
+Description=Next Page Icon
+
+[SkinTrayIcon/Active]
+Type=Image
+Description=Active Tray Icon
+
+[SkinTrayIcon/Inactive]
+Type=Image
+Description=Inctive Tray Icon
+
+[SkinMenu/BackImg]
+Type=Image
+Description=Background Image
+
+[SkinMenu/Resize]
+Type=Enum
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+Description=Background Resize Rule
+
+[SkinMenu/MarginTop]
+Type=Integer
+Description=Margin to top
+
+[SkinMenu/MarginBottom]
+Type=Integer
+Description=Margin to bottom
+
+[SkinMenu/MarginLeft]
+Type=Integer
+Description=Margin to left
+
+[SkinMenu/MarginRight]
+Type=Integer
+Description=Margin to right
+
+[SkinMenu/ActiveColor]
+Type=Color
+Description=Active Menu Color
+
+[SkinMenu/LineColor]
+Type=Color
+Description=Space Line Color

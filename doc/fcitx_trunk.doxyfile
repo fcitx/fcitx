@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = fcitx
-PROJECT_NUMBER         = 3.5
+PROJECT_NUMBER         = 3.6.4rc
 OUTPUT_DIRECTORY       = ./
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = Chinese
@@ -81,9 +81,9 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = ../src
-INPUT_ENCODING         = GBK
+INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = 
-RECURSIVE              = NO
+RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 

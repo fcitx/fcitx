@@ -27,14 +27,33 @@
 #include <stdlib.h>
 #endif
 
-#include "../src/internalVersion.c"
+#include "tools/utf8.h"
+#include "../src/core/internalVersion.c"
 
 typedef int     Bool;
 
-#define MAX_CODE_LENGTH 30
-
 #define True	1
 #define False	0
+
+#define STR_KEYCODE 0
+#define STR_CODELEN 1
+#define STR_IGNORECHAR 2
+#define STR_PINYIN 3
+#define STR_PINYINLEN 4
+#define STR_DATA 5
+#define STR_RULE 6
+
+#define CONST_STR_SIZE 7
+
+#define MAX_CODE_LENGTH  30
+#define PHRASE_MAX_LENGTH 10
+#define FH_MAX_LENGTH  10
+#define TABLE_AUTO_SAVE_AFTER 1024
+#define AUTO_PHRASE_COUNT 10000
+#define SINGLE_HZ_COUNT 66000
+
+char* strConst[CONST_STR_SIZE] = { "é”®ç =", "ç é•¿=", "è§„é¿å­—ç¬¦=", "æ‹¼éŸ³=", "æ‹¼éŸ³é•¿åº¦=" , "[æ•°æ®]", "[ç»„è¯è§„åˆ™]"};
+int strLength[CONST_STR_SIZE];
 
 char            strInputCode[100] = "\0";
 char            strIgnoreChars[100] = "\0";
@@ -51,16 +70,23 @@ typedef struct _RECORD {
 } RECORD;
 
 typedef struct _RULE_RULE {
-    unsigned char   iFlag;	// 1 --> ÕıĞò   0 --> ÄæĞò
-    unsigned char   iWhich;	//µÚ¼¸¸ö×Ö
-    unsigned char   iIndex;	//µÚ¼¸¸ö±àÂë
+    unsigned char   iFlag;	// 1 --> æ­£åº   0 --> é€†åº
+    unsigned char   iWhich;	//ç¬¬å‡ ä¸ªå­—
+    unsigned char   iIndex;	//ç¬¬å‡ ä¸ªç¼–ç 
 } RULE_RULE;
 
 typedef struct _RULE {
-    unsigned char   iWords;	//¶àÉÙ¸ö×Ö
-    unsigned char   iFlag;	//1 --> ´óÓÚµÈÓÚiWords  0 --> µÈÓÚiWords
+    unsigned char   iWords;	//å¤šå°‘ä¸ªå­—
+    unsigned char   iFlag;	//1 --> å¤§äºç­‰äºiWords  0 --> ç­‰äºiWords
     RULE_RULE      *rule;
 } RULE;
+
+void InitStrLength()
+{
+	int i;
+	for (i=0;i<CONST_STR_SIZE;i++)
+		strLength[i] = strlen(strConst[i]);
+}
 
 Bool IsValidCode (char cChar)
 {
@@ -118,6 +144,7 @@ int main (int argc, char *argv[])
 	exit (2);
     }
 
+    InitStrLength();
     head = (RECORD *) malloc (sizeof (RECORD));
     head->next = head;
     head->prev = head;
@@ -140,32 +167,37 @@ int main (int argc, char *argv[])
 	if (pstr[0] == '#')
 	    continue;
 
-	if (strstr (pstr, "¼üÂë=")) {
-	    pstr += 5;
+	if (strstr (pstr, strConst[STR_KEYCODE])) {
+	    pstr += strLength[STR_KEYCODE];
 	    strcpy (strInputCode, pstr);
 	}
-	else if (strstr (pstr, "Âë³¤=")) {
-	    pstr += 5;
+	else if (strstr (pstr, strConst[STR_CODELEN])) {
+	    pstr += strLength[STR_CODELEN];
 	    iCodeLength = atoi (pstr);
+        if (iCodeLength > MAX_CODE_LENGTH)
+        {
+            iCodeLength = MAX_CODE_LENGTH;
+            printf("Max Code Length is %d\n", MAX_CODE_LENGTH);
+        }
 	}
-	else if (strstr (pstr, "¹æ±Ü×Ö·û=")) {
-	    pstr += 9;
+	else if (strstr (pstr, strConst[STR_IGNORECHAR])) {
+	    pstr += strLength[STR_IGNORECHAR];
 	    strcpy (strIgnoreChars, pstr);
 	}
-	else if (strstr (pstr, "Æ´Òô=")) {
-	    pstr += 5;
+	else if (strstr (pstr, strConst[STR_PINYIN])) {
+	    pstr += strLength[STR_PINYIN];
 	    while (*pstr == ' ')
 		pstr++;
 	    cPinyinKey = *pstr;
 	}
-	else if (strstr (pstr, "Æ´Òô³¤¶È=")) {
-	    pstr += 9;
+	else if (strstr (pstr, strConst[STR_PINYINLEN])) {
+	    pstr += strLength[STR_PINYINLEN];
 	    iPYCodeLength = atoi (pstr);
 	}
 
-	else if (strstr (pstr, "[Êı¾İ]"))
+	else if (strstr (pstr, strConst[STR_DATA]))
 	    break;
-	else if (strstr (pstr, "[×é´Ê¹æÔò]")) {
+	else if (strstr (pstr, strConst[STR_RULE])) {
 	    bRule = 1;
 	    break;
 	}
@@ -178,7 +210,7 @@ int main (int argc, char *argv[])
 
     if (bRule) {
 	/*
-	 * ×é´Ê¹æÔòÊıÓ¦¸Ã±È¼üÂë³¤¶ÈĞ¡1
+	 * ç»„è¯è§„åˆ™æ•°åº”è¯¥æ¯”é”®ç é•¿åº¦å°1
 	 */
 	rule = (RULE *) malloc (sizeof (RULE) * (iCodeLength - 1));
 
@@ -199,7 +231,7 @@ int main (int argc, char *argv[])
 	    if (pstr[0] == '#')
 		continue;
 
-	    if (strstr (pstr, "[Êı¾İ]"))
+	    if (strstr (pstr, strConst[STR_DATA]))
 		break;
 
 	    switch (*pstr) {
@@ -289,7 +321,7 @@ int main (int argc, char *argv[])
 	    if (pstr[0] == '#')
 		continue;
 
-	    if (strstr (pstr, "[Êı¾İ]"))
+	    if (strstr (pstr, strConst[STR_DATA]))
 		break;
 	}
     }
@@ -297,7 +329,7 @@ int main (int argc, char *argv[])
     if (iPYCodeLength < iCodeLength)
 	iPYCodeLength = iCodeLength;
 
-    if (!strstr (pstr, "[Êı¾İ]")) {
+    if (!strstr (pstr, strConst[STR_DATA])) {
 	printf ("Source File Format Error!\n");
 	exit (1);
     }
@@ -314,9 +346,16 @@ int main (int argc, char *argv[])
 	}
 
 	if (((strCode[0] != cPinyinKey) && (strlen (strCode) > iCodeLength)) || ((strCode[0] == cPinyinKey) && (strlen (strCode) > (iPYCodeLength + 1))))
+    {
+        printf("Delete:  %s %s, Too long\n", strCode, strHZ);
 	    continue;
-	if (strlen (strHZ) > 20)	//×î³¤´Ê×é³¤¶ÈÎª10¸öºº×Ö
+    }
+
+	if (utf8_strlen (strHZ) > PHRASE_MAX_LENGTH)	//æœ€é•¿è¯ç»„é•¿åº¦ä¸º10ä¸ªæ±‰å­—
+    {
+        printf("Delete:  %s %s, Too long\n", strCode, strHZ);
 	    continue;
+    }
 
 	bPY = False;
 	if (strCode[0] == cPinyinKey) {
@@ -324,7 +363,7 @@ int main (int argc, char *argv[])
 	    bPY = True;
 	}
 
-	//²éÕÒÊÇ·ñÖØ¸´
+	//æŸ¥æ‰¾æ˜¯å¦é‡å¤
 	temp = current;
 	if (temp != head) {
 	    if (strcmp (temp->strCode, strCode) >= 0) {
@@ -353,7 +392,7 @@ int main (int argc, char *argv[])
 	    }
 	}
 
-	//²åÔÚtempµÄÇ°Ãæ
+	//æ’åœ¨tempçš„å‰é¢
 	newRec = (RECORD *) malloc (sizeof (RECORD));
 	newRec->strCode = (char *) malloc (sizeof (char) * (iPYCodeLength + 1));
 	newRec->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
@@ -385,7 +424,7 @@ int main (int argc, char *argv[])
 	exit (3);
     }
 
-    //Ğ´Èë°æ±¾ºÅ--Èç¹ûµÚÒ»¸ö×ÖÎª0,±íÊ¾ºóÃæÄÇ¸ö×Ö½ÚÎª°æ±¾ºÅ
+    //å†™å…¥ç‰ˆæœ¬å·--å¦‚æœç¬¬ä¸€ä¸ªå­—ä¸º0,è¡¨ç¤ºåé¢é‚£ä¸ªå­—èŠ‚ä¸ºç‰ˆæœ¬å·
     iTemp = 0;
     fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
     fwrite (&iInternalVersion, sizeof (INT8), 1, fpDict);
@@ -429,3 +468,4 @@ int main (int argc, char *argv[])
 
     return 0;
 }
+// vim: sw=4 sts=4 et tw=100 

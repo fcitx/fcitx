@@ -1,0 +1,39 @@
+#!/bin/sh
+#--------------------------------------
+# fcitx-config
+#
+
+# from xdg-open
+
+detectDE()
+{
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    fi
+}
+
+run_gtk()
+{
+    command=`which fcitx-config-gtk 2>&1`
+    if [ $? -eq 0 ]; then
+        exec $command
+    else
+        run_xdg
+    fi
+}
+
+run_xdg()
+{
+    command=`which xdg-open`
+    if [ $? -eq 0 ]; then
+        exec $command ~/.config/fcitx/config
+    else
+        exit 0
+    fi
+}
+
+detectDE
+
+run_gtk

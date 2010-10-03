@@ -75,7 +75,7 @@ IMListOfAttr Default_ICattr[] =
     {XNLineSpace,               XimType_CARD32},
     {XNPreeditState,            XimType_CARD32},
     {XNSeparatorofNestedList,   XimType_SeparatorOfNestedList},
-    {(char *)NULL, (CARD16) NULL}
+    {(char *)NULL, (CARD16) 0}
 };
 
 IMExtList Default_Extension[] =
@@ -83,7 +83,7 @@ IMExtList Default_Extension[] =
     {"XIM_EXT_MOVE", XIM_EXTENSION, XIM_EXT_MOVE},
     {"XIM_EXT_SET_EVENT_MASK", XIM_EXTENSION, XIM_EXT_SET_EVENT_MASK},
     {"XIM_EXT_FORWARD_KEYEVENT", XIM_EXTENSION, XIM_EXT_FORWARD_KEYEVENT},
-    {(char *) NULL, (CARD8) NULL, (CARD8) NULL}
+    {(char *) NULL, (CARD8) 0, (CARD8) 0}
 };
 
 static void CountAttrList(IMListOfAttr *attr, int *total_count)

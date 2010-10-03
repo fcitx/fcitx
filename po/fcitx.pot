@@ -1,0 +1,1815 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-09-25 09:17+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/config.desc:12
+msgid "Font Locale to display"
+msgstr ""
+
+#: data/config.desc:17
+msgid "Record File of Input"
+msgstr ""
+
+#: data/config.desc:22
+msgid "Use System Tray Icon"
+msgstr ""
+
+#: data/config.desc:27
+msgid "Use DBus to display UI (Require KIMPanel)"
+msgstr ""
+
+#: data/config.desc:32
+msgid "Enable Addons to Fcitx"
+msgstr ""
+
+#: data/config.desc:37
+msgid "Use English Punc After a Number"
+msgstr ""
+
+#: data/config.desc:46
+msgid "Action after press enter"
+msgstr ""
+
+#: data/config.desc:55
+msgid "Action after press SemiColon"
+msgstr ""
+
+#: data/config.desc:60
+msgid "Input English Character if you input upper case"
+msgstr ""
+
+#: data/config.desc:65
+msgid "Convert Punc to Chinese Punc"
+msgstr ""
+
+#: data/config.desc:70
+msgid "Disable Paging in Legend Mode"
+msgstr ""
+
+#: data/config.desc:75
+msgid "Send inputed Text if Switch to English Mode"
+msgstr ""
+
+#: data/config.desc:80
+msgid "Candidate Word Number"
+msgstr ""
+
+#: data/config.desc:89
+msgid "Main Window Hide Mode"
+msgstr ""
+
+#: data/config.desc:94
+msgid "Show Input Window In the center of screen"
+msgstr ""
+
+#: data/config.desc:99
+msgid "Show Input Window After Trigger Input Mode"
+msgstr ""
+
+#: data/config.desc:104
+msgid "Show Point After Index of Candidate Word "
+msgstr ""
+
+#: data/config.desc:109
+msgid "Show Input Speed"
+msgstr ""
+
+#: data/config.desc:114
+msgid "Show Version"
+msgstr ""
+
+#: data/config.desc:119
+msgid "Show Hint Window while ENV is not correctly configured."
+msgstr ""
+
+#: data/config.desc:124
+msgid "Skin Name in use"
+msgstr ""
+
+#: data/config.desc:129
+msgid "Hot key of Triggering Input Method"
+msgstr ""
+
+#: data/config.desc:141
+msgid "Hotkey of Switching Chinese and English Mode"
+msgstr ""
+
+#: data/config.desc:146
+msgid "Double click Switch Key to Change Mode"
+msgstr ""
+
+#: data/config.desc:151
+msgid "Interval of Two Key Input"
+msgstr ""
+
+#: data/config.desc:156
+msgid "Hotkey of Switching Follow Cursor Mode"
+msgstr ""
+
+#: data/config.desc:161
+msgid "Hotkey of Hiding Main Window"
+msgstr ""
+
+#: data/config.desc:166
+msgid "Hotkey of Switching Virtual Keyboard"
+msgstr ""
+
+#: data/config.desc:171
+msgid "Hotkey of Switching Traditional Chinese Input Mode On."
+msgstr ""
+
+#: data/config.desc:176
+msgid "Hotkey of Switching Legend Mode"
+msgstr ""
+
+#: data/config.desc:181
+msgid "Hotkey of Looking up the Corresponding pinyin of Word."
+msgstr ""
+
+#: data/config.desc:186
+msgid "Hotkey of Switching Full Width Character Mode"
+msgstr ""
+
+#: data/config.desc:191
+msgid "Hotkey of Switch Chinese Punc Mode"
+msgstr ""
+
+#: data/config.desc:196
+msgid "Hotkey of Going Prev Page"
+msgstr ""
+
+#: data/config.desc:201
+msgid "Hotkey of Going Next Page"
+msgstr ""
+
+#: data/config.desc:206
+msgid "Hotkey to Choose Second and Third Candidate Word"
+msgstr ""
+
+#: data/config.desc:211
+msgid "Hotkey of Saving All Config and Input History"
+msgstr ""
+
+#: data/config.desc:216
+msgid "Hotkey of Switching Recording Mode"
+msgstr ""
+
+#: data/config.desc:221
+msgid "Hotkey of Reseting Recording Mode"
+msgstr ""
+
+#: data/config.desc:226
+msgid "Pinyin Priority Order, Zero to Disable"
+msgstr ""
+
+#: data/config.desc:231
+msgid "Shuangpin Priority Order, Zero to Disable"
+msgstr ""
+
+#: data/config.desc:236
+msgid "Default Shuangpin Schema"
+msgstr ""
+
+#: data/config.desc:241
+msgid "Quwei Priority Order, Zero to Disable"
+msgstr ""
+
+#: data/config.desc:250
+msgid "Give the tips of Phrase"
+msgstr ""
+
+#: data/config.desc:259
+msgid "Use Complete Pinyin"
+msgstr ""
+
+#: data/config.desc:264
+msgid "Auto Create Phrase"
+msgstr ""
+
+#: data/config.desc:269
+msgid "Save Auto Created Phrase"
+msgstr ""
+
+#: data/config.desc:274
+msgid "Hotkey of Adding Frequent Word"
+msgstr ""
+
+#: data/config.desc:279
+msgid "Hotkey of Deleting Frequent Word"
+msgstr ""
+
+#: data/config.desc:284
+msgid "Hotkey of Delete User Phrase"
+msgstr ""
+
+#: data/config.desc:289
+msgid "Hotkey of Inputing Word From Phrase"
+msgstr ""
+
+#: data/config.desc:298
+msgid "Rule of Candidate Word Order"
+msgstr ""
+
+#: data/config.desc:307
+msgid "Rule of Candidate Phrase Order"
+msgstr ""
+
+#: data/config.desc:316
+msgid "Rule of Frequent Word Order"
+msgstr ""
+
+#: data/config.desc:321
+msgid "Fuzzy an and ang"
+msgstr ""
+
+#: data/config.desc:326
+msgid "Fuzzy en and eng"
+msgstr ""
+
+#: data/config.desc:331
+msgid "Fuzzy ian and iang"
+msgstr ""
+
+#: data/config.desc:336
+msgid "Fuzzy in and ing"
+msgstr ""
+
+#: data/config.desc:341
+msgid "Fuzzy ou and u"
+msgstr ""
+
+#: data/config.desc:346
+msgid "Fuzzy uan and uang"
+msgstr ""
+
+#: data/config.desc:351
+msgid "Fuzzy c and ch"
+msgstr ""
+
+#: data/config.desc:356
+msgid "Fuzzy f and h"
+msgstr ""
+
+#: data/config.desc:361
+msgid "Fuzzy l and n"
+msgstr ""
+
+#: data/config.desc:366
+msgid "Fuzzy s and sh"
+msgstr ""
+
+#: data/config.desc:371
+msgid "Fuzzy z and zh"
+msgstr ""
+
+#: data/table.desc:2
+msgid "Code Table Name"
+msgstr ""
+
+#: data/table.desc:6
+msgid "Icon Name"
+msgstr ""
+
+#: data/table.desc:10
+msgid "Code Table File"
+msgstr ""
+
+#: data/table.desc:14
+msgid "Adjust Order"
+msgstr ""
+
+#: data/table.desc:23
+msgid "Order of Code Table"
+msgstr ""
+
+#: data/table.desc:28
+msgid "Use Pinyin"
+msgstr ""
+
+#: data/table.desc:33
+msgid "Pinyin Key"
+msgstr ""
+
+#: data/table.desc:38
+msgid "Auto Send Candidate Word to Client"
+msgstr ""
+
+#: data/table.desc:43
+msgid "Auto Send Candidate Word if no match in Code Table"
+msgstr ""
+
+#: data/table.desc:48
+msgid "End Key"
+msgstr ""
+
+#: data/table.desc:53
+msgid "Use Matching Key"
+msgstr ""
+
+#: data/table.desc:58
+msgid "Matching Key"
+msgstr ""
+
+#: data/table.desc:63
+msgid "Exact Match"
+msgstr ""
+
+#: data/table.desc:67
+msgid "Auto Phrase"
+msgstr ""
+
+#: data/table.desc:72
+msgid "Auto Phrase Length"
+msgstr ""
+
+#: data/table.desc:77
+msgid "Auto Phrase Phrase"
+msgstr ""
+
+#: data/table.desc:82
+msgid "Save Auto Phrase"
+msgstr ""
+
+#: data/table.desc:87
+msgid "Prompt Table Code"
+msgstr ""
+
+#: data/table.desc:91 data/table.desc:90
+msgid "Symbol"
+msgstr ""
+
+#: data/table.desc:96
+msgid "Symbol File"
+msgstr ""
+
+#: data/table.desc:101 data/table.desc:100
+msgid "Choose"
+msgstr ""
+
+#: data/table.desc:106
+msgid "Enable This Table or Not"
+msgstr ""
+
+#: data/profile.desc:2
+msgid "Main Window Position X"
+msgstr ""
+
+#: data/profile.desc:7
+msgid "Main Window Position Y"
+msgstr ""
+
+#: data/profile.desc:12
+msgid "Input Window Position X"
+msgstr ""
+
+#: data/profile.desc:17
+msgid "Input Window Position Y"
+msgstr ""
+
+#: data/profile.desc:22
+msgid "Use Full Width Character"
+msgstr ""
+
+#: data/profile.desc:27
+msgid "Use Chinese Punctuation"
+msgstr ""
+
+#: data/profile.desc:32
+msgid "Input Window Shows at the position of cursor"
+msgstr ""
+
+#: data/profile.desc:37
+msgid "Prompt the phrases after input"
+msgstr ""
+
+#: data/profile.desc:42
+msgid "Current Input Method Index"
+msgstr ""
+
+#: data/profile.desc:47 data/profile.desc:46
+msgid "Locked"
+msgstr ""
+
+#: data/profile.desc:52
+msgid "Show Main Window in a compact way"
+msgstr ""
+
+#: data/profile.desc:57
+msgid "Use Traditional Chinese in Input"
+msgstr ""
+
+#: data/profile.desc:62
+msgid "Use recording mode"
+msgstr ""
+
+#: data/skin.desc:3
+msgid "Skin Name"
+msgstr ""
+
+#: data/skin.desc:7
+msgid "Skin Version"
+msgstr ""
+
+#: data/skin.desc:11
+msgid "Skin Author"
+msgstr ""
+
+#: data/skin.desc:15
+msgid "Description of Skin"
+msgstr ""
+
+#: data/skin.desc:19
+msgid "Input Font Size"
+msgstr ""
+
+#: data/skin.desc:23
+msgid "Tip Message Color"
+msgstr ""
+
+#: data/skin.desc:27
+msgid "Input Message Color"
+msgstr ""
+
+#: data/skin.desc:31
+msgid "Candidate Index Color"
+msgstr ""
+
+#: data/skin.desc:35
+msgid "First Candidate Color"
+msgstr ""
+
+#: data/skin.desc:39
+msgid "User Phrase Color"
+msgstr ""
+
+#: data/skin.desc:43
+msgid "Table Code Color"
+msgstr ""
+
+#: data/skin.desc:47
+msgid "Other Color"
+msgstr ""
+
+#: data/skin.desc:51
+msgid "Active Menu Item Character Color"
+msgstr ""
+
+#: data/skin.desc:55
+msgid "Inactive Menu Item Character Color"
+msgstr ""
+
+#: data/skin.desc:59 data/skin.desc:123 data/skin.desc:179
+msgid "Background Image"
+msgstr ""
+
+#: data/skin.desc:63
+msgid "Logo Icon"
+msgstr ""
+
+#: data/skin.desc:67
+msgid "Chinese Punc Icon"
+msgstr ""
+
+#: data/skin.desc:71
+msgid "English Punc Icon"
+msgstr ""
+
+#: data/skin.desc:75
+msgid "Simplified Chinese Icon"
+msgstr ""
+
+#: data/skin.desc:79
+msgid "Traditional Chinese Icon"
+msgstr ""
+
+#: data/skin.desc:83
+msgid "Half Width Character Icon"
+msgstr ""
+
+#: data/skin.desc:87
+msgid "Full Width Character Icon"
+msgstr ""
+
+#: data/skin.desc:91
+msgid "UnLock Icon"
+msgstr ""
+
+#: data/skin.desc:95
+msgid "Lock Icon"
+msgstr ""
+
+#: data/skin.desc:99
+msgid "Legend mode Icon"
+msgstr ""
+
+#: data/skin.desc:103
+msgid "Legend disabled Icon"
+msgstr ""
+
+#: data/skin.desc:107
+msgid "Virtual Keyboard enabled Icon"
+msgstr ""
+
+#: data/skin.desc:111
+msgid "Virtual Keyboard disabled Icon"
+msgstr ""
+
+#: data/skin.desc:115
+msgid "English Mode Icon"
+msgstr ""
+
+#: data/skin.desc:119
+msgid "Chinese Mode Icon"
+msgstr ""
+
+#: data/skin.desc:131 data/skin.desc:186
+msgid "Background Resize Rule"
+msgstr ""
+
+#: data/skin.desc:135
+msgid "The Resize Position to Left"
+msgstr ""
+
+#: data/skin.desc:139
+msgid "Width of Resize Part "
+msgstr ""
+
+#: data/skin.desc:143
+msgid "Left-down position of Input"
+msgstr ""
+
+#: data/skin.desc:147
+msgid "Left-down position of Output"
+msgstr ""
+
+#: data/skin.desc:151
+msgid "Space to the left"
+msgstr ""
+
+#: data/skin.desc:155
+msgid "Space to the right"
+msgstr ""
+
+#: data/skin.desc:159
+msgid "Color of Cursor"
+msgstr ""
+
+#: data/skin.desc:163
+msgid "Prev Page Icon"
+msgstr ""
+
+#: data/skin.desc:167
+msgid "Next Page Icon"
+msgstr ""
+
+#: data/skin.desc:171
+msgid "Active Tray Icon"
+msgstr ""
+
+#: data/skin.desc:175
+msgid "Inctive Tray Icon"
+msgstr ""
+
+#: data/skin.desc:190
+msgid "Margin to top"
+msgstr ""
+
+#: data/skin.desc:194
+msgid "Margin to bottom"
+msgstr ""
+
+#: data/skin.desc:198
+msgid "Margin to left"
+msgstr ""
+
+#: data/skin.desc:202
+msgid "Margin to right"
+msgstr ""
+
+#: data/skin.desc:206
+msgid "Active Menu Color"
+msgstr ""
+
+#: data/skin.desc:210
+msgid "Space Line Color"
+msgstr ""
+
+#: data/table/erbi.conf:2
+msgid "Erbi"
+msgstr ""
+
+#: data/table/wanfeng.conf:2
+msgid "Wanfeng"
+msgstr ""
+
+#: data/table/zrm.conf:2
+msgid "Ziranma"
+msgstr ""
+
+#: data/table/wbx.conf:2
+msgid "Wubi"
+msgstr ""
+
+#: data/table/db.conf:2
+msgid "Dianbaoma"
+msgstr ""
+
+#: data/table/cangjie.conf:2
+msgid "Cangjie"
+msgstr ""
+
+#: data/table/wbpy.conf:2
+msgid "WubiPinyin"
+msgstr ""
+
+#: data/table/qxm.conf:2
+msgid "Bingchan"
+msgstr ""
+
+#: data/addon.desc:1 data/skin.desc:1 data/table.desc:1
+msgid "Name"
+msgstr ""
+
+#: data/addon.desc:4
+msgid "Category"
+msgstr ""
+
+#: data/addon.desc:9 data/table.desc:105
+msgid "Enabled"
+msgstr ""
+
+#: data/addon.desc:13
+msgid "Module"
+msgstr ""
+
+#: data/addon.desc:16
+msgid "Type"
+msgstr ""
+
+#: data/config.desc:1
+msgid "FontEn"
+msgstr ""
+
+#: data/config.desc:5
+msgid "FontZh"
+msgstr ""
+
+#: data/config.desc:9
+msgid "FontLocale"
+msgstr ""
+
+#: data/config.desc:14
+msgid "RecordFile"
+msgstr ""
+
+#: data/config.desc:19
+msgid "UseTray"
+msgstr ""
+
+#: data/config.desc:24
+msgid "UseDBus"
+msgstr ""
+
+#: data/config.desc:29
+msgid "EnableAddons"
+msgstr ""
+
+#: data/config.desc:34
+msgid "HalfPuncAfterNumber"
+msgstr ""
+
+#: data/config.desc:39
+msgid "EnterAction"
+msgstr ""
+
+#: data/config.desc:48
+msgid "SemiColonAction"
+msgstr ""
+
+#: data/config.desc:57
+msgid "InputEngByCapitalChar"
+msgstr ""
+
+#: data/config.desc:62
+msgid "ConvertPunc"
+msgstr ""
+
+#: data/config.desc:67
+msgid "LegendModeDisablePaging"
+msgstr ""
+
+#: data/config.desc:72
+msgid "SendTextWhenSwitchEng"
+msgstr ""
+
+#: data/config.desc:77
+msgid "CandidateWordNumber"
+msgstr ""
+
+#: data/config.desc:82
+msgid "MainWindowHideMode"
+msgstr ""
+
+#: data/config.desc:91
+msgid "CenterInputWindow"
+msgstr ""
+
+#: data/config.desc:96
+msgid "ShowInputWindowAfterTriggering"
+msgstr ""
+
+#: data/config.desc:101
+msgid "ShowPointAfterIndex"
+msgstr ""
+
+#: data/config.desc:106
+msgid "ShowInputSpeed"
+msgstr ""
+
+#: data/config.desc:111
+msgid "ShowVersion"
+msgstr ""
+
+#: data/config.desc:116
+msgid "ShowHintWindow"
+msgstr ""
+
+#: data/config.desc:121
+msgid "SkinType"
+msgstr ""
+
+#: data/config.desc:126
+msgid "TriggerKey"
+msgstr ""
+
+#: data/config.desc:131
+msgid "ChnEngSwitchKey"
+msgstr ""
+
+#: data/config.desc:143
+msgid "DoubleSwitchKey"
+msgstr ""
+
+#: data/config.desc:148
+msgid "TimeInterval"
+msgstr ""
+
+#: data/config.desc:153
+msgid "FollowCursorKey"
+msgstr ""
+
+#: data/config.desc:158
+msgid "HideMainWindowKey"
+msgstr ""
+
+#: data/config.desc:163
+msgid "VKSwitchKey"
+msgstr ""
+
+#: data/config.desc:168
+msgid "TraditionalChnSwitchKey"
+msgstr ""
+
+#: data/config.desc:173
+msgid "LegendSwitchKey"
+msgstr ""
+
+#: data/config.desc:178
+msgid "LookupPinyinKey"
+msgstr ""
+
+#: data/config.desc:183
+msgid "FullWidthSwitchKey"
+msgstr ""
+
+#: data/config.desc:188
+msgid "ChnPuncSwitchKey"
+msgstr ""
+
+#: data/config.desc:193
+msgid "PrevPageKey"
+msgstr ""
+
+#: data/config.desc:198
+msgid "NextPageKey"
+msgstr ""
+
+#: data/config.desc:203
+msgid "SecondThirdCandWordKey"
+msgstr ""
+
+#: data/config.desc:208
+msgid "SaveAllKey"
+msgstr ""
+
+#: data/config.desc:213
+msgid "SetRecordingKey"
+msgstr ""
+
+#: data/config.desc:218
+msgid "ResetRecordingKey"
+msgstr ""
+
+#: data/config.desc:223
+msgid "PinyinOrder"
+msgstr ""
+
+#: data/config.desc:228
+msgid "ShuangpinOrder"
+msgstr ""
+
+#: data/config.desc:233
+msgid "DefaultShuangpinSchema"
+msgstr ""
+
+#: data/config.desc:238
+msgid "QuweiOrder"
+msgstr ""
+
+#: data/config.desc:243
+msgid "TableOrder"
+msgstr ""
+
+#: data/config.desc:247
+msgid "PhraseTips"
+msgstr ""
+
+#: data/config.desc:252
+msgid "ExtraIM"
+msgstr ""
+
+#: data/config.desc:256
+msgid "UseCompletePinyin"
+msgstr ""
+
+#: data/config.desc:261
+msgid "AutoCreatePhrase"
+msgstr ""
+
+#: data/config.desc:266 data/table.desc:81
+msgid "SaveAutoPhrase"
+msgstr ""
+
+#: data/config.desc:271
+msgid "AddFreqWordKey"
+msgstr ""
+
+#: data/config.desc:276
+msgid "DeleteFreqWordKey"
+msgstr ""
+
+#: data/config.desc:281
+msgid "DeleteUserPhraseKey"
+msgstr ""
+
+#: data/config.desc:286
+msgid "InputWordFromPhraseKey"
+msgstr ""
+
+#: data/config.desc:291
+msgid "BaseOrder"
+msgstr ""
+
+#: data/config.desc:300
+msgid "PhraseOrder"
+msgstr ""
+
+#: data/config.desc:309
+msgid "FreqOrder"
+msgstr ""
+
+#: data/config.desc:318
+msgid "FuzzyAnAng"
+msgstr ""
+
+#: data/config.desc:323
+msgid "FuzzyEnEng"
+msgstr ""
+
+#: data/config.desc:328
+msgid "FuzzyIanIang"
+msgstr ""
+
+#: data/config.desc:333
+msgid "FuzzyInIng"
+msgstr ""
+
+#: data/config.desc:338
+msgid "FuzzyOuU"
+msgstr ""
+
+#: data/config.desc:343
+msgid "FuzzyUanUang"
+msgstr ""
+
+#: data/config.desc:348
+msgid "FuzzyCCh"
+msgstr ""
+
+#: data/config.desc:353
+msgid "FuzzyFH"
+msgstr ""
+
+#: data/config.desc:358
+msgid "FuzzyLN"
+msgstr ""
+
+#: data/config.desc:363
+msgid "FuzzySSH"
+msgstr ""
+
+#: data/config.desc:368
+msgid "FuzzyZZH"
+msgstr ""
+
+#: data/profile.desc:1
+msgid "MainWindowOffsetX"
+msgstr ""
+
+#: data/profile.desc:6
+msgid "MainWindowOffsetY"
+msgstr ""
+
+#: data/profile.desc:11
+msgid "InputWindowOffsetX"
+msgstr ""
+
+#: data/profile.desc:16
+msgid "InputWindowOffsetY"
+msgstr ""
+
+#: data/profile.desc:21
+msgid "Corner"
+msgstr ""
+
+#: data/profile.desc:26
+msgid "ChnPunc"
+msgstr ""
+
+#: data/profile.desc:31
+msgid "TrackCursor"
+msgstr ""
+
+#: data/profile.desc:36
+msgid "UseLegend"
+msgstr ""
+
+#: data/profile.desc:41
+msgid "IMIndex"
+msgstr ""
+
+#: data/profile.desc:51
+msgid "CompactMainWindow"
+msgstr ""
+
+#: data/profile.desc:56
+msgid "UseGBKT"
+msgstr ""
+
+#: data/profile.desc:61
+msgid "Recording"
+msgstr ""
+
+#: data/skin.desc:5
+msgid "Version"
+msgstr ""
+
+#: data/skin.desc:9
+msgid "Author"
+msgstr ""
+
+#: data/skin.desc:13
+msgid "Desc"
+msgstr ""
+
+#: data/skin.desc:17
+msgid "FontSize"
+msgstr ""
+
+#: data/skin.desc:21
+msgid "TipColor"
+msgstr ""
+
+#: data/skin.desc:25
+msgid "InputColor"
+msgstr ""
+
+#: data/skin.desc:29
+msgid "IndexColor"
+msgstr ""
+
+#: data/skin.desc:33
+msgid "FirstCandColor"
+msgstr ""
+
+#: data/skin.desc:37
+msgid "UserPhraseColor"
+msgstr ""
+
+#: data/skin.desc:41
+msgid "CodeColor"
+msgstr ""
+
+#: data/skin.desc:45
+msgid "OtherColor"
+msgstr ""
+
+#: data/skin.desc:49
+msgid "ActiveMenuColor"
+msgstr ""
+
+#: data/skin.desc:53
+msgid "InactiveMenuColor"
+msgstr ""
+
+#: data/skin.desc:57 data/skin.desc:121 data/skin.desc:177
+msgid "BackImg"
+msgstr ""
+
+#: data/skin.desc:61
+msgid "Logo"
+msgstr ""
+
+#: data/skin.desc:65
+msgid "ZhPunc"
+msgstr ""
+
+#: data/skin.desc:69
+msgid "EnPunc"
+msgstr ""
+
+#: data/skin.desc:73
+msgid "Chs"
+msgstr ""
+
+#: data/skin.desc:77
+msgid "Cht"
+msgstr ""
+
+#: data/skin.desc:81
+msgid "HalfCorner"
+msgstr ""
+
+#: data/skin.desc:85
+msgid "FullCorner"
+msgstr ""
+
+#: data/skin.desc:89
+msgid "Unlock"
+msgstr ""
+
+#: data/skin.desc:93
+msgid "Lock"
+msgstr ""
+
+#: data/skin.desc:97
+msgid "Legend"
+msgstr ""
+
+#: data/skin.desc:101
+msgid "NoLegend"
+msgstr ""
+
+#: data/skin.desc:105
+msgid "VK"
+msgstr ""
+
+#: data/skin.desc:109
+msgid "NoVK"
+msgstr ""
+
+#: data/skin.desc:113 unknown
+msgid "Eng"
+msgstr ""
+
+#: data/skin.desc:117
+msgid "Chn"
+msgstr ""
+
+#: data/skin.desc:125 data/skin.desc:181 unknown
+msgid "Resize"
+msgstr ""
+
+#: data/skin.desc:133
+msgid "ResizePos"
+msgstr ""
+
+#: data/skin.desc:137
+msgid "ResizeWidth"
+msgstr ""
+
+#: data/skin.desc:141
+msgid "InputPos"
+msgstr ""
+
+#: data/skin.desc:145
+msgid "OutputPos"
+msgstr ""
+
+#: data/skin.desc:149
+msgid "LayoutLeft"
+msgstr ""
+
+#: data/skin.desc:153
+msgid "LayoutRight"
+msgstr ""
+
+#: data/skin.desc:157
+msgid "CursorColor"
+msgstr ""
+
+#: data/skin.desc:161
+msgid "BackArrow"
+msgstr ""
+
+#: data/skin.desc:165
+msgid "ForwardArrow"
+msgstr ""
+
+#: data/skin.desc:169
+msgid "Active"
+msgstr ""
+
+#: data/skin.desc:173
+msgid "Inactive"
+msgstr ""
+
+#: data/skin.desc:188
+msgid "MarginTop"
+msgstr ""
+
+#: data/skin.desc:192
+msgid "MarginBottom"
+msgstr ""
+
+#: data/skin.desc:196
+msgid "MarginLeft"
+msgstr ""
+
+#: data/skin.desc:200
+msgid "MarginRight"
+msgstr ""
+
+#: data/skin.desc:204
+msgid "ActiveColor"
+msgstr ""
+
+#: data/skin.desc:208
+msgid "LineColor"
+msgstr ""
+
+#: data/table.desc:5
+msgid "IconName"
+msgstr ""
+
+#: data/table.desc:9
+msgid "File"
+msgstr ""
+
+#: data/table.desc:13
+msgid "AdjustOrder"
+msgstr ""
+
+#: data/table.desc:22
+msgid "Priority"
+msgstr ""
+
+#: data/table.desc:27
+msgid "UsePY"
+msgstr ""
+
+#: data/table.desc:32
+msgid "PYKey"
+msgstr ""
+
+#: data/table.desc:37
+msgid "AutoSend"
+msgstr ""
+
+#: data/table.desc:42
+msgid "NoneMatchAutoSend"
+msgstr ""
+
+#: data/table.desc:47
+msgid "EndKey"
+msgstr ""
+
+#: data/table.desc:52
+msgid "UseMatchingKey"
+msgstr ""
+
+#: data/table.desc:57
+msgid "MatchingKey"
+msgstr ""
+
+#: data/table.desc:62
+msgid "ExactMatch"
+msgstr ""
+
+#: data/table.desc:66
+msgid "AutoPhrase"
+msgstr ""
+
+#: data/table.desc:71
+msgid "AutoPhraseLength"
+msgstr ""
+
+#: data/table.desc:76
+msgid "AutoPhrasePhrase"
+msgstr ""
+
+#: data/table.desc:86
+msgid "PromptTableCode"
+msgstr ""
+
+#: data/table.desc:95
+msgid "SymbolFile"
+msgstr ""
+
+# unknown
+msgid "Addon"
+msgstr ""
+
+# unknown
+msgid "Appearance"
+msgstr ""
+
+# unknown
+msgid "CodeTable"
+msgstr ""
+
+# unknown
+msgid "Hotkey"
+msgstr ""
+
+# unknown
+#: unknown
+msgid "InputMethod"
+msgstr ""
+
+# unknown
+msgid "Output"
+msgstr ""
+
+# unknown
+#: ../src/im/pinyin/py.h:40
+msgid "Pinyin"
+msgstr ""
+
+# unknown
+msgid "Profile"
+msgstr ""
+
+# unknown
+msgid "Program"
+msgstr ""
+
+# unknown
+msgid "SkinFont"
+msgstr ""
+
+# unknown
+msgid "SkinInfo"
+msgstr ""
+
+# unknown
+msgid "SkinInputBar"
+msgstr ""
+
+# unknown
+msgid "SkinMainBar"
+msgstr ""
+
+# unknown
+msgid "SkinMenu"
+msgstr ""
+
+# unknown
+msgid "SkinTrayIcon"
+msgstr ""
+
+#: unknown
+msgid "AdjustFast"
+msgstr ""
+
+#: unknown
+msgid "AdjustFreq"
+msgstr ""
+
+#: unknown
+msgid "AdjustNo"
+msgstr ""
+
+#: unknown
+msgid "Auto"
+msgstr ""
+
+#: unknown
+msgid "Clean"
+msgstr ""
+
+#: unknown
+msgid "Commit"
+msgstr ""
+
+#: unknown
+msgid "Copy"
+msgstr ""
+
+#: unknown
+msgid "Fix"
+msgstr ""
+
+#: unknown
+msgid "Hide"
+msgstr ""
+
+#: unknown
+msgid "L_CTRL"
+msgstr ""
+
+#: unknown
+msgid "L_SHIFT"
+msgstr ""
+
+#: unknown
+msgid "L_SUPER"
+msgstr ""
+
+#: unknown
+msgid "NoChange"
+msgstr ""
+
+#: unknown
+msgid "Nothing"
+msgstr ""
+
+#: unknown
+msgid "QuickPhrase"
+msgstr ""
+
+#: unknown
+msgid "R_CTRL"
+msgstr ""
+
+#: unknown
+msgid "R_SHIFT"
+msgstr ""
+
+#: unknown
+msgid "R_SUPER"
+msgstr ""
+
+#: unknown
+msgid "SharedLibrary"
+msgstr ""
+
+#: unknown
+msgid "Show"
+msgstr ""
+
+#: ../src/interface/ImeRemote.c:170
+#, c-format
+msgid "Can't open socket %s: %s"
+msgstr ""
+
+#: ../src/interface/DBus.c:103
+#, c-format
+msgid "Connection Error (%s)"
+msgstr ""
+
+#: ../src/interface/DBus.c:115
+#, c-format
+msgid "Name Error (%s)"
+msgstr ""
+
+#: ../src/interface/DBus.c:129
+#, c-format
+msgid "Match Error (%s)"
+msgstr ""
+
+#: ../src/interface/DBus.c:164
+msgid "MovePreeditCaret"
+msgstr ""
+
+#: ../src/interface/DBus.c:167 ../src/interface/DBus.c:179
+#: ../src/interface/DBus.c:223
+msgid "Message has no arguments!"
+msgstr ""
+
+#: ../src/interface/DBus.c:169 ../src/interface/DBus.c:181
+msgid "Argument is not INT32!"
+msgstr ""
+
+#: ../src/interface/DBus.c:172
+#, c-format
+msgid "Got Signal with value %d"
+msgstr ""
+
+#: ../src/interface/DBus.c:176
+msgid "SelectCandidate: "
+msgstr ""
+
+#: ../src/interface/DBus.c:206
+#, c-format
+msgid "%d:%s"
+msgstr ""
+
+#: ../src/interface/DBus.c:210
+msgid "LookupTablePageUp"
+msgstr ""
+
+#: ../src/interface/DBus.c:215
+msgid "LookupTablePageDown"
+msgstr ""
+
+#: ../src/interface/DBus.c:220
+msgid "TriggerProperty: "
+msgstr ""
+
+#: ../src/interface/DBus.c:225
+msgid "Argument is not STRING!"
+msgstr ""
+
+#: ../src/interface/DBus.c:228
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: ../src/interface/DBus.c:234
+msgid "PanelCreated"
+msgstr ""
+
+#: ../src/interface/DBus.c:238
+msgid "Exit"
+msgstr ""
+
+#: ../src/interface/DBus.c:241
+msgid "ReloadConfig"
+msgstr ""
+
+#: ../src/interface/DBus.c:263 ../src/interface/DBus.c:297
+#: ../src/interface/DBus.c:344 ../src/interface/DBus.c:391
+#: ../src/interface/DBus.c:425 ../src/interface/DBus.c:459
+#: ../src/interface/DBus.c:493 ../src/interface/DBus.c:527
+#: ../src/interface/DBus.c:561 ../src/interface/DBus.c:595
+#: ../src/interface/DBus.c:657 ../src/interface/DBus.c:691
+#: ../src/interface/DBus.c:729 ../src/interface/DBus.c:768
+#: ../src/interface/DBus.c:805
+msgid "Message Null"
+msgstr ""
+
+#: ../src/interface/DBus.c:270 ../src/interface/DBus.c:275
+#: ../src/interface/DBus.c:315 ../src/interface/DBus.c:322
+#: ../src/interface/DBus.c:362 ../src/interface/DBus.c:369
+#: ../src/interface/DBus.c:398 ../src/interface/DBus.c:403
+#: ../src/interface/DBus.c:432 ../src/interface/DBus.c:437
+#: ../src/interface/DBus.c:466 ../src/interface/DBus.c:471
+#: ../src/interface/DBus.c:500 ../src/interface/DBus.c:505
+#: ../src/interface/DBus.c:534 ../src/interface/DBus.c:539
+#: ../src/interface/DBus.c:568 ../src/interface/DBus.c:573
+#: ../src/interface/DBus.c:608 ../src/interface/DBus.c:616
+#: ../src/interface/DBus.c:625 ../src/interface/DBus.c:635
+#: ../src/interface/DBus.c:664 ../src/interface/DBus.c:669
+#: ../src/interface/DBus.c:699 ../src/interface/DBus.c:702
+#: ../src/interface/DBus.c:707 ../src/interface/DBus.c:738
+#: ../src/interface/DBus.c:741 ../src/interface/DBus.c:746
+#: ../src/interface/DBus.c:775 ../src/interface/DBus.c:778
+#: ../src/interface/DBus.c:783 ../src/interface/DBus.c:812
+#: ../src/interface/DBus.c:817
+msgid "Out Of Memory!"
+msgstr ""
+
+#: ../src/interface/DBus.c:840
+#, c-format
+msgid "Type: %d Text: %s"
+msgstr ""
+
+#: ../src/interface/DBus.c:866
+#, c-format
+msgid "Labels %d, Texts %d, CMB:%s"
+msgstr ""
+
+#: ../src/interface/DBus.c:902
+#, c-format
+msgid "updateMesssages Up:%s"
+msgstr ""
+
+#: ../src/ui/tray.c:154
+#, c-format
+msgid "X error %i on opcode send"
+msgstr ""
+
+#: ../src/ui/ui.c:81
+msgid "FCITX can only run under X"
+msgstr ""
+
+#: ../src/ui/ui.c:123
+msgid "XEvent--Expose"
+msgstr ""
+
+#: ../src/ui/ui.c:314 ../src/ui/ui.c:321
+msgid "Unable to create process"
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:340
+msgid "About Fcitx"
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:342
+msgid "Switch Skin"
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:343
+msgid "Switch IM"
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:344
+msgid "Switch VK"
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:346
+msgid "Fcitx Config ..."
+msgstr ""
+
+#: ../src/ui/MenuWindow.c:347
+msgid "Exit Fcitx"
+msgstr ""
+
+#: ../src/ui/InputWindow.c:164
+msgid "DISPLAY InputWindow"
+msgstr ""
+
+#: ../src/ui/InputWindow.c:189
+msgid "CAL InputWindow"
+msgstr ""
+
+#: ../src/ui/MainWindow.c:123
+msgid "DISPLAY MainWindow"
+msgstr ""
+
+#: ../src/ui/MainWindow.c:144
+msgid "DRAW MainWindow"
+msgstr ""
+
+#: ../src/ui/skin.c:162
+msgid "Can not load default skin, is installion correct?"
+msgstr ""
+
+#: ../src/ui/skin.c:167
+#, c-format
+msgid "Can not load skin %s, return to default"
+msgstr ""
+
+#: ../src/ui/font.c:33
+msgid "Error: Load fontconfig failed"
+msgstr ""
+
+#: ../src/ui/font.c:85
+#, c-format
+msgid "your current font is: %s"
+msgstr ""
+
+#: ../src/ui/font.c:102
+msgid "no valid font."
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:265
+msgid "Enum option duplicated."
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:278
+msgid "Enum option number must larger than 0"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:288
+msgid "Enum Option is invalid, take it as string"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:295
+#, c-format
+msgid "Unknown type, take it as string: %s"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:301
+msgid "Missing type, take it as string"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:674
+#, c-format
+msgid "Configure group name error: line %d"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:684
+#, c-format
+msgid "Duplicate group name, merge with the previous: %s :line %d"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:701
+#, c-format
+msgid "Invalid Entry: line %d missing '='"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:711
+#, c-format
+msgid "Duplicate option, overwrite: line %d"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:823
+#, c-format
+msgid "Option %s is Invalid, Use Default Value %s"
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:832
+#, c-format
+msgid "Option %s is Invalid."
+msgstr ""
+
+#: ../src/fcitx-config/fcitx-config.c:867
+#, c-format
+msgid "no default option for %s/%s"
+msgstr ""
+
+#: ../src/im/special/punc.c:55
+msgid "Can't open Chinese punc file."
+msgstr ""
+
+#: ../src/im/qw/qw.h:25
+msgid "Quwei"
+msgstr ""
+
+#: ../src/im/pinyin/py.c:169
+msgid "Can not find System Database of Pinyin!"
+msgstr ""
+
+#: ../src/im/pinyin/py.c:2320
+#, c-format
+msgid "Cannot Save User Pinyin Database: %s"
+msgstr ""
+
+#: ../src/im/pinyin/py.c:2382
+#, c-format
+msgid "Cannot Save Frequent word: %s"
+msgstr ""
+
+#: ../src/im/pinyin/py.c:2452
+#, c-format
+msgid "Cannot Save Pinyin Index: %s"
+msgstr ""
+
+#: ../src/im/pinyin/sp.h:23
+msgid "Shuangpin"
+msgstr ""
+
+#: ../src/im/table/table.c:181
+#, c-format
+msgid "Load Table Config File:%s"
+msgstr ""
+
+#: ../src/im/table/table.c:191
+#, c-format
+msgid "Table Config %s is %s"
+msgstr ""
+
+#: ../src/im/table/table.c:255
+msgid "Loading Table Dict"
+msgstr ""
+
+#: ../src/im/table/table.c:265
+#, c-format
+msgid "Load Table Dict from %s"
+msgstr ""
+
+#: ../src/im/table/table.c:271
+#, c-format
+msgid "Cannot load table file: %s"
+msgstr ""
+
+#: ../src/im/table/table.c:393
+msgid "Load Table Dict OK"
+msgstr ""
+
+#: ../src/im/table/table.c:423
+msgid "Loading Autophrase."
+msgstr ""
+
+#: ../src/im/table/table.c:464
+msgid "Load Autophrase OK"
+msgstr ""
+
+#: ../src/im/table/table.c:602
+#, c-format
+msgid "Cannot create table file: %s"
+msgstr ""
+
+#: ../src/im/table/table.c:609
+msgid "Saving TABLE Dict."
+msgstr ""
+
+#: ../src/im/table/table.c:691
+msgid "Rename OK"
+msgstr ""
+
+#: ../src/im/extra/extra.c:249
+msgid "ExtraIM: init fail"
+msgstr ""
+
+#: ../src/im/extra/extra.c:279
+#, c-format
+msgid "ExtraIM: open %s fail %s"
+msgstr ""
+
+#: ../src/im/extra/extra.c:285
+msgid "ExtraIM: bad im"
+msgstr ""
+
+#: ../src/tools/configfile.c:273
+#, c-format
+msgid "Load Config File %s"
+msgstr ""
+
+#: ../src/tools/tools.c:254
+msgid "pthread mutexattr init failed"
+msgstr ""
+
+#: ../src/tools/tools.c:261
+msgid "pthread mutex init failed"
+msgstr ""
+
+#: ../src/core/addon.c:134
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr ""
+
+#: ../src/core/addon.c:144
+#, c-format
+msgid "Addon Config %s is %s"
+msgstr ""
+
+#: ../src/core/xim.c:492
+msgid "Recording file must be an absolute path."
+msgstr ""
+
+#: ../src/core/xim.c:525
+#, c-format
+msgid "Sending %s  icid=%d connectid=%d\n"
+msgstr ""
+
+#: ../src/core/xim.c:587
+msgid "Can't Create imWindow"
+msgstr ""
+
+#: ../src/core/xim.c:597
+msgid "XMODIFIERS Error."
+msgstr ""
+
+#: ../src/core/xim.c:602
+msgid "Please set XMODIFIERS."
+msgstr ""
+
+#: ../src/core/xim.c:617
+msgid "Please check your environment varibles."
+msgstr ""
+
+#: ../src/core/xim.c:618
+msgid ""
+"You need to set environment varibles below to make fcitx work correctly."
+msgstr ""
+
+#: ../src/core/xim.c:622
+msgid "You can set those variables in ~/.bashrc ."
+msgstr ""
+
+#: ../src/core/xim.c:623
+msgid "Setting Hint"
+msgstr ""
+
+#: ../src/core/xim.c:678
+#, c-format
+msgid "Start FCITX error. Another XIM daemon named %s is running?"
+msgstr ""
+
+#: ../src/core/xim.c:958
+#, c-format
+msgid "Set icid=%d(connect_id=%d) to %d"
+msgstr ""
+
+#: ../src/core/MyErrorsHandlers.c:87
+#, c-format
+msgid "FCITX -- Get Signal No.: %d"
+msgstr ""

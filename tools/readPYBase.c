@@ -1,7 +1,28 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <stdio.h>
 
-#include "py.h"
+#include "im/pinyin/py.h"
 #include "pyTools.h"
+#include "fcitx-config/xdg.h"
 
 void usage();
 
@@ -9,14 +30,34 @@ int main(int argc, char **argv)
 {
   FILE *fi;
   int i, PYFACount;
-  char *pybase_mb;
+  char *pybase_mb = NULL;
   struct _HZMap *HZMap;
+  char c;
 
-  if (argc > 2)
-    usage();
+  while((c = getopt(argc, argv, "b:h")) != -1)
+  {
+      switch(c)
+      {
+          case 'b':
+              pybase_mb = strdup(optarg);
+              break;
+          case 'h':
+          default:
+              usage();
+      }
+  }
 
-  pybase_mb = strdup((argc > 1) ? argv[1] : (PKGDATADIR "/data/" PY_BASE_FILE));
-  fi = tryopen(pybase_mb);
+  if (pybase_mb)
+      fi = fopen (pybase_mb , "r");
+  else
+      fi = GetXDGFileData(PY_BASE_FILE, "r", &pybase_mb);
+  if (!fi)
+  {
+    perror("fopen");
+    fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
+    exit(1);
+  }
+  free(pybase_mb);
 
   PYFACount = LoadPYBase(fi, &HZMap);
   if (PYFACount > 0)
@@ -33,11 +74,9 @@ int main(int argc, char **argv)
     {
       int j;
       printf("%s: HZ Index\n", HZMap[i].Map);
-      for (j = 0; j < HZMap[i].BaseCount / 2; ++j)
+      for (j = 0; j < HZMap[i].BaseCount; ++j)
       {
-        printf("    ");
-        fwrite(HZMap[i].HZ + 2 * j, 2, 1, stdout);
-        printf(" %5d\n", *(HZMap[i].Index + 2 * j));
+        printf("\t%s %5d", HZMap[i].HZ[j],HZMap[i].Index[j]);
       }
       printf("\n");
     }
@@ -52,12 +91,13 @@ void usage()
   puts(
 "readPYBase - read pybase.mb file and display its contents\n"
 "\n"
-"  usage: readPYBase [<pybase.mb>]\n"
+"  usage: readPYBase [OPTION]\n"
 "\n"
-"  <pybase.mb>    full path to the file, usually\n"
+"  -b <pybase.mb> full path to the file, usually\n"
 "                 " PKGDATADIR "/data/" PY_BASE_FILE "\n"
 "                 if not specified, defaults to\n"
 "                 " PKGDATADIR "/data/" PY_BASE_FILE "\n"
+"  -h             display this help\n"
 "\n"
   );
   exit(1);

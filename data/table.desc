@@ -1,0 +1,108 @@
+[CodeTable/Name]
+Description=Code Table Name
+Type=String
+
+[CodeTable/IconName]
+Description=Icon Name
+Type=String
+
+[CodeTable/File]
+Description=Code Table File
+Type=File
+
+[CodeTable/AdjustOrder]
+Description=Adjust Order
+Type=Enum
+DefaultValue=AdjustNo
+EnumCount=3
+Enum0=AdjustNo
+Enum1=AdjustFast
+Enum2=AdjustFreq
+
+[CodeTable/Priority]
+Description=Order of Code Table
+Type=Integer
+DefaultValue=99
+
+[CodeTable/UsePY]
+Description=Use Pinyin
+Type=Boolean
+DefaultValue=False
+
+[CodeTable/PYKey]
+Description=Pinyin Key
+Type=Char
+DefaultValue=@
+
+[CodeTable/AutoSend]
+Description=Auto Send Candidate Word to Client
+Type=Integer
+DefaultValue=-1
+
+[CodeTable/NoneMatchAutoSend]
+Description=Auto Send Candidate Word if no match in Code Table
+Type=Integer
+DefaultValue=-1
+
+[CodeTable/EndKey]
+Description=End Key
+Type=String
+DefaultValue=
+
+[CodeTable/UseMatchingKey]
+Description=Use Matching Key
+Type=Boolean
+DefaultValue=False
+
+[CodeTable/MatchingKey]
+Description=Matching Key
+Type=Char
+DefaultValue=~
+
+[CodeTable/ExactMatch]
+Description=Exact Match
+Type=Boolean
+
+[CodeTable/AutoPhrase]
+Description=Auto Phrase
+Type=Boolean
+DefaultValue=True
+
+[CodeTable/AutoPhraseLength]
+Description=Auto Phrase Length
+Type=Integer
+DefaultValue=4
+
+[CodeTable/AutoPhrasePhrase]
+Description=Auto Phrase Phrase
+Type=Boolean
+DefaultValue=True
+
+[CodeTable/SaveAutoPhrase]
+Description=Save Auto Phrase
+Type=Integer
+DefaultValue=0
+
+[CodeTable/PromptTableCode]
+Description=Prompt Table Code
+Type=Boolean
+
+[CodeTable/Symbol]
+Description=Symbol
+Type=String
+DefaultValue=
+
+[CodeTable/SymbolFile]
+Description=Symbol File
+Type=File
+DefaultValue=
+
+[CodeTable/Choose]
+Description=Choose
+Type=String
+DefaultValue=1234567890
+
+[CodeTable/Enabled]
+Description=Enable This Table or Not
+Type=Boolean
+DefaultValue=True

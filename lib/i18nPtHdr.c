@@ -1301,7 +1301,11 @@ static void TriggerNotifyMessageProc (XIMS ims,
     if (i18n_core->address.improto)
     {
         if (!(i18n_core->address.improto(ims, call_data)))
+        {
+            FrameMgrFree(fm);
+            XFree (reply);
             return;
+        }
         /*endif*/
     }
     /*endif*/

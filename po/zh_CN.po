@@ -1,0 +1,1840 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Weng Xuetian <wengxt@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: fcitx 20100424\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-09-25 09:17+0800\n"
+"PO-Revision-Date: 2010-09-25 08:26+0800\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+"X-Poedit-Basepath: ../\n"
+"Plural-Forms: \n"
+"X-Generator: Lokalize 1.1\n"
+
+#: data/config.desc:12
+msgid "Font Locale to display"
+msgstr "字体区域"
+
+#: data/config.desc:17
+msgid "Record File of Input"
+msgstr "记录文件"
+
+#: data/config.desc:22
+msgid "Use System Tray Icon"
+msgstr "使用系统托盘"
+
+#: data/config.desc:27
+msgid "Use DBus to display UI (Require KIMPanel)"
+msgstr "使用DBus来显示界面(需要KIMPanel)"
+
+#: data/config.desc:32
+msgid "Enable Addons to Fcitx"
+msgstr "在Fcitx启用附加组件"
+
+#: data/config.desc:37
+msgid "Use English Punc After a Number"
+msgstr "数字后跟半角符号"
+
+#: data/config.desc:46
+msgid "Action after press enter"
+msgstr "回车键操作"
+
+#: data/config.desc:55
+msgid "Action after press SemiColon"
+msgstr "分号键操作"
+
+#: data/config.desc:60
+msgid "Input English Character if you input upper case"
+msgstr "大写时输入英文"
+
+#: data/config.desc:65
+msgid "Convert Punc to Chinese Punc"
+msgstr "转换中文标点"
+
+#: data/config.desc:70
+msgid "Disable Paging in Legend Mode"
+msgstr "联想模式禁用翻页"
+
+#: data/config.desc:75
+msgid "Send inputed Text if Switch to English Mode"
+msgstr "快速切换英文模式时上屏"
+
+#: data/config.desc:80
+msgid "Candidate Word Number"
+msgstr "候选词个数"
+
+#: data/config.desc:89
+msgid "Main Window Hide Mode"
+msgstr "主窗口隐藏模式"
+
+#: data/config.desc:94
+msgid "Show Input Window In the center of screen"
+msgstr "输入窗口显示在正中"
+
+#: data/config.desc:99
+msgid "Show Input Window After Trigger Input Mode"
+msgstr "切换输入时显示输入条"
+
+#: data/config.desc:104
+msgid "Show Point After Index of Candidate Word "
+msgstr "候选序号后加点"
+
+#: data/config.desc:109
+msgid "Show Input Speed"
+msgstr "显示输入速度"
+
+#: data/config.desc:114
+msgid "Show Version"
+msgstr "显示版本"
+
+#: data/config.desc:119
+msgid "Show Hint Window while ENV is not correctly configured."
+msgstr "环境未配置正确时显示提示窗口"
+
+#: data/config.desc:124
+msgid "Skin Name in use"
+msgstr "皮肤名称"
+
+#: data/config.desc:129
+msgid "Hot key of Triggering Input Method"
+msgstr "快捷键: 切换输入法"
+
+#: data/config.desc:141
+msgid "Hotkey of Switching Chinese and English Mode"
+msgstr "快捷键: 切换中英文输入"
+
+#: data/config.desc:146
+msgid "Double click Switch Key to Change Mode"
+msgstr "双击中英文切换键时切换"
+
+#: data/config.desc:151
+msgid "Interval of Two Key Input"
+msgstr "输入间隔"
+
+#: data/config.desc:156
+msgid "Hotkey of Switching Follow Cursor Mode"
+msgstr "快捷键: 切换光标跟随"
+
+#: data/config.desc:161
+msgid "Hotkey of Hiding Main Window"
+msgstr "快捷键: 隐藏主窗口"
+
+#: data/config.desc:166
+msgid "Hotkey of Switching Virtual Keyboard"
+msgstr "快捷键: 切换软键盘"
+
+#: data/config.desc:171
+msgid "Hotkey of Switching Traditional Chinese Input Mode On."
+msgstr "快捷键: 切换简繁体中文输入"
+
+#: data/config.desc:176
+msgid "Hotkey of Switching Legend Mode"
+msgstr "快捷键: 切换联想模式"
+
+#: data/config.desc:181
+msgid "Hotkey of Looking up the Corresponding pinyin of Word."
+msgstr "快捷键: 反查拼音"
+
+#: data/config.desc:186
+msgid "Hotkey of Switching Full Width Character Mode"
+msgstr "快捷键: 切换全角"
+
+#: data/config.desc:191
+msgid "Hotkey of Switch Chinese Punc Mode"
+msgstr "快捷键: 切换中英文标点"
+
+#: data/config.desc:196
+msgid "Hotkey of Going Prev Page"
+msgstr "快捷键: 前一页"
+
+#: data/config.desc:201
+msgid "Hotkey of Going Next Page"
+msgstr "快捷键: 后一页"
+
+#: data/config.desc:206
+msgid "Hotkey to Choose Second and Third Candidate Word"
+msgstr "快捷键: 选择第二第三候选词"
+
+#: data/config.desc:211
+msgid "Hotkey of Saving All Config and Input History"
+msgstr "快捷键: 保存配置及输入历史"
+
+#: data/config.desc:216
+msgid "Hotkey of Switching Recording Mode"
+msgstr "快捷键: 切换记录模式"
+
+#: data/config.desc:221
+msgid "Hotkey of Reseting Recording Mode"
+msgstr "快捷键: 重置记录模式"
+
+#: data/config.desc:226
+msgid "Pinyin Priority Order, Zero to Disable"
+msgstr "拼音输入法优先级，0为禁用"
+
+#: data/config.desc:231
+msgid "Shuangpin Priority Order, Zero to Disable"
+msgstr "双拼输入法优先级，0为禁用"
+
+#: data/config.desc:236
+msgid "Default Shuangpin Schema"
+msgstr "默认双拼方案"
+
+#: data/config.desc:241
+msgid "Quwei Priority Order, Zero to Disable"
+msgstr "区位输入法优先级，0为禁用"
+
+#: data/config.desc:250
+msgid "Give the tips of Phrase"
+msgstr "提示词库中词组"
+
+#: data/config.desc:259
+msgid "Use Complete Pinyin"
+msgstr "使用完整拼音"
+
+#: data/config.desc:264
+msgid "Auto Create Phrase"
+msgstr "自动组词"
+
+#: data/config.desc:269
+msgid "Save Auto Created Phrase"
+msgstr "保存自动词组"
+
+#: data/config.desc:274
+msgid "Hotkey of Adding Frequent Word"
+msgstr "快捷键: 添加常用字"
+
+#: data/config.desc:279
+msgid "Hotkey of Deleting Frequent Word"
+msgstr "快捷键: 删除常用字"
+
+#: data/config.desc:284
+msgid "Hotkey of Delete User Phrase"
+msgstr "快捷键: 删除用户词组"
+
+#: data/config.desc:289
+msgid "Hotkey of Inputing Word From Phrase"
+msgstr "快捷键: 以词定字"
+
+#: data/config.desc:298
+msgid "Rule of Candidate Word Order"
+msgstr "候选字顺序"
+
+#: data/config.desc:307
+msgid "Rule of Candidate Phrase Order"
+msgstr "候选词顺序"
+
+#: data/config.desc:316
+msgid "Rule of Frequent Word Order"
+msgstr "常用字顺序"
+
+#: data/config.desc:321
+msgid "Fuzzy an and ang"
+msgstr "模糊an和ang"
+
+#: data/config.desc:326
+msgid "Fuzzy en and eng"
+msgstr "模糊en和eng"
+
+#: data/config.desc:331
+msgid "Fuzzy ian and iang"
+msgstr "模糊ian和iang"
+
+#: data/config.desc:336
+msgid "Fuzzy in and ing"
+msgstr "模糊in和ing"
+
+#: data/config.desc:341
+msgid "Fuzzy ou and u"
+msgstr "模糊ou和u"
+
+#: data/config.desc:346
+msgid "Fuzzy uan and uang"
+msgstr "模糊uan和uang"
+
+#: data/config.desc:351
+msgid "Fuzzy c and ch"
+msgstr "模糊c和ch"
+
+#: data/config.desc:356
+msgid "Fuzzy f and h"
+msgstr "模糊f和h"
+
+#: data/config.desc:361
+msgid "Fuzzy l and n"
+msgstr "模糊l和n"
+
+#: data/config.desc:366
+msgid "Fuzzy s and sh"
+msgstr "模糊s和sh"
+
+#: data/config.desc:371
+msgid "Fuzzy z and zh"
+msgstr "模糊z和zh"
+
+#: data/table.desc:2
+msgid "Code Table Name"
+msgstr "码表名称"
+
+#: data/table.desc:6
+msgid "Icon Name"
+msgstr "图标名称"
+
+#: data/table.desc:10
+msgid "Code Table File"
+msgstr "码表文件"
+
+#: data/table.desc:14
+msgid "Adjust Order"
+msgstr "输入顺序"
+
+#: data/table.desc:23
+msgid "Order of Code Table"
+msgstr "码表顺序"
+
+#: data/table.desc:28
+msgid "Use Pinyin"
+msgstr "使用拼音"
+
+#: data/table.desc:33
+msgid "Pinyin Key"
+msgstr "拼音键"
+
+#: data/table.desc:38
+msgid "Auto Send Candidate Word to Client"
+msgstr "自动上屏"
+
+#: data/table.desc:43
+msgid "Auto Send Candidate Word if no match in Code Table"
+msgstr "空码自动上屏"
+
+#: data/table.desc:48
+msgid "End Key"
+msgstr "中止键"
+
+#: data/table.desc:53
+msgid "Use Matching Key"
+msgstr "使用模糊键"
+
+#: data/table.desc:58
+msgid "Matching Key"
+msgstr "模糊键"
+
+#: data/table.desc:63
+msgid "Exact Match"
+msgstr "精确匹配"
+
+#: data/table.desc:67
+msgid "Auto Phrase"
+msgstr "自动词组"
+
+#: data/table.desc:72
+msgid "Auto Phrase Length"
+msgstr "自动词组长度"
+
+#: data/table.desc:77
+msgid "Auto Phrase Phrase"
+msgstr "词组参与自动造词"
+
+#: data/table.desc:82
+msgid "Save Auto Phrase"
+msgstr "保存自动词组"
+
+#: data/table.desc:87
+msgid "Prompt Table Code"
+msgstr "提示码表编码"
+
+#: data/table.desc:91 data/table.desc:90
+msgid "Symbol"
+msgstr "符号"
+
+#: data/table.desc:96
+msgid "Symbol File"
+msgstr "符号文件"
+
+#: data/table.desc:101 data/table.desc:100
+msgid "Choose"
+msgstr "选择键"
+
+#: data/table.desc:106
+msgid "Enable This Table or Not"
+msgstr "是否启用此码表"
+
+#: data/profile.desc:2
+msgid "Main Window Position X"
+msgstr "主窗口X位置"
+
+#: data/profile.desc:7
+msgid "Main Window Position Y"
+msgstr "主窗口Y位置"
+
+#: data/profile.desc:12
+msgid "Input Window Position X"
+msgstr "输入框X位置"
+
+#: data/profile.desc:17
+msgid "Input Window Position Y"
+msgstr "输入框Y位置"
+
+#: data/profile.desc:22
+msgid "Use Full Width Character"
+msgstr "使用全角字符"
+
+#: data/profile.desc:27
+msgid "Use Chinese Punctuation"
+msgstr "使用中文标点"
+
+#: data/profile.desc:32
+msgid "Input Window Shows at the position of cursor"
+msgstr "光标跟随"
+
+#: data/profile.desc:37
+msgid "Prompt the phrases after input"
+msgstr "输入后联想词组"
+
+#: data/profile.desc:42
+msgid "Current Input Method Index"
+msgstr "当前输入法"
+
+#: data/profile.desc:47 data/profile.desc:46
+msgid "Locked"
+msgstr "锁定"
+
+#: data/profile.desc:52
+msgid "Show Main Window in a compact way"
+msgstr "用紧凑的方式显示主窗口"
+
+#: data/profile.desc:57
+msgid "Use Traditional Chinese in Input"
+msgstr "使用繁体中文输入"
+
+#: data/profile.desc:62
+msgid "Use recording mode"
+msgstr "使用记录模式"
+
+#: data/skin.desc:3
+msgid "Skin Name"
+msgstr "皮肤名称"
+
+#: data/skin.desc:7
+msgid "Skin Version"
+msgstr "皮肤版本"
+
+#: data/skin.desc:11
+msgid "Skin Author"
+msgstr "皮肤作者"
+
+#: data/skin.desc:15
+msgid "Description of Skin"
+msgstr "描述"
+
+#: data/skin.desc:19
+msgid "Input Font Size"
+msgstr "输入字体大小"
+
+#: data/skin.desc:23
+msgid "Tip Message Color"
+msgstr "提示信息颜色"
+
+#: data/skin.desc:27
+msgid "Input Message Color"
+msgstr "输入信息颜色"
+
+#: data/skin.desc:31
+msgid "Candidate Index Color"
+msgstr "候选词索引颜色"
+
+#: data/skin.desc:35
+msgid "First Candidate Color"
+msgstr "第一候选词颜色"
+
+#: data/skin.desc:39
+msgid "User Phrase Color"
+msgstr "用户词组颜色"
+
+#: data/skin.desc:43
+msgid "Table Code Color"
+msgstr "码表提示颜色"
+
+#: data/skin.desc:47
+msgid "Other Color"
+msgstr "其他颜色"
+
+#: data/skin.desc:51
+msgid "Active Menu Item Character Color"
+msgstr "活动菜单项颜色"
+
+#: data/skin.desc:55
+msgid "Inactive Menu Item Character Color"
+msgstr "非活动菜单项颜色"
+
+#: data/skin.desc:59 data/skin.desc:123 data/skin.desc:179
+msgid "Background Image"
+msgstr "背景图片"
+
+#: data/skin.desc:63
+msgid "Logo Icon"
+msgstr "Logo图标"
+
+#: data/skin.desc:67
+msgid "Chinese Punc Icon"
+msgstr "中文标点图标"
+
+#: data/skin.desc:71
+msgid "English Punc Icon"
+msgstr "英文标点图标"
+
+#: data/skin.desc:75
+msgid "Simplified Chinese Icon"
+msgstr "简体中文图标"
+
+#: data/skin.desc:79
+msgid "Traditional Chinese Icon"
+msgstr "繁体中文图标"
+
+#: data/skin.desc:83
+msgid "Half Width Character Icon"
+msgstr "半角图标"
+
+#: data/skin.desc:87
+msgid "Full Width Character Icon"
+msgstr "全角图标"
+
+#: data/skin.desc:91
+msgid "UnLock Icon"
+msgstr "未锁定图标"
+
+#: data/skin.desc:95
+msgid "Lock Icon"
+msgstr "锁定图标"
+
+#: data/skin.desc:99
+msgid "Legend mode Icon"
+msgstr "联想激活图标"
+
+#: data/skin.desc:103
+msgid "Legend disabled Icon"
+msgstr "禁用联想图标"
+
+#: data/skin.desc:107
+msgid "Virtual Keyboard enabled Icon"
+msgstr "启用软键盘图标"
+
+#: data/skin.desc:111
+msgid "Virtual Keyboard disabled Icon"
+msgstr "禁用软键盘图标"
+
+#: data/skin.desc:115
+msgid "English Mode Icon"
+msgstr "英文模式图标"
+
+#: data/skin.desc:119
+msgid "Chinese Mode Icon"
+msgstr "中文模式图标"
+
+#: data/skin.desc:131 data/skin.desc:186
+msgid "Background Resize Rule"
+msgstr "变形规则"
+
+#: data/skin.desc:135
+msgid "The Resize Position to Left"
+msgstr "变形区域距左侧举例"
+
+#: data/skin.desc:139
+msgid "Width of Resize Part "
+msgstr "变形区域宽度"
+
+#: data/skin.desc:143
+msgid "Left-down position of Input"
+msgstr "输入文字左下角"
+
+#: data/skin.desc:147
+msgid "Left-down position of Output"
+msgstr "输出文字左下角"
+
+#: data/skin.desc:151
+msgid "Space to the left"
+msgstr "左侧空白宽度"
+
+#: data/skin.desc:155
+msgid "Space to the right"
+msgstr "右侧空白宽度"
+
+#: data/skin.desc:159
+msgid "Color of Cursor"
+msgstr "光标颜色"
+
+#: data/skin.desc:163
+msgid "Prev Page Icon"
+msgstr "上一页图标"
+
+#: data/skin.desc:167
+msgid "Next Page Icon"
+msgstr "下一页图标"
+
+# unknown
+#: data/skin.desc:171
+msgid "Active Tray Icon"
+msgstr "活动输入法图标"
+
+# unknown
+#: data/skin.desc:175
+msgid "Inctive Tray Icon"
+msgstr "非活动输入法图标"
+
+#: data/skin.desc:190
+msgid "Margin to top"
+msgstr "上边距"
+
+#: data/skin.desc:194
+msgid "Margin to bottom"
+msgstr "下边距"
+
+#: data/skin.desc:198
+msgid "Margin to left"
+msgstr "左边距"
+
+#: data/skin.desc:202
+msgid "Margin to right"
+msgstr "右边距"
+
+#: data/skin.desc:206
+msgid "Active Menu Color"
+msgstr "活动菜单项颜色"
+
+#: data/skin.desc:210
+msgid "Space Line Color"
+msgstr "分隔线颜色"
+
+#: data/table/erbi.conf:2
+msgid "Erbi"
+msgstr "二笔"
+
+#: data/table/wanfeng.conf:2
+msgid "Wanfeng"
+msgstr "晚风"
+
+#: data/table/zrm.conf:2
+msgid "Ziranma"
+msgstr "自然码"
+
+#: data/table/wbx.conf:2
+msgid "Wubi"
+msgstr "五笔字型"
+
+#: data/table/db.conf:2
+msgid "Dianbaoma"
+msgstr "电报码"
+
+#: data/table/cangjie.conf:2
+msgid "Cangjie"
+msgstr "仓颉"
+
+#: data/table/wbpy.conf:2
+msgid "WubiPinyin"
+msgstr "五笔拼音"
+
+#: data/table/qxm.conf:2
+msgid "Bingchan"
+msgstr "冰蟾全息"
+
+#: data/addon.desc:1 data/skin.desc:1 data/table.desc:1
+msgid "Name"
+msgstr "名称"
+
+#: data/addon.desc:4
+msgid "Category"
+msgstr "分组"
+
+#: data/addon.desc:9 data/table.desc:105
+msgid "Enabled"
+msgstr "启用"
+
+# unknown
+#: data/addon.desc:13
+msgid "Module"
+msgstr "模块"
+
+#: data/addon.desc:16
+msgid "Type"
+msgstr "类型"
+
+#: data/config.desc:1
+msgid "FontEn"
+msgstr "英文字体"
+
+#: data/config.desc:5
+msgid "FontZh"
+msgstr "中文字体"
+
+#: data/config.desc:9
+msgid "FontLocale"
+msgstr "字体区域"
+
+#: data/config.desc:14
+msgid "RecordFile"
+msgstr "记录文件"
+
+#: data/config.desc:19
+msgid "UseTray"
+msgstr "启用托盘"
+
+#: data/config.desc:24
+msgid "UseDBus"
+msgstr "启用DBus"
+
+#: data/config.desc:29
+msgid "EnableAddons"
+msgstr "启用附加组件"
+
+#: data/config.desc:34
+msgid "HalfPuncAfterNumber"
+msgstr "数字后跟半角符号"
+
+#: data/config.desc:39
+msgid "EnterAction"
+msgstr "回车键行为"
+
+#: data/config.desc:48
+msgid "SemiColonAction"
+msgstr "分号键行为"
+
+#: data/config.desc:57
+msgid "InputEngByCapitalChar"
+msgstr "大写字母输入英文"
+
+#: data/config.desc:62
+msgid "ConvertPunc"
+msgstr "转换中文标点"
+
+#: data/config.desc:67
+msgid "LegendModeDisablePaging"
+msgstr "联想模式禁止翻页"
+
+#: data/config.desc:72
+msgid "SendTextWhenSwitchEng"
+msgstr "快速切换中英文时将已有英文上屏"
+
+#: data/config.desc:77
+msgid "CandidateWordNumber"
+msgstr "候选词个数"
+
+#: data/config.desc:82
+msgid "MainWindowHideMode"
+msgstr "主窗口隐藏模式"
+
+#: data/config.desc:91
+msgid "CenterInputWindow"
+msgstr "输入窗口居中"
+
+#: data/config.desc:96
+msgid "ShowInputWindowAfterTriggering"
+msgstr "首次显示输入条"
+
+#: data/config.desc:101
+msgid "ShowPointAfterIndex"
+msgstr "候选序号后加点"
+
+#: data/config.desc:106
+msgid "ShowInputSpeed"
+msgstr "显示输入速度"
+
+#: data/config.desc:111
+msgid "ShowVersion"
+msgstr "显示版本"
+
+#: data/config.desc:116
+msgid "ShowHintWindow"
+msgstr "显示配置提示窗口"
+
+#: data/config.desc:121
+msgid "SkinType"
+msgstr "皮肤名称"
+
+#: data/config.desc:126
+msgid "TriggerKey"
+msgstr "输入法切换键"
+
+#: data/config.desc:131
+msgid "ChnEngSwitchKey"
+msgstr "中英文快速切换键"
+
+#: data/config.desc:143
+msgid "DoubleSwitchKey"
+msgstr "双击中英文切换"
+
+#: data/config.desc:148
+msgid "TimeInterval"
+msgstr "击键时间间隔"
+
+#: data/config.desc:153
+msgid "FollowCursorKey"
+msgstr "快捷键: 切换光标跟随"
+
+#: data/config.desc:158
+msgid "HideMainWindowKey"
+msgstr "快捷键: 隐藏主窗口"
+
+#: data/config.desc:163
+msgid "VKSwitchKey"
+msgstr "快捷键: 切换软键盘"
+
+#: data/config.desc:168
+msgid "TraditionalChnSwitchKey"
+msgstr "快捷键: 切换简体繁体"
+
+#: data/config.desc:173
+msgid "LegendSwitchKey"
+msgstr "快捷键: 切换联想模式"
+
+#: data/config.desc:178
+msgid "LookupPinyinKey"
+msgstr "快捷键: 反查拼音"
+
+#: data/config.desc:183
+msgid "FullWidthSwitchKey"
+msgstr "快捷键: 切换全半角"
+
+#: data/config.desc:188
+msgid "ChnPuncSwitchKey"
+msgstr "快捷键: 切换中英文标点"
+
+#: data/config.desc:193
+msgid "PrevPageKey"
+msgstr "快捷键: 上一页"
+
+#: data/config.desc:198
+msgid "NextPageKey"
+msgstr "快捷键: 下一页"
+
+#: data/config.desc:203
+msgid "SecondThirdCandWordKey"
+msgstr "第二三候选词选择键"
+
+#: data/config.desc:208
+msgid "SaveAllKey"
+msgstr "快捷键: 保存"
+
+#: data/config.desc:213
+msgid "SetRecordingKey"
+msgstr "快捷键: 切换记录模式"
+
+#: data/config.desc:218
+msgid "ResetRecordingKey"
+msgstr "快捷键: 重置记录模式"
+
+#: data/config.desc:223
+msgid "PinyinOrder"
+msgstr "拼音顺序"
+
+#: data/config.desc:228
+msgid "ShuangpinOrder"
+msgstr "双拼顺序"
+
+#: data/config.desc:233
+msgid "DefaultShuangpinSchema"
+msgstr "默认双拼方案"
+
+#: data/config.desc:238
+msgid "QuweiOrder"
+msgstr "区位顺序"
+
+#: data/config.desc:243
+msgid "TableOrder"
+msgstr "码表顺序"
+
+#: data/config.desc:247
+msgid "PhraseTips"
+msgstr "提示词库中的词组"
+
+#: data/config.desc:252
+msgid "ExtraIM"
+msgstr "额外输入法"
+
+#: data/config.desc:256
+msgid "UseCompletePinyin"
+msgstr "使用全拼"
+
+#: data/config.desc:261
+msgid "AutoCreatePhrase"
+msgstr "自动组词"
+
+#: data/config.desc:266 data/table.desc:81
+msgid "SaveAutoPhrase"
+msgstr "自动保存词组"
+
+#: data/config.desc:271
+msgid "AddFreqWordKey"
+msgstr "快捷键: 增加常用字"
+
+#: data/config.desc:276
+msgid "DeleteFreqWordKey"
+msgstr "快捷键: 删除常用字"
+
+#: data/config.desc:281
+msgid "DeleteUserPhraseKey"
+msgstr "快捷键: 删除用户词组"
+
+#: data/config.desc:286
+msgid "InputWordFromPhraseKey"
+msgstr "以词定字键"
+
+#: data/config.desc:291
+msgid "BaseOrder"
+msgstr "单字重码顺序调整"
+
+#: data/config.desc:300
+msgid "PhraseOrder"
+msgstr "词组重码顺序调整"
+
+#: data/config.desc:309
+msgid "FreqOrder"
+msgstr "常用词重码顺序调整"
+
+#: data/config.desc:318
+msgid "FuzzyAnAng"
+msgstr "FuzzyAnAng"
+
+#: data/config.desc:323
+msgid "FuzzyEnEng"
+msgstr "FuzzyEnEng"
+
+#: data/config.desc:328
+msgid "FuzzyIanIang"
+msgstr "模糊ian和iang"
+
+#: data/config.desc:333
+msgid "FuzzyInIng"
+msgstr "FuzzyInIng"
+
+#: data/config.desc:338
+msgid "FuzzyOuU"
+msgstr "FuzzyOuU"
+
+#: data/config.desc:343
+msgid "FuzzyUanUang"
+msgstr "模糊uan和uang"
+
+#: data/config.desc:348
+msgid "FuzzyCCh"
+msgstr "FuzzyCCh"
+
+#: data/config.desc:353
+msgid "FuzzyFH"
+msgstr "FuzzyFH"
+
+#: data/config.desc:358
+msgid "FuzzyLN"
+msgstr "FuzzyLN"
+
+#: data/config.desc:363
+msgid "FuzzySSH"
+msgstr "FuzzySSH"
+
+#: data/config.desc:368
+msgid "FuzzyZZH"
+msgstr "FuzzyZZH"
+
+#: data/profile.desc:1
+msgid "MainWindowOffsetX"
+msgstr "主窗口X位置"
+
+#: data/profile.desc:6
+msgid "MainWindowOffsetY"
+msgstr "主窗口Y位置"
+
+#: data/profile.desc:11
+msgid "InputWindowOffsetX"
+msgstr "输入窗口X位置"
+
+#: data/profile.desc:16
+msgid "InputWindowOffsetY"
+msgstr "输入窗口Y位置"
+
+#: data/profile.desc:21
+msgid "Corner"
+msgstr "全角"
+
+#: data/profile.desc:26
+msgid "ChnPunc"
+msgstr "中文标点"
+
+#: data/profile.desc:31
+msgid "TrackCursor"
+msgstr "光标跟随"
+
+#: data/profile.desc:36
+msgid "UseLegend"
+msgstr "联想模式"
+
+#: data/profile.desc:41
+msgid "IMIndex"
+msgstr "当前输入法编号"
+
+#: data/profile.desc:51
+msgid "CompactMainWindow"
+msgstr "压缩主窗口"
+
+#: data/profile.desc:56
+msgid "UseGBKT"
+msgstr "使用繁体"
+
+#: data/profile.desc:61
+msgid "Recording"
+msgstr "记录模式"
+
+#: data/skin.desc:5
+msgid "Version"
+msgstr "版本"
+
+#: data/skin.desc:9
+msgid "Author"
+msgstr "作者"
+
+#: data/skin.desc:13
+msgid "Desc"
+msgstr "描述"
+
+#: data/skin.desc:17
+msgid "FontSize"
+msgstr "字体大小"
+
+#: data/skin.desc:21
+msgid "TipColor"
+msgstr "提升颜色"
+
+#: data/skin.desc:25
+msgid "InputColor"
+msgstr "输入颜色"
+
+#: data/skin.desc:29
+msgid "IndexColor"
+msgstr "索引标记颜色"
+
+#: data/skin.desc:33
+msgid "FirstCandColor"
+msgstr "第一候选词颜色"
+
+#: data/skin.desc:37
+msgid "UserPhraseColor"
+msgstr "用户词组颜色"
+
+#: data/skin.desc:41
+msgid "CodeColor"
+msgstr "码表提升颜色"
+
+#: data/skin.desc:45
+msgid "OtherColor"
+msgstr "其他颜色"
+
+#: data/skin.desc:49
+msgid "ActiveMenuColor"
+msgstr "活动菜单项颜色"
+
+#: data/skin.desc:53
+msgid "InactiveMenuColor"
+msgstr "非活动菜单项颜色"
+
+#: data/skin.desc:57 data/skin.desc:121 data/skin.desc:177
+msgid "BackImg"
+msgstr "背景图片"
+
+#: data/skin.desc:61
+msgid "Logo"
+msgstr "Logo图标"
+
+#: data/skin.desc:65
+msgid "ZhPunc"
+msgstr "中文标点图标"
+
+#: data/skin.desc:69
+msgid "EnPunc"
+msgstr "英文标点图标"
+
+#: data/skin.desc:73
+msgid "Chs"
+msgstr "简体图标"
+
+#: data/skin.desc:77
+msgid "Cht"
+msgstr "繁体图标"
+
+#: data/skin.desc:81
+msgid "HalfCorner"
+msgstr "半角图标"
+
+#: data/skin.desc:85
+msgid "FullCorner"
+msgstr "全角图标"
+
+#: data/skin.desc:89
+msgid "Unlock"
+msgstr "未锁定图标"
+
+#: data/skin.desc:93
+msgid "Lock"
+msgstr "锁定图标"
+
+#: data/skin.desc:97
+msgid "Legend"
+msgstr "联想激活图标"
+
+#: data/skin.desc:101
+msgid "NoLegend"
+msgstr "联想未激活图标"
+
+#: data/skin.desc:105
+msgid "VK"
+msgstr "软键盘激活图标"
+
+#: data/skin.desc:109
+msgid "NoVK"
+msgstr "软键盘未激活图标"
+
+#: data/skin.desc:113 unknown
+msgid "Eng"
+msgstr "英文"
+
+#: data/skin.desc:117
+msgid "Chn"
+msgstr "中文"
+
+#: data/skin.desc:125 data/skin.desc:181 unknown
+msgid "Resize"
+msgstr "变形规则"
+
+#: data/skin.desc:133
+msgid "ResizePos"
+msgstr "变形区域位置"
+
+#: data/skin.desc:137
+msgid "ResizeWidth"
+msgstr "变形区域宽度"
+
+#: data/skin.desc:141
+msgid "InputPos"
+msgstr "上排文字位置"
+
+#: data/skin.desc:145
+msgid "OutputPos"
+msgstr "下排文字位置"
+
+#: data/skin.desc:149
+msgid "LayoutLeft"
+msgstr "左边距"
+
+#: data/skin.desc:153
+msgid "LayoutRight"
+msgstr "右边距"
+
+#: data/skin.desc:157
+msgid "CursorColor"
+msgstr "光标颜色"
+
+#: data/skin.desc:161
+msgid "BackArrow"
+msgstr "向后翻页"
+
+#: data/skin.desc:165
+msgid "ForwardArrow"
+msgstr "向前翻页"
+
+#: data/skin.desc:169
+msgid "Active"
+msgstr "激活"
+
+#: data/skin.desc:173
+msgid "Inactive"
+msgstr "未激活"
+
+#: data/skin.desc:188
+msgid "MarginTop"
+msgstr "上边距"
+
+#: data/skin.desc:192
+msgid "MarginBottom"
+msgstr "下边距"
+
+#: data/skin.desc:196
+msgid "MarginLeft"
+msgstr "左边距"
+
+#: data/skin.desc:200
+msgid "MarginRight"
+msgstr "右边距"
+
+#: data/skin.desc:204
+msgid "ActiveColor"
+msgstr "活动项背景颜色"
+
+#: data/skin.desc:208
+msgid "LineColor"
+msgstr "分隔线颜色"
+
+#: data/table.desc:5
+msgid "IconName"
+msgstr "图标名称"
+
+#: data/table.desc:9
+msgid "File"
+msgstr "文件"
+
+#: data/table.desc:13
+msgid "AdjustOrder"
+msgstr "候选词顺序调整"
+
+#: data/table.desc:22
+msgid "Priority"
+msgstr "优先级"
+
+#: data/table.desc:27
+msgid "UsePY"
+msgstr "使用拼音"
+
+#: data/table.desc:32
+msgid "PYKey"
+msgstr "拼音键"
+
+#: data/table.desc:37
+msgid "AutoSend"
+msgstr "自动上屏"
+
+#: data/table.desc:42
+msgid "NoneMatchAutoSend"
+msgstr "空码自动上屏"
+
+#: data/table.desc:47
+msgid "EndKey"
+msgstr "中止键"
+
+#: data/table.desc:52
+msgid "UseMatchingKey"
+msgstr "使用模糊键"
+
+#: data/table.desc:57
+msgid "MatchingKey"
+msgstr "模糊键"
+
+#: data/table.desc:62
+msgid "ExactMatch"
+msgstr "精确匹配"
+
+#: data/table.desc:66
+msgid "AutoPhrase"
+msgstr "自动组词"
+
+#: data/table.desc:71
+msgid "AutoPhraseLength"
+msgstr "自动组词长度"
+
+#: data/table.desc:76
+msgid "AutoPhrasePhrase"
+msgstr "词组参与自动造词"
+
+#: data/table.desc:86
+msgid "PromptTableCode"
+msgstr "提示编码"
+
+#: data/table.desc:95
+msgid "SymbolFile"
+msgstr "符号文件"
+
+# unknown
+msgid "Addon"
+msgstr "附加组件"
+
+# unknown
+msgid "Appearance"
+msgstr "外观"
+
+# unknown
+msgid "CodeTable"
+msgstr "码表"
+
+# unknown
+msgid "Hotkey"
+msgstr "快捷键"
+
+# unknown
+#: unknown
+msgid "InputMethod"
+msgstr "输入法"
+
+# unknown
+msgid "Output"
+msgstr "输出"
+
+#: ../src/im/pinyin/py.h:40
+msgid "Pinyin"
+msgstr "拼音"
+
+# unknown
+msgid "Profile"
+msgstr "预置文件"
+
+# unknown
+msgid "Program"
+msgstr "程序"
+
+# unknown
+msgid "SkinFont"
+msgstr "皮肤字体"
+
+# unknown
+msgid "SkinInfo"
+msgstr "皮肤信息"
+
+# unknown
+msgid "SkinInputBar"
+msgstr "皮肤输入框设置"
+
+# unknown
+msgid "SkinMainBar"
+msgstr "皮肤主窗口设置"
+
+# unknown
+msgid "SkinMenu"
+msgstr "皮肤菜单设置"
+
+# unknown
+msgid "SkinTrayIcon"
+msgstr "皮肤托盘图标设置"
+
+# unknown
+#: unknown
+msgid "AdjustFast"
+msgstr "快速"
+
+#: unknown
+msgid "AdjustFreq"
+msgstr "按频率"
+
+#: unknown
+msgid "AdjustNo"
+msgstr "不调整"
+
+#: unknown
+msgid "Auto"
+msgstr "自动"
+
+# unknown
+#: unknown
+msgid "Clean"
+msgstr "清除"
+
+# unknown
+#: unknown
+msgid "Commit"
+msgstr "提交输入"
+
+# unknown
+#: unknown
+msgid "Copy"
+msgstr "复制"
+
+# unknown
+#: unknown
+msgid "Fix"
+msgstr "固定长度"
+
+# unknown
+#: unknown
+msgid "Hide"
+msgstr "隐藏"
+
+# unknown
+#: unknown
+msgid "L_CTRL"
+msgstr "左Ctrl"
+
+# unknown
+#: unknown
+msgid "L_SHIFT"
+msgstr "左Shift"
+
+# unknown
+#: unknown
+msgid "L_SUPER"
+msgstr "左Super"
+
+# unknown
+#: unknown
+msgid "NoChange"
+msgstr "原始操作"
+
+# unknown
+#: unknown
+msgid "Nothing"
+msgstr "无操作"
+
+#: unknown
+msgid "QuickPhrase"
+msgstr "快速输入"
+
+# unknown
+#: unknown
+msgid "R_CTRL"
+msgstr "右Ctrl"
+
+# unknown
+#: unknown
+msgid "R_SHIFT"
+msgstr "右Shift"
+
+# unknown
+#: unknown
+msgid "R_SUPER"
+msgstr "右Super"
+
+#: unknown
+msgid "SharedLibrary"
+msgstr "共享库"
+
+#: unknown
+msgid "Show"
+msgstr "显示"
+
+#: ../src/interface/ImeRemote.c:170
+#, c-format
+msgid "Can't open socket %s: %s"
+msgstr "无法打开Socket %s: %s"
+
+#: ../src/interface/DBus.c:103
+#, c-format
+msgid "Connection Error (%s)"
+msgstr "连接错误 (%s)"
+
+#: ../src/interface/DBus.c:115
+#, c-format
+msgid "Name Error (%s)"
+msgstr "名称错误 (%s)"
+
+#: ../src/interface/DBus.c:129
+#, c-format
+msgid "Match Error (%s)"
+msgstr "匹配错误 (%s)"
+
+#: ../src/interface/DBus.c:164
+msgid "MovePreeditCaret"
+msgstr "MovePreeditCaret"
+
+#: ../src/interface/DBus.c:167 ../src/interface/DBus.c:179
+#: ../src/interface/DBus.c:223
+msgid "Message has no arguments!"
+msgstr "Message has no arguments!"
+
+#: ../src/interface/DBus.c:169 ../src/interface/DBus.c:181
+msgid "Argument is not INT32!"
+msgstr "Argument is not INT32!"
+
+#: ../src/interface/DBus.c:172
+#, c-format
+msgid "Got Signal with value %d"
+msgstr "Got Signal with value %d"
+
+#: ../src/interface/DBus.c:176
+msgid "SelectCandidate: "
+msgstr "SelectCandidate: "
+
+#: ../src/interface/DBus.c:206
+#, c-format
+msgid "%d:%s"
+msgstr "%d:%s"
+
+#: ../src/interface/DBus.c:210
+msgid "LookupTablePageUp"
+msgstr "LookupTablePageUp"
+
+#: ../src/interface/DBus.c:215
+msgid "LookupTablePageDown"
+msgstr "LookupTablePageDown"
+
+#: ../src/interface/DBus.c:220
+msgid "TriggerProperty: "
+msgstr "TriggerProperty: "
+
+#: ../src/interface/DBus.c:225
+msgid "Argument is not STRING!"
+msgstr "Argument is not STRING!"
+
+#: ../src/interface/DBus.c:228
+#, c-format
+msgid "%s"
+msgstr "%s"
+
+#: ../src/interface/DBus.c:234
+msgid "PanelCreated"
+msgstr "PanelCreated"
+
+#: ../src/interface/DBus.c:238
+msgid "Exit"
+msgstr "Exit"
+
+#: ../src/interface/DBus.c:241
+msgid "ReloadConfig"
+msgstr "ReloadConfig"
+
+#: ../src/interface/DBus.c:263 ../src/interface/DBus.c:297
+#: ../src/interface/DBus.c:344 ../src/interface/DBus.c:391
+#: ../src/interface/DBus.c:425 ../src/interface/DBus.c:459
+#: ../src/interface/DBus.c:493 ../src/interface/DBus.c:527
+#: ../src/interface/DBus.c:561 ../src/interface/DBus.c:595
+#: ../src/interface/DBus.c:657 ../src/interface/DBus.c:691
+#: ../src/interface/DBus.c:729 ../src/interface/DBus.c:768
+#: ../src/interface/DBus.c:805
+msgid "Message Null"
+msgstr "Message Null"
+
+#: ../src/interface/DBus.c:270 ../src/interface/DBus.c:275
+#: ../src/interface/DBus.c:315 ../src/interface/DBus.c:322
+#: ../src/interface/DBus.c:362 ../src/interface/DBus.c:369
+#: ../src/interface/DBus.c:398 ../src/interface/DBus.c:403
+#: ../src/interface/DBus.c:432 ../src/interface/DBus.c:437
+#: ../src/interface/DBus.c:466 ../src/interface/DBus.c:471
+#: ../src/interface/DBus.c:500 ../src/interface/DBus.c:505
+#: ../src/interface/DBus.c:534 ../src/interface/DBus.c:539
+#: ../src/interface/DBus.c:568 ../src/interface/DBus.c:573
+#: ../src/interface/DBus.c:608 ../src/interface/DBus.c:616
+#: ../src/interface/DBus.c:625 ../src/interface/DBus.c:635
+#: ../src/interface/DBus.c:664 ../src/interface/DBus.c:669
+#: ../src/interface/DBus.c:699 ../src/interface/DBus.c:702
+#: ../src/interface/DBus.c:707 ../src/interface/DBus.c:738
+#: ../src/interface/DBus.c:741 ../src/interface/DBus.c:746
+#: ../src/interface/DBus.c:775 ../src/interface/DBus.c:778
+#: ../src/interface/DBus.c:783 ../src/interface/DBus.c:812
+#: ../src/interface/DBus.c:817
+msgid "Out Of Memory!"
+msgstr "Out Of Memory!"
+
+#: ../src/interface/DBus.c:840
+#, c-format
+msgid "Type: %d Text: %s"
+msgstr "Type: %d Text: %s"
+
+#: ../src/interface/DBus.c:866
+#, c-format
+msgid "Labels %d, Texts %d, CMB:%s"
+msgstr "Labels %d, Texts %d, CMB:%s"
+
+#: ../src/interface/DBus.c:902
+#, c-format
+msgid "updateMesssages Up:%s"
+msgstr "updateMesssages Up:%s"
+
+#: ../src/ui/tray.c:154
+#, c-format
+msgid "X error %i on opcode send"
+msgstr "X error %i on opcode send"
+
+#: ../src/ui/ui.c:81
+msgid "FCITX can only run under X"
+msgstr "Fcitx只能在X下运行"
+
+#: ../src/ui/ui.c:123
+msgid "XEvent--Expose"
+msgstr "XEvent--Expose"
+
+#: ../src/ui/ui.c:314 ../src/ui/ui.c:321
+msgid "Unable to create process"
+msgstr "无法创建进程"
+
+#: ../src/ui/MenuWindow.c:340
+msgid "About Fcitx"
+msgstr "关于Fcitx"
+
+#: ../src/ui/MenuWindow.c:342
+msgid "Switch Skin"
+msgstr "切换皮肤"
+
+#: ../src/ui/MenuWindow.c:343
+msgid "Switch IM"
+msgstr "选择输入法"
+
+#: ../src/ui/MenuWindow.c:344
+msgid "Switch VK"
+msgstr "选择软键盘"
+
+#: ../src/ui/MenuWindow.c:346
+msgid "Fcitx Config ..."
+msgstr "配置Fcitx..."
+
+#: ../src/ui/MenuWindow.c:347
+msgid "Exit Fcitx"
+msgstr "退出Fcitx"
+
+#: ../src/ui/InputWindow.c:164
+msgid "DISPLAY InputWindow"
+msgstr "DISPLAY InputWindow"
+
+#: ../src/ui/InputWindow.c:189
+msgid "CAL InputWindow"
+msgstr "CAL InputWindow"
+
+#: ../src/ui/MainWindow.c:123
+msgid "DISPLAY MainWindow"
+msgstr "DISPLAY MainWindow"
+
+#: ../src/ui/MainWindow.c:144
+msgid "DRAW MainWindow"
+msgstr "DRAW MainWindow"
+
+#: ../src/ui/skin.c:162
+msgid "Can not load default skin, is installion correct?"
+msgstr "无法加载默认皮肤，安装是否正确？"
+
+#: ../src/ui/skin.c:167
+#, c-format
+msgid "Can not load skin %s, return to default"
+msgstr "无法加载皮肤%s，回到默认皮肤"
+
+#: ../src/ui/font.c:33
+msgid "Error: Load fontconfig failed"
+msgstr "错误：fontconfig加载失败"
+
+#: ../src/ui/font.c:85
+#, c-format
+msgid "your current font is: %s"
+msgstr "当前字体为：%s"
+
+#: ../src/ui/font.c:102
+msgid "no valid font."
+msgstr "无可用字体"
+
+#: ../src/fcitx-config/fcitx-config.c:265
+msgid "Enum option duplicated."
+msgstr "枚举选项重复"
+
+#: ../src/fcitx-config/fcitx-config.c:278
+msgid "Enum option number must larger than 0"
+msgstr "枚举选项个数需要大于0"
+
+#: ../src/fcitx-config/fcitx-config.c:288
+msgid "Enum Option is invalid, take it as string"
+msgstr "枚举选项不合法，将类型作为字符串处理"
+
+#: ../src/fcitx-config/fcitx-config.c:295
+#, c-format
+msgid "Unknown type, take it as string: %s"
+msgstr "未知类型，作为字符串处理: %s"
+
+#: ../src/fcitx-config/fcitx-config.c:301
+msgid "Missing type, take it as string"
+msgstr "类型缺失，作为字符串处理"
+
+#: ../src/fcitx-config/fcitx-config.c:674
+#, c-format
+msgid "Configure group name error: line %d"
+msgstr "配置组名错误: 行%d"
+
+#: ../src/fcitx-config/fcitx-config.c:684
+#, c-format
+msgid "Duplicate group name, merge with the previous: %s :line %d"
+msgstr "组名重复，和之前的组合并: %s :行 %d"
+
+#: ../src/fcitx-config/fcitx-config.c:701
+#, c-format
+msgid "Invalid Entry: line %d missing '='"
+msgstr "配置项不合法： 行%d 缺少'='"
+
+#: ../src/fcitx-config/fcitx-config.c:711
+#, c-format
+msgid "Duplicate option, overwrite: line %d"
+msgstr "重复的配置项，覆盖: 行%d"
+
+#: ../src/fcitx-config/fcitx-config.c:823
+#, c-format
+msgid "Option %s is Invalid, Use Default Value %s"
+msgstr "配置项%s不合法，使用默认值%s"
+
+#: ../src/fcitx-config/fcitx-config.c:832
+#, c-format
+msgid "Option %s is Invalid."
+msgstr "配置项%s不合法"
+
+#: ../src/fcitx-config/fcitx-config.c:867
+#, c-format
+msgid "no default option for %s/%s"
+msgstr "选项%s/%s没有默认选项"
+
+#: ../src/im/special/punc.c:55
+msgid "Can't open Chinese punc file."
+msgstr "无法打开中文标点文件。"
+
+#: ../src/im/qw/qw.h:25
+msgid "Quwei"
+msgstr "区位"
+
+#: ../src/im/pinyin/py.c:169
+msgid "Can not find System Database of Pinyin!"
+msgstr "无法找到系统的拼音词库"
+
+#: ../src/im/pinyin/py.c:2320
+#, c-format
+msgid "Cannot Save User Pinyin Database: %s"
+msgstr "无法保存用户拼音词库: %s"
+
+#: ../src/im/pinyin/py.c:2382
+#, c-format
+msgid "Cannot Save Frequent word: %s"
+msgstr "无法保存词频: %s"
+
+#: ../src/im/pinyin/py.c:2452
+#, c-format
+msgid "Cannot Save Pinyin Index: %s"
+msgstr "无法保存拼音索引: %s"
+
+#: ../src/im/pinyin/sp.h:23
+msgid "Shuangpin"
+msgstr "双拼"
+
+#: ../src/im/table/table.c:181
+#, c-format
+msgid "Load Table Config File:%s"
+msgstr "加载码表文件: %s"
+
+#: ../src/im/table/table.c:191
+#, c-format
+msgid "Table Config %s is %s"
+msgstr "Table Config %s is %s"
+
+#: ../src/im/table/table.c:255
+msgid "Loading Table Dict"
+msgstr "加载码表词典"
+
+#: ../src/im/table/table.c:265
+#, c-format
+msgid "Load Table Dict from %s"
+msgstr "加载码表%s"
+
+#: ../src/im/table/table.c:271
+#, c-format
+msgid "Cannot load table file: %s"
+msgstr "无法加载码表文件: %s"
+
+#: ../src/im/table/table.c:393
+msgid "Load Table Dict OK"
+msgstr "加载码表文件成功"
+
+#: ../src/im/table/table.c:423
+msgid "Loading Autophrase."
+msgstr "加载自动组词信息中"
+
+#: ../src/im/table/table.c:464
+msgid "Load Autophrase OK"
+msgstr "加载自动组词信息完成"
+
+#: ../src/im/table/table.c:602
+#, c-format
+msgid "Cannot create table file: %s"
+msgstr "无法创建码表文件: %s"
+
+#: ../src/im/table/table.c:609
+msgid "Saving TABLE Dict."
+msgstr "保存码表词典"
+
+#: ../src/im/table/table.c:691
+msgid "Rename OK"
+msgstr "重命名成功"
+
+#: ../src/im/extra/extra.c:249
+msgid "ExtraIM: init fail"
+msgstr "额外输入法: 初始化失败"
+
+#: ../src/im/extra/extra.c:279
+#, c-format
+msgid "ExtraIM: open %s fail %s"
+msgstr "额外输入法: 打开%s失败 %s"
+
+#: ../src/im/extra/extra.c:285
+msgid "ExtraIM: bad im"
+msgstr "额外输入法: 不正确的输入法"
+
+#: ../src/tools/configfile.c:273
+#, c-format
+msgid "Load Config File %s"
+msgstr "加载配置文件: %s"
+
+#: ../src/tools/tools.c:254
+msgid "pthread mutexattr init failed"
+msgstr "pthread mutexattr init failed"
+
+#: ../src/tools/tools.c:261
+msgid "pthread mutex init failed"
+msgstr "pthread mutex init failed"
+
+#: ../src/core/addon.c:134
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr "加载附加组件配置文件: %s"
+
+#: ../src/core/addon.c:144
+#, c-format
+msgid "Addon Config %s is %s"
+msgstr "Addon Config %s is %s"
+
+#: ../src/core/xim.c:492
+msgid "Recording file must be an absolute path."
+msgstr "记录文件必须是绝对路径"
+
+#: ../src/core/xim.c:525
+#, c-format
+msgid "Sending %s  icid=%d connectid=%d\n"
+msgstr "Sending %s  icid=%d connectid=%d\n"
+
+#: ../src/core/xim.c:587
+msgid "Can't Create imWindow"
+msgstr "无法创建输入法窗口"
+
+#: ../src/core/xim.c:597
+msgid "XMODIFIERS Error."
+msgstr "XMODIFIERS Error."
+
+#: ../src/core/xim.c:602
+msgid "Please set XMODIFIERS."
+msgstr "请设置环境变量XMOIFIERS"
+
+#: ../src/core/xim.c:617
+msgid "Please check your environment varibles."
+msgstr "请检查你的环境变量的设置"
+
+#: ../src/core/xim.c:618
+msgid ""
+"You need to set environment varibles below to make fcitx work correctly."
+msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
+
+#: ../src/core/xim.c:622
+msgid "You can set those variables in ~/.bashrc ."
+msgstr "这些环境变量可以设置在~/.bashrc当中。"
+
+#: ../src/core/xim.c:623
+msgid "Setting Hint"
+msgstr "设置提示"
+
+#: ../src/core/xim.c:678
+#, c-format
+msgid "Start FCITX error. Another XIM daemon named %s is running?"
+msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
+
+#: ../src/core/xim.c:958
+#, c-format
+msgid "Set icid=%d(connect_id=%d) to %d"
+msgstr "Set icid=%d(connect_id=%d) to %d"
+
+#: ../src/core/MyErrorsHandlers.c:87
+#, c-format
+msgid "FCITX -- Get Signal No.: %d"
+msgstr "Fcitx接收到信号: %d"
+
+#~ msgid "Enable"
+#~ msgstr "启用"
+
+#~ msgid "Extra"
+#~ msgstr "额外输入法"

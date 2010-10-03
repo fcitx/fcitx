@@ -449,7 +449,7 @@ FmStatus _FrameMgrPutToken (FrameMgr fm, void *data, int data_size)
         /*endif*/
         if (info.num > 0)
         {
-            bcopy (*(char **) data, fm->area + fm->idx, info.num);
+            memcpy (fm->area + fm->idx, *(char **) data, info.num);
             fm->idx += info.num;
         }
         /*endif*/

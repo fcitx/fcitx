@@ -1,8 +1,29 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "py.h"
+#include "im/pinyin/py.h"
 #include "pyTools.h"
+#include "fcitx-config/xdg.h"
 
 void usage();
 
@@ -10,15 +31,40 @@ int main(int argc, char **argv)
 {
   FILE *fi;
   int i, j;
-  char *pyusrphrase_mb;
+  char *pyusrphrase_mb = NULL;
   struct _PYMB *PYMB;
+  Bool isUser = True;
+  char c;
 
-  if (argc > 3)
-    usage();
+  while((c = getopt(argc, argv, "f:sh")) != -1)
+  {
+      switch(c)
+      {
+          case 'f':
+              pyusrphrase_mb = strdup(optarg);
+              break;
+          case 's':
+              isUser = False;
+              break;
+          case 'h':
+          default:
+              usage();
+      }
+  }
 
-  pyusrphrase_mb = getuserfile(PY_USERPHRASE_FILE, (argc > 1) ? argv[1] : "");
-  fi = tryopen(pyusrphrase_mb);
-  LoadPYMB(fi, &PYMB);
+  if (pyusrphrase_mb)
+      fi = fopen(pyusrphrase_mb, "r");
+  else
+      fi = GetXDGFileUser( PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+  if (!fi)
+  {
+    perror("fopen");
+    fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
+    exit(1);
+  }
+  free(pyusrphrase_mb);
+
+  LoadPYMB(fi, &PYMB, isUser);
 
   for (i = 0; PYMB[i].HZ[0]; ++i)
   {
@@ -45,12 +91,14 @@ void usage()
   puts(
 "readPYMB - read data from a pinyin .mb file and display its meaning\n"
 "\n"
-"  usage: readPYMB <mbfile>\n"
+"  usage: readPYMB [OPTION]\n"
 "\n"
-"  <mbfile>    MB (MaBiao) file to be read, usually this is\n"
+"  -f <mbfile> MB (MaBiao) file to be read, usually this is\n"
 "              ~/.config/fcitx/" PY_USERPHRASE_FILE "\n"
 "              if not specified, defaults to\n"
 "              ~/.config/fcitx/" PY_USERPHRASE_FILE "\n"
+"  -s          Is MB from user or from system (they have different format).\n"
+"  -h          display this help\n"
 "\n"
 "  The MB file can either be a user's MB file (~/.config/fcitx/pyuserphrase.mb),\n"
 "  or the system phrase pinyin MB file (/usr/share/fcitx/data/pyphrase.mb.\n"

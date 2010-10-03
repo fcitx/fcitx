@@ -28,7 +28,7 @@ endif
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
-	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr
+	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --enable-tray --enable-dbus --enable-recording
 
 
 build: build-stamp
@@ -55,8 +55,6 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	rm -f data/cj.mb data/erbi.mb data/pybase.mb data/pyphrase.mb data/wbx.mb 
-
 
 	dh_clean 
 
@@ -80,13 +78,11 @@ binary-arch: build install
 	dh_testroot
 	dh_installchangelogs ChangeLog
 	dh_installdocs
-	install -m 644 data/*.dat data/*.mb data/tables.conf $(CURDIR)/debian/fcitx/usr/share/fcitx/data/
-	install -m 644 xpm/logo.xpm $(CURDIR)/debian/fcitx/usr/share/fcitx/xpm/
 	install -d $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/
-	install -m 644 $(CURDIR)/debian/im-switch/fcitx $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/
+	install -m 644 $(CURDIR)/debian/im-switch.conf $(CURDIR)/debian/fcitx/etc/X11/xinit/xinput.d/fcitx
 
 	dh_installexamples
-#	dh_install
+	dh_install
 #	dh_installmenu
 #	dh_installdebconf
 #	dh_installlogrotate
@@ -103,7 +99,7 @@ binary-arch: build install
 	dh_fixperms
 #	dh_perl
 #	dh_python
-#	dh_makeshlibs
+	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

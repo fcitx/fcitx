@@ -1,728 +1,903 @@
+2010-09-26: CSSlayer <wengxt@gmail.com>
+    * 多词库支持，但性能一般，推荐主词库较大，附加小词库。
+	* 搜狗细胞词库转化为pinyin原始文件工具。
+
+2010-09-24: CSSlayer <wengxt@gmail.com>
+    * 修复系统托盘重新加入问题
+
+2010-09-24: CSSlayer <wengxt@gmail.com>
+    * 新Addon信息配置
+
+2010-09-21: CSSlayer <wengxt@gmail.com>
+    * 修改部分ExtraIM的绑定
+	* 可以和fcitx-sunpinyin 0.1.0工作（待测试）
+
+2010-09-14: CSSlayer <wengxt@gmail.com>
+    * 修复一个设置输入法切换快捷键的问题（笔误……）
+	* 修复子菜单在左侧时的问题
+	* readPYMB, readPYBase, mb2org可以工作，注意用-h查看参数选项
+
+2010-09-09: CSSlayer <wengxt@gmail.com>
+    * 修复读取老版本profile时的崩溃错误。issue 291
+
+2010-09-08: CSSlayer <wengxt@gmail.com>
+    * 修复非UTF-8 Locale的问题
+	* 主窗口设置名称
+	* 放松环境变量检查（大小写）
+	* 更新deb包build信息
+
+2010-09-07: CSSlayer <wengxt@gmail.com>
+    * 增加利用fcitx-remote进行重新加载配置的选项
+	* 调整线程间同步，避免问题。
+	* 避免僵尸进程
+	* 菜单样式集成进皮肤
+	* 菜单配置选项和退出选项正常工作，关闭菜单把鼠标移出即可
+	* fcitx-config脚本移入fcitx当中，用于探测已安装的配置工具
+	* 否则调用系统的默认编辑器打开配置文件，因此与fcitx-config-0.1.1有一个文件冲突
+
+2010-09-06: CSSlayer <wengxt@gmail.com>
+    * 调整libfcitx-config，方便GUI开发
+	* 调整dark的一些字体颜色，感谢jason52lh
+	* 大量更新翻译信息
+	* 4.0beta1
+
+2010-09-02: CSSlayer <wengxt@gmail.com>
+	* 调整libfcitx-config的函数
+
+2010-09-01: CSSlayer <wengxt@gmail.com>
+    * 修复一些托盘程序背景颜色问题。（如trayer，但并未解决用im-switch启动的托盘背景为黑色的问题）
+
+2010-08-31: CSSlayer <wengxt@gmail.com>
+    * 修复输入框的箭头不显示的问题
+	* 将字体设置移回配置文件中，而不是和皮肤一起设置
+	* dark皮肤小更新
+	* 修复一个拼写错误
+	* 更新部分翻译
+	* 修复不存在~/.config文件夹时的崩溃错误
+	* 修复一个笔误带来的模糊音无效问题
+	* 增加生成码表时的判断条件，防止生成无效的码表
+	* 修复字体问题
+	* 皮肤的颜色配置修改为原来的各个设置
+	* 增加Ukoyi的新皮肤为Default，原default作为classic
+
+2010-08-18: CSSlayer <wengxt@gmail.com>
+    * 消除内存泄漏
+	* 修复CTRL_5重新加载配置时会崩溃的问题
+	* 修改微软双拼的一些配置，同时对于双拼方案令v可以被配置（如果影响了其他双拼请汇报Bug）
+	* 对某些配置采取CTRL_5读取时不加载，保证稳定性（目前包含DBus和托盘）
+	* 修复DBus模式会崩溃的问题
+	* 修复各种码表相关Bug - -b
+
+2010-08-16: CSSlayer <wengxt@gmail.com>
+    * 为码表增加一个优先级设置，按照优先级大小对码表排序
+	* 修复无法记录当前输入法的问题
+	* 配置文件和皮肤也迁移到新格式，皮肤目前可以在用户目录下设置~/.config/fcitx/skin
+	* 用户的码表调整为配置和用户码表都存储在~/.config/fcitx/table下
+	* 皮肤的各个输入法图标文件名可以自行配置，默认为fcitx_skin.conf中的chn图标
+	* 如果有对应文件存在那么就可以使用对应文件图标作为显示
+	* 无全局配置文件，配置文件在第一次运行时自动生成
+	* 目录返回~/.config/fcitx而不是~/.config/fcitx-utf8
+	* 终端运行时提示性输出增多
+
+2010-08-15: CSSlayer <wengxt@gmail.com>
+    * 增加一个信息提示的窗口，如果环境变量设置有问题的话提示如何设置
+
+2010-08-14: CSSlayer <wengxt@gmail.com>
+    * 对配置文件有大量修改，初步加入国际化支持
+	* 码表配置文件有所调整，一个配置文件对应一个码表，而不是原先所有码表使用一个配置文件
+	* 配置文件内容使用覆盖策略，本地覆盖全局
+	* profile和码表已经采用新格式，皮肤和config暂时未变动
+
+2010-07-18: CSSlayer <wengxt@gmail.com>
+    * 增加一个选项，在按下临时英文键时可以将已经输入的英文直接输入
+
+2010-07-13: CSSlayer <wengxt@gmail.com>
+    * 合并Skin Dark 0.5，感谢Jarryson
+    * 修复一个内存访问越界的Bug
+    * 修复Issue 259
+    * 修复在XVnc等X Server环境下无法启动的问题
+	* 修复两个disable选项时的编译问题
+
+2010-06-26: CSSlayer <wengxt@gmail.com>
+    * 修复在XVnc等X Server环境下无法启动的问题
+	* 修复两个disable选项时的编译问题
+
+2010-06-26: CSSlayer <wengxt@gmail.com>
+    * 修改dark皮肤的小显示问题
+	* 更新默认皮肤的背景
+
+2010-06-24: CSSlayer <wengxt@gmail.com>
+    * 修复一个文字显示错误(Issue 244)
+    * 现在所有的文字显示之前都会经过UTF-8有效性检验，避免cairo画笔失效
+
+2010-06-22: CSSlayer <wengxt@gmail.com>
+    * 修复一个由于记录模式带来的bug（输入过长时溢出）
+    * 修复拼音输入时输入过长溢出的问题
+    * 重新调整信息显示代码，采用统一函数修改具体字符串
+	* 修复一个查询字体时的导致崩溃的指针问题
+	* 增加崩溃时调试信息输出
+	* 系统托盘随主题更换
+
+2010-06-21: CSSlayer <wengxt@gmail.com>
+    * 再次尝试解决字体问题
+    * 由系统判断默认字体
+    * 修复引入skin之后的光标位置问题
+
+2010-06-19: CSSlayer <wengxt@gmail.com>
+    * 移除Xft
+    * 移除一些不再起作用的选项
+    * 尝试解决字体问题
+
+2010-06-16: CSSlayer <wengxt@gmail.com>
+    * 彻底移除Xpm
+	* 添加 -ldl
+	* 修复多余的显示信息
+	* 默认字体使用Sans
+	* 默认主题小修改
+	* 添加一个来自ubuntu.org.cn的暗色主题
+
+2010-06-16: t3swing <t3swing@gmail.com>
+    * 右键菜单支持自定义码表显示
+	* 系统托盘右键定位
+	* 标点提示修复
+	* 输入条箭头
+	* 状态条按钮鼠标悬停效果
+	* 虚拟键盘显示修复
+
+2010-06-07: CSSlayer <wengxt@gmail.com>
+    * 更加用户友好，不能加载皮肤时加载默认皮肤
+
+2010-06-05: CSSlayer <wengxt@gmail.com>
+    * 系统托盘自适应大小
+
+2010-06-05: t3swing <t3swing@gmail.com>
+    * 增加皮肤支持
+	* 界面全面修改为cairo绘制
+
+2010-04-26: CSSlayer <wengxt@gmail.com>
+	* 修复QuickPhrase的一些崩溃问题，加入翻页支持
+	* 不建议在QuickPhrase中使用翻页键作为快捷键
+	* 加入一个变长数组的文件
+	* 移除码表和xpm源文件不予安装，如有需求请到googlecode下载
 
 2010-04-24: CSSlayer <wengxt@gmail.com>
-	* src/ImeRemote.c: ����fcitxԶ�̵���socket�ļ�������
-	* tools/client-test.c: fcitx-remote���Ӱ�����Ϣ
-	* src/ime.c: �޸�Issue 190
-	* �ϲ�UTF-8��֧��DBus��Ϣ���´���
+	* utf8版本去除GBK字符集选项，kimpanel添加显示虚拟键盘状态的按钮
+	* 这个按钮提示信息中有快捷键，不能直接按
+
+2010-04-24: CSSlayer <wengxt@gmail.com>
+	* src/ImeRemote.c: 修正fcitx远程调用socket文件名问题
+	* tools/client-test.c: fcitx-remote添加帮助信息
+	* src/ime.c: 修复Issue 190
+
+2010-04-22: CSSlayer <wengxt@gmail.com>
+	* 修复overflow，常用字表，无法以词定第二个字，以及一个不保存用户词组的问题
+
+2010-04-22: CSSlayer <wengxt@gmail.com>
+	* 调整代码结构, 修改图标文件路径
+
+2010-04-21: CSSlayer <wengxt@gmail.com>
+	* createPYMB加入对gbkpy.org的简单错误检测
+
+2010-04-05: CSSlayer <wengxt@gmail.com>
+	* 修复自定义双拼配置无效问题
 
 2010-03-24: CSSlayer <wengxt@gmail.com>
-	* ��л�ṩ������ͼ���zdon (at) forum.ubuntu.org.cn
+	* 感谢提供新托盘图标的zdon (at) forum.ubuntu.org.cn
+
+2010-03-20: CSSlayer <wengxt@gmail.com>
+	* 初始化UTF8版本
 
 2010-03-05: Yuking <yuking_net@sohu.com>
-	* src/KeyList.c: ����ĳЩ��ϼ���Ӧ������������
+	* src/KeyList.c: 修正某些组合键响应不正常的问题
 
 2010-02-12: Yuking <yuking_net@sohu.com>
-	* src/ui.c: ����ϵͳ����ͼ����ʾ������������
+	* src/ui.c: 修正系统托盘图标显示不正常的问题
 
 2010-02-11: Yuking <yuking_net@sohu.com>
-	* src/MainWindow.c, InputWindow.c: Ϊ���봰��״̬������������
+	* src/MainWindow.c, InputWindow.c: 为输入窗和状态窗增加了名字
 
 2010-01-28: Yuking <yuking_net@sohu.com>
-	* ������/�ر�DBusģʽ��һЩ����
+	* 修正打开/关闭DBus模式的一些错误
 
 2010-01-18: Yuking <yuking_net@sohu.com>
-	* data/cj.txt: ��©������뷨�еġ��⡱��
-	* src/tools.c: ���������ļ�������
+	* data/cj.txt: 补漏仓颉输入法中的“这”字
+	* src/tools.c: 修正配置文件读错误
 
 2009-12-29: Yuking <yuking_net@sohu.com>
-	* �����޷������û�����ʹ�Ƶ��Ϣ�Ĵ���
+	* 修正无法保存用户词组和词频信息的错误
 
 2009-12-19: zxd <zhangxudong AT 163.com>
-	* ���뻷������FCITXDIR�������û�����ָ���Ӻδ����������ļ�
+	* 引入环境变量FCITXDIR，这样用户可以指定从何处读入数据文件
 
 2009-12-10: meoow <meoow AT imp3.net>
-	* data/vk.conf: Ϊ��������������ķ���
+	* data/vk.conf: 为虚拟键盘添加日文符号
 
 2009-12-10: Yuking <yuking_net@sohu.com>
-	* src/KeyList.c: ����ĳЩ�����������������
+	* src/KeyList.c: 修正某些按键处理错误的问题
 
 2009-11-29: Jarryson
-	* �޸������ļ���·������������XDG��׼
+	* 修改配置文件的路径，尽量靠近XDG标准
 
 2009-11-03: hurrica...@126.com
-	* lib/i18nPtHdr.c, i18nIc.c: ���������ڴ�й¶
+	* lib/i18nPtHdr.c, i18nIc.c: 修正两处内存泄露
 
 2009-11-02: Yuking <yuking_net@sohu.com>
-	* src/tools.c, xim.c: �û�����ָ����¼�ļ�·���ˣ����·��Ϊ�գ���Ĭ��Ϊ~/.fcitx/record.dat
+	* src/tools.c, xim.c: 用户可以指定记录文件路径了，如果路径为空，则默认为~/.fcitx/record.dat
 
 2009-10-29: Yuking <yuking_net@sohu.com>
-	* src/xim.c, tools.c: ���Ӽ�¼ģʽ��Ĭ���ȼ�CTRL_ALT_J)������������ѡ��
-	* src/ime.c: �Ľ����뷨����ģʽ������ͨ�������ļ��������뷨��˳��(�磬���á�ʹ��ƴ��=1������ʹ����λ=2������ôƴ��������λ��ǰ��)
+	* src/xim.c, tools.c: 增加记录模式（默认热键CTRL_ALT_J)，并增加配置选项
+	* src/ime.c: 改进输入法设置模式，可以通过配置文件设置输入法的顺序(如，设置“使用拼音=1”、“使用区位=2”，那么拼音将在区位的前面)
 
 2009-10-25: Yuking <yuking_net@sohu.com>
-	* src/py.c: ����ƴ����Ƶ��Ϣ�����������
-	* src/tools.c, main.c: ���������ļ��Ķ�ȡ�����������Զ��ڼ�Ŀ¼�����������ļ�������������һ�������в���������fcitx -h�鿴��
+	* src/py.c: 修正拼音词频信息保存错误问题
+	* src/tools.c, main.c: 调整配置文件的读取方法，不再自动在家目录中生成配置文件，而是增加了一个命令行参数（请用fcitx -h查看）
 
 2009-10-21: Yuking <yuking_net@sohu.com>
-	* src/xim.c, main.c: ������QT4.6��Чʱ�Ĳ�����
+	* src/xim.c, main.c: 修正与QT4.6特效时的不兼容
 
 2009-10-18: wind (xihe), xihels@gmail.com
-        * ����VIM�Զ�����ģʽת��
+        * 添加VIM自动输入模式转换
 
 2009-09-30: ginkgo <ginkgo @ linuxsir>
-        * data/vk.conf: �������ġ������Ĵ���
+        * data/vk.conf: 修正中文“〇”的错误
 
 2009-09-29: Yuking <yuking_net@sohu.com>
-        * src/tools.c, ime.c: ���Ӵ�/�ر�������̵��ȼ�"CTRL_ALT_K"
+        * src/tools.c, ime.c: 增加打开/关闭虚拟键盘的热键"CTRL_ALT_K"
 
 2009-09-20: Yuking <yuking_net@sohu.com>
-        * src/tools.c, ime.c: �����ֶ�����ʿ���ȼ���Ĭ��Ϊ"CTRL_ALT_S"
+        * src/tools.c, ime.c: 增加手动保存词库的热键，默认为"CTRL_ALT_S"
 
 2009-09-19: Yuking <yuking_net@sohu.com>
-	* �����֡�������ƴ����lo��
+	* 添加字“咯”的拼音“lo”
 
 2009-09-18: Yuking <yuking_net@sohu.com>
-	* ����LOG�ļ��ı���·�������Ȩ�޲��Զ����±���������
-	* ����ĳЩ�������������ʾ������������
-	* ����ƴ������Ƶ�ʲ��ܱ��������
+	* 更改LOG文件的保存路径，解决权限不对而导致崩溃的问题
+	* 修正某些情况下主窗口显示不完整的问题
+	* 修正拼音词组频率不能保存的问题
 
 2009-09-13: Yuking <yuking_net@sohu.com>
-	* src/ui.c: �ػ�tray icon
+	* src/ui.c: 重画tray icon
 
 2009-08-17: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ����������˫ƴʱ˫ƴ����������������
+	* src/ime.c: 修正仅配置双拼时双拼工作不正常的问题
 
 2009-08-11: Yuking <yuking_net@sohu.com>
-	* src/xim.c, InputWindow.c: �Ż�������
+	* src/xim.c, InputWindow.c: 优化光标跟随
 
 2009-07-05: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ��������ģʽ����ʾ�����������ܵ��±���������
+	* src/ime.c: 修正联想模式下显示不正常及可能导致崩溃的问题
 
 2009-05-26: Yuking <yuking_net@sohu.com>
-        * src/ime.c: ������������ʱ����ʾ������������
-	* ������������ͼ��ʱ����ѡ���Ƿ���ʾ����ͼ��
+        * src/ime.c: 修正输入条有时候显示不正常的问题
+	* 当编译了托盘图标时，可选择是否显示托盘图标
 
 2009-05-19: Yuking <yuking_net@sohu.com>
-        * src/main.c: ��������ʱ����ʾ����ͼ�������
-	* configure.in: ������ͼ����Ϊһ��������ѡ��
+        * src/main.c: 修正启动时不显示托盘图标的问题
+	* configure.in: 将托盘图标作为一个可配置选项
 
 2009-05-19: hubert_star AT forum.ubuntu.com.cn
-        * src/ime.c: keycode��32��126֮��ʱ������keypress������keyrelease
+        * src/ime.c: keycode在32到126之间时，处理keypress而忽略keyrelease
 
 2009-05-15: Yuking <yuking_net@sohu.com>
-        * ����������ʱ������λ�õ�һЩС����
+        * 修正光标跟随时输入条位置的一些小问题
 
 2009-05-07: Yuking <yuking_net@sohu.com>
-        * ������������ʾʱ��һЩС����
+        * 修正输入条显示时的一些小问题
 
 2009-05-07: Vern Sun <s5unty AT gmail.com>
-        * ������������ͼ����ʱ���޷���ȷ��ʾ������
+        * 尝试修正托盘图标有时候无法正确显示的问题
 
 2009-05-02: Vern Sun <s5unty AT gmail.com>
-        * ��������ͼ�깦��
+        * 增加托盘图标功能
 
 2009-04-13: Yuking <yuking_net@sohu.com>
-	* �����������е�һЩ��������
-	* src/ime.c: ����ĳЩʱ���޷���0ѡ���ѡ�ֵ�����
+	* 修正五笔码表中的一些致命错误
+	* src/ime.c: 修正某些时候无法用0选择候选字的问题
 
 2009-04-05: Yuking <yuking_net@sohu.com>
-	* ����ĳЩ����»����˫��ĸ������
+	* 修正某些情况下会出现双字母的问题
 
 2009-03-26: Yuking <yuking_net@sohu.com>
-	* ����ƴ������е�һЩ����
+	* 修正拼音码表中的一些错误
 
 2009-03-26: Yuking <yuking_net@sohu.com>
-	* tools/createPYMB.c: ת��ƴ����ʱ��������һЩ�����Ϣ
-	* ���һЩ��ע�͵������ô���
+	* tools/createPYMB.c: 转换拼音的时候增加了一些输出信息
+	* 清除一些被注释掉的无用代码
 
 2009-03-10: BigSnake.NET (BigSnake.NET@forum.ubuntu.org.cn)
 	* src/xim.c: fixes a potential segment fault
 
 2009-01-27: Yuking <yuking_net@sohu.com>
-	* src/table.c: ���������������ѡ��(���磬ָ��Ϊ2��ʾֻ��ʾ˫�ִ�)
+	* src/table.c: 增加最长词组字数的选项(比如，指定为2表示只显示双字词)
 
 2008-11-14: Yuking <yuking_net@sohu.com>
-	* �Ľ�ƴ����д�����ƥ�䣬���磬������"c'fan"ʱ�����Է���Ҳ������ں�ѡ���У��������Ƿ�ѡ����ģ��ƴ��
+	* 改进拼音简写词组的匹配，比如，当输入"c'fan"时，“吃饭”也会出现在候选词中，而无论是否选择了模糊拼音
 
 2008-10-28: Yuking <yuking_net@sohu.com>
-	* src/main.c,xim.c: ���Ӳ�����-n�������������е�ʱ�����ָ��XIM������
-	* src/ime.c: �ָ�ԭ������ʱӢ��ģʽ
-	* data/AutoEng.dat: �����˼����Զ�ת��Ӣ�ĵ�ǰ׺
-	* src/table.c: �����Զ����ʱ��һ��Ƶ�ȴ���
+	* src/main.c,xim.c: 增加参数‘-n’，这样在运行的时候可以指定XIM的名字
+	* src/ime.c: 恢复原来的临时英文模式
+	* data/AutoEng.dat: 增加了几个自动转入英文的前缀
+	* src/table.c: 修正自动组词时的一个频度错误
 
 2008-10-26: Yuking <yuking_net@sohu.com>
-	* ������ʾ/���������ڵ��ȼ���Ĭ��ΪCTRL_ALT_H
+	* 增加显示/隐藏主窗口的热键，默认为CTRL_ALT_H
 
 2008-10-23: Yuking <yuking_net@sohu.com>
-	* src/table.c: ����������뷨�����빦��ʱ�Ĵ���
+	* src/table.c: 修正码表输入法打开联想功能时的错误
 
 2008-10-21: Yuking <yuking_net@sohu.com>
-	* ��������Ȼ�����/������ʱ�����һ������
-	* �ϲ�google-code�ϵĴ���
+	* 增加了自然码码表/修正五笔编码中一个错误
+	* 合并google-code上的代码
 
 2008-10-16: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ������������ֺ�ĸ����С���㣬����С��������������˸��������С�������Ϊȫ�Ƿ��š�
+	* src/ime.c: 如果设置了数字后的跟半角小数点，输入小数点后马上输入退格键，将该小数点更改为全角符号。
 
 2008-10-14: Yuking <yuking_net@sohu.com>
-	* src/table.c: �����������ʱ�Զ���ʵ�����
+	* src/table.c: 修正码表输入时自动组词的问题
 
 2008-10-08: Yuking <yuking_net@sohu.com>
-	* src/table.c: ����ƴ��/����������ʱ��һ���Զ��������⣬���ӽ���������ϰ��
+	* src/table.c: 修正拼音/码表混合输入时的一个自动上屏问题，更接近码表输入的习惯
 
 2008-10-07: Yuking <yuking_net@sohu.com>
-	* src/xim.c: ����һ����������λ����
+	* src/xim.c: 修正一个输入条定位问题
 
 2008-09-22: Yuking <yuking_net@sohu.com>
-	* src/xim.c, tools.c: ȥ������̬ģʽ��ѡ��
+	* src/xim.c, tools.c: 去掉“静态模式”选项
 
 2008-09-16: Yuking <yuking_net@sohu.com>
-	* src/xim.c: ����ĳЩʱ���������������
+	* src/xim.c: 修正某些时候键盘锁死的问题
 
 2008-09-08: Yuking <yuking_net@sohu.com>
-	* src/ui.c: ��������״̬���ڵ�һ��ͼ��ʱ���뷨״̬��ʾ���ҵ�����
+	* src/ui.c: 修正单击状态窗口第一个图标时输入法状态显示错乱的问题
 
 2008-07-31: Yuking <yuking_net@sohu.com>
-	* src/ime.c: �����Զ�Ӣ��Ϊֱ���͵��û�����
+	* src/ime.c: 更改自动英文为直接送到用户程序
 
 2008-07-11: Yuking <yuking_net@sohu.com>
-	* data/wanfeng.txt: ����wiltong@linuxsir�ṩ����������еĲ��ִ�������
-	* src/table.c: �����Զ�����е�һ������
+	* data/wanfeng.txt: 加上wiltong@linuxsir提供的晚风码表中的部分错码修正
+	* src/table.c: 修正自动组词中的一个错误
 
 2008-05-10: Yuking <yuking_net@sohu.com>
-	* src/table.c: ����������뷨�е�һ������
+	* src/table.c: 修正码表输入法中的一个错误
 
 2007-07-16: Yuking <yuking_net@sohu.com>
-	* src/table.c:�������ģʽ����ʱ�޷����뷭ҳ��������
-	* src/table.c:���ģʽʱ�������ѡ����ƴ��������������뷨�ı���
+	* src/table.c:修正混合模式输入时无法输入翻页键的问题
+	* src/table.c:混合模式时，如果候选字是拼音，给出码表输入法的编码
 
 2007-07-13: Yuking <yuking_net@sohu.com>
-	* ��ɫ�������
+	* 黑色星期五版
 
 2007-07-05: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ��ͼ�����QT-immodule����¶��ֵ�����
-	* src/table.c ����ĳЩ����°���㵼�±���������
+	* src/ime.c: 试图解决在QT-immodule情况下丢字的问题
+	* src/table.c 修正某些情况下按标点导致崩溃的问题
 
 2007-07-02: Yuking <yuking_net@sohu.com>
-	* src/table.c: �����˿���������һ������
-	* src/table.c: ��������������һ������
-	* ���ӱ���ȫϢ���
+	* src/table.c: 修正了空码上屏的一个错误
+	* src/table.c: 调整空码上屏的一个设置
+	* 增加冰蝉全息码表
 
 2007-07-01: Yuking <yuking_net@sohu.com>
-	* src/table.c: ���������/ƴ����������е�һ����BUG
+	* src/table.c: 修正了码表/拼音混合输入中的一个大BUG
 
 2007-06-30: Yuking <yuking_net@sohu.com>
-	* xpm/fullcorner.xpm: ʹ��wpyh@linuxsir�޸Ĺ���ͼ��
-	* data/pyphrase.org: ��������Ŷlve��ƴ������(лл �϶���dsdsdds AT ������.����)
-	* src/table.c: ����ʵ�����/ƴ���Ļ������
+	* xpm/fullcorner.xpm: 使用wpyh@linuxsir修改过的图标
+	* data/pyphrase.org: 修正读音哦lve的拼音错误(谢谢 邢东升dsdsdds AT １２６.ｃｏｍ)
+	* src/table.c: 初步实现码表/拼音的混合输入
 
 2007-06-28: Yuking <yuking_net@sohu.com>
-	* data/erbi.txt: ʹ�����µı�׼���������esixth�ṩ��
+	* data/erbi.txt: 使用了新的标准二笔码表（esixth提供）
 
 2007-06-10: Yuking <yuking_net@sohu.com>
-	* src/ui.c: ������xftģʽ�±���ʧ�ܵ�����
+	* src/ui.c: 修正非xft模式下编译失败的问题
 
 2007-05-28: Yuking <yuking_net@sohu.com>
-	* src/ime.c: �ٴ�����ĳЩ���룬��ͼ����������������
-	* src/main.c: �����޷�ͨ�������н����̨������
-	* ����״̬����˸������
-	* �汾3.5-070528
+	* src/ime.c: 再次修正某些代码，试图解决不能输入的问题
+	* src/main.c: 修正无法通过命令行进入后台的问题
+	* 修正状态栏闪烁的问题
+	* 版本3.5-070528
 
 2007-05-27: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ��������ĳЩ���룬��ͼ����������������
-	* Ĭ�ϲ��ٽ����̨ģʽ
-	* Ĭ�Ϲرվ�̬ģʽ
-	* �汾3.5-070527
+	* src/ime.c: 重新修正某些代码，试图解决不能输入的问题
+	* 默认不再进入后台模式
+	* 默认关闭静态模式
+	* 版本3.5-070527
 
 2007-05-25: Yuking <yuking_net@sohu.com>
-	* src/table.c: ��ʱ�����������ʱ��ʱƴ���������������
+	* src/table.c: 临时修正码表输入时临时拼音联想崩溃的问题
 
 2007-05-23: Yuking <yuking_net@sohu.com>
-	* src/tools.c: ��������ʾ�汾���������õ�����
+	* src/tools.c: 修正“显示版本”不起作用的问题
 
 2007-05-22: Yuking <yuking_net@sohu.com>
-	* �Ľ��������ڹ�����ģʽ�µ���Ϊ
+	* 改进输入条在光标跟随模式下的行为
 
 2007-05-07: Yuking <yuking_net@sohu.com>
-	* �����vimĳЩ�����ݵ�����
-	* ������ͼ�����ʱ�������������
-	* �汾3.5-070507
+	* 解决与vim某些不兼容的问题
+	* 继续试图解决有时不能输入的问题
+	* 版本3.5-070507
 
 2007-04-16: Yuking <yuking_net@sohu.com>
-	* src/xim.c: Ҳ���������ʱ�������������
+	* src/xim.c: 也许解决了有时不能输入的问题
 
 2007-04-10: Yuking <yuking_net@sohu.com>
-	* src/xim.c, tools.c: XIMĬ������Ϊ��̬ģʽ
+	* src/xim.c, tools.c: XIM默认设置为静态模式
 
 2007-04-10: Yuking <yuking_net@sohu.com>
-	* src/InputWindows.c: ����������һ�����λ��������
+	* src/InputWindows.c: 修正输入条一个光标位错误问题
 
 2007-04-06: Yuking <yuking_net@sohu.com>
-	* src/py.c: �������Զ���ʵĲ��ԣ����ܻ����һЩ
-	* �����Զ�ת��Ӣ�ĵĹ���
+	* src/py.c: 调整了自动组词的策略，可能会更好一些
+	* 增加自动转入英文的功能
 
 2007-04-03: Yuking <yuking_net@sohu.com>
-	* src/py.c: ����һ�����ܵ��³�������Ķ�ȡ�ʿ�����
-	* �汾3.5-070403
+	* src/py.c: 修正一个可能导致程序崩溃的读取词库问题
+	* 版本3.5-070403
 
 2007-03-27: Yuking <yuking_net@sohu.com>
-	* src/KeyList.c,tools.c: ֧��Super���������
+	* src/KeyList.c,tools.c: 支持Super键及其组合
 
 2007-03-14: Yuking <yuking_net@sohu.com>
-	* src/KeyList.c: ֧��С����ѡ��/��
+	* src/KeyList.c: 支持小键盘选字/词
 
 2007-03-06: Yuking <yuking_net@sohu.com>
-	* src/MainWindow.c: ȫ��ģʽʱ�����뷨������ʾ��ȫ��ģʽ��
+	* src/MainWindow.c: 全角模式时在输入法名处显示“全角模式”
 
 2007-03-05: Chiyuan Zhang(pluskid DOT zju AT gmail DOT com)
-	*��XKeysymToKeycode���滻ԭ���Ķ�ȡɨ���룬�Ա�fcitx�ܵõ��û��Զ���ļ�
-	* src/KeyList.c: ���κ���GetKeyCodeList����Ϊ��������û����
+	*用XKeysymToKeycode来替换原来的读取扫描码，以便fcitx能得到用户自定义的键
+	* src/KeyList.c: 屏蔽函数GetKeyCodeList，因为它根本就没有用
 
 2007-03-05: dgod(dgod@linuxsir.org)
-	* ����ʹ���ⲿ���뷨ģ����ṩ�����ⲿ���뷨�Ľӿڣ���������Ϊfcitx��д�Լ������뷨��
+	* 添加使用外部输入法模块和提供开发外部输入法的接口，这样可以为fcitx编写自己的输入法了
 
 2007-01-31: Yuking <yuking_net@sohu.com>
-	* src/xim.c: ����ĳЩ�����״̬����ʾ��׼ȷ������
-	* ȥ���Զ�������������ѡ���Ϊ�����Զ�����
+	* src/xim.c: 修正某些情况下状态栏显示不准确的问题
+	* 去掉自动隐藏输入条的选项，改为总是自动隐藏
 
 2007-01-23: Yuking <yuking_net@sohu.com>
- 	* src/tools.c: �޸������ļ���ȥ�����Ƿ�(unicom_2@linuxsir)
-	* src/table.c: ������ʱƴ��ʱ��һ����ʾ����
-	* src/table.c: �޸ķ�ҳ������Ϊ
+ 	* src/tools.c: 修改设置文件，去掉“是否”(unicom_2@linuxsir)
+	* src/table.c: 修正临时拼音时的一个显示错误
+	* src/table.c: 修改翻页键的行为
 
 2007-01-15: Yuking <yuking_net@sohu.com>
-	* src/py.c: Ӧkde@magiclinux�Ľ��飬������ƴ��Ԥ�༭ģʽ�°���/�Ҽ�����Ϊ
+	* src/py.c: 应kde@magiclinux的建议，更改了拼音预编辑模式下按左/右键的行为
 
 2007-01-13: Yuking <yuking_net@sohu.com>
-	* src/tools.c: ��ƴ��/��λ�������ã�ԭ��û�г����������ļ��У�
-	* src/PYFA.c: ����ĳЩģ��ƴ���޷���Ч������
+	* src/tools.c: 打开拼音/区位名称设置（原来没有出现在配置文件中）
+	* src/PYFA.c: 修正某些模糊拼音无法生效的问题
 
 2007-01-12: Yuking <yuking_net@sohu.com>
-	* src/table.c: �����û��Զ����������Ĺ���
-	* Ĭ�ϲ���vvg�ġ�fcitx����ɫ�򵥷�񡱣�vvg@linuxsir��
-	* �汾3.5-070112
+	* src/table.c: 增加用户自定义上屏键的功能
+	* 默认采用vvg的“fcitx蓝紫色简单风格”（vvg@linuxsir）
+	* 版本3.5-070112
 
 2007-01-08: Yuking <yuking_net@sohu.com>
-	* src/tools.c, ime.c: �����ڶ�����ѡ������Ϊ������ʱ��һ������
-	* src/table.c: ������뷨���ӿ����Զ������Ĺ���
+	* src/tools.c, ime.c: 修正第二三候选键设置为其它键时的一个问题
+	* src/table.c: 码表输入法增加空码自动上屏的功能
 
 2007-01-04: Yuking <yuking_net@sohu.com>
-	* src/ui.c: ��Ϊ�����ͼ���ϰ�����Ҽ���ʱ����״̬��
-	* src/ui.c: ������һ����ʾ����
-	* src/tools.c, ime.c: �Ѵ�����ɫ����Ϊ�ɼ�ʱ����
+	* src/ui.c: 改为在企鹅图标上按鼠标右键临时隐藏状态栏
+	* src/ui.c: 修正了一个显示错误
+	* src/tools.c, ime.c: 把窗口颜色设置为可即时更改
 
 2006-12-31: Yuking <yuking_net@sohu.com>
-	* �汾 'GirlDog' 3.4.3 �����
+	* 版本 'GirlDog' 3.4.3 新年版
 
 2006-12-30: Yuking <yuking_net@sohu.com>
-	* src/ime.c,tools.c: �ڶ�����ѡ���������ó���������
+	* src/ime.c,tools.c: 第二三候选键可以设置成其它键了
 
 2006-12-29: Yuking <yuking_net@sohu.com>
-	* src/table.c: ����ĳЩ������³������������
-	* data/erbi.txt: ʹ��esixth�������Ķ������
+	* src/table.c: 修正某些码表导致程序崩溃的问题
+	* data/erbi.txt: 使用esixth修正过的二笔码表
 
 2006-12-16: Yuking <yuking_net@sohu.com>
-	* ����TAB/SHIFT֧��
-	* ����GBK���֡��֡��͡��r(chou)��
+	* 增加TAB/SHIFT支持
+	* 加入GBK汉字“囍”和“䌷(chou)”
 
 2006-12-09: Yuking <yuking_net@sohu.com>
-	* src/ui.c, tools.c: ��״̬��������һ�¿��أ�����Ƿ�ʹ�ô���
+	* src/ui.c, tools.c: 给状态窗口增加一下开关，设计是否使用粗体
 
 2006-12-06: waq <waq@linux.sir>
-	* �ֺŽ���Ϊ����Ϊ1��2��������������Ӣ�ļ����ţ����س�����������Ӣ�ļ����š����ڿ�������������Ӣ�ľ�����
-	* �ֺŽ���Ϊ����Ϊ2ʱ���ṩ�������ʾ���ܡ�Ҳ����˵����ֻҪ��ƥ��ǰ��ı���Ϳ�����
-	* ���ڷֺſ���������ţ������Զ�������ʱ�ķ�ҳ���ܸ�ȡ���ˡ����˾���û�˻��̬���Զ���ʱ����һ�������İɡ����������и�Ҫ�󣬾����Զ�������ļ�(QuickPhrase.mb)Ҫ���ǰ������ź���ģ�����ո������ľͲ�����ƥ����Ǹ���
-	* �����������ֺ����һ���ֺŵ�����
-	* �����˷ֺż���Ϊ����Ϊ2ʱ�������д��ĸ�л�ΪӢ�������BUG��Ҳ�����Բ�����BUG��
-	* �����˷ֺż���Ϊ����Ϊ2ʱ��ʹ���ȼ���L_SHIFT��R_SHIFT��ѡ��ڶ��������ѡ��ʱ���ִ������fcitx������BUG
-	* ������ʹ���ȼ�ѡ��ڶ��������ѡ��ʱ�������������������
+	* 分号健行为设置为1与2都可以输入任意英文及符号，按回车键结束输入英文及符号。现在可以输入完整的英文句子了
+	* 分号健行为设置为2时，提供了逐键提示功能。也就是说现在只要求匹配前面的编码就可以了
+	* 由于分号可以输入符号，所以自定义输入时的翻页功能给取消了。个人觉得没人会变态到自定义时还有一大堆重码的吧。但是这里有个要求，就是自定义码表文件(QuickPhrase.mb)要求是按升序排好序的，否则空格键输入的就不是最匹配的那个了
+	* 增加了两个分号输出一个分号的能力
+	* 修正了分号键行为设置为2时，输入大写字母切换为英文输入的BUG，也许可以不算是BUG吧
+	* 修正了分号键行为设置为2时，使用热键（L_SHIFT、R_SHIFT）选择第二或第三候选字时出现错误或者fcitx崩溃的BUG
+	* 增加了使用热键选择第二或第三候选字时，可以连续联想的能力
 
 2006-12-03: Yuking <yuking_net@sohu.com>
-	* ��������Ϊȫ��ʱ����������
+	* 修正设置为全角时崩溃的问题
 
 2006-12-01: Yuking <yuking_net@sohu.com>
-	* ��libxpm�滻ԭ�е�xpm��������
-	* �汾 'GirlDog' 3.4.2
+	* 用libxpm替换原有的xpm处理方法
+	* 版本 'GirlDog' 3.4.2
 
 2006-11-29: Yuking <yuking_net@sohu.com>
-	* src/table.c: �����ֶ�������ƵʧЧ�Ĵ���
-	* src/InputWindow.c, tools.c, ime.c: �����Ƿ���ʾ�汾�Ŀ���
+	* src/table.c: 修正手动调整词频失效的错误
+	* src/InputWindow.c, tools.c, ime.c: 增加是否显示版本的开关
 
 2006-11-02: Yuking <yuking_net@sohu.com>
-	* src/table.c: ����ĳЩʱ�򲻱����û���Ƶ��Ϣ������
+	* src/table.c: 修正某些时候不保存用户词频信息的问题
 
 2006-11-01: Yuking <yuking_net@sohu.com>
-	* tools/txt2mb.c: ������������һ������
-	* src/xim.c,tools.c: ����������λ��������X/Y��ƫ����
-	* �汾 'GirlDog' 3.4.1
+	* tools/txt2mb.c: 修正码表排序的一个问题
+	* src/xim.c,tools.c: 给输入条的位置设置了X/Y的偏移量
+	* 版本 'GirlDog' 3.4.1
 
 2006-10-23: Yuking <yuking_net@sohu.com>
-	* �ָ��ٶȵ���ʾ
+	* 恢复速度的显示
 
 2006-10-21: Yuking <yuking_net@sohu.com>
-	* ��ƴ������λ����ʾ������Ϊ�ɶ���
+	* 将拼音和区位的显示名称设为可定义
 
 2006-10-20: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ��ȫ�ǵ����뷽ʽ�ָ�Ϊԭ��������
-	* src/table.c: �Ľ�������뷨�е��Զ����
+	* src/ime.c: 将全角的输入方式恢复为原来的样子
+	* src/table.c: 改进码表输入法中的自动组词
 
 2006-10-13: Yuking <yuking_net@sohu.com>
-	* data/pyphrase.org: �����ݾ�������Ϊ�����塱
+	* data/pyphrase.org: 将“陷井”修正为“陷阱”
 
 2006-10-10: Yuking <yuking_net@sohu.com>
-	* src/table.c: ������뷽ʽ�£���¼ÿ�����ɵ��Զ�����
+	* src/table.c: 码表输入方式下，记录每次生成的自动词组
 
 2006-09-21: Yuking <yuking_net@sohu.com>
-	* �汾 'GirlDog' 3.4
+	* 版本 'GirlDog' 3.4
 
 2006-09-13: Yuking <yuking_net@sohu.com>
-	* src/table.c,py.c: ������뷽ʽ�£���ʱƴ�������������
-	* src/table.c: ����������뷨��һ����ҳ����
-	* src/ime.c: ������/�ر����뷨ʱ������Զ���ʶ�ʧ������
-	* src/MainWindow.c: ������������ʾ��һ������
+	* src/table.c,py.c: 码表输入方式下，临时拼音可以输入词组
+	* src/table.c: 修正码表输入法的一个翻页错误
+	* src/ime.c: 修正打开/关闭输入法时，码表自动组词丢失的问题
+	* src/MainWindow.c: 修正主窗口显示的一个错误
 
 2006-09-10: Yuking <yuking_net@sohu.com>
-	* �汾060910
+	* 版本060910
 
 2006-09-05: Yuking <yuking_net@sohu.com>
-	* src/py.c: �������Ľ�����
+	* src/py.c: 修正并改进排序
 
 2006-09-01: Yuking <yuking_net@sohu.com>
-	* src/ime.c, tools.c: Ϊ�����л��������ȼ�(Ĭ��CTRL_ALT_F)
-	* src/table.c: �Ľ��˱�����ҷ���
+	* src/ime.c, tools.c: 为繁体切换设置了热键(默认CTRL_ALT_F)
+	* src/table.c: 改进了编码查找方法
 
 2006-08-30: Yuking <yuking_net@sohu.com>
-	* src/: �Ľ�˫ƴ������
-	* src/tools.c: Ĭ�ϴ�����Ŀ¼��ȡ�����ļ�
-	* �汾3.3.1��06��Ϧ�棩
+	* src/: 改进双拼的设置
+	* src/tools.c: 默认从数据目录读取配置文件
+	* 版本3.3.1（06七夕版）
 
 2006-08-27: Yuking <yuking_net@sohu.com>
-	* src/py.c: �Ż���ѡ�ֵ�����
-	* src/py.c: ����ĳЩʱ��HOME/END���������õ����⣨Ԥ�༭״̬��
+	* src/py.c: 优化候选字的排序
+	* src/py.c: 修正某些时候HOME/END键不起作用的问题（预编辑状态）
 
 2006-08-25: Yuking <yuking_net@sohu.com>
-	* tools/txt2mb.c: ����һ���������
+	* tools/txt2mb.c: 修正一个排序错误
 
 2006-08-18: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ����ȫ�ǵ����뷽ʽ
-	* �汾3.3
+	* src/ime.c: 更改全角的输入方式
+	* 版本3.3
 
 2006-08-15: Yuking <yuking_net@sohu.com>
-	* ��CTRL_H���˸������
-	* src/main.c: �����ڷ�zh_CN*״̬�²����������������ʾ������
+	* 将CTRL_H按退格键处理
+	* src/main.c: 修正在非zh_CN*状态下不能输入或不能正常显示的问题
 
 2006-08-14: Yuking <yuking_net@sohu.com>
-	* src/sp.c: ��˫ƴ�����˫ƴ������ָ�������ֽ��С�
+	* src/sp.c: 将双拼码表的双拼方案按指定的名字进行。
 
 2006-08-10: Yuking <yuking_net@sohu.com>
-	* src/xim.c: �����޷���ȡ������ӳ�����ʹ�÷���ת������ʱ���³������������
+	* src/xim.c: 修正无法读取繁体字映射表，使用繁体转换功能时导致程序崩溃的问题
 
 2006-07-27: Yuking <yuking_net@sohu.com>
-	* src/punc.c: ���ȴ��û�Ŀ¼��ȡ�����Ϣ
+	* src/punc.c: 首先从用户目录读取标点信息
 
 2006-07-25: Yuking <yuking_net@sohu.com>
-	* src/table.c: �����˷�ҳʱ��һ��С����
+	* src/table.c: 修正了翻页时的一个小错误
 
 2006-07-17: wpyh <wpyh@linuxsir>
 	* autogen.sh
-	* ����*2fcitx �ı���֧��
-	* �޸���tools�µ�ĳЩԴ���룬�滻#include *.c
-	* �޸�src/Makefile.*�����������Ҳ���ͷ�ļ�������
-	* src/MyErrorsHandlers.c: �޸�Ϊ����kill -s SIGUSR1 <fcitx-pid>��ʱ�򣬿��Ա������뷨���ļ�
-	* src/py.c: ��������ƴ�������ļ�ʱû���ȱ���Ϊ��ʱ�ļ���BUG
-	* tools/: ����������ȡ�û��Ĵʿ⣨���˴ʿ⣩�Ĺ���
+	* 加入*2fcitx 的编译支持
+	* 修改了tools下的某些源代码，替换#include *.c
+	* 修改src/Makefile.*，修正可能找不到头文件的问题
+	* src/MyErrorsHandlers.c: 修改为运行kill -s SIGUSR1 <fcitx-pid>的时候，可以保存输入法的文件
+	* src/py.c: 修正保存拼音索引文件时没有先保存为临时文件的BUG
+	* tools/: 增加三个提取用户的词库（个人词库）的工具
 
 2006-07-03: Yuking <yuking_net@sohu.com>
-	* src/table.c: �޸��˷�ҳ���Ĵ�����ʽ
+	* src/table.c: 修改了翻页键的处理方式
 
 2006-06-25: Yuking <yuking_net@sohu.com>
-	* ��Ĭ�ϵķ�ҳ����Ϊ-/= ,/.
+	* 将默认的翻页键改为-/= ,/.
 
 2006-06-23: Yuking <yuking_net@sohu.com>
-	* ȥ����������ٶȵĹ��ܣ�û��ʲô��
+	* 去掉计算打字速度的功能，没有什么用
 
 2006-06-22: Yuking <yuking_net@sohu.com>
-	* tools/txt2mb.c: �������������һ���������
-	* src/ui.c: ��������̴�ʱ�����Ҽ����ܻᵼ�½�����ʾ����
-	* �汾3.2.1
+	* tools/txt2mb.c: 修正生成码表的一个排序错误
+	* src/ui.c: 当虚拟键盘打开时，按右键可能会导致界面显示错误
+	* 版本3.2.1
 
 2006-06-18: Yuking <yuking_net@sohu.com>
-	* �滻�µ�������������kardinal@linuxsir��
-	* src/MyErrorsHandlers.c: ȥ����X�Ĵ�����Ϣ��û��ʲô��
-	* src/ime.c: ��������ָ��˫ƴ����Ч������
-	* src/ime.c, src/MyErrorsHandlers.c: �������¶������õ�һ��˳�����
+	* 替换新的五笔码表（来自kardinal@linuxsir）
+	* src/MyErrorsHandlers.c: 去掉了X的错误信息，没有什么用
+	* src/ime.c: 修正单独指定双拼不生效的问题
+	* src/ime.c, src/MyErrorsHandlers.c: 修正重新读入配置的一个顺序错误
 
 2006-06-07: Yuking <yuking_net@sohu.com>
-	* ����һ��GTK������������ʱ���������Ҳ����GTK�����⣨ubuntu 5.1���ԣ�
-	* �����ĵ�
-	* src/table.c: ���Զ����鱣���������Ϊ0ʱ���Զ����齫��һ����鴦��������ѡ�ֱ���ֻ��һ���Զ�����ʱ�������Զ�������
-	* �汾3.2
+	* 给了一个GTK程序光标跟随的临时解决方案：也许是GTK的问题（ubuntu 5.1测试）
+	* 更新文档
+	* src/table.c: 当自动词组保存次数设置为0时，自动词组将按一般词组处理（当候选字表中只有一个自动词组时，它会自动上屏）
+	* 版本3.2
 
 2006-03-05: Yuking <yuking_net@sohu.com>
-	* ���ģʽ�£����������ͼ������Ϊ��ѡ
-	* ����
+	* 简洁模式下，将虚拟键盘图标设置为可选
+	* ……
 
 2006-01-08: Yuking <yuking_net@sohu.com>
-	* src/ime.c: �����޷������Ƿֺŵ�����
+	* src/ime.c: 修正无法输入半角分号的问题
 
 2006-01-02: Yuking <yuking_net@sohu.com>
-	* src/ime.c: ����ĳЩGBK���������������Ĵ���(KanKer)
-	* configure.in: ���û�а�װX��������������make
+	* src/ime.c: 修正某些GBK汉字上屏不正常的错误(KanKer)
+	* configure.in: 如果没有安装X开发包，将不能make
 
 2005-12-30: Tao Liu<liutao1980@gmail.com>
-	* src/ui.c:����һ������
-	* src/ui.c:����xft�汾�������Ϊ��Ӣ�ĺ�����
+	* src/ui.c:修正一处笔误
+	* src/ui.c:将非xft版本的字体改为先英文后中文
 
 2005-12-25: Yuking <yuking_net@sohu.com>
-	* ���ӿ�������Ĺ���
-	* ȥ��LumaQQ֧�֣���Ϊ�µ�Lumaqq�Ѿ�����Ҫ�����
+	* 添加快速输入的功能
+	* 去掉LumaQQ支持，因为新的Lumaqq已经不需要这个了
 
 2005-11-03: Yuking <yuking_net@sohu.com>
-	* �ϲ�ƴ���Ѽ�4.0�ʿ⣨���������ɣ�
+	* 合并拼音佳佳4.0词库（经作者许可）
 	* 3.2-20051108
 
 2005-11-03: Yuking <yuking_net@sohu.com>
-	* ����wpyh@linuxsir�ļ���������������
-	    ��������ʾ����
-	    �����ļ���������
-	    tools/Makefile.in tools/Makefile.am������
+	* 加入wpyh@linuxsir的几个补丁，包括：
+	    输入条显示补丁
+	    配置文件错误修正
+	    tools/Makefile.in tools/Makefile.am的修正
 
 2005-10-23: Yuking <yuking_net@sohu.com>
-	* table.c:������ʱ�������Ҫ���ո������
+	* table.c:解决二笔标点符号需要按空格的问题
 
 2005-10-09: Yuking <yuking_net@sohu.com>
-	* ʹ������linuxfans�ϵļ���������
+	* 使用来自linuxfans上的极点二笔码表
 	* 3.2-051010
 
 2005-9-23: Yuking <yuking_net@sohu.com>
-	* Ϊ������뷨���ӹ̶��������Ĺ��ܣ�Ϊƴ������Ҫ�鷳һЩ�������ʱ������
+	* 为码表输入法增加固定输入条的功能，为拼音增加要麻烦一些，因此暂时不做了
 
 2005-9-10: Yuking <yuking_net@sohu.com>
-	* �޸����彫������������������ctrl_5����
-	* �������벻�ɹ�������
+	* 修改字体将不必再重新启动，按ctrl_5即可
+	* 修正编译不成功的问题
 	* 3.2-050910
 
 2005-9-9: Yuking <yuking_net@sohu.com>
-	* ���Ӵ��Լ�������ٶȵĹ���
+	* 增加粗略计算打字速度的功能
 
 2005-9-7: Yuking <yuking_net@sohu.com>
-	* src/vk.c:����һ����Ҫ���ڴ��������
-	* ����yunfan@linuxfans�Ĺ��ڴ���
+	* src/vk.c:修正一个重要的内存溢出问题
+	* 增加yunfan@linuxfans的关于窗口
 
 2005-8-27: Yuking <yuking_net@sohu.com>
-	* src/vk.c:����������̹���
-	* src/table.c:���ķ���ƴ���ķ�ʽ
+	* src/vk.c:完善虚拟键盘功能
+	* src/table.c:更改反查拼音的方式
 	* 3.2-050827
 
 2005-8-24: Yuking <yuking_net@sohu.com>
-	* src/table.c:������뷨�л�ʱ�����ܻᵼ��ƴ���޷�������������
+	* src/table.c:解决输入法切换时，可能会导致拼音无法输入词组的问题
 
 2005-8-21: Yuking <yuking_net@sohu.com>
-	* ������N��������̷���
+	* 增加了N个虚拟键盘方案
 
 2005-8-19: Yuking <yuking_net@sohu.com>
-	* ����3.2��һ�������԰�3.2-050819
+	* 发布3.2第一公开测试版3.2-050819
 
 2005-8-17: Yuking <yuking_net@sohu.com>
-	* src/ime.c,src/punc.c:����������״̬�°���д��/�س���Ӣ������еı������Ϊȫ�ǣ����ı��״̬��
+	* src/ime.c,src/punc.c:将中文输入状态下按大写键/回车的英文输出中的标点设置为全角（中文标点状态）
 
 2005-8-15: Yuking <yuking_net@sohu.com>
-	* ����������̵Ĺ���
-	* ����һЩС��BUG����
-	* �汾Ϊ3.2
+	* 增加虚拟键盘的功能
+	* 其它一些小的BUG修正
+	* 版本为3.2
 
 2005-7-23: Yuking <yuking_net@sohu.com>
-	* ��������ɫ����ƴ������ ��Archetype@linuxsir��
+	* 修正“角色”的拼音错误。 （Archetype@linuxsir）
 
 2005-7-7: Yuking <yuking_net@sohu.com>
-	* src/xim.c,src/InputWindow.c,src/tools.c:��������һֱ���У��ǹ�����״̬�£�
+	* src/xim.c,src/InputWindow.c,src/tools.c:将输入条一直居中（非光标跟随状态下）
 
 2005-5-4 jeff_yecn <sinomac.net>
-	* �����޷���Mac OS X(Darwin)���������
+	* 修正无法在Mac OS X(Darwin)编译的问题
 
 2005-4-23 Yuking <yuking_net@sohu.com>
-	* src/tools.c:��©�˹������������
-	* �����������ֺ�ĵ�����Ϊ��ѡ
+	* src/tools.c:遗漏了光标跟随键的设置
+	* 将输入条数字后的点设置为可选
 
 2005-3-24 Yuking <yuking_net@sohu.com>
-	* �汾Ϊ3.1.1
+	* 版本为3.1.1
 
 2005-3-23 Yuking <yuking_net@sohu.com>
-	* src/ime.c:�����뷽ʽ�£����ڶ�ѡ��������ǿո񣬰�����ѡ������ȫ�ǿո�
+	* src/ime.c:在联想方式下，按第二选择键输出半角空格，按第三选择键输出全角空格
 
 2005-3-21 Yuking <yuking_net@sohu.com>
-	* src/InputWindow.c:����GBK��ʽ��ѡ�����������
+	* src/InputWindow.c:修正GBK方式候选条乱码的问题
 
 2005-3-17 Yuking <yuking_net@sohu.com>
-	* src/ime.c,src/table.c,src/py.c:Ϊ����������ӷ���ƴ���Ĺ���
+	* src/ime.c,src/table.c,src/py.c:为码表输入增加反查拼音的功能
 
 2005-3-12 Yuking <yuking_net@sohu.com>
-	* src/ime.c,src/tools.c:����˫���л��������л���Ӣ�Ĺ���
+	* src/ime.c,src/tools.c:增加双击切换键快速切换中英文功能
 
 2005-3-09 Yuking <yuking_net@sohu.com>
-	* src/xim.c,src/ui.c:��������������ͼ�������������ģʽ�Ĺ���
+	* src/xim.c,src/ui.c:增加用鼠标点击企鹅图标进入中文输入模式的功能
 
 2005-3-02 wpyh (www.linuxsir.org)
-	* ��������ű������ĳЩ����²��ܱ��������
+	* 修正编译脚本，解决某些情况下不能编译的问题
 
 2005-2-27 Yuking <yuking_net@sohu.com>
-	* src/ime.c,src/tools.c:����Ӣ�Ŀ����л���Ĭ�����ûָ�ΪL_CTRL
+	* src/ime.c,src/tools.c:将中英文快速切换键默认设置恢复为L_CTRL
 
 2005-2-26 Yuking <yuking_net@sohu.com>
-	* src/ime.c:��ʱӢ��״̬ʱ���ո�����
-	* ����˵���ĵ�
-	* �Ľ��İ�װ����
-	* �汾Ϊ3.1
+	* src/ime.c:临时英文状态时按空格上屏
+	* 更新说明文档
+	* 改进的安装程序
+	* 版本为3.1
 
 2005-2-20 Yuking <yuking_net@sohu.com>
-	* ��Ӣ������ֱ�����
+	* 中英文字体分别设置
 
 2005-2-20 Yuking <yuking_net@sohu.com>
-	* ����ƴ�����·𡱵�ע������
+	* 修正拼音“仿佛”的注音错误
 
 2005-2-13 Yuking <yuking_net@sohu.com>
-	* src/py.c,src/tools.c:��ƴ���Դʶ��ּ���Ϊ������
+	* src/py.c,src/tools.c:将拼音以词定字键改为可设置
 
 2005-1-24 Yuking <yuking_net@sohu.com>
-	* src/ui.c:�������ܼ���״̬����λ�õ�����
-	* �汾Ϊ3.0.4
+	* src/ui.c:修正不能记忆状态窗口位置的问题
+	* 版本为3.0.4
 
 2005-1-24 Yuking <yuking_net@sohu.com>
-	* src/table.c:����������뷨���Ӵ����һ������
-	* src/ime.c,src/tools.c:����Ӣ�Ŀ����л���Ĭ�����ø�ΪL_SHIFT
+	* src/table.c:修正码表输入法添加词组的一个问题
+	* src/ime.c,src/tools.c:将中英文快速切换键默认设置改为L_SHIFT
 
 2005-1-17 Yuking <yuking_net@sohu.com>
-	* src/pyParser.c,src/py.c:����ƴ�����뷨�зָ���ʱ�Ĵ���
+	* src/pyParser.c,src/py.c:修正拼音输入法有分隔符时的错误
 
 2005-1-1  Yuking <yuking_net@sohu.com>
-	* src/table.c:����������뷨�������¼��Ĵ���
+	* src/table.c:修正码表输入法特殊符号录入的错误
 
 2004-12-5  Yuking <yuking_net@sohu.com>
-	* �汾Ϊ3.0.3
+	* 版本为3.0.3
 
 2004-12-5  Yuking <yuking_net@sohu.com>
-	* �޸Ĳ������еĴ���
-	* �Ľ�������뷨ƥ����ٶ�
+	* 修改仓颉码表中的错误
+	* 改进码表输入法匹配的速度
 
 2004-12-5  Yuking <yuking_net@sohu.com>
-	* src/table.c:�Ľ����Ҵ�����㷨
+	* src/table.c:改进查找词组的算法
 
 2004-12-3  Yuking <yuking_net@sohu.com>
-	* src/MyErrorsHandlers.c:����ӵ�SIGHUP�����¶�ȡ�����ļ�
-	* src/xim.c:�޸���lumaQQ֧�֣��Խ����֧��ʱ��ɾ��QT������ѡ�����ֵ�����
+	* src/MyErrorsHandlers.c:程序接到SIGHUP后将重新读取配置文件
+	* src/xim.c:修改了lumaQQ支持，以解决打开支持时会删除QT程序中选中文字的问题
 
 2004-12-2  Yuking <yuking_net@sohu.com>
-	* src/table.c:�Ľ��Զ���ʵĲ���
+	* src/table.c:改进自动组词的查重
 
 2004-10-29 Yuking <yuking_net@sohu.com>
-	* src/table.c:����һ�����ֱ����Ա�����Զ���ʵ��ٶ�
+	* src/table.c:增加一个单字表，以便提高自动组词的速度
 
 2004-10-24 Yuking <yuking_net@sohu.com>
-	* src/table.c:ʹ����ʱƴ������ʱ�����ո����ѡ����ֲ��ܵ�������һ��
+	* src/table.c:使用临时拼音功能时，按空格键所选择的字不能调整到第一个
 
 2004-10-20 Yuking <yuking_net@sohu.com>
-	* ��ѡ������ż����һ��С����
-	* �����ĵ�
-	* �汾Ϊ3.0.2
+	* 候选字与序号间加入一个小数点
+	* 更新文档
+	* 版本为3.0.2
 
 2004-10-11 Yuking <yuking_net@sohu.com>
-	* src/table.c:�������Ƿ��������Լ��Զ���ʱ�����������Ϊѡ��
+	* src/table.c:将词组是否参与组词以及自动组词保存条件设置为选项
 
 2004-10-5 Yuking <yuking_net@sohu.com>
-	* src/table.c:�����Զ���ʵ�һ���ڴ��������
+	* src/table.c:修正自动组词的一个内存溢出问题
 
 2004-09-27 Yuking <yuking_net@sohu.com>
-	* src/py.c:�����뷽ʽ�£������Դʶ��ּ��������
+	* src/py.c:在联想方式下，按下以词定字键会出问题
 
 2004-09-18 Yuking <yuking_net@sohu.com>
-	* ��������뷨��ʱʹ��ƴ��ʱ��ƴ�����ְ�������������
-	* ��������һЩС����
-	* �汾Ϊ3.0.1
+	* 将码表输入法临时使用拼音时，拼音单字按快速排序排列
+	* 修正其它一些小问题
+	* 版本为3.0.1
 
 2004-09-15 Yuking <yuking_net@sohu.com>
-	* ������ı����Ϊ��д����ʱ�ļ����Ա����������
-	* src/tools.c:����ʹ��ȫƴ������
+	* 将码表的保存改为先写入临时文件，以避免码表被损坏
+	* src/tools.c:修正使用全拼的设置
 
 2004-09-9 Yuking <yuking_net@sohu.com>
-	* src/table.c:ֻ��¼��ĵ����Զ����
-	* src/ime.c:����֧��lumaQQʱ�����ͷŵ�һ������
-	* tools/createPYMB.c:������ĳЩC�������в��ܱ��������
+	* src/table.c:只对录入的单字自动组词
+	* src/ime.c:修正支持lumaQQ时按键释放的一个问题
+	* tools/createPYMB.c:修正在某些C编译器中不能编译的问题
 
 2004-09-6 Yuking <yuking_net@sohu.com>
-	* src/table.c:����������뷨���Զ���ʵ�һ��BUG
-	* src/ime.c,src/xim.c:���LumaQQ֧�ִ�ʱ��qt-3.3.3�ļ���������
+	* src/table.c:修正码表输入法中自动组词的一个BUG
+	* src/ime.c,src/xim.c:解决LumaQQ支持打开时与qt-3.3.3的兼容性问题
 
 2004-09-5 Yuking <yuking_net@sohu.com>
-	* ��д�ĵ�
-	* ����3.0
+	* 重写文档
+	* 发布3.0
 
 2004-08   Yuking <yuking_net@sohu.com>
-	* ���ֺ�����Ӣ�Ļָ���2.X������
-	* ����ȫ�ǿո�
-	* ����xftģʽ���ּ�����������
-	* ����
+	* 将分号输入英文恢复到2.X的情形
+	* 修正全角空格
+	* 修正xft模式下字间距过宽的问题
+	* ……
 
 2004-07-21 Yuking <yuking_net@sohu.com>
-	* ����˫ƴ��ҳ�е�һ������
+	* 修正双拼翻页中的一个问题
 
 2004-07-19 Yuking <yuking_net@sohu.com>
-	* �޸Ĵ�/�ر����뷨��һ��С����
-	* �޸��Զ������е�һ���ظ�����������ٶ�
+	* 修改打开/关闭输入法的一个小问题
+	* 修改自动词组中的一个重复操作，提高速度
 
 2004-07-16 "Xie Yanbo"<xyb76@sina.com>
-	* (��ӡ�����Ϊ fprintf(stderr, ...)��������osx patch��jeff�ĵ�
-	* ���� config.h������Ҳ��jeff�ӵ�
-	* ����Ҫ���ļ������Ӷ�config.h�ĵ��ú�һЩ��Ҫ�ĺ�
-	* ���Ӷ� iconv �����ļ��
-	* tools Ŀ¼�еĳ�������������������壬fcloseall û��̫���ô���ȥ��
+	* (打印错误改为 fprintf(stderr, ...)，这是做osx patch的jeff改的
+	* 添加 config.h，好象也是jeff加的
+	* 在需要的文件里添加对config.h的调用和一些必要的宏
+	* 增加对 iconv 函数的检测
+	* tools 目录中的程序整理，比如变量定义，fcloseall 没有太大用处，去除
 
 2004-07-12 Yuking <yuking_net@sohu.com>
-	* �����lumaQQ�ļ��ݴ����Ϊһ��ѡ��
+	* 将针对lumaQQ的兼容代码改为一个选项
 
 2004-07-08 Yuking <yuking_net@sohu.com>
-	* ����ƴ���������ģ�飬��ȥ��ԭ�е�DARWIN��֧�֡�
+	* 整理拼音码表制作模块，并去掉原有的DARWIN的支持。
 
 2004-07-07 Yuking <yuking_net@sohu.com>
-	* �汾�Ÿ�Ϊ3.0.0-rc
-	* ���LumaQQ�������޸ģ����ڿ��Ժ���������Эͬ����
-	* ��������˫�ַ���ԭ�򣬲�����һЩ������ͼ��ֹ���������<�����ܻ�������>
-	* ������λ���뷨
-	* �����������ģ�飬����ʡ����ʵ���Ϊ���
-	* Ϊ������������Զ���ʵĹ���(ȡ�Լ�����ʵĹ�˼)
-	* ����
+	* 版本号改为3.0.0-rc
+	* 针对LumaQQ进行了修改，现在可以和它正常地协同工作
+	* 查明出现双字符的原因，并添加一些代码试图阻止出这种情况<但可能会有问题>
+	* 添加区位输入法
+	* 添加码表输入模块，将五笔、二笔等作为码表
+	* 为码表输入添加自动造词的功能(取自极点五笔的构思)
+	* ……
 
 2004-05-20 Yuking <yuking_net@sohu.com>
-	* Ϊ����������һ�����ģʽ��
+	* 为主窗口增加一个简洁模式。
 
 2004-05-19 Yuking <yuking_net@sohu.com>
-	* src/ime.c�����ķֺŵ��������Ϊ�س�����ȫ�Ƿֺţ��ո������Ƿֺš�
+	* src/ime.c：更改分号的输出，改为回车输入全角分号，空格输出半角分号。
 
 2004-05-17 Yuking <yuking_net@sohu.com>
-	* ���Ľ��棬�����뷨������������ʾ��
-	* �����ں��������Ƿ�ʹ��3D��ʾ���Էֱ����á�
-
-2004-05-16 Yuking <yuking_net@sohu.com>
-	* ȥ�����á��������á���
-	* �����������ı��ļ���Ϊ��ʽ�ļ���
-	* ����һ�����ߣ���ԭ�����������ļ�ת��Ϊ�µĸ�ʽ��
-	* ���������Զ���Ƶ��������Ϊ����/����/��Ƶ�ʣ�
-	* �汾�Ÿ�Ϊ2.1.0.
+	* 更改界面，将输入法名称用文字显示。
+	* 主窗口和输入条是否使用3D显示可以分别设置。
+	* 增加一个工具，将原来的五笔码表文件转换为新的格式；
+	* 五笔重码的自动调频可以设置为不调/快速/按频率；
+	* 版本号改为2.1.0.
 
 2004-05-15 Yuking <yuking_net@sohu.com>
-	* �����������뷨��Ϊ���ú���RegisterNewIM���Ա�Ϊ�Ժ���ܵ�Ӧ����׼����
-	* src/ui.c:XFT��������ĺ�����Ϊ����XftFontOpen(CreateFont);
-	* ��CheckLocale����ΪCheckHZCharset���������ļ�tools.c�У�ȥ��SetLocale.c/.h��
+	* 将添加新输入法改为调用函数RegisterNewIM，以便为以后可能的应用作准备。
+	* src/ui.c:XFT创建字体的函数改为调用XftFontOpen(CreateFont);
+	* 将CheckLocale改名为CheckHZCharset，并移入文件tools.c中，去掉SetLocale.c/.h。
 
 2004-05-09 Yuking <yuking_net@sohu.com>
-	* src/xim.c:����UnsetFocusʱ�й�CurrentIC��һ���жϴ���(MyUnsetFocusHandler)��
+	* src/xim.c:修正UnsetFocus时有关CurrentIC的一个判断错误(MyUnsetFocusHandler)。
 
 2004-04-30 Yuking <yuking_net@sohu.com>
-	* src/main.c:�޸��������в�����
+	* src/main.c:修改了命令行参数。
 
 2004-04-29 Yuking <yuking_net@sohu.com>
-	* src/ime.c:����xine����ʱ���ڶ�����ѡ��/���Զ�����������(ProcessKey)��
-	* src/py.c:����ƴ�����뷨�к�ѡ�ִ��������
+	* src/ime.c:修正xine播放时，第二个候选字/词自动上屏的问题(ProcessKey)。
+	* src/py.c:修正拼音输入法中候选字词排序错误。
 
 2004-04-25 Yuking <yuking_net@sohu.com>
-	* �û������Զ����/�ر����뷨���ȼ�--�����ļ�������ѡ���/�ر����뷨����
-	* �޸���readme.htm�ĵ���
+	* 用户可以自定义打开/关闭输入法的热键--配置文件中增加选项“打开/关闭输入法”。
+	* 修改了readme.htm文档。
 
 2004-04-25 Yuking <yuking_net@sohu.com>
-	* ȡ�Թ������˵İ������а�����BIGENDIAN��������
-	* src/xim.c: �޸�����ICʱ��CurrentIC����Ϊ�µ�ֵ������(MyCreateICHandler)��
-	* src/xim.c: ���������ICֵ��CurrentIC����ͬ����������(MyForwardEventHandler)������ͼ�������˫��ĸ�����⡣
-	* src/InputWindow.h: ��INPUTWND_WIDTH��Ĭ��ֵ����Ϊ200��
-	* src/py.c: �޸�һ������ı������ã�������ᵼ�������ѡ�ֱ���ʾ������(PYGetLegendCandWords)��
-	* src/MainWindow.c,src/tools.c,src/xim.c: ��������������һ��������ť����ʱ���޷��ü������л����뷨��
+	* 取自共创联盟的包，其中包括对BIGENDIAN的修正。
+	* src/xim.c: 修改生成IC时将CurrentIC设置为新的值的问题(MyCreateICHandler)。
+	* src/xim.c: 如果动作的IC值与CurrentIC不相同，将不处理(MyForwardEventHandler)──试图解决出现双字母的问题。
+	* src/InputWindow.h: 将INPUTWND_WIDTH的默认值设置为200。
+	* src/py.c: 修改一处错误的变量调用，此问题会导致联想候选字表显示不正常(PYGetLegendCandWords)。
+	* src/MainWindow.c,src/tools.c,src/xim.c: 在主窗口上增加一个锁定按钮，打开时将无法用键盘来切换输入法。
 
 2004-03-01  Xiao Huo  <xiaohuo@mail.com>
 
