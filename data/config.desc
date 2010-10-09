@@ -31,6 +31,11 @@ Type=Boolean
 DefaultValue=True
 Description=Enable Addons to Fcitx
 
+[Program/DelayStart]
+Type=Integer
+DefaultValue=0
+Description=Seconds sleep before fcitx really start
+
 [Output/HalfPuncAfterNumber]
 Type=Boolean
 DefaultValue=True

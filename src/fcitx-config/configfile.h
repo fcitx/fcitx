@@ -137,6 +137,8 @@ typedef struct FcitxConfig
     int i2ndSelectKey;
     int i3rdSelectKey;
     char cPYYCDZ[3];
+
+    int iDelayStart;
 } FcitxConfig;
 
 #ifdef _FCITX_H_

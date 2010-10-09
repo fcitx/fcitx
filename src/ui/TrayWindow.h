@@ -28,7 +28,6 @@
 #ifdef _ENABLE_TRAY
 
 #include <X11/Xlib.h>
-#include <X11/extensions/shape.h>
 #include <string.h>
 #include <cairo.h>
 #include <cairo-xlib.h>

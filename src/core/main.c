@@ -198,6 +198,9 @@ int main (int argc, char *argv[])
      */
     LoadAutoEng ();
 
+    if (fc.iDelayStart > 0)
+        sleep(fc.iDelayStart);
+
     /* 以下是界面的处理 */
     /* 创建主窗口，即输入法状态窗口 */
     if (!fc.bUseDBus)

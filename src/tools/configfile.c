@@ -70,6 +70,7 @@ CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseTray", bUseTrayIcon_, FilterC
 CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseDBus", bUseDBus_, FilterCopyUseDBus);
 #endif
 CONFIG_BINDING_REGISTER("Program", "EnableAddons", bEnableAddons);
+CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart);
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber);
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo);
 CONFIG_BINDING_REGISTER("Output", "SemiColonAction", semicolonToDo);
