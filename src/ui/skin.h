@@ -141,19 +141,6 @@ typedef struct
     SkinMenu skinMenu;
 } FcitxSkin;
 
-/**
-*
-*/
-typedef struct
-{
-	char *dirbase[64];
-} SkinDir;
-
-//extern cairo_surface_t *cs_main_menu;
-//extern cairo_surface_t *cs_vk_menu;
-//extern cairo_surface_t *cs_im_menu;
-//extern cairo_surface_t *cs_skin_menu;
-
 extern cairo_surface_t *  bar;
 extern cairo_surface_t *  logo;
 extern cairo_surface_t *  punc[2];
@@ -189,48 +176,28 @@ extern INT8	iIMCount;
 extern IM	*im;
 extern FcitxSkin sc;
 extern UT_array *skinBuf;
-/**
-*解析skin_xpm结构的值
-*/
-extern int str2skin_img(char * str,FcitxImage * img);
-extern Visual * find_argb_visual (Display *dpy, int scr);
-extern void load_main_img();
-void load_tray_img();
-void load_menu_img();
-void load_input_img();
-void load_input_msg();
-void draw_a_img(cairo_t **c,FcitxImage img,cairo_surface_t * png,MouseE mouse);
-void destroy_a_img(cairo_surface_t ** png);
-extern void draw_input_bar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
-extern void draw_menu_background(xlibMenu * menu);
-extern void set_mouse_status(MouseE m);
-/**
-* 加载皮肤配置文件
-*/
-int LoadSkinConfig();
 
-/*
-**
-*/
-int WritePrivateProfileString(char *SelectName, char *KeyName, char *String, char *FileName);
-int GetPrivateProfileString(FILE * fptmp,char *SelectName, char *KeyName,char *DefaultString, char *ReturnString,int Size);
-int fill_skin_config_int(FILE * fptmp,char * SelectName,char * KeyName);
-int fill_skin_config_str(FILE * fptmp,char * SelectName,char * KeyName,char * str);
+Visual * FindARGBVisual (Display *dpy, int scr);
+void LoadMainBarImage();
+void LoadTrayImage();
+void LoadMenuImage();
+void LoadInputBarImage();
+void LoadInputMessage();
+void DrawImage(cairo_t **c,FcitxImage img,cairo_surface_t * png,MouseE mouse);
+void DestroyImage(cairo_surface_t ** png);
+void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
+void DrawMenuBackground(XlibMenu * menu);
+void SetMouseStatus(MouseE m);
+/**
+ * 加载皮肤配置文件
+ */
+int LoadSkinConfig();
 
 void DisplayInputBar(int barlen);
 void DisplaySkin(char * skinname);
-int loadSkinDir();
-
-extern Bool IsInBox (int x0, int y0, int x1, int y1, int x2, int y2);
-extern Bool IsInRspArea(int x0,int y0,FcitxImage img);
-
-extern Visual * find_argb_visual (Display *dpy, int scr);
-
-extern void SelectIM(int imidx);
-extern void SelectVK(int );
+int LoadSkinDirectory();
 
 #define fcitx_cairo_set_color(c, color) cairo_set_source_rgb((c), (color)->r, (color)->g, (color)->b)
-
 
 CONFIG_BINDING_DECLARE(FcitxSkin);
 #endif

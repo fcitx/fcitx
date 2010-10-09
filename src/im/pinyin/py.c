@@ -33,6 +33,8 @@
 #include <machine/endian.h>
 #endif
 
+#include "core/fcitx.h"
+
 #include "tools/tools.h"
 #include "core/ime.h"
 #include "ui/InputWindow.h"
@@ -220,7 +222,7 @@ void LoadPYPhraseDict(FILE *fp, Bool isSystem)
 {
     int i, j ,k, count, iLen;
     char strBase[UTF8_MAX_LENGTH + 1];
-    PyPhrase *temp, *phrase;
+    PyPhrase *temp, *phrase = NULL;
     while (!feof(fp)) {
         INT8 clen;
         if (!fread(&i, sizeof(int), 1, fp))

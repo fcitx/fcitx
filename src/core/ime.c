@@ -358,7 +358,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 #ifdef _DEBUG
     printf
         ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d  iKey=%d\n",
-         (call_data->event.type == KeyRelease), iKeyState, (int) keysym, kev->keycode, keyCount, iKey);
+         (call_data->event.type == KeyRelease), iKeyState, kev->keycode, (int) keysym, keyCount, iKey);
 #endif
 
     /* Added by hubert_star AT forum.ubuntu.com.cn */
@@ -1154,7 +1154,6 @@ void SwitchIM(INT8 index)
 
 void SelectIM(int imidx)
 {
-//  int i=0;
     INT8 iLastIM;
     gs.iIMIndex = imidx;
 
@@ -1166,18 +1165,6 @@ void SelectIM(int imidx)
         im[gs.iIMIndex].Init();
     ResetInput();
     DrawMainWindow();
-/*
-	while(1)
-	{
-		if( iIMIndex == imidx )
-			break;
-		SwitchIM(-1);
-
-		i++;
-		if(i >20)
-			break;
-	}*/
-    //printf("im[%d]:%s\n",iIMIndex,im[iIMIndex].strName);
 }
 
 void DoPhraseTips(void)
@@ -1246,7 +1233,7 @@ void UnloadIM()
     INT8 i;
     if (im) {
         for (i = 0; i < iIMCount; i++) {
-            destroy_a_img(&im[i].icon);
+            DestroyImage(&im[i].icon);
             if (im[i].addonInfo)
                 UnloadExtraIM(i);
         }

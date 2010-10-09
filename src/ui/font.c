@@ -22,6 +22,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "core/fcitx.h"
+
 #include "ui/skin.h"
 #include "fcitx-config/configfile.h"
 #include "fcitx-config/cutils.h"

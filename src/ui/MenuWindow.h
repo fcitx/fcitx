@@ -32,25 +32,17 @@
 #include <cairo-xlib.h>
 #include <X11/Xlib.h>
 
-#define MENU_WINDOW_WIDTH	200
-#define MENU_WINDOW_HEIGHT	400
+#define MENU_WINDOW_WIDTH   200
+#define MENU_WINDOW_HEIGHT  400
 
-#define IM_MENU_WINDOW_WIDTH	110
-#define IM_MENU_WINDOW_HEIGHT	300
+#define IM_MENU_WINDOW_WIDTH    110
+#define IM_MENU_WINDOW_HEIGHT   300
 
-#define SKIN_MENU_WINDOW_WIDTH	110
-#define SKIN_MENU_WINDOW_HEIGHT	300
+#define SKIN_MENU_WINDOW_WIDTH  110
+#define SKIN_MENU_WINDOW_HEIGHT 300
 
-#define VK_MENU_WINDOW_WIDTH	110
-#define VK_MENU_WINDOW_HEIGHT	300
-
-#define CHAR_COLOR 0x111111
-#define CHAR_SELECT_COLOR (0xFFFFFF-0x111111)
-
-//背景色 默认银灰色
-#define BG_COLOR 0xDCDCDC
-//选中后的背景色 深蓝色
-#define BG_SELECT_COLOR 0x0A2465
+#define VK_MENU_WINDOW_WIDTH    110
+#define VK_MENU_WINDOW_HEIGHT   300
 
 typedef enum MenuState
 {
@@ -60,56 +52,54 @@ typedef enum MenuState
 
 typedef enum
 {
-	menushell, //暂时只有菜单项和分割线两种类型
-	divline
-}shellType;
+    MENUSHELL, //暂时只有菜单项和分割线两种类型
+    DIVLINE
+} MenuShellType;
 
 //菜单项属性
-typedef	struct 
+typedef struct
 {
-	char tipstr[24];
-	int  next;//下一级菜单
-	int  isselect;
-	shellType type;
-}menuShell;
+    char tipstr[24];
+    int  next;//下一级菜单
+    int  isselect;
+    MenuShellType type;
+} MenuShell;
 
 typedef struct
 {
-	int pos_x;
-	int pos_y;
-	int width;
-	int height;
-	Window menuWindow;
-	cairo_surface_t *menu_cs;
-	int	mark;
-	int font_size;
-	XColor bgcolor;
-	XColor bgselectcolor;
-	char font[32];
-	XColor charcolor;
-	XColor charselectcolor;	
-	menuShell shell[16];//暂时用静态的 ,每级支持16给菜单项
-	int useItemCount;
-}xlibMenu;
+    int iPosX;
+    int iPosY;
+    int width;
+    int height;
+    Window menuWindow;
+    Pixmap pixmap;
+    cairo_surface_t *menu_cs;
+    int mark;
+    int font_size;
+    XColor bgcolor;
+    XColor bgselectcolor;
+    char font[32];
+    XColor charcolor;
+    XColor charselectcolor;
+    UT_array shell;
+} XlibMenu;
 
-extern xlibMenu mainMenu,imMenu,vkMenu,skinMenu;
-Bool            CreateMenuWindow (void);
-void            InitMenu(void );
-void            InitMenuWindowColor (void);
-void            DisplayMenuWindow (void);
-void            DrawMenuWindow (void);
-void GetMenuHeight(Display * dpy,xlibMenu * Menu);
+extern XlibMenu mainMenu,imMenu,vkMenu,skinMenu;
+Bool CreateMenuWindow (void);
+void InitMenuWindowColor (void);
+void DisplayMenuWindow (void);
+void DrawMenuWindow (void);
+void GetMenuHeight(Display * dpy,XlibMenu * Menu);
 
 Bool CreateMenuWindow (void);
 
-int CreateXlibMenu(Display * dpy,xlibMenu * Menu);
-void DrawXlibMenu(Display * dpy,xlibMenu * Menu);
-void DrawDivLine(Display * dpy,xlibMenu * Menu,int line_y);
-void DisplayText(Display * dpy,xlibMenu * Menu,int shellindex,int line_y);
-int selectShellIndex(xlibMenu * Menu, int x, int y, int* offseth);
-void DisplayXlibMenu(Display * dpy,xlibMenu * Menu);
-void menuMark(Display * dpy,xlibMenu * Menu,int y,int i);
-void clearSelectFlag(xlibMenu * Menu);
+int CreateXlibMenu(Display * dpy,XlibMenu * Menu);
+void DrawXlibMenu(Display * dpy,XlibMenu * Menu);
+void DrawDivLine(Display * dpy,XlibMenu * Menu,int line_y);
+void DisplayText(Display * dpy,XlibMenu * Menu,int shellindex,int line_y);
+int SelectShellIndex(XlibMenu * Menu, int x, int y, int* offseth);
+void DisplayXlibMenu(Display * dpy,XlibMenu * Menu);
+void ClearSelectFlag(XlibMenu * Menu);
 void MainMenuEvent(int x,int y);
 void IMMenuEvent(int x,int y);
 void VKMenuEvent(int x,int y);

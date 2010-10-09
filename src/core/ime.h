@@ -122,6 +122,8 @@ void            UnloadIM();
 void            SetIM (void);
 void            ConvertPunc (void);
 void            ReloadConfig();
+void            SelectIM(int imidx);
+void            SelectVK(int vkidx);
 
 extern FcitxState gs;
 

@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "core/fcitx.h"
 #include "im/special/AutoEng.h"
 #include "tools/tools.h"
 #include "fcitx-config/xdg.h"

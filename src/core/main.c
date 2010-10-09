@@ -35,9 +35,10 @@
 #include <langinfo.h>
 #include <libintl.h>
 
-#include <config.h>
-
 #include "version.h"
+
+#include "core/fcitx.h"
+
 #include "tools/tools.h"
 
 #include "core/MyErrorsHandlers.h"

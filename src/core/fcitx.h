@@ -27,6 +27,7 @@
 #define _(msgid) gettext(msgid)
 #define __(msgid) (msgid)
 
+#include "config.h"
 #include "tools/utf8.h"
 #include "core/im.h"
 

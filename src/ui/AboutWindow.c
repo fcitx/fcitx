@@ -18,16 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <ctype.h>
+#include <iconv.h>
+#include <X11/Xatom.h>
+
+#include "core/fcitx.h"
+
 #include "ui/AboutWindow.h"
 #include "ui/ui.h"
 #include "core/xim.h"
 #include "fcitx-config/configfile.h"
 #include "version.h"
-
-#include <ctype.h>
-
-#include <iconv.h>
-#include <X11/Xatom.h>
 
 extern Display *dpy;
 extern int      iScreen;

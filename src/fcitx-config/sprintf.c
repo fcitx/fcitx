@@ -19,6 +19,9 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+
+#include "core/fcitx.h"
+
 #include "fcitx-config/sprintf.h"
 
 #ifndef HAVE_VASPRINTF

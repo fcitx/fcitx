@@ -17,11 +17,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,6 +28,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <limits.h>
+
+#include "core/fcitx.h"
+
 #include "tools/tools.h"
 #include "core/xim.h"
 #include "ui/MainWindow.h"

@@ -175,7 +175,7 @@ MyXEventHandler(XEvent * event)
     case ButtonPress:
         switch (event->xbutton.button) {
         case Button1:
-            set_mouse_status(RELEASE);
+            SetMouseStatus(RELEASE);
             if (event->xbutton.window == inputWindow.window) {
                 int             x,
                                 y;
@@ -264,7 +264,7 @@ MyXEventHandler(XEvent * event)
                     ms_py = PRESS;
                 }
                 DrawMainWindow();
-                set_mouse_status(RELEASE);
+                SetMouseStatus(RELEASE);
             }
 #ifdef _ENABLE_TRAY
             else if (event->xbutton.window == tray.window) {
@@ -297,7 +297,7 @@ MyXEventHandler(XEvent * event)
                 DrawMainWindow();
             } else if (event->xbutton.window == mainMenu.menuWindow) {
                 int             i;
-                i = selectShellIndex(&mainMenu, event->xbutton.x, event->xbutton.y, NULL);
+                i = SelectShellIndex(&mainMenu, event->xbutton.x, event->xbutton.y, NULL);
                 if (i == 0) {
                     DisplayAboutWindow();
                     XUnmapWindow(dpy, mainMenu.menuWindow);
@@ -332,23 +332,23 @@ MyXEventHandler(XEvent * event)
                     exit(0);
                 }
             } else if (event->xbutton.window == imMenu.menuWindow) {
-                int idx = selectShellIndex(&imMenu, event->xbutton.x, event->xbutton.y, NULL);
+                int idx = SelectShellIndex(&imMenu, event->xbutton.x, event->xbutton.y, NULL);
                 if (idx >= 0)
                 {
                     SelectIM(idx);
-                    clearSelectFlag(&mainMenu);
+                    ClearSelectFlag(&mainMenu);
                     XUnmapWindow(dpy, imMenu.menuWindow);
                     XUnmapWindow(dpy, mainMenu.menuWindow);
                 }
             } else if (event->xbutton.window == skinMenu.menuWindow) {
                 // 皮肤切换在此进行
                 int             i;
-                i = selectShellIndex(&skinMenu, event->xbutton.x, event->xbutton.y, NULL);
+                i = SelectShellIndex(&skinMenu, event->xbutton.x, event->xbutton.y, NULL);
                 if (i >= 0)
                 {
                     char **sskin = (char**) utarray_eltptr(skinBuf, i);
                     if (strcmp(fc.skinType, *sskin) != 0) {
-                        clearSelectFlag(&mainMenu);
+                        ClearSelectFlag(&mainMenu);
                         XUnmapWindow(dpy, mainMenu.menuWindow);
                         XUnmapWindow(dpy, vkMenu.menuWindow);
                         XUnmapWindow(dpy, imMenu.menuWindow);
@@ -358,11 +358,11 @@ MyXEventHandler(XEvent * event)
                     }
                 }
             } else if (event->xbutton.window == vkMenu.menuWindow) {
-                int idx = selectShellIndex(&vkMenu, event->xbutton.x, event->xbutton.y, NULL);
+                int idx = SelectShellIndex(&vkMenu, event->xbutton.x, event->xbutton.y, NULL);
                 if (idx >= 0)
                 {
                     SelectVK(idx);
-                    clearSelectFlag(&mainMenu);
+                    ClearSelectFlag(&mainMenu);
                     XUnmapWindow(dpy, mainMenu.menuWindow);
                     XUnmapWindow(dpy, vkMenu.menuWindow);
                 }
@@ -374,7 +374,7 @@ MyXEventHandler(XEvent * event)
         case Button3:
 
             if (event->xbutton.window == mainMenu.menuWindow) {
-                clearSelectFlag(&mainMenu);
+                ClearSelectFlag(&mainMenu);
                 XUnmapWindow(dpy, mainMenu.menuWindow);
                 XUnmapWindow(dpy, vkMenu.menuWindow);
                 XUnmapWindow(dpy, imMenu.menuWindow);
@@ -383,29 +383,29 @@ MyXEventHandler(XEvent * event)
 #ifdef _ENABLE_TRAY
             else if (event->xbutton.window == tray.window) {
 
-                loadSkinDir();
+                LoadSkinDirectory();
 
                 GetMenuHeight(dpy, &mainMenu);
 
                 if (event->xbutton.x_root - event->xbutton.x +
                     mainMenu.width >= DisplayWidth(dpy, iScreen))
-                    mainMenu.pos_x =
+                    mainMenu.iPosX =
                         DisplayWidth(dpy,
                                      iScreen) - mainMenu.width -
                         event->xbutton.x;
                 else
-                    mainMenu.pos_x =
+                    mainMenu.iPosX =
                         event->xbutton.x_root - event->xbutton.x;
 
                 // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
                 if (event->xbutton.y_root + mainMenu.height -
                     event->xbutton.y >= DisplayHeight(dpy, iScreen))
-                    mainMenu.pos_y =
+                    mainMenu.iPosY =
                         DisplayHeight(dpy,
                                       iScreen) - mainMenu.height -
                         event->xbutton.y - 15;
                 else
-                    mainMenu.pos_y = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
+                    mainMenu.iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
 
                 /*
                  * printf("%d %d :%d %d :%d
@@ -417,17 +417,17 @@ MyXEventHandler(XEvent * event)
             }
 #endif
             else if (event->xbutton.window == mainWindow.window) {
-                loadSkinDir();
+                LoadSkinDirectory();
 
                 GetMenuHeight(dpy, &mainMenu);
 
-                mainMenu.pos_x = fcitxProfile.iMainWindowOffsetX;
-                mainMenu.pos_y =
+                mainMenu.iPosX = fcitxProfile.iMainWindowOffsetX;
+                mainMenu.iPosY =
                     fcitxProfile.iMainWindowOffsetY +
                     sc.skinMainBar.backImg.height + 5;
-                if ((mainMenu.pos_y + mainMenu.height) >
+                if ((mainMenu.iPosY + mainMenu.height) >
                     DisplayHeight(dpy, iScreen))
-                    mainMenu.pos_y = fcitxProfile.iMainWindowOffsetY - 5 - mainMenu.height;
+                    mainMenu.iPosY = fcitxProfile.iMainWindowOffsetY - 5 - mainMenu.height;
 
                 DrawXlibMenu(dpy, &mainMenu);
                 DisplayXlibMenu(dpy, &mainMenu);
@@ -439,7 +439,7 @@ MyXEventHandler(XEvent * event)
         if (event->xbutton.window == mainWindow.window) {
             switch (event->xbutton.button) {
             case Button1:
-                set_mouse_status(RELEASE);
+                SetMouseStatus(RELEASE);
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.logo))
@@ -600,7 +600,7 @@ MyXEventHandler(XEvent * event)
                 ms_py = MOTION;
             }
             DrawMainWindow();
-            set_mouse_status(RELEASE);
+            SetMouseStatus(RELEASE);
         } else if (event->xany.window == mainMenu.menuWindow) {
             MainMenuEvent(event->xmotion.x, event->xmotion.y);
         } else if (event->xany.window == imMenu.menuWindow) {
@@ -631,7 +631,7 @@ MyXEventHandler(XEvent * event)
             }
             if (!flag)
             {
-                clearSelectFlag(&mainMenu);
+                ClearSelectFlag(&mainMenu);
                 XUnmapWindow(dpy, mainMenu.menuWindow);
                 XUnmapWindow(dpy, vkMenu.menuWindow);
                 XUnmapWindow(dpy, imMenu.menuWindow);

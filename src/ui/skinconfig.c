@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "core/fcitx.h"
+
 #include "ui/skin.h"
 #include "ui/MenuWindow.h"
 #include "fcitx-config/fcitx-config.h"

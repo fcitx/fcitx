@@ -87,139 +87,143 @@ KEY_LIST        keyList[] = {
     {"\0", 0}
 };
 
-int GetKey (unsigned char iKeyCode, int iKeyState, int iCount)
+int GetKey (KeySym keysym, int iKeyState, int iCount)
 {
-    if (!iCount) {		//是SHIFT、CTRL、ALT或它们的组合，或其它诸如HOME、END之类的键
-	if (iKeyState == KEY_NONE) {
-	    if (iKeyCode >= 80 && iKeyCode <= 99)	//上、下、左、右、HOME、END、PGUP、PGDN、INSERT等
-		return 8000 + iKeyCode;
-	    if (iKeyCode >= 225 && iKeyCode <= 233)	//单按SHIFT、CTRL、ALT
-		return 9000 + iKeyCode;
-	}
-	else if (iKeyState == KEY_CTRL_COMP) {
-	    switch (iKeyCode) {
-	    case K_LCTRL:
-		return CTRL_CTRL;
-	    case K_LSHIFT:
-		return CTRL_LSHIFT;
-	    case K_LALT:
-		return CTRL_LALT;
-	    case K_RCTRL:
-		return CTRL_CTRL;
-	    case K_RSHIFT:
-		return CTRL_RSHIFT;
-	    case K_RALT:
-		return CTRL_RALT;
-	    default:
-		return iKeyCode + 10000;
-	    }
-	}
-	else if (iKeyState == KEY_SHIFT_COMP) {
-	    switch (iKeyCode) {
-	    case K_LCTRL:
-		return SHIFT_LCTRL;
-	    case K_LSHIFT:
-		return SHIFT_SHIFT;
-	    case K_LALT:
-		return SHIFT_LALT;
-	    case K_RCTRL:
-		return SHIFT_RCTRL;
-	    case K_RSHIFT:
-		return SHIFT_SHIFT;
-	    case K_RALT:
-		return SHIFT_RALT;
-	    default:
-		return iKeyCode + 11000;
-	    }
-	}
-	else if (iKeyState == KEY_ALT_COMP) {
-	    switch (iKeyCode) {
-	    case K_LCTRL:
-		return ALT_LCTRL;
-	    case K_LSHIFT:
-		return ALT_LSHIFT;
-	    case K_LALT:
-		return ALT_ALT;
-	    case K_RCTRL:
-		return ALT_RCTRL;
-	    case K_RSHIFT:
-		return ALT_RSHIFT;
-	    case K_RALT:
-		return ALT_ALT;
-	    default:
-		return iKeyCode + 12000;
-	    }
-	}
-	else if (iKeyState == KEY_CTRL_SHIFT_COMP ) {
-	    switch (iKeyCode) {
-	    case K_LSHIFT:
-	    case K_LCTRL:
-		return CTRL_LSHIFT;
-	    case K_RSHIFT:
-	    case K_RCTRL:
-		return CTRL_RSHIFT;
-	    default:
-		return iKeyCode + 13000;
-	    }
-	}
-	else if (iKeyState == KEY_ALT_SHIFT_COMP ) {
-	    switch (iKeyCode) {
-	    case K_LSHIFT:
-	    case K_LALT:
-		return ALT_LSHIFT;
-	    case K_RSHIFT:
-	    case K_RCTRL:
-		return ALT_RSHIFT;
-	    default:
-		return iKeyCode + 14000;
-	    }
-	}
-	else if (iKeyState == KEY_CTRL_ALT_COMP ) {
-	    switch (iKeyCode) {
-	    case K_LCTRL:
-	    case K_LALT:
-		return CTRL_LALT;
-	    case K_RCTRL:
-	    case K_RALT:
-		return CTRL_RALT;
-	    default:
-		return iKeyCode + 15000;
-	    }
+    unsigned char iKeyCode = keysym & 0xFF;
+    /* special case */
+    if (keysym == 0xFF67)
+        return keysym;
+    if (!iCount) {      //是SHIFT、CTRL、ALT或它们的组合，或其它诸如HOME、END之类的键
+        if (iKeyState == KEY_NONE) {
+            if (iKeyCode >= 80 && iKeyCode <= 99)   //上、下、左、右、HOME、END、PGUP、PGDN、INSERT等
+                return 8000 + iKeyCode;
+            if (iKeyCode >= 225 && iKeyCode <= 233) //单按SHIFT、CTRL、ALT
+                return 9000 + iKeyCode;
         }
-	else if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP )
-	    return iKeyCode + 16000;
+        else if (iKeyState == KEY_CTRL_COMP) {
+            switch (iKeyCode) {
+            case K_LCTRL:
+                return CTRL_CTRL;
+            case K_LSHIFT:
+                return CTRL_LSHIFT;
+            case K_LALT:
+                return CTRL_LALT;
+            case K_RCTRL:
+                return CTRL_CTRL;
+            case K_RSHIFT:
+                return CTRL_RSHIFT;
+            case K_RALT:
+                return CTRL_RALT;
+            default:
+                return iKeyCode + 10000;
+            }
+        }
+        else if (iKeyState == KEY_SHIFT_COMP) {
+            switch (iKeyCode) {
+            case K_LCTRL:
+                return SHIFT_LCTRL;
+            case K_LSHIFT:
+                return SHIFT_SHIFT;
+            case K_LALT:
+                return SHIFT_LALT;
+            case K_RCTRL:
+                return SHIFT_RCTRL;
+            case K_RSHIFT:
+                return SHIFT_SHIFT;
+            case K_RALT:
+                return SHIFT_RALT;
+            default:
+                return iKeyCode + 11000;
+            }
+        }
+        else if (iKeyState == KEY_ALT_COMP) {
+            switch (iKeyCode) {
+            case K_LCTRL:
+                return ALT_LCTRL;
+            case K_LSHIFT:
+                return ALT_LSHIFT;
+            case K_LALT:
+                return ALT_ALT;
+            case K_RCTRL:
+                return ALT_RCTRL;
+            case K_RSHIFT:
+                return ALT_RSHIFT;
+            case K_RALT:
+                return ALT_ALT;
+            default:
+                return iKeyCode + 12000;
+            }
+        }
+        else if (iKeyState == KEY_CTRL_SHIFT_COMP ) {
+            switch (iKeyCode) {
+            case K_LSHIFT:
+            case K_LCTRL:
+                return CTRL_LSHIFT;
+            case K_RSHIFT:
+            case K_RCTRL:
+                return CTRL_RSHIFT;
+            default:
+                return iKeyCode + 13000;
+            }
+        }
+        else if (iKeyState == KEY_ALT_SHIFT_COMP ) {
+            switch (iKeyCode) {
+            case K_LSHIFT:
+            case K_LALT:
+                return ALT_LSHIFT;
+            case K_RSHIFT:
+            case K_RCTRL:
+                return ALT_RSHIFT;
+            default:
+                return iKeyCode + 14000;
+            }
+        }
+        else if (iKeyState == KEY_CTRL_ALT_COMP ) {
+            switch (iKeyCode) {
+            case K_LCTRL:
+            case K_LALT:
+                return CTRL_LALT;
+            case K_RCTRL:
+            case K_RALT:
+                return CTRL_RALT;
+            default:
+                return iKeyCode + 15000;
+            }
+        }
+        else if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP )
+            return iKeyCode + 16000;
     }
     else {
-	if (iKeyState == KEY_NONE) {
-	    //小键盘的数字也要处理成与大键盘上一样      
-        if (iKeyCode == 141 || (iKeyCode >= 176 && iKeyCode <= 185))
-		iKeyCode -= 128;
-	}
-	else {
-	    //由于大小写字母有区别，此处应该将其处理为等同;
-	    if (iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
-		iKeyCode -= 32;
+        if (iKeyState == KEY_NONE) {
+            //小键盘的数字也要处理成与大键盘上一样
+            if (iKeyCode == 141 || (iKeyCode >= 170 && iKeyCode <= 185))
+                iKeyCode -= 128;
+        }
+        else {
+            //由于大小写字母有区别，此处应该将其处理为等同;
+            if (iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
+                iKeyCode -= 32;
 
-	    if (iKeyState == KEY_CTRL_COMP)
-		return iKeyCode + 1000;
-	    if (iKeyState == KEY_SHIFT_COMP) {
-		//只处理空格
-		if (iKeyCode == 32)
-		    return iKeyCode + 2000;
-	    }
-	    if (iKeyState == KEY_ALT_COMP)
-		return iKeyCode + 3000;
-	    if (iKeyState == KEY_CTRL_SHIFT_COMP)
-		return iKeyCode + 4000;
-	    if (iKeyState == KEY_CTRL_ALT_COMP)
-		return iKeyCode + 5000;
-	    if (iKeyState == KEY_ALT_SHIFT_COMP)
-		return iKeyCode + 6000;
-	    if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP)
-		return iKeyCode + 7000;
-	    if (iKeyState == KEY_SUPER_COMP)
-		return iKeyCode + 8000;
-	}
+            if (iKeyState == KEY_CTRL_COMP)
+                return iKeyCode + 1000;
+            if (iKeyState == KEY_SHIFT_COMP) {
+                //只处理空格
+                if (iKeyCode == 32)
+                    return iKeyCode + 2000;
+            }
+            if (iKeyState == KEY_ALT_COMP)
+                return iKeyCode + 3000;
+            if (iKeyState == KEY_CTRL_SHIFT_COMP)
+                return iKeyCode + 4000;
+            if (iKeyState == KEY_CTRL_ALT_COMP)
+                return iKeyCode + 5000;
+            if (iKeyState == KEY_ALT_SHIFT_COMP)
+                return iKeyCode + 6000;
+            if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP)
+                return iKeyCode + 7000;
+            if (iKeyState == KEY_SUPER_COMP)
+                return iKeyCode + 8000;
+        }
     }
 
     return iKeyCode;
@@ -239,157 +243,157 @@ int ParseKey (char *strKey)
 
     iKeyCode = GetKeyList (strKey);
     if (iKeyCode != -1)
-	return iKeyCode;
+        return iKeyCode;
 
     if (!strncmp (strKey, "CTRL_ALT_SHIFT_", 15)) {
-	iKeyState = KEY_CTRL_ALT_SHIFT_COMP;
-	p = strKey + 15;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_CTRL_ALT_SHIFT_COMP;
+        p = strKey + 15;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "CTRL_ALT_", 9)) {
-	iKeyState = KEY_CTRL_ALT_COMP;
-	p = strKey + 9;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_CTRL_ALT_COMP;
+        p = strKey + 9;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "CTRL_SHIFT_", 11)) {
-	iKeyState = KEY_CTRL_SHIFT_COMP;
-	p = strKey + 11;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_CTRL_SHIFT_COMP;
+        p = strKey + 11;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "ALT_SHIFT_", 10)) {
-	iKeyState = KEY_ALT_SHIFT_COMP;
-	p = strKey + 10;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_ALT_SHIFT_COMP;
+        p = strKey + 10;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "CTRL_", 5)) {
-	iKeyState = KEY_CTRL_COMP;
-	p = strKey + 5;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_CTRL_COMP;
+        p = strKey + 5;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "ALT_", 4)) {
-	iKeyState = KEY_ALT_COMP;
-	p = strKey + 4;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_ALT_COMP;
+        p = strKey + 4;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "SHIFT_", 6)) {
-	iKeyState = KEY_SHIFT_COMP;
-	p = strKey + 6;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_SHIFT_COMP;
+        p = strKey + 6;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else if (!strncmp (strKey, "SUPER_", 6)) {
-	iKeyState = KEY_SUPER_COMP;
-	p = strKey + 6;
-	iKeyCode = GetKeyList (p);
-	if (iKeyCode != -1)
-	    iCount = 0;
-	else {
-	    iCount = 1;
-	    if (!strcmp (p, "SPACE"))
-		iKeyCode = ' ';
-	    else if (!strcmp (p, "DELETE"))
-		iKeyCode = DELETE;
-	    else if (strlen (p) == 1)
-		iKeyCode = p[0];
-	    else
-		return -1;
-	}
+        iKeyState = KEY_SUPER_COMP;
+        p = strKey + 6;
+        iKeyCode = GetKeyList (p);
+        if (iKeyCode != -1)
+            iCount = 0;
+        else {
+            iCount = 1;
+            if (!strcmp (p, "SPACE"))
+                iKeyCode = ' ';
+            else if (!strcmp (p, "DELETE"))
+                iKeyCode = DELETE;
+            else if (strlen (p) == 1)
+                iKeyCode = p[0];
+            else
+                return -1;
+        }
     }
     else {
-	if (strlen (strKey) == 1)
-	    return strKey[0];
-	else
-	    return -1;
+        if (strlen (strKey) == 1)
+            return strKey[0];
+        else
+            return -1;
     }
 
     return GetKey (iKeyCode, iKeyState, iCount);
@@ -401,11 +405,11 @@ int GetKeyList (char *strKey)
 
     i = 0;
     for (;;) {
-	if (!keyList[i].code)
-	    break;
-	if (!strcmp (strKey, keyList[i].strKey))
-	    return keyList[i].code;
-	i++;
+        if (!keyList[i].code)
+            break;
+        if (!strcmp (strKey, keyList[i].strKey))
+            return keyList[i].code;
+        i++;
     }
 
     return -1;
@@ -425,22 +429,22 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
         int keycode;
         i = 0;
         while (p[i] != ' ' && p[i] != '\0')
-           i++;
+            i++;
         strKey = strndup (p, i);
         strKey[i] = '\0';
         keycode = ParseKey (strKey);
         if (keycode != -1)
         {
-           hotkey[j].iKeyCode = keycode;
-           hotkey[j].desc = trim(strKey);
-           j ++;
+            hotkey[j].iKeyCode = keycode;
+            hotkey[j].desc = trim(strKey);
+            j ++;
         }
         free(strKey);
         if (p[i] == '\0')
             break;
         p = &p[i + 1];
     }
-    for(; j < 2; j++)
+    for (; j < 2; j++)
     {
         hotkey[j].iKeyCode = 0;
         hotkey[j].desc= NULL;

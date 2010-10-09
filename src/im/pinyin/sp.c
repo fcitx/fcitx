@@ -22,6 +22,8 @@
 #include <limits.h>
 #include <ctype.h>
 
+#include "core/fcitx.h"
+
 #include "im/pinyin/sp.h"
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/pyParser.h"

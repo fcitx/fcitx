@@ -356,9 +356,9 @@ typedef enum _KEY {
     CTRL_ALT_SHIFT_9
 } KEY;
 
-void            SetHotKey (char *strKey, HOTKEYS * hotkey);
-int             GetKey (unsigned char iKeyCode, int iKeyState, int iCount);
-int             ParseKey (char *strKey);
-int             GetKeyList (char *strKey);
+void SetHotKey (char *strKey, HOTKEYS * hotkey);
+int GetKey (KeySym keysym, int iKeyState, int iCount);
+int ParseKey (char *strKey);
+int GetKeyList (char *strKey);
 
 #endif

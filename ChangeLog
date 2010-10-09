@@ -1,33 +1,39 @@
+2010-10-09: CSSlayer <wengxt@gmail.com>
+	* 更好的菜单处理
+	* 修改小键盘按键和菜单按键的处理
+	* 修改一些函数名称，统一风格
+	* 调整缩进
+
 2010-09-26: CSSlayer <wengxt@gmail.com>
-    * 多词库支持，但性能一般，推荐主词库较大，附加小词库。
+	* 多词库支持，但性能一般，推荐主词库较大，附加小词库。
 	* 搜狗细胞词库转化为pinyin原始文件工具。
 
 2010-09-24: CSSlayer <wengxt@gmail.com>
-    * 修复系统托盘重新加入问题
+	* 修复系统托盘重新加入问题
 
 2010-09-24: CSSlayer <wengxt@gmail.com>
-    * 新Addon信息配置
+	* 新Addon信息配置
 
 2010-09-21: CSSlayer <wengxt@gmail.com>
-    * 修改部分ExtraIM的绑定
+	* 修改部分ExtraIM的绑定
 	* 可以和fcitx-sunpinyin 0.1.0工作（待测试）
 
 2010-09-14: CSSlayer <wengxt@gmail.com>
-    * 修复一个设置输入法切换快捷键的问题（笔误……）
+	* 修复一个设置输入法切换快捷键的问题（笔误……）
 	* 修复子菜单在左侧时的问题
 	* readPYMB, readPYBase, mb2org可以工作，注意用-h查看参数选项
 
 2010-09-09: CSSlayer <wengxt@gmail.com>
-    * 修复读取老版本profile时的崩溃错误。issue 291
+	* 修复读取老版本profile时的崩溃错误。issue 291
 
 2010-09-08: CSSlayer <wengxt@gmail.com>
-    * 修复非UTF-8 Locale的问题
+	* 修复非UTF-8 Locale的问题
 	* 主窗口设置名称
 	* 放松环境变量检查（大小写）
 	* 更新deb包build信息
 
 2010-09-07: CSSlayer <wengxt@gmail.com>
-    * 增加利用fcitx-remote进行重新加载配置的选项
+	* 增加利用fcitx-remote进行重新加载配置的选项
 	* 调整线程间同步，避免问题。
 	* 避免僵尸进程
 	* 菜单样式集成进皮肤
@@ -36,7 +42,7 @@
 	* 否则调用系统的默认编辑器打开配置文件，因此与fcitx-config-0.1.1有一个文件冲突
 
 2010-09-06: CSSlayer <wengxt@gmail.com>
-    * 调整libfcitx-config，方便GUI开发
+	* 调整libfcitx-config，方便GUI开发
 	* 调整dark的一些字体颜色，感谢jason52lh
 	* 大量更新翻译信息
 	* 4.0beta1
@@ -45,10 +51,10 @@
 	* 调整libfcitx-config的函数
 
 2010-09-01: CSSlayer <wengxt@gmail.com>
-    * 修复一些托盘程序背景颜色问题。（如trayer，但并未解决用im-switch启动的托盘背景为黑色的问题）
+	* 修复一些托盘程序背景颜色问题。（如trayer，但并未解决用im-switch启动的托盘背景为黑色的问题）
 
 2010-08-31: CSSlayer <wengxt@gmail.com>
-    * 修复输入框的箭头不显示的问题
+	* 修复输入框的箭头不显示的问题
 	* 将字体设置移回配置文件中，而不是和皮肤一起设置
 	* dark皮肤小更新
 	* 修复一个拼写错误
@@ -61,7 +67,7 @@
 	* 增加Ukoyi的新皮肤为Default，原default作为classic
 
 2010-08-18: CSSlayer <wengxt@gmail.com>
-    * 消除内存泄漏
+	* 消除内存泄漏
 	* 修复CTRL_5重新加载配置时会崩溃的问题
 	* 修改微软双拼的一些配置，同时对于双拼方案令v可以被配置（如果影响了其他双拼请汇报Bug）
 	* 对某些配置采取CTRL_5读取时不加载，保证稳定性（目前包含DBus和托盘）
@@ -69,7 +75,7 @@
 	* 修复各种码表相关Bug - -b
 
 2010-08-16: CSSlayer <wengxt@gmail.com>
-    * 为码表增加一个优先级设置，按照优先级大小对码表排序
+	* 为码表增加一个优先级设置，按照优先级大小对码表排序
 	* 修复无法记录当前输入法的问题
 	* 配置文件和皮肤也迁移到新格式，皮肤目前可以在用户目录下设置~/.config/fcitx/skin
 	* 用户的码表调整为配置和用户码表都存储在~/.config/fcitx/table下
@@ -80,56 +86,56 @@
 	* 终端运行时提示性输出增多
 
 2010-08-15: CSSlayer <wengxt@gmail.com>
-    * 增加一个信息提示的窗口，如果环境变量设置有问题的话提示如何设置
+	* 增加一个信息提示的窗口，如果环境变量设置有问题的话提示如何设置
 
 2010-08-14: CSSlayer <wengxt@gmail.com>
-    * 对配置文件有大量修改，初步加入国际化支持
+	* 对配置文件有大量修改，初步加入国际化支持
 	* 码表配置文件有所调整，一个配置文件对应一个码表，而不是原先所有码表使用一个配置文件
 	* 配置文件内容使用覆盖策略，本地覆盖全局
 	* profile和码表已经采用新格式，皮肤和config暂时未变动
 
 2010-07-18: CSSlayer <wengxt@gmail.com>
-    * 增加一个选项，在按下临时英文键时可以将已经输入的英文直接输入
+	* 增加一个选项，在按下临时英文键时可以将已经输入的英文直接输入
 
 2010-07-13: CSSlayer <wengxt@gmail.com>
-    * 合并Skin Dark 0.5，感谢Jarryson
-    * 修复一个内存访问越界的Bug
-    * 修复Issue 259
-    * 修复在XVnc等X Server环境下无法启动的问题
+	* 合并Skin Dark 0.5，感谢Jarryson
+	* 修复一个内存访问越界的Bug
+	* 修复Issue 259
+	* 修复在XVnc等X Server环境下无法启动的问题
 	* 修复两个disable选项时的编译问题
 
 2010-06-26: CSSlayer <wengxt@gmail.com>
-    * 修复在XVnc等X Server环境下无法启动的问题
+	* 修复在XVnc等X Server环境下无法启动的问题
 	* 修复两个disable选项时的编译问题
 
 2010-06-26: CSSlayer <wengxt@gmail.com>
-    * 修改dark皮肤的小显示问题
+	* 修改dark皮肤的小显示问题
 	* 更新默认皮肤的背景
 
 2010-06-24: CSSlayer <wengxt@gmail.com>
-    * 修复一个文字显示错误(Issue 244)
-    * 现在所有的文字显示之前都会经过UTF-8有效性检验，避免cairo画笔失效
+	* 修复一个文字显示错误(Issue 244)
+	* 现在所有的文字显示之前都会经过UTF-8有效性检验，避免cairo画笔失效
 
 2010-06-22: CSSlayer <wengxt@gmail.com>
-    * 修复一个由于记录模式带来的bug（输入过长时溢出）
-    * 修复拼音输入时输入过长溢出的问题
-    * 重新调整信息显示代码，采用统一函数修改具体字符串
+	* 修复一个由于记录模式带来的bug（输入过长时溢出）
+	* 修复拼音输入时输入过长溢出的问题
+	* 重新调整信息显示代码，采用统一函数修改具体字符串
 	* 修复一个查询字体时的导致崩溃的指针问题
 	* 增加崩溃时调试信息输出
 	* 系统托盘随主题更换
 
 2010-06-21: CSSlayer <wengxt@gmail.com>
-    * 再次尝试解决字体问题
-    * 由系统判断默认字体
-    * 修复引入skin之后的光标位置问题
+	* 再次尝试解决字体问题
+	* 由系统判断默认字体
+	* 修复引入skin之后的光标位置问题
 
 2010-06-19: CSSlayer <wengxt@gmail.com>
-    * 移除Xft
-    * 移除一些不再起作用的选项
-    * 尝试解决字体问题
+	* 移除Xft
+	* 移除一些不再起作用的选项
+	* 尝试解决字体问题
 
 2010-06-16: CSSlayer <wengxt@gmail.com>
-    * 彻底移除Xpm
+	* 彻底移除Xpm
 	* 添加 -ldl
 	* 修复多余的显示信息
 	* 默认字体使用Sans
@@ -137,7 +143,7 @@
 	* 添加一个来自ubuntu.org.cn的暗色主题
 
 2010-06-16: t3swing <t3swing@gmail.com>
-    * 右键菜单支持自定义码表显示
+	* 右键菜单支持自定义码表显示
 	* 系统托盘右键定位
 	* 标点提示修复
 	* 输入条箭头
@@ -145,13 +151,13 @@
 	* 虚拟键盘显示修复
 
 2010-06-07: CSSlayer <wengxt@gmail.com>
-    * 更加用户友好，不能加载皮肤时加载默认皮肤
+	* 更加用户友好，不能加载皮肤时加载默认皮肤
 
 2010-06-05: CSSlayer <wengxt@gmail.com>
-    * 系统托盘自适应大小
+	* 系统托盘自适应大小
 
 2010-06-05: t3swing <t3swing@gmail.com>
-    * 增加皮肤支持
+	* 增加皮肤支持
 	* 界面全面修改为cairo绘制
 
 2010-04-26: CSSlayer <wengxt@gmail.com>
@@ -236,16 +242,16 @@
 	* src/xim.c, main.c: 修正与QT4.6特效时的不兼容
 
 2009-10-18: wind (xihe), xihels@gmail.com
-        * 添加VIM自动输入模式转换
+	* 添加VIM自动输入模式转换
 
 2009-09-30: ginkgo <ginkgo @ linuxsir>
-        * data/vk.conf: 修正中文“〇”的错误
+	* data/vk.conf: 修正中文“〇”的错误
 
 2009-09-29: Yuking <yuking_net@sohu.com>
-        * src/tools.c, ime.c: 增加打开/关闭虚拟键盘的热键"CTRL_ALT_K"
+	* src/tools.c, ime.c: 增加打开/关闭虚拟键盘的热键"CTRL_ALT_K"
 
 2009-09-20: Yuking <yuking_net@sohu.com>
-        * src/tools.c, ime.c: 增加手动保存词库的热键，默认为"CTRL_ALT_S"
+	* src/tools.c, ime.c: 增加手动保存词库的热键，默认为"CTRL_ALT_S"
 
 2009-09-19: Yuking <yuking_net@sohu.com>
 	* 添加字“咯”的拼音“lo”
@@ -268,27 +274,27 @@
 	* src/ime.c: 修正联想模式下显示不正常及可能导致崩溃的问题
 
 2009-05-26: Yuking <yuking_net@sohu.com>
-        * src/ime.c: 修正输入条有时候显示不正常的问题
+	* src/ime.c: 修正输入条有时候显示不正常的问题
 	* 当编译了托盘图标时，可选择是否显示托盘图标
 
 2009-05-19: Yuking <yuking_net@sohu.com>
-        * src/main.c: 修正启动时不显示托盘图标的问题
+	* src/main.c: 修正启动时不显示托盘图标的问题
 	* configure.in: 将托盘图标作为一个可配置选项
 
 2009-05-19: hubert_star AT forum.ubuntu.com.cn
-        * src/ime.c: keycode在32到126之间时，处理keypress而忽略keyrelease
+	* src/ime.c: keycode在32到126之间时，处理keypress而忽略keyrelease
 
 2009-05-15: Yuking <yuking_net@sohu.com>
-        * 修正光标跟随时输入条位置的一些小问题
+	* 修正光标跟随时输入条位置的一些小问题
 
 2009-05-07: Yuking <yuking_net@sohu.com>
-        * 修正输入条显示时的一些小问题
+	* 修正输入条显示时的一些小问题
 
 2009-05-07: Vern Sun <s5unty AT gmail.com>
-        * 尝试修正托盘图标有时候无法正确显示的问题
+	* 尝试修正托盘图标有时候无法正确显示的问题
 
 2009-05-02: Vern Sun <s5unty AT gmail.com>
-        * 增加托盘图标功能
+	* 增加托盘图标功能
 
 2009-04-13: Yuking <yuking_net@sohu.com>
 	* 修正五笔码表中的一些致命错误
@@ -651,9 +657,9 @@
 
 2005-11-03: Yuking <yuking_net@sohu.com>
 	* 加入wpyh@linuxsir的几个补丁，包括：
-	    输入条显示补丁
-	    配置文件错误修正
-	    tools/Makefile.in tools/Makefile.am的修正
+	输入条显示补丁
+	配置文件错误修正
+	tools/Makefile.in tools/Makefile.am的修正
 
 2005-10-23: Yuking <yuking_net@sohu.com>
 	* table.c:解决二笔标点符号需要按空格的问题

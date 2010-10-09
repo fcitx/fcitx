@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "core/fcitx.h"
 
 #ifndef _TRAY_WINDOW_H
 #define _TRAY_WINDOW_H

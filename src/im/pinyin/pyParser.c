@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "core/fcitx.h"
+
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
 #include "im/pinyin/sp.h"

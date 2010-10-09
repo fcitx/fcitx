@@ -21,6 +21,8 @@
 #include <limits.h>
 #include <ctype.h>
 
+#include "core/fcitx.h"
+
 #include "tools/tools.h"
 #include "im/special/QuickPhrase.h"
 #include "ui/InputWindow.h"

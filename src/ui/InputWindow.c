@@ -18,15 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <string.h>
 #include <ctype.h>
 #include "version.h"
 #include <time.h>
 #include <X11/Xatom.h>
+
+#include "core/fcitx.h"
 
 #include "ui/InputWindow.h"
 #include "ui/ui.h"
@@ -51,17 +49,17 @@ extern Bool     bStartRecordType;
 extern time_t   timeStart;
 extern uint     iHZInputed;
 
-extern CARD16	connect_id;
+extern CARD16   connect_id;
 
-extern int	iClientCursorX;
-extern int	iClientCursorY;
+extern int  iClientCursorX;
+extern int  iClientCursorY;
 
 #ifdef _DEBUG
 extern char     strXModifiers[];
 #endif
 
 #ifdef _ENABLE_RECORDING
-extern FILE	*fpRecord;
+extern FILE *fpRecord;
 #endif
 static void InitInputWindow();
 
@@ -80,65 +78,65 @@ void InitInputWindow()
 
 Bool CreateInputWindow (void)
 {
-    XSetWindowAttributes	attrib;
-    unsigned long	attribmask;
-    XTextProperty	tp;
-    char		strWindowName[]="Fcitx Input Window";
-	int depth;
-	Colormap cmap;
-	Visual * vs;
-	int scr;
-	GC gc;
-	XGCValues xgv;
+    XSetWindowAttributes    attrib;
+    unsigned long   attribmask;
+    XTextProperty   tp;
+    char        strWindowName[]="Fcitx Input Window";
+    int depth;
+    Colormap cmap;
+    Visual * vs;
+    int scr;
+    GC gc;
+    XGCValues xgv;
 
     InitInputWindow();
-	
-	load_input_img();
-    CalculateInputWindowHeight ();   
-	scr=DefaultScreen(dpy);
-   	vs=find_argb_visual (dpy, scr);
+
+    LoadInputBarImage();
+    CalculateInputWindowHeight ();
+    scr=DefaultScreen(dpy);
+    vs=FindARGBVisual (dpy, scr);
     InitWindowAttribute(&vs, &cmap, &attrib, &attribmask, &depth);
-	
+
     inputWindow.window=XCreateWindow (dpy,
-                               RootWindow(dpy, scr),
-                               fcitxProfile.iInputWindowOffsetX,
-                               fcitxProfile.iInputWindowOffsetY,
-                               INPUT_BAR_MAX_LEN,
-                               inputWindow.iInputWindowHeight,
-                               0,
-                               depth,InputOutput,
-                               vs,attribmask,
-                               &attrib);
+                                      RootWindow(dpy, scr),
+                                      fcitxProfile.iInputWindowOffsetX,
+                                      fcitxProfile.iInputWindowOffsetY,
+                                      INPUT_BAR_MAX_LEN,
+                                      inputWindow.iInputWindowHeight,
+                                      0,
+                                      depth,InputOutput,
+                                      vs,attribmask,
+                                      &attrib);
 
-	if(mainWindow.window == None)
-		return False;
-		
-	xgv.foreground = WhitePixel(dpy, scr);
+    if (mainWindow.window == None)
+        return False;
 
-	inputWindow.pm_input_bar=XCreatePixmap(
-            dpy,
-            inputWindow.window,
-            INPUT_BAR_MAX_LEN,
-            inputWindow.iInputWindowHeight,
-            depth);
-	gc = XCreateGC(dpy, inputWindow.pm_input_bar, GCForeground, &xgv);
-	XFillRectangle(
-            dpy,
-            inputWindow.pm_input_bar,
-            gc,
-            0,
-            0,
-            INPUT_BAR_MAX_LEN,
-            inputWindow.iInputWindowHeight);
-	inputWindow.cs_input_bar=cairo_xlib_surface_create(
-            dpy,
-            inputWindow.pm_input_bar,
-            vs,
-            INPUT_BAR_MAX_LEN,
-            inputWindow.iInputWindowHeight);
+    xgv.foreground = WhitePixel(dpy, scr);
+
+    inputWindow.pm_input_bar=XCreatePixmap(
+                                 dpy,
+                                 inputWindow.window,
+                                 INPUT_BAR_MAX_LEN,
+                                 inputWindow.iInputWindowHeight,
+                                 depth);
+    gc = XCreateGC(dpy, inputWindow.pm_input_bar, GCForeground, &xgv);
+    XFillRectangle(
+        dpy,
+        inputWindow.pm_input_bar,
+        gc,
+        0,
+        0,
+        INPUT_BAR_MAX_LEN,
+        inputWindow.iInputWindowHeight);
+    inputWindow.cs_input_bar=cairo_xlib_surface_create(
+                                 dpy,
+                                 inputWindow.pm_input_bar,
+                                 vs,
+                                 INPUT_BAR_MAX_LEN,
+                                 inputWindow.iInputWindowHeight);
     XFreeGC(dpy, gc);
-	
-	load_input_msg();
+
+    LoadInputMessage();
     XSelectInput (dpy, inputWindow.window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
     /* Set the name of the window */
@@ -156,7 +154,7 @@ Bool CreateInputWindow (void)
  */
 void CalculateInputWindowHeight (void)
 {
-	inputWindow.iInputWindowHeight=sc.skinInputBar.backImg.height;
+    inputWindow.iInputWindowHeight=sc.skinInputBar.backImg.height;
 }
 
 void DisplayInputWindow (void)
@@ -167,14 +165,14 @@ void DisplayInputWindow (void)
     CalInputWindow();
     MoveInputWindow(connect_id);
     if (MESSAGE_IS_NOT_EMPTY)
-	{
-		if (!fc.bUseDBus)
-			XMapRaised (dpy, inputWindow.window);
+    {
+        if (!fc.bUseDBus)
+            XMapRaised (dpy, inputWindow.window);
 #ifdef _ENABLE_DBUS
-		else
-			updateMessages();
+        else
+            updateMessages();
 #endif
-	}
+    }
 }
 
 void ResetInputWindow (void)
@@ -191,146 +189,146 @@ void CalInputWindow (void)
 #endif
 
     if (MESSAGE_IS_EMPTY) {
-	inputWindow.bShowCursor = False;
-	if (fc.bShowVersion) {
-        AddMessageAtLast(&messageUp, MSG_TIPS, "FCITX " FCITX_VERSION);
-	}
+        inputWindow.bShowCursor = False;
+        if (fc.bShowVersion) {
+            AddMessageAtLast(&messageUp, MSG_TIPS, "FCITX " FCITX_VERSION);
+        }
 
-	//显示打字速度
-	if (bStartRecordType && fc.bShowUserSpeed) {
-	    double          timePassed;
+        //显示打字速度
+        if (bStartRecordType && fc.bShowUserSpeed) {
+            double          timePassed;
 
-	    timePassed = difftime (time (NULL), timeStart);
-	    if (((int) timePassed) == 0)
-		timePassed = 1.0;
+            timePassed = difftime (time (NULL), timeStart);
+            if (((int) timePassed) == 0)
+                timePassed = 1.0;
 
-        SetMessageCount(&messageDown, 0);
-        AddMessageAtLast(&messageDown, MSG_OTHER, "打字速度：");
-        AddMessageAtLast(&messageDown, MSG_CODE, "%d", (int) (iHZInputed * 60 / timePassed));
-        AddMessageAtLast(&messageDown, MSG_OTHER, "/分  用时：");
-        AddMessageAtLast(&messageDown, MSG_CODE, "%d", (int) timePassed);
-        AddMessageAtLast(&messageDown, MSG_OTHER, "秒  字数：");
-        AddMessageAtLast(&messageDown, MSG_CODE, "%u", iHZInputed);
-	}
+            SetMessageCount(&messageDown, 0);
+            AddMessageAtLast(&messageDown, MSG_OTHER, "打字速度：");
+            AddMessageAtLast(&messageDown, MSG_CODE, "%d", (int) (iHZInputed * 60 / timePassed));
+            AddMessageAtLast(&messageDown, MSG_OTHER, "/分  用时：");
+            AddMessageAtLast(&messageDown, MSG_CODE, "%d", (int) timePassed);
+            AddMessageAtLast(&messageDown, MSG_OTHER, "秒  字数：");
+            AddMessageAtLast(&messageDown, MSG_CODE, "%u", iHZInputed);
+        }
     }
 
 #ifdef _ENABLE_RECORDING
     if ( fcitxProfile.bRecording && fpRecord ) {
-	if ( messageUp.msgCount > 0 ) {
-	    if ( MESSAGE_TYPE_IS(LAST_MESSAGE(messageUp), MSG_RECORDING) )
-	        DecMessageCount(&messageUp);
-	}
-    AddMessageAtLast(&messageUp, MSG_RECORDING, "[记录模式]");
+        if ( messageUp.msgCount > 0 ) {
+            if ( MESSAGE_TYPE_IS(LAST_MESSAGE(messageUp), MSG_RECORDING) )
+                DecMessageCount(&messageUp);
+        }
+        AddMessageAtLast(&messageUp, MSG_RECORDING, "[记录模式]");
     }
 #endif
 }
 
 void DrawInputWindow(void)
 {
-	GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
-	
-	draw_input_bar(&messageUp, &messageDown ,&inputWindow.iInputWindowWidth);
-	XResizeWindow(
-            dpy,
-            inputWindow.window,
-            inputWindow.iInputWindowWidth,
-            inputWindow.iInputWindowHeight);	
-	XCopyArea (dpy,
-            inputWindow.pm_input_bar,
-            inputWindow.window,
-            gc,
-            0,
-            0,
-            inputWindow.iInputWindowWidth,
-            inputWindow.iInputWindowHeight, 0, 0);
+    GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
+
+    DrawInputBar(&messageUp, &messageDown ,&inputWindow.iInputWindowWidth);
+    XResizeWindow(
+        dpy,
+        inputWindow.window,
+        inputWindow.iInputWindowWidth,
+        inputWindow.iInputWindowHeight);
+    XCopyArea (dpy,
+               inputWindow.pm_input_bar,
+               inputWindow.window,
+               gc,
+               0,
+               0,
+               inputWindow.iInputWindowWidth,
+               inputWindow.iInputWindowHeight, 0, 0);
     XFreeGC(dpy, gc);
 }
 
 void MoveInputWindow(CARD16 connect_id)
 {
-	inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>sc.skinInputBar.backImg.width)?inputWindow.iInputWindowWidth:sc.skinInputBar.backImg.width;
-	inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>=INPUT_BAR_MAX_LEN)?INPUT_BAR_MAX_LEN:inputWindow.iInputWindowWidth;
-	
+    inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>sc.skinInputBar.backImg.width)?inputWindow.iInputWindowWidth:sc.skinInputBar.backImg.width;
+    inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>=INPUT_BAR_MAX_LEN)?INPUT_BAR_MAX_LEN:inputWindow.iInputWindowWidth;
+
     if (ConnectIDGetTrackCursor (connect_id) && fcitxProfile.bTrackCursor)
     {
         int iTempInputWindowX, iTempInputWindowY;
 
-	if (iClientCursorX < 0)
-	    iTempInputWindowX = 0;
-	else
-	    iTempInputWindowX = iClientCursorX + inputWindow.iOffsetX;
+        if (iClientCursorX < 0)
+            iTempInputWindowX = 0;
+        else
+            iTempInputWindowX = iClientCursorX + inputWindow.iOffsetX;
 
-	if (iClientCursorY < 0)
-	    iTempInputWindowY = 0;
-	else
-	    iTempInputWindowY = iClientCursorY + inputWindow.iOffsetY;
+        if (iClientCursorY < 0)
+            iTempInputWindowY = 0;
+        else
+            iTempInputWindowY = iClientCursorY + inputWindow.iOffsetY;
 
-	if ((iTempInputWindowX + inputWindow.iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-	    iTempInputWindowX = DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth;
+        if ((iTempInputWindowX + inputWindow.iInputWindowWidth) > DisplayWidth (dpy, iScreen))
+            iTempInputWindowX = DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth;
 
-	if ((iTempInputWindowY + inputWindow.iInputWindowHeight) > DisplayHeight (dpy, iScreen)) {
-	    if ( iTempInputWindowY > DisplayHeight (dpy, iScreen) )
-	        iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * inputWindow.iInputWindowHeight;
-	    else
-	        iTempInputWindowY = iTempInputWindowY - 2 * inputWindow.iInputWindowHeight;
-	}
+        if ((iTempInputWindowY + inputWindow.iInputWindowHeight) > DisplayHeight (dpy, iScreen)) {
+            if ( iTempInputWindowY > DisplayHeight (dpy, iScreen) )
+                iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * inputWindow.iInputWindowHeight;
+            else
+                iTempInputWindowY = iTempInputWindowY - 2 * inputWindow.iInputWindowHeight;
+        }
 
-	if (!fc.bUseDBus)
-	{
-		//printf("iInputWindowWidth:%d\n",iInputWindowWidth);
-		XMoveWindow (dpy, inputWindow.window, iTempInputWindowX, iTempInputWindowY);
-	}
+        if (!fc.bUseDBus)
+        {
+            //printf("iInputWindowWidth:%d\n",iInputWindowWidth);
+            XMoveWindow (dpy, inputWindow.window, iTempInputWindowX, iTempInputWindowY);
+        }
 #ifdef _ENABLE_DBUS
-	else
-	{
-	if (iClientCursorX < 0)
-	    iTempInputWindowX = 0;
-	else
-	    iTempInputWindowX = iClientCursorX + inputWindow.iOffsetX;
+        else
+        {
+            if (iClientCursorX < 0)
+                iTempInputWindowX = 0;
+            else
+                iTempInputWindowX = iClientCursorX + inputWindow.iOffsetX;
 
-	if (iClientCursorY < 0)
-	    iTempInputWindowY = 0;
-	else
-	    iTempInputWindowY = iClientCursorY + inputWindow.iOffsetY;
+            if (iClientCursorY < 0)
+                iTempInputWindowY = 0;
+            else
+                iTempInputWindowY = iClientCursorY + inputWindow.iOffsetY;
 
-	    KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
-	}
+            KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
+        }
 #endif
-	ConnectIDSetPos (connect_id, iTempInputWindowX - inputWindow.iOffsetX, iTempInputWindowY - inputWindow.iOffsetY);
+        ConnectIDSetPos (connect_id, iTempInputWindowX - inputWindow.iOffsetX, iTempInputWindowY - inputWindow.iOffsetY);
     }
     else
     {
-		position * pos = ConnectIDGetPos(connect_id);
-		if (fc.bCenterInputWindow) {
-		    fcitxProfile.iInputWindowOffsetX = (DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth) / 2;
-		    if (fcitxProfile.iInputWindowOffsetX < 0)
-			fcitxProfile.iInputWindowOffsetX = 0;
-		}
-		else
-		    fcitxProfile.iInputWindowOffsetX = pos ? pos->x : fcitxProfile.iInputWindowOffsetX;
-	
-		if (!fc.bUseDBus)
-		{
-			XMoveResizeWindow (dpy, inputWindow.window, fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY, inputWindow.iInputWindowWidth, inputWindow.iInputWindowHeight); 
-		}
+        position * pos = ConnectIDGetPos(connect_id);
+        if (fc.bCenterInputWindow) {
+            fcitxProfile.iInputWindowOffsetX = (DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth) / 2;
+            if (fcitxProfile.iInputWindowOffsetX < 0)
+                fcitxProfile.iInputWindowOffsetX = 0;
+        }
+        else
+            fcitxProfile.iInputWindowOffsetX = pos ? pos->x : fcitxProfile.iInputWindowOffsetX;
+
+        if (!fc.bUseDBus)
+        {
+            XMoveResizeWindow (dpy, inputWindow.window, fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY, inputWindow.iInputWindowWidth, inputWindow.iInputWindowHeight);
+        }
 #ifdef _ENABLE_DBUS
-		else
-		    KIMUpdateSpotLocation(fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY);
+        else
+            KIMUpdateSpotLocation(fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY);
 #endif
     }
-    
+
 }
 
 void CloseInputWindow()
 {
-	XUnmapWindow (dpy, inputWindow.window);
+    XUnmapWindow (dpy, inputWindow.window);
 #ifdef _ENABLE_DBUS
-	if (fc.bUseDBus)
-	{
-		KIMShowAux(False);
-		KIMShowPreedit(False);
-		KIMShowLookupTable(False);
-	}
+    if (fc.bUseDBus)
+    {
+        KIMShowAux(False);
+        KIMShowPreedit(False);
+        KIMShowLookupTable(False);
+    }
 #endif
 }
 
@@ -381,7 +379,7 @@ void DestroyInputWindow()
 
     for ( i = 0 ; i < 7; i ++)
         cairo_destroy(inputWindow.c_font[i]);
-	cairo_destroy(inputWindow.c_cursor);
+    cairo_destroy(inputWindow.c_cursor);
 
     cairo_surface_destroy(inputWindow.cs_input_bar);
     XFreePixmap(dpy, inputWindow.pm_input_bar);

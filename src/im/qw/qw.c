@@ -23,6 +23,8 @@
 #include <string.h>
 #include <iconv.h>
 
+#include "core/fcitx.h"
+
 #include "im/qw/qw.h"
 #include "ui/InputWindow.h"
 #include "fcitx-config/configfile.h"

@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "core/fcitx.h"
 
 #ifdef _ENABLE_TRAY
 
@@ -73,7 +74,7 @@ Bool CreateTrayWindow() {
     if (tray.window == (Window) NULL)
         return False;
 
-    load_tray_img();
+    LoadTrayImage();
     XSizeHints size_hints;
     size_hints.flags = PWinGravity | PBaseSize;
     size_hints.base_width = tray.size;
