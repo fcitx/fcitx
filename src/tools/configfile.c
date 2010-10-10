@@ -81,7 +81,7 @@ CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEn
 CONFIG_BINDING_REGISTER("Appearance", "CandidateWordNumber", iMaxCandWord);
 CONFIG_BINDING_REGISTER("Appearance", "MainWindowHideMode", hideMainWindow);
 CONFIG_BINDING_REGISTER("Appearance", "CenterInputWindow", bCenterInputWindow);
-CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bSendTextWhenSwitchEng);
+CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering);
 CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber);
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed);
 CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion);
