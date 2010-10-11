@@ -246,16 +246,8 @@ void *custom_bsearch(const void *key, const void *base,
 
 void FcitxInitThread()
 {
-    pthread_mutexattr_t   mta;
     int rc;
-    
-    rc = pthread_mutexattr_init(&mta);
-    if (rc != 0)
-        FcitxLog(ERROR, _("pthread mutexattr init failed"));
-
-    pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_RECURSIVE);
-
-    rc = pthread_mutex_init(&fcitxMutex, &mta);
+    rc = pthread_mutex_init(&fcitxMutex, NULL);
     gs.bMutexInited = True;
     if (rc != 0)
         FcitxLog(ERROR, _("pthread mutex init failed"));

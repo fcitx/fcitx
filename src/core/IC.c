@@ -219,6 +219,8 @@ void CreateIC (IMChangeICStruct * call_data)
     if (rec == NULL)
 	return;
 
+    rec->state = IS_CLOSED;
+    rec->connect_id = call_data->connect_id;
     StoreIC (rec, call_data);
     call_data->icid = rec->id;
 

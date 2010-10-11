@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
 "POT-Creation-Date: 2010-10-09 18:43+0800\n"
-"PO-Revision-Date: 2010-10-09 18:44+0800\n"
+"PO-Revision-Date: 2010-10-11 15:18+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -410,7 +410,7 @@ msgstr "变形规则"
 
 #: data/skin.desc:135
 msgid "The Resize Position to Left"
-msgstr "变形区域距左侧举例"
+msgstr "变形区域距左侧距离"
 
 #: data/skin.desc:139
 msgid "Width of Resize Part "

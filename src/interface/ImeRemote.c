@@ -49,7 +49,6 @@ extern Property state_prop;
 #endif
 extern Display* dpy;
 char socketfile[PATH_MAX]="";
-CARD16 g_last_connect_id;
 
 int create_socket(const char *name)
 {
@@ -107,12 +106,10 @@ int ud_accept(int listenfd)
 
 static void send_ime_state(int fd)
 {
-	IME_STATE r = ConnectIDGetState(g_last_connect_id);
+	IME_STATE r = GetCurrentState();
 	write(fd, &r, sizeof(r));
 }
 
-
-extern void DisplayMainWindow (void);
 static void main_loop (int socket_fd)
 {
 	unsigned int O;  // 低16位, 0 = get, 1 = set;
@@ -141,7 +138,7 @@ static void main_loop (int socket_fd)
 #endif
 #ifdef _ENABLE_TRAY
                 if (!fc.bUseDBus) {
-                    if (ConnectIDGetState (g_last_connect_id) == IS_CHN)
+                    if (GetCurrentState() == IS_CHN)
                         DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size );
                     else
                         DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size );

@@ -62,8 +62,6 @@ char sVKmsg[PATH_MAX] = "";
 
 //extern IMProtocol * current_call_data;
 extern INT8 iIMCount;
-extern CARD16 connect_id;
-extern CARD16 icid;
 extern Bool bIsInLegend;
 extern int iLegendCandWordCount;
 extern int iCurrentCandPage;
@@ -1016,8 +1014,8 @@ void updateProperty(Property *prop)
         fixProperty(prop);
     }
     if (prop == &state_prop) {
-        prop->label = (ConnectIDGetState(connect_id) == IS_CHN) ? TOOLTIP_STATE_CHN: TOOLTIP_STATE_ENG;
-        if (ConnectIDGetState(connect_id) == IS_CHN) {
+        prop->label = (GetCurrentState() == IS_CHN) ? TOOLTIP_STATE_CHN: TOOLTIP_STATE_ENG;
+        if (GetCurrentState() == IS_CHN) {
             prop->icon = "fcitx-chn";
         } else {
             prop->icon = "fcitx-eng";
@@ -1110,7 +1108,7 @@ void triggerProperty(char *propKey)
     }
 
     if (strcmp(propKey,state_prop.key) == 0) {
-        ChangeIMState(connect_id);
+        ChangeIMState();
     }
     if (strcmp(propKey,punc_prop.key) == 0) {
         ChangePunc();
@@ -1192,8 +1190,8 @@ void fixProperty(Property *prop)
     }
 }
 
-void updatePropertyByConnectID(CARD16 connect_id) {
-	int iIndex = ConnectIDGetState(connect_id);
+void updatePropertyByState() {
+	int iIndex = GetCurrentState();
 	switch (iIndex) {
 	case IS_CLOSED:
         iState = IS_ENG;

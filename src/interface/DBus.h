@@ -68,7 +68,7 @@ void triggerProperty(char *propKey);
 
 char* property2string(Property *prop);
 
-void updatePropertyByConnectID(CARD16 connect_id);
+void updatePropertyByState();
 
 void DBusLoop(void *val);
 void MyDBusEventHandler();

@@ -51,49 +51,20 @@ typedef struct _POSITION {
     int	y;
 } position;
 
-typedef struct _ICID {
-    struct _ICID	*next;
-    CARD16		icid;
-    IME_STATE		imState;
-    CARD16		connect_id;
-} ICID;
-
-typedef struct _CONNECT_ID {
-    struct _CONNECT_ID	*next;
-    CARD16		connect_id;
-    IME_STATE		imState;
-    Bool		bTrackCursor:1;	//if in 'over the spot' mode
-    position		pos;
-} CONNECT_ID;
-
 Bool            InitXIM (char *);
 void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
-void            CreateConnectID (IMOpenStruct * call_data);
-void            DestroyConnectID (CARD16 connect_id);
-void            SetConnectID (CARD16 connect_id, IME_STATE imState);
-IME_STATE       ConnectIDGetState (CARD16 connect_id);
 
-/* 用于lumaqq支持
-Bool            ConnectIDGetReset (CARD16 connect_id);
-void            ConnectIDSetReset (CARD16 connect_id, Bool bReset);
-void            ConnectIDResetReset (void);
-*/
-void            ConnectIDSetPos (CARD16 connect_id, int x, int y);
-position	   *ConnectIDGetPos (CARD16 connect_id);
-void            ConnectIDSetTrackCursor (CARD16 connect_id, Bool bTrack);
-Bool            ConnectIDGetTrackCursor (CARD16 connect_id);
 void            SetIMState (Bool bState);
 void		    SetTrackPos(IMChangeICStruct * call_data);
 void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
 
-/* char           *ConnectIDGetLocale(CARD16 connect_id); */
-void		CreateICID (IMChangeICStruct * call_data);
-void		DestroyICID (CARD16 icid);
-void		icidSetIMState (CARD16 icid, IME_STATE imState);
-IME_STATE	icidGetIMState (CARD16 icid);
-/* CARD16		icidGetConnectID (CARD16 icid); */
-CARD16 ConnectIDGetICID (CARD16 connect_id);
+#define GetCurrentState() (CurrentIC?(CurrentIC->state):(IS_CLOSED))
+#define GetCurrentPos() (CurrentIC?(&CurrentIC->pos):(NULL))
+
+struct _IC;
+
+extern struct _IC* CurrentIC;
 
 #ifndef __USE_GNU
 extern char    *strcasestr (__const char *__haystack, __const char *__needle);

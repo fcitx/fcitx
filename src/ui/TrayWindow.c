@@ -41,7 +41,6 @@ TrayWindow tray;
 
 extern Display *dpy;
 extern int iScreen;
-extern CARD16 connect_id;
 
 Bool CreateTrayWindow() {
     XTextProperty tp;
@@ -176,7 +175,7 @@ void TrayEventHandler(XEvent* event)
 
 		case Expose:
 			if (event->xexpose.window == tray.window) {
-                if (ConnectIDGetState (connect_id) == IS_CHN)
+                if (GetCurrentState() == IS_CHN)
                     DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
                 else
                     DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
@@ -196,7 +195,7 @@ void TrayEventHandler(XEvent* event)
                     XSetWMNormalHints(dpy, tray.window, &size_hints);
                 }
 
-                if (ConnectIDGetState (connect_id) == IS_CHN)
+                if (GetCurrentState() == IS_CHN)
                     DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
                 else
                     DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
@@ -213,7 +212,7 @@ void TrayEventHandler(XEvent* event)
                 if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == tray.window)
                 {
                     tray.bTrayMapped = False;
-                    if (ConnectIDGetState (connect_id) == IS_CHN)
+                    if (GetCurrentState() == IS_CHN)
                         DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
                     else
                         DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);

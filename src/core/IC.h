@@ -34,9 +34,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "IMdkit.h"
 #include "Xi18n.h"
-/*
-#include "ime.h"
-*/
+#include "xim.h"
 typedef struct {
     XRectangle      area;	/* area */
     XRectangle      area_needed;	/* area needed */
@@ -71,6 +69,11 @@ typedef struct _IC {
     char           *resource_class;	/* resource class */
     PreeditAttributes pre_attr;	/* preedit attributes */
     StatusAttributes sts_attr;	/* status attributes */
+
+    IME_STATE state; /* im state */
+    CARD16 connect_id;
+
+    position pos;
     struct _IC     *next;    
 } IC;
 

@@ -81,7 +81,6 @@ MouseE ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
 //指定皮肤所在的文件夹 一般在/usr/share/fcitx/skin目录下面
 UT_array *skinBuf;
 extern Display  *dpy;
-extern CARD16 connect_id;
 static ConfigFileDesc * fcitxSkinDesc = NULL;
 
 static ConfigFileDesc* GetSkinDesc()
@@ -729,7 +728,7 @@ void DisplaySkin(char * skinname)
     DrawInputWindow ();
 #ifdef _ENABLE_TRAY
     LoadTrayImage();
-    if (ConnectIDGetState (connect_id) == IS_CHN)
+    if (GetCurrentState() == IS_CHN)
         DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size );
     else
         DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size );

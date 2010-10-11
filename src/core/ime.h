@@ -89,7 +89,7 @@ typedef struct FcitxState {
 void            ProcessKey (IMForwardEventStruct * call_data);
 void            ResetInput (void);
 void            CloseIM (IMForwardEventStruct * call_data);
-void            ChangeIMState (CARD16 _connect_id);
+void            ChangeIMState ();
 Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);

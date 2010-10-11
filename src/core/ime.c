@@ -107,8 +107,6 @@ extern XIMS ims;
 extern Display *dpy;
 extern ChnPunc *chnPunc;
 
-extern IC *CurrentIC;
-
 extern XIMTriggerKey *Trigger_Keys;
 
 extern VKWindow vkWindow;
@@ -129,8 +127,6 @@ extern int iInputWindowX;
 extern int iInputWindowY;
 
 extern Bool bMainWindow_Hiden;
-
-extern CARD16 connect_id;
 
 extern int iFirstQuickPhrase;
 
@@ -212,13 +208,15 @@ void ResetInput(void)
  */
 void CloseIM(IMForwardEventStruct * call_data)
 {
+    if (CurrentIC == NULL)
+        return;
+
     CloseInputWindow();
 
     XUnmapWindow(dpy, vkWindow.window);
 
     IMPreeditEnd(ims, (XPointer) call_data);
-    SetConnectID(call_data->connect_id, IS_CLOSED);
-    icidSetIMState(call_data->icid, IS_CLOSED);
+    CurrentIC->state = IS_CLOSED;
     bVK = False;
     SwitchIM(-2);
 
@@ -240,10 +238,12 @@ void CloseIM(IMForwardEventStruct * call_data)
  * 
  * @param _connect_id
  */
-void ChangeIMState(CARD16 _connect_id)
+void ChangeIMState()
 {
-    if (ConnectIDGetState(_connect_id) == IS_ENG) {
-        SetConnectID(_connect_id, IS_CHN);
+    if (!CurrentIC)
+        return;
+    if (GetCurrentState() == IS_ENG) {
+        CurrentIC->state = IS_CHN;
         iState = IS_CHN;
 
         if (bVK) {
@@ -251,7 +251,7 @@ void ChangeIMState(CARD16 _connect_id)
         } else
             DisplayInputWindow();
     } else {
-        SetConnectID(_connect_id, IS_ENG);
+        CurrentIC->state = IS_ENG;
         iState = IS_ENG;
         ResetInput();
         ResetInputWindow();
@@ -331,14 +331,12 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
     if (!CurrentIC) {
         CurrentIC = FindIC(call_data->icid);
-        connect_id = CurrentIC->id;
         if (CurrentIC)
             return;
     }
 
     if (CurrentIC->id != call_data->icid) {
         CurrentIC = FindIC(call_data->icid);
-        connect_id = CurrentIC->id;
     }
 
     kev = (XKeyEvent *) & call_data->event;
@@ -370,11 +368,11 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
     /* ******************************************* */
     if (call_data->event.type == KeyRelease) {
-        if (ConnectIDGetState(call_data->connect_id) != IS_CLOSED) {
+        if (CurrentIC->state != IS_CLOSED) {
             if ((kev->time - lastKeyPressedTime) < 500 && (!bIsDoInputOnly)) {
                 if (iKeyState == KEY_CTRL_SHIFT_COMP && (iKey == 225 || iKey == 227)) {
                     if (!fcitxProfile.bLocked) {
-                        if (ConnectIDGetState(call_data->connect_id) == IS_CHN)
+                        if (CurrentIC->state == IS_CHN)
                             SwitchIM(-1);
                         else if (IsHotKey(iKey, fc.hkTrigger))
                             CloseIM(call_data);
@@ -382,7 +380,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
                         ChangVK();
                 } else if (iKey == CTRL_LSHIFT) {
                     if (!fcitxProfile.bLocked) {
-                        if (ConnectIDGetState(call_data->connect_id) == IS_CHN)
+                        if (CurrentIC->state == IS_CHN)
                             SwitchIM(-1);
                         else if (IsHotKey(iKey, fc.hkTrigger))
                             CloseIM(call_data);
@@ -462,8 +460,8 @@ void ProcessKey(IMForwardEventStruct * call_data)
                 keyReleased = KR_CTRL;
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(iKey, fc.hkTrigger)) {
-                if (ConnectIDGetState(call_data->connect_id) == IS_ENG) {
-                    SetConnectID(call_data->connect_id, IS_CHN);
+                if (CurrentIC->state == IS_ENG) {
+                    CurrentIC->state = IS_CHN;
 
                     EnterChineseMode(False);
                     if (!fc.bUseDBus)
@@ -472,7 +470,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
                     if (fc.bShowInputWindowTriggering && !fcitxProfile.bCorner) {
                         DisplayInputWindow();
                     } else
-                        MoveInputWindow(call_data->connect_id);
+                        MoveInputWindow();
                 } else
                     CloseIM(call_data);
 
@@ -482,7 +480,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
         if (retVal == IRV_TO_PROCESS) {
             if (call_data->event.type == KeyPress) {
-                if (ConnectIDGetState(call_data->connect_id) == IS_CHN) {
+                if (CurrentIC->state == IS_CHN) {
                     if (bVK)
                         retVal = DoVKInput(iKey);
                     else {
@@ -1138,7 +1136,7 @@ void SwitchIM(INT8 index)
             strcpy(logo_prop.label, "Fcitx");
             iState = IS_ENG;
         } else {
-            int iIndex = ConnectIDGetState(connect_id);
+            int iIndex = GetCurrentState();
 
             if (iIndex == IS_CHN) {
                 strcpy(logo_prop.label, im[gs.iIMIndex].strName);

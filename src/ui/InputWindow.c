@@ -49,8 +49,6 @@ extern Bool     bStartRecordType;
 extern time_t   timeStart;
 extern uint     iHZInputed;
 
-extern CARD16   connect_id;
-
 extern int  iClientCursorX;
 extern int  iClientCursorY;
 
@@ -163,7 +161,7 @@ void DisplayInputWindow (void)
     FcitxLog(DEBUG, _("DISPLAY InputWindow"));
 #endif
     CalInputWindow();
-    MoveInputWindow(connect_id);
+    MoveInputWindow();
     if (MESSAGE_IS_NOT_EMPTY)
     {
         if (!fc.bUseDBus)
@@ -244,12 +242,12 @@ void DrawInputWindow(void)
     XFreeGC(dpy, gc);
 }
 
-void MoveInputWindow(CARD16 connect_id)
+void MoveInputWindow()
 {
     inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>sc.skinInputBar.backImg.width)?inputWindow.iInputWindowWidth:sc.skinInputBar.backImg.width;
     inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>=INPUT_BAR_MAX_LEN)?INPUT_BAR_MAX_LEN:inputWindow.iInputWindowWidth;
 
-    if (ConnectIDGetTrackCursor (connect_id) && fcitxProfile.bTrackCursor)
+    if (fcitxProfile.bTrackCursor)
     {
         int iTempInputWindowX, iTempInputWindowY;
 
@@ -294,11 +292,15 @@ void MoveInputWindow(CARD16 connect_id)
             KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
         }
 #endif
-        ConnectIDSetPos (connect_id, iTempInputWindowX - inputWindow.iOffsetX, iTempInputWindowY - inputWindow.iOffsetY);
+        if (CurrentIC)
+        {
+            CurrentIC->pos.x = iTempInputWindowX - inputWindow.iOffsetX;
+            CurrentIC->pos.y = iTempInputWindowY - inputWindow.iOffsetY;
+        }
     }
     else
     {
-        position * pos = ConnectIDGetPos(connect_id);
+        position * pos = GetCurrentPos();
         if (fc.bCenterInputWindow) {
             fcitxProfile.iInputWindowOffsetX = (DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth) / 2;
             if (fcitxProfile.iInputWindowOffsetX < 0)

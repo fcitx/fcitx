@@ -338,6 +338,7 @@ ba 鮊
 ba 鲃
 ba 鲌
 ba 鼥
+ba 丷
 bai 百
 bai 白
 bai 败
@@ -6751,7 +6752,6 @@ guo 馃
 ha 哈
 ha 蛤
 ha 铪
-ha 丷
 ha 吓
 ha 呵
 ha 奤

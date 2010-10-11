@@ -55,9 +55,6 @@ extern int      iScreen;
 extern char     strStringGet[];
 extern Bool     bVK;
 
-extern IC      *CurrentIC;
-extern CARD16   connect_id;
-extern CARD16   icid;
 extern XIMS     ims;
 
 extern uint     iHZInputed;
@@ -163,7 +160,7 @@ Bool VKMouseKey (int x, int y)
     if (IsInBox (x, y, 1, 1, VK_WINDOW_WIDTH, 16))
         ChangVK ();
     else {
-        if (!CurrentIC->id || !connect_id)
+        if (!CurrentIC || !CurrentIC->id)
             return False;
 
         strKey[1] = '\0';
@@ -174,7 +171,7 @@ Bool VKMouseKey (int x, int y)
 
             x -= 4;
             if (x >= 313 && x <= 344) { //backspace
-                MyIMForwardEvent (connect_id, CurrentIC->id, 22);
+                MyIMForwardEvent (CurrentIC->connect_id, CurrentIC->id, 22);
                 return True;
             }
             else {
@@ -193,7 +190,7 @@ Bool VKMouseKey (int x, int y)
                 return False;
 
             if (x >= 4 && x < 38) { //Tab
-                MyIMForwardEvent (connect_id, CurrentIC->id, 23);
+                MyIMForwardEvent (CurrentIC->connect_id, CurrentIC->id, 23);
                 return True;
             }
             else {
@@ -248,11 +245,11 @@ Bool VKMouseKey (int x, int y)
         else if (y >= 140 && y <= 162) {    //第五行
             if (x >= 4 && x < 38) { //Ins
                 //改变INS键状态
-                MyIMForwardEvent (connect_id, CurrentIC->id, 106);
+                MyIMForwardEvent (CurrentIC->connect_id, CurrentIC->id, 106);
                 return True;
             }
             else if (x >= 61 && x < 98) {   //DEL
-                MyIMForwardEvent (connect_id, CurrentIC->id, 107);
+                MyIMForwardEvent (CurrentIC->connect_id, CurrentIC->id, 107);
                 return True;
             }
             else if (x >= 99 && x < 270)    //空格
@@ -267,7 +264,7 @@ Bool VKMouseKey (int x, int y)
 
         if (pstr) {
             memset (&forwardEvent, 0, sizeof (IMForwardEventStruct));
-            forwardEvent.connect_id = connect_id;
+            forwardEvent.connect_id = CurrentIC->connect_id;
             forwardEvent.icid = CurrentIC->id;
             SendHZtoClient (&forwardEvent, pstr);
             iHZInputed += (int) (utf8_strlen (pstr));   //粗略统计字数
@@ -467,7 +464,7 @@ void SwitchVK (void)
         DisplayVKWindow ();
         CloseInputWindow();
 
-        if (ConnectIDGetState (connect_id) == IS_CLOSED)
+        if (CurrentIC && CurrentIC->state == IS_CLOSED)
             SetIMState (True);
     }
     else

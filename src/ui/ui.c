@@ -64,7 +64,6 @@ extern Window   ximWindow;
 extern VKWindow vkWindow;
 extern Bool     bMainWindow_Hiden;
 unsigned char   iCurrentVK;
-extern CARD16   connect_id;
 extern Bool     bVK;
 extern Bool     bIsDisplaying;
 
@@ -193,15 +192,14 @@ MyXEventHandler(XEvent * event)
                     ms_logo = PRESS;
                     if (!MouseClick
                         (&fcitxProfile.iMainWindowOffsetX, &fcitxProfile.iMainWindowOffsetY, mainWindow.window)) {
-                        if (ConnectIDGetState(connect_id) != IS_CHN) {
-                            SetIMState((ConnectIDGetState(connect_id) ==
-                                        IS_ENG) ? False : True);
+                        if (GetCurrentState() != IS_CHN) {
+                            SetIMState((GetCurrentState() == IS_ENG) ? False : True);
                         }
                     }
                     DrawMainWindow();
 
 #ifdef _ENABLE_TRAY
-                    if (ConnectIDGetState(connect_id) == IS_CHN)
+                    if (GetCurrentState() == IS_CHN)
                         DrawTrayWindow(ACTIVE_ICON, 0, 0, tray.size,
                                        tray.size);
                     else
@@ -268,10 +266,9 @@ MyXEventHandler(XEvent * event)
             }
 #ifdef _ENABLE_TRAY
             else if (event->xbutton.window == tray.window) {
-                SetIMState((ConnectIDGetState(connect_id) ==
-                            IS_ENG) ? False : True);
+                SetIMState((GetCurrentState() == IS_ENG) ? False : True);
                 DrawMainWindow();
-                if (ConnectIDGetState(connect_id) == IS_CHN)
+                if (GetCurrentState() == IS_CHN)
                     DrawTrayWindow(ACTIVE_ICON, 0, 0, tray.size,
                                    tray.size);
                 else
@@ -505,7 +502,7 @@ MyXEventHandler(XEvent * event)
                 if (event->xbutton.window == tray.window) {
                     switch (event->xbutton.button) {
                     case Button1:
-                        if (ConnectIDGetState(connect_id) != IS_CHN) {
+                        if (GetCurrentState() != IS_CHN) {
                             SetIMState(True);
                             DrawMainWindow();
 
@@ -536,7 +533,7 @@ MyXEventHandler(XEvent * event)
         }
         break;
     case FocusIn:
-        if (ConnectIDGetState(connect_id) == IS_CHN)
+        if (GetCurrentState() == IS_CHN)
             DisplayInputWindow();
         if (fc.hideMainWindow != HM_HIDE)
             XMapRaised(dpy, mainWindow.window);

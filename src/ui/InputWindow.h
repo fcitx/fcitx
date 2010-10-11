@@ -116,14 +116,14 @@ extern int iCursorPos;
 
 Bool            CreateInputWindow (void);
 void            DisplayInputWindow (void);
-void		DrawInputWindow (void);
-void		CalInputWindow (void);
+void            DrawInputWindow (void);
+void            CalInputWindow (void);
 void            CalculateInputWindowHeight (void);
 void            DrawCursor (int iPos);
 void            DisplayMessageUp (void);
 void            DisplayMessageDown (void);
 void            ResetInputWindow (void);
-void		MoveInputWindow(CARD16 connect_id);
+void            MoveInputWindow();
 void            CloseInputWindow(void);
 
 void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...);

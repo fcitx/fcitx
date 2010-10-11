@@ -46,7 +46,6 @@ Bool        bMainWindow_Hiden = False;
 extern Display *dpy;
 extern Bool     bSP;
 extern Bool     bVK;
-extern CARD16   connect_id;
 
 extern unsigned char iCurrentVK;
 extern int iScreen;
@@ -157,7 +156,7 @@ void DrawMainWindow (void)
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
-    if (fc.hideMainWindow == HM_SHOW || (fc.hideMainWindow == HM_AUTO && (ConnectIDGetState (connect_id) != IS_CLOSED)))
+    if (fc.hideMainWindow == HM_SHOW || (fc.hideMainWindow == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
     {
         // extern mouse_e ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
         DrawImage(&c, sc.skinMainBar.backImg,bar,RELEASE );
@@ -169,7 +168,7 @@ void DrawMainWindow (void)
         DrawImage(&c, sc.skinMainBar.nolegend,lx[fcitxProfile.bUseLegend],ms_lx);
         DrawImage(&c, sc.skinMainBar.novk,vk[bVK],ms_vk);
 
-        iIndex = ConnectIDGetState (connect_id);
+        iIndex = GetCurrentState();
         //printf("[iIndex:%d iIMIndex:%d imName:%s]\n",iIndex,iIMIndex,im[iIMIndex].strName);
         if ( iIndex == 1 || iIndex ==0 )
         {
