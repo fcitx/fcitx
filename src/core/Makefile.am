@@ -38,6 +38,7 @@ fcitx_LDADD=../../lib/libXimd.a \
             ../fcitx-config/libfcitx-config.la \
 			@CAIRO_XLIB_LIBS@ \
 			@DBUS_LIBS@ \
+			@FONTCONFIG_LIBS@ \
 			$(NULL)
 
 fcitx_LDFLAGS = -ldl -lpthread
