@@ -247,7 +247,8 @@ Description=Quwei Priority Order, Zero to Disable
 
 [InputMethod/TableOrder]
 Type=Integer
-DefaultValue=Table Priority Order, Zero to Disable
+DefaultValue=1
+Description=Table Priority Order, Zero to Disable
 
 [InputMethod/PhraseTips]
 Type=Boolean

@@ -69,7 +69,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libfcitx-config.la
 [ ${RPM_BUILD_ROOT} != "/" ] && rm -rf ${RPM_BUILD_ROOT}
 
 %files -f %{name}.lang
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING INSTALL README
 %doc doc/*.txt doc/*.htm
 %{_bindir}/*
@@ -82,6 +82,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libfcitx-config.la
 %postun -p /sbin/ldconfig
 
 %files devel
+%defattr(-,root,root,-)
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/*
 
