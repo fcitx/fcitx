@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-09 18:43+0800\n"
+"POT-Creation-Date: 2010-10-14 21:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgid "Show Input Window After Trigger Input Mode"
 msgstr ""
 
 #: data/config.desc:109
-msgid "Show Point After Index of Candidate Word "
+msgid "Show Point After Index"
 msgstr ""
 
 #: data/config.desc:114
@@ -193,91 +193,95 @@ msgstr ""
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:255
+#: data/config.desc:251
+msgid "Table Priority Order, Zero to Disable"
+msgstr ""
+
+#: data/config.desc:256
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: data/config.desc:264
+#: data/config.desc:265
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: data/config.desc:269
+#: data/config.desc:270
 msgid "Auto Create Phrase"
 msgstr ""
 
-#: data/config.desc:274
+#: data/config.desc:275
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: data/config.desc:279
+#: data/config.desc:280
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: data/config.desc:284
+#: data/config.desc:285
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: data/config.desc:289
+#: data/config.desc:290
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: data/config.desc:294
+#: data/config.desc:295
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: data/config.desc:303
+#: data/config.desc:304
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: data/config.desc:312
+#: data/config.desc:313
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: data/config.desc:321
+#: data/config.desc:322
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: data/config.desc:326
+#: data/config.desc:327
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: data/config.desc:331
+#: data/config.desc:332
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: data/config.desc:336
+#: data/config.desc:337
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: data/config.desc:341
+#: data/config.desc:342
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: data/config.desc:346
+#: data/config.desc:347
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: data/config.desc:351
+#: data/config.desc:352
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: data/config.desc:356
+#: data/config.desc:357
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: data/config.desc:361
+#: data/config.desc:362
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: data/config.desc:366
+#: data/config.desc:367
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: data/config.desc:371
+#: data/config.desc:372
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: data/config.desc:376
+#: data/config.desc:377
 msgid "Fuzzy z and zh"
 msgstr ""
 
@@ -853,95 +857,95 @@ msgstr ""
 msgid "TableOrder"
 msgstr ""
 
-#: data/config.desc:252
+#: data/config.desc:253
 msgid "PhraseTips"
 msgstr ""
 
-#: data/config.desc:257
+#: data/config.desc:258
 msgid "ExtraIM"
 msgstr ""
 
-#: data/config.desc:261
+#: data/config.desc:262
 msgid "UseCompletePinyin"
 msgstr ""
 
-#: data/config.desc:266
+#: data/config.desc:267
 msgid "AutoCreatePhrase"
 msgstr ""
 
-#: data/config.desc:271 data/table.desc:81
+#: data/config.desc:272 data/table.desc:81
 msgid "SaveAutoPhrase"
 msgstr ""
 
-#: data/config.desc:276
+#: data/config.desc:277
 msgid "AddFreqWordKey"
 msgstr ""
 
-#: data/config.desc:281
+#: data/config.desc:282
 msgid "DeleteFreqWordKey"
 msgstr ""
 
-#: data/config.desc:286
+#: data/config.desc:287
 msgid "DeleteUserPhraseKey"
 msgstr ""
 
-#: data/config.desc:291
+#: data/config.desc:292
 msgid "InputWordFromPhraseKey"
 msgstr ""
 
-#: data/config.desc:296
+#: data/config.desc:297
 msgid "BaseOrder"
 msgstr ""
 
-#: data/config.desc:305
+#: data/config.desc:306
 msgid "PhraseOrder"
 msgstr ""
 
-#: data/config.desc:314
+#: data/config.desc:315
 msgid "FreqOrder"
 msgstr ""
 
-#: data/config.desc:323
+#: data/config.desc:324
 msgid "FuzzyAnAng"
 msgstr ""
 
-#: data/config.desc:328
+#: data/config.desc:329
 msgid "FuzzyEnEng"
 msgstr ""
 
-#: data/config.desc:333
+#: data/config.desc:334
 msgid "FuzzyIanIang"
 msgstr ""
 
-#: data/config.desc:338
+#: data/config.desc:339
 msgid "FuzzyInIng"
 msgstr ""
 
-#: data/config.desc:343
+#: data/config.desc:344
 msgid "FuzzyOuU"
 msgstr ""
 
-#: data/config.desc:348
+#: data/config.desc:349
 msgid "FuzzyUanUang"
 msgstr ""
 
-#: data/config.desc:353
+#: data/config.desc:354
 msgid "FuzzyCCh"
 msgstr ""
 
-#: data/config.desc:358
+#: data/config.desc:359
 msgid "FuzzyFH"
 msgstr ""
 
-#: data/config.desc:363
+#: data/config.desc:364
 msgid "FuzzyLN"
 msgstr ""
 
-#: data/config.desc:368
+#: data/config.desc:369
 msgid "FuzzySSH"
 msgstr ""
 
-#: data/config.desc:373
+#: data/config.desc:374
 msgid "FuzzyZZH"
 msgstr ""
 
@@ -1391,129 +1395,129 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: ../src/interface/ImeRemote.c:168
+#: ../src/interface/ImeRemote.c:165
 #, c-format
 msgid "Can't open socket %s: %s"
 msgstr ""
 
-#: ../src/interface/DBus.c:103
+#: ../src/interface/DBus.c:101
 #, c-format
 msgid "Connection Error (%s)"
 msgstr ""
 
-#: ../src/interface/DBus.c:115
+#: ../src/interface/DBus.c:113
 #, c-format
 msgid "Name Error (%s)"
 msgstr ""
 
-#: ../src/interface/DBus.c:129
+#: ../src/interface/DBus.c:127
 #, c-format
 msgid "Match Error (%s)"
 msgstr ""
 
-#: ../src/interface/DBus.c:164
+#: ../src/interface/DBus.c:162
 msgid "MovePreeditCaret"
 msgstr ""
 
-#: ../src/interface/DBus.c:167 ../src/interface/DBus.c:179
-#: ../src/interface/DBus.c:223
+#: ../src/interface/DBus.c:165 ../src/interface/DBus.c:177
+#: ../src/interface/DBus.c:221
 msgid "Message has no arguments!"
 msgstr ""
 
-#: ../src/interface/DBus.c:169 ../src/interface/DBus.c:181
+#: ../src/interface/DBus.c:167 ../src/interface/DBus.c:179
 msgid "Argument is not INT32!"
 msgstr ""
 
-#: ../src/interface/DBus.c:172
+#: ../src/interface/DBus.c:170
 #, c-format
 msgid "Got Signal with value %d"
 msgstr ""
 
-#: ../src/interface/DBus.c:176
+#: ../src/interface/DBus.c:174
 msgid "SelectCandidate: "
 msgstr ""
 
-#: ../src/interface/DBus.c:206
+#: ../src/interface/DBus.c:204
 #, c-format
 msgid "%d:%s"
 msgstr ""
 
-#: ../src/interface/DBus.c:210
+#: ../src/interface/DBus.c:208
 msgid "LookupTablePageUp"
 msgstr ""
 
-#: ../src/interface/DBus.c:215
+#: ../src/interface/DBus.c:213
 msgid "LookupTablePageDown"
 msgstr ""
 
-#: ../src/interface/DBus.c:220
+#: ../src/interface/DBus.c:218
 msgid "TriggerProperty: "
 msgstr ""
 
-#: ../src/interface/DBus.c:225
+#: ../src/interface/DBus.c:223
 msgid "Argument is not STRING!"
 msgstr ""
 
-#: ../src/interface/DBus.c:228
+#: ../src/interface/DBus.c:226
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: ../src/interface/DBus.c:234
+#: ../src/interface/DBus.c:232
 msgid "PanelCreated"
 msgstr ""
 
-#: ../src/interface/DBus.c:238
+#: ../src/interface/DBus.c:236
 msgid "Exit"
 msgstr ""
 
-#: ../src/interface/DBus.c:241
+#: ../src/interface/DBus.c:239
 msgid "ReloadConfig"
 msgstr ""
 
-#: ../src/interface/DBus.c:263 ../src/interface/DBus.c:297
-#: ../src/interface/DBus.c:344 ../src/interface/DBus.c:391
-#: ../src/interface/DBus.c:425 ../src/interface/DBus.c:459
-#: ../src/interface/DBus.c:493 ../src/interface/DBus.c:527
-#: ../src/interface/DBus.c:561 ../src/interface/DBus.c:595
-#: ../src/interface/DBus.c:657 ../src/interface/DBus.c:691
-#: ../src/interface/DBus.c:729 ../src/interface/DBus.c:768
-#: ../src/interface/DBus.c:805
+#: ../src/interface/DBus.c:261 ../src/interface/DBus.c:295
+#: ../src/interface/DBus.c:342 ../src/interface/DBus.c:389
+#: ../src/interface/DBus.c:423 ../src/interface/DBus.c:457
+#: ../src/interface/DBus.c:491 ../src/interface/DBus.c:525
+#: ../src/interface/DBus.c:559 ../src/interface/DBus.c:593
+#: ../src/interface/DBus.c:655 ../src/interface/DBus.c:689
+#: ../src/interface/DBus.c:727 ../src/interface/DBus.c:766
+#: ../src/interface/DBus.c:803
 msgid "Message Null"
 msgstr ""
 
-#: ../src/interface/DBus.c:270 ../src/interface/DBus.c:275
-#: ../src/interface/DBus.c:315 ../src/interface/DBus.c:322
-#: ../src/interface/DBus.c:362 ../src/interface/DBus.c:369
-#: ../src/interface/DBus.c:398 ../src/interface/DBus.c:403
-#: ../src/interface/DBus.c:432 ../src/interface/DBus.c:437
-#: ../src/interface/DBus.c:466 ../src/interface/DBus.c:471
-#: ../src/interface/DBus.c:500 ../src/interface/DBus.c:505
-#: ../src/interface/DBus.c:534 ../src/interface/DBus.c:539
-#: ../src/interface/DBus.c:568 ../src/interface/DBus.c:573
-#: ../src/interface/DBus.c:608 ../src/interface/DBus.c:616
-#: ../src/interface/DBus.c:625 ../src/interface/DBus.c:635
-#: ../src/interface/DBus.c:664 ../src/interface/DBus.c:669
-#: ../src/interface/DBus.c:699 ../src/interface/DBus.c:702
-#: ../src/interface/DBus.c:707 ../src/interface/DBus.c:738
-#: ../src/interface/DBus.c:741 ../src/interface/DBus.c:746
-#: ../src/interface/DBus.c:775 ../src/interface/DBus.c:778
-#: ../src/interface/DBus.c:783 ../src/interface/DBus.c:812
-#: ../src/interface/DBus.c:817
+#: ../src/interface/DBus.c:268 ../src/interface/DBus.c:273
+#: ../src/interface/DBus.c:313 ../src/interface/DBus.c:320
+#: ../src/interface/DBus.c:360 ../src/interface/DBus.c:367
+#: ../src/interface/DBus.c:396 ../src/interface/DBus.c:401
+#: ../src/interface/DBus.c:430 ../src/interface/DBus.c:435
+#: ../src/interface/DBus.c:464 ../src/interface/DBus.c:469
+#: ../src/interface/DBus.c:498 ../src/interface/DBus.c:503
+#: ../src/interface/DBus.c:532 ../src/interface/DBus.c:537
+#: ../src/interface/DBus.c:566 ../src/interface/DBus.c:571
+#: ../src/interface/DBus.c:606 ../src/interface/DBus.c:614
+#: ../src/interface/DBus.c:623 ../src/interface/DBus.c:633
+#: ../src/interface/DBus.c:662 ../src/interface/DBus.c:667
+#: ../src/interface/DBus.c:697 ../src/interface/DBus.c:700
+#: ../src/interface/DBus.c:705 ../src/interface/DBus.c:736
+#: ../src/interface/DBus.c:739 ../src/interface/DBus.c:744
+#: ../src/interface/DBus.c:773 ../src/interface/DBus.c:776
+#: ../src/interface/DBus.c:781 ../src/interface/DBus.c:810
+#: ../src/interface/DBus.c:815
 msgid "Out Of Memory!"
 msgstr ""
 
-#: ../src/interface/DBus.c:840
+#: ../src/interface/DBus.c:838
 #, c-format
 msgid "Type: %d Text: %s"
 msgstr ""
 
-#: ../src/interface/DBus.c:866
+#: ../src/interface/DBus.c:864
 #, c-format
 msgid "Labels %d, Texts %d, CMB:%s"
 msgstr ""
 
-#: ../src/interface/DBus.c:902
+#: ../src/interface/DBus.c:900
 #, c-format
 msgid "updateMesssages Up:%s"
 msgstr ""
@@ -1523,15 +1527,15 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: ../src/ui/ui.c:81
+#: ../src/ui/ui.c:80
 msgid "FCITX can only run under X"
 msgstr ""
 
-#: ../src/ui/ui.c:123
+#: ../src/ui/ui.c:122
 msgid "XEvent--Expose"
 msgstr ""
 
-#: ../src/ui/ui.c:314 ../src/ui/ui.c:321
+#: ../src/ui/ui.c:311 ../src/ui/ui.c:318
 msgid "Unable to create process"
 msgstr ""
 
@@ -1559,27 +1563,27 @@ msgstr ""
 msgid "Exit Fcitx"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:163
+#: ../src/ui/InputWindow.c:161
 msgid "DISPLAY InputWindow"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:188
+#: ../src/ui/InputWindow.c:186
 msgid "CAL InputWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:126
+#: ../src/ui/MainWindow.c:125
 msgid "DISPLAY MainWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:147
+#: ../src/ui/MainWindow.c:146
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: ../src/ui/skin.c:165
+#: ../src/ui/skin.c:164
 msgid "Can not load default skin, is installion correct?"
 msgstr ""
 
-#: ../src/ui/skin.c:170
+#: ../src/ui/skin.c:169
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr ""
@@ -1751,11 +1755,7 @@ msgstr ""
 msgid "Load Config File %s"
 msgstr ""
 
-#: ../src/tools/tools.c:254
-msgid "pthread mutexattr init failed"
-msgstr ""
-
-#: ../src/tools/tools.c:261
+#: ../src/tools/tools.c:253
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -1769,52 +1769,47 @@ msgstr ""
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: ../src/core/xim.c:501
+#: ../src/core/xim.c:462
 msgid "Recording file must be an absolute path."
 msgstr ""
 
-#: ../src/core/xim.c:534
+#: ../src/core/xim.c:495
 #, c-format
 msgid "Sending %s  icid=%d connectid=%d\n"
 msgstr ""
 
-#: ../src/core/xim.c:595
+#: ../src/core/xim.c:556
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: ../src/core/xim.c:605
+#: ../src/core/xim.c:566
 msgid "XMODIFIERS Error."
 msgstr ""
 
-#: ../src/core/xim.c:609
+#: ../src/core/xim.c:570
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: ../src/core/xim.c:621
+#: ../src/core/xim.c:582
 msgid "Please check your environment varibles."
 msgstr ""
 
-#: ../src/core/xim.c:622
+#: ../src/core/xim.c:583
 msgid ""
 "You need to set environment varibles below to make fcitx work correctly."
 msgstr ""
 
-#: ../src/core/xim.c:626
+#: ../src/core/xim.c:587
 msgid "You can set those variables in ~/.bashrc ."
 msgstr ""
 
-#: ../src/core/xim.c:627
+#: ../src/core/xim.c:588
 msgid "Setting Hint"
 msgstr ""
 
-#: ../src/core/xim.c:676
+#: ../src/core/xim.c:637
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
-msgstr ""
-
-#: ../src/core/xim.c:955
-#, c-format
-msgid "Set icid=%d(connect_id=%d) to %d"
 msgstr ""
 
 #: ../src/core/MyErrorsHandlers.c:87

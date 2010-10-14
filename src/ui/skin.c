@@ -45,6 +45,8 @@
 #include "ui/TrayWindow.h"
 #endif
 
+#define ROUND_SIZE 60
+
 static int LoadImage(FcitxImage * img,cairo_surface_t ** png);
 static void DestroyAllImage();
 static ConfigFileDesc* GetSkinDesc();
@@ -485,7 +487,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     int posDown[MAX_MESSAGE_COUNT];
     int png_width,png_height;
     int repaint_times=0,remain_width=0;
-    int input_bar_len=0;
+    int input_bar_len=0, oldlen = *iwidth;
     int resizePos=0;
     int resizeWidth=0;
     RESIZERULE flag=0;
@@ -493,6 +495,9 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     int up_len,down_len;
     int iChar = iCursorPos;
     cairo_t *c;
+
+    if (!msgup->changed && !msgdown->changed)
+        return;
 
     resizePos=sc.skinInputBar.resizePos;
     resizeWidth=(sc.skinInputBar.resizeWidth==0)?20:sc.skinInputBar.resizeWidth;
@@ -549,6 +554,10 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
 
     input_bar_len=(up_len<down_len)?down_len:up_len;
     input_bar_len+=sc.skinInputBar.layoutLeft+sc.skinInputBar.layoutRight;
+
+    /* round to ROUND_SIZE in order to decrease resize */
+    input_bar_len =  (input_bar_len / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
+
     //输入条长度应该比背景图长度要长,比最大长度要短
     input_bar_len=(input_bar_len>sc.skinInputBar.backImg.width)?input_bar_len:sc.skinInputBar.backImg.width;
     input_bar_len=(input_bar_len>=INPUT_BAR_MAX_LEN)?INPUT_BAR_MAX_LEN:input_bar_len;
@@ -562,79 +571,89 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     //不够汇一次的剩余的长度
     remain_width=(input_bar_len - png_width)%resizeWidth;
 
-    c=cairo_create(inputWindow.cs_input_bar);
-
-    //把cr设定位png图像,并保存
-    cairo_set_source_surface(c, input, 0, 0);
-    cairo_save(c);
-
-    //画输入条第一部分(从开始到重复或者延伸段开始的位置)
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_rectangle (c,0,0,resizePos,png_height);
-    cairo_clip(c);
-    cairo_paint(c);
-
-    //再画输入条的第三部分(因为第二部分可变,最后处理会比较方便)
-    cairo_restore(c);
-    cairo_save(c);
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_translate(c, input_bar_len-(png_width-resizePos-resizeWidth), 0);
-    cairo_set_source_surface(c, input, -resizePos-resizeWidth, 0);
-    cairo_rectangle (c,0,0,png_width-resizePos-resizeWidth,png_height);
-    cairo_clip(c);
-    cairo_paint(c);
-
-    //画第二部分,智能变化有两种方式
-    if ( flag == R_COPY) //
+    if (oldlen != input_bar_len)
     {
-        int i=0;
+        c=cairo_create(inputWindow.cs_input_back);
 
-        //先把整段的都绘上去
-        for (i=0;i<repaint_times;i++)
+        //把cr设定位png图像,并保存
+        cairo_set_source_surface(c, input, 0, 0);
+        cairo_save(c);
+
+        //画输入条第一部分(从开始到重复或者延伸段开始的位置)
+        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+        cairo_rectangle (c,0,0,resizePos,png_height);
+        cairo_clip(c);
+        cairo_paint(c);
+
+        //再画输入条的第三部分(因为第二部分可变,最后处理会比较方便)
+        cairo_restore(c);
+        cairo_save(c);
+        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+        cairo_translate(c, input_bar_len-(png_width-resizePos-resizeWidth), 0);
+        cairo_set_source_surface(c, input, -resizePos-resizeWidth, 0);
+        cairo_rectangle (c,0,0,png_width-resizePos-resizeWidth,png_height);
+        cairo_clip(c);
+        cairo_paint(c);
+
+        //画第二部分,智能变化有两种方式
+        if ( flag == R_COPY) //
+        {
+            int i=0;
+
+            //先把整段的都绘上去
+            for (i=0;i<repaint_times;i++)
+            {
+                cairo_restore(c);
+                cairo_save(c);
+                cairo_translate(c,resizePos+i*resizeWidth, 0);
+                cairo_set_source_surface(c, input,-resizePos, 0);
+                cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+                cairo_rectangle (c,0,0,resizeWidth,png_height);
+                cairo_clip(c);
+                cairo_paint(c);
+            }
+
+            //绘制剩余段
+            if (remain_width != 0)
+            {
+                cairo_restore(c);
+                cairo_translate(c,resizePos+resizeWidth*repaint_times, 0);
+                cairo_set_source_surface(c, input,-resizePos, 0);
+                cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+                cairo_rectangle (c,0,0,remain_width,png_height);
+                cairo_clip(c);
+                cairo_paint(c);
+            }
+        }
+        else if ( flag == R_RESIZE)
         {
             cairo_restore(c);
-            cairo_save(c);
-            cairo_translate(c,resizePos+i*resizeWidth, 0);
+            cairo_translate(c,resizePos, 0);
+            cairo_scale(c, (double)(input_bar_len-png_width+resizeWidth)/(double)resizeWidth,1);
             cairo_set_source_surface(c, input,-resizePos, 0);
             cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
             cairo_rectangle (c,0,0,resizeWidth,png_height);
             cairo_clip(c);
             cairo_paint(c);
         }
-
-        //绘制剩余段
-        if (remain_width != 0)
+        else
         {
             cairo_restore(c);
-            cairo_translate(c,resizePos+resizeWidth*repaint_times, 0);
+            cairo_translate(c,resizePos, 0);
             cairo_set_source_surface(c, input,-resizePos, 0);
             cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-            cairo_rectangle (c,0,0,remain_width,png_height);
+            cairo_rectangle (c,0,0,resizeWidth,png_height);
             cairo_clip(c);
             cairo_paint(c);
         }
+        cairo_destroy(c);
     }
-    else if ( flag == R_RESIZE)
-    {
-        cairo_restore(c);
-        cairo_translate(c,resizePos, 0);
-        cairo_scale(c, (double)(input_bar_len-png_width+resizeWidth)/(double)resizeWidth,1);
-        cairo_set_source_surface(c, input,-resizePos, 0);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_rectangle (c,0,0,resizeWidth,png_height);
-        cairo_clip(c);
-        cairo_paint(c);
-    }
-    else
-    {
-        cairo_restore(c);
-        cairo_translate(c,resizePos, 0);
-        cairo_set_source_surface(c, input,-resizePos, 0);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_rectangle (c,0,0,resizeWidth,png_height);
-        cairo_clip(c);
-        cairo_paint(c);
-    }
+
+    c = cairo_create(inputWindow.cs_input_bar);
+    cairo_set_source_surface(c, inputWindow.cs_input_back, 0, 0);
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(c);
+
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
     if (inputWindow.bShowCursor )
@@ -680,7 +699,8 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     }
 
     cairo_destroy(c);
-
+    msgup->changed = False;
+    msgdown->changed = False;
 }
 
 /*

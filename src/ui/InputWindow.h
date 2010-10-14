@@ -70,6 +70,7 @@ typedef struct {
 typedef struct Messages {
     MESSAGE msg[33];
     uint msgCount;
+    Bool changed;
 } Messages;
 
 extern Messages        messageUp;
@@ -92,6 +93,7 @@ typedef struct InputWindow {
     Pixmap pm_input_bar;
     
     cairo_surface_t *cs_input_bar;
+    cairo_surface_t *cs_input_back;
     cairo_t *c_back, *c_cursor;
     cairo_t *c_font[8];
 } InputWindow;
@@ -107,11 +109,13 @@ extern int iCursorPos;
     do { \
         if ((m)->msgCount > 0) \
             ((m)->msgCount--); \
+        (m)->changed = True; \
     } while(0)
 #define SetMessageCount(m,s) \
     do { \
         if ((s) <= MAX_MESSAGE_COUNT && s >= 0) \
             ((m)->msgCount = (s)); \
+        (m)->changed = True; \
     } while(0)
 
 Bool            CreateInputWindow (void);
@@ -133,4 +137,5 @@ void MessageConcat(Messages* message, int position, char* text);
 void MessageConcatLast(Messages* message, char* text);
 void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
 void DestroyInputWindow();
+
 #endif

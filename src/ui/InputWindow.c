@@ -132,6 +132,12 @@ Bool CreateInputWindow (void)
                                  vs,
                                  INPUT_BAR_MAX_LEN,
                                  inputWindow.iInputWindowHeight);
+
+    inputWindow.cs_input_back = cairo_surface_create_similar(inputWindow.cs_input_bar,
+            CAIRO_CONTENT_COLOR_ALPHA,
+            INPUT_BAR_MAX_LEN,
+            inputWindow.iInputWindowHeight);
+
     XFreeGC(dpy, gc);
 
     LoadInputMessage();
@@ -223,14 +229,17 @@ void CalInputWindow (void)
 
 void DrawInputWindow(void)
 {
-    GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
-
+    int lastW = inputWindow.iInputWindowWidth, lastH = inputWindow.iInputWindowHeight;
     DrawInputBar(&messageUp, &messageDown ,&inputWindow.iInputWindowWidth);
-    XResizeWindow(
-        dpy,
-        inputWindow.window,
-        inputWindow.iInputWindowWidth,
-        inputWindow.iInputWindowHeight);
+
+    if (lastW != inputWindow.iInputWindowWidth || lastH != inputWindow.iInputWindowHeight)
+        XResizeWindow(
+                dpy,
+                inputWindow.window,
+                inputWindow.iInputWindowWidth,
+                inputWindow.iInputWindowHeight);
+
+    GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
     XCopyArea (dpy,
                inputWindow.pm_input_bar,
                inputWindow.window,
@@ -344,6 +353,7 @@ void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...)
         SetMessageV(message, message->msgCount, type, fmt, ap);
         va_end(ap);
         message->msgCount ++;
+        message->changed = True;
     }
 }
 
@@ -361,17 +371,20 @@ void SetMessageV(Messages* message, int position, MSG_TYPE type,char* fmt, va_li
     {
         vsnprintf(message->msg[position].strMsg, MESSAGE_MAX_LENGTH, fmt, ap);
         message->msg[position].type = type;
+        message->changed = True;
     }
 }
 
 void MessageConcatLast(Messages* message, char* text)
 {
     strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
+    message->changed = True;
 }
 
 void MessageConcat(Messages* message, int position, char* text)
 {
     strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
+    message->changed = True;
 }
 
 void DestroyInputWindow()
@@ -384,6 +397,7 @@ void DestroyInputWindow()
     cairo_destroy(inputWindow.c_cursor);
 
     cairo_surface_destroy(inputWindow.cs_input_bar);
+    cairo_surface_destroy(inputWindow.cs_input_back);
     XFreePixmap(dpy, inputWindow.pm_input_bar);
     XDestroyWindow(dpy, inputWindow.window);
 }
