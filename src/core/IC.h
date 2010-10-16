@@ -72,8 +72,9 @@ typedef struct _IC {
 
     IME_STATE state; /* im state */
     CARD16 connect_id;
+    
+    int offset_x, offset_y;
 
-    position pos;
     struct _IC     *next;    
 } IC;
 

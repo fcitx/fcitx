@@ -181,6 +181,23 @@ MyXEventHandler(XEvent * event)
                 x = event->xbutton.x;
                 y = event->xbutton.y;
                 MouseClick(&x, &y, inputWindow.window);
+                if (CurrentIC)
+                {
+                    Window window = None, dst;
+                    if (CurrentIC->focus_win)
+                        window = CurrentIC->focus_win;
+                    else if(CurrentIC->client_win)
+                        window = CurrentIC->client_win;
+                    
+                    if (window != None)
+                    {
+                        XTranslateCoordinates(dpy, RootWindow(dpy, iScreen), window,
+                            x, y,
+                            &CurrentIC->offset_x, &CurrentIC->offset_y,
+                            &dst
+                        );
+                    }
+                }
                 DrawInputWindow();
             } else if (event->xbutton.window == mainWindow.window) {
 

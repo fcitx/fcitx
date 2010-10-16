@@ -46,11 +46,6 @@ typedef enum _IME_STATE {
     IS_CHN
 } IME_STATE;
 
-typedef struct _POSITION {
-    int	x;
-    int	y;
-} position;
-
 Bool            InitXIM (char *);
 void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);

@@ -126,6 +126,7 @@ Bool MyOpenHandler(IMOpenStruct * call_data)
 
 void SetTrackPos(IMChangeICStruct * call_data)
 {
+    Bool flag = False;
     if (CurrentIC == NULL)
         return;
     if (CurrentIC != (IC *) FindIC(call_data->icid))
@@ -133,21 +134,14 @@ void SetTrackPos(IMChangeICStruct * call_data)
 
     if (fcitxProfile.bTrackCursor) {
         int i;
-        Window window;
         XICAttribute *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
 
         for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
             if (!strcmp(XNSpotLocation, pre_attr->name)) {
-                if (CurrentIC->focus_win)
-                    XTranslateCoordinates(dpy, CurrentIC->focus_win, RootWindow(dpy, iScreen),
-                                          (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y,
-                                          &iClientCursorX, &iClientCursorY, &window);
-                else if (CurrentIC->client_win)
-                    XTranslateCoordinates(dpy, CurrentIC->client_win, RootWindow(dpy, iScreen),
-                                          (*(XPoint *) pre_attr->value).x, (*(XPoint *) pre_attr->value).y,
-                                          &iClientCursorX, &iClientCursorY, &window);
-                else
-                    return;
+                flag = True;
+                
+                CurrentIC->offset_x = (*(XPoint *) pre_attr->value).x;
+                CurrentIC->offset_y = (*(XPoint *) pre_attr->value).y;
             }
         }
     }
@@ -211,18 +205,7 @@ Bool MySetFocusHandler(IMChangeFocusStruct * call_data)
         iHZInputed = 0;
 
         if (fcitxProfile.bTrackCursor) {
-            position *pos = NULL;
-
-            if (pos) {
-                iClientCursorX = pos->x;
-                iClientCursorY = pos->y;
-                if (!fc.bUseDBus)
-                    XMoveWindow(dpy, inputWindow.window, iClientCursorX, iClientCursorY);
-#ifdef _ENABLE_DBUS
-                else
-                    KIMUpdateSpotLocation(iClientCursorX, iClientCursorY);
-#endif
-            }
+            MoveInputWindow();
         }
 #ifdef _ENABLE_DBUS
         if (fc.bUseDBus)

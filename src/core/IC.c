@@ -50,6 +50,8 @@ static IC      *NewIC ()
     }
     memset (rec, 0, sizeof (IC));
     rec->id = ++icid;
+    rec->offset_x = -1;
+    rec->offset_y = -1;
 
     rec->next = ic_list;
     ic_list = rec;

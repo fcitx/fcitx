@@ -71,7 +71,7 @@ void InitInputWindow()
     inputWindow.bShowNext = False;
     inputWindow.bShowCursor = False;
     inputWindow.iOffsetX = 0;
-    inputWindow.iOffsetY = 16;
+    inputWindow.iOffsetY = 8;
 }
 
 Bool CreateInputWindow (void)
@@ -253,11 +253,37 @@ void DrawInputWindow(void)
 
 void MoveInputWindow()
 {
-    inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>sc.skinInputBar.backImg.width)?inputWindow.iInputWindowWidth:sc.skinInputBar.backImg.width;
-    inputWindow.iInputWindowWidth=(inputWindow.iInputWindowWidth>=INPUT_BAR_MAX_LEN)?INPUT_BAR_MAX_LEN:inputWindow.iInputWindowWidth;
-
     if (fcitxProfile.bTrackCursor)
     {
+        Window window = None, dst;
+        int offset_x, offset_y;
+        if (CurrentIC)
+        {
+            if (CurrentIC->focus_win)
+                window = CurrentIC->focus_win;
+            else if(CurrentIC->client_win)
+                window = CurrentIC->client_win;
+            else
+                return;
+            
+            offset_x = CurrentIC->offset_x;
+            offset_y = CurrentIC->offset_y;
+            
+            if(offset_x < 0 || offset_y < 0)
+            {
+                    
+                XWindowAttributes attr;
+                XGetWindowAttributes(dpy, window, &attr);
+
+                offset_x = 0;
+                offset_y = attr.height;
+            }
+        
+            XTranslateCoordinates(dpy, window, RootWindow(dpy, iScreen),
+                                  offset_x, offset_y,
+                                  &iClientCursorX, &iClientCursorY, &dst);
+        }
+
         int iTempInputWindowX, iTempInputWindowY;
 
         if (iClientCursorX < 0)
@@ -282,7 +308,6 @@ void MoveInputWindow()
 
         if (!fc.bUseDBus)
         {
-            //printf("iInputWindowWidth:%d\n",iInputWindowWidth);
             XMoveWindow (dpy, inputWindow.window, iTempInputWindowX, iTempInputWindowY);
         }
 #ifdef _ENABLE_DBUS
@@ -301,30 +326,22 @@ void MoveInputWindow()
             KIMUpdateSpotLocation(iTempInputWindowX, iTempInputWindowY);
         }
 #endif
-        if (CurrentIC)
-        {
-            CurrentIC->pos.x = iTempInputWindowX - inputWindow.iOffsetX;
-            CurrentIC->pos.y = iTempInputWindowY - inputWindow.iOffsetY;
-        }
     }
     else
     {
-        position * pos = GetCurrentPos();
         if (fc.bCenterInputWindow) {
             fcitxProfile.iInputWindowOffsetX = (DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth) / 2;
             if (fcitxProfile.iInputWindowOffsetX < 0)
                 fcitxProfile.iInputWindowOffsetX = 0;
         }
-        else
-            fcitxProfile.iInputWindowOffsetX = pos ? pos->x : fcitxProfile.iInputWindowOffsetX;
 
         if (!fc.bUseDBus)
         {
-            XMoveResizeWindow (dpy, inputWindow.window, fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY, inputWindow.iInputWindowWidth, inputWindow.iInputWindowHeight);
+            XMoveWindow (dpy, inputWindow.window, fcitxProfile.iInputWindowOffsetX, fcitxProfile.iInputWindowOffsetY);
         }
 #ifdef _ENABLE_DBUS
         else
-            KIMUpdateSpotLocation(fcitxProfile.iInputWindowOffsetX, pos ? pos->y : fcitxProfile.iInputWindowOffsetY);
+            KIMUpdateSpotLocation(fcitxProfile.iInputWindowOffsetX, fcitxProfile.iInputWindowOffsetY);
 #endif
     }
 
