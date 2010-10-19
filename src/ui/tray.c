@@ -116,6 +116,12 @@ InitTray(Display* dpy, TrayWindow* tray)
 int
 TrayFindDock(Display *dpy, TrayWindow* tray)
 {
+    if (tray->window == None)
+    {
+        tray->bTrayMapped = False;
+        return 0;
+    }
+
     Window Dock;
     
     XGrabServer (dpy);

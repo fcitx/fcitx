@@ -101,6 +101,15 @@ Bool CreateTrayWindow() {
     return True;
 }
 
+void DestroyTrayWindow()
+{
+    if (tray.window == None)
+        return;
+    cairo_surface_destroy(tray.cs);
+    XDestroyWindow(dpy, tray.window);
+    tray.window = None;
+}
+
 void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
     if ( !fc.bUseTrayIcon )
             return;
@@ -152,14 +161,6 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
 
 }
 
-void DeInitTrayWindow(TrayWindow *f_tray) {
-    ;
-}
-
-void RedrawTrayWindow(void) {
-    TrayFindDock(dpy, &tray);
-}
-
 void TrayEventHandler(XEvent* event)
 {
     if (!fc.bUseTrayIcon)
@@ -169,6 +170,8 @@ void TrayEventHandler(XEvent* event)
 			if (event->xclient.message_type == tray.atoms[ATOM_MANAGER]
 			 && event->xclient.data.l[1] == tray.atoms[ATOM_SELECTION])
 			{
+                if (tray.window == None)
+                    CreateTrayWindow();
                 TrayFindDock(dpy, &tray);
 			}
 			break;
@@ -205,6 +208,7 @@ void TrayEventHandler(XEvent* event)
 
 		case DestroyNotify:
             tray.bTrayMapped = False;
+            DestroyTrayWindow();
 			break;
 
         case ReparentNotify:
@@ -212,10 +216,7 @@ void TrayEventHandler(XEvent* event)
                 if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == tray.window)
                 {
                     tray.bTrayMapped = False;
-                    if (GetCurrentState() == IS_CHN)
-                        DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
-                    else
-                        DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
+                    DestroyTrayWindow();
                 }
             }
             break;
