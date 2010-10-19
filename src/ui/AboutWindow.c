@@ -57,11 +57,11 @@ Bool CreateAboutWindow (void)
 
     ABOUT_WINDOW_WIDTH = StringWidth (strTitle, gs.fontZh, aboutWindow.fontSize ) + 50;
     aboutWindow.window =
-	XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
-    aboutWindow.surface = cairo_xlib_surface_create(dpy, aboutWindow.window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT); 
+    aboutWindow.surface = cairo_xlib_surface_create(dpy, aboutWindow.window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
     if (aboutWindow.window == None)
-	return False;
+        return False;
 
     InitAboutWindowProperty ();
     XSelectInput (dpy, aboutWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
@@ -80,9 +80,9 @@ void InitAboutWindowProperty (void)
 
     XSetWMProtocols (dpy, aboutWindow.window, &killAtom, 1);
 
-	char           *p;
+    char           *p;
 
-	p = AboutCaption;
+    p = AboutCaption;
 
     XTextProperty   tp;
     Xutf8TextListToTextProperty(dpy, &p, 1, XUTF8StringStyle, &tp);

@@ -37,6 +37,5 @@
 void            SetMyExceptionHandler (void);
 void            OnException (int signo);
 void            SetMyXErrorHandler (void);
-int             MyXErrorHandler (Display * dpy, XErrorEvent * event);
 
 #endif

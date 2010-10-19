@@ -48,11 +48,12 @@
 #define SIGUNUSED 32
 #endif
 
-#ifdef _ENABLE_LOG
-FILE *logfile = (FILE *)NULL;
-#endif
 
-XErrorHandler   oldXErrorHandler;
+static XErrorHandler   oldXErrorHandler;
+static XIOErrorHandler oldXIOErrorHandler;
+
+static int MyXErrorHandler (Display * dpy, XErrorEvent * event);
+static int MyXIOErrorHandler (Display *d);
 
 void SetMyExceptionHandler (void)
 {
@@ -65,27 +66,12 @@ void SetMyExceptionHandler (void)
 }
 
 void OnException (int signo)
-{   
-#ifdef _ENABLE_LOG
-    struct tm	*ts;
-    char	buf[PATH_MAX];
-    time_t	now;
-
-    if ( !logfile )
-	logfile = GetXDGFileUser("fcitx.log","wt", NULL);
-    if ( logfile ) {
-	now=time(NULL);
-	ts = localtime(&now);
-	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-	fprintf (logfile, "%d: FCITX -- Get Signal No.: %d (%s)\n", getpid(), signo,buf);
-    }
-#endif
-
+{
     if (signo == SIGCHLD)
         return;
-    
+
     FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
-    
+
     if ( signo!=SIGSEGV && signo!=SIGCONT)
         SaveIM();
 
@@ -93,81 +79,94 @@ void OnException (int signo)
     size_t size;
     char **strings = NULL;
     size_t i;
-    
+
     size = backtrace (array, 10);
     strings = backtrace_symbols (array, size);
-   
+
     if (strings)
     {
+        FILE *fp = NULL;
+        if ( signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL || signo == SIGTERM )
+            fp = GetXDGFileUser("crash.log","wt", NULL);
+
         printf ("Obtained %zd stack frames.\n", size);
-        
+        if (fp)
+        {
+            fprintf (fp, "FCITX -- Get Signal No.: %d\n", signo);
+            fprintf (fp, "Obtained %zd stack frames.\n", size);
+        }
+
         for (i = 0; i < size; i++)
+        {
             printf ("%s\n", strings[i]);
-        
+            if (fp)
+                fprintf (fp, "%s\n", strings[i]);
+        }
+
+        if (fp)
+            fclose(fp);
         free (strings);
     }
-    
+
     switch (signo) {
     case SIGHUP:
-	LoadConfig ();
-    UnloadIM();
-	SetIM ();
-	break;
+        LoadConfig ();
+        UnloadIM();
+        SetIM ();
+        break;
     case SIGINT:
     case SIGTERM:
     case SIGPIPE:
     case SIGSEGV:
-#ifdef _ENABLE_LOG    
-        if ( !logfile ) {
-            fclose(logfile);
-            logfile = (FILE *)NULL;
-        }
-#endif
 #ifdef _ENABLE_RECORDING
         CloseRecording();
 #endif
 
-	exit (0);
+        exit (0);
     default:
-	break;
+        break;
     }
 }
 
 void SetMyXErrorHandler (void)
 {
     oldXErrorHandler = XSetErrorHandler (MyXErrorHandler);
+    oldXIOErrorHandler = XSetIOErrorHandler (MyXIOErrorHandler);
+}
+
+int MyXIOErrorHandler (Display *d)
+{
+    FILE *fp;
+    fp = GetXDGFileUser("crash.log","wt" , NULL);
+    if ( fp ) {
+        fprintf(fp, "%s: X IO error.\n", DisplayString(d));
+        fclose(fp);
+    }
+    
+    if (oldXIOErrorHandler)
+        oldXIOErrorHandler(d);
+    return 0;
+
 }
 
 int MyXErrorHandler (Display * dpy, XErrorEvent * event)
 {
-#ifdef _ENABLE_LOG
-    char	str[256];
-    char	buf[PATH_MAX];
-    struct tm	*ts;
-    time_t	now;
+    char    str[256];
+    FILE* fp = NULL;
 
-    if ( !logfile )
-        logfile = GetXDGFileUser("fcitx.log","wt" , NULL);
-    if ( logfile ) {
-        now = time(NULL);
-	ts = localtime(&now);
-	strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", ts);
-	XGetErrorText (dpy, event->error_code, str, 255);
-	fprintf (logfile, "fcitx: %s\n", buf);
-	fprintf (logfile, "fcitx: %s\n", str);
+    fp = GetXDGFileUser("crash.log","wt" , NULL);
+    if ( fp ) {
+        XGetErrorText (dpy, event->error_code, str, 255);
+        fprintf (fp, "fcitx: %s\n", str);
     }
-#endif
 
     SaveIM();
-
-    if (event->error_code != 3 && event->error_code != BadMatch) {	// xterm will generate 3
-#ifdef _ENABLE_LOG
-	if ( !logfile ) {
-            fclose(logfile);
-            logfile = (FILE *)NULL;
-        }
-#endif	
-	oldXErrorHandler (dpy, event);
+    
+    if ( fp )
+        fclose(fp);
+    if (event->error_code != 3 && event->error_code != BadMatch) {  // xterm will generate 3
+        if (oldXErrorHandler)
+            oldXErrorHandler (dpy, event);
     }
 
     return 0;

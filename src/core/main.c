@@ -86,72 +86,72 @@ static void Usage();
 static void Version();
 static void InitGlobal();
 
-/** 
- * @brief 初始化全局状态 
+/**
+ * @brief 初始化全局状态
  */
 void InitGlobal()
 {
     memset(&gs, 0, sizeof(FcitxState));
 }
 
-/** 
+/**
  * @brief 主程序入口
- * 
+ *
  * @param argc 命令行参数个数
  * @param argv[] 命令行参数
- * 
- * @return 
+ *
+ * @return
  */
 int main (int argc, char *argv[])
 {
     setlocale(LC_ALL, "");
-    bindtextdomain(PACKAGE, LOCALEDIR); 
+    bindtextdomain(PACKAGE, LOCALEDIR);
     bind_textdomain_codeset(PACKAGE, "UTF-8");
     textdomain(PACKAGE);
 
     XEvent          event;
-    int             c; 	/* 用于保存用户输入的参数 */
+    int             c;  /* 用于保存用户输入的参数 */
     Bool            bBackground = True;
-    char	    *imname=(char *)NULL;
-    pthread_t	    pid;
+    char        *imname=(char *)NULL;
+    pthread_t       pid;
 
     InitGlobal();
 
-    SetMyExceptionHandler();		/* 处理信号 */
+    SetMyExceptionHandler();        /* 处理信号 */
 
     /*
      * 先初始化 X 再加载配置文件，因为设置快捷键从 keysym 转换到
      * keycode 的时候需要 Display
      */
     if (!InitX ())
-	exit (1);
+        exit (1);
 
     /*
      * 加载用户配置文件
      */
     LoadConfig ();
 
-    while((c = getopt(argc, argv, "cdDn:vh")) != -1) {
-        switch(c){
-            case 'd':
-                /* nothing to do */
-                break;
-            case 'D':
-                bBackground = False;
-                break;
-            case 'c':
-                SaveConfig();
-                return 0;
-            case 'n':
-                imname=optarg;
-                break;
-            case 'v':	/* 输出版本号 */
-                Version();
-                return 0;
-            case 'h':	/* h或者其他任何不合法的参数均，输出参数帮助信息 */
-            case '?':
-                Usage();
-                return 0;
+    while ((c = getopt(argc, argv, "cdDn:vh")) != -1) {
+        switch (c) {
+        case 'd':
+            /* nothing to do */
+            break;
+        case 'D':
+            bBackground = False;
+            break;
+        case 'c':
+            SaveConfig();
+            return 0;
+        case 'n':
+            imname=optarg;
+            break;
+        case 'v':   /* 输出版本号 */
+            Version();
+            return 0;
+        case 'h':   /* h或者其他任何不合法的参数均，输出参数帮助信息 */
+        case '?':
+            Usage();
+            return 0;
         }
     }
 
@@ -160,13 +160,13 @@ int main (int argc, char *argv[])
      * 启用DBus时初始化DBus
      */
     if (fc.bUseDBus && !InitDBus ())
-	exit (5);
+        exit (5);
 #endif
-	
-	/*
+
+    /*
      * 加载皮肤配置文件,一般在share/fcixt/skin/skinname dir/fcitx_skin.conf中,制作皮肤的时候配置好
      */
-	LoadSkinConfig();
+    LoadSkinConfig();
 
     InitFont();
 
@@ -215,12 +215,12 @@ int main (int argc, char *argv[])
 
     /* 创建虚拟键盘窗口 */
     CreateVKWindow ();
-    
-    /* 创建菜单窗口 */
-    CreateMenuWindow( ); 
 
-	/* 创建信息提示窗口 */
-	CreateMessageWindow();
+    /* 创建菜单窗口 */
+    CreateMenuWindow( );
+
+    /* 创建信息提示窗口 */
+    CreateMessageWindow();
 
     /* 创建关于窗口 */
     if (!fc.bUseDBus)
@@ -239,7 +239,7 @@ int main (int argc, char *argv[])
 
     /* 初始化XIM */
     if (!InitXIM (imname))
-	exit (4);
+        exit (4);
 
     /* 以后台方式运行 */
     if (bBackground)
@@ -252,7 +252,7 @@ int main (int argc, char *argv[])
 #ifdef _ENABLE_DBUS
     dbus_threads_init_default();
 #endif
-	
+
     FcitxInitThread();
 
     pthread_create(&pid, NULL, remoteThread, NULL);
@@ -268,7 +268,7 @@ int main (int argc, char *argv[])
     /* 创建系统托盘窗口 */
     if (!fc.bUseDBus) {
         CreateTrayWindow ();
-    	DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
+        DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
     }
 #endif
 
@@ -276,14 +276,14 @@ int main (int argc, char *argv[])
 
     /* 主循环，即XWindow的消息循环 */
     for (;;) {
-        XNextEvent (dpy, &event);			//等待一个事件发生
-        
+        XNextEvent (dpy, &event);           //等待一个事件发生
+
         FcitxLock();
-        
+
         /* 处理X事件 */
         if (XFilterEvent (&event, None) == False)
             MyXEventHandler (&event);
-        
+
         FcitxUnlock();
     }
 
@@ -291,7 +291,7 @@ int main (int argc, char *argv[])
     return 0;
 }
 
-/** 
+/**
  * @brief 显示命令行参数
  */
 void Usage ()
@@ -299,13 +299,13 @@ void Usage ()
     printf("Usage: fcitx [OPTION]\n"
            "\t-d\t\trun as daemon(default)\n"
            "\t-D\t\tdon't run as daemon\n"
-		   "\t-c\t\t(re)create config file in home directory and then exit\n"
-		   "\t-n[im name]\trun as specified name\n"
+           "\t-c\t\t(re)create config file in home directory and then exit\n"
+           "\t-n[im name]\trun as specified name\n"
            "\t-v\t\tdisplay the version information and exit\n"
            "\t-h\t\tdisplay this help and exit\n");
 }
 
-/** 
+/**
  * @brief 显示版本
  */
 void Version ()
