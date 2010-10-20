@@ -5,7 +5,6 @@ INCLUDES = \
 		   $(NULL)
 DEFS = -DPKGDATADIR=\"$(pkgdatadir)\"
 
-toolsdir = $(pkgdatadir)/tools
 EXTRA_DIST = $(tools_DATA)
 
 bin_PROGRAMS = mb2txt txt2mb createPYMB readPYMB readPYBase mb2org fcitx-remote scel2org

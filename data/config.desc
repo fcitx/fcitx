@@ -375,3 +375,8 @@ Description=Fuzzy s and sh
 Type=Boolean
 DefaultValue=False
 Description=Fuzzy z and zh
+
+[Pinyin/Misstype]
+Type=Boolean
+DefaultValue=False
+Description=Fix misstype gn/ng

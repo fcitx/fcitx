@@ -75,6 +75,8 @@ typedef struct FcitxConfig
     Bool bUseDBus;
     Bool bUseDBus_;
     Bool bEnableAddons;
+    int iDelayStart;
+
     /* output config */
     Bool bEngPuncAfterNumber;
     ENTER_TO_DO enterToDo;
@@ -137,8 +139,8 @@ typedef struct FcitxConfig
     int i2ndSelectKey;
     int i3rdSelectKey;
     char cPYYCDZ[3];
+    Bool bMisstype;
 
-    int iDelayStart;
 } FcitxConfig;
 
 #ifdef _FCITX_H_

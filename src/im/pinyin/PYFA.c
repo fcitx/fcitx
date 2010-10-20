@@ -19,11 +19,12 @@
  ***************************************************************************/
 
 #include "core/fcitx.h"
+#include "fcitx-config/configfile.h"
 #include "PYFA.h"
 
 #include <stdio.h>
 
-MHPY            MHPY_C[] = {	//韵母
+MHPY            MHPY_C[] = {    //韵母
     //{"an","ang"},
     {"CD", 0}
     ,
@@ -46,7 +47,7 @@ MHPY            MHPY_C[] = {	//韵母
     {"\0", 0}
 };
 
-MHPY            MHPY_S[] = {	//声母
+MHPY            MHPY_S[] = {    //声母
     //{"c","ch"},
     {"bc", 0}
     ,
@@ -77,7 +78,11 @@ PYTABLE         PYTable[] = {
     ,
     {"zui", NULL}
     ,
+    {"zuagn", &fc.bMisstype }
+    ,
     {"zuang", &MHPY_C[5].bMode}
+    ,
+    {"zuagn", &fc.bMisstype }
     ,
     {"zuang", &MHPY_S[4].bMode}
     ,
@@ -89,6 +94,8 @@ PYTABLE         PYTable[] = {
     ,
     {"zou", NULL}
     ,
+    {"zogn", &fc.bMisstype }
+    ,
     {"zong", NULL}
     ,
     {"zi", NULL}
@@ -98,6 +105,8 @@ PYTABLE         PYTable[] = {
     {"zhun", NULL}
     ,
     {"zhui", NULL}
+    ,
+    {"zhuagn", &fc.bMisstype }
     ,
     {"zhuang", NULL}
     ,
@@ -111,9 +120,13 @@ PYTABLE         PYTable[] = {
     ,
     {"zhou", NULL}
     ,
+    {"zhogn", &fc.bMisstype }
+    ,
     {"zhong", NULL}
     ,
     {"zhi", NULL}
+    ,
+    {"zhegn", &fc.bMisstype }
     ,
     {"zheng", NULL}
     ,
@@ -123,6 +136,8 @@ PYTABLE         PYTable[] = {
     ,
     {"zhao", NULL}
     ,
+    {"zhagn", &fc.bMisstype }
+    ,
     {"zhang", NULL}
     ,
     {"zhan", NULL}
@@ -130,6 +145,8 @@ PYTABLE         PYTable[] = {
     {"zhai", NULL}
     ,
     {"zha", NULL}
+    ,
+    {"zegn", &fc.bMisstype }
     ,
     {"zeng", NULL}
     ,
@@ -140,6 +157,8 @@ PYTABLE         PYTable[] = {
     {"ze", NULL}
     ,
     {"zao", NULL}
+    ,
+    {"zagn", &fc.bMisstype }
     ,
     {"zang", NULL}
     ,
@@ -153,6 +172,8 @@ PYTABLE         PYTable[] = {
     ,
     {"yue", NULL}
     ,
+    {"yuagn", &fc.bMisstype }
+    ,
     {"yuang", &MHPY_C[5].bMode}
     ,
     {"yuan", NULL}
@@ -161,9 +182,13 @@ PYTABLE         PYTable[] = {
     ,
     {"you", NULL}
     ,
+    {"yogn", &fc.bMisstype }
+    ,
     {"yong", NULL}
     ,
     {"yo", NULL}
+    ,
+    {"yign", &fc.bMisstype }
     ,
     {"ying", NULL}
     ,
@@ -175,6 +200,8 @@ PYTABLE         PYTable[] = {
     ,
     {"yao", NULL}
     ,
+    {"yagn", &fc.bMisstype }
+    ,
     {"yang", NULL}
     ,
     {"yan", NULL}
@@ -184,6 +211,8 @@ PYTABLE         PYTable[] = {
     {"xun", NULL}
     ,
     {"xue", NULL}
+    ,
+    {"xuagn", &fc.bMisstype }
     ,
     {"xuang", &MHPY_C[5].bMode}
     ,
@@ -195,7 +224,11 @@ PYTABLE         PYTable[] = {
     ,
     {"xiu", NULL}
     ,
+    {"xiogn", &fc.bMisstype }
+    ,
     {"xiong", NULL}
+    ,
+    {"xign", &fc.bMisstype }
     ,
     {"xing", NULL}
     ,
@@ -204,6 +237,8 @@ PYTABLE         PYTable[] = {
     {"xie", NULL}
     ,
     {"xiao", NULL}
+    ,
+    {"xiagn", &fc.bMisstype }
     ,
     {"xiang", NULL}
     ,
@@ -217,11 +252,15 @@ PYTABLE         PYTable[] = {
     ,
     {"wo", NULL}
     ,
+    {"wegn", &fc.bMisstype }
+    ,
     {"weng", NULL}
     ,
     {"wen", NULL}
     ,
     {"wei", NULL}
+    ,
+    {"wagn", &fc.bMisstype }
     ,
     {"wang", NULL}
     ,
@@ -237,6 +276,8 @@ PYTABLE         PYTable[] = {
     ,
     {"tui", NULL}
     ,
+    {"tuagn", &fc.bMisstype }
+    ,
     {"tuang", &MHPY_C[5].bMode}
     ,
     {"tuan", NULL}
@@ -245,7 +286,11 @@ PYTABLE         PYTable[] = {
     ,
     {"tou", NULL}
     ,
+    {"togn", &fc.bMisstype }
+    ,
     {"tong", NULL}
+    ,
+    {"tign", &fc.bMisstype }
     ,
     {"ting", NULL}
     ,
@@ -255,11 +300,15 @@ PYTABLE         PYTable[] = {
     ,
     {"tiao", NULL}
     ,
+    {"tiagn", &fc.bMisstype }
+    ,
     {"tiang", &MHPY_C[2].bMode}
     ,
     {"tian", NULL}
     ,
     {"ti", NULL}
+    ,
+    {"tegn", &fc.bMisstype }
     ,
     {"teng", NULL}
     ,
@@ -270,6 +319,8 @@ PYTABLE         PYTable[] = {
     {"te", NULL}
     ,
     {"tao", NULL}
+    ,
+    {"tagn", &fc.bMisstype }
     ,
     {"tang", NULL}
     ,
@@ -285,7 +336,11 @@ PYTABLE         PYTable[] = {
     ,
     {"sui", NULL}
     ,
+    {"suagn", &fc.bMisstype }
+    ,
     {"suang", &MHPY_S[3].bMode}
+    ,
+    {"suagn", &fc.bMisstype }
     ,
     {"suang", &MHPY_C[5].bMode}
     ,
@@ -297,6 +352,8 @@ PYTABLE         PYTable[] = {
     ,
     {"sou", NULL}
     ,
+    {"sogn", &fc.bMisstype }
+    ,
     {"song", NULL}
     ,
     {"si", NULL}
@@ -306,6 +363,8 @@ PYTABLE         PYTable[] = {
     {"shun", NULL}
     ,
     {"shui", NULL}
+    ,
+    {"shuagn", &fc.bMisstype }
     ,
     {"shuang", NULL}
     ,
@@ -321,6 +380,8 @@ PYTABLE         PYTable[] = {
     ,
     {"shi", NULL}
     ,
+    {"shegn", &fc.bMisstype }
+    ,
     {"sheng", NULL}
     ,
     {"shen", NULL}
@@ -331,6 +392,8 @@ PYTABLE         PYTable[] = {
     ,
     {"shao", NULL}
     ,
+    {"shagn", &fc.bMisstype }
+    ,
     {"shang", NULL}
     ,
     {"shan", NULL}
@@ -339,6 +402,8 @@ PYTABLE         PYTable[] = {
     ,
     {"sha", NULL}
     ,
+    {"segn", &fc.bMisstype }
+    ,
     {"seng", NULL}
     ,
     {"sen", NULL}
@@ -346,6 +411,8 @@ PYTABLE         PYTable[] = {
     {"se", NULL}
     ,
     {"sao", NULL}
+    ,
+    {"sagn", &fc.bMisstype }
     ,
     {"sang", NULL}
     ,
@@ -361,6 +428,8 @@ PYTABLE         PYTable[] = {
     ,
     {"rui", NULL}
     ,
+    {"ruagn", &fc.bMisstype }
+    ,
     {"ruang", &MHPY_C[5].bMode}
     ,
     {"ruan", NULL}
@@ -369,9 +438,13 @@ PYTABLE         PYTable[] = {
     ,
     {"rou", NULL}
     ,
+    {"rogn", &fc.bMisstype }
+    ,
     {"rong", NULL}
     ,
     {"ri", NULL}
+    ,
+    {"regn", &fc.bMisstype }
     ,
     {"reng", NULL}
     ,
@@ -381,6 +454,8 @@ PYTABLE         PYTable[] = {
     ,
     {"rao", NULL}
     ,
+    {"ragn", &fc.bMisstype }
+    ,
     {"rang", NULL}
     ,
     {"ran", NULL}
@@ -388,6 +463,8 @@ PYTABLE         PYTable[] = {
     {"qun", NULL}
     ,
     {"que", NULL}
+    ,
+    {"quagn", &fc.bMisstype }
     ,
     {"quang", &MHPY_C[5].bMode}
     ,
@@ -397,7 +474,11 @@ PYTABLE         PYTable[] = {
     ,
     {"qiu", NULL}
     ,
+    {"qiogn", &fc.bMisstype }
+    ,
     {"qiong", NULL}
+    ,
+    {"qign", &fc.bMisstype }
     ,
     {"qing", NULL}
     ,
@@ -406,6 +487,8 @@ PYTABLE         PYTable[] = {
     {"qie", NULL}
     ,
     {"qiao", NULL}
+    ,
+    {"qiagn", &fc.bMisstype }
     ,
     {"qiang", NULL}
     ,
@@ -421,6 +504,8 @@ PYTABLE         PYTable[] = {
     ,
     {"po", NULL}
     ,
+    {"pign", &fc.bMisstype }
+    ,
     {"ping", NULL}
     ,
     {"pin", NULL}
@@ -429,11 +514,15 @@ PYTABLE         PYTable[] = {
     ,
     {"piao", NULL}
     ,
+    {"piagn", &fc.bMisstype }
+    ,
     {"piang", &MHPY_C[2].bMode}
     ,
     {"pian", NULL}
     ,
     {"pi", NULL}
+    ,
+    {"pegn", &fc.bMisstype }
     ,
     {"peng", NULL}
     ,
@@ -442,6 +531,8 @@ PYTABLE         PYTable[] = {
     {"pei", NULL}
     ,
     {"pao", NULL}
+    ,
+    {"pagn", &fc.bMisstype }
     ,
     {"pang", NULL}
     ,
@@ -463,7 +554,11 @@ PYTABLE         PYTable[] = {
     ,
     {"nue", NULL}
     ,
+    {"nuagn", &fc.bMisstype }
+    ,
     {"nuang", &MHPY_C[5].bMode}
+    ,
+    {"nuagn", &fc.bMisstype }
     ,
     {"nuang", &MHPY_S[2].bMode}
     ,
@@ -473,9 +568,13 @@ PYTABLE         PYTable[] = {
     ,
     {"nou", NULL}
     ,
+    {"nogn", &fc.bMisstype }
+    ,
     {"nong", NULL}
     ,
     {"niu", NULL}
+    ,
+    {"nign", &fc.bMisstype }
     ,
     {"ning", NULL}
     ,
@@ -485,6 +584,8 @@ PYTABLE         PYTable[] = {
     ,
     {"niao", NULL}
     ,
+    {"niagn", &fc.bMisstype }
+    ,
     {"niang", NULL}
     ,
     {"nian", NULL}
@@ -492,6 +593,8 @@ PYTABLE         PYTable[] = {
     {"ni", NULL}
     ,
     {"ng", NULL}
+    ,
+    {"negn", &fc.bMisstype }
     ,
     {"neng", NULL}
     ,
@@ -502,6 +605,8 @@ PYTABLE         PYTable[] = {
     {"ne", NULL}
     ,
     {"nao", NULL}
+    ,
+    {"nagn", &fc.bMisstype }
     ,
     {"nang", NULL}
     ,
@@ -521,6 +626,8 @@ PYTABLE         PYTable[] = {
     ,
     {"miu", NULL}
     ,
+    {"mign", &fc.bMisstype }
+    ,
     {"ming", NULL}
     ,
     {"min", NULL}
@@ -529,11 +636,15 @@ PYTABLE         PYTable[] = {
     ,
     {"miao", NULL}
     ,
+    {"miagn", &fc.bMisstype }
+    ,
     {"miang", &MHPY_C[2].bMode}
     ,
     {"mian", NULL}
     ,
     {"mi", NULL}
+    ,
+    {"megn", &fc.bMisstype }
     ,
     {"meng", NULL}
     ,
@@ -544,6 +655,8 @@ PYTABLE         PYTable[] = {
     {"me", NULL}
     ,
     {"mao", NULL}
+    ,
+    {"magn", &fc.bMisstype }
     ,
     {"mang", NULL}
     ,
@@ -565,7 +678,11 @@ PYTABLE         PYTable[] = {
     ,
     {"lue", NULL}
     ,
+    {"luagn", &fc.bMisstype }
+    ,
     {"luang", &MHPY_C[5].bMode}
+    ,
+    {"luagn", &fc.bMisstype }
     ,
     {"luang", &MHPY_S[2].bMode}
     ,
@@ -575,11 +692,15 @@ PYTABLE         PYTable[] = {
     ,
     {"lou", NULL}
     ,
+    {"logn", &fc.bMisstype }
+    ,
     {"long", NULL}
     ,
     {"lo", NULL}
     ,
     {"liu", NULL}
+    ,
+    {"lign", &fc.bMisstype }
     ,
     {"ling", NULL}
     ,
@@ -589,6 +710,8 @@ PYTABLE         PYTable[] = {
     ,
     {"liao", NULL}
     ,
+    {"liagn", &fc.bMisstype }
+    ,
     {"liang", NULL}
     ,
     {"lian", NULL}
@@ -596,6 +719,8 @@ PYTABLE         PYTable[] = {
     {"lia", NULL}
     ,
     {"li", NULL}
+    ,
+    {"legn", &fc.bMisstype }
     ,
     {"leng", NULL}
     ,
@@ -606,6 +731,8 @@ PYTABLE         PYTable[] = {
     {"le", NULL}
     ,
     {"lao", NULL}
+    ,
+    {"lagn", &fc.bMisstype }
     ,
     {"lang", NULL}
     ,
@@ -621,6 +748,8 @@ PYTABLE         PYTable[] = {
     ,
     {"kui", NULL}
     ,
+    {"kuagn", &fc.bMisstype }
+    ,
     {"kuang", NULL}
     ,
     {"kuan", NULL}
@@ -633,7 +762,11 @@ PYTABLE         PYTable[] = {
     ,
     {"kou", NULL}
     ,
+    {"kogn", &fc.bMisstype }
+    ,
     {"kong", NULL}
+    ,
+    {"kegn", &fc.bMisstype }
     ,
     {"keng", NULL}
     ,
@@ -644,6 +777,8 @@ PYTABLE         PYTable[] = {
     {"ke", NULL}
     ,
     {"kao", NULL}
+    ,
+    {"kagn", &fc.bMisstype }
     ,
     {"kang", NULL}
     ,
@@ -657,6 +792,8 @@ PYTABLE         PYTable[] = {
     ,
     {"jue", NULL}
     ,
+    {"juagn", &fc.bMisstype }
+    ,
     {"juang", &MHPY_C[5].bMode}
     ,
     {"juan", NULL}
@@ -665,7 +802,11 @@ PYTABLE         PYTable[] = {
     ,
     {"jiu", NULL}
     ,
+    {"jiogn", &fc.bMisstype }
+    ,
     {"jiong", NULL}
+    ,
+    {"jign", &fc.bMisstype }
     ,
     {"jing", NULL}
     ,
@@ -674,6 +815,8 @@ PYTABLE         PYTable[] = {
     {"jie", NULL}
     ,
     {"jiao", NULL}
+    ,
+    {"jiagn", &fc.bMisstype }
     ,
     {"jiang", NULL}
     ,
@@ -689,6 +832,8 @@ PYTABLE         PYTable[] = {
     ,
     {"hui", NULL}
     ,
+    {"huagn", &fc.bMisstype }
+    ,
     {"huang", NULL}
     ,
     {"huan", NULL}
@@ -701,7 +846,11 @@ PYTABLE         PYTable[] = {
     ,
     {"hou", NULL}
     ,
+    {"hogn", &fc.bMisstype }
+    ,
     {"hong", NULL}
+    ,
+    {"hegn", &fc.bMisstype }
     ,
     {"heng", NULL}
     ,
@@ -712,6 +861,8 @@ PYTABLE         PYTable[] = {
     {"he", NULL}
     ,
     {"hao", NULL}
+    ,
+    {"hagn", &fc.bMisstype }
     ,
     {"hang", NULL}
     ,
@@ -727,6 +878,8 @@ PYTABLE         PYTable[] = {
     ,
     {"gui", NULL}
     ,
+    {"guagn", &fc.bMisstype }
+    ,
     {"guang", NULL}
     ,
     {"guan", NULL}
@@ -739,7 +892,11 @@ PYTABLE         PYTable[] = {
     ,
     {"gou", NULL}
     ,
+    {"gogn", &fc.bMisstype }
+    ,
     {"gong", NULL}
+    ,
+    {"gegn", &fc.bMisstype }
     ,
     {"geng", NULL}
     ,
@@ -750,6 +907,8 @@ PYTABLE         PYTable[] = {
     {"ge", NULL}
     ,
     {"gao", NULL}
+    ,
+    {"gagn", &fc.bMisstype }
     ,
     {"gang", NULL}
     ,
@@ -765,11 +924,15 @@ PYTABLE         PYTable[] = {
     ,
     {"fo", NULL}
     ,
+    {"fegn", &fc.bMisstype }
+    ,
     {"feng", NULL}
     ,
     {"fen", NULL}
     ,
     {"fei", NULL}
+    ,
+    {"fagn", &fc.bMisstype }
     ,
     {"fang", NULL}
     ,
@@ -778,6 +941,8 @@ PYTABLE         PYTable[] = {
     {"fa", NULL}
     ,
     {"er", NULL}
+    ,
+    {"egn", &fc.bMisstype }
     ,
     {"eng", &MHPY_C[1].bMode}
     ,
@@ -793,6 +958,8 @@ PYTABLE         PYTable[] = {
     ,
     {"dui", NULL}
     ,
+    {"duagn", &fc.bMisstype }
+    ,
     {"duang", &MHPY_C[5].bMode}
     ,
     {"duan", NULL}
@@ -801,9 +968,13 @@ PYTABLE         PYTable[] = {
     ,
     {"dou", NULL}
     ,
+    {"dogn", &fc.bMisstype }
+    ,
     {"dong", NULL}
     ,
     {"diu", NULL}
+    ,
+    {"dign", &fc.bMisstype }
     ,
     {"ding", NULL}
     ,
@@ -813,6 +984,8 @@ PYTABLE         PYTable[] = {
     ,
     {"diao", NULL}
     ,
+    {"diagn", &fc.bMisstype }
+    ,
     {"diang", &MHPY_C[2].bMode}
     ,
     {"dian", NULL}
@@ -820,6 +993,8 @@ PYTABLE         PYTable[] = {
     {"dia", NULL}
     ,
     {"di", NULL}
+    ,
+    {"degn", &fc.bMisstype }
     ,
     {"deng", NULL}
     ,
@@ -830,6 +1005,8 @@ PYTABLE         PYTable[] = {
     {"de", NULL}
     ,
     {"dao", NULL}
+    ,
+    {"dagn", &fc.bMisstype }
     ,
     {"dang", NULL}
     ,
@@ -845,7 +1022,11 @@ PYTABLE         PYTable[] = {
     ,
     {"cui", NULL}
     ,
+    {"cuagn", &fc.bMisstype }
+    ,
     {"cuang", &MHPY_C[5].bMode}
+    ,
+    {"cuagn", &fc.bMisstype }
     ,
     {"cuang", &MHPY_S[0].bMode}
     ,
@@ -854,6 +1035,8 @@ PYTABLE         PYTable[] = {
     {"cu", NULL}
     ,
     {"cou", NULL}
+    ,
+    {"cogn", &fc.bMisstype }
     ,
     {"cong", NULL}
     ,
@@ -865,6 +1048,8 @@ PYTABLE         PYTable[] = {
     ,
     {"chui", NULL}
     ,
+    {"chuagn", &fc.bMisstype }
+    ,
     {"chuang", NULL}
     ,
     {"chuan", NULL}
@@ -875,9 +1060,13 @@ PYTABLE         PYTable[] = {
     ,
     {"chou", NULL}
     ,
+    {"chogn", &fc.bMisstype }
+    ,
     {"chong", NULL}
     ,
     {"chi", NULL}
+    ,
+    {"chegn", &fc.bMisstype }
     ,
     {"cheng", NULL}
     ,
@@ -887,6 +1076,8 @@ PYTABLE         PYTable[] = {
     ,
     {"chao", NULL}
     ,
+    {"chagn", &fc.bMisstype }
+    ,
     {"chang", NULL}
     ,
     {"chan", NULL}
@@ -895,6 +1086,8 @@ PYTABLE         PYTable[] = {
     ,
     {"cha", NULL}
     ,
+    {"cegn", &fc.bMisstype }
+    ,
     {"ceng", NULL}
     ,
     {"cen", NULL}
@@ -902,6 +1095,8 @@ PYTABLE         PYTable[] = {
     {"ce", NULL}
     ,
     {"cao", NULL}
+    ,
+    {"cagn", &fc.bMisstype }
     ,
     {"cang", NULL}
     ,
@@ -915,6 +1110,8 @@ PYTABLE         PYTable[] = {
     ,
     {"bo", NULL}
     ,
+    {"bign", &fc.bMisstype }
+    ,
     {"bing", NULL}
     ,
     {"bin", NULL}
@@ -923,11 +1120,15 @@ PYTABLE         PYTable[] = {
     ,
     {"biao", NULL}
     ,
+    {"biagn", &fc.bMisstype }
+    ,
     {"biang", &MHPY_C[2].bMode}
     ,
     {"bian", NULL}
     ,
     {"bi", NULL}
+    ,
+    {"begn", &fc.bMisstype }
     ,
     {"beng", NULL}
     ,
@@ -936,6 +1137,8 @@ PYTABLE         PYTable[] = {
     {"bei", NULL}
     ,
     {"bao", NULL}
+    ,
+    {"bagn", &fc.bMisstype }
     ,
     {"bang", NULL}
     ,
@@ -946,6 +1149,8 @@ PYTABLE         PYTable[] = {
     {"ba", NULL}
     ,
     {"ao", NULL}
+    ,
+    {"agn", &fc.bMisstype }
     ,
     {"ang", NULL}
     ,
@@ -963,12 +1168,12 @@ int GetMHIndex_C (char map)
     int             i;
 
     for (i = 0; MHPY_C[i].strMap[0]; i++) {
-	if (map == MHPY_C[i].strMap[0] || map == MHPY_C[i].strMap[1]) {
-	    if (MHPY_C[i].bMode)
-		return i;
-	    else
-		return -1;
-	}
+        if (map == MHPY_C[i].strMap[0] || map == MHPY_C[i].strMap[1]) {
+            if (MHPY_C[i].bMode)
+                return i;
+            else
+                return -1;
+        }
     }
     return -1;
 }
@@ -978,12 +1183,12 @@ int GetMHIndex_S (char map, Bool bMode)
     int             i;
 
     for (i = 0; MHPY_S[i].strMap[0]; i++) {
-	if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1]) {
-	    if (MHPY_S[i].bMode || bMode)
-		return i;
-	    else
-		return -1;
-	}
+        if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1]) {
+            if (MHPY_S[i].bMode || bMode)
+                return i;
+            else
+                return -1;
+        }
     }
 
     return -1;
@@ -993,7 +1198,7 @@ int GetMHIndex_S (char map, Bool bMode)
 Bool IsZ_C_S (char map)
 {
     if (map=='c' || map=='H'|| map=='B')
-	return True;
+        return True;
     return False;
 }
 

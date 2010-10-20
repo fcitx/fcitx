@@ -134,6 +134,7 @@ CONFIG_BINDING_REGISTER("Pinyin", "FuzzyFH", MHPY_S[1].bMode);
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyLN", MHPY_S[2].bMode);
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzySSH", MHPY_S[3].bMode);
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode);
+CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype);
 CONFIG_BINDING_END()
 
 Bool MyStrcmp (char *str1, char *str2)
