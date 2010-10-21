@@ -23,6 +23,10 @@
 
 #include <fcitx-config/fcitx-config.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct FcitxProfile
 {
     GenericConfig gconfig;
@@ -45,5 +49,9 @@ extern FcitxProfile fcitxProfile;
 
 void LoadProfile();
 void SaveProfile();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

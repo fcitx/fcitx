@@ -21,8 +21,12 @@
 #define CONFIGFILE_H
 
 #include <X11/Xlib.h>
-#include "fcitx-config/fcitx-config.h"
+#include <fcitx-config/fcitx-config.h>
 #define INPUT_METHODS	5	//标示输入法的类别数量
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef MHPY_DEFINED
 #define MHPY_DEFINED
@@ -147,6 +151,10 @@ typedef struct FcitxConfig
 extern FcitxConfig fc;
 void LoadConfig();
 void SaveConfig();
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif

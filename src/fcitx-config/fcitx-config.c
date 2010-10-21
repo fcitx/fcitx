@@ -876,7 +876,7 @@ Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
     return True;
 }
 
-void ConfigBindValue(ConfigFile* cfile, char *groupName, char *optionName, void* var, SyncFilter filter, void *arg)
+void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg)
 {
     ConfigGroup *group = NULL;
     HASH_FIND_STR(cfile->groups, groupName, group);

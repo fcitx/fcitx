@@ -33,6 +33,10 @@
 #include <stdio.h>
 #include <fcitx-config/hotkey.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef UTHASH_H
 
 typedef struct UT_hash_handle {
@@ -256,6 +260,10 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync);
 #define ConfigOptionFile ConfigOptionString
 #define ConfigOptionFont ConfigOptionString
 
-void ConfigBindValue(ConfigFile* cfile, char *groupName, char *optionName, void* var, SyncFilter filter, void *arg);
+void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

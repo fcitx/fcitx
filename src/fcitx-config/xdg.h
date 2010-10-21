@@ -32,6 +32,10 @@
 #include <stdio.h>
 #include <X11/Xlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 FILE *GetLibFile(const char *filename, const char *mode, char **retFile);
 FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
 char **GetXDGPath(
@@ -47,4 +51,9 @@ FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile);
 FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
 FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile);
 void FreeXDGPath(char **path);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

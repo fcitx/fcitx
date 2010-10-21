@@ -33,6 +33,10 @@
 #include <stdio.h>
 #include <X11/Xlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct HOTKEYS
 {
     char *desc;
@@ -360,5 +364,9 @@ void SetHotKey (char *strKey, HOTKEYS * hotkey);
 int GetKey (KeySym keysym, int iKeyState, int iCount);
 int ParseKey (char *strKey);
 int GetKeyList (char *strKey);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
