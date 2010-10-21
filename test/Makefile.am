@@ -11,9 +11,10 @@ noinst_PROGRAMS = testpyfa
 testpyfa_SOURCES = testpyfa.c
 
 testpyfa_LDADD = \
-				   ../src/im/pinyin/PYFA.o \
-				   ../src/fcitx-config/libfcitx-config.la \
-				   $(NULL)
+                 ../src/im/pinyin/PYFA.o \
+                 ../src/fcitx-config/libfcitx-config.la \
+                 @INTLLIBS@ \
+                 $(NULL)
 
 all: test
 

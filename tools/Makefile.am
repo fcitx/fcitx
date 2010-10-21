@@ -13,16 +13,22 @@ readPYMB_SOURCES = pyTools.c pyTools.h readPYMB.c
 readPYBase_SOURCES = pyTools.c pyTools.h readPYBase.c
 fcitx_remote_SOURCES = fcitx-remote.c
 
+scel2org_LDADD = \
+                 @LIBICONV@ \
+                 $(NULL)
+
 fcitx_remote_LDADD = \
 					 @CAIRO_XLIB_LIBS@ \
 					 $(NULL)
 
 readPYBase_LDADD = \
 				   ../src/fcitx-config/libfcitx-config.la \
+                                   @INTLLIBS@ \
 				   $(NULL)
 
 readPYMB_LDADD = \
 				 ../src/fcitx-config/libfcitx-config.la \
+                                 @INTLLIBS@ \
 				 $(NULL)
 
 createPYMB_LDADD = \
@@ -32,6 +38,7 @@ createPYMB_LDADD = \
 				   ../src/im/pinyin/PYFA.o \
 				   ../src/im/pinyin/sp.o \
 				   ../src/fcitx-config/libfcitx-config.la \
+                                   @INTLLIBS@ \
 				   $(NULL)
 mb2org_LDADD = \
 			   ../src/im/pinyin/pyParser.o \
@@ -40,6 +47,7 @@ mb2org_LDADD = \
 			   ../src/im/pinyin/sp.o \
 			   pyTools.o \
 			   ../src/fcitx-config/libfcitx-config.la \
+                           @INTLLIBS@ \
 			   $(NULL)
 
 txt2mb_LDADD = ../src/tools/utf8.o

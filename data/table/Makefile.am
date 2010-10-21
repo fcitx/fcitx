@@ -7,7 +7,7 @@ mb_conf = qxm.conf db.conf erbi.conf wanfeng.conf  wbpy.conf wbx.conf zrm.conf c
 table_DATA = $(mb_data) $(mb_conf)
 EXTRA_DIST = $(mb_conf) $(txt_data)
 
-%.mb: %.txt
+.mb.txt:
 	../../tools/txt2mb $< $@
 
 tools: ../../tools/txt2mb

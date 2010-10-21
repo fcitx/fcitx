@@ -30,6 +30,9 @@
  *
  *
  */
+#include <pthread.h>
+#include <limits.h>
+
 #include "core/fcitx.h"
 #include "tools/tools.h"
 #include "ui/ui.h"
@@ -40,7 +43,6 @@
 #include "fcitx-config/profile.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/cutils.h"
-#include <pthread.h>
 #ifdef _ENABLE_TRAY
 #include "ui/TrayWindow.h"
 #endif

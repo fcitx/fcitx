@@ -1,3 +1,7 @@
+INCLUDES= \
+          $(X_CFLAGS) \
+          $(NULL)
+
 noinst_LIBRARIES = libXimd.a
 AM_CFLAGS = -c -O2 -fno-strength-reduce -fno-strict-aliasing
 libXimd_a_SOURCES = \

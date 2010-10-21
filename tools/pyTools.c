@@ -21,10 +21,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <X11/Xmd.h>
 
 #include "pyTools.h"
-
-#define INT8 int8_t
 
 void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 {

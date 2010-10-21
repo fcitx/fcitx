@@ -122,7 +122,7 @@ Bool LoadPY (void)
         fwrite (&(PYFAList[i].iHZCount), sizeof (int), 1, fp);
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
             INT8 len = strlen(PYFAList[i].pyBase[j].strHZ);
-            fwrite (&len, sizeof(INT8), 1, fp1);
+            fwrite (&len, sizeof(INT8), 1, fp);
             fwrite (PYFAList[i].pyBase[j].strHZ, sizeof (char) * len, 1, fp);
             fwrite (&(PYFAList[i].pyBase[j].iIndex), sizeof (int), 1, fp);
         }

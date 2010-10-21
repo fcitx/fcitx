@@ -21,7 +21,6 @@
 #define _TABLE_H
 
 #include <X11/Xlib.h>
-#include <limits.h>
 
 #include "fcitx-config/configfile.h"
 #include "core/ime.h"

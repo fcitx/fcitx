@@ -27,6 +27,7 @@
 #include "im/table/table.h"
 #include "im/special/punc.h"
 
+#include <limits.h>
 #include <errno.h>
 #include <stdio.h>
 #include <sys/stat.h>
