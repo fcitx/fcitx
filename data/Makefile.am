@@ -19,7 +19,7 @@ $(py_data): @top_srcdir@/data/pyPhrase.org @top_srcdir@/data/gbkpy.org
 tools: ../tools/createPYMB
 	$(MAKE) -C ../tools
 
-all: tools $(py_data) desc.po
+all-local: tools $(py_data) desc.po
 	rm -f pyERROR
 	rm -f pyPhrase.ok
 
