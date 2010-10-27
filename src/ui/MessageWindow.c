@@ -146,7 +146,8 @@ void DrawMessageWindow (char *title, char **msg, int length)
     cairo_t *c = cairo_create(messageWindow.surface);
     cairo_set_source_rgb(c, messageWindow.color.r, messageWindow.color.g, messageWindow.color.b);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    PangoFontDescription* desc = GetPangoFontDescription(gs. fontZh, messageWindow.fontSize);
+
+    SetFontContext(c, gs.fontZh, messageWindow.fontSize);
 
     cairo_paint(c);
 
@@ -157,11 +158,11 @@ void DrawMessageWindow (char *title, char **msg, int length)
     y = MESSAGE_WINDOW_MARGIN;
     for (i = 0; i< length ;i ++)
     {
-        OutputStringWithContext(c, desc, msg[i], x, y);
+        OutputStringWithContext(c, msg[i], x, y);
         y += messageWindow.fontSize + MESSAGE_WINDOW_LINESPACE;
     }
 
-    pango_font_description_free (desc);
+    ResetFontContext();
     cairo_destroy(c);
 
     ActiveWindow(dpy, messageWindow.window);

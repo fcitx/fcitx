@@ -248,12 +248,14 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
     int marginRight = sc.skinMenu.marginRight;
     cairo_t *  cr;
     cr=cairo_create(menu->menu_cs);
-    PangoFontDescription* fontDesc = GetPangoFontDescription(menu->font, menu->font_size);
+
+    SetFontContext(cr, menu->font, menu->font_size);
+
     if (GetMenuShell(menu, shellindex)->isselect ==0)
     {
         fcitx_cairo_set_color(cr, &sc.skinFont.menuFontColor[MENU_INACTIVE]);
 
-        OutputStringWithContext(cr, fontDesc, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
+        OutputStringWithContext(cr, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
 
         if (GetMenuShell(menu, shellindex)->next == 1)
         {
@@ -272,7 +274,7 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
         cairo_fill (cr);
 
         fcitx_cairo_set_color(cr, &sc.skinFont.menuFontColor[MENU_ACTIVE]);
-        OutputStringWithContext(cr, fontDesc, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
+        OutputStringWithContext(cr, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
 
         if (GetMenuShell(menu, shellindex)->next == 1)
         {
@@ -283,7 +285,7 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
             cairo_fill (cr);
         }
     }
-    pango_font_description_free (fontDesc);
+    ResetFontContext();
     cairo_destroy(cr);
 }
 

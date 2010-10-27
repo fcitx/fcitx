@@ -22,24 +22,65 @@
 
 #include <X11/Xlib.h>
 #include <cairo.h>
+
+#ifdef _ENABLE_PANGO
 #include <pango/pangocairo.h>
+#endif
+
+#include "core/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 
 Bool InitX (void);
 void MyXEventHandler (XEvent * event);
 
 void OutputString (cairo_t* c, const char *str, const char *font, int fontSize, int x, int y, ConfigColor* color);
-void OutputStringWithContext(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
 int StringWidth (const char *str, const char *font, int fontSize);
-int StringWidthWithContext(cairo_t * c, PangoFontDescription* fontDesc, const char *str);
 int FontHeight (const char *font);
-int FontHeightWithContext(cairo_t* c, PangoFontDescription* fontDesc);
 
 Bool MouseClick (int *x, int *y, Window window);
 Bool IsWindowVisible(Window window);
 void InitWindowAttribute(Visual** vs, Colormap *cmap, XSetWindowAttributes *attrib, unsigned long *attribmask, int* depth);
 void ActiveWindow(Display *dpy, Window window);
+
+#ifdef _ENABLE_PANGO
+#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
+#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, fontDesc, str)
+#define FontHeightWithContext(c) FontHeightWithContextReal(c, fontDesc)
+
 PangoFontDescription* GetPangoFontDescription(const char* font, int size);
+void OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
+int StringWidthWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str);
+int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
+
+#define SetFontContext(context, fontname, size) \
+    PangoFontDescription* fontDesc = GetPangoFontDescription(fontname, size)
+    
+#define ResetFontContext() \
+    do { \
+        pango_font_description_free(fontDesc); \
+    } while(0)
+
+#else
+
+#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, str, x, y)
+#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, str)
+#define FontHeightWithContext(c) FontHeightWithContextReal(c)
+
+void OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y);
+int StringWidthWithContextReal(cairo_t * c, const char *str);
+int FontHeightWithContextReal(cairo_t* c);
+
+#define SetFontContext(context, fontname, size) \
+    do { \
+        cairo_select_font_face(context, fontname, \
+                CAIRO_FONT_SLANT_NORMAL, \
+                CAIRO_FONT_WEIGHT_NORMAL); \
+        cairo_set_font_size(context, size); \
+    } while (0)
+
+#define ResetFontContext()
+
+#endif
 
 Bool IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
 Bool IsInRspArea(int x0, int y0, FcitxImage img);

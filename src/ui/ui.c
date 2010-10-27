@@ -35,7 +35,6 @@
 #include <malloc.h>
 #endif
 #include <iconv.h>
-#include <pango/pangocairo.h>
 
 #include "ui/ui.h"
 #include "core/xim.h"
@@ -685,9 +684,10 @@ StringWidth(const char *str, const char *font, int fontSize)
     cairo_surface_t *surface =
         cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
     cairo_t        *c = cairo_create(surface);
-    PangoFontDescription *fontDesc = GetPangoFontDescription(font, fontSize);
+    SetFontContext(c, font, fontSize);
 
-    int             width = StringWidthWithContext(c, fontDesc, str);
+    int             width = StringWidthWithContext(c, str);
+    ResetFontContext();
 
     cairo_destroy(c);
     cairo_surface_destroy(surface);
@@ -695,8 +695,9 @@ StringWidth(const char *str, const char *font, int fontSize)
     return width;
 }
 
+#ifdef _ENABLE_PANGO
 int
-StringWidthWithContext(cairo_t * c, PangoFontDescription* fontDesc, const char *str)
+StringWidthWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str)
 {
     if (!str || str[0] == 0)
         return 0;
@@ -712,6 +713,21 @@ StringWidthWithContext(cairo_t * c, PangoFontDescription* fontDesc, const char *
 
     return width;
 }
+#else
+
+int
+StringWidthWithContextReal(cairo_t * c, const char *str)
+{
+    if (!str || str[0] == 0)
+        return 0;
+    if (!utf8_check_string(str))
+        return 0;
+    cairo_text_extents_t extents;
+    cairo_text_extents(c, str, &extents);
+    int             width = extents.x_advance;
+    return width;
+}
+#endif
 
 int
 FontHeight(const char *font)
@@ -720,27 +736,45 @@ FontHeight(const char *font)
         cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
     cairo_t        *c = cairo_create(surface);
 
-    PangoFontDescription *fontDesc = GetPangoFontDescription(font, sc.skinFont.fontSize);
-    int             height = FontHeightWithContext(c, fontDesc);
+    SetFontContext(c, font, sc.skinFont.fontSize);
+    int             height = FontHeightWithContext(c);
+    ResetFontContext();
 
     cairo_destroy(c);
     cairo_surface_destroy(surface);
     return height;
 }
 
+#ifdef _ENABLE_PANGO
 int
-FontHeightWithContext(cairo_t* c, PangoFontDescription* fontDesc)
+FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
 {
-    char            str[] = "Ay中";
     int height;
-    PangoLayout *layout = pango_cairo_create_layout (c);
-    pango_layout_set_text (layout, str, -1);
-    pango_layout_set_font_description (layout, fontDesc);
-    pango_layout_get_pixel_size(layout, NULL, &height);
-    g_object_unref (layout);
+
+    if (pango_font_description_get_size_is_absolute(fontDesc)) /* it must be this case */
+    {
+        height = pango_font_description_get_size(fontDesc);
+        height /= PANGO_SCALE;
+    }
+    else
+        height = 0;
+    
+    printf("%d\n", height);
 
     return height;
 }
+#else
+
+int
+FontHeightWithContextReal(cairo_t * c)
+{
+    cairo_matrix_t matrix;
+    cairo_get_font_matrix (c, &matrix);
+
+    int             height = matrix.xx;
+    return height;
+}
+#endif
 
 /*
  * 以指定的颜色在窗口的指定位置输出字串
@@ -752,20 +786,19 @@ OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x
     if (!str || str[0] == 0)
         return;
 
-    PangoFontDescription* desc;
-
     cairo_save(c);
 
     cairo_set_source_rgb(c, color->r, color->g, color->b);
-    desc = GetPangoFontDescription(font, fontSize);
-    OutputStringWithContext(c, desc, str, x, y);
-    pango_font_description_free (desc);
+    SetFontContext(c, font, fontSize);
+    OutputStringWithContext(c, str, x, y);
+    ResetFontContext();
 
     cairo_restore(c);
 }
 
+#ifdef _ENABLE_PANGO
 void
-OutputStringWithContext(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y)
+OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y)
 {
     if (!str || str[0] == 0)
         return;
@@ -786,6 +819,22 @@ OutputStringWithContext(cairo_t * c, PangoFontDescription* desc, const char *str
     cairo_restore(c);
     g_object_unref (layout);
 }
+#else
+
+void
+OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y)
+{
+    if (!str || str[0] == 0)
+        return;
+    if (!utf8_check_string(str))
+        return;
+    cairo_save(c);
+    int             height = FontHeightWithContextReal(c);
+    cairo_move_to(c, x, y + height);
+    cairo_show_text(c, str);
+    cairo_restore(c);
+}
+#endif
 
 Bool
 IsWindowVisible(Window window)
@@ -883,6 +932,7 @@ void ActiveWindow(Display *dpy, Window window)
     XSync(dpy, False);
 }
 
+#ifdef _ENABLE_PANGO
 PangoFontDescription* GetPangoFontDescription(const char* font, int size)
 {
     PangoFontDescription* desc;
@@ -891,3 +941,4 @@ PangoFontDescription* GetPangoFontDescription(const char* font, int size)
     pango_font_description_set_family(desc, font);
     return desc;
 }
+#endif

@@ -49,6 +49,7 @@
 #include "ui/InputWindow.h"
 #include "ui/skin.h"
 #include "ui/MenuWindow.h"
+#include "ui/font.h"
 
 #ifdef _ENABLE_TRAY
 #include "ui/TrayWindow.h"
@@ -166,6 +167,13 @@ int main (int argc, char *argv[])
      * 加载皮肤配置文件,一般在share/fcixt/skin/skinname dir/fcitx_skin.conf中,制作皮肤的时候配置好
      */
     LoadSkinConfig();
+
+#ifndef _ENABLE_PANGO
+    InitFont();
+
+    /* 加载皮肤和配置之后才有字体 */
+    CreateFont();
+#endif
 
     /* 根据字体计算输入窗口的高度 */
     CalculateInputWindowHeight ();
