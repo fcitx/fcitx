@@ -437,7 +437,7 @@ void LoadInputMessage()
         inputWindow.c_font[i] = cairo_create(inputWindow.cs_input_bar);
         fcitx_cairo_set_color(inputWindow.c_font[i], &sc.skinFont.fontColor[i]);
 #ifndef _ENABLE_PANGO
-        SetFontContext(inputWindow.c_font[i], gs.fontZh, sc.skinFont.fontSize);
+        SetFontContext(inputWindow.c_font[i], gs.font, sc.skinFont.fontSize);
 #endif
     }
     inputWindow.c_font[7] = inputWindow.c_font[0];
