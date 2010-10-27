@@ -112,35 +112,35 @@ void DrawVKWindow (void)
     cairo_paint(cr);
     /* 显示字符 */
     /* 名称 */
-    OutputString (cr, vks[iCurrentVK].strName, gs.fontZh, vkWindow.fontSize , (VK_WINDOW_WIDTH - StringWidth (vks[iCurrentVK].strName, gs.fontZh, sc.skinFont.fontSize)) / 2, 6, &vkWindow.fontColor);
+    OutputString (cr, vks[iCurrentVK].strName, gs.font, vkWindow.fontSize , (VK_WINDOW_WIDTH - StringWidth (vks[iCurrentVK].strName, gs.font, sc.skinFont.fontSize)) / 2, 6, &vkWindow.fontColor);
 
     /* 第一排 */
     iPos = 13;
     for (i = 0; i < 13; i++) {
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.fontZh, vkWindow.fontSize, iPos, 27, &vkWindow.fontColor);
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.fontZh, vkWindow.fontSize, iPos - 5, 40, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.font, vkWindow.fontSize, iPos, 27, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.font, vkWindow.fontSize, iPos - 5, 40, &vkWindow.fontColor);
         iPos += 24;
     }
     /* 第二排 */
     iPos = 48;
     for (i = 13; i < 26; i++) {
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.fontZh, vkWindow.fontSize, iPos, 55, &vkWindow.fontColor);
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.fontZh, vkWindow.fontSize, iPos - 5, 68, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.font, vkWindow.fontSize, iPos, 55, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.font, vkWindow.fontSize, iPos - 5, 68, &vkWindow.fontColor);
         iPos += 24;
     }
     /* 第三排 */
     iPos = 55;
     for (i = 26; i < 37; i++) {
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.fontZh, vkWindow.fontSize, iPos, 83, &vkWindow.fontColor);
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.fontZh, vkWindow.fontSize, iPos - 5, 96, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.font, vkWindow.fontSize, iPos, 83, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.font, vkWindow.fontSize, iPos - 5, 96, &vkWindow.fontColor);
         iPos += 24;
     }
 
     /* 第四排 */
     iPos = 72;
     for (i = 37; i < 47; i++) {
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.fontZh, vkWindow.fontSize, iPos, 111, &vkWindow.fontColor);
-        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.fontZh, vkWindow.fontSize, iPos - 5, 124, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][1], gs.font, vkWindow.fontSize, iPos, 111, &vkWindow.fontColor);
+        OutputString (cr, vks[iCurrentVK].strSymbol[i][0], gs.font, vkWindow.fontSize, iPos - 5, 124, &vkWindow.fontColor);
         iPos += 24;
     }
 

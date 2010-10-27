@@ -506,7 +506,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     flag=sc.skinInputBar.resize;
     up_len = 0;
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, gs.fontZh, sc.skinFont.fontSize);
+    SetFontContext(dummy, gs.font, sc.skinFont.fontSize);
 #endif
 
     for (i = 0; i < msgup->msgCount ; i++)

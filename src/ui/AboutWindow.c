@@ -55,7 +55,7 @@ Bool CreateAboutWindow (void)
     aboutWindow.fontColor.r = aboutWindow.fontColor.g = aboutWindow.fontColor.b = 0;
     aboutWindow.fontSize = 11;
 
-    ABOUT_WINDOW_WIDTH = StringWidth (strTitle, gs.fontZh, aboutWindow.fontSize ) + 50;
+    ABOUT_WINDOW_WIDTH = StringWidth (strTitle, gs.font, aboutWindow.fontSize ) + 50;
     aboutWindow.window =
         XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
@@ -103,11 +103,11 @@ void DrawAboutWindow (void)
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_paint(c);
 
-    OutputString (c, strTitle, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 30, &aboutWindow.fontColor);
+    OutputString (c, strTitle, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, gs.font, aboutWindow.fontSize)) / 2, 6 + 30, &aboutWindow.fontColor);
 
-    OutputString (c, AboutEmail, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 60, &aboutWindow.fontColor);
+    OutputString (c, AboutEmail, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, gs.font, aboutWindow.fontSize)) / 2, 6 + 60, &aboutWindow.fontColor);
 
-    OutputString (c, AboutCopyRight, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 80, &aboutWindow.fontColor);
+    OutputString (c, AboutCopyRight, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, gs.font, aboutWindow.fontSize)) / 2, 6 + 80, &aboutWindow.fontColor);
 
     cairo_destroy(c);
 }

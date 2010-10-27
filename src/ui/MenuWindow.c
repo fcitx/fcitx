@@ -53,7 +53,7 @@ void InitMenuDefault(XlibMenu * menu)
     menu->iPosY=100;
     menu->width=sc.skinMenu.backImg.width;
     menu->font_size=14;
-    strcpy(menu->font,gs.fontZh);
+    strcpy(menu->font,gs.font);
     menu->mark=-1;
     utarray_init(&menu->shell, &menuICD);
 }

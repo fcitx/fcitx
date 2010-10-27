@@ -70,8 +70,7 @@ typedef struct FcitxConfig
 {
     GenericConfig gconfig;
     /* program config */
-    char *fontEn;
-    char *fontZh;
+    char *font;
     char *strUserLocale;
     char *strRecordingPath;
     Bool bUseTrayIcon;

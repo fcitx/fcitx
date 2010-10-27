@@ -54,7 +54,7 @@ void CreateFont()
         strcpy(locale, "zh");
     locale[2]='\0';
 reloadfont:
-    if (strcmp(gs.fontZh, "") == 0)
+    if (strcmp(gs.font, "") == 0)
     {
         FcChar8 strpat[9];
         sprintf((char*)strpat, ":lang=%s", locale);
@@ -62,7 +62,7 @@ reloadfont:
     }
     else
     {
-        pat = FcNameParse ((FcChar8*)gs.fontZh);
+        pat = FcNameParse ((FcChar8*)gs.font);
     }
     
     os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
@@ -80,20 +80,20 @@ reloadfont:
     FcChar8* family;
     if (FcPatternGetString (fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch)
         goto nofont;
-    if (gs.fontZh)
-        free(gs.fontZh);
+    if (gs.font)
+        free(gs.font);
 
-    gs.fontZh = strdup((const char*) family);
+    gs.font = strdup((const char*) family);
 
     FcFontSetDestroy(fs);
 
-    FcitxLog(INFO, _("your current font is: %s"), gs.fontZh);
+    FcitxLog(INFO, _("your current font is: %s"), gs.font);
     return;
 
 nofont:
-    if (strcmp(gs.fontZh, "") != 0)
+    if (strcmp(gs.font, "") != 0)
     {
-        strcpy(gs.fontZh, "");
+        strcpy(gs.font, "");
         if (pat)
             FcPatternDestroy(pat);
         if (os)

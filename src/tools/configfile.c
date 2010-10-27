@@ -44,8 +44,7 @@ static ConfigFileDesc* GetConfigDesc();
 static void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterCopyFontEn(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterCopyFontZh(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void SetTriggerKeys (char **str, int length);
 static Bool MyStrcmp (char *str1, char *str2);
@@ -57,9 +56,10 @@ FilterNextTimeEffectBool(UseTray, fc.bUseTrayIcon)
 FilterNextTimeEffectBool(UseDBus, fc.bUseDBus)
 
 CONFIG_BINDING_BEGIN(FcitxConfig);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "FontEn", fontEn, FilterCopyFontEn);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "FontZh", fontZh, FilterCopyFontZh);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "Font", font, FilterCopyFont);
+#ifndef _ENABLE_PANGO
 CONFIG_BINDING_REGISTER("Program", "FontLocale", strUserLocale);
+#endif
 #ifdef _ENABLE_RECORDING
 CONFIG_BINDING_REGISTER("Program", "RecordFile", strRecordingPath);
 #endif
@@ -142,25 +142,14 @@ Bool MyStrcmp (char *str1, char *str2)
         return !strncmp (str1, str2, strlen (str2));
 }
 
-void FilterCopyFontEn(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
     char *pstr = *(char **)value;
     if (sync == Raw2Value)
     {
-        if (gs.fontEn)
-            free(gs.fontEn);
-        gs.fontEn = strdup(pstr);
-    }
-}
-
-void FilterCopyFontZh(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
-{
-    char *pstr = *(char **)value;
-    if (sync == Raw2Value)
-    {
-        if (gs.fontZh)
-            free(gs.fontZh);
-        gs.fontZh = strdup(pstr);
+        if (gs.font)
+            free(gs.font);
+        gs.font = strdup(pstr);
     }
 }
 

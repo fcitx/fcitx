@@ -134,7 +134,7 @@ void DrawMessageWindow (char *title, char **msg, int length)
 
     for (i = 0; i< length ;i ++)
     {
-        int width = StringWidth(msg[i], gs.fontZh, messageWindow.fontSize);
+        int width = StringWidth(msg[i], gs.font, messageWindow.fontSize);
         if (width > messageWindow.width)
             messageWindow.width = width;
     }
@@ -147,7 +147,7 @@ void DrawMessageWindow (char *title, char **msg, int length)
     cairo_set_source_rgb(c, messageWindow.color.r, messageWindow.color.g, messageWindow.color.b);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
 
-    SetFontContext(c, gs.fontZh, messageWindow.fontSize);
+    SetFontContext(c, gs.font, messageWindow.fontSize);
 
     cairo_paint(c);
 

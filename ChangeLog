@@ -1,3 +1,7 @@
+2010-10-27: CSSlayer <wengxt@gmail.com>
+	* 编译时可以选择pango支持
+	* 配置文件保存时输出注释
+
 2010-10-20: CSSlayer <wengxt@gmail.com>
 	* 增加一个选项，可以将拼音中ng/gn混用
 

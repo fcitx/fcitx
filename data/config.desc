@@ -1,10 +1,7 @@
-[Program/FontEn]
+[Program/Font]
 Type=Font
 DefaultValue=
-
-[Program/FontZh]
-Type=Font
-DefaultValue=
+Description=Font
 
 [Program/FontLocale]
 Type=String

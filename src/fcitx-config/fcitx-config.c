@@ -859,6 +859,10 @@ Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
             if (group)
                 HASH_FIND_STR(group->options, optiondesc->optionName, option);
 
+            if (optiondesc->desc && strlen(optiondesc->desc) != 0)
+                fprintf(fp, "# %s\n", _(optiondesc->desc));
+
+
             if (!option)
             {
                 if (optiondesc->rawDefaultValue)
@@ -872,6 +876,7 @@ Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
             }
         }
+        fprintf(fp, "\n");
     }
     return True;
 }

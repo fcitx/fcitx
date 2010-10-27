@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-14 21:13+0800\n"
+"POT-Creation-Date: 2010-10-27 18:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,272 +17,420 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/config.desc:12
+#: data/config.desc:4 data/config.desc:1
+msgid "Font"
+msgstr ""
+
+#: data/config.desc:9
 msgid "Font Locale to display"
 msgstr ""
 
-#: data/config.desc:17
+#: data/config.desc:14
 msgid "Record File of Input"
 msgstr ""
 
-#: data/config.desc:22
+#: data/config.desc:19
 msgid "Use System Tray Icon"
 msgstr ""
 
-#: data/config.desc:27
+#: data/config.desc:24
 msgid "Use DBus to display UI (Require KIMPanel)"
 msgstr ""
 
-#: data/config.desc:32
+#: data/config.desc:29
 msgid "Enable Addons to Fcitx"
 msgstr ""
 
-#: data/config.desc:37
+#: data/config.desc:34
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
 
-#: data/config.desc:42
+#: data/config.desc:39
 msgid "Use English Punc After a Number"
 msgstr ""
 
-#: data/config.desc:51
+#: data/config.desc:48
 msgid "Action after press enter"
 msgstr ""
 
-#: data/config.desc:60
+#: data/config.desc:57
 msgid "Action after press SemiColon"
 msgstr ""
 
-#: data/config.desc:65
+#: data/config.desc:62
 msgid "Input English Character if you input upper case"
 msgstr ""
 
-#: data/config.desc:70
+#: data/config.desc:67
 msgid "Convert Punc to Chinese Punc"
 msgstr ""
 
-#: data/config.desc:75
+#: data/config.desc:72
 msgid "Disable Paging in Legend Mode"
 msgstr ""
 
-#: data/config.desc:80
+#: data/config.desc:77
 msgid "Send inputed Text if Switch to English Mode"
 msgstr ""
 
-#: data/config.desc:85
+#: data/config.desc:82
 msgid "Candidate Word Number"
 msgstr ""
 
-#: data/config.desc:94
+#: data/config.desc:91
 msgid "Main Window Hide Mode"
 msgstr ""
 
-#: data/config.desc:99
+#: data/config.desc:96
 msgid "Show Input Window In the center of screen"
 msgstr ""
 
-#: data/config.desc:104
+#: data/config.desc:101
 msgid "Show Input Window After Trigger Input Mode"
 msgstr ""
 
-#: data/config.desc:109
+#: data/config.desc:106
 msgid "Show Point After Index"
 msgstr ""
 
-#: data/config.desc:114
+#: data/config.desc:111
 msgid "Show Input Speed"
 msgstr ""
 
-#: data/config.desc:119
+#: data/config.desc:116
 msgid "Show Version"
 msgstr ""
 
-#: data/config.desc:124
+#: data/config.desc:121
 msgid "Show Hint Window while ENV is not correctly configured."
 msgstr ""
 
-#: data/config.desc:129
+#: data/config.desc:126
 msgid "Skin Name in use"
 msgstr ""
 
-#: data/config.desc:134
+#: data/config.desc:131
 msgid "Hot key of Triggering Input Method"
 msgstr ""
 
-#: data/config.desc:146
+#: data/config.desc:143
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr ""
 
-#: data/config.desc:151
+#: data/config.desc:148
 msgid "Double click Switch Key to Change Mode"
 msgstr ""
 
-#: data/config.desc:156
+#: data/config.desc:153
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: data/config.desc:161
+#: data/config.desc:158
 msgid "Hotkey of Switching Follow Cursor Mode"
 msgstr ""
 
-#: data/config.desc:166
+#: data/config.desc:163
 msgid "Hotkey of Hiding Main Window"
 msgstr ""
 
-#: data/config.desc:171
+#: data/config.desc:168
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr ""
 
-#: data/config.desc:176
+#: data/config.desc:173
 msgid "Hotkey of Switching Traditional Chinese Input Mode On."
 msgstr ""
 
-#: data/config.desc:181
+#: data/config.desc:178
 msgid "Hotkey of Switching Legend Mode"
 msgstr ""
 
-#: data/config.desc:186
+#: data/config.desc:183
 msgid "Hotkey of Looking up the Corresponding pinyin of Word."
 msgstr ""
 
-#: data/config.desc:191
+#: data/config.desc:188
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr ""
 
-#: data/config.desc:196
+#: data/config.desc:193
 msgid "Hotkey of Switch Chinese Punc Mode"
 msgstr ""
 
-#: data/config.desc:201
+#: data/config.desc:198
 msgid "Hotkey of Going Prev Page"
 msgstr ""
 
-#: data/config.desc:206
+#: data/config.desc:203
 msgid "Hotkey of Going Next Page"
 msgstr ""
 
-#: data/config.desc:211
+#: data/config.desc:208
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr ""
 
-#: data/config.desc:216
+#: data/config.desc:213
 msgid "Hotkey of Saving All Config and Input History"
 msgstr ""
 
-#: data/config.desc:221
+#: data/config.desc:218
 msgid "Hotkey of Switching Recording Mode"
 msgstr ""
 
-#: data/config.desc:226
+#: data/config.desc:223
 msgid "Hotkey of Reseting Recording Mode"
 msgstr ""
 
-#: data/config.desc:231
+#: data/config.desc:228
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:236
+#: data/config.desc:233
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:241
+#: data/config.desc:238
 msgid "Default Shuangpin Schema"
 msgstr ""
 
-#: data/config.desc:246
+#: data/config.desc:243
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:251
+#: data/config.desc:248
 msgid "Table Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:256
+#: data/config.desc:253
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: data/config.desc:265
+#: data/config.desc:262
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: data/config.desc:270
+#: data/config.desc:267
 msgid "Auto Create Phrase"
 msgstr ""
 
-#: data/config.desc:275
+#: data/config.desc:272
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: data/config.desc:280
+#: data/config.desc:277
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: data/config.desc:285
+#: data/config.desc:282
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: data/config.desc:290
+#: data/config.desc:287
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: data/config.desc:295
+#: data/config.desc:292
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: data/config.desc:304
+#: data/config.desc:301
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: data/config.desc:313
+#: data/config.desc:310
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: data/config.desc:322
+#: data/config.desc:319
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: data/config.desc:327
+#: data/config.desc:324
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: data/config.desc:332
+#: data/config.desc:329
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: data/config.desc:337
+#: data/config.desc:334
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: data/config.desc:342
+#: data/config.desc:339
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: data/config.desc:347
+#: data/config.desc:344
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: data/config.desc:352
+#: data/config.desc:349
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: data/config.desc:357
+#: data/config.desc:354
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: data/config.desc:362
+#: data/config.desc:359
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: data/config.desc:367
+#: data/config.desc:364
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: data/config.desc:372
+#: data/config.desc:369
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: data/config.desc:377
+#: data/config.desc:374
 msgid "Fuzzy z and zh"
+msgstr ""
+
+#: data/config.desc:379
+msgid "Fix misstype gn/ng"
+msgstr ""
+
+#: data/table.desc:2
+msgid "Code Table Name"
+msgstr ""
+
+#: data/table.desc:6
+msgid "Icon Name"
+msgstr ""
+
+#: data/table.desc:10
+msgid "Code Table File"
+msgstr ""
+
+#: data/table.desc:14
+msgid "Adjust Order"
+msgstr ""
+
+#: data/table.desc:23
+msgid "Order of Code Table"
+msgstr ""
+
+#: data/table.desc:28
+msgid "Use Pinyin"
+msgstr ""
+
+#: data/table.desc:33
+msgid "Pinyin Key"
+msgstr ""
+
+#: data/table.desc:38
+msgid "Auto Send Candidate Word to Client"
+msgstr ""
+
+#: data/table.desc:43
+msgid "Auto Send Candidate Word if no match in Code Table"
+msgstr ""
+
+#: data/table.desc:48
+msgid "End Key"
+msgstr ""
+
+#: data/table.desc:53
+msgid "Use Matching Key"
+msgstr ""
+
+#: data/table.desc:58
+msgid "Matching Key"
+msgstr ""
+
+#: data/table.desc:63
+msgid "Exact Match"
+msgstr ""
+
+#: data/table.desc:67
+msgid "Auto Phrase"
+msgstr ""
+
+#: data/table.desc:72
+msgid "Auto Phrase Length"
+msgstr ""
+
+#: data/table.desc:77
+msgid "Auto Phrase Phrase"
+msgstr ""
+
+#: data/table.desc:82
+msgid "Save Auto Phrase"
+msgstr ""
+
+#: data/table.desc:87
+msgid "Prompt Table Code"
+msgstr ""
+
+#: data/table.desc:91 data/table.desc:90
+msgid "Symbol"
+msgstr ""
+
+#: data/table.desc:96
+msgid "Symbol File"
+msgstr ""
+
+#: data/table.desc:101 data/table.desc:100
+msgid "Choose"
+msgstr ""
+
+#: data/table.desc:106
+msgid "Enable This Table or Not"
+msgstr ""
+
+#: data/profile.desc:2
+msgid "Main Window Position X"
+msgstr ""
+
+#: data/profile.desc:7
+msgid "Main Window Position Y"
+msgstr ""
+
+#: data/profile.desc:12
+msgid "Input Window Position X"
+msgstr ""
+
+#: data/profile.desc:17
+msgid "Input Window Position Y"
+msgstr ""
+
+#: data/profile.desc:22
+msgid "Use Full Width Character"
+msgstr ""
+
+#: data/profile.desc:27
+msgid "Use Chinese Punctuation"
+msgstr ""
+
+#: data/profile.desc:32
+msgid "Input Window Shows at the position of cursor"
+msgstr ""
+
+#: data/profile.desc:37
+msgid "Prompt the phrases after input"
+msgstr ""
+
+#: data/profile.desc:42
+msgid "Current Input Method Index"
+msgstr ""
+
+#: data/profile.desc:47 data/profile.desc:46
+msgid "Locked"
+msgstr ""
+
+#: data/profile.desc:52
+msgid "Show Main Window in a compact way"
+msgstr ""
+
+#: data/profile.desc:57
+msgid "Use Traditional Chinese in Input"
+msgstr ""
+
+#: data/profile.desc:62
+msgid "Use recording mode"
 msgstr ""
 
 #: data/skin.desc:3
@@ -477,144 +625,20 @@ msgstr ""
 msgid "Space Line Color"
 msgstr ""
 
-#: data/profile.desc:2
-msgid "Main Window Position X"
+#: data/table/erbi.conf:2
+msgid "Erbi"
 msgstr ""
 
-#: data/profile.desc:7
-msgid "Main Window Position Y"
+#: data/table/wanfeng.conf:2
+msgid "Wanfeng"
 msgstr ""
 
-#: data/profile.desc:12
-msgid "Input Window Position X"
+#: data/table/zrm.conf:2
+msgid "Ziranma"
 msgstr ""
 
-#: data/profile.desc:17
-msgid "Input Window Position Y"
-msgstr ""
-
-#: data/profile.desc:22
-msgid "Use Full Width Character"
-msgstr ""
-
-#: data/profile.desc:27
-msgid "Use Chinese Punctuation"
-msgstr ""
-
-#: data/profile.desc:32
-msgid "Input Window Shows at the position of cursor"
-msgstr ""
-
-#: data/profile.desc:37
-msgid "Prompt the phrases after input"
-msgstr ""
-
-#: data/profile.desc:42
-msgid "Current Input Method Index"
-msgstr ""
-
-#: data/profile.desc:47 data/profile.desc:46
-msgid "Locked"
-msgstr ""
-
-#: data/profile.desc:52
-msgid "Show Main Window in a compact way"
-msgstr ""
-
-#: data/profile.desc:57
-msgid "Use Traditional Chinese in Input"
-msgstr ""
-
-#: data/profile.desc:62
-msgid "Use recording mode"
-msgstr ""
-
-#: data/table.desc:2
-msgid "Code Table Name"
-msgstr ""
-
-#: data/table.desc:6
-msgid "Icon Name"
-msgstr ""
-
-#: data/table.desc:10
-msgid "Code Table File"
-msgstr ""
-
-#: data/table.desc:14
-msgid "Adjust Order"
-msgstr ""
-
-#: data/table.desc:23
-msgid "Order of Code Table"
-msgstr ""
-
-#: data/table.desc:28
-msgid "Use Pinyin"
-msgstr ""
-
-#: data/table.desc:33
-msgid "Pinyin Key"
-msgstr ""
-
-#: data/table.desc:38
-msgid "Auto Send Candidate Word to Client"
-msgstr ""
-
-#: data/table.desc:43
-msgid "Auto Send Candidate Word if no match in Code Table"
-msgstr ""
-
-#: data/table.desc:48
-msgid "End Key"
-msgstr ""
-
-#: data/table.desc:53
-msgid "Use Matching Key"
-msgstr ""
-
-#: data/table.desc:58
-msgid "Matching Key"
-msgstr ""
-
-#: data/table.desc:63
-msgid "Exact Match"
-msgstr ""
-
-#: data/table.desc:67
-msgid "Auto Phrase"
-msgstr ""
-
-#: data/table.desc:72
-msgid "Auto Phrase Length"
-msgstr ""
-
-#: data/table.desc:77
-msgid "Auto Phrase Phrase"
-msgstr ""
-
-#: data/table.desc:82
-msgid "Save Auto Phrase"
-msgstr ""
-
-#: data/table.desc:87
-msgid "Prompt Table Code"
-msgstr ""
-
-#: data/table.desc:91 data/table.desc:90
-msgid "Symbol"
-msgstr ""
-
-#: data/table.desc:96
-msgid "Symbol File"
-msgstr ""
-
-#: data/table.desc:101 data/table.desc:100
-msgid "Choose"
-msgstr ""
-
-#: data/table.desc:106
-msgid "Enable This Table or Not"
+#: data/table/wbx.conf:2
+msgid "Wubi"
 msgstr ""
 
 #: data/table/db.conf:2
@@ -625,28 +649,12 @@ msgstr ""
 msgid "Cangjie"
 msgstr ""
 
-#: data/table/qxm.conf:2
-msgid "Bingchan"
-msgstr ""
-
-#: data/table/wbx.conf:2
-msgid "Wubi"
-msgstr ""
-
-#: data/table/zrm.conf:2
-msgid "Ziranma"
-msgstr ""
-
-#: data/table/wanfeng.conf:2
-msgid "Wanfeng"
-msgstr ""
-
 #: data/table/wbpy.conf:2
 msgid "WubiPinyin"
 msgstr ""
 
-#: data/table/erbi.conf:2
-msgid "Erbi"
+#: data/table/qxm.conf:2
+msgid "Bingchan"
 msgstr ""
 
 #: data/addon.desc:1 data/skin.desc:1 data/table.desc:1
@@ -669,284 +677,280 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: data/config.desc:1
-msgid "FontEn"
-msgstr ""
-
-#: data/config.desc:5
-msgid "FontZh"
-msgstr ""
-
-#: data/config.desc:9
+#: data/config.desc:6
 msgid "FontLocale"
 msgstr ""
 
-#: data/config.desc:14
+#: data/config.desc:11
 msgid "RecordFile"
 msgstr ""
 
-#: data/config.desc:19
+#: data/config.desc:16
 msgid "UseTray"
 msgstr ""
 
-#: data/config.desc:24
+#: data/config.desc:21
 msgid "UseDBus"
 msgstr ""
 
-#: data/config.desc:29
+#: data/config.desc:26
 msgid "EnableAddons"
 msgstr ""
 
-#: data/config.desc:34
+#: data/config.desc:31
 msgid "DelayStart"
 msgstr ""
 
-#: data/config.desc:39
+#: data/config.desc:36
 msgid "HalfPuncAfterNumber"
 msgstr ""
 
-#: data/config.desc:44
+#: data/config.desc:41
 msgid "EnterAction"
 msgstr ""
 
-#: data/config.desc:53
+#: data/config.desc:50
 msgid "SemiColonAction"
 msgstr ""
 
-#: data/config.desc:62
+#: data/config.desc:59
 msgid "InputEngByCapitalChar"
 msgstr ""
 
-#: data/config.desc:67
+#: data/config.desc:64
 msgid "ConvertPunc"
 msgstr ""
 
-#: data/config.desc:72
+#: data/config.desc:69
 msgid "LegendModeDisablePaging"
 msgstr ""
 
-#: data/config.desc:77
+#: data/config.desc:74
 msgid "SendTextWhenSwitchEng"
 msgstr ""
 
-#: data/config.desc:82
+#: data/config.desc:79
 msgid "CandidateWordNumber"
 msgstr ""
 
-#: data/config.desc:87
+#: data/config.desc:84
 msgid "MainWindowHideMode"
 msgstr ""
 
-#: data/config.desc:96
+#: data/config.desc:93
 msgid "CenterInputWindow"
 msgstr ""
 
-#: data/config.desc:101
+#: data/config.desc:98
 msgid "ShowInputWindowAfterTriggering"
 msgstr ""
 
-#: data/config.desc:106
+#: data/config.desc:103
 msgid "ShowPointAfterIndex"
 msgstr ""
 
-#: data/config.desc:111
+#: data/config.desc:108
 msgid "ShowInputSpeed"
 msgstr ""
 
-#: data/config.desc:116
+#: data/config.desc:113
 msgid "ShowVersion"
 msgstr ""
 
-#: data/config.desc:121
+#: data/config.desc:118
 msgid "ShowHintWindow"
 msgstr ""
 
-#: data/config.desc:126
+#: data/config.desc:123
 msgid "SkinType"
 msgstr ""
 
-#: data/config.desc:131
+#: data/config.desc:128
 msgid "TriggerKey"
 msgstr ""
 
-#: data/config.desc:136
+#: data/config.desc:133
 msgid "ChnEngSwitchKey"
 msgstr ""
 
-#: data/config.desc:148
+#: data/config.desc:145
 msgid "DoubleSwitchKey"
 msgstr ""
 
-#: data/config.desc:153
+#: data/config.desc:150
 msgid "TimeInterval"
 msgstr ""
 
-#: data/config.desc:158
+#: data/config.desc:155
 msgid "FollowCursorKey"
 msgstr ""
 
-#: data/config.desc:163
+#: data/config.desc:160
 msgid "HideMainWindowKey"
 msgstr ""
 
-#: data/config.desc:168
+#: data/config.desc:165
 msgid "VKSwitchKey"
 msgstr ""
 
-#: data/config.desc:173
+#: data/config.desc:170
 msgid "TraditionalChnSwitchKey"
 msgstr ""
 
-#: data/config.desc:178
+#: data/config.desc:175
 msgid "LegendSwitchKey"
 msgstr ""
 
-#: data/config.desc:183
+#: data/config.desc:180
 msgid "LookupPinyinKey"
 msgstr ""
 
-#: data/config.desc:188
+#: data/config.desc:185
 msgid "FullWidthSwitchKey"
 msgstr ""
 
-#: data/config.desc:193
+#: data/config.desc:190
 msgid "ChnPuncSwitchKey"
 msgstr ""
 
-#: data/config.desc:198
+#: data/config.desc:195
 msgid "PrevPageKey"
 msgstr ""
 
-#: data/config.desc:203
+#: data/config.desc:200
 msgid "NextPageKey"
 msgstr ""
 
-#: data/config.desc:208
+#: data/config.desc:205
 msgid "SecondThirdCandWordKey"
 msgstr ""
 
-#: data/config.desc:213
+#: data/config.desc:210
 msgid "SaveAllKey"
 msgstr ""
 
-#: data/config.desc:218
+#: data/config.desc:215
 msgid "SetRecordingKey"
 msgstr ""
 
-#: data/config.desc:223
+#: data/config.desc:220
 msgid "ResetRecordingKey"
 msgstr ""
 
-#: data/config.desc:228
+#: data/config.desc:225
 msgid "PinyinOrder"
 msgstr ""
 
-#: data/config.desc:233
+#: data/config.desc:230
 msgid "ShuangpinOrder"
 msgstr ""
 
-#: data/config.desc:238
+#: data/config.desc:235
 msgid "DefaultShuangpinSchema"
 msgstr ""
 
-#: data/config.desc:243
+#: data/config.desc:240
 msgid "QuweiOrder"
 msgstr ""
 
-#: data/config.desc:248
+#: data/config.desc:245
 msgid "TableOrder"
 msgstr ""
 
-#: data/config.desc:253
+#: data/config.desc:250
 msgid "PhraseTips"
 msgstr ""
 
-#: data/config.desc:258
+#: data/config.desc:255
 msgid "ExtraIM"
 msgstr ""
 
-#: data/config.desc:262
+#: data/config.desc:259
 msgid "UseCompletePinyin"
 msgstr ""
 
-#: data/config.desc:267
+#: data/config.desc:264
 msgid "AutoCreatePhrase"
 msgstr ""
 
-#: data/config.desc:272 data/table.desc:81
+#: data/config.desc:269 data/table.desc:81
 msgid "SaveAutoPhrase"
 msgstr ""
 
-#: data/config.desc:277
+#: data/config.desc:274
 msgid "AddFreqWordKey"
 msgstr ""
 
-#: data/config.desc:282
+#: data/config.desc:279
 msgid "DeleteFreqWordKey"
 msgstr ""
 
-#: data/config.desc:287
+#: data/config.desc:284
 msgid "DeleteUserPhraseKey"
 msgstr ""
 
-#: data/config.desc:292
+#: data/config.desc:289
 msgid "InputWordFromPhraseKey"
 msgstr ""
 
-#: data/config.desc:297
+#: data/config.desc:294
 msgid "BaseOrder"
 msgstr ""
 
-#: data/config.desc:306
+#: data/config.desc:303
 msgid "PhraseOrder"
 msgstr ""
 
-#: data/config.desc:315
+#: data/config.desc:312
 msgid "FreqOrder"
 msgstr ""
 
-#: data/config.desc:324
+#: data/config.desc:321
 msgid "FuzzyAnAng"
 msgstr ""
 
-#: data/config.desc:329
+#: data/config.desc:326
 msgid "FuzzyEnEng"
 msgstr ""
 
-#: data/config.desc:334
+#: data/config.desc:331
 msgid "FuzzyIanIang"
 msgstr ""
 
-#: data/config.desc:339
+#: data/config.desc:336
 msgid "FuzzyInIng"
 msgstr ""
 
-#: data/config.desc:344
+#: data/config.desc:341
 msgid "FuzzyOuU"
 msgstr ""
 
-#: data/config.desc:349
+#: data/config.desc:346
 msgid "FuzzyUanUang"
 msgstr ""
 
-#: data/config.desc:354
+#: data/config.desc:351
 msgid "FuzzyCCh"
 msgstr ""
 
-#: data/config.desc:359
+#: data/config.desc:356
 msgid "FuzzyFH"
 msgstr ""
 
-#: data/config.desc:364
+#: data/config.desc:361
 msgid "FuzzyLN"
 msgstr ""
 
-#: data/config.desc:369
+#: data/config.desc:366
 msgid "FuzzySSH"
 msgstr ""
 
-#: data/config.desc:374
+#: data/config.desc:371
 msgid "FuzzyZZH"
+msgstr ""
+
+#: data/config.desc:376
+msgid "Misstype"
 msgstr ""
 
 #: data/profile.desc:1
@@ -1395,7 +1399,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: ../src/interface/ImeRemote.c:165
+#: ../src/interface/ImeRemote.c:164
 #, c-format
 msgid "Can't open socket %s: %s"
 msgstr ""
@@ -1522,7 +1526,7 @@ msgstr ""
 msgid "updateMesssages Up:%s"
 msgstr ""
 
-#: ../src/ui/tray.c:163
+#: ../src/ui/tray.c:169
 #, c-format
 msgid "X error %i on opcode send"
 msgstr ""
@@ -1535,39 +1539,39 @@ msgstr ""
 msgid "XEvent--Expose"
 msgstr ""
 
-#: ../src/ui/ui.c:311 ../src/ui/ui.c:318
+#: ../src/ui/ui.c:328 ../src/ui/ui.c:335
 msgid "Unable to create process"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:389
+#: ../src/ui/MenuWindow.c:387
 msgid "About Fcitx"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:391
+#: ../src/ui/MenuWindow.c:389
 msgid "Switch Skin"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:392
+#: ../src/ui/MenuWindow.c:390
 msgid "Switch IM"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:393
+#: ../src/ui/MenuWindow.c:391
 msgid "Switch VK"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:395
+#: ../src/ui/MenuWindow.c:393
 msgid "Fcitx Config ..."
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:396
+#: ../src/ui/MenuWindow.c:394
 msgid "Exit Fcitx"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:161
+#: ../src/ui/InputWindow.c:167
 msgid "DISPLAY InputWindow"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:186
+#: ../src/ui/InputWindow.c:192
 msgid "CAL InputWindow"
 msgstr ""
 
@@ -1579,25 +1583,25 @@ msgstr ""
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: ../src/ui/skin.c:164
+#: ../src/ui/skin.c:167
 msgid "Can not load default skin, is installion correct?"
 msgstr ""
 
-#: ../src/ui/skin.c:169
+#: ../src/ui/skin.c:172
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr ""
 
-#: ../src/ui/font.c:36
+#: ../src/ui/font.c:38
 msgid "Error: Load fontconfig failed"
 msgstr ""
 
-#: ../src/ui/font.c:88
+#: ../src/ui/font.c:90
 #, c-format
 msgid "your current font is: %s"
 msgstr ""
 
-#: ../src/ui/font.c:105
+#: ../src/ui/font.c:107
 msgid "no valid font."
 msgstr ""
 
@@ -1652,7 +1656,7 @@ msgstr ""
 msgid "Option %s is Invalid."
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:867
+#: ../src/fcitx-config/fcitx-config.c:871
 #, c-format
 msgid "no default option for %s/%s"
 msgstr ""
@@ -1724,16 +1728,12 @@ msgstr ""
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: ../src/im/table/table.c:602
+#: ../src/im/table/table.c:583
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr ""
 
-#: ../src/im/table/table.c:609
-msgid "Saving TABLE Dict."
-msgstr ""
-
-#: ../src/im/table/table.c:691
+#: ../src/im/table/table.c:642
 msgid "Rename OK"
 msgstr ""
 
@@ -1750,7 +1750,7 @@ msgstr ""
 msgid "ExtraIM: bad im"
 msgstr ""
 
-#: ../src/tools/configfile.c:274
+#: ../src/tools/configfile.c:264
 #, c-format
 msgid "Load Config File %s"
 msgstr ""
@@ -1769,50 +1769,50 @@ msgstr ""
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: ../src/core/xim.c:462
+#: ../src/core/xim.c:445
 msgid "Recording file must be an absolute path."
 msgstr ""
 
-#: ../src/core/xim.c:495
+#: ../src/core/xim.c:478
 #, c-format
 msgid "Sending %s  icid=%d connectid=%d\n"
 msgstr ""
 
-#: ../src/core/xim.c:556
+#: ../src/core/xim.c:539
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: ../src/core/xim.c:566
+#: ../src/core/xim.c:549
 msgid "XMODIFIERS Error."
 msgstr ""
 
-#: ../src/core/xim.c:570
+#: ../src/core/xim.c:553
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: ../src/core/xim.c:582
+#: ../src/core/xim.c:565
 msgid "Please check your environment varibles."
 msgstr ""
 
-#: ../src/core/xim.c:583
+#: ../src/core/xim.c:566
 msgid ""
 "You need to set environment varibles below to make fcitx work correctly."
 msgstr ""
 
-#: ../src/core/xim.c:587
+#: ../src/core/xim.c:570
 msgid "You can set those variables in ~/.bashrc ."
 msgstr ""
 
-#: ../src/core/xim.c:588
+#: ../src/core/xim.c:571
 msgid "Setting Hint"
 msgstr ""
 
-#: ../src/core/xim.c:637
+#: ../src/core/xim.c:620
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr ""
 
-#: ../src/core/MyErrorsHandlers.c:87
+#: ../src/core/MyErrorsHandlers.c:73
 #, c-format
 msgid "FCITX -- Get Signal No.: %d"
 msgstr ""
