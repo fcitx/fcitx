@@ -63,6 +63,16 @@ else
     :
 fi
 
+PKG_CHECK_MODULES(PANGOCAIRO, pangocairo, have_pangocairo=true, :)
+if test "x$have_pangocairo" = "xtrue"; then
+    AC_SUBST(PANGOCAIRO_LIBS)
+    AC_SUBST(PANGOCAIRO_CFLAGS)
+    :
+else
+    AC_MSG_ERROR([No pangocairo found!])
+    :
+fi
+
 PKG_CHECK_MODULES(FONTCONFIG, fontconfig, have_fontconfig=true, :)
 if test "x$have_fontconfig" = "xtrue"; then
     AC_SUBST(FONTCONFIG_LIBS)

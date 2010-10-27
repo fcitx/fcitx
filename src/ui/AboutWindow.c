@@ -103,11 +103,11 @@ void DrawAboutWindow (void)
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_paint(c);
 
-    OutputString (c, strTitle, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, gs.fontZh, aboutWindow.fontSize)) / 2, aboutWindow.fontSize + 6 + 30, &aboutWindow.fontColor);
+    OutputString (c, strTitle, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 30, &aboutWindow.fontColor);
 
-    OutputString (c, AboutEmail, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, gs.fontZh, aboutWindow.fontSize)) / 2, aboutWindow.fontSize + 6 + 60, &aboutWindow.fontColor);
+    OutputString (c, AboutEmail, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 60, &aboutWindow.fontColor);
 
-    OutputString (c, AboutCopyRight, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, gs.fontZh, aboutWindow.fontSize)) / 2,aboutWindow.fontSize + 6 + 80, &aboutWindow.fontColor);
+    OutputString (c, AboutCopyRight, gs.fontZh, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, gs.fontZh, aboutWindow.fontSize)) / 2, 6 + 80, &aboutWindow.fontColor);
 
     cairo_destroy(c);
 }

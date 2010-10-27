@@ -37,7 +37,6 @@
 #include "tools/tools.h"
 #include "ui/ui.h"
 #include "ui/skin.h"
-#include "ui/font.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/configfile.h"
 #include "fcitx-config/profile.h"
@@ -437,8 +436,6 @@ void LoadInputMessage()
     {
         inputWindow.c_font[i] = cairo_create(inputWindow.cs_input_bar);
         fcitx_cairo_set_color(inputWindow.c_font[i], &sc.skinFont.fontColor[i]);
-        cairo_select_font_face(inputWindow.c_font[i], gs.fontZh,CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-        cairo_set_font_size(inputWindow.c_font[i], fontSize);
     }
     inputWindow.c_font[7] = inputWindow.c_font[0];
 
@@ -504,6 +501,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
     resizePos=sc.skinInputBar.resizePos;
     resizeWidth=(sc.skinInputBar.resizeWidth==0)?20:sc.skinInputBar.resizeWidth;
     flag=sc.skinInputBar.resize;
+    PangoFontDescription *fontDesc = GetPangoFontDescription(gs.fontZh, sc.skinFont.fontSize);
 
     up_len = 0;
     for (i = 0; i < msgup->msgCount ; i++)
@@ -513,7 +511,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
         else
             strUp[i] = msgup->msg[i].strMsg;
         posUp[i] = sc.skinInputBar.layoutLeft + up_len;
-        up_len += StringWidthWithContext(inputWindow.c_font[msgup->msg[i].type] ,strUp[i]);
+        up_len += StringWidthWithContext(inputWindow.c_font[msgup->msg[i].type], fontDesc ,strUp[i]);
         if (inputWindow.bShowCursor)
         {
             int length = strlen(msgup->msg[i].strMsg);
@@ -530,7 +528,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
                     else
                         strGBKT = strTemp;
                     cursor_pos= posUp[i]
-                                + StringWidthWithContext(inputWindow.c_font[msgup->msg[i].type], strGBKT) + 2;
+                                + StringWidthWithContext(inputWindow.c_font[msgup->msg[i].type], fontDesc, strGBKT) + 2;
                     if (bUseGBKT)
                         free(strGBKT);
                 }
@@ -551,7 +549,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
         else
             strDown[i] = msgdown->msg[i].strMsg;
         posDown[i] = sc.skinInputBar.layoutLeft + down_len;
-        down_len += StringWidthWithContext(inputWindow.c_font[msgdown->msg[i].type] ,strDown[i]);
+        down_len += StringWidthWithContext(inputWindow.c_font[msgdown->msg[i].type], fontDesc ,strDown[i]);
     }
 
     input_bar_len=(up_len<down_len)?down_len:up_len;
@@ -679,18 +677,20 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
         else
             cairo_paint_with_alpha(inputWindow.c_back,0.5);
     }
-
+    
     for (i = 0; i < msgup->msgCount ; i++)
     {
-        OutputStringWithContext(inputWindow.c_font[msgup->msg[i].type], strUp[i], posUp[i], sc.skinInputBar.inputPos );
+        OutputStringWithContext(inputWindow.c_font[msgup->msg[i].type], fontDesc, strUp[i], posUp[i], sc.skinInputBar.inputPos - sc.skinFont.fontSize);
         if (bUseGBKT) free(strUp[i]);
     }
 
     for (i = 0; i < msgdown->msgCount ; i++)
     {
-        OutputStringWithContext(inputWindow.c_font[msgdown->msg[i].type], strDown[i], posDown[i], sc.skinInputBar.outputPos );
+        OutputStringWithContext(inputWindow.c_font[msgdown->msg[i].type], fontDesc, strDown[i], posDown[i], sc.skinInputBar.outputPos - sc.skinFont.fontSize);
         if (bUseGBKT) free(strDown[i]);
     }
+
+    pango_font_description_free(fontDesc);
 
     //画光标
     if (inputWindow.bShowCursor )
@@ -740,7 +740,6 @@ void DisplaySkin(char * skinname)
     DestroyMenuWindow();
 
     LoadSkinConfig();
-    CreateFont();
     CreateMainWindow ();
     CreateInputWindow ();
 

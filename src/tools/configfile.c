@@ -25,7 +25,6 @@
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "im/pinyin/PYFA.h"
-#include "ui/font.h"
 #include "core/ime.h"
 #include <errno.h>
 #include <ctype.h>
@@ -292,8 +291,6 @@ void LoadConfig()
     IsReloadConfig = True;
     
     fclose(fp);
-    
-    CreateFont();
 }
 
 ConfigFileDesc* GetConfigDesc()

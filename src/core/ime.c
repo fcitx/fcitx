@@ -39,7 +39,6 @@
 #include "ui/InputWindow.h"
 #include "ui/MainWindow.h"
 #include "ui/TrayWindow.h"
-#include "ui/font.h"
 #include "ui/skin.h"
 #include "ui/ui.h"
 #include "im/special/punc.h"
@@ -1366,7 +1365,6 @@ void ReloadConfig()
 
     SetIM();
     if (!fc.bUseDBus) {
-        CreateFont();
         CalculateInputWindowHeight();
     }
 

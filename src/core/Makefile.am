@@ -3,6 +3,7 @@ INCLUDES = \
 		   -I$(top_srcdir)/src \
 		   @CAIRO_XLIB_CFLAGS@ \
 		   @DBUS_CFLAGS@ \
+		   @PANGOCAIRO_CFLAGS@ \
 		   $(NULL)
 DEFS = -DPKGDATADIR=\"$(pkgdatadir)\" -DDATADIR=\"$(datadir)\" -DLOCALEDIR=\"$(localedir)\"
 
@@ -40,7 +41,8 @@ fcitx_LDADD=../../lib/libXimd.a \
 			@DBUS_LIBS@ \
 			@FONTCONFIG_LIBS@ \
 			@XRENDER_LIBS@ \
-                        @INTLLIBS@ \
+			@INTLLIBS@ \
+			@PANGOCAIRO_LIBS@ \
 			$(NULL)
 
 fcitx_LDFLAGS = \

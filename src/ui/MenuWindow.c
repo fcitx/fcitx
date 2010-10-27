@@ -144,7 +144,7 @@ void GetMenuHeight(Display * dpy,XlibMenu * menu)
     int fontheight=0;
 
     winheight = sc.skinMenu.marginTop + sc.skinMenu.marginBottom;//菜单头和尾都空8个pixel
-    fontheight=FontHeight(menu->font);
+    fontheight= sc.skinFont.fontSize;
     for (i=0;i<utarray_len(&menu->shell);i++)
     {
         if ( GetMenuShell(menu, i)->type == MENUSHELL)
@@ -163,7 +163,7 @@ void DrawXlibMenu(Display * dpy,XlibMenu * menu)
     int fontheight;
     int iPosY = 0;
 
-    fontheight=FontHeight(menu->font);
+    fontheight= sc.skinFont.fontSize;
 
     GetMenuHeight(dpy,menu);
 
@@ -248,13 +248,12 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
     int marginRight = sc.skinMenu.marginRight;
     cairo_t *  cr;
     cr=cairo_create(menu->menu_cs);
+    PangoFontDescription* fontDesc = GetPangoFontDescription(menu->font, menu->font_size);
     if (GetMenuShell(menu, shellindex)->isselect ==0)
     {
         fcitx_cairo_set_color(cr, &sc.skinFont.menuFontColor[MENU_INACTIVE]);
-        cairo_select_font_face(cr, menu->font,CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-        cairo_set_font_size(cr, menu->font_size);
 
-        OutputStringWithContext(cr, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y+menu->font_size);
+        OutputStringWithContext(cr, fontDesc, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
 
         if (GetMenuShell(menu, shellindex)->next == 1)
         {
@@ -272,12 +271,8 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
         cairo_rectangle (cr, marginLeft ,line_y, menu->width - marginRight - marginLeft,menu->font_size+4);
         cairo_fill (cr);
 
-
         fcitx_cairo_set_color(cr, &sc.skinFont.menuFontColor[MENU_ACTIVE]);
-        cairo_select_font_face(cr, menu->font,CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
-        cairo_set_font_size(cr, menu->font_size);
-
-        OutputStringWithContext(cr, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y+menu->font_size);
+        OutputStringWithContext(cr, fontDesc, GetMenuShell(menu, shellindex)->tipstr , 15 + marginLeft ,line_y);
 
         if (GetMenuShell(menu, shellindex)->next == 1)
         {
@@ -288,6 +283,7 @@ void DisplayText(Display * dpy,XlibMenu * menu,int shellindex,int line_y)
             cairo_fill (cr);
         }
     }
+    pango_font_description_free (fontDesc);
     cairo_destroy(cr);
 }
 
@@ -304,7 +300,7 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
     if (x < marginLeft)
         return -1;
 
-    fontheight=FontHeight(menu->font);
+    fontheight= sc.skinFont.fontSize;
     for (i=0;i<utarray_len(&menu->shell);i++)
     {
         if (GetMenuShell(menu, i)->type == MENUSHELL)

@@ -22,22 +22,24 @@
 
 #include <X11/Xlib.h>
 #include <cairo.h>
+#include <pango/pangocairo.h>
 #include "fcitx-config/fcitx-config.h"
 
 Bool InitX (void);
 void MyXEventHandler (XEvent * event);
 
 void OutputString (cairo_t* c, const char *str, const char *font, int fontSize, int x, int y, ConfigColor* color);
-void OutputStringWithContext (cairo_t *c, const char *str, int x, int y);
+void OutputStringWithContext(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
 int StringWidth (const char *str, const char *font, int fontSize);
-int StringWidthWithContext (cairo_t *c, const char *str);
+int StringWidthWithContext(cairo_t * c, PangoFontDescription* fontDesc, const char *str);
 int FontHeight (const char *font);
-int FontHeightWithContext (cairo_t *c);
+int FontHeightWithContext(cairo_t* c, PangoFontDescription* fontDesc);
 
 Bool MouseClick (int *x, int *y, Window window);
 Bool IsWindowVisible(Window window);
 void InitWindowAttribute(Visual** vs, Colormap *cmap, XSetWindowAttributes *attrib, unsigned long *attribmask, int* depth);
 void ActiveWindow(Display *dpy, Window window);
+PangoFontDescription* GetPangoFontDescription(const char* font, int size);
 
 Bool IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
 Bool IsInRspArea(int x0, int y0, FcitxImage img);

@@ -3,6 +3,7 @@ INCLUDES = \
 		   -I$(top_srcdir)/src \
 		   @CAIRO_XLIB_CFLAGS@ \
 		   @DBUS_CFLAGS@ \
+		   @PANGOCAIRO_CFLAGS@ \
 		   $(NULL)
 DEFS = -DPKGDATADIR=\"$(pkgdatadir)\"
 
