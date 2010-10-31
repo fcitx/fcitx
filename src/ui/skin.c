@@ -284,80 +284,265 @@ void LoadMainBarImage()
 
 void DrawMenuBackground(XlibMenu * menu)
 {
-    int png_height=sc.skinMenu.backImg.height;
-    int resizeHeight = png_height - sc.skinMenu.marginTop - sc.skinMenu.marginBottom;
+    int resizeHeight = sc.skinMenu.backImg.height - sc.skinMenu.marginTop - sc.skinMenu.marginBottom;
+    int resizeWidth = sc.skinMenu.backImg.width - sc.skinMenu.marginLeft - sc.skinMenu.marginRight;
     int marginTop = sc.skinMenu.marginTop;
     int marginBottom = sc.skinMenu.marginBottom;
+    int marginLeft = sc.skinMenu.marginLeft;
+    int marginRight = sc.skinMenu.marginRight;
 
     if (resizeHeight <= 0)
         resizeHeight = 1;
+    
+    if (resizeWidth <= 0) 
+        resizeWidth = 1;
 
     cairo_t *c = cairo_create(menu->menu_cs);
+    
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_surface(c, menuBack, 0, 0);
-    cairo_save(c);
+    
+    
+    /* 九宫格 
+     * 7 8 9 
+     * 4 5 6
+     * 1 2 3
+     */
 
-    /* 第一部分 */
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_rectangle (c, 0, 0, menu->width, marginTop);
-    cairo_clip(c);
-    cairo_paint(c);
-
-    /* 第三部分 */
-    cairo_restore(c);
+    /* part 1 */
     cairo_save(c);
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_translate(c, 0, menu->height - marginBottom);
     cairo_set_source_surface(c, menuBack, 0, -marginTop -resizeHeight);
-    cairo_rectangle (c, 0, 0, menu->width, marginBottom);
+    cairo_rectangle (c, 0, 0, marginLeft, marginBottom);
     cairo_clip(c);
     cairo_paint(c);
+    cairo_restore(c);
+    
+    /* part 3 */
+    cairo_save(c);
+    cairo_translate(c, menu->width - marginRight, menu->height - marginBottom);
+    cairo_set_source_surface(c, menuBack, -marginLeft -resizeWidth, -marginTop -resizeHeight);
+    cairo_rectangle (c, 0, 0, marginRight, marginBottom);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_restore(c);
 
-    //重绘的次数
-    int repaint_times=(menu->height - marginTop - marginBottom)/resizeHeight;
-    //不够汇一次的剩余的长度
-    int remain_height=(menu->height - marginTop - marginBottom)% resizeHeight;
-
-    if ( sc.skinMenu.resize == R_COPY)
+    
+    /* part 7 */
+    cairo_save(c);
+    cairo_rectangle (c, 0, 0, marginLeft, marginTop);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_restore(c);
+    
+    /* part 9 */
+    cairo_save(c);
+    cairo_translate(c, menu->width - marginRight, 0);
+    cairo_set_source_surface(c, menuBack, -marginLeft -resizeWidth, 0);
+    cairo_rectangle (c, 0, 0, marginRight, marginTop);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_restore(c);
+        
+    /* part 2 & 8 */
     {
-        int i=0;
-
-        //先把整段的都绘上去
-        for (i=0;i<repaint_times;i++)
+ 
+        if ( sc.skinMenu.resizeH == R_COPY)
         {
-            cairo_restore(c);
+            int repaint_times=(menu->width - marginLeft - marginRight)/resizeWidth;
+            int remain_width=(menu->width - marginLeft - marginRight)% resizeWidth;
+            int i=0;
+
+            for (i=0;i<repaint_times;i++)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, marginLeft + i*resizeWidth, 0);
+                cairo_set_source_surface(c, menuBack, -marginLeft, 0);
+                cairo_rectangle (c,0,0,resizeWidth, marginTop);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  marginLeft + i*resizeWidth, menu->height - marginBottom);
+                cairo_set_source_surface(c, menuBack,  -marginLeft, -marginTop -resizeHeight);
+                cairo_rectangle (c,0,0,resizeWidth,marginBottom);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+
+            if (remain_width != 0)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, marginLeft + repaint_times*resizeWidth, 0);
+                cairo_set_source_surface(c, menuBack, -marginLeft, 0);
+                cairo_rectangle (c,0,0,remain_width, marginTop);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  marginLeft + repaint_times*resizeWidth, menu->height - marginBottom);
+                cairo_set_source_surface(c, menuBack,  -marginLeft, -marginTop -resizeHeight);
+                cairo_rectangle (c,0,0,remain_width,marginBottom);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+        }
+        else if ( sc.skinMenu.resizeH == R_RESIZE)
+        {
             cairo_save(c);
-            cairo_translate(c, 0, marginTop + i*resizeHeight);
-            cairo_set_source_surface(c, menuBack, 0, -marginTop);
-            cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-            cairo_rectangle (c,0,0,menu->width,resizeHeight);
+            cairo_translate(c, marginLeft, 0);
+            cairo_scale(c, (double)(menu->width - marginLeft - marginRight)/(double)resizeWidth, 1);
+            cairo_set_source_surface(c, menuBack, -marginLeft, 0);
+            cairo_rectangle (c,0,0, resizeWidth, marginTop);
             cairo_clip(c);
             cairo_paint(c);
-        }
-
-        //绘制剩余段
-        if (remain_height != 0)
-        {
             cairo_restore(c);
-            cairo_translate(c, 0, marginTop + resizeHeight * repaint_times);
-            cairo_set_source_surface(c, menuBack, 0, -marginTop);
-            cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-            cairo_rectangle (c,0,0,menu->width,remain_height);
+                        
+            cairo_save(c);
+            cairo_translate(c, marginLeft, menu->height - marginBottom);
+            cairo_scale(c, (double)(menu->width - marginLeft - marginRight)/(double)resizeWidth, 1);
+            cairo_set_source_surface(c, menuBack, -marginLeft, -marginTop -resizeHeight);
+            cairo_rectangle (c,0,0, resizeWidth, marginBottom);
             cairo_clip(c);
             cairo_paint(c);
+            cairo_restore(c);
         }
     }
-    else if ( sc.skinMenu.resize == R_RESIZE)
+    
+    /* part 4 & 6 */
     {
-        cairo_restore(c);
-        cairo_translate(c, 0 , marginTop);
-        cairo_scale(c, 1, (double)(menu->height - marginTop - marginBottom)/(double)resizeHeight);
-        cairo_set_source_surface(c, menuBack, 0, -marginTop);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_rectangle (c,0,0, menu->width, resizeHeight);
-        cairo_clip(c);
-        cairo_paint(c);
-    }
+ 
+        if ( sc.skinMenu.resizeV == R_COPY)
+        {
+            int repaint_times=(menu->height - marginTop - marginBottom)/resizeHeight;
+            int remain_height=(menu->height - marginTop - marginBottom)% resizeHeight;
+            int i=0;
 
+            for (i=0;i<repaint_times;i++)
+            {
+                /* part 4 */
+                cairo_save(c);
+                cairo_translate(c, 0, marginTop + i*resizeHeight);
+                cairo_set_source_surface(c, menuBack, 0, -marginTop);
+                cairo_rectangle (c,0,0, marginLeft, resizeHeight);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 6 */
+                cairo_save(c);
+                cairo_translate(c, menu->width - marginRight,  marginTop + i*resizeHeight);
+                cairo_set_source_surface(c, menuBack, -marginLeft -resizeWidth,  -marginTop);
+                cairo_rectangle (c,0,0,marginRight,resizeHeight);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+
+            if (remain_height != 0)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, 0, marginTop + repaint_times*resizeHeight);
+                cairo_set_source_surface(c, menuBack, 0, -marginTop);
+                cairo_rectangle (c,0,0, marginLeft, remain_height);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  menu->width - marginRight,  marginTop + repaint_times*resizeHeight);
+                cairo_set_source_surface(c, menuBack, -marginLeft -resizeWidth,  -marginTop);
+                cairo_rectangle (c,0,0,marginRight, remain_height);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+        }
+        else if ( sc.skinMenu.resizeV == R_RESIZE)
+        {
+            cairo_save(c);
+            cairo_translate(c, 0, marginTop);
+            cairo_scale(c, 1, (double)(menu->height - marginTop - marginBottom)/(double)resizeHeight);
+            cairo_set_source_surface(c, menuBack, 0, -marginTop);
+            cairo_rectangle (c,0,0, marginLeft, resizeHeight);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+                        
+            cairo_save(c);
+            cairo_translate(c, menu->width - marginRight, marginTop);
+            cairo_scale(c, 1, (double)(menu->height - marginTop - marginBottom)/(double)resizeHeight);
+            cairo_set_source_surface(c, menuBack, -marginLeft -resizeWidth, -marginTop);
+            cairo_rectangle (c,0,0, marginRight, resizeHeight);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+        }
+    }
+    
+    /* part 5 */
+    {
+        int repaintH = 0, repaintV = 0;
+        int remainW = 0, remainH = 0;
+        double scaleX = 1.0, scaleY = 1.0;
+        
+        if (sc.skinMenu.resizeH == R_COPY)
+        {
+            repaintH = (menu->width - marginLeft - marginRight)/resizeWidth + 1;
+            remainW = (menu->width - marginLeft - marginRight)% resizeWidth;
+        }
+        else if (sc.skinMenu.resizeH == R_RESIZE)
+        {
+            repaintH = 1;
+            scaleX = (double)(menu->width - marginLeft - marginRight)/(double)resizeWidth;
+        }
+        
+        if (sc.skinMenu.resizeV == R_COPY)
+        {            
+            repaintV = (menu->height - marginTop - marginBottom)/(double)resizeHeight + 1;
+            remainH = (menu->height - marginTop - marginBottom)%resizeHeight;
+        }
+        else if (sc.skinMenu.resizeV == R_RESIZE)
+        {
+            repaintV = 1;
+            scaleY = (double)(menu->height - marginTop - marginBottom)/(double)resizeHeight;
+        }
+        
+
+        int i, j;
+        for (i = 0; i < repaintH; i ++)
+        {
+            for (j = 0; j < repaintV; j ++)
+            {
+                cairo_save(c);
+                cairo_translate(c, marginLeft + i * resizeWidth , marginTop + j * resizeHeight);
+                cairo_scale(c, scaleX, scaleY);
+                cairo_set_source_surface(c, menuBack, -marginLeft, -marginTop);
+                int w = resizeWidth,h = resizeHeight;
+
+                if (sc.skinMenu.resizeV == R_COPY && j == repaintV - 1)
+                    h = remainH;
+                
+                if (sc.skinMenu.resizeH == R_COPY && i == repaintH -1 )
+                    w = remainW;
+                
+                cairo_rectangle (c,0,0, w, h);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+        }
+    }
     cairo_destroy(c);
 }
 

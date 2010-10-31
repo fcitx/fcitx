@@ -73,7 +73,8 @@ CONFIG_BINDING_REGISTER("SkinTrayIcon","Active",skinTrayIcon.active);
 CONFIG_BINDING_REGISTER("SkinTrayIcon","Inactive",skinTrayIcon.inactive);
 
 CONFIG_BINDING_REGISTER("SkinMenu", "BackImg", skinMenu.backImg);
-CONFIG_BINDING_REGISTER("SkinMenu", "Resize", skinMenu.resize);
+CONFIG_BINDING_REGISTER("SkinMenu", "ResizeVertical", skinMenu.resizeV);
+CONFIG_BINDING_REGISTER("SkinMenu", "ResizeHorizontal", skinMenu.resizeH);
 CONFIG_BINDING_REGISTER("SkinMenu", "MarginTop", skinMenu.marginTop);
 CONFIG_BINDING_REGISTER("SkinMenu", "MarginBottom", skinMenu.marginBottom);
 CONFIG_BINDING_REGISTER("SkinMenu", "MarginLeft", skinMenu.marginLeft);

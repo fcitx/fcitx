@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-27 18:21+0800\n"
+"POT-Creation-Date: 2010-10-31 23:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -553,7 +553,7 @@ msgstr ""
 msgid "Chinese Mode Icon"
 msgstr ""
 
-#: data/skin.desc:131 data/skin.desc:186
+#: data/skin.desc:131
 msgid "Background Resize Rule"
 msgstr ""
 
@@ -601,27 +601,35 @@ msgstr ""
 msgid "Inctive Tray Icon"
 msgstr ""
 
-#: data/skin.desc:190
-msgid "Margin to top"
+#: data/skin.desc:186
+msgid "Background Resize Rule on Horizontal Direction"
 msgstr ""
 
 #: data/skin.desc:194
+msgid "Background Resize Rule on Vertical Direction"
+msgstr ""
+
+#: data/skin.desc:199
+msgid "Margin to top"
+msgstr ""
+
+#: data/skin.desc:203
 msgid "Margin to bottom"
 msgstr ""
 
-#: data/skin.desc:198
+#: data/skin.desc:207
 msgid "Margin to left"
 msgstr ""
 
-#: data/skin.desc:202
+#: data/skin.desc:211
 msgid "Margin to right"
 msgstr ""
 
-#: data/skin.desc:206
+#: data/skin.desc:215
 msgid "Active Menu Color"
 msgstr ""
 
-#: data/skin.desc:210
+#: data/skin.desc:219
 msgid "Space Line Color"
 msgstr ""
 
@@ -1117,7 +1125,7 @@ msgstr ""
 msgid "Chn"
 msgstr ""
 
-#: data/skin.desc:125 data/skin.desc:181 unknown
+#: data/skin.desc:125 unknown
 msgid "Resize"
 msgstr ""
 
@@ -1165,27 +1173,35 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
-#: data/skin.desc:188
+#: data/skin.desc:181
+msgid "ResizeHorizontal"
+msgstr ""
+
+#: data/skin.desc:189
+msgid "ResizeVertical"
+msgstr ""
+
+#: data/skin.desc:197
 msgid "MarginTop"
 msgstr ""
 
-#: data/skin.desc:192
+#: data/skin.desc:201
 msgid "MarginBottom"
 msgstr ""
 
-#: data/skin.desc:196
+#: data/skin.desc:205
 msgid "MarginLeft"
 msgstr ""
 
-#: data/skin.desc:200
+#: data/skin.desc:209
 msgid "MarginRight"
 msgstr ""
 
-#: data/skin.desc:204
+#: data/skin.desc:213
 msgid "ActiveColor"
 msgstr ""
 
-#: data/skin.desc:208
+#: data/skin.desc:217
 msgid "LineColor"
 msgstr ""
 
@@ -1543,27 +1559,27 @@ msgstr ""
 msgid "Unable to create process"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:387
+#: ../src/ui/MenuWindow.c:393
 msgid "About Fcitx"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:389
+#: ../src/ui/MenuWindow.c:395
 msgid "Switch Skin"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:390
+#: ../src/ui/MenuWindow.c:396
 msgid "Switch IM"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:391
+#: ../src/ui/MenuWindow.c:397
 msgid "Switch VK"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:393
+#: ../src/ui/MenuWindow.c:399
 msgid "Fcitx Config ..."
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:394
+#: ../src/ui/MenuWindow.c:400
 msgid "Exit Fcitx"
 msgstr ""
 

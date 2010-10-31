@@ -137,11 +137,12 @@ int CreateXlibMenu(Display * dpy,XlibMenu * menu)
     return True;
 }
 
-void GetMenuHeight(Display * dpy,XlibMenu * menu)
+void GetMenuSize(Display * dpy,XlibMenu * menu)
 {
     int i=0;
     int winheight=0;
     int fontheight=0;
+    int menuwidth = 0;
 
     winheight = sc.skinMenu.marginTop + sc.skinMenu.marginBottom;//菜单头和尾都空8个pixel
     fontheight= sc.skinFont.fontSize;
@@ -151,8 +152,13 @@ void GetMenuHeight(Display * dpy,XlibMenu * menu)
             winheight += 6+fontheight;
         else if ( GetMenuShell(menu, i)->type == DIVLINE)
             winheight += 5;
+        
+        int width = StringWidth(GetMenuShell(menu, i)->tipstr, menu->font, menu->font_size);
+        if (width > menuwidth)
+            menuwidth = width;        
     }
-    menu->height=winheight;
+    menu->height = winheight;
+    menu->width = menuwidth + sc.skinMenu.marginLeft + sc.skinMenu.marginRight + 15 + 20;
 }
 
 //根据Menu内容来绘制菜单内容
@@ -165,7 +171,7 @@ void DrawXlibMenu(Display * dpy,XlibMenu * menu)
 
     fontheight= sc.skinFont.fontSize;
 
-    GetMenuHeight(dpy,menu);
+    GetMenuSize(dpy,menu);
 
     DrawMenuBackground(menu);
 
@@ -396,6 +402,7 @@ Bool CreateMainMenuWindow()
     GetMenuShell(&mainMenu, 3)->next=1;
     GetMenuShell(&mainMenu, 4)->next=1;
     CreateXlibMenu(dpy,&mainMenu);
+    GetMenuSize(dpy, &mainMenu);
     return 0;
 }
 

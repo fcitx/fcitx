@@ -399,8 +399,6 @@ MyXEventHandler(XEvent * event)
 
                 LoadSkinDirectory();
 
-                GetMenuHeight(dpy, &mainMenu);
-
                 if (event->xbutton.x_root - event->xbutton.x +
                     mainMenu.width >= DisplayWidth(dpy, iScreen))
                     mainMenu.iPosX =
@@ -432,8 +430,6 @@ MyXEventHandler(XEvent * event)
 #endif
             else if (event->xbutton.window == mainWindow.window) {
                 LoadSkinDirectory();
-
-                GetMenuHeight(dpy, &mainMenu);
 
                 mainMenu.iPosX = fcitxProfile.iMainWindowOffsetX;
                 mainMenu.iPosY =

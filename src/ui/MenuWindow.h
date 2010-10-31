@@ -89,7 +89,7 @@ Bool CreateMenuWindow (void);
 void InitMenuWindowColor (void);
 void DisplayMenuWindow (void);
 void DrawMenuWindow (void);
-void GetMenuHeight(Display * dpy,XlibMenu * Menu);
+void GetMenuSize(Display * dpy,XlibMenu * Menu);
 
 Bool CreateMenuWindow (void);
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-27 18:21+0800\n"
-"PO-Revision-Date: 2010-10-27 18:20+0800\n"
+"POT-Creation-Date: 2010-10-31 23:27+0800\n"
+"PO-Revision-Date: 2010-10-31 23:30+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -556,7 +556,7 @@ msgstr "英文模式图标"
 msgid "Chinese Mode Icon"
 msgstr "中文模式图标"
 
-#: data/skin.desc:131 data/skin.desc:186
+#: data/skin.desc:131
 msgid "Background Resize Rule"
 msgstr "变形规则"
 
@@ -606,27 +606,35 @@ msgstr "活动输入法图标"
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
 
-#: data/skin.desc:190
+#: data/skin.desc:186
+msgid "Background Resize Rule on Horizontal Direction"
+msgstr "横向变形规则"
+
+#: data/skin.desc:194
+msgid "Background Resize Rule on Vertical Direction"
+msgstr "纵向变形规则"
+
+#: data/skin.desc:199
 msgid "Margin to top"
 msgstr "上边距"
 
-#: data/skin.desc:194
+#: data/skin.desc:203
 msgid "Margin to bottom"
 msgstr "下边距"
 
-#: data/skin.desc:198
+#: data/skin.desc:207
 msgid "Margin to left"
 msgstr "左边距"
 
-#: data/skin.desc:202
+#: data/skin.desc:211
 msgid "Margin to right"
 msgstr "右边距"
 
-#: data/skin.desc:206
+#: data/skin.desc:215
 msgid "Active Menu Color"
 msgstr "活动菜单项颜色"
 
-#: data/skin.desc:210
+#: data/skin.desc:219
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
@@ -1123,7 +1131,7 @@ msgstr "英文"
 msgid "Chn"
 msgstr "中文"
 
-#: data/skin.desc:125 data/skin.desc:181 unknown
+#: data/skin.desc:125 unknown
 msgid "Resize"
 msgstr "变形规则"
 
@@ -1171,27 +1179,35 @@ msgstr "激活"
 msgid "Inactive"
 msgstr "未激活"
 
-#: data/skin.desc:188
+#: data/skin.desc:181
+msgid "ResizeHorizontal"
+msgstr "横向变形规则"
+
+#: data/skin.desc:189
+msgid "ResizeVertical"
+msgstr "纵向变形规则"
+
+#: data/skin.desc:197
 msgid "MarginTop"
 msgstr "上边距"
 
-#: data/skin.desc:192
+#: data/skin.desc:201
 msgid "MarginBottom"
 msgstr "下边距"
 
-#: data/skin.desc:196
+#: data/skin.desc:205
 msgid "MarginLeft"
 msgstr "左边距"
 
-#: data/skin.desc:200
+#: data/skin.desc:209
 msgid "MarginRight"
 msgstr "右边距"
 
-#: data/skin.desc:204
+#: data/skin.desc:213
 msgid "ActiveColor"
 msgstr "活动项背景颜色"
 
-#: data/skin.desc:208
+#: data/skin.desc:217
 msgid "LineColor"
 msgstr "分隔线颜色"
 
@@ -1562,27 +1578,27 @@ msgstr "XEvent--Expose"
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
-#: ../src/ui/MenuWindow.c:387
+#: ../src/ui/MenuWindow.c:393
 msgid "About Fcitx"
 msgstr "关于Fcitx"
 
-#: ../src/ui/MenuWindow.c:389
+#: ../src/ui/MenuWindow.c:395
 msgid "Switch Skin"
 msgstr "切换皮肤"
 
-#: ../src/ui/MenuWindow.c:390
+#: ../src/ui/MenuWindow.c:396
 msgid "Switch IM"
 msgstr "选择输入法"
 
-#: ../src/ui/MenuWindow.c:391
+#: ../src/ui/MenuWindow.c:397
 msgid "Switch VK"
 msgstr "选择软键盘"
 
-#: ../src/ui/MenuWindow.c:393
+#: ../src/ui/MenuWindow.c:399
 msgid "Fcitx Config ..."
 msgstr "配置Fcitx..."
 
-#: ../src/ui/MenuWindow.c:394
+#: ../src/ui/MenuWindow.c:400
 msgid "Exit Fcitx"
 msgstr "退出Fcitx"
 

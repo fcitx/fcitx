@@ -178,12 +178,21 @@ Description=Inctive Tray Icon
 Type=Image
 Description=Background Image
 
-[SkinMenu/Resize]
+[SkinMenu/ResizeHorizontal]
 Type=Enum
 EnumCount=2
 Enum0=Copy
 Enum1=Resize
-Description=Background Resize Rule
+Description=Background Resize Rule on Horizontal Direction
+DefaultValue=Resize
+
+[SkinMenu/ResizeVertical]
+Type=Enum
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+Description=Background Resize Rule on Vertical Direction
+DefaultValue=Resize
 
 [SkinMenu/MarginTop]
 Type=Integer

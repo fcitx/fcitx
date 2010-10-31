@@ -76,7 +76,8 @@ typedef struct
 typedef struct
 {
     FcitxImage backImg;
-    RESIZERULE resize;
+    RESIZERULE resizeV;
+    RESIZERULE resizeH;
 	int marginTop;
 	int marginBottom;
     int marginLeft;
