@@ -69,6 +69,7 @@ extern IM *im;
 extern Display *dpy;
 extern int iScreen;
 extern VKWindow vkWindow;
+extern IC *ic_list;
 
 extern uint iInputWindowHeight;
 extern uint iInputWindowWidth;
@@ -647,6 +648,24 @@ void SetIMState(Bool bState)
         }
         
     }
+}
+
+void CloseAllIM()
+{
+    IC             *rec;
+    IMChangeFocusStruct call_data;
+
+    for (rec = ic_list; rec != NULL; rec = rec->next)
+    {
+        call_data.connect_id = rec->connect_id;
+        call_data.icid = rec->id;
+        
+        IMPreeditEnd(ims, (XPointer) & call_data);
+        rec->state = IS_CLOSED;
+    }
+
+    IMCloseIM(ims);
+     
 }
 
 // vim: sw=4 sts=4 et tw=100

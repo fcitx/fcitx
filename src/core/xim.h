@@ -60,6 +60,7 @@ void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
 struct _IC;
 
 extern struct _IC* CurrentIC;
+void CloseAllIM();
 
 #ifndef __USE_GNU
 extern char    *strcasestr (__const char *__haystack, __const char *__needle);

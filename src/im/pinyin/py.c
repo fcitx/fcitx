@@ -229,6 +229,8 @@ void LoadPYPhraseDict(FILE *fp, Bool isSystem)
             break;
         if (!fread(&clen, sizeof(INT8), 1, fp))
             break;
+        if (clen <= 0 || clen > UTF8_MAX_LENGTH)
+            break;
         if (!fread(strBase, sizeof(char) * clen, 1, fp))
             break;
         strBase[clen] = '\0';

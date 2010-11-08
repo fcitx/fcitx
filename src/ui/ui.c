@@ -343,6 +343,7 @@ MyXEventHandler(XEvent * event)
                         exit(0);
                     }
                 } else if (i == 7) {
+                    CloseAllIM();
                     exit(0);
                 }
             } else if (event->xbutton.window == imMenu.menuWindow) {

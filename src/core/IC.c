@@ -33,7 +33,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "core/IC.h"
 #include <stdio.h>
 
-static IC      *ic_list = (IC *) NULL;
+IC      *ic_list = (IC *) NULL;
 static IC      *free_list = (IC *) NULL;
 
 static IC      *NewIC ()
