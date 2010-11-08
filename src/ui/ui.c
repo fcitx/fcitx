@@ -420,11 +420,6 @@ MyXEventHandler(XEvent * event)
                 else
                     mainMenu.iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
 
-                /*
-                 * printf("%d %d :%d %d :%d
-                 * \n",event->xbutton.x,event->xbutton.y,event->xbutton.x_root,\
-                 * event->xbutton.y_root,sc.skin_tray_icon.active_img.height);
-                 */
                 DrawXlibMenu(dpy, &mainMenu);
                 DisplayXlibMenu(dpy, &mainMenu);
             }
@@ -756,8 +751,6 @@ FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
     else
         height = 0;
     
-    printf("%d\n", height);
-
     return height;
 }
 #else

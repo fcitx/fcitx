@@ -330,40 +330,40 @@ Bool MyProtoHandler(XIMS _ims, IMProtocol * call_data)
 #ifdef _DEBUG
     switch (call_data->major_code) {
     case XIM_OPEN:
-        printf("XIM_OPEN:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_OPEN:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_CLOSE:
-        printf("XIM_CLOSE:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_CLOSE:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_CREATE_IC:
-        printf("XIM_CREATE_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_CREATE_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_DESTROY_IC:
-        printf("XIM_DESTROY_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_DESTROY_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_SET_IC_VALUES:
-        printf("XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_SET_IC_VALUES:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_GET_IC_VALUES:
-        printf("XIM_GET_IC_VALUES:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_GET_IC_VALUES:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_FORWARD_EVENT:
-        printf("XIM_FORWARD_EVENT:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_FORWARD_EVENT:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_SET_IC_FOCUS:
-        printf("XIM_SET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_SET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_UNSET_IC_FOCUS:
-        printf("XIM_UNSET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_UNSET_IC_FOCUS:\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_RESET_IC:
-        printf("XIM_RESET_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_RESET_IC:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     case XIM_TRIGGER_NOTIFY:
-        printf("XIM_TRIGGER_NOTIFY:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_TRIGGER_NOTIFY:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     default:
-        printf("XIM_DEFAULT:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
+        FcitxLog(DEBUG, "XIM_DEFAULT:\t\ticid=%d\tconnect_id=%d\n", ((IMForwardEventStruct *) call_data)->icid,
                ((IMForwardEventStruct *) call_data)->connect_id);
     }
 #endif
@@ -476,7 +476,7 @@ void SendHZtoClient(IMForwardEventStruct * call_data, char *strHZ)
     char *pS2T = (char *) NULL;
 
 #ifdef _DEBUG
-    FcitxLog(DEBUG, _("Sending %s  icid=%d connectid=%d\n"), strHZ, CurrentIC->id, connect_id);
+    FcitxLog(DEBUG, _("Sending %s  icid=%d connectid=%d\n"), strHZ, CurrentIC->id, CurrentIC->connect_id);
 #endif
 
     /* avoid Seg fault */

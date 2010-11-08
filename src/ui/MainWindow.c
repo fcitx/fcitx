@@ -169,7 +169,6 @@ void DrawMainWindow (void)
         DrawImage(&c, sc.skinMainBar.novk,vk[bVK],ms_vk);
 
         iIndex = GetCurrentState();
-        //printf("[iIndex:%d iIMIndex:%d imName:%s]\n",iIndex,iIMIndex,im[iIMIndex].strName);
         if ( iIndex == 1 || iIndex ==0 )
         {
             //英文
@@ -183,7 +182,6 @@ void DrawMainWindow (void)
             else
             {   //如果非默认码表的内容,则临时加载png文件.
                 //暂时先不能自定义码表图片.其他码表统一用一种图片。
-                //printf("[%s]\n",tmpstr);
                 DrawImage(&c, sc.skinMainBar.chn,otherim,ms_py);
             }
 

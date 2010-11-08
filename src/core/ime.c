@@ -55,6 +55,7 @@
 #include "interface/DBus.h"
 #include "fcitx-config/configfile.h"
 #include "fcitx-config/profile.h"
+#include "fcitx-config/cutils.h"
 
 FcitxState gs;                  /* global state */
 
@@ -354,8 +355,8 @@ void ProcessKey(IMForwardEventStruct * call_data)
     retVal = IRV_TO_PROCESS;
 
 #ifdef _DEBUG
-    printf
-        ("KeyRelease=%d  iKeyState=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d  iKey=%d\n",
+    FcitxLog(DEBUG, 
+        "KeyRelease=%d  iKeyState=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d  iKey=%d\n",
          (call_data->event.type == KeyRelease), iKeyState, kev->keycode, (int) keysym, keyCount, iKey);
 #endif
 
@@ -1187,7 +1188,7 @@ RegisterNewIM(char *strName,
               Bool(*PhraseTips) (void), void (*Init) (void), void (*Save) (void), FcitxAddon * addon)
 {
 #ifdef _DEBUG
-    printf("REGISTER %s\n", strName);
+    FcitxLog(DEBUG, "REGISTER %s\n", strName);
 #endif
     strcpy(im[iIMCount].strName, strName);
     strcpy(im[iIMCount].strIconName, strIconName);

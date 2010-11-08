@@ -159,10 +159,8 @@ void CreatePYPhrase (void)
         ParsePY (strPY, &strTemp, PY_PARSE_INPUT_SYSTEM, False);
         s2++;
         kkk = 0;
-        // printf("%s  %s  %d\n",strPY,strPhrase,strTemp.iHZCount);
         if (strTemp.iHZCount != utf8_strlen (strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
-            //if ( strlen(strPhrase)==4 )
-            fprintf (f, "%s %s\n", strPY, strPhrase);    //"%s %s %s\n", strPY, strPhrase, strTemp.strPYParsed);
+            fprintf (f, "%s %s\n", strPY, strPhrase);
             continue;
         }
 

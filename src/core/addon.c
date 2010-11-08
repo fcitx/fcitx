@@ -32,7 +32,6 @@
 #include "core/addon.h"
 #include "tools/tools.h"
 
-
 CONFIG_BINDING_BEGIN(FcitxAddon);
 CONFIG_BINDING_REGISTER("Addon", "Name", name);
 CONFIG_BINDING_REGISTER("Addon", "Category", category);

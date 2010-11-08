@@ -636,8 +636,6 @@ void LoadInputMessage()
 void DrawImage(cairo_t **c,FcitxImage img,cairo_surface_t * png,MouseE mouse)
 {
     cairo_t * cr;
-    /*  printf("%s=%d %d %d %d %d %d %d %d\n",img.img_name,img.position_x, img.position_y,img.width,img.height,
-                                                            img.response_x,img.response_y,img.response_w,img.response_h);*/
     if ( strlen(img.img_name) == 0 || strcmp( img.img_name ,"NONE.img") ==0 || !png)
         return;
 
