@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-31 23:27+0800\n"
-"PO-Revision-Date: 2010-10-31 23:30+0800\n"
+"POT-Creation-Date: 2010-11-09 18:14+0800\n"
+"PO-Revision-Date: 2010-11-09 18:14+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1704,21 +1704,21 @@ msgstr "无法打开中文标点文件。"
 msgid "Quwei"
 msgstr "区位"
 
-#: ../src/im/pinyin/py.c:357
+#: ../src/im/pinyin/py.c:359
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: ../src/im/pinyin/py.c:2444
+#: ../src/im/pinyin/py.c:2446
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: ../src/im/pinyin/py.c:2506
+#: ../src/im/pinyin/py.c:2508
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: ../src/im/pinyin/py.c:2576
+#: ../src/im/pinyin/py.c:2578
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
@@ -1804,45 +1804,45 @@ msgstr "加载附加组件配置文件: %s"
 msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
 
-#: ../src/core/xim.c:445
+#: ../src/core/xim.c:446
 msgid "Recording file must be an absolute path."
 msgstr "记录文件必须是绝对路径"
 
-#: ../src/core/xim.c:478
+#: ../src/core/xim.c:479
 #, c-format
 msgid "Sending %s  icid=%d connectid=%d\n"
 msgstr "Sending %s  icid=%d connectid=%d\n"
 
-#: ../src/core/xim.c:539
+#: ../src/core/xim.c:540
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
-#: ../src/core/xim.c:549
+#: ../src/core/xim.c:550
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
 
-#: ../src/core/xim.c:553
+#: ../src/core/xim.c:554
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
-#: ../src/core/xim.c:565
+#: ../src/core/xim.c:566
 msgid "Please check your environment varibles."
 msgstr "请检查你的环境变量的设置"
 
-#: ../src/core/xim.c:566
+#: ../src/core/xim.c:567
 msgid ""
 "You need to set environment varibles below to make fcitx work correctly."
 msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
 
-#: ../src/core/xim.c:570
-msgid "You can set those variables in ~/.bashrc ."
-msgstr "这些环境变量可以设置在~/.bashrc当中。"
-
 #: ../src/core/xim.c:571
+msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
+msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
+
+#: ../src/core/xim.c:572
 msgid "Setting Hint"
 msgstr "设置提示"
 
-#: ../src/core/xim.c:620
+#: ../src/core/xim.c:621
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在运行？"

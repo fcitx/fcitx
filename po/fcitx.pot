@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-10-31 23:27+0800\n"
+"POT-Creation-Date: 2010-11-09 18:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1685,21 +1685,21 @@ msgstr ""
 msgid "Quwei"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:357
+#: ../src/im/pinyin/py.c:359
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2444
+#: ../src/im/pinyin/py.c:2446
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2506
+#: ../src/im/pinyin/py.c:2508
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2576
+#: ../src/im/pinyin/py.c:2578
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
@@ -1785,45 +1785,45 @@ msgstr ""
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: ../src/core/xim.c:445
+#: ../src/core/xim.c:446
 msgid "Recording file must be an absolute path."
 msgstr ""
 
-#: ../src/core/xim.c:478
+#: ../src/core/xim.c:479
 #, c-format
 msgid "Sending %s  icid=%d connectid=%d\n"
 msgstr ""
 
-#: ../src/core/xim.c:539
+#: ../src/core/xim.c:540
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: ../src/core/xim.c:549
+#: ../src/core/xim.c:550
 msgid "XMODIFIERS Error."
 msgstr ""
 
-#: ../src/core/xim.c:553
+#: ../src/core/xim.c:554
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: ../src/core/xim.c:565
+#: ../src/core/xim.c:566
 msgid "Please check your environment varibles."
 msgstr ""
 
-#: ../src/core/xim.c:566
+#: ../src/core/xim.c:567
 msgid ""
 "You need to set environment varibles below to make fcitx work correctly."
 msgstr ""
 
-#: ../src/core/xim.c:570
-msgid "You can set those variables in ~/.bashrc ."
+#: ../src/core/xim.c:571
+msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
 msgstr ""
 
-#: ../src/core/xim.c:571
+#: ../src/core/xim.c:572
 msgid "Setting Hint"
 msgstr ""
 
-#: ../src/core/xim.c:620
+#: ../src/core/xim.c:621
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr ""

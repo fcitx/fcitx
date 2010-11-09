@@ -852,7 +852,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
         cairo_set_source_surface(inputWindow.c_back, prev,
                                  input_bar_len-(sc.skinInputBar.backImg.width-sc.skinInputBar.backArrow.position_x) ,
                                  sc.skinInputBar.backArrow.position_y);
-        if (inputWindow.bShowNext)
+        if (inputWindow.bShowPrev)
             cairo_paint(inputWindow.c_back);
         else
             cairo_paint_with_alpha(inputWindow.c_back,0.5);
@@ -861,7 +861,7 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
         cairo_set_source_surface(inputWindow.c_back, next,
                                  input_bar_len-(sc.skinInputBar.backImg.width-sc.skinInputBar.forwardArrow.position_x) ,
                                  sc.skinInputBar.forwardArrow.position_y);
-        if (inputWindow.bShowPrev)
+        if (inputWindow.bShowNext)
             cairo_paint(inputWindow.c_back);
         else
             cairo_paint_with_alpha(inputWindow.c_back,0.5);

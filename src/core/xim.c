@@ -568,7 +568,7 @@ Bool InitXIM(char *imname)
             msg[2] = "export XMODIFIERS=\"@im=fcitx\"";
             msg[3] = "export QT_IM_MODULE=xim";
             msg[4] = "export GTK_IM_MODULE=xim";
-            msg[5] = _("You can set those variables in ~/.bashrc .");
+            msg[5] = _("You can set those variables in ~/.bashrc or ~/.xprofile .");
             DrawMessageWindow(_("Setting Hint"), msg, 6);
             DisplayMessageWindow();
         }
