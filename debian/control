@@ -2,7 +2,7 @@ Source: fcitx
 Section: utils
 Priority: optional
 Maintainer: Kov Chai <tchaikov@gmail.org>
-Build-Depends: debhelper (>= 5), libcairo2-dev, libdbus-1-dev, intltool (>= 0.35.0), libtool
+Build-Depends: debhelper (>= 5), libpango1.0-dev, libcairo2-dev, libdbus-1-dev, intltool (>= 0.35.0), libtool
 DM-Upload-Allowed: yes
 Standards-Version: 3.8.0
 Homepage: http://code.google.com/p/fcitx/

@@ -16,6 +16,7 @@ Group(zh_CN):	用户界面/桌面
 License:	GPL
 Source:		%{name}-%{version}.tar.gz
 BuildRequires:	cairo-devel
+BuildRequires:  pango-devel
 %if 0%{?suse_version}
 BuildRequires:	dbus-1-devel
 %else
@@ -73,6 +74,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libfcitx-config.la
 %doc AUTHORS ChangeLog COPYING INSTALL README
 %doc doc/*.txt doc/*.htm
 %{_bindir}/*
+%{_datadir}/fcitx/
 %{_datadir}/fcitx/*
 %{_datadir}/pixmaps/*
 %{_libdir}/libfcitx*

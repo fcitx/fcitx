@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <limits.h>
 #include <string.h>
 #include <pthread.h>
@@ -255,8 +256,12 @@ void FcitxInitThread()
 
 void InitAsDaemon()
 {
-    if (fork() > 0)
+    pid_t pid;
+    if ((pid = fork()) > 0)
+    {
+    	waitpid(pid, NULL, 0);
         exit(0);
+    }
     setsid();
     signal(SIGINT, SIG_IGN);
     signal(SIGHUP, SIG_IGN);
