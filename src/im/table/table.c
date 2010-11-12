@@ -105,6 +105,7 @@ void LoadTableInfo (void)
 
     StringHashSet* sset = NULL;
     tbl.bTablePhraseTips = False;
+    tbl.bTableDictLoaded = False;
 
     if (tbl.table)
     {
@@ -271,7 +272,7 @@ Bool LoadTableDict (void)
         FcitxLog( DEBUG, _("Cannot load table file: %s"), strPath);
         return False;
     }
-
+    
     //先读取码表的信息
     //判断版本信息
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
@@ -281,7 +282,7 @@ Bool LoadTableDict (void)
         fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     }
 
-    table->strInputCode = (char *) malloc (sizeof (char) * (iTemp + 1));
+    table->strInputCode = (char *) realloc (table->strInputCode, sizeof (char) * (iTemp + 1));
     fread (table->strInputCode, sizeof (char), iTemp + 1, fpDict);
     /*
      * 建立索引，加26是为了为拼音编码预留空间
@@ -507,8 +508,9 @@ void FreeTableIM (void)
     free (tbl.recordHead);
     tbl.recordHead = NULL;
 
-    if (tbl.iFH) {
+    if (tbl.fh) {
         free (tbl.fh);
+        tbl.fh = NULL;
         tbl.iFH = 0;
     }
 
@@ -573,6 +575,9 @@ void SaveTableDict (void)
         return;
 
     if (!tbl.iTableChanged)
+        return;
+    
+    if (!tbl.bTableDictLoaded)
         return;
 
     tbl.isSavingTableDic = True;
@@ -647,7 +652,7 @@ void SaveTableDict (void)
     if (tbl.autoPhrase) {
         //保存上次的自动词组信息
         fpDict = GetXDGFileTable(TEMP_FILE, "wb", &pstr, True);
-        strcpy (strPathTemp,pstr);
+        strncpy (strPathTemp, pstr, PATH_MAX);
         if (fpDict) {
             fwrite (&tbl.iAutoPhrase, sizeof (int), 1, fpDict);
             for (i = 0; i < tbl.iAutoPhrase; i++) {
@@ -660,10 +665,10 @@ void SaveTableDict (void)
         }
         free(pstr);
 
-        strcpy (strPath, table->strName);
-        strcat (strPath, "_LastAutoPhrase.tmp");
+        strncpy (strPath, table->strName, PATH_MAX);
+        strncat (strPath, "_LastAutoPhrase.tmp", PATH_MAX);
         fpDict = GetXDGFileTable(strPath, NULL, &pstr, True);
-        if (access (pstr, 0))
+        if (access (pstr, F_OK))
             unlink (pstr);
         rename (strPathTemp, pstr);
         free(pstr);
@@ -1097,7 +1102,10 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
     if (tbl.bIsTableDelPhrase || tbl.bIsTableAdjustOrder || bIsInLegend)
         inputWindow.bShowCursor = False;
     else
+    {
         inputWindow.bShowCursor = True;
+        iCursorPos = iCodeInputCount;
+    }
 
     return retVal;
 }

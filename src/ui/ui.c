@@ -303,11 +303,11 @@ MyXEventHandler(XEvent * event)
             }
             else if (event->xbutton.window == messageWindow.window)
             {
-                XUnmapWindow(dpy, messageWindow.window);
+                XWithdrawWindow(dpy, messageWindow.window, iScreen);
             }
             // added by yunfan
             else if (event->xbutton.window == aboutWindow.window) {
-                XUnmapWindow(dpy, aboutWindow.window);
+                XWithdrawWindow(dpy, aboutWindow.window, iScreen);
                 DrawMainWindow();
             } else if (event->xbutton.window == mainMenu.menuWindow) {
                 int             i;

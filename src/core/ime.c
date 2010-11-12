@@ -1360,7 +1360,9 @@ void ReloadConfig()
         tray.bTrayMapped = False;
 #endif
     }
-
+    
+    SaveIM();
+    
     UnloadIM();
 
     LoadAddonInfo();

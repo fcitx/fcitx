@@ -176,7 +176,7 @@ typedef struct TableState {
     Bool            bTablePhraseTips;
     
     ADJUSTORDER     PYBaseOrder;
-    Bool		isSavingTableDic;
+    Bool		    isSavingTableDic;
 } TableState;
 
 extern TableState tbl;
