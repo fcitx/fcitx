@@ -181,6 +181,13 @@ MyXEventHandler(XEvent * event)
                 x = event->xbutton.x;
                 y = event->xbutton.y;
                 MouseClick(&x, &y, inputWindow.window);
+                
+                if(!fcitxProfile.bTrackCursor)
+                {
+                    fcitxProfile.iInputWindowOffsetX = x;
+                    fcitxProfile.iInputWindowOffsetY = y;
+                }   
+                
                 if (CurrentIC)
                 {
                     Window window = None, dst;
