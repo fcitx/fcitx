@@ -224,9 +224,6 @@ operates.
      Look for the package's source code in directory DIR.  Usually
      `configure' can determine that directory automatically.
 
-`--enable-xft`
-     Enable Xft for Freetype font support.
-
 `configure' also accepts some other, not widely useful, options.  Run
 `configure --help' for more details.
 
