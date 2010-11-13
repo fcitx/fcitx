@@ -572,6 +572,8 @@ Bool InitXIM(char *imname)
             DrawMessageWindow(_("Setting Hint"), msg, 6);
             DisplayMessageWindow();
         }
+        fc.bHintWindow = False;
+        SaveConfig();
     }
 #ifdef _DEBUG
     strcpy(strXModifiers, imname);

@@ -114,6 +114,7 @@ int main (int argc, char *argv[])
     Bool            bBackground = True;
     char        *imname=(char *)NULL;
     pthread_t       pid;
+    int             overrideDelay = -1;
 
     InitGlobal();
 
@@ -131,7 +132,7 @@ int main (int argc, char *argv[])
      */
     LoadConfig ();
 
-    while ((c = getopt(argc, argv, "cdDn:vh")) != -1) {
+    while ((c = getopt(argc, argv, "cdDn:s:vh")) != -1) {
         switch (c) {
         case 'd':
             /* nothing to do */
@@ -148,12 +149,19 @@ int main (int argc, char *argv[])
         case 'v':   /* 输出版本号 */
             Version();
             return 0;
+        case 's':
+            overrideDelay = atoi(optarg);
+            break;
         case 'h':   /* h或者其他任何不合法的参数均，输出参数帮助信息 */
         case '?':
             Usage();
             return 0;
         }
     }
+
+    /* 以后台方式运行 */
+    if (bBackground)
+        InitAsDaemon();
 
 #ifdef _ENABLE_DBUS
     /*
@@ -200,9 +208,6 @@ int main (int argc, char *argv[])
      */
     LoadAutoEng ();
 
-    if (fc.iDelayStart > 0)
-        sleep(fc.iDelayStart);
-
     /* 以下是界面的处理 */
     /* 创建主窗口，即输入法状态窗口 */
     if (!fc.bUseDBus)
@@ -243,9 +248,11 @@ int main (int argc, char *argv[])
     if (!InitXIM (imname))
         exit (4);
 
-    /* 以后台方式运行 */
-    if (bBackground)
-        InitAsDaemon();
+    if (overrideDelay < 0)
+        fc.iDelayStart = overrideDelay;
+
+    if (overrideDelay > 0)
+        sleep(overrideDelay);
 
 #ifdef _ENABLE_RECORDING
     OpenRecording(True);
@@ -303,6 +310,7 @@ void Usage ()
            "\t-D\t\tdon't run as daemon\n"
            "\t-c\t\t(re)create config file in home directory and then exit\n"
            "\t-n[im name]\trun as specified name\n"
+           "\t-s[sleep time]\toverride delay start time in config file, 0 for immediate start\n"
            "\t-v\t\tdisplay the version information and exit\n"
            "\t-h\t\tdisplay this help and exit\n");
 }
