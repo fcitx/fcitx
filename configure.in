@@ -16,28 +16,6 @@ AC_PROG_MAKE_SET
 AC_PROG_RANLIB
 AC_PROG_LIBTOOL
 
-AC_PATH_PROGS(TAR, tar, no)
-AC_PATH_PROGS(WGET, wget, no)
-AC_PATH_PROGS(MD5SUM, md5sum, no)
-if test "x$WGET" = "xno";
-then
-    AC_MSG_ERROR([You need to install wget])
-fi
-
-if test "x$TAR" = "xno";
-then
-    AC_MSG_ERROR([You need to install tar])
-fi
-
-if test "x$MD5SUM" = "xno";
-then
-    AC_MSG_ERROR([You need to install md5sum])
-fi
-
-AC_SUBST(WGET)
-AC_SUBST(TAR)
-AC_SUBST(MD5SUM)
-
 # Checks for libraries.
 AM_ICONV
 
@@ -47,16 +25,40 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([limits.h malloc.h malloc/malloc.h stdlib.h string.h sys/param.h unistd.h wait.h sys/wait.h machine/endian.h pthread.h])
 
 AC_MSG_CHECKING([host platform characteristics])
+
 case "$host" in
     *-*-*freebsd*)
     HOST_LDFLAGS="-lexecinfo -pthread"
+    md5prog=gmd5sum
     ;;
     *-*-linux*)
     HOST_LDFLAGS="-ldl -lpthread"
+    md5prog=md5sum
     ;;
 esac
 
 AC_SUBST(HOST_LDFLAGS)
+
+AC_PATH_PROGS(WGET, wget, no)
+if test "x$WGET" = "xno";
+then
+    AC_MSG_ERROR([You need to install wget])
+fi
+
+AC_PATH_PROGS(TAR, tar, no)
+if test "x$TAR" = "xno";
+then
+    AC_MSG_ERROR([You need to install tar])
+fi
+
+AC_PATH_PROGS(MD5SUM, $md5prog, no)
+if test "x$MD5SUM" = "xno";
+then
+    AC_MSG_ERROR([You need to install md5sum])
+fi
+AC_SUBST(WGET)
+AC_SUBST(TAR)
+AC_SUBST(MD5SUM)
 
 # x11
 AC_PATH_X
