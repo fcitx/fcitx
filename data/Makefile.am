@@ -33,7 +33,7 @@ $(py_tar):
 	$(WGET) -O $(py_tar) $(py_url)
 	$(WGET) -O $(py_tar).md5 $(py_url).md5
 
-md5check:
+md5check: $(py_tar)
 	$(MD5SUM) -c $(py_tar).md5 || ( $(RM) $(py_tar); exit 1)
 
 all-local: tools  $(py_data) desc.po

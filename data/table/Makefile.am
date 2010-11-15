@@ -29,7 +29,7 @@ $(table_tar):
 	$(WGET) -O $(table_tar) $(table_url)
 	$(WGET) -O $(table_tar).md5 $(table_url).md5
 
-md5check:
+md5check: $(table_tar)
 	$(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
 
 all-local: tools $(txt_data) $(mb_data)
