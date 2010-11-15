@@ -252,10 +252,6 @@ Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
 
-[InputMethod/ExtraIM]
-Type=String
-DefaultValue=
-
 [Pinyin/UseCompletePinyin]
 Type=Boolean
 DefaultValue=False

@@ -3,7 +3,7 @@ filename=desc.po
 dir=`pwd`
 filename=`basename $filename`
 
-rm desc.po; touch desc.po
+rm -f desc.po; touch desc.po
 
 cd ..
 find data -iname "*.desc" | while read f
