@@ -28,16 +28,16 @@ AC_MSG_CHECKING([host platform characteristics])
 
 case "$host" in
     *-*-*freebsd*)
-    HOST_LDFLAGS="-lexecinfo -pthread"
+    HOST_LIBS="-lexecinfo -pthread"
     md5prog=gmd5sum
     ;;
     *-*-linux*)
-    HOST_LDFLAGS="-ldl -lpthread"
+    HOST_LIBS="-ldl -lpthread"
     md5prog=md5sum
     ;;
 esac
 
-AC_SUBST(HOST_LDFLAGS)
+AC_SUBST(HOST_LIBS)
 
 AC_PATH_PROGS(WGET, wget, no)
 if test "x$WGET" = "xno";

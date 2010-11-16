@@ -43,8 +43,8 @@ fcitx_LDADD=../../lib/libXimd.a \
 			@XRENDER_LIBS@ \
 			@INTLLIBS@ \
 			@PANGOCAIRO_LIBS@ \
+			@HOST_LIBS@ \
 			$(NULL)
 
 fcitx_LDFLAGS = \
-                @HOST_LDFLAGS@ \
                 $(NULL)
