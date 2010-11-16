@@ -106,7 +106,7 @@ Bool CreateMainWindow (void)
 
     mainWindow.main_win_gc = XCreateGC( dpy, mainWindow.window, 0, NULL );
     XChangeWindowAttributes (dpy, mainWindow.window, attribmask, &attrib);
-    XSelectInput (dpy, mainWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
+    XSelectInput (dpy, mainWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
     XTextProperty   tp;
     /* Set the name of the window */

@@ -231,23 +231,28 @@ void DrawInputWindow(void)
     int lastW = inputWindow.iInputWindowWidth, lastH = inputWindow.iInputWindowHeight;
     DrawInputBar(&messageUp, &messageDown ,&inputWindow.iInputWindowWidth);
 
+    /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow.iInputWindowWidth || lastH != inputWindow.iInputWindowHeight)
+    {
         XResizeWindow(
                 dpy,
                 inputWindow.window,
                 inputWindow.iInputWindowWidth,
                 inputWindow.iInputWindowHeight);
-
-    GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
-    XCopyArea (dpy,
-               inputWindow.pm_input_bar,
-               inputWindow.window,
-               gc,
-               0,
-               0,
-               inputWindow.iInputWindowWidth,
-               inputWindow.iInputWindowHeight, 0, 0);
-    XFreeGC(dpy, gc);
+        MoveInputWindow();
+    }
+    else {
+        GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
+        XCopyArea (dpy,
+                inputWindow.pm_input_bar,
+                inputWindow.window,
+                gc,
+                0,
+                0,
+                inputWindow.iInputWindowWidth,
+                inputWindow.iInputWindowHeight, 0, 0);
+        XFreeGC(dpy, gc);
+    }
 }
 
 void MoveInputWindow()

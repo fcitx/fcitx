@@ -470,8 +470,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
                     if (fc.bShowInputWindowTriggering && !fcitxProfile.bCorner) {
                         DisplayInputWindow();
-                    } else
-                        MoveInputWindow();
+                    }
                 } else
                     CloseIM(call_data);
 

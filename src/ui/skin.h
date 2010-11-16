@@ -188,7 +188,7 @@ void DrawImage(cairo_t **c,FcitxImage img,cairo_surface_t * png,MouseE mouse);
 void DestroyImage(cairo_surface_t ** png);
 void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
 void DrawMenuBackground(XlibMenu * menu);
-void SetMouseStatus(MouseE m);
+Bool SetMouseStatus(MouseE m, MouseE* e, MouseE s);
 /**
  * 加载皮肤配置文件
  */

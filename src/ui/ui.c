@@ -174,7 +174,7 @@ MyXEventHandler(XEvent * event)
     case ButtonPress:
         switch (event->xbutton.button) {
         case Button1:
-            SetMouseStatus(RELEASE);
+            SetMouseStatus(RELEASE, NULL, 0);
             if (event->xbutton.window == inputWindow.window) {
                 int             x,
                                 y;
@@ -286,7 +286,7 @@ MyXEventHandler(XEvent * event)
                     ms_py = PRESS;
                 }
                 DrawMainWindow();
-                SetMouseStatus(RELEASE);
+                SetMouseStatus(RELEASE, NULL, 0);
             }
 #ifdef _ENABLE_TRAY
             else if (event->xbutton.window == tray.window) {
@@ -452,7 +452,7 @@ MyXEventHandler(XEvent * event)
         if (event->xbutton.window == mainWindow.window) {
             switch (event->xbutton.button) {
             case Button1:
-                SetMouseStatus(RELEASE);
+                SetMouseStatus(RELEASE, NULL, 0);
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.logo))
@@ -559,17 +559,18 @@ MyXEventHandler(XEvent * event)
 
     case MotionNotify:
         if (event->xany.window == mainWindow.window) {
+            MouseE *mouseOn = NULL;
             if (IsInRspArea
                 (event->xbutton.x, event->xbutton.y,
                  sc.skinMainBar.logo)) {
-                ms_logo = MOTION;
+                mouseOn = &ms_logo;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.zhpunc)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.enpunc)) {
-                ms_punc = MOTION;
+                mouseOn = &ms_punc;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
@@ -577,43 +578,43 @@ MyXEventHandler(XEvent * event)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.
                                    fullcorner)) {
-                ms_corner = MOTION;
+                mouseOn = &ms_corner;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.nolegend)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.legend)) {
-                ms_lx = MOTION;
+                mouseOn = &ms_lx;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.chs)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.cht)) {
-                ms_chs = MOTION;
+                mouseOn = &ms_chs;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.unlock)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.lock)) {
-                ms_lock = MOTION;
+                mouseOn = &ms_lock;
             } else
                 if (IsInRspArea
                     (event->xbutton.x, event->xbutton.y,
                      sc.skinMainBar.novk)
                     || IsInRspArea(event->xbutton.x, event->xbutton.y,
                                    sc.skinMainBar.vk)) {
-                ms_vk = MOTION;
+                mouseOn = &ms_vk;
             } else if (!fcitxProfile.bCorner
                        && IsInRspArea(event->xbutton.x, event->xbutton.y,
                                       sc.skinMainBar.
                                       chn)) {
-                ms_py = MOTION;
+                mouseOn = &ms_py;
             }
-            DrawMainWindow();
-            SetMouseStatus(RELEASE);
+            if (SetMouseStatus(RELEASE, mouseOn, MOTION))
+                DrawMainWindow();
         } else if (event->xany.window == mainMenu.menuWindow) {
             MainMenuEvent(event->xmotion.x, event->xmotion.y);
         } else if (event->xany.window == imMenu.menuWindow) {
@@ -625,6 +626,10 @@ MyXEventHandler(XEvent * event)
         }
         break;
     case LeaveNotify:
+        if  (event->xcrossing.window == mainWindow.window) {
+            if (SetMouseStatus(RELEASE, NULL , 0))
+                DrawMainWindow();
+        }
         if  (event->xcrossing.window == mainMenu.menuWindow) {
             int x = event->xcrossing.x_root;
             int y = event->xcrossing.y_root;

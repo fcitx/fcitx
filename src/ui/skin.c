@@ -80,6 +80,7 @@ cairo_surface_t *  trayInactive;
 FcitxSkin sc;
 
 MouseE ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
+MouseE *msE[] = {&ms_logo, &ms_punc, &ms_corner, &ms_lx, &ms_chs, &ms_lock, &ms_vk, &ms_py};
 //指定皮肤类型 在config文件中配置
 //指定皮肤所在的文件夹 一般在/usr/share/fcitx/skin目录下面
 UT_array *skinBuf;
@@ -897,16 +898,25 @@ void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth)
 /*
 *把鼠标状态初始化为某一种状态.
 */
-void SetMouseStatus(MouseE m)
+Bool SetMouseStatus(MouseE m, MouseE* e, MouseE s)
 {
-    ms_logo=m;
-    ms_punc=m;
-    ms_corner=m;
-    ms_lx=m;
-    ms_chs=m;
-    ms_lock=m;
-    ms_vk=m;
-    ms_py=m;
+    Bool changed = False;
+    int i = 0;
+    for (i = 0 ;i < 8; i ++)
+    {
+        MouseE obj;
+        if (msE[i] == e)
+            obj = s;
+        else
+            obj = m;
+        
+        if (obj != *msE[i])
+            changed = True;
+        
+        *msE[i] = obj;
+    }
+    
+    return changed;
 }
 
 
