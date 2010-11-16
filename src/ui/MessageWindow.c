@@ -25,7 +25,6 @@
 #include "core/xim.h"
 #include "fcitx-config/configfile.h"
 #include "fcitx-config/cutils.h"
-#include "version.h"
 
 #include <ctype.h>
 

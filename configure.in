@@ -255,7 +255,6 @@ AC_CONFIG_FILES([
            skin/classic/Makefile
            png/Makefile
            lib/Makefile
-           src/version.h
            src/Makefile
            src/core/Makefile
            src/im/Makefile

@@ -35,8 +35,6 @@
 #include <langinfo.h>
 #include <libintl.h>
 
-#include "version.h"
-
 #include "core/fcitx.h"
 
 #include "tools/tools.h"
@@ -320,5 +318,5 @@ void Usage ()
  */
 void Version ()
 {
-    printf ("fcitx version: %s\n", FCITX_VERSION);
+    printf ("fcitx version: %s\n", VERSION);
 }

@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "version.h"
 #include <time.h>
 #include <X11/Xatom.h>
 
@@ -195,7 +194,7 @@ void CalInputWindow (void)
     if (MESSAGE_IS_EMPTY) {
         inputWindow.bShowCursor = False;
         if (fc.bShowVersion) {
-            AddMessageAtLast(&messageUp, MSG_TIPS, "FCITX " FCITX_VERSION);
+            AddMessageAtLast(&messageUp, MSG_TIPS, "FCITX " VERSION);
         }
 
         //显示打字速度

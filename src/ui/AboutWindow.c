@@ -28,7 +28,6 @@
 #include "ui/ui.h"
 #include "core/xim.h"
 #include "fcitx-config/configfile.h"
-#include "version.h"
 
 extern Display *dpy;
 extern int      iScreen;
@@ -49,7 +48,7 @@ Bool CreateAboutWindow (void)
 {
     strcpy (strTitle, AboutTitle);
     strcat (strTitle, " ");
-    strcat (strTitle, FCITX_VERSION);
+    strcat (strTitle, VERSION);
 
     aboutWindow.color.r = aboutWindow.color.g = aboutWindow.color.b = 220.0 / 256;
     aboutWindow.fontColor.r = aboutWindow.fontColor.g = aboutWindow.fontColor.b = 0;

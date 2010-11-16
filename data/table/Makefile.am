@@ -1,11 +1,38 @@
 tabledir = $(pkgdatadir)/data/table
 
-mb_data = cj.mb erbi.mb wanfeng.mb wbpy.mb qxm.mb db.mb wbx.mb zrm.mb
-txt_data = cj.txt erbi.txt wanfeng.txt wbpy.txt qxm.txt db.txt wbx.txt zrm.txt
-txt_m_data = erbi.txt wanfeng.txt wbpy.txt qxm.txt db.txt wbx.txt zrm.txt
+mb_data = \
+		  @srcdir@/cj.mb \
+		  @srcdir@/erbi.mb \
+		  @srcdir@/wanfeng.mb \
+		  @srcdir@/wbpy.mb \
+		  @srcdir@/qxm.mb \
+		  @srcdir@/db.mb \
+		  @srcdir@/wbx.mb \
+		  @srcdir@/zrm.mb \
+		  $(NULL)
+txt_data = \
+		   @srcdir@/cj.txt \
+		   @srcdir@/erbi.txt \
+		   @srcdir@/wanfeng.txt \
+		   @srcdir@/wbpy.txt \
+		   @srcdir@/qxm.txt \
+		   @srcdir@/db.txt \
+		   @srcdir@/wbx.txt \
+		   @srcdir@/zrm.txt \
+		   $(NULL)
+txt_m_data = \
+		   @srcdir@/erbi.txt \
+		   @srcdir@/wanfeng.txt \
+		   @srcdir@/wbpy.txt \
+		   @srcdir@/qxm.txt \
+		   @srcdir@/db.txt \
+		   @srcdir@/wbx.txt \
+		   @srcdir@/zrm.txt \
+		   $(NULL)
+
 mb_conf = qxm.conf db.conf erbi.conf wanfeng.conf  wbpy.conf wbx.conf zrm.conf cangjie.conf disable-table.conf.template
 table_url = http://fcitx.googlecode.com/files/table.tar.gz
-table_tar = table.tar.gz
+table_tar = @srcdir@/table.tar.gz
 
 table_DATA = $(mb_data) $(mb_conf)
 EXTRA_DIST = $(mb_conf)
@@ -14,7 +41,7 @@ CLEANFILES = $(mb_data)
 
 DISTCLEANFILES = $(txt_data) $(table_tar)
 
-%.mb: %.txt
+@srcdir@/%.mb: @srcdir@/%.txt
 	../../tools/txt2mb $< $@
 
 tools: ../../tools/txt2mb
@@ -30,7 +57,7 @@ $(table_tar):
 	$(WGET) -O $(table_tar).md5 $(table_url).md5
 
 md5check: $(table_tar)
-	$(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
+	cd $(srcdir) && $(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
 
 all-local: tools $(txt_data) $(mb_data)
 

@@ -40,7 +40,6 @@
 #include "fcitx-config/uthash.h"
 #include "core/ime.h"
 #include "tools/tools.h"
-#include "version.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
 
