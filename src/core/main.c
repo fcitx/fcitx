@@ -161,6 +161,12 @@ int main (int argc, char *argv[])
     if (bBackground)
         InitAsDaemon();
 
+    if (overrideDelay < 0)
+        overrideDelay = fc.iDelayStart;
+
+    if (overrideDelay > 0)
+        sleep(overrideDelay);
+
 #ifdef _ENABLE_DBUS
     /*
      * 启用DBus时初始化DBus
@@ -245,12 +251,6 @@ int main (int argc, char *argv[])
     /* 初始化XIM */
     if (!InitXIM (imname))
         exit (4);
-
-    if (overrideDelay < 0)
-        fc.iDelayStart = overrideDelay;
-
-    if (overrideDelay > 0)
-        sleep(overrideDelay);
 
 #ifdef _ENABLE_RECORDING
     OpenRecording(True);
