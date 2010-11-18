@@ -141,7 +141,10 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
         return 1;
     } 
     else
+    {
         tray->bTrayMapped = False;
+        DestroyTrayWindow();
+    }
 
     return 0;
 }

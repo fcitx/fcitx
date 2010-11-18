@@ -51,6 +51,7 @@
 
 #ifdef _ENABLE_TRAY
 #include "ui/TrayWindow.h"
+#include "ui/tray.h"
 #endif
 
 #include "interface/DBus.h"
@@ -275,6 +276,7 @@ int main (int argc, char *argv[])
     /* 创建系统托盘窗口 */
     if (!fc.bUseDBus) {
         CreateTrayWindow ();
+        TrayFindDock(dpy, &tray);
         DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
     }
 #endif
@@ -293,8 +295,6 @@ int main (int argc, char *argv[])
 
         FcitxUnlock();
     }
-
-
     return 0;
 }
 

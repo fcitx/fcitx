@@ -81,4 +81,3 @@ src/core/fcitx.h
 src/core/IC.c
 src/core/MyErrorsHandlers.h
 src/core/ime.c
-src/version.h

@@ -117,10 +117,8 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
     cairo_t *c;
     cairo_surface_t *png_surface ;
     FcitxImage* skinImg;
-    if (!tray.bTrayMapped) {
-        if (!TrayFindDock(dpy, &tray))
-            return;
-    }
+    if (!tray.bTrayMapped)
+        return;
 
     /* 画png */
     if (f_state)
@@ -136,7 +134,7 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
 
     c=cairo_create(tray.cs);
 
-    XVisualInfo* vi = TrayGetVisual(dpy, &tray);
+    XVisualInfo* vi = tray.visual.visual ? &tray.visual : 0;
     if (vi && vi->visual)
     {
         /* 清空窗口 */

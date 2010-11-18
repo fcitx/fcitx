@@ -3,7 +3,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/core/main.c])
-AM_INIT_AUTOMAKE(fcitx, "4.0_rc1")
+AM_INIT_AUTOMAKE(fcitx, "4.0.0")
 
 dnl Find out what type of system we are
 AC_CANONICAL_HOST
@@ -163,7 +163,7 @@ AC_ARG_ENABLE(tray,
   *) AC_MSG_ERROR([bad value "${enableval}" for --enable-tray, use "yes" (default) or "no".]) ;;
 esac],[])
 
-if test "x$enable_tray" = "xyes"; then
+if test "x$enable_tray" != "xno"; then
   AC_DEFINE(_ENABLE_TRAY,,[Enable Tray Icon])
 fi
 
