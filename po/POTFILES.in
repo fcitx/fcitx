@@ -1,5 +1,4 @@
 # List of source files which contain translatable strings.
-./data/desc.po
 src/interface/ImeRemote.c
 src/interface/DBus.h
 src/interface/DBus.c
