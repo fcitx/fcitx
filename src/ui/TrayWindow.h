@@ -54,6 +54,7 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h);
 void DeInitTrayWindow(TrayWindow *f_tray);
 void RedrawTrayWindow(void);
 void TrayEventHandler(XEvent* event);
+void DestroyTrayWindow();
 
 extern TrayWindow tray;
 
