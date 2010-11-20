@@ -891,6 +891,8 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
                     XSetWindowAttributes * attrib,
                     unsigned long *attribmask, int *depth)
 {
+    attrib->bit_gravity = NorthWestGravity;
+    attrib->backing_store = WhenMapped;
     if (*vs) {
         *cmap =
             XCreateColormap(dpy, RootWindow(dpy, iScreen), *vs, AllocNone);
@@ -901,7 +903,7 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
         attrib->colormap = *cmap;
         *attribmask =
             (CWBackPixel | CWBorderPixel | CWOverrideRedirect |
-             CWColormap);
+             CWColormap | CWBitGravity | CWBackingStore);
         *depth = 32;
     } else {
         *cmap = DefaultColormap(dpy, iScreen);
@@ -909,7 +911,8 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
         attrib->override_redirect = True;       // False;
         attrib->background_pixel = WhitePixel(dpy, iScreen);
         attrib->border_pixel = BlackPixel(dpy, iScreen);
-        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect);
+        attrib->bit_gravity = NorthWestGravity;
+        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWBitGravity | CWBackingStore);
         *depth = DefaultDepth(dpy, iScreen);
     }
 }

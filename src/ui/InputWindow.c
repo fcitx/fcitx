@@ -241,18 +241,16 @@ void DrawInputWindow(void)
                 inputWindow.iInputWindowHeight);
         MoveInputWindow();
     }
-    else {
-        GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
-        XCopyArea (dpy,
-                inputWindow.pm_input_bar,
-                inputWindow.window,
-                gc,
-                0,
-                0,
-                inputWindow.iInputWindowWidth,
-                inputWindow.iInputWindowHeight, 0, 0);
-        XFreeGC(dpy, gc);
-    }
+    GC gc = XCreateGC( dpy, inputWindow.window, 0, NULL );
+    XCopyArea (dpy,
+            inputWindow.pm_input_bar,
+            inputWindow.window,
+            gc,
+            0,
+            0,
+            inputWindow.iInputWindowWidth,
+            inputWindow.iInputWindowHeight, 0, 0);
+    XFreeGC(dpy, gc);
 }
 
 void MoveInputWindow()
