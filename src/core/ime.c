@@ -653,7 +653,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
                                                     }
 
                                                     if (iCodeInputCount) {
-                                                        AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
+                                                        AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
                                                     }
 
                                                     if (retVal != IRV_DISPLAY_CANDWORDS) {
@@ -866,7 +866,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
         SetMessageCount(&messageUp, 0);
         AddMessageAtLast(&messageUp, MSG_INPUT, "%c", strCodeInput[0]);
         SetMessageCount(&messageDown, 0);
-        AddMessageAtLast(&messageDown, MSG_TIPS, strStringGet);
+        AddMessageAtLast(&messageDown, MSG_TIPS, "%s", strStringGet);
         DisplayInputWindow();
 
         break;

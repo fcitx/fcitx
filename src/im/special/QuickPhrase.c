@@ -246,11 +246,11 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode)
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
-        AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
-        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), quickPhraseCandWords[i]->strPhrase);
+        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
+        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", quickPhraseCandWords[i]->strPhrase);
 
         //编码提示
-        AddMessageAtLast(&messageDown, MSG_CODE, quickPhraseCandWords[i]->strCode + iInputLen);
+        AddMessageAtLast(&messageDown, MSG_CODE, "%s", quickPhraseCandWords[i]->strCode + iInputLen);
         if (i != (iCandWordCount - 1))
             MessageConcatLast(&messageDown, " ");
     }

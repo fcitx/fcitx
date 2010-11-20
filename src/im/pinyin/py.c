@@ -2878,7 +2878,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
 
     SetMessageCount(&messageUp, 0);
     AddMessageAtLast(&messageUp, MSG_TIPS, "联想：");
-    AddMessageAtLast(&messageUp, MSG_INPUT, strPYLegendSource);
+    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strPYLegendSource);
     strTemp[1] = '\0';
     SetMessageCount(&messageDown, 0);
     for (i = 0; i < iLegendCandWordCount; i++) {
@@ -2886,9 +2886,10 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
         if (i == 9)
             strTemp[0] = '0';
 
-        AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
+        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
         AddMessageAtLast(&messageDown,
-                         ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), PYLegendCandWords[i].phrase->strPhrase + PYLegendCandWords[i].iLength);
+                         ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER),
+                         "%s", PYLegendCandWords[i].phrase->strPhrase + PYLegendCandWords[i].iLength);
         if (i != (iLegendCandWordCount - 1)) {
             MessageConcatLast(&messageDown, " ");
         }

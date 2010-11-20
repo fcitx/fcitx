@@ -90,7 +90,7 @@ INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount)
 		return IRV_TO_PROCESS;
 	
     SetMessageCount(&messageUp, 0);
-    AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
+    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
 	if ( iCodeInputCount!=3 )
 		SetMessageCount(&messageDown, 0);
 		
@@ -147,15 +147,15 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
 	strTemp[0] = i + 1 + '0';
 	if (i == 9)
 		strTemp[0] = '0';
-    AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
-    AddMessageAtLast(&messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, GetQuWei (iQu, iWei + i + 1));
+    AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
+    AddMessageAtLast(&messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (iQu, iWei + i + 1));
 	if (i != 9)
         MessageConcatLast(&messageDown, " ");
     }    
     
     strCodeInput[2]=iCurrentCandPage+'0';
     SetMessageCount(&messageUp, 0);
-    AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
+    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
     
     return IRV_DISPLAY_CANDWORDS;
 }

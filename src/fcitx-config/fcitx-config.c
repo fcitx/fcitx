@@ -744,16 +744,18 @@ Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc)
 void ConfigBindSync(GenericConfig* config)
 {
     ConfigFile *cfile = config->configFile;
-    ConfigFileDesc *cdesc = cfile->fileDesc;
+    ConfigFileDesc *cdesc = NULL;
     ConfigGroupDesc* groupdesc = NULL;
+    if (cfile)
+        return;
+    cdesc = cfile->fileDesc;
     for(groupdesc = cdesc->groupsDesc;
         groupdesc != NULL;
         groupdesc = (ConfigGroupDesc*)groupdesc->hh.next)
     {
         ConfigOptionDesc *optiondesc;
         ConfigGroup *group = NULL;
-        if (cfile)
-            HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
+        HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
         for(optiondesc = groupdesc->optionsDesc;
             optiondesc != NULL;
             optiondesc = (ConfigOptionDesc*)optiondesc->hh.next)

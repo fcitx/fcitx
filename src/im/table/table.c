@@ -961,7 +961,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
             iCodeInputCount = 0;
             SetMessageCount(&messageUp, 0);
-            AddMessageAtLast(&messageUp, MSG_INPUT, strStringGet);
+            AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strStringGet);
 
             SetMessageCount(&messageDown, 0);
             AddMessageAtLast(&messageDown, MSG_CODE, "读音：");
@@ -1092,7 +1092,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
         if (!tbl.bIsTableDelPhrase && !tbl.bIsTableAdjustOrder) {
             SetMessageCount(&messageUp,0);
             if (iCodeInputCount) {
-                AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
+                AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
             }
         }
         else
@@ -1192,13 +1192,13 @@ char           *_TableGetCandWord (int iIndex, Bool _bLegend)
             RECORD         *temp;
 
             SetMessageCount(&messageUp, 0);
-            AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
+            AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
 
             SetMessageCount(&messageDown, 0);
-            AddMessageAtLast(&messageDown, MSG_TIPS, pCandWord);
+            AddMessageAtLast(&messageDown, MSG_TIPS, "%s", pCandWord);
             temp = tbl.tableSingleHZ[CalHZIndex (pCandWord)];
             if (temp) {
-                AddMessageAtLast(&messageDown, MSG_CODE, temp->strCode);
+                AddMessageAtLast(&messageDown, MSG_CODE, "%s", temp->strCode);
             }
         }
         else {
@@ -1355,7 +1355,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
-        AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
+        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
 
         MSG_TYPE mType;
         char* pMsg = NULL;
@@ -1408,7 +1408,7 @@ INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode)
             pstr = ((tableCandWord[i].flag == CT_NORMAL) ? tableCandWord[i].candWord.record->strCode : tableCandWord[i].candWord.autoPhrase->strCode) + iCodeInputCount;
 
         if (pstr)
-            AddMessageAtLast(&messageDown, MSG_CODE, pstr);
+            AddMessageAtLast(&messageDown, MSG_CODE, "%s", pstr);
         else
             AddMessageAtLast(&messageDown, MSG_CODE, "");
 
@@ -1981,7 +1981,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
 
     SetMessageCount(&messageUp, 0);
     AddMessageAtLast(&messageUp, MSG_TIPS, "联想：");
-    AddMessageAtLast(&messageUp, MSG_INPUT, tbl.strTableLegendSource);
+    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", tbl.strTableLegendSource);
 
     if (fc.bPointAfterNumber) {
         strTemp[1] = '.';
@@ -1996,9 +1996,9 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
             strTemp[0] = '0';
         else
             strTemp[0] = i + 1 + '0';
-        AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
+        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
 
-        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), tableCandWord[i].candWord.record->strHZ + strlen (tbl.strTableLegendSource));
+        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tableCandWord[i].candWord.record->strHZ + strlen (tbl.strTableLegendSource));
         if (i != (iLegendCandWordCount - 1)) {
             MessageConcatLast(&messageDown, " ");
         }
@@ -2122,7 +2122,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode)
         if (i == 9)
             strTemp[0] = '0';
         AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
-        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), tbl.fh[iCurrentCandPage * fc.iMaxCandWord + i].strFH);
+        AddMessageAtLast(&messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tbl.fh[iCurrentCandPage * fc.iMaxCandWord + i].strFH);
         if (i != (fc.iMaxCandWord - 1)) {
             MessageConcatLast(&messageDown, " ");
         }
@@ -2176,11 +2176,11 @@ Bool TablePhraseTips (void)
         if (recTemp) {
             SetMessageCount(&messageUp, 0);
             AddMessageAtLast(&messageUp, MSG_TIPS, "词库中有词组 ");
-            AddMessageAtLast(&messageUp, MSG_INPUT, ps);
+            AddMessageAtLast(&messageUp, MSG_INPUT, "%s", ps);
 
             SetMessageCount(&messageDown, 0);
             AddMessageAtLast(&messageDown, MSG_FIRSTCAND, "编码为 ");
-            AddMessageAtLast(&messageDown, MSG_CODE, recTemp->strCode);
+            AddMessageAtLast(&messageDown, MSG_CODE, "%s", recTemp->strCode);
             AddMessageAtLast(&messageDown, MSG_TIPS, " ^DEL删除");
             tbl.bTablePhraseTips = True;
             inputWindow.bShowCursor = False;

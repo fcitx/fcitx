@@ -46,7 +46,7 @@ static ConfigFileDesc *addonConfigDesc = NULL;
 static ConfigFileDesc* GetAddonConfigDesc();
 
 /** 
- * @brief 加载Addon信息
+ * @brief Load Addon Info
  */
 void LoadAddonInfo(void)
 {
@@ -164,9 +164,9 @@ void LoadAddonInfo(void)
 }
 
 /** 
- * @brief 加载Addon的配置文件描述
+ * @brief Load addon.desc file
  * 
- * @return 单例的配置文件描述
+ * @return the description of addon configure.
  */
 ConfigFileDesc* GetAddonConfigDesc()
 {
@@ -182,9 +182,9 @@ ConfigFileDesc* GetAddonConfigDesc()
 }
 
 /** 
- * @brief 释放单个Addon信息的内存
+ * @brief Free one addon info
  * 
- * @param addon的指针
+ * @param v addon info
  */
 void FreeAddon(void *v)
 {

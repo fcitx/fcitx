@@ -101,11 +101,11 @@ static void DisplayEIM(EXTRA_IM *im)
 	{
 		strTemp[0] = i + 1 + '0';
 		if (i == 9) strTemp[0] = '0';
-        AddMessageAtLast(&messageDown, MSG_INDEX, strTemp);
+        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
 
-        AddMessageAtLast(&messageDown, (i!=im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND, im->CandTable[i]);
+        AddMessageAtLast(&messageDown, (i!=im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND, "%s", im->CandTable[i]);
 		if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
-            AddMessageAtLast(&messageDown, MSG_CODE, im->CodeTips[i]);
+            AddMessageAtLast(&messageDown, MSG_CODE, "%s", im->CodeTips[i]);
 		if (i != 9)
             MessageConcatLast(&messageDown, " ");
 	}
