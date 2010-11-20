@@ -22,7 +22,7 @@ bin_SCRIPTS = fcitx-config
 @srcdir@/pybase.mb: @srcdir@/pyphrase.mb ;
 
 @srcdir@/pyphrase.mb: $(pyorg_data) $(gbkorg_data)
-	cd $(srcdir) && $(abs_top_builddir)/tools/createPYMB $(gbkorg_data) $(pyorg_data)
+	cd $(srcdir) && @abs_top_builddir@/tools/createPYMB $(gbkorg_data) $(pyorg_data)
 
 tools: 
 	$(MAKE) -C ../tools

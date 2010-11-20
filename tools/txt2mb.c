@@ -359,7 +359,8 @@ int main (int argc, char *argv[])
 
 	bPY = False;
 	if (strCode[0] == cPinyinKey) {
-	    strcpy (strCode, strCode + 1);
+        size_t length = strlen(strCode);
+        memmove (strCode, strCode + 1, length);
 	    bPY = True;
 	}
 
