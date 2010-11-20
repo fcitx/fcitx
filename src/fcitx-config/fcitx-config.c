@@ -746,7 +746,7 @@ void ConfigBindSync(GenericConfig* config)
     ConfigFile *cfile = config->configFile;
     ConfigFileDesc *cdesc = NULL;
     ConfigGroupDesc* groupdesc = NULL;
-    if (cfile)
+    if (!cfile)
         return;
     cdesc = cfile->fileDesc;
     for(groupdesc = cdesc->groupsDesc;
