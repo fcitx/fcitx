@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+_Name=Fcitx
+_GenericName=Free Chinese Input Toy of X
+_Comment=Chinese Input Method
+Exec=@exec_prefix@/fcitx
+Icon=fcitx
+Terminal=false
+Categories=
+Type=Application
+Categories=System;Utility;
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=true
+X-KDE-autostart-after=panel
