@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-09 18:14+0800\n"
-"PO-Revision-Date: 2010-11-09 18:14+0800\n"
+"POT-Creation-Date: 2010-11-22 20:34+0800\n"
+"PO-Revision-Date: 2010-11-22 20:35+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -208,91 +208,91 @@ msgstr "码表输入法优先级，0为禁用"
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
-#: data/config.desc:262
+#: data/config.desc:258
 msgid "Use Complete Pinyin"
 msgstr "使用完整拼音"
 
-#: data/config.desc:267
+#: data/config.desc:263
 msgid "Auto Create Phrase"
 msgstr "自动组词"
 
-#: data/config.desc:272
+#: data/config.desc:268
 msgid "Save Auto Created Phrase"
 msgstr "保存自动词组"
 
-#: data/config.desc:277
+#: data/config.desc:273
 msgid "Hotkey of Adding Frequent Word"
 msgstr "快捷键: 添加常用字"
 
-#: data/config.desc:282
+#: data/config.desc:278
 msgid "Hotkey of Deleting Frequent Word"
 msgstr "快捷键: 删除常用字"
 
-#: data/config.desc:287
+#: data/config.desc:283
 msgid "Hotkey of Delete User Phrase"
 msgstr "快捷键: 删除用户词组"
 
-#: data/config.desc:292
+#: data/config.desc:288
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr "快捷键: 以词定字"
 
-#: data/config.desc:301
+#: data/config.desc:297
 msgid "Rule of Candidate Word Order"
 msgstr "候选字顺序"
 
-#: data/config.desc:310
+#: data/config.desc:306
 msgid "Rule of Candidate Phrase Order"
 msgstr "候选词顺序"
 
-#: data/config.desc:319
+#: data/config.desc:315
 msgid "Rule of Frequent Word Order"
 msgstr "常用字顺序"
 
-#: data/config.desc:324
+#: data/config.desc:320
 msgid "Fuzzy an and ang"
 msgstr "模糊an和ang"
 
-#: data/config.desc:329
+#: data/config.desc:325
 msgid "Fuzzy en and eng"
 msgstr "模糊en和eng"
 
-#: data/config.desc:334
+#: data/config.desc:330
 msgid "Fuzzy ian and iang"
 msgstr "模糊ian和iang"
 
-#: data/config.desc:339
+#: data/config.desc:335
 msgid "Fuzzy in and ing"
 msgstr "模糊in和ing"
 
-#: data/config.desc:344
+#: data/config.desc:340
 msgid "Fuzzy ou and u"
 msgstr "模糊ou和u"
 
-#: data/config.desc:349
+#: data/config.desc:345
 msgid "Fuzzy uan and uang"
 msgstr "模糊uan和uang"
 
-#: data/config.desc:354
+#: data/config.desc:350
 msgid "Fuzzy c and ch"
 msgstr "模糊c和ch"
 
-#: data/config.desc:359
+#: data/config.desc:355
 msgid "Fuzzy f and h"
 msgstr "模糊f和h"
 
-#: data/config.desc:364
+#: data/config.desc:360
 msgid "Fuzzy l and n"
 msgstr "模糊l和n"
 
-#: data/config.desc:369
+#: data/config.desc:365
 msgid "Fuzzy s and sh"
 msgstr "模糊s和sh"
 
-#: data/config.desc:374
+#: data/config.desc:370
 msgid "Fuzzy z and zh"
 msgstr "模糊z和zh"
 
-#: data/config.desc:379
+#: data/config.desc:375
 msgid "Fix misstype gn/ng"
 msgstr "修复拼音中ng和gn的输入错误"
 
@@ -876,94 +876,90 @@ msgid "PhraseTips"
 msgstr "提示词库中的词组"
 
 #: data/config.desc:255
-msgid "ExtraIM"
-msgstr "额外输入法"
-
-#: data/config.desc:259
 msgid "UseCompletePinyin"
 msgstr "使用全拼"
 
-#: data/config.desc:264
+#: data/config.desc:260
 msgid "AutoCreatePhrase"
 msgstr "自动组词"
 
-#: data/config.desc:269 data/table.desc:81
+#: data/config.desc:265 data/table.desc:81
 msgid "SaveAutoPhrase"
 msgstr "自动保存词组"
 
-#: data/config.desc:274
+#: data/config.desc:270
 msgid "AddFreqWordKey"
 msgstr "快捷键: 增加常用字"
 
-#: data/config.desc:279
+#: data/config.desc:275
 msgid "DeleteFreqWordKey"
 msgstr "快捷键: 删除常用字"
 
-#: data/config.desc:284
+#: data/config.desc:280
 msgid "DeleteUserPhraseKey"
 msgstr "快捷键: 删除用户词组"
 
-#: data/config.desc:289
+#: data/config.desc:285
 msgid "InputWordFromPhraseKey"
 msgstr "以词定字键"
 
-#: data/config.desc:294
+#: data/config.desc:290
 msgid "BaseOrder"
 msgstr "单字重码顺序调整"
 
-#: data/config.desc:303
+#: data/config.desc:299
 msgid "PhraseOrder"
 msgstr "词组重码顺序调整"
 
-#: data/config.desc:312
+#: data/config.desc:308
 msgid "FreqOrder"
 msgstr "常用词重码顺序调整"
 
-#: data/config.desc:321
+#: data/config.desc:317
 msgid "FuzzyAnAng"
 msgstr "FuzzyAnAng"
 
-#: data/config.desc:326
+#: data/config.desc:322
 msgid "FuzzyEnEng"
 msgstr "FuzzyEnEng"
 
-#: data/config.desc:331
+#: data/config.desc:327
 msgid "FuzzyIanIang"
 msgstr "模糊ian和iang"
 
-#: data/config.desc:336
+#: data/config.desc:332
 msgid "FuzzyInIng"
 msgstr "FuzzyInIng"
 
-#: data/config.desc:341
+#: data/config.desc:337
 msgid "FuzzyOuU"
 msgstr "FuzzyOuU"
 
-#: data/config.desc:346
+#: data/config.desc:342
 msgid "FuzzyUanUang"
 msgstr "模糊uan和uang"
 
-#: data/config.desc:351
+#: data/config.desc:347
 msgid "FuzzyCCh"
 msgstr "FuzzyCCh"
 
-#: data/config.desc:356
+#: data/config.desc:352
 msgid "FuzzyFH"
 msgstr "FuzzyFH"
 
-#: data/config.desc:361
+#: data/config.desc:357
 msgid "FuzzyLN"
 msgstr "FuzzyLN"
 
-#: data/config.desc:366
+#: data/config.desc:362
 msgid "FuzzySSH"
 msgstr "FuzzySSH"
 
-#: data/config.desc:371
+#: data/config.desc:367
 msgid "FuzzyZZH"
 msgstr "FuzzyZZH"
 
-#: data/config.desc:376
+#: data/config.desc:372
 msgid "Misstype"
 msgstr "gn/ng输入错误"
 
@@ -1434,6 +1430,19 @@ msgstr "共享库"
 msgid "Show"
 msgstr "显示"
 
+# unknown
+#: ../data/fcitx.desktop.in.h:1
+msgid "Chinese Input Method"
+msgstr "中文输入法"
+
+#: ../data/fcitx.desktop.in.h:2
+msgid "Fcitx"
+msgstr "Fcitx"
+
+#: ../data/fcitx.desktop.in.h:3
+msgid "Free Chinese Input Toy of X"
+msgstr "Free Chinese Input Toy of X"
+
 #: ../src/interface/ImeRemote.c:164
 #, c-format
 msgid "Can't open socket %s: %s"
@@ -1561,7 +1570,7 @@ msgstr "Labels %d, Texts %d, CMB:%s"
 msgid "updateMesssages Up:%s"
 msgstr "updateMesssages Up:%s"
 
-#: ../src/ui/tray.c:169
+#: ../src/ui/tray.c:172
 #, c-format
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
@@ -1574,7 +1583,7 @@ msgstr "Fcitx只能在X下运行"
 msgid "XEvent--Expose"
 msgstr "XEvent--Expose"
 
-#: ../src/ui/ui.c:328 ../src/ui/ui.c:335
+#: ../src/ui/ui.c:335 ../src/ui/ui.c:342
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1602,11 +1611,11 @@ msgstr "配置Fcitx..."
 msgid "Exit Fcitx"
 msgstr "退出Fcitx"
 
-#: ../src/ui/InputWindow.c:167
+#: ../src/ui/InputWindow.c:166
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: ../src/ui/InputWindow.c:192
+#: ../src/ui/InputWindow.c:191
 msgid "CAL InputWindow"
 msgstr "CAL InputWindow"
 
@@ -1618,11 +1627,11 @@ msgstr "DISPLAY MainWindow"
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
-#: ../src/ui/skin.c:167
+#: ../src/ui/skin.c:168
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: ../src/ui/skin.c:172
+#: ../src/ui/skin.c:173
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -1681,17 +1690,17 @@ msgstr "配置项不合法： 行%d 缺少'='"
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
 
-#: ../src/fcitx-config/fcitx-config.c:823
+#: ../src/fcitx-config/fcitx-config.c:825
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "配置项%s不合法，使用默认值%s"
 
-#: ../src/fcitx-config/fcitx-config.c:832
+#: ../src/fcitx-config/fcitx-config.c:834
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
 
-#: ../src/fcitx-config/fcitx-config.c:871
+#: ../src/fcitx-config/fcitx-config.c:873
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
@@ -1727,48 +1736,48 @@ msgstr "无法保存拼音索引: %s"
 msgid "Shuangpin"
 msgstr "双拼"
 
-#: ../src/im/table/table.c:181
+#: ../src/im/table/table.c:182
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
 
-#: ../src/im/table/table.c:191
+#: ../src/im/table/table.c:192
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
 
-#: ../src/im/table/table.c:255
+#: ../src/im/table/table.c:256
 msgid "Loading Table Dict"
 msgstr "加载码表词典"
 
-#: ../src/im/table/table.c:265
+#: ../src/im/table/table.c:266
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr "加载码表%s"
 
-#: ../src/im/table/table.c:271
+#: ../src/im/table/table.c:272
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr "无法加载码表文件: %s"
 
-#: ../src/im/table/table.c:393
+#: ../src/im/table/table.c:394
 msgid "Load Table Dict OK"
 msgstr "加载码表文件成功"
 
-#: ../src/im/table/table.c:423
+#: ../src/im/table/table.c:424
 msgid "Loading Autophrase."
 msgstr "加载自动组词信息中"
 
-#: ../src/im/table/table.c:464
+#: ../src/im/table/table.c:465
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: ../src/im/table/table.c:583
+#: ../src/im/table/table.c:588
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr "无法创建码表文件: %s"
 
-#: ../src/im/table/table.c:642
+#: ../src/im/table/table.c:647
 msgid "Rename OK"
 msgstr "重命名成功"
 
@@ -1794,12 +1803,12 @@ msgstr "加载配置文件: %s"
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
-#: ../src/core/addon.c:134
+#: ../src/core/addon.c:133
 #, c-format
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
 
-#: ../src/core/addon.c:144
+#: ../src/core/addon.c:143
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
@@ -1842,7 +1851,7 @@ msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
 msgid "Setting Hint"
 msgstr "设置提示"
 
-#: ../src/core/xim.c:621
+#: ../src/core/xim.c:623
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
@@ -1851,6 +1860,9 @@ msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在�
 #, c-format
 msgid "FCITX -- Get Signal No.: %d"
 msgstr "Fcitx接收到信号: %d"
+
+#~ msgid "ExtraIM"
+#~ msgstr "额外输入法"
 
 #~ msgid "FontZh"
 #~ msgstr "中文字体"

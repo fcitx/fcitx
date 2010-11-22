@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-17 11:48+0800\n"
+"POT-Creation-Date: 2010-11-22 20:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1411,6 +1411,18 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
+#: ../data/fcitx.desktop.in.h:1
+msgid "Chinese Input Method"
+msgstr ""
+
+#: ../data/fcitx.desktop.in.h:2
+msgid "Fcitx"
+msgstr ""
+
+#: ../data/fcitx.desktop.in.h:3
+msgid "Free Chinese Input Toy of X"
+msgstr ""
+
 #: ../src/interface/ImeRemote.c:164
 #, c-format
 msgid "Can't open socket %s: %s"
@@ -1538,7 +1550,7 @@ msgstr ""
 msgid "updateMesssages Up:%s"
 msgstr ""
 
-#: ../src/ui/tray.c:169
+#: ../src/ui/tray.c:172
 #, c-format
 msgid "X error %i on opcode send"
 msgstr ""
@@ -1658,17 +1670,17 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:823
+#: ../src/fcitx-config/fcitx-config.c:825
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:832
+#: ../src/fcitx-config/fcitx-config.c:834
 #, c-format
 msgid "Option %s is Invalid."
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:871
+#: ../src/fcitx-config/fcitx-config.c:873
 #, c-format
 msgid "no default option for %s/%s"
 msgstr ""

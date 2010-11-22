@@ -14,10 +14,17 @@ py_data = @srcdir@/pybase.mb @srcdir@/pyphrase.mb
 py_tar = @srcdir@/pinyin.tar.gz
 py_url = http://fcitx.googlecode.com/files/pinyin.tar.gz
 
-EXTRA_DIST = pySym.mb sp.dat punc.mb vk.conf gbks2t.tab AutoEng.dat gbkpy.org getdescpo fcitx-config $(configdescfile)
-CLEANFILES = $(py_data)
-DISTCLEANFILES = $(pyorg_data) $(py_tar)
 bin_SCRIPTS = fcitx-config
+
+desktopdir = $(datadir)/applications
+desktop_in_files = fcitx.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+EXTRA_DIST = pySym.mb sp.dat punc.mb vk.conf gbks2t.tab AutoEng.dat gbkpy.org getdescpo fcitx-config $(configdescfile) $(desktop_in_files)
+CLEANFILES = $(py_data)
+DISTCLEANFILES = $(pyorg_data) $(py_tar) $(desktop_DATA) 
+
+@INTLTOOL_DESKTOP_RULE@
 
 @srcdir@/pybase.mb: @srcdir@/pyphrase.mb ;
 
@@ -27,15 +34,13 @@ bin_SCRIPTS = fcitx-config
 tools: 
 	$(MAKE) -C ../tools
 
-$(pyorg_data): $(py_tar) md5check
-	cd $(srcdir) && $(TAR) xzvf $(py_tar)
+$(pyorg_data): $(py_tar)
+	cd $(srcdir) && $(MD5SUM) -c $(py_tar).md5 || ( $(RM) $(py_tar); exit 1 )
+	cd $(srcdir) && $(TAR) xzmvf $(py_tar)
 
 $(py_tar):
 	$(WGET) -O $(py_tar) $(py_url)
 	$(WGET) -O $(py_tar).md5 $(py_url).md5
-
-md5check: $(py_tar)
-	cd $(srcdir) && $(MD5SUM) -c $(py_tar).md5 || ( $(RM) $(py_tar); exit 1 )
 
 all-local: tools  $(py_data)
 	rm -f pyERROR

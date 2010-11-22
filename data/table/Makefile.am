@@ -47,17 +47,15 @@ DISTCLEANFILES = $(txt_data) $(table_tar)
 tools: ../../tools/txt2mb
 	$(MAKE) -C ../../tools
 
-$(txt_m_data): cj.txt ;
+$(txt_m_data): @srcdir@/cj.txt ;
 
-cj.txt: $(table_tar) md5check
-	$(TAR) xzvf $(table_tar)
+@srcdir@/cj.txt: $(table_tar)
+	cd $(srcdir) && $(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
+	$(TAR) xzmvf $(table_tar)
 
 $(table_tar):
 	$(WGET) -O $(table_tar) $(table_url)
 	$(WGET) -O $(table_tar).md5 $(table_url).md5
-
-md5check: $(table_tar)
-	cd $(srcdir) && $(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
 
 all-local: tools $(txt_data) $(mb_data)
 
