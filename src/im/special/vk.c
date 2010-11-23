@@ -441,13 +441,15 @@ void SwitchVK (void)
     bVK = !bVK;
     if (bVK) {
         int             x, y;
+        int dwidth, dheight;
+        GetScreenSize(&dwidth, &dheight);
 
         if (fc.bUseDBus)
-            x = DisplayWidth (dpy, iScreen) / 2 - VK_WINDOW_WIDTH / 2;
+            x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
         else
             x = fcitxProfile.iMainWindowOffsetX;
-        if ((x + VK_WINDOW_WIDTH) >= DisplayWidth (dpy, iScreen))
-            x = DisplayWidth (dpy, iScreen) - VK_WINDOW_WIDTH - 1;
+        if ((x + VK_WINDOW_WIDTH) >= dwidth)
+            x = dwidth - VK_WINDOW_WIDTH - 1;
         if (x < 0)
             x = 0;
 
@@ -455,7 +457,7 @@ void SwitchVK (void)
             y = 0;
         else
             y = fcitxProfile.iMainWindowOffsetY + sc.skinMainBar.backImg.height + 2;
-        if ((y + VK_WINDOW_HEIGHT) >= DisplayHeight (dpy, iScreen))
+        if ((y + VK_WINDOW_HEIGHT) >= dheight)
             y = fcitxProfile.iMainWindowOffsetY - VK_WINDOW_HEIGHT - 2;
         if (y < 0)
             y = 0;

@@ -41,6 +41,7 @@ Bool MouseClick (int *x, int *y, Window window);
 Bool IsWindowVisible(Window window);
 void InitWindowAttribute(Visual** vs, Colormap *cmap, XSetWindowAttributes *attrib, unsigned long *attribmask, int* depth);
 void ActiveWindow(Display *dpy, Window window);
+void GetScreenSize(int *width, int *height);
 
 #ifdef _ENABLE_PANGO
 #define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)

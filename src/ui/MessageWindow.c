@@ -77,8 +77,10 @@ void InitMessageWindowProperty (void)
 
 void DisplayMessageWindow (void)
 {
+    int dwidth, dheight;
+    GetScreenSize(&dwidth, &dheight);
     XMapRaised (dpy, messageWindow.window);
-    XMoveWindow (dpy, messageWindow.window, (DisplayWidth (dpy, iScreen) - messageWindow.width) / 2, (DisplayHeight (dpy, iScreen) - messageWindow.height) / 2);
+    XMoveWindow (dpy, messageWindow.window, (dwidth - messageWindow.width) / 2, (dheight - messageWindow.height) / 2);
 }
 
 void DrawMessageWindow (char *title, char **msg, int length)

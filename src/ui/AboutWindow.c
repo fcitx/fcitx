@@ -46,9 +46,11 @@ static void            InitAboutWindowProperty (void);
 
 Bool CreateAboutWindow (void)
 {
+    int dwidth, dheight;
     strcpy (strTitle, AboutTitle);
     strcat (strTitle, " ");
     strcat (strTitle, VERSION);
+    GetScreenSize(&dwidth, &dheight);
 
     aboutWindow.color.r = aboutWindow.color.g = aboutWindow.color.b = 220.0 / 256;
     aboutWindow.fontColor.r = aboutWindow.fontColor.g = aboutWindow.fontColor.b = 0;
@@ -56,7 +58,7 @@ Bool CreateAboutWindow (void)
 
     ABOUT_WINDOW_WIDTH = StringWidth (strTitle, gs.font, aboutWindow.fontSize ) + 50;
     aboutWindow.window =
-        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
     aboutWindow.surface = cairo_xlib_surface_create(dpy, aboutWindow.window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
     if (aboutWindow.window == None)
@@ -91,8 +93,10 @@ void InitAboutWindowProperty (void)
 
 void DisplayAboutWindow (void)
 {
+    int dwidth, dheight;
+    GetScreenSize(&dwidth, &dheight);
     XMapRaised (dpy, aboutWindow.window);
-    XMoveWindow (dpy, aboutWindow.window, (DisplayWidth (dpy, iScreen) - ABOUT_WINDOW_WIDTH) / 2, (DisplayHeight (dpy, iScreen) - ABOUT_WINDOW_HEIGHT) / 2);
+    XMoveWindow (dpy, aboutWindow.window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
 }
 
 void DrawAboutWindow (void)

@@ -96,6 +96,8 @@ InitX(void)
 void
 MyXEventHandler(XEvent * event)
 {
+    int dwidth, dheight;
+    GetScreenSize(&dwidth, &dheight);
     switch (event->type) {
     case ConfigureNotify:
 #ifdef _ENABLE_TRAY
@@ -408,10 +410,9 @@ MyXEventHandler(XEvent * event)
                 LoadSkinDirectory();
 
                 if (event->xbutton.x_root - event->xbutton.x +
-                    mainMenu.width >= DisplayWidth(dpy, iScreen))
+                    mainMenu.width >= dwidth)
                     mainMenu.iPosX =
-                        DisplayWidth(dpy,
-                                     iScreen) - mainMenu.width -
+                        dwidth - mainMenu.width -
                         event->xbutton.x;
                 else
                     mainMenu.iPosX =
@@ -419,10 +420,9 @@ MyXEventHandler(XEvent * event)
 
                 // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
                 if (event->xbutton.y_root + mainMenu.height -
-                    event->xbutton.y >= DisplayHeight(dpy, iScreen))
+                    event->xbutton.y >= dheight)
                     mainMenu.iPosY =
-                        DisplayHeight(dpy,
-                                      iScreen) - mainMenu.height -
+                        dheight - mainMenu.height -
                         event->xbutton.y - 15;
                 else
                     mainMenu.iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
@@ -439,7 +439,7 @@ MyXEventHandler(XEvent * event)
                     fcitxProfile.iMainWindowOffsetY +
                     sc.skinMainBar.backImg.height + 5;
                 if ((mainMenu.iPosY + mainMenu.height) >
-                    DisplayHeight(dpy, iScreen))
+                    dheight)
                     mainMenu.iPosY = fcitxProfile.iMainWindowOffsetY - 5 - mainMenu.height;
 
                 DrawXlibMenu(dpy, &mainMenu);
@@ -935,6 +935,18 @@ void ActiveWindow(Display *dpy, Window window)
 
     XSendEvent(dpy, RootWindow(dpy, iScreen), False, SubstructureNotifyMask, &ev);
     XSync(dpy, False);
+}
+
+void GetScreenSize(int *width, int *height)
+{
+	XWindowAttributes attrs;
+    if (XGetWindowAttributes(dpy, RootWindow(dpy, iScreen), &attrs) < 0) {
+        printf("ERROR\n");
+    }
+    if (width != NULL)
+        (*width) = attrs.width;
+    if (height != NULL)
+        (*height) = attrs.height;
 }
 
 #ifdef _ENABLE_PANGO

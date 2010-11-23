@@ -6,6 +6,7 @@
 #include "fcitx-config/profile.h"
 #include "fcitx-config/xdg.h"
 #include "core/ime.h"
+#include "ui/ui.h"
 
 extern Display* dpy;
 extern int iScreen;
@@ -104,10 +105,14 @@ static void FilterScreenSizeX(ConfigGroup *group, ConfigOption *option, void *da
     switch(sync)
     {
         case Raw2Value:
-            if (*X >= DisplayWidth(dpy, iScreen))
-                *X = DisplayWidth(dpy, iScreen) - 10;
-            if (*X < 0)
-                *X = 0;
+            {
+                int dwidth, dheight;
+                GetScreenSize(&dwidth, &dheight);
+                if (*X >= dwidth)
+                    *X = dwidth - 10;
+                if (*X < 0)
+                    *X = 0;
+            }
             break;
         case Value2Raw:
             break;
@@ -122,10 +127,14 @@ static void FilterScreenSizeY(ConfigGroup *group, ConfigOption *option, void *da
     switch(sync)
     {
         case Raw2Value:
-            if (*Y >= DisplayHeight(dpy, iScreen))
-                *Y = DisplayHeight(dpy, iScreen) - 3;
-            if (*Y < 0)
-                *Y = 0;
+            {
+                int dwidth, dheight;
+                GetScreenSize(&dwidth, &dheight);
+                if (*Y >= dheight)
+                    *Y = dheight - 3;
+                if (*Y < 0)
+                    *Y = 0;
+            }
             break;
         case Value2Raw:
             break;

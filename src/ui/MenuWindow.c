@@ -445,6 +445,8 @@ void MainMenuEvent(int x,int y)
     int i,j;
     char tmpstr[64]={0};
     int offseth = 0;
+    int dwidth, dheight;
+    GetScreenSize(&dwidth, &dheight);
     i=SelectShellIndex(&mainMenu, x, y, &offseth);
     Bool flag = ReverseColor(&mainMenu,i);
     if (flag)
@@ -466,13 +468,13 @@ void MainMenuEvent(int x,int y)
         skinMenu.iPosX=mainMenu.iPosX;
         skinMenu.iPosY=mainMenu.iPosY;
 
-        if ( skinMenu.iPosX+ mainMenu.width+skinMenu.width > DisplayWidth(dpy,iScreen))
+        if ( skinMenu.iPosX+ mainMenu.width+skinMenu.width > dwidth)
             skinMenu.iPosX=skinMenu.iPosX - skinMenu.width + sc.skinMenu.marginLeft + 4;
         else
             skinMenu.iPosX=skinMenu.iPosX + mainMenu.width - sc.skinMenu.marginRight - 4;
 
-        if ( skinMenu.iPosY+offseth+skinMenu.height >DisplayHeight(dpy, iScreen))
-            skinMenu.iPosY=DisplayHeight(dpy, iScreen)-skinMenu.height-10;
+        if ( skinMenu.iPosY+offseth+skinMenu.height >dheight)
+            skinMenu.iPosY=dheight-skinMenu.height-10;
         else
             skinMenu.iPosY=offseth+skinMenu.iPosY-sc.skinMenu.marginTop;
 
@@ -492,13 +494,13 @@ void MainMenuEvent(int x,int y)
         imMenu.iPosX=mainMenu.iPosX;
         imMenu.iPosY=mainMenu.iPosY;
 
-        if ( imMenu.iPosX+ mainMenu.width+imMenu.width > DisplayWidth(dpy,iScreen))
+        if ( imMenu.iPosX+ mainMenu.width+imMenu.width > dwidth)
             imMenu.iPosX=imMenu.iPosX-imMenu.width+ sc.skinMenu.marginLeft + 4;
         else
             imMenu.iPosX=imMenu.iPosX+ mainMenu.width - sc.skinMenu.marginRight-4;
 
-        if ( imMenu.iPosY+offseth+imMenu.height >DisplayHeight(dpy, iScreen))
-            imMenu.iPosY=DisplayHeight(dpy, iScreen)-imMenu.height-10;
+        if ( imMenu.iPosY+offseth+imMenu.height >dheight)
+            imMenu.iPosY=dheight-imMenu.height-10;
         else
             imMenu.iPosY=offseth+imMenu.iPosY-sc.skinMenu.marginTop;
 
@@ -510,13 +512,13 @@ void MainMenuEvent(int x,int y)
         vkMenu.iPosX=mainMenu.iPosX;
         vkMenu.iPosY=mainMenu.iPosY;
 
-        if ( vkMenu.iPosX+ mainMenu.width+vkMenu.width > DisplayWidth(dpy,iScreen))
+        if ( vkMenu.iPosX+ mainMenu.width+vkMenu.width > dwidth)
             vkMenu.iPosX=vkMenu.iPosX-vkMenu.width+ sc.skinMenu.marginLeft + 4;
         else
             vkMenu.iPosX=vkMenu.iPosX+ mainMenu.width - sc.skinMenu.marginRight-4;
 
-        if ( vkMenu.iPosY+offseth+vkMenu.height >DisplayHeight(dpy, iScreen))
-            vkMenu.iPosY=DisplayHeight(dpy, iScreen)-vkMenu.height-10;
+        if ( vkMenu.iPosY+offseth+vkMenu.height >dheight)
+            vkMenu.iPosY=dheight-vkMenu.height-10;
         else
             vkMenu.iPosY=offseth+vkMenu.iPosY-sc.skinMenu.marginTop;
 

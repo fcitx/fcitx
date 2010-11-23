@@ -255,6 +255,8 @@ void DrawInputWindow(void)
 
 void MoveInputWindow()
 {
+    int dwidth, dheight;
+    GetScreenSize(&dwidth, &dheight);
     if (fcitxProfile.bTrackCursor)
     {
         Window window = None, dst;
@@ -298,12 +300,12 @@ void MoveInputWindow()
         else
             iTempInputWindowY = iClientCursorY + inputWindow.iOffsetY;
 
-        if ((iTempInputWindowX + inputWindow.iInputWindowWidth) > DisplayWidth (dpy, iScreen))
-            iTempInputWindowX = DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth;
+        if ((iTempInputWindowX + inputWindow.iInputWindowWidth) > dwidth)
+            iTempInputWindowX = dwidth - inputWindow.iInputWindowWidth;
 
-        if ((iTempInputWindowY + inputWindow.iInputWindowHeight) > DisplayHeight (dpy, iScreen)) {
-            if ( iTempInputWindowY > DisplayHeight (dpy, iScreen) )
-                iTempInputWindowY = DisplayHeight (dpy, iScreen) - 2 * inputWindow.iInputWindowHeight;
+        if ((iTempInputWindowY + inputWindow.iInputWindowHeight) > dheight) {
+            if ( iTempInputWindowY > dheight )
+                iTempInputWindowY = dheight - 2 * inputWindow.iInputWindowHeight;
             else
                 iTempInputWindowY = iTempInputWindowY - 2 * inputWindow.iInputWindowHeight;
         }
@@ -332,7 +334,7 @@ void MoveInputWindow()
     else
     {
         if (fc.bCenterInputWindow) {
-            fcitxProfile.iInputWindowOffsetX = (DisplayWidth (dpy, iScreen) - inputWindow.iInputWindowWidth) / 2;
+            fcitxProfile.iInputWindowOffsetX = (dwidth - inputWindow.iInputWindowWidth) / 2;
             if (fcitxProfile.iInputWindowOffsetX < 0)
                 fcitxProfile.iInputWindowOffsetX = 0;
         }
