@@ -28,7 +28,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = pySym.mb sp.dat punc.mb vk.conf gbks2t.tab AutoEng.dat gbkpy.org getdescpo fcitx-config $(configdescfile) $(desktop_in_files)
 CLEANFILES = $(py_data)
-DISTCLEANFILES = $(pyorg_data) $(py_tar) $(desktop_DATA) 
+DISTCLEANFILES = $(pyorg_data) $(desktop_DATA) 
 
 @INTLTOOL_DESKTOP_RULE@
 
@@ -48,10 +48,10 @@ $(py_tar):
 	$(WGET) -O $(py_tar) $(py_url)
 	$(WGET) -O $(py_tar).md5 $(py_url).md5
 
-all-local: tools  $(py_data)
+all-local: tools  $(py_data) @srcdir@/desc.po
 	rm -f pyERROR
 	rm -f pyPhrase.ok
 
-desc.po: *.desc
-	./getdescpo
+@srcdir@/desc.po: @srcdir@/*.desc
+	@srcdir@/getdescpo @abs_srcdir@
 

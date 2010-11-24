@@ -39,7 +39,7 @@ EXTRA_DIST = $(mb_conf)
 
 CLEANFILES = $(mb_data)
 
-DISTCLEANFILES = $(txt_data) $(table_tar)
+DISTCLEANFILES = $(txt_data)
 
 @srcdir@/%.mb: @srcdir@/%.txt
 	../../tools/txt2mb $< $@
@@ -51,7 +51,7 @@ $(txt_m_data): @srcdir@/cj.txt ;
 
 @srcdir@/cj.txt: $(table_tar)
 	cd $(srcdir) && $(MD5SUM) -c $(table_tar).md5 || ( $(RM) $(table_tar); exit 1)
-	$(TAR) xzmvf $(table_tar)
+	cd $(srcdir) && $(TAR) xzmvf $(table_tar)
 
 $(table_tar):
 	$(WGET) -O $(table_tar) $(table_url)

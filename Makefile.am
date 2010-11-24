@@ -11,3 +11,9 @@ MAINTAINERCLEANFILES = \
         missing \
         mkinstalldirs \
         Makefile.in
+
+install-exec-local:
+	@echo
+	@echo Fcitx Install Finished.
+	@echo You may need to run ldconfig to make shared library work.
+	@echo

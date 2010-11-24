@@ -1,7 +1,9 @@
 #!/bin/sh
 filename=desc.po
-dir=`pwd`
+dir=$1
 filename=`basename $filename`
+
+cd $dir
 
 rm -f desc.po; touch desc.po
 

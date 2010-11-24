@@ -116,7 +116,7 @@ else
             # Must use pango, raise a error.
             AC_MSG_ERROR([No PANGOCAIRO found, configure for pango failed!])
         else
-            AC_MSG_WARN([No PANGOCAIR found, skipping configure for pango])
+            AC_MSG_WARN([No PANGOCAIRO found, skipping configure for pango])
         fi
     fi
 fi
