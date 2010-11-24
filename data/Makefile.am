@@ -1,4 +1,10 @@
-SUBDIRS=table
+if ENABLE_TABLE_DATA
+TABLE=table
+endif
+
+SUBDIRS= \
+		 $(TABLE) \
+		 $(NULL)
 
 generaldir = $(pkgdatadir)/data
 

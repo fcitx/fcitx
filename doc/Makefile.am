@@ -1,5 +1,4 @@
-docdir = $(pkgdatadir)/doc
 doc_DATA = \
-	cjkvinput.txt wb_fh.htm fcitx4.pdf pinyin.txt fcitx_trunk.doxyfile \
+	cjkvinput.txt wb_fh.htm fcitx4.pdf pinyin.txt \
 	Develop_Readme API.txt
-EXTRA_DIST = $(doc_DATA)
+EXTRA_DIST = $(doc_DATA) fcitx_trunk.doxyfile
