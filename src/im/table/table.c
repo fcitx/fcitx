@@ -1933,7 +1933,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
     if (!tbl.strTableLegendSource[0])
         return IRV_TO_PROCESS;
 
-    iLength = strlen (tbl.strTableLegendSource);
+    iLength = utf8_strlen (tbl.strTableLegendSource);
     if (mode == SM_FIRST) {
         iCurrentLegendCandPage = 0;
         iLegendCandPageCount = 0;
@@ -1962,8 +1962,8 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode)
     tableLegend = tbl.recordHead->next;
 
     while (tableLegend != tbl.recordHead) {
-        if (((mode == SM_PREV) ^ (!tableLegend->flag)) && ((iLength + 2) == strlen (tableLegend->strHZ))) {
-            if (!strncmp (tableLegend->strHZ, tbl.strTableLegendSource, iLength) && tableLegend->strHZ[iLength]) {
+        if (((mode == SM_PREV) ^ (!tableLegend->flag)) && ((iLength + 1) == utf8_strlen (tableLegend->strHZ))) {
+            if (!utf8_strncmp (tableLegend->strHZ, tbl.strTableLegendSource, iLength) && utf8_get_nth_char(tableLegend->strHZ, iLength)) {
                 if (mode == SM_FIRST)
                     iTableTotalLengendCandCount++;
 
