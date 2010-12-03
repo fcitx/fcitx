@@ -71,6 +71,7 @@ typedef struct FcitxConfig
     GenericConfig gconfig;
     /* program config */
     char *font;
+    char *menuFont;
     char *strUserLocale;
     char *strRecordingPath;
     Bool bUseTrayIcon;

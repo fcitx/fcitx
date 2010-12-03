@@ -31,6 +31,7 @@ CONFIG_BINDING_REGISTER("SkinInfo","Author",skinInfo.skinAuthor);
 CONFIG_BINDING_REGISTER("SkinInfo","Desc",skinInfo.skinDesc);
 	
 CONFIG_BINDING_REGISTER("SkinFont","FontSize",skinFont.fontSize);
+CONFIG_BINDING_REGISTER("SkinFont","MenuFontSize",skinFont.menuFontSize);
 CONFIG_BINDING_REGISTER("SkinFont","TipColor",skinFont.fontColor[MSG_TIPS]);
 CONFIG_BINDING_REGISTER("SkinFont","InputColor",skinFont.fontColor[MSG_INPUT]);
 CONFIG_BINDING_REGISTER("SkinFont","IndexColor",skinFont.fontColor[MSG_INDEX]);

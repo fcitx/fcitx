@@ -45,6 +45,7 @@ static void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, C
 static void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void SetTriggerKeys (char **str, int length);
 static Bool MyStrcmp (char *str1, char *str2);
@@ -57,6 +58,7 @@ FilterNextTimeEffectBool(UseDBus, fc.bUseDBus)
 
 CONFIG_BINDING_BEGIN(FcitxConfig);
 CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "Font", font, FilterCopyFont);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "MenuFont", menuFont, FilterCopyMenuFont);
 #ifndef _ENABLE_PANGO
 CONFIG_BINDING_REGISTER("Program", "FontLocale", strUserLocale);
 #endif
@@ -152,6 +154,19 @@ void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, Confi
         gs.font = strdup(pstr);
     }
 }
+
+void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    char *pstr = *(char **)value;
+    if (sync == Raw2Value)
+    {
+        if (gs.menuFont)
+            free(gs.menuFont);
+        gs.menuFont = strdup(pstr);
+    }
+}
+
+
 
 void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {

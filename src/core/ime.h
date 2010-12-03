@@ -81,7 +81,7 @@ typedef struct IM{
 
 typedef struct FcitxState {
     char *font;
-    char *fontEn;
+    char *menuFont;
     INT8 iIMIndex;
     Bool bMutexInited;
 } FcitxState;

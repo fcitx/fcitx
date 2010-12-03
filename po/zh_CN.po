@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-22 20:34+0800\n"
-"PO-Revision-Date: 2010-11-22 20:35+0800\n"
+"POT-Creation-Date: 2010-12-03 21:59+0800\n"
+"PO-Revision-Date: 2010-12-03 21:57+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -20,279 +20,283 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Lokalize 1.1\n"
 
-#: data/config.desc:4 data/config.desc:1
+#: data/config.desc:4
 msgid "Font"
 msgstr "字体"
 
 #: data/config.desc:9
+msgid "Menu Font"
+msgstr "菜单字体"
+
+#: data/config.desc:14
 msgid "Font Locale to display"
 msgstr "字体区域"
 
-#: data/config.desc:14
+#: data/config.desc:19
 msgid "Record File of Input"
 msgstr "记录文件"
 
-#: data/config.desc:19
+#: data/config.desc:24
 msgid "Use System Tray Icon"
 msgstr "使用系统托盘"
 
-#: data/config.desc:24
+#: data/config.desc:29
 msgid "Use DBus to display UI (Require KIMPanel)"
 msgstr "使用DBus来显示界面(需要KIMPanel)"
 
-#: data/config.desc:29
+#: data/config.desc:34
 msgid "Enable Addons to Fcitx"
 msgstr "在Fcitx启用附加组件"
 
-#: data/config.desc:34
+#: data/config.desc:39
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
-#: data/config.desc:39
+#: data/config.desc:44
 msgid "Use English Punc After a Number"
 msgstr "数字后跟半角符号"
 
-#: data/config.desc:48
+#: data/config.desc:53
 msgid "Action after press enter"
 msgstr "回车键操作"
 
-#: data/config.desc:57
+#: data/config.desc:62
 msgid "Action after press SemiColon"
 msgstr "分号键操作"
 
-#: data/config.desc:62
+#: data/config.desc:67
 msgid "Input English Character if you input upper case"
 msgstr "大写时输入英文"
 
-#: data/config.desc:67
+#: data/config.desc:72
 msgid "Convert Punc to Chinese Punc"
 msgstr "转换中文标点"
 
-#: data/config.desc:72
+#: data/config.desc:77
 msgid "Disable Paging in Legend Mode"
 msgstr "联想模式禁用翻页"
 
-#: data/config.desc:77
+#: data/config.desc:82
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
 
-#: data/config.desc:82
+#: data/config.desc:87
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
-#: data/config.desc:91
+#: data/config.desc:96
 msgid "Main Window Hide Mode"
 msgstr "主窗口隐藏模式"
 
-#: data/config.desc:96
+#: data/config.desc:101
 msgid "Show Input Window In the center of screen"
 msgstr "输入窗口显示在正中"
 
-#: data/config.desc:101
+#: data/config.desc:106
 msgid "Show Input Window After Trigger Input Mode"
 msgstr "切换输入时显示输入条"
 
-#: data/config.desc:106
+#: data/config.desc:111
 msgid "Show Point After Index"
 msgstr "序号后加点"
 
-#: data/config.desc:111
+#: data/config.desc:116
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
-#: data/config.desc:116
+#: data/config.desc:121
 msgid "Show Version"
 msgstr "显示版本"
 
-#: data/config.desc:121
+#: data/config.desc:126
 msgid "Show Hint Window while ENV is not correctly configured."
 msgstr "环境未配置正确时显示提示窗口"
 
-#: data/config.desc:126
+#: data/config.desc:131
 msgid "Skin Name in use"
 msgstr "皮肤名称"
 
-#: data/config.desc:131
+#: data/config.desc:136
 msgid "Hot key of Triggering Input Method"
 msgstr "快捷键: 切换输入法"
 
-#: data/config.desc:143
+#: data/config.desc:148
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr "快捷键: 切换中英文输入"
 
-#: data/config.desc:148
+#: data/config.desc:153
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
-#: data/config.desc:153
+#: data/config.desc:158
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
-#: data/config.desc:158
+#: data/config.desc:163
 msgid "Hotkey of Switching Follow Cursor Mode"
 msgstr "快捷键: 切换光标跟随"
 
-#: data/config.desc:163
+#: data/config.desc:168
 msgid "Hotkey of Hiding Main Window"
 msgstr "快捷键: 隐藏主窗口"
 
-#: data/config.desc:168
+#: data/config.desc:173
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr "快捷键: 切换软键盘"
 
-#: data/config.desc:173
+#: data/config.desc:178
 msgid "Hotkey of Switching Traditional Chinese Input Mode On."
 msgstr "快捷键: 切换简繁体中文输入"
 
-#: data/config.desc:178
+#: data/config.desc:183
 msgid "Hotkey of Switching Legend Mode"
 msgstr "快捷键: 切换联想模式"
 
-#: data/config.desc:183
+#: data/config.desc:188
 msgid "Hotkey of Looking up the Corresponding pinyin of Word."
 msgstr "快捷键: 反查拼音"
 
-#: data/config.desc:188
+#: data/config.desc:193
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
-#: data/config.desc:193
+#: data/config.desc:198
 msgid "Hotkey of Switch Chinese Punc Mode"
 msgstr "快捷键: 切换中英文标点"
 
-#: data/config.desc:198
+#: data/config.desc:203
 msgid "Hotkey of Going Prev Page"
 msgstr "快捷键: 前一页"
 
-#: data/config.desc:203
+#: data/config.desc:208
 msgid "Hotkey of Going Next Page"
 msgstr "快捷键: 后一页"
 
-#: data/config.desc:208
+#: data/config.desc:213
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
-#: data/config.desc:213
+#: data/config.desc:218
 msgid "Hotkey of Saving All Config and Input History"
 msgstr "快捷键: 保存配置及输入历史"
 
-#: data/config.desc:218
+#: data/config.desc:223
 msgid "Hotkey of Switching Recording Mode"
 msgstr "快捷键: 切换记录模式"
 
-#: data/config.desc:223
+#: data/config.desc:228
 msgid "Hotkey of Reseting Recording Mode"
 msgstr "快捷键: 重置记录模式"
 
-#: data/config.desc:228
+#: data/config.desc:233
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr "拼音输入法优先级，0为禁用"
 
-#: data/config.desc:233
+#: data/config.desc:238
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr "双拼输入法优先级，0为禁用"
 
-#: data/config.desc:238
+#: data/config.desc:243
 msgid "Default Shuangpin Schema"
 msgstr "默认双拼方案"
 
-#: data/config.desc:243
+#: data/config.desc:248
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr "区位输入法优先级，0为禁用"
 
-#: data/config.desc:248
+#: data/config.desc:253
 msgid "Table Priority Order, Zero to Disable"
 msgstr "码表输入法优先级，0为禁用"
 
-#: data/config.desc:253
+#: data/config.desc:258
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
-#: data/config.desc:258
+#: data/config.desc:263
 msgid "Use Complete Pinyin"
 msgstr "使用完整拼音"
 
-#: data/config.desc:263
+#: data/config.desc:268
 msgid "Auto Create Phrase"
 msgstr "自动组词"
 
-#: data/config.desc:268
+#: data/config.desc:273
 msgid "Save Auto Created Phrase"
 msgstr "保存自动词组"
 
-#: data/config.desc:273
+#: data/config.desc:278
 msgid "Hotkey of Adding Frequent Word"
 msgstr "快捷键: 添加常用字"
 
-#: data/config.desc:278
+#: data/config.desc:283
 msgid "Hotkey of Deleting Frequent Word"
 msgstr "快捷键: 删除常用字"
 
-#: data/config.desc:283
+#: data/config.desc:288
 msgid "Hotkey of Delete User Phrase"
 msgstr "快捷键: 删除用户词组"
 
-#: data/config.desc:288
+#: data/config.desc:293
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr "快捷键: 以词定字"
 
-#: data/config.desc:297
+#: data/config.desc:302
 msgid "Rule of Candidate Word Order"
 msgstr "候选字顺序"
 
-#: data/config.desc:306
+#: data/config.desc:311
 msgid "Rule of Candidate Phrase Order"
 msgstr "候选词顺序"
 
-#: data/config.desc:315
+#: data/config.desc:320
 msgid "Rule of Frequent Word Order"
 msgstr "常用字顺序"
 
-#: data/config.desc:320
+#: data/config.desc:325
 msgid "Fuzzy an and ang"
 msgstr "模糊an和ang"
 
-#: data/config.desc:325
+#: data/config.desc:330
 msgid "Fuzzy en and eng"
 msgstr "模糊en和eng"
 
-#: data/config.desc:330
+#: data/config.desc:335
 msgid "Fuzzy ian and iang"
 msgstr "模糊ian和iang"
 
-#: data/config.desc:335
+#: data/config.desc:340
 msgid "Fuzzy in and ing"
 msgstr "模糊in和ing"
 
-#: data/config.desc:340
+#: data/config.desc:345
 msgid "Fuzzy ou and u"
 msgstr "模糊ou和u"
 
-#: data/config.desc:345
+#: data/config.desc:350
 msgid "Fuzzy uan and uang"
 msgstr "模糊uan和uang"
 
-#: data/config.desc:350
+#: data/config.desc:355
 msgid "Fuzzy c and ch"
 msgstr "模糊c和ch"
 
-#: data/config.desc:355
+#: data/config.desc:360
 msgid "Fuzzy f and h"
 msgstr "模糊f和h"
 
-#: data/config.desc:360
+#: data/config.desc:365
 msgid "Fuzzy l and n"
 msgstr "模糊l和n"
 
-#: data/config.desc:365
+#: data/config.desc:370
 msgid "Fuzzy s and sh"
 msgstr "模糊s和sh"
 
-#: data/config.desc:370
+#: data/config.desc:375
 msgid "Fuzzy z and zh"
 msgstr "模糊z和zh"
 
-#: data/config.desc:375
+#: data/config.desc:380
 msgid "Fix misstype gn/ng"
 msgstr "修复拼音中ng和gn的输入错误"
 
@@ -368,7 +372,7 @@ msgstr "保存自动词组"
 msgid "Prompt Table Code"
 msgstr "提示码表编码"
 
-#: data/table.desc:91 data/table.desc:90
+#: data/table.desc:91
 msgid "Symbol"
 msgstr "符号"
 
@@ -376,7 +380,7 @@ msgstr "符号"
 msgid "Symbol File"
 msgstr "符号文件"
 
-#: data/table.desc:101 data/table.desc:100
+#: data/table.desc:101
 msgid "Choose"
 msgstr "选择键"
 
@@ -420,7 +424,7 @@ msgstr "输入后联想词组"
 msgid "Current Input Method Index"
 msgstr "当前输入法"
 
-#: data/profile.desc:47 data/profile.desc:46
+#: data/profile.desc:47
 msgid "Locked"
 msgstr "锁定"
 
@@ -457,184 +461,188 @@ msgid "Input Font Size"
 msgstr "输入字体大小"
 
 #: data/skin.desc:23
+msgid "Menu Font Size"
+msgstr "菜单字体大小"
+
+#: data/skin.desc:28
 msgid "Tip Message Color"
 msgstr "提示信息颜色"
 
-#: data/skin.desc:27
+#: data/skin.desc:32
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: data/skin.desc:31
+#: data/skin.desc:36
 msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
-#: data/skin.desc:35
+#: data/skin.desc:40
 msgid "First Candidate Color"
 msgstr "第一候选词颜色"
 
-#: data/skin.desc:39
+#: data/skin.desc:44
 msgid "User Phrase Color"
 msgstr "用户词组颜色"
 
-#: data/skin.desc:43
+#: data/skin.desc:48
 msgid "Table Code Color"
 msgstr "码表提示颜色"
 
-#: data/skin.desc:47
+#: data/skin.desc:52
 msgid "Other Color"
 msgstr "其他颜色"
 
-#: data/skin.desc:51
+#: data/skin.desc:56
 msgid "Active Menu Item Character Color"
 msgstr "活动菜单项颜色"
 
-#: data/skin.desc:55
+#: data/skin.desc:60
 msgid "Inactive Menu Item Character Color"
 msgstr "非活动菜单项颜色"
 
-#: data/skin.desc:59 data/skin.desc:123 data/skin.desc:179
+#: data/skin.desc:64 data/skin.desc:128 data/skin.desc:184
 msgid "Background Image"
 msgstr "背景图片"
 
-#: data/skin.desc:63
+#: data/skin.desc:68
 msgid "Logo Icon"
 msgstr "Logo图标"
 
-#: data/skin.desc:67
+#: data/skin.desc:72
 msgid "Chinese Punc Icon"
 msgstr "中文标点图标"
 
-#: data/skin.desc:71
+#: data/skin.desc:76
 msgid "English Punc Icon"
 msgstr "英文标点图标"
 
-#: data/skin.desc:75
+#: data/skin.desc:80
 msgid "Simplified Chinese Icon"
 msgstr "简体中文图标"
 
-#: data/skin.desc:79
+#: data/skin.desc:84
 msgid "Traditional Chinese Icon"
 msgstr "繁体中文图标"
 
-#: data/skin.desc:83
+#: data/skin.desc:88
 msgid "Half Width Character Icon"
 msgstr "半角图标"
 
-#: data/skin.desc:87
+#: data/skin.desc:92
 msgid "Full Width Character Icon"
 msgstr "全角图标"
 
-#: data/skin.desc:91
+#: data/skin.desc:96
 msgid "UnLock Icon"
 msgstr "未锁定图标"
 
-#: data/skin.desc:95
+#: data/skin.desc:100
 msgid "Lock Icon"
 msgstr "锁定图标"
 
-#: data/skin.desc:99
+#: data/skin.desc:104
 msgid "Legend mode Icon"
 msgstr "联想激活图标"
 
-#: data/skin.desc:103
+#: data/skin.desc:108
 msgid "Legend disabled Icon"
 msgstr "禁用联想图标"
 
-#: data/skin.desc:107
+#: data/skin.desc:112
 msgid "Virtual Keyboard enabled Icon"
 msgstr "启用软键盘图标"
 
-#: data/skin.desc:111
+#: data/skin.desc:116
 msgid "Virtual Keyboard disabled Icon"
 msgstr "禁用软键盘图标"
 
-#: data/skin.desc:115
+#: data/skin.desc:120
 msgid "English Mode Icon"
 msgstr "英文模式图标"
 
-#: data/skin.desc:119
+#: data/skin.desc:124
 msgid "Chinese Mode Icon"
 msgstr "中文模式图标"
 
-#: data/skin.desc:131
+#: data/skin.desc:136
 msgid "Background Resize Rule"
 msgstr "变形规则"
 
-#: data/skin.desc:135
+#: data/skin.desc:140
 msgid "The Resize Position to Left"
 msgstr "变形区域距左侧距离"
 
-#: data/skin.desc:139
+#: data/skin.desc:144
 msgid "Width of Resize Part "
 msgstr "变形区域宽度"
 
-#: data/skin.desc:143
+#: data/skin.desc:148
 msgid "Left-down position of Input"
 msgstr "输入文字左下角"
 
-#: data/skin.desc:147
+#: data/skin.desc:152
 msgid "Left-down position of Output"
 msgstr "输出文字左下角"
 
-#: data/skin.desc:151
+#: data/skin.desc:156
 msgid "Space to the left"
 msgstr "左侧空白宽度"
 
-#: data/skin.desc:155
+#: data/skin.desc:160
 msgid "Space to the right"
 msgstr "右侧空白宽度"
 
-#: data/skin.desc:159
+#: data/skin.desc:164
 msgid "Color of Cursor"
 msgstr "光标颜色"
 
-#: data/skin.desc:163
+#: data/skin.desc:168
 msgid "Prev Page Icon"
 msgstr "上一页图标"
 
-#: data/skin.desc:167
+#: data/skin.desc:172
 msgid "Next Page Icon"
 msgstr "下一页图标"
 
 # unknown
-#: data/skin.desc:171
+#: data/skin.desc:176
 msgid "Active Tray Icon"
 msgstr "活动输入法图标"
 
 # unknown
-#: data/skin.desc:175
+#: data/skin.desc:180
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
 
-#: data/skin.desc:186
+#: data/skin.desc:191
 msgid "Background Resize Rule on Horizontal Direction"
 msgstr "横向变形规则"
 
-#: data/skin.desc:194
+#: data/skin.desc:199
 msgid "Background Resize Rule on Vertical Direction"
 msgstr "纵向变形规则"
 
-#: data/skin.desc:199
+#: data/skin.desc:204
 msgid "Margin to top"
 msgstr "上边距"
 
-#: data/skin.desc:203
+#: data/skin.desc:208
 msgid "Margin to bottom"
 msgstr "下边距"
 
-#: data/skin.desc:207
+#: data/skin.desc:212
 msgid "Margin to left"
 msgstr "左边距"
 
-#: data/skin.desc:211
+#: data/skin.desc:216
 msgid "Margin to right"
 msgstr "右边距"
 
-#: data/skin.desc:215
+#: data/skin.desc:220
 msgid "Active Menu Color"
 msgstr "活动菜单项颜色"
 
-#: data/skin.desc:219
+#: data/skin.desc:224
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
@@ -669,611 +677,6 @@ msgstr "五笔拼音"
 #: data/table/qxm.conf:2
 msgid "Bingchan"
 msgstr "冰蟾全息"
-
-#: data/addon.desc:1 data/skin.desc:1 data/table.desc:1
-msgid "Name"
-msgstr "名称"
-
-#: data/addon.desc:4
-msgid "Category"
-msgstr "分组"
-
-#: data/addon.desc:9 data/table.desc:105
-msgid "Enabled"
-msgstr "启用"
-
-# unknown
-#: data/addon.desc:13
-msgid "Module"
-msgstr "模块"
-
-#: data/addon.desc:16
-msgid "Type"
-msgstr "类型"
-
-#: data/config.desc:6
-msgid "FontLocale"
-msgstr "字体区域"
-
-#: data/config.desc:11
-msgid "RecordFile"
-msgstr "记录文件"
-
-#: data/config.desc:16
-msgid "UseTray"
-msgstr "启用托盘"
-
-#: data/config.desc:21
-msgid "UseDBus"
-msgstr "启用DBus"
-
-#: data/config.desc:26
-msgid "EnableAddons"
-msgstr "启用附加组件"
-
-#: data/config.desc:31
-msgid "DelayStart"
-msgstr "延迟启动"
-
-#: data/config.desc:36
-msgid "HalfPuncAfterNumber"
-msgstr "数字后跟半角符号"
-
-#: data/config.desc:41
-msgid "EnterAction"
-msgstr "回车键行为"
-
-#: data/config.desc:50
-msgid "SemiColonAction"
-msgstr "分号键行为"
-
-#: data/config.desc:59
-msgid "InputEngByCapitalChar"
-msgstr "大写字母输入英文"
-
-#: data/config.desc:64
-msgid "ConvertPunc"
-msgstr "转换中文标点"
-
-#: data/config.desc:69
-msgid "LegendModeDisablePaging"
-msgstr "联想模式禁止翻页"
-
-#: data/config.desc:74
-msgid "SendTextWhenSwitchEng"
-msgstr "快速切换中英文时将已有英文上屏"
-
-#: data/config.desc:79
-msgid "CandidateWordNumber"
-msgstr "候选词个数"
-
-#: data/config.desc:84
-msgid "MainWindowHideMode"
-msgstr "主窗口隐藏模式"
-
-#: data/config.desc:93
-msgid "CenterInputWindow"
-msgstr "输入窗口居中"
-
-#: data/config.desc:98
-msgid "ShowInputWindowAfterTriggering"
-msgstr "首次显示输入条"
-
-#: data/config.desc:103
-msgid "ShowPointAfterIndex"
-msgstr "候选序号后加点"
-
-#: data/config.desc:108
-msgid "ShowInputSpeed"
-msgstr "显示输入速度"
-
-#: data/config.desc:113
-msgid "ShowVersion"
-msgstr "显示版本"
-
-#: data/config.desc:118
-msgid "ShowHintWindow"
-msgstr "显示配置提示窗口"
-
-#: data/config.desc:123
-msgid "SkinType"
-msgstr "皮肤名称"
-
-#: data/config.desc:128
-msgid "TriggerKey"
-msgstr "输入法切换键"
-
-#: data/config.desc:133
-msgid "ChnEngSwitchKey"
-msgstr "中英文快速切换键"
-
-#: data/config.desc:145
-msgid "DoubleSwitchKey"
-msgstr "双击中英文切换"
-
-#: data/config.desc:150
-msgid "TimeInterval"
-msgstr "击键时间间隔"
-
-#: data/config.desc:155
-msgid "FollowCursorKey"
-msgstr "快捷键: 切换光标跟随"
-
-#: data/config.desc:160
-msgid "HideMainWindowKey"
-msgstr "快捷键: 隐藏主窗口"
-
-#: data/config.desc:165
-msgid "VKSwitchKey"
-msgstr "快捷键: 切换软键盘"
-
-#: data/config.desc:170
-msgid "TraditionalChnSwitchKey"
-msgstr "快捷键: 切换简体繁体"
-
-#: data/config.desc:175
-msgid "LegendSwitchKey"
-msgstr "快捷键: 切换联想模式"
-
-#: data/config.desc:180
-msgid "LookupPinyinKey"
-msgstr "快捷键: 反查拼音"
-
-#: data/config.desc:185
-msgid "FullWidthSwitchKey"
-msgstr "快捷键: 切换全半角"
-
-#: data/config.desc:190
-msgid "ChnPuncSwitchKey"
-msgstr "快捷键: 切换中英文标点"
-
-#: data/config.desc:195
-msgid "PrevPageKey"
-msgstr "快捷键: 上一页"
-
-#: data/config.desc:200
-msgid "NextPageKey"
-msgstr "快捷键: 下一页"
-
-#: data/config.desc:205
-msgid "SecondThirdCandWordKey"
-msgstr "第二三候选词选择键"
-
-#: data/config.desc:210
-msgid "SaveAllKey"
-msgstr "快捷键: 保存"
-
-#: data/config.desc:215
-msgid "SetRecordingKey"
-msgstr "快捷键: 切换记录模式"
-
-#: data/config.desc:220
-msgid "ResetRecordingKey"
-msgstr "快捷键: 重置记录模式"
-
-#: data/config.desc:225
-msgid "PinyinOrder"
-msgstr "拼音顺序"
-
-#: data/config.desc:230
-msgid "ShuangpinOrder"
-msgstr "双拼顺序"
-
-#: data/config.desc:235
-msgid "DefaultShuangpinSchema"
-msgstr "默认双拼方案"
-
-#: data/config.desc:240
-msgid "QuweiOrder"
-msgstr "区位顺序"
-
-#: data/config.desc:245
-msgid "TableOrder"
-msgstr "码表顺序"
-
-#: data/config.desc:250
-msgid "PhraseTips"
-msgstr "提示词库中的词组"
-
-#: data/config.desc:255
-msgid "UseCompletePinyin"
-msgstr "使用全拼"
-
-#: data/config.desc:260
-msgid "AutoCreatePhrase"
-msgstr "自动组词"
-
-#: data/config.desc:265 data/table.desc:81
-msgid "SaveAutoPhrase"
-msgstr "自动保存词组"
-
-#: data/config.desc:270
-msgid "AddFreqWordKey"
-msgstr "快捷键: 增加常用字"
-
-#: data/config.desc:275
-msgid "DeleteFreqWordKey"
-msgstr "快捷键: 删除常用字"
-
-#: data/config.desc:280
-msgid "DeleteUserPhraseKey"
-msgstr "快捷键: 删除用户词组"
-
-#: data/config.desc:285
-msgid "InputWordFromPhraseKey"
-msgstr "以词定字键"
-
-#: data/config.desc:290
-msgid "BaseOrder"
-msgstr "单字重码顺序调整"
-
-#: data/config.desc:299
-msgid "PhraseOrder"
-msgstr "词组重码顺序调整"
-
-#: data/config.desc:308
-msgid "FreqOrder"
-msgstr "常用词重码顺序调整"
-
-#: data/config.desc:317
-msgid "FuzzyAnAng"
-msgstr "FuzzyAnAng"
-
-#: data/config.desc:322
-msgid "FuzzyEnEng"
-msgstr "FuzzyEnEng"
-
-#: data/config.desc:327
-msgid "FuzzyIanIang"
-msgstr "模糊ian和iang"
-
-#: data/config.desc:332
-msgid "FuzzyInIng"
-msgstr "FuzzyInIng"
-
-#: data/config.desc:337
-msgid "FuzzyOuU"
-msgstr "FuzzyOuU"
-
-#: data/config.desc:342
-msgid "FuzzyUanUang"
-msgstr "模糊uan和uang"
-
-#: data/config.desc:347
-msgid "FuzzyCCh"
-msgstr "FuzzyCCh"
-
-#: data/config.desc:352
-msgid "FuzzyFH"
-msgstr "FuzzyFH"
-
-#: data/config.desc:357
-msgid "FuzzyLN"
-msgstr "FuzzyLN"
-
-#: data/config.desc:362
-msgid "FuzzySSH"
-msgstr "FuzzySSH"
-
-#: data/config.desc:367
-msgid "FuzzyZZH"
-msgstr "FuzzyZZH"
-
-#: data/config.desc:372
-msgid "Misstype"
-msgstr "gn/ng输入错误"
-
-#: data/profile.desc:1
-msgid "MainWindowOffsetX"
-msgstr "主窗口X位置"
-
-#: data/profile.desc:6
-msgid "MainWindowOffsetY"
-msgstr "主窗口Y位置"
-
-#: data/profile.desc:11
-msgid "InputWindowOffsetX"
-msgstr "输入窗口X位置"
-
-#: data/profile.desc:16
-msgid "InputWindowOffsetY"
-msgstr "输入窗口Y位置"
-
-#: data/profile.desc:21
-msgid "Corner"
-msgstr "全角"
-
-#: data/profile.desc:26
-msgid "ChnPunc"
-msgstr "中文标点"
-
-#: data/profile.desc:31
-msgid "TrackCursor"
-msgstr "光标跟随"
-
-#: data/profile.desc:36
-msgid "UseLegend"
-msgstr "联想模式"
-
-#: data/profile.desc:41
-msgid "IMIndex"
-msgstr "当前输入法编号"
-
-#: data/profile.desc:51
-msgid "CompactMainWindow"
-msgstr "压缩主窗口"
-
-#: data/profile.desc:56
-msgid "UseGBKT"
-msgstr "使用繁体"
-
-#: data/profile.desc:61
-msgid "Recording"
-msgstr "记录模式"
-
-#: data/skin.desc:5
-msgid "Version"
-msgstr "版本"
-
-#: data/skin.desc:9
-msgid "Author"
-msgstr "作者"
-
-#: data/skin.desc:13
-msgid "Desc"
-msgstr "描述"
-
-#: data/skin.desc:17
-msgid "FontSize"
-msgstr "字体大小"
-
-#: data/skin.desc:21
-msgid "TipColor"
-msgstr "提升颜色"
-
-#: data/skin.desc:25
-msgid "InputColor"
-msgstr "输入颜色"
-
-#: data/skin.desc:29
-msgid "IndexColor"
-msgstr "索引标记颜色"
-
-#: data/skin.desc:33
-msgid "FirstCandColor"
-msgstr "第一候选词颜色"
-
-#: data/skin.desc:37
-msgid "UserPhraseColor"
-msgstr "用户词组颜色"
-
-#: data/skin.desc:41
-msgid "CodeColor"
-msgstr "码表提升颜色"
-
-#: data/skin.desc:45
-msgid "OtherColor"
-msgstr "其他颜色"
-
-#: data/skin.desc:49
-msgid "ActiveMenuColor"
-msgstr "活动菜单项颜色"
-
-#: data/skin.desc:53
-msgid "InactiveMenuColor"
-msgstr "非活动菜单项颜色"
-
-#: data/skin.desc:57 data/skin.desc:121 data/skin.desc:177
-msgid "BackImg"
-msgstr "背景图片"
-
-#: data/skin.desc:61
-msgid "Logo"
-msgstr "Logo图标"
-
-#: data/skin.desc:65
-msgid "ZhPunc"
-msgstr "中文标点图标"
-
-#: data/skin.desc:69
-msgid "EnPunc"
-msgstr "英文标点图标"
-
-#: data/skin.desc:73
-msgid "Chs"
-msgstr "简体图标"
-
-#: data/skin.desc:77
-msgid "Cht"
-msgstr "繁体图标"
-
-#: data/skin.desc:81
-msgid "HalfCorner"
-msgstr "半角图标"
-
-#: data/skin.desc:85
-msgid "FullCorner"
-msgstr "全角图标"
-
-#: data/skin.desc:89
-msgid "Unlock"
-msgstr "未锁定图标"
-
-#: data/skin.desc:93
-msgid "Lock"
-msgstr "锁定图标"
-
-#: data/skin.desc:97
-msgid "Legend"
-msgstr "联想激活图标"
-
-#: data/skin.desc:101
-msgid "NoLegend"
-msgstr "联想未激活图标"
-
-#: data/skin.desc:105
-msgid "VK"
-msgstr "软键盘激活图标"
-
-#: data/skin.desc:109
-msgid "NoVK"
-msgstr "软键盘未激活图标"
-
-#: data/skin.desc:113 unknown
-msgid "Eng"
-msgstr "英文"
-
-#: data/skin.desc:117
-msgid "Chn"
-msgstr "中文"
-
-#: data/skin.desc:125 unknown
-msgid "Resize"
-msgstr "变形规则"
-
-#: data/skin.desc:133
-msgid "ResizePos"
-msgstr "变形区域位置"
-
-#: data/skin.desc:137
-msgid "ResizeWidth"
-msgstr "变形区域宽度"
-
-#: data/skin.desc:141
-msgid "InputPos"
-msgstr "上排文字位置"
-
-#: data/skin.desc:145
-msgid "OutputPos"
-msgstr "下排文字位置"
-
-#: data/skin.desc:149
-msgid "LayoutLeft"
-msgstr "左边距"
-
-#: data/skin.desc:153
-msgid "LayoutRight"
-msgstr "右边距"
-
-#: data/skin.desc:157
-msgid "CursorColor"
-msgstr "光标颜色"
-
-#: data/skin.desc:161
-msgid "BackArrow"
-msgstr "向后翻页"
-
-#: data/skin.desc:165
-msgid "ForwardArrow"
-msgstr "向前翻页"
-
-#: data/skin.desc:169
-msgid "Active"
-msgstr "激活"
-
-#: data/skin.desc:173
-msgid "Inactive"
-msgstr "未激活"
-
-#: data/skin.desc:181
-msgid "ResizeHorizontal"
-msgstr "横向变形规则"
-
-#: data/skin.desc:189
-msgid "ResizeVertical"
-msgstr "纵向变形规则"
-
-#: data/skin.desc:197
-msgid "MarginTop"
-msgstr "上边距"
-
-#: data/skin.desc:201
-msgid "MarginBottom"
-msgstr "下边距"
-
-#: data/skin.desc:205
-msgid "MarginLeft"
-msgstr "左边距"
-
-#: data/skin.desc:209
-msgid "MarginRight"
-msgstr "右边距"
-
-#: data/skin.desc:213
-msgid "ActiveColor"
-msgstr "活动项背景颜色"
-
-#: data/skin.desc:217
-msgid "LineColor"
-msgstr "分隔线颜色"
-
-#: data/table.desc:5
-msgid "IconName"
-msgstr "图标名称"
-
-#: data/table.desc:9
-msgid "File"
-msgstr "文件"
-
-#: data/table.desc:13
-msgid "AdjustOrder"
-msgstr "候选词顺序调整"
-
-#: data/table.desc:22
-msgid "Priority"
-msgstr "优先级"
-
-#: data/table.desc:27
-msgid "UsePY"
-msgstr "使用拼音"
-
-#: data/table.desc:32
-msgid "PYKey"
-msgstr "拼音键"
-
-#: data/table.desc:37
-msgid "AutoSend"
-msgstr "自动上屏"
-
-#: data/table.desc:42
-msgid "NoneMatchAutoSend"
-msgstr "空码自动上屏"
-
-#: data/table.desc:47
-msgid "EndKey"
-msgstr "中止键"
-
-#: data/table.desc:52
-msgid "UseMatchingKey"
-msgstr "使用模糊键"
-
-#: data/table.desc:57
-msgid "MatchingKey"
-msgstr "模糊键"
-
-#: data/table.desc:62
-msgid "ExactMatch"
-msgstr "精确匹配"
-
-#: data/table.desc:66
-msgid "AutoPhrase"
-msgstr "自动组词"
-
-#: data/table.desc:71
-msgid "AutoPhraseLength"
-msgstr "自动组词长度"
-
-#: data/table.desc:76
-msgid "AutoPhrasePhrase"
-msgstr "词组参与自动造词"
-
-#: data/table.desc:86
-msgid "PromptTableCode"
-msgstr "提示编码"
-
-#: data/table.desc:95
-msgid "SymbolFile"
-msgstr "符号文件"
 
 # unknown
 msgid "Addon"
@@ -1368,6 +771,10 @@ msgstr "提交输入"
 msgid "Copy"
 msgstr "复制"
 
+#: unknown
+msgid "Eng"
+msgstr "英文"
+
 # unknown
 #: unknown
 msgid "Fix"
@@ -1411,6 +818,10 @@ msgstr "快速输入"
 #: unknown
 msgid "R_CTRL"
 msgstr "右Ctrl"
+
+#: unknown
+msgid "Resize"
+msgstr "变形规则"
 
 # unknown
 #: unknown
@@ -1579,11 +990,11 @@ msgstr "X error %i on opcode send"
 msgid "FCITX can only run under X"
 msgstr "Fcitx只能在X下运行"
 
-#: ../src/ui/ui.c:122
+#: ../src/ui/ui.c:124
 msgid "XEvent--Expose"
 msgstr "XEvent--Expose"
 
-#: ../src/ui/ui.c:335 ../src/ui/ui.c:342
+#: ../src/ui/ui.c:337 ../src/ui/ui.c:344
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1619,11 +1030,11 @@ msgstr "DISPLAY InputWindow"
 msgid "CAL InputWindow"
 msgstr "CAL InputWindow"
 
-#: ../src/ui/MainWindow.c:125
+#: ../src/ui/MainWindow.c:134
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: ../src/ui/MainWindow.c:146
+#: ../src/ui/MainWindow.c:155
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -1794,7 +1205,7 @@ msgstr "额外输入法: 打开%s失败 %s"
 msgid "ExtraIM: bad im"
 msgstr "额外输入法: 不正确的输入法"
 
-#: ../src/tools/configfile.c:264
+#: ../src/tools/configfile.c:279
 #, c-format
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"
@@ -1860,6 +1271,460 @@ msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在�
 #, c-format
 msgid "FCITX -- Get Signal No.: %d"
 msgstr "Fcitx接收到信号: %d"
+
+#~ msgid "Name"
+#~ msgstr "名称"
+
+#~ msgid "Category"
+#~ msgstr "分组"
+
+#~ msgid "Enabled"
+#~ msgstr "启用"
+
+# unknown
+#~ msgid "Module"
+#~ msgstr "模块"
+
+#~ msgid "Type"
+#~ msgstr "类型"
+
+#~ msgid "MenuFont"
+#~ msgstr "菜单字体"
+
+#~ msgid "FontLocale"
+#~ msgstr "字体区域"
+
+#~ msgid "RecordFile"
+#~ msgstr "记录文件"
+
+#~ msgid "UseTray"
+#~ msgstr "启用托盘"
+
+#~ msgid "UseDBus"
+#~ msgstr "启用DBus"
+
+#~ msgid "EnableAddons"
+#~ msgstr "启用附加组件"
+
+#~ msgid "DelayStart"
+#~ msgstr "延迟启动"
+
+#~ msgid "HalfPuncAfterNumber"
+#~ msgstr "数字后跟半角符号"
+
+#~ msgid "EnterAction"
+#~ msgstr "回车键行为"
+
+#~ msgid "SemiColonAction"
+#~ msgstr "分号键行为"
+
+#~ msgid "InputEngByCapitalChar"
+#~ msgstr "大写字母输入英文"
+
+#~ msgid "ConvertPunc"
+#~ msgstr "转换中文标点"
+
+#~ msgid "LegendModeDisablePaging"
+#~ msgstr "联想模式禁止翻页"
+
+#~ msgid "SendTextWhenSwitchEng"
+#~ msgstr "快速切换中英文时将已有英文上屏"
+
+#~ msgid "CandidateWordNumber"
+#~ msgstr "候选词个数"
+
+#~ msgid "MainWindowHideMode"
+#~ msgstr "主窗口隐藏模式"
+
+#~ msgid "CenterInputWindow"
+#~ msgstr "输入窗口居中"
+
+#~ msgid "ShowInputWindowAfterTriggering"
+#~ msgstr "首次显示输入条"
+
+#~ msgid "ShowPointAfterIndex"
+#~ msgstr "候选序号后加点"
+
+#~ msgid "ShowInputSpeed"
+#~ msgstr "显示输入速度"
+
+#~ msgid "ShowVersion"
+#~ msgstr "显示版本"
+
+#~ msgid "ShowHintWindow"
+#~ msgstr "显示配置提示窗口"
+
+#~ msgid "SkinType"
+#~ msgstr "皮肤名称"
+
+#~ msgid "TriggerKey"
+#~ msgstr "输入法切换键"
+
+#~ msgid "ChnEngSwitchKey"
+#~ msgstr "中英文快速切换键"
+
+#~ msgid "DoubleSwitchKey"
+#~ msgstr "双击中英文切换"
+
+#~ msgid "TimeInterval"
+#~ msgstr "击键时间间隔"
+
+#~ msgid "FollowCursorKey"
+#~ msgstr "快捷键: 切换光标跟随"
+
+#~ msgid "HideMainWindowKey"
+#~ msgstr "快捷键: 隐藏主窗口"
+
+#~ msgid "VKSwitchKey"
+#~ msgstr "快捷键: 切换软键盘"
+
+#~ msgid "TraditionalChnSwitchKey"
+#~ msgstr "快捷键: 切换简体繁体"
+
+#~ msgid "LegendSwitchKey"
+#~ msgstr "快捷键: 切换联想模式"
+
+#~ msgid "LookupPinyinKey"
+#~ msgstr "快捷键: 反查拼音"
+
+#~ msgid "FullWidthSwitchKey"
+#~ msgstr "快捷键: 切换全半角"
+
+#~ msgid "ChnPuncSwitchKey"
+#~ msgstr "快捷键: 切换中英文标点"
+
+#~ msgid "PrevPageKey"
+#~ msgstr "快捷键: 上一页"
+
+#~ msgid "NextPageKey"
+#~ msgstr "快捷键: 下一页"
+
+#~ msgid "SecondThirdCandWordKey"
+#~ msgstr "第二三候选词选择键"
+
+#~ msgid "SaveAllKey"
+#~ msgstr "快捷键: 保存"
+
+#~ msgid "SetRecordingKey"
+#~ msgstr "快捷键: 切换记录模式"
+
+#~ msgid "ResetRecordingKey"
+#~ msgstr "快捷键: 重置记录模式"
+
+#~ msgid "PinyinOrder"
+#~ msgstr "拼音顺序"
+
+#~ msgid "ShuangpinOrder"
+#~ msgstr "双拼顺序"
+
+#~ msgid "DefaultShuangpinSchema"
+#~ msgstr "默认双拼方案"
+
+#~ msgid "QuweiOrder"
+#~ msgstr "区位顺序"
+
+#~ msgid "TableOrder"
+#~ msgstr "码表顺序"
+
+#~ msgid "PhraseTips"
+#~ msgstr "提示词库中的词组"
+
+#~ msgid "UseCompletePinyin"
+#~ msgstr "使用全拼"
+
+#~ msgid "AutoCreatePhrase"
+#~ msgstr "自动组词"
+
+#~ msgid "SaveAutoPhrase"
+#~ msgstr "自动保存词组"
+
+#~ msgid "AddFreqWordKey"
+#~ msgstr "快捷键: 增加常用字"
+
+#~ msgid "DeleteFreqWordKey"
+#~ msgstr "快捷键: 删除常用字"
+
+#~ msgid "DeleteUserPhraseKey"
+#~ msgstr "快捷键: 删除用户词组"
+
+#~ msgid "InputWordFromPhraseKey"
+#~ msgstr "以词定字键"
+
+#~ msgid "BaseOrder"
+#~ msgstr "单字重码顺序调整"
+
+#~ msgid "PhraseOrder"
+#~ msgstr "词组重码顺序调整"
+
+#~ msgid "FreqOrder"
+#~ msgstr "常用词重码顺序调整"
+
+#~ msgid "FuzzyAnAng"
+#~ msgstr "FuzzyAnAng"
+
+#~ msgid "FuzzyEnEng"
+#~ msgstr "FuzzyEnEng"
+
+#~ msgid "FuzzyIanIang"
+#~ msgstr "模糊ian和iang"
+
+#~ msgid "FuzzyInIng"
+#~ msgstr "FuzzyInIng"
+
+#~ msgid "FuzzyOuU"
+#~ msgstr "FuzzyOuU"
+
+#~ msgid "FuzzyUanUang"
+#~ msgstr "模糊uan和uang"
+
+#~ msgid "FuzzyCCh"
+#~ msgstr "FuzzyCCh"
+
+#~ msgid "FuzzyFH"
+#~ msgstr "FuzzyFH"
+
+#~ msgid "FuzzyLN"
+#~ msgstr "FuzzyLN"
+
+#~ msgid "FuzzySSH"
+#~ msgstr "FuzzySSH"
+
+#~ msgid "FuzzyZZH"
+#~ msgstr "FuzzyZZH"
+
+#~ msgid "Misstype"
+#~ msgstr "gn/ng输入错误"
+
+#~ msgid "MainWindowOffsetX"
+#~ msgstr "主窗口X位置"
+
+#~ msgid "MainWindowOffsetY"
+#~ msgstr "主窗口Y位置"
+
+#~ msgid "InputWindowOffsetX"
+#~ msgstr "输入窗口X位置"
+
+#~ msgid "InputWindowOffsetY"
+#~ msgstr "输入窗口Y位置"
+
+#~ msgid "Corner"
+#~ msgstr "全角"
+
+#~ msgid "ChnPunc"
+#~ msgstr "中文标点"
+
+#~ msgid "TrackCursor"
+#~ msgstr "光标跟随"
+
+#~ msgid "UseLegend"
+#~ msgstr "联想模式"
+
+#~ msgid "IMIndex"
+#~ msgstr "当前输入法编号"
+
+#~ msgid "CompactMainWindow"
+#~ msgstr "压缩主窗口"
+
+#~ msgid "UseGBKT"
+#~ msgstr "使用繁体"
+
+#~ msgid "Recording"
+#~ msgstr "记录模式"
+
+#~ msgid "Version"
+#~ msgstr "版本"
+
+#~ msgid "Author"
+#~ msgstr "作者"
+
+#~ msgid "Desc"
+#~ msgstr "描述"
+
+#~ msgid "FontSize"
+#~ msgstr "字体大小"
+
+#~ msgid "MenuFontSize"
+#~ msgstr "菜单字体大小"
+
+#~ msgid "TipColor"
+#~ msgstr "提升颜色"
+
+#~ msgid "InputColor"
+#~ msgstr "输入颜色"
+
+#~ msgid "IndexColor"
+#~ msgstr "索引标记颜色"
+
+#~ msgid "FirstCandColor"
+#~ msgstr "第一候选词颜色"
+
+#~ msgid "UserPhraseColor"
+#~ msgstr "用户词组颜色"
+
+#~ msgid "CodeColor"
+#~ msgstr "码表提升颜色"
+
+#~ msgid "OtherColor"
+#~ msgstr "其他颜色"
+
+#~ msgid "ActiveMenuColor"
+#~ msgstr "活动菜单项颜色"
+
+#~ msgid "InactiveMenuColor"
+#~ msgstr "非活动菜单项颜色"
+
+#~ msgid "BackImg"
+#~ msgstr "背景图片"
+
+#~ msgid "Logo"
+#~ msgstr "Logo图标"
+
+#~ msgid "ZhPunc"
+#~ msgstr "中文标点图标"
+
+#~ msgid "EnPunc"
+#~ msgstr "英文标点图标"
+
+#~ msgid "Chs"
+#~ msgstr "简体图标"
+
+#~ msgid "Cht"
+#~ msgstr "繁体图标"
+
+#~ msgid "HalfCorner"
+#~ msgstr "半角图标"
+
+#~ msgid "FullCorner"
+#~ msgstr "全角图标"
+
+#~ msgid "Unlock"
+#~ msgstr "未锁定图标"
+
+#~ msgid "Lock"
+#~ msgstr "锁定图标"
+
+#~ msgid "Legend"
+#~ msgstr "联想激活图标"
+
+#~ msgid "NoLegend"
+#~ msgstr "联想未激活图标"
+
+#~ msgid "VK"
+#~ msgstr "软键盘激活图标"
+
+#~ msgid "NoVK"
+#~ msgstr "软键盘未激活图标"
+
+#~ msgid "Chn"
+#~ msgstr "中文"
+
+#~ msgid "ResizePos"
+#~ msgstr "变形区域位置"
+
+#~ msgid "ResizeWidth"
+#~ msgstr "变形区域宽度"
+
+#~ msgid "InputPos"
+#~ msgstr "上排文字位置"
+
+#~ msgid "OutputPos"
+#~ msgstr "下排文字位置"
+
+#~ msgid "LayoutLeft"
+#~ msgstr "左边距"
+
+#~ msgid "LayoutRight"
+#~ msgstr "右边距"
+
+#~ msgid "CursorColor"
+#~ msgstr "光标颜色"
+
+#~ msgid "BackArrow"
+#~ msgstr "向后翻页"
+
+#~ msgid "ForwardArrow"
+#~ msgstr "向前翻页"
+
+#~ msgid "Active"
+#~ msgstr "激活"
+
+#~ msgid "Inactive"
+#~ msgstr "未激活"
+
+#~ msgid "ResizeHorizontal"
+#~ msgstr "横向变形规则"
+
+#~ msgid "ResizeVertical"
+#~ msgstr "纵向变形规则"
+
+#~ msgid "MarginTop"
+#~ msgstr "上边距"
+
+#~ msgid "MarginBottom"
+#~ msgstr "下边距"
+
+#~ msgid "MarginLeft"
+#~ msgstr "左边距"
+
+#~ msgid "MarginRight"
+#~ msgstr "右边距"
+
+#~ msgid "ActiveColor"
+#~ msgstr "活动项背景颜色"
+
+#~ msgid "LineColor"
+#~ msgstr "分隔线颜色"
+
+#~ msgid "IconName"
+#~ msgstr "图标名称"
+
+#~ msgid "File"
+#~ msgstr "文件"
+
+#~ msgid "AdjustOrder"
+#~ msgstr "候选词顺序调整"
+
+#~ msgid "Priority"
+#~ msgstr "优先级"
+
+#~ msgid "UsePY"
+#~ msgstr "使用拼音"
+
+#~ msgid "PYKey"
+#~ msgstr "拼音键"
+
+#~ msgid "AutoSend"
+#~ msgstr "自动上屏"
+
+#~ msgid "NoneMatchAutoSend"
+#~ msgstr "空码自动上屏"
+
+#~ msgid "EndKey"
+#~ msgstr "中止键"
+
+#~ msgid "UseMatchingKey"
+#~ msgstr "使用模糊键"
+
+#~ msgid "MatchingKey"
+#~ msgstr "模糊键"
+
+#~ msgid "ExactMatch"
+#~ msgstr "精确匹配"
+
+#~ msgid "AutoPhrase"
+#~ msgstr "自动组词"
+
+#~ msgid "AutoPhraseLength"
+#~ msgstr "自动组词长度"
+
+#~ msgid "AutoPhrasePhrase"
+#~ msgstr "词组参与自动造词"
+
+#~ msgid "PromptTableCode"
+#~ msgstr "提示编码"
+
+#~ msgid "SymbolFile"
+#~ msgstr "符号文件"
 
 #~ msgid "ExtraIM"
 #~ msgstr "额外输入法"

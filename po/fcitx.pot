@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-11-22 20:34+0800\n"
+"POT-Creation-Date: 2010-12-03 21:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,279 +17,283 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/config.desc:4 data/config.desc:1
+#: data/config.desc:4
 msgid "Font"
 msgstr ""
 
 #: data/config.desc:9
-msgid "Font Locale to display"
+msgid "Menu Font"
 msgstr ""
 
 #: data/config.desc:14
-msgid "Record File of Input"
+msgid "Font Locale to display"
 msgstr ""
 
 #: data/config.desc:19
-msgid "Use System Tray Icon"
+msgid "Record File of Input"
 msgstr ""
 
 #: data/config.desc:24
-msgid "Use DBus to display UI (Require KIMPanel)"
+msgid "Use System Tray Icon"
 msgstr ""
 
 #: data/config.desc:29
-msgid "Enable Addons to Fcitx"
+msgid "Use DBus to display UI (Require KIMPanel)"
 msgstr ""
 
 #: data/config.desc:34
-msgid "Seconds sleep before fcitx really start"
+msgid "Enable Addons to Fcitx"
 msgstr ""
 
 #: data/config.desc:39
+msgid "Seconds sleep before fcitx really start"
+msgstr ""
+
+#: data/config.desc:44
 msgid "Use English Punc After a Number"
 msgstr ""
 
-#: data/config.desc:48
+#: data/config.desc:53
 msgid "Action after press enter"
 msgstr ""
 
-#: data/config.desc:57
+#: data/config.desc:62
 msgid "Action after press SemiColon"
 msgstr ""
 
-#: data/config.desc:62
+#: data/config.desc:67
 msgid "Input English Character if you input upper case"
 msgstr ""
 
-#: data/config.desc:67
+#: data/config.desc:72
 msgid "Convert Punc to Chinese Punc"
 msgstr ""
 
-#: data/config.desc:72
+#: data/config.desc:77
 msgid "Disable Paging in Legend Mode"
 msgstr ""
 
-#: data/config.desc:77
+#: data/config.desc:82
 msgid "Send inputed Text if Switch to English Mode"
 msgstr ""
 
-#: data/config.desc:82
+#: data/config.desc:87
 msgid "Candidate Word Number"
 msgstr ""
 
-#: data/config.desc:91
+#: data/config.desc:96
 msgid "Main Window Hide Mode"
 msgstr ""
 
-#: data/config.desc:96
+#: data/config.desc:101
 msgid "Show Input Window In the center of screen"
 msgstr ""
 
-#: data/config.desc:101
+#: data/config.desc:106
 msgid "Show Input Window After Trigger Input Mode"
 msgstr ""
 
-#: data/config.desc:106
+#: data/config.desc:111
 msgid "Show Point After Index"
 msgstr ""
 
-#: data/config.desc:111
+#: data/config.desc:116
 msgid "Show Input Speed"
 msgstr ""
 
-#: data/config.desc:116
+#: data/config.desc:121
 msgid "Show Version"
 msgstr ""
 
-#: data/config.desc:121
+#: data/config.desc:126
 msgid "Show Hint Window while ENV is not correctly configured."
 msgstr ""
 
-#: data/config.desc:126
+#: data/config.desc:131
 msgid "Skin Name in use"
 msgstr ""
 
-#: data/config.desc:131
+#: data/config.desc:136
 msgid "Hot key of Triggering Input Method"
 msgstr ""
 
-#: data/config.desc:143
+#: data/config.desc:148
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr ""
 
-#: data/config.desc:148
+#: data/config.desc:153
 msgid "Double click Switch Key to Change Mode"
 msgstr ""
 
-#: data/config.desc:153
+#: data/config.desc:158
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: data/config.desc:158
+#: data/config.desc:163
 msgid "Hotkey of Switching Follow Cursor Mode"
 msgstr ""
 
-#: data/config.desc:163
+#: data/config.desc:168
 msgid "Hotkey of Hiding Main Window"
 msgstr ""
 
-#: data/config.desc:168
+#: data/config.desc:173
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr ""
 
-#: data/config.desc:173
+#: data/config.desc:178
 msgid "Hotkey of Switching Traditional Chinese Input Mode On."
 msgstr ""
 
-#: data/config.desc:178
+#: data/config.desc:183
 msgid "Hotkey of Switching Legend Mode"
 msgstr ""
 
-#: data/config.desc:183
+#: data/config.desc:188
 msgid "Hotkey of Looking up the Corresponding pinyin of Word."
 msgstr ""
 
-#: data/config.desc:188
+#: data/config.desc:193
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr ""
 
-#: data/config.desc:193
+#: data/config.desc:198
 msgid "Hotkey of Switch Chinese Punc Mode"
 msgstr ""
 
-#: data/config.desc:198
+#: data/config.desc:203
 msgid "Hotkey of Going Prev Page"
 msgstr ""
 
-#: data/config.desc:203
+#: data/config.desc:208
 msgid "Hotkey of Going Next Page"
 msgstr ""
 
-#: data/config.desc:208
+#: data/config.desc:213
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr ""
 
-#: data/config.desc:213
+#: data/config.desc:218
 msgid "Hotkey of Saving All Config and Input History"
 msgstr ""
 
-#: data/config.desc:218
+#: data/config.desc:223
 msgid "Hotkey of Switching Recording Mode"
 msgstr ""
 
-#: data/config.desc:223
+#: data/config.desc:228
 msgid "Hotkey of Reseting Recording Mode"
 msgstr ""
 
-#: data/config.desc:228
+#: data/config.desc:233
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:233
+#: data/config.desc:238
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:238
+#: data/config.desc:243
 msgid "Default Shuangpin Schema"
 msgstr ""
 
-#: data/config.desc:243
+#: data/config.desc:248
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:248
+#: data/config.desc:253
 msgid "Table Priority Order, Zero to Disable"
 msgstr ""
 
-#: data/config.desc:253
+#: data/config.desc:258
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: data/config.desc:258
+#: data/config.desc:263
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: data/config.desc:263
+#: data/config.desc:268
 msgid "Auto Create Phrase"
 msgstr ""
 
-#: data/config.desc:268
+#: data/config.desc:273
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: data/config.desc:273
+#: data/config.desc:278
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: data/config.desc:278
+#: data/config.desc:283
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: data/config.desc:283
+#: data/config.desc:288
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: data/config.desc:288
+#: data/config.desc:293
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: data/config.desc:297
+#: data/config.desc:302
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: data/config.desc:306
+#: data/config.desc:311
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: data/config.desc:315
+#: data/config.desc:320
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: data/config.desc:320
+#: data/config.desc:325
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: data/config.desc:325
+#: data/config.desc:330
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: data/config.desc:330
+#: data/config.desc:335
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: data/config.desc:335
+#: data/config.desc:340
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: data/config.desc:340
+#: data/config.desc:345
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: data/config.desc:345
+#: data/config.desc:350
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: data/config.desc:350
+#: data/config.desc:355
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: data/config.desc:355
+#: data/config.desc:360
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: data/config.desc:360
+#: data/config.desc:365
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: data/config.desc:365
+#: data/config.desc:370
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: data/config.desc:370
+#: data/config.desc:375
 msgid "Fuzzy z and zh"
 msgstr ""
 
-#: data/config.desc:375
+#: data/config.desc:380
 msgid "Fix misstype gn/ng"
 msgstr ""
 
@@ -365,7 +369,7 @@ msgstr ""
 msgid "Prompt Table Code"
 msgstr ""
 
-#: data/table.desc:91 data/table.desc:90
+#: data/table.desc:91
 msgid "Symbol"
 msgstr ""
 
@@ -373,7 +377,7 @@ msgstr ""
 msgid "Symbol File"
 msgstr ""
 
-#: data/table.desc:101 data/table.desc:100
+#: data/table.desc:101
 msgid "Choose"
 msgstr ""
 
@@ -417,7 +421,7 @@ msgstr ""
 msgid "Current Input Method Index"
 msgstr ""
 
-#: data/profile.desc:47 data/profile.desc:46
+#: data/profile.desc:47
 msgid "Locked"
 msgstr ""
 
@@ -454,182 +458,186 @@ msgid "Input Font Size"
 msgstr ""
 
 #: data/skin.desc:23
+msgid "Menu Font Size"
+msgstr ""
+
+#: data/skin.desc:28
 msgid "Tip Message Color"
 msgstr ""
 
-#: data/skin.desc:27
+#: data/skin.desc:32
 msgid "Input Message Color"
 msgstr ""
 
-#: data/skin.desc:31
+#: data/skin.desc:36
 msgid "Candidate Index Color"
 msgstr ""
 
-#: data/skin.desc:35
+#: data/skin.desc:40
 msgid "First Candidate Color"
 msgstr ""
 
-#: data/skin.desc:39
+#: data/skin.desc:44
 msgid "User Phrase Color"
 msgstr ""
 
-#: data/skin.desc:43
+#: data/skin.desc:48
 msgid "Table Code Color"
 msgstr ""
 
-#: data/skin.desc:47
+#: data/skin.desc:52
 msgid "Other Color"
 msgstr ""
 
-#: data/skin.desc:51
+#: data/skin.desc:56
 msgid "Active Menu Item Character Color"
 msgstr ""
 
-#: data/skin.desc:55
+#: data/skin.desc:60
 msgid "Inactive Menu Item Character Color"
 msgstr ""
 
-#: data/skin.desc:59 data/skin.desc:123 data/skin.desc:179
+#: data/skin.desc:64 data/skin.desc:128 data/skin.desc:184
 msgid "Background Image"
 msgstr ""
 
-#: data/skin.desc:63
+#: data/skin.desc:68
 msgid "Logo Icon"
 msgstr ""
 
-#: data/skin.desc:67
+#: data/skin.desc:72
 msgid "Chinese Punc Icon"
 msgstr ""
 
-#: data/skin.desc:71
+#: data/skin.desc:76
 msgid "English Punc Icon"
 msgstr ""
 
-#: data/skin.desc:75
+#: data/skin.desc:80
 msgid "Simplified Chinese Icon"
 msgstr ""
 
-#: data/skin.desc:79
+#: data/skin.desc:84
 msgid "Traditional Chinese Icon"
 msgstr ""
 
-#: data/skin.desc:83
+#: data/skin.desc:88
 msgid "Half Width Character Icon"
 msgstr ""
 
-#: data/skin.desc:87
+#: data/skin.desc:92
 msgid "Full Width Character Icon"
 msgstr ""
 
-#: data/skin.desc:91
+#: data/skin.desc:96
 msgid "UnLock Icon"
 msgstr ""
 
-#: data/skin.desc:95
+#: data/skin.desc:100
 msgid "Lock Icon"
 msgstr ""
 
-#: data/skin.desc:99
+#: data/skin.desc:104
 msgid "Legend mode Icon"
 msgstr ""
 
-#: data/skin.desc:103
+#: data/skin.desc:108
 msgid "Legend disabled Icon"
 msgstr ""
 
-#: data/skin.desc:107
+#: data/skin.desc:112
 msgid "Virtual Keyboard enabled Icon"
 msgstr ""
 
-#: data/skin.desc:111
+#: data/skin.desc:116
 msgid "Virtual Keyboard disabled Icon"
 msgstr ""
 
-#: data/skin.desc:115
+#: data/skin.desc:120
 msgid "English Mode Icon"
 msgstr ""
 
-#: data/skin.desc:119
+#: data/skin.desc:124
 msgid "Chinese Mode Icon"
 msgstr ""
 
-#: data/skin.desc:131
+#: data/skin.desc:136
 msgid "Background Resize Rule"
 msgstr ""
 
-#: data/skin.desc:135
+#: data/skin.desc:140
 msgid "The Resize Position to Left"
 msgstr ""
 
-#: data/skin.desc:139
+#: data/skin.desc:144
 msgid "Width of Resize Part "
 msgstr ""
 
-#: data/skin.desc:143
+#: data/skin.desc:148
 msgid "Left-down position of Input"
 msgstr ""
 
-#: data/skin.desc:147
+#: data/skin.desc:152
 msgid "Left-down position of Output"
 msgstr ""
 
-#: data/skin.desc:151
+#: data/skin.desc:156
 msgid "Space to the left"
 msgstr ""
 
-#: data/skin.desc:155
+#: data/skin.desc:160
 msgid "Space to the right"
 msgstr ""
 
-#: data/skin.desc:159
+#: data/skin.desc:164
 msgid "Color of Cursor"
 msgstr ""
 
-#: data/skin.desc:163
+#: data/skin.desc:168
 msgid "Prev Page Icon"
 msgstr ""
 
-#: data/skin.desc:167
+#: data/skin.desc:172
 msgid "Next Page Icon"
 msgstr ""
 
-#: data/skin.desc:171
+#: data/skin.desc:176
 msgid "Active Tray Icon"
 msgstr ""
 
-#: data/skin.desc:175
+#: data/skin.desc:180
 msgid "Inctive Tray Icon"
 msgstr ""
 
-#: data/skin.desc:186
+#: data/skin.desc:191
 msgid "Background Resize Rule on Horizontal Direction"
 msgstr ""
 
-#: data/skin.desc:194
+#: data/skin.desc:199
 msgid "Background Resize Rule on Vertical Direction"
 msgstr ""
 
-#: data/skin.desc:199
+#: data/skin.desc:204
 msgid "Margin to top"
 msgstr ""
 
-#: data/skin.desc:203
+#: data/skin.desc:208
 msgid "Margin to bottom"
 msgstr ""
 
-#: data/skin.desc:207
+#: data/skin.desc:212
 msgid "Margin to left"
 msgstr ""
 
-#: data/skin.desc:211
+#: data/skin.desc:216
 msgid "Margin to right"
 msgstr ""
 
-#: data/skin.desc:215
+#: data/skin.desc:220
 msgid "Active Menu Color"
 msgstr ""
 
-#: data/skin.desc:219
+#: data/skin.desc:224
 msgid "Space Line Color"
 msgstr ""
 
@@ -663,610 +671,6 @@ msgstr ""
 
 #: data/table/qxm.conf:2
 msgid "Bingchan"
-msgstr ""
-
-#: data/addon.desc:1 data/skin.desc:1 data/table.desc:1
-msgid "Name"
-msgstr ""
-
-#: data/addon.desc:4
-msgid "Category"
-msgstr ""
-
-#: data/addon.desc:9 data/table.desc:105
-msgid "Enabled"
-msgstr ""
-
-#: data/addon.desc:13
-msgid "Module"
-msgstr ""
-
-#: data/addon.desc:16
-msgid "Type"
-msgstr ""
-
-#: data/config.desc:6
-msgid "FontLocale"
-msgstr ""
-
-#: data/config.desc:11
-msgid "RecordFile"
-msgstr ""
-
-#: data/config.desc:16
-msgid "UseTray"
-msgstr ""
-
-#: data/config.desc:21
-msgid "UseDBus"
-msgstr ""
-
-#: data/config.desc:26
-msgid "EnableAddons"
-msgstr ""
-
-#: data/config.desc:31
-msgid "DelayStart"
-msgstr ""
-
-#: data/config.desc:36
-msgid "HalfPuncAfterNumber"
-msgstr ""
-
-#: data/config.desc:41
-msgid "EnterAction"
-msgstr ""
-
-#: data/config.desc:50
-msgid "SemiColonAction"
-msgstr ""
-
-#: data/config.desc:59
-msgid "InputEngByCapitalChar"
-msgstr ""
-
-#: data/config.desc:64
-msgid "ConvertPunc"
-msgstr ""
-
-#: data/config.desc:69
-msgid "LegendModeDisablePaging"
-msgstr ""
-
-#: data/config.desc:74
-msgid "SendTextWhenSwitchEng"
-msgstr ""
-
-#: data/config.desc:79
-msgid "CandidateWordNumber"
-msgstr ""
-
-#: data/config.desc:84
-msgid "MainWindowHideMode"
-msgstr ""
-
-#: data/config.desc:93
-msgid "CenterInputWindow"
-msgstr ""
-
-#: data/config.desc:98
-msgid "ShowInputWindowAfterTriggering"
-msgstr ""
-
-#: data/config.desc:103
-msgid "ShowPointAfterIndex"
-msgstr ""
-
-#: data/config.desc:108
-msgid "ShowInputSpeed"
-msgstr ""
-
-#: data/config.desc:113
-msgid "ShowVersion"
-msgstr ""
-
-#: data/config.desc:118
-msgid "ShowHintWindow"
-msgstr ""
-
-#: data/config.desc:123
-msgid "SkinType"
-msgstr ""
-
-#: data/config.desc:128
-msgid "TriggerKey"
-msgstr ""
-
-#: data/config.desc:133
-msgid "ChnEngSwitchKey"
-msgstr ""
-
-#: data/config.desc:145
-msgid "DoubleSwitchKey"
-msgstr ""
-
-#: data/config.desc:150
-msgid "TimeInterval"
-msgstr ""
-
-#: data/config.desc:155
-msgid "FollowCursorKey"
-msgstr ""
-
-#: data/config.desc:160
-msgid "HideMainWindowKey"
-msgstr ""
-
-#: data/config.desc:165
-msgid "VKSwitchKey"
-msgstr ""
-
-#: data/config.desc:170
-msgid "TraditionalChnSwitchKey"
-msgstr ""
-
-#: data/config.desc:175
-msgid "LegendSwitchKey"
-msgstr ""
-
-#: data/config.desc:180
-msgid "LookupPinyinKey"
-msgstr ""
-
-#: data/config.desc:185
-msgid "FullWidthSwitchKey"
-msgstr ""
-
-#: data/config.desc:190
-msgid "ChnPuncSwitchKey"
-msgstr ""
-
-#: data/config.desc:195
-msgid "PrevPageKey"
-msgstr ""
-
-#: data/config.desc:200
-msgid "NextPageKey"
-msgstr ""
-
-#: data/config.desc:205
-msgid "SecondThirdCandWordKey"
-msgstr ""
-
-#: data/config.desc:210
-msgid "SaveAllKey"
-msgstr ""
-
-#: data/config.desc:215
-msgid "SetRecordingKey"
-msgstr ""
-
-#: data/config.desc:220
-msgid "ResetRecordingKey"
-msgstr ""
-
-#: data/config.desc:225
-msgid "PinyinOrder"
-msgstr ""
-
-#: data/config.desc:230
-msgid "ShuangpinOrder"
-msgstr ""
-
-#: data/config.desc:235
-msgid "DefaultShuangpinSchema"
-msgstr ""
-
-#: data/config.desc:240
-msgid "QuweiOrder"
-msgstr ""
-
-#: data/config.desc:245
-msgid "TableOrder"
-msgstr ""
-
-#: data/config.desc:250
-msgid "PhraseTips"
-msgstr ""
-
-#: data/config.desc:255
-msgid "UseCompletePinyin"
-msgstr ""
-
-#: data/config.desc:260
-msgid "AutoCreatePhrase"
-msgstr ""
-
-#: data/config.desc:265 data/table.desc:81
-msgid "SaveAutoPhrase"
-msgstr ""
-
-#: data/config.desc:270
-msgid "AddFreqWordKey"
-msgstr ""
-
-#: data/config.desc:275
-msgid "DeleteFreqWordKey"
-msgstr ""
-
-#: data/config.desc:280
-msgid "DeleteUserPhraseKey"
-msgstr ""
-
-#: data/config.desc:285
-msgid "InputWordFromPhraseKey"
-msgstr ""
-
-#: data/config.desc:290
-msgid "BaseOrder"
-msgstr ""
-
-#: data/config.desc:299
-msgid "PhraseOrder"
-msgstr ""
-
-#: data/config.desc:308
-msgid "FreqOrder"
-msgstr ""
-
-#: data/config.desc:317
-msgid "FuzzyAnAng"
-msgstr ""
-
-#: data/config.desc:322
-msgid "FuzzyEnEng"
-msgstr ""
-
-#: data/config.desc:327
-msgid "FuzzyIanIang"
-msgstr ""
-
-#: data/config.desc:332
-msgid "FuzzyInIng"
-msgstr ""
-
-#: data/config.desc:337
-msgid "FuzzyOuU"
-msgstr ""
-
-#: data/config.desc:342
-msgid "FuzzyUanUang"
-msgstr ""
-
-#: data/config.desc:347
-msgid "FuzzyCCh"
-msgstr ""
-
-#: data/config.desc:352
-msgid "FuzzyFH"
-msgstr ""
-
-#: data/config.desc:357
-msgid "FuzzyLN"
-msgstr ""
-
-#: data/config.desc:362
-msgid "FuzzySSH"
-msgstr ""
-
-#: data/config.desc:367
-msgid "FuzzyZZH"
-msgstr ""
-
-#: data/config.desc:372
-msgid "Misstype"
-msgstr ""
-
-#: data/profile.desc:1
-msgid "MainWindowOffsetX"
-msgstr ""
-
-#: data/profile.desc:6
-msgid "MainWindowOffsetY"
-msgstr ""
-
-#: data/profile.desc:11
-msgid "InputWindowOffsetX"
-msgstr ""
-
-#: data/profile.desc:16
-msgid "InputWindowOffsetY"
-msgstr ""
-
-#: data/profile.desc:21
-msgid "Corner"
-msgstr ""
-
-#: data/profile.desc:26
-msgid "ChnPunc"
-msgstr ""
-
-#: data/profile.desc:31
-msgid "TrackCursor"
-msgstr ""
-
-#: data/profile.desc:36
-msgid "UseLegend"
-msgstr ""
-
-#: data/profile.desc:41
-msgid "IMIndex"
-msgstr ""
-
-#: data/profile.desc:51
-msgid "CompactMainWindow"
-msgstr ""
-
-#: data/profile.desc:56
-msgid "UseGBKT"
-msgstr ""
-
-#: data/profile.desc:61
-msgid "Recording"
-msgstr ""
-
-#: data/skin.desc:5
-msgid "Version"
-msgstr ""
-
-#: data/skin.desc:9
-msgid "Author"
-msgstr ""
-
-#: data/skin.desc:13
-msgid "Desc"
-msgstr ""
-
-#: data/skin.desc:17
-msgid "FontSize"
-msgstr ""
-
-#: data/skin.desc:21
-msgid "TipColor"
-msgstr ""
-
-#: data/skin.desc:25
-msgid "InputColor"
-msgstr ""
-
-#: data/skin.desc:29
-msgid "IndexColor"
-msgstr ""
-
-#: data/skin.desc:33
-msgid "FirstCandColor"
-msgstr ""
-
-#: data/skin.desc:37
-msgid "UserPhraseColor"
-msgstr ""
-
-#: data/skin.desc:41
-msgid "CodeColor"
-msgstr ""
-
-#: data/skin.desc:45
-msgid "OtherColor"
-msgstr ""
-
-#: data/skin.desc:49
-msgid "ActiveMenuColor"
-msgstr ""
-
-#: data/skin.desc:53
-msgid "InactiveMenuColor"
-msgstr ""
-
-#: data/skin.desc:57 data/skin.desc:121 data/skin.desc:177
-msgid "BackImg"
-msgstr ""
-
-#: data/skin.desc:61
-msgid "Logo"
-msgstr ""
-
-#: data/skin.desc:65
-msgid "ZhPunc"
-msgstr ""
-
-#: data/skin.desc:69
-msgid "EnPunc"
-msgstr ""
-
-#: data/skin.desc:73
-msgid "Chs"
-msgstr ""
-
-#: data/skin.desc:77
-msgid "Cht"
-msgstr ""
-
-#: data/skin.desc:81
-msgid "HalfCorner"
-msgstr ""
-
-#: data/skin.desc:85
-msgid "FullCorner"
-msgstr ""
-
-#: data/skin.desc:89
-msgid "Unlock"
-msgstr ""
-
-#: data/skin.desc:93
-msgid "Lock"
-msgstr ""
-
-#: data/skin.desc:97
-msgid "Legend"
-msgstr ""
-
-#: data/skin.desc:101
-msgid "NoLegend"
-msgstr ""
-
-#: data/skin.desc:105
-msgid "VK"
-msgstr ""
-
-#: data/skin.desc:109
-msgid "NoVK"
-msgstr ""
-
-#: data/skin.desc:113 unknown
-msgid "Eng"
-msgstr ""
-
-#: data/skin.desc:117
-msgid "Chn"
-msgstr ""
-
-#: data/skin.desc:125 unknown
-msgid "Resize"
-msgstr ""
-
-#: data/skin.desc:133
-msgid "ResizePos"
-msgstr ""
-
-#: data/skin.desc:137
-msgid "ResizeWidth"
-msgstr ""
-
-#: data/skin.desc:141
-msgid "InputPos"
-msgstr ""
-
-#: data/skin.desc:145
-msgid "OutputPos"
-msgstr ""
-
-#: data/skin.desc:149
-msgid "LayoutLeft"
-msgstr ""
-
-#: data/skin.desc:153
-msgid "LayoutRight"
-msgstr ""
-
-#: data/skin.desc:157
-msgid "CursorColor"
-msgstr ""
-
-#: data/skin.desc:161
-msgid "BackArrow"
-msgstr ""
-
-#: data/skin.desc:165
-msgid "ForwardArrow"
-msgstr ""
-
-#: data/skin.desc:169
-msgid "Active"
-msgstr ""
-
-#: data/skin.desc:173
-msgid "Inactive"
-msgstr ""
-
-#: data/skin.desc:181
-msgid "ResizeHorizontal"
-msgstr ""
-
-#: data/skin.desc:189
-msgid "ResizeVertical"
-msgstr ""
-
-#: data/skin.desc:197
-msgid "MarginTop"
-msgstr ""
-
-#: data/skin.desc:201
-msgid "MarginBottom"
-msgstr ""
-
-#: data/skin.desc:205
-msgid "MarginLeft"
-msgstr ""
-
-#: data/skin.desc:209
-msgid "MarginRight"
-msgstr ""
-
-#: data/skin.desc:213
-msgid "ActiveColor"
-msgstr ""
-
-#: data/skin.desc:217
-msgid "LineColor"
-msgstr ""
-
-#: data/table.desc:5
-msgid "IconName"
-msgstr ""
-
-#: data/table.desc:9
-msgid "File"
-msgstr ""
-
-#: data/table.desc:13
-msgid "AdjustOrder"
-msgstr ""
-
-#: data/table.desc:22
-msgid "Priority"
-msgstr ""
-
-#: data/table.desc:27
-msgid "UsePY"
-msgstr ""
-
-#: data/table.desc:32
-msgid "PYKey"
-msgstr ""
-
-#: data/table.desc:37
-msgid "AutoSend"
-msgstr ""
-
-#: data/table.desc:42
-msgid "NoneMatchAutoSend"
-msgstr ""
-
-#: data/table.desc:47
-msgid "EndKey"
-msgstr ""
-
-#: data/table.desc:52
-msgid "UseMatchingKey"
-msgstr ""
-
-#: data/table.desc:57
-msgid "MatchingKey"
-msgstr ""
-
-#: data/table.desc:62
-msgid "ExactMatch"
-msgstr ""
-
-#: data/table.desc:66
-msgid "AutoPhrase"
-msgstr ""
-
-#: data/table.desc:71
-msgid "AutoPhraseLength"
-msgstr ""
-
-#: data/table.desc:76
-msgid "AutoPhrasePhrase"
-msgstr ""
-
-#: data/table.desc:86
-msgid "PromptTableCode"
-msgstr ""
-
-#: data/table.desc:95
-msgid "SymbolFile"
 msgstr ""
 
 # unknown
@@ -1360,6 +764,10 @@ msgid "Copy"
 msgstr ""
 
 #: unknown
+msgid "Eng"
+msgstr ""
+
+#: unknown
 msgid "Fix"
 msgstr ""
 
@@ -1393,6 +801,10 @@ msgstr ""
 
 #: unknown
 msgid "R_CTRL"
+msgstr ""
+
+#: unknown
+msgid "Resize"
 msgstr ""
 
 #: unknown
@@ -1559,11 +971,11 @@ msgstr ""
 msgid "FCITX can only run under X"
 msgstr ""
 
-#: ../src/ui/ui.c:122
+#: ../src/ui/ui.c:124
 msgid "XEvent--Expose"
 msgstr ""
 
-#: ../src/ui/ui.c:335 ../src/ui/ui.c:342
+#: ../src/ui/ui.c:337 ../src/ui/ui.c:344
 msgid "Unable to create process"
 msgstr ""
 
@@ -1599,11 +1011,11 @@ msgstr ""
 msgid "CAL InputWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:125
+#: ../src/ui/MainWindow.c:134
 msgid "DISPLAY MainWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:146
+#: ../src/ui/MainWindow.c:155
 msgid "DRAW MainWindow"
 msgstr ""
 
@@ -1774,7 +1186,7 @@ msgstr ""
 msgid "ExtraIM: bad im"
 msgstr ""
 
-#: ../src/tools/configfile.c:264
+#: ../src/tools/configfile.c:279
 #, c-format
 msgid "Load Config File %s"
 msgstr ""

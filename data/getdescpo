@@ -8,19 +8,21 @@ cd $dir
 rm -f desc.po; touch desc.po
 
 cd ..
+# Extract Description
 find data -iname "*.desc" | while read f
 do
     awk '/^[\t ]*Description=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' $f >> $dir/$filename
 done
 
+# Extract Table Name
 find data/table -name "*.conf" | while read f
 do
     awk '/^[\t ]*Name=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 6)"\"\n" "msgstr \"\""}' $f >> $dir/$filename
 done
 
-grep -n '^\[' data/*.desc | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print "#: "a[1]":"a[2]"\nmsgid \""substr(b[2], 1, length(b[2])-1)"\"\nmsgstr \"\"\n" }' >> $dir/$filename
-
+# Extract Group Name
 grep -n '^\[' data/*.desc | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> $dir/$filename
 
+# Extract Enum Name
 grep -h 'Enum[0-9]' data/*.desc | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> $dir/$filename
 

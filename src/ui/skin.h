@@ -69,6 +69,7 @@ typedef struct
 typedef struct 
 {
 	int fontSize;
+    int menuFontSize;
     ConfigColor fontColor[7];
     ConfigColor menuFontColor[2];
 } SkinFont;
