@@ -66,6 +66,9 @@ Bool CreateMainWindow (void)
     unsigned long   attribmask;
     GC gc;
     char        strWindowName[] = "Fcitx Main Window";
+    int swidth, sheight;
+    
+    GetScreenSize(&swidth, &sheight);
 
     InitMainWindow();
 
@@ -74,6 +77,12 @@ Bool CreateMainWindow (void)
     LoadMainBarImage();
 
     vs = FindARGBVisual(dpy, iScreen);
+
+    if (fcitxProfile.iMainWindowOffsetX + sc.skinMainBar.backImg.width > swidth )
+        fcitxProfile.iMainWindowOffsetX = swidth - sc.skinMainBar.backImg.width;
+    
+    if (fcitxProfile.iMainWindowOffsetY + sc.skinMainBar.backImg.height > sheight )
+        fcitxProfile.iMainWindowOffsetY = sheight - sc.skinMainBar.backImg.height;
 
     InitWindowAttribute(&vs, &cmap, &attrib, &attribmask, &depth);
     mainWindow.window=XCreateWindow (dpy,
