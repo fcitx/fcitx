@@ -346,7 +346,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
     state = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
     GetKey(sym, state, keyCount, &sym, &state);
 
-#ifndef _DEBUG
+#ifdef _DEBUG
     FcitxLog(INFO,
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d\n",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
