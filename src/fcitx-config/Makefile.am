@@ -12,6 +12,7 @@ libfcitx_config_la_SOURCES= \
 						   uthash.h \
 						   xdg.c xdg.h
 libfcitx_config_la_LDFLAGS= -version-number 4:0:0 -no-undefined
+libfcitx_config_la_CFLAGS= -fvisibility=hidden
 libfcitx_configincludedir= $(includedir)/fcitx-config
 libfcitx_configinclude_HEADERS= \
 								fcitx-config.h \

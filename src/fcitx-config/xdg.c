@@ -77,6 +77,7 @@ make_path (const char *path)
  * 
  * @return 文件指针
  */
+FCITX_EXPORT_API
 FILE *GetXDGFileData(const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
@@ -89,6 +90,7 @@ FILE *GetXDGFileData(const char *fileName, const char *mode, char **retFile)
     return fp;
 }
 
+FCITX_EXPORT_API
 FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
@@ -103,6 +105,7 @@ FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 
 }
 
+FCITX_EXPORT_API
 FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser)
 {
     size_t len;
@@ -119,6 +122,7 @@ FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bo
     return fp;
 }
 
+FCITX_EXPORT_API
 FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
@@ -132,6 +136,7 @@ FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
     return fp;
 }
 
+FCITX_EXPORT_API
 FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
@@ -154,6 +159,7 @@ FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile)
  * 
  * @return 文件指针
  */
+FCITX_EXPORT_API
 FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
     char buf[PATH_MAX];
@@ -216,6 +222,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
  * 
  * @param 路径数组
  */
+FCITX_EXPORT_API
 void FreeXDGPath(char **path)
 {
     free(path[0]);
@@ -233,6 +240,7 @@ void FreeXDGPath(char **path)
  * 
  * @return 字符串数组
  */
+FCITX_EXPORT_API
 char **GetXDGPath(
         size_t *len,
         const char* homeEnv,

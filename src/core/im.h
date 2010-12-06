@@ -24,7 +24,6 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_TO_PROCESS, /* key will passed to next flow*/ 
     IRV_DISPLAY_MESSAGE, /* it's a message, so next and prev will not be shown */
     IRV_DISPLAY_CANDWORDS, /* the only different with message it it will show next and prev button */
-    IRV_DISPLAY_LAST,  /* show the last input, special use */
     IRV_PUNC,
     IRV_ENG,
     IRV_GET_LEGEND, /* legend word */

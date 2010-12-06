@@ -37,6 +37,17 @@
 #include "fcitx-config/fcitx-config.h"
 #include "tools/tools.h"
 
+static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync);
+#define ConfigOptionFile ConfigOptionString
+#define ConfigOptionFont ConfigOptionString
+
+FCITX_EXPORT_API
 ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc* fileDesc)
 {
     FILE* fp = fopen(filename, "r");
@@ -47,6 +58,7 @@ ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc* fileDesc)
     return cf;
 }
 
+FCITX_EXPORT_API
 ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDesc)
 {
     FILE **fp = malloc(sizeof(FILE*) * len);
@@ -68,6 +80,7 @@ ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDe
     return cf;
 }
 
+FCITX_EXPORT_API
 ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc)
 {
     ConfigFile* cfile = NULL;
@@ -83,6 +96,7 @@ ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc)
 
 }
 
+FCITX_EXPORT_API
 ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
 {
     ConfigFile *cfile = ParseIniFp(fp, NULL);
@@ -94,6 +108,7 @@ ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
     return NULL;
 }
 
+FCITX_EXPORT_API
 Bool CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
 {
     if (!cfile)
@@ -146,6 +161,7 @@ Bool CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
  * 
  * @return 
  */
+FCITX_EXPORT_API
 ConfigFileDesc *ParseConfigFileDesc(char* filename)
 {
     FILE* fp = fopen(filename, "r");
@@ -166,6 +182,7 @@ ConfigFileDesc *ParseConfigFileDesc(char* filename)
  * 
  * @return 
  */
+FCITX_EXPORT_API
 ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
 {
     ConfigFile *cfile = ParseIniFp(fp, NULL);
@@ -539,6 +556,7 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
+FCITX_EXPORT_API
 void FreeConfigFile(ConfigFile* cfile)
 {
     if (!cfile)
@@ -553,6 +571,7 @@ void FreeConfigFile(ConfigFile* cfile)
     free(cfile);
 }
 
+FCITX_EXPORT_API
 void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
 {
     if (!cfdesc)
@@ -567,6 +586,7 @@ void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
     free(cfdesc);
 }
 
+FCITX_EXPORT_API
 void FreeConfigGroup(ConfigGroup *group)
 {
     ConfigOption *option = group->options, *curOption;
@@ -580,6 +600,7 @@ void FreeConfigGroup(ConfigGroup *group)
     free(group);
 }
 
+FCITX_EXPORT_API
 void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc)
 {
     ConfigOptionDesc *codesc = cgdesc->optionsDesc, *curOption;
@@ -593,6 +614,7 @@ void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc)
     free(cgdesc);
 }
 
+FCITX_EXPORT_API
 void FreeConfigOption(ConfigOption *option)
 {
     free(option->optionName);
@@ -601,6 +623,7 @@ void FreeConfigOption(ConfigOption *option)
     free(option);
 }
 
+FCITX_EXPORT_API
 void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
 {
     free(codesc->optionName);
@@ -626,6 +649,7 @@ void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
  * 
  * @return 
  */
+FCITX_EXPORT_API
 ConfigFile* ParseIni(char* filename, ConfigFile* reuse)
 {
     FILE* fp = fopen(filename, "r");
@@ -636,6 +660,7 @@ ConfigFile* ParseIni(char* filename, ConfigFile* reuse)
     return cf;
 }
 
+FCITX_EXPORT_API
 ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
 {
     char *line = NULL, *buf = NULL;
@@ -731,6 +756,7 @@ next_line:
     return cfile;
 }
 
+FCITX_EXPORT_API
 Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc)
 {
     FILE* fp = fopen(filename, "w");
@@ -741,6 +767,7 @@ Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc)
     return result;
 }
 
+FCITX_EXPORT_API
 void ConfigBindSync(GenericConfig* config)
 {
     ConfigFile *cfile = config->configFile;
@@ -769,6 +796,7 @@ void ConfigBindSync(GenericConfig* config)
     }
 }
 
+FCITX_EXPORT_API
 void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync)
 {
     ConfigOptionDesc *codesc = option->optionDesc;
@@ -840,6 +868,7 @@ void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync)
             option->filter(group, option, option->value.untype, sync, option->filterArg);
 }
 
+FCITX_EXPORT_API
 Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
 {
     ConfigGroupDesc* groupdesc = NULL;
@@ -883,6 +912,7 @@ Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
     return True;
 }
 
+FCITX_EXPORT_API
 void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg)
 {
     ConfigGroup *group = NULL;

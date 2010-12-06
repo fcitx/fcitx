@@ -58,9 +58,7 @@ typedef enum _KEY_RELEASED {
     KR_OTHER = 0,
     KR_CTRL,
     KR_2ND_SELECTKEY,
-    KR_2ND_SELECTKEY_OTHER,
     KR_3RD_SELECTKEY,
-    KR_3RD_SELECTKEY_OTHER
 } KEY_RELEASED;
 
 typedef struct IM{
@@ -90,7 +88,7 @@ void            ProcessKey (IMForwardEventStruct * call_data);
 void            ResetInput (void);
 void            CloseIM (IMForwardEventStruct * call_data);
 void            ChangeIMState ();
-Bool            IsHotKey (int iKey, HOTKEYS * hotkey);
+Bool            IsHotKey(KeySym sym, int state, HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
 INPUT_RETURN_VALUE ChangeLegend (void);

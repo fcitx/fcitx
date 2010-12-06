@@ -104,7 +104,7 @@ typedef struct FcitxConfig
     /* hotkey config */
     HOTKEYS hkTrigger[2];
     SWITCHKEY iSwitchKey;
-    KEY_CODE switchKey;
+    KeySym switchKey;
     Bool bDoubleSwitchKey;
     int iTimeInterval;
     HOTKEYS hkTrack[2];
@@ -140,8 +140,8 @@ typedef struct FcitxConfig
     ADJUSTORDER freqOrder;
     MHPY *MHPY_C;
     MHPY *MHPY_S;
-    int i2ndSelectKey;
-    int i3rdSelectKey;
+    HOTKEYS i2ndSelectKey[2];
+    HOTKEYS i3rdSelectKey[2];
     char cPYYCDZ[3];
     Bool bMisstype;
 

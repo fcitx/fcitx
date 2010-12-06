@@ -32,7 +32,7 @@ typedef struct _QUICK_PHRASE {
 
 void LoadQuickPhrase(void);
 void FreeQuickPhrase(void);
-INPUT_RETURN_VALUE QuickPhraseDoInput (int iKey);
+INPUT_RETURN_VALUE QuickPhraseDoInput (KeySym sym, int state, int iCount);
 INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode);
 
 #endif

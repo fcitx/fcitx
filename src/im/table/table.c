@@ -34,15 +34,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 #include <X11/Xlib.h>
 
+#include "core/keys.h"
 #include "ui/InputWindow.h"
 #include "im/pinyin/py.h"
 #include "im/pinyin/pyParser.h"
 #include "tools/utarray.h"
-#include <sys/types.h>
-#include <dirent.h>
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/profile.h"
 #include "fcitx-config/cutils.h"
@@ -113,9 +114,9 @@ void LoadTableInfo (void)
         tbl.table = NULL;
     }
 
-    tbl.hkTableDelPhrase[0].iKeyCode = CTRL_7;
-    tbl.hkTableAdjustOrder[0].iKeyCode = CTRL_6;
-    tbl.hkTableAddPhrase[0].iKeyCode = CTRL_8;
+    tbl.hkTableDelPhrase[0].sym = XK_7; tbl.hkTableDelPhrase[0].state = KEY_CTRL_COMP;
+    tbl.hkTableAdjustOrder[0].sym = XK_6; tbl.hkTableAdjustOrder[0].state = KEY_CTRL_COMP;
+    tbl.hkTableAddPhrase[0].sym = XK_8; tbl.hkTableAddPhrase[0].state = KEY_CTRL_COMP;
 
     tbl.table = malloc(sizeof(UT_array));
     tbl.iTableCount = 0;
@@ -339,7 +340,7 @@ Bool LoadTableDict (void)
         fread (&iTemp, sizeof (unsigned int), 1, fpDict);
         fread (strHZ, sizeof (char), iTemp, fpDict);
         recTemp = (RECORD *) malloc (sizeof (RECORD));
-        recTemp->strCode = (char *) malloc0 (sizeof (char) * (table->iPYCodeLength + 1));
+        recTemp->strCode = (char *) malloc (sizeof (char) * (table->iPYCodeLength + 1));
         memset(recTemp->strCode, 0, sizeof (char) * (table->iPYCodeLength + 1));
         strcpy (recTemp->strCode, strCode);
         recTemp->strHZ = (char *) malloc (sizeof (char) * iTemp);
@@ -753,21 +754,16 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
     TABLECANDWORD* tableCandWord = tbl.tableCandWord;
     TABLE* table = (TABLE*) utarray_eltptr(tbl.table, tbl.iTableIMIndex);
 
-    unsigned int iKeyState;
-    unsigned int iKey;
-    iKeyState = state - (state & KEY_NUMLOCK) - (state & KEY_CAPSLOCK) - (state & KEY_SCROLLLOCK);
-    iKey = GetKey (sym, iKeyState, keyCount);
-
     if (!tbl.bTableDictLoaded)
         LoadTableDict ();
 
     if (tbl.bTablePhraseTips) {
-        if (iKey == CTRL_DELETE) {
+        if (IsHotKey(sym, state, FCITX_CTRL_DELETE)) {
             tbl.bTablePhraseTips = False;
             TableDelPhraseByHZ (messageUp.msg[1].strMsg);
             return IRV_DONOT_PROCESS_CLEAN;
         }
-        else if (iKey != LCTRL && iKey != RCTRL && iKey != LSHIFT && iKey != RSHIFT) {
+        else if (state == KEY_NONE && (sym != XK_Control_L && sym != XK_Control_R && sym != XK_Shift_L && sym != XK_Shift_R )) {
             SetMessageCount(&messageUp, 0);
             SetMessageCount(&messageDown, 0);
             tbl.bTablePhraseTips = False;
@@ -776,13 +772,13 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
     }
 
     retVal = IRV_DO_NOTHING;
-    if (IsInputKey (iKey) || IsEndKey (iKey) || iKey == table->cMatchingKey || iKey == table->cPinyin) {
+    if (state == KEY_NONE && (IsInputKey (sym) || IsEndKey (sym) || sym == table->cMatchingKey || sym == table->cPinyin)) {
         bIsInLegend = False;
 
         if (!tbl.bIsTableAddPhrase && !tbl.bIsTableDelPhrase && !tbl.bIsTableAdjustOrder) {
             if (strCodeInput[0] == table->cPinyin && table->bUsePY) {
                 if (iCodeInputCount != (MAX_PY_LENGTH * 5 + 1)) {
-                    strCodeInput[iCodeInputCount++] = (char) iKey;
+                    strCodeInput[iCodeInputCount++] = (char) sym;
                     strCodeInput[iCodeInputCount] = '\0';
                     retVal = TableGetCandWords (SM_FIRST);
                 }
@@ -791,12 +787,13 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
             }
             else {
                 if ((iCodeInputCount < table->iCodeLength) || (table->bHasPinyin && iCodeInputCount < table->iPYCodeLength)) {
-                    strCodeInput[iCodeInputCount++] = (char) iKey;
+                    strCodeInput[iCodeInputCount++] = (char) sym;
                     strCodeInput[iCodeInputCount] = '\0';
 
                     if (iCodeInputCount == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
                         iCandWordCount = 0;
-                        retVal = IRV_DISPLAY_LAST;
+                        SetMessageCount(&messageDown , 0);
+                        retVal = IRV_DISPLAY_CANDWORDS;
                     }
                     else {
                         char        *strTemp;
@@ -815,7 +812,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
                         retVal = TableGetCandWords (SM_FIRST);
                         strTemp = GetPunc (strCodeInput[0]);
-                        if (IsEndKey (iKey)) {
+                        if (IsEndKey (sym)) {
                             if (iCodeInputCount == 1)
                                 return IRV_TO_PROCESS;
 
@@ -840,7 +837,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
                             else
                                 retVal = IRV_DISPLAY_CANDWORDS;
                             iCodeInputCount = 1;
-                            strCodeInput[0] = iKey;
+                            strCodeInput[0] = sym;
                             strCodeInput[1] = '\0';
                             TableGetCandWords (SM_FIRST);
                         }
@@ -882,7 +879,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
                             retVal = IRV_DISPLAY_CANDWORDS;
 
                         iCodeInputCount = 1;
-                        strCodeInput[0] = iKey;
+                        strCodeInput[0] = sym;
                         strCodeInput[1] = '\0';
                         bIsInLegend = False;
 
@@ -897,33 +894,35 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
     }
     else {
         if (tbl.bIsTableAddPhrase) {
-            switch (iKey) {
-            case LEFT:
+            if (IsHotKey(sym, state, FCITX_LEFT))
+            {
                 if (tbl.iTableNewPhraseHZCount < tbl.iHZLastInputCount && tbl.iTableNewPhraseHZCount < PHRASE_MAX_LENGTH) {
                     tbl.iTableNewPhraseHZCount++;
                     TableCreateNewPhrase ();
                 }
-                break;
-            case RIGHT:
+            }
+            else if (IsHotKey(sym, state, FCITX_RIGHT))
+            {
                 if (tbl.iTableNewPhraseHZCount > 2) {
                     tbl.iTableNewPhraseHZCount--;
                     TableCreateNewPhrase ();
                 }
-                break;
-            case ENTER_K:
+            }
+            else if (IsHotKey(sym, state, FCITX_ENTER))
+            {
                 if (!tbl.bCanntFindCode)
                     TableInsertPhrase (messageDown.msg[1].strMsg, messageDown.msg[0].strMsg);
-            case ESC:
-                tbl.bIsTableAddPhrase = False;
-                bIsDoInputOnly = False;
+            }
+            else if (IsHotKey(sym, state, FCITX_ESCAPE))
+            {
                 return IRV_CLEAN;
-            default:
+            }
+            else {
                 return IRV_DO_NOTHING;
             }
-
             return IRV_DISPLAY_MESSAGE;
         }
-        if (IsHotKey (iKey, tbl.hkTableAddPhrase)) {
+        if (IsHotKey (sym, state, tbl.hkTableAddPhrase)) {
             if (!tbl.bIsTableAddPhrase) {
                 if (tbl.iHZLastInputCount < 2 || !table->bRule) //词组最少为两个汉字
                     return IRV_DO_NOTHING;
@@ -948,7 +947,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
             return retVal;
         }
-        else if (IsHotKey (iKey, fc.hkGetPY)) {
+        else if (IsHotKey (sym, state, fc.hkGetPY)) {
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
@@ -975,7 +974,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
         if (!iCodeInputCount && !bIsInLegend)
             return IRV_TO_PROCESS;
 
-        if (iKey == ESC) {
+        if (IsHotKey(sym, state, FCITX_ESCAPE)) {
             if (tbl.bIsTableDelPhrase || tbl.bIsTableAdjustOrder) {
                 TableResetStatus ();
                 retVal = IRV_DISPLAY_CANDWORDS;
@@ -983,8 +982,9 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
             else
                 return IRV_CLEAN;
         }
-        else if (IsChooseKey(iKey)) {
-            iKey = IsChooseKey(iKey);
+        else if (state == KEY_NONE && IsChooseKey(sym)) {
+            int iKey;
+            iKey = IsChooseKey(sym);
 
             if (!bIsInLegend) {
                 if (!iCandWordCount)
@@ -1020,7 +1020,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
             }
         }
         else if (!tbl.bIsTableDelPhrase && !tbl.bIsTableAdjustOrder) {
-            if (IsHotKey (iKey, tbl.hkTableAdjustOrder)) {
+            if (IsHotKey (sym, state, tbl.hkTableAdjustOrder)) {
                 if ((tbl.iTableCandDisplayed == iCandWordCount && iCandWordCount < 2) || bIsInLegend)
                     return IRV_DO_NOTHING;
 
@@ -1029,7 +1029,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
                 AddMessageAtLast(&messageUp, MSG_TIPS, "选择需要提前的词组序号，ESC结束");
                 retVal = IRV_DISPLAY_MESSAGE;
             }
-            else if (IsHotKey (iKey, tbl.hkTableDelPhrase)) {
+            else if (IsHotKey (sym, state, tbl.hkTableDelPhrase)) {
                 if (!iCandWordCount || bIsInLegend)
                     return IRV_DO_NOTHING;
 
@@ -1038,7 +1038,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
                 AddMessageAtLast(&messageUp, MSG_TIPS, "选择需要删除的词组序号，ESC取消");
                 retVal = IRV_DISPLAY_MESSAGE;
             }
-            else if (iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) {
+            else if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H)) {
                 if (!iCodeInputCount) {
                     bIsInLegend = False;
                     return IRV_DONOT_PROCESS_CLEAN;
@@ -1049,14 +1049,15 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
                 if (iCodeInputCount == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
                     iCandWordCount = 0;
-                    retVal = IRV_DISPLAY_LAST;
+                    SetMessageCount(&messageDown , 0);
+                    retVal = IRV_DISPLAY_CANDWORDS;
                 }
                 else if (iCodeInputCount)
                     retVal = TableGetCandWords (SM_FIRST);
                 else
                     retVal = IRV_CLEAN;
             }
-            else if (iKey == ' ') {
+            else if (IsHotKey(sym, state, FCITX_SPACE)) {
                 if (!bIsInLegend) {
                     if (!(table->bUsePY && iCodeInputCount == 1 && strCodeInput[0] == table->cPinyin)) {
                         if (strcmp (strCodeInput, table->strSymbol) && strCodeInput[0] == table->cPinyin && table->bUsePY)

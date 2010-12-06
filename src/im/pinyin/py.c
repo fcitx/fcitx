@@ -37,6 +37,7 @@
 
 #include "tools/tools.h"
 #include "core/ime.h"
+#include "core/keys.h"
 #include "ui/InputWindow.h"
 #include "im/pinyin/py.h"
 #include "im/pinyin/PYFA.h"
@@ -554,16 +555,9 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
     int val;
     char *strGet = NULL;
     char strTemp[MAX_USER_INPUT + 1];
-    unsigned int iKeyState;
-    unsigned int iKey;
 
     if (sym == 0 && state == 0 && keyCount == -1)
-        iKey = -1;
-    else
-    {
-        iKeyState = state - (state & KEY_NUMLOCK) - (state & KEY_CAPSLOCK) - (state & KEY_SCROLLLOCK);
-        iKey = GetKey (sym, iKeyState, keyCount);
-    }
+        sym = -1;
 
     if (!bPYBaseDictLoaded)
         LoadPYBaseDict();
@@ -572,11 +566,11 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
     val = IRV_TO_PROCESS;
     if (!bIsPYAddFreq && !bIsPYDelFreq && !bIsPYDelUserPhr) {
-        if ((iKey >= 'a' && iKey <= 'z') || iKey == PY_SEPARATOR || (bSP && bSP_UseSemicolon && iKey == ';')) {
+        if ((IsHotKeyLAZ(sym, state) || IsHotKey(sym, state, FCITX_SEPARATOR) || (bSP && bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON)))) {
             bIsInLegend = False;
             inputWindow.bShowCursor = True;
 
-            if (iKey == PY_SEPARATOR) {
+            if (IsHotKey(sym, state, FCITX_SEPARATOR)) {
                 if (!iPYInsertPoint)
                     return IRV_TO_PROCESS;
                 if (strFindString[iPYInsertPoint - 1] == PY_SEPARATOR)
@@ -588,7 +582,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
             for (; i > iPYInsertPoint; i--)
                 strFindString[i] = strFindString[i - 1];
 
-            strFindString[iPYInsertPoint++] = iKey;
+            strFindString[iPYInsertPoint++] = sym;
             strFindString[val + 1] = '\0';
             ParsePY(strFindString, &findMap, PY_PARSE_INPUT_USER, bSP);
 
@@ -602,7 +596,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
             }
 
             val = IRV_DISPLAY_CANDWORDS;
-        } else if (iKey == (XK_BackSpace & 0x00FF) || iKey == CTRL_H) {
+        } else if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H) ) {
             if (iPYInsertPoint) {
                 val = ((iPYInsertPoint > 1)
                        && (strFindString[iPYInsertPoint - 2] == PY_SEPARATOR)) ? 2 : 1;
@@ -629,7 +623,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
                 val = IRV_DISPLAY_CANDWORDS;
             }
-        } else if (iKey == (XK_Delete & 0x00FF)) {
+        } else if (IsHotKey(sym, state, FCITX_DELETE)) {
             if (iCodeInputCount) {
                 if (iPYInsertPoint == strlen(strFindString))
                     return IRV_DO_NOTHING;
@@ -644,24 +638,24 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                     return IRV_CLEAN;
                 val = IRV_DISPLAY_CANDWORDS;
             }
-        } else if (iKey == HOME) {
+        } else if (IsHotKey(sym, state, FCITX_HOME)) {
             if (iCodeInputCount == 0)
                 return IRV_DONOT_PROCESS;
             iPYInsertPoint = 0;
             val = IRV_DISPLAY_CANDWORDS;
-        } else if (iKey == END) {
+        } else if (IsHotKey(sym, state, FCITX_END)) {
             if (iCodeInputCount == 0)
                 return IRV_DONOT_PROCESS;
             iPYInsertPoint = strlen(strFindString);
             val = IRV_DISPLAY_CANDWORDS;
-        } else if (iKey == RIGHT) {
+        } else if (IsHotKey(sym, state, FCITX_RIGHT)) {
             if (!iCodeInputCount)
                 return IRV_TO_PROCESS;
             if (iPYInsertPoint == strlen(strFindString))
                 return IRV_DO_NOTHING;
             iPYInsertPoint++;
             val = IRV_DISPLAY_CANDWORDS;
-        } else if (iKey == LEFT) {
+        } else if (IsHotKey(sym, state, FCITX_LEFT)) {
             if (!iCodeInputCount)
                 return IRV_TO_PROCESS;
             if (iPYInsertPoint < 2) {
@@ -686,7 +680,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 iPYInsertPoint--;
                 val = IRV_DISPLAY_CANDWORDS;
             }
-        } else if (iKey == ' ') {
+        } else if (IsHotKey(sym, state, FCITX_SPACE)) {
             if (!bIsInLegend) {
                 if (findMap.iMode == PARSE_ERROR)
                     return IRV_DO_NOTHING;
@@ -714,7 +708,8 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 strcpy(strStringGet, PYGetLegendCandWord(0));
                 val = IRV_GET_LEGEND;
             }
-        } else if (IsHotKey(iKey, fc.hkPYDelUserPhr)) {
+        } else if (IsHotKey(sym, state, fc.hkPYDelUserPhr)) {
+            printf("abcd\n");
             if (!bIsPYDelUserPhr) {
                 for (val = 0; val < iCandWordCount; val++) {
                     if (PYCandWords[val].iWhich == PY_CAND_USERPHRASE)
@@ -732,7 +727,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
                 return IRV_DISPLAY_MESSAGE;
             }
-        } else if (IsHotKey(iKey, fc.hkPYAddFreq)) {
+        } else if (IsHotKey(sym, state, fc.hkPYAddFreq)) {
             if (!bIsPYAddFreq && findMap.iHZCount == 1 && iCodeInputCount) {
                 bIsPYAddFreq = True;
                 bIsDoInputOnly = True;
@@ -743,7 +738,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
                 return IRV_DISPLAY_MESSAGE;
             }
-        } else if (IsHotKey(iKey, fc.hkPYDelFreq)) {
+        } else if (IsHotKey(sym, state, fc.hkPYDelFreq)) {
             if (!bIsPYDelFreq && (pCurFreq && !pCurFreq->bIsSym)) {
                 for (val = 0; val < iCandWordCount; val++) {
                     if (PYCandWords[val].iWhich != PY_CAND_FREQ)
@@ -770,8 +765,8 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
     }
 
     if (val == IRV_TO_PROCESS) {
-        if (iKey >= '0' && iKey <= '9') {
-            iKey -= '0';
+        if (IsHotKeyDigit(sym, state)) {
+            int iKey = sym - XK_0;
             if (iKey == 0)
                 iKey = 10;
 
@@ -815,11 +810,11 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 strcpy(strStringGet, PYGetLegendCandWord(iKey - 1));
                 val = IRV_GET_LEGEND;
             }
-        } else if (iKey == -1) {
+        } else if (sym == -1) {
             ParsePY(strFindString, &findMap, PY_PARSE_INPUT_USER, bSP);
             iPYInsertPoint = 0;
             val = IRV_DISPLAY_CANDWORDS;
-        } else if (iKey == ESC)
+        } else if (IsHotKey(sym, state, FCITX_ESCAPE))
             return IRV_TO_PROCESS;
         else {
             if (bIsPYAddFreq || bIsPYDelFreq || bIsPYDelUserPhr)
@@ -827,14 +822,14 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
             //下面实现以词定字
             if (iCandWordCount) {
-                if (iKey == fc.cPYYCDZ[0] || iKey == fc.cPYYCDZ[1]) {
+                if (state == KEY_NONE && (sym == fc.cPYYCDZ[0] || sym == fc.cPYYCDZ[1])) {
                     if (PYCandWords[iYCDZ].iWhich == PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich == PY_CAND_SYMPHRASE) {
                         char *pBase, *pPhrase;
 
                         pBase = PYFAList[PYCandWords[iYCDZ].cand.phrase.iPYFA].pyBase[PYCandWords[iYCDZ].cand.phrase.iBase].strHZ;
                         pPhrase = PYCandWords[iYCDZ].cand.phrase.phrase->strPhrase;
 
-                        if (iKey == fc.cPYYCDZ[0])
+                        if (sym == fc.cPYYCDZ[0])
                             strcpy(strStringGet, pBase);
                         else {
                             INT8 clen;
@@ -847,26 +842,26 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                     }
                 } else if (!bIsInLegend) {
                     val = -1;
-                    switch (iKey) {
-                    case ')':
+                    switch (sym) {
+                    case XK_parenright:
                         val++;
-                    case '(':
+                    case XK_parenleft:
                         val++;
-                    case '*':
+                    case XK_asterisk:
                         val++;
-                    case '&':
+                    case XK_ampersand:
                         val++;
-                    case '^':
+                    case XK_asciicircum:
                         val++;
-                    case '%':
+                    case XK_percent:
                         val++;
-                    case '$':
+                    case XK_dollar:
                         val++;
-                    case '#':
+                    case XK_numbersign:
                         val++;
-                    case '@':
+                    case XK_at:
                         val++;
-                    case '!':
+                    case XK_exclam:
                         val++;
                     }
 

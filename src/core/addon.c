@@ -149,18 +149,17 @@ void LoadAddonInfo(void)
     for (i = 0;i < len ;i ++)
         free(paths[i]);
     free(paths);
-		
 
     FreeXDGPath(addonPath);
 
-	StringHashSet *curStr;
-	while(sset)
-	{
-		curStr = sset;
-		HASH_DEL(sset, curStr);
-		free(curStr->name);
+    StringHashSet *curStr;
+    while(sset)
+    {
+        curStr = sset;
+        HASH_DEL(sset, curStr);
+        free(curStr->name);
         free(curStr);
-	}
+    }
 }
 
 /** 
@@ -170,15 +169,15 @@ void LoadAddonInfo(void)
  */
 ConfigFileDesc* GetAddonConfigDesc()
 {
-	if (!addonConfigDesc)
-	{
-		FILE *tmpfp;
-		tmpfp = GetXDGFileData("addon.desc", "r", NULL);
-		addonConfigDesc = ParseConfigFileDescFp(tmpfp);
-		fclose(tmpfp);
-	}
+    if (!addonConfigDesc)
+    {
+        FILE *tmpfp;
+        tmpfp = GetXDGFileData("addon.desc", "r", NULL);
+        addonConfigDesc = ParseConfigFileDescFp(tmpfp);
+        fclose(tmpfp);
+    }
 
-	return addonConfigDesc;
+    return addonConfigDesc;
 }
 
 /** 

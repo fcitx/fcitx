@@ -24,6 +24,7 @@
 #include <iconv.h>
 
 #include "core/fcitx.h"
+#include "core/keys.h"
 
 #include "im/qw/qw.h"
 #include "ui/InputWindow.h"
@@ -41,71 +42,66 @@ char     strQWHZUTF8[UTF8_MAX_LENGTH + 1];
 
 INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount)
 {
-	INPUT_RETURN_VALUE retVal;
-    unsigned int iKeyState;
-    unsigned int iKey;
-    
-    iKeyState = state - (state & KEY_NUMLOCK) - (state & KEY_CAPSLOCK) - (state & KEY_SCROLLLOCK);
-    iKey = GetKey (sym, iKeyState, keyCount);
-	
-	retVal = IRV_TO_PROCESS;
-	if ( iKey>='0' && iKey<='9') {
-		if ( iCodeInputCount!= 4 ) {
-			strCodeInput[iCodeInputCount++]=iKey;
-			strCodeInput[iCodeInputCount]='\0';
-			if ( iCodeInputCount==4 ) {
-				strcpy(strStringGet, QWGetCandWord(iKey-'0'-1));
-				retVal= IRV_GET_CANDWORDS;
-			}
-			else if (iCodeInputCount==3)
-				retVal=QWGetCandWords(SM_FIRST);
-			else
-				retVal=IRV_DISPLAY_CANDWORDS;
-		}
-	}
-	else if (iKey == (XK_BackSpace & 0x00FF)) {
-		if (!iCodeInputCount)
-		    return IRV_DONOT_PROCESS_CLEAN;
-		iCodeInputCount--;
-		strCodeInput[iCodeInputCount] = '\0';
+    INPUT_RETURN_VALUE retVal;
 
-		if (!iCodeInputCount)
-		    retVal = IRV_CLEAN;
-		else {
-		    iCandPageCount = 0;
-		    SetMessageCount(&messageDown, 0);
-		    retVal = IRV_DISPLAY_CANDWORDS;
-		}
-	}
-	else if (iKey == ' ') {		
-		if (!iCodeInputCount)
-		    return IRV_TO_PROCESS;
-		if (iCodeInputCount!=3)
-		    return IRV_DO_NOTHING;
-		    
-		strcpy(strStringGet, QWGetCandWord(0));
-		retVal= IRV_GET_CANDWORDS;
-	}
-	else
-		return IRV_TO_PROCESS;
-	
+    retVal = IRV_TO_PROCESS;
+    if (IsHotKeyDigit(sym, state)) {
+        if ( iCodeInputCount!= 4 ) {
+            strCodeInput[iCodeInputCount++]=sym;
+            strCodeInput[iCodeInputCount]='\0';
+            if ( iCodeInputCount==4 ) {
+            strcpy(strStringGet, QWGetCandWord(sym-'0'-1));
+            retVal= IRV_GET_CANDWORDS;
+         }
+         else if (iCodeInputCount==3)
+            retVal=QWGetCandWords(SM_FIRST);
+         else
+            retVal=IRV_DISPLAY_CANDWORDS;
+      }
+   }
+   else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
+      if (!iCodeInputCount)
+          return IRV_DONOT_PROCESS_CLEAN;
+      iCodeInputCount--;
+      strCodeInput[iCodeInputCount] = '\0';
+
+      if (!iCodeInputCount)
+          retVal = IRV_CLEAN;
+      else {
+          iCandPageCount = 0;
+          SetMessageCount(&messageDown, 0);
+          retVal = IRV_DISPLAY_CANDWORDS;
+      }
+   }
+   else if (IsHotKey(sym, state, FCITX_SPACE)) {
+      if (!iCodeInputCount)
+          return IRV_TO_PROCESS;
+      if (iCodeInputCount!=3)
+          return IRV_DO_NOTHING;
+          
+      strcpy(strStringGet, QWGetCandWord(0));
+      retVal= IRV_GET_CANDWORDS;
+   }
+   else
+      return IRV_TO_PROCESS;
+   
     SetMessageCount(&messageUp, 0);
     AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
-	if ( iCodeInputCount!=3 )
-		SetMessageCount(&messageDown, 0);
-		
-	return retVal;
+   if ( iCodeInputCount!=3 )
+      SetMessageCount(&messageDown, 0);
+      
+   return retVal;
 }
 
 char *QWGetCandWord (int iIndex)
 {
-	if ( !iCandPageCount )
-		return NULL;
-		
-	SetMessageCount(&messageDown, 0);
-	if ( iIndex==-1 )
-		iIndex=9;
-	return GetQuWei((strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0',iCurrentCandPage * 10+iIndex+1);
+   if ( !iCandPageCount )
+      return NULL;
+      
+   SetMessageCount(&messageDown, 0);
+   if ( iIndex==-1 )
+      iIndex=9;
+   return GetQuWei((strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0',iCurrentCandPage * 10+iIndex+1);
 }
 
 INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
@@ -115,41 +111,41 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
     char            strTemp[3];
 
     if ( fc.bPointAfterNumber ) {
-	    strTemp[1] = '.';
-	    strTemp[2] = '\0';
+       strTemp[1] = '.';
+       strTemp[2] = '\0';
     }
     else
-	    strTemp[1]='\0';
+       strTemp[1]='\0';
 
     iQu = (strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0';
     
     if (mode==SM_FIRST ) {
-    	iCandPageCount = 9;
-	iCurrentCandPage = strCodeInput[2]-'0';
+       iCandPageCount = 9;
+   iCurrentCandPage = strCodeInput[2]-'0';
     }
     else {
-    	if ( !iCandPageCount )
-		return IRV_TO_PROCESS;
-    	if (mode==SM_NEXT) {
-    		if ( iCurrentCandPage!=iCandPageCount )
-			iCurrentCandPage++;
-	}
-	else {
-    		if ( iCurrentCandPage )
-			iCurrentCandPage--;
-	}
+       if ( !iCandPageCount )
+      return IRV_TO_PROCESS;
+       if (mode==SM_NEXT) {
+          if ( iCurrentCandPage!=iCandPageCount )
+         iCurrentCandPage++;
+   }
+   else {
+          if ( iCurrentCandPage )
+         iCurrentCandPage--;
+   }
     }
-	
+   
     iWei = iCurrentCandPage * 10;
 
     SetMessageCount(&messageDown, 0);
     for (i = 0; i < 10; i++) {
-	strTemp[0] = i + 1 + '0';
-	if (i == 9)
-		strTemp[0] = '0';
+   strTemp[0] = i + 1 + '0';
+   if (i == 9)
+      strTemp[0] = '0';
     AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
     AddMessageAtLast(&messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (iQu, iWei + i + 1));
-	if (i != 9)
+   if (i != 9)
         MessageConcatLast(&messageDown, " ");
     }    
     
@@ -163,34 +159,34 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
 char           *GetQuWei (int iQu, int iWei)
 {
 
-	char *inbuf, *outbuf;
+   char *inbuf, *outbuf;
 
-	size_t insize = 2, avail = UTF8_MAX_LENGTH + 1;
+   size_t insize = 2, avail = UTF8_MAX_LENGTH + 1;
 
-	iconv_t convGBK = iconv_open("utf-8", "gb18030");
+   iconv_t convGBK = iconv_open("utf-8", "gb18030");
 
-    if (iQu >= 95) {		/* Process extend Qu 95 and 96 */
-	strQWHZ[0] = iQu - 95 + 0xA8;
-	strQWHZ[1] = iWei + 0x40;
+    if (iQu >= 95) {      /* Process extend Qu 95 and 96 */
+   strQWHZ[0] = iQu - 95 + 0xA8;
+   strQWHZ[1] = iWei + 0x40;
 
-	/* skip 0xa87f and 0xa97f */
-	if ((unsigned char) strQWHZ[1] >= 0x7f)
-	    strQWHZ[1]++;
+   /* skip 0xa87f and 0xa97f */
+   if ((unsigned char) strQWHZ[1] >= 0x7f)
+       strQWHZ[1]++;
     }
     else {
-	strQWHZ[0] = iQu + 0xa0;
-	strQWHZ[1] = iWei + 0xa0;
+   strQWHZ[0] = iQu + 0xa0;
+   strQWHZ[1] = iWei + 0xa0;
     }
 
     strQWHZ[2] = '\0';
 
-	inbuf = strQWHZ;
+   inbuf = strQWHZ;
 
-	outbuf = strQWHZUTF8;
+   outbuf = strQWHZUTF8;
 
-	iconv(convGBK, &inbuf, &insize, &outbuf, &avail);
+   iconv(convGBK, &inbuf, &insize, &outbuf, &avail);
 
-	iconv_close(convGBK);
+   iconv_close(convGBK);
 
     return strQWHZUTF8;
 }

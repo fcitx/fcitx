@@ -42,6 +42,7 @@
 #include "fcitx-config/profile.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/cutils.h"
+#include "im/special/vk.h"
 #ifdef _ENABLE_TRAY
 #include "ui/TrayWindow.h"
 #endif
@@ -75,6 +76,7 @@ cairo_surface_t *  english;
 cairo_surface_t *  otherim;
 cairo_surface_t *  trayActive;
 cairo_surface_t *  trayInactive;
+cairo_surface_t *  keyBoard;
 
 //定义全局皮肤配置结构
 FcitxSkin sc;
@@ -281,6 +283,11 @@ void LoadMainBarImage()
         im[i].image.response_h = sc.skinMainBar.chn.response_h;
         LoadImage(&im[i].image, &im[i].icon);
     }
+}
+
+void LoadVKImage()
+{
+    LoadImage( &sc.skinKeyboard.backImg, &keyBoard);
 }
 
 void DrawMenuBackground(XlibMenu * menu)
@@ -598,6 +605,8 @@ void DestroyAllImage()
     DestroyImage(&trayInactive);
 
     DestroyImage(&menuBack);
+
+    DestroyImage(&keyBoard);
 
     int i = 0;
     for (; i < iIMCount; i ++)
@@ -937,12 +946,14 @@ void DisplaySkin(char * skinname)
     DestroyMainWindow();
     DestroyInputWindow();
     DestroyMenuWindow();
+    DestroyVKWindow();
 
     LoadSkinConfig();
     CreateMainWindow ();
     CreateInputWindow ();
 
     CreateMenuWindow();
+    CreateVKWindow();
 
     DrawMainWindow ();
     DrawInputWindow ();

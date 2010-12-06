@@ -222,3 +222,13 @@ Description=Active Menu Color
 [SkinMenu/LineColor]
 Type=Color
 Description=Space Line Color
+
+[SkinKeyboard/BackImg]
+Type=Image
+Description=Virtual Keyboard Image
+DefaultValue=keyboard.png
+
+[SkinKeyboard/KeyColor]
+Type=Color
+Description=Key Color On Virutal Keyboard
+DefaultValue=0 0 0

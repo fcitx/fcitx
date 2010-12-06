@@ -61,31 +61,31 @@ typedef struct ConfigColor
 
 typedef enum
 {
-	RELEASE,//鼠标释放状态
-	PRESS,//鼠标按下
-	MOTION//鼠标停留
+    RELEASE,//鼠标释放状态
+    PRESS,//鼠标按下
+    MOTION//鼠标停留
 } MouseE;
 
 typedef struct FcitxImage
 {
-	char img_name[32];
-	//图片绘画区域
-	int  position_x;
-	int  position_y;
-	int  width;
-	int  height;
-	//按键响应区域
-	int  response_x;
-	int  response_y;
-	int  response_w;
-	int  response_h;
-	//鼠标不同状态mainnMenuwindow不同的显示状态.
-	MouseE mouse;
+    char img_name[32];
+    //图片绘画区域
+    int  position_x;
+    int  position_y;
+    int  width;
+    int  height;
+    //按键响应区域
+    int  response_x;
+    int  response_y;
+    int  response_w;
+    int  response_h;
+    //鼠标不同状态mainnMenuwindow不同的显示状态.
+    MouseE mouse;
 } FcitxImage;
 
 typedef enum ConfigType
 {
-	T_Integer,
+    T_Integer,
     T_Color,
     T_String,
     T_Char,
@@ -250,15 +250,6 @@ void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync);
 void ConfigBindSync(GenericConfig* config);
 
 typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);
-ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync);
-ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync);
-#define ConfigOptionFile ConfigOptionString
-#define ConfigOptionFont ConfigOptionString
 
 void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg);
 

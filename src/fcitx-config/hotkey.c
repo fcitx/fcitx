@@ -24,209 +24,128 @@
 #include "tools/tools.h"
 #include "fcitx-config/hotkey.h"
 #include <string.h>
+#include <X11/keysym.h>
 
+/* fcitx key name translist */
 KEY_LIST        keyList[] = {
-    {"TAB", 9}
-    ,
-    {"ENTER", 13}
-    ,
-    {"LCTRL", 227}
-    ,
-    {"LSHIFT", 225}
-    ,
-    {"LALT", 233}
-    ,
-    {"RCTRL", 228}
-    ,
-    {"RSHIFT", 226}
-    ,
-    {"RALT", 234}
-    ,
-    {"INSERT", 8099}
-    ,
-    {"HOME", 8080}
-    ,
-    {"PGUP", 8085}
-    ,
-    {"END", 8087}
-    ,
-    {"PGDN", 8086}
-    ,
-    {"SHIFT_TAB", 11032}
-    ,
-    {"CTRL_CTRL", 300}
-    ,
-    {"CTRL_LSHIFT", 301}
-    ,
-    {"CTRL_LALT", 302}
-    ,
-    {"CTRL_RSHIFT", 303}
-    ,
-    {"CTRL_RALT", 304}
-    ,
-    {"SHIFT_LCTRL", 305}
-    ,
-    {"SHIFT_SHIFT", 306}
-    ,
-    {"SHIFT_LALT", 307}
-    ,
-    {"SHIFT_RCTRL", 308}
-    ,
-    {"SHIFT_RALT", 309}
-    ,
-    {"ALT_LCTRL", 310}
-    ,
-    {"ALT_LSHIFT", 311}
-    ,
-    {"ALT_ALT", 312}
-    ,
-    {"ALT_RCTRL", 313}
-    ,
-    {"ALT_RSHIFT", 314}
-    ,
+    {"TAB", XK_Tab},
+    {"ENTER", XK_Return},
+    {"LCTRL", XK_Control_L},
+    {"LSHIFT", XK_Shift_L},
+    {"LALT", XK_Alt_L},
+    {"RCTRL", XK_Control_R},
+    {"RSHIFT", XK_Shift_R},
+    {"RALT", XK_Alt_R},
+    {"INSERT", XK_Insert},
+    {"HOME", XK_Home},
+    {"PGUP", XK_Page_Up},
+    {"END", XK_End},
+    {"PGDN", XK_Page_Down},
+    {"ESCAPE", XK_Escape},
+    {"SPACE", XK_space},
+    {"DELETE", XK_Delete},
     {"\0", 0}
 };
 
-int GetKey (KeySym keysym, int iKeyState, int iCount)
+static char *GetKeyListString(int key);
+
+FCITX_EXPORT_API
+Bool IsHotKeyDigit(KeySym sym, int state)
 {
-    unsigned char iKeyCode = keysym & 0xFF;
-    /* special case */
-    if (keysym == 0xFF67)
-        return keysym;
-    if (!iCount) {      //是SHIFT、CTRL、ALT或它们的组合，或其它诸如HOME、END之类的键
-        if (iKeyState == KEY_NONE) {
-            if (iKeyCode >= 80 && iKeyCode <= 99)   //上、下、左、右、HOME、END、PGUP、PGDN、INSERT等
-                return 8000 + iKeyCode;
-            if (iKeyCode >= 225 && iKeyCode <= 233) //单按SHIFT、CTRL、ALT
-                return 9000 + iKeyCode;
-        }
-        else if (iKeyState == KEY_CTRL_COMP) {
-            switch (iKeyCode) {
-            case K_LCTRL:
-                return CTRL_CTRL;
-            case K_LSHIFT:
-                return CTRL_LSHIFT;
-            case K_LALT:
-                return CTRL_LALT;
-            case K_RCTRL:
-                return CTRL_CTRL;
-            case K_RSHIFT:
-                return CTRL_RSHIFT;
-            case K_RALT:
-                return CTRL_RALT;
-            default:
-                return iKeyCode + 10000;
-            }
-        }
-        else if (iKeyState == KEY_SHIFT_COMP) {
-            switch (iKeyCode) {
-            case K_LCTRL:
-                return SHIFT_LCTRL;
-            case K_LSHIFT:
-                return SHIFT_SHIFT;
-            case K_LALT:
-                return SHIFT_LALT;
-            case K_RCTRL:
-                return SHIFT_RCTRL;
-            case K_RSHIFT:
-                return SHIFT_SHIFT;
-            case K_RALT:
-                return SHIFT_RALT;
-            default:
-                return iKeyCode + 11000;
-            }
-        }
-        else if (iKeyState == KEY_ALT_COMP) {
-            switch (iKeyCode) {
-            case K_LCTRL:
-                return ALT_LCTRL;
-            case K_LSHIFT:
-                return ALT_LSHIFT;
-            case K_LALT:
-                return ALT_ALT;
-            case K_RCTRL:
-                return ALT_RCTRL;
-            case K_RSHIFT:
-                return ALT_RSHIFT;
-            case K_RALT:
-                return ALT_ALT;
-            default:
-                return iKeyCode + 12000;
-            }
-        }
-        else if (iKeyState == KEY_CTRL_SHIFT_COMP ) {
-            switch (iKeyCode) {
-            case K_LSHIFT:
-            case K_LCTRL:
-                return CTRL_LSHIFT;
-            case K_RSHIFT:
-            case K_RCTRL:
-                return CTRL_RSHIFT;
-            default:
-                return iKeyCode + 13000;
-            }
-        }
-        else if (iKeyState == KEY_ALT_SHIFT_COMP ) {
-            switch (iKeyCode) {
-            case K_LSHIFT:
-            case K_LALT:
-                return ALT_LSHIFT;
-            case K_RSHIFT:
-            case K_RCTRL:
-                return ALT_RSHIFT;
-            default:
-                return iKeyCode + 14000;
-            }
-        }
-        else if (iKeyState == KEY_CTRL_ALT_COMP ) {
-            switch (iKeyCode) {
-            case K_LCTRL:
-            case K_LALT:
-                return CTRL_LALT;
-            case K_RCTRL:
-            case K_RALT:
-                return CTRL_RALT;
-            default:
-                return iKeyCode + 15000;
-            }
-        }
-        else if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP )
-            return iKeyCode + 16000;
-    }
-    else {
-        if (iKeyState == KEY_NONE) {
-            //小键盘的数字也要处理成与大键盘上一样
-            if (iKeyCode == 141 || (iKeyCode >= 170 && iKeyCode <= 185))
-                iKeyCode -= 128;
-        }
-        else {
-            //由于大小写字母有区别，此处应该将其处理为等同;
-            if (iKeyState < KEY_SCROLLLOCK && (iKeyCode >= 97 && iKeyCode <= 122))
-                iKeyCode -= 32;
+    if (state)
+        return False;
 
-            if (iKeyState == KEY_CTRL_COMP)
-                return iKeyCode + 1000;
-            if (iKeyState == KEY_SHIFT_COMP) {
-                //只处理空格
-                if (iKeyCode == 32)
-                    return iKeyCode + 2000;
-            }
-            if (iKeyState == KEY_ALT_COMP)
-                return iKeyCode + 3000;
-            if (iKeyState == KEY_CTRL_SHIFT_COMP)
-                return iKeyCode + 4000;
-            if (iKeyState == KEY_CTRL_ALT_COMP)
-                return iKeyCode + 5000;
-            if (iKeyState == KEY_ALT_SHIFT_COMP)
-                return iKeyCode + 6000;
-            if (iKeyState == KEY_CTRL_ALT_SHIFT_COMP)
-                return iKeyCode + 7000;
-            if (iKeyState == KEY_SUPER_COMP)
-                return iKeyCode + 8000;
-        }
-    }
+    if (sym >= XK_0 && sym <= XK_9)
+        return True;
 
-    return iKeyCode;
+    return False;
+}
+
+FCITX_EXPORT_API
+Bool IsHotKeyUAZ(KeySym sym, int state)
+{
+    if (state)
+        return False;
+
+    if (sym >= XK_A && sym <= XK_Z)
+        return True;
+
+    return False;
+}
+
+FCITX_EXPORT_API
+Bool IsHotKeySimple(KeySym sym, int state)
+{
+    if (state)
+        return False;
+
+    if (sym >= XK_space && sym <= XK_asciitilde)
+        return True;
+
+    return False;
+}
+
+FCITX_EXPORT_API
+Bool IsHotKeyLAZ(KeySym sym, int state)
+{
+    if (state)
+        return False;
+
+    if (sym >= XK_a && sym <= XK_z)
+        return True;
+
+    return False;
+}
+
+/*
+ * Do some custom process
+ */
+FCITX_EXPORT_API
+void GetKey (KeySym keysym, int iKeyState, int iCount, KeySym* outk, unsigned int* outs)
+{
+    if (iKeyState)
+    {
+        if (IsHotKeyLAZ(keysym, 0))
+            keysym = keysym + XK_A - XK_a;
+
+        if (iKeyState == KEY_SHIFT_COMP)
+            if (IsHotKeySimple(keysym, 0) && keysym != XK_space)
+                iKeyState = KEY_NONE;
+    }
+    *outk = keysym;
+    *outs = iKeyState;
+}
+
+
+FCITX_EXPORT_API
+char* GetKeyString(KeySym sym, unsigned int state)
+{
+    char *str;
+    size_t len = 0;
+    if (state & KEY_CTRL_COMP)
+        len += strlen("CTRL_");
+    if (state & KEY_ALT_COMP)
+        len += strlen("ALT_");
+    if (state & KEY_SHIFT_COMP)
+        len += strlen("SHIFT_");
+
+    char *key = GetKeyListString(sym);
+
+    if (key)
+        return NULL;
+
+    len += strlen(key);
+
+    str = malloc(sizeof(char) * (len + 1));
+    if (state & KEY_CTRL_COMP)
+        strcat(str, "CTRL_");
+    if (state & KEY_ALT_COMP)
+        strcat(str, "ALT_");
+    if (state & KEY_SHIFT_COMP)
+        strcat(str, "SHIFT_");
+    strcat(str, key);
+    free(key);
+    return str;
 }
 
 /*
@@ -234,171 +153,41 @@ int GetKey (KeySym keysym, int iKeyState, int iCount)
  * 主要用于从设置文件中读取热键设定
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
-int ParseKey (char *strKey)
+FCITX_EXPORT_API
+Bool ParseKey (char *strKey, KeySym* sym, int* state)
 {
     char           *p;
-    int             iKeyCode;
+    int             iKey;
     int             iKeyState = 0;
-    int             iCount = 0;
 
-    iKeyCode = GetKeyList (strKey);
-    if (iKeyCode != -1)
-        return iKeyCode;
-
-    if (!strncmp (strKey, "CTRL_ALT_SHIFT_", 15)) {
-        iKeyState = KEY_CTRL_ALT_SHIFT_COMP;
-        p = strKey + 15;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "CTRL_ALT_", 9)) {
-        iKeyState = KEY_CTRL_ALT_COMP;
-        p = strKey + 9;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "CTRL_SHIFT_", 11)) {
-        iKeyState = KEY_CTRL_SHIFT_COMP;
-        p = strKey + 11;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "ALT_SHIFT_", 10)) {
-        iKeyState = KEY_ALT_SHIFT_COMP;
-        p = strKey + 10;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "CTRL_", 5)) {
-        iKeyState = KEY_CTRL_COMP;
-        p = strKey + 5;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "ALT_", 4)) {
-        iKeyState = KEY_ALT_COMP;
-        p = strKey + 4;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "SHIFT_", 6)) {
-        iKeyState = KEY_SHIFT_COMP;
-        p = strKey + 6;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else if (!strncmp (strKey, "SUPER_", 6)) {
-        iKeyState = KEY_SUPER_COMP;
-        p = strKey + 6;
-        iKeyCode = GetKeyList (p);
-        if (iKeyCode != -1)
-            iCount = 0;
-        else {
-            iCount = 1;
-            if (!strcmp (p, "SPACE"))
-                iKeyCode = ' ';
-            else if (!strcmp (p, "DELETE"))
-                iKeyCode = DELETE;
-            else if (strlen (p) == 1)
-                iKeyCode = p[0];
-            else
-                return -1;
-        }
-    }
-    else {
-        if (strlen (strKey) == 1)
-            return strKey[0];
-        else
-            return -1;
+    p = strKey;
+    if (strstr(p, "CTRL_"))
+    {
+        iKeyState |= KEY_CTRL_COMP;
+        p += strlen("CTRL_");
     }
 
-    return GetKey (iKeyCode, iKeyState, iCount);
+    if (strstr(p, "ALT_"))
+    {
+        iKeyState |= KEY_ALT_COMP;
+        p += strlen("ALT_");
+    }
+
+    if (strstr(strKey, "SHIFT_"))
+    {
+        iKeyState |= KEY_SHIFT_COMP;
+        p += strlen("SHIFT_");
+    }
+
+    iKey = GetKeyList (p);
+    if (iKey == -1)
+        return False;
+    *sym = iKey;
+    *state = iKeyState;
+    return True;
 }
 
+FCITX_EXPORT_API
 int GetKeyList (char *strKey)
 {
     int             i;
@@ -412,9 +201,38 @@ int GetKeyList (char *strKey)
         i++;
     }
 
+    if (strlen(strKey) == 1)
+        return strKey[0];
+
     return -1;
 }
 
+char *GetKeyListString(int key)
+{
+    if (key >= XK_space && key <= XK_asciitilde)
+    {
+        char *p;
+        p = malloc(sizeof(char) * 2);
+        p[0] = key;
+        p[1] = '\0';
+        return p;
+    }
+    int             i;
+
+    i = 0;
+    for (;;) {
+        if (!keyList[i].code)
+            break;
+        if (keyList[i].code == key)
+            return strdup(keyList[i].strKey);
+        i++;
+    }
+
+    return NULL;
+
+}
+
+FCITX_EXPORT_API
 void SetHotKey (char *strKeys, HOTKEYS * hotkey)
 {
     char           *p;
@@ -426,16 +244,17 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
 
     for (k = 0; k < 2; k++)
     {
-        int keycode;
+        KeySym sym;
+        int state;
         i = 0;
         while (p[i] != ' ' && p[i] != '\0')
             i++;
         strKey = strndup (p, i);
         strKey[i] = '\0';
-        keycode = ParseKey (strKey);
-        if (keycode != -1)
+        if (ParseKey (strKey, &sym, &state))
         {
-            hotkey[j].iKeyCode = keycode;
+            hotkey[j].sym = sym;
+            hotkey[j].state = state;
             hotkey[j].desc = trim(strKey);
             j ++;
         }
@@ -446,7 +265,8 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
     }
     for (; j < 2; j++)
     {
-        hotkey[j].iKeyCode = 0;
+        hotkey[j].sym = 0;
+        hotkey[j].state = 0;
         hotkey[j].desc= NULL;
     }
     free(strKeys);

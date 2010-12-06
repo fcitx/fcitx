@@ -60,15 +60,15 @@ typedef enum
 
 typedef struct 
 {
-	char *skinName;
-	char *skinVersion;
-	char *skinAuthor;
-	char *skinDesc;
+    char *skinName;
+    char *skinVersion;
+    char *skinAuthor;
+    char *skinDesc;
 } SkinInfo;
 
 typedef struct 
 {
-	int fontSize;
+    int fontSize;
     int menuFontSize;
     ConfigColor fontColor[7];
     ConfigColor menuFontColor[2];
@@ -79,8 +79,8 @@ typedef struct
     FcitxImage backImg;
     RESIZERULE resizeV;
     RESIZERULE resizeH;
-	int marginTop;
-	int marginBottom;
+    int marginTop;
+    int marginBottom;
     int marginLeft;
     int marginRight;
     ConfigColor activeColor;
@@ -89,45 +89,51 @@ typedef struct
 
 typedef struct 
 {
-	FcitxImage backImg;
-	FcitxImage logo;
-	FcitxImage zhpunc;
-	FcitxImage enpunc;
-	FcitxImage chs;
-	FcitxImage cht;
-	FcitxImage halfcorner;
-	FcitxImage fullcorner;
-	FcitxImage unlock;
-	FcitxImage lock;
-	FcitxImage legend;
-	FcitxImage nolegend;
-	FcitxImage vk;
-	FcitxImage novk;
-	FcitxImage eng;
-	FcitxImage chn;
+    FcitxImage backImg;
+    FcitxImage logo;
+    FcitxImage zhpunc;
+    FcitxImage enpunc;
+    FcitxImage chs;
+    FcitxImage cht;
+    FcitxImage halfcorner;
+    FcitxImage fullcorner;
+    FcitxImage unlock;
+    FcitxImage lock;
+    FcitxImage legend;
+    FcitxImage nolegend;
+    FcitxImage vk;
+    FcitxImage novk;
+    FcitxImage eng;
+    FcitxImage chn;
 } SkinMainBar;
 
 typedef struct 
-{	
-	FcitxImage backImg;
-	RESIZERULE resize;
-	int	resizePos;
-	int resizeWidth;
-	int inputPos;
-	int outputPos;
-	int layoutLeft;
-	int layoutRight;
-	ConfigColor cursorColor;
-	FcitxImage backArrow;
-	FcitxImage forwardArrow;
+{    
+    FcitxImage backImg;
+    RESIZERULE resize;
+    int    resizePos;
+    int resizeWidth;
+    int inputPos;
+    int outputPos;
+    int layoutLeft;
+    int layoutRight;
+    ConfigColor cursorColor;
+    FcitxImage backArrow;
+    FcitxImage forwardArrow;
 } SkinInputBar;
 
 
 typedef struct 
 {
-	FcitxImage active;
-	FcitxImage inactive;
+    FcitxImage active;
+    FcitxImage inactive;
 } SkinTrayIcon;
+
+typedef struct
+{
+    FcitxImage backImg;
+    ConfigColor keyColor;
+} SkinKeyboard;
 
 /** 
 * 配置文件结构,方便处理,结构固定
@@ -139,17 +145,18 @@ typedef struct
     SkinFont skinFont;
     SkinMainBar skinMainBar;
     SkinInputBar skinInputBar;
-    SkinTrayIcon skinTrayIcon;	
+    SkinTrayIcon skinTrayIcon;    
     SkinMenu skinMenu;
+    SkinKeyboard skinKeyboard;
 } FcitxSkin;
 
 extern cairo_surface_t *  bar;
 extern cairo_surface_t *  logo;
 extern cairo_surface_t *  punc[2];
-extern cairo_surface_t *  corner[2];	
-extern cairo_surface_t *  lx[2];	
-extern cairo_surface_t *  chs_t[2];	
-extern cairo_surface_t *  lock[2];	
+extern cairo_surface_t *  corner[2];    
+extern cairo_surface_t *  lx[2];    
+extern cairo_surface_t *  chs_t[2];    
+extern cairo_surface_t *  lock[2];    
 extern cairo_surface_t *  vk[2];
 extern cairo_surface_t *  input;
 extern cairo_surface_t *  prev;
@@ -169,18 +176,20 @@ extern cairo_surface_t *  dianbao;
 extern cairo_surface_t *  otherim;
 extern cairo_surface_t *  trayActive;
 extern cairo_surface_t *  trayInactive;
+extern cairo_surface_t *  keyBoard;
 
 extern MouseE ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
 
 extern Display *dpy;
 
-extern INT8	iIMCount;
-extern IM	*im;
+extern INT8    iIMCount;
+extern IM    *im;
 extern FcitxSkin sc;
 extern UT_array *skinBuf;
 
 Visual * FindARGBVisual (Display *dpy, int scr);
 void LoadMainBarImage();
+void LoadVKImage();
 void LoadTrayImage();
 void LoadMenuImage();
 void LoadInputBarImage();

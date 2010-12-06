@@ -83,5 +83,8 @@ CONFIG_BINDING_REGISTER("SkinMenu", "MarginRight", skinMenu.marginRight);
 CONFIG_BINDING_REGISTER("SkinMenu", "ActiveColor", skinMenu.activeColor);
 CONFIG_BINDING_REGISTER("SkinMenu", "LineColor", skinMenu.lineColor);
 
+CONFIG_BINDING_REGISTER("SkinKeyboard", "BackImg", skinKeyboard.backImg);
+CONFIG_BINDING_REGISTER("SkinKeyboard", "KeyColor", skinKeyboard.keyColor);
+
 CONFIG_BINDING_END()
 

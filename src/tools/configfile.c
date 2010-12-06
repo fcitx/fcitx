@@ -189,23 +189,42 @@ void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, Conf
 
     if(sync == Raw2Value){
         if (!strcasecmp (pstr, "SHIFT")) {
-            fc.i2ndSelectKey = 50;        //左SHIFT的扫描码
-            fc.i3rdSelectKey = 62;        //右SHIFT的扫描码
+            fc.i2ndSelectKey[0].sym = fc.i2ndSelectKey[1].sym = XK_Shift_L;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[0].sym = fc.i3rdSelectKey[1].sym = XK_Shift_R;        //右SHIFT的扫描码
+            fc.i3rdSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[1].state = KEY_NONE;
         }
         else if (!strcasecmp (pstr, "CTRL")) {
-            fc.i2ndSelectKey = 37;        //左CTRL的扫描码
-            fc.i3rdSelectKey = 109;       //右CTRL的扫描码
+            fc.i2ndSelectKey[0].sym = fc.i2ndSelectKey[1].sym = XK_Control_L;        //左CTRL的扫描码
+            fc.i2ndSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[0].sym = fc.i3rdSelectKey[1].sym = XK_Control_R;       //右CTRL的扫描码
+            fc.i3rdSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[1].state = KEY_NONE;
         }
         else {
             if (pstr[0] && pstr[0]!='0')
-                fc.i2ndSelectKey = pstr[0] ^ 0xFF;
+            {
+                fc.i2ndSelectKey[0].sym = pstr[0] ^ 0xFF;
+                fc.i2ndSelectKey[0].state = KEY_NONE;
+            }
             else
-                fc.i2ndSelectKey = 0;
-        
+            {
+                fc.i2ndSelectKey[0].sym = 0;
+                fc.i2ndSelectKey[0].state = KEY_NONE;
+            }
             if (pstr[1] && pstr[1]!='0')
-                fc.i3rdSelectKey = pstr[1] ^ 0xFF;
+            {
+                fc.i3rdSelectKey[0].sym = pstr[1] ^ 0xFF;
+                fc.i3rdSelectKey[0].state = KEY_NONE;
+            }
             else
-                fc.i3rdSelectKey = 0;
+            {
+                fc.i3rdSelectKey[0].sym = 0;
+                fc.i3rdSelectKey[0].state = KEY_NONE;
+            }
         }
     }
 }
@@ -218,7 +237,8 @@ void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, Con
         if (hotkey[0].desc == NULL && hotkey[1].desc == NULL)
         {
             hotkey[0].desc = strdup("CTRL_SPACE");
-            hotkey[0].iKeyCode = CTRL_SPACE;
+            hotkey[0].sym = XK_space;
+            hotkey[0].state = KEY_CTRL_COMP;
         }
         char *strkey[2];
         int i = 0;

@@ -153,7 +153,7 @@ typedef struct TableState {
     uint            iAutoPhrase;
     uint            iTableCandDisplayed;
     uint            iTableTotalCandCount;
-    char            strTableLegendSource[PHRASE_MAX_LENGTH * 2 + 1];
+    char            strTableLegendSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
     
     FH             *fh;
     int             iFH ;

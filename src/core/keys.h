@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,44 +17,28 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _VK_WINDOW_H
-#define _VK_WINDOW_H
 
-#include <X11/Xlib.h>
-#include "core/ime.h"
-#include "ui/skin.h"
+/*
+ * Define const keys that will be used in code
+ */
+#include <X11/keysym.h>
 
-#define VK_FILE	"vk.conf"
+#include "fcitx-config/hotkey.h"
 
-#define VK_WINDOW_WIDTH		354
-#define VK_WINDOW_HEIGHT	164
-#define VK_NUMBERS		47
-#define VK_MAX			50
-
-typedef struct {
-     char            strSymbol[VK_NUMBERS][2][UTF8_MAX_LENGTH + 1];	//相应的符号
-     char            strName[MAX_IM_NAME + 1];
-} VKS;
-
-typedef struct VKWindow
-{
-    Window          window;
-    ConfigColor fontColor;
-    int fontSize;
-    cairo_surface_t* surface;
-} VKWindow;
-
-Bool            CreateVKWindow (void);
-void            DisplayVKWindow (void);
-void            DrawVKWindow (void);
-char           *VKGetSymbol (char cChar);
-void            LoadVKMapFile (void);
-void            ChangVK (void);
-INPUT_RETURN_VALUE DoVKInput (KeySym sym, int state, int iCount);
-int             MyToLower (int iChar);
-int             MyToUpper (int iChar);
-void            SwitchVK (void);
-void            DestroyVKWindow (void);
-Bool            VKMouseKey (int x, int y);
-
-#endif
+extern HOTKEYS FCITX_DELETE[2];
+extern HOTKEYS FCITX_CTRL_DELETE[2];
+extern HOTKEYS FCITX_BACKSPACE[2];
+extern HOTKEYS FCITX_CTRL_H[2];
+extern HOTKEYS FCITX_HOME[2];
+extern HOTKEYS FCITX_END[2];
+extern HOTKEYS FCITX_RIGHT[2];
+extern HOTKEYS FCITX_LEFT[2];
+extern HOTKEYS FCITX_ESCAPE[2];
+extern HOTKEYS FCITX_ENTER[2];
+extern HOTKEYS FCITX_LCTRL_LSHIFT[2];
+extern HOTKEYS FCITX_SEMICOLON[2];
+extern HOTKEYS FCITX_SPACE[2];
+extern HOTKEYS FCITX_COMMA[2];
+extern HOTKEYS FCITX_PERIOD[2];
+extern HOTKEYS FCITX_CTRL_5[2];
+extern HOTKEYS FCITX_SEPARATOR[2];

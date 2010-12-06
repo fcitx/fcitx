@@ -55,6 +55,7 @@ void *malloc0(size_t bytes)
  * 
  * @return malloc的字符串，需要free
  */
+FCITX_EXPORT_API
 char *trim(char *s)
 {
     register char *end;
@@ -80,6 +81,7 @@ char *trim(char *s)
  * @param fmt
  * @param ...
  */
+FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
 #ifndef _DEBUG

@@ -70,11 +70,13 @@ Bool CreateVKWindow (void)
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
 
+    LoadVKImage();
+
     attrib.override_redirect = True;
     attribmask = CWOverrideRedirect;
 
     vkWindow.fontSize = 12;
-    vkWindow.fontColor.r = vkWindow.fontColor.g = vkWindow.fontColor.b = 0;
+    vkWindow.fontColor = sc.skinKeyboard.keyColor;
 
     vkWindow.window = XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
     if (vkWindow.window == (Window) NULL)
@@ -95,20 +97,20 @@ void DisplayVKWindow (void)
     XMapRaised (dpy, vkWindow.window);
 }
 
+void DestroyVKWindow (void)
+{
+    cairo_surface_destroy(vkWindow.surface);
+    XDestroyWindow(dpy, vkWindow.window);
+}
+
 void DrawVKWindow (void)
 {
     int             i;
     int             iPos;
-    char buf[PATH_MAX]={0};
     cairo_t *cr;
-    cairo_surface_t *png_surface ;
-
-    snprintf(buf, PATH_MAX, "%s/skin/default/keyboard.png",PKGDATADIR);
-    buf[sizeof(buf) - 1] = '\0';
 
     cr=cairo_create(vkWindow.surface);
-    png_surface = cairo_image_surface_create_from_png(buf);
-    cairo_set_source_surface(cr, png_surface, 0, 0);
+    cairo_set_source_surface(cr, keyBoard, 0, 0);
     cairo_paint(cr);
     /* 显示字符 */
     /* 名称 */
@@ -420,11 +422,12 @@ void ChangVK (void)
         DrawMainWindow ();
 }
 
-INPUT_RETURN_VALUE DoVKInput (int iKey)
+INPUT_RETURN_VALUE DoVKInput (KeySym sym, int state, int iCount)
 {
-    char           *pstr;
+    char           *pstr = NULL;
 
-    pstr = VKGetSymbol (iKey);
+    if (IsHotKeySimple(sym, state))
+        pstr = VKGetSymbol (sym);
     if (!pstr)
         return IRV_TO_PROCESS;
     else {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-03 21:59+0800\n"
+"POT-Creation-Date: 2010-12-06 20:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -641,6 +641,14 @@ msgstr ""
 msgid "Space Line Color"
 msgstr ""
 
+#: data/skin.desc:228
+msgid "Virtual Keyboard Image"
+msgstr ""
+
+#: data/skin.desc:233
+msgid "Key Color On Virutal Keyboard"
+msgstr ""
+
 #: data/table/erbi.conf:2
 msgid "Erbi"
 msgstr ""
@@ -721,6 +729,10 @@ msgstr ""
 
 # unknown
 msgid "SkinInputBar"
+msgstr ""
+
+# unknown
+msgid "SkinKeyboard"
 msgstr ""
 
 # unknown
@@ -1019,11 +1031,11 @@ msgstr ""
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: ../src/ui/skin.c:168
+#: ../src/ui/skin.c:170
 msgid "Can not load default skin, is installion correct?"
 msgstr ""
 
-#: ../src/ui/skin.c:173
+#: ../src/ui/skin.c:175
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr ""
@@ -1041,58 +1053,58 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:265
+#: ../src/fcitx-config/fcitx-config.c:282
 msgid "Enum option duplicated."
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:278
+#: ../src/fcitx-config/fcitx-config.c:295
 msgid "Enum option number must larger than 0"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:288
+#: ../src/fcitx-config/fcitx-config.c:305
 msgid "Enum Option is invalid, take it as string"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:295
+#: ../src/fcitx-config/fcitx-config.c:312
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:301
+#: ../src/fcitx-config/fcitx-config.c:318
 msgid "Missing type, take it as string"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:674
+#: ../src/fcitx-config/fcitx-config.c:699
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:684
+#: ../src/fcitx-config/fcitx-config.c:709
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:701
+#: ../src/fcitx-config/fcitx-config.c:726
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:711
+#: ../src/fcitx-config/fcitx-config.c:736
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:825
+#: ../src/fcitx-config/fcitx-config.c:853
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:834
+#: ../src/fcitx-config/fcitx-config.c:862
 #, c-format
 msgid "Option %s is Invalid."
 msgstr ""
 
-#: ../src/fcitx-config/fcitx-config.c:873
+#: ../src/fcitx-config/fcitx-config.c:902
 #, c-format
 msgid "no default option for %s/%s"
 msgstr ""
@@ -1105,21 +1117,21 @@ msgstr ""
 msgid "Quwei"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:359
+#: ../src/im/pinyin/py.c:360
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2446
+#: ../src/im/pinyin/py.c:2441
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2508
+#: ../src/im/pinyin/py.c:2503
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2578
+#: ../src/im/pinyin/py.c:2573
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
@@ -1128,48 +1140,48 @@ msgstr ""
 msgid "Shuangpin"
 msgstr ""
 
-#: ../src/im/table/table.c:182
+#: ../src/im/table/table.c:183
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr ""
 
-#: ../src/im/table/table.c:192
+#: ../src/im/table/table.c:193
 #, c-format
 msgid "Table Config %s is %s"
 msgstr ""
 
-#: ../src/im/table/table.c:256
+#: ../src/im/table/table.c:257
 msgid "Loading Table Dict"
 msgstr ""
 
-#: ../src/im/table/table.c:266
+#: ../src/im/table/table.c:267
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr ""
 
-#: ../src/im/table/table.c:272
+#: ../src/im/table/table.c:273
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr ""
 
-#: ../src/im/table/table.c:394
+#: ../src/im/table/table.c:395
 msgid "Load Table Dict OK"
 msgstr ""
 
-#: ../src/im/table/table.c:424
+#: ../src/im/table/table.c:425
 msgid "Loading Autophrase."
 msgstr ""
 
-#: ../src/im/table/table.c:465
+#: ../src/im/table/table.c:466
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: ../src/im/table/table.c:588
+#: ../src/im/table/table.c:589
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr ""
 
-#: ../src/im/table/table.c:647
+#: ../src/im/table/table.c:648
 msgid "Rename OK"
 msgstr ""
 
@@ -1186,7 +1198,7 @@ msgstr ""
 msgid "ExtraIM: bad im"
 msgstr ""
 
-#: ../src/tools/configfile.c:279
+#: ../src/tools/configfile.c:299
 #, c-format
 msgid "Load Config File %s"
 msgstr ""
