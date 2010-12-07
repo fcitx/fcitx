@@ -205,7 +205,7 @@ void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, Conf
         else {
             if (pstr[0] && pstr[0]!='0')
             {
-                fc.i2ndSelectKey[0].sym = pstr[0] ^ 0xFF;
+                fc.i2ndSelectKey[0].sym = pstr[0] & 0xFF;
                 fc.i2ndSelectKey[0].state = KEY_NONE;
             }
             else
@@ -215,7 +215,7 @@ void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, Conf
             }
             if (pstr[1] && pstr[1]!='0')
             {
-                fc.i3rdSelectKey[0].sym = pstr[1] ^ 0xFF;
+                fc.i3rdSelectKey[0].sym = pstr[1] & 0xFF;
                 fc.i3rdSelectKey[0].state = KEY_NONE;
             }
             else
