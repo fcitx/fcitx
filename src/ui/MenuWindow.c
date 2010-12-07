@@ -144,7 +144,7 @@ void GetMenuSize(Display * dpy,XlibMenu * menu)
     int menuwidth = 0;
 
     winheight = sc.skinMenu.marginTop + sc.skinMenu.marginBottom;//菜单头和尾都空8个pixel
-    fontheight= sc.skinFont.fontSize;
+    fontheight= menu->font_size;
     for (i=0;i<utarray_len(&menu->shell);i++)
     {
         if ( GetMenuShell(menu, i)->type == MENUSHELL)
@@ -168,7 +168,7 @@ void DrawXlibMenu(Display * dpy,XlibMenu * menu)
     int fontheight;
     int iPosY = 0;
 
-    fontheight= sc.skinFont.fontSize;
+    fontheight= menu->font_size;
 
     GetMenuSize(dpy,menu);
 
@@ -307,7 +307,7 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
     if (x < marginLeft)
         return -1;
 
-    fontheight= sc.skinFont.fontSize;
+    fontheight= menu->font_size;
     for (i=0;i<utarray_len(&menu->shell);i++)
     {
         if (GetMenuShell(menu, i)->type == MENUSHELL)
