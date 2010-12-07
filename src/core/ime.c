@@ -482,11 +482,17 @@ void ProcessKey(IMForwardEventStruct * call_data)
                     retVal = DoVKInput(sym, state, keyCount);
                 else {
                     if (IsHotKey(sym, state, fc.i2ndSelectKey)) {
-                        keyReleased = KR_2ND_SELECTKEY;
-                        return;
+                        if (iCandWordCount >= 2)
+                        {
+                            keyReleased = KR_2ND_SELECTKEY;
+                            return;
+                        }
                     } else if (IsHotKey(sym, state, fc.i3rdSelectKey)) {
-                        keyReleased = KR_3RD_SELECTKEY;
-                        return;
+                        if (iCandWordCount >= 3)
+                        {
+                            keyReleased = KR_3RD_SELECTKEY;
+                            return;
+                        }
                     }
 
                     if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {

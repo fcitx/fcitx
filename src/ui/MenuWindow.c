@@ -449,7 +449,6 @@ void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth, int dwidth, int d
     if ( sub->iPosX + sub->width > dwidth)
         sub->iPosX=parent->iPosX - sub->width + sc.skinMenu.marginLeft + 4;
 
-    printf("%d, %d %d\n", sub->iPosY, sub->height, dheight);
     if ( sub->iPosY + sub->height > dheight)
         sub->iPosY = dheight - sub->height;
     
