@@ -69,6 +69,9 @@ extern Bool     bIsDisplaying;
 
 Atom protocolAtom;
 Atom killAtom;
+Atom windowTypeAtom;
+Atom typeMenuAtom;
+Atom typeDialogAtom;
 
 // added by yunfan
 // **********************************
@@ -86,6 +89,9 @@ InitX(void)
     
     protocolAtom = XInternAtom (dpy, "WM_PROTOCOLS", False);
     killAtom = XInternAtom (dpy, "WM_DELETE_WINDOW", False);
+    windowTypeAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE", False);
+    typeMenuAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
+    typeDialogAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
     return True;
 }
 
@@ -762,7 +768,7 @@ FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
     }
     else
         height = 0;
-    
+
     return height;
 }
 #else
@@ -809,12 +815,10 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char 
     cairo_save(c);
 
     PangoLayout *layout;
-    int height;
 
     layout = pango_cairo_create_layout (c);
     pango_layout_set_text (layout, str, -1);
     pango_layout_set_font_description (layout, desc);
-    pango_layout_get_pixel_size (layout, NULL, &height);
     cairo_move_to(c, x, y);
     pango_cairo_show_layout (c, layout);
 

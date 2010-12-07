@@ -33,7 +33,7 @@
 
 extern Display *dpy;
 extern int      iScreen;
-extern Atom killAtom;
+extern Atom killAtom, windowTypeAtom, typeDialogAtom;
 
 MessageWindow messageWindow;
 
@@ -65,12 +65,9 @@ Bool CreateMessageWindow (void)
 
 void InitMessageWindowProperty (void)
 {
-    Atom            message_wm_window_type = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE", False);
-    Atom            type_toolbar = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-
     XSetTransientForHint (dpy, messageWindow.window, DefaultRootWindow (dpy));
 
-    XChangeProperty (dpy, messageWindow.window, message_wm_window_type, XA_ATOM, 32, PropModeReplace, (void *) &type_toolbar, 1);
+    XChangeProperty (dpy, messageWindow.window, windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) &typeDialogAtom, 1);
 
     XSetWMProtocols(dpy, messageWindow.window, &killAtom, 1);
 }

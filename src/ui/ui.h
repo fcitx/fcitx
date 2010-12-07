@@ -55,7 +55,7 @@ int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
 
 #define SetFontContext(context, fontname, size) \
     PangoFontDescription* fontDesc = GetPangoFontDescription(fontname, size)
-    
+
 #define ResetFontContext() \
     do { \
         pango_font_description_free(fontDesc); \

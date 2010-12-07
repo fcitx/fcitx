@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <cairo.h>
 #include <cairo-xlib.h>
+#include <X11/Xatom.h>
 
 #include "core/fcitx.h"
 #include "im/special/vk.h"
@@ -69,23 +70,38 @@ Bool CreateVKWindow (void)
 {
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
+    char        strWindowName[] = "Fcitx VK Window";
+    Colormap cmap;
+    Visual * vs;
+    int depth;
 
     LoadVKImage();
 
-    attrib.override_redirect = True;
-    attribmask = CWOverrideRedirect;
+    vs = FindARGBVisual(dpy, iScreen);
+    InitWindowAttribute(&vs, &cmap, &attrib, &attribmask, &depth);
 
     vkWindow.fontSize = 12;
     vkWindow.fontColor = sc.skinKeyboard.keyColor;
 
-    vkWindow.window = XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+    vkWindow.window = XCreateWindow (dpy,
+            DefaultRootWindow (dpy),
+            0, 0,
+            VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT,
+            0, depth, InputOutput, vs, attribmask, &attrib);
     if (vkWindow.window == (Window) NULL)
         return False;
 
-    vkWindow.surface=cairo_xlib_surface_create(dpy, vkWindow.window, DefaultVisual(dpy, iScreen), VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT);
+    vkWindow.surface=cairo_xlib_surface_create(dpy, vkWindow.window, vs, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT);
 
-    XChangeWindowAttributes (dpy, vkWindow.window, attribmask, &attrib);
     XSelectInput (dpy, vkWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+
+    XTextProperty   tp;
+    /* Set the name of the window */
+    tp.value = (void *)strWindowName;
+    tp.encoding = XA_STRING;
+    tp.format = 16;
+    tp.nitems = strlen(strWindowName);
+    XSetWMName (dpy, vkWindow.window, &tp);
 
     LoadVKMapFile ();
 

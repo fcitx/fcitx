@@ -92,15 +92,15 @@ InitTray(Display* dpy, TrayWindow* tray)
 {
     static char *atom_names[] = {
         NULL,
-		"MANAGER", 
-		"_NET_SYSTEM_TRAY_OPCODE",
-		"_NET_SYSTEM_TRAY_ORIENTATION",
-		"_NET_SYSTEM_TRAY_VISUAL"
+        "MANAGER",
+        "_NET_SYSTEM_TRAY_OPCODE",
+        "_NET_SYSTEM_TRAY_ORIENTATION",
+        "_NET_SYSTEM_TRAY_VISUAL"
     };
     memset(tray, 0, sizeof(TrayWindow));
 
-	atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
-	atom_names[0][17] += iScreen;
+    atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
+    atom_names[0][17] += iScreen;
 
     XInternAtoms (dpy, atom_names, 5, False, tray->atoms);
     tray->size = 22;

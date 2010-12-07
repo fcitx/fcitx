@@ -166,8 +166,6 @@ void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, C
     }
 }
 
-
-
 void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
     char *pstr = *(char**) value;

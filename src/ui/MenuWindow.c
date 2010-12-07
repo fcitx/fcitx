@@ -31,6 +31,7 @@
 extern unsigned char iVKCount;
 extern int      iScreen;
 extern VKS             vks[];
+extern Atom windowTypeAtom, typeMenuAtom;
 
 XlibMenu mainMenu,imMenu,vkMenu,skinMenu;
 static void DestroyXlibMenu(XlibMenu *menu);
@@ -71,8 +72,6 @@ void AddMenuShell(XlibMenu* menu,char * tips,int isselect,MenuShellType type)
 
 int CreateXlibMenu(Display * dpy,XlibMenu * menu)
 {
-    Atom            menu_wm_window_type = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE", False);
-    Atom            type_menu = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
     char        strWindowName[]="Fcitx Menu Window";
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
@@ -100,7 +99,7 @@ int CreateXlibMenu(Display * dpy,XlibMenu * menu)
 
     XSetTransientForHint (dpy, menu->menuWindow, DefaultRootWindow (dpy));
 
-    XChangeProperty (dpy, menu->menuWindow, menu_wm_window_type, XA_ATOM, 32, PropModeReplace, (void *) &type_menu, 1);
+    XChangeProperty (dpy, menu->menuWindow, windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) &typeMenuAtom, 1);
     
     menu->pixmap = XCreatePixmap(dpy,
                                  menu->menuWindow,
