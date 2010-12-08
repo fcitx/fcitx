@@ -52,7 +52,7 @@ void LoadAddonInfo(void)
 {
     if (!fc.bEnableAddons)
         return;
-        
+
     char **addonPath;
     size_t len;
     char pathBuf[PATH_MAX];
@@ -61,7 +61,7 @@ void LoadAddonInfo(void)
     struct dirent *drt;
     struct stat fileStat;
 
-	StringHashSet* sset = NULL;
+    StringHashSet* sset = NULL;
 
     if (addons)
     {
@@ -83,7 +83,7 @@ void LoadAddonInfo(void)
         if (dir == NULL)
             continue;
 
-		/* collect all *.conf files */
+        /* collect all *.conf files */
         while((drt = readdir(dir)) != NULL)
         {
             size_t nameLen = strlen(drt->d_name);
@@ -100,16 +100,16 @@ void LoadAddonInfo(void)
 
             if (fileStat.st_mode & S_IFREG)
             {
-				StringHashSet *string;
-				HASH_FIND_STR(sset, drt->d_name, string);
-				if (!string)
-				{
-					char *bStr = strdup(drt->d_name);
-					string = malloc(sizeof(StringHashSet));
+                StringHashSet *string;
+                HASH_FIND_STR(sset, drt->d_name, string);
+                if (!string)
+                {
+                    char *bStr = strdup(drt->d_name);
+                    string = malloc(sizeof(StringHashSet));
                     memset(string, 0, sizeof(StringHashSet));
-					string->name = bStr;
-					HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
-				}
+                    string->name = bStr;
+                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
+                }
             }
         }
 

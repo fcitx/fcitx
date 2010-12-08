@@ -359,14 +359,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
     retVal = IRV_TO_PROCESS;
 
-    /* Added by hubert_star AT forum.ubuntu.com.cn */
-    if ((call_data->event.type == KeyRelease)
-        && (IsHotKeySimple(sym, state)
-            && (!IsHotKey(sym, state, fc.i2ndSelectKey))
-            && (!IsHotKey(sym, state, fc.i3rdSelectKey))))
-        return;
-
-    /*
+   /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
      * because ctrl, shift, alt are compose key, so hotkey like ctrl+a will also produce a key
      * release event for ctrl key, so we must make sure the key release right now is the key just
@@ -437,6 +430,13 @@ void ProcessKey(IMForwardEventStruct * call_data)
         }
     }
 
+    /* Added by hubert_star AT forum.ubuntu.com.cn */
+    if ((call_data->event.type == KeyRelease)
+        && IsHotKeySimple(sym, state)
+        && retVal == IRV_TO_PROCESS)
+        return;
+
+ 
     if (retVal == IRV_TO_PROCESS) {
         /* process key event for switch key */
         if (call_data->event.type == KeyPress) {
