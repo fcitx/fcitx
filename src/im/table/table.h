@@ -136,7 +136,7 @@ typedef struct TableState {
     INT8            iTableIMIndex;
     INT8            iTableCount;
     
-    Bool            bTableDictLoaded;		//Loads tables only if needed
+    INT8            iCurrentTableLoaded;
     
     RECORD         *currentRecord;
     RECORD	       *recordHead;
@@ -184,7 +184,8 @@ extern TableState tbl;
 void            LoadTableInfo (void);
 Bool            LoadTableDict (void);
 void            TableInit (void);
-void            FreeTableIM (void);
+void            FreeTableIM (INT8 index);
+void            SaveTableIM (void);
 void            SaveTableDict (void);
 Bool            IsInputKey (int iKey);
 Bool            IsIgnoreChar (char cChar);

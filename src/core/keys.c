@@ -126,3 +126,13 @@ HOTKEYS FCITX_CTRL_5[2] =
     {NULL, 0, 0},
 };
 
+Bool IsHotKeyModifierCombine(KeySym sym, int state)
+{
+   if (sym == XK_Control_L
+    || sym == XK_Control_R
+    || sym == XK_Shift_L
+    || sym == XK_Shift_R )
+       return True;
+
+   return False;
+}

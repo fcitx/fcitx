@@ -49,6 +49,7 @@
 #include "fcitx-config/cutils.h"
 
 static void FreeTableConfig(void *v);
+static void FreeTable (INT8 iTableIndex);
 UT_icd table_icd = {sizeof(TABLE), NULL ,NULL, FreeTableConfig};
 TableState tbl;
 
@@ -83,6 +84,8 @@ extern ParsePYStruct findMap;
 
 ConfigFileDesc* tableConfigDesc = NULL;
 
+static INT8 GetTableIMIndex(INT8 index);
+
 int TablePriorityCmp(const void *a, const void *b)
 {
     TABLE *ta, *tb;
@@ -106,7 +109,7 @@ void LoadTableInfo (void)
 
     StringHashSet* sset = NULL;
     tbl.bTablePhraseTips = False;
-    tbl.bTableDictLoaded = False;
+    tbl.iCurrentTableLoaded = -1;
 
     if (tbl.table)
     {
@@ -232,6 +235,17 @@ ConfigFileDesc *GetTableConfigDesc()
     return tableConfigDesc;
 }
 
+INT8 GetTableIMIndex(INT8 index)
+{
+    int i;
+    for (i = 0; i < tbl.iTableCount; i++) {
+        TABLE* table =(TABLE*) utarray_eltptr(tbl.table, i);
+        if (table->iIMIndex == index)
+            return i;
+    }
+    return -1;
+}
+
 Bool LoadTableDict (void)
 {
     char            strCode[MAX_CODE_LENGTH + 1];
@@ -244,13 +258,6 @@ Bool LoadTableDict (void)
     char            cChar = 0, cTemp;
     INT8            iVersion = 1;
     int             iRecordIndex;
-
-    //首先，来看看我们该调入哪个码表
-    for (i = 0; i < tbl.iTableCount; i++) {
-        TABLE* table =(TABLE*) utarray_eltptr(tbl.table, i);
-        if (table->iIMIndex == gs.iIMIndex)
-            tbl.iTableIMIndex = i;
-    }
 
     //读入码表
 #ifdef _DEBUG
@@ -413,7 +420,7 @@ Bool LoadTableDict (void)
 
     tbl.strNewPhraseCode = (char *) malloc (sizeof (char) * (table->iCodeLength + 1));
     tbl.strNewPhraseCode[table->iCodeLength] = '\0';
-    tbl.bTableDictLoaded = True;
+    tbl.iCurrentTableLoaded = tbl.iTableIMIndex;
 
     tbl.iAutoPhrase = 0;
     if (table->bAutoPhrase) {
@@ -479,14 +486,31 @@ void TableInit (void)
     strPYAuto[0] = '\0';
 }
 
+void SaveTableIM (void)
+{
+    if (!tbl.recordHead)
+        return;
+    if (tbl.iTableChanged)
+        SaveTableDict();
+}
+
 /*
  * 释放当前码表所占用的内存
  * 目的是切换码表时使占用的内存减少
  */
-void FreeTableIM (void)
+void FreeTableIM (INT8 i)
+{
+    INT8 index = GetTableIMIndex(i);
+    FreeTable(index);
+}
+
+void FreeTable (INT8 iTableIndex)
 {
     RECORD         *recTemp, *recNext;
     INT16           i;
+
+    if (iTableIndex == -1)
+        return;
 
     if (!tbl.recordHead)
         return;
@@ -515,10 +539,10 @@ void FreeTableIM (void)
         tbl.iFH = 0;
     }
 
-    TABLE* table = (TABLE*) utarray_eltptr(tbl.table, tbl.iTableIMIndex);
+    TABLE* table = (TABLE*) utarray_eltptr(tbl.table, iTableIndex);
 
     table->iRecordCount = 0;
-    tbl.bTableDictLoaded = False;
+    tbl.iCurrentTableLoaded = -1;
 
     free (tbl.strNewPhraseCode);
 
@@ -578,7 +602,7 @@ void SaveTableDict (void)
     if (!tbl.iTableChanged)
         return;
     
-    if (!tbl.bTableDictLoaded)
+    if (tbl.iCurrentTableLoaded == -1)
         return;
 
     tbl.isSavingTableDic = True;
@@ -754,7 +778,14 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
     TABLECANDWORD* tableCandWord = tbl.tableCandWord;
     TABLE* table = (TABLE*) utarray_eltptr(tbl.table, tbl.iTableIMIndex);
 
-    if (!tbl.bTableDictLoaded)
+    if (IsHotKeyModifierCombine(sym, state))
+        return IRV_TO_PROCESS;
+
+    tbl.iTableIMIndex = GetTableIMIndex(gs.iIMIndex);
+    if (tbl.iTableIMIndex != tbl.iCurrentTableLoaded)
+        FreeTable(tbl.iCurrentTableLoaded);
+
+    if (tbl.iCurrentTableLoaded == -1)
         LoadTableDict ();
 
     if (tbl.bTablePhraseTips) {
@@ -912,9 +943,14 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
             {
                 if (!tbl.bCanntFindCode)
                     TableInsertPhrase (messageDown.msg[1].strMsg, messageDown.msg[0].strMsg);
+                tbl.bIsTableAddPhrase = False;
+                bIsDoInputOnly = False;
+                return IRV_CLEAN;
             }
             else if (IsHotKey(sym, state, FCITX_ESCAPE))
             {
+                tbl.bIsTableAddPhrase = False;
+                bIsDoInputOnly = False;
                 return IRV_CLEAN;
             }
             else {

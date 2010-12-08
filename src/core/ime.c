@@ -1163,11 +1163,15 @@ void
 RegisterNewIM(char *strName,
               char *strIconName,
               void (*ResetIM) (void),
-              INPUT_RETURN_VALUE(*DoInput) (unsigned int, unsigned int,
-                                            int),
+              INPUT_RETURN_VALUE(*DoInput) (unsigned int, unsigned int, int),
               INPUT_RETURN_VALUE(*GetCandWords) (SEARCH_MODE),
-              char *(*GetCandWord) (int), char *(*GetLegendCandWord) (int),
-              Bool(*PhraseTips) (void), void (*Init) (void), void (*Save) (void), FcitxAddon * addon)
+              char *(*GetCandWord) (int),
+              char *(*GetLegendCandWord) (int),
+              Bool(*PhraseTips) (void),
+              void (*Init) (void),
+              void (*Save) (void),
+              void (*Destroy) (INT8),
+              FcitxAddon* addon)
 {
 #ifdef _DEBUG
     FcitxLog(DEBUG, "REGISTER %s\n", strName);
@@ -1182,6 +1186,7 @@ RegisterNewIM(char *strName,
     im[iIMCount].PhraseTips = PhraseTips;
     im[iIMCount].Init = Init;
     im[iIMCount].Save = Save;
+    im[iIMCount].Destroy = Destroy;
     memset(&im[iIMCount].image, 0, sizeof(FcitxImage));
     strcpy(im[iIMCount].image.img_name, strIconName);
     strcat(im[iIMCount].image.img_name, ".png");
@@ -1215,8 +1220,8 @@ void UnloadIM()
     if (im) {
         for (i = 0; i < iIMCount; i++) {
             DestroyImage(&im[i].icon);
-            if (im[i].addonInfo)
-                UnloadExtraIM(i);
+            if (im[i].Destroy)
+                im[i].Destroy(i);
         }
         free(im);
         im = NULL;
@@ -1275,16 +1280,16 @@ void SetIM(void)
             case IM_PY:
                 RegisterNewIM(strNameOfPinyin, strIconNameOfPinyin,
                               ResetPYStatus, DoPYInput, PYGetCandWords,
-                              PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, SavePY, NULL);
+                              PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, SavePY, NULL, NULL);
                 break;
             case IM_SP:
                 RegisterNewIM(strNameOfShuangpin, strIconNameOfShuangpin,
                               ResetPYStatus, DoPYInput, PYGetCandWords,
-                              PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, SavePY, NULL);
+                              PYGetCandWord, PYGetLegendCandWord, NULL, SPInit, SavePY, NULL, NULL);
                 break;
             case IM_QW:
                 RegisterNewIM(strNameOfQuwei, strIconNameOfQuwei, NULL,
-                              DoQWInput, QWGetCandWords, QWGetCandWord, NULL, NULL, NULL, NULL, NULL);
+                              DoQWInput, QWGetCandWords, QWGetCandWord, NULL, NULL, NULL, NULL, NULL, NULL);
                 break;
             case IM_TABLE:
                 for (l = 0; l < tbl.iTableCount; l++) {
@@ -1292,7 +1297,7 @@ void SetIM(void)
                     RegisterNewIM(table->strName, table->strIconName,
                                   TableResetStatus, DoTableInput,
                                   TableGetCandWords, TableGetCandWord,
-                                  TableGetLegendCandWord, TablePhraseTips, TableInit, FreeTableIM, NULL);
+                                  TableGetLegendCandWord, TablePhraseTips, TableInit, SaveTableIM, FreeTableIM, NULL);
                     table->iIMIndex = iIMCount - 1;
                 }
             default:
@@ -1306,7 +1311,7 @@ void SetIM(void)
 
     if ((!fc.inputMethods[IM_SP] && (!fc.inputMethods[IM_TABLE] || !tbl.iTableCount)) && !iIMCount)     //至少应该有一种输入法
         RegisterNewIM(strNameOfPinyin, strIconNameOfPinyin, ResetPYStatus,
-                      DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL, NULL);
+                      DoPYInput, PYGetCandWords, PYGetCandWord, PYGetLegendCandWord, NULL, PYInit, NULL, NULL, NULL);
 
     SwitchIM(gs.iIMIndex);
 }
@@ -1342,9 +1347,9 @@ void ReloadConfig()
         tray.bTrayMapped = False;
 #endif
     }
-    
+
     SaveIM();
-    
+
     UnloadIM();
 
     LoadAddonInfo();

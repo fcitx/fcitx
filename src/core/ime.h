@@ -72,6 +72,7 @@ typedef struct IM{
     Bool               (*PhraseTips) (void);
     void               (*Init) (void);
     void               (*Save) (void);
+    void               (*Destroy) (INT8 im);
     FcitxImage         image;
     cairo_surface_t   *icon;
     FcitxAddon        *addonInfo;
@@ -111,7 +112,8 @@ void            RegisterNewIM (char *strName,
                                Bool (*PhraseTips) (void),
                                void (*Init) (void),
                                void (*Save) (void),
-                               FcitxAddon *addon);
+                               void (*Destroy) (INT8),
+                               FcitxAddon* addon);
 void            SwitchIM (INT8 index);
 void            DoPhraseTips ();
 Bool            IsIM (char *strName);
@@ -124,7 +126,5 @@ void            SelectIM(int imidx);
 void            SelectVK(int vkidx);
 
 extern FcitxState gs;
-
-// Bool            IsKeyIgnored (int iKeyCode);
 
 #endif

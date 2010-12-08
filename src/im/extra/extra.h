@@ -23,7 +23,6 @@
 #include "core/ime.h"
 #include "core/fcitx.h"
 
-void UnloadExtraIM(int index);
 void LoadExtraIM();
 
 #endif/*_EXTRA_H_*/

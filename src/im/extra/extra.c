@@ -44,20 +44,22 @@ extern INT8 iInCap;
 
 extern int      iCandWordCount;
 extern int      iCandPageCount;
-extern int	iCurrentCandPage;
+extern int    iCurrentCandPage;
 extern char     strStringGet[];
 extern char     strCodeInput[];
 extern int      iCodeInputCount;
-extern Bool	bCursorAuto;
+extern Bool    bCursorAuto;
 
 #define GetCurrentEIM() ((im[gs.iIMIndex].addonInfo)?im[gs.iIMIndex].addonInfo->im.eim:NULL)
+static void UnloadExtraIM(INT8 index);
 
-void UnloadExtraIM(int index)
+static void UnloadExtraIM(INT8 index)
 {
-    FcitxAddon* addon = im[index].addonInfo;
+    IM *cim = &im[index];
+    FcitxAddon* addon = cim->addonInfo;
     if (!addon)
         return;
-    EXTRA_IM *eim = GetCurrentEIM();
+    EXTRA_IM *eim = addon->im.eim;
     if (!eim)
         return;
     if (eim->Destroy)
@@ -71,126 +73,126 @@ void UnloadExtraIM(int index)
 
 static void ExtraReset(void)
 {
-	EXTRA_IM *eim = GetCurrentEIM();
-	inputWindow.bShowCursor=False;
-	bCursorAuto=False;
-	if(!eim) return;
-	if(eim->CandWordMax) eim->CandWordMax=fc.iMaxCandWord;
-	if(eim->Reset) eim->Reset();
-	eim->StringGet[0]=0;
-	eim->CodeInput[0]=0;
-	eim->CaretPos=-1;
-	eim->CandWordMax=fc.iMaxCandWord;
-	eim->Reset();
+    EXTRA_IM *eim = GetCurrentEIM();
+    inputWindow.bShowCursor=False;
+    bCursorAuto=False;
+    if(!eim) return;
+    if(eim->CandWordMax) eim->CandWordMax=fc.iMaxCandWord;
+    if(eim->Reset) eim->Reset();
+    eim->StringGet[0]=0;
+    eim->CodeInput[0]=0;
+    eim->CaretPos=-1;
+    eim->CandWordMax=fc.iMaxCandWord;
+    eim->Reset();
 }
 
 static void DisplayEIM(EXTRA_IM *im)
 {
-	int i;
-	char strTemp[3];
+    int i;
+    char strTemp[3];
 
-	if ( fc.bPointAfterNumber )
-	{
-		strTemp[1] = '.';
-		strTemp[2] = '\0';
-	}
-	else strTemp[1]='\0';
+    if ( fc.bPointAfterNumber )
+    {
+        strTemp[1] = '.';
+        strTemp[2] = '\0';
+    }
+    else strTemp[1]='\0';
 
-	SetMessageCount(&messageDown, 0);
-	for (i = 0; i < im->CandWordCount; i++)
-	{
-		strTemp[0] = i + 1 + '0';
-		if (i == 9) strTemp[0] = '0';
+    SetMessageCount(&messageDown, 0);
+    for (i = 0; i < im->CandWordCount; i++)
+    {
+        strTemp[0] = i + 1 + '0';
+        if (i == 9) strTemp[0] = '0';
         AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
 
         AddMessageAtLast(&messageDown, (i!=im->SelectIndex)? MSG_OTHER:MSG_FIRSTCAND, "%s", im->CandTable[i]);
-		if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
+        if(im->CodeTips && im->CodeTips[i] && im->CodeTips[i][0])
             AddMessageAtLast(&messageDown, MSG_CODE, "%s", im->CodeTips[i]);
-		if (i != 9)
+        if (i != 9)
             MessageConcatLast(&messageDown, " ");
-	}
+    }
 
-	SetMessageCount(&messageUp, 0);
-	if(im->StringGet[0] || im->CodeInput[0])
-	{
+    SetMessageCount(&messageUp, 0);
+    if(im->StringGet[0] || im->CodeInput[0])
+    {
         AddMessageAtLast(&messageUp, MSG_INPUT, "%s%s", im->StringGet, im->CodeInput);
 
-		inputWindow.bShowCursor=True;
-		iCodeInputCount=strlen(im->CodeInput);
-		if(im->CaretPos!=-1)
-			iCursorPos=im->CaretPos;
-		else
-			iCursorPos=strlen(im->StringGet) + strlen(im->CodeInput);
-		bCursorAuto=True;
-	}
+        inputWindow.bShowCursor=True;
+        iCodeInputCount=strlen(im->CodeInput);
+        if(im->CaretPos!=-1)
+            iCursorPos=im->CaretPos;
+        else
+            iCursorPos=strlen(im->StringGet) + strlen(im->CodeInput);
+        bCursorAuto=True;
+    }
 
-	iCandWordCount=im->CandWordCount;
-	iCandPageCount=im->CandPageCount;
-	iCurrentCandPage=im->CurCandPage;
-	if(iCandPageCount) iCandPageCount--;
+    iCandWordCount=im->CandWordCount;
+    iCandPageCount=im->CandPageCount;
+    iCurrentCandPage=im->CurCandPage;
+    if(iCandPageCount) iCandPageCount--;
 }
 
 static INPUT_RETURN_VALUE ExtraDoInput(unsigned int sym, unsigned int state, int count)
 {
-	EXTRA_IM *eim = GetCurrentEIM();
-	INPUT_RETURN_VALUE ret=IRV_DO_NOTHING;
-	if(!eim) return IRV_TO_PROCESS;
-	if(eim->DoInput)
-		ret=eim->DoInput(sym, state, count);
+    EXTRA_IM *eim = GetCurrentEIM();
+    INPUT_RETURN_VALUE ret=IRV_DO_NOTHING;
+    if(!eim) return IRV_TO_PROCESS;
+    if(eim->DoInput)
+        ret=eim->DoInput(sym, state, count);
 
-	if(ret==IRV_GET_CANDWORDS||ret==IRV_GET_CANDWORDS_NEXT)
-	{
-		strcpy(strStringGet,eim->StringGet);
-		eim->StringGet[0]=0;
-		if(ret==IRV_GET_CANDWORDS_NEXT)
-		{
-			DisplayEIM(eim);
-		}
-		else
-		{
-			SetMessageCount(&messageDown, 0);
-			SetMessageCount(&messageUp, 0);
-		}
-	}
-	else if(ret==IRV_DO_NOTHING && (eim->CandWordCount ||
-		eim->StringGet[0] || eim->CodeInput[0]))
-	{
-		DisplayEIM(eim);
-		ret=IRV_DISPLAY_CANDWORDS;
-	}
-	else if(ret==IRV_DISPLAY_CANDWORDS)
-	{
-		DisplayEIM(eim);
-	}
-	else if(ret==IRV_ENG)
-	{
-		iCodeInputCount=strlen(strCodeInput);
-		iInCap=3;
-		ret=IRV_DONOT_PROCESS;
-	}
+    if(ret==IRV_GET_CANDWORDS||ret==IRV_GET_CANDWORDS_NEXT)
+    {
+        strcpy(strStringGet,eim->StringGet);
+        eim->StringGet[0]=0;
+        if(ret==IRV_GET_CANDWORDS_NEXT)
+        {
+            DisplayEIM(eim);
+        }
+        else
+        {
+            SetMessageCount(&messageDown, 0);
+            SetMessageCount(&messageUp, 0);
+        }
+    }
+    else if(ret==IRV_DO_NOTHING && (eim->CandWordCount ||
+        eim->StringGet[0] || eim->CodeInput[0]))
+    {
+        DisplayEIM(eim);
+        ret=IRV_DISPLAY_CANDWORDS;
+    }
+    else if(ret==IRV_DISPLAY_CANDWORDS)
+    {
+        DisplayEIM(eim);
+    }
+    else if(ret==IRV_ENG)
+    {
+        iCodeInputCount=strlen(strCodeInput);
+        iInCap=3;
+        ret=IRV_DONOT_PROCESS;
+    }
 
-	return ret;
+    return ret;
 }
 
 static INPUT_RETURN_VALUE ExtraGetCandWords(SEARCH_MODE sm)
 {
-	EXTRA_IM *eim = GetCurrentEIM();
-	INPUT_RETURN_VALUE ret=IRV_DO_NOTHING;
-	if(!eim) return IRV_TO_PROCESS;
-	if(eim->GetCandWords)
-		ret=eim->GetCandWords(sm);
-	if(ret==IRV_DISPLAY_CANDWORDS)
-		DisplayEIM(eim);
-	return ret;
+    EXTRA_IM *eim = GetCurrentEIM();
+    INPUT_RETURN_VALUE ret=IRV_DO_NOTHING;
+    if(!eim) return IRV_TO_PROCESS;
+    if(eim->GetCandWords)
+        ret=eim->GetCandWords(sm);
+    if(ret==IRV_DISPLAY_CANDWORDS)
+        DisplayEIM(eim);
+    return ret;
 }
 
 static char *ExtraGetCandWord(int index)
 {
-	EXTRA_IM *eim = GetCurrentEIM();
-	if(!eim) return 0;
-	if(eim->GetCandWord)
-	{
-		char *ret = eim->GetCandWord(index);
+    EXTRA_IM *eim = GetCurrentEIM();
+    if(!eim) return 0;
+    if(eim->GetCandWord)
+    {
+        char *ret = eim->GetCandWord(index);
         if (ret)
         {
             SetMessageCount(&messageDown, 0);
@@ -199,60 +201,60 @@ static char *ExtraGetCandWord(int index)
         }
         else
             DisplayEIM(eim);
-	}
-	return 0;
+    }
+    return 0;
 }
 
 /* the result is slow, why? */
 char *GetClipboardString(Display *disp)
 {
-	Atom sel;
-	Window w;
-	int ret;
-	Atom target;
-	Atom type;
-	int fmt;
-	unsigned long n,after;
-	unsigned char *pret=0;
-	static char result[1024];
+    Atom sel;
+    Window w;
+    int ret;
+    Atom target;
+    Atom type;
+    int fmt;
+    unsigned long n,after;
+    unsigned char *pret=0;
+    static char result[1024];
 
-	sel = XInternAtom(disp, "PRIMARY", 0);
-	target = XInternAtom(disp,"UTF8_STRING",0);
-	w=XGetSelectionOwner(disp,sel);
-	if(w==None)
-	{
-		return NULL;
-	}
-	XConvertSelection(disp,sel,target,sel,w,CurrentTime);
-	ret=XGetWindowProperty(disp,w,sel,0,1023,False,target,&type,&fmt,&n,&after,&pret);
-	if(ret!=Success || !pret || fmt!=8)
-	{
-		return NULL;
-	}
-	memcpy(result,pret,n);
-	XFree(pret);
-	result[n]=0;
-	return result;
+    sel = XInternAtom(disp, "PRIMARY", 0);
+    target = XInternAtom(disp,"UTF8_STRING",0);
+    w=XGetSelectionOwner(disp,sel);
+    if(w==None)
+    {
+        return NULL;
+    }
+    XConvertSelection(disp,sel,target,sel,w,CurrentTime);
+    ret=XGetWindowProperty(disp,w,sel,0,1023,False,target,&type,&fmt,&n,&after,&pret);
+    if(ret!=Success || !pret || fmt!=8)
+    {
+        return NULL;
+    }
+    memcpy(result,pret,n);
+    XFree(pret);
+    result[n]=0;
+    return result;
 }
 
 int InitExtraIM(EXTRA_IM *eim,char *arg)
 {
-	eim->CodeInput=strCodeInput;
-	eim->StringGet=StringGetEngine;
-	eim->CandTable=CandTableEngine;
-	eim->CodeTips=CodeTipsEngine;
-	eim->CandWordMax=fc.iMaxCandWord;
-	eim->CaretPos=-1;
+    eim->CodeInput=strCodeInput;
+    eim->StringGet=StringGetEngine;
+    eim->CandTable=CandTableEngine;
+    eim->CodeTips=CodeTipsEngine;
+    eim->CandWordMax=fc.iMaxCandWord;
+    eim->CaretPos=-1;
     eim->fc = (void*)&fc;
     eim->profile = (void*)&fcitxProfile;
 
-	if(eim->Init(arg))
-	{
-		FcitxLog(ERROR, _("ExtraIM: init fail"));
-		return -1;
-	}
+    if(eim->Init(arg))
+    {
+        FcitxLog(ERROR, _("ExtraIM: init fail"));
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 void LoadExtraIM()
@@ -293,7 +295,7 @@ void LoadExtraIM()
                             dlclose(handle);
                             return;
                         }
-                        RegisterNewIM(eim->Name, eim->IconName,ExtraReset,ExtraDoInput,ExtraGetCandWords,ExtraGetCandWord,NULL,NULL,NULL,NULL, addon);
+                        RegisterNewIM(eim->Name, eim->IconName,ExtraReset,ExtraDoInput,ExtraGetCandWords,ExtraGetCandWord,NULL,NULL,NULL,NULL, UnloadExtraIM, addon);
                         addon->im.handle = handle;
                         addon->im.index = iIMCount - 1;
                         addon->im.eim = eim;

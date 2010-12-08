@@ -25,6 +25,8 @@
 
 #include "fcitx-config/hotkey.h"
 
+Bool IsHotKeyModifierCombine(KeySym sym, int state);
+
 extern HOTKEYS FCITX_DELETE[2];
 extern HOTKEYS FCITX_CTRL_DELETE[2];
 extern HOTKEYS FCITX_BACKSPACE[2];
