@@ -23,7 +23,7 @@ py_url = http://fcitx.googlecode.com/files/pinyin.tar.gz
 bin_SCRIPTS = fcitx-config
 
 desktopdir = $(datadir)/applications
-desktop_in_files = fcitx.desktop.in
+desktop_in_files = fcitx.desktop.in fcitx-configtool.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = pySym.mb sp.dat punc.mb vk.conf gbks2t.tab AutoEng.dat gbkpy.org getdescpo fcitx-config $(configdescfile) $(desktop_in_files)

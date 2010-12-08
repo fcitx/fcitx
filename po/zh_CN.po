@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-06 20:06+0800\n"
-"PO-Revision-Date: 2010-12-06 20:08+0800\n"
+"POT-Creation-Date: 2010-12-08 12:34+0800\n"
+"PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -866,6 +866,18 @@ msgstr "Fcitx"
 msgid "Free Chinese Input Toy of X"
 msgstr "Free Chinese Input Toy of X"
 
+#: ../data/fcitx-configtool.desktop.in.h:1
+msgid "Fcitx Config Tool"
+msgstr "Fcitx配置工具"
+
+#: ../data/fcitx-configtool.desktop.in.h:2
+msgid "Fcitx Configuration Tool"
+msgstr "Fcitx配置工具"
+
+#: ../data/fcitx-configtool.desktop.in.h:3
+msgid "Fcitx GUI Config Tool"
+msgstr "Fcitx图形化配置工具"
+
 #: ../src/interface/ImeRemote.c:164
 #, c-format
 msgid "Can't open socket %s: %s"
@@ -998,39 +1010,39 @@ msgstr "updateMesssages Up:%s"
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
 
-#: ../src/ui/ui.c:80
+#: ../src/ui/ui.c:83
 msgid "FCITX can only run under X"
 msgstr "Fcitx只能在X下运行"
 
-#: ../src/ui/ui.c:124
+#: ../src/ui/ui.c:130
 msgid "XEvent--Expose"
 msgstr "XEvent--Expose"
 
-#: ../src/ui/ui.c:337 ../src/ui/ui.c:344
+#: ../src/ui/ui.c:343 ../src/ui/ui.c:350
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
-#: ../src/ui/MenuWindow.c:393
+#: ../src/ui/MenuWindow.c:395
 msgid "About Fcitx"
 msgstr "关于Fcitx"
 
-#: ../src/ui/MenuWindow.c:395
+#: ../src/ui/MenuWindow.c:397
 msgid "Switch Skin"
 msgstr "切换皮肤"
 
-#: ../src/ui/MenuWindow.c:396
+#: ../src/ui/MenuWindow.c:398
 msgid "Switch IM"
 msgstr "选择输入法"
 
-#: ../src/ui/MenuWindow.c:397
+#: ../src/ui/MenuWindow.c:399
 msgid "Switch VK"
 msgstr "选择软键盘"
 
-#: ../src/ui/MenuWindow.c:399
+#: ../src/ui/MenuWindow.c:401
 msgid "Fcitx Config ..."
 msgstr "配置Fcitx..."
 
-#: ../src/ui/MenuWindow.c:400
+#: ../src/ui/MenuWindow.c:402
 msgid "Exit Fcitx"
 msgstr "退出Fcitx"
 
@@ -1159,65 +1171,65 @@ msgstr "无法保存拼音索引: %s"
 msgid "Shuangpin"
 msgstr "双拼"
 
-#: ../src/im/table/table.c:183
+#: ../src/im/table/table.c:186
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
 
-#: ../src/im/table/table.c:193
+#: ../src/im/table/table.c:196
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
 
-#: ../src/im/table/table.c:257
+#: ../src/im/table/table.c:264
 msgid "Loading Table Dict"
 msgstr "加载码表词典"
 
-#: ../src/im/table/table.c:267
+#: ../src/im/table/table.c:274
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr "加载码表%s"
 
-#: ../src/im/table/table.c:273
+#: ../src/im/table/table.c:280
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr "无法加载码表文件: %s"
 
-#: ../src/im/table/table.c:395
+#: ../src/im/table/table.c:402
 msgid "Load Table Dict OK"
 msgstr "加载码表文件成功"
 
-#: ../src/im/table/table.c:425
+#: ../src/im/table/table.c:432
 msgid "Loading Autophrase."
 msgstr "加载自动组词信息中"
 
-#: ../src/im/table/table.c:466
+#: ../src/im/table/table.c:473
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: ../src/im/table/table.c:589
+#: ../src/im/table/table.c:613
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr "无法创建码表文件: %s"
 
-#: ../src/im/table/table.c:648
+#: ../src/im/table/table.c:672
 msgid "Rename OK"
 msgstr "重命名成功"
 
-#: ../src/im/extra/extra.c:251
+#: ../src/im/extra/extra.c:253
 msgid "ExtraIM: init fail"
 msgstr "额外输入法: 初始化失败"
 
-#: ../src/im/extra/extra.c:281
+#: ../src/im/extra/extra.c:283
 #, c-format
 msgid "ExtraIM: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
 
-#: ../src/im/extra/extra.c:287
+#: ../src/im/extra/extra.c:289
 msgid "ExtraIM: bad im"
 msgstr "额外输入法: 不正确的输入法"
 
-#: ../src/tools/configfile.c:299
+#: ../src/tools/configfile.c:297
 #, c-format
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"

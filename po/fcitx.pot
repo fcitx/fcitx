@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-06 20:06+0800\n"
+"POT-Creation-Date: 2010-12-08 12:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -847,6 +847,18 @@ msgstr ""
 msgid "Free Chinese Input Toy of X"
 msgstr ""
 
+#: ../data/fcitx-configtool.desktop.in.h:1
+msgid "Fcitx Config Tool"
+msgstr ""
+
+#: ../data/fcitx-configtool.desktop.in.h:2
+msgid "Fcitx Configuration Tool"
+msgstr ""
+
+#: ../data/fcitx-configtool.desktop.in.h:3
+msgid "Fcitx GUI Config Tool"
+msgstr ""
+
 #: ../src/interface/ImeRemote.c:164
 #, c-format
 msgid "Can't open socket %s: %s"
@@ -979,39 +991,39 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: ../src/ui/ui.c:80
+#: ../src/ui/ui.c:83
 msgid "FCITX can only run under X"
 msgstr ""
 
-#: ../src/ui/ui.c:124
+#: ../src/ui/ui.c:130
 msgid "XEvent--Expose"
 msgstr ""
 
-#: ../src/ui/ui.c:337 ../src/ui/ui.c:344
+#: ../src/ui/ui.c:343 ../src/ui/ui.c:350
 msgid "Unable to create process"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:393
+#: ../src/ui/MenuWindow.c:395
 msgid "About Fcitx"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:395
+#: ../src/ui/MenuWindow.c:397
 msgid "Switch Skin"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:396
+#: ../src/ui/MenuWindow.c:398
 msgid "Switch IM"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:397
+#: ../src/ui/MenuWindow.c:399
 msgid "Switch VK"
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:399
+#: ../src/ui/MenuWindow.c:401
 msgid "Fcitx Config ..."
 msgstr ""
 
-#: ../src/ui/MenuWindow.c:400
+#: ../src/ui/MenuWindow.c:402
 msgid "Exit Fcitx"
 msgstr ""
 
@@ -1140,65 +1152,65 @@ msgstr ""
 msgid "Shuangpin"
 msgstr ""
 
-#: ../src/im/table/table.c:183
+#: ../src/im/table/table.c:186
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr ""
 
-#: ../src/im/table/table.c:193
+#: ../src/im/table/table.c:196
 #, c-format
 msgid "Table Config %s is %s"
 msgstr ""
 
-#: ../src/im/table/table.c:257
+#: ../src/im/table/table.c:264
 msgid "Loading Table Dict"
 msgstr ""
 
-#: ../src/im/table/table.c:267
+#: ../src/im/table/table.c:274
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr ""
 
-#: ../src/im/table/table.c:273
+#: ../src/im/table/table.c:280
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr ""
 
-#: ../src/im/table/table.c:395
+#: ../src/im/table/table.c:402
 msgid "Load Table Dict OK"
 msgstr ""
 
-#: ../src/im/table/table.c:425
+#: ../src/im/table/table.c:432
 msgid "Loading Autophrase."
 msgstr ""
 
-#: ../src/im/table/table.c:466
+#: ../src/im/table/table.c:473
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: ../src/im/table/table.c:589
+#: ../src/im/table/table.c:613
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr ""
 
-#: ../src/im/table/table.c:648
+#: ../src/im/table/table.c:672
 msgid "Rename OK"
 msgstr ""
 
-#: ../src/im/extra/extra.c:251
+#: ../src/im/extra/extra.c:253
 msgid "ExtraIM: init fail"
 msgstr ""
 
-#: ../src/im/extra/extra.c:281
+#: ../src/im/extra/extra.c:283
 #, c-format
 msgid "ExtraIM: open %s fail %s"
 msgstr ""
 
-#: ../src/im/extra/extra.c:287
+#: ../src/im/extra/extra.c:289
 msgid "ExtraIM: bad im"
 msgstr ""
 
-#: ../src/tools/configfile.c:299
+#: ../src/tools/configfile.c:297
 #, c-format
 msgid "Load Config File %s"
 msgstr ""

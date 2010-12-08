@@ -1,0 +1,10 @@
+[Desktop Entry]
+Exec=fcitx-config
+_GenericName=Fcitx Configuration Tool
+_Comment=Fcitx GUI Config Tool
+_Name=Fcitx Config Tool
+Icon=fcitx
+MimeType=
+StartupNotify=true
+Type=Application
+Categories=Settings;

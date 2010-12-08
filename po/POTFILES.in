@@ -1,6 +1,7 @@
 # List of source files which contain translatable strings.
 ./data/desc.po
 data/fcitx.desktop.in
+data/fcitx-configtool.desktop.in
 src/interface/ImeRemote.c
 src/interface/DBus.h
 src/interface/DBus.c
