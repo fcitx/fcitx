@@ -359,7 +359,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
     retVal = IRV_TO_PROCESS;
 
-   /*
+    /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
      * because ctrl, shift, alt are compose key, so hotkey like ctrl+a will also produce a key
      * release event for ctrl key, so we must make sure the key release right now is the key just
@@ -435,7 +435,6 @@ void ProcessKey(IMForwardEventStruct * call_data)
         && IsHotKeySimple(sym, state)
         && retVal == IRV_TO_PROCESS)
         return;
-
  
     if (retVal == IRV_TO_PROCESS) {
         /* process key event for switch key */
@@ -475,342 +474,343 @@ void ProcessKey(IMForwardEventStruct * call_data)
         }
     }
 
+    if (call_data->event.type != KeyPress)
+        retVal = IRV_DONOT_PROCESS;
+
     if (retVal == IRV_TO_PROCESS) {
-        if (call_data->event.type == KeyPress) {
-            if (CurrentIC->state == IS_CHN) {
-                if (bVK)
-                    retVal = DoVKInput(sym, state, keyCount);
-                else {
-                    if (IsHotKey(sym, state, fc.i2ndSelectKey)) {
-                        if (iCandWordCount >= 2)
-                        {
-                            keyReleased = KR_2ND_SELECTKEY;
-                            return;
-                        }
-                    } else if (IsHotKey(sym, state, fc.i3rdSelectKey)) {
-                        if (iCandWordCount >= 3)
-                        {
-                            keyReleased = KR_3RD_SELECTKEY;
-                            return;
-                        }
+        if (CurrentIC->state == IS_CHN) {
+            if (bVK)
+                retVal = DoVKInput(sym, state, keyCount);
+            else {
+                if (IsHotKey(sym, state, fc.i2ndSelectKey)) {
+                    if (iCandWordCount >= 2)
+                    {
+                        keyReleased = KR_2ND_SELECTKEY;
+                        return;
                     }
+                } else if (IsHotKey(sym, state, fc.i3rdSelectKey)) {
+                    if (iCandWordCount >= 3)
+                    {
+                        keyReleased = KR_3RD_SELECTKEY;
+                        return;
+                    }
+                }
 
-                    if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                        if (fcitxProfile.bLocked)
-                            retVal = IRV_TO_PROCESS;
+                if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                    if (fcitxProfile.bLocked)
+                        retVal = IRV_TO_PROCESS;
+                } else {
+                    //调用输入法模块
+                    if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
+                        //有人报 空格 的全角不对，正确的是0xa1 0xa1
+                        //但查资料却说全角符号总是以0xa3开始。
+                        //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
+                        sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
+                        retVal = IRV_GET_CANDWORDS;
                     } else {
-                        //调用输入法模块
-                        if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
-                            //有人报 空格 的全角不对，正确的是0xa1 0xa1
-                            //但查资料却说全角符号总是以0xa3开始。
-                            //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
-                            sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
-                            retVal = IRV_GET_CANDWORDS;
-                        } else {
-                            if (!iInCap) {
-                                char strTemp[MAX_USER_INPUT];
+                        if (!iInCap) {
+                            char strTemp[MAX_USER_INPUT];
 
-                                retVal = im[gs.iIMIndex].DoInput(sym, state, keyCount);
-                                if (!bCursorAuto && !IsIM(strNameOfPinyin)
-                                    && !IsIM(strNameOfShuangpin))
-                                    iCursorPos = iCodeInputCount;
+                            retVal = im[gs.iIMIndex].DoInput(sym, state, keyCount);
+                            if (!bCursorAuto && !IsIM(strNameOfPinyin)
+                                && !IsIM(strNameOfShuangpin))
+                                iCursorPos = iCodeInputCount;
 
-                                //为了实现自动英文转换
-                                strcpy(strTemp, strCodeInput);
-                                if (retVal == IRV_TO_PROCESS) {
-                                    strTemp[strlen(strTemp) + 1] = '\0';
-                                    strTemp[strlen(strTemp)] = sym;
+                            //为了实现自动英文转换
+                            strcpy(strTemp, strCodeInput);
+                            if (retVal == IRV_TO_PROCESS) {
+                                strTemp[strlen(strTemp) + 1] = '\0';
+                                strTemp[strlen(strTemp)] = sym;
+                            }
+
+                            if (SwitchToEng(strTemp)) {
+                                iInCap = 3;
+                                if (retVal != IRV_TO_PROCESS) {
+                                    iCodeInputCount--;
+                                    retVal = IRV_TO_PROCESS;
                                 }
+                            }
 
-                                if (SwitchToEng(strTemp)) {
-                                    iInCap = 3;
-                                    if (retVal != IRV_TO_PROCESS) {
-                                        iCodeInputCount--;
-                                        retVal = IRV_TO_PROCESS;
+                            if (!IsHotKey(sym, state, FCITX_BACKSPACE))
+                                cLastIsAutoConvert = 0;
+                        } else if (iInCap == 2
+                                   && fc.semicolonToDo == K_SEMICOLON_QUICKPHRASE && !iLegendCandWordCount)
+                            retVal = QuickPhraseDoInput(sym, state, keyCount);
+
+                        if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+                            if (!iInCap && IsHotKeyUAZ(sym,state) && fc.bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
+                                iInCap = 1;
+                                if (!bIsInLegend && iCandWordCount) {
+                                    pstr = im[gs.iIMIndex].GetCandWord(0);
+                                    iCandWordCount = 0;
+                                    if (pstr) {
+                                        SendHZtoClient(call_data, pstr);
+                                        strcpy(strStringGet, pstr);
+                                        //粗略统计字数
+                                        iHZInputed += (int) (utf8_strlen(strStringGet));
+                                        iCodeInputCount = 0;
                                     }
                                 }
-
-                                if (IsHotKey(sym, state, FCITX_BACKSPACE))
-                                    cLastIsAutoConvert = 0;
-                            } else if (iInCap == 2
-                                       && fc.semicolonToDo == K_SEMICOLON_QUICKPHRASE && !iLegendCandWordCount)
-                                retVal = QuickPhraseDoInput(sym, state, keyCount);
-
-                            if (!bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-                                if (!iInCap && IsHotKeyUAZ(sym,state) && fc.bEngAfterCap && !(kev->state & KEY_CAPSLOCK)) {
-                                    iInCap = 1;
-                                    if (!bIsInLegend && iCandWordCount) {
-                                        pstr = im[gs.iIMIndex].GetCandWord(0);
-                                        iCandWordCount = 0;
-                                        if (pstr) {
-                                            SendHZtoClient(call_data, pstr);
-                                            strcpy(strStringGet, pstr);
-                                            //粗略统计字数
-                                            iHZInputed += (int) (utf8_strlen(strStringGet));
-                                            iCodeInputCount = 0;
-                                        }
-                                    }
-                                } else if (IsHotKey(sym, state, FCITX_SEMICOLON)
-                                           && fc.semicolonToDo != K_SEMICOLON_NOCHANGE && !iCodeInputCount) {
-                                    if (iInCap != 2)
-                                        iInCap = 2;
-                                    else
-                                        sym = XK_space; //使用第2个分号输入中文分号
-                                } else if (!iInCap) {
-                                    if (IsHotKey(sym, state, fc.hkPrevPage))
-                                        retVal = im[gs.iIMIndex].GetCandWords(SM_PREV);
-                                    else if (IsHotKey(sym, state, fc.hkNextPage))
-                                        retVal = im[gs.iIMIndex].GetCandWords(SM_NEXT);
-                                }
-
-                                if (retVal == IRV_TO_PROCESS) {
-                                    if (iInCap) {
-                                        if (IsHotKey(sym, state, FCITX_SPACE)
-                                            && (iCodeInputCount == 0)) {
-                                            strcpy(strStringGet, "；");
-                                            retVal = IRV_ENG;
-                                            SetMessageCount(&messageDown, 0);
-                                            SetMessageCount(&messageUp, 0);
-                                            iInCap = 0;
-                                        } else {
-                                            if (IsHotKeySimple(sym, state)) {
-                                                if (iCodeInputCount == MAX_USER_INPUT)
-                                                    retVal = IRV_DO_NOTHING;
-                                                else {
-                                                    if (!(iInCap == 2 && !iCodeInputCount && IsHotKey(sym, state, FCITX_SEMICOLON))) {
-                                                        strCodeInput[iCodeInputCount++]
-                                                            = sym;
-                                                        strCodeInput[iCodeInputCount]
-                                                            = '\0';
-                                                        inputWindow.bShowCursor = True;
-                                                        iCursorPos = iCodeInputCount;
-                                                        if (fc.semicolonToDo
-                                                            == K_SEMICOLON_QUICKPHRASE && iInCap == 2) {
-                                                            if (iFirstQuickPhrase == -1)
-                                                                retVal = QuickPhraseGetCandWords(SM_FIRST);
-                                                            else {
-                                                                if (IsHotKey(sym, state, fc.hkPrevPage)
-                                                                    || IsHotKey(sym, state, fc.hkNextPage)) {
-                                                                    if (iCodeInputCount)
-                                                                        iCodeInputCount--;
-                                                                    strCodeInput[iCodeInputCount]
-                                                                        = '\0';
-                                                                    iCursorPos = iCodeInputCount;
-                                                                }
-
-                                                                if (IsHotKey(sym, state, fc.hkPrevPage))
-                                                                    retVal = QuickPhraseGetCandWords(SM_PREV);
-                                                                else if (IsHotKey(sym, state, fc.hkNextPage))
-                                                                    retVal = QuickPhraseGetCandWords(SM_NEXT);
-                                                                else
-                                                                    retVal = QuickPhraseGetCandWords(SM_FIRST);
-                                                            }
-                                                        } else
-                                                            retVal = IRV_DISPLAY_MESSAGE;
-                                                    } else
-                                                        retVal = IRV_DISPLAY_MESSAGE;
-                                                }
-                                            } else if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H)) {
-                                                if (iCodeInputCount)
-                                                    iCodeInputCount--;
-                                                strCodeInput[iCodeInputCount] = '\0';
-                                                iCursorPos = iCodeInputCount;
-                                                if (!iCodeInputCount)
-                                                    retVal = IRV_CLEAN;
-                                                else if (fc.semicolonToDo == K_SEMICOLON_QUICKPHRASE && iInCap == 2) {
-                                                    if (iFirstQuickPhrase == -1)
-                                                        retVal = QuickPhraseGetCandWords(SM_FIRST);
-                                                    else if (IsHotKey(sym, state, fc.hkPrevPage))
-                                                        retVal = QuickPhraseGetCandWords(SM_PREV);
-                                                    else if (IsHotKey(sym, state, fc.hkNextPage))
-                                                        retVal = QuickPhraseGetCandWords(SM_NEXT);
-                                                    else
-                                                        retVal = QuickPhraseGetCandWords(SM_FIRST);
-                                                } else
-                                                    retVal = IRV_DISPLAY_MESSAGE;
-                                            }
-
-                                            SetMessageCount(&messageUp, 0);
-                                            if (iInCap == 2) {
-                                                if (fc.semicolonToDo == K_SEMICOLON_ENG) {
-                                                    AddMessageAtLast(&messageUp, MSG_TIPS, "英文输入 ");
-                                                    iCursorPos += strlen("英文输入 ");
-                                                } else {
-                                                    AddMessageAtLast(&messageUp, MSG_TIPS, "自定义输入 ");
-                                                    iCursorPos += strlen("自定义输入 ");
-                                                }
-
-                                                if (iCodeInputCount) {
-                                                    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
-                                                }
-
-                                                if (retVal != IRV_DISPLAY_CANDWORDS) {
-                                                    SetMessageCount(&messageDown, 0);
-                                                    if (iCodeInputCount)
-                                                        AddMessageAtLast
-                                                            (&messageDown, MSG_TIPS, "按 Enter 输入英文");
-                                                    else
-                                                        AddMessageAtLast
-                                                            (&messageDown, MSG_TIPS, "空格输入；Enter输入;");
-                                                }
-                                            } else {
-                                                SetMessageCount(&messageDown, 0);
-                                                AddMessageAtLast(&messageDown, MSG_TIPS, "按 Enter 输入英文");
-                                                AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
-                                            }
-                                        }
-                                    } else if ((bLastIsNumber && fc.bEngPuncAfterNumber)
-                                               && (IsHotKey(sym, state, FCITX_PERIOD) 
-                                                   || IsHotKey(sym, state, FCITX_SEMICOLON) 
-                                                   || IsHotKey(sym, state, FCITX_COMMA))
-                                               && !iCandWordCount) {
-                                        cLastIsAutoConvert = sym;
-                                        bLastIsNumber = False;
-                                        retVal = IRV_TO_PROCESS;
-                                    } else {
-                                        if (fcitxProfile.bChnPunc) {
-                                            char *pPunc = NULL;
-
-                                            pstr = NULL;
-                                            if (state == KEY_NONE)
-                                                pPunc = GetPunc(sym);
-                                            if (pPunc) {
-                                                strStringGet[0] = '\0';
-                                                if (!bIsInLegend)
-                                                    pstr = im[gs.iIMIndex].GetCandWord(0);
-                                                if (pstr)
-                                                    strcpy(strStringGet, pstr);
-                                                strcat(strStringGet, pPunc);
-                                                SetMessageCount(&messageDown, 0);
-                                                SetMessageCount(&messageUp, 0);
-
-                                                retVal = IRV_PUNC;
-                                            } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
-                                                       && cLastIsAutoConvert) {
-                                                char *pPunc;
-
-                                                DoForwardEvent(call_data);
-                                                pPunc = GetPunc(cLastIsAutoConvert);
-                                                if (pPunc)
-                                                    SendHZtoClient(call_data, pPunc);
-
-                                                retVal = IRV_DO_NOTHING;
-                                            } else if (IsHotKeySimple(sym, state)) {
-                                                if (IsHotKeyDigit(sym, state))
-                                                    bLastIsNumber = True;
-                                                else {
-                                                    bLastIsNumber = False;
-                                                    if (IsHotKey(sym, state, FCITX_SPACE))
-                                                        retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
-                                                    else {
-                                                        strStringGet[0]
-                                                            = '\0';
-                                                        if (!bIsInLegend)
-                                                            pstr = im[gs.iIMIndex].GetCandWord(0);
-                                                        if (pstr)
-                                                            strcpy(strStringGet, pstr);
-                                                        iLen = strlen(strStringGet);
-                                                        SetMessageCount(&messageDown, 0);
-                                                        SetMessageCount(&messageUp, 0);
-                                                        strStringGet[iLen] = sym;
-                                                        strStringGet[iLen + 1] = '\0';
-                                                        retVal = IRV_ENG;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        cLastIsAutoConvert = 0;
-                                    }
-                                }
+                            } else if (IsHotKey(sym, state, FCITX_SEMICOLON)
+                                       && fc.semicolonToDo != K_SEMICOLON_NOCHANGE && !iCodeInputCount) {
+                                if (iInCap != 2)
+                                    iInCap = 2;
+                                else
+                                    sym = XK_space; //使用第2个分号输入中文分号
+                            } else if (!iInCap) {
+                                if (IsHotKey(sym, state, fc.hkPrevPage))
+                                    retVal = im[gs.iIMIndex].GetCandWords(SM_PREV);
+                                else if (IsHotKey(sym, state, fc.hkNextPage))
+                                    retVal = im[gs.iIMIndex].GetCandWords(SM_NEXT);
                             }
 
                             if (retVal == IRV_TO_PROCESS) {
-                                if (IsHotKey(sym, state, FCITX_ESCAPE)) {
-                                    if (iCodeInputCount || iInCap || bIsInLegend)
-                                        retVal = IRV_CLEAN;
-                                    else
-                                        retVal = IRV_DONOT_PROCESS;
-                                } else if (IsHotKey(sym, state, FCITX_CTRL_5)) {
-                                    ReloadConfig();
-                                    retVal = IRV_DO_NOTHING;
-                                } else if (IsHotKey(sym, state, FCITX_ENTER)) {
-                                    if (iInCap) {
-                                        if (!iCodeInputCount)
-                                            strcpy(strStringGet, ";");
-                                        else
-                                            strcpy(strStringGet, strCodeInput);
-                                        retVal = IRV_PUNC;
+                                if (iInCap) {
+                                    if (IsHotKey(sym, state, FCITX_SPACE)
+                                        && (iCodeInputCount == 0)) {
+                                        strcpy(strStringGet, "；");
+                                        retVal = IRV_ENG;
                                         SetMessageCount(&messageDown, 0);
                                         SetMessageCount(&messageUp, 0);
                                         iInCap = 0;
-                                    } else if (!iCodeInputCount)
-                                        retVal = IRV_DONOT_PROCESS;
-                                    else {
-                                        switch (fc.enterToDo) {
-                                        case K_ENTER_NOTHING:
-                                            retVal = IRV_DO_NOTHING;
-                                            break;
-                                        case K_ENTER_CLEAN:
-                                            retVal = IRV_CLEAN;
-                                            break;
-                                        case K_ENTER_SEND:
+                                    } else {
+                                        if (IsHotKeySimple(sym, state)) {
+                                            if (iCodeInputCount == MAX_USER_INPUT)
+                                                retVal = IRV_DO_NOTHING;
+                                            else {
+                                                if (!(iInCap == 2 && !iCodeInputCount && IsHotKey(sym, state, FCITX_SEMICOLON))) {
+                                                    strCodeInput[iCodeInputCount++]
+                                                        = sym;
+                                                    strCodeInput[iCodeInputCount]
+                                                        = '\0';
+                                                    inputWindow.bShowCursor = True;
+                                                    iCursorPos = iCodeInputCount;
+                                                    if (fc.semicolonToDo
+                                                        == K_SEMICOLON_QUICKPHRASE && iInCap == 2) {
+                                                        if (iFirstQuickPhrase == -1)
+                                                            retVal = QuickPhraseGetCandWords(SM_FIRST);
+                                                        else {
+                                                            if (IsHotKey(sym, state, fc.hkPrevPage)
+                                                                || IsHotKey(sym, state, fc.hkNextPage)) {
+                                                                if (iCodeInputCount)
+                                                                    iCodeInputCount--;
+                                                                strCodeInput[iCodeInputCount]
+                                                                    = '\0';
+                                                                iCursorPos = iCodeInputCount;
+                                                            }
+
+                                                            if (IsHotKey(sym, state, fc.hkPrevPage))
+                                                                retVal = QuickPhraseGetCandWords(SM_PREV);
+                                                            else if (IsHotKey(sym, state, fc.hkNextPage))
+                                                                retVal = QuickPhraseGetCandWords(SM_NEXT);
+                                                            else
+                                                                retVal = QuickPhraseGetCandWords(SM_FIRST);
+                                                        }
+                                                    } else
+                                                        retVal = IRV_DISPLAY_MESSAGE;
+                                                } else
+                                                    retVal = IRV_DISPLAY_MESSAGE;
+                                            }
+                                        } else if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H)) {
+                                            if (iCodeInputCount)
+                                                iCodeInputCount--;
+                                            strCodeInput[iCodeInputCount] = '\0';
+                                            iCursorPos = iCodeInputCount;
+                                            if (!iCodeInputCount)
+                                                retVal = IRV_CLEAN;
+                                            else if (fc.semicolonToDo == K_SEMICOLON_QUICKPHRASE && iInCap == 2) {
+                                                if (iFirstQuickPhrase == -1)
+                                                    retVal = QuickPhraseGetCandWords(SM_FIRST);
+                                                else if (IsHotKey(sym, state, fc.hkPrevPage))
+                                                    retVal = QuickPhraseGetCandWords(SM_PREV);
+                                                else if (IsHotKey(sym, state, fc.hkNextPage))
+                                                    retVal = QuickPhraseGetCandWords(SM_NEXT);
+                                                else
+                                                    retVal = QuickPhraseGetCandWords(SM_FIRST);
+                                            } else
+                                                retVal = IRV_DISPLAY_MESSAGE;
+                                        }
+
+                                        SetMessageCount(&messageUp, 0);
+                                        if (iInCap == 2) {
+                                            if (fc.semicolonToDo == K_SEMICOLON_ENG) {
+                                                AddMessageAtLast(&messageUp, MSG_TIPS, "英文输入 ");
+                                                iCursorPos += strlen("英文输入 ");
+                                            } else {
+                                                AddMessageAtLast(&messageUp, MSG_TIPS, "自定义输入 ");
+                                                iCursorPos += strlen("自定义输入 ");
+                                            }
+
+                                            if (iCodeInputCount) {
+                                                AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
+                                            }
+
+                                            if (retVal != IRV_DISPLAY_CANDWORDS) {
+                                                SetMessageCount(&messageDown, 0);
+                                                if (iCodeInputCount)
+                                                    AddMessageAtLast
+                                                        (&messageDown, MSG_TIPS, "按 Enter 输入英文");
+                                                else
+                                                    AddMessageAtLast
+                                                        (&messageDown, MSG_TIPS, "空格输入；Enter输入;");
+                                            }
+                                        } else {
                                             SetMessageCount(&messageDown, 0);
-                                            SetMessageCount(&messageUp, 0);
-                                            strcpy(strStringGet, strCodeInput);
-                                            retVal = IRV_ENG;
-                                            break;
+                                            AddMessageAtLast(&messageDown, MSG_TIPS, "按 Enter 输入英文");
+                                            AddMessageAtLast(&messageUp, MSG_INPUT, strCodeInput);
                                         }
                                     }
-                                } else if (IsHotKeySimple(sym, state))
-                                    retVal = IRV_DONOT_PROCESS_CLEAN;
+                                } else if ((bLastIsNumber && fc.bEngPuncAfterNumber)
+                                           && (IsHotKey(sym, state, FCITX_PERIOD) 
+                                               || IsHotKey(sym, state, FCITX_SEMICOLON) 
+                                               || IsHotKey(sym, state, FCITX_COMMA))
+                                           && !iCandWordCount) {
+                                    cLastIsAutoConvert = sym;
+                                    bLastIsNumber = False;
+                                    retVal = IRV_TO_PROCESS;
+                                } else {
+                                    if (fcitxProfile.bChnPunc) {
+                                        char *pPunc = NULL;
+
+                                        pstr = NULL;
+                                        if (state == KEY_NONE)
+                                            pPunc = GetPunc(sym);
+
+                                        if (pPunc) {
+                                            strStringGet[0] = '\0';
+                                            if (!bIsInLegend)
+                                                pstr = im[gs.iIMIndex].GetCandWord(0);
+                                            if (pstr)
+                                                strcpy(strStringGet, pstr);
+                                            strcat(strStringGet, pPunc);
+                                            SetMessageCount(&messageDown, 0);
+                                            SetMessageCount(&messageUp, 0);
+
+                                            retVal = IRV_PUNC;
+                                        } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
+                                                   && cLastIsAutoConvert) {
+                                            char *pPunc;
+
+                                            DoForwardEvent(call_data);
+                                            pPunc = GetPunc(cLastIsAutoConvert);
+                                            if (pPunc)
+                                                SendHZtoClient(call_data, pPunc);
+
+                                            retVal = IRV_DO_NOTHING;
+                                        } else if (IsHotKeySimple(sym, state)) {
+                                            if (IsHotKeyDigit(sym, state))
+                                                bLastIsNumber = True;
+                                            else {
+                                                bLastIsNumber = False;
+                                                if (IsHotKey(sym, state, FCITX_SPACE))
+                                                    retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
+                                                else {
+                                                    strStringGet[0]
+                                                        = '\0';
+                                                    if (!bIsInLegend)
+                                                        pstr = im[gs.iIMIndex].GetCandWord(0);
+                                                    if (pstr)
+                                                        strcpy(strStringGet, pstr);
+                                                    iLen = strlen(strStringGet);
+                                                    SetMessageCount(&messageDown, 0);
+                                                    SetMessageCount(&messageUp, 0);
+                                                    strStringGet[iLen] = sym;
+                                                    strStringGet[iLen + 1] = '\0';
+                                                    retVal = IRV_ENG;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    cLastIsAutoConvert = 0;
+                                }
+                            }
+                        }
+
+                        if (retVal == IRV_TO_PROCESS) {
+                            if (IsHotKey(sym, state, FCITX_ESCAPE)) {
+                                if (iCodeInputCount || iInCap || bIsInLegend)
+                                    retVal = IRV_CLEAN;
                                 else
                                     retVal = IRV_DONOT_PROCESS;
-                            }
+                            } else if (IsHotKey(sym, state, FCITX_CTRL_5)) {
+                                ReloadConfig();
+                                retVal = IRV_DO_NOTHING;
+                            } else if (IsHotKey(sym, state, FCITX_ENTER)) {
+                                if (iInCap) {
+                                    if (!iCodeInputCount)
+                                        strcpy(strStringGet, ";");
+                                    else
+                                        strcpy(strStringGet, strCodeInput);
+                                    retVal = IRV_PUNC;
+                                    SetMessageCount(&messageDown, 0);
+                                    SetMessageCount(&messageUp, 0);
+                                    iInCap = 0;
+                                } else if (!iCodeInputCount)
+                                    retVal = IRV_DONOT_PROCESS;
+                                else {
+                                    switch (fc.enterToDo) {
+                                    case K_ENTER_NOTHING:
+                                        retVal = IRV_DO_NOTHING;
+                                        break;
+                                    case K_ENTER_CLEAN:
+                                        retVal = IRV_CLEAN;
+                                        break;
+                                    case K_ENTER_SEND:
+                                        SetMessageCount(&messageDown, 0);
+                                        SetMessageCount(&messageUp, 0);
+                                        strcpy(strStringGet, strCodeInput);
+                                        retVal = IRV_ENG;
+                                        break;
+                                    }
+                                }
+                            } else if (IsHotKeySimple(sym, state))
+                                retVal = IRV_DONOT_PROCESS_CLEAN;
+                            else
+                                retVal = IRV_DONOT_PROCESS;
                         }
                     }
                 }
             }
+        }
 
-            if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS) {
-                if (IsHotKey(sym, state, fc.hkCorner))
-                    retVal = ChangeCorner();
-                else if (IsHotKey(sym, state, fc.hkPunc))
-                    retVal = ChangePunc();
-                else if (IsHotKey(sym, state, fc.hkLegend))
-                    retVal = ChangeLegend();
-                else if (IsHotKey(sym, state, fc.hkTrack))
-                    retVal = ChangeTrack();
-                else if (IsHotKey(sym, state, fc.hkGBT))
-                    retVal = ChangeGBKT();
-                else if (IsHotKey(sym, state, fc.hkHideMainWindow)) {
-                    if (bMainWindow_Hiden) {
-                        bMainWindow_Hiden = False;
-                        if (!fc.bUseDBus) {
-                            DisplayMainWindow();
-                            DrawMainWindow();
-                        }
-                    } else {
-                        bMainWindow_Hiden = True;
-                        if (!fc.bUseDBus)
-                            XUnmapWindow(dpy, mainWindow.window);
+        if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS) {
+            if (IsHotKey(sym, state, fc.hkCorner))
+                retVal = ChangeCorner();
+            else if (IsHotKey(sym, state, fc.hkPunc))
+                retVal = ChangePunc();
+            else if (IsHotKey(sym, state, fc.hkLegend))
+                retVal = ChangeLegend();
+            else if (IsHotKey(sym, state, fc.hkTrack))
+                retVal = ChangeTrack();
+            else if (IsHotKey(sym, state, fc.hkGBT))
+                retVal = ChangeGBKT();
+            else if (IsHotKey(sym, state, fc.hkHideMainWindow)) {
+                if (bMainWindow_Hiden) {
+                    bMainWindow_Hiden = False;
+                    if (!fc.bUseDBus) {
+                        DisplayMainWindow();
+                        DrawMainWindow();
                     }
-                    retVal = IRV_DO_NOTHING;
-                } else if (IsHotKey(sym, state, fc.hkSaveAll)) {
-                    SaveIM();
-                    SetMessageCount(&messageDown, 0);
-                    AddMessageAtLast(&messageDown, MSG_TIPS, "词库已保存");
-                    retVal = IRV_DISPLAY_MESSAGE;
-                } else if (IsHotKey(sym, state, fc.hkVK))
-                    SwitchVK();
+                } else {
+                    bMainWindow_Hiden = True;
+                    if (!fc.bUseDBus)
+                        XUnmapWindow(dpy, mainWindow.window);
+                }
+                retVal = IRV_DO_NOTHING;
+            } else if (IsHotKey(sym, state, fc.hkSaveAll)) {
+                SaveIM();
+                SetMessageCount(&messageDown, 0);
+                AddMessageAtLast(&messageDown, MSG_TIPS, "词库已保存");
+                retVal = IRV_DISPLAY_MESSAGE;
+            } else if (IsHotKey(sym, state, fc.hkVK))
+                SwitchVK();
 #ifdef _ENABLE_RECORDING
-                else if (IsHotKey(sym, state, fc.hkRecording))
-                    ChangeRecording();
-                else if (IsHotKey(sym, state, fc.hkResetRecording))
-                    ResetRecording();
+            else if (IsHotKey(sym, state, fc.hkRecording))
+                ChangeRecording();
+            else if (IsHotKey(sym, state, fc.hkResetRecording))
+                ResetRecording();
 #endif
-            }
-        } else
-            retVal = IRV_DONOT_PROCESS;
+        }
     }
 
     switch (retVal) {

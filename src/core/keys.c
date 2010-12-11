@@ -44,7 +44,7 @@ HOTKEYS FCITX_BACKSPACE[2] =
 
 HOTKEYS FCITX_CTRL_H[2] =
 {
-    {NULL, XK_h, KEY_CTRL_COMP},
+    {NULL, XK_H, KEY_CTRL_COMP},
     {NULL, 0, 0},
 };
 
@@ -110,7 +110,7 @@ HOTKEYS FCITX_COMMA[2] =
 
 HOTKEYS FCITX_PERIOD[2] = 
 {
-    {NULL, XK_comma, KEY_NONE},
+    {NULL, XK_period, KEY_NONE},
     {NULL, 0, 0},
 };
 

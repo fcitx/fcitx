@@ -47,7 +47,7 @@ typedef enum _IME_STATE {
 } IME_STATE;
 
 Bool            InitXIM (char *);
-void            SendHZtoClient (IMForwardEventStruct * call_data, char *strHZ);
+void            SendHZtoClient(IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
 
 void            SetIMState (Bool bState);
