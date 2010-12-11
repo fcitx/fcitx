@@ -849,6 +849,18 @@ void ProcessKey(IMForwardEventStruct * call_data)
         }
 
         break;
+    case IRV_DISPLAY_LAST:
+        inputWindow.bShowNext = inputWindow.bShowPrev = False;
+        SetMessageCount(&messageUp, 0);
+        AddMessageAtLast(&messageUp, MSG_INPUT, "%c", strCodeInput[0]);
+        SetMessageCount(&messageDown, 0);
+        AddMessageAtLast(&messageDown, MSG_TIPS, "%s", strStringGet);
+        DisplayInputWindow();
+        if (!fc.bUseDBus) {
+            DrawInputWindow();
+        }
+        
+        break;
     case IRV_DISPLAY_MESSAGE:
         inputWindow.bShowNext = False;
         inputWindow.bShowPrev = False;
