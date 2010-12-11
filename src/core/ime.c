@@ -348,7 +348,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
 
 #ifdef _DEBUG
     FcitxLog(INFO,
-        "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d\n",
+        "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 #endif
 
@@ -474,7 +474,7 @@ void ProcessKey(IMForwardEventStruct * call_data)
         }
     }
 
-    if (call_data->event.type != KeyPress)
+    if (retVal == IRV_TO_PROCESS && call_data->event.type != KeyPress)
         retVal = IRV_DONOT_PROCESS;
 
     if (retVal == IRV_TO_PROCESS) {
