@@ -792,7 +792,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
         if (IsHotKey(sym, state, FCITX_CTRL_DELETE)) {
             tbl.bTablePhraseTips = False;
             TableDelPhraseByHZ (messageUp.msg[1].strMsg);
-            return IRV_DONOT_PROCESS_CLEAN;
+            return IRV_CLEAN;
         }
         else if (state == KEY_NONE && (sym != XK_Control_L && sym != XK_Control_R && sym != XK_Shift_L && sym != XK_Shift_R )) {
             SetMessageCount(&messageUp, 0);
@@ -823,8 +823,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
                     if (iCodeInputCount == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
                         iCandWordCount = 0;
-                        SetMessageCount(&messageDown , 0);
-                        retVal = IRV_DISPLAY_CANDWORDS;
+                        retVal = IRV_DISPLAY_LAST;
                     }
                     else {
                         char        *strTemp;
@@ -1085,8 +1084,7 @@ INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCo
 
                 if (iCodeInputCount == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
                     iCandWordCount = 0;
-                    SetMessageCount(&messageDown , 0);
-                    retVal = IRV_DISPLAY_CANDWORDS;
+                    retVal = IRV_DISPLAY_LAST;
                 }
                 else if (iCodeInputCount)
                     retVal = TableGetCandWords (SM_FIRST);

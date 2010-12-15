@@ -709,7 +709,6 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 val = IRV_GET_LEGEND;
             }
         } else if (IsHotKey(sym, state, fc.hkPYDelUserPhr)) {
-            printf("abcd\n");
             if (!bIsPYDelUserPhr) {
                 for (val = 0; val < iCandWordCount; val++) {
                     if (PYCandWords[val].iWhich == PY_CAND_USERPHRASE)

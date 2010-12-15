@@ -185,7 +185,7 @@ void MyDBusEventHandler()
                 if (!bIsInLegend) {
                     pstr = im[gs.iIMIndex].GetCandWord(int0);
                     if (pstr) {
-                        SendHZtoClient(0,pstr);
+                        SendHZtoClient(0, pstr);
                         if (!fcitxProfile.bUseLegend) {
                             ResetInput();
                         }
@@ -194,7 +194,7 @@ void MyDBusEventHandler()
                 } else {
                     pstr = im[gs.iIMIndex].GetLegendCandWord(int0);
                     if (pstr) {
-                        SendHZtoClient(0,pstr);
+                        SendHZtoClient(0, pstr);
                         if (!iLegendCandWordCount) {
                             ResetInput ();
                         }
