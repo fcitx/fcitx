@@ -187,36 +187,6 @@ reload:
 
 }
 
-Visual * FindARGBVisual (Display *dpy, int scr)
-{
-    XVisualInfo *xvi;
-    XVisualInfo template;
-    int         nvi;
-    int         i;
-    XRenderPictFormat   *format;
-    Visual      *visual;
-
-    template.screen = scr;
-    template.depth = 32;
-    template.class = TrueColor;
-    xvi = XGetVisualInfo (dpy,  VisualScreenMask |VisualDepthMask |VisualClassMask,&template,&nvi);
-    if (!xvi)
-        return 0;
-    visual = 0;
-    for (i = 0; i < nvi; i++)
-    {
-        format = XRenderFindVisualFormat (dpy, xvi[i].visual);
-        if (format->type == PictTypeDirect && format->direct.alphaMask)
-        {
-            visual = xvi[i].visual;
-            break;
-        }
-    }
-
-    XFree (xvi);
-    return visual;
-}
-
 int LoadImage(FcitxImage * img,cairo_surface_t ** png, Bool fallback)
 {
     char buf[PATH_MAX];
@@ -960,6 +930,9 @@ void DisplaySkin(char * skinname)
     DestroyVKWindow();
 
     LoadSkinConfig();
+
+    InitComposite();
+
     CreateMainWindow ();
     CreateInputWindow ();
 

@@ -83,8 +83,6 @@ Bool CreateInputWindow (void)
     Colormap cmap;
     Visual * vs;
     int scr;
-    GC gc;
-    XGCValues xgv;
 
     InitInputWindow();
 
@@ -108,23 +106,12 @@ Bool CreateInputWindow (void)
     if (mainWindow.window == None)
         return False;
 
-    xgv.foreground = WhitePixel(dpy, scr);
-
     inputWindow.pm_input_bar=XCreatePixmap(
                                  dpy,
                                  inputWindow.window,
                                  INPUT_BAR_MAX_LEN,
                                  inputWindow.iInputWindowHeight,
                                  depth);
-    gc = XCreateGC(dpy, inputWindow.pm_input_bar, GCForeground, &xgv);
-    XFillRectangle(
-        dpy,
-        inputWindow.pm_input_bar,
-        gc,
-        0,
-        0,
-        INPUT_BAR_MAX_LEN,
-        inputWindow.iInputWindowHeight);
     inputWindow.cs_input_bar=cairo_xlib_surface_create(
                                  dpy,
                                  inputWindow.pm_input_bar,
@@ -136,8 +123,6 @@ Bool CreateInputWindow (void)
             CAIRO_CONTENT_COLOR_ALPHA,
             INPUT_BAR_MAX_LEN,
             inputWindow.iInputWindowHeight);
-
-    XFreeGC(dpy, gc);
 
     LoadInputMessage();
     XSelectInput (dpy, inputWindow.window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);

@@ -187,7 +187,6 @@ extern IM    *im;
 extern FcitxSkin sc;
 extern UT_array *skinBuf;
 
-Visual * FindARGBVisual (Display *dpy, int scr);
 void LoadMainBarImage();
 void LoadVKImage();
 void LoadTrayImage();

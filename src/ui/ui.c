@@ -72,6 +72,8 @@ Atom killAtom;
 Atom windowTypeAtom;
 Atom typeMenuAtom;
 Atom typeDialogAtom;
+Atom compManagerAtom;
+Window compManager;
 
 // added by yunfan
 // **********************************
@@ -121,8 +123,11 @@ MyXEventHandler(XEvent * event)
             XUnmapWindow(dpy, event->xclient.window);
             DrawMainWindow();
         }
+        else if (event->xclient.data.l[1] == compManagerAtom)
+            DisplaySkin(fc.skinType);
 #ifdef _ENABLE_TRAY
-        TrayEventHandler(event);
+        else
+            TrayEventHandler(event);
 #endif
         break;
     case Expose:
@@ -175,8 +180,11 @@ MyXEventHandler(XEvent * event)
             DrawMessageWindow(NULL, NULL, 0);
         break;
     case DestroyNotify:
+        if (event->xany.window == compManager)
+            DisplaySkin(fc.skinType);
 #ifdef _ENABLE_TRAY
-        TrayEventHandler(event);
+        else
+            TrayEventHandler(event);
 #endif
         break;
     case ButtonPress:
@@ -897,6 +905,7 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
 {
     attrib->bit_gravity = NorthWestGravity;
     attrib->backing_store = WhenMapped;
+    attrib->save_under = True;
     if (*vs) {
         *cmap =
             XCreateColormap(dpy, RootWindow(dpy, iScreen), *vs, AllocNone);
@@ -906,17 +915,17 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
         attrib->border_pixel = 0;
         attrib->colormap = *cmap;
         *attribmask =
-            (CWBackPixel | CWBorderPixel | CWOverrideRedirect |
-             CWColormap | CWBitGravity);
+            (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWSaveUnder |
+             CWColormap | CWBitGravity | CWBackingStore);
         *depth = 32;
     } else {
         *cmap = DefaultColormap(dpy, iScreen);
         *vs = DefaultVisual(dpy, iScreen);
         attrib->override_redirect = True;       // False;
-        attrib->background_pixel = WhitePixel(dpy, iScreen);
-        attrib->border_pixel = BlackPixel(dpy, iScreen);
-        attrib->bit_gravity = NorthWestGravity;
-        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWBitGravity);
+        attrib->background_pixel = 0;
+        attrib->border_pixel = 0;
+        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWSaveUnder
+                | CWBitGravity | CWBackingStore);
         *depth = DefaultDepth(dpy, iScreen);
     }
 }
@@ -953,6 +962,20 @@ void GetScreenSize(int *width, int *height)
         (*height) = attrs.height;
 }
 
+void InitComposite()
+{
+    compManagerAtom = XInternAtom (dpy, "_NET_WM_CM_S0", False);
+
+    compManager = XGetSelectionOwner(dpy, compManagerAtom);
+
+    if (compManager)
+    {
+        XSetWindowAttributes attrs;
+        attrs.event_mask = StructureNotifyMask;
+        XChangeWindowAttributes (dpy, compManager, CWEventMask, &attrs);
+    }
+}
+
 #ifdef _ENABLE_PANGO
 PangoFontDescription* GetPangoFontDescription(const char* font, int size)
 {
@@ -962,4 +985,39 @@ PangoFontDescription* GetPangoFontDescription(const char* font, int size)
     pango_font_description_set_family(desc, font);
     return desc;
 }
+
+Visual * FindARGBVisual (Display *dpy, int scr)
+{
+    XVisualInfo *xvi;
+    XVisualInfo template;
+    int         nvi;
+    int         i;
+    XRenderPictFormat   *format;
+    Visual      *visual;
+
+    if (compManager == None)
+        return NULL;
+
+    template.screen = scr;
+    template.depth = 32;
+    template.class = TrueColor;
+    xvi = XGetVisualInfo (dpy,  VisualScreenMask |VisualDepthMask |VisualClassMask,&template,&nvi);
+    if (!xvi)
+        return 0;
+    visual = 0;
+    for (i = 0; i < nvi; i++)
+    {
+        format = XRenderFindVisualFormat (dpy, xvi[i].visual);
+        if (format->type == PictTypeDirect && format->direct.alphaMask)
+        {
+            visual = xvi[i].visual;
+            break;
+        }
+    }
+
+    XFree (xvi);
+    return visual;
+}
+
+
 #endif
