@@ -131,7 +131,7 @@ int main (int argc, char *argv[])
      */
     LoadConfig ();
 
-    while ((c = getopt(argc, argv, "cdDn:s:vh")) != -1) {
+    while ((c = getopt(argc, argv, "dDn:s:vh")) != -1) {
         switch (c) {
         case 'd':
             /* nothing to do */
@@ -139,9 +139,6 @@ int main (int argc, char *argv[])
         case 'D':
             bBackground = False;
             break;
-        case 'c':
-            SaveConfig();
-            return 0;
         case 'n':
             imname=optarg;
             break;
@@ -306,7 +303,6 @@ void Usage ()
     printf("Usage: fcitx [OPTION]\n"
            "\t-d\t\trun as daemon(default)\n"
            "\t-D\t\tdon't run as daemon\n"
-           "\t-c\t\t(re)create config file in home directory and then exit\n"
            "\t-n[im name]\trun as specified name\n"
            "\t-s[sleep time]\toverride delay start time in config file, 0 for immediate start\n"
            "\t-v\t\tdisplay the version information and exit\n"

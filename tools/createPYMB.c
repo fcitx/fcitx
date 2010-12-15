@@ -67,6 +67,8 @@ __PYFA         *PYFAList;
 int             YY[1000];
 int             iAllCount;
 
+static void Usage();
+
 Bool LoadPY (void)
 {
     FILE           *fp;
@@ -353,6 +355,10 @@ void CreatePYBase (void)
 
 int main (int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        Usage();
+    }
     fps = fopen (argv[1], "rt");
     fpt = fopen (argv[2], "rt");
     fp1 = fopen ("pybase.mb", "wb");
@@ -364,6 +370,11 @@ int main (int argc, char *argv[])
     }
 
     return 0;
+}
+
+void Usage()
+{
+    printf("Usage: createPYMB <pyfile> <phrasefile>\n");
 }
 
 // vim: expandtab ts=4 sw=4

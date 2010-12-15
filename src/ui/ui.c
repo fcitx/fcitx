@@ -907,7 +907,7 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
         attrib->colormap = *cmap;
         *attribmask =
             (CWBackPixel | CWBorderPixel | CWOverrideRedirect |
-             CWColormap | CWBitGravity | CWBackingStore);
+             CWColormap | CWBitGravity);
         *depth = 32;
     } else {
         *cmap = DefaultColormap(dpy, iScreen);
@@ -916,7 +916,7 @@ InitWindowAttribute(Visual ** vs, Colormap * cmap,
         attrib->background_pixel = WhitePixel(dpy, iScreen);
         attrib->border_pixel = BlackPixel(dpy, iScreen);
         attrib->bit_gravity = NorthWestGravity;
-        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWBitGravity | CWBackingStore);
+        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWBitGravity);
         *depth = DefaultDepth(dpy, iScreen);
     }
 }

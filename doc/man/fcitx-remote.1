@@ -1,0 +1,29 @@
+.TH FCITX 1 "2010-12-16"
+.SH NAME
+fcitx-remote \- Tool for control fcitx state via console
+.SH SYNOPSIS
+.B fcitx-remote
+[\fIOPTION\fR]
+.SH OPTIONS
+.TP
+\fB\-c\fR
+close input method
+.TP
+\fB\-o\fR
+open input method
+.TP
+\fB\-r\fR
+reload fcitx config
+.TP
+[\fIno option\fR]
+display fcitx state, 0 for close, 1 for english, 2 for chinese
+.TP
+\fB\-h\fR
+display this help and exit
+.SH FILES
+fcitx will create socket at \fI/tmp/fcitx-socket-<displayname>\fR, so user must have permission to access \fI/tmp\fR folder.
+.SH SEE ALSO
+Please see the homepage at
+.BR http://www.fcitx.org/
+and
+.BR http://fcitx.googlecode.com/

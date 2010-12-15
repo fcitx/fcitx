@@ -2675,6 +2675,7 @@ void PYAddFreq(int iIndex)
     }
 
     HZTemp = (HZ *) malloc(sizeof(HZ));
+    memset(HZTemp, 0 , sizeof(HZ));
     strcpy(HZTemp->strHZ, PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ);
     HZTemp->iPYFA = PYCandWords[iIndex].cand.base.iPYFA;
     HZTemp->iHit = 0;

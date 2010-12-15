@@ -1,3 +1,7 @@
+2010-12-16: CSSlayer <wengxt@gmail.com>
+	* 增加man
+	* 移除pdf和odt格式的文档，以后fcitx-handbook将分开发布。
+
 2010-11-09: CSSlayer <wengxt@gmail.com>
 	* 更新文档
 

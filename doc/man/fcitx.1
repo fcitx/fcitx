@@ -1,0 +1,44 @@
+.TH FCITX 1 "2010-12-16"
+.SH NAME
+fcitx \- Free Chinese Input Toy of X - a Chinese IME for XIM
+.SH SYNOPSIS
+.B fcitx
+[\fIOPTION\fR]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B fcitx
+command.
+.PP
+\fBfcitx\fP is a Chinese IME for XIM intentionally designed not to depend on any Desktop Environment. It includes Pinyin and Table for input by default, but it can also support other Input Method.
+.SH OPTIONS
+.TP
+\fB\-d\fR
+run as daemon(default)
+.TP
+\fB\-D\fR
+don't run as daemon
+.TP
+\fB\-n\fR[\fIim name\fR]
+run as specified name
+.TP
+\fB\-s\fR[\fIsleep time\fR]
+override delay start time in config file, 0 for immediate start
+.TP
+\fB\-v\fR
+display the version information and exit
+.TP
+\fB\-h\fR
+display help and exit
+.SH ENVIRONMENT
+.TP
+.B XMODIFIERS
+If
+.RB $ XMODIFIERS
+is set and fcitx is not run with option \fB\-n\fR, fcitx will run with the name that specified in
+.RB $ XMODIFIERS
+, otherwise it will run with im name fcitx.
+.SH SEE ALSO
+Please see the homepage at
+.BR http://www.fcitx.org/
+and
+.BR http://fcitx.googlecode.com/

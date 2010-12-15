@@ -266,6 +266,7 @@ AC_CONFIG_FILES([
            Makefile
            fcitx.spec
            doc/Makefile
+           doc/man/Makefile
            data/Makefile
            data/table/Makefile
            skin/Makefile
