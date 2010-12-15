@@ -355,9 +355,10 @@ void CreatePYBase (void)
 
 int main (int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
         Usage();
+        exit(1);
     }
     fps = fopen (argv[1], "rt");
     fpt = fopen (argv[2], "rt");
