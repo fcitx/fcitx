@@ -27,7 +27,7 @@
 #include "im/pinyin/PYFA.h"
 #include "im/pinyin/sp.h"
 #include "pyTools.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/xdg.h"
 
 FcitxConfig fc;

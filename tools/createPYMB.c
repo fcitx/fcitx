@@ -26,7 +26,7 @@
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
 #include "tools/utf8.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 FcitxConfig fc;
 

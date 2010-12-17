@@ -1,6 +1,6 @@
 #include "core/fcitx.h"
 #include "im/pinyin/PYFA.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include <string.h>
 
 extern PYTABLE PYTable[];
