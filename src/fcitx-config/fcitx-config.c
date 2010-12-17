@@ -964,6 +964,7 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
     }
 }
 
+FCITX_EXPORT_API
 ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName, const char* optionName)
 {
     ConfigFile* cfile = config->configFile;
