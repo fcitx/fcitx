@@ -110,6 +110,18 @@ typedef enum ConfigSyncResult
     SyncInvalid
 } ConfigSyncResult;
 
+typedef union ConfigValueType{
+    void *untype;
+    int *integer;
+    Bool *boolean;
+    HOTKEYS *hotkey;
+    ConfigColor *color;
+    int *enumerate;
+    char **string;
+    char *chr;
+    FcitxImage* image;
+} ConfigValueType;
+
 typedef struct ConfigGroup ConfigGroup;
 typedef struct ConfigOption ConfigOption;
 
@@ -148,17 +160,7 @@ struct ConfigOption
 {
     char *optionName;
     char *rawValue;
-    union {
-        void *untype;
-        int *integer;
-        Bool *boolean;
-        HOTKEYS *hotkey;
-        ConfigColor *color;
-        int *enumerate;
-        char **string;
-        char *chr;
-        FcitxImage* image;
-    } value;
+    ConfigValueType value;
     SyncFilter filter;
     void *filterArg;
     ConfigOptionDesc *optionDesc;
@@ -247,6 +249,7 @@ void FreeConfigOptionDesc(ConfigOptionDesc *codesc);
 Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc);
 Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc);
 void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync);
+ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, const char* option);
 void ConfigBindSync(GenericConfig* config);
 
 typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);

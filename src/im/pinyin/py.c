@@ -44,9 +44,9 @@
 #include "im/pinyin/pyParser.h"
 #include "im/pinyin/sp.h"
 #include "tools/utf8.h"
-#include "fcitx-config/profile.h"
+#include "tools/profile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
-#include "fcitx-config/configfile.h"
 #include "fcitx-config/xdg.h"
 
 int iPYFACount;

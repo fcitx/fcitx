@@ -28,7 +28,7 @@
 
 #include "im/qw/qw.h"
 #include "ui/InputWindow.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 extern char     strCodeInput[];
 extern int      iCodeInputCount;

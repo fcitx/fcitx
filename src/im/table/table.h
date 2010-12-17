@@ -22,7 +22,7 @@
 
 #include <X11/Xlib.h>
 
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "core/ime.h"
 #include "tools/utarray.h"
 

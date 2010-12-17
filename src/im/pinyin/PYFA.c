@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "core/fcitx.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "PYFA.h"
 
 #include <stdio.h>

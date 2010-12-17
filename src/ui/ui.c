@@ -51,8 +51,8 @@
 #include "ui/TrayWindow.h"
 #include "ui/skin.h"
 #include "core/ime.h"
-#include "fcitx-config/profile.h"
-#include "fcitx-config/configfile.h"
+#include "tools/profile.h"
+#include "tools/configfile.h"
 #include "ui/AboutWindow.h"
 #include "fcitx-config/cutils.h"
 
@@ -132,7 +132,7 @@ MyXEventHandler(XEvent * event)
         break;
     case Expose:
 #ifdef _DEBUG
-    FcitxLog(DEBUG, _("XEvent--Expose"));
+        FcitxLog(DEBUG, _("XEvent--Expose"));
 #endif
         if (event->xexpose.count > 0)
             break;

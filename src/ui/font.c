@@ -28,7 +28,7 @@
 #include "core/fcitx.h"
 
 #include "ui/skin.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 
 void InitFont()

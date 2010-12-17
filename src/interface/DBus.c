@@ -31,7 +31,7 @@
 #include "core/ime.h"
 #include "core/xim.h"
 #include "interface/DBus.h"
-#include "fcitx-config/profile.h"
+#include "tools/profile.h"
 
 #ifdef _ENABLE_DBUS
 DBusConnection *conn;

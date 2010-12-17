@@ -20,7 +20,7 @@
 
 #include "core/fcitx.h"
 #include "tools/tools.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"

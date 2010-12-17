@@ -41,7 +41,7 @@
 #include "core/ime.h"
 #include "core/MyErrorsHandlers.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 
 #ifndef SIGUNUSED

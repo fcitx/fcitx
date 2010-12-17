@@ -35,8 +35,8 @@
 #include "ui/ui.h"
 #include "ui/skin.h"
 #include "MainWindow.h"
-#include "fcitx-config/profile.h"
-#include "fcitx-config/configfile.h"
+#include "tools/profile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 
 MainWindow          mainWindow;

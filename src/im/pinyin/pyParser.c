@@ -27,7 +27,7 @@
 #include "im/pinyin/PYFA.h"
 #include "im/pinyin/sp.h"
 #include "im/pinyin/pyParser.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "core/ime.h"
 
 extern MHPY MHPY_C[];

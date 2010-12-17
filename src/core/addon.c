@@ -25,7 +25,7 @@
 #include "core/fcitx.h"
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "tools/utarray.h"

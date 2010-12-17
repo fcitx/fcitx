@@ -11,7 +11,7 @@ libtools_a_SOURCES= utf8.c utf8.h\
 					utf8_in_gb18030.h \
 					tools.c tools.h \
 					utarray.h \
-					configfile.c \
-					profile.c \
+					configfile.c configfile.h \
+					profile.c profile.h \
 					$(NULL)
 

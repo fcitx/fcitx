@@ -67,7 +67,7 @@
 #include "im/special/QuickPhrase.h"
 #include "im/special/AutoEng.h"
 
-#include "fcitx-config/profile.h"
+#include "tools/profile.h"
 
 #ifndef CODESET
 #define CODESET 14

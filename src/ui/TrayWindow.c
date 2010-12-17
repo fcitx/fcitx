@@ -35,7 +35,7 @@
 #include "ui/tray.h"
 #include "ui/skin.h"
 #include "core/xim.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 TrayWindow tray;
 

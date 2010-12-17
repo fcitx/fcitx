@@ -3,7 +3,7 @@
 #include "core/fcitx.h"
 #include "tools/tools.h"
 #include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/profile.h"
+#include "tools/profile.h"
 #include "fcitx-config/xdg.h"
 #include "core/ime.h"
 #include "ui/ui.h"

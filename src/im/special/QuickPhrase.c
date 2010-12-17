@@ -29,7 +29,7 @@
 #include "tools/utarray.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 uint uQuickPhraseCount;
 UT_array *quickPhrases = NULL;

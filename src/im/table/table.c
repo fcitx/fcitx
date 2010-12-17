@@ -45,7 +45,7 @@
 #include "im/pinyin/pyParser.h"
 #include "tools/utarray.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/profile.h"
+#include "tools/profile.h"
 #include "fcitx-config/cutils.h"
 
 static void FreeTableConfig(void *v);

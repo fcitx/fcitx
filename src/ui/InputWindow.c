@@ -31,8 +31,8 @@
 
 #include "interface/DBus.h"
 #include "skin.h"
-#include "fcitx-config/profile.h"
-#include "fcitx-config/configfile.h"
+#include "tools/profile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 
 InputWindow     inputWindow;

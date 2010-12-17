@@ -26,7 +26,7 @@
 #include "ui/MenuWindow.h"
 #include "ui/skin.h"
 #include "im/special/vk.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 extern unsigned char iVKCount;
 extern int      iScreen;

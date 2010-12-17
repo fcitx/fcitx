@@ -35,7 +35,7 @@
 #include "core/xim.h"
 #include "ui/MainWindow.h"
 #include "ui/TrayWindow.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 #include "im/pinyin/sp.h"
 #include "im/special/QuickPhrase.h"

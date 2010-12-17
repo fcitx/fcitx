@@ -54,8 +54,8 @@
 #include "im/extra/extra.h"
 #include "ui/skin.h"
 #include "interface/DBus.h"
-#include "fcitx-config/configfile.h"
-#include "fcitx-config/profile.h"
+#include "tools/configfile.h"
+#include "tools/profile.h"
 #include "fcitx-config/cutils.h"
 
 FcitxState gs;                  /* global state */

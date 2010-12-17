@@ -131,12 +131,12 @@ char* GetKeyString(KeySym sym, unsigned int state)
 
     char *key = GetKeyListString(sym);
 
-    if (key)
+    if (!key)
         return NULL;
 
     len += strlen(key);
 
-    str = malloc(sizeof(char) * (len + 1));
+    str = malloc0(sizeof(char) * (len + 1));
     if (state & KEY_CTRL_COMP)
         strcat(str, "CTRL_");
     if (state & KEY_ALT_COMP)
@@ -209,7 +209,7 @@ int GetKeyList (char *strKey)
 
 char *GetKeyListString(int key)
 {
-    if (key >= XK_space && key <= XK_asciitilde)
+    if (key > XK_space && key <= XK_asciitilde)
     {
         char *p;
         p = malloc(sizeof(char) * 2);

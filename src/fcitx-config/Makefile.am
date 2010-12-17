@@ -6,8 +6,6 @@ libfcitx_config_la_SOURCES= \
 						   cutils.c cutils.h \
 						   sprintf.c sprintf.h \
 						   fcitx-config.c fcitx-config.h \
-						   profile.h \
-						   configfile.h \
 						   hotkey.c hotkey.h \
 						   uthash.h \
 						   xdg.c xdg.h
@@ -16,8 +14,6 @@ libfcitx_config_la_CFLAGS= -fvisibility=hidden
 libfcitx_configincludedir= $(includedir)/fcitx-config
 libfcitx_configinclude_HEADERS= \
 								fcitx-config.h \
-								configfile.h \
-								profile.h \
 								hotkey.h \
 								xdg.h
 

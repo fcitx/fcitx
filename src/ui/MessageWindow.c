@@ -23,7 +23,7 @@
 #include "ui/MessageWindow.h"
 #include "ui/ui.h"
 #include "core/xim.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 #include "fcitx-config/cutils.h"
 
 #include <ctype.h>

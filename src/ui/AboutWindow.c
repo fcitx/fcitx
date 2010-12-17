@@ -27,7 +27,7 @@
 #include "ui/AboutWindow.h"
 #include "ui/ui.h"
 #include "core/xim.h"
-#include "fcitx-config/configfile.h"
+#include "tools/configfile.h"
 
 extern Display *dpy;
 extern int      iScreen;

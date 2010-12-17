@@ -22,8 +22,8 @@
 #include "core/addon.h"
 #include "im/extra/extra.h"
 #include "ui/InputWindow.h"
-#include "fcitx-config/configfile.h"
-#include "fcitx-config/profile.h"
+#include "tools/configfile.h"
+#include "tools/profile.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
 

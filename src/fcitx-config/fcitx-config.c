@@ -964,3 +964,22 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
     }
 }
 
+ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName, const char* optionName)
+{
+    ConfigFile* cfile = config->configFile;
+    ConfigGroup *group = NULL;
+    ConfigValueType null;
+    memset(&null, 0, sizeof(ConfigValueType));
+    HASH_FIND_STR(cfile->groups, groupName, group);
+    if (group)
+    {
+        ConfigOption *option = NULL;
+        HASH_FIND_STR(group->options, optionName, option);
+        if (option)
+        {
+            return option->value;
+        }
+    }
+    return null;
+ 
+}
