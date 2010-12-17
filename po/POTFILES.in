@@ -27,12 +27,12 @@ src/ui/TrayWindow.c
 src/ui/skinconfig.c
 src/ui/InputWindow.h
 src/fcitx-config/uthash.h
-src/fcitx-config/profile.h
+src/tools/profile.h
 src/fcitx-config/hotkey.h
 src/fcitx-config/fcitx-config.c
 src/fcitx-config/fcitx-config.h
 src/fcitx-config/sprintf.c
-src/fcitx-config/configfile.h
+src/tools/configfile.h
 src/fcitx-config/sprintf.h
 src/fcitx-config/hotkey.c
 src/im/special/punc.h

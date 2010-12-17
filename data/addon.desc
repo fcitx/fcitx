@@ -1,19 +1,24 @@
 [Addon/Name]
 Type=String
+Description=Name
 
 [Addon/Category]
 Type=Enum
 EnumCount=1
 Enum0=InputMethod
+Description=Category
 
 [Addon/Enabled]
 Type=Boolean
 DefaultValue=True
+Description=Enabled
 
 [Addon/Module]
 Type=String
+Description=Module
 
 [Addon/Type]
 Type=Enum
 EnumCount=1
 Enum0=SharedLibrary
+Description=Type

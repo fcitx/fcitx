@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-08 12:34+0800\n"
+"POT-Creation-Date: 2010-12-17 14:05+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -654,6 +654,27 @@ msgstr "软键盘图片"
 msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
 
+#: data/addon.desc:3
+msgid "Name"
+msgstr "名称"
+
+#: data/addon.desc:9
+msgid "Category"
+msgstr "种类"
+
+#: data/addon.desc:14
+msgid "Enabled"
+msgstr "启用"
+
+# unknown
+#: data/addon.desc:18
+msgid "Module"
+msgstr "模块"
+
+#: data/addon.desc:24
+msgid "Type"
+msgstr "类型"
+
 #: data/table/erbi.conf:2
 msgid "Erbi"
 msgstr "二笔"
@@ -1010,15 +1031,15 @@ msgstr "updateMesssages Up:%s"
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
 
-#: ../src/ui/ui.c:83
+#: ../src/ui/ui.c:85
 msgid "FCITX can only run under X"
 msgstr "Fcitx只能在X下运行"
 
-#: ../src/ui/ui.c:130
+#: ../src/ui/ui.c:135
 msgid "XEvent--Expose"
 msgstr "XEvent--Expose"
 
-#: ../src/ui/ui.c:343 ../src/ui/ui.c:350
+#: ../src/ui/ui.c:351 ../src/ui/ui.c:358
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1046,19 +1067,19 @@ msgstr "配置Fcitx..."
 msgid "Exit Fcitx"
 msgstr "退出Fcitx"
 
-#: ../src/ui/InputWindow.c:166
+#: ../src/ui/InputWindow.c:151
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: ../src/ui/InputWindow.c:191
+#: ../src/ui/InputWindow.c:176
 msgid "CAL InputWindow"
 msgstr "CAL InputWindow"
 
-#: ../src/ui/MainWindow.c:134
+#: ../src/ui/MainWindow.c:135
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: ../src/ui/MainWindow.c:155
+#: ../src/ui/MainWindow.c:156
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -1152,17 +1173,17 @@ msgstr "区位"
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: ../src/im/pinyin/py.c:2441
+#: ../src/im/pinyin/py.c:2440
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: ../src/im/pinyin/py.c:2503
+#: ../src/im/pinyin/py.c:2502
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: ../src/im/pinyin/py.c:2573
+#: ../src/im/pinyin/py.c:2572
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
@@ -1295,22 +1316,6 @@ msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在�
 #, c-format
 msgid "FCITX -- Get Signal No.: %d"
 msgstr "Fcitx接收到信号: %d"
-
-#~ msgid "Name"
-#~ msgstr "名称"
-
-#~ msgid "Category"
-#~ msgstr "分组"
-
-#~ msgid "Enabled"
-#~ msgstr "启用"
-
-# unknown
-#~ msgid "Module"
-#~ msgstr "模块"
-
-#~ msgid "Type"
-#~ msgstr "类型"
 
 #~ msgid "MenuFont"
 #~ msgstr "菜单字体"

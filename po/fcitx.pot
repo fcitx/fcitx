@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-08 12:34+0800\n"
+"POT-Creation-Date: 2010-12-17 14:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -649,6 +649,26 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
+#: data/addon.desc:3
+msgid "Name"
+msgstr ""
+
+#: data/addon.desc:9
+msgid "Category"
+msgstr ""
+
+#: data/addon.desc:14
+msgid "Enabled"
+msgstr ""
+
+#: data/addon.desc:18
+msgid "Module"
+msgstr ""
+
+#: data/addon.desc:24
+msgid "Type"
+msgstr ""
+
 #: data/table/erbi.conf:2
 msgid "Erbi"
 msgstr ""
@@ -991,15 +1011,15 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: ../src/ui/ui.c:83
+#: ../src/ui/ui.c:85
 msgid "FCITX can only run under X"
 msgstr ""
 
-#: ../src/ui/ui.c:130
+#: ../src/ui/ui.c:135
 msgid "XEvent--Expose"
 msgstr ""
 
-#: ../src/ui/ui.c:343 ../src/ui/ui.c:350
+#: ../src/ui/ui.c:351 ../src/ui/ui.c:358
 msgid "Unable to create process"
 msgstr ""
 
@@ -1027,19 +1047,19 @@ msgstr ""
 msgid "Exit Fcitx"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:166
+#: ../src/ui/InputWindow.c:151
 msgid "DISPLAY InputWindow"
 msgstr ""
 
-#: ../src/ui/InputWindow.c:191
+#: ../src/ui/InputWindow.c:176
 msgid "CAL InputWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:134
+#: ../src/ui/MainWindow.c:135
 msgid "DISPLAY MainWindow"
 msgstr ""
 
-#: ../src/ui/MainWindow.c:155
+#: ../src/ui/MainWindow.c:156
 msgid "DRAW MainWindow"
 msgstr ""
 
@@ -1133,17 +1153,17 @@ msgstr ""
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2441
+#: ../src/im/pinyin/py.c:2440
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2503
+#: ../src/im/pinyin/py.c:2502
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: ../src/im/pinyin/py.c:2573
+#: ../src/im/pinyin/py.c:2572
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
