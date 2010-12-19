@@ -985,6 +985,7 @@ PangoFontDescription* GetPangoFontDescription(const char* font, int size)
     pango_font_description_set_family(desc, font);
     return desc;
 }
+#endif
 
 Visual * FindARGBVisual (Display *dpy, int scr)
 {
@@ -1018,6 +1019,3 @@ Visual * FindARGBVisual (Display *dpy, int scr)
     XFree (xvi);
     return visual;
 }
-
-
-#endif
