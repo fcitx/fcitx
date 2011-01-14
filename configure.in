@@ -29,11 +29,19 @@ AC_CHECK_HEADERS([limits.h malloc.h malloc/malloc.h stdlib.h string.h sys/param.
 AC_MSG_CHECKING([host platform characteristics])
 
 case "$host" in
+    *-*-*kfreebsd*)
+    HOST_LIBS="-ldl -lpthread"
+    md5prog=md5sum
+    ;;
     *-*-*freebsd*)
     HOST_LIBS="-lexecinfo -pthread"
     md5prog=gmd5sum
     ;;
     *-*-linux*)
+    HOST_LIBS="-ldl -lpthread"
+    md5prog=md5sum
+    ;;
+    *-*-gnu*)
     HOST_LIBS="-ldl -lpthread"
     md5prog=md5sum
     ;;
