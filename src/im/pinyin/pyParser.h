@@ -40,19 +40,19 @@ typedef enum {
 typedef struct {
     char            strPYParsed[MAX_WORDS_USER_INPUT + 3][MAX_PY_LENGTH + 2];
     char            strMap[MAX_WORDS_USER_INPUT + 3][3];
-    INT8            iHZCount;
-    INT8            iMode;
+    char            iHZCount;
+    char            iMode;
 } ParsePYStruct;
 
-int             IsSyllabary (const char *strPY, Bool bMode);
-int             IsConsonant (const char *strPY, Bool bMode);
-int             FindPYFAIndex (const char *strPY, Bool bMode);
-void            ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode, Bool bSP);
-Bool            MapPY (char *strPY, char strMap[3], PYPARSEINPUTMODE mode);
+int             IsSyllabary (const char *strPY, boolean bMode);
+int             IsConsonant (const char *strPY, boolean bMode);
+int             FindPYFAIndex (const char *strPY, boolean bMode);
+void            ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode, boolean bSP);
+boolean            MapPY (char *strPY, char strMap[3], PYPARSEINPUTMODE mode);
 
-Bool            MapToPY (char strMap[3], char *strPY);
-int             CmpMap (char *strMap1, char *strMap2, int *iMatchedLength, Bool bSP);
-int     Cmp1Map (char map1, char map2, Bool b, Bool bUseMH, Bool bSP);
-int             Cmp2Map (char map1[3], char map2[3], Bool bSP);
+boolean            MapToPY (char strMap[3], char *strPY);
+int             CmpMap (char *strMap1, char *strMap2, int *iMatchedLength, boolean bSP);
+int     Cmp1Map (char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
+int             Cmp2Map (char map1[3], char map2[3], boolean bSP);
 
 #endif

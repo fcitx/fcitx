@@ -35,7 +35,7 @@
 #include "fcitx-config/sprintf.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/fcitx-config.h"
-#include "tools/tools.h"
+#include "utils/utils.h"
 
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync);

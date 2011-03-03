@@ -25,19 +25,20 @@
 #include "core/fcitx.h"
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/fcitx-config.h"
-#include "tools/configfile.h"
+#include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
-#include "tools/utarray.h"
+#include "utils/utarray.h"
 #include "core/addon.h"
-#include "tools/tools.h"
+#include "utils/utils.h"
 
 CONFIG_BINDING_BEGIN(FcitxAddon);
 CONFIG_BINDING_REGISTER("Addon", "Name", name);
 CONFIG_BINDING_REGISTER("Addon", "Category", category);
 CONFIG_BINDING_REGISTER("Addon", "Enabled", bEnabled);
-CONFIG_BINDING_REGISTER("Addon", "Module", module);
+CONFIG_BINDING_REGISTER("Addon", "Library", library);
 CONFIG_BINDING_REGISTER("Addon", "Type", type);
+CONFIG_BINDING_REGISTER("Addon", "Dependency", depend);
 CONFIG_BINDING_END()
 
 UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
@@ -50,9 +51,6 @@ static ConfigFileDesc* GetAddonConfigDesc();
  */
 void LoadAddonInfo(void)
 {
-    if (!fc.bEnableAddons)
-        return;
-
     char **addonPath;
     size_t len;
     char pathBuf[PATH_MAX];
@@ -69,8 +67,7 @@ void LoadAddonInfo(void)
         addons = NULL;
     }
 
-    addons = malloc(sizeof(UT_array));
-    utarray_init(addons, &addon_icd);
+    utarray_new(addons, &addon_icd);
 
     addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/addon" , DATADIR, "fcitx/data/addon" );
 
@@ -162,6 +159,69 @@ void LoadAddonInfo(void)
     }
 }
 
+void AddonResolveDependency()
+{
+    boolean remove = true;
+    while(remove)
+    {
+        remove = false;
+        FcitxAddon *addon;
+        for ( addon = (FcitxAddon *) utarray_front(addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
+        {
+            if (!addon->bEnabled)
+                continue;
+            UT_array* dependlist = SplitString(addon->depend);
+            boolean valid = true;
+            char **depend = NULL;
+            for (depend = (char **) utarray_front(dependlist);
+                 depend != NULL;
+                 depend = (char **) utarray_next(dependlist, depend))
+            {
+                if (!AddonIsAvailable(*depend))
+                {
+                    valid = false;
+                    break;
+                }
+            }
+            
+            utarray_free(dependlist);
+            if (!valid)
+            {
+                FcitxLog(WARNING, _("Disable addon %s, dependency %s can not be satisfied."), addon->name, addon->depend);
+                addon->bEnabled = false;
+            }
+        }
+    }
+}
+
+boolean AddonIsAvailable(const char* name)
+{
+    FcitxAddon *addon;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+          addon != NULL;
+          addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->bEnabled && strcmp(name, addon->name) == 0)
+            return true;
+    }
+    return false;
+}
+
+FcitxAddon* GetAddonByName(const char* name)
+{
+    FcitxAddon *addon;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+          addon != NULL;
+          addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->bEnabled && strcmp(name, addon->name) == 0)
+            return addon;
+    }
+    return NULL;
+}
+
 /** 
  * @brief Load addon.desc file
  * 
@@ -192,5 +252,5 @@ void FreeAddon(void *v)
         return ;
     FreeConfigFile(addon->config.configFile);
     free(addon->name);
-    free(addon->module);
+    free(addon->library);
 }

@@ -24,12 +24,13 @@
 
 #include "core/fcitx.h"
 
-#include "im/pinyin/sp.h"
-#include "im/pinyin/pyMapTable.h"
-#include "im/pinyin/pyParser.h"
+#include "sp.h"
+#include "pyMapTable.h"
+#include "pyParser.h"
 #include "ui/MainWindow.h"
-#include "tools/configfile.h"
 #include "fcitx-config/xdg.h"
+#include "pyconfig.h"
+#include <string.h>
 
 SP_C            SPMap_C[] = {
     {"ai", 'l'}
@@ -163,7 +164,7 @@ void LoadSPData (void)
 	    pstr += cstrlen(NAME);
 	    if (*pstr == ' ' || *pstr == '\t')
 		pstr++;
-	    bIsDefault = !(strcmp (fc.strDefaultSP, pstr));
+	    bIsDefault = !(strcmp (pyconfig.strDefaultSP, pstr));
 	    continue;
 	}
 

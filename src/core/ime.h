@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,51 +17,48 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-/**
- * @file   ime.h
- * @author Yuking yuking_net@sohu.com
- * @date   2008-1-16
- *
- * @brief  按键和输入法通用功能处理
- *
- *
- */
+#ifndef _IME_H_
+#define _IME_H_
 
-#ifndef _IME_H
-#define _IME_H
+#define MAX_IM_NAME    (8 * 6)
 
-#include <X11/keysym.h>
-#include <cairo.h>
-#include "core/xim.h"
-#include "fcitx-config/hotkey.h"
-#include "core/fcitx.h"
-#include "tools/utf8.h"
-#include "fcitx-config/fcitx-config.h"
-#include "core/addon.h"
+#define MAX_CAND_LEN    127
+#define MAX_TIPS_LEN    9
 
-#define HOT_KEY_COUNT	2
-#define TEMP_FILE		"FCITX_DICT_TEMP"
+#define MAX_CAND_WORD    10
+#define MAX_USER_INPUT    300
 
-typedef enum _INPUT_METHOD {
-    IM_PY = 0,
-    IM_SP,
-    IM_QW,
-    IM_TABLE,
-    IM_EXTRA
-} INPUT_METHOD;
+#define HOT_KEY_COUNT   2
+#include "fcitx.h"
+
+typedef enum _SEARCH_MODE {
+    SM_FIRST,
+    SM_NEXT,
+    SM_PREV
+} SEARCH_MODE;
+
+typedef enum _INPUT_RETURN_VALUE {
+    //IRV_UNKNOWN = -1,
+    IRV_DO_NOTHING = 0, /* do nothing */
+    IRV_DONOT_PROCESS, /* key will be forward */
+    IRV_DONOT_PROCESS_CLEAN, /* key will be forward and process as IRV_CLEAN */
+    IRV_CLEAN, /* reset input */
+    IRV_TO_PROCESS, /* key will passed to next flow*/ 
+    IRV_DISPLAY_MESSAGE, /* it's a message, so next and prev will not be shown */
+    IRV_DISPLAY_CANDWORDS, /* the only different with message it it will show next and prev button */
+    IRV_DISPLAY_LAST, /* display the last input word */
+    IRV_PUNC,
+    IRV_ENG,
+    IRV_GET_LEGEND, /* legend word */
+    IRV_GET_CANDWORDS, /* send the input to client, close input window */
+    IRV_GET_CANDWORDS_NEXT /* send the input to client, dont close input window */
+} INPUT_RETURN_VALUE;
 
 typedef struct _SINGLE_HZ {
     char            strHZ[UTF8_MAX_LENGTH + 1];
 } SINGLE_HZ;
 
-typedef enum _KEY_RELEASED {
-    KR_OTHER = 0,
-    KR_CTRL,
-    KR_2ND_SELECTKEY,
-    KR_3RD_SELECTKEY,
-} KEY_RELEASED;
-
-typedef struct IM{
+typedef struct FcitxIM {
     char               strName[MAX_IM_NAME + 1];
     char               strIconName[MAX_IM_NAME + 1];
     void               (*ResetIM) (void);
@@ -69,62 +66,10 @@ typedef struct IM{
     INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
     char              *(*GetCandWord) (int);
     char              *(*GetLegendCandWord) (int);
-    Bool               (*PhraseTips) (void);
-    void               (*Init) (void);
+    boolean            (*PhraseTips) (void);
+    boolean            (*Init) (void);
+    void               (*Destroy) ();
     void               (*Save) (void);
-    void               (*Destroy) (INT8 im);
-    FcitxImage         image;
-    cairo_surface_t   *icon;
-    FcitxAddon        *addonInfo;
-} IM;
-
-typedef struct FcitxState {
-    char *font;
-    char *menuFont;
-    INT8 iIMIndex;
-    Bool bMutexInited;
-} FcitxState;
-
-void            ProcessKey (IMForwardEventStruct * call_data);
-void            ResetInput (void);
-void            CloseIM (IMForwardEventStruct * call_data);
-void            ChangeIMState ();
-Bool            IsHotKey(KeySym sym, int state, HOTKEYS * hotkey);
-INPUT_RETURN_VALUE ChangeCorner (void);
-INPUT_RETURN_VALUE ChangePunc (void);
-INPUT_RETURN_VALUE ChangeLegend (void);
-INPUT_RETURN_VALUE ChangeTrack (void);
-INPUT_RETURN_VALUE ChangeGBKT (void);
-void		ChangeLock (void);
-
-#ifdef _ENABLE_RECORDING
-void		ChangeRecording (void);
-void		ResetRecording (void);
-#endif
-
-void            RegisterNewIM (char *strName,
-                               char *strIconName,
-                               void (*ResetIM) (void),
-                               INPUT_RETURN_VALUE (*DoInput) (unsigned int, unsigned int, int),
-                               INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE),
-                               char *(*GetCandWord) (int),
-                               char *(*GetLegendCandWord) (int),
-                               Bool (*PhraseTips) (void),
-                               void (*Init) (void),
-                               void (*Save) (void),
-                               void (*Destroy) (INT8),
-                               FcitxAddon* addon);
-void            SwitchIM (INT8 index);
-void            DoPhraseTips ();
-Bool            IsIM (char *strName);
-void            SaveIM (void);
-void            UnloadIM();
-void            SetIM (void);
-void            ConvertPunc (void);
-void            ReloadConfig();
-void            SelectIM(int imidx);
-void            SelectVK(int vkidx);
-
-extern FcitxState gs;
+} FcitxIM;
 
 #endif

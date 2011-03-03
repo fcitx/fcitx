@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
-"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2010-12-17 14:05+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-01 15:06+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -20,721 +20,805 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Lokalize 1.1\n"
 
-#: data/config.desc:4
-msgid "Font"
-msgstr "字体"
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:204
+#, c-format
+msgid "%d:%s"
+msgstr "%d:%s"
 
-#: data/config.desc:9
-msgid "Menu Font"
-msgstr "菜单字体"
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:226
+#, c-format
+msgid "%s"
+msgstr "%s"
 
-#: data/config.desc:14
-msgid "Font Locale to display"
-msgstr "字体区域"
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:395
+msgid "About Fcitx"
+msgstr "关于Fcitx"
 
-#: data/config.desc:19
-msgid "Record File of Input"
-msgstr "记录文件"
-
-#: data/config.desc:24
-msgid "Use System Tray Icon"
-msgstr "使用系统托盘"
-
-#: data/config.desc:29
-msgid "Use DBus to display UI (Require KIMPanel)"
-msgstr "使用DBus来显示界面(需要KIMPanel)"
-
-#: data/config.desc:34
-msgid "Enable Addons to Fcitx"
-msgstr "在Fcitx启用附加组件"
-
-#: data/config.desc:39
-msgid "Seconds sleep before fcitx really start"
-msgstr "Fcitx真正启动前延迟的秒数"
-
-#: data/config.desc:44
-msgid "Use English Punc After a Number"
-msgstr "数字后跟半角符号"
-
-#: data/config.desc:53
-msgid "Action after press enter"
-msgstr "回车键操作"
-
-#: data/config.desc:62
+#: /home/saber/Develop/fcitx/data/config.desc:62
 msgid "Action after press SemiColon"
 msgstr "分号键操作"
 
-#: data/config.desc:67
-msgid "Input English Character if you input upper case"
-msgstr "大写时输入英文"
-
-#: data/config.desc:72
-msgid "Convert Punc to Chinese Punc"
-msgstr "转换中文标点"
-
-#: data/config.desc:77
-msgid "Disable Paging in Legend Mode"
-msgstr "联想模式禁用翻页"
-
-#: data/config.desc:82
-msgid "Send inputed Text if Switch to English Mode"
-msgstr "快速切换英文模式时上屏"
-
-#: data/config.desc:87
-msgid "Candidate Word Number"
-msgstr "候选词个数"
-
-#: data/config.desc:96
-msgid "Main Window Hide Mode"
-msgstr "主窗口隐藏模式"
-
-#: data/config.desc:101
-msgid "Show Input Window In the center of screen"
-msgstr "输入窗口显示在正中"
-
-#: data/config.desc:106
-msgid "Show Input Window After Trigger Input Mode"
-msgstr "切换输入时显示输入条"
-
-#: data/config.desc:111
-msgid "Show Point After Index"
-msgstr "序号后加点"
-
-#: data/config.desc:116
-msgid "Show Input Speed"
-msgstr "显示输入速度"
-
-#: data/config.desc:121
-msgid "Show Version"
-msgstr "显示版本"
-
-#: data/config.desc:126
-msgid "Show Hint Window while ENV is not correctly configured."
-msgstr "环境未配置正确时显示提示窗口"
-
-#: data/config.desc:131
-msgid "Skin Name in use"
-msgstr "皮肤名称"
-
-#: data/config.desc:136
-msgid "Hot key of Triggering Input Method"
-msgstr "快捷键: 切换输入法"
-
-#: data/config.desc:148
-msgid "Hotkey of Switching Chinese and English Mode"
-msgstr "快捷键: 切换中英文输入"
-
-#: data/config.desc:153
-msgid "Double click Switch Key to Change Mode"
-msgstr "双击中英文切换键时切换"
-
-#: data/config.desc:158
-msgid "Interval of Two Key Input"
-msgstr "输入间隔"
-
-#: data/config.desc:163
-msgid "Hotkey of Switching Follow Cursor Mode"
-msgstr "快捷键: 切换光标跟随"
-
-#: data/config.desc:168
-msgid "Hotkey of Hiding Main Window"
-msgstr "快捷键: 隐藏主窗口"
-
-#: data/config.desc:173
-msgid "Hotkey of Switching Virtual Keyboard"
-msgstr "快捷键: 切换软键盘"
-
-#: data/config.desc:178
-msgid "Hotkey of Switching Traditional Chinese Input Mode On."
-msgstr "快捷键: 切换简繁体中文输入"
-
-#: data/config.desc:183
-msgid "Hotkey of Switching Legend Mode"
-msgstr "快捷键: 切换联想模式"
-
-#: data/config.desc:188
-msgid "Hotkey of Looking up the Corresponding pinyin of Word."
-msgstr "快捷键: 反查拼音"
-
-#: data/config.desc:193
-msgid "Hotkey of Switching Full Width Character Mode"
-msgstr "快捷键: 切换全角"
-
-#: data/config.desc:198
-msgid "Hotkey of Switch Chinese Punc Mode"
-msgstr "快捷键: 切换中英文标点"
-
-#: data/config.desc:203
-msgid "Hotkey of Going Prev Page"
-msgstr "快捷键: 前一页"
-
-#: data/config.desc:208
-msgid "Hotkey of Going Next Page"
-msgstr "快捷键: 后一页"
-
-#: data/config.desc:213
-msgid "Hotkey to Choose Second and Third Candidate Word"
-msgstr "快捷键: 选择第二第三候选词"
-
-#: data/config.desc:218
-msgid "Hotkey of Saving All Config and Input History"
-msgstr "快捷键: 保存配置及输入历史"
-
-#: data/config.desc:223
-msgid "Hotkey of Switching Recording Mode"
-msgstr "快捷键: 切换记录模式"
-
-#: data/config.desc:228
-msgid "Hotkey of Reseting Recording Mode"
-msgstr "快捷键: 重置记录模式"
-
-#: data/config.desc:233
-msgid "Pinyin Priority Order, Zero to Disable"
-msgstr "拼音输入法优先级，0为禁用"
-
-#: data/config.desc:238
-msgid "Shuangpin Priority Order, Zero to Disable"
-msgstr "双拼输入法优先级，0为禁用"
-
-#: data/config.desc:243
-msgid "Default Shuangpin Schema"
-msgstr "默认双拼方案"
-
-#: data/config.desc:248
-msgid "Quwei Priority Order, Zero to Disable"
-msgstr "区位输入法优先级，0为禁用"
-
-#: data/config.desc:253
-msgid "Table Priority Order, Zero to Disable"
-msgstr "码表输入法优先级，0为禁用"
-
-#: data/config.desc:258
-msgid "Give the tips of Phrase"
-msgstr "提示词库中词组"
-
-#: data/config.desc:263
-msgid "Use Complete Pinyin"
-msgstr "使用完整拼音"
-
-#: data/config.desc:268
-msgid "Auto Create Phrase"
-msgstr "自动组词"
-
-#: data/config.desc:273
-msgid "Save Auto Created Phrase"
-msgstr "保存自动词组"
-
-#: data/config.desc:278
-msgid "Hotkey of Adding Frequent Word"
-msgstr "快捷键: 添加常用字"
-
-#: data/config.desc:283
-msgid "Hotkey of Deleting Frequent Word"
-msgstr "快捷键: 删除常用字"
-
-#: data/config.desc:288
-msgid "Hotkey of Delete User Phrase"
-msgstr "快捷键: 删除用户词组"
-
-#: data/config.desc:293
-msgid "Hotkey of Inputing Word From Phrase"
-msgstr "快捷键: 以词定字"
-
-#: data/config.desc:302
-msgid "Rule of Candidate Word Order"
-msgstr "候选字顺序"
-
-#: data/config.desc:311
-msgid "Rule of Candidate Phrase Order"
-msgstr "候选词顺序"
-
-#: data/config.desc:320
-msgid "Rule of Frequent Word Order"
-msgstr "常用字顺序"
-
-#: data/config.desc:325
-msgid "Fuzzy an and ang"
-msgstr "模糊an和ang"
-
-#: data/config.desc:330
-msgid "Fuzzy en and eng"
-msgstr "模糊en和eng"
-
-#: data/config.desc:335
-msgid "Fuzzy ian and iang"
-msgstr "模糊ian和iang"
-
-#: data/config.desc:340
-msgid "Fuzzy in and ing"
-msgstr "模糊in和ing"
-
-#: data/config.desc:345
-msgid "Fuzzy ou and u"
-msgstr "模糊ou和u"
-
-#: data/config.desc:350
-msgid "Fuzzy uan and uang"
-msgstr "模糊uan和uang"
-
-#: data/config.desc:355
-msgid "Fuzzy c and ch"
-msgstr "模糊c和ch"
-
-#: data/config.desc:360
-msgid "Fuzzy f and h"
-msgstr "模糊f和h"
-
-#: data/config.desc:365
-msgid "Fuzzy l and n"
-msgstr "模糊l和n"
-
-#: data/config.desc:370
-msgid "Fuzzy s and sh"
-msgstr "模糊s和sh"
-
-#: data/config.desc:375
-msgid "Fuzzy z and zh"
-msgstr "模糊z和zh"
-
-#: data/config.desc:380
-msgid "Fix misstype gn/ng"
-msgstr "修复拼音中ng和gn的输入错误"
-
-#: data/table.desc:2
-msgid "Code Table Name"
-msgstr "码表名称"
-
-#: data/table.desc:6
-msgid "Icon Name"
-msgstr "图标名称"
-
-#: data/table.desc:10
-msgid "Code Table File"
-msgstr "码表文件"
-
-#: data/table.desc:14
-msgid "Adjust Order"
-msgstr "输入顺序"
-
-#: data/table.desc:23
-msgid "Order of Code Table"
-msgstr "码表顺序"
-
-#: data/table.desc:28
-msgid "Use Pinyin"
-msgstr "使用拼音"
-
-#: data/table.desc:33
-msgid "Pinyin Key"
-msgstr "拼音键"
-
-#: data/table.desc:38
-msgid "Auto Send Candidate Word to Client"
-msgstr "自动上屏"
-
-#: data/table.desc:43
-msgid "Auto Send Candidate Word if no match in Code Table"
-msgstr "空码自动上屏"
-
-#: data/table.desc:48
-msgid "End Key"
-msgstr "中止键"
-
-#: data/table.desc:53
-msgid "Use Matching Key"
-msgstr "使用模糊键"
-
-#: data/table.desc:58
-msgid "Matching Key"
-msgstr "模糊键"
-
-#: data/table.desc:63
-msgid "Exact Match"
-msgstr "精确匹配"
-
-#: data/table.desc:67
-msgid "Auto Phrase"
-msgstr "自动词组"
-
-#: data/table.desc:72
-msgid "Auto Phrase Length"
-msgstr "自动词组长度"
-
-#: data/table.desc:77
-msgid "Auto Phrase Phrase"
-msgstr "词组参与自动造词"
-
-#: data/table.desc:82
-msgid "Save Auto Phrase"
-msgstr "保存自动词组"
-
-#: data/table.desc:87
-msgid "Prompt Table Code"
-msgstr "提示码表编码"
-
-#: data/table.desc:91
-msgid "Symbol"
-msgstr "符号"
-
-#: data/table.desc:96
-msgid "Symbol File"
-msgstr "符号文件"
-
-#: data/table.desc:101
-msgid "Choose"
-msgstr "选择键"
-
-#: data/table.desc:106
-msgid "Enable This Table or Not"
-msgstr "是否启用此码表"
-
-#: data/profile.desc:2
-msgid "Main Window Position X"
-msgstr "主窗口X位置"
-
-#: data/profile.desc:7
-msgid "Main Window Position Y"
-msgstr "主窗口Y位置"
-
-#: data/profile.desc:12
-msgid "Input Window Position X"
-msgstr "输入框X位置"
-
-#: data/profile.desc:17
-msgid "Input Window Position Y"
-msgstr "输入框Y位置"
-
-#: data/profile.desc:22
-msgid "Use Full Width Character"
-msgstr "使用全角字符"
-
-#: data/profile.desc:27
-msgid "Use Chinese Punctuation"
-msgstr "使用中文标点"
-
-#: data/profile.desc:32
-msgid "Input Window Shows at the position of cursor"
-msgstr "光标跟随"
-
-#: data/profile.desc:37
-msgid "Prompt the phrases after input"
-msgstr "输入后联想词组"
-
-#: data/profile.desc:42
-msgid "Current Input Method Index"
-msgstr "当前输入法"
-
-#: data/profile.desc:47
-msgid "Locked"
-msgstr "锁定"
-
-#: data/profile.desc:52
-msgid "Show Main Window in a compact way"
-msgstr "用紧凑的方式显示主窗口"
-
-#: data/profile.desc:57
-msgid "Use Traditional Chinese in Input"
-msgstr "使用繁体中文输入"
-
-#: data/profile.desc:62
-msgid "Use recording mode"
-msgstr "使用记录模式"
-
-#: data/skin.desc:3
-msgid "Skin Name"
-msgstr "皮肤名称"
-
-#: data/skin.desc:7
-msgid "Skin Version"
-msgstr "皮肤版本"
-
-#: data/skin.desc:11
-msgid "Skin Author"
-msgstr "皮肤作者"
-
-#: data/skin.desc:15
-msgid "Description of Skin"
-msgstr "描述"
-
-#: data/skin.desc:19
-msgid "Input Font Size"
-msgstr "输入字体大小"
-
-#: data/skin.desc:23
-msgid "Menu Font Size"
-msgstr "菜单字体大小"
-
-#: data/skin.desc:28
-msgid "Tip Message Color"
-msgstr "提示信息颜色"
-
-#: data/skin.desc:32
-msgid "Input Message Color"
-msgstr "输入信息颜色"
-
-#: data/skin.desc:36
-msgid "Candidate Index Color"
-msgstr "候选词索引颜色"
-
-#: data/skin.desc:40
-msgid "First Candidate Color"
-msgstr "第一候选词颜色"
-
-#: data/skin.desc:44
-msgid "User Phrase Color"
-msgstr "用户词组颜色"
-
-#: data/skin.desc:48
-msgid "Table Code Color"
-msgstr "码表提示颜色"
-
-#: data/skin.desc:52
-msgid "Other Color"
-msgstr "其他颜色"
-
-#: data/skin.desc:56
-msgid "Active Menu Item Character Color"
-msgstr "活动菜单项颜色"
-
-#: data/skin.desc:60
-msgid "Inactive Menu Item Character Color"
-msgstr "非活动菜单项颜色"
-
-#: data/skin.desc:64 data/skin.desc:128 data/skin.desc:184
-msgid "Background Image"
-msgstr "背景图片"
-
-#: data/skin.desc:68
-msgid "Logo Icon"
-msgstr "Logo图标"
-
-#: data/skin.desc:72
-msgid "Chinese Punc Icon"
-msgstr "中文标点图标"
-
-#: data/skin.desc:76
-msgid "English Punc Icon"
-msgstr "英文标点图标"
-
-#: data/skin.desc:80
-msgid "Simplified Chinese Icon"
-msgstr "简体中文图标"
-
-#: data/skin.desc:84
-msgid "Traditional Chinese Icon"
-msgstr "繁体中文图标"
-
-#: data/skin.desc:88
-msgid "Half Width Character Icon"
-msgstr "半角图标"
-
-#: data/skin.desc:92
-msgid "Full Width Character Icon"
-msgstr "全角图标"
-
-#: data/skin.desc:96
-msgid "UnLock Icon"
-msgstr "未锁定图标"
-
-#: data/skin.desc:100
-msgid "Lock Icon"
-msgstr "锁定图标"
-
-#: data/skin.desc:104
-msgid "Legend mode Icon"
-msgstr "联想激活图标"
-
-#: data/skin.desc:108
-msgid "Legend disabled Icon"
-msgstr "禁用联想图标"
-
-#: data/skin.desc:112
-msgid "Virtual Keyboard enabled Icon"
-msgstr "启用软键盘图标"
-
-#: data/skin.desc:116
-msgid "Virtual Keyboard disabled Icon"
-msgstr "禁用软键盘图标"
-
-#: data/skin.desc:120
-msgid "English Mode Icon"
-msgstr "英文模式图标"
-
-#: data/skin.desc:124
-msgid "Chinese Mode Icon"
-msgstr "中文模式图标"
-
-#: data/skin.desc:136
-msgid "Background Resize Rule"
-msgstr "变形规则"
-
-#: data/skin.desc:140
-msgid "The Resize Position to Left"
-msgstr "变形区域距左侧距离"
-
-#: data/skin.desc:144
-msgid "Width of Resize Part "
-msgstr "变形区域宽度"
-
-#: data/skin.desc:148
-msgid "Left-down position of Input"
-msgstr "输入文字左下角"
-
-#: data/skin.desc:152
-msgid "Left-down position of Output"
-msgstr "输出文字左下角"
-
-#: data/skin.desc:156
-msgid "Space to the left"
-msgstr "左侧空白宽度"
-
-#: data/skin.desc:160
-msgid "Space to the right"
-msgstr "右侧空白宽度"
-
-#: data/skin.desc:164
-msgid "Color of Cursor"
-msgstr "光标颜色"
-
-#: data/skin.desc:168
-msgid "Prev Page Icon"
-msgstr "上一页图标"
-
-#: data/skin.desc:172
-msgid "Next Page Icon"
-msgstr "下一页图标"
-
-# unknown
-#: data/skin.desc:176
-msgid "Active Tray Icon"
-msgstr "活动输入法图标"
-
-# unknown
-#: data/skin.desc:180
-msgid "Inctive Tray Icon"
-msgstr "非活动输入法图标"
-
-#: data/skin.desc:191
-msgid "Background Resize Rule on Horizontal Direction"
-msgstr "横向变形规则"
-
-#: data/skin.desc:199
-msgid "Background Resize Rule on Vertical Direction"
-msgstr "纵向变形规则"
-
-#: data/skin.desc:204
-msgid "Margin to top"
-msgstr "上边距"
-
-#: data/skin.desc:208
-msgid "Margin to bottom"
-msgstr "下边距"
-
-#: data/skin.desc:212
-msgid "Margin to left"
-msgstr "左边距"
-
-#: data/skin.desc:216
-msgid "Margin to right"
-msgstr "右边距"
-
-#: data/skin.desc:220
+#: /home/saber/Develop/fcitx/data/config.desc:53
+msgid "Action after press enter"
+msgstr "回车键操作"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:220
 msgid "Active Menu Color"
 msgstr "活动菜单项颜色"
 
-#: data/skin.desc:224
-msgid "Space Line Color"
-msgstr "分隔线颜色"
-
-#: data/skin.desc:228
-msgid "Virtual Keyboard Image"
-msgstr "软键盘图片"
-
-#: data/skin.desc:233
-msgid "Key Color On Virutal Keyboard"
-msgstr "软键盘按键文字颜色"
-
-#: data/addon.desc:3
-msgid "Name"
-msgstr "名称"
-
-#: data/addon.desc:9
-msgid "Category"
-msgstr "种类"
-
-#: data/addon.desc:14
-msgid "Enabled"
-msgstr "启用"
+#: /home/saber/Develop/fcitx/data/skin.desc:56
+msgid "Active Menu Item Character Color"
+msgstr "活动菜单项颜色"
 
 # unknown
-#: data/addon.desc:18
-msgid "Module"
-msgstr "模块"
-
-#: data/addon.desc:24
-msgid "Type"
-msgstr "类型"
-
-#: data/table/erbi.conf:2
-msgid "Erbi"
-msgstr "二笔"
-
-#: data/table/wanfeng.conf:2
-msgid "Wanfeng"
-msgstr "晚风"
-
-#: data/table/zrm.conf:2
-msgid "Ziranma"
-msgstr "自然码"
-
-#: data/table/wbx.conf:2
-msgid "Wubi"
-msgstr "五笔字型"
-
-#: data/table/db.conf:2
-msgid "Dianbaoma"
-msgstr "电报码"
-
-#: data/table/cangjie.conf:2
-msgid "Cangjie"
-msgstr "仓颉"
-
-#: data/table/wbpy.conf:2
-msgid "WubiPinyin"
-msgstr "五笔拼音"
-
-#: data/table/qxm.conf:2
-msgid "Bingchan"
-msgstr "冰蟾全息"
+#: /home/saber/Develop/fcitx/data/skin.desc:176
+msgid "Active Tray Icon"
+msgstr "活动输入法图标"
 
 # unknown
 msgid "Addon"
 msgstr "附加组件"
 
+#: /home/saber/Develop/fcitx/po/.././src/core/addon.c:140
+#, c-format
+msgid "Addon Config %s is %s"
+msgstr "Addon Config %s is %s"
+
 # unknown
 msgid "Appearance"
 msgstr "外观"
 
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:167
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:179
+msgid "Argument is not INT32!"
+msgstr "Argument is not INT32!"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:223
+msgid "Argument is not STRING!"
+msgstr "Argument is not STRING!"
+
+#: unknown
+msgid "Auto"
+msgstr "自动"
+
+#: unknown
+msgid "Backend"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:143
+#, fuzzy
+msgid "Backend: bad im"
+msgstr "额外输入法: 不正确的输入法"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:137
+#, fuzzy, c-format
+msgid "Backend: open %s fail %s"
+msgstr "额外输入法: 打开%s失败 %s"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:64
+#: /home/saber/Develop/fcitx/data/skin.desc:128
+#: /home/saber/Develop/fcitx/data/skin.desc:184
+msgid "Background Image"
+msgstr "背景图片"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:136
+msgid "Background Resize Rule"
+msgstr "变形规则"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:191
+msgid "Background Resize Rule on Horizontal Direction"
+msgstr "横向变形规则"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:199
+msgid "Background Resize Rule on Vertical Direction"
+msgstr "纵向变形规则"
+
+#: /home/saber/Develop/fcitx/data/table/qxm.conf:2
+msgid "Bingchan"
+msgstr "冰蟾全息"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/InputWindow.c:174
+msgid "CAL InputWindow"
+msgstr "CAL InputWindow"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:363
+msgid "Can not find System Database of Pinyin!"
+msgstr "无法找到系统的拼音词库"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/skin.c:170
+msgid "Can not load default skin, is installion correct?"
+msgstr "无法加载默认皮肤，安装是否正确？"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/skin.c:175
+#, c-format
+msgid "Can not load skin %s, return to default"
+msgstr "无法加载皮肤%s，回到默认皮肤"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:286
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:108
+msgid "Can't Create imWindow"
+msgstr "无法创建输入法窗口"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/special/punc.c:55
+msgid "Can't open Chinese punc file."
+msgstr "无法打开中文标点文件。"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/ImeRemote.c:164
+#, c-format
+msgid "Can't open socket %s: %s"
+msgstr "无法打开Socket %s: %s"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:36
+msgid "Candidate Index Color"
+msgstr "候选词索引颜色"
+
+#: /home/saber/Develop/fcitx/data/config.desc:87
+msgid "Candidate Word Number"
+msgstr "候选词个数"
+
+#: /home/saber/Develop/fcitx/data/table/cangjie.conf:2
+msgid "Cangjie"
+msgstr "仓颉"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2505
+#, c-format
+msgid "Cannot Save Frequent word: %s"
+msgstr "无法保存词频: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2575
+#, c-format
+msgid "Cannot Save Pinyin Index: %s"
+msgstr "无法保存拼音索引: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2443
+#, c-format
+msgid "Cannot Save User Pinyin Database: %s"
+msgstr "无法保存用户拼音词库: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:611
+#, c-format
+msgid "Cannot create table file: %s"
+msgstr "无法创建码表文件: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:280
+#, c-format
+msgid "Cannot load table file: %s"
+msgstr "无法加载码表文件: %s"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:11
+msgid "Category"
+msgstr "种类"
+
 # unknown
-msgid "CodeTable"
-msgstr "码表"
+#: ../data/fcitx.desktop.in.h:1
+msgid "Chinese Input Method"
+msgstr "中文输入法"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:124
+msgid "Chinese Mode Icon"
+msgstr "中文模式图标"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:72
+msgid "Chinese Punc Icon"
+msgstr "中文标点图标"
+
+# unknown
+#: unknown
+msgid "Clean"
+msgstr "清除"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:164
+msgid "Color of Cursor"
+msgstr "光标颜色"
+
+# unknown
+#: unknown
+msgid "Commit"
+msgstr "提交输入"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:699
+#, c-format
+msgid "Configure group name error: line %d"
+msgstr "配置组名错误: 行%d"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:101
+#, c-format
+msgid "Connection Error (%s)"
+msgstr "连接错误 (%s)"
+
+#: /home/saber/Develop/fcitx/data/config.desc:72
+msgid "Convert Punc to Chinese Punc"
+msgstr "转换中文标点"
+
+# unknown
+#: unknown
+msgid "Copy"
+msgstr "复制"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:42
+msgid "Current Input Method Index"
+msgstr "当前输入法"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/InputWindow.c:149
+msgid "DISPLAY InputWindow"
+msgstr "DISPLAY InputWindow"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MainWindow.c:135
+msgid "DISPLAY MainWindow"
+msgstr "DISPLAY MainWindow"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MainWindow.c:156
+msgid "DRAW MainWindow"
+msgstr "DRAW MainWindow"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:31
+msgid "Dependency"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/skin.desc:15
+msgid "Description of Skin"
+msgstr "描述"
+
+#: /home/saber/Develop/fcitx/data/table/db.conf:2
+msgid "Dianbaoma"
+msgstr "电报码"
+
+#: /home/saber/Develop/fcitx/data/config.desc:77
+msgid "Disable Paging in Legend Mode"
+msgstr "联想模式禁用翻页"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/addon.c:192
+#, c-format
+msgid "Disable addon %s, dependency %s can not be satisfied."
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:153
+msgid "Double click Switch Key to Change Mode"
+msgstr "双击中英文切换键时切换"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:709
+#, c-format
+msgid "Duplicate group name, merge with the previous: %s :line %d"
+msgstr "组名重复，和之前的组合并: %s :行 %d"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:736
+#, c-format
+msgid "Duplicate option, overwrite: line %d"
+msgstr "重复的配置项，覆盖: 行%d"
+
+#: /home/saber/Develop/fcitx/data/config.desc:34
+msgid "Enable Addons to Fcitx"
+msgstr "在Fcitx启用附加组件"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:16
+msgid "Enabled"
+msgstr "启用"
+
+#: unknown
+msgid "Eng"
+msgstr "英文"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:120
+msgid "English Mode Icon"
+msgstr "英文模式图标"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:76
+msgid "English Punc Icon"
+msgstr "英文标点图标"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:305
+msgid "Enum Option is invalid, take it as string"
+msgstr "枚举选项不合法，将类型作为字符串处理"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:282
+msgid "Enum option duplicated."
+msgstr "枚举选项重复"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:295
+msgid "Enum option number must larger than 0"
+msgstr "枚举选项个数需要大于0"
+
+#: /home/saber/Develop/fcitx/data/table/erbi.conf:2
+msgid "Erbi"
+msgstr "二笔"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:38
+msgid "Error: Load fontconfig failed"
+msgstr "错误：fontconfig加载失败"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:236
+msgid "Exit"
+msgstr "Exit"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:402
+msgid "Exit Fcitx"
+msgstr "退出Fcitx"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/extra/extra.c:289
+msgid "ExtraIM: bad im"
+msgstr "额外输入法: 不正确的输入法"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/extra/extra.c:253
+msgid "ExtraIM: init fail"
+msgstr "额外输入法: 初始化失败"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/extra/extra.c:283
+#, c-format
+msgid "ExtraIM: open %s fail %s"
+msgstr "额外输入法: 打开%s失败 %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:85
+msgid "FCITX can only run under X"
+msgstr "Fcitx只能在X下运行"
+
+#: ../data/fcitx.desktop.in.h:2
+msgid "Fcitx"
+msgstr "Fcitx"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:401
+msgid "Fcitx Config ..."
+msgstr "配置Fcitx..."
+
+#: ../data/fcitx-configtool.desktop.in.h:1
+msgid "Fcitx Config Tool"
+msgstr "Fcitx配置工具"
+
+#: ../data/fcitx-configtool.desktop.in.h:2
+msgid "Fcitx Configuration Tool"
+msgstr "Fcitx配置工具"
+
+#: ../data/fcitx-configtool.desktop.in.h:3
+msgid "Fcitx GUI Config Tool"
+msgstr "Fcitx图形化配置工具"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:40
+msgid "First Candidate Color"
+msgstr "第一候选词颜色"
+
+# unknown
+#: unknown
+msgid "Fix"
+msgstr "固定长度"
+
+#: /home/saber/Develop/fcitx/data/config.desc:4
+msgid "Font"
+msgstr "字体"
+
+#: /home/saber/Develop/fcitx/data/config.desc:14
+msgid "Font Locale to display"
+msgstr "字体区域"
+
+#: ../data/fcitx.desktop.in.h:3
+msgid "Free Chinese Input Toy of X"
+msgstr "Free Chinese Input Toy of X"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:92
+msgid "Full Width Character Icon"
+msgstr "全角图标"
+
+#: /home/saber/Develop/fcitx/data/config.desc:248
+msgid "Give the tips of Phrase"
+msgstr "提示词库中词组"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:170
+#, c-format
+msgid "Got Signal with value %d"
+msgstr "Got Signal with value %d"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:88
+msgid "Half Width Character Icon"
+msgstr "半角图标"
+
+# unknown
+#: unknown
+msgid "Hide"
+msgstr "隐藏"
+
+#: /home/saber/Develop/fcitx/data/config.desc:136
+msgid "Hot key of Triggering Input Method"
+msgstr "快捷键: 切换输入法"
 
 # unknown
 msgid "Hotkey"
 msgstr "快捷键"
+
+#: /home/saber/Develop/fcitx/data/config.desc:203
+msgid "Hotkey of Going Next Page"
+msgstr "快捷键: 后一页"
+
+#: /home/saber/Develop/fcitx/data/config.desc:198
+msgid "Hotkey of Going Prev Page"
+msgstr "快捷键: 前一页"
+
+#: /home/saber/Develop/fcitx/data/config.desc:168
+msgid "Hotkey of Hiding Main Window"
+msgstr "快捷键: 隐藏主窗口"
+
+#: /home/saber/Develop/fcitx/data/config.desc:223
+msgid "Hotkey of Reseting Recording Mode"
+msgstr "快捷键: 重置记录模式"
+
+#: /home/saber/Develop/fcitx/data/config.desc:213
+msgid "Hotkey of Saving All Config and Input History"
+msgstr "快捷键: 保存配置及输入历史"
+
+#: /home/saber/Develop/fcitx/data/config.desc:193
+msgid "Hotkey of Switch Chinese Punc Mode"
+msgstr "快捷键: 切换中英文标点"
+
+#: /home/saber/Develop/fcitx/data/config.desc:148
+msgid "Hotkey of Switching Chinese and English Mode"
+msgstr "快捷键: 切换中英文输入"
+
+#: /home/saber/Develop/fcitx/data/config.desc:163
+msgid "Hotkey of Switching Follow Cursor Mode"
+msgstr "快捷键: 切换光标跟随"
+
+#: /home/saber/Develop/fcitx/data/config.desc:188
+msgid "Hotkey of Switching Full Width Character Mode"
+msgstr "快捷键: 切换全角"
+
+#: /home/saber/Develop/fcitx/data/config.desc:183
+msgid "Hotkey of Switching Legend Mode"
+msgstr "快捷键: 切换联想模式"
+
+#: /home/saber/Develop/fcitx/data/config.desc:218
+msgid "Hotkey of Switching Recording Mode"
+msgstr "快捷键: 切换记录模式"
+
+#: /home/saber/Develop/fcitx/data/config.desc:178
+msgid "Hotkey of Switching Traditional Chinese Input Mode On."
+msgstr "快捷键: 切换简繁体中文输入"
+
+#: /home/saber/Develop/fcitx/data/config.desc:173
+msgid "Hotkey of Switching Virtual Keyboard"
+msgstr "快捷键: 切换软键盘"
+
+#: /home/saber/Develop/fcitx/data/config.desc:208
+msgid "Hotkey to Choose Second and Third Candidate Word"
+msgstr "快捷键: 选择第二第三候选词"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:107
+#, fuzzy
+msgid "IM: bad im"
+msgstr "额外输入法: 不正确的输入法"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:101
+#, fuzzy, c-format
+msgid "IM: open %s fail %s"
+msgstr "额外输入法: 打开%s失败 %s"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:60
+msgid "Inactive Menu Item Character Color"
+msgstr "非活动菜单项颜色"
+
+# unknown
+#: /home/saber/Develop/fcitx/data/skin.desc:180
+msgid "Inctive Tray Icon"
+msgstr "非活动输入法图标"
+
+#: /home/saber/Develop/fcitx/data/config.desc:67
+msgid "Input English Character if you input upper case"
+msgstr "大写时输入英文"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:19
+msgid "Input Font Size"
+msgstr "输入字体大小"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:32
+msgid "Input Message Color"
+msgstr "输入信息颜色"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:12
+msgid "Input Window Position X"
+msgstr "输入框X位置"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:17
+msgid "Input Window Position Y"
+msgstr "输入框Y位置"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:32
+msgid "Input Window Shows at the position of cursor"
+msgstr "光标跟随"
 
 # unknown
 #: unknown
 msgid "InputMethod"
 msgstr "输入法"
 
+#: /home/saber/Develop/fcitx/data/config.desc:158
+msgid "Interval of Two Key Input"
+msgstr "输入间隔"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:726
+#, c-format
+msgid "Invalid Entry: line %d missing '='"
+msgstr "配置项不合法： 行%d 缺少'='"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:233
+msgid "Key Color On Virutal Keyboard"
+msgstr "软键盘按键文字颜色"
+
+# unknown
+#: unknown
+msgid "L_CTRL"
+msgstr "左Ctrl"
+
+# unknown
+#: unknown
+msgid "L_SHIFT"
+msgstr "左Shift"
+
+# unknown
+#: unknown
+msgid "L_SUPER"
+msgstr "左Super"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:864
+#, c-format
+msgid "Labels %d, Texts %d, CMB:%s"
+msgstr "Labels %d, Texts %d, CMB:%s"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:148
+msgid "Left-down position of Input"
+msgstr "输入文字左下角"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:152
+msgid "Left-down position of Output"
+msgstr "输出文字左下角"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:108
+msgid "Legend disabled Icon"
+msgstr "禁用联想图标"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:104
+msgid "Legend mode Icon"
+msgstr "联想激活图标"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:20
+#, fuzzy
+msgid "Library"
+msgstr "共享库"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/addon.c:130
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr "加载附加组件配置文件: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:473
+msgid "Load Autophrase OK"
+msgstr "加载自动组词信息完成"
+
+#: /home/saber/Develop/fcitx/po/.././src/utils/configfile.c:234
+#, c-format
+msgid "Load Config File %s"
+msgstr "加载配置文件: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:186
+#, c-format
+msgid "Load Table Config File:%s"
+msgstr "加载码表文件: %s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:402
+msgid "Load Table Dict OK"
+msgstr "加载码表文件成功"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:274
+#, c-format
+msgid "Load Table Dict from %s"
+msgstr "加载码表%s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:432
+msgid "Loading Autophrase."
+msgstr "加载自动组词信息中"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:264
+msgid "Loading Table Dict"
+msgstr "加载码表词典"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:100
+msgid "Lock Icon"
+msgstr "锁定图标"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:47
+msgid "Locked"
+msgstr "锁定"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:68
+msgid "Logo Icon"
+msgstr "Logo图标"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:213
+msgid "LookupTablePageDown"
+msgstr "LookupTablePageDown"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:208
+msgid "LookupTablePageUp"
+msgstr "LookupTablePageUp"
+
+#: /home/saber/Develop/fcitx/data/config.desc:96
+msgid "Main Window Hide Mode"
+msgstr "主窗口隐藏模式"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:2
+msgid "Main Window Position X"
+msgstr "主窗口X位置"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:7
+msgid "Main Window Position Y"
+msgstr "主窗口Y位置"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:208
+msgid "Margin to bottom"
+msgstr "下边距"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:212
+msgid "Margin to left"
+msgstr "左边距"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:216
+msgid "Margin to right"
+msgstr "右边距"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:204
+msgid "Margin to top"
+msgstr "上边距"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:127
+#, c-format
+msgid "Match Error (%s)"
+msgstr "匹配错误 (%s)"
+
+#: /home/saber/Develop/fcitx/data/config.desc:9
+msgid "Menu Font"
+msgstr "菜单字体"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:23
+msgid "Menu Font Size"
+msgstr "菜单字体大小"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:261
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:295
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:342
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:389
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:423
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:457
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:491
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:525
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:559
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:593
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:655
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:689
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:727
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:766
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:803
+msgid "Message Null"
+msgstr "Message Null"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:165
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:177
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:221
+msgid "Message has no arguments!"
+msgstr "Message has no arguments!"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:318
+msgid "Missing type, take it as string"
+msgstr "类型缺失，作为字符串处理"
+
+# unknown
+#: unknown
+msgid "Module"
+msgstr "模块"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:162
+msgid "MovePreeditCaret"
+msgstr "MovePreeditCaret"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:3
+msgid "Name"
+msgstr "名称"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:113
+#, c-format
+msgid "Name Error (%s)"
+msgstr "名称错误 (%s)"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:172
+msgid "Next Page Icon"
+msgstr "下一页图标"
+
+# unknown
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:132
+#, fuzzy
+msgid "No available Input Method"
+msgstr "中文输入法"
+
+# unknown
+#: unknown
+msgid "NoChange"
+msgstr "原始操作"
+
+# unknown
+#: unknown
+msgid "Nothing"
+msgstr "无操作"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:853
+#, c-format
+msgid "Option %s is Invalid, Use Default Value %s"
+msgstr "配置项%s不合法，使用默认值%s"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:862
+#, c-format
+msgid "Option %s is Invalid."
+msgstr "配置项%s不合法"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:52
+msgid "Other Color"
+msgstr "其他颜色"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:268
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:273
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:313
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:320
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:360
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:367
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:396
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:401
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:430
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:435
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:464
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:469
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:498
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:503
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:532
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:537
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:566
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:571
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:606
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:614
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:623
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:633
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:662
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:667
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:697
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:700
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:705
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:736
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:739
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:744
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:773
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:776
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:781
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:810
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:815
+msgid "Out Of Memory!"
+msgstr "Out Of Memory!"
+
 # unknown
 msgid "Output"
 msgstr "输出"
 
-#: ../src/im/pinyin/py.h:40
-msgid "Pinyin"
-msgstr "拼音"
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:232
+msgid "PanelCreated"
+msgstr "PanelCreated"
+
+#: /home/saber/Develop/fcitx/data/config.desc:228
+msgid "Pinyin Priority Order, Zero to Disable"
+msgstr "拼音输入法优先级，0为禁用"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:312
+msgid "Please check your environment varibles."
+msgstr "请检查你的环境变量的设置"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:300
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:122
+msgid "Please set XMODIFIERS."
+msgstr "请设置环境变量XMOIFIERS"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:168
+msgid "Prev Page Icon"
+msgstr "上一页图标"
 
 # unknown
 msgid "Profile"
@@ -743,6 +827,134 @@ msgstr "预置文件"
 # unknown
 msgid "Program"
 msgstr "程序"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:37
+msgid "Prompt the phrases after input"
+msgstr "输入后联想词组"
+
+#: unknown
+msgid "QuickPhrase"
+msgstr "快速输入"
+
+#: /home/saber/Develop/fcitx/data/config.desc:238
+msgid "Quwei Priority Order, Zero to Disable"
+msgstr "区位输入法优先级，0为禁用"
+
+# unknown
+#: unknown
+msgid "R_CTRL"
+msgstr "右Ctrl"
+
+# unknown
+#: unknown
+msgid "R_SHIFT"
+msgstr "右Shift"
+
+# unknown
+#: unknown
+msgid "R_SUPER"
+msgstr "右Super"
+
+#: /home/saber/Develop/fcitx/data/config.desc:19
+msgid "Record File of Input"
+msgstr "记录文件"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:192
+msgid "Recording file must be an absolute path."
+msgstr "记录文件必须是绝对路径"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:239
+msgid "ReloadConfig"
+msgstr "ReloadConfig"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:670
+msgid "Rename OK"
+msgstr "重命名成功"
+
+#: unknown
+msgid "Resize"
+msgstr "变形规则"
+
+#: /home/saber/Develop/fcitx/data/config.desc:39
+msgid "Seconds sleep before fcitx really start"
+msgstr "Fcitx真正启动前延迟的秒数"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:174
+msgid "SelectCandidate: "
+msgstr "SelectCandidate: "
+
+#: /home/saber/Develop/fcitx/data/config.desc:82
+msgid "Send inputed Text if Switch to English Mode"
+msgstr "快速切换英文模式时上屏"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:225
+#, c-format
+msgid "Sending %s  icid=%d connectid=%d\n"
+msgstr "Sending %s  icid=%d connectid=%d\n"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:318
+msgid "Setting Hint"
+msgstr "设置提示"
+
+#: unknown
+msgid "SharedLibrary"
+msgstr "共享库"
+
+#: unknown
+msgid "Show"
+msgstr "显示"
+
+#: /home/saber/Develop/fcitx/data/config.desc:126
+msgid "Show Hint Window while ENV is not correctly configured."
+msgstr "环境未配置正确时显示提示窗口"
+
+#: /home/saber/Develop/fcitx/data/config.desc:116
+msgid "Show Input Speed"
+msgstr "显示输入速度"
+
+#: /home/saber/Develop/fcitx/data/config.desc:106
+msgid "Show Input Window After Trigger Input Mode"
+msgstr "切换输入时显示输入条"
+
+#: /home/saber/Develop/fcitx/data/config.desc:101
+msgid "Show Input Window In the center of screen"
+msgstr "输入窗口显示在正中"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:52
+msgid "Show Main Window in a compact way"
+msgstr "用紧凑的方式显示主窗口"
+
+#: /home/saber/Develop/fcitx/data/config.desc:111
+msgid "Show Point After Index"
+msgstr "序号后加点"
+
+#: /home/saber/Develop/fcitx/data/config.desc:121
+msgid "Show Version"
+msgstr "显示版本"
+
+#: /home/saber/Develop/fcitx/data/config.desc:233
+msgid "Shuangpin Priority Order, Zero to Disable"
+msgstr "双拼输入法优先级，0为禁用"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:80
+msgid "Simplified Chinese Icon"
+msgstr "简体中文图标"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:11
+msgid "Skin Author"
+msgstr "皮肤作者"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:3
+msgid "Skin Name"
+msgstr "皮肤名称"
+
+#: /home/saber/Develop/fcitx/data/config.desc:131
+msgid "Skin Name in use"
+msgstr "皮肤名称"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:7
+msgid "Skin Version"
+msgstr "皮肤版本"
 
 # unknown
 msgid "SkinFont"
@@ -772,973 +984,263 @@ msgstr "皮肤菜单设置"
 msgid "SkinTrayIcon"
 msgstr "皮肤托盘图标设置"
 
-# unknown
-#: unknown
-msgid "AdjustFast"
-msgstr "快速"
-
-#: unknown
-msgid "AdjustFreq"
-msgstr "按频率"
-
-#: unknown
-msgid "AdjustNo"
-msgstr "不调整"
-
-#: unknown
-msgid "Auto"
-msgstr "自动"
-
-# unknown
-#: unknown
-msgid "Clean"
-msgstr "清除"
-
-# unknown
-#: unknown
-msgid "Commit"
-msgstr "提交输入"
-
-# unknown
-#: unknown
-msgid "Copy"
-msgstr "复制"
-
-#: unknown
-msgid "Eng"
-msgstr "英文"
-
-# unknown
-#: unknown
-msgid "Fix"
-msgstr "固定长度"
-
-# unknown
-#: unknown
-msgid "Hide"
-msgstr "隐藏"
-
-# unknown
-#: unknown
-msgid "L_CTRL"
-msgstr "左Ctrl"
-
-# unknown
-#: unknown
-msgid "L_SHIFT"
-msgstr "左Shift"
-
-# unknown
-#: unknown
-msgid "L_SUPER"
-msgstr "左Super"
-
-# unknown
-#: unknown
-msgid "NoChange"
-msgstr "原始操作"
-
-# unknown
-#: unknown
-msgid "Nothing"
-msgstr "无操作"
-
-#: unknown
-msgid "QuickPhrase"
-msgstr "快速输入"
-
-# unknown
-#: unknown
-msgid "R_CTRL"
-msgstr "右Ctrl"
-
-#: unknown
-msgid "Resize"
-msgstr "变形规则"
-
-# unknown
-#: unknown
-msgid "R_SHIFT"
-msgstr "右Shift"
-
-# unknown
-#: unknown
-msgid "R_SUPER"
-msgstr "右Super"
-
-#: unknown
-msgid "SharedLibrary"
-msgstr "共享库"
-
-#: unknown
-msgid "Show"
-msgstr "显示"
-
-# unknown
-#: ../data/fcitx.desktop.in.h:1
-msgid "Chinese Input Method"
-msgstr "中文输入法"
-
-#: ../data/fcitx.desktop.in.h:2
-msgid "Fcitx"
-msgstr "Fcitx"
-
-#: ../data/fcitx.desktop.in.h:3
-msgid "Free Chinese Input Toy of X"
-msgstr "Free Chinese Input Toy of X"
-
-#: ../data/fcitx-configtool.desktop.in.h:1
-msgid "Fcitx Config Tool"
-msgstr "Fcitx配置工具"
-
-#: ../data/fcitx-configtool.desktop.in.h:2
-msgid "Fcitx Configuration Tool"
-msgstr "Fcitx配置工具"
-
-#: ../data/fcitx-configtool.desktop.in.h:3
-msgid "Fcitx GUI Config Tool"
-msgstr "Fcitx图形化配置工具"
-
-#: ../src/interface/ImeRemote.c:164
-#, c-format
-msgid "Can't open socket %s: %s"
-msgstr "无法打开Socket %s: %s"
-
-#: ../src/interface/DBus.c:101
-#, c-format
-msgid "Connection Error (%s)"
-msgstr "连接错误 (%s)"
-
-#: ../src/interface/DBus.c:113
-#, c-format
-msgid "Name Error (%s)"
-msgstr "名称错误 (%s)"
-
-#: ../src/interface/DBus.c:127
-#, c-format
-msgid "Match Error (%s)"
-msgstr "匹配错误 (%s)"
-
-#: ../src/interface/DBus.c:162
-msgid "MovePreeditCaret"
-msgstr "MovePreeditCaret"
-
-#: ../src/interface/DBus.c:165 ../src/interface/DBus.c:177
-#: ../src/interface/DBus.c:221
-msgid "Message has no arguments!"
-msgstr "Message has no arguments!"
-
-#: ../src/interface/DBus.c:167 ../src/interface/DBus.c:179
-msgid "Argument is not INT32!"
-msgstr "Argument is not INT32!"
-
-#: ../src/interface/DBus.c:170
-#, c-format
-msgid "Got Signal with value %d"
-msgstr "Got Signal with value %d"
-
-#: ../src/interface/DBus.c:174
-msgid "SelectCandidate: "
-msgstr "SelectCandidate: "
-
-#: ../src/interface/DBus.c:204
-#, c-format
-msgid "%d:%s"
-msgstr "%d:%s"
-
-#: ../src/interface/DBus.c:208
-msgid "LookupTablePageUp"
-msgstr "LookupTablePageUp"
-
-#: ../src/interface/DBus.c:213
-msgid "LookupTablePageDown"
-msgstr "LookupTablePageDown"
-
-#: ../src/interface/DBus.c:218
-msgid "TriggerProperty: "
-msgstr "TriggerProperty: "
-
-#: ../src/interface/DBus.c:223
-msgid "Argument is not STRING!"
-msgstr "Argument is not STRING!"
-
-#: ../src/interface/DBus.c:226
-#, c-format
-msgid "%s"
-msgstr "%s"
-
-#: ../src/interface/DBus.c:232
-msgid "PanelCreated"
-msgstr "PanelCreated"
-
-#: ../src/interface/DBus.c:236
-msgid "Exit"
-msgstr "Exit"
-
-#: ../src/interface/DBus.c:239
-msgid "ReloadConfig"
-msgstr "ReloadConfig"
-
-#: ../src/interface/DBus.c:261 ../src/interface/DBus.c:295
-#: ../src/interface/DBus.c:342 ../src/interface/DBus.c:389
-#: ../src/interface/DBus.c:423 ../src/interface/DBus.c:457
-#: ../src/interface/DBus.c:491 ../src/interface/DBus.c:525
-#: ../src/interface/DBus.c:559 ../src/interface/DBus.c:593
-#: ../src/interface/DBus.c:655 ../src/interface/DBus.c:689
-#: ../src/interface/DBus.c:727 ../src/interface/DBus.c:766
-#: ../src/interface/DBus.c:803
-msgid "Message Null"
-msgstr "Message Null"
-
-#: ../src/interface/DBus.c:268 ../src/interface/DBus.c:273
-#: ../src/interface/DBus.c:313 ../src/interface/DBus.c:320
-#: ../src/interface/DBus.c:360 ../src/interface/DBus.c:367
-#: ../src/interface/DBus.c:396 ../src/interface/DBus.c:401
-#: ../src/interface/DBus.c:430 ../src/interface/DBus.c:435
-#: ../src/interface/DBus.c:464 ../src/interface/DBus.c:469
-#: ../src/interface/DBus.c:498 ../src/interface/DBus.c:503
-#: ../src/interface/DBus.c:532 ../src/interface/DBus.c:537
-#: ../src/interface/DBus.c:566 ../src/interface/DBus.c:571
-#: ../src/interface/DBus.c:606 ../src/interface/DBus.c:614
-#: ../src/interface/DBus.c:623 ../src/interface/DBus.c:633
-#: ../src/interface/DBus.c:662 ../src/interface/DBus.c:667
-#: ../src/interface/DBus.c:697 ../src/interface/DBus.c:700
-#: ../src/interface/DBus.c:705 ../src/interface/DBus.c:736
-#: ../src/interface/DBus.c:739 ../src/interface/DBus.c:744
-#: ../src/interface/DBus.c:773 ../src/interface/DBus.c:776
-#: ../src/interface/DBus.c:781 ../src/interface/DBus.c:810
-#: ../src/interface/DBus.c:815
-msgid "Out Of Memory!"
-msgstr "Out Of Memory!"
-
-#: ../src/interface/DBus.c:838
-#, c-format
-msgid "Type: %d Text: %s"
-msgstr "Type: %d Text: %s"
-
-#: ../src/interface/DBus.c:864
-#, c-format
-msgid "Labels %d, Texts %d, CMB:%s"
-msgstr "Labels %d, Texts %d, CMB:%s"
-
-#: ../src/interface/DBus.c:900
-#, c-format
-msgid "updateMesssages Up:%s"
-msgstr "updateMesssages Up:%s"
-
-#: ../src/ui/tray.c:172
-#, c-format
-msgid "X error %i on opcode send"
-msgstr "X error %i on opcode send"
-
-#: ../src/ui/ui.c:85
-msgid "FCITX can only run under X"
-msgstr "Fcitx只能在X下运行"
-
-#: ../src/ui/ui.c:135
-msgid "XEvent--Expose"
-msgstr "XEvent--Expose"
-
-#: ../src/ui/ui.c:351 ../src/ui/ui.c:358
-msgid "Unable to create process"
-msgstr "无法创建进程"
-
-#: ../src/ui/MenuWindow.c:395
-msgid "About Fcitx"
-msgstr "关于Fcitx"
-
-#: ../src/ui/MenuWindow.c:397
-msgid "Switch Skin"
-msgstr "切换皮肤"
-
-#: ../src/ui/MenuWindow.c:398
-msgid "Switch IM"
-msgstr "选择输入法"
-
-#: ../src/ui/MenuWindow.c:399
-msgid "Switch VK"
-msgstr "选择软键盘"
-
-#: ../src/ui/MenuWindow.c:401
-msgid "Fcitx Config ..."
-msgstr "配置Fcitx..."
-
-#: ../src/ui/MenuWindow.c:402
-msgid "Exit Fcitx"
-msgstr "退出Fcitx"
-
-#: ../src/ui/InputWindow.c:151
-msgid "DISPLAY InputWindow"
-msgstr "DISPLAY InputWindow"
-
-#: ../src/ui/InputWindow.c:176
-msgid "CAL InputWindow"
-msgstr "CAL InputWindow"
-
-#: ../src/ui/MainWindow.c:135
-msgid "DISPLAY MainWindow"
-msgstr "DISPLAY MainWindow"
-
-#: ../src/ui/MainWindow.c:156
-msgid "DRAW MainWindow"
-msgstr "DRAW MainWindow"
-
-#: ../src/ui/skin.c:170
-msgid "Can not load default skin, is installion correct?"
-msgstr "无法加载默认皮肤，安装是否正确？"
-
-#: ../src/ui/skin.c:175
-#, c-format
-msgid "Can not load skin %s, return to default"
-msgstr "无法加载皮肤%s，回到默认皮肤"
-
-#: ../src/ui/font.c:38
-msgid "Error: Load fontconfig failed"
-msgstr "错误：fontconfig加载失败"
-
-#: ../src/ui/font.c:90
-#, c-format
-msgid "your current font is: %s"
-msgstr "当前字体为：%s"
-
-#: ../src/ui/font.c:107
-msgid "no valid font."
-msgstr "无可用字体"
-
-#: ../src/fcitx-config/fcitx-config.c:282
-msgid "Enum option duplicated."
-msgstr "枚举选项重复"
-
-#: ../src/fcitx-config/fcitx-config.c:295
-msgid "Enum option number must larger than 0"
-msgstr "枚举选项个数需要大于0"
-
-#: ../src/fcitx-config/fcitx-config.c:305
-msgid "Enum Option is invalid, take it as string"
-msgstr "枚举选项不合法，将类型作为字符串处理"
-
-#: ../src/fcitx-config/fcitx-config.c:312
-#, c-format
-msgid "Unknown type, take it as string: %s"
-msgstr "未知类型，作为字符串处理: %s"
-
-#: ../src/fcitx-config/fcitx-config.c:318
-msgid "Missing type, take it as string"
-msgstr "类型缺失，作为字符串处理"
-
-#: ../src/fcitx-config/fcitx-config.c:699
-#, c-format
-msgid "Configure group name error: line %d"
-msgstr "配置组名错误: 行%d"
-
-#: ../src/fcitx-config/fcitx-config.c:709
-#, c-format
-msgid "Duplicate group name, merge with the previous: %s :line %d"
-msgstr "组名重复，和之前的组合并: %s :行 %d"
-
-#: ../src/fcitx-config/fcitx-config.c:726
-#, c-format
-msgid "Invalid Entry: line %d missing '='"
-msgstr "配置项不合法： 行%d 缺少'='"
-
-#: ../src/fcitx-config/fcitx-config.c:736
-#, c-format
-msgid "Duplicate option, overwrite: line %d"
-msgstr "重复的配置项，覆盖: 行%d"
-
-#: ../src/fcitx-config/fcitx-config.c:853
-#, c-format
-msgid "Option %s is Invalid, Use Default Value %s"
-msgstr "配置项%s不合法，使用默认值%s"
-
-#: ../src/fcitx-config/fcitx-config.c:862
-#, c-format
-msgid "Option %s is Invalid."
-msgstr "配置项%s不合法"
-
-#: ../src/fcitx-config/fcitx-config.c:902
-#, c-format
-msgid "no default option for %s/%s"
-msgstr "选项%s/%s没有默认选项"
-
-#: ../src/im/special/punc.c:55
-msgid "Can't open Chinese punc file."
-msgstr "无法打开中文标点文件。"
-
-#: ../src/im/qw/qw.h:25
-msgid "Quwei"
-msgstr "区位"
-
-#: ../src/im/pinyin/py.c:360
-msgid "Can not find System Database of Pinyin!"
-msgstr "无法找到系统的拼音词库"
-
-#: ../src/im/pinyin/py.c:2440
-#, c-format
-msgid "Cannot Save User Pinyin Database: %s"
-msgstr "无法保存用户拼音词库: %s"
-
-#: ../src/im/pinyin/py.c:2502
-#, c-format
-msgid "Cannot Save Frequent word: %s"
-msgstr "无法保存词频: %s"
-
-#: ../src/im/pinyin/py.c:2572
-#, c-format
-msgid "Cannot Save Pinyin Index: %s"
-msgstr "无法保存拼音索引: %s"
-
-#: ../src/im/pinyin/sp.h:23
-msgid "Shuangpin"
-msgstr "双拼"
-
-#: ../src/im/table/table.c:186
-#, c-format
-msgid "Load Table Config File:%s"
-msgstr "加载码表文件: %s"
-
-#: ../src/im/table/table.c:196
-#, c-format
-msgid "Table Config %s is %s"
-msgstr "Table Config %s is %s"
-
-#: ../src/im/table/table.c:264
-msgid "Loading Table Dict"
-msgstr "加载码表词典"
-
-#: ../src/im/table/table.c:274
-#, c-format
-msgid "Load Table Dict from %s"
-msgstr "加载码表%s"
-
-#: ../src/im/table/table.c:280
-#, c-format
-msgid "Cannot load table file: %s"
-msgstr "无法加载码表文件: %s"
-
-#: ../src/im/table/table.c:402
-msgid "Load Table Dict OK"
-msgstr "加载码表文件成功"
-
-#: ../src/im/table/table.c:432
-msgid "Loading Autophrase."
-msgstr "加载自动组词信息中"
-
-#: ../src/im/table/table.c:473
-msgid "Load Autophrase OK"
-msgstr "加载自动组词信息完成"
-
-#: ../src/im/table/table.c:613
-#, c-format
-msgid "Cannot create table file: %s"
-msgstr "无法创建码表文件: %s"
-
-#: ../src/im/table/table.c:672
-msgid "Rename OK"
-msgstr "重命名成功"
-
-#: ../src/im/extra/extra.c:253
-msgid "ExtraIM: init fail"
-msgstr "额外输入法: 初始化失败"
-
-#: ../src/im/extra/extra.c:283
-#, c-format
-msgid "ExtraIM: open %s fail %s"
-msgstr "额外输入法: 打开%s失败 %s"
-
-#: ../src/im/extra/extra.c:289
-msgid "ExtraIM: bad im"
-msgstr "额外输入法: 不正确的输入法"
-
-#: ../src/tools/configfile.c:297
-#, c-format
-msgid "Load Config File %s"
-msgstr "加载配置文件: %s"
-
-#: ../src/tools/tools.c:253
-msgid "pthread mutex init failed"
-msgstr "pthread mutex init failed"
-
-#: ../src/core/addon.c:133
-#, c-format
-msgid "Load Addon Config File:%s"
-msgstr "加载附加组件配置文件: %s"
-
-#: ../src/core/addon.c:143
-#, c-format
-msgid "Addon Config %s is %s"
-msgstr "Addon Config %s is %s"
-
-#: ../src/core/xim.c:446
-msgid "Recording file must be an absolute path."
-msgstr "记录文件必须是绝对路径"
-
-#: ../src/core/xim.c:479
-#, c-format
-msgid "Sending %s  icid=%d connectid=%d\n"
-msgstr "Sending %s  icid=%d connectid=%d\n"
-
-#: ../src/core/xim.c:540
-msgid "Can't Create imWindow"
-msgstr "无法创建输入法窗口"
-
-#: ../src/core/xim.c:550
-msgid "XMODIFIERS Error."
-msgstr "XMODIFIERS Error."
-
-#: ../src/core/xim.c:554
-msgid "Please set XMODIFIERS."
-msgstr "请设置环境变量XMOIFIERS"
-
-#: ../src/core/xim.c:566
-msgid "Please check your environment varibles."
-msgstr "请检查你的环境变量的设置"
-
-#: ../src/core/xim.c:567
-msgid ""
-"You need to set environment varibles below to make fcitx work correctly."
-msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
-
-#: ../src/core/xim.c:571
-msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
-msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
-
-#: ../src/core/xim.c:572
-msgid "Setting Hint"
-msgstr "设置提示"
-
-#: ../src/core/xim.c:623
+#: /home/saber/Develop/fcitx/data/skin.desc:224
+msgid "Space Line Color"
+msgstr "分隔线颜色"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:156
+msgid "Space to the left"
+msgstr "左侧空白宽度"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:160
+msgid "Space to the right"
+msgstr "右侧空白宽度"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:369
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:180
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
-#: ../src/core/MyErrorsHandlers.c:73
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:398
+msgid "Switch IM"
+msgstr "选择输入法"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:397
+msgid "Switch Skin"
+msgstr "切换皮肤"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:399
+msgid "Switch VK"
+msgstr "选择软键盘"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:48
+msgid "Table Code Color"
+msgstr "码表提示颜色"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:196
 #, c-format
-msgid "FCITX -- Get Signal No.: %d"
-msgstr "Fcitx接收到信号: %d"
-
-#~ msgid "MenuFont"
-#~ msgstr "菜单字体"
-
-#~ msgid "FontLocale"
-#~ msgstr "字体区域"
-
-#~ msgid "RecordFile"
-#~ msgstr "记录文件"
-
-#~ msgid "UseTray"
-#~ msgstr "启用托盘"
-
-#~ msgid "UseDBus"
-#~ msgstr "启用DBus"
-
-#~ msgid "EnableAddons"
-#~ msgstr "启用附加组件"
-
-#~ msgid "DelayStart"
-#~ msgstr "延迟启动"
-
-#~ msgid "HalfPuncAfterNumber"
-#~ msgstr "数字后跟半角符号"
-
-#~ msgid "EnterAction"
-#~ msgstr "回车键行为"
-
-#~ msgid "SemiColonAction"
-#~ msgstr "分号键行为"
-
-#~ msgid "InputEngByCapitalChar"
-#~ msgstr "大写字母输入英文"
-
-#~ msgid "ConvertPunc"
-#~ msgstr "转换中文标点"
-
-#~ msgid "LegendModeDisablePaging"
-#~ msgstr "联想模式禁止翻页"
-
-#~ msgid "SendTextWhenSwitchEng"
-#~ msgstr "快速切换中英文时将已有英文上屏"
-
-#~ msgid "CandidateWordNumber"
-#~ msgstr "候选词个数"
-
-#~ msgid "MainWindowHideMode"
-#~ msgstr "主窗口隐藏模式"
-
-#~ msgid "CenterInputWindow"
-#~ msgstr "输入窗口居中"
-
-#~ msgid "ShowInputWindowAfterTriggering"
-#~ msgstr "首次显示输入条"
-
-#~ msgid "ShowPointAfterIndex"
-#~ msgstr "候选序号后加点"
-
-#~ msgid "ShowInputSpeed"
-#~ msgstr "显示输入速度"
-
-#~ msgid "ShowVersion"
-#~ msgstr "显示版本"
-
-#~ msgid "ShowHintWindow"
-#~ msgstr "显示配置提示窗口"
-
-#~ msgid "SkinType"
-#~ msgstr "皮肤名称"
-
-#~ msgid "TriggerKey"
-#~ msgstr "输入法切换键"
-
-#~ msgid "ChnEngSwitchKey"
-#~ msgstr "中英文快速切换键"
-
-#~ msgid "DoubleSwitchKey"
-#~ msgstr "双击中英文切换"
-
-#~ msgid "TimeInterval"
-#~ msgstr "击键时间间隔"
-
-#~ msgid "FollowCursorKey"
-#~ msgstr "快捷键: 切换光标跟随"
-
-#~ msgid "HideMainWindowKey"
-#~ msgstr "快捷键: 隐藏主窗口"
-
-#~ msgid "VKSwitchKey"
-#~ msgstr "快捷键: 切换软键盘"
-
-#~ msgid "TraditionalChnSwitchKey"
-#~ msgstr "快捷键: 切换简体繁体"
-
-#~ msgid "LegendSwitchKey"
-#~ msgstr "快捷键: 切换联想模式"
-
-#~ msgid "LookupPinyinKey"
-#~ msgstr "快捷键: 反查拼音"
-
-#~ msgid "FullWidthSwitchKey"
-#~ msgstr "快捷键: 切换全半角"
-
-#~ msgid "ChnPuncSwitchKey"
-#~ msgstr "快捷键: 切换中英文标点"
-
-#~ msgid "PrevPageKey"
-#~ msgstr "快捷键: 上一页"
-
-#~ msgid "NextPageKey"
-#~ msgstr "快捷键: 下一页"
-
-#~ msgid "SecondThirdCandWordKey"
-#~ msgstr "第二三候选词选择键"
-
-#~ msgid "SaveAllKey"
-#~ msgstr "快捷键: 保存"
-
-#~ msgid "SetRecordingKey"
-#~ msgstr "快捷键: 切换记录模式"
-
-#~ msgid "ResetRecordingKey"
-#~ msgstr "快捷键: 重置记录模式"
-
-#~ msgid "PinyinOrder"
-#~ msgstr "拼音顺序"
-
-#~ msgid "ShuangpinOrder"
-#~ msgstr "双拼顺序"
-
-#~ msgid "DefaultShuangpinSchema"
-#~ msgstr "默认双拼方案"
-
-#~ msgid "QuweiOrder"
-#~ msgstr "区位顺序"
-
-#~ msgid "TableOrder"
-#~ msgstr "码表顺序"
-
-#~ msgid "PhraseTips"
-#~ msgstr "提示词库中的词组"
-
-#~ msgid "UseCompletePinyin"
-#~ msgstr "使用全拼"
-
-#~ msgid "AutoCreatePhrase"
-#~ msgstr "自动组词"
-
-#~ msgid "SaveAutoPhrase"
-#~ msgstr "自动保存词组"
-
-#~ msgid "AddFreqWordKey"
-#~ msgstr "快捷键: 增加常用字"
-
-#~ msgid "DeleteFreqWordKey"
-#~ msgstr "快捷键: 删除常用字"
-
-#~ msgid "DeleteUserPhraseKey"
-#~ msgstr "快捷键: 删除用户词组"
-
-#~ msgid "InputWordFromPhraseKey"
-#~ msgstr "以词定字键"
-
-#~ msgid "BaseOrder"
-#~ msgstr "单字重码顺序调整"
-
-#~ msgid "PhraseOrder"
-#~ msgstr "词组重码顺序调整"
-
-#~ msgid "FreqOrder"
-#~ msgstr "常用词重码顺序调整"
-
-#~ msgid "FuzzyAnAng"
-#~ msgstr "FuzzyAnAng"
-
-#~ msgid "FuzzyEnEng"
-#~ msgstr "FuzzyEnEng"
-
-#~ msgid "FuzzyIanIang"
-#~ msgstr "模糊ian和iang"
-
-#~ msgid "FuzzyInIng"
-#~ msgstr "FuzzyInIng"
-
-#~ msgid "FuzzyOuU"
-#~ msgstr "FuzzyOuU"
-
-#~ msgid "FuzzyUanUang"
-#~ msgstr "模糊uan和uang"
-
-#~ msgid "FuzzyCCh"
-#~ msgstr "FuzzyCCh"
-
-#~ msgid "FuzzyFH"
-#~ msgstr "FuzzyFH"
-
-#~ msgid "FuzzyLN"
-#~ msgstr "FuzzyLN"
-
-#~ msgid "FuzzySSH"
-#~ msgstr "FuzzySSH"
-
-#~ msgid "FuzzyZZH"
-#~ msgstr "FuzzyZZH"
-
-#~ msgid "Misstype"
-#~ msgstr "gn/ng输入错误"
-
-#~ msgid "MainWindowOffsetX"
-#~ msgstr "主窗口X位置"
-
-#~ msgid "MainWindowOffsetY"
-#~ msgstr "主窗口Y位置"
-
-#~ msgid "InputWindowOffsetX"
-#~ msgstr "输入窗口X位置"
-
-#~ msgid "InputWindowOffsetY"
-#~ msgstr "输入窗口Y位置"
-
-#~ msgid "Corner"
-#~ msgstr "全角"
-
-#~ msgid "ChnPunc"
-#~ msgstr "中文标点"
-
-#~ msgid "TrackCursor"
-#~ msgstr "光标跟随"
-
-#~ msgid "UseLegend"
-#~ msgstr "联想模式"
-
-#~ msgid "IMIndex"
-#~ msgstr "当前输入法编号"
-
-#~ msgid "CompactMainWindow"
-#~ msgstr "压缩主窗口"
-
-#~ msgid "UseGBKT"
-#~ msgstr "使用繁体"
-
-#~ msgid "Recording"
-#~ msgstr "记录模式"
-
-#~ msgid "Version"
-#~ msgstr "版本"
-
-#~ msgid "Author"
-#~ msgstr "作者"
-
-#~ msgid "Desc"
-#~ msgstr "描述"
-
-#~ msgid "FontSize"
-#~ msgstr "字体大小"
-
-#~ msgid "MenuFontSize"
-#~ msgstr "菜单字体大小"
-
-#~ msgid "TipColor"
-#~ msgstr "提升颜色"
-
-#~ msgid "InputColor"
-#~ msgstr "输入颜色"
-
-#~ msgid "IndexColor"
-#~ msgstr "索引标记颜色"
-
-#~ msgid "FirstCandColor"
-#~ msgstr "第一候选词颜色"
-
-#~ msgid "UserPhraseColor"
-#~ msgstr "用户词组颜色"
-
-#~ msgid "CodeColor"
-#~ msgstr "码表提升颜色"
-
-#~ msgid "OtherColor"
-#~ msgstr "其他颜色"
-
-#~ msgid "ActiveMenuColor"
-#~ msgstr "活动菜单项颜色"
-
-#~ msgid "InactiveMenuColor"
-#~ msgstr "非活动菜单项颜色"
-
-#~ msgid "BackImg"
-#~ msgstr "背景图片"
-
-#~ msgid "Logo"
-#~ msgstr "Logo图标"
-
-#~ msgid "ZhPunc"
-#~ msgstr "中文标点图标"
-
-#~ msgid "EnPunc"
-#~ msgstr "英文标点图标"
-
-#~ msgid "Chs"
-#~ msgstr "简体图标"
-
-#~ msgid "Cht"
-#~ msgstr "繁体图标"
-
-#~ msgid "HalfCorner"
-#~ msgstr "半角图标"
-
-#~ msgid "FullCorner"
-#~ msgstr "全角图标"
-
-#~ msgid "Unlock"
-#~ msgstr "未锁定图标"
-
-#~ msgid "Lock"
-#~ msgstr "锁定图标"
-
-#~ msgid "Legend"
-#~ msgstr "联想激活图标"
-
-#~ msgid "NoLegend"
-#~ msgstr "联想未激活图标"
-
-#~ msgid "VK"
-#~ msgstr "软键盘激活图标"
-
-#~ msgid "NoVK"
-#~ msgstr "软键盘未激活图标"
-
-#~ msgid "Chn"
-#~ msgstr "中文"
-
-#~ msgid "ResizePos"
-#~ msgstr "变形区域位置"
-
-#~ msgid "ResizeWidth"
-#~ msgstr "变形区域宽度"
-
-#~ msgid "InputPos"
-#~ msgstr "上排文字位置"
-
-#~ msgid "OutputPos"
-#~ msgstr "下排文字位置"
-
-#~ msgid "LayoutLeft"
-#~ msgstr "左边距"
-
-#~ msgid "LayoutRight"
-#~ msgstr "右边距"
-
-#~ msgid "CursorColor"
-#~ msgstr "光标颜色"
-
-#~ msgid "BackArrow"
-#~ msgstr "向后翻页"
-
-#~ msgid "ForwardArrow"
-#~ msgstr "向前翻页"
+msgid "Table Config %s is %s"
+msgstr "Table Config %s is %s"
+
+#: /home/saber/Develop/fcitx/data/config.desc:243
+msgid "Table Priority Order, Zero to Disable"
+msgstr "码表输入法优先级，0为禁用"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:140
+msgid "The Resize Position to Left"
+msgstr "变形区域距左侧距离"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:28
+msgid "Tip Message Color"
+msgstr "提示信息颜色"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:84
+msgid "Traditional Chinese Icon"
+msgstr "繁体中文图标"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:218
+msgid "TriggerProperty: "
+msgstr "TriggerProperty: "
+
+#: /home/saber/Develop/fcitx/data/addon.desc:26
+msgid "Type"
+msgstr "类型"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:838
+#, c-format
+msgid "Type: %d Text: %s"
+msgstr "Type: %d Text: %s"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:96
+msgid "UnLock Icon"
+msgstr "未锁定图标"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:351
+#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:358
+msgid "Unable to create process"
+msgstr "无法创建进程"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:312
+#, c-format
+msgid "Unknown type, take it as string: %s"
+msgstr "未知类型，作为字符串处理: %s"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:27
+msgid "Use Chinese Punctuation"
+msgstr "使用中文标点"
+
+#: /home/saber/Develop/fcitx/data/config.desc:29
+msgid "Use DBus to display UI (Require KIMPanel)"
+msgstr "使用DBus来显示界面(需要KIMPanel)"
+
+#: /home/saber/Develop/fcitx/data/config.desc:44
+msgid "Use English Punc After a Number"
+msgstr "数字后跟半角符号"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:22
+msgid "Use Full Width Character"
+msgstr "使用全角字符"
+
+#: /home/saber/Develop/fcitx/data/config.desc:24
+msgid "Use System Tray Icon"
+msgstr "使用系统托盘"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:57
+msgid "Use Traditional Chinese in Input"
+msgstr "使用繁体中文输入"
+
+#: /home/saber/Develop/fcitx/data/profile.desc:62
+msgid "Use recording mode"
+msgstr "使用记录模式"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:44
+msgid "User Phrase Color"
+msgstr "用户词组颜色"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:228
+msgid "Virtual Keyboard Image"
+msgstr "软键盘图片"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:116
+msgid "Virtual Keyboard disabled Icon"
+msgstr "禁用软键盘图标"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:112
+msgid "Virtual Keyboard enabled Icon"
+msgstr "启用软键盘图标"
+
+#: /home/saber/Develop/fcitx/data/table/wanfeng.conf:2
+msgid "Wanfeng"
+msgstr "晚风"
+
+#: /home/saber/Develop/fcitx/data/skin.desc:144
+msgid "Width of Resize Part "
+msgstr "变形区域宽度"
+
+#: /home/saber/Develop/fcitx/data/table/wbx.conf:2
+msgid "Wubi"
+msgstr "五笔字型"
+
+#: /home/saber/Develop/fcitx/data/table/wbpy.conf:2
+msgid "WubiPinyin"
+msgstr "五笔拼音"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/tray.c:172
+#, c-format
+msgid "X error %i on opcode send"
+msgstr "X error %i on opcode send"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:135
+msgid "XEvent--Expose"
+msgstr "XEvent--Expose"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:296
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:118
+msgid "XMODIFIERS Error."
+msgstr "XMODIFIERS Error."
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:317
+msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
+msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
+
+#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:313
+msgid ""
+"You need to set environment varibles below to make fcitx work correctly."
+msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
+
+#: /home/saber/Develop/fcitx/data/table/zrm.conf:2
+msgid "Ziranma"
+msgstr "自然码"
+
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:902
+#, c-format
+msgid "no default option for %s/%s"
+msgstr "选项%s/%s没有默认选项"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:107
+msgid "no valid font."
+msgstr "无可用字体"
+
+#: /home/saber/Develop/fcitx/po/.././src/utils/utils.c:255
+msgid "pthread mutex init failed"
+msgstr "pthread mutex init failed"
+
+#: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:900
+#, c-format
+msgid "updateMesssages Up:%s"
+msgstr "updateMesssages Up:%s"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:90
+#, c-format
+msgid "your current font is: %s"
+msgstr "当前字体为：%s"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:755
+#, c-format
+msgid "按 1 删除 %s 的常用字(ESC取消)"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:757
+#, c-format
+msgid "按 1-%d 删除 %s 的常用字(ESC取消)"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2880
+msgid "联想："
+msgstr ""
 
 #~ msgid "Active"
 #~ msgstr "激活"
 
-#~ msgid "Inactive"
-#~ msgstr "未激活"
-
-#~ msgid "ResizeHorizontal"
-#~ msgstr "横向变形规则"
-
-#~ msgid "ResizeVertical"
-#~ msgstr "纵向变形规则"
-
-#~ msgid "MarginTop"
-#~ msgstr "上边距"
-
-#~ msgid "MarginBottom"
-#~ msgstr "下边距"
-
-#~ msgid "MarginLeft"
-#~ msgstr "左边距"
-
-#~ msgid "MarginRight"
-#~ msgstr "右边距"
-
 #~ msgid "ActiveColor"
 #~ msgstr "活动项背景颜色"
 
-#~ msgid "LineColor"
-#~ msgstr "分隔线颜色"
+#~ msgid "ActiveMenuColor"
+#~ msgstr "活动菜单项颜色"
 
-#~ msgid "IconName"
-#~ msgstr "图标名称"
+#~ msgid "AddFreqWordKey"
+#~ msgstr "快捷键: 增加常用字"
 
-#~ msgid "File"
-#~ msgstr "文件"
+#~ msgid "Adjust Order"
+#~ msgstr "输入顺序"
+
+# unknown
+#~ msgid "AdjustFast"
+#~ msgstr "快速"
+
+#~ msgid "AdjustFreq"
+#~ msgstr "按频率"
+
+#~ msgid "AdjustNo"
+#~ msgstr "不调整"
 
 #~ msgid "AdjustOrder"
 #~ msgstr "候选词顺序调整"
 
-#~ msgid "Priority"
-#~ msgstr "优先级"
+#~ msgid "Author"
+#~ msgstr "作者"
 
-#~ msgid "UsePY"
-#~ msgstr "使用拼音"
+#~ msgid "Auto Create Phrase"
+#~ msgstr "自动组词"
 
-#~ msgid "PYKey"
-#~ msgstr "拼音键"
+#~ msgid "Auto Phrase"
+#~ msgstr "自动词组"
 
-#~ msgid "AutoSend"
-#~ msgstr "自动上屏"
+#~ msgid "Auto Phrase Length"
+#~ msgstr "自动词组长度"
 
-#~ msgid "NoneMatchAutoSend"
+#~ msgid "Auto Phrase Phrase"
+#~ msgstr "词组参与自动造词"
+
+#~ msgid "Auto Send Candidate Word if no match in Code Table"
 #~ msgstr "空码自动上屏"
 
-#~ msgid "EndKey"
-#~ msgstr "中止键"
+#~ msgid "Auto Send Candidate Word to Client"
+#~ msgstr "自动上屏"
 
-#~ msgid "UseMatchingKey"
-#~ msgstr "使用模糊键"
-
-#~ msgid "MatchingKey"
-#~ msgstr "模糊键"
-
-#~ msgid "ExactMatch"
-#~ msgstr "精确匹配"
+#~ msgid "AutoCreatePhrase"
+#~ msgstr "自动组词"
 
 #~ msgid "AutoPhrase"
 #~ msgstr "自动组词"
@@ -1749,32 +1251,567 @@ msgstr "Fcitx接收到信号: %d"
 #~ msgid "AutoPhrasePhrase"
 #~ msgstr "词组参与自动造词"
 
-#~ msgid "PromptTableCode"
-#~ msgstr "提示编码"
+#~ msgid "AutoSend"
+#~ msgstr "自动上屏"
 
-#~ msgid "SymbolFile"
-#~ msgstr "符号文件"
+#~ msgid "BackArrow"
+#~ msgstr "向后翻页"
 
-#~ msgid "ExtraIM"
-#~ msgstr "额外输入法"
+#~ msgid "BackImg"
+#~ msgstr "背景图片"
 
-#~ msgid "FontZh"
-#~ msgstr "中文字体"
+#~ msgid "BaseOrder"
+#~ msgstr "单字重码顺序调整"
 
-#~ msgid "Saving TABLE Dict."
-#~ msgstr "保存码表词典"
+#~ msgid "CandidateWordNumber"
+#~ msgstr "候选词个数"
 
-#~ msgid "Show Point After Index of Candidate Word "
-#~ msgstr "候选序号后加点"
+#~ msgid "CenterInputWindow"
+#~ msgstr "输入窗口居中"
 
-#~ msgid "pthread mutexattr init failed"
-#~ msgstr "pthread mutexattr init failed"
+#~ msgid "Chn"
+#~ msgstr "中文"
 
-#~ msgid "Set icid=%d(connect_id=%d) to %d"
-#~ msgstr "Set icid=%d(connect_id=%d) to %d"
+#~ msgid "ChnEngSwitchKey"
+#~ msgstr "中英文快速切换键"
+
+#~ msgid "ChnPunc"
+#~ msgstr "中文标点"
+
+#~ msgid "ChnPuncSwitchKey"
+#~ msgstr "快捷键: 切换中英文标点"
+
+#~ msgid "Choose"
+#~ msgstr "选择键"
+
+#~ msgid "Chs"
+#~ msgstr "简体图标"
+
+#~ msgid "Cht"
+#~ msgstr "繁体图标"
+
+#~ msgid "Code Table File"
+#~ msgstr "码表文件"
+
+#~ msgid "Code Table Name"
+#~ msgstr "码表名称"
+
+#~ msgid "CodeColor"
+#~ msgstr "码表提升颜色"
+
+# unknown
+#~ msgid "CodeTable"
+#~ msgstr "码表"
+
+#~ msgid "CompactMainWindow"
+#~ msgstr "压缩主窗口"
+
+#~ msgid "ConvertPunc"
+#~ msgstr "转换中文标点"
+
+#~ msgid "Corner"
+#~ msgstr "全角"
+
+#~ msgid "CursorColor"
+#~ msgstr "光标颜色"
+
+#~ msgid "Default Shuangpin Schema"
+#~ msgstr "默认双拼方案"
+
+#~ msgid "DefaultShuangpinSchema"
+#~ msgstr "默认双拼方案"
+
+#~ msgid "DelayStart"
+#~ msgstr "延迟启动"
+
+#~ msgid "DeleteFreqWordKey"
+#~ msgstr "快捷键: 删除常用字"
+
+#~ msgid "DeleteUserPhraseKey"
+#~ msgstr "快捷键: 删除用户词组"
+
+#~ msgid "Desc"
+#~ msgstr "描述"
+
+#~ msgid "DoubleSwitchKey"
+#~ msgstr "双击中英文切换"
+
+#~ msgid "EnPunc"
+#~ msgstr "英文标点图标"
 
 #~ msgid "Enable"
 #~ msgstr "启用"
 
+#~ msgid "Enable This Table or Not"
+#~ msgstr "是否启用此码表"
+
+#~ msgid "EnableAddons"
+#~ msgstr "启用附加组件"
+
+#~ msgid "End Key"
+#~ msgstr "中止键"
+
+#~ msgid "EndKey"
+#~ msgstr "中止键"
+
+#~ msgid "EnterAction"
+#~ msgstr "回车键行为"
+
+#~ msgid "Exact Match"
+#~ msgstr "精确匹配"
+
+#~ msgid "ExactMatch"
+#~ msgstr "精确匹配"
+
 #~ msgid "Extra"
 #~ msgstr "额外输入法"
+
+#~ msgid "ExtraIM"
+#~ msgstr "额外输入法"
+
+#~ msgid "FCITX -- Get Signal No.: %d"
+#~ msgstr "Fcitx接收到信号: %d"
+
+#~ msgid "File"
+#~ msgstr "文件"
+
+#~ msgid "FirstCandColor"
+#~ msgstr "第一候选词颜色"
+
+#~ msgid "Fix misstype gn/ng"
+#~ msgstr "修复拼音中ng和gn的输入错误"
+
+#~ msgid "FollowCursorKey"
+#~ msgstr "快捷键: 切换光标跟随"
+
+#~ msgid "FontLocale"
+#~ msgstr "字体区域"
+
+#~ msgid "FontSize"
+#~ msgstr "字体大小"
+
+#~ msgid "FontZh"
+#~ msgstr "中文字体"
+
+#~ msgid "ForwardArrow"
+#~ msgstr "向前翻页"
+
+#~ msgid "FreqOrder"
+#~ msgstr "常用词重码顺序调整"
+
+#~ msgid "FullCorner"
+#~ msgstr "全角图标"
+
+#~ msgid "FullWidthSwitchKey"
+#~ msgstr "快捷键: 切换全半角"
+
+#~ msgid "Fuzzy an and ang"
+#~ msgstr "模糊an和ang"
+
+#~ msgid "Fuzzy c and ch"
+#~ msgstr "模糊c和ch"
+
+#~ msgid "Fuzzy en and eng"
+#~ msgstr "模糊en和eng"
+
+#~ msgid "Fuzzy f and h"
+#~ msgstr "模糊f和h"
+
+#~ msgid "Fuzzy ian and iang"
+#~ msgstr "模糊ian和iang"
+
+#~ msgid "Fuzzy in and ing"
+#~ msgstr "模糊in和ing"
+
+#~ msgid "Fuzzy l and n"
+#~ msgstr "模糊l和n"
+
+#~ msgid "Fuzzy ou and u"
+#~ msgstr "模糊ou和u"
+
+#~ msgid "Fuzzy s and sh"
+#~ msgstr "模糊s和sh"
+
+#~ msgid "Fuzzy uan and uang"
+#~ msgstr "模糊uan和uang"
+
+#~ msgid "Fuzzy z and zh"
+#~ msgstr "模糊z和zh"
+
+#~ msgid "FuzzyAnAng"
+#~ msgstr "FuzzyAnAng"
+
+#~ msgid "FuzzyCCh"
+#~ msgstr "FuzzyCCh"
+
+#~ msgid "FuzzyEnEng"
+#~ msgstr "FuzzyEnEng"
+
+#~ msgid "FuzzyFH"
+#~ msgstr "FuzzyFH"
+
+#~ msgid "FuzzyIanIang"
+#~ msgstr "模糊ian和iang"
+
+#~ msgid "FuzzyInIng"
+#~ msgstr "FuzzyInIng"
+
+#~ msgid "FuzzyLN"
+#~ msgstr "FuzzyLN"
+
+#~ msgid "FuzzyOuU"
+#~ msgstr "FuzzyOuU"
+
+#~ msgid "FuzzySSH"
+#~ msgstr "FuzzySSH"
+
+#~ msgid "FuzzyUanUang"
+#~ msgstr "模糊uan和uang"
+
+#~ msgid "FuzzyZZH"
+#~ msgstr "FuzzyZZH"
+
+#~ msgid "HalfCorner"
+#~ msgstr "半角图标"
+
+#~ msgid "HalfPuncAfterNumber"
+#~ msgstr "数字后跟半角符号"
+
+#~ msgid "HideMainWindowKey"
+#~ msgstr "快捷键: 隐藏主窗口"
+
+#~ msgid "Hotkey of Adding Frequent Word"
+#~ msgstr "快捷键: 添加常用字"
+
+#~ msgid "Hotkey of Delete User Phrase"
+#~ msgstr "快捷键: 删除用户词组"
+
+#~ msgid "Hotkey of Deleting Frequent Word"
+#~ msgstr "快捷键: 删除常用字"
+
+#~ msgid "Hotkey of Inputing Word From Phrase"
+#~ msgstr "快捷键: 以词定字"
+
+#~ msgid "Hotkey of Looking up the Corresponding pinyin of Word."
+#~ msgstr "快捷键: 反查拼音"
+
+#~ msgid "IMIndex"
+#~ msgstr "当前输入法编号"
+
+#~ msgid "Icon Name"
+#~ msgstr "图标名称"
+
+#~ msgid "IconName"
+#~ msgstr "图标名称"
+
+#~ msgid "Inactive"
+#~ msgstr "未激活"
+
+#~ msgid "InactiveMenuColor"
+#~ msgstr "非活动菜单项颜色"
+
+#~ msgid "IndexColor"
+#~ msgstr "索引标记颜色"
+
+#~ msgid "InputColor"
+#~ msgstr "输入颜色"
+
+#~ msgid "InputEngByCapitalChar"
+#~ msgstr "大写字母输入英文"
+
+#~ msgid "InputPos"
+#~ msgstr "上排文字位置"
+
+#~ msgid "InputWindowOffsetX"
+#~ msgstr "输入窗口X位置"
+
+#~ msgid "InputWindowOffsetY"
+#~ msgstr "输入窗口Y位置"
+
+#~ msgid "InputWordFromPhraseKey"
+#~ msgstr "以词定字键"
+
+#~ msgid "LayoutLeft"
+#~ msgstr "左边距"
+
+#~ msgid "LayoutRight"
+#~ msgstr "右边距"
+
+#~ msgid "Legend"
+#~ msgstr "联想激活图标"
+
+#~ msgid "LegendModeDisablePaging"
+#~ msgstr "联想模式禁止翻页"
+
+#~ msgid "LegendSwitchKey"
+#~ msgstr "快捷键: 切换联想模式"
+
+#~ msgid "LineColor"
+#~ msgstr "分隔线颜色"
+
+#~ msgid "Lock"
+#~ msgstr "锁定图标"
+
+#~ msgid "Logo"
+#~ msgstr "Logo图标"
+
+#~ msgid "LookupPinyinKey"
+#~ msgstr "快捷键: 反查拼音"
+
+#~ msgid "MainWindowHideMode"
+#~ msgstr "主窗口隐藏模式"
+
+#~ msgid "MainWindowOffsetX"
+#~ msgstr "主窗口X位置"
+
+#~ msgid "MainWindowOffsetY"
+#~ msgstr "主窗口Y位置"
+
+#~ msgid "MarginBottom"
+#~ msgstr "下边距"
+
+#~ msgid "MarginLeft"
+#~ msgstr "左边距"
+
+#~ msgid "MarginRight"
+#~ msgstr "右边距"
+
+#~ msgid "MarginTop"
+#~ msgstr "上边距"
+
+#~ msgid "Matching Key"
+#~ msgstr "模糊键"
+
+#~ msgid "MatchingKey"
+#~ msgstr "模糊键"
+
+#~ msgid "MenuFont"
+#~ msgstr "菜单字体"
+
+#~ msgid "MenuFontSize"
+#~ msgstr "菜单字体大小"
+
+#~ msgid "Misstype"
+#~ msgstr "gn/ng输入错误"
+
+#~ msgid "NextPageKey"
+#~ msgstr "快捷键: 下一页"
+
+#~ msgid "NoLegend"
+#~ msgstr "联想未激活图标"
+
+#~ msgid "NoVK"
+#~ msgstr "软键盘未激活图标"
+
+#~ msgid "NoneMatchAutoSend"
+#~ msgstr "空码自动上屏"
+
+#~ msgid "Order of Code Table"
+#~ msgstr "码表顺序"
+
+#~ msgid "OtherColor"
+#~ msgstr "其他颜色"
+
+#~ msgid "OutputPos"
+#~ msgstr "下排文字位置"
+
+#~ msgid "PYKey"
+#~ msgstr "拼音键"
+
+#~ msgid "PhraseOrder"
+#~ msgstr "词组重码顺序调整"
+
+#~ msgid "PhraseTips"
+#~ msgstr "提示词库中的词组"
+
+#~ msgid "Pinyin"
+#~ msgstr "拼音"
+
+#~ msgid "Pinyin Key"
+#~ msgstr "拼音键"
+
+#~ msgid "PinyinOrder"
+#~ msgstr "拼音顺序"
+
+#~ msgid "PrevPageKey"
+#~ msgstr "快捷键: 上一页"
+
+#~ msgid "Priority"
+#~ msgstr "优先级"
+
+#~ msgid "Prompt Table Code"
+#~ msgstr "提示码表编码"
+
+#~ msgid "PromptTableCode"
+#~ msgstr "提示编码"
+
+#~ msgid "Quwei"
+#~ msgstr "区位"
+
+#~ msgid "QuweiOrder"
+#~ msgstr "区位顺序"
+
+#~ msgid "RecordFile"
+#~ msgstr "记录文件"
+
+#~ msgid "Recording"
+#~ msgstr "记录模式"
+
+#~ msgid "ResetRecordingKey"
+#~ msgstr "快捷键: 重置记录模式"
+
+#~ msgid "ResizeHorizontal"
+#~ msgstr "横向变形规则"
+
+#~ msgid "ResizePos"
+#~ msgstr "变形区域位置"
+
+#~ msgid "ResizeVertical"
+#~ msgstr "纵向变形规则"
+
+#~ msgid "ResizeWidth"
+#~ msgstr "变形区域宽度"
+
+#~ msgid "Rule of Candidate Phrase Order"
+#~ msgstr "候选词顺序"
+
+#~ msgid "Rule of Candidate Word Order"
+#~ msgstr "候选字顺序"
+
+#~ msgid "Rule of Frequent Word Order"
+#~ msgstr "常用字顺序"
+
+#~ msgid "Save Auto Created Phrase"
+#~ msgstr "保存自动词组"
+
+#~ msgid "Save Auto Phrase"
+#~ msgstr "保存自动词组"
+
+#~ msgid "SaveAllKey"
+#~ msgstr "快捷键: 保存"
+
+#~ msgid "SaveAutoPhrase"
+#~ msgstr "自动保存词组"
+
+#~ msgid "Saving TABLE Dict."
+#~ msgstr "保存码表词典"
+
+#~ msgid "SecondThirdCandWordKey"
+#~ msgstr "第二三候选词选择键"
+
+#~ msgid "SemiColonAction"
+#~ msgstr "分号键行为"
+
+#~ msgid "SendTextWhenSwitchEng"
+#~ msgstr "快速切换中英文时将已有英文上屏"
+
+#~ msgid "Set icid=%d(connect_id=%d) to %d"
+#~ msgstr "Set icid=%d(connect_id=%d) to %d"
+
+#~ msgid "SetRecordingKey"
+#~ msgstr "快捷键: 切换记录模式"
+
+#~ msgid "Show Point After Index of Candidate Word "
+#~ msgstr "候选序号后加点"
+
+#~ msgid "ShowHintWindow"
+#~ msgstr "显示配置提示窗口"
+
+#~ msgid "ShowInputSpeed"
+#~ msgstr "显示输入速度"
+
+#~ msgid "ShowInputWindowAfterTriggering"
+#~ msgstr "首次显示输入条"
+
+#~ msgid "ShowPointAfterIndex"
+#~ msgstr "候选序号后加点"
+
+#~ msgid "ShowVersion"
+#~ msgstr "显示版本"
+
+#~ msgid "Shuangpin"
+#~ msgstr "双拼"
+
+#~ msgid "ShuangpinOrder"
+#~ msgstr "双拼顺序"
+
+#~ msgid "SkinType"
+#~ msgstr "皮肤名称"
+
+#~ msgid "Symbol"
+#~ msgstr "符号"
+
+#~ msgid "Symbol File"
+#~ msgstr "符号文件"
+
+#~ msgid "SymbolFile"
+#~ msgstr "符号文件"
+
+#~ msgid "TableOrder"
+#~ msgstr "码表顺序"
+
+#~ msgid "TimeInterval"
+#~ msgstr "击键时间间隔"
+
+#~ msgid "TipColor"
+#~ msgstr "提升颜色"
+
+#~ msgid "TrackCursor"
+#~ msgstr "光标跟随"
+
+#~ msgid "TraditionalChnSwitchKey"
+#~ msgstr "快捷键: 切换简体繁体"
+
+#~ msgid "TriggerKey"
+#~ msgstr "输入法切换键"
+
+#~ msgid "Unlock"
+#~ msgstr "未锁定图标"
+
+#~ msgid "Use Complete Pinyin"
+#~ msgstr "使用完整拼音"
+
+#~ msgid "Use Matching Key"
+#~ msgstr "使用模糊键"
+
+#~ msgid "Use Pinyin"
+#~ msgstr "使用拼音"
+
+#~ msgid "UseCompletePinyin"
+#~ msgstr "使用全拼"
+
+#~ msgid "UseDBus"
+#~ msgstr "启用DBus"
+
+#~ msgid "UseGBKT"
+#~ msgstr "使用繁体"
+
+#~ msgid "UseLegend"
+#~ msgstr "联想模式"
+
+#~ msgid "UseMatchingKey"
+#~ msgstr "使用模糊键"
+
+#~ msgid "UsePY"
+#~ msgstr "使用拼音"
+
+#~ msgid "UseTray"
+#~ msgstr "启用托盘"
+
+#~ msgid "UserPhraseColor"
+#~ msgstr "用户词组颜色"
+
+#~ msgid "VK"
+#~ msgstr "软键盘激活图标"
+
+#~ msgid "VKSwitchKey"
+#~ msgstr "快捷键: 切换软键盘"
+
+#~ msgid "Version"
+#~ msgstr "版本"
+
+#~ msgid "ZhPunc"
+#~ msgstr "中文标点图标"
+
+#~ msgid "pthread mutexattr init failed"
+#~ msgstr "pthread mutexattr init failed"

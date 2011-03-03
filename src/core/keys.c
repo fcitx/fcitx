@@ -126,6 +126,12 @@ HOTKEYS FCITX_CTRL_5[2] =
     {NULL, 0, 0},
 };
 
+HOTKEYS FCITX_CTRL_ALT_E[2] = 
+{
+    {NULL, XK_E, KEY_CTRL_ALT_COMP},
+    {NULL, 0, 0},
+};
+
 Bool IsHotKeyModifierCombine(KeySym sym, int state)
 {
    if (sym == XK_Control_L

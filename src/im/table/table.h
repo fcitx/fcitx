@@ -22,9 +22,9 @@
 
 #include <X11/Xlib.h>
 
-#include "tools/configfile.h"
+#include "utils/configfile.h"
 #include "core/ime.h"
-#include "tools/utarray.h"
+#include "utils/utarray.h"
 
 #define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10
@@ -67,20 +67,20 @@ typedef struct _TABLE {
     ADJUSTORDER     tableOrder;
 
     int             iPriority;
-    Bool            bUsePY;	//使用拼音
+    boolean            bUsePY;	//使用拼音
     int             iTableAutoSendToClient;	//自动上屏
     int             iTableAutoSendToClientWhenNone;	//空码自动上屏
-    Bool            bUseMatchingKey;	//是否模糊匹配
-    Bool            bAutoPhrase;	//是否自动造词
+    boolean            bUseMatchingKey;	//是否模糊匹配
+    boolean            bAutoPhrase;	//是否自动造词
     int             iSaveAutoPhraseAfter;	//选择N次后保存自动词组，0-不保存，1-立即保存
-    Bool            bAutoPhrasePhrase;	//词组是否参与造词
+    boolean            bAutoPhrasePhrase;	//词组是否参与造词
     int             iAutoPhrase;	//自动造词长度
-    Bool            bTableExactMatch;	//是否只显示精确匹配的候选字/词
-    Bool            bPromptTableCode;	//输入完毕后是否提示编码
+    boolean            bTableExactMatch;	//是否只显示精确匹配的候选字/词
+    boolean            bPromptTableCode;	//输入完毕后是否提示编码
 
-    Bool            bHasPinyin;		//标记该码表中是否有拼音
+    boolean            bHasPinyin;		//标记该码表中是否有拼音
     char           *strChoose;		//设置选择键
-    Bool            bEnabled;
+    boolean            bEnabled;
 } TABLE;
 
 typedef struct _RECORD {
@@ -107,7 +107,7 @@ typedef struct _FH {
 typedef struct _AUTOPHRASE {
     char           *strHZ;
     char           *strCode;
-    INT8            iSelected;
+    char            iSelected;
     unsigned int    flag:1;
     struct _AUTOPHRASE *next;	//构造一个队列
 } AUTOPHRASE;
@@ -133,10 +133,10 @@ typedef enum {
 typedef struct TableState {
     UT_array* table; /* 码表 */
     
-    INT8            iTableIMIndex;
-    INT8            iTableCount;
+    char            iTableIMIndex;
+    char            iTableCount;
     
-    INT8            iCurrentTableLoaded;
+    char            iCurrentTableLoaded;
     
     RECORD         *currentRecord;
     RECORD	       *recordHead;
@@ -159,43 +159,43 @@ typedef struct TableState {
     int             iFH ;
     unsigned int    iTableIndex;
     
-    Bool            bIsTableDelPhrase;
+    boolean            bIsTableDelPhrase;
     HOTKEYS         hkTableDelPhrase[HOT_KEY_COUNT];
-    Bool            bIsTableAdjustOrder;
+    boolean            bIsTableAdjustOrder;
     HOTKEYS         hkTableAdjustOrder[HOT_KEY_COUNT];
-    Bool            bIsTableAddPhrase;
+    boolean            bIsTableAddPhrase;
     HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT];
     
-    INT8            iTableChanged;
-    INT8            iTableNewPhraseHZCount;
-    Bool            bCanntFindCode;	//Records if new phrase has corresponding code - should be always false
+    char            iTableChanged;
+    char            iTableNewPhraseHZCount;
+    boolean            bCanntFindCode;	//Records if new phrase has corresponding code - should be always false
     char           *strNewPhraseCode;
     
     SINGLE_HZ       hzLastInput[PHRASE_MAX_LENGTH];	//Records last HZ input
-    INT16           iHZLastInputCount ;
-    Bool            bTablePhraseTips;
+    short           iHZLastInputCount ;
+    boolean            bTablePhraseTips;
     
     ADJUSTORDER     PYBaseOrder;
-    Bool		    isSavingTableDic;
+    boolean		    isSavingTableDic;
 } TableState;
 
 extern TableState tbl;
 
 void            LoadTableInfo (void);
-Bool            LoadTableDict (void);
+boolean            LoadTableDict (void);
 void            TableInit (void);
-void            FreeTableIM (INT8 index);
+void            FreeTableIM (char index);
 void            SaveTableIM (void);
 void            SaveTableDict (void);
-Bool            IsInputKey (int iKey);
-Bool            IsIgnoreChar (char cChar);
-Bool            IsEndKey (char cChar);
-INT8            IsChooseKey (int iKey);
+boolean            IsInputKey (int iKey);
+boolean            IsIgnoreChar (char cChar);
+boolean            IsEndKey (char cChar);
+char            IsChooseKey (int iKey);
 
 INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCount);
 INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode);
 void            TableAddCandWord (RECORD * wbRecord, SEARCH_MODE mode);
-void            TableAddAutoCandWord (INT16 which, SEARCH_MODE mode);
+void            TableAddAutoCandWord (short which, SEARCH_MODE mode);
 INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode);
 void            TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode);
 INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode);
@@ -203,7 +203,7 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (SEARCH_MODE mode);
 void            TableResetStatus (void);
 char           *TableGetLegendCandWord (int iIndex);
 char           *TableGetFHCandWord (int iIndex);
-Bool            HasMatchingKey (void);
+boolean            HasMatchingKey (void);
 int             TableCompareCode (char *strUser, char *strDict);
 int             TableFindFirstMatchCode (void);
 void            TableAdjustOrderByIndex (int iIndex);
@@ -213,16 +213,16 @@ void            TableDelPhrase (RECORD * record);
 RECORD         *TableHasPhrase (char *strCode, char *strHZ);
 RECORD         *TableFindPhrase (char *strHZ);
 void            TableInsertPhrase (char *strCode, char *strHZ);
-char	       *_TableGetCandWord (int iIndex, Bool _bLegend);		//Internal
+char	       *_TableGetCandWord (int iIndex, boolean _bLegend);		//Internal
 char           *TableGetCandWord (int iIndex);
 void		TableUpdateHitFrequency (RECORD * record);
 void            TableCreateNewPhrase (void);
 void            TableCreatePhraseCode (char *strHZ);
-Bool            TablePhraseTips (void);
-void            TableSetCandWordsFlag (int iCount, Bool flag);
+boolean            TablePhraseTips (void);
+void            TableSetCandWordsFlag (int iCount, boolean flag);
 void            TableResetFlags (void);
 
-void            TableCreateAutoPhrase (INT8 iCount);
+void            TableCreateAutoPhrase (char iCount);
 
 void            UpdateHZLastInput (char *);
 

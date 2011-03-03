@@ -1,28 +1,49 @@
 #!/bin/sh
 filename=desc.po
-dir=$1
-filename=`basename $filename`
+indir=$1
+outdir=$2
 
-cd $dir
+cd "$outdir"
 
-rm -f desc.po; touch desc.po
+rm -f "$outdir/$filename"; touch "$outdir/$filename"
+
+cat > "$outdir/$filename"  <<EOF
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
+"POT-Creation-Date: 2010-11-17 11:48+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+EOF
 
 cd ..
 # Extract Description
-find data -iname "*.desc" | while read f
+find "$indir" -iname "*.desc" | while read f
 do
-    awk '/^[\t ]*Description=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' $f >> $dir/$filename
+    awk '/^[\t ]*Description=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
 done
 
 # Extract Table Name
-find data/table -name "*.conf" | while read f
+find "$indir/table" -name "*.conf" | while read f
 do
-    awk '/^[\t ]*Name=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 6)"\"\n" "msgstr \"\""}' $f >> $dir/$filename
+    awk '/^[\t ]*Name=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 6)"\"\n" "msgstr \"\""}' $f >> "$outdir/$filename"
 done
 
 # Extract Group Name
-grep -n '^\[' data/*.desc | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> $dir/$filename
+grep -n '^\[' "$indir"/*.desc | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 
 # Extract Enum Name
-grep -h 'Enum[0-9]' data/*.desc | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> $dir/$filename
+grep -h 'Enum[0-9]' "$indir"/*.desc | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 

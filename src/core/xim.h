@@ -29,7 +29,6 @@
 #include "IMdkit.h"
 #include "Xi18n.h"
 
-#define DEFAULT_IMNAME "fcitx"
 #define STRBUFLEN 64
 
 #ifndef ICONV_CONST
@@ -40,26 +39,16 @@
 #define FALSE	0
 #endif
 
-typedef enum _IME_STATE {
-    IS_CLOSED = 0,
-    IS_ENG,
-    IS_CHN
-} IME_STATE;
-
 Bool            InitXIM (char *);
 void            SendHZtoClient(IMForwardEventStruct * call_data, char *strHZ);
 void            EnterChineseMode (Bool bState);
 
 void            SetIMState (Bool bState);
-void		    SetTrackPos(IMChangeICStruct * call_data);
 void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
 
 #define GetCurrentState() (CurrentIC?(CurrentIC->state):(IS_CLOSED))
 #define GetCurrentPos() (CurrentIC?(&CurrentIC->pos):(NULL))
 
-struct _IC;
-
-extern struct _IC* CurrentIC;
 void CloseAllIM();
 
 #ifndef __USE_GNU

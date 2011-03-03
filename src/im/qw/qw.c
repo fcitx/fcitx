@@ -24,11 +24,13 @@
 #include <iconv.h>
 
 #include "core/fcitx.h"
+#include "utils/utils.h"
 #include "core/keys.h"
 
 #include "im/qw/qw.h"
-#include "ui/InputWindow.h"
-#include "tools/configfile.h"
+#include "core/ui.h"
+#include "utils/configfile.h"
+#include "core/ime-internal.h"
 
 extern char     strCodeInput[];
 extern int      iCodeInputCount;
@@ -69,7 +71,7 @@ INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount)
           retVal = IRV_CLEAN;
       else {
           iCandPageCount = 0;
-          SetMessageCount(&messageDown, 0);
+          SetMessageCount(&gs.messageDown, 0);
           retVal = IRV_DISPLAY_CANDWORDS;
       }
    }
@@ -85,10 +87,10 @@ INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount)
    else
       return IRV_TO_PROCESS;
    
-    SetMessageCount(&messageUp, 0);
-    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
+    SetMessageCount(&gs.messageUp, 0);
+    AddMessageAtLast(&gs.messageUp, MSG_INPUT, "%s", strCodeInput);
    if ( iCodeInputCount!=3 )
-      SetMessageCount(&messageDown, 0);
+      SetMessageCount(&gs.messageDown, 0);
       
    return retVal;
 }
@@ -98,7 +100,7 @@ char *QWGetCandWord (int iIndex)
    if ( !iCandPageCount )
       return NULL;
       
-   SetMessageCount(&messageDown, 0);
+   SetMessageCount(&gs.messageDown, 0);
    if ( iIndex==-1 )
       iIndex=9;
    return GetQuWei((strCodeInput[0] - '0') * 10 + strCodeInput[1] - '0',iCurrentCandPage * 10+iIndex+1);
@@ -110,7 +112,7 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
     int             i;
     char            strTemp[3];
 
-    if ( fc.bPointAfterNumber ) {
+    if ( ConfigGetPointAfterNumber() ) {
        strTemp[1] = '.';
        strTemp[2] = '\0';
     }
@@ -138,20 +140,20 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
    
     iWei = iCurrentCandPage * 10;
 
-    SetMessageCount(&messageDown, 0);
+    SetMessageCount(&gs.messageDown, 0);
     for (i = 0; i < 10; i++) {
    strTemp[0] = i + 1 + '0';
    if (i == 9)
       strTemp[0] = '0';
-    AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
-    AddMessageAtLast(&messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (iQu, iWei + i + 1));
+    AddMessageAtLast(&gs.messageDown, MSG_INDEX, "%s", strTemp);
+    AddMessageAtLast(&gs.messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (iQu, iWei + i + 1));
    if (i != 9)
-        MessageConcatLast(&messageDown, " ");
+        MessageConcatLast(&gs.messageDown, " ");
     }    
     
     strCodeInput[2]=iCurrentCandPage+'0';
-    SetMessageCount(&messageUp, 0);
-    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strCodeInput);
+    SetMessageCount(&gs.messageUp, 0);
+    AddMessageAtLast(&gs.messageUp, MSG_INPUT, "%s", strCodeInput);
     
     return IRV_DISPLAY_CANDWORDS;
 }

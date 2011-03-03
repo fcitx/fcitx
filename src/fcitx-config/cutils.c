@@ -20,7 +20,7 @@
 
 #include "core/fcitx.h"
 
-#include "tools/tools.h"
+#include "utils/utils.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/sprintf.h"
 #include <stdlib.h>

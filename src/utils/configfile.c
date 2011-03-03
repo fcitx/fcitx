@@ -1,0 +1,297 @@
+/***************************************************************************
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "core/fcitx.h"
+#include "utils/utils.h"
+#include "utils/configfile.h"
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/cutils.h"
+#include "fcitx-config/xdg.h"
+#include "ui/font.h"
+#include "core/ime.h"
+#include <errno.h>
+#include <ctype.h>
+#include <X11/keysym.h>
+
+extern Display* dpy;
+extern int iTriggerKeyCount;
+//extern XIMTriggerKey* Trigger_Keys;
+
+static Bool IsReloadConfig = False;
+
+static FcitxConfig fc;
+ConfigFileDesc* fcitxConfigDesc = NULL;
+static ConfigFileDesc* GetConfigDesc();
+static void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+
+#ifdef _ENABLE_TRAY
+FilterNextTimeEffectBool(UseTray, fc.bUseTrayIcon)
+#endif
+FilterNextTimeEffectBool(UseDBus, fc.bUseDBus)
+
+CONFIG_BINDING_BEGIN(FcitxConfig);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "Font", font, FilterCopyFont);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "MenuFont", menuFont, FilterCopyMenuFont);
+#ifndef _ENABLE_PANGO
+CONFIG_BINDING_REGISTER("Program", "FontLocale", strUserLocale);
+#endif
+#ifdef _ENABLE_RECORDING
+CONFIG_BINDING_REGISTER("Program", "RecordFile", strRecordingPath);
+#endif
+#ifdef _ENABLE_TRAY
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseTray", bUseTrayIcon_, FilterCopyUseTray);
+#endif
+#ifdef _ENABLE_DBUS
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseDBus", bUseDBus_, FilterCopyUseDBus);
+#endif
+CONFIG_BINDING_REGISTER("Program", "EnableAddons", bEnableAddons);
+CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart);
+CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber);
+CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo);
+CONFIG_BINDING_REGISTER("Output", "SemiColonAction", semicolonToDo);
+CONFIG_BINDING_REGISTER("Output", "InputEngByCapitalChar", bEngAfterCap);
+CONFIG_BINDING_REGISTER("Output", "ConvertPunc", bConvertPunc);
+CONFIG_BINDING_REGISTER("Output", "LegendModeDisablePaging", bDisablePagingInLegend);
+CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEng);
+CONFIG_BINDING_REGISTER("Appearance", "CandidateWordNumber", iMaxCandWord);
+CONFIG_BINDING_REGISTER("Appearance", "MainWindowHideMode", hideMainWindow);
+CONFIG_BINDING_REGISTER("Appearance", "CenterInputWindow", bCenterInputWindow);
+CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering);
+CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber);
+CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed);
+CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion);
+CONFIG_BINDING_REGISTER("Appearance", "ShowHintWindow", bHintWindow);
+CONFIG_BINDING_REGISTER("Appearance", "SkinType", skinType);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "TriggerKey", hkTrigger, FilterTriggerKey);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "ChnEngSwitchKey", iSwitchKey, FilterSwitchKey);
+CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey);
+CONFIG_BINDING_REGISTER("Hotkey", "TimeInterval", iTimeInterval);
+CONFIG_BINDING_REGISTER("Hotkey", "FollowCursorKey", hkTrack);
+CONFIG_BINDING_REGISTER("Hotkey", "HideMainWindowKey", hkHideMainWindow);
+CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK);
+CONFIG_BINDING_REGISTER("Hotkey", "TraditionalChnSwitchKey", hkGBT);
+CONFIG_BINDING_REGISTER("Hotkey", "LegendSwitchKey", hkLegend);
+CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkCorner);
+CONFIG_BINDING_REGISTER("Hotkey", "ChnPuncSwitchKey", hkPunc);
+CONFIG_BINDING_REGISTER("Hotkey", "PrevPageKey", hkPrevPage);
+CONFIG_BINDING_REGISTER("Hotkey", "NextPageKey", hkNextPage);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SecondThirdCandWordKey", str2nd3rdCand, Filter2nd3rdKey);
+CONFIG_BINDING_REGISTER("Hotkey", "SaveAllKey", hkSaveAll);
+#ifdef _ENABLE_RECORDING
+CONFIG_BINDING_REGISTER("Hotkey", "SetRecordingKey", hkRecording);
+CONFIG_BINDING_REGISTER("Hotkey", "ResetRecordingKey", hkResetRecording);
+#endif
+CONFIG_BINDING_REGISTER("InputMethod", "PhraseTips", bPhraseTips);
+CONFIG_BINDING_END()
+
+void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    char *pstr = *(char **)value;
+    if (sync == Raw2Value)
+    {
+        if (gs.font)
+            free(gs.font);
+        gs.font = strdup(pstr);
+    }
+}
+
+void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    char *pstr = *(char **)value;
+    if (sync == Raw2Value)
+    {
+        if (gs.menuFont)
+            free(gs.menuFont);
+        gs.menuFont = strdup(pstr);
+    }
+}
+
+void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    char *pstr = *(char**) value;
+
+    if(sync == Raw2Value){
+        if (!strcasecmp (pstr, "SHIFT")) {
+            fc.i2ndSelectKey[0].sym = fc.i2ndSelectKey[1].sym = XK_Shift_L;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[0].sym = fc.i3rdSelectKey[1].sym = XK_Shift_R;        //右SHIFT的扫描码
+            fc.i3rdSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[1].state = KEY_NONE;
+        }
+        else if (!strcasecmp (pstr, "CTRL")) {
+            fc.i2ndSelectKey[0].sym = fc.i2ndSelectKey[1].sym = XK_Control_L;        //左CTRL的扫描码
+            fc.i2ndSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
+            fc.i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[0].sym = fc.i3rdSelectKey[1].sym = XK_Control_R;       //右CTRL的扫描码
+            fc.i3rdSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
+            fc.i3rdSelectKey[1].state = KEY_NONE;
+        }
+        else {
+            if (pstr[0] && pstr[0]!='0')
+            {
+                fc.i2ndSelectKey[0].sym = pstr[0] & 0xFF;
+                fc.i2ndSelectKey[0].state = KEY_NONE;
+            }
+            else
+            {
+                fc.i2ndSelectKey[0].sym = 0;
+                fc.i2ndSelectKey[0].state = KEY_NONE;
+            }
+            if (pstr[1] && pstr[1]!='0')
+            {
+                fc.i3rdSelectKey[0].sym = pstr[1] & 0xFF;
+                fc.i3rdSelectKey[0].state = KEY_NONE;
+            }
+            else
+            {
+                fc.i3rdSelectKey[0].sym = 0;
+                fc.i3rdSelectKey[0].state = KEY_NONE;
+            }
+        }
+    }
+}
+
+void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    HOTKEYS *hotkey = (HOTKEYS*)value;
+    if (sync == Raw2Value)
+    {
+        if (hotkey[0].desc == NULL && hotkey[1].desc == NULL)
+        {
+            hotkey[0].desc = strdup("CTRL_SPACE");
+            hotkey[0].sym = XK_space;
+            hotkey[0].state = KEY_CTRL_COMP;
+        }
+        char *strkey[2];
+        int i = 0;
+        for (;i<2;i++)
+        {
+            if (hotkey[i].desc == NULL)
+                break;
+            strkey[i] = hotkey[i].desc;
+        }
+    }
+}
+
+void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+#if 0
+    if (sync == Raw2Value)
+    {
+        SWITCHKEY *s = (SWITCHKEY*)value;
+        switch(*s)
+        {
+            case S_R_CTRL:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Control_R);
+                break;
+            case S_R_SHIFT:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Shift_R);
+                break;
+            case S_L_SHIFT:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Shift_L);
+                break;
+            case S_R_SUPER:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Super_R);
+                break;
+            case S_L_SUPER:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Super_L);
+                break;
+            case S_L_CTRL:
+                fc.switchKey = XKeysymToKeycode (dpy, XK_Control_L);
+                break;
+        }
+    }
+#endif
+}
+
+void LoadConfig()
+{
+    FILE *fp;
+    char *file;
+    fp = GetXDGFileUser( "config", "rt", &file);
+    FcitxLog(INFO, _("Load Config File %s"), file);
+    free(file);
+    if (!fp) {
+        if (errno == ENOENT)
+        {
+            SaveConfig();
+            LoadConfig();
+        }
+        return;
+    }
+    
+    ConfigFileDesc* configDesc = GetConfigDesc();
+    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    
+    FcitxConfigConfigBind(&fc, cfile, configDesc);
+    ConfigBindSync((GenericConfig*)&fc);
+
+    IsReloadConfig = True;
+    
+    fclose(fp);
+/*#ifndef _ENABLE_PANGO
+    CreateFont();
+#endif*/
+}
+
+ConfigFileDesc* GetConfigDesc()
+{
+    if (!fcitxConfigDesc)
+    {
+        FILE *tmpfp;
+        tmpfp = GetXDGFileData("config.desc", "r", NULL);
+        fcitxConfigDesc = ParseConfigFileDescFp(tmpfp);
+		fclose(tmpfp);
+    }
+
+    return fcitxConfigDesc;
+}
+
+void SaveConfig()
+{
+    ConfigFileDesc* configDesc = GetConfigDesc();
+    char *file;
+    FILE *fp = GetXDGFileUser("config", "wt", &file);
+    FcitxLog(INFO, "Save Config to %s", file);
+    SaveConfigFileFp(fp, fc.gconfig.configFile, configDesc);
+    free(file);
+    fclose(fp);
+}
+
+GenericConfig* GetConfig()
+{
+    return &fc.gconfig;
+}
+
+
+int ConfigGetMaxCandWord()
+{
+    return fc.iMaxCandWord;
+}
+
+Bool ConfigGetPointAfterNumber()
+{
+    return fc.bPointAfterNumber;
+}

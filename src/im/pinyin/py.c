@@ -35,26 +35,29 @@
 
 #include "core/fcitx.h"
 
-#include "tools/tools.h"
+#include "utils/utils.h"
 #include "core/ime.h"
 #include "core/keys.h"
-#include "ui/InputWindow.h"
-#include "im/pinyin/py.h"
-#include "im/pinyin/PYFA.h"
-#include "im/pinyin/pyParser.h"
-#include "im/pinyin/sp.h"
-#include "tools/utf8.h"
-#include "tools/profile.h"
-#include "tools/configfile.h"
+#include "core/ui.h"
+#include "py.h"
+#include "PYFA.h"
+#include "pyParser.h"
+#include "sp.h"
+#include "utils/utf8.h"
+#include "utils/profile.h"
+#include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
+#include "pyconfig.h"
+
+FcitxPinyinConfig pyconfig;
 
 int iPYFACount;
 PYFA *PYFAList;
 uint iCounter = 0;
 uint iOrigCounter = 0;
-Bool bPYBaseDictLoaded = False;
-Bool bPYOtherDictLoaded = False;
+boolean bPYBaseDictLoaded = False;
+boolean bPYOtherDictLoaded = False;
 
 PyFreq *pyFreq = NULL, *pCurFreq = NULL;
 uint iPYFreqCount = 0;
@@ -75,23 +78,23 @@ PYCandWord PYCandWords[MAX_CAND_WORD];
 char strPYAuto[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
 char strPYAutoMap[MAX_WORDS_USER_INPUT * 2 + 1];
 
-INT8 iNewPYPhraseCount = 0;
-INT8 iOrderCount = 0;
-INT8 iNewFreqCount = 0;
+char iNewPYPhraseCount = 0;
+char iOrderCount = 0;
+char iNewFreqCount = 0;
 
-INT8 iYCDZ = 0;
+char iYCDZ = 0;
 
-Bool bIsPYAddFreq = False;
-Bool bIsPYDelFreq = False;
-Bool bIsPYDelUserPhr = False;
+boolean bIsPYAddFreq = False;
+boolean bIsPYDelFreq = False;
+boolean bIsPYDelUserPhr = False;
 
-Bool isSavingPYUserPhrase = False;
-Bool isSavingPYIndex = False;
-Bool isSavingPYFreq = False;
+boolean isSavingPYUserPhrase = False;
+boolean isSavingPYIndex = False;
+boolean isSavingPYFreq = False;
 
-extern Bool bIsInLegend;
-extern Bool bSP_UseSemicolon;
-extern Bool bSP;
+extern boolean bIsInLegend;
+extern boolean bSP_UseSemicolon;
+extern boolean bSP;
 extern int iCandWordCount;
 extern int iCandPageCount;
 extern int iCodeInputCount;
@@ -99,20 +102,20 @@ extern int iCurrentCandPage;
 extern char strCodeInput[];
 
 extern char strStringGet[];
-extern Bool bIsDoInputOnly;
+extern boolean bIsDoInputOnly;
 
 extern int iLegendCandWordCount;
 extern int iLegendCandPageCount;
 extern int iCurrentLegendCandPage;
 
-static void LoadPYPhraseDict(FILE *fp, Bool isSystem);
+static void LoadPYPhraseDict(FILE *fp, boolean isSystem);
 
 void PYInit(void)
 {
     bSP = False;
 }
 
-Bool LoadPYBaseDict(void)
+boolean LoadPYBaseDict(void)
 {
     FILE *fp;
     int i, j, iLen;
@@ -130,8 +133,8 @@ Bool LoadPYBaseDict(void)
         fread(&(PYFAList[i].iBase), sizeof(int), 1, fp);
         PYFAList[i].pyBase = (PyBase *) malloc(sizeof(PyBase) * PYFAList[i].iBase);
         for (j = 0; j < PYFAList[i].iBase; j++) {
-            INT8 len;
-            fread(&len, sizeof(INT8), 1, fp);
+            char len;
+            fread(&len, sizeof(char), 1, fp);
             fread(PYFAList[i].pyBase[j].strHZ, sizeof(char) * len, 1, fp);
             PYFAList[i].pyBase[j].strHZ[len] = '\0';
             fread(&iLen, sizeof(int), 1, fp);
@@ -219,16 +222,16 @@ StringHashSet *GetPYPhraseFiles()
     return sset;
 }
 
-void LoadPYPhraseDict(FILE *fp, Bool isSystem)
+void LoadPYPhraseDict(FILE *fp, boolean isSystem)
 {
     int i, j ,k, count, iLen;
     char strBase[UTF8_MAX_LENGTH + 1];
     PyPhrase *temp, *phrase = NULL;
     while (!feof(fp)) {
-        INT8 clen;
+        char clen;
         if (!fread(&i, sizeof(int), 1, fp))
             break;
-        if (!fread(&clen, sizeof(INT8), 1, fp))
+        if (!fread(&clen, sizeof(char), 1, fp))
             break;
         if (clen <= 0 || clen > UTF8_MAX_LENGTH)
             break;
@@ -297,8 +300,8 @@ void LoadPYPhraseDict(FILE *fp, Bool isSystem)
             else
             {
                 int m, n;
-                Bool *flag = malloc(sizeof(Bool) * count);
-                memset(flag, 0, sizeof(Bool) * count);
+                boolean *flag = malloc(sizeof(boolean) * count);
+                memset(flag, 0, sizeof(boolean) * count);
                 int left = count;
                 phrase = temp;
                 for (m = 0; m < count; m++)
@@ -344,7 +347,7 @@ void LoadPYPhraseDict(FILE *fp, Bool isSystem)
     }
 }
 
-Bool LoadPYOtherDict(void)
+boolean LoadPYOtherDict(void)
 {
     //下面开始读系统词组
     FILE *fp;
@@ -434,9 +437,9 @@ Bool LoadPYOtherDict(void)
             pHZ = pyFreqTemp->HZList;
 
             for (k = 0; k < pyFreqTemp->iCount; k++) {
-                INT8 slen;
+                char slen;
                 HZTemp = (HZ *) malloc(sizeof(HZ));
-                fread(&slen, sizeof(INT8), 1, fp);
+                fread(&slen, sizeof(char), 1, fp);
                 fread(HZTemp->strHZ, sizeof(char) * slen, 1, fp);
                 HZTemp->strHZ[slen] = '\0';
                 fread(&j, sizeof(int), 1, fp);
@@ -568,7 +571,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
     if (!bIsPYAddFreq && !bIsPYDelFreq && !bIsPYDelUserPhr) {
         if ((IsHotKeyLAZ(sym, state) || IsHotKey(sym, state, FCITX_SEPARATOR) || (bSP && bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON)))) {
             bIsInLegend = False;
-            inputWindow.bShowCursor = True;
+            gs.bShowCursor = True;
 
             if (IsHotKey(sym, state, FCITX_SEPARATOR)) {
                 if (!iPYInsertPoint)
@@ -708,7 +711,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 strcpy(strStringGet, PYGetLegendCandWord(0));
                 val = IRV_GET_LEGEND;
             }
-        } else if (IsHotKey(sym, state, fc.hkPYDelUserPhr)) {
+        } else if (IsHotKey(sym, state, pyconfig.hkPYDelUserPhr)) {
             if (!bIsPYDelUserPhr) {
                 for (val = 0; val < iCandWordCount; val++) {
                     if (PYCandWords[val].iWhich == PY_CAND_USERPHRASE)
@@ -720,24 +723,24 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 bIsPYDelUserPhr = True;
                 bIsDoInputOnly = True;
 
-                SetMessageCount(&messageUp, 0);
-                AddMessageAtLast(&messageUp, MSG_TIPS, "选择标号的用户词组将被删除(ESC取消)");
-                inputWindow.bShowCursor = False;
+                SetMessageCount(&gs.messageUp, 0);
+                AddMessageAtLast(&gs.messageUp, MSG_TIPS, "选择标号的用户词组将被删除(ESC取消)");
+                gs.bShowCursor = False;
 
                 return IRV_DISPLAY_MESSAGE;
             }
-        } else if (IsHotKey(sym, state, fc.hkPYAddFreq)) {
+        } else if (IsHotKey(sym, state, pyconfig.hkPYAddFreq)) {
             if (!bIsPYAddFreq && findMap.iHZCount == 1 && iCodeInputCount) {
                 bIsPYAddFreq = True;
                 bIsDoInputOnly = True;
 
-                SetMessageCount(&messageUp, 0);
-                AddMessageAtLast(&messageUp, MSG_TIPS, "选择标号的字将进入 %s 的常用字表(ESC取消)", strFindString);
-                inputWindow.bShowCursor = False;
+                SetMessageCount(&gs.messageUp, 0);
+                AddMessageAtLast(&gs.messageUp, MSG_TIPS, "选择标号的字将进入 %s 的常用字表(ESC取消)", strFindString);
+                gs.bShowCursor = False;
 
                 return IRV_DISPLAY_MESSAGE;
             }
-        } else if (IsHotKey(sym, state, fc.hkPYDelFreq)) {
+        } else if (IsHotKey(sym, state, pyconfig.hkPYDelFreq)) {
             if (!bIsPYDelFreq && (pCurFreq && !pCurFreq->bIsSym)) {
                 for (val = 0; val < iCandWordCount; val++) {
                     if (PYCandWords[val].iWhich != PY_CAND_FREQ)
@@ -747,16 +750,16 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                 if (!val)
                     return IRV_DO_NOTHING;
 
-                SetMessageCount(&messageUp, 0);
+                SetMessageCount(&gs.messageUp, 0);
                 if (val == 1)
-                    AddMessageAtLast(&messageUp, MSG_TIPS, "按 1 删除 %s 的常用字(ESC取消)", strFindString);
+                    AddMessageAtLast(&gs.messageUp, MSG_TIPS, _("按 1 删除 %s 的常用字(ESC取消)"), strFindString);
                 else
-                    AddMessageAtLast(&messageUp, MSG_TIPS, "按 1-%d 删除 %s 的常用字(ESC取消)", val, strFindString);
+                    AddMessageAtLast(&gs.messageUp, MSG_TIPS, _("按 1-%d 删除 %s 的常用字(ESC取消)"), val, strFindString);
 
                 bIsPYDelFreq = True;
                 bIsDoInputOnly = True;
 
-                inputWindow.bShowCursor = False;
+                gs.bShowCursor = False;
 
                 return IRV_DISPLAY_MESSAGE;
             }
@@ -789,7 +792,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                             bIsPYDelUserPhr = False;
                         }
                         bIsDoInputOnly = False;
-                        inputWindow.bShowCursor = True;
+                        gs.bShowCursor = True;
 
                         val = IRV_DISPLAY_CANDWORDS;
                     } else {
@@ -821,22 +824,22 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
 
             //下面实现以词定字
             if (iCandWordCount) {
-                if (state == KEY_NONE && (sym == fc.cPYYCDZ[0] || sym == fc.cPYYCDZ[1])) {
+                if (state == KEY_NONE && (sym == pyconfig.cPYYCDZ[0] || sym == pyconfig.cPYYCDZ[1])) {
                     if (PYCandWords[iYCDZ].iWhich == PY_CAND_USERPHRASE || PYCandWords[iYCDZ].iWhich == PY_CAND_SYMPHRASE) {
                         char *pBase, *pPhrase;
 
                         pBase = PYFAList[PYCandWords[iYCDZ].cand.phrase.iPYFA].pyBase[PYCandWords[iYCDZ].cand.phrase.iBase].strHZ;
                         pPhrase = PYCandWords[iYCDZ].cand.phrase.phrase->strPhrase;
 
-                        if (sym == fc.cPYYCDZ[0])
+                        if (sym == pyconfig.cPYYCDZ[0])
                             strcpy(strStringGet, pBase);
                         else {
-                            INT8 clen;
+                            char clen;
                             clen = utf8_char_len(pPhrase);
                             strncpy(strStringGet, pPhrase, clen);
                             strStringGet[clen] = '\0';
                         }
-                        SetMessageCount(&messageDown, 0);
+                        SetMessageCount(&gs.messageDown, 0);
                         return IRV_GET_CANDWORDS;
                     }
                 } else if (!bIsInLegend) {
@@ -883,15 +886,15 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
     }
 
     if (val == IRV_DISPLAY_CANDWORDS) {
-        SetMessageCount(&messageUp, 0);
+        SetMessageCount(&gs.messageUp, 0);
         if (iPYSelected) {
-            AddMessageAtLast(&messageUp, MSG_OTHER, "");
+            AddMessageAtLast(&gs.messageUp, MSG_OTHER, "");
             for (i = 0; i < iPYSelected; i++)
-                strcat(LAST_MESSAGE(messageUp).strMsg, pySelected[i].strHZ);
+                strcat(LAST_MESSAGE(gs.messageUp).strMsg, pySelected[i].strHZ);
         }
 
         for (i = 0; i < findMap.iHZCount; i++) {
-            AddMessageAtLast(&messageUp, MSG_CODE, "%s ", findMap.strPYParsed[i]);
+            AddMessageAtLast(&gs.messageUp, MSG_CODE, "%s ", findMap.strPYParsed[i]);
         }
 
         return PYGetCandWords(SM_FIRST);
@@ -908,9 +911,9 @@ void CalculateCursorPosition(void)
     int i;
     int iTemp;
 
-    iCursorPos = 0;
+    gs.iCursorPos = 0;
     for (i = 0; i < iPYSelected; i++)
-        iCursorPos += strlen(pySelected[i].strHZ);
+        gs.iCursorPos += strlen(pySelected[i].strHZ);
 
     if (iPYInsertPoint > strlen(strFindString))
         iPYInsertPoint = strlen(strFindString);
@@ -918,12 +921,12 @@ void CalculateCursorPosition(void)
 
     for (i = 0; i < findMap.iHZCount; i++) {
         if (strlen(findMap.strPYParsed[i]) >= iTemp) {
-            iCursorPos += iTemp;
+            gs.iCursorPos += iTemp;
             break;
         }
-        iCursorPos += strlen(findMap.strPYParsed[i]);
+        gs.iCursorPos += strlen(findMap.strPYParsed[i]);
 
-        iCursorPos++;
+        gs.iCursorPos++;
         iTemp -= strlen(findMap.strPYParsed[i]);
     }
 }
@@ -992,7 +995,7 @@ INPUT_RETURN_VALUE PYGetCandWords(SEARCH_MODE mode)
     int iVal;
 
     if (findMap.iMode == PARSE_ERROR) {
-        SetMessageCount(&messageDown, 0);
+        SetMessageCount(&gs.messageDown, 0);
         iCandPageCount = 0;
         iCandWordCount = 0;
 
@@ -1018,7 +1021,7 @@ INPUT_RETURN_VALUE PYGetCandWords(SEARCH_MODE mode)
             pCurFreq = pCurFreq->next;
         }
 
-        if (fc.bPYCreateAuto)
+        if (pyconfig.bPYCreateAuto)
             PYCreateAuto();
     } else {
         if (!iCandPageCount)
@@ -1069,20 +1072,20 @@ void PYCreateCandString(void)
     char *pBase = NULL, *pPhrase;
     int iVal;
     MSG_TYPE iType;
-
-    if (fc.bPointAfterNumber) {
+    
+    if ( ConfigGetPointAfterNumber()) {
         str[1] = '.';
         str[2] = '\0';
     } else
         str[1] = '\0';
-    SetMessageCount(&messageDown, 0);
+    SetMessageCount(&gs.messageDown, 0);
 
     for (iVal = 0; iVal < iCandWordCount; iVal++) {
         if (iVal == 9)
             str[0] = '0';
         else
             str[0] = iVal + 1 + '0';
-        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", str);
+        AddMessageAtLast(&gs.messageDown, MSG_INDEX, "%s", str);
 
         iType = MSG_OTHER;
         if (PYCandWords[iVal].iWhich == PY_CAND_AUTO)
@@ -1090,9 +1093,9 @@ void PYCreateCandString(void)
         if (PYCandWords[iVal].iWhich != PY_CAND_AUTO && iVal == iYCDZ)
             iType = MSG_FIRSTCAND;
 
-        AddMessageAtLast(&messageDown, iType, "");
+        AddMessageAtLast(&gs.messageDown, iType, "");
         if (PYCandWords[iVal].iWhich == PY_CAND_AUTO) {
-            MessageConcatLast(&messageDown, strPYAuto);
+            MessageConcatLast(&gs.messageDown, strPYAuto);
         } else {
             pPhrase = NULL;
             switch (PYCandWords[iVal].iWhich) {
@@ -1113,13 +1116,13 @@ void PYCreateCandString(void)
                 pBase = PYCandWords[iVal].cand.freq.hz->strHZ;
                 break;
             }
-            MessageConcatLast(&messageDown, pBase);
+            MessageConcatLast(&gs.messageDown, pBase);
             if (pPhrase)
-                MessageConcatLast(&messageDown, pPhrase);
+                MessageConcatLast(&gs.messageDown, pPhrase);
         }
 
         if (iVal != (iCandWordCount - 1)) {
-            MessageConcatLast(&messageDown, " ");
+            MessageConcatLast(&gs.messageDown, " ");
         }
     }
 }
@@ -1156,7 +1159,7 @@ void PYGetCandText(int iIndex, char *strText)
     }
 }
 
-void PYSetCandWordsFlag(Bool flag)
+void PYSetCandWordsFlag(boolean flag)
 {
     int i;
 
@@ -1164,7 +1167,7 @@ void PYSetCandWordsFlag(Bool flag)
         PYSetCandWordFlag(i, flag);
 }
 
-void PYSetCandWordFlag(int iIndex, Bool flag)
+void PYSetCandWordFlag(int iIndex, boolean flag)
 {
     switch (PYCandWords[iIndex].iWhich) {
     case PY_CAND_BASE:
@@ -1345,7 +1348,7 @@ char *PYGetCandWord(int iIndex)
     char *pBase = NULL, *pPhrase = NULL;
     char *pBaseMap = NULL, *pPhraseMap = NULL;
     uint *pIndex = NULL;
-    Bool bAddNewPhrase = True;
+    boolean bAddNewPhrase = True;
     int i;
     char strHZString[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     int iLen;
@@ -1358,7 +1361,7 @@ char *PYGetCandWord(int iIndex)
     case PY_CAND_AUTO:
         pBase = strPYAuto;
         pBaseMap = strPYAutoMap;
-        bAddNewPhrase = fc.bPYSaveAutoAsPhrase;
+        bAddNewPhrase = pyconfig.bPYSaveAutoAsPhrase;
         break;
     case PY_CAND_BASE:         //是系统单字
         pBase = PYFAList[PYCandWords[iIndex].cand.base.iPYFA].pyBase[PYCandWords[iIndex].cand.base.iBase].strHZ;
@@ -1401,9 +1404,9 @@ char *PYGetCandWord(int iIndex)
         iNewFreqCount = 0;
     }
 
-    SetMessageText(&messageDown, messageDown.msgCount, pBase);
+    SetMessageText(&gs.messageDown, gs.messageDown.msgCount, pBase);
     if (pPhrase)
-        MessageConcat(&messageDown, messageDown.msgCount, pPhrase);
+        MessageConcat(&gs.messageDown, gs.messageDown.msgCount, pPhrase);
     strcpy(strHZString, pBase);
     if (pPhrase)
         strcat(strHZString, pPhrase);
@@ -1423,8 +1426,8 @@ char *PYGetCandWord(int iIndex)
             strcat(strHZString, pPhraseMap);
         if (bAddNewPhrase && (utf8_strlen(strPYAuto) <= (MAX_PY_PHRASE_LENGTH)))
             PYAddUserPhrase(strPYAuto, strHZString);
-        SetMessageCount(&messageDown, 0);
-        SetMessageCount(&messageUp, 0);
+        SetMessageCount(&gs.messageDown, 0);
+        SetMessageCount(&gs.messageUp, 0);
         if (fcitxProfile.bUseLegend) {
             strcpy(strPYLegendSource, strPYAuto);
             strcpy(strPYLegendMap, strHZString);
@@ -1475,13 +1478,13 @@ void PYGetCandWordsBackward(void)
     else {
         PYGetFreqCandWords(SM_PREV);
         PYGetBaseCandWords(SM_PREV);
-        if (iCandWordCount == fc.iMaxCandWord)
+        if (iCandWordCount == ConfigGetMaxCandWord())
             return;
         PYGetPhraseCandWords(SM_PREV);
     }
 }
 
-Bool PYCheckNextCandPage(void)
+boolean PYCheckNextCandPage(void)
 {
     PYCandIndex candPos;
     int val;
@@ -1635,7 +1638,7 @@ void PYGetPhraseCandWords(SEARCH_MODE mode)
  * 将一个词加入到候选列表的合适位置中
  * b = True 表示是系统词组，False表示是用户词组
  */
-Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, Bool b)
+boolean PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, boolean b)
 {
     char str[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     int i = 0, j, iStart = 0;
@@ -1649,7 +1652,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
         }
     }
 
-    switch (fc.phraseOrder) {
+    switch (pyconfig.phraseOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
             for (i = (iCandWordCount - 1); i >= 0; i--) {
@@ -1666,11 +1669,11 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return False;
                 else
                     i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
@@ -1678,7 +1681,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
                     if (strlen(PYCandWords[i].cand.phrase.phrase->strPhrase) < strlen(phrase->strPhrase))
                         break;
             }
-            if (i > fc.iMaxCandWord)
+            if (i > ConfigGetMaxCandWord())
                 return False;
         }
         break;
@@ -1709,10 +1712,10 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
@@ -1730,7 +1733,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
                 }
             }
 
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
         break;
@@ -1760,10 +1763,10 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
@@ -1780,7 +1783,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
                     }
                 }
             }
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
         break;
@@ -1788,7 +1791,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
     //×××××××××××××××××××××××××××××××××××××××××××××××××××××
 
     if (mode == SM_PREV) {
-        if (iCandWordCount == fc.iMaxCandWord) {
+        if (iCandWordCount == ConfigGetMaxCandWord()) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -1832,7 +1835,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
         }
     } else {
         j = iCandWordCount;
-        if (iCandWordCount == fc.iMaxCandWord)
+        if (iCandWordCount == ConfigGetMaxCandWord())
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -1859,7 +1862,7 @@ Bool PYAddPhraseCandWord(PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, B
     PYCandWords[i].cand.phrase.phrase = phrase;
     PYCandWords[i].cand.phrase.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.phrase.iBase = pos.iBase;
-    if (iCandWordCount != fc.iMaxCandWord)
+    if (iCandWordCount != ConfigGetMaxCandWord())
         iCandWordCount++;
     return True;
 }
@@ -1889,19 +1892,19 @@ void PYGetSymCandWords(SEARCH_MODE mode)
  * 将一个符号加入到候选列表的合适位置中
  * 符号不需进行频率调整
  */
-Bool PYAddSymCandWord(HZ * hz, SEARCH_MODE mode)
+boolean PYAddSymCandWord(HZ * hz, SEARCH_MODE mode)
 {
     int i, j;
 
     if (mode == SM_PREV) {
-        if (iCandWordCount == fc.iMaxCandWord) {
+        if (iCandWordCount == ConfigGetMaxCandWord()) {
             i = iCandWordCount - 1;
             for (j = 0; j < i; j++)
                 PYCandWords[j].cand.sym.hz = PYCandWords[j + 1].cand.sym.hz;
         } else
             i = iCandWordCount;
     } else {
-        if (iCandWordCount == fc.iMaxCandWord)
+        if (iCandWordCount == ConfigGetMaxCandWord())
             return False;
         i = iCandWordCount;
         for (j = iCandWordCount - 1; j > i; j--)
@@ -1910,7 +1913,7 @@ Bool PYAddSymCandWord(HZ * hz, SEARCH_MODE mode)
 
     PYCandWords[i].iWhich = PY_CAND_SYMBOL;
     PYCandWords[i].cand.sym.hz = hz;
-    if (iCandWordCount != fc.iMaxCandWord)
+    if (iCandWordCount != ConfigGetMaxCandWord())
         iCandWordCount++;
     return True;
 }
@@ -1948,20 +1951,20 @@ void PYGetBaseCandWords(SEARCH_MODE mode)
 /*
  * 将一个字加入到候选列表的合适位置中
  */
-Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
+boolean PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
 {
     int i = 0, j;
     int iStart = 0;
 
-    switch (fc.baseOrder) {
+    switch (pyconfig.baseOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
-            if (iCandWordCount == fc.iMaxCandWord)
+            if (iCandWordCount == ConfigGetMaxCandWord())
                 i = iCandWordCount - 1;
             else
                 i = iCandWordCount;
         } else {
-            if (iCandWordCount == fc.iMaxCandWord)
+            if (iCandWordCount == ConfigGetMaxCandWord())
                 return False;
             i = iCandWordCount;
         }
@@ -1991,10 +1994,10 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
@@ -2011,7 +2014,7 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
                 }
             }
 
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
 
@@ -2041,10 +2044,10 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
@@ -2060,14 +2063,14 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
                     }
                 }
             }
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
         break;
     }
 
     if (mode == SM_PREV) {
-        if (iCandWordCount == fc.iMaxCandWord) {
+        if (iCandWordCount == ConfigGetMaxCandWord()) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -2110,7 +2113,7 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
         }
     } else {
         j = iCandWordCount;
-        if (iCandWordCount == fc.iMaxCandWord)
+        if (iCandWordCount == ConfigGetMaxCandWord())
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -2136,7 +2139,7 @@ Bool PYAddBaseCandWord(PYCandIndex pos, SEARCH_MODE mode)
     PYCandWords[i].iWhich = PY_CAND_BASE;
     PYCandWords[i].cand.base.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.base.iBase = pos.iBase;
-    if (iCandWordCount != fc.iMaxCandWord)
+    if (iCandWordCount != ConfigGetMaxCandWord())
         iCandWordCount++;
     return True;
 }
@@ -2164,18 +2167,18 @@ void PYGetFreqCandWords(SEARCH_MODE mode)
 /*
  * 将一个常用字加入到候选列表的合适位置中
  */
-Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
+boolean PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
 {
     int i = 0, j;
     int iStart = 0;
 
-    switch (fc.freqOrder) {
+    switch (pyconfig.freqOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
-            if (iCandWordCount == fc.iMaxCandWord)
+            if (iCandWordCount == ConfigGetMaxCandWord())
                 i = iCandWordCount - 1;
         } else {
-            if (iCandWordCount == fc.iMaxCandWord)
+            if (iCandWordCount == ConfigGetMaxCandWord())
                 return False;
             i = iCandWordCount;
         }
@@ -2194,17 +2197,17 @@ Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
                 if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iIndex > PYCandWords[i].cand.freq.hz->iIndex))
                     break;
             }
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
         break;
@@ -2222,24 +2225,24 @@ Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
             }
 
             if (i < 0) {
-                if (iCandWordCount == fc.iMaxCandWord)
+                if (iCandWordCount == ConfigGetMaxCandWord())
                     return True;
                 i = 0;
-            } else if (iCandWordCount == fc.iMaxCandWord)
+            } else if (iCandWordCount == ConfigGetMaxCandWord())
                 i--;
         } else {
             for (i = 0; i < iCandWordCount; i++) {
                 if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit > PYCandWords[i].cand.freq.hz->iHit))
                     break;
             }
-            if (i == fc.iMaxCandWord)
+            if (i == ConfigGetMaxCandWord())
                 return True;
         }
         break;
     }
 
     if (mode == SM_PREV) {
-        if (iCandWordCount == fc.iMaxCandWord) {
+        if (iCandWordCount == ConfigGetMaxCandWord()) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -2282,7 +2285,7 @@ Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
         }
     } else {
         j = iCandWordCount;
-        if (iCandWordCount == fc.iMaxCandWord)
+        if (iCandWordCount == ConfigGetMaxCandWord())
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -2308,7 +2311,7 @@ Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
     PYCandWords[i].iWhich = PY_CAND_FREQ;
     PYCandWords[i].cand.freq.hz = hz;
     PYCandWords[i].cand.freq.strPY = strPY;
-    if (iCandWordCount != fc.iMaxCandWord)
+    if (iCandWordCount != ConfigGetMaxCandWord())
         iCandWordCount++;
     return True;
 }
@@ -2317,7 +2320,7 @@ Bool PYAddFreqCandWord(HZ * hz, char *strPY, SEARCH_MODE mode)
  * 将一个词组保存到用户词组库中
  * 返回True表示是新词组
  */
-Bool PYAddUserPhrase(char *phrase, char *map)
+boolean PYAddUserPhrase(char *phrase, char *map)
 {
     PyPhrase *userPhrase, *newPhrase, *temp;
     char str[UTF8_MAX_LENGTH + 1];
@@ -2447,10 +2450,10 @@ void SavePYUserPhrase(void)
         for (j = 0; j < PYFAList[i].iBase; j++) {
             iTemp = PYFAList[i].pyBase[j].iUserPhrase;
             if (iTemp) {
-                INT8 clen;
+                char clen;
                 fwrite(&i, sizeof(int), 1, fp);
                 clen = strlen(PYFAList[i].pyBase[j].strHZ);
-                fwrite(&clen, sizeof(INT8), 1, fp);
+                fwrite(&clen, sizeof(char), 1, fp);
                 fwrite(PYFAList[i].pyBase[j].strHZ, sizeof(char) * clen, 1, fp);
                 fwrite(&iTemp, sizeof(int), 1, fp);
                 phrase = PYFAList[i].pyBase[j].userPhrase->next;
@@ -2522,8 +2525,8 @@ void SavePYFreq(void)
             hz = pPyFreq->HZList->next;
             for (k = 0; k < pPyFreq->iCount; k++) {
 
-                INT8 slen = strlen(hz->strHZ);
-                fwrite(&slen, sizeof(INT8), 1, fp);
+                char slen = strlen(hz->strHZ);
+                fwrite(&slen, sizeof(char), 1, fp);
                 fwrite(hz->strHZ, sizeof(char) * slen, 1, fp);
 
                 j = hz->iPYFA;
@@ -2723,7 +2726,7 @@ void PYDelFreq(int iIndex)
 /*
  * 判断一个字是否已经是常用字
  */
-Bool PYIsInFreq(char *strHZ)
+boolean PYIsInFreq(char *strHZ)
 {
     HZ *hz;
     int i;
@@ -2749,6 +2752,8 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
     int i, j;
     char strTemp[2];
     PyPhrase *phrase;
+    GenericConfig *fc = GetConfig();
+    boolean bDisablePagingInLegend = *ConfigGetBindValue(fc, "Output", "LegendModeDisablePaging").boolean;
 
     if (!strPYLegendSource[0])
         return IRV_TO_PROCESS;
@@ -2772,7 +2777,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
       _HIT:
         if (!pyBaseForLengend)
             return IRV_TO_PROCESS;
-        inputWindow.bShowCursor = False;
+        gs.bShowCursor = False;
     } else {
         if (!iLegendCandPageCount)
             return IRV_TO_PROCESS;
@@ -2831,7 +2836,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
     }
 
     PYSetLegendCandWordsFlag(True);
-    if (!fc.bDisablePagingInLegend && mode != SM_PREV && iCurrentLegendCandPage == iLegendCandPageCount) {
+    if (!bDisablePagingInLegend && mode != SM_PREV && iCurrentLegendCandPage == iLegendCandPageCount) {
         for (i = 0; i < pyBaseForLengend->iPhrase; i++) {
             if (utf8_strlen(strPYLegendSource) == 1) {
                 if (utf8_strlen(pyBaseForLengend->phrase[i].strPhrase) == 1 && !pyBaseForLengend->phrase[i].flag) {
@@ -2871,22 +2876,22 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
         ;
     }
 
-    SetMessageCount(&messageUp, 0);
-    AddMessageAtLast(&messageUp, MSG_TIPS, "联想：");
-    AddMessageAtLast(&messageUp, MSG_INPUT, "%s", strPYLegendSource);
+    SetMessageCount(&gs.messageUp, 0);
+    AddMessageAtLast(&gs.messageUp, MSG_TIPS, _("联想："));
+    AddMessageAtLast(&gs.messageUp, MSG_INPUT, "%s", strPYLegendSource);
     strTemp[1] = '\0';
-    SetMessageCount(&messageDown, 0);
+    SetMessageCount(&gs.messageDown, 0);
     for (i = 0; i < iLegendCandWordCount; i++) {
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
 
-        AddMessageAtLast(&messageDown, MSG_INDEX, "%s", strTemp);
-        AddMessageAtLast(&messageDown,
+        AddMessageAtLast(&gs.messageDown, MSG_INDEX, "%s", strTemp);
+        AddMessageAtLast(&gs.messageDown,
                          ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER),
                          "%s", PYLegendCandWords[i].phrase->strPhrase + PYLegendCandWords[i].iLength);
         if (i != (iLegendCandWordCount - 1)) {
-            MessageConcatLast(&messageDown, " ");
+            MessageConcatLast(&gs.messageDown, " ");
         }
     }
 
@@ -2894,7 +2899,7 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(SEARCH_MODE mode)
     return IRV_DISPLAY_CANDWORDS;
 }
 
-Bool PYAddLengendCandWord(PyPhrase * phrase, SEARCH_MODE mode)
+boolean PYAddLengendCandWord(PyPhrase * phrase, SEARCH_MODE mode)
 {
     int i = 0, j;
 
@@ -2907,22 +2912,22 @@ Bool PYAddLengendCandWord(PyPhrase * phrase, SEARCH_MODE mode)
         }
 
         if (i < 0) {
-            if (iLegendCandWordCount == fc.iMaxCandWord)
+            if (iLegendCandWordCount == ConfigGetMaxCandWord())
                 return True;
             i = 0;
-        } else if (iLegendCandWordCount == fc.iMaxCandWord)
+        } else if (iLegendCandWordCount == ConfigGetMaxCandWord())
             i--;
     } else {
         for (i = 0; i < iLegendCandWordCount; i++) {
             if (PYLegendCandWords[i].phrase->iHit < phrase->iHit)
                 break;
         }
-        if (i == fc.iMaxCandWord)
+        if (i == ConfigGetMaxCandWord())
             return True;
     }
 
     if (mode == SM_PREV) {
-        if (iLegendCandWordCount == fc.iMaxCandWord) {
+        if (iLegendCandWordCount == ConfigGetMaxCandWord()) {
             for (j = 0; j < i; j++) {
                 PYLegendCandWords[j].phrase = PYLegendCandWords[j + 1].phrase;
                 PYLegendCandWords[j].iLength = PYLegendCandWords[j + 1].iLength;
@@ -2935,7 +2940,7 @@ Bool PYAddLengendCandWord(PyPhrase * phrase, SEARCH_MODE mode)
         }
     } else {
         j = iLegendCandWordCount;
-        if (iLegendCandWordCount == fc.iMaxCandWord)
+        if (iLegendCandWordCount == ConfigGetMaxCandWord())
             j--;
         for (; j > i; j--) {
             PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
@@ -2945,7 +2950,7 @@ Bool PYAddLengendCandWord(PyPhrase * phrase, SEARCH_MODE mode)
 
     PYLegendCandWords[i].phrase = phrase;
     PYLegendCandWords[i].iLength = strlen(strPYLegendSource) - utf8_char_len(strPYLegendSource);
-    if (iLegendCandWordCount != fc.iMaxCandWord)
+    if (iLegendCandWordCount != ConfigGetMaxCandWord())
         iLegendCandWordCount++;
     return True;
 }
@@ -2964,7 +2969,7 @@ char *PYGetLegendCandWord(int iIndex)
     return NULL;
 }
 
-void PYSetLegendCandWordsFlag(Bool flag)
+void PYSetLegendCandWordsFlag(boolean flag)
 {
     int i;
 

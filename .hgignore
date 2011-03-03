@@ -1,0 +1,12 @@
+# use glob syntax.
+syntax: glob
+*~
+build/*
+data/pinyin.tar.gz
+data/pinyin.tar.gz.md5
+data/table/table.tar.gz
+data/table/table.tar.gz.md5
+fcitx.kdev4
+tools/pybase.mb
+tools/pyphrase.mb
+data/desc.po

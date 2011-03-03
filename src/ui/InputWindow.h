@@ -39,43 +39,6 @@
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
 
-/* #define INPUTWND_START_POS_UP	8 */
-#define INPUTWND_START_POS_DOWN	8
-#define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数
-
-#define MESSAGE_MAX_LENGTH	(MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)	//输入条上显示的最长长度，以字符计
-
-/* 将输入条上显示的内容分为以下几类 */
-#define MESSAGE_TYPE_COUNT	7
-
-typedef enum {
-    MSG_TIPS = 0,			//提示文本
-    MSG_INPUT = 1,			//用户的输入
-    MSG_INDEX = 2,			//候选字前面的序号
-    MSG_FIRSTCAND = 3,		//第一个候选字
-    MSG_USERPHR = 4,		//用户词组
-    MSG_CODE = 5,			//显示的编码
-    MSG_OTHER = 6,			//其它文本
-#ifdef _ENABLE_RECORDING
-    MSG_RECORDING = 7              //记录提示
-#endif
-} MSG_TYPE;
-
-typedef struct {
-    char            strMsg[MESSAGE_MAX_LENGTH + 1];
-    MSG_TYPE        type;
-} MESSAGE;
-
-#define MAX_MESSAGE_COUNT 33
-typedef struct Messages {
-    MESSAGE msg[33];
-    uint msgCount;
-    Bool changed;
-} Messages;
-
-extern Messages        messageUp;
-extern Messages        messageDown;
-
 typedef struct InputWindow {
     Window window;
     
@@ -101,23 +64,6 @@ typedef struct InputWindow {
 extern InputWindow inputWindow;
 extern int iCursorPos;
 
-#define MESSAGE_IS_NOT_EMPTY (messageUp.msgCount || messageDown.msgCount)
-#define MESSAGE_IS_EMPTY (!MESSAGE_IS_NOT_EMPTY)
-#define MESSAGE_TYPE_IS(msg, t) ((msg).type == (t))
-#define LAST_MESSAGE(m) ((m).msg[(m).msgCount - 1])
-#define DecMessageCount(m) \
-    do { \
-        if ((m)->msgCount > 0) \
-            ((m)->msgCount--); \
-        (m)->changed = True; \
-    } while(0)
-#define SetMessageCount(m,s) \
-    do { \
-        if ((s) <= MAX_MESSAGE_COUNT && s >= 0) \
-            ((m)->msgCount = (s)); \
-        (m)->changed = True; \
-    } while(0)
-
 Bool            CreateInputWindow (void);
 void            DisplayInputWindow (void);
 void            DrawInputWindow (void);
@@ -129,13 +75,6 @@ void            DisplayMessageDown (void);
 void            ResetInputWindow (void);
 void            MoveInputWindow();
 void            CloseInputWindow(void);
-
-void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...);
-void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...);
-#define SetMessageText(m, p, fmt) SetMessage((m), (p), (m)->msg[(p)].type, (fmt))
-void MessageConcat(Messages* message, int position, char* text);
-void MessageConcatLast(Messages* message, char* text);
-void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
 void DestroyInputWindow();
 
 #endif

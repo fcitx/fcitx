@@ -20,7 +20,8 @@
 #ifndef _PY_H
 #define _PY_H
 
-#include	"core/ime.h"
+#include "core/ime.h"
+#include "core/fcitx.h"
 
 #define PY_BASE_FILE	"pybase.mb"
 #define PY_PHRASE_FILE	"pyphrase.mb"
@@ -70,7 +71,7 @@ typedef struct PYFREQ {
     HZ             *HZList;
     char            strPY[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1];
     uint            iCount;
-    Bool            bIsSym;	//For special symbols
+    boolean            bIsSym;	//For special symbols
     struct PYFREQ  *next;
 } PyFreq;
 
@@ -153,9 +154,11 @@ typedef struct {
     char            strMap[MAX_PY_PHRASE_LENGTH * 2 + 1];
 } PY_SELECTED;
 
+#define TEMP_FILE       "FCITX_DICT_TEMP"
+
 void            PYInit (void);
-Bool            LoadPYBaseDict (void);
-Bool            LoadPYOtherDict (void);
+boolean         LoadPYBaseDict (void);
+boolean         LoadPYOtherDict (void);
 void            ResetPYStatus ();
 int             GetBaseIndex (int iPYFA, char *strBase);
 INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount);
@@ -170,19 +173,19 @@ void		PYCreateCandString(void);
 void		PYGetCandText(int iIndex, char *strText);
 char           *PYGetCandWord (int iIndex);
 void            PYGetSymCandWords (SEARCH_MODE mode);
-Bool            PYAddSymCandWord (HZ * hz, SEARCH_MODE mode);
+boolean            PYAddSymCandWord (HZ * hz, SEARCH_MODE mode);
 void            PYGetBaseCandWords (SEARCH_MODE mode);
-Bool            PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode);
+boolean            PYAddBaseCandWord (PYCandIndex pos, SEARCH_MODE mode);
 void            PYGetFreqCandWords (SEARCH_MODE mode);
-Bool            PYAddFreqCandWord (HZ * hz, char *strPY, SEARCH_MODE mode);
+boolean            PYAddFreqCandWord (HZ * hz, char *strPY, SEARCH_MODE mode);
 void            PYGetPhraseCandWords (SEARCH_MODE mode);
-Bool            PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, Bool b);
+boolean            PYAddPhraseCandWord (PYCandIndex pos, PyPhrase * phrase, SEARCH_MODE mode, boolean b);
 void            PYGetCandWordsForward (void);
 void            PYGetCandWordsBackward (void);
-Bool            PYCheckNextCandPage (void);
-void            PYSetCandWordFlag (int iIndex, Bool flag);
-void            PYSetCandWordsFlag (Bool flag);
-Bool            PYAddUserPhrase (char *phrase, char *map);
+boolean            PYCheckNextCandPage (void);
+void            PYSetCandWordFlag (int iIndex, boolean flag);
+void            PYSetCandWordsFlag (boolean flag);
+boolean            PYAddUserPhrase (char *phrase, char *map);
 void            PYDelUserPhrase (int iPYFA, int iBase, PyPhrase * phrase);
 int             GetBaseMapIndex (char *strMap);
 void            SavePYUserPhrase (void);
@@ -192,12 +195,12 @@ void		SavePY (void);
 
 void            PYAddFreq (int iIndex);
 void            PYDelFreq (int iIndex);
-Bool            PYIsInFreq (char *strHZ);
+boolean            PYIsInFreq (char *strHZ);
 
 INPUT_RETURN_VALUE PYGetLegendCandWords (SEARCH_MODE iMode);
-Bool            PYAddLengendCandWord (PyPhrase * phrase, SEARCH_MODE mode);
+boolean            PYAddLengendCandWord (PyPhrase * phrase, SEARCH_MODE mode);
 char           *PYGetLegendCandWord (int iIndex);
-void            PYSetLegendCandWordsFlag (Bool flag);
+void            PYSetLegendCandWordsFlag (boolean flag);
 void		PYGetPYByHZ(char *strHZ, char *strPY);
 
 //void            PP ();

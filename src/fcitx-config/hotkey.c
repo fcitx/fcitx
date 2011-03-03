@@ -21,7 +21,7 @@
 #include "core/fcitx.h"
 
 #include "fcitx-config/cutils.h"
-#include "tools/tools.h"
+#include "utils/utils.h"
 #include "fcitx-config/hotkey.h"
 #include <string.h>
 #include <X11/keysym.h>

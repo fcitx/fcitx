@@ -36,8 +36,6 @@
 #include "fcitx-config/cutils.h"
 
 InputWindow     inputWindow;
-Messages        messageUp;
-Messages        messageDown;
 int iCursorPos = 0;
 
 extern Display *dpy;
@@ -347,50 +345,6 @@ void CloseInputWindow()
         KIMShowLookupTable(False);
     }
 #endif
-}
-
-void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...)
-{
-
-    if (message->msgCount < MAX_MESSAGE_COUNT)
-    {
-        va_list ap;
-        va_start(ap, fmt);
-        SetMessageV(message, message->msgCount, type, fmt, ap);
-        va_end(ap);
-        message->msgCount ++;
-        message->changed = True;
-    }
-}
-
-void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...)
-{
-    va_list ap;
-    va_start(ap, fmt);
-    SetMessageV(message, position, type, fmt, ap);
-    va_end(ap);
-}
-
-void SetMessageV(Messages* message, int position, MSG_TYPE type,char* fmt, va_list ap)
-{
-    if (position < MAX_MESSAGE_COUNT)
-    {
-        vsnprintf(message->msg[position].strMsg, MESSAGE_MAX_LENGTH, fmt, ap);
-        message->msg[position].type = type;
-        message->changed = True;
-    }
-}
-
-void MessageConcatLast(Messages* message, char* text)
-{
-    strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
-    message->changed = True;
-}
-
-void MessageConcat(Messages* message, int position, char* text)
-{
-    strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
-    message->changed = True;
 }
 
 void DestroyInputWindow()

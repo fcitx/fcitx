@@ -21,7 +21,7 @@
 #define _PUNC_H
 
 #include <X11/Xlib.h>
-#include "tools/utf8.h"
+#include "utils/utf8.h"
 
 #define PUNC_DICT_FILENAME	"punc.mb"
 #define MAX_PUNC_NO		2

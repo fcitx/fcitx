@@ -23,11 +23,11 @@
 
 #include "core/fcitx.h"
 
-#include "im/pinyin/pyMapTable.h"
-#include "im/pinyin/PYFA.h"
-#include "im/pinyin/sp.h"
-#include "im/pinyin/pyParser.h"
-#include "tools/configfile.h"
+#include "pyMapTable.h"
+#include "PYFA.h"
+#include "sp.h"
+#include "pyParser.h"
+#include "pyconfig.h"
 #include "core/ime.h"
 
 extern MHPY MHPY_C[];
@@ -36,7 +36,7 @@ extern ConsonantMap consonantMapTable[];
 extern SyllabaryMap syllabaryMapTable[];
 extern int      iIMEIndex;
 
-int IsSyllabary (const char *strPY, Bool bMode)
+int IsSyllabary (const char *strPY, boolean bMode)
 {
     register int    i;
 
@@ -54,7 +54,7 @@ int IsSyllabary (const char *strPY, Bool bMode)
     return -1;
 }
 
-int IsConsonant (const char *strPY, Bool bMode)
+int IsConsonant (const char *strPY, boolean bMode)
 {
     register int    i;
 
@@ -72,7 +72,7 @@ int IsConsonant (const char *strPY, Bool bMode)
     return -1;
 }
 
-int FindPYFAIndex (const char *strPY, Bool bMode)
+int FindPYFAIndex (const char *strPY, boolean bMode)
 {
     int             i;
     int             iTemp;
@@ -90,7 +90,7 @@ int FindPYFAIndex (const char *strPY, Bool bMode)
             else if (*(PYTable[i].pMH))
             {
                 /* trick: not the kind of misstype */
-                if (PYTable[i].pMH != &fc.bMisstype )
+                if (PYTable[i].pMH != &pyconfig.bMisstype )
                     return i;
                 else
                     /* fixed pinyin is valid? */
@@ -103,7 +103,7 @@ int FindPYFAIndex (const char *strPY, Bool bMode)
     return -1;
 }
 
-void ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode, Bool bSP)
+void ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode, boolean bSP)
 {
     const char           *strP;
     int             iIndex;
@@ -157,7 +157,7 @@ void ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode,
         }
     }
     else {
-        Bool            bSeperator = False;
+        boolean            bSeperator = False;
 
         do {
             iIndex = FindPYFAIndex (strP, 1);
@@ -199,7 +199,7 @@ void ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode,
                 strcat (parsePY->strPYParsed[parsePY->iHZCount++], strTemp);
             }
             else {
-                if (fc.bFullPY && *strP != PY_SEPARATOR)
+                if (pyconfig.bFullPY && *strP != PY_SEPARATOR)
                     parsePY->iMode = PARSE_ERROR;
 
                 iIndex = IsConsonant (strP, 1);
@@ -266,7 +266,7 @@ void ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode,
  * 将一个拼音(包括仅为声母或韵母)转换为拼音映射
  * 返回True为转换成功，否则为False(一般是因为strPY不是一个标准的拼音)
  */
-Bool MapPY (char *strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
+boolean MapPY (char *strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
 {
     char            str[5];
     char            strPY[7];
@@ -275,7 +275,7 @@ Bool MapPY (char *strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
     strcpy(strPY, strPYorigin);
     
     size_t          len = strlen(strPY);
-    if (fc.bMisstype && strPY[len - 1] == 'n' && strPY[len - 2] == 'g')
+    if (pyconfig.bMisstype && strPY[len - 1] == 'n' && strPY[len - 2] == 'g')
     {
         strPY[len - 2] = 'n';
         strPY[len - 1] = 'g';
@@ -334,7 +334,7 @@ Bool MapPY (char *strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
  * 将一个完整的拼音映射转换为拼音，返回False表示失败，
  * 一般原因是拼音映射不正确
  */
-Bool MapToPY (char strMap[3], char *strPY)
+boolean MapToPY (char strMap[3], char *strPY)
 {
     int             i;
 
@@ -373,12 +373,12 @@ Bool MapToPY (char strMap[3], char *strPY)
  * 0表示相等
  * b指示是声母还是韵母，True表示声母
  */
-int Cmp1Map (char map1, char map2, Bool b, Bool bUseMH, Bool bSP)
+int Cmp1Map (char map1, char map2, boolean b, boolean bUseMH, boolean bSP)
 {
     int             iVal1, iVal2;
 
     if (map2 == '0' || map1 == '0') {
-        if (map1 == ' ' || map2 == ' ' || !fc.bFullPY || bSP)
+        if (map1 == ' ' || map2 == ' ' || !pyconfig.bFullPY || bSP)
             return 0;
     }
     else {
@@ -404,7 +404,7 @@ int Cmp1Map (char map1, char map2, Bool b, Bool bUseMH, Bool bSP)
  * >0表示前者大
  * <0表示后者大
  */
-int Cmp2Map (char map1[3], char map2[3], Bool bSP)
+int Cmp2Map (char map1[3], char map2[3], boolean bSP)
 {
     int             i;
 
@@ -425,7 +425,7 @@ int Cmp2Map (char map1[3], char map2[3], Bool bSP)
  * 否 返回值不为0
  * *iMatchedLength 记录了二者能够匹配的长度
  */
-int CmpMap (char *strMap1, char *strMap2, int *iMatchedLength, Bool bSP)
+int CmpMap (char *strMap1, char *strMap2, int *iMatchedLength, boolean bSP)
 {
     int             val;
 

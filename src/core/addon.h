@@ -24,24 +24,21 @@
 #include "core/fcitx.h"
 #include "X11/Xmd.h"
 #include "fcitx-config/fcitx-config.h"
-#include "tools/utarray.h"
+#include "utils/utarray.h"
+#include "backend.h"
+#include "module.h"
 
 typedef enum AddonCategory
 {
-    AC_INPUTMETHOD = 0
+    AC_INPUTMETHOD = 0,
+    AC_BACKEND,
+    AC_MODULE
 } AddonCategory;
 
 typedef enum AddonType
 {
     AT_SHAREDLIBRARY = 0
 } AddonType;
-
-typedef struct FcitxAddonLibIM
-{
-    INT8 index;
-    void *handle;
-    EXTRA_IM *eim;
-} FcitxAddonLibIM;
 
 typedef struct FcitxAddon
 {
@@ -50,14 +47,20 @@ typedef struct FcitxAddon
     Bool bEnabled;
     AddonCategory category;
     AddonType type;
-    char *module;
+    char *library;
+    char *depend;
     union {
-        FcitxAddonLibIM im;
+        FcitxBackend *backend;
+        FcitxModule *module;
+        FcitxIM* im;
     };
 } FcitxAddon;
 
 void FreeAddon(void *v);
 void LoadAddonInfo(void);
+void AddonResolveDependency();
+boolean AddonIsAvailable(const char* name);
+FcitxAddon* GetAddonByName(const char* name);
 
 extern UT_array *addons;
 

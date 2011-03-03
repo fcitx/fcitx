@@ -182,11 +182,6 @@ Type=Hotkey
 DefaultValue=CTRL_L
 Description=Hotkey of Switching Legend Mode
 
-[Hotkey/LookupPinyinKey]
-Type=Hotkey
-DefaultValue=CTRL_ALT_E
-Description=Hotkey of Looking up the Corresponding pinyin of Word.
-
 [Hotkey/FullWidthSwitchKey]
 Type=Hotkey
 DefaultValue=SHIFT_SPACE
@@ -237,11 +232,6 @@ Type=Integer
 DefaultValue=1
 Description=Shuangpin Priority Order, Zero to Disable
 
-[InputMethod/DefaultShuangpinSchema]
-Type=String
-DefaultValue=自然码
-Description=Default Shuangpin Schema
-
 [InputMethod/QuweiOrder]
 Type=Integer
 DefaultValue=0
@@ -256,125 +246,3 @@ Description=Table Priority Order, Zero to Disable
 Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
-
-[Pinyin/UseCompletePinyin]
-Type=Boolean
-DefaultValue=False
-Description=Use Complete Pinyin
-
-[Pinyin/AutoCreatePhrase]
-Type=Boolean
-DefaultValue=True
-Description=Auto Create Phrase
-
-[Pinyin/SaveAutoPhrase]
-Type=Boolean
-DefaultValue=False
-Description=Save Auto Created Phrase
-
-[Pinyin/AddFreqWordKey]
-Type=Hotkey
-DefaultValue=CTRL_8
-Description=Hotkey of Adding Frequent Word
-
-[Pinyin/DeleteFreqWordKey]
-Type=Hotkey
-DefaultValue=CTRL_7
-Description=Hotkey of Deleting Frequent Word
-
-[Pinyin/DeleteUserPhraseKey]
-Type=Hotkey
-DefaultValue=CTRL_DELETE
-Description=Hotkey of Delete User Phrase
-
-[Pinyin/InputWordFromPhraseKey]
-Type=String
-DefaultValue=[]
-Description=Hotkey of Inputing Word From Phrase
-
-[Pinyin/BaseOrder]
-Type=Enum
-EnumCount=3
-Enum0=AdjustNo
-Enum1=AdjustFast
-Enum2=AdjustFreq
-DefaultValue=AdjustFreq
-Description=Rule of Candidate Word Order
-
-[Pinyin/PhraseOrder]
-Type=Enum
-EnumCount=3
-Enum0=AdjustNo
-Enum1=AdjustFast
-Enum2=AdjustFreq
-DefaultValue=AdjustFast
-Description=Rule of Candidate Phrase Order
-
-[Pinyin/FreqOrder]
-Type=Enum
-EnumCount=3
-Enum0=AdjustNo
-Enum1=AdjustFast
-Enum2=AdjustFreq
-DefaultValue=AdjustNo
-Description=Rule of Frequent Word Order
-
-[Pinyin/FuzzyAnAng]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy an and ang
-
-[Pinyin/FuzzyEnEng]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy en and eng
-
-[Pinyin/FuzzyIanIang]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy ian and iang
-
-[Pinyin/FuzzyInIng]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy in and ing
-
-[Pinyin/FuzzyOuU]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy ou and u
-
-[Pinyin/FuzzyUanUang]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy uan and uang
-
-[Pinyin/FuzzyCCh]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy c and ch
-
-[Pinyin/FuzzyFH]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy f and h
-
-[Pinyin/FuzzyLN]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy l and n
-
-[Pinyin/FuzzySSH]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy s and sh
-
-[Pinyin/FuzzyZZH]
-Type=Boolean
-DefaultValue=False
-Description=Fuzzy z and zh
-
-[Pinyin/Misstype]
-Type=Boolean
-DefaultValue=False
-Description=Fix misstype gn/ng

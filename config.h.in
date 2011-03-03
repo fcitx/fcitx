@@ -1,0 +1,13 @@
+#define HAVE_CONFIG_H
+#cmakedefine HAVE_MALLOC_H
+#cmakedefine HAVE_STDBOOL_H
+#cmakedefine HAVE_ASPRINTF
+#cmakedefine _DEBUG
+#cmakedefine _ENABLE_DBUS
+#cmakedefine _ENABLE_PANGO
+#cmakedefine _ENABLE_RECORDING
+#cmakedefine _ENABLE_TRAY
+#define LOCALEDIR "@localedir@"
+#define PACKAGE "@package@"
+#define DATADIR "@prefix@/share"
+#define LIBDIR "@libdir@"

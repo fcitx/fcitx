@@ -4,8 +4,10 @@ Description=Name
 
 [Addon/Category]
 Type=Enum
-EnumCount=1
+EnumCount=3
 Enum0=InputMethod
+Enum1=Backend
+Enum2=Module
 Description=Category
 
 [Addon/Enabled]
@@ -13,12 +15,17 @@ Type=Boolean
 DefaultValue=True
 Description=Enabled
 
-[Addon/Module]
+[Addon/Library]
 Type=String
-Description=Module
+Description=Library
 
 [Addon/Type]
 Type=Enum
 EnumCount=1
 Enum0=SharedLibrary
 Description=Type
+
+[Addon/Dependency]
+Type=String
+DefaultValue=
+Description=Dependency

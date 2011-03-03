@@ -27,14 +27,18 @@
 #define _(msgid) gettext(msgid)
 #define __(msgid) (msgid)
 
-#include "config.h"
-#include "tools/utf8.h"
-#include "core/im.h"
-
 #define EIM_MAX		4
 
 #define FCITX_EXPORT_API __attribute__ ((visibility("default")))
 
 #define MAX_CODE_LEN	63
+
+typedef unsigned int boolean;
+#define true (1)
+#define false (0)
+
+#include "config.h"
+#include "utils/utf8.h"
+#include "core/ime.h"
 
 #endif/*_FCITX_H_*/

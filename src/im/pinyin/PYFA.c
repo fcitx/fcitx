@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 #include "core/fcitx.h"
-#include "tools/configfile.h"
 #include "PYFA.h"
+#include "pyconfig.h"
 
 #include <stdio.h>
 
@@ -78,11 +78,11 @@ PYTABLE         PYTable[] = {
     ,
     {"zui", NULL}
     ,
-    {"zuagn", &fc.bMisstype }
+    {"zuagn", &pyconfig.bMisstype }
     ,
     {"zuang", &MHPY_C[5].bMode}
     ,
-    {"zuagn", &fc.bMisstype }
+    {"zuagn", &pyconfig.bMisstype }
     ,
     {"zuang", &MHPY_S[4].bMode}
     ,
@@ -94,7 +94,7 @@ PYTABLE         PYTable[] = {
     ,
     {"zou", NULL}
     ,
-    {"zogn", &fc.bMisstype }
+    {"zogn", &pyconfig.bMisstype }
     ,
     {"zong", NULL}
     ,
@@ -106,7 +106,7 @@ PYTABLE         PYTable[] = {
     ,
     {"zhui", NULL}
     ,
-    {"zhuagn", &fc.bMisstype }
+    {"zhuagn", &pyconfig.bMisstype }
     ,
     {"zhuang", NULL}
     ,
@@ -120,13 +120,13 @@ PYTABLE         PYTable[] = {
     ,
     {"zhou", NULL}
     ,
-    {"zhogn", &fc.bMisstype }
+    {"zhogn", &pyconfig.bMisstype }
     ,
     {"zhong", NULL}
     ,
     {"zhi", NULL}
     ,
-    {"zhegn", &fc.bMisstype }
+    {"zhegn", &pyconfig.bMisstype }
     ,
     {"zheng", NULL}
     ,
@@ -136,7 +136,7 @@ PYTABLE         PYTable[] = {
     ,
     {"zhao", NULL}
     ,
-    {"zhagn", &fc.bMisstype }
+    {"zhagn", &pyconfig.bMisstype }
     ,
     {"zhang", NULL}
     ,
@@ -146,7 +146,7 @@ PYTABLE         PYTable[] = {
     ,
     {"zha", NULL}
     ,
-    {"zegn", &fc.bMisstype }
+    {"zegn", &pyconfig.bMisstype }
     ,
     {"zeng", NULL}
     ,
@@ -158,7 +158,7 @@ PYTABLE         PYTable[] = {
     ,
     {"zao", NULL}
     ,
-    {"zagn", &fc.bMisstype }
+    {"zagn", &pyconfig.bMisstype }
     ,
     {"zang", NULL}
     ,
@@ -172,7 +172,7 @@ PYTABLE         PYTable[] = {
     ,
     {"yue", NULL}
     ,
-    {"yuagn", &fc.bMisstype }
+    {"yuagn", &pyconfig.bMisstype }
     ,
     {"yuang", &MHPY_C[5].bMode}
     ,
@@ -182,13 +182,13 @@ PYTABLE         PYTable[] = {
     ,
     {"you", NULL}
     ,
-    {"yogn", &fc.bMisstype }
+    {"yogn", &pyconfig.bMisstype }
     ,
     {"yong", NULL}
     ,
     {"yo", NULL}
     ,
-    {"yign", &fc.bMisstype }
+    {"yign", &pyconfig.bMisstype }
     ,
     {"ying", NULL}
     ,
@@ -200,7 +200,7 @@ PYTABLE         PYTable[] = {
     ,
     {"yao", NULL}
     ,
-    {"yagn", &fc.bMisstype }
+    {"yagn", &pyconfig.bMisstype }
     ,
     {"yang", NULL}
     ,
@@ -212,7 +212,7 @@ PYTABLE         PYTable[] = {
     ,
     {"xue", NULL}
     ,
-    {"xuagn", &fc.bMisstype }
+    {"xuagn", &pyconfig.bMisstype }
     ,
     {"xuang", &MHPY_C[5].bMode}
     ,
@@ -224,11 +224,11 @@ PYTABLE         PYTable[] = {
     ,
     {"xiu", NULL}
     ,
-    {"xiogn", &fc.bMisstype }
+    {"xiogn", &pyconfig.bMisstype }
     ,
     {"xiong", NULL}
     ,
-    {"xign", &fc.bMisstype }
+    {"xign", &pyconfig.bMisstype }
     ,
     {"xing", NULL}
     ,
@@ -238,7 +238,7 @@ PYTABLE         PYTable[] = {
     ,
     {"xiao", NULL}
     ,
-    {"xiagn", &fc.bMisstype }
+    {"xiagn", &pyconfig.bMisstype }
     ,
     {"xiang", NULL}
     ,
@@ -252,7 +252,7 @@ PYTABLE         PYTable[] = {
     ,
     {"wo", NULL}
     ,
-    {"wegn", &fc.bMisstype }
+    {"wegn", &pyconfig.bMisstype }
     ,
     {"weng", NULL}
     ,
@@ -260,7 +260,7 @@ PYTABLE         PYTable[] = {
     ,
     {"wei", NULL}
     ,
-    {"wagn", &fc.bMisstype }
+    {"wagn", &pyconfig.bMisstype }
     ,
     {"wang", NULL}
     ,
@@ -276,7 +276,7 @@ PYTABLE         PYTable[] = {
     ,
     {"tui", NULL}
     ,
-    {"tuagn", &fc.bMisstype }
+    {"tuagn", &pyconfig.bMisstype }
     ,
     {"tuang", &MHPY_C[5].bMode}
     ,
@@ -286,11 +286,11 @@ PYTABLE         PYTable[] = {
     ,
     {"tou", NULL}
     ,
-    {"togn", &fc.bMisstype }
+    {"togn", &pyconfig.bMisstype }
     ,
     {"tong", NULL}
     ,
-    {"tign", &fc.bMisstype }
+    {"tign", &pyconfig.bMisstype }
     ,
     {"ting", NULL}
     ,
@@ -300,7 +300,7 @@ PYTABLE         PYTable[] = {
     ,
     {"tiao", NULL}
     ,
-    {"tiagn", &fc.bMisstype }
+    {"tiagn", &pyconfig.bMisstype }
     ,
     {"tiang", &MHPY_C[2].bMode}
     ,
@@ -308,7 +308,7 @@ PYTABLE         PYTable[] = {
     ,
     {"ti", NULL}
     ,
-    {"tegn", &fc.bMisstype }
+    {"tegn", &pyconfig.bMisstype }
     ,
     {"teng", NULL}
     ,
@@ -320,7 +320,7 @@ PYTABLE         PYTable[] = {
     ,
     {"tao", NULL}
     ,
-    {"tagn", &fc.bMisstype }
+    {"tagn", &pyconfig.bMisstype }
     ,
     {"tang", NULL}
     ,
@@ -336,11 +336,11 @@ PYTABLE         PYTable[] = {
     ,
     {"sui", NULL}
     ,
-    {"suagn", &fc.bMisstype }
+    {"suagn", &pyconfig.bMisstype }
     ,
     {"suang", &MHPY_S[3].bMode}
     ,
-    {"suagn", &fc.bMisstype }
+    {"suagn", &pyconfig.bMisstype }
     ,
     {"suang", &MHPY_C[5].bMode}
     ,
@@ -352,7 +352,7 @@ PYTABLE         PYTable[] = {
     ,
     {"sou", NULL}
     ,
-    {"sogn", &fc.bMisstype }
+    {"sogn", &pyconfig.bMisstype }
     ,
     {"song", NULL}
     ,
@@ -364,7 +364,7 @@ PYTABLE         PYTable[] = {
     ,
     {"shui", NULL}
     ,
-    {"shuagn", &fc.bMisstype }
+    {"shuagn", &pyconfig.bMisstype }
     ,
     {"shuang", NULL}
     ,
@@ -380,7 +380,7 @@ PYTABLE         PYTable[] = {
     ,
     {"shi", NULL}
     ,
-    {"shegn", &fc.bMisstype }
+    {"shegn", &pyconfig.bMisstype }
     ,
     {"sheng", NULL}
     ,
@@ -392,7 +392,7 @@ PYTABLE         PYTable[] = {
     ,
     {"shao", NULL}
     ,
-    {"shagn", &fc.bMisstype }
+    {"shagn", &pyconfig.bMisstype }
     ,
     {"shang", NULL}
     ,
@@ -402,7 +402,7 @@ PYTABLE         PYTable[] = {
     ,
     {"sha", NULL}
     ,
-    {"segn", &fc.bMisstype }
+    {"segn", &pyconfig.bMisstype }
     ,
     {"seng", NULL}
     ,
@@ -412,7 +412,7 @@ PYTABLE         PYTable[] = {
     ,
     {"sao", NULL}
     ,
-    {"sagn", &fc.bMisstype }
+    {"sagn", &pyconfig.bMisstype }
     ,
     {"sang", NULL}
     ,
@@ -428,7 +428,7 @@ PYTABLE         PYTable[] = {
     ,
     {"rui", NULL}
     ,
-    {"ruagn", &fc.bMisstype }
+    {"ruagn", &pyconfig.bMisstype }
     ,
     {"ruang", &MHPY_C[5].bMode}
     ,
@@ -438,13 +438,13 @@ PYTABLE         PYTable[] = {
     ,
     {"rou", NULL}
     ,
-    {"rogn", &fc.bMisstype }
+    {"rogn", &pyconfig.bMisstype }
     ,
     {"rong", NULL}
     ,
     {"ri", NULL}
     ,
-    {"regn", &fc.bMisstype }
+    {"regn", &pyconfig.bMisstype }
     ,
     {"reng", NULL}
     ,
@@ -454,7 +454,7 @@ PYTABLE         PYTable[] = {
     ,
     {"rao", NULL}
     ,
-    {"ragn", &fc.bMisstype }
+    {"ragn", &pyconfig.bMisstype }
     ,
     {"rang", NULL}
     ,
@@ -464,7 +464,7 @@ PYTABLE         PYTable[] = {
     ,
     {"que", NULL}
     ,
-    {"quagn", &fc.bMisstype }
+    {"quagn", &pyconfig.bMisstype }
     ,
     {"quang", &MHPY_C[5].bMode}
     ,
@@ -474,11 +474,11 @@ PYTABLE         PYTable[] = {
     ,
     {"qiu", NULL}
     ,
-    {"qiogn", &fc.bMisstype }
+    {"qiogn", &pyconfig.bMisstype }
     ,
     {"qiong", NULL}
     ,
-    {"qign", &fc.bMisstype }
+    {"qign", &pyconfig.bMisstype }
     ,
     {"qing", NULL}
     ,
@@ -488,7 +488,7 @@ PYTABLE         PYTable[] = {
     ,
     {"qiao", NULL}
     ,
-    {"qiagn", &fc.bMisstype }
+    {"qiagn", &pyconfig.bMisstype }
     ,
     {"qiang", NULL}
     ,
@@ -504,7 +504,7 @@ PYTABLE         PYTable[] = {
     ,
     {"po", NULL}
     ,
-    {"pign", &fc.bMisstype }
+    {"pign", &pyconfig.bMisstype }
     ,
     {"ping", NULL}
     ,
@@ -514,7 +514,7 @@ PYTABLE         PYTable[] = {
     ,
     {"piao", NULL}
     ,
-    {"piagn", &fc.bMisstype }
+    {"piagn", &pyconfig.bMisstype }
     ,
     {"piang", &MHPY_C[2].bMode}
     ,
@@ -522,7 +522,7 @@ PYTABLE         PYTable[] = {
     ,
     {"pi", NULL}
     ,
-    {"pegn", &fc.bMisstype }
+    {"pegn", &pyconfig.bMisstype }
     ,
     {"peng", NULL}
     ,
@@ -532,7 +532,7 @@ PYTABLE         PYTable[] = {
     ,
     {"pao", NULL}
     ,
-    {"pagn", &fc.bMisstype }
+    {"pagn", &pyconfig.bMisstype }
     ,
     {"pang", NULL}
     ,
@@ -554,11 +554,11 @@ PYTABLE         PYTable[] = {
     ,
     {"nue", NULL}
     ,
-    {"nuagn", &fc.bMisstype }
+    {"nuagn", &pyconfig.bMisstype }
     ,
     {"nuang", &MHPY_C[5].bMode}
     ,
-    {"nuagn", &fc.bMisstype }
+    {"nuagn", &pyconfig.bMisstype }
     ,
     {"nuang", &MHPY_S[2].bMode}
     ,
@@ -568,13 +568,13 @@ PYTABLE         PYTable[] = {
     ,
     {"nou", NULL}
     ,
-    {"nogn", &fc.bMisstype }
+    {"nogn", &pyconfig.bMisstype }
     ,
     {"nong", NULL}
     ,
     {"niu", NULL}
     ,
-    {"nign", &fc.bMisstype }
+    {"nign", &pyconfig.bMisstype }
     ,
     {"ning", NULL}
     ,
@@ -584,7 +584,7 @@ PYTABLE         PYTable[] = {
     ,
     {"niao", NULL}
     ,
-    {"niagn", &fc.bMisstype }
+    {"niagn", &pyconfig.bMisstype }
     ,
     {"niang", NULL}
     ,
@@ -594,7 +594,7 @@ PYTABLE         PYTable[] = {
     ,
     {"ng", NULL}
     ,
-    {"negn", &fc.bMisstype }
+    {"negn", &pyconfig.bMisstype }
     ,
     {"neng", NULL}
     ,
@@ -606,7 +606,7 @@ PYTABLE         PYTable[] = {
     ,
     {"nao", NULL}
     ,
-    {"nagn", &fc.bMisstype }
+    {"nagn", &pyconfig.bMisstype }
     ,
     {"nang", NULL}
     ,
@@ -626,7 +626,7 @@ PYTABLE         PYTable[] = {
     ,
     {"miu", NULL}
     ,
-    {"mign", &fc.bMisstype }
+    {"mign", &pyconfig.bMisstype }
     ,
     {"ming", NULL}
     ,
@@ -636,7 +636,7 @@ PYTABLE         PYTable[] = {
     ,
     {"miao", NULL}
     ,
-    {"miagn", &fc.bMisstype }
+    {"miagn", &pyconfig.bMisstype }
     ,
     {"miang", &MHPY_C[2].bMode}
     ,
@@ -644,7 +644,7 @@ PYTABLE         PYTable[] = {
     ,
     {"mi", NULL}
     ,
-    {"megn", &fc.bMisstype }
+    {"megn", &pyconfig.bMisstype }
     ,
     {"meng", NULL}
     ,
@@ -656,7 +656,7 @@ PYTABLE         PYTable[] = {
     ,
     {"mao", NULL}
     ,
-    {"magn", &fc.bMisstype }
+    {"magn", &pyconfig.bMisstype }
     ,
     {"mang", NULL}
     ,
@@ -678,11 +678,11 @@ PYTABLE         PYTable[] = {
     ,
     {"lue", NULL}
     ,
-    {"luagn", &fc.bMisstype }
+    {"luagn", &pyconfig.bMisstype }
     ,
     {"luang", &MHPY_C[5].bMode}
     ,
-    {"luagn", &fc.bMisstype }
+    {"luagn", &pyconfig.bMisstype }
     ,
     {"luang", &MHPY_S[2].bMode}
     ,
@@ -692,7 +692,7 @@ PYTABLE         PYTable[] = {
     ,
     {"lou", NULL}
     ,
-    {"logn", &fc.bMisstype }
+    {"logn", &pyconfig.bMisstype }
     ,
     {"long", NULL}
     ,
@@ -700,7 +700,7 @@ PYTABLE         PYTable[] = {
     ,
     {"liu", NULL}
     ,
-    {"lign", &fc.bMisstype }
+    {"lign", &pyconfig.bMisstype }
     ,
     {"ling", NULL}
     ,
@@ -710,7 +710,7 @@ PYTABLE         PYTable[] = {
     ,
     {"liao", NULL}
     ,
-    {"liagn", &fc.bMisstype }
+    {"liagn", &pyconfig.bMisstype }
     ,
     {"liang", NULL}
     ,
@@ -720,7 +720,7 @@ PYTABLE         PYTable[] = {
     ,
     {"li", NULL}
     ,
-    {"legn", &fc.bMisstype }
+    {"legn", &pyconfig.bMisstype }
     ,
     {"leng", NULL}
     ,
@@ -732,7 +732,7 @@ PYTABLE         PYTable[] = {
     ,
     {"lao", NULL}
     ,
-    {"lagn", &fc.bMisstype }
+    {"lagn", &pyconfig.bMisstype }
     ,
     {"lang", NULL}
     ,
@@ -748,7 +748,7 @@ PYTABLE         PYTable[] = {
     ,
     {"kui", NULL}
     ,
-    {"kuagn", &fc.bMisstype }
+    {"kuagn", &pyconfig.bMisstype }
     ,
     {"kuang", NULL}
     ,
@@ -762,11 +762,11 @@ PYTABLE         PYTable[] = {
     ,
     {"kou", NULL}
     ,
-    {"kogn", &fc.bMisstype }
+    {"kogn", &pyconfig.bMisstype }
     ,
     {"kong", NULL}
     ,
-    {"kegn", &fc.bMisstype }
+    {"kegn", &pyconfig.bMisstype }
     ,
     {"keng", NULL}
     ,
@@ -778,7 +778,7 @@ PYTABLE         PYTable[] = {
     ,
     {"kao", NULL}
     ,
-    {"kagn", &fc.bMisstype }
+    {"kagn", &pyconfig.bMisstype }
     ,
     {"kang", NULL}
     ,
@@ -792,7 +792,7 @@ PYTABLE         PYTable[] = {
     ,
     {"jue", NULL}
     ,
-    {"juagn", &fc.bMisstype }
+    {"juagn", &pyconfig.bMisstype }
     ,
     {"juang", &MHPY_C[5].bMode}
     ,
@@ -802,11 +802,11 @@ PYTABLE         PYTable[] = {
     ,
     {"jiu", NULL}
     ,
-    {"jiogn", &fc.bMisstype }
+    {"jiogn", &pyconfig.bMisstype }
     ,
     {"jiong", NULL}
     ,
-    {"jign", &fc.bMisstype }
+    {"jign", &pyconfig.bMisstype }
     ,
     {"jing", NULL}
     ,
@@ -816,7 +816,7 @@ PYTABLE         PYTable[] = {
     ,
     {"jiao", NULL}
     ,
-    {"jiagn", &fc.bMisstype }
+    {"jiagn", &pyconfig.bMisstype }
     ,
     {"jiang", NULL}
     ,
@@ -832,7 +832,7 @@ PYTABLE         PYTable[] = {
     ,
     {"hui", NULL}
     ,
-    {"huagn", &fc.bMisstype }
+    {"huagn", &pyconfig.bMisstype }
     ,
     {"huang", NULL}
     ,
@@ -846,11 +846,11 @@ PYTABLE         PYTable[] = {
     ,
     {"hou", NULL}
     ,
-    {"hogn", &fc.bMisstype }
+    {"hogn", &pyconfig.bMisstype }
     ,
     {"hong", NULL}
     ,
-    {"hegn", &fc.bMisstype }
+    {"hegn", &pyconfig.bMisstype }
     ,
     {"heng", NULL}
     ,
@@ -862,7 +862,7 @@ PYTABLE         PYTable[] = {
     ,
     {"hao", NULL}
     ,
-    {"hagn", &fc.bMisstype }
+    {"hagn", &pyconfig.bMisstype }
     ,
     {"hang", NULL}
     ,
@@ -878,7 +878,7 @@ PYTABLE         PYTable[] = {
     ,
     {"gui", NULL}
     ,
-    {"guagn", &fc.bMisstype }
+    {"guagn", &pyconfig.bMisstype }
     ,
     {"guang", NULL}
     ,
@@ -892,11 +892,11 @@ PYTABLE         PYTable[] = {
     ,
     {"gou", NULL}
     ,
-    {"gogn", &fc.bMisstype }
+    {"gogn", &pyconfig.bMisstype }
     ,
     {"gong", NULL}
     ,
-    {"gegn", &fc.bMisstype }
+    {"gegn", &pyconfig.bMisstype }
     ,
     {"geng", NULL}
     ,
@@ -908,7 +908,7 @@ PYTABLE         PYTable[] = {
     ,
     {"gao", NULL}
     ,
-    {"gagn", &fc.bMisstype }
+    {"gagn", &pyconfig.bMisstype }
     ,
     {"gang", NULL}
     ,
@@ -924,7 +924,7 @@ PYTABLE         PYTable[] = {
     ,
     {"fo", NULL}
     ,
-    {"fegn", &fc.bMisstype }
+    {"fegn", &pyconfig.bMisstype }
     ,
     {"feng", NULL}
     ,
@@ -932,7 +932,7 @@ PYTABLE         PYTable[] = {
     ,
     {"fei", NULL}
     ,
-    {"fagn", &fc.bMisstype }
+    {"fagn", &pyconfig.bMisstype }
     ,
     {"fang", NULL}
     ,
@@ -942,7 +942,7 @@ PYTABLE         PYTable[] = {
     ,
     {"er", NULL}
     ,
-    {"egn", &fc.bMisstype }
+    {"egn", &pyconfig.bMisstype }
     ,
     {"eng", &MHPY_C[1].bMode}
     ,
@@ -958,7 +958,7 @@ PYTABLE         PYTable[] = {
     ,
     {"dui", NULL}
     ,
-    {"duagn", &fc.bMisstype }
+    {"duagn", &pyconfig.bMisstype }
     ,
     {"duang", &MHPY_C[5].bMode}
     ,
@@ -968,13 +968,13 @@ PYTABLE         PYTable[] = {
     ,
     {"dou", NULL}
     ,
-    {"dogn", &fc.bMisstype }
+    {"dogn", &pyconfig.bMisstype }
     ,
     {"dong", NULL}
     ,
     {"diu", NULL}
     ,
-    {"dign", &fc.bMisstype }
+    {"dign", &pyconfig.bMisstype }
     ,
     {"ding", NULL}
     ,
@@ -984,7 +984,7 @@ PYTABLE         PYTable[] = {
     ,
     {"diao", NULL}
     ,
-    {"diagn", &fc.bMisstype }
+    {"diagn", &pyconfig.bMisstype }
     ,
     {"diang", &MHPY_C[2].bMode}
     ,
@@ -994,7 +994,7 @@ PYTABLE         PYTable[] = {
     ,
     {"di", NULL}
     ,
-    {"degn", &fc.bMisstype }
+    {"degn", &pyconfig.bMisstype }
     ,
     {"deng", NULL}
     ,
@@ -1006,7 +1006,7 @@ PYTABLE         PYTable[] = {
     ,
     {"dao", NULL}
     ,
-    {"dagn", &fc.bMisstype }
+    {"dagn", &pyconfig.bMisstype }
     ,
     {"dang", NULL}
     ,
@@ -1022,11 +1022,11 @@ PYTABLE         PYTable[] = {
     ,
     {"cui", NULL}
     ,
-    {"cuagn", &fc.bMisstype }
+    {"cuagn", &pyconfig.bMisstype }
     ,
     {"cuang", &MHPY_C[5].bMode}
     ,
-    {"cuagn", &fc.bMisstype }
+    {"cuagn", &pyconfig.bMisstype }
     ,
     {"cuang", &MHPY_S[0].bMode}
     ,
@@ -1036,7 +1036,7 @@ PYTABLE         PYTable[] = {
     ,
     {"cou", NULL}
     ,
-    {"cogn", &fc.bMisstype }
+    {"cogn", &pyconfig.bMisstype }
     ,
     {"cong", NULL}
     ,
@@ -1048,7 +1048,7 @@ PYTABLE         PYTable[] = {
     ,
     {"chui", NULL}
     ,
-    {"chuagn", &fc.bMisstype }
+    {"chuagn", &pyconfig.bMisstype }
     ,
     {"chuang", NULL}
     ,
@@ -1060,13 +1060,13 @@ PYTABLE         PYTable[] = {
     ,
     {"chou", NULL}
     ,
-    {"chogn", &fc.bMisstype }
+    {"chogn", &pyconfig.bMisstype }
     ,
     {"chong", NULL}
     ,
     {"chi", NULL}
     ,
-    {"chegn", &fc.bMisstype }
+    {"chegn", &pyconfig.bMisstype }
     ,
     {"cheng", NULL}
     ,
@@ -1076,7 +1076,7 @@ PYTABLE         PYTable[] = {
     ,
     {"chao", NULL}
     ,
-    {"chagn", &fc.bMisstype }
+    {"chagn", &pyconfig.bMisstype }
     ,
     {"chang", NULL}
     ,
@@ -1086,7 +1086,7 @@ PYTABLE         PYTable[] = {
     ,
     {"cha", NULL}
     ,
-    {"cegn", &fc.bMisstype }
+    {"cegn", &pyconfig.bMisstype }
     ,
     {"ceng", NULL}
     ,
@@ -1096,7 +1096,7 @@ PYTABLE         PYTable[] = {
     ,
     {"cao", NULL}
     ,
-    {"cagn", &fc.bMisstype }
+    {"cagn", &pyconfig.bMisstype }
     ,
     {"cang", NULL}
     ,
@@ -1110,7 +1110,7 @@ PYTABLE         PYTable[] = {
     ,
     {"bo", NULL}
     ,
-    {"bign", &fc.bMisstype }
+    {"bign", &pyconfig.bMisstype }
     ,
     {"bing", NULL}
     ,
@@ -1120,7 +1120,7 @@ PYTABLE         PYTable[] = {
     ,
     {"biao", NULL}
     ,
-    {"biagn", &fc.bMisstype }
+    {"biagn", &pyconfig.bMisstype }
     ,
     {"biang", &MHPY_C[2].bMode}
     ,
@@ -1128,7 +1128,7 @@ PYTABLE         PYTable[] = {
     ,
     {"bi", NULL}
     ,
-    {"begn", &fc.bMisstype }
+    {"begn", &pyconfig.bMisstype }
     ,
     {"beng", NULL}
     ,
@@ -1138,7 +1138,7 @@ PYTABLE         PYTable[] = {
     ,
     {"bao", NULL}
     ,
-    {"bagn", &fc.bMisstype }
+    {"bagn", &pyconfig.bMisstype }
     ,
     {"bang", NULL}
     ,
@@ -1150,7 +1150,7 @@ PYTABLE         PYTable[] = {
     ,
     {"ao", NULL}
     ,
-    {"agn", &fc.bMisstype }
+    {"agn", &pyconfig.bMisstype }
     ,
     {"ang", NULL}
     ,
