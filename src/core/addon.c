@@ -21,16 +21,12 @@
 #include <limits.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <libintl.h>
 
 #include "core/fcitx.h"
-#include "fcitx-config/uthash.h"
-#include "fcitx-config/fcitx-config.h"
-#include "utils/configfile.h"
-#include "fcitx-config/cutils.h"
-#include "fcitx-config/xdg.h"
-#include "utils/utarray.h"
-#include "core/addon.h"
+#include "addon.h"
 #include "utils/utils.h"
+#include "fcitx-config/xdg.h"
 
 CONFIG_BINDING_BEGIN(FcitxAddon);
 CONFIG_BINDING_REGISTER("Addon", "Name", name);
@@ -39,12 +35,25 @@ CONFIG_BINDING_REGISTER("Addon", "Enabled", bEnabled);
 CONFIG_BINDING_REGISTER("Addon", "Library", library);
 CONFIG_BINDING_REGISTER("Addon", "Type", type);
 CONFIG_BINDING_REGISTER("Addon", "Dependency", depend);
+CONFIG_BINDING_REGISTER("Addon", "Priority", priority);
 CONFIG_BINDING_END()
 
-UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
-UT_array *addons;
 static ConfigFileDesc *addonConfigDesc = NULL;
 static ConfigFileDesc* GetAddonConfigDesc();
+static int AddonPriorityCmp(const void* a, const void* b)
+{
+    FcitxAddon *aa = (FcitxAddon*)a, *ab = (FcitxAddon*)b;
+    return aa->priority - ab->priority;
+}
+
+UT_array* GetFcitxAddons()
+{
+    const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
+    static UT_array *addons = NULL;
+    if (addons == NULL)
+        utarray_new(addons, &addon_icd);
+    return addons;
+}
 
 /** 
  * @brief Load Addon Info
@@ -58,16 +67,10 @@ void LoadAddonInfo(void)
     DIR *dir;
     struct dirent *drt;
     struct stat fileStat;
+    UT_array* addons = GetFcitxAddons();
+    utarray_done(addons);
 
     StringHashSet* sset = NULL;
-
-    if (addons)
-    {
-        utarray_free(addons);
-        addons = NULL;
-    }
-
-    utarray_new(addons, &addon_icd);
 
     addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/addon" , DATADIR, "fcitx/data/addon" );
 
@@ -157,10 +160,13 @@ void LoadAddonInfo(void)
         free(curStr->name);
         free(curStr);
     }
+    
+    utarray_sort(addons, AddonPriorityCmp);
 }
 
 void AddonResolveDependency()
 {
+    UT_array* addons = GetFcitxAddons();
     boolean remove = true;
     while(remove)
     {
@@ -198,6 +204,7 @@ void AddonResolveDependency()
 
 boolean AddonIsAvailable(const char* name)
 {
+    UT_array* addons = GetFcitxAddons();
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
@@ -211,6 +218,7 @@ boolean AddonIsAvailable(const char* name)
 
 FcitxAddon* GetAddonByName(const char* name)
 {
+    UT_array* addons = GetFcitxAddons();
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;

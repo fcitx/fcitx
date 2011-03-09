@@ -25,17 +25,59 @@
  *
  * @brief 新配置文件读写
  */
-
-#include "core/fcitx.h"
-
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <search.h>
-#include "fcitx-config/uthash.h"
-#include "fcitx-config/sprintf.h"
-#include "fcitx-config/cutils.h"
-#include "fcitx-config/fcitx-config.h"
-#include "utils/utils.h"
+#include <libintl.h>
+
+#include "core/fcitx.h"
+#include "fcitx-config.h"
+#include "cutils.h"
+#include "uthash.h"
+#include "hotkey.h"
+
+
+struct ConfigOptionDesc
+{
+    char *optionName;
+    char *desc;
+    ConfigType type;
+    char *rawDefaultValue;
+    ConfigEnum configEnum;
+
+    UT_hash_handle hh;
+};
+
+struct ConfigGroupDesc
+{
+    char *groupName;
+    ConfigOptionDesc *optionsDesc;
+    UT_hash_handle hh;
+};
+
+struct ConfigFileDesc
+{
+    ConfigGroupDesc *groupsDesc;
+};
+
+struct ConfigOption
+{
+    char *optionName;
+    char *rawValue;
+    ConfigValueType value;
+    SyncFilter filter;
+    void *filterArg;
+    ConfigOptionDesc *optionDesc;
+    UT_hash_handle hh;
+} ;
+
+struct ConfigGroup
+{
+    char *groupName;
+    ConfigGroupDesc *groupDesc;
+    ConfigOption* options;
+    UT_hash_handle hh;
+};
 
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync);
@@ -109,10 +151,10 @@ ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
 }
 
 FCITX_EXPORT_API
-Bool CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
+boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
 {
     if (!cfile)
-        return False;
+        return false;
     ConfigGroupDesc *cgdesc = NULL;
     for(cgdesc = cfdesc->groupsDesc;
         cgdesc != NULL;
@@ -140,7 +182,7 @@ Bool CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
                 if (!codesc->rawDefaultValue)
                 {
                     FcitxLog(WARNING, "missing value: %s", codesc->optionName);
-                    return False;
+                    return false;
                 }
                 option = malloc0(sizeof(ConfigOption));
                 option->optionName = strdup(codesc->optionName);
@@ -151,7 +193,7 @@ Bool CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
         }
     }
     cfile->fileDesc = cfdesc;
-    return True;
+    return true;
 }
 
 /** 
@@ -257,7 +299,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                 ConfigOption *eoption;
                 codesc->type = T_Enum;
                 HASH_FIND_STR(options, "EnumCount", eoption);
-                Bool enumError = False;
+                boolean enumError = false;
                 int i = 0;
                 if (eoption)
                 {
@@ -284,7 +326,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                                 codesc->configEnum.enumDesc[i] = strdup(eoption->rawValue);
                             }
                             else {
-                                enumError = True;
+                                enumError = true;
                                 free(enumname);
                                 goto config_enum_final;
                             }
@@ -293,7 +335,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                     }
                     else {
                         FcitxLog(WARNING, _("Enum option number must larger than 0"));
-                        enumError = True;
+                        enumError = true;
                         goto config_enum_final;
                     }
                 }
@@ -349,20 +391,20 @@ ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync)
 
 ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync)
 {
-    if (!option->value.boolean)
+    if (!option->value.boolvalue)
         return SyncNoBinding;
     switch(sync)
     {
         case Raw2Value:
             if (strcmp(option->rawValue, "True") == 0)
-                *option->value.boolean = True;
+                *option->value.boolvalue = true;
             else
-                *option->value.boolean = False;
+                *option->value.boolvalue = false;
             return SyncSuccess;
         case Value2Raw:
             if (option->rawValue)
                 free(option->rawValue);
-            if (*option->value.boolean)
+            if (*option->value.boolvalue)
                 option->rawValue = strdup("True");
             else
                 option->rawValue = strdup("False");
@@ -757,12 +799,12 @@ next_line:
 }
 
 FCITX_EXPORT_API
-Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc)
+boolean SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc)
 {
     FILE* fp = fopen(filename, "w");
     if (!fp)
-        return False;
-    Bool result = SaveConfigFileFp(fp, cfile, cdesc);
+        return false;
+    boolean result = SaveConfigFileFp(fp, cfile, cdesc);
     fclose(fp);
     return result;
 }
@@ -869,7 +911,7 @@ void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync)
 }
 
 FCITX_EXPORT_API
-Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
+boolean SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
 {
     ConfigGroupDesc* groupdesc = NULL;
     for(groupdesc = cdesc->groupsDesc;
@@ -909,7 +951,7 @@ Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc)
         }
         fprintf(fp, "\n");
     }
-    return True;
+    return true;
 }
 
 FCITX_EXPORT_API
@@ -946,7 +988,7 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
                     option->value.color = (ConfigColor*) var;
                     break;
                 case T_Boolean:
-                    option->value.boolean = (Bool*) var;
+                    option->value.boolvalue = (boolean*) var;
                     break;
                 case T_Hotkey:
                     option->value.hotkey = (HOTKEYS*) var;

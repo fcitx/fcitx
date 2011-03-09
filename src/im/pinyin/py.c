@@ -49,6 +49,21 @@
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
+#include "core/ime-internal.h"
+
+FcitxIM im = {
+    "pinyin",
+    "pinyin",
+    ResetPYStatus,
+    DoPYInput,
+    PYGetCandWords,
+    PYGetCandWord,
+    PYGetLegendCandWord,
+    NULL,
+    PYInit,
+    SavePY,
+    NULL
+};
 
 FcitxPinyinConfig pyconfig;
 
@@ -82,7 +97,7 @@ char iNewPYPhraseCount = 0;
 char iOrderCount = 0;
 char iNewFreqCount = 0;
 
-char iYCDZ = 0;
+int8_t iYCDZ = 0;
 
 boolean bIsPYAddFreq = False;
 boolean bIsPYDelFreq = False;
@@ -110,9 +125,10 @@ extern int iCurrentLegendCandPage;
 
 static void LoadPYPhraseDict(FILE *fp, boolean isSystem);
 
-void PYInit(void)
+boolean PYInit(void)
 {
     bSP = False;
+    return true;
 }
 
 boolean LoadPYBaseDict(void)
@@ -133,7 +149,7 @@ boolean LoadPYBaseDict(void)
         fread(&(PYFAList[i].iBase), sizeof(int), 1, fp);
         PYFAList[i].pyBase = (PyBase *) malloc(sizeof(PyBase) * PYFAList[i].iBase);
         for (j = 0; j < PYFAList[i].iBase; j++) {
-            char len;
+            int8_t len;
             fread(&len, sizeof(char), 1, fp);
             fread(PYFAList[i].pyBase[j].strHZ, sizeof(char) * len, 1, fp);
             PYFAList[i].pyBase[j].strHZ[len] = '\0';
@@ -228,10 +244,10 @@ void LoadPYPhraseDict(FILE *fp, boolean isSystem)
     char strBase[UTF8_MAX_LENGTH + 1];
     PyPhrase *temp, *phrase = NULL;
     while (!feof(fp)) {
-        char clen;
+        int8_t clen;
         if (!fread(&i, sizeof(int), 1, fp))
             break;
-        if (!fread(&clen, sizeof(char), 1, fp))
+        if (!fread(&clen, sizeof(int8_t), 1, fp))
             break;
         if (clen <= 0 || clen > UTF8_MAX_LENGTH)
             break;
@@ -437,9 +453,9 @@ boolean LoadPYOtherDict(void)
             pHZ = pyFreqTemp->HZList;
 
             for (k = 0; k < pyFreqTemp->iCount; k++) {
-                char slen;
+                int8_t slen;
                 HZTemp = (HZ *) malloc(sizeof(HZ));
-                fread(&slen, sizeof(char), 1, fp);
+                fread(&slen, sizeof(int8_t), 1, fp);
                 fread(HZTemp->strHZ, sizeof(char) * slen, 1, fp);
                 HZTemp->strHZ[slen] = '\0';
                 fread(&j, sizeof(int), 1, fp);
@@ -834,7 +850,7 @@ INPUT_RETURN_VALUE DoPYInput(unsigned int sym, unsigned int state, int keyCount)
                         if (sym == pyconfig.cPYYCDZ[0])
                             strcpy(strStringGet, pBase);
                         else {
-                            char clen;
+                            int8_t clen;
                             clen = utf8_char_len(pPhrase);
                             strncpy(strStringGet, pPhrase, clen);
                             strStringGet[clen] = '\0';

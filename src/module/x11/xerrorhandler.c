@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "X11/Xlib.h"
+#include "core/ime-internal.h"
 #include "fcitx-config/xdg.h"
 
 static XErrorHandler   oldXErrorHandler;
@@ -59,7 +60,7 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
         fprintf (fp, "fcitx: %s\n", str);
     }
 
-    SaveIM();
+    SaveAllIM();
     
     if ( fp )
         fclose(fp);

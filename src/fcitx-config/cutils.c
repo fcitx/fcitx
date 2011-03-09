@@ -18,16 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
-
-#include "utils/utils.h"
-#include "fcitx-config/cutils.h"
-#include "fcitx-config/sprintf.h"
+#include <iconv.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <ctype.h>
-#include <iconv.h>
+
+#include "core/fcitx.h"
+#include "cutils.h"
 
 static iconv_t iconvW = NULL;
 
@@ -84,7 +83,7 @@ char *trim(char *s)
 FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
-#ifndef _DEBUG
+#ifdef _DEBUG
     if (e == DEBUG)
         return;
 #endif

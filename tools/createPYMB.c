@@ -25,11 +25,10 @@
 #include "im/pinyin/pyParser.h"
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
-#include "tools/utf8.h"
-#include "tools/configfile.h"
+#include "utils/utf8.h"
+#include "im/pinyin/pyconfig.h"
 
-FcitxConfig fc;
-
+FcitxPinyinConfig pyconfig;
 extern PYTABLE  PYTable[];
 
 FILE           *fps, *fpt, *fp1, *fp2;
@@ -87,8 +86,8 @@ Bool LoadPY (void)
         fread (&(PYFAList[i].iHZCount), sizeof (int), 1, fp);
         PYFAList[i].pyBase = (_PyBase *) malloc (sizeof (_PyBase) * PYFAList[i].iHZCount);
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
-            INT8 len;
-            fread (&len, sizeof (INT8) , 1, fp);
+            int8_t len;
+            fread (&len, sizeof (int8_t) , 1, fp);
             fread (PYFAList[i].pyBase[j].strHZ, sizeof (char) * len, 1, fp);
             PYFAList[i].pyBase[j].strHZ[len] = '\0';
             PYFAList[i].pyBase[j].phrase = (_PyPhrase *) malloc (sizeof (_PyPhrase));
@@ -123,8 +122,8 @@ Bool LoadPY (void)
         fwrite (PYFAList[i].strMap, sizeof (char) * 2, 1, fp);
         fwrite (&(PYFAList[i].iHZCount), sizeof (int), 1, fp);
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
-            INT8 len = strlen(PYFAList[i].pyBase[j].strHZ);
-            fwrite (&len, sizeof(INT8), 1, fp);
+            int8_t len = strlen(PYFAList[i].pyBase[j].strHZ);
+            fwrite (&len, sizeof(int8_t), 1, fp);
             fwrite (PYFAList[i].pyBase[j].strHZ, sizeof (char) * len, 1, fp);
             fwrite (&(PYFAList[i].pyBase[j].iIndex), sizeof (int), 1, fp);
         }
@@ -217,9 +216,9 @@ _next:
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
             iIndex = PYFAList[i].pyBase[j].iPhraseCount;
             if (iIndex) {
-                INT8 clen = strlen(PYFAList[i].pyBase[j].strHZ);
+                int8_t clen = strlen(PYFAList[i].pyBase[j].strHZ);
                 fwrite (&i, sizeof (int), 1, fp2);
-                fwrite (&clen, sizeof(INT8), 1, fp2);
+                fwrite (&clen, sizeof(int8_t), 1, fp2);
                 fwrite (PYFAList[i].pyBase[j].strHZ, sizeof (char) * clen, 1, fp2);
 
                 fwrite (&iIndex, sizeof (int), 1, fp2);
@@ -275,7 +274,7 @@ void CreatePYBase (void)
             iIndex++;
             if (utf8_strlen(strHZ) > 1)
             {
-                INT8 charLen = utf8_char_len(strHZ);
+                int8_t charLen = utf8_char_len(strHZ);
                 fprintf(stderr, "%s length is larger that 1, truncated to ", strHZ);
                 strHZ[charLen] = '\0';
                 fprintf(stderr, "%s.\n", strHZ);
@@ -326,8 +325,8 @@ void CreatePYBase (void)
             fwrite (strPY, sizeof (char) * 2, 1, fp1);
             fwrite (&iCount, sizeof (int), 1, fp1);
             for (i = 0; i < iCount; i++) {
-                INT8 len = strlen(t->strHZ);
-                fwrite (&len, sizeof(INT8), 1, fp1);
+                int8_t len = strlen(t->strHZ);
+                fwrite (&len, sizeof(int8_t), 1, fp1);
                 fwrite (t->strHZ, sizeof (char) * len , 1, fp1);
 
                 t = t->next;
@@ -342,8 +341,8 @@ void CreatePYBase (void)
     fwrite (strPY, sizeof (char) * 2, 1, fp1);
     fwrite (&iCount, sizeof (int), 1, fp1);
     for (i = 0; i < iCount; i++) {
-        INT8 len = strlen(t->strHZ);
-        fwrite (&len, sizeof(INT8), 1, fp1);
+        int8_t len = strlen(t->strHZ);
+        fwrite (&len, sizeof(int8_t), 1, fp1);
         fwrite (t->strHZ, sizeof (char) * len , 1, fp1);
         t = t->next;
     }

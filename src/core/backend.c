@@ -18,25 +18,43 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
-#include "core/addon.h"
-#include "core/backend.h"
+#include <dlfcn.h>
+#include <libintl.h>
+#include <pthread.h>
+
+#include "utils/utarray.h"
+#include "backend.h"
+#include "addon.h"
+#include "ime-internal.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
-#include <dlfcn.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <malloc.h>
 
-UT_array* backends;
-UT_icd backend_icd = {sizeof(FcitxBackend*), NULL, NULL, NULL };
-FcitxInputContext *ic_list = NULL;
-FcitxInputContext *free_list = NULL;
-FcitxInputContext *CurrentIC = NULL;
+static FcitxInputContext *ic_list = NULL;
+static FcitxInputContext *free_list = NULL;
+static FcitxInputContext *CurrentIC = NULL;
+
+FcitxInputContext* GetCurrentIC()
+{
+    return CurrentIC;
+}
+
+void SetCurrentIC(FcitxInputContext* ic)
+{
+    CurrentIC = ic;
+}
+
+UT_array* GetFcitxBackends()
+{
+    const UT_icd backend_icd = {sizeof(FcitxBackend*), NULL, NULL, NULL };
+    static UT_array* backends = NULL;
+    if (backends == NULL)
+        utarray_new(backends, &backend_icd);
+    return backends;
+}
 
 FcitxInputContext* CreateIC(int backendid, void * priv)
 {
+    UT_array* backends = GetFcitxBackends();
     FcitxBackend** pbackend =(FcitxBackend**) utarray_eltptr(backends, backendid);
     if (pbackend == NULL)
         return NULL;
@@ -67,6 +85,7 @@ FcitxInputContext* CreateIC(int backendid, void * priv)
 
 FcitxInputContext* FindIC(int backendid, void *filter)
 {
+    UT_array* backends = GetFcitxBackends();
     FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, backendid);
     if (pbackend == NULL)
         return NULL;
@@ -81,12 +100,13 @@ FcitxInputContext* FindIC(int backendid, void *filter)
     return NULL;
 }
 
-FcitxInputContext* DestroyIC(int backendid, void* filter)
+void DestroyIC(int backendid, void* filter)
 {
     FcitxInputContext             *rec, *last;
+    UT_array* backends = GetFcitxBackends();
     FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, backendid);
     if (pbackend == NULL)
-        return NULL;
+        return;
     FcitxBackend* backend = *pbackend;
  
     last = NULL;
@@ -109,11 +129,50 @@ FcitxInputContext* DestroyIC(int backendid, void* filter)
     return;
 }
 
+void CloseIM(FcitxInputContext* ic)
+{
+    UT_array* backends = GetFcitxBackends();
+    FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = *pbackend;
+    backend->CloseIM(ic);
+}
+
+/** 
+ * @brief 更改输入法状态
+ * 
+ * @param _connect_id
+ */
+void ChangeIMState(FcitxInputContext* ic)
+{
+    if (!ic)
+        return;
+    if (ic->state == IS_ENG) {
+        ic->state = IS_CHN;
+    } else {
+        ic->state = IS_ENG;
+        ResetInput();
+    }
+}
+
+void CommitString(FcitxInputContext* ic, char* str)
+{
+    UT_array* backends = GetFcitxBackends();
+    FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = *pbackend;
+    backend->CommitString(ic, str);
+}
+
 void StartBackend()
 {
+    UT_array* addons = GetFcitxAddons();
+    UT_array* backends = GetFcitxBackends();
     FcitxAddon *addon;
     int backendindex = 0;
-    utarray_new(backends, &backend_icd);
+    utarray_done(backends);
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
           addon = (FcitxAddon *) utarray_next(addons, addon))
@@ -140,7 +199,7 @@ void StartBackend()
                         backend=dlsym(handle,"backend");
                         if(!backend || !backend->Init)
                         {
-                            FcitxLog(ERROR, _("Backend: bad im"));
+                            FcitxLog(ERROR, _("Backend: bad backend"));
                             dlclose(handle);
                             break;
                         }
@@ -149,6 +208,7 @@ void StartBackend()
                             dlclose(handle);
                             return;
                         }
+                        addon->backend = backend;
                         backend->backendid = backendindex;
                         backendindex ++;
                         utarray_push_back(backends, &backend);

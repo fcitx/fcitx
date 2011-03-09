@@ -21,9 +21,9 @@
 
 #include "core/addon.h"
 #include "im/extra/extra.h"
-#include "ui/InputWindow.h"
-#include "tools/configfile.h"
-#include "tools/profile.h"
+#include "InputWindow.h"
+#include "configfile.h"
+#include "profile.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
 
@@ -39,8 +39,8 @@ static char CandTableEngine[10][MAX_CAND_LEN+1];
 static char CodeTipsEngine[10][MAX_TIPS_LEN+1];
 static char StringGetEngine[MAX_USER_INPUT+1];
 
-extern INT8 iIMCount;
-extern INT8 iInCap;
+extern int8_t iIMCount;
+extern int8_t iInCap;
 
 extern int      iCandWordCount;
 extern int      iCandPageCount;
@@ -51,9 +51,9 @@ extern int      iCodeInputCount;
 extern Bool    bCursorAuto;
 
 #define GetCurrentEIM() ((im[gs.iIMIndex].addonInfo)?im[gs.iIMIndex].addonInfo->im.eim:NULL)
-static void UnloadExtraIM(INT8 index);
+static void UnloadExtraIM(int8_t index);
 
-static void UnloadExtraIM(INT8 index)
+static void UnloadExtraIM(int8_t index)
 {
     IM *cim = &im[index];
     FcitxAddon* addon = cim->addonInfo;

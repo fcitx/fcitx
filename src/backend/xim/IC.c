@@ -26,15 +26,12 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
 ******************************************************************/
-
 #include <X11/Xlib.h>
-#include <stdio.h>
+#include <X11/Xmd.h>
 
-#include "core/fcitx.h"
-#include "core/backend.h"
-#include "IMdkit.h"
 #include "Xi18n.h"
 #include "IC.h"
+#include "fcitx-config/cutils.h"
 #include "xim.h"
 
 static int Is (char *attr, XICAttribute * attr_list);
@@ -166,11 +163,11 @@ static void StoreIC (FcitxXimIC * rec, IMChangeICStruct * call_data)
 void XimCreateIC (FcitxInputContext* context, void *priv)
 {
     IMChangeICStruct * call_data = (IMChangeICStruct *)priv;
-    context->privateic = malloc(sizeof(FcitxXimIC));
+    context->privateic = malloc0(sizeof(FcitxXimIC));
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
 
     privic->connect_id = call_data->connect_id;
-    privic->id = xim.icid;
+    privic->id = ++ xim.icid  ;
     StoreIC (privic, call_data);
     call_data->icid = privic->id;
 
@@ -191,7 +188,7 @@ void XimDestroyIC (FcitxInputContext *context)
     return;
 }
 
-void SetIC (IMChangeICStruct * call_data)
+void XimSetIC (IMChangeICStruct * call_data)
 {
     FcitxInputContext   *ic = FindIC (backend.backendid, &call_data->icid);
 
@@ -203,7 +200,7 @@ void SetIC (IMChangeICStruct * call_data)
     return;
 }
 
-void GetIC (IMChangeICStruct * call_data)
+void XimGetIC (IMChangeICStruct * call_data)
 {
     XICAttribute   *ic_attr = call_data->ic_attr;
     XICAttribute   *pre_attr = call_data->preedit_attr;

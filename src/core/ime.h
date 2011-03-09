@@ -17,8 +17,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _IME_H_
-#define _IME_H_
+#ifndef _FCITX_IME_H_
+#define _FCITX_IME_H_
+
+#include "utils/utf8.h"
 
 #define MAX_IM_NAME    (8 * 6)
 
@@ -29,13 +31,21 @@
 #define MAX_USER_INPUT    300
 
 #define HOT_KEY_COUNT   2
-#include "fcitx.h"
+#include "core/fcitx.h"
+#include "core/backend.h"
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
     SM_NEXT,
     SM_PREV
 } SEARCH_MODE;
+
+typedef enum _KEY_RELEASED {
+    KR_OTHER = 0,
+    KR_CTRL,
+    KR_2ND_SELECTKEY,
+    KR_3RD_SELECTKEY,
+} KEY_RELEASED;
 
 typedef enum _INPUT_RETURN_VALUE {
     //IRV_UNKNOWN = -1,
@@ -71,5 +81,33 @@ typedef struct FcitxIM {
     void               (*Destroy) ();
     void               (*Save) (void);
 } FcitxIM;
+
+typedef enum FcitxKeyEventType {
+    FCITX_PRESS_KEY,
+    FCITX_RELEASE_KEY
+} FcitxKeyEventType;
+
+typedef struct FcitxInputState {
+    long unsigned int lastKeyPressedTime;
+    boolean bIsDoInputOnly;
+    KEY_RELEASED keyReleased;
+    int iCodeInputCount;
+    char strCodeInput[MAX_USER_INPUT + 1];
+    char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
+    boolean bIsInLegend;
+    
+    int iCandPageCount;
+    int iCandWordCount;
+    time_t timeStart;
+    boolean bStartRecordType;
+    int iCursorPos;
+    boolean bCursorAuto;
+    int iCurrentCandPage;
+    int iLegendCandWordCount;
+    int iLegendCandPageCount;
+    int iCurrentLegendCandPage;
+    int bShowNext;
+    int bShowPrev;
+} FcitxInputState;
 
 #endif

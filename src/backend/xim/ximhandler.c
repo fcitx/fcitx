@@ -1,11 +1,31 @@
-#include <X11/Xlib.h>
-#include <X11/Xmd.h>
+/***************************************************************************
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
-#include "core/fcitx.h"
-#include "core/backend.h"
-#include "ximhandler.h"
-#include "IC.h"
+#include <X11/Xutil.h>
+
+#include "core/ime-internal.h"
 #include "xim.h"
+#include "Xi18n.h"
+#include "IC.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-config/cutils.h"
 
 extern FcitxXimBackend xim;
 
@@ -21,14 +41,14 @@ Bool XIMOpenHandler(IMOpenStruct * call_data)
 
 Bool XIMGetICValuesHandler(IMChangeICStruct * call_data)
 {
-    GetIC(call_data);
+    XimGetIC(call_data);
 
     return True;
 }
 
 Bool XIMSetICValuesHandler(IMChangeICStruct * call_data)
 {
-    SetIC(call_data);
+    XimSetIC(call_data);
     SetTrackPos(call_data);
 
     return True;
@@ -36,14 +56,16 @@ Bool XIMSetICValuesHandler(IMChangeICStruct * call_data)
 
 Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data)
 {
-    CurrentIC = FindIC(backend.backendid, &call_data->icid);
+    FcitxInputContext* ic =  FindIC(backend.backendid, &call_data->icid);
+    SetCurrentIC(ic);
 
     return True;
 }
 
 Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data)
 {
-    if (CurrentIC && CurrentXimIC->id == call_data->icid)
+    FcitxInputContext* ic = GetCurrentIC();
+    if (ic && GetXimIC(ic)->id == call_data->icid)
     {
 
     }
@@ -60,9 +82,11 @@ Bool XIMCloseHandler(IMOpenStruct * call_data)
 Bool XIMCreateICHandler(IMChangeICStruct * call_data)
 {
     CreateIC(backend.backendid, call_data);
+    FcitxInputContext* ic = GetCurrentIC();
 
-    if (!CurrentIC) {
-        CurrentIC = FindIC(backend.backendid, &call_data->icid);
+    if (!ic) {
+        ic = FindIC(backend.backendid, &call_data->icid);
+        SetCurrentIC(ic);
     }
 
     return True;
@@ -70,7 +94,7 @@ Bool XIMCreateICHandler(IMChangeICStruct * call_data)
 
 Bool XIMDestroyICHandler(IMChangeICStruct * call_data)
 {
-    if (CurrentIC == FindIC(backend.backendid, &call_data->icid)) {
+    if (GetCurrentIC() == FindIC(backend.backendid, &call_data->icid)) {
     }
 
     DestroyIC(backend.backendid, &call_data->icid);
@@ -84,7 +108,7 @@ Bool XIMTriggerNotifyHandler(IMTriggerNotifyStruct * call_data)
     if (ic == NULL)
         return True;
 
-    CurrentIC = ic;
+    SetCurrentIC(ic);
     return True;
 }
 
@@ -92,9 +116,10 @@ Bool XIMTriggerNotifyHandler(IMTriggerNotifyStruct * call_data)
 void SetTrackPos(IMChangeICStruct * call_data)
 {
     Bool flag = False;
-    if (CurrentIC == NULL)
+    FcitxInputContext* ic = GetCurrentIC();
+    if (ic == NULL)
         return;
-    if (CurrentIC != FindIC(backend.backendid, &call_data->icid))
+    if (ic != FindIC(backend.backendid, &call_data->icid))
         return;
 
     if (true) {
@@ -105,8 +130,8 @@ void SetTrackPos(IMChangeICStruct * call_data)
             if (!strcmp(XNSpotLocation, pre_attr->name)) {
                 flag = True;
                 
-                CurrentIC->offset_x = (*(XPoint *) pre_attr->value).x;
-                CurrentIC->offset_y = (*(XPoint *) pre_attr->value).y;
+                ic->offset_x = (*(XPoint *) pre_attr->value).x;
+                ic->offset_y = (*(XPoint *) pre_attr->value).y;
             }
         }
     }
@@ -114,7 +139,58 @@ void SetTrackPos(IMChangeICStruct * call_data)
 
 void XIMProcessKey(IMForwardEventStruct * call_data)
 {
-    DoForwardEvent(call_data);
+    KeySym sym;
+    XKeyEvent *kev;
+    int keyCount;
+    unsigned int state;
+    char strbuf[STRBUFLEN];
+    FcitxInputContext* ic = GetCurrentIC();
+ 
+    if (!ic) {
+        ic = FindIC(backend.backendid, &call_data->icid);
+        SetCurrentIC(ic);
+        if (!ic)
+            return;
+    }
+
+    if (GetXimIC(ic)->id != call_data->icid) {
+        ic = FindIC(backend.backendid, &call_data->icid);
+        if (!ic)
+            return;
+    }
+
+    kev = (XKeyEvent *) & call_data->event;
+    memset(strbuf, 0, STRBUFLEN);
+    keyCount = XLookupString(kev, strbuf, STRBUFLEN, &sym, NULL);
+
+    state = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
+    GetKey(sym, state, keyCount, &sym, &state);
+    FcitxLog(DEBUG,
+        "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
+         (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
+
+    INPUT_RETURN_VALUE ret = ProcessKey((call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+                                        kev->time,
+                                        sym, state, keyCount);
+
+    if (ret == IRV_DONOT_PROCESS)
+        DoForwardEvent(call_data);
+}
+
+void XIMClose(FcitxInputContext* ic)
+{
+    if (ic == NULL)
+        return;
+    IMChangeFocusStruct call_data;
+
+    call_data.connect_id = GetXimIC(ic)->connect_id;
+    call_data.icid = GetXimIC(ic)->id;
+ 
+    IMPreeditEnd(xim.ims, (XPointer) &call_data);
+}
+
+void XIMCommitString(char* string)
+{
 }
 
 void DoForwardEvent(IMForwardEventStruct * call_data)

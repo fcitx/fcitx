@@ -10,3 +10,4 @@ fcitx.kdev4
 tools/pybase.mb
 tools/pyphrase.mb
 data/desc.po
+.kdev_include_paths

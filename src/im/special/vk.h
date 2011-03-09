@@ -22,7 +22,7 @@
 
 #include <X11/Xlib.h>
 #include "core/ime.h"
-#include "ui/skin.h"
+#include "skin.h"
 
 #define VK_FILE	"vk.conf"
 

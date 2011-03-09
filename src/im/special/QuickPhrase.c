@@ -23,13 +23,13 @@
 
 #include "core/fcitx.h"
 
-#include "tools/tools.h"
+#include "tools.h"
 #include "im/special/QuickPhrase.h"
-#include "ui/InputWindow.h"
-#include "tools/utarray.h"
+#include "InputWindow.h"
+#include "utarray.h"
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
-#include "tools/configfile.h"
+#include "configfile.h"
 
 uint uQuickPhraseCount;
 UT_array *quickPhrases = NULL;

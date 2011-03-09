@@ -6,6 +6,8 @@ set(FCITX_SOURCES
     errorhandler.c
     module.c
     ime.c
+    ui.c
+    hook.c
 )
 
 add_executable(fcitx ${FCITX_SOURCES})

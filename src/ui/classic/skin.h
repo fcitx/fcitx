@@ -41,10 +41,11 @@
 #include <sys/stat.h>
 #include "MainWindow.h"
 #include "InputWindow.h"
-#include "core/IC.h"
+#include "core/backend.h"
 #include "core/ime.h"
-#include "tools/utarray.h"
-#include "ui/MenuWindow.h"
+#include "utils/utarray.h"
+#include "MenuWindow.h"
+#include "core/ui.h"
 
 #define SIZEX 800
 #define SIZEY 200
@@ -181,9 +182,6 @@ extern cairo_surface_t *  keyBoard;
 extern MouseE ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
 
 extern Display *dpy;
-
-extern INT8    iIMCount;
-extern IM    *im;
 extern FcitxSkin sc;
 extern UT_array *skinBuf;
 

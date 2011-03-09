@@ -27,13 +27,8 @@
 #include <stdlib.h>
 #endif
 
-#include "tools/utf8.h"
-#include "../src/core/internalVersion.c"
-
-typedef int     Bool;
-
-#define True	1
-#define False	0
+#include "utils/utf8.h"
+#include "core/fcitx.h"
 
 #define STR_KEYCODE 0
 #define STR_CODELEN 1
@@ -62,7 +57,7 @@ char            cPinyinKey = '\0';
 typedef struct _RECORD {
     char           *strCode;
     char           *strHZ;
-    INT8            bPinyin;
+    int8_t            bPinyin;
     struct _RECORD *next;
     struct _RECORD *prev;
     unsigned int    iHit;
@@ -88,28 +83,28 @@ void InitStrLength()
         strLength[i] = strlen(strConst[i]);
 }
 
-Bool IsValidCode (char cChar)
+boolean IsValidCode (char cChar)
 {
     char           *p;
 
     p = strInputCode;
     while (*p) {
         if (cChar == *p)
-            return True;
+            return true;
         p++;
     }
 
     p = strIgnoreChars;
     while (*p) {
         if (cChar == *p)
-            return True;
+            return true;
         p++;
     }
 
     if (cChar == cPinyinKey)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 int main (int argc, char *argv[])
@@ -131,7 +126,7 @@ int main (int argc, char *argv[])
     unsigned char   iCodeLength = 0;
     unsigned char   iPYCodeLength = 0;
 
-    Bool            bPY;
+    boolean            bPY;
 
     if (argc != 3) {
         printf ("\nUsage: txt2mb <Source File> <IM File>\n\n");
@@ -357,11 +352,11 @@ int main (int argc, char *argv[])
             continue;
         }
 
-        bPY = False;
+        bPY = false;
         if (strCode[0] == cPinyinKey) {
             size_t length = strlen(strCode);
             memmove (strCode, strCode + 1, length);
-            bPY = True;
+            bPY = true;
         }
 
         //查找是否重复
@@ -424,11 +419,12 @@ _next:
         printf ("\nCan not create target file!\n\n");
         exit (3);
     }
+    int8_t iInternalVersion = INTERNAL_VERSION;
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号
     iTemp = 0;
     fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
-    fwrite (&iInternalVersion, sizeof (INT8), 1, fpDict);
+    fwrite (&iInternalVersion, sizeof (int8_t), 1, fpDict);
 
     iTemp = (unsigned int) strlen (strInputCode);
     fwrite (&iTemp, sizeof (unsigned int), 1, fpNew);

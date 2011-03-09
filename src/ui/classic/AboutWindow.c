@@ -23,14 +23,14 @@
 #include <X11/Xatom.h>
 
 #include "core/fcitx.h"
+#include "utils/utils.h"
 
-#include "ui/AboutWindow.h"
-#include "ui/ui.h"
-#include "core/xim.h"
-#include "tools/configfile.h"
+#include "AboutWindow.h"
+#include "utils/configfile.h"
 
 extern Display *dpy;
 extern int      iScreen;
+extern FcitxState gs;
 
 int             ABOUT_WINDOW_WIDTH;
 

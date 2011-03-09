@@ -7,4 +7,6 @@ set(fcitx_config_SOURCES
 )
 
 add_library(fcitx-config SHARED ${fcitx_config_SOURCES})
+set_target_properties(fcitx-config PROPERTIES VERSION 4.1.0 SOVERSION 4.1)
+
 install(TARGETS fcitx-config DESTINATION ${libdir})

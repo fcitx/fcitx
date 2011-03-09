@@ -18,9 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _BACKEND_H
-#define _BACKEND_H
-#include "core/fcitx.h"
+#ifndef _FCITX_BACKEND_H_
+#define _FCITX_BACKEND_H_
+
+#include "utils/utarray.h"
+#include "fcitx-config/fcitx-config.h"
 
 typedef enum _IME_STATE {
     IS_CLOSED = 0,
@@ -45,15 +47,21 @@ typedef struct FcitxBackend
     void (*CreateIC)(FcitxInputContext*, void* priv);
     boolean (*CheckIC)(FcitxInputContext* arg1, void* arg2);
     void (*DestroyIC) (FcitxInputContext *context);
+    void (*CloseIM)(FcitxInputContext* arg1);
+    void (*CommitString)(FcitxInputContext* arg1, char* arg2);
     pthread_t pid;
     int backendid;
 } FcitxBackend;
 
-extern FcitxInputContext* CurrentIC;
-
+FcitxInputContext* GetCurrentIC();
+void SetCurrentIC(FcitxInputContext*);
+UT_array* GetFcitxBackends();
 FcitxInputContext* FindIC(int backendid, void* filter);
 FcitxInputContext* CreateIC(int backendid, void * priv);
-FcitxInputContext* DestroyIC(int backendid, void *filter);
+void DestroyIC(int backendid, void *filter);
 void StartBackend();
+void CloseIM(FcitxInputContext* ic);
+void CommitString(FcitxInputContext* ic, char* str);
+void ChangeIMState (FcitxInputContext* ic);
 
 #endif

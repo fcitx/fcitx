@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef XIM_HANDLER_H
-#define XIM_HANDLER_H
+#ifndef _FCITX_XIMHANDLER_H_
+#define _FCITX_XIMHANDLER_H_
 
 #include <X11/Xlib.h>
 #include <Xi18n.h>

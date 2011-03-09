@@ -25,14 +25,12 @@
 
 #include "core/fcitx.h"
 
-#include "ui/InputWindow.h"
-#include "ui/ui.h"
+#include "InputWindow.h"
+#include "ui.h"
 #include "core/ime.h"
-
-#include "interface/DBus.h"
 #include "skin.h"
-#include "tools/profile.h"
-#include "tools/configfile.h"
+#include "utils/profile.h"
+#include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
 
 InputWindow     inputWindow;
@@ -212,7 +210,7 @@ void CalInputWindow (void)
 void DrawInputWindow(void)
 {
     int lastW = inputWindow.iInputWindowWidth, lastH = inputWindow.iInputWindowHeight;
-    DrawInputBar(&messageUp, &messageDown ,&inputWindow.iInputWindowWidth);
+    DrawInputBar(&gs.messageUp, &gs.messageDown ,&inputWindow.iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow.iInputWindowWidth || lastH != inputWindow.iInputWindowHeight)

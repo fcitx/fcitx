@@ -27,20 +27,21 @@
  * 
  */
 
-#ifndef _HOTKEY_H
-#define _HOTKEY_H
+#ifndef _FCITX_HOTKEY_H_
+#define _FCITX_HOTKEY_H_
 
-#include <stdio.h>
-#include <X11/Xlib.h>
+#include "fcitx-config.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef unsigned long int FcitxKeySym;
+
 typedef struct HOTKEYS
 {
     char *desc;
-    int sym;
+    FcitxKeySym sym;
     int state;
 } HOTKEYS;
 
@@ -66,15 +67,15 @@ typedef enum _KEY_STATE {
 } KEY_STATE;
 
 void SetHotKey (char *strKey, HOTKEYS * hotkey);
-void GetKey (KeySym keysym, int iKeyState, int iCount, KeySym* outk, unsigned int* outs);
-Bool ParseKey (char *strKey, KeySym* sym, int* state);
+void GetKey (FcitxKeySym keysym, int iKeyState, int iCount, FcitxKeySym* outk, unsigned int* outs);
+boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state);
 int GetKeyList (char *strKey);
-char* GetKeyString(KeySym sym, unsigned int state);
+char* GetKeyString(FcitxKeySym sym, unsigned int state);
 
-Bool IsHotKeyDigit(KeySym sym, int state);
-Bool IsHotKeyUAZ(KeySym sym, int state);
-Bool IsHotKeyLAZ(KeySym sym, int state);
-Bool IsHotKeySimple(KeySym sym, int state);
+boolean IsHotKeyDigit(FcitxKeySym sym, int state);
+boolean IsHotKeyUAZ(FcitxKeySym sym, int state);
+boolean IsHotKeyLAZ(FcitxKeySym sym, int state);
+boolean IsHotKeySimple(FcitxKeySym sym, int state);
 
 #ifdef __cplusplus
 }

@@ -23,10 +23,10 @@
 #include <X11/Xatom.h>
 
 #include "core/fcitx.h"
-#include "ui/MenuWindow.h"
-#include "ui/skin.h"
+#include "MenuWindow.h"
+#include "skin.h"
 #include "im/special/vk.h"
-#include "tools/configfile.h"
+#include "configfile.h"
 
 extern unsigned char iVKCount;
 extern int      iScreen;

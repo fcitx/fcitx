@@ -18,7 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <stdio.h>
+#ifndef _FCITX_SPRINTF_H_
+#define _FCITX_SPRINTF_H_
+
 #include <stdarg.h>
 
 #ifndef HAVE_VASPRINTF
@@ -27,4 +29,6 @@ extern int vasprintf(char **ptr, const char *format, va_list ap);
 
 #ifndef HAVE_ASPRINTF
 extern int asprintf(char **ptr, const char *format, ...);
+#endif
+
 #endif

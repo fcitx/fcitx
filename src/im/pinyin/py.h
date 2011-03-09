@@ -156,7 +156,7 @@ typedef struct {
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"
 
-void            PYInit (void);
+boolean            PYInit (void);
 boolean         LoadPYBaseDict (void);
 boolean         LoadPYOtherDict (void);
 void            ResetPYStatus ();

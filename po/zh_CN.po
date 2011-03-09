@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-01 15:06+0800\n"
+"POT-Creation-Date: 2011-03-05 04:55+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -30,7 +30,7 @@ msgstr "%d:%s"
 msgid "%s"
 msgstr "%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:395
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:395
 msgid "About Fcitx"
 msgstr "关于Fcitx"
 
@@ -117,25 +117,24 @@ msgstr "纵向变形规则"
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/InputWindow.c:174
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/InputWindow.c:174
 msgid "CAL InputWindow"
 msgstr "CAL InputWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:363
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:379
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/skin.c:170
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/skin.c:170
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/skin.c:175
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/skin.c:175
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:286
-#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:108
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:109
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
@@ -160,27 +159,27 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2505
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2521
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2575
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2591
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2443
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2459
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:611
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:612
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr "无法创建码表文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:280
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:281
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr "无法加载码表文件: %s"
@@ -239,15 +238,15 @@ msgstr "复制"
 msgid "Current Input Method Index"
 msgstr "当前输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/InputWindow.c:149
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/InputWindow.c:149
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MainWindow.c:135
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MainWindow.c:135
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MainWindow.c:156
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MainWindow.c:156
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -322,7 +321,7 @@ msgstr "枚举选项个数需要大于0"
 msgid "Erbi"
 msgstr "二笔"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:38
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/font.c:38
 msgid "Error: Load fontconfig failed"
 msgstr "错误：fontconfig加载失败"
 
@@ -330,7 +329,7 @@ msgstr "错误：fontconfig加载失败"
 msgid "Exit"
 msgstr "Exit"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:402
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:402
 msgid "Exit Fcitx"
 msgstr "退出Fcitx"
 
@@ -347,7 +346,12 @@ msgstr "额外输入法: 初始化失败"
 msgid "ExtraIM: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:85
+#: /home/saber/Develop/fcitx/po/.././src/core/errorhandler.c:68
+#, c-format
+msgid "FCITX -- Get Signal No.: %d"
+msgstr "Fcitx接收到信号: %d"
+
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/ui.c:85
 msgid "FCITX can only run under X"
 msgstr "Fcitx只能在X下运行"
 
@@ -355,7 +359,7 @@ msgstr "Fcitx只能在X下运行"
 msgid "Fcitx"
 msgstr "Fcitx"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:401
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:401
 msgid "Fcitx Config ..."
 msgstr "配置Fcitx..."
 
@@ -478,12 +482,12 @@ msgstr "快捷键: 切换软键盘"
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:107
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:138
 #, fuzzy
 msgid "IM: bad im"
 msgstr "额外输入法: 不正确的输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:101
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:132
 #, fuzzy, c-format
 msgid "IM: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
@@ -585,34 +589,34 @@ msgstr "共享库"
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:473
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:474
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: /home/saber/Develop/fcitx/po/.././src/utils/configfile.c:234
+#: /home/saber/Develop/fcitx/po/.././src/utils/configfile.c:233
 #, c-format
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:186
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:187
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:402
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:403
 msgid "Load Table Dict OK"
 msgstr "加载码表文件成功"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:274
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:275
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr "加载码表%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:432
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:433
 msgid "Loading Autophrase."
 msgstr "加载自动组词信息中"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:264
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:265
 msgid "Loading Table Dict"
 msgstr "加载码表词典"
 
@@ -710,6 +714,15 @@ msgstr "类型缺失，作为字符串处理"
 msgid "Module"
 msgstr "模块"
 
+#: /home/saber/Develop/fcitx/po/.././src/core/module.c:59
+msgid "Module: bad module"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/po/.././src/core/module.c:53
+#, fuzzy, c-format
+msgid "Module: open %s fail %s"
+msgstr "额外输入法: 打开%s失败 %s"
+
 #: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:162
 msgid "MovePreeditCaret"
 msgstr "MovePreeditCaret"
@@ -728,7 +741,7 @@ msgid "Next Page Icon"
 msgstr "下一页图标"
 
 # unknown
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:132
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:163
 #, fuzzy
 msgid "No available Input Method"
 msgstr "中文输入法"
@@ -807,18 +820,18 @@ msgstr "PanelCreated"
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr "拼音输入法优先级，0为禁用"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:312
-msgid "Please check your environment varibles."
-msgstr "请检查你的环境变量的设置"
-
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:300
-#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:122
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:123
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
 #: /home/saber/Develop/fcitx/data/skin.desc:168
 msgid "Prev Page Icon"
 msgstr "上一页图标"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:36
+#, fuzzy
+msgid "Priority of addon"
+msgstr "优先级"
 
 # unknown
 msgid "Profile"
@@ -859,15 +872,11 @@ msgstr "右Super"
 msgid "Record File of Input"
 msgstr "记录文件"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:192
-msgid "Recording file must be an absolute path."
-msgstr "记录文件必须是绝对路径"
-
 #: /home/saber/Develop/fcitx/po/.././src/interface/DBus.c:239
 msgid "ReloadConfig"
 msgstr "ReloadConfig"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:670
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:671
 msgid "Rename OK"
 msgstr "重命名成功"
 
@@ -886,15 +895,6 @@ msgstr "SelectCandidate: "
 #: /home/saber/Develop/fcitx/data/config.desc:82
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
-
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:225
-#, c-format
-msgid "Sending %s  icid=%d connectid=%d\n"
-msgstr "Sending %s  icid=%d connectid=%d\n"
-
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:318
-msgid "Setting Hint"
-msgstr "设置提示"
 
 #: unknown
 msgid "SharedLibrary"
@@ -996,21 +996,20 @@ msgstr "左侧空白宽度"
 msgid "Space to the right"
 msgstr "右侧空白宽度"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:369
-#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:180
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:181
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
 msgstr "Fcitx启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:398
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:398
 msgid "Switch IM"
 msgstr "选择输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:397
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:397
 msgid "Switch Skin"
 msgstr "切换皮肤"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/MenuWindow.c:399
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/MenuWindow.c:399
 msgid "Switch VK"
 msgstr "选择软键盘"
 
@@ -1018,7 +1017,7 @@ msgstr "选择软键盘"
 msgid "Table Code Color"
 msgstr "码表提示颜色"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:196
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:197
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
@@ -1056,8 +1055,8 @@ msgstr "Type: %d Text: %s"
 msgid "UnLock Icon"
 msgstr "未锁定图标"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:351
-#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:358
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/ui.c:351
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/ui.c:358
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1126,28 +1125,18 @@ msgstr "五笔字型"
 msgid "WubiPinyin"
 msgstr "五笔拼音"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/tray.c:172
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/tray.c:172
 #, c-format
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/ui.c:135
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/ui.c:135
 msgid "XEvent--Expose"
 msgstr "XEvent--Expose"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:296
-#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:118
+#: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:119
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
-
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:317
-msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
-msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
-
-#: /home/saber/Develop/fcitx/po/.././src/core/xim.c:313
-msgid ""
-"You need to set environment varibles below to make fcitx work correctly."
-msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
 
 #: /home/saber/Develop/fcitx/data/table/zrm.conf:2
 msgid "Ziranma"
@@ -1158,7 +1147,7 @@ msgstr "自然码"
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:107
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/font.c:107
 msgid "no valid font."
 msgstr "无可用字体"
 
@@ -1171,22 +1160,22 @@ msgstr "pthread mutex init failed"
 msgid "updateMesssages Up:%s"
 msgstr "updateMesssages Up:%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/font.c:90
+#: /home/saber/Develop/fcitx/po/.././src/ui/default/font.c:90
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为：%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:755
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:771
 #, c-format
 msgid "按 1 删除 %s 的常用字(ESC取消)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:757
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:773
 #, c-format
 msgid "按 1-%d 删除 %s 的常用字(ESC取消)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2880
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2896
 msgid "联想："
 msgstr ""
 
@@ -1368,9 +1357,6 @@ msgstr ""
 
 #~ msgid "ExtraIM"
 #~ msgstr "额外输入法"
-
-#~ msgid "FCITX -- Get Signal No.: %d"
-#~ msgstr "Fcitx接收到信号: %d"
 
 #~ msgid "File"
 #~ msgstr "文件"
@@ -1633,11 +1619,11 @@ msgstr ""
 #~ msgid "PinyinOrder"
 #~ msgstr "拼音顺序"
 
+#~ msgid "Please check your environment varibles."
+#~ msgstr "请检查你的环境变量的设置"
+
 #~ msgid "PrevPageKey"
 #~ msgstr "快捷键: 上一页"
-
-#~ msgid "Priority"
-#~ msgstr "优先级"
 
 #~ msgid "Prompt Table Code"
 #~ msgstr "提示码表编码"
@@ -1656,6 +1642,9 @@ msgstr ""
 
 #~ msgid "Recording"
 #~ msgstr "记录模式"
+
+#~ msgid "Recording file must be an absolute path."
+#~ msgstr "记录文件必须是绝对路径"
 
 #~ msgid "ResetRecordingKey"
 #~ msgstr "快捷键: 重置记录模式"
@@ -1705,11 +1694,17 @@ msgstr ""
 #~ msgid "SendTextWhenSwitchEng"
 #~ msgstr "快速切换中英文时将已有英文上屏"
 
+#~ msgid "Sending %s  icid=%d connectid=%d\n"
+#~ msgstr "Sending %s  icid=%d connectid=%d\n"
+
 #~ msgid "Set icid=%d(connect_id=%d) to %d"
 #~ msgstr "Set icid=%d(connect_id=%d) to %d"
 
 #~ msgid "SetRecordingKey"
 #~ msgstr "快捷键: 切换记录模式"
+
+#~ msgid "Setting Hint"
+#~ msgstr "设置提示"
 
 #~ msgid "Show Point After Index of Candidate Word "
 #~ msgstr "候选序号后加点"
@@ -1809,6 +1804,13 @@ msgstr ""
 
 #~ msgid "Version"
 #~ msgstr "版本"
+
+#~ msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
+#~ msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
+
+#~ msgid ""
+#~ "You need to set environment varibles below to make fcitx work correctly."
+#~ msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
 
 #~ msgid "ZhPunc"
 #~ msgstr "中文标点图标"

@@ -18,30 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <X11/Xmd.h>
 #include <X11/Xlib.h>
-#include <IMdkit.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <Xi18n.h>
-#include <malloc.h>
 #include <X11/keysym.h>
+#include <X11/Xutil.h>
+#include <libintl.h>
 #include <ctype.h>
 
 #include "core/fcitx.h"
-#include "utils/utils.h"
 #include "core/addon.h"
 #include "core/backend.h"
-#include "module/x11/x11stuff.h"
-#include "fcitx-config/cutils.h"
-#include "fcitx-config/fcitx-config.h"
+#include "core/module.h"
 #include "utils/configfile.h"
+#include "utils/utils.h"
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/cutils.h"
+#include "IMdkit.h"
+#include "Xi18n.h"
+#include "IC.h"
 #include "xim.h"
 #include "ximhandler.h"
+#include "module/x11/x11stuff.h"
 
 static boolean XimInit();
 static void* XimRun();
 static boolean XimDestroy();
+static void XimCloseIM(FcitxInputContext* arg1);
+static void XimCommitString(FcitxInputContext* arg1, char* arg2);
+
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 static void XimXEventHandler(XEvent * event);
 static void SetTriggerKeys (char **str, int length);
@@ -62,6 +66,7 @@ static XIMStyle Styles[] = {
     0
 };
 
+FCITX_EXPORT_API
 FcitxBackend backend =
 {
     XimInit,
@@ -70,6 +75,8 @@ FcitxBackend backend =
     XimCreateIC,
     XimCheckIC,
     XimDestroyIC,
+    XimCloseIM,
+    XimCommitString,
     0,
     0
 };
@@ -375,4 +382,35 @@ void SetTriggerKeys (char **strKey, int length)
         else
             xim.Trigger_Keys[i].keysym = XK_space;
     }
+}
+
+void XimCloseIM(FcitxInputContext* ic)
+{
+    IMChangeFocusStruct call_data;
+    FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
+    call_data.connect_id = ximic->connect_id;
+    call_data.icid = ximic->id;
+    IMPreeditEnd(xim.ims, (XPointer) &call_data);
+}
+
+void XimCommitString(FcitxInputContext* ic, char* str)
+{
+    XTextProperty tp;
+    IMCommitStruct cms;
+    FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
+
+    /* avoid Seg fault */
+    if (!ic)
+        return;
+
+    Xutf8TextListToTextProperty(xim.display, (char **) &str, 1, XCompoundTextStyle, &tp);
+
+    memset(&cms, 0, sizeof(cms));
+    cms.major_code = XIM_COMMIT;
+    cms.icid = ximic->id;
+    cms.connect_id = ximic->connect_id;
+    cms.flag = XimLookupChars;
+    cms.commit_string = (char *) tp.value;
+    IMCommitString(xim.ims, (XPointer) & cms);
+    XFree(tp.value);
 }

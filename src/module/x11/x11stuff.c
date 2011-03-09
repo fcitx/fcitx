@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include "core/fcitx.h"
 #include "core/module.h"
 #include "x11stuff.h"
 
@@ -24,6 +26,7 @@ static boolean X11Init();
 
 FcitxX11 x11priv;
 
+FCITX_EXPORT_API
 FcitxModule module = {
     X11Init,
     &x11priv
@@ -36,6 +39,8 @@ boolean X11Init()
         return false;
     
     XInitThreads();
+    
+    return true;
 }
 
 

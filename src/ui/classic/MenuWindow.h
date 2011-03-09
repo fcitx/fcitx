@@ -23,7 +23,6 @@
 #define _MENUWINDOW_H_
 
 #include "ui.h"
-#include "core/xim.h"
 #include "core/ime.h"
 #include "im/pinyin/PYFA.h"
 #include "MainWindow.h"

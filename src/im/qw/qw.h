@@ -25,9 +25,4 @@
 #define strNameOfQuwei __("Quwei")
 #define strIconNameOfQuwei "quwei"
 
-INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount);
-INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode);
-char *QWGetCandWord (int iIndex);
-char           *GetQuWei (int, int);
-
 #endif

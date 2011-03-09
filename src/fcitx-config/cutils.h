@@ -18,7 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <stdlib.h>
+#ifndef _FCITX_CUTILS_H_
+#define _FCITX_CUTILS_H_
+
+#include <stddef.h>
 
 typedef enum ErrorLevel
 {
@@ -34,3 +37,5 @@ void *malloc0(size_t bytes);
 
 #define FcitxLog(e, fmt, arg...) FcitxLogFunc(e, __FILE__, __LINE__, fmt, ##arg)
 void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+
+#endif

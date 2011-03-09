@@ -25,7 +25,7 @@ set(Ximd_SOURCES
 
 add_library(fcitx-xim MODULE ${fcitx_xim_SOURCES} ${Ximd_SOURCES})
 install(TARGETS fcitx-xim DESTINATION ${libdir}/fcitx/)
-set_target_properties( fcitx-xim PROPERTIES PREFIX "")
+set_target_properties( fcitx-xim PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
 target_link_libraries( fcitx-xim ${X11_LIBRARIES} fcitx-config )
 
 install(FILES fcitx-xim.conf DESTINATION share/fcitx/data/addon)

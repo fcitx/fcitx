@@ -18,14 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef _FCITX_KEYS_H_
+#define _FCITX_KEYS_H_
 /*
  * Define const keys that will be used in code
  */
-#include <X11/keysym.h>
-
 #include "fcitx-config/hotkey.h"
 
-Bool IsHotKeyModifierCombine(KeySym sym, int state);
+boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
 
 extern HOTKEYS FCITX_DELETE[2];
 extern HOTKEYS FCITX_CTRL_DELETE[2];
@@ -45,3 +45,5 @@ extern HOTKEYS FCITX_PERIOD[2];
 extern HOTKEYS FCITX_CTRL_5[2];
 extern HOTKEYS FCITX_SEPARATOR[2];
 extern HOTKEYS FCITX_CTRL_ALT_E[2];
+
+#endif

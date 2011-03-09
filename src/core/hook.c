@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010 by CSSlayer                                         
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,31 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/* A very simple MessageBox for FCITX */
+#include "core/hook.h"
 
-#ifndef _MESSAGE_WINDOW_H
-#define _MESSAGE_WINDOW_H
+typedef struct HookStack {
+    union {
+        boolean (*a)(); 
+    };
+    struct HookStack* next;
+} HookStack;
 
-#include <X11/Xlib.h>
-#include "ui/skin.h"
-
-typedef struct MessageWindow
-{
-    Window window;
-    cairo_surface_t* surface;
-    ConfigColor color;
-    ConfigColor fontColor;
-    int height, width;
-    int fontSize;
-    char *title;
-    char **msg;
-    int length;
-} MessageWindow;
-
-extern MessageWindow messageWindow;
-
-Bool            CreateMessageWindow (void);
-void            DisplayMessageWindow (void);
-void            DrawMessageWindow (char *title, char **msg, int length);
-
-#endif
+#define DEFINE_HOOK(funcname, listname) \
+HookStack *listname; \
+void Register##function(void *func) \
+{ \
+}

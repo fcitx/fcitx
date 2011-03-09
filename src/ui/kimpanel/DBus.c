@@ -25,13 +25,13 @@
 #include <ctype.h>
 #include <limits.h>
 
-#include "tools/tools.h"
-#include "ui/InputWindow.h"
+#include "tools.h"
+#include "InputWindow.h"
 #include "im/special/vk.h"
 #include "core/ime.h"
 #include "core/xim.h"
 #include "interface/DBus.h"
-#include "tools/profile.h"
+#include "profile.h"
 
 #ifdef _ENABLE_DBUS
 DBusConnection *conn;
@@ -61,7 +61,7 @@ char sVKmsg[PATH_MAX] = "";
 #define TOOLTIP_LEGEND_DISABLE "无联"
 
 //extern IMProtocol * current_call_data;
-extern INT8 iIMCount;
+extern int8_t iIMCount;
 extern Bool bIsInLegend;
 extern int iLegendCandWordCount;
 extern int iCurrentCandPage;

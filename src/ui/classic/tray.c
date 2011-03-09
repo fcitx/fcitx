@@ -33,9 +33,9 @@
 #include <X11/Xmd.h>
 
 #include "core/fcitx.h"
-#include "ui/tray.h"
-#include "ui/TrayWindow.h"
-#include "tools/tools.h"
+#include "tray.h"
+#include "TrayWindow.h"
+#include "tools.h"
 #include "fcitx-config/cutils.h"
 
 #define MAX_SUPPORTED_XEMBED_VERSION 1

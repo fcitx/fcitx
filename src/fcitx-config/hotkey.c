@@ -18,13 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
-
-#include "fcitx-config/cutils.h"
-#include "utils/utils.h"
-#include "fcitx-config/hotkey.h"
-#include <string.h>
 #include <X11/keysym.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "core/fcitx.h"
+#include "hotkey.h"
+#include "cutils.h"
 
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {
@@ -50,58 +50,58 @@ KEY_LIST        keyList[] = {
 static char *GetKeyListString(int key);
 
 FCITX_EXPORT_API
-Bool IsHotKeyDigit(KeySym sym, int state)
+boolean IsHotKeyDigit(FcitxKeySym sym, int state)
 {
     if (state)
-        return False;
+        return false;
 
     if (sym >= XK_0 && sym <= XK_9)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 FCITX_EXPORT_API
-Bool IsHotKeyUAZ(KeySym sym, int state)
+boolean IsHotKeyUAZ(FcitxKeySym sym, int state)
 {
     if (state)
-        return False;
+        return false;
 
     if (sym >= XK_A && sym <= XK_Z)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 FCITX_EXPORT_API
-Bool IsHotKeySimple(KeySym sym, int state)
+boolean IsHotKeySimple(FcitxKeySym sym, int state)
 {
     if (state)
-        return False;
+        return false;
 
     if (sym >= XK_space && sym <= XK_asciitilde)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 FCITX_EXPORT_API
-Bool IsHotKeyLAZ(KeySym sym, int state)
+boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
 {
     if (state)
-        return False;
+        return false;
 
     if (sym >= XK_a && sym <= XK_z)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 /*
  * Do some custom process
  */
 FCITX_EXPORT_API
-void GetKey (KeySym keysym, int iKeyState, int iCount, KeySym* outk, unsigned int* outs)
+void GetKey (FcitxKeySym keysym, int iKeyState, int iCount, FcitxKeySym* outk, unsigned int* outs)
 {
     if (iKeyState)
     {
@@ -118,7 +118,7 @@ void GetKey (KeySym keysym, int iKeyState, int iCount, KeySym* outk, unsigned in
 
 
 FCITX_EXPORT_API
-char* GetKeyString(KeySym sym, unsigned int state)
+char* GetKeyString(FcitxKeySym sym, unsigned int state)
 {
     char *str;
     size_t len = 0;
@@ -154,7 +154,7 @@ char* GetKeyString(KeySym sym, unsigned int state)
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
 FCITX_EXPORT_API
-Bool ParseKey (char *strKey, KeySym* sym, int* state)
+boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state)
 {
     char           *p;
     int             iKey;
@@ -181,10 +181,10 @@ Bool ParseKey (char *strKey, KeySym* sym, int* state)
 
     iKey = GetKeyList (p);
     if (iKey == -1)
-        return False;
+        return false;
     *sym = iKey;
     *state = iKeyState;
-    return True;
+    return true;
 }
 
 FCITX_EXPORT_API
@@ -244,7 +244,7 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
 
     for (k = 0; k < 2; k++)
     {
-        KeySym sym;
+        FcitxKeySym sym;
         int state;
         i = 0;
         while (p[i] != ' ' && p[i] != '\0')

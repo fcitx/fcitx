@@ -18,8 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UI_H
-#define UI_H
+#ifndef _FCITX_UI_H_
+#define _FCITX_UI_H_
+
+#include "fcitx.h"
+#include "fcitx-config/fcitx-config.h"
+#include "utils/utf8.h"
 
 #define INPUTWND_START_POS_DOWN	8
 #define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数
@@ -42,17 +46,9 @@ typedef enum {
 #endif
 } MSG_TYPE;
 
-typedef struct {
-    char            strMsg[MESSAGE_MAX_LENGTH + 1];
-    MSG_TYPE        type;
-} MESSAGE;
-
 #define MAX_MESSAGE_COUNT 33
-typedef struct Messages {
-    MESSAGE msg[33];
-    uint msgCount;
-    boolean changed;
-} Messages;
+typedef struct MESSAGE MESSAGE;
+typedef struct Messages Messages;
 
 #define MESSAGE_IS_NOT_EMPTY (messageUp.msgCount || messageDown.msgCount)
 #define MESSAGE_IS_EMPTY (!MESSAGE_IS_NOT_EMPTY)
@@ -64,15 +60,13 @@ typedef struct Messages {
             ((m)->msgCount--); \
         (m)->changed = True; \
     } while(0)
-#define SetMessageCount(m,s) \
-    do { \
-        if ((s) <= MAX_MESSAGE_COUNT && s >= 0) \
-            ((m)->msgCount = (s)); \
-        (m)->changed = True; \
-    } while(0)
 
+typedef struct FcitxUI
+{
+    boolean (*Init)();
+} FcitxUI;
 
-#endif
+void LoadUserInterface();
 
 void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...);
 void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...);
@@ -80,3 +74,5 @@ void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...);
 void MessageConcat(Messages* message, int position, char* text);
 void MessageConcatLast(Messages* message, char* text);
 void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
+void SetMessageCount(Messages* m, int s);
+#endif

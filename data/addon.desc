@@ -4,10 +4,11 @@ Description=Name
 
 [Addon/Category]
 Type=Enum
-EnumCount=3
+EnumCount=4
 Enum0=InputMethod
 Enum1=Backend
 Enum2=Module
+Enum3=UI
 Description=Category
 
 [Addon/Enabled]
@@ -29,3 +30,8 @@ Description=Type
 Type=String
 DefaultValue=
 Description=Dependency
+
+[Addon/Priority]
+Type=Integer
+DefaultValue=50
+Description=Priority of addon

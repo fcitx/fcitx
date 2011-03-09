@@ -20,10 +20,10 @@
 
 #include "core/fcitx.h"
 
-#include "ui/MessageWindow.h"
-#include "ui/ui.h"
+#include "MessageWindow.h"
+#include "ui.h"
 #include "core/xim.h"
-#include "tools/configfile.h"
+#include "configfile.h"
 #include "fcitx-config/cutils.h"
 
 #include <ctype.h>

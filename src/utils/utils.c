@@ -26,28 +26,23 @@
  *
  *
  */
-#include "core/fcitx.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <limits.h>
-#include <string.h>
 #include <pthread.h>
+#include <stdio.h>
+#include <libintl.h>
 #include <signal.h>
 #include <unistd.h>
-#include <malloc.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
+#include "core/fcitx.h"
+#include "utils.h"
 #include "fcitx-config/uthash.h"
-#include "core/ime.h"
-#include "utils/utils.h"
-#include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
-
+#include "utf8.h"
 #include "utf8_in_gb18030.h"
 
-pthread_mutex_t fcitxMutex;
+static pthread_mutex_t fcitxMutex;
 
 typedef struct simple2trad_t
 {
@@ -248,9 +243,10 @@ void *custom_bsearch(const void *key, const void *base,
 
 void FcitxInitThread()
 {
+    FcitxState* gs = GetFcitxGlobalState();
     int rc;
     rc = pthread_mutex_init(&fcitxMutex, NULL);
-    gs.bMutexInited = True;
+    gs->bMutexInited = True;
     if (rc != 0)
         FcitxLog(ERROR, _("pthread mutex init failed"));
 }
@@ -280,14 +276,16 @@ void InitAsDaemon()
 
 int FcitxLock()
 {
-    if (gs.bMutexInited)
+    FcitxState* gs = GetFcitxGlobalState();
+    if (gs->bMutexInited)
         return pthread_mutex_lock(&fcitxMutex); 
     return 0;
 }
 
 int FcitxUnlock()
 {
-    if (gs.bMutexInited)        
+    FcitxState* gs = GetFcitxGlobalState();
+    if (gs->bMutexInited)        
         return pthread_mutex_unlock(&fcitxMutex);
     return 0;
 }
@@ -317,4 +315,12 @@ UT_array* SplitString(const char *str)
 void FreeStringList(UT_array *list)
 {
     utarray_free(list);
+}
+
+FcitxState* GetFcitxGlobalState()
+{
+    static FcitxState* gs = NULL;
+    if (gs == NULL)
+        gs = malloc0(sizeof(FcitxState));
+    return gs;
 }

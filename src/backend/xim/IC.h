@@ -26,16 +26,11 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
  
 ******************************************************************/
-#ifndef _IC_H
-#define _IC_H
+#ifndef _FCITX_IC_H_
+#define _FCITX_IC_H_
 
-#include <stdio.h>
-#include <X11/Xlib.h>
+#include <core/backend.h>
 
-#include "IMdkit.h"
-#include "Xi18n.h"
-#include "core/xim.h"
-#include "core/backend.h"
 typedef struct {
     XRectangle      area;	/* area */
     XRectangle      area_needed;	/* area needed */
@@ -74,10 +69,10 @@ typedef struct FcitxXimIC {
     CARD16 connect_id;
 } FcitxXimIC;
 
-extern void     XimCreateIC (FcitxInputContext*, void*);
-extern void     XimDestroyIC (FcitxInputContext*);
-extern boolean  XimCheckIC (FcitxInputContext* arg1, void* arg2);
-extern void     XimSetIC (IMChangeICStruct *);
-extern void     XimGetIC (IMChangeICStruct *);
+void     XimCreateIC (FcitxInputContext*, void*);
+void     XimDestroyIC (FcitxInputContext*);
+boolean  XimCheckIC (FcitxInputContext* arg1, void* arg2);
+void     XimSetIC (IMChangeICStruct *);
+void     XimGetIC (IMChangeICStruct *);
 
 #endif

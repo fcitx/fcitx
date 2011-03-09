@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "tools/utarray.h"
+#include "utarray.h"
 
 #define HEADER_SIZE 12
 #define BUFLEN 0x1000

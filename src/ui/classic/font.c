@@ -26,10 +26,13 @@
 #include <string.h>
 
 #include "core/fcitx.h"
+#include "utils/utils.h"
 
-#include "ui/skin.h"
-#include "tools/configfile.h"
+#include "skin.h"
+#include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
+
+extern FcitxState gs;
 
 void InitFont()
 {

@@ -31,11 +31,11 @@
 #include <X11/Xmd.h>
 #include <X11/extensions/Xrender.h>
 
-#include "ui/TrayWindow.h"
-#include "ui/tray.h"
-#include "ui/skin.h"
+#include "TrayWindow.h"
+#include "tray.h"
+#include "skin.h"
 #include "core/xim.h"
-#include "tools/configfile.h"
+#include "configfile.h"
 
 TrayWindow tray;
 

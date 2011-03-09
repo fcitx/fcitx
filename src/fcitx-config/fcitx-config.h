@@ -26,30 +26,19 @@
  * @brief 新配置文件读写
  */
 
-#ifndef FCITX_CONFIG_H
-#define FCITX_CONFIG_H
+#ifndef _FCITX_FCITX_CONFIG_H_
+#define _FCITX_FCITX_CONFIG_H_
 
-#include <X11/Xlib.h>
+#include <stdint.h>
 #include <stdio.h>
-#include <fcitx-config/hotkey.h>
+
+struct HOTKEYS;
+typedef int8_t boolean;
+#define true (1)
+#define false (0)
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifndef UTHASH_H
-
-typedef struct UT_hash_handle {
-   struct UT_hash_table *tbl;
-   void *prev;                       /* prev element in app order      */
-   void *next;                       /* next element in app order      */
-   struct UT_hash_handle *hh_prev;   /* previous hh in bucket order    */
-   struct UT_hash_handle *hh_next;   /* next hh in bucket order        */
-   void *key;                        /* ptr to enclosing struct's key  */
-   unsigned keylen;                  /* enclosing struct's key len     */
-   unsigned hashv;                   /* result of hash-fcn(key)        */
-} UT_hash_handle;
-
 #endif
 
 typedef struct ConfigColor
@@ -113,8 +102,8 @@ typedef enum ConfigSyncResult
 typedef union ConfigValueType{
     void *untype;
     int *integer;
-    Bool *boolean;
-    HOTKEYS *hotkey;
+    boolean *boolvalue;
+    struct HOTKEYS *hotkey;
     ConfigColor *color;
     int *enumerate;
     char **string;
@@ -124,6 +113,9 @@ typedef union ConfigValueType{
 
 typedef struct ConfigGroup ConfigGroup;
 typedef struct ConfigOption ConfigOption;
+typedef struct ConfigFileDesc ConfigFileDesc;
+typedef struct ConfigGroupDesc ConfigGroupDesc;
+typedef struct ConfigOptionDesc ConfigOptionDesc;
 
 typedef void (*SyncFilter)(ConfigGroup *, ConfigOption *, void* , ConfigSync, void* );
 
@@ -133,62 +125,19 @@ typedef struct ConfigEnum
     int enumCount;
 } ConfigEnum;
 
-typedef struct ConfigOptionDesc
-{
-    char *optionName;
-    char *desc;
-    ConfigType type;
-    char *rawDefaultValue;
-    ConfigEnum configEnum;
-
-    UT_hash_handle hh;
-} ConfigOptionDesc;
-
-typedef struct ConfigGroupDesc
-{
-    char *groupName;
-    ConfigOptionDesc *optionsDesc;
-    UT_hash_handle hh;
-} ConfigGroupDesc;
-
-typedef struct ConfigFileDesc
-{
-    ConfigGroupDesc *groupsDesc;
-} ConfigFileDesc;
-
-struct ConfigOption
-{
-    char *optionName;
-    char *rawValue;
-    ConfigValueType value;
-    SyncFilter filter;
-    void *filterArg;
-    ConfigOptionDesc *optionDesc;
-    UT_hash_handle hh;
-} ;
-
-struct ConfigGroup
-{
-    char *groupName;
-    ConfigGroupDesc *groupDesc;
-    ConfigOption* options;
-    UT_hash_handle hh;
-} ;
-
 typedef struct ConfigFile
 {
     ConfigFileDesc *fileDesc;
     ConfigGroup* groups;
 } ConfigFile;
 
-struct GenericConfig;
-
-typedef void(*ConfigBindingFunc)(struct GenericConfig*);
 
 typedef struct GenericConfig
 {
     ConfigFile *configFile;
 } GenericConfig;
+
+typedef void(*ConfigBindingFunc)(GenericConfig*);
 
 #define CONFIG_BINDING_DECLARE(config_type) \
     void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc);
@@ -217,25 +166,23 @@ typedef struct GenericConfig
 #define IsColorValid(c) ((c) >=0 && (c) <= 255)
 #define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
 
-#define FilterNextTimeEffectBool(name, var) \
-    static Bool firstRunOn##name = True; \
+#define FilterNextTimeEffectBoolean(name, var) \
+    static boolean firstRunOn##name = true; \
     void FilterCopy##name(ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg) { \
-        Bool *b = (Bool*)value; \
+        boolean *b = (boolean*)value; \
         if (sync == Raw2Value && b) \
         { \
             if (firstRunOn##name) \
                 var = *b; \
-            firstRunOn##name = False; \
+            firstRunOn##name = false; \
         } \
     }
-
-
 
 ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc*);
 ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*);
 ConfigFile *ParseConfigFileFp(FILE* fp, ConfigFileDesc* fileDesc);
 ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc);
-Bool CheckConfig(ConfigFile *configFile, ConfigFileDesc* fileDesc);
+boolean CheckConfig(ConfigFile *configFile, ConfigFileDesc* fileDesc);
 ConfigFileDesc *ParseConfigFileDesc(char* filename);
 ConfigFileDesc *ParseConfigFileDescFp(FILE* filename);
 ConfigFile* ParseIni(char* filename, ConfigFile* reuse);
@@ -246,8 +193,8 @@ void FreeConfigGroup(ConfigGroup *group);
 void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc);
 void FreeConfigOption(ConfigOption *option);
 void FreeConfigOptionDesc(ConfigOptionDesc *codesc);
-Bool SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc);
-Bool SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc);
+boolean SaveConfigFile(char *filename, ConfigFile *cfile, ConfigFileDesc* cdesc);
+boolean SaveConfigFileFp(FILE* fp, ConfigFile *cfile, ConfigFileDesc* cdesc);
 void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync);
 ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, const char* option);
 void ConfigBindSync(GenericConfig* config);

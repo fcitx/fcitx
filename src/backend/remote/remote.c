@@ -31,22 +31,20 @@
 
 #include "core/fcitx.h"
 
-#include "tools/tools.h"
+#include "tools.h"
 #include "core/xim.h"
-#include "ui/MainWindow.h"
-#include "ui/TrayWindow.h"
-#include "tools/configfile.h"
+#include "MainWindow.h"
+#include "TrayWindow.h"
+#include "configfile.h"
 #include "fcitx-config/cutils.h"
 #include "im/pinyin/sp.h"
 #include "im/special/QuickPhrase.h"
 #include "im/special/AutoEng.h"
 #include "im/special/punc.h"
-#include "ui/AboutWindow.h"
+#include "AboutWindow.h"
 #ifdef _ENABLE_DBUS
 #include "interface/DBus.h"
-extern Property state_prop;
 #endif
-extern Display* dpy;
 char socketfile[PATH_MAX]="";
 
 int create_socket(const char *name)

@@ -20,7 +20,7 @@
 
 #include "core/fcitx.h"
 #include "im/special/AutoEng.h"
-#include "tools/tools.h"
+#include "tools.h"
 #include "fcitx-config/xdg.h"
 
 #include <limits.h>

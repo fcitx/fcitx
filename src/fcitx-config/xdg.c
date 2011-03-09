@@ -25,20 +25,17 @@
  * @version 4.0.0
  * @date 2010-05-02
  */
-#include "core/fcitx.h"
 
-#include <unistd.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
 #include <limits.h>
-#include <pthread.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <libgen.h>
 
-#include "fcitx-config/xdg.h"
-#include "fcitx-config/sprintf.h"
+#include "core/fcitx.h"
+#include "xdg.h"
 
 static void make_path (const char *path);
 

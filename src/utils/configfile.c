@@ -18,41 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
-#include "utils/configfile.h"
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/cutils.h"
-#include "fcitx-config/xdg.h"
-#include "ui/font.h"
-#include "core/ime.h"
-#include <errno.h>
-#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include <X11/keysym.h>
+#include <libintl.h>
+#include <errno.h>
 
-extern Display* dpy;
-extern int iTriggerKeyCount;
-//extern XIMTriggerKey* Trigger_Keys;
-
-static Bool IsReloadConfig = False;
+#include "core/fcitx.h"
+#include "configfile.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-config/cutils.h"
+static boolean IsReloadConfig = false;
 
 static FcitxConfig fc;
 ConfigFileDesc* fcitxConfigDesc = NULL;
 static ConfigFileDesc* GetConfigDesc();
 static void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
 #ifdef _ENABLE_TRAY
-FilterNextTimeEffectBool(UseTray, fc.bUseTrayIcon)
+FilterNextTimeEffectBoolean(UseTray, fc.bUseTrayIcon)
 #endif
-FilterNextTimeEffectBool(UseDBus, fc.bUseDBus)
+FilterNextTimeEffectBoolean(UseDBus, fc.bUseDBus)
 
 CONFIG_BINDING_BEGIN(FcitxConfig);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "Font", font, FilterCopyFont);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "MenuFont", menuFont, FilterCopyMenuFont);
+CONFIG_BINDING_REGISTER("Program", "Font", font);
+CONFIG_BINDING_REGISTER("Program", "MenuFont", menuFont);
 #ifndef _ENABLE_PANGO
 CONFIG_BINDING_REGISTER("Program", "FontLocale", strUserLocale);
 #endif
@@ -104,28 +96,6 @@ CONFIG_BINDING_REGISTER("Hotkey", "ResetRecordingKey", hkResetRecording);
 #endif
 CONFIG_BINDING_REGISTER("InputMethod", "PhraseTips", bPhraseTips);
 CONFIG_BINDING_END()
-
-void FilterCopyFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
-{
-    char *pstr = *(char **)value;
-    if (sync == Raw2Value)
-    {
-        if (gs.font)
-            free(gs.font);
-        gs.font = strdup(pstr);
-    }
-}
-
-void FilterCopyMenuFont(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
-{
-    char *pstr = *(char **)value;
-    if (sync == Raw2Value)
-    {
-        if (gs.menuFont)
-            free(gs.menuFont);
-        gs.menuFont = strdup(pstr);
-    }
-}
 
 void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
@@ -291,7 +261,7 @@ int ConfigGetMaxCandWord()
     return fc.iMaxCandWord;
 }
 
-Bool ConfigGetPointAfterNumber()
+boolean ConfigGetPointAfterNumber()
 {
     return fc.bPointAfterNumber;
 }

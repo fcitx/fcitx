@@ -17,11 +17,11 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef CONFIGFILE_H
-#define CONFIGFILE_H
+#ifndef _FCITX_CONFIGFILE_H_
+#define _FCITX_CONFIGFILE_H_
 
-#include <X11/Xlib.h>
 #include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/hotkey.h"
 #define INPUT_METHODS	5	//标示输入法的类别数量
 
 typedef enum _HIDE_MAINWINDOW {
@@ -65,38 +65,38 @@ typedef struct FcitxConfig
     char *menuFont;
     char *strUserLocale;
     char *strRecordingPath;
-    Bool bUseTrayIcon;
-    Bool bUseTrayIcon_;
-    Bool bUseDBus;
-    Bool bUseDBus_;
-    Bool bEnableAddons;
+    boolean bUseTrayIcon;
+    boolean bUseTrayIcon_;
+    boolean bUseDBus;
+    boolean bUseDBus_;
+    boolean bEnableAddons;
     int iDelayStart;
 
     /* output config */
-    Bool bEngPuncAfterNumber;
+    boolean bEngPuncAfterNumber;
     ENTER_TO_DO enterToDo;
     SEMICOLON_TO_DO semicolonToDo;
-    Bool bEngAfterCap;
-    Bool bConvertPunc;
-    Bool bDisablePagingInLegend;
-    Bool bSendTextWhenSwitchEng;
+    boolean bEngAfterCap;
+    boolean bConvertPunc;
+    boolean bDisablePagingInLegend;
+    boolean bSendTextWhenSwitchEng;
 
     /* appearance config */
     int iMaxCandWord;
     HIDE_MAINWINDOW hideMainWindow;
-    Bool bCenterInputWindow;
-    Bool bShowInputWindowTriggering;
-    Bool bPointAfterNumber;
-    Bool bShowUserSpeed;
-    Bool bShowVersion;
-    Bool bHintWindow;
+    boolean bCenterInputWindow;
+    boolean bShowInputWindowTriggering;
+    boolean bPointAfterNumber;
+    boolean bShowUserSpeed;
+    boolean bShowVersion;
+    boolean bHintWindow;
     char* skinType;
 
     /* hotkey config */
     HOTKEYS hkTrigger[2];
     SWITCHKEY iSwitchKey;
-    KeySym switchKey;
-    Bool bDoubleSwitchKey;
+    FcitxKeySym switchKey;
+    boolean bDoubleSwitchKey;
     int iTimeInterval;
     HOTKEYS hkTrack[2];
     HOTKEYS hkHideMainWindow[2];
@@ -114,7 +114,7 @@ typedef struct FcitxConfig
 
     /* im config */
     int inputMethods[INPUT_METHODS];
-    Bool bPhraseTips;
+    boolean bPhraseTips;
     HOTKEYS i2ndSelectKey[2];
     HOTKEYS i3rdSelectKey[2];
 } FcitxConfig;
@@ -123,6 +123,6 @@ void LoadConfig();
 void SaveConfig();
 GenericConfig* GetConfig();
 int ConfigGetMaxCandWord();
-Bool ConfigGetPointAfterNumber();
+boolean ConfigGetPointAfterNumber();
 
 #endif

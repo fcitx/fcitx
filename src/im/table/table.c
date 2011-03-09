@@ -47,40 +47,12 @@
 #include "fcitx-config/xdg.h"
 #include "utils/profile.h"
 #include "fcitx-config/cutils.h"
+#include "core/ime-internal.h"
 
 static void FreeTableConfig(void *v);
 static void FreeTable (char iTableIndex);
 UT_icd table_icd = {sizeof(TABLE), NULL ,NULL, FreeTableConfig};
 TableState tbl;
-
-extern char     strPYAuto[];
-
-extern char     iInternalVersion;
-
-extern Display *dpy;
-
-extern char     strCodeInput[];
-extern boolean     bIsDoInputOnly;
-extern int      iCandPageCount;
-extern int      iCurrentCandPage;
-extern int      iCandWordCount;
-extern int      iLegendCandWordCount;
-extern int      iLegendCandPageCount;
-extern int      iCurrentLegendCandPage;
-extern int      iCodeInputCount;
-extern char     strStringGet[];
-extern boolean     bIsInLegend;
-extern char     lastIsSingleHZ;
-
-extern ADJUSTORDER baseOrder;
-extern boolean     bSP;
-extern boolean     bPYBaseDictLoaded;
-
-extern PYFA    *PYFAList;
-extern PYCandWord PYCandWords[];
-
-extern char     strFindString[];
-extern ParsePYStruct findMap;
 
 ConfigFileDesc* tableConfigDesc = NULL;
 
@@ -286,7 +258,7 @@ boolean LoadTableDict (void)
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     if (!iTemp) {
         fread (&iVersion, sizeof (char), 1, fpDict);
-        iVersion = (iVersion < iInternalVersion);
+        iVersion = (iVersion < INTERNAL_VERSION);
         fread (&iTemp, sizeof (unsigned int), 1, fpDict);
     }
 

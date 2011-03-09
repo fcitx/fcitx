@@ -27,19 +27,16 @@
  * 
  */
 
-#ifndef _UTILS_H
-#define _UTILS_H
+#ifndef _FCITX_UTILS_H_
+#define _FCITX_UTILS_H_
 
-#include <stdio.h>
-#include <errno.h>
-#include "core/fcitx.h"
-#include "core/ui.h"
 #include "fcitx-config/uthash.h"
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/cutils.h"
+#include "core/ui.h"
+#include "utarray.h"
 
 #define TABLE_GBKS2T "gbks2t.tab"
-
-#include <stdlib.h>
-#include "utils/utarray.h"
 
 typedef struct StringHashSet {
     char *name;
@@ -52,8 +49,8 @@ typedef struct FcitxState {
     int iIMIndex;
     boolean bMutexInited;
     int bShowCursor;
-    Messages        messageUp;
-    Messages        messageDown;
+    Messages* messageUp;
+    Messages* messageDown;
     int iCursorPos;
 } FcitxState;
 
@@ -72,6 +69,6 @@ int             CalHZIndex (char *strHZ);
 char           *ConvertGBKSimple2Tradition (char *text);
 UT_array* SplitString(const char *str);
 void FreeStringList(UT_array *list);
+FcitxState* GetFcitxGlobalState();
 
-extern FcitxState gs;
 #endif

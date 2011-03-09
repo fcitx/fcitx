@@ -20,6 +20,7 @@
 #ifndef _PY_PARSER_H
 #define _PY_PARSER_H
 
+#include "core/fcitx.h"
 #include "py.h"
 
 #define PY_SEPARATOR '\''
@@ -40,7 +41,7 @@ typedef enum {
 typedef struct {
     char            strPYParsed[MAX_WORDS_USER_INPUT + 3][MAX_PY_LENGTH + 2];
     char            strMap[MAX_WORDS_USER_INPUT + 3][3];
-    char            iHZCount;
+    int8_t          iHZCount;
     char            iMode;
 } ParsePYStruct;
 

@@ -32,11 +32,11 @@
 #include <X11/Xatom.h>
 
 #include "core/fcitx.h"
-#include "ui/ui.h"
-#include "ui/skin.h"
+#include "ui.h"
+#include "skin.h"
 #include "MainWindow.h"
-#include "tools/profile.h"
-#include "tools/configfile.h"
+#include "profile.h"
+#include "configfile.h"
 #include "fcitx-config/cutils.h"
 
 MainWindow          mainWindow;
@@ -141,7 +141,7 @@ void DisplayMainWindow (void)
 
 void DrawMainWindow (void)
 {
-    INT8            iIndex = 0;
+    int8_t            iIndex = 0;
     cairo_t *c;
     Bool btmpPunc;
 

@@ -37,13 +37,13 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
   n = 0;
   while (1)
   {
-      INT8 clen;
+      int8_t clen;
       r = fread(&t, sizeof (int), 1, fi);
       if (!r)
           break;
       ++n;
       
-      fread(&clen, sizeof (INT8), 1, fi);
+      fread(&clen, sizeof (int8_t), 1, fi);
       fseek(fi, sizeof (char) * clen, SEEK_CUR);
       fread(&t, sizeof(int), 1, fi);
       
@@ -70,8 +70,8 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
   {
     r = fread(&(PYMB[i].PYFAIndex), sizeof (int), 1, fi);
 
-    INT8 clen;
-    fread(&clen, sizeof (INT8), 1, fi);
+    int8_t clen;
+    fread(&clen, sizeof (int8_t), 1, fi);
     fread(PYMB[i].HZ, sizeof (char) * clen, 1, fi);
     PYMB[i].HZ[clen] = '\0';
 
@@ -128,8 +128,8 @@ int LoadPYBase(FILE *fi, struct _HZMap **pHZMap)
 
     for (j = 0; j < HZMap[i].BaseCount; ++j)
     {
-      INT8 clen;
-      fread(&clen, sizeof(INT8), 1, fi);
+      int8_t clen;
+      fread(&clen, sizeof(int8_t), 1, fi);
       HZMap[i].HZ[j] = malloc(sizeof(char) *( clen + 1));
       fread(HZMap[i].HZ[j], sizeof(char) * clen, 1, fi);
       HZMap[i].HZ[j][clen] = '\0';

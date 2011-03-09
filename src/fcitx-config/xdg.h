@@ -26,8 +26,8 @@
  * @date 2010-05-02
  */
 
-#ifndef XDG_H
-#define XDG_H
+#ifndef _FCITX_XDG_H_
+#define _FCITX_XDG_H_
 
 #include <stdio.h>
 #include <X11/Xlib.h>

@@ -17,13 +17,20 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <X11/Xlib.h>
-#include <IMdkit.h>
-#include "IC.h"
-#include <core/backend.h>
-#define DEFAULT_IMNAME "fcitx"
 
-#define CurrentXimIC ((FcitxXimIC*)CurrentIC->privateic)
+#ifndef _FCITX_XIM_H_
+#define _FCITX_XIM_H_
+
+#include <X11/Xlib.h>
+#include <X11/Xmd.h>
+
+#include "IMdkit.h"
+#include "core/backend.h"
+
+#define DEFAULT_IMNAME "fcitx"
+#define STRBUFLEN 64
+
+#define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
 
 typedef struct FcitxXimBackend
 {
@@ -37,3 +44,5 @@ typedef struct FcitxXimBackend
 
 extern FcitxBackend backend;
 extern FcitxXimBackend xim;
+
+#endif

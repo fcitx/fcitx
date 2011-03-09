@@ -24,7 +24,7 @@
 #include <stdlib.h>
 
 #include "core/fcitx.h"
-#include "tools/tools.h"
+#include "tools.h"
 #include "im/special/punc.h"
 #include "core/ime.h"
 #include "fcitx-config/xdg.h"

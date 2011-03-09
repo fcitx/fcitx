@@ -21,16 +21,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 #include "im/pinyin/pyParser.h"
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
 #include "im/pinyin/sp.h"
 #include "pyTools.h"
-#include "tools/configfile.h"
 #include "fcitx-config/xdg.h"
+#include "im/pinyin/pyconfig.h"
 
-FcitxConfig fc;
+FcitxPinyinConfig pyconfig;
 
 /* Bad programming practice :( */
 Bool bSingleHZMode;

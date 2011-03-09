@@ -22,6 +22,8 @@
  * Define const keys that will be used in code
  */
 
+#include <X11/keysym.h>
+
 #include "core/keys.h"
 
 HOTKEYS FCITX_DELETE[2] =
@@ -132,13 +134,13 @@ HOTKEYS FCITX_CTRL_ALT_E[2] =
     {NULL, 0, 0},
 };
 
-Bool IsHotKeyModifierCombine(KeySym sym, int state)
+boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
 {
    if (sym == XK_Control_L
     || sym == XK_Control_R
     || sym == XK_Shift_L
     || sym == XK_Shift_R )
-       return True;
+       return true;
 
-   return False;
+   return false;
 }

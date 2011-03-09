@@ -34,17 +34,17 @@
 #include <limits.h>
 
 #include "core/fcitx.h"
-#include "tools/tools.h"
-#include "ui/ui.h"
-#include "ui/skin.h"
+#include "tools.h"
+#include "ui.h"
+#include "skin.h"
 #include "fcitx-config/xdg.h"
-#include "tools/configfile.h"
-#include "tools/profile.h"
+#include "configfile.h"
+#include "profile.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/cutils.h"
 #include "im/special/vk.h"
 #ifdef _ENABLE_TRAY
-#include "ui/TrayWindow.h"
+#include "TrayWindow.h"
 #endif
 
 #define ROUND_SIZE 60

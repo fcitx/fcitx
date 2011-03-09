@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef FCITX_PROFILE_H
-#define FCITX_PROFILE_H
+#ifndef _FCITX_PROFILE_H_
+#define _FCITX_PROFILE_H_
 
 #include "fcitx-config/fcitx-config.h"
 
@@ -30,15 +30,13 @@ typedef struct FcitxProfile
     int iMainWindowOffsetY;
     int iInputWindowOffsetX;
     int iInputWindowOffsetY;
-    Bool bCorner;
-    Bool bChnPunc;
-    Bool bTrackCursor;
-    Bool bUseLegend;
+    boolean bCorner;
+    boolean bChnPunc;
+    boolean bTrackCursor;
+    boolean bUseLegend;
     int iIMIndex;
-    Bool bLocked;
-    Bool bCompactMainWindow;
-    Bool bUseGBKT;
-    Bool bRecording;
+    boolean bUseGBKT;
+    boolean bRecording;
 } FcitxProfile;
 
 extern FcitxProfile fcitxProfile;

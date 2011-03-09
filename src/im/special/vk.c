@@ -25,15 +25,15 @@
 
 #include "core/fcitx.h"
 #include "im/special/vk.h"
-#include "ui/ui.h"
-#include "ui/MainWindow.h"
-#include "ui/InputWindow.h"
+#include "ui.h"
+#include "MainWindow.h"
+#include "InputWindow.h"
 #include "core/IC.h"
 #include "core/xim.h"
 #include "fcitx-config/xdg.h"
 #include "interface/DBus.h"
-#include "tools/profile.h"
-#include "tools/configfile.h"
+#include "profile.h"
+#include "configfile.h"
 
 VKWindow vkWindow;
 

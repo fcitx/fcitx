@@ -27,46 +27,17 @@
  *
  */
 
-#ifndef _IME_INTERNAL_H
-#define _IME_INTERNAL_H
+#ifndef _FCITX_IME_INTERNAL_H_
+#define _FCITX_IME_INTERNAL_H_
 
-#include <X11/keysym.h>
-#include <cairo.h>
 #include "fcitx-config/hotkey.h"
-#include "core/fcitx.h"
-#include "utils/utf8.h"
-#include "fcitx-config/fcitx-config.h"
-#include "core/addon.h"
-#include "core/ui.h"
+#include "ime.h"
 
-typedef enum _KEY_RELEASED {
-    KR_OTHER = 0,
-    KR_CTRL,
-    KR_2ND_SELECTKEY,
-    KR_3RD_SELECTKEY,
-} KEY_RELEASED;
-
-typedef struct IM{
-    char               strName[MAX_IM_NAME + 1];
-    char               strIconName[MAX_IM_NAME + 1];
-    void               (*ResetIM) (void);
-    INPUT_RETURN_VALUE (*DoInput) (unsigned int, unsigned int, int);
-    INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
-    char              *(*GetCandWord) (int);
-    char              *(*GetLegendCandWord) (int);
-    Bool               (*PhraseTips) (void);
-    void               (*Init) (void);
-    void               (*Destroy) ();
-    FcitxImage         image;
-    cairo_surface_t   *icon;
-    FcitxAddon        *addonInfo;
-} IM;
-
-//void            ProcessKey (IMForwardEventStruct * call_data);
+INPUT_RETURN_VALUE ProcessKey(FcitxKeyEventType event, long unsigned int timestamp, long unsigned int keysym, unsigned int keystate, int keyCount);
 void            ResetInput (void);
-//void            CloseIM (IMForwardEventStruct * call_data);
-void            ChangeIMState ();
-Bool            IsHotKey(KeySym sym, int state, HOTKEYS * hotkey);
+INPUT_RETURN_VALUE CheckHotkey(unsigned long keysym, unsigned int state, int count);
+
+boolean IsHotKey(FcitxKeySym sym, int state, struct HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);
 INPUT_RETURN_VALUE ChangePunc (void);
 INPUT_RETURN_VALUE ChangeLegend (void);
@@ -79,9 +50,8 @@ void		ChangeRecording (void);
 void		ResetRecording (void);
 #endif
 
-void            SwitchIM (INT8 index);
+void            SwitchIM (int index);
 void            DoPhraseTips ();
-Bool            IsIM (char *strName);
 void            SaveAllIM (void);
 void            UnloadAllIM();
 void            LoadAllIM (void);

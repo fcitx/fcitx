@@ -18,17 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <dlfcn.h>
+#include <libintl.h>
+
 #include "core/fcitx.h"
-#include "core/addon.h"
-#include "core/backend.h"
+#include "module.h"
+#include "addon.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
-#include <dlfcn.h>
-#include <pthread.h>
-#include <stdio.h>
 
 void LoadModule()
 {
+    UT_array* addons = GetFcitxAddons();
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
@@ -65,8 +66,8 @@ void LoadModule()
                             dlclose(handle);
                             return;
                         }
+                        addon->module = module;
                     }
-                    break;
                 default:
                     break;
             }

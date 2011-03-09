@@ -20,8 +20,8 @@
 
 #include "core/fcitx.h"
 
-#include "ui/skin.h"
-#include "ui/MenuWindow.h"
+#include "skin.h"
+#include "MenuWindow.h"
 #include "fcitx-config/fcitx-config.h"
 
 CONFIG_BINDING_BEGIN(FcitxSkin);

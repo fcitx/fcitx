@@ -17,10 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _MY_ERRORS_HANDLERS_H
-#define _MY_ERRORS_HANDLERS_
+#ifndef _ERRORHANDLER_H
+#define _ERRORHANDLER_H
 
-#include <X11/Xlib.h>
 /* ***********************************************************
  * Consts
  * *********************************************************** */

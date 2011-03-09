@@ -20,13 +20,13 @@
 #ifdef _ENABLE_DBUS
 
 #include <dbus/dbus.h>
-#include "ui/InputWindow.h"
+#include "InputWindow.h"
 #include "core/ime.h"
 #include "core/xim.h"
 
 extern IM *im;
 
-extern INT8 iState;
+extern int8_t iState;
 extern Bool bVK;
 extern Bool bUseAA;
 extern Bool bUseMatchingKey;

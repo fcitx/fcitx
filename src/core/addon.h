@@ -18,21 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef ADDON_H
-#define ADDON_H
-
-#include "core/fcitx.h"
-#include "X11/Xmd.h"
-#include "fcitx-config/fcitx-config.h"
+#ifndef _FCITX_ADDON_H_
+#define _FCITX_ADDON_H_
 #include "utils/utarray.h"
-#include "backend.h"
-#include "module.h"
+#include "fcitx-config/fcitx-config.h"
 
 typedef enum AddonCategory
 {
     AC_INPUTMETHOD = 0,
     AC_BACKEND,
-    AC_MODULE
+    AC_MODULE,
+    AC_UI
 } AddonCategory;
 
 typedef enum AddonType
@@ -44,24 +40,24 @@ typedef struct FcitxAddon
 {
     GenericConfig config;
     char *name;
-    Bool bEnabled;
+    boolean bEnabled;
     AddonCategory category;
     AddonType type;
     char *library;
     char *depend;
+    int priority;
     union {
-        FcitxBackend *backend;
-        FcitxModule *module;
-        FcitxIM* im;
+        struct FcitxBackend *backend;
+        struct FcitxModule *module;
+        struct FcitxIM* im;
     };
 } FcitxAddon;
 
+UT_array* GetFcitxAddons();
 void FreeAddon(void *v);
 void LoadAddonInfo(void);
 void AddonResolveDependency();
 boolean AddonIsAvailable(const char* name);
 FcitxAddon* GetAddonByName(const char* name);
-
-extern UT_array *addons;
 
 #endif

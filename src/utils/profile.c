@@ -1,36 +1,38 @@
+/***************************************************************************
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <errno.h>
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
-#include "fcitx-config/fcitx-config.h"
-#include "utils/profile.h"
+#include "profile.h"
 #include "fcitx-config/xdg.h"
-#include "core/ime.h"
-#include "ui/ui.h"
-
-extern Display* dpy;
-extern int iScreen;
 
 FcitxProfile fcitxProfile;
 ConfigFileDesc* fcitxProfileDesc = NULL;
 static ConfigFileDesc* GetProfileDesc();
 
-static void FilterCopyIMIndex(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg);
-static void FilterScreenSizeX(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg);
-static void FilterScreenSizeY(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg);
-
 CONFIG_BINDING_BEGIN(FcitxProfile);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Profile", "MainWindowOffsetX",  iMainWindowOffsetX, FilterScreenSizeX);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Profile", "MainWindowOffsetY", iMainWindowOffsetY, FilterScreenSizeY);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Profile", "InputWindowOffsetX", iInputWindowOffsetX, FilterScreenSizeX);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Profile", "InputWindowOffsetY", iInputWindowOffsetY, FilterScreenSizeY);
 CONFIG_BINDING_REGISTER("Profile", "Corner", bCorner);
 CONFIG_BINDING_REGISTER("Profile", "ChnPunc", bChnPunc);
 CONFIG_BINDING_REGISTER("Profile", "TrackCursor", bTrackCursor);
 CONFIG_BINDING_REGISTER("Profile", "UseLegend", bUseLegend);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Profile", "IMIndex", iIMIndex, FilterCopyIMIndex);
-CONFIG_BINDING_REGISTER("Profile", "Locked", bLocked);
-CONFIG_BINDING_REGISTER("Profile", "CompactMainWindow", bCompactMainWindow);
+CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex);
 CONFIG_BINDING_REGISTER("Profile", "UseGBKT", bUseGBKT);
 #ifdef _ENABLE_RECORDING
 CONFIG_BINDING_REGISTER("Profile", "Recording", bRecording);
@@ -83,62 +85,4 @@ void SaveProfile(void)
     FILE* fp = GetXDGFileUser("profile", "wt", NULL);
     SaveConfigFileFp(fp, fcitxProfile.gconfig.configFile, profileDesc);
     fclose(fp);
-}
-
-void FilterCopyIMIndex(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg)
-{
-    int* iIMIndex = (int*)data;
-    switch(sync)
-    {
-        case Raw2Value:
-            gs.iIMIndex = *iIMIndex;
-            break;
-        case Value2Raw:
-            *iIMIndex = gs.iIMIndex;
-            break;
-    }
-}
-static void FilterScreenSizeX(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg)
-{
-    int* X = (int*)data;
-
-    switch(sync)
-    {
-        case Raw2Value:
-            {
-                int dwidth, dheight;
-                GetScreenSize(&dwidth, &dheight);
-                if (*X >= dwidth)
-                    *X = dwidth - 10;
-                if (*X < 0)
-                    *X = 0;
-            }
-            break;
-        case Value2Raw:
-            break;
-    }
-
-}
-
-static void FilterScreenSizeY(ConfigGroup *group, ConfigOption *option, void *data, ConfigSync sync, void* arg)
-{
-    int* Y = (int*)data;
-
-    switch(sync)
-    {
-        case Raw2Value:
-            {
-                int dwidth, dheight;
-                GetScreenSize(&dwidth, &dheight);
-                if (*Y >= dheight)
-                    *Y = dheight - 3;
-                if (*Y < 0)
-                    *Y = 0;
-            }
-            break;
-        case Value2Raw:
-            break;
-    }
-
-
 }

@@ -17,47 +17,63 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _xim_h
-#define _xim_h
+/**
+ * @file   InputWindow.h
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ * 
+ * @brief  输入条窗口
+ * 
+ * 
+ */
 
-#include <stdio.h>
-#include <X11/Xlocale.h>
+#ifndef _INPUT_WINDOW_H
+#define _INPUT_WINDOW_H
+
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+#include <stdarg.h>
+#include "utils/utf8.h"
+#include <cairo.h>
 
-#include "IMdkit.h"
-#include "Xi18n.h"
+#define INPUTWND_WIDTH	50
+#define INPUTWND_HEIGHT	40
 
-#define STRBUFLEN 64
+typedef struct InputWindow {
+    Window window;
+    
+    uint            iInputWindowHeight;
+    uint            iInputWindowWidth;
+    Bool            bShowPrev;
+    Bool            bShowNext;
+    Bool            bShowCursor;
+    
+    //这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
+    ///* Issue 11: piaoairy: 为适应generic_config_integer(), 改int8_t 为int */
+    int		iOffsetX;
+    int		iOffsetY;
+    
+    Pixmap pm_input_bar;
+    
+    cairo_surface_t *cs_input_bar;
+    cairo_surface_t *cs_input_back;
+    cairo_t *c_back, *c_cursor;
+    cairo_t *c_font[8];
+} InputWindow;
 
-#ifndef ICONV_CONST
-#define ICONV_CONST
-#endif
+extern InputWindow inputWindow;
+extern int iCursorPos;
 
-#ifndef FALSE
-#define FALSE	0
-#endif
-
-Bool            InitXIM (char *);
-void            SendHZtoClient(IMForwardEventStruct * call_data, char *strHZ);
-void            EnterChineseMode (Bool bState);
-
-void            SetIMState (Bool bState);
-void            MyIMForwardEvent (CARD16 connectId, CARD16 icId, int keycode);
-
-#define GetCurrentState() (CurrentIC?(CurrentIC->state):(IS_CLOSED))
-#define GetCurrentPos() (CurrentIC?(&CurrentIC->pos):(NULL))
-
-void CloseAllIM();
-
-#ifndef __USE_GNU
-extern char    *strcasestr (__const char *__haystack, __const char *__needle);
-#endif
-
-#ifdef _ENABLE_RECORDING
-Bool		OpenRecording(Bool);
-void 		CloseRecording(void);
-#endif
+Bool            CreateInputWindow (void);
+void            DisplayInputWindow (void);
+void            DrawInputWindow (void);
+void            CalInputWindow (void);
+void            CalculateInputWindowHeight (void);
+void            DrawCursor (int iPos);
+void            DisplayMessageUp (void);
+void            DisplayMessageDown (void);
+void            ResetInputWindow (void);
+void            MoveInputWindow();
+void            CloseInputWindow(void);
+void DestroyInputWindow();
 
 #endif

@@ -43,6 +43,7 @@
 #include "fcitx-config/xdg.h"
 #include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
+#include "core/ime-internal.h"
 
 #ifndef SIGUNUSED
 #define SIGUNUSED 32

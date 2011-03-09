@@ -20,7 +20,7 @@
 
 #ifndef _MODULE_H
 #define _MODULE_H
-#include "core/fcitx.h"
+#include "fcitx-config/fcitx-config.h"
 
 typedef struct FcitxModule
 {

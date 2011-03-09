@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 
 project(fcitx)
 
+set(version 4.1.0)
+
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 
@@ -36,7 +38,9 @@ set(bindir ${prefix}/bin)
 set(libdir ${LIB_INSTALL_DIR})
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
+set(CMAKE_C_FLAGS "-Wall")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+add_definitions("-D_GNU_SOURCE")
 
 configure_file(${fcitx_SOURCE_DIR}/config.h.in ${fcitx_BINARY_DIR}/config.h)
 

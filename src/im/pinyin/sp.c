@@ -27,7 +27,6 @@
 #include "sp.h"
 #include "pyMapTable.h"
 #include "pyParser.h"
-#include "ui/MainWindow.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
 #include <string.h>
