@@ -271,7 +271,7 @@ Bool VKMouseKey (int x, int y)
                 return True;
             }
             else if (x >= 99 && x < 270)    //空格
-                strcpy (strKey, "\xa1\xa1");
+                strcpy (strKey, " ");
             else if (x >= 312 && x <= 350) {    //ESC
                 SwitchVK ();
                 pstr = (char *) NULL;
