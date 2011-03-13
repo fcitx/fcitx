@@ -32,7 +32,7 @@
 
 #define HOT_KEY_COUNT   2
 #include "core/fcitx.h"
-#include "core/backend.h"
+#include "fcitx-config/hotkey.h"
 
 typedef enum _SEARCH_MODE {
     SM_FIRST,
@@ -72,7 +72,7 @@ typedef struct FcitxIM {
     char               strName[MAX_IM_NAME + 1];
     char               strIconName[MAX_IM_NAME + 1];
     void               (*ResetIM) (void);
-    INPUT_RETURN_VALUE (*DoInput) (unsigned int, unsigned int, int);
+    INPUT_RETURN_VALUE (*DoInput) (FcitxKeySym, unsigned int);
     INPUT_RETURN_VALUE (*GetCandWords) (SEARCH_MODE);
     char              *(*GetCandWord) (int);
     char              *(*GetLegendCandWord) (int);
@@ -108,6 +108,10 @@ typedef struct FcitxInputState {
     int iCurrentLegendCandPage;
     int bShowNext;
     int bShowPrev;
+    int iHZInputed;
+    int lastIsSingleHZ;
+    boolean bLastIsNumber;
 } FcitxInputState;
 
+boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
 #endif

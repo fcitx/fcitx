@@ -386,7 +386,7 @@ void DestroyXlibMenu(XlibMenu *menu)
     cairo_surface_destroy(menu->menu_cs);
     XFreePixmap(dpy, menu->pixmap);
     XDestroyWindow(dpy, menu->menuWindow);
-    utarray_done(&menu->shell);
+    utarray_clear(&menu->shell);
 }
 
 Bool CreateMainMenuWindow()

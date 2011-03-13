@@ -21,5 +21,12 @@
 #ifndef _HOOK_H
 #define _HOOK_H
 #include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/hotkey.h"
+#include "ime.h"
+
+void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+char* ProcessOutputFilter(char *in);
+INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state);
 
 #endif

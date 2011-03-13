@@ -321,6 +321,10 @@ FcitxState* GetFcitxGlobalState()
 {
     static FcitxState* gs = NULL;
     if (gs == NULL)
+    {
         gs = malloc0(sizeof(FcitxState));
+        gs->messageUp = InitMessages();
+        gs->messageDown = InitMessages();
+    }
     return gs;
 }

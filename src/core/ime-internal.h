@@ -33,9 +33,11 @@
 #include "fcitx-config/hotkey.h"
 #include "ime.h"
 
-INPUT_RETURN_VALUE ProcessKey(FcitxKeyEventType event, long unsigned int timestamp, long unsigned int keysym, unsigned int keystate, int keyCount);
+struct FcitxInputContext;
+
+INPUT_RETURN_VALUE ProcessKey(FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym keysym, unsigned int keystate);
 void            ResetInput (void);
-INPUT_RETURN_VALUE CheckHotkey(unsigned long keysym, unsigned int state, int count);
+void ForwardKey(struct FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 
 boolean IsHotKey(FcitxKeySym sym, int state, struct HOTKEYS * hotkey);
 INPUT_RETURN_VALUE ChangeCorner (void);

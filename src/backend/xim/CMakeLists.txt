@@ -1,5 +1,6 @@
 include_directories(${fcitx_SOURCE_DIR}/src)
 include_directories(${fcitx_SOURCE_DIR}/src/backend/xim/lib)
+include_directories(${X11_X11_INCLUDE_PATH})
 
 set(fcitx_xim_SOURCES
     IC.c

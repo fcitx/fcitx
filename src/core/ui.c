@@ -43,6 +43,11 @@ struct Messages {
     boolean changed;
 };
 
+Messages* InitMessages()
+{
+    return malloc0(sizeof(Messages));
+}
+
 void SetMessageCount(Messages* m, int s)
 {
     if ((s) <= MAX_MESSAGE_COUNT && s >= 0)
@@ -146,4 +151,24 @@ void MessageConcat(Messages* message, int position, char* text)
 {
     strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
+}
+
+void CloseInputWindow()
+{
+}
+
+void ShowInputWindow()
+{
+}
+
+void UpdateStatus()
+{
+}
+
+void RegisterStatus()
+{
+}
+
+void OnInputFocus()
+{
 }

@@ -34,7 +34,7 @@
 
 extern FcitxInputState input;
 
-INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount);
+INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode);
 char *QWGetCandWord (int iIndex);
 char           *GetQuWei (int, int);
@@ -63,7 +63,7 @@ boolean QWInit()
     return true;
 }
 
-INPUT_RETURN_VALUE DoQWInput(unsigned int sym, unsigned int state, int keyCount)
+INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state)
 {
     FcitxState* gs = GetFcitxGlobalState();
     INPUT_RETURN_VALUE retVal;

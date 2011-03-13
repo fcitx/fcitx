@@ -68,6 +68,7 @@ typedef struct FcitxUI
 
 void LoadUserInterface();
 
+Messages* InitMessages();
 void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...);
 void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...);
 #define SetMessageText(m, p, fmt) SetMessage((m), (p), (m)->msg[(p)].type, (fmt))
@@ -75,4 +76,12 @@ void MessageConcat(Messages* message, int position, char* text);
 void MessageConcatLast(Messages* message, char* text);
 void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
 void SetMessageCount(Messages* m, int s);
+
+
+void CloseInputWindow();
+void ShowInputWindow();
+void UpdateStatus();
+void RegisterStatus();
+void OnInputFocus();
+
 #endif

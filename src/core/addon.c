@@ -38,6 +38,7 @@ CONFIG_BINDING_REGISTER("Addon", "Dependency", depend);
 CONFIG_BINDING_REGISTER("Addon", "Priority", priority);
 CONFIG_BINDING_END()
 
+static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
 static ConfigFileDesc *addonConfigDesc = NULL;
 static ConfigFileDesc* GetAddonConfigDesc();
 static int AddonPriorityCmp(const void* a, const void* b)
@@ -48,7 +49,6 @@ static int AddonPriorityCmp(const void* a, const void* b)
 
 UT_array* GetFcitxAddons()
 {
-    const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
     static UT_array *addons = NULL;
     if (addons == NULL)
         utarray_new(addons, &addon_icd);
@@ -68,7 +68,7 @@ void LoadAddonInfo(void)
     struct dirent *drt;
     struct stat fileStat;
     UT_array* addons = GetFcitxAddons();
-    utarray_done(addons);
+    utarray_clear(addons);
 
     StringHashSet* sset = NULL;
 

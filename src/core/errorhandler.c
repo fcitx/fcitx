@@ -17,33 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "core/fcitx.h"
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
-#include <stdio.h>
 #include <signal.h>
-#include <limits.h>
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_WAIT_H
-#include <wait.h>
-#else
-#include <sys/wait.h>
-#endif
-
 #include <execinfo.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <libintl.h>
 
-#include "core/ime.h"
-#include "core/errorhandler.h"
-#include "fcitx-config/xdg.h"
-#include "utils/configfile.h"
 #include "fcitx-config/cutils.h"
-#include "core/ime-internal.h"
+#include "fcitx-config/xdg.h"
+#include "ime-internal.h"
+#include "utils/configfile.h"
+#include "errorhandler.h"
 
 #ifndef SIGUNUSED
 #define SIGUNUSED 32

@@ -39,15 +39,17 @@
 #include "utils/profile.h"
 #include "ime-internal.h"
 #include "ui.h"
-#include <utils/utils.h>
+#include "utils/utils.h"
+#include "hook.h"
+#include "backend.h"
 
 static void UnloadIM(FcitxIM* ime);
+static const UT_icd im_icd = {sizeof(FcitxIM*), NULL ,NULL, NULL};
 
 FcitxInputState input;
 
 UT_array* GetFcitxIMS()
 {
-    UT_icd im_icd = {sizeof(FcitxIM*), NULL ,NULL, NULL};
     static UT_array* ims = NULL;
     if (ims == NULL)
         utarray_new(ims, &im_icd);
@@ -150,7 +152,7 @@ void LoadAllIM(void)
     }
 }
 
-boolean IsHotKey(KeySym sym, int state, HOTKEYS * hotkey)
+boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
     if (sym == hotkey[0].sym && (hotkey[0].state == state) )
@@ -162,9 +164,8 @@ boolean IsHotKey(KeySym sym, int state, HOTKEYS * hotkey)
 
 INPUT_RETURN_VALUE ProcessKey(FcitxKeyEventType event,
                               long unsigned int timestamp,
-                              long unsigned int sym,
-                              unsigned int state,
-                              int keyCount)
+                              FcitxKeySym sym,
+                              unsigned int state)
 {
     FcitxState* gs = GetFcitxGlobalState();
     if (sym == 0) {
@@ -290,47 +291,153 @@ INPUT_RETURN_VALUE ProcessKey(FcitxKeyEventType event,
 
     if (retVal == IRV_TO_PROCESS) {
         if (GetCurrentIC()->state == IS_CHN) {
-            /* TODO VK if (bVK)
-                retVal = DoVKInput(sym, state, keyCount);
-            else */
-            if (IsHotKey(sym, state, fc->i2ndSelectKey)) {
-                if (input.iCandWordCount >= 2)
-                {
-                    input.keyReleased = KR_2ND_SELECTKEY;
-                    return IRV_DONOT_PROCESS;
+            ProcessPreInputFilter(sym, state, &retVal);
+            if (retVal == IRV_TO_PROCESS)
+            {
+                if (IsHotKey(sym, state, fc->i2ndSelectKey)) {
+                    if (input.iCandWordCount >= 2)
+                    {
+                        input.keyReleased = KR_2ND_SELECTKEY;
+                        return IRV_DONOT_PROCESS;
+                    }
+                } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
+                    if (input.iCandWordCount >= 3)
+                    {
+                        input.keyReleased = KR_3RD_SELECTKEY;
+                        return IRV_DONOT_PROCESS;
+                    }
                 }
-            } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
-                if (input.iCandWordCount >= 3)
-                {
-                    input.keyReleased = KR_3RD_SELECTKEY;
-                    return IRV_DONOT_PROCESS;
+
+                if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                    //调用输入法模块
+                    /* TODO: use module
+                    if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
+                        //有人报 空格 的全角不对，正确的是0xa1 0xa1
+                        //但查资料却说全角符号总是以0xa3开始。
+                        //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
+                        sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
+                        retVal = IRV_GET_CANDWORDS;
+                    } else */
+
+                    retVal = currentIM->DoInput(sym, state);
+                    if (!input.bCursorAuto)
+                        input.iCursorPos = input.iCodeInputCount;
                 }
-            }
-
-            if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                //调用输入法模块
-                /* TODO: use module
-                if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
-                    //有人报 空格 的全角不对，正确的是0xa1 0xa1
-                    //但查资料却说全角符号总是以0xa3开始。
-                    //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
-                    sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
-                    retVal = IRV_GET_CANDWORDS;
-                } else */
-
-                retVal = currentIM->DoInput(sym, state, keyCount);
-                if (!input.bCursorAuto)
-                    input.iCursorPos = input.iCodeInputCount;
             }
         }
 
                      
         if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS) {
-            CheckHotkey(sym, state, keyCount);
+            CheckHotkey(sym, state);
         }
     }
     
+    switch (retVal)
+    {
+        case IRV_DO_NOTHING:
+            break;
+        case IRV_TO_PROCESS:
+        case IRV_DONOT_PROCESS:
+        case IRV_DONOT_PROCESS_CLEAN:
+            ForwardKey(GetCurrentIC(), event, sym, state);
+            
+            if (retVal != IRV_DONOT_PROCESS_CLEAN)
+                break;
+        case IRV_CLEAN:
+            ResetInput();
+            CloseInputWindow();
+            break;
+            
+        case IRV_DISPLAY_CANDWORDS:
+            input.bShowPrev = input.bShowNext = false;
+            if (input.bIsInLegend) {
+                if (input.iCurrentLegendCandPage > 0)
+                    input.bShowPrev = true;
+                if (input.iCurrentLegendCandPage < input.iLegendCandPageCount)
+                    input.bShowNext = true;
+            } else {
+                if (input.iCurrentCandPage > 0)
+                    input.bShowPrev = true;
+                if (input.iCurrentCandPage < input.iCandPageCount)
+                    input.bShowNext = true;
+            }
+
+            ShowInputWindow();
+            break;
+            
+        case IRV_DISPLAY_LAST:
+            input.bShowNext = input.bShowPrev = False;
+            SetMessageCount(gs->messageUp, 0);
+            AddMessageAtLast(gs->messageUp, MSG_INPUT, "%c", input.strCodeInput[0]);
+            SetMessageCount(gs->messageDown, 0);
+            AddMessageAtLast(gs->messageDown, MSG_TIPS, "%s", input.strStringGet);
+            ShowInputWindow();
+            
+            break;
+        case IRV_DISPLAY_MESSAGE:
+            input.bShowNext = False;
+            input.bShowPrev = False;
+            ShowInputWindow();
+            break;
+        case IRV_GET_LEGEND:
+            CommitString(GetCurrentIC(), input.strStringGet);
+            input.iHZInputed += (int) (utf8_strlen(input.strStringGet));        //粗略统计字数
+            if (input.iLegendCandWordCount) {
+                input.bShowNext = input.bShowPrev = false;
+                if (input.iCurrentLegendCandPage > 0)
+                    input.bShowPrev = true;
+                if (input.iCurrentLegendCandPage < input.iLegendCandPageCount)
+                    input.bShowNext = true;
+                input.iCodeInputCount = 0;
+                ShowInputWindow();
+            } else {
+                ResetInput();
+                CloseInputWindow();
+            }
+
+            break;
+        case IRV_GET_CANDWORDS:
+            CommitString(GetCurrentIC(), input.strStringGet);
+            if (fc->bPhraseTips && currentIM->PhraseTips)
+                DoPhraseTips();
+            input.iHZInputed += (int) (utf8_strlen(input.strStringGet));
+            
+            ShowInputWindow();
+
+            ResetInput();
+            input.lastIsSingleHZ = 0;
+            break;
+        case IRV_ENG:
+        case IRV_PUNC:
+            input.iHZInputed += (int) (utf8_strlen(input.strStringGet));        //粗略统计字数
+            ResetInput();
+            ShowInputWindow();
+        case IRV_GET_CANDWORDS_NEXT:
+            CommitString(GetCurrentIC(), input.strStringGet);
+            input.bLastIsNumber = false;
+            input.lastIsSingleHZ = 0;
+
+            if (retVal == IRV_GET_CANDWORDS_NEXT || input.lastIsSingleHZ == -1) {
+                input.iHZInputed += (int) (utf8_strlen(input.strStringGet));    //粗略统计字数
+                ShowInputWindow();
+            }
+
+            break;
+        default:
+            ;
+    }
+    
     return retVal;
+}
+
+void ForwardKey(FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
+{
+    UT_array* backends = GetFcitxBackends();
+    FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = *pbackend;
+    backend->ForwardKey(ic, event, sym, state);
 }
 
 void SwitchIM(int index)
@@ -412,9 +519,17 @@ void ResetInput(void)
         curentIM->ResetIM();
 }
 
-INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state, int count)
+void DoPhraseTips(void)
 {
-    return IRV_DO_NOTHING;
+    FcitxState* gs = GetFcitxGlobalState();
+    UT_array* ims = GetFcitxIMS();
+    FcitxIM** pcurrentIM = (FcitxIM**) utarray_eltptr(ims, gs->iIMIndex);
+    FcitxIM* currentIM = *pcurrentIM;
+
+    if (currentIM->PhraseTips && currentIM->PhraseTips())
+        input.lastIsSingleHZ = -1;
+    else
+        input.lastIsSingleHZ = 0;
 }
 
 #if 0
@@ -535,21 +650,6 @@ void ConvertPunc(void)
     *s2 = '\0';
 
     strcpy(strStringGet, strTemp);
-}
-
-void DoForwardEvent(IMForwardEventStruct * call_data)
-{
-    IMForwardEventStruct fe;
-    memset(&fe, 0, sizeof(fe));
-
-    fe.major_code = XIM_FORWARD_EVENT;
-    fe.icid = call_data->icid;
-    fe.connect_id = call_data->connect_id;
-    fe.sync_bit = 0;
-    fe.serial_number = 0L;
-    fe.event = call_data->event;
-
-    IMForwardEvent(ims, (XPointer) & fe);
 }
 
 /** 
@@ -1329,17 +1429,6 @@ void SelectIM(int imidx)
         im[gs->iIMIndex].Init();
     ResetInput();
     DrawMainWindow();
-}
-
-void DoPhraseTips(void)
-{
-    if (!fc->bPhraseTips)
-        return;
-
-    if (im[gs->iIMIndex].PhraseTips())
-        lastIsSingleHZ = -1;
-    else
-        lastIsSingleHZ = 0;
 }
 
 void ReloadConfig()

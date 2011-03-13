@@ -19,16 +19,103 @@
  ***************************************************************************/
 
 #include "core/hook.h"
+#include "fcitx-config/cutils.h"
+#include "ime.h"
+#include "fcitx-config/hotkey.h"
+
+typedef struct HotkeyHook {
+    HOTKEYS* hotkey;
+    INPUT_RETURN_VALUE (*hotkeyhandle)();
+} HotkeyHook;
 
 typedef struct HookStack {
     union {
-        boolean (*a)(); 
+        void *func;
+        boolean (*keyfilter)(long unsigned int sym,
+                             unsigned int state,
+                             INPUT_RETURN_VALUE *retval
+                            );
+        char* (*stringfilter)(const char* in);
+        HotkeyHook hotkey;
     };
     struct HookStack* next;
 } HookStack;
 
-#define DEFINE_HOOK(funcname, listname) \
-HookStack *listname; \
-void Register##function(void *func) \
+
+#define DEFINE_HOOK(name, type, field) \
+HookStack* Get##name() \
 { \
+    static HookStack* name = NULL; \
+    if (name == NULL) \
+    { \
+        name = malloc0(sizeof(HookStack)); \
+    } \
+    return name; \
+} \
+void Register##name(type value) \
+{ \
+    HookStack* head = Get##name(); \
+    while(head->next != NULL) \
+        head = head->next; \
+    head->next = malloc0(sizeof(HookStack)); \
+    head = head->next; \
+    head->field = value; \
+}
+
+DEFINE_HOOK(PreInputFilter, void*, func)
+DEFINE_HOOK(PostInputFilter, void*, func)
+DEFINE_HOOK(OutputFilter, void*, func)
+DEFINE_HOOK(HotkeyFilter, HotkeyHook, hotkey)
+
+void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    HookStack* stack = GetPreInputFilter();
+    stack = stack->next;
+    *retval = IRV_TO_PROCESS;
+    while(stack)
+    {
+        if (stack->keyfilter(sym, state, retval))
+            break;
+    }
+}
+
+void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    HookStack* stack = GetPostInputFilter();
+    stack = stack->next;
+    *retval = IRV_TO_PROCESS;
+    while(stack)
+    {
+        if (stack->keyfilter(sym, state, retval))
+            break;
+    }
+}
+
+char* ProcessOutputFilter(char *in)
+{
+    HookStack* stack = GetOutputFilter();
+    stack = stack->next;
+    char *out = NULL;
+    while(stack)
+    {
+        if ((out = stack->stringfilter(in)) != NULL)
+            break;
+    }
+    return out;
+}
+
+INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state)
+{
+    HookStack* stack = GetHotkeyFilter();
+    stack = stack->next;
+    INPUT_RETURN_VALUE out = IRV_TO_PROCESS;
+    while(stack)
+    {
+        if (IsHotKey(keysym, state, stack->hotkey.hotkey))
+        {
+            out = stack->hotkey.hotkeyhandle();
+            break;
+        }
+    }
+    return out;
 }

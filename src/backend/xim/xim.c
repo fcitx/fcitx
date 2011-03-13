@@ -45,6 +45,7 @@ static void* XimRun();
 static boolean XimDestroy();
 static void XimCloseIM(FcitxInputContext* arg1);
 static void XimCommitString(FcitxInputContext* arg1, char* arg2);
+static void XimForwardKey(FcitxInputContext* ic,  FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 static void XimXEventHandler(XEvent * event);
@@ -77,6 +78,7 @@ FcitxBackend backend =
     XimDestroyIC,
     XimCloseIM,
     XimCommitString,
+    XimForwardKey,
     0,
     0
 };
@@ -413,4 +415,37 @@ void XimCommitString(FcitxInputContext* ic, char* str)
     cms.commit_string = (char *) tp.value;
     IMCommitString(xim.ims, (XPointer) & cms);
     XFree(tp.value);
+}
+
+void XimForwardKey(FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
+{
+    IMForwardEventStruct forwardEvent;
+    XEvent xEvent;
+
+    memset(&forwardEvent, 0, sizeof(IMForwardEventStruct));
+    forwardEvent.connect_id = GetXimIC(ic)->connect_id;
+    forwardEvent.icid = GetXimIC(ic)->id;
+    forwardEvent.major_code = XIM_FORWARD_EVENT;
+    forwardEvent.sync_bit = 0;
+    forwardEvent.serial_number = 0L;
+    
+
+    xEvent.xkey.type = (event == FCITX_PRESS_KEY)?KeyPress:KeyRelease;
+    xEvent.xkey.display = xim.display;
+    xEvent.xkey.serial = 0L;
+    xEvent.xkey.send_event = False;
+    xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
+    xEvent.xkey.same_screen = False;
+    xEvent.xkey.subwindow = None;
+    xEvent.xkey.window = None;
+    xEvent.xkey.root = DefaultRootWindow(xim.display);
+    xEvent.xkey.state = state;
+    if (GetXimIC(ic)->focus_win)
+        xEvent.xkey.window = GetXimIC(ic)->focus_win;
+    else if (GetXimIC(ic)->client_win)
+        xEvent.xkey.window = GetXimIC(ic)->client_win;
+
+    xEvent.xkey.keycode = XKeysymToKeycode(xim.display, sym);
+    memcpy(&(forwardEvent.event), &xEvent, sizeof(forwardEvent.event));
+    IMForwardEvent(xim.ims, (XPointer) (&forwardEvent));
 }

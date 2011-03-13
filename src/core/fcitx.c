@@ -25,6 +25,7 @@
 #include "utils/utils.h"
 #include "module.h"
 #include "ime-internal.h"
+#include "backend.h"
 
 int main(int argc, char* argv[])
 {

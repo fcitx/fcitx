@@ -6,6 +6,7 @@ set(version 4.1.0)
 
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
+include(FindPkgConfig)
 
 check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
@@ -17,7 +18,6 @@ FIND_PROGRAM(INTLTOOL_UPDATE intltool-update)
 FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
 
 FIND_PACKAGE(X11 REQUIRED)
-include(FindPkgConfig)
 
 PKG_CHECK_MODULES(CAIRO REQUIRED "cairo >= 1.0" )
 PKG_CHECK_MODULES(PANGO "pango >= 1.0" )

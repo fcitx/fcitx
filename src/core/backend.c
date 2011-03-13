@@ -32,6 +32,7 @@
 static FcitxInputContext *ic_list = NULL;
 static FcitxInputContext *free_list = NULL;
 static FcitxInputContext *CurrentIC = NULL;
+static const UT_icd backend_icd = {sizeof(FcitxBackend*), NULL, NULL, NULL };
 
 FcitxInputContext* GetCurrentIC()
 {
@@ -45,7 +46,6 @@ void SetCurrentIC(FcitxInputContext* ic)
 
 UT_array* GetFcitxBackends()
 {
-    const UT_icd backend_icd = {sizeof(FcitxBackend*), NULL, NULL, NULL };
     static UT_array* backends = NULL;
     if (backends == NULL)
         utarray_new(backends, &backend_icd);
@@ -172,7 +172,7 @@ void StartBackend()
     UT_array* backends = GetFcitxBackends();
     FcitxAddon *addon;
     int backendindex = 0;
-    utarray_done(backends);
+    utarray_clear(backends);
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
           addon = (FcitxAddon *) utarray_next(addons, addon))

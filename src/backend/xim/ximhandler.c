@@ -31,8 +31,6 @@ extern FcitxXimBackend xim;
 
 static void SetTrackPos(IMChangeICStruct * call_data);
 
-static void DoForwardEvent(IMForwardEventStruct * call_data);
-
 Bool XIMOpenHandler(IMOpenStruct * call_data)
 {
     return True;
@@ -169,15 +167,12 @@ void XIMProcessKey(IMForwardEventStruct * call_data)
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 
-    INPUT_RETURN_VALUE ret = ProcessKey((call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+    ProcessKey((call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
                                         kev->time,
-                                        sym, state, keyCount);
-
-    if (ret == IRV_DONOT_PROCESS)
-        DoForwardEvent(call_data);
+                                        sym, state);
 }
 
-void XIMClose(FcitxInputContext* ic)
+void XIMClose(FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
 {
     if (ic == NULL)
         return;
@@ -187,23 +182,4 @@ void XIMClose(FcitxInputContext* ic)
     call_data.icid = GetXimIC(ic)->id;
  
     IMPreeditEnd(xim.ims, (XPointer) &call_data);
-}
-
-void XIMCommitString(char* string)
-{
-}
-
-void DoForwardEvent(IMForwardEventStruct * call_data)
-{
-    IMForwardEventStruct fe;
-    memset(&fe, 0, sizeof(fe));
-
-    fe.major_code = XIM_FORWARD_EVENT;
-    fe.icid = call_data->icid;
-    fe.connect_id = call_data->connect_id;
-    fe.sync_bit = 0;
-    fe.serial_number = 0L;
-    fe.event = call_data->event;
-
-    IMForwardEvent(xim.ims, (XPointer) & fe);
 }

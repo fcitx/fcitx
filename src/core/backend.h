@@ -23,6 +23,8 @@
 
 #include "utils/utarray.h"
 #include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/hotkey.h"
+#include "ime.h"
 
 typedef enum _IME_STATE {
     IS_CLOSED = 0,
@@ -49,6 +51,7 @@ typedef struct FcitxBackend
     void (*DestroyIC) (FcitxInputContext *context);
     void (*CloseIM)(FcitxInputContext* arg1);
     void (*CommitString)(FcitxInputContext* arg1, char* arg2);
+    void (*ForwardKey)(FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
     pthread_t pid;
     int backendid;
 } FcitxBackend;

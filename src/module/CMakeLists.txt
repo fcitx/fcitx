@@ -1,3 +1,5 @@
-
-
 add_subdirectory(x11)
+add_subdirectory(vk)
+add_subdirectory(chttrans)
+add_subdirectory(punc)
+add_subdirectory(quickphrase)
