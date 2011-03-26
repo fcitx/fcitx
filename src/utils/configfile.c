@@ -37,27 +37,7 @@ static void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* valu
 static void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void Filter2nd3rdKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
-#ifdef _ENABLE_TRAY
-FilterNextTimeEffectBoolean(UseTray, fc.bUseTrayIcon)
-#endif
-FilterNextTimeEffectBoolean(UseDBus, fc.bUseDBus)
-
 CONFIG_BINDING_BEGIN(FcitxConfig);
-CONFIG_BINDING_REGISTER("Program", "Font", font);
-CONFIG_BINDING_REGISTER("Program", "MenuFont", menuFont);
-#ifndef _ENABLE_PANGO
-CONFIG_BINDING_REGISTER("Program", "FontLocale", strUserLocale);
-#endif
-#ifdef _ENABLE_RECORDING
-CONFIG_BINDING_REGISTER("Program", "RecordFile", strRecordingPath);
-#endif
-#ifdef _ENABLE_TRAY
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseTray", bUseTrayIcon_, FilterCopyUseTray);
-#endif
-#ifdef _ENABLE_DBUS
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseDBus", bUseDBus_, FilterCopyUseDBus);
-#endif
-CONFIG_BINDING_REGISTER("Program", "EnableAddons", bEnableAddons);
 CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart);
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber);
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo);
@@ -66,15 +46,12 @@ CONFIG_BINDING_REGISTER("Output", "InputEngByCapitalChar", bEngAfterCap);
 CONFIG_BINDING_REGISTER("Output", "ConvertPunc", bConvertPunc);
 CONFIG_BINDING_REGISTER("Output", "LegendModeDisablePaging", bDisablePagingInLegend);
 CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEng);
-CONFIG_BINDING_REGISTER("Appearance", "CandidateWordNumber", iMaxCandWord);
-CONFIG_BINDING_REGISTER("Appearance", "MainWindowHideMode", hideMainWindow);
+CONFIG_BINDING_REGISTER("Output", "CandidateWordNumber", iMaxCandWord);
 CONFIG_BINDING_REGISTER("Appearance", "CenterInputWindow", bCenterInputWindow);
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering);
 CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber);
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed);
 CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion);
-CONFIG_BINDING_REGISTER("Appearance", "ShowHintWindow", bHintWindow);
-CONFIG_BINDING_REGISTER("Appearance", "SkinType", skinType);
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "TriggerKey", hkTrigger, FilterTriggerKey);
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "ChnEngSwitchKey", iSwitchKey, FilterSwitchKey);
 CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey);
@@ -264,4 +241,9 @@ int ConfigGetMaxCandWord()
 boolean ConfigGetPointAfterNumber()
 {
     return fc.bPointAfterNumber;
+}
+
+boolean IsCenterInputWindow()
+{
+    return fc.bCenterInputWindow;
 }

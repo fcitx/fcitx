@@ -36,6 +36,7 @@ typedef struct FcitxXimBackend
 {
     Window ximWindow;
     Display* display;
+    int iScreen;
     int iTriggerKeyCount;
     XIMTriggerKey* Trigger_Keys;
     XIMS ims;

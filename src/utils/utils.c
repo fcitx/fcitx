@@ -36,6 +36,7 @@
 #include <sys/stat.h>
 
 #include "core/fcitx.h"
+#include "core/ui.h"
 #include "utils.h"
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/xdg.h"
@@ -53,6 +54,7 @@ typedef struct simple2trad_t
 } simple2trad_t;
 
 simple2trad_t* s2t_table = NULL;
+const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 
 /**
  * 该函数装载data/gbks2t.tab的简体转繁体的码表，
@@ -325,6 +327,25 @@ FcitxState* GetFcitxGlobalState()
         gs = malloc0(sizeof(FcitxState));
         gs->messageUp = InitMessages();
         gs->messageDown = InitMessages();
+        utarray_init(&gs->uistats, &stat_icd);
     }
     return gs;
+}
+
+Messages* GetMessageUp()
+{
+    FcitxState* gs = GetFcitxGlobalState();
+    return gs->messageUp;
+}
+
+Messages* GetMessageDown()
+{
+    FcitxState* gs = GetFcitxGlobalState();
+    return gs->messageDown;
+}
+
+UT_array* GetUIStatus()
+{
+    FcitxState* gs = GetFcitxGlobalState();
+    return &gs->uistats;
 }

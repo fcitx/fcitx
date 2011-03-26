@@ -31,12 +31,14 @@
 #define _INPUT_WINDOW_H
 
 #include <X11/Xlib.h>
-#include <stdarg.h>
-#include "utils/utf8.h"
 #include <cairo.h>
 
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
+//输入条最大长度(缓冲区大小由这个决定)
+#define INPUT_BAR_MAX_LEN 1500
+
+struct FcitxSkin;
 
 typedef struct InputWindow {
     Window window;
@@ -56,24 +58,18 @@ typedef struct InputWindow {
     
     cairo_surface_t *cs_input_bar;
     cairo_surface_t *cs_input_back;
+    cairo_surface_t *input, *prev, *next;
     cairo_t *c_back, *c_cursor;
     cairo_t *c_font[8];
+    Display* dpy;
+    int iScreen;
+    struct FcitxSkin* skin;
 } InputWindow;
 
-extern InputWindow inputWindow;
-extern int iCursorPos;
-
-Bool            CreateInputWindow (void);
-void            DisplayInputWindow (void);
-void            DrawInputWindow (void);
-void            CalInputWindow (void);
-void            CalculateInputWindowHeight (void);
-void            DrawCursor (int iPos);
-void            DisplayMessageUp (void);
-void            DisplayMessageDown (void);
-void            ResetInputWindow (void);
-void            MoveInputWindow();
-void            CloseInputWindow(void);
-void DestroyInputWindow();
+InputWindow* CreateInputWindow(Display* dpy, int iScreen, struct FcitxSkin* sc);
+void MoveInputWindowInternal(InputWindow* inputWindow);
+void CloseInputWindowInternal(InputWindow* inputWindow);
+void DestroyInputWindow(InputWindow* inputWindow);
+void DrawInputWindow(InputWindow* inputWindow);
 
 #endif

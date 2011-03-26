@@ -30,27 +30,13 @@
 #ifndef _SKIN_H
 #define _SKIN_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <cairo.h>
-#include <cairo-xlib.h>
-#include <X11/extensions/Xrender.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include "MainWindow.h"
-#include "InputWindow.h"
-#include "core/backend.h"
-#include "core/ime.h"
-#include "utils/utarray.h"
-#include "MenuWindow.h"
-#include "core/ui.h"
-
 #define SIZEX 800
 #define SIZEY 200
-//输入条最大长度(缓冲区大小由这个决定)
-#define INPUT_BAR_MAX_LEN 1500
+#include <cairo.h>
+#include "fcitx-config/fcitx-config.h"
+#include "InputWindow.h"
+#include <core/ui.h>
+#include "MainWindow.h"
 
 typedef enum
 {
@@ -77,7 +63,7 @@ typedef struct
 
 typedef struct
 {
-    FcitxImage backImg;
+    char* backImg;
     RESIZERULE resizeV;
     RESIZERULE resizeH;
     int marginTop;
@@ -90,27 +76,15 @@ typedef struct
 
 typedef struct 
 {
-    FcitxImage backImg;
-    FcitxImage logo;
-    FcitxImage zhpunc;
-    FcitxImage enpunc;
-    FcitxImage chs;
-    FcitxImage cht;
-    FcitxImage halfcorner;
-    FcitxImage fullcorner;
-    FcitxImage unlock;
-    FcitxImage lock;
-    FcitxImage legend;
-    FcitxImage nolegend;
-    FcitxImage vk;
-    FcitxImage novk;
-    FcitxImage eng;
-    FcitxImage chn;
+    char* backImg;
+    char* logo;
+    char* eng;
+    char* chn;
 } SkinMainBar;
 
 typedef struct 
 {    
-    FcitxImage backImg;
+    char* backImg;
     RESIZERULE resize;
     int    resizePos;
     int resizeWidth;
@@ -119,27 +93,31 @@ typedef struct
     int layoutLeft;
     int layoutRight;
     ConfigColor cursorColor;
-    FcitxImage backArrow;
-    FcitxImage forwardArrow;
+    char* backArrow;
+    char* forwardArrow;
+    int iBackArrowX;
+    int iBackArrowY;
+    int iForwardArrowX;
+    int iForwardArrowY;
 } SkinInputBar;
 
 
 typedef struct 
 {
-    FcitxImage active;
-    FcitxImage inactive;
+    char* active;
+    char* inactive;
 } SkinTrayIcon;
 
 typedef struct
 {
-    FcitxImage backImg;
+    char* backImg;
     ConfigColor keyColor;
 } SkinKeyboard;
 
 /** 
 * 配置文件结构,方便处理,结构固定
 */
-typedef struct 
+typedef struct FcitxSkin
 {
     GenericConfig config;
     SkinInfo skinInfo;
@@ -149,61 +127,20 @@ typedef struct
     SkinTrayIcon skinTrayIcon;    
     SkinMenu skinMenu;
     SkinKeyboard skinKeyboard;
+    
+    char* skinType;
+    cairo_surface_t* keyBoard;
+    cairo_surface_t* menuBack;
+    cairo_surface_t* trayActive;
+    cairo_surface_t* trayInactive;
 } FcitxSkin;
 
-extern cairo_surface_t *  bar;
-extern cairo_surface_t *  logo;
-extern cairo_surface_t *  punc[2];
-extern cairo_surface_t *  corner[2];    
-extern cairo_surface_t *  lx[2];    
-extern cairo_surface_t *  chs_t[2];    
-extern cairo_surface_t *  lock[2];    
-extern cairo_surface_t *  vk[2];
-extern cairo_surface_t *  input;
-extern cairo_surface_t *  prev;
-extern cairo_surface_t *  next;
-extern cairo_surface_t *  english;
-extern cairo_surface_t *  pinyin;
-extern cairo_surface_t *  shuangpin;
-extern cairo_surface_t *  quwei;
-extern cairo_surface_t *  wubi;
-extern cairo_surface_t *  mix;
-extern cairo_surface_t *  erbi;
-extern cairo_surface_t *  cangji;
-extern cairo_surface_t *  wanfeng;
-extern cairo_surface_t *  bingchan;
-extern cairo_surface_t *  ziran;
-extern cairo_surface_t *  dianbao;
-extern cairo_surface_t *  otherim;
-extern cairo_surface_t *  trayActive;
-extern cairo_surface_t *  trayInactive;
-extern cairo_surface_t *  keyBoard;
 
-extern MouseE ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
-
-extern Display *dpy;
-extern FcitxSkin sc;
-extern UT_array *skinBuf;
-
-void LoadMainBarImage();
-void LoadVKImage();
-void LoadTrayImage();
-void LoadMenuImage();
+void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc);
 void LoadInputBarImage();
-void LoadInputMessage();
-void DrawImage(cairo_t **c,FcitxImage img,cairo_surface_t * png,MouseE mouse);
-void DestroyImage(cairo_surface_t ** png);
-void DrawInputBar(Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
-void DrawMenuBackground(XlibMenu * menu);
-Bool SetMouseStatus(MouseE m, MouseE* e, MouseE s);
-/**
- * 加载皮肤配置文件
- */
-int LoadSkinConfig();
-
-void DisplayInputBar(int barlen);
-void DisplaySkin(char * skinname);
-int LoadSkinDirectory();
+void DrawImage(cairo_t **c, cairo_surface_t * png, int x, int y, MouseE mouse);
+void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
+int LoadImage(const char* img, const char* skinType, cairo_surface_t** png, boolean fallback);
 
 #define fcitx_cairo_set_color(c, color) cairo_set_source_rgb((c), (color)->r, (color)->g, (color)->b)
 

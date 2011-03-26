@@ -1,17 +1,12 @@
 include_directories(${fcitx_SOURCE_DIR}/src)
 
 set(fcitx_classic_ui_SOURCES
-    AboutWindow.c
-    font.c
+    classicui.c
+    classicuiconfig.c
     InputWindow.c
     MainWindow.c
-    MenuWindow.c
-    MessageWindow.c
-    skin.c
     skinconfig.c
-    tray.c
-    TrayWindow.c
-    ui.c
+    skin.c
 )
 
 add_library(fcitx-classic-ui MODULE ${fcitx_classic_ui_SOURCES})

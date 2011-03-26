@@ -52,6 +52,7 @@ typedef struct FcitxState {
     Messages* messageUp;
     Messages* messageDown;
     int iCursorPos;
+    UT_array uistats;
 } FcitxState;
 
 void *custom_bsearch(const void *key, const void *base,
@@ -70,5 +71,9 @@ char           *ConvertGBKSimple2Tradition (char *text);
 UT_array* SplitString(const char *str);
 void FreeStringList(UT_array *list);
 FcitxState* GetFcitxGlobalState();
+
+Messages* GetMessageUp();
+Messages* GetMessageDown();
+UT_array* GetUIStatus();
 
 #endif

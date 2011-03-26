@@ -26,6 +26,10 @@
 #include "addon.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
+#include <pthread.h>
+
+const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
+typedef void*(*FcitxModuleFunction)(FcitxModuleFunctionArg);
 
 void LoadModule()
 {
@@ -61,12 +65,18 @@ void LoadModule()
                             dlclose(handle);
                             break;
                         }
+                        utarray_init(&module->functionList, &function_icd);
                         if(!module->Init())
                         {
+                            utarray_done(&module->functionList);
                             dlclose(handle);
                             return;
                         }
                         addon->module = module;
+                        if(module->Run)
+                        {                            
+                            pthread_create(&addon->pid, NULL, module->Run, NULL);
+                        }
                     }
                 default:
                     break;
@@ -74,4 +84,30 @@ void LoadModule()
             free(modulePath);
         }
     }
+}
+
+void* InvodeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
+{
+    if (addon->module == NULL)
+    {
+        FcitxLog(ERROR, "addon %s is not a valid module", addon->name);
+        return NULL;
+    }
+    FcitxModuleFunction* func =(FcitxModuleFunction*) utarray_eltptr(&addon->module->functionList, functionId);
+    if (func == NULL)
+    {
+        FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
+        return NULL;
+    }
+    void* result = (*func)(args);
+    return result;
+}
+
+void* InvokeModuleFunctionWithName(const char* name, int functionId, FcitxModuleFunctionArg args)
+{
+    FcitxAddon* module = GetAddonByName(name);
+    if (module == NULL)
+        return NULL;
+    else
+        return InvodeModuleFunction(module, functionId, args);
 }

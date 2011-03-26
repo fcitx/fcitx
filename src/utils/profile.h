@@ -39,9 +39,12 @@ typedef struct FcitxProfile
     boolean bRecording;
 } FcitxProfile;
 
-extern FcitxProfile fcitxProfile;
-
 void LoadProfile();
 void SaveProfile();
+boolean IsTrackCursor();
+int GetInputWindowOffsetX();
+int GetInputWindowOffsetY();
+void SetInputWindowOffsetX(int pos);
+void SetInputWindowOffsetY(int pos);
 
 #endif

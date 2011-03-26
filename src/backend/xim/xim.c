@@ -41,14 +41,14 @@
 #include "module/x11/x11stuff.h"
 
 static boolean XimInit();
-static void* XimRun();
 static boolean XimDestroy();
 static void XimCloseIM(FcitxInputContext* arg1);
 static void XimCommitString(FcitxInputContext* arg1, char* arg2);
 static void XimForwardKey(FcitxInputContext* ic,  FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
+void XimSetWindowOffset(FcitxInputContext* ic, int x, int y);
+void XimGetWindowPosition(FcitxInputContext* ic, int* x, int* y);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
-static void XimXEventHandler(XEvent * event);
 static void SetTriggerKeys (char **str, int length);
 static inline Bool MyStrcmp (char *str1, char *str2);
 
@@ -71,7 +71,7 @@ FCITX_EXPORT_API
 FcitxBackend backend =
 {
     XimInit,
-    XimRun,
+    NULL,
     XimDestroy,
     XimCreateIC,
     XimCheckIC,
@@ -79,7 +79,7 @@ FcitxBackend backend =
     XimCloseIM,
     XimCommitString,
     XimForwardKey,
-    0,
+    XimSetWindowOffset,
     0
 };
 
@@ -107,10 +107,10 @@ boolean XimInit(int argc, char *argv[])
     GenericConfig *fc = GetConfig();
     ConfigValueType triggerKey = ConfigGetBindValue(fc, "Hotkey", "TriggerKey");
     char *p;
-    FcitxAddon* x11mod = GetAddonByName("fcitx-x11");
-    FcitxX11* x11priv = (FcitxX11*) x11mod->module->priv;
+    FcitxModuleFunctionArg arg;
     
-    xim.display = x11priv->dpy;
+    xim.display = InvokeFunction(FCITX_X11, GETDISPLAY, arg);
+    xim.iScreen = DefaultScreen(xim.display);
 
     xim.ximWindow = XCreateSimpleWindow(xim.display, DefaultRootWindow(xim.display), 0, 0, 1, 1, 1, 0, 0);
     if (xim.ximWindow == (Window) NULL) {
@@ -190,30 +190,6 @@ boolean XimInit(int argc, char *argv[])
         return false;
     }
     return true;
-}
-
-void* XimRun()
-{
-    XEvent event;
-    /* 主循环，即XWindow的消息循环 */
-    for (;;) {
-        XNextEvent (xim.display, &event);           //等待一个事件发生
-
-        FcitxLock();
-
-        /* 处理X事件 */
-        if (XFilterEvent (&event, None) == False)
-            XimXEventHandler (&event);
-
-        FcitxUnlock();
-    }
-    return NULL;
-}
-
-void
-XimXEventHandler(XEvent * event)
-{
-    return ;
 }
 
 Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
@@ -448,4 +424,42 @@ void XimForwardKey(FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym s
     xEvent.xkey.keycode = XKeysymToKeycode(xim.display, sym);
     memcpy(&(forwardEvent.event), &xEvent, sizeof(forwardEvent.event));
     IMForwardEvent(xim.ims, (XPointer) (&forwardEvent));
+}
+
+void XimSetWindowOffset(FcitxInputContext* ic, int x, int y)
+{
+    FcitxXimIC* ximic = GetXimIC(ic);
+    Window window = None, dst;
+    if (ximic->focus_win)
+        window = ximic->focus_win;
+    else if(ximic->client_win)
+        window = ximic->client_win;
+    
+    if (window != None)
+    {
+        XTranslateCoordinates(xim.display, RootWindow(xim.display, xim.iScreen), window,
+            x, y,
+            &ic->offset_x, &ic->offset_y,
+            &dst
+        );
+    }
+}
+
+void XimGetWindowPosition(FcitxInputContext* ic, int* x, int* y)
+{
+    FcitxXimIC* ximic = GetXimIC(ic);
+    Window window = None, dst;
+    if (ximic->focus_win)
+        window = ximic->focus_win;
+    else if(ximic->client_win)
+        window = ximic->client_win;
+    
+    if (window != None)
+    {
+        XTranslateCoordinates(xim.display, window, RootWindow(xim.display, xim.iScreen),
+            ic->offset_x, ic->offset_y,
+            x, y,
+            &dst
+        );
+    }
 }

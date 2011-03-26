@@ -27,38 +27,24 @@
  *
  */
 
-#include <stdio.h>
-#include <ctype.h>
+#include <cairo-xlib.h>
+#include <X11/Xutil.h>
+#include <string.h>
 #include <X11/Xatom.h>
 
-#include "core/fcitx.h"
-#include "ui.h"
-#include "skin.h"
 #include "MainWindow.h"
-#include "profile.h"
-#include "configfile.h"
 #include "fcitx-config/cutils.h"
+#include "module/x11/x11stuff.h"
+#include "classicui.h"
+#include "skin.h"
+#include <core/backend.h>
+#include "core/module.h"
 
-MainWindow          mainWindow;
+static boolean MainWindowEventHandler(void *instance, XEvent* event);
 
-Bool        bMainWindow_Hiden = False;
-
-extern Display *dpy;
-extern Bool     bSP;
-extern Bool     bVK;
-
-extern unsigned char iCurrentVK;
-extern int iScreen;
-
-static void InitMainWindow();
-
-void InitMainWindow()
+MainWindow* CreateMainWindow (Display* dpy, int iScreen, FcitxSkin* sc, HIDE_MAINWINDOW hideMainWindow)
 {
-    memset(&mainWindow, 0, sizeof(MainWindow));
-}
-
-Bool CreateMainWindow (void)
-{
+    MainWindow *mainWindow;
     int depth;
     Colormap cmap;
     Visual * vs;
@@ -67,55 +53,55 @@ Bool CreateMainWindow (void)
     GC gc;
     char        strWindowName[] = "Fcitx Main Window";
     int swidth, sheight;
-    
-    GetScreenSize(&swidth, &sheight);
-
-    InitMainWindow();
-
     XGCValues xgv;
 
-    LoadMainBarImage();
+    mainWindow = malloc0(sizeof(MainWindow));
+    
+    mainWindow->hideMode = hideMainWindow;
+    
+    GetScreenSize(dpy, iScreen, &swidth, &sheight);
+    LoadMainBarImage(mainWindow, sc);
 
     vs = FindARGBVisual(dpy, iScreen);
 
-    if (fcitxProfile.iMainWindowOffsetX + sc.skinMainBar.backImg.width > swidth )
-        fcitxProfile.iMainWindowOffsetX = swidth - sc.skinMainBar.backImg.width;
+    if (classicui.iMainWindowOffsetX + cairo_image_surface_get_width(mainWindow->bar) > swidth )
+        classicui.iMainWindowOffsetX = swidth - cairo_image_surface_get_width(mainWindow->bar);
     
-    if (fcitxProfile.iMainWindowOffsetY + sc.skinMainBar.backImg.height > sheight )
-        fcitxProfile.iMainWindowOffsetY = sheight - sc.skinMainBar.backImg.height;
+    if (classicui.iMainWindowOffsetY + cairo_image_surface_get_height(mainWindow->bar) > sheight )
+        classicui.iMainWindowOffsetY = sheight - cairo_image_surface_get_height(mainWindow->bar);
 
-    InitWindowAttribute(&vs, &cmap, &attrib, &attribmask, &depth);
-    mainWindow.window=XCreateWindow (dpy,
+    InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
+    mainWindow->window=XCreateWindow (dpy,
                                      RootWindow(dpy, iScreen),
-                                     fcitxProfile.iMainWindowOffsetX,
-                                     fcitxProfile.iMainWindowOffsetY,
-                                     sc.skinMainBar.backImg.width,
-                                     sc.skinMainBar.backImg.height,
+                                     classicui.iMainWindowOffsetX,
+                                     classicui.iMainWindowOffsetY,
+                                     cairo_image_surface_get_width(mainWindow->bar),
+                                     cairo_image_surface_get_height(mainWindow->bar),
                                      0, depth,InputOutput, vs,attribmask, &attrib);
 
-    if (mainWindow.window == None)
-        return False;
+    if (mainWindow->window == None)
+        return NULL;
 
     xgv.foreground = WhitePixel(dpy, iScreen);
-    mainWindow.pm_main_bar = XCreatePixmap(
+    mainWindow->pm_main_bar = XCreatePixmap(
                                  dpy,
-                                 mainWindow.window,
-                                 sc.skinMainBar.backImg.width,
-                                 sc.skinMainBar.backImg.height,
+                                 mainWindow->window,
+                                 cairo_image_surface_get_width(mainWindow->bar),
+                                 cairo_image_surface_get_height(mainWindow->bar),
                                  depth);
-    gc = XCreateGC(dpy,mainWindow.pm_main_bar, GCForeground, &xgv);
-    XFillRectangle(dpy, mainWindow.pm_main_bar, gc, 0, 0,sc.skinMainBar.backImg.width, sc.skinMainBar.backImg.height);
-    mainWindow.cs_main_bar=cairo_xlib_surface_create(
+    gc = XCreateGC(dpy,mainWindow->pm_main_bar, GCForeground, &xgv);
+    XFillRectangle(dpy, mainWindow->pm_main_bar, gc, 0, 0,cairo_image_surface_get_width(mainWindow->bar), cairo_image_surface_get_height(mainWindow->bar));
+    mainWindow->cs_main_bar=cairo_xlib_surface_create(
                                dpy,
-                               mainWindow.pm_main_bar,
+                               mainWindow->pm_main_bar,
                                vs,
-                               sc.skinMainBar.backImg.width,
-                               sc.skinMainBar.backImg.height);
+                               cairo_image_surface_get_width(mainWindow->bar),
+                               cairo_image_surface_get_height(mainWindow->bar));
     XFreeGC(dpy,gc);
 
-    mainWindow.main_win_gc = XCreateGC( dpy, mainWindow.window, 0, NULL );
-    XChangeWindowAttributes (dpy, mainWindow.window, attribmask, &attrib);
-    XSelectInput (dpy, mainWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
+    mainWindow->main_win_gc = XCreateGC( dpy, mainWindow->window, 0, NULL );
+    XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
+    XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
     
 
     XTextProperty   tp;
@@ -124,40 +110,39 @@ Bool CreateMainWindow (void)
     tp.encoding = XA_STRING;
     tp.format = 16;
     tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, mainWindow.window, &tp);
+    XSetWMName (dpy, mainWindow->window, &tp);
 
-    return True;
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = MainWindowEventHandler;
+    arg.args[1] = mainWindow;
+    InvokeFunction(FCITX_X11, ADDXEVENTHANDLER, arg);
+    return mainWindow;
 }
 
-void DisplayMainWindow (void)
+void DisplayMainWindow (Display* dpy, MainWindow* mainWindow)
 {
 #ifdef _DEBUG
     FcitxLog(DEBUG, _("DISPLAY MainWindow"));
 #endif
 
-    if (!bMainWindow_Hiden)
-        XMapRaised (dpy, mainWindow.window);
+    if (!mainWindow->bMainWindowHidden)
+        XMapRaised (dpy, mainWindow->window);
 }
 
-void DrawMainWindow (void)
+void DrawMainWindow (MainWindow* mainWindow)
 {
     int8_t            iIndex = 0;
     cairo_t *c;
-    Bool btmpPunc;
 
-    if ( bMainWindow_Hiden )
+    if ( mainWindow->bMainWindowHidden )
         return;
 
     iIndex = IS_CLOSED;
-
-    //中英标点符号咋就反了?修正
-    btmpPunc=fcitxProfile.bChnPunc?False:True;
 #ifdef _DEBUG
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 #endif
-    //XResizeWindow(dpy, mainWindow, sc.skinMainBar.backImg.width, sc.skinMainBar.backImg.height);
 
-    c=cairo_create(mainWindow.cs_main_bar);
+    c=cairo_create(mainWindow->cs_main_bar);
     //把背景清空
     cairo_set_source_rgba(c, 0, 0, 0,0);
     cairo_rectangle (c, 0, 0, SIZEX, SIZEY);
@@ -166,23 +151,23 @@ void DrawMainWindow (void)
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
-    if (fc.hideMainWindow == HM_SHOW || (fc.hideMainWindow == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
+    if (mainWindow->hideMode == HM_SHOW || (mainWindow->hideMode == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
     {
         // extern mouse_e ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
-        DrawImage(&c, sc.skinMainBar.backImg,bar,RELEASE );
-        DrawImage(&c, sc.skinMainBar.logo,logo,ms_logo);
-        DrawImage(&c, sc.skinMainBar.zhpunc,punc[btmpPunc],ms_punc);
-        DrawImage(&c, sc.skinMainBar.chs,chs_t[fcitxProfile.bUseGBKT],ms_chs);
-        DrawImage(&c, sc.skinMainBar.halfcorner,corner[fcitxProfile.bCorner],ms_corner);
-        DrawImage(&c, sc.skinMainBar.unlock,lock[fcitxProfile.bLocked],ms_lock);
-        DrawImage(&c, sc.skinMainBar.nolegend,lx[fcitxProfile.bUseLegend],ms_lx);
-        DrawImage(&c, sc.skinMainBar.novk,vk[bVK],ms_vk);
+        DrawImage(&c, mainWindow->bar, 0, 0, RELEASE );
+/* TODO:        DrawImage(&c, sc->skinMainBar.logo,sc->logo,ms_logo);
+        DrawImage(&c, sc->skinMainBar.zhpunc,sc->punc[btmpPunc],ms_punc);
+        DrawImage(&c, sc->skinMainBar.chs,sc->chs_t[fcitxProfile.bUseGBKT],ms_chs);
+        DrawImage(&c, sc->skinMainBar.halfcorner,sc->corner[fcitxProfile.bCorner],ms_corner);
+        DrawImage(&c, sc->skinMainBar.unlock,sc->lock[fcitxProfile.bLocked],ms_lock);
+        DrawImage(&c, sc->skinMainBar.nolegend,lx[fcitxProfile.bUseLegend],ms_lx);
+        DrawImage(&c, sc->skinMainBar.novk,vk[bVK],ms_vk);
 
         iIndex = GetCurrentState();
         if ( iIndex == 1 || iIndex ==0 )
         {
             //英文
-            DrawImage(&c, sc.skinMainBar.eng,english,ms_py);
+            DrawImage(&c, sc->skinMainBar.eng,english,ms_py);
         }
         else
         {
@@ -192,23 +177,80 @@ void DrawMainWindow (void)
             else
             {   //如果非默认码表的内容,则临时加载png文件.
                 //暂时先不能自定义码表图片.其他码表统一用一种图片。
-                DrawImage(&c, sc.skinMainBar.chn,otherim,ms_py);
+                DrawImage(&c, sc->skinMainBar.chn,otherim,ms_py);
             }
 
-        }
-        XCopyArea (dpy, mainWindow.pm_main_bar, mainWindow.window, mainWindow.main_win_gc, 0, 0, sc.skinMainBar.backImg.width,\
-                   sc.skinMainBar.backImg.height, 0, 0);
+        }*/
+        XCopyArea (mainWindow->dpy, mainWindow->pm_main_bar, mainWindow->window, mainWindow->main_win_gc, 0, 0, cairo_image_surface_get_width(mainWindow->bar),\
+                   cairo_image_surface_get_height(mainWindow->bar), 0, 0);
     }
     else
-        XUnmapWindow (dpy, mainWindow.window);
+        XUnmapWindow (mainWindow->dpy, mainWindow->window);
 
     cairo_destroy(c);
 }
 
-void DestroyMainWindow()
+void DestroyMainWindow(MainWindow* mainWindow)
 {
-    cairo_surface_destroy(mainWindow.cs_main_bar);
-    XFreePixmap(dpy, mainWindow.pm_main_bar);
-    XFreeGC(dpy, mainWindow.main_win_gc);
-    XDestroyWindow(dpy, mainWindow.window);
+    cairo_surface_destroy(mainWindow->cs_main_bar);
+    XFreePixmap(mainWindow->dpy, mainWindow->pm_main_bar);
+    XFreeGC(mainWindow->dpy, mainWindow->main_win_gc);
+    XDestroyWindow(mainWindow->dpy, mainWindow->window);
+    
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = mainWindow;
+    InvokeFunction(FCITX_X11, REMOVEXEVENTHANDLER, arg);
+    
+    free(mainWindow);
+}
+
+void CloseMainWindow(MainWindow *mainWindow)
+{
+    XUnmapWindow (mainWindow->dpy, mainWindow->window);
+}
+
+boolean MainWindowEventHandler(void *instance, XEvent* event)
+{
+    MainWindow* mainWindow = instance;
+    
+    if (event->xany.window == mainWindow->window)
+    {
+        switch (event->type)
+        {
+            case Expose:
+                DrawMainWindow(mainWindow);
+                break;
+            case ButtonPress:
+                switch (event->xbutton.button) {
+                    case Button1:
+                        {/*
+                            if (IsInRspArea
+                                (event->xbutton.x, event->xbutton.y,
+                                sc.skinMainBar.logo)) {
+                                fcitxProfile.iMainWindowOffsetX = event->xbutton.x;
+                                fcitxProfile.iMainWindowOffsetY = event->xbutton.y;
+                                ms_logo = PRESS;
+                                if (!MouseClick
+                                    (&fcitxProfile.iMainWindowOffsetX, &fcitxProfile.iMainWindowOffsetY, mainWindow.window)) {
+                                    if (GetCurrentState() != IS_CHN) {
+                                        SetIMState((GetCurrentState() == IS_ENG) ? False : True);
+                                    }
+                                }
+                                DrawMainWindow(mainWindow);
+
+                                if (GetCurrentState() == IS_CHN)
+                                    DrawTrayWindow(ACTIVE_ICON, 0, 0, tray.size,
+                                                tray.size);
+                                else
+                                    DrawTrayWindow(INACTIVE_ICON, 0, 0, tray.size,
+                                                tray.size);
+                            }*/
+                        }
+                        break;
+                }
+                break;
+        }
+        return true;
+    }
+    return false;
 }

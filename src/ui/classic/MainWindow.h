@@ -29,25 +29,38 @@
 
 #ifndef _MAIN_WINDOW_H
 #define _MAIN_WINDOW_H
-
-#include "core/fcitx.h"
-
 #include <X11/Xlib.h>
 #include <cairo.h>
+#include <fcitx-config/fcitx-config.h>
 
-Bool            CreateMainWindow (void);
-void            DisplayMainWindow (void);
-void            DrawMainWindow (void);
-void            ChangeLock (void);
-void            DestroyMainWindow();
+struct FcitxSkin;
+
+typedef enum _HIDE_MAINWINDOW {
+    HM_SHOW = 0,
+    HM_AUTO = 1,
+    HM_HIDE = 2
+} HIDE_MAINWINDOW;
 
 typedef struct MainWindow
 {
+    Display* dpy;
     Window window;
     Pixmap pm_main_bar;
     cairo_surface_t* cs_main_bar;
     GC main_win_gc;
+    boolean bMainWindowHidden;
+    HIDE_MAINWINDOW hideMode;
+    struct FcitxSkin* skin;
+    
+    cairo_surface_t* bar;
+    cairo_surface_t* logo;
+    cairo_surface_t* english;
+    cairo_surface_t* otherim;
 } MainWindow;
-extern MainWindow mainWindow;
+
+MainWindow* CreateMainWindow (Display* dpy, int iScreen, struct FcitxSkin* sc, HIDE_MAINWINDOW hideMainWindow);
+void CloseMainWindow(MainWindow *mainWindow);
+void DestroyMainWindow(MainWindow* mainWindow);
+void DrawMainWindow (MainWindow* mainWindow);
 
 #endif

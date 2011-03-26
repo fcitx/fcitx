@@ -51,6 +51,7 @@ typedef struct FcitxAddon
         struct FcitxModule *module;
         struct FcitxIM* im;
     };
+    pthread_t pid;
 } FcitxAddon;
 
 UT_array* GetFcitxAddons();

@@ -29,20 +29,47 @@
 
 #include "core/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
+#include "InputWindow.h"
+#include "MainWindow.h"
+#include "MessageWindow.h"
+#include "AboutWindow.h"
+#include "MenuWindow.h"
+#include "TrayWindow.h"
 
-Bool InitX (void);
-void MyXEventHandler (XEvent * event);
+typedef struct FcitxClassicUI {
+    Display* dpy;
+    int iScreen;
+    Atom protocolAtom;
+    Atom killAtom;
+    Atom windowTypeAtom;
+    Atom typeMenuAtom;
+    Atom typeDialogAtom;
+    Atom compManagerAtom;
+    Window compManager;
+    InputWindow* inputWindow;
+    MainWindow* mainWindow;
+    MessageWindow* messageWindow;
+    TrayWindow* trayWindow;
+    XlibMenu* menu;
+    AboutWindow* aboutWindow;
+    
+    struct FcitxSkin skin;
+    
+    char* font;
+    char* menuFont;
+    char* strUserLocale;
+    boolean bUseTrayIcon;
+    boolean bUseTrayIcon_;
+    HIDE_MAINWINDOW hideMainWindow;
+    boolean bHintWindow;
+    char* skinType;
+    int iMainWindowOffsetX;
+    int iMainWindowOffsetY;
+    
+    UT_array status;
+} FcitxClassicUI;
 
-void OutputString (cairo_t* c, const char *str, const char *font, int fontSize, int x, int y, ConfigColor* color);
-int StringWidth (const char *str, const char *font, int fontSize);
-int FontHeight (const char *font);
-
-Bool MouseClick (int *x, int *y, Window window);
-Bool IsWindowVisible(Window window);
-void InitWindowAttribute(Visual** vs, Colormap *cmap, XSetWindowAttributes *attrib, unsigned long *attribmask, int* depth);
-void InitComposite();
-void ActiveWindow(Display *dpy, Window window);
-void GetScreenSize(int *width, int *height);
+extern FcitxClassicUI classicui;
 
 #ifdef _ENABLE_PANGO
 #define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
@@ -84,8 +111,15 @@ int FontHeightWithContextReal(cairo_t* c);
 
 #endif
 
-Bool IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
-Bool IsInRspArea(int x0, int y0, FcitxImage img);
+void GetScreenSize(Display* dpy, int iScreen, int *width, int *height);
+void
+InitWindowAttribute(Display* dpy, int iScreen, Visual ** vs, Colormap * cmap,
+                    XSetWindowAttributes * attrib,
+                    unsigned long *attribmask, int *depth);
+void InitComposite();
 Visual * FindARGBVisual (Display *dpy, int scr);
-
+Bool MouseClick(int *x, int *y, Display* dpy, Window window);
+Bool SetMouseStatus();
+boolean IsInRspArea(int x0, int y0, cairo_surface_t* surface);
+boolean IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
 #endif

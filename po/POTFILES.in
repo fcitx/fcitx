@@ -11,7 +11,6 @@ data/fcitx-configtool.desktop.in
 ./src/ui/classic/skin.h
 ./src/ui/classic/tray.h
 ./src/ui/classic/TrayWindow.h
-./src/ui/classic/ui.h
 ./src/ui/classic/AboutWindow.c
 ./src/ui/classic/font.c
 ./src/ui/classic/InputWindow.c
@@ -22,7 +21,6 @@ data/fcitx-configtool.desktop.in
 ./src/ui/classic/skinconfig.c
 ./src/ui/classic/tray.c
 ./src/ui/classic/TrayWindow.c
-./src/ui/classic/ui.c
 ./src/fcitx-config/uthash.h
 ./src/fcitx-config/xdg.h
 ./src/fcitx-config/xdg.c

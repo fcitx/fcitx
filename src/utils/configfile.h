@@ -24,11 +24,6 @@
 #include "fcitx-config/hotkey.h"
 #define INPUT_METHODS	5	//标示输入法的类别数量
 
-typedef enum _HIDE_MAINWINDOW {
-    HM_SHOW = 0,
-    HM_AUTO = 1,
-    HM_HIDE = 2
-} HIDE_MAINWINDOW;
 
 typedef enum ADJUSTORDER {
     AD_NO = 0,
@@ -61,15 +56,6 @@ typedef struct FcitxConfig
 {
     GenericConfig gconfig;
     /* program config */
-    char *font;
-    char *menuFont;
-    char *strUserLocale;
-    char *strRecordingPath;
-    boolean bUseTrayIcon;
-    boolean bUseTrayIcon_;
-    boolean bUseDBus;
-    boolean bUseDBus_;
-    boolean bEnableAddons;
     int iDelayStart;
 
     /* output config */
@@ -83,14 +69,11 @@ typedef struct FcitxConfig
 
     /* appearance config */
     int iMaxCandWord;
-    HIDE_MAINWINDOW hideMainWindow;
     boolean bCenterInputWindow;
     boolean bShowInputWindowTriggering;
     boolean bPointAfterNumber;
     boolean bShowUserSpeed;
     boolean bShowVersion;
-    boolean bHintWindow;
-    char* skinType;
 
     /* hotkey config */
     HOTKEYS hkTrigger[2];
@@ -124,5 +107,6 @@ void SaveConfig();
 GenericConfig* GetConfig();
 int ConfigGetMaxCandWord();
 boolean ConfigGetPointAfterNumber();
+boolean IsCenterInputWindow();
 
 #endif

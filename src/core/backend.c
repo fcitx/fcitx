@@ -156,6 +156,11 @@ void ChangeIMState(FcitxInputContext* ic)
     }
 }
 
+IME_STATE GetCurrentState()
+{
+    return CurrentIC->state;
+}
+
 void CommitString(FcitxInputContext* ic, char* str)
 {
     UT_array* backends = GetFcitxBackends();
@@ -165,6 +170,29 @@ void CommitString(FcitxInputContext* ic, char* str)
     FcitxBackend* backend = *pbackend;
     backend->CommitString(ic, str);
 }
+
+void SetWindowOffset(FcitxInputContext *ic, int x, int y)
+{
+    UT_array* backends = GetFcitxBackends();
+    FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = *pbackend;
+    if (backend->SetWindowOffset)
+        backend->SetWindowOffset(ic, x, y);
+}
+
+void GetWindowPosition(FcitxInputContext* ic, int* x, int* y)
+{
+    UT_array* backends = GetFcitxBackends();
+    FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = *pbackend;
+    if (backend->GetWindowPosition)
+        backend->GetWindowPosition(ic, x, y);
+}
+
 
 void StartBackend()
 {
@@ -212,11 +240,10 @@ void StartBackend()
                         backend->backendid = backendindex;
                         backendindex ++;
                         utarray_push_back(backends, &backend);
-                        //backend->Run();
-                        pthread_create(&backend->pid, NULL, backend->Run, NULL);
-                        pthread_join(backend->pid, NULL);
-                        //backend->Destroy();
-                        //pthread_create(&backend->pid, NULL, backend->Run, NULL);
+                        if (backend->Run)
+                        {
+                            pthread_create(&addon->pid, NULL, backend->Run, NULL);
+                        }
                     }
                     break;
                 default:

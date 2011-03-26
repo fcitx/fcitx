@@ -21,15 +21,27 @@
 #include "core/fcitx.h"
 #include "core/module.h"
 #include "x11stuff.h"
+#include "utils/utils.h"
 
 static boolean X11Init();
+static void* X11Run();
+static void* X11GetDisplay(FcitxModuleFunctionArg arg);
+static void* X11AddEventHandler(FcitxModuleFunctionArg arg);
+static void* X11RemoveEventHandler(FcitxModuleFunctionArg arg);
+
+typedef struct FcitxX11 {
+    Display *dpy;
+    UT_array handlers;
+} FcitxX11;
+
+const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 
 FcitxX11 x11priv;
 
 FCITX_EXPORT_API
 FcitxModule module = {
     X11Init,
-    &x11priv
+    X11Run
 };
 
 boolean X11Init()
@@ -40,7 +52,67 @@ boolean X11Init()
     
     XInitThreads();
     
+    utarray_init(&x11priv.handlers, &handler_icd);
+    
+    /* ensure the order ! */
+    AddFunction(X11GetDisplay);
+    AddFunction(X11AddEventHandler);
+    AddFunction(X11RemoveEventHandler);
+    
     return true;
 }
 
+void* X11Run()
+{
+    XEvent event;
+    /* 主循环，即XWindow的消息循环 */
+    for (;;) {
+        XNextEvent (x11priv.dpy, &event);           //等待一个事件发生
 
+        FcitxLock();
+
+        /* 处理X事件 */
+        if (XFilterEvent (&event, None) == False)
+        {
+            FcitxXEventHandler* handler;
+            for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv.handlers);
+                  handler != NULL;
+                  handler = (FcitxXEventHandler *) utarray_next(&x11priv.handlers, handler))
+                if (handler->eventHandler (handler->instance, &event))
+                    break;
+        }
+        FcitxUnlock();
+    }
+    return NULL;
+
+}
+
+void* X11GetDisplay(FcitxModuleFunctionArg arg)
+{
+    return x11priv.dpy;
+}
+
+void* X11AddEventHandler(FcitxModuleFunctionArg arg)
+{
+    FcitxXEventHandler handler;
+    handler.eventHandler = arg.args[0];
+    handler.instance = arg.args[1];
+    utarray_push_back(&x11priv.handlers, &handler);
+    return NULL;
+}
+
+void* X11RemoveEventHandler(FcitxModuleFunctionArg arg)
+{
+    FcitxXEventHandler* handler;
+    int i = 0;
+    for ( i = 0 ;
+          i < utarray_len(&x11priv.handlers);
+          i ++)
+    {
+        handler = (FcitxXEventHandler*) utarray_eltptr(&x11priv.handlers, i);
+        if (handler->instance == arg.args[0])
+            break;
+    }
+    utarray_erase(&x11priv.handlers, i, 1);
+    return NULL;
+}

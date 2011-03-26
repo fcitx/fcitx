@@ -23,9 +23,6 @@
 #ifndef _MESSAGE_WINDOW_H
 #define _MESSAGE_WINDOW_H
 
-#include <X11/Xlib.h>
-#include "skin.h"
-
 typedef struct MessageWindow
 {
     Window window;
@@ -38,11 +35,5 @@ typedef struct MessageWindow
     char **msg;
     int length;
 } MessageWindow;
-
-extern MessageWindow messageWindow;
-
-Bool            CreateMessageWindow (void);
-void            DisplayMessageWindow (void);
-void            DrawMessageWindow (char *title, char **msg, int length);
 
 #endif

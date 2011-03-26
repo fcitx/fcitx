@@ -1,13 +1,3 @@
-[Profile/MainWindowOffsetX]
-Description=Main Window Position X
-Type=Integer
-DefaultValue=500
-
-[Profile/MainWindowOffsetY]
-Description=Main Window Position Y
-Type=Integer
-DefaultValue=1
-
 [Profile/InputWindowOffsetX]
 Description=Input Window Position X
 Type=Integer

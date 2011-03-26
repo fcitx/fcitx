@@ -182,7 +182,7 @@ typedef struct {
   }                                                                           \
   if ((a)->i > (pos+len)) {                                                   \
     memmove( _utarray_eltptr(a,pos), _utarray_eltptr(a,pos+len),              \
-            ((a->i)-(pos+len))*((a)->icd->sz));                               \
+            (((a)->i)-(pos+len))*((a)->icd->sz));                             \
   }                                                                           \
   (a)->i -= (len);                                                            \
 } while(0)

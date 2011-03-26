@@ -1,38 +1,3 @@
-[Program/Font]
-Type=Font
-DefaultValue=
-Description=Font
-
-[Program/MenuFont]
-Type=Font
-DefaultValue=
-Description=Menu Font
-
-[Program/FontLocale]
-Type=String
-DefaultValue=zh_CN.UTF-8
-Description=Font Locale to display
-
-[Program/RecordFile]
-Type=File
-DefaultValue=
-Description=Record File of Input
-
-[Program/UseTray]
-Type=Boolean
-DefaultValue=True
-Description=Use System Tray Icon
-
-[Program/UseDBus]
-Type=Boolean
-DefaultValue=False
-Description=Use DBus to display UI (Require KIMPanel)
-
-[Program/EnableAddons]
-Type=Boolean
-DefaultValue=True
-Description=Enable Addons to Fcitx
-
 [Program/DelayStart]
 Type=Integer
 DefaultValue=0
@@ -86,15 +51,6 @@ Type=Integer
 DefaultValue=5
 Description=Candidate Word Number
 
-[Appearance/MainWindowHideMode]
-Type=Enum
-EnumCount=3
-Enum0=Show
-Enum1=Auto
-Enum2=Hide
-DefaultValue=Auto
-Description=Main Window Hide Mode
-
 [Appearance/CenterInputWindow]
 Type=Boolean
 DefaultValue=False
@@ -119,16 +75,6 @@ Description=Show Input Speed
 Type=Boolean
 DefaultValue=True
 Description=Show Version
-
-[Appearance/ShowHintWindow]
-Type=Boolean
-DefaultValue=True
-Description=Show Hint Window while ENV is not correctly configured.
-
-[Appearance/SkinType]
-Type=String
-DefaultValue=default
-Description=Skin Name in use
 
 [Hotkey/TriggerKey]
 Type=Hotkey

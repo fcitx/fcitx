@@ -26,6 +26,7 @@
 #include "IC.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx-config/cutils.h"
+#include <core/ui.h>
 
 extern FcitxXimBackend xim;
 
@@ -56,6 +57,16 @@ Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data)
 {
     FcitxInputContext* ic =  FindIC(backend.backendid, &call_data->icid);
     SetCurrentIC(ic);
+    
+    if (ic && ic->state == IS_CLOSED)
+    {
+        OnInputFocus();
+    }
+    else
+    {
+        CloseInputWindow();
+        MoveInputWindow();
+    }
 
     return True;
 }
@@ -65,7 +76,7 @@ Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data)
     FcitxInputContext* ic = GetCurrentIC();
     if (ic && GetXimIC(ic)->id == call_data->icid)
     {
-
+        CloseInputWindow();
     }
 
     return True;
@@ -73,7 +84,8 @@ Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data)
 
 Bool XIMCloseHandler(IMOpenStruct * call_data)
 {
-
+    CloseInputWindow();
+    SaveAllIM();
     return True;
 }
 
@@ -120,19 +132,36 @@ void SetTrackPos(IMChangeICStruct * call_data)
     if (ic != FindIC(backend.backendid, &call_data->icid))
         return;
 
-    if (true) {
-        int i;
-        XICAttribute *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
+    int i;
+    XICAttribute *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
 
-        for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
-            if (!strcmp(XNSpotLocation, pre_attr->name)) {
-                flag = True;
-                
-                ic->offset_x = (*(XPoint *) pre_attr->value).x;
-                ic->offset_y = (*(XPoint *) pre_attr->value).y;
-            }
+    for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
+        if (!strcmp(XNSpotLocation, pre_attr->name)) {
+            flag = True;
+            
+            ic->offset_x = (*(XPoint *) pre_attr->value).x;
+            ic->offset_y = (*(XPoint *) pre_attr->value).y;
         }
     }
+    FcitxXimIC* ximic = GetXimIC(ic);
+    
+    Window window = None;
+    if (ximic->focus_win)
+        window = ximic->focus_win;
+    else if(ximic->client_win)
+        window = ximic->client_win;
+
+    if(window != None && (ic->offset_x < 0 || ic->offset_y < 0))
+    {
+            
+        XWindowAttributes attr;
+        XGetWindowAttributes(xim.display, window, &attr);
+
+        ic->offset_x = 0;
+        ic->offset_y = attr.height;
+    }
+
+    MoveInputWindow();
 }
 
 void XIMProcessKey(IMForwardEventStruct * call_data)

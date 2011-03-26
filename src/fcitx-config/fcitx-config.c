@@ -80,7 +80,6 @@ struct ConfigGroup
 };
 
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync);
@@ -290,8 +289,6 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                 codesc->type = T_File;
             else if (!strcmp(option->rawValue, "Font"))
                 codesc->type = T_Font;
-            else if (!strcmp(option->rawValue, "Image"))
-                codesc->type = T_Image;
             else if (!strcmp(option->rawValue, "Hotkey"))
                 codesc->type = T_Hotkey;
             else if (!strcmp(option->rawValue, "Enum"))
@@ -524,39 +521,6 @@ ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync)
             asprintf(&option->rawValue, "%c", *option->value.chr);
             return SyncSuccess;
     }
-    return SyncInvalid;
-}
-
-ConfigSyncResult ConfigOptionImage(ConfigOption *option, ConfigSync sync)
-{
-    if (!option->value.image)
-        return SyncNoBinding;
-
-    FcitxImage *img = option->value.image;
-
-    switch(sync)
-    {
-        case Raw2Value:
-            memset(img, 0 , sizeof(FcitxImage));
-            if(sscanf(option->rawValue, "%s %d %d %d %d %d %d %d %d", img->img_name,&img->position_x,\
-		&img->position_y,&img->width,&img->height,&img->response_x,&img->response_y,\
-		&img->response_w,&img->response_h) <= 0 )
-            {
-                strcpy(img->img_name, "");
-            }
-            else
-            {
-                if( img->response_x ==0 && img->response_y ==0)
-                {
-                    img->response_x=img->position_x;
-                    img->response_y=img->position_y;
-                }
-            }
-            return SyncSuccess;
-        case Value2Raw:
-            break;
-    }
-
     return SyncInvalid;
 }
 
@@ -872,9 +836,6 @@ void ConfigSyncValue(ConfigGroup* group, ConfigOption *option, ConfigSync sync)
         case T_Hotkey:
             f = ConfigOptionHotkey;
             break;
-        case T_Image:
-            f = ConfigOptionImage;
-            break;
         case T_File:
             f = ConfigOptionFile;
             break;
@@ -975,9 +936,6 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
             }
             switch(codesc->type)
             {
-                case T_Image:
-                    option->value.image = (FcitxImage*)var;
-                    break;
                 case T_Char:
                     option->value.chr = (char*) var;
                     break;

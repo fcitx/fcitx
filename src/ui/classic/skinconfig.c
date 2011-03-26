@@ -23,6 +23,7 @@
 #include "skin.h"
 #include "MenuWindow.h"
 #include "fcitx-config/fcitx-config.h"
+#include "core/ui.h"
 
 CONFIG_BINDING_BEGIN(FcitxSkin);
 CONFIG_BINDING_REGISTER("SkinInfo","Name",skinInfo.skinName);
@@ -44,18 +45,6 @@ CONFIG_BINDING_REGISTER("SkinFont","InactiveMenuColor",skinFont.menuFontColor[ME
 	
 CONFIG_BINDING_REGISTER("SkinMainBar","BackImg",skinMainBar.backImg);
 CONFIG_BINDING_REGISTER("SkinMainBar","Logo",skinMainBar.logo);
-CONFIG_BINDING_REGISTER("SkinMainBar","ZhPunc",skinMainBar.zhpunc);
-CONFIG_BINDING_REGISTER("SkinMainBar","EnPunc",skinMainBar.enpunc);
-CONFIG_BINDING_REGISTER("SkinMainBar","Chs",skinMainBar.chs);
-CONFIG_BINDING_REGISTER("SkinMainBar","Cht",skinMainBar.cht);
-CONFIG_BINDING_REGISTER("SkinMainBar","HalfCorner",skinMainBar.halfcorner);
-CONFIG_BINDING_REGISTER("SkinMainBar","FullCorner",skinMainBar.fullcorner);
-CONFIG_BINDING_REGISTER("SkinMainBar","Unlock",skinMainBar.unlock);
-CONFIG_BINDING_REGISTER("SkinMainBar","Lock",  skinMainBar.lock);
-CONFIG_BINDING_REGISTER("SkinMainBar","Legend",skinMainBar.legend);
-CONFIG_BINDING_REGISTER("SkinMainBar","NoLegend",skinMainBar.nolegend);
-CONFIG_BINDING_REGISTER("SkinMainBar","VK",skinMainBar.vk);
-CONFIG_BINDING_REGISTER("SkinMainBar","NoVK",skinMainBar.novk);
 CONFIG_BINDING_REGISTER("SkinMainBar","Eng",skinMainBar.eng);
 CONFIG_BINDING_REGISTER("SkinMainBar","Chn",skinMainBar.chn);
 CONFIG_BINDING_REGISTER("SkinInputBar","BackImg",skinInputBar.backImg);

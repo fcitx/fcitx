@@ -86,3 +86,28 @@ void SaveProfile(void)
     SaveConfigFileFp(fp, fcitxProfile.gconfig.configFile, profileDesc);
     fclose(fp);
 }
+
+boolean IsTrackCursor()
+{
+    return fcitxProfile.bTrackCursor;
+}
+
+int GetInputWindowOffsetX()
+{
+    return fcitxProfile.iInputWindowOffsetX;
+}
+
+int GetInputWindowOffsetY()
+{
+    return fcitxProfile.iInputWindowOffsetY;
+}
+
+void SetInputWindowOffsetX(int pos)
+{
+    fcitxProfile.iInputWindowOffsetX = pos;
+}
+
+void SetInputWindowOffsetY(int pos)
+{
+    fcitxProfile.iInputWindowOffsetY = pos;
+}

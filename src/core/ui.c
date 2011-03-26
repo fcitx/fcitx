@@ -27,6 +27,8 @@
 #include "utils/utarray.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
+#include <sys/stat.h>
+#include <utils/utils.h>
 
 FcitxUI* ui;
 FcitxUI dummyUI;
@@ -53,6 +55,31 @@ void SetMessageCount(Messages* m, int s)
     if ((s) <= MAX_MESSAGE_COUNT && s >= 0)
         ((m)->msgCount = (s));
     (m)->changed = true;
+}
+
+int GetMessageCount(Messages* m)
+{
+    return m->msgCount;
+}
+
+boolean IsMessageChanged(Messages* m)
+{
+    return m->changed;
+}
+
+const char* GetMessageString(Messages* m, int index)
+{
+    return m->msg[index].strMsg;
+}
+
+MSG_TYPE GetMessageType(Messages* m, int index)
+{
+    return m->msg[index].type;
+}
+
+void SetMessageChanged(Messages* m, boolean changed)
+{
+    m->changed = changed;
 }
 
 void LoadUserInterface()
@@ -155,18 +182,39 @@ void MessageConcat(Messages* message, int position, char* text)
 
 void CloseInputWindow()
 {
+    if (ui->CloseInputWindow)
+        ui->CloseInputWindow();
 }
 
 void ShowInputWindow()
 {
+    if (ui->ShowInputWindow)
+        ui->ShowInputWindow();
+}
+
+void MoveInputWindow()
+{
+    if (ui->MoveInputWindow)
+        ui->MoveInputWindow();
 }
 
 void UpdateStatus()
 {
 }
 
-void RegisterStatus()
+void RegisterStatus(const char* name, void (*toggleStatus)(), boolean (*getStatus)())
 {
+    FcitxUIStatus status;
+    status.name = strdup(name);
+    status.getCurrentStatus = getStatus;
+    status.toggleStatus = toggleStatus;
+    UT_array* uistats = GetUIStatus();
+    
+    utarray_push_back(uistats, &status);
+    FcitxUIStatus* newstat = (FcitxUIStatus*) utarray_back(uistats);
+    
+    if (ui->RegisterStatus)
+        ui->RegisterStatus(newstat);
 }
 
 void OnInputFocus()

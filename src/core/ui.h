@@ -61,9 +61,22 @@ typedef struct Messages Messages;
         (m)->changed = True; \
     } while(0)
 
+typedef struct FcitxUIStatus {
+    char *name;
+    void (*toggleStatus)();
+    boolean (*getCurrentStatus)();
+    void *priv;
+} FcitxUIStatus;
+
 typedef struct FcitxUI
 {
     boolean (*Init)();
+    void (*CloseInputWindow)();
+    void (*ShowInputWindow)();
+    void (*MoveInputWindow)();
+    void (*UpdateStatus)();
+    void (*RegisterStatus)(FcitxUIStatus* );
+    void (*OnInputFocus)();
 } FcitxUI;
 
 void LoadUserInterface();
@@ -76,8 +89,13 @@ void MessageConcat(Messages* message, int position, char* text);
 void MessageConcatLast(Messages* message, char* text);
 void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
 void SetMessageCount(Messages* m, int s);
+int GetMessageCount(Messages* m);
+const char* GetMessageString(Messages* m, int index);
+MSG_TYPE GetMessageType(Messages* m, int index);
+boolean IsMessageChanged(Messages* m);
+void SetMessageChanged(Messages* m, boolean changed);
 
-
+void MoveInputWindow();
 void CloseInputWindow();
 void ShowInputWindow();
 void UpdateStatus();

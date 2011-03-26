@@ -22,8 +22,17 @@
 #define X11STUFF_H
 #include <X11/Xlib.h>
 
-typedef struct FcitxX11 {
-    Display *dpy;
-} FcitxX11;
+#define FCITX_X11_NAME "fcitx-x11"
+#define FCITX_X11_GETDISPLAY 0
+#define FCITX_X11_GETDISPLAY_RETURNTYPE Display*
+#define FCITX_X11_ADDXEVENTHANDLER 1
+#define FCITX_X11_ADDXEVENTHANDLER_RETURNTYPE void
+#define FCITX_X11_REMOVEXEVENTHANDLER 2
+#define FCITX_X11_REMOVEXEVENTHANDLER_RETURNTYPE void
+
+typedef struct FcitxXEventHandler {
+    boolean (*eventHandler)(void* instance, XEvent* event);
+    void* instance;
+} FcitxXEventHandler;
 
 #endif

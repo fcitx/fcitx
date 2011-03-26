@@ -55,23 +55,6 @@ typedef enum
     MOTION//鼠标停留
 } MouseE;
 
-typedef struct FcitxImage
-{
-    char img_name[32];
-    //图片绘画区域
-    int  position_x;
-    int  position_y;
-    int  width;
-    int  height;
-    //按键响应区域
-    int  response_x;
-    int  response_y;
-    int  response_w;
-    int  response_h;
-    //鼠标不同状态mainnMenuwindow不同的显示状态.
-    MouseE mouse;
-} FcitxImage;
-
 typedef enum ConfigType
 {
     T_Integer,
@@ -82,8 +65,7 @@ typedef enum ConfigType
     T_Enum,
     T_File,
     T_Hotkey,
-    T_Font,
-    T_Image
+    T_Font
 } ConfigType;
 
 typedef enum ConfigSync
@@ -108,7 +90,6 @@ typedef union ConfigValueType{
     int *enumerate;
     char **string;
     char *chr;
-    FcitxImage* image;
 } ConfigValueType;
 
 typedef struct ConfigGroup ConfigGroup;

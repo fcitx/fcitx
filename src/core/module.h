@@ -21,13 +21,33 @@
 #ifndef _MODULE_H
 #define _MODULE_H
 #include "fcitx-config/fcitx-config.h"
+#include "utils/utarray.h"
+
+struct FcitxAddon;
 
 typedef struct FcitxModule
 {
     boolean (*Init)();
-    void *priv;
+    void* (*Run)();
+    UT_array functionList;
 } FcitxModule;
 
+typedef struct FcitxModuleFunctionArg
+{
+    void* args[10];
+} FcitxModuleFunctionArg;
+
 void LoadModule();
+void* InvokeModuleFunction(struct FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+void* InvokeModuleFunctionWithName(const char* name, int functionId, FcitxModuleFunctionArg args);
+
+#define InvokeFunction(MODULE, FUNC, ARG)  \
+    ((MODULE##_##FUNC##_RETURNTYPE) InvokeModuleFunctionWithName(MODULE##_NAME, MODULE##_##FUNC, ARG))
+    
+#define AddFunction(Realname) \
+    do { \
+        void *temp = Realname; \
+        utarray_push_back(&module.functionList, &temp); \
+    } while(0)        
 
 #endif

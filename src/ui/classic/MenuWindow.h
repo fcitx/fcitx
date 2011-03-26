@@ -22,15 +22,6 @@
 #ifndef _MENUWINDOW_H_
 #define _MENUWINDOW_H_
 
-#include "ui.h"
-#include "core/ime.h"
-#include "im/pinyin/PYFA.h"
-#include "MainWindow.h"
-#include "TrayWindow.h"
-#include <cairo.h>
-#include <cairo-xlib.h>
-#include <X11/Xlib.h>
-
 #define MENU_WINDOW_WIDTH   200
 #define MENU_WINDOW_HEIGHT  400
 
@@ -42,6 +33,8 @@
 
 #define VK_MENU_WINDOW_WIDTH    110
 #define VK_MENU_WINDOW_HEIGHT   300
+#include <X11/Xlib.h>
+#include "utils/utarray.h"
 
 typedef enum MenuState
 {

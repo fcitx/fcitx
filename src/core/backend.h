@@ -52,7 +52,8 @@ typedef struct FcitxBackend
     void (*CloseIM)(FcitxInputContext* arg1);
     void (*CommitString)(FcitxInputContext* arg1, char* arg2);
     void (*ForwardKey)(FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
-    pthread_t pid;
+    void (*SetWindowOffset)(FcitxInputContext* ic, int x, int y);
+    void (*GetWindowPosition)(FcitxInputContext* ic, int* x, int* y);
     int backendid;
 } FcitxBackend;
 
@@ -66,5 +67,8 @@ void StartBackend();
 void CloseIM(FcitxInputContext* ic);
 void CommitString(FcitxInputContext* ic, char* str);
 void ChangeIMState (FcitxInputContext* ic);
+void SetWindowOffset(FcitxInputContext *ic, int x, int y);
+void GetWindowPosition(FcitxInputContext *ic, int* x, int* y);
+IME_STATE GetCurrentState();
 
 #endif

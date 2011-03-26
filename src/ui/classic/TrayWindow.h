@@ -25,12 +25,13 @@
 #ifndef _TRAY_WINDOW_H
 #define _TRAY_WINDOW_H
 
-#ifdef _ENABLE_TRAY
-
 #include <X11/Xlib.h>
 #include <string.h>
 #include <cairo.h>
 #include <cairo-xlib.h>
+#include <X11/Xutil.h>
+#include <fcitx-config/fcitx-config.h>
+#include <X11/Xdefs.h>
 
 #define INACTIVE_ICON 0
 #define ACTIVE_ICON   1
@@ -41,7 +42,7 @@ typedef struct TrayWindow {
     XImage* icon[2];
     Pixmap picon[2];
     GC gc;
-    Bool bTrayMapped;
+    boolean bTrayMapped;
     XVisualInfo visual;
     Atom atoms[6];
 
@@ -49,15 +50,10 @@ typedef struct TrayWindow {
     int size;
 } TrayWindow;
 
-Bool CreateTrayWindow();
-void DrawTrayWindow(int f_state, int x, int y, int w, int h);
+TrayWindow* CreateTrayWindow();
+void DrawTrayWindow(TrayWindow* trayWindow);
 void DeInitTrayWindow(TrayWindow *f_tray);
-void RedrawTrayWindow(void);
+void RedrawTrayWindow(TrayWindow* trayWindow);
 void TrayEventHandler(XEvent* event);
-void DestroyTrayWindow();
-
-extern TrayWindow tray;
-
-#endif
-
+void DestroyTrayWindow(TrayWindow* trayWindow);
 #endif

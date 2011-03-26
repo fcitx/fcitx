@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 23:42+0800\n"
+"POT-Creation-Date: 2011-03-20 22:08+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -24,11 +24,11 @@ msgstr ""
 msgid "About Fcitx"
 msgstr "关于Fcitx"
 
-#: /home/saber/Develop/fcitx/data/config.desc:62
+#: /home/saber/Develop/fcitx/data/config.desc:27
 msgid "Action after press SemiColon"
 msgstr "分号键操作"
 
-#: /home/saber/Develop/fcitx/data/config.desc:53
+#: /home/saber/Develop/fcitx/data/config.desc:18
 msgid "Action after press enter"
 msgstr "回车键操作"
 
@@ -59,24 +59,20 @@ msgid "Appearance"
 msgstr "外观"
 
 #: unknown
-msgid "Auto"
-msgstr "自动"
-
-#: unknown
 msgid "Backend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:202
+#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:230
 #, fuzzy
 msgid "Backend: bad backend"
 msgstr "额外输入法: 不正确的输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ui.c:87
+#: /home/saber/Develop/fcitx/po/.././src/core/ui.c:114
 #, fuzzy
 msgid "Backend: bad im"
 msgstr "额外输入法: 不正确的输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:196
+#: /home/saber/Develop/fcitx/po/.././src/core/backend.c:224
 #, fuzzy, c-format
 msgid "Backend: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
@@ -103,19 +99,15 @@ msgstr "纵向变形规则"
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/InputWindow.c:172
-msgid "CAL InputWindow"
-msgstr "CAL InputWindow"
-
 #: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:379
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:170
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:140
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:175
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:145
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -132,7 +124,7 @@ msgstr "无法打开中文标点文件。"
 msgid "Candidate Index Color"
 msgstr "候选词索引颜色"
 
-#: /home/saber/Develop/fcitx/data/config.desc:87
+#: /home/saber/Develop/fcitx/data/config.desc:52
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
@@ -201,7 +193,7 @@ msgstr "提交输入"
 msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
 
-#: /home/saber/Develop/fcitx/data/config.desc:72
+#: /home/saber/Develop/fcitx/data/config.desc:37
 msgid "Convert Punc to Chinese Punc"
 msgstr "转换中文标点"
 
@@ -210,19 +202,19 @@ msgstr "转换中文标点"
 msgid "Copy"
 msgstr "复制"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:42
+#: /home/saber/Develop/fcitx/data/profile.desc:32
 msgid "Current Input Method Index"
 msgstr "当前输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/InputWindow.c:147
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/InputWindow.c:159
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:135
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:125
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:156
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:143
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -238,7 +230,7 @@ msgstr "描述"
 msgid "Dianbaoma"
 msgstr "电报码"
 
-#: /home/saber/Develop/fcitx/data/config.desc:77
+#: /home/saber/Develop/fcitx/data/config.desc:42
 msgid "Disable Paging in Legend Mode"
 msgstr "联想模式禁用翻页"
 
@@ -247,7 +239,7 @@ msgstr "联想模式禁用翻页"
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:153
+#: /home/saber/Develop/fcitx/data/config.desc:99
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
@@ -260,10 +252,6 @@ msgstr "组名重复，和之前的组合并: %s :行 %d"
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
-
-#: /home/saber/Develop/fcitx/data/config.desc:34
-msgid "Enable Addons to Fcitx"
-msgstr "在Fcitx启用附加组件"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:17
 msgid "Enabled"
@@ -323,10 +311,6 @@ msgstr "额外输入法: 打开%s失败 %s"
 msgid "FCITX -- Get Signal No.: %d"
 msgstr "Fcitx接收到信号: %d"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/ui.c:85
-msgid "FCITX can only run under X"
-msgstr "Fcitx只能在X下运行"
-
 #: ../data/fcitx.desktop.in.h:2
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -356,14 +340,6 @@ msgstr "第一候选词颜色"
 msgid "Fix"
 msgstr "固定长度"
 
-#: /home/saber/Develop/fcitx/data/config.desc:4
-msgid "Font"
-msgstr "字体"
-
-#: /home/saber/Develop/fcitx/data/config.desc:14
-msgid "Font Locale to display"
-msgstr "字体区域"
-
 #: ../data/fcitx.desktop.in.h:3
 msgid "Free Chinese Input Toy of X"
 msgstr "Free Chinese Input Toy of X"
@@ -372,7 +348,7 @@ msgstr "Free Chinese Input Toy of X"
 msgid "Full Width Character Icon"
 msgstr "全角图标"
 
-#: /home/saber/Develop/fcitx/data/config.desc:248
+#: /home/saber/Develop/fcitx/data/config.desc:194
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
@@ -380,12 +356,7 @@ msgstr "提示词库中词组"
 msgid "Half Width Character Icon"
 msgstr "半角图标"
 
-# unknown
-#: unknown
-msgid "Hide"
-msgstr "隐藏"
-
-#: /home/saber/Develop/fcitx/data/config.desc:136
+#: /home/saber/Develop/fcitx/data/config.desc:82
 msgid "Hot key of Triggering Input Method"
 msgstr "快捷键: 切换输入法"
 
@@ -393,59 +364,59 @@ msgstr "快捷键: 切换输入法"
 msgid "Hotkey"
 msgstr "快捷键"
 
-#: /home/saber/Develop/fcitx/data/config.desc:203
+#: /home/saber/Develop/fcitx/data/config.desc:149
 msgid "Hotkey of Going Next Page"
 msgstr "快捷键: 后一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:198
+#: /home/saber/Develop/fcitx/data/config.desc:144
 msgid "Hotkey of Going Prev Page"
 msgstr "快捷键: 前一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:168
+#: /home/saber/Develop/fcitx/data/config.desc:114
 msgid "Hotkey of Hiding Main Window"
 msgstr "快捷键: 隐藏主窗口"
 
-#: /home/saber/Develop/fcitx/data/config.desc:223
+#: /home/saber/Develop/fcitx/data/config.desc:169
 msgid "Hotkey of Reseting Recording Mode"
 msgstr "快捷键: 重置记录模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:213
+#: /home/saber/Develop/fcitx/data/config.desc:159
 msgid "Hotkey of Saving All Config and Input History"
 msgstr "快捷键: 保存配置及输入历史"
 
-#: /home/saber/Develop/fcitx/data/config.desc:193
+#: /home/saber/Develop/fcitx/data/config.desc:139
 msgid "Hotkey of Switch Chinese Punc Mode"
 msgstr "快捷键: 切换中英文标点"
 
-#: /home/saber/Develop/fcitx/data/config.desc:148
+#: /home/saber/Develop/fcitx/data/config.desc:94
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr "快捷键: 切换中英文输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:163
+#: /home/saber/Develop/fcitx/data/config.desc:109
 msgid "Hotkey of Switching Follow Cursor Mode"
 msgstr "快捷键: 切换光标跟随"
 
-#: /home/saber/Develop/fcitx/data/config.desc:188
+#: /home/saber/Develop/fcitx/data/config.desc:134
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
-#: /home/saber/Develop/fcitx/data/config.desc:183
+#: /home/saber/Develop/fcitx/data/config.desc:129
 msgid "Hotkey of Switching Legend Mode"
 msgstr "快捷键: 切换联想模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:218
+#: /home/saber/Develop/fcitx/data/config.desc:164
 msgid "Hotkey of Switching Recording Mode"
 msgstr "快捷键: 切换记录模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:178
+#: /home/saber/Develop/fcitx/data/config.desc:124
 msgid "Hotkey of Switching Traditional Chinese Input Mode On."
 msgstr "快捷键: 切换简繁体中文输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:173
+#: /home/saber/Develop/fcitx/data/config.desc:119
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr "快捷键: 切换软键盘"
 
-#: /home/saber/Develop/fcitx/data/config.desc:208
+#: /home/saber/Develop/fcitx/data/config.desc:154
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
@@ -468,7 +439,7 @@ msgstr "非活动菜单项颜色"
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
 
-#: /home/saber/Develop/fcitx/data/config.desc:67
+#: /home/saber/Develop/fcitx/data/config.desc:32
 msgid "Input English Character if you input upper case"
 msgstr "大写时输入英文"
 
@@ -480,15 +451,15 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:12
+#: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Input Window Position X"
 msgstr "输入框X位置"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:17
+#: /home/saber/Develop/fcitx/data/profile.desc:7
 msgid "Input Window Position Y"
 msgstr "输入框Y位置"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:32
+#: /home/saber/Develop/fcitx/data/profile.desc:22
 msgid "Input Window Shows at the position of cursor"
 msgstr "光标跟随"
 
@@ -497,7 +468,7 @@ msgstr "光标跟随"
 msgid "InputMethod"
 msgstr "输入法"
 
-#: /home/saber/Develop/fcitx/data/config.desc:158
+#: /home/saber/Develop/fcitx/data/config.desc:104
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
@@ -555,7 +526,7 @@ msgstr "加载附加组件配置文件: %s"
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: /home/saber/Develop/fcitx/po/.././src/utils/configfile.c:204
+#: /home/saber/Develop/fcitx/po/.././src/utils/configfile.c:181
 #, c-format
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"
@@ -586,25 +557,13 @@ msgstr "加载码表词典"
 msgid "Lock Icon"
 msgstr "锁定图标"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:47
+#: /home/saber/Develop/fcitx/data/profile.desc:37
 msgid "Locked"
 msgstr "锁定"
 
 #: /home/saber/Develop/fcitx/data/skin.desc:68
 msgid "Logo Icon"
 msgstr "Logo图标"
-
-#: /home/saber/Develop/fcitx/data/config.desc:96
-msgid "Main Window Hide Mode"
-msgstr "主窗口隐藏模式"
-
-#: /home/saber/Develop/fcitx/data/profile.desc:2
-msgid "Main Window Position X"
-msgstr "主窗口X位置"
-
-#: /home/saber/Develop/fcitx/data/profile.desc:7
-msgid "Main Window Position Y"
-msgstr "主窗口Y位置"
 
 #: /home/saber/Develop/fcitx/data/skin.desc:208
 msgid "Margin to bottom"
@@ -622,10 +581,6 @@ msgstr "右边距"
 msgid "Margin to top"
 msgstr "上边距"
 
-#: /home/saber/Develop/fcitx/data/config.desc:9
-msgid "Menu Font"
-msgstr "菜单字体"
-
 #: /home/saber/Develop/fcitx/data/skin.desc:23
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
@@ -639,11 +594,11 @@ msgstr "类型缺失，作为字符串处理"
 msgid "Module"
 msgstr "模块"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/module.c:60
+#: /home/saber/Develop/fcitx/po/.././src/core/module.c:64
 msgid "Module: bad module"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/core/module.c:54
+#: /home/saber/Develop/fcitx/po/.././src/core/module.c:58
 #, fuzzy, c-format
 msgid "Module: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
@@ -690,7 +645,7 @@ msgstr "其他颜色"
 msgid "Output"
 msgstr "输出"
 
-#: /home/saber/Develop/fcitx/data/config.desc:228
+#: /home/saber/Develop/fcitx/data/config.desc:174
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr "拼音输入法优先级，0为禁用"
 
@@ -715,7 +670,7 @@ msgstr "预置文件"
 msgid "Program"
 msgstr "程序"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:37
+#: /home/saber/Develop/fcitx/data/profile.desc:27
 msgid "Prompt the phrases after input"
 msgstr "输入后联想词组"
 
@@ -723,7 +678,7 @@ msgstr "输入后联想词组"
 msgid "QuickPhrase"
 msgstr "快速输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:238
+#: /home/saber/Develop/fcitx/data/config.desc:184
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr "区位输入法优先级，0为禁用"
 
@@ -742,10 +697,6 @@ msgstr "右Shift"
 msgid "R_SUPER"
 msgstr "右Super"
 
-#: /home/saber/Develop/fcitx/data/config.desc:19
-msgid "Record File of Input"
-msgstr "记录文件"
-
 #: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:642
 msgid "Rename OK"
 msgstr "重命名成功"
@@ -754,11 +705,11 @@ msgstr "重命名成功"
 msgid "Resize"
 msgstr "变形规则"
 
-#: /home/saber/Develop/fcitx/data/config.desc:39
+#: /home/saber/Develop/fcitx/data/config.desc:4
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
-#: /home/saber/Develop/fcitx/data/config.desc:82
+#: /home/saber/Develop/fcitx/data/config.desc:47
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
 
@@ -766,39 +717,31 @@ msgstr "快速切换英文模式时上屏"
 msgid "SharedLibrary"
 msgstr "共享库"
 
-#: unknown
-msgid "Show"
-msgstr "显示"
-
-#: /home/saber/Develop/fcitx/data/config.desc:126
-msgid "Show Hint Window while ENV is not correctly configured."
-msgstr "环境未配置正确时显示提示窗口"
-
-#: /home/saber/Develop/fcitx/data/config.desc:116
+#: /home/saber/Develop/fcitx/data/config.desc:72
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
-#: /home/saber/Develop/fcitx/data/config.desc:106
+#: /home/saber/Develop/fcitx/data/config.desc:62
 msgid "Show Input Window After Trigger Input Mode"
 msgstr "切换输入时显示输入条"
 
-#: /home/saber/Develop/fcitx/data/config.desc:101
+#: /home/saber/Develop/fcitx/data/config.desc:57
 msgid "Show Input Window In the center of screen"
 msgstr "输入窗口显示在正中"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:52
+#: /home/saber/Develop/fcitx/data/profile.desc:42
 msgid "Show Main Window in a compact way"
 msgstr "用紧凑的方式显示主窗口"
 
-#: /home/saber/Develop/fcitx/data/config.desc:111
+#: /home/saber/Develop/fcitx/data/config.desc:67
 msgid "Show Point After Index"
 msgstr "序号后加点"
 
-#: /home/saber/Develop/fcitx/data/config.desc:121
+#: /home/saber/Develop/fcitx/data/config.desc:77
 msgid "Show Version"
 msgstr "显示版本"
 
-#: /home/saber/Develop/fcitx/data/config.desc:233
+#: /home/saber/Develop/fcitx/data/config.desc:179
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr "双拼输入法优先级，0为禁用"
 
@@ -812,10 +755,6 @@ msgstr "皮肤作者"
 
 #: /home/saber/Develop/fcitx/data/skin.desc:3
 msgid "Skin Name"
-msgstr "皮肤名称"
-
-#: /home/saber/Develop/fcitx/data/config.desc:131
-msgid "Skin Name in use"
 msgstr "皮肤名称"
 
 #: /home/saber/Develop/fcitx/data/skin.desc:7
@@ -888,7 +827,7 @@ msgstr "码表提示颜色"
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
 
-#: /home/saber/Develop/fcitx/data/config.desc:243
+#: /home/saber/Develop/fcitx/data/config.desc:189
 msgid "Table Priority Order, Zero to Disable"
 msgstr "码表输入法优先级，0为禁用"
 
@@ -912,7 +851,7 @@ msgstr "类型"
 msgid "UI"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ui.c:81
+#: /home/saber/Develop/fcitx/po/.././src/core/ui.c:108
 #, fuzzy, c-format
 msgid "UI: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
@@ -921,41 +860,28 @@ msgstr "额外输入法: 打开%s失败 %s"
 msgid "UnLock Icon"
 msgstr "未锁定图标"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/ui.c:351
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/ui.c:358
-msgid "Unable to create process"
-msgstr "无法创建进程"
-
 #: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:354
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:27
+#: /home/saber/Develop/fcitx/data/profile.desc:17
 msgid "Use Chinese Punctuation"
 msgstr "使用中文标点"
 
-#: /home/saber/Develop/fcitx/data/config.desc:29
-msgid "Use DBus to display UI (Require KIMPanel)"
-msgstr "使用DBus来显示界面(需要KIMPanel)"
-
-#: /home/saber/Develop/fcitx/data/config.desc:44
+#: /home/saber/Develop/fcitx/data/config.desc:9
 msgid "Use English Punc After a Number"
 msgstr "数字后跟半角符号"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:22
+#: /home/saber/Develop/fcitx/data/profile.desc:12
 msgid "Use Full Width Character"
 msgstr "使用全角字符"
 
-#: /home/saber/Develop/fcitx/data/config.desc:24
-msgid "Use System Tray Icon"
-msgstr "使用系统托盘"
-
-#: /home/saber/Develop/fcitx/data/profile.desc:57
+#: /home/saber/Develop/fcitx/data/profile.desc:47
 msgid "Use Traditional Chinese in Input"
 msgstr "使用繁体中文输入"
 
-#: /home/saber/Develop/fcitx/data/profile.desc:62
+#: /home/saber/Develop/fcitx/data/profile.desc:52
 msgid "Use recording mode"
 msgstr "使用记录模式"
 
@@ -996,10 +922,6 @@ msgstr "五笔拼音"
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/ui.c:135
-msgid "XEvent--Expose"
-msgstr "XEvent--Expose"
-
 #: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:127
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
@@ -1017,7 +939,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/po/.././src/utils/utils.c:251
+#: /home/saber/Develop/fcitx/po/.././src/utils/utils.c:253
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
@@ -1083,6 +1005,9 @@ msgstr ""
 #~ msgid "Author"
 #~ msgstr "作者"
 
+#~ msgid "Auto"
+#~ msgstr "自动"
+
 #~ msgid "Auto Create Phrase"
 #~ msgstr "自动组词"
 
@@ -1124,6 +1049,9 @@ msgstr ""
 
 #~ msgid "BaseOrder"
 #~ msgstr "单字重码顺序调整"
+
+#~ msgid "CAL InputWindow"
+#~ msgstr "CAL InputWindow"
 
 #~ msgid "Can't open socket %s: %s"
 #~ msgstr "无法打开Socket %s: %s"
@@ -1210,6 +1138,9 @@ msgstr ""
 #~ msgid "Enable"
 #~ msgstr "启用"
 
+#~ msgid "Enable Addons to Fcitx"
+#~ msgstr "在Fcitx启用附加组件"
+
 #~ msgid "Enable This Table or Not"
 #~ msgstr "是否启用此码表"
 
@@ -1240,6 +1171,9 @@ msgstr ""
 #~ msgid "ExtraIM"
 #~ msgstr "额外输入法"
 
+#~ msgid "FCITX can only run under X"
+#~ msgstr "Fcitx只能在X下运行"
+
 #~ msgid "File"
 #~ msgstr "文件"
 
@@ -1251,6 +1185,12 @@ msgstr ""
 
 #~ msgid "FollowCursorKey"
 #~ msgstr "快捷键: 切换光标跟随"
+
+#~ msgid "Font"
+#~ msgstr "字体"
+
+#~ msgid "Font Locale to display"
+#~ msgstr "字体区域"
 
 #~ msgid "FontLocale"
 #~ msgstr "字体区域"
@@ -1348,6 +1288,10 @@ msgstr ""
 #~ msgid "HalfPuncAfterNumber"
 #~ msgstr "数字后跟半角符号"
 
+# unknown
+#~ msgid "Hide"
+#~ msgstr "隐藏"
+
 #~ msgid "HideMainWindowKey"
 #~ msgstr "快捷键: 隐藏主窗口"
 
@@ -1438,6 +1382,15 @@ msgstr ""
 #~ msgid "LookupTablePageUp"
 #~ msgstr "LookupTablePageUp"
 
+#~ msgid "Main Window Hide Mode"
+#~ msgstr "主窗口隐藏模式"
+
+#~ msgid "Main Window Position X"
+#~ msgstr "主窗口X位置"
+
+#~ msgid "Main Window Position Y"
+#~ msgstr "主窗口Y位置"
+
 #~ msgid "MainWindowHideMode"
 #~ msgstr "主窗口隐藏模式"
 
@@ -1467,6 +1420,9 @@ msgstr ""
 
 #~ msgid "MatchingKey"
 #~ msgstr "模糊键"
+
+#~ msgid "Menu Font"
+#~ msgstr "菜单字体"
 
 #~ msgid "MenuFont"
 #~ msgstr "菜单字体"
@@ -1552,6 +1508,9 @@ msgstr ""
 #~ msgid "QuweiOrder"
 #~ msgstr "区位顺序"
 
+#~ msgid "Record File of Input"
+#~ msgstr "记录文件"
+
 #~ msgid "RecordFile"
 #~ msgstr "记录文件"
 
@@ -1627,6 +1586,12 @@ msgstr ""
 #~ msgid "Setting Hint"
 #~ msgstr "设置提示"
 
+#~ msgid "Show"
+#~ msgstr "显示"
+
+#~ msgid "Show Hint Window while ENV is not correctly configured."
+#~ msgstr "环境未配置正确时显示提示窗口"
+
 #~ msgid "Show Point After Index of Candidate Word "
 #~ msgstr "候选序号后加点"
 
@@ -1650,6 +1615,9 @@ msgstr ""
 
 #~ msgid "ShuangpinOrder"
 #~ msgstr "双拼顺序"
+
+#~ msgid "Skin Name in use"
+#~ msgstr "皮肤名称"
 
 #~ msgid "SkinType"
 #~ msgstr "皮肤名称"
@@ -1687,17 +1655,26 @@ msgstr ""
 #~ msgid "Type: %d Text: %s"
 #~ msgstr "Type: %d Text: %s"
 
+#~ msgid "Unable to create process"
+#~ msgstr "无法创建进程"
+
 #~ msgid "Unlock"
 #~ msgstr "未锁定图标"
 
 #~ msgid "Use Complete Pinyin"
 #~ msgstr "使用完整拼音"
 
+#~ msgid "Use DBus to display UI (Require KIMPanel)"
+#~ msgstr "使用DBus来显示界面(需要KIMPanel)"
+
 #~ msgid "Use Matching Key"
 #~ msgstr "使用模糊键"
 
 #~ msgid "Use Pinyin"
 #~ msgstr "使用拼音"
+
+#~ msgid "Use System Tray Icon"
+#~ msgstr "使用系统托盘"
 
 #~ msgid "UseCompletePinyin"
 #~ msgstr "使用全拼"
@@ -1731,6 +1708,9 @@ msgstr ""
 
 #~ msgid "Version"
 #~ msgstr "版本"
+
+#~ msgid "XEvent--Expose"
+#~ msgstr "XEvent--Expose"
 
 #~ msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
 #~ msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
