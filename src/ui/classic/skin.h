@@ -80,6 +80,10 @@ typedef struct
     char* logo;
     char* eng;
     char* chn;
+    char* placement;
+    RESIZERULE resize;
+    int    resizePos;
+    int resizeWidth;
 } SkinMainBar;
 
 typedef struct 
@@ -128,19 +132,20 @@ typedef struct FcitxSkin
     SkinMenu skinMenu;
     SkinKeyboard skinKeyboard;
     
-    char* skinType;
+    char** skinType;
     cairo_surface_t* keyBoard;
     cairo_surface_t* menuBack;
     cairo_surface_t* trayActive;
     cairo_surface_t* trayInactive;
 } FcitxSkin;
 
-
+int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc);
-void LoadInputBarImage();
+void LoadInputBarImage(InputWindow* inputWindow, FcitxSkin* sc);
 void DrawImage(cairo_t **c, cairo_surface_t * png, int x, int y, MouseE mouse);
 void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
 int LoadImage(const char* img, const char* skinType, cairo_surface_t** png, boolean fallback);
+void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font);
 
 #define fcitx_cairo_set_color(c, color) cairo_set_source_rgb((c), (color)->r, (color)->g, (color)->b)
 

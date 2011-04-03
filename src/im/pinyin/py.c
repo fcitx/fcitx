@@ -124,6 +124,20 @@ extern int iLegendCandPageCount;
 extern int iCurrentLegendCandPage;
 
 static void LoadPYPhraseDict(FILE *fp, boolean isSystem);
+static FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile);
+
+FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
+{
+    size_t len;
+    char ** path;
+    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/data/pinyin" );
+
+    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
+
+    FreeXDGPath(path);
+
+    return fp;
+}
 
 boolean PYInit(void)
 {
@@ -189,7 +203,7 @@ StringHashSet *GetPYPhraseFiles()
 
 	StringHashSet* sset = NULL;
 
-    pinyinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/pinyin" , DATADIR, "fcitx/data/pinyin" );
+    pinyinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/data/pinyin" );
 
     for(i = 0; i< len; i++)
     {

@@ -37,6 +37,7 @@
 #include "TrayWindow.h"
 
 typedef struct FcitxClassicUI {
+    GenericConfig gconfig;
     Display* dpy;
     int iScreen;
     Atom protocolAtom;
@@ -122,4 +123,6 @@ Bool MouseClick(int *x, int *y, Display* dpy, Window window);
 Bool SetMouseStatus();
 boolean IsInRspArea(int x0, int y0, cairo_surface_t* surface);
 boolean IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
+
+CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif

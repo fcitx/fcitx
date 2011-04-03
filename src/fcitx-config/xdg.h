@@ -48,8 +48,6 @@ char **GetXDGPath(
 
 FILE *GetXDGFileData(const char *fileName, const char *mode, char**retFile);
 FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile);
-FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
-FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile);
 void FreeXDGPath(char **path);
 
 #ifdef __cplusplus

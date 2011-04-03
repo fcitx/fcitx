@@ -5,4 +5,4 @@ bar.png cangjie.png  cn.png en.png  fan.png  full.png inactive.png  jian.png log
 dianbaoma.png novk.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png keyboard.png
 )
 
-install(FILES ${FCITX_DARK_SKIN_FILES} DESTINATION share/fcitx/skin/dark)
+install(FILES ${FCITX_DARK_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/dark)

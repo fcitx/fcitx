@@ -60,71 +60,45 @@ Type=Color
 Description=Inactive Menu Item Character Color
 
 [SkinMainBar/BackImg]
-Type=Image
+Type=String
 Description=Background Image
 
 [SkinMainBar/Logo]
-Type=Image
+Type=String
 Description=Logo Icon
 
-[SkinMainBar/ZhPunc]
-Type=Image
-Description=Chinese Punc Icon
-
-[SkinMainBar/EnPunc]
-Type=Image
-Description=English Punc Icon
-
-[SkinMainBar/Chs]
-Type=Image
-Description=Simplified Chinese Icon
-
-[SkinMainBar/Cht]
-Type=Image
-Description=Traditional Chinese Icon
-
-[SkinMainBar/HalfCorner]
-Type=Image
-Description=Half Width Character Icon
-
-[SkinMainBar/FullCorner]
-Type=Image
-Description=Full Width Character Icon
-
-[SkinMainBar/Unlock]
-Type=Image
-Description=UnLock Icon
-
-[SkinMainBar/Lock]
-Type=Image
-Description=Lock Icon
-
-[SkinMainBar/Legend]
-Type=Image
-Description=Legend mode Icon
-
-[SkinMainBar/NoLegend]
-Type=Image
-Description=Legend disabled Icon
-
-[SkinMainBar/VK]
-Type=Image
-Description=Virtual Keyboard enabled Icon
-
-[SkinMainBar/NoVK]
-Type=Image
-Description=Virtual Keyboard disabled Icon
-
 [SkinMainBar/Eng]
-Type=Image
+Type=String
 Description=English Mode Icon
 
 [SkinMainBar/Chn]
-Type=Image
+Type=String
 Description=Chinese Mode Icon
 
+[SkinMainBar/Placement]
+Type=String
+Description=Special Icon position
+DefaultValue=
+
+[SkinMainBar/Resize]
+Type=Enum
+EnumCount=3
+Enum0=Copy
+Enum1=Resize
+Enum2=Fix
+Description=Background Resize Rule
+DefaultValue=Resize
+
+[SkinMainBar/ResizePos]
+Type=Integer
+Description=The Resize Position to Left
+
+[SkinMainBar/ResizeWidth]
+Type=Integer
+Description=Width of Resize Part 
+
 [SkinInputBar/BackImg]
-Type=Image
+Type=String
 Description=Background Image
 
 [SkinInputBar/Resize]
@@ -164,23 +138,23 @@ Type=Color
 Description=Color of Cursor
 
 [SkinInputBar/BackArrow]
-Type=Image
+Type=String
 Description=Prev Page Icon
 
 [SkinInputBar/ForwardArrow]
-Type=Image
+Type=String
 Description=Next Page Icon
 
 [SkinTrayIcon/Active]
-Type=Image
+Type=String
 Description=Active Tray Icon
 
 [SkinTrayIcon/Inactive]
-Type=Image
+Type=String
 Description=Inctive Tray Icon
 
 [SkinMenu/BackImg]
-Type=Image
+Type=String
 Description=Background Image
 
 [SkinMenu/ResizeHorizontal]
@@ -224,7 +198,7 @@ Type=Color
 Description=Space Line Color
 
 [SkinKeyboard/BackImg]
-Type=Image
+Type=String
 Description=Virtual Keyboard Image
 DefaultValue=keyboard.png
 

@@ -39,7 +39,7 @@
 
 static boolean InputWindowEventHandler(void *instance, XEvent* event);
 
-InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc)
+InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const char* font)
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
@@ -58,8 +58,9 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc)
     inputWindow->iOffsetY = 8;
     inputWindow->dpy = dpy;
     inputWindow->iScreen = iScreen;
+    inputWindow->skin = sc;
 
-    LoadInputBarImage();
+    LoadInputBarImage(inputWindow, sc);
     inputWindow->iInputWindowHeight= cairo_image_surface_get_height(inputWindow->input);
     vs=FindARGBVisual (dpy, iScreen);
     InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
@@ -93,7 +94,7 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc)
             INPUT_BAR_MAX_LEN,
             inputWindow->iInputWindowHeight);
 
-    // TODO: LoadInputMessage();
+    LoadInputMessage(sc, inputWindow, font);
     XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
     /* Set the name of the window */
@@ -260,4 +261,9 @@ void DestroyInputWindow(InputWindow* inputWindow)
     InvokeFunction(FCITX_X11, REMOVEXEVENTHANDLER, arg);
     
     free(inputWindow);
+}
+
+void ShowInputWindowInternal(InputWindow* inputWindow)
+{
+    XMapRaised(inputWindow->dpy, inputWindow->window);
 }

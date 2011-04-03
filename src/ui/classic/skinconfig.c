@@ -47,6 +47,11 @@ CONFIG_BINDING_REGISTER("SkinMainBar","BackImg",skinMainBar.backImg);
 CONFIG_BINDING_REGISTER("SkinMainBar","Logo",skinMainBar.logo);
 CONFIG_BINDING_REGISTER("SkinMainBar","Eng",skinMainBar.eng);
 CONFIG_BINDING_REGISTER("SkinMainBar","Chn",skinMainBar.chn);
+CONFIG_BINDING_REGISTER("SkinMainBar","Placement",skinMainBar.placement);
+CONFIG_BINDING_REGISTER("SkinMainBar","Resize", skinMainBar.resize);
+CONFIG_BINDING_REGISTER("SkinMainBar","ResizePos", skinMainBar.resizePos);
+CONFIG_BINDING_REGISTER("SkinMainBar","ResizeWidth", skinMainBar.resizeWidth);
+
 CONFIG_BINDING_REGISTER("SkinInputBar","BackImg",skinInputBar.backImg);
 CONFIG_BINDING_REGISTER("SkinInputBar","Resize", skinInputBar.resize);
 CONFIG_BINDING_REGISTER("SkinInputBar","ResizePos", skinInputBar.resizePos);

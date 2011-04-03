@@ -26,6 +26,13 @@
 #include "module.h"
 #include "ime-internal.h"
 #include "backend.h"
+#include <unistd.h>
+
+static void WaitForEnd()
+{
+    while (true)
+        sleep(10);
+}
 
 int main(int argc, char* argv[])
 {
@@ -44,5 +51,6 @@ int main(int argc, char* argv[])
     LoadAllIM();
     LoadUserInterface();
     StartBackend();
+    WaitForEnd();
 	return 0;
 }

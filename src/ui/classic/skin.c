@@ -98,7 +98,7 @@ reload:
             snprintf(buf, PATH_MAX, "%s/fcitx_skin.conf", *skinType);
             buf[PATH_MAX-1] ='\0';
             size_t len;
-            char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/skin" , DATADIR, "fcitx/skin" );
+            char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin" );
 
             fp = GetXDGFile(buf, path, "r", len, NULL);
             FreeXDGPath(path);
@@ -128,7 +128,7 @@ reload:
         else
         {
             FcitxSkinConfigBind(sc, cfile, skinDesc);
-            ConfigBindSync((GenericConfig*)&sc);
+            ConfigBindSync((GenericConfig*)sc);
         }
     }
 
@@ -163,20 +163,20 @@ int LoadImage(const char* name, const char* skinType, cairo_surface_t ** png, bo
     {
         char *skintype = strdup(skinType);
         size_t len;
-        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/skin" , DATADIR, "fcitx/skin" );
-        char *name;
+        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin" );
+        char *filename;
         while (True) {
             snprintf(buf, PATH_MAX, "%s/%s", skintype, name);
             buf[PATH_MAX-1] ='\0';
 
-            FILE* fp = GetXDGFile(buf, path, "r", len, &name);
+            FILE* fp = GetXDGFile(buf, path, "r", len, &filename);
 
             Bool flagNoFile = (fp == NULL);
             if (fp)
             {
                 fclose(fp);
 
-                *png=cairo_image_surface_create_from_png(name);
+                *png=cairo_image_surface_create_from_png(filename);
                 break;
             }
             if (flagNoFile && (!fallback || strcmp(skintype, "default") == 0))
@@ -185,11 +185,11 @@ int LoadImage(const char* name, const char* skinType, cairo_surface_t ** png, bo
                 break;
             }
 
-            free(name);
+            free(filename);
             free(skintype);
             skintype = strdup("default");
         }
-        free(name);
+        free(filename);
         free(skintype);
         FreeXDGPath(path);
     }
@@ -199,10 +199,10 @@ int LoadImage(const char* name, const char* skinType, cairo_surface_t ** png, bo
 
 void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc)
 {
-    LoadImage( sc->skinMainBar.backImg, sc->skinType, &mainWindow->bar , False);
-    LoadImage( sc->skinMainBar.logo, sc->skinType, &mainWindow->logo, False);
-    LoadImage( sc->skinMainBar.eng, sc->skinType, &mainWindow->english, False);
-    LoadImage( sc->skinMainBar.chn, sc->skinType, &mainWindow->otherim, False);
+    LoadImage( sc->skinMainBar.backImg, *sc->skinType, &mainWindow->bar , False);
+    LoadImage( sc->skinMainBar.logo, *sc->skinType, &mainWindow->logo, False);
+    LoadImage( sc->skinMainBar.eng, *sc->skinType, &mainWindow->english, False);
+    LoadImage( sc->skinMainBar.chn, *sc->skinType, &mainWindow->otherim, False);
 /*  TODO:
  *  int i = 0;
     for (; i < iIMCount; i ++)
@@ -219,7 +219,7 @@ void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc)
 
 void LoadVKImage(FcitxSkin* sc)
 {
-    LoadImage( sc->skinKeyboard.backImg, sc->skinType, &sc->keyBoard, True);
+    LoadImage( sc->skinKeyboard.backImg, *sc->skinType, &sc->keyBoard, True);
 }
 
 void DrawMenuBackground(FcitxSkin* sc, XlibMenu * menu)
@@ -488,20 +488,20 @@ void DrawMenuBackground(FcitxSkin* sc, XlibMenu * menu)
 
 void LoadInputBarImage(InputWindow* inputWindow, FcitxSkin* sc)
 {
-    LoadImage( sc->skinInputBar.backImg, sc->skinType, &inputWindow->input, False);
-    LoadImage( sc->skinInputBar.backArrow, sc->skinType, &inputWindow->prev, False);
-    LoadImage( sc->skinInputBar.forwardArrow, sc->skinType, &inputWindow->next, False);
+    LoadImage( sc->skinInputBar.backImg, *sc->skinType, &inputWindow->input, False);
+    LoadImage( sc->skinInputBar.backArrow, *sc->skinType, &inputWindow->prev, False);
+    LoadImage( sc->skinInputBar.forwardArrow, *sc->skinType, &inputWindow->next, False);
 }
 
 void LoadTrayImage(FcitxSkin* sc)
 {
-    LoadImage( sc->skinTrayIcon.active, sc->skinType, &sc->trayActive, False);
-    LoadImage( sc->skinTrayIcon.inactive, sc->skinType, &sc->trayInactive, False);
+    LoadImage( sc->skinTrayIcon.active, *sc->skinType, &sc->trayActive, False);
+    LoadImage( sc->skinTrayIcon.inactive, *sc->skinType, &sc->trayInactive, False);
 }
 
 void LoadMenuImage(FcitxSkin* sc)
 {
-    LoadImage( sc->skinMenu.backImg, sc->skinType, &sc->menuBack, False);
+    LoadImage( sc->skinMenu.backImg, *sc->skinType, &sc->menuBack, False);
 }
 
 void DestroyImage(cairo_surface_t ** png)
@@ -804,7 +804,7 @@ void DisplaySkin(char * skinname)
     InitComposite();
 
     classicui.mainWindow = CreateMainWindow (classicui.dpy, classicui.iScreen, &classicui.skin, classicui.hideMainWindow);
-    classicui.inputWindow = CreateInputWindow (classicui.dpy, classicui.iScreen, &classicui.skin);
+    classicui.inputWindow = CreateInputWindow (classicui.dpy, classicui.iScreen, &classicui.skin, classicui.font);
 
     CreateMenuWindow();
 
@@ -836,7 +836,7 @@ int LoadSkinDirectory()
     struct stat fileStat;
     size_t len;
     char pathBuf[PATH_MAX];
-    char **skinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/skin" , DATADIR, "fcitx/skin" );
+    char **skinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin" );
     for (i = 0; i< len; i++)
     {
         dir = opendir(skinPath[i]);

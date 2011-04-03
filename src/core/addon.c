@@ -72,7 +72,7 @@ void LoadAddonInfo(void)
 
     StringHashSet* sset = NULL;
 
-    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/addon" , DATADIR, "fcitx/data/addon" );
+    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/data/addon" );
 
     for(i = 0; i< len; i++)
     {

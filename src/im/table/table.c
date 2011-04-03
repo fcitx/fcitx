@@ -57,6 +57,23 @@ TableState tbl;
 ConfigFileDesc* tableConfigDesc = NULL;
 
 static char GetTableIMIndex(char index);
+static FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
+
+FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser)
+{
+    size_t len;
+    char ** path;
+    if (forceUser)
+        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , NULL, NULL );
+    else
+        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
+
+    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
+
+    FreeXDGPath(path);
+
+    return fp;
+}
 
 int TablePriorityCmp(const void *a, const void *b)
 {
@@ -97,7 +114,7 @@ void LoadTableInfo (void)
     tbl.iTableCount = 0;
     utarray_init(tbl.table, &table_icd);
 
-    tablePath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/table" , DATADIR, "fcitx/data/table" );
+    tablePath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
 
     for (i = 0; i< len; i++)
     {
@@ -241,7 +258,7 @@ boolean LoadTableDict (void)
     {
         size_t len;
         char *pstr = NULL;
-        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/table" , DATADIR, "fcitx/data/table" );
+        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
         fpDict = GetXDGFile(table->strPath, path, "r", len, &pstr);
         FcitxLog(INFO, _("Load Table Dict from %s"), pstr);
         free(pstr);

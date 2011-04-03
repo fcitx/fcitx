@@ -19,7 +19,7 @@ FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
 
 FIND_PACKAGE(X11 REQUIRED)
 
-PKG_CHECK_MODULES(CAIRO REQUIRED "cairo >= 1.0" )
+PKG_CHECK_MODULES(CAIRO_XLIB REQUIRED "cairo-xlib >= 1.0" )
 PKG_CHECK_MODULES(PANGO "pango >= 1.0" )
 if (${PANGO_FOUND})
     set(_ENABLE_PANGO)
@@ -31,11 +31,13 @@ endif()
 
 set(HAVE_CONFIG_H 1)
 
-set(package     fcitx)
+set(package     fcitx4)
 set(prefix      ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${CMAKE_INSTALL_PREFIX})
 set(bindir ${prefix}/bin)
 set(libdir ${LIB_INSTALL_DIR})
+set(addondir ${libdir}/${package} )
+set(pkgdatadir ${CMAKE_INSTALL_PREFIX}/share/${package})
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
 set(CMAKE_C_FLAGS "-Wall")

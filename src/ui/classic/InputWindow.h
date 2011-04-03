@@ -66,10 +66,11 @@ typedef struct InputWindow {
     struct FcitxSkin* skin;
 } InputWindow;
 
-InputWindow* CreateInputWindow(Display* dpy, int iScreen, struct FcitxSkin* sc);
+InputWindow* CreateInputWindow(Display* dpy, int iScreen, struct FcitxSkin* sc, const char* font);
 void MoveInputWindowInternal(InputWindow* inputWindow);
 void CloseInputWindowInternal(InputWindow* inputWindow);
 void DestroyInputWindow(InputWindow* inputWindow);
 void DrawInputWindow(InputWindow* inputWindow);
+void ShowInputWindowInternal(InputWindow* inputWindow);
 
 #endif

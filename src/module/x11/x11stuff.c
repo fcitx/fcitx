@@ -22,6 +22,7 @@
 #include "core/module.h"
 #include "x11stuff.h"
 #include "utils/utils.h"
+#include <unistd.h>
 
 static boolean X11Init();
 static void* X11Run();
@@ -46,19 +47,18 @@ FcitxModule module = {
 
 boolean X11Init()
 {
+    XInitThreads();
     x11priv.dpy = XOpenDisplay(NULL);
     if (x11priv.dpy == NULL)
         return false;
-    
-    XInitThreads();
-    
+
     utarray_init(&x11priv.handlers, &handler_icd);
-    
+
     /* ensure the order ! */
     AddFunction(X11GetDisplay);
     AddFunction(X11AddEventHandler);
     AddFunction(X11RemoveEventHandler);
-    
+
     return true;
 }
 
@@ -67,21 +67,24 @@ void* X11Run()
     XEvent event;
     /* 主循环，即XWindow的消息循环 */
     for (;;) {
-        XNextEvent (x11priv.dpy, &event);           //等待一个事件发生
+        while (XPending (x11priv.dpy) ) {
+            XNextEvent (x11priv.dpy, &event);           //等待一个事件发生
 
-        FcitxLock();
+            FcitxLock();
 
-        /* 处理X事件 */
-        if (XFilterEvent (&event, None) == False)
-        {
-            FcitxXEventHandler* handler;
-            for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv.handlers);
-                  handler != NULL;
-                  handler = (FcitxXEventHandler *) utarray_next(&x11priv.handlers, handler))
-                if (handler->eventHandler (handler->instance, &event))
-                    break;
+            /* 处理X事件 */
+            if (XFilterEvent (&event, None) == False)
+            {
+                FcitxXEventHandler* handler;
+                for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv.handlers);
+                        handler != NULL;
+                        handler = (FcitxXEventHandler *) utarray_next(&x11priv.handlers, handler))
+                    if (handler->eventHandler (handler->instance, &event))
+                        break;
+            }
+            FcitxUnlock();
         }
-        FcitxUnlock();
+        usleep(16000);
     }
     return NULL;
 
@@ -106,8 +109,8 @@ void* X11RemoveEventHandler(FcitxModuleFunctionArg arg)
     FcitxXEventHandler* handler;
     int i = 0;
     for ( i = 0 ;
-          i < utarray_len(&x11priv.handlers);
-          i ++)
+            i < utarray_len(&x11priv.handlers);
+            i ++)
     {
         handler = (FcitxXEventHandler*) utarray_eltptr(&x11priv.handlers, i);
         if (handler->instance == arg.args[0])

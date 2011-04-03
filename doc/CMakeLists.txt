@@ -5,4 +5,4 @@ set(FCITX_DOC_FILES
 	Develop_Readme API.txt
 )
 
-install(FILES ${FCITX_DOC_FILES} DESTINATION share/doc/fcitx )
+install(FILES ${FCITX_DOC_FILES} DESTINATION share/doc/${package} )

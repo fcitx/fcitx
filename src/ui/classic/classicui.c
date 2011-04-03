@@ -22,6 +22,8 @@
 #include <X11/extensions/Xrender.h>
 #include <cairo.h>
 #include <limits.h>
+#include <libintl.h>
+#include <errno.h>
 
 #include "core/fcitx.h"
 #include "core/ui.h"
@@ -29,6 +31,10 @@
 #include "module/x11/x11stuff.h"
 
 #include "classicui.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-config/cutils.h"
+
+
 
 struct FcitxSkin;
 
@@ -49,6 +55,10 @@ static void ClassicUIMoveInputWindow();
 static void ClassicUIUpdateStatus();
 static void ClassicUIRegisterStatus(FcitxUIStatus* status);
 static void ClassicUIOnInputFocus();
+static ConfigFileDesc* GetClassicUIDesc();
+
+static void LoadClassicUIConfig();
+static void SaveClassicUIConfig();
 
 FCITX_EXPORT_API
 FcitxUI ui = {
@@ -65,6 +75,9 @@ boolean ClassicUIInit()
 {
     FcitxModuleFunctionArg arg;
     classicui.dpy = InvokeFunction(FCITX_X11, GETDISPLAY, arg);
+    
+    XLockDisplay(classicui.dpy);
+    
     classicui.iScreen = DefaultScreen(classicui.dpy);
     
     classicui.protocolAtom = XInternAtom (classicui.dpy, "WM_PROTOCOLS", False);
@@ -74,7 +87,13 @@ boolean ClassicUIInit()
     classicui.typeDialogAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
     
     InitComposite();
-    classicui.inputWindow = CreateInputWindow(classicui.dpy, classicui.iScreen, &classicui.skin);
+    LoadClassicUIConfig();
+    LoadSkinConfig(&classicui.skin, &classicui.skinType);
+    classicui.skin.skinType = &classicui.skinType;
+
+    classicui.inputWindow = CreateInputWindow(classicui.dpy, classicui.iScreen, &classicui.skin, classicui.font);
+    
+    XUnlockDisplay(classicui.dpy);
     return true;
 }
 
@@ -84,7 +103,7 @@ static void ClassicUICloseInputWindow()
 
 static void ClassicUIShowInputWindow()
 {
-    
+    ShowInputWindowInternal(classicui.inputWindow);
 }
 
 static void ClassicUIMoveInputWindow()
@@ -105,8 +124,8 @@ static void ClassicUIRegisterStatus(FcitxUIStatus* status)
     sprintf(activename, "%s_active.png", status->name);
     sprintf(inactivename, "%s_inactive.png", status->name);
     
-    LoadImage(activename , sc->skinType, &privstat->active, False);
-    LoadImage(inactivename, sc->skinType, &privstat->inactive, False);
+    LoadImage(activename , *sc->skinType, &privstat->active, False);
+    LoadImage(inactivename, *sc->skinType, &privstat->inactive, False);
 }
 
 static void ClassicUIOnInputFocus()
@@ -358,6 +377,58 @@ void InitComposite()
         attrs.event_mask = StructureNotifyMask;
         XChangeWindowAttributes (classicui.dpy, classicui.compManager, CWEventMask, &attrs);
     }
+}
+
+
+ConfigFileDesc* GetClassicUIDesc()
+{    
+    static ConfigFileDesc * classicUIDesc = NULL;
+    if (!classicUIDesc)
+    {
+        FILE *tmpfp;
+        tmpfp = GetXDGFileData("fcitx-classic-ui.desc", "r", NULL);
+        classicUIDesc = ParseConfigFileDescFp(tmpfp);
+        fclose(tmpfp);
+    }
+
+    return classicUIDesc;
+}
+
+void LoadClassicUIConfig()
+{
+    FILE *fp;
+    char *file;
+    fp = GetXDGFileUser( "fcitx-classic-ui.config", "rt", &file);
+    FcitxLog(INFO, _("Load Config File %s"), file);
+    free(file);
+    if (!fp) {
+        if (errno == ENOENT)
+        {
+            SaveClassicUIConfig();
+            LoadClassicUIConfig();
+        }
+        return;
+    }
+    
+    ConfigFileDesc* configDesc = GetClassicUIDesc();
+    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    
+    FcitxClassicUIConfigBind(&classicui, cfile, configDesc);
+    ConfigBindSync((GenericConfig*)&classicui);
+
+    fclose(fp);
+
+}
+
+void SaveClassicUIConfig()
+{
+    ConfigFileDesc* configDesc = GetClassicUIDesc();
+    char *file;
+    FILE *fp = GetXDGFileUser("fcitx-classic-ui.config", "wt", &file);
+    FcitxLog(INFO, "Save Config to %s", file);
+    SaveConfigFileFp(fp, classicui.gconfig.configFile, configDesc);
+    free(file);
+    fclose(fp);
 }
 
 #ifdef _ENABLE_PANGO

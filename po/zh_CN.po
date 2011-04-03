@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-20 22:08+0800\n"
+"POT-Creation-Date: 2011-04-02 22:55+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -31,19 +31,6 @@ msgstr "分号键操作"
 #: /home/saber/Develop/fcitx/data/config.desc:18
 msgid "Action after press enter"
 msgstr "回车键操作"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:220
-msgid "Active Menu Color"
-msgstr "活动菜单项颜色"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:56
-msgid "Active Menu Item Character Color"
-msgstr "活动菜单项颜色"
-
-# unknown
-#: /home/saber/Develop/fcitx/data/skin.desc:176
-msgid "Active Tray Icon"
-msgstr "活动输入法图标"
 
 # unknown
 msgid "Addon"
@@ -77,37 +64,19 @@ msgstr "额外输入法: 不正确的输入法"
 msgid "Backend: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:64
-#: /home/saber/Develop/fcitx/data/skin.desc:128
-#: /home/saber/Develop/fcitx/data/skin.desc:184
-msgid "Background Image"
-msgstr "背景图片"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:136
-msgid "Background Resize Rule"
-msgstr "变形规则"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:191
-msgid "Background Resize Rule on Horizontal Direction"
-msgstr "横向变形规则"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:199
-msgid "Background Resize Rule on Vertical Direction"
-msgstr "纵向变形规则"
-
 #: /home/saber/Develop/fcitx/data/table/qxm.conf:2
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:379
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:393
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:140
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:139
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:145
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:144
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -120,10 +89,6 @@ msgstr "无法创建输入法窗口"
 msgid "Can't open Chinese punc file."
 msgstr "无法打开中文标点文件。"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:36
-msgid "Candidate Index Color"
-msgstr "候选词索引颜色"
-
 #: /home/saber/Develop/fcitx/data/config.desc:52
 msgid "Candidate Word Number"
 msgstr "候选词个数"
@@ -132,27 +97,27 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2521
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2535
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2591
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2605
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2459
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2473
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:583
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:600
 #, c-format
 msgid "Cannot create table file: %s"
 msgstr "无法创建码表文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:252
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:269
 #, c-format
 msgid "Cannot load table file: %s"
 msgstr "无法加载码表文件: %s"
@@ -166,29 +131,17 @@ msgstr "种类"
 msgid "Chinese Input Method"
 msgstr "中文输入法"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:124
-msgid "Chinese Mode Icon"
-msgstr "中文模式图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:72
-msgid "Chinese Punc Icon"
-msgstr "中文标点图标"
-
 # unknown
 #: unknown
 msgid "Clean"
 msgstr "清除"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:164
-msgid "Color of Cursor"
-msgstr "光标颜色"
 
 # unknown
 #: unknown
 msgid "Commit"
 msgstr "提交输入"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:741
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:705
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
@@ -196,11 +149,6 @@ msgstr "配置组名错误: 行%d"
 #: /home/saber/Develop/fcitx/data/config.desc:37
 msgid "Convert Punc to Chinese Punc"
 msgstr "转换中文标点"
-
-# unknown
-#: unknown
-msgid "Copy"
-msgstr "复制"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:32
 msgid "Current Input Method Index"
@@ -214,17 +162,13 @@ msgstr "DISPLAY InputWindow"
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:143
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:142
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:32
 msgid "Dependency"
 msgstr ""
-
-#: /home/saber/Develop/fcitx/data/skin.desc:15
-msgid "Description of Skin"
-msgstr "描述"
 
 #: /home/saber/Develop/fcitx/data/table/db.conf:2
 msgid "Dianbaoma"
@@ -243,12 +187,12 @@ msgstr ""
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:751
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:715
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr "组名重复，和之前的组合并: %s :行 %d"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:778
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:742
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
@@ -261,23 +205,15 @@ msgstr "启用"
 msgid "Eng"
 msgstr "英文"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:120
-msgid "English Mode Icon"
-msgstr "英文模式图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:76
-msgid "English Punc Icon"
-msgstr "英文标点图标"
-
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:347
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:344
 msgid "Enum Option is invalid, take it as string"
 msgstr "枚举选项不合法，将类型作为字符串处理"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:324
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:321
 msgid "Enum option duplicated."
 msgstr "枚举选项重复"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:337
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:334
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
@@ -331,30 +267,13 @@ msgstr "Fcitx配置工具"
 msgid "Fcitx GUI Config Tool"
 msgstr "Fcitx图形化配置工具"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:40
-msgid "First Candidate Color"
-msgstr "第一候选词颜色"
-
-# unknown
-#: unknown
-msgid "Fix"
-msgstr "固定长度"
-
 #: ../data/fcitx.desktop.in.h:3
 msgid "Free Chinese Input Toy of X"
 msgstr "Free Chinese Input Toy of X"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:92
-msgid "Full Width Character Icon"
-msgstr "全角图标"
-
 #: /home/saber/Develop/fcitx/data/config.desc:194
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:88
-msgid "Half Width Character Icon"
-msgstr "半角图标"
 
 #: /home/saber/Develop/fcitx/data/config.desc:82
 msgid "Hot key of Triggering Input Method"
@@ -430,26 +349,9 @@ msgstr "额外输入法: 不正确的输入法"
 msgid "IM: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:60
-msgid "Inactive Menu Item Character Color"
-msgstr "非活动菜单项颜色"
-
-# unknown
-#: /home/saber/Develop/fcitx/data/skin.desc:180
-msgid "Inctive Tray Icon"
-msgstr "非活动输入法图标"
-
 #: /home/saber/Develop/fcitx/data/config.desc:32
 msgid "Input English Character if you input upper case"
 msgstr "大写时输入英文"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:19
-msgid "Input Font Size"
-msgstr "输入字体大小"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:32
-msgid "Input Message Color"
-msgstr "输入信息颜色"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Input Window Position X"
@@ -472,14 +374,10 @@ msgstr "输入法"
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:768
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:732
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "配置项不合法： 行%d 缺少'='"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:233
-msgid "Key Color On Virutal Keyboard"
-msgstr "软键盘按键文字颜色"
 
 # unknown
 #: unknown
@@ -496,22 +394,6 @@ msgstr "左Shift"
 msgid "L_SUPER"
 msgstr "左Super"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:148
-msgid "Left-down position of Input"
-msgstr "输入文字左下角"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:152
-msgid "Left-down position of Output"
-msgstr "输出文字左下角"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:108
-msgid "Legend disabled Icon"
-msgstr "禁用联想图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:104
-msgid "Legend mode Icon"
-msgstr "联想激活图标"
-
 #: /home/saber/Develop/fcitx/data/addon.desc:21
 #, fuzzy
 msgid "Library"
@@ -522,7 +404,7 @@ msgstr "共享库"
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:445
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:462
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
@@ -531,61 +413,33 @@ msgstr "加载自动组词信息完成"
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:158
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:175
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:374
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:391
 msgid "Load Table Dict OK"
 msgstr "加载码表文件成功"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:246
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:263
 #, c-format
 msgid "Load Table Dict from %s"
 msgstr "加载码表%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:404
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:421
 msgid "Loading Autophrase."
 msgstr "加载自动组词信息中"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:236
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:253
 msgid "Loading Table Dict"
 msgstr "加载码表词典"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:100
-msgid "Lock Icon"
-msgstr "锁定图标"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:37
 msgid "Locked"
 msgstr "锁定"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:68
-msgid "Logo Icon"
-msgstr "Logo图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:208
-msgid "Margin to bottom"
-msgstr "下边距"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:212
-msgid "Margin to left"
-msgstr "左边距"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:216
-msgid "Margin to right"
-msgstr "右边距"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:204
-msgid "Margin to top"
-msgstr "上边距"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:23
-msgid "Menu Font Size"
-msgstr "菜单字体大小"
-
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:360
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:357
 msgid "Missing type, take it as string"
 msgstr "类型缺失，作为字符串处理"
 
@@ -607,10 +461,6 @@ msgstr "额外输入法: 打开%s失败 %s"
 msgid "Name"
 msgstr "名称"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:172
-msgid "Next Page Icon"
-msgstr "下一页图标"
-
 # unknown
 #: /home/saber/Develop/fcitx/po/.././src/core/ime.c:150
 #, fuzzy
@@ -627,19 +477,15 @@ msgstr "原始操作"
 msgid "Nothing"
 msgstr "无操作"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:895
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:856
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "配置项%s不合法，使用默认值%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:904
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:865
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:52
-msgid "Other Color"
-msgstr "其他颜色"
 
 # unknown
 msgid "Output"
@@ -652,10 +498,6 @@ msgstr "拼音输入法优先级，0为禁用"
 #: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:131
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:168
-msgid "Prev Page Icon"
-msgstr "上一页图标"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:37
 #, fuzzy
@@ -697,13 +539,9 @@ msgstr "右Shift"
 msgid "R_SUPER"
 msgstr "右Super"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:642
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:659
 msgid "Rename OK"
 msgstr "重命名成功"
-
-#: unknown
-msgid "Resize"
-msgstr "变形规则"
 
 #: /home/saber/Develop/fcitx/data/config.desc:4
 msgid "Seconds sleep before fcitx really start"
@@ -745,62 +583,6 @@ msgstr "显示版本"
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr "双拼输入法优先级，0为禁用"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:80
-msgid "Simplified Chinese Icon"
-msgstr "简体中文图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:11
-msgid "Skin Author"
-msgstr "皮肤作者"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:3
-msgid "Skin Name"
-msgstr "皮肤名称"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:7
-msgid "Skin Version"
-msgstr "皮肤版本"
-
-# unknown
-msgid "SkinFont"
-msgstr "皮肤字体"
-
-# unknown
-msgid "SkinInfo"
-msgstr "皮肤信息"
-
-# unknown
-msgid "SkinInputBar"
-msgstr "皮肤输入框设置"
-
-# unknown
-msgid "SkinKeyboard"
-msgstr "键盘"
-
-# unknown
-msgid "SkinMainBar"
-msgstr "皮肤主窗口设置"
-
-# unknown
-msgid "SkinMenu"
-msgstr "皮肤菜单设置"
-
-# unknown
-msgid "SkinTrayIcon"
-msgstr "皮肤托盘图标设置"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:224
-msgid "Space Line Color"
-msgstr "分隔线颜色"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:156
-msgid "Space to the left"
-msgstr "左侧空白宽度"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:160
-msgid "Space to the right"
-msgstr "右侧空白宽度"
-
 #: /home/saber/Develop/fcitx/po/.././src/backend/xim/xim.c:189
 #, c-format
 msgid "Start FCITX error. Another XIM daemon named %s is running?"
@@ -818,11 +600,7 @@ msgstr "切换皮肤"
 msgid "Switch VK"
 msgstr "选择软键盘"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:48
-msgid "Table Code Color"
-msgstr "码表提示颜色"
-
-#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:168
+#: /home/saber/Develop/fcitx/po/.././src/im/table/table.c:185
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
@@ -830,18 +608,6 @@ msgstr "Table Config %s is %s"
 #: /home/saber/Develop/fcitx/data/config.desc:189
 msgid "Table Priority Order, Zero to Disable"
 msgstr "码表输入法优先级，0为禁用"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:140
-msgid "The Resize Position to Left"
-msgstr "变形区域距左侧距离"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:28
-msgid "Tip Message Color"
-msgstr "提示信息颜色"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:84
-msgid "Traditional Chinese Icon"
-msgstr "繁体中文图标"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:27
 msgid "Type"
@@ -856,11 +622,7 @@ msgstr ""
 msgid "UI: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:96
-msgid "UnLock Icon"
-msgstr "未锁定图标"
-
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:354
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:351
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
@@ -885,29 +647,9 @@ msgstr "使用繁体中文输入"
 msgid "Use recording mode"
 msgstr "使用记录模式"
 
-#: /home/saber/Develop/fcitx/data/skin.desc:44
-msgid "User Phrase Color"
-msgstr "用户词组颜色"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:228
-msgid "Virtual Keyboard Image"
-msgstr "软键盘图片"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:116
-msgid "Virtual Keyboard disabled Icon"
-msgstr "禁用软键盘图标"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:112
-msgid "Virtual Keyboard enabled Icon"
-msgstr "启用软键盘图标"
-
 #: /home/saber/Develop/fcitx/data/table/wanfeng.conf:2
 msgid "Wanfeng"
 msgstr "晚风"
-
-#: /home/saber/Develop/fcitx/data/skin.desc:144
-msgid "Width of Resize Part "
-msgstr "变形区域宽度"
 
 #: /home/saber/Develop/fcitx/data/table/wbx.conf:2
 msgid "Wubi"
@@ -930,7 +672,7 @@ msgstr "XMODIFIERS Error."
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:944
+#: /home/saber/Develop/fcitx/po/.././src/fcitx-config/fcitx-config.c:905
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
@@ -948,17 +690,17 @@ msgstr "pthread mutex init failed"
 msgid "your current font is: %s"
 msgstr "当前字体为：%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:771
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:785
 #, c-format
 msgid "按 1 删除 %s 的常用字(ESC取消)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:773
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:787
 #, c-format
 msgid "按 1-%d 删除 %s 的常用字(ESC取消)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2896
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2910
 msgid "联想："
 msgstr ""
 
@@ -970,6 +712,16 @@ msgstr ""
 
 #~ msgid "Active"
 #~ msgstr "激活"
+
+#~ msgid "Active Menu Color"
+#~ msgstr "活动菜单项颜色"
+
+#~ msgid "Active Menu Item Character Color"
+#~ msgstr "活动菜单项颜色"
+
+# unknown
+#~ msgid "Active Tray Icon"
+#~ msgstr "活动输入法图标"
 
 #~ msgid "ActiveColor"
 #~ msgstr "活动项背景颜色"
@@ -1047,6 +799,18 @@ msgstr ""
 #~ msgid "BackImg"
 #~ msgstr "背景图片"
 
+#~ msgid "Background Image"
+#~ msgstr "背景图片"
+
+#~ msgid "Background Resize Rule"
+#~ msgstr "变形规则"
+
+#~ msgid "Background Resize Rule on Horizontal Direction"
+#~ msgstr "横向变形规则"
+
+#~ msgid "Background Resize Rule on Vertical Direction"
+#~ msgstr "纵向变形规则"
+
 #~ msgid "BaseOrder"
 #~ msgstr "单字重码顺序调整"
 
@@ -1056,11 +820,20 @@ msgstr ""
 #~ msgid "Can't open socket %s: %s"
 #~ msgstr "无法打开Socket %s: %s"
 
+#~ msgid "Candidate Index Color"
+#~ msgstr "候选词索引颜色"
+
 #~ msgid "CandidateWordNumber"
 #~ msgstr "候选词个数"
 
 #~ msgid "CenterInputWindow"
 #~ msgstr "输入窗口居中"
+
+#~ msgid "Chinese Mode Icon"
+#~ msgstr "中文模式图标"
+
+#~ msgid "Chinese Punc Icon"
+#~ msgstr "中文标点图标"
 
 #~ msgid "Chn"
 #~ msgstr "中文"
@@ -1096,6 +869,9 @@ msgstr ""
 #~ msgid "CodeTable"
 #~ msgstr "码表"
 
+#~ msgid "Color of Cursor"
+#~ msgstr "光标颜色"
+
 #~ msgid "CompactMainWindow"
 #~ msgstr "压缩主窗口"
 
@@ -1104,6 +880,10 @@ msgstr ""
 
 #~ msgid "ConvertPunc"
 #~ msgstr "转换中文标点"
+
+# unknown
+#~ msgid "Copy"
+#~ msgstr "复制"
 
 #~ msgid "Corner"
 #~ msgstr "全角"
@@ -1127,6 +907,9 @@ msgstr ""
 #~ msgstr "快捷键: 删除用户词组"
 
 #~ msgid "Desc"
+#~ msgstr "描述"
+
+#~ msgid "Description of Skin"
 #~ msgstr "描述"
 
 #~ msgid "DoubleSwitchKey"
@@ -1153,6 +936,12 @@ msgstr ""
 #~ msgid "EndKey"
 #~ msgstr "中止键"
 
+#~ msgid "English Mode Icon"
+#~ msgstr "英文模式图标"
+
+#~ msgid "English Punc Icon"
+#~ msgstr "英文标点图标"
+
 #~ msgid "EnterAction"
 #~ msgstr "回车键行为"
 
@@ -1177,8 +966,15 @@ msgstr ""
 #~ msgid "File"
 #~ msgstr "文件"
 
+#~ msgid "First Candidate Color"
+#~ msgstr "第一候选词颜色"
+
 #~ msgid "FirstCandColor"
 #~ msgstr "第一候选词颜色"
+
+# unknown
+#~ msgid "Fix"
+#~ msgstr "固定长度"
 
 #~ msgid "Fix misstype gn/ng"
 #~ msgstr "修复拼音中ng和gn的输入错误"
@@ -1206,6 +1002,9 @@ msgstr ""
 
 #~ msgid "FreqOrder"
 #~ msgstr "常用词重码顺序调整"
+
+#~ msgid "Full Width Character Icon"
+#~ msgstr "全角图标"
 
 #~ msgid "FullCorner"
 #~ msgstr "全角图标"
@@ -1282,6 +1081,9 @@ msgstr ""
 #~ msgid "Got Signal with value %d"
 #~ msgstr "Got Signal with value %d"
 
+#~ msgid "Half Width Character Icon"
+#~ msgstr "半角图标"
+
 #~ msgid "HalfCorner"
 #~ msgstr "半角图标"
 
@@ -1322,11 +1124,24 @@ msgstr ""
 #~ msgid "Inactive"
 #~ msgstr "未激活"
 
+#~ msgid "Inactive Menu Item Character Color"
+#~ msgstr "非活动菜单项颜色"
+
 #~ msgid "InactiveMenuColor"
 #~ msgstr "非活动菜单项颜色"
 
+# unknown
+#~ msgid "Inctive Tray Icon"
+#~ msgstr "非活动输入法图标"
+
 #~ msgid "IndexColor"
 #~ msgstr "索引标记颜色"
+
+#~ msgid "Input Font Size"
+#~ msgstr "输入字体大小"
+
+#~ msgid "Input Message Color"
+#~ msgstr "输入信息颜色"
 
 #~ msgid "InputColor"
 #~ msgstr "输入颜色"
@@ -1346,6 +1161,9 @@ msgstr ""
 #~ msgid "InputWordFromPhraseKey"
 #~ msgstr "以词定字键"
 
+#~ msgid "Key Color On Virutal Keyboard"
+#~ msgstr "软键盘按键文字颜色"
+
 #~ msgid "Labels %d, Texts %d, CMB:%s"
 #~ msgstr "Labels %d, Texts %d, CMB:%s"
 
@@ -1355,7 +1173,19 @@ msgstr ""
 #~ msgid "LayoutRight"
 #~ msgstr "右边距"
 
+#~ msgid "Left-down position of Input"
+#~ msgstr "输入文字左下角"
+
+#~ msgid "Left-down position of Output"
+#~ msgstr "输出文字左下角"
+
 #~ msgid "Legend"
+#~ msgstr "联想激活图标"
+
+#~ msgid "Legend disabled Icon"
+#~ msgstr "禁用联想图标"
+
+#~ msgid "Legend mode Icon"
 #~ msgstr "联想激活图标"
 
 #~ msgid "LegendModeDisablePaging"
@@ -1370,7 +1200,13 @@ msgstr ""
 #~ msgid "Lock"
 #~ msgstr "锁定图标"
 
+#~ msgid "Lock Icon"
+#~ msgstr "锁定图标"
+
 #~ msgid "Logo"
+#~ msgstr "Logo图标"
+
+#~ msgid "Logo Icon"
 #~ msgstr "Logo图标"
 
 #~ msgid "LookupPinyinKey"
@@ -1400,6 +1236,18 @@ msgstr ""
 #~ msgid "MainWindowOffsetY"
 #~ msgstr "主窗口Y位置"
 
+#~ msgid "Margin to bottom"
+#~ msgstr "下边距"
+
+#~ msgid "Margin to left"
+#~ msgstr "左边距"
+
+#~ msgid "Margin to right"
+#~ msgstr "右边距"
+
+#~ msgid "Margin to top"
+#~ msgstr "上边距"
+
 #~ msgid "MarginBottom"
 #~ msgstr "下边距"
 
@@ -1424,6 +1272,9 @@ msgstr ""
 #~ msgid "Menu Font"
 #~ msgstr "菜单字体"
 
+#~ msgid "Menu Font Size"
+#~ msgstr "菜单字体大小"
+
 #~ msgid "MenuFont"
 #~ msgstr "菜单字体"
 
@@ -1445,6 +1296,9 @@ msgstr ""
 #~ msgid "Name Error (%s)"
 #~ msgstr "名称错误 (%s)"
 
+#~ msgid "Next Page Icon"
+#~ msgstr "下一页图标"
+
 #~ msgid "NextPageKey"
 #~ msgstr "快捷键: 下一页"
 
@@ -1459,6 +1313,9 @@ msgstr ""
 
 #~ msgid "Order of Code Table"
 #~ msgstr "码表顺序"
+
+#~ msgid "Other Color"
+#~ msgstr "其他颜色"
 
 #~ msgid "OtherColor"
 #~ msgstr "其他颜色"
@@ -1493,6 +1350,9 @@ msgstr ""
 #~ msgid "Please check your environment varibles."
 #~ msgstr "请检查你的环境变量的设置"
 
+#~ msgid "Prev Page Icon"
+#~ msgstr "上一页图标"
+
 #~ msgid "PrevPageKey"
 #~ msgstr "快捷键: 上一页"
 
@@ -1525,6 +1385,9 @@ msgstr ""
 
 #~ msgid "ResetRecordingKey"
 #~ msgstr "快捷键: 重置记录模式"
+
+#~ msgid "Resize"
+#~ msgstr "变形规则"
 
 #~ msgid "ResizeHorizontal"
 #~ msgstr "横向变形规则"
@@ -1616,11 +1479,60 @@ msgstr ""
 #~ msgid "ShuangpinOrder"
 #~ msgstr "双拼顺序"
 
+#~ msgid "Simplified Chinese Icon"
+#~ msgstr "简体中文图标"
+
+#~ msgid "Skin Author"
+#~ msgstr "皮肤作者"
+
+#~ msgid "Skin Name"
+#~ msgstr "皮肤名称"
+
 #~ msgid "Skin Name in use"
 #~ msgstr "皮肤名称"
 
+#~ msgid "Skin Version"
+#~ msgstr "皮肤版本"
+
+# unknown
+#~ msgid "SkinFont"
+#~ msgstr "皮肤字体"
+
+# unknown
+#~ msgid "SkinInfo"
+#~ msgstr "皮肤信息"
+
+# unknown
+#~ msgid "SkinInputBar"
+#~ msgstr "皮肤输入框设置"
+
+# unknown
+#~ msgid "SkinKeyboard"
+#~ msgstr "键盘"
+
+# unknown
+#~ msgid "SkinMainBar"
+#~ msgstr "皮肤主窗口设置"
+
+# unknown
+#~ msgid "SkinMenu"
+#~ msgstr "皮肤菜单设置"
+
+# unknown
+#~ msgid "SkinTrayIcon"
+#~ msgstr "皮肤托盘图标设置"
+
 #~ msgid "SkinType"
 #~ msgstr "皮肤名称"
+
+#~ msgid "Space Line Color"
+#~ msgstr "分隔线颜色"
+
+#~ msgid "Space to the left"
+#~ msgstr "左侧空白宽度"
+
+#~ msgid "Space to the right"
+#~ msgstr "右侧空白宽度"
 
 #~ msgid "Symbol"
 #~ msgstr "符号"
@@ -1631,17 +1543,29 @@ msgstr ""
 #~ msgid "SymbolFile"
 #~ msgstr "符号文件"
 
+#~ msgid "Table Code Color"
+#~ msgstr "码表提示颜色"
+
 #~ msgid "TableOrder"
 #~ msgstr "码表顺序"
 
+#~ msgid "The Resize Position to Left"
+#~ msgstr "变形区域距左侧距离"
+
 #~ msgid "TimeInterval"
 #~ msgstr "击键时间间隔"
+
+#~ msgid "Tip Message Color"
+#~ msgstr "提示信息颜色"
 
 #~ msgid "TipColor"
 #~ msgstr "提升颜色"
 
 #~ msgid "TrackCursor"
 #~ msgstr "光标跟随"
+
+#~ msgid "Traditional Chinese Icon"
+#~ msgstr "繁体中文图标"
 
 #~ msgid "TraditionalChnSwitchKey"
 #~ msgstr "快捷键: 切换简体繁体"
@@ -1654,6 +1578,9 @@ msgstr ""
 
 #~ msgid "Type: %d Text: %s"
 #~ msgstr "Type: %d Text: %s"
+
+#~ msgid "UnLock Icon"
+#~ msgstr "未锁定图标"
 
 #~ msgid "Unable to create process"
 #~ msgstr "无法创建进程"
@@ -1697,6 +1624,9 @@ msgstr ""
 #~ msgid "UseTray"
 #~ msgstr "启用托盘"
 
+#~ msgid "User Phrase Color"
+#~ msgstr "用户词组颜色"
+
 #~ msgid "UserPhraseColor"
 #~ msgstr "用户词组颜色"
 
@@ -1708,6 +1638,18 @@ msgstr ""
 
 #~ msgid "Version"
 #~ msgstr "版本"
+
+#~ msgid "Virtual Keyboard Image"
+#~ msgstr "软键盘图片"
+
+#~ msgid "Virtual Keyboard disabled Icon"
+#~ msgstr "禁用软键盘图标"
+
+#~ msgid "Virtual Keyboard enabled Icon"
+#~ msgstr "启用软键盘图标"
+
+#~ msgid "Width of Resize Part "
+#~ msgstr "变形区域宽度"
 
 #~ msgid "XEvent--Expose"
 #~ msgstr "XEvent--Expose"

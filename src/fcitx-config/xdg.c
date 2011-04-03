@@ -78,7 +78,7 @@ FCITX_EXPORT_API
 FILE *GetXDGFileData(const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx" , DATADIR, "fcitx/data" );
+    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE , DATADIR, PACKAGE "/data" );
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 
@@ -92,7 +92,7 @@ FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
     char ** path;
-    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/lib" , LIBDIR, "" );
+    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE );
 
     FILE* fp = GetXDGFile(filename, path, mode, len, retFile);
 
@@ -103,41 +103,10 @@ FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 }
 
 FCITX_EXPORT_API
-FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser)
-{
-    size_t len;
-    char ** path;
-    if (forceUser)
-        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/table" , NULL, NULL );
-    else
-        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/table" , DATADIR, "fcitx/data/table" );
-
-    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
-
-    FreeXDGPath(path);
-
-    return fp;
-}
-
-FCITX_EXPORT_API
-FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
-{
-    size_t len;
-    char ** path;
-    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx/pinyin" , DATADIR, "fcitx/data/pinyin" );
-
-    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
-
-    FreeXDGPath(path);
-
-    return fp;
-}
-
-FCITX_EXPORT_API
 FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", "fcitx" , NULL, NULL );
+    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE , NULL, NULL );
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 

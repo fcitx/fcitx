@@ -35,7 +35,7 @@ add_custom_target(desktopfile ALL DEPENDS ${FCITX_DSEKTOP_FILES})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop DESTINATION share/applications/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop DESTINATION share/applications/)
 
-install(FILES ${FCITX_DESC_FILES} ${FCITX_DATA_FILES} DESTINATION share/fcitx/data)
+install(FILES ${FCITX_DESC_FILES} ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
 install(FILES fcitx-config DESTINATION ${bindir})
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_CURRENT_SOURCE_DIR}/desc.po)

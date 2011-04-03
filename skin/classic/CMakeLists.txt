@@ -5,4 +5,4 @@ set(FCITX_CLASSIC_SKIN_FILES
  dianbaoma.png novk.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png keyboard.png
 )
 
-install(FILES ${FCITX_CLASSIC_SKIN_FILES} DESTINATION share/fcitx/skin/default)
+install(FILES ${FCITX_CLASSIC_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/classic)
