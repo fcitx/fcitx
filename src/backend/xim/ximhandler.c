@@ -58,7 +58,7 @@ Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data)
     FcitxInputContext* ic =  FindIC(backend.backendid, &call_data->icid);
     SetCurrentIC(ic);
     
-    if (ic && ic->state == IS_CLOSED)
+    if (ic && ic->state != IS_CLOSED)
     {
         OnInputFocus();
     }

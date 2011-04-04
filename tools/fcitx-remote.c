@@ -69,7 +69,7 @@ void usage()
            "\t-r\t\treload fcitx config\n"
            "\t[no option]\tdisplay fcitx state, %d for close, %d for english, %d for chinese\n"
 		   "\t-h\t\tdisplay this help and exit\n",
-		   IS_CLOSED, IS_ENG, IS_CHN);
+		   IS_CLOSED, IS_ENG, IS_ACTIVE);
 }
 
 int main ( int argc, char *argv[] )

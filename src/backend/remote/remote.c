@@ -135,7 +135,7 @@ static void main_loop (int socket_fd)
 #endif
 #ifdef _ENABLE_TRAY
                 if (!fc.bUseDBus) {
-                    if (GetCurrentState() == IS_CHN)
+                    if (GetCurrentState() == IS_ACTIVE)
                         DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size );
                     else
                         DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size );

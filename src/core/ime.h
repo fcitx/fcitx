@@ -110,8 +110,12 @@ typedef struct FcitxInputState {
     int bShowPrev;
     int iHZInputed;
     int lastIsSingleHZ;
+    int iInCap;
     boolean bLastIsNumber;
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
+boolean IsInLegend();
+char* GetOutputString();
+FcitxIM* GetCurrentIM();
 #endif

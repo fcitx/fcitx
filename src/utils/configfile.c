@@ -28,6 +28,7 @@
 #include "configfile.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
+#include <core/keys.h>
 static boolean IsReloadConfig = false;
 
 static FcitxConfig fc;
@@ -53,16 +54,15 @@ CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber);
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed);
 CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion);
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "TriggerKey", hkTrigger, FilterTriggerKey);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "ChnEngSwitchKey", iSwitchKey, FilterSwitchKey);
+CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SwitchKey", iSwitchKey, FilterSwitchKey);
 CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey);
 CONFIG_BINDING_REGISTER("Hotkey", "TimeInterval", iTimeInterval);
 CONFIG_BINDING_REGISTER("Hotkey", "FollowCursorKey", hkTrack);
 CONFIG_BINDING_REGISTER("Hotkey", "HideMainWindowKey", hkHideMainWindow);
 CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK);
-CONFIG_BINDING_REGISTER("Hotkey", "TraditionalChnSwitchKey", hkGBT);
 CONFIG_BINDING_REGISTER("Hotkey", "LegendSwitchKey", hkLegend);
 CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkCorner);
-CONFIG_BINDING_REGISTER("Hotkey", "ChnPuncSwitchKey", hkPunc);
+CONFIG_BINDING_REGISTER("Hotkey", "PuncSwitchKey", hkPunc);
 CONFIG_BINDING_REGISTER("Hotkey", "PrevPageKey", hkPrevPage);
 CONFIG_BINDING_REGISTER("Hotkey", "NextPageKey", hkNextPage);
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SecondThirdCandWordKey", str2nd3rdCand, Filter2nd3rdKey);
@@ -144,33 +144,31 @@ void FilterTriggerKey(ConfigGroup *group, ConfigOption *option, void* value, Con
 
 void FilterSwitchKey(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
-#if 0
+    HOTKEYS* hkey = NULL;
     if (sync == Raw2Value)
     {
         SWITCHKEY *s = (SWITCHKEY*)value;
         switch(*s)
         {
             case S_R_CTRL:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Control_R);
+                hkey = FCITX_RCTRL;
                 break;
             case S_R_SHIFT:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Shift_R);
+                hkey = FCITX_RSHIFT;
                 break;
             case S_L_SHIFT:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Shift_L);
-                break;
-            case S_R_SUPER:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Super_R);
-                break;
-            case S_L_SUPER:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Super_L);
+                hkey = FCITX_LSHIFT;
                 break;
             case S_L_CTRL:
-                fc.switchKey = XKeysymToKeycode (dpy, XK_Control_L);
+                hkey = FCITX_LCTRL;
                 break;
         }
     }
-#endif
+    if (hkey != NULL)
+    {
+        fc.switchKey[0] = hkey[0];
+        fc.switchKey[1] = hkey[1];
+    }
 }
 
 void LoadConfig()

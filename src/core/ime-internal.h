@@ -61,5 +61,10 @@ void            ConvertPunc (void);
 void            ReloadConfig();
 void            SelectIM(int imidx);
 void            SelectVK(int vkidx);
+void InitBuiltInHotkey();
+INPUT_RETURN_VALUE ImProcessEnter();
+INPUT_RETURN_VALUE ImProcessEscape();
+INPUT_RETURN_VALUE ImProcessReload();
+
 
 #endif

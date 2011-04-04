@@ -64,6 +64,7 @@ typedef struct InputWindow {
     Display* dpy;
     int iScreen;
     struct FcitxSkin* skin;
+    const char* font;
 } InputWindow;
 
 InputWindow* CreateInputWindow(Display* dpy, int iScreen, struct FcitxSkin* sc, const char* font);

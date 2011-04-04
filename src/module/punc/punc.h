@@ -27,12 +27,12 @@
 #define MAX_PUNC_NO		2
 #define MAX_PUNC_LENGTH		2
 
-typedef struct TCHNPUNC {
+typedef struct WidePunc {
     int             ASCII;
-    char            strChnPunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
+    char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
     unsigned        iCount:2;
     unsigned        iWhich:2;
-} ChnPunc;
+} WidePunc;
 
 Bool            LoadPuncDict (void);
 char           *GetPunc (int iKey);

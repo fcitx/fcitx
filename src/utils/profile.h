@@ -30,8 +30,6 @@ typedef struct FcitxProfile
     int iMainWindowOffsetY;
     int iInputWindowOffsetX;
     int iInputWindowOffsetY;
-    boolean bCorner;
-    boolean bChnPunc;
     boolean bTrackCursor;
     boolean bUseLegend;
     int iIMIndex;

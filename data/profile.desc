@@ -13,8 +13,8 @@ Description=Use Full Width Character
 Type=Boolean
 DefaultValue=False
 
-[Profile/ChnPunc]
-Description=Use Chinese Punctuation
+[Profile/WidePunc]
+Description=Use Wide Punctuation
 Type=Boolean
 DefaultValue=True
 

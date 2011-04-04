@@ -947,9 +947,9 @@ void registerProperties()
     props[1] = property2string(&state_prop);
 
     punc_prop.key = "/Fcitx/Punc";
-    punc_prop.label = fcitxProfile.bChnPunc ? TOOLTIP_PUNK_CHN : TOOLTIP_PUNK_ENG;
+    punc_prop.label = fcitxProfile.bWidePunc ? TOOLTIP_PUNK_CHN : TOOLTIP_PUNK_ENG;
 
-    if (fcitxProfile.bChnPunc) {
+    if (fcitxProfile.bWidePunc) {
         punc_prop.icon = "fcitx-full-punct";
     } else {
         punc_prop.icon = "fcitx-half-punct";
@@ -1014,16 +1014,16 @@ void updateProperty(Property *prop)
         fixProperty(prop);
     }
     if (prop == &state_prop) {
-        prop->label = (GetCurrentState() == IS_CHN) ? TOOLTIP_STATE_CHN: TOOLTIP_STATE_ENG;
-        if (GetCurrentState() == IS_CHN) {
+        prop->label = (GetCurrentState() == IS_ACTIVE) ? TOOLTIP_STATE_CHN: TOOLTIP_STATE_ENG;
+        if (GetCurrentState() == IS_ACTIVE) {
             prop->icon = "fcitx-chn";
         } else {
             prop->icon = "fcitx-eng";
         }
     }
     if (prop == &punc_prop) {
-        prop->label = fcitxProfile.bChnPunc ? TOOLTIP_PUNK_CHN : TOOLTIP_PUNK_ENG;
-        if (fcitxProfile.bChnPunc) {
+        prop->label = fcitxProfile.bWidePunc ? TOOLTIP_PUNK_CHN : TOOLTIP_PUNK_ENG;
+        if (fcitxProfile.bWidePunc) {
             prop->icon = "fcitx-full-punct";
         } else {
             prop->icon = "fcitx-half-punct";
@@ -1096,8 +1096,8 @@ void triggerProperty(char *propKey)
             i = atoi(strrchr(propKey,'/') + 1);
             /*
             if (ConnectIDGetState (connect_id) == IS_CLOSED) {
-                SetConnectID (connect_id, IS_CHN);
-	            icidSetIMState(ConnectIDGetICID(connect_id), IS_CHN);
+                SetConnectID (connect_id, IS_ACTIVE);
+	            icidSetIMState(ConnectIDGetICID(connect_id), IS_ACTIVE);
                 EnterChineseMode (False);
             } else if (ConnectIDGetState (connect_id) == IS_ENG) {
                 ChangeIMState(connect_id);
@@ -1199,8 +1199,8 @@ void updatePropertyByState() {
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);
 		break;
-	case IS_CHN:
-        iState = IS_CHN;
+	case IS_ACTIVE:
+        iState = IS_ACTIVE;
 		strcpy(logo_prop.label, im[gs.iIMIndex].strName);
 		updateProperty(&logo_prop);
 		updateProperty(&state_prop);

@@ -59,6 +59,7 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
     inputWindow->dpy = dpy;
     inputWindow->iScreen = iScreen;
     inputWindow->skin = sc;
+    inputWindow->font = font;
 
     LoadInputBarImage(inputWindow, sc);
     inputWindow->iInputWindowHeight= cairo_image_surface_get_height(inputWindow->input);
@@ -266,4 +267,5 @@ void DestroyInputWindow(InputWindow* inputWindow)
 void ShowInputWindowInternal(InputWindow* inputWindow)
 {
     XMapRaised(inputWindow->dpy, inputWindow->window);
+    DrawInputWindow(inputWindow);
 }

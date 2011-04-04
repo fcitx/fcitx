@@ -46,7 +46,7 @@ CONFIG_BINDING_REGISTER("SkinFont","InactiveMenuColor",skinFont.menuFontColor[ME
 CONFIG_BINDING_REGISTER("SkinMainBar","BackImg",skinMainBar.backImg);
 CONFIG_BINDING_REGISTER("SkinMainBar","Logo",skinMainBar.logo);
 CONFIG_BINDING_REGISTER("SkinMainBar","Eng",skinMainBar.eng);
-CONFIG_BINDING_REGISTER("SkinMainBar","Chn",skinMainBar.chn);
+CONFIG_BINDING_REGISTER("SkinMainBar","Active",skinMainBar.active);
 CONFIG_BINDING_REGISTER("SkinMainBar","Placement",skinMainBar.placement);
 CONFIG_BINDING_REGISTER("SkinMainBar","Resize", skinMainBar.resize);
 CONFIG_BINDING_REGISTER("SkinMainBar","ResizePos", skinMainBar.resizePos);

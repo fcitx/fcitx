@@ -202,7 +202,7 @@ void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc)
     LoadImage( sc->skinMainBar.backImg, *sc->skinType, &mainWindow->bar , False);
     LoadImage( sc->skinMainBar.logo, *sc->skinType, &mainWindow->logo, False);
     LoadImage( sc->skinMainBar.eng, *sc->skinType, &mainWindow->english, False);
-    LoadImage( sc->skinMainBar.chn, *sc->skinType, &mainWindow->otherim, False);
+    LoadImage( sc->skinMainBar.active, *sc->skinType, &mainWindow->otherim, False);
 /*  TODO:
  *  int i = 0;
     for (; i < iIMCount; i ++)
@@ -593,7 +593,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     flag=sc->skinInputBar.resize;
     up_len = 0;
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, gs.font, sc->skinFont.fontSize);
+    SetFontContext(dummy, inputWindow->font, sc->skinFont.fontSize);
 #endif
 
     for (i = 0; i < GetMessageCount(msgup) ; i++)

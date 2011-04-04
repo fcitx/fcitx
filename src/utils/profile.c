@@ -28,8 +28,6 @@ ConfigFileDesc* fcitxProfileDesc = NULL;
 static ConfigFileDesc* GetProfileDesc();
 
 CONFIG_BINDING_BEGIN(FcitxProfile);
-CONFIG_BINDING_REGISTER("Profile", "Corner", bCorner);
-CONFIG_BINDING_REGISTER("Profile", "ChnPunc", bChnPunc);
 CONFIG_BINDING_REGISTER("Profile", "TrackCursor", bTrackCursor);
 CONFIG_BINDING_REGISTER("Profile", "UseLegend", bUseLegend);
 CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex);

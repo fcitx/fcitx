@@ -23,11 +23,6 @@
 #include "ime.h"
 #include "fcitx-config/hotkey.h"
 
-typedef struct HotkeyHook {
-    HOTKEYS* hotkey;
-    INPUT_RETURN_VALUE (*hotkeyhandle)();
-} HotkeyHook;
-
 typedef struct HookStack {
     union {
         void *func;
@@ -43,6 +38,7 @@ typedef struct HookStack {
 
 
 #define DEFINE_HOOK(name, type, field) \
+static HookStack* Get##name(); \
 HookStack* Get##name() \
 { \
     static HookStack* name = NULL; \
@@ -76,6 +72,7 @@ void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VAL
     {
         if (stack->keyfilter(sym, state, retval))
             break;
+        stack = stack->next;
     }
 }
 
@@ -88,6 +85,7 @@ void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VA
     {
         if (stack->keyfilter(sym, state, retval))
             break;
+        stack = stack->next;
     }
 }
 
@@ -100,6 +98,7 @@ char* ProcessOutputFilter(char *in)
     {
         if ((out = stack->stringfilter(in)) != NULL)
             break;
+        stack = stack->next;
     }
     return out;
 }
@@ -116,6 +115,7 @@ INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state)
             out = stack->hotkey.hotkeyhandle();
             break;
         }
+        stack = stack->next;
     }
     return out;
 }

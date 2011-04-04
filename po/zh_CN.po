@@ -838,9 +838,6 @@ msgstr ""
 #~ msgid "Chn"
 #~ msgstr "中文"
 
-#~ msgid "ChnEngSwitchKey"
-#~ msgstr "中英文快速切换键"
-
 #~ msgid "ChnPunc"
 #~ msgstr "中文标点"
 
@@ -1533,6 +1530,9 @@ msgstr ""
 
 #~ msgid "Space to the right"
 #~ msgstr "右侧空白宽度"
+
+#~ msgid "SwitchKey"
+#~ msgstr "中英文快速切换键"
 
 #~ msgid "Symbol"
 #~ msgstr "符号"

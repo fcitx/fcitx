@@ -20,13 +20,15 @@
 
 #include <locale.h>
 #include <libintl.h>
+#include <unistd.h>
+
 #include "utils/configfile.h"
 #include "addon.h"
 #include "utils/utils.h"
 #include "module.h"
 #include "ime-internal.h"
 #include "backend.h"
-#include <unistd.h>
+#include "utils/profile.h"
 
 static void WaitForEnd()
 {
@@ -42,8 +44,11 @@ int main(int argc, char* argv[])
     textdomain(PACKAGE);
 
     LoadConfig();
+    LoadProfile();
     LoadAddonInfo();
     AddonResolveDependency();
+    
+    InitBuiltInHotkey();
     
     FcitxInitThread();
 //    InitAsDaemon();

@@ -134,6 +134,30 @@ HOTKEYS FCITX_CTRL_ALT_E[2] =
     {NULL, 0, 0},
 };
 
+HOTKEYS FCITX_LCTRL[2] =
+{
+    {NULL, XK_Control_L, KEY_NONE},
+    {NULL, XK_Control_L, KEY_CTRL_COMP},
+};
+
+HOTKEYS FCITX_LSHIFT[2] =
+{
+    {NULL, XK_Shift_L, KEY_NONE},
+    {NULL, XK_Shift_L, KEY_SHIFT_COMP},
+};
+
+HOTKEYS FCITX_RCTRL[2] =
+{
+    {NULL, XK_Control_R, KEY_NONE},
+    {NULL, XK_Control_R, KEY_CTRL_COMP},
+};
+
+HOTKEYS FCITX_RSHIFT[2] =
+{
+    {NULL, XK_Shift_R, KEY_NONE},
+    {NULL, XK_Shift_R, KEY_SHIFT_COMP},
+};
+
 boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
 {
    if (sym == XK_Control_L

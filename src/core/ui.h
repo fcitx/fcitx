@@ -74,7 +74,7 @@ typedef struct FcitxUI
     void (*CloseInputWindow)();
     void (*ShowInputWindow)();
     void (*MoveInputWindow)();
-    void (*UpdateStatus)();
+    void (*UpdateStatus)(FcitxUIStatus* );
     void (*RegisterStatus)(FcitxUIStatus* );
     void (*OnInputFocus)();
 } FcitxUI;
@@ -99,7 +99,7 @@ void MoveInputWindow();
 void CloseInputWindow();
 void ShowInputWindow();
 void UpdateStatus();
-void RegisterStatus();
+void RegisterStatus(const char* name, void (*toggleStatus)(), boolean (*getStatus)());
 void OnInputFocus();
 
 #endif

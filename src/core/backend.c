@@ -28,6 +28,8 @@
 #include "ime-internal.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
+#include "ui.h"
+#include "hook.h"
 
 static FcitxInputContext *ic_list = NULL;
 static FcitxInputContext *free_list = NULL;
@@ -73,7 +75,7 @@ FcitxInputContext* CreateIC(int backendid, void * priv)
     rec->backendid = backendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    rec->state = IS_CHN;
+    rec->state = IS_ACTIVE;
     
     backend->CreateIC(rec, priv);
     
@@ -137,6 +139,7 @@ void CloseIM(FcitxInputContext* ic)
         return;
     FcitxBackend* backend = *pbackend;
     backend->CloseIM(ic);
+    CloseInputWindow();
 }
 
 /** 
@@ -149,7 +152,7 @@ void ChangeIMState(FcitxInputContext* ic)
     if (!ic)
         return;
     if (ic->state == IS_ENG) {
-        ic->state = IS_CHN;
+        ic->state = IS_ACTIVE;
     } else {
         ic->state = IS_ENG;
         ResetInput();
@@ -163,12 +166,22 @@ IME_STATE GetCurrentState()
 
 void CommitString(FcitxInputContext* ic, char* str)
 {
+    if (str == NULL)
+        return ;
+    
+    char *pstr = ProcessOutputFilter(str);
+    if (pstr != NULL)
+        str = pstr;
+    
     UT_array* backends = GetFcitxBackends();
     FcitxBackend** pbackend = (FcitxBackend**) utarray_eltptr(backends, ic->backendid);
     if (pbackend == NULL)
         return;
     FcitxBackend* backend = *pbackend;
     backend->CommitString(ic, str);
+    
+    if (pstr)
+        free(pstr);
 }
 
 void SetWindowOffset(FcitxInputContext *ic, int x, int y)

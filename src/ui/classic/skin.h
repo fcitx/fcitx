@@ -79,7 +79,7 @@ typedef struct
     char* backImg;
     char* logo;
     char* eng;
-    char* chn;
+    char* active;
     char* placement;
     RESIZERULE resize;
     int    resizePos;

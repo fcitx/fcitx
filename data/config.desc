@@ -81,15 +81,13 @@ Type=Hotkey
 DefaultValue=CTRL_SPACE
 Description=Hot key of Triggering Input Method
 
-[Hotkey/ChnEngSwitchKey]
+[Hotkey/SwitchKey]
 Type=Enum
-EnumCount=6
+EnumCount=4
 Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
-Enum3=R_SUPER
-Enum4=L_SUPER
-Enum5=L_CTRL
+Enum3=L_CTRL
 DefaultValue=L_CTRL
 Description=Hotkey of Switching Chinese and English Mode
 
@@ -118,11 +116,6 @@ Type=Hotkey
 DefaultValue=CTRL_ALT_K
 Description=Hotkey of Switching Virtual Keyboard
 
-[Hotkey/TraditionalChnSwitchKey]
-Type=Hotkey
-DefaultValue=CTRL_ALT_F
-Description=Hotkey of Switching Traditional Chinese Input Mode On.
-
 [Hotkey/LegendSwitchKey]
 Type=Hotkey
 DefaultValue=CTRL_L
@@ -133,10 +126,10 @@ Type=Hotkey
 DefaultValue=SHIFT_SPACE
 Description=Hotkey of Switching Full Width Character Mode
 
-[Hotkey/ChnPuncSwitchKey]
+[Hotkey/PuncSwitchKey]
 Type=Hotkey
 DefaultValue=ALT_SPACE
-Description=Hotkey of Switch Chinese Punc Mode
+Description=Hotkey of Switch Full Width Punc Mode
 
 [Hotkey/PrevPageKey]
 Type=Hotkey

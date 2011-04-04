@@ -22,6 +22,7 @@
 
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/hotkey.h"
+#include <X11/Xproto.h>
 #define INPUT_METHODS	5	//标示输入法的类别数量
 
 
@@ -35,9 +36,7 @@ typedef enum SWITCHKEY {
     S_R_CTRL = 0,
     S_R_SHIFT = 1,
     S_L_SHIFT = 2,
-    S_R_SUPER = 3,
-    S_L_SUPER = 4,
-    S_L_CTRL = 5
+    S_L_CTRL = 3
 } SWITCHKEY;
 
 typedef enum _ENTER_TO_DO {
@@ -78,13 +77,12 @@ typedef struct FcitxConfig
     /* hotkey config */
     HOTKEYS hkTrigger[2];
     SWITCHKEY iSwitchKey;
-    FcitxKeySym switchKey;
+    HOTKEYS switchKey[2];
     boolean bDoubleSwitchKey;
     int iTimeInterval;
     HOTKEYS hkTrack[2];
     HOTKEYS hkHideMainWindow[2];
     HOTKEYS hkVK[2];
-    HOTKEYS hkGBT[2];
     HOTKEYS hkLegend[2];
     HOTKEYS hkCorner[2];
     HOTKEYS hkPunc[2];

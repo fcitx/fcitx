@@ -36,8 +36,6 @@
 #include "core/ui.h"
 #include "utarray.h"
 
-#define TABLE_GBKS2T "gbks2t.tab"
-
 typedef struct StringHashSet {
     char *name;
     UT_hash_handle hh;
@@ -67,7 +65,6 @@ int FcitxUnlock();
 int             CalculateRecordNumber (FILE * fpDict);
 void            SetSwitchKey (char *str);
 int             CalHZIndex (char *strHZ);
-char           *ConvertGBKSimple2Tradition (char *text);
 UT_array* SplitString(const char *str);
 void FreeStringList(UT_array *list);
 FcitxState* GetFcitxGlobalState();

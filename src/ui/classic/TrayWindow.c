@@ -176,7 +176,7 @@ void TrayEventHandler(XEvent* event)
 
     case Expose:
         if (event->xexpose.window == tray.window) {
-            if (GetCurrentState() == IS_CHN)
+            if (GetCurrentState() == IS_ACTIVE)
                 DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
             else
                 DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
@@ -196,7 +196,7 @@ void TrayEventHandler(XEvent* event)
                 XSetWMNormalHints(dpy, tray.window, &size_hints);
             }
 
-            if (GetCurrentState() == IS_CHN)
+            if (GetCurrentState() == IS_ACTIVE)
                 DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
             else
                 DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);

@@ -29,7 +29,7 @@
 typedef enum _IME_STATE {
     IS_CLOSED = 0,
     IS_ENG,
-    IS_CHN
+    IS_ACTIVE
 } IME_STATE;
 
 typedef struct FcitxInputContext

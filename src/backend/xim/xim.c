@@ -70,17 +70,18 @@ static XIMStyle Styles[] = {
 FCITX_EXPORT_API
 FcitxBackend backend =
 {
-    XimInit,
-    NULL,
-    XimDestroy,
-    XimCreateIC,
-    XimCheckIC,
-    XimDestroyIC,
-    XimCloseIM,
-    XimCommitString,
-    XimForwardKey,
-    XimSetWindowOffset,
-    0
+    Init : XimInit,
+    Run : NULL,
+    Destroy : XimDestroy,
+    CreateIC : XimCreateIC,
+    CheckIC : XimCheckIC,
+    DestroyIC : XimDestroyIC,
+    CloseIM : XimCloseIM,
+    CommitString: XimCommitString,
+    ForwardKey : XimForwardKey,
+    SetWindowOffset : XimSetWindowOffset,
+    GetWindowPosition : XimGetWindowPosition,
+    backendid: 0
 };
 
 /* Supported Chinese Encodings */

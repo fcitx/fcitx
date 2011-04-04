@@ -24,9 +24,22 @@
 #include "fcitx-config/hotkey.h"
 #include "ime.h"
 
+typedef struct HotkeyHook {
+    HOTKEYS* hotkey;
+    INPUT_RETURN_VALUE (*hotkeyhandle)();
+} HotkeyHook;
+
 void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 char* ProcessOutputFilter(char *in);
 INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state);
+
+#define DECLARE_HOOK(name, type) \
+void Register##name(type value)
+
+DECLARE_HOOK(PreInputFilter, void*);
+DECLARE_HOOK(PostInputFilter, void*);
+DECLARE_HOOK(OutputFilter, void*);
+DECLARE_HOOK(HotkeyFilter, HotkeyHook);
 
 #endif

@@ -20,6 +20,8 @@
 #ifndef _UI_H
 #define _UI_H
 
+#include "core/fcitx.h"
+
 #include <X11/Xlib.h>
 #include <cairo.h>
 
@@ -27,7 +29,6 @@
 #include <pango/pangocairo.h>
 #endif
 
-#include "core/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 #include "InputWindow.h"
 #include "MainWindow.h"

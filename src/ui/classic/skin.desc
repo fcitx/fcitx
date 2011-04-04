@@ -71,7 +71,7 @@ Description=Logo Icon
 Type=String
 Description=English Mode Icon
 
-[SkinMainBar/Chn]
+[SkinMainBar/Active]
 Type=String
 Description=Chinese Mode Icon
 

@@ -30,7 +30,7 @@
 #include <sys/stat.h>
 #include <utils/utils.h>
 
-FcitxUI* ui;
+FcitxUI* ui = NULL;
 FcitxUI dummyUI;
 
 
@@ -182,24 +182,40 @@ void MessageConcat(Messages* message, int position, char* text)
 
 void CloseInputWindow()
 {
-    if (ui->CloseInputWindow)
+    if (ui && ui->CloseInputWindow)
         ui->CloseInputWindow();
 }
 
 void ShowInputWindow()
 {
-    if (ui->ShowInputWindow)
+    if (ui && ui->ShowInputWindow)
         ui->ShowInputWindow();
 }
 
 void MoveInputWindow()
 {
-    if (ui->MoveInputWindow)
+    if (ui && ui->MoveInputWindow)
         ui->MoveInputWindow();
 }
 
-void UpdateStatus()
+void UpdateStatus(const char* name)
 {
+    FcitxLog(DEBUG, "Update Status for %s", name);
+    
+    UT_array* uistats = GetUIStatus();
+    FcitxUIStatus *status;
+    for ( status = (FcitxUIStatus *) utarray_front(uistats);
+          status != NULL;
+          status = (FcitxUIStatus *) utarray_next(uistats, status))
+         if (strcmp(status->name, name) == 0)
+             break;
+    
+    if (status != NULL)
+    {
+        status->toggleStatus();
+        if (ui && ui->UpdateStatus)
+            ui->UpdateStatus(status);
+    }
 }
 
 void RegisterStatus(const char* name, void (*toggleStatus)(), boolean (*getStatus)())
@@ -213,10 +229,12 @@ void RegisterStatus(const char* name, void (*toggleStatus)(), boolean (*getStatu
     utarray_push_back(uistats, &status);
     FcitxUIStatus* newstat = (FcitxUIStatus*) utarray_back(uistats);
     
-    if (ui->RegisterStatus)
+    if (ui && ui->RegisterStatus)
         ui->RegisterStatus(newstat);
 }
 
 void OnInputFocus()
 {
+    if (ui && ui->OnInputFocus)
+        ui->OnInputFocus();
 }

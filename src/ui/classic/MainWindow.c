@@ -232,13 +232,13 @@ boolean MainWindowEventHandler(void *instance, XEvent* event)
                                 ms_logo = PRESS;
                                 if (!MouseClick
                                     (&fcitxProfile.iMainWindowOffsetX, &fcitxProfile.iMainWindowOffsetY, mainWindow.window)) {
-                                    if (GetCurrentState() != IS_CHN) {
+                                    if (GetCurrentState() != IS_ACTIVE) {
                                         SetIMState((GetCurrentState() == IS_ENG) ? False : True);
                                     }
                                 }
                                 DrawMainWindow(mainWindow);
 
-                                if (GetCurrentState() == IS_CHN)
+                                if (GetCurrentState() == IS_ACTIVE)
                                     DrawTrayWindow(ACTIVE_ICON, 0, 0, tray.size,
                                                 tray.size);
                                 else
