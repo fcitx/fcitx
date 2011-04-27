@@ -354,19 +354,19 @@ int main (int argc, char *argv[])
         }
 
         bPY = false;
+        pstr = strCode;
         if (strCode[0] == cPinyinKey) {
-            size_t length = strlen(strCode);
-            memmove (strCode, strCode + 1, length);
+            pstr ++;
             bPY = true;
         }
 
         //查找是否重复
         temp = current;
         if (temp != head) {
-            if (strcmp (temp->strCode, strCode) >= 0) {
-                while (temp != head && strcmp (temp->strCode, strCode) >= 0) {
-                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, strCode)) {
-                        printf ("Delete:  %s %s\n", strCode, strHZ);
+            if (strcmp (temp->strCode, pstr) >= 0) {
+                while (temp != head && strcmp (temp->strCode, pstr) >= 0) {
+                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, pstr)) {
+                        printf ("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }
                     temp = temp->prev;
@@ -375,13 +375,13 @@ int main (int argc, char *argv[])
                 if (temp == head)
                     temp = temp->next;
 
-                while (temp != head && strcmp (temp->strCode, strCode) <= 0)
+                while (temp != head && strcmp (temp->strCode, pstr) <= 0)
                     temp = temp->next;
             }
             else {
-                while (temp != head && strcmp (temp->strCode, strCode) <= 0) {
-                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, strCode)) {
-                        printf ("Delete:  %s %s\n", strCode, strHZ);
+                while (temp != head && strcmp (temp->strCode, pstr) <= 0) {
+                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, pstr)) {
+                        printf ("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }
                     temp = temp->next;
@@ -393,7 +393,7 @@ int main (int argc, char *argv[])
         newRec = (RECORD *) malloc (sizeof (RECORD));
         newRec->strCode = (char *) malloc (sizeof (char) * (iPYCodeLength + 1));
         newRec->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
-        strcpy (newRec->strCode, strCode);
+        strcpy (newRec->strCode, pstr);
         strcpy (newRec->strHZ, strHZ);
         newRec->bPinyin = bPY;
         newRec->iHit = 0;

@@ -72,7 +72,16 @@ typedef struct FcitxClassicUI {
     int iMainWindowOffsetY;
     
     UT_array status;
+    Atom pidAtom;
+    Atom typeDockAtom;
 } FcitxClassicUI;
+
+typedef enum FcitxXWindowType {
+    FCITX_WINDOW_UNKNOWN,
+    FCITX_WINDOW_DOCK,
+    FCITX_WINDOW_MENU,
+    FCITX_WINDOW_DIALOG
+} FcitxXWindowType;
 
 extern FcitxClassicUI classicui;
 
@@ -127,6 +136,7 @@ Bool MouseClick(int *x, int *y, Display* dpy, Window window);
 Bool SetMouseStatus();
 boolean IsInRspArea(int x0, int y0, cairo_surface_t* surface);
 boolean IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
+void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
 
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif

@@ -43,7 +43,6 @@ extern Display *dpy;
 extern int iScreen;
 
 Bool CreateTrayWindow() {
-    XTextProperty tp;
     char   strWindowName[]="Fcitx Tray Window";
     if ( !fc.bUseTrayIcon )
         return False;
@@ -80,13 +79,6 @@ Bool CreateTrayWindow() {
     size_hints.base_height = tray.size;
     XSetWMNormalHints(dpy, tray.window, &size_hints);
 
-    //Set the name of the window
-    tp.value = (void *)strWindowName;
-    tp.encoding = XA_STRING;
-    tp.format = 16;
-    tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, tray.window, &tp);
-
     if (vi && vi->visual)
         tray.cs = cairo_xlib_surface_create(dpy, tray.window, tray.visual.visual, 200, 200);
     else
@@ -98,6 +90,8 @@ Bool CreateTrayWindow() {
     XSelectInput (dpy, tray.window, ExposureMask | KeyPressMask | \
                   ButtonPressMask | ButtonReleaseMask | StructureNotifyMask \
                   | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
+
+    SetWindowProperty(dpy, tray.window, FCITX_WINDOW_DOCK, strWindowName);
     return True;
 }
 

@@ -68,7 +68,6 @@ FcitxIM im = {
 };
 
 FcitxPinyinConfig pyconfig;
-FcitxPinyinState state;
 
 int iPYFACount;
 PYFA *PYFAList;

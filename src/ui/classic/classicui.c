@@ -20,6 +20,8 @@
 
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
+#include <X11/Xatom.h>
+#include <unistd.h>
 #include <cairo.h>
 #include <limits.h>
 #include <libintl.h>
@@ -85,6 +87,8 @@ boolean ClassicUIInit()
     classicui.windowTypeAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE", False);
     classicui.typeMenuAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
     classicui.typeDialogAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    classicui.typeDockAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    classicui.pidAtom = XInternAtom(classicui.dpy, "_NET_WM_PID", False);
     
     InitComposite();
     LoadClassicUIConfig();
@@ -95,6 +99,40 @@ boolean ClassicUIInit()
     
     XUnlockDisplay(classicui.dpy);
     return true;
+}
+
+void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
+{
+    Atom* wintype = NULL;
+    switch(type)
+    {
+        case FCITX_WINDOW_DIALOG:
+            wintype = &classicui->typeDialogAtom;
+            break;
+        case FCITX_WINDOW_DOCK:
+            wintype = &classicui->typeDockAtom;
+            break;
+        case FCITX_WINDOW_MENU:
+            wintype = &classicui->typeMenuAtom;
+            break;
+        default:
+            wintype = NULL;
+            break;
+    }
+    if (wintype)
+        XChangeProperty (classicui->dpy, window, classicui->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
+
+    pid_t pid = getpid();
+    XChangeProperty(classicui->dpy, window, classicui->pidAtom, XA_CARDINAL, 32,
+            PropModeReplace, (unsigned char *)&pid, 1);
+    
+    if (windowTitle)
+    {
+        XTextProperty   tp;
+        Xutf8TextListToTextProperty(classicui->dpy, &windowTitle, 1, XUTF8StringStyle, &tp);
+        XSetWMName (classicui->dpy, window, &tp);
+        XFree(tp.value);
+    }
 }
 
 static void ClassicUICloseInputWindow()

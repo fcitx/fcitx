@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-24 13:06+0800\n"
+"POT-Creation-Date: 2011-04-27 15:09+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -68,7 +68,7 @@ msgstr "额外输入法: 打开%s失败 %s"
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:395
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:382
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
@@ -93,17 +93,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2540
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2538
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2610
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2608
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2478
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2476
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -150,15 +150,15 @@ msgstr "转换中文标点"
 msgid "Current Input Method Index"
 msgstr "当前输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/InputWindow.c:161
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/InputWindow.c:155
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:125
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:118
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:142
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/MainWindow.c:135
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -332,12 +332,12 @@ msgstr "快捷键: 切换软键盘"
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:178
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:183
 #, fuzzy
 msgid "IM: bad im"
 msgstr "额外输入法: 不正确的输入法"
 
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:172
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:177
 #, fuzzy, c-format
 msgid "IM: open %s fail %s"
 msgstr "额外输入法: 打开%s失败 %s"
@@ -450,7 +450,7 @@ msgid "Name"
 msgstr "名称"
 
 # unknown
-#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:202
+#: /home/saber/Develop/fcitx/po/.././src/core/ime.c:207
 #, fuzzy
 msgid "No available Input Method"
 msgstr "中文输入法"
@@ -487,21 +487,21 @@ msgstr "拼音输入法优先级，0为禁用"
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:788
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:776
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:790
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:778
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:760
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:748
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:771
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:759
 msgid "Press number to make word in frequent list"
 msgstr ""
 
@@ -692,7 +692,7 @@ msgstr "pthread mutex init failed"
 msgid "your current font is: %s"
 msgstr "当前字体为：%s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2916
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2915
 msgid "联想："
 msgstr ""
 

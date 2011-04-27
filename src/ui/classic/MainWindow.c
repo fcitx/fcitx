@@ -102,15 +102,8 @@ MainWindow* CreateMainWindow (Display* dpy, int iScreen, FcitxSkin* sc, HIDE_MAI
     mainWindow->main_win_gc = XCreateGC( dpy, mainWindow->window, 0, NULL );
     XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
     XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
-    
 
-    XTextProperty   tp;
-    /* Set the name of the window */
-    tp.value = (void *)strWindowName;
-    tp.encoding = XA_STRING;
-    tp.format = 16;
-    tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, mainWindow->window, &tp);
+    SetWindowProperty(dpy, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MainWindowEventHandler;

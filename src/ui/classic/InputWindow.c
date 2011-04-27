@@ -43,7 +43,6 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
-    XTextProperty   tp;
     char        strWindowName[]="Fcitx Input Window";
     int depth;
     Colormap cmap;
@@ -98,12 +97,7 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
     LoadInputMessage(sc, inputWindow, font);
     XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
-    /* Set the name of the window */
-    tp.value = (void *)strWindowName;
-    tp.encoding = XA_STRING;
-    tp.format = 16;
-    tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, inputWindow->window, &tp);
+    SetWindowProperty(dpy, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = InputWindowEventHandler;
