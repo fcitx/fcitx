@@ -102,7 +102,7 @@ void LoadUserInterface()
                         if (!fp)
                             break;
                         fclose(fp);
-                        handle = dlopen(modulePath,RTLD_LAZY);
+                        handle = dlopen(modulePath, RTLD_LAZY);
                         if(!handle)
                         {
                             FcitxLog(ERROR, _("UI: open %s fail %s") ,modulePath ,dlerror());
@@ -119,6 +119,17 @@ void LoadUserInterface()
                         {
                             dlclose(handle);
                             return;
+                        }
+                        
+                        /* some may register before ui load, so load it here */
+                        if (ui->RegisterStatus)
+                        {
+                            UT_array* uistats = GetUIStatus();
+                            FcitxUIStatus *status;
+                            for ( status = (FcitxUIStatus *) utarray_front(uistats);
+                                status != NULL;
+                                status = (FcitxUIStatus *) utarray_next(uistats, status))
+                                ui->RegisterStatus(status);
                         }
                     }
                     break;
@@ -155,6 +166,14 @@ void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     SetMessageV(message, position, type, fmt, ap);
+    va_end(ap);
+}
+
+void SetMessageText(Messages* message, int position, char* fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+    SetMessageV(message, position, message->msg[position].type, fmt, ap);
     va_end(ap);
 }
 

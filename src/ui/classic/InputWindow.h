@@ -22,8 +22,7 @@
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
  * 
- * @brief  输入条窗口
- * 
+ * @brief  Preedit Window for Input
  * 
  */
 
@@ -35,7 +34,6 @@
 
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
-//输入条最大长度(缓冲区大小由这个决定)
 #define INPUT_BAR_MAX_LEN 1500
 
 struct FcitxSkin;

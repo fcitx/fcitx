@@ -18,12 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 /**
- * @file   ime.h
- * @author Yuking yuking_net@sohu.com
+ * @file   ime-internal.h
  * @date   2008-1-16
  *
- * @brief  按键和输入法通用功能处理
- *
+ * @brief  Private Header for Input Method
  *
  */
 

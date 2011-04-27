@@ -60,8 +60,8 @@ typedef struct FcitxChttrans{
     HOTKEYS hkToggle[2];
 } FcitxChttrans;
 
-static char* ChttransOutputFilter(char *strin);
-static char *ConvertGBKSimple2Tradition (char *strHZ, ChttransEngine engine);
+static char* ChttransOutputFilter(const char* strin);
+static char *ConvertGBKSimple2Tradition (const char* strHZ, ChttransEngine engine);
 static boolean GetChttransEnabled();
 static void LoadChttransConfig();
 static ConfigFileDesc* GetChttransConfigDesc();
@@ -115,7 +115,7 @@ boolean GetChttransEnabled()
     return transState.enabled;
 }
 
-char* ChttransOutputFilter(char *strin)
+char* ChttransOutputFilter(const char *strin)
 {
     if (transState.enabled)
         return ConvertGBKSimple2Tradition(strin, transState.engine);
@@ -130,7 +130,7 @@ char* ChttransOutputFilter(char *strin)
  * WARNING： 该函数返回新分配内存字符串，请调用者
  * 注意释放。
  */
-char *ConvertGBKSimple2Tradition (char *strHZ, ChttransEngine engine)
+char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
 {
     if (strHZ == NULL)
         return NULL;
@@ -169,7 +169,7 @@ char *ConvertGBKSimple2Tradition (char *strHZ, ChttransEngine engine)
             int             i, len, ret_len;
             char           *strBuf = NULL;
             size_t          bufLen = 0;
-            char           *ps;
+            const char     *ps;
 
             if (!s2t_table) {
                 len = 0;

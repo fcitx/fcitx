@@ -22,16 +22,17 @@
 #define PYCONFIG_H
 #include "fcitx-config/fcitx-config.h"
 #include <utils/configfile.h>
-#include "PYFA.h"
+
+struct MHPY;
 
 typedef struct FcitxPinyinConfig
 {
     GenericConfig gconfig;
     /* py config */
     char *strDefaultSP;
-    Bool bFullPY;
-    Bool bPYCreateAuto;
-    Bool bPYSaveAutoAsPhrase;
+    boolean bFullPY;
+    boolean bPYCreateAuto;
+    boolean bPYSaveAutoAsPhrase;
     ADJUSTORDER baseOrder;
     ADJUSTORDER phraseOrder;
     ADJUSTORDER freqOrder;
@@ -40,9 +41,9 @@ typedef struct FcitxPinyinConfig
     HOTKEYS hkPYDelUserPhr[2];
     char* strPYGetWordFromPhrase;
     char cPYYCDZ[3];
-    MHPY *MHPY_C;
-    MHPY *MHPY_S;
-    Bool bMisstype;
+    struct MHPY *MHPY_C;
+    struct MHPY *MHPY_S;
+    boolean bMisstype;
 } FcitxPinyinConfig;
 
 CONFIG_BINDING_DECLARE(FcitxPinyinConfig);

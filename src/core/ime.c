@@ -23,8 +23,7 @@
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
  *
- * @brief  按键和输入法通用功能处理
- *
+ * @brief  Process Keyboard Event and Input Method
  *
  */
 #include <dlfcn.h>
@@ -42,13 +41,19 @@
 #include "utils/utils.h"
 #include "hook.h"
 #include "backend.h"
+#include "hook-internal.h"
 
 static void UnloadIM(FcitxIM* ime);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static void UpdateInputWindow();
 static const UT_icd im_icd = {sizeof(FcitxIM*), NULL ,NULL, NULL};
 
-FcitxInputState input;
+static FcitxInputState input;
+
+FcitxInputState* GetFcitxInputContext()
+{
+    return &input;
+}
 
 void InitBuiltInHotkey()
 {
@@ -582,6 +587,8 @@ void ResetInput(void)
 
     if (curentIM && curentIM->ResetIM)
         curentIM->ResetIM();
+    
+    ResetInputHook();
     
     CloseInputWindow();
 }

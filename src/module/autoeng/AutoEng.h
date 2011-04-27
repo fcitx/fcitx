@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,25 +17,23 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+/**
+ * @file   AutoEng.h
+ * @author Yuking yuking_net@sohu.com 
+ * @date   2008-1-16
+ * 
+ * @brief Auto Switch to English State
+ *
+ */
 
-#ifndef _FCITX_CUTILS_H_
-#define _FCITX_CUTILS_H_
+#ifndef _FCITX_AUTOENG_H_
+#define _FCITX_AUTOENG_H_
 
-#include <stddef.h>
+#define MAX_AUTO_TO_ENG	10
+#include <fcitx-config/fcitx-config.h>
 
-typedef enum ErrorLevel
-{
-    DEBUG,
-    ERROR,
-    INFO,
-    FATAL,
-    WARNING
-} ErrorLevel;
-
-char *trim(char *s);
-void *malloc0(size_t bytes);
-
-#define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
-void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+typedef struct {
+    char            str[MAX_AUTO_TO_ENG + 1];
+} AUTO_ENG;
 
 #endif

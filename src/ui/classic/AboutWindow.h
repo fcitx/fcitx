@@ -18,7 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/* A very simple About Window for FCITX */
+/**
+ * @file AboutWindow.h
+ * @brief A very simple About Window for FCITX 
+ * @author Yunfan yunfan_zg@163.com 
+ */
 
 #ifndef _ABOUT_WINDOW_H
 #define _ABOUT_WINDOW_H

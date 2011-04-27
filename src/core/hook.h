@@ -18,28 +18,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/**
+ * @file hook.h
+ * @brief Register function to be called automatically.
+ */
+
 #ifndef _HOOK_H
 #define _HOOK_H
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/hotkey.h"
 #include "ime.h"
 
+/**
+ * @brief Hotkey process struct
+ **/
 typedef struct HotkeyHook {
+    /**
+     * @brief Pointer to fcitx hotkeys, fcitx hotkey is length 2 array.
+     **/
     HOTKEYS* hotkey;
+    /**
+     * @brief Function to be called while hotkey is pressed.
+     *
+     * @return INPUT_RETURN_VALUE*
+     **/
     INPUT_RETURN_VALUE (*hotkeyhandle)();
 } HotkeyHook;
 
-void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-char* ProcessOutputFilter(char *in);
-INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state);
+typedef boolean (*FcitxKeyFilter)(long unsigned int sym, 
+                             unsigned int state,
+                             INPUT_RETURN_VALUE *retval
+                            );
+typedef char* (*FcitxStringFilter)(const char* in);
+typedef void (*FcitxResetInputHook)();
 
-#define DECLARE_HOOK(name, type) \
-void Register##name(type value)
-
-DECLARE_HOOK(PreInputFilter, void*);
-DECLARE_HOOK(PostInputFilter, void*);
-DECLARE_HOOK(OutputFilter, void*);
-DECLARE_HOOK(HotkeyFilter, HotkeyHook);
+void RegisterPreInputFilter(FcitxKeyFilter value) ;
+void RegisterPostInputFilter(FcitxKeyFilter value);
+void RegisterOutputFilter(FcitxStringFilter value);
+void RegisterHotkeyFilter(HotkeyHook);
+void RegisterResetInputHook(FcitxResetInputHook value);
 
 #endif

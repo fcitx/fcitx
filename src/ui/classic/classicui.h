@@ -37,6 +37,9 @@
 #include "MenuWindow.h"
 #include "TrayWindow.h"
 
+/**
+ * @brief Config and Global State for Classic UI
+ **/
 typedef struct FcitxClassicUI {
     GenericConfig gconfig;
     Display* dpy;

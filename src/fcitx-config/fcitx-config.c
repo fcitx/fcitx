@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 /**
- * @file conf.c
+ * @file fcitx-config.c
  * @author CSSlayer wengxt@gmail.com
  * @date 2010-04-30
  *
@@ -48,13 +48,25 @@ struct ConfigOptionDesc
     UT_hash_handle hh;
 };
 
+/**
+ * @brief Config Group Description
+ **/
 struct ConfigGroupDesc
 {
+    /**
+     * @brief Group Name
+     **/
     char *groupName;
+    /**
+     * @brief Hash table for option description
+     **/
     ConfigOptionDesc *optionsDesc;
     UT_hash_handle hh;
 };
 
+/**
+ * @brief Description of a config file
+ **/
 struct ConfigFileDesc
 {
     ConfigGroupDesc *groupsDesc;
@@ -71,11 +83,26 @@ struct ConfigOption
     UT_hash_handle hh;
 } ;
 
+/**
+ * @brief Config group
+ **/
 struct ConfigGroup
 {
+    /**
+     * @brief Group Name, unique in ConfigFile
+     **/
     char *groupName;
+    /**
+     * @brief Group Description
+     **/
     ConfigGroupDesc *groupDesc;
+    /**
+     * @brief Option store with a hash table
+     **/
     ConfigOption* options;
+    /**
+     * @brief UTHash handler
+     **/
     UT_hash_handle hh;
 };
 

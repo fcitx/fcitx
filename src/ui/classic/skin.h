@@ -74,6 +74,9 @@ typedef struct
     ConfigColor lineColor;
 } SkinMenu;
 
+/**
+ * @brief The Main Window Skin description
+ **/
 typedef struct 
 {
     char* backImg;
@@ -106,9 +109,19 @@ typedef struct
 } SkinInputBar;
 
 
+/**
+ * @brief Tray Icon Image
+ **/
 typedef struct 
 {
+    /**
+     * @brief Active Tray Icon Image
+     **/
     char* active;
+    
+    /**
+     * @brief Inactive Tray Icon Image
+     **/
     char* inactive;
 } SkinTrayIcon;
 

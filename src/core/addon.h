@@ -18,24 +18,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/**
+ * @file addon.h
+ * @brief Header Addon Support for fcitx
+ * @author CSSlayer wengxt@gmail.com
+ */
+
 #ifndef _FCITX_ADDON_H_
 #define _FCITX_ADDON_H_
 #include "utils/utarray.h"
 #include "fcitx-config/fcitx-config.h"
 
+/**
+ * @brief Addon Category Definition
+ **/
 typedef enum AddonCategory
 {
+    /**
+     * @brief Input method
+     **/
     AC_INPUTMETHOD = 0,
-    AC_BACKEND,
+    /**
+     * @brief Input backend, like xim
+     **/
+   AC_BACKEND,
+    /**
+     * @brief General module, can be implemented in a quite extensive way
+     **/
     AC_MODULE,
+    /**
+     * @brief User Interface, only one of it can be enabled currently.
+     **/
     AC_UI
 } AddonCategory;
 
+/**
+ * @brief Supported Addon Type, Currently only sharedlibrary
+ **/
 typedef enum AddonType
 {
     AT_SHAREDLIBRARY = 0
 } AddonType;
 
+/**
+ * @brief Addon Instance in Fcitx
+ **/
 typedef struct FcitxAddon
 {
     GenericConfig config;
@@ -54,11 +81,48 @@ typedef struct FcitxAddon
     pthread_t pid;
 } FcitxAddon;
 
+/**
+ * @brief Get all fcitx addon in an array
+ *
+ * @return UT_array*
+ **/
 UT_array* GetFcitxAddons();
+
+/** 
+ * @brief Free one addon info
+ * 
+ * @param v addon info
+ */
 void FreeAddon(void *v);
+
+/**
+ * @brief Load all addon of fcitx during initialize
+ *
+ * @return void
+ **/
 void LoadAddonInfo(void);
+
+/**
+ * @brief Resolve addon dependency, in order to make every addon works
+ *
+ * @return void
+ **/
 void AddonResolveDependency();
+
+/**
+ * @brief Check whether an addon is enabled or not by addon name
+ *
+ * @param name ...
+ * @return boolean
+ **/
 boolean AddonIsAvailable(const char* name);
+
+/**
+ * @brief Get addon instance by addon name
+ *
+ * @param name addon name
+ * @return FcitxAddon*
+ **/
 FcitxAddon* GetAddonByName(const char* name);
 
 #endif

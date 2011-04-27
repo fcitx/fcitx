@@ -4,9 +4,12 @@ project(fcitx)
 
 set(version 4.1.0)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(FindPkgConfig)
+include(UseDoxygen OPTIONAL)
 
 check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)

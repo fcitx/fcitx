@@ -85,6 +85,11 @@ void SaveProfile(void)
     fclose(fp);
 }
 
+boolean UseLegend()
+{
+    return fcitxProfile.bUseLegend;
+}
+
 boolean IsTrackCursor()
 {
     return fcitxProfile.bTrackCursor;

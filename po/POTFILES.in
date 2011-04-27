@@ -100,12 +100,8 @@ data/fcitx-configtool.desktop.in
 ./src/im/pinyin/pyconfig.c
 ./src/im/qw/qw.c
 ./src/im/qw/qw.h
-./src/im/special/AutoEng.c
-./src/im/special/AutoEng.h
 ./src/im/special/QuickPhrase.c
 ./src/im/special/QuickPhrase.h
-./src/im/special/punc.c
-./src/im/special/punc.h
 ./src/im/special/vk.c
 ./src/im/special/vk.h
 ./src/im/table/table.c

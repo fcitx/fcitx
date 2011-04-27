@@ -18,6 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/**
+ * @mainpage Fcitx
+ * fcitx is a lightweight Input Method Framework, written by C.
+ * It can be used under X11 to support international input.
+ * 
+ */
+
+/**
+ * @file fcitx.c
+ * @brief Main Function for fcitx
+ */
+
 #include <locale.h>
 #include <libintl.h>
 #include <unistd.h>

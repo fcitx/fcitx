@@ -29,6 +29,7 @@ typedef struct FcitxModule
 {
     boolean (*Init)();
     void* (*Run)();
+    void (*Destroy)();
     UT_array functionList;
 } FcitxModule;
 

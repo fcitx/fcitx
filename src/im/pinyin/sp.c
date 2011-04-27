@@ -109,8 +109,6 @@ Bool            bSP_UseSemicolon = False;
 Bool            bSP = False;
 char            cNonS = 'o';
 
-//extern Bool     bSingleHZMode;
-
 #define STR_SPCONF_NAME 0
 
 #define cstr(b) (strConstSPConf[STR_SPCONF_##b])
@@ -123,7 +121,6 @@ char* strConstSPConf[] = {
 void SPInit (void)
 {
     bSP = True;
-    //SingleHZMode = False;
 
     LoadSPData ();
 }

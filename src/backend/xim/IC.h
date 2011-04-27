@@ -31,6 +31,9 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include <core/backend.h>
 
+/**
+ * @brief XIM Preedit Attributes
+ **/
 typedef struct {
     XRectangle      area;	/* area */
     XRectangle      area_needed;	/* area needed */
@@ -44,6 +47,9 @@ typedef struct {
     Cursor          cursor;	/* cursor */
 } PreeditAttributes;
 
+/**
+ * @brief XIM Status Attributes
+ **/
 typedef struct {
     XRectangle      area;	/* area */
     XRectangle      area_needed;	/* area needed */
@@ -56,6 +62,9 @@ typedef struct {
     Cursor          cursor;	/* cursor */
 } StatusAttributes;
 
+/**
+ * @brief Input Context for Fcitx XIM Backend
+ **/
 typedef struct FcitxXimIC {
     CARD16          id;		/* ic id */
     INT32           input_style;	/* input style */

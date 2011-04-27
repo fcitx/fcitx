@@ -17,6 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+/**
+ * @file   ime.h
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ *
+ * @brief  Public Header for Input Method Develop
+ *
+ */
 #ifndef _FCITX_IME_H_
 #define _FCITX_IME_H_
 
@@ -118,4 +127,5 @@ boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
 boolean IsInLegend();
 char* GetOutputString();
 FcitxIM* GetCurrentIM();
+struct FcitxInputState* GetFcitxInputState();
 #endif

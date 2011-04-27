@@ -18,9 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string.h>
+
 #include "pyconfig.h"
 #include "fcitx-config/fcitx-config.h"
-#include <string.h>
+#include "PYFA.h"
 
 static void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
@@ -71,7 +73,7 @@ void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, ConfigSy
 {
     if (sync == Raw2Value)
     {
-        Bool *b = (Bool*)value;
+        boolean *b = (boolean*)value;
         pyconfig.MHPY_S[5].bMode = *b;
     }
 }

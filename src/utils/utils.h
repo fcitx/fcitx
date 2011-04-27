@@ -36,6 +36,9 @@
 #include "core/ui.h"
 #include "utarray.h"
 
+/**
+ * @brief A hash set for string
+ **/
 typedef struct StringHashSet {
     char *name;
     UT_hash_handle hh;

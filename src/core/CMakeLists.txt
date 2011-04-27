@@ -12,6 +12,7 @@ set(FCITX_SOURCES
 
 add_executable(fcitx ${FCITX_SOURCES})
 install(TARGETS fcitx DESTINATION ${bindir})
+configure_file(fcitx.pc.in fcitx.pc)
 
 target_link_libraries(fcitx fcitx-config)
 target_link_libraries(fcitx utils)

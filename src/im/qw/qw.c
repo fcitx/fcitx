@@ -32,8 +32,6 @@
 #include "utils/configfile.h"
 #include "core/ime-internal.h"
 
-extern FcitxInputState input;
-
 INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode);
 char *QWGetCandWord (int iIndex);
@@ -66,52 +64,53 @@ boolean QWInit()
 INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state)
 {
     FcitxState* gs = GetFcitxGlobalState();
+    FcitxInputState* input = GetFcitxInputState();
     INPUT_RETURN_VALUE retVal;
 
     retVal = IRV_TO_PROCESS;
     if (IsHotKeyDigit(sym, state)) {
-        if ( input.iCodeInputCount!= 4 ) {
-            input.strCodeInput[input.iCodeInputCount++]=sym;
-            input.strCodeInput[input.iCodeInputCount]='\0';
-            if ( input.iCodeInputCount==4 ) {
-                strcpy(input.strStringGet, QWGetCandWord(sym-'0'-1));
+        if ( input->iCodeInputCount!= 4 ) {
+            input->strCodeInput[input->iCodeInputCount++]=sym;
+            input->strCodeInput[input->iCodeInputCount]='\0';
+            if ( input->iCodeInputCount==4 ) {
+                strcpy(input->strStringGet, QWGetCandWord(sym-'0'-1));
                 retVal= IRV_GET_CANDWORDS;
             }
-            else if (input.iCodeInputCount==3)
+            else if (input->iCodeInputCount==3)
                 retVal=QWGetCandWords(SM_FIRST);
             else
                 retVal=IRV_DISPLAY_CANDWORDS;
         }
     }
     else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
-        if (!input.iCodeInputCount)
+        if (!input->iCodeInputCount)
             return IRV_DONOT_PROCESS_CLEAN;
-        input.iCodeInputCount--;
-        input.strCodeInput[input.iCodeInputCount] = '\0';
+        input->iCodeInputCount--;
+        input->strCodeInput[input->iCodeInputCount] = '\0';
 
-        if (!input.iCodeInputCount)
+        if (!input->iCodeInputCount)
             retVal = IRV_CLEAN;
         else {
-            input.iCandPageCount = 0;
+            input->iCandPageCount = 0;
             SetMessageCount(gs->messageDown, 0);
             retVal = IRV_DISPLAY_CANDWORDS;
         }
     }
     else if (IsHotKey(sym, state, FCITX_SPACE)) {
-        if (!input.iCodeInputCount)
+        if (!input->iCodeInputCount)
             return IRV_TO_PROCESS;
-        if (input.iCodeInputCount!=3)
+        if (input->iCodeInputCount!=3)
             return IRV_DO_NOTHING;
 
-        strcpy(input.strStringGet, QWGetCandWord(0));
+        strcpy(input->strStringGet, QWGetCandWord(0));
         retVal= IRV_GET_CANDWORDS;
     }
     else
         return IRV_TO_PROCESS;
 
     SetMessageCount(gs->messageUp, 0);
-    AddMessageAtLast(gs->messageUp, MSG_INPUT, "%s", input.strCodeInput);
-    if ( input.iCodeInputCount!=3 )
+    AddMessageAtLast(gs->messageUp, MSG_INPUT, "%s", input->strCodeInput);
+    if ( input->iCodeInputCount!=3 )
         SetMessageCount(gs->messageDown, 0);
 
     return retVal;
@@ -119,18 +118,20 @@ INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state)
 
 char *QWGetCandWord (int iIndex)
 {
-    if ( !input.iCandPageCount )
+    FcitxInputState* input = GetFcitxInputState();
+    if ( !input->iCandPageCount )
         return NULL;
 
     FcitxState* gs = GetFcitxGlobalState();
     SetMessageCount(gs->messageDown, 0);
     if ( iIndex==-1 )
         iIndex=9;
-    return GetQuWei((input.strCodeInput[0] - '0') * 10 + input.strCodeInput[1] - '0',input.iCurrentCandPage * 10+iIndex+1);
+    return GetQuWei((input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0',input->iCurrentCandPage * 10+iIndex+1);
 }
 
 INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
 {
+    FcitxInputState* input = GetFcitxInputState();
     int             iQu, iWei;
     int             i;
     char            strTemp[3];
@@ -142,26 +143,26 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
     else
         strTemp[1]='\0';
 
-    iQu = (input.strCodeInput[0] - '0') * 10 + input.strCodeInput[1] - '0';
+    iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
 
     if (mode==SM_FIRST ) {
-        input.iCandPageCount = 9;
-        input.iCurrentCandPage = input.strCodeInput[2]-'0';
+        input->iCandPageCount = 9;
+        input->iCurrentCandPage = input->strCodeInput[2]-'0';
     }
     else {
-        if ( !input.iCandPageCount )
+        if ( !input->iCandPageCount )
             return IRV_TO_PROCESS;
         if (mode==SM_NEXT) {
-            if ( input.iCurrentCandPage!=input.iCandPageCount )
-                input.iCurrentCandPage++;
+            if ( input->iCurrentCandPage!=input->iCandPageCount )
+                input->iCurrentCandPage++;
         }
         else {
-            if ( input.iCurrentCandPage )
-                input.iCurrentCandPage--;
+            if ( input->iCurrentCandPage )
+                input->iCurrentCandPage--;
         }
     }
 
-    iWei = input.iCurrentCandPage * 10;
+    iWei = input->iCurrentCandPage * 10;
 
     FcitxState* gs = GetFcitxGlobalState();
     SetMessageCount(gs->messageDown, 0);
@@ -175,9 +176,9 @@ INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode)
             MessageConcatLast(gs->messageDown, " ");
     }
 
-    input.strCodeInput[2]=input.iCurrentCandPage+'0';
+    input->strCodeInput[2]=input->iCurrentCandPage+'0';
     SetMessageCount(gs->messageUp, 0);
-    AddMessageAtLast(gs->messageUp, MSG_INPUT, "%s", input.strCodeInput);
+    AddMessageAtLast(gs->messageUp, MSG_INPUT, "%s", input->strCodeInput);
 
     return IRV_DISPLAY_CANDWORDS;
 }

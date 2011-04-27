@@ -18,6 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/**
+ * @file addon.c
+ * @brief Addon Support for fcitx
+ * @author CSSlayer wengxt@gmail.com
+ */
+
 #include <limits.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -248,11 +254,6 @@ ConfigFileDesc* GetAddonConfigDesc()
     return addonConfigDesc;
 }
 
-/** 
- * @brief Free one addon info
- * 
- * @param v addon info
- */
 void FreeAddon(void *v)
 {
     FcitxAddon *addon = (FcitxAddon*) v;

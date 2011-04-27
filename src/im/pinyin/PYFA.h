@@ -21,20 +21,19 @@
 #define _PYFA_H
 
 #include <X11/Xlib.h>
+#include <fcitx-config/fcitx-config.h>
 
-struct MH_PY {
+/**
+ * @brief ...
+ **/
+typedef struct MHPY {
     char           *strMap;
-    Bool           bMode;
-};
+    boolean           bMode;
+} MHPY;
 
-#ifndef MHPY_DEFINED
-#define MHPY_DEFINED
-typedef struct MH_PY MHPY;
-#endif
-
-typedef struct {
+typedef struct PYTABLE {
     char            strPY[7];
-    int            *pMH;
+    boolean            *pMH;
 } PYTABLE;
 
 int             GetMHIndex_C (char map);

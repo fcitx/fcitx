@@ -75,9 +75,7 @@ int IsConsonant (const char *strPY, boolean bMode)
 int FindPYFAIndex (const char *strPY, boolean bMode)
 {
     int             i;
-    int             iTemp;
-
-    iTemp = -1;
+    
     for (i = 0; PYTable[i].strPY[0] != '\0'; i++) {
         int cmp;
         if (bMode)

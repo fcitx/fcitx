@@ -30,6 +30,7 @@
 #include "fcitx-config/cutils.h"
 #include "ui.h"
 #include "hook.h"
+#include "hook-internal.h"
 
 static FcitxInputContext *ic_list = NULL;
 static FcitxInputContext *free_list = NULL;

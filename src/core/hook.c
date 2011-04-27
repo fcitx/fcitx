@@ -23,14 +23,15 @@
 #include "ime.h"
 #include "fcitx-config/hotkey.h"
 
+/**
+ * @file hook.c
+ * @brief A list for a stack of processing
+ **/
 typedef struct HookStack {
     union {
-        void *func;
-        boolean (*keyfilter)(long unsigned int sym,
-                             unsigned int state,
-                             INPUT_RETURN_VALUE *retval
-                            );
-        char* (*stringfilter)(const char* in);
+        FcitxKeyFilter keyfilter;
+        FcitxStringFilter stringfilter;
+        FcitxResetInputHook resetinput;
         HotkeyHook hotkey;
     };
     struct HookStack* next;
@@ -58,10 +59,11 @@ void Register##name(type value) \
     head->field = value; \
 }
 
-DEFINE_HOOK(PreInputFilter, void*, func)
-DEFINE_HOOK(PostInputFilter, void*, func)
-DEFINE_HOOK(OutputFilter, void*, func)
+DEFINE_HOOK(PreInputFilter, FcitxKeyFilter, keyfilter)
+DEFINE_HOOK(PostInputFilter, FcitxKeyFilter, keyfilter)
+DEFINE_HOOK(OutputFilter, FcitxStringFilter, stringfilter)
 DEFINE_HOOK(HotkeyFilter, HotkeyHook, hotkey)
+DEFINE_HOOK(ResetInputHook, FcitxResetInputHook, resetinput);
 
 void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -101,6 +103,17 @@ char* ProcessOutputFilter(char *in)
         stack = stack->next;
     }
     return out;
+}
+
+void ResetInputHook()
+{
+    HookStack* stack = GetOutputFilter();
+    stack = stack->next;
+    while(stack)
+    {
+        stack->resetinput();
+        stack = stack->next;
+    }
 }
 
 INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state)

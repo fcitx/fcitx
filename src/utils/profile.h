@@ -39,6 +39,7 @@ typedef struct FcitxProfile
 
 void LoadProfile();
 void SaveProfile();
+boolean UseLegend();
 boolean IsTrackCursor();
 int GetInputWindowOffsetX();
 int GetInputWindowOffsetY();

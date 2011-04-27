@@ -37,12 +37,13 @@
 #include <core/backend.h>
 
 /**
- * 负责fcitx的标点转换模块。
+ * @file punc.c
+ * @brief Trans full width punc for Fcitx
  */
 
 static WidePunc        *chnPunc = (WidePunc *) NULL;
 static boolean PuncInit();
-static void ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
+static boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 
 struct FcitxPuncState {
     boolean bUseWidePunc;
@@ -69,7 +70,7 @@ boolean PuncInit()
     return true;
 }
 
-void ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
+boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxState* gs = GetFcitxGlobalState();
     char* strStringGet = GetOutputString();
@@ -96,6 +97,7 @@ void ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal
             SetMessageCount(gs->messageUp, 0);
             
             *retVal = IRV_PUNC;
+            return true;
         } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
                     && puncState.cLastIsAutoConvert) {
             char *pPunc;
@@ -106,6 +108,7 @@ void ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal
                 CommitString(GetCurrentIC(), pPunc);
 
             *retVal = IRV_DO_NOTHING;
+            return true;
         } else if (IsHotKeySimple(sym, state)) {
             if (IsHotKeyDigit(sym, state))
                 puncState.bLastIsNumber = True;
@@ -125,11 +128,13 @@ void ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal
                     strStringGet[iLen] = sym;
                     strStringGet[iLen + 1] = '\0';
                     *retVal = IRV_ENG;
+                    return true;
                 }
             }
         }
     }
     puncState.cLastIsAutoConvert = 0;
+    return false;
 }
 
 /**
