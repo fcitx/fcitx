@@ -25,6 +25,7 @@
 
 #include <X11/Xlocale.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,7 +73,9 @@ Atom killAtom;
 Atom windowTypeAtom;
 Atom typeMenuAtom;
 Atom typeDialogAtom;
+Atom typeDockAtom;
 Atom compManagerAtom;
+Atom pidAtom;
 Window compManager;
 
 // added by yunfan
@@ -94,7 +97,43 @@ InitX(void)
     windowTypeAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE", False);
     typeMenuAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
     typeDialogAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    typeDockAtom = XInternAtom (dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    pidAtom = XInternAtom(dpy, "_NET_WM_PID", False);
     return True;
+}
+
+void SetWindowProperty(Display* dpy, Window window, FcitxXWindowType type, char *windowTitle)
+{
+    Atom* wintype = NULL;
+    switch(type)
+    {
+        case FCITX_WINDOW_DIALOG:
+            wintype = &typeDialogAtom;
+            break;
+        case FCITX_WINDOW_DOCK:
+            wintype = &typeDockAtom;
+            break;
+        case FCITX_WINDOW_MENU:
+            wintype = &typeMenuAtom;
+            break;
+        default:
+            wintype = NULL;
+            break;
+    }
+    if (wintype)
+        XChangeProperty (dpy, window, windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
+
+    pid_t pid = getpid();
+    XChangeProperty(dpy, window, pidAtom, XA_CARDINAL, 32,
+            PropModeReplace, (unsigned char *)&pid, 1);
+    
+    if (windowTitle)
+    {
+        XTextProperty   tp;
+        Xutf8TextListToTextProperty(dpy, &windowTitle, 1, XUTF8StringStyle, &tp);
+        XSetWMName (dpy, window, &tp);
+        XFree(tp.value);
+    }
 }
 
 /*

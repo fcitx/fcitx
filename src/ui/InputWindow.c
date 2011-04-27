@@ -77,7 +77,6 @@ Bool CreateInputWindow (void)
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
-    XTextProperty   tp;
     char        strWindowName[]="Fcitx Input Window";
     int depth;
     Colormap cmap;
@@ -127,12 +126,7 @@ Bool CreateInputWindow (void)
     LoadInputMessage();
     XSelectInput (dpy, inputWindow.window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
-    /* Set the name of the window */
-    tp.value = (void *)strWindowName;
-    tp.encoding = XA_STRING;
-    tp.format = 16;
-    tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, inputWindow.window, &tp);
+    SetWindowProperty(dpy, inputWindow.window, FCITX_WINDOW_DOCK, strWindowName);
 
     return True;
 }

@@ -33,7 +33,7 @@
 
 extern Display *dpy;
 extern int      iScreen;
-extern Atom killAtom, windowTypeAtom, typeDialogAtom;
+extern Atom killAtom;
 
 MessageWindow messageWindow;
 
@@ -67,7 +67,7 @@ void InitMessageWindowProperty (void)
 {
     XSetTransientForHint (dpy, messageWindow.window, DefaultRootWindow (dpy));
 
-    XChangeProperty (dpy, messageWindow.window, windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) &typeDialogAtom, 1);
+    SetWindowProperty(dpy, messageWindow.window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
 
     XSetWMProtocols(dpy, messageWindow.window, &killAtom, 1);
 }

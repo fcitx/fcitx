@@ -118,13 +118,7 @@ Bool CreateMainWindow (void)
     XSelectInput (dpy, mainWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
     
 
-    XTextProperty   tp;
-    /* Set the name of the window */
-    tp.value = (void *)strWindowName;
-    tp.encoding = XA_STRING;
-    tp.format = 16;
-    tp.nitems = strlen(strWindowName);
-    XSetWMName (dpy, mainWindow.window, &tp);
+    SetWindowProperty(dpy, mainWindow.window, FCITX_WINDOW_DOCK, strWindowName);
 
     return True;
 }

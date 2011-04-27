@@ -1,3 +1,7 @@
+2011-04-27: CSSlayer <wengxt@gmail.com>
+	* 修复txt2mb在64位系统下的一个bug
+	* 参考Freedesktop.org WM-Spec尝试解决GNOME3窗口显示相关的问题（未验证）
+
 2010-12-16: CSSlayer <wengxt@gmail.com>
 	* 增加man
 	* 移除pdf和odt格式的文档，以后fcitx-handbook将分开发布。

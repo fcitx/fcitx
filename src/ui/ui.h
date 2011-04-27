@@ -30,7 +30,15 @@
 #include "core/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 
+typedef enum FcitxXWindowType {
+    FCITX_WINDOW_UNKNOWN,
+    FCITX_WINDOW_DOCK,
+    FCITX_WINDOW_MENU,
+    FCITX_WINDOW_DIALOG
+} FcitxXWindowType;
+
 Bool InitX (void);
+void SetWindowProperty(Display* dpy, Window window, FcitxXWindowType type, char *windowTitle);
 void MyXEventHandler (XEvent * event);
 
 void OutputString (cairo_t* c, const char *str, const char *font, int fontSize, int x, int y, ConfigColor* color);

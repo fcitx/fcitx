@@ -600,9 +600,6 @@ void DestroyAllImage()
 void LoadInputMessage()
 {
     int i = 0;
-    int fontSize;
-
-    fontSize=sc.skinFont.fontSize;
 
     ConfigColor cursorColor = sc.skinInputBar.cursorColor;
     //输入条背景图画笔
