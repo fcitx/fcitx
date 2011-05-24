@@ -22,8 +22,9 @@
 #include <limits.h>
 #include <ctype.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
+#include "py.h"
 #include "sp.h"
 #include "pyMapTable.h"
 #include "pyParser.h"
@@ -118,14 +119,15 @@ char* strConstSPConf[] = {
     "方案名称="
 };
 
-void SPInit (void)
+void SPInit (void *arg)
 {
     bSP = True;
+    FcitxPinyinState *pystate = (FcitxPinyinState* )arg;
 
-    LoadSPData ();
+    LoadSPData (&pystate->pyconfig);
 }
 
-void LoadSPData (void)
+void LoadSPData (FcitxPinyinConfig *pyconfig)
 {
     FILE           *fp;
     char            str[100], strS[5], *pstr;
@@ -160,7 +162,7 @@ void LoadSPData (void)
 	    pstr += cstrlen(NAME);
 	    if (*pstr == ' ' || *pstr == '\t')
 		pstr++;
-	    bIsDefault = !(strcmp (pyconfig.strDefaultSP, pstr));
+	    bIsDefault = !(strcmp (pyconfig->strDefaultSP, pstr));
 	    continue;
 	}
 
@@ -268,7 +270,7 @@ void LoadSPData (void)
 /*
  * 此处只转换单个双拼，并且不检查错误
  */
-void SP2QP (char *strSP, char *strQP)
+void SP2QP (FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
 {
     int             iIndex1 = 0, iIndex2 = 0;
     char            strTmp[2];
@@ -301,20 +303,20 @@ void SP2QP (char *strSP, char *strQP)
 
 	    strcpy (str_QP, strQP);
 	    strcat (strQP, SPMap_C[iIndex2].strQP);
-	    if (FindPYFAIndex (strQP, False) != -1)
+	    if (FindPYFAIndex (pyconfig, strQP, False) != -1)
 		break;
 
 	    strcpy (strQP, str_QP);
 	}
     }
 
-    if (FindPYFAIndex (strQP, False) != -1)
+    if (FindPYFAIndex (pyconfig, strQP, False) != -1)
 	iIndex2 = 0;		//这只是将iIndex2置为非-1,以免后面的判断
 
     strTmp[0] = strSP[0];
     strTmp[1] = '\0';
     if ((iIndex1 == -1 && !(IsSyllabary (strTmp, 0))) || iIndex2 == -1) {
-	iIndex1 = FindPYFAIndex (strSP, False);
+	iIndex1 = FindPYFAIndex (pyconfig, strSP, False);
 	if (iIndex1 != -1)
 	    strcpy (strQP, strSP);
     }

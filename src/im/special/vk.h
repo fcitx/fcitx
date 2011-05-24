@@ -21,7 +21,7 @@
 #define _VK_WINDOW_H
 
 #include <X11/Xlib.h>
-#include "core/ime.h"
+#include "fcitx/ime.h"
 #include "skin.h"
 
 #define VK_FILE	"vk.conf"

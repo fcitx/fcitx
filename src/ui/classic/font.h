@@ -23,7 +23,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 void InitFont();
 void CreateFont();

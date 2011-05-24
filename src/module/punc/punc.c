@@ -24,64 +24,69 @@
 #include <stdlib.h>
 #include <libintl.h>
 
-#include "core/module.h"
-#include "core/fcitx.h"
-#include "core/hook.h"
+#include "fcitx/module.h"
+#include "fcitx/fcitx.h"
+#include "fcitx/hook.h"
 #include "punc.h"
-#include "core/ime.h"
+#include "fcitx/ime.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
-#include "utils/utils.h"
-#include "core/keys.h"
-#include <core/ime-internal.h>
-#include <core/backend.h>
+#include "fcitx-utils/utils.h"
+#include "fcitx-utils/keys.h"
+#include <fcitx/ime-internal.h>
+#include <fcitx/backend.h>
+#include <fcitx/instance.h>
 
 /**
  * @file punc.c
  * @brief Trans full width punc for Fcitx
  */
 
-static WidePunc        *chnPunc = (WidePunc *) NULL;
-static boolean PuncInit();
-static boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
+static void* PuncCreate(FcitxInstance* instance);
+static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 
-struct FcitxPuncState {
+typedef struct FcitxPuncState {
     boolean bUseWidePunc;
     char cLastIsAutoConvert;
     boolean bLastIsNumber;
-};
-
-struct FcitxPuncState puncState;
+    FcitxInstance* owner;
+    WidePunc* chnPunc;
+} FcitxPuncState;
 
 FCITX_EXPORT_API
 FcitxModule module = {
-    PuncInit,
+    PuncCreate,
     NULL
 };
 
-boolean PuncInit()
+void* PuncCreate(FcitxInstance* instance)
 {
-    LoadPuncDict();
-    RegisterPostInputFilter(ProcessPunc);
+    FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));
+    LoadPuncDict(puncState);
+    KeyFilterHook hk;
+    hk.arg = puncState;
+    hk.func = ProcessPunc;
     
-    puncState.bUseWidePunc = true;
-    puncState.cLastIsAutoConvert = '\0';
-    puncState.bLastIsNumber = false;
-    return true;
+    RegisterPostInputFilter(hk);
+    
+    puncState->bUseWidePunc = true;
+    puncState->cLastIsAutoConvert = '\0';
+    puncState->bLastIsNumber = false;
+    return puncState;
 }
 
-boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
+boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
-    FcitxState* gs = GetFcitxGlobalState();
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
     char* strStringGet = GetOutputString();
-    FcitxIM* im = GetCurrentIM();
+    FcitxAddon* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
-    if (puncState.bUseWidePunc) {
+    if (puncState->bUseWidePunc) {
         char *pPunc = NULL;
 
         char *pstr = NULL;
         if (state == KEY_NONE)
-            pPunc = GetPunc(sym);
+            pPunc = GetPunc(puncState, sym);
 
         /* 
          * 在有候选词未输入的情况下，选择第一个候选词并输入标点
@@ -89,42 +94,42 @@ boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* ret
         if (pPunc) {
             strStringGet[0] = '\0';
             if (!IsInLegend())
-                pstr = im->GetCandWord(0);
+                pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 0);
             if (pstr)
                 strcpy(strStringGet, pstr);
             strcat(strStringGet, pPunc);
-            SetMessageCount(gs->messageDown, 0);
-            SetMessageCount(gs->messageUp, 0);
+            SetMessageCount(puncState->owner->messageDown, 0);
+            SetMessageCount(puncState->owner->messageUp, 0);
             
             *retVal = IRV_PUNC;
             return true;
         } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
-                    && puncState.cLastIsAutoConvert) {
+                    && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
-            ForwardKey(GetCurrentIC(), FCITX_PRESS_KEY, sym, state);
-            pPunc = GetPunc(puncState.cLastIsAutoConvert);
+            ForwardKey(puncState->owner, GetCurrentIC(), FCITX_PRESS_KEY, sym, state);
+            pPunc = GetPunc(puncState, puncState->cLastIsAutoConvert);
             if (pPunc)
-                CommitString(GetCurrentIC(), pPunc);
+                CommitString(puncState->owner, GetCurrentIC(), pPunc);
 
             *retVal = IRV_DO_NOTHING;
             return true;
         } else if (IsHotKeySimple(sym, state)) {
             if (IsHotKeyDigit(sym, state))
-                puncState.bLastIsNumber = True;
+                puncState->bLastIsNumber = True;
             else {
-                puncState.bLastIsNumber = False;
+                puncState->bLastIsNumber = False;
                 if (IsHotKey(sym, state, FCITX_SPACE))
                     *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
                 else {
                     strStringGet[0] = '\0';
                     if (!IsInLegend())
-                        pstr = im->GetCandWord(0);
+                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 0);
                     if (pstr)
                         strcpy(strStringGet, pstr);
                     iLen = strlen(strStringGet);
-                    SetMessageCount(gs->messageDown, 0);
-                    SetMessageCount(gs->messageUp, 0);
+                    SetMessageCount(puncState->owner->messageDown, 0);
+                    SetMessageCount(puncState->owner->messageUp, 0);
                     strStringGet[iLen] = sym;
                     strStringGet[iLen + 1] = '\0';
                     *retVal = IRV_ENG;
@@ -133,7 +138,7 @@ boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* ret
             }
         }
     }
-    puncState.cLastIsAutoConvert = 0;
+    puncState->cLastIsAutoConvert = 0;
     return false;
 }
 
@@ -144,7 +149,7 @@ boolean ProcessPunc(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* ret
  * @note 文件中数据的格式为： 对应的英文符号 中文标点 <中文标点>
  * 加载标点词典。标点词典定义了一组标点转换，如输入‘.’就直接转换成‘。’
  */
-int LoadPuncDict (void)
+int LoadPuncDict (FcitxPuncState* puncState)
 {
     FILE           *fpDict;             // 词典文件指针
     int             iRecordNo;
@@ -165,8 +170,7 @@ int LoadPuncDict (void)
      * 没有一个空行就是浪费sizeof (WidePunc)字节内存*/
     iRecordNo = CalculateRecordNumber (fpDict);
     // 申请空间，用来存放这些数据。这儿没有检查是否申请到内存，严格说有小隐患
-    // chnPunc是一个全局变量
-    chnPunc = (WidePunc *) malloc (sizeof (WidePunc) * (iRecordNo + 1));
+    puncState->chnPunc = (WidePunc *) malloc (sizeof (WidePunc) * (iRecordNo + 1));
 
     iRecordNo = 0;
 
@@ -189,56 +193,57 @@ int LoadPuncDict (void)
             pstr = strText;                     // 将pstr指向第一个非空字符
             while (*pstr == ' ')
                 pstr++;
-            chnPunc[iRecordNo].ASCII = *pstr++; // 这个就是中文符号所对应的ASCII码值
+            puncState->chnPunc[iRecordNo].ASCII = *pstr++; // 这个就是中文符号所对应的ASCII码值
             while (*pstr == ' ')                // 然后，将pstr指向下一个非空字符
                 pstr++;
 
-            chnPunc[iRecordNo].iCount = 0;      // 该符号有几个转化，比如英文"就可以转换成“和”
-            chnPunc[iRecordNo].iWhich = 0;      // 标示该符号的输入状态，即处于第几个转换。如"，iWhich标示是转换成“还是”
+            puncState->chnPunc[iRecordNo].iCount = 0;      // 该符号有几个转化，比如英文"就可以转换成“和”
+            puncState->chnPunc[iRecordNo].iWhich = 0;      // 标示该符号的输入状态，即处于第几个转换。如"，iWhich标示是转换成“还是”
             // 依次将该ASCII码所对应的符号放入到结构中
             while (*pstr) {
                 i = 0;
                 // 因为中文符号都是多字节（这里读取并不像其他地方是固定两个，所以没有问题）的，所以，要一直往后读，知道空格或者字符串的末尾
                 while (*pstr != ' ' && *pstr) {
-                    chnPunc[iRecordNo].strWidePunc[chnPunc[iRecordNo].iCount][i] = *pstr;
+                    puncState->chnPunc[iRecordNo].strWidePunc[puncState->chnPunc[iRecordNo].iCount][i] = *pstr;
                     i++;
                     pstr++;
                 }
 
                 // 每个中文符号用'\0'隔开
-                chnPunc[iRecordNo].strWidePunc[chnPunc[iRecordNo].iCount][i] = '\0';
+                puncState->chnPunc[iRecordNo].strWidePunc[puncState->chnPunc[iRecordNo].iCount][i] = '\0';
                 while (*pstr == ' ')
                     pstr++;
-                chnPunc[iRecordNo].iCount++;
+                puncState->chnPunc[iRecordNo].iCount++;
             }
 
             iRecordNo++;
         }
     }
 
-    chnPunc[iRecordNo].ASCII = '\0';
+    puncState->chnPunc[iRecordNo].ASCII = '\0';
     fclose (fpDict);
 
     return True;
 }
 
-void FreePunc (void)
+void FreePunc (FcitxPuncState* puncState)
 {
-    if (!chnPunc)
+    if (!puncState->chnPunc)
         return;
 
-    free (chnPunc);
-    chnPunc = (WidePunc *) NULL;
+    free (puncState->chnPunc);
+    puncState->chnPunc = (WidePunc *) NULL;
 }
 
 /*
  * 根据字符得到相应的标点符号
  * 如果该字符不在标点符号集中，则返回NULL
  */
-char           *GetPunc (int iKey)
+char           *GetPunc (FcitxPuncState* puncState, int iKey)
 {
     int             iIndex = 0;
     char           *pPunc;
+    WidePunc       *chnPunc = puncState->chnPunc;
 
     if (!chnPunc)
         return (char *) NULL;

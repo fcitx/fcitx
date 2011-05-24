@@ -21,7 +21,7 @@
 #ifndef _PY_TOOLS_H
 #define _PY_TOOLS_H
 
-#include "utils/utf8.h"
+#include "fcitx-utils/utf8.h"
 
 /**
  * @brief Code table for Pinyin

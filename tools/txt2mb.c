@@ -27,8 +27,8 @@
 #include <stdlib.h>
 #endif
 
-#include "utils/utf8.h"
-#include "core/fcitx.h"
+#include "fcitx-utils/utf8.h"
+#include "fcitx/fcitx.h"
 #include <fcitx-config/fcitx-config.h>
 
 #define STR_KEYCODE 0

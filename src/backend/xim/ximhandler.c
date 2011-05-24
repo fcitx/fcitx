@@ -20,17 +20,15 @@
 
 #include <X11/Xutil.h>
 
-#include "core/ime-internal.h"
+#include "fcitx/ime-internal.h"
 #include "xim.h"
 #include "Xi18n.h"
 #include "IC.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx-config/cutils.h"
-#include <core/ui.h>
+#include <fcitx/ui.h>
 
-extern FcitxXimBackend xim;
-
-static void SetTrackPos(IMChangeICStruct * call_data);
+static void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct* call_data);
 
 Bool XIMOpenHandler(IMOpenStruct * call_data)
 {
@@ -38,24 +36,24 @@ Bool XIMOpenHandler(IMOpenStruct * call_data)
 }
 
 
-Bool XIMGetICValuesHandler(IMChangeICStruct * call_data)
+Bool XIMGetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    XimGetIC(call_data);
+    XimGetIC(xim, call_data);
 
     return True;
 }
 
-Bool XIMSetICValuesHandler(IMChangeICStruct * call_data)
+Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    XimSetIC(call_data);
-    SetTrackPos(call_data);
+    XimSetIC(xim, call_data);
+    SetTrackPos(xim, call_data);
 
     return True;
 }
 
-Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data)
+Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
 {
-    FcitxInputContext* ic =  FindIC(backend.backendid, &call_data->icid);
+    FcitxInputContext* ic =  FindIC(xim->owner, xim->backendid, &call_data->icid);
     SetCurrentIC(ic);
     
     if (ic && ic->state != IS_CLOSED)
@@ -64,14 +62,14 @@ Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data)
     }
     else
     {
-        CloseInputWindow();
-        MoveInputWindow();
+        CloseInputWindow(xim->owner);
+        MoveInputWindow(xim->owner);
     }
 
     return True;
 }
 
-Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data)
+Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
     FcitxInputContext* ic = GetCurrentIC();
     if (ic && GetXimIC(ic)->id == call_data->icid)
@@ -82,39 +80,39 @@ Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data)
     return True;
 }
 
-Bool XIMCloseHandler(IMOpenStruct * call_data)
+Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
 {
     CloseInputWindow();
-    SaveAllIM();
+    SaveAllIM(xim->owner);
     return True;
 }
 
-Bool XIMCreateICHandler(IMChangeICStruct * call_data)
+Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    CreateIC(backend.backendid, call_data);
+    CreateIC(xim->owner, xim->backendid, call_data);
     FcitxInputContext* ic = GetCurrentIC();
 
     if (!ic) {
-        ic = FindIC(backend.backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
         SetCurrentIC(ic);
     }
 
     return True;
 }
 
-Bool XIMDestroyICHandler(IMChangeICStruct * call_data)
+Bool XIMDestroyICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    if (GetCurrentIC() == FindIC(backend.backendid, &call_data->icid)) {
+    if (GetCurrentIC() == FindIC(xim->owner, xim->backendid, &call_data->icid)) {
     }
 
-    DestroyIC(backend.backendid, &call_data->icid);
+    DestroyIC(xim->owner, xim->backendid, &call_data->icid);
 
     return True;
 }
 
-Bool XIMTriggerNotifyHandler(IMTriggerNotifyStruct * call_data)
+Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_data)
 {
-    FcitxInputContext* ic = FindIC(backend.backendid, &call_data->icid);
+    FcitxInputContext* ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
     if (ic == NULL)
         return True;
 
@@ -123,13 +121,12 @@ Bool XIMTriggerNotifyHandler(IMTriggerNotifyStruct * call_data)
 }
 
 
-void SetTrackPos(IMChangeICStruct * call_data)
+void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    Bool flag = False;
     FcitxInputContext* ic = GetCurrentIC();
     if (ic == NULL)
         return;
-    if (ic != FindIC(backend.backendid, &call_data->icid))
+    if (ic != FindIC(xim->owner, xim->backendid, &call_data->icid))
         return;
 
     int i;
@@ -137,8 +134,6 @@ void SetTrackPos(IMChangeICStruct * call_data)
 
     for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
         if (!strcmp(XNSpotLocation, pre_attr->name)) {
-            flag = True;
-            
             ic->offset_x = (*(XPoint *) pre_attr->value).x;
             ic->offset_y = (*(XPoint *) pre_attr->value).y;
         }
@@ -155,16 +150,16 @@ void SetTrackPos(IMChangeICStruct * call_data)
     {
             
         XWindowAttributes attr;
-        XGetWindowAttributes(xim.display, window, &attr);
+        XGetWindowAttributes(xim->display, window, &attr);
 
         ic->offset_x = 0;
         ic->offset_y = attr.height;
     }
 
-    MoveInputWindow();
+    MoveInputWindow(xim->owner);
 }
 
-void XIMProcessKey(IMForwardEventStruct * call_data)
+void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
 {
     KeySym sym;
     XKeyEvent *kev;
@@ -174,14 +169,14 @@ void XIMProcessKey(IMForwardEventStruct * call_data)
     FcitxInputContext* ic = GetCurrentIC();
  
     if (!ic) {
-        ic = FindIC(backend.backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
         SetCurrentIC(ic);
         if (!ic)
             return;
     }
 
     if (GetXimIC(ic)->id != call_data->icid) {
-        ic = FindIC(backend.backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
         if (!ic)
             return;
     }
@@ -196,12 +191,12 @@ void XIMProcessKey(IMForwardEventStruct * call_data)
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 
-    ProcessKey((call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+    ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
                                         kev->time,
                                         sym, state);
 }
 
-void XIMClose(FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
+void XIMClose(FcitxXimBackend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
 {
     if (ic == NULL)
         return;
@@ -210,5 +205,5 @@ void XIMClose(FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int co
     call_data.connect_id = GetXimIC(ic)->connect_id;
     call_data.icid = GetXimIC(ic)->id;
  
-    IMPreeditEnd(xim.ims, (XPointer) &call_data);
+    IMPreeditEnd(xim->ims, (XPointer) &call_data);
 }

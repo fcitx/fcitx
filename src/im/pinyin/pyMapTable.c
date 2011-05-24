@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 #include "pyMapTable.h"
 
 ConsonantMap    consonantMapTable[] = {

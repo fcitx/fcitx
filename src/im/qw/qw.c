@@ -23,14 +23,15 @@
 #include <string.h>
 #include <iconv.h>
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
-#include "core/keys.h"
+#include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx-utils/keys.h"
 
 #include "qw.h"
-#include "core/ui.h"
-#include "utils/configfile.h"
-#include "core/ime-internal.h"
+#include "fcitx/ui.h"
+#include "fcitx-utils/configfile.h"
+#include "fcitx/ime-internal.h"
+#include <fcitx/instance.h>
 
 INPUT_RETURN_VALUE DoQWInput(FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE QWGetCandWords (SEARCH_MODE mode);

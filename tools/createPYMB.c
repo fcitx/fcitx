@@ -25,7 +25,7 @@
 #include "im/pinyin/pyParser.h"
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
-#include "utils/utf8.h"
+#include "fcitx-utils/utf8.h"
 #include "im/pinyin/pyconfig.h"
 
 FcitxPinyinConfig pyconfig;

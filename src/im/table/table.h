@@ -22,9 +22,9 @@
 
 #include <X11/Xlib.h>
 
-#include "utils/configfile.h"
-#include "core/ime.h"
-#include "utils/utarray.h"
+#include "fcitx-utils/configfile.h"
+#include "fcitx/ime.h"
+#include "fcitx-utils/utarray.h"
 
 #define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10

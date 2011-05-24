@@ -25,7 +25,7 @@
 #include <X11/Xmd.h>
 
 #include "IMdkit.h"
-#include "core/backend.h"
+#include "fcitx/backend.h"
 
 #define DEFAULT_IMNAME "fcitx"
 #define STRBUFLEN 64
@@ -41,9 +41,9 @@ typedef struct FcitxXimBackend
     XIMTriggerKey* Trigger_Keys;
     XIMS ims;
     CARD16 icid;
+    struct FcitxBackend* backend;
+    struct FcitxInstance* owner;
+    int backendid;
 } FcitxXimBackend;
-
-extern FcitxBackend backend;
-extern FcitxXimBackend xim;
 
 #endif

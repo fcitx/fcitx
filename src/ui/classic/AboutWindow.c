@@ -22,11 +22,11 @@
 #include <iconv.h>
 #include <X11/Xatom.h>
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
+#include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
 
 #include "AboutWindow.h"
-#include "utils/configfile.h"
+#include "fcitx-utils/configfile.h"
 
 extern Display *dpy;
 extern int      iScreen;

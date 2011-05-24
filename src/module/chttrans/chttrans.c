@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #ifdef HAVE_OPENCC
 #include <opencc.h>
@@ -26,18 +26,18 @@
 
 #include <libintl.h>
 
-#include "core/module.h"
-#include "utils/utf8.h"
+#include "fcitx/module.h"
+#include "fcitx-utils/utf8.h"
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/xdg.h"
 #include <errno.h>
-#include <core/hook.h>
-#include <core/ui.h>
+#include <fcitx/hook.h>
+#include <fcitx/ui.h>
 #include <fcitx-config/cutils.h>
+#include <fcitx/instance.h>
 
 #define TABLE_GBKS2T "gbks2t.tab"
 
-static boolean ChttransInit();
 typedef struct simple2trad_t
 {
     int wc;
@@ -58,19 +58,18 @@ typedef struct FcitxChttrans{
     boolean enabled;
     ChttransEngine engine;
     HOTKEYS hkToggle[2];
+    simple2trad_t* s2t_table;
 } FcitxChttrans;
 
-static char* ChttransOutputFilter(const char* strin);
-static char *ConvertGBKSimple2Tradition (const char* strHZ, ChttransEngine engine);
+static void* ChttransCreate(FcitxInstance* instance);
+static char* ChttransOutputFilter(void* arg, const char* strin);
+static char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char* strHZ);
 static boolean GetChttransEnabled();
-static void LoadChttransConfig();
+static void LoadChttransConfig(FcitxChttrans* transState);
 static ConfigFileDesc* GetChttransConfigDesc();
-static void SaveChttransConfig();
+static void SaveChttransConfig(FcitxChttrans* transState);
 static INPUT_RETURN_VALUE HotkeyToggleChttransState();
 static void ToggleChttransState();
-
-FcitxChttrans transState;
-simple2trad_t* s2t_table = NULL;
 
 CONFIG_BINDING_BEGIN(FcitxChttrans);
 CONFIG_BINDING_REGISTER("TraditionalChinese","TransEngine", engine);
@@ -81,22 +80,28 @@ CONFIG_BINDING_END()
 FCITX_EXPORT_API
 FcitxModule module =
 {
-    ChttransInit,
+    ChttransCreate,
     NULL
 };
 
-boolean ChttransInit()
+void* ChttransCreate(FcitxInstance* instance)
 {
-    LoadChttransConfig();
+    FcitxChttrans* transState = fcitx_malloc0(sizeof(FcitxChttrans));
+    LoadChttransConfig(transState);
     
     HotkeyHook hk;
-    hk.hotkey = transState.hkToggle;
+    hk.arg = transState;
+    hk.hotkey = transState->hkToggle;
     hk.hotkeyhandle = HotkeyToggleChttransState;
     
+    StringFilterHook shk;
+    shk.arg = transState;
+    shk.func = ChttransOutputFilter;
+    
     RegisterHotkeyFilter(hk);
-    RegisterOutputFilter(ChttransOutputFilter);
-    RegisterStatus("chttrans", ToggleChttransState, GetChttransEnabled);
-    return true;
+    RegisterOutputFilter(shk);
+    RegisterStatus(instance, "chttrans", ToggleChttransState, GetChttransEnabled);
+    return transState;
 }
 
 INPUT_RETURN_VALUE HotkeyToggleChttransState()
@@ -105,20 +110,23 @@ INPUT_RETURN_VALUE HotkeyToggleChttransState()
     return IRV_DO_NOTHING;
 }
 
-void ToggleChttransState()
+void ToggleChttransState(void* arg)
 {
-    transState.enabled = !transState.enabled;
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    transState->enabled = !transState->enabled;
 }
 
-boolean GetChttransEnabled()
+boolean GetChttransEnabled(void* arg)
 {
-    return transState.enabled;
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    return transState->enabled;
 }
 
-char* ChttransOutputFilter(const char *strin)
+char* ChttransOutputFilter(void* arg, const char *strin)
 {
-    if (transState.enabled)
-        return ConvertGBKSimple2Tradition(strin, transState.engine);
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    if (transState->enabled)
+        return ConvertGBKSimple2Tradition(transState, strin);
     else
         return NULL;
 }
@@ -130,12 +138,12 @@ char* ChttransOutputFilter(const char *strin)
  * WARNING： 该函数返回新分配内存字符串，请调用者
  * 注意释放。
  */
-char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
+char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
 {
     if (strHZ == NULL)
         return NULL;
 
-    switch(engine)
+    switch(transState->engine)
     {
         case ENGINE_OPENCC:
 #ifdef HAVE_OPENCC
@@ -171,7 +179,7 @@ char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
             size_t          bufLen = 0;
             const char     *ps;
 
-            if (!s2t_table) {
+            if (!transState->engine) {
                 len = 0;
 
                 fp = GetXDGFileData(TABLE_GBKS2T, "rb", NULL);
@@ -193,7 +201,7 @@ char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
                     strncpy(s2t->str, ps, s2t->len);
                     s2t->str[s2t->len] = '\0';
 
-                    HASH_ADD_INT(s2t_table, wc, s2t);
+                    HASH_ADD_INT(transState->s2t_table, wc, s2t);
                 }
                 if (strBuf)
                     free(strBuf);
@@ -211,7 +219,7 @@ char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
                 int chr_len = utf8_char_len(ps);
                 char *nps;
                 nps = utf8_get_char(ps , &wc);
-                HASH_FIND_INT(s2t_table, &wc, s2t);
+                HASH_FIND_INT(transState->s2t_table, &wc, s2t);
 
                 if (s2t)
                 {
@@ -235,7 +243,7 @@ char *ConvertGBKSimple2Tradition (const char *strHZ, ChttransEngine engine)
     return NULL;
 }
 
-void LoadChttransConfig()
+void LoadChttransConfig(FcitxChttrans* transState)
 {
     FILE *fp;
     char *file;
@@ -245,8 +253,8 @@ void LoadChttransConfig()
     if (!fp) {
         if (errno == ENOENT)
         {
-            SaveChttransConfig();
-            LoadChttransConfig();
+            SaveChttransConfig(transState);
+            LoadChttransConfig(transState);
         }
         return;
     }
@@ -254,7 +262,7 @@ void LoadChttransConfig()
     ConfigFileDesc* configDesc = GetChttransConfigDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
-    FcitxChttransConfigBind(&transState, cfile, configDesc);
+    FcitxChttransConfigBind(transState, cfile, configDesc);
     ConfigBindSync((GenericConfig*)&transState);
 
     fclose(fp);
@@ -274,13 +282,13 @@ ConfigFileDesc* GetChttransConfigDesc()
     return chttransConfigDesc;
 }
 
-void SaveChttransConfig()
+void SaveChttransConfig(FcitxChttrans* transState)
 {
     ConfigFileDesc* configDesc = GetChttransConfigDesc();
     char *file;
     FILE *fp = GetXDGFileUser("addon/fcitx-chttrans.config", "wt", &file);
     FcitxLog(INFO, "Save Config to %s", file);
-    SaveConfigFileFp(fp, transState.gconfig.configFile, configDesc);
+    SaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);
     fclose(fp);
 }

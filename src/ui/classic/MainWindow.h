@@ -34,6 +34,7 @@
 #include <fcitx-config/fcitx-config.h>
 
 struct FcitxSkin;
+struct FcitxClassicUI;
 
 typedef enum _HIDE_MAINWINDOW {
     HM_SHOW = 0,
@@ -49,16 +50,16 @@ typedef struct MainWindow
     cairo_surface_t* cs_main_bar;
     GC main_win_gc;
     boolean bMainWindowHidden;
-    HIDE_MAINWINDOW hideMode;
     struct FcitxSkin* skin;
     
     cairo_surface_t* bar;
     cairo_surface_t* logo;
     cairo_surface_t* english;
     cairo_surface_t* otherim;
+    struct FcitxClassicUI* owner;
 } MainWindow;
 
-MainWindow* CreateMainWindow (Display* dpy, int iScreen, struct FcitxSkin* sc, HIDE_MAINWINDOW hideMainWindow);
+MainWindow* CreateMainWindow (struct FcitxClassicUI* classicui);
 void CloseMainWindow(MainWindow *mainWindow);
 void DestroyMainWindow(MainWindow* mainWindow);
 void DrawMainWindow (MainWindow* mainWindow);

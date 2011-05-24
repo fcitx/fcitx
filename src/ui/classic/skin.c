@@ -38,20 +38,20 @@
 #include <sys/stat.h>
 #include <libintl.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
-#include "utils/utarray.h"
+#include "fcitx-utils/utarray.h"
 
 #include "classicui.h"
 #include "skin.h"
 #include "MenuWindow.h"
 #include "InputWindow.h"
 #include "MainWindow.h"
-#include "core/ui.h"
-#include "core/backend.h"
+#include "fcitx/ui.h"
+#include "fcitx/backend.h"
 
 #define ROUND_SIZE 60
 
@@ -782,33 +782,33 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     SetMessageChanged(msgdown, false);
 }
 
-void DisplaySkin(char * skinname)
+void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
 {
-    char *pivot = classicui.skinType;
-    classicui.skinType= strdup(skinname);
+    char *pivot = classicui->skinType;
+    classicui->skinType= strdup(skinname);
     if (pivot)
         free(pivot);
 
-    CloseMainWindow(classicui.mainWindow);
-    CloseInputWindowInternal(classicui.inputWindow);
+    CloseMainWindow(classicui->mainWindow);
+    CloseInputWindowInternal(classicui->inputWindow);
 
-    DestroyMainWindow(classicui.mainWindow);
-    DestroyInputWindow(classicui.inputWindow);
+    DestroyMainWindow(classicui->mainWindow);
+    DestroyInputWindow(classicui->inputWindow);
     DestroyMenuWindow();
 
-    LoadSkinConfig(&classicui.skin, &classicui.skinType);
+    LoadSkinConfig(&classicui->skin, &classicui->skinType);
 
-    InitComposite();
+    InitComposite(classicui);
 
-    classicui.mainWindow = CreateMainWindow (classicui.dpy, classicui.iScreen, &classicui.skin, classicui.hideMainWindow);
-    classicui.inputWindow = CreateInputWindow (classicui.dpy, classicui.iScreen, &classicui.skin, classicui.font);
+    classicui->mainWindow = CreateMainWindow (classicui);
+    classicui->inputWindow = CreateInputWindow (classicui);
 
     CreateMenuWindow();
 
-    DrawMainWindow (classicui.mainWindow);
-    DrawInputWindow (classicui.inputWindow);
-    LoadTrayImage(&classicui.skin);
-    DrawTrayWindow (classicui.trayWindow);
+    DrawMainWindow (classicui->mainWindow);
+    DrawInputWindow (classicui->inputWindow);
+    LoadTrayImage(&classicui->skin);
+    DrawTrayWindow (classicui->trayWindow);
 }
 
 //图片文件加载函数完成

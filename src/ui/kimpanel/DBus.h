@@ -21,8 +21,8 @@
 
 #include <dbus/dbus.h>
 #include "InputWindow.h"
-#include "core/ime.h"
-#include "core/xim.h"
+#include "fcitx/ime.h"
+#include "fcitx/xim.h"
 
 extern IM *im;
 

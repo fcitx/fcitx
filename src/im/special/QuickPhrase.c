@@ -21,7 +21,7 @@
 #include <limits.h>
 #include <ctype.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #include "tools.h"
 #include "im/special/QuickPhrase.h"

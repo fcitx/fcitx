@@ -20,7 +20,7 @@
 #ifndef _UI_H
 #define _UI_H
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #include <X11/Xlib.h>
 #include <cairo.h>
@@ -59,6 +59,7 @@ typedef struct FcitxClassicUI {
     AboutWindow* aboutWindow;
     
     struct FcitxSkin skin;
+    struct FcitxInstance *owner;
     
     char* font;
     char* menuFont;
@@ -82,8 +83,6 @@ typedef enum FcitxXWindowType {
     FCITX_WINDOW_MENU,
     FCITX_WINDOW_DIALOG
 } FcitxXWindowType;
-
-extern FcitxClassicUI classicui;
 
 #ifdef _ENABLE_PANGO
 #define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
@@ -125,13 +124,13 @@ int FontHeightWithContextReal(cairo_t* c);
 
 #endif
 
-void GetScreenSize(Display* dpy, int iScreen, int *width, int *height);
+void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
 void
 InitWindowAttribute(Display* dpy, int iScreen, Visual ** vs, Colormap * cmap,
                     XSetWindowAttributes * attrib,
                     unsigned long *attribmask, int *depth);
-void InitComposite();
-Visual * FindARGBVisual (Display *dpy, int scr);
+void InitComposite(FcitxClassicUI* classicui);
+Visual * FindARGBVisual (FcitxClassicUI* classicui);
 Bool MouseClick(int *x, int *y, Display* dpy, Window window);
 Bool SetMouseStatus();
 boolean IsInRspArea(int x0, int y0, cairo_surface_t* surface);

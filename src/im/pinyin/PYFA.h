@@ -26,19 +26,46 @@
 /**
  * @brief ...
  **/
+typedef struct MHPY_TEMPLATE {
+    char           *strMap;
+} MHPY_TEMPLATE;
+
 typedef struct MHPY {
     char           *strMap;
     boolean           bMode;
 } MHPY;
+
+typedef enum PYTABLE_CONTROL {
+    PYTABLE_NONE,
+    PYTABLE_NG_GN,
+    PYTABLE_AN_ANG, // 0
+    PYTABLE_EN_ENG, // 1
+    PYTABLE_IAN_IANG, // 2
+    PYTABLE_IN_ING, // 3
+    PYTABLE_U_OU, // 4
+    PYTABLE_UAN_UANG, // 5
+    PYTABLE_C_CH, // 0
+    PYTABLE_F_H, // 1
+    PYTABLE_L_N, // 2
+    PYTABLE_S_SH, // 3
+    PYTABLE_Z_ZH, // 4
+    PYTABLE_AN_ANG_S //5
+} PYTABLE_CONTROL;
+
+typedef struct PYTABLE_TEMPLATE
+{
+    char            strPY[7];
+    PYTABLE_CONTROL control;
+} PYTABLE_TEMPLATE;
 
 typedef struct PYTABLE {
     char            strPY[7];
     boolean            *pMH;
 } PYTABLE;
 
-int             GetMHIndex_C (char map);
+int GetMHIndex_C (MHPY* MHPY_C, char map);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
-int             GetMHIndex_S (char map, Bool bMode);
+int GetMHIndex_S (MHPY* MHPY_S, char map, Bool bMode);
 Bool		IsZ_C_S (char map);
 
 #endif

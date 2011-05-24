@@ -48,7 +48,7 @@ static int Is (char *attr, XICAttribute * attr_list)
     return !strcmp (attr, attr_list->name);
 }
 
-boolean  XimCheckIC (FcitxInputContext* context, void* priv)
+boolean  XimCheckIC (void* arg, FcitxInputContext* context, void* priv)
 {
     CARD16* picid = (CARD16*) priv;
     FcitxXimIC* rec = (FcitxXimIC*) context->privateic;
@@ -173,14 +173,15 @@ static void StoreIC (FcitxXimIC * rec, IMChangeICStruct * call_data)
  * @param  priv private data passed by CreateIC
  * @return void
  **/
-void XimCreateIC (FcitxInputContext* context, void *priv)
+void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
 {
+    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
     IMChangeICStruct * call_data = (IMChangeICStruct *)priv;
-    context->privateic = malloc0(sizeof(FcitxXimIC));
+    context->privateic = fcitx_malloc0(sizeof(FcitxXimIC));
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
 
     privic->connect_id = call_data->connect_id;
-    privic->id = ++ xim.icid  ;
+    privic->id = ++ xim->icid  ;
     StoreIC (privic, call_data);
     call_data->icid = privic->id;
 
@@ -193,7 +194,7 @@ void XimCreateIC (FcitxInputContext* context, void *priv)
  * @param context Input Context to Destroy
  * @return void
  **/
-void XimDestroyIC (FcitxInputContext *context)
+void XimDestroyIC (void* arg, FcitxInputContext* context)
 {
     //free resource
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
@@ -213,9 +214,9 @@ void XimDestroyIC (FcitxInputContext *context)
  * @param call_data 
  * @return void
  **/
-void XimSetIC (IMChangeICStruct * call_data)
+void XimSetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext   *ic = FindIC (backend.backendid, &call_data->icid);
+    FcitxInputContext   *ic = FindIC (xim->owner, xim->backendid, &call_data->icid);
 
     if (ic == NULL)
         return;
@@ -231,13 +232,13 @@ void XimSetIC (IMChangeICStruct * call_data)
  * @param call_data 
  * @return void
  **/
-void XimGetIC (IMChangeICStruct * call_data)
+void XimGetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
     XICAttribute   *ic_attr = call_data->ic_attr;
     XICAttribute   *pre_attr = call_data->preedit_attr;
     XICAttribute   *sts_attr = call_data->status_attr;
     register int    i;
-    FcitxInputContext *ic = FindIC (backend.backendid, &call_data->icid);
+    FcitxInputContext *ic = FindIC (xim->owner, xim->backendid, &call_data->icid);
     FcitxXimIC* rec = (FcitxXimIC*) ic->privateic;
 
     if (rec == NULL)

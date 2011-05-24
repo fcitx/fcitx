@@ -35,7 +35,7 @@
 #include <cairo.h>
 #include "fcitx-config/fcitx-config.h"
 #include "InputWindow.h"
-#include <core/ui.h>
+#include <fcitx/ui.h>
 #include "MainWindow.h"
 
 typedef enum

@@ -23,13 +23,13 @@
 #include <cairo-xlib.h>
 #include <X11/Xatom.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 #include "im/special/vk.h"
 #include "ui.h"
 #include "MainWindow.h"
 #include "InputWindow.h"
-#include "core/IC.h"
-#include "core/xim.h"
+#include "fcitx/IC.h"
+#include "fcitx/xim.h"
 #include "fcitx-config/xdg.h"
 #include "interface/DBus.h"
 #include "profile.h"

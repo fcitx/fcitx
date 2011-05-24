@@ -25,21 +25,23 @@
 #include <limits.h>
 #include <libintl.h>
 
-#include "core/fcitx.h"
-#include "core/module.h"
-#include "core/hook.h"
-#include "utils/utils.h"
+#include "fcitx/fcitx.h"
+#include "fcitx/module.h"
+#include "fcitx/hook.h"
+#include "fcitx-utils/utils.h"
 #include "fcitx-config/xdg.h"
 
 #include "AutoEng.h"
-#include <core/keys.h>
+#include <fcitx-utils/keys.h>
+#include <fcitx/ui.h>
+#include <fcitx/instance.h>
 
-struct {
+typedef struct FcitxAutoEngState {
     UT_array* autoEng;
     char buf[MAX_USER_INPUT + 1];
     int index;
     boolean active;
-} autoEngState;
+} FcitxAutoEngState;
 
 static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 
@@ -49,14 +51,14 @@ static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
  *
  * @return boolean
  **/
-static boolean AutoEngInit();
+static void* AutoEngCreate(FcitxInstance *instance);
 
 /**
  * @brief Load AutoEng File
  *
  * @return void
  **/
-static void            LoadAutoEng (void);
+static void            LoadAutoEng (FcitxAutoEngState* autoEngState);
 
 /**
  * @brief Cache the input key for autoeng, only simple key without combine key will be record
@@ -66,7 +68,8 @@ static void            LoadAutoEng (void);
  * @param retval Return state value
  * @return boolean
  **/
-static boolean ProcessAutoEng(long unsigned int sym,
+static boolean ProcessAutoEng(void* arg,
+                              long unsigned int sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              );
@@ -83,7 +86,7 @@ static void ResetAutoEng();
  *
  * @return void
  **/
-static void FreeAutoEng (void);
+static void FreeAutoEng (void* arg);
 
 /**
  * @brief Check whether need to switch to English
@@ -91,7 +94,7 @@ static void FreeAutoEng (void);
  * @param  str string
  * @return boolean
  **/
-boolean            SwitchToEng (char *);
+boolean            SwitchToEng (FcitxAutoEngState* autoEngState, char* str);
 
 
 /**
@@ -99,44 +102,55 @@ boolean            SwitchToEng (char *);
  *
  * @return void
  **/
-void ShowAutoEngMessage();
+void ShowAutoEngMessage(FcitxAutoEngState* autoEngState);
 
 FCITX_EXPORT_API
 FcitxModule module = {
-    AutoEngInit,
+    AutoEngCreate,
     NULL,
     FreeAutoEng
 };
 
-boolean AutoEngInit()
+void* AutoEngCreate(FcitxInstance *instance)
 {
-    LoadAutoEng();
-    RegisterPreInputFilter(ProcessAutoEng);
-    RegisterResetInputHook(ResetAutoEng);
+    FcitxAutoEngState* autoEngState = fcitx_malloc0(sizeof(FcitxAutoEngState));
+    LoadAutoEng(autoEngState);
+    
+    KeyFilterHook khk;
+    khk.arg = autoEngState;
+    khk.func = ProcessAutoEng;
+    
+    FcitxResetInputHook rhk;
+    rhk.arg = autoEngState;
+    rhk.func = ResetAutoEng;
+    
+    RegisterPreInputFilter(khk);
+    RegisterResetInputHook(rhk);
 
     ResetAutoEng();
-    return true;
+    return autoEngState;
 }
 
-static boolean ProcessAutoEng(long unsigned int sym,
+static boolean ProcessAutoEng(void* arg,long unsigned int sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              )
 {
-    if (autoEngState.active)
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    if (autoEngState->active)
     {
         if (IsHotKeySimple(sym,state))
         {
-            autoEngState.buf[autoEngState.index] = sym;
-            autoEngState.index++;
-            autoEngState.buf[autoEngState.index] = '\0';
+            autoEngState->buf[autoEngState->index] = sym;
+            autoEngState->index++;
+            autoEngState->buf[autoEngState->index] = '\0';
             *retval = IRV_DISPLAY_MESSAGE;
         }
         else if (IsHotKey(sym, state, FCITX_BACKSPACE))
         {
-            autoEngState.index -- ;
-            autoEngState.buf[autoEngState.index] = '\0';
-            if (autoEngState.index == 0)
+            autoEngState->index -- ;
+            autoEngState->buf[autoEngState->index] = '\0';
+            if (autoEngState->index == 0)
             {
                 ResetAutoEng();
                 *retval = IRV_CLEAN;
@@ -146,46 +160,47 @@ static boolean ProcessAutoEng(long unsigned int sym,
         }
         else if (IsHotKey(sym, state, FCITX_ENTER))
         {
-            strcpy(GetOutputString(), autoEngState.buf);
+            strcpy(GetOutputString(), autoEngState->buf);
             ResetAutoEng();
             *retval = IRV_GET_CANDWORDS;
         }
-        ShowAutoEngMessage();
+        ShowAutoEngMessage(autoEngState);
         return true;
     }
     if (IsHotKeySimple(sym, state))
     {
-        autoEngState.buf[autoEngState.index] = sym;
-        autoEngState.index++;
-        autoEngState.buf[autoEngState.index] = '\0';
+        autoEngState->buf[autoEngState->index] = sym;
+        autoEngState->index++;
+        autoEngState->buf[autoEngState->index] = '\0';
 
-        if (SwitchToEng(autoEngState.buf))
+        if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
-            autoEngState.active = true;
-            ShowAutoEngMessage();
+            autoEngState->active = true;
+            ShowAutoEngMessage(autoEngState);
             return true;
         }
     }
     else if (IsHotKey(sym, state, FCITX_BACKSPACE))
     {
-        if (autoEngState.index > 0)
+        if (autoEngState->index > 0)
         {
-            autoEngState.index -- ;
-            autoEngState.buf[autoEngState.index] = '\0';
+            autoEngState->index -- ;
+            autoEngState->buf[autoEngState->index] = '\0';
         }
     }
     return false;
 }
 
-void ResetAutoEng()
+void ResetAutoEng(void* arg)
 {
-    autoEngState.index = 0;
-    autoEngState.buf[autoEngState.index] = '\0';
-    autoEngState.active = false;
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    autoEngState->index = 0;
+    autoEngState->buf[autoEngState->index] = '\0';
+    autoEngState->active = false;
 }
 
-void LoadAutoEng (void)
+void LoadAutoEng (FcitxAutoEngState* autoEngState)
 {
     FILE    *fp;
     char    *buf;
@@ -195,7 +210,7 @@ void LoadAutoEng (void)
     if (!fp)
         return;
 
-    utarray_new(autoEngState.autoEng, &autoeng_icd);
+    utarray_new(autoEngState->autoEng, &autoeng_icd);
     AUTO_ENG autoeng;
 
     while  (getline(&buf, &length, fp) != -1) {
@@ -205,7 +220,7 @@ void LoadAutoEng (void)
         strncpy(autoeng.str, line, MAX_AUTO_TO_ENG);
         free(line);
         autoeng.str[MAX_AUTO_TO_ENG] = '\0';
-        utarray_push_back(autoEngState.autoEng, &autoeng);
+        utarray_push_back(autoEngState->autoEng, &autoeng);
     }
 
     free(buf);
@@ -213,28 +228,29 @@ void LoadAutoEng (void)
     fclose (fp);
 }
 
-void FreeAutoEng (void)
+void FreeAutoEng (void* arg)
 {
-    if (autoEngState.autoEng)
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    if (autoEngState->autoEng)
     {
-        utarray_free(autoEngState.autoEng);
-        autoEngState.autoEng = NULL;
+        utarray_free(autoEngState->autoEng);
+        autoEngState->autoEng = NULL;
     }
 }
 
-boolean SwitchToEng (char *str)
+boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 {
     AUTO_ENG*       autoeng;
-    for (autoeng = (AUTO_ENG *) utarray_front(autoEngState.autoEng);
+    for (autoeng = (AUTO_ENG *) utarray_front(autoEngState->autoEng);
             autoeng != NULL;
-            autoeng = (AUTO_ENG *) utarray_next(autoEngState.autoEng, autoeng))
+            autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
         if (!strcmp (str, autoeng->str))
             return true;
 
     return false;
 }
 
-void ShowAutoEngMessage()
+void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
     Messages *msgUp = GetMessageUp();
     Messages *msgDown = GetMessageDown();
@@ -242,9 +258,9 @@ void ShowAutoEngMessage()
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);
     
-    if (autoEngState.buf[0] == '\0')
+    if (autoEngState->buf[0] == '\0')
         return;
     
-    AddMessageAtLast(msgUp, MSG_INPUT, autoEngState.buf);
+    AddMessageAtLast(msgUp, MSG_INPUT, autoEngState->buf);
     AddMessageAtLast(msgDown, MSG_OTHER, _("Press enter to input text"));
 }

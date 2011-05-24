@@ -29,10 +29,10 @@
 #include <fcntl.h>
 #include <limits.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #include "tools.h"
-#include "core/xim.h"
+#include "fcitx/xim.h"
 #include "MainWindow.h"
 #include "TrayWindow.h"
 #include "configfile.h"

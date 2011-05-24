@@ -37,12 +37,13 @@
 #include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
-#include <core/backend.h>
-#include "core/module.h"
+#include <fcitx/backend.h>
+#include "fcitx/module.h"
+#include <fcitx/instance.h>
 
 static boolean MainWindowEventHandler(void *instance, XEvent* event);
 
-MainWindow* CreateMainWindow (Display* dpy, int iScreen, FcitxSkin* sc, HIDE_MAINWINDOW hideMainWindow)
+MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
 {
     MainWindow *mainWindow;
     int depth;
@@ -54,27 +55,30 @@ MainWindow* CreateMainWindow (Display* dpy, int iScreen, FcitxSkin* sc, HIDE_MAI
     char        strWindowName[] = "Fcitx Main Window";
     int swidth, sheight;
     XGCValues xgv;
+    Display* dpy = classicui->dpy;
+    int iScreen = classicui->iScreen;
+    FcitxSkin *sc = &classicui->skin;
+    
 
-    mainWindow = malloc0(sizeof(MainWindow));
+    mainWindow = fcitx_malloc0(sizeof(MainWindow));
+    mainWindow->owner = classicui;
     
-    mainWindow->hideMode = hideMainWindow;
-    
-    GetScreenSize(dpy, iScreen, &swidth, &sheight);
+    GetScreenSize(classicui, &swidth, &sheight);
     LoadMainBarImage(mainWindow, sc);
 
-    vs = FindARGBVisual(dpy, iScreen);
+    vs = FindARGBVisual(classicui);
 
-    if (classicui.iMainWindowOffsetX + cairo_image_surface_get_width(mainWindow->bar) > swidth )
-        classicui.iMainWindowOffsetX = swidth - cairo_image_surface_get_width(mainWindow->bar);
+    if (classicui->iMainWindowOffsetX + cairo_image_surface_get_width(mainWindow->bar) > swidth )
+        classicui->iMainWindowOffsetX = swidth - cairo_image_surface_get_width(mainWindow->bar);
     
-    if (classicui.iMainWindowOffsetY + cairo_image_surface_get_height(mainWindow->bar) > sheight )
-        classicui.iMainWindowOffsetY = sheight - cairo_image_surface_get_height(mainWindow->bar);
+    if (classicui->iMainWindowOffsetY + cairo_image_surface_get_height(mainWindow->bar) > sheight )
+        classicui->iMainWindowOffsetY = sheight - cairo_image_surface_get_height(mainWindow->bar);
 
     InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
     mainWindow->window=XCreateWindow (dpy,
                                      RootWindow(dpy, iScreen),
-                                     classicui.iMainWindowOffsetX,
-                                     classicui.iMainWindowOffsetY,
+                                     classicui->iMainWindowOffsetX,
+                                     classicui->iMainWindowOffsetY,
                                      cairo_image_surface_get_width(mainWindow->bar),
                                      cairo_image_surface_get_height(mainWindow->bar),
                                      0, depth,InputOutput, vs,attribmask, &attrib);
@@ -103,12 +107,12 @@ MainWindow* CreateMainWindow (Display* dpy, int iScreen, FcitxSkin* sc, HIDE_MAI
     XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
     XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
-    SetWindowProperty(dpy, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
+    SetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MainWindowEventHandler;
     arg.args[1] = mainWindow;
-    InvokeFunction(FCITX_X11, ADDXEVENTHANDLER, arg);
+    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
     return mainWindow;
 }
 
@@ -144,7 +148,7 @@ void DrawMainWindow (MainWindow* mainWindow)
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
-    if (mainWindow->hideMode == HM_SHOW || (mainWindow->hideMode == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
+    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
     {
         // extern mouse_e ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
         DrawImage(&c, mainWindow->bar, 0, 0, RELEASE );
@@ -192,7 +196,7 @@ void DestroyMainWindow(MainWindow* mainWindow)
     
     FcitxModuleFunctionArg arg;
     arg.args[0] = mainWindow;
-    InvokeFunction(FCITX_X11, REMOVEXEVENTHANDLER, arg);
+    InvokeFunction(mainWindow->owner->owner, FCITX_X11, REMOVEXEVENTHANDLER, arg);
     
     free(mainWindow);
 }

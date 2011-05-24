@@ -28,8 +28,8 @@
 #include "tools.h"
 #include "InputWindow.h"
 #include "im/special/vk.h"
-#include "core/ime.h"
-#include "core/xim.h"
+#include "fcitx/ime.h"
+#include "fcitx/xim.h"
 #include "interface/DBus.h"
 #include "profile.h"
 

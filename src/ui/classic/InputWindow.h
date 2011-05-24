@@ -37,6 +37,7 @@
 #define INPUT_BAR_MAX_LEN 1500
 
 struct FcitxSkin;
+struct FcitxClassicUI;
 
 typedef struct InputWindow {
     Window window;
@@ -63,9 +64,10 @@ typedef struct InputWindow {
     int iScreen;
     struct FcitxSkin* skin;
     const char* font;
+    struct FcitxClassicUI *owner;
 } InputWindow;
 
-InputWindow* CreateInputWindow(Display* dpy, int iScreen, struct FcitxSkin* sc, const char* font);
+InputWindow* CreateInputWindow(struct FcitxClassicUI* classicui);
 void MoveInputWindowInternal(InputWindow* inputWindow);
 void CloseInputWindowInternal(InputWindow* inputWindow);
 void DestroyInputWindow(InputWindow* inputWindow);

@@ -1,0 +1,686 @@
+/***************************************************************************
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+/**
+ * @file   ime.c
+ * @author Yuking yuking_net@sohu.com
+ * @date   2008-1-16
+ *
+ * @brief  Process Keyboard Event and Input Method
+ *
+ */
+#include <dlfcn.h>
+#include <libintl.h>
+#include "ime.h"
+#include "addon.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-config/cutils.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-utils/configfile.h"
+#include "fcitx-utils/keys.h"
+#include "fcitx-utils/profile.h"
+#include "ime-internal.h"
+#include "ui.h"
+#include "fcitx-utils/utils.h"
+#include "hook.h"
+#include "backend.h"
+#include "hook-internal.h"
+#include "instance.h"
+
+static void UnloadIM(FcitxAddon* pim);
+static const char* GetStateName(INPUT_RETURN_VALUE retVal);
+static void UpdateInputWindow(FcitxInstance* instance);
+static const UT_icd im_icd = {sizeof(FcitxAddon*), NULL ,NULL, NULL};
+
+void InitBuiltInHotkey(FcitxInstance *instance)
+{
+    HotkeyHook hk;
+    hk.hotkey = FCITX_CTRL_5;
+    hk.hotkeyhandle = ImProcessReload;
+    hk.arg = instance;
+    RegisterHotkeyFilter(hk);
+    
+    hk.hotkey = FCITX_ENTER;
+    hk.hotkeyhandle = ImProcessEnter;
+    hk.arg = instance;
+    RegisterHotkeyFilter(hk);
+    
+    hk.hotkey = FCITX_ESCAPE;
+    hk.hotkeyhandle = ImProcessEscape;
+    hk.arg = instance;
+    RegisterHotkeyFilter(hk);
+}
+
+void InitFcitxIMS(UT_array* ims)
+{
+    utarray_init(ims, &im_icd);
+}
+
+void SaveAllIM(FcitxInstance* instance)
+{
+    UT_array* ims = &instance->ims;
+    FcitxAddon **pim;
+    for ( pim = (FcitxAddon **) utarray_front(ims);
+          pim != NULL;
+          pim = (FcitxAddon **) utarray_next(ims, pim))
+    {
+        FcitxIM *im = (*pim)->im;
+        if (im->Save)
+            im->Save((*pim)->addonInstance);
+    }
+}
+
+void UnloadAllIM(UT_array* ims)
+{
+    FcitxAddon **pim;
+    for ( pim = (FcitxAddon **) utarray_front(ims);
+          pim != NULL;
+          pim = (FcitxAddon **) utarray_next(ims, pim))
+    {
+        FcitxAddon *im = *pim;
+        UnloadIM(im);
+    }
+    utarray_clear(ims);
+}
+
+static const char* GetStateName(INPUT_RETURN_VALUE retVal)
+{
+    switch (retVal)
+    {
+        case IRV_DO_NOTHING:
+            return "IRV_DO_NOTHING";
+        case IRV_DONOT_PROCESS:
+            return "IRV_DONOT_PROCESS";
+        case IRV_DONOT_PROCESS_CLEAN:
+            return "IRV_DONOT_PROCESS_CLEAN";
+        case IRV_CLEAN:
+            return "IRV_CLEAN";
+        case IRV_TO_PROCESS:
+            return "IRV_TO_PROCESS";
+        case IRV_DISPLAY_MESSAGE:
+            return "IRV_DISPLAY_MESSAGE";
+        case IRV_DISPLAY_CANDWORDS:
+            return "IRV_DISPLAY_CANDWORDS";
+        case IRV_DISPLAY_LAST:
+            return "IRV_DISPLAY_LAST";
+        case IRV_PUNC:
+            return "IRV_PUNC";
+        case IRV_ENG:
+            return "IRV_ENG";
+        case IRV_GET_LEGEND:
+            return "IRV_GET_LEGEND";
+        case IRV_GET_CANDWORDS:
+            return "IRV_GET_CANDWORDS";
+        case IRV_GET_CANDWORDS_NEXT:
+            return "IRV_GET_CANDWORDS_NEXT";
+    }
+    return "unknown";
+}
+
+void UnloadIM(FcitxAddon* pim)
+{
+    //TODO: DestroyImage(&ime->icon);
+    FcitxIM *im = pim->im;
+    if (im->Destroy)
+        im->Destroy(pim->addonInstance);
+}
+
+void LoadAllIM(FcitxInstance* instance)
+{
+    UT_array* addons = &instance->addons;
+    UT_array* ims = &instance->ims;
+    FcitxAddon *addon;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+          addon != NULL;
+          addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->bEnabled && addon->category == AC_INPUTMETHOD)
+        {
+            char *modulePath;
+            switch (addon->type)
+            {
+                case AT_SHAREDLIBRARY:
+                    {
+                        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+                        void *handle;
+                        FcitxIM* im;
+                        if (!fp)
+                            break;
+                        fclose(fp);
+                        handle = dlopen(modulePath,RTLD_LAZY);
+                        if(!handle)
+                        {
+                            FcitxLog(ERROR, _("IM: open %s fail %s") ,modulePath ,dlerror());
+                            break;
+                        }
+                        im=dlsym(handle,"ime");
+                        if(!im || !im->Create)
+                        {
+                            FcitxLog(ERROR, _("IM: bad im"));
+                            dlclose(handle);
+                            break;
+                        }
+                        if((addon->addonInstance = im->Create(instance)) == NULL)
+                        {
+                            dlclose(handle);
+                            return;
+                        }
+                        addon->im = im;
+                        utarray_push_back(ims, &addon);
+                    }
+                default:
+                    break;
+            }
+            free(modulePath);
+        }
+    }
+    if (instance->iIMIndex < 0)
+        instance->iIMIndex = 0;
+    if (instance->iIMIndex > utarray_len(ims))
+        instance->iIMIndex = utarray_len(ims) - 1;
+    if (utarray_len(ims) <= 0)
+    {
+        FcitxLog(ERROR, _("No available Input Method"));
+        exit(1);
+    }
+}
+
+boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
+{
+    state &= KEY_CTRL_ALT_SHIFT_COMP;
+    if (sym == hotkey[0].sym && (hotkey[0].state == state) )
+        return True;
+    if (sym == hotkey[1].sym && (hotkey[1].state == state) )
+        return True;
+    return False;
+}
+
+INPUT_RETURN_VALUE ProcessKey(
+    FcitxInstance* instance,
+    FcitxKeyEventType event,
+                              long unsigned int timestamp,
+                              FcitxKeySym sym,
+                              unsigned int state)
+{
+    if (sym == 0) {
+        return IRV_DONOT_PROCESS;
+    }
+
+    INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
+    char *pstr;
+    FcitxAddon* currentIM = GetCurrentIM(instance);
+    FcitxInputState *input = &instance->input;
+    
+    /* TODO: */
+    FcitxConfig *fc = NULL; // (FcitxConfig*) GetConfig();
+
+    /*
+     * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
+     * because ctrl, shift, alt are compose key, so hotkey like ctrl+a will also produce a key
+     * release event for ctrl key, so we must make sure the key release right now is the key just
+     * pressed.
+     */
+
+    /* process keyrelease event for switch key and 2nd, 3rd key */
+    if (event == FCITX_RELEASE_KEY ) {
+        if (GetCurrentIC()->state != IS_CLOSED) {
+            if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
+                if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                    if (GetCurrentIC()->state == IS_ACTIVE)
+                        SwitchIM(instance, -1);
+                    else if (IsHotKey(sym, state, fc->hkTrigger))
+                        CloseIM(instance, GetCurrentIC());
+                    /* else if (bVK)
+                        ChangVK(); */
+                } else if (IsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
+                    retVal = IRV_DONOT_PROCESS;
+                    if (fc->bSendTextWhenSwitchEng) {
+                        if (input->iCodeInputCount != 0) {
+                            strcpy(input->strStringGet, input->strCodeInput);
+                            retVal = IRV_ENG;
+                        }
+                    }
+                    input->keyReleased = KR_OTHER;
+                    ChangeIMState(instance, GetCurrentIC());
+                } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
+                    if (!input->bIsInLegend) {
+                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 1);
+                        if (pstr) {
+                            strcpy(input->strStringGet, pstr);
+                            if (input->bIsInLegend)
+                                retVal = IRV_GET_LEGEND;
+                            else
+                                retVal = IRV_GET_CANDWORDS;
+                        } else if (input->iCandWordCount != 0)
+                            retVal = IRV_DISPLAY_CANDWORDS;
+                        else
+                            retVal = IRV_TO_PROCESS;
+                    } else {
+                        strcpy(input->strStringGet, " ");
+                        SetMessageCount(instance->messageDown, 0);
+                        retVal = IRV_GET_CANDWORDS;
+                    }
+                    input->keyReleased = KR_OTHER;
+                } else if (IsHotKey(sym, state, fc->i3rdSelectKey) && input->keyReleased == KR_3RD_SELECTKEY) {
+                    if (!input->bIsInLegend) {
+                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 2);
+                        if (pstr) {
+                            strcpy(input->strStringGet, pstr);
+                            if (input->bIsInLegend)
+                                retVal = IRV_GET_LEGEND;
+                            else
+                                retVal = IRV_GET_CANDWORDS;
+                        } else if (input->iCandWordCount)
+                            retVal = IRV_DISPLAY_CANDWORDS;
+                    } else {
+                        strcpy(input->strStringGet, "　");
+                        SetMessageCount(instance->messageDown, 0);
+                        retVal = IRV_GET_CANDWORDS;
+                    }
+
+                    input->keyReleased = KR_OTHER;
+                }
+            }
+        }
+    }
+
+    /* Added by hubert_star AT forum.ubuntu.com.cn */
+    if (event == FCITX_RELEASE_KEY
+        && IsHotKeySimple(sym, state)
+        && retVal == IRV_TO_PROCESS)
+        return IRV_DONOT_PROCESS;
+ 
+    if (retVal == IRV_TO_PROCESS) {
+        /* process key event for switch key */
+        if (event == FCITX_PRESS_KEY) {
+            if (!IsHotKey(sym, state, fc->switchKey))
+                input->keyReleased = KR_OTHER;
+            else {
+                if ((input->keyReleased == KR_CTRL)
+                    && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
+                    && fc->bDoubleSwitchKey) {
+                    CommitString(instance, GetCurrentIC(), input->strCodeInput);
+                    ChangeIMState(instance, GetCurrentIC());
+                }
+            }
+
+            input->lastKeyPressedTime = timestamp;
+            if (IsHotKey(sym, state, fc->switchKey)) {
+                input->keyReleased = KR_CTRL;
+                retVal = IRV_DO_NOTHING;
+            } else if (IsHotKey(sym, state, fc->hkTrigger)) {
+                /* trigger key has the highest priority, so we check it first */
+                if (GetCurrentIC()->state == IS_ENG) {
+                    ChangeIMState(instance, GetCurrentIC());
+                } else
+                    CloseIM(instance, GetCurrentIC());
+
+                retVal = IRV_DO_NOTHING;
+            }
+        }
+    }
+
+    if (retVal == IRV_TO_PROCESS && event != FCITX_PRESS_KEY)
+        retVal = IRV_DONOT_PROCESS;
+
+    if (GetCurrentIC()->state == IS_ACTIVE) {
+        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+            ProcessPreInputFilter(sym, state, &retVal);
+        }
+        
+        if (retVal == IRV_TO_PROCESS)
+        {
+            if (IsHotKey(sym, state, fc->i2ndSelectKey)) {
+                if (input->iCandWordCount >= 2)
+                {
+                    input->keyReleased = KR_2ND_SELECTKEY;
+                    return IRV_DONOT_PROCESS;
+                }
+            } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
+                if (input->iCandWordCount >= 3)
+                {
+                    input->keyReleased = KR_3RD_SELECTKEY;
+                    return IRV_DONOT_PROCESS;
+                }
+            }
+
+            if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                //调用输入法模块
+                /* TODO: use module
+                if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
+                    //有人报 空格 的全角不对，正确的是0xa1 0xa1
+                    //但查资料却说全角符号总是以0xa3开始。
+                    //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
+                    sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
+                    retVal = IRV_GET_CANDWORDS;
+                } else */
+
+                retVal = currentIM->im->DoInput(currentIM->addonInstance, sym, state);
+                if (!input->bCursorAuto)
+                    input->iCursorPos = input->iCodeInputCount;
+            }
+        }
+        
+        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+            if (!input->iInCap) {
+                if (IsHotKey(sym, state, fc->hkPrevPage))
+                    retVal = currentIM->im->GetCandWords(currentIM->addonInstance, SM_PREV);
+                else if (IsHotKey(sym, state, fc->hkNextPage))
+                    retVal = currentIM->im->GetCandWords(currentIM->addonInstance, SM_NEXT);
+            }
+
+
+        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+            ProcessPostInputFilter(sym, state, &retVal);
+    }
+    
+    if (retVal == IRV_TO_PROCESS) {
+        retVal = CheckHotkey(sym, state);
+    }
+    
+    FcitxLog(DEBUG, "ProcessKey Return State: %s", GetStateName(retVal));
+    
+    switch (retVal)
+    {
+        case IRV_DO_NOTHING:
+            break;
+        case IRV_TO_PROCESS:
+        case IRV_DONOT_PROCESS:
+        case IRV_DONOT_PROCESS_CLEAN:
+            ForwardKey(instance, GetCurrentIC(), event, sym, state);
+            
+            if (retVal != IRV_DONOT_PROCESS_CLEAN)
+                break;
+        case IRV_CLEAN:
+            ResetInput(instance);
+            CloseInputWindow();
+            break;
+            
+        case IRV_DISPLAY_CANDWORDS:
+            input->bShowPrev = input->bShowNext = false;
+            if (input->bIsInLegend) {
+                if (input->iCurrentLegendCandPage > 0)
+                    input->bShowPrev = true;
+                if (input->iCurrentLegendCandPage < input->iLegendCandPageCount)
+                    input->bShowNext = true;
+            } else {
+                if (input->iCurrentCandPage > 0)
+                    input->bShowPrev = true;
+                if (input->iCurrentCandPage < input->iCandPageCount)
+                    input->bShowNext = true;
+            }
+
+            ShowInputWindow(instance);
+            break;
+            
+        case IRV_DISPLAY_LAST:
+            input->bShowNext = input->bShowPrev = False;
+            SetMessageCount(instance->messageUp, 0);
+            AddMessageAtLast(instance->messageUp, MSG_INPUT, "%c", input->strCodeInput[0]);
+            SetMessageCount(instance->messageDown, 0);
+            AddMessageAtLast(instance->messageDown, MSG_TIPS, "%s", input->strStringGet);
+            UpdateInputWindow(instance);
+            
+            break;
+        case IRV_DISPLAY_MESSAGE:
+            input->bShowNext = False;
+            input->bShowPrev = False;
+            UpdateInputWindow(instance);
+            break;
+        case IRV_GET_LEGEND:
+            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
+            if (input->iLegendCandWordCount) {
+                input->bShowNext = input->bShowPrev = false;
+                if (input->iCurrentLegendCandPage > 0)
+                    input->bShowPrev = true;
+                if (input->iCurrentLegendCandPage < input->iLegendCandPageCount)
+                    input->bShowNext = true;
+                input->iCodeInputCount = 0;
+                ShowInputWindow(instance);
+            } else {
+                ResetInput(instance);
+                CloseInputWindow(instance);
+            }
+
+            break;
+        case IRV_GET_CANDWORDS:
+            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            if (fc->bPhraseTips && currentIM->im->PhraseTips)
+                DoPhraseTips(instance);
+            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));
+            UpdateInputWindow(instance);
+
+            ResetInput(instance);
+            input->lastIsSingleHZ = 0;
+            break;
+        case IRV_ENG:
+        case IRV_PUNC:
+            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
+            ResetInput(instance);
+            UpdateInputWindow(instance);
+        case IRV_GET_CANDWORDS_NEXT:
+            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            input->bLastIsNumber = false;
+            input->lastIsSingleHZ = 0;
+
+            if (retVal == IRV_GET_CANDWORDS_NEXT || input->lastIsSingleHZ == -1) {
+                input->iHZInputed += (int) (utf8_strlen(input->strStringGet));    //粗略统计字数
+                ShowInputWindow(instance);
+            }
+
+            break;
+        default:
+            ;
+    }
+    
+    return retVal;
+}
+
+void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
+{
+    UT_array* backends = &instance->backends;
+    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = (*pbackend)->backend;
+    backend->ForwardKey((*pbackend)->addonInstance, ic, event, sym, state);
+}
+
+void SwitchIM(FcitxInstance* instance, int index)
+{
+    UT_array* ims = &instance->ims;
+    int iIMCount = utarray_len(ims);
+    
+    FcitxAddon* lastIM, *newIM;
+
+    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
+        lastIM = NULL;
+    else
+    {
+        FcitxAddon** plastIM = (FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex);
+        lastIM = *plastIM;
+    }
+
+    if (index == -1) {
+        if (instance->iIMIndex >= (iIMCount - 1))
+            instance->iIMIndex = 0;
+        else
+            instance->iIMIndex++;
+    } 
+    
+    if (index >= iIMCount)
+        instance->iIMIndex = iIMCount - 1;
+    else if (index < 0)
+        instance->iIMIndex = 0;
+    else
+        instance->iIMIndex = index;
+
+    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
+        newIM = NULL;
+    else
+    {
+        FcitxAddon** pnewIM = (FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex);
+        newIM = *pnewIM;
+    }
+
+/* TODO
+    if (lastIM && lastIM->Save)
+        lastIM->Save();
+    if (newIM && newIM->Init)
+        newIM->Init();*/
+
+    ResetInput(instance);
+    SaveProfile();
+}
+
+/** 
+ * @brief 重置输入状态
+ */
+void ResetInput(FcitxInstance* instance)
+{
+    FcitxInputState *input = &instance->input;
+    input->iCandPageCount = 0;
+    input->iCurrentCandPage = 0;
+    input->iCandWordCount = 0;
+    input->iLegendCandWordCount = 0;
+    input->iCurrentLegendCandPage = 0;
+    input->iLegendCandPageCount = 0;
+    input->iCursorPos = 0;
+
+    input->strCodeInput[0] = '\0';
+    input->iCodeInputCount = 0;  
+
+    input->bIsDoInputOnly = false;
+
+    input->bShowPrev = false;
+    input->bShowNext = false;
+
+    input->bIsInLegend = false;
+    
+    input->iInCap = 0;
+    UT_array* ims = &instance->ims;
+
+    FcitxAddon* pcurentIM = *((FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex));
+    FcitxIM* curentIM = (pcurentIM)->im;
+
+    if (curentIM && curentIM->ResetIM)
+        curentIM->ResetIM(pcurentIM->addonInstance);
+    
+    ResetInputHook();
+    
+    CloseInputWindow();
+}
+
+void DoPhraseTips(FcitxInstance* instance)
+{
+    UT_array* ims = &instance->ims;
+    FcitxAddon* pcurrentIM = (FcitxAddon*) utarray_eltptr(ims, instance->iIMIndex);
+    FcitxIM* currentIM = pcurrentIM->im;
+    FcitxInputState *input = &instance->input;
+
+    if (currentIM->PhraseTips && currentIM->PhraseTips(pcurrentIM->addonInstance))
+        input->lastIsSingleHZ = -1;
+    else
+        input->lastIsSingleHZ = 0;
+}
+
+INPUT_RETURN_VALUE ImProcessEnter(void *arg)
+{
+    FcitxInstance *instance = (FcitxInstance *)arg;
+    INPUT_RETURN_VALUE retVal; 
+    FcitxInputState *input = &instance->input;
+    FcitxConfig *fc = &instance->config;
+    
+    if (input->iInCap) {
+        if (!input->iCodeInputCount)
+            strcpy(input->strStringGet, ";");
+        else
+            strcpy(input->strStringGet, input->strCodeInput);
+        retVal = IRV_PUNC;
+        SetMessageCount(instance->messageDown, 0);
+        SetMessageCount(instance->messageUp, 0);
+        input->iInCap = 0;
+    } else if (!input->iCodeInputCount)
+        retVal = IRV_DONOT_PROCESS;
+    else {
+        switch (fc->enterToDo) {
+        case K_ENTER_NOTHING:
+            retVal = IRV_DO_NOTHING;
+            break;
+        case K_ENTER_CLEAN:
+            retVal = IRV_CLEAN;
+            break;
+        case K_ENTER_SEND:
+            SetMessageCount(instance->messageDown, 0);
+            SetMessageCount(instance->messageUp, 0);
+            strcpy(input->strStringGet, input->strCodeInput);
+            retVal = IRV_ENG;
+            break;
+        }
+    }
+    return retVal;
+}
+
+INPUT_RETURN_VALUE ImProcessEscape(void* arg)
+{
+    FcitxInstance *instance = (FcitxInstance*) arg;
+    FcitxInputState *input = &instance->input;
+    if (input->iCodeInputCount || input->iInCap || input->bIsInLegend)
+        return IRV_CLEAN;
+    else
+        return IRV_DONOT_PROCESS;
+}
+
+INPUT_RETURN_VALUE ImProcessReload(void *arg)
+{
+    FcitxInstance *instance = (FcitxInstance*) arg;
+    ReloadConfig(instance);
+    return IRV_DO_NOTHING;
+}
+
+void ReloadConfig(FcitxInstance *instance)
+{
+}
+
+void UpdateInputWindow(FcitxInstance *instance)
+{
+    if (GetMessageCount(instance->messageDown) == 0)
+        CloseInputWindow(instance);
+    else
+        ShowInputWindow(instance);
+}
+
+boolean IsInLegend(FcitxInputState* input)
+{
+    return input->bIsInLegend;
+}
+
+char* GetOutputString(FcitxInputState* input)
+{
+    return input->strStringGet;
+}
+
+FcitxAddon* GetCurrentIM(FcitxInstance* instance)
+{
+    UT_array* ims = &instance->ims;
+    FcitxAddon* pcurrentIM = *((FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex));
+    return pcurrentIM;
+}

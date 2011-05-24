@@ -22,7 +22,7 @@
 #include <iconv.h>
 #include <X11/Xatom.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 #include "MenuWindow.h"
 #include "skin.h"
 #include "im/special/vk.h"

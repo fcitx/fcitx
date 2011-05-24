@@ -24,22 +24,23 @@
 #include <X11/Xatom.h>
 #include <cairo-xlib.h>
 
-#include "core/ui.h"
-#include "core/module.h"
-#include "utils/profile.h"
+#include "fcitx/ui.h"
+#include "fcitx/module.h"
+#include "fcitx-utils/profile.h"
 
 #include "InputWindow.h"
 #include "classicui.h"
 #include "skin.h"
 #include "module/x11/x11stuff.h"
-#include "utils/utils.h"
-#include <core/backend.h>
-#include <utils/configfile.h>
-#include <core/ime-internal.h>
+#include "fcitx-utils/utils.h"
+#include <fcitx/backend.h>
+#include <fcitx-utils/configfile.h>
+#include <fcitx/ime-internal.h>
+#include <fcitx/instance.h>
 
 static boolean InputWindowEventHandler(void *instance, XEvent* event);
 
-InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const char* font)
+InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
@@ -48,8 +49,11 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
     Colormap cmap;
     Visual * vs;
     InputWindow* inputWindow;
+    int iScreen = classicui->iScreen;
+    Display* dpy = classicui->dpy;
+    FcitxSkin *sc = &classicui->skin;
     
-    inputWindow = malloc0(sizeof(InputWindow));    
+    inputWindow = fcitx_malloc0(sizeof(InputWindow));    
     inputWindow->window = None;
     inputWindow->iInputWindowHeight = INPUTWND_HEIGHT;
     inputWindow->iInputWindowWidth = INPUTWND_WIDTH;
@@ -58,17 +62,18 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
     inputWindow->dpy = dpy;
     inputWindow->iScreen = iScreen;
     inputWindow->skin = sc;
-    inputWindow->font = font;
+    inputWindow->font = classicui->font;
+    inputWindow->owner = classicui;
 
     LoadInputBarImage(inputWindow, sc);
     inputWindow->iInputWindowHeight= cairo_image_surface_get_height(inputWindow->input);
-    vs=FindARGBVisual (dpy, iScreen);
+    vs=FindARGBVisual (classicui);
     InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
 
     inputWindow->window=XCreateWindow (dpy,
                                       RootWindow(dpy, iScreen),
-                                      GetInputWindowOffsetX(),
-                                      GetInputWindowOffsetY(),
+                                      GetInputWindowOffsetX(&classicui->owner->profile),
+                                      GetInputWindowOffsetY(&classicui->owner->profile),
                                       INPUT_BAR_MAX_LEN,
                                       inputWindow->iInputWindowHeight,
                                       0,
@@ -94,15 +99,15 @@ InputWindow* CreateInputWindow(Display* dpy, int iScreen, FcitxSkin* sc, const c
             INPUT_BAR_MAX_LEN,
             inputWindow->iInputWindowHeight);
 
-    LoadInputMessage(sc, inputWindow, font);
+    LoadInputMessage(sc, inputWindow, classicui->font);
     XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
-    SetWindowProperty(dpy, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
+    SetWindowProperty(classicui, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = InputWindowEventHandler;
     arg.args[1] = inputWindow;
-    InvokeFunction(FCITX_X11, ADDXEVENTHANDLER, arg);
+    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
     return inputWindow;
 }
 
@@ -127,16 +132,16 @@ boolean InputWindowEventHandler(void *instance, XEvent* event)
                             y = event->xbutton.y;
                             MouseClick(&x, &y, inputWindow->dpy, inputWindow->window);
                             
-                            if(!IsTrackCursor())
+                            if(!IsTrackCursor(&inputWindow->owner->owner->profile))
                             {
-                                SetInputWindowOffsetX(x);
-                                SetInputWindowOffsetY(y);
+                                SetInputWindowOffsetX(&inputWindow->owner->owner->profile, x);
+                                SetInputWindowOffsetY(&inputWindow->owner->owner->profile, y);
                             }
                                                     
                             FcitxInputContext* ic = GetCurrentIC();
 
                             if (ic)
-                                SetWindowOffset(ic, x, y);
+                                SetWindowOffset(inputWindow->owner->owner, ic, x, y);
 
                             DrawInputWindow(inputWindow);
                         }
@@ -189,12 +194,12 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
 {
     int dwidth, dheight;
     int x, y;
-    GetScreenSize(inputWindow->dpy, inputWindow->iScreen, &dwidth, &dheight);
+    GetScreenSize(inputWindow->owner, &dwidth, &dheight);
     
-    if (IsTrackCursor())
+    if (IsTrackCursor(&inputWindow->owner->owner->profile))
     {
         FcitxInputContext* ic = GetCurrentIC();
-        GetWindowPosition(ic, &x, &y);
+        GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
     }
     else
     {
@@ -202,10 +207,10 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
             x = (dwidth - inputWindow->iInputWindowWidth) / 2;
         }
         else {
-            x = GetInputWindowOffsetX();
+            x = GetInputWindowOffsetX(&inputWindow->owner->owner->profile);
         }
         
-        y = GetInputWindowOffsetY();
+        y = GetInputWindowOffsetY(&inputWindow->owner->owner->profile);
     }
 
     int iTempInputWindowX, iTempInputWindowY;
@@ -253,7 +258,7 @@ void DestroyInputWindow(InputWindow* inputWindow)
     
     FcitxModuleFunctionArg arg;
     arg.args[0] = inputWindow;
-    InvokeFunction(FCITX_X11, REMOVEXEVENTHANDLER, arg);
+    InvokeFunction(inputWindow->owner->owner, FCITX_X11, REMOVEXEVENTHANDLER, arg);
     
     free(inputWindow);
 }

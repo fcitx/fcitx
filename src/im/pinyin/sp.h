@@ -39,11 +39,13 @@ typedef struct _SP_S {
     char            cJP;
 } SP_S;
 
-void            SPInit (void);
-void            LoadSPData (void);
+struct FcitxPinyinConfig;
+
+void            SPInit (void* arg);
+void            LoadSPData (struct FcitxPinyinConfig* pyconfig);
 
 //void            QP2SP (char *strQP, char *strSP);
-void            SP2QP (char *strSP, char *strQP);
+void            SP2QP (struct FcitxPinyinConfig* pyconfig, char* strSP, char* strQP);
 int             GetSPIndexQP_C (char *str);
 int             GetSPIndexQP_S (char *str);
 int             GetSPIndexJP_C (char c, int iStart);

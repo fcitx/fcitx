@@ -20,7 +20,7 @@
 #ifndef _QUWEI_H
 #define _QUWEI_H
 
-#include "core/ime.h"
+#include "fcitx/ime.h"
 
 #define strNameOfQuwei __("Quwei")
 #define strIconNameOfQuwei "quwei"

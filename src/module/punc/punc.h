@@ -21,12 +21,13 @@
 #define _PUNC_H
 
 #include <X11/Xlib.h>
-#include "utils/utf8.h"
+#include "fcitx-utils/utf8.h"
 
 #define PUNC_DICT_FILENAME	"punc.mb"
 #define MAX_PUNC_NO		2
 #define MAX_PUNC_LENGTH		2
 
+struct FcitxPuncState;
 typedef struct WidePunc {
     int             ASCII;
     char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
@@ -34,8 +35,8 @@ typedef struct WidePunc {
     unsigned        iWhich:2;
 } WidePunc;
 
-Bool            LoadPuncDict (void);
-char           *GetPunc (int iKey);
-void		FreePunc (void);
+Bool            LoadPuncDict (struct FcitxPuncState* puncState);
+char           *GetPunc (struct FcitxPuncState* puncState, int iKey);
+void		FreePunc (struct FcitxPuncState* puncState);
 
 #endif

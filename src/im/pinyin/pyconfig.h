@@ -21,7 +21,7 @@
 #ifndef PYCONFIG_H
 #define PYCONFIG_H
 #include "fcitx-config/fcitx-config.h"
-#include <utils/configfile.h>
+#include <fcitx-utils/configfile.h>
 
 struct MHPY;
 
@@ -47,7 +47,5 @@ typedef struct FcitxPinyinConfig
 } FcitxPinyinConfig;
 
 CONFIG_BINDING_DECLARE(FcitxPinyinConfig);
-
-extern FcitxPinyinConfig pyconfig;
 
 #endif

@@ -35,7 +35,7 @@
 #include <poll.h>
 #include <limits.h>
 #include <X11/Xlib.h>
-#include <core/backend.h>
+#include <fcitx/backend.h>
 
 int create_socket(const char *name)
 {

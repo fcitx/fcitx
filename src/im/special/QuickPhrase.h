@@ -20,7 +20,7 @@
 #ifndef _QUICKPHRASE_H
 #define _QUICKPHRASE_H
 
-#include "core/ime.h"
+#include "fcitx/ime.h"
 
 #define QUICKPHRASE_CODE_LEN	20
 #define QUICKPHRASE_PHRASE_LEN  40

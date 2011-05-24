@@ -18,12 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #include "skin.h"
 #include "MenuWindow.h"
 #include "fcitx-config/fcitx-config.h"
-#include "core/ui.h"
+#include "fcitx/ui.h"
 
 CONFIG_BINDING_BEGIN(FcitxSkin);
 CONFIG_BINDING_REGISTER("SkinInfo","Name",skinInfo.skinName);

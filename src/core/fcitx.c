@@ -34,13 +34,14 @@
 #include <libintl.h>
 #include <unistd.h>
 
-#include "utils/configfile.h"
-#include "addon.h"
-#include "utils/utils.h"
-#include "module.h"
-#include "ime-internal.h"
-#include "backend.h"
-#include "utils/profile.h"
+#include "fcitx-utils/configfile.h"
+#include "fcitx/addon.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx/module.h"
+#include "fcitx/ime-internal.h"
+#include "fcitx/backend.h"
+#include "fcitx-utils/profile.h"
+#include <fcitx/instance.h>
 
 static void WaitForEnd()
 {
@@ -54,20 +55,9 @@ int main(int argc, char* argv[])
     bindtextdomain(PACKAGE, LOCALEDIR);
     bind_textdomain_codeset(PACKAGE, "UTF-8");
     textdomain(PACKAGE);
-
-    LoadConfig();
-    LoadProfile();
-    LoadAddonInfo();
-    AddonResolveDependency();
     
-    InitBuiltInHotkey();
+    CreateFcitxInstance();
     
-    FcitxInitThread();
-//    InitAsDaemon();
-    LoadModule();
-    LoadAllIM();
-    LoadUserInterface();
-    StartBackend();
     WaitForEnd();
 	return 0;
 }

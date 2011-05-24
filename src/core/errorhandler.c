@@ -26,8 +26,8 @@
 
 #include "fcitx-config/cutils.h"
 #include "fcitx-config/xdg.h"
-#include "ime-internal.h"
-#include "utils/configfile.h"
+#include "fcitx/ime-internal.h"
+#include "fcitx-utils/configfile.h"
 #include "errorhandler.h"
 
 #ifndef SIGUNUSED
@@ -53,7 +53,10 @@ void OnException (int signo)
     FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
 
     if ( signo!=SIGSEGV && signo!=SIGCONT)
-        SaveAllIM();
+    {
+        // TODO:
+        // SaveAllIM();
+    }
 
     void *array[10];
     size_t size;
@@ -90,9 +93,10 @@ void OnException (int signo)
 
     switch (signo) {
     case SIGHUP:
-        LoadConfig ();
-        UnloadAllIM();
-        LoadAllIM ();
+        /* TODO */
+        //LoadConfig ();
+        //UnloadAllIM();
+        //LoadAllIM ();
         break;
     case SIGINT:
     case SIGTERM:

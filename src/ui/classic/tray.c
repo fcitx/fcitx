@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 
 #ifdef _ENABLE_TRAY
 
@@ -32,7 +32,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xmd.h>
 
-#include "core/fcitx.h"
+#include "fcitx/fcitx.h"
 #include "tray.h"
 #include "TrayWindow.h"
 #include "tools.h"

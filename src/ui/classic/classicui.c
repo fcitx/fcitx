@@ -27,14 +27,15 @@
 #include <libintl.h>
 #include <errno.h>
 
-#include "core/fcitx.h"
-#include "core/ui.h"
-#include "core/module.h"
+#include "fcitx/fcitx.h"
+#include "fcitx/ui.h"
+#include "fcitx/module.h"
 #include "module/x11/x11stuff.h"
 
 #include "classicui.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-config/cutils.h"
+#include <fcitx/instance.h>
 
 
 
@@ -46,25 +47,23 @@ typedef struct FcitxClassicUIStatus {
     cairo_surface_t* inactive;
 } FcitxClassicUIStatus;
 
-FcitxClassicUI classicui;
-
 #define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)
 
-static boolean ClassicUIInit();
-static void ClassicUICloseInputWindow();
-static void ClassicUIShowInputWindow();
-static void ClassicUIMoveInputWindow();
-static void ClassicUIUpdateStatus(FcitxUIStatus* status);
-static void ClassicUIRegisterStatus(FcitxUIStatus* status);
+void* ClassicUICreate(FcitxInstance* instance);
+static void ClassicUICloseInputWindow(void* arg);
+static void ClassicUIShowInputWindow(void* arg);
+static void ClassicUIMoveInputWindow(void* arg);
+static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status);
+static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIOnInputFocus();
 static ConfigFileDesc* GetClassicUIDesc();
 
 static void LoadClassicUIConfig();
-static void SaveClassicUIConfig();
+static void SaveClassicUIConfig(FcitxClassicUI* classicui);
 
 FCITX_EXPORT_API
 FcitxUI ui = {
-    ClassicUIInit,
+    ClassicUICreate,
     ClassicUICloseInputWindow,
     ClassicUIShowInputWindow,
     ClassicUIMoveInputWindow,
@@ -73,32 +72,33 @@ FcitxUI ui = {
     ClassicUIOnInputFocus
 };
 
-boolean ClassicUIInit()
+void* ClassicUICreate(FcitxInstance* instance)
 {
     FcitxModuleFunctionArg arg;
-    classicui.dpy = InvokeFunction(FCITX_X11, GETDISPLAY, arg);
+    FcitxClassicUI* classicui = fcitx_malloc0(sizeof(FcitxClassicUI));
+    classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
     
-    XLockDisplay(classicui.dpy);
+    XLockDisplay(classicui->dpy);
     
-    classicui.iScreen = DefaultScreen(classicui.dpy);
+    classicui->iScreen = DefaultScreen(classicui->dpy);
     
-    classicui.protocolAtom = XInternAtom (classicui.dpy, "WM_PROTOCOLS", False);
-    classicui.killAtom = XInternAtom (classicui.dpy, "WM_DELETE_WINDOW", False);
-    classicui.windowTypeAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE", False);
-    classicui.typeMenuAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
-    classicui.typeDialogAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-    classicui.typeDockAtom = XInternAtom (classicui.dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
-    classicui.pidAtom = XInternAtom(classicui.dpy, "_NET_WM_PID", False);
+    classicui->protocolAtom = XInternAtom (classicui->dpy, "WM_PROTOCOLS", False);
+    classicui->killAtom = XInternAtom (classicui->dpy, "WM_DELETE_WINDOW", False);
+    classicui->windowTypeAtom = XInternAtom (classicui->dpy, "_NET_WM_WINDOW_TYPE", False);
+    classicui->typeMenuAtom = XInternAtom (classicui->dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
+    classicui->typeDialogAtom = XInternAtom (classicui->dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    classicui->typeDockAtom = XInternAtom (classicui->dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    classicui->pidAtom = XInternAtom(classicui->dpy, "_NET_WM_PID", False);
     
-    InitComposite();
-    LoadClassicUIConfig();
-    LoadSkinConfig(&classicui.skin, &classicui.skinType);
-    classicui.skin.skinType = &classicui.skinType;
+    InitComposite(classicui);
+    LoadClassicUIConfig(classicui);
+    LoadSkinConfig(&classicui->skin, &classicui->skinType);
+    classicui->skin.skinType = &classicui->skinType;
 
-    classicui.inputWindow = CreateInputWindow(classicui.dpy, classicui.iScreen, &classicui.skin, classicui.font);
+    classicui->inputWindow = CreateInputWindow(classicui);
     
-    XUnlockDisplay(classicui.dpy);
-    return true;
+    XUnlockDisplay(classicui->dpy);
+    return classicui;
 }
 
 void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
@@ -135,28 +135,35 @@ void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowTyp
     }
 }
 
-static void ClassicUICloseInputWindow()
+static void ClassicUICloseInputWindow(void *arg)
 {
-    CloseInputWindowInternal(classicui.inputWindow);
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    CloseInputWindowInternal(classicui->inputWindow);
 }
 
-static void ClassicUIShowInputWindow()
+static void ClassicUIShowInputWindow(void *arg)
 {
-    ShowInputWindowInternal(classicui.inputWindow);
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    ShowInputWindowInternal(classicui->inputWindow);
 }
 
-static void ClassicUIMoveInputWindow()
+static void ClassicUIMoveInputWindow(void *arg)
 {
-    MoveInputWindowInternal(classicui.inputWindow);
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    MoveInputWindowInternal(classicui->inputWindow);
 }
 
-static void ClassicUIUpdateStatus(FcitxUIStatus* status)
+static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status)
 {
+#ifdef UNUSED
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+#endif
 }
 
-static void ClassicUIRegisterStatus(FcitxUIStatus* status)
+static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
-    FcitxSkin* sc = &classicui.skin;
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    FcitxSkin* sc = &classicui->skin;
     status->priv = malloc(sizeof(FcitxClassicUIStatus));
     FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
     char activename[PATH_MAX], inactivename[PATH_MAX];
@@ -167,7 +174,7 @@ static void ClassicUIRegisterStatus(FcitxUIStatus* status)
     LoadImage(inactivename, *sc->skinType, &privstat->inactive, False);
 }
 
-static void ClassicUIOnInputFocus()
+static void ClassicUIOnInputFocus(void *arg)
 {
 }
 
@@ -392,10 +399,10 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
     XSync(dpy, False);
 }
 
-void GetScreenSize(Display* dpy, int iScreen, int *width, int *height)
+void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
 {
     XWindowAttributes attrs;
-    if (XGetWindowAttributes(classicui.dpy, RootWindow(dpy, iScreen), &attrs) < 0) {
+    if (XGetWindowAttributes(classicui->dpy, RootWindow(classicui->dpy, classicui->iScreen), &attrs) < 0) {
         printf("ERROR\n");
     }
     if (width != NULL)
@@ -404,17 +411,17 @@ void GetScreenSize(Display* dpy, int iScreen, int *width, int *height)
         (*height) = attrs.height;
 }
 
-void InitComposite()
+void InitComposite(FcitxClassicUI* classicui)
 {
-    classicui.compManagerAtom = XInternAtom (classicui.dpy, "_NET_WM_CM_S0", False);
+    classicui->compManagerAtom = XInternAtom (classicui->dpy, "_NET_WM_CM_S0", False);
 
-    classicui.compManager = XGetSelectionOwner(classicui.dpy, classicui.compManagerAtom);
+    classicui->compManager = XGetSelectionOwner(classicui->dpy, classicui->compManagerAtom);
 
-    if (classicui.compManager)
+    if (classicui->compManager)
     {
         XSetWindowAttributes attrs;
         attrs.event_mask = StructureNotifyMask;
-        XChangeWindowAttributes (classicui.dpy, classicui.compManager, CWEventMask, &attrs);
+        XChangeWindowAttributes (classicui->dpy, classicui->compManager, CWEventMask, &attrs);
     }
 }
 
@@ -433,7 +440,7 @@ ConfigFileDesc* GetClassicUIDesc()
     return classicUIDesc;
 }
 
-void LoadClassicUIConfig()
+void LoadClassicUIConfig(FcitxClassicUI* classicui)
 {
     FILE *fp;
     char *file;
@@ -443,8 +450,8 @@ void LoadClassicUIConfig()
     if (!fp) {
         if (errno == ENOENT)
         {
-            SaveClassicUIConfig();
-            LoadClassicUIConfig();
+            SaveClassicUIConfig(classicui);
+            LoadClassicUIConfig(classicui);
         }
         return;
     }
@@ -452,20 +459,20 @@ void LoadClassicUIConfig()
     ConfigFileDesc* configDesc = GetClassicUIDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
-    FcitxClassicUIConfigBind(&classicui, cfile, configDesc);
-    ConfigBindSync((GenericConfig*)&classicui);
+    FcitxClassicUIConfigBind(classicui, cfile, configDesc);
+    ConfigBindSync(&classicui->gconfig);
 
     fclose(fp);
 
 }
 
-void SaveClassicUIConfig()
+void SaveClassicUIConfig(FcitxClassicUI *classicui)
 {
     ConfigFileDesc* configDesc = GetClassicUIDesc();
     char *file;
     FILE *fp = GetXDGFileUser("fcitx-classic-ui.config", "wt", &file);
     FcitxLog(INFO, "Save Config to %s", file);
-    SaveConfigFileFp(fp, classicui.gconfig.configFile, configDesc);
+    SaveConfigFileFp(fp, &classicui->gconfig, configDesc);
     free(file);
     fclose(fp);
 }
@@ -481,7 +488,7 @@ PangoFontDescription* GetPangoFontDescription(const char* font, int size)
 }
 #endif
 
-Visual * FindARGBVisual (Display *dpy, int scr)
+Visual * FindARGBVisual (FcitxClassicUI* classicui)
 {
     XVisualInfo *xvi;
     XVisualInfo temp;
@@ -489,8 +496,10 @@ Visual * FindARGBVisual (Display *dpy, int scr)
     int         i;
     XRenderPictFormat   *format;
     Visual      *visual;
+    Display*    dpy = classicui->dpy;
+    int         scr = classicui->iScreen;
 
-    if (classicui.compManager == None)
+    if (classicui->compManager == None)
         return NULL;
 
     temp.screen = scr;

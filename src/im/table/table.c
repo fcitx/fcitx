@@ -21,8 +21,8 @@
 #include <config.h>
 #endif
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
+#include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
 
 #include "table.h"
 #include "im/special/punc.h"
@@ -39,15 +39,15 @@
 
 #include <X11/Xlib.h>
 
-#include "core/keys.h"
-#include "core/ui.h"
+#include "fcitx-utils/keys.h"
+#include "fcitx/ui.h"
 #include "im/pinyin/py.h"
 #include "im/pinyin/pyParser.h"
-#include "utils/utarray.h"
+#include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
-#include "utils/profile.h"
+#include "fcitx-utils/profile.h"
 #include "fcitx-config/cutils.h"
-#include "core/ime-internal.h"
+#include "fcitx/ime-internal.h"
 
 static void FreeTableConfig(void *v);
 static void FreeTable (char iTableIndex);

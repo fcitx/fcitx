@@ -20,8 +20,13 @@
 #ifndef _PY_PARSER_H
 #define _PY_PARSER_H
 
-#include "core/fcitx.h"
-#include "py.h"
+#include <stdint.h>
+#include "fcitx/fcitx.h"
+#include "fcitx-config/fcitx-config.h"
+
+#define MAX_WORDS_USER_INPUT    32
+#define MAX_PY_PHRASE_LENGTH    10
+#define MAX_PY_LENGTH       6
 
 #define PY_SEPARATOR '\''
 #define PY_SEPARATOR_S "'"
@@ -45,15 +50,17 @@ typedef struct {
     char            iMode;
 } ParsePYStruct;
 
+struct FcitxPinyinConfig;
+
 int             IsSyllabary (const char *strPY, boolean bMode);
 int             IsConsonant (const char *strPY, boolean bMode);
-int             FindPYFAIndex (const char *strPY, boolean bMode);
-void            ParsePY (const char *strPY, ParsePYStruct * parsePY, PYPARSEINPUTMODE mode, boolean bSP);
-boolean            MapPY (char *strPY, char strMap[3], PYPARSEINPUTMODE mode);
+int             FindPYFAIndex (struct FcitxPinyinConfig* pyconfig, const char *strPY, boolean bMode);
+void            ParsePY (struct FcitxPinyinConfig* pyconfig, const char* strPY, ParsePYStruct* parsePY, PYPARSEINPUTMODE mode, boolean bSP);
+boolean            MapPY (struct FcitxPinyinConfig* pyconfig, char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode);
 
 boolean            MapToPY (char strMap[3], char *strPY);
-int             CmpMap (char *strMap1, char *strMap2, int *iMatchedLength, boolean bSP);
-int     Cmp1Map (char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
-int             Cmp2Map (char map1[3], char map2[3], boolean bSP);
+int             CmpMap (struct FcitxPinyinConfig* pyconfig, char* strMap1, char* strMap2, int* iMatchedLength, boolean bSP);
+int     Cmp1Map (struct FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
+int             Cmp2Map (struct FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
 
 #endif

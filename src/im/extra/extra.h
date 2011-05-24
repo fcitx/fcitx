@@ -20,8 +20,8 @@
 #ifndef _EXTRA_H_
 #define _EXTRA_H_
 
-#include "core/ime.h"
-#include "core/fcitx.h"
+#include "fcitx/ime.h"
+#include "fcitx/fcitx.h"
 
 void LoadExtraIM();
 

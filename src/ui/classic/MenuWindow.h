@@ -34,7 +34,7 @@
 #define VK_MENU_WINDOW_WIDTH    110
 #define VK_MENU_WINDOW_HEIGHT   300
 #include <X11/Xlib.h>
-#include "utils/utarray.h"
+#include "fcitx-utils/utarray.h"
 
 typedef enum MenuState
 {

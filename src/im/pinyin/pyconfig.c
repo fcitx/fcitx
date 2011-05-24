@@ -24,8 +24,8 @@
 #include "fcitx-config/fcitx-config.h"
 #include "PYFA.h"
 
-static void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig);
 CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", strDefaultSP);
@@ -54,9 +54,10 @@ CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype);
 CONFIG_BINDING_END()
 
 
-void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
     char *pstr = *(char**) value;
+    FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
     if(sync == Raw2Value){
         char a = '\0';
         char b = '\0';
@@ -64,16 +65,17 @@ void FilterGetWordFromPhrase(ConfigGroup *group, ConfigOption *option, void* val
             a = pstr[0];
         if (strlen(pstr) >= 2)
             b = pstr[1];
-        pyconfig.cPYYCDZ[0] = a;
-        pyconfig.cPYYCDZ[1] = b;
+        pyconfig->cPYYCDZ[0] = a;
+        pyconfig->cPYYCDZ[1] = b;
     }
 }
 
-void FilterAnAng(ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
+    FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
     if (sync == Raw2Value)
     {
         boolean *b = (boolean*)value;
-        pyconfig.MHPY_S[5].bMode = *b;
+        pyconfig->MHPY_S[5].bMode = *b;
     }
 }

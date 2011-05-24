@@ -25,11 +25,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "core/fcitx.h"
-#include "utils/utils.h"
+#include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
 
 #include "skin.h"
-#include "utils/configfile.h"
+#include "fcitx-utils/configfile.h"
 #include "fcitx-config/cutils.h"
 
 extern FcitxState gs;
