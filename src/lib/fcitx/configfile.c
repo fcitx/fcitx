@@ -159,7 +159,7 @@ void LoadConfig(FcitxConfig* fc)
     if (!fp) {
         if (errno == ENOENT)
         {
-            SaveConfig();
+            SaveConfig(fc);
             LoadConfig(fc);
         }
         return;

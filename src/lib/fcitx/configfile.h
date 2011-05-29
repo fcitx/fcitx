@@ -101,10 +101,9 @@ typedef struct FcitxConfig
 } FcitxConfig;
 
 void LoadConfig(FcitxConfig* fc);
-void SaveConfig();
-GenericConfig* GetConfig();
-int ConfigGetMaxCandWord();
-boolean ConfigGetPointAfterNumber();
-boolean IsCenterInputWindow();
+void SaveConfig(FcitxConfig* fc);
+int ConfigGetMaxCandWord(FcitxConfig* fc);
+boolean ConfigGetPointAfterNumber(FcitxConfig* fc);
+boolean IsCenterInputWindow(FcitxConfig* fc);
 
 #endif

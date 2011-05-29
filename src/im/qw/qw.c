@@ -157,7 +157,7 @@ INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode)
     int             i;
     char            strTemp[3];
 
-    if ( ConfigGetPointAfterNumber() ) {
+    if ( ConfigGetPointAfterNumber(&qwstate->owner->config) ) {
         strTemp[1] = '.';
         strTemp[2] = '\0';
     }

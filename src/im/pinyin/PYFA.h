@@ -22,16 +22,17 @@
 
 #include <X11/Xlib.h>
 #include <fcitx-config/fcitx-config.h>
+struct FcitxPinyinConfig;
 
 /**
  * @brief ...
  **/
 typedef struct MHPY_TEMPLATE {
-    char           *strMap;
+    char           strMap[3];
 } MHPY_TEMPLATE;
 
 typedef struct MHPY {
-    char           *strMap;
+    char           strMap[3];
     boolean           bMode;
 } MHPY;
 
@@ -48,7 +49,7 @@ typedef enum PYTABLE_CONTROL {
     PYTABLE_F_H, // 1
     PYTABLE_L_N, // 2
     PYTABLE_S_SH, // 3
-    PYTABLE_Z_ZH, // 4
+    PYTABLE_Z_ZH, // 4struct FcitxPinyinConfig
     PYTABLE_AN_ANG_S //5
 } PYTABLE_CONTROL;
 
@@ -67,5 +68,10 @@ int GetMHIndex_C (MHPY* MHPY_C, char map);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
 int GetMHIndex_S (MHPY* MHPY_S, char map, Bool bMode);
 Bool		IsZ_C_S (char map);
+void InitMHPY(struct MHPY** pMHPY, const struct  MHPY_TEMPLATE* MHPYtemplate);
+void InitPYTable(struct FcitxPinyinConfig* pyconfig);
 
+extern const PYTABLE_TEMPLATE  PYTable_template[];
+extern const MHPY_TEMPLATE  MHPY_C_TEMPLATE[];
+extern const MHPY_TEMPLATE MHPY_S_TEMPLATE[];
 #endif

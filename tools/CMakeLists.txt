@@ -36,7 +36,6 @@ set(txt2mb_SOURCES
     txt2mb.c
 )
 
-
 add_executable(createPYMB ${createPYMB_SOURCES}) 
 add_executable(readPYBase ${readPYBase_SOURCES})
 add_executable(readPYMB ${readPYMB_SOURCES})

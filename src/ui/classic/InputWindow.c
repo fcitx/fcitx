@@ -203,7 +203,7 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
     }
     else
     {
-        if (IsCenterInputWindow()) {
+        if (IsCenterInputWindow(&inputWindow->owner->owner->config)) {
             x = (dwidth - inputWindow->iInputWindowWidth) / 2;
         }
         else {

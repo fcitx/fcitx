@@ -1344,7 +1344,7 @@ INPUT_RETURN_VALUE TableGetCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
             }
         }
 
-        if (input->iCandWordCount < ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount < ConfigGetMaxCandWord(&tbl->owner->config)) {
             while (tbl->currentRecord && tbl->currentRecord != tbl->recordHead) {
                 if ((mode == SM_PREV) ^ (!tbl->currentRecord->flag)) {
                     if (!TableCompareCode (tbl, input->strCodeInput, tbl->currentRecord->strCode)) {
@@ -1383,7 +1383,7 @@ INPUT_RETURN_VALUE TableGetCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
         /* **************************************************** */
     }
 
-    if (ConfigGetPointAfterNumber()) {
+    if (ConfigGetPointAfterNumber(&tbl->owner->config)) {
         strTemp[1] = '.';
         strTemp[2] = '\0';
     }
@@ -1468,7 +1468,7 @@ void TableAddAutoCandWord (FcitxTableState* tbl, short which, SEARCH_MODE mode)
     FcitxInputState *input = &instance->input;
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             i = input->iCandWordCount - 1;
             for (j = 0; j < input->iCandWordCount - 1; j++)
                 tableCandWord[j].candWord.autoPhrase = tableCandWord[j + 1].candWord.autoPhrase;
@@ -1479,7 +1479,7 @@ void TableAddAutoCandWord (FcitxTableState* tbl, short which, SEARCH_MODE mode)
         tableCandWord[i].candWord.autoPhrase = &tbl->autoPhrase[which];
     }
     else {
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
             return;
 
         tableCandWord[input->iCandWordCount].flag = CT_AUTOPHRASE;
@@ -1498,7 +1498,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
     switch (table->tableOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
                 i = input->iCandWordCount - 1;
             else {
                 for (i = 0; i < input->iCandWordCount; i++) {
@@ -1508,7 +1508,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
             }
         }
         else {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
                 return;
             tableCandWord[input->iCandWordCount].flag = CT_NORMAL;
             tableCandWord[input->iCandWordCount++].candWord.record = record;
@@ -1524,7 +1524,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
                 }
             }
 
-            if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
                 if (i < 0)
                     return;
             }
@@ -1536,7 +1536,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
                 if (strcmp (tableCandWord[i].candWord.record->strCode, record->strCode) > 0 || (strcmp (tableCandWord[i].candWord.record->strCode, record->strCode) == 0 && tableCandWord[i].candWord.record->iHit < record->iHit))
                     break;
             }
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&tbl->owner->config))
                 return;
         }
         break;
@@ -1550,7 +1550,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
                 }
             }
 
-            if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
                 if (i < 0)
                     return;
             }
@@ -1563,14 +1563,14 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
                     break;
             }
 
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&tbl->owner->config))
                 return;
         }
         break;
     }
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             for (j = 0; j < i; j++) {
                 tableCandWord[j].flag = tableCandWord[j + 1].flag;
                 if (tableCandWord[j].flag == CT_NORMAL)
@@ -1591,7 +1591,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
     }
     else {
         j = input->iCandWordCount;
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
             j--;
         for (; j > i; j--) {
             tableCandWord[j].flag = tableCandWord[j - 1].flag;
@@ -1605,7 +1605,7 @@ void TableAddCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 
-    if (input->iCandWordCount != ConfigGetMaxCandWord())
+    if (input->iCandWordCount != ConfigGetMaxCandWord(&tbl->owner->config))
         input->iCandWordCount++;
 }
 
@@ -1978,7 +1978,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mo
     RECORD         *tableLegend = NULL;
     unsigned int    iTableTotalLengendCandCount = 0;
     TABLECANDWORD* tableCandWord = tbl->tableCandWord;
-    GenericConfig *fc = GetConfig();
+    GenericConfig *fc = &tbl->owner->config;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
     boolean bDisablePagingInLegend = *ConfigGetBindValue(fc, "Output", "LegendModeDisablePaging").boolvalue;
@@ -2030,13 +2030,13 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mo
     TableSetCandWordsFlag (tbl, input->iLegendCandWordCount, True);
 
     if (mode == SM_FIRST && bDisablePagingInLegend)
-        input->iLegendCandPageCount = iTableTotalLengendCandCount / ConfigGetMaxCandWord() - ((iTableTotalLengendCandCount % ConfigGetMaxCandWord()) ? 0 : 1);
+        input->iLegendCandPageCount = iTableTotalLengendCandCount / ConfigGetMaxCandWord(&tbl->owner->config) - ((iTableTotalLengendCandCount % ConfigGetMaxCandWord(&tbl->owner->config)) ? 0 : 1);
 
     SetMessageCount(instance->messageUp, 0);
     AddMessageAtLast(instance->messageUp, MSG_TIPS, "联想：");
     AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", tbl->strTableLegendSource);
 
-    if (ConfigGetPointAfterNumber()) {
+    if (ConfigGetPointAfterNumber(&tbl->owner->config)) {
         strTemp[1] = '.';
         strTemp[2] = '\0';
     }
@@ -2075,7 +2075,7 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
                 break;
         }
 
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             if (i < 0)
                 return;
         }
@@ -2088,12 +2088,12 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
                 break;
         }
 
-        if (i == ConfigGetMaxCandWord())
+        if (i == ConfigGetMaxCandWord(&tbl->owner->config))
             return;
     }
 
     if (mode == SM_PREV) {
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             for (j = 0; j < i; j++)
                 tableCandWord[j].candWord.record = tableCandWord[j + 1].candWord.record;
         }
@@ -2104,7 +2104,7 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
     }
     else {
         j = input->iLegendCandWordCount;
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord())
+        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
             j--;
         for (; j > i; j--)
             tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
@@ -2113,7 +2113,7 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 
-    if (input->iLegendCandWordCount != ConfigGetMaxCandWord())
+    if (input->iLegendCandWordCount != ConfigGetMaxCandWord(&tbl->owner->config))
         input->iLegendCandWordCount++;
 }
 
@@ -2146,7 +2146,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
     if (!tbl->iFH)
         return IRV_DISPLAY_MESSAGE;
 
-    if (ConfigGetPointAfterNumber()) {
+    if (ConfigGetPointAfterNumber(&tbl->owner->config)) {
         strTemp[1] = '.';
         strTemp[2] = '\0';
     }
@@ -2156,7 +2156,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
     SetMessageCount(instance->messageDown, 0);
 
     if (mode == SM_FIRST) {
-        input->iCandPageCount = tbl->iFH / ConfigGetMaxCandWord() - ((tbl->iFH % ConfigGetMaxCandWord()) ? 0 : 1);
+        input->iCandPageCount = tbl->iFH / ConfigGetMaxCandWord(&tbl->owner->config) - ((tbl->iFH % ConfigGetMaxCandWord(&tbl->owner->config)) ? 0 : 1);
         input->iCurrentCandPage = 0;
     }
     else {
@@ -2177,16 +2177,16 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
         }
     }
 
-    for (i = 0; i < ConfigGetMaxCandWord(); i++) {
+    for (i = 0; i < ConfigGetMaxCandWord(&tbl->owner->config); i++) {
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
         AddMessageAtLast(instance->messageDown, MSG_INDEX, strTemp);
-        AddMessageAtLast(instance->messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tbl->fh[input->iCurrentCandPage * ConfigGetMaxCandWord() + i].strFH);
-        if (i != (ConfigGetMaxCandWord() - 1)) {
+        AddMessageAtLast(instance->messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tbl->fh[input->iCurrentCandPage * ConfigGetMaxCandWord(&tbl->owner->config) + i].strFH);
+        if (i != (ConfigGetMaxCandWord(&tbl->owner->config) - 1)) {
             MessageConcatLast(instance->messageDown, " ");
         }
-        if ((input->iCurrentCandPage * ConfigGetMaxCandWord() + i) >= (tbl->iFH - 1)) {
+        if ((input->iCurrentCandPage * ConfigGetMaxCandWord(&tbl->owner->config) + i) >= (tbl->iFH - 1)) {
             i++;
             break;
         }
@@ -2206,7 +2206,7 @@ char           *TableGetFHCandWord (FcitxTableState* tbl, int iIndex)
         if (iIndex > (input->iCandWordCount - 1))
             iIndex = input->iCandWordCount - 1;
 
-        return tbl->fh[input->iCurrentCandPage * ConfigGetMaxCandWord() + iIndex].strFH;
+        return tbl->fh[input->iCurrentCandPage * ConfigGetMaxCandWord(&tbl->owner->config) + iIndex].strFH;
     }
     return NULL;
 }

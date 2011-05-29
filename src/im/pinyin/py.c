@@ -80,6 +80,9 @@ FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 void *PYCreate(FcitxInstance* instance)
 {
     FcitxPinyinState *pystate = fcitx_malloc0(sizeof(FcitxPinyinState));
+    InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
+    InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
+    InitPYTable(&pystate->pyconfig);
     
     FcitxRegsiterIM(instance,
                     pystate,
@@ -94,7 +97,7 @@ void *PYCreate(FcitxInstance* instance)
                     NULL,
                     SavePY
                    );
-        FcitxRegsiterIM(instance,
+    FcitxRegsiterIM(instance,
                     pystate,
                     "Shuangpin",
                     "shuangpin",
@@ -1096,7 +1099,7 @@ void PYCreateCandString(FcitxPinyinState *pystate)
     PYFA* PYFAList = pystate->PYFAList;
     FcitxInstance* instance = pystate->owner;
     
-    if ( ConfigGetPointAfterNumber()) {
+    if ( ConfigGetPointAfterNumber(&pystate->owner->config)) {
         str[1] = '.';
         str[2] = '\0';
     } else
@@ -1712,11 +1715,11 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return False;
                 else
                     i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
@@ -1724,7 +1727,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
                     if (strlen(PYCandWords[i].cand.phrase.phrase->strPhrase) < strlen(phrase->strPhrase))
                         break;
             }
-            if (i > ConfigGetMaxCandWord())
+            if (i > ConfigGetMaxCandWord(&pystate->owner->config))
                 return False;
         }
         break;
@@ -1755,10 +1758,10 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
@@ -1776,7 +1779,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
                 }
             }
 
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
         break;
@@ -1806,10 +1809,10 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
@@ -1826,7 +1829,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
                     }
                 }
             }
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
         break;
@@ -1834,7 +1837,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
     //×××××××××××××××××××××××××××××××××××××××××××××××××××××
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -1878,7 +1881,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
         }
     } else {
         j = input->iCandWordCount;
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -1905,7 +1908,7 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
     PYCandWords[i].cand.phrase.phrase = phrase;
     PYCandWords[i].cand.phrase.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.phrase.iBase = pos.iBase;
-    if (input->iCandWordCount != ConfigGetMaxCandWord())
+    if (input->iCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
         input->iCandWordCount++;
     return true;
 }
@@ -1942,14 +1945,14 @@ boolean PYAddSymCandWord(FcitxPinyinState* pystate, HZ * hz, SEARCH_MODE mode)
     PYCandWord* PYCandWords = pystate->PYCandWords;
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             i = input->iCandWordCount - 1;
             for (j = 0; j < i; j++)
                 PYCandWords[j].cand.sym.hz = PYCandWords[j + 1].cand.sym.hz;
         } else
             i = input->iCandWordCount;
     } else {
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             return False;
         i = input->iCandWordCount;
         for (j = input->iCandWordCount - 1; j > i; j--)
@@ -1958,7 +1961,7 @@ boolean PYAddSymCandWord(FcitxPinyinState* pystate, HZ * hz, SEARCH_MODE mode)
 
     PYCandWords[i].iWhich = PY_CAND_SYMBOL;
     PYCandWords[i].cand.sym.hz = hz;
-    if (input->iCandWordCount != ConfigGetMaxCandWord())
+    if (input->iCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
         input->iCandWordCount++;
     return True;
 }
@@ -2009,12 +2012,12 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
     switch (pystate->pyconfig.baseOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i = input->iCandWordCount - 1;
             else
                 i = input->iCandWordCount;
         } else {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 return False;
             i = input->iCandWordCount;
         }
@@ -2044,10 +2047,10 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
@@ -2064,7 +2067,7 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
                 }
             }
 
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
 
@@ -2094,10 +2097,10 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
@@ -2113,14 +2116,14 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
                     }
                 }
             }
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
         break;
     }
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -2163,7 +2166,7 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
         }
     } else {
         j = input->iCandWordCount;
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -2189,7 +2192,7 @@ boolean PYAddBaseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, SEARCH_MOD
     PYCandWords[i].iWhich = PY_CAND_BASE;
     PYCandWords[i].cand.base.iPYFA = pos.iPYFA;
     PYCandWords[i].cand.base.iBase = pos.iBase;
-    if (input->iCandWordCount != ConfigGetMaxCandWord())
+    if (input->iCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
         input->iCandWordCount++;
     return true;
 }
@@ -2227,10 +2230,10 @@ boolean PYAddFreqCandWord(FcitxPinyinState* pystate, HZ * hz, char *strPY, SEARC
     switch (pystate->pyconfig.freqOrder) {
     case AD_NO:
         if (mode == SM_PREV) {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i = input->iCandWordCount - 1;
         } else {
-            if (input->iCandWordCount == ConfigGetMaxCandWord())
+            if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 return False;
             i = input->iCandWordCount;
         }
@@ -2249,17 +2252,17 @@ boolean PYAddFreqCandWord(FcitxPinyinState* pystate, HZ * hz, char *strPY, SEARC
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
                 if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iIndex > PYCandWords[i].cand.freq.hz->iIndex))
                     break;
             }
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
         break;
@@ -2277,24 +2280,24 @@ boolean PYAddFreqCandWord(FcitxPinyinState* pystate, HZ * hz, char *strPY, SEARC
             }
 
             if (i < 0) {
-                if (input->iCandWordCount == ConfigGetMaxCandWord())
+                if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                     return True;
                 i = 0;
-            } else if (input->iCandWordCount == ConfigGetMaxCandWord())
+            } else if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 i--;
         } else {
             for (i = 0; i < input->iCandWordCount; i++) {
                 if (PYCandWords[i].iWhich == PY_CAND_FREQ && (hz->iHit > PYCandWords[i].cand.freq.hz->iHit))
                     break;
             }
-            if (i == ConfigGetMaxCandWord())
+            if (i == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
         }
         break;
     }
 
     if (mode == SM_PREV) {
-        if (input->iCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             for (j = iStart; j < i; j++) {
                 PYCandWords[j].iWhich = PYCandWords[j + 1].iWhich;
                 switch (PYCandWords[j].iWhich) {
@@ -2337,7 +2340,7 @@ boolean PYAddFreqCandWord(FcitxPinyinState* pystate, HZ * hz, char *strPY, SEARC
         }
     } else {
         j = input->iCandWordCount;
-        if (input->iCandWordCount == ConfigGetMaxCandWord())
+        if (input->iCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             j--;
         for (; j > i; j--) {
             PYCandWords[j].iWhich = PYCandWords[j - 1].iWhich;
@@ -2363,7 +2366,7 @@ boolean PYAddFreqCandWord(FcitxPinyinState* pystate, HZ * hz, char *strPY, SEARC
     PYCandWords[i].iWhich = PY_CAND_FREQ;
     PYCandWords[i].cand.freq.hz = hz;
     PYCandWords[i].cand.freq.strPY = strPY;
-    if (input->iCandWordCount != ConfigGetMaxCandWord())
+    if (input->iCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
         input->iCandWordCount++;
     return True;
 }
@@ -2978,22 +2981,22 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
         }
 
         if (i < 0) {
-            if (input->iLegendCandWordCount == ConfigGetMaxCandWord())
+            if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 return True;
             i = 0;
-        } else if (input->iLegendCandWordCount == ConfigGetMaxCandWord())
+        } else if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             i--;
     } else {
         for (i = 0; i < input->iLegendCandWordCount; i++) {
             if (PYLegendCandWords[i].phrase->iHit < phrase->iHit)
                 break;
         }
-        if (i == ConfigGetMaxCandWord())
+        if (i == ConfigGetMaxCandWord(&pystate->owner->config))
             return True;
     }
 
     if (mode == SM_PREV) {
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord()) {
+        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             for (j = 0; j < i; j++) {
                 PYLegendCandWords[j].phrase = PYLegendCandWords[j + 1].phrase;
                 PYLegendCandWords[j].iLength = PYLegendCandWords[j + 1].iLength;
@@ -3006,7 +3009,7 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
         }
     } else {
         j = input->iLegendCandWordCount;
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord())
+        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             j--;
         for (; j > i; j--) {
             PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
@@ -3016,7 +3019,7 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
 
     PYLegendCandWords[i].phrase = phrase;
     PYLegendCandWords[i].iLength = strlen(pystate->strPYLegendSource) - utf8_char_len(pystate->strPYLegendSource);
-    if (input->iLegendCandWordCount != ConfigGetMaxCandWord())
+    if (input->iLegendCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
         input->iLegendCandWordCount++;
     return True;
 }

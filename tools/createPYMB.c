@@ -27,9 +27,9 @@
 #include "im/pinyin/PYFA.h"
 #include "fcitx-utils/utf8.h"
 #include "im/pinyin/pyconfig.h"
+#include <im/pinyin/py.h>
 
 FcitxPinyinConfig pyconfig;
-extern PYTABLE_TEMPLATE  PYTable_template[];
 
 FILE           *fps, *fpt, *fp1, *fp2;
 Bool            bSingleHZMode = False;
@@ -149,12 +149,15 @@ void CreatePYPhrase (void)
     FcitxPinyinConfig pyconfig;
     
     memset(&pyconfig, 0 ,sizeof(pyconfig));
+    InitMHPY(&pyconfig.MHPY_C, MHPY_C_TEMPLATE);
+    InitMHPY(&pyconfig.MHPY_S, MHPY_S_TEMPLATE);
+    InitPYTable(&pyconfig);
 
     s1 = 0;
     s2 = 0;
     uIndex = 0;
+    printf("Start Loading Phrase...\n");
     while (!feof (fpt)) {
-        printf("Reading Phrase: %d\r", s2+1);
         fscanf (fpt, "%s", strPY);
         fscanf (fpt, "%s\n", strPhrase);
         if (strlen (strPhrase) < 3)
@@ -214,7 +217,7 @@ _next:
         else
             fprintf (fg, "%s %s\n", strPY, strPhrase);
     }
-    printf ("\n%d Phrases, %d Converted!\nWriting Phrase file ...", s2, s1);
+    printf ("%d Phrases, %d Converted!\nWriting Phrase file ...", s2, s1);
     for (i = 0; i < iPYFACount; i++) {
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
             iIndex = PYFAList[i].pyBase[j].iPhraseCount;

@@ -23,8 +23,10 @@
 #include "pyconfig.h"
 
 #include <stdio.h>
+#include <fcitx-utils/cutils.h>
+#include <string.h>
 
-MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
+const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
     //{"an","ang"},
     {"CD"}
     ,
@@ -47,7 +49,7 @@ MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
     {"\0"}
 };
 
-MHPY_TEMPLATE MHPY_S_TEMPLATE[] = {    //声母
+const MHPY_TEMPLATE MHPY_S_TEMPLATE[] = {    //声母
     //{"c","ch"},
     {"bc"}
     ,
@@ -71,7 +73,7 @@ MHPY_TEMPLATE MHPY_S_TEMPLATE[] = {    //声母
 };
 
 //其中增加了那些不是标准的拼音，但模糊输入中需要使用的拼音组合
-PYTABLE_TEMPLATE  PYTable_template[] = {
+const PYTABLE_TEMPLATE  PYTable_template[] = {
     {"zuo", PYTABLE_NONE}
     ,
     {"zun", PYTABLE_NONE}
@@ -1200,5 +1202,85 @@ Bool IsZ_C_S (char map)
     if (map=='c' || map=='H'|| map=='B')
         return True;
     return False;
+}
+
+void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)
+{
+    int iBaseCount = 0;
+    while (MHPYtemplate[iBaseCount].strMap[0] != '\0')
+        iBaseCount++;
+    
+    iBaseCount++;
+    *pMHPY = fcitx_malloc0(sizeof(MHPY) * iBaseCount);
+    MHPY *mhpy = *pMHPY;
+    iBaseCount = 0;
+    while (MHPYtemplate[iBaseCount].strMap[0] != '\0')
+    {
+        strcpy(mhpy[iBaseCount].strMap, MHPYtemplate[iBaseCount].strMap);
+        mhpy[iBaseCount].bMode = false;
+        iBaseCount++;
+    }
+}
+
+void InitPYTable(FcitxPinyinConfig* pyconfig)
+{
+
+    int iBaseCount = 0;
+    while (PYTable_template[iBaseCount].strPY[0] != '\0')
+        iBaseCount++;
+    iBaseCount++;
+    
+    pyconfig->PYTable = fcitx_malloc0(sizeof(PYTABLE) * iBaseCount);
+    iBaseCount = 0;
+    while (PYTable_template[iBaseCount].strPY[0] != '\0')
+    {
+        strcpy(pyconfig->PYTable[iBaseCount].strPY, PYTable_template[iBaseCount].strPY);
+        switch(PYTable_template[iBaseCount].control)
+        {
+            case PYTABLE_NONE:
+                pyconfig->PYTable[iBaseCount].pMH = NULL;
+                break;
+            case PYTABLE_NG_GN:
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->bMisstype;
+                break;
+            case PYTABLE_AN_ANG: // 0
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[0].bMode;
+                break;
+            case PYTABLE_EN_ENG: // 1
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[1].bMode;
+                break;
+            case PYTABLE_IAN_IANG: // 2
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[2].bMode;
+                break;
+            case PYTABLE_IN_ING: // 3
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[3].bMode;
+                break;
+            case PYTABLE_U_OU: // 4
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[4].bMode;
+                break;
+            case PYTABLE_UAN_UANG: // 5
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[5].bMode;
+                break;
+            case PYTABLE_C_CH: // 0
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[0].bMode;
+                break;
+            case PYTABLE_F_H: // 1
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[1].bMode;
+                break;
+            case PYTABLE_L_N: // 2
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[2].bMode;
+                break;
+            case PYTABLE_S_SH: // 3
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[3].bMode;
+                break;
+            case PYTABLE_Z_ZH: // 4
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[4].bMode;
+                break;
+            case PYTABLE_AN_ANG_S: //5
+                pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_S[5].bMode;
+                break;
+        }
+        iBaseCount++;
+    }
 }
 

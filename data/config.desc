@@ -46,7 +46,7 @@ Type=Boolean
 DefaultValue=False
 Description=Send inputed Text if Switch to English Mode
 
-[Appearance/CandidateWordNumber]
+[Output/CandidateWordNumber]
 Type=Integer
 DefaultValue=5
 Description=Candidate Word Number
