@@ -148,18 +148,6 @@ typedef void(*ConfigBindingFunc)(GenericConfig*);
 #define IsColorValid(c) ((c) >=0 && (c) <= 255)
 #define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
 
-#define FilterNextTimeEffectBoolean(name, var) \
-    static boolean firstRunOn##name = true; \
-    void FilterCopy##name(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg) { \
-        boolean *b = (boolean*)value; \
-        if (sync == Raw2Value && b) \
-        { \
-            if (firstRunOn##name) \
-                var = *b; \
-            firstRunOn##name = false; \
-        } \
-    }
-
 ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc*);
 ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*);
 ConfigFile *ParseConfigFileFp(FILE* fp, ConfigFileDesc* fileDesc);

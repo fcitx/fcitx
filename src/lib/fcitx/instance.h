@@ -20,8 +20,8 @@
 
 #include "fcitx/ui.h"
 #include "fcitx-utils/utarray.h"
-#include <fcitx-utils/configfile.h>
-#include <fcitx-utils/profile.h>
+#include <fcitx/configfile.h>
+#include <fcitx/profile.h>
 #include "addon.h"
 #include "ime.h"
 
@@ -41,13 +41,14 @@ typedef struct FcitxInstance {
     FcitxConfig config;
     FcitxProfile profile;
     UT_array addons;
-    UT_array ims;
+    UT_array imeclasses;
+    UT_array imes;
     UT_array backends;
 } FcitxInstance;
 
-Messages* GetMessageUp();
-Messages* GetMessageDown();
+Messages* GetMessageUp(FcitxInstance* instance);
+Messages* GetMessageDown(FcitxInstance* instance);
 
-FcitxInstance* CreateFcitxInstance();
+FcitxInstance* CreateFcitxInstance(void);
 int FcitxLock(FcitxInstance* instance);
 int FcitxUnlock(FcitxInstance* instance);

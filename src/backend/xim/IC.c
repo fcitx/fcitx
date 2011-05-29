@@ -31,7 +31,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "Xi18n.h"
 #include "IC.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "xim.h"
 
 /**

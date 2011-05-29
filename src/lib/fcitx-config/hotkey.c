@@ -24,7 +24,7 @@
 
 #include "fcitx/fcitx.h"
 #include "hotkey.h"
-#include "cutils.h"
+#include "fcitx-utils/cutils.h"
 
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {

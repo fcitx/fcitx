@@ -25,12 +25,12 @@
 #include "module.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include <pthread.h>
 #include "instance.h"
 
 const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
-typedef void*(*FcitxModuleFunction)(FcitxModuleFunctionArg);
+typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
 void LoadModule(FcitxInstance* instance)
 {
@@ -75,9 +75,10 @@ void LoadModule(FcitxInstance* instance)
                             return;
                         }
                         addon->module = module;
+			addon->addonInstance = moduleinstance;
                         if(module->Run)
                         {                            
-                            pthread_create(&addon->pid, NULL, module->Run, NULL);
+                            pthread_create(&addon->pid, NULL, module->Run, addon->addonInstance);
                         }
                     }
                 default:
@@ -101,7 +102,7 @@ void* InvodeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
         FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
         return NULL;
     }
-    void* result = (*func)(args);
+    void* result = (*func)(addon->addonInstance, args);
     return result;
 }
 

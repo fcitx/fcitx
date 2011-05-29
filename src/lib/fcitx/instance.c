@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "instance.h"
-#include <fcitx-config/cutils.h>
+#include <fcitx-utils/cutils.h>
 #include "ime-internal.h"
 #include "ui.h"
 #include <libintl.h>
@@ -35,8 +35,11 @@ FcitxInstance* CreateFcitxInstance()
 {
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
     InitFcitxAddons(&instance->addons);
-    InitFcitxIMS(&instance->ims);
+    InitFcitxIM(instance);
     InitFcitxBackends(&instance->backends);
+    utarray_init(&instance->uistats, &stat_icd);
+    instance->messageDown = InitMessages();
+    instance->messageUp = InitMessages();
     
     FcitxInitThread(instance);
     LoadConfig(&instance->config);
@@ -60,11 +63,6 @@ Messages* GetMessageUp(FcitxInstance *instance)
 Messages* GetMessageDown(FcitxInstance *instance)
 {
     return instance->messageDown;
-}
-
-UT_array* GetUIStatus(FcitxInstance *instance)
-{
-    return &instance->uistats;
 }
 
 void FcitxInitThread(FcitxInstance* inst)

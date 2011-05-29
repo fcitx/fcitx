@@ -36,7 +36,7 @@
 #include "tray.h"
 #include "TrayWindow.h"
 #include "tools.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 
 #define MAX_SUPPORTED_XEMBED_VERSION 1
 

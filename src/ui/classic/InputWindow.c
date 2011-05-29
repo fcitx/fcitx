@@ -26,7 +26,7 @@
 
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
-#include "fcitx-utils/profile.h"
+#include "fcitx/profile.h"
 
 #include "InputWindow.h"
 #include "classicui.h"
@@ -34,7 +34,7 @@
 #include "module/x11/x11stuff.h"
 #include "fcitx-utils/utils.h"
 #include <fcitx/backend.h>
-#include <fcitx-utils/configfile.h>
+#include <fcitx/configfile.h>
 #include <fcitx/ime-internal.h>
 #include <fcitx/instance.h>
 
@@ -166,7 +166,7 @@ void DisplayInputWindow (InputWindow* inputWindow)
 void DrawInputWindow(InputWindow* inputWindow)
 {
     int lastW = inputWindow->iInputWindowWidth, lastH = inputWindow->iInputWindowHeight;
-    DrawInputBar(inputWindow->skin, inputWindow, GetMessageUp(), GetMessageDown() ,&inputWindow->iInputWindowWidth);
+    DrawInputBar(inputWindow->skin, inputWindow, GetMessageUp(inputWindow->owner->owner), GetMessageDown(inputWindow->owner->owner) ,&inputWindow->iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight)

@@ -42,7 +42,7 @@
 
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "fcitx-utils/utarray.h"
 
 #include "classicui.h"

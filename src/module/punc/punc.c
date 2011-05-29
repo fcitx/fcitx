@@ -30,7 +30,7 @@
 #include "punc.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/keys.h"
 #include <fcitx/ime-internal.h>
@@ -62,6 +62,7 @@ FcitxModule module = {
 void* PuncCreate(FcitxInstance* instance)
 {
     FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));
+    puncState->owner = instance;
     LoadPuncDict(puncState);
     KeyFilterHook hk;
     hk.arg = puncState;
@@ -78,8 +79,8 @@ void* PuncCreate(FcitxInstance* instance)
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
-    char* strStringGet = GetOutputString();
-    FcitxAddon* currentIM = GetCurrentIM(puncState->owner);
+    char* strStringGet = GetOutputString(&puncState->owner->input);
+    FcitxIM* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
     if (puncState->bUseWidePunc) {
         char *pPunc = NULL;
@@ -93,8 +94,8 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
          */
         if (pPunc) {
             strStringGet[0] = '\0';
-            if (!IsInLegend())
-                pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 0);
+            if (!IsInLegend(&puncState->owner->input))
+                pstr = currentIM->GetCandWord(currentIM->klass, 0);
             if (pstr)
                 strcpy(strStringGet, pstr);
             strcat(strStringGet, pPunc);
@@ -123,8 +124,8 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                     *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
                 else {
                     strStringGet[0] = '\0';
-                    if (!IsInLegend())
-                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 0);
+                    if (!IsInLegend(&puncState->owner->input))
+                        pstr = currentIM->GetCandWord(currentIM->klass, 0);
                     if (pstr)
                         strcpy(strStringGet, pstr);
                     iLen = strlen(strStringGet);

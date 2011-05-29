@@ -56,7 +56,7 @@ int             IsSyllabary (const char *strPY, boolean bMode);
 int             IsConsonant (const char *strPY, boolean bMode);
 int             FindPYFAIndex (struct FcitxPinyinConfig* pyconfig, const char *strPY, boolean bMode);
 void            ParsePY (struct FcitxPinyinConfig* pyconfig, const char* strPY, ParsePYStruct* parsePY, PYPARSEINPUTMODE mode, boolean bSP);
-boolean            MapPY (struct FcitxPinyinConfig* pyconfig, char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode);
+boolean            MapPY (struct FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode);
 
 boolean            MapToPY (char strMap[3], char *strPY);
 int             CmpMap (struct FcitxPinyinConfig* pyconfig, char* strMap1, char* strMap2, int* iMatchedLength, boolean bSP);

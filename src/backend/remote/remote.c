@@ -36,7 +36,7 @@
 #include "MainWindow.h"
 #include "TrayWindow.h"
 #include "configfile.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "im/pinyin/sp.h"
 #include "im/special/QuickPhrase.h"
 #include "im/special/AutoEng.h"

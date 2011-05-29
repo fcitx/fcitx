@@ -24,15 +24,15 @@
 #include <X11/Xlib.h>
 #include <Xi18n.h>
 
-Bool XIMOpenHandler(IMOpenStruct * call_data);
-Bool XIMGetICValuesHandler(IMChangeICStruct * call_data);
-Bool XIMSetICValuesHandler(IMChangeICStruct * call_data);
-Bool XIMSetFocusHandler(IMChangeFocusStruct * call_data);
-Bool XIMUnsetFocusHandler(IMChangeICStruct * call_data);
-Bool XIMCloseHandler(IMOpenStruct * call_data);
-Bool XIMCreateICHandler(IMChangeICStruct * call_data);
-Bool XIMDestroyICHandler(IMChangeICStruct * call_data);
-Bool XIMTriggerNotifyHandler(IMTriggerNotifyStruct * call_data);
-void XIMProcessKey(IMForwardEventStruct * call_data);
+Bool XIMOpenHandler(FcitxXimBackend* xim, IMOpenStruct * call_data);
+Bool XIMGetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
+Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
+Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data);
+Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
+Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data);
+Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
+Bool XIMDestroyICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
+Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_data);
+void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data);
 
 #endif

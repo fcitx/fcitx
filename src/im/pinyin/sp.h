@@ -22,6 +22,7 @@
 
 #define strNameOfShuangpin __("Shuangpin")
 #define strIconNameOfShuangpin "shuangpin"
+#include <fcitx-config/fcitx-config.h>
 
 typedef enum {
     SP_FROM_USER=0,
@@ -41,7 +42,7 @@ typedef struct _SP_S {
 
 struct FcitxPinyinConfig;
 
-void            SPInit (void* arg);
+boolean         SPInit (void* arg);
 void            LoadSPData (struct FcitxPinyinConfig* pyconfig);
 
 //void            QP2SP (char *strQP, char *strSP);

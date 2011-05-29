@@ -28,10 +28,6 @@
 #include "AboutWindow.h"
 #include "fcitx-utils/configfile.h"
 
-extern Display *dpy;
-extern int      iScreen;
-extern FcitxState gs;
-
 int             ABOUT_WINDOW_WIDTH;
 
 char            AboutCaption[] = "关于 - FCITX";
@@ -41,7 +37,6 @@ char            AboutCopyRight[] = "(c) 2005, Yuking";
 char            strTitle[100];
 
 AboutWindow aboutWindow;
-extern Atom killAtom;
 static void            InitAboutWindowProperty (void);
 
 Bool CreateAboutWindow (void)

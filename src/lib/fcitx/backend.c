@@ -27,7 +27,7 @@
 #include "addon.h"
 #include "ime-internal.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "ui.h"
 #include "hook.h"
 #include "hook-internal.h"
@@ -138,7 +138,7 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
         return;
     FcitxBackend* backend = (*pbackend)->backend;
     backend->CloseIM((*pbackend)->addonInstance, ic);
-    CloseInputWindow();
+    CloseInputWindow(instance);
 }
 
 /** 

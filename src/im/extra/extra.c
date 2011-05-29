@@ -25,7 +25,7 @@
 #include "configfile.h"
 #include "profile.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 
 #include <dlfcn.h>
 #include <limits.h>

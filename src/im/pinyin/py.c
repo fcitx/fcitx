@@ -46,28 +46,19 @@
 #include "pyParser.h"
 #include "sp.h"
 #include "fcitx-utils/utf8.h"
-#include "fcitx-utils/profile.h"
-#include "fcitx-utils/configfile.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx/profile.h"
+#include "fcitx/configfile.h"
+#include "fcitx-utils/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
 #include "fcitx/ime-internal.h"
 #include <fcitx/instance.h>
 #include <fcitx/backend.h>
 
-FcitxIM im = {
-    "pinyin",
-    "pinyin",
+FCITX_EXPORT_API
+FcitxIMClass ime = {
     PYCreate,
-    ResetPYStatus,
-    DoPYInput,
-    PYGetCandWords,
-    PYGetCandWord,
-    PYGetLegendCandWord,
-    NULL,
-    PYInit,
-    NULL,
-    SavePY
+    NULL
 };
 
 static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem);
@@ -89,6 +80,33 @@ FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 void *PYCreate(FcitxInstance* instance)
 {
     FcitxPinyinState *pystate = fcitx_malloc0(sizeof(FcitxPinyinState));
+    
+    FcitxRegsiterIM(instance,
+                    pystate,
+                    "Pinyin",
+                    "pinyin",
+                    PYInit,
+                    ResetPYStatus,
+                    DoPYInput,
+                    PYGetCandWords,
+                    PYGetCandWord,
+                    PYGetLegendCandWord,
+                    NULL,
+                    SavePY
+                   );
+        FcitxRegsiterIM(instance,
+                    pystate,
+                    "Shuangpin",
+                    "shuangpin",
+                    SPInit,
+                    ResetPYStatus,
+                    DoPYInput,
+                    PYGetCandWords,
+                    PYGetCandWord,
+                    PYGetLegendCandWord,
+                    NULL,
+                    SavePY
+                   );
     pystate->owner = instance;
     return pystate;
 }
@@ -512,8 +530,9 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     return True;
 }
 
-void ResetPYStatus(FcitxPinyinState* pystate)
+void ResetPYStatus(void* arg)
 {
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     pystate->iPYInsertPoint = 0;
     pystate->iPYSelected = 0;
     pystate->strFindString[0] = '\0';
@@ -540,7 +559,7 @@ int GetBaseIndex(FcitxPinyinState* pystate, int iPYFA, char *strBase)
     return -1;
 }
 
-INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, int keyCount)
+INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*) arg;
     FcitxInputState *input = &pystate->owner->input;
@@ -550,7 +569,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
     char *strGet = NULL;
     char strTemp[MAX_USER_INPUT + 1];
 
-    if (sym == 0 && state == 0 && keyCount == -1)
+    if (sym == 0 && state == 0)
         sym = -1;
 
     if (!pystate->bPYBaseDictLoaded)
@@ -716,8 +735,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
                 pystate->bIsPYDelUserPhr = True;
                 input->bIsDoInputOnly = True;
 
-                SetMessageCount(GetMessageUp(), 0);
-                AddMessageAtLast(GetMessageUp(), MSG_TIPS, _("Press index to delete user phrase (ESC for cancel)"));
+                SetMessageCount(GetMessageUp(instance), 0);
+                AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Press index to delete user phrase (ESC for cancel)"));
                 instance->bShowCursor = False;
 
                 return IRV_DISPLAY_MESSAGE;
@@ -727,8 +746,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
                 pystate->bIsPYAddFreq = True;
                 input->bIsDoInputOnly = True;
 
-                SetMessageCount(GetMessageUp(), 0);
-                AddMessageAtLast(GetMessageUp(), MSG_TIPS, _("Press number to make word in frequent list"), pystate->strFindString);
+                SetMessageCount(GetMessageUp(instance), 0);
+                AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Press number to make word in frequent list"), pystate->strFindString);
                 instance->bShowCursor = False;
 
                 return IRV_DISPLAY_MESSAGE;
@@ -743,11 +762,11 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
                 if (!val)
                     return IRV_DO_NOTHING;
 
-                SetMessageCount(GetMessageUp(), 0);
+                SetMessageCount(GetMessageUp(instance), 0);
                 if (val == 1)
-                    AddMessageAtLast(GetMessageUp(), MSG_TIPS, _("Press 1 to delete %s in frequent list (ESC for cancel)"), pystate->strFindString);
+                    AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Press 1 to delete %s in frequent list (ESC for cancel)"), pystate->strFindString);
                 else
-                    AddMessageAtLast(GetMessageUp(), MSG_TIPS, _("Press 1-%d to delete %s in frequent list (ESC for cancel)"), val, pystate->strFindString);
+                    AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Press 1-%d to delete %s in frequent list (ESC for cancel)"), val, pystate->strFindString);
 
                 pystate->bIsPYDelFreq = True;
                 input->bIsDoInputOnly = True;
@@ -832,7 +851,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
                             strncpy(input->strStringGet, pPhrase, clen);
                             input->strStringGet[clen] = '\0';
                         }
-                        SetMessageCount(GetMessageDown(), 0);
+                        SetMessageCount(GetMessageDown(instance), 0);
                         return IRV_GET_CANDWORDS;
                     }
                 } else if (!input->bIsInLegend) {
@@ -879,16 +898,16 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, in
     }
 
     if (val == IRV_DISPLAY_CANDWORDS) {
-        SetMessageCount(GetMessageUp(), 0);
+        SetMessageCount(GetMessageUp(instance), 0);
         if (pystate->iPYSelected) {
-            struct Messages* messageUp = GetMessageUp();
-            AddMessageAtLast(GetMessageUp(), MSG_OTHER, "");
+            struct Messages* messageUp = GetMessageUp(instance);
+            AddMessageAtLast(GetMessageUp(instance), MSG_OTHER, "");
             for (i = 0; i < pystate->iPYSelected; i++)
                 MessageConcat(messageUp, GetMessageCount(messageUp) - 1, pystate->pySelected[i].strHZ);
         }
 
         for (i = 0; i < pystate->findMap.iHZCount; i++) {
-            AddMessageAtLast(GetMessageUp(), MSG_CODE, "%s ", pystate->findMap.strPYParsed[i]);
+            AddMessageAtLast(GetMessageUp(instance), MSG_CODE, "%s ", pystate->findMap.strPYParsed[i]);
         }
 
         return PYGetCandWords(pystate, SM_FIRST);
@@ -992,9 +1011,10 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg, SEARCH_MODE mode)
     int iVal;
     FcitxPinyinState *pystate = (FcitxPinyinState*) arg;
     FcitxInputState *input = &pystate->owner->input;
+    FcitxInstance* instance = pystate->owner;
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
-        SetMessageCount(GetMessageDown(), 0);
+        SetMessageCount(GetMessageDown(instance), 0);
         input->iCandPageCount = 0;
         input->iCandWordCount = 0;
 
@@ -1074,20 +1094,21 @@ void PYCreateCandString(FcitxPinyinState *pystate)
     MSG_TYPE iType;
     PYCandWord* PYCandWords = pystate->PYCandWords;
     PYFA* PYFAList = pystate->PYFAList;
+    FcitxInstance* instance = pystate->owner;
     
     if ( ConfigGetPointAfterNumber()) {
         str[1] = '.';
         str[2] = '\0';
     } else
         str[1] = '\0';
-    SetMessageCount(GetMessageDown(), 0);
+    SetMessageCount(GetMessageDown(instance), 0);
 
     for (iVal = 0; iVal < input->iCandWordCount; iVal++) {
         if (iVal == 9)
             str[0] = '0';
         else
             str[0] = iVal + 1 + '0';
-        AddMessageAtLast(GetMessageDown(), MSG_INDEX, "%s", str);
+        AddMessageAtLast(GetMessageDown(instance), MSG_INDEX, "%s", str);
 
         iType = MSG_OTHER;
         if (PYCandWords[iVal].iWhich == PY_CAND_AUTO)
@@ -1095,9 +1116,9 @@ void PYCreateCandString(FcitxPinyinState *pystate)
         if (PYCandWords[iVal].iWhich != PY_CAND_AUTO && iVal == pystate->iYCDZ)
             iType = MSG_FIRSTCAND;
 
-        AddMessageAtLast(GetMessageDown(), iType, "");
+        AddMessageAtLast(GetMessageDown(instance), iType, "");
         if (PYCandWords[iVal].iWhich == PY_CAND_AUTO) {
-            MessageConcatLast(GetMessageDown(), pystate->strPYAuto);
+            MessageConcatLast(GetMessageDown(instance), pystate->strPYAuto);
         } else {
             pPhrase = NULL;
             switch (PYCandWords[iVal].iWhich) {
@@ -1118,13 +1139,13 @@ void PYCreateCandString(FcitxPinyinState *pystate)
                 pBase = PYCandWords[iVal].cand.freq.hz->strHZ;
                 break;
             }
-            MessageConcatLast(GetMessageDown(), pBase);
+            MessageConcatLast(GetMessageDown(instance), pBase);
             if (pPhrase)
-                MessageConcatLast(GetMessageDown(), pPhrase);
+                MessageConcatLast(GetMessageDown(instance), pPhrase);
         }
 
         if (iVal != (input->iCandWordCount - 1)) {
-            MessageConcatLast(GetMessageDown(), " ");
+            MessageConcatLast(GetMessageDown(instance), " ");
         }
     }
 }
@@ -1365,6 +1386,7 @@ char *PYGetCandWord(void* arg, int iIndex)
     FcitxInputState* input = &pystate->owner->input;
     PYCandWord* PYCandWords = pystate->PYCandWords;
     PYFA* PYFAList = pystate->PYFAList;
+    FcitxInstance* instance = pystate->owner;
 
     if (!input->iCandWordCount)
         return NULL;
@@ -1417,9 +1439,9 @@ char *PYGetCandWord(void* arg, int iIndex)
         pystate->iNewFreqCount = 0;
     }
 
-    SetMessageText(GetMessageDown(), GetMessageCount(GetMessageDown()), pBase);
+    SetMessageText(GetMessageDown(instance), GetMessageCount(GetMessageDown(instance)), pBase);
     if (pPhrase)
-        MessageConcat(GetMessageDown(), GetMessageCount(GetMessageDown()), pPhrase);
+        MessageConcat(GetMessageDown(instance), GetMessageCount(GetMessageDown(instance)), pPhrase);
     strcpy(strHZString, pBase);
     if (pPhrase)
         strcat(strHZString, pPhrase);
@@ -1439,8 +1461,8 @@ char *PYGetCandWord(void* arg, int iIndex)
             strcat(strHZString, pPhraseMap);
         if (bAddNewPhrase && (utf8_strlen(pystate->strPYAuto) <= (MAX_PY_PHRASE_LENGTH)))
             PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString);
-        SetMessageCount(GetMessageDown(), 0);
-        SetMessageCount(GetMessageUp(), 0);
+        SetMessageCount(GetMessageDown(instance), 0);
+        SetMessageCount(GetMessageUp(instance), 0);
         if (UseLegend()) {
             strcpy(pystate->strPYLegendSource, pystate->strPYAuto);
             strcpy(pystate->strPYLegendMap, strHZString);
@@ -1465,7 +1487,7 @@ char *PYGetCandWord(void* arg, int iIndex)
     pystate->strFindString[0] = '\0';
     for (; i < pystate->findMap.iHZCount; i++)
         strcat(pystate->strFindString, pystate->findMap.strPYParsed[i]);
-    DoPYInput(pystate, 0, 0, -1);
+    DoPYInput(pystate, 0, 0);
     pystate->iPYInsertPoint = strlen(pystate->strFindString);
     return NULL;
 }
@@ -2918,22 +2940,22 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
         ;
     }
 
-    SetMessageCount(GetMessageUp(), 0);
-    AddMessageAtLast(GetMessageUp(), MSG_TIPS, _("Legend: "));
-    AddMessageAtLast(GetMessageUp(), MSG_INPUT, "%s", pystate->strPYLegendSource);
+    SetMessageCount(GetMessageUp(instance), 0);
+    AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Legend: "));
+    AddMessageAtLast(GetMessageUp(instance), MSG_INPUT, "%s", pystate->strPYLegendSource);
     strTemp[1] = '\0';
-    SetMessageCount(GetMessageDown(), 0);
+    SetMessageCount(GetMessageDown(instance), 0);
     for (i = 0; i < input->iLegendCandWordCount; i++) {
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
 
-        AddMessageAtLast(GetMessageDown(), MSG_INDEX, "%s", strTemp);
-        AddMessageAtLast(GetMessageDown(),
+        AddMessageAtLast(GetMessageDown(instance), MSG_INDEX, "%s", strTemp);
+        AddMessageAtLast(GetMessageDown(instance),
                          ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER),
                          "%s", pystate->PYLegendCandWords[i].phrase->strPhrase + pystate->PYLegendCandWords[i].iLength);
         if (i != (input->iLegendCandWordCount - 1)) {
-            MessageConcatLast(GetMessageDown(), " ");
+            MessageConcatLast(GetMessageDown(instance), " ");
         }
     }
 
@@ -2999,8 +3021,9 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
     return True;
 }
 
-char *PYGetLegendCandWord(FcitxPinyinState*pystate, int iIndex)
+char *PYGetLegendCandWord(void *arg, int iIndex)
 {
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     FcitxInputState* input = &pystate->owner->input;
     PYLegendCandWord* PYLegendCandWords = pystate->PYLegendCandWords;
     if (input->iLegendCandWordCount) {

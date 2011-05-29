@@ -76,7 +76,7 @@ typedef struct FcitxAddon
     union {
         struct FcitxBackend *backend;
         struct FcitxModule *module;
-        struct FcitxIM* im;
+        struct FcitxIMClass* imclass;
         struct FcitxUI* ui;
     };
     void *addonInstance;

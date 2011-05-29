@@ -29,10 +29,10 @@
 #include "fcitx/addon.h"
 #include "fcitx/backend.h"
 #include "fcitx/module.h"
-#include "fcitx-utils/configfile.h"
+#include "fcitx/configfile.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "IMdkit.h"
 #include "Xi18n.h"
 #include "IC.h"
@@ -84,6 +84,8 @@ FcitxBackend backend =
     XimGetWindowPosition
 };
 
+FcitxXimBackend *ximbackend;
+
 /* Supported Chinese Encodings */
 static XIMEncoding zhEncodings[] = {
     "COMPOUND_TEXT",
@@ -99,7 +101,14 @@ Bool MyStrcmp (char *str1, char *str2)
 
 void* XimCreate(FcitxInstance* instance, int backendid)
 {
+    if (ximbackend != NULL)
+        return NULL;
     FcitxXimBackend* xim = fcitx_malloc0(sizeof(FcitxXimBackend));
+    if (xim == NULL)
+        return NULL;
+    
+    ximbackend = xim;
+    
     XIMStyles *input_styles;
     XIMTriggerKeys *on_keys;
     XIMEncodings *encodings;
@@ -249,28 +258,28 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 
     switch (call_data->major_code) {
     case XIM_OPEN:
-        return XIMOpenHandler((IMOpenStruct *) call_data);
+        return XIMOpenHandler(ximbackend, (IMOpenStruct *) call_data);
     case XIM_CLOSE:
-        return XIMCloseHandler((IMOpenStruct *) call_data);
+        return XIMCloseHandler(ximbackend, (IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
-        return XIMCreateICHandler((IMChangeICStruct *) call_data);
+        return XIMCreateICHandler(ximbackend, (IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
-        return XIMDestroyICHandler((IMChangeICStruct *) call_data);
+        return XIMDestroyICHandler(ximbackend, (IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
-        return XIMSetICValuesHandler((IMChangeICStruct *) call_data);
+        return XIMSetICValuesHandler(ximbackend, (IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
-        return XIMGetICValuesHandler((IMChangeICStruct *) call_data);
+        return XIMGetICValuesHandler(ximbackend, (IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
-        XIMProcessKey((IMForwardEventStruct *) call_data);
+        XIMProcessKey(ximbackend, (IMForwardEventStruct *) call_data);
         return True;
     case XIM_SET_IC_FOCUS:
-        return XIMSetFocusHandler((IMChangeFocusStruct *) call_data);
+        return XIMSetFocusHandler(ximbackend, (IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
-        return XIMUnsetFocusHandler((IMChangeICStruct *) call_data);;
+        return XIMUnsetFocusHandler(ximbackend, (IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
         return True;
     case XIM_TRIGGER_NOTIFY:
-        return XIMTriggerNotifyHandler((IMTriggerNotifyStruct *) call_data);
+        return XIMTriggerNotifyHandler(ximbackend, (IMTriggerNotifyStruct *) call_data);
     default:
         return True;
     }

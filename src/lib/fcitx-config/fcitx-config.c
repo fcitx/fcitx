@@ -32,7 +32,7 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx-config.h"
-#include "cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "uthash.h"
 #include "hotkey.h"
 

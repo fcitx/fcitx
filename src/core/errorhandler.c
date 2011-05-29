@@ -24,10 +24,10 @@
 #include <stdlib.h>
 #include <libintl.h>
 
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/ime-internal.h"
-#include "fcitx-utils/configfile.h"
+#include "fcitx/configfile.h"
 #include "errorhandler.h"
 
 #ifndef SIGUNUSED

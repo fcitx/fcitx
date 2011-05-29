@@ -26,7 +26,7 @@
 #include "addon.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include <sys/stat.h>
 #include <fcitx-utils/utils.h>
 #include "instance.h"
@@ -67,7 +67,7 @@ boolean IsMessageChanged(Messages* m)
     return m->changed;
 }
 
-const char* GetMessageString(Messages* m, int index)
+char* GetMessageString(Messages* m, int index)
 {
     return m->msg[index].strMsg;
 }
@@ -124,13 +124,15 @@ void LoadUserInterface(FcitxInstance* instance)
                         /* some may register before ui load, so load it here */
                         if (addon->ui->RegisterStatus)
                         {
-                            UT_array* uistats = GetUIStatus();
+                            UT_array* uistats = &instance->uistats;
                             FcitxUIStatus *status;
                             for ( status = (FcitxUIStatus *) utarray_front(uistats);
                                 status != NULL;
                                 status = (FcitxUIStatus *) utarray_next(uistats, status))
                                 addon->ui->RegisterStatus(addon->addonInstance, status);
                         }
+                        
+                        instance->ui = addon;
                     }
                     break;
                 default:
@@ -221,7 +223,7 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
 {
     FcitxLog(DEBUG, "Update Status for %s", name);
     
-    UT_array* uistats = GetUIStatus();
+    UT_array* uistats = &instance->uistats;
     FcitxUIStatus *status;
     for ( status = (FcitxUIStatus *) utarray_front(uistats);
           status != NULL;
@@ -243,7 +245,7 @@ void RegisterStatus(FcitxInstance* instance, const char* name, void (*toggleStat
     status.name = strdup(name);
     status.getCurrentStatus = getStatus;
     status.toggleStatus = toggleStatus;
-    UT_array* uistats = GetUIStatus();
+    UT_array* uistats = &instance->uistats;
     
     utarray_push_back(uistats, &status);
     FcitxUIStatus* newstat = (FcitxUIStatus*) utarray_back(uistats);

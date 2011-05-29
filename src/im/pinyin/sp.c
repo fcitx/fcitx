@@ -119,12 +119,13 @@ char* strConstSPConf[] = {
     "方案名称="
 };
 
-void SPInit (void *arg)
+boolean SPInit (void *arg)
 {
     bSP = True;
     FcitxPinyinState *pystate = (FcitxPinyinState* )arg;
 
     LoadSPData (&pystate->pyconfig);
+    return true;
 }
 
 void LoadSPData (FcitxPinyinConfig *pyconfig)

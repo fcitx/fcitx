@@ -52,7 +52,7 @@ void		ChangeRecording (void);
 void		ResetRecording (void);
 #endif
 
-void            InitFcitxIMS(UT_array* ims);
+void            InitFcitxIM(struct FcitxInstance* instance);
 void            InitBuiltInHotkey(struct FcitxInstance* instance);
 void            SwitchIM (struct FcitxInstance* instance, int index);
 void            DoPhraseTips (struct FcitxInstance* instance);

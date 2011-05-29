@@ -33,7 +33,7 @@
 #include <X11/Xatom.h>
 
 #include "MainWindow.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"

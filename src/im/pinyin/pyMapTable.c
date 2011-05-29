@@ -21,7 +21,7 @@
 #include "fcitx/fcitx.h"
 #include "pyMapTable.h"
 
-ConsonantMap    consonantMapTable[] = {
+const ConsonantMap    consonantMapTable[] = {
     {"a", 'A'}
     ,
     {"ai", 'B'}
@@ -139,7 +139,7 @@ ConsonantMap    consonantMapTable[] = {
 /*
  * 声母
  */
-SyllabaryMap    syllabaryMapTable[] = {
+const SyllabaryMap    syllabaryMapTable[] = {
     /*{"b", 'A'},
        {"c", 'B'},
        {"ch", 'C'},

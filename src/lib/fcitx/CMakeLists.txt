@@ -1,4 +1,6 @@
 set(LIBFCITX_SOURCES
+    configfile.c
+    profile.c
     addon.c
     backend.c
     hook.c

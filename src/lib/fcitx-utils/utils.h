@@ -32,7 +32,7 @@
 
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "utarray.h"
 
 /**
@@ -53,6 +53,5 @@ void            SetSwitchKey (char *str);
 int             CalHZIndex (char *strHZ);
 UT_array* SplitString(const char *str);
 void FreeStringList(UT_array *list);
-UT_array* GetUIStatus();
 
 #endif

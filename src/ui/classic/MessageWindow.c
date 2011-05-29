@@ -24,7 +24,7 @@
 #include "ui.h"
 #include "fcitx/xim.h"
 #include "configfile.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 
 #include <ctype.h>
 

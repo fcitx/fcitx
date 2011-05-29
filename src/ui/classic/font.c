@@ -30,7 +30,7 @@
 
 #include "skin.h"
 #include "fcitx-utils/configfile.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 
 extern FcitxState gs;
 

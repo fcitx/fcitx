@@ -3,7 +3,7 @@
 
 extern FcitxClassicUI classicui;
 
-FilterNextTimeEffectBoolean(UseTray, classicui.bUseTrayIcon)
+static void FilterCopyUseTray(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg);
 
 CONFIG_BINDING_BEGIN(FcitxClassicUI);
 CONFIG_BINDING_REGISTER("ClassicUI", "Font", font);
@@ -16,3 +16,15 @@ CONFIG_BINDING_REGISTER("ClassicUI", "ShowHintWindow", bHintWindow);
 CONFIG_BINDING_REGISTER("ClassicUI", "SkinType", skinType);
 CONFIG_BINDING_REGISTER("ClassicUI", "MainWindowHideMode", hideMainWindow);
 CONFIG_BINDING_END()
+
+void FilterCopyUseTray(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg) {
+    static boolean firstRunOnUseTray = true;
+    FcitxClassicUI *classicui = (FcitxClassicUI*) config;
+    boolean *b = (boolean*)value;
+    if (sync == Raw2Value && b)
+    {
+        if (firstRunOnUseTray)
+            classicui->bUseTrayIcon = *b;
+        firstRunOnUseTray = false;
+    }
+}

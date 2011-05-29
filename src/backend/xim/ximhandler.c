@@ -22,15 +22,16 @@
 
 #include "fcitx/ime-internal.h"
 #include "xim.h"
+#include "ximhandler.h"
 #include "Xi18n.h"
 #include "IC.h"
 #include "fcitx-config/hotkey.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include <fcitx/ui.h>
 
 static void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct* call_data);
 
-Bool XIMOpenHandler(IMOpenStruct * call_data)
+Bool XIMOpenHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
 {
     return True;
 }
@@ -58,7 +59,7 @@ Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
     
     if (ic && ic->state != IS_CLOSED)
     {
-        OnInputFocus();
+        OnInputFocus(xim->owner);
     }
     else
     {
@@ -74,7 +75,7 @@ Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     FcitxInputContext* ic = GetCurrentIC();
     if (ic && GetXimIC(ic)->id == call_data->icid)
     {
-        CloseInputWindow();
+        CloseInputWindow(xim->owner);
     }
 
     return True;
@@ -82,7 +83,7 @@ Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 
 Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
 {
-    CloseInputWindow();
+    CloseInputWindow(xim->owner);
     SaveAllIM(xim->owner);
     return True;
 }

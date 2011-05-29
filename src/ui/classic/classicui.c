@@ -34,7 +34,7 @@
 
 #include "classicui.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include <fcitx/instance.h>
 
 
@@ -76,6 +76,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 {
     FcitxModuleFunctionArg arg;
     FcitxClassicUI* classicui = fcitx_malloc0(sizeof(FcitxClassicUI));
+    classicui->owner = instance;
     classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
     
     XLockDisplay(classicui->dpy);

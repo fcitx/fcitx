@@ -91,16 +91,16 @@ void MessageConcatLast(Messages* message, char* text);
 void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
 void SetMessageCount(Messages* m, int s);
 int GetMessageCount(Messages* m);
-const char* GetMessageString(Messages* m, int index);
+char* GetMessageString(Messages* m, int index);
 MSG_TYPE GetMessageType(Messages* m, int index);
 boolean IsMessageChanged(Messages* m);
 void SetMessageChanged(Messages* m, boolean changed);
 
 void MoveInputWindow(struct FcitxInstance* instance);
-void CloseInputWindow();
+void CloseInputWindow(struct FcitxInstance* instance);
 void ShowInputWindow(struct FcitxInstance* instance);
-void UpdateStatus();
+void UpdateStatus(struct FcitxInstance* instance, const char* name);
 void RegisterStatus(struct FcitxInstance* instance, const char* name, void (*toggleStatus)(), boolean (*getStatus)());
-void OnInputFocus();
+void OnInputFocus(struct FcitxInstance* instance);
 
 #endif

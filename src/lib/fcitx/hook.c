@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "fcitx/hook.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "ime.h"
 #include "fcitx-config/hotkey.h"
 

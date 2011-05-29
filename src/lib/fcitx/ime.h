@@ -79,19 +79,33 @@ typedef struct _SINGLE_HZ {
     char            strHZ[UTF8_MAX_LENGTH + 1];
 } SINGLE_HZ;
 
+typedef struct FcitxIMClass {
+    void*              (*Create) (struct FcitxInstance* instance);
+    void               (*Destroy) (void *arg);
+} FcitxIMClass;
+
+typedef boolean            (*FcitxIMInit) (void *arg);
+typedef void               (*FcitxIMResetIM) (void *arg);
+typedef INPUT_RETURN_VALUE (*FcitxIMDoInput) (void *arg, FcitxKeySym, unsigned int);
+typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg, SEARCH_MODE);
+typedef char              *(*FcitxIMGetCandWord) (void *arg, int);
+typedef char              *(*FcitxIMGetLegendCandWord) (void *arg, int);
+typedef boolean            (*FcitxIMPhraseTips) (void *arg);
+typedef void               (*FcitxIMSave) (void *arg);
+
 typedef struct FcitxIM {
     char               strName[MAX_IM_NAME + 1];
     char               strIconName[MAX_IM_NAME + 1];
-    void               (*ResetIM) (void *arg);
-    INPUT_RETURN_VALUE (*DoInput) (void *arg, FcitxKeySym, unsigned int);
-    INPUT_RETURN_VALUE (*GetCandWords) (void *arg, SEARCH_MODE);
-    char              *(*GetCandWord) (void *arg, int);
-    char              *(*GetLegendCandWord) (void *arg, int);
-    boolean            (*PhraseTips) (void *arg);
-    void*              (*Create) (struct FcitxInstance* instance);
-    void               (*Destroy) (void *arg);
-    void               (*Save) (void *arg);
-    void*              (*Init) (void *arg);
+    FcitxIMResetIM ResetIM;
+    FcitxIMDoInput DoInput;
+    FcitxIMGetCandWords GetCandWords;
+    FcitxIMGetCandWord GetCandWord;
+    FcitxIMGetLegendCandWord GetLegendCandWord;
+    FcitxIMPhraseTips PhraseTips;
+    FcitxIMSave Save;
+    FcitxIMInit Init;
+    void*              uiprivate;
+    void* klass;
 } FcitxIM;
 
 typedef enum FcitxKeyEventType {
@@ -127,7 +141,21 @@ typedef struct FcitxInputState {
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
-boolean IsInLegend();
-char* GetOutputString();
-struct FcitxAddon* GetCurrentIM(struct FcitxInstance *instance);
+boolean IsInLegend(FcitxInputState* input);
+char* GetOutputString(FcitxInputState* input);
+struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
+
+void FcitxRegsiterIM(struct FcitxInstance *instance,
+                     void *addonInstance,
+                     const char* name,
+                     const char* iconName,
+                     FcitxIMInit Init,
+                     FcitxIMResetIM ResetIM, 
+                     FcitxIMDoInput DoInput, 
+                     FcitxIMGetCandWords GetCandWords, 
+                     FcitxIMGetCandWord GetCandWord, 
+                     FcitxIMGetLegendCandWord GetLegendCandWord, 
+                     FcitxIMPhraseTips PhraseTips, 
+                     FcitxIMSave Save                     
+);
 #endif

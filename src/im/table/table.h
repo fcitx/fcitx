@@ -22,7 +22,7 @@
 
 #include <X11/Xlib.h>
 
-#include "fcitx-utils/configfile.h"
+#include "fcitx/configfile.h"
 #include "fcitx/ime.h"
 #include "fcitx-utils/utarray.h"
 
@@ -32,6 +32,8 @@
 #define TABLE_AUTO_SAVE_AFTER 1024
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
+
+struct FcitxInstance;
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> 正序   0 --> 逆序
@@ -130,7 +132,7 @@ typedef enum {
     CT_PYPHRASE			//临时拼音转换过来的候选字/词
 } CANDTYPE;
 
-typedef struct TableState {
+typedef struct FcitxTableState {
     UT_array* table; /* 码表 */
     
     char            iTableIMIndex;
@@ -177,54 +179,55 @@ typedef struct TableState {
     
     ADJUSTORDER     PYBaseOrder;
     boolean		    isSavingTableDic;
-} TableState;
+    
+    struct FcitxInstance* owner;
+    struct FcitxPinyinState* pystate;
+} FcitxTableState;
 
-extern TableState tbl;
+void            LoadTableInfo (FcitxTableState* tbl);
+boolean            LoadTableDict (FcitxTableState* tbl);
+boolean TableInit (void* arg);
+void            FreeTableIM (FcitxTableState* tbl, char i);
+void            SaveTableIM (FcitxTableState* tbl);
+void            SaveTableDict (FcitxTableState* tbl);
+boolean            IsInputKey (FcitxTableState* tbl, int iKey);
+boolean            IsIgnoreChar (FcitxTableState* tbl, char cChar);
+boolean            IsEndKey (FcitxTableState* tbl, char cChar);
+char            IsChooseKey (FcitxTableState* tbl, int iKey);
 
-void            LoadTableInfo (void);
-boolean            LoadTableDict (void);
-void            TableInit (void);
-void            FreeTableIM (char index);
-void            SaveTableIM (void);
-void            SaveTableDict (void);
-boolean            IsInputKey (int iKey);
-boolean            IsIgnoreChar (char cChar);
-boolean            IsEndKey (char cChar);
-char            IsChooseKey (int iKey);
+INPUT_RETURN_VALUE DoTableInput (FcitxTableState* tbl, unsigned int sym, unsigned int state);
+INPUT_RETURN_VALUE TableGetCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+void            TableAddCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
+void            TableAddAutoCandWord (FcitxTableState* tbl, short int which, SEARCH_MODE mode);
+INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+void            TableAddLegendCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
+INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+void            TableResetStatus (FcitxTableState* tbl);
+char           *TableGetLegendCandWord (void* arg, int iIndex);
+char           *TableGetFHCandWord (FcitxTableState* tbl, int iIndex);
+boolean            HasMatchingKey (FcitxTableState* tbl);
+int             TableCompareCode (FcitxTableState* tbl, char* strUser, char* strDict);
+int             TableFindFirstMatchCode (FcitxTableState* tbl);
+void            TableAdjustOrderByIndex (FcitxTableState* tbl, int iIndex);
+void            TableDelPhraseByIndex (FcitxTableState* tbl, int iIndex);
+void            TableDelPhraseByHZ (FcitxTableState* tbl, const char* strHZ);
+void            TableDelPhrase (FcitxTableState* tbl, RECORD* record);
+RECORD         *TableHasPhrase (FcitxTableState* tbl, const char* strCode, const char* strHZ);
+RECORD         *TableFindPhrase (FcitxTableState* tbl, const char* strHZ);
+void            TableInsertPhrase (FcitxTableState* tbl, const char* strCode, const char* strHZ);
+char	       *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bLegend);		//Internal
+char           *TableGetCandWord (FcitxTableState* tbl, int iIndex);
+void		TableUpdateHitFrequency (FcitxTableState* tbl, RECORD* record);
+void            TableCreateNewPhrase (FcitxTableState* tbl);
+void            TableCreatePhraseCode (FcitxTableState* tbl, char* strHZ);
+boolean            TablePhraseTips (FcitxTableState* tbl);
+void            TableSetCandWordsFlag (FcitxTableState* tbl, int iCount, boolean flag);
+void            TableResetFlags (FcitxTableState* tbl);
 
-INPUT_RETURN_VALUE DoTableInput (unsigned int sym, unsigned int state, int keyCount);
-INPUT_RETURN_VALUE TableGetCandWords (SEARCH_MODE mode);
-void            TableAddCandWord (RECORD * wbRecord, SEARCH_MODE mode);
-void            TableAddAutoCandWord (short which, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetLegendCandWords (SEARCH_MODE mode);
-void            TableAddLegendCandWord (RECORD * record, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetFHCandWords (SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetPinyinCandWords (SEARCH_MODE mode);
-void            TableResetStatus (void);
-char           *TableGetLegendCandWord (int iIndex);
-char           *TableGetFHCandWord (int iIndex);
-boolean            HasMatchingKey (void);
-int             TableCompareCode (char *strUser, char *strDict);
-int             TableFindFirstMatchCode (void);
-void            TableAdjustOrderByIndex (int iIndex);
-void            TableDelPhraseByIndex (int iIndex);
-void            TableDelPhraseByHZ (char *strHZ);
-void            TableDelPhrase (RECORD * record);
-RECORD         *TableHasPhrase (char *strCode, char *strHZ);
-RECORD         *TableFindPhrase (char *strHZ);
-void            TableInsertPhrase (char *strCode, char *strHZ);
-char	       *_TableGetCandWord (int iIndex, boolean _bLegend);		//Internal
-char           *TableGetCandWord (int iIndex);
-void		TableUpdateHitFrequency (RECORD * record);
-void            TableCreateNewPhrase (void);
-void            TableCreatePhraseCode (char *strHZ);
-boolean            TablePhraseTips (void);
-void            TableSetCandWordsFlag (int iCount, boolean flag);
-void            TableResetFlags (void);
+void            TableCreateAutoPhrase (FcitxTableState* tbl, char iCount);
 
-void            TableCreateAutoPhrase (char iCount);
-
-void            UpdateHZLastInput (char *);
+void            UpdateHZLastInput (FcitxTableState* tbl, char* str);
 
 ConfigFileDesc *GetTableConfigDesc();
 CONFIG_BINDING_DECLARE(TABLE);

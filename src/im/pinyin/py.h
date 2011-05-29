@@ -211,9 +211,9 @@ void *PYCreate(struct FcitxInstance* instance);
 boolean            PYInit (void* arg);
 boolean         LoadPYBaseDict (struct FcitxPinyinState* pystate);
 boolean         LoadPYOtherDict (struct FcitxPinyinState* pystate);
-void            ResetPYStatus (struct FcitxPinyinState* pystate);
+void            ResetPYStatus (void* pystate);
 int             GetBaseIndex (struct FcitxPinyinState* pystate, int iPYFA, char* strBase);
-INPUT_RETURN_VALUE DoPYInput(void* arg, unsigned int sym, unsigned int state, int keyCount);
+INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state);
 void            UpdateCodeInputPY (struct FcitxPinyinState* pystate);
 void            UpdateFindString (struct FcitxPinyinState* pystate, int val);
 void            CalculateCursorPosition (struct FcitxPinyinState* pystate);
@@ -251,7 +251,7 @@ boolean            PYIsInFreq (struct FcitxPinyinState* pystate, char *strHZ);
 
 INPUT_RETURN_VALUE PYGetLegendCandWords (void* arg, SEARCH_MODE mode);
 boolean            PYAddLengendCandWord (struct FcitxPinyinState* pystate,PyPhrase * phrase, SEARCH_MODE mode);
-char           *PYGetLegendCandWord (struct FcitxPinyinState* pystate,int iIndex);
+char           *PYGetLegendCandWord (void* arg, int iIndex);
 void            PYSetLegendCandWordsFlag (struct FcitxPinyinState* pystate, boolean flag);
 void		PYGetPYByHZ(struct FcitxPinyinState* pystate, char *strHZ, char *strPY);
 

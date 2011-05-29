@@ -27,7 +27,7 @@
 #include "fcitx/fcitx.h"
 #include "configfile.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include <fcitx-utils/keys.h>
 static boolean IsReloadConfig = false;
 

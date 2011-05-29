@@ -31,11 +31,11 @@
 #include "ime.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-config/cutils.h"
+#include "fcitx-utils/cutils.h"
 #include "fcitx-config/hotkey.h"
-#include "fcitx-utils/configfile.h"
+#include "fcitx/configfile.h"
 #include "fcitx-utils/keys.h"
-#include "fcitx-utils/profile.h"
+#include "fcitx/profile.h"
 #include "ime-internal.h"
 #include "ui.h"
 #include "fcitx-utils/utils.h"
@@ -47,7 +47,8 @@
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static void UpdateInputWindow(FcitxInstance* instance);
-static const UT_icd im_icd = {sizeof(FcitxAddon*), NULL ,NULL, NULL};
+static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
+static const UT_icd imclass_icd = {sizeof(FcitxIMClass*), NULL ,NULL, NULL};
 
 void InitBuiltInHotkey(FcitxInstance *instance)
 {
@@ -68,22 +69,22 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     RegisterHotkeyFilter(hk);
 }
 
-void InitFcitxIMS(UT_array* ims)
+void InitFcitxIM(FcitxInstance* instance)
 {
-    utarray_init(ims, &im_icd);
+    utarray_init(&instance->imes, &ime_icd);
+    utarray_init(&instance->imeclasses, &imclass_icd);
 }
 
 void SaveAllIM(FcitxInstance* instance)
 {
-    UT_array* ims = &instance->ims;
-    FcitxAddon **pim;
-    for ( pim = (FcitxAddon **) utarray_front(ims);
+    UT_array* imes = &instance->imes;
+    FcitxIM *pim;
+    for ( pim = (FcitxIM *) utarray_front(imes);
           pim != NULL;
-          pim = (FcitxAddon **) utarray_next(ims, pim))
+          pim = (FcitxIM *) utarray_next(imes, pim))
     {
-        FcitxIM *im = (*pim)->im;
-        if (im->Save)
-            im->Save((*pim)->addonInstance);
+        if ((pim)->Save)
+            (pim)->Save(pim->klass);
     }
 }
 
@@ -137,15 +138,46 @@ static const char* GetStateName(INPUT_RETURN_VALUE retVal)
 void UnloadIM(FcitxAddon* pim)
 {
     //TODO: DestroyImage(&ime->icon);
-    FcitxIM *im = pim->im;
+    FcitxIMClass *im = pim->imclass;
     if (im->Destroy)
         im->Destroy(pim->addonInstance);
+}
+
+void FcitxRegsiterIM(FcitxInstance *instance,
+                     void *addonInstance,
+                     const char* name,
+                     const char* iconName,
+                     FcitxIMInit Init,
+                     FcitxIMResetIM ResetIM, 
+                     FcitxIMDoInput DoInput, 
+                     FcitxIMGetCandWords GetCandWords, 
+                     FcitxIMGetCandWord GetCandWord, 
+                     FcitxIMGetLegendCandWord GetLegendCandWord, 
+                     FcitxIMPhraseTips PhraseTips, 
+                     FcitxIMSave Save                     
+)
+{
+    UT_array* imes = &instance->imes ;
+    FcitxIM newime;
+    strncpy(newime.strName, name, MAX_IM_NAME);
+    strncpy(newime.strIconName, iconName, MAX_IM_NAME);
+    newime.Init = Init;
+    newime.ResetIM = ResetIM;
+    newime.DoInput = DoInput;
+    newime.GetCandWord =GetCandWord;
+    newime.GetCandWords = GetCandWords;
+    newime.GetLegendCandWord = GetLegendCandWord;
+    newime.PhraseTips = PhraseTips;
+    newime.Save = Save;
+    newime.klass = addonInstance;
+    
+    utarray_push_back(imes, &newime);
 }
 
 void LoadAllIM(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
-    UT_array* ims = &instance->ims;
+    UT_array* ims = &instance->imeclasses;
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
@@ -160,29 +192,29 @@ void LoadAllIM(FcitxInstance* instance)
                     {
                         FILE *fp = GetLibFile(addon->library, "r", &modulePath);
                         void *handle;
-                        FcitxIM* im;
+                        FcitxIMClass * imclass;
                         if (!fp)
                             break;
                         fclose(fp);
                         handle = dlopen(modulePath,RTLD_LAZY);
                         if(!handle)
                         {
-                            FcitxLog(ERROR, _("IM: open %s fail %s") ,modulePath ,dlerror());
+                            FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath ,dlerror());
                             break;
                         }
-                        im=dlsym(handle,"ime");
-                        if(!im || !im->Create)
+                        imclass=dlsym(handle,"ime");
+                        if(!imclass || !imclass->Create)
                         {
-                            FcitxLog(ERROR, _("IM: bad im"));
+                            FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
                             dlclose(handle);
                             break;
                         }
-                        if((addon->addonInstance = im->Create(instance)) == NULL)
+                        if((addon->addonInstance = imclass->Create(instance)) == NULL)
                         {
                             dlclose(handle);
                             return;
                         }
-                        addon->im = im;
+                        addon->imclass = imclass;
                         utarray_push_back(ims, &addon);
                     }
                 default:
@@ -193,9 +225,9 @@ void LoadAllIM(FcitxInstance* instance)
     }
     if (instance->iIMIndex < 0)
         instance->iIMIndex = 0;
-    if (instance->iIMIndex > utarray_len(ims))
-        instance->iIMIndex = utarray_len(ims) - 1;
-    if (utarray_len(ims) <= 0)
+    if (instance->iIMIndex > utarray_len(&instance->imes))
+        instance->iIMIndex = utarray_len(&instance->imes) - 1;
+    if (utarray_len(&instance->imes) <= 0)
     {
         FcitxLog(ERROR, _("No available Input Method"));
         exit(1);
@@ -225,11 +257,10 @@ INPUT_RETURN_VALUE ProcessKey(
 
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     char *pstr;
-    FcitxAddon* currentIM = GetCurrentIM(instance);
+    FcitxIM* currentIM = GetCurrentIM(instance);
     FcitxInputState *input = &instance->input;
     
-    /* TODO: */
-    FcitxConfig *fc = NULL; // (FcitxConfig*) GetConfig();
+    FcitxConfig *fc = &instance->config;
 
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
@@ -261,7 +292,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     ChangeIMState(instance, GetCurrentIC());
                 } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
                     if (!input->bIsInLegend) {
-                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 1);
+                        pstr = currentIM->GetCandWord(currentIM->klass, 1);
                         if (pstr) {
                             strcpy(input->strStringGet, pstr);
                             if (input->bIsInLegend)
@@ -280,7 +311,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     input->keyReleased = KR_OTHER;
                 } else if (IsHotKey(sym, state, fc->i3rdSelectKey) && input->keyReleased == KR_3RD_SELECTKEY) {
                     if (!input->bIsInLegend) {
-                        pstr = currentIM->im->GetCandWord(currentIM->addonInstance, 2);
+                        pstr = currentIM->GetCandWord(currentIM->klass, 2);
                         if (pstr) {
                             strcpy(input->strStringGet, pstr);
                             if (input->bIsInLegend)
@@ -372,7 +403,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     retVal = IRV_GET_CANDWORDS;
                 } else */
 
-                retVal = currentIM->im->DoInput(currentIM->addonInstance, sym, state);
+                retVal = currentIM->DoInput(currentIM->klass, sym, state);
                 if (!input->bCursorAuto)
                     input->iCursorPos = input->iCodeInputCount;
             }
@@ -381,9 +412,9 @@ INPUT_RETURN_VALUE ProcessKey(
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
             if (!input->iInCap) {
                 if (IsHotKey(sym, state, fc->hkPrevPage))
-                    retVal = currentIM->im->GetCandWords(currentIM->addonInstance, SM_PREV);
+                    retVal = currentIM->GetCandWords(currentIM->klass, SM_PREV);
                 else if (IsHotKey(sym, state, fc->hkNextPage))
-                    retVal = currentIM->im->GetCandWords(currentIM->addonInstance, SM_NEXT);
+                    retVal = currentIM->GetCandWords(currentIM->klass, SM_NEXT);
             }
 
 
@@ -410,7 +441,7 @@ INPUT_RETURN_VALUE ProcessKey(
                 break;
         case IRV_CLEAN:
             ResetInput(instance);
-            CloseInputWindow();
+            CloseInputWindow(instance);
             break;
             
         case IRV_DISPLAY_CANDWORDS:
@@ -463,7 +494,7 @@ INPUT_RETURN_VALUE ProcessKey(
             break;
         case IRV_GET_CANDWORDS:
             CommitString(instance, GetCurrentIC(), input->strStringGet);
-            if (fc->bPhraseTips && currentIM->im->PhraseTips)
+            if (fc->bPhraseTips && currentIM->PhraseTips)
                 DoPhraseTips(instance);
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));
             UpdateInputWindow(instance);
@@ -506,17 +537,16 @@ void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventTyp
 
 void SwitchIM(FcitxInstance* instance, int index)
 {
-    UT_array* ims = &instance->ims;
-    int iIMCount = utarray_len(ims);
+    UT_array* imes = &instance->imes;
+    int iIMCount = utarray_len(imes);
     
-    FcitxAddon* lastIM, *newIM;
+    FcitxIM* lastIM, *newIM;
 
     if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
         lastIM = NULL;
     else
     {
-        FcitxAddon** plastIM = (FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex);
-        lastIM = *plastIM;
+        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
 
     if (index == -1) {
@@ -537,15 +567,13 @@ void SwitchIM(FcitxInstance* instance, int index)
         newIM = NULL;
     else
     {
-        FcitxAddon** pnewIM = (FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex);
-        newIM = *pnewIM;
+        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
 
-/* TODO
     if (lastIM && lastIM->Save)
-        lastIM->Save();
+        lastIM->Save(lastIM->klass);
     if (newIM && newIM->Init)
-        newIM->Init();*/
+        newIM->Init(newIM->klass);
 
     ResetInput(instance);
     SaveProfile();
@@ -576,27 +604,25 @@ void ResetInput(FcitxInstance* instance)
     input->bIsInLegend = false;
     
     input->iInCap = 0;
-    UT_array* ims = &instance->ims;
+    UT_array* ims = &instance->imes;
 
-    FcitxAddon* pcurentIM = *((FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex));
-    FcitxIM* curentIM = (pcurentIM)->im;
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
 
-    if (curentIM && curentIM->ResetIM)
-        curentIM->ResetIM(pcurentIM->addonInstance);
+    if (currentIM && currentIM->ResetIM)
+        currentIM->ResetIM(currentIM->klass);
     
     ResetInputHook();
     
-    CloseInputWindow();
+    CloseInputWindow(instance);
 }
 
 void DoPhraseTips(FcitxInstance* instance)
 {
-    UT_array* ims = &instance->ims;
-    FcitxAddon* pcurrentIM = (FcitxAddon*) utarray_eltptr(ims, instance->iIMIndex);
-    FcitxIM* currentIM = pcurrentIM->im;
+    UT_array* ims = &instance->imes;
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
     FcitxInputState *input = &instance->input;
 
-    if (currentIM->PhraseTips && currentIM->PhraseTips(pcurrentIM->addonInstance))
+    if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
         input->lastIsSingleHZ = -1;
     else
         input->lastIsSingleHZ = 0;
@@ -678,9 +704,9 @@ char* GetOutputString(FcitxInputState* input)
     return input->strStringGet;
 }
 
-FcitxAddon* GetCurrentIM(FcitxInstance* instance)
+FcitxIM* GetCurrentIM(FcitxInstance* instance)
 {
-    UT_array* ims = &instance->ims;
-    FcitxAddon* pcurrentIM = *((FcitxAddon**) utarray_eltptr(ims, instance->iIMIndex));
+    UT_array* imes = &instance->imes;
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     return pcurrentIM;
 }

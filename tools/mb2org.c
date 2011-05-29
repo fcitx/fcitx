@@ -30,6 +30,7 @@
 #include "pyTools.h"
 #include "fcitx-config/xdg.h"
 #include "im/pinyin/pyconfig.h"
+#include "im/pinyin/py.h"
 
 FcitxPinyinConfig pyconfig;
 

@@ -41,6 +41,7 @@ typedef struct FcitxAutoEngState {
     char buf[MAX_USER_INPUT + 1];
     int index;
     boolean active;
+    FcitxInstance *owner;
 } FcitxAutoEngState;
 
 static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
@@ -79,7 +80,7 @@ static boolean ProcessAutoEng(void* arg,
  *
  * @return void
  **/
-static void ResetAutoEng();
+static void ResetAutoEng(void *arg);
 
 /**
  * @brief Free Auto Eng Data
@@ -114,6 +115,7 @@ FcitxModule module = {
 void* AutoEngCreate(FcitxInstance *instance)
 {
     FcitxAutoEngState* autoEngState = fcitx_malloc0(sizeof(FcitxAutoEngState));
+    autoEngState->owner = instance;
     LoadAutoEng(autoEngState);
     
     KeyFilterHook khk;
@@ -127,7 +129,7 @@ void* AutoEngCreate(FcitxInstance *instance)
     RegisterPreInputFilter(khk);
     RegisterResetInputHook(rhk);
 
-    ResetAutoEng();
+    ResetAutoEng(autoEngState);
     return autoEngState;
 }
 
@@ -152,7 +154,7 @@ static boolean ProcessAutoEng(void* arg,long unsigned int sym,
             autoEngState->buf[autoEngState->index] = '\0';
             if (autoEngState->index == 0)
             {
-                ResetAutoEng();
+                ResetAutoEng(autoEngState);
                 *retval = IRV_CLEAN;
             }
             else
@@ -160,8 +162,8 @@ static boolean ProcessAutoEng(void* arg,long unsigned int sym,
         }
         else if (IsHotKey(sym, state, FCITX_ENTER))
         {
-            strcpy(GetOutputString(), autoEngState->buf);
-            ResetAutoEng();
+            strcpy(GetOutputString(&autoEngState->owner->input), autoEngState->buf);
+            ResetAutoEng(autoEngState);
             *retval = IRV_GET_CANDWORDS;
         }
         ShowAutoEngMessage(autoEngState);
@@ -203,7 +205,7 @@ void ResetAutoEng(void* arg)
 void LoadAutoEng (FcitxAutoEngState* autoEngState)
 {
     FILE    *fp;
-    char    *buf;
+    char    *buf = NULL;
     size_t   length = 0;
 
     fp = GetXDGFileData("AutoEng.dat", "rt", NULL);
@@ -252,8 +254,8 @@ boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
-    Messages *msgUp = GetMessageUp();
-    Messages *msgDown = GetMessageDown();
+    Messages *msgUp = GetMessageUp(autoEngState->owner);
+    Messages *msgDown = GetMessageDown(autoEngState->owner);
 
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);

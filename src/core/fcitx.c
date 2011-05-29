@@ -34,13 +34,13 @@
 #include <libintl.h>
 #include <unistd.h>
 
-#include "fcitx-utils/configfile.h"
+#include "fcitx/configfile.h"
 #include "fcitx/addon.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/module.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/backend.h"
-#include "fcitx-utils/profile.h"
+#include "fcitx/profile.h"
 #include <fcitx/instance.h>
 
 static void WaitForEnd()

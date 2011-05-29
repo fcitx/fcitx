@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <fcitx/hook.h>
 #include <fcitx/ui.h>
-#include <fcitx-config/cutils.h>
+#include <fcitx-utils/cutils.h>
 #include <fcitx/instance.h>
 
 #define TABLE_GBKS2T "gbks2t.tab"
@@ -59,6 +59,7 @@ typedef struct FcitxChttrans{
     ChttransEngine engine;
     HOTKEYS hkToggle[2];
     simple2trad_t* s2t_table;
+    FcitxInstance* owner;
 } FcitxChttrans;
 
 static void* ChttransCreate(FcitxInstance* instance);
@@ -87,6 +88,7 @@ FcitxModule module =
 void* ChttransCreate(FcitxInstance* instance)
 {
     FcitxChttrans* transState = fcitx_malloc0(sizeof(FcitxChttrans));
+    transState->owner = instance;
     LoadChttransConfig(transState);
     
     HotkeyHook hk;
@@ -104,9 +106,10 @@ void* ChttransCreate(FcitxInstance* instance)
     return transState;
 }
 
-INPUT_RETURN_VALUE HotkeyToggleChttransState()
+INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 {
-    UpdateStatus("chttrans");
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    UpdateStatus(transState->owner, "chttrans");
     return IRV_DO_NOTHING;
 }
 
@@ -263,7 +266,7 @@ void LoadChttransConfig(FcitxChttrans* transState)
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
     FcitxChttransConfigBind(transState, cfile, configDesc);
-    ConfigBindSync((GenericConfig*)&transState);
+    ConfigBindSync((GenericConfig*)transState);
 
     fclose(fp);
 }

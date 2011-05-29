@@ -29,7 +29,7 @@
 #include "im/pinyin/pyconfig.h"
 
 FcitxPinyinConfig pyconfig;
-extern PYTABLE  PYTable[];
+extern PYTABLE_TEMPLATE  PYTable_template[];
 
 FILE           *fps, *fpt, *fp1, *fp2;
 Bool            bSingleHZMode = False;
@@ -146,6 +146,9 @@ void CreatePYPhrase (void)
     FILE           *fg = fopen ("pyPhrase.ok", "wt");
     int             kkk;
     unsigned int    uIndex, uTemp;
+    FcitxPinyinConfig pyconfig;
+    
+    memset(&pyconfig, 0 ,sizeof(pyconfig));
 
     s1 = 0;
     s2 = 0;
@@ -157,7 +160,7 @@ void CreatePYPhrase (void)
         if (strlen (strPhrase) < 3)
             continue;
 
-        ParsePY (strPY, &strTemp, PY_PARSE_INPUT_SYSTEM, False);
+        ParsePY (&pyconfig, strPY, &strTemp, PY_PARSE_INPUT_SYSTEM, False);
         s2++;
         kkk = 0;
         if (strTemp.iHZCount != utf8_strlen (strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
@@ -257,7 +260,7 @@ void CreatePYBase (void)
     head->next = head;
 
     iBaseCount = 0;
-    while (PYTable[iBaseCount].strPY[0] != '\0')
+    while (PYTable_template[iBaseCount].strPY[0] != '\0')
         iBaseCount++;
     for (iIndex = 0; iIndex < iBaseCount; iIndex++)
         YY[iIndex] = 0;
@@ -267,9 +270,9 @@ void CreatePYBase (void)
         fscanf (fps, "%s", strPY);
         fscanf (fps, "%s\n", strHZ);
 
-        if (MapPY (strPY, strMap, PARSE_INPUT_SYSTEM)) {
+        if (MapPY (&pyconfig, strPY, strMap, PARSE_INPUT_SYSTEM)) {
             for (i = 0; i < iBaseCount; i++)
-                if ((!strcmp (PYTable[i].strPY, strPY)) && PYTable[i].pMH == NULL)
+                if ((!strcmp (PYTable_template[i].strPY, strPY)) && PYTable_template[i].control == PYTABLE_NONE)
                     YY[i] += 1;
             iIndex++;
             if (utf8_strlen(strHZ) > 1)

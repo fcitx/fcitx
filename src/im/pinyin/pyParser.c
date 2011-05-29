@@ -31,11 +31,8 @@
 #include "fcitx/ime.h"
 #include "py.h"
 
-extern MHPY MHPY_C[];
-extern PYTABLE  PYTable[];
-extern ConsonantMap consonantMapTable[];
-extern SyllabaryMap syllabaryMapTable[];
-extern int      iIMEIndex;
+extern const ConsonantMap consonantMapTable[];
+extern const SyllabaryMap syllabaryMapTable[];
 
 int IsSyllabary (const char *strPY, boolean bMode)
 {
@@ -77,23 +74,23 @@ int FindPYFAIndex (FcitxPinyinConfig *pyconfig, const char *strPY, boolean bMode
 {
     int             i;
     
-    for (i = 0; PYTable[i].strPY[0] != '\0'; i++) {
+    for (i = 0; pyconfig->PYTable[i].strPY[0] != '\0'; i++) {
         int cmp;
         if (bMode)
-            cmp = strncmp (strPY, PYTable[i].strPY, strlen (PYTable[i].strPY));
+            cmp = strncmp (strPY, pyconfig->PYTable[i].strPY, strlen ( pyconfig->PYTable[i].strPY));
         else
-            cmp = strcmp (strPY, PYTable[i].strPY);
+            cmp = strcmp (strPY, pyconfig->PYTable[i].strPY);
         if (!cmp) {
-            if (!PYTable[i].pMH)
+            if (!pyconfig->PYTable[i].pMH)
                 return i;
-            else if (*(PYTable[i].pMH))
+            else if (*(pyconfig->PYTable[i].pMH))
             {
                 /* trick: not the kind of misstype */
-                if (PYTable[i].pMH != &pyconfig->bMisstype )
+                if (pyconfig->PYTable[i].pMH != &pyconfig->bMisstype )
                     return i;
                 else
                     /* fixed pinyin is valid? */
-                    if (!PYTable[i + 1].pMH || *(PYTable[i + 1].pMH))
+                    if (!pyconfig->PYTable[i + 1].pMH || *(pyconfig->PYTable[i + 1].pMH))
                         return i;
             }
         }
@@ -160,10 +157,10 @@ void ParsePY (FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * pa
 
         do {
             iIndex = FindPYFAIndex (pyconfig, strP, 1);
-            size_t lIndex = strlen (PYTable[iIndex].strPY);
+            size_t lIndex = strlen (pyconfig->PYTable[iIndex].strPY);
 
             if (iIndex != -1) {
-                strTemp[0] = PYTable[iIndex].strPY[lIndex - 1];
+                strTemp[0] = pyconfig->PYTable[iIndex].strPY[lIndex - 1];
                 iTemp = -1;
                 if (strTemp[0] == 'g' || strTemp[0] == 'n') {
                     strncpy (strTemp, strP, lIndex - 1);
@@ -171,9 +168,9 @@ void ParsePY (FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * pa
 
                     iTemp = FindPYFAIndex (pyconfig, strTemp, 0);
                     if (iTemp != -1) {
-                        iTemp = FindPYFAIndex (pyconfig, strP + strlen (PYTable[iTemp].strPY), 1);
+                        iTemp = FindPYFAIndex (pyconfig, strP + strlen (pyconfig->PYTable[iTemp].strPY), 1);
                         if (iTemp != -1) {
-                            if (strlen (PYTable[iTemp].strPY) == 1 || !strcmp ("ng", PYTable[iTemp].strPY))
+                            if (strlen (pyconfig->PYTable[iTemp].strPY) == 1 || !strcmp ("ng", pyconfig->PYTable[iTemp].strPY))
                                 iTemp = -1;
                         }
                         if (iTemp != -1) {
@@ -183,7 +180,7 @@ void ParsePY (FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * pa
                     }
                 }
                 if (iTemp == -1)
-                    strcpy (strTemp, PYTable[iIndex].strPY);
+                    strcpy (strTemp, pyconfig->PYTable[iIndex].strPY);
                 MapPY (pyconfig, strTemp, str_Map, mode);
                 strcpy (parsePY->strMap[parsePY->iHZCount], str_Map);
                 strP += strlen (strTemp);
@@ -265,7 +262,7 @@ void ParsePY (FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * pa
  * 将一个拼音(包括仅为声母或韵母)转换为拼音映射
  * 返回True为转换成功，否则为False(一般是因为strPY不是一个标准的拼音)
  */
-boolean MapPY (FcitxPinyinConfig* pyconfig, char *strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
+boolean MapPY (FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode)
 {
     char            str[5];
     char            strPY[7];
@@ -281,7 +278,7 @@ boolean MapPY (FcitxPinyinConfig* pyconfig, char *strPYorigin, char strMap[3], P
     }
 
     //特殊处理eng
-    if (!strcmp (strPY, "eng") && MHPY_C[1].bMode) {
+    if (!strcmp (strPY, "eng") && pyconfig->MHPY_C[1].bMode) {
         strcpy (strMap, "X0");
         return True;
     }
