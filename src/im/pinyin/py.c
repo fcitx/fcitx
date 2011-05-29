@@ -83,7 +83,7 @@ void *PYCreate(FcitxInstance* instance)
     InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
     InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
     InitPYTable(&pystate->pyconfig);
-    
+    /*
     FcitxRegsiterIM(instance,
                     pystate,
                     "Pinyin",
@@ -109,7 +109,7 @@ void *PYCreate(FcitxInstance* instance)
                     PYGetLegendCandWord,
                     NULL,
                     SavePY
-                   );
+                   );*/
     pystate->owner = instance;
     return pystate;
 }

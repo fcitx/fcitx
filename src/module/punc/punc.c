@@ -44,6 +44,7 @@
 
 static void* PuncCreate(FcitxInstance* instance);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
+static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);
 
 typedef struct FcitxPuncState {
     boolean bUseWidePunc;
@@ -73,7 +74,16 @@ void* PuncCreate(FcitxInstance* instance)
     puncState->bUseWidePunc = true;
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
+    
+    AddFunction(PuncGetPunc);
     return puncState;
+}
+
+void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) a;
+    int *key = arg.args[0];
+    return GetPunc(puncState, *key);
 }
 
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)

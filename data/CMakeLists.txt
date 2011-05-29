@@ -1,3 +1,5 @@
+add_subdirectory(table)
+
 set(FCITX_DESC_FILES
     addon.desc
     config.desc

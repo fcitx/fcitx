@@ -50,6 +50,8 @@
 #include "fcitx-utils/cutils.h"
 #include "fcitx/ime-internal.h"
 #include <fcitx/instance.h>
+#include <module/punc/punc.h>
+#include <fcitx/module.h>
 
 static void FreeTableConfig(void *v);
 static void FreeTable (FcitxTableState* tbl, char iTableIndex);
@@ -60,6 +62,43 @@ ConfigFileDesc* tableConfigDesc = NULL;
 
 static char GetTableIMIndex(FcitxTableState* tbl, char index);
 static FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
+static void *TableCreate(FcitxInstance* instance);
+
+FCITX_EXPORT_API
+FcitxIMClass ime = {
+    TableCreate,
+    NULL
+};
+
+void *TableCreate(FcitxInstance* instance)
+{
+    FcitxTableState *tbl = fcitx_malloc0(sizeof(FcitxTableState));
+    tbl->owner = instance;
+    LoadTableInfo(tbl);
+    TABLE* table;
+    for(table = (TABLE*) utarray_front(tbl->table);
+        table != NULL;
+        table = (TABLE*) utarray_next(tbl->table, table))
+    {
+        FcitxRegsiterIM(
+            instance,
+            tbl,
+            table->strName,
+            table->strIconName,
+            TableInit,
+            TableResetStatus,
+            DoTableInput,
+            TableGetCandWords,
+            TableGetCandWord,
+            TableGetLegendCandWord,
+            TablePhraseTips,
+            SaveTableIM
+        );
+    }
+    
+    
+    return tbl;
+}
 
 FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser)
 {
@@ -218,7 +257,7 @@ ConfigFileDesc *GetTableConfigDesc()
     if (!tableConfigDesc)
     {
         FILE *tmpfp;
-        tmpfp = GetXDGFileData("table.desc", "r", NULL);
+        tmpfp = GetXDGFileData("addon/table.desc", "r", NULL);
         tableConfigDesc = ParseConfigFileDescFp(tmpfp);
         fclose(tmpfp);
     }
@@ -483,8 +522,9 @@ boolean TableInit (void *arg)
     return true;
 }
 
-void SaveTableIM (FcitxTableState *tbl)
+void SaveTableIM (void *arg)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     if (!tbl->recordHead)
         return;
     if (tbl->iTableChanged)
@@ -570,8 +610,9 @@ void FreeTable (FcitxTableState *tbl, char iTableIndex)
     }
 }
 
-void TableResetStatus (FcitxTableState* tbl)
+void TableResetStatus (void* arg)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     FcitxInputState *input = &tbl->owner->input;
     tbl->bIsTableAddPhrase = False;
     tbl->bIsTableDelPhrase = False;
@@ -768,8 +809,9 @@ char IsChooseKey (FcitxTableState* tbl, int iKey)
     return 0;
 }
 
-INPUT_RETURN_VALUE DoTableInput (FcitxTableState* tbl, unsigned int sym, unsigned int state)
+INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     INPUT_RETURN_VALUE retVal;
     TABLECANDWORD* tableCandWord = tbl->tableCandWord;
     TABLE* table = (TABLE*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
@@ -839,7 +881,10 @@ INPUT_RETURN_VALUE DoTableInput (FcitxTableState* tbl, unsigned int sym, unsigne
                         }
 
                         retVal = TableGetCandWords (tbl, SM_FIRST);
-                        strTemp = GetPunc (input->strCodeInput[0]);
+                        FcitxModuleFunctionArg farg;
+                        int key = input->strCodeInput[0];
+                        farg.args[0] = &key;
+                        strTemp = InvokeFunction(instance, FCITX_PUNC, GETPUNC, farg);
                         if (IsEndKey (tbl, sym)) {
                             if (input->iCodeInputCount == 1)
                                 return IRV_TO_PROCESS;
@@ -1143,8 +1188,9 @@ INPUT_RETURN_VALUE DoTableInput (FcitxTableState* tbl, unsigned int sym, unsigne
     return retVal;
 }
 
-char           *TableGetCandWord (FcitxTableState* tbl, int iIndex)
+char           *TableGetCandWord (void* arg, int iIndex)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     char *str;
     TABLE* table = (TABLE*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
@@ -1282,8 +1328,9 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl, SEARCH_MODE mo
     return IRV_DISPLAY_CANDWORDS;
 }
 
-INPUT_RETURN_VALUE TableGetCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
+INPUT_RETURN_VALUE TableGetCandWords (void* arg, SEARCH_MODE mode)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     int             i;
     char            strTemp[3], *pstr;
     RECORD         *recTemp;
@@ -1978,7 +2025,7 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mo
     RECORD         *tableLegend = NULL;
     unsigned int    iTableTotalLengendCandCount = 0;
     TABLECANDWORD* tableCandWord = tbl->tableCandWord;
-    GenericConfig *fc = &tbl->owner->config;
+    GenericConfig *fc = &tbl->owner->config.gconfig;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
     boolean bDisablePagingInLegend = *ConfigGetBindValue(fc, "Output", "LegendModeDisablePaging").boolvalue;
@@ -2211,8 +2258,9 @@ char           *TableGetFHCandWord (FcitxTableState* tbl, int iIndex)
     return NULL;
 }
 
-boolean TablePhraseTips (FcitxTableState* tbl)
+boolean TablePhraseTips (void *arg)
 {
+    FcitxTableState *tbl = (FcitxTableState*) arg;
     RECORD         *recTemp = NULL;
     char            strTemp[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1] = "\0", *ps;
     short           i, j;

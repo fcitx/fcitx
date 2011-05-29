@@ -27,6 +27,10 @@
 #define MAX_PUNC_NO		2
 #define MAX_PUNC_LENGTH		2
 
+#define FCITX_PUNC_NAME "fcitx-punc"
+#define FCITX_PUNC_GETPUNC 0
+#define FCITX_PUNC_GETPUNC_RETURNTYPE char*
+
 struct FcitxPuncState;
 typedef struct WidePunc {
     int             ASCII;
