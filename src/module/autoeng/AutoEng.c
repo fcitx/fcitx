@@ -171,24 +171,21 @@ static boolean ProcessAutoEng(void* arg,long unsigned int sym,
     }
     if (IsHotKeySimple(sym, state))
     {
-        autoEngState->buf[autoEngState->index] = sym;
-        autoEngState->index++;
+        strncpy(autoEngState->buf, autoEngState->owner->input.strCodeInput, MAX_USER_INPUT);
+        if (strlen(autoEngState->buf) >= MAX_USER_INPUT - 1)
+            return true;
+        
+        autoEngState->index = strlen(autoEngState->buf);
+        autoEngState->buf[autoEngState->index ++ ] = sym;
         autoEngState->buf[autoEngState->index] = '\0';
-
+        
         if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
+            autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
             ShowAutoEngMessage(autoEngState);
             return true;
-        }
-    }
-    else if (IsHotKey(sym, state, FCITX_BACKSPACE))
-    {
-        if (autoEngState->index > 0)
-        {
-            autoEngState->index -- ;
-            autoEngState->buf[autoEngState->index] = '\0';
         }
     }
     return false;
