@@ -271,19 +271,7 @@ void LoadChttransConfig(FcitxChttrans* transState)
     fclose(fp);
 }
 
-ConfigFileDesc* GetChttransConfigDesc()
-{
-    static ConfigFileDesc* chttransConfigDesc = NULL;
-    if (!chttransConfigDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("addon/fcitx-chttrans.desc", "r", NULL);
-        chttransConfigDesc = ParseConfigFileDescFp(tmpfp);
-        fclose(tmpfp);
-    }
-
-    return chttransConfigDesc;
-}
+CONFIG_DESC_DEFINE(GetChttransConfigDesc, "addon/fcitx-chttrans.desc")
 
 void SaveChttransConfig(FcitxChttrans* transState)
 {

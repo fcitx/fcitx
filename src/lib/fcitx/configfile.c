@@ -31,7 +31,6 @@
 #include <fcitx-utils/keys.h>
 static boolean IsReloadConfig = false;
 
-ConfigFileDesc* fcitxConfigDesc = NULL;
 static ConfigFileDesc* GetConfigDesc();
 static void FilterSwitchKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void Filter2nd3rdKey(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg);
@@ -179,18 +178,7 @@ void LoadConfig(FcitxConfig* fc)
 #endif*/
 }
 
-ConfigFileDesc* GetConfigDesc()
-{
-    if (!fcitxConfigDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("config.desc", "r", NULL);
-        fcitxConfigDesc = ParseConfigFileDescFp(tmpfp);
-		fclose(tmpfp);
-    }
-
-    return fcitxConfigDesc;
-}
+CONFIG_DESC_DEFINE(GetConfigDesc, "config.desc")
 
 void SaveConfig(FcitxConfig* fc)
 {

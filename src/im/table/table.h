@@ -64,7 +64,6 @@ typedef struct _TABLE {
     unsigned char   bRule;
 
     RULE           *rule;	//组词规则
-    int             iIMIndex;	//记录该码表对应于输入法的顺序
     unsigned int    iRecordCount;
     ADJUSTORDER     tableOrder;
 

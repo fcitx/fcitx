@@ -426,20 +426,7 @@ void InitComposite(FcitxClassicUI* classicui)
     }
 }
 
-
-ConfigFileDesc* GetClassicUIDesc()
-{    
-    static ConfigFileDesc * classicUIDesc = NULL;
-    if (!classicUIDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("fcitx-classic-ui.desc", "r", NULL);
-        classicUIDesc = ParseConfigFileDescFp(tmpfp);
-        fclose(tmpfp);
-    }
-
-    return classicUIDesc;
-}
+CONFIG_DESC_DEFINE(GetClassicUIDesc, "fcitx-classic-ui.desc")
 
 void LoadClassicUIConfig(FcitxClassicUI* classicui)
 {

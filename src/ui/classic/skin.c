@@ -56,21 +56,8 @@
 #define ROUND_SIZE 60
 
 static ConfigFileDesc* GetSkinDesc();
-static ConfigFileDesc * fcitxSkinDesc = NULL;
 
-static ConfigFileDesc* GetSkinDesc()
-{
-    if (!fcitxSkinDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("skin.desc", "r", NULL);
-        fcitxSkinDesc = ParseConfigFileDescFp(tmpfp);
-        fclose(tmpfp);
-    }
-
-    return fcitxSkinDesc;
-}
-
+CONFIG_DESC_DEFINE(GetSkinDesc, "skin.desc")
 
 /**
 @加载皮肤配置文件

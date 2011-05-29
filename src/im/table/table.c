@@ -58,9 +58,6 @@ static void FreeTable (FcitxTableState* tbl, char iTableIndex);
 const UT_icd table_icd = {sizeof(TABLE), NULL ,NULL, FreeTableConfig};
 const int iInternalVersion = 3;
 
-ConfigFileDesc* tableConfigDesc = NULL;
-
-static char GetTableIMIndex(FcitxTableState* tbl, char index);
 static FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
 static void *TableCreate(FcitxInstance* instance);
 
@@ -92,7 +89,9 @@ void *TableCreate(FcitxInstance* instance)
             TableGetCandWord,
             TableGetLegendCandWord,
             TablePhraseTips,
-            SaveTableIM
+            SaveTableIM,
+            table,
+            table->iPriority
         );
     }
     
@@ -114,14 +113,6 @@ FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bo
     FreeXDGPath(path);
 
     return fp;
-}
-
-int TablePriorityCmp(const void *a, const void *b)
-{
-    TABLE *ta, *tb;
-    ta = (TABLE*)a;
-    tb = (TABLE*)b;
-    return ta->iPriority - tb->iPriority;
 }
 
 /*
@@ -233,8 +224,6 @@ void LoadTableInfo (FcitxTableState *tbl)
         }
     }
 
-    utarray_sort(tbl->table, TablePriorityCmp);
-
     for (i = 0;i < len ;i ++)
         free(paths[i]);
     free(paths);
@@ -252,29 +241,7 @@ void LoadTableInfo (FcitxTableState *tbl)
     }
 }
 
-ConfigFileDesc *GetTableConfigDesc()
-{
-    if (!tableConfigDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("addon/table.desc", "r", NULL);
-        tableConfigDesc = ParseConfigFileDescFp(tmpfp);
-        fclose(tmpfp);
-    }
-
-    return tableConfigDesc;
-}
-
-char GetTableIMIndex(FcitxTableState *tbl, char index)
-{
-    int i;
-    for (i = 0; i < tbl->iTableCount; i++) {
-        TABLE* table =(TABLE*) utarray_eltptr(tbl->table, i);
-        if (table->iIMIndex == index)
-            return i;
-    }
-    return -1;
-}
+CONFIG_DESC_DEFINE(GetTableConfigDesc, "addon/table.desc")
 
 boolean LoadTableDict (FcitxTableState *tbl)
 {
@@ -529,16 +496,6 @@ void SaveTableIM (void *arg)
         return;
     if (tbl->iTableChanged)
         SaveTableDict(tbl);
-}
-
-/*
- * 释放当前码表所占用的内存
- * 目的是切换码表时使占用的内存减少
- */
-void FreeTableIM (FcitxTableState *tbl, char i)
-{
-    char index = GetTableIMIndex(tbl, i);
-    FreeTable(tbl, index);
 }
 
 void FreeTable (FcitxTableState *tbl, char iTableIndex)
@@ -821,7 +778,8 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
     if (IsHotKeyModifierCombine(sym, state))
         return IRV_TO_PROCESS;
 
-    tbl->iTableIMIndex = GetTableIMIndex(tbl, instance->iIMIndex);
+    FcitxIM* currentIM = GetCurrentIM(instance);
+    tbl->iTableIMIndex = utarray_eltidx(tbl->table, currentIM->priv);
     if (tbl->iTableIMIndex != tbl->iCurrentTableLoaded)
         FreeTable(tbl, tbl->iCurrentTableLoaded);
 

@@ -83,7 +83,8 @@ void *PYCreate(FcitxInstance* instance)
     InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
     InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
     InitPYTable(&pystate->pyconfig);
-    /*
+    LoadPYConfig(&pystate->pyconfig);
+    
     FcitxRegsiterIM(instance,
                     pystate,
                     "Pinyin",
@@ -95,7 +96,9 @@ void *PYCreate(FcitxInstance* instance)
                     PYGetCandWord,
                     PYGetLegendCandWord,
                     NULL,
-                    SavePY
+                    SavePY,
+                    NULL,
+                    pystate->pyconfig.iPinyinPriority
                    );
     FcitxRegsiterIM(instance,
                     pystate,
@@ -108,8 +111,10 @@ void *PYCreate(FcitxInstance* instance)
                     PYGetCandWord,
                     PYGetLegendCandWord,
                     NULL,
-                    SavePY
-                   );*/
+                    SavePY,
+                    NULL,
+                    pystate->pyconfig.iShuangpinPriority
+                   );
     pystate->owner = instance;
     return pystate;
 }

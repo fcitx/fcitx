@@ -145,6 +145,20 @@ typedef void(*ConfigBindingFunc)(GenericConfig*);
         } while(0)
 #define CONFIG_BINDING_END() }
 
+#define CONFIG_DESC_DEFINE(funcname, path) \
+ConfigFileDesc *funcname() \
+{ \
+    static ConfigFileDesc *configDesc = NULL; \
+    if (!configDesc) \
+    { \
+        FILE *tmpfp; \
+        tmpfp = GetXDGFileData(path, "r", NULL); \
+        configDesc = ParseConfigFileDescFp(tmpfp); \
+        fclose(tmpfp); \
+    } \
+    return configDesc; \
+}
+
 #define IsColorValid(c) ((c) >=0 && (c) <= 255)
 #define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
 

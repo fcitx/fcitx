@@ -106,6 +106,8 @@ typedef struct FcitxIM {
     FcitxIMInit Init;
     void*              uiprivate;
     void* klass;
+    int iPriority;
+    void* priv;
 } FcitxIM;
 
 typedef enum FcitxKeyEventType {
@@ -156,6 +158,8 @@ void FcitxRegsiterIM(struct FcitxInstance *instance,
                      FcitxIMGetCandWord GetCandWord, 
                      FcitxIMGetLegendCandWord GetLegendCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
-                     FcitxIMSave Save                     
+                     FcitxIMSave Save,
+                     void *priv,
+                     int priority
 );
 #endif

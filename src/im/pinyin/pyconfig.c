@@ -22,12 +22,18 @@
 
 #include "pyconfig.h"
 #include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/xdg.h"
 #include "PYFA.h"
+#include <stdlib.h>
+#include <errno.h>
 
 static void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static ConfigFileDesc* GetPYConfigDesc();
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig);
+CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority);
+CONFIG_BINDING_REGISTER("Pinyin", "ShuangpinPriority", iShuangpinPriority);
 CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", strDefaultSP);
 CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY);
 CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto);
@@ -79,3 +85,39 @@ void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option
         pyconfig->MHPY_S[5].bMode = *b;
     }
 }
+
+void LoadPYConfig(FcitxPinyinConfig *pyconfig)
+{
+    FILE *fp;
+    char *file;
+    fp = GetXDGFileUser( "pinyin/fcitx-pinyin.config", "rt", &file);
+    free(file);
+    if (!fp) {
+        if (errno == ENOENT)
+        {
+            SavePYConfig(pyconfig);
+            LoadPYConfig(pyconfig);
+        }
+        return;
+    }
+    
+    ConfigFileDesc* configDesc = GetPYConfigDesc();
+    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    
+    FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
+    ConfigBindSync((GenericConfig*)pyconfig);
+
+    fclose(fp);
+}
+
+void SavePYConfig(FcitxPinyinConfig* pyconfig)
+{
+    ConfigFileDesc* configDesc = GetPYConfigDesc();
+    char *file;
+    FILE *fp = GetXDGFileUser("pinyin/fcitx-pinyin.config", "wt", &file);
+    SaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
+    free(file);
+    fclose(fp);
+}
+
+CONFIG_DESC_DEFINE(GetPYConfigDesc, "addon/fcitx-pinyin.desc")

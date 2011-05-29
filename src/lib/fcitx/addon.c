@@ -45,7 +45,6 @@ CONFIG_BINDING_REGISTER("Addon", "Priority", priority);
 CONFIG_BINDING_END()
 
 static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
-static ConfigFileDesc *addonConfigDesc = NULL;
 static ConfigFileDesc* GetAddonConfigDesc();
 static int AddonPriorityCmp(const void* a, const void* b)
 {
@@ -234,18 +233,7 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
  * 
  * @return the description of addon configure.
  */
-ConfigFileDesc* GetAddonConfigDesc()
-{
-    if (!addonConfigDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("addon.desc", "r", NULL);
-        addonConfigDesc = ParseConfigFileDescFp(tmpfp);
-        fclose(tmpfp);
-    }
-
-    return addonConfigDesc;
-}
+CONFIG_DESC_DEFINE(GetAddonConfigDesc, "addon.desc")
 
 void FreeAddon(void *v)
 {

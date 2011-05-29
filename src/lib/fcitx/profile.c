@@ -23,7 +23,6 @@
 #include "profile.h"
 #include "fcitx-config/xdg.h"
 
-ConfigFileDesc* fcitxProfileDesc = NULL;
 static ConfigFileDesc* GetProfileDesc();
 
 CONFIG_BINDING_BEGIN(FcitxProfile);
@@ -63,18 +62,7 @@ void LoadProfile(FcitxProfile* profile)
         SaveProfile(profile);
 }
 
-ConfigFileDesc* GetProfileDesc()
-{
-    if (!fcitxProfileDesc)
-    {
-        FILE *tmpfp;
-        tmpfp = GetXDGFileData("profile.desc", "r", NULL);
-        fcitxProfileDesc = ParseConfigFileDescFp(tmpfp);
-		fclose(tmpfp);
-    }
-
-    return fcitxProfileDesc;
-}
+CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
 
 void SaveProfile(FcitxProfile* profile)
 {

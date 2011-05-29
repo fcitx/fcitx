@@ -67,7 +67,9 @@ void* QWCreate (struct FcitxInstance* instance)
         QWGetCandWord,
         NULL,
         NULL,
-        NULL
+        NULL,
+        NULL,
+        100 /* make quwei place at last */
     );
     qwstate->owner = instance;
     return qwstate;

@@ -29,6 +29,8 @@ typedef struct FcitxPinyinConfig
 {
     GenericConfig gconfig;
     /* py config */
+    int iPinyinPriority;
+    int iShuangpinPriority;
     char *strDefaultSP;
     boolean bFullPY;
     boolean bPYCreateAuto;
@@ -48,5 +50,7 @@ typedef struct FcitxPinyinConfig
 } FcitxPinyinConfig;
 
 CONFIG_BINDING_DECLARE(FcitxPinyinConfig);
+void LoadPYConfig(FcitxPinyinConfig *pyconfig);
+void SavePYConfig(FcitxPinyinConfig *pyconfig);
 
 #endif

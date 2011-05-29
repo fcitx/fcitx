@@ -49,6 +49,15 @@ static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static void UpdateInputWindow(FcitxInstance* instance);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxIMClass*), NULL ,NULL, NULL};
+static int IMPriorityCmp(const void *a, const void *b);
+
+int IMPriorityCmp(const void *a, const void *b)
+{
+    FcitxIM *ta, *tb;
+    ta = (FcitxIM*)a;
+    tb = (FcitxIM*)b;
+    return ta->iPriority - tb->iPriority;
+}
 
 void InitBuiltInHotkey(FcitxInstance *instance)
 {
@@ -154,9 +163,13 @@ void FcitxRegsiterIM(FcitxInstance *instance,
                      FcitxIMGetCandWord GetCandWord, 
                      FcitxIMGetLegendCandWord GetLegendCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
-                     FcitxIMSave Save                     
+                     FcitxIMSave Save,
+                     void *priv,
+                     int priority
 )
 {
+    if (priority <= 0)
+        return ;
     UT_array* imes = &instance->imes ;
     FcitxIM newime;
     strncpy(newime.strName, name, MAX_IM_NAME);
@@ -170,6 +183,8 @@ void FcitxRegsiterIM(FcitxInstance *instance,
     newime.PhraseTips = PhraseTips;
     newime.Save = Save;
     newime.klass = addonInstance;
+    newime.iPriority = priority;
+    newime.priv = priv;
     
     utarray_push_back(imes, &newime);
 }
@@ -232,6 +247,7 @@ void LoadAllIM(FcitxInstance* instance)
         FcitxLog(ERROR, _("No available Input Method"));
         exit(1);
     }
+    utarray_sort(&instance->imes, IMPriorityCmp);
 }
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
