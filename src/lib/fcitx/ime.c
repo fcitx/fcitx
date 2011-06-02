@@ -574,9 +574,15 @@ void SwitchIM(FcitxInstance* instance, int index)
     
     if (index >= iIMCount)
         instance->iIMIndex = iIMCount - 1;
-    else if (index < 0)
+    else if (index < -1)
         instance->iIMIndex = 0;
-    else
+    else if (index == -1) {
+        if (instance->iIMIndex >= (iIMCount - 1))
+            instance->iIMIndex = 0;
+        else
+            instance->iIMIndex++;
+    } 
+    else if (index >= 0)
         instance->iIMIndex = index;
 
     if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
@@ -694,7 +700,7 @@ void ReloadConfig(FcitxInstance *instance)
 
 void UpdateInputWindow(FcitxInstance *instance)
 {
-    if (GetMessageCount(instance->messageDown) == 0)
+    if (GetMessageCount(instance->messageUp) == 0 && GetMessageCount(instance->messageDown) == 0)
         CloseInputWindow(instance);
     else
         ShowInputWindow(instance);
