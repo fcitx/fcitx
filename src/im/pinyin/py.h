@@ -43,6 +43,7 @@ struct FcitxInstance;
 struct FcitxPinyinState;
 struct MHPY;
 struct MHPY_TEMPLATE;
+struct FcitxModuleFunctionArg;
 
 typedef enum FIND_MODE {
     FIND_PHRASE,
@@ -206,9 +207,6 @@ typedef struct FcitxPinyinState
     struct FcitxInstance *owner;
 } FcitxPinyinState;
 
-#define TEMP_FILE       "FCITX_DICT_TEMP"
-
-
 void *PYCreate(struct FcitxInstance* instance);
 boolean            PYInit (void* arg);
 boolean         LoadPYBaseDict (struct FcitxPinyinState* pystate);
@@ -256,5 +254,5 @@ boolean            PYAddLengendCandWord (struct FcitxPinyinState* pystate,PyPhra
 char           *PYGetLegendCandWord (void* arg, int iIndex);
 void            PYSetLegendCandWordsFlag (struct FcitxPinyinState* pystate, boolean flag);
 void		PYGetPYByHZ(struct FcitxPinyinState* pystate, char *strHZ, char *strPY);
-//void            PP ();
+
 #endif

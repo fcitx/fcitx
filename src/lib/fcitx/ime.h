@@ -138,7 +138,6 @@ typedef struct FcitxInputState {
     int bShowPrev;
     int iHZInputed;
     int lastIsSingleHZ;
-    int iInCap;
     boolean bLastIsNumber;
 } FcitxInputState;
 
@@ -146,6 +145,8 @@ boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
 boolean IsInLegend(FcitxInputState* input);
 char* GetOutputString(FcitxInputState* input);
 struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
+void EnableIM(struct FcitxInstance* instance, boolean keepState);
+void            ResetInput (struct FcitxInstance* instance);
 
 void FcitxRegsiterIM(struct FcitxInstance *instance,
                      void *addonInstance,

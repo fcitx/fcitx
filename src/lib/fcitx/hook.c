@@ -107,7 +107,7 @@ char* ProcessOutputFilter(char *in)
 
 void ResetInputHook()
 {
-    HookStack* stack = GetOutputFilter();
+    HookStack* stack = GetResetInputHook();
     stack = stack->next;
     while(stack)
     {

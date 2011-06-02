@@ -25,6 +25,8 @@
 #include "addon.h"
 #include "ime.h"
 
+struct FcitxInputContext;
+
 typedef struct FcitxInstance {
     pthread_mutex_t fcitxMutex;
     int iIMIndex;
@@ -44,6 +46,10 @@ typedef struct FcitxInstance {
     UT_array imeclasses;
     UT_array imes;
     UT_array backends;
+    
+    struct FcitxInputContext *CurrentIC;
+    struct FcitxInputContext *ic_list;
+    struct FcitxInputContext *free_list;
 } FcitxInstance;
 
 Messages* GetMessageUp(FcitxInstance* instance);

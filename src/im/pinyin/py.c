@@ -54,6 +54,9 @@
 #include "fcitx/ime-internal.h"
 #include <fcitx/instance.h>
 #include <fcitx/backend.h>
+#include <fcitx/module.h>
+
+#define TEMP_FILE       "FCITX_DICT_TEMP"
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -63,6 +66,15 @@ FcitxIMClass ime = {
 
 static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem);
 static FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile);
+
+static void * LoadPYBaseDictWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYGetPYByHZWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYGetCandWordWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * DoPYInputWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYGetCandWordsWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYGetCandTextWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYGetFindStringWrapper(void* arg, FcitxModuleFunctionArg args);
+static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
 
 FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 {
@@ -80,6 +92,7 @@ FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 void *PYCreate(FcitxInstance* instance)
 {
     FcitxPinyinState *pystate = fcitx_malloc0(sizeof(FcitxPinyinState));
+    FcitxAddon* pyaddon = GetAddonByName(&instance->addons, FCITX_PINYIN_NAME);
     InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
     InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
     InitPYTable(&pystate->pyconfig);
@@ -116,6 +129,16 @@ void *PYCreate(FcitxInstance* instance)
                     pystate->pyconfig.iShuangpinPriority
                    );
     pystate->owner = instance;
+    
+    /* ensure the order! */
+    AddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
+    AddFunction(pyaddon, PYGetPYByHZWrapper); // 1
+    AddFunction(pyaddon, PYGetCandTextWrapper); // 2
+    AddFunction(pyaddon, PYGetCandWordWrapper); // 3
+    AddFunction(pyaddon, DoPYInputWrapper); // 4
+    AddFunction(pyaddon, PYGetCandWordsWrapper); // 5
+    AddFunction(pyaddon, PYGetFindStringWrapper); // 6
+    AddFunction(pyaddon, PYResetWrapper); // 7
     return pystate;
 }
 
@@ -3084,4 +3107,69 @@ void SavePY(void *arg)
         SavePYIndex(pystate);
     if (pystate->iNewFreqCount)
         SavePYFreq(pystate);
+}
+
+void* LoadPYBaseDictWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    if (!pystate->bPYBaseDictLoaded)
+        LoadPYBaseDict(pystate);
+    return NULL;
+}
+
+void* PYGetCandTextWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    int *a = args.args[0];
+    char *b = args.args[1];
+    PYGetCandText(pystate, *a, b);
+    return NULL;
+}
+
+void* PYGetPYByHZWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    char *a = args.args[0];
+    char *b = args.args[1];
+    PYGetPYByHZ(pystate, a, b);
+    return NULL;
+
+}
+void* DoPYInputWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    FcitxKeySym *a = args.args[0];
+    unsigned int *b = args.args[1];
+    DoPYInput(pystate, *a, *b);
+    return NULL;
+
+}
+void* PYGetCandWordsWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    SEARCH_MODE *a = args.args[0];
+    PYGetCandWords(arg, *a);
+    return NULL;
+}
+
+void* PYGetCandWordWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    int *a = args.args[0];
+    PYGetCandWord(arg, *a);
+    return NULL;
+
+}
+void* PYGetFindStringWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    return pystate->strFindString;
+
+}
+void* PYResetWrapper(void * arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    
+    pystate->bSP = False;
+    pystate->strPYAuto[0] = '\0';
+
+    return NULL;
 }

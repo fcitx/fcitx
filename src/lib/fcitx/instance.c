@@ -50,6 +50,9 @@ FcitxInstance* CreateFcitxInstance()
     LoadModule(instance);
     LoadAllIM(instance);
     LoadUserInterface(instance);
+    
+    SwitchIM(instance, instance->iIMIndex);
+    
     StartBackend(instance);
 
     return instance;

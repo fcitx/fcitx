@@ -33,19 +33,16 @@
 #include "hook-internal.h"
 #include "instance.h"
 
-static FcitxInputContext *ic_list = NULL;
-static FcitxInputContext *free_list = NULL;
-static FcitxInputContext *CurrentIC = NULL;
 static const UT_icd backend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
 
-FcitxInputContext* GetCurrentIC()
+FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
 {
-    return CurrentIC;
+    return instance->CurrentIC;
 }
 
-void SetCurrentIC(FcitxInputContext* ic)
+void SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    CurrentIC = ic;
+    instance->CurrentIC = ic;
 }
 
 void InitFcitxBackends(UT_array* backends)
@@ -62,10 +59,10 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
     FcitxBackend* backend = (*pbackend)->backend;
     
     FcitxInputContext *rec;
-    if (free_list != NULL)
+    if (instance->free_list != NULL)
     {
-        rec = free_list;
-        free_list = free_list->next;
+        rec = instance->free_list;
+        instance->free_list = instance->free_list->next;
     }
     else
         rec = malloc(sizeof(FcitxInputContext));
@@ -78,8 +75,8 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
     
     backend->CreateIC((*pbackend)->addonInstance, rec, priv);
     
-    rec->next = ic_list;
-    ic_list = rec;
+    rec->next = instance->ic_list;
+    instance->ic_list = rec;
     
     return rec;
 }
@@ -91,7 +88,7 @@ FcitxInputContext* FindIC(FcitxInstance* instance, int backendid, void *filter)
     if (pbackend == NULL)
         return NULL;
     FcitxBackend* backend = (*pbackend)->backend;
-    FcitxInputContext *rec = ic_list;
+    FcitxInputContext *rec = instance->ic_list;
     while (rec != NULL)
     {
         if (rec->backendid == backendid && backend->CheckIC((*pbackend)->addonInstance, rec, filter))
@@ -112,15 +109,15 @@ void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
  
     last = NULL;
 
-    for (rec = ic_list; rec != NULL; last = rec, rec = rec->next) {
+    for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
         if (rec->backendid == backendid && backend->CheckIC((*pbackend)->addonInstance, rec, filter)) {
             if (last != NULL)
                 last->next = rec->next;
             else
-                ic_list = rec->next;
+                instance->ic_list = rec->next;
             
-            rec->next = free_list;
-            free_list = rec;
+            rec->next = instance->free_list;
+            instance->free_list = rec;
             
             backend->DestroyIC((*pbackend)->addonInstance, rec);
             return;
@@ -158,9 +155,9 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     }
 }
 
-IME_STATE GetCurrentState()
+IME_STATE GetCurrentState(FcitxInstance* instance)
 {
-    return CurrentIC->state;
+    return instance->CurrentIC->state;
 }
 
 void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)

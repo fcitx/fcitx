@@ -287,13 +287,13 @@ INPUT_RETURN_VALUE ProcessKey(
 
     /* process keyrelease event for switch key and 2nd, 3rd key */
     if (event == FCITX_RELEASE_KEY ) {
-        if (GetCurrentIC()->state != IS_CLOSED) {
+        if (GetCurrentIC(instance)->state != IS_CLOSED) {
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
                 if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                    if (GetCurrentIC()->state == IS_ACTIVE)
+                    if (GetCurrentIC(instance)->state == IS_ACTIVE)
                         SwitchIM(instance, -1);
                     else if (IsHotKey(sym, state, fc->hkTrigger))
-                        CloseIM(instance, GetCurrentIC());
+                        CloseIM(instance, GetCurrentIC(instance));
                     /* else if (bVK)
                         ChangVK(); */
                 } else if (IsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
@@ -305,7 +305,7 @@ INPUT_RETURN_VALUE ProcessKey(
                         }
                     }
                     input->keyReleased = KR_OTHER;
-                    ChangeIMState(instance, GetCurrentIC());
+                    ChangeIMState(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
                     if (!input->bIsInLegend) {
                         pstr = currentIM->GetCandWord(currentIM->klass, 1);
@@ -363,8 +363,8 @@ INPUT_RETURN_VALUE ProcessKey(
                 if ((input->keyReleased == KR_CTRL)
                     && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
                     && fc->bDoubleSwitchKey) {
-                    CommitString(instance, GetCurrentIC(), input->strCodeInput);
-                    ChangeIMState(instance, GetCurrentIC());
+                    CommitString(instance, GetCurrentIC(instance), input->strCodeInput);
+                    ChangeIMState(instance, GetCurrentIC(instance));
                 }
             }
 
@@ -374,10 +374,10 @@ INPUT_RETURN_VALUE ProcessKey(
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
-                if (GetCurrentIC()->state == IS_ENG) {
-                    ChangeIMState(instance, GetCurrentIC());
+                if (GetCurrentIC(instance)->state == IS_ENG) {
+                    ChangeIMState(instance, GetCurrentIC(instance));
                 } else
-                    CloseIM(instance, GetCurrentIC());
+                    CloseIM(instance, GetCurrentIC(instance));
 
                 retVal = IRV_DO_NOTHING;
             }
@@ -387,7 +387,7 @@ INPUT_RETURN_VALUE ProcessKey(
     if (retVal == IRV_TO_PROCESS && event != FCITX_PRESS_KEY)
         retVal = IRV_DONOT_PROCESS;
 
-    if (GetCurrentIC()->state == IS_ACTIVE) {
+    if (GetCurrentIC(instance)->state == IS_ACTIVE) {
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
             ProcessPreInputFilter(sym, state, &retVal);
         }
@@ -426,12 +426,12 @@ INPUT_RETURN_VALUE ProcessKey(
         }
         
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-            if (!input->iInCap) {
-                if (IsHotKey(sym, state, fc->hkPrevPage))
-                    retVal = currentIM->GetCandWords(currentIM->klass, SM_PREV);
-                else if (IsHotKey(sym, state, fc->hkNextPage))
-                    retVal = currentIM->GetCandWords(currentIM->klass, SM_NEXT);
-            }
+        {
+            if (IsHotKey(sym, state, fc->hkPrevPage))
+                retVal = currentIM->GetCandWords(currentIM->klass, SM_PREV);
+            else if (IsHotKey(sym, state, fc->hkNextPage))
+                retVal = currentIM->GetCandWords(currentIM->klass, SM_NEXT);
+        }
 
 
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
@@ -451,7 +451,7 @@ INPUT_RETURN_VALUE ProcessKey(
         case IRV_TO_PROCESS:
         case IRV_DONOT_PROCESS:
         case IRV_DONOT_PROCESS_CLEAN:
-            ForwardKey(instance, GetCurrentIC(), event, sym, state);
+            ForwardKey(instance, GetCurrentIC(instance), event, sym, state);
             
             if (retVal != IRV_DONOT_PROCESS_CLEAN)
                 break;
@@ -492,7 +492,7 @@ INPUT_RETURN_VALUE ProcessKey(
             UpdateInputWindow(instance);
             break;
         case IRV_GET_LEGEND:
-            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
             if (input->iLegendCandWordCount) {
                 input->bShowNext = input->bShowPrev = false;
@@ -509,7 +509,7 @@ INPUT_RETURN_VALUE ProcessKey(
 
             break;
         case IRV_GET_CANDWORDS:
-            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
             if (fc->bPhraseTips && currentIM->PhraseTips)
                 DoPhraseTips(instance);
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));
@@ -524,7 +524,7 @@ INPUT_RETURN_VALUE ProcessKey(
             ResetInput(instance);
             UpdateInputWindow(instance);
         case IRV_GET_CANDWORDS_NEXT:
-            CommitString(instance, GetCurrentIC(), input->strStringGet);
+            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
             input->bLastIsNumber = false;
             input->lastIsSingleHZ = 0;
 
@@ -619,7 +619,6 @@ void ResetInput(FcitxInstance* instance)
 
     input->bIsInLegend = false;
     
-    input->iInCap = 0;
     UT_array* ims = &instance->imes;
 
     FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
@@ -651,16 +650,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
     FcitxInputState *input = &instance->input;
     FcitxConfig *fc = &instance->config;
     
-    if (input->iInCap) {
-        if (!input->iCodeInputCount)
-            strcpy(input->strStringGet, ";");
-        else
-            strcpy(input->strStringGet, input->strCodeInput);
-        retVal = IRV_PUNC;
-        SetMessageCount(instance->messageDown, 0);
-        SetMessageCount(instance->messageUp, 0);
-        input->iInCap = 0;
-    } else if (!input->iCodeInputCount)
+    if (!input->iCodeInputCount)
         retVal = IRV_DONOT_PROCESS;
     else {
         switch (fc->enterToDo) {
@@ -685,7 +675,7 @@ INPUT_RETURN_VALUE ImProcessEscape(void* arg)
 {
     FcitxInstance *instance = (FcitxInstance*) arg;
     FcitxInputState *input = &instance->input;
-    if (input->iCodeInputCount || input->iInCap || input->bIsInLegend)
+    if (input->iCodeInputCount || input->bIsInLegend)
         return IRV_CLEAN;
     else
         return IRV_DONOT_PROCESS;
@@ -725,4 +715,12 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
     UT_array* imes = &instance->imes;
     FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     return pcurrentIM;
+}
+
+void EnableIM(FcitxInstance* instance, boolean keepState)
+{
+    if (!keepState)
+    {
+        ResetInput(instance);
+    }
 }

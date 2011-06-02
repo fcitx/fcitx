@@ -55,7 +55,7 @@ Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
 {
     FcitxInputContext* ic =  FindIC(xim->owner, xim->backendid, &call_data->icid);
-    SetCurrentIC(ic);
+    SetCurrentIC(xim->owner, ic);
     
     if (ic && ic->state != IS_CLOSED)
     {
@@ -72,7 +72,7 @@ Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
 
 Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext* ic = GetCurrentIC();
+    FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid)
     {
         CloseInputWindow(xim->owner);
@@ -91,11 +91,11 @@ Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
 Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
     CreateIC(xim->owner, xim->backendid, call_data);
-    FcitxInputContext* ic = GetCurrentIC();
+    FcitxInputContext* ic = GetCurrentIC(xim->owner);
 
     if (!ic) {
         ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
-        SetCurrentIC(ic);
+        SetCurrentIC(xim->owner, ic);
     }
 
     return True;
@@ -103,7 +103,7 @@ Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 
 Bool XIMDestroyICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    if (GetCurrentIC() == FindIC(xim->owner, xim->backendid, &call_data->icid)) {
+    if (GetCurrentIC(xim->owner) == FindIC(xim->owner, xim->backendid, &call_data->icid)) {
     }
 
     DestroyIC(xim->owner, xim->backendid, &call_data->icid);
@@ -117,14 +117,15 @@ Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_
     if (ic == NULL)
         return True;
 
-    SetCurrentIC(ic);
+    SetCurrentIC(xim->owner, ic);
+    EnableIM(xim->owner, false);
     return True;
 }
 
 
 void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext* ic = GetCurrentIC();
+    FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic == NULL)
         return;
     if (ic != FindIC(xim->owner, xim->backendid, &call_data->icid))
@@ -167,11 +168,11 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
     int keyCount;
     unsigned int state;
     char strbuf[STRBUFLEN];
-    FcitxInputContext* ic = GetCurrentIC();
+    FcitxInputContext* ic = GetCurrentIC(xim->owner);
  
     if (!ic) {
         ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
-        SetCurrentIC(ic);
+        SetCurrentIC(xim->owner, ic);
         if (!ic)
             return;
     }

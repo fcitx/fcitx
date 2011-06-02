@@ -57,8 +57,8 @@ typedef struct FcitxBackend
     void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
 } FcitxBackend;
 
-FcitxInputContext* GetCurrentIC();
-void SetCurrentIC(FcitxInputContext*);
+FcitxInputContext* GetCurrentIC(struct FcitxInstance* instance);
+void SetCurrentIC(struct FcitxInstance* instance, FcitxInputContext* ic);
 void InitFcitxBackends(UT_array* );
 FcitxInputContext* FindIC(struct FcitxInstance* instance, int backendid, void* filter);
 FcitxInputContext* CreateIC(struct FcitxInstance* instance, int backendid, void* priv);
@@ -69,6 +69,6 @@ void CommitString(struct FcitxInstance* instance, FcitxInputContext* ic, char* s
 void ChangeIMState (struct FcitxInstance*, FcitxInputContext* ic);
 void SetWindowOffset(struct FcitxInstance*, FcitxInputContext* ic, int x, int y);
 void GetWindowPosition(struct FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
-IME_STATE GetCurrentState();
+IME_STATE GetCurrentState(struct FcitxInstance* instance);
 
 #endif

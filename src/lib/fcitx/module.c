@@ -29,7 +29,6 @@
 #include <pthread.h>
 #include "instance.h"
 
-const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
 void LoadModule(FcitxInstance* instance)
@@ -67,15 +66,13 @@ void LoadModule(FcitxInstance* instance)
                             dlclose(handle);
                             break;
                         }
-                        utarray_init(&module->functionList, &function_icd);
                         if((moduleinstance = module->Create(instance)) == NULL)
                         {
-                            utarray_done(&module->functionList);
                             dlclose(handle);
                             return;
                         }
                         addon->module = module;
-			addon->addonInstance = moduleinstance;
+                        addon->addonInstance = moduleinstance;
                         if(module->Run)
                         {                            
                             pthread_create(&addon->pid, NULL, module->Run, addon->addonInstance);
@@ -89,14 +86,14 @@ void LoadModule(FcitxInstance* instance)
     }
 }
 
-void* InvodeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
+void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {
-    if (addon->module == NULL)
+    if (addon == NULL)
     {
-        FcitxLog(ERROR, "addon %s is not a valid module", addon->name);
+        FcitxLog(ERROR, "addon is not valid");
         return NULL;
     }
-    FcitxModuleFunction* func =(FcitxModuleFunction*) utarray_eltptr(&addon->module->functionList, functionId);
+    FcitxModuleFunction* func =(FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
     if (func == NULL)
     {
         FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
@@ -112,5 +109,5 @@ void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, in
     if (module == NULL)
         return NULL;
     else
-        return InvodeModuleFunction(module, functionId, args);
+        return InvokeModuleFunction(module, functionId, args);
 }

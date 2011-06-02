@@ -48,6 +48,7 @@ FcitxModule module = {
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11* x11priv = fcitx_malloc0(sizeof(FcitxX11));
+    FcitxAddon* x11addon = GetAddonByName(&instance->addons, FCITX_X11_NAME);
     XInitThreads();
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
@@ -58,9 +59,9 @@ void* X11Create(FcitxInstance* instance)
     utarray_init(&x11priv->handlers, &handler_icd);
 
     /* ensure the order ! */
-    AddFunction(X11GetDisplay);
-    AddFunction(X11AddEventHandler);
-    AddFunction(X11RemoveEventHandler);
+    AddFunction(x11addon, X11GetDisplay);
+    AddFunction(x11addon, X11AddEventHandler);
+    AddFunction(x11addon,X11RemoveEventHandler);
     return x11priv;
 }
 

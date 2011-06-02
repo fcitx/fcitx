@@ -180,7 +180,7 @@ typedef struct FcitxTableState {
     boolean		    isSavingTableDic;
     
     struct FcitxInstance* owner;
-    struct FcitxPinyinState* pystate;
+    struct FcitxAddon* pyaddon;
 } FcitxTableState;
 
 void            LoadTableInfo (FcitxTableState* tbl);

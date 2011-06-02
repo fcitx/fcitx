@@ -31,7 +31,6 @@ typedef struct FcitxModule
     void* (*Create)(struct FcitxInstance* instance);
     void* (*Run)(void*);
     void (*Destroy)(void*);
-    UT_array functionList;
 } FcitxModule;
 
 typedef struct FcitxModuleFunctionArg
@@ -46,10 +45,10 @@ void* InvokeModuleFunctionWithName(struct FcitxInstance* instance, const char* n
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) InvokeModuleFunctionWithName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
     
-#define AddFunction(Realname) \
+#define AddFunction(ADDON, Realname) \
     do { \
         void *temp = Realname; \
-        utarray_push_back(&module.functionList, &temp); \
+        utarray_push_back(&ADDON->functionList, &temp); \
     } while(0)        
 
 #endif

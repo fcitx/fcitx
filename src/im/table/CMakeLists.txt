@@ -5,7 +5,7 @@ set(FCITX_TABLE_SOURCES
 )
 
 add_library(fcitx-table MODULE ${FCITX_TABLE_SOURCES})
-set_target_properties( fcitx-table PROPERTIES PREFIX "")
+set_target_properties( fcitx-table PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
 
 install(TARGETS fcitx-table DESTINATION ${addondir})
 install(FILES fcitx-table.conf DESTINATION ${pkgdatadir}/data/addon)

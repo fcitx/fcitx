@@ -63,6 +63,7 @@ FcitxModule module = {
 void* PuncCreate(FcitxInstance* instance)
 {
     FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));
+    FcitxAddon* puncaddon = GetAddonByName(&instance->addons, FCITX_PUNC_NAME);
     puncState->owner = instance;
     LoadPuncDict(puncState);
     KeyFilterHook hk;
@@ -75,7 +76,7 @@ void* PuncCreate(FcitxInstance* instance)
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
     
-    AddFunction(PuncGetPunc);
+    AddFunction(puncaddon, PuncGetPunc);
     return puncState;
 }
 
@@ -89,6 +90,7 @@ void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    FcitxInstance* instance = puncState->owner;
     char* strStringGet = GetOutputString(&puncState->owner->input);
     FcitxIM* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
@@ -118,10 +120,10 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                     && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
-            ForwardKey(puncState->owner, GetCurrentIC(), FCITX_PRESS_KEY, sym, state);
+            ForwardKey(puncState->owner, GetCurrentIC(instance), FCITX_PRESS_KEY, sym, state);
             pPunc = GetPunc(puncState, puncState->cLastIsAutoConvert);
             if (pPunc)
-                CommitString(puncState->owner, GetCurrentIC(), pPunc);
+                CommitString(puncState->owner, GetCurrentIC(instance), pPunc);
 
             *retVal = IRV_DO_NOTHING;
             return true;

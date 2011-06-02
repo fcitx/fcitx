@@ -138,7 +138,7 @@ boolean InputWindowEventHandler(void *instance, XEvent* event)
                                 SetInputWindowOffsetY(&inputWindow->owner->owner->profile, y);
                             }
                                                     
-                            FcitxInputContext* ic = GetCurrentIC();
+                            FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
 
                             if (ic)
                                 SetWindowOffset(inputWindow->owner->owner, ic, x, y);
@@ -198,7 +198,7 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
     
     if (IsTrackCursor(&inputWindow->owner->owner->profile))
     {
-        FcitxInputContext* ic = GetCurrentIC();
+        FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
         GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
     }
     else

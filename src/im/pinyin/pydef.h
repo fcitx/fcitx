@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by dgod                                       *
+ *   Copyright (C) 2002~2005 by Yuking                                     *
+ *   yuking_net@sohu.com                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +18,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _EXTRA_H_
-#define _EXTRA_H_
+#ifndef PYDEF_H
+#define PYDEF_H
 
-#include "fcitx/ime.h"
-#include "fcitx/fcitx.h"
+#define MAX_WORDS_USER_INPUT    32
+#define MAX_PY_PHRASE_LENGTH    10
+#define MAX_PY_LENGTH       6
 
-void LoadExtraIM();
+#define FCITX_PINYIN_NAME "fcitx-pinyin"
+#define FCITX_PINYIN_LOADBASEDICT 0
+#define FCITX_PINYIN_LOADBASEDICT_RETURNTYPE void
+#define FCITX_PINYIN_PYGETPYBYHZ 1
+#define FCITX_PINYIN_PYGETPYBYHZ_RETURNTYPE void
+#define FCITX_PINYIN_PYGETCANDTEXT 2
+#define FCITX_PINYIN_PYGETCANDTEXT_RETURNTYPE void
+#define FCITX_PINYIN_PYGETCANDWORD 3
+#define FCITX_PINYIN_PYGETCANDWORD_RETURNTYPE void
+#define FCITX_PINYIN_DOPYINPUT 4
+#define FCITX_PINYIN_DOPYINPUT_RETURNTYPE void
+#define FCITX_PINYIN_PYGETCANDWORDS 5
+#define FCITX_PINYIN_PYGETCANDWORDS_RETURNTYPE void
+#define FCITX_PINYIN_PYGETFINDSTRING 6
+#define FCITX_PINYIN_PYGETFINDSTRING_RETURNTYPE char*
+#define FCITX_PINYIN_PYRESET 7
+#define FCITX_PINYIN_PYRESET_RETURNTYPE void
 
-#endif/*_EXTRA_H_*/
-
+#endif

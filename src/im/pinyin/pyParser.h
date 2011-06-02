@@ -23,10 +23,7 @@
 #include <stdint.h>
 #include "fcitx/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
-
-#define MAX_WORDS_USER_INPUT    32
-#define MAX_PY_PHRASE_LENGTH    10
-#define MAX_PY_LENGTH       6
+#include "pydef.h"
 
 #define PY_SEPARATOR '\''
 #define PY_SEPARATOR_S "'"

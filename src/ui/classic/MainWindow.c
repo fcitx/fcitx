@@ -148,7 +148,7 @@ void DrawMainWindow (MainWindow* mainWindow)
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState() != IS_CLOSED)))
+    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState(mainWindow->owner->owner) != IS_CLOSED)))
     {
         // extern mouse_e ms_logo,ms_punc,ms_corner,ms_lx,ms_chs,ms_lock,ms_vk,ms_py;
         DrawImage(&c, mainWindow->bar, 0, 0, RELEASE );

@@ -36,7 +36,6 @@ struct FcitxInputContext;
 struct FcitxInstance;
 
 INPUT_RETURN_VALUE ProcessKey(struct FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
-void            ResetInput (struct FcitxInstance* instance);
 void ForwardKey(struct FcitxInstance* instance, struct FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 
 boolean IsHotKey(FcitxKeySym sym, int state, struct HOTKEYS * hotkey);

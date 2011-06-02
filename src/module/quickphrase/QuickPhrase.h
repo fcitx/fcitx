@@ -30,9 +30,4 @@ typedef struct _QUICK_PHRASE {
     char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH+1];
 } QUICK_PHRASE;
 
-void LoadQuickPhrase(void);
-void FreeQuickPhrase(void);
-INPUT_RETURN_VALUE QuickPhraseDoInput (KeySym sym, int state, int iCount);
-INPUT_RETURN_VALUE QuickPhraseGetCandWords (SEARCH_MODE mode);
-
 #endif

@@ -44,6 +44,7 @@ CONFIG_BINDING_REGISTER("Addon", "Dependency", depend);
 CONFIG_BINDING_REGISTER("Addon", "Priority", priority);
 CONFIG_BINDING_END()
 
+const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
 static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
 static ConfigFileDesc* GetAddonConfigDesc();
 static int AddonPriorityCmp(const void* a, const void* b)
@@ -139,6 +140,7 @@ void LoadAddonInfo(UT_array* addons)
             memset(&addon, 0, sizeof(FcitxAddon));
             utarray_push_back(addons, &addon);
             FcitxAddon *a = (FcitxAddon*) utarray_back(addons);
+            utarray_init(&a->functionList, &function_icd);
             FcitxAddonConfigBind(a, cfile, GetAddonConfigDesc());
             ConfigBindSync((GenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"),string->name, (a->bEnabled)?"Enabled":"Disabled");

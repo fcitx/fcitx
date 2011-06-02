@@ -40,10 +40,9 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
+#include "im/pinyin/pydef.h"
 #include "fcitx-utils/keys.h"
 #include "fcitx/ui.h"
-#include "im/pinyin/py.h"
-#include "im/pinyin/pyParser.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/profile.h"
@@ -53,6 +52,8 @@
 #include <module/punc/punc.h>
 #include <fcitx/module.h>
 
+#define TEMP_FILE       "FCITX_TABLE_TEMP"
+
 static void FreeTableConfig(void *v);
 static void FreeTable (FcitxTableState* tbl, char iTableIndex);
 const UT_icd table_icd = {sizeof(TABLE), NULL ,NULL, FreeTableConfig};
@@ -60,6 +61,14 @@ const int iInternalVersion = 3;
 
 static FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, Bool forceUser);
 static void *TableCreate(FcitxInstance* instance);
+static void Table_LoadPYBaseDict(FcitxTableState *tbl);
+static void Table_PYGetPYByHZ(FcitxTableState *tbl, char *a, char* b);
+static void Table_PYGetCandWord(FcitxTableState *tbl, int a);
+static void Table_DoPYInput(FcitxTableState *tbl, FcitxKeySym sym, unsigned int state);
+static void Table_PYGetCandWords(FcitxTableState *tbl, SEARCH_MODE mode);
+static void Table_PYGetCandText(FcitxTableState *tbl, int iIndex, char *strText);
+static void Table_ResetPY(FcitxTableState *tbl);
+static char* Table_PYGetFindString(FcitxTableState *tbl);
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -479,13 +488,13 @@ boolean LoadTableDict (FcitxTableState *tbl)
 boolean TableInit (void *arg)
 {
     FcitxTableState *tbl = (FcitxTableState*) arg;
-    FcitxPinyinState* pystate = GetAddonByName(&tbl->owner->addons, "pinyin")->addonInstance;
-    tbl->pystate = pystate;
-    if (pystate == NULL)
+    FcitxAddon* pyaddon = GetAddonByName(&tbl->owner->addons, "fcitx-pinyin");
+    tbl->pyaddon = pyaddon;
+    if (pyaddon == NULL)
         return false;
-    pystate->bSP = False;
     tbl->PYBaseOrder = AD_FREQ; // TODO
-    pystate->strPYAuto[0] = '\0';
+    
+    Table_ResetPY(tbl);
     return true;
 }
 
@@ -987,8 +996,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
-            if (!tbl->pystate->bPYBaseDictLoaded)
-                LoadPYBaseDict (tbl->pystate);
+            Table_LoadPYBaseDict (tbl);
 
             //如果刚刚输入的是个词组，刚不查拼音
             if (utf8_strlen (input->strStringGet) != 1)
@@ -1000,7 +1008,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
             SetMessageCount(instance->messageDown, 0);
             AddMessageAtLast(instance->messageDown, MSG_CODE, "读音：");
-            PYGetPYByHZ (tbl->pystate, input->strStringGet, strPY);
+            Table_PYGetPYByHZ (tbl, input->strStringGet, strPY);
             AddMessageAtLast(instance->messageDown, MSG_TIPS, (strPY[0]) ? strPY : "无法查到该字读音");
             instance->bShowCursor = False;
 
@@ -1040,7 +1048,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                     else {
                         //如果是拼音，进入快速调整字频方式
                         if (strcmp (input->strCodeInput, table->strSymbol) && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
-                            PYGetCandWord (tbl->pystate, iKey - 1);
+                            Table_PYGetCandWord (tbl, iKey - 1);
                         strcpy (input->strStringGet, TableGetCandWord (tbl, iKey - 1));
 
                         if (input->bIsInLegend)
@@ -1096,7 +1104,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 if (!input->bIsInLegend) {
                     if (!(table->bUsePY && input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin)) {
                         if (strcmp (input->strCodeInput, table->strSymbol) && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
-                            PYGetCandWord (tbl->pystate, 0);
+                            Table_PYGetCandWord (tbl, SM_FIRST);
 
                         if (!input->iCandWordCount) {
                             input->iCodeInputCount = 0;
@@ -1264,23 +1272,23 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl, SEARCH_MODE mo
     FcitxInputState *input = &instance->input;
 
     if (mode == SM_FIRST) {
-        strcpy (tbl->pystate->strFindString, input->strCodeInput + 1);
+        strcpy (Table_PYGetFindString(tbl), input->strCodeInput + 1);
 
-        DoPYInput (tbl->pystate, 0,0);
+        Table_DoPYInput (tbl, 0,0);
 
         input->strCodeInput[0] = table->cPinyin;
         input->strCodeInput[1] = '\0';
 
-        strcat (input->strCodeInput, tbl->pystate->strFindString);
+        strcat (input->strCodeInput, Table_PYGetFindString(tbl));
         input->iCodeInputCount = strlen (input->strCodeInput);
     }
     else
-        PYGetCandWords (tbl->pystate, mode);
+        Table_PYGetCandWords (tbl, mode);
 
     //下面将拼音的候选字表转换为码表输入法的样式
     for (i = 0; i < input->iCandWordCount; i++) {
         tableCandWord[i].flag = CT_PYPHRASE;
-        PYGetCandText (tbl->pystate, i, tableCandWord[i].candWord.strPYPhrase);
+        Table_PYGetCandText (tbl, i, tableCandWord[i].candWord.strPYPhrase);
     }
 
     return IRV_DISPLAY_CANDWORDS;
@@ -2363,4 +2371,61 @@ void FreeTableConfig(void *v)
     free(table->strIgnoreChars);
     free(table->strSymbol);
     free(table->strChoose);
+}
+
+void Table_LoadPYBaseDict(FcitxTableState *tbl)
+{
+    FcitxModuleFunctionArg args;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_LOADBASEDICT, args);
+}
+
+void Table_PYGetPYByHZ(FcitxTableState *tbl, char *a, char* b)
+{
+    FcitxModuleFunctionArg args;
+    args.args[0] = a;
+    args.args[1] = b;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_LOADBASEDICT, args);
+}
+
+void Table_PYGetCandWord(FcitxTableState *tbl, int a)
+{
+    FcitxModuleFunctionArg args;
+    args.args[0] = &a;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETCANDWORD, args);
+}
+
+void Table_DoPYInput(FcitxTableState *tbl, FcitxKeySym sym, unsigned int state)
+{
+    FcitxModuleFunctionArg args;
+    args.args[0] = &sym;
+    args.args[1] = &state;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_DOPYINPUT, args);
+}
+
+void Table_PYGetCandWords(FcitxTableState *tbl, SEARCH_MODE mode)
+{
+    FcitxModuleFunctionArg args;
+    args.args[0] = &mode;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETCANDWORDS, args);
+}
+
+void Table_PYGetCandText(FcitxTableState *tbl, int iIndex, char *strText)
+{
+    FcitxModuleFunctionArg args;
+    args.args[0] = &iIndex;
+    args.args[1] = strText;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETCANDTEXT, args);
+}
+
+void Table_ResetPY(FcitxTableState *tbl)
+{
+    FcitxModuleFunctionArg args;
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYRESET, args);
+}
+
+char* Table_PYGetFindString(FcitxTableState *tbl)
+{
+    FcitxModuleFunctionArg args;
+    char * str = InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETFINDSTRING, args);
+    return str;
 }
