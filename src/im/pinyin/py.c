@@ -1494,7 +1494,7 @@ char *PYGetCandWord(void* arg, int iIndex)
             PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString);
         SetMessageCount(GetMessageDown(instance), 0);
         SetMessageCount(GetMessageUp(instance), 0);
-        if (UseLegend()) {
+        if (UseLegend(&instance->profile)) {
             strcpy(pystate->strPYLegendSource, pystate->strPYAuto);
             strcpy(pystate->strPYLegendMap, strHZString);
             PYGetLegendCandWords(pystate, SM_FIRST);

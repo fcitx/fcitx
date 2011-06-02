@@ -157,9 +157,9 @@ void ParsePY (FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * pa
 
         do {
             iIndex = FindPYFAIndex (pyconfig, strP, 1);
-            size_t lIndex = strlen (pyconfig->PYTable[iIndex].strPY);
 
             if (iIndex != -1) {
+                size_t lIndex = strlen (pyconfig->PYTable[iIndex].strPY);
                 strTemp[0] = pyconfig->PYTable[iIndex].strPY[lIndex - 1];
                 iTemp = -1;
                 if (strTemp[0] == 'g' || strTemp[0] == 'n') {

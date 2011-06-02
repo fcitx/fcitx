@@ -38,8 +38,8 @@ typedef struct FcitxProfile
 } FcitxProfile;
 
 void LoadProfile(FcitxProfile* profile);
-void SaveProfile();
-boolean UseLegend();
+void SaveProfile(FcitxProfile* profile);
+boolean UseLegend(FcitxProfile* profile);
 boolean IsTrackCursor(FcitxProfile* profile);
 int GetInputWindowOffsetX(FcitxProfile* profile);
 int GetInputWindowOffsetY(FcitxProfile* profile);

@@ -35,6 +35,5 @@
  * *********************************************************** */
 void            SetMyExceptionHandler (void);
 void            OnException (int signo);
-void            SetMyXErrorHandler (void);
 
 #endif

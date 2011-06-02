@@ -42,6 +42,7 @@
 #include "fcitx/backend.h"
 #include "fcitx/profile.h"
 #include <fcitx/instance.h>
+#include "errorhandler.h"
 
 static void WaitForEnd()
 {
@@ -55,7 +56,7 @@ int main(int argc, char* argv[])
     bindtextdomain(PACKAGE, LOCALEDIR);
     bind_textdomain_codeset(PACKAGE, "UTF-8");
     textdomain(PACKAGE);
-    
+    SetMyExceptionHandler();
     CreateFcitxInstance();
     
     WaitForEnd();

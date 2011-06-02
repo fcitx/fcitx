@@ -45,7 +45,7 @@ void LoadProfile(FcitxProfile* profile)
     if (!fp) {
         if (errno == ENOENT)
         {
-            SaveProfile();
+            SaveProfile(profile);
             LoadProfile(profile);
         }
         return;

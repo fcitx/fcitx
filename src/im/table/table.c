@@ -972,6 +972,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 if (tbl->iHZLastInputCount < 2 || !table->bRule) //词组最少为两个汉字
                     return IRV_DO_NOTHING;
 
+                tbl->bTablePhraseTips = False;
                 tbl->iTableNewPhraseHZCount = 2;
                 tbl->bIsTableAddPhrase = True;
                 input->bIsDoInputOnly = True;
@@ -1925,9 +1926,16 @@ void TableCreateNewPhrase (FcitxTableState* tbl)
     TableCreatePhraseCode (tbl, GetMessageString(instance->messageDown, 0));
 
     if (!tbl->bCanntFindCode)
+    {    
+        SetMessageCount(instance->messageDown, 2);
         SetMessageText(instance->messageDown, 1, tbl->strNewPhraseCode);
+    }
     else
+    {
+        SetMessageCount(instance->messageDown, 1);
         SetMessageText(instance->messageDown, 0, "????");
+    }
+
 }
 
 void TableCreatePhraseCode (FcitxTableState* tbl, char *strHZ)

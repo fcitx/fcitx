@@ -564,13 +564,6 @@ void SwitchIM(FcitxInstance* instance, int index)
     {
         lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
-
-    if (index == -1) {
-        if (instance->iIMIndex >= (iIMCount - 1))
-            instance->iIMIndex = 0;
-        else
-            instance->iIMIndex++;
-    } 
     
     if (index >= iIMCount)
         instance->iIMIndex = iIMCount - 1;
@@ -598,7 +591,7 @@ void SwitchIM(FcitxInstance* instance, int index)
         newIM->Init(newIM->klass);
 
     ResetInput(instance);
-    SaveProfile();
+    SaveProfile(&instance->profile);
 }
 
 /** 
