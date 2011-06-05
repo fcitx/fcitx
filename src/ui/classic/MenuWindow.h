@@ -35,29 +35,12 @@
 #define VK_MENU_WINDOW_HEIGHT   300
 #include <X11/Xlib.h>
 #include "fcitx-utils/utarray.h"
+#include <cairo.h>
+#include <fcitx-config/fcitx-config.h>
 
-typedef enum MenuState
-{
-    MENU_ACTIVE = 0,
-    MENU_INACTIVE = 1
-} MenuState;
+struct FcitxClassicUI;
 
-typedef enum
-{
-    MENUSHELL, //暂时只有菜单项和分割线两种类型
-    DIVLINE
-} MenuShellType;
-
-//菜单项属性
-typedef struct
-{
-    char tipstr[24];
-    int  next;//下一级菜单
-    int  isselect;
-    MenuShellType type;
-} MenuShell;
-
-typedef struct
+typedef struct XlibMenu
 {
     int iPosX;
     int iPosY;
@@ -73,24 +56,23 @@ typedef struct
     char font[32];
     XColor charcolor;
     XColor charselectcolor;
-    UT_array shell;
+    struct FcitxClassicUI* owner;
 } XlibMenu;
 
-extern XlibMenu mainMenu,imMenu,vkMenu,skinMenu;
-Bool CreateMenuWindow (void);
+boolean CreateMenuWindow (void);
 void InitMenuWindowColor (void);
 void DisplayMenuWindow (void);
 void DrawMenuWindow (void);
-void GetMenuSize(Display * dpy,XlibMenu * Menu);
+void GetMenuSize(XlibMenu* menu);
 
-Bool CreateMenuWindow (void);
+boolean CreateMenuWindow (void);
 
-int CreateXlibMenu(Display * dpy,XlibMenu * Menu);
-void DrawXlibMenu(Display * dpy,XlibMenu * Menu);
-void DrawDivLine(Display * dpy,XlibMenu * Menu,int line_y);
-void DisplayText(Display * dpy,XlibMenu * Menu,int shellindex,int line_y);
+XlibMenu* CreateXlibMenu(struct FcitxClassicUI* classicui);
+void DrawXlibMenu(XlibMenu* menu);
+void DrawDivLine(XlibMenu* menu, int line_y);
+void DisplayText(XlibMenu* menu, int shellindex, int line_y);
 int SelectShellIndex(XlibMenu * Menu, int x, int y, int* offseth);
-void DisplayXlibMenu(Display * dpy,XlibMenu * Menu);
+void DisplayXlibMenu(XlibMenu* menu);
 void ClearSelectFlag(XlibMenu * Menu);
 void MainMenuEvent(int x,int y);
 void IMMenuEvent(int x,int y);

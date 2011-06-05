@@ -51,7 +51,7 @@ void InitAsDaemon();
 int             CalculateRecordNumber (FILE * fpDict);
 void            SetSwitchKey (char *str);
 int             CalHZIndex (char *strHZ);
-UT_array* SplitString(const char *str);
+UT_array* SplitString(const char *str, char delm);
 void FreeStringList(UT_array *list);
 
 #endif

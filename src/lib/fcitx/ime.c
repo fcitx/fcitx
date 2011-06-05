@@ -722,4 +722,6 @@ void EnableIM(FcitxInstance* instance, boolean keepState)
     {
         ResetInput(instance);
     }
+    FcitxInputContext* ic = GetCurrentIC(instance);
+    ic->state = IS_ACTIVE;
 }

@@ -36,26 +36,23 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/cutils.h"
 #include <fcitx/instance.h>
-
-
+#include <fcitx/backend.h>
+#include "InputWindow.h"
+#include "MainWindow.h"
 
 struct FcitxSkin;
-
-typedef struct FcitxClassicUIStatus {
-    MouseE mouse;
-    cairo_surface_t* active;
-    cairo_surface_t* inactive;
-} FcitxClassicUIStatus;
-
-#define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)
 
 void* ClassicUICreate(FcitxInstance* instance);
 static void ClassicUICloseInputWindow(void* arg);
 static void ClassicUIShowInputWindow(void* arg);
 static void ClassicUIMoveInputWindow(void* arg);
+static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu);
 static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status);
-static void ClassicUIOnInputFocus();
+static void ClassicUIOnInputFocus(void *arg);
+static void ClassicUIOnInputUnFocus(void *arg);
+static void ClassicUIOnTriggerOn(void *arg);
+static void ClassicUiOnTriggerOff(void *arg);
 static ConfigFileDesc* GetClassicUIDesc();
 
 static void LoadClassicUIConfig();
@@ -69,7 +66,11 @@ FcitxUI ui = {
     ClassicUIMoveInputWindow,
     ClassicUIUpdateStatus,
     ClassicUIRegisterStatus,
-    ClassicUIOnInputFocus
+    ClassicUIRegisterMenu,
+    ClassicUIOnInputFocus,
+    ClassicUIOnInputUnFocus,
+    ClassicUIOnTriggerOn,
+    ClassicUiOnTriggerOff
 };
 
 void* ClassicUICreate(FcitxInstance* instance)
@@ -97,6 +98,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->skin.skinType = &classicui->skinType;
 
     classicui->inputWindow = CreateInputWindow(classicui);
+    classicui->mainWindow = CreateMainWindow(classicui);
     
     XUnlockDisplay(classicui->dpy);
     return classicui;
@@ -161,22 +163,43 @@ static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status)
 #endif
 }
 
+static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
+{
+}
+
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
-    status->priv = malloc(sizeof(FcitxClassicUIStatus));
-    FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
+    status->priv = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
     char activename[PATH_MAX], inactivename[PATH_MAX];
     sprintf(activename, "%s_active.png", status->name);
     sprintf(inactivename, "%s_inactive.png", status->name);
     
-    LoadImage(activename , *sc->skinType, &privstat->active, False);
-    LoadImage(inactivename, *sc->skinType, &privstat->inactive, False);
+    LoadImage(sc, activename, false);
+    LoadImage(sc, inactivename, false);
 }
 
 static void ClassicUIOnInputFocus(void *arg)
 {
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    FcitxInstance *instance = classicui->owner;
+    if (GetCurrentState(instance) == IS_ACTIVE)
+    {
+        DrawMainWindow(classicui->mainWindow);
+        ShowMainWindow(classicui->mainWindow);
+    }
+}
+
+static void ClassicUIOnInputUnFocus(void *arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    FcitxInstance *instance = classicui->owner;
+    if (GetCurrentState(instance) == IS_ACTIVE)
+    {
+        DrawMainWindow(classicui->mainWindow);
+        ShowMainWindow(classicui->mainWindow);
+    }
 }
 
 int
@@ -511,13 +534,18 @@ Visual * FindARGBVisual (FcitxClassicUI* classicui)
     return visual;
 }
 
+boolean IsInRspArea(int x0, int y0, FcitxClassicUIStatus* status)
+{
+    return IsInBox(x0, y0, status->x, status->y, status->w, status->h);
+}
+
 /*
  * 判断鼠标点击处是否处于指定的区域内
  */
 boolean
-IsInBox(int x0, int y0, int x1, int y1, int x2, int y2)
+IsInBox(int x0, int y0, int x1, int y1, int w, int h)
 {
-    if (x0 >= x1 && x0 <= x2 && y0 >= y1 && y0 <= y2)
+    if (x0 >= x1 && x0 <= x1 + w && y0 >= y1 && y0 <= y1 + h)
         return true;
 
     return false;
@@ -558,29 +586,20 @@ MouseClick(int *x, int *y, Display* dpy, Window window)
     return bMoved;
 }
 
-
-/*
-*把鼠标状态初始化为某一种状态.
-*/
-Bool SetMouseStatus()
+void ClassicUIOnTriggerOn(void* arg)
 {
-    /* TODO 
-    Bool changed = False;
-    int i = 0;
-    for (i = 0 ;i < 8; i ++)
+
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    FcitxInstance *instance = classicui->owner;
+    if (GetCurrentState(instance) == IS_ACTIVE)
     {
-        MouseE obj;
-        if (msE[i] == e)
-            obj = s;
-        else
-            obj = m;
-        
-        if (obj != *msE[i])
-            changed = True;
-        
-        *msE[i] = obj;
+        DrawMainWindow(classicui->mainWindow);
+        ShowMainWindow(classicui->mainWindow);
     }
-    
-    return changed;*/
-    return True;
+}
+
+void ClassicUiOnTriggerOff(void* arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    CloseMainWindow(classicui->mainWindow);
 }

@@ -180,7 +180,7 @@ void AddonResolveDependency(UT_array* addons)
         {
             if (!addon->bEnabled)
                 continue;
-            UT_array* dependlist = SplitString(addon->depend);
+            UT_array* dependlist = SplitString(addon->depend, ',');
             boolean valid = true;
             char **depend = NULL;
             for (depend = (char **) utarray_front(dependlist);

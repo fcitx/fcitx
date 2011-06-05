@@ -22,6 +22,11 @@
 
 #ifndef _MESSAGE_WINDOW_H
 #define _MESSAGE_WINDOW_H
+#include <X11/Xlib.h>
+#include <cairo.h>
+#include <fcitx-config/fcitx-config.h>
+
+struct FcitxClassicUI;
 
 typedef struct MessageWindow
 {
@@ -34,6 +39,7 @@ typedef struct MessageWindow
     char *title;
     char **msg;
     int length;
+    struct FcitxClassicUI* owner;
 } MessageWindow;
 
 #endif

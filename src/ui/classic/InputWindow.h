@@ -34,7 +34,8 @@
 
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
-#define INPUT_BAR_MAX_LEN 1500
+#define INPUT_BAR_MAX_WIDTH 1500
+#define INPUT_BAR_MAX_HEIGHT 600
 
 struct FcitxSkin;
 struct FcitxClassicUI;
@@ -57,7 +58,6 @@ typedef struct InputWindow {
     
     cairo_surface_t *cs_input_bar;
     cairo_surface_t *cs_input_back;
-    cairo_surface_t *input, *prev, *next;
     cairo_t *c_back, *c_cursor;
     cairo_t *c_font[8];
     Display* dpy;

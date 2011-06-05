@@ -31,7 +31,7 @@
 #include "skin.h"
 
 #define ABOUT_WINDOW_HEIGHT	150
-
+struct FcitxClassicUI;
 typedef struct AboutWindow
 {
     Window window;
@@ -41,12 +41,12 @@ typedef struct AboutWindow
     int width;
     int fontSize;
     Atom     about_kill_atom;
+    struct FcitxClassicUI* owner;
 } AboutWindow;
 
-extern AboutWindow aboutWindow;
 
-Bool            CreateAboutWindow (void);
-void            DisplayAboutWindow (void);
-void            DrawAboutWindow (void);
+AboutWindow* CreateAboutWindow (struct FcitxClassicUI *classicui);
+void            DisplayAboutWindow (AboutWindow* aboutWindow);
+void            DrawAboutWindow (AboutWindow* aboutWindow);
 
 #endif

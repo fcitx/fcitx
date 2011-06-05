@@ -34,22 +34,22 @@
 #include "TrayWindow.h"
 #include "tray.h"
 #include "skin.h"
-#include "fcitx/xim.h"
-#include "configfile.h"
+#include "classicui.h"
+#include <fcitx-utils/cutils.h>
+#include <fcitx/backend.h>
 
-TrayWindow tray;
-
-extern Display *dpy;
-extern int iScreen;
-
-Bool CreateTrayWindow() {
+void InitTrayWindow(TrayWindow *trayWindow)
+{
+    FcitxClassicUI *classicui = trayWindow->owner;
+    Display *dpy = classicui->dpy;
+    int iScreen = classicui->iScreen;
     char   strWindowName[]="Fcitx Tray Window";
-    if ( !fc.bUseTrayIcon )
-        return False;
+    if ( !classicui->bUseTrayIcon )
+        return;
 
-    InitTray(dpy, &tray);
+    InitTray(dpy, trayWindow);
 
-    XVisualInfo* vi = TrayGetVisual(dpy, &tray);
+    XVisualInfo* vi = TrayGetVisual(dpy, trayWindow);
     if (vi && vi->visual) {
         Window p = DefaultRootWindow (dpy);
         Colormap colormap = XCreateColormap(dpy, p, vi->visual, AllocNone);
@@ -58,77 +58,86 @@ Bool CreateTrayWindow() {
         wsa.colormap = colormap;
         wsa.background_pixel = 0;
         wsa.border_pixel = 0;
-        tray.window = XCreateWindow(dpy, p, -1, -1, 1, 1,
+        trayWindow->window = XCreateWindow(dpy, p, -1, -1, 1, 1,
                                     0, vi->depth, InputOutput, vi->visual,
                                     CWBackPixmap|CWBackPixel|CWBorderPixel|CWColormap, &wsa);
     }
     else {
-        tray.window = XCreateSimpleWindow (dpy, DefaultRootWindow(dpy), \
-                                           -1, -1, 1, 1, 0, \
-                                           BlackPixel (dpy, DefaultScreen (dpy)), \
+        trayWindow->window = XCreateSimpleWindow (dpy, DefaultRootWindow(dpy),
+                                           -1, -1, 1, 1, 0,
+                                           BlackPixel (dpy, DefaultScreen (dpy)),
                                            WhitePixel (dpy, DefaultScreen (dpy)));
-        XSetWindowBackgroundPixmap(dpy, tray.window, ParentRelative);
+        XSetWindowBackgroundPixmap(dpy, trayWindow->window, ParentRelative);
     }
-    if (tray.window == (Window) NULL)
-        return False;
+    if (trayWindow->window == (Window) NULL)
+        return;
 
-    LoadTrayImage();
     XSizeHints size_hints;
     size_hints.flags = PWinGravity | PBaseSize;
-    size_hints.base_width = tray.size;
-    size_hints.base_height = tray.size;
-    XSetWMNormalHints(dpy, tray.window, &size_hints);
+    size_hints.base_width = trayWindow->size;
+    size_hints.base_height = trayWindow->size;
+    XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
 
     if (vi && vi->visual)
-        tray.cs = cairo_xlib_surface_create(dpy, tray.window, tray.visual.visual, 200, 200);
+        trayWindow->cs = cairo_xlib_surface_create(dpy, trayWindow->window, trayWindow->visual.visual, 200, 200);
     else
     {
         Visual *target_visual = DefaultVisual (dpy, iScreen);
-        tray.cs = cairo_xlib_surface_create(dpy, tray.window, target_visual, 200, 200);
+        trayWindow->cs = cairo_xlib_surface_create(dpy, trayWindow->window, target_visual, 200, 200);
     }
 
-    XSelectInput (dpy, tray.window, ExposureMask | KeyPressMask | \
-                  ButtonPressMask | ButtonReleaseMask | StructureNotifyMask \
+    XSelectInput (dpy, trayWindow->window, ExposureMask | KeyPressMask |
+                  ButtonPressMask | ButtonReleaseMask | StructureNotifyMask
                   | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
 
-    SetWindowProperty(dpy, tray.window, FCITX_WINDOW_DOCK, strWindowName);
-    return True;
+    SetWindowProperty(classicui, trayWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 }
 
-void DestroyTrayWindow()
+TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui) {
+    TrayWindow *trayWindow = fcitx_malloc0(sizeof(TrayWindow));
+    trayWindow->owner = classicui;
+    InitTrayWindow(trayWindow);
+    return trayWindow;
+}
+
+void ReleaseTrayWindow(TrayWindow *trayWindow)
 {
-    if (tray.window == None)
+    FcitxClassicUI *classicui = trayWindow->owner;
+    Display *dpy = classicui->dpy;
+    if (trayWindow->window == None)
         return;
-    cairo_surface_destroy(tray.cs);
-    XDestroyWindow(dpy, tray.window);
-    tray.window = None;
+    cairo_surface_destroy(trayWindow->cs);
+    XDestroyWindow(dpy, trayWindow->window);
+    trayWindow->window = None;
 }
 
-void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
-    if ( !fc.bUseTrayIcon )
+void DrawTrayWindow(TrayWindow* trayWindow, int f_state, int x, int y, int w, int h) {
+    FcitxClassicUI *classicui = trayWindow->owner;
+    FcitxSkin *sc = &classicui->skin;
+    Display *dpy = classicui->dpy;
+    SkinImage *image;
+    if ( !classicui->bUseTrayIcon )
         return;
 
     cairo_t *c;
     cairo_surface_t *png_surface ;
-    FcitxImage* skinImg;
-    if (!tray.bTrayMapped)
+    if (!trayWindow->bTrayMapped)
         return;
 
     /* 画png */
     if (f_state)
     {
-        png_surface = trayActive;
-        skinImg = &sc.skinTrayIcon.active;
+        image = LoadImage(sc, sc->skinTrayIcon.active, true);
     }
     else
     {
-        png_surface = trayInactive;
-        skinImg = &sc.skinTrayIcon.inactive;
+        image = LoadImage(sc, sc->skinTrayIcon.inactive, true);
     }
+    png_surface = image->image;
 
-    c=cairo_create(tray.cs);
+    c=cairo_create(trayWindow->cs);
 
-    XVisualInfo* vi = tray.visual.visual ? &tray.visual : 0;
+    XVisualInfo* vi = trayWindow->visual.visual ? &trayWindow->visual : NULL;
     if (vi && vi->visual)
     {
         /* 清空窗口 */
@@ -138,12 +147,12 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
     }
     else
     {
-        XClearArea (dpy, tray.window, x, y, w, h, False);
+        XClearArea (dpy, trayWindow->window, x, y, w, h, False);
     }
 
-    if ( strlen(skinImg->img_name) != 0 && strcmp( skinImg->img_name ,"NONE.img") != 0)
+    if ( png_surface)
     {
-        cairo_scale(c, ((double) tray.size) / skinImg->height, ((double) tray.size) / skinImg->width);
+        cairo_scale(c, ((double) trayWindow->size) / cairo_image_surface_get_height(png_surface), ((double) trayWindow->size) / cairo_image_surface_get_width(png_surface));
         cairo_set_source_surface(c, png_surface, x , y );
         cairo_set_operator(c, CAIRO_OPERATOR_OVER);
         cairo_paint_with_alpha(c,1);
@@ -153,61 +162,64 @@ void DrawTrayWindow(int f_state, int x, int y, int w, int h) {
 
 }
 
-void TrayEventHandler(XEvent* event)
+void TrayEventHandler(void *instance, XEvent* event)
 {
-    if (!fc.bUseTrayIcon)
+    TrayWindow *trayWindow = instance;
+    FcitxClassicUI *classicui = trayWindow->owner;
+    Display *dpy = classicui->dpy;
+    if (!classicui->bUseTrayIcon)
         return;
     switch (event->type) {
     case ClientMessage:
-        if (event->xclient.message_type == tray.atoms[ATOM_MANAGER]
-                && event->xclient.data.l[1] == tray.atoms[ATOM_SELECTION])
+        if (event->xclient.message_type == trayWindow->atoms[ATOM_MANAGER]
+                && event->xclient.data.l[1] == trayWindow->atoms[ATOM_SELECTION])
         {
-            if (tray.window == None)
-                CreateTrayWindow();
-            TrayFindDock(dpy, &tray);
+            if (trayWindow->window == None)
+                InitTrayWindow(trayWindow);
+            TrayFindDock(dpy, trayWindow);
         }
         break;
 
     case Expose:
-        if (event->xexpose.window == tray.window) {
-            if (GetCurrentState() == IS_ACTIVE)
-                DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
+        if (event->xexpose.window == trayWindow->window) {
+            if (GetCurrentState(classicui->owner) == IS_ACTIVE)
+                DrawTrayWindow (trayWindow, ACTIVE_ICON, 0, 0, trayWindow->size, trayWindow->size);
             else
-                DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
+                DrawTrayWindow (trayWindow, INACTIVE_ICON, 0, 0, trayWindow->size, trayWindow->size);
         }
         break;
     case ConfigureNotify:
-        if (tray.window == event->xconfigure.window)
+        if (trayWindow->window == event->xconfigure.window)
         {
             int size = event->xconfigure.height;
-            if (size != tray.size)
+            if (size != trayWindow->size)
             {
-                tray.size = size;
+                trayWindow->size = size;
                 XSizeHints size_hints;
                 size_hints.flags = PWinGravity | PBaseSize;
-                size_hints.base_width = tray.size;
-                size_hints.base_height = tray.size;
-                XSetWMNormalHints(dpy, tray.window, &size_hints);
+                size_hints.base_width = trayWindow->size;
+                size_hints.base_height = trayWindow->size;
+                XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
             }
 
-            if (GetCurrentState() == IS_ACTIVE)
-                DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size);
+            if (GetCurrentState(classicui->owner) == IS_ACTIVE)
+                DrawTrayWindow (trayWindow, ACTIVE_ICON, 0, 0, trayWindow->size, trayWindow->size);
             else
-                DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size);
+                DrawTrayWindow (trayWindow, INACTIVE_ICON, 0, 0, trayWindow->size, trayWindow->size);
         }
         break;
 
 
     case DestroyNotify:
-        tray.bTrayMapped = False;
-        DestroyTrayWindow();
+        trayWindow->bTrayMapped = False;
+        ReleaseTrayWindow(trayWindow);
         break;
 
     case ReparentNotify:
-        if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == tray.window)
+        if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == trayWindow->window)
         {
-            tray.bTrayMapped = False;
-            DestroyTrayWindow();
+            trayWindow->bTrayMapped = False;
+            ReleaseTrayWindow(trayWindow);
         }
         break;
     }

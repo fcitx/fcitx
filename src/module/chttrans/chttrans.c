@@ -102,7 +102,7 @@ void* ChttransCreate(FcitxInstance* instance)
     
     RegisterHotkeyFilter(hk);
     RegisterOutputFilter(shk);
-    RegisterStatus(instance, "chttrans", ToggleChttransState, GetChttransEnabled);
+    RegisterStatus(instance, transState, "chttrans", ToggleChttransState, GetChttransEnabled);
     return transState;
 }
 

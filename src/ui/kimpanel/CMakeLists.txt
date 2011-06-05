@@ -1,7 +1,9 @@
+if(FALSE)
+
 include_directories(${fcitx_SOURCE_DIR}/src)
 
 set(fcitx_kimpanel_ui_SOURCES
-    DBus.c
+    kimpanel.c
 )
 
 add_library(fcitx-kimpanel-ui MODULE ${fcitx_kimpanel_ui_SOURCES})
@@ -10,3 +12,4 @@ set_target_properties( fcitx-kimpanel-ui PROPERTIES PREFIX "")
 
 install(FILES fcitx-kimpanel-ui.conf DESTINATION ${pkgdatadir}/data/addon)
 
+endif()

@@ -21,135 +21,139 @@
 #include "fcitx/fcitx.h"
 
 #include "MessageWindow.h"
-#include "ui.h"
-#include "fcitx/xim.h"
-#include "configfile.h"
 #include "fcitx-utils/cutils.h"
 
 #include <ctype.h>
 
 #include <iconv.h>
 #include <X11/Xatom.h>
+#include <string.h>
+#include "classicui.h"
+#include <cairo-xlib.h>
+#include <X11/Xutil.h>
 
-extern Display *dpy;
-extern int      iScreen;
-extern Atom killAtom;
-
-MessageWindow messageWindow;
 
 #define MESSAGE_WINDOW_MARGIN 20
 #define MESSAGE_WINDOW_LINESPACE 2
-static void            InitMessageWindowProperty (void);
+static void            InitMessageWindowProperty (MessageWindow* messageWindow);
 
-Bool CreateMessageWindow (void)
+MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
 {
-    memset(&messageWindow, 0, sizeof(MessageWindow));
-    messageWindow.color.r = messageWindow.color.g = messageWindow.color.b = 220.0 / 256;
-    messageWindow.fontColor.r = messageWindow.fontColor.g = messageWindow.fontColor.b = 0;
-    messageWindow.fontSize = 15;
-    messageWindow.width = 1;
-    messageWindow.height = 1;
+    MessageWindow* messageWindow = fcitx_malloc0(sizeof(MessageWindow));
+    Display *dpy = classicui->dpy;
+    int iScreen= classicui->iScreen;
+    messageWindow->owner = classicui;
+    
+    messageWindow->color.r = messageWindow->color.g = messageWindow->color.b = 220.0 / 256;
+    messageWindow->fontColor.r = messageWindow->fontColor.g = messageWindow->fontColor.b = 0;
+    messageWindow->fontSize = 15;
+    messageWindow->width = 1;
+    messageWindow->height = 1;
 
-    messageWindow.window =
+    messageWindow->window =
 	XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, 1, 1, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
-    messageWindow.surface = cairo_xlib_surface_create(dpy, messageWindow.window, DefaultVisual(dpy, iScreen), 1, 1); 
-    if (messageWindow.window == None)
+    messageWindow->surface = cairo_xlib_surface_create(dpy, messageWindow->window, DefaultVisual(dpy, iScreen), 1, 1); 
+    if (messageWindow->window == None)
 	return False;
 
-    InitMessageWindowProperty ();
-    XSelectInput (dpy, messageWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    InitMessageWindowProperty (messageWindow);
+    XSelectInput (dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
-    return True;
+    return messageWindow;
 }
 
-void InitMessageWindowProperty (void)
+void InitMessageWindowProperty (MessageWindow *messageWindow)
 {
-    XSetTransientForHint (dpy, messageWindow.window, DefaultRootWindow (dpy));
+    FcitxClassicUI* classicui = messageWindow->owner;
+    Display *dpy = classicui->dpy;
+    XSetTransientForHint (dpy, messageWindow->window, DefaultRootWindow (dpy));
 
-    SetWindowProperty(dpy, messageWindow.window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
+    SetWindowProperty(classicui, messageWindow->window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
 
-    XSetWMProtocols(dpy, messageWindow.window, &killAtom, 1);
+    XSetWMProtocols(dpy, messageWindow->window, &classicui->killAtom, 1);
 }
 
-void DisplayMessageWindow (void)
+void DisplayMessageWindow (MessageWindow *messageWindow)
 {
+    FcitxClassicUI* classicui = messageWindow->owner;
+    Display *dpy = classicui->dpy;
     int dwidth, dheight;
-    GetScreenSize(&dwidth, &dheight);
-    XMapRaised (dpy, messageWindow.window);
-    XMoveWindow (dpy, messageWindow.window, (dwidth - messageWindow.width) / 2, (dheight - messageWindow.height) / 2);
+    GetScreenSize(classicui, &dwidth, &dheight);
+    XMapRaised (dpy, messageWindow->window);
+    XMoveWindow (dpy, messageWindow->window, (dwidth - messageWindow->width) / 2, (dheight - messageWindow->height) / 2);
 }
 
-void DrawMessageWindow (char *title, char **msg, int length)
+void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length)
 {
+    FcitxClassicUI* classicui = messageWindow->owner;
+    Display *dpy = classicui->dpy;
     int i = 0;
-    if (messageWindow.window == None)
-        CreateMessageWindow();
     if (title)
     {
-        if (messageWindow.title)
-            free(messageWindow.title);
-        messageWindow.title = strdup(title);
+        if (messageWindow->title)
+            free(messageWindow->title);
+        messageWindow->title = strdup(title);
     }
     else
-        if (!messageWindow.title)
+        if (!messageWindow->title)
             return;
     
-    title = messageWindow.title;
+    title = messageWindow->title;
     FcitxLog(INFO, "%s", title);
 
     XTextProperty   tp;
     Xutf8TextListToTextProperty(dpy, &title, 1, XUTF8StringStyle, &tp);
-    XSetWMName(dpy, messageWindow.window, &tp);
+    XSetWMName(dpy, messageWindow->window, &tp);
     XFree(tp.value);
 
     if (msg)
     {
-        if (messageWindow.msg)
+        if (messageWindow->msg)
         {
-            for(i =0 ;i<messageWindow.length; i++)
-                free(messageWindow.msg[i]);
-            free(messageWindow.msg);
+            for(i =0 ;i<messageWindow->length; i++)
+                free(messageWindow->msg[i]);
+            free(messageWindow->msg);
         }
-        messageWindow.length = length;
-        messageWindow.msg = malloc(sizeof(char*) * length);
-        for (i = 0; i < messageWindow.length; i++)
-            messageWindow.msg[i] = strdup(msg[i]);
+        messageWindow->length = length;
+        messageWindow->msg = malloc(sizeof(char*) * length);
+        for (i = 0; i < messageWindow->length; i++)
+            messageWindow->msg[i] = strdup(msg[i]);
     }
     else
     {
-        if (!messageWindow.msg)
+        if (!messageWindow->msg)
             return;
     }
-    msg = messageWindow.msg;
-    length = messageWindow.length;
+    msg = messageWindow->msg;
+    length = messageWindow->length;
 
     if (!msg || length == 0)
         return;
 
-    messageWindow.height = MESSAGE_WINDOW_MARGIN * 2 + length *(messageWindow.fontSize + MESSAGE_WINDOW_LINESPACE);
-    messageWindow.width = 0;
+    messageWindow->height = MESSAGE_WINDOW_MARGIN * 2 + length *(messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE);
+    messageWindow->width = 0;
 
     for (i = 0; i< length ;i ++)
     {
-        int width = StringWidth(msg[i], gs.font, messageWindow.fontSize);
-        if (width > messageWindow.width)
-            messageWindow.width = width;
+        int width = StringWidth(msg[i], classicui->font, messageWindow->fontSize);
+        if (width > messageWindow->width)
+            messageWindow->width = width;
     }
 
-    messageWindow.width += MESSAGE_WINDOW_MARGIN * 2;
-    XResizeWindow(dpy, messageWindow.window, messageWindow.width, messageWindow.height);
-    cairo_xlib_surface_set_size(messageWindow.surface, messageWindow.width,messageWindow.height);
+    messageWindow->width += MESSAGE_WINDOW_MARGIN * 2;
+    XResizeWindow(dpy, messageWindow->window, messageWindow->width, messageWindow->height);
+    cairo_xlib_surface_set_size(messageWindow->surface, messageWindow->width,messageWindow->height);
 
-    cairo_t *c = cairo_create(messageWindow.surface);
-    cairo_set_source_rgb(c, messageWindow.color.r, messageWindow.color.g, messageWindow.color.b);
+    cairo_t *c = cairo_create(messageWindow->surface);
+    cairo_set_source_rgb(c, messageWindow->color.r, messageWindow->color.g, messageWindow->color.b);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
 
-    SetFontContext(c, gs.font, messageWindow.fontSize);
+    SetFontContext(c, classicui->font, messageWindow->fontSize);
 
     cairo_paint(c);
 
-    cairo_set_source_rgb(c, messageWindow.fontColor.r, messageWindow.fontColor.g, messageWindow.fontColor.b);
+    cairo_set_source_rgb(c, messageWindow->fontColor.r, messageWindow->fontColor.g, messageWindow->fontColor.b);
 
     int x, y;
     x = MESSAGE_WINDOW_MARGIN;
@@ -157,11 +161,11 @@ void DrawMessageWindow (char *title, char **msg, int length)
     for (i = 0; i< length ;i ++)
     {
         OutputStringWithContext(c, msg[i], x, y);
-        y += messageWindow.fontSize + MESSAGE_WINDOW_LINESPACE;
+        y += messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE;
     }
 
     ResetFontContext();
     cairo_destroy(c);
 
-    ActiveWindow(dpy, messageWindow.window);
+    ActivateWindow(dpy, classicui->iScreen, messageWindow->window);
 }

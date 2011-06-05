@@ -24,6 +24,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-utils/utf8.h"
+#include <fcitx-utils/utarray.h>
 
 #define INPUTWND_START_POS_DOWN	8
 #define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数
@@ -62,12 +63,40 @@ typedef struct Messages Messages;
         (m)->changed = True; \
     } while(0)
 
+#define MAX_STATUS_NAME 32
+
 typedef struct FcitxUIStatus {
-    char *name;
-    void (*toggleStatus)();
-    boolean (*getCurrentStatus)();
+    char name[MAX_STATUS_NAME + 1];
+    void (*toggleStatus)(void *arg);
+    boolean (*getCurrentStatus)(void *arg);
     void *priv;
+    void* arg;
 } FcitxUIStatus;
+
+typedef enum MenuState
+{
+    MENU_ACTIVE = 0,
+    MENU_INACTIVE = 1
+} MenuState;
+
+typedef enum
+{
+    MENUSHELL, //暂时只有菜单项和分割线两种类型
+    DIVLINE
+} MenuShellType;
+
+//菜单项属性
+typedef struct MenuShell
+{
+    char tipstr[24];
+    int  next;//下一级菜单
+    int  isselect;
+    MenuShellType type;
+} MenuShell;
+
+typedef struct FcitxUIMenu {
+    UT_array shell;
+} FcitxUIMenu;
 
 typedef struct FcitxUI
 {
@@ -77,7 +106,11 @@ typedef struct FcitxUI
     void (*MoveInputWindow)(void *arg);
     void (*UpdateStatus)(void *arg, FcitxUIStatus* );
     void (*RegisterStatus)(void *arg, FcitxUIStatus* );
+    void (*RegisterMenu)(void *arg, FcitxUIMenu* );
     void (*OnInputFocus)(void *arg);
+    void (*OnInputUnFocus)(void *arg);
+    void (*OnTriggerOn)(void *arg);
+    void (*OnTriggerOff)(void *arg);
 } FcitxUI;
 
 void LoadUserInterface(struct FcitxInstance* instance);
@@ -100,7 +133,11 @@ void MoveInputWindow(struct FcitxInstance* instance);
 void CloseInputWindow(struct FcitxInstance* instance);
 void ShowInputWindow(struct FcitxInstance* instance);
 void UpdateStatus(struct FcitxInstance* instance, const char* name);
-void RegisterStatus(struct FcitxInstance* instance, const char* name, void (*toggleStatus)(), boolean (*getStatus)());
+void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
 void OnInputFocus(struct FcitxInstance* instance);
+void OnInputUnFocus(struct FcitxInstance* instance);
+void OnTriggerOn(struct FcitxInstance* instance);
+void OnTriggerOff(struct FcitxInstance* instance);
+FcitxUIStatus *GetUIStatus(struct FcitxInstance* instance, const char* name);
 
 #endif

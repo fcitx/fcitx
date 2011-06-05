@@ -21,12 +21,13 @@
 #include <ctype.h>
 #include <iconv.h>
 #include <X11/Xatom.h>
+#include <cairo/cairo-xlib.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
 
 #include "AboutWindow.h"
-#include "fcitx-utils/configfile.h"
+#include "classicui.h"
 
 int             ABOUT_WINDOW_WIDTH;
 
@@ -36,64 +37,73 @@ char            AboutEmail[] = "yuking_net@sohu.com";
 char            AboutCopyRight[] = "(c) 2005, Yuking";
 char            strTitle[100];
 
-AboutWindow aboutWindow;
-static void            InitAboutWindowProperty (void);
+static void            InitAboutWindowProperty (AboutWindow* aboutWindow);
 
-Bool CreateAboutWindow (void)
+AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
 {
+    AboutWindow *aboutWindow = fcitx_malloc0(sizeof(AboutWindow));
+    Display* dpy = classicui->dpy;
+    int iScreen = classicui->iScreen;
     int dwidth, dheight;
     strcpy (strTitle, AboutTitle);
     strcat (strTitle, " ");
     strcat (strTitle, VERSION);
-    GetScreenSize(&dwidth, &dheight);
+    GetScreenSize(classicui, &dwidth, &dheight);
+    
+    aboutWindow->owner = classicui;
 
-    aboutWindow.color.r = aboutWindow.color.g = aboutWindow.color.b = 220.0 / 256;
-    aboutWindow.fontColor.r = aboutWindow.fontColor.g = aboutWindow.fontColor.b = 0;
-    aboutWindow.fontSize = 11;
+    aboutWindow->color.r = aboutWindow->color.g = aboutWindow->color.b = 220.0 / 256;
+    aboutWindow->fontColor.r = aboutWindow->fontColor.g = aboutWindow->fontColor.b = 0;
+    aboutWindow->fontSize = 11;
 
-    ABOUT_WINDOW_WIDTH = StringWidth (strTitle, gs.font, aboutWindow.fontSize ) + 50;
-    aboutWindow.window =
+    ABOUT_WINDOW_WIDTH = StringWidth (strTitle, classicui->font, aboutWindow->fontSize ) + 50;
+    aboutWindow->window =
         XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
-    aboutWindow.surface = cairo_xlib_surface_create(dpy, aboutWindow.window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
-    if (aboutWindow.window == None)
+    aboutWindow->surface = cairo_xlib_surface_create(dpy, aboutWindow->window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
+    if (aboutWindow->window == None)
         return False;
 
-    InitAboutWindowProperty ();
-    XSelectInput (dpy, aboutWindow.window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    InitAboutWindowProperty (aboutWindow);
+    XSelectInput (dpy, aboutWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
-    return True;
+    return aboutWindow;
 }
 
-void InitAboutWindowProperty (void)
+void InitAboutWindowProperty (AboutWindow* aboutWindow)
 {
-    XSetTransientForHint (dpy, aboutWindow.window, DefaultRootWindow (dpy));
+    FcitxClassicUI *classicui = aboutWindow->owner;
+    Display* dpy = classicui->dpy;
+    XSetTransientForHint (dpy, aboutWindow->window, DefaultRootWindow (dpy));
 
-    SetWindowProperty(dpy, aboutWindow.window, FCITX_WINDOW_DIALOG, AboutCaption);
+    SetWindowProperty(classicui, aboutWindow->window, FCITX_WINDOW_DIALOG, AboutCaption);
 
-    XSetWMProtocols (dpy, aboutWindow.window, &killAtom, 1);
+    XSetWMProtocols (dpy, aboutWindow->window, &classicui->killAtom, 1);
 }
 
-void DisplayAboutWindow (void)
+void DisplayAboutWindow (AboutWindow* aboutWindow)
 {
+    FcitxClassicUI *classicui = aboutWindow->owner;
+    Display* dpy = classicui->dpy;
     int dwidth, dheight;
-    GetScreenSize(&dwidth, &dheight);
-    XMapRaised (dpy, aboutWindow.window);
-    XMoveWindow (dpy, aboutWindow.window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
+    GetScreenSize(classicui, &dwidth, &dheight);
+    XMapRaised (dpy, aboutWindow->window);
+    XMoveWindow (dpy, aboutWindow->window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
 }
 
-void DrawAboutWindow (void)
+void DrawAboutWindow (AboutWindow* aboutWindow)
 {
-    cairo_t *c = cairo_create(aboutWindow.surface);
-    cairo_set_source_rgb(c, aboutWindow.color.r, aboutWindow.color.g, aboutWindow.color.b);
+    FcitxClassicUI *classicui = aboutWindow->owner;
+    cairo_t *c = cairo_create(aboutWindow->surface);
+    cairo_set_source_rgb(c, aboutWindow->color.r, aboutWindow->color.g, aboutWindow->color.b);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_paint(c);
 
-    OutputString (c, strTitle, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, gs.font, aboutWindow.fontSize)) / 2, 6 + 30, &aboutWindow.fontColor);
+    OutputString (c, strTitle, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, classicui->font, aboutWindow->fontSize)) / 2, 6 + 30, &aboutWindow->fontColor);
 
-    OutputString (c, AboutEmail, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, gs.font, aboutWindow.fontSize)) / 2, 6 + 60, &aboutWindow.fontColor);
+    OutputString (c, AboutEmail, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, classicui->font, aboutWindow->fontSize)) / 2, 6 + 60, &aboutWindow->fontColor);
 
-    OutputString (c, AboutCopyRight, gs.font, aboutWindow.fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, gs.font, aboutWindow.fontSize)) / 2, 6 + 80, &aboutWindow.fontColor);
+    OutputString (c, AboutCopyRight, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, classicui->font, aboutWindow->fontSize)) / 2, 6 + 80, &aboutWindow->fontColor);
 
     cairo_destroy(c);
 }

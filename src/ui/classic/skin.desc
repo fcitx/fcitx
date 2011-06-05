@@ -75,47 +75,45 @@ Description=English Mode Icon
 Type=String
 Description=Chinese Mode Icon
 
-[SkinMainBar/Placement]
-Type=String
+[SkinMainBar/MarginLeft]
+Type=Integer
 Description=Special Icon position
-DefaultValue=
 
-[SkinMainBar/Resize]
-Type=Enum
-EnumCount=3
-Enum0=Copy
-Enum1=Resize
-Enum2=Fix
-Description=Background Resize Rule
-DefaultValue=Resize
-
-[SkinMainBar/ResizePos]
+[SkinMainBar/MarginRight]
 Type=Integer
-Description=The Resize Position to Left
+Description=Special Icon position
 
-[SkinMainBar/ResizeWidth]
+[SkinMainBar/MarginTop]
 Type=Integer
-Description=Width of Resize Part 
+Description=Special Icon position
+
+[SkinMainBar/MarginBottom]
+Type=Integer
+Description=Special Icon position
 
 [SkinInputBar/BackImg]
 Type=String
 Description=Background Image
 
-[SkinInputBar/Resize]
-Type=Enum
-EnumCount=3
-Enum0=Copy
-Enum1=Resize
-Enum2=Fix
-Description=Background Resize Rule
-
-[SkinInputBar/ResizePos]
+[SkinInputBar/MarginLeft]
 Type=Integer
-Description=The Resize Position to Left
+Description=Special Icon position
 
-[SkinInputBar/ResizeWidth]
+[SkinInputBar/MarginRight]
 Type=Integer
-Description=Width of Resize Part 
+Description=Special Icon position
+
+[SkinInputBar/MarginTop]
+Type=Integer
+Description=Special Icon position
+
+[SkinInputBar/MarginBottom]
+Type=Integer
+Description=Special Icon position
+
+[SkinInputBar/CursorColor]
+Type=Color
+Description=Color of Cursor
 
 [SkinInputBar/InputPos]
 Type=Integer
@@ -125,24 +123,28 @@ Description=Left-down position of Input
 Type=Integer
 Description=Left-down position of Output
 
-[SkinInputBar/LayoutLeft]
-Type=Integer
-Description=Space to the left
-
-[SkinInputBar/LayoutRight]
-Type=Integer
-Description=Space to the right
-
-[SkinInputBar/CursorColor]
-Type=Color
-Description=Color of Cursor
-
 [SkinInputBar/BackArrow]
 Type=String
 Description=Prev Page Icon
 
 [SkinInputBar/ForwardArrow]
 Type=String
+Description=Next Page Icon
+
+[SkinInputBar/BackArrowX]
+Type=Integer
+Description=Prev Page Icon
+
+[SkinInputBar/BackArrowY]
+Type=Integer
+Description=Next Page Icon
+
+[SkinInputBar/ForwardArrowX]
+Type=Integer
+Description=Prev Page Icon
+
+[SkinInputBar/ForwardArrowY]
+Type=Integer
 Description=Next Page Icon
 
 [SkinTrayIcon/Active]
@@ -156,22 +158,6 @@ Description=Inctive Tray Icon
 [SkinMenu/BackImg]
 Type=String
 Description=Background Image
-
-[SkinMenu/ResizeHorizontal]
-Type=Enum
-EnumCount=2
-Enum0=Copy
-Enum1=Resize
-Description=Background Resize Rule on Horizontal Direction
-DefaultValue=Resize
-
-[SkinMenu/ResizeVertical]
-Type=Enum
-EnumCount=2
-Enum0=Copy
-Enum1=Resize
-Description=Background Resize Rule on Vertical Direction
-DefaultValue=Resize
 
 [SkinMenu/MarginTop]
 Type=Integer

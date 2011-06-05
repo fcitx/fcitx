@@ -32,15 +32,16 @@
 #include <X11/Xlib.h>
 #include <cairo.h>
 #include <fcitx-config/fcitx-config.h>
+#include "classicui.h"
 
 struct FcitxSkin;
 struct FcitxClassicUI;
 
-typedef enum _HIDE_MAINWINDOW {
-    HM_SHOW = 0,
-    HM_AUTO = 1,
-    HM_HIDE = 2
-} HIDE_MAINWINDOW;
+typedef struct FcitxClassicUIStatus {
+    MouseE mouse;
+    int x, y;
+    int w, h;
+} FcitxClassicUIStatus;
 
 typedef struct MainWindow
 {
@@ -50,12 +51,10 @@ typedef struct MainWindow
     cairo_surface_t* cs_main_bar;
     GC main_win_gc;
     boolean bMainWindowHidden;
+    FcitxClassicUIStatus logostat;
+    FcitxClassicUIStatus imiconstat;
     struct FcitxSkin* skin;
     
-    cairo_surface_t* bar;
-    cairo_surface_t* logo;
-    cairo_surface_t* english;
-    cairo_surface_t* otherim;
     struct FcitxClassicUI* owner;
 } MainWindow;
 
@@ -63,5 +62,7 @@ MainWindow* CreateMainWindow (struct FcitxClassicUI* classicui);
 void CloseMainWindow(MainWindow *mainWindow);
 void DestroyMainWindow(MainWindow* mainWindow);
 void DrawMainWindow (MainWindow* mainWindow);
+void ShowMainWindow (MainWindow* mainWindow);
+boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other);
 
 #endif

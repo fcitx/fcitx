@@ -219,10 +219,8 @@ void MoveInputWindow(FcitxInstance* instance)
         instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
 
-void UpdateStatus(FcitxInstance* instance, const char* name)
+FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
 {
-    FcitxLog(DEBUG, "Update Status for %s", name);
-    
     UT_array* uistats = &instance->uistats;
     FcitxUIStatus *status;
     for ( status = (FcitxUIStatus *) utarray_front(uistats);
@@ -230,21 +228,33 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
           status = (FcitxUIStatus *) utarray_next(uistats, status))
          if (strcmp(status->name, name) == 0)
              break;
+   return status;
+}
+
+void UpdateStatus(FcitxInstance* instance, const char* name)
+{
+    FcitxLog(DEBUG, "Update Status for %s", name);
+    
+    FcitxUIStatus *status = GetUIStatus(instance, name);
     
     if (status != NULL)
     {
-        status->toggleStatus();
+        status->toggleStatus(status->arg);
         if (instance->ui && instance->ui->ui->UpdateStatus)
             instance->ui->ui->UpdateStatus(instance->ui->addonInstance ,status);
     }
 }
 
-void RegisterStatus(FcitxInstance* instance, const char* name, void (*toggleStatus)(), boolean (*getStatus)())
+void RegisterStatus(FcitxInstance* instance, void* arg, const char* name, void (*toggleStatus)(), boolean (*getStatus)())
 {
     FcitxUIStatus status;
-    status.name = strdup(name);
+    if (strlen(name) > MAX_STATUS_NAME)
+        return;
+    memset(&status, 0 , sizeof(FcitxUIStatus));
+    strncpy(status.name, name, MAX_STATUS_NAME);
     status.getCurrentStatus = getStatus;
     status.toggleStatus = toggleStatus;
+    status.arg = arg;
     UT_array* uistats = &instance->uistats;
     
     utarray_push_back(uistats, &status);
@@ -258,4 +268,22 @@ void OnInputFocus(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputFocus)
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
+}
+
+void OnInputUnFocus(struct FcitxInstance* instance)
+{
+    if (instance->ui && instance->ui->ui->OnInputUnFocus)
+        instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
+}
+
+void OnTriggerOn(FcitxInstance* instance)
+{
+    if (instance->ui && instance->ui->ui->OnTriggerOn)
+        instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
+}
+
+void OnTriggerOff(FcitxInstance* instance)
+{
+    if (instance->ui && instance->ui->ui->OnTriggerOff)
+        instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
 }

@@ -42,6 +42,11 @@ Type=Boolean
 DefaultValue=True
 Description=Show Hint Window while ENV is not correctly configured.
 
+[ClassicUI/VerticalList]
+Type=Boolean
+DefaultValue=False
+Description=Show Hint Window while ENV is not correctly configured.
+
 [ClassicUI/SkinType]
 Type=String
 DefaultValue=default

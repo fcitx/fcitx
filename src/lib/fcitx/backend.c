@@ -71,7 +71,7 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
     rec->backendid = backendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    rec->state = IS_ACTIVE;
+    rec->state = IS_CLOSED;
     
     backend->CreateIC((*pbackend)->addonInstance, rec, priv);
     
@@ -134,6 +134,7 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     if (pbackend == NULL)
         return;
     FcitxBackend* backend = (*pbackend)->backend;
+    ic->state = IS_CLOSED;
     backend->CloseIM((*pbackend)->addonInstance, ic);
     CloseInputWindow(instance);
 }
@@ -157,7 +158,10 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
 
 IME_STATE GetCurrentState(FcitxInstance* instance)
 {
-    return instance->CurrentIC->state;
+    if (instance->CurrentIC)
+        return instance->CurrentIC->state;
+    else
+        return IS_CLOSED;
 }
 
 void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)

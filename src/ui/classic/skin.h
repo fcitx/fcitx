@@ -32,18 +32,20 @@
 
 #define SIZEX 800
 #define SIZEY 200
+#include <fcitx-config/uthash.h>
 #include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
-#include "InputWindow.h"
-#include <fcitx/ui.h>
-#include "MainWindow.h"
+#include <fcitx-config/fcitx-config.h>
 
-typedef enum
+struct XlibMenu;
+struct InputWindow;
+struct Messages;
+
+typedef struct SkinImage
 {
-    R_COPY = 0,
-    R_RESIZE = 1,
-    R_FIX = 2
-} RESIZERULE;
+    char *name;
+    cairo_surface_t *image;
+    UT_hash_handle hh;
+} SkinImage;
 
 typedef struct 
 {
@@ -64,8 +66,6 @@ typedef struct
 typedef struct
 {
     char* backImg;
-    RESIZERULE resizeV;
-    RESIZERULE resizeH;
     int marginTop;
     int marginBottom;
     int marginLeft;
@@ -83,29 +83,28 @@ typedef struct
     char* logo;
     char* eng;
     char* active;
-    char* placement;
-    RESIZERULE resize;
-    int    resizePos;
-    int resizeWidth;
+    int marginTop;
+    int marginBottom;
+    int marginLeft;
+    int marginRight;
 } SkinMainBar;
 
 typedef struct 
 {    
     char* backImg;
-    RESIZERULE resize;
-    int    resizePos;
-    int resizeWidth;
-    int inputPos;
-    int outputPos;
-    int layoutLeft;
-    int layoutRight;
     ConfigColor cursorColor;
+    int marginTop;
+    int marginBottom;
+    int marginLeft;
+    int marginRight;
     char* backArrow;
     char* forwardArrow;
     int iBackArrowX;
     int iBackArrowY;
     int iForwardArrowX;
     int iForwardArrowY;
+    int iInputPos;
+    int iOutputPos;
 } SkinInputBar;
 
 
@@ -146,20 +145,25 @@ typedef struct FcitxSkin
     SkinKeyboard skinKeyboard;
     
     char** skinType;
-    cairo_surface_t* keyBoard;
-    cairo_surface_t* menuBack;
-    cairo_surface_t* trayActive;
-    cairo_surface_t* trayInactive;
+    
+    SkinImage* imageTable;
 } FcitxSkin;
 
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
-void LoadMainBarImage(MainWindow* mainWindow, FcitxSkin* sc);
-void LoadInputBarImage(InputWindow* inputWindow, FcitxSkin* sc);
-void DrawImage(cairo_t **c, cairo_surface_t * png, int x, int y, MouseE mouse);
-void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Messages *msgdown ,unsigned int * iwidth);
-int LoadImage(const char* img, const char* skinType, cairo_surface_t** png, boolean fallback);
-void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font);
-
+void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
+void DrawInputBar(FcitxSkin* sc, struct InputWindow* inputWindow, struct Messages * msgup, struct Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
+SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
+void LoadInputMessage(FcitxSkin* sc, struct InputWindow* inputWindow, const char* font);
+void DrawMenuBackground(FcitxSkin* sc, struct XlibMenu * menu);
+void DrawResizableBackground(cairo_t *c,
+                             cairo_surface_t *background,
+                             int height,
+                             int width,
+                             int marginLeft,
+                             int marginTop,
+                             int marginRight,
+                             int marginBottom
+                            );
 #define fcitx_cairo_set_color(c, color) cairo_set_source_rgb((c), (color)->r, (color)->g, (color)->b)
 
 CONFIG_BINDING_DECLARE(FcitxSkin);

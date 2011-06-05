@@ -30,12 +30,18 @@
 #endif
 
 #include "fcitx-config/fcitx-config.h"
-#include "InputWindow.h"
-#include "MainWindow.h"
-#include "MessageWindow.h"
-#include "AboutWindow.h"
-#include "MenuWindow.h"
-#include "TrayWindow.h"
+#include "skin.h"
+#include <fcitx-utils/utarray.h>
+
+struct MainWindow;
+struct AboutWindow;
+struct FcitxClassicUIStatus;
+
+typedef enum _HIDE_MAINWINDOW {
+    HM_SHOW = 0,
+    HM_AUTO = 1,
+    HM_HIDE = 2
+} HIDE_MAINWINDOW;
 
 /**
  * @brief Config and Global State for Classic UI
@@ -51,14 +57,14 @@ typedef struct FcitxClassicUI {
     Atom typeDialogAtom;
     Atom compManagerAtom;
     Window compManager;
-    InputWindow* inputWindow;
-    MainWindow* mainWindow;
-    MessageWindow* messageWindow;
-    TrayWindow* trayWindow;
-    XlibMenu* menu;
-    AboutWindow* aboutWindow;
+    struct InputWindow* inputWindow;
+    struct MainWindow* mainWindow;
+    struct MessageWindow* messageWindow;
+    struct TrayWindow* trayWindow;
+    struct XlibMenu* menu;
+    struct AboutWindow* aboutWindow;
     
-    struct FcitxSkin skin;
+    FcitxSkin skin;
     struct FcitxInstance *owner;
     
     char* font;
@@ -67,6 +73,7 @@ typedef struct FcitxClassicUI {
     boolean bUseTrayIcon;
     boolean bUseTrayIcon_;
     HIDE_MAINWINDOW hideMainWindow;
+    boolean bVerticalList;
     boolean bHintWindow;
     char* skinType;
     int iMainWindowOffsetX;
@@ -124,6 +131,8 @@ int FontHeightWithContextReal(cairo_t* c);
 
 #endif
 
+int StringWidth(const char *str, const char *font, int fontSize);
+void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,  int y, ConfigColor * color);
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
 void
 InitWindowAttribute(Display* dpy, int iScreen, Visual ** vs, Colormap * cmap,
@@ -132,10 +141,12 @@ InitWindowAttribute(Display* dpy, int iScreen, Visual ** vs, Colormap * cmap,
 void InitComposite(FcitxClassicUI* classicui);
 Visual * FindARGBVisual (FcitxClassicUI* classicui);
 Bool MouseClick(int *x, int *y, Display* dpy, Window window);
-Bool SetMouseStatus();
-boolean IsInRspArea(int x0, int y0, cairo_surface_t* surface);
+boolean IsInRspArea(int x0, int y0, struct FcitxClassicUIStatus* status);
 boolean IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
 void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
+void ActivateWindow(Display *dpy, int iScreen, Window window);
+
+#define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)
 
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif

@@ -15,6 +15,7 @@ CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseTray", bUseTrayIcon_, FilterC
 CONFIG_BINDING_REGISTER("ClassicUI", "ShowHintWindow", bHintWindow);
 CONFIG_BINDING_REGISTER("ClassicUI", "SkinType", skinType);
 CONFIG_BINDING_REGISTER("ClassicUI", "MainWindowHideMode", hideMainWindow);
+CONFIG_BINDING_REGISTER("ClassicUI", "VerticalList", bVerticalList);
 CONFIG_BINDING_END()
 
 void FilterCopyUseTray(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg) {

@@ -54,8 +54,6 @@ static INPUT_RETURN_VALUE QuickPhraseGetCandWords ();
 static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
 static void ShowQuickPhraseMessage(QuickPhraseState *qpstate);
 
-#define MIN(a,b) ((a) < (b)?(a) : (b))
-
 FCITX_EXPORT_API
 FcitxModule module =
 {

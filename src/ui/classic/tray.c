@@ -35,8 +35,9 @@
 #include "fcitx/fcitx.h"
 #include "tray.h"
 #include "TrayWindow.h"
-#include "tools.h"
 #include "fcitx-utils/cutils.h"
+#include <libintl.h>
+#include "classicui.h"
 
 #define MAX_SUPPORTED_XEMBED_VERSION 1
 
@@ -60,8 +61,6 @@
 
 static int iTrappedErrorCode = 0;
 static int (*hOldErrorHandler) (Display *d, XErrorEvent *e);
-
-extern int iScreen;
 
 /* static void tray_map_window (Display* dpy, Window win); */
 
@@ -100,7 +99,7 @@ InitTray(Display* dpy, TrayWindow* tray)
     memset(tray, 0, sizeof(TrayWindow));
 
     atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
-    atom_names[0][17] += iScreen;
+    atom_names[0][17] += tray->owner->iScreen;
 
     XInternAtoms (dpy, atom_names, 5, False, tray->atoms);
     tray->size = 22;
@@ -143,7 +142,7 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
     else
     {
         tray->bTrayMapped = False;
-        DestroyTrayWindow();
+        ReleaseTrayWindow(tray);
     }
 
     return 0;

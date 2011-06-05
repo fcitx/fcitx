@@ -36,12 +36,7 @@ void Init (void)
 
 int FcitxXIOErrorHandler (Display *d)
 {
-    FILE *fp;
-    fp = GetXDGFileUser("crash.log","wt" , NULL);
-    if ( fp ) {
-        fprintf(fp, "%s: X IO error.\n", DisplayString(d));
-        fclose(fp);
-    }
+    /* Do not log, because this is likely to happen while log out */
     
     if (oldXIOErrorHandler)
         oldXIOErrorHandler(d);

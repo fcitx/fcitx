@@ -77,6 +77,7 @@ Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     {
         CloseInputWindow(xim->owner);
     }
+    OnInputUnFocus(xim->owner);
 
     return True;
 }
@@ -119,6 +120,7 @@ Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_
 
     SetCurrentIC(xim->owner, ic);
     EnableIM(xim->owner, false);
+    OnTriggerOn(xim->owner);
     return True;
 }
 

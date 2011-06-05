@@ -1,6 +1,4 @@
 /***************************************************************************
- *   Copyright (C) 2002~2010 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
  *   Copyright (C) 2010~2010 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
@@ -20,42 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "fcitx/fcitx.h"
+#ifndef _FCITX_DBUS_H
+#define _FCITX_DBUS_H
+#include <dbus/dbus.h>
 
-#ifndef _TRAY_WINDOW_H
-#define _TRAY_WINDOW_H
+#define FCITX_DBUS_NAME "fcitx-dbus"
+#define FCITX_DBUS_ADDXEVENTHANDLER 0
+#define FCITX_DBUS_ADDXEVENTHANDLER_RETURNTYPE void
+#define FCITX_DBUS_REMOVEXEVENTHANDLER 1
+#define FCITX_DBUS_REMOVEXEVENTHANDLER_RETURNTYPE void
 
-#include <X11/Xlib.h>
-#include <string.h>
-#include <cairo.h>
-#include <cairo-xlib.h>
-#include <X11/Xutil.h>
-#include <fcitx-config/fcitx-config.h>
-#include <X11/Xdefs.h>
+typedef struct FcitxDBusEventHandler {
+    boolean (*eventHandler)(void* instance, DBusMessage * event);
+    void* instance;
+} FcitxDBusEventHandler;
 
-#define INACTIVE_ICON 0
-#define ACTIVE_ICON   1
-struct FcitxClassicUI;
-
-typedef struct TrayWindow {
-    Window window;
-
-    XImage* icon[2];
-    Pixmap picon[2];
-    GC gc;
-    boolean bTrayMapped;
-    XVisualInfo visual;
-    Atom atoms[6];
-
-    cairo_surface_t *cs;
-    int size;
-    struct FcitxClassicUI* owner;
-} TrayWindow;
-
-TrayWindow* CreateTrayWindow();
-void DrawTrayWindow(TrayWindow* trayWindow, int f_state, int x, int y, int w, int h);
-void DeInitTrayWindow(TrayWindow *f_tray);
-void RedrawTrayWindow(TrayWindow* trayWindow);
-void TrayEventHandler(void *instance, XEvent* event);
-void ReleaseTrayWindow(TrayWindow* trayWindow);
-#endif
+#endif // _FCITX_DBUS_H

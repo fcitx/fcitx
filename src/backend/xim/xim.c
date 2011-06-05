@@ -382,6 +382,7 @@ void XimCloseIM(void* arg, FcitxInputContext* ic)
     call_data.connect_id = ximic->connect_id;
     call_data.icid = ximic->id;
     IMPreeditEnd(xim->ims, (XPointer) &call_data);
+    OnTriggerOff(xim->owner);
 }
 
 void XimCommitString(void* arg, FcitxInputContext* ic, char* str)

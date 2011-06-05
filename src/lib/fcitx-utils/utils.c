@@ -174,7 +174,7 @@ void InitAsDaemon()
     umask(0);
 }
 
-UT_array* SplitString(const char *str)
+UT_array* SplitString(const char *str, char delm)
 {
     UT_array* array;
     utarray_new(array, &ut_str_icd);
@@ -183,7 +183,7 @@ UT_array* SplitString(const char *str)
     int i = 0, last = 0;
     for (i =0 ; i <= len ; i++)
     {
-        if (bakstr[i] == ',' || bakstr[i] == '\0')
+        if (bakstr[i] == delm || bakstr[i] == '\0')
         {
             bakstr[i] = '\0';
             char *p = &bakstr[last];
