@@ -419,7 +419,7 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
     forwardEvent.icid = GetXimIC(ic)->id;
     forwardEvent.major_code = XIM_FORWARD_EVENT;
     forwardEvent.sync_bit = 0;
-    forwardEvent.serial_number = 0L;
+    forwardEvent.serial_number = xim->currentSerialNumber;
     
 
     xEvent.xkey.type = (event == FCITX_PRESS_KEY)?KeyPress:KeyRelease;

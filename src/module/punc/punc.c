@@ -45,6 +45,10 @@
 static void* PuncCreate(FcitxInstance* instance);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);
+static void TogglePuncState(void *arg);
+static boolean GetPuncState(void *arg);
+static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
+
 
 typedef struct FcitxPuncState {
     boolean bUseWidePunc;
@@ -75,7 +79,14 @@ void* PuncCreate(FcitxInstance* instance)
     puncState->bUseWidePunc = true;
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
+
+    HotkeyHook hotkey;
+    hotkey.hotkey = instance->config.hkPunc;
+    hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
+    hotkey.arg = TogglePuncStateWithHotkey;
     
+    RegisterStatus(instance, puncState, "punc",  TogglePuncState, GetPuncState);
+
     AddFunction(puncaddon, PuncGetPunc);
     return puncState;
 }
@@ -98,7 +109,17 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         char *pPunc = NULL;
 
         char *pstr = NULL;
-        if (state == KEY_NONE)
+        if (puncState->bLastIsNumber && instance->config.bEngPuncAfterNumber
+            && (IsHotKey(sym, state, FCITX_PERIOD) 
+            || IsHotKey(sym, state, FCITX_SEMICOLON) 
+            || IsHotKey(sym, state, FCITX_COMMA)))
+        {
+            puncState->cLastIsAutoConvert = sym;
+            puncState->bLastIsNumber = False;
+            *retVal = IRV_DONOT_PROCESS_CLEAN;
+            return true;
+        }
+        if (IsHotKeySimple(sym, state))
             pPunc = GetPunc(puncState, sym);
 
         /* 
@@ -125,6 +146,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
             if (pPunc)
                 CommitString(puncState->owner, GetCurrentIC(instance), pPunc);
 
+            puncState->cLastIsAutoConvert = 0;
             *retVal = IRV_DO_NOTHING;
             return true;
         } else if (IsHotKeySimple(sym, state)) {
@@ -273,4 +295,24 @@ char           *GetPunc (FcitxPuncState* puncState, int iKey)
     }
 
     return (char *) NULL;
+}
+
+void TogglePuncState(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState* )arg;
+    puncState->bUseWidePunc = !puncState->bUseWidePunc;
+
+}
+
+INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState* )arg;
+    UpdateStatus(puncState->owner, FCITX_PUNC_NAME);
+    return IRV_DO_NOTHING;
+}
+
+boolean GetPuncState(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    return puncState->bUseWidePunc;
 }

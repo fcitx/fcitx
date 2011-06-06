@@ -195,9 +195,11 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 
+    xim->currentSerialNumber = call_data->serial_number;
     ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
                                         kev->time,
                                         sym, state);
+    xim->currentSerialNumber = 0L;
 }
 
 void XIMClose(FcitxXimBackend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)

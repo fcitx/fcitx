@@ -409,16 +409,6 @@ INPUT_RETURN_VALUE ProcessKey(
             }
 
             if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                //调用输入法模块
-                /* TODO: use module
-                if (fcitxProfile.bCorner && (IsHotKeySimple(sym, state))) {
-                    //有人报 空格 的全角不对，正确的是0xa1 0xa1
-                    //但查资料却说全角符号总是以0xa3开始。
-                    //由于0xa3 0xa0可能会显示乱码，因此采用0xa1 0xa1的方式
-                    sprintf(strStringGet, "%s", sCornerTrans[sym - 32]);
-                    retVal = IRV_GET_CANDWORDS;
-                } else */
-
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
                 if (!input->bCursorAuto)
                     input->iCursorPos = input->iCodeInputCount;
@@ -510,6 +500,8 @@ INPUT_RETURN_VALUE ProcessKey(
             break;
         case IRV_GET_CANDWORDS:
             CommitString(instance, GetCurrentIC(instance), input->strStringGet);
+            SetMessageCount(GetMessageUp(instance), 0);
+            SetMessageCount(GetMessageDown(instance), 0);
             if (fc->bPhraseTips && currentIM->PhraseTips)
                 DoPhraseTips(instance);
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));
@@ -626,8 +618,6 @@ void ResetInput(FcitxInstance* instance)
         currentIM->ResetIM(currentIM->klass);
     
     ResetInputHook();
-    
-    CloseInputWindow(instance);
 }
 
 void DoPhraseTips(FcitxInstance* instance)

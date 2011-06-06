@@ -153,6 +153,7 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     } else {
         ic->state = IS_ENG;
         ResetInput(instance);
+        CloseInputWindow(instance);
     }
 }
 

@@ -84,7 +84,7 @@ typedef struct FcitxConfig
     HOTKEYS hkHideMainWindow[2];
     HOTKEYS hkVK[2];
     HOTKEYS hkLegend[2];
-    HOTKEYS hkCorner[2];
+    HOTKEYS hkFullWidthChar[2];
     HOTKEYS hkPunc[2];
     HOTKEYS hkPrevPage[2];
     HOTKEYS hkNextPage[2];

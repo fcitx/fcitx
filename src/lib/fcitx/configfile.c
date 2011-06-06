@@ -58,7 +58,7 @@ CONFIG_BINDING_REGISTER("Hotkey", "FollowCursorKey", hkTrack);
 CONFIG_BINDING_REGISTER("Hotkey", "HideMainWindowKey", hkHideMainWindow);
 CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK);
 CONFIG_BINDING_REGISTER("Hotkey", "LegendSwitchKey", hkLegend);
-CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkCorner);
+CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkFullWidthChar);
 CONFIG_BINDING_REGISTER("Hotkey", "PuncSwitchKey", hkPunc);
 CONFIG_BINDING_REGISTER("Hotkey", "PrevPageKey", hkPrevPage);
 CONFIG_BINDING_REGISTER("Hotkey", "NextPageKey", hkNextPage);
