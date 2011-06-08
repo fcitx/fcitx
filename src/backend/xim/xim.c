@@ -419,12 +419,11 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
     forwardEvent.icid = GetXimIC(ic)->id;
     forwardEvent.major_code = XIM_FORWARD_EVENT;
     forwardEvent.sync_bit = 0;
-    forwardEvent.serial_number = xim->currentSerialNumber;
-    
+    forwardEvent.serial_number = xim->currentSerialNumberCallData;    
 
     xEvent.xkey.type = (event == FCITX_PRESS_KEY)?KeyPress:KeyRelease;
     xEvent.xkey.display = xim->display;
-    xEvent.xkey.serial = 0L;
+    xEvent.xkey.serial = xim->currentSerialNumberKey;
     xEvent.xkey.send_event = False;
     xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
     xEvent.xkey.same_screen = False;
@@ -438,7 +437,7 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
         xEvent.xkey.window = GetXimIC(ic)->client_win;
 
     xEvent.xkey.keycode = XKeysymToKeycode(xim->display, sym);
-    memcpy(&(forwardEvent.event), &xEvent, sizeof(forwardEvent.event));
+    memcpy(&(forwardEvent.event), &xEvent, sizeof(XEvent));
     IMForwardEvent(xim->ims, (XPointer) (&forwardEvent));
 }
 

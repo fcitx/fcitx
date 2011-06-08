@@ -52,10 +52,9 @@ typedef struct TrayWindow {
     struct FcitxClassicUI* owner;
 } TrayWindow;
 
-TrayWindow* CreateTrayWindow();
+TrayWindow* CreateTrayWindow(struct FcitxClassicUI *classicui);
 void DrawTrayWindow(TrayWindow* trayWindow, int f_state, int x, int y, int w, int h);
 void DeInitTrayWindow(TrayWindow *f_tray);
 void RedrawTrayWindow(TrayWindow* trayWindow);
-void TrayEventHandler(void *instance, XEvent* event);
 void ReleaseTrayWindow(TrayWindow* trayWindow);
 #endif

@@ -41,6 +41,7 @@
 #include "fcitx/module.h"
 #include <fcitx/instance.h>
 #include <fcitx/ime-internal.h>
+#include <libintl.h>
 
 static boolean MainWindowEventHandler(void *instance, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
@@ -122,9 +123,7 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
 
 void DisplayMainWindow (Display* dpy, MainWindow* mainWindow)
 {
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("DISPLAY MainWindow"));
-#endif
 
     if (!mainWindow->bMainWindowHidden)
         XMapRaised (dpy, mainWindow->window);
@@ -139,9 +138,7 @@ void DrawMainWindow (MainWindow* mainWindow)
     if ( mainWindow->bMainWindowHidden )
         return;
 
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("DRAW MainWindow"));
-#endif
 
     c=cairo_create(mainWindow->cs_main_bar);
     //把背景清空

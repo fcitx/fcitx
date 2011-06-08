@@ -266,9 +266,7 @@ boolean LoadTableDict (FcitxTableState *tbl)
     int             iRecordIndex;
 
     //读入码表
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("Loading Table Dict"));
-#endif
 
     TABLE* table = (TABLE*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
@@ -404,9 +402,7 @@ boolean LoadTableDict (FcitxTableState *tbl)
     tbl->recordHead->prev = tbl->currentRecord;
 
     fclose (fpDict);
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("Load Table Dict OK"));
-#endif
 
     //读取相应的特殊符号表
     fpDict = GetXDGFileTable(table->strSymbolFile, "rt", NULL, False);
@@ -434,9 +430,7 @@ boolean LoadTableDict (FcitxTableState *tbl)
         tbl->autoPhrase = (AUTOPHRASE *) malloc (sizeof (AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
         //读取上次保存的自动词组信息
-#ifdef _DEBUG
         FcitxLog(DEBUG, _("Loading Autophrase."));
-#endif
 
         strcpy (strPath, table->strName);
         strcat (strPath, "_LastAutoPhrase.tmp");
@@ -671,9 +665,7 @@ void SaveTableDict (FcitxTableState *tbl)
     rename (strPathTemp, pstr);
     free(pstr);
 
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("Rename OK"));
-#endif
 
     tbl->iTableChanged = 0;
 

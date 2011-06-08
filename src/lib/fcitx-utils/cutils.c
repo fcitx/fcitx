@@ -83,7 +83,7 @@ char *trim(char *s)
 FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
-#ifdef _DEBUG
+#ifndef _DEBUG
     if (e == DEBUG)
         return;
 #endif

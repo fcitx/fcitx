@@ -38,6 +38,7 @@
 #include <fcitx/ime-internal.h>
 #include <fcitx/instance.h>
 #include "MainWindow.h"
+#include <libintl.h>
 
 static boolean InputWindowEventHandler(void *instance, XEvent* event);
 
@@ -158,9 +159,7 @@ boolean InputWindowEventHandler(void *instance, XEvent* event)
 
 void DisplayInputWindow (InputWindow* inputWindow)
 {
-#ifdef _DEBUG
     FcitxLog(DEBUG, _("DISPLAY InputWindow"));
-#endif
     MoveInputWindowInternal(inputWindow);
     XMapRaised (inputWindow->dpy, inputWindow->window);
 }

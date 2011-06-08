@@ -35,8 +35,12 @@
 #include "tray.h"
 #include "skin.h"
 #include "classicui.h"
+#include "module/x11/x11stuff.h"
 #include <fcitx-utils/cutils.h>
 #include <fcitx/backend.h>
+#include <fcitx/module.h>
+
+static void TrayEventHandler(void *instance, XEvent* event);
 
 void InitTrayWindow(TrayWindow *trayWindow)
 {
@@ -91,11 +95,17 @@ void InitTrayWindow(TrayWindow *trayWindow)
                   | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
 
     SetWindowProperty(classicui, trayWindow->window, FCITX_WINDOW_DOCK, strWindowName);
+    
+    TrayFindDock(dpy, trayWindow);
 }
 
 TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui) {
     TrayWindow *trayWindow = fcitx_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = TrayEventHandler;
+    arg.args[1] = trayWindow;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
     InitTrayWindow(trayWindow);
     return trayWindow;
 }

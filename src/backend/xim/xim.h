@@ -44,7 +44,8 @@ typedef struct FcitxXimBackend
     struct FcitxBackend* backend;
     struct FcitxInstance* owner;
     int backendid;
-    CARD16 currentSerialNumber;
+    CARD16 currentSerialNumberCallData;
+    long unsigned int currentSerialNumberKey;
 } FcitxXimBackend;
 
 #endif

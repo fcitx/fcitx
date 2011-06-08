@@ -11,7 +11,7 @@ CONFIG_BINDING_REGISTER("ClassicUI", "MenuFont", menuFont);
 #ifndef _ENABLE_PANGO
 CONFIG_BINDING_REGISTER("ClassicUI", "FontLocale", strUserLocale);
 #endif
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "UseTray", bUseTrayIcon_, FilterCopyUseTray);
+CONFIG_BINDING_REGISTER_WITH_FILTER("ClassicUI", "UseTray", bUseTrayIcon_, FilterCopyUseTray);
 CONFIG_BINDING_REGISTER("ClassicUI", "ShowHintWindow", bHintWindow);
 CONFIG_BINDING_REGISTER("ClassicUI", "SkinType", skinType);
 CONFIG_BINDING_REGISTER("ClassicUI", "MainWindowHideMode", hideMainWindow);

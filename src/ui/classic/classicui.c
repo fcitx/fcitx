@@ -39,6 +39,7 @@
 #include <fcitx/backend.h>
 #include "InputWindow.h"
 #include "MainWindow.h"
+#include "TrayWindow.h"
 
 struct FcitxSkin;
 
@@ -99,6 +100,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
+    classicui->trayWindow = CreateTrayWindow(classicui);
     
     XUnlockDisplay(classicui->dpy);
     return classicui;

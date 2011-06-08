@@ -64,6 +64,10 @@ endif()
 
 set(HAVE_CONFIG_H 1)
 
+if(${ENABLE_DEBUG})
+    set(_DEBUG)
+endif()
+
 set(package     fcitx4)
 set(prefix      ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${CMAKE_INSTALL_PREFIX})

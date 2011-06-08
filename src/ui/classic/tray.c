@@ -96,7 +96,6 @@ InitTray(Display* dpy, TrayWindow* tray)
         "_NET_SYSTEM_TRAY_ORIENTATION",
         "_NET_SYSTEM_TRAY_VISUAL"
     };
-    memset(tray, 0, sizeof(TrayWindow));
 
     atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
     atom_names[0][17] += tray->owner->iScreen;
