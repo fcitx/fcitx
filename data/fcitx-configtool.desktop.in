@@ -8,3 +8,6 @@ MimeType=
 StartupNotify=true
 Type=Application
 Categories=Settings;
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false
+StartupNotify=false

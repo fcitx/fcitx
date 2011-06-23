@@ -40,6 +40,9 @@
 #include "InputWindow.h"
 #include "MainWindow.h"
 #include "TrayWindow.h"
+#include "MenuWindow.h"
+#include "AboutWindow.h"
+#include "MessageWindow.h"
 
 struct FcitxSkin;
 
@@ -54,6 +57,7 @@ static void ClassicUIOnInputFocus(void *arg);
 static void ClassicUIOnInputUnFocus(void *arg);
 static void ClassicUIOnTriggerOn(void *arg);
 static void ClassicUiOnTriggerOff(void *arg);
+static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static ConfigFileDesc* GetClassicUIDesc();
 
 static void LoadClassicUIConfig();
@@ -71,7 +75,8 @@ FcitxUI ui = {
     ClassicUIOnInputFocus,
     ClassicUIOnInputUnFocus,
     ClassicUIOnTriggerOn,
-    ClassicUiOnTriggerOff
+    ClassicUiOnTriggerOff,
+    ClassicUIDisplayMessage
 };
 
 void* ClassicUICreate(FcitxInstance* instance)
@@ -101,6 +106,9 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
     classicui->trayWindow = CreateTrayWindow(classicui);
+    classicui->aboutWindow = CreateAboutWindow(classicui);
+    classicui->messageWindow = CreateMessageWindow(classicui);
+    classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
     
     XUnlockDisplay(classicui->dpy);
     return classicui;
@@ -191,6 +199,7 @@ static void ClassicUIOnInputFocus(void *arg)
         DrawMainWindow(classicui->mainWindow);
         ShowMainWindow(classicui->mainWindow);
     }
+    DrawTrayWindow(classicui->trayWindow);
 }
 
 static void ClassicUIOnInputUnFocus(void *arg)
@@ -202,6 +211,7 @@ static void ClassicUIOnInputUnFocus(void *arg)
         DrawMainWindow(classicui->mainWindow);
         ShowMainWindow(classicui->mainWindow);
     }
+    DrawTrayWindow(classicui->trayWindow);
 }
 
 int
@@ -590,7 +600,6 @@ MouseClick(int *x, int *y, Display* dpy, Window window)
 
 void ClassicUIOnTriggerOn(void* arg)
 {
-
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxInstance *instance = classicui->owner;
     if (GetCurrentState(instance) == IS_ACTIVE)
@@ -598,10 +607,20 @@ void ClassicUIOnTriggerOn(void* arg)
         DrawMainWindow(classicui->mainWindow);
         ShowMainWindow(classicui->mainWindow);
     }
+    DrawTrayWindow(classicui->trayWindow);
 }
 
 void ClassicUiOnTriggerOff(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     CloseMainWindow(classicui->mainWindow);
+    DrawTrayWindow(classicui->trayWindow);
 }
+
+void ClassicUIDisplayMessage(void* arg, char* title, char** msg, int length)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    XMapRaised(classicui->dpy, classicui->messageWindow->window);
+    DrawMessageWindow(classicui->messageWindow, title, msg, length);    
+}
+

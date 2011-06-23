@@ -91,20 +91,21 @@ void* DBusRun(void* arg)
     DBusConnection *conn = dbusmodule->conn;
 
     for (;;) {
+        FcitxLock(dbusmodule->owner);
         dbus_connection_read_write(conn, 0);
         msg = dbus_connection_pop_message(conn);
         if ( NULL == msg) {
             usleep(16000);
-            continue;
         }
-        FcitxLock(dbusmodule->owner);
-        FcitxDBusEventHandler* handler;
-        for ( handler = (FcitxDBusEventHandler *) utarray_front(&dbusmodule->handlers);
-                handler != NULL;
-                handler = (FcitxDBusEventHandler *) utarray_next(&dbusmodule->handlers, handler))
-            if (handler->eventHandler (handler->instance, msg))
-                break;
-        dbus_message_unref(msg);
+        else {
+            FcitxDBusEventHandler* handler;
+            for ( handler = (FcitxDBusEventHandler *) utarray_front(&dbusmodule->handlers);
+                    handler != NULL;
+                    handler = (FcitxDBusEventHandler *) utarray_next(&dbusmodule->handlers, handler))
+                if (handler->eventHandler (handler->instance, msg))
+                    break;
+            dbus_message_unref(msg);
+        }
         FcitxUnlock(dbusmodule->owner);
     }
     return NULL;

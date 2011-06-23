@@ -152,7 +152,7 @@ void UnloadIM(FcitxAddon* pim)
         im->Destroy(pim->addonInstance);
 }
 
-void FcitxRegsiterIM(FcitxInstance *instance,
+void FcitxRegisterIM(FcitxInstance *instance,
                      void *addonInstance,
                      const char* name,
                      const char* iconName,

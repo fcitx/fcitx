@@ -42,4 +42,6 @@ typedef struct MessageWindow
     struct FcitxClassicUI* owner;
 } MessageWindow;
 
+MessageWindow* CreateMessageWindow (struct FcitxClassicUI * classicui);
+void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length);
 #endif

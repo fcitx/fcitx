@@ -98,7 +98,7 @@ void *PYCreate(FcitxInstance* instance)
     InitPYTable(&pystate->pyconfig);
     LoadPYConfig(&pystate->pyconfig);
     
-    FcitxRegsiterIM(instance,
+    FcitxRegisterIM(instance,
                     pystate,
                     "Pinyin",
                     "pinyin",
@@ -113,7 +113,7 @@ void *PYCreate(FcitxInstance* instance)
                     NULL,
                     pystate->pyconfig.iPinyinPriority
                    );
-    FcitxRegsiterIM(instance,
+    FcitxRegisterIM(instance,
                     pystate,
                     "Shuangpin",
                     "shuangpin",

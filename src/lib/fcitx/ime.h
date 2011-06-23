@@ -148,7 +148,7 @@ struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
 void EnableIM(struct FcitxInstance* instance, boolean keepState);
 void            ResetInput (struct FcitxInstance* instance);
 
-void FcitxRegsiterIM(struct FcitxInstance *instance,
+void FcitxRegisterIM(struct FcitxInstance *instance,
                      void *addonInstance,
                      const char* name,
                      const char* iconName,

@@ -55,7 +55,7 @@ FcitxIMClass ime = {
 void* QWCreate (struct FcitxInstance* instance)
 {
     FcitxQWState* qwstate = fcitx_malloc0(sizeof(FcitxQWState));
-    FcitxRegsiterIM(
+    FcitxRegisterIM(
         instance,
         qwstate,
         "Quwei",

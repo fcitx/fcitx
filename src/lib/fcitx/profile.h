@@ -26,8 +26,6 @@
 typedef struct FcitxProfile
 {
     GenericConfig gconfig;
-    int iMainWindowOffsetX;
-    int iMainWindowOffsetY;
     int iInputWindowOffsetX;
     int iInputWindowOffsetY;
     boolean bTrackCursor;

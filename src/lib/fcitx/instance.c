@@ -20,6 +20,7 @@
 
 #include "instance.h"
 #include <fcitx-utils/cutils.h>
+#include <limits.h>
 #include "ime-internal.h"
 #include "ui.h"
 #include <libintl.h>
@@ -27,6 +28,12 @@
 #include "addon.h"
 #include "module.h"
 #include "backend.h"
+
+
+#define CHECK_ENV(env, value, icase) (!getenv(env) \
+        || (icase ? \
+            (0 != strcmp(getenv(env), (value))) \
+            : (0 != strcasecmp(getenv(env), (value)))))
 
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
@@ -50,10 +57,35 @@ FcitxInstance* CreateFcitxInstance()
     LoadModule(instance);
     LoadAllIM(instance);
     LoadUserInterface(instance);
-    
+
     SwitchIM(instance, instance->iIMIndex);
     
     StartBackend(instance);
+    
+    if (instance->config.bFirstRun)
+    {
+        instance->config.bFirstRun = false;
+        SaveConfig(&instance->config);
+        
+        const char *imname = "fcitx";
+        char strTemp[PATH_MAX];
+        snprintf(strTemp, PATH_MAX, "@im=%s", imname);
+        strTemp[PATH_MAX - 1] = '\0';
+
+        if ((getenv("XMODIFIERS") != NULL && CHECK_ENV("XMODIFIERS", strTemp, true)) ||
+            CHECK_ENV("GTK_IM_MODULE", "xim", false) || CHECK_ENV("QT_IM_MODULE", "xim", false)) {
+            char *msg[7];
+            msg[0] = _("Please check your environment varibles.");
+            msg[1] = _("You may need to set environment varibles below to make fcitx work correctly.");
+            msg[2] = "export XMODIFIERS=\"@im=fcitx\"";
+            msg[3] = "export QT_IM_MODULE=xim";
+            msg[4] = "export GTK_IM_MODULE=xim";
+            msg[5] = _("If you use login manager like gdm or kdm, put those lines in your ~/.xprofile.");
+            msg[6] = _("If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc.");
+
+            DisplayMessage(instance, _("Setting Hint"), msg, 7);
+        }
+    }
 
     return instance;
 }

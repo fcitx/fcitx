@@ -5,6 +5,7 @@ set(fcitx_classic_ui_SOURCES
     classicuiconfig.c
     InputWindow.c
     MainWindow.c
+    MenuWindow.c
     MessageWindow.c
     AboutWindow.c
     TrayWindow.c

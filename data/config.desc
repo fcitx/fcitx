@@ -3,6 +3,11 @@ Type=Integer
 DefaultValue=0
 Description=Seconds sleep before fcitx really start
 
+[Program/FirstRun]
+Type=Boolean
+DefaultValue=True
+Description=It's the first time Fcitx Start.
+
 [Output/HalfPuncAfterNumber]
 Type=Boolean
 DefaultValue=True

@@ -86,7 +86,7 @@ void *TableCreate(FcitxInstance* instance)
         table != NULL;
         table = (TABLE*) utarray_next(tbl->table, table))
     {
-        FcitxRegsiterIM(
+        FcitxRegisterIM(
             instance,
             tbl,
             table->strName,

@@ -61,7 +61,6 @@ typedef struct FcitxClassicUI {
     struct MainWindow* mainWindow;
     struct MessageWindow* messageWindow;
     struct TrayWindow* trayWindow;
-    struct XlibMenu* menu;
     struct AboutWindow* aboutWindow;
     
     FcitxSkin skin;
@@ -74,7 +73,6 @@ typedef struct FcitxClassicUI {
     boolean bUseTrayIcon_;
     HIDE_MAINWINDOW hideMainWindow;
     boolean bVerticalList;
-    boolean bHintWindow;
     char* skinType;
     int iMainWindowOffsetX;
     int iMainWindowOffsetY;
@@ -82,6 +80,7 @@ typedef struct FcitxClassicUI {
     UT_array status;
     Atom pidAtom;
     Atom typeDockAtom;
+    struct XlibMenu* mainMenuWindow;
 } FcitxClassicUI;
 
 typedef enum FcitxXWindowType {

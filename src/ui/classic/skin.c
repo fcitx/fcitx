@@ -589,7 +589,6 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
 
     DestroyMainWindow(classicui->mainWindow);
     DestroyInputWindow(classicui->inputWindow);
-    DestroyMenuWindow();
 
     LoadSkinConfig(&classicui->skin, &classicui->skinType);
 
@@ -598,11 +597,9 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     classicui->mainWindow = CreateMainWindow (classicui);
     classicui->inputWindow = CreateInputWindow (classicui);
 
-    CreateMenuWindow();
-
     DrawMainWindow (classicui->mainWindow);
     DrawInputWindow (classicui->inputWindow);
-    DrawTrayWindow (classicui->trayWindow, INACTIVE_ICON, 0, 0, classicui->trayWindow->size, classicui->trayWindow->size);
+    DrawTrayWindow (classicui->trayWindow);
 }
 
 //图片文件加载函数完成

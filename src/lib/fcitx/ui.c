@@ -33,6 +33,7 @@
 
 FcitxUI dummyUI;
 
+const static UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 
 struct MESSAGE{
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
@@ -280,6 +281,12 @@ void OnTriggerOn(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOn)
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
+}
+
+void DisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)
+{
+    if (instance->ui && instance->ui->ui->DisplayMessage)
+        instance->ui->ui->DisplayMessage(instance->ui->addonInstance, title, msg, length);
 }
 
 void OnTriggerOff(FcitxInstance* instance)

@@ -39,6 +39,7 @@
 #include <fcitx-config/fcitx-config.h>
 
 struct FcitxClassicUI;
+struct FcitxUIMenu;
 
 typedef struct XlibMenu
 {
@@ -56,28 +57,14 @@ typedef struct XlibMenu
     char font[32];
     XColor charcolor;
     XColor charselectcolor;
+    struct FcitxUIMenu *menu;
     struct FcitxClassicUI* owner;
 } XlibMenu;
 
-boolean CreateMenuWindow (void);
-void InitMenuWindowColor (void);
-void DisplayMenuWindow (void);
-void DrawMenuWindow (void);
-void GetMenuSize(XlibMenu* menu);
-
-boolean CreateMenuWindow (void);
-
+XlibMenu* CreateMainMenuWindow(struct FcitxClassicUI *classicui);
 XlibMenu* CreateXlibMenu(struct FcitxClassicUI* classicui);
-void DrawXlibMenu(XlibMenu* menu);
-void DrawDivLine(XlibMenu* menu, int line_y);
-void DisplayText(XlibMenu* menu, int shellindex, int line_y);
-int SelectShellIndex(XlibMenu * Menu, int x, int y, int* offseth);
-void DisplayXlibMenu(XlibMenu* menu);
-void ClearSelectFlag(XlibMenu * Menu);
-void MainMenuEvent(int x,int y);
-void IMMenuEvent(int x,int y);
-void VKMenuEvent(int x,int y);
-void SkinMenuEvent(int x,int y);
-void DestroyMenuWindow();
+void GetMenuSize(XlibMenu * menu);
+void DrawXlibMenu(XlibMenu * menu);
+void DisplayXlibMenu(XlibMenu * menu);
 
 #endif

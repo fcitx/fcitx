@@ -37,11 +37,6 @@ Enum2=Hide
 DefaultValue=Auto
 Description=Main Window Hide Mode
 
-[ClassicUI/ShowHintWindow]
-Type=Boolean
-DefaultValue=True
-Description=Show Hint Window while ENV is not correctly configured.
-
 [ClassicUI/VerticalList]
 Type=Boolean
 DefaultValue=False

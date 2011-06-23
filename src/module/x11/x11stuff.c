@@ -71,10 +71,10 @@ void* X11Run(void* arg)
     XEvent event;
     /* 主循环，即XWindow的消息循环 */
     for (;;) {
+        FcitxLock(x11priv->owner);
         while (XPending (x11priv->dpy) ) {
             XNextEvent (x11priv->dpy, &event);           //等待一个事件发生
 
-            FcitxLock(x11priv->owner);
 
             /* 处理X事件 */
             if (XFilterEvent (&event, None) == False)
@@ -86,8 +86,8 @@ void* X11Run(void* arg)
                     if (handler->eventHandler (handler->instance, &event))
                         break;
             }
-            FcitxUnlock(x11priv->owner);
         }
+        FcitxUnlock(x11priv->owner);
         usleep(16000);
     }
     return NULL;

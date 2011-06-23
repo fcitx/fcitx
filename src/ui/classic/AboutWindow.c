@@ -23,8 +23,10 @@
 #include <X11/Xatom.h>
 #include <cairo/cairo-xlib.h>
 
-#include "fcitx/fcitx.h"
-#include "fcitx-utils/utils.h"
+#include <fcitx/fcitx.h>
+#include <fcitx/module.h>
+#include <fcitx-utils/utils.h>
+#include "module/x11/x11stuff.h"
 
 #include "AboutWindow.h"
 #include "classicui.h"
@@ -38,6 +40,7 @@ char            AboutCopyRight[] = "(c) 2005, Yuking";
 char            strTitle[100];
 
 static void            InitAboutWindowProperty (AboutWindow* aboutWindow);
+static boolean AboutWindowEventHandler(void *arg, XEvent* event);
 
 AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
 {
@@ -62,12 +65,43 @@ AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
 
     aboutWindow->surface = cairo_xlib_surface_create(dpy, aboutWindow->window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
     if (aboutWindow->window == None)
-        return False;
+        return NULL;
 
     InitAboutWindowProperty (aboutWindow);
     XSelectInput (dpy, aboutWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = AboutWindowEventHandler;
+    arg.args[1] = aboutWindow;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
 
     return aboutWindow;
+}
+
+boolean AboutWindowEventHandler(void *arg, XEvent* event)
+{
+    AboutWindow* aboutWindow = (AboutWindow*) arg;
+    if (event->xany.window == aboutWindow->window)
+    {
+        switch (event->type)
+        {
+            case Expose:
+                DrawAboutWindow(aboutWindow);
+                break;
+            case ButtonRelease:
+                {
+                    switch(event->xbutton.button)
+                    {
+                        case Button1:  
+                            XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
+                            break;
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+    return false;
 }
 
 void InitAboutWindowProperty (AboutWindow* aboutWindow)
@@ -90,6 +124,8 @@ void DisplayAboutWindow (AboutWindow* aboutWindow)
     XMapRaised (dpy, aboutWindow->window);
     XMoveWindow (dpy, aboutWindow->window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
 }
+
+
 
 void DrawAboutWindow (AboutWindow* aboutWindow)
 {

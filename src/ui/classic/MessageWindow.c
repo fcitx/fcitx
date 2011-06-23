@@ -29,13 +29,16 @@
 #include <X11/Xatom.h>
 #include <string.h>
 #include "classicui.h"
+#include <fcitx/module.h>
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
+#include "module/x11/x11stuff.h"
 
 
 #define MESSAGE_WINDOW_MARGIN 20
 #define MESSAGE_WINDOW_LINESPACE 2
 static void            InitMessageWindowProperty (MessageWindow* messageWindow);
+static boolean MessageWindowEventHandler(void *arg, XEvent* event);
 
 MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
 {
@@ -60,9 +63,39 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
     InitMessageWindowProperty (messageWindow);
     XSelectInput (dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = MessageWindowEventHandler;
+    arg.args[1] = messageWindow;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    
     return messageWindow;
 }
 
+boolean MessageWindowEventHandler(void *arg, XEvent* event)
+{
+    MessageWindow* messageWindow = (MessageWindow*) arg;
+    if (event->xany.window == messageWindow->window)
+    {
+        switch (event->type)
+        {
+            case Expose:
+                DrawMessageWindow(messageWindow, NULL, NULL, 0);
+                break;
+            case ButtonRelease:
+                {
+                    switch(event->xbutton.button)
+                    {
+                        case Button1:  
+                            XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
+                            break;
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+    return false;
+}
 void InitMessageWindowProperty (MessageWindow *messageWindow)
 {
     FcitxClassicUI* classicui = messageWindow->owner;

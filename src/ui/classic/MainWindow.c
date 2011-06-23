@@ -42,6 +42,8 @@
 #include <fcitx/instance.h>
 #include <fcitx/ime-internal.h>
 #include <libintl.h>
+#include "AboutWindow.h"
+#include "MenuWindow.h"
 
 static boolean MainWindowEventHandler(void *instance, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
@@ -328,7 +330,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
 {
     MainWindow* mainWindow = arg;
     FcitxInstance *instance = mainWindow->owner->owner;
-    FcitxProfile *profile = &instance->profile;
+    FcitxClassicUI *classicui = mainWindow->owner;
     MouseE *mouse;
     
     if (event->xany.window == mainWindow->window)
@@ -371,10 +373,10 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                             if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->logostat)) {
                                 mouse = &mainWindow->logostat.mouse;
                                 
-                                profile->iMainWindowOffsetX = event->xbutton.x;
-                                profile->iMainWindowOffsetY = event->xbutton.y;
+                                classicui->iMainWindowOffsetX = event->xbutton.x;
+                                classicui->iMainWindowOffsetY = event->xbutton.y;
 
-                                if (!MouseClick(&profile->iMainWindowOffsetX, &profile->iMainWindowOffsetY, mainWindow->dpy, mainWindow->window))
+                                if (!MouseClick(&classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY, mainWindow->dpy, mainWindow->window))
                                 {
                                     if (GetCurrentState(instance) == IS_CLOSED) {
                                         EnableIM(instance, false);
@@ -405,6 +407,28 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                                 DrawMainWindow(mainWindow);
                         }
                         break;
+                    case Button3:
+                        {
+                            XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
+                            unsigned int height; int sheight;
+                            GetMenuSize(mainMenuWindow);
+                            GetScreenSize(classicui, NULL, &sheight);
+                            XGetGeometry(classicui->dpy, mainWindow->window, NULL, NULL, NULL, NULL, &height, NULL, NULL);
+
+                            mainMenuWindow->iPosX = classicui->iMainWindowOffsetX;
+                            mainMenuWindow->iPosY =
+                                classicui->iMainWindowOffsetY +
+                                height;
+                            if ((mainMenuWindow->iPosY + mainMenuWindow->height) >
+                                sheight)
+                                mainMenuWindow->iPosY = classicui->iMainWindowOffsetY - 5 - mainMenuWindow->height;
+
+                            DrawXlibMenu(mainMenuWindow);
+                            DisplayXlibMenu(mainMenuWindow);
+
+                        }
+                        break;
+                        
                 }
                 break;
             case ButtonRelease:
@@ -412,6 +436,9 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     case Button1:
                         if(SetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
                             DrawMainWindow(mainWindow);
+                        break;
+                    case Button2:
+                        DisplayAboutWindow(mainWindow->owner->aboutWindow);
                         break;
                 }
                 break;

@@ -89,13 +89,14 @@ typedef enum
 typedef struct MenuShell
 {
     char tipstr[24];
-    int  next;//下一级菜单
     int  isselect;
     MenuShellType type;
 } MenuShell;
 
 typedef struct FcitxUIMenu {
     UT_array shell;
+	void (*UpdateMenuShell)(void *arg);
+	void (*MenuAction)(void *arg, MenuShell *shell);
 } FcitxUIMenu;
 
 typedef struct FcitxUI
@@ -111,6 +112,7 @@ typedef struct FcitxUI
     void (*OnInputUnFocus)(void *arg);
     void (*OnTriggerOn)(void *arg);
     void (*OnTriggerOff)(void *arg);
+    void (*DisplayMessage)(void *arg, char *title, char **msg, int length);
 } FcitxUI;
 
 void LoadUserInterface(struct FcitxInstance* instance);
@@ -138,6 +140,7 @@ void OnInputFocus(struct FcitxInstance* instance);
 void OnInputUnFocus(struct FcitxInstance* instance);
 void OnTriggerOn(struct FcitxInstance* instance);
 void OnTriggerOff(struct FcitxInstance* instance);
+void DisplayMessage(struct FcitxInstance *instance, char *title, char **msg, int length);
 FcitxUIStatus *GetUIStatus(struct FcitxInstance* instance, const char* name);
 
 #endif

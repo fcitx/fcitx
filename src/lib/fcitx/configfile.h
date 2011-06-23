@@ -56,6 +56,7 @@ typedef struct FcitxConfig
     GenericConfig gconfig;
     /* program config */
     int iDelayStart;
+    boolean bFirstRun;
 
     /* output config */
     boolean bEngPuncAfterNumber;
