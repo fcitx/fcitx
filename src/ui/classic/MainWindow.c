@@ -411,9 +411,11 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                         {
                             XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
                             unsigned int height; int sheight;
+                            XWindowAttributes attr;
                             GetMenuSize(mainMenuWindow);
                             GetScreenSize(classicui, NULL, &sheight);
-                            XGetGeometry(classicui->dpy, mainWindow->window, NULL, NULL, NULL, NULL, &height, NULL, NULL);
+                            XGetWindowAttributes(classicui->dpy, mainWindow->window, &attr);
+                            height = attr.height;
 
                             mainMenuWindow->iPosX = classicui->iMainWindowOffsetX;
                             mainMenuWindow->iPosY =

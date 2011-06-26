@@ -59,6 +59,9 @@
 #define ROUND_SIZE 60
 
 static ConfigFileDesc* GetSkinDesc();
+static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
+static void UpdateSkinMenuShell(FcitxUIMenu* menu);
+static void UnloadImage(FcitxSkin* skin);
 
 CONFIG_DESC_DEFINE(GetSkinDesc, "skin.desc")
 
@@ -69,7 +72,8 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
 {
     FILE    *fp;
     char  buf[PATH_MAX]={0};
-    Bool    isreload = False;
+    boolean    isreload = False;
+    int ret = 0;
     if (sc->config.configFile)
     {
         FreeConfigFile(sc->config.configFile);
@@ -94,7 +98,10 @@ reload:
             FreeXDGPath(path);
         }
         else
-            fp = fopen(DATADIR "/fcitx/skin/default/fcitx_skin.conf", "r");
+        {
+            FcitxLog(INFO, PKGDATADIR "/skin/default/fcitx_skin.conf");
+            fp = fopen( PKGDATADIR "/skin/default/fcitx_skin.conf", "r");
+        }
     }
 
     if (fp)
@@ -128,21 +135,22 @@ reload:
         {
             FcitxLog(FATAL, _("Can not load default skin, is installion correct?"));
             perror("fopen");
-            exit(1);    // 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
+            ret = 1;    // 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
         }
         perror("fopen");
         FcitxLog(WARNING, _("Can not load skin %s, return to default"), *skinType);
         if (*skinType)
             free(*skinType);
         *skinType = strdup("default");
-        isreload = True;
+        isreload = true;
         goto reload;
     }
 
 
     fclose(fp);
+    sc->skinType = skinType;
 
-    return 0;
+    return ret;
 
 }
 
@@ -584,40 +592,39 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     if (pivot)
         free(pivot);
 
-    CloseMainWindow(classicui->mainWindow);
-    CloseInputWindowInternal(classicui->inputWindow);
-
-    DestroyMainWindow(classicui->mainWindow);
-    DestroyInputWindow(classicui->inputWindow);
-
-    LoadSkinConfig(&classicui->skin, &classicui->skinType);
+    if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
+        EndInstance(classicui->owner);
+    
+    UnloadImage(&classicui->skin);
 
     InitComposite(classicui);
-
-    classicui->mainWindow = CreateMainWindow (classicui);
-    classicui->inputWindow = CreateInputWindow (classicui);
 
     DrawMainWindow (classicui->mainWindow);
     DrawInputWindow (classicui->inputWindow);
     DrawTrayWindow (classicui->trayWindow);
 }
 
+void UnloadImage(FcitxSkin* skin)
+{
+    SkinImage *images = skin->imageTable;
+    while(images)
+    {
+        SkinImage* curimage = images;
+        HASH_DEL(images, curimage);
+        free(curimage->name);
+        cairo_surface_destroy(curimage->image);
+    }
+    skin->imageTable = NULL;
+}
+
 //图片文件加载函数完成
 /*-------------------------------------------------------------------------------------------------------------*/
 //skin目录下读入skin的文件夹名
 
-int LoadSkinDirectory()
+void LoadSkinDirectory(FcitxClassicUI* classicui)
 {
-    static UT_array* skinBuf = NULL;
-    if (!skinBuf)
-    {
-        skinBuf = malloc(sizeof(UT_array));
-        utarray_init(skinBuf, &ut_str_icd);
-    }
-    else
-    {
-        utarray_clear(skinBuf);
-    }
+    UT_array* skinBuf = &classicui->skinBuf;
+    utarray_clear(skinBuf);
     int i ;
     DIR *dir;
     struct dirent *drt;
@@ -664,5 +671,49 @@ int LoadSkinDirectory()
 
     FreeXDGPath(skinPath);
 
-    return 0;
+    return;
+}
+
+void InitSkinMenu(FcitxClassicUI* classicui)
+{
+    utarray_init(&classicui->skinBuf, &ut_str_icd);
+    strcpy(classicui->skinMenu.candStatusBind, "skin");
+    strcpy(classicui->skinMenu.name, "Skin");
+    utarray_init(&classicui->skinMenu.shell, &menuICD);
+    
+    classicui->skinMenu.UpdateMenuShell = UpdateSkinMenuShell;
+    classicui->skinMenu.MenuAction = SkinMenuAction;
+    classicui->skinMenu.priv = classicui;
+    classicui->skinMenu.isSubMenu = false;
+}
+
+boolean SkinMenuAction(FcitxUIMenu* menu, int index)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
+    MenuShell* shell = (MenuShell*) utarray_eltptr(&menu->shell, index);
+    if (shell)
+        DisplaySkin(classicui, shell->tipstr);
+    return true;
+}
+
+void UpdateSkinMenuShell(FcitxUIMenu* menu)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
+    LoadSkinDirectory(classicui);
+    ClearMenuShell(menu);
+    char **s;
+    int i = 0;
+    
+    for( s = (char**) utarray_front(&classicui->skinBuf);
+         s != NULL;
+         s = (char**) utarray_next(&classicui->skinBuf, s))
+    {
+        if (strcmp(*s, classicui->skinType) == 0)
+        {
+            menu->mark = i;
+        }
+        AddMenuShell(menu, *s, MENUTYPE_SIMPLE, NULL);
+        i ++;
+    }
+
 }

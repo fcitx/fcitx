@@ -43,8 +43,10 @@
 #include "MenuWindow.h"
 #include "AboutWindow.h"
 #include "MessageWindow.h"
+#include <fcitx/hook.h>
 
 struct FcitxSkin;
+boolean MainMenuAction(FcitxUIMenu* menu, int index);
 
 void* ClassicUICreate(FcitxInstance* instance);
 static void ClassicUICloseInputWindow(void* arg);
@@ -58,6 +60,7 @@ static void ClassicUIOnInputUnFocus(void *arg);
 static void ClassicUIOnTriggerOn(void *arg);
 static void ClassicUiOnTriggerOff(void *arg);
 static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
+static void ClassicUIInputReset(void *arg);
 static ConfigFileDesc* GetClassicUIDesc();
 
 static void LoadClassicUIConfig();
@@ -101,14 +104,44 @@ void* ClassicUICreate(FcitxInstance* instance)
     InitComposite(classicui);
     LoadClassicUIConfig(classicui);
     LoadSkinConfig(&classicui->skin, &classicui->skinType);
-    classicui->skin.skinType = &classicui->skinType;
-
+    
+    InitSkinMenu(classicui);
+    RegisterMenu(instance, &classicui->skinMenu);
+    
+    /* Main Menu Initial */
+    utarray_init(&classicui->mainMenu.shell, &menuICD);
+    AddMenuShell(&classicui->mainMenu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
+    AddMenuShell(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
+    
+    FcitxUIMenu **menupp;
+    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+        menupp != NULL;
+        menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+    )
+    {
+        FcitxUIMenu * menup = *menupp;
+        if (!menup->isSubMenu)
+            AddMenuShell(&classicui->mainMenu, menup->name, MENUTYPE_SUBMENU, menup);
+    }
+    AddMenuShell(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
+    AddMenuShell(&classicui->mainMenu, _("Configure"), MENUTYPE_SIMPLE, NULL);
+    AddMenuShell(&classicui->mainMenu, _("Exit"), MENUTYPE_SIMPLE, NULL);
+    classicui->mainMenu.MenuAction = MainMenuAction;
+    classicui->mainMenu.priv = classicui;
+    classicui->mainMenu.mark = -1;
+    
+    
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
     classicui->trayWindow = CreateTrayWindow(classicui);
     classicui->aboutWindow = CreateAboutWindow(classicui);
     classicui->messageWindow = CreateMessageWindow(classicui);
     classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
+    
+    FcitxResetInputHook resethk;
+    resethk.arg = classicui;
+    resethk.func = ClassicUIInputReset;
+    RegisterResetInputHook(resethk);
     
     XUnlockDisplay(classicui->dpy);
     return classicui;
@@ -148,6 +181,12 @@ void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowTyp
     }
 }
 
+static void ClassicUIInputReset(void *arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    DrawMainWindow(classicui->mainWindow);
+}
+
 static void ClassicUICloseInputWindow(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
@@ -175,6 +214,10 @@ static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status)
 
 static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    XlibMenu* xlibMenu = CreateXlibMenu(classicui);
+    menu->uipriv = xlibMenu;
+    xlibMenu->menushell = menu;
 }
 
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
@@ -624,3 +667,42 @@ void ClassicUIDisplayMessage(void* arg, char* title, char** msg, int length)
     DrawMessageWindow(classicui->messageWindow, title, msg, length);    
 }
 
+boolean MainMenuAction(FcitxUIMenu* menu, int index)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
+    int length = utarray_len(&menu->shell);
+    if (index == 0)
+    {
+        DisplayAboutWindow(classicui->mainWindow->owner->aboutWindow);
+    }
+    else if (index == length - 1) /* Exit */
+    {
+        EndInstance(classicui->owner);
+    }
+    else if (index == length - 2) /* Configuration */
+    {
+        pid_t id;
+
+        id = fork();
+
+        if (id < 0)
+            FcitxLog(ERROR, _("Unable to create process"));
+        else if (id == 0)
+        {
+            id = fork();
+
+            if (id < 0)
+            {
+                FcitxLog(ERROR, _("Unable to create process"));
+                exit(1);
+            }
+            else if (id > 0)
+                exit(0);
+
+            execl(BINDIR "/fcitx-config", "fcitx-config", NULL);
+
+            exit(0);
+        }
+    }
+    return true;
+}

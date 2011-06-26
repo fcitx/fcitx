@@ -153,6 +153,11 @@ ConfigFileDesc *funcname() \
     { \
         FILE *tmpfp; \
         tmpfp = GetXDGFileData(path, "r", NULL); \
+        if (tmpfp == NULL) \
+        { \
+            FcitxLog(ERROR, _("Load Config Description File %s Erorr, Please Check your install."), path); \
+            return NULL; \
+        } \
         configDesc = ParseConfigFileDescFp(tmpfp); \
         fclose(tmpfp); \
     } \

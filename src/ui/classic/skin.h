@@ -39,6 +39,7 @@
 struct XlibMenu;
 struct InputWindow;
 struct Messages;
+struct FcitxClassicUI;
 
 typedef struct SkinImage
 {
@@ -154,7 +155,7 @@ void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
 void DrawInputBar(FcitxSkin* sc, struct InputWindow* inputWindow, struct Messages * msgup, struct Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
 void LoadInputMessage(FcitxSkin* sc, struct InputWindow* inputWindow, const char* font);
-void DrawMenuBackground(FcitxSkin* sc, struct XlibMenu * menu);
+void InitSkinMenu(struct FcitxClassicUI* classicui);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
                              int height,

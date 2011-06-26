@@ -11,7 +11,8 @@
 #define LOCALEDIR "@localedir@"
 #define PACKAGE "@package@"
 #define DATADIR "@prefix@/share"
-#define PKGDATADIR "@prefix@/share/fcitx"
+#define PKGDATADIR "@pkgdatadir@"
+#define BINDIR "@bindir@"
 #define LIBDIR "@libdir@"
 #define VERSION "@version@"
 #define INTERNAL_VERSION 3

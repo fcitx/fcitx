@@ -133,7 +133,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
             return;
     
     title = messageWindow->title;
-    FcitxLog(INFO, "%s", title);
+    FcitxLog(DEBUG, "%s", title);
 
     XTextProperty   tp;
     Xutf8TextListToTextProperty(dpy, &title, 1, XUTF8StringStyle, &tp);

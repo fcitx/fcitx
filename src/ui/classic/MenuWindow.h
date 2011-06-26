@@ -50,14 +50,13 @@ typedef struct XlibMenu
     Window menuWindow;
     Pixmap pixmap;
     cairo_surface_t *menu_cs;
-    int mark;
     int font_size;
     XColor bgcolor;
     XColor bgselectcolor;
     char font[32];
     XColor charcolor;
     XColor charselectcolor;
-    struct FcitxUIMenu *menu;
+    struct FcitxUIMenu *menushell;
     struct FcitxClassicUI* owner;
 } XlibMenu;
 

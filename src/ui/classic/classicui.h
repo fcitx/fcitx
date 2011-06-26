@@ -20,7 +20,10 @@
 #ifndef _UI_H
 #define _UI_H
 
-#include "fcitx/fcitx.h"
+#include <fcitx/fcitx.h>
+#include <fcitx/ui.h>
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-utils/utarray.h>
 
 #include <X11/Xlib.h>
 #include <cairo.h>
@@ -29,9 +32,7 @@
 #include <pango/pangocairo.h>
 #endif
 
-#include "fcitx-config/fcitx-config.h"
 #include "skin.h"
-#include <fcitx-utils/utarray.h>
 
 struct MainWindow;
 struct AboutWindow;
@@ -62,8 +63,10 @@ typedef struct FcitxClassicUI {
     struct MessageWindow* messageWindow;
     struct TrayWindow* trayWindow;
     struct AboutWindow* aboutWindow;
+    FcitxUIMenu skinMenu;
     
     FcitxSkin skin;
+    UT_array skinBuf;
     struct FcitxInstance *owner;
     
     char* font;
@@ -81,6 +84,7 @@ typedef struct FcitxClassicUI {
     Atom pidAtom;
     Atom typeDockAtom;
     struct XlibMenu* mainMenuWindow;
+    FcitxUIMenu mainMenu;
 } FcitxClassicUI;
 
 typedef enum FcitxXWindowType {
@@ -141,7 +145,7 @@ void InitComposite(FcitxClassicUI* classicui);
 Visual * FindARGBVisual (FcitxClassicUI* classicui);
 Bool MouseClick(int *x, int *y, Display* dpy, Window window);
 boolean IsInRspArea(int x0, int y0, struct FcitxClassicUIStatus* status);
-boolean IsInBox(int x0, int y0, int x1, int y1, int x2, int y2);
+boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
 void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
 void ActivateWindow(Display *dpy, int iScreen, Window window);
 

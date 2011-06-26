@@ -24,6 +24,7 @@
 #include <fcitx/profile.h>
 #include "addon.h"
 #include "ime.h"
+#include <semaphore.h>
 
 struct FcitxInputContext;
 
@@ -35,9 +36,14 @@ typedef struct FcitxInstance {
     Messages* messageUp;
     Messages* messageDown;
     UT_array uistats;
+    UT_array uimenus;
     FcitxAddon* ui;
     FcitxInputState input;
     boolean bMutexInited;
+    FcitxUIMenu imMenu;
+    
+    /* Fcitx is not good at multi process, so put a readonlyMode in it */
+    boolean readonlyMode;
     
     /* config file */
     FcitxConfig config;
@@ -50,11 +56,13 @@ typedef struct FcitxInstance {
     struct FcitxInputContext *CurrentIC;
     struct FcitxInputContext *ic_list;
     struct FcitxInputContext *free_list;
+    sem_t* sem;
 } FcitxInstance;
 
 Messages* GetMessageUp(FcitxInstance* instance);
 Messages* GetMessageDown(FcitxInstance* instance);
 
-FcitxInstance* CreateFcitxInstance(void);
+FcitxInstance* CreateFcitxInstance(sem_t *sem);
 int FcitxLock(FcitxInstance* instance);
 int FcitxUnlock(FcitxInstance* instance);
+void EndInstance(FcitxInstance* instance);

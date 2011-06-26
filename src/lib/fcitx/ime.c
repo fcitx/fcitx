@@ -50,6 +50,8 @@ static void UpdateInputWindow(FcitxInstance* instance);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxIMClass*), NULL ,NULL, NULL};
 static int IMPriorityCmp(const void *a, const void *b);
+static boolean IMMenuAction(FcitxUIMenu* menu, int index);
+static void UpdateIMMenuShell(FcitxUIMenu *menu);
 
 int IMPriorityCmp(const void *a, const void *b)
 {
@@ -146,7 +148,6 @@ static const char* GetStateName(INPUT_RETURN_VALUE retVal)
 
 void UnloadIM(FcitxAddon* pim)
 {
-    //TODO: DestroyImage(&ime->icon);
     FcitxIMClass *im = pim->imclass;
     if (im->Destroy)
         im->Destroy(pim->addonInstance);
@@ -714,4 +715,36 @@ void EnableIM(FcitxInstance* instance, boolean keepState)
     }
     FcitxInputContext* ic = GetCurrentIC(instance);
     ic->state = IS_ACTIVE;
+}
+
+void InitIMMenu(FcitxInstance* instance)
+{
+    strcpy(instance->imMenu.candStatusBind, "im");
+    strcpy(instance->imMenu.name, "Input Method");
+    FcitxIM* pim;
+    UT_array* imes = &instance->imes;
+    utarray_init(&instance->imMenu.shell, &menuICD);
+    for ( pim = (FcitxIM *) utarray_front(imes);
+        pim != NULL;
+        pim = (FcitxIM *) utarray_next(imes, pim))
+        AddMenuShell(&instance->imMenu, pim->strName, MENUTYPE_SIMPLE, NULL);
+    
+    instance->imMenu.UpdateMenuShell = UpdateIMMenuShell;
+    instance->imMenu.MenuAction = IMMenuAction;
+    instance->imMenu.priv = instance;
+    instance->imMenu.isSubMenu = false;
+}
+
+boolean IMMenuAction(FcitxUIMenu *menu, int index)
+{
+    FcitxInstance* instance = (FcitxInstance*) menu->priv;
+    SwitchIM(instance, index);
+    return true;
+}
+
+void UpdateIMMenuShell(FcitxUIMenu *menu)
+{
+    FcitxInstance* instance = (FcitxInstance*) menu->priv;
+    
+    menu->mark = instance->iIMIndex;
 }

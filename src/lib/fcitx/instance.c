@@ -28,6 +28,7 @@
 #include "addon.h"
 #include "module.h"
 #include "backend.h"
+#include <semaphore.h>
 
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
@@ -36,17 +37,20 @@
             : (0 != strcasecmp(getenv(env), (value)))))
 
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
+const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
 
-FcitxInstance* CreateFcitxInstance()
+FcitxInstance* CreateFcitxInstance(sem_t *sem)
 {
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
     InitFcitxAddons(&instance->addons);
     InitFcitxIM(instance);
     InitFcitxBackends(&instance->backends);
     utarray_init(&instance->uistats, &stat_icd);
+    utarray_init(&instance->uimenus, &menup_icd);
     instance->messageDown = InitMessages();
     instance->messageUp = InitMessages();
+    instance->sem = sem;
     
     FcitxInitThread(instance);
     LoadConfig(&instance->config);
@@ -56,6 +60,10 @@ FcitxInstance* CreateFcitxInstance()
     InitBuiltInHotkey(instance);
     LoadModule(instance);
     LoadAllIM(instance);
+    
+    InitIMMenu(instance);
+    RegisterMenu(instance, &instance->imMenu);
+    
     LoadUserInterface(instance);
 
     SwitchIM(instance, instance->iIMIndex);
@@ -88,6 +96,11 @@ FcitxInstance* CreateFcitxInstance()
     }
 
     return instance;
+}
+
+void EndInstance(FcitxInstance* instance)
+{
+    sem_post(instance->sem);
 }
 
 Messages* GetMessageUp(FcitxInstance *instance)

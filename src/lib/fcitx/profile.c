@@ -19,7 +19,10 @@
  ***************************************************************************/
 
 #include <errno.h>
+#include <libintl.h>
 
+#include "fcitx.h"
+#include "fcitx-utils/cutils.h"
 #include "profile.h"
 #include "fcitx-config/xdg.h"
 

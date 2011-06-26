@@ -33,8 +33,6 @@
 
 FcitxUI dummyUI;
 
-const static UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
-
 struct MESSAGE{
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
     MSG_TYPE        type;
@@ -131,6 +129,16 @@ void LoadUserInterface(FcitxInstance* instance)
                                 status != NULL;
                                 status = (FcitxUIStatus *) utarray_next(uistats, status))
                                 addon->ui->RegisterStatus(addon->addonInstance, status);
+                        }
+                        
+                        if (addon->ui->RegisterMenu)
+                        {
+                            UT_array* uimenus = &instance->uimenus;
+                            FcitxUIMenu **menupp;
+                            for ( menupp = (FcitxUIMenu **) utarray_front(uimenus);
+                                menupp != NULL;
+                                menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp))
+                                addon->ui->RegisterMenu(addon->addonInstance, *menupp);
                         }
                         
                         instance->ui = addon;
@@ -259,10 +267,38 @@ void RegisterStatus(FcitxInstance* instance, void* arg, const char* name, void (
     UT_array* uistats = &instance->uistats;
     
     utarray_push_back(uistats, &status);
-    FcitxUIStatus* newstat = (FcitxUIStatus*) utarray_back(uistats);
-    
-    if (instance->ui && instance->ui->ui->RegisterStatus)
-        instance->ui->ui->RegisterStatus(instance->ui->addonInstance, newstat);
+}
+
+void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
+{
+    UT_array* uimenus = &instance->uimenus;
+    if (!menu)
+        return ;
+    menu->mark = -1;
+    utarray_push_back(uimenus, &menu);    
+}
+
+void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMenu* subMenu)
+{
+    MenuShell shell;
+    memset(&shell, 0, sizeof(MenuShell));
+    if (string) {
+        if (strlen(string) > MAX_MENU_STRING_LENGTH)
+            return;
+        else
+            strncpy(shell.tipstr, string, MAX_MENU_STRING_LENGTH);
+    }
+    shell.type = type;
+    shell.isselect = false;
+    if (type == MENUTYPE_SUBMENU)
+        shell.subMenu = subMenu;
+        
+    utarray_push_back(&menu->shell, &shell);
+}
+
+void ClearMenuShell(FcitxUIMenu* menu)
+{
+    utarray_clear(&menu->shell);
 }
 
 void OnInputFocus(FcitxInstance* instance)
@@ -293,4 +329,12 @@ void OnTriggerOff(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOff)
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
+}
+
+void UpdateMenuShell(FcitxUIMenu* menu)
+{
+    if (menu && menu->UpdateMenuShell)
+    {
+        menu->UpdateMenuShell(menu);
+    }
 }

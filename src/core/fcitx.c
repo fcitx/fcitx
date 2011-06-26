@@ -33,6 +33,7 @@
 #include <locale.h>
 #include <libintl.h>
 #include <unistd.h>
+#include <semaphore.h>
 
 #include "fcitx/configfile.h"
 #include "fcitx/addon.h"
@@ -44,10 +45,13 @@
 #include <fcitx/instance.h>
 #include "errorhandler.h"
 
-static void WaitForEnd()
+static void WaitForEnd(sem_t *sem, int count)
 {
-    while (true)
-        sleep(10);
+    while (count)
+    {
+        sem_wait(sem);
+        count --;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -57,8 +61,14 @@ int main(int argc, char* argv[])
     bind_textdomain_codeset(PACKAGE, "UTF-8");
     textdomain(PACKAGE);
     SetMyExceptionHandler();
-    CreateFcitxInstance();
     
-    WaitForEnd();
+    int instanceCount = 1;
+    
+    sem_t sem;
+    sem_init(&sem, 0, 0);
+    
+    CreateFcitxInstance(&sem);
+    
+    WaitForEnd(&sem, instanceCount);
 	return 0;
 }

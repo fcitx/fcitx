@@ -65,6 +65,6 @@ void            SelectVK(int vkidx);
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
 INPUT_RETURN_VALUE ImProcessReload(void *arg);
-
+void InitIMMenu(struct FcitxInstance* instance);
 
 #endif
