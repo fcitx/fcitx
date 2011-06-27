@@ -34,7 +34,6 @@
 #include "MenuWindow.h"
 #include <fcitx/instance.h>
 
-static void DestroyXlibMenu(XlibMenu *menu);
 static boolean ReverseColor(XlibMenu * Menu,int shellIndex);
 static void MenuMark(XlibMenu* menu, int y, int i);
 static void DrawArrow(XlibMenu* menu, int line_y);
@@ -229,8 +228,8 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
     int iScreen = classicui->iScreen;
     menu->owner = classicui;
     
-    vs=FindARGBVisual (classicui);
-    InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
+    vs=ClassicUIFindARGBVisual (classicui);
+    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
 
     //开始只创建一个简单的窗口不做任何动作
     menu->menuWindow =XCreateWindow (dpy,
@@ -244,8 +243,6 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
         return False;
 
     XSetTransientForHint (dpy, menu->menuWindow, DefaultRootWindow (dpy));
-
-    XChangeProperty (dpy, menu->menuWindow, classicui->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) &classicui->typeMenuAtom, 1);
     
     menu->pixmap = XCreatePixmap(dpy,
                                  menu->menuWindow,
@@ -271,7 +268,7 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
 
     XSelectInput (dpy, menu->menuWindow, KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask | StructureNotifyMask );
     
-    SetWindowProperty(classicui, menu->menuWindow, FCITX_WINDOW_MENU, strWindowName);
+    ClassicUISetWindowProperty(classicui, menu->menuWindow, FCITX_WINDOW_MENU, strWindowName);
     
     FcitxSkin *sc = &menu->owner->skin;
     menu->iPosX=100;

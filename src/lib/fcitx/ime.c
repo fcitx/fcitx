@@ -78,6 +78,11 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     hk.hotkeyhandle = ImProcessEscape;
     hk.arg = instance;
     RegisterHotkeyFilter(hk);
+    
+    hk.hotkey = instance->config.hkLegend;
+    hk.hotkeyhandle = ImProcessLegend;
+    hk.arg = instance;
+    RegisterHotkeyFilter(hk);
 }
 
 void InitFcitxIM(FcitxInstance* instance)
@@ -669,6 +674,13 @@ INPUT_RETURN_VALUE ImProcessEscape(void* arg)
         return IRV_CLEAN;
     else
         return IRV_DONOT_PROCESS;
+}
+
+INPUT_RETURN_VALUE ImProcessLegend(void* arg)
+{
+    FcitxInstance *instance = (FcitxInstance*) arg;
+    UpdateStatus(instance, "legend");
+    return IRV_DONOT_PROCESS;
 }
 
 INPUT_RETURN_VALUE ImProcessReload(void *arg)

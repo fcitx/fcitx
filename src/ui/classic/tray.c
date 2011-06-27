@@ -89,7 +89,7 @@ UntrapErrors(void)
 int
 InitTray(Display* dpy, TrayWindow* tray)
 {
-    static char *atom_names[] = {
+    char *atom_names[] = {
         NULL,
         "MANAGER",
         "_NET_SYSTEM_TRAY_OPCODE",
@@ -97,11 +97,12 @@ InitTray(Display* dpy, TrayWindow* tray)
         "_NET_SYSTEM_TRAY_VISUAL"
     };
 
-    atom_names[0] = strdup("_NET_SYSTEM_TRAY_S0");
-    atom_names[0][17] += tray->owner->iScreen;
+    asprintf(&atom_names[0], "_NET_SYSTEM_TRAY_S%d", tray->owner->iScreen);
 
     XInternAtoms (dpy, atom_names, 5, False, tray->atoms);
     tray->size = 22;
+    
+    free(atom_names[0]);
 
     XWindowAttributes attr;
     XGetWindowAttributes(dpy, DefaultRootWindow(dpy), &attr);

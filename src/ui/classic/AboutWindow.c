@@ -110,7 +110,7 @@ void InitAboutWindowProperty (AboutWindow* aboutWindow)
     Display* dpy = classicui->dpy;
     XSetTransientForHint (dpy, aboutWindow->window, DefaultRootWindow (dpy));
 
-    SetWindowProperty(classicui, aboutWindow->window, FCITX_WINDOW_DIALOG, AboutCaption);
+    ClassicUISetWindowProperty(classicui, aboutWindow->window, FCITX_WINDOW_DIALOG, AboutCaption);
 
     XSetWMProtocols (dpy, aboutWindow->window, &classicui->killAtom, 1);
 }

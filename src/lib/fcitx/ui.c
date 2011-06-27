@@ -338,3 +338,29 @@ void UpdateMenuShell(FcitxUIMenu* menu)
         menu->UpdateMenuShell(menu);
     }
 }
+
+/*
+ * 判断鼠标点击处是否处于指定的区域内
+ */
+boolean
+IsInBox(int x0, int y0, int x1, int y1, int w, int h)
+{
+    if (x0 >= x1 && x0 <= x1 + w && y0 >= y1 && y0 <= y1 + h)
+        return true;
+
+    return false;
+}
+
+boolean UISupportMainWindow(FcitxInstance* instance)
+{
+    if (instance->ui && instance->ui->ui->MainWindowSizeHint)
+        return true;
+    else
+        return false;
+}
+
+void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
+{
+    if (instance->ui && instance->ui->ui->MainWindowSizeHint)
+        instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
+}

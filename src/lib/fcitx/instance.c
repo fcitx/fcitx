@@ -39,6 +39,8 @@
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
+void ToggleLegendState(void* arg);
+boolean GetLegendEnabled(void* arg);
 
 FcitxInstance* CreateFcitxInstance(sem_t *sem)
 {
@@ -63,6 +65,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem)
     
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
+    RegisterStatus(instance, instance, "legend", ToggleLegendState, GetLegendEnabled);
     
     LoadUserInterface(instance);
 
@@ -134,4 +137,16 @@ int FcitxUnlock(FcitxInstance* inst)
     if (inst->bMutexInited)
         return pthread_mutex_unlock(&inst->fcitxMutex);
     return 0;
+}
+
+void ToggleLegendState(void* arg)
+{
+    FcitxInstance* instance = (FcitxInstance*) arg;
+    instance->profile.bUseLegend = !instance->profile.bUseLegend;
+}
+
+boolean GetLegendEnabled(void* arg)
+{
+    FcitxInstance* instance = (FcitxInstance*) arg;
+    return instance->profile.bUseLegend;
 }

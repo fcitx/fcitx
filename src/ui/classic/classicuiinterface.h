@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2010~2011 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,44 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _VK_WINDOW_H
-#define _VK_WINDOW_H
 
-#include <X11/Xlib.h>
-#include "fcitx/ime.h"
-#include "skin.h"
+#ifndef CLASSICUIINTERFACE_H
+#define CLASSICUIINTERFACE_H
+#include <fcitx-config/fcitx-config.h>
+#include <cairo.h>
 
-#define VK_FILE	"vk.conf"
-
-#define VK_WINDOW_WIDTH		354
-#define VK_WINDOW_HEIGHT	164
-#define VK_NUMBERS		47
-#define VK_MAX			50
-
-typedef struct {
-     char            strSymbol[VK_NUMBERS][2][UTF8_MAX_LENGTH + 1];	//相应的符号
-     char            strName[MAX_IM_NAME + 1];
-} VKS;
-
-typedef struct VKWindow
-{
-    Window          window;
-    ConfigColor fontColor;
-    int fontSize;
-    cairo_surface_t* surface;
-} VKWindow;
-
-Bool            CreateVKWindow (void);
-void            DisplayVKWindow (void);
-void            DrawVKWindow (void);
-char           *VKGetSymbol (char cChar);
-void            LoadVKMapFile (void);
-void            ChangVK (void);
-INPUT_RETURN_VALUE DoVKInput (KeySym sym, int state, int iCount);
-int             MyToLower (int iChar);
-int             MyToUpper (int iChar);
-void            SwitchVK (void);
-void            DestroyVKWindow (void);
-Bool            VKMouseKey (int x, int y);
+#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
+#define FCITX_CLASSIC_UI_LOADIMAGE 0
+#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
+#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
+#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE ConfigColor *
+#define FCITX_CLASSIC_UI_GETFONT 2
+#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
 
 #endif

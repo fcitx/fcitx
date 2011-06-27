@@ -94,7 +94,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
                   ButtonPressMask | ButtonReleaseMask | StructureNotifyMask
                   | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
 
-    SetWindowProperty(classicui, trayWindow->window, FCITX_WINDOW_DOCK, strWindowName);
+    ClassicUISetWindowProperty(classicui, trayWindow->window, FCITX_WINDOW_DOCK, strWindowName);
     
     TrayFindDock(dpy, trayWindow);
 }

@@ -24,18 +24,35 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include <unistd.h>
+#include <X11/extensions/Xrender.h>
+#include <X11/Xatom.h>
 
 static void* X11Create(FcitxInstance* instance);
 static void* X11Run();
 static void* X11GetDisplay(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11AddEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11RemoveEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
+static void* X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args);
+static void* X11InitWindowAttribute(void* arg, FcitxModuleFunctionArg args);
+static void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args);
+static void* X11GetScreenSize(void *arg, FcitxModuleFunctionArg args);
+static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 
 typedef struct FcitxX11 {
     Display *dpy;
     UT_array handlers;
     FcitxInstance* owner;
+    Window compManager;
+    Atom compManagerAtom;
+    int iScreen;
+    Atom typeMenuAtom;
+    Atom windowTypeAtom;
+    Atom typeDialogAtom;
+    Atom typeDockAtom;
+    Atom pidAtom;
 } FcitxX11;
+
+static void InitComposite(FcitxX11* x11stuff);
 
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 
@@ -55,13 +72,25 @@ void* X11Create(FcitxInstance* instance)
         return false;
     
     x11priv->owner = instance;
+    x11priv->iScreen = DefaultScreen(x11priv->dpy);
+    x11priv->windowTypeAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE", False);
+    x11priv->typeMenuAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
+    x11priv->typeDialogAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    x11priv->typeDockAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
 
     utarray_init(&x11priv->handlers, &handler_icd);
 
     /* ensure the order ! */
     AddFunction(x11addon, X11GetDisplay);
     AddFunction(x11addon, X11AddEventHandler);
-    AddFunction(x11addon,X11RemoveEventHandler);
+    AddFunction(x11addon, X11RemoveEventHandler);
+    AddFunction(x11addon, X11FindARGBVisual);
+    AddFunction(x11addon, X11InitWindowAttribute);
+    AddFunction(x11addon, X11SetWindowProperty);
+    AddFunction(x11addon, X11GetScreenSize);
+    AddFunction(x11addon, X11MouseClick);
+    InitComposite(x11priv);
     return x11priv;
 }
 
@@ -124,5 +153,197 @@ void* X11RemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
             break;
     }
     utarray_erase(&x11priv->handlers, i, 1);
+    return NULL;
+}
+
+void InitComposite(FcitxX11* x11stuff)
+{
+    char *atom_names = NULL;
+    asprintf(&atom_names, "_NET_WM_CM_S%d", x11stuff->iScreen);
+    x11stuff->compManagerAtom = XInternAtom (x11stuff->dpy, atom_names, False);
+    
+    free(atom_names);
+
+    x11stuff->compManager = XGetSelectionOwner(x11stuff->dpy, x11stuff->compManagerAtom);
+
+    if (x11stuff->compManager)
+    {
+        XSetWindowAttributes attrs;
+        attrs.event_mask = StructureNotifyMask;
+        XChangeWindowAttributes (x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
+    }
+}
+
+void*
+X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11stuff = (FcitxX11*)arg;
+    XVisualInfo *xvi;
+    XVisualInfo temp;
+    int         nvi;
+    int         i;
+    XRenderPictFormat   *format;
+    Visual      *visual;
+    Display*    dpy = x11stuff->dpy;
+    int         scr = x11stuff->iScreen;
+
+    if (x11stuff->compManager == None)
+        return NULL;
+
+    temp.screen = scr;
+    temp.depth = 32;
+    temp.class = TrueColor;
+    xvi = XGetVisualInfo (dpy,  VisualScreenMask |VisualDepthMask |VisualClassMask,&temp,&nvi);
+    if (!xvi)
+        return 0;
+    visual = 0;
+    for (i = 0; i < nvi; i++)
+    {
+        format = XRenderFindVisualFormat (dpy, xvi[i].visual);
+        if (format->type == PictTypeDirect && format->direct.alphaMask)
+        {
+            visual = xvi[i].visual;
+            break;
+        }
+    }
+
+    XFree (xvi);
+    return visual;
+}
+
+void *
+X11InitWindowAttribute(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    Visual ** vs = args.args[0];
+    Colormap * cmap = args.args[1];
+    XSetWindowAttributes * attrib = args.args[2];
+    unsigned long *attribmask = args.args[3];
+    int *depth = args.args[4];
+    Display* dpy = x11priv->dpy;
+    int iScreen = x11priv->iScreen;
+    attrib->bit_gravity = NorthWestGravity;
+    attrib->backing_store = WhenMapped;
+    attrib->save_under = True;
+    if (*vs) {
+        *cmap =
+            XCreateColormap(dpy, RootWindow(dpy, iScreen), *vs, AllocNone);
+
+        attrib->override_redirect = True;       // False;
+        attrib->background_pixel = 0;
+        attrib->border_pixel = 0;
+        attrib->colormap = *cmap;
+        *attribmask =
+            (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWSaveUnder |
+             CWColormap | CWBitGravity | CWBackingStore);
+        *depth = 32;
+    } else {
+        *cmap = DefaultColormap(dpy, iScreen);
+        *vs = DefaultVisual(dpy, iScreen);
+        attrib->override_redirect = True;       // False;
+        attrib->background_pixel = 0;
+        attrib->border_pixel = 0;
+        *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWSaveUnder
+                | CWBitGravity | CWBackingStore);
+        *depth = DefaultDepth(dpy, iScreen);
+    }
+    return NULL;
+}
+
+void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    Atom* wintype = NULL;
+    
+    Window window = *(Window*) args.args[0];
+    FcitxXWindowType *type = args.args[1];
+    char *windowTitle = args.args[2];
+    
+    switch(*type)
+    {
+        case FCITX_WINDOW_DIALOG:
+            wintype = &x11priv->typeDialogAtom;
+            break;
+        case FCITX_WINDOW_DOCK:
+            wintype = &x11priv->typeDockAtom;
+            break;
+        case FCITX_WINDOW_MENU:
+            wintype = &x11priv->typeMenuAtom;
+            break;
+        default:
+            wintype = NULL;
+            break;
+    }
+    if (wintype)
+        XChangeProperty (x11priv->dpy, window, x11priv->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
+
+    pid_t pid = getpid();
+    XChangeProperty(x11priv->dpy, window, x11priv->pidAtom, XA_CARDINAL, 32,
+            PropModeReplace, (unsigned char *)&pid, 1);
+    
+    if (windowTitle)
+    {
+        XTextProperty   tp;
+        Xutf8TextListToTextProperty(x11priv->dpy, &windowTitle, 1, XUTF8StringStyle, &tp);
+        XSetWMName (x11priv->dpy, window, &tp);
+        XFree(tp.value);
+    }
+    
+    return NULL;
+}
+
+void* X11GetScreenSize(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    int* width = args.args[0];
+    int* height = args.args[1];
+    XWindowAttributes attrs;
+    if (XGetWindowAttributes(x11priv->dpy, RootWindow(x11priv->dpy, x11priv->iScreen), &attrs) < 0) {
+        printf("ERROR\n");
+    }
+    if (width != NULL)
+        (*width) = attrs.width;
+    if (height != NULL)
+        (*height) = attrs.height;
+    
+    return NULL;
+}
+
+void*
+X11MouseClick(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    Window window = *(Window*) args.args[0];
+    int *x = args.args[1];
+    int *y = args.args[2]; 
+    XEvent          evtGrabbed;
+    boolean           *bMoved = args.args[3];
+
+    // To motion the window
+    while (1) {
+        XMaskEvent(x11priv->dpy,
+                   PointerMotionMask | ButtonReleaseMask | ButtonPressMask,
+                   &evtGrabbed);
+        if (ButtonRelease == evtGrabbed.xany.type) {
+            if (Button1 == evtGrabbed.xbutton.button)
+                break;
+        } else if (MotionNotify == evtGrabbed.xany.type) {
+            static Time     LastTime;
+
+            if (evtGrabbed.xmotion.time - LastTime < 20)
+                continue;
+
+            XMoveWindow(x11priv->dpy, window, evtGrabbed.xmotion.x_root - *x,
+                        evtGrabbed.xmotion.y_root - *y);
+            XRaiseWindow(x11priv->dpy, window);
+
+            *bMoved = true;
+            LastTime = evtGrabbed.xmotion.time;
+        }
+    }
+
+    *x = evtGrabbed.xmotion.x_root - *x;
+    *y = evtGrabbed.xmotion.y_root - *y;
+
     return NULL;
 }

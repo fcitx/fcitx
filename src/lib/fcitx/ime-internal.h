@@ -61,9 +61,9 @@ void            LoadAllIM (struct FcitxInstance* instance);
 void            ConvertPunc (void);
 void            ReloadConfig(struct FcitxInstance* instance);
 void            SelectIM(int imidx);
-void            SelectVK(int vkidx);
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
+INPUT_RETURN_VALUE ImProcessLegend(void *arg);
 INPUT_RETURN_VALUE ImProcessReload(void *arg);
 void InitIMMenu(struct FcitxInstance* instance);
 

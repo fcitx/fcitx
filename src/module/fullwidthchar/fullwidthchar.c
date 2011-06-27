@@ -130,6 +130,6 @@ boolean GetFullWidthState(void* arg)
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    UpdateStatus(fwchar->owner, FCITX_FULLWIDTH_CHAR);
+    UpdateStatus(fwchar->owner, "fullwidth");
     return IRV_DO_NOTHING;
 }

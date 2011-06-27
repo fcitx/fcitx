@@ -1,8 +1,11 @@
 set(FCITX_DARK_SKIN_FILES
-active.png  bingchan.png chnpunc.png  engpunc.png  erbi.png  fcitx_skin.conf  half.png
-input.png  legend.png  nolegend.png  quwei.png  vk.png wubi.png wbpy.png ziranma.png
-bar.png cangjie.png  cn.png en.png  fan.png  full.png inactive.png  jian.png logo.png
-dianbaoma.png novk.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png keyboard.png
+active.png  bingchan.png erbi.png  fcitx_skin.conf 
+input.png quwei.png wubi.png wbpy.png ziranma.png
+bar.png cangjie.png  cn.png en.png  inactive.png logo.png
+dianbaoma.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png keyboard.png
+legend_active.png legend_inactive.png vk_active.png vk_inactive.png
+punc_active.png punc_inactive.png fullwidth_active.png fullwidth_inactive.png
+chttrans_active.png chttrans_inactive.png
 )
 
 install(FILES ${FCITX_DARK_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/dark)

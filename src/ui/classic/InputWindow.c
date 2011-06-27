@@ -70,8 +70,8 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     SkinImage *back = LoadImage(sc, sc->skinInputBar.backImg, false);
 
     inputWindow->iInputWindowHeight= cairo_image_surface_get_height(back->image);
-    vs=FindARGBVisual (classicui);
-    InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
+    vs=ClassicUIFindARGBVisual (classicui);
+    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
 
     inputWindow->window=XCreateWindow (dpy,
                                       RootWindow(dpy, iScreen),
@@ -105,7 +105,7 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     LoadInputMessage(sc, inputWindow, classicui->font);
     XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
-    SetWindowProperty(classicui, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
+    ClassicUISetWindowProperty(classicui, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = InputWindowEventHandler;
@@ -133,7 +133,7 @@ boolean InputWindowEventHandler(void *instance, XEvent* event)
                                             y;
                             x = event->xbutton.x;
                             y = event->xbutton.y;
-                            MouseClick(&x, &y, inputWindow->dpy, inputWindow->window);
+                            ClassicUIMouseClick(inputWindow->owner, inputWindow->window, &x, &y);
                             
                             if(!IsTrackCursor(&inputWindow->owner->owner->profile))
                             {

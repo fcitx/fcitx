@@ -27,12 +27,14 @@
 
 #include <X11/Xlib.h>
 #include <cairo.h>
+#include "ui/cairostuff/cairostuff.h"
 
 #ifdef _ENABLE_PANGO
 #include <pango/pangocairo.h>
 #endif
 
 #include "skin.h"
+#include <module/x11/x11stuff.h>
 
 struct MainWindow;
 struct AboutWindow;
@@ -53,11 +55,6 @@ typedef struct FcitxClassicUI {
     int iScreen;
     Atom protocolAtom;
     Atom killAtom;
-    Atom windowTypeAtom;
-    Atom typeMenuAtom;
-    Atom typeDialogAtom;
-    Atom compManagerAtom;
-    Window compManager;
     struct InputWindow* inputWindow;
     struct MainWindow* mainWindow;
     struct MessageWindow* messageWindow;
@@ -81,72 +78,19 @@ typedef struct FcitxClassicUI {
     int iMainWindowOffsetY;
     
     UT_array status;
-    Atom pidAtom;
-    Atom typeDockAtom;
     struct XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
 } FcitxClassicUI;
 
-typedef enum FcitxXWindowType {
-    FCITX_WINDOW_UNKNOWN,
-    FCITX_WINDOW_DOCK,
-    FCITX_WINDOW_MENU,
-    FCITX_WINDOW_DIALOG
-} FcitxXWindowType;
-
-#ifdef _ENABLE_PANGO
-#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
-#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, fontDesc, str)
-#define FontHeightWithContext(c) FontHeightWithContextReal(c, fontDesc)
-
-PangoFontDescription* GetPangoFontDescription(const char* font, int size);
-void OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
-int StringWidthWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str);
-int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
-
-#define SetFontContext(context, fontname, size) \
-    PangoFontDescription* fontDesc = GetPangoFontDescription(fontname, size)
-
-#define ResetFontContext() \
-    do { \
-        pango_font_description_free(fontDesc); \
-    } while(0)
-
-#else
-
-#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, str, x, y)
-#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, str)
-#define FontHeightWithContext(c) FontHeightWithContextReal(c)
-
-void OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y);
-int StringWidthWithContextReal(cairo_t * c, const char *str);
-int FontHeightWithContextReal(cairo_t* c);
-
-#define SetFontContext(context, fontname, size) \
-    do { \
-        cairo_select_font_face(context, fontname, \
-                CAIRO_FONT_SLANT_NORMAL, \
-                CAIRO_FONT_WEIGHT_NORMAL); \
-        cairo_set_font_size(context, size); \
-    } while (0)
-
-#define ResetFontContext()
-
-#endif
-
-int StringWidth(const char *str, const char *font, int fontSize);
-void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,  int y, ConfigColor * color);
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
 void
-InitWindowAttribute(Display* dpy, int iScreen, Visual ** vs, Colormap * cmap,
+ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
                     XSetWindowAttributes * attrib,
                     unsigned long *attribmask, int *depth);
-void InitComposite(FcitxClassicUI* classicui);
-Visual * FindARGBVisual (FcitxClassicUI* classicui);
-Bool MouseClick(int *x, int *y, Display* dpy, Window window);
+Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui);
+boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y);
 boolean IsInRspArea(int x0, int y0, struct FcitxClassicUIStatus* status);
-boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
-void SetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
+void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
 void ActivateWindow(Display *dpy, int iScreen, Window window);
 
 #define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)

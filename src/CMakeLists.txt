@@ -1,6 +1,5 @@
 include_directories(${fcitx_SOURCE_DIR}/src)
 include_directories(${fcitx_SOURCE_DIR}/src/lib)
-include_directories(${CAIRO_INCLUDE_DIRS})
 
 add_subdirectory(lib)
 add_subdirectory(core)

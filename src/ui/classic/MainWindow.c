@@ -50,6 +50,9 @@ static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *imag
 
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
 
+#define MAIN_BAR_MAX_WIDTH 400
+#define MAIN_BAR_MAX_HEIGHT 400
+
 MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
 {
     MainWindow *mainWindow;
@@ -73,7 +76,7 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     GetScreenSize(classicui, &swidth, &sheight);
     SkinImage *back = LoadImage(sc, sc->skinMainBar.backImg, false);
 
-    vs = FindARGBVisual(classicui);
+    vs = ClassicUIFindARGBVisual(classicui);
 
     if (classicui->iMainWindowOffsetX + cairo_image_surface_get_width(back->image) > swidth )
         classicui->iMainWindowOffsetX = swidth - cairo_image_surface_get_width(back->image);
@@ -81,7 +84,7 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     if (classicui->iMainWindowOffsetY + cairo_image_surface_get_height(back->image) > sheight )
         classicui->iMainWindowOffsetY = sheight - cairo_image_surface_get_height(back->image);
 
-    InitWindowAttribute(dpy, iScreen, &vs, &cmap, &attrib, &attribmask, &depth);
+    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
     mainWindow->window=XCreateWindow (dpy,
                                      RootWindow(dpy, iScreen),
                                      classicui->iMainWindowOffsetX,
@@ -97,8 +100,8 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     mainWindow->pm_main_bar = XCreatePixmap(
                                  dpy,
                                  mainWindow->window,
-                                 cairo_image_surface_get_width(back->image),
-                                 cairo_image_surface_get_height(back->image),
+                                 MAIN_BAR_MAX_WIDTH,
+                                 MAIN_BAR_MAX_HEIGHT,
                                  depth);
     gc = XCreateGC(dpy,mainWindow->pm_main_bar, GCForeground, &xgv);
     XFillRectangle(dpy, mainWindow->pm_main_bar, gc, 0, 0,cairo_image_surface_get_width(back->image), cairo_image_surface_get_height(back->image));
@@ -106,15 +109,15 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
                                dpy,
                                mainWindow->pm_main_bar,
                                vs,
-                               cairo_image_surface_get_width(back->image),
-                               cairo_image_surface_get_height(back->image));
+                               MAIN_BAR_MAX_WIDTH,
+                               MAIN_BAR_MAX_HEIGHT);
     XFreeGC(dpy,gc);
 
     mainWindow->main_win_gc = XCreateGC( dpy, mainWindow->window, 0, NULL );
     XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
     XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
-    SetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
+    ClassicUISetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MainWindowEventHandler;
@@ -376,7 +379,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                                 classicui->iMainWindowOffsetX = event->xbutton.x;
                                 classicui->iMainWindowOffsetY = event->xbutton.y;
 
-                                if (!MouseClick(&classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY, mainWindow->dpy, mainWindow->window))
+                                if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY))
                                 {
                                     if (GetCurrentState(instance) == IS_CLOSED) {
                                         EnableIM(instance, false);

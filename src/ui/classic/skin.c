@@ -158,7 +158,7 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
 {
     char buf[PATH_MAX];
     cairo_surface_t *png;
-    SkinImage *image;
+    SkinImage *image = NULL;
     
     HASH_FIND_STR(sc->imageTable, name, image);
     if (image != NULL)
@@ -203,7 +203,7 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
         image = fcitx_malloc0(sizeof(SkinImage));
         image->name = strdup(name);
         image->image = png;
-        HASH_ADD_KEYPTR(hh, sc->imageTable, name, strlen(name), image);
+        HASH_ADD_KEYPTR(hh, sc->imageTable, image->name, strlen(image->name), image);
         return image;
     }
     return NULL;
@@ -596,8 +596,8 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
         EndInstance(classicui->owner);
     
     UnloadImage(&classicui->skin);
-
-    InitComposite(classicui);
+    
+    LoadInputMessage(&classicui->skin, classicui->inputWindow, classicui->font);
 
     DrawMainWindow (classicui->mainWindow);
     DrawInputWindow (classicui->inputWindow);

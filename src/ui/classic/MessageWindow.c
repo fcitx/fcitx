@@ -102,7 +102,7 @@ void InitMessageWindowProperty (MessageWindow *messageWindow)
     Display *dpy = classicui->dpy;
     XSetTransientForHint (dpy, messageWindow->window, DefaultRootWindow (dpy));
 
-    SetWindowProperty(classicui, messageWindow->window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
+    ClassicUISetWindowProperty(classicui, messageWindow->window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
 
     XSetWMProtocols(dpy, messageWindow->window, &classicui->killAtom, 1);
 }

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-02 13:54+0800\n"
+"POT-Creation-Date: 2011-06-27 12:58+0800\n"
 "PO-Revision-Date: 2010-12-08 12:34+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Lokalize 1.1\n"
 
-#: /home/saber/Develop/fcitx/data/config.desc:27
+#: /home/saber/Develop/fcitx/data/config.desc:32
 msgid "Action after press SemiColon"
 msgstr "分号键操作"
 
-#: /home/saber/Develop/fcitx/data/config.desc:18
+#: /home/saber/Develop/fcitx/data/config.desc:23
 msgid "Action after press enter"
 msgstr "回车键操作"
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/data/config.desc:52
+#: /home/saber/Develop/fcitx/data/config.desc:57
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
@@ -71,7 +71,7 @@ msgstr "清除"
 msgid "Commit"
 msgstr "提交输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:37
+#: /home/saber/Develop/fcitx/data/config.desc:42
 msgid "Convert Punc to Chinese Punc"
 msgstr "转换中文标点"
 
@@ -87,11 +87,11 @@ msgstr ""
 msgid "Dianbaoma"
 msgstr "电报码"
 
-#: /home/saber/Develop/fcitx/data/config.desc:42
+#: /home/saber/Develop/fcitx/data/config.desc:47
 msgid "Disable Paging in Legend Mode"
 msgstr "联想模式禁用翻页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:97
+#: /home/saber/Develop/fcitx/data/config.desc:102
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
@@ -127,11 +127,11 @@ msgstr "Fcitx图形化配置工具"
 msgid "Free Chinese Input Toy of X"
 msgstr "Free Chinese Input Toy of X"
 
-#: /home/saber/Develop/fcitx/data/config.desc:187
+#: /home/saber/Develop/fcitx/data/config.desc:192
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
-#: /home/saber/Develop/fcitx/data/config.desc:82
+#: /home/saber/Develop/fcitx/data/config.desc:87
 msgid "Hot key of Triggering Input Method"
 msgstr "快捷键: 切换输入法"
 
@@ -139,60 +139,60 @@ msgstr "快捷键: 切换输入法"
 msgid "Hotkey"
 msgstr "快捷键"
 
-#: /home/saber/Develop/fcitx/data/config.desc:142
+#: /home/saber/Develop/fcitx/data/config.desc:147
 msgid "Hotkey of Going Next Page"
 msgstr "快捷键: 后一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:137
+#: /home/saber/Develop/fcitx/data/config.desc:142
 msgid "Hotkey of Going Prev Page"
 msgstr "快捷键: 前一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:112
+#: /home/saber/Develop/fcitx/data/config.desc:117
 msgid "Hotkey of Hiding Main Window"
 msgstr "快捷键: 隐藏主窗口"
 
-#: /home/saber/Develop/fcitx/data/config.desc:162
+#: /home/saber/Develop/fcitx/data/config.desc:167
 msgid "Hotkey of Reseting Recording Mode"
 msgstr "快捷键: 重置记录模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:152
+#: /home/saber/Develop/fcitx/data/config.desc:157
 msgid "Hotkey of Saving All Config and Input History"
 msgstr "快捷键: 保存配置及输入历史"
 
-#: /home/saber/Develop/fcitx/data/config.desc:132
+#: /home/saber/Develop/fcitx/data/config.desc:137
 #, fuzzy
 msgid "Hotkey of Switch Full Width Punc Mode"
 msgstr "快捷键: 切换全角"
 
-#: /home/saber/Develop/fcitx/data/config.desc:92
+#: /home/saber/Develop/fcitx/data/config.desc:97
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr "快捷键: 切换中英文输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:107
+#: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Hotkey of Switching Follow Cursor Mode"
 msgstr "快捷键: 切换光标跟随"
 
-#: /home/saber/Develop/fcitx/data/config.desc:127
+#: /home/saber/Develop/fcitx/data/config.desc:132
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
-#: /home/saber/Develop/fcitx/data/config.desc:122
+#: /home/saber/Develop/fcitx/data/config.desc:127
 msgid "Hotkey of Switching Legend Mode"
 msgstr "快捷键: 切换联想模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:157
+#: /home/saber/Develop/fcitx/data/config.desc:162
 msgid "Hotkey of Switching Recording Mode"
 msgstr "快捷键: 切换记录模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:117
+#: /home/saber/Develop/fcitx/data/config.desc:122
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr "快捷键: 切换软键盘"
 
-#: /home/saber/Develop/fcitx/data/config.desc:147
+#: /home/saber/Develop/fcitx/data/config.desc:152
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
-#: /home/saber/Develop/fcitx/data/config.desc:32
+#: /home/saber/Develop/fcitx/data/config.desc:37
 msgid "Input English Character if you input upper case"
 msgstr "大写时输入英文"
 
@@ -213,9 +213,13 @@ msgstr "光标跟随"
 msgid "InputMethod"
 msgstr "输入法"
 
-#: /home/saber/Develop/fcitx/data/config.desc:102
+#: /home/saber/Develop/fcitx/data/config.desc:107
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
+
+#: /home/saber/Develop/fcitx/data/config.desc:9
+msgid "It's the first time Fcitx Start."
+msgstr ""
 
 # unknown
 #: unknown
@@ -259,7 +263,7 @@ msgstr "无操作"
 msgid "Output"
 msgstr "输出"
 
-#: /home/saber/Develop/fcitx/data/config.desc:167
+#: /home/saber/Develop/fcitx/data/config.desc:172
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr "拼音输入法优先级，0为禁用"
 
@@ -284,7 +288,7 @@ msgstr "输入后联想词组"
 msgid "QuickPhrase"
 msgstr "快速输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:177
+#: /home/saber/Develop/fcitx/data/config.desc:182
 msgid "Quwei Priority Order, Zero to Disable"
 msgstr "区位输入法优先级，0为禁用"
 
@@ -302,7 +306,7 @@ msgstr "右Shift"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
 
-#: /home/saber/Develop/fcitx/data/config.desc:47
+#: /home/saber/Develop/fcitx/data/config.desc:52
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
 
@@ -310,15 +314,15 @@ msgstr "快速切换英文模式时上屏"
 msgid "SharedLibrary"
 msgstr "共享库"
 
-#: /home/saber/Develop/fcitx/data/config.desc:72
+#: /home/saber/Develop/fcitx/data/config.desc:77
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
-#: /home/saber/Develop/fcitx/data/config.desc:62
+#: /home/saber/Develop/fcitx/data/config.desc:67
 msgid "Show Input Window After Trigger Input Mode"
 msgstr "切换输入时显示输入条"
 
-#: /home/saber/Develop/fcitx/data/config.desc:57
+#: /home/saber/Develop/fcitx/data/config.desc:62
 msgid "Show Input Window In the center of screen"
 msgstr "输入窗口显示在正中"
 
@@ -326,19 +330,19 @@ msgstr "输入窗口显示在正中"
 msgid "Show Main Window in a compact way"
 msgstr "用紧凑的方式显示主窗口"
 
-#: /home/saber/Develop/fcitx/data/config.desc:67
+#: /home/saber/Develop/fcitx/data/config.desc:72
 msgid "Show Point After Index"
 msgstr "序号后加点"
 
-#: /home/saber/Develop/fcitx/data/config.desc:77
+#: /home/saber/Develop/fcitx/data/config.desc:82
 msgid "Show Version"
 msgstr "显示版本"
 
-#: /home/saber/Develop/fcitx/data/config.desc:172
+#: /home/saber/Develop/fcitx/data/config.desc:177
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr "双拼输入法优先级，0为禁用"
 
-#: /home/saber/Develop/fcitx/data/config.desc:182
+#: /home/saber/Develop/fcitx/data/config.desc:187
 msgid "Table Priority Order, Zero to Disable"
 msgstr "码表输入法优先级，0为禁用"
 
@@ -350,7 +354,7 @@ msgstr "类型"
 msgid "UI"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:9
+#: /home/saber/Develop/fcitx/data/config.desc:14
 msgid "Use English Punc After a Number"
 msgstr "数字后跟半角符号"
 

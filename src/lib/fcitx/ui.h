@@ -126,6 +126,7 @@ typedef struct FcitxUI
     void (*OnTriggerOn)(void *arg);
     void (*OnTriggerOff)(void *arg);
     void (*DisplayMessage)(void *arg, char *title, char **msg, int length);
+    void (*MainWindowSizeHint)(void *arg, int* x, int* y, int* w, int* h);
 } FcitxUI;
 
 void LoadUserInterface(struct FcitxInstance* instance);
@@ -158,8 +159,10 @@ void OnTriggerOn(struct FcitxInstance* instance);
 void OnTriggerOff(struct FcitxInstance* instance);
 void DisplayMessage(struct FcitxInstance *instance, char *title, char **msg, int length);
 FcitxUIStatus *GetUIStatus(struct FcitxInstance* instance, const char* name);
-FcitxUIMenu *GetMenuShell(struct FcitxInstance* instance, const char* name);
 void UpdateMenuShell(FcitxUIMenu* menu);
+boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
+boolean UISupportMainWindow(struct FcitxInstance* instance);
+void GetMainWindowSize(struct FcitxInstance* instance, int* x, int* y, int* w, int* h);
 
 static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

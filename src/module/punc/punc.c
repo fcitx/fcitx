@@ -83,7 +83,8 @@ void* PuncCreate(FcitxInstance* instance)
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkPunc;
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
-    hotkey.arg = TogglePuncStateWithHotkey;
+    hotkey.arg = puncState;
+    RegisterHotkeyFilter(hotkey);
     
     RegisterStatus(instance, puncState, "punc",  TogglePuncState, GetPuncState);
 
@@ -307,7 +308,7 @@ void TogglePuncState(void* arg)
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState* )arg;
-    UpdateStatus(puncState->owner, FCITX_PUNC_NAME);
+    UpdateStatus(puncState->owner, "punc");
     return IRV_DO_NOTHING;
 }
 
