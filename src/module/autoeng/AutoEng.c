@@ -122,7 +122,7 @@ void* AutoEngCreate(FcitxInstance *instance)
     khk.arg = autoEngState;
     khk.func = ProcessAutoEng;
     
-    FcitxResetInputHook rhk;
+    FcitxIMEventHook rhk;
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
     

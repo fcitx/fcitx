@@ -300,8 +300,6 @@ INPUT_RETURN_VALUE ProcessKey(
                         SwitchIM(instance, -1);
                     else if (IsHotKey(sym, state, fc->hkTrigger))
                         CloseIM(instance, GetCurrentIC(instance));
-                    /* else if (bVK)
-                        ChangVK(); */
                 } else if (IsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
                     if (fc->bSendTextWhenSwitchEng) {
@@ -428,7 +426,6 @@ INPUT_RETURN_VALUE ProcessKey(
             else if (IsHotKey(sym, state, fc->hkNextPage))
                 retVal = currentIM->GetCandWords(currentIM->klass, SM_NEXT);
         }
-
 
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
             ProcessPostInputFilter(sym, state, &retVal);

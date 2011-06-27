@@ -118,7 +118,7 @@ Description=Hotkey of Hiding Main Window
 
 [Hotkey/VKSwitchKey]
 Type=Hotkey
-DefaultValue=CTRL_ALT_K
+DefaultValue=CTRL_ALT_B
 Description=Hotkey of Switching Virtual Keyboard
 
 [Hotkey/LegendSwitchKey]

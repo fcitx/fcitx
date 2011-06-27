@@ -28,3 +28,7 @@ void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VA
 char* ProcessOutputFilter(char *in);
 INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state);
 void ResetInputHook();
+void TriggerOffHook();
+void TriggerOnHook();
+void InputFocusHook();
+void InputUnFocusHook();

@@ -31,7 +31,7 @@ typedef struct HookStack {
     union {
         KeyFilterHook keyfilter;
         StringFilterHook stringfilter;
-        FcitxResetInputHook resetinput;
+        FcitxIMEventHook eventhook;
         HotkeyHook hotkey;
     };
     struct HookStack* next;
@@ -63,7 +63,11 @@ DEFINE_HOOK(PreInputFilter, KeyFilterHook, keyfilter)
 DEFINE_HOOK(PostInputFilter, KeyFilterHook, keyfilter)
 DEFINE_HOOK(OutputFilter, StringFilterHook, stringfilter)
 DEFINE_HOOK(HotkeyFilter, HotkeyHook, hotkey)
-DEFINE_HOOK(ResetInputHook, FcitxResetInputHook, resetinput);
+DEFINE_HOOK(ResetInputHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(TriggerOnHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(TriggerOffHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
 
 void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -111,7 +115,48 @@ void ResetInputHook()
     stack = stack->next;
     while(stack)
     {
-        stack->resetinput.func(stack->resetinput.arg);
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+
+void TriggerOffHook()
+{
+    HookStack* stack = GetTriggerOffHook();
+    stack = stack->next;
+    while(stack)
+    {
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+void TriggerOnHook()
+{
+    HookStack* stack = GetTriggerOnHook();
+    stack = stack->next;
+    while(stack)
+    {
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+void InputFocusHook()
+{
+    HookStack* stack = GetInputFocusHook();
+    stack = stack->next;
+    while(stack)
+    {
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+void InputUnFocusHook()
+{
+    HookStack* stack = GetInputUnFocusHook();
+    stack = stack->next;
+    while(stack)
+    {
+        stack->eventhook.func(stack->eventhook.arg);
         stack = stack->next;
     }
 }

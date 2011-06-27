@@ -38,6 +38,7 @@ typedef struct FcitxModuleFunctionArg
     void* args[10];
 } FcitxModuleFunctionArg;
 
+void RunModule(struct FcitxInstance* instance );
 void LoadModule(struct FcitxInstance* instance);
 void* InvokeModuleFunction(struct FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 void* InvokeModuleFunctionWithName(struct FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);

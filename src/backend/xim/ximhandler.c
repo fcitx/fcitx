@@ -57,7 +57,7 @@ Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
     FcitxInputContext* ic =  FindIC(xim->owner, xim->backendid, &call_data->icid);
     SetCurrentIC(xim->owner, ic);
     
-    if (ic && ic->state != IS_CLOSED)
+    if (ic)
     {
         OnInputFocus(xim->owner);
     }
@@ -76,8 +76,8 @@ Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     if (ic && GetXimIC(ic)->id == call_data->icid)
     {
         CloseInputWindow(xim->owner);
+        OnInputUnFocus(xim->owner);
     }
-    OnInputUnFocus(xim->owner);
 
     return True;
 }

@@ -71,7 +71,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem)
 
     SwitchIM(instance, instance->iIMIndex);
     
-    StartBackend(instance);
+    LoadBackend(instance);
     
     if (instance->config.bFirstRun)
     {
@@ -97,6 +97,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem)
             DisplayMessage(instance, _("Setting Hint"), msg, 7);
         }
     }
+    /* make in order to use block X, query is not good here */
+    RunModule(instance);
 
     return instance;
 }

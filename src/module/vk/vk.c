@@ -104,14 +104,16 @@ static void ToggleVKState(void *arg);
 static INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg);
 static void DrawVKWindow (VKWindow* vkWindow);
 static boolean VKMouseKey (FcitxVKState* vkstate, int x, int y);
+static boolean VKPreFilter(void* arg, long unsigned int sym,
+                                    unsigned int state,
+                                    INPUT_RETURN_VALUE *retval
+                                   );
+static  void VKReset(void* arg);
+static void VKUpdate(void* arg);
+static INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state);
+static void DisplayVKWindow (VKWindow* vkWindow);
 
 static ConfigColor blackColor = {0, 0, 0};
-
-HOTKEYS FCITX_CTRL_SHIFT_K[2] = 
-{
-    {NULL, XK_K, KEY_CTRL_SHIFT_COMP},
-    {NULL, 0, 0},
-};
 
 FCITX_EXPORT_API
 FcitxModule module =
@@ -128,7 +130,7 @@ void *VKCreate(FcitxInstance* instance)
     vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
     
     HotkeyHook hotkey;
-    hotkey.hotkey = FCITX_CTRL_SHIFT_K;
+    hotkey.hotkey = instance->config.hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
     RegisterHotkeyFilter(hotkey);
@@ -137,7 +139,55 @@ void *VKCreate(FcitxInstance* instance)
     
     LoadVKMapFile(vkstate);
     
+    KeyFilterHook hk;
+    hk.arg = vkstate ;
+    hk.func = VKPreFilter;
+    RegisterPreInputFilter(hk);
+
+    FcitxIMEventHook resethk;
+    resethk.arg = vkstate;
+    resethk.func = VKReset;
+    RegisterTriggerOnHook(resethk);
+    RegisterTriggerOffHook(resethk);
+    
+    resethk.func = VKUpdate;
+    RegisterInputFocusHook(resethk);
+    RegisterInputUnFocusHook(resethk);
+    
     return vkstate;
+}
+
+void VKReset(void* arg)
+{
+    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    VKWindow* vkWindow = vkstate->vkWindow;
+    if (vkstate->bVK != false)
+        UpdateStatus(vkstate->owner, "vk");
+    if (vkWindow)
+        XUnmapWindow (vkWindow->dpy, vkWindow->window);
+}
+
+void VKUpdate(void* arg)
+{
+    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    VKWindow* vkWindow = vkstate->vkWindow;
+    if (vkWindow)
+    {
+        DrawVKWindow(vkWindow);
+        DisplayVKWindow(vkWindow);
+    }
+}
+
+boolean VKPreFilter(void* arg, long unsigned int sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    if (vkstate->bVK)
+    {
+        INPUT_RETURN_VALUE ret = DoVKInput(vkstate, sym, state);
+        *retval = ret;
+        return true;
+    }
+    return false;
 }
 
 boolean GetVKState(void *arg)
@@ -287,6 +337,12 @@ void DrawVKWindow (VKWindow* vkWindow)
     cairo_t *cr;
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
+    
+    if (GetCurrentState(vkstate->owner) == IS_CLOSED || !vkstate->bVK)
+    {
+        XUnmapWindow(vkWindow->dpy, vkWindow->window);
+        return;
+    }
 
     cr = cairo_create(vkWindow->surface);
     cairo_surface_t* vkimage = LoadVKImage(vkWindow);
@@ -596,7 +652,7 @@ void ChangVK (FcitxVKState* vkstate)
     DrawVKWindow (vkstate->vkWindow);
 }
 
-INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state, int iCount)
+INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state)
 {
     char           *pstr = NULL;
     FcitxInputState *input = &vkstate->owner->input;

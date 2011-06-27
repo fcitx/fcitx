@@ -34,7 +34,7 @@ typedef boolean (*FcitxKeyFilter)(void* arg, long unsigned int sym,
                              INPUT_RETURN_VALUE *retval
                             );
 typedef char* (*FcitxStringFilter)(void* arg, const char* in);
-typedef void (*FcitxResetInputHookFunc)(void* arg);
+typedef void (*FcitxIMEventHookFunc)(void* arg);
 
 /**
  * @brief Hotkey process struct
@@ -68,16 +68,20 @@ typedef struct StringFilterHook
     void *arg;
 } StringFilterHook;
 
-typedef struct FcitxResetInputHook 
+typedef struct FcitxIMEventHook 
 {
-    FcitxResetInputHookFunc func;
+    FcitxIMEventHookFunc func;
     void *arg;
-} FcitxResetInputHook;
+} FcitxIMEventHook;
 
 void RegisterPreInputFilter(KeyFilterHook) ;
 void RegisterPostInputFilter(KeyFilterHook);
 void RegisterOutputFilter(StringFilterHook);
 void RegisterHotkeyFilter(HotkeyHook);
-void RegisterResetInputHook(FcitxResetInputHook value);
+void RegisterResetInputHook(FcitxIMEventHook value);
+void RegisterTriggerOnHook(FcitxIMEventHook value);
+void RegisterTriggerOffHook(FcitxIMEventHook value);
+void RegisterInputFocusHook(FcitxIMEventHook value);
+void RegisterInputUnFocusHook(FcitxIMEventHook value);
 
 #endif

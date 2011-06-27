@@ -602,6 +602,8 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     DrawMainWindow (classicui->mainWindow);
     DrawInputWindow (classicui->inputWindow);
     DrawTrayWindow (classicui->trayWindow);
+    
+    SaveClassicUIConfig(classicui);
 }
 
 void UnloadImage(FcitxSkin* skin)

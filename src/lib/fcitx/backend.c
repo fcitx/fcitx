@@ -136,6 +136,7 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     FcitxBackend* backend = (*pbackend)->backend;
     ic->state = IS_CLOSED;
     backend->CloseIM((*pbackend)->addonInstance, ic);
+    OnTriggerOff(instance);
     CloseInputWindow(instance);
 }
 
@@ -209,7 +210,7 @@ void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, i
 }
 
 
-void StartBackend(FcitxInstance* instance)
+void LoadBackend(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     UT_array* backends = &instance->backends;
@@ -254,10 +255,6 @@ void StartBackend(FcitxInstance* instance)
                         addon->backend = backend;
                         backendindex ++;
                         utarray_push_back(backends, &addon);
-                        if (backend->Run)
-                        {
-                            pthread_create(&addon->pid, NULL, backend->Run, NULL);
-                        }
                     }
                     break;
                 default:

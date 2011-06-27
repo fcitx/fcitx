@@ -100,24 +100,20 @@ void* X11Run(void* arg)
     XEvent event;
     /* 主循环，即XWindow的消息循环 */
     for (;;) {
+        XNextEvent (x11priv->dpy, &event);           //等待一个事件发生
+
         FcitxLock(x11priv->owner);
-        while (XPending (x11priv->dpy) ) {
-            XNextEvent (x11priv->dpy, &event);           //等待一个事件发生
-
-
-            /* 处理X事件 */
-            if (XFilterEvent (&event, None) == False)
-            {
-                FcitxXEventHandler* handler;
-                for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
-                        handler != NULL;
-                        handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
-                    if (handler->eventHandler (handler->instance, &event))
-                        break;
-            }
+        /* 处理X事件 */
+        if (XFilterEvent (&event, None) == False)
+        {
+            FcitxXEventHandler* handler;
+            for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
+                    handler != NULL;
+                    handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
+                if (handler->eventHandler (handler->instance, &event))
+                    break;
         }
         FcitxUnlock(x11priv->owner);
-        usleep(16000);
     }
     return NULL;
 

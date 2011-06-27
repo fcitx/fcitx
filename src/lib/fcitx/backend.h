@@ -45,7 +45,6 @@ typedef struct FcitxInputContext
 typedef struct FcitxBackend
 {
     void* (*Create)(struct FcitxInstance*, int backendindex);
-    void* (*Run)(void* arg);
     boolean (*Destroy)(void *arg);
     void (*CreateIC)(void* arg, FcitxInputContext*, void* priv);
     boolean (*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
@@ -63,7 +62,7 @@ void InitFcitxBackends(UT_array* );
 FcitxInputContext* FindIC(struct FcitxInstance* instance, int backendid, void* filter);
 FcitxInputContext* CreateIC(struct FcitxInstance* instance, int backendid, void* priv);
 void DestroyIC(struct FcitxInstance* instance, int backendid, void* filter);
-void StartBackend(struct FcitxInstance* instance );
+void LoadBackend(struct FcitxInstance* instance );
 void CloseIM(struct FcitxInstance* instance, FcitxInputContext* ic);
 void CommitString(struct FcitxInstance* instance, FcitxInputContext* ic, char* str);
 void ChangeIMState (struct FcitxInstance*, FcitxInputContext* ic);

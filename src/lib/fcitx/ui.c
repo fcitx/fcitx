@@ -30,6 +30,7 @@
 #include <sys/stat.h>
 #include <fcitx-utils/utils.h>
 #include "instance.h"
+#include "hook-internal.h"
 
 FcitxUI dummyUI;
 
@@ -305,12 +306,16 @@ void OnInputFocus(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputFocus)
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
+    
+    InputFocusHook();
 }
 
 void OnInputUnFocus(struct FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputUnFocus)
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
+    
+    InputUnFocusHook();
 }
 
 void OnTriggerOn(FcitxInstance* instance)
@@ -329,6 +334,8 @@ void OnTriggerOff(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOff)
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
+    
+    TriggerOffHook();
 }
 
 void UpdateMenuShell(FcitxUIMenu* menu)

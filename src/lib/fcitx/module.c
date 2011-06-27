@@ -73,10 +73,6 @@ void LoadModule(FcitxInstance* instance)
                         }
                         addon->module = module;
                         addon->addonInstance = moduleinstance;
-                        if(module->Run)
-                        {                            
-                            pthread_create(&addon->pid, NULL, module->Run, addon->addonInstance);
-                        }
                     }
                 default:
                     break;
@@ -85,6 +81,33 @@ void LoadModule(FcitxInstance* instance)
         }
     }
 }
+
+void RunModule(FcitxInstance* instance)
+{
+    UT_array* addons = &instance->addons;
+    FcitxAddon *addon;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+          addon != NULL;
+          addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->bEnabled && addon->category == AC_MODULE)
+        {
+            switch (addon->type)
+            {
+                case AT_SHAREDLIBRARY:
+                    {
+                        if(addon->module && addon->module->Run)
+                        {                            
+                            pthread_create(&addon->pid, NULL, addon->module->Run, addon->addonInstance);
+                        }
+                    }
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 
 void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {

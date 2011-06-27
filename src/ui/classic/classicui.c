@@ -66,8 +66,6 @@ static void ClassicUIInputReset(void *arg);
 static ConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y, int* w, int* h);
 
-static void LoadClassicUIConfig();
-static void SaveClassicUIConfig(FcitxClassicUI* classicui);
 static void* ClassicUILoadImage(void *arg, FcitxModuleFunctionArg args);
 static void* ClassicUIGetKeyBoardFontColor(void* arg, FcitxModuleFunctionArg args);
 static void* ClassicUIGetFont(void *arg, FcitxModuleFunctionArg args);
@@ -140,7 +138,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->messageWindow = CreateMessageWindow(classicui);
     classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
     
-    FcitxResetInputHook resethk;
+    FcitxIMEventHook resethk;
     resethk.arg = classicui;
     resethk.func = ClassicUIInputReset;
     RegisterResetInputHook(resethk);
@@ -219,9 +217,9 @@ static void ClassicUIOnInputFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxInstance *instance = classicui->owner;
+    DrawMainWindow(classicui->mainWindow);
     if (GetCurrentState(instance) == IS_ACTIVE)
     {
-        DrawMainWindow(classicui->mainWindow);
         ShowMainWindow(classicui->mainWindow);
     }
     DrawTrayWindow(classicui->trayWindow);
@@ -230,12 +228,7 @@ static void ClassicUIOnInputFocus(void *arg)
 static void ClassicUIOnInputUnFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    FcitxInstance *instance = classicui->owner;
-    if (GetCurrentState(instance) == IS_ACTIVE)
-    {
-        DrawMainWindow(classicui->mainWindow);
-        ShowMainWindow(classicui->mainWindow);
-    }
+    DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
 Bool
