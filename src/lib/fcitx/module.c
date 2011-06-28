@@ -69,11 +69,12 @@ void LoadModule(FcitxInstance* instance)
                         if((moduleinstance = module->Create(instance)) == NULL)
                         {
                             dlclose(handle);
-                            return;
+                            break;
                         }
                         addon->module = module;
                         addon->addonInstance = moduleinstance;
                     }
+                    break;
                 default:
                     break;
             }

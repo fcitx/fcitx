@@ -39,6 +39,7 @@
 #include <fcitx-utils/cutils.h>
 #include <fcitx/backend.h>
 #include <fcitx/module.h>
+#include "MenuWindow.h"
 
 static boolean TrayEventHandler(void *instance, XEvent* event);
 
@@ -219,8 +220,42 @@ boolean TrayEventHandler(void *instance, XEvent* event)
                 DrawTrayWindow (trayWindow);
             }
             break;
+        case ButtonPress:
+            {
+                switch(event->xbutton.button)
+                {
+                    case Button1:
+                        EnableIM(instance, false);
+                        break;
+                    case Button3:
+                        {
+                            XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
+                            int dwidth, dheight;
+                            GetScreenSize(classicui, &dwidth, &dheight);
+                            GetMenuSize(mainMenuWindow);
+                            if (event->xbutton.x_root - event->xbutton.x +
+                                mainMenuWindow->width >= dwidth)
+                                mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
+                            else
+                                mainMenuWindow->iPosX =
+                                    event->xbutton.x_root - event->xbutton.x;
 
+                            // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
+                            if (event->xbutton.y_root + mainMenuWindow->height -
+                                event->xbutton.y >= dheight)
+                                mainMenuWindow->iPosY =
+                                    dheight - mainMenuWindow->height -
+                                    event->xbutton.y - 15;
+                            else
+                                mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
 
+                            DrawXlibMenu(mainMenuWindow);
+                            DisplayXlibMenu(mainMenuWindow);
+                        }
+                        break;
+                }
+            }
+            break;
         case DestroyNotify:
             trayWindow->bTrayMapped = False;
             ReleaseTrayWindow(trayWindow);

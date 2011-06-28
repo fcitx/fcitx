@@ -27,12 +27,19 @@
 #include "ime.h"
 
 struct FcitxInstance;
-typedef enum _IME_STATE {
+
+/**
+ * @brief Input Method State
+ **/
+typedef enum IME_STATE {
     IS_CLOSED = 0,
     IS_ENG,
     IS_ACTIVE
 } IME_STATE;
 
+/**
+ * @brief Input Context, normally one for one program
+ **/
 typedef struct FcitxInputContext
 {
     IME_STATE state; /* im state */
@@ -42,6 +49,9 @@ typedef struct FcitxInputContext
     struct FcitxInputContext* next;
 } FcitxInputContext;
 
+/**
+ * @brief Program IM Module Backend
+ **/
 typedef struct FcitxBackend
 {
     void* (*Create)(struct FcitxInstance*, int backendindex);
@@ -56,18 +66,125 @@ typedef struct FcitxBackend
     void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
 } FcitxBackend;
 
+/**
+ * @brief Get Current Input Context
+ *
+ * @param instance 
+ * @return FcitxInputContext*
+ **/
 FcitxInputContext* GetCurrentIC(struct FcitxInstance* instance);
+
+/**
+ * @brief Set Current Input Context
+ *
+ * @param instance 
+ * @param ic new input context
+ * @return void
+ **/
 void SetCurrentIC(struct FcitxInstance* instance, FcitxInputContext* ic);
+
+/**
+ * @brief Initial backends array
+ *
+ * @param  backends array
+ * @return void
+ **/
 void InitFcitxBackends(UT_array* );
+
+/**
+ * @brief Find Input Context By Backend Specific filter
+ *
+ * @param instance 
+ * @param backendid backend id
+ * @param filter backend specfic filter
+ * @return FcitxInputContext*
+ **/
 FcitxInputContext* FindIC(struct FcitxInstance* instance, int backendid, void* filter);
+
+/**
+ * @brief Creat New Input Context
+ *
+ * @param instance 
+ * @param backendid backend id
+ * @param priv backend specfic data
+ * @return FcitxInputContext*
+ **/
 FcitxInputContext* CreateIC(struct FcitxInstance* instance, int backendid, void* priv);
+
+/**
+ * @brief Destroy Input context
+ *
+ * @param instance 
+ * @param backendid backend id
+ * @param filter backend specfic filter
+ * @return void
+ **/
 void DestroyIC(struct FcitxInstance* instance, int backendid, void* filter);
+
+/**
+ * @brief Load All backend
+ *
+ * @param instance 
+ * @return void
+ **/
 void LoadBackend(struct FcitxInstance* instance );
+
+/**
+ * @brief End Input
+ *
+ * @param instance 
+ * @param ic input context
+ * @return void
+ **/
 void CloseIM(struct FcitxInstance* instance, FcitxInputContext* ic);
+
+/**
+ * @brief Commit String to Client
+ *
+ * @param instance 
+ * @param ic input context
+ * @param str String to commit
+ * @return void
+ **/
 void CommitString(struct FcitxInstance* instance, FcitxInputContext* ic, char* str);
+
+/**
+ * @brief ...
+ *
+ * @param  ...
+ * @param ic ...
+ * @return void
+ **/
 void ChangeIMState (struct FcitxInstance*, FcitxInputContext* ic);
+
+/**
+ * @brief Set Cursor Position
+ *
+ * @param  ...
+ * @param ic input context
+ * @param x xpos
+ * @param y ypos
+ * @return void
+ **/
 void SetWindowOffset(struct FcitxInstance*, FcitxInputContext* ic, int x, int y);
+
+/**
+ * @brief Get Cursor Position
+ *
+ * @param  ...
+ * @param ic input context
+ * @param x xpos
+ * @param y ypos
+ * @return void
+ **/
 void GetWindowPosition(struct FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
+
+/**
+ * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
+ *
+ * @param instance 
+ * @return IME_STATE
+ **/
 IME_STATE GetCurrentState(struct FcitxInstance* instance);
 
 #endif

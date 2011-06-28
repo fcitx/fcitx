@@ -76,6 +76,7 @@ typedef struct FcitxVKState {
     boolean         bShiftPressed;
     boolean         bVKCaps;
     boolean         bVK;
+    FcitxUIMenu     vkmenu;
     FcitxInstance* owner;
     FcitxAddon* classicui;
 } FcitxVKState;
@@ -112,6 +113,9 @@ static  void VKReset(void* arg);
 static void VKUpdate(void* arg);
 static INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state);
 static void DisplayVKWindow (VKWindow* vkWindow);
+static boolean VKMenuAction(FcitxUIMenu *menu, int index);
+static void UpdateVKMenuShell(FcitxUIMenu *menu);
+static void SelectVK(FcitxVKState* vkstate, int vkidx);
 
 static ConfigColor blackColor = {0, 0, 0};
 
@@ -154,7 +158,35 @@ void *VKCreate(FcitxInstance* instance)
     RegisterInputFocusHook(resethk);
     RegisterInputUnFocusHook(resethk);
     
+    strcpy(vkstate->vkmenu.candStatusBind, "vk");
+    strcpy(vkstate->vkmenu.name, "Virtual Keyboard");
+    
+    utarray_init(&vkstate->vkmenu.shell, &menuICD);
+    vkstate->vkmenu.UpdateMenuShell = UpdateVKMenuShell;
+    vkstate->vkmenu.MenuAction = VKMenuAction;
+    vkstate->vkmenu.priv = vkstate;
+    vkstate->vkmenu.isSubMenu = false;
+    
+    int i;
+    for(i = 0; i < vkstate->iVKCount; i ++)
+        AddMenuShell(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
+
+    RegisterMenu(instance, &vkstate->vkmenu);
+    
     return vkstate;
+}
+
+boolean VKMenuAction(FcitxUIMenu *menu, int index)
+{
+    FcitxVKState* vkstate = (FcitxVKState*) menu->priv;
+    SelectVK(vkstate, index);
+    return true;
+}
+
+void UpdateVKMenuShell(FcitxUIMenu *menu)
+{
+    FcitxVKState* vkstate = (FcitxVKState*) menu->priv;
+    menu->mark = vkstate->iCurrentVK;
 }
 
 void VKReset(void* arg)
@@ -731,8 +763,9 @@ void SelectVK(FcitxVKState* vkstate, int vkidx)
 {
     vkstate->bVK = false;
     vkstate->iCurrentVK=vkidx;
-    XUnmapWindow (vkstate->vkWindow->dpy, vkstate->vkWindow->window);
-    SwitchVK(vkstate);
+    UpdateStatus(vkstate->owner, "vk");
+    if (vkstate->vkWindow)
+        DrawVKWindow(vkstate->vkWindow);
 }
 
 void
