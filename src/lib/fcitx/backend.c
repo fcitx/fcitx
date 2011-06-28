@@ -250,7 +250,7 @@ void LoadBackend(FcitxInstance* instance)
                         if((addon->addonInstance = backend->Create(instance, backendindex)) == NULL)
                         {
                             dlclose(handle);
-                            return;
+                            break;
                         }                        
                         addon->backend = backend;
                         backendindex ++;

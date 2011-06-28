@@ -233,7 +233,7 @@ void LoadAllIM(FcitxInstance* instance)
                         if((addon->addonInstance = imclass->Create(instance)) == NULL)
                         {
                             dlclose(handle);
-                            return;
+                            break;
                         }
                         addon->imclass = imclass;
                         utarray_push_back(ims, &addon);
