@@ -1,5 +1,3 @@
-if(FALSE)
-
 include_directories(${fcitx_SOURCE_DIR}/src)
 
 set(fcitx_kimpanel_ui_SOURCES
@@ -11,5 +9,3 @@ install(TARGETS fcitx-kimpanel-ui DESTINATION ${addondir})
 set_target_properties( fcitx-kimpanel-ui PROPERTIES PREFIX "")
 
 install(FILES fcitx-kimpanel-ui.conf DESTINATION ${pkgdatadir}/data/addon)
-
-endif()

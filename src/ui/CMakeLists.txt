@@ -1,2 +1,5 @@
 add_subdirectory(classic)
-add_subdirectory(kimpanel)
+
+if (ENABLE_DBUS)
+    add_subdirectory(kimpanel)
+endif (ENABLE_DBUS)

@@ -270,12 +270,9 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
     
     ClassicUISetWindowProperty(classicui, menu->menuWindow, FCITX_WINDOW_MENU, strWindowName);
     
-    FcitxSkin *sc = &menu->owner->skin;
     menu->iPosX=100;
     menu->iPosY=100;
     menu->width=cairo_image_surface_get_height(menu->menu_cs);
-    menu->font_size=sc->skinFont.menuFontSize;
-    strcpy(menu->font,menu->owner->menuFont);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MenuWindowEventHandler;
@@ -293,7 +290,7 @@ void GetMenuSize(XlibMenu * menu)
     FcitxSkin *sc = &menu->owner->skin;
 
     winheight = sc->skinMenu.marginTop + sc->skinMenu.marginBottom;//菜单头和尾都空8个pixel
-    fontheight= menu->font_size;
+    fontheight= sc->skinFont.menuFontSize;
     for (i=0;i<utarray_len(&menu->menushell->shell);i++)
     {
         if ( GetMenuShell(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuShell(menu->menushell, i)->type == MENUTYPE_SUBMENU)
@@ -301,7 +298,7 @@ void GetMenuSize(XlibMenu * menu)
         else if ( GetMenuShell(menu->menushell, i)->type == MENUTYPE_DIVLINE)
             winheight += 5;
         
-        int width = StringWidth(GetMenuShell(menu->menushell, i)->tipstr, menu->font, menu->font_size);
+        int width = StringWidth(GetMenuShell(menu->menushell, i)->tipstr, menu->owner->menuFont, sc->skinFont.menuFontSize);
         if (width > menuwidth)
             menuwidth = width;        
     }
@@ -322,7 +319,7 @@ void DrawXlibMenu(XlibMenu * menu)
     cairo_t* cr=cairo_create(menu->menu_cs);
     SkinImage *background = LoadImage(sc, sc->skinMenu.backImg, false);
 
-    fontheight= menu->font_size;
+    fontheight= sc->skinFont.menuFontSize;
 
     GetMenuSize(menu);
 
@@ -388,7 +385,7 @@ void MenuMark(XlibMenu * menu,int y,int i)
 {
     FcitxSkin *sc = &menu->owner->skin;
     int marginLeft = sc->skinMenu.marginLeft;
-    double size = (menu->font_size * 0.7 ) / 2;
+    double size = (sc->skinFont.menuFontSize * 0.7 ) / 2;
     cairo_t *cr;
     cr = cairo_create(menu->menu_cs);
     if (GetMenuShell(menu->menushell, i)->isselect == 0)
@@ -399,7 +396,7 @@ void MenuMark(XlibMenu * menu,int y,int i)
     {
         fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_ACTIVE]);
     }
-    cairo_translate(cr, marginLeft + 7, y + (menu->font_size / 2.0) );
+    cairo_translate(cr, marginLeft + 7, y + (sc->skinFont.menuFontSize / 2.0) );
     cairo_arc(cr, 0, 0, size , 0., 2*M_PI);
     cairo_fill(cr);
     cairo_destroy(cr);
@@ -417,7 +414,7 @@ void DisplayText(XlibMenu * menu,int shellindex,int line_y)
     cairo_t *  cr;
     cr=cairo_create(menu->menu_cs);
 
-    SetFontContext(cr, menu->font, menu->font_size);
+    SetFontContext(cr, menu->owner->menuFont, sc->skinFont.menuFontSize);
 
     if (GetMenuShell(menu->menushell, shellindex)->isselect ==0)
     {
@@ -429,7 +426,7 @@ void DisplayText(XlibMenu * menu,int shellindex,int line_y)
     {
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         fcitx_cairo_set_color(cr, &sc->skinMenu.activeColor);
-        cairo_rectangle (cr, marginLeft ,line_y, menu->width - marginRight - marginLeft,menu->font_size+4);
+        cairo_rectangle (cr, marginLeft ,line_y, menu->width - marginRight - marginLeft,sc->skinFont.menuFontSize+4);
         cairo_fill (cr);
 
         fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_ACTIVE]);
@@ -444,8 +441,8 @@ void DrawArrow(XlibMenu *menu, int line_y)
     FcitxSkin *sc = &menu->owner->skin;
     int marginRight = sc->skinMenu.marginRight;
     cairo_t* cr=cairo_create(menu->menu_cs);
-    double size = menu->font_size * 0.4;
-    double offset = (menu->font_size - size) / 2;
+    double size = sc->skinFont.menuFontSize * 0.4;
+    double offset = (sc->skinFont.menuFontSize - size) / 2;
     cairo_move_to(cr,menu->width - marginRight - 1 - size, line_y + offset);
     cairo_line_to(cr,menu->width - marginRight - 1 - size, line_y+size * 2 + offset);
     cairo_line_to(cr,menu->width - marginRight - 1, line_y + size + offset );
@@ -468,7 +465,7 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
     if (x < marginLeft)
         return -1;
 
-    fontheight= menu->font_size;
+    fontheight= sc->skinFont.menuFontSize;
     for (i=0;i<utarray_len(&menu->menushell->shell);i++)
     {
         if (GetMenuShell(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuShell(menu->menushell, i)->type == MENUTYPE_SUBMENU)

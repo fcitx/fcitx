@@ -38,6 +38,7 @@
 #include <ui/classic/classicuiinterface.h>
 #include <fcitx/hook.h>
 #include <X11/keysym.h>
+#include <ui/cairostuff/font.h>
 
 #define VK_FILE "vk.conf"
 
@@ -131,7 +132,7 @@ void *VKCreate(FcitxInstance* instance)
 {
     FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));
     vkstate->owner = instance;
-    vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
+    vkstate->classicui = NULL; // GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
     
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkVK;
@@ -270,6 +271,7 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     {
         vkWindow->fontColor = &blackColor;
         vkWindow->defaultFont = strdup("sans");
+        GetValidFont("zh", &vkWindow->defaultFont);
         vkWindow->font = &vkWindow->defaultFont;
     }
 
@@ -345,8 +347,8 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
             char path[PATH_MAX];
             strncpy(path, PKGDATADIR "/skin/default/keyboard.png" ,PATH_MAX );
             vkWindow->keyboard = cairo_image_surface_create_from_png(path);
-            return vkWindow->keyboard;
         }
+        return vkWindow->keyboard;
     }
     return NULL;
 }

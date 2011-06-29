@@ -22,8 +22,6 @@
 
 #include "fcitx/fcitx.h"
 
-#ifdef _ENABLE_TRAY
-
 #include <stdio.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -273,5 +271,3 @@ boolean TrayEventHandler(void *instance, XEvent* event)
     }
     return false;
 }
-
-#endif

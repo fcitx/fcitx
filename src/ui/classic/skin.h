@@ -156,6 +156,7 @@ void DrawInputBar(FcitxSkin* sc, struct InputWindow* inputWindow, struct Message
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
 void LoadInputMessage(FcitxSkin* sc, struct InputWindow* inputWindow, const char* font);
 void InitSkinMenu(struct FcitxClassicUI* classicui);
+void DisplaySkin(struct FcitxClassicUI* classicui, char * skinname);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
                              int height,

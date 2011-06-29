@@ -22,7 +22,10 @@
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/fcitx-config.h>
 #include "cairostuff.h"
+
+#ifdef _ENABLE_PANGO
 #include <pango/pangocairo.h>
+#endif
 
 int
 StringWidth(const char *str, const char *font, int fontSize)

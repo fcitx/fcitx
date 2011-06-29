@@ -55,6 +55,7 @@
 #include "fcitx/backend.h"
 #include <fcitx-utils/utils.h>
 #include <fcitx/instance.h>
+#include "ui/cairostuff/font.h"
 
 #define ROUND_SIZE 60
 
@@ -594,6 +595,9 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
 
     if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
         EndInstance(classicui->owner);
+    
+    GetValidFont(classicui->strUserLocale, &classicui->font);
+    GetValidFont(classicui->strUserLocale, &classicui->menuFont);
     
     UnloadImage(&classicui->skin);
     

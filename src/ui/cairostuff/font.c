@@ -24,40 +24,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <libintl.h>
 
-#include "fcitx/fcitx.h"
-#include "fcitx-utils/utils.h"
+#include <fcitx/fcitx.h>
+#include <fcitx-utils/utils.h>
+#include <fcitx-utils/cutils.h>
 
-#include "skin.h"
-#include "fcitx-utils/configfile.h"
-#include "fcitx-utils/cutils.h"
-
-extern FcitxState gs;
-
-void InitFont()
-{
-    if (!FcInit())
-    {
-        FcitxLog(FATAL, _("Error: Load fontconfig failed"));
-        exit(1);
-    }
-}
-
-void CreateFont()
+/**
+ * @brief Get Usable Font
+ *
+ * @param strUserLocale font language
+ * @param font input as a malloc-ed font name, out put as new malloc-ed font name.
+ * @return void
+ **/
+void GetValidFont(const char* strUserLocale, char **font)
 {
     FcFontSet	*fs = NULL;
     FcPattern   *pat = NULL;
     FcObjectSet *os = NULL;
 
+    if (!FcInit())
+    {
+        FcitxLog(ERROR, _("Error: Load fontconfig failed"));
+        return;
+    }
     char locale[3];
 
-    if (fc.strUserLocale[0])
-        strncpy(locale, fc.strUserLocale, 2);
+    if (strUserLocale)
+        strncpy(locale, strUserLocale, 2);
     else
         strcpy(locale, "zh");
     locale[2]='\0';
 reloadfont:
-    if (strcmp(gs.font, "") == 0)
+    if (strcmp(*font, "") == 0)
     {
         FcChar8 strpat[9];
         sprintf((char*)strpat, ":lang=%s", locale);
@@ -65,7 +64,7 @@ reloadfont:
     }
     else
     {
-        pat = FcNameParse ((FcChar8*)gs.font);
+        pat = FcNameParse ((FcChar8*)(*font));
     }
     
     os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
@@ -83,20 +82,20 @@ reloadfont:
     FcChar8* family;
     if (FcPatternGetString (fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch)
         goto nofont;
-    if (gs.font)
-        free(gs.font);
+    if (*font)
+        free(*font);
 
-    gs.font = strdup((const char*) family);
+    *font = strdup((const char*) family);
 
     FcFontSetDestroy(fs);
 
-    FcitxLog(INFO, _("your current font is: %s"), gs.font);
+    FcitxLog(INFO, _("your current font is: %s"), *font);
     return;
 
 nofont:
-    if (strcmp(gs.font, "") != 0)
+    if (strcmp(*font, "") != 0)
     {
-        strcpy(gs.font, "");
+        strcpy(*font, "");
         if (pat)
             FcPatternDestroy(pat);
         if (os)

@@ -63,7 +63,6 @@ typedef struct InputWindow {
     Display* dpy;
     int iScreen;
     struct FcitxSkin* skin;
-    const char* font;
     struct FcitxClassicUI *owner;
 } InputWindow;
 

@@ -21,17 +21,9 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
-#include <strings.h> // bzero()
+#include <strings.h>
 #include <ctype.h>
 #include <limits.h>
-
-#include "tools.h"
-#include "InputWindow.h"
-#include "im/special/vk.h"
-#include "fcitx/ime.h"
-#include "fcitx/xim.h"
-#include "interface/DBus.h"
-#include "profile.h"
 
 #ifdef _ENABLE_DBUS
 DBusConnection *conn;

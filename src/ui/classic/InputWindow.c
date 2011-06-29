@@ -64,7 +64,6 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     inputWindow->dpy = dpy;
     inputWindow->iScreen = iScreen;
     inputWindow->skin = sc;
-    inputWindow->font = classicui->font;
     inputWindow->owner = classicui;
 
     SkinImage *back = LoadImage(sc, sc->skinInputBar.backImg, false);

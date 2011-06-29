@@ -13,6 +13,7 @@ set(fcitx_classic_ui_SOURCES
     tray.c
     skinconfig.c
     skin.c
+    ../cairostuff/font.c
     ../cairostuff/cairostuff.c
 )
 

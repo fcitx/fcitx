@@ -144,6 +144,8 @@ void* ClassicUICreate(FcitxInstance* instance)
     RegisterResetInputHook(resethk);
     
     XUnlockDisplay(classicui->dpy);
+    
+    DisplaySkin(classicui, classicui->skinType);
 
     /* ensure order ! */
     AddFunction(classicuiaddon, ClassicUILoadImage);

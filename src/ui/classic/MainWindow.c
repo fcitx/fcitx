@@ -31,6 +31,7 @@
 #include <X11/Xutil.h>
 #include <string.h>
 #include <X11/Xatom.h>
+#include <limits.h>
 
 #include "MainWindow.h"
 #include "fcitx-utils/cutils.h"
@@ -44,6 +45,7 @@
 #include <libintl.h>
 #include "AboutWindow.h"
 #include "MenuWindow.h"
+
 
 static boolean MainWindowEventHandler(void *instance, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
@@ -165,10 +167,13 @@ void DrawMainWindow (MainWindow* mainWindow)
         SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
         SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
         SkinImage* imicon;
+        int imageheight;
         if (logo)
         {
             currentX += cairo_image_surface_get_width(logo->image);
-            height = MAX(height, cairo_image_surface_get_height(logo->image));
+            imageheight = cairo_image_surface_get_height(logo->image);
+            if (imageheight > height)
+                height = imageheight;
         }
         
         if (GetCurrentState(instance) != IS_ACTIVE )
@@ -183,7 +188,9 @@ void DrawMainWindow (MainWindow* mainWindow)
                 imicon = LoadImage(sc, sc->skinMainBar.active, false);
         }
         currentX += cairo_image_surface_get_width(imicon->image);
-        height = MAX(height, cairo_image_surface_get_height(imicon->image));
+        imageheight = cairo_image_surface_get_height(imicon->image);
+        if (imageheight > height)
+            height = imageheight;
         
         FcitxUIStatus* status;
         for(status = (FcitxUIStatus*) utarray_front(&instance->uistats);
@@ -200,8 +207,10 @@ void DrawMainWindow (MainWindow* mainWindow)
             SkinImage* statusicon = LoadImage(sc, path, false);
             if (statusicon == NULL)
                 continue;
-            currentX += cairo_image_surface_get_width(statusicon->image);
-            height = MAX(height, cairo_image_surface_get_height(statusicon->image));            
+            currentX += cairo_image_surface_get_width(statusicon->image); 
+            imageheight = cairo_image_surface_get_height(statusicon->image);
+            if (imageheight > height)
+                height = imageheight;        
         }
         
         int width = currentX + sc->skinMainBar.marginRight;

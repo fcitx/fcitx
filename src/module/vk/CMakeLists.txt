@@ -4,6 +4,7 @@ include_directories(${CAIRO_XLIB_INCLUDE_DIRS})
 set(FCITX_VK_SOURCES
     vk.c
     ../../ui/cairostuff/cairostuff.c
+    ../../ui/cairostuff/font.c
 )
 
 add_library(fcitx-vk MODULE ${FCITX_VK_SOURCES})

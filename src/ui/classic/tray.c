@@ -22,8 +22,6 @@
 
 #include "fcitx/fcitx.h"
 
-#ifdef _ENABLE_TRAY
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -223,5 +221,3 @@ Window TrayGetDock(Display* dpy, TrayWindow* tray)
     Window dock = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
     return dock;
 }
-
-#endif

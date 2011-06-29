@@ -1,4 +1,6 @@
-add_subdirectory(table)
+if (ENABLE_TABLE)
+    add_subdirectory(table)
+endif (ENABLE_TABLE)
 
 set(FCITX_DESC_FILES
     addon.desc
