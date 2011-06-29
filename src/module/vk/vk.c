@@ -132,7 +132,7 @@ void *VKCreate(FcitxInstance* instance)
 {
     FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));
     vkstate->owner = instance;
-    vkstate->classicui = NULL; // GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
+    vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
     
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkVK;
