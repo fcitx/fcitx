@@ -1141,7 +1141,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
     else
     {
         instance->bShowCursor = True;
-        instance->iCursorPos = input->iCodeInputCount;
+        input->iCursorPos = input->iCodeInputCount;
     }
 
     return retVal;

@@ -954,11 +954,11 @@ void CalculateCursorPosition(FcitxPinyinState* pystate)
 {
     int i;
     int iTemp;
-    FcitxInstance* instance = pystate->owner;
+    FcitxInputState* input = &pystate->owner->input;
 
-    instance->iCursorPos = 0;
+    input->iCursorPos = 0;
     for (i = 0; i < pystate->iPYSelected; i++)
-        instance->iCursorPos += strlen(pystate->pySelected[i].strHZ);
+        input->iCursorPos += strlen(pystate->pySelected[i].strHZ);
 
     if (pystate->iPYInsertPoint > strlen(pystate->strFindString))
         pystate->iPYInsertPoint = strlen(pystate->strFindString);
@@ -966,12 +966,12 @@ void CalculateCursorPosition(FcitxPinyinState* pystate)
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
         if (strlen(pystate->findMap.strPYParsed[i]) >= iTemp) {
-            instance->iCursorPos += iTemp;
+            input->iCursorPos += iTemp;
             break;
         }
-        instance->iCursorPos += strlen(pystate->findMap.strPYParsed[i]);
+        input->iCursorPos += strlen(pystate->findMap.strPYParsed[i]);
 
-        instance->iCursorPos++;
+        input->iCursorPos++;
         iTemp -= strlen(pystate->findMap.strPYParsed[i]);
     }
 }

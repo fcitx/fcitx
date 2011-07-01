@@ -45,12 +45,8 @@ typedef struct InputWindow {
     
     uint            iInputWindowHeight;
     uint            iInputWindowWidth;
-    Bool            bShowPrev;
-    Bool            bShowNext;
-    Bool            bShowCursor;
     
     //这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
-    ///* Issue 11: piaoairy: 为适应generic_config_integer(), 改int8_t 为int */
     int		iOffsetX;
     int		iOffsetY;
     

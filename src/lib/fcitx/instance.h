@@ -31,7 +31,6 @@ struct FcitxInputContext;
 typedef struct FcitxInstance {
     pthread_mutex_t fcitxMutex;
     int iIMIndex;
-    int iCursorPos;
     int bShowCursor;
     Messages* messageUp;
     Messages* messageDown;

@@ -24,215 +24,143 @@
 #include <strings.h>
 #include <ctype.h>
 #include <limits.h>
+#include "config.h"
+#include <fcitx/ui.h>
+#include <fcitx-utils/cutils.h>
+#include <dbus/dbus.h>
+#include <fcitx/instance.h>
 
-#ifdef _ENABLE_DBUS
-DBusConnection *conn;
-int ret;
+static void* KimpanelCreate(FcitxInstance* instance);
+static void KimpanelCloseInputWindow(void* arg);
+static void KimpanelShowInputWindow(void* arg);
+static void KimpanelMoveInputWindow(void* arg);
+static void KimpanelRegisterMenu(void *arg, FcitxUIMenu* menu);
+static void KimpanelUpdateStatus(void *arg, FcitxUIStatus* status);
+static void KimpanelRegisterStatus(void *arg, FcitxUIStatus* status);
+static void KimpanelOnInputFocus(void *arg);
+static void KimpanelOnInputUnFocus(void *arg);
+static void KimpanelOnTriggerOn(void *arg);
+static void KimpanelOnTriggerOff(void *arg);
+static void KimpanelDisplayMessage(void *arg, char *title, char **msg, int length);
+static void KimpanelInputReset(void *arg);
 
-Property logo_prop;
-Property state_prop;
-Property punc_prop;
-Property corner_prop;
-Property vk_prop;
-Property gbkt_prop;
-Property legend_prop;
-
-char sVKmsg[PATH_MAX] = "";
-
-#define TOOLTIP_STATE_ENG "英语"
-#define TOOLTIP_STATE_CHN "中文"
-#define TOOLTIP_PUNK_CHN "UP"
-#define TOOLTIP_PUNK_ENG "NP"
-#define TOOLTIP_CORNER_ENABLE "全角"
-#define TOOLTIP_CORNER_DISABLE "半角"
-#define TOOLTIP_VK_ENABLE "VK-ON"
-#define TOOLTIP_VK_DISABLE "VK-OFF"
-#define TOOLTIP_GBKT_ENABLE "繁体"
-#define TOOLTIP_GBKT_DISABLE "简体"
-#define TOOLTIP_LEGEND_ENABLE "联想"
-#define TOOLTIP_LEGEND_DISABLE "无联"
-
-//extern IMProtocol * current_call_data;
-extern int8_t iIMCount;
-extern Bool bIsInLegend;
-extern int iLegendCandWordCount;
-extern int iCurrentCandPage;
-extern int iCurrentLegendCandPage;
-extern int iCandPageCount;
-extern int iLegendCandPageCount;
-extern char *sVKHotkey;
-
-void fixProperty(Property *prop);
-char* convertMessage(char* in);
-int calKIMCursorPos();
-
-char sLogoLabel[MAX_IM_NAME * 2 + 1];
-
-//#define DEBUG_DBUS
-
-#ifdef DEBUG_DBUS
-#define debug_dbus(fmt,arg...) \
-    FcitxLog(DEBUG,fmt,##arg)
-#else
-static int /* inline */ debug_dbus(const char* fmt, ...)
-__attribute__((format(printf, 1, 2)));
-
-static int /* inline */ debug_dbus(const char* fmt, ...)
+typedef struct FcitxKimpanelUI
 {
-     return 0;
-}
-#endif
+    FcitxInstance* owner;
+} FcitxKimpanelUI;
 
-Bool InitDBus()
+FCITX_EXPORT_API
+FcitxUI ui = {
+    KimpanelCreate,
+    KimpanelCloseInputWindow,
+    KimpanelShowInputWindow,
+    KimpanelMoveInputWindow,
+    KimpanelUpdateStatus,
+    KimpanelRegisterStatus,
+    KimpanelRegisterMenu,
+    KimpanelOnInputFocus,
+    KimpanelOnInputUnFocus,
+    KimpanelOnTriggerOn,
+    KimpanelOnTriggerOff,
+    KimpanelDisplayMessage,
+    NULL
+};
+
+void* KimpanelCreate(FcitxInstance* instance)
 {
-    DBusError err;
-    // first init dbus
-    dbus_error_init(&err);
-    conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
-    if (dbus_error_is_set(&err)) {
-        debug_dbus(_("Connection Error (%s)"), err.message); 
-        dbus_error_free(&err); 
-    }
-    if (NULL == conn) { 
-        return False;
-    }
-
-    // request a name on the bus
-    ret = dbus_bus_request_name(conn, "org.kde.fcitx", 
-            DBUS_NAME_FLAG_REPLACE_EXISTING,
-            &err);
-    if (dbus_error_is_set(&err)) { 
-        debug_dbus( _("Name Error (%s)"), err.message); 
-        dbus_error_free(&err); 
-    }
-    if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) { 
-        return False;
-    }
-
-    dbus_connection_flush(conn);
-    // add a rule to receive signals from kimpanel
-    dbus_bus_add_match(conn, 
-            "type='signal',interface='org.kde.impanel'", 
-            &err);
-    dbus_connection_flush(conn);
-    if (dbus_error_is_set(&err)) { 
-        debug_dbus(_("Match Error (%s)"), err.message);
-        return False;
-    }
-
-    logo_prop.label = sLogoLabel;
-
-    return True;
+    FcitxKimpanelUI *kimpanel = fcitx_malloc0(sizeof(FcitxKimpanelUI));
+    kimpanel->owner = instance;
+    return kimpanel;
 }
 
-void TestSendSignal()
-{
-}
 
-void DBusLoop(void *val)
+void KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
 {
-    MyDBusEventHandler();
-}
-
-void MyDBusEventHandler()
-{
-    DBusMessage *msg;
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    FcitxIM* im = GetCurrentIM(instance);
     DBusMessageIter args;
-
     int int0;
-    char *s0;
-   
-    for (;;) {
-        dbus_connection_read_write(conn, 0);
-        msg = dbus_connection_pop_message(conn);
-        if ( NULL == msg) {
-            usleep(300);
-            continue;
-        }
-        FcitxLock();
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "MovePreeditCaret")) {
-            debug_dbus(_("MovePreeditCaret"));
-            // read the parameters
-            if (!dbus_message_iter_init(msg, &args))
-                debug_dbus(_("Message has no arguments!")); 
-            else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
-                debug_dbus(_("Argument is not INT32!")); 
-            else {
-                dbus_message_iter_get_basic(&args, &int0);
-                debug_dbus(_("Got Signal with value %d"), int0);
-            }
-        }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "SelectCandidate")) {
-            debug_dbus(_("SelectCandidate: "));
-            // read the parameters
-            if (!dbus_message_iter_init(msg, &args))
-                debug_dbus( _("Message has no arguments!")); 
-            else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
-                debug_dbus(_("Argument is not INT32!")); 
-            else {
-                dbus_message_iter_get_basic(&args, &int0);
 
-                char *pstr;
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "MovePreeditCaret")) {
+        FcitxLog(DEBUG, "MovePreeditCaret");
+        // read the parameters
+        if (!dbus_message_iter_init(msg, &args))
+            FcitxLog(DEBUG, "Message has no arguments!"); 
+        else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
+            FcitxLog(DEBUG, "Argument is not INT32!"); 
+        else {
+            dbus_message_iter_get_basic(&args, &int0);
+            FcitxLog(DEBUG, "Got Signal with value %d", int0);
+        }
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "SelectCandidate")) {
+        FcitxLog(DEBUG, "SelectCandidate: ");
+        // read the parameters
+        if (!dbus_message_iter_init(msg, &args))
+            FcitxLog(DEBUG, "Message has no arguments!"); 
+        else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
+            FcitxLog(DEBUG, "Argument is not INT32!"); 
+        else {
+            dbus_message_iter_get_basic(&args, &int0);
 
-                if (!bIsInLegend) {
-                    pstr = im[gs.iIMIndex].GetCandWord(int0);
+            char *pstr;
+
+            if (!bIsInLegend) {
+                if (im->GetCandWord)
+                {
+                    pstr = im->GetCandWord(im->klass, 1);
                     if (pstr) {
                         SendHZtoClient(0, pstr);
                         if (!fcitxProfile.bUseLegend) {
                             ResetInput();
                         }
                     }
-                    updateMessages();
-                } else {
-                    pstr = im[gs.iIMIndex].GetLegendCandWord(int0);
-                    if (pstr) {
-                        SendHZtoClient(0, pstr);
-                        if (!iLegendCandWordCount) {
-                            ResetInput ();
-                        }
-                    }
-                    updateMessages();
                 }
-                debug_dbus(_("%d:%s"), int0,pstr);
+            } else {
+                pstr = im->GetLegendCandWord(int0);
+                if (pstr) {
+                    SendHZtoClient(0, pstr);
+                    if (!iLegendCandWordCount) {
+                        ResetInput ();
+                    }
+                }
             }
+            FcitxLog(DEBUG, "%d:%s"), int0,pstr);
         }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageUp")) {
-            debug_dbus(_("LookupTablePageUp"));
-            im[gs.iIMIndex].GetCandWords (SM_PREV);
-            updateMessages();
-        }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageDown")) {
-            debug_dbus(_("LookupTablePageDown"));
-            im[gs.iIMIndex].GetCandWords (SM_NEXT);
-            updateMessages();
-        }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
-            debug_dbus(_("TriggerProperty: "));
-            // read the parameters
-            if (!dbus_message_iter_init(msg, &args))
-                debug_dbus(_("Message has no arguments!")); 
-            else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
-                debug_dbus(_("Argument is not STRING!")); 
-            else {
-                dbus_message_iter_get_basic(&args, &s0);
-                debug_dbus(_("%s"), s0);
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageUp")) {
+        FcitxLog(DEBUG, "LookupTablePageUp"));
+        im[gs.iIMIndex].GetCandWords (SM_PREV);
+        updateMessages();
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageDown")) {
+        FcitxLog(DEBUG, "LookupTablePageDown"));
+        im[gs.iIMIndex].GetCandWords (SM_NEXT);
+        updateMessages();
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
+        FcitxLog(DEBUG, "TriggerProperty: "));
+        // read the parameters
+        if (!dbus_message_iter_init(msg, &args))
+            FcitxLog(DEBUG, "Message has no arguments!")); 
+        else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
+            FcitxLog(DEBUG, "Argument is not STRING!")); 
+        else {
+            dbus_message_iter_get_basic(&args, &s0);
+            FcitxLog(DEBUG, "%s"), s0);
 
-                triggerProperty(s0);
-            }
+            triggerProperty(s0);
         }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
-            debug_dbus(_("PanelCreated"));
-            registerProperties();
-        }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
-            debug_dbus(_("Exit"));
-        }
-        if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
-            debug_dbus(_("ReloadConfig"));
-        }
-        // free the message
-        dbus_message_unref(msg);
-        FcitxUnlock();
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
+        FcitxLog(DEBUG, "PanelCreated"));
+        registerProperties();
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
+        FcitxLog(DEBUG, "Exit"));
+    }
+    if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
+        FcitxLog(DEBUG, "ReloadConfig"));
     }
 }
 
@@ -250,19 +178,19 @@ void KIMExecDialog(char *prop)
             "ExecDialog"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null"));
+        FcitxLog(DEBUG, "Message Null"));
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
     }
     dbus_connection_flush(conn);
 
@@ -284,7 +212,7 @@ void KIMExecMenu(char *props[],int n)
             "ExecMenu"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
@@ -302,14 +230,14 @@ void KIMExecMenu(char *props[],int n)
     dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"s",&sub);
     for (i = 0; i < n; i++) {
         if (!dbus_message_iter_append_basic(&sub, DBUS_TYPE_STRING, &props[i])) { 
-            debug_dbus(_("Out Of Memory!")); 
+            FcitxLog(DEBUG, "Out Of Memory!")); 
         }
     }
     dbus_message_iter_close_container(&args,&sub);
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -331,7 +259,7 @@ void KIMRegisterProperties(char *props[], int n)
             "RegisterProperties"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
@@ -349,14 +277,14 @@ void KIMRegisterProperties(char *props[], int n)
     dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"s",&sub);
     for (i = 0; i < n; i++) {
         if (!dbus_message_iter_append_basic(&sub, DBUS_TYPE_STRING, &props[i])) { 
-            debug_dbus(_("Out Of Memory!")); 
+            FcitxLog(DEBUG, "Out Of Memory!")); 
         }
     }
     dbus_message_iter_close_container(&args,&sub);
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -378,19 +306,19 @@ void KIMUpdateProperty(char *prop)
             "UpdateProperty"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -412,19 +340,19 @@ void KIMRemoveProperty(char *prop)
             "RemoveProperty"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -446,19 +374,19 @@ void KIMEnable(Bool toEnable)
             "Enable"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &toEnable)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -480,19 +408,19 @@ void KIMShowAux(Bool toShow)
             "ShowAux"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &toShow)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -514,19 +442,19 @@ void KIMShowPreedit(Bool toShow)
             "ShowPreedit"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &toShow)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -548,19 +476,19 @@ void KIMShowLookupTable(Bool toShow)
             "ShowLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_BOOLEAN, &toShow)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -582,7 +510,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
             "UpdateLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
@@ -595,7 +523,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
     dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"s",&subLabel);
     for (i = 0; i < nLabel; i++) {
         if (!dbus_message_iter_append_basic(&subLabel, DBUS_TYPE_STRING, &labels[i])) { 
-            debug_dbus(_("Out Of Memory!")); 
+            FcitxLog(DEBUG, "Out Of Memory!")); 
         }
     }
     dbus_message_iter_close_container(&args,&subLabel);
@@ -603,7 +531,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
     dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"s",&subText);
     for (i = 0; i < nText; i++) {
         if (!dbus_message_iter_append_basic(&subText, DBUS_TYPE_STRING, &texts[i])) { 
-            debug_dbus(_("Out Of Memory!")); 
+            FcitxLog(DEBUG, "Out Of Memory!")); 
         }
     }
     dbus_message_iter_close_container(&args,&subText);
@@ -612,7 +540,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
     dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"s",&subAttrs);
     for (i = 0; i < nLabel; i++) {
         if (!dbus_message_iter_append_basic(&subAttrs, DBUS_TYPE_STRING, &attr)) { 
-            debug_dbus(_("Out Of Memory!")); 
+            FcitxLog(DEBUG, "Out Of Memory!")); 
         }
     }
     dbus_message_iter_close_container(&args,&subAttrs);
@@ -622,7 +550,7 @@ void KIMUpdateLookupTable(char *labels[], int nLabel, char *texts[], int nText, 
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -644,19 +572,19 @@ void KIMUpdatePreeditCaret(int position)
             "UpdatePreeditCaret"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &position)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -678,7 +606,7 @@ void KIMUpdatePreeditText(char *text)
             "UpdatePreeditText"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
@@ -686,15 +614,15 @@ void KIMUpdatePreeditText(char *text)
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &text)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &attr)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -716,7 +644,7 @@ void KIMUpdateAux(char *text)
             "UpdateAux"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
@@ -725,15 +653,15 @@ void KIMUpdateAux(char *text)
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &text)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &attr)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -755,22 +683,22 @@ void KIMUpdateSpotLocation(int x,int y)
             "UpdateSpotLocation"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &x)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &y)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -792,19 +720,19 @@ void KIMUpdateScreen(int id)
             "UpdateScreen"); // name of the signal
     if (NULL == msg) 
     { 
-        debug_dbus(_("Message Null")); 
+        FcitxLog(DEBUG, "Message Null")); 
         return;
     }
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &id)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
 
     // send the message and flush the connection
     if (!dbus_connection_send(conn, msg, &serial)) { 
-        debug_dbus(_("Out Of Memory!")); 
+        FcitxLog(DEBUG, "Out Of Memory!")); 
     }
     dbus_connection_flush(conn);
 
@@ -827,7 +755,7 @@ void updateMessages()
 
     if (n) {
         for (i=0;i<n;i++) {
-            debug_dbus(_("Type: %d Text: %s"),messageDown.msg[i].type,messageDown.msg[i].strMsg);
+            FcitxLog(DEBUG, "Type: %d Text: %s"),messageDown.msg[i].type,messageDown.msg[i].strMsg);
 
             if (messageDown.msg[i].type == MSG_INDEX) {
                 if (nLabels) {
@@ -853,7 +781,7 @@ void updateMessages()
                 text[nTexts] = strdup("");
             }
         }
-        debug_dbus(_("Labels %d, Texts %d, CMB:%s"),nLabels,nTexts, cmb); 
+        FcitxLog(DEBUG, "Labels %d, Texts %d, CMB:%s"),nLabels,nTexts, cmb); 
         if (nTexts == 0) {
             KIMShowLookupTable(False);
         }
@@ -889,7 +817,7 @@ void updateMessages()
         // FIXME: buffer overflow
         for (i=0;i<n;i++) {
             strcat(aux,messageUp.msg[i].strMsg);
-            debug_dbus(_("updateMesssages Up:%s"), aux);
+            FcitxLog(DEBUG, "updateMesssages Up:%s"), aux);
         }
         if (inputWindow.bShowCursor)
         {
@@ -925,75 +853,7 @@ void registerProperties()
 
     int i = 0;
 
-
-    logo_prop.key = "/Fcitx/Logo";
-    strcpy(logo_prop.label, "Fcitx");
-    logo_prop.icon = "fcitx";
-    logo_prop.tip = "小企鹅输入法";
-    props[0] = property2string(&logo_prop);
-
-    state_prop.key = "/Fcitx/State";
-    state_prop.label = TOOLTIP_STATE_ENG;
-    state_prop.icon = "fcitx-eng";
-    state_prop.tip = "小企鹅输入法";
-    props[1] = property2string(&state_prop);
-
-    punc_prop.key = "/Fcitx/Punc";
-    punc_prop.label = fcitxProfile.bWidePunc ? TOOLTIP_PUNK_CHN : TOOLTIP_PUNK_ENG;
-
-    if (fcitxProfile.bWidePunc) {
-        punc_prop.icon = "fcitx-full-punct";
-    } else {
-        punc_prop.icon = "fcitx-half-punct";
-    }
-    punc_prop.tip = "中英文标点切换";
-    props[2] = property2string(&punc_prop);
-
-    corner_prop.key = "/Fcitx/Corner";
-    corner_prop.label = fcitxProfile.bCorner ? TOOLTIP_CORNER_ENABLE : TOOLTIP_CORNER_DISABLE;
-    if (fcitxProfile.bCorner) {
-        corner_prop.icon = "fcitx-full-letter";
-    } else {
-        corner_prop.icon = "fcitx-half-letter";
-    }
-    corner_prop.tip = "全半角切换";
-    props[3] = property2string(&corner_prop);
-
-    vk_prop.key = "/Fcitx/VK";
-    vk_prop.label = bVK ? TOOLTIP_VK_ENABLE : TOOLTIP_VK_DISABLE;
-    if (bVK) {
-        vk_prop.icon = "fcitx-vkon";
-    } else {
-        vk_prop.icon = "fcitx-vkoff";
-    }
-    sprintf(sVKmsg,  "虚拟键盘切换：%s", sVKHotkey);
-    vk_prop.tip = sVKmsg;
-    props[4] = property2string(&vk_prop);
-
-    gbkt_prop.key = "/Fcitx/GBKT";
-    gbkt_prop.label = fcitxProfile.bUseGBKT ? TOOLTIP_GBKT_ENABLE : TOOLTIP_GBKT_DISABLE;
-    if (fcitxProfile.bUseGBKT) {
-        gbkt_prop.icon = "fcitx-trad";
-    } else {
-        gbkt_prop.icon = "fcitx-simp";
-    }
-    gbkt_prop.tip = "简繁体转换";
-    props[5] = property2string(&gbkt_prop);
-
-    legend_prop.key = "/Fcitx/Legend";
-    legend_prop.label = fcitxProfile.bUseLegend ? TOOLTIP_LEGEND_ENABLE : TOOLTIP_LEGEND_DISABLE;
-    if (fcitxProfile.bUseLegend) {
-        legend_prop.icon = "fcitx-legend";
-    } else {
-        legend_prop.icon = "fcitx-nolegend";
-    }
-    legend_prop.tip = "启用联想支持";
-    props[6] = property2string(&legend_prop);
-
     KIMRegisterProperties(props,7);
-    for(i=0;i<7;i++) {
-        free(props[i]);
-    }
 }
 
 void updateProperty(Property *prop)
@@ -1058,154 +918,6 @@ void updateProperty(Property *prop)
     free(need_free);
 }
 
-void triggerProperty(char *propKey)
-{
-    char *menu[32];
-    char *name;
-    int i;
-    bzero(menu,32);
-    if (strcmp(propKey,logo_prop.key) == 0) {
-        for (i = 0; i < iIMCount; i++) {
-            name = im[i].strName;
-            //menu[i] = (char *)malloc(100*sizeof(char));
-            Property prop;
-            prop.key = (char *)malloc(100*sizeof(char));
-            prop.icon = "";
-            sprintf(prop.key,"/Fcitx/Logo/%d",i);
-            prop.label = name;
-            prop.tip = name;
-            //            strcat(prop.tip,"输入法");
-            fixProperty(&prop);
-            menu[i] = property2string(&prop);
-            free(prop.key);
-        }
-        KIMExecMenu(menu,iIMCount);
-        for (i = 0;i < iIMCount; i++) {
-            free(menu[i]);
-        }
-    } else {
-        if (strstr(propKey,logo_prop.key) == propKey) {
-            i = atoi(strrchr(propKey,'/') + 1);
-            /*
-            if (ConnectIDGetState (connect_id) == IS_CLOSED) {
-                SetConnectID (connect_id, IS_ACTIVE);
-	            icidSetIMState(ConnectIDGetICID(connect_id), IS_ACTIVE);
-                EnterChineseMode (False);
-            } else if (ConnectIDGetState (connect_id) == IS_ENG) {
-                ChangeIMState(connect_id);
-                EnterChineseMode (False);
-            }*/
-            SwitchIM(i);
-        }
-    }
-
-    if (strcmp(propKey,state_prop.key) == 0) {
-        ChangeIMState();
-    }
-    if (strcmp(propKey,punc_prop.key) == 0) {
-        ChangePunc();
-    }
-    if (strcmp(propKey,corner_prop.key) == 0) {
-        ChangeCorner();
-    }
-    if (strcmp(propKey,vk_prop.key) == 0) {
-//        SwitchVK();
-    }
-    if (strcmp(propKey,gbkt_prop.key) == 0) {
-        ChangeGBKT();
-    }
-    if (strcmp(propKey,legend_prop.key) == 0) {
-        ChangeLegend();
-    }
-}
-
-char* property2string(Property *prop)
-{
-    int len;
-    char *result = NULL;
-
-    len = strlen(prop->key)
-        + strlen(prop->label)
-        + strlen(prop->icon)
-        + strlen(prop->tip)
-        + 3 + 1;
-    result = malloc(len * sizeof(char));
-
-    bzero(result,len*sizeof(char));
-    strcat(result,prop->key);
-    strcat(result,":");
-    strcat(result,prop->label);
-    strcat(result,":");
-    strcat(result,prop->icon);
-    strcat(result,":");
-    strcat(result,prop->tip);
-    return result;
-}
-
-void fixProperty(Property *prop)
-{
-    if (strcmp(prop->label,"Fcitx") == 0) {
-        prop->icon = "fcitx";
-    }
-    if (strcmp(prop->label,"智能拼音") == 0) {
-        prop->icon = "fcitx-pinyin";
-    }
-    if (strcmp(prop->label,"智能双拼") == 0) {
-        prop->icon = "";
-    }
-    if (strcmp(prop->label,"区位") == 0) {
-        prop->icon = "";
-    }
-    if (strcmp(prop->label,"五笔字型") == 0) {
-        prop->icon = "fcitx-wubi";
-    }
-    if (strcmp(prop->label,"五笔拼音") == 0) {
-        prop->icon = "fcitx-wubi";
-    }
-    if (strcmp(prop->label,"二笔") == 0) {
-        prop->icon = "fcitx-erbi";
-    }
-    if (strcmp(prop->label,"仓颉") == 0) {
-        prop->icon = "fcitx-cangjie";
-    }
-    if (strcmp(prop->label,"晚风") == 0) {
-        prop->icon = "";
-    }
-    if (strcmp(prop->label,"冰蟾全息") == 0) {
-        prop->icon = "";
-    }
-    if (strcmp(prop->label,"自然码") == 0) {
-        prop->icon = "fcitx-ziranma";
-    }
-    if (strcmp(prop->label,"电报码") == 0) {
-        prop->icon = "";
-    }
-}
-
-void updatePropertyByState() {
-	int iIndex = GetCurrentState();
-	switch (iIndex) {
-	case IS_CLOSED:
-        iState = IS_ENG;
-        strcpy(logo_prop.label, "Fcitx");
-		updateProperty(&logo_prop);
-		updateProperty(&state_prop);
-		break;
-	case IS_ACTIVE:
-        iState = IS_ACTIVE;
-		strcpy(logo_prop.label, im[gs.iIMIndex].strName);
-		updateProperty(&logo_prop);
-		updateProperty(&state_prop);
-		break;
-	case IS_ENG:
-        iState = IS_ENG;
-		strcpy(logo_prop.label, im[gs.iIMIndex].strName);
-		updateProperty(&logo_prop);
-		updateProperty(&state_prop);
-		break;
-	}
-}
-
 int calKIMCursorPos()
 {
     int             i = 0;
@@ -1236,4 +948,3 @@ int calKIMCursorPos()
     return iCount;
 }
 // vim: sw=4 sts=4 et tw=100
-#endif // DBUS_C

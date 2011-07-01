@@ -50,7 +50,7 @@
 struct FcitxSkin;
 boolean MainMenuAction(FcitxUIMenu* menu, int index);
 
-void* ClassicUICreate(FcitxInstance* instance);
+static void* ClassicUICreate(FcitxInstance* instance);
 static void ClassicUICloseInputWindow(void* arg);
 static void ClassicUIShowInputWindow(void* arg);
 static void ClassicUIMoveInputWindow(void* arg);
@@ -60,7 +60,7 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIOnInputFocus(void *arg);
 static void ClassicUIOnInputUnFocus(void *arg);
 static void ClassicUIOnTriggerOn(void *arg);
-static void ClassicUiOnTriggerOff(void *arg);
+static void ClassicUIOnTriggerOff(void *arg);
 static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static void ClassicUIInputReset(void *arg);
 static ConfigFileDesc* GetClassicUIDesc();
@@ -82,7 +82,7 @@ FcitxUI ui = {
     ClassicUIOnInputFocus,
     ClassicUIOnInputUnFocus,
     ClassicUIOnTriggerOn,
-    ClassicUiOnTriggerOff,
+    ClassicUIOnTriggerOff,
     ClassicUIDisplayMessage,
     ClassicUIMainWindowSizeHint
 };
@@ -350,7 +350,7 @@ void ClassicUIOnTriggerOn(void* arg)
     DrawTrayWindow(classicui->trayWindow);
 }
 
-void ClassicUiOnTriggerOff(void* arg)
+void ClassicUIOnTriggerOff(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     CloseMainWindow(classicui->mainWindow);

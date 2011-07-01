@@ -269,9 +269,9 @@ boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 INPUT_RETURN_VALUE ProcessKey(
     FcitxInstance* instance,
     FcitxKeyEventType event,
-                              long unsigned int timestamp,
-                              FcitxKeySym sym,
-                              unsigned int state)
+    long unsigned int timestamp,
+    FcitxKeySym sym,
+    unsigned int state)
 {
     if (sym == 0) {
         return IRV_DONOT_PROCESS;
@@ -413,9 +413,8 @@ INPUT_RETURN_VALUE ProcessKey(
             }
 
             if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                input->iCursorPos = input->iCodeInputCount;
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
-                if (!input->bCursorAuto)
-                    input->iCursorPos = input->iCodeInputCount;
             }
         }
         
@@ -437,17 +436,30 @@ INPUT_RETURN_VALUE ProcessKey(
     
     FcitxLog(DEBUG, "ProcessKey Return State: %s", GetStateName(retVal));
     
+    if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
+        ForwardKey(instance, GetCurrentIC(instance), event, sym, state);
+    
+    ProcessInputReturnValue(instance, retVal);
+    
+    return retVal;
+}
+
+void ProcessInputReturnValue(
+    FcitxInstance* instance, 
+    INPUT_RETURN_VALUE retVal
+)
+{
+    FcitxIM* currentIM = GetCurrentIM(instance);
+    FcitxInputState *input = &instance->input;    
+    FcitxConfig *fc = &instance->config;
+    
     switch (retVal)
     {
         case IRV_DO_NOTHING:
-            break;
         case IRV_TO_PROCESS:
         case IRV_DONOT_PROCESS:
+            break;
         case IRV_DONOT_PROCESS_CLEAN:
-            ForwardKey(instance, GetCurrentIC(instance), event, sym, state);
-            
-            if (retVal != IRV_DONOT_PROCESS_CLEAN)
-                break;
         case IRV_CLEAN:
             ResetInput(instance);
             CloseInputWindow(instance);
@@ -532,8 +544,6 @@ INPUT_RETURN_VALUE ProcessKey(
         default:
             ;
     }
-    
-    return retVal;
 }
 
 void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)

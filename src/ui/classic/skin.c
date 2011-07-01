@@ -426,11 +426,13 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     int cursor_pos=0;
     int inputWidth = 0, outputWidth = 0;
     int inputHeight = 0, outputHeight = 0;
-    int iChar = 0 /* iCursorPos */;
     cairo_t *c = NULL;
+    FcitxInputState* input = &inputWindow->owner->owner->input;
+    FcitxInstance* instance = inputWindow->owner->owner;
+    int iChar = input->iCursorPos;
     
-    SkinImage *input, *prev, *next;
-    input = LoadImage(sc, sc->skinInputBar.backImg, false);
+    SkinImage *inputimg, *prev, *next;
+    inputimg = LoadImage(sc, sc->skinInputBar.backImg, false);
     prev = LoadImage(sc, sc->skinInputBar.backArrow, false);
     next = LoadImage(sc, sc->skinInputBar.forwardArrow, false);
 
@@ -440,7 +442,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     inputWidth = 0;
     inputHeight = sc->skinFont.fontSize;
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, inputWindow->font, sc->skinFont.fontSize);
+    SetFontContext(dummy, inputWindow->owner->font, sc->skinFont.fontSize);
 #endif
 
     for (i = 0; i < GetMessageCount(msgup) ; i++)
@@ -450,7 +452,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
         posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
 
         inputWidth += StringWidthWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i]);
-        if (inputWindow->bShowCursor)
+        if (instance->bShowCursor)
         {
             int length = strlen(GetMessageString(msgup, i));
             if (iChar >= 0)
@@ -461,7 +463,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
                     char *strGBKT = NULL;
                     strncpy(strTemp, GetMessageString(msgup, i), iChar);
                     strTemp[iChar] = '\0';
-                    strGBKT = strTemp;
+                    strGBKT = strTemp;  
                     cursor_pos= posUpX[i]
                                 + StringWidthWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strGBKT) + 2;
                 }
@@ -472,7 +474,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     }
 
     if (iChar >= 0)
-        cursor_pos = sc->skinInputBar.marginLeft + inputWidth;
+        cursor_pos = inputWidth + sc->skinInputBar.marginLeft;
 
     outputWidth = 0;
     outputHeight = 0;
@@ -522,7 +524,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     if (oldHeight != newHeight || oldWidth != newWidth)
     {
         c=cairo_create(inputWindow->cs_input_back);
-        DrawResizableBackground(c, input->image, newHeight, newWidth,
+        DrawResizableBackground(c, inputimg->image, newHeight, newWidth,
             sc->skinInputBar.marginLeft,
             sc->skinInputBar.marginTop,
             sc->skinInputBar.marginRight,
@@ -539,14 +541,14 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
     
 
-    if (inputWindow->bShowCursor )
+    if (instance->bShowCursor )
     {
         //画向前向后箭头
 
         cairo_set_source_surface(inputWindow->c_back, prev->image,
                                  newWidth - sc->skinInputBar.iBackArrowX ,
                                  sc->skinInputBar.iBackArrowY);
-        if (inputWindow->bShowPrev)
+        if (input->bShowPrev)
             cairo_paint(inputWindow->c_back);
         else
             cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -555,7 +557,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
         cairo_set_source_surface(inputWindow->c_back, next->image,
                                  newWidth - sc->skinInputBar.iForwardArrowX ,
                                  sc->skinInputBar.iForwardArrowY);
-        if (inputWindow->bShowNext)
+        if (input->bShowNext)
             cairo_paint(inputWindow->c_back);
         else
             cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -574,10 +576,10 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     ResetFontContext();
 
     //画光标
-    if (inputWindow->bShowCursor )
+    if (instance->bShowCursor )
     {
-        cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.iInputPos+2);
-        cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.iInputPos-sc->skinFont.fontSize);
+        cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + 2);
+        cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos -sc->skinFont.fontSize);
         cairo_stroke(inputWindow->c_cursor);
     }
 
@@ -596,8 +598,10 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
         EndInstance(classicui->owner);
     
+#ifndef _ENABLE_PANGO
     GetValidFont(classicui->strUserLocale, &classicui->font);
     GetValidFont(classicui->strUserLocale, &classicui->menuFont);
+#endif
     
     UnloadImage(&classicui->skin);
     

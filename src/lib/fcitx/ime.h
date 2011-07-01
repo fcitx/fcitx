@@ -129,7 +129,6 @@ typedef struct FcitxInputState {
     time_t timeStart;
     boolean bStartRecordType;
     int iCursorPos;
-    boolean bCursorAuto;
     int iCurrentCandPage;
     int iLegendCandWordCount;
     int iLegendCandPageCount;
@@ -147,7 +146,17 @@ char* GetOutputString(FcitxInputState* input);
 struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
 void EnableIM(struct FcitxInstance* instance, boolean keepState);
 void            ResetInput (struct FcitxInstance* instance);
-
+/**
+ * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
+ *
+ * @param instance fcitx instance
+ * @param retVal input return val
+ * @return void
+ **/
+void ProcessInputReturnValue(
+    struct FcitxInstance* instance, 
+    INPUT_RETURN_VALUE retVal
+);
 void FcitxRegisterIM(struct FcitxInstance *instance,
                      void *addonInstance,
                      const char* name,

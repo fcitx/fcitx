@@ -271,7 +271,9 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     {
         vkWindow->fontColor = &blackColor;
         vkWindow->defaultFont = strdup("sans");
+#ifndef _ENABLE_PANGO
         GetValidFont("zh", &vkWindow->defaultFont);
+#endif
         vkWindow->font = &vkWindow->defaultFont;
     }
 
