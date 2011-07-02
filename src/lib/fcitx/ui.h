@@ -131,6 +131,7 @@ typedef struct FcitxUI
     void (*OnTriggerOff)(void *arg);
     void (*DisplayMessage)(void *arg, char *title, char **msg, int length);
     void (*MainWindowSizeHint)(void *arg, int* x, int* y, int* w, int* h);
+    void (*ReloadConfig)(void*);
 } FcitxUI;
 
 void LoadUserInterface(struct FcitxInstance* instance);

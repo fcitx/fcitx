@@ -31,6 +31,7 @@ typedef struct FcitxModule
     void* (*Create)(struct FcitxInstance* instance);
     void* (*Run)(void*);
     void (*Destroy)(void*);
+    void (*ReloadConfig)(void*);
 } FcitxModule;
 
 typedef struct FcitxModuleFunctionArg

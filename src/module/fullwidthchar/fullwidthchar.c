@@ -78,6 +78,8 @@ typedef struct FcitxFullWidthChar {
 FCITX_EXPORT_API
 FcitxModule module = {
     FullWidthCharCreate,
+    NULL,
+    NULL,
     NULL
 };
 

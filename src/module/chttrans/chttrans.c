@@ -64,13 +64,14 @@ typedef struct FcitxChttrans{
 
 static void* ChttransCreate(FcitxInstance* instance);
 static char* ChttransOutputFilter(void* arg, const char* strin);
+static void ReloadChttrans(void* arg);
 static char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char* strHZ);
 static boolean GetChttransEnabled();
 static void LoadChttransConfig(FcitxChttrans* transState);
 static ConfigFileDesc* GetChttransConfigDesc();
 static void SaveChttransConfig(FcitxChttrans* transState);
-static INPUT_RETURN_VALUE HotkeyToggleChttransState();
-static void ToggleChttransState();
+static INPUT_RETURN_VALUE HotkeyToggleChttransState(void*);
+static void ToggleChttransState(void*);
 
 CONFIG_BINDING_BEGIN(FcitxChttrans)
 CONFIG_BINDING_REGISTER("TraditionalChinese","TransEngine", engine)
@@ -82,7 +83,9 @@ FCITX_EXPORT_API
 FcitxModule module =
 {
     ChttransCreate,
-    NULL
+    NULL,
+    NULL,
+    ReloadChttrans
 };
 
 void* ChttransCreate(FcitxInstance* instance)
@@ -282,4 +285,10 @@ void SaveChttransConfig(FcitxChttrans* transState)
     SaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);
     fclose(fp);
+}
+
+void ReloadChttrans(void* arg)
+{
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    LoadChttransConfig(transState);
 }

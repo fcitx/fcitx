@@ -89,6 +89,8 @@ static void ResetAutoEng(void *arg);
  **/
 static void FreeAutoEng (void* arg);
 
+static void ReloadAutoEng (void* arg);
+
 /**
  * @brief Check whether need to switch to English
  *
@@ -109,7 +111,8 @@ FCITX_EXPORT_API
 FcitxModule module = {
     AutoEngCreate,
     NULL,
-    FreeAutoEng
+    FreeAutoEng,
+    ReloadAutoEng
 };
 
 void* AutoEngCreate(FcitxInstance *instance)
@@ -262,4 +265,11 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
     
     AddMessageAtLast(msgUp, MSG_INPUT, autoEngState->buf);
     AddMessageAtLast(msgDown, MSG_OTHER, _("Press enter to input text"));
+}
+
+void ReloadAutoEng(void* arg)
+{
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    FreeAutoEng(autoEngState);
+    LoadAutoEng(autoEngState);
 }

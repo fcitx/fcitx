@@ -89,6 +89,7 @@ FcitxUI ui = {
     KimpanelOnTriggerOn,
     KimpanelOnTriggerOff,
     NULL,
+    NULL,
     NULL
 };
 

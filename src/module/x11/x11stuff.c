@@ -59,7 +59,9 @@ const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 FCITX_EXPORT_API
 FcitxModule module = {
     X11Create,
-    X11Run
+    X11Run,
+    NULL,
+    NULL
 };
 
 void* X11Create(FcitxInstance* instance)

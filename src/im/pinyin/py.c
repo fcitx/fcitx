@@ -75,6 +75,7 @@ static void * PYGetCandWordsWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetCandTextWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetFindStringWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
+static void ReloadConfigPY(void* arg);
 
 FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
 {
@@ -109,6 +110,7 @@ void *PYCreate(FcitxInstance* instance)
                     PYGetCandWord,
                     NULL,
                     SavePY,
+                    ReloadConfigPY,
                     NULL,
                     pystate->pyconfig.iPinyinPriority
                    );
@@ -123,6 +125,7 @@ void *PYCreate(FcitxInstance* instance)
                     PYGetCandWord,
                     NULL,
                     SavePY,
+                    ReloadConfigPY,
                     NULL,
                     pystate->pyconfig.iShuangpinPriority
                    );
@@ -3170,4 +3173,11 @@ void* PYResetWrapper(void * arg, FcitxModuleFunctionArg args)
     pystate->strPYAuto[0] = '\0';
 
     return NULL;
+}
+
+void ReloadConfigPY(void* arg)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+
+    LoadPYConfig(&pystate->pyconfig);
 }

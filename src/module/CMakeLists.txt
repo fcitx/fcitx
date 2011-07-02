@@ -5,6 +5,7 @@ add_subdirectory(punc)
 add_subdirectory(quickphrase)
 add_subdirectory(autoeng)
 add_subdirectory(fullwidthchar)
+add_subdirectory(remote)
 
 if (ENABLE_DBUS)
     add_subdirectory(dbus)

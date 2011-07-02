@@ -68,6 +68,7 @@ void* QWCreate (struct FcitxInstance* instance)
         NULL,
         NULL,
         NULL,
+        NULL,
         100 /* make quwei place at last */
     );
     qwstate->owner = instance;

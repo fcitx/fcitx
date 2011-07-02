@@ -63,6 +63,7 @@ static void ClassicUIOnTriggerOn(void *arg);
 static void ClassicUIOnTriggerOff(void *arg);
 static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static void ClassicUIInputReset(void *arg);
+static void ReloadConfigClassicUI(void *arg);
 static ConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y, int* w, int* h);
 
@@ -84,7 +85,8 @@ FcitxUI ui = {
     ClassicUIOnTriggerOn,
     ClassicUIOnTriggerOff,
     ClassicUIDisplayMessage,
-    ClassicUIMainWindowSizeHint
+    ClassicUIMainWindowSizeHint,
+    ReloadConfigClassicUI
 };
 
 void* ClassicUICreate(FcitxInstance* instance)
@@ -471,4 +473,11 @@ void* ClassicUIGetFont(void *arg, FcitxModuleFunctionArg args)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     return &classicui->font;
+}
+
+void ReloadConfigClassicUI(void* arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    LoadClassicUIConfig(classicui);
+    DisplaySkin(classicui, classicui->skinType);
 }

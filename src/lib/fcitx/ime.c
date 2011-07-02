@@ -43,6 +43,7 @@
 #include "backend.h"
 #include "hook-internal.h"
 #include "instance.h"
+#include "module.h"
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
@@ -169,6 +170,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
                      FcitxIMGetCandWord GetCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
                      FcitxIMSave Save,
+                     FcitxIMReloadConfig ReloadConfig,
                      void *priv,
                      int priority
 )
@@ -186,6 +188,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
     newime.GetCandWords = GetCandWords;
     newime.PhraseTips = PhraseTips;
     newime.Save = Save;
+    newime.ReloadConfig = ReloadConfig;
     newime.klass = addonInstance;
     newime.iPriority = priority;
     newime.priv = priv;
@@ -697,6 +700,36 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
 
 void ReloadConfig(FcitxInstance *instance)
 {
+    /* Reload All IM, Module, and UI Config */
+    UT_array* addons = &instance->addons;
+    
+    FcitxAddon *addon;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+          addon != NULL;
+          addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->category == AC_MODULE &&
+            addon->bEnabled &&
+            addon->addonInstance)
+        {
+            if (addon->module->ReloadConfig)
+                addon->module->ReloadConfig(addon->addonInstance);
+        }
+    }
+
+    
+    UT_array* imes = &instance->imes;
+    FcitxIM* pim;
+    for (pim = (FcitxIM *) utarray_front(imes);
+         pim != NULL;
+         pim = (FcitxIM *) utarray_next(imes, pim))
+    {
+        if (pim->ReloadConfig)
+            pim->ReloadConfig(pim->klass);
+    }
+    
+    if (instance->ui->ui->ReloadConfig)
+        instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
 }
 
 void UpdateInputWindow(FcitxInstance *instance)

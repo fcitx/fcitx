@@ -92,6 +92,7 @@ typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg, SEARCH_MODE);
 typedef char              *(*FcitxIMGetCandWord) (void *arg, int);
 typedef boolean            (*FcitxIMPhraseTips) (void *arg);
 typedef void               (*FcitxIMSave) (void *arg);
+typedef void               (*FcitxIMReloadConfig) (void *arg);
 
 typedef struct FcitxIM {
     char               strName[MAX_IM_NAME + 1];
@@ -103,6 +104,7 @@ typedef struct FcitxIM {
     FcitxIMPhraseTips PhraseTips;
     FcitxIMSave Save;
     FcitxIMInit Init;
+    FcitxIMReloadConfig ReloadConfig;
     void*              uiprivate;
     void* klass;
     int iPriority;
@@ -167,6 +169,7 @@ void FcitxRegisterIM(struct FcitxInstance *instance,
                      FcitxIMGetCandWord GetCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
                      FcitxIMSave Save,
+                     FcitxIMReloadConfig ReloadConfig,
                      void *priv,
                      int priority
 );

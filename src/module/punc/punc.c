@@ -47,6 +47,7 @@ static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT
 static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);
 static void TogglePuncState(void *arg);
 static boolean GetPuncState(void *arg);
+static void ReloadPunc(void *arg);
 static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
 
 
@@ -61,7 +62,9 @@ typedef struct FcitxPuncState {
 FCITX_EXPORT_API
 FcitxModule module = {
     PuncCreate,
-    NULL
+    NULL,
+    NULL,
+    ReloadPunc
 };
 
 void* PuncCreate(FcitxInstance* instance)
@@ -317,3 +320,11 @@ boolean GetPuncState(void* arg)
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     return puncState->bUseWidePunc;
 }
+
+void ReloadPunc(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    FreePunc(puncState);
+    LoadPuncDict(puncState);
+}
+

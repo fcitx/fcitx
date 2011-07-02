@@ -42,7 +42,7 @@ typedef enum AddonCategory
     /**
      * @brief Input backend, like xim
      **/
-   AC_BACKEND,
+    AC_BACKEND,
     /**
      * @brief General module, can be implemented in a quite extensive way
      **/

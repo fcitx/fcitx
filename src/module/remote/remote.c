@@ -26,147 +26,149 @@
 #include <sys/stat.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <libintl.h>
 #include <fcntl.h>
 #include <limits.h>
 
 #include "fcitx/fcitx.h"
-
-#include "tools.h"
-#include "fcitx/xim.h"
-#include "MainWindow.h"
-#include "TrayWindow.h"
-#include "configfile.h"
 #include "fcitx-utils/cutils.h"
-#include "im/pinyin/sp.h"
-#include "im/special/QuickPhrase.h"
-#include "im/special/AutoEng.h"
-#include "im/special/punc.h"
-#include "AboutWindow.h"
-#ifdef _ENABLE_DBUS
-#include "interface/DBus.h"
-#endif
-char socketfile[PATH_MAX]="";
+#include <fcitx/module.h>
+#include <fcitx/backend.h>
+#include <fcitx/instance.h>
+#include <fcitx/ime-internal.h>
 
-int create_socket(const char *name)
+static void* RemoteCreate(FcitxInstance* instance);
+static void* RemoteRun(void* arg);
+
+FCITX_EXPORT_API
+FcitxModule module = {
+    RemoteCreate,
+    RemoteRun,
+    NULL,
+    NULL
+};
+
+typedef struct FcitxRemote {
+    char socketfile[PATH_MAX];
+    FcitxInstance* owner;
+} FcitxRemote;
+
+void* RemoteCreate(FcitxInstance* instance)
 {
-	int fd;
-	int r;
-	struct sockaddr_un uds_addr;
+    FcitxRemote* remote = fcitx_malloc0(sizeof(FcitxRemote));
+    remote->owner = instance;
+    return remote;
+}
 
-	/* JIC */
-	unlink(name);
+int CreateSocket(const char *name)
+{
+    int fd;
+    int r;
+    struct sockaddr_un uds_addr;
 
-	fd = socket(AF_UNIX, SOCK_STREAM, 0);
-	if (fd < 0) {
-		return fd;
-	}
+    /* JIC */
+    unlink(name);
 
-	/* setup address struct */
-	memset(&uds_addr, 0, sizeof(uds_addr));
-	uds_addr.sun_family = AF_UNIX;
-	strcpy(uds_addr.sun_path, name);
+    fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (fd < 0) {
+        return fd;
+    }
 
-	/* bind it to the socket */
-	r = bind(fd, (struct sockaddr *)&uds_addr, sizeof(uds_addr));
-	if (r < 0) {
-		return r;
-	}
+    /* setup address struct */
+    memset(&uds_addr, 0, sizeof(uds_addr));
+    uds_addr.sun_family = AF_UNIX;
+    strcpy(uds_addr.sun_path, name);
+
+    /* bind it to the socket */
+    r = bind(fd, (struct sockaddr *)&uds_addr, sizeof(uds_addr));
+    if (r < 0) {
+        return r;
+    }
 
 
-	/* listen - allow 10 to queue */
-	r = listen(fd, 10);
-	if (r < 0) {
-		return r;
-	}
+    /* listen - allow 10 to queue */
+    r = listen(fd, 10);
+    if (r < 0) {
+        return r;
+    }
 
-	return fd;
+    return fd;
 }
 
 
-int ud_accept(int listenfd)
+int UdAccept(int listenfd)
 {
-	for (;;) {
-		int newsock = 0;
-		struct sockaddr_un cliaddr;
-		socklen_t len = sizeof(struct sockaddr_un);
+    for (;;) {
+        int newsock = 0;
+        struct sockaddr_un cliaddr;
+        socklen_t len = sizeof(struct sockaddr_un);
 
-		newsock = accept(listenfd, (struct sockaddr *)&cliaddr, &len);
-		if (newsock < 0) {
-			if (errno == EINTR) {
-				continue; /* signal */
-			}
-		}
+        newsock = accept(listenfd, (struct sockaddr *)&cliaddr, &len);
+        if (newsock < 0) {
+            if (errno == EINTR) {
+                continue; /* signal */
+            }
+        }
 
-		return newsock;
-	}
+        return newsock;
+    }
 }
 
-static void send_ime_state(int fd)
+static void SendIMState(FcitxRemote* remote, int fd)
 {
-	IME_STATE r = GetCurrentState();
-	write(fd, &r, sizeof(r));
+    IME_STATE r = GetCurrentState(remote->owner);
+    write(fd, &r, sizeof(r));
 }
 
-static void main_loop (int socket_fd)
+static void RemoteMainLoop (FcitxRemote* remote, int socket_fd)
 {
-	unsigned int O;  // 低16位, 0 = get, 1 = set;
-			// 高16位, 只用于 set, 0 关闭输入法, 1 打开输入法.
-	for (;;) {
-		int client_fd = ud_accept(socket_fd);
-		read(client_fd, &O, sizeof(int));
+    unsigned int O;  // 低16位, 0 = get, 1 = set;
+    // 高16位, 只用于 set, 0 关闭输入法, 1 打开输入法.
+    for (;;) {
+        int client_fd = UdAccept(socket_fd);
+        read(client_fd, &O, sizeof(int));
         unsigned int cmd = O & 0xFFFF;
         unsigned int arg = (O >> 16) & 0xFFFF;
-        FcitxLock();
+        FcitxLock(remote->owner);
         switch (cmd)
         {
             /// {{{
-            case 0:
-                send_ime_state(client_fd);
-                break;
-            case 1:
-                SetIMState(arg);
-                if (!fc.bUseDBus) {
-                    DisplayMainWindow();
-                    DrawMainWindow();
-                }
-#ifdef _ENABLE_DBUS
-                if (fc.bUseDBus)
-                    updateProperty(&state_prop);
-#endif
-#ifdef _ENABLE_TRAY
-                if (!fc.bUseDBus) {
-                    if (GetCurrentState() == IS_ACTIVE)
-                        DrawTrayWindow (ACTIVE_ICON, 0, 0, tray.size, tray.size );
-                    else
-                        DrawTrayWindow (INACTIVE_ICON, 0, 0, tray.size, tray.size );
-                }
-#endif
-                break;
-            case 2:
-                ReloadConfig();
-                break;
-            default:
-                break;
+        case 0:
+            SendIMState(remote, client_fd);
+            break;
+        case 1:
+            if (arg == IS_CLOSED)
+                CloseIM(remote->owner, GetCurrentIC(remote->owner));
+            else
+                EnableIM(remote->owner, GetCurrentIC(remote->owner), false);
+            break;
+        case 2:
+            ReloadConfig(remote->owner);
+            break;
+        default:
+            break;
             /// }}}
-		}
-        FcitxUnlock();
-		close(client_fd);
-	}
+        }
+        FcitxUnlock(remote->owner);
+        close(client_fd);
+    }
 }
 
-void* remoteThread (void* val)
+void* RemoteRun (void* arg)
 {
-	sprintf(socketfile, "/tmp/fcitx-socket-%s", DisplayString(dpy));
-	int socket_fd = create_socket(socketfile);
-	if (socket_fd < 0) {
-		FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
-		return 0;
-	}
+    FcitxRemote* remote = (FcitxRemote*) arg;
+    char *socketfile = remote->socketfile;
+    sprintf(socketfile, "/tmp/fcitx-socket");
+    int socket_fd = CreateSocket(socketfile);
+    if (socket_fd < 0) {
+        FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
+        return 0;
+    }
 
-	fcntl(socket_fd, F_SETFD, FD_CLOEXEC);
-	chmod(socketfile, 0666);
-	main_loop(socket_fd);
-	close(socket_fd);
-	return 0;
-}				/* ----------  end of function main  ---------- */
+    fcntl(socket_fd, F_SETFD, FD_CLOEXEC);
+    chmod(socketfile, 0600);
+    RemoteMainLoop(remote, socket_fd);
+    close(socket_fd);
+    return 0;
+}
 

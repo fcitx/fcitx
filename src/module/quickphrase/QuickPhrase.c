@@ -49,6 +49,7 @@ typedef struct QuickPhraseState {
 static void * QuickPhraseCreate (FcitxInstance *instance);
 static void LoadQuickPhrase(QuickPhraseState* qpstate);
 static void FreeQuickPhrase(void* arg);
+static void ReloadQuickPhrase(void* arg);
 static INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state);
 static INPUT_RETURN_VALUE QuickPhraseGetCandWords ();
 static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
@@ -59,7 +60,8 @@ FcitxModule module =
 {
     QuickPhraseCreate,
     NULL,
-    FreeQuickPhrase
+    FreeQuickPhrase,
+    ReloadQuickPhrase
 };
 
 static boolean QuickPhrasePostFilter(void* arg, long unsigned int sym,
@@ -445,4 +447,12 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
 
     return IRV_DISPLAY_CANDWORDS;
 }
+
+void ReloadQuickPhrase(void* arg)
+{
+    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
+    FreeQuickPhrase(arg);
+    LoadQuickPhrase(qpstate);
+}
+
 

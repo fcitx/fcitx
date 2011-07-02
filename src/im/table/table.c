@@ -98,6 +98,7 @@ void *TableCreate(FcitxInstance* instance)
             TableGetCandWord,
             TablePhraseTips,
             SaveTableIM,
+            NULL,
             table,
             table->iPriority
         );

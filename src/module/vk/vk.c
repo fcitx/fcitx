@@ -96,6 +96,7 @@ static boolean VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y
 static void SwitchVK (FcitxVKState *vkstate);
 static void LoadVKMapFile ( FcitxVKState *vkstate);
 static void ChangVK (FcitxVKState* vkstate);
+static void ReloadVK(void *arg);
 static int MyToUpper (int iChar);
 static int MyToLower (int iChar);
 static cairo_surface_t* LoadVKImage(VKWindow* vkWindow);
@@ -125,7 +126,8 @@ FcitxModule module =
 {
     VKCreate,
     NULL,
-    NULL
+    NULL,
+    ReloadVK
 };
 
 void *VKCreate(FcitxInstance* instance)
@@ -814,3 +816,10 @@ VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y)
 
     return bMoved;
 }
+
+void ReloadVK(void* arg)
+{
+    FcitxVKState* vkstate = (FcitxVKState*)arg;
+    LoadVKMapFile(vkstate);
+}
+

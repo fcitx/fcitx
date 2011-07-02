@@ -44,7 +44,9 @@ static void* DBusRemoveEventHandler(void* arg, FcitxModuleFunctionArg args);
 FCITX_EXPORT_API
 FcitxModule module = {
     DBusCreate,
-    DBusRun
+    DBusRun,
+    NULL,
+    NULL
 };
 
 void* DBusCreate(FcitxInstance* instance)
