@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     sem_t sem;
     sem_init(&sem, 0, 0);
     
-    CreateFcitxInstance(&sem);
+    CreateFcitxInstance(&sem, argc, argv);
     
     WaitForEnd(&sem, instanceCount);
 	return 0;

@@ -6,7 +6,7 @@ DefaultValue=500
 [ClassicUI/MainWindowOffsetY]
 Description=Main Window Position Y
 Type=Integer
-DefaultValue=1
+DefaultValue=40
 
 [ClassicUI/Font]
 Type=Font

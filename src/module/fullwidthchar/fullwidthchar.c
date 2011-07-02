@@ -98,7 +98,7 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     
     RegisterHotkeyFilter(hotkey);
     
-    RegisterStatus(instance, fwchar, "fullwidth",  ToggleFullWidthState, GetFullWidthState);
+    RegisterStatus(instance, fwchar, "fullwidth", "Full Width Character", "Full Width Character",  ToggleFullWidthState, GetFullWidthState);
     
     return fwchar;
 }

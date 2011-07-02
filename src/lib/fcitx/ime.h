@@ -89,7 +89,6 @@ typedef void               (*FcitxIMResetIM) (void *arg);
 typedef INPUT_RETURN_VALUE (*FcitxIMDoInput) (void *arg, FcitxKeySym, unsigned int);
 typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg, SEARCH_MODE);
 typedef char              *(*FcitxIMGetCandWord) (void *arg, int);
-typedef char              *(*FcitxIMGetLegendCandWord) (void *arg, int);
 typedef boolean            (*FcitxIMPhraseTips) (void *arg);
 typedef void               (*FcitxIMSave) (void *arg);
 
@@ -100,7 +99,6 @@ typedef struct FcitxIM {
     FcitxIMDoInput DoInput;
     FcitxIMGetCandWords GetCandWords;
     FcitxIMGetCandWord GetCandWord;
-    FcitxIMGetLegendCandWord GetLegendCandWord;
     FcitxIMPhraseTips PhraseTips;
     FcitxIMSave Save;
     FcitxIMInit Init;
@@ -166,7 +164,6 @@ void FcitxRegisterIM(struct FcitxInstance *instance,
                      FcitxIMDoInput DoInput, 
                      FcitxIMGetCandWords GetCandWords, 
                      FcitxIMGetCandWord GetCandWord, 
-                     FcitxIMGetLegendCandWord GetLegendCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
                      FcitxIMSave Save,
                      void *priv,

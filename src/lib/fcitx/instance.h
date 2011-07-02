@@ -56,12 +56,13 @@ typedef struct FcitxInstance {
     struct FcitxInputContext *ic_list;
     struct FcitxInputContext *free_list;
     sem_t* sem;
+    char* uiname;
 } FcitxInstance;
 
 Messages* GetMessageUp(FcitxInstance* instance);
 Messages* GetMessageDown(FcitxInstance* instance);
 
-FcitxInstance* CreateFcitxInstance(sem_t *sem);
+FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
 int FcitxLock(FcitxInstance* instance);
 int FcitxUnlock(FcitxInstance* instance);
 void EndInstance(FcitxInstance* instance);

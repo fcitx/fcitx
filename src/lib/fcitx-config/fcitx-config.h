@@ -33,7 +33,7 @@
 #include <stdio.h>
 
 struct HOTKEYS;
-typedef int8_t boolean;
+typedef int32_t boolean;
 #define true (1)
 #define false (0)
 
@@ -129,20 +129,20 @@ typedef void(*ConfigBindingFunc)(GenericConfig*);
         if (gconfig->configFile) { \
             FreeConfigFile(gconfig->configFile); \
         } \
-        gconfig->configFile = cfile
+        gconfig->configFile = cfile;
 #define CONFIG_BINDING_REGISTER(g, o, var) \
         do { \
             ConfigBindValue(cfile, g, o, &config->var, NULL, NULL); \
-        } while(0)      
+        } while(0);
 
 #define CONFIG_BINDING_REGISTER_WITH_FILTER(g, o, var, filter_func) \
         do { \
             ConfigBindValue(cfile, g, o, &config->var, filter_func, NULL); \
-        } while(0)
+        } while(0);
 #define CONFIG_BINDING_REGISTER_WITH_FILTER_ARG(g, o, var, filter_func, arg) \
         do { \
             ConfigBindValue(cfile, g, o, &config->var, filter_func, arg); \
-        } while(0)
+        } while(0);
 #define CONFIG_BINDING_END() }
 
 #define CONFIG_DESC_DEFINE(funcname, path) \

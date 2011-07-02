@@ -33,15 +33,16 @@
 #include "addon.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-config/xdg.h"
+#include "instance.h"
 
-CONFIG_BINDING_BEGIN(FcitxAddon);
-CONFIG_BINDING_REGISTER("Addon", "Name", name);
-CONFIG_BINDING_REGISTER("Addon", "Category", category);
-CONFIG_BINDING_REGISTER("Addon", "Enabled", bEnabled);
-CONFIG_BINDING_REGISTER("Addon", "Library", library);
-CONFIG_BINDING_REGISTER("Addon", "Type", type);
-CONFIG_BINDING_REGISTER("Addon", "Dependency", depend);
-CONFIG_BINDING_REGISTER("Addon", "Priority", priority);
+CONFIG_BINDING_BEGIN(FcitxAddon)
+CONFIG_BINDING_REGISTER("Addon", "Name", name)
+CONFIG_BINDING_REGISTER("Addon", "Category", category)
+CONFIG_BINDING_REGISTER("Addon", "Enabled", bEnabled)
+CONFIG_BINDING_REGISTER("Addon", "Library", library)
+CONFIG_BINDING_REGISTER("Addon", "Type", type)
+CONFIG_BINDING_REGISTER("Addon", "Dependency", depend)
+CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
 CONFIG_BINDING_END()
 
 const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
@@ -144,8 +145,6 @@ void LoadAddonInfo(UT_array* addons)
             FcitxAddonConfigBind(a, cfile, GetAddonConfigDesc());
             ConfigBindSync((GenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"),string->name, (a->bEnabled)?"Enabled":"Disabled");
-            if (!a->bEnabled)
-                utarray_pop_back(addons);
         }
     }
 
@@ -167,13 +166,40 @@ void LoadAddonInfo(UT_array* addons)
     utarray_sort(addons, AddonPriorityCmp);
 }
 
-void AddonResolveDependency(UT_array* addons)
+void AddonResolveDependency(FcitxInstance* instance)
 {
+    UT_array* addons = &instance->addons;
     boolean remove = true;
+    FcitxAddon *addon;
+    
+    /* choose ui */
+    boolean founduiflag = false;
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+        addon != NULL;
+        addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->category == AC_UI)
+        {
+            if (instance->uiname == NULL)
+            {
+                if (!founduiflag)
+                    founduiflag = true;
+                else
+                    addon->bEnabled = false;
+            }
+            else
+            {
+                if (strcmp(instance->uiname, addon->name) != 0)
+                    addon->bEnabled = false;
+                else
+                    addon->bEnabled = true;
+            }
+        }
+    }
+    
     while(remove)
     {
         remove = false;
-        FcitxAddon *addon;
         for ( addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon))

@@ -255,13 +255,15 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
     }
 }
 
-void RegisterStatus(FcitxInstance* instance, void* arg, const char* name, void (*toggleStatus)(), boolean (*getStatus)())
+void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg))
 {
     FcitxUIStatus status;
     if (strlen(name) > MAX_STATUS_NAME)
         return;
     memset(&status, 0 , sizeof(FcitxUIStatus));
     strncpy(status.name, name, MAX_STATUS_NAME);
+    strncpy(status.shortDescription, shortDesc, MAX_STATUS_NAME);
+    strncpy(status.longDescription, longDesc, MAX_STATUS_NAME);
     status.getCurrentStatus = getStatus;
     status.toggleStatus = toggleStatus;
     status.arg = arg;

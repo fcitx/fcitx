@@ -151,6 +151,7 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         return;
     if (ic->state == IS_ENG) {
         ic->state = IS_ACTIVE;
+        ResetInput(instance);
     } else {
         ic->state = IS_ENG;
         ResetInput(instance);

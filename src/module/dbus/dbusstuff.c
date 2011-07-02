@@ -25,7 +25,7 @@
 #include <fcitx-utils/cutils.h>
 #include <dbus/dbus.h>
 #include <libintl.h>
-#include "dbus.h"
+#include "dbusstuff.h"
 #include <unistd.h>
 
 typedef struct FcitxDBus {
@@ -37,6 +37,7 @@ typedef struct FcitxDBus {
 const UT_icd handler_icd = {sizeof(FcitxDBusEventHandler), 0, 0, 0};
 static void* DBusCreate(FcitxInstance* instance);
 static void* DBusRun(void* arg);
+static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
 static void* DBusAddEventHandler(void* arg, FcitxModuleFunctionArg args);
 static void* DBusRemoveEventHandler(void* arg, FcitxModuleFunctionArg args);
 
@@ -51,6 +52,9 @@ void* DBusCreate(FcitxInstance* instance)
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_malloc0(sizeof(FcitxDBus));
     FcitxAddon* dbusaddon = GetAddonByName(&instance->addons, FCITX_DBUS_NAME);
     DBusError err;
+    
+    dbus_threads_init_default();
+
     // first init dbus
     dbus_error_init(&err);
     DBusConnection* conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
@@ -63,7 +67,7 @@ void* DBusCreate(FcitxInstance* instance)
     }
 
     // request a name on the bus
-    int ret = dbus_bus_request_name(conn, "org.fcitx",
+    int ret = dbus_bus_request_name(conn, "org.kde.fcitx",
                                 DBUS_NAME_FLAG_REPLACE_EXISTING,
                                 &err);
     if (dbus_error_is_set(&err)) {
@@ -75,9 +79,10 @@ void* DBusCreate(FcitxInstance* instance)
     }
 
     dbus_connection_flush(conn);
-    dbusmodule->conn = conn;
     utarray_init(&dbusmodule->handlers, &handler_icd);
+    dbusmodule->conn = conn;
     dbusmodule->owner = instance;
+    AddFunction(dbusaddon, DBusGetConnection);
     AddFunction(dbusaddon, DBusAddEventHandler);
     AddFunction(dbusaddon, DBusRemoveEventHandler);
 
@@ -98,6 +103,7 @@ void* DBusRun(void* arg)
             usleep(16000);
         }
         else {
+            FcitxLog(INFO, "DBUS: %s %s %s", dbus_message_get_sender(msg), dbus_message_get_member(msg), dbus_message_get_interface(msg));
             FcitxDBusEventHandler* handler;
             for ( handler = (FcitxDBusEventHandler *) utarray_front(&dbusmodule->handlers);
                     handler != NULL;
@@ -109,6 +115,12 @@ void* DBusRun(void* arg)
         FcitxUnlock(dbusmodule->owner);
     }
     return NULL;
+}
+
+void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+    return dbusmodule->conn;
 }
 
 void* DBusAddEventHandler(void* arg, FcitxModuleFunctionArg args)

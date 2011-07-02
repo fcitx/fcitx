@@ -140,7 +140,7 @@ void *VKCreate(FcitxInstance* instance)
     hotkey.arg = vkstate;
     RegisterHotkeyFilter(hotkey);
     
-    RegisterStatus(instance, vkstate, "vk",  ToggleVKState, GetVKState);
+    RegisterStatus(instance, vkstate, "vk", "Virtual Keyboard", "Virtual Keyboard State",  ToggleVKState, GetVKState);
     
     LoadVKMapFile(vkstate);
     

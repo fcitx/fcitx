@@ -96,7 +96,6 @@ void *TableCreate(FcitxInstance* instance)
             DoTableInput,
             TableGetCandWords,
             TableGetCandWord,
-            TableGetLegendCandWord,
             TablePhraseTips,
             SaveTableIM,
             table,

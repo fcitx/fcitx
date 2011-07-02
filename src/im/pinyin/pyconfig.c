@@ -34,32 +34,32 @@ static void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, C
 static void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 static ConfigFileDesc* GetPYConfigDesc();
 
-CONFIG_BINDING_BEGIN(FcitxPinyinConfig);
-CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority);
-CONFIG_BINDING_REGISTER("Pinyin", "ShuangpinPriority", iShuangpinPriority);
-CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", strDefaultSP);
-CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY);
-CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto);
-CONFIG_BINDING_REGISTER("Pinyin", "SaveAutoPhrase", bPYSaveAutoAsPhrase);
-CONFIG_BINDING_REGISTER("Pinyin", "AddFreqWordKey", hkPYAddFreq);
-CONFIG_BINDING_REGISTER("Pinyin", "DeleteFreqWordKey", hkPYDelFreq);
-CONFIG_BINDING_REGISTER("Pinyin", "DeleteUserPhraseKey", hkPYDelUserPhr);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "InputWordFromPhraseKey", strPYGetWordFromPhrase, FilterGetWordFromPhrase);
-CONFIG_BINDING_REGISTER("Pinyin", "BaseOrder", baseOrder);
-CONFIG_BINDING_REGISTER("Pinyin", "PhraseOrder", phraseOrder);
-CONFIG_BINDING_REGISTER("Pinyin", "FreqOrder", freqOrder);
-CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "FuzzyAnAng", MHPY_C[0].bMode, FilterAnAng);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyEnEng", MHPY_C[1].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyIanIang", MHPY_C[2].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyInIng", MHPY_C[3].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyOuU", MHPY_C[4].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyUanUang", MHPY_C[5].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyCCh", MHPY_S[0].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyFH", MHPY_S[1].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyLN", MHPY_S[2].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzySSH", MHPY_S[3].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode);
-CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype);
+CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
+CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority)
+CONFIG_BINDING_REGISTER("Pinyin", "ShuangpinPriority", iShuangpinPriority)
+CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", strDefaultSP)
+CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY)
+CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto)
+CONFIG_BINDING_REGISTER("Pinyin", "SaveAutoPhrase", bPYSaveAutoAsPhrase)
+CONFIG_BINDING_REGISTER("Pinyin", "AddFreqWordKey", hkPYAddFreq)
+CONFIG_BINDING_REGISTER("Pinyin", "DeleteFreqWordKey", hkPYDelFreq)
+CONFIG_BINDING_REGISTER("Pinyin", "DeleteUserPhraseKey", hkPYDelUserPhr)
+CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "InputWordFromPhraseKey", strPYGetWordFromPhrase, FilterGetWordFromPhrase)
+CONFIG_BINDING_REGISTER("Pinyin", "BaseOrder", baseOrder)
+CONFIG_BINDING_REGISTER("Pinyin", "PhraseOrder", phraseOrder)
+CONFIG_BINDING_REGISTER("Pinyin", "FreqOrder", freqOrder)
+CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "FuzzyAnAng", MHPY_C[0].bMode, FilterAnAng)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyEnEng", MHPY_C[1].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyIanIang", MHPY_C[2].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyInIng", MHPY_C[3].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyOuU", MHPY_C[4].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyUanUang", MHPY_C[5].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyCCh", MHPY_S[0].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyFH", MHPY_S[1].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyLN", MHPY_S[2].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzySSH", MHPY_S[3].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode)
+CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype)
 CONFIG_BINDING_END()
 
 

@@ -29,6 +29,7 @@
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/fcitx-config.h"
 
+struct FcitxInstance;
 /**
  * @brief Addon Category Definition
  **/
@@ -110,7 +111,7 @@ void LoadAddonInfo(UT_array* addons);
  *
  * @return void
  **/
-void AddonResolveDependency(UT_array* addons);
+void AddonResolveDependency(struct FcitxInstance* instance);
 
 /**
  * @brief Check whether an addon is enabled or not by addon name

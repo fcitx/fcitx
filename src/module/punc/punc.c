@@ -86,7 +86,7 @@ void* PuncCreate(FcitxInstance* instance)
     hotkey.arg = puncState;
     RegisterHotkeyFilter(hotkey);
     
-    RegisterStatus(instance, puncState, "punc",  TogglePuncState, GetPuncState);
+    RegisterStatus(instance, puncState, "punc", "Full Width Punctuation", "Full Width Punctuation", TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
     return puncState;

@@ -167,7 +167,6 @@ void FcitxRegisterIM(FcitxInstance *instance,
                      FcitxIMDoInput DoInput, 
                      FcitxIMGetCandWords GetCandWords, 
                      FcitxIMGetCandWord GetCandWord, 
-                     FcitxIMGetLegendCandWord GetLegendCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
                      FcitxIMSave Save,
                      void *priv,
@@ -185,7 +184,6 @@ void FcitxRegisterIM(FcitxInstance *instance,
     newime.DoInput = DoInput;
     newime.GetCandWord =GetCandWord;
     newime.GetCandWords = GetCandWords;
-    newime.GetLegendCandWord = GetLegendCandWord;
     newime.PhraseTips = PhraseTips;
     newime.Save = Save;
     newime.klass = addonInstance;

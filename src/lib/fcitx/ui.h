@@ -65,9 +65,13 @@ typedef struct Messages Messages;
 
 #define MAX_STATUS_NAME 32
 #define MAX_MENU_STRING_LENGTH 32
+#define MAX_STATUS_SDESC 32
+#define MAX_STATUS_LDESC 32
 
 typedef struct FcitxUIStatus {
     char name[MAX_STATUS_NAME + 1];
+    char shortDescription[MAX_STATUS_SDESC + 1];
+    char longDescription[MAX_STATUS_LDESC + 1];
     void (*toggleStatus)(void *arg);
     boolean (*getCurrentStatus)(void *arg);
     void *priv;
@@ -151,7 +155,7 @@ void MoveInputWindow(struct FcitxInstance* instance);
 void CloseInputWindow(struct FcitxInstance* instance);
 void ShowInputWindow(struct FcitxInstance* instance);
 void UpdateStatus(struct FcitxInstance* instance, const char* name);
-void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
+void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
 void RegisterMenu(struct FcitxInstance* instance, FcitxUIMenu* menu);
 void OnInputFocus(struct FcitxInstance* instance);
 void OnInputUnFocus(struct FcitxInstance* instance);

@@ -28,13 +28,13 @@
 
 static ConfigFileDesc* GetProfileDesc();
 
-CONFIG_BINDING_BEGIN(FcitxProfile);
-CONFIG_BINDING_REGISTER("Profile", "TrackCursor", bTrackCursor);
-CONFIG_BINDING_REGISTER("Profile", "UseLegend", bUseLegend);
-CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex);
-CONFIG_BINDING_REGISTER("Profile", "UseGBKT", bUseGBKT);
+CONFIG_BINDING_BEGIN(FcitxProfile)
+CONFIG_BINDING_REGISTER("Profile", "TrackCursor", bTrackCursor)
+CONFIG_BINDING_REGISTER("Profile", "UseLegend", bUseLegend)
+CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex)
+CONFIG_BINDING_REGISTER("Profile", "UseGBKT", bUseGBKT)
 #ifdef _ENABLE_RECORDING
-CONFIG_BINDING_REGISTER("Profile", "Recording", bRecording);
+CONFIG_BINDING_REGISTER("Profile", "Recording", bRecording)
 #endif
 CONFIG_BINDING_END()
 

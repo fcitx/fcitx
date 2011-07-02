@@ -2,7 +2,7 @@ include_directories(${fcitx_SOURCE_DIR}/src)
 include_directories(${DBUS_INCLUDE_DIRS})
 
 set(FCITX_DBUS_SOURCES
-	dbus.c
+	dbusstuff.c
 )
 
 add_library(fcitx-dbus MODULE ${FCITX_DBUS_SOURCES})

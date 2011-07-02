@@ -72,10 +72,10 @@ static void SaveChttransConfig(FcitxChttrans* transState);
 static INPUT_RETURN_VALUE HotkeyToggleChttransState();
 static void ToggleChttransState();
 
-CONFIG_BINDING_BEGIN(FcitxChttrans);
-CONFIG_BINDING_REGISTER("TraditionalChinese","TransEngine", engine);
-CONFIG_BINDING_REGISTER("TraditionalChinese","Enabled", enabled);
-CONFIG_BINDING_REGISTER("TraditionalChinese","Hotkey", hkToggle);
+CONFIG_BINDING_BEGIN(FcitxChttrans)
+CONFIG_BINDING_REGISTER("TraditionalChinese","TransEngine", engine)
+CONFIG_BINDING_REGISTER("TraditionalChinese","Enabled", enabled)
+CONFIG_BINDING_REGISTER("TraditionalChinese","Hotkey", hkToggle)
 CONFIG_BINDING_END()
 
 FCITX_EXPORT_API
@@ -102,7 +102,7 @@ void* ChttransCreate(FcitxInstance* instance)
     
     RegisterHotkeyFilter(hk);
     RegisterOutputFilter(shk);
-    RegisterStatus(instance, transState, "chttrans", ToggleChttransState, GetChttransEnabled);
+    RegisterStatus(instance, transState, "chttrans", "Traditional Chinese Translate", "Traditional Chinese Translate", ToggleChttransState, GetChttransEnabled);
     return transState;
 }
 

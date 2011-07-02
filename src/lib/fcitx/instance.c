@@ -29,6 +29,7 @@
 #include "module.h"
 #include "backend.h"
 #include <semaphore.h>
+#include <getopt.h>
 
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
@@ -39,12 +40,14 @@
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
-void ToggleLegendState(void* arg);
-boolean GetLegendEnabled(void* arg);
+static void ToggleLegendState(void* arg);
+static boolean GetLegendEnabled(void* arg);
+static void ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
 
-FcitxInstance* CreateFcitxInstance(sem_t *sem)
+FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 {
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
+    ProcessOption(instance, argc, argv);
     InitFcitxAddons(&instance->addons);
     InitFcitxIM(instance);
     InitFcitxBackends(&instance->backends);
@@ -58,14 +61,14 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem)
     LoadConfig(&instance->config);
     LoadProfile(&instance->profile);
     LoadAddonInfo(&instance->addons);
-    AddonResolveDependency(&instance->addons);
+    AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);
     LoadAllIM(instance);
     
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
-    RegisterStatus(instance, instance, "legend", ToggleLegendState, GetLegendEnabled);
+    RegisterStatus(instance, instance, "legend", "Legend", "Legend", ToggleLegendState, GetLegendEnabled);
     
     LoadUserInterface(instance);
 
@@ -151,4 +154,40 @@ boolean GetLegendEnabled(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     return instance->profile.bUseLegend;
+}
+
+void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
+{
+    struct option longOptions[] ={
+        {"ui", 1, 0, 0}       
+    };
+    
+    int optionIndex = 0;
+    int c;
+    char* uiname = NULL;
+    while((c = getopt_long(argc, argv, "u:", longOptions, &optionIndex)) != EOF)
+    {
+        switch(c)
+        {
+            case 0:
+                {
+                    switch(optionIndex)
+                    {
+                        case 0:
+                            uiname = optarg;
+                            break;
+                    }
+                }
+                break;
+            case 'u':
+                uiname = optarg;
+                break;
+                
+        }
+    }
+    
+    if (uiname)
+        instance->uiname = strdup(uiname);
+    else
+        instance->uiname = NULL;
 }
