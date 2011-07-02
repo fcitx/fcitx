@@ -103,7 +103,6 @@ void* DBusRun(void* arg)
             usleep(16000);
         }
         else {
-            FcitxLog(INFO, "DBUS: %s %s %s", dbus_message_get_sender(msg), dbus_message_get_member(msg), dbus_message_get_interface(msg));
             FcitxDBusEventHandler* handler;
             for ( handler = (FcitxDBusEventHandler *) utarray_front(&dbusmodule->handlers);
                     handler != NULL;

@@ -43,6 +43,7 @@
 
 static void* XimCreate(FcitxInstance* instance, int backendid);
 static boolean XimDestroy(void* arg);
+static void XimEnableIM(void* arg, FcitxInputContext* ic);
 static void XimCloseIM(void* arg, FcitxInputContext* ic);
 static void XimCommitString(void* arg, FcitxInputContext* ic, char* str);
 static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
@@ -76,6 +77,7 @@ FcitxBackend backend =
     XimCreateIC,
     XimCheckIC,
     XimDestroyIC,
+    XimEnableIM,
     XimCloseIM,
     XimCommitString,
     XimForwardKey,
@@ -372,6 +374,17 @@ void SetTriggerKeys (FcitxXimBackend* xim, char **strKey, int length)
             xim->Trigger_Keys[i].keysym = XK_space;
     }
 }
+
+void XimEnableIM(void* arg, FcitxInputContext* ic)
+{
+    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    IMChangeFocusStruct call_data;
+    FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
+    call_data.connect_id = ximic->connect_id;
+    call_data.icid = ximic->id;
+    IMPreeditStart(xim->ims, (XPointer) &call_data);
+}
+
 
 void XimCloseIM(void* arg, FcitxInputContext* ic)
 {

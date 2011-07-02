@@ -236,6 +236,8 @@ void DrawMainWindow (MainWindow* mainWindow)
         )
         {
             FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
+            if (privstat == NULL)
+                continue;
             /* reset status */
             privstat->x = privstat->y = -1; privstat->w = privstat->h = 0;
             boolean active = status->getCurrentStatus(status->arg);
@@ -391,7 +393,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                                 if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY))
                                 {
                                     if (GetCurrentState(instance) == IS_CLOSED) {
-                                        EnableIM(instance, false);
+                                        EnableIM(instance, GetCurrentIC(instance), false);
                                     }
                                     else {
                                         CloseIM(instance, GetCurrentIC(instance));

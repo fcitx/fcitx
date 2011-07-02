@@ -35,6 +35,7 @@
 #include <fcitx/module.h>
 #include <fcitx/backend.h>
 #include <fcitx/hook.h>
+#include <fcitx/ime-internal.h>
 
 typedef struct FcitxKimpanelUI
 {
@@ -72,6 +73,7 @@ static void KimpanelInputReset(void *arg);
 static char* Status2String(FcitxUIStatus* status);
 static void KimpanelRegisterBuiltinStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
+static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[],int n);
 
 FCITX_EXPORT_API
 FcitxUI ui = {
@@ -431,19 +433,57 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
         else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
             FcitxLog(DEBUG, "Argument is not STRING!"); 
         else {
-            char* s0;
+            const char* s0;
             dbus_message_iter_get_basic(&args, &s0);
-            FcitxLog(INFO, "%s", s0);
+
             size_t len = strlen("/Fcitx/");
             if (strlen(s0) > len)
             {
-                UpdateStatus(instance, s0 + len);
+                s0 += len;
+                if (strcmp("logo", s0) == 0)
+                {
+                    if (GetCurrentState(instance) == IS_CLOSED) {
+                        EnableIM(instance, GetCurrentIC(instance), false);
+                    }
+                    else {
+                        CloseIM(instance, GetCurrentIC(instance));
+                    }
+                }
+                else if (strncmp("im/", s0, strlen("im/")) == 0)
+                {
+                    s0 += strlen("im/");
+                    int index = atoi(s0);
+                    SwitchIM(instance, index);
+                }
+                else if (strncmp("im", s0, strlen("im")) == 0)
+                {
+                    UT_array* imes = &instance->imes;
+                    FcitxIM* pim;
+                    int index;
+                    size_t len = utarray_len(imes);
+                    char **prop = fcitx_malloc0(len * sizeof(char*));
+                    for (pim = (FcitxIM *) utarray_front(imes);
+                         pim != NULL;
+                         pim = (FcitxIM *) utarray_next(imes, pim))
+                    {
+                        asprintf(&prop[index], "/Fcitx/im/%d:%s:fcitx-%s:%s", index, _(pim->strName), pim->strIconName, _(pim->strName));
+                        index ++;
+                    }
+                    KimExecMenu(kimpanel, prop , len);
+                    while(len -- )
+                        free(prop[len]);
+                }
+                else
+                    UpdateStatus(instance, s0);
             }            
         }
         return true;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
         FcitxLog(DEBUG, "PanelCreated");
+        
+        KimpanelRegisterBuiltinStatus(kimpanel);
+        
         UT_array* uistats = &instance->uistats;
         FcitxUIStatus *status;
         for ( status = (FcitxUIStatus *) utarray_front(uistats);

@@ -129,6 +129,8 @@ void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
 
 void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
+    if (ic == NULL)
+        return ;
     UT_array* backends = &instance->backends;
     FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
     if (pbackend == NULL)

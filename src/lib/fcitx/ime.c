@@ -724,14 +724,23 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
     return pcurrentIM;
 }
 
-void EnableIM(FcitxInstance* instance, boolean keepState)
+void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
-    if (!keepState)
+    if (ic == NULL)
+        return ;
+    UT_array* backends = &instance->backends;
+    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
+    if (pbackend == NULL)
+        return;
+    FcitxBackend* backend = (*pbackend)->backend;
+    if (ic->state == IS_CLOSED)
     {
-        ResetInput(instance);
+        backend->EnableIM((*pbackend)->addonInstance, ic);
+        OnTriggerOn(instance);
     }
-    FcitxInputContext* ic = GetCurrentIC(instance);
     ic->state = IS_ACTIVE;
+    if (!keepState)
+        ResetInput(instance);
 }
 
 void InitIMMenu(FcitxInstance* instance)

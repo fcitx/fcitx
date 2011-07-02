@@ -751,7 +751,7 @@ void SwitchVK (FcitxVKState *vkstate)
         FcitxInputContext* ic = GetCurrentIC(vkstate->owner);
 
         if (ic && ic->state == IS_CLOSED)
-            EnableIM (instance, true);
+            EnableIM (instance, ic, true);
     }
     else
         XUnmapWindow (vkWindow->dpy, vkWindow->window);

@@ -223,7 +223,12 @@ boolean TrayEventHandler(void *instance, XEvent* event)
                 switch(event->xbutton.button)
                 {
                     case Button1:
-                        EnableIM(instance, false);
+                        if (GetCurrentState(instance) == IS_CLOSED) {
+                            EnableIM(instance, GetCurrentIC(instance), false);
+                        }
+                        else {
+                            CloseIM(instance, GetCurrentIC(instance));
+                        }
                         break;
                     case Button3:
                         {

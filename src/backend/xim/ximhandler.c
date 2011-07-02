@@ -119,7 +119,7 @@ Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_
         return True;
 
     SetCurrentIC(xim->owner, ic);
-    EnableIM(xim->owner, false);
+    EnableIM(xim->owner, ic, false);
     OnTriggerOn(xim->owner);
     return True;
 }

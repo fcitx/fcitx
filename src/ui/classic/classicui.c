@@ -353,7 +353,7 @@ void ClassicUIOnTriggerOn(void* arg)
 void ClassicUIOnTriggerOff(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    CloseMainWindow(classicui->mainWindow);
+    DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
 

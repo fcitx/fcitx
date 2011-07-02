@@ -59,6 +59,7 @@ typedef struct FcitxBackend
     void (*CreateIC)(void* arg, FcitxInputContext*, void* priv);
     boolean (*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
     void (*DestroyIC) (void* arg, FcitxInputContext *context);
+    void (*EnableIM)(void* arg, FcitxInputContext* arg1);
     void (*CloseIM)(void* arg, FcitxInputContext* arg1);
     void (*CommitString)(void* arg, FcitxInputContext* arg1, char* arg2);
     void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
