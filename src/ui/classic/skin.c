@@ -59,6 +59,8 @@
 
 #define ROUND_SIZE 60
 
+static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
+
 static ConfigFileDesc* GetSkinDesc();
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateSkinMenuShell(FcitxUIMenu* menu);
@@ -77,6 +79,7 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
     int ret = 0;
     if (sc->config.configFile)
     {
+        utarray_done(&sc->skinMainBar.skinPlacement);
         FreeConfigFile(sc->config.configFile);
         free(sc->skinInfo.skinName);
         free(sc->skinInfo.skinVersion);
@@ -84,6 +87,7 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
         free(sc->skinInfo.skinDesc);
     }
     memset(sc, 0, sizeof(FcitxSkin));
+    utarray_init(&sc->skinMainBar.skinPlacement, &place_icd);
 
 reload:
     //获取配置文件的绝对路径
@@ -158,7 +162,7 @@ reload:
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
 {
     char buf[PATH_MAX];
-    cairo_surface_t *png;
+    cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
     
     HASH_FIND_STR(sc->imageTable, name, image);
@@ -544,23 +548,25 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     if (instance->bShowCursor )
     {
         //画向前向后箭头
+        if (prev && next )
+        {
+            cairo_set_source_surface(inputWindow->c_back, prev->image,
+                                    newWidth - sc->skinInputBar.iBackArrowX ,
+                                    sc->skinInputBar.iBackArrowY);
+            if (input->bShowPrev)
+                cairo_paint(inputWindow->c_back);
+            else
+                cairo_paint_with_alpha(inputWindow->c_back,0.5);
 
-        cairo_set_source_surface(inputWindow->c_back, prev->image,
-                                 newWidth - sc->skinInputBar.iBackArrowX ,
-                                 sc->skinInputBar.iBackArrowY);
-        if (input->bShowPrev)
-            cairo_paint(inputWindow->c_back);
-        else
-            cairo_paint_with_alpha(inputWindow->c_back,0.5);
-
-        //画向前箭头
-        cairo_set_source_surface(inputWindow->c_back, next->image,
-                                 newWidth - sc->skinInputBar.iForwardArrowX ,
-                                 sc->skinInputBar.iForwardArrowY);
-        if (input->bShowNext)
-            cairo_paint(inputWindow->c_back);
-        else
-            cairo_paint_with_alpha(inputWindow->c_back,0.5);
+            //画向前箭头
+            cairo_set_source_surface(inputWindow->c_back, next->image,
+                                    newWidth - sc->skinInputBar.iForwardArrowX ,
+                                    sc->skinInputBar.iForwardArrowY);
+            if (input->bShowNext)
+                cairo_paint(inputWindow->c_back);
+            else
+                cairo_paint_with_alpha(inputWindow->c_back,0.5);
+        }
     }
 
     for (i = 0; i < GetMessageCount(msgup) ; i++)
@@ -726,4 +732,31 @@ void UpdateSkinMenuShell(FcitxUIMenu* menu)
         i ++;
     }
 
+}
+
+void ParsePlacement(UT_array* sps, char* placment)
+{
+    UT_array* array = SplitString(placment, ';');
+    char** str;
+    utarray_clear(sps);
+    for(str = (char**) utarray_front(array);
+        str != NULL;
+        str = (char**) utarray_next(array, str))
+    {
+        char* s = *str;
+        char* p = strchr(s, ':');
+        if (p == NULL)
+            continue;
+        if ((strchr(s, ':') - s) > MAX_STATUS_NAME)
+            continue;
+        
+        int len = p - s;
+        SkinPlacement sp;
+        strncpy(sp.name, s, len);
+        sp.name[len] = '\0';
+        int ret = sscanf(p+1, "%d,%d", &sp.x, &sp.y);
+        if (ret != 2)
+            continue;
+        utarray_push_back(sps, &sp);
+    }
 }

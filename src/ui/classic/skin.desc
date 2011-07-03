@@ -77,19 +77,24 @@ Description=Chinese Mode Icon
 
 [SkinMainBar/MarginLeft]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Left
 
 [SkinMainBar/MarginRight]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Right
 
 [SkinMainBar/MarginTop]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Top
 
 [SkinMainBar/MarginBottom]
 Type=Integer
+Description=Resize Margin Bottom
+
+[SkinMainBar/Placement]
+Type=String
 Description=Special Icon position
+DefaultValue=
 
 [SkinInputBar/BackImg]
 Type=String

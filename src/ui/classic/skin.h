@@ -35,6 +35,7 @@
 #include <fcitx-config/uthash.h>
 #include <cairo.h>
 #include <fcitx-config/fcitx-config.h>
+#include <fcitx/ui.h>
 
 struct XlibMenu;
 struct InputWindow;
@@ -88,6 +89,8 @@ typedef struct
     int marginBottom;
     int marginLeft;
     int marginRight;
+    char *placement;
+    UT_array skinPlacement;
 } SkinMainBar;
 
 typedef struct 
@@ -108,6 +111,13 @@ typedef struct
     int iOutputPos;
 } SkinInputBar;
 
+typedef struct SkinPlacement
+{
+    char name[MAX_STATUS_NAME + 1];
+    int x;
+    int y;
+    UT_hash_handle hh;
+} SkinPlacement;
 
 /**
  * @brief Tray Icon Image
@@ -157,6 +167,7 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
 void LoadInputMessage(FcitxSkin* sc, struct InputWindow* inputWindow, const char* font);
 void InitSkinMenu(struct FcitxClassicUI* classicui);
 void DisplaySkin(struct FcitxClassicUI* classicui, char * skinname);
+void ParsePlacement(UT_array* sps, char* placment);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
                              int height,

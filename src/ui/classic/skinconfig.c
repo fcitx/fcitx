@@ -25,6 +25,9 @@
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx/ui.h"
 
+
+static void FilterPlacement(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+
 CONFIG_BINDING_BEGIN(FcitxSkin)
 CONFIG_BINDING_REGISTER("SkinInfo","Name",skinInfo.skinName)
 CONFIG_BINDING_REGISTER("SkinInfo","Version",skinInfo.skinVersion)
@@ -51,6 +54,7 @@ CONFIG_BINDING_REGISTER("SkinMainBar","MarginLeft", skinMainBar.marginLeft)
 CONFIG_BINDING_REGISTER("SkinMainBar","MarginRight", skinMainBar.marginRight)
 CONFIG_BINDING_REGISTER("SkinMainBar","MarginTop", skinMainBar.marginTop)
 CONFIG_BINDING_REGISTER("SkinMainBar","MarginBottom", skinMainBar.marginBottom)
+CONFIG_BINDING_REGISTER_WITH_FILTER("SkinMainBar","Placement", skinMainBar.placement, FilterPlacement)
 
 CONFIG_BINDING_REGISTER("SkinInputBar","BackImg",skinInputBar.backImg)
 CONFIG_BINDING_REGISTER("SkinInputBar","MarginTop", skinInputBar.marginTop)
@@ -83,3 +87,11 @@ CONFIG_BINDING_REGISTER("SkinKeyboard", "KeyColor", skinKeyboard.keyColor)
 
 CONFIG_BINDING_END()
 
+void FilterPlacement(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+{
+    FcitxSkin* sc = (FcitxSkin*) config;
+    if (sync == Raw2Value)
+    {        
+        ParsePlacement(&sc->skinMainBar.skinPlacement, *(char**) value);
+    }
+}
