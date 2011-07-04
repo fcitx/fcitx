@@ -759,4 +759,6 @@ void ParsePlacement(UT_array* sps, char* placment)
             continue;
         utarray_push_back(sps, &sp);
     }
+    
+    utarray_free(array);
 }
