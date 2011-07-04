@@ -180,12 +180,15 @@ void AddonResolveDependency(FcitxInstance* instance)
     {
         if (addon->category == AC_UI)
         {
-            if (instance->uiname == NULL && addon->bEnabled)
+            if (instance->uiname == NULL)
             {
-                if (!founduiflag)
-                    founduiflag = true;
-                else
-                    addon->bEnabled = false;
+                if (addon->bEnabled)
+                {
+                    if (!founduiflag)
+                        founduiflag = true;
+                    else
+                        addon->bEnabled = false;
+                }
             }
             else
             {
