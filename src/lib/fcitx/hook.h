@@ -74,14 +74,14 @@ typedef struct FcitxIMEventHook
     void *arg;
 } FcitxIMEventHook;
 
-void RegisterPreInputFilter(KeyFilterHook) ;
-void RegisterPostInputFilter(KeyFilterHook);
-void RegisterOutputFilter(StringFilterHook);
-void RegisterHotkeyFilter(HotkeyHook);
-void RegisterResetInputHook(FcitxIMEventHook value);
-void RegisterTriggerOnHook(FcitxIMEventHook value);
-void RegisterTriggerOffHook(FcitxIMEventHook value);
-void RegisterInputFocusHook(FcitxIMEventHook value);
-void RegisterInputUnFocusHook(FcitxIMEventHook value);
+void RegisterPreInputFilter(struct FcitxInstance* instance, KeyFilterHook) ;
+void RegisterPostInputFilter(struct FcitxInstance* instance, KeyFilterHook);
+void RegisterOutputFilter(struct FcitxInstance* instance, StringFilterHook);
+void RegisterHotkeyFilter(struct FcitxInstance* instance, HotkeyHook);
+void RegisterResetInputHook(struct FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterTriggerOnHook(struct FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterTriggerOffHook(struct FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterInputFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterInputUnFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
 
 #endif

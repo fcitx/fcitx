@@ -68,22 +68,22 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     hk.hotkey = FCITX_CTRL_5;
     hk.hotkeyhandle = ImProcessReload;
     hk.arg = instance;
-    RegisterHotkeyFilter(hk);
+    RegisterHotkeyFilter(instance, hk);
     
     hk.hotkey = FCITX_ENTER;
     hk.hotkeyhandle = ImProcessEnter;
     hk.arg = instance;
-    RegisterHotkeyFilter(hk);
+    RegisterHotkeyFilter(instance, hk);
     
     hk.hotkey = FCITX_ESCAPE;
     hk.hotkeyhandle = ImProcessEscape;
     hk.arg = instance;
-    RegisterHotkeyFilter(hk);
+    RegisterHotkeyFilter(instance, hk);
     
     hk.hotkey = instance->config.hkLegend;
     hk.hotkeyhandle = ImProcessLegend;
     hk.arg = instance;
-    RegisterHotkeyFilter(hk);
+    RegisterHotkeyFilter(instance, hk);
 }
 
 void InitFcitxIM(FcitxInstance* instance)
@@ -394,7 +394,7 @@ INPUT_RETURN_VALUE ProcessKey(
 
     if (GetCurrentIC(instance)->state == IS_ACTIVE) {
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-            ProcessPreInputFilter(sym, state, &retVal);
+            ProcessPreInputFilter(instance, sym, state, &retVal);
         }
         
         if (retVal == IRV_TO_PROCESS)
@@ -428,11 +428,11 @@ INPUT_RETURN_VALUE ProcessKey(
         }
 
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-            ProcessPostInputFilter(sym, state, &retVal);
+            ProcessPostInputFilter(instance, sym, state, &retVal);
     }
     
     if (retVal == IRV_TO_PROCESS) {
-        retVal = CheckHotkey(sym, state);
+        retVal = CheckHotkey(instance, sym, state);
     }
     
     FcitxLog(DEBUG, "ProcessKey Return State: %s", GetStateName(retVal));
@@ -628,7 +628,7 @@ void ResetInput(FcitxInstance* instance)
     if (currentIM && currentIM->ResetIM)
         currentIM->ResetIM(currentIM->klass);
     
-    ResetInputHook();
+    ResetInputHook(instance);
 }
 
 void DoPhraseTips(FcitxInstance* instance)

@@ -309,7 +309,7 @@ void OnInputFocus(FcitxInstance* instance)
     if (instance->ui && instance->ui->ui->OnInputFocus)
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
     
-    InputFocusHook();
+    InputFocusHook(instance);
 }
 
 void OnInputUnFocus(struct FcitxInstance* instance)
@@ -317,7 +317,7 @@ void OnInputUnFocus(struct FcitxInstance* instance)
     if (instance->ui && instance->ui->ui->OnInputUnFocus)
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
     
-    InputUnFocusHook();
+    InputUnFocusHook(instance);
 }
 
 void OnTriggerOn(FcitxInstance* instance)
@@ -337,7 +337,7 @@ void OnTriggerOff(FcitxInstance* instance)
     if (instance->ui && instance->ui->ui->OnTriggerOff)
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
     
-    TriggerOffHook();
+    TriggerOffHook(instance);
 }
 
 void UpdateMenuShell(FcitxUIMenu* menu)

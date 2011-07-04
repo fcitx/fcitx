@@ -102,15 +102,15 @@ void * QuickPhraseCreate (FcitxInstance *instance)
     KeyFilterHook hk;
     hk.arg = qpstate ;
     hk.func = QuickPhrasePostFilter;
-    RegisterPostInputFilter(hk);
+    RegisterPostInputFilter(instance, hk);
 
     hk.func = QuickPhrasePreFilter;
-    RegisterPreInputFilter(hk);
+    RegisterPreInputFilter(instance, hk);
 
     FcitxIMEventHook resethk;
     resethk.arg = qpstate;
     resethk.func = QuickPhraseReset;
-    RegisterResetInputHook(resethk);
+    RegisterResetInputHook(instance, resethk);
 
     return qpstate;
 }

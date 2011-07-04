@@ -140,7 +140,7 @@ void *VKCreate(FcitxInstance* instance)
     hotkey.hotkey = instance->config.hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
-    RegisterHotkeyFilter(hotkey);
+    RegisterHotkeyFilter(instance, hotkey);
     
     RegisterStatus(instance, vkstate, "vk", "Virtual Keyboard", "Virtual Keyboard State",  ToggleVKState, GetVKState);
     
@@ -149,17 +149,17 @@ void *VKCreate(FcitxInstance* instance)
     KeyFilterHook hk;
     hk.arg = vkstate ;
     hk.func = VKPreFilter;
-    RegisterPreInputFilter(hk);
+    RegisterPreInputFilter(instance, hk);
 
     FcitxIMEventHook resethk;
     resethk.arg = vkstate;
     resethk.func = VKReset;
-    RegisterTriggerOnHook(resethk);
-    RegisterTriggerOffHook(resethk);
+    RegisterTriggerOnHook(instance, resethk);
+    RegisterTriggerOffHook(instance, resethk);
     
     resethk.func = VKUpdate;
-    RegisterInputFocusHook(resethk);
-    RegisterInputUnFocusHook(resethk);
+    RegisterInputFocusHook(instance, resethk);
+    RegisterInputUnFocusHook(instance, resethk);
     
     strcpy(vkstate->vkmenu.candStatusBind, "vk");
     strcpy(vkstate->vkmenu.name, "Virtual Keyboard");

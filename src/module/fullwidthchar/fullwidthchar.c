@@ -91,14 +91,14 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     hk.arg = fwchar;
     hk.func = ProcessFullWidthChar;
     
-    RegisterPreInputFilter(hk);
+    RegisterPreInputFilter(instance, hk);
     
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkFullWidthChar;
     hotkey.hotkeyhandle = ToggleFullWidthStateWithHotkey;
     hotkey.arg = fwchar;
     
-    RegisterHotkeyFilter(hotkey);
+    RegisterHotkeyFilter(instance, hotkey);
     
     RegisterStatus(instance, fwchar, "fullwidth", "Full Width Character", "Full Width Character",  ToggleFullWidthState, GetFullWidthState);
     

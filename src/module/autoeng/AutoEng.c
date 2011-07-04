@@ -129,8 +129,8 @@ void* AutoEngCreate(FcitxInstance *instance)
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
     
-    RegisterPreInputFilter(khk);
-    RegisterResetInputHook(rhk);
+    RegisterPreInputFilter(instance, khk);
+    RegisterResetInputHook(instance, rhk);
 
     ResetAutoEng(autoEngState);
     return autoEngState;

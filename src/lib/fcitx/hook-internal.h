@@ -23,12 +23,13 @@
  * @brief private header of hook
  */
 
-void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-char* ProcessOutputFilter(char *in);
-INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state);
-void ResetInputHook();
-void TriggerOffHook();
-void TriggerOnHook();
-void InputFocusHook();
-void InputUnFocusHook();
+struct FcitxInstance;
+void ProcessPreInputFilter(struct FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+void ProcessPostInputFilter(struct FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
+char* ProcessOutputFilter(struct FcitxInstance* instance, char *in);
+INPUT_RETURN_VALUE CheckHotkey(struct FcitxInstance* instance, FcitxKeySym keysym, unsigned int state);
+void ResetInputHook(struct FcitxInstance* instance);
+void TriggerOffHook(struct FcitxInstance* instance);
+void TriggerOnHook(struct FcitxInstance* instance);
+void InputFocusHook(struct FcitxInstance* instance);
+void InputUnFocusHook(struct FcitxInstance* instance);

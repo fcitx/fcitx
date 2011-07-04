@@ -26,6 +26,7 @@
 #include "ime.h"
 #include <semaphore.h>
 
+struct HookStack;
 struct FcitxInputContext;
 
 typedef struct FcitxInstance {
@@ -57,6 +58,16 @@ typedef struct FcitxInstance {
     struct FcitxInputContext *free_list;
     sem_t* sem;
     char* uiname;
+    
+    struct HookStack* hookPreInputFilter;
+    struct HookStack* hookPostInputFilter;
+    struct HookStack* hookOutputFilter;
+    struct HookStack* hookHotkeyFilter;
+    struct HookStack* hookResetInputHook;
+    struct HookStack* hookTriggerOnHook;
+    struct HookStack* hookTriggerOffHook;
+    struct HookStack* hookInputFocusHook;
+    struct HookStack* hookInputUnFocusHook;
 } FcitxInstance;
 
 Messages* GetMessageUp(FcitxInstance* instance);

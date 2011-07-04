@@ -176,7 +176,7 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
     
     UT_array* backends = &instance->backends;
     
-    char *pstr = ProcessOutputFilter(str);
+    char *pstr = ProcessOutputFilter(instance, str);
     if (pstr != NULL)
         str = pstr;
     

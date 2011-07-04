@@ -22,6 +22,8 @@
 #include "fcitx-utils/cutils.h"
 #include "ime.h"
 #include "fcitx-config/hotkey.h"
+#include "instance.h"
+#include "fcitx/hook-internal.h"
 
 /**
  * @file hook.c
@@ -40,18 +42,17 @@ typedef struct HookStack {
 
 #define DEFINE_HOOK(name, type, field) \
 static HookStack* Get##name(); \
-HookStack* Get##name() \
+HookStack* Get##name(FcitxInstance* instance) \
 { \
-    static HookStack* name = NULL; \
-    if (name == NULL) \
+    if (instance->hook##name == NULL) \
     { \
-        name = fcitx_malloc0(sizeof(HookStack)); \
+        instance->hook##name = fcitx_malloc0(sizeof(HookStack)); \
     } \
-    return name; \
+    return instance->hook##name; \
 } \
-void Register##name(type value) \
+void Register##name(FcitxInstance* instance, type value) \
 { \
-    HookStack* head = Get##name(); \
+    HookStack* head = Get##name(instance); \
     while(head->next != NULL) \
         head = head->next; \
     head->next = fcitx_malloc0(sizeof(HookStack)); \
@@ -69,9 +70,9 @@ DEFINE_HOOK(TriggerOffHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
 
-void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+void ProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
-    HookStack* stack = GetPreInputFilter();
+    HookStack* stack = GetPreInputFilter(instance);
     stack = stack->next;
     *retval = IRV_TO_PROCESS;
     while(stack)
@@ -82,9 +83,9 @@ void ProcessPreInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VAL
     }
 }
 
-void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+void ProcessPostInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
-    HookStack* stack = GetPostInputFilter();
+    HookStack* stack = GetPostInputFilter(instance);
     stack = stack->next;
     *retval = IRV_TO_PROCESS;
     while(stack)
@@ -95,9 +96,9 @@ void ProcessPostInputFilter(FcitxKeySym sym, unsigned int state, INPUT_RETURN_VA
     }
 }
 
-char* ProcessOutputFilter(char *in)
+char* ProcessOutputFilter(FcitxInstance* instance, char *in)
 {
-    HookStack* stack = GetOutputFilter();
+    HookStack* stack = GetOutputFilter(instance);
     stack = stack->next;
     char *out = NULL;
     while(stack)
@@ -109,9 +110,9 @@ char* ProcessOutputFilter(char *in)
     return out;
 }
 
-void ResetInputHook()
+void ResetInputHook(FcitxInstance* instance)
 {
-    HookStack* stack = GetResetInputHook();
+    HookStack* stack = GetResetInputHook(instance);
     stack = stack->next;
     while(stack)
     {
@@ -120,9 +121,9 @@ void ResetInputHook()
     }
 }
 
-void TriggerOffHook()
+void TriggerOffHook(FcitxInstance* instance)
 {
-    HookStack* stack = GetTriggerOffHook();
+    HookStack* stack = GetTriggerOffHook(instance);
     stack = stack->next;
     while(stack)
     {
@@ -130,9 +131,9 @@ void TriggerOffHook()
         stack = stack->next;
     }
 }
-void TriggerOnHook()
+void TriggerOnHook(FcitxInstance* instance)
 {
-    HookStack* stack = GetTriggerOnHook();
+    HookStack* stack = GetTriggerOnHook(instance);
     stack = stack->next;
     while(stack)
     {
@@ -140,9 +141,9 @@ void TriggerOnHook()
         stack = stack->next;
     }
 }
-void InputFocusHook()
+void InputFocusHook(FcitxInstance* instance)
 {
-    HookStack* stack = GetInputFocusHook();
+    HookStack* stack = GetInputFocusHook(instance);
     stack = stack->next;
     while(stack)
     {
@@ -150,9 +151,9 @@ void InputFocusHook()
         stack = stack->next;
     }
 }
-void InputUnFocusHook()
+void InputUnFocusHook(FcitxInstance* instance)
 {
-    HookStack* stack = GetInputUnFocusHook();
+    HookStack* stack = GetInputUnFocusHook(instance);
     stack = stack->next;
     while(stack)
     {
@@ -161,9 +162,9 @@ void InputUnFocusHook()
     }
 }
 
-INPUT_RETURN_VALUE CheckHotkey(FcitxKeySym keysym, unsigned int state)
+INPUT_RETURN_VALUE CheckHotkey(FcitxInstance* instance, FcitxKeySym keysym, unsigned int state)
 {
-    HookStack* stack = GetHotkeyFilter();
+    HookStack* stack = GetHotkeyFilter(instance);
     stack = stack->next;
     INPUT_RETURN_VALUE out = IRV_TO_PROCESS;
     while(stack)

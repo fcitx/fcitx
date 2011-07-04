@@ -143,7 +143,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     FcitxIMEventHook resethk;
     resethk.arg = classicui;
     resethk.func = ClassicUIInputReset;
-    RegisterResetInputHook(resethk);
+    RegisterResetInputHook(instance, resethk);
     
     XUnlockDisplay(classicui->dpy);
     

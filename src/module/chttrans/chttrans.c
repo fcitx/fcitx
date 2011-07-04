@@ -103,8 +103,8 @@ void* ChttransCreate(FcitxInstance* instance)
     shk.arg = transState;
     shk.func = ChttransOutputFilter;
     
-    RegisterHotkeyFilter(hk);
-    RegisterOutputFilter(shk);
+    RegisterHotkeyFilter(instance, hk);
+    RegisterOutputFilter(instance, shk);
     RegisterStatus(instance, transState, "chttrans", "Traditional Chinese Translate", "Traditional Chinese Translate", ToggleChttransState, GetChttransEnabled);
     return transState;
 }

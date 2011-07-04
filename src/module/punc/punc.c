@@ -49,6 +49,7 @@ static void TogglePuncState(void *arg);
 static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);
 static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
+static void ResetPunc(void *arg);
 
 
 typedef struct FcitxPuncState {
@@ -77,7 +78,7 @@ void* PuncCreate(FcitxInstance* instance)
     hk.arg = puncState;
     hk.func = ProcessPunc;
     
-    RegisterPostInputFilter(hk);
+    RegisterPostInputFilter(instance, hk);
     
     puncState->bUseWidePunc = true;
     puncState->cLastIsAutoConvert = '\0';
@@ -87,7 +88,13 @@ void* PuncCreate(FcitxInstance* instance)
     hotkey.hotkey = instance->config.hkPunc;
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
     hotkey.arg = puncState;
-    RegisterHotkeyFilter(hotkey);
+    RegisterHotkeyFilter(instance, hotkey);
+    
+    FcitxIMEventHook hook;
+    hook.arg = puncState;
+    hook.func = ResetPunc;
+    
+    RegisterResetInputHook(instance, hook);
     
     RegisterStatus(instance, puncState, "punc", "Full Width Punctuation", "Full Width Punctuation", TogglePuncState, GetPuncState);
 
@@ -101,6 +108,15 @@ void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
     int *key = arg.args[0];
     return GetPunc(puncState, *key);
 }
+
+void ResetPunc(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    puncState->bLastIsNumber = false;
+    puncState->cLastIsAutoConvert = '\0';
+    
+}
+
 
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
@@ -120,7 +136,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         {
             puncState->cLastIsAutoConvert = sym;
             puncState->bLastIsNumber = False;
-            *retVal = IRV_DONOT_PROCESS_CLEAN;
+            *retVal = IRV_DONOT_PROCESS;
             return true;
         }
         if (IsHotKeySimple(sym, state))

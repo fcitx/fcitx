@@ -120,7 +120,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     FcitxIMEventHook resethk;
     resethk.arg = kimpanel;
     resethk.func = KimpanelInputReset;
-    RegisterResetInputHook(resethk);
+    RegisterResetInputHook(instance, resethk);
     
     KimpanelRegisterBuiltinStatus(kimpanel);
     return kimpanel;
