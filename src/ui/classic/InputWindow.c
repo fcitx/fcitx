@@ -40,7 +40,7 @@
 #include "MainWindow.h"
 #include <libintl.h>
 
-static boolean InputWindowEventHandler(void *instance, XEvent* event);
+static boolean InputWindowEventHandler(void *arg, XEvent* event);
 
 InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
 {
@@ -113,9 +113,9 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     return inputWindow;
 }
 
-boolean InputWindowEventHandler(void *instance, XEvent* event)
+boolean InputWindowEventHandler(void *arg, XEvent* event)
 {
-    InputWindow* inputWindow = instance;
+    InputWindow* inputWindow = arg;
     if (event->xany.window == inputWindow->window)
     {
         switch (event->type)

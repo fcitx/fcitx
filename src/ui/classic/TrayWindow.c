@@ -38,8 +38,9 @@
 #include <fcitx/backend.h>
 #include <fcitx/module.h>
 #include "MenuWindow.h"
+#include <fcitx/instance.h>
 
-static boolean TrayEventHandler(void *instance, XEvent* event);
+static boolean TrayEventHandler(void *arg, XEvent* event);
 
 void InitTrayWindow(TrayWindow *trayWindow)
 {
@@ -178,10 +179,11 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
 
 }
 
-boolean TrayEventHandler(void *instance, XEvent* event)
+boolean TrayEventHandler(void *arg, XEvent* event)
 {
-    TrayWindow *trayWindow = instance;
+    TrayWindow *trayWindow = arg;
     FcitxClassicUI *classicui = trayWindow->owner;
+    FcitxInstance* instance = classicui->owner;
     Display *dpy = classicui->dpy;
     if (!classicui->bUseTrayIcon)
         return false;

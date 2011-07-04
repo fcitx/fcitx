@@ -40,7 +40,7 @@ static void DrawArrow(XlibMenu* menu, int line_y);
 static void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth);
 static void DisplayText(XlibMenu * menu,int shellindex,int line_y);
 static void DrawDivLine(XlibMenu * menu,int line_y);
-static boolean MenuWindowEventHandler(void *instance, XEvent* event);
+static boolean MenuWindowEventHandler(void *arg, XEvent* event);
 static int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth);
 static void CloseAllMenuWindow(FcitxClassicUI *classicui);
 static void CloseAllSubMenuWindow(XlibMenu *xlibMenu);
@@ -57,9 +57,9 @@ XlibMenu* CreateMainMenuWindow(FcitxClassicUI *classicui)
     return menu;
 }
 
-boolean MenuWindowEventHandler(void *instance, XEvent* event)
+boolean MenuWindowEventHandler(void *arg, XEvent* event)
 {
-    XlibMenu* menu = (XlibMenu*) instance;
+    XlibMenu* menu = (XlibMenu*) arg;
     if (event->xany.window == menu->menuWindow)
     {
         switch(event->type)

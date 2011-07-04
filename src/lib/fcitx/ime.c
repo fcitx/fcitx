@@ -768,12 +768,13 @@ void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
     if (pbackend == NULL)
         return;
     FcitxBackend* backend = (*pbackend)->backend;
-    if (ic->state == IS_CLOSED)
+    IME_STATE oldstate = ic->state;
+    ic->state = IS_ACTIVE;
+    if (oldstate == IS_CLOSED)
     {
         backend->EnableIM((*pbackend)->addonInstance, ic);
         OnTriggerOn(instance);
     }
-    ic->state = IS_ACTIVE;
     if (!keepState)
         ResetInput(instance);
 }

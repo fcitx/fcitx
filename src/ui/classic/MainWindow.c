@@ -47,7 +47,7 @@
 #include "MenuWindow.h"
 
 
-static boolean MainWindowEventHandler(void *instance, XEvent* event);
+static boolean MainWindowEventHandler(void *arg, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
 
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))

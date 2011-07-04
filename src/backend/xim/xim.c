@@ -484,6 +484,15 @@ void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
     
     if (window != None)
     {
+        if(ic->offset_x < 0 || ic->offset_y < 0)
+        {
+                
+            XWindowAttributes attr;
+            XGetWindowAttributes(xim->display, window, &attr);
+
+            ic->offset_x = 0;
+            ic->offset_y = attr.height;
+        }
         XTranslateCoordinates(xim->display, window, RootWindow(xim->display, xim->iScreen),
             ic->offset_x, ic->offset_y,
             x, y,
