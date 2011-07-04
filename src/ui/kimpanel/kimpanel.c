@@ -392,7 +392,7 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
         else {
             dbus_message_iter_get_basic(&args, &int0);
 
-            char *pstr;
+            char *pstr = NULL;
 
             if (im->GetCandWord)
             {
@@ -460,7 +460,7 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
                 {
                     UT_array* imes = &instance->imes;
                     FcitxIM* pim;
-                    int index;
+                    int index = 0;
                     size_t len = utarray_len(imes);
                     char **prop = fcitx_malloc0(len * sizeof(char*));
                     for (pim = (FcitxIM *) utarray_front(imes);

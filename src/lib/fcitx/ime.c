@@ -649,7 +649,7 @@ void DoPhraseTips(FcitxInstance* instance)
 INPUT_RETURN_VALUE ImProcessEnter(void *arg)
 {
     FcitxInstance *instance = (FcitxInstance *)arg;
-    INPUT_RETURN_VALUE retVal; 
+    INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS; 
     FcitxInputState *input = &instance->input;
     FcitxConfig *fc = &instance->config;
     

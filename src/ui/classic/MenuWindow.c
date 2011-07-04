@@ -83,7 +83,7 @@ boolean MenuWindowEventHandler(void *instance, XEvent* event)
                 break;
             case MotionNotify:
                 {
-                    int offseth;
+                    int offseth = 0;
                     GetMenuSize(menu);
                     int i=SelectShellIndex(menu, event->xmotion.x, event->xmotion.y, &offseth);
                     boolean flag = ReverseColor(menu,i);
