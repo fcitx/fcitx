@@ -165,10 +165,10 @@ void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 
 void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
 {
-    KeySym sym;
+    KeySym sym, originsym;
     XKeyEvent *kev;
     int keyCount;
-    unsigned int state;
+    unsigned int state, originstate;
     char strbuf[STRBUFLEN];
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
  
@@ -187,19 +187,26 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
 
     kev = (XKeyEvent *) & call_data->event;
     memset(strbuf, 0, STRBUFLEN);
-    keyCount = XLookupString(kev, strbuf, STRBUFLEN, &sym, NULL);
+    keyCount = XLookupString(kev, strbuf, STRBUFLEN, &originsym, NULL);
 
-    state = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
-    GetKey(sym, state, keyCount, &sym, &state);
+    originstate = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
+    GetKey(originsym, originstate, keyCount, &sym, &state);
     FcitxLog(DEBUG,
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 
     xim->currentSerialNumberCallData = call_data->serial_number;
     xim->currentSerialNumberKey = kev->serial;
-    ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
-                                        kev->time,
-                                        sym, state);
+    INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+                                           kev->time,
+                                           sym, state);
+    
+    if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
+        ForwardKey(xim->owner,
+                   GetCurrentIC(xim->owner),
+                   (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+                   originsym,
+                   originstate);
     xim->currentSerialNumberCallData = xim->currentSerialNumberKey = 0L;
 }
 

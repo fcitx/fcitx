@@ -58,6 +58,7 @@ void Usage ()
            "\t-D\t\tdon't run as daemon\n"
            "\t-s[sleep time]\toverride delay start time in config file, 0 for immediate start\n"
            "\t-v\t\tdisplay the version information and exit\n"
+           "\t-u, --ui\t\tspecify the user interface to use\n"
            "\t-h\t\tdisplay this help and exit\n");
 }
 

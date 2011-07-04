@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+_Name=Fcitx Kimpanel
+_GenericName=Free Chinese Input Toy of X (Use Kimpanel)
+_Comment=Chinese Input Method (Use Kimpanel)
+Exec=fcitx -u fcitx-kimpanel-ui
+Icon=fcitx
+Terminal=false
+Categories=
+Type=Application
+Categories=System;Utility;
+StartupNotify=false
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=false
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false

@@ -436,10 +436,7 @@ INPUT_RETURN_VALUE ProcessKey(
     }
     
     FcitxLog(DEBUG, "ProcessKey Return State: %s", GetStateName(retVal));
-    
-    if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
-        ForwardKey(instance, GetCurrentIC(instance), event, sym, state);
-    
+        
     ProcessInputReturnValue(instance, retVal);
     
     return retVal;
