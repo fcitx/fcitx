@@ -237,8 +237,7 @@ void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
         instance->uiname = NULL;
     
     if (runasdaemon)
-        InitAsDaemon();
-    
+        InitAsDaemon();    
     
     if (overrideDelay < 0)
         overrideDelay = instance->config.iDelayStart;
