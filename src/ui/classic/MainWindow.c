@@ -482,6 +482,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                                         CloseIM(instance, GetCurrentIC(instance));
                                     }
                                 }
+                                SaveClassicUIConfig(classicui);
                             } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
                                 mouse = &mainWindow->imiconstat.mouse;
                                 SwitchIM(instance, -1);

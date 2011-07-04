@@ -147,6 +147,8 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
     {
         image = LoadImage(sc, sc->skinTrayIcon.inactive, true);
     }
+    if (image == NULL)
+        return;
     png_surface = image->image;
 
     c=cairo_create(trayWindow->cs);

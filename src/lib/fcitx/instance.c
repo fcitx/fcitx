@@ -30,6 +30,8 @@
 #include "backend.h"
 #include <semaphore.h>
 #include <getopt.h>
+#include <fcitx-utils/utils.h>
+#include <unistd.h>
 
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
@@ -43,11 +45,35 @@ static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleLegendState(void* arg);
 static boolean GetLegendEnabled(void* arg);
 static void ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
+static void Usage();
+static void Version();
+
+/**
+ * @brief 显示命令行参数
+ */
+void Usage ()
+{
+    printf("Usage: fcitx [OPTION]\n"
+           "\t-d\t\trun as daemon(default)\n"
+           "\t-D\t\tdon't run as daemon\n"
+           "\t-s[sleep time]\toverride delay start time in config file, 0 for immediate start\n"
+           "\t-v\t\tdisplay the version information and exit\n"
+           "\t-h\t\tdisplay this help and exit\n");
+}
+
+/**
+ * @brief 显示版本
+ */
+void Version ()
+{
+    printf ("fcitx version: %s\n", VERSION);
+}
+
+
 
 FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 {
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
-    ProcessOption(instance, argc, argv);
     InitFcitxAddons(&instance->addons);
     InitFcitxIM(instance);
     InitFcitxBackends(&instance->backends);
@@ -57,8 +83,10 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->messageUp = InitMessages();
     instance->sem = sem;
     
-    FcitxInitThread(instance);
     LoadConfig(&instance->config);
+    ProcessOption(instance, argc, argv);
+    
+    FcitxInitThread(instance);
     LoadProfile(&instance->profile);
     LoadAddonInfo(&instance->addons);
     AddonResolveDependency(instance);
@@ -159,13 +187,15 @@ boolean GetLegendEnabled(void* arg)
 void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 {
     struct option longOptions[] ={
-        {"ui", 1, 0, 0}       
+        {"ui", 1, 0, 0}
     };
     
     int optionIndex = 0;
     int c;
     char* uiname = NULL;
-    while((c = getopt_long(argc, argv, "u:", longOptions, &optionIndex)) != EOF)
+    boolean runasdaemon = true;
+    int             overrideDelay = -1;
+    while((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF)
     {
         switch(c)
         {
@@ -174,20 +204,45 @@ void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                     switch(optionIndex)
                     {
                         case 0:
-                            uiname = optarg;
+                            uiname = strdup(optarg);
                             break;
                     }
                 }
                 break;
             case 'u':
-                uiname = optarg;
+                uiname = strdup(optarg);
                 break;
-                
+            case 'd':
+                runasdaemon = true;
+                break;
+            case 'D':
+                runasdaemon = false;
+                break;
+            case 's':
+                overrideDelay = atoi(optarg);
+                break;
+            case 'h':
+                Usage();
+                exit(0);
+            case 'v':
+                Version();
+                exit(0);
+                break;
         }
     }
     
     if (uiname)
-        instance->uiname = strdup(uiname);
+        instance->uiname = uiname;
     else
         instance->uiname = NULL;
+    
+    if (runasdaemon)
+        InitAsDaemon();
+    
+    
+    if (overrideDelay < 0)
+        overrideDelay = instance->config.iDelayStart;
+
+    if (overrideDelay > 0)
+        sleep(overrideDelay);
 }

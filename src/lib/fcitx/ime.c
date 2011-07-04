@@ -700,6 +700,8 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
 
 void ReloadConfig(FcitxInstance *instance)
 {
+    LoadConfig(&instance->config);
+    
     /* Reload All IM, Module, and UI Config */
     UT_array* addons = &instance->addons;
     
