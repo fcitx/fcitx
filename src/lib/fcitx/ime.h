@@ -128,7 +128,6 @@ typedef struct FcitxInputState {
     int iCandPageCount;
     int iCandWordCount;
     time_t timeStart;
-    boolean bStartRecordType;
     int iCursorPos;
     int iCurrentCandPage;
     int iLegendCandWordCount;

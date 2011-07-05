@@ -548,6 +548,9 @@ void ProcessInputReturnValue(
         default:
             ;
     }
+    if (retVal == IRV_DISPLAY_MESSAGE || retVal == IRV_DISPLAY_CANDWORDS || retVal == IRV_PUNC) {
+        input->timeStart = time (NULL);
+    }
 }
 
 void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
