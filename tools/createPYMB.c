@@ -32,7 +32,7 @@
 FcitxPinyinConfig pyconfig;
 
 FILE           *fps, *fpt, *fp1, *fp2;
-Bool            bSingleHZMode = False;
+boolean         bSingleHZMode = false;
 
 typedef struct _PY {
     char            strPY[3];
@@ -68,7 +68,7 @@ int             iAllCount;
 
 static void Usage();
 
-Bool LoadPY (void)
+boolean LoadPY (void)
 {
     FILE           *fp;
     int             i, j;
@@ -76,7 +76,7 @@ Bool LoadPY (void)
 
     fp = fopen ("pybase.mb", "rb");
     if (!fp)
-        return False;
+        return false;
 
     fread (&iPYFACount, sizeof (int), 1, fp);
     PYFAList = (__PYFA *) malloc (sizeof (__PYFA) * iPYFACount);
@@ -115,7 +115,7 @@ Bool LoadPY (void)
 
     fp = fopen ("pybase.mb", "wb");
     if (!fp)
-        return False;
+        return false;
 
     fwrite (&iPYFACount, sizeof (int), 1, fp);
     for (i = 0; i < iPYFACount; i++) {
@@ -131,7 +131,7 @@ Bool LoadPY (void)
 
     fclose (fp);
 
-    return True;
+    return true;
 }
 
 void CreatePYPhrase (void)
@@ -163,7 +163,7 @@ void CreatePYPhrase (void)
         if (strlen (strPhrase) < 3)
             continue;
 
-        ParsePY (&pyconfig, strPY, &strTemp, PY_PARSE_INPUT_SYSTEM, False);
+        ParsePY (&pyconfig, strPY, &strTemp, PY_PARSE_INPUT_SYSTEM, false);
         s2++;
         kkk = 0;
         if (strTemp.iHZCount != utf8_strlen (strPhrase) || (strTemp.iMode & PARSE_ABBR)) {

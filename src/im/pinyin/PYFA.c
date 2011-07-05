@@ -1180,7 +1180,7 @@ int GetMHIndex_C (MHPY* MHPY_C, char map)
     return -1;
 }
 
-int GetMHIndex_S (MHPY* MHPY_S, char map, Bool bMode)
+int GetMHIndex_S (MHPY* MHPY_S, char map, boolean bMode)
 {
     int             i;
 
@@ -1197,11 +1197,11 @@ int GetMHIndex_S (MHPY* MHPY_S, char map, Bool bMode)
 
 }
 
-Bool IsZ_C_S (char map)
+boolean IsZ_C_S (char map)
 {
     if (map=='c' || map=='H'|| map=='B')
-        return True;
-    return False;
+        return true;
+    return false;
 }
 
 void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)

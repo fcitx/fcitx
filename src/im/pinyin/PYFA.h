@@ -20,7 +20,6 @@
 #ifndef _PYFA_H
 #define _PYFA_H
 
-#include <X11/Xlib.h>
 #include "fcitx-config/fcitx-config.h"
 struct FcitxPinyinConfig;
 
@@ -66,8 +65,8 @@ typedef struct PYTABLE {
 
 int GetMHIndex_C (MHPY* MHPY_C, char map);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
-int GetMHIndex_S (MHPY* MHPY_S, char map, Bool bMode);
-Bool		IsZ_C_S (char map);
+int GetMHIndex_S (MHPY* MHPY_S, char map, boolean bMode);
+boolean		IsZ_C_S (char map);
 void InitMHPY(struct MHPY** pMHPY, const struct  MHPY_TEMPLATE* MHPYtemplate);
 void InitPYTable(struct FcitxPinyinConfig* pyconfig);
 

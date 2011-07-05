@@ -20,8 +20,6 @@
 #ifndef _TABLE_H
 #define _TABLE_H
 
-#include <X11/Xlib.h>
-
 #include "fcitx/configfile.h"
 #include "fcitx/ime.h"
 #include "fcitx-utils/utarray.h"

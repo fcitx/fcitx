@@ -36,8 +36,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <libintl.h>
-
-#include <X11/Xlib.h>
 #include <X11/keysym.h>
 
 #include "im/pinyin/pydef.h"
