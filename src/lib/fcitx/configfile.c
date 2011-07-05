@@ -28,7 +28,7 @@
 #include "configfile.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/cutils.h"
-#include <fcitx-utils/keys.h>
+#include "fcitx-utils/keys.h"
 static boolean IsReloadConfig = false;
 
 static ConfigFileDesc* GetConfigDesc();

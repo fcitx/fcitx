@@ -32,6 +32,8 @@
 #include "pyconfig.h"
 #include <string.h>
 
+#define strNameOfShuangpin __("Shuangpin")
+
 SP_C            SPMap_C[] = {
     {"ai", 'l'}
     ,

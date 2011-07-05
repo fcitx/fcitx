@@ -37,12 +37,12 @@
 
 #include "fcitx/configfile.h"
 #include "fcitx/addon.h"
-#include "fcitx-utils/utils.h"
 #include "fcitx/module.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/backend.h"
 #include "fcitx/profile.h"
-#include <fcitx/instance.h>
+#include "fcitx/instance.h"
+#include "fcitx-utils/utils.h"
 #include "errorhandler.h"
 
 static void WaitForEnd(sem_t *sem, int count)

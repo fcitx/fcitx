@@ -53,8 +53,8 @@
 #include "TrayWindow.h"
 #include "fcitx/ui.h"
 #include "fcitx/backend.h"
-#include <fcitx-utils/utils.h>
-#include <fcitx/instance.h>
+#include "fcitx-utils/utils.h"
+#include "fcitx/instance.h"
 #include "ui/cairostuff/font.h"
 
 #define ROUND_SIZE 60

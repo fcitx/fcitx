@@ -30,41 +30,21 @@
 
 #include "fcitx-config/hotkey.h"
 #include "ime.h"
-#include <fcitx-utils/utarray.h>
+#include "fcitx-utils/utarray.h"
 
 struct FcitxInputContext;
 struct FcitxInstance;
 
-INPUT_RETURN_VALUE ProcessKey(struct FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
-void ForwardKey(struct FcitxInstance* instance, struct FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
-
-boolean IsHotKey(FcitxKeySym sym, int state, struct HOTKEYS * hotkey);
-INPUT_RETURN_VALUE ChangeCorner (void);
-INPUT_RETURN_VALUE ChangePunc (void);
-INPUT_RETURN_VALUE ChangeLegend (void);
-INPUT_RETURN_VALUE Chanrack (void);
-INPUT_RETURN_VALUE ChangeGBKT (void);
-void		ChangeLock (void);
-
-#ifdef _ENABLE_RECORDING
-void		ChangeRecording (void);
-void		ResetRecording (void);
-#endif
-
-void            InitFcitxIM(struct FcitxInstance* instance);
-void            InitBuiltInHotkey(struct FcitxInstance* instance);
-void            SwitchIM (struct FcitxInstance* instance, int index);
-void            DoPhraseTips (struct FcitxInstance* instance);
-void            SaveAllIM (struct FcitxInstance* instance);
-void            UnloadAllIM(UT_array* ims);
-void            LoadAllIM (struct FcitxInstance* instance);
-void            ConvertPunc (void);
-void            ReloadConfig(struct FcitxInstance* instance);
-void            SelectIM(int imidx);
+void InitFcitxIM(struct FcitxInstance* instance);
+void InitBuiltInHotkey(struct FcitxInstance* instance);
+void DoPhraseTips (struct FcitxInstance* instance);
+void UnloadAllIM(UT_array* ims);
+void LoadAllIM (struct FcitxInstance* instance);
+void InitIMMenu(struct FcitxInstance* instance);
+void ShowInputSpeed(struct FcitxInstance* instance);
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
 INPUT_RETURN_VALUE ImProcessLegend(void *arg);
 INPUT_RETURN_VALUE ImProcessReload(void *arg);
-void InitIMMenu(struct FcitxInstance* instance);
 
 #endif

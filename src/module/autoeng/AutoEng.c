@@ -32,9 +32,9 @@
 #include "fcitx-config/xdg.h"
 
 #include "AutoEng.h"
-#include <fcitx-utils/keys.h>
-#include <fcitx/ui.h>
-#include <fcitx/instance.h>
+#include "fcitx-utils/keys.h"
+#include "fcitx/ui.h"
+#include "fcitx/instance.h"
 
 typedef struct FcitxAutoEngState {
     UT_array* autoEng;

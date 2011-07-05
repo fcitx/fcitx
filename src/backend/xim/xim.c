@@ -30,16 +30,16 @@
 #include "fcitx/backend.h"
 #include "fcitx/module.h"
 #include "fcitx/configfile.h"
+#include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-config/fcitx-config.h"
 #include "fcitx-utils/cutils.h"
+#include "fcitx-config/fcitx-config.h"
 #include "IMdkit.h"
 #include "Xi18n.h"
 #include "IC.h"
 #include "xim.h"
 #include "ximhandler.h"
 #include "module/x11/x11stuff.h"
-#include <fcitx/instance.h>
 
 static void* XimCreate(FcitxInstance* instance, int backendid);
 static boolean XimDestroy(void* arg);

@@ -26,9 +26,9 @@
 #include <string.h>
 #include <libintl.h>
 
-#include <fcitx/fcitx.h>
-#include <fcitx-utils/utils.h>
-#include <fcitx-utils/cutils.h>
+#include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx-utils/cutils.h"
 
 /**
  * @brief Get Usable Font

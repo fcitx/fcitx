@@ -65,7 +65,7 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_DONOT_PROCESS, /* key will be forward */
     IRV_DONOT_PROCESS_CLEAN, /* key will be forward and process as IRV_CLEAN */
     IRV_CLEAN, /* reset input */
-    IRV_TO_PROCESS, /* key will passed to next flow*/ 
+    IRV_TO_PROCESS, /* key will passed to next flow*/
     IRV_DISPLAY_MESSAGE, /* it's a message, so next and prev will not be shown */
     IRV_DISPLAY_CANDWORDS, /* the only different with message it it will show next and prev button */
     IRV_DISPLAY_LAST, /* display the last input word */
@@ -124,7 +124,7 @@ typedef struct FcitxInputState {
     char strCodeInput[MAX_USER_INPUT + 1];
     char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
     boolean bIsInLegend;
-    
+
     int iCandPageCount;
     int iCandWordCount;
     time_t timeStart;
@@ -146,7 +146,7 @@ boolean IsInLegend(FcitxInputState* input);
 char* GetOutputString(FcitxInputState* input);
 struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
 void EnableIM(struct FcitxInstance* instance, struct FcitxInputContext* ic, boolean keepState);
-void            ResetInput (struct FcitxInstance* instance);
+void ResetInput (struct FcitxInstance* instance);
 /**
  * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
  *
@@ -155,7 +155,7 @@ void            ResetInput (struct FcitxInstance* instance);
  * @return void
  **/
 void ProcessInputReturnValue(
-    struct FcitxInstance* instance, 
+    struct FcitxInstance* instance,
     INPUT_RETURN_VALUE retVal
 );
 void FcitxRegisterIM(struct FcitxInstance *instance,
@@ -163,14 +163,21 @@ void FcitxRegisterIM(struct FcitxInstance *instance,
                      const char* name,
                      const char* iconName,
                      FcitxIMInit Init,
-                     FcitxIMResetIM ResetIM, 
-                     FcitxIMDoInput DoInput, 
-                     FcitxIMGetCandWords GetCandWords, 
-                     FcitxIMGetCandWord GetCandWord, 
-                     FcitxIMPhraseTips PhraseTips, 
+                     FcitxIMResetIM ResetIM,
+                     FcitxIMDoInput DoInput,
+                     FcitxIMGetCandWords GetCandWords,
+                     FcitxIMGetCandWord GetCandWord,
+                     FcitxIMPhraseTips PhraseTips,
                      FcitxIMSave Save,
                      FcitxIMReloadConfig ReloadConfig,
                      void *priv,
                      int priority
-);
+                    );
+
+INPUT_RETURN_VALUE ProcessKey(struct FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
+void ForwardKey(struct FcitxInstance* instance, struct FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
+void SaveAllIM (struct FcitxInstance* instance);
+void ReloadConfig(struct FcitxInstance* instance);
+void SwitchIM (struct FcitxInstance* instance, int index);
+
 #endif

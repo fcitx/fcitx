@@ -23,9 +23,9 @@
 #include <X11/Xatom.h>
 #include <cairo/cairo-xlib.h>
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
-#include <fcitx-utils/utils.h>
+#include "fcitx/fcitx.h"
+#include "fcitx/module.h"
+#include "fcitx-utils/utils.h"
 #include "module/x11/x11stuff.h"
 
 #include "AboutWindow.h"

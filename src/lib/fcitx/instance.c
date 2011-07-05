@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "instance.h"
-#include <fcitx-utils/cutils.h>
+#include "fcitx-utils/cutils.h"
 #include <limits.h>
 #include "ime-internal.h"
 #include "ui.h"
@@ -30,9 +30,9 @@
 #include "backend.h"
 #include <semaphore.h>
 #include <getopt.h>
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 #include <unistd.h>
-
+#include <time.h>
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
         || (icase ? \
@@ -86,6 +86,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     
     LoadConfig(&instance->config);
     ProcessOption(instance, argc, argv);
+    
+    instance->input.timeStart = time(NULL);
     
     FcitxInitThread(instance);
     LoadProfile(&instance->profile);

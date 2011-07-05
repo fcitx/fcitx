@@ -23,22 +23,21 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <cairo-xlib.h>
+#include <libintl.h>
 
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
 #include "fcitx/profile.h"
+#include "fcitx/backend.h"
+#include "fcitx/configfile.h"
+#include "fcitx/instance.h"
+#include "fcitx-utils/utils.h"
 
 #include "InputWindow.h"
 #include "classicui.h"
 #include "skin.h"
 #include "module/x11/x11stuff.h"
-#include "fcitx-utils/utils.h"
-#include <fcitx/backend.h>
-#include <fcitx/configfile.h>
-#include <fcitx/ime-internal.h>
-#include <fcitx/instance.h>
 #include "MainWindow.h"
-#include <libintl.h>
 
 static boolean InputWindowEventHandler(void *arg, XEvent* event);
 

@@ -29,7 +29,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _FCITX_IC_H_
 #define _FCITX_IC_H_
 
-#include <fcitx/backend.h>
+#include "fcitx/backend.h"
 
 /**
  * @brief XIM Preedit Attributes

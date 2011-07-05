@@ -32,9 +32,8 @@
 #include "fcitx-utils/cutils.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/keys.h"
-#include <fcitx/ime-internal.h>
-#include <fcitx/backend.h>
-#include <fcitx/instance.h>
+#include "fcitx/backend.h"
+#include "fcitx/instance.h"
 
 char *sCornerTrans[] = {
     "　", "！", "＂", "＃", "￥", "％", "＆", "＇", "（", "）",

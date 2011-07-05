@@ -21,7 +21,7 @@
 #ifndef PYCONFIG_H
 #define PYCONFIG_H
 #include "fcitx-config/fcitx-config.h"
-#include <fcitx/configfile.h>
+#include "fcitx/configfile.h"
 
 struct MHPY;
 

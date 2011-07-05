@@ -47,10 +47,9 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx/profile.h"
 #include "fcitx-utils/cutils.h"
-#include "fcitx/ime-internal.h"
-#include <fcitx/instance.h>
+#include "fcitx/instance.h"
 #include <module/punc/punc.h>
-#include <fcitx/module.h>
+#include "fcitx/module.h"
 
 #define TEMP_FILE       "FCITX_TABLE_TEMP"
 

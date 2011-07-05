@@ -31,10 +31,10 @@
 #include "fcitx-config/uthash.h"
 #include "fcitx-config/xdg.h"
 #include <errno.h>
-#include <fcitx/hook.h>
-#include <fcitx/ui.h>
-#include <fcitx-utils/cutils.h>
-#include <fcitx/instance.h>
+#include "fcitx/hook.h"
+#include "fcitx/ui.h"
+#include "fcitx-utils/cutils.h"
+#include "fcitx/instance.h"
 
 #define TABLE_GBKS2T "gbks2t.tab"
 

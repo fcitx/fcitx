@@ -23,7 +23,7 @@
 #include "pyconfig.h"
 
 #include <stdio.h>
-#include <fcitx-utils/cutils.h>
+#include "fcitx-utils/cutils.h"
 #include <string.h>
 
 const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母

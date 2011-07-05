@@ -30,7 +30,7 @@
 #include <cairo.h>
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 #include <X11/Xdefs.h>
 
 #define INACTIVE_ICON 0

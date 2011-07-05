@@ -27,15 +27,14 @@
 #include <limits.h>
 #include <libintl.h>
 #include "config.h"
-#include <fcitx/ui.h>
-#include <fcitx-utils/cutils.h>
+#include "fcitx/ui.h"
+#include "fcitx-utils/cutils.h"
 #include <dbus/dbus.h>
 #include "module/dbus/dbusstuff.h"
-#include <fcitx/instance.h>
-#include <fcitx/module.h>
-#include <fcitx/backend.h>
-#include <fcitx/hook.h>
-#include <fcitx/ime-internal.h>
+#include "fcitx/instance.h"
+#include "fcitx/module.h"
+#include "fcitx/backend.h"
+#include "fcitx/hook.h"
 
 typedef struct FcitxKimpanelUI
 {

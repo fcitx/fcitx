@@ -27,13 +27,13 @@
 #include "QuickPhrase.h"
 #include "fcitx-utils/cutils.h"
 #include "fcitx-config/xdg.h"
-#include <fcitx-utils/utarray.h>
-#include <fcitx/instance.h>
-#include <fcitx-utils/utils.h>
-#include <fcitx/module.h>
-#include <fcitx/hook.h>
-#include <fcitx-utils/keys.h>
-#include <fcitx/backend.h>
+#include "fcitx-utils/utarray.h"
+#include "fcitx/instance.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx/module.h"
+#include "fcitx/hook.h"
+#include "fcitx-utils/keys.h"
+#include "fcitx/backend.h"
 
 typedef struct QuickPhraseState {
     uint uQuickPhraseCount;

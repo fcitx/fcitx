@@ -28,9 +28,10 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/cutils.h"
 #include <sys/stat.h>
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 #include "instance.h"
 #include "hook-internal.h"
+#include "ime-internal.h"
 
 FcitxUI dummyUI;
 
@@ -324,6 +325,8 @@ void OnTriggerOn(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOn)
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
+    
+    ShowInputSpeed(instance);
 }
 
 void DisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)

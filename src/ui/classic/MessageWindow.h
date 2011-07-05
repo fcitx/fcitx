@@ -24,7 +24,7 @@
 #define _MESSAGE_WINDOW_H
 #include <X11/Xlib.h>
 #include <cairo.h>
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 
 struct FcitxClassicUI;
 

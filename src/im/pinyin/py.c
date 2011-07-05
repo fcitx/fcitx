@@ -51,10 +51,12 @@
 #include "fcitx-utils/cutils.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
-#include "fcitx/ime-internal.h"
-#include <fcitx/instance.h>
-#include <fcitx/backend.h>
-#include <fcitx/module.h>
+#include "fcitx/instance.h"
+#include "fcitx/backend.h"
+#include "fcitx/module.h"
+
+
+#define strNameOfPinyin __("Pinyin")
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"
 

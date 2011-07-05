@@ -36,9 +36,6 @@
 #define AUTOSAVE_ORDER_COUNT  	1024
 #define AUTOSAVE_FREQ_COUNT  	32
 
-#define strNameOfPinyin __("Pinyin")
-#define strIconNameOfPinyin "pinyin"
-
 struct FcitxInstance;
 struct FcitxPinyinState;
 struct MHPY;

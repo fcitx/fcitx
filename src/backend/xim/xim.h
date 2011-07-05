@@ -24,8 +24,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
 
-#include "IMdkit.h"
 #include "fcitx/backend.h"
+#include "IMdkit.h"
 
 #define DEFAULT_IMNAME "fcitx"
 #define STRBUFLEN 64

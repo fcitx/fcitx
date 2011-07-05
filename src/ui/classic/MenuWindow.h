@@ -36,7 +36,7 @@
 #include <X11/Xlib.h>
 #include "fcitx-utils/utarray.h"
 #include <cairo.h>
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 
 struct FcitxClassicUI;
 struct FcitxUIMenu;

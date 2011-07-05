@@ -20,10 +20,10 @@
 #ifndef _UI_H
 #define _UI_H
 
-#include <fcitx/fcitx.h>
-#include <fcitx/ui.h>
-#include <fcitx-config/fcitx-config.h>
-#include <fcitx-utils/utarray.h>
+#include "fcitx/fcitx.h"
+#include "fcitx/ui.h"
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx-utils/utarray.h"
 
 #include <X11/Xlib.h>
 #include <cairo.h>

@@ -29,7 +29,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 #include "classicui.h"
-#include <fcitx/module.h>
+#include "fcitx/module.h"
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
 #include "module/x11/x11stuff.h"

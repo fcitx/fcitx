@@ -30,8 +30,9 @@
 #include "qw.h"
 #include "fcitx/ui.h"
 #include "fcitx/configfile.h"
-#include "fcitx/ime-internal.h"
-#include <fcitx/instance.h>
+#include "fcitx/instance.h"
+
+#define strNameOfQuwei __("Quwei")
 
 typedef struct FcitxQWState {
     char     strQWHZ[3];

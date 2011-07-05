@@ -21,7 +21,7 @@
 #define _PYFA_H
 
 #include <X11/Xlib.h>
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 struct FcitxPinyinConfig;
 
 /**

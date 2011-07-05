@@ -31,7 +31,7 @@
 #define _MAIN_WINDOW_H
 #include <X11/Xlib.h>
 #include <cairo.h>
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 #include "classicui.h"
 
 struct FcitxSkin;

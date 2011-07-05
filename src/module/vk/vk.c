@@ -23,20 +23,19 @@
 #include <X11/Xlib.h>
 #include <cairo.h>
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
+#include "fcitx/fcitx.h"
+#include "fcitx/module.h"
 #include <module/x11/x11stuff.h>
 
 #include "fcitx/ime.h"
-#include <fcitx/instance.h>
-#include <fcitx-utils/cutils.h>
-#include <fcitx/ime-internal.h>
-#include <fcitx/backend.h>
-#include <fcitx-config/xdg.h>
+#include "fcitx/instance.h"
+#include "fcitx-utils/cutils.h"
+#include "fcitx/backend.h"
+#include "fcitx-config/xdg.h"
 #include <cairo-xlib.h>
 #include <ui/cairostuff/cairostuff.h>
 #include <ui/classic/classicuiinterface.h>
-#include <fcitx/hook.h>
+#include "fcitx/hook.h"
 #include <X11/keysym.h>
 #include <ui/cairostuff/font.h>
 

@@ -22,7 +22,4 @@
 
 #include "fcitx/ime.h"
 
-#define strNameOfQuwei __("Quwei")
-#define strIconNameOfQuwei "quwei"
-
 #endif

@@ -29,7 +29,7 @@
 
 #include "fcitx-utils/utf8.h"
 #include "fcitx/fcitx.h"
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 
 #define STR_KEYCODE 0
 #define STR_CODELEN 1

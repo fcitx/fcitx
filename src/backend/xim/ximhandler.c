@@ -20,14 +20,14 @@
 
 #include <X11/Xutil.h>
 
-#include "fcitx/ime-internal.h"
+#include "fcitx/ui.h"
+#include "fcitx/ime.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-utils/cutils.h"
 #include "xim.h"
 #include "ximhandler.h"
 #include "Xi18n.h"
 #include "IC.h"
-#include "fcitx-config/hotkey.h"
-#include "fcitx-utils/cutils.h"
-#include <fcitx/ui.h>
 
 static void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct* call_data);
 

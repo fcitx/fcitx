@@ -32,17 +32,17 @@
 #include <string.h>
 #include <X11/Xatom.h>
 #include <limits.h>
+#include <libintl.h>
+
+#include "fcitx/backend.h"
+#include "fcitx/module.h"
+#include "fcitx/instance.h"
 
 #include "MainWindow.h"
 #include "fcitx-utils/cutils.h"
 #include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
-#include <fcitx/backend.h>
-#include "fcitx/module.h"
-#include <fcitx/instance.h>
-#include <fcitx/ime-internal.h>
-#include <libintl.h>
 #include "AboutWindow.h"
 #include "MenuWindow.h"
 

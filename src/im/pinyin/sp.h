@@ -20,9 +20,7 @@
 #ifndef _SP_H
 #define _SP_H
 
-#define strNameOfShuangpin __("Shuangpin")
-#define strIconNameOfShuangpin "shuangpin"
-#include <fcitx-config/fcitx-config.h>
+#include "fcitx-config/fcitx-config.h"
 
 typedef enum {
     SP_FROM_USER=0,

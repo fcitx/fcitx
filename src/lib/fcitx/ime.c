@@ -28,6 +28,7 @@
  */
 #include <dlfcn.h>
 #include <libintl.h>
+#include <time.h>
 #include "ime.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
@@ -310,6 +311,8 @@ INPUT_RETURN_VALUE ProcessKey(
                         }
                     }
                     input->keyReleased = KR_OTHER;
+                    if (GetCurrentState(instance) == IS_ENG)
+                        ShowInputSpeed(instance);
                     ChangeIMState(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
                     if (!input->bIsInLegend) {
@@ -381,6 +384,7 @@ INPUT_RETURN_VALUE ProcessKey(
                 /* trigger key has the highest priority, so we check it first */
                 if (GetCurrentIC(instance)->state == IS_ENG) {
                     ChangeIMState(instance, GetCurrentIC(instance));
+                    ShowInputSpeed(instance);
                 } else
                     CloseIM(instance, GetCurrentIC(instance));
 
@@ -527,6 +531,8 @@ void ProcessInputReturnValue(
         case IRV_PUNC:
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
             ResetInput(instance);
+            SetMessageCount(GetMessageUp(instance), 0);
+            SetMessageCount(GetMessageDown(instance), 0);
             UpdateInputWindow(instance);
         case IRV_GET_CANDWORDS_NEXT:
             CommitString(instance, GetCurrentIC(instance), input->strStringGet);
@@ -806,4 +812,40 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
     
     menu->mark = instance->iIMIndex;
+}
+
+void ShowInputSpeed(FcitxInstance* instance)
+{
+    FcitxInputState* input = &instance->input;
+    
+    if (!instance->config.bShowInputWindowTriggering)
+        return;
+    
+    instance->bShowCursor = false;
+    
+    SetMessageCount(GetMessageUp(instance), 0);
+    SetMessageCount(GetMessageDown(instance), 0);
+    if (instance->config.bShowVersion) {
+        AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, "FCITX " VERSION);
+    }
+    
+    //显示打字速度
+    if (instance->config.bShowUserSpeed) {
+        double          timePassed;
+
+        timePassed = difftime (time (NULL), input->timeStart);
+        if (((int) timePassed) == 0)
+            timePassed = 1.0;
+
+        SetMessageCount(GetMessageDown(instance), 0);
+        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("Input Speed: "));
+        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%d", (int) ( input->iHZInputed * 60 / timePassed));
+        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("/min  Time Used: "));
+        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%d", (int) timePassed);
+        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("s  Num of Characters: "));
+        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%u", input->iHZInputed);
+        
+    }
+
+    UpdateInputWindow(instance);
 }

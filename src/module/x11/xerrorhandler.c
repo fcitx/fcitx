@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "X11/Xlib.h"
-#include "fcitx/ime-internal.h"
 #include "fcitx-config/xdg.h"
 
 static XErrorHandler   oldXErrorHandler;

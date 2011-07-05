@@ -20,8 +20,8 @@
 
 #include "fcitx/ui.h"
 #include "fcitx-utils/utarray.h"
-#include <fcitx/configfile.h>
-#include <fcitx/profile.h>
+#include "fcitx/configfile.h"
+#include "fcitx/profile.h"
 #include "addon.h"
 #include "ime.h"
 #include <semaphore.h>

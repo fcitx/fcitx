@@ -32,10 +32,9 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/cutils.h"
-#include <fcitx/module.h>
-#include <fcitx/backend.h>
-#include <fcitx/instance.h>
-#include <fcitx/ime-internal.h>
+#include "fcitx/module.h"
+#include "fcitx/backend.h"
+#include "fcitx/instance.h"
 
 static void* RemoteCreate(FcitxInstance* instance);
 static void* RemoteRun(void* arg);

@@ -24,7 +24,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-utils/utf8.h"
-#include <fcitx-utils/utarray.h>
+#include "fcitx-utils/utarray.h"
 
 #define INPUTWND_START_POS_DOWN	8
 #define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数

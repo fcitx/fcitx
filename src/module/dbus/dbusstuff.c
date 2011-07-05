@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
-#include <fcitx-utils/utarray.h>
-#include <fcitx/instance.h>
-#include <fcitx-utils/cutils.h>
+#include "fcitx/fcitx.h"
+#include "fcitx/module.h"
+#include "fcitx-utils/utarray.h"
+#include "fcitx/instance.h"
+#include "fcitx-utils/cutils.h"
 #include <dbus/dbus.h>
 #include <libintl.h>
 #include "dbusstuff.h"
