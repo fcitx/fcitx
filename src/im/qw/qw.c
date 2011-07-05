@@ -44,7 +44,7 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode);
 char *QWGetCandWord (void *arg, int iIndex);
 char           *GetQuWei (FcitxQWState* qwstate, int iQu, int iWei);
-boolean QWInit();
+boolean QWInit(void *arg);
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {

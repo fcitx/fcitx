@@ -120,6 +120,7 @@ void ToggleFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
     fwchar->enabled = !fwchar->enabled;
+    ResetInput(fwchar->owner);
 }
 
 boolean GetFullWidthState(void* arg)

@@ -5,8 +5,8 @@ includedir=@includedir@
 
 Name: fcitx
 Description: Fcitx
-Version: 0.95
-Requires: x11
-Requires.private: x11
+Version: 1.0
+Requires: fcitx-config
+Requires.private: fcitx-config
 Cflags: -I${includedir}
-Libs: 
+Libs: -L${libdir} -lfcitx-core

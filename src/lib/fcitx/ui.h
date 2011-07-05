@@ -137,12 +137,12 @@ typedef struct FcitxUI
 void LoadUserInterface(struct FcitxInstance* instance);
 
 Messages* InitMessages();
-void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...);
-void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...);
-void SetMessageText(Messages* message, int position, char* fmt, ...);
-void MessageConcat(Messages* message, int position, char* text);
-void MessageConcatLast(Messages* message, char* text);
-void SetMessageV(Messages* message, int position, MSG_TYPE type, char* fmt, va_list ap);
+void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...);
+void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...);
+void SetMessageText(Messages* message, int position, const char* fmt, ...);
+void MessageConcat(Messages* message, int position, const char* text);
+void MessageConcatLast(Messages* message, const char* text);
+void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt, va_list ap);
 void SetMessageCount(Messages* m, int s);
 int GetMessageCount(Messages* m);
 char* GetMessageString(Messages* m, int index);

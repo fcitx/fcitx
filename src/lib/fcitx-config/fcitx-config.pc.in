@@ -6,7 +6,5 @@ includedir=@includedir@
 Name: fcitx-config
 Description: Fcitx Config Library
 Version: 1.0
-Requires: x11
-Requires.private: x11
 Cflags: -I${includedir}
-Libs: -L${libdir} -lfcitx-config
+Libs: -L${libdir} -lfcitx-config -lfcitx-utils

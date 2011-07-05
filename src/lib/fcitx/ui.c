@@ -160,7 +160,7 @@ void LoadUserInterface(FcitxInstance* instance)
         FcitxLog(ERROR, "no usable user interface.");
 }
 
-void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...)
+void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...)
 {
 
     if (message->msgCount < MAX_MESSAGE_COUNT)
@@ -174,7 +174,7 @@ void AddMessageAtLast(Messages* message, MSG_TYPE type, char *fmt, ...)
     }
 }
 
-void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...)
+void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -182,7 +182,7 @@ void SetMessage(Messages* message, int position, MSG_TYPE type, char* fmt, ...)
     va_end(ap);
 }
 
-void SetMessageText(Messages* message, int position, char* fmt, ...)
+void SetMessageText(Messages* message, int position, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -190,7 +190,7 @@ void SetMessageText(Messages* message, int position, char* fmt, ...)
     va_end(ap);
 }
 
-void SetMessageV(Messages* message, int position, MSG_TYPE type,char* fmt, va_list ap)
+void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt, va_list ap)
 {
     if (position < MAX_MESSAGE_COUNT)
     {
@@ -200,13 +200,13 @@ void SetMessageV(Messages* message, int position, MSG_TYPE type,char* fmt, va_li
     }
 }
 
-void MessageConcatLast(Messages* message, char* text)
+void MessageConcatLast(Messages* message, const char* text)
 {
     strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
-void MessageConcat(Messages* message, int position, char* text)
+void MessageConcat(Messages* message, int position, const char* text)
 {
     strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;

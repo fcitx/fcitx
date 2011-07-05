@@ -1,4 +1,3 @@
-#define HAVE_CONFIG_H
 #cmakedefine HAVE_MALLOC_H
 #cmakedefine HAVE_STDBOOL_H
 #cmakedefine HAVE_ASPRINTF

@@ -246,10 +246,10 @@ void LoadAllIM(FcitxInstance* instance)
             free(modulePath);
         }
     }
-    if (instance->iIMIndex < 0)
-        instance->iIMIndex = 0;
-    if (instance->iIMIndex > utarray_len(&instance->imes))
-        instance->iIMIndex = utarray_len(&instance->imes) - 1;
+    if (instance->profile.iIMIndex < 0)
+        instance->profile.iIMIndex = 0;
+    if (instance->profile.iIMIndex > utarray_len(&instance->imes))
+        instance->profile.iIMIndex = utarray_len(&instance->imes) - 1;
     if (utarray_len(&instance->imes) <= 0)
     {
         FcitxLog(ERROR, _("No available Input Method"));
@@ -567,31 +567,31 @@ void SwitchIM(FcitxInstance* instance, int index)
     
     FcitxIM* lastIM, *newIM;
 
-    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
+    if (instance->profile.iIMIndex >= iIMCount || instance->profile.iIMIndex < 0)
         lastIM = NULL;
     else
     {
-        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
     }
     
     if (index >= iIMCount)
-        instance->iIMIndex = iIMCount - 1;
+        instance->profile.iIMIndex = iIMCount - 1;
     else if (index < -1)
-        instance->iIMIndex = 0;
+        instance->profile.iIMIndex = 0;
     else if (index == -1) {
-        if (instance->iIMIndex >= (iIMCount - 1))
-            instance->iIMIndex = 0;
+        if (instance->profile.iIMIndex >= (iIMCount - 1))
+            instance->profile.iIMIndex = 0;
         else
-            instance->iIMIndex++;
+            instance->profile.iIMIndex++;
     } 
     else if (index >= 0)
-        instance->iIMIndex = index;
+        instance->profile.iIMIndex = index;
 
-    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
+    if (instance->profile.iIMIndex >= iIMCount || instance->profile.iIMIndex < 0)
         newIM = NULL;
     else
     {
-        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        newIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
     }
 
     if (lastIM && lastIM->Save)
@@ -629,7 +629,7 @@ void ResetInput(FcitxInstance* instance)
     
     UT_array* ims = &instance->imes;
 
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile.iIMIndex);
 
     if (currentIM && currentIM->ResetIM)
         currentIM->ResetIM(currentIM->klass);
@@ -640,7 +640,7 @@ void ResetInput(FcitxInstance* instance)
 void DoPhraseTips(FcitxInstance* instance)
 {
     UT_array* ims = &instance->imes;
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile.iIMIndex);
     FcitxInputState *input = &instance->input;
 
     if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
@@ -758,7 +758,7 @@ char* GetOutputString(FcitxInputState* input)
 FcitxIM* GetCurrentIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
     return pcurrentIM;
 }
 
@@ -811,7 +811,7 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
     
-    menu->mark = instance->iIMIndex;
+    menu->mark = instance->profile.iIMIndex;
 }
 
 void ShowInputSpeed(FcitxInstance* instance)

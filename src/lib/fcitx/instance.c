@@ -103,7 +103,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     
     LoadUserInterface(instance);
 
-    SwitchIM(instance, instance->iIMIndex);
+    SwitchIM(instance, instance->profile.iIMIndex);
     
     LoadBackend(instance);
     

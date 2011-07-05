@@ -71,8 +71,6 @@ if(NOT DEFINED LIB_INSTALL_DIR)
     set(LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-set(HAVE_CONFIG_H 1)
-
 if(ENABLE_DEBUG)
     set(_DEBUG)
 endif(ENABLE_DEBUG)
@@ -88,7 +86,7 @@ set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
 set(CMAKE_C_FLAGS "-Wall")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-add_definitions("-D_GNU_SOURCE")
+add_definitions("-D_GNU_SOURCE -DFCITX_HAVE_CONFIG_H")
 
 configure_file(${fcitx_SOURCE_DIR}/config.h.in ${fcitx_BINARY_DIR}/config.h)
 

@@ -17,6 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef __FCITX_INSTANCE_H__
+#define __FCITX_INSTANCE_H__
 
 #include "fcitx/ui.h"
 #include "fcitx-utils/utarray.h"
@@ -31,7 +33,6 @@ struct FcitxInputContext;
 
 typedef struct FcitxInstance {
     pthread_mutex_t fcitxMutex;
-    int iIMIndex;
     int bShowCursor;
     Messages* messageUp;
     Messages* messageDown;
@@ -77,3 +78,5 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
 int FcitxLock(FcitxInstance* instance);
 int FcitxUnlock(FcitxInstance* instance);
 void EndInstance(FcitxInstance* instance);
+
+#endif

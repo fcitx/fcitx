@@ -20,7 +20,9 @@
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
+#if defined(FCITX_HAVE_CONFIG_H)
 #include "config.h"
+#endif
 
 #define _(msgid) gettext(msgid)
 #define __(msgid) (msgid)

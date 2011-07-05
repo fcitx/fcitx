@@ -203,7 +203,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
  * @note 文件中数据的格式为： 对应的英文符号 中文标点 <中文标点>
  * 加载标点词典。标点词典定义了一组标点转换，如输入‘.’就直接转换成‘。’
  */
-int LoadPuncDict (FcitxPuncState* puncState)
+boolean LoadPuncDict (FcitxPuncState* puncState)
 {
     FILE           *fpDict;             // 词典文件指针
     int             iRecordNo;
@@ -320,7 +320,7 @@ void TogglePuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState* )arg;
     puncState->bUseWidePunc = !puncState->bUseWidePunc;
-
+    ResetInput(puncState->owner);
 }
 
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
