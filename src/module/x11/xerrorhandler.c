@@ -20,15 +20,19 @@
 
 #include "X11/Xlib.h"
 #include "fcitx-config/xdg.h"
+#include <fcitx/ime.h>
+#include "x11stuff.h"
 
 static XErrorHandler   oldXErrorHandler;
 static XIOErrorHandler oldXIOErrorHandler;
+static FcitxX11* x11handle; 
 
 static int FcitxXErrorHandler (Display * dpy, XErrorEvent * event);
 static int FcitxXIOErrorHandler (Display *d);
 
-void Init (void)
+void InitXErrorHandler (FcitxX11* x11priv)
 {
+    x11handle = x11priv;
     oldXErrorHandler = XSetErrorHandler (FcitxXErrorHandler);
     oldXIOErrorHandler = XSetIOErrorHandler (FcitxXIOErrorHandler);
 }
@@ -36,6 +40,7 @@ void Init (void)
 int FcitxXIOErrorHandler (Display *d)
 {
     /* Do not log, because this is likely to happen while log out */
+    SaveAllIM(x11handle->owner);
     
     if (oldXIOErrorHandler)
         oldXIOErrorHandler(d);
@@ -54,8 +59,7 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
         fprintf (fp, "fcitx: %s\n", str);
     }
 
-    // TODO
-    // SaveAllIM();
+    SaveAllIM(x11handle->owner);
     
     if ( fp )
         fclose(fp);

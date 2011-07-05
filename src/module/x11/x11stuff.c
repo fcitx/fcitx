@@ -26,9 +26,10 @@
 #include <unistd.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/Xatom.h>
+#include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
-static void* X11Run();
+static void* X11Run(void* arg);
 static void* X11GetDisplay(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11AddEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11RemoveEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
@@ -37,21 +38,6 @@ static void* X11InitWindowAttribute(void* arg, FcitxModuleFunctionArg args);
 static void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetScreenSize(void *arg, FcitxModuleFunctionArg args);
 static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
-
-typedef struct FcitxX11 {
-    Display *dpy;
-    UT_array handlers;
-    FcitxInstance* owner;
-    Window compManager;
-    Atom compManagerAtom;
-    int iScreen;
-    Atom typeMenuAtom;
-    Atom windowTypeAtom;
-    Atom typeDialogAtom;
-    Atom typeDockAtom;
-    Atom pidAtom;
-} FcitxX11;
-
 static void InitComposite(FcitxX11* x11stuff);
 
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
@@ -93,6 +79,8 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11GetScreenSize);
     AddFunction(x11addon, X11MouseClick);
     InitComposite(x11priv);
+    
+    InitXErrorHandler (x11priv);
     return x11priv;
 }
 

@@ -139,6 +139,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
 void EndInstance(FcitxInstance* instance)
 {
+    SaveAllIM(instance);
     sem_post(instance->sem);
 }
 

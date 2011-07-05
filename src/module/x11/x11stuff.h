@@ -21,6 +21,7 @@
 #ifndef X11STUFF_H
 #define X11STUFF_H
 #include <X11/Xlib.h>
+#include "fcitx-utils/utarray.h"
 
 #define FCITX_X11_NAME "fcitx-x11"
 #define FCITX_X11_GETDISPLAY 0
@@ -40,10 +41,27 @@
 #define FCITX_X11_MOUSECLICK 7
 #define FCITX_X11_MOUSECLICK_RETURNTYPE void
 
+struct FcitxInstance;
+
 typedef struct FcitxXEventHandler {
     boolean (*eventHandler)(void* instance, XEvent* event);
     void* instance;
 } FcitxXEventHandler;
+
+
+typedef struct FcitxX11 {
+    Display *dpy;
+    UT_array handlers;
+    struct FcitxInstance* owner;
+    Window compManager;
+    Atom compManagerAtom;
+    int iScreen;
+    Atom typeMenuAtom;
+    Atom windowTypeAtom;
+    Atom typeDialogAtom;
+    Atom typeDockAtom;
+    Atom pidAtom;
+} FcitxX11;
 
 typedef enum FcitxXWindowType {
     FCITX_WINDOW_UNKNOWN,
