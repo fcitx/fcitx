@@ -120,6 +120,7 @@ void ToggleChttransState(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     transState->enabled = !transState->enabled;
+    SaveChttransConfig(transState);
 }
 
 boolean GetChttransEnabled(void* arg)

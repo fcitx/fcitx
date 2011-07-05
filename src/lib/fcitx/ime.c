@@ -85,6 +85,11 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     hk.hotkeyhandle = ImProcessLegend;
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
+    
+    hk.hotkey = instance->config.hkSaveAll;
+    hk.hotkeyhandle = ImProcessSaveAll;
+    hk.arg = instance;
+    RegisterHotkeyFilter(instance, hk);
 }
 
 void InitFcitxIM(FcitxInstance* instance)
@@ -851,4 +856,11 @@ void ShowInputSpeed(FcitxInstance* instance)
     }
 
     UpdateInputWindow(instance);
+}
+
+INPUT_RETURN_VALUE ImProcessSaveAll(void *arg)
+{
+    FcitxInstance *instance = (FcitxInstance*) arg;
+    SaveAllIM(instance);
+    return IRV_DO_NOTHING;
 }

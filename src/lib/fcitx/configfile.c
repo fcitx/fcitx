@@ -40,13 +40,10 @@ CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "FirstRun", bFirstRun)
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber)
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo)
-CONFIG_BINDING_REGISTER("Output", "SemiColonAction", semicolonToDo)
-CONFIG_BINDING_REGISTER("Output", "InputEngByCapitalChar", bEngAfterCap)
-CONFIG_BINDING_REGISTER("Output", "ConvertPunc", bConvertPunc)
 CONFIG_BINDING_REGISTER("Output", "LegendModeDisablePaging", bDisablePagingInLegend)
 CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEng)
 CONFIG_BINDING_REGISTER("Output", "CandidateWordNumber", iMaxCandWord)
-CONFIG_BINDING_REGISTER("Appearance", "CenterInputWindow", bCenterInputWindow)
+CONFIG_BINDING_REGISTER("Output", "PhraseTips", bPhraseTips)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering)
 CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed)
@@ -55,8 +52,6 @@ CONFIG_BINDING_REGISTER("Hotkey", "TriggerKey", hkTrigger)
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SwitchKey", iSwitchKey, FilterSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "TimeInterval", iTimeInterval)
-CONFIG_BINDING_REGISTER("Hotkey", "FollowCursorKey", hkTrack)
-CONFIG_BINDING_REGISTER("Hotkey", "HideMainWindowKey", hkHideMainWindow)
 CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK)
 CONFIG_BINDING_REGISTER("Hotkey", "LegendSwitchKey", hkLegend)
 CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkFullWidthChar)
@@ -65,11 +60,6 @@ CONFIG_BINDING_REGISTER("Hotkey", "PrevPageKey", hkPrevPage)
 CONFIG_BINDING_REGISTER("Hotkey", "NextPageKey", hkNextPage)
 CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SecondThirdCandWordKey", str2nd3rdCand, Filter2nd3rdKey)
 CONFIG_BINDING_REGISTER("Hotkey", "SaveAllKey", hkSaveAll)
-#ifdef _ENABLE_RECORDING
-CONFIG_BINDING_REGISTER("Hotkey", "SetRecordingKey", hkRecording)
-CONFIG_BINDING_REGISTER("Hotkey", "ResetRecordingKey", hkResetRecording)
-#endif
-CONFIG_BINDING_REGISTER("InputMethod", "PhraseTips", bPhraseTips)
 CONFIG_BINDING_END()
 
 void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
@@ -200,9 +190,4 @@ int ConfigGetMaxCandWord(FcitxConfig* fc)
 boolean ConfigGetPointAfterNumber(FcitxConfig* fc)
 {
     return fc->bPointAfterNumber;
-}
-
-boolean IsCenterInputWindow(FcitxConfig* fc)
-{
-    return fc->bCenterInputWindow;
 }

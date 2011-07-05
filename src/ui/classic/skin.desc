@@ -102,19 +102,19 @@ Description=Background Image
 
 [SkinInputBar/MarginLeft]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Left
 
 [SkinInputBar/MarginRight]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Right
 
 [SkinInputBar/MarginTop]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Top
 
 [SkinInputBar/MarginBottom]
 Type=Integer
-Description=Special Icon position
+Description=Resize Margin Bottom
 
 [SkinInputBar/CursorColor]
 Type=Color
@@ -166,19 +166,19 @@ Description=Background Image
 
 [SkinMenu/MarginTop]
 Type=Integer
-Description=Margin to top
+Description=Resize Margin Top
 
 [SkinMenu/MarginBottom]
 Type=Integer
-Description=Margin to bottom
+Description=Resize Margin Bottom
 
 [SkinMenu/MarginLeft]
 Type=Integer
-Description=Margin to left
+Description=Resize Margin Left
 
 [SkinMenu/MarginRight]
 Type=Integer
-Description=Margin to right
+Description=Resize Margin Right
 
 [SkinMenu/ActiveColor]
 Type=Color

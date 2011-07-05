@@ -28,22 +28,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 EOF
 
-cd ..
+cd $indir
+
+descfiles=`find "$indir" -iname "*.desc" | grep -v '\.hg'`
+
 # Extract Description
-find "$indir" -iname "*.desc" | while read f
+for f in $descfiles
 do
     awk '/^[\t ]*Description=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
 done
 
 # Extract Table Name
-find "$indir/table" -name "*.conf" | while read f
+find "$indir/data/table" -name "*.conf" | while read f
 do
     awk '/^[\t ]*Name=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 6)"\"\n" "msgstr \"\""}' $f >> "$outdir/$filename"
 done
 
 # Extract Group Name
-grep -n '^\[' "$indir"/*.desc | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
+grep -n '^\[' $descfiles | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 
 # Extract Enum Name
-grep -h 'Enum[0-9]' "$indir"/*.desc | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
+grep -h 'Enum[0-9]' $descfiles | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 

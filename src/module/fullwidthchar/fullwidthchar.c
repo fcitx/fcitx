@@ -70,7 +70,6 @@ static boolean GetFullWidthState(void *arg);
 static INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void *arg);
 
 typedef struct FcitxFullWidthChar {
-    boolean enabled;
     FcitxInstance* owner;
 } FcitxFullWidthChar;
 
@@ -107,7 +106,7 @@ void* FullWidthCharCreate(FcitxInstance* instance)
 boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    if (fwchar->enabled && IsHotKeySimple(sym, state))
+    if (fwchar->owner->profile.bUseFullWidthChar && IsHotKeySimple(sym, state))
     {
         sprintf(GetOutputString(&fwchar->owner->input), "%s", sCornerTrans[sym - 32]);
         *retVal = IRV_GET_CANDWORDS;
@@ -119,14 +118,15 @@ boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INP
 void ToggleFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    fwchar->enabled = !fwchar->enabled;
+    fwchar->owner->profile.bUseFullWidthChar = !fwchar->owner->profile.bUseFullWidthChar;
+    SaveProfile(&fwchar->owner->profile);
     ResetInput(fwchar->owner);
 }
 
 boolean GetFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    return fwchar->enabled; 
+    return fwchar->owner->profile.bUseFullWidthChar; 
 }
 
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)

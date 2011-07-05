@@ -22,25 +22,6 @@ Enum2=Commit
 DefaultValue=Commit
 Description=Action after press enter
 
-[Output/SemiColonAction]
-Type=Enum
-EnumCount=3
-Enum0=NoChange
-Enum1=Eng
-Enum2=QuickPhrase
-DefaultValue=QuickPhrase
-Description=Action after press SemiColon
-
-[Output/InputEngByCapitalChar]
-Type=Boolean
-DefaultValue=True
-Description=Input English Character if you input upper case
-
-[Output/ConvertPunc]
-Type=Boolean
-DefaultValue=True
-Description=Convert Punc to Chinese Punc
-
 [Output/LegendModeDisablePaging]
 Type=Boolean
 DefaultValue=True
@@ -56,10 +37,10 @@ Type=Integer
 DefaultValue=5
 Description=Candidate Word Number
 
-[Appearance/CenterInputWindow]
+[Output/PhraseTips]
 Type=Boolean
-DefaultValue=False
-Description=Show Input Window In the center of screen
+DefaultValue=True
+Description=Give the tips of Phrase
 
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
@@ -106,16 +87,6 @@ Type=Integer
 DefaultValue=250
 Description=Interval of Two Key Input
 
-[Hotkey/FollowCursorKey]
-Type=Hotkey
-DefaultValue=CTRL_K
-Description=Hotkey of Switching Follow Cursor Mode
-
-[Hotkey/HideMainWindowKey]
-Type=Hotkey
-DefaultValue=CTRL_ALT_H
-Description=Hotkey of Hiding Main Window
-
 [Hotkey/VKSwitchKey]
 Type=Hotkey
 DefaultValue=CTRL_ALT_B
@@ -123,7 +94,7 @@ Description=Hotkey of Switching Virtual Keyboard
 
 [Hotkey/LegendSwitchKey]
 Type=Hotkey
-DefaultValue=CTRL_L
+DefaultValue=
 Description=Hotkey of Switching Legend Mode
 
 [Hotkey/FullWidthSwitchKey]
@@ -155,38 +126,3 @@ Description=Hotkey to Choose Second and Third Candidate Word
 Type=Hotkey
 DefaultValue=CTRL_ALT_S
 Description=Hotkey of Saving All Config and Input History
-
-[Hotkey/SetRecordingKey]
-Type=Hotkey
-DefaultValue=CTRL_ALT_J
-Description=Hotkey of Switching Recording Mode
-
-[Hotkey/ResetRecordingKey]
-Type=Hotkey
-DefaultValue=CTRL_ALT_A
-Description=Hotkey of Reseting Recording Mode
-
-[InputMethod/PinyinOrder]
-Type=Integer
-DefaultValue=1
-Description=Pinyin Priority Order, Zero to Disable
-
-[InputMethod/ShuangpinOrder]
-Type=Integer
-DefaultValue=1
-Description=Shuangpin Priority Order, Zero to Disable
-
-[InputMethod/QuweiOrder]
-Type=Integer
-DefaultValue=0
-Description=Quwei Priority Order, Zero to Disable
-
-[InputMethod/TableOrder]
-Type=Integer
-DefaultValue=1
-Description=Table Priority Order, Zero to Disable
-
-[InputMethod/PhraseTips]
-Type=Boolean
-DefaultValue=True
-Description=Give the tips of Phrase

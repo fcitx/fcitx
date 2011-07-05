@@ -180,6 +180,7 @@ void ToggleLegendState(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     instance->profile.bUseLegend = !instance->profile.bUseLegend;
+    SaveProfile(&instance->profile);
 }
 
 boolean GetLegendEnabled(void* arg)

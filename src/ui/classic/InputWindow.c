@@ -73,8 +73,8 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
 
     inputWindow->window=XCreateWindow (dpy,
                                       RootWindow(dpy, iScreen),
-                                      GetInputWindowOffsetX(&classicui->owner->profile),
-                                      GetInputWindowOffsetY(&classicui->owner->profile),
+                                      classicui->iMainWindowOffsetX,
+                                      classicui->iMainWindowOffsetY,
                                       INPUT_BAR_MAX_WIDTH,
                                       inputWindow->iInputWindowHeight,
                                       0,
@@ -132,12 +132,6 @@ boolean InputWindowEventHandler(void *arg, XEvent* event)
                             x = event->xbutton.x;
                             y = event->xbutton.y;
                             ClassicUIMouseClick(inputWindow->owner, inputWindow->window, &x, &y);
-                            
-                            if(!IsTrackCursor(&inputWindow->owner->owner->profile))
-                            {
-                                SetInputWindowOffsetX(&inputWindow->owner->owner->profile, x);
-                                SetInputWindowOffsetY(&inputWindow->owner->owner->profile, y);
-                            }
                                                     
                             FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
 
@@ -195,22 +189,8 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
     int x, y;
     GetScreenSize(inputWindow->owner, &dwidth, &dheight);
     
-    if (IsTrackCursor(&inputWindow->owner->owner->profile))
-    {
-        FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
-        GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
-    }
-    else
-    {
-        if (IsCenterInputWindow(&inputWindow->owner->owner->config)) {
-            x = (dwidth - inputWindow->iInputWindowWidth) / 2;
-        }
-        else {
-            x = GetInputWindowOffsetX(&inputWindow->owner->owner->profile);
-        }
-        
-        y = GetInputWindowOffsetY(&inputWindow->owner->owner->profile);
-    }
+    FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
+    GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
 
     int iTempInputWindowX, iTempInputWindowY;
 

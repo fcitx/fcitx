@@ -52,7 +52,6 @@ static void ResetPunc(void *arg);
 
 
 typedef struct FcitxPuncState {
-    boolean bUseWidePunc;
     char cLastIsAutoConvert;
     boolean bLastIsNumber;
     FcitxInstance* owner;
@@ -79,7 +78,6 @@ void* PuncCreate(FcitxInstance* instance)
     
     RegisterPostInputFilter(instance, hk);
     
-    puncState->bUseWidePunc = true;
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
 
@@ -124,7 +122,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     char* strStringGet = GetOutputString(&puncState->owner->input);
     FcitxIM* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
-    if (puncState->bUseWidePunc) {
+    if (instance->profile.bUseWidePunc) {
         char *pPunc = NULL;
 
         char *pstr = NULL;
@@ -319,7 +317,9 @@ char           *GetPunc (FcitxPuncState* puncState, int iKey)
 void TogglePuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState* )arg;
-    puncState->bUseWidePunc = !puncState->bUseWidePunc;
+    FcitxInstance* instance = puncState->owner;
+    instance->profile.bUseWidePunc = !instance->profile.bUseWidePunc;
+    SaveProfile(&instance->profile);
     ResetInput(puncState->owner);
 }
 
@@ -333,7 +333,8 @@ INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
 boolean GetPuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
-    return puncState->bUseWidePunc;
+    FcitxInstance* instance = puncState->owner;
+    return instance->profile.bUseWidePunc;
 }
 
 void ReloadPunc(void* arg)

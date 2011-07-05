@@ -93,19 +93,11 @@ void OnException (int signo)
 
     switch (signo) {
     case SIGHUP:
-        /* TODO */
-        //LoadConfig ();
-        //UnloadAllIM();
-        //LoadAllIM ();
         break;
     case SIGINT:
     case SIGTERM:
     case SIGPIPE:
     case SIGSEGV:
-#ifdef _ENABLE_RECORDING
-        CloseRecording();
-#endif
-
         exit (0);
     default:
         break;

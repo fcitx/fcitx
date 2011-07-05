@@ -61,15 +61,12 @@ typedef struct FcitxConfig
     /* output config */
     boolean bEngPuncAfterNumber;
     ENTER_TO_DO enterToDo;
-    SEMICOLON_TO_DO semicolonToDo;
-    boolean bEngAfterCap;
-    boolean bConvertPunc;
     boolean bDisablePagingInLegend;
     boolean bSendTextWhenSwitchEng;
+    int iMaxCandWord;
+    boolean bPhraseTips;
 
     /* appearance config */
-    int iMaxCandWord;
-    boolean bCenterInputWindow;
     boolean bShowInputWindowTriggering;
     boolean bPointAfterNumber;
     boolean bShowUserSpeed;
@@ -81,8 +78,6 @@ typedef struct FcitxConfig
     HOTKEYS switchKey[2];
     boolean bDoubleSwitchKey;
     int iTimeInterval;
-    HOTKEYS hkTrack[2];
-    HOTKEYS hkHideMainWindow[2];
     HOTKEYS hkVK[2];
     HOTKEYS hkLegend[2];
     HOTKEYS hkFullWidthChar[2];
@@ -91,12 +86,7 @@ typedef struct FcitxConfig
     HOTKEYS hkNextPage[2];
     HOTKEYS str2nd3rdCand[2];
     HOTKEYS hkSaveAll[2];
-    HOTKEYS hkRecording[2];
-    HOTKEYS hkResetRecording[2];
-
-    /* im config */
-    int inputMethods[INPUT_METHODS];
-    boolean bPhraseTips;
+    
     HOTKEYS i2ndSelectKey[2];
     HOTKEYS i3rdSelectKey[2];
 } FcitxConfig;

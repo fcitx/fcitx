@@ -43,9 +43,6 @@ typedef enum {
     MSG_USERPHR = 4,		//用户词组
     MSG_CODE = 5,			//显示的编码
     MSG_OTHER = 6,			//其它文本
-#ifdef _ENABLE_RECORDING
-    MSG_RECORDING = 7              //记录提示
-#endif
 } MSG_TYPE;
 
 #define MAX_MESSAGE_COUNT 33

@@ -26,22 +26,14 @@
 typedef struct FcitxProfile
 {
     GenericConfig gconfig;
-    int iInputWindowOffsetX;
-    int iInputWindowOffsetY;
-    boolean bTrackCursor;
     boolean bUseLegend;
     int iIMIndex;
-    boolean bUseGBKT;
-    boolean bRecording;
+    boolean bUseWidePunc;
+    boolean bUseFullWidthChar;
 } FcitxProfile;
 
 void LoadProfile(FcitxProfile* profile);
 void SaveProfile(FcitxProfile* profile);
 boolean UseLegend(FcitxProfile* profile);
-boolean IsTrackCursor(FcitxProfile* profile);
-int GetInputWindowOffsetX(FcitxProfile* profile);
-int GetInputWindowOffsetY(FcitxProfile* profile);
-void SetInputWindowOffsetX(FcitxProfile* profile, int pos);
-void SetInputWindowOffsetY(FcitxProfile* profile, int pos);
 
 #endif

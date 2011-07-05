@@ -4,8 +4,6 @@
 #cmakedefine _DEBUG
 #cmakedefine _ENABLE_DBUS
 #cmakedefine _ENABLE_PANGO
-#cmakedefine _ENABLE_RECORDING
-#cmakedefine _ENABLE_TRAY
 #cmakedefine HAVE_OPENCC
 #define LOCALEDIR "@localedir@"
 #define PACKAGE "@package@"

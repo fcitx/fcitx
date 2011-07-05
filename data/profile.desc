@@ -1,25 +1,10 @@
-[Profile/InputWindowOffsetX]
-Description=Input Window Position X
-Type=Integer
-DefaultValue=300
-
-[Profile/InputWindowOffsetY]
-Description=Input Window Position Y
-Type=Integer
-DefaultValue=50
-
-[Profile/Corner]
+[Profile/FullWidth]
 Description=Use Full Width Character
 Type=Boolean
 DefaultValue=False
 
 [Profile/WidePunc]
 Description=Use Wide Punctuation
-Type=Boolean
-DefaultValue=True
-
-[Profile/TrackCursor]
-Description=Input Window Shows at the position of cursor
 Type=Boolean
 DefaultValue=True
 
@@ -32,23 +17,3 @@ DefaultValue=False
 Description=Current Input Method Index
 Type=Integer
 DefaultValue=0
-
-[Profile/Locked]
-Description=Locked
-Type=Boolean
-DefaultValue=False
-
-[Profile/CompactMainWindow]
-Description=Show Main Window in a compact way
-Type=Boolean
-DefaultValue=False
-
-[Profile/UseGBKT]
-Description=Use Traditional Chinese in Input
-Type=Boolean
-DefaultValue=False
-
-[Profile/Recording]
-Description=Use recording mode
-Type=Boolean
-DefaultValue=False
