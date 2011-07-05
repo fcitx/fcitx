@@ -22,6 +22,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <cairo.h>
+#include <libintl.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
@@ -161,7 +162,7 @@ void *VKCreate(FcitxInstance* instance)
     RegisterInputUnFocusHook(instance, resethk);
     
     strcpy(vkstate->vkmenu.candStatusBind, "vk");
-    strcpy(vkstate->vkmenu.name, "Virtual Keyboard");
+    strcpy(vkstate->vkmenu.name, _("Virtual Keyboard"));
     
     utarray_init(&vkstate->vkmenu.shell, &menuICD);
     vkstate->vkmenu.UpdateMenuShell = UpdateVKMenuShell;

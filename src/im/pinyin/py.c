@@ -55,9 +55,6 @@
 #include "fcitx/backend.h"
 #include "fcitx/module.h"
 
-
-#define strNameOfPinyin __("Pinyin")
-
 #define TEMP_FILE       "FCITX_DICT_TEMP"
 
 FCITX_EXPORT_API
@@ -103,7 +100,7 @@ void *PYCreate(FcitxInstance* instance)
     
     FcitxRegisterIM(instance,
                     pystate,
-                    "Pinyin",
+                    _("Pinyin"),
                     "pinyin",
                     PYInit,
                     ResetPYStatus,
@@ -118,7 +115,7 @@ void *PYCreate(FcitxInstance* instance)
                    );
     FcitxRegisterIM(instance,
                     pystate,
-                    "Shuangpin",
+                    _("Shuangpin"),
                     "shuangpin",
                     SPInit,
                     ResetPYStatus,

@@ -57,9 +57,9 @@ static void WaitForEnd(sem_t *sem, int count)
 int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "");
-    bindtextdomain(PACKAGE, LOCALEDIR);
-    bind_textdomain_codeset(PACKAGE, "UTF-8");
-    textdomain(PACKAGE);
+    bindtextdomain("fcitx", LOCALEDIR);
+    bind_textdomain_codeset("fcitx", "UTF-8");
+    textdomain("fcitx");
     SetMyExceptionHandler();
     
     int instanceCount = 1;

@@ -694,7 +694,7 @@ void InitSkinMenu(FcitxClassicUI* classicui)
 {
     utarray_init(&classicui->skinBuf, &ut_str_icd);
     strcpy(classicui->skinMenu.candStatusBind, "skin");
-    strcpy(classicui->skinMenu.name, "Skin");
+    strcpy(classicui->skinMenu.name, _("Skin"));
     utarray_init(&classicui->skinMenu.shell, &menuICD);
     
     classicui->skinMenu.UpdateMenuShell = UpdateSkinMenuShell;

@@ -112,7 +112,7 @@ void LoadUserInterface(FcitxInstance* instance)
                         addon->ui=dlsym(handle,"ui");
                         if(!addon->ui || !addon->ui->Create)
                         {
-                            FcitxLog(ERROR, _("Backend: bad im"));
+                            FcitxLog(ERROR, _("UI: bad ui"));
                             dlclose(handle);
                             break;
                         }

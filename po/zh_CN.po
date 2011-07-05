@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-05 08:29+0800\n"
-"PO-Revision-Date: 2011-07-05 08:39+0800\n"
+"POT-Creation-Date: 2011-07-05 08:56+0800\n"
+"PO-Revision-Date: 2011-07-05 08:56+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ime.c:843
 msgid "/min  Time Used: "
-msgstr "/分  经过时间："
+msgstr "/分  经过时间: "
 
 #: /home/saber/Develop/fcitx/po/.././src/ui/classic/classicui.c:115
 msgid "About Fcitx"
@@ -55,11 +55,7 @@ msgstr "后端"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/backend.c:249
 msgid "Backend: bad backend"
-msgstr "后端：有问题的后端"
-
-#: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ui.c:115
-msgid "Backend: bad im"
-msgstr ""
+msgstr "后端: 有问题的后端"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/backend.c:243
 #, c-format
@@ -70,7 +66,7 @@ msgstr "后端: 打开 %s 失败 %s"
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:403
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:400
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
@@ -104,17 +100,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2595
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2592
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2666
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2663
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2533
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2530
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -244,11 +240,11 @@ msgstr "二笔"
 
 #: /home/saber/Develop/fcitx/po/.././src/ui/cairostuff/font.c:48
 msgid "Error: Load fontconfig failed"
-msgstr "错误：fontconfig加载失败"
+msgstr "错误: fontconfig加载失败"
 
 #: /home/saber/Develop/fcitx/po/.././src/ui/classic/classicui.c:130
 msgid "Exit"
-msgstr "Exit"
+msgstr "退出"
 
 #: /home/saber/Develop/fcitx/po/.././src/core/errorhandler.c:53
 #, c-format
@@ -334,7 +330,7 @@ msgstr "快捷键: 切换记录模式"
 
 #: /home/saber/Develop/fcitx/data/config.desc:122
 msgid "Hotkey of Switching Virtual Keyboard"
-msgstr "快捷键: 切换软键盘"
+msgstr "快捷键: 切换虚拟键盘"
 
 #: /home/saber/Develop/fcitx/data/config.desc:152
 msgid "Hotkey to Choose Second and Third Candidate Word"
@@ -365,6 +361,11 @@ msgid "Input English Character if you input upper case"
 msgstr "大写时输入英文"
 
 # unknown
+#: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ime.c:788
+msgid "Input Method"
+msgstr "输入法"
+
+# unknown
 #: /home/saber/Develop/fcitx/po/.././src/ui/kimpanel/kimpanel.c:132
 #: /home/saber/Develop/fcitx/po/.././src/ui/kimpanel/kimpanel.c:150
 msgid "Input Method Disabled"
@@ -372,7 +373,7 @@ msgstr "输入法被禁用"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ime.c:841
 msgid "Input Speed: "
-msgstr "输入速度："
+msgstr "输入速度: "
 
 #: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Input Window Position X"
@@ -398,7 +399,7 @@ msgstr "输入间隔"
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx-config/fcitx-config.c:759
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
-msgstr "配置项不合法： 行%d 缺少'='"
+msgstr "配置项不合法:  行%d 缺少'='"
 
 #: /home/saber/Develop/fcitx/data/config.desc:9
 msgid "It's the first time Fcitx Start."
@@ -414,9 +415,9 @@ msgstr "左Ctrl"
 msgid "L_SHIFT"
 msgstr "左Shift"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2978
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:2975
 msgid "Legend: "
-msgstr "联想："
+msgstr "联想: "
 
 #: /home/saber/Develop/fcitx/data/addon.desc:21
 msgid "Library"
@@ -482,7 +483,7 @@ msgstr "模块"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/module.c:65
 msgid "Module: bad module"
-msgstr "模块：有问题的模块"
+msgstr "模块: 有问题的模块"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/module.c:59
 #, c-format
@@ -535,6 +536,10 @@ msgstr "配置项%s不合法"
 msgid "Output"
 msgstr "输出"
 
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:103
+msgid "Pinyin"
+msgstr "拼音"
+
 #: /home/saber/Develop/fcitx/data/config.desc:172
 msgid "Pinyin Priority Order, Zero to Disable"
 msgstr "拼音输入法优先级，0为禁用"
@@ -547,12 +552,12 @@ msgstr "请检查你的环境变量的设置"
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:801
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:798
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:803
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:800
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
@@ -562,11 +567,11 @@ msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 msgid "Press enter to input text"
 msgstr "按下回车输入文本"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:773
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:770
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:784
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:781
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
@@ -591,11 +596,15 @@ msgstr "输入后联想词组"
 #: /home/saber/Develop/fcitx/po/.././src/module/quickphrase/QuickPhrase.c:307
 #: /home/saber/Develop/fcitx/po/.././src/module/quickphrase/QuickPhrase.c:308
 msgid "Quick Phrase: "
-msgstr "快速输入："
+msgstr "快速输入: "
 
 #: unknown
 msgid "QuickPhrase"
 msgstr "快速输入"
+
+#: /home/saber/Develop/fcitx/po/.././src/im/qw/qw.c:61
+msgid "Quwei"
+msgstr "区位"
 
 #: /home/saber/Develop/fcitx/data/config.desc:182
 msgid "Quwei Priority Order, Zero to Disable"
@@ -655,9 +664,18 @@ msgstr "序号后加点"
 msgid "Show Version"
 msgstr "显示版本"
 
+#: /home/saber/Develop/fcitx/po/.././src/im/pinyin/py.c:118
+msgid "Shuangpin"
+msgstr "双拼"
+
 #: /home/saber/Develop/fcitx/data/config.desc:177
 msgid "Shuangpin Priority Order, Zero to Disable"
 msgstr "双拼输入法优先级，0为禁用"
+
+# unknown
+#: /home/saber/Develop/fcitx/po/.././src/ui/classic/skin.c:697
+msgid "Skin"
+msgstr "皮肤"
 
 #: /home/saber/Develop/fcitx/po/.././src/module/quickphrase/QuickPhrase.c:310
 msgid "Spcae for ； Enter for;"
@@ -679,7 +697,7 @@ msgstr "码表输入法优先级，0为禁用"
 
 #: /home/saber/Develop/fcitx/po/.././src/module/autoeng/AutoEng.c:221
 msgid "Too long item for AutoEng"
-msgstr ""
+msgstr "自动英文条目过长"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:27
 msgid "Type"
@@ -688,6 +706,10 @@ msgstr "类型"
 #: unknown
 msgid "UI"
 msgstr "界面"
+
+#: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ui.c:115
+msgid "UI: bad ui"
+msgstr "界面: 有问题的界面"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ui.c:109
 #, c-format
@@ -723,6 +745,10 @@ msgstr "使用全角标点"
 #: /home/saber/Develop/fcitx/data/profile.desc:52
 msgid "Use recording mode"
 msgstr "使用记录模式"
+
+#: /home/saber/Develop/fcitx/po/.././src/module/vk/vk.c:165
+msgid "Virtual Keyboard"
+msgstr "虚拟键盘"
 
 #: /home/saber/Develop/fcitx/data/table/wanfeng.conf:2
 msgid "Wanfeng"
@@ -769,12 +795,12 @@ msgstr "pthread mutex init failed"
 
 #: /home/saber/Develop/fcitx/po/.././src/lib/fcitx/ime.c:845
 msgid "s  Num of Characters: "
-msgstr "秒  字符数："
+msgstr "秒  字符数: "
 
 #: /home/saber/Develop/fcitx/po/.././src/ui/cairostuff/font.c:92
 #, c-format
 msgid "your current font is: %s"
-msgstr "当前字体为：%s"
+msgstr "当前字体为: %s"
 
 #~ msgid "%d:%s"
 #~ msgstr "%d:%s"
@@ -1417,9 +1443,6 @@ msgstr "当前字体为：%s"
 #~ msgid "PhraseTips"
 #~ msgstr "提示词库中的词组"
 
-#~ msgid "Pinyin"
-#~ msgstr "拼音"
-
 #~ msgid "Pinyin Key"
 #~ msgstr "拼音键"
 
@@ -1437,9 +1460,6 @@ msgstr "当前字体为：%s"
 
 #~ msgid "PromptTableCode"
 #~ msgstr "提示编码"
-
-#~ msgid "Quwei"
-#~ msgstr "区位"
 
 #~ msgid "QuweiOrder"
 #~ msgstr "区位顺序"
@@ -1550,9 +1570,6 @@ msgstr "当前字体为：%s"
 #~ msgid "ShowVersion"
 #~ msgstr "显示版本"
 
-#~ msgid "Shuangpin"
-#~ msgstr "双拼"
-
 #~ msgid "ShuangpinOrder"
 #~ msgstr "双拼顺序"
 
@@ -1570,10 +1587,6 @@ msgstr "当前字体为：%s"
 
 #~ msgid "Skin Version"
 #~ msgstr "皮肤版本"
-
-# unknown
-#~ msgid "SkinFont"
-#~ msgstr "皮肤字体"
 
 # unknown
 #~ msgid "SkinInfo"
@@ -1724,9 +1737,6 @@ msgstr "当前字体为：%s"
 
 #~ msgid "Version"
 #~ msgstr "版本"
-
-#~ msgid "Virtual Keyboard Image"
-#~ msgstr "软键盘图片"
 
 #~ msgid "Virtual Keyboard disabled Icon"
 #~ msgstr "禁用软键盘图标"

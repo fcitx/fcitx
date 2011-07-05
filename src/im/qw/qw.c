@@ -22,6 +22,7 @@
  */
 #include <string.h>
 #include <iconv.h>
+#include <libintl.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
@@ -31,8 +32,6 @@
 #include "fcitx/ui.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
-
-#define strNameOfQuwei __("Quwei")
 
 typedef struct FcitxQWState {
     char     strQWHZ[3];
@@ -59,7 +58,7 @@ void* QWCreate (struct FcitxInstance* instance)
     FcitxRegisterIM(
         instance,
         qwstate,
-        "Quwei",
+        _("Quwei"),
         "quwei",
         QWInit,
         NULL,

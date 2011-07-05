@@ -77,7 +77,7 @@ if(ENABLE_DEBUG)
     set(_DEBUG)
 endif(ENABLE_DEBUG)
 
-set(package     fcitx4)
+set(package     fcitx)
 set(prefix      ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${CMAKE_INSTALL_PREFIX})
 set(bindir ${prefix}/bin)

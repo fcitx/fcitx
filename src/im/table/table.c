@@ -88,7 +88,7 @@ void *TableCreate(FcitxInstance* instance)
         FcitxRegisterIM(
             instance,
             tbl,
-            table->strName,
+            _(table->strName),
             table->strIconName,
             TableInit,
             TableResetStatus,
