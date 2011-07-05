@@ -70,7 +70,7 @@ static boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
 static void KimpanelInputReset(void *arg);
 static char* Status2String(FcitxUIStatus* status);
-static void KimpanelRegisterBuiltinStatus(FcitxKimpanelUI* kimpanel);
+static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
 static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[],int n);
 
@@ -121,19 +121,36 @@ void* KimpanelCreate(FcitxInstance* instance)
     resethk.func = KimpanelInputReset;
     RegisterResetInputHook(instance, resethk);
     
-    KimpanelRegisterBuiltinStatus(kimpanel);
+    KimpanelRegisterAllStatus(kimpanel);
     return kimpanel;
 }
 
-void KimpanelRegisterBuiltinStatus(FcitxKimpanelUI* kimpanel)
+void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
 {
-    char* prop[2] = { NULL, NULL };
+    FcitxInstance* instance = kimpanel->owner;
+    char **prop = fcitx_malloc0(sizeof(char*)*(2+utarray_len(&instance->uistats)));
     asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
     asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-eng", _("Input Method Disabled"));
     
-    KimRegisterProperties(kimpanel, prop, 2);
-    free(prop[0]);
-    free(prop[1]);
+    int count = 2;
+    
+        
+    UT_array* uistats = &instance->uistats;
+    FcitxUIStatus *status;
+    for ( status = (FcitxUIStatus *) utarray_front(uistats);
+        status != NULL;
+        status = (FcitxUIStatus *) utarray_next(uistats, status))
+    {             
+        prop[count] = Status2String(status);
+        count ++;
+    }
+    
+    KimRegisterProperties(kimpanel, prop, count);
+    
+    while(count --)
+        free(prop[count]);
+    
+    free(prop);
 }
 
 void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
@@ -238,17 +255,14 @@ void KimpanelRegisterMenu(void* arg, FcitxUIMenu* menu)
 void KimpanelRegisterStatus(void* arg, FcitxUIStatus* status)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    char *prop[1];
-    prop[0] = Status2String(status);
-    KimRegisterProperties(kimpanel, prop, 1);
-    free(prop[0]);
+    KimpanelRegisterAllStatus(kimpanel);
     return ;
 }
 
 char* Status2String(FcitxUIStatus* status)
 {
     char *result = NULL;
-    asprintf(&result, "/Fcitx/%s:%s:%s_%s:%s",
+    asprintf(&result, "/Fcitx/%s:%s:fcitx-%s-%s:%s",
              status->name,
              status->shortDescription,
              status->name,
@@ -482,14 +496,7 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
         FcitxLog(DEBUG, "PanelCreated");
         
-        KimpanelRegisterBuiltinStatus(kimpanel);
-        
-        UT_array* uistats = &instance->uistats;
-        FcitxUIStatus *status;
-        for ( status = (FcitxUIStatus *) utarray_front(uistats);
-            status != NULL;
-            status = (FcitxUIStatus *) utarray_next(uistats, status))
-            KimpanelRegisterStatus(kimpanel, status);
+        KimpanelRegisterAllStatus(kimpanel);
         return true;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
