@@ -83,5 +83,6 @@ void RegisterTriggerOnHook(struct FcitxInstance* instance, FcitxIMEventHook valu
 void RegisterTriggerOffHook(struct FcitxInstance* instance, FcitxIMEventHook value);
 void RegisterInputFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
 void RegisterInputUnFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
+char* ProcessOutputFilter(struct FcitxInstance* instance, char *in);
 
 #endif

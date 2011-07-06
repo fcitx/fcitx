@@ -56,6 +56,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "ui/cairostuff/font.h"
+#include <fcitx/hook.h>
 
 #define ROUND_SIZE 60
 
@@ -421,8 +422,8 @@ void DrawImage(cairo_t *c, cairo_surface_t * png, int x, int y, MouseE mouse)
 void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth)
 {
     int i;
-    const char *strUp[MAX_MESSAGE_COUNT];
-    const char *strDown[MAX_MESSAGE_COUNT];
+    char *strUp[MAX_MESSAGE_COUNT];
+    char *strDown[MAX_MESSAGE_COUNT];
     int posUpX[MAX_MESSAGE_COUNT], posUpY[MAX_MESSAGE_COUNT];
     int posDownX[MAX_MESSAGE_COUNT], posDownY[MAX_MESSAGE_COUNT];
     int oldHeight = *iheight, oldWidth = *iwidth;
@@ -451,7 +452,11 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
 
     for (i = 0; i < GetMessageCount(msgup) ; i++)
     {
-        strUp[i] = GetMessageString(msgup, i);
+        char *trans = ProcessOutputFilter(instance, GetMessageString(msgup, i));
+        if (trans)
+            strUp[i] = trans;
+        else
+            strUp[i] = GetMessageString(msgup, i);
         posUpX[i] = sc->skinInputBar.marginLeft + inputWidth;
         posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
 
@@ -465,7 +470,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
                 {
                     char strTemp[MESSAGE_MAX_LENGTH];
                     char *strGBKT = NULL;
-                    strncpy(strTemp, GetMessageString(msgup, i), iChar);
+                    strncpy(strTemp, strUp[i], iChar);
                     strTemp[iChar] = '\0';
                     strGBKT = strTemp;  
                     cursor_pos= posUpX[i]
@@ -485,7 +490,12 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     int currentX = 0;
     for (i = 0; i < GetMessageCount(msgdown) ; i++)
     {
-        strDown[i] = GetMessageString(msgdown, i);
+        char *trans = ProcessOutputFilter(instance, GetMessageString(msgdown, i));
+        if (trans)
+            strDown[i] = trans;
+        else
+            strDown[i] = GetMessageString(msgdown, i);
+            
         if (inputWindow->owner->bVerticalList) /* vertical */
         {
             if (GetMessageType(msgdown, i) == MSG_INDEX)
@@ -572,11 +582,15 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     for (i = 0; i < GetMessageCount(msgup) ; i++)
     {
         OutputStringWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i], posUpX[i], posUpY[i] - sc->skinFont.fontSize);
+        if (strUp[i] != GetMessageString(msgup, i))
+            free(strUp[i]);
     }
 
     for (i = 0; i < GetMessageCount(msgdown) ; i++)
     {
         OutputStringWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i], posDownX[i], posDownY[i] - sc->skinFont.fontSize);
+        if (strDown[i] != GetMessageString(msgdown, i))
+            free(strDown[i]);
     }
 
     ResetFontContext();

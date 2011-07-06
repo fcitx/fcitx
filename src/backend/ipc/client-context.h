@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2010~2011 by CSSlayer                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,17 +17,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/**
- * @file hook-internal.h
- * @brief private header of hook
- */
+#ifndef __FCITX_CLIENT_CONTEXT_H__
+#define  __FCITX_CLIENT_CONTEXT_H__
 
-struct FcitxInstance;
-void ProcessPreInputFilter(struct FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-void ProcessPostInputFilter(struct FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
-INPUT_RETURN_VALUE CheckHotkey(struct FcitxInstance* instance, FcitxKeySym keysym, unsigned int state);
-void ResetInputHook(struct FcitxInstance* instance);
-void TriggerOffHook(struct FcitxInstance* instance);
-void TriggerOnHook(struct FcitxInstance* instance);
-void InputFocusHook(struct FcitxInstance* instance);
-void InputUnFocusHook(struct FcitxInstance* instance);
+typedef struct FcitxDBusClientInputContext
+{
+} FcitxDBusClientInputContext;
+
+#endif

@@ -10,6 +10,7 @@ option(ENABLE_DBUS "Enable DBus Support" ON)
 option(ENABLE_PANGO "Enable Pango Support" ON)
 option(ENABLE_DEBUG "Enable Debug" ON)
 option(ENABLE_TABLE "Enable Table IM" ON)
+option(ENABLE_GTK2_IM_MODULE "Enable GTK IM Module" ON)
 
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 

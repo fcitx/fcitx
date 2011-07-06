@@ -186,7 +186,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             size_t          bufLen = 0;
             const char     *ps;
 
-            if (!transState->engine) {
+            if (!transState->s2t_table) {
                 len = 0;
 
                 fp = GetXDGFileData(TABLE_GBKS2T, "rb", NULL);

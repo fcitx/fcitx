@@ -298,10 +298,26 @@ void KimpanelShowInputWindow(void* arg)
                 if (nLabels) {
                     text[nTexts++] = strdup(cmb);
                 }
-                label[nLabels++] = strdup( GetMessageString(messageDown, i) );
+                char *needfree = ProcessOutputFilter(instance, GetMessageString(messageDown, i));
+                char *msgstr;
+                if (needfree)
+                    msgstr = needfree;
+                else
+                    msgstr = strdup(GetMessageString(messageDown, i));
+                
+                label[nLabels++] = msgstr;
                 strcpy(cmb,"");
             } else {
-                strcat(cmb, GetMessageString(messageDown, i));
+                char *needfree = ProcessOutputFilter(instance, GetMessageString(messageDown, i));
+                char *msgstr;
+                if (needfree)
+                    msgstr = needfree;
+                else
+                    msgstr = GetMessageString(messageDown, i);
+                
+                strcat(cmb, msgstr);
+                if (needfree)
+                    free(needfree);
             }
         }
         text[nTexts++] = strdup(cmb);
@@ -336,24 +352,31 @@ void KimpanelShowInputWindow(void* arg)
     char aux[MESSAGE_MAX_LENGTH] = "";
     char empty[MESSAGE_MAX_LENGTH] = "";
     if (n) {
-        char* strGBKT;
         for (i=0;i<n;i++) {
-            strcat(aux, GetMessageString(messageUp, i));
+            
+            char *needfree = ProcessOutputFilter(instance, GetMessageString(messageUp, i));
+            char *msgstr;
+            if (needfree)
+                msgstr = needfree;
+            else
+                msgstr = GetMessageString(messageUp, i);
+            
+            strcat(aux, msgstr);
+            if (needfree)
+                free(needfree);
             FcitxLog(DEBUG, "updateMesssages Up:%s", aux);
         }
         if (instance->bShowCursor)
         {
-            strGBKT = aux;
-            KimUpdatePreeditText(kimpanel, strGBKT);
+            KimUpdatePreeditText(kimpanel, aux);
             KimUpdateAux(kimpanel, empty);
             KimShowPreedit(kimpanel, true);
             KimUpdatePreeditCaret(kimpanel, CalKimCursorPos(kimpanel));
             KimShowAux(kimpanel, false);
         }
         else {
-            strGBKT = aux;
             KimUpdatePreeditText(kimpanel, empty);
-            KimUpdateAux(kimpanel, strGBKT);
+            KimUpdateAux(kimpanel, aux);
             KimShowPreedit(kimpanel, false);
             KimShowAux(kimpanel, true);
         }
