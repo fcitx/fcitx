@@ -267,10 +267,10 @@ boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
     if (sym == hotkey[0].sym && (hotkey[0].state == state) )
-        return True;
+        return true;
     if (sym == hotkey[1].sym && (hotkey[1].state == state) )
-        return True;
-    return False;
+        return true;
+    return false;
 }
 
 INPUT_RETURN_VALUE ProcessKey(
@@ -490,7 +490,7 @@ void ProcessInputReturnValue(
             break;
             
         case IRV_DISPLAY_LAST:
-            input->bShowNext = input->bShowPrev = False;
+            input->bShowNext = input->bShowPrev = false;
             SetMessageCount(instance->messageUp, 0);
             AddMessageAtLast(instance->messageUp, MSG_INPUT, "%c", input->strCodeInput[0]);
             SetMessageCount(instance->messageDown, 0);
@@ -499,8 +499,8 @@ void ProcessInputReturnValue(
             
             break;
         case IRV_DISPLAY_MESSAGE:
-            input->bShowNext = False;
-            input->bShowPrev = False;
+            input->bShowNext = false;
+            input->bShowPrev = false;
             UpdateInputWindow(instance);
             break;
         case IRV_GET_LEGEND:
@@ -554,7 +554,11 @@ void ProcessInputReturnValue(
             ;
     }
     if (retVal == IRV_DISPLAY_MESSAGE || retVal == IRV_DISPLAY_CANDWORDS || retVal == IRV_PUNC) {
-        input->timeStart = time (NULL);
+        if (!input->bStartRecordType)
+        {
+            input->bStartRecordType = true;
+            input->timeStart = time (NULL);
+        }
     }
 }
 

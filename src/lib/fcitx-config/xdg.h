@@ -30,7 +30,6 @@
 #define _FCITX_XDG_H_
 
 #include <stdio.h>
-#include <X11/Xlib.h>
 
 #ifdef __cplusplus
 extern "C" {

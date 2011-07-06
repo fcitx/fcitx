@@ -132,7 +132,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
             || IsHotKey(sym, state, FCITX_COMMA)))
         {
             puncState->cLastIsAutoConvert = sym;
-            puncState->bLastIsNumber = False;
+            puncState->bLastIsNumber = false;
             *retVal = IRV_DONOT_PROCESS;
             return true;
         }
@@ -168,9 +168,9 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
             return true;
         } else if (IsHotKeySimple(sym, state)) {
             if (IsHotKeyDigit(sym, state))
-                puncState->bLastIsNumber = True;
+                puncState->bLastIsNumber = true;
             else {
-                puncState->bLastIsNumber = False;
+                puncState->bLastIsNumber = false;
                 if (IsHotKey(sym, state, FCITX_SPACE))
                     *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
                 else {
@@ -213,7 +213,7 @@ boolean LoadPuncDict (FcitxPuncState* puncState)
 
     if (!fpDict) {
         FcitxLog(WARNING, _("Can't open Chinese punc file."));
-        return False;
+        return false;
     }
 
     /* 计算词典里面有多少的数据
@@ -275,7 +275,7 @@ boolean LoadPuncDict (FcitxPuncState* puncState)
     puncState->chnPunc[iRecordNo].ASCII = '\0';
     fclose (fpDict);
 
-    return True;
+    return true;
 }
 
 void FreePunc (FcitxPuncState* puncState)

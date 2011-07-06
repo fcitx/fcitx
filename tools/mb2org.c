@@ -35,7 +35,7 @@
 FcitxPinyinConfig pyconfig;
 
 /* Bad programming practice :( */
-Bool bSingleHZMode;
+boolean bSingleHZMode;
 
 void usage();
 char *HZToPY(struct _HZMap *, char []);
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   struct _HZMap *HZMap;
   struct _PYMB *PYMB;
   char c;
-  Bool isUser = True;
+  boolean isUser = true;
 
   while((c = getopt(argc, argv, "f:b:sh")) != -1)
   {
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
               pybase_mb = strdup(optarg);
               break;
           case 's':
-              isUser = False;
+              isUser = false;
               break;
           case 'h':
           default:

@@ -386,9 +386,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
         input->iCandPageCount=0;
         input->iCurrentCandPage=0;
         input->iCandWordCount=0;
-        currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, False, PhraseCmp);
+        currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
         qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
-        lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, False, PhraseCmpA);
+        lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
         qpstate->iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
         if (qpstate->iLastQuickPhrase < 0)
             qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);

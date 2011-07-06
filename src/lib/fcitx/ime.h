@@ -138,6 +138,7 @@ typedef struct FcitxInputState {
     int iHZInputed;
     int lastIsSingleHZ;
     boolean bLastIsNumber;
+    boolean bStartRecordType;
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);

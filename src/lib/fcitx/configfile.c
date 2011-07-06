@@ -161,7 +161,7 @@ void LoadConfig(FcitxConfig* fc)
     FcitxConfigConfigBind(fc, cfile, configDesc);
     ConfigBindSync((GenericConfig*)fc);
 
-    IsReloadConfig = True;
+    IsReloadConfig = true;
     
     fclose(fp);
 /*#ifndef _ENABLE_PANGO

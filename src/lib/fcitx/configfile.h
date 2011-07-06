@@ -22,7 +22,6 @@
 
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/hotkey.h"
-#include <X11/Xproto.h>
 #define INPUT_METHODS	5	//标示输入法的类别数量
 
 

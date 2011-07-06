@@ -203,18 +203,18 @@ void LoadSPData (FcitxPinyinState *pystate)
     i = 0;
     while (SPMap_C[i].strQP[0]) {
 	if (SPMap_C[i++].cJP == ';')
-	    pystate->bSP_UseSemicolon = True;
+	    pystate->bSP_UseSemicolon = true;
     }
     if (!pystate->bSP_UseSemicolon) {
 	i = 0;
 	while (SPMap_S[i].strQP[0]) {
 	    if (SPMap_S[i++].cJP == ';')
-		pystate->bSP_UseSemicolon = True;
+		pystate->bSP_UseSemicolon = true;
 	}
     }
     if (!pystate->bSP_UseSemicolon) {
 	if (pyconfig->cNonS == ';')
-	    pystate->bSP_UseSemicolon = True;
+	    pystate->bSP_UseSemicolon = true;
     }
 }
 
@@ -251,7 +251,7 @@ void LoadSPData (FcitxPinyinState *pystate)
 	return;
     }
 
-    iIndex = IsSyllabary (strQP, True);
+    iIndex = IsSyllabary (strQP, true);
 
     strQP += strlen (syllabaryMapTable[iIndex].strPY);
     if (*strQP) {
@@ -308,20 +308,20 @@ void SP2QP (FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
 
 	    strcpy (str_QP, strQP);
 	    strcat (strQP, SPMap_C[iIndex2].strQP);
-	    if (FindPYFAIndex (pyconfig, strQP, False) != -1)
+	    if (FindPYFAIndex (pyconfig, strQP, false) != -1)
 		break;
 
 	    strcpy (strQP, str_QP);
 	}
     }
 
-    if (FindPYFAIndex (pyconfig, strQP, False) != -1)
+    if (FindPYFAIndex (pyconfig, strQP, false) != -1)
 	iIndex2 = 0;		//这只是将iIndex2置为非-1,以免后面的判断
 
     strTmp[0] = strSP[0];
     strTmp[1] = '\0';
     if ((iIndex1 == -1 && !(IsSyllabary (strTmp, 0))) || iIndex2 == -1) {
-	iIndex1 = FindPYFAIndex (pyconfig, strSP, False);
+	iIndex1 = FindPYFAIndex (pyconfig, strSP, false);
 	if (iIndex1 != -1)
 	    strcpy (strQP, strSP);
     }
