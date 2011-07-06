@@ -613,7 +613,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         if ((IsHotKeyLAZ(sym, state)
             || IsHotKey(sym, state, FCITX_SEPARATOR)
             || (pystate->bSP && pystate->bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON)))) {
-            input->bIsInLegend = false;
+            input->bIsInRemind = false;
             instance->bShowCursor = true;
 
             if (IsHotKey(sym, state, FCITX_SEPARATOR)) {
@@ -727,7 +727,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 val = IRV_DISPLAY_CANDWORDS;
             }
         } else if (IsHotKey(sym, state, FCITX_SPACE)) {
-            if (!input->bIsInLegend) {
+            if (!input->bIsInRemind) {
                 if (pystate->findMap.iMode == PARSE_ERROR)
                     return IRV_DO_NOTHING;
 
@@ -744,15 +744,15 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 if (strGet) {
                     strcpy(input->strStringGet, strGet);
 
-                    if (input->bIsInLegend)
-                        val = IRV_GET_LEGEND;
+                    if (input->bIsInRemind)
+                        val = IRV_GET_REMIND;
                     else
                         val = IRV_GET_CANDWORDS;
                 } else
                     val = IRV_DISPLAY_CANDWORDS;
             } else {
-                strcpy(input->strStringGet, PYGetLegendCandWord(pystate, 0));
-                val = IRV_GET_LEGEND;
+                strcpy(input->strStringGet, PYGetRemindCandWord(pystate, 0));
+                val = IRV_GET_REMIND;
             }
         } else if (IsHotKey(sym, state, pystate->pyconfig.hkPYDelUserPhr)) {
             if (!pystate->bIsPYDelUserPhr) {
@@ -815,7 +815,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             if (iKey == 0)
                 iKey = 10;
 
-            if (!input->bIsInLegend) {
+            if (!input->bIsInRemind) {
                 if (!input->iCodeInputCount)
                     return IRV_TO_PROCESS;
                 else if (!input->iCandWordCount || (iKey > input->iCandWordCount))
@@ -843,8 +843,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         if (strGet) {
                             strcpy(input->strStringGet, strGet);
 
-                            if (input->bIsInLegend)
-                                val = IRV_GET_LEGEND;
+                            if (input->bIsInRemind)
+                                val = IRV_GET_REMIND;
                             else
                                 val = IRV_GET_CANDWORDS;
                         } else
@@ -852,8 +852,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     }
                 }
             } else {
-                strcpy(input->strStringGet, PYGetLegendCandWord(pystate, iKey - 1));
-                val = IRV_GET_LEGEND;
+                strcpy(input->strStringGet, PYGetRemindCandWord(pystate, iKey - 1));
+                val = IRV_GET_REMIND;
             }
         } else if (sym == -1) {
             ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
@@ -885,7 +885,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         SetMessageCount(GetMessageDown(instance), 0);
                         return IRV_GET_CANDWORDS;
                     }
-                } else if (!input->bIsInLegend) {
+                } else if (!input->bIsInRemind) {
                     val = -1;
                     switch (sym) {
                     case XK_parenright:
@@ -923,7 +923,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         }
     }
 
-    if (!input->bIsInLegend) {
+    if (!input->bIsInRemind) {
         UpdateCodeInputPY(pystate);
         CalculateCursorPosition(pystate);
     }
@@ -1052,8 +1052,8 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg, SEARCH_MODE mode)
         return IRV_DISPLAY_MESSAGE;
     }
 
-    if (input->bIsInLegend)
-        return PYGetLegendCandWords(pystate, mode);
+    if (input->bIsInRemind)
+        return PYGetRemindCandWords(pystate, mode);
 
     if (mode == SM_FIRST) {
         input->iCurrentCandPage = 0;
@@ -1494,10 +1494,10 @@ char *PYGetCandWord(void* arg, int iIndex)
             PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString);
         SetMessageCount(GetMessageDown(instance), 0);
         SetMessageCount(GetMessageUp(instance), 0);
-        if (UseLegend(&instance->profile)) {
-            strcpy(pystate->strPYLegendSource, pystate->strPYAuto);
-            strcpy(pystate->strPYLegendMap, strHZString);
-            PYGetLegendCandWords(pystate, SM_FIRST);
+        if (UseRemind(&instance->profile)) {
+            strcpy(pystate->strPYRemindSource, pystate->strPYAuto);
+            strcpy(pystate->strPYRemindMap, strHZString);
+            PYGetRemindCandWords(pystate, SM_FIRST);
             pystate->iPYInsertPoint = 0;
             pystate->strFindString[0] = '\0';
         }
@@ -2838,30 +2838,30 @@ boolean PYIsInFreq(FcitxPinyinState* pystate, char *strHZ)
  * 取得拼音的联想字串
  * 	按照频率来定排列顺序
  */
-INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
+INPUT_RETURN_VALUE PYGetRemindCandWords(void *arg, SEARCH_MODE mode)
 {
     int i, j;
     char strTemp[2];
     PyPhrase *phrase;
     FcitxPinyinState* pystate = (FcitxPinyinState*) arg;
     GenericConfig *fc = &pystate->owner->config.gconfig;
-    boolean bDisablePagingInLegend = *(ConfigGetBindValue(fc, "Output", "LegendModeDisablePaging").boolvalue);
+    boolean bDisablePagingInRemind = *(ConfigGetBindValue(fc, "Output", "RemindModeDisablePaging").boolvalue);
     FcitxInstance *instance = pystate->owner;
     FcitxInputState *input = &pystate->owner->input;
     PYFA* PYFAList = pystate->PYFAList;
 
-    if (!pystate->strPYLegendSource[0])
+    if (!pystate->strPYRemindSource[0])
         return IRV_TO_PROCESS;
     if (mode == SM_FIRST) {
-        input->iLegendCandPageCount = 0;
-        input->iLegendCandWordCount = 0;
-        input->iCurrentLegendCandPage = 0;
+        input->iRemindCandPageCount = 0;
+        input->iRemindCandWordCount = 0;
+        input->iCurrentRemindCandPage = 0;
         PYResetFlags(pystate);
         pystate->pyBaseForLengend = NULL;
         for (i = 0; i < pystate->iPYFACount; i++) {
-            if (!strncmp(pystate->strPYLegendMap, PYFAList[i].strMap, 2)) {
+            if (!strncmp(pystate->strPYRemindMap, PYFAList[i].strMap, 2)) {
                 for (j = 0; j < PYFAList[i].iBase; j++) {
-                    if (!utf8_strncmp(pystate->strPYLegendSource, PYFAList[i].pyBase[j].strHZ, 1)) {
+                    if (!utf8_strncmp(pystate->strPYRemindSource, PYFAList[i].pyBase[j].strHZ, 1)) {
                         pystate->pyBaseForLengend = &(PYFAList[i].pyBase[j]);
                         goto _HIT;
                     }
@@ -2874,32 +2874,32 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
             return IRV_TO_PROCESS;
         instance->bShowCursor = false;
     } else {
-        if (!input->iLegendCandPageCount)
+        if (!input->iRemindCandPageCount)
             return IRV_TO_PROCESS;
         if (mode == SM_NEXT) {
-            if (input->iCurrentLegendCandPage == input->iLegendCandPageCount)
+            if (input->iCurrentRemindCandPage == input->iRemindCandPageCount)
                 return IRV_DO_NOTHING;
-            input->iLegendCandWordCount = 0;
-            input->iCurrentLegendCandPage++;
+            input->iRemindCandWordCount = 0;
+            input->iCurrentRemindCandPage++;
         } else {
-            if (!input->iCurrentLegendCandPage)
+            if (!input->iCurrentRemindCandPage)
                 return IRV_DO_NOTHING;
-            input->iCurrentLegendCandPage--;
-            PYSetLegendCandWordsFlag(pystate, false);
+            input->iCurrentRemindCandPage--;
+            PYSetRemindCandWordsFlag(pystate, false);
         }
     }
 
     for (i = 0; i < pystate->pyBaseForLengend->iPhrase; i++) {
-        if (utf8_strlen(pystate->strPYLegendSource) == 1) {
+        if (utf8_strlen(pystate->strPYRemindSource) == 1) {
             if (utf8_strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == 1 && ((mode != SM_PREV && !pystate->pyBaseForLengend->phrase[i].flag)
                                                                             || (mode == SM_PREV && pystate->pyBaseForLengend->phrase[i].flag))) {
                 if (!PYAddLengendCandWord(pystate, &pystate->pyBaseForLengend->phrase[i], mode))
                     break;
             }
-        } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYLegendSource)) {
+        } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYRemindSource)) {
             if (!strncmp
-                (pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource),
-                 pystate->pyBaseForLengend->phrase[i].strPhrase, strlen(pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource)))
+                (pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource),
+                 pystate->pyBaseForLengend->phrase[i].strPhrase, strlen(pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource)))
                 && ((mode != SM_PREV && !pystate->pyBaseForLengend->phrase[i].flag)
                     || (mode == SM_PREV && pystate->pyBaseForLengend->phrase[i].flag))) {
                 if (!PYAddLengendCandWord(pystate, &pystate->pyBaseForLengend->phrase[i], mode))
@@ -2910,16 +2910,16 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
 
     phrase = pystate->pyBaseForLengend->userPhrase->next;
     for (i = 0; i < pystate->pyBaseForLengend->iUserPhrase; i++) {
-        if (utf8_strlen(pystate->strPYLegendSource) == 1) {
+        if (utf8_strlen(pystate->strPYRemindSource) == 1) {
             if (utf8_strlen(phrase->strPhrase) == 1 && ((mode != SM_PREV && !phrase->flag)
                                                         || (mode == SM_PREV && phrase->flag))) {
                 if (!PYAddLengendCandWord(pystate, phrase, mode))
                     break;
             }
-        } else if (strlen(phrase->strPhrase) == strlen(pystate->strPYLegendSource)) {
+        } else if (strlen(phrase->strPhrase) == strlen(pystate->strPYRemindSource)) {
             if (!strncmp
-                (pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource),
-                 phrase->strPhrase, strlen(pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource)))
+                (pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource),
+                 phrase->strPhrase, strlen(pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource)))
                 && ((mode != SM_PREV && !phrase->flag)
                     || (mode == SM_PREV && phrase->flag))) {
                 if (!PYAddLengendCandWord(pystate, phrase, mode))
@@ -2930,20 +2930,20 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
         phrase = phrase->next;
     }
 
-    PYSetLegendCandWordsFlag(pystate, true);
-    if (!bDisablePagingInLegend && mode != SM_PREV && input->iCurrentLegendCandPage == input->iLegendCandPageCount) {
+    PYSetRemindCandWordsFlag(pystate, true);
+    if (!bDisablePagingInRemind && mode != SM_PREV && input->iCurrentRemindCandPage == input->iRemindCandPageCount) {
         for (i = 0; i < pystate->pyBaseForLengend->iPhrase; i++) {
-            if (utf8_strlen(pystate->strPYLegendSource) == 1) {
+            if (utf8_strlen(pystate->strPYRemindSource) == 1) {
                 if (utf8_strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == 1 && !pystate->pyBaseForLengend->phrase[i].flag) {
-                    input->iLegendCandPageCount++;
+                    input->iRemindCandPageCount++;
                     goto _NEWPAGE;
                 }
-            } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYLegendSource)) {
+            } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYRemindSource)) {
                 if (!strncmp
-                    (pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource),
-                     pystate->pyBaseForLengend->phrase[i].strPhrase, strlen(pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource)))
+                    (pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource),
+                     pystate->pyBaseForLengend->phrase[i].strPhrase, strlen(pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource)))
                     && (!pystate->pyBaseForLengend->phrase[i].flag)) {
-                    input->iLegendCandPageCount++;
+                    input->iRemindCandPageCount++;
                     goto _NEWPAGE;
                 }
             }
@@ -2951,17 +2951,17 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
 
         phrase = pystate->pyBaseForLengend->userPhrase->next;
         for (i = 0; i < pystate->pyBaseForLengend->iUserPhrase; i++) {
-            if (utf8_strlen(pystate->strPYLegendSource) == 1) {
+            if (utf8_strlen(pystate->strPYRemindSource) == 1) {
                 if (utf8_strlen(phrase->strPhrase) == 1 && (!phrase->flag)) {
-                    input->iLegendCandPageCount++;
+                    input->iRemindCandPageCount++;
                     goto _NEWPAGE;
                 }
-            } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYLegendSource)) {
+            } else if (strlen(pystate->pyBaseForLengend->phrase[i].strPhrase) == strlen(pystate->strPYRemindSource)) {
                 if (!strncmp
-                    (pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource),
-                     phrase->strPhrase, strlen(pystate->strPYLegendSource + utf8_char_len(pystate->strPYLegendSource)))
+                    (pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource),
+                     phrase->strPhrase, strlen(pystate->strPYRemindSource + utf8_char_len(pystate->strPYRemindSource)))
                     && (!phrase->flag)) {
-                    input->iLegendCandPageCount++;
+                    input->iRemindCandPageCount++;
                     goto _NEWPAGE;
                 }
             }
@@ -2972,11 +2972,11 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
     }
 
     SetMessageCount(GetMessageUp(instance), 0);
-    AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Legend: "));
-    AddMessageAtLast(GetMessageUp(instance), MSG_INPUT, "%s", pystate->strPYLegendSource);
+    AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, _("Remind: "));
+    AddMessageAtLast(GetMessageUp(instance), MSG_INPUT, "%s", pystate->strPYRemindSource);
     strTemp[1] = '\0';
     SetMessageCount(GetMessageDown(instance), 0);
-    for (i = 0; i < input->iLegendCandWordCount; i++) {
+    for (i = 0; i < input->iRemindCandWordCount; i++) {
         strTemp[0] = i + 1 + '0';
         if (i == 9)
             strTemp[0] = '0';
@@ -2984,13 +2984,13 @@ INPUT_RETURN_VALUE PYGetLegendCandWords(void *arg, SEARCH_MODE mode)
         AddMessageAtLast(GetMessageDown(instance), MSG_INDEX, "%s", strTemp);
         AddMessageAtLast(GetMessageDown(instance),
                          ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER),
-                         "%s", pystate->PYLegendCandWords[i].phrase->strPhrase + pystate->PYLegendCandWords[i].iLength);
-        if (i != (input->iLegendCandWordCount - 1)) {
+                         "%s", pystate->PYRemindCandWords[i].phrase->strPhrase + pystate->PYRemindCandWords[i].iLength);
+        if (i != (input->iRemindCandWordCount - 1)) {
             MessageConcatLast(GetMessageDown(instance), " ");
         }
     }
 
-    input->bIsInLegend = (input->iLegendCandWordCount != 0);
+    input->bIsInRemind = (input->iRemindCandWordCount != 0);
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -2998,25 +2998,25 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
 {
     int i = 0, j;
     FcitxInputState* input = &pystate->owner->input;
-    PYLegendCandWord* PYLegendCandWords = pystate->PYLegendCandWords;
+    PYRemindCandWord* PYRemindCandWords = pystate->PYRemindCandWords;
 
     if (mode == SM_PREV) {
-        for (i = (input->iLegendCandWordCount - 1); i >= 0; i--) {
-            if (PYLegendCandWords[i].phrase->iHit >= phrase->iHit) {
+        for (i = (input->iRemindCandWordCount - 1); i >= 0; i--) {
+            if (PYRemindCandWords[i].phrase->iHit >= phrase->iHit) {
                 i++;
                 break;
             }
         }
 
         if (i < 0) {
-            if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
+            if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
                 return true;
             i = 0;
-        } else if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
+        } else if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             i--;
     } else {
-        for (i = 0; i < input->iLegendCandWordCount; i++) {
-            if (PYLegendCandWords[i].phrase->iHit < phrase->iHit)
+        for (i = 0; i < input->iRemindCandWordCount; i++) {
+            if (PYRemindCandWords[i].phrase->iHit < phrase->iHit)
                 break;
         }
         if (i == ConfigGetMaxCandWord(&pystate->owner->config))
@@ -3024,58 +3024,58 @@ boolean PYAddLengendCandWord(FcitxPinyinState* pystate, PyPhrase * phrase, SEARC
     }
 
     if (mode == SM_PREV) {
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
+        if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config)) {
             for (j = 0; j < i; j++) {
-                PYLegendCandWords[j].phrase = PYLegendCandWords[j + 1].phrase;
-                PYLegendCandWords[j].iLength = PYLegendCandWords[j + 1].iLength;
+                PYRemindCandWords[j].phrase = PYRemindCandWords[j + 1].phrase;
+                PYRemindCandWords[j].iLength = PYRemindCandWords[j + 1].iLength;
             }
         } else {
-            for (j = input->iLegendCandWordCount; j > i; j--) {
-                PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
-                PYLegendCandWords[j].iLength = PYLegendCandWords[j - 1].iLength;
+            for (j = input->iRemindCandWordCount; j > i; j--) {
+                PYRemindCandWords[j].phrase = PYRemindCandWords[j - 1].phrase;
+                PYRemindCandWords[j].iLength = PYRemindCandWords[j - 1].iLength;
             }
         }
     } else {
-        j = input->iLegendCandWordCount;
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
+        j = input->iRemindCandWordCount;
+        if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&pystate->owner->config))
             j--;
         for (; j > i; j--) {
-            PYLegendCandWords[j].phrase = PYLegendCandWords[j - 1].phrase;
-            PYLegendCandWords[j].iLength = PYLegendCandWords[j - 1].iLength;
+            PYRemindCandWords[j].phrase = PYRemindCandWords[j - 1].phrase;
+            PYRemindCandWords[j].iLength = PYRemindCandWords[j - 1].iLength;
         }
     }
 
-    PYLegendCandWords[i].phrase = phrase;
-    PYLegendCandWords[i].iLength = strlen(pystate->strPYLegendSource) - utf8_char_len(pystate->strPYLegendSource);
-    if (input->iLegendCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
-        input->iLegendCandWordCount++;
+    PYRemindCandWords[i].phrase = phrase;
+    PYRemindCandWords[i].iLength = strlen(pystate->strPYRemindSource) - utf8_char_len(pystate->strPYRemindSource);
+    if (input->iRemindCandWordCount != ConfigGetMaxCandWord(&pystate->owner->config))
+        input->iRemindCandWordCount++;
     return true;
 }
 
-char *PYGetLegendCandWord(void *arg, int iIndex)
+char *PYGetRemindCandWord(void *arg, int iIndex)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     FcitxInputState* input = &pystate->owner->input;
-    PYLegendCandWord* PYLegendCandWords = pystate->PYLegendCandWords;
-    if (input->iLegendCandWordCount) {
-        if (iIndex > (input->iLegendCandWordCount - 1))
-            iIndex = input->iLegendCandWordCount - 1;
-        strcpy(pystate->strPYLegendSource, PYLegendCandWords[iIndex].phrase->strPhrase + PYLegendCandWords[iIndex].iLength);
-        strcpy(pystate->strPYLegendMap, PYLegendCandWords[iIndex].phrase->strMap + PYLegendCandWords[iIndex].iLength);
-        PYGetLegendCandWords(pystate, SM_FIRST);
-        return pystate->strPYLegendSource;
+    PYRemindCandWord* PYRemindCandWords = pystate->PYRemindCandWords;
+    if (input->iRemindCandWordCount) {
+        if (iIndex > (input->iRemindCandWordCount - 1))
+            iIndex = input->iRemindCandWordCount - 1;
+        strcpy(pystate->strPYRemindSource, PYRemindCandWords[iIndex].phrase->strPhrase + PYRemindCandWords[iIndex].iLength);
+        strcpy(pystate->strPYRemindMap, PYRemindCandWords[iIndex].phrase->strMap + PYRemindCandWords[iIndex].iLength);
+        PYGetRemindCandWords(pystate, SM_FIRST);
+        return pystate->strPYRemindSource;
     }
 
     return NULL;
 }
 
-void PYSetLegendCandWordsFlag(FcitxPinyinState*pystate, boolean flag)
+void PYSetRemindCandWordsFlag(FcitxPinyinState*pystate, boolean flag)
 {
     int i;
     FcitxInputState* input = &pystate->owner->input;
 
-    for (i = 0; i < input->iLegendCandWordCount; i++)
-        pystate->PYLegendCandWords[i].phrase->flag = flag;
+    for (i = 0; i < input->iRemindCandWordCount; i++)
+        pystate->PYRemindCandWords[i].phrase->flag = flag;
 }
 
 void PYGetPYByHZ(FcitxPinyinState*pystate, char *strHZ, char *strPY)

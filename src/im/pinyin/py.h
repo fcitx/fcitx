@@ -56,7 +56,7 @@ typedef enum {
     PY_CAND_SYMPHRASE,
     PY_CAND_USERPHRASE,
     PY_CAND_FREQ,
-    PY_CAND_LEGEND
+    PY_CAND_REMIND
 } PY_CAND_WORD_TYPE;
 
 typedef struct _HZ {
@@ -126,10 +126,10 @@ typedef struct PYBASECANDWORD {
     int             iBase;
 } PYBaseCandWord;
 
-typedef struct PYLEGENDCANDWORD {
+typedef struct PYREMINDCANDWORD {
     PyPhrase       *phrase;
     int             iLength;
-} PYLegendCandWord;
+} PYRemindCandWord;
 
 typedef union {
     PYFreqCandWord  sym;
@@ -173,10 +173,10 @@ typedef struct FcitxPinyinState
     ParsePYStruct findMap;
     int iPYInsertPoint;
 
-    char strPYLegendSource[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
-    char strPYLegendMap[MAX_WORDS_USER_INPUT * 2 + 1];
+    char strPYRemindSource[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
+    char strPYRemindMap[MAX_WORDS_USER_INPUT * 2 + 1];
     PyBase *pyBaseForLengend;
-    PYLegendCandWord PYLegendCandWords[MAX_CAND_WORD];
+    PYRemindCandWord PYRemindCandWords[MAX_CAND_WORD];
 
     PY_SELECTED pySelected[MAX_WORDS_USER_INPUT + 1];
     uint iPYSelected;
@@ -246,10 +246,10 @@ void            PYAddFreq (struct FcitxPinyinState* pystate, int iIndex);
 void            PYDelFreq (struct FcitxPinyinState* pystate, int iIndex);
 boolean            PYIsInFreq (struct FcitxPinyinState* pystate, char *strHZ);
 
-INPUT_RETURN_VALUE PYGetLegendCandWords (void* arg, SEARCH_MODE mode);
+INPUT_RETURN_VALUE PYGetRemindCandWords (void* arg, SEARCH_MODE mode);
 boolean            PYAddLengendCandWord (struct FcitxPinyinState* pystate,PyPhrase * phrase, SEARCH_MODE mode);
-char           *PYGetLegendCandWord (void* arg, int iIndex);
-void            PYSetLegendCandWordsFlag (struct FcitxPinyinState* pystate, boolean flag);
+char           *PYGetRemindCandWord (void* arg, int iIndex);
+void            PYSetRemindCandWordsFlag (struct FcitxPinyinState* pystate, boolean flag);
 void		PYGetPYByHZ(struct FcitxPinyinState* pystate, char *strHZ, char *strPY);
 
 #endif

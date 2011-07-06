@@ -22,10 +22,10 @@ Enum2=Commit
 DefaultValue=Commit
 Description=Action after press enter
 
-[Output/LegendModeDisablePaging]
+[Output/RemindModeDisablePaging]
 Type=Boolean
 DefaultValue=True
-Description=Disable Paging in Legend Mode
+Description=Disable Paging in Remind Mode
 
 [Output/SendTextWhenSwitchEng]
 Type=Boolean
@@ -92,10 +92,10 @@ Type=Hotkey
 DefaultValue=CTRL_ALT_B
 Description=Hotkey of Switching Virtual Keyboard
 
-[Hotkey/LegendSwitchKey]
+[Hotkey/RemindSwitchKey]
 Type=Hotkey
 DefaultValue=
-Description=Hotkey of Switching Legend Mode
+Description=Hotkey of Switching Remind Mode
 
 [Hotkey/FullWidthSwitchKey]
 Type=Hotkey

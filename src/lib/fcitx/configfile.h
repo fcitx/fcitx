@@ -60,7 +60,7 @@ typedef struct FcitxConfig
     /* output config */
     boolean bEngPuncAfterNumber;
     ENTER_TO_DO enterToDo;
-    boolean bDisablePagingInLegend;
+    boolean bDisablePagingInRemind;
     boolean bSendTextWhenSwitchEng;
     int iMaxCandWord;
     boolean bPhraseTips;
@@ -78,7 +78,7 @@ typedef struct FcitxConfig
     boolean bDoubleSwitchKey;
     int iTimeInterval;
     HOTKEYS hkVK[2];
-    HOTKEYS hkLegend[2];
+    HOTKEYS hkRemind[2];
     HOTKEYS hkFullWidthChar[2];
     HOTKEYS hkPunc[2];
     HOTKEYS hkPrevPage[2];

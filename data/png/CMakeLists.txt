@@ -7,8 +7,8 @@ fcitx-eng.png
 fcitx-erbi.png
 fcitx-fullwidth-active.png
 fcitx-fullwidth-inactive.png
-fcitx-legend-active.png
-fcitx-legend-inactive.png
+fcitx-remind-active.png
+fcitx-remind-inactive.png
 fcitx-pinyin.png
 fcitx-punc-active.png
 fcitx-punc-inactive.png

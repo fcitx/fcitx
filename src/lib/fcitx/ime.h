@@ -71,7 +71,7 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_DISPLAY_LAST, /* display the last input word */
     IRV_PUNC,
     IRV_ENG,
-    IRV_GET_LEGEND, /* legend word */
+    IRV_GET_REMIND, /* remind word */
     IRV_GET_CANDWORDS, /* send the input to client, close input window */
     IRV_GET_CANDWORDS_NEXT /* send the input to client, dont close input window */
 } INPUT_RETURN_VALUE;
@@ -123,16 +123,16 @@ typedef struct FcitxInputState {
     int iCodeInputCount;
     char strCodeInput[MAX_USER_INPUT + 1];
     char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
-    boolean bIsInLegend;
+    boolean bIsInRemind;
 
     int iCandPageCount;
     int iCandWordCount;
     time_t timeStart;
     int iCursorPos;
     int iCurrentCandPage;
-    int iLegendCandWordCount;
-    int iLegendCandPageCount;
-    int iCurrentLegendCandPage;
+    int iRemindCandWordCount;
+    int iRemindCandPageCount;
+    int iCurrentRemindCandPage;
     int bShowNext;
     int bShowPrev;
     int iHZInputed;
@@ -142,7 +142,7 @@ typedef struct FcitxInputState {
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
-boolean IsInLegend(FcitxInputState* input);
+boolean IsInRemind(FcitxInputState* input);
 char* GetOutputString(FcitxInputState* input);
 struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
 void EnableIM(struct FcitxInstance* instance, struct FcitxInputContext* ic, boolean keepState);

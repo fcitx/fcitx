@@ -42,8 +42,8 @@
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
-static void ToggleLegendState(void* arg);
-static boolean GetLegendEnabled(void* arg);
+static void ToggleRemindState(void* arg);
+static boolean GetRemindEnabled(void* arg);
 static void ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
 static void Usage();
 static void Version();
@@ -99,7 +99,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
-    RegisterStatus(instance, instance, "legend", "Legend", "Legend", ToggleLegendState, GetLegendEnabled);
+    RegisterStatus(instance, instance, "remind", "Remind", "Remind", ToggleRemindState, GetRemindEnabled);
     
     LoadUserInterface(instance);
 
@@ -176,17 +176,17 @@ int FcitxUnlock(FcitxInstance* inst)
     return 0;
 }
 
-void ToggleLegendState(void* arg)
+void ToggleRemindState(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    instance->profile.bUseLegend = !instance->profile.bUseLegend;
+    instance->profile.bUseRemind = !instance->profile.bUseRemind;
     SaveProfile(&instance->profile);
 }
 
-boolean GetLegendEnabled(void* arg)
+boolean GetRemindEnabled(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    return instance->profile.bUseLegend;
+    return instance->profile.bUseRemind;
 }
 
 void ProcessOption(FcitxInstance* instance, int argc, char* argv[])

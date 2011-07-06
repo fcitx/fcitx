@@ -81,8 +81,8 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
     
-    hk.hotkey = instance->config.hkLegend;
-    hk.hotkeyhandle = ImProcessLegend;
+    hk.hotkey = instance->config.hkRemind;
+    hk.hotkeyhandle = ImProcessRemind;
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
     
@@ -148,8 +148,8 @@ static const char* GetStateName(INPUT_RETURN_VALUE retVal)
             return "IRV_PUNC";
         case IRV_ENG:
             return "IRV_ENG";
-        case IRV_GET_LEGEND:
-            return "IRV_GET_LEGEND";
+        case IRV_GET_REMIND:
+            return "IRV_GET_REMIND";
         case IRV_GET_CANDWORDS:
             return "IRV_GET_CANDWORDS";
         case IRV_GET_CANDWORDS_NEXT:
@@ -320,12 +320,12 @@ INPUT_RETURN_VALUE ProcessKey(
                         ShowInputSpeed(instance);
                     ChangeIMState(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
-                    if (!input->bIsInLegend) {
+                    if (!input->bIsInRemind) {
                         pstr = currentIM->GetCandWord(currentIM->klass, 1);
                         if (pstr) {
                             strcpy(input->strStringGet, pstr);
-                            if (input->bIsInLegend)
-                                retVal = IRV_GET_LEGEND;
+                            if (input->bIsInRemind)
+                                retVal = IRV_GET_REMIND;
                             else
                                 retVal = IRV_GET_CANDWORDS;
                         } else if (input->iCandWordCount != 0)
@@ -339,12 +339,12 @@ INPUT_RETURN_VALUE ProcessKey(
                     }
                     input->keyReleased = KR_OTHER;
                 } else if (IsHotKey(sym, state, fc->i3rdSelectKey) && input->keyReleased == KR_3RD_SELECTKEY) {
-                    if (!input->bIsInLegend) {
+                    if (!input->bIsInRemind) {
                         pstr = currentIM->GetCandWord(currentIM->klass, 2);
                         if (pstr) {
                             strcpy(input->strStringGet, pstr);
-                            if (input->bIsInLegend)
-                                retVal = IRV_GET_LEGEND;
+                            if (input->bIsInRemind)
+                                retVal = IRV_GET_REMIND;
                             else
                                 retVal = IRV_GET_CANDWORDS;
                         } else if (input->iCandWordCount)
@@ -474,10 +474,10 @@ void ProcessInputReturnValue(
             
         case IRV_DISPLAY_CANDWORDS:
             input->bShowPrev = input->bShowNext = false;
-            if (input->bIsInLegend) {
-                if (input->iCurrentLegendCandPage > 0)
+            if (input->bIsInRemind) {
+                if (input->iCurrentRemindCandPage > 0)
                     input->bShowPrev = true;
-                if (input->iCurrentLegendCandPage < input->iLegendCandPageCount)
+                if (input->iCurrentRemindCandPage < input->iRemindCandPageCount)
                     input->bShowNext = true;
             } else {
                 if (input->iCurrentCandPage > 0)
@@ -503,14 +503,14 @@ void ProcessInputReturnValue(
             input->bShowPrev = false;
             UpdateInputWindow(instance);
             break;
-        case IRV_GET_LEGEND:
+        case IRV_GET_REMIND:
             CommitString(instance, GetCurrentIC(instance), input->strStringGet);
             input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
-            if (input->iLegendCandWordCount) {
+            if (input->iRemindCandWordCount) {
                 input->bShowNext = input->bShowPrev = false;
-                if (input->iCurrentLegendCandPage > 0)
+                if (input->iCurrentRemindCandPage > 0)
                     input->bShowPrev = true;
-                if (input->iCurrentLegendCandPage < input->iLegendCandPageCount)
+                if (input->iCurrentRemindCandPage < input->iRemindCandPageCount)
                     input->bShowNext = true;
                 input->iCodeInputCount = 0;
                 ShowInputWindow(instance);
@@ -624,9 +624,9 @@ void ResetInput(FcitxInstance* instance)
     input->iCandPageCount = 0;
     input->iCurrentCandPage = 0;
     input->iCandWordCount = 0;
-    input->iLegendCandWordCount = 0;
-    input->iCurrentLegendCandPage = 0;
-    input->iLegendCandPageCount = 0;
+    input->iRemindCandWordCount = 0;
+    input->iCurrentRemindCandPage = 0;
+    input->iRemindCandPageCount = 0;
     input->iCursorPos = 0;
 
     input->strCodeInput[0] = '\0';
@@ -637,7 +637,7 @@ void ResetInput(FcitxInstance* instance)
     input->bShowPrev = false;
     input->bShowNext = false;
 
-    input->bIsInLegend = false;
+    input->bIsInRemind = false;
     
     UT_array* ims = &instance->imes;
 
@@ -693,16 +693,16 @@ INPUT_RETURN_VALUE ImProcessEscape(void* arg)
 {
     FcitxInstance *instance = (FcitxInstance*) arg;
     FcitxInputState *input = &instance->input;
-    if (input->iCodeInputCount || input->bIsInLegend)
+    if (input->iCodeInputCount || input->bIsInRemind)
         return IRV_CLEAN;
     else
         return IRV_DONOT_PROCESS;
 }
 
-INPUT_RETURN_VALUE ImProcessLegend(void* arg)
+INPUT_RETURN_VALUE ImProcessRemind(void* arg)
 {
     FcitxInstance *instance = (FcitxInstance*) arg;
-    UpdateStatus(instance, "legend");
+    UpdateStatus(instance, "remind");
     return IRV_DONOT_PROCESS;
 }
 
@@ -757,9 +757,9 @@ void UpdateInputWindow(FcitxInstance *instance)
         ShowInputWindow(instance);
 }
 
-boolean IsInLegend(FcitxInputState* input)
+boolean IsInRemind(FcitxInputState* input)
 {
-    return input->bIsInLegend;
+    return input->bIsInRemind;
 }
 
 char* GetOutputString(FcitxInputState* input)

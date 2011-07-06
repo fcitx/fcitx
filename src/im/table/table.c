@@ -800,7 +800,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
     retVal = IRV_DO_NOTHING;
     if (state == KEY_NONE && (IsInputKey (tbl, sym) || IsEndKey (tbl, sym) || sym == table->cMatchingKey || sym == table->cPinyin)) {
-        input->bIsInLegend = false;
+        input->bIsInRemind = false;
 
         if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             if (input->strCodeInput[0] == table->cPinyin && table->bUsePY) {
@@ -881,8 +881,8 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                                 if (retVal != IRV_DISPLAY_CANDWORDS) {
                                     strcpy (input->strStringGet, TableGetCandWord (tbl, 0));
                                     input->iCandWordCount = 0;
-                                    if (input->bIsInLegend)
-                                        retVal = IRV_GET_LEGEND;
+                                    if (input->bIsInRemind)
+                                        retVal = IRV_GET_REMIND;
                                     else
                                         retVal = IRV_GET_CANDWORDS;
                                 }
@@ -910,7 +910,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                         input->iCodeInputCount = 1;
                         input->strCodeInput[0] = sym;
                         input->strCodeInput[1] = '\0';
-                        input->bIsInLegend = false;
+                        input->bIsInRemind = false;
 
                         if (retVal != IRV_DISPLAY_CANDWORDS)
                             TableGetCandWords (tbl, SM_FIRST);
@@ -1005,7 +1005,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             return IRV_DISPLAY_MESSAGE;
         }
 
-        if (!input->iCodeInputCount && !input->bIsInLegend)
+        if (!input->iCodeInputCount && !input->bIsInRemind)
             return IRV_TO_PROCESS;
 
         if (IsHotKey(sym, state, FCITX_ESCAPE)) {
@@ -1020,7 +1020,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             int iKey;
             iKey = IsChooseKey(tbl, sym);
 
-            if (!input->bIsInLegend) {
+            if (!input->bIsInRemind) {
                 if (!input->iCandWordCount)
                     return IRV_TO_PROCESS;
 
@@ -1041,21 +1041,21 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             Table_PYGetCandWord (tbl, iKey - 1);
                         strcpy (input->strStringGet, TableGetCandWord (tbl, iKey - 1));
 
-                        if (input->bIsInLegend)
-                            retVal = IRV_GET_LEGEND;
+                        if (input->bIsInRemind)
+                            retVal = IRV_GET_REMIND;
                         else
                             retVal = IRV_GET_CANDWORDS;
                     }
                 }
             }
             else {
-                strcpy (input->strStringGet, TableGetLegendCandWord (tbl, iKey - 1));
-                retVal = IRV_GET_LEGEND;
+                strcpy (input->strStringGet, TableGetRemindCandWord (tbl, iKey - 1));
+                retVal = IRV_GET_REMIND;
             }
         }
         else if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             if (IsHotKey (sym, state, tbl->hkTableAdjustOrder)) {
-                if ((tbl->iTableCandDisplayed == input->iCandWordCount && input->iCandWordCount < 2) || input->bIsInLegend)
+                if ((tbl->iTableCandDisplayed == input->iCandWordCount && input->iCandWordCount < 2) || input->bIsInRemind)
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableAdjustOrder = true;
@@ -1064,7 +1064,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 retVal = IRV_DISPLAY_MESSAGE;
             }
             else if (IsHotKey (sym, state, tbl->hkTableDelPhrase)) {
-                if (!input->iCandWordCount || input->bIsInLegend)
+                if (!input->iCandWordCount || input->bIsInRemind)
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableDelPhrase = true;
@@ -1074,7 +1074,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             }
             else if (IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H)) {
                 if (!input->iCodeInputCount) {
-                    input->bIsInLegend = false;
+                    input->bIsInRemind = false;
                     return IRV_DONOT_PROCESS_CLEAN;
                 }
 
@@ -1091,7 +1091,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                     retVal = IRV_CLEAN;
             }
             else if (IsHotKey(sym, state, FCITX_SPACE)) {
-                if (!input->bIsInLegend) {
+                if (!input->bIsInRemind) {
                     if (!(table->bUsePY && input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin)) {
                         if (strcmp (input->strCodeInput, table->strSymbol) && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
                             Table_PYGetCandWord (tbl, SM_FIRST);
@@ -1106,15 +1106,15 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                     else
                         SetMessageCount(instance->messageDown, 0);
 
-                    if (input->bIsInLegend)
-                        retVal = IRV_GET_LEGEND;
+                    if (input->bIsInRemind)
+                        retVal = IRV_GET_REMIND;
                     else
                         retVal = IRV_GET_CANDWORDS;
 
                 }
                 else {
-                    strcpy (input->strStringGet, TableGetLegendCandWord (tbl, 0));
-                    retVal = IRV_GET_LEGEND;
+                    strcpy (input->strStringGet, TableGetRemindCandWord (tbl, 0));
+                    retVal = IRV_GET_REMIND;
                 }
             }
             else
@@ -1122,7 +1122,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
         }
     }
 
-    if (!input->bIsInLegend) {
+    if (!input->bIsInRemind) {
         if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             SetMessageCount(instance->messageUp,0);
             if (input->iCodeInputCount) {
@@ -1133,7 +1133,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             input->bIsDoInputOnly = true;
     }
 
-    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || input->bIsInLegend)
+    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || input->bIsInRemind)
         instance->bShowCursor = false;
     else
     {
@@ -1171,7 +1171,7 @@ void        TableUpdateHitFrequency (FcitxTableState* tbl, RECORD * record)
 /*
  * 第二个参数表示是否进入联想模式，实现自动上屏功能时，不能使用联想模式
  */
-char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bLegend)
+char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bRemind)
 {
     char           *pCandWord = NULL;
     TABLECANDWORD* tableCandWord = tbl->tableCandWord;
@@ -1183,7 +1183,7 @@ char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bL
     if (!strcmp (input->strCodeInput, table->strSymbol))
         return TableGetFHCandWord (tbl, iIndex);
 
-    input->bIsInLegend = false;
+    input->bIsInRemind = false;
 
     if (!input->iCandWordCount)
         return NULL;
@@ -1206,8 +1206,8 @@ char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bL
         break;
     case CT_AUTOPHRASE:
         if (table->iSaveAutoPhraseAfter) {
-            /* 当_bLegend为false时，不应该计算自动组词的频度，因此此时实际并没有选择这个词 */
-            if (table->iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected && _bLegend)
+            /* 当_bRemind为false时，不应该计算自动组词的频度，因此此时实际并没有选择这个词 */
+            if (table->iSaveAutoPhraseAfter >= tableCandWord[iIndex].candWord.autoPhrase->iSelected && _bRemind)
                 tableCandWord[iIndex].candWord.autoPhrase->iSelected++;
             if (table->iSaveAutoPhraseAfter == tableCandWord[iIndex].candWord.autoPhrase->iSelected)    //保存自动词组
                 TableInsertPhrase (tbl, tableCandWord[iIndex].candWord.autoPhrase->strCode, tableCandWord[iIndex].candWord.autoPhrase->strHZ);
@@ -1221,9 +1221,9 @@ char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bL
         ;
     }
 
-    if (profile->bUseLegend && _bLegend) {
-        strcpy (tbl->strTableLegendSource, pCandWord);
-        TableGetLegendCandWords (tbl, SM_FIRST);
+    if (profile->bUseRemind && _bRemind) {
+        strcpy (tbl->strTableRemindSource, pCandWord);
+        TableGetRemindCandWords (tbl, SM_FIRST);
     }
     else {
         if (table->bPromptTableCode) {
@@ -1298,8 +1298,8 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg, SEARCH_MODE mode)
     if (input->strCodeInput[0] == '\0')
         return IRV_TO_PROCESS;
 
-    if (input->bIsInLegend)
-        return TableGetLegendCandWords (tbl, mode);
+    if (input->bIsInRemind)
+        return TableGetRemindCandWords (tbl, mode);
     if (!strcmp (input->strCodeInput, table->strSymbol))
         return TableGetFHCandWords (tbl, mode);
 
@@ -1980,71 +1980,71 @@ void TableCreatePhraseCode (FcitxTableState* tbl, char *strHZ)
 /*
  * 获取联想候选字列表
  */
-INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
+INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl, SEARCH_MODE mode)
 {
     char            strTemp[3];
     int             iLength;
     int             i;
-    RECORD         *tableLegend = NULL;
+    RECORD         *tableRemind = NULL;
     unsigned int    iTableTotalLengendCandCount = 0;
     TABLECANDWORD* tableCandWord = tbl->tableCandWord;
     GenericConfig *fc = &tbl->owner->config.gconfig;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
-    boolean bDisablePagingInLegend = *ConfigGetBindValue(fc, "Output", "LegendModeDisablePaging").boolvalue;
+    boolean bDisablePagingInRemind = *ConfigGetBindValue(fc, "Output", "RemindModeDisablePaging").boolvalue;
 
-    if (!tbl->strTableLegendSource[0])
+    if (!tbl->strTableRemindSource[0])
         return IRV_TO_PROCESS;
 
-    iLength = utf8_strlen (tbl->strTableLegendSource);
+    iLength = utf8_strlen (tbl->strTableRemindSource);
     if (mode == SM_FIRST) {
-        input->iCurrentLegendCandPage = 0;
-        input->iLegendCandPageCount = 0;
+        input->iCurrentRemindCandPage = 0;
+        input->iRemindCandPageCount = 0;
         TableResetFlags(tbl);
     }
     else {
-        if (!input->iLegendCandPageCount)
+        if (!input->iRemindCandPageCount)
             return IRV_TO_PROCESS;
 
         if (mode == SM_NEXT) {
-            if (input->iCurrentLegendCandPage == input->iLegendCandPageCount)
+            if (input->iCurrentRemindCandPage == input->iRemindCandPageCount)
                 return IRV_DO_NOTHING;
 
-            input->iCurrentLegendCandPage++;
+            input->iCurrentRemindCandPage++;
         }
         else {
-            if (!input->iCurrentLegendCandPage)
+            if (!input->iCurrentRemindCandPage)
                 return IRV_DO_NOTHING;
 
-            TableSetCandWordsFlag (tbl, input->iLegendCandWordCount, false);
-            input->iCurrentLegendCandPage--;
+            TableSetCandWordsFlag (tbl, input->iRemindCandWordCount, false);
+            input->iCurrentRemindCandPage--;
         }
     }
 
-    input->iLegendCandWordCount = 0;
-    tableLegend = tbl->recordHead->next;
+    input->iRemindCandWordCount = 0;
+    tableRemind = tbl->recordHead->next;
 
-    while (tableLegend != tbl->recordHead) {
-        if (((mode == SM_PREV) ^ (!tableLegend->flag)) && ((iLength + 1) == utf8_strlen (tableLegend->strHZ))) {
-            if (!utf8_strncmp (tableLegend->strHZ, tbl->strTableLegendSource, iLength) && utf8_get_nth_char(tableLegend->strHZ, iLength)) {
+    while (tableRemind != tbl->recordHead) {
+        if (((mode == SM_PREV) ^ (!tableRemind->flag)) && ((iLength + 1) == utf8_strlen (tableRemind->strHZ))) {
+            if (!utf8_strncmp (tableRemind->strHZ, tbl->strTableRemindSource, iLength) && utf8_get_nth_char(tableRemind->strHZ, iLength)) {
                 if (mode == SM_FIRST)
                     iTableTotalLengendCandCount++;
 
-                TableAddLegendCandWord (tbl, tableLegend, mode);
+                TableAddRemindCandWord (tbl, tableRemind, mode);
             }
         }
 
-        tableLegend = tableLegend->next;
+        tableRemind = tableRemind->next;
     }
 
-    TableSetCandWordsFlag (tbl, input->iLegendCandWordCount, true);
+    TableSetCandWordsFlag (tbl, input->iRemindCandWordCount, true);
 
-    if (mode == SM_FIRST && bDisablePagingInLegend)
-        input->iLegendCandPageCount = iTableTotalLengendCandCount / ConfigGetMaxCandWord(&tbl->owner->config) - ((iTableTotalLengendCandCount % ConfigGetMaxCandWord(&tbl->owner->config)) ? 0 : 1);
+    if (mode == SM_FIRST && bDisablePagingInRemind)
+        input->iRemindCandPageCount = iTableTotalLengendCandCount / ConfigGetMaxCandWord(&tbl->owner->config) - ((iTableTotalLengendCandCount % ConfigGetMaxCandWord(&tbl->owner->config)) ? 0 : 1);
 
     SetMessageCount(instance->messageUp, 0);
     AddMessageAtLast(instance->messageUp, MSG_TIPS, "联想：");
-    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", tbl->strTableLegendSource);
+    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", tbl->strTableRemindSource);
 
     if (ConfigGetPointAfterNumber(&tbl->owner->config)) {
         strTemp[1] = '.';
@@ -2054,25 +2054,25 @@ INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mo
         strTemp[1] = '\0';
 
     SetMessageCount(instance->messageDown, 0);
-    for (i = 0; i < input->iLegendCandWordCount; i++) {
+    for (i = 0; i < input->iRemindCandWordCount; i++) {
         if (i == 9)
             strTemp[0] = '0';
         else
             strTemp[0] = i + 1 + '0';
         AddMessageAtLast(instance->messageDown, MSG_INDEX, "%s", strTemp);
 
-        AddMessageAtLast(instance->messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tableCandWord[i].candWord.record->strHZ + strlen (tbl->strTableLegendSource));
-        if (i != (input->iLegendCandWordCount - 1)) {
+        AddMessageAtLast(instance->messageDown, ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", tableCandWord[i].candWord.record->strHZ + strlen (tbl->strTableRemindSource));
+        if (i != (input->iRemindCandWordCount - 1)) {
             MessageConcatLast(instance->messageDown, " ");
         }
     }
 
-    input->bIsInLegend = (input->iLegendCandWordCount != 0);
+    input->bIsInRemind = (input->iRemindCandWordCount != 0);
 
     return IRV_DISPLAY_CANDWORDS;
 }
 
-void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
+void TableAddRemindCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE mode)
 {
     int             i, j;
     TABLECANDWORD *tableCandWord = tbl->tableCandWord;
@@ -2080,12 +2080,12 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
     FcitxInputState *input = &instance->input;
 
     if (mode == SM_PREV) {
-        for (i = input->iLegendCandWordCount - 1; i >= 0; i--) {
+        for (i = input->iRemindCandWordCount - 1; i >= 0; i--) {
             if (tableCandWord[i].candWord.record->iHit >= record->iHit)
                 break;
         }
 
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
+        if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             if (i < 0)
                 return;
         }
@@ -2093,7 +2093,7 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
             i++;
     }
     else {
-        for (i = 0; i < input->iLegendCandWordCount; i++) {
+        for (i = 0; i < input->iRemindCandWordCount; i++) {
             if (tableCandWord[i].candWord.record->iHit < record->iHit)
                 break;
         }
@@ -2103,18 +2103,18 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
     }
 
     if (mode == SM_PREV) {
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
+        if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config)) {
             for (j = 0; j < i; j++)
                 tableCandWord[j].candWord.record = tableCandWord[j + 1].candWord.record;
         }
         else {
-            for (j = input->iLegendCandWordCount; j > i; j--)
+            for (j = input->iRemindCandWordCount; j > i; j--)
                 tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
         }
     }
     else {
-        j = input->iLegendCandWordCount;
-        if (input->iLegendCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
+        j = input->iRemindCandWordCount;
+        if (input->iRemindCandWordCount == ConfigGetMaxCandWord(&tbl->owner->config))
             j--;
         for (; j > i; j--)
             tableCandWord[j].candWord.record = tableCandWord[j - 1].candWord.record;
@@ -2123,25 +2123,25 @@ void TableAddLegendCandWord (FcitxTableState* tbl, RECORD * record, SEARCH_MODE 
     tableCandWord[i].flag = CT_NORMAL;
     tableCandWord[i].candWord.record = record;
 
-    if (input->iLegendCandWordCount != ConfigGetMaxCandWord(&tbl->owner->config))
-        input->iLegendCandWordCount++;
+    if (input->iRemindCandWordCount != ConfigGetMaxCandWord(&tbl->owner->config))
+        input->iRemindCandWordCount++;
 }
 
-char           *TableGetLegendCandWord (void* arg, int iIndex)
+char           *TableGetRemindCandWord (void* arg, int iIndex)
 {
     FcitxTableState* tbl = (FcitxTableState*) arg;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
     TABLECANDWORD *tableCandWord = tbl->tableCandWord;
-    if (input->iLegendCandWordCount) {
-        if (iIndex > (input->iLegendCandWordCount - 1))
-            iIndex = input->iLegendCandWordCount - 1;
+    if (input->iRemindCandWordCount) {
+        if (iIndex > (input->iRemindCandWordCount - 1))
+            iIndex = input->iRemindCandWordCount - 1;
 
         tableCandWord[iIndex].candWord.record->iHit++;
-        strcpy (tbl->strTableLegendSource, tableCandWord[iIndex].candWord.record->strHZ + strlen (tbl->strTableLegendSource));
-        TableGetLegendCandWords (tbl, SM_FIRST);
+        strcpy (tbl->strTableRemindSource, tableCandWord[iIndex].candWord.record->strHZ + strlen (tbl->strTableRemindSource));
+        TableGetRemindCandWords (tbl, SM_FIRST);
 
-        return tbl->strTableLegendSource;
+        return tbl->strTableRemindSource;
     }
     return NULL;
 }

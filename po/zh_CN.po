@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-05 21:45+0800\n"
-"PO-Revision-Date: 2011-07-05 21:47+0800\n"
+"POT-Creation-Date: 2011-07-06 14:44+0800\n"
+"PO-Revision-Date: 2011-07-06 14:44+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Lokalize 1.2\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:851
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:855
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -130,11 +130,11 @@ msgstr "冰蟾全息"
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:141
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:142
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:146
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:147
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -283,7 +283,7 @@ msgid "Dianbaoma"
 msgstr "电报码"
 
 #: /home/saber/Develop/fcitx/data/config.desc:28
-msgid "Disable Paging in Legend Mode"
+msgid "Disable Paging in Remind Mode"
 msgstr "联想模式禁用翻页"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:229
@@ -502,7 +502,7 @@ msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
 #: /home/saber/Develop/fcitx/data/config.desc:98
-msgid "Hotkey of Switching Legend Mode"
+msgid "Hotkey of Switching Remind Mode"
 msgstr "快捷键: 切换联想模式"
 
 #: /home/saber/Develop/fcitx/data/config.desc:93
@@ -555,7 +555,7 @@ msgid "Input Message Color"
 msgstr "输入信息颜色"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:796
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:800
 msgid "Input Method"
 msgstr "输入法"
 
@@ -565,7 +565,7 @@ msgstr "输入法"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:849
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:853
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -608,10 +608,6 @@ msgstr "输入文字左下角"
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:129
 msgid "Left-down position of Output"
 msgstr "输出文字左下角"
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2975
-msgid "Legend: "
-msgstr "联想: "
 
 #: /home/saber/Develop/fcitx/data/addon.desc:21
 msgid "Library"
@@ -861,6 +857,10 @@ msgstr "右Ctrl"
 msgid "R_SHIFT"
 msgstr "右Shift"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2975
+msgid "Remind: "
+msgstr "联想："
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:665
 msgid "Rename OK"
 msgstr "重命名成功"
@@ -958,7 +958,7 @@ msgid "Shuangpin Priority Order, 0 to disable"
 msgstr "双拼输入法优先级，0为禁用"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:697
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:711
 msgid "Skin"
 msgstr "皮肤"
 
@@ -1169,7 +1169,7 @@ msgstr "无可用字体"
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:853
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:857
 msgid "s  Num of Characters: "
 msgstr "秒  字符数: "
 
@@ -1523,17 +1523,9 @@ msgstr "当前字体为: %s"
 #~ msgid "LayoutRight"
 #~ msgstr "右边距"
 
-#~ msgid "Legend disabled Icon"
-#~ msgstr "禁用联想图标"
-
-#~ msgid "Legend mode Icon"
-#~ msgstr "联想激活图标"
-
-#~ msgid "LegendModeDisablePaging"
-#~ msgstr "联想模式禁止翻页"
-
-#~ msgid "LegendSwitchKey"
-#~ msgstr "快捷键: 切换联想模式"
+#, fuzzy
+#~ msgid "Legend: "
+#~ msgstr "联想: "
 
 #~ msgid "LineColor"
 #~ msgstr "分隔线颜色"
@@ -1611,9 +1603,6 @@ msgstr "当前字体为: %s"
 #~ msgid "NoChange"
 #~ msgstr "原始操作"
 
-#~ msgid "NoLegend"
-#~ msgstr "联想未激活图标"
-
 #~ msgid "NoVK"
 #~ msgstr "软键盘未激活图标"
 
@@ -1677,6 +1666,18 @@ msgstr "当前字体为: %s"
 
 #~ msgid "ReloadConfig"
 #~ msgstr "ReloadConfig"
+
+#~ msgid "Remind disabled Icon"
+#~ msgstr "禁用联想图标"
+
+#~ msgid "Remind mode Icon"
+#~ msgstr "联想激活图标"
+
+#~ msgid "RemindModeDisablePaging"
+#~ msgstr "联想模式禁止翻页"
+
+#~ msgid "RemindSwitchKey"
+#~ msgstr "快捷键: 切换联想模式"
 
 #~ msgid "ResetRecordingKey"
 #~ msgstr "快捷键: 重置记录模式"
@@ -1834,14 +1835,14 @@ msgstr "当前字体为: %s"
 #~ msgid "UseGBKT"
 #~ msgstr "使用繁体"
 
-#~ msgid "UseLegend"
-#~ msgstr "联想模式"
-
 #~ msgid "UseMatchingKey"
 #~ msgstr "使用模糊键"
 
 #~ msgid "UsePY"
 #~ msgstr "使用拼音"
+
+#~ msgid "UseRemind"
+#~ msgstr "联想模式"
 
 #~ msgid "UseTray"
 #~ msgstr "启用托盘"

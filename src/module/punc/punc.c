@@ -144,7 +144,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
          */
         if (pPunc) {
             strStringGet[0] = '\0';
-            if (!IsInLegend(&puncState->owner->input))
+            if (!IsInRemind(&puncState->owner->input))
                 pstr = currentIM->GetCandWord(currentIM->klass, 0);
             if (pstr)
                 strcpy(strStringGet, pstr);
@@ -175,7 +175,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                     *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
                 else {
                     strStringGet[0] = '\0';
-                    if (!IsInLegend(&puncState->owner->input))
+                    if (!IsInRemind(&puncState->owner->input))
                         pstr = currentIM->GetCandWord(currentIM->klass, 0);
                     if (pstr)
                         strcpy(strStringGet, pstr);

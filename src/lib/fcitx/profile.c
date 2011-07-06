@@ -30,7 +30,7 @@ static ConfigFileDesc* GetProfileDesc();
 
 CONFIG_BINDING_BEGIN(FcitxProfile)
 CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
-CONFIG_BINDING_REGISTER("Profile", "UseLegend", bUseLegend)
+CONFIG_BINDING_REGISTER("Profile", "UseRemind", bUseRemind)
 CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex)
 CONFIG_BINDING_REGISTER("Profile", "WidePunc", bUseWidePunc)
 CONFIG_BINDING_END()
@@ -72,7 +72,7 @@ void SaveProfile(FcitxProfile* profile)
     fclose(fp);
 }
 
-boolean UseLegend(FcitxProfile* profile)
+boolean UseRemind(FcitxProfile* profile)
 {
-    return profile->bUseLegend;
+    return profile->bUseRemind;
 }

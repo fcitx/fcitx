@@ -8,7 +8,7 @@ Description=Use Wide Punctuation
 Type=Boolean
 DefaultValue=True
 
-[Profile/UseLegend]
+[Profile/UseRemind]
 Description=Prompt the phrases after input
 Type=Boolean
 DefaultValue=False

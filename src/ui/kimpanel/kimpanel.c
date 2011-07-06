@@ -436,8 +436,8 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
                 INPUT_RETURN_VALUE retVal;
                 if (pstr) {
                     strcpy(input->strStringGet, pstr);
-                    if (input->bIsInLegend)
-                        retVal = IRV_GET_LEGEND;
+                    if (input->bIsInRemind)
+                        retVal = IRV_GET_REMIND;
                     else
                         retVal = IRV_GET_CANDWORDS;
                 } else if (input->iCandWordCount != 0)

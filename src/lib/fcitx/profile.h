@@ -26,7 +26,7 @@
 typedef struct FcitxProfile
 {
     GenericConfig gconfig;
-    boolean bUseLegend;
+    boolean bUseRemind;
     int iIMIndex;
     boolean bUseWidePunc;
     boolean bUseFullWidthChar;
@@ -34,6 +34,6 @@ typedef struct FcitxProfile
 
 void LoadProfile(FcitxProfile* profile);
 void SaveProfile(FcitxProfile* profile);
-boolean UseLegend(FcitxProfile* profile);
+boolean UseRemind(FcitxProfile* profile);
 
 #endif

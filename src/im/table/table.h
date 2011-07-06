@@ -152,7 +152,7 @@ typedef struct FcitxTableState {
     uint            iAutoPhrase;
     uint            iTableCandDisplayed;
     uint            iTableTotalCandCount;
-    char            strTableLegendSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
+    char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
     
     FH             *fh;
     int             iFH ;
@@ -196,12 +196,12 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 INPUT_RETURN_VALUE TableGetCandWords (void* arg, SEARCH_MODE mode);
 void            TableAddCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
 void            TableAddAutoCandWord (FcitxTableState* tbl, short int which, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetLegendCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
-void            TableAddLegendCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
+INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+void            TableAddRemindCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
 INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
 INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
 void            TableResetStatus (void* arg);
-char           *TableGetLegendCandWord (void* arg, int iIndex);
+char           *TableGetRemindCandWord (void* arg, int iIndex);
 char           *TableGetFHCandWord (FcitxTableState* tbl, int iIndex);
 boolean            HasMatchingKey (FcitxTableState* tbl);
 int             TableCompareCode (FcitxTableState* tbl, char* strUser, char* strDict);
@@ -213,7 +213,7 @@ void            TableDelPhrase (FcitxTableState* tbl, RECORD* record);
 RECORD         *TableHasPhrase (FcitxTableState* tbl, const char* strCode, const char* strHZ);
 RECORD         *TableFindPhrase (FcitxTableState* tbl, const char* strHZ);
 void            TableInsertPhrase (FcitxTableState* tbl, const char* strCode, const char* strHZ);
-char	       *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bLegend);		//Internal
+char	       *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bRemind);		//Internal
 char           *TableGetCandWord (void* arg, int iIndex);
 void		TableUpdateHitFrequency (FcitxTableState* tbl, RECORD* record);
 void            TableCreateNewPhrase (FcitxTableState* tbl);
