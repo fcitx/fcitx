@@ -80,9 +80,9 @@ FcitxInputContext* GetCurrentIC(struct FcitxInstance* instance);
  *
  * @param instance 
  * @param ic new input context
- * @return void
+ * @return current ic changed
  **/
-void SetCurrentIC(struct FcitxInstance* instance, FcitxInputContext* ic);
+boolean SetCurrentIC(struct FcitxInstance* instance, FcitxInputContext* ic);
 
 /**
  * @brief Initial backends array

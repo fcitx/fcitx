@@ -55,7 +55,8 @@ Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
 Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
 {
     FcitxInputContext* ic =  FindIC(xim->owner, xim->backendid, &call_data->icid);
-    SetCurrentIC(xim->owner, ic);
+    if (!SetCurrentIC(xim->owner, ic))
+        return True;
     
     if (ic)
     {

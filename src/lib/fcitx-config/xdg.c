@@ -166,7 +166,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
     if (!fp)
     {
-        if (strchr(mode, 'w'))
+        if (strchr(mode, 'w') || strchr(mode, 'a'))
         {
             snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
             buf[sizeof(buf) - 1] = '\0';
@@ -261,5 +261,3 @@ char **GetXDGPath(
     *len = dirsCount;
     return dirsArray;
 }
-
-

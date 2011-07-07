@@ -311,6 +311,8 @@ void OnInputFocus(FcitxInstance* instance)
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
     
     InputFocusHook(instance);
+    ResetInput(instance);
+    CloseInputWindow(instance);
 }
 
 void OnInputUnFocus(struct FcitxInstance* instance)
@@ -326,6 +328,7 @@ void OnTriggerOn(FcitxInstance* instance)
     if (instance->ui && instance->ui->ui->OnTriggerOn)
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
     
+    TriggerOnHook(instance);
     ShowInputSpeed(instance);
 }
 

@@ -40,9 +40,11 @@ FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
     return instance->CurrentIC;
 }
 
-void SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
+boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
+    boolean changed = (instance->CurrentIC != ic);
     instance->CurrentIC = ic;
+    return changed;
 }
 
 void InitFcitxBackends(UT_array* backends)

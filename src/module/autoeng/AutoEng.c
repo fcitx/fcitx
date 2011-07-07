@@ -185,6 +185,7 @@ static boolean ProcessAutoEng(void* arg,long unsigned int sym,
         if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
+            autoEngState->owner->bShowCursor = false;
             autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
             ShowAutoEngMessage(autoEngState);
