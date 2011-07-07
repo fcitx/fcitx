@@ -46,8 +46,72 @@ static void CloseAllMenuWindow(FcitxClassicUI *classicui);
 static void CloseAllSubMenuWindow(XlibMenu *xlibMenu);
 static void CloseOtherSubMenuWindow(XlibMenu *xlibMenu, XlibMenu* subMenu);
 static boolean IsMouseInOtherMenu(XlibMenu *xlibMenu, int x, int y);
+static void InitXlibMenu(XlibMenu* menu);
+static void ReloadXlibMenu(void* arg, boolean enabled);
 
 #define GetMenuShell(m, i) ((MenuShell*) utarray_eltptr(&(m)->shell, (i)))
+
+void InitXlibMenu(XlibMenu* menu)
+{
+    FcitxClassicUI* classicui = menu->owner;
+    char        strWindowName[]="Fcitx Menu Window";
+    XSetWindowAttributes attrib;
+    unsigned long   attribmask;
+    int depth;
+    Colormap cmap;
+    Visual * vs;
+    XGCValues xgv;
+    GC gc;
+    Display* dpy = classicui->dpy;
+    int iScreen = classicui->iScreen;
+    
+    vs=ClassicUIFindARGBVisual (classicui);
+    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
+
+    //开始只创建一个简单的窗口不做任何动作
+    menu->menuWindow =XCreateWindow (dpy,
+                                     RootWindow (dpy, iScreen),
+                                     0, 0,
+                                     MENU_WINDOW_WIDTH,MENU_WINDOW_HEIGHT,
+                                     0, depth, InputOutput,
+                                     vs, attribmask, &attrib);
+
+    if (menu->menuWindow == (Window) NULL)
+        return;
+
+    XSetTransientForHint (dpy, menu->menuWindow, DefaultRootWindow (dpy));
+    
+    menu->pixmap = XCreatePixmap(dpy,
+                                 menu->menuWindow,
+                                 MENU_WINDOW_WIDTH,
+                                 MENU_WINDOW_HEIGHT,
+                                 depth);
+
+    xgv.foreground = WhitePixel(dpy, iScreen);
+    gc = XCreateGC(dpy, menu->pixmap, GCForeground, &xgv);
+    XFillRectangle(
+        dpy,
+        menu->pixmap,
+        gc,
+        0,
+        0,
+        MENU_WINDOW_WIDTH,
+        MENU_WINDOW_HEIGHT);
+    menu->menu_cs=cairo_xlib_surface_create(dpy,
+                                            menu->pixmap,
+                                            vs,
+                                            MENU_WINDOW_WIDTH,MENU_WINDOW_HEIGHT);
+    XFreeGC(dpy, gc);
+
+    XSelectInput (dpy, menu->menuWindow, KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask | StructureNotifyMask );
+    
+    ClassicUISetWindowProperty(classicui, menu->menuWindow, FCITX_WINDOW_MENU, strWindowName);
+    
+    menu->iPosX=100;
+    menu->iPosY=100;
+    menu->width=cairo_image_surface_get_height(menu->menu_cs);
+}
+
 
 XlibMenu* CreateMainMenuWindow(FcitxClassicUI *classicui)
 {
@@ -215,69 +279,18 @@ boolean IsMouseInOtherMenu(XlibMenu *xlibMenu, int x, int y)
 
 XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
 {
-    char        strWindowName[]="Fcitx Menu Window";
     XlibMenu *menu = fcitx_malloc0(sizeof(XlibMenu));
-    XSetWindowAttributes attrib;
-    unsigned long   attribmask;
-    int depth;
-    Colormap cmap;
-    Visual * vs;
-    XGCValues xgv;
-    GC gc;
-    Display* dpy = classicui->dpy;
-    int iScreen = classicui->iScreen;
     menu->owner = classicui;
-    
-    vs=ClassicUIFindARGBVisual (classicui);
-    ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
-
-    //开始只创建一个简单的窗口不做任何动作
-    menu->menuWindow =XCreateWindow (dpy,
-                                     RootWindow (dpy, iScreen),
-                                     0, 0,
-                                     MENU_WINDOW_WIDTH,MENU_WINDOW_HEIGHT,
-                                     0, depth, InputOutput,
-                                     vs, attribmask, &attrib);
-
-    if (menu->menuWindow == (Window) NULL)
-        return False;
-
-    XSetTransientForHint (dpy, menu->menuWindow, DefaultRootWindow (dpy));
-    
-    menu->pixmap = XCreatePixmap(dpy,
-                                 menu->menuWindow,
-                                 MENU_WINDOW_WIDTH,
-                                 MENU_WINDOW_HEIGHT,
-                                 depth);
-
-    xgv.foreground = WhitePixel(dpy, iScreen);
-    gc = XCreateGC(dpy, menu->pixmap, GCForeground, &xgv);
-    XFillRectangle(
-        dpy,
-        menu->pixmap,
-        gc,
-        0,
-        0,
-        MENU_WINDOW_WIDTH,
-        MENU_WINDOW_HEIGHT);
-    menu->menu_cs=cairo_xlib_surface_create(dpy,
-                                            menu->pixmap,
-                                            vs,
-                                            MENU_WINDOW_WIDTH,MENU_WINDOW_HEIGHT);
-    XFreeGC(dpy, gc);
-
-    XSelectInput (dpy, menu->menuWindow, KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask | StructureNotifyMask );
-    
-    ClassicUISetWindowProperty(classicui, menu->menuWindow, FCITX_WINDOW_MENU, strWindowName);
-    
-    menu->iPosX=100;
-    menu->iPosY=100;
-    menu->width=cairo_image_surface_get_height(menu->menu_cs);
+    InitXlibMenu(menu);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MenuWindowEventHandler;
     arg.args[1] = menu;
     InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    
+    arg.args[0] = ReloadXlibMenu;
+    arg.args[1] = menu;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
     return menu;
 }
 
@@ -514,11 +527,18 @@ void ClearSelectFlag(XlibMenu * menu)
     }
 }
 
-void DestroyXlibMenu(XlibMenu *menu)
+void ReloadXlibMenu(void* arg, boolean enabled)
 {
+    XlibMenu* menu = (XlibMenu*) arg;
     cairo_surface_destroy(menu->menu_cs);
     XFreePixmap(menu->owner->dpy, menu->pixmap);
     XDestroyWindow(menu->owner->dpy, menu->menuWindow);
+
+    menu->menu_cs = NULL;
+    menu->pixmap = None;
+    menu->menuWindow = None;
+    
+    InitXlibMenu(menu);
 }
 
 void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)

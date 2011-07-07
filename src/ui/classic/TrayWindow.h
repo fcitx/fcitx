@@ -50,6 +50,7 @@ typedef struct TrayWindow {
     cairo_surface_t *cs;
     int size;
     struct FcitxClassicUI* owner;
+    Window dockWindow;
 } TrayWindow;
 
 TrayWindow* CreateTrayWindow(struct FcitxClassicUI *classicui);

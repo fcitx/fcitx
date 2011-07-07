@@ -40,8 +40,10 @@
 #include "MainWindow.h"
 
 static boolean InputWindowEventHandler(void *arg, XEvent* event);
+static void InitInputWindow(InputWindow* inputWindow);
+static void ReloadInputWindow(void* arg, boolean enabled);
 
-InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
+void InitInputWindow(InputWindow* inputWindow)
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
@@ -49,12 +51,10 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     int depth;
     Colormap cmap;
     Visual * vs;
-    InputWindow* inputWindow;
+    FcitxClassicUI* classicui = inputWindow->owner;
     int iScreen = classicui->iScreen;
     Display* dpy = classicui->dpy;
     FcitxSkin *sc = &classicui->skin;
-    
-    inputWindow = fcitx_malloc0(sizeof(InputWindow));    
     inputWindow->window = None;
     inputWindow->iInputWindowHeight = INPUTWND_HEIGHT;
     inputWindow->iInputWindowWidth = INPUTWND_WIDTH;
@@ -63,7 +63,6 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     inputWindow->dpy = dpy;
     inputWindow->iScreen = iScreen;
     inputWindow->skin = sc;
-    inputWindow->owner = classicui;
 
     SkinImage *back = LoadImage(sc, sc->skinInputBar.backImg, false);
 
@@ -104,11 +103,24 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
     ClassicUISetWindowProperty(classicui, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
+}
+
+InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
+{
+    InputWindow* inputWindow;
+    
+    inputWindow = fcitx_malloc0(sizeof(InputWindow));
+    inputWindow->owner = classicui;
+    InitInputWindow(inputWindow);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = InputWindowEventHandler;
     arg.args[1] = inputWindow;
     InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    
+    arg.args[0] = ReloadInputWindow;
+    arg.args[1] = inputWindow;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
     return inputWindow;
 }
 
@@ -221,25 +233,31 @@ void CloseInputWindowInternal(InputWindow* inputWindow)
     XUnmapWindow (inputWindow->dpy, inputWindow->window);
 }
 
-void DestroyInputWindow(InputWindow* inputWindow)
+void ReloadInputWindow(void* arg, boolean enabled)
 {
+    InputWindow* inputWindow = (InputWindow*) arg;
     int i = 0;
     cairo_destroy(inputWindow->c_back);
 
     for ( i = 0 ; i < 7; i ++)
+    {
         cairo_destroy(inputWindow->c_font[i]);
+        inputWindow->c_font[i] = NULL;
+    }
     cairo_destroy(inputWindow->c_cursor);
+    inputWindow->c_cursor = NULL;
 
     cairo_surface_destroy(inputWindow->cs_input_bar);
     cairo_surface_destroy(inputWindow->cs_input_back);
     XFreePixmap(inputWindow->dpy, inputWindow->pm_input_bar);
     XDestroyWindow(inputWindow->dpy, inputWindow->window);
     
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = inputWindow;
-    InvokeFunction(inputWindow->owner->owner, FCITX_X11, REMOVEXEVENTHANDLER, arg);
+    inputWindow->cs_input_back = NULL;
+    inputWindow->cs_input_bar = NULL;
+    inputWindow->pm_input_bar = None;
+    inputWindow->window = None;
     
-    free(inputWindow);
+    InitInputWindow(inputWindow);
 }
 
 void ShowInputWindowInternal(InputWindow* inputWindow)

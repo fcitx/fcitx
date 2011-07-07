@@ -119,21 +119,19 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
         return 0;
     }
 
-    Window Dock;
-    
     XGrabServer (dpy);
 
-    Dock = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
+    tray->dockWindow = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
 
-    if (Dock != None)
-        XSelectInput(dpy, Dock,
+    if (tray->dockWindow != None)
+        XSelectInput(dpy, tray->dockWindow,
                 StructureNotifyMask|PropertyChangeMask);
 
     XUngrabServer (dpy);
     XFlush (dpy);
 
-    if (Dock != None) {
-        TraySendOpcode(dpy, Dock, tray, SYSTEM_TRAY_REQUEST_DOCK, tray->window, 0, 0);
+    if (tray->dockWindow != None) {
+        TraySendOpcode(dpy, tray->dockWindow, tray, SYSTEM_TRAY_REQUEST_DOCK, tray->window, 0, 0);
         tray->bTrayMapped = True;
         return 1;
     } 
@@ -173,21 +171,19 @@ void TraySendOpcode(Display* dpy, Window dock, TrayWindow* tray,
 
 XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray)
 {
-    Window Dock;
-
     if (tray->visual.visual)
     {
         return &tray->visual;
     }
 
-    Dock = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
+    tray->dockWindow = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
 
-    if (Dock != None) {
+    if (tray->dockWindow != None) {
         Atom actual_type;
         int actual_format;
         unsigned long nitems, bytes_remaining;
         unsigned char *data = 0;
-        int result = XGetWindowProperty(dpy, Dock, tray->atoms[ATOM_VISUAL], 0, 1,
+        int result = XGetWindowProperty(dpy, tray->dockWindow, tray->atoms[ATOM_VISUAL], 0, 1,
                                         False, XA_VISUALID, &actual_type,
                                         &actual_format, &nitems, &bytes_remaining, &data);
         VisualID vid = 0;

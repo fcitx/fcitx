@@ -63,6 +63,5 @@ XlibMenu* CreateXlibMenu(struct FcitxClassicUI* classicui);
 void GetMenuSize(XlibMenu * menu);
 void DrawXlibMenu(XlibMenu * menu);
 void DisplayXlibMenu(XlibMenu * menu);
-void DestroyXlibMenu(XlibMenu *menu);
 
 #endif

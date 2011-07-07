@@ -46,18 +46,19 @@
 #include "AboutWindow.h"
 #include "MenuWindow.h"
 
-
-static boolean MainWindowEventHandler(void *arg, XEvent* event);
-static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
-
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
 
 #define MAIN_BAR_MAX_WIDTH 400
 #define MAIN_BAR_MAX_HEIGHT 400
 
-MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
+static boolean MainWindowEventHandler(void *arg, XEvent* event);
+static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
+static void ReloadMainWindow(void* arg, boolean enabled);
+static void InitMainWindow(MainWindow* mainWindow);
+
+void InitMainWindow(MainWindow* mainWindow)
 {
-    MainWindow *mainWindow;
+    FcitxClassicUI* classicui = mainWindow->owner;
     int depth;
     Colormap cmap;
     Visual * vs;
@@ -70,9 +71,6 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     Display* dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     FcitxSkin *sc = &classicui->skin;
-    
-    mainWindow = fcitx_malloc0(sizeof(MainWindow));
-    mainWindow->owner = classicui;
     mainWindow->dpy = dpy;
     
     GetScreenSize(classicui, &swidth, &sheight);
@@ -96,7 +94,7 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
                                      0, depth,InputOutput, vs,attribmask, &attrib);
 
     if (mainWindow->window == None)
-        return NULL;
+        return;
 
     xgv.foreground = WhitePixel(dpy, iScreen);
     mainWindow->pm_main_bar = XCreatePixmap(
@@ -120,11 +118,24 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
     ClassicUISetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
+}
+
+MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
+{
+    MainWindow *mainWindow;
+    
+    mainWindow = fcitx_malloc0(sizeof(MainWindow));
+    mainWindow->owner = classicui;
+    InitMainWindow(mainWindow);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MainWindowEventHandler;
     arg.args[1] = mainWindow;
     InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    
+    arg.args[0] = ReloadMainWindow;
+    arg.args[1] = mainWindow;
+    InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
     return mainWindow;
 }
 
@@ -346,18 +357,20 @@ void DrawMainWindow (MainWindow* mainWindow)
     cairo_destroy(c);
 }
 
-void DestroyMainWindow(MainWindow* mainWindow)
+void ReloadMainWindow(void *arg, boolean enabled)
 {
+    MainWindow* mainWindow = (MainWindow*) arg;
     cairo_surface_destroy(mainWindow->cs_main_bar);
     XFreePixmap(mainWindow->dpy, mainWindow->pm_main_bar);
     XFreeGC(mainWindow->dpy, mainWindow->main_win_gc);
     XDestroyWindow(mainWindow->dpy, mainWindow->window);
     
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = mainWindow;
-    InvokeFunction(mainWindow->owner->owner, FCITX_X11, REMOVEXEVENTHANDLER, arg);
+    mainWindow->cs_main_bar = NULL;
+    mainWindow->pm_main_bar = None;
+    mainWindow->main_win_gc = NULL;
+    mainWindow->window = None;
     
-    free(mainWindow);
+    InitMainWindow(mainWindow);
 }
 
 void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y)

@@ -38,9 +38,12 @@ static void* X11InitWindowAttribute(void* arg, FcitxModuleFunctionArg args);
 static void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetScreenSize(void *arg, FcitxModuleFunctionArg args);
 static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
+static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void InitComposite(FcitxX11* x11stuff);
+static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
+const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -68,6 +71,7 @@ void* X11Create(FcitxInstance* instance)
     x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
 
     utarray_init(&x11priv->handlers, &handler_icd);
+    utarray_init(&x11priv->comphandlers, &comphandler_icd);
 
     /* ensure the order ! */
     AddFunction(x11addon, X11GetDisplay);
@@ -78,6 +82,7 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11SetWindowProperty);
     AddFunction(x11addon, X11GetScreenSize);
     AddFunction(x11addon, X11MouseClick);
+    AddFunction(x11addon, X11AddCompositeHandler);
     InitComposite(x11priv);
     
     InitXErrorHandler (x11priv);
@@ -101,6 +106,17 @@ void* X11Run(void* arg)
                 /* 处理X事件 */
                 if (XFilterEvent (&event, None) == False)
                 {
+                    if (event.type == DestroyNotify)
+                    {
+                        if (event.xany.window == x11priv->compManager)
+                            X11HandlerComposite(x11priv, false);
+                    }
+                    else if (event.type == ClientMessage) {
+                        if (event.xclient.data.l[1] == x11priv->compManagerAtom)
+                            X11HandlerComposite(x11priv, true);
+                    }
+
+                    
                     FcitxXEventHandler* handler;
                     for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
                             handler != NULL;
@@ -130,6 +146,16 @@ void* X11AddEventHandler(void* arg, FcitxModuleFunctionArg args)
     handler.eventHandler = args.args[0];
     handler.instance = args.args[1];
     utarray_push_back(&x11priv->handlers, &handler);
+    return NULL;
+}
+
+void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    FcitxCompositeChangedHandler handler;
+    handler.eventHandler = args.args[0];
+    handler.instance = args.args[1];
+    utarray_push_back(&x11priv->comphandlers, &handler);
     return NULL;
 }
 
@@ -340,4 +366,29 @@ X11MouseClick(void *arg, FcitxModuleFunctionArg args)
     *y = evtGrabbed.xmotion.y_root - *y;
 
     return NULL;
+}
+
+void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
+{
+    
+    if (enable)
+    {
+        x11priv->compManager = XGetSelectionOwner(x11priv->dpy, x11priv->compManagerAtom);
+
+        if (x11priv->compManager)
+        {
+            XSetWindowAttributes attrs;
+            attrs.event_mask = StructureNotifyMask;
+            XChangeWindowAttributes (x11priv->dpy, x11priv->compManager, CWEventMask, &attrs);
+        }
+    }
+    else {
+        x11priv->compManager = None;
+    }
+    
+    FcitxCompositeChangedHandler* handler;
+    for ( handler = (FcitxCompositeChangedHandler *) utarray_front(&x11priv->comphandlers);
+            handler != NULL;
+            handler = (FcitxCompositeChangedHandler *) utarray_next(&x11priv->comphandlers, handler))
+        handler->eventHandler (handler->instance, enable);
 }

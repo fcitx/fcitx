@@ -22,6 +22,7 @@
 #define X11STUFF_H
 #include <X11/Xlib.h>
 #include "fcitx-utils/utarray.h"
+#include <fcitx-config/fcitx-config.h>
 
 #define FCITX_X11_NAME "fcitx-x11"
 #define FCITX_X11_GETDISPLAY 0
@@ -40,6 +41,8 @@
 #define FCITX_X11_GETSCREENSIZE_RETURNTYPE void
 #define FCITX_X11_MOUSECLICK 7
 #define FCITX_X11_MOUSECLICK_RETURNTYPE void
+#define FCITX_X11_ADDCOMPOSITEHANDLER 8
+#define FCITX_X11_ADDCOMPOSITEHANDLER_RETURNTYPE void
 
 struct FcitxInstance;
 
@@ -48,10 +51,15 @@ typedef struct FcitxXEventHandler {
     void* instance;
 } FcitxXEventHandler;
 
+typedef struct FcitxCompositeChangedHandler {
+    void (*eventHandler)(void* instance, boolean enable);
+    void *instance;
+} FcitxCompositeChangedHandler;
 
 typedef struct FcitxX11 {
     Display *dpy;
     UT_array handlers;
+    UT_array comphandlers;
     struct FcitxInstance* owner;
     Window compManager;
     Atom compManagerAtom;

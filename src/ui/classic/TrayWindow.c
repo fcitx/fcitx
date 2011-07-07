@@ -187,42 +187,44 @@ boolean TrayEventHandler(void *arg, XEvent* event)
     Display *dpy = classicui->dpy;
     if (!classicui->bUseTrayIcon)
         return false;
-    if (event->xany.window == trayWindow->window)
-    {
-        switch (event->type) {
-        case ClientMessage:
-            if (event->xclient.message_type == trayWindow->atoms[ATOM_MANAGER]
-                    && event->xclient.data.l[1] == trayWindow->atoms[ATOM_SELECTION])
-            {
-                if (trayWindow->window == None)
-                    InitTrayWindow(trayWindow);
-                TrayFindDock(dpy, trayWindow);
-            }
-            break;
+    switch (event->type) {
+    case ClientMessage:
+        if (event->xclient.message_type == trayWindow->atoms[ATOM_MANAGER]
+                && event->xclient.data.l[1] == trayWindow->atoms[ATOM_SELECTION])
+        {
+            if (trayWindow->window == None)
+                InitTrayWindow(trayWindow);
+            TrayFindDock(dpy, trayWindow);
+            return true;
+        }
+        break;
 
-        case Expose:
-            if (event->xexpose.window == trayWindow->window) {
-                DrawTrayWindow (trayWindow);
-            }
-            break;
-        case ConfigureNotify:
-            if (trayWindow->window == event->xconfigure.window)
+    case Expose:
+        if (event->xexpose.window == trayWindow->window) {
+            DrawTrayWindow (trayWindow);
+        }
+        break;
+    case ConfigureNotify:
+        if (trayWindow->window == event->xconfigure.window)
+        {
+            int size = event->xconfigure.height;
+            if (size != trayWindow->size)
             {
-                int size = event->xconfigure.height;
-                if (size != trayWindow->size)
-                {
-                    trayWindow->size = size;
-                    XSizeHints size_hints;
-                    size_hints.flags = PWinGravity | PBaseSize;
-                    size_hints.base_width = trayWindow->size;
-                    size_hints.base_height = trayWindow->size;
-                    XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
-                }
-
-                DrawTrayWindow (trayWindow);
+                trayWindow->size = size;
+                XSizeHints size_hints;
+                size_hints.flags = PWinGravity | PBaseSize;
+                size_hints.base_width = trayWindow->size;
+                size_hints.base_height = trayWindow->size;
+                XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
             }
-            break;
-        case ButtonPress:
+
+            DrawTrayWindow (trayWindow);
+            return true;
+        }
+        break;
+    case ButtonPress:
+        {
+            if (event->xbutton.window == trayWindow->window)
             {
                 switch(event->xbutton.button)
                 {
@@ -261,22 +263,28 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                         }
                         break;
                 }
+                return true;
             }
-            break;
-        case DestroyNotify:
+        }
+        break;
+    case DestroyNotify:
+        if (event->xdestroywindow.window == trayWindow->dockWindow)
+        {
+            trayWindow->dockWindow = None;
             trayWindow->bTrayMapped = False;
             ReleaseTrayWindow(trayWindow);
-            break;
-
-        case ReparentNotify:
-            if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == trayWindow->window)
-            {
-                trayWindow->bTrayMapped = False;
-                ReleaseTrayWindow(trayWindow);
-            }
-            break;
+            return true;
         }
-        return true;
+        break;
+
+    case ReparentNotify:
+        if (event->xreparent.parent == DefaultRootWindow(dpy) && event->xreparent.window == trayWindow->window)
+        {
+            trayWindow->bTrayMapped = False;
+            ReleaseTrayWindow(trayWindow);
+            return true;
+        }
+        break;
     }
     return false;
 }

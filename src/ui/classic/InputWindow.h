@@ -65,7 +65,6 @@ typedef struct InputWindow {
 InputWindow* CreateInputWindow(struct FcitxClassicUI* classicui);
 void MoveInputWindowInternal(InputWindow* inputWindow);
 void CloseInputWindowInternal(InputWindow* inputWindow);
-void DestroyInputWindow(InputWindow* inputWindow);
 void DrawInputWindow(InputWindow* inputWindow);
 void ShowInputWindowInternal(InputWindow* inputWindow);
 

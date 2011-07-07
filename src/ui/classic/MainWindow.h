@@ -60,7 +60,6 @@ typedef struct MainWindow
 
 MainWindow* CreateMainWindow (struct FcitxClassicUI* classicui);
 void CloseMainWindow(MainWindow *mainWindow);
-void DestroyMainWindow(MainWindow* mainWindow);
 void DrawMainWindow (MainWindow* mainWindow);
 void ShowMainWindow (MainWindow* mainWindow);
 boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other);
