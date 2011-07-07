@@ -360,6 +360,7 @@ void DrawMainWindow (MainWindow* mainWindow)
 void ReloadMainWindow(void *arg, boolean enabled)
 {
     MainWindow* mainWindow = (MainWindow*) arg;
+    boolean visable = WindowIsVisable(mainWindow->dpy, mainWindow->window);
     cairo_surface_destroy(mainWindow->cs_main_bar);
     XFreePixmap(mainWindow->dpy, mainWindow->pm_main_bar);
     XFreeGC(mainWindow->dpy, mainWindow->main_win_gc);
@@ -371,6 +372,9 @@ void ReloadMainWindow(void *arg, boolean enabled)
     mainWindow->window = None;
     
     InitMainWindow(mainWindow);
+    
+    if (visable)
+        ShowMainWindow(mainWindow);
 }
 
 void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y)

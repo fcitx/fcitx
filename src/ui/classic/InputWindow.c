@@ -236,6 +236,7 @@ void CloseInputWindowInternal(InputWindow* inputWindow)
 void ReloadInputWindow(void* arg, boolean enabled)
 {
     InputWindow* inputWindow = (InputWindow*) arg;
+    boolean visable = WindowIsVisable(inputWindow->dpy, inputWindow->window);
     int i = 0;
     cairo_destroy(inputWindow->c_back);
 
@@ -258,6 +259,9 @@ void ReloadInputWindow(void* arg, boolean enabled)
     inputWindow->window = None;
     
     InitInputWindow(inputWindow);
+    
+    if (visable)
+        ShowInputWindowInternal(inputWindow);
 }
 
 void ShowInputWindowInternal(InputWindow* inputWindow)

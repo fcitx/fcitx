@@ -94,6 +94,7 @@ void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxX
 void ActivateWindow(Display *dpy, int iScreen, Window window);
 void LoadClassicUIConfig(FcitxClassicUI* classicui);
 void SaveClassicUIConfig(FcitxClassicUI* classicui);
+boolean WindowIsVisable(Display* dpy, Window window);
 
 #define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)
 

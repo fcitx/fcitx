@@ -530,6 +530,7 @@ void ClearSelectFlag(XlibMenu * menu)
 void ReloadXlibMenu(void* arg, boolean enabled)
 {
     XlibMenu* menu = (XlibMenu*) arg;
+    boolean visable = WindowIsVisable(menu->owner->dpy, menu->menuWindow);
     cairo_surface_destroy(menu->menu_cs);
     XFreePixmap(menu->owner->dpy, menu->pixmap);
     XDestroyWindow(menu->owner->dpy, menu->menuWindow);
@@ -539,6 +540,8 @@ void ReloadXlibMenu(void* arg, boolean enabled)
     menu->menuWindow = None;
     
     InitXlibMenu(menu);
+    if (visable)
+        XMapWindow(menu->owner->dpy, menu->menuWindow);
 }
 
 void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)

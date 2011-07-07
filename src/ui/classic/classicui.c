@@ -481,3 +481,10 @@ void ReloadConfigClassicUI(void* arg)
     LoadClassicUIConfig(classicui);
     DisplaySkin(classicui, classicui->skinType);
 }
+
+boolean WindowIsVisable(Display* dpy, Window window)
+{
+    XWindowAttributes attr;
+    XGetWindowAttributes(dpy, window, &attr);
+    return attr.map_state == IsViewable;
+}
