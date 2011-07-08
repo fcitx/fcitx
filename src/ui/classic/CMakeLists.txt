@@ -32,5 +32,5 @@ if (${_ENABLE_PANGO})
     include_directories ( ${PANGOCAIRO_INCLUDE_DIRS} )
 endif (${_ENABLE_PANGO})
 
-install(FILES fcitx-classic-ui.conf DESTINATION ${pkgdatadir}/data/addon)
-install(FILES ${CLASSICUI_DESC_FILES} DESTINATION ${pkgdatadir}/data)
+install(FILES fcitx-classic-ui.conf DESTINATION ${addonconfigdir})
+install(FILES ${CLASSICUI_DESC_FILES} DESTINATION ${configdescdir})

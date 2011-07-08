@@ -10,4 +10,4 @@ install(TARGETS fcitx-kimpanel-ui DESTINATION ${addondir})
 set_target_properties( fcitx-kimpanel-ui PROPERTIES PREFIX "")
 target_link_libraries( fcitx-kimpanel-ui ${DBUS_LIBRARIES} )
 
-install(FILES fcitx-kimpanel-ui.conf DESTINATION ${pkgdatadir}/data/addon)
+install(FILES fcitx-kimpanel-ui.conf DESTINATION ${addonconfigdir})

@@ -93,7 +93,7 @@ void LoadPYConfig(FcitxPinyinConfig *pyconfig)
 {
     FILE *fp;
     char *file;
-    fp = GetXDGFileUser( "pinyin/fcitx-pinyin.config", "rt", &file);
+    fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "rt", &file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
@@ -117,10 +117,10 @@ void SavePYConfig(FcitxPinyinConfig* pyconfig)
 {
     ConfigFileDesc* configDesc = GetPYConfigDesc();
     char *file;
-    FILE *fp = GetXDGFileUser("pinyin/fcitx-pinyin.config", "wt", &file);
+    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "wt", &file);
     SaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
     free(file);
     fclose(fp);
 }
 
-CONFIG_DESC_DEFINE(GetPYConfigDesc, "addon/fcitx-pinyin.desc")
+CONFIG_DESC_DEFINE(GetPYConfigDesc, "fcitx-pinyin.desc")

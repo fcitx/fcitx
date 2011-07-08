@@ -189,7 +189,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             if (!transState->s2t_table) {
                 len = 0;
 
-                fp = GetXDGFileData(TABLE_GBKS2T, "rb", NULL);
+                fp = GetXDGFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
                 if (!fp) {
                     ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
                     strcpy (ret, strHZ);
@@ -254,7 +254,7 @@ void LoadChttransConfig(FcitxChttrans* transState)
 {
     FILE *fp;
     char *file;
-    fp = GetXDGFileUser( "addon/fcitx-chttrans.config", "rt", &file);
+    fp = GetXDGFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
     FcitxLog(INFO, _("Load Config File %s"), file);
     free(file);
     if (!fp) {
@@ -275,13 +275,13 @@ void LoadChttransConfig(FcitxChttrans* transState)
     fclose(fp);
 }
 
-CONFIG_DESC_DEFINE(GetChttransConfigDesc, "addon/fcitx-chttrans.desc")
+CONFIG_DESC_DEFINE(GetChttransConfigDesc, "fcitx-chttrans.desc")
 
 void SaveChttransConfig(FcitxChttrans* transState)
 {
     ConfigFileDesc* configDesc = GetChttransConfigDesc();
     char *file;
-    FILE *fp = GetXDGFileUser("addon/fcitx-chttrans.config", "wt", &file);
+    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-chttrans.config", "wt", &file);
     FcitxLog(INFO, "Save Config to %s", file);
     SaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);

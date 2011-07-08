@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   if (pybase_mb)
       fi = fopen (pybase_mb , "r");
   else
-      fi = GetXDGFileData(PY_BASE_FILE, "r", &pybase_mb);
+      fi = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
   if (!fi)
   {
     perror("fopen");
@@ -96,9 +96,9 @@ void usage()
 "  usage: readPYBase [OPTION]\n"
 "\n"
 "  -b <pybase.mb> full path to the file, usually\n"
-"                 " PKGDATADIR "/data/" PY_BASE_FILE "\n"
+"                 " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
 "                 if not specified, defaults to\n"
-"                 " PKGDATADIR "/data/" PY_BASE_FILE "\n"
+"                 " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
 "  -h             display this help\n"
 "\n"
   );

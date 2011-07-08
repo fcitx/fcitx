@@ -11,5 +11,5 @@ install(TARGETS fcitx-x11 DESTINATION ${addondir})
 set_target_properties( fcitx-x11 PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
 target_link_libraries( fcitx-x11 ${X11_LIBRARIES} ${X11_Xrender_LIB} )
 
-install(FILES fcitx-x11.conf DESTINATION ${pkgdatadir}/data/addon)
+install(FILES fcitx-x11.conf DESTINATION ${addonconfigdir})
 

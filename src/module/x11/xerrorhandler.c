@@ -18,9 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "X11/Xlib.h"
+#include <X11/Xlib.h>
 #include "fcitx-config/xdg.h"
-#include <fcitx/ime.h>
+#include "fcitx/ime.h"
 #include "x11stuff.h"
 
 static XErrorHandler   oldXErrorHandler;
@@ -53,7 +53,7 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
     char    str[256];
     FILE* fp = NULL;
 
-    fp = GetXDGFileUser("crash.log","wt" , NULL);
+    fp = GetXDGFileUserWithPrefix("log", "crash.log","wt" , NULL);
     if ( fp ) {
         XGetErrorText (dpy, event->error_code, str, 255);
         fprintf (fp, "fcitx: %s\n", str);

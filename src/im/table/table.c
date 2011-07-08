@@ -112,7 +112,7 @@ FILE *GetXDGFileTable(const char *fileName, const char *mode, char **retFile, bo
     if (forceUser)
         path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , NULL, NULL );
     else
-        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
+        path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table" );
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 
@@ -152,7 +152,7 @@ void LoadTableInfo (FcitxTableState *tbl)
     tbl->iTableCount = 0;
     utarray_init(tbl->table, &table_icd);
 
-    tablePath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
+    tablePath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table" );
 
     for (i = 0; i< len; i++)
     {
@@ -247,7 +247,7 @@ void LoadTableInfo (FcitxTableState *tbl)
     }
 }
 
-CONFIG_DESC_DEFINE(GetTableConfigDesc, "addon/table.desc")
+CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
 
 boolean LoadTableDict (FcitxTableState *tbl)
 {
@@ -270,7 +270,7 @@ boolean LoadTableDict (FcitxTableState *tbl)
     {
         size_t len;
         char *pstr = NULL;
-        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/data/table" );
+        char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table" );
         fpDict = GetXDGFile(table->strPath, path, "r", len, &pstr);
         FcitxLog(INFO, _("Load Table Dict from %s"), pstr);
         free(pstr);

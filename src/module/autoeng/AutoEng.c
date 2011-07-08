@@ -209,7 +209,7 @@ void LoadAutoEng (FcitxAutoEngState* autoEngState)
     char    *buf = NULL;
     size_t   length = 0;
 
-    fp = GetXDGFileData("AutoEng.dat", "rt", NULL);
+    fp = GetXDGFileWithPrefix("data", "AutoEng.dat", "rt", NULL);
     if (!fp)
         return;
 

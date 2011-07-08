@@ -152,7 +152,7 @@ ConfigFileDesc *funcname() \
     if (!configDesc) \
     { \
         FILE *tmpfp; \
-        tmpfp = GetXDGFileData(path, "r", NULL); \
+        tmpfp = GetXDGFileWithPrefix("configdesc", path, "r", NULL); \
         if (tmpfp == NULL) \
         { \
             FcitxLog(ERROR, _("Load Config Description File %s Erorr, Please Check your install."), path); \

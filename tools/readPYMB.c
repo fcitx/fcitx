@@ -103,7 +103,7 @@ void usage()
 "  -h          display this help\n"
 "\n"
 "  The MB file can either be a user's MB file (~/.config/fcitx/pyuserphrase.mb),\n"
-"  or the system phrase pinyin MB file (/usr/share/fcitx/data/pyphrase.mb.\n"
+"  or the system phrase pinyin MB file (/usr/share/fcitx/pinyin/pyphrase.mb.\n"
   );
   exit(1);
   return;

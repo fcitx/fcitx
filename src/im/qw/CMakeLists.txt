@@ -7,4 +7,4 @@ add_library(fcitx-qw MODULE ${FCITX_QUWEI_SOURCES})
 set_target_properties( fcitx-qw PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
 
 install(TARGETS fcitx-qw DESTINATION ${addondir})
-install(FILES fcitx-qw.conf DESTINATION ${pkgdatadir}/data/addon)
+install(FILES fcitx-qw.conf DESTINATION ${addonconfigdir})

@@ -64,7 +64,6 @@ FcitxIMClass ime = {
 };
 
 static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem);
-static FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile);
 
 static void * LoadPYBaseDictWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetPYByHZWrapper(void* arg, FcitxModuleFunctionArg args);
@@ -75,19 +74,6 @@ static void * PYGetCandTextWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetFindStringWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
 static void ReloadConfigPY(void* arg);
-
-FILE *GetXDGFilePinyin(const char *fileName, const char *mode, char **retFile)
-{
-    size_t len;
-    char ** path;
-    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/data/pinyin" );
-
-    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
-
-    FreeXDGPath(path);
-
-    return fp;
-}
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -154,7 +140,7 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
     FILE *fp;
     int i, j, iLen;
 
-    fp = GetXDGFileData(PY_BASE_FILE, "r", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", NULL);
     if (!fp)
         return false;
 
@@ -208,7 +194,7 @@ StringHashSet *GetPYPhraseFiles()
 
 	StringHashSet* sset = NULL;
 
-    pinyinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/data/pinyin" );
+    pinyinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/pinyin" );
 
     for(i = 0; i< len; i++)
     {
@@ -228,6 +214,8 @@ StringHashSet *GetPYPhraseFiles()
             memset(pathBuf,0,sizeof(pathBuf));
 
             if (strcmp(drt->d_name + nameLen -strlen(".mb"), ".mb") != 0)
+                continue;
+            if (strcmp(drt->d_name, PY_PHRASE_FILE) == 0)
                 continue;
             snprintf(pathBuf, sizeof(pathBuf), "%s/%s", pinyinPath[i], drt->d_name );
 
@@ -395,7 +383,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
 
     pystate->bPYOtherDictLoaded = true;
 
-    fp = GetXDGFileData(PY_PHRASE_FILE, "r", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_PHRASE_FILE, "r", NULL);
     if (!fp)
         FcitxLog(ERROR, _("Can not find System Database of Pinyin!"));
     else {
@@ -407,7 +395,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         {
             curStr = sset;
             HASH_DEL(sset, curStr);
-            fp = GetXDGFilePinyin(curStr->name, "r", NULL);
+            fp = GetXDGFileWithPrefix("pinyin", curStr->name, "r", NULL);
             LoadPYPhraseDict(pystate, fp, true);
             fclose(fp);
             free(curStr->name);
@@ -418,13 +406,13 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     }
 
     //下面开始读取用户词库
-    fp = GetXDGFileData(PY_USERPHRASE_FILE, "rb", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_USERPHRASE_FILE, "rb", NULL);
     if (fp) {
         LoadPYPhraseDict(pystate, fp, false);
         fclose(fp);
     }
     //下面读取索引文件
-    fp = GetXDGFileData(PY_INDEX_FILE, "rb", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_INDEX_FILE, "rb", NULL);
     if (fp) {
         fread(&iLen, sizeof(uint), 1, fp);
         if (iLen > pystate->iCounter)
@@ -454,7 +442,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         fclose(fp);
     }
     //下面读取常用词表
-    fp = GetXDGFileData(PY_FREQ_FILE, "rb", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_FREQ_FILE, "rb", NULL);
     if (fp) {
         pPyFreq = pystate->pyFreq;
 
@@ -497,7 +485,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         fclose(fp);
     }
     //下面读取特殊符号表
-    fp = GetXDGFileData(PY_SYMBOL_FILE, "rb", NULL);
+    fp = GetXDGFileWithPrefix("pinyin", PY_SYMBOL_FILE, "rb", NULL);
     if (fp) {
         char strTxt[256];
         char str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
@@ -2524,7 +2512,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
 
     pystate->isSavingPYUserPhrase = true;
 
-    fp = GetXDGFileData(TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
         pystate->isSavingPYUserPhrase = false;
         FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), pstr);
@@ -2564,7 +2552,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     }
 
     fclose(fp);
-    fp = GetXDGFileData(PY_USERPHRASE_FILE, NULL, &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", PY_USERPHRASE_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
     rename(strPathTemp, pstr);
@@ -2586,7 +2574,7 @@ void SavePYFreq(FcitxPinyinState *pystate)
         return;
 
     pystate->isSavingPYFreq = true;
-    fp = GetXDGFileData(TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
         pystate->isSavingPYFreq = false;
         FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), pstr);
@@ -2633,7 +2621,7 @@ void SavePYFreq(FcitxPinyinState *pystate)
 
     fclose(fp);
 
-    fp = GetXDGFileData(PY_FREQ_FILE, NULL, &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", PY_FREQ_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
     rename(strPathTemp, pstr);
@@ -2657,7 +2645,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
         return;
 
     pystate->isSavingPYIndex = true;
-    fp = GetXDGFileData(TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
         pystate->isSavingPYIndex = false;
         FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), pstr);
@@ -2703,7 +2691,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
 
     fclose(fp);
 
-    fp = GetXDGFileData(PY_INDEX_FILE, NULL, &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", PY_INDEX_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
     rename(strPathTemp, pstr);

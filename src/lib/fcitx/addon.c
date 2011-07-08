@@ -75,7 +75,7 @@ void LoadAddonInfo(UT_array* addons)
 
     StringHashSet* sset = NULL;
 
-    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/data/addon" );
+    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon" );
 
     for(i = 0; i< len; i++)
     {

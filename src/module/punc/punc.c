@@ -209,7 +209,7 @@ boolean LoadPuncDict (FcitxPuncState* puncState)
     char           *pstr;               // 临时指针
     int             i;
 
-    fpDict = GetXDGFileData(PUNC_DICT_FILENAME, "rt", NULL);
+    fpDict = GetXDGFileWithPrefix("data", PUNC_DICT_FILENAME, "rt", NULL);
 
     if (!fpDict) {
         FcitxLog(WARNING, _("Can't open Chinese punc file."));

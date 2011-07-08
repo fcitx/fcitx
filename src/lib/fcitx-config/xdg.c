@@ -75,10 +75,12 @@ make_path (const char *path)
  * @return 文件指针
  */
 FCITX_EXPORT_API
-FILE *GetXDGFileData(const char *fileName, const char *mode, char **retFile)
+FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE , DATADIR, PACKAGE "/data" );
+    char prefixpath[PATH_MAX];
+    snprintf(prefixpath, PATH_MAX, "%s/%s", PACKAGE, prefix);
+    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , DATADIR, prefixpath);
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 
@@ -103,10 +105,12 @@ FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 }
 
 FCITX_EXPORT_API
-FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile)
+FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE , NULL, NULL );
+    char prefixpath[PATH_MAX];
+    snprintf(prefixpath, PATH_MAX, "%s/%s", PACKAGE, prefix);
+    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , NULL, NULL);
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 

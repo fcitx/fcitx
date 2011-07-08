@@ -135,7 +135,7 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
 
     qpstate->uQuickPhraseCount=0;
 
-    fp =  GetXDGFileData("QuickPhrase.mb", "rt", NULL);
+    fp =  GetXDGFileWithPrefix("data", "QuickPhrase.mb", "rt", NULL);
     if (!fp)
         return;
 

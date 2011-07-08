@@ -566,7 +566,7 @@ void LoadVKMapFile ( FcitxVKState *vkstate)
         vks[j].strName[0] = '\0';
     }
 
-    fp = GetXDGFileData(VK_FILE, "rt", NULL);
+    fp = GetXDGFileWithPrefix("data", VK_FILE, "rt", NULL);
 
     if (!fp)
         return;

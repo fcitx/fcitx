@@ -70,7 +70,7 @@ void OnException (int signo)
     {
         FILE *fp = NULL;
         if ( signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL || signo == SIGTERM )
-            fp = GetXDGFileUser("crash.log","wt", NULL);
+            fp = GetXDGFileWithPrefix("log", "crash.log","wt", NULL);
 
         printf ("Obtained %zd stack frames.\n", size);
         if (fp)

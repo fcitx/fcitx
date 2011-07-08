@@ -29,5 +29,5 @@ add_custom_command(OUTPUT ${tblname}.mb
                    COMMAND txt2mb ${tblname}.txt ${tblname}.mb)
 endforeach()
 
-install(FILES ${TABLE_DATA} DESTINATION ${pkgdatadir}/data/table )
-install(FILES ${TABLE_CONF} DESTINATION ${pkgdatadir}/data/table )
+install(FILES ${TABLE_DATA} DESTINATION ${pkgdatadir}/table )
+install(FILES ${TABLE_CONF} DESTINATION ${pkgdatadir}/table )

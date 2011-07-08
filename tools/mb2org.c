@@ -72,7 +72,7 @@ int main(int argc, char **argv)
   if (pyusrphrase_mb)
       fi = fopen (pyusrphrase_mb , "r");
   else
-      fi = GetXDGFileUser( PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+      fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
   if (!fi)
   {
     perror("fopen");
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
   if (pybase_mb)
       fi2 = fopen (pybase_mb , "r");
   else
-      fi2 = GetXDGFileData(PY_BASE_FILE, "r", &pybase_mb);
+      fi2 = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
   if (!fi2)
   {
     perror("fopen");
@@ -159,9 +159,9 @@ void usage()
 "                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
 "  -b <pybase.mb>      this is the pybase.mb file used to determine the\n"
 "                      of the first character in HZ. Usually, this is\n"
-"                      " PKGDATADIR "/data/" PY_BASE_FILE "\n"
+"                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
 "                      if not specified, defaults to\n"
-"                      " PKGDATADIR "/data/" PY_BASE_FILE "\n"
+"                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
 "  -s                  Is MB from user or from system (they have different format).\n"
 "  -h                  display this help\n"
 "\n"

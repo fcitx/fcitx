@@ -12,8 +12,11 @@ set(FCITX_DATA_FILES
     AutoEng.dat
     gbks2t.tab
     punc.mb
-    pySym.mb
     vk.conf
+)
+
+set(FCITX_PY_FILES
+    pySym.mb
     sp.dat
 )
 
@@ -61,8 +64,10 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop DESTINATION share/applic
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop DESTINATION share/applications/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop DESTINATION share/applications/)
 
-install(FILES ${FCITX_DESC_FILES} ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
 install(FILES fcitx-config DESTINATION ${bindir} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pybase.mb ${CMAKE_CURRENT_BINARY_DIR}/pyphrase.mb DESTINATION ${pkgdatadir}/data)
+
+install(FILES ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
+install(FILES ${FCITX_DESC_FILES} DESTINATION ${configdescdir})
+install(FILES ${FCITX_PY_FILES} ${CMAKE_CURRENT_BINARY_DIR}/pybase.mb ${CMAKE_CURRENT_BINARY_DIR}/pyphrase.mb DESTINATION ${pkgdatadir}/pinyin)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_CURRENT_BINARY_DIR}/pyERROR,${CMAKE_CURRENT_BINARY_DIR}/pyPhrase.ok")

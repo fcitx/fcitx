@@ -13,5 +13,5 @@ if (${HAVE_OPENCC})
     include_directories(${OPENCC_INCLUDE_DIRS})
 endif (${HAVE_OPENCC})
 
-install(FILES fcitx-chttrans.conf DESTINATION ${pkgdatadir}/data/addon)
-install(FILES fcitx-chttrans.desc DESTINATION ${pkgdatadir}/data/addon)
+install(FILES fcitx-chttrans.conf DESTINATION ${addonconfigdir})
+install(FILES fcitx-chttrans.desc DESTINATION ${configdescdir})

@@ -41,7 +41,7 @@ CONFIG_BINDING_END()
 void LoadProfile(FcitxProfile* profile)
 {
     FILE *fp;
-    fp = GetXDGFileUser( "profile", "rt", NULL);
+    fp = GetXDGFileUserWithPrefix("", "profile", "rt", NULL);
     if (!fp) {
         if (errno == ENOENT)
         {
@@ -67,7 +67,7 @@ CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
 void SaveProfile(FcitxProfile* profile)
 {
     ConfigFileDesc* profileDesc = GetProfileDesc();
-    FILE* fp = GetXDGFileUser("profile", "wt", NULL);
+    FILE* fp = GetXDGFileUserWithPrefix("", "profile", "wt", NULL);
     SaveConfigFileFp(fp, &profile->gconfig, profileDesc);
     fclose(fp);
 }

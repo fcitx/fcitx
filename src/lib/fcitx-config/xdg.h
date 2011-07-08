@@ -45,8 +45,8 @@ char **GetXDGPath(
         const char* dirsDefault,
         const char* suffixGlobal);
 
-FILE *GetXDGFileData(const char *fileName, const char *mode, char**retFile);
-FILE *GetXDGFileUser(const char *fileName, const char *mode, char **retFile);
+FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
+FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
 void FreeXDGPath(char **path);
 
 #ifdef __cplusplus

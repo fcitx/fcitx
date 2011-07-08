@@ -282,7 +282,7 @@ void LoadClassicUIConfig(FcitxClassicUI* classicui)
 {
     FILE *fp;
     char *file;
-    fp = GetXDGFileUser( "fcitx-classic-ui.config", "rt", &file);
+    fp = GetXDGFileUserWithPrefix("conf", "fcitx-classic-ui.config", "rt", &file);
     FcitxLog(INFO, _("Load Config File %s"), file);
     free(file);
     if (!fp) {
@@ -308,7 +308,7 @@ void SaveClassicUIConfig(FcitxClassicUI *classicui)
 {
     ConfigFileDesc* configDesc = GetClassicUIDesc();
     char *file;
-    FILE *fp = GetXDGFileUser("fcitx-classic-ui.config", "wt", &file);
+    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-classic-ui.config", "wt", &file);
     FcitxLog(INFO, "Save Config to %s", file);
     SaveConfigFileFp(fp, &classicui->gconfig, configDesc);
     free(file);
