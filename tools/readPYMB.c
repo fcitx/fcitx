@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   int i, j;
   char *pyusrphrase_mb = NULL;
   struct _PYMB *PYMB;
-  Bool isUser = True;
+  boolean isUser = true;
   char c;
 
   while((c = getopt(argc, argv, "f:sh")) != -1)
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
               pyusrphrase_mb = strdup(optarg);
               break;
           case 's':
-              isUser = False;
+              isUser = false;
               break;
           case 'h':
           default:
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
   if (pyusrphrase_mb)
       fi = fopen(pyusrphrase_mb, "r");
   else
-      fi = GetXDGFileUser( PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+      fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
   if (!fi)
   {
     perror("fopen");

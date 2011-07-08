@@ -24,7 +24,7 @@ set(readPYBase_SOURCES
 )
 
 set(readPYMB_SOURCES
-    readPYBase.c
+    readPYMB.c
     pyTools.c
 )
 
