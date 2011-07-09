@@ -31,6 +31,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <fcitx-config/uthash.h>
 
 struct HOTKEYS;
 typedef int32_t boolean;
@@ -117,6 +118,75 @@ typedef struct ConfigFile
 struct GenericConfig
 {
     ConfigFile *configFile;
+};
+
+struct ConfigOptionDesc
+{
+    char *optionName;
+    char *desc;
+    ConfigType type;
+    char *rawDefaultValue;
+    ConfigEnum configEnum;
+
+    UT_hash_handle hh;
+};
+
+/**
+ * @brief Config Group Description
+ **/
+struct ConfigGroupDesc
+{
+    /**
+     * @brief Group Name
+     **/
+    char *groupName;
+    /**
+     * @brief Hash table for option description
+     **/
+    ConfigOptionDesc *optionsDesc;
+    UT_hash_handle hh;
+};
+
+/**
+ * @brief Description of a config file
+ **/
+struct ConfigFileDesc
+{
+    ConfigGroupDesc *groupsDesc;
+};
+
+struct ConfigOption
+{
+    char *optionName;
+    char *rawValue;
+    ConfigValueType value;
+    SyncFilter filter;
+    void *filterArg;
+    ConfigOptionDesc *optionDesc;
+    UT_hash_handle hh;
+} ;
+
+/**
+ * @brief Config group
+ **/
+struct ConfigGroup
+{
+    /**
+     * @brief Group Name, unique in ConfigFile
+     **/
+    char *groupName;
+    /**
+     * @brief Group Description
+     **/
+    ConfigGroupDesc *groupDesc;
+    /**
+     * @brief Option store with a hash table
+     **/
+    ConfigOption* options;
+    /**
+     * @brief UTHash handler
+     **/
+    UT_hash_handle hh;
 };
 
 typedef void(*ConfigBindingFunc)(GenericConfig*);
