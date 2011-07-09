@@ -33,8 +33,6 @@
 #include "hook-internal.h"
 #include "ime-internal.h"
 
-FcitxUI dummyUI;
-
 struct MESSAGE{
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
     MSG_TYPE        type;

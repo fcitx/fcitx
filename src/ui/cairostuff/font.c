@@ -107,6 +107,6 @@ nofont:
     }
         
     FcitxLog(FATAL, _("no valid font."));
-    exit(1);
+    return;
 }
 #endif

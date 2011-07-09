@@ -215,7 +215,7 @@ void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, i
 }
 
 
-void LoadBackend(FcitxInstance* instance)
+boolean LoadBackend(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     UT_array* backends = &instance->backends;
@@ -268,4 +268,11 @@ void LoadBackend(FcitxInstance* instance)
             free(modulePath);
         }
     }
+    
+    if (utarray_len(&instance->backends) <= 0)
+    {
+        FcitxLog(ERROR, _("No available backend"));
+        return false;
+    }
+    return true;
 }

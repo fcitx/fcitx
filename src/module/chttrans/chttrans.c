@@ -162,7 +162,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
                 if (od == (opencc_t) -1)
                 {
                     opencc_perror(_("OpenCC initialization error"));
-                    exit(1);
+                    return NULL;
                 }
             }
 
@@ -171,7 +171,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             if (res == (char *) -1)
             {
                 opencc_perror(_("OpenCC error"));
-                exit(1);
+                return NULL;
             }
 
             return res;

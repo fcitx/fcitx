@@ -128,7 +128,7 @@ void DestroyIC(struct FcitxInstance* instance, int backendid, void* filter);
  * @param instance 
  * @return void
  **/
-void LoadBackend(struct FcitxInstance* instance );
+boolean LoadBackend(struct FcitxInstance* instance );
 
 /**
  * @brief End Input

@@ -202,7 +202,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
     utarray_push_back(imes, &newime);
 }
 
-void LoadAllIM(FcitxInstance* instance)
+boolean LoadAllIM(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     UT_array* ims = &instance->imeclasses;
@@ -258,9 +258,10 @@ void LoadAllIM(FcitxInstance* instance)
     if (utarray_len(&instance->imes) <= 0)
     {
         FcitxLog(ERROR, _("No available Input Method"));
-        exit(1);
+        return false;
     }
     utarray_sort(&instance->imes, IMPriorityCmp);
+    return true;
 }
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)

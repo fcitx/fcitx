@@ -39,7 +39,7 @@ void InitFcitxIM(struct FcitxInstance* instance);
 void InitBuiltInHotkey(struct FcitxInstance* instance);
 void DoPhraseTips (struct FcitxInstance* instance);
 void UnloadAllIM(UT_array* ims);
-void LoadAllIM (struct FcitxInstance* instance);
+boolean LoadAllIM (struct FcitxInstance* instance);
 void InitIMMenu(struct FcitxInstance* instance);
 void ShowInputSpeed(struct FcitxInstance* instance);
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);

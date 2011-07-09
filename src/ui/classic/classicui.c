@@ -397,10 +397,11 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
             }
             else if (id > 0)
                 exit(0);
-
-            execl(BINDIR "/fcitx-config", "fcitx-config", NULL);
-
-            exit(0);
+            else
+            {
+                execl(BINDIR "/fcitx-config", "fcitx-config", NULL);
+                exit(0);
+            }
         }
     }
     return true;

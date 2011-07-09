@@ -127,7 +127,8 @@ void* XimCreate(FcitxInstance* instance, int backendid)
     xim->ximWindow = XCreateSimpleWindow(xim->display, DefaultRootWindow(xim->display), 0, 0, 1, 1, 1, 0, 0);
     if (xim->ximWindow == (Window) NULL) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
-        exit(1);
+        free(xim);
+        return NULL;
     }
 
     if (!imname) {
@@ -198,7 +199,8 @@ void* XimCreate(FcitxInstance* instance, int backendid)
     free(encodings);
 
     if (xim->ims == (XIMS) NULL) {
-        FcitxLog(ERROR, _("Start FCITX error. Another XIM daemon named %s is running?"), imname);
+        FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
+        free(xim);
         return NULL;
     }
     return xim;

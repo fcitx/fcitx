@@ -44,7 +44,7 @@ const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleRemindState(void* arg);
 static boolean GetRemindEnabled(void* arg);
-static void ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
+static boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
 static void Usage();
 static void Version();
 
@@ -85,7 +85,11 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->sem = sem;
     
     LoadConfig(&instance->config);
-    ProcessOption(instance, argc, argv);
+    if (!ProcessOption(instance, argc, argv))
+    {
+        EndInstance(instance);
+        return instance;
+    }
     
     instance->input.timeStart = time(NULL);
     
@@ -95,7 +99,11 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);
-    LoadAllIM(instance);
+    if (!LoadAllIM(instance))
+    {
+        EndInstance(instance);
+        return instance;
+    }
     
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
@@ -105,7 +113,11 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
     SwitchIM(instance, instance->profile.iIMIndex);
     
-    LoadBackend(instance);
+    if (!LoadBackend(instance))
+    {
+        EndInstance(instance);
+        return instance;
+    }
     
     if (instance->config.bFirstRun)
     {
@@ -189,7 +201,7 @@ boolean GetRemindEnabled(void* arg)
     return instance->profile.bUseRemind;
 }
 
-void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
+boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 {
     struct option longOptions[] ={
         {"ui", 1, 0, 0}
@@ -228,10 +240,10 @@ void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                 break;
             case 'h':
                 Usage();
-                exit(0);
+                return false;
             case 'v':
                 Version();
-                exit(0);
+                return false;
                 break;
         }
     }
@@ -249,4 +261,6 @@ void ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 
     if (overrideDelay > 0)
         sleep(overrideDelay);
+    
+    return true;
 }
