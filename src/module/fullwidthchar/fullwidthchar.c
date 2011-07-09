@@ -53,7 +53,7 @@ char *sCornerTrans[] = {
     "ｋ", "ｌ", "ｍ", "ｎ", "ｏ",
     "ｐ", "ｑ", "ｒ", "ｓ", "ｔ", "ｕ", "ｖ", "ｗ", "ｘ", "ｙ",
     "ｚ",
-    "｛", "｜", "｝", "￣",
+    "｛", "｜", "｝", "～",
 };
 
 #define FCITX_FULLWIDTH_CHAR "fcitx-fullwidth-char"
