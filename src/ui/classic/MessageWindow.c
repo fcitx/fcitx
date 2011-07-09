@@ -74,6 +74,15 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
 boolean MessageWindowEventHandler(void *arg, XEvent* event)
 {
     MessageWindow* messageWindow = (MessageWindow*) arg;
+    if (event->type == ClientMessage
+        && event->xclient.data.l[0] == messageWindow->owner->killAtom
+        && event->xclient.window == messageWindow->window
+    )
+    {
+        XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
+        return true;
+    }
+    
     if (event->xany.window == messageWindow->window)
     {
         switch (event->type)

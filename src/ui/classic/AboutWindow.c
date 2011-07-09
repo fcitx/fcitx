@@ -81,6 +81,15 @@ AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
 boolean AboutWindowEventHandler(void *arg, XEvent* event)
 {
     AboutWindow* aboutWindow = (AboutWindow*) arg;
+    if (event->type == ClientMessage
+        && event->xclient.data.l[0] == aboutWindow->owner->killAtom
+        && event->xclient.window == aboutWindow->window
+    )
+    {
+        XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
+        return true;
+    }
+    
     if (event->xany.window == aboutWindow->window)
     {
         switch (event->type)
