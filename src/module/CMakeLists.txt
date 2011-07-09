@@ -7,6 +7,6 @@ add_subdirectory(autoeng)
 add_subdirectory(fullwidthchar)
 add_subdirectory(remote)
 
-if (ENABLE_DBUS)
+if (_ENABLE_DBUS)
     add_subdirectory(dbus)
-endif (ENABLE_DBUS)
+endif (_ENABLE_DBUS)

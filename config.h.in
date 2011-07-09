@@ -4,7 +4,7 @@
 #cmakedefine _DEBUG
 #cmakedefine _ENABLE_DBUS
 #cmakedefine _ENABLE_PANGO
-#cmakedefine HAVE_OPENCC
+#cmakedefine _ENABLE_OPENCC
 #define LOCALEDIR "@localedir@"
 #define PACKAGE "@package@"
 #define DATADIR "@prefix@/share"

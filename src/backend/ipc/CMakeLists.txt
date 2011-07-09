@@ -1,6 +1,6 @@
 if(FALSE)
 
-include_directories(${fcitx_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
 set(fcitx_ipc_SOURCES
     

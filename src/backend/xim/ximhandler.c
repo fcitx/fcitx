@@ -204,12 +204,30 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
                                            sym, state);
     
     if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
-        ForwardKey(xim->owner,
-                   GetCurrentIC(xim->owner),
-                   (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
-                   originsym,
-                   originstate);
+        XimForwardKeyInternal(xim,
+                           GetXimIC(ic),
+                           &call_data->event
+                          );
     xim->currentSerialNumberCallData = xim->currentSerialNumberKey = 0L;
+}
+
+
+void XimForwardKeyInternal(FcitxXimBackend *xim,
+                           FcitxXimIC* ic,
+                           XEvent* xEvent
+                          )
+{
+    IMForwardEventStruct forwardEvent;
+
+    memset(&forwardEvent, 0, sizeof(IMForwardEventStruct));
+    forwardEvent.connect_id = ic->connect_id;
+    forwardEvent.icid = ic->id;
+    forwardEvent.major_code = XIM_FORWARD_EVENT;
+    forwardEvent.sync_bit = 0;
+    forwardEvent.serial_number = xim->currentSerialNumberCallData;    
+
+    memcpy(&(forwardEvent.event), xEvent, sizeof(XEvent));
+    IMForwardEvent(xim->ims, (XPointer) (&forwardEvent));
 }
 
 void XIMClose(FcitxXimBackend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)

@@ -20,7 +20,7 @@
 
 #include "fcitx/fcitx.h"
 
-#ifdef HAVE_OPENCC
+#ifdef _ENABLE_OPENCC
 #include <opencc.h>
 #endif
 
@@ -153,7 +153,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
     switch(transState->engine)
     {
         case ENGINE_OPENCC:
-#ifdef HAVE_OPENCC
+#ifdef _ENABLE_OPENCC
         {
             static opencc_t od = NULL;
             if (od == NULL)

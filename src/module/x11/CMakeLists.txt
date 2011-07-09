@@ -1,4 +1,4 @@
-include_directories(${fcitx_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${X11_X11_INCLUDE_PATH})
 
 set(FCITX_X11_SOURCES

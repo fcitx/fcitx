@@ -1,4 +1,4 @@
-include_directories(${fcitx_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${CAIRO_XLIB_INCLUDE_DIRS})
 
 set(fcitx_classic_ui_SOURCES

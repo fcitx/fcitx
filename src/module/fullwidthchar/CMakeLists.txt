@@ -1,4 +1,4 @@
-include_directories(${fcitx_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
 set(FCITX_FULLWIDTH_CHAR_SOURCES
     fullwidthchar.c

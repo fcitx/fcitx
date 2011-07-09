@@ -1,5 +1,5 @@
-include_directories(${fcitx_SOURCE_DIR}/src/)
-include_directories(${fcitx_SOURCE_DIR}/src/lib/)
+include_directories(${PROJECT_SOURCE_DIR}/src/)
+include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
 
 set(createPYMB_SOURCES
     createPYMB.c

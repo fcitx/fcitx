@@ -1,4 +1,4 @@
-include_directories(${fcitx_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${DBUS_INCLUDE_DIRS})
 
 set(FCITX_DBUS_SOURCES
