@@ -25,12 +25,13 @@
 #include "module.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <pthread.h>
 #include "instance.h"
 
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
+FCITX_EXPORT_API
 void LoadModule(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
@@ -83,6 +84,7 @@ void LoadModule(FcitxInstance* instance)
     }
 }
 
+FCITX_EXPORT_API
 void RunModule(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
@@ -109,7 +111,7 @@ void RunModule(FcitxInstance* instance)
     }
 }
 
-
+FCITX_EXPORT_API
 void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {
     if (addon == NULL)
@@ -127,6 +129,7 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
     return result;
 }
 
+FCITX_EXPORT_API
 void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
 {
     FcitxAddon* module = GetAddonByName(&instance->addons, name);

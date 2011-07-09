@@ -18,37 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_KEYS_H_
-#define _FCITX_KEYS_H_
-/*
- * Define const keys that will be used in code
- */
-#include "fcitx-config/hotkey.h"
+#ifndef _FCITX_LOG_H_
+#define _FCITX_LOG_H_
 
-boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
+#include <stddef.h>
 
-extern HOTKEYS FCITX_DELETE[2];
-extern HOTKEYS FCITX_CTRL_DELETE[2];
-extern HOTKEYS FCITX_BACKSPACE[2];
-extern HOTKEYS FCITX_CTRL_H[2];
-extern HOTKEYS FCITX_HOME[2];
-extern HOTKEYS FCITX_END[2];
-extern HOTKEYS FCITX_RIGHT[2];
-extern HOTKEYS FCITX_LEFT[2];
-extern HOTKEYS FCITX_ESCAPE[2];
-extern HOTKEYS FCITX_ENTER[2];
-extern HOTKEYS FCITX_LCTRL_LSHIFT[2];
-extern HOTKEYS FCITX_SEMICOLON[2];
-extern HOTKEYS FCITX_SPACE[2];
-extern HOTKEYS FCITX_COMMA[2];
-extern HOTKEYS FCITX_PERIOD[2];
-extern HOTKEYS FCITX_CTRL_5[2];
-extern HOTKEYS FCITX_SEPARATOR[2];
-extern HOTKEYS FCITX_CTRL_ALT_E[2];
-extern HOTKEYS FCITX_LCTRL[2];
-extern HOTKEYS FCITX_LSHIFT[2];
-extern HOTKEYS FCITX_RCTRL[2];
-extern HOTKEYS FCITX_RSHIFT[2];
-extern HOTKEYS FCITX_LSUPER[2];
-extern HOTKEYS FCITX_RSUPER[2];
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum ErrorLevel
+{
+    DEBUG,
+    ERROR,
+    INFO,
+    FATAL,
+    WARNING
+} ErrorLevel;
+
+#define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
+
+void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

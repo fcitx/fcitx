@@ -31,7 +31,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <fcitx-config/uthash.h>
+#include <fcitx-utils/uthash.h>
 
 struct HOTKEYS;
 typedef int32_t boolean;

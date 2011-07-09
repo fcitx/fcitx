@@ -27,7 +27,7 @@
 #include "addon.h"
 #include "ime-internal.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "ui.h"
 #include "hook.h"
 #include "hook-internal.h"
@@ -35,11 +35,13 @@
 
 static const UT_icd backend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
 
+FCITX_EXPORT_API
 FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
 {
     return instance->CurrentIC;
 }
 
+FCITX_EXPORT_API
 boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
     boolean changed = (instance->CurrentIC != ic);
@@ -47,11 +49,13 @@ boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
     return changed;
 }
 
+FCITX_EXPORT_API
 void InitFcitxBackends(UT_array* backends)
 {
     utarray_init(backends, &backend_icd);
 }
 
+FCITX_EXPORT_API
 FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
 {
     UT_array* backends = &instance->backends;
@@ -83,6 +87,7 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
     return rec;
 }
 
+FCITX_EXPORT_API
 FcitxInputContext* FindIC(FcitxInstance* instance, int backendid, void *filter)
 {
     UT_array* backends = &instance->backends;
@@ -100,6 +105,7 @@ FcitxInputContext* FindIC(FcitxInstance* instance, int backendid, void *filter)
     return NULL;
 }
 
+FCITX_EXPORT_API
 void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
 {
     FcitxInputContext             *rec, *last;
@@ -129,6 +135,7 @@ void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
     return;
 }
 
+FCITX_EXPORT_API
 void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (ic == NULL)
@@ -149,6 +156,7 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
  * 
  * @param _connect_id
  */
+FCITX_EXPORT_API
 void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (!ic)
@@ -163,6 +171,7 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     }
 }
 
+FCITX_EXPORT_API
 IME_STATE GetCurrentState(FcitxInstance* instance)
 {
     if (instance->CurrentIC)
@@ -171,6 +180,7 @@ IME_STATE GetCurrentState(FcitxInstance* instance)
         return IS_CLOSED;
 }
 
+FCITX_EXPORT_API
 void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 {
     if (str == NULL)
@@ -192,6 +202,7 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
         free(pstr);
 }
 
+FCITX_EXPORT_API
 void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int y)
 {
     UT_array* backends = &instance->backends;
@@ -203,6 +214,7 @@ void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int 
         backend->SetWindowOffset((*pbackend)->addonInstance, ic, x, y);
 }
 
+FCITX_EXPORT_API
 void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, int* y)
 {
     UT_array* backends = &instance->backends;
@@ -214,7 +226,7 @@ void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, i
         backend->GetWindowPosition((*pbackend)->addonInstance, ic, x, y);
 }
 
-
+FCITX_EXPORT_API
 boolean LoadBackend(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;

@@ -1,20 +1,20 @@
 set(fcitx_config_SOURCES
-	fcitx-config.c
-	hotkey.c
-	sprintf.c
-	xdg.c
+    fcitx-config.c
+    hotkey.c
+    sprintf.c
+    xdg.c
 )
 
 set(FCITX_CONFIG_HEADERS
     fcitx-config.h
     hotkey.h
-    uthash.h
     xdg.h
 )
 
 add_library(fcitx-config SHARED ${fcitx_config_SOURCES})
 target_link_libraries(fcitx-config fcitx-utils)
-set_target_properties(fcitx-config PROPERTIES VERSION 4.1.0 SOVERSION 4.1)
+set_target_properties(fcitx-config PROPERTIES VERSION 4.1.0 SOVERSION 4.1 COMPILE_FLAGS "-fvisibility=hidden")
+
 configure_file(fcitx-config.pc.in fcitx-config.pc)
 
 install(TARGETS fcitx-config DESTINATION ${libdir})

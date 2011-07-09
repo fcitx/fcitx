@@ -21,10 +21,14 @@
 #ifndef _FCITX_UI_H_
 #define _FCITX_UI_H_
 
-#include "fcitx/fcitx.h"
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-utils/utf8.h"
-#include "fcitx-utils/utarray.h"
+#include <fcitx/fcitx.h>
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-utils/utf8.h>
+#include <fcitx-utils/utarray.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define INPUTWND_START_POS_DOWN	8
 #define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数
@@ -132,7 +136,6 @@ typedef struct FcitxUI
 } FcitxUI;
 
 void LoadUserInterface(struct FcitxInstance* instance);
-
 Messages* InitMessages();
 void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...);
 void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...);
@@ -167,5 +170,9 @@ boolean UISupportMainWindow(struct FcitxInstance* instance);
 void GetMainWindowSize(struct FcitxInstance* instance, int* x, int* y, int* w, int* h);
 
 static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

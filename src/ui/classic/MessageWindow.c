@@ -21,7 +21,7 @@
 #include "fcitx/fcitx.h"
 
 #include "MessageWindow.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 
 #include <ctype.h>
 
@@ -33,6 +33,7 @@
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
 #include "module/x11/x11stuff.h"
+#include <fcitx-utils/utils.h>
 
 
 #define MESSAGE_WINDOW_MARGIN 20

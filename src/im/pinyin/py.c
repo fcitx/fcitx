@@ -39,7 +39,7 @@
 
 #include "fcitx-utils/utils.h"
 #include "fcitx/ime.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/ui.h"
 #include "py.h"
 #include "PYFA.h"
@@ -48,7 +48,7 @@
 #include "fcitx-utils/utf8.h"
 #include "fcitx/profile.h"
 #include "fcitx/configfile.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
 #include "fcitx/instance.h"
@@ -721,7 +721,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                 if (!input->iCandWordCount) {
                     if (input->iCodeInputCount == 1 && input->strCodeInput[0] == ';' && pystate->bSP) {
-                        strcpy(input->strStringGet, "；");
+                        strcpy(GetOutputString(input), "；");
                         return IRV_PUNC;
                     }
                     return IRV_TO_PROCESS;
@@ -730,7 +730,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 strGet = PYGetCandWord(pystate, 0);
 
                 if (strGet) {
-                    strcpy(input->strStringGet, strGet);
+                    strcpy(GetOutputString(input), strGet);
 
                     if (input->bIsInRemind)
                         val = IRV_GET_REMIND;
@@ -739,7 +739,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 } else
                     val = IRV_DISPLAY_CANDWORDS;
             } else {
-                strcpy(input->strStringGet, PYGetRemindCandWord(pystate, 0));
+                strcpy(GetOutputString(input), PYGetRemindCandWord(pystate, 0));
                 val = IRV_GET_REMIND;
             }
         } else if (IsHotKey(sym, state, pystate->pyconfig.hkPYDelUserPhr)) {
@@ -829,7 +829,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     } else {
                         strGet = PYGetCandWord(pystate, iKey - 1);
                         if (strGet) {
-                            strcpy(input->strStringGet, strGet);
+                            strcpy(GetOutputString(input), strGet);
 
                             if (input->bIsInRemind)
                                 val = IRV_GET_REMIND;
@@ -840,7 +840,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     }
                 }
             } else {
-                strcpy(input->strStringGet, PYGetRemindCandWord(pystate, iKey - 1));
+                strcpy(GetOutputString(input), PYGetRemindCandWord(pystate, iKey - 1));
                 val = IRV_GET_REMIND;
             }
         } else if (sym == -1) {
@@ -863,12 +863,12 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         pPhrase = pystate->PYCandWords[pystate->iYCDZ].cand.phrase.phrase->strPhrase;
 
                         if (sym == pystate->pyconfig.cPYYCDZ[0])
-                            strcpy(input->strStringGet, pBase);
+                            strcpy(GetOutputString(input), pBase);
                         else {
                             int8_t clen;
                             clen = utf8_char_len(pPhrase);
-                            strncpy(input->strStringGet, pPhrase, clen);
-                            input->strStringGet[clen] = '\0';
+                            strncpy(GetOutputString(input), pPhrase, clen);
+                            GetOutputString(input)[clen] = '\0';
                         }
                         SetMessageCount(GetMessageDown(instance), 0);
                         return IRV_GET_CANDWORDS;

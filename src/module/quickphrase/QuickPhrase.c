@@ -25,14 +25,14 @@
 #include "fcitx/fcitx.h"
 
 #include "QuickPhrase.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/backend.h"
 
 typedef struct QuickPhraseState {
@@ -146,7 +146,7 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
     {
         if (buf1)
             free(buf1);
-        buf1 = trim(buf);
+        buf1 = fcitx_trim(buf);
         char *p = buf1;
 
         while (*p && !isspace(*p))
@@ -343,7 +343,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
         if (iKey > input->iCandWordCount)
             retVal = IRV_DO_NOTHING;
         else {
-            strcpy (input->strStringGet, qpstate->quickPhraseCandWords[iKey-1]->strPhrase);
+            strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[iKey-1]->strPhrase);
             retVal = IRV_GET_CANDWORDS;
             SetMessageCount(GetMessageDown(instance), 0);
         }
@@ -352,7 +352,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
         if (!input->iCandWordCount)
             retVal = IRV_TO_PROCESS;
         else {
-            strcpy (input->strStringGet, qpstate->quickPhraseCandWords[0]->strPhrase);
+            strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[0]->strPhrase);
             retVal = IRV_GET_CANDWORDS;
             SetMessageCount(GetMessageDown(instance), 0);
         }
@@ -392,7 +392,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
         qpstate->iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
         if (qpstate->iLastQuickPhrase < 0)
             qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
-        input->iCandPageCount = (qpstate->iLastQuickPhrase - qpstate->iFirstQuickPhrase + instance->config.iMaxCandWord - 1) / instance->config.iMaxCandWord - 1;
+        input->iCandPageCount = (qpstate->iLastQuickPhrase - qpstate->iFirstQuickPhrase + ConfigGetMaxCandWord(&instance->config) - 1) / ConfigGetMaxCandWord(&instance->config) - 1;
         if ( !currentQuickPhrase || strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen) ) {
             SetMessageCount(GetMessageDown(instance), 0);
             currentQuickPhrase = NULL;
@@ -414,13 +414,13 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
 
     for ( currentQuickPhrase = (QUICK_PHRASE*) utarray_eltptr(qpstate->quickPhrases,
                                qpstate->iFirstQuickPhrase
-                               + input->iCurrentCandPage * instance->config.iMaxCandWord);
+                               + input->iCurrentCandPage * ConfigGetMaxCandWord(&instance->config));
             currentQuickPhrase != NULL;
             currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase))
     {
         if (!strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen)) {
             qpstate->quickPhraseCandWords[input->iCandWordCount++]=currentQuickPhrase;
-            if (input->iCandWordCount==instance->config.iMaxCandWord) {
+            if (input->iCandWordCount==ConfigGetMaxCandWord(&instance->config)) {
                 break;
             }
         }

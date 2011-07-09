@@ -32,10 +32,10 @@
 #include "ime.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx/configfile.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/profile.h"
 #include "ime-internal.h"
 #include "ui.h"
@@ -98,6 +98,7 @@ void InitFcitxIM(FcitxInstance* instance)
     utarray_init(&instance->imeclasses, &imclass_icd);
 }
 
+FCITX_EXPORT_API
 void SaveAllIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
@@ -165,6 +166,7 @@ void UnloadIM(FcitxAddon* pim)
         im->Destroy(pim->addonInstance);
 }
 
+FCITX_EXPORT_API
 void FcitxRegisterIM(FcitxInstance *instance,
                      void *addonInstance,
                      const char* name,
@@ -264,6 +266,7 @@ boolean LoadAllIM(FcitxInstance* instance)
     return true;
 }
 
+FCITX_EXPORT_API
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
@@ -274,6 +277,7 @@ boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
     return false;
 }
 
+FCITX_EXPORT_API
 INPUT_RETURN_VALUE ProcessKey(
     FcitxInstance* instance,
     FcitxKeyEventType event,
@@ -312,7 +316,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     retVal = IRV_DONOT_PROCESS;
                     if (fc->bSendTextWhenSwitchEng) {
                         if (input->iCodeInputCount != 0) {
-                            strcpy(input->strStringGet, input->strCodeInput);
+                            strcpy(GetOutputString(input), input->strCodeInput);
                             retVal = IRV_ENG;
                         }
                     }
@@ -324,7 +328,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     if (!input->bIsInRemind) {
                         pstr = currentIM->GetCandWord(currentIM->klass, 1);
                         if (pstr) {
-                            strcpy(input->strStringGet, pstr);
+                            strcpy(GetOutputString(input), pstr);
                             if (input->bIsInRemind)
                                 retVal = IRV_GET_REMIND;
                             else
@@ -334,7 +338,7 @@ INPUT_RETURN_VALUE ProcessKey(
                         else
                             retVal = IRV_TO_PROCESS;
                     } else {
-                        strcpy(input->strStringGet, " ");
+                        strcpy(GetOutputString(input), " ");
                         SetMessageCount(instance->messageDown, 0);
                         retVal = IRV_GET_CANDWORDS;
                     }
@@ -343,7 +347,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     if (!input->bIsInRemind) {
                         pstr = currentIM->GetCandWord(currentIM->klass, 2);
                         if (pstr) {
-                            strcpy(input->strStringGet, pstr);
+                            strcpy(GetOutputString(input), pstr);
                             if (input->bIsInRemind)
                                 retVal = IRV_GET_REMIND;
                             else
@@ -351,7 +355,7 @@ INPUT_RETURN_VALUE ProcessKey(
                         } else if (input->iCandWordCount)
                             retVal = IRV_DISPLAY_CANDWORDS;
                     } else {
-                        strcpy(input->strStringGet, "　");
+                        strcpy(GetOutputString(input), "　");
                         SetMessageCount(instance->messageDown, 0);
                         retVal = IRV_GET_CANDWORDS;
                     }
@@ -451,6 +455,7 @@ INPUT_RETURN_VALUE ProcessKey(
     return retVal;
 }
 
+FCITX_EXPORT_API
 void ProcessInputReturnValue(
     FcitxInstance* instance, 
     INPUT_RETURN_VALUE retVal
@@ -494,7 +499,7 @@ void ProcessInputReturnValue(
             SetMessageCount(instance->messageUp, 0);
             AddMessageAtLast(instance->messageUp, MSG_INPUT, "%c", input->strCodeInput[0]);
             SetMessageCount(instance->messageDown, 0);
-            AddMessageAtLast(instance->messageDown, MSG_TIPS, "%s", input->strStringGet);
+            AddMessageAtLast(instance->messageDown, MSG_TIPS, "%s", GetOutputString(input));
             UpdateInputWindow(instance);
             
             break;
@@ -504,8 +509,8 @@ void ProcessInputReturnValue(
             UpdateInputWindow(instance);
             break;
         case IRV_GET_REMIND:
-            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
-            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
+            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
+            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));        //粗略统计字数
             if (input->iRemindCandWordCount) {
                 input->bShowNext = input->bShowPrev = false;
                 if (input->iCurrentRemindCandPage > 0)
@@ -521,12 +526,12 @@ void ProcessInputReturnValue(
 
             break;
         case IRV_GET_CANDWORDS:
-            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
+            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
             SetMessageCount(GetMessageUp(instance), 0);
             SetMessageCount(GetMessageDown(instance), 0);
             if (fc->bPhraseTips && currentIM->PhraseTips)
                 DoPhraseTips(instance);
-            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));
+            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
             UpdateInputWindow(instance);
 
             ResetInput(instance);
@@ -534,18 +539,18 @@ void ProcessInputReturnValue(
             break;
         case IRV_ENG:
         case IRV_PUNC:
-            input->iHZInputed += (int) (utf8_strlen(input->strStringGet));        //粗略统计字数
+            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));        //粗略统计字数
             ResetInput(instance);
             SetMessageCount(GetMessageUp(instance), 0);
             SetMessageCount(GetMessageDown(instance), 0);
             UpdateInputWindow(instance);
         case IRV_GET_CANDWORDS_NEXT:
-            CommitString(instance, GetCurrentIC(instance), input->strStringGet);
+            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
             input->bLastIsNumber = false;
             input->lastIsSingleHZ = 0;
 
             if (retVal == IRV_GET_CANDWORDS_NEXT || input->lastIsSingleHZ == -1) {
-                input->iHZInputed += (int) (utf8_strlen(input->strStringGet));    //粗略统计字数
+                input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));    //粗略统计字数
                 ShowInputWindow(instance);
             }
 
@@ -562,6 +567,7 @@ void ProcessInputReturnValue(
     }
 }
 
+FCITX_EXPORT_API
 void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
     UT_array* backends = &instance->backends;
@@ -572,6 +578,7 @@ void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventTyp
     backend->ForwardKey((*pbackend)->addonInstance, ic, event, sym, state);
 }
 
+FCITX_EXPORT_API
 void SwitchIM(FcitxInstance* instance, int index)
 {
     UT_array* imes = &instance->imes;
@@ -618,6 +625,7 @@ void SwitchIM(FcitxInstance* instance, int index)
 /** 
  * @brief 重置输入状态
  */
+FCITX_EXPORT_API
 void ResetInput(FcitxInstance* instance)
 {
     FcitxInputState *input = &instance->input;
@@ -681,7 +689,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
         case K_ENTER_SEND:
             SetMessageCount(instance->messageDown, 0);
             SetMessageCount(instance->messageUp, 0);
-            strcpy(input->strStringGet, input->strCodeInput);
+            strcpy(GetOutputString(input), input->strCodeInput);
             retVal = IRV_ENG;
             break;
         }
@@ -713,6 +721,7 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
     return IRV_DO_NOTHING;
 }
 
+FCITX_EXPORT_API
 void ReloadConfig(FcitxInstance *instance)
 {
     LoadConfig(&instance->config);
@@ -757,16 +766,13 @@ void UpdateInputWindow(FcitxInstance *instance)
         ShowInputWindow(instance);
 }
 
-boolean IsInRemind(FcitxInputState* input)
-{
-    return input->bIsInRemind;
-}
-
+FCITX_EXPORT_API
 char* GetOutputString(FcitxInputState* input)
 {
     return input->strStringGet;
 }
 
+FCITX_EXPORT_API
 FcitxIM* GetCurrentIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
@@ -774,6 +780,7 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
     return pcurrentIM;
 }
 
+FCITX_EXPORT_API
 void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
     if (ic == NULL)

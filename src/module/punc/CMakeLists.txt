@@ -7,6 +7,7 @@ set(FCITX_PUNC_SOURCES
 add_library(fcitx-punc MODULE ${FCITX_PUNC_SOURCES})
 install(TARGETS fcitx-punc DESTINATION ${addondir})
 set_target_properties( fcitx-punc PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+target_link_libraries( fcitx-punc fcitx-config fcitx-core)
 
 install(FILES fcitx-punc.conf DESTINATION ${addonconfigdir})
 install(FILES punc.h DESTINATION ${includedir}/fcitx/module/punc/)

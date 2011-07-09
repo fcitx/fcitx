@@ -32,7 +32,7 @@
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-config/fcitx-config.h"
 #include "IMdkit.h"
 #include "Xi18n.h"

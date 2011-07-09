@@ -39,12 +39,13 @@
 #include "fcitx/instance.h"
 
 #include "MainWindow.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
 #include "AboutWindow.h"
 #include "MenuWindow.h"
+#include <fcitx-utils/utils.h>
 
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
 

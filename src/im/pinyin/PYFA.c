@@ -23,8 +23,9 @@
 #include "pyconfig.h"
 
 #include <stdio.h>
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <string.h>
+#include <fcitx-utils/utils.h>
 
 const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
     //{"an","ang"},

@@ -30,9 +30,9 @@
 #include "punc.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/backend.h"
 #include "fcitx/instance.h"
 
@@ -129,12 +129,11 @@ void ResetPunc(void* arg)
     
 }
 
-
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
-    char* strStringGet = GetOutputString(&puncState->owner->input);
+    FcitxInputState* input = &puncState->owner->input;
     FcitxIM* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
     if (instance->profile.bUseWidePunc) {
@@ -158,12 +157,12 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
          * 在有候选词未输入的情况下，选择第一个候选词并输入标点
          */
         if (pPunc) {
-            strStringGet[0] = '\0';
-            if (!IsInRemind(&puncState->owner->input))
+            GetOutputString(input)[0] = '\0';
+            if (puncState->owner->input.bIsInRemind)
                 pstr = currentIM->GetCandWord(currentIM->klass, 0);
             if (pstr)
-                strcpy(strStringGet, pstr);
-            strcat(strStringGet, pPunc);
+                strcpy(GetOutputString(input), pstr);
+            strcat(GetOutputString(input), pPunc);
             SetMessageCount(puncState->owner->messageDown, 0);
             SetMessageCount(puncState->owner->messageUp, 0);
             
@@ -189,16 +188,16 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                 if (IsHotKey(sym, state, FCITX_SPACE))
                     *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
                 else {
-                    strStringGet[0] = '\0';
-                    if (!IsInRemind(&puncState->owner->input))
+                    GetOutputString(input)[0] = '\0';
+                    if (puncState->owner->input.bIsInRemind)
                         pstr = currentIM->GetCandWord(currentIM->klass, 0);
                     if (pstr)
-                        strcpy(strStringGet, pstr);
-                    iLen = strlen(strStringGet);
+                        strcpy(GetOutputString(input), pstr);
+                    iLen = strlen(GetOutputString(input));
                     SetMessageCount(puncState->owner->messageDown, 0);
                     SetMessageCount(puncState->owner->messageUp, 0);
-                    strStringGet[iLen] = sym;
-                    strStringGet[iLen + 1] = '\0';
+                    GetOutputString(input)[iLen] = sym;
+                    GetOutputString(input)[iLen + 1] = '\0';
                     *retVal = IRV_ENG;
                     return true;
                 }

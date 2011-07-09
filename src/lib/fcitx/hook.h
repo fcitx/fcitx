@@ -25,9 +25,13 @@
 
 #ifndef _HOOK_H
 #define _HOOK_H
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/hotkey.h"
-#include "ime.h"
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-config/hotkey.h>
+#include <fcitx/ime.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef boolean (*FcitxKeyFilter)(void* arg, long unsigned int sym, 
                              unsigned int state,
@@ -84,5 +88,9 @@ void RegisterTriggerOffHook(struct FcitxInstance* instance, FcitxIMEventHook val
 void RegisterInputFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
 void RegisterInputUnFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
 char* ProcessOutputFilter(struct FcitxInstance* instance, char *in);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -28,13 +28,14 @@
 
 #include "fcitx/module.h"
 #include "fcitx-utils/utf8.h"
-#include "fcitx-config/uthash.h"
+#include "fcitx-utils/uthash.h"
 #include "fcitx-config/xdg.h"
 #include <errno.h>
 #include "fcitx/hook.h"
 #include "fcitx/ui.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
+#include <fcitx-utils/utils.h>
 
 #define TABLE_GBKS2T "gbks2t.tab"
 

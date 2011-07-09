@@ -29,9 +29,9 @@
 #include "fcitx/hook.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/backend.h"
 #include "fcitx/instance.h"
 

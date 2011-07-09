@@ -39,12 +39,12 @@
 #include <X11/keysym.h>
 
 #include "im/pinyin/pydef.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/ui.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/profile.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
 #include <module/punc/punc.h>
 #include "fcitx/module.h"
@@ -851,7 +851,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             }
 
                             if (input->iCandWordCount == 1) {
-                                strcpy (input->strStringGet, TableGetCandWord (tbl, 0));
+                                strcpy (GetOutputString(input), TableGetCandWord (tbl, 0));
                                 return IRV_GET_CANDWORDS;
                             }
 
@@ -859,7 +859,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                         }
                         else if (table->iTableAutoSendToClientWhenNone && (input->iCodeInputCount == (table->iTableAutoSendToClientWhenNone + 1)) && !input->iCandWordCount) {
                             if ( strLastFirstCand && (lastFirstCandType!=CT_AUTOPHRASE)) {
-                                strcpy (input->strStringGet, strLastFirstCand);
+                                strcpy (GetOutputString(input), strLastFirstCand);
                                 TableUpdateHitFrequency(tbl, pLastCandRecord);
                                 retVal=IRV_GET_CANDWORDS_NEXT;
                             }
@@ -879,7 +879,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                                 }
 
                                 if (retVal != IRV_DISPLAY_CANDWORDS) {
-                                    strcpy (input->strStringGet, TableGetCandWord (tbl, 0));
+                                    strcpy (GetOutputString(input), TableGetCandWord (tbl, 0));
                                     input->iCandWordCount = 0;
                                     if (input->bIsInRemind)
                                         retVal = IRV_GET_REMIND;
@@ -889,7 +889,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             }
                         }
                         else if ((input->iCodeInputCount == 1) && strTemp && !input->iCandWordCount) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
-                            strcpy (input->strStringGet, strTemp);
+                            strcpy (GetOutputString(input), strTemp);
                             retVal = IRV_PUNC;
                         }
                     }
@@ -898,7 +898,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                     if (table->iTableAutoSendToClient) {
                         if (input->iCandWordCount) {
                             if (tableCandWord[0].flag != CT_AUTOPHRASE) {
-                                strcpy (input->strStringGet, TableGetCandWord (tbl, 0));
+                                strcpy (GetOutputString(input), TableGetCandWord (tbl, 0));
                                 retVal = IRV_GET_CANDWORDS_NEXT;
                             }
                             else
@@ -989,16 +989,16 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             Table_LoadPYBaseDict (tbl);
 
             //如果刚刚输入的是个词组，刚不查拼音
-            if (utf8_strlen (input->strStringGet) != 1)
+            if (utf8_strlen (GetOutputString(input)) != 1)
                 return IRV_DO_NOTHING;
 
             input->iCodeInputCount = 0;
             SetMessageCount(instance->messageUp, 0);
-            AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strStringGet);
+            AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", GetOutputString(input));
 
             SetMessageCount(instance->messageDown, 0);
             AddMessageAtLast(instance->messageDown, MSG_CODE, "读音：");
-            Table_PYGetPYByHZ (tbl, input->strStringGet, strPY);
+            Table_PYGetPYByHZ (tbl, GetOutputString(input), strPY);
             AddMessageAtLast(instance->messageDown, MSG_TIPS, (strPY[0]) ? strPY : "无法查到该字读音");
             instance->bShowCursor = false;
 
@@ -1039,7 +1039,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                         //如果是拼音，进入快速调整字频方式
                         if (strcmp (input->strCodeInput, table->strSymbol) && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
                             Table_PYGetCandWord (tbl, iKey - 1);
-                        strcpy (input->strStringGet, TableGetCandWord (tbl, iKey - 1));
+                        strcpy (GetOutputString(input), TableGetCandWord (tbl, iKey - 1));
 
                         if (input->bIsInRemind)
                             retVal = IRV_GET_REMIND;
@@ -1049,7 +1049,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 }
             }
             else {
-                strcpy (input->strStringGet, TableGetRemindCandWord (tbl, iKey - 1));
+                strcpy (GetOutputString(input), TableGetRemindCandWord (tbl, iKey - 1));
                 retVal = IRV_GET_REMIND;
             }
         }
@@ -1101,7 +1101,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             return IRV_CLEAN;
                         }
 
-                        strcpy (input->strStringGet, TableGetCandWord (tbl, 0));
+                        strcpy (GetOutputString(input), TableGetCandWord (tbl, 0));
                     }
                     else
                         SetMessageCount(instance->messageDown, 0);
@@ -1113,7 +1113,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
                 }
                 else {
-                    strcpy (input->strStringGet, TableGetRemindCandWord (tbl, 0));
+                    strcpy (GetOutputString(input), TableGetRemindCandWord (tbl, 0));
                     retVal = IRV_GET_REMIND;
                 }
             }
@@ -1233,7 +1233,7 @@ char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bR
         ;
     }
 
-    if (profile->bUseRemind && _bRemind) {
+    if (UseRemind(profile) && _bRemind) {
         strcpy (tbl->strTableRemindSource, pCandWord);
         TableGetRemindCandWords (tbl, SM_FIRST);
     }

@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "instance.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <limits.h>
 #include "ime-internal.h"
 #include "ui.h"
@@ -70,8 +70,7 @@ void Version ()
     printf ("fcitx version: %s\n", VERSION);
 }
 
-
-
+FCITX_EXPORT_API
 FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 {
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
@@ -149,17 +148,20 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     return instance;
 }
 
+FCITX_EXPORT_API
 void EndInstance(FcitxInstance* instance)
 {
     SaveAllIM(instance);
     sem_post(instance->sem);
 }
 
+FCITX_EXPORT_API
 Messages* GetMessageUp(FcitxInstance *instance)
 {
     return instance->messageUp;
 }
 
+FCITX_EXPORT_API
 Messages* GetMessageDown(FcitxInstance *instance)
 {
     return instance->messageDown;
@@ -173,7 +175,7 @@ void FcitxInitThread(FcitxInstance* inst)
         FcitxLog(ERROR, _("pthread mutex init failed"));
 }
 
-
+FCITX_EXPORT_API
 int FcitxLock(FcitxInstance* inst)
 {
     if (inst->bMutexInited)
@@ -181,6 +183,7 @@ int FcitxLock(FcitxInstance* inst)
     return 0;
 }
 
+FCITX_EXPORT_API
 int FcitxUnlock(FcitxInstance* inst)
 {
     if (inst->bMutexInited)

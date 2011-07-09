@@ -22,7 +22,7 @@
 #include <libintl.h>
 
 #include "fcitx/fcitx.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "pyconfig.h"
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx-config/xdg.h"

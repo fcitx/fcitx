@@ -36,12 +36,10 @@
 #include <sys/stat.h>
 
 #include "fcitx/fcitx.h"
-#include "fcitx/ui.h"
 #include "utils.h"
-#include "fcitx-config/uthash.h"
-#include "fcitx-config/xdg.h"
 #include "utf8.h"
 #include "utf8_in_gb18030.h"
+#include <ctype.h>
 
 static int cmpi(const void * a, const void *b)
 {
@@ -52,6 +50,7 @@ static int cmpi(const void * a, const void *b)
  * 计算文件中有多少行
  * 注意:文件中的空行也做为一行处理
  */
+FCITX_EXPORT_API
 int CalculateRecordNumber (FILE * fpDict)
 {
     char           *strBuf = NULL;
@@ -69,7 +68,7 @@ int CalculateRecordNumber (FILE * fpDict)
     return nNumber;
 }
 
-
+FCITX_EXPORT_API
 int CalHZIndex (char *strHZ)
 {
     unsigned int iutf = 0;
@@ -118,6 +117,7 @@ int CalHZIndex (char *strHZ)
  *
  * @return
  */
+FCITX_EXPORT_API
 void *custom_bsearch(const void *key, const void *base,
                      size_t nmemb, size_t size, int accurate,
                      int (*compar)(const void *, const void *))
@@ -150,7 +150,7 @@ void *custom_bsearch(const void *key, const void *base,
     }
 }
 
-
+FCITX_EXPORT_API
 void InitAsDaemon()
 {
     pid_t pid;
@@ -174,6 +174,7 @@ void InitAsDaemon()
     umask(0);
 }
 
+FCITX_EXPORT_API
 UT_array* SplitString(const char *str, char delm)
 {
     UT_array* array;
@@ -196,7 +197,53 @@ UT_array* SplitString(const char *str, char delm)
     return array;
 }
 
+FCITX_EXPORT_API
 void FreeStringList(UT_array *list)
 {
     utarray_free(list);
+}
+
+
+/** 
+ * @brief 返回申请后的内存，并清零
+ * 
+ * @param 申请的内存长度
+ * 
+ * @return 申请的内存指针
+ */
+FCITX_EXPORT_API
+void *fcitx_malloc0(size_t bytes)
+{
+    void *p = malloc(bytes);
+    if (!p)
+        return NULL;
+
+    memset(p, 0, bytes);
+    return p;
+}
+
+/** 
+ * @brief 去除字符串首末尾空白字符
+ * 
+ * @param s
+ * 
+ * @return malloc的字符串，需要free
+ */
+FCITX_EXPORT_API
+char *fcitx_trim(char *s)
+{
+    register char *end;
+    register char csave;
+    
+    while (isspace(*s))                 /* skip leading space */
+        ++s;
+    end = strchr(s,'\0') - 1;
+    while (end >= s && isspace(*end))               /* skip trailing space */
+        --end;
+    
+    csave = end[1];
+    end[1] = '\0';
+    s = strdup(s);
+    end[1] = csave;
+    return (s);
 }

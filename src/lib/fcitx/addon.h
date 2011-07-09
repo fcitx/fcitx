@@ -26,8 +26,13 @@
 
 #ifndef _FCITX_ADDON_H_
 #define _FCITX_ADDON_H_
-#include "fcitx-utils/utarray.h"
-#include "fcitx-config/fcitx-config.h"
+
+#include <fcitx-utils/utarray.h>
+#include <fcitx-config/fcitx-config.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct FcitxInstance;
 /**
@@ -128,5 +133,9 @@ boolean AddonIsAvailable(UT_array* addons, const char* name);
  * @return FcitxAddon*
  **/
 FcitxAddon* GetAddonByName(UT_array* addons, const char* name);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

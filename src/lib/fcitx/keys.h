@@ -18,24 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_CUTILS_H_
-#define _FCITX_CUTILS_H_
+#ifndef _FCITX_KEYS_H_
+#define _FCITX_KEYS_H_
 
-#include <stddef.h>
+#include <fcitx-config/hotkey.h>
 
-typedef enum ErrorLevel
-{
-    DEBUG,
-    ERROR,
-    INFO,
-    FATAL,
-    WARNING
-} ErrorLevel;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-char *trim(char *s);
-void *fcitx_malloc0(size_t bytes);
+/*
+ * Define const keys that will be used in code
+ */
 
-#define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
-void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
+
+extern HOTKEYS FCITX_DELETE[2];
+extern HOTKEYS FCITX_CTRL_DELETE[2];
+extern HOTKEYS FCITX_BACKSPACE[2];
+extern HOTKEYS FCITX_CTRL_H[2];
+extern HOTKEYS FCITX_HOME[2];
+extern HOTKEYS FCITX_END[2];
+extern HOTKEYS FCITX_RIGHT[2];
+extern HOTKEYS FCITX_LEFT[2];
+extern HOTKEYS FCITX_ESCAPE[2];
+extern HOTKEYS FCITX_ENTER[2];
+extern HOTKEYS FCITX_LCTRL_LSHIFT[2];
+extern HOTKEYS FCITX_SEMICOLON[2];
+extern HOTKEYS FCITX_SPACE[2];
+extern HOTKEYS FCITX_COMMA[2];
+extern HOTKEYS FCITX_PERIOD[2];
+extern HOTKEYS FCITX_CTRL_5[2];
+extern HOTKEYS FCITX_SEPARATOR[2];
+extern HOTKEYS FCITX_CTRL_ALT_E[2];
+extern HOTKEYS FCITX_LCTRL[2];
+extern HOTKEYS FCITX_LSHIFT[2];
+extern HOTKEYS FCITX_RCTRL[2];
+extern HOTKEYS FCITX_RSHIFT[2];
+extern HOTKEYS FCITX_LSUPER[2];
+extern HOTKEYS FCITX_RSUPER[2];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

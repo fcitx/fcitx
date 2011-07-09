@@ -30,10 +30,13 @@
 #ifndef _FCITX_UTILS_H_
 #define _FCITX_UTILS_H_
 
-#include "fcitx-config/uthash.h"
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-utils/cutils.h"
-#include "utarray.h"
+#include <stdio.h>
+#include <fcitx-utils/utarray.h>
+#include <fcitx-utils/uthash.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief A hash set for string
@@ -48,10 +51,16 @@ void *custom_bsearch(const void *key, const void *base,
         int (*compar)(const void *, const void *));
 
 void InitAsDaemon();
-int             CalculateRecordNumber (FILE * fpDict);
+int             CalculateRecordNumber (FILE* fpDict);
 void            SetSwitchKey (char *str);
 int             CalHZIndex (char *strHZ);
 UT_array* SplitString(const char *str, char delm);
 void FreeStringList(UT_array *list);
+char *fcitx_trim(char *s);
+void *fcitx_malloc0(size_t bytes);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

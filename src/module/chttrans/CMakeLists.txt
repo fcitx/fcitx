@@ -11,6 +11,7 @@ set(FCITX_CHTTRANS_SOURCES
 add_library(fcitx-chttrans MODULE ${FCITX_CHTTRANS_SOURCES})
 install(TARGETS fcitx-chttrans DESTINATION ${addondir})
 set_target_properties( fcitx-chttrans PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+    target_link_libraries( fcitx-chttrans fcitx-config fcitx-core )
 
 if (_ENABLE_OPENCC)
     target_link_libraries( fcitx-chttrans ${OPENCC_LIBRARIES} )

@@ -20,10 +20,12 @@
 #ifndef _FCITX_CONFIGFILE_H_
 #define _FCITX_CONFIGFILE_H_
 
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/hotkey.h"
-#define INPUT_METHODS	5	//标示输入法的类别数量
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-config/hotkey.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum ADJUSTORDER {
     AD_NO = 0,
@@ -94,6 +96,9 @@ void LoadConfig(FcitxConfig* fc);
 void SaveConfig(FcitxConfig* fc);
 int ConfigGetMaxCandWord(FcitxConfig* fc);
 boolean ConfigGetPointAfterNumber(FcitxConfig* fc);
-boolean IsCenterInputWindow(FcitxConfig* fc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

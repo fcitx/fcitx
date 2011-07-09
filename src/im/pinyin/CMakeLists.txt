@@ -10,6 +10,7 @@ set(FCITX_PINYIN_SOURCES
 
 add_library(fcitx-pinyin MODULE ${FCITX_PINYIN_SOURCES})
 set_target_properties( fcitx-pinyin PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+target_link_libraries( fcitx-pinyin fcitx-config fcitx-core)
 
 install(TARGETS fcitx-pinyin DESTINATION ${addondir})
 install(FILES fcitx-pinyin.conf DESTINATION ${addonconfigdir})

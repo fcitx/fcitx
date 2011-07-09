@@ -22,7 +22,7 @@
 #include <libintl.h>
 
 #include "fcitx.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "profile.h"
 #include "fcitx-config/xdg.h"
 
@@ -38,6 +38,7 @@ CONFIG_BINDING_END()
 /** 
  * @brief 加载配置文件
  */
+FCITX_EXPORT_API
 void LoadProfile(FcitxProfile* profile)
 {
     FILE *fp;
@@ -64,6 +65,7 @@ void LoadProfile(FcitxProfile* profile)
 
 CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
 
+FCITX_EXPORT_API
 void SaveProfile(FcitxProfile* profile)
 {
     ConfigFileDesc* profileDesc = GetProfileDesc();
@@ -72,6 +74,7 @@ void SaveProfile(FcitxProfile* profile)
     fclose(fp);
 }
 
+FCITX_EXPORT_API
 boolean UseRemind(FcitxProfile* profile)
 {
     return profile->bUseRemind;

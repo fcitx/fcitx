@@ -34,11 +34,12 @@
 #include "skin.h"
 #include "classicui.h"
 #include "module/x11/x11stuff.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/backend.h"
 #include "fcitx/module.h"
 #include "MenuWindow.h"
 #include "fcitx/instance.h"
+#include <fcitx-utils/utils.h>
 
 static boolean TrayEventHandler(void *arg, XEvent* event);
 

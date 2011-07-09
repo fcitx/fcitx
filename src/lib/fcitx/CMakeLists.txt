@@ -8,6 +8,7 @@ set(LIBFCITX_SOURCES
     ui.c
     instance.c
     module.c
+    keys.c
 )
 
 set(FCITX_HEADERS
@@ -21,10 +22,11 @@ set(FCITX_HEADERS
     addon.h
     backend.h
     fcitx.h
+    keys.h
 )
 
 add_library(fcitx-core SHARED ${LIBFCITX_SOURCES})
-set_target_properties(fcitx-core PROPERTIES VERSION 0.1.0 SOVERSION 0.1)
+set_target_properties(fcitx-core PROPERTIES VERSION 0.1.0 SOVERSION 0.1 COMPILE_FLAGS "-fvisibility=hidden")
 target_link_libraries(fcitx-core fcitx-config)
 configure_file(fcitx.pc.in fcitx.pc)
 

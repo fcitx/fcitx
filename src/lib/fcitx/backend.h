@@ -21,10 +21,14 @@
 #ifndef _FCITX_BACKEND_H_
 #define _FCITX_BACKEND_H_
 
-#include "fcitx-utils/utarray.h"
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-config/hotkey.h"
-#include "ime.h"
+#include <fcitx-utils/utarray.h>
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-config/hotkey.h>
+#include <fcitx/ime.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct FcitxInstance;
 
@@ -187,5 +191,9 @@ void GetWindowPosition(struct FcitxInstance*, FcitxInputContext *ic, int* x, int
  * @return IME_STATE
  **/
 IME_STATE GetCurrentState(struct FcitxInstance* instance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

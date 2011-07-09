@@ -23,7 +23,7 @@
 #include "fcitx/ui.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/hotkey.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "xim.h"
 #include "ximhandler.h"
 #include "Xi18n.h"

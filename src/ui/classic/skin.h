@@ -32,7 +32,7 @@
 
 #define SIZEX 800
 #define SIZEY 200
-#include "fcitx-config/uthash.h"
+#include "fcitx-utils/uthash.h"
 #include <cairo.h>
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx/ui.h"

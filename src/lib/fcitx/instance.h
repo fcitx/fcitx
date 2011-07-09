@@ -20,13 +20,17 @@
 #ifndef __FCITX_INSTANCE_H__
 #define __FCITX_INSTANCE_H__
 
-#include "fcitx/ui.h"
-#include "fcitx-utils/utarray.h"
-#include "fcitx/configfile.h"
-#include "fcitx/profile.h"
-#include "addon.h"
-#include "ime.h"
 #include <semaphore.h>
+#include <fcitx/ui.h>
+#include <fcitx-utils/utarray.h>
+#include <fcitx/configfile.h>
+#include <fcitx/profile.h>
+#include <fcitx/addon.h>
+#include <fcitx/ime.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct HookStack;
 struct FcitxInputContext;
@@ -78,5 +82,9 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
 int FcitxLock(FcitxInstance* instance);
 int FcitxUnlock(FcitxInstance* instance);
 void EndInstance(FcitxInstance* instance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -31,10 +31,11 @@
 #include <limits.h>
 
 #include "fcitx/fcitx.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/module.h"
 #include "fcitx/backend.h"
 #include "fcitx/instance.h"
+#include <fcitx-utils/utils.h>
 
 static void* RemoteCreate(FcitxInstance* instance);
 static void* RemoteRun(void* arg);

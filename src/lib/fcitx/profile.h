@@ -21,7 +21,11 @@
 #ifndef _FCITX_PROFILE_H_
 #define _FCITX_PROFILE_H_
 
-#include "fcitx-config/fcitx-config.h"
+#include <fcitx-config/fcitx-config.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct FcitxProfile
 {
@@ -35,5 +39,9 @@ typedef struct FcitxProfile
 void LoadProfile(FcitxProfile* profile);
 void SaveProfile(FcitxProfile* profile);
 boolean UseRemind(FcitxProfile* profile);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -24,9 +24,10 @@
 #include <stdlib.h>
 #include <libintl.h>
 
+#include "fcitx/fcitx.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/configfile.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "errorhandler.h"
 

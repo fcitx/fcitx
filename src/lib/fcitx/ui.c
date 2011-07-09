@@ -26,7 +26,7 @@
 #include "addon.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <sys/stat.h>
 #include "fcitx-utils/utils.h"
 #include "instance.h"
@@ -44,11 +44,13 @@ struct Messages {
     boolean changed;
 };
 
+FCITX_EXPORT_API
 Messages* InitMessages()
 {
     return fcitx_malloc0(sizeof(Messages));
 }
 
+FCITX_EXPORT_API
 void SetMessageCount(Messages* m, int s)
 {
     if ((s) <= MAX_MESSAGE_COUNT && s >= 0)
@@ -56,31 +58,37 @@ void SetMessageCount(Messages* m, int s)
     (m)->changed = true;
 }
 
+FCITX_EXPORT_API
 int GetMessageCount(Messages* m)
 {
     return m->msgCount;
 }
 
+FCITX_EXPORT_API
 boolean IsMessageChanged(Messages* m)
 {
     return m->changed;
 }
 
+FCITX_EXPORT_API
 char* GetMessageString(Messages* m, int index)
 {
     return m->msg[index].strMsg;
 }
 
+FCITX_EXPORT_API
 MSG_TYPE GetMessageType(Messages* m, int index)
 {
     return m->msg[index].type;
 }
 
+FCITX_EXPORT_API
 void SetMessageChanged(Messages* m, boolean changed)
 {
     m->changed = changed;
 }
 
+FCITX_EXPORT_API
 void LoadUserInterface(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
@@ -158,6 +166,7 @@ void LoadUserInterface(FcitxInstance* instance)
         FcitxLog(ERROR, "no usable user interface.");
 }
 
+FCITX_EXPORT_API
 void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...)
 {
 
@@ -172,6 +181,7 @@ void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...)
     }
 }
 
+FCITX_EXPORT_API
 void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...)
 {
     va_list ap;
@@ -180,6 +190,7 @@ void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt,
     va_end(ap);
 }
 
+FCITX_EXPORT_API
 void SetMessageText(Messages* message, int position, const char* fmt, ...)
 {
     va_list ap;
@@ -188,6 +199,7 @@ void SetMessageText(Messages* message, int position, const char* fmt, ...)
     va_end(ap);
 }
 
+FCITX_EXPORT_API
 void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt, va_list ap)
 {
     if (position < MAX_MESSAGE_COUNT)
@@ -198,36 +210,42 @@ void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt
     }
 }
 
+FCITX_EXPORT_API
 void MessageConcatLast(Messages* message, const char* text)
 {
     strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
+FCITX_EXPORT_API
 void MessageConcat(Messages* message, int position, const char* text)
 {
     strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
+FCITX_EXPORT_API
 void CloseInputWindow(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->CloseInputWindow)
         instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
 }
 
+FCITX_EXPORT_API
 void ShowInputWindow(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->ShowInputWindow)
         instance->ui->ui->ShowInputWindow(instance->ui->addonInstance);
 }
 
+FCITX_EXPORT_API
 void MoveInputWindow(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->MoveInputWindow)
         instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
 
+FCITX_EXPORT_API
 FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
 {
     UT_array* uistats = &instance->uistats;
@@ -240,6 +258,7 @@ FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
    return status;
 }
 
+FCITX_EXPORT_API
 void UpdateStatus(FcitxInstance* instance, const char* name)
 {
     FcitxLog(DEBUG, "Update Status for %s", name);
@@ -254,6 +273,7 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
     }
 }
 
+FCITX_EXPORT_API
 void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg))
 {
     FcitxUIStatus status;
@@ -271,6 +291,7 @@ void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name,
     utarray_push_back(uistats, &status);
 }
 
+FCITX_EXPORT_API
 void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
 {
     UT_array* uimenus = &instance->uimenus;
@@ -280,6 +301,7 @@ void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
     utarray_push_back(uimenus, &menu);    
 }
 
+FCITX_EXPORT_API
 void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMenu* subMenu)
 {
     MenuShell shell;
@@ -298,11 +320,13 @@ void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMe
     utarray_push_back(&menu->shell, &shell);
 }
 
+FCITX_EXPORT_API
 void ClearMenuShell(FcitxUIMenu* menu)
 {
     utarray_clear(&menu->shell);
 }
 
+FCITX_EXPORT_API
 void OnInputFocus(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputFocus)
@@ -313,6 +337,7 @@ void OnInputFocus(FcitxInstance* instance)
     CloseInputWindow(instance);
 }
 
+FCITX_EXPORT_API
 void OnInputUnFocus(struct FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputUnFocus)
@@ -321,6 +346,7 @@ void OnInputUnFocus(struct FcitxInstance* instance)
     InputUnFocusHook(instance);
 }
 
+FCITX_EXPORT_API
 void OnTriggerOn(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOn)
@@ -330,12 +356,14 @@ void OnTriggerOn(FcitxInstance* instance)
     ShowInputSpeed(instance);
 }
 
+FCITX_EXPORT_API
 void DisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)
 {
     if (instance->ui && instance->ui->ui->DisplayMessage)
         instance->ui->ui->DisplayMessage(instance->ui->addonInstance, title, msg, length);
 }
 
+FCITX_EXPORT_API
 void OnTriggerOff(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOff)
@@ -344,6 +372,7 @@ void OnTriggerOff(FcitxInstance* instance)
     TriggerOffHook(instance);
 }
 
+FCITX_EXPORT_API
 void UpdateMenuShell(FcitxUIMenu* menu)
 {
     if (menu && menu->UpdateMenuShell)
@@ -355,6 +384,7 @@ void UpdateMenuShell(FcitxUIMenu* menu)
 /*
  * 判断鼠标点击处是否处于指定的区域内
  */
+FCITX_EXPORT_API
 boolean
 IsInBox(int x0, int y0, int x1, int y1, int w, int h)
 {
@@ -364,6 +394,7 @@ IsInBox(int x0, int y0, int x1, int y1, int w, int h)
     return false;
 }
 
+FCITX_EXPORT_API
 boolean UISupportMainWindow(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->MainWindowSizeHint)
@@ -372,6 +403,7 @@ boolean UISupportMainWindow(FcitxInstance* instance)
         return false;
 }
 
+FCITX_EXPORT_API
 void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
 {
     if (instance->ui && instance->ui->ui->MainWindowSizeHint)

@@ -29,9 +29,16 @@
 #ifndef _FCITX_IME_H_
 #define _FCITX_IME_H_
 
-#include "fcitx-utils/utf8.h"
+#include <fcitx-utils/utf8.h>
+#include <fcitx-config/hotkey.h>
 
-#define MAX_IM_NAME    (8 * 6)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define MAX_CODE_LEN    63
+
+#define MAX_IM_NAME    (8 * UTF8_MAX_LENGTH)
 
 #define MAX_CAND_LEN    127
 #define MAX_TIPS_LEN    9
@@ -40,8 +47,6 @@
 #define MAX_USER_INPUT    300
 
 #define HOT_KEY_COUNT   2
-#include "fcitx/fcitx.h"
-#include "fcitx-config/hotkey.h"
 
 struct FcitxInputContext;
 struct FcitxInstance;
@@ -142,7 +147,6 @@ typedef struct FcitxInputState {
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
-boolean IsInRemind(FcitxInputState* input);
 char* GetOutputString(FcitxInputState* input);
 struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
 void EnableIM(struct FcitxInstance* instance, struct FcitxInputContext* ic, boolean keepState);
@@ -179,5 +183,9 @@ void ForwardKey(struct FcitxInstance* instance, struct FcitxInputContext* ic, Fc
 void SaveAllIM (struct FcitxInstance* instance);
 void ReloadConfig(struct FcitxInstance* instance);
 void SwitchIM (struct FcitxInstance* instance, int index);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -36,7 +36,7 @@
 #include "classicui.h"
 #include "classicuiinterface.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
 #include "fcitx/backend.h"
 #include "InputWindow.h"
@@ -46,6 +46,7 @@
 #include "AboutWindow.h"
 #include "MessageWindow.h"
 #include "fcitx/hook.h"
+#include <fcitx-utils/utils.h>
 
 struct FcitxSkin;
 boolean MainMenuAction(FcitxUIMenu* menu, int index);

@@ -32,9 +32,10 @@
 #include "fcitx-config/xdg.h"
 
 #include "AutoEng.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 #include "fcitx/ui.h"
 #include "fcitx/instance.h"
+#include <fcitx-utils/log.h>
 
 typedef struct FcitxAutoEngState {
     UT_array* autoEng;
@@ -217,7 +218,7 @@ void LoadAutoEng (FcitxAutoEngState* autoEngState)
     AUTO_ENG autoeng;
 
     while  (getline(&buf, &length, fp) != -1) {
-        char* line = trim(buf);
+        char* line = fcitx_trim(buf);
         if (strlen(line) > MAX_AUTO_TO_ENG)
             FcitxLog(WARNING, _("Too long item for AutoEng"));
         strncpy(autoeng.str, line, MAX_AUTO_TO_ENG);

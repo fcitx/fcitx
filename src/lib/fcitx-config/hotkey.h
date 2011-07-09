@@ -30,7 +30,7 @@
 #ifndef _FCITX_HOTKEY_H_
 #define _FCITX_HOTKEY_H_
 
-#include "fcitx-config.h"
+#include <fcitx-config/fcitx-config.h>
 
 #ifdef __cplusplus
 extern "C" {

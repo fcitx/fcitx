@@ -22,11 +22,12 @@
 #include "fcitx/module.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx/instance.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <dbus/dbus.h>
 #include <libintl.h>
 #include "dbusstuff.h"
 #include <unistd.h>
+#include <fcitx-utils/utils.h>
 
 typedef struct FcitxDBus {
     DBusConnection *conn;

@@ -30,7 +30,7 @@
 
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "fcitx/backend.h"
 #include "fcitx-config/xdg.h"
 #include <cairo-xlib.h>
@@ -39,6 +39,7 @@
 #include "fcitx/hook.h"
 #include <X11/keysym.h>
 #include <ui/cairostuff/font.h>
+#include <fcitx-utils/utils.h>
 
 #define VK_FILE "vk.conf"
 
@@ -700,7 +701,7 @@ INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state)
     if (!pstr)
         return IRV_TO_PROCESS;
     else {
-        strcpy (input->strStringGet, pstr);
+        strcpy (GetOutputString(input), pstr);
         return IRV_GET_CANDWORDS;
     }
 }

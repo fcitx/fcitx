@@ -38,6 +38,7 @@
 #include "skin.h"
 #include "module/x11/x11stuff.h"
 #include "MainWindow.h"
+#include <fcitx-utils/log.h>
 
 static boolean InputWindowEventHandler(void *arg, XEvent* event);
 static void InitInputWindow(InputWindow* inputWindow);

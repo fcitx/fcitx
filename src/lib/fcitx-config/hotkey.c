@@ -24,7 +24,8 @@
 
 #include "fcitx/fcitx.h"
 #include "hotkey.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
+#include "fcitx-utils/utils.h"
 
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {
@@ -239,7 +240,7 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
     char           *strKey;
     int             i = 0, j = 0, k;
 
-    strKeys = trim(strKeys);
+    strKeys = fcitx_trim(strKeys);
     p = strKeys;
 
     for (k = 0; k < 2; k++)
@@ -255,7 +256,7 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
         {
             hotkey[j].sym = sym;
             hotkey[j].state = state;
-            hotkey[j].desc = trim(strKey);
+            hotkey[j].desc = fcitx_trim(strKey);
             j ++;
         }
         free(strKey);

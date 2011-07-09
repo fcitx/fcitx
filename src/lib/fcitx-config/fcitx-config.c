@@ -32,9 +32,9 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx-config.h"
-#include "fcitx-utils/cutils.h"
-#include "uthash.h"
+#include "fcitx-utils/log.h"
 #include "hotkey.h"
+#include <fcitx-utils/utils.h>
 
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
@@ -649,7 +649,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
         lineNo ++;
         if (line)
             free(line);
-        line = trim(buf);
+        line = fcitx_trim(buf);
         lineLen = strlen(line);
 
         if (lineLen == 0 || line[0] == '#')

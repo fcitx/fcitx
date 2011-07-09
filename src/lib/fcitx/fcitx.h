@@ -20,17 +20,20 @@
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
-#if defined(FCITX_HAVE_CONFIG_H)
-#include "config.h"
+#ifdef __cplusplus
+extern "C" {
 #endif
 
+#if defined(FCITX_HAVE_CONFIG_H)
+#include "config.h"
 #define _(msgid) gettext(msgid)
 #define __(msgid) (msgid)
-
-#define EIM_MAX		4
+#endif
 
 #define FCITX_EXPORT_API __attribute__ ((visibility("default")))
 
-#define MAX_CODE_LEN	63
+#ifdef __cplusplus
+}
+#endif
 
 #endif/*_FCITX_H_*/

@@ -26,7 +26,7 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx/keys.h"
 
 #include "qw.h"
 #include "fcitx/ui.h"
@@ -93,7 +93,7 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
             input->strCodeInput[input->iCodeInputCount++]=sym;
             input->strCodeInput[input->iCodeInputCount]='\0';
             if ( input->iCodeInputCount==4 ) {
-                strcpy(input->strStringGet, QWGetCandWord(arg, sym-'0'-1));
+                strcpy(GetOutputString(input), QWGetCandWord(arg, sym-'0'-1));
                 retVal= IRV_GET_CANDWORDS;
             }
             else if (input->iCodeInputCount==3)
@@ -122,7 +122,7 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
         if (input->iCodeInputCount!=3)
             return IRV_DO_NOTHING;
 
-        strcpy(input->strStringGet, QWGetCandWord(arg, 0));
+        strcpy(GetOutputString(input), QWGetCandWord(arg, 0));
         retVal= IRV_GET_CANDWORDS;
     }
     else

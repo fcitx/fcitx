@@ -28,13 +28,14 @@
 #include <libintl.h>
 #include "config.h"
 #include "fcitx/ui.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <dbus/dbus.h>
 #include "module/dbus/dbusstuff.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx/backend.h"
 #include "fcitx/hook.h"
+#include <fcitx-utils/utils.h>
 
 typedef struct FcitxKimpanelUI
 {
@@ -435,7 +436,7 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
                 pstr = im->GetCandWord(im->klass, int0);
                 INPUT_RETURN_VALUE retVal;
                 if (pstr) {
-                    strcpy(input->strStringGet, pstr);
+                    strcpy(GetOutputString(input), pstr);
                     if (input->bIsInRemind)
                         retVal = IRV_GET_REMIND;
                     else

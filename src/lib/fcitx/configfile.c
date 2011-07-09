@@ -27,8 +27,8 @@
 #include "fcitx/fcitx.h"
 #include "configfile.h"
 #include "fcitx-config/xdg.h"
-#include "fcitx-utils/cutils.h"
-#include "fcitx-utils/keys.h"
+#include "fcitx-utils/log.h"
+#include "fcitx/keys.h"
 static boolean IsReloadConfig = false;
 
 static ConfigFileDesc* GetConfigDesc();
@@ -139,6 +139,7 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
     }
 }
 
+FCITX_EXPORT_API
 void LoadConfig(FcitxConfig* fc)
 {
     FILE *fp;
@@ -164,13 +165,11 @@ void LoadConfig(FcitxConfig* fc)
     IsReloadConfig = true;
     
     fclose(fp);
-/*#ifndef _ENABLE_PANGO
-    CreateFont();
-#endif*/
 }
 
 CONFIG_DESC_DEFINE(GetConfigDesc, "config.desc")
 
+FCITX_EXPORT_API
 void SaveConfig(FcitxConfig* fc)
 {
     ConfigFileDesc* configDesc = GetConfigDesc();
@@ -182,11 +181,13 @@ void SaveConfig(FcitxConfig* fc)
     fclose(fp);
 }
 
+FCITX_EXPORT_API
 int ConfigGetMaxCandWord(FcitxConfig* fc)
 {
     return fc->iMaxCandWord;
 }
 
+FCITX_EXPORT_API
 boolean ConfigGetPointAfterNumber(FcitxConfig* fc)
 {
     return fc->bPointAfterNumber;

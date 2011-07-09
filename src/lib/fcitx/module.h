@@ -18,10 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _MODULE_H
-#define _MODULE_H
-#include "fcitx-config/fcitx-config.h"
-#include "fcitx-utils/utarray.h"
+#ifndef _FCITX_MODULE_H
+#define _FCITX_MODULE_H
+#include <fcitx-config/fcitx-config.h>
+#include <fcitx-utils/utarray.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct FcitxInstance;
 struct FcitxAddon;
@@ -51,6 +55,10 @@ void* InvokeModuleFunctionWithName(struct FcitxInstance* instance, const char* n
     do { \
         void *temp = Realname; \
         utarray_push_back(&ADDON->functionList, &temp); \
-    } while(0)        
+    } while(0)
+    
+#ifdef __cplusplus
+}
+#endif
 
 #endif

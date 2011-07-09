@@ -33,7 +33,7 @@
 #include "fcitx/fcitx.h"
 #include "tray.h"
 #include "TrayWindow.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <libintl.h>
 #include "classicui.h"
 

@@ -19,11 +19,12 @@
  ***************************************************************************/
 
 #include "fcitx/hook.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include "ime.h"
 #include "fcitx-config/hotkey.h"
 #include "instance.h"
 #include "fcitx/hook-internal.h"
+#include "fcitx-utils/utils.h"
 
 /**
  * @file hook.c
@@ -41,7 +42,7 @@ typedef struct HookStack {
 
 
 #define DEFINE_HOOK(name, type, field) \
-static HookStack* Get##name(); \
+static HookStack* Get##name(FcitxInstance* instance); \
 HookStack* Get##name(FcitxInstance* instance) \
 { \
     if (instance->hook##name == NULL) \
@@ -50,6 +51,7 @@ HookStack* Get##name(FcitxInstance* instance) \
     } \
     return instance->hook##name; \
 } \
+FCITX_EXPORT_API \
 void Register##name(FcitxInstance* instance, type value) \
 { \
     HookStack* head = Get##name(instance); \
@@ -96,6 +98,7 @@ void ProcessPostInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned i
     }
 }
 
+FCITX_EXPORT_API
 char* ProcessOutputFilter(FcitxInstance* instance, char *in)
 {
     HookStack* stack = GetOutputFilter(instance);

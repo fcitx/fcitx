@@ -37,6 +37,7 @@
      ((Char) < 0xFDD0 || (Char) > 0xFDEF) &&  \
      ((Char) & 0xFFFE) != 0xFFFE)
 
+FCITX_EXPORT_API
 size_t
 utf8_strlen(const char *s)
 {
@@ -53,6 +54,7 @@ utf8_strlen(const char *s)
     return l;
 }
 
+FCITX_EXPORT_API
 int utf8_char_len(const char *in)
 {
     if (!(in[0] & 0x80))
@@ -76,6 +78,7 @@ int utf8_char_len(const char *in)
     return 1;
 }
 
+FCITX_EXPORT_API
 char *
 utf8_get_char(const char *in, int *chr)
 {
@@ -120,6 +123,7 @@ utf8_get_char(const char *in, int *chr)
     return (char *)in+1;
 }
 
+FCITX_EXPORT_API
 int utf8_strncmp(const char *s1, const char *s2, int n) {
     // Seems to work.
     int c1,c2;
@@ -144,6 +148,7 @@ int utf8_strncmp(const char *s1, const char *s2, int n) {
     return 0;
 }
 
+FCITX_EXPORT_API
 char* utf8_get_nth_char(char* s, unsigned int n)
 {
     unsigned int l = 0;
@@ -159,6 +164,7 @@ char* utf8_get_nth_char(char* s, unsigned int n)
     return s;
 }
 
+FCITX_EXPORT_API
 int
 utf8_get_char_extended (const char *s,
         int max_len)
@@ -217,6 +223,7 @@ utf8_get_char_extended (const char *s,
     return wc;
 }
 
+FCITX_EXPORT_API
 int utf8_get_char_validated (const char *p,
         int max_len)
 {
@@ -233,6 +240,8 @@ int utf8_get_char_validated (const char *p,
     else
         return result;
 }
+
+FCITX_EXPORT_API
 int utf8_check_string(const char *s)
 {
     while(*s)

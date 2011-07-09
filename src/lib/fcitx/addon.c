@@ -34,6 +34,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx-config/xdg.h"
 #include "instance.h"
+#include <fcitx-utils/log.h>
 
 CONFIG_BINDING_BEGIN(FcitxAddon)
 CONFIG_BINDING_REGISTER("Addon", "Name", name)
@@ -54,6 +55,7 @@ static int AddonPriorityCmp(const void* a, const void* b)
     return aa->priority - ab->priority;
 }
 
+FCITX_EXPORT_API
 void InitFcitxAddons(UT_array* addons)
 {
     utarray_init(addons, &addon_icd);
@@ -62,6 +64,7 @@ void InitFcitxAddons(UT_array* addons)
 /** 
  * @brief Load Addon Info
  */
+FCITX_EXPORT_API
 void LoadAddonInfo(UT_array* addons)
 {
     char **addonPath;
@@ -166,6 +169,7 @@ void LoadAddonInfo(UT_array* addons)
     utarray_sort(addons, AddonPriorityCmp);
 }
 
+FCITX_EXPORT_API
 void AddonResolveDependency(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
@@ -233,6 +237,7 @@ void AddonResolveDependency(FcitxInstance* instance)
     }
 }
 
+FCITX_EXPORT_API
 boolean AddonIsAvailable(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
@@ -246,6 +251,7 @@ boolean AddonIsAvailable(UT_array* addons, const char* name)
     return false;
 }
 
+FCITX_EXPORT_API
 FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
@@ -266,6 +272,7 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
  */
 CONFIG_DESC_DEFINE(GetAddonConfigDesc, "addon.desc")
 
+FCITX_EXPORT_API
 void FreeAddon(void *v)
 {
     FcitxAddon *addon = (FcitxAddon*) v;

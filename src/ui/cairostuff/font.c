@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "fcitx/fcitx.h"
+
 #ifndef _ENABLE_PANGO
 
 #include <fontconfig/fontconfig.h>
@@ -28,7 +30,7 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 
 /**
  * @brief Get Usable Font

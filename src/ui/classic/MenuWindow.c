@@ -23,7 +23,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include "fcitx-config/fcitx-config.h"
-#include "fcitx-utils/cutils.h"
+#include "fcitx-utils/log.h"
 #include <cairo-xlib.h>
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
@@ -33,6 +33,7 @@
 #include "classicui.h"
 #include "MenuWindow.h"
 #include "fcitx/instance.h"
+#include <fcitx-utils/utils.h>
 
 static boolean ReverseColor(XlibMenu * Menu,int shellIndex);
 static void MenuMark(XlibMenu* menu, int y, int i);
