@@ -52,8 +52,7 @@
 @REL_SOURCE_ROOT@/src/ui/kimpanel/kimpanel.c
 @REL_SOURCE_ROOT@/src/ui/cairostuff/cairostuff.c
 @REL_SOURCE_ROOT@/src/ui/cairostuff/font.c
-@REL_SOURCE_ROOT@/src/lib/fcitx-utils/cutils.c
-@REL_SOURCE_ROOT@/src/lib/fcitx-utils/keys.c
+@REL_SOURCE_ROOT@/src/lib/fcitx-utils/log.c
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utf8.c
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utils.c
 @REL_SOURCE_ROOT@/src/lib/fcitx-config/fcitx-config.c
@@ -69,6 +68,7 @@
 @REL_SOURCE_ROOT@/src/lib/fcitx/module.c
 @REL_SOURCE_ROOT@/src/lib/fcitx/profile.c
 @REL_SOURCE_ROOT@/src/lib/fcitx/ui.c
+@REL_SOURCE_ROOT@/src/lib/fcitx/keys.c
 @REL_SOURCE_ROOT@/tools/createPYMB.c
 @REL_SOURCE_ROOT@/tools/fcitx-remote.c
 @REL_SOURCE_ROOT@/tools/mb2org.c
