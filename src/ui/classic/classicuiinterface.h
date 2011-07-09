@@ -20,8 +20,9 @@
 
 #ifndef CLASSICUIINTERFACE_H
 #define CLASSICUIINTERFACE_H
-#include "fcitx-config/fcitx-config.h"
+
 #include <cairo.h>
+#include <fcitx-config/fcitx-config.h>
 
 #define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
 #define FCITX_CLASSIC_UI_LOADIMAGE 0

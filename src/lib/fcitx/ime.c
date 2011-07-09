@@ -424,7 +424,6 @@ INPUT_RETURN_VALUE ProcessKey(
             }
 
             if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                input->iCursorPos = input->iCodeInputCount;
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
             }
         }

@@ -21,7 +21,7 @@
 #ifndef X11STUFF_H
 #define X11STUFF_H
 #include <X11/Xlib.h>
-#include "fcitx-utils/utarray.h"
+#include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
 
 #define FCITX_X11_NAME "fcitx-x11"

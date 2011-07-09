@@ -41,6 +41,21 @@
  * @brief Trans full width punc for Fcitx
  */
 
+#define PUNC_DICT_FILENAME  "punc.mb"
+#define MAX_PUNC_NO     2
+#define MAX_PUNC_LENGTH     2
+
+struct FcitxPuncState;
+typedef struct WidePunc {
+    int             ASCII;
+    char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
+    unsigned        iCount:2;
+    unsigned        iWhich:2;
+} WidePunc;
+
+static boolean LoadPuncDict (struct FcitxPuncState* puncState);
+static char *GetPunc (struct FcitxPuncState* puncState, int iKey);
+static void FreePunc (struct FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);

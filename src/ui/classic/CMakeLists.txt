@@ -34,3 +34,4 @@ endif (${_ENABLE_PANGO})
 
 install(FILES fcitx-classic-ui.conf DESTINATION ${addonconfigdir})
 install(FILES ${CLASSICUI_DESC_FILES} DESTINATION ${configdescdir})
+install(FILES classicuiinterface.h DESTINATION ${includedir}/fcitx/module/classicui/)

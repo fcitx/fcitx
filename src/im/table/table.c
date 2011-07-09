@@ -483,7 +483,7 @@ boolean TableInit (void *arg)
     tbl->pyaddon = pyaddon;
     if (pyaddon == NULL)
         return false;
-    tbl->PYBaseOrder = AD_FREQ; // TODO
+    tbl->PYBaseOrder = AD_FREQ;
     
     Table_ResetPY(tbl);
     return true;
@@ -794,7 +794,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             SetMessageCount(instance->messageUp, 0);
             SetMessageCount(instance->messageDown, 0);
             tbl->bTablePhraseTips = false;
-            //TODO: CloseInputWindow();
+            CloseInputWindow(instance);
         }
     }
 
@@ -1118,7 +1118,19 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 }
             }
             else
-                return IRV_TO_PROCESS;
+            {
+                /* friendly to cursor move, don't left cursor move while input text */
+                if (input->iCodeInputCount != 0 &&
+                    (IsHotKey(sym, state, FCITX_LEFT) ||
+                    IsHotKey(sym, state, FCITX_RIGHT) ||
+                    IsHotKey(sym, state, FCITX_HOME) ||
+                    IsHotKey(sym, state, FCITX_END)))
+                {
+                    return IRV_DO_NOTHING;
+                }
+                else
+                    return IRV_TO_PROCESS;
+            }
         }
     }
 
@@ -2381,7 +2393,7 @@ void Table_PYGetPYByHZ(FcitxTableState *tbl, char *a, char* b)
     FcitxModuleFunctionArg args;
     args.args[0] = a;
     args.args[1] = b;
-    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_LOADBASEDICT, args);
+    InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETPYBYHZ, args);
 }
 
 void Table_PYGetCandWord(FcitxTableState *tbl, int a)

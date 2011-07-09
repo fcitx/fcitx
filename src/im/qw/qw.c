@@ -132,6 +132,8 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
     AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strCodeInput);
     if ( input->iCodeInputCount!=3 )
         SetMessageCount(instance->messageDown, 0);
+    
+    input->iCursorPos = input->iCodeInputCount;
 
     return retVal;
 }

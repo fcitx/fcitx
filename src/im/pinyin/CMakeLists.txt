@@ -14,3 +14,4 @@ set_target_properties( fcitx-pinyin PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibi
 install(TARGETS fcitx-pinyin DESTINATION ${addondir})
 install(FILES fcitx-pinyin.conf DESTINATION ${addonconfigdir})
 install(FILES fcitx-pinyin.desc DESTINATION ${configdescdir})
+install(FILES pydef.h DESTINATION ${includedir}/fcitx/module/pinyin/)
