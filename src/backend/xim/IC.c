@@ -240,6 +240,8 @@ void XimGetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
     XICAttribute   *sts_attr = call_data->status_attr;
     register int    i;
     FcitxInputContext *ic = FindIC (xim->owner, xim->backendid, &call_data->icid);
+    if (ic == NULL)
+        return;
     FcitxXimIC* rec = (FcitxXimIC*) ic->privateic;
 
     if (rec == NULL)

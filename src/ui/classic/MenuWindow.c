@@ -340,6 +340,8 @@ void DrawXlibMenu(XlibMenu * menu)
     DrawResizableBackground(cr, background->image, menu->height, menu->width,
                             sc->skinMenu.marginLeft,  sc->skinMenu.marginTop,  sc->skinMenu.marginRight,  sc->skinMenu.marginBottom);
 
+    cairo_destroy(cr);
+    
     iPosY=sc->skinMenu.marginTop;
     for (i=0;i<utarray_len(&menu->menushell->shell);i++)
     {

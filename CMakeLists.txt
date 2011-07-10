@@ -12,6 +12,7 @@ option(ENABLE_DEBUG "Enable Debug" ON)
 option(ENABLE_TABLE "Enable Table IM" ON)
 option(ENABLE_GTK2_IM_MODULE "Enable GTK IM Module" ON)
 option(ENABLE_OPENCC "Enable OpenCC for Chinese Transform" ON)
+option(ENABLE_STATIC "Build Static Library" OFF)
 
 # uninstall target
 configure_file(

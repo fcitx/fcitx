@@ -3,9 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: fcitx
-Description: Fcitx - Free Chinese Input Toy of X
+Name: fcitx-utils
+Description: Fcitx Utils Library
 Version: 4.1.0
-Requires: fcitx-config
 Cflags: -I${includedir}
-Libs: -L${libdir} -lfcitx-core
+Libs: -L${libdir} -lfcitx-utils
