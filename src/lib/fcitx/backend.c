@@ -186,6 +186,9 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
     if (str == NULL)
         return ;
     
+    if (ic == NULL)
+        return;
+    
     UT_array* backends = &instance->backends;
     
     char *pstr = ProcessOutputFilter(instance, str);
@@ -217,6 +220,9 @@ void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int 
 FCITX_EXPORT_API
 void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, int* y)
 {
+    if (ic == NULL)
+        return;
+    
     UT_array* backends = &instance->backends;
     FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
     if (pbackend == NULL)

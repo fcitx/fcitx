@@ -302,6 +302,8 @@ INPUT_RETURN_VALUE ProcessKey(
      * release event for ctrl key, so we must make sure the key release right now is the key just
      * pressed.
      */
+    if (GetCurrentIC(instance) == NULL)
+        return IRV_TO_PROCESS;
 
     /* process keyrelease event for switch key and 2nd, 3rd key */
     if (event == FCITX_RELEASE_KEY ) {
@@ -570,6 +572,8 @@ void ProcessInputReturnValue(
 FCITX_EXPORT_API
 void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
+    if (ic == NULL)
+        return;
     UT_array* backends = &instance->backends;
     FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
     if (pbackend == NULL)

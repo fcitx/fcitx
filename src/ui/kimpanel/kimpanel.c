@@ -228,7 +228,7 @@ void KimpanelMoveInputWindow(void* arg)
     kimpanel->iOffsetX = 12;
     kimpanel->iOffsetY = 0;
     
-    int x, y;
+    int x = 0, y = 0;
     
     FcitxInputContext* ic = GetCurrentIC(kimpanel->owner);
     GetWindowPosition(kimpanel->owner, ic, &x, &y);
