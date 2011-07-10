@@ -147,8 +147,12 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     FcitxBackend* backend = (*pbackend)->backend;
     ic->state = IS_CLOSED;
     backend->CloseIM((*pbackend)->addonInstance, ic);
-    OnTriggerOff(instance);
-    CloseInputWindow(instance);
+    
+    if (ic == GetCurrentIC(instance))
+    {
+        OnTriggerOff(instance);
+        CloseInputWindow(instance);
+    }
 }
 
 /** 

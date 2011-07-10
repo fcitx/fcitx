@@ -291,6 +291,7 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 boolean XimDestroy(void* arg)
 {
     FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    
     if (xim->ims)
         IMCloseIM(xim->ims);
 

@@ -152,6 +152,38 @@ FCITX_EXPORT_API
 void EndInstance(FcitxInstance* instance)
 {
     SaveAllIM(instance);
+ 
+    /* handle exit */
+    FcitxAddon** pbackend;
+    FcitxBackend* backend;  
+    FcitxInputContext* rec = NULL;
+    FcitxInputContext* last = NULL;
+    
+    for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
+        pbackend = (FcitxAddon**) utarray_eltptr(&instance->backends, rec->backendid);
+        backend = (*pbackend)->backend;
+        backend->CloseIM((*pbackend)->addonInstance, rec);
+    }
+        
+    for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
+        pbackend = (FcitxAddon**) utarray_eltptr(&instance->backends, rec->backendid);
+        backend = (*pbackend)->backend;
+        backend->DestroyIC((*pbackend)->addonInstance, rec);
+    }
+    
+    int backendid = 0;
+    for (pbackend = (FcitxAddon**) utarray_front(&instance->backends);
+        pbackend != NULL;
+        pbackend = (FcitxAddon**) utarray_next(&instance->backends, pbackend) 
+    )
+    {
+        if (pbackend == NULL)
+            return;
+        FcitxBackend* backend = (*pbackend)->backend;
+        backend->Destroy((*pbackend)->addonInstance);
+        backendid++;
+    }
+    
     sem_post(instance->sem);
 }
 
