@@ -78,6 +78,7 @@ FcitxModule module = {
     FullWidthCharCreate,
     NULL,
     NULL,
+    NULL,
     NULL
 };
 

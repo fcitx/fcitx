@@ -86,6 +86,7 @@ FcitxModule module =
     ChttransCreate,
     NULL,
     NULL,
+    NULL,
     ReloadChttrans
 };
 

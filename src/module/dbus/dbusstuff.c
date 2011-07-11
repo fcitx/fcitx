@@ -29,23 +29,30 @@
 #include <unistd.h>
 #include <fcitx-utils/utils.h>
 
+
+typedef struct FcitxDBusWatch {
+  DBusWatch *watch;      
+  struct FcitxDBusWatch *next;
+} FcitxDBusWatch;
+
 typedef struct FcitxDBus {
     DBusConnection *conn;
-    UT_array handlers;
     FcitxInstance* owner;
+    FcitxDBusWatch* watches;
 } FcitxDBus;
 
-const UT_icd handler_icd = {sizeof(FcitxDBusEventHandler), 0, 0, 0};
 static void* DBusCreate(FcitxInstance* instance);
-static void* DBusRun(void* arg);
+static void DBusSetFD(void* arg);
+static void DBusProcessEvent(void* arg);
 static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
-static void* DBusAddEventHandler(void* arg, FcitxModuleFunctionArg args);
-static void* DBusRemoveEventHandler(void* arg, FcitxModuleFunctionArg args);
+static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data);
+static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data);
 
 FCITX_EXPORT_API
 FcitxModule module = {
     DBusCreate,
-    DBusRun,
+    DBusSetFD,
+    DBusProcessEvent,
     NULL,
     NULL
 };
@@ -66,8 +73,11 @@ void* DBusCreate(FcitxInstance* instance)
         dbus_error_free(&err);
     }
     if (NULL == conn) {
+        free(dbusmodule);
         return NULL;
     }
+    dbusmodule->conn = conn;
+    dbusmodule->owner = instance;
 
     // request a name on the bus
     int ret = dbus_bus_request_name(conn, FCITX_DBUS_SERVICE,
@@ -80,43 +90,15 @@ void* DBusCreate(FcitxInstance* instance)
     if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
         return NULL;
     }
+    if (dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch, 
+                      NULL, dbusmodule, NULL))
+    {
+    }
 
     dbus_connection_flush(conn);
-    utarray_init(&dbusmodule->handlers, &handler_icd);
-    dbusmodule->conn = conn;
-    dbusmodule->owner = instance;
     AddFunction(dbusaddon, DBusGetConnection);
-    AddFunction(dbusaddon, DBusAddEventHandler);
-    AddFunction(dbusaddon, DBusRemoveEventHandler);
 
     return dbusmodule;
-}
-
-void* DBusRun(void* arg)
-{
-    FcitxDBus *dbusmodule = (FcitxDBus*) arg;
-    DBusMessage *msg;
-    DBusConnection *conn = dbusmodule->conn;
-
-    for (;;) {
-        FcitxLock(dbusmodule->owner);
-        dbus_connection_read_write(conn, 0);
-        msg = dbus_connection_pop_message(conn);
-        if ( NULL == msg) {
-            usleep(16000);
-        }
-        else {
-            FcitxDBusEventHandler* handler;
-            for ( handler = (FcitxDBusEventHandler *) utarray_front(&dbusmodule->handlers);
-                    handler != NULL;
-                    handler = (FcitxDBusEventHandler *) utarray_next(&dbusmodule->handlers, handler))
-                if (handler->eventHandler (handler->instance, msg))
-                    break;
-            dbus_message_unref(msg);
-        }
-        FcitxUnlock(dbusmodule->owner);
-    }
-    return NULL;
 }
 
 void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
@@ -125,29 +107,98 @@ void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
     return dbusmodule->conn;
 }
 
-void* DBusAddEventHandler(void* arg, FcitxModuleFunctionArg args)
+static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data)
 {
-    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
-    FcitxDBusEventHandler handler;
-    handler.eventHandler = args.args[0];
-    handler.instance = args.args[1];
-    utarray_push_back(&dbusmodule->handlers, &handler);
-    return NULL;
+    FcitxDBusWatch *w;
+    FcitxDBus* dbusmodule = (FcitxDBus*) data;
+    
+    for (w = dbusmodule->watches; w; w = w->next)
+    if (w->watch == watch)
+      return TRUE;
+
+  if (!(w = fcitx_malloc0(sizeof(FcitxDBusWatch))))
+    return FALSE;
+
+  w->watch = watch;
+  w->next = dbusmodule->watches;
+  dbusmodule->watches = w;
+  return TRUE;
 }
 
-void* DBusRemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
+static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data)
 {
-    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
-    FcitxDBusEventHandler* handler;
-    int i = 0;
-    for ( i = 0 ;
-            i < utarray_len(&dbusmodule->handlers);
-            i ++)
+    FcitxDBusWatch **up, *w;  
+    FcitxDBus* dbusmodule = (FcitxDBus*) data;
+    
+    for (up = &(dbusmodule->watches), w = dbusmodule->watches; w; w = w->next)
     {
-        handler = (FcitxDBusEventHandler*) utarray_eltptr(&dbusmodule->handlers, i);
-        if (handler->instance == args.args[0])
-            break;
+        if (w->watch == watch)
+        {
+            *up = w->next;
+            free(w);
+        }
+        else
+            up = &(w->next);
     }
-    utarray_erase(&dbusmodule->handlers, i, 1);
-    return NULL;
+}
+
+void DBusSetFD(void* arg)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*) arg;
+    FcitxDBusWatch *w;
+    FcitxInstance* instance = dbusmodule->owner;
+    
+    for (w = dbusmodule->watches; w; w = w->next)
+    if (dbus_watch_get_enabled(w->watch))
+    {
+        unsigned int flags = dbus_watch_get_flags(w->watch);
+        int fd = dbus_watch_get_unix_fd(w->watch);
+        
+        if (dbusmodule->owner->maxfd < fd)
+            dbusmodule->owner->maxfd = fd;
+        
+        if (flags & DBUS_WATCH_READABLE)
+            FD_SET(fd, &instance->rfds);
+        
+        if (flags & DBUS_WATCH_WRITABLE)
+            FD_SET(fd, &instance->wfds);
+        
+        FD_SET(fd, &instance->efds);
+    }
+}
+
+
+void DBusProcessEvent(void* arg)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*) arg;
+    DBusConnection *connection = (DBusConnection *)dbusmodule->conn;
+    FcitxDBusWatch *w;
+    
+    for (w = dbusmodule->watches; w; w = w->next)
+    {
+        if (dbus_watch_get_enabled(w->watch))
+        {
+            unsigned int flags = 0;
+            int fd = dbus_watch_get_unix_fd(w->watch);
+            
+            if (FD_ISSET(fd, &dbusmodule->owner->rfds))
+                flags |= DBUS_WATCH_READABLE;
+            
+            if (FD_ISSET(fd, &dbusmodule->owner->wfds))
+                flags |= DBUS_WATCH_WRITABLE;
+            
+            if (FD_ISSET(fd, &dbusmodule->owner->efds))
+                flags |= DBUS_WATCH_ERROR;
+
+            if (flags != 0)
+                dbus_watch_handle(w->watch, flags);
+        }
+    }
+    
+    if (connection)
+    {
+        dbus_connection_ref (connection);
+        while (dbus_connection_dispatch (connection) == DBUS_DISPATCH_DATA_REMAINS);
+        dbus_connection_unref (connection);
+    }
 }

@@ -47,6 +47,7 @@ static boolean GetRemindEnabled(void* arg);
 static boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
 static void Usage();
 static void Version();
+static void* RunInstance(void* arg);
 
 /**
  * @brief 显示命令行参数
@@ -77,6 +78,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     InitFcitxAddons(&instance->addons);
     InitFcitxIM(instance);
     InitFcitxBackends(&instance->backends);
+    InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
     instance->messageDown = InitMessages();
@@ -143,9 +145,42 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         }
     }
     /* make in order to use block X, query is not good here */
-    RunModule(instance);
+    pthread_create(&instance->pid, NULL, RunInstance, instance);
 
     return instance;
+}
+
+void* RunInstance(void* arg)
+{
+    FcitxInstance* instance = (FcitxInstance*) arg;
+    while (1)
+    {
+        FcitxAddon** pmodule; 
+        for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
+             pmodule != NULL;
+             pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
+        {
+            FcitxModule* module = (*pmodule)->module;
+            module->ProcessEvent((*pmodule)->addonInstance);
+        }
+        
+        FD_ZERO(&instance->rfds);
+        FD_ZERO(&instance->wfds);
+        FD_ZERO(&instance->efds);
+
+        instance->maxfd = 0;
+        for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
+             pmodule != NULL;
+             pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
+        {
+            FcitxModule* module = (*pmodule)->module;
+            module->SetFD((*pmodule)->addonInstance);
+        }
+        if (instance->maxfd == 0)
+            break;
+        select(instance->maxfd + 1, &instance->rfds, &instance->wfds, &instance->efds, NULL);
+    }
+    return NULL;
 }
 
 FCITX_EXPORT_API

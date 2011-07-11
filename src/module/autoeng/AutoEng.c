@@ -112,6 +112,7 @@ FCITX_EXPORT_API
 FcitxModule module = {
     AutoEngCreate,
     NULL,
+    NULL,
     FreeAutoEng,
     ReloadAutoEng
 };

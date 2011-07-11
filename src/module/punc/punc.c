@@ -78,6 +78,7 @@ FcitxModule module = {
     PuncCreate,
     NULL,
     NULL,
+    NULL,
     ReloadPunc
 };
 

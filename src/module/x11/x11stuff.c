@@ -29,7 +29,8 @@
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
-static void* X11Run(void* arg);
+static void X11SetFD(void* arg);
+static void X11ProcessEvent(void *arg);
 static void* X11GetDisplay(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11AddEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
 static void* X11RemoveEventHandler(void* x11priv, FcitxModuleFunctionArg arg);
@@ -48,7 +49,8 @@ const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
 FCITX_EXPORT_API
 FcitxModule module = {
     X11Create,
-    X11Run,
+    X11SetFD,
+    X11ProcessEvent,
     NULL,
     NULL
 };
@@ -89,61 +91,49 @@ void* X11Create(FcitxInstance* instance)
     return x11priv;
 }
 
-void* X11Run(void* arg)
+void X11SetFD(void* arg)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    int fd = ConnectionNumber(x11priv->dpy);
+    FD_SET(fd, &x11priv->owner->rfds);
+    
+    if (x11priv->owner->maxfd < fd)
+        x11priv->owner->maxfd = fd;
+}
+
+
+void X11ProcessEvent(void* arg)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     XEvent event;
-    fd_set            rfds, wfds, efds;
-    /* 主循环，即XWindow的消息循环 */
-    for (;;) {
-        /* two loop is a trick used by qt */
-        while(XPending(x11priv->dpy))
+    while(XPending(x11priv->dpy))
+    {
+        XNextEvent (x11priv->dpy, &event); //等待一个事件发生
+
+        FcitxLock(x11priv->owner);
+        /* 处理X事件 */
+        if (XFilterEvent (&event, None) == False)
         {
-            while(XPending(x11priv->dpy))
+            if (event.type == DestroyNotify)
             {
-                XNextEvent (x11priv->dpy, &event);           //等待一个事件发生
-
-                FcitxLock(x11priv->owner);
-                /* 处理X事件 */
-                if (XFilterEvent (&event, None) == False)
-                {
-                    if (event.type == DestroyNotify)
-                    {
-                        if (event.xany.window == x11priv->compManager)
-                            X11HandlerComposite(x11priv, false);
-                    }
-                    else if (event.type == ClientMessage) {
-                        if (event.xclient.data.l[1] == x11priv->compManagerAtom)
-                            X11HandlerComposite(x11priv, true);
-                    }
-
-                    
-                    FcitxXEventHandler* handler;
-                    for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
-                            handler != NULL;
-                            handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
-                        if (handler->eventHandler (handler->instance, &event))
-                            break;
-                }
-                FcitxUnlock(x11priv->owner);
+                if (event.xany.window == x11priv->compManager)
+                    X11HandlerComposite(x11priv, false);
             }
-        }
-        
-        /*
-         * yes, we need select after first event being processed, otherwise if there is no new
-         * event, the program will simply hang there.
-         */
-        FD_ZERO(&rfds);
-        FD_ZERO(&wfds);
-        FD_ZERO(&efds);
-        FD_SET(ConnectionNumber(x11priv->dpy), &rfds);
-        int i = select(ConnectionNumber(x11priv->dpy) + 1,
-            &rfds, &wfds, &efds, NULL);
-        if (i < 0)
-            break;
-    }
-    return NULL;
+            else if (event.type == ClientMessage) {
+                if (event.xclient.data.l[1] == x11priv->compManagerAtom)
+                    X11HandlerComposite(x11priv, true);
+            }
 
+            
+            FcitxXEventHandler* handler;
+            for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
+                    handler != NULL;
+                    handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
+                if (handler->eventHandler (handler->instance, &event))
+                    break;
+        }
+        FcitxUnlock(x11priv->owner);
+    }
 }
 
 void* X11GetDisplay(void* arg, FcitxModuleFunctionArg args)

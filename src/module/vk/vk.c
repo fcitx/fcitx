@@ -128,6 +128,7 @@ FcitxModule module =
     VKCreate,
     NULL,
     NULL,
+    NULL,
     ReloadVK
 };
 

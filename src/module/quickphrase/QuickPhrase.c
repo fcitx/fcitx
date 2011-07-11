@@ -60,6 +60,7 @@ FcitxModule module =
 {
     QuickPhraseCreate,
     NULL,
+    NULL,
     FreeQuickPhrase,
     ReloadQuickPhrase
 };

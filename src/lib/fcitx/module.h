@@ -33,7 +33,8 @@ struct FcitxAddon;
 typedef struct FcitxModule
 {
     void* (*Create)(struct FcitxInstance* instance);
-    void* (*Run)(void*);
+    void (*SetFD)(void*);
+    void (*ProcessEvent)(void*);
     void (*Destroy)(void*);
     void (*ReloadConfig)(void*);
 } FcitxModule;
@@ -43,7 +44,7 @@ typedef struct FcitxModuleFunctionArg
     void* args[10];
 } FcitxModuleFunctionArg;
 
-void RunModule(struct FcitxInstance* instance );
+void InitFcitxModules(UT_array* modules);
 void LoadModule(struct FcitxInstance* instance);
 void* InvokeModuleFunction(struct FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 void* InvokeModuleFunctionWithName(struct FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);

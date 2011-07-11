@@ -57,11 +57,15 @@ typedef struct FcitxInstance {
     UT_array imeclasses;
     UT_array imes;
     UT_array backends;
+    UT_array eventmodules;
     
     struct FcitxInputContext *CurrentIC;
     struct FcitxInputContext *ic_list;
     struct FcitxInputContext *free_list;
     sem_t* sem;
+    pthread_t pid;
+    fd_set rfds, wfds, efds;
+    int maxfd;
     char* uiname;
     
     struct HookStack* hookPreInputFilter;

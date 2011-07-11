@@ -38,12 +38,15 @@
 #include <fcitx-utils/utils.h>
 
 static void* RemoteCreate(FcitxInstance* instance);
-static void* RemoteRun(void* arg);
+static void RemoteProcessEvent(void* arg);
+static void RemoteSetFD(void* arg);
+static int CreateSocket(const char *name);
 
 FCITX_EXPORT_API
 FcitxModule module = {
     RemoteCreate,
-    RemoteRun,
+    RemoteSetFD,
+    RemoteProcessEvent,
     NULL,
     NULL
 };
@@ -51,12 +54,26 @@ FcitxModule module = {
 typedef struct FcitxRemote {
     char socketfile[PATH_MAX];
     FcitxInstance* owner;
+    int socket_fd;
 } FcitxRemote;
 
 void* RemoteCreate(FcitxInstance* instance)
 {
     FcitxRemote* remote = fcitx_malloc0(sizeof(FcitxRemote));
     remote->owner = instance;
+    
+    char *socketfile = remote->socketfile;
+    sprintf(socketfile, "/tmp/fcitx-socket");
+    remote->socket_fd = CreateSocket(socketfile);
+    if ( remote->socket_fd < 0) {
+        FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
+        free(remote);
+        return NULL;
+    }
+
+    fcntl(remote->socket_fd, F_SETFD, FD_CLOEXEC);
+    fcntl(remote->socket_fd, F_SETFL, O_NONBLOCK);
+    chmod(socketfile, 0600);
     return remote;
 }
 
@@ -120,55 +137,46 @@ static void SendIMState(FcitxRemote* remote, int fd)
     write(fd, &r, sizeof(r));
 }
 
-static void RemoteMainLoop (FcitxRemote* remote, int socket_fd)
+static void RemoteProcessEvent (void* p)
 {
+    FcitxRemote* remote = (FcitxRemote*) p;
     unsigned int O;  // 低16位, 0 = get, 1 = set;
     // 高16位, 只用于 set, 0 关闭输入法, 1 打开输入法.
-    for (;;) {
-        int client_fd = UdAccept(socket_fd);
-        read(client_fd, &O, sizeof(int));
-        unsigned int cmd = O & 0xFFFF;
-        unsigned int arg = (O >> 16) & 0xFFFF;
-        FcitxLock(remote->owner);
-        switch (cmd)
-        {
-            /// {{{
-        case 0:
-            SendIMState(remote, client_fd);
-            break;
-        case 1:
-            if (arg == IS_CLOSED)
-                CloseIM(remote->owner, GetCurrentIC(remote->owner));
-            else
-                EnableIM(remote->owner, GetCurrentIC(remote->owner), false);
-            break;
-        case 2:
-            ReloadConfig(remote->owner);
-            break;
-        default:
-            break;
-            /// }}}
-        }
-        FcitxUnlock(remote->owner);
-        close(client_fd);
+    int client_fd = UdAccept(remote->socket_fd);
+    if (client_fd < 0)
+        return;
+    read(client_fd, &O, sizeof(int));
+    unsigned int cmd = O & 0xFFFF;
+    unsigned int arg = (O >> 16) & 0xFFFF;
+    FcitxLock(remote->owner);
+    switch (cmd)
+    {
+        /// {{{
+    case 0:
+        SendIMState(remote, client_fd);
+        break;
+    case 1:
+        if (arg == IS_CLOSED)
+            CloseIM(remote->owner, GetCurrentIC(remote->owner));
+        else
+            EnableIM(remote->owner, GetCurrentIC(remote->owner), false);
+        break;
+    case 2:
+        ReloadConfig(remote->owner);
+        break;
+    default:
+        break;
+        /// }}}
     }
+    FcitxUnlock(remote->owner);
+    close(client_fd);
 }
 
-void* RemoteRun (void* arg)
+void RemoteSetFD (void* arg)
 {
     FcitxRemote* remote = (FcitxRemote*) arg;
-    char *socketfile = remote->socketfile;
-    sprintf(socketfile, "/tmp/fcitx-socket");
-    int socket_fd = CreateSocket(socketfile);
-    if (socket_fd < 0) {
-        FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
-        return 0;
-    }
-
-    fcntl(socket_fd, F_SETFD, FD_CLOEXEC);
-    chmod(socketfile, 0600);
-    RemoteMainLoop(remote, socket_fd);
-    close(socket_fd);
-    return 0;
+    FD_SET(remote->socket_fd, &remote->owner->rfds);
+    if (remote->owner->maxfd < remote->socket_fd)
+        remote->owner->maxfd = remote->socket_fd;
 }
 

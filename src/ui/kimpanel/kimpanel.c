@@ -37,6 +37,8 @@
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
 
+#define FCITX_KIMPANEL_PATH "/kimpanel"
+
 typedef struct FcitxKimpanelUI
 {
     FcitxInstance* owner;
@@ -67,7 +69,7 @@ static void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text);
 static void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position);
 static void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n);
 static void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop);
-static boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg);
+static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
 static void KimpanelInputReset(void *arg);
 static char* Status2String(FcitxUIStatus* status);
@@ -100,6 +102,12 @@ void* KimpanelCreate(FcitxInstance* instance)
 
     kimpanel->owner = instance;
     kimpanel->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
+    
+    if (kimpanel->conn == NULL)
+    {
+        free(kimpanel);
+        return NULL;
+    }
         
     // add a rule to receive signals from kimpanel
     DBusError err;
@@ -110,12 +118,16 @@ void* KimpanelCreate(FcitxInstance* instance)
     dbus_connection_flush(kimpanel->conn);
     if (dbus_error_is_set(&err)) { 
         FcitxLog(ERROR, "Match Error (%s)", err.message);
+        free(kimpanel);
         return NULL;
     }
-
-    arg.args[0] = KimpanelDBusEventHandler;
-    arg.args[1] = kimpanel;
-    InvokeFunction(instance, FCITX_DBUS, ADDEVENTHANDLER, arg);
+    
+    if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusEventHandler, kimpanel, NULL))
+    {
+        FcitxLog(ERROR, "No memory");
+        free(kimpanel);
+        return NULL;
+    }
     
     FcitxIMEventHook resethk;
     resethk.arg = kimpanel;
@@ -397,7 +409,7 @@ void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
     return ;
 }
 
-boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
+static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     FcitxInstance* instance = kimpanel->owner;
@@ -417,7 +429,7 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
             dbus_message_iter_get_basic(&args, &int0);
             FcitxLog(DEBUG, "Got Signal with value %d", int0);
         }
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "SelectCandidate")) {
         FcitxLog(DEBUG, "SelectCandidate: ");
@@ -449,19 +461,19 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
             }
             FcitxLog(DEBUG, "%d:%s", int0, pstr);
         }
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageUp")) {
         FcitxLog(DEBUG, "LookupTablePageUp");
         INPUT_RETURN_VALUE retVal = im->GetCandWords (im->klass, SM_PREV);
         ProcessInputReturnValue(instance, retVal);
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageDown")) {
         FcitxLog(DEBUG, "LookupTablePageDown");
         INPUT_RETURN_VALUE retVal = im->GetCandWords (im->klass,SM_NEXT);
         ProcessInputReturnValue(instance, retVal);
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
         FcitxLog(DEBUG, "TriggerProperty: ");
@@ -515,25 +527,25 @@ boolean KimpanelDBusEventHandler(void* arg, DBusMessage* msg)
                     UpdateStatus(instance, s0);
             }            
         }
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
         FcitxLog(DEBUG, "PanelCreated");
         
         KimpanelRegisterAllStatus(kimpanel);
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
         FcitxLog(DEBUG, "Exit");
         EndInstance(instance);
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
         FcitxLog(DEBUG, "ReloadConfig");
-        return true;
+        return DBUS_HANDLER_RESULT_HANDLED;
     }
     
-    return false;
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
 
@@ -544,8 +556,8 @@ void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "ExecDialog"); // name of the signal
     if (NULL == msg) 
     { 
@@ -578,8 +590,8 @@ void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[],int n)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "ExecMenu"); // name of the signal
     if (NULL == msg) 
     { 
@@ -624,8 +636,8 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "RegisterProperties"); // name of the signal
     if (NULL == msg) 
     { 
@@ -671,8 +683,8 @@ void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdateProperty"); // name of the signal
     if (NULL == msg) 
     { 
@@ -705,8 +717,8 @@ void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "RemoveProperty"); // name of the signal
     if (NULL == msg) 
     { 
@@ -739,8 +751,8 @@ void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "Enable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -774,8 +786,8 @@ void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "ShowAux"); // name of the signal
     if (NULL == msg) 
     { 
@@ -808,8 +820,8 @@ void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "ShowPreedit"); // name of the signal
     if (NULL == msg) 
     { 
@@ -842,8 +854,8 @@ void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "ShowLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -876,8 +888,8 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdateLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -938,8 +950,8 @@ void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdatePreeditCaret"); // name of the signal
     if (NULL == msg) 
     { 
@@ -972,8 +984,8 @@ void KimUpdatePreeditText(FcitxKimpanelUI* kimpanel, char *text)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdatePreeditText"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1010,8 +1022,8 @@ void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdateAux"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1049,8 +1061,8 @@ void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdateSpotLocation"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1086,8 +1098,8 @@ void KimUpdateScreen(FcitxKimpanelUI* kimpanel, int id)
     DBusMessageIter args;
 
     // create a signal and check for errors 
-    msg = dbus_message_new_signal("/fcitx", // object name of the signal
-            "org.kde.fcitx", // interface name of the signal
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+            FCITX_DBUS_SERVICE, // interface name of the signal
             "UpdateScreen"); // name of the signal
     if (NULL == msg) 
     { 

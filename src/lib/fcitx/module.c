@@ -29,7 +29,14 @@
 #include <pthread.h>
 #include "instance.h"
 
+static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
+
+FCITX_EXPORT_API
+void InitFcitxModules(UT_array* modules)
+{
+    utarray_init(modules, &module_icd);
+}
 
 FCITX_EXPORT_API
 void LoadModule(FcitxInstance* instance)
@@ -74,39 +81,14 @@ void LoadModule(FcitxInstance* instance)
                         }
                         addon->module = module;
                         addon->addonInstance = moduleinstance;
+                        if (module->ProcessEvent && module->SetFD)
+                            utarray_push_back(&instance->eventmodules, &addon);
                     }
                     break;
                 default:
                     break;
             }
             free(modulePath);
-        }
-    }
-}
-
-FCITX_EXPORT_API
-void RunModule(FcitxInstance* instance)
-{
-    UT_array* addons = &instance->addons;
-    FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
-        if (addon->bEnabled && addon->category == AC_MODULE)
-        {
-            switch (addon->type)
-            {
-                case AT_SHAREDLIBRARY:
-                    {
-                        if(addon->module && addon->module->Run)
-                        {                            
-                            pthread_create(&addon->pid, NULL, addon->module->Run, addon->addonInstance);
-                        }
-                    }
-                default:
-                    break;
-            }
         }
     }
 }
