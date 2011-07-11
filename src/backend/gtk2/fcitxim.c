@@ -17,11 +17,60 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef __FCITX_CLIENT_CONTEXT_H__
-#define  __FCITX_CLIENT_CONTEXT_H__
+#include <gtk/gtk.h>
+#include <gtk/gtkimmodule.h>
+#include "fcitx/fcitx.h"
+#include "fcitximcontext.h"
 
-typedef struct FcitxDBusClientInputContext
+static const GtkIMContextInfo fcitx_im_info = {
+    "fcitx",
+    "Fcitx (Free Chinese Input Toy of X)",
+    "fcitx",
+    LOCALEDIR,
+    "ja:ko:zh:*"
+};
+
+static const GtkIMContextInfo *info_list[] = {
+    &fcitx_im_info
+};
+
+G_MODULE_EXPORT const gchar*
+g_module_check_init (GModule *module)
 {
-} FcitxDBusClientInputContext;
+    return glib_check_version (GLIB_MAJOR_VERSION,
+                               GLIB_MINOR_VERSION,
+                               0);
+}
 
-#endif
+G_MODULE_EXPORT void
+im_module_init (GTypeModule *type_module)
+{
+    /* make module resident */
+    g_type_module_use (type_module);
+    fcitx_im_context_register_type (type_module);
+}
+
+G_MODULE_EXPORT void
+im_module_exit (void)
+{
+}
+
+G_MODULE_EXPORT GtkIMContext *
+im_module_create (const gchar *context_id)
+{
+    if (g_strcmp0 (context_id, "fcitx") == 0) {
+        FcitxIMContext *context;
+        context = fcitx_im_context_new ();
+        return (GtkIMContext *) context;
+    }
+    return NULL;
+}
+
+G_MODULE_EXPORT void
+im_module_list (const GtkIMContextInfo ***contexts,
+                gint *n_contexts)
+{
+    *contexts = info_list;
+    *n_contexts = G_N_ELEMENTS (info_list);
+}
+

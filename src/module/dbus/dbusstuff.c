@@ -70,7 +70,7 @@ void* DBusCreate(FcitxInstance* instance)
     }
 
     // request a name on the bus
-    int ret = dbus_bus_request_name(conn, "org.kde.fcitx",
+    int ret = dbus_bus_request_name(conn, FCITX_DBUS_SERVICE,
                                 DBUS_NAME_FLAG_REPLACE_EXISTING,
                                 &err);
     if (dbus_error_is_set(&err)) {

@@ -30,6 +30,9 @@
 #define FCITX_DBUS_REMOVEEVENTHANDLER 2
 #define FCITX_DBUS_REMOVEEVENTHANDLER_RETURNTYPE void
 
+#define FCITX_DBUS_PATH "/org/fcitx/fcitx"
+#define FCITX_DBUS_SERVICE "org.fcitx.fcitx"
+
 typedef struct FcitxDBusEventHandler {
     boolean (*eventHandler)(void* instance, DBusMessage * event);
     void* instance;

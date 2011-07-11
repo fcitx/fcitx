@@ -93,6 +93,7 @@ void* X11Run(void* arg)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     XEvent event;
+    fd_set            rfds, wfds, efds;
     /* 主循环，即XWindow的消息循环 */
     for (;;) {
         /* two loop is a trick used by qt */
@@ -127,7 +128,19 @@ void* X11Run(void* arg)
                 FcitxUnlock(x11priv->owner);
             }
         }
-        usleep(5000);
+        
+        /*
+         * yes, we need select after first event being processed, otherwise if there is no new
+         * event, the program will simply hang there.
+         */
+        FD_ZERO(&rfds);
+        FD_ZERO(&wfds);
+        FD_ZERO(&efds);
+        FD_SET(ConnectionNumber(x11priv->dpy), &rfds);
+        int i = select(ConnectionNumber(x11priv->dpy) + 1,
+            &rfds, &wfds, &efds, NULL);
+        if (i < 0)
+            break;
     }
     return NULL;
 
