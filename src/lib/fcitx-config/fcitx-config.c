@@ -195,6 +195,13 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
         ConfigGroupDesc *cgdesc = NULL;
         ConfigOption *options = group->options, *option = NULL;
         
+        if (strcmp(group->groupName, "DescriptionFile") == 0)
+        {
+            HASH_FIND_STR(options, "LocaleDomain", option);
+            cfdesc->domain = strdup(option->rawValue);
+            continue;
+        }
+        
         char * p = strchr(group->groupName, '/');
         if (p == NULL)
             continue;
@@ -852,7 +859,7 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
                 HASH_FIND_STR(group->options, optiondesc->optionName, option);
 
             if (optiondesc->desc && strlen(optiondesc->desc) != 0)
-                fprintf(fp, "# %s\n", _(optiondesc->desc));
+                fprintf(fp, "# %s\n", dgettext(cdesc->domain, optiondesc->desc));
 
 
             if (!option)

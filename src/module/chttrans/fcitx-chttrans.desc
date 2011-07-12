@@ -15,3 +15,6 @@ Description=Enabled in input
 Type=Hotkey
 DefaultValue=CTRL_ALT_F
 Description=Toggle for enable or disable
+
+[DescriptionFile]
+LocaleDomain=fcitx

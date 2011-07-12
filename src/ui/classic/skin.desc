@@ -197,3 +197,6 @@ DefaultValue=keyboard.png
 Type=Color
 Description=Key Color On Virutal Keyboard
 DefaultValue=0 0 0
+
+[DescriptionFile]
+LocaleDomain=fcitx

@@ -126,3 +126,6 @@ Description=Hotkey to Choose Second and Third Candidate Word
 Type=Hotkey
 DefaultValue=CTRL_ALT_S
 Description=Hotkey of Saving All Config and Input History
+
+[DescriptionFile]
+LocaleDomain=fcitx

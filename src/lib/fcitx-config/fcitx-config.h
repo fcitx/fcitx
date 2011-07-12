@@ -153,6 +153,7 @@ struct ConfigGroupDesc
 struct ConfigFileDesc
 {
     ConfigGroupDesc *groupsDesc;
+    char* domain;
 };
 
 struct ConfigOption

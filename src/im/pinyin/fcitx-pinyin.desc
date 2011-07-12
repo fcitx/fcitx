@@ -134,3 +134,6 @@ Description=Fuzzy z and zh
 Type=Boolean
 DefaultValue=False
 Description=Fix misstype gn/ng
+
+[DescriptionFile]
+LocaleDomain=fcitx

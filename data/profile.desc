@@ -17,3 +17,6 @@ DefaultValue=False
 Description=Current Input Method Index
 Type=Integer
 DefaultValue=0
+
+[DescriptionFile]
+LocaleDomain=fcitx

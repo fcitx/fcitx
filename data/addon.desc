@@ -35,3 +35,6 @@ Description=Dependency
 Type=Integer
 DefaultValue=50
 Description=Priority of addon
+
+[DescriptionFile]
+LocaleDomain=fcitx

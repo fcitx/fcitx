@@ -106,3 +106,6 @@ DefaultValue=1234567890
 Description=Enable This Table or Not
 Type=Boolean
 DefaultValue=True
+
+[DescriptionFile]
+LocaleDomain=fcitx
