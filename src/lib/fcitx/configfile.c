@@ -29,7 +29,6 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/keys.h"
-static boolean IsReloadConfig = false;
 
 static ConfigFileDesc* GetConfigDesc();
 static void FilterSwitchKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
@@ -161,8 +160,6 @@ void LoadConfig(FcitxConfig* fc)
     
     FcitxConfigConfigBind(fc, cfile, configDesc);
     ConfigBindSync((GenericConfig*)fc);
-
-    IsReloadConfig = true;
     
     fclose(fp);
 }

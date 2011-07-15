@@ -1,6 +1,9 @@
 #ifndef FCITX_CLIENT_H
 #define FCITX_CLIENT_H
 
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx/ime.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -8,11 +11,13 @@ extern "C" {
 typedef struct FcitxIMClient FcitxIMClient;
 
 FcitxIMClient* FcitxIMClientOpen();
+boolean IsFcitxIMClientValid(FcitxIMClient* client);
 void FcitxIMClientClose(FcitxIMClient* client);
-void FcitxIMClientFoucsIn(FcitxIMClient* client);
-void FcitxIMClientFoucsOut(FcitxIMClient* client);
+void FcitxIMClientFocusIn(FcitxIMClient* client);
+void FcitxIMClientFocusOut(FcitxIMClient* client);
 void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y);
 void FcitxIMClientReset(FcitxIMClient* client);
+int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t time);
 
 #ifdef __cplusplus
 }

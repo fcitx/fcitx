@@ -303,6 +303,7 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
     pid_t pid = getpid();
     XChangeProperty(x11priv->dpy, window, x11priv->pidAtom, XA_CARDINAL, 32,
             PropModeReplace, (unsigned char *)&pid, 1);
+    XChangeProperty( x11priv->dpy, window, XA_WM_CLASS, XA_STRING, 8, PropModeReplace, (const unsigned char*) "Fcitx", strlen("Fcitx") + 1);
     
     if (windowTitle)
     {

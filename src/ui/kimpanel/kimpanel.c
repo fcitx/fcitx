@@ -105,6 +105,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     
     if (kimpanel->conn == NULL)
     {
+        FcitxLog(ERROR, "DBus Not initialized");
         free(kimpanel);
         return NULL;
     }

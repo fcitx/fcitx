@@ -159,7 +159,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
          */
         if (pPunc) {
             GetOutputString(input)[0] = '\0';
-            if (puncState->owner->input.bIsInRemind)
+            if (!puncState->owner->input.bIsInRemind)
                 pstr = currentIM->GetCandWord(currentIM->klass, 0);
             if (pstr)
                 strcpy(GetOutputString(input), pstr);

@@ -47,8 +47,6 @@ FcitxIMContext
         *fcitx_im_context_new (void);
 void fcitx_im_context_register_type
                                   (GTypeModule *type_module);
-void fcitx_im_context_shutdown
-                                  (void);
 const gchar
         *fcitx_im_context_get_ic (FcitxIMContext *context);
 void fcitx_im_context_set_ic (FcitxIMContext *context,

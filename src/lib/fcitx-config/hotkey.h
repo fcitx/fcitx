@@ -67,7 +67,7 @@ typedef enum _KEY_STATE {
 } KEY_STATE;
 
 void SetHotKey (char *strKey, HOTKEYS * hotkey);
-void GetKey (FcitxKeySym keysym, int iKeyState, int iCount, FcitxKeySym* outk, unsigned int* outs);
+void GetKey (FcitxKeySym keysym, unsigned int iKeyState, int iCount, FcitxKeySym* outk, unsigned int* outs);
 boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state);
 int GetKeyList (char *strKey);
 char* GetKeyString(FcitxKeySym sym, unsigned int state);

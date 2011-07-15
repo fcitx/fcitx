@@ -34,6 +34,7 @@ static const GtkIMContextInfo *info_list[] = {
     &fcitx_im_info
 };
 
+FCITX_EXPORT_API
 G_MODULE_EXPORT const gchar*
 g_module_check_init (GModule *module)
 {
@@ -42,6 +43,7 @@ g_module_check_init (GModule *module)
                                0);
 }
 
+FCITX_EXPORT_API
 G_MODULE_EXPORT void
 im_module_init (GTypeModule *type_module)
 {
@@ -50,11 +52,13 @@ im_module_init (GTypeModule *type_module)
     fcitx_im_context_register_type (type_module);
 }
 
+FCITX_EXPORT_API
 G_MODULE_EXPORT void
 im_module_exit (void)
 {
 }
 
+FCITX_EXPORT_API
 G_MODULE_EXPORT GtkIMContext *
 im_module_create (const gchar *context_id)
 {
@@ -66,6 +70,7 @@ im_module_create (const gchar *context_id)
     return NULL;
 }
 
+FCITX_EXPORT_API
 G_MODULE_EXPORT void
 im_module_list (const GtkIMContextInfo ***contexts,
                 gint *n_contexts)
