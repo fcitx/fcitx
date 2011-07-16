@@ -47,24 +47,5 @@ FcitxIMContext
         *fcitx_im_context_new (void);
 void fcitx_im_context_register_type
                                   (GTypeModule *type_module);
-const gchar
-        *fcitx_im_context_get_ic (FcitxIMContext *context);
-void fcitx_im_context_set_ic (FcitxIMContext *context,
-                                   const gchar *ic);
-void fcitx_im_context_enable (FcitxIMContext *context);
-void fcitx_im_context_disable (FcitxIMContext *context);
-void fcitx_im_context_commit_string
-                                  (FcitxIMContext *context,
-                                   const gchar *string);
-void fcitx_im_context_update_preedit
-                                  (FcitxIMContext *context,
-                                   const gchar *string,
-                                   PangoAttrList *attrs,
-                                   gint cursor_pos,
-                                   gboolean visible);
-void fcitx_im_context_show_preedit
-                                  (FcitxIMContext *context);
-void fcitx_im_context_hide_preedit
-                                  (FcitxIMContext *context);
 G_END_DECLS
 #endif

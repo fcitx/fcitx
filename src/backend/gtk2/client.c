@@ -1,11 +1,15 @@
 #include <stdlib.h>
 #include <dbus/dbus-glib.h>
 #include "fcitx/fcitx.h"
-#include "fcitx-utils/utils.h"
-#include "client.h"
+#include "fcitx/ime.h"
 #include "fcitx-config/fcitx-config.h"
-#include <fcitx/ime.h>
+#include "fcitx-utils/log.h"
+#include "fcitx-utils/utils.h"
 
+#include "client.h"
+#include "marshall.h"
+
+#define LOG_LEVEL INFO
 #define IC_NAME_MAX 64
 
 struct FcitxIMClient {
@@ -14,16 +18,16 @@ struct FcitxIMClient {
     DBusGProxy* icproxy;
     char icname[IC_NAME_MAX];
     int id;
+    DBusGProxy* dbusproxy;
+    FcitxIMClientConnectCallback connectcb;
+    FcitxIMClientDestroyCallback destroycb;
+    void *data;
 };
 
 static void FcitxIMClientCreateIC(FcitxIMClient* client);
-extern void
-fcitx_marshall_VOID__UINT_UINT_INT (GClosure     *closure,
-                                    GValue       *return_value G_GNUC_UNUSED,
-                                    guint         n_param_values,
-                                    const GValue *param_values,
-                                    gpointer      invocation_hint G_GNUC_UNUSED,
-                                    gpointer      marshal_data);
+
+static void _destroy_cb(DBusGProxy *proxy, gpointer user_data);
+static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char* new_owner, gpointer user_data);
 
 boolean IsFcitxIMClientValid(FcitxIMClient* client)
 {
@@ -35,31 +39,100 @@ boolean IsFcitxIMClientValid(FcitxIMClient* client)
     return true;
 }
 
-FcitxIMClient* FcitxIMClientOpen()
+FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, void* data)
 {
     FcitxIMClient* client = fcitx_malloc0(sizeof(FcitxIMClient));
     GError *error = NULL;
+    client->connectcb = connectcb;
+    client->destroycb = destroycb;
+    client->data = data;
     client->conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
     client->id = -1;
+    
+    /* You must have dbus to make it works */
     if (client->conn == NULL)
     {
+        g_warning(error->message);
         free(client);
         return NULL;
     }
-    client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                    "org.fcitx.fcitx",
-                                                    "/inputmethod",
-                                                    "org.fcitx.fcitx",
-                                                    &error);
+    
+    client->dbusproxy = dbus_g_proxy_new_for_name(client->conn,
+                                           DBUS_SERVICE_DBUS,
+                                           DBUS_PATH_DBUS,
+                                           DBUS_INTERFACE_DBUS);
+    
+    if (!client->dbusproxy)
+    {
+        g_object_unref(client->conn);
+        free(client);
+        return NULL;
+    }
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+    dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+    dbus_g_proxy_connect_signal(client->dbusproxy, "NameOwnerChanged",
+                                G_CALLBACK(_changed_cb), client, NULL);
     
     FcitxIMClientCreateIC(client);
     return client;
+}
+
+static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char* new_owner, gpointer user_data)
+{
+    FcitxLog(LOG_LEVEL, "_changed_cb");
+    FcitxIMClient* client = (FcitxIMClient*) user_data;
+    if (g_str_equal(service, "org.fcitx.fcitx"))
+    {
+        gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
+        if (new_owner_good)
+        {
+            if (client->proxy) 
+            {
+                g_object_unref(client->proxy);
+                client->proxy = NULL;
+            }
+
+            if (client->icproxy) 
+            {
+                g_object_unref(client->icproxy);
+                client->icproxy = NULL;
+            }
+            
+            FcitxIMClientCreateIC(client);
+        }
+    }
+}
+
+static void _destroy_cb(DBusGProxy *proxy, gpointer user_data)
+{
+    FcitxLog(LOG_LEVEL, "_destroy_cb");
+    FcitxIMClient* client = (FcitxIMClient*) user_data;
+    if (client->proxy == proxy)
+    {
+        g_object_unref(client->proxy);
+        g_object_unref(client->icproxy);
+        client->proxy = NULL;
+        client->icproxy = NULL;
+    }
+    client->destroycb(client, client->data);
 }
 
 void FcitxIMClientCreateIC(FcitxIMClient* client)
 {
     GError* error = NULL;
     int id = -1;
+    
+    client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
+                                                "org.fcitx.fcitx",
+                                                "/inputmethod",
+                                                "org.fcitx.fcitx",
+                                                &error);
+    if (!client->proxy)
+        return;
+    
+    g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
+
+    
     dbus_g_proxy_call(client->proxy, "CreateIC", &error, G_TYPE_INVALID, G_TYPE_INT, &id, G_TYPE_INVALID);
     if (id >= 0)
         client->id = id;
@@ -74,14 +147,17 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
                                                       "org.fcitx.fcitx",
                                                       &error
                                                      );
+    if (!client->icproxy)
+        return;
     
-     dbus_g_proxy_add_signal(client->icproxy, "EnableIM", G_TYPE_INVALID);
-     dbus_g_proxy_add_signal(client->icproxy, "CloseIM", G_TYPE_INVALID);
-     dbus_g_proxy_add_signal(client->icproxy, "CommitString", G_TYPE_STRING, G_TYPE_INVALID);
-     
-     dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
-     
-     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+    dbus_g_proxy_add_signal(client->icproxy, "EnableIM", G_TYPE_INVALID);
+    dbus_g_proxy_add_signal(client->icproxy, "CloseIM", G_TYPE_INVALID);
+    dbus_g_proxy_add_signal(client->icproxy, "CommitString", G_TYPE_STRING, G_TYPE_INVALID);
+
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+
+    dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+    client->connectcb(client, client->data);
 }
 
 void FcitxIMClientClose(FcitxIMClient* client)
@@ -90,8 +166,16 @@ void FcitxIMClientClose(FcitxIMClient* client)
     {
         dbus_g_proxy_call_no_reply(client->icproxy, "DestroyIC", G_TYPE_INVALID);
     }
-    g_object_unref(client->icproxy);
-    g_object_unref(client->proxy);
+    DBusGProxy* icproxy = client->icproxy;
+    DBusGProxy* proxy = client->proxy;
+    client->icproxy = NULL;
+    client->proxy = NULL;
+    if (proxy)
+        g_signal_handlers_disconnect_by_func(proxy, G_CALLBACK( _destroy_cb), client);
+    if (icproxy)
+        g_object_unref(icproxy);
+    if (proxy)
+        g_object_unref(proxy);
     free(client);
 }
 

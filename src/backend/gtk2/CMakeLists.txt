@@ -12,19 +12,23 @@ FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
 add_custom_command(OUTPUT marshall.c
                    COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall ${CMAKE_CURRENT_SOURCE_DIR}/marshal.list > marshall.c
 )
-
+add_custom_command(OUTPUT marshall.h
+                   COMMAND ${GLIB_GENMARSHAL} --header --prefix=fcitx_marshall ${CMAKE_CURRENT_SOURCE_DIR}/marshal.list > marshall.h
+)
 set(GTK2_IM_MODULEDIR
  "${libdir}/gtk-2.0/${GTK2_BINARY_VERSION}/immodules"
 )
 
 include_directories(${GTK2_INCLUDE_DIRS})
 include_directories(${DBUS_GLIB_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(FCITX_GTK2_IM_MODULE_SOURCES
     fcitxim.c
     fcitximcontext.c
     client.c
     ${CMAKE_CURRENT_BINARY_DIR}/marshall.c
+    ${CMAKE_CURRENT_BINARY_DIR}/marshall.h
 )
 
 add_library(im-fcitx MODULE ${FCITX_GTK2_IM_MODULE_SOURCES})

@@ -111,7 +111,10 @@ static void
 _fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user_data);
 static void
 _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint state, gint type, void* user_data);
-
+static void
+_fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data);
+static void
+_fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data);
 
 static GdkEventKey *
 _create_gdk_event (FcitxIMContext *fcitxcontext,
@@ -299,18 +302,8 @@ fcitx_im_context_init (FcitxIMContext *context)
                       context);
     
     context->time = GDK_CURRENT_TIME;
-    
-    context->client = FcitxIMClientOpen();
-    if (IsFcitxIMClientValid(context->client))
-    {
-        FcitxIMClientConnectSignal(context->client,
-                                   G_CALLBACK(_fcitx_im_context_enable_im_cb),
-                                   G_CALLBACK(_fcitx_im_context_close_im_cb),
-                                   G_CALLBACK(_fcitx_im_context_commit_string_cb),
-                                   G_CALLBACK(_fcitx_im_context_forward_key_cb),
-                                   context,
-                                   NULL);
-    }
+
+    context->client = FcitxIMClientOpen(_fcitx_im_context_connect_cb, _fcitx_im_context_destroy_cb, context);
 }
 
 static void
@@ -388,7 +381,7 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
         }
         else
         {
-            if (!fcitxcontext->is_inpreedit)
+            if (fcitxcontext->use_preedit && !fcitxcontext->is_inpreedit)
             {
                 fcitxcontext->is_inpreedit = true;
                 g_signal_emit (context, _signal_preedit_start_id, 0);
@@ -553,14 +546,14 @@ fcitx_im_context_get_preedit_string (GtkIMContext   *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
     
-    if (fcitxcontext->enable && IsFcitxIMClientValid(fcitxcontext->client))
+    if (fcitxcontext->enable && IsFcitxIMClientValid(fcitxcontext->client) && fcitxcontext->is_inpreedit)
     {
-        if (fcitxcontext->is_inpreedit)
-        {
+        if (str)
             *str = strdup("");
+        if (attrs)
             *attrs = pango_attr_list_new ();
+        if (cursor_pos)
             *cursor_pos = 0;
-        }
     }
     else
         gtk_im_context_get_preedit_string (fcitxcontext->slave, str, attrs, cursor_pos);
@@ -857,4 +850,26 @@ _key_is_modifier (guint keyval)
     default:
         return FALSE;
     }
+}
+
+void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
+{
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    if (IsFcitxIMClientValid(client))
+    {
+        FcitxIMClientConnectSignal(client,
+                                   G_CALLBACK(_fcitx_im_context_enable_im_cb),
+                                   G_CALLBACK(_fcitx_im_context_close_im_cb),
+                                   G_CALLBACK(_fcitx_im_context_commit_string_cb),
+                                   G_CALLBACK(_fcitx_im_context_forward_key_cb),
+                                   context,
+                                   NULL);
+    }
+
+}
+
+void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
+{
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    context->enable = false;
 }
