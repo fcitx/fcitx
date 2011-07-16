@@ -31,6 +31,7 @@
 #include "fcitx-config/fcitx-config.h"
 #include "client.h"
 #include <fcitx-utils/log.h>
+#include <dbus/dbus-glib.h>
 
 #define LOG_LEVEL INFO
 
@@ -48,6 +49,9 @@ struct _FcitxIMContext {
     FcitxIMClient* client;
     GtkIMContext* slave;
     int has_focus;
+    guint32 time;
+    gboolean use_preedit;
+    gboolean is_inpreedit;
 };
 
 struct _FcitxIMContextClass {
@@ -76,7 +80,7 @@ static void     fcitx_im_context_get_preedit_string (GtkIMContext          *cont
         gint                  *cursor_pos);
 
 
-static void
+static gboolean
 _set_cursor_location_internal (FcitxIMContext *fcitxcontext);
 static void
 _slave_commit_cb (GtkIMContext *slave,
@@ -99,6 +103,26 @@ _slave_delete_surrounding_cb (GtkIMContext *slave,
                               gint offset_from_cursor,
                               guint nchars,
                               FcitxIMContext *context);
+static void
+_fcitx_im_context_enable_im_cb(DBusGProxy* proxy, void* user_data);
+static void
+_fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data);
+static void
+_fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user_data);
+static void
+_fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint state, gint type, void* user_data);
+
+
+static GdkEventKey *
+_create_gdk_event (FcitxIMContext *fcitxcontext,
+                   guint keyval,
+                   guint state,
+                   FcitxKeyEventType type
+                  );
+
+
+static gboolean
+_key_is_modifier (guint keyval);
 
 static GType _fcitx_type_im_context = 0;
 
@@ -240,6 +264,8 @@ fcitx_im_context_init (FcitxIMContext *context)
     context->area.y = -1;
     context->area.width = 0;
     context->area.height = 0;
+    context->use_preedit = FALSE;
+    context->is_inpreedit = FALSE;
     
     context->slave = gtk_im_context_simple_new ();
     gtk_im_context_simple_add_table (GTK_IM_CONTEXT_SIMPLE (context->slave),
@@ -272,7 +298,19 @@ fcitx_im_context_init (FcitxIMContext *context)
                       G_CALLBACK (_slave_delete_surrounding_cb),
                       context);
     
+    context->time = GDK_CURRENT_TIME;
+    
     context->client = FcitxIMClientOpen();
+    if (IsFcitxIMClientValid(context->client))
+    {
+        FcitxIMClientConnectSignal(context->client,
+                                   G_CALLBACK(_fcitx_im_context_enable_im_cb),
+                                   G_CALLBACK(_fcitx_im_context_close_im_cb),
+                                   G_CALLBACK(_fcitx_im_context_commit_string_cb),
+                                   G_CALLBACK(_fcitx_im_context_forward_key_cb),
+                                   context,
+                                   NULL);
+    }
 }
 
 static void
@@ -332,7 +370,12 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
     if (IsFcitxIMClientValid(fcitxcontext->client))
-    {
+    {        
+        /* XXX it is a workaround for some applications do not set client window. */
+        if (fcitxcontext->client_window == NULL && event->window != NULL)
+            gtk_im_context_set_client_window ((GtkIMContext *)fcitxcontext, event->window);
+        
+        fcitxcontext->time = event->time;
         int ret = FcitxIMClientProcessKey(fcitxcontext->client,
                                           event->keyval,
                                           event->hardware_keycode,
@@ -341,12 +384,22 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
                                           event->time);
         if (ret <= 0)
         {
-            gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+            return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+        }
+        else
+        {
+            if (!fcitxcontext->is_inpreedit)
+            {
+                fcitxcontext->is_inpreedit = true;
+                g_signal_emit (context, _signal_preedit_start_id, 0);
+                g_signal_emit (context, _signal_preedit_changed_id, 0);
+            }
+            return true;
         }
     }
     else
     {
-        gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
     }
     return FALSE;
 }
@@ -368,6 +421,13 @@ fcitx_im_context_focus_in (GtkIMContext *context)
     }
     
     gtk_im_context_focus_in (fcitxcontext->slave);
+        
+    /* set_cursor_location_internal() will get origin from X server,
+     * it blocks UI. So delay it to idle callback. */
+    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                     (GSourceFunc) _set_cursor_location_internal,
+                     g_object_ref (fcitxcontext),
+                     (GDestroyNotify) g_object_unref);
 
     return;
 }
@@ -389,6 +449,12 @@ fcitx_im_context_focus_out (GtkIMContext *context)
         FcitxIMClientFocusOut(fcitxcontext->client);
     }
     
+    if (fcitxcontext->is_inpreedit)
+    {
+        fcitxcontext->is_inpreedit = FALSE;
+        g_signal_emit (fcitxcontext, _signal_preedit_end_id, 0);
+    }
+    
     gtk_im_context_focus_out(fcitxcontext->slave);
 
     return;
@@ -399,7 +465,7 @@ static void
 fcitx_im_context_set_cursor_location (GtkIMContext *context,
                                       GdkRectangle *area)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_cursor_location");
+    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_cursor_location %d %d %d %d", area->x, area->y, area->height, area->width);
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
     
     if (fcitxcontext->area.x == area->x &&
@@ -418,14 +484,14 @@ fcitx_im_context_set_cursor_location (GtkIMContext *context,
     return;
 }
 
-static void
+static gboolean
 _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
 {
     GdkRectangle area;
 
     if(fcitxcontext->client_window == NULL ||
        !IsFcitxIMClientValid(fcitxcontext->client)) {
-        return;
+        return FALSE;
     }
 
     area = fcitxcontext->area;
@@ -446,7 +512,7 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
                                 &area.x, &area.y);
     
     FcitxIMClientSetCursorLocation(fcitxcontext->client, area.x, area.y + area.height);
-    return;
+    return FALSE;
 }
 
 ///
@@ -456,9 +522,9 @@ fcitx_im_context_set_use_preedit (GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    if (!IsFcitxIMClientValid(fcitxcontext->client))
-    {
-    }
+    
+    fcitxcontext->use_preedit = use_preedit;
+    fcitxcontext->is_inpreedit = FALSE;
     
     gtk_im_context_set_use_preedit(fcitxcontext->slave, use_preedit);
 }
@@ -486,13 +552,18 @@ fcitx_im_context_get_preedit_string (GtkIMContext   *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    if (fcitxcontext->enable)
+    
+    if (fcitxcontext->enable && IsFcitxIMClientValid(fcitxcontext->client))
     {
+        if (fcitxcontext->is_inpreedit)
+        {
+            *str = strdup("");
+            *attrs = pango_attr_list_new ();
+            *cursor_pos = 0;
+        }
     }
     else
-    {
         gtk_im_context_get_preedit_string (fcitxcontext->slave, str, attrs, cursor_pos);
-    }
     return ;
 }
 
@@ -562,4 +633,228 @@ _slave_delete_surrounding_cb (GtkIMContext *slave,
     }
     g_signal_emit (context, _signal_delete_surrounding_id, 0, offset_from_cursor, nchars, &return_value);
     return return_value;
+}
+
+void _fcitx_im_context_enable_im_cb(DBusGProxy* proxy, void* user_data)
+{
+    FcitxLog(LOG_LEVEL, "_fcitx_im_context_enable_im_cb");
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    context->enable = true;
+}
+
+void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
+{
+    FcitxLog(LOG_LEVEL, "_fcitx_im_context_close_im_cb");
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    context->enable = false;
+}
+
+void _fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user_data)
+{
+    FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    
+    g_signal_emit (context, _signal_commit_id, 0, str);
+}
+
+void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint state, gint type, void* user_data)
+{
+    FcitxLog(LOG_LEVEL, "_fcitx_im_context_forward_key_cb");
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+    FcitxKeyEventType tp = (FcitxKeyEventType) type;
+    GdkEventKey* event = _create_gdk_event(context, keyval, state, tp);
+    gdk_event_put ((GdkEvent *)event);
+    gdk_event_free ((GdkEvent *)event);
+}
+
+/* Copy from gdk */
+static GdkEventKey *
+_create_gdk_event (FcitxIMContext *fcitxcontext,
+                   guint keyval,
+                   guint state,
+                   FcitxKeyEventType type
+                  )
+{
+    gunichar c = 0;
+    gchar buf[8];
+
+    GdkEventKey *event = (GdkEventKey *)gdk_event_new ((type == FCITX_RELEASE_KEY) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
+
+    if (fcitxcontext && fcitxcontext->client_window)
+        event->window = g_object_ref (fcitxcontext->client_window);
+
+    /* The time is copied the latest value from the previous
+     * GdkKeyEvent in filter_keypress().
+     *
+     * We understand the best way would be to pass the all time value
+     * to IBus functions process_key_event() and IBus DBus functions
+     * ProcessKeyEvent() in IM clients and IM engines so that the
+     * _create_gdk_event() could get the correct time values.
+     * However it would causes to change many functions and the time value
+     * would not provide the useful meanings for each IBus engines but just
+     * pass the original value to ForwardKeyEvent().
+     * We use the saved value at the moment.
+     *
+     * Another idea might be to have the time implementation in X servers
+     * but some Xorg uses clock_gettime() and others use gettimeofday()
+     * and the values would be different in each implementation and
+     * locale/remote X server. So probably that idea would not work. */
+    if (fcitxcontext) {
+        event->time = fcitxcontext->time;
+    } else {
+        event->time = GDK_CURRENT_TIME;
+    }
+
+    event->send_event = FALSE;
+    event->state = state;
+    event->keyval = keyval;
+    event->string = NULL;
+    event->length = 0;
+    event->hardware_keycode = 0;
+    if (event->window)
+    {
+        
+          GdkDisplay      *display = gdk_window_get_display (event->window);
+          GdkKeymap       *keymap  = gdk_keymap_get_for_display (display);
+          GdkKeymapKey    *keys;
+          gint             n_keys = 0;
+
+          if (gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
+          {
+              if (n_keys)
+                  event->hardware_keycode = keys[0].keycode;
+              g_free(keys);
+          }
+    }
+    
+    event->group = 0;
+    event->is_modifier = _key_is_modifier (keyval);
+
+#ifdef DEPRECATED_GDK_KEYSYMS
+    if (keyval != GDK_VoidSymbol)
+#else
+    if (keyval != GDK_KEY_VoidSymbol)
+#endif
+        c = gdk_keyval_to_unicode (keyval);
+
+    if (c) {
+        gsize bytes_written;
+        gint len;
+
+        /* Apply the control key - Taken from Xlib
+*/
+        if (event->state & GDK_CONTROL_MASK) {
+            if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+            else if (c == '2') {
+                event->string = g_memdup ("\0\0", 2);
+                event->length = 1;
+                buf[0] = '\0';
+                goto out;
+            }
+            else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+            else if (c == '8') c = '\177';
+            else if (c == '/') c = '_' & 0x1F;
+        }
+
+        len = g_unichar_to_utf8 (c, buf);
+        buf[len] = '\0';
+
+        event->string = g_locale_from_utf8 (buf, len,
+                                            NULL, &bytes_written,
+                                            NULL);
+        if (event->string)
+            event->length = bytes_written;
+#ifdef DEPRECATED_GDK_KEYSYMS
+    } else if (keyval == GDK_Escape) {
+#else
+    } else if (keyval == GDK_KEY_Escape) {
+#endif
+        event->length = 1;
+        event->string = g_strdup ("\033");
+    }
+#ifdef DEPRECATED_GDK_KEYSYMS
+    else if (keyval == GDK_Return ||
+             keyval == GDK_KP_Enter) {
+#else
+    else if (keyval == GDK_KEY_Return ||
+             keyval == GDK_KEY_KP_Enter) {
+#endif
+        event->length = 1;
+        event->string = g_strdup ("\r");
+    }
+
+    if (!event->string) {
+        event->length = 0;
+        event->string = g_strdup ("");
+    }
+out:
+    return event;
+}
+
+
+static gboolean
+_key_is_modifier (guint keyval)
+{
+  /* See gdkkeys-x11.c:_gdk_keymap_key_is_modifier() for how this
+* really should be implemented */
+
+    switch (keyval) {
+#ifdef DEPRECATED_GDK_KEYSYMS
+    case GDK_Shift_L:
+    case GDK_Shift_R:
+    case GDK_Control_L:
+    case GDK_Control_R:
+    case GDK_Caps_Lock:
+    case GDK_Shift_Lock:
+    case GDK_Meta_L:
+    case GDK_Meta_R:
+    case GDK_Alt_L:
+    case GDK_Alt_R:
+    case GDK_Super_L:
+    case GDK_Super_R:
+    case GDK_Hyper_L:
+    case GDK_Hyper_R:
+    case GDK_ISO_Lock:
+    case GDK_ISO_Level2_Latch:
+    case GDK_ISO_Level3_Shift:
+    case GDK_ISO_Level3_Latch:
+    case GDK_ISO_Level3_Lock:
+    case GDK_ISO_Level5_Shift:
+    case GDK_ISO_Level5_Latch:
+    case GDK_ISO_Level5_Lock:
+    case GDK_ISO_Group_Shift:
+    case GDK_ISO_Group_Latch:
+    case GDK_ISO_Group_Lock:
+        return TRUE;
+#else
+    case GDK_KEY_Shift_L:
+    case GDK_KEY_Shift_R:
+    case GDK_KEY_Control_L:
+    case GDK_KEY_Control_R:
+    case GDK_KEY_Caps_Lock:
+    case GDK_KEY_Shift_Lock:
+    case GDK_KEY_Meta_L:
+    case GDK_KEY_Meta_R:
+    case GDK_KEY_Alt_L:
+    case GDK_KEY_Alt_R:
+    case GDK_KEY_Super_L:
+    case GDK_KEY_Super_R:
+    case GDK_KEY_Hyper_L:
+    case GDK_KEY_Hyper_R:
+    case GDK_KEY_ISO_Lock:
+    case GDK_KEY_ISO_Level2_Latch:
+    case GDK_KEY_ISO_Level3_Shift:
+    case GDK_KEY_ISO_Level3_Latch:
+    case GDK_KEY_ISO_Level3_Lock:
+    case GDK_KEY_ISO_Level5_Shift:
+    case GDK_KEY_ISO_Level5_Latch:
+    case GDK_KEY_ISO_Level5_Lock:
+    case GDK_KEY_ISO_Group_Shift:
+    case GDK_KEY_ISO_Group_Latch:
+    case GDK_KEY_ISO_Group_Lock:
+        return TRUE;
+#endif
+    default:
+        return FALSE;
+    }
 }

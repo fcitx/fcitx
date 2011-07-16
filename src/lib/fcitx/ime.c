@@ -270,9 +270,9 @@ FCITX_EXPORT_API
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
-    if (sym == hotkey[0].sym && (hotkey[0].state == state) )
+    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state) )
         return true;
-    if (sym == hotkey[1].sym && (hotkey[1].state == state) )
+    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state) )
         return true;
     return false;
 }

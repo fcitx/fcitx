@@ -17,6 +17,13 @@ struct FcitxIMClient {
 };
 
 static void FcitxIMClientCreateIC(FcitxIMClient* client);
+extern void
+fcitx_marshall_VOID__UINT_UINT_INT (GClosure     *closure,
+                                    GValue       *return_value G_GNUC_UNUSED,
+                                    guint         n_param_values,
+                                    const GValue *param_values,
+                                    gpointer      invocation_hint G_GNUC_UNUSED,
+                                    gpointer      marshal_data);
 
 boolean IsFcitxIMClientValid(FcitxIMClient* client)
 {
@@ -67,6 +74,14 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
                                                       "org.fcitx.fcitx",
                                                       &error
                                                      );
+    
+     dbus_g_proxy_add_signal(client->icproxy, "EnableIM", G_TYPE_INVALID);
+     dbus_g_proxy_add_signal(client->icproxy, "CloseIM", G_TYPE_INVALID);
+     dbus_g_proxy_add_signal(client->icproxy, "CommitString", G_TYPE_STRING, G_TYPE_INVALID);
+     
+     dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+     
+     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
 }
 
 void FcitxIMClientClose(FcitxIMClient* client)
@@ -136,7 +151,40 @@ int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t key
     return ret;
 }
 
-DBusGConnection* FcitxIMClientGetConnection(FcitxIMClient* imclient)
+void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
+    GCallback enableIM,
+    GCallback closeIM,
+    GCallback commitString,
+    GCallback forwardKey,
+    void* user_data,
+    GClosureNotify freefunc
+)
 {
-    return imclient->conn;
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+        "EnableIM",
+        enableIM,
+        user_data,
+        freefunc
+    );
+        
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+        "CloseIM",
+        closeIM,
+        user_data,
+        freefunc
+    );
+    
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+        "CommitString",
+        commitString,
+        user_data,
+        freefunc
+    );
+    
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+        "ForwardKey",
+        forwardKey,
+        user_data,
+        freefunc
+    );
 }

@@ -16,6 +16,7 @@
 
 typedef struct FcitxIPCIC {
     int id;
+    char path[32];
 } FcitxIPCIC;
 
 typedef struct FcitxIPCBackend {
@@ -63,7 +64,7 @@ const char * im_introspection_xml =
 const char * ic_introspection_xml =
 "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
 "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
-"<node name=\"" FCITX_IC_DBUS_PATH "\">\n"
+"<node>\n"
 "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
 "    <method name=\"Introspect\">\n"
 "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
@@ -90,6 +91,18 @@ const char * ic_introspection_xml =
 "      <arg name=\"time\" direction=\"in\" type=\"u\"/>\n"
 "      <arg name=\"ret\" direction=\"out\" type=\"i\"/>\n"
 "    </method>\n"
+"    <signal name=\"EnableIM\">\n"
+"    </signal>\n"
+"    <signal name=\"CloseIM\">\n"
+"    </signal>\n"
+"    <signal name=\"CommitString\">\n"
+"      <arg name=\"str\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"ForwardKey\">\n"
+"      <arg name=\"keyval\" direction=\"in\" type=\"u\"/>\n"
+"      <arg name=\"state\" direction=\"in\" type=\"u\"/>\n"
+"      <arg name=\"type\" direction=\"in\" type=\"i\"/>\n"
+"    </signal>\n"
 "  </interface>\n"
 "</node>\n";
 
@@ -154,15 +167,14 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     
     ipcic->id = ipc->maxid;
     ipc->maxid ++;
+    sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
     
     dbus_message_append_args(reply, DBUS_TYPE_INT32, &ipcic->id, DBUS_TYPE_INVALID);
     dbus_connection_send (ipc->conn, reply, NULL);
     dbus_message_unref (reply);
-    char path[PATH_MAX];
-    sprintf(path, FCITX_IC_DBUS_PATH, ipcic->id);
     
     DBusObjectPathVTable vtable = {NULL, &IPCICDBusEventHandler, NULL, NULL, NULL, NULL };
-    if (!dbus_connection_register_object_path(ipc->conn, path, &vtable, ipc))
+    if (!dbus_connection_register_object_path(ipc->conn, ipcic->path, &vtable, ipc))
     {
         return ;  
     }
@@ -182,29 +194,74 @@ boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv)
 void IPCDestroyIC(void* arg, FcitxInputContext* context)
 {
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
-    char path[PATH_MAX];
-    sprintf(path, FCITX_IC_DBUS_PATH, GetIPCIC(context)->id);
-    dbus_connection_unregister_object_path(ipc->conn, path);
+    dbus_connection_unregister_object_path(ipc->conn, GetIPCIC(context)->path);
 }
 
 void IPCEnableIM(void* arg, FcitxInputContext* ic)
 {
-
+    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+        FCITX_DBUS_SERVICE, // interface name of the signal
+        "EnableIM"); // name of the signal
+    
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
 }
 
 void IPCCloseIM(void* arg, FcitxInputContext* ic)
 {
-
+    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+        FCITX_DBUS_SERVICE, // interface name of the signal
+        "CloseIM"); // name of the signal
+    
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
 }
 
 void IPCCommitString(void* arg, FcitxInputContext* ic, char* str)
 {
-
+    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+        FCITX_DBUS_SERVICE, // interface name of the signal
+        "CommitString"); // name of the signal
+    
+    dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
+    
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
 }
 
 void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
-
+    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+        FCITX_DBUS_SERVICE, // interface name of the signal
+        "ForwardKey"); // name of the signal
+    
+    uint32_t keyval = (uint32_t) sym;
+    uint32_t keystate = (uint32_t) state;
+    int32_t type = (int) event;
+    dbus_message_append_args(msg, DBUS_TYPE_UINT32, &keyval, DBUS_TYPE_UINT32, &keystate, DBUS_TYPE_INT32, &type, DBUS_TYPE_INVALID);
+    
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
+        FcitxLog(DEBUG, "Out Of Memory!"); 
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
 }
 
 void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
@@ -240,6 +297,7 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
+
 static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) user_data;
@@ -258,13 +316,10 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
     {
         DBusMessage *reply = dbus_message_new_method_return(msg);
-        char *xml = NULL;
 
-        asprintf(&xml, ic_introspection_xml, id);
-        dbus_message_append_args(reply, DBUS_TYPE_STRING, &xml, DBUS_TYPE_INVALID);
+        dbus_message_append_args(reply, DBUS_TYPE_STRING, &ic_introspection_xml, DBUS_TYPE_INVALID);
         dbus_connection_send (ipc->conn, reply, NULL);
         dbus_message_unref (reply);
-        free(xml);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     
@@ -348,9 +403,13 @@ static int IPCProcessKey(FcitxIPCBackend* ipc, FcitxInputContext* callic, uint32
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%u ",
          (type == FCITX_RELEASE_KEY), state, keycode, sym);
     
+    if (originsym == 0)
+        return 1;
+    
     if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, ipc->owner->config.hkTrigger))
     {
         EnableIM(ipc->owner, ic, false);
+        ipc->owner->input.keyReleased = KR_OTHER;
         return 1;
     }
 
@@ -412,8 +471,10 @@ static void IPCICReset(FcitxIPCBackend* ipc, FcitxInputContext* ic)
 
 static void IPCICSetCursorLocation(FcitxIPCBackend* ipc, FcitxInputContext* ic, int x, int y)
 {
+    FcitxLog(INFO, "location: %d %d", x, y);
     ic->offset_x = x;
     ic->offset_y = y;
+    MoveInputWindow(ipc->owner);
 
     return;
 }

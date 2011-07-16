@@ -39,6 +39,65 @@
 
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
+const char * kimpanel_introspection_xml =
+"<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
+"\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
+"<node name=\"" FCITX_KIMPANEL_PATH "\">\n"
+"  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
+"    <method name=\"Introspect\">\n"
+"      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
+"    </method>\n"
+"  </interface>\n"
+"  <interface name=\"" FCITX_DBUS_SERVICE "\">\n"
+"    <signal name=\"ExecDialog\">\n"
+"      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"ExecMenu\">\n"
+"      <arg name=\"prop\" direction=\"in\" type=\"a\"/>\n"
+"    </signal>\n"
+"    <signal name=\"RegisterProperties\">\n"
+"      <arg name=\"prop\" direction=\"in\" type=\"a\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdateProperty\">\n"
+"      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"RemoveProperty\">\n"
+"      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"ShowAux\">\n"
+"      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
+"    </signal>\n"
+"    <signal name=\"ShowPreedit\">\n"
+"      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
+"    </signal>\n"
+"    <signal name=\"ShowLookupTable\">\n"
+"      <arg name=\"toshow\" direction=\"in\" type=\"b\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdateLookupTable\">\n"
+"      <arg name=\"label\" direction=\"in\" type=\"a\"/>\n"
+"      <arg name=\"text\" direction=\"in\" type=\"a\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdatePreeditCaret\">\n"
+"      <arg name=\"position\" direction=\"in\" type=\"i\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdatePreeditText\">\n"
+"      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
+"      <arg name=\"attr\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdateAux\">\n"
+"      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
+"      <arg name=\"attr\" direction=\"in\" type=\"s\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdateSpotLocation\">\n"
+"      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
+"      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
+"    </signal>\n"
+"    <signal name=\"UpdateScreen\">\n"
+"      <arg name=\"screen\" direction=\"in\" type=\"i\"/>\n"
+"    </signal>\n"
+"  </interface>\n"
+"</node>\n";
+
 typedef struct FcitxKimpanelUI
 {
     FcitxInstance* owner;
@@ -70,6 +129,7 @@ static void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position);
 static void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n);
 static void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop);
 static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
+static DBusHandlerResult KimpanelDBusFilter (DBusConnection *connection, DBusMessage *message, void *user_data);
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
 static void KimpanelInputReset(void *arg);
 static char* Status2String(FcitxUIStatus* status);
@@ -123,12 +183,16 @@ void* KimpanelCreate(FcitxInstance* instance)
         return NULL;
     }
     
-    if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusEventHandler, kimpanel, NULL))
+    if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel, NULL))
     {
         FcitxLog(ERROR, "No memory");
         free(kimpanel);
         return NULL;
     }
+    
+    DBusObjectPathVTable vtable = {NULL, &KimpanelDBusEventHandler, NULL, NULL, NULL, NULL };
+    
+    dbus_connection_register_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH, &vtable, kimpanel);
     
     FcitxIMEventHook resethk;
     resethk.arg = kimpanel;
@@ -413,35 +477,38 @@ void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
 static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+
+    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
+    {
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+
+        dbus_message_append_args(reply, DBUS_TYPE_STRING, &kimpanel_introspection_xml, DBUS_TYPE_INVALID);
+        dbus_connection_send (kimpanel->conn, reply, NULL);
+        dbus_message_unref (reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+}
+
+DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
+{
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) user_data;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = &kimpanel->owner->input;
     FcitxIM* im = GetCurrentIM(instance);
-    DBusMessageIter args;
     int int0;
-
+    const char* s0 = NULL;
+    DBusError error;
+    dbus_error_init(&error);
     if (dbus_message_is_signal(msg, "org.kde.impanel", "MovePreeditCaret")) {
         FcitxLog(DEBUG, "MovePreeditCaret");
-        // read the parameters
-        if (!dbus_message_iter_init(msg, &args))
-            FcitxLog(DEBUG, "Message has no arguments!"); 
-        else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
-            FcitxLog(DEBUG, "Argument is not INT32!"); 
-        else {
-            dbus_message_iter_get_basic(&args, &int0);
-            FcitxLog(DEBUG, "Got Signal with value %d", int0);
-        }
+        dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 ,DBUS_TYPE_INVALID);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "SelectCandidate")) {
         FcitxLog(DEBUG, "SelectCandidate: ");
-        // read the parameters
-        if (!dbus_message_iter_init(msg, &args))
-            FcitxLog(DEBUG, "Message has no arguments!"); 
-        else if (DBUS_TYPE_INT32 != dbus_message_iter_get_arg_type(&args)) 
-            FcitxLog(DEBUG, "Argument is not INT32!"); 
-        else {
-            dbus_message_iter_get_basic(&args, &int0);
-
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 ,DBUS_TYPE_INVALID))
+        {
             char *pstr = NULL;
 
             if (im->GetCandWord)
@@ -478,15 +545,8 @@ static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, D
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
         FcitxLog(DEBUG, "TriggerProperty: ");
-        // read the parameters
-        if (!dbus_message_iter_init(msg, &args))
-            FcitxLog(DEBUG, "Message has no arguments!"); 
-        else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args)) 
-            FcitxLog(DEBUG, "Argument is not STRING!"); 
-        else {
-            const char* s0;
-            dbus_message_iter_get_basic(&args, &s0);
-
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s0 ,DBUS_TYPE_INVALID))
+        {
             size_t len = strlen("/Fcitx/");
             if (strlen(s0) > len)
             {
@@ -550,11 +610,11 @@ static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, D
 }
 
 
+
 void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
 {
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
-    DBusMessageIter args;
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
@@ -565,17 +625,11 @@ void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
         FcitxLog(DEBUG, "Message Null");
         return;
     }
-
-    // append arguments onto signal
-    dbus_message_iter_init_append(msg, &args);
-    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) { 
-        FcitxLog(DEBUG, "Out Of Memory!"); 
+    
+    if (dbus_message_append_args(msg, DBUS_TYPE_STRING, &prop, DBUS_TYPE_INVALID)) { 
+        dbus_connection_send(kimpanel->conn, msg, &serial);
     }
 
-    // send the message and flush the connection
-    if (!dbus_connection_send(kimpanel->conn, msg, &serial)) { 
-        FcitxLog(DEBUG, "Out Of Memory!"); 
-    }
     dbus_connection_flush(kimpanel->conn);
 
     // free the message 

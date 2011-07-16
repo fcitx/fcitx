@@ -449,7 +449,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
             x -= 4;
             if (x >= 313 && x <= 344) { //backspace
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, 22, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_BackSpace, 0);
                 return true;
             }
             else {
@@ -468,7 +468,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
                 return false;
 
             if (x >= 4 && x < 38) { //Tab
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, 23, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Tab, 0);
                 return true;
             }
             else {
@@ -523,11 +523,11 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
         else if (y >= 140 && y <= 162) {    //第五行
             if (x >= 4 && x < 38) { //Ins
                 //改变INS键状态
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, 106, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Insert, 0);
                 return true;
             }
             else if (x >= 61 && x < 98) {   //DEL
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, 107, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Delete, 0);
                 return true;
             }
             else if (x >= 99 && x < 270)    //空格
