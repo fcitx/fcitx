@@ -366,7 +366,16 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
     {        
         /* XXX it is a workaround for some applications do not set client window. */
         if (fcitxcontext->client_window == NULL && event->window != NULL)
+        {
             gtk_im_context_set_client_window ((GtkIMContext *)fcitxcontext, event->window);
+            
+            /* set_cursor_location_internal() will get origin from X server,
+            * it blocks UI. So delay it to idle callback. */
+            g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
+                            (GSourceFunc) _set_cursor_location_internal,
+                            g_object_ref (fcitxcontext),
+                            (GDestroyNotify) g_object_unref);
+        }
         
         fcitxcontext->time = event->time;
         int ret = FcitxIMClientProcessKey(fcitxcontext->client,
@@ -415,7 +424,7 @@ fcitx_im_context_focus_in (GtkIMContext *context)
     }
     
     gtk_im_context_focus_in (fcitxcontext->slave);
-        
+
     /* set_cursor_location_internal() will get origin from X server,
      * it blocks UI. So delay it to idle callback. */
     g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
