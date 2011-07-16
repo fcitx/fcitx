@@ -9,7 +9,7 @@
 #include "client.h"
 #include "marshall.h"
 
-#define LOG_LEVEL INFO
+#define LOG_LEVEL DEBUG
 #define IC_NAME_MAX 64
 
 struct FcitxIMClient {

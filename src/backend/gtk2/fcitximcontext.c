@@ -33,7 +33,7 @@
 #include <fcitx-utils/log.h>
 #include <dbus/dbus-glib.h>
 
-#define LOG_LEVEL INFO
+#define LOG_LEVEL DEBUG
 
 #if !GTK_CHECK_VERSION (2, 91, 0)
 # define DEPRECATED_GDK_KEYSYMS 1

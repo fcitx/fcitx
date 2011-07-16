@@ -305,14 +305,6 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PATH, &id);
     FcitxInputContext* ic = FindIC(ipc->owner, ipc->backendid, &id);
     
-    FcitxLog(INFO, "%s %s %s %s %s",
-             dbus_message_get_path(msg),
-             dbus_message_get_interface(msg),
-             dbus_message_get_destination(msg),
-             dbus_message_get_signature(msg),
-             dbus_message_get_member(msg)
-            );
-    
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
     {
         DBusMessage *reply = dbus_message_new_method_return(msg);
@@ -471,7 +463,6 @@ static void IPCICReset(FcitxIPCBackend* ipc, FcitxInputContext* ic)
 
 static void IPCICSetCursorLocation(FcitxIPCBackend* ipc, FcitxInputContext* ic, int x, int y)
 {
-    FcitxLog(INFO, "location: %d %d", x, y);
     ic->offset_x = x;
     ic->offset_y = y;
     MoveInputWindow(ipc->owner);
