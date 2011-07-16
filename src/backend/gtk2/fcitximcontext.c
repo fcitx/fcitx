@@ -381,7 +381,8 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
         }
         else
         {
-            if (fcitxcontext->use_preedit && !fcitxcontext->is_inpreedit)
+            /* this is a hack for mozilla firefox, maybe also for all xulrunner app */
+            if (!fcitxcontext->is_inpreedit)
             {
                 fcitxcontext->is_inpreedit = true;
                 g_signal_emit (context, _signal_preedit_start_id, 0);
