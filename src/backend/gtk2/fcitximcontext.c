@@ -25,7 +25,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkwindow.h>
 #include "fcitx/fcitx.h"
 #include "fcitximcontext.h"
 #include "fcitx-config/fcitx-config.h"

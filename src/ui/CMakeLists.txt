@@ -1,5 +1,7 @@
-add_subdirectory(classic)
+if (_ENABLE_CAIRO)
+    add_subdirectory(classic)
+endif (_ENABLE_CAIRO)
 
-if (ENABLE_DBUS)
+if (_ENABLE_DBUS)
     add_subdirectory(kimpanel)
-endif (ENABLE_DBUS)
+endif (_ENABLE_DBUS)
