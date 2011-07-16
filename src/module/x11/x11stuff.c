@@ -42,6 +42,7 @@ static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void InitComposite(FcitxX11* x11stuff);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
+static boolean X11GetCompositeManager(FcitxX11* x11stuff);
 
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
@@ -121,7 +122,10 @@ void X11ProcessEvent(void* arg)
             }
             else if (event.type == ClientMessage) {
                 if (event.xclient.data.l[1] == x11priv->compManagerAtom)
-                    X11HandlerComposite(x11priv, true);
+                {
+                    if (X11GetCompositeManager(x11priv))
+                        X11HandlerComposite(x11priv, true);
+                }
             }
 
             
@@ -186,15 +190,7 @@ void InitComposite(FcitxX11* x11stuff)
     x11stuff->compManagerAtom = XInternAtom (x11stuff->dpy, atom_names, False);
     
     free(atom_names);
-
-    x11stuff->compManager = XGetSelectionOwner(x11stuff->dpy, x11stuff->compManagerAtom);
-
-    if (x11stuff->compManager)
-    {
-        XSetWindowAttributes attrs;
-        attrs.event_mask = StructureNotifyMask;
-        XChangeWindowAttributes (x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
-    }
+    X11GetCompositeManager(x11stuff);
 }
 
 void*
@@ -395,4 +391,19 @@ void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
             handler != NULL;
             handler = (FcitxCompositeChangedHandler *) utarray_next(&x11priv->comphandlers, handler))
         handler->eventHandler (handler->instance, enable);
+}
+
+boolean X11GetCompositeManager(FcitxX11* x11stuff)
+{
+    x11stuff->compManager = XGetSelectionOwner(x11stuff->dpy, x11stuff->compManagerAtom);
+
+    if (x11stuff->compManager)
+    {
+        XSetWindowAttributes attrs;
+        attrs.event_mask = StructureNotifyMask;
+        XChangeWindowAttributes (x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
+        return true;
+    }
+    else
+        return false;
 }
