@@ -27,6 +27,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/configfile.h"
+#include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "errorhandler.h"
@@ -35,6 +36,7 @@
 #define SIGUNUSED 32
 #endif
 
+extern FcitxInstance* instance;
 
 void SetMyExceptionHandler (void)
 {
@@ -55,8 +57,9 @@ void OnException (int signo)
 
     if ( signo!=SIGSEGV && signo!=SIGCONT)
     {
-        // TODO:
-        // SaveAllIM();
+        FcitxLock(instance);
+        SaveAllIM(instance);
+        FcitxUnlock(instance);
     }
 
     void *array[10];

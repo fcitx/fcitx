@@ -17,6 +17,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+/**
+ * @file fcitximcontext.c
+ * 
+ * @brief This is a gtk im module for fcitx, using DBus as a protocol. 
+ *        This is compromise to gtk and firefox, users are being sucked by them
+ *        again and again.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -302,7 +310,7 @@ fcitx_im_context_init (FcitxIMContext *context)
     
     context->time = GDK_CURRENT_TIME;
 
-    context->client = FcitxIMClientOpen(_fcitx_im_context_connect_cb, _fcitx_im_context_destroy_cb, context);
+    context->client = FcitxIMClientOpen(_fcitx_im_context_connect_cb, _fcitx_im_context_destroy_cb, G_OBJECT(context));
 }
 
 static void
@@ -311,10 +319,8 @@ fcitx_im_context_finalize (GObject *obj)
     FcitxLog(LOG_LEVEL, "fcitx_im_context_finalize");
     FcitxIMContext *context = FCITX_IM_CONTEXT (obj);
 
-    if (IsFcitxIMClientValid(context->client)) {
-        FcitxIMClientClose(context->client);
-        context->client = NULL;
-    }
+    FcitxIMClientClose(context->client);
+    context->client = NULL;
     
     if (context->slave)
     {

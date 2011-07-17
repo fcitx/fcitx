@@ -13,7 +13,7 @@ typedef void (*FcitxIMClientDestroyCallback)(FcitxIMClient* client, void* data);
 typedef void (*FcitxIMClientConnectCallback)(FcitxIMClient* client, void* data);
 
 
-    FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, void* data);
+FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data);
 boolean IsFcitxIMClientValid(FcitxIMClient* client);
 void FcitxIMClientClose(FcitxIMClient* client);
 void FcitxIMClientFocusIn(FcitxIMClient* client);

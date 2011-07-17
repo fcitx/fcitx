@@ -39,7 +39,7 @@ boolean IsFcitxIMClientValid(FcitxIMClient* client)
     return true;
 }
 
-FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, void* data)
+FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data)
 {
     FcitxIMClient* client = fcitx_malloc0(sizeof(FcitxIMClient));
     GError *error = NULL;
@@ -170,6 +170,8 @@ void FcitxIMClientClose(FcitxIMClient* client)
     DBusGProxy* proxy = client->proxy;
     client->icproxy = NULL;
     client->proxy = NULL;
+    if (client->dbusproxy)
+        g_object_unref(client->dbusproxy);
     if (proxy)
         g_signal_handlers_disconnect_by_func(proxy, G_CALLBACK( _destroy_cb), client);
     if (icproxy)

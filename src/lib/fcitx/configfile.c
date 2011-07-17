@@ -144,7 +144,7 @@ void LoadConfig(FcitxConfig* fc)
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("", "config", "rt", &file);
-    FcitxLog(INFO, _("Load Config File %s"), file);
+    FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
@@ -172,7 +172,7 @@ void SaveConfig(FcitxConfig* fc)
     ConfigFileDesc* configDesc = GetConfigDesc();
     char *file;
     FILE *fp = GetXDGFileUserWithPrefix("", "config", "wt", &file);
-    FcitxLog(INFO, "Save Config to %s", file);
+    FcitxLog(DEBUG, "Save Config to %s", file);
     SaveConfigFileFp(fp, &fc->gconfig, configDesc);
     free(file);
     fclose(fp);

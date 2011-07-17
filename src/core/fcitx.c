@@ -45,6 +45,8 @@
 #include "fcitx-utils/utils.h"
 #include "errorhandler.h"
 
+FcitxInstance* instance;
+
 static void WaitForEnd(sem_t *sem, int count)
 {
     while (count)
@@ -67,7 +69,7 @@ int main(int argc, char* argv[])
     sem_t sem;
     sem_init(&sem, 0, 0);
     
-    CreateFcitxInstance(&sem, argc, argv);
+    instance = CreateFcitxInstance(&sem, argc, argv);
     
     WaitForEnd(&sem, instanceCount);
 	return 0;

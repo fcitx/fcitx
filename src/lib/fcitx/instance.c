@@ -18,21 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "instance.h"
-#include "fcitx-utils/log.h"
+#include <unistd.h>
+#include <time.h>
 #include <limits.h>
-#include "ime-internal.h"
-#include "ui.h"
 #include <libintl.h>
 #include <pthread.h>
+#include <semaphore.h>
+#include <getopt.h>
+
+#include "instance.h"
+#include "fcitx-utils/log.h"
+#include "ime-internal.h"
+#include "ui.h"
 #include "addon.h"
 #include "module.h"
 #include "backend.h"
-#include <semaphore.h>
-#include <getopt.h>
 #include "fcitx-utils/utils.h"
-#include <unistd.h>
-#include <time.h>
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
         || (icase ? \
@@ -55,12 +56,12 @@ static void* RunInstance(void* arg);
 void Usage ()
 {
     printf("Usage: fcitx [OPTION]\n"
-           "\t-d\t\trun as daemon(default)\n"
-           "\t-D\t\tdon't run as daemon\n"
-           "\t-s[sleep time]\toverride delay start time in config file, 0 for immediate start\n"
-           "\t-v\t\tdisplay the version information and exit\n"
+           "\t-d\t\t\trun as daemon(default)\n"
+           "\t-D\t\t\tdon't run as daemon\n"
+           "\t-s[sleep time]\t\toverride delay start time in config file, 0 for immediate start\n"
+           "\t-v\t\t\tdisplay the version information and exit\n"
            "\t-u, --ui\t\tspecify the user interface to use\n"
-           "\t-h\t\tdisplay this help and exit\n");
+           "\t-h, --help\t\tdisplay this help and exit\n");
 }
 
 /**
@@ -274,7 +275,8 @@ boolean GetRemindEnabled(void* arg)
 boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 {
     struct option longOptions[] ={
-        {"ui", 1, 0, 0}
+        {"ui", 1, 0, 0},
+        {"help", 0, 0, 0}
     };
     
     int optionIndex = 0;
@@ -293,6 +295,9 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                         case 0:
                             uiname = strdup(optarg);
                             break;
+                        default:
+                            Usage();
+                            return false;
                     }
                 }
                 break;
@@ -315,6 +320,9 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                 Version();
                 return false;
                 break;
+            default:
+                Usage();
+                return false;
         }
     }
     
