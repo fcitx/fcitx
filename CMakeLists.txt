@@ -13,6 +13,7 @@ option(ENABLE_DEBUG "Enable Debug" ON)
 option(ENABLE_TABLE "Enable Table IM" ON)
 option(ENABLE_GTK2_IM_MODULE "Enable GTK2 IM Module" ON)
 option(ENABLE_GTK3_IM_MODULE "Enable GTK3 IM Module" OFF)
+option(ENABLE_QT_IM_MODULE "Enable Qt IM Module" OFF)
 option(ENABLE_OPENCC "Enable OpenCC for Chinese Transform" ON)
 option(ENABLE_STATIC "Build Static Library" OFF)
 

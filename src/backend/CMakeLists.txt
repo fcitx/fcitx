@@ -17,4 +17,5 @@ if (_ENABLE_DBUS)
 
     add_subdirectory(gtk2)
     add_subdirectory(gtk3)
+    add_subdirectory(qt)
 endif (_ENABLE_DBUS)

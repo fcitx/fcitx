@@ -11,3 +11,4 @@ set_target_properties( fcitx-ipc PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibilit
 target_link_libraries( fcitx-ipc fcitx-config fcitx-core ${DBUS_LIBRARIES} )
 
 install(FILES fcitx-ipc.conf DESTINATION ${addonconfigdir})
+install(FILES ipc.h DESTINATION ${includedir}/fcitx/module/ipc/)

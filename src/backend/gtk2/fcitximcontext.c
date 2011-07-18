@@ -695,11 +695,11 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
      * GdkKeyEvent in filter_keypress().
      *
      * We understand the best way would be to pass the all time value
-     * to IBus functions process_key_event() and IBus DBus functions
+     * to Fcitx functions process_key_event() and Fcitx DBus functions
      * ProcessKeyEvent() in IM clients and IM engines so that the
      * _create_gdk_event() could get the correct time values.
      * However it would causes to change many functions and the time value
-     * would not provide the useful meanings for each IBus engines but just
+     * would not provide the useful meanings for each Fcitx engines but just
      * pass the original value to ForwardKeyEvent().
      * We use the saved value at the moment.
      *

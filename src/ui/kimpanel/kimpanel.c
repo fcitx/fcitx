@@ -37,6 +37,7 @@
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
 
+#define FCITX_KIMPANEL_INTERFACE "org.fcitx.Fcitx.Kimpanel"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
 const char * kimpanel_introspection_xml =
@@ -48,7 +49,7 @@ const char * kimpanel_introspection_xml =
 "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
 "    </method>\n"
 "  </interface>\n"
-"  <interface name=\"" FCITX_DBUS_SERVICE "\">\n"
+"  <interface name=\"" FCITX_KIMPANEL_INTERFACE "\">\n"
 "    <signal name=\"ExecDialog\">\n"
 "      <arg name=\"prop\" direction=\"in\" type=\"s\"/>\n"
 "    </signal>\n"
@@ -618,7 +619,7 @@ void KimExecDialog(FcitxKimpanelUI* kimpanel, char *prop)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "ExecDialog"); // name of the signal
     if (NULL == msg) 
     { 
@@ -646,7 +647,7 @@ void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[],int n)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "ExecMenu"); // name of the signal
     if (NULL == msg) 
     { 
@@ -692,7 +693,7 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "RegisterProperties"); // name of the signal
     if (NULL == msg) 
     { 
@@ -739,7 +740,7 @@ void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdateProperty"); // name of the signal
     if (NULL == msg) 
     { 
@@ -773,7 +774,7 @@ void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "RemoveProperty"); // name of the signal
     if (NULL == msg) 
     { 
@@ -807,7 +808,7 @@ void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "Enable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -842,7 +843,7 @@ void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "ShowAux"); // name of the signal
     if (NULL == msg) 
     { 
@@ -876,7 +877,7 @@ void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "ShowPreedit"); // name of the signal
     if (NULL == msg) 
     { 
@@ -910,7 +911,7 @@ void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "ShowLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -944,7 +945,7 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdateLookupTable"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1006,7 +1007,7 @@ void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdatePreeditCaret"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1040,7 +1041,7 @@ void KimUpdatePreeditText(FcitxKimpanelUI* kimpanel, char *text)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdatePreeditText"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1078,7 +1079,7 @@ void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdateAux"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1117,7 +1118,7 @@ void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdateSpotLocation"); // name of the signal
     if (NULL == msg) 
     { 
@@ -1154,7 +1155,7 @@ void KimUpdateScreen(FcitxKimpanelUI* kimpanel, int id)
 
     // create a signal and check for errors 
     msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
-            FCITX_DBUS_SERVICE, // interface name of the signal
+            FCITX_KIMPANEL_INTERFACE, // interface name of the signal
             "UpdateScreen"); // name of the signal
     if (NULL == msg) 
     { 

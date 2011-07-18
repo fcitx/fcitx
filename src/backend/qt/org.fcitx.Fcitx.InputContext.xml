@@ -1,0 +1,38 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.fcitx.Fcitx.InputContext">
+    <method name="FocusIn">
+    </method>
+    <method name="FocusOut">
+    </method>
+    <method name="Reset">
+    </method>
+    <method name="SetCursorLocation">
+      <arg name="x" direction="in" type="i"/>
+      <arg name="y" direction="in" type="i"/>
+    </method>
+    <method name="DestroyIC">
+    </method>
+    <method name="ProcessKeyEvent">
+      <arg name="keyval" direction="in" type="u"/>
+      <arg name="keycode" direction="in" type="u"/>
+      <arg name="state" direction="in" type="u"/>
+      <arg name="type" direction="in" type="i"/>
+      <arg name="time" direction="in" type="u"/>
+      <arg name="ret" direction="out" type="i"/>
+    </method>
+    <signal name="EnableIM">
+    </signal>
+    <signal name="CloseIM">
+    </signal>
+    <signal name="CommitString">
+      <arg name="str" direction="in" type="s"/>
+    </signal>
+    <signal name="ForwardKey">
+      <arg name="keyval" direction="in" type="u"/>
+      <arg name="state" direction="in" type="u"/>
+      <arg name="type" direction="in" type="i"/>
+    </signal>
+  </interface>
+</node>";

@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   Copyright (C) 2010~2011 by CSSlayer                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <dbus/dbus.h>
 #include <limits.h>
 
@@ -9,9 +28,8 @@
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/configfile.h"
+#include "ipc.h"
 
-#define FCITX_IM_DBUS_PATH "/inputmethod"
-#define FCITX_IC_DBUS_PATH "/inputcontext_%d"
 #define GetIPCIC(ic) ((FcitxIPCIC*) (ic)->privateic)
 
 typedef struct FcitxIPCIC {
@@ -48,13 +66,13 @@ static int IPCProcessKey(FcitxIPCBackend* ipc, FcitxInputContext* callic, uint32
 const char * im_introspection_xml =
 "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
 "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
-"<node name=\"" FCITX_IM_DBUS_PATH "\">\n"
+"<node>\n"
 "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
 "    <method name=\"Introspect\">\n"
 "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
 "    </method>\n"
 "  </interface>\n"
-"  <interface name=\"" FCITX_DBUS_SERVICE "\">\n"
+"  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">\n"
 "    <method name=\"CreateIC\">\n"
 "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
 "    </method>\n"
@@ -70,7 +88,7 @@ const char * ic_introspection_xml =
 "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
 "    </method>\n"
 "  </interface>\n"
-"  <interface name=\"" FCITX_DBUS_SERVICE "\">\n"
+"  <interface name=\"" FCITX_IC_DBUS_INTERFACE "\">\n"
 "    <method name=\"FocusIn\">\n"
 "    </method>\n"
 "    <method name=\"FocusOut\">\n"
@@ -202,7 +220,7 @@ void IPCEnableIM(void* arg, FcitxInputContext* ic)
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
-        FCITX_DBUS_SERVICE, // interface name of the signal
+        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
         "EnableIM"); // name of the signal
     
     if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
@@ -217,7 +235,7 @@ void IPCCloseIM(void* arg, FcitxInputContext* ic)
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
-        FCITX_DBUS_SERVICE, // interface name of the signal
+        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
         "CloseIM"); // name of the signal
     
     if (!dbus_connection_send(ipc->conn, msg, &serial)) { 
@@ -232,7 +250,7 @@ void IPCCommitString(void* arg, FcitxInputContext* ic, char* str)
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
-        FCITX_DBUS_SERVICE, // interface name of the signal
+        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
         "CommitString"); // name of the signal
     
     dbus_message_append_args(msg, DBUS_TYPE_STRING, &str, DBUS_TYPE_INVALID);
@@ -249,7 +267,7 @@ void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
     FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
-        FCITX_DBUS_SERVICE, // interface name of the signal
+        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
         "ForwardKey"); // name of the signal
     
     uint32_t keyval = (uint32_t) sym;
@@ -289,7 +307,7 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
         dbus_message_unref (reply);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
-    else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "CreateIC"))
+    else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
     {
         CreateIC(ipc->owner, ipc->backendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -319,22 +337,22 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     {
         DBusError error;
         dbus_error_init(&error);
-        if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "FocusIn"))
+        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
         {
             IPCICFocusIn(ipc, ic);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "FocusOut"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut"))
         {
             IPCICFocusOut(ipc, ic);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "Reset"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset"))
         {
             IPCICReset(ipc, ic);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "SetCursorLocation"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation"))
         {
             int x, y;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID))
@@ -343,12 +361,12 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
             }
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "DestroyIC"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))
         {
             DestroyIC(ipc->owner, ipc->backendid, &id);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (dbus_message_is_method_call(msg, FCITX_DBUS_SERVICE, "ProcessKeyEvent"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent"))
         {
             uint32_t keyval, keycode, state, t;
             int ret, itype;

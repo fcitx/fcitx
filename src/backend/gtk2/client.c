@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 #include <dbus/dbus-glib.h>
+#include "module/dbus/dbusstuff.h"
+#include "backend/ipc/ipc.h"
 #include "fcitx/fcitx.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/fcitx-config.h"
@@ -100,7 +102,7 @@ static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char*
 {
     FcitxLog(LOG_LEVEL, "_changed_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
-    if (g_str_equal(service, "org.fcitx.fcitx"))
+    if (g_str_equal(service, FCITX_DBUS_SERVICE))
     {
         gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
         if (new_owner_good)
@@ -142,9 +144,9 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     int id = -1;
     
     client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                "org.fcitx.fcitx",
-                                                "/inputmethod",
-                                                "org.fcitx.fcitx",
+                                                FCITX_DBUS_SERVICE,
+                                                FCITX_IM_DBUS_PATH,
+                                                FCITX_IM_DBUS_INTERFACE,
                                                 &error);
     if (!client->proxy)
         return;
@@ -158,12 +160,12 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     else
         return;
     
-    sprintf(client->icname, "/inputcontext_%d", client->id);    
+    sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);    
     
     client->icproxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                      "org.fcitx.fcitx",
+                                                      FCITX_DBUS_SERVICE,
                                                       client->icname,
-                                                      "org.fcitx.fcitx",
+                                                      FCITX_IC_DBUS_INTERFACE,
                                                       &error
                                                      );
     if (!client->icproxy)

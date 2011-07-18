@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2010~2011 by CSSlayer                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,24 +17,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_DBUS_H
-#define _FCITX_DBUS_H
-#include <dbus/dbus.h>
-#include <fcitx-config/fcitx-config.h>
+#ifndef FCITX_IPC_H
+#define FCITX_IPC_H
 
-#define FCITX_DBUS_NAME "fcitx-dbus"
-#define FCITX_DBUS_GETCONNECTION 0
-#define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
-#define FCITX_DBUS_ADDEVENTHANDLER 1
-#define FCITX_DBUS_ADDEVENTHANDLER_RETURNTYPE void
-#define FCITX_DBUS_REMOVEEVENTHANDLER 2
-#define FCITX_DBUS_REMOVEEVENTHANDLER_RETURNTYPE void
+#define FCITX_IM_DBUS_PATH "/inputmethod"
+#define FCITX_IC_DBUS_PATH "/inputcontext_%d"
 
-#define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
+#define FCITX_IM_DBUS_INTERFACE "org.fcitx.Fcitx.InputMethod"
+#define FCITX_IC_DBUS_INTERFACE "org.fcitx.Fcitx.InputContext"
 
-typedef struct FcitxDBusEventHandler {
-    boolean (*eventHandler)(void* instance, DBusMessage * event);
-    void* instance;
-} FcitxDBusEventHandler;
-
-#endif // _FCITX_DBUS_H
+#endif // FCITX_IPC_H
