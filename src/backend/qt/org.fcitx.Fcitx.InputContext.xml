@@ -27,12 +27,12 @@
     <signal name="CloseIM">
     </signal>
     <signal name="CommitString">
-      <arg name="str" direction="in" type="s"/>
+      <arg name="str" type="s"/>
     </signal>
     <signal name="ForwardKey">
-      <arg name="keyval" direction="in" type="u"/>
-      <arg name="state" direction="in" type="u"/>
-      <arg name="type" direction="in" type="i"/>
+      <arg name="keyval" type="u"/>
+      <arg name="state" type="u"/>
+      <arg name="type" type="i"/>
     </signal>
   </interface>
 </node>";

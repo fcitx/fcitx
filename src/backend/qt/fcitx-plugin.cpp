@@ -1,7 +1,6 @@
 #include <QInputContextPlugin>
+#include <QDBusConnection>
 #include "fcitx-input-context.h"
-
-#define FCITX_IDENTIFIER_NAME "fcitx"
 
 /* The class Definition */
 class FcitxPlugin: public QInputContextPlugin
@@ -30,7 +29,6 @@ public:
     QString displayName (const QString &key);
 
 private:
-
 };
 
 

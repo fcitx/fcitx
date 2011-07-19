@@ -20,10 +20,19 @@
 #ifndef FCITX_IPC_H
 #define FCITX_IPC_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif 
+
 #define FCITX_IM_DBUS_PATH "/inputmethod"
 #define FCITX_IC_DBUS_PATH "/inputcontext_%d"
+#define FCITX_IC_DBUS_PATH_QSTRING "/inputcontext_%1"
 
 #define FCITX_IM_DBUS_INTERFACE "org.fcitx.Fcitx.InputMethod"
 #define FCITX_IC_DBUS_INTERFACE "org.fcitx.Fcitx.InputContext"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // FCITX_IPC_H

@@ -7,6 +7,7 @@ include_directories(
     ${QT_QTDBUS_INCLUDE_DIR}
     ${X11_INCLUDE_DIRS}
     ${DBUS_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 link_directories(
@@ -17,8 +18,8 @@ link_directories(
 
 set(
     qtim_fcitx_SRCS
-    fcitx-input-context.cpp
     fcitx-plugin.cpp
+    fcitx-input-context.cpp
 )
 
 
@@ -63,6 +64,7 @@ target_link_libraries(
     optimized ${QT_QTCORE_LIBRARY_RELEASE}
     optimized ${QT_QTDBUS_LIBRARY_RELEASE}
     optimized ${QT_QTGUI_LIBRARY_RELEASE}
+    ${X11_LIBRARIES}
 )
 
 install(

@@ -20,6 +20,11 @@
 
 #ifndef _FCITX_DBUS_H
 #define _FCITX_DBUS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <dbus/dbus.h>
 #include <fcitx-config/fcitx-config.h>
 
@@ -37,5 +42,9 @@ typedef struct FcitxDBusEventHandler {
     boolean (*eventHandler)(void* instance, DBusMessage * event);
     void* instance;
 } FcitxDBusEventHandler;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _FCITX_DBUS_H
