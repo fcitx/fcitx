@@ -29,22 +29,22 @@
 #include "Xi18n.h"
 #include "IC.h"
 
-static void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct* call_data);
+static void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct* call_data);
 
-Bool XIMOpenHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
+Bool XIMOpenHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
     return True;
 }
 
 
-Bool XIMGetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+Bool XIMGetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     XimGetIC(xim, call_data);
 
     return True;
 }
 
-Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     XimSetIC(xim, call_data);
     SetTrackPos(xim, call_data);
@@ -52,9 +52,9 @@ Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     return True;
 }
 
-Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
+Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
 {
-    FcitxInputContext* ic =  FindIC(xim->owner, xim->backendid, &call_data->icid);
+    FcitxInputContext* ic =  FindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return True;
     
@@ -74,7 +74,7 @@ Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data)
     return True;
 }
 
-Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid)
@@ -87,43 +87,43 @@ Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     return True;
 }
 
-Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data)
+Bool XIMCloseHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
     CloseInputWindow(xim->owner);
     SaveAllIM(xim->owner);
     return True;
 }
 
-Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    CreateIC(xim->owner, xim->backendid, call_data);
+    CreateIC(xim->owner, xim->frontendid, call_data);
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
 
     if (ic == NULL) {
-        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
         SetCurrentIC(xim->owner, ic);
     }
 
     return True;
 }
 
-Bool XIMDestroyICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
-    if (ic != NULL && ic == FindIC(xim->owner, xim->backendid, &call_data->icid)) {
+    if (ic != NULL && ic == FindIC(xim->owner, xim->frontendid, &call_data->icid)) {
         CloseInputWindow(xim->owner);
         OnInputUnFocus(xim->owner);
         SetCurrentIC(xim->owner, NULL);
     }
 
-    DestroyIC(xim->owner, xim->backendid, &call_data->icid);
+    DestroyIC(xim->owner, xim->frontendid, &call_data->icid);
 
     return True;
 }
 
-Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_data)
+Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call_data)
 {
-    FcitxInputContext* ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
+    FcitxInputContext* ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return True;
 
@@ -134,12 +134,12 @@ Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_
 }
 
 
-void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct * call_data)
+void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic == NULL)
         return;
-    if (ic != FindIC(xim->owner, xim->backendid, &call_data->icid))
+    if (ic != FindIC(xim->owner, xim->frontendid, &call_data->icid))
         return;
 
     int i;
@@ -172,7 +172,7 @@ void SetTrackPos(FcitxXimBackend* xim, IMChangeICStruct * call_data)
     MoveInputWindow(xim->owner);
 }
 
-void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
+void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
 {
     KeySym sym, originsym;
     XKeyEvent *kev;
@@ -182,7 +182,7 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
  
     if (ic == NULL) {
-        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
         SetCurrentIC(xim->owner, ic);
     }
     
@@ -190,7 +190,7 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
         return;
 
     if (GetXimIC(ic)->id != call_data->icid) {
-        ic = FindIC(xim->owner, xim->backendid, &call_data->icid);
+        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
         if (ic == NULL)
             return;
     }
@@ -220,7 +220,7 @@ void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data)
 }
 
 
-void XimForwardKeyInternal(FcitxXimBackend *xim,
+void XimForwardKeyInternal(FcitxXimFrontend *xim,
                            FcitxXimIC* ic,
                            XEvent* xEvent
                           )
@@ -238,7 +238,7 @@ void XimForwardKeyInternal(FcitxXimBackend *xim,
     IMForwardEvent(xim->ims, (XPointer) (&forwardEvent));
 }
 
-void XIMClose(FcitxXimBackend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
+void XIMClose(FcitxXimFrontend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
 {
     if (ic == NULL)
         return;

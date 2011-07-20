@@ -32,7 +32,7 @@
 #include "ui.h"
 #include "addon.h"
 #include "module.h"
-#include "backend.h"
+#include "frontend.h"
 #include "fcitx-utils/utils.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
@@ -78,7 +78,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
     InitFcitxAddons(&instance->addons);
     InitFcitxIM(instance);
-    InitFcitxBackends(&instance->backends);
+    InitFcitxFrontends(&instance->frontends);
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
@@ -115,7 +115,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
     SwitchIM(instance, instance->profile.iIMIndex);
     
-    if (!LoadBackend(instance))
+    if (!LoadFrontend(instance))
     {
         EndInstance(instance);
         return instance;
@@ -190,34 +190,34 @@ void EndInstance(FcitxInstance* instance)
     SaveAllIM(instance);
  
     /* handle exit */
-    FcitxAddon** pbackend;
-    FcitxBackend* backend;  
+    FcitxAddon** pfrontend;
+    FcitxFrontend* frontend;  
     FcitxInputContext* rec = NULL;
     FcitxInputContext* last = NULL;
     
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
-        pbackend = (FcitxAddon**) utarray_eltptr(&instance->backends, rec->backendid);
-        backend = (*pbackend)->backend;
-        backend->CloseIM((*pbackend)->addonInstance, rec);
+        pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
+        frontend = (*pfrontend)->frontend;
+        frontend->CloseIM((*pfrontend)->addonInstance, rec);
     }
         
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
-        pbackend = (FcitxAddon**) utarray_eltptr(&instance->backends, rec->backendid);
-        backend = (*pbackend)->backend;
-        backend->DestroyIC((*pbackend)->addonInstance, rec);
+        pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
+        frontend = (*pfrontend)->frontend;
+        frontend->DestroyIC((*pfrontend)->addonInstance, rec);
     }
     
-    int backendid = 0;
-    for (pbackend = (FcitxAddon**) utarray_front(&instance->backends);
-        pbackend != NULL;
-        pbackend = (FcitxAddon**) utarray_next(&instance->backends, pbackend) 
+    int frontendid = 0;
+    for (pfrontend = (FcitxAddon**) utarray_front(&instance->frontends);
+        pfrontend != NULL;
+        pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend) 
     )
     {
-        if (pbackend == NULL)
+        if (pfrontend == NULL)
             return;
-        FcitxBackend* backend = (*pbackend)->backend;
-        backend->Destroy((*pbackend)->addonInstance);
-        backendid++;
+        FcitxFrontend* frontend = (*pfrontend)->frontend;
+        frontend->Destroy((*pfrontend)->addonInstance);
+        frontendid++;
     }
     
     sem_post(instance->sem);

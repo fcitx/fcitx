@@ -33,7 +33,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/module.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/instance.h"
 #include <fcitx-utils/utils.h>
 

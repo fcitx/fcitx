@@ -18,34 +18,24 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_XIM_H_
-#define _FCITX_XIM_H_
+#ifndef _FCITX_XIMHANDLER_H_
+#define _FCITX_XIMHANDLER_H_
 
 #include <X11/Xlib.h>
-#include <X11/Xmd.h>
+#include <Xi18n.h>
 
-#include "fcitx/backend.h"
-#include "IMdkit.h"
+struct FcitxXimIC;
 
-#define DEFAULT_IMNAME "fcitx"
-#define STRBUFLEN 64
-
-#define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
-
-typedef struct FcitxXimBackend
-{
-    Window ximWindow;
-    Display* display;
-    int iScreen;
-    int iTriggerKeyCount;
-    XIMTriggerKey* Trigger_Keys;
-    XIMS ims;
-    CARD16 icid;
-    struct FcitxBackend* backend;
-    struct FcitxInstance* owner;
-    int backendid;
-    CARD16 currentSerialNumberCallData;
-    long unsigned int currentSerialNumberKey;
-} FcitxXimBackend;
+Bool XIMOpenHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data);
+Bool XIMGetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data);
+Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMCloseHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data);
+Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call_data);
+void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data);
+void XimForwardKeyInternal(FcitxXimFrontend *xim, struct FcitxXimIC* ic, XEvent* xEvent );
 
 #endif

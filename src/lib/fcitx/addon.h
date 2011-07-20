@@ -45,9 +45,9 @@ typedef enum AddonCategory
      **/
     AC_INPUTMETHOD = 0,
     /**
-     * @brief Input backend, like xim
+     * @brief Input frontend, like xim
      **/
-    AC_BACKEND,
+    AC_FRONTEND,
     /**
      * @brief General module, can be implemented in a quite extensive way
      **/
@@ -80,7 +80,7 @@ typedef struct FcitxAddon
     char *depend;
     int priority;
     union {
-        struct FcitxBackend *backend;
+        struct FcitxFrontend *frontend;
         struct FcitxModule *module;
         struct FcitxIMClass* imclass;
         struct FcitxUI* ui;

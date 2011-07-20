@@ -56,7 +56,7 @@ typedef struct FcitxInstance {
     UT_array addons;
     UT_array imeclasses;
     UT_array imes;
-    UT_array backends;
+    UT_array frontends;
     UT_array eventmodules;
     
     struct FcitxInputContext *CurrentIC;

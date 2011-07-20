@@ -176,7 +176,7 @@ static void StoreIC (FcitxXimIC * rec, IMChangeICStruct * call_data)
  **/
 void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     IMChangeICStruct * call_data = (IMChangeICStruct *)priv;
     context->privateic = fcitx_malloc0(sizeof(FcitxXimIC));
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
@@ -215,9 +215,9 @@ void XimDestroyIC (void* arg, FcitxInputContext* context)
  * @param call_data 
  * @return void
  **/
-void XimSetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
+void XimSetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext   *ic = FindIC (xim->owner, xim->backendid, &call_data->icid);
+    FcitxInputContext   *ic = FindIC (xim->owner, xim->frontendid, &call_data->icid);
 
     if (ic == NULL)
         return;
@@ -233,13 +233,13 @@ void XimSetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
  * @param call_data 
  * @return void
  **/
-void XimGetIC (FcitxXimBackend* xim, IMChangeICStruct * call_data)
+void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     XICAttribute   *ic_attr = call_data->ic_attr;
     XICAttribute   *pre_attr = call_data->preedit_attr;
     XICAttribute   *sts_attr = call_data->status_attr;
     register int    i;
-    FcitxInputContext *ic = FindIC (xim->owner, xim->backendid, &call_data->icid);
+    FcitxInputContext *ic = FindIC (xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return;
     FcitxXimIC* rec = (FcitxXimIC*) ic->privateic;

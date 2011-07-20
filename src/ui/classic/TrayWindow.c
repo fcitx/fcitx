@@ -35,7 +35,7 @@
 #include "classicui.h"
 #include "module/x11/x11stuff.h"
 #include "fcitx-utils/log.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/module.h"
 #include "MenuWindow.h"
 #include "fcitx/instance.h"

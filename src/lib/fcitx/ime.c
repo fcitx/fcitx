@@ -41,7 +41,7 @@
 #include "ui.h"
 #include "fcitx-utils/utils.h"
 #include "hook.h"
-#include "backend.h"
+#include "frontend.h"
 #include "hook-internal.h"
 #include "instance.h"
 #include "module.h"
@@ -574,12 +574,12 @@ void ForwardKey(FcitxInstance* instance, FcitxInputContext *ic, FcitxKeyEventTyp
 {
     if (ic == NULL)
         return;
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
-    backend->ForwardKey((*pbackend)->addonInstance, ic, event, sym, state);
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    frontend->ForwardKey((*pfrontend)->addonInstance, ic, event, sym, state);
 }
 
 FCITX_EXPORT_API
@@ -789,16 +789,16 @@ void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
     if (ic == NULL)
         return ;
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
     IME_STATE oldstate = ic->state;
     ic->state = IS_ACTIVE;
     if (oldstate == IS_CLOSED)
     {
-        backend->EnableIM((*pbackend)->addonInstance, ic);
+        frontend->EnableIM((*pfrontend)->addonInstance, ic);
         OnTriggerOn(instance);
     }
     if (!keepState)

@@ -23,7 +23,7 @@
 #include <pthread.h>
 
 #include "fcitx-utils/utarray.h"
-#include "backend.h"
+#include "frontend.h"
 #include "addon.h"
 #include "ime-internal.h"
 #include "fcitx-config/xdg.h"
@@ -33,7 +33,7 @@
 #include "hook-internal.h"
 #include "instance.h"
 
-static const UT_icd backend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
+static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
 
 FCITX_EXPORT_API
 FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
@@ -50,19 +50,19 @@ boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 }
 
 FCITX_EXPORT_API
-void InitFcitxBackends(UT_array* backends)
+void InitFcitxFrontends(UT_array* frontends)
 {
-    utarray_init(backends, &backend_icd);
+    utarray_init(frontends, &frontend_icd);
 }
 
 FCITX_EXPORT_API
-FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
+FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv)
 {
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend =(FcitxAddon**) utarray_eltptr(backends, backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend =(FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    if (pfrontend == NULL)
         return NULL;
-    FcitxBackend* backend = (*pbackend)->backend;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
     
     FcitxInputContext *rec;
     if (instance->free_list != NULL)
@@ -74,12 +74,12 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
         rec = malloc(sizeof(FcitxInputContext));
     
     memset (rec, 0, sizeof(FcitxInputContext));
-    rec->backendid = backendid;
+    rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
     rec->state = IS_CLOSED;
     
-    backend->CreateIC((*pbackend)->addonInstance, rec, priv);
+    frontend->CreateIC((*pfrontend)->addonInstance, rec, priv);
     
     rec->next = instance->ic_list;
     instance->ic_list = rec;
@@ -88,17 +88,17 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int backendid, void * priv)
 }
 
 FCITX_EXPORT_API
-FcitxInputContext* FindIC(FcitxInstance* instance, int backendid, void *filter)
+FcitxInputContext* FindIC(FcitxInstance* instance, int frontendid, void *filter)
 {
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    if (pfrontend == NULL)
         return NULL;
-    FcitxBackend* backend = (*pbackend)->backend;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
     FcitxInputContext *rec = instance->ic_list;
     while (rec != NULL)
     {
-        if (rec->backendid == backendid && backend->CheckIC((*pbackend)->addonInstance, rec, filter))
+        if (rec->frontendid == frontendid && frontend->CheckIC((*pfrontend)->addonInstance, rec, filter))
             return rec;
         rec = rec->next;
     }
@@ -106,19 +106,19 @@ FcitxInputContext* FindIC(FcitxInstance* instance, int backendid, void *filter)
 }
 
 FCITX_EXPORT_API
-void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
+void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
 {
     FcitxInputContext             *rec, *last;
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
  
     last = NULL;
 
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
-        if (rec->backendid == backendid && backend->CheckIC((*pbackend)->addonInstance, rec, filter)) {
+        if (rec->frontendid == frontendid && frontend->CheckIC((*pfrontend)->addonInstance, rec, filter)) {
             if (last != NULL)
                 last->next = rec->next;
             else
@@ -127,7 +127,7 @@ void DestroyIC(FcitxInstance* instance, int backendid, void* filter)
             rec->next = instance->free_list;
             instance->free_list = rec;
             
-            backend->DestroyIC((*pbackend)->addonInstance, rec);
+            frontend->DestroyIC((*pfrontend)->addonInstance, rec);
             return;
         }
     }
@@ -140,13 +140,13 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (ic == NULL)
         return ;
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
     ic->state = IS_CLOSED;
-    backend->CloseIM((*pbackend)->addonInstance, ic);
+    frontend->CloseIM((*pfrontend)->addonInstance, ic);
     
     if (ic == GetCurrentIC(instance))
     {
@@ -193,17 +193,17 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
     if (ic == NULL)
         return;
     
-    UT_array* backends = &instance->backends;
+    UT_array* frontends = &instance->frontends;
     
     char *pstr = ProcessOutputFilter(instance, str);
     if (pstr != NULL)
         str = pstr;
     
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
-    backend->CommitString((*pbackend)->addonInstance, ic, str);
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    frontend->CommitString((*pfrontend)->addonInstance, ic, str);
     
     if (pstr)
         free(pstr);
@@ -212,13 +212,13 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 FCITX_EXPORT_API
 void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int y)
 {
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
-    if (backend->SetWindowOffset)
-        backend->SetWindowOffset((*pbackend)->addonInstance, ic, x, y);
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->SetWindowOffset)
+        frontend->SetWindowOffset((*pfrontend)->addonInstance, ic, x, y);
 }
 
 FCITX_EXPORT_API
@@ -227,28 +227,28 @@ void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, i
     if (ic == NULL)
         return;
     
-    UT_array* backends = &instance->backends;
-    FcitxAddon** pbackend = (FcitxAddon**) utarray_eltptr(backends, ic->backendid);
-    if (pbackend == NULL)
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
         return;
-    FcitxBackend* backend = (*pbackend)->backend;
-    if (backend->GetWindowPosition)
-        backend->GetWindowPosition((*pbackend)->addonInstance, ic, x, y);
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->GetWindowPosition)
+        frontend->GetWindowPosition((*pfrontend)->addonInstance, ic, x, y);
 }
 
 FCITX_EXPORT_API
-boolean LoadBackend(FcitxInstance* instance)
+boolean LoadFrontend(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
-    UT_array* backends = &instance->backends;
+    UT_array* frontends = &instance->frontends;
     FcitxAddon *addon;
-    int backendindex = 0;
-    utarray_clear(backends);
+    int frontendindex = 0;
+    utarray_clear(frontends);
     for ( addon = (FcitxAddon *) utarray_front(addons);
           addon != NULL;
           addon = (FcitxAddon *) utarray_next(addons, addon))
     {
-        if (addon->bEnabled && addon->category == AC_BACKEND)
+        if (addon->bEnabled && addon->category == AC_FRONTEND)
         {
             char *modulePath;
             switch (addon->type)
@@ -257,31 +257,31 @@ boolean LoadBackend(FcitxInstance* instance)
                     {
                         FILE *fp = GetLibFile(addon->library, "r", &modulePath);
                         void *handle;
-                        FcitxBackend* backend;
+                        FcitxFrontend* frontend;
                         if (!fp)
                             break;
                         fclose(fp);
                         handle = dlopen(modulePath,RTLD_LAZY);
                         if(!handle)
                         {
-                            FcitxLog(ERROR, _("Backend: open %s fail %s") ,modulePath ,dlerror());
+                            FcitxLog(ERROR, _("Frontend: open %s fail %s") ,modulePath ,dlerror());
                             break;
                         }
-                        backend=dlsym(handle,"backend");
-                        if(!backend || !backend->Create)
+                        frontend=dlsym(handle,"frontend");
+                        if(!frontend || !frontend->Create)
                         {
-                            FcitxLog(ERROR, _("Backend: bad backend"));
+                            FcitxLog(ERROR, _("Frontend: bad frontend"));
                             dlclose(handle);
                             break;
                         }
-                        if((addon->addonInstance = backend->Create(instance, backendindex)) == NULL)
+                        if((addon->addonInstance = frontend->Create(instance, frontendindex)) == NULL)
                         {
                             dlclose(handle);
                             break;
                         }                        
-                        addon->backend = backend;
-                        backendindex ++;
-                        utarray_push_back(backends, &addon);
+                        addon->frontend = frontend;
+                        frontendindex ++;
+                        utarray_push_back(frontends, &addon);
                     }
                     break;
                 default:
@@ -291,9 +291,9 @@ boolean LoadBackend(FcitxInstance* instance)
         }
     }
     
-    if (utarray_len(&instance->backends) <= 0)
+    if (utarray_len(&instance->frontends) <= 0)
     {
-        FcitxLog(ERROR, _("No available backend"));
+        FcitxLog(ERROR, _("No available frontend"));
         return false;
     }
     return true;

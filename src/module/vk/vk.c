@@ -31,7 +31,7 @@
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include <cairo-xlib.h>
 #include <ui/cairostuff/cairostuff.h>

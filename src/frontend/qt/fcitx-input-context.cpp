@@ -3,7 +3,7 @@
 #include <fcitx/ime.h>
 #include <sys/time.h>
 #include "module/dbus/dbusstuff.h"
-#include "backend/ipc/ipc.h"
+#include "frontend/ipc/ipc.h"
 #include "fcitx-input-context.h"
 
 #if defined(Q_WS_X11)

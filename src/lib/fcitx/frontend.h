@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_BACKEND_H_
-#define _FCITX_BACKEND_H_
+#ifndef _FCITX_FRONTEND_H_
+#define _FCITX_FRONTEND_H_
 
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
@@ -48,17 +48,17 @@ typedef struct FcitxInputContext
 {
     IME_STATE state; /* im state */
     int offset_x, offset_y;
-    int backendid;
+    int frontendid;
     void *privateic;
     struct FcitxInputContext* next;
 } FcitxInputContext;
 
 /**
- * @brief Program IM Module Backend
+ * @brief Program IM Module Frontend
  **/
-typedef struct FcitxBackend
+typedef struct FcitxFrontend
 {
-    void* (*Create)(struct FcitxInstance*, int backendindex);
+    void* (*Create)(struct FcitxInstance*, int frontendindex);
     boolean (*Destroy)(void *arg);
     void (*CreateIC)(void* arg, FcitxInputContext*, void* priv);
     boolean (*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
@@ -69,7 +69,7 @@ typedef struct FcitxBackend
     void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
     void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y);
     void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
-} FcitxBackend;
+} FcitxFrontend;
 
 /**
  * @brief Get Current Input Context
@@ -89,50 +89,50 @@ FcitxInputContext* GetCurrentIC(struct FcitxInstance* instance);
 boolean SetCurrentIC(struct FcitxInstance* instance, FcitxInputContext* ic);
 
 /**
- * @brief Initial backends array
+ * @brief Initial frontends array
  *
- * @param  backends array
+ * @param  frontends array
  * @return void
  **/
-void InitFcitxBackends(UT_array* );
+void InitFcitxFrontends(UT_array* );
 
 /**
- * @brief Find Input Context By Backend Specific filter
+ * @brief Find Input Context By Frontend Specific filter
  *
  * @param instance 
- * @param backendid backend id
- * @param filter backend specfic filter
+ * @param frontendid frontend id
+ * @param filter frontend specfic filter
  * @return FcitxInputContext*
  **/
-FcitxInputContext* FindIC(struct FcitxInstance* instance, int backendid, void* filter);
+FcitxInputContext* FindIC(struct FcitxInstance* instance, int frontendid, void* filter);
 
 /**
  * @brief Creat New Input Context
  *
  * @param instance 
- * @param backendid backend id
- * @param priv backend specfic data
+ * @param frontendid frontend id
+ * @param priv frontend specfic data
  * @return FcitxInputContext*
  **/
-FcitxInputContext* CreateIC(struct FcitxInstance* instance, int backendid, void* priv);
+FcitxInputContext* CreateIC(struct FcitxInstance* instance, int frontendid, void* priv);
 
 /**
  * @brief Destroy Input context
  *
  * @param instance 
- * @param backendid backend id
- * @param filter backend specfic filter
+ * @param frontendid frontend id
+ * @param filter frontend specfic filter
  * @return void
  **/
-void DestroyIC(struct FcitxInstance* instance, int backendid, void* filter);
+void DestroyIC(struct FcitxInstance* instance, int frontendid, void* filter);
 
 /**
- * @brief Load All backend
+ * @brief Load All frontend
  *
  * @param instance 
  * @return void
  **/
-boolean LoadBackend(struct FcitxInstance* instance );
+boolean LoadFrontend(struct FcitxInstance* instance );
 
 /**
  * @brief End Input

@@ -21,7 +21,7 @@
 #include <limits.h>
 
 #include "fcitx/fcitx.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx-utils/utils.h"
 #include "module/dbus/dbusstuff.h"
 #include "fcitx/instance.h"
@@ -37,14 +37,14 @@ typedef struct FcitxIPCIC {
     char path[32];
 } FcitxIPCIC;
 
-typedef struct FcitxIPCBackend {
-    int backendid;
+typedef struct FcitxIPCFrontend {
+    int frontendid;
     int maxid;
     DBusConnection* conn;
     FcitxInstance* owner;
-} FcitxIPCBackend;
+} FcitxIPCFrontend;
 
-static void* IPCCreate(FcitxInstance* instance, int backendid);
+static void* IPCCreate(FcitxInstance* instance, int frontendid);
 static boolean IPCDestroy(void* arg);
 void IPCCreateIC (void* arg, FcitxInputContext* context, void *priv);
 boolean IPCCheckIC (void* arg, FcitxInputContext* context, void* priv);
@@ -57,11 +57,11 @@ static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
 static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data);
-static void IPCICFocusIn(FcitxIPCBackend* ipc, FcitxInputContext* ic);
-static void IPCICFocusOut(FcitxIPCBackend* ipc, FcitxInputContext* ic);
-static void IPCICReset(FcitxIPCBackend* ipc, FcitxInputContext* ic);
-static void IPCICSetCursorLocation(FcitxIPCBackend* ipc, FcitxInputContext* ic, int x, int y);
-static int IPCProcessKey(FcitxIPCBackend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
+static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
+static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
+static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
+static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y);
+static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
 
 const char * im_introspection_xml =
 "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
@@ -131,7 +131,7 @@ const char * ic_introspection_xml =
 "</node>\n";
 
 FCITX_EXPORT_API
-FcitxBackend backend =
+FcitxFrontend frontend =
 {
     IPCCreate,
     IPCDestroy,
@@ -146,10 +146,10 @@ FcitxBackend backend =
     IPCGetWindowPosition
 };
 
-void* IPCCreate(FcitxInstance* instance, int backendid)
+void* IPCCreate(FcitxInstance* instance, int frontendid)
 {
-    FcitxIPCBackend* ipc = fcitx_malloc0(sizeof(FcitxIPCBackend));
-    ipc->backendid = backendid;
+    FcitxIPCFrontend* ipc = fcitx_malloc0(sizeof(FcitxIPCFrontend));
+    ipc->frontendid = frontendid;
     ipc->owner = instance;    
     
     FcitxModuleFunctionArg arg;
@@ -182,7 +182,7 @@ boolean IPCDestroy(void* arg)
 
 void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxIPCIC* ipcic = (FcitxIPCIC*) fcitx_malloc0(sizeof(FcitxIPCIC));
     context->privateic = ipcic;
     DBusMessage* message = (DBusMessage*) priv;
@@ -217,13 +217,13 @@ boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv)
 
 void IPCDestroyIC(void* arg, FcitxInputContext* context)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_connection_unregister_object_path(ipc->conn, GetIPCIC(context)->path);
 }
 
 void IPCEnableIM(void* arg, FcitxInputContext* ic)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
@@ -238,7 +238,7 @@ void IPCEnableIM(void* arg, FcitxInputContext* ic)
 
 void IPCCloseIM(void* arg, FcitxInputContext* ic)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
@@ -253,7 +253,7 @@ void IPCCloseIM(void* arg, FcitxInputContext* ic)
 
 void IPCCommitString(void* arg, FcitxInputContext* ic, char* str)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
@@ -270,7 +270,7 @@ void IPCCommitString(void* arg, FcitxInputContext* ic, char* str)
 
 void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) arg;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
@@ -303,7 +303,7 @@ void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 
 static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) user_data;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
     {
         DBusMessage *reply = dbus_message_new_method_return(msg);
@@ -315,7 +315,7 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
     }
     else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
     {
-        CreateIC(ipc->owner, ipc->backendid, msg);
+        CreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetTriggerKey"))
@@ -342,10 +342,10 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
 
 static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
-    FcitxIPCBackend* ipc = (FcitxIPCBackend*) user_data;
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
     int id;
     sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PATH, &id);
-    FcitxInputContext* ic = FindIC(ipc->owner, ipc->backendid, &id);
+    FcitxInputContext* ic = FindIC(ipc->owner, ipc->frontendid, &id);
     
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
     {
@@ -387,7 +387,7 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))
         {
-            DestroyIC(ipc->owner, ipc->backendid, &id);
+            DestroyIC(ipc->owner, ipc->frontendid, &id);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent"))
@@ -420,7 +420,7 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
-static int IPCProcessKey(FcitxIPCBackend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
+static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
 {
     FcitxInputContext* ic = GetCurrentIC(ipc->owner);
  
@@ -457,7 +457,7 @@ static int IPCProcessKey(FcitxIPCBackend* ipc, FcitxInputContext* callic, uint32
         return 1;
 }
 
-static void IPCICFocusIn(FcitxIPCBackend* ipc, FcitxInputContext* ic)
+static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     if (ic == NULL)
         return;
@@ -478,7 +478,7 @@ static void IPCICFocusIn(FcitxIPCBackend* ipc, FcitxInputContext* ic)
     return;
 }
 
-static void IPCICFocusOut(FcitxIPCBackend* ipc, FcitxInputContext* ic)
+static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
     if (ic && ic == currentic)
@@ -491,7 +491,7 @@ static void IPCICFocusOut(FcitxIPCBackend* ipc, FcitxInputContext* ic)
     return;
 }
 
-static void IPCICReset(FcitxIPCBackend* ipc, FcitxInputContext* ic)
+static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
     if (ic && ic == currentic)
@@ -503,7 +503,7 @@ static void IPCICReset(FcitxIPCBackend* ipc, FcitxInputContext* ic)
     return;
 }
 
-static void IPCICSetCursorLocation(FcitxIPCBackend* ipc, FcitxInputContext* ic, int x, int y)
+static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y)
 {
     ic->offset_x = x;
     ic->offset_y = y;

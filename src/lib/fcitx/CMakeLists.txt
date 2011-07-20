@@ -2,7 +2,7 @@ set(LIBFCITX_SOURCES
     configfile.c
     profile.c
     addon.c
-    backend.c
+    frontend.c
     hook.c
     ime.c
     ui.c
@@ -20,7 +20,7 @@ set(FCITX_HEADERS
     module.h
     instance.h
     addon.h
-    backend.h
+    frontend.h
     fcitx.h
     keys.h
 )

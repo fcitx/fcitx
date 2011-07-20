@@ -28,7 +28,7 @@
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
 #include "fcitx/profile.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"

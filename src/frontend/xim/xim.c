@@ -27,7 +27,7 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx/addon.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/module.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
@@ -41,7 +41,7 @@
 #include "ximhandler.h"
 #include "module/x11/x11stuff.h"
 
-static void* XimCreate(FcitxInstance* instance, int backendid);
+static void* XimCreate(FcitxInstance* instance, int frontendid);
 static boolean XimDestroy(void* arg);
 static void XimEnableIM(void* arg, FcitxInputContext* ic);
 static void XimCloseIM(void* arg, FcitxInputContext* ic);
@@ -51,7 +51,7 @@ static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
-static void SetTriggerKeys (FcitxXimBackend* xim, char** strKey, int length);
+static void SetTriggerKeys (FcitxXimFrontend* xim, char** strKey, int length);
 static inline Bool MyStrcmp (char *str1, char *str2);
 
 static XIMStyle Styles[] = {
@@ -70,7 +70,7 @@ static XIMStyle Styles[] = {
 };
 
 FCITX_EXPORT_API
-FcitxBackend backend =
+FcitxFrontend frontend =
 {
     XimCreate,
     XimDestroy,
@@ -85,7 +85,7 @@ FcitxBackend backend =
     XimGetWindowPosition
 };
 
-FcitxXimBackend *ximbackend;
+FcitxXimFrontend *ximfrontend;
 
 /* Supported Chinese Encodings */
 static XIMEncoding zhEncodings[] = {
@@ -100,15 +100,15 @@ Bool MyStrcmp (char *str1, char *str2)
         return !strncmp (str1, str2, strlen (str2));
 }
 
-void* XimCreate(FcitxInstance* instance, int backendid)
+void* XimCreate(FcitxInstance* instance, int frontendid)
 {
-    if (ximbackend != NULL)
+    if (ximfrontend != NULL)
         return NULL;
-    FcitxXimBackend* xim = fcitx_malloc0(sizeof(FcitxXimBackend));
+    FcitxXimFrontend* xim = fcitx_malloc0(sizeof(FcitxXimFrontend));
     if (xim == NULL)
         return NULL;
     
-    ximbackend = xim;
+    ximfrontend = xim;
     
     XIMStyles *input_styles;
     XIMTriggerKeys *on_keys;
@@ -122,7 +122,7 @@ void* XimCreate(FcitxInstance* instance, int backendid)
     xim->display = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
-    xim->backendid = backendid;
+    xim->frontendid = frontendid;
 
     xim->ximWindow = XCreateSimpleWindow(xim->display, DefaultRootWindow(xim->display), 0, 0, 1, 1, 1, 0, 0);
     if (xim->ximWindow == (Window) NULL) {
@@ -261,28 +261,28 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 
     switch (call_data->major_code) {
     case XIM_OPEN:
-        return XIMOpenHandler(ximbackend, (IMOpenStruct *) call_data);
+        return XIMOpenHandler(ximfrontend, (IMOpenStruct *) call_data);
     case XIM_CLOSE:
-        return XIMCloseHandler(ximbackend, (IMOpenStruct *) call_data);
+        return XIMCloseHandler(ximfrontend, (IMOpenStruct *) call_data);
     case XIM_CREATE_IC:
-        return XIMCreateICHandler(ximbackend, (IMChangeICStruct *) call_data);
+        return XIMCreateICHandler(ximfrontend, (IMChangeICStruct *) call_data);
     case XIM_DESTROY_IC:
-        return XIMDestroyICHandler(ximbackend, (IMChangeICStruct *) call_data);
+        return XIMDestroyICHandler(ximfrontend, (IMChangeICStruct *) call_data);
     case XIM_SET_IC_VALUES:
-        return XIMSetICValuesHandler(ximbackend, (IMChangeICStruct *) call_data);
+        return XIMSetICValuesHandler(ximfrontend, (IMChangeICStruct *) call_data);
     case XIM_GET_IC_VALUES:
-        return XIMGetICValuesHandler(ximbackend, (IMChangeICStruct *) call_data);
+        return XIMGetICValuesHandler(ximfrontend, (IMChangeICStruct *) call_data);
     case XIM_FORWARD_EVENT:
-        XIMProcessKey(ximbackend, (IMForwardEventStruct *) call_data);
+        XIMProcessKey(ximfrontend, (IMForwardEventStruct *) call_data);
         return True;
     case XIM_SET_IC_FOCUS:
-        return XIMSetFocusHandler(ximbackend, (IMChangeFocusStruct *) call_data);
+        return XIMSetFocusHandler(ximfrontend, (IMChangeFocusStruct *) call_data);
     case XIM_UNSET_IC_FOCUS:
-        return XIMUnsetFocusHandler(ximbackend, (IMChangeICStruct *) call_data);;
+        return XIMUnsetFocusHandler(ximfrontend, (IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
         return True;
     case XIM_TRIGGER_NOTIFY:
-        return XIMTriggerNotifyHandler(ximbackend, (IMTriggerNotifyStruct *) call_data);
+        return XIMTriggerNotifyHandler(ximfrontend, (IMTriggerNotifyStruct *) call_data);
     default:
         return True;
     }
@@ -290,7 +290,7 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
 
 boolean XimDestroy(void* arg)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     
     if (xim->ims)
         IMCloseIM(xim->ims);
@@ -298,7 +298,7 @@ boolean XimDestroy(void* arg)
     return true;
 }
 
-void SetTriggerKeys (FcitxXimBackend* xim, char **strKey, int length)
+void SetTriggerKeys (FcitxXimFrontend* xim, char **strKey, int length)
 {
     int             i;
     char           *p;
@@ -380,7 +380,7 @@ void SetTriggerKeys (FcitxXimBackend* xim, char **strKey, int length)
 
 void XimEnableIM(void* arg, FcitxInputContext* ic)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     IMChangeFocusStruct call_data;
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
     call_data.connect_id = ximic->connect_id;
@@ -391,7 +391,7 @@ void XimEnableIM(void* arg, FcitxInputContext* ic)
 
 void XimCloseIM(void* arg, FcitxInputContext* ic)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     IMChangeFocusStruct call_data;
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
     call_data.connect_id = ximic->connect_id;
@@ -401,7 +401,7 @@ void XimCloseIM(void* arg, FcitxInputContext* ic)
 
 void XimCommitString(void* arg, FcitxInputContext* ic, char* str)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XTextProperty tp;
     IMCommitStruct cms;
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
@@ -424,7 +424,7 @@ void XimCommitString(void* arg, FcitxInputContext* ic, char* str)
 
 void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XEvent xEvent;
 
     xEvent.xkey.type = (event == FCITX_PRESS_KEY)?KeyPress:KeyRelease;
@@ -448,7 +448,7 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
 
 void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxXimIC* ximic = GetXimIC(ic);
     Window window = None, dst;
     if (ximic->focus_win)
@@ -468,7 +468,7 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 
 void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 {
-    FcitxXimBackend* xim = (FcitxXimBackend*) arg;
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxXimIC* ximic = GetXimIC(ic);
     Window window = None, dst;
     if (ximic->focus_win)

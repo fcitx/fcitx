@@ -34,7 +34,7 @@
 #include <limits.h>
 #include <libintl.h>
 
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/module.h"
 #include "fcitx/instance.h"
 

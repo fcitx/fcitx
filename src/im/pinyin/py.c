@@ -52,7 +52,7 @@
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
 #include "fcitx/instance.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/module.h"
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"

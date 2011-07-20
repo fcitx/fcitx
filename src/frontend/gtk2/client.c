@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <dbus/dbus-glib.h>
 #include "module/dbus/dbusstuff.h"
-#include "backend/ipc/ipc.h"
+#include "frontend/ipc/ipc.h"
 #include "fcitx/fcitx.h"
 #include "fcitx/ime.h"
 #include "fcitx-config/fcitx-config.h"

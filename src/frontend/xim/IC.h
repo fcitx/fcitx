@@ -29,7 +29,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _FCITX_IC_H_
 #define _FCITX_IC_H_
 
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 
 /**
  * @brief XIM Preedit Attributes
@@ -63,7 +63,7 @@ typedef struct {
 } StatusAttributes;
 
 /**
- * @brief Input Context for Fcitx XIM Backend
+ * @brief Input Context for Fcitx XIM Frontend
  **/
 typedef struct FcitxXimIC {
     CARD16          id;		/* ic id */
@@ -78,12 +78,12 @@ typedef struct FcitxXimIC {
     CARD16 connect_id;
 } FcitxXimIC;
 
-struct FcitxXimBackend;
+struct FcitxXimFrontend;
 
 void     XimCreateIC (void* arg, FcitxInputContext* context, void *priv);
 void     XimDestroyIC (void* arg, FcitxInputContext* arg1);
 boolean  XimCheckIC (void* arg, FcitxInputContext* arg1, void* arg2);
-void     XimSetIC (struct FcitxXimBackend* xim, IMChangeICStruct * call_data);
-void     XimGetIC (struct FcitxXimBackend* xim, IMChangeICStruct * call_data);
+void     XimSetIC (struct FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+void     XimGetIC (struct FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 
 #endif

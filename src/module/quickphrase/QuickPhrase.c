@@ -33,7 +33,7 @@
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
 #include "fcitx/keys.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 
 typedef struct QuickPhraseState {
     uint uQuickPhraseCount;

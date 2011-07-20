@@ -39,7 +39,7 @@
 #include "fcitx/addon.h"
 #include "fcitx/module.h"
 #include "fcitx/ime-internal.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/profile.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/utils.h"

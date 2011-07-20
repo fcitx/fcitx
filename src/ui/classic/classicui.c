@@ -38,7 +38,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "InputWindow.h"
 #include "MainWindow.h"
 #include "TrayWindow.h"

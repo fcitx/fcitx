@@ -33,7 +33,7 @@
 #include "module/dbus/dbusstuff.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
-#include "fcitx/backend.h"
+#include "fcitx/frontend.h"
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
 

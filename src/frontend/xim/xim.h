@@ -18,24 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_XIMHANDLER_H_
-#define _FCITX_XIMHANDLER_H_
+#ifndef _FCITX_XIM_H_
+#define _FCITX_XIM_H_
 
 #include <X11/Xlib.h>
-#include <Xi18n.h>
+#include <X11/Xmd.h>
 
-struct FcitxXimIC;
+#include "fcitx/frontend.h"
+#include "IMdkit.h"
 
-Bool XIMOpenHandler(FcitxXimBackend* xim, IMOpenStruct * call_data);
-Bool XIMGetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
-Bool XIMSetICValuesHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
-Bool XIMSetFocusHandler(FcitxXimBackend* xim, IMChangeFocusStruct * call_data);
-Bool XIMUnsetFocusHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
-Bool XIMCloseHandler(FcitxXimBackend* xim, IMOpenStruct * call_data);
-Bool XIMCreateICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
-Bool XIMDestroyICHandler(FcitxXimBackend* xim, IMChangeICStruct * call_data);
-Bool XIMTriggerNotifyHandler(FcitxXimBackend* xim, IMTriggerNotifyStruct * call_data);
-void XIMProcessKey(FcitxXimBackend* xim, IMForwardEventStruct * call_data);
-void XimForwardKeyInternal(FcitxXimBackend *xim, struct FcitxXimIC* ic, XEvent* xEvent );
+#define DEFAULT_IMNAME "fcitx"
+#define STRBUFLEN 64
+
+#define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
+
+typedef struct FcitxXimFrontend
+{
+    Window ximWindow;
+    Display* display;
+    int iScreen;
+    int iTriggerKeyCount;
+    XIMTriggerKey* Trigger_Keys;
+    XIMS ims;
+    CARD16 icid;
+    struct FcitxFrontend* frontend;
+    struct FcitxInstance* owner;
+    int frontendid;
+    CARD16 currentSerialNumberCallData;
+    long unsigned int currentSerialNumberKey;
+} FcitxXimFrontend;
 
 #endif
