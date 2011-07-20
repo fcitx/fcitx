@@ -200,7 +200,7 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     keyCount = XLookupString(kev, strbuf, STRBUFLEN, &originsym, NULL);
 
     originstate = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
-    GetKey(originsym, originstate, keyCount, &sym, &state);
+    GetKey(originsym, originstate, &sym, &state);
     FcitxLog(DEBUG,
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
          (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);

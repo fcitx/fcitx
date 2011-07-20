@@ -108,22 +108,36 @@ bool FcitxInputContext::isComposing() const
 
 bool FcitxInputContext::filterEvent(const QEvent* event)
 {
-//#ifndef Q_WS_X11
+#ifndef Q_WS_X11
 
     if (key_filtered)
-        return true;
+        return false;
     if (!isValid())
         return QInputContext::filterEvent(event);
+   
+    QWidget* keywidget = focusWidget();
+    if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
+        return false;
 
     if (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease)
         return QInputContext::filterEvent(event);
     
+    const QKeyEvent *key_event = static_cast<const QKeyEvent*> (event);
+    if (!m_enable)
+    {
+        FcitxKeySym fcitxsym;
+        uint fcitxstate;
+        GetKey(key_event->nativeVirtualKey(), key_event->nativeModifiers(), &fcitxsym, &fcitxstate);
+        if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
+            return QInputContext::filterEvent(event);
+        
+    }
+    m_icproxy->FocusIn();
+    
     struct timeval current_time;
     gettimeofday (&current_time, NULL);
     uint time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
-
     
-    const QKeyEvent *key_event = static_cast<const QKeyEvent*> (event);
     QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(key_event->nativeVirtualKey(),
                                               key_event->nativeScanCode(),
                                               key_event->nativeModifiers(),
@@ -134,8 +148,13 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
     if (result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
     else
+    {
+        update();
         return true;
-//#endif
+    }
+#else
+    return false;
+#endif
 
 }
 
@@ -152,7 +171,19 @@ QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 
 void FcitxInputContext::setFocusWidget(QWidget* w)
 {
+    QWidget *oldFocus = focusWidget();
+
+    if (oldFocus == w)
+        return;
+
+    if (oldFocus && isValid()) {
+        m_icproxy->FocusOut();
+    }
+    
     QInputContext::setFocusWidget(w);
+    
+    if (!w || w->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
+        return;
     
     bool has_focus = (w != NULL);
 
@@ -184,7 +215,17 @@ void FcitxInputContext::widgetDestroyed(QWidget* w)
 bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 {
     if (key_filtered)
-        return true;
+        return false;
+    
+    if (!keywidget->testAttribute(Qt::WA_WState_Created))
+        return false;
+    
+    if (keywidget != focusWidget())
+        return false;
+    
+    if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
+        return false;
+    
     if (!isValid())
         return QInputContext::x11FilterEvent(keywidget, event);
 
@@ -194,13 +235,14 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     KeySym sym;
     char strbuf[64];
     memset(strbuf, 0, 64);
-    int count = XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
-
+    XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
+    
+    
     if (!m_enable)
     {
         FcitxKeySym fcitxsym;
         uint fcitxstate;
-        GetKey(sym, event->xkey.state, count, &fcitxsym, &fcitxstate);
+        GetKey(sym, event->xkey.state, &fcitxsym, &fcitxstate);
         if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
             return QInputContext::x11FilterEvent(keywidget, event);
     }
@@ -290,13 +332,11 @@ void FcitxInputContext::createInputContext()
 
 void FcitxInputContext::closeIM()
 {
-    qDebug() << "Close IM";
     this->m_enable = false;
 }
 
 void FcitxInputContext::enableIM()
 {
-    qDebug() << "Enable IM";
     this->m_enable = true;
 }
 

@@ -62,6 +62,7 @@ typedef enum _KEY_RELEASED {
     KR_CTRL,
     KR_2ND_SELECTKEY,
     KR_3RD_SELECTKEY,
+    KR_CTRL_SHIFT
 } KEY_RELEASED;
 
 typedef enum _INPUT_RETURN_VALUE {

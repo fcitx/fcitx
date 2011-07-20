@@ -311,7 +311,10 @@ INPUT_RETURN_VALUE ProcessKey(
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
                 if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
                     if (GetCurrentIC(instance)->state == IS_ACTIVE)
-                        SwitchIM(instance, -1);
+                    {
+                        if (input->keyReleased == KR_CTRL_SHIFT)
+                            SwitchIM(instance, -1);
+                    }
                     else if (IsHotKey(sym, state, fc->hkTrigger))
                         CloseIM(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
@@ -391,6 +394,10 @@ INPUT_RETURN_VALUE ProcessKey(
             input->lastKeyPressedTime = timestamp;
             if (IsHotKey(sym, state, fc->switchKey)) {
                 input->keyReleased = KR_CTRL;
+                retVal = IRV_DO_NOTHING;
+            }
+            else if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2)) {
+                input->keyReleased = KR_CTRL_SHIFT;
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */

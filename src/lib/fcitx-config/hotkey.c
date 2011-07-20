@@ -102,7 +102,7 @@ boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
  * Do some custom process
  */
 FCITX_EXPORT_API
-void GetKey (FcitxKeySym keysym, unsigned int iKeyState, int iCount, FcitxKeySym* outk, unsigned int* outs)
+void GetKey (FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
     if (iKeyState)
     {

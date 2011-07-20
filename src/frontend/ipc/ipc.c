@@ -432,7 +432,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     unsigned int state;
     
     originstate = originstate - (originstate & KEY_NUMLOCK) - (originstate & KEY_CAPSLOCK) - (originstate & KEY_SCROLLLOCK);
-    GetKey(originsym, originstate, 0, &sym, &state);
+    GetKey(originsym, originstate, &sym, &state);
     FcitxLog(DEBUG,
         "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%u ",
          (type == FCITX_RELEASE_KEY), state, keycode, sym);
