@@ -22,6 +22,18 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
+static boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
+
+boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
+{
+    state &= KEY_CTRL_ALT_SHIFT_COMP;
+    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state) )
+        return true;
+    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state) )
+        return true;
+    return false;
+}
+
 FcitxInputContext::FcitxInputContext()
     : m_connection(QDBusConnection::sessionBus()),
     m_dbusproxy(0),
@@ -34,6 +46,8 @@ FcitxInputContext::FcitxInputContext()
 {
     m_dbusproxy = new org::freedesktop::DBus(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, m_connection, this);    
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
+    
+    m_triggerKey[0].sym = m_triggerKey[1].sym = m_triggerKey[0].state = m_triggerKey[1].state = 0;
     
     createInputContext();
 }
@@ -138,7 +152,6 @@ QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 
 void FcitxInputContext::setFocusWidget(QWidget* w)
 {
-    qDebug() << "setFocusWidget";
     QInputContext::setFocusWidget(w);
     
     bool has_focus = (w != NULL);
@@ -178,12 +191,22 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (event->type != XKeyRelease && event->type != XKeyPress)
         return QInputContext::x11FilterEvent(keywidget, event);
 
-    m_icproxy->FocusIn();
-
     KeySym sym;
     char strbuf[64];
     memset(strbuf, 0, 64);
-    XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
+    int count = XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
+
+    if (!m_enable)
+    {
+        FcitxKeySym fcitxsym;
+        uint fcitxstate;
+        GetKey(sym, event->xkey.state, count, &fcitxsym, &fcitxstate);
+        if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
+            return QInputContext::x11FilterEvent(keywidget, event);
+    }
+    
+    m_icproxy->FocusIn();
+
     QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(sym,
                                               event->xkey.keycode,
                                               event->xkey.state,
@@ -191,7 +214,7 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                               event->xkey.time
                                               );
     result.waitForFinished();
-    qDebug() << "keysym: " << sym << "keycode: " << event->xkey.keycode << " keystate: " << event->xkey.state << " result: " << result.value();
+
     if (result.isError() || result.value() <= 0)
         return QInputContext::x11FilterEvent(keywidget, event);
     else
@@ -207,9 +230,7 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 void FcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
 {
     if (service == FCITX_DBUS_SERVICE)
-    {
-        qDebug() << "Service: " << service << " oldowner: " << oldowner << " newowner: " << newowner << endl;
-        
+    {        
         /* old die */
         if (oldowner.length() > 0 || newowner.length() > 0)
         {
@@ -225,6 +246,7 @@ void FcitxInputContext::imChanged(const QString& service, const QString& oldowne
                 m_icproxy = NULL;
             }
             m_enable = false;
+            m_triggerKey[0].sym = m_triggerKey[1].sym = m_triggerKey[0].state = m_triggerKey[1].state = 0;
         }
         
         /* new rise */
@@ -240,15 +262,21 @@ void FcitxInputContext::createInputContext()
     if (!m_improxy->isValid())
         return;
     
+    QDBusPendingReply< uint, uint, uint, uint > triggerKey = m_improxy->GetTriggerKey();
+    triggerKey.waitForFinished();
+    m_triggerKey[0].sym = qdbus_cast<uint>(triggerKey.argumentAt(0));
+    m_triggerKey[0].state = qdbus_cast<uint>(triggerKey.argumentAt(1));
+    m_triggerKey[1].sym = qdbus_cast<uint>(triggerKey.argumentAt(2));
+    m_triggerKey[1].state = qdbus_cast<uint>(triggerKey.argumentAt(3));
+    
     QDBusPendingReply< int > result = m_improxy->CreateIC();
     result.waitForFinished();
     if (result.isError())
-        qDebug() << result.error();
+        qWarning() << result.error();
     else
     {
         this->m_id = result.value();
         this->m_path = QString(FCITX_IC_DBUS_PATH_QSTRING).arg(m_id);
-        qDebug() << this->m_path;
         m_icproxy = new org::fcitx::Fcitx::InputContext(FCITX_DBUS_SERVICE, m_path, m_connection, this);
         connect(m_icproxy, SIGNAL(CloseIM()), this, SLOT(closeIM()));
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));

@@ -65,6 +65,7 @@ target_link_libraries(
     optimized ${QT_QTDBUS_LIBRARY_RELEASE}
     optimized ${QT_QTGUI_LIBRARY_RELEASE}
     ${X11_LIBRARIES}
+    fcitx-config
 )
 
 install(

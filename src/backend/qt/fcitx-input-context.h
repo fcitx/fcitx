@@ -8,6 +8,7 @@
 #include "org.freedesktop.DBus.h"
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
+#include <fcitx-config/hotkey.h>
 
 
 #define FCITX_IDENTIFIER_NAME "fcitx"
@@ -54,6 +55,7 @@ private:
     QString m_path;
     bool m_enable;
     bool m_has_focus;
+    HOTKEYS m_triggerKey[2];
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

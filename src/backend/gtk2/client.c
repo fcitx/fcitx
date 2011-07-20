@@ -43,6 +43,7 @@ struct FcitxIMClient {
     FcitxIMClientConnectCallback connectcb;
     FcitxIMClientDestroyCallback destroycb;
     void *data;
+    HOTKEYS triggerkey[2];
 };
 
 static void FcitxIMClientCreateIC(FcitxIMClient* client);
@@ -94,6 +95,8 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
     dbus_g_proxy_connect_signal(client->dbusproxy, "NameOwnerChanged",
                                 G_CALLBACK(_changed_cb), client, NULL);
     
+    client->triggerkey[0].sym = client->triggerkey[0].state = client->triggerkey[1].sym = client->triggerkey[1].state = 0;
+    
     FcitxIMClientCreateIC(client);
     return client;
 }
@@ -134,6 +137,7 @@ static void _destroy_cb(DBusGProxy *proxy, gpointer user_data)
         g_object_unref(client->icproxy);
         client->proxy = NULL;
         client->icproxy = NULL;
+        client->triggerkey[0].sym = client->triggerkey[0].state = client->triggerkey[1].sym = client->triggerkey[1].state = 0;
     }
     client->destroycb(client, client->data);
 }
@@ -148,17 +152,30 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
                                                 FCITX_IM_DBUS_PATH,
                                                 FCITX_IM_DBUS_INTERFACE,
                                                 &error);
+    
     if (!client->proxy)
         return;
     
     g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
 
-    
     dbus_g_proxy_call(client->proxy, "CreateIC", &error, G_TYPE_INVALID, G_TYPE_INT, &id, G_TYPE_INVALID);
     if (id >= 0)
         client->id = id;
     else
         return;
+    
+    guint arg1, arg2, arg3, arg4;
+    dbus_g_proxy_call(client->proxy, "GetTriggerKey", &error, G_TYPE_INVALID,
+                      G_TYPE_UINT, &arg1,
+                      G_TYPE_UINT, &arg2,
+                      G_TYPE_UINT, &arg3,
+                      G_TYPE_UINT, &arg4,
+                      G_TYPE_INVALID
+                     );
+    client->triggerkey[0].sym = arg1;
+    client->triggerkey[0].state = arg2;
+    client->triggerkey[1].sym = arg3;
+    client->triggerkey[1].state = arg4;
     
     sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);    
     
@@ -294,4 +311,9 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
         user_data,
         freefunc
     );
+}
+
+HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
+{
+    return client->triggerkey;
 }

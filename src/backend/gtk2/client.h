@@ -48,6 +48,7 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
     void* user_data,
     GClosureNotify freefunc
 );
+HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client);
 
 #ifdef __cplusplus
 }
