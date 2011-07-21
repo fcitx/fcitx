@@ -218,7 +218,10 @@ boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv)
 void IPCDestroyIC(void* arg, FcitxInputContext* context)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    
     dbus_connection_unregister_object_path(ipc->conn, GetIPCIC(context)->path);
+    free(context->privateic);
+    context->privateic = NULL;
 }
 
 void IPCEnableIM(void* arg, FcitxInputContext* ic)
@@ -483,9 +486,9 @@ static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
     FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
     if (ic && ic == currentic)
     {
+        SetCurrentIC(ipc->owner, NULL);
         CloseInputWindow(ipc->owner);
         OnInputUnFocus(ipc->owner);
-        SetCurrentIC(ipc->owner, NULL);
     }
 
     return;

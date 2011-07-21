@@ -127,6 +127,14 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
             rec->next = instance->free_list;
             instance->free_list = rec;
             
+            if (rec == GetCurrentIC(instance))
+            {
+                FcitxLog(INFO, "Hello, We destroy current ic");
+                CloseInputWindow(instance);
+                OnInputUnFocus(instance);
+                SetCurrentIC(instance, NULL);
+            }
+
             frontend->DestroyIC((*pfrontend)->addonInstance, rec);
             return;
         }

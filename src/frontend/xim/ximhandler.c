@@ -79,9 +79,9 @@ Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid)
     {
+        SetCurrentIC(xim->owner, NULL);
         CloseInputWindow(xim->owner);
         OnInputUnFocus(xim->owner);
-        SetCurrentIC(xim->owner, NULL);
     }
 
     return True;
@@ -109,13 +109,6 @@ Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext* ic = GetCurrentIC(xim->owner);
-    if (ic != NULL && ic == FindIC(xim->owner, xim->frontendid, &call_data->icid)) {
-        CloseInputWindow(xim->owner);
-        OnInputUnFocus(xim->owner);
-        SetCurrentIC(xim->owner, NULL);
-    }
-
     DestroyIC(xim->owner, xim->frontendid, &call_data->icid);
 
     return True;
