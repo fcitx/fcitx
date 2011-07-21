@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #--------------------------------------
 # fcitx-config
 #
@@ -11,6 +11,24 @@ detectDE()
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
     elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    fi
+}
+
+run_kde()
+{
+    command=`which kcmshell4 2>&1`
+    haskde=0
+    if [ $? -eq 0 ]; then
+        checkinstalled=`$command --list | grep -c kcm_fcitx`
+        if [ "x$checkinstalled" != "x0" ]; then
+            haskde=1
+        fi
+    fi
+
+    if [ $haskde == "1" ]; then
+        exec $command kcm_fcitx
+    else
+        run_gtk
     fi
 }
 
@@ -36,4 +54,11 @@ run_xdg()
 
 detectDE
 
-run_gtk
+case "$DE" in
+    kde)
+        run_kde
+        ;;
+    *)
+        run_gtk
+        ;;
+esac

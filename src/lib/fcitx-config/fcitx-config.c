@@ -949,3 +949,20 @@ ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName,
     return null;
  
 }
+
+FCITX_EXPORT_API
+const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName)
+{
+    ConfigGroupDesc* groupDesc;
+    HASH_FIND_STR(cfdesc->groupsDesc, groupName, groupDesc);
+    if (groupDesc)
+    {
+        ConfigOptionDesc *optionDesc = NULL;
+        HASH_FIND_STR(groupDesc->optionsDesc, optionName, optionDesc);
+        if (optionDesc)
+        {
+            return optionDesc;
+        }
+    }
+    return NULL;
+}

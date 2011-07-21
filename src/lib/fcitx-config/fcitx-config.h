@@ -257,6 +257,7 @@ boolean SaveConfigFile(char *filename, GenericConfig *cfile, ConfigFileDesc* cde
 boolean SaveConfigFileFp(FILE* fp, GenericConfig *cfile, ConfigFileDesc* cdesc);
 void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption* option, ConfigSync sync);
 ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, const char* option);
+const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
 void ConfigBindSync(GenericConfig* config);
 
 typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);
