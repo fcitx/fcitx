@@ -40,6 +40,7 @@
 #define MESSAGE_WINDOW_LINESPACE 2
 static void            InitMessageWindowProperty (MessageWindow* messageWindow);
 static boolean MessageWindowEventHandler(void *arg, XEvent* event);
+static void DisplayMessageWindow (MessageWindow *messageWindow);
 
 MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
 {
@@ -90,6 +91,7 @@ boolean MessageWindowEventHandler(void *arg, XEvent* event)
         {
             case Expose:
                 DrawMessageWindow(messageWindow, NULL, NULL, 0);
+                DisplayMessageWindow(messageWindow);
                 break;
             case ButtonRelease:
                 {

@@ -54,7 +54,7 @@ typedef struct _FcitxPinyinConfig
 } FcitxPinyinConfig;
 
 CONFIG_BINDING_DECLARE(FcitxPinyinConfig);
-void LoadPYConfig(FcitxPinyinConfig *pyconfig);
+boolean LoadPYConfig(FcitxPinyinConfig *pyconfig);
 void SavePYConfig(FcitxPinyinConfig *pyconfig);
 
 #endif

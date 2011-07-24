@@ -86,6 +86,11 @@ ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc)
     int i = 0;
     for (i = 0 ; i< len ;i ++)
         cfile = ParseIniFp(fp[i], cfile);
+    
+    /* create a empty one, CheckConfig will do other thing for us */
+    if (cfile == NULL)
+        cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
+    
     if (CheckConfig(cfile, fileDesc))
     {
         return cfile;
@@ -99,6 +104,11 @@ FCITX_EXPORT_API
 ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
 {
     ConfigFile *cfile = ParseIniFp(fp, NULL);
+    
+    /* create a empty one, CheckConfig will do other thing for us */
+    if (cfile == NULL)
+        cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
+
     if (CheckConfig(cfile, fileDesc))
     {
         return cfile;
@@ -933,6 +943,9 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
 FCITX_EXPORT_API
 boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
 {
+    if (!fp)
+        return false;
+    
     ConfigFile* cfile = config->configFile;
     ConfigGroupDesc* groupdesc = NULL;
     for(groupdesc = cdesc->groupsDesc;

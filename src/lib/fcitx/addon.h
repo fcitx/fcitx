@@ -136,6 +136,8 @@ boolean AddonIsAvailable(UT_array* addons, const char* name);
  **/
 FcitxAddon* GetAddonByName(UT_array* addons, const char* name);
 
+ConfigFileDesc* GetAddonConfigDesc();
+
 #ifdef __cplusplus
 }
 #endif

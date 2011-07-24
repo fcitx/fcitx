@@ -82,7 +82,14 @@ void *PYCreate(FcitxInstance* instance)
     InitMHPY(&pystate->pyconfig.MHPY_C, MHPY_C_TEMPLATE);
     InitMHPY(&pystate->pyconfig.MHPY_S, MHPY_S_TEMPLATE);
     InitPYTable(&pystate->pyconfig);
-    LoadPYConfig(&pystate->pyconfig);
+    if (!LoadPYConfig(&pystate->pyconfig))
+    {
+        free(pystate->pyconfig.MHPY_C);
+        free(pystate->pyconfig.MHPY_S);
+        free(pystate->pyconfig.PYTable);
+        free(pystate);
+        return NULL;
+    }
     
     FcitxRegisterIM(instance,
                     pystate,

@@ -735,8 +735,9 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
 FCITX_EXPORT_API
 void ReloadConfig(FcitxInstance *instance)
 {
-    LoadConfig(&instance->config);
-    
+    if (!LoadConfig(&instance->config))
+        EndInstance(instance);
+        
     /* Reload All IM, Module, and UI Config */
     UT_array* addons = &instance->addons;
     

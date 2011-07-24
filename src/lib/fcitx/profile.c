@@ -39,28 +39,28 @@ CONFIG_BINDING_END()
  * @brief 加载配置文件
  */
 FCITX_EXPORT_API
-void LoadProfile(FcitxProfile* profile)
+boolean LoadProfile(FcitxProfile* profile)
 {
+    ConfigFileDesc* profileDesc = GetProfileDesc();
+    if (!profileDesc)
+        return false;
+    
     FILE *fp;
     fp = GetXDGFileUserWithPrefix("", "profile", "rt", NULL);
     if (!fp) {
         if (errno == ENOENT)
-        {
             SaveProfile(profile);
-            LoadProfile(profile);
-        }
-        return;
     }
 
-    ConfigFileDesc* profileDesc = GetProfileDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, profileDesc);
     
     FcitxProfileConfigBind(profile, cfile, profileDesc);
     ConfigBindSync(&profile->gconfig);
 
-    fclose(fp);
-    if (profile->gconfig.configFile)
-        SaveProfile(profile);
+    if (fp)
+        fclose(fp);
+    
+    return true;
 }
 
 CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
@@ -71,7 +71,8 @@ void SaveProfile(FcitxProfile* profile)
     ConfigFileDesc* profileDesc = GetProfileDesc();
     FILE* fp = GetXDGFileUserWithPrefix("", "profile", "wt", NULL);
     SaveConfigFileFp(fp, &profile->gconfig, profileDesc);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 FCITX_EXPORT_API

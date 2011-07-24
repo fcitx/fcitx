@@ -89,28 +89,28 @@ void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option
     }
 }
 
-void LoadPYConfig(FcitxPinyinConfig *pyconfig)
+boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
 {
+    ConfigFileDesc* configDesc = GetPYConfigDesc();
+    if (configDesc == NULL)
+        return false;
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "rt", &file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
-        {
             SavePYConfig(pyconfig);
-            LoadPYConfig(pyconfig);
-        }
-        return;
     }
     
-    ConfigFileDesc* configDesc = GetPYConfigDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
     FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
     ConfigBindSync((GenericConfig*)pyconfig);
 
-    fclose(fp);
+    if (fp)
+        fclose(fp);
+    return true;
 }
 
 void SavePYConfig(FcitxPinyinConfig* pyconfig)
@@ -120,7 +120,8 @@ void SavePYConfig(FcitxPinyinConfig* pyconfig)
     FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "wt", &file);
     SaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
     free(file);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 CONFIG_DESC_DEFINE(GetPYConfigDesc, "fcitx-pinyin.desc")

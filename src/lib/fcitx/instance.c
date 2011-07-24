@@ -86,17 +86,19 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->messageUp = InitMessages();
     instance->sem = sem;
     
-    LoadConfig(&instance->config);
+    if (!LoadConfig(&instance->config))
+        goto error_exit;
     if (!ProcessOption(instance, argc, argv))
-    {
-        EndInstance(instance);
-        return instance;
-    }
+        goto error_exit;
     
     instance->input.timeStart = time(NULL);
     
     FcitxInitThread(instance);
-    LoadProfile(&instance->profile);
+    if (!LoadProfile(&instance->profile))
+        goto error_exit;
+    if (GetAddonConfigDesc() == NULL)
+        goto error_exit;
+    
     LoadAddonInfo(&instance->addons);
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
@@ -149,6 +151,11 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     pthread_create(&instance->pid, NULL, RunInstance, instance);
 
     return instance;
+
+error_exit:
+    EndInstance(instance);
+    return instance;
+
 }
 
 void* RunInstance(void* arg)

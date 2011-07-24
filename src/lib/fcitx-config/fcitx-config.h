@@ -32,6 +32,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <fcitx-utils/uthash.h>
+#include <fcitx-utils/utils.h>
 
 struct _HOTKEYS;
 typedef int32_t boolean;

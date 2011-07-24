@@ -68,7 +68,7 @@ static char* ChttransOutputFilter(void* arg, const char* strin);
 static void ReloadChttrans(void* arg);
 static char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char* strHZ);
 static boolean GetChttransEnabled();
-static void LoadChttransConfig(FcitxChttrans* transState);
+boolean LoadChttransConfig(FcitxChttrans* transState);
 static ConfigFileDesc* GetChttransConfigDesc();
 static void SaveChttransConfig(FcitxChttrans* transState);
 static INPUT_RETURN_VALUE HotkeyToggleChttransState(void*);
@@ -94,7 +94,11 @@ void* ChttransCreate(FcitxInstance* instance)
 {
     FcitxChttrans* transState = fcitx_malloc0(sizeof(FcitxChttrans));
     transState->owner = instance;
-    LoadChttransConfig(transState);
+    if (!LoadChttransConfig(transState))
+    {
+        free(transState);
+        return NULL;
+    }
     
     HotkeyHook hk;
     hk.arg = transState;
@@ -252,8 +256,12 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
     return NULL;
 }
 
-void LoadChttransConfig(FcitxChttrans* transState)
+boolean LoadChttransConfig(FcitxChttrans* transState)
 {
+    ConfigFileDesc* configDesc = GetChttransConfigDesc();
+    if (configDesc == NULL)
+        return false;
+    
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
@@ -261,20 +269,18 @@ void LoadChttransConfig(FcitxChttrans* transState)
     free(file);
     if (!fp) {
         if (errno == ENOENT)
-        {
             SaveChttransConfig(transState);
-            LoadChttransConfig(transState);
-        }
-        return;
     }
     
-    ConfigFileDesc* configDesc = GetChttransConfigDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
     FcitxChttransConfigBind(transState, cfile, configDesc);
     ConfigBindSync((GenericConfig*)transState);
 
-    fclose(fp);
+    if (fp)
+        fclose(fp);
+    
+    return true;
 }
 
 CONFIG_DESC_DEFINE(GetChttransConfigDesc, "fcitx-chttrans.desc")
@@ -287,7 +293,8 @@ void SaveChttransConfig(FcitxChttrans* transState)
     FcitxLog(INFO, "Save Config to %s", file);
     SaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 void ReloadChttrans(void* arg)

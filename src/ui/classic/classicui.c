@@ -96,6 +96,16 @@ void* ClassicUICreate(FcitxInstance* instance)
     FcitxModuleFunctionArg arg;
     FcitxClassicUI* classicui = fcitx_malloc0(sizeof(FcitxClassicUI));
     classicui->owner = instance;
+    if (!LoadClassicUIConfig(classicui))
+    {
+        free(classicui);
+        return NULL;
+    }
+    if (GetSkinDesc() == NULL)
+    {
+        free(classicui);
+        return NULL;
+    }
     classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
     
     XLockDisplay(classicui->dpy);
@@ -104,8 +114,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     
     classicui->protocolAtom = XInternAtom (classicui->dpy, "WM_PROTOCOLS", False);
     classicui->killAtom = XInternAtom (classicui->dpy, "WM_DELETE_WINDOW", False);
-    
-    LoadClassicUIConfig(classicui);
+
     LoadSkinConfig(&classicui->skin, &classicui->skinType);
     
     InitSkinMenu(classicui);
@@ -279,8 +288,11 @@ void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
 
 CONFIG_DESC_DEFINE(GetClassicUIDesc, "fcitx-classic-ui.desc")
 
-void LoadClassicUIConfig(FcitxClassicUI* classicui)
+boolean LoadClassicUIConfig(FcitxClassicUI* classicui)
 {
+    ConfigFileDesc* configDesc = GetClassicUIDesc();
+    if (configDesc == NULL)
+        return false;
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("conf", "fcitx-classic-ui.config", "rt", &file);
@@ -288,21 +300,17 @@ void LoadClassicUIConfig(FcitxClassicUI* classicui)
     free(file);
     if (!fp) {
         if (errno == ENOENT)
-        {
             SaveClassicUIConfig(classicui);
-            LoadClassicUIConfig(classicui);
-        }
-        return;
     }
     
-    ConfigFileDesc* configDesc = GetClassicUIDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
     FcitxClassicUIConfigBind(classicui, cfile, configDesc);
     ConfigBindSync(&classicui->gconfig);
 
-    fclose(fp);
-
+    if (fp)
+        fclose(fp);
+    return true;
 }
 
 void SaveClassicUIConfig(FcitxClassicUI *classicui)
@@ -313,7 +321,8 @@ void SaveClassicUIConfig(FcitxClassicUI *classicui)
     FcitxLog(INFO, "Save Config to %s", file);
     SaveConfigFileFp(fp, &classicui->gconfig, configDesc);
     free(file);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 Visual * FindARGBVisual (FcitxClassicUI* classicui)

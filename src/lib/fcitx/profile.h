@@ -36,7 +36,7 @@ typedef struct _FcitxProfile
     boolean bUseFullWidthChar;
 } FcitxProfile;
 
-void LoadProfile(FcitxProfile* profile);
+boolean LoadProfile(FcitxProfile* profile);
 void SaveProfile(FcitxProfile* profile);
 boolean UseRemind(FcitxProfile* profile);
 

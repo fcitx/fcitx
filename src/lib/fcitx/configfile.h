@@ -92,7 +92,7 @@ typedef struct _FcitxConfig
     HOTKEYS i3rdSelectKey[2];
 } FcitxConfig;
 
-void LoadConfig(FcitxConfig* fc);
+boolean LoadConfig(FcitxConfig* fc);
 void SaveConfig(FcitxConfig* fc);
 int ConfigGetMaxCandWord(FcitxConfig* fc);
 boolean ConfigGetPointAfterNumber(FcitxConfig* fc);

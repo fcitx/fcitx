@@ -62,7 +62,6 @@
 
 static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
 
-static ConfigFileDesc* GetSkinDesc();
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateSkinMenuShell(FcitxUIMenu* menu);
 static void UnloadImage(FcitxSkin* skin);

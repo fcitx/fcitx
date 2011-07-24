@@ -50,7 +50,6 @@ CONFIG_BINDING_END()
 
 const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
 static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
-static ConfigFileDesc* GetAddonConfigDesc();
 static int AddonPriorityCmp(const void* a, const void* b)
 {
     FcitxAddon *aa = (FcitxAddon*)a, *ab = (FcitxAddon*)b;
@@ -272,6 +271,7 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
  * 
  * @return the description of addon configure.
  */
+FCITX_EXPORT_API
 CONFIG_DESC_DEFINE(GetAddonConfigDesc, "addon.desc")
 
 FCITX_EXPORT_API

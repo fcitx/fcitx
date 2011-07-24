@@ -160,6 +160,7 @@ typedef struct _FcitxSkin
     SkinImage* imageTable;
 } FcitxSkin;
 
+ConfigFileDesc* GetSkinDesc();
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
 void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, struct _Messages * msgup, struct _Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);

@@ -29,6 +29,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/keys.h"
+#include "instance.h"
 
 static ConfigFileDesc* GetConfigDesc();
 static void FilterSwitchKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
@@ -139,8 +140,13 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
 }
 
 FCITX_EXPORT_API
-void LoadConfig(FcitxConfig* fc)
+boolean LoadConfig(FcitxConfig* fc)
 {
+    ConfigFileDesc* configDesc = GetConfigDesc();
+    
+    if (configDesc == NULL)
+        return false;
+    
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("", "config", "rt", &file);
@@ -148,20 +154,17 @@ void LoadConfig(FcitxConfig* fc)
     free(file);
     if (!fp) {
         if (errno == ENOENT)
-        {
             SaveConfig(fc);
-            LoadConfig(fc);
-        }
-        return;
     }
     
-    ConfigFileDesc* configDesc = GetConfigDesc();
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
     
     FcitxConfigConfigBind(fc, cfile, configDesc);
     ConfigBindSync((GenericConfig*)fc);
     
-    fclose(fp);
+    if (fp)
+        fclose(fp);
+    return true;
 }
 
 CONFIG_DESC_DEFINE(GetConfigDesc, "config.desc")
@@ -175,7 +178,8 @@ void SaveConfig(FcitxConfig* fc)
     FcitxLog(DEBUG, "Save Config to %s", file);
     SaveConfigFileFp(fp, &fc->gconfig, configDesc);
     free(file);
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 }
 
 FCITX_EXPORT_API

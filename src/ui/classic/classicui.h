@@ -92,7 +92,7 @@ boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, in
 boolean IsInRspArea(int x0, int y0, struct _FcitxClassicUIStatus* status);
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
 void ActivateWindow(Display *dpy, int iScreen, Window window);
-void LoadClassicUIConfig(FcitxClassicUI* classicui);
+boolean LoadClassicUIConfig(FcitxClassicUI* classicui);
 void SaveClassicUIConfig(FcitxClassicUI* classicui);
 boolean WindowIsVisable(Display* dpy, Window window);
 
