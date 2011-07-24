@@ -73,6 +73,8 @@ typedef struct _FcitxAddon
 {
     GenericConfig config;
     char *name;
+    char *generalname;
+    char *comment;
     boolean bEnabled;
     AddonCategory category;
     AddonType type;

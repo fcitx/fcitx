@@ -38,6 +38,8 @@
 
 CONFIG_BINDING_BEGIN(FcitxAddon)
 CONFIG_BINDING_REGISTER("Addon", "Name", name)
+CONFIG_BINDING_REGISTER("Addon", "GeneralName", generalname)
+CONFIG_BINDING_REGISTER("Addon", "Comment", comment)
 CONFIG_BINDING_REGISTER("Addon", "Category", category)
 CONFIG_BINDING_REGISTER("Addon", "Enabled", bEnabled)
 CONFIG_BINDING_REGISTER("Addon", "Library", library)

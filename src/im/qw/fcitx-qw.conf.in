@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-qw
-_GenernalName=Quwei
+_GeneralName=Quwei
 _Comment=Quwei Input Method for Fcitx
 Category=InputMethod
 Enabled=False

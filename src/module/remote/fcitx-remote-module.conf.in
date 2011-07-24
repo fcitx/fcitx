@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-remote
-_GenernalName=Remote
+_GeneralName=Remote
 _Comment=Used by fcitx-remote to change Fcitx state from console
 Category=Module
 Enabled=True

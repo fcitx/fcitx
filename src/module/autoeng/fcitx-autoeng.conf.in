@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-autoeng
-_GenernalName=Auto English Mode
+_GeneralName=Auto English Mode
 _Comment=Auto Change to English Mode while Input Specific String
 Category=Module
 Enabled=True

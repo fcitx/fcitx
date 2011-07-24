@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-dbus
-_GenernalName=DBus Support
+_GeneralName=DBus Support
 _Comment=Provides DBus Support (Used by other Addon)
 Category=Module
 Enabled=True

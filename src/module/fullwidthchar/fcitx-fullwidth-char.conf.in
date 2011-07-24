@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-fullwidth-char
-_GenernalName=Fullwidth Character
+_GeneralName=Fullwidth Character
 _Comment=Provides Fullwidth Character Input Support
 Category=Module
 Enabled=True
