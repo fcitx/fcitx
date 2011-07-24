@@ -129,7 +129,6 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
             
             if (rec == GetCurrentIC(instance))
             {
-                FcitxLog(INFO, "Hello, We destroy current ic");
                 CloseInputWindow(instance);
                 OnInputUnFocus(instance);
                 SetCurrentIC(instance, NULL);

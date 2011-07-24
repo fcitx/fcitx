@@ -36,12 +36,6 @@ set(PY_URL http://fcitx.googlecode.com/files/pinyin.tar.gz)
 
 add_subdirectory(png)
 
-add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/desc.po
-                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/getdescpo ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-                   DEPENDS getdescpo)
-
-add_custom_target(desc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/desc.po)
-
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-configtool.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop )
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-kimpanel.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop )
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop )
