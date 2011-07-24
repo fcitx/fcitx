@@ -35,8 +35,9 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
         endif ( ${EXTRACTFILE} MATCHES ".conf.in$")
     endforeach(EXTRACTFILE ${POTFILES_IN})
 
-    add_custom_target(
-        conf.po ALL COMMAND xgettext --add-comments --output=conf.po --keyword=N_ ${TEMPHEADER}
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/conf.po
+        COMMAND xgettext --add-comments --output=conf.po --keyword=N_ ${TEMPHEADER}
         DEPENDS ${TEMPHEADER})
 ENDMACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
 
