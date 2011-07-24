@@ -1,5 +1,5 @@
 # List of source files which contain translatable strings.
-./data/desc.po
+./po/desc.po
 ./po/conf.po
 @REL_SOURCE_ROOT@/data/table/cangjie.conf.in
 @REL_SOURCE_ROOT@/data/table/db.conf.in
