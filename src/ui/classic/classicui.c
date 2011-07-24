@@ -400,7 +400,7 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
                 exit(0);
             else
             {
-                execl(BINDIR "/fcitx-config", "fcitx-config", NULL);
+                execl(BINDIR "/fcitx-configtool", "fcitx-configtool", NULL);
                 exit(0);
             }
         }

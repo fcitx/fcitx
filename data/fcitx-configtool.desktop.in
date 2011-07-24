@@ -1,8 +1,8 @@
 [Desktop Entry]
-Exec=fcitx-config
-_GenericName=Fcitx Configuration Tool
-_Comment=Fcitx GUI Config Tool
+Encoding=UTF-8
 _Name=Fcitx Config Tool
+_Comment=Fcitx GUI Config Tool
+Exec=fcitx-configtool
 Icon=fcitx
 MimeType=
 StartupNotify=true

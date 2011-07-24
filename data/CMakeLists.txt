@@ -2,6 +2,8 @@ if (ENABLE_TABLE)
     add_subdirectory(table)
 endif (ENABLE_TABLE)
 
+add_subdirectory(script)
+
 set(FCITX_DESC_FILES
     addon.desc
     config.desc
@@ -58,9 +60,9 @@ add_custom_command(OUTPUT ${PY_DATA}
 add_custom_target(desktopfile ALL DEPENDS ${FCITX_DSEKTOP_FILES})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop DESTINATION share/applications/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop DESTINATION share/applications/)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop DESTINATION share/applications/)
-
-install(FILES fcitx-config DESTINATION ${bindir} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+if (_ENABLE_DBUS)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop DESTINATION share/applications/)
+endif(_ENABLE_DBUS)
 
 install(FILES ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
 fcitx_add_configdesc_file(${FCITX_DESC_FILES})

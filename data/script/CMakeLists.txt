@@ -1,0 +1,4 @@
+install(FILES fcitx-configtool DESTINATION ${bindir} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+configure_file(fcitx4-config.in fcitx4-config)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx4-config DESTINATION ${bindir})

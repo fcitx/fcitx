@@ -74,7 +74,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
     /* You must have dbus to make it works */
     if (client->conn == NULL)
     {
-        g_warning(error->message);
+        g_warning("%s", error->message);
         free(client);
         return NULL;
     }
