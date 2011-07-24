@@ -745,7 +745,7 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     event->hardware_keycode = 0;
     if (event->window)
     {
-#ifdef NEW_GDK_WINDOW_GET_DISPLAY
+#ifndef NEW_GDK_WINDOW_GET_DISPLAY
           GdkDisplay      *display = gdk_display_get_default();
 #else
           GdkDisplay      *display = gdk_window_get_display (event->window);

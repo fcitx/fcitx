@@ -2,6 +2,7 @@ if (ENABLE_QT_IM_MODULE)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
 
 include_directories(
+    ${QT_INCLUDE_DIR}
     ${QT_QTCORE_INCLUDE_DIR}
     ${QT_QTGUI_INCLUDE_DIR}
     ${QT_QTDBUS_INCLUDE_DIR}
@@ -13,7 +14,6 @@ include_directories(
 link_directories(
     ${X11_LIBRARY_DIRS}
     ${DBUS_LIBRARY_DIRS}
-    ${ICU_LIBRARY_DIRS}
 )
 
 set(
