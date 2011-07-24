@@ -1,5 +1,0 @@
-version=3
-
-#http://www.fcitx.org/download/fcitx-([\d.]+)\.tar\.bz2
-#ftp://mirrors.redv.com/pub/fcitx/fcitx-([\d.]+)\.tar\.bz2
-http://code.google.com/p/fcitx/downloads/list http://fcitx.googlecode.com/files/fcitx-(.*)\.tar\.gz

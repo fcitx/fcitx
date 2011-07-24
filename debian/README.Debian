@@ -1,6 +1,0 @@
-fcitx for Debian
-----------------
-  Some changes of fcitx-3.4 may cause crash if old ~/.fcitx exists, please 
-delete old ~/.fcitx and try again.
-
-  -- Yu Guanghui <ygh@debian.org>, Sat, 29 Sep 2006 22:23:20 +0800
