@@ -28,7 +28,6 @@ MACRO(EXTRACT_FCITX_ADDON_CONF_POSTRING)
     foreach(EXTRACTFILE ${POTFILES_IN})
         if ( ${EXTRACTFILE} MATCHES ".conf.in$")
             get_filename_component(_EXTRAFILENAME ${EXTRACTFILE} NAME)
-            message(STATUS ${_EXTRAFILENAME} ${EXTRACTFILE})
             add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/tmp/${_EXTRAFILENAME}.h
                             COMMAND ${INTLTOOL_EXTRACT} --srcdir=${PROJECT_BINARY_DIR} --local --type=gettext/ini ${EXTRACTFILE}
                             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
