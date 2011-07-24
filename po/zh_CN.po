@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-24 16:29+0800\n"
+"POT-Creation-Date: 2011-07-24 18:18+0800\n"
 "PO-Revision-Date: 2011-07-24 02:22+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -79,7 +79,7 @@ msgstr "外观"
 msgid "Auto"
 msgstr "自动"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/autoeng/fcitx-autoeng.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-autoeng.conf.in.h:1
 msgid "Auto Change to English Mode while Input Specific String"
 msgstr "在输入特定字符串时切换到英文模式"
 
@@ -87,7 +87,7 @@ msgstr "在输入特定字符串时切换到英文模式"
 msgid "Auto Create Phrase"
 msgstr "自动组词"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/autoeng/fcitx-autoeng.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-autoeng.conf.in.h:2
 msgid "Auto English Mode"
 msgstr "自动英文模式"
 
@@ -117,7 +117,7 @@ msgstr "自动上屏"
 msgid "Background Image"
 msgstr "背景图片"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/qxm.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/qxm.conf.in.h:1
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
@@ -155,7 +155,7 @@ msgstr "候选词索引颜色"
 msgid "Candidate Word Number"
 msgstr "候选词个数"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/cangjie.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/cangjie.conf.in.h:1
 msgid "Cangjie"
 msgstr "仓颉"
 
@@ -207,11 +207,11 @@ msgid "Choose"
 msgstr "选择键"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/..//src/ui/classic/fcitx-classic-ui.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
 msgid "Classic"
 msgstr "经典界面"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/ui/classic/fcitx-classic-ui.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:2
 msgid "Classic User Interface with Skin support"
 msgstr "带皮肤支持的经典界面"
 
@@ -264,11 +264,11 @@ msgstr "配置组名错误: 行%d"
 msgid "Connection Error (%s)"
 msgstr "连接错误 (%s)"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/quickphrase/fcitx-quickphrase.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-quickphrase.conf.in.h:1
 msgid "Conveniently Input English or User-Defined Simple Table"
 msgstr "方便地输入英文或用户定义的码表"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/chttrans/fcitx-chttrans.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-chttrans.conf.in.h:1
 msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "简体中文转换为繁体中文"
 
@@ -276,7 +276,7 @@ msgstr "简体中文转换为繁体中文"
 msgid "Current Input Method Index"
 msgstr "当前输入法"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/dbus/fcitx-dbus.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-dbus.conf.in.h:1
 msgid "DBus Support"
 msgstr "DBus 支持"
 
@@ -304,7 +304,7 @@ msgstr "依赖"
 msgid "Description of Skin"
 msgstr "描述"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/db.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/db.conf.in.h:1
 msgid "Dianbaoma"
 msgstr "电报码"
 
@@ -368,7 +368,7 @@ msgstr "枚举选项重复"
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/erbi.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/erbi.conf.in.h:1
 msgid "Erbi"
 msgstr "二笔"
 
@@ -398,7 +398,7 @@ msgstr "Fcitx"
 msgid "Fcitx Config Tool"
 msgstr "Fcitx配置工具"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/frontend/ipc/fcitx-ipc.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-ipc.conf.in.h:1
 msgid "Fcitx DBus Frontend "
 msgstr "Fcitx DBus 前端"
 
@@ -410,7 +410,7 @@ msgstr "Fcitx图形化配置工具"
 msgid "Fcitx Kimpanel"
 msgstr "Fcitx (使用Kimpanel)"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/frontend/xim/fcitx-xim.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xim.conf.in.h:1
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
 
@@ -434,7 +434,7 @@ msgstr "字体区域"
 msgid "Frontend"
 msgstr "前端"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/frontend/ipc/fcitx-ipc.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-ipc.conf.in.h:2
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
@@ -447,7 +447,7 @@ msgstr "前端: 有问题的前端"
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/fullwidthchar/fcitx-fullwidth-char.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-fullwidth-char.conf.in.h:1
 msgid "Fullwidth Character"
 msgstr "全角字符"
 
@@ -643,11 +643,11 @@ msgstr "这是 Fcitx 首次启动"
 msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/ui/kimpanel/fcitx-kimpanel-ui.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-kimpanel-ui.conf.in.h:1
 msgid "Kimpanel"
 msgstr "Kimpanel"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/ui/kimpanel/fcitx-kimpanel-ui.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-kimpanel-ui.conf.in.h:2
 msgid "Kimpanel Support for Fcitx"
 msgstr "Fcitx 的 Kimpanel 支持"
 
@@ -835,7 +835,7 @@ msgstr "其他颜色"
 msgid "Output"
 msgstr "输出"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/im/pinyin/fcitx-pinyin.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:89
 msgid "Pinyin"
 msgstr "拼音"
@@ -905,23 +905,23 @@ msgstr "提示码表编码"
 msgid "Prompt the phrases after input"
 msgstr "输入后联想词组"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/dbus/fcitx-dbus.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-dbus.conf.in.h:2
 msgid "Provides DBus Support (Used by other Addon)"
 msgstr "提供 DBus 支持 (由其他插件使用)"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/fullwidthchar/fcitx-fullwidth-char.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-fullwidth-char.conf.in.h:2
 msgid "Provides Fullwidth Character Input Support"
 msgstr "提供全角符号输入支持"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/frontend/xim/fcitx-xim.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xim.conf.in.h:2
 msgid "Provides XIM support"
 msgstr "提供 XIM 支持"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/punc/fcitx-punc.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-punc.conf.in.h:1
 msgid "Punctation Conversion Support"
 msgstr "标点转换支持"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/punc/fcitx-punc.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-punc.conf.in.h:2
 msgid "Punctuation Support"
 msgstr "标点支持"
 
@@ -932,16 +932,16 @@ msgstr "标点支持"
 msgid "Quick Phrase: "
 msgstr "快速输入: "
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/quickphrase/fcitx-quickphrase.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-quickphrase.conf.in.h:2
 msgid "Quickphrase"
 msgstr "快速输入"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/im/qw/fcitx-qw.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-qw.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/qw/qw.c:61
 msgid "Quwei"
 msgstr "区位"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/im/qw/fcitx-qw.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-qw.conf.in.h:2
 msgid "Quwei Input Method for Fcitx"
 msgstr "Fcitx 的区位输入法"
 
@@ -959,7 +959,7 @@ msgstr "右Shift"
 msgid "Remind: "
 msgstr "联想："
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/remote/fcitx-remote-module.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-remote-module.conf.in.h:1
 msgid "Remote"
 msgstr "远程调用"
 
@@ -1059,11 +1059,11 @@ msgstr "双拼"
 msgid "Shuangpin Priority Order, 0 to disable"
 msgstr "双拼输入法优先级，0为禁用"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/im/pinyin/fcitx-pinyin.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:2
 msgid "Simple Pinyin support for Fcitx"
 msgstr "Fcitx 简单的拼音支持"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/chttrans/fcitx-chttrans.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-chttrans.conf.in.h:2
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
@@ -1141,7 +1141,7 @@ msgstr "符号"
 msgid "Symbol File"
 msgstr "符号文件"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/im/table/fcitx-table.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:1
 msgid "Table"
 msgstr "码表"
 
@@ -1155,7 +1155,7 @@ msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/..//src/im/table/fcitx-table.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:2
 msgid "Table Input Method for Fcitx"
 msgstr "Fcitx 的码表输入法"
 
@@ -1233,7 +1233,7 @@ msgstr "使用系统托盘"
 msgid "Use Wide Punctuation"
 msgstr "使用全角标点"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/remote/fcitx-remote-module.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-remote-module.conf.in.h:2
 msgid "Used by fcitx-remote to change Fcitx state from console"
 msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
 
@@ -1241,12 +1241,12 @@ msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
 msgid "User Phrase Color"
 msgstr "用户词组颜色"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/vk/fcitx-vk.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:1
 #, fuzzy
 msgid "Virtual Key Board"
 msgstr "虚拟键盘"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/vk/fcitx-vk.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:2
 msgid "Virtual Key Board in order to input special character"
 msgstr "用于输入特殊字符的虚拟键盘"
 
@@ -1258,15 +1258,15 @@ msgstr "虚拟键盘"
 msgid "Virtual Keyboard Image"
 msgstr "虚拟键盘图片"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/wanfeng.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/wanfeng.conf.in.h:1
 msgid "Wanfeng"
 msgstr "晚风"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/wbx.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/wbx.conf.in.h:1
 msgid "Wubi"
 msgstr "五笔字型"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/wbpy.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/wbpy.conf.in.h:1
 msgid "WubiPinyin"
 msgstr "五笔拼音"
 
@@ -1275,11 +1275,11 @@ msgstr "五笔拼音"
 msgid "X error %i on opcode send"
 msgstr "X error %i on opcode send"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/x11/fcitx-x11.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-x11.conf.in.h:1
 msgid "X11 Support"
 msgstr "X11 支持"
 
-#: /home/saber/Develop/fcitx/build/po/..//src/module/x11/fcitx-x11.conf.in.h:2
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-x11.conf.in.h:2
 msgid "X11 Utilitiy used by other Addon"
 msgstr "由其他插件使用的 X11 工具函数"
 
@@ -1292,7 +1292,7 @@ msgid ""
 "You may need to set environment varibles below to make fcitx work correctly."
 msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
 
-#: /home/saber/Develop/fcitx/build/po/..//data/table/zrm.conf.in.h:1
+#: /home/saber/Develop/fcitx/build/po/tmp/zrm.conf.in.h:1
 msgid "Ziranma"
 msgstr "自然码"
 
