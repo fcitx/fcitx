@@ -36,9 +36,9 @@
 #include "skin.h"
 #include <module/x11/x11stuff.h>
 
-struct MainWindow;
-struct AboutWindow;
-struct FcitxClassicUIStatus;
+struct _MainWindow;
+struct _AboutWindow;
+struct _FcitxClassicUIStatus;
 
 typedef enum _HIDE_MAINWINDOW {
     HM_SHOW = 0,
@@ -49,22 +49,22 @@ typedef enum _HIDE_MAINWINDOW {
 /**
  * @brief Config and Global State for Classic UI
  **/
-typedef struct FcitxClassicUI {
+typedef struct _FcitxClassicUI {
     GenericConfig gconfig;
     Display* dpy;
     int iScreen;
     Atom protocolAtom;
     Atom killAtom;
-    struct InputWindow* inputWindow;
-    struct MainWindow* mainWindow;
-    struct MessageWindow* messageWindow;
-    struct TrayWindow* trayWindow;
-    struct AboutWindow* aboutWindow;
+    struct _InputWindow* inputWindow;
+    struct _MainWindow* mainWindow;
+    struct _MessageWindow* messageWindow;
+    struct _TrayWindow* trayWindow;
+    struct _AboutWindow* aboutWindow;
     FcitxUIMenu skinMenu;
     
     FcitxSkin skin;
     UT_array skinBuf;
-    struct FcitxInstance *owner;
+    struct _FcitxInstance *owner;
     
     char* font;
     char* menuFont;
@@ -78,7 +78,7 @@ typedef struct FcitxClassicUI {
     int iMainWindowOffsetY;
     
     UT_array status;
-    struct XlibMenu* mainMenuWindow;
+    struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
 } FcitxClassicUI;
 
@@ -89,7 +89,7 @@ ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap *
                     unsigned long *attribmask, int *depth);
 Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui);
 boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y);
-boolean IsInRspArea(int x0, int y0, struct FcitxClassicUIStatus* status);
+boolean IsInRspArea(int x0, int y0, struct _FcitxClassicUIStatus* status);
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
 void ActivateWindow(Display *dpy, int iScreen, Window window);
 void LoadClassicUIConfig(FcitxClassicUI* classicui);

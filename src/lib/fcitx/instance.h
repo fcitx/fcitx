@@ -32,10 +32,10 @@
 extern "C" {
 #endif
 
-struct HookStack;
-struct FcitxInputContext;
+struct _HookStack;
+struct _FcitxInputContext;
 
-typedef struct FcitxInstance {
+typedef struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     int bShowCursor;
     Messages* messageUp;
@@ -59,24 +59,24 @@ typedef struct FcitxInstance {
     UT_array frontends;
     UT_array eventmodules;
     
-    struct FcitxInputContext *CurrentIC;
-    struct FcitxInputContext *ic_list;
-    struct FcitxInputContext *free_list;
+    struct _FcitxInputContext *CurrentIC;
+    struct _FcitxInputContext *ic_list;
+    struct _FcitxInputContext *free_list;
     sem_t* sem;
     pthread_t pid;
     fd_set rfds, wfds, efds;
     int maxfd;
     char* uiname;
     
-    struct HookStack* hookPreInputFilter;
-    struct HookStack* hookPostInputFilter;
-    struct HookStack* hookOutputFilter;
-    struct HookStack* hookHotkeyFilter;
-    struct HookStack* hookResetInputHook;
-    struct HookStack* hookTriggerOnHook;
-    struct HookStack* hookTriggerOffHook;
-    struct HookStack* hookInputFocusHook;
-    struct HookStack* hookInputUnFocusHook;
+    struct _HookStack* hookPreInputFilter;
+    struct _HookStack* hookPostInputFilter;
+    struct _HookStack* hookOutputFilter;
+    struct _HookStack* hookHotkeyFilter;
+    struct _HookStack* hookResetInputHook;
+    struct _HookStack* hookTriggerOnHook;
+    struct _HookStack* hookTriggerOffHook;
+    struct _HookStack* hookInputFocusHook;
+    struct _HookStack* hookInputUnFocusHook;
 } FcitxInstance;
 
 Messages* GetMessageUp(FcitxInstance* instance);

@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-typedef struct FcitxIMClient FcitxIMClient;
+typedef struct _FcitxIMClient FcitxIMClient;
 typedef void (*FcitxIMClientDestroyCallback)(FcitxIMClient* client, void* data);
 typedef void (*FcitxIMClientConnectCallback)(FcitxIMClient* client, void* data);
 

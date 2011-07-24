@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-typedef enum ErrorLevel
+typedef enum _ErrorLevel
 {
     DEBUG,
     ERROR,

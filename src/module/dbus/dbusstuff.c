@@ -30,12 +30,12 @@
 #include <fcitx-utils/utils.h>
 
 
-typedef struct FcitxDBusWatch {
+typedef struct _FcitxDBusWatch {
   DBusWatch *watch;      
-  struct FcitxDBusWatch *next;
+  struct _FcitxDBusWatch *next;
 } FcitxDBusWatch;
 
-typedef struct FcitxDBus {
+typedef struct _FcitxDBus {
     DBusConnection *conn;
     FcitxInstance* owner;
     FcitxDBusWatch* watches;

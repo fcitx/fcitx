@@ -5,10 +5,8 @@ set(fcitx_ipc_SOURCES
     ipc.c
 )
 
-add_library(fcitx-ipc MODULE ${fcitx_ipc_SOURCES})
-install(TARGETS fcitx-ipc DESTINATION ${addondir})
-set_target_properties( fcitx-ipc PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-ipc ${fcitx_ipc_SOURCES})
 target_link_libraries( fcitx-ipc fcitx-config fcitx-core ${DBUS_LIBRARIES} )
+fcitx_add_addon_header(ipc ipc.h)
+fcitx_add_addon_conf_file(fcitx-ipc.conf)
 
-install(FILES fcitx-ipc.conf DESTINATION ${addonconfigdir})
-install(FILES ipc.h DESTINATION ${includedir}/fcitx/module/ipc/)

@@ -27,13 +27,13 @@
 extern "C" {
 #endif
 
-typedef enum ADJUSTORDER {
+typedef enum _ADJUSTORDER {
     AD_NO = 0,
     AD_FAST = 1,
     AD_FREQ = 2
 } ADJUSTORDER;
 
-typedef enum SWITCHKEY {
+typedef enum _SWITCHKEY {
     S_R_CTRL = 0,
     S_R_SHIFT = 1,
     S_L_SHIFT = 2,
@@ -52,7 +52,7 @@ typedef enum _SEMICOLON_TO_DO {
     K_SEMICOLON_QUICKPHRASE = 2
 } SEMICOLON_TO_DO;
 
-typedef struct FcitxConfig
+typedef struct _FcitxConfig
 {
     GenericConfig gconfig;
     /* program config */

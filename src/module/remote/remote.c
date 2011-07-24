@@ -51,7 +51,7 @@ FcitxModule module = {
     NULL
 };
 
-typedef struct FcitxRemote {
+typedef struct _FcitxRemote {
     char socketfile[PATH_MAX];
     FcitxInstance* owner;
     int socket_fd;

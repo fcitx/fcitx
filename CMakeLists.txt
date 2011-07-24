@@ -16,6 +16,7 @@ option(ENABLE_GTK3_IM_MODULE "Enable GTK3 IM Module" OFF)
 option(ENABLE_QT_IM_MODULE "Enable Qt IM Module" OFF)
 option(ENABLE_OPENCC "Enable OpenCC for Chinese Transform" ON)
 option(ENABLE_STATIC "Build Static Library" OFF)
+option(ENABLE_TEST "Test build" OFF)
 
 # uninstall target
 configure_file(
@@ -30,19 +31,21 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(FindPkgConfig)
 include(UseDoxygen OPTIONAL)
+include(FcitxMacro)
 
 check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
 check_function_exists(asprintf HAVE_ASPRINTF)
 
 FIND_PACKAGE(Gettext REQUIRED)
-FIND_PROGRAM(INTLTOOL_EXTRACT intltool-extract)
-FIND_PROGRAM(INTLTOOL_UPDATE intltool-update)
-FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
 FIND_PROGRAM(WGET wget)
 FIND_PROGRAM(TAR tar) 
 
 FIND_PACKAGE(X11 REQUIRED)
+
+if (ENABLE_TEST)
+    ENABLE_TESTING()
+endif (ENABLE_TEST)
 
 set(_ENABLE_CAIRO 0)
 set(_ENABLE_PANGO 0)
@@ -82,10 +85,6 @@ if (ENABLE_OPENCC)
     endif (OPENCC_FOUND)
 endif (ENABLE_OPENCC)
 
-if(NOT DEFINED LIB_INSTALL_DIR)
-    set(LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib)
-endif()
-
 if(ENABLE_DEBUG)
     set(_DEBUG)
 endif(ENABLE_DEBUG)
@@ -101,14 +100,26 @@ endif("${isSystemDir}" STREQUAL "-1")
 set(package     fcitx)
 set(prefix      ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix ${CMAKE_INSTALL_PREFIX})
-set(bindir ${prefix}/bin)
+set(bindir ${exec_prefix}/bin)
+
+if(NOT DEFINED LIB_INSTALL_DIR)
+    set(LIB_INSTALL_DIR ${exec_prefix}/lib)
+endif()
+
 set(libdir ${LIB_INSTALL_DIR})
 set(addondir ${libdir}/${package} )
-set(pkgdatadir ${CMAKE_INSTALL_PREFIX}/share/${package})
+set(pkgdatadir ${prefix}/share/${package})
 set(configdescdir ${pkgdatadir}/configdesc)
 set(addonconfigdir ${pkgdatadir}/addon)
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
+
+# For FcitxMacro
+set(FCITX4_ADDON_INSTALL_DIR ${addondir})
+set(FCITX4_CONFIGDESC_INSTALL_DIR ${configdescdir})
+set(FCITX4_ADDON_CONFIG_INSTALL_DIR ${addonconfigdir})
+set(FCITX4_PACKAGE_NAME ${package})
+
 set(CMAKE_C_FLAGS "-Wall -fvisibility=hidden")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,--as-needed")
 set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined,--as-needed")
@@ -124,3 +135,8 @@ add_subdirectory(skin)
 add_subdirectory(tools)
 add_subdirectory(data)
 add_subdirectory(po)
+add_subdirectory(cmake)
+
+if (ENABLE_TEST)
+    add_subdirectory(test)
+endif (ENABLE_TEST)

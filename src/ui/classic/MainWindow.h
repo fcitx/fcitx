@@ -34,16 +34,16 @@
 #include "fcitx-config/fcitx-config.h"
 #include "classicui.h"
 
-struct FcitxSkin;
-struct FcitxClassicUI;
+struct _FcitxSkin;
+struct _FcitxClassicUI;
 
-typedef struct FcitxClassicUIStatus {
+typedef struct _FcitxClassicUIStatus {
     MouseE mouse;
     int x, y;
     int w, h;
 } FcitxClassicUIStatus;
 
-typedef struct MainWindow
+typedef struct _MainWindow
 {
     Display* dpy;
     Window window;
@@ -53,12 +53,12 @@ typedef struct MainWindow
     boolean bMainWindowHidden;
     FcitxClassicUIStatus logostat;
     FcitxClassicUIStatus imiconstat;
-    struct FcitxSkin* skin;
+    struct _FcitxSkin* skin;
     
-    struct FcitxClassicUI* owner;
+    struct _FcitxClassicUI* owner;
 } MainWindow;
 
-MainWindow* CreateMainWindow (struct FcitxClassicUI* classicui);
+MainWindow* CreateMainWindow (struct _FcitxClassicUI* classicui);
 void CloseMainWindow(MainWindow *mainWindow);
 void DrawMainWindow (MainWindow* mainWindow);
 void ShowMainWindow (MainWindow* mainWindow);

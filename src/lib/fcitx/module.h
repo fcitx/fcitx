@@ -27,27 +27,27 @@
 extern "C" {
 #endif
 
-struct FcitxInstance;
-struct FcitxAddon;
+struct _FcitxInstance;
+struct _FcitxAddon;
 
-typedef struct FcitxModule
+typedef struct _FcitxModule
 {
-    void* (*Create)(struct FcitxInstance* instance);
+    void* (*Create)(struct _FcitxInstance* instance);
     void (*SetFD)(void*);
     void (*ProcessEvent)(void*);
     void (*Destroy)(void*);
     void (*ReloadConfig)(void*);
 } FcitxModule;
 
-typedef struct FcitxModuleFunctionArg
+typedef struct _FcitxModuleFunctionArg
 {
     void* args[10];
 } FcitxModuleFunctionArg;
 
 void InitFcitxModules(UT_array* modules);
-void LoadModule(struct FcitxInstance* instance);
-void* InvokeModuleFunction(struct FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
-void* InvokeModuleFunctionWithName(struct FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
+void LoadModule(struct _FcitxInstance* instance);
+void* InvokeModuleFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+void* InvokeModuleFunctionWithName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) InvokeModuleFunctionWithName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))

@@ -48,9 +48,9 @@ extern "C" {
 
 #define HOT_KEY_COUNT   2
 
-struct FcitxInputContext;
-struct FcitxInstance;
-struct FcitxAddon;
+struct _FcitxInputContext;
+struct _FcitxInstance;
+struct _FcitxAddon;
 typedef enum _SEARCH_MODE {
     SM_FIRST,
     SM_NEXT,
@@ -86,8 +86,8 @@ typedef struct _SINGLE_HZ {
     char            strHZ[UTF8_MAX_LENGTH + 1];
 } SINGLE_HZ;
 
-typedef struct FcitxIMClass {
-    void*              (*Create) (struct FcitxInstance* instance);
+typedef struct _FcitxIMClass {
+    void*              (*Create) (struct _FcitxInstance* instance);
     void               (*Destroy) (void *arg);
 } FcitxIMClass;
 
@@ -100,7 +100,7 @@ typedef boolean            (*FcitxIMPhraseTips) (void *arg);
 typedef void               (*FcitxIMSave) (void *arg);
 typedef void               (*FcitxIMReloadConfig) (void *arg);
 
-typedef struct FcitxIM {
+typedef struct _FcitxIM {
     char               strName[MAX_IM_NAME + 1];
     char               strIconName[MAX_IM_NAME + 1];
     FcitxIMResetIM ResetIM;
@@ -117,12 +117,12 @@ typedef struct FcitxIM {
     void* priv;
 } FcitxIM;
 
-typedef enum FcitxKeyEventType {
+typedef enum _FcitxKeyEventType {
     FCITX_PRESS_KEY,
     FCITX_RELEASE_KEY
 } FcitxKeyEventType;
 
-typedef struct FcitxInputState {
+typedef struct _FcitxInputState {
     long unsigned int lastKeyPressedTime;
     boolean bIsDoInputOnly;
     KEY_RELEASED keyReleased;
@@ -149,9 +149,9 @@ typedef struct FcitxInputState {
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
 char* GetOutputString(FcitxInputState* input);
-struct FcitxIM* GetCurrentIM(struct FcitxInstance *instance);
-void EnableIM(struct FcitxInstance* instance, struct FcitxInputContext* ic, boolean keepState);
-void ResetInput (struct FcitxInstance* instance);
+struct _FcitxIM* GetCurrentIM(struct _FcitxInstance *instance);
+void EnableIM(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, boolean keepState);
+void ResetInput (struct _FcitxInstance* instance);
 /**
  * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
  *
@@ -160,10 +160,10 @@ void ResetInput (struct FcitxInstance* instance);
  * @return void
  **/
 void ProcessInputReturnValue(
-    struct FcitxInstance* instance,
+    struct _FcitxInstance* instance,
     INPUT_RETURN_VALUE retVal
 );
-void FcitxRegisterIM(struct FcitxInstance *instance,
+void FcitxRegisterIM(struct _FcitxInstance *instance,
                      void *addonInstance,
                      const char* name,
                      const char* iconName,
@@ -179,11 +179,11 @@ void FcitxRegisterIM(struct FcitxInstance *instance,
                      int priority
                     );
 
-INPUT_RETURN_VALUE ProcessKey(struct FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
-void ForwardKey(struct FcitxInstance* instance, struct FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
-void SaveAllIM (struct FcitxInstance* instance);
-void ReloadConfig(struct FcitxInstance* instance);
-void SwitchIM (struct FcitxInstance* instance, int index);
+INPUT_RETURN_VALUE ProcessKey(struct _FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
+void ForwardKey(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
+void SaveAllIM (struct _FcitxInstance* instance);
+void ReloadConfig(struct _FcitxInstance* instance);
+void SwitchIM (struct _FcitxInstance* instance, int index);
 
 #ifdef __cplusplus
 }

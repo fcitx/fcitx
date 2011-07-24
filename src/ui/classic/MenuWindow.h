@@ -38,10 +38,10 @@
 #include <cairo.h>
 #include "fcitx-config/fcitx-config.h"
 
-struct FcitxClassicUI;
-struct FcitxUIMenu;
+struct _FcitxClassicUI;
+struct _FcitxUIMenu;
 
-typedef struct XlibMenu
+typedef struct _XlibMenu
 {
     int iPosX;
     int iPosY;
@@ -54,12 +54,12 @@ typedef struct XlibMenu
     XColor bgselectcolor;
     XColor charcolor;
     XColor charselectcolor;
-    struct FcitxUIMenu *menushell;
-    struct FcitxClassicUI* owner;
+    struct _FcitxUIMenu *menushell;
+    struct _FcitxClassicUI* owner;
 } XlibMenu;
 
-XlibMenu* CreateMainMenuWindow(struct FcitxClassicUI *classicui);
-XlibMenu* CreateXlibMenu(struct FcitxClassicUI* classicui);
+XlibMenu* CreateMainMenuWindow(struct _FcitxClassicUI *classicui);
+XlibMenu* CreateXlibMenu(struct _FcitxClassicUI* classicui);
 void GetMenuSize(XlibMenu * menu);
 void DrawXlibMenu(XlibMenu * menu);
 void DisplayXlibMenu(XlibMenu * menu);

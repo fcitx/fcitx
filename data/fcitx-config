@@ -25,7 +25,7 @@ run_kde()
         fi
     fi
 
-    if [ $haskde == "1" ]; then
+    if [ $haskde = "1" ]; then
         exec $command kcm_fcitx
     else
         run_gtk

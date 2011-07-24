@@ -1,0 +1,8 @@
+[Addon]
+Name=fcitx-chttrans
+_GenernalName=Simplified Chinese To Traditional Chinese
+_Comment=Convert Simplified Chinese To Traditional Chinese
+Category=Module
+Enabled=True
+Library=fcitx-chttrans.so
+Type=SharedLibrary

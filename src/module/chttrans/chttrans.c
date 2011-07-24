@@ -39,7 +39,7 @@
 
 #define TABLE_GBKS2T "gbks2t.tab"
 
-typedef struct simple2trad_t
+typedef struct _simple2trad_t
 {
     int wc;
     char str[UTF8_MAX_LENGTH + 1];
@@ -47,14 +47,14 @@ typedef struct simple2trad_t
     UT_hash_handle hh;
 } simple2trad_t;
 
-typedef enum ChttransEngine
+typedef enum _ChttransEngine
 {
     ENGINE_NATIVE,
     ENGINE_OPENCC
 } ChttransEngine;
 
 
-typedef struct FcitxChttrans{
+typedef struct _FcitxChttrans{
     GenericConfig gconfig;
     boolean enabled;
     ChttransEngine engine;

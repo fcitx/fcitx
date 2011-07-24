@@ -31,6 +31,8 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include "fcitx/frontend.h"
 
+struct _FcitxXimFrontend;
+
 /**
  * @brief XIM Preedit Attributes
  **/
@@ -65,7 +67,7 @@ typedef struct {
 /**
  * @brief Input Context for Fcitx XIM Frontend
  **/
-typedef struct FcitxXimIC {
+typedef struct _FcitxXimIC {
     CARD16          id;		/* ic id */
     INT32           input_style;	/* input style */
     Window          client_win;	/* client window */
@@ -83,7 +85,7 @@ struct FcitxXimFrontend;
 void     XimCreateIC (void* arg, FcitxInputContext* context, void *priv);
 void     XimDestroyIC (void* arg, FcitxInputContext* arg1);
 boolean  XimCheckIC (void* arg, FcitxInputContext* arg1, void* arg2);
-void     XimSetIC (struct FcitxXimFrontend* xim, IMChangeICStruct * call_data);
-void     XimGetIC (struct FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+void     XimSetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+void     XimGetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 
 #endif

@@ -4,8 +4,6 @@ set(FCITX_QUICKPHRASE_SOURCES
     QuickPhrase.c
 )
 
-add_library(fcitx-quickphrase MODULE ${FCITX_QUICKPHRASE_SOURCES})
-install(TARGETS fcitx-quickphrase DESTINATION ${addondir})
-set_target_properties( fcitx-quickphrase PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-quickphrase ${FCITX_QUICKPHRASE_SOURCES})
 target_link_libraries( fcitx-quickphrase fcitx-config fcitx-core)
-install(FILES fcitx-quickphrase.conf DESTINATION ${addonconfigdir})
+fcitx_add_addon_conf_file(fcitx-quickphrase.conf)

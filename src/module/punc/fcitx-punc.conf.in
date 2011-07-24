@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-punc
+_GenernalName=Punctuation Support
+_Comment=Punctation Conversion Support
 Category=Module
 Enabled=True
 Library=fcitx-punc.so

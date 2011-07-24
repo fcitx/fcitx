@@ -32,7 +32,7 @@
 #define MAX_AUTO_TO_ENG	10
 #include "fcitx-config/fcitx-config.h"
 
-typedef struct {
+typedef struct _AUTO_ENG {
     char            str[MAX_AUTO_TO_ENG + 1];
 } AUTO_ENG;
 

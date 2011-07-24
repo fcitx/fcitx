@@ -32,7 +32,7 @@
 
 #define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
 
-typedef struct FcitxXimFrontend
+typedef struct _FcitxXimFrontend
 {
     Window ximWindow;
     Display* display;
@@ -41,8 +41,8 @@ typedef struct FcitxXimFrontend
     XIMTriggerKey* Trigger_Keys;
     XIMS ims;
     CARD16 icid;
-    struct FcitxFrontend* frontend;
-    struct FcitxInstance* owner;
+    struct _FcitxFrontend* frontend;
+    struct _FcitxInstance* owner;
     int frontendid;
     CARD16 currentSerialNumberCallData;
     long unsigned int currentSerialNumberKey;

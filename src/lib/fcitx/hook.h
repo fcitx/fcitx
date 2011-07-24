@@ -43,7 +43,7 @@ typedef void (*FcitxIMEventHookFunc)(void* arg);
 /**
  * @brief Hotkey process struct
  **/
-typedef struct HotkeyHook {
+typedef struct _HotkeyHook {
     /**
      * @brief Pointer to fcitx hotkeys, fcitx hotkey is length 2 array.
      **/
@@ -60,34 +60,34 @@ typedef struct HotkeyHook {
     void* arg;
 } HotkeyHook;
 
-typedef struct KeyFilterHook 
+typedef struct _KeyFilterHook 
 {
     FcitxKeyFilter func;
     void *arg;
 } KeyFilterHook;
 
-typedef struct StringFilterHook 
+typedef struct _StringFilterHook 
 {
     FcitxStringFilter func;
     void *arg;
 } StringFilterHook;
 
-typedef struct FcitxIMEventHook 
+typedef struct _FcitxIMEventHook 
 {
     FcitxIMEventHookFunc func;
     void *arg;
 } FcitxIMEventHook;
 
-void RegisterPreInputFilter(struct FcitxInstance* instance, KeyFilterHook) ;
-void RegisterPostInputFilter(struct FcitxInstance* instance, KeyFilterHook);
-void RegisterOutputFilter(struct FcitxInstance* instance, StringFilterHook);
-void RegisterHotkeyFilter(struct FcitxInstance* instance, HotkeyHook);
-void RegisterResetInputHook(struct FcitxInstance* instance, FcitxIMEventHook value);
-void RegisterTriggerOnHook(struct FcitxInstance* instance, FcitxIMEventHook value);
-void RegisterTriggerOffHook(struct FcitxInstance* instance, FcitxIMEventHook value);
-void RegisterInputFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
-void RegisterInputUnFocusHook(struct FcitxInstance* instance, FcitxIMEventHook value);
-char* ProcessOutputFilter(struct FcitxInstance* instance, char *in);
+void RegisterPreInputFilter(struct _FcitxInstance* instance, KeyFilterHook) ;
+void RegisterPostInputFilter(struct _FcitxInstance* instance, KeyFilterHook);
+void RegisterOutputFilter(struct _FcitxInstance* instance, StringFilterHook);
+void RegisterHotkeyFilter(struct _FcitxInstance* instance, HotkeyHook);
+void RegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
 #ifdef __cplusplus
 }

@@ -2,6 +2,16 @@
 Type=String
 Description=Name
 
+[Addon/GeneralName]
+Type=I18NString
+Description=Name that can be display in UI
+DefaultValue=
+
+[Addon/Comment]
+Type=I18NString
+Description=Comment
+DefaultValue=
+
 [Addon/Category]
 Type=Enum
 EnumCount=4

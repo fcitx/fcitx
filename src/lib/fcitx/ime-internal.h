@@ -32,16 +32,16 @@
 #include "ime.h"
 #include "fcitx-utils/utarray.h"
 
-struct FcitxInputContext;
-struct FcitxInstance;
+struct _FcitxInputContext;
+struct _FcitxInstance;
 
-void InitFcitxIM(struct FcitxInstance* instance);
-void InitBuiltInHotkey(struct FcitxInstance* instance);
-void DoPhraseTips (struct FcitxInstance* instance);
+void InitFcitxIM(struct _FcitxInstance* instance);
+void InitBuiltInHotkey(struct _FcitxInstance* instance);
+void DoPhraseTips (struct _FcitxInstance* instance);
 void UnloadAllIM(UT_array* ims);
-boolean LoadAllIM (struct FcitxInstance* instance);
-void InitIMMenu(struct FcitxInstance* instance);
-void ShowInputSpeed(struct FcitxInstance* instance);
+boolean LoadAllIM (struct _FcitxInstance* instance);
+void InitIMMenu(struct _FcitxInstance* instance);
+void ShowInputSpeed(struct _FcitxInstance* instance);
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
 INPUT_RETURN_VALUE ImProcessRemind(void *arg);

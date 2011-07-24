@@ -45,17 +45,17 @@
 #define MAX_PUNC_NO     2
 #define MAX_PUNC_LENGTH     2
 
-struct FcitxPuncState;
-typedef struct WidePunc {
+struct _FcitxPuncState;
+typedef struct _WidePunc {
     int             ASCII;
     char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
     unsigned        iCount:2;
     unsigned        iWhich:2;
 } WidePunc;
 
-static boolean LoadPuncDict (struct FcitxPuncState* puncState);
-static char *GetPunc (struct FcitxPuncState* puncState, int iKey);
-static void FreePunc (struct FcitxPuncState* puncState);
+static boolean LoadPuncDict (struct _FcitxPuncState* puncState);
+static char *GetPunc (struct _FcitxPuncState* puncState, int iKey);
+static void FreePunc (struct _FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);
@@ -66,7 +66,7 @@ static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
 static void ResetPunc(void *arg);
 
 
-typedef struct FcitxPuncState {
+typedef struct _FcitxPuncState {
     char cLastIsAutoConvert;
     boolean bLastIsNumber;
     FcitxInstance* owner;

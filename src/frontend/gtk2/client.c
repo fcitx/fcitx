@@ -33,7 +33,7 @@
 #define LOG_LEVEL DEBUG
 #define IC_NAME_MAX 64
 
-struct FcitxIMClient {
+struct _FcitxIMClient {
     DBusGConnection* conn;
     DBusGProxy* proxy;
     DBusGProxy* icproxy;

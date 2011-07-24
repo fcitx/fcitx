@@ -37,19 +37,19 @@
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx/ui.h"
 
-struct XlibMenu;
-struct InputWindow;
-struct Messages;
-struct FcitxClassicUI;
+struct _XlibMenu;
+struct _InputWindow;
+struct _Messages;
+struct _FcitxClassicUI;
 
-typedef struct SkinImage
+typedef struct _SkinImage
 {
     char *name;
     cairo_surface_t *image;
     UT_hash_handle hh;
 } SkinImage;
 
-typedef struct 
+typedef struct _SkinInfo
 {
     char *skinName;
     char *skinVersion;
@@ -57,7 +57,7 @@ typedef struct
     char *skinDesc;
 } SkinInfo;
 
-typedef struct 
+typedef struct _SkinFont
 {
     int fontSize;
     int menuFontSize;
@@ -65,7 +65,7 @@ typedef struct
     ConfigColor menuFontColor[2];
 } SkinFont;
 
-typedef struct
+typedef struct _SkinMenu
 {
     char* backImg;
     int marginTop;
@@ -79,7 +79,7 @@ typedef struct
 /**
  * @brief The Main Window Skin description
  **/
-typedef struct 
+typedef struct _SkinMainBar
 {
     char* backImg;
     char* logo;
@@ -93,7 +93,7 @@ typedef struct
     UT_array skinPlacement;
 } SkinMainBar;
 
-typedef struct 
+typedef struct _SkinInputBar
 {    
     char* backImg;
     ConfigColor cursorColor;
@@ -111,7 +111,7 @@ typedef struct
     int iOutputPos;
 } SkinInputBar;
 
-typedef struct SkinPlacement
+typedef struct _SkinPlacement
 {
     char name[MAX_STATUS_NAME + 1];
     int x;
@@ -122,7 +122,7 @@ typedef struct SkinPlacement
 /**
  * @brief Tray Icon Image
  **/
-typedef struct 
+typedef struct _SkinTrayIcon
 {
     /**
      * @brief Active Tray Icon Image
@@ -135,7 +135,7 @@ typedef struct
     char* inactive;
 } SkinTrayIcon;
 
-typedef struct
+typedef struct _SkinKeyboard
 {
     char* backImg;
     ConfigColor keyColor;
@@ -144,7 +144,7 @@ typedef struct
 /** 
 * 配置文件结构,方便处理,结构固定
 */
-typedef struct FcitxSkin
+typedef struct _FcitxSkin
 {
     GenericConfig config;
     SkinInfo skinInfo;
@@ -162,11 +162,11 @@ typedef struct FcitxSkin
 
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
-void DrawInputBar(FcitxSkin* sc, struct InputWindow* inputWindow, struct Messages * msgup, struct Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
+void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, struct _Messages * msgup, struct _Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
-void LoadInputMessage(FcitxSkin* sc, struct InputWindow* inputWindow, const char* font);
-void InitSkinMenu(struct FcitxClassicUI* classicui);
-void DisplaySkin(struct FcitxClassicUI* classicui, char * skinname);
+void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const char* font);
+void InitSkinMenu(struct _FcitxClassicUI* classicui);
+void DisplaySkin(struct _FcitxClassicUI* classicui, char * skinname);
 void ParsePlacement(UT_array* sps, char* placment);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,

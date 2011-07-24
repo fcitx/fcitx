@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-typedef struct FcitxProfile
+typedef struct _FcitxProfile
 {
     GenericConfig gconfig;
     boolean bUseRemind;

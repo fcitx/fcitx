@@ -4,9 +4,6 @@ set(FCITX_AUTOENG_SOURCES
     AutoEng.c
 )
 
-add_library(fcitx-autoeng MODULE ${FCITX_AUTOENG_SOURCES})
-install(TARGETS fcitx-autoeng DESTINATION ${addondir})
-set_target_properties( fcitx-autoeng PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-autoeng ${FCITX_AUTOENG_SOURCES})
 target_link_libraries( fcitx-autoeng fcitx-config fcitx-core)
-
-install(FILES fcitx-autoeng.conf DESTINATION ${addonconfigdir})
+fcitx_add_addon_conf_file(fcitx-autoeng.conf)

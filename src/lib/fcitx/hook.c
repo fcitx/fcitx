@@ -30,14 +30,14 @@
  * @file hook.c
  * @brief A list for a stack of processing
  **/
-typedef struct HookStack {
+typedef struct _HookStack {
     union {
         KeyFilterHook keyfilter;
         StringFilterHook stringfilter;
         FcitxIMEventHook eventhook;
         HotkeyHook hotkey;
     };
-    struct HookStack* next;
+    struct _HookStack* next;
 } HookStack;
 
 

@@ -40,7 +40,7 @@ char header_str[HEADER_SIZE] = { '\x40', '\x15', '\0', '\0', '\x44', '\x43', '\x
 char pinyin_str[PINYIN_SIZE] = { '\x9d', '\x01', '\0', '\0' };
 iconv_t conv;
 
-typedef struct ScelPinyin {
+typedef struct _ScelPinyin {
     char pinyin[10];
 } ScelPinyin;
 

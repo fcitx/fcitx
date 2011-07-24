@@ -26,7 +26,7 @@
 
 struct MHPY;
 
-typedef struct FcitxPinyinConfig
+typedef struct _FcitxPinyinConfig
 {
     GenericConfig gconfig;
     /* py config */
@@ -44,10 +44,10 @@ typedef struct FcitxPinyinConfig
     HOTKEYS hkPYDelUserPhr[2];
     char* strPYGetWordFromPhrase;
     char cPYYCDZ[3];
-    struct MHPY *MHPY_C;
-    struct MHPY *MHPY_S;
+    struct _MHPY *MHPY_C;
+    struct _MHPY *MHPY_S;
     boolean bMisstype;
-    struct PYTABLE *PYTable;
+    struct _PYTABLE *PYTable;
     char cNonS;
     SP_C SPMap_C[31];
     SP_S SPMap_S[4];

@@ -822,7 +822,7 @@ void InitIMMenu(FcitxInstance* instance)
     for ( pim = (FcitxIM *) utarray_front(imes);
         pim != NULL;
         pim = (FcitxIM *) utarray_next(imes, pim))
-        AddMenuShell(&instance->imMenu, _(pim->strName), MENUTYPE_SIMPLE, NULL);
+        AddMenuShell(&instance->imMenu, pim->strName, MENUTYPE_SIMPLE, NULL);
     
     instance->imMenu.UpdateMenuShell = UpdateIMMenuShell;
     instance->imMenu.MenuAction = IMMenuAction;

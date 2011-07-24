@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-pinyin
+_GeneralName=Pinyin
+_Comment=Simple Pinyin support for Fcitx
 Category=InputMethod
 Enabled=True
 Library=fcitx-pinyin.so

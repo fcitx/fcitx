@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-xim
+_GeneralName=Fcitx XIM Frontend
+_Comment=Provides XIM support
 Category=Frontend
 Enabled=True
 Library=fcitx-xim.so

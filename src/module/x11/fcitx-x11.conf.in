@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-x11
+_GenernalName=X11 Support
+_Comment=X11 Utilitiy used by other Addon
 Category=Module
 Enabled=True
 Library=fcitx-x11.so

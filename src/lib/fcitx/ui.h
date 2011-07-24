@@ -38,8 +38,8 @@ extern "C" {
 /* 将输入条上显示的内容分为以下几类 */
 #define MESSAGE_TYPE_COUNT	7
 
-struct  FcitxInstance;
-typedef enum {
+struct _FcitxInstance;
+typedef enum _MSG_TYPE {
     MSG_TIPS = 0,			//提示文本
     MSG_INPUT = 1,			//用户的输入
     MSG_INDEX = 2,			//候选字前面的序号
@@ -50,8 +50,8 @@ typedef enum {
 } MSG_TYPE;
 
 #define MAX_MESSAGE_COUNT 33
-typedef struct MESSAGE MESSAGE;
-typedef struct Messages Messages;
+typedef struct _MESSAGE MESSAGE;
+typedef struct _Messages Messages;
 
 #define MESSAGE_IS_NOT_EMPTY (messageUp.msgCount || messageDown.msgCount)
 #define MESSAGE_IS_EMPTY (!MESSAGE_IS_NOT_EMPTY)
@@ -69,7 +69,7 @@ typedef struct Messages Messages;
 #define MAX_STATUS_SDESC 32
 #define MAX_STATUS_LDESC 32
 
-typedef struct FcitxUIStatus {
+typedef struct _FcitxUIStatus {
     char name[MAX_STATUS_NAME + 1];
     char shortDescription[MAX_STATUS_SDESC + 1];
     char longDescription[MAX_STATUS_LDESC + 1];
@@ -79,37 +79,37 @@ typedef struct FcitxUIStatus {
     void* arg;
 } FcitxUIStatus;
 
-typedef enum MenuState
+typedef enum _MenuState
 {
     MENU_ACTIVE = 0,
     MENU_INACTIVE = 1
 } MenuState;
 
-typedef enum
+typedef enum _MenuShellType
 {
     MENUTYPE_SIMPLE,
     MENUTYPE_SUBMENU,
     MENUTYPE_DIVLINE
 } MenuShellType;
 
-struct FcitxUIMenu;
+struct _FcitxUIMenu;
 
 //菜单项属性
-typedef struct MenuShell
+typedef struct _MenuShell
 {
     char tipstr[MAX_MENU_STRING_LENGTH + 1];
     int  isselect;
     MenuShellType type;
-    struct FcitxUIMenu *subMenu;
+    struct _FcitxUIMenu *subMenu;
 } MenuShell;
 
-typedef boolean (*MenuActionFunction)(struct FcitxUIMenu *arg, int index);
+typedef boolean (*MenuActionFunction)(struct _FcitxUIMenu *arg, int index);
 
-typedef struct FcitxUIMenu {
+typedef struct _FcitxUIMenu {
     UT_array shell;
     char name[MAX_MENU_STRING_LENGTH + 1];
     char candStatusBind[MAX_STATUS_NAME + 1];
-    void (*UpdateMenuShell)(struct FcitxUIMenu *arg);
+    void (*UpdateMenuShell)(struct _FcitxUIMenu *arg);
     MenuActionFunction MenuAction;
     void *priv;
     void *uipriv;
@@ -117,9 +117,9 @@ typedef struct FcitxUIMenu {
     int mark;
 } FcitxUIMenu;
 
-typedef struct FcitxUI
+typedef struct _FcitxUI
 {
-    void* (*Create)(struct FcitxInstance*);
+    void* (*Create)(struct _FcitxInstance*);
     void (*CloseInputWindow)(void *arg);
     void (*ShowInputWindow)(void *arg);
     void (*MoveInputWindow)(void *arg);
@@ -135,7 +135,7 @@ typedef struct FcitxUI
     void (*ReloadConfig)(void*);
 } FcitxUI;
 
-void LoadUserInterface(struct FcitxInstance* instance);
+void LoadUserInterface(struct _FcitxInstance* instance);
 Messages* InitMessages();
 void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...);
 void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...);
@@ -152,22 +152,22 @@ void SetMessageChanged(Messages* m, boolean changed);
 void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMenu* subMenu);
 void ClearMenuShell(FcitxUIMenu* menu);
 
-void MoveInputWindow(struct FcitxInstance* instance);
-void CloseInputWindow(struct FcitxInstance* instance);
-void ShowInputWindow(struct FcitxInstance* instance);
-void UpdateStatus(struct FcitxInstance* instance, const char* name);
-void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
-void RegisterMenu(struct FcitxInstance* instance, FcitxUIMenu* menu);
-void OnInputFocus(struct FcitxInstance* instance);
-void OnInputUnFocus(struct FcitxInstance* instance);
-void OnTriggerOn(struct FcitxInstance* instance);
-void OnTriggerOff(struct FcitxInstance* instance);
-void DisplayMessage(struct FcitxInstance *instance, char *title, char **msg, int length);
-FcitxUIStatus *GetUIStatus(struct FcitxInstance* instance, const char* name);
+void MoveInputWindow(struct _FcitxInstance* instance);
+void CloseInputWindow(struct _FcitxInstance* instance);
+void ShowInputWindow(struct _FcitxInstance* instance);
+void UpdateStatus(struct _FcitxInstance* instance, const char* name);
+void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
+void RegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
+void OnInputFocus(struct _FcitxInstance* instance);
+void OnInputUnFocus(struct _FcitxInstance* instance);
+void OnTriggerOn(struct _FcitxInstance* instance);
+void OnTriggerOff(struct _FcitxInstance* instance);
+void DisplayMessage(struct _FcitxInstance *instance, char *title, char **msg, int length);
+FcitxUIStatus *GetUIStatus(struct _FcitxInstance* instance, const char* name);
 void UpdateMenuShell(FcitxUIMenu* menu);
 boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
-boolean UISupportMainWindow(struct FcitxInstance* instance);
-void GetMainWindowSize(struct FcitxInstance* instance, int* x, int* y, int* w, int* h);
+boolean UISupportMainWindow(struct _FcitxInstance* instance);
+void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
 
 static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

@@ -83,10 +83,11 @@ void *TableCreate(FcitxInstance* instance)
         table != NULL;
         table = (TABLE*) utarray_next(tbl->table, table))
     {
+        FcitxLog(INFO, table->strName);
         FcitxRegisterIM(
             instance,
             tbl,
-            _(table->strName),
+            table->strName,
             table->strIconName,
             TableInit,
             TableResetStatus,

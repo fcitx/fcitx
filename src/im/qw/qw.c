@@ -33,13 +33,13 @@
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
 
-typedef struct FcitxQWState {
+typedef struct _FcitxQWState {
     char     strQWHZ[3];
     char     strQWHZUTF8[UTF8_MAX_LENGTH + 1];
     FcitxInstance *owner;
 } FcitxQWState;
 
-static void* QWCreate (struct FcitxInstance* instance);
+static void* QWCreate (struct _FcitxInstance* instance);
 INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode);
 char *QWGetCandWord (void *arg, int iIndex);
@@ -52,7 +52,7 @@ FcitxIMClass ime = {
     NULL
 };
 
-void* QWCreate (struct FcitxInstance* instance)
+void* QWCreate (struct _FcitxInstance* instance)
 {
     FcitxQWState* qwstate = fcitx_malloc0(sizeof(FcitxQWState));
     FcitxRegisterIM(

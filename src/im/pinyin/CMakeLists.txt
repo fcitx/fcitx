@@ -8,11 +8,9 @@ set(FCITX_PINYIN_SOURCES
     pyconfig.c
 )
 
-add_library(fcitx-pinyin MODULE ${FCITX_PINYIN_SOURCES})
-set_target_properties( fcitx-pinyin PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-pinyin ${FCITX_PINYIN_SOURCES})
 target_link_libraries( fcitx-pinyin fcitx-config fcitx-core)
 
-install(TARGETS fcitx-pinyin DESTINATION ${addondir})
-install(FILES fcitx-pinyin.conf DESTINATION ${addonconfigdir})
-install(FILES fcitx-pinyin.desc DESTINATION ${configdescdir})
-install(FILES pydef.h DESTINATION ${includedir}/fcitx/module/pinyin/)
+fcitx_add_addon_header(pinyin pydef.h)
+fcitx_add_configdesc_file(fcitx-pinyin.desc)
+fcitx_add_addon_conf_file(fcitx-pinyin.conf)

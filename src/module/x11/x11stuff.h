@@ -44,23 +44,23 @@
 #define FCITX_X11_ADDCOMPOSITEHANDLER 8
 #define FCITX_X11_ADDCOMPOSITEHANDLER_RETURNTYPE void
 
-struct FcitxInstance;
+struct _FcitxInstance;
 
-typedef struct FcitxXEventHandler {
+typedef struct _FcitxXEventHandler {
     boolean (*eventHandler)(void* instance, XEvent* event);
     void* instance;
 } FcitxXEventHandler;
 
-typedef struct FcitxCompositeChangedHandler {
+typedef struct _FcitxCompositeChangedHandler {
     void (*eventHandler)(void* instance, boolean enable);
     void *instance;
 } FcitxCompositeChangedHandler;
 
-typedef struct FcitxX11 {
+typedef struct _FcitxX11 {
     Display *dpy;
     UT_array handlers;
     UT_array comphandlers;
-    struct FcitxInstance* owner;
+    struct _FcitxInstance* owner;
     Window compManager;
     Atom compManagerAtom;
     int iScreen;
@@ -71,7 +71,7 @@ typedef struct FcitxX11 {
     Atom pidAtom;
 } FcitxX11;
 
-typedef enum FcitxXWindowType {
+typedef enum _FcitxXWindowType {
     FCITX_WINDOW_UNKNOWN,
     FCITX_WINDOW_DOCK,
     FCITX_WINDOW_MENU,

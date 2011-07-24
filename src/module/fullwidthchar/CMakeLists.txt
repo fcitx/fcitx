@@ -4,9 +4,6 @@ set(FCITX_FULLWIDTH_CHAR_SOURCES
     fullwidthchar.c
 )
 
-add_library(fcitx-fullwidth-char MODULE ${FCITX_FULLWIDTH_CHAR_SOURCES})
-install(TARGETS fcitx-fullwidth-char DESTINATION ${addondir})
-set_target_properties( fcitx-fullwidth-char PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-fullwidth-char ${FCITX_FULLWIDTH_CHAR_SOURCES})
 target_link_libraries( fcitx-fullwidth-char fcitx-core)
-
-install(FILES fcitx-fullwidth-char.conf DESTINATION ${addonconfigdir})
+fcitx_add_addon_conf_file(fcitx-fullwidth-char.conf)

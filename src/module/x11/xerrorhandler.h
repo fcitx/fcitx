@@ -21,7 +21,7 @@
 #ifndef XERRORHANDLER_H
 #define XERRORHANDLER_H
 
-struct FcitxX11;
-void InitXErrorHandler (struct FcitxX11*);
+struct _FcitxX11;
+void InitXErrorHandler (struct _FcitxX11*);
 
 #endif

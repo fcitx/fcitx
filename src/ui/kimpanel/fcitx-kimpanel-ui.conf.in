@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-kimpanel-ui
+_GeneralName=Kimpanel
+_Comment=Kimpanel Support for Fcitx
 Category=UI
 Enabled=False
 Library=fcitx-kimpanel-ui.so

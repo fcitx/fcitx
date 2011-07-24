@@ -37,7 +37,7 @@
 #include "fcitx/instance.h"
 #include <fcitx-utils/log.h>
 
-typedef struct FcitxAutoEngState {
+typedef struct _FcitxAutoEngState {
     UT_array* autoEng;
     char buf[MAX_USER_INPUT + 1];
     int index;

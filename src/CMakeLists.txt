@@ -7,3 +7,5 @@ add_subdirectory(module)
 add_subdirectory(im)
 add_subdirectory(frontend)
 add_subdirectory(ui)
+
+add_subdirectory(config)

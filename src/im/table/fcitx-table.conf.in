@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-table
+_GenernalName=Table
+_Comment=Table Input Method for Fcitx
 Category=InputMethod
 Enabled=True
 Library=fcitx-table.so

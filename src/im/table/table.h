@@ -31,7 +31,7 @@
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
 
-struct FcitxInstance;
+struct _FcitxInstance;
 
 typedef struct _RULE_RULE {
     unsigned char   iFlag;	// 1 --> 正序   0 --> 逆序
@@ -112,7 +112,7 @@ typedef struct _AUTOPHRASE {
 } AUTOPHRASE;
 
 //用union就会出错，不知道是啥原因
-typedef struct {
+typedef struct _CANDWORD {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
     char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
@@ -123,13 +123,13 @@ typedef struct _TABLECANDWORD {
     CANDWORD        candWord;
 } TABLECANDWORD;
 
-typedef enum {
+typedef enum _CANDTYPE {
     CT_NORMAL = 0,
     CT_AUTOPHRASE,
     CT_PYPHRASE			//临时拼音转换过来的候选字/词
 } CANDTYPE;
 
-typedef struct FcitxTableState {
+typedef struct _FcitxTableState {
     UT_array* table; /* 码表 */
     
     char            iTableIMIndex;
@@ -177,8 +177,8 @@ typedef struct FcitxTableState {
     ADJUSTORDER     PYBaseOrder;
     boolean		    isSavingTableDic;
     
-    struct FcitxInstance* owner;
-    struct FcitxAddon* pyaddon;
+    struct _FcitxInstance* owner;
+    struct _FcitxAddon* pyaddon;
 } FcitxTableState;
 
 void            LoadTableInfo (FcitxTableState* tbl);

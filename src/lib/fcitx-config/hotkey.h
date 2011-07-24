@@ -38,7 +38,7 @@ extern "C" {
 
 typedef unsigned long int FcitxKeySym;
 
-typedef struct HOTKEYS
+typedef struct _HOTKEYS
 {
     char *desc;
     FcitxKeySym sym;

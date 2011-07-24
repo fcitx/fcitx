@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-quickphrase
+_GenernalName=Quickphrase
+_Comment=Conveniently Input English or User-Defined Simple Table
 Category=Module
 Enabled=True
 Library=fcitx-quickphrase.so

@@ -35,7 +35,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 
-typedef struct QuickPhraseState {
+typedef struct _QuickPhraseState {
     uint uQuickPhraseCount;
     UT_array *quickPhrases ;
     int iFirstQuickPhrase;

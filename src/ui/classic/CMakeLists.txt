@@ -28,9 +28,7 @@ set(CLASSICUI_DESC_FILES
     skin.desc
 )
 
-add_library(fcitx-classic-ui MODULE ${fcitx_classic_ui_SOURCES})
-install(TARGETS fcitx-classic-ui DESTINATION ${addondir})
-set_target_properties( fcitx-classic-ui PROPERTIES PREFIX "")
+fcitx_add_addon(fcitx-classic-ui ${fcitx_classic_ui_SOURCES})
 target_link_libraries( fcitx-classic-ui ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES} fcitx-config fcitx-core )
 
 if (_ENABLE_PANGO)
@@ -38,6 +36,6 @@ if (_ENABLE_PANGO)
 else (_ENABLE_PANGO)
     target_link_libraries( fcitx-classic-ui ${FONTCONFIG_LIBRARIES} )
 endif (_ENABLE_PANGO)
-install(FILES fcitx-classic-ui.conf DESTINATION ${addonconfigdir})
-install(FILES ${CLASSICUI_DESC_FILES} DESTINATION ${configdescdir})
-install(FILES classicuiinterface.h DESTINATION ${includedir}/fcitx/module/classicui/)
+fcitx_add_addon_header(classicui classicuiinterface.h)
+fcitx_add_addon_conf_file(fcitx-classic-ui.conf)
+fcitx_add_configdesc_file(${CLASSICUI_DESC_FILES})

@@ -33,12 +33,12 @@
 #include "hook-internal.h"
 #include "ime-internal.h"
 
-struct MESSAGE{
+struct _MESSAGE{
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
     MSG_TYPE        type;
 } ;
 
-struct Messages {
+struct _Messages {
     MESSAGE msg[MAX_MESSAGE_COUNT];
     uint msgCount;
     boolean changed;
@@ -274,7 +274,7 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
 }
 
 FCITX_EXPORT_API
-void RegisterStatus(struct FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg))
+void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg))
 {
     FcitxUIStatus status;
     if (strlen(name) > MAX_STATUS_NAME)
@@ -338,7 +338,7 @@ void OnInputFocus(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void OnInputUnFocus(struct FcitxInstance* instance)
+void OnInputUnFocus(struct _FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputUnFocus)
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);

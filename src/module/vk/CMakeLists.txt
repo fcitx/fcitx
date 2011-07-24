@@ -12,9 +12,7 @@ set(FCITX_VK_SOURCES
     ../../ui/cairostuff/font.c
 )
 
-add_library(fcitx-vk MODULE ${FCITX_VK_SOURCES})
-install(TARGETS fcitx-vk DESTINATION ${addondir})
-set_target_properties( fcitx-vk PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-vk ${FCITX_VK_SOURCES})
 target_link_libraries( fcitx-vk ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES} fcitx-config fcitx-core )
 if (_ENABLE_PANGO)
     target_link_libraries( fcitx-vk ${PANGOCAIRO_LIBRARIES} )
@@ -22,4 +20,4 @@ else (_ENABLE_PANGO)
     target_link_libraries( fcitx-vk ${FONTCONFIG_LIBRARIES} )
 endif (_ENABLE_PANGO)
 
-install(FILES fcitx-vk.conf DESTINATION ${addonconfigdir})
+fcitx_add_addon_conf_file(fcitx-vk.conf)

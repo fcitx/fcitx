@@ -28,36 +28,36 @@
 #define PY_SEPARATOR '\''
 #define PY_SEPARATOR_S "'"
 
-typedef enum PARSEPYMODE {
+typedef enum _PY_PARSE_INPUT_MODE {
     PARSE_ERROR = 0,
     PARSE_SINGLEHZ = 1,
     PARSE_PHRASE = 2,
     PARSE_ABBR = 4
 } PY_PARSE_INPUT_MODE;
 
-typedef enum {
+typedef enum _PYPARSEINPUTMODE {
     PY_PARSE_INPUT_USER = '0',
     PY_PARSE_INPUT_SYSTEM = ' '
 } PYPARSEINPUTMODE;     //这个值不能随意修改
 
-typedef struct {
+typedef struct _ParsePYStruct {
     char            strPYParsed[MAX_WORDS_USER_INPUT + 3][MAX_PY_LENGTH + 2];
     char            strMap[MAX_WORDS_USER_INPUT + 3][3];
     int8_t          iHZCount;
     char            iMode;
 } ParsePYStruct;
 
-struct FcitxPinyinConfig;
+struct _FcitxPinyinConfig;
 
 int             IsSyllabary (const char *strPY, boolean bMode);
 int             IsConsonant (const char *strPY, boolean bMode);
-int             FindPYFAIndex (struct FcitxPinyinConfig* pyconfig, const char *strPY, boolean bMode);
-void            ParsePY (struct FcitxPinyinConfig* pyconfig, const char* strPY, ParsePYStruct* parsePY, PYPARSEINPUTMODE mode, boolean bSP);
-boolean            MapPY (struct FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode);
+int             FindPYFAIndex (struct _FcitxPinyinConfig* pyconfig, const char *strPY, boolean bMode);
+void            ParsePY (struct _FcitxPinyinConfig* pyconfig, const char* strPY, ParsePYStruct* parsePY, PYPARSEINPUTMODE mode, boolean bSP);
+boolean            MapPY (struct _FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[3], PYPARSEINPUTMODE mode);
 
 boolean            MapToPY (char strMap[3], char *strPY);
-int             CmpMap (struct FcitxPinyinConfig* pyconfig, char* strMap1, char* strMap2, int* iMatchedLength, boolean bSP);
-int     Cmp1Map (struct FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
-int             Cmp2Map (struct FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
+int             CmpMap (struct _FcitxPinyinConfig* pyconfig, char* strMap1, char* strMap2, int* iMatchedLength, boolean bSP);
+int     Cmp1Map (struct _FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP);
+int             Cmp2Map (struct _FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
 
 #endif

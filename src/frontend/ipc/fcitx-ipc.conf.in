@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-ipc
+_GeneralName=Fcitx DBus Frontend 
+_Comment=Frontend Used by IM Modules
 Category=Frontend
 Enabled=True
 Library=fcitx-ipc.so

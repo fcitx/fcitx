@@ -35,6 +35,7 @@
 #include "fcitx-utils/log.h"
 #include "hotkey.h"
 #include <fcitx-utils/utils.h>
+#include <locale.h>
 
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
@@ -247,6 +248,8 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                 codesc->type = T_Char;
             else if (!strcmp(option->rawValue, "String"))
                 codesc->type = T_String;
+            else if (!strcmp(option->rawValue, "I18NString"))
+                codesc->type = T_I18NString;
             else if (!strcmp(option->rawValue, "Boolean"))
                 codesc->type = T_Boolean;
             else if (!strcmp(option->rawValue, "File"))
@@ -465,6 +468,47 @@ ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync)
             return SyncSuccess;
     }
     return SyncInvalid;
+}
+
+ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync)
+{
+    if (!option->value.string)
+        return SyncNoBinding;
+    switch(sync)
+    {
+        case Raw2Value:
+            if (*option->value.string)
+                free(*option->value.string); 
+            
+            *option->value.string = strdup(ConfigOptionGetLocaleString(option));
+            return SyncSuccess;
+        case Value2Raw:
+            /* read only */
+            return SyncSuccess;
+    }
+    return SyncInvalid;
+}
+
+const char* ConfigOptionGetLocaleString(ConfigOption* option)
+{
+    char* locale = setlocale(LC_MESSAGES, NULL);
+    char buf[40];
+    char *p;
+    size_t len;
+    if ((p = strchr(locale, '.')) != NULL)
+        len = p - locale;
+    else
+        len = strlen(locale);
+    if  (len > sizeof(buf))
+        return option->rawValue;
+    strncpy(buf, locale, len);
+    buf[len] = '\0';
+    ConfigOptionSubkey* subkey = NULL;
+    HASH_FIND_STR(option->subkey, buf, subkey);
+    if (subkey)
+        return subkey->rawValue;
+    else
+        return option->rawValue;
 }
 
 ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync)
@@ -696,16 +740,54 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                 FcitxLog(WARNING, _("Invalid Entry: line %d missing '='"), lineNo);
                 goto next_line;
             }
+            if (line == value)
+                goto next_line;
+            
             *value = '\0';
             value ++;
             char *name = line;
+            
+            /* check subkey */
+            char *subkeyname = NULL;
+            if ((subkeyname = strchr(name, '[')) != NULL)
+            {
+                size_t namelen = strlen(name);
+                if (name[namelen - 1] == ']')
+                {
+                    /* there is a subkey */
+                    *subkeyname = '\0';
+                    subkeyname++;
+                    name[namelen -1] = '\0';
+                }
+            }
+            
             ConfigOption *option;
             HASH_FIND_STR(curGroup->options, name, option);
             if (option)
             {
-                FcitxLog(DEBUG, _("Duplicate option, overwrite: line %d"), lineNo);
-                free(option->rawValue);
-                option->rawValue = strdup(value);
+                if (subkeyname)
+                {
+                    ConfigOptionSubkey* subkey = NULL;
+                    HASH_FIND_STR(option->subkey, subkeyname, subkey);
+                    if (subkey)
+                    {
+                        free(subkey->rawValue);
+                        subkey->rawValue = strdup(value);
+                    }
+                    else
+                    {
+                        subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
+                        subkey->subkeyName = strdup(subkeyname);
+                        subkey->rawValue = strdup(value);
+                        HASH_ADD_KEYPTR(hh, option->subkey, subkey->subkeyName, strlen(subkey->subkeyName), subkey);
+                    }
+                }
+                else 
+                {
+                    FcitxLog(DEBUG, _("Duplicate option, overwrite: line %d"), lineNo);
+                    free(option->rawValue);
+                    option->rawValue = strdup(value);
+                }
             }
             else
             {
@@ -713,6 +795,16 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                 option->optionName = strdup(name);
                 option->rawValue = strdup(value);
                 HASH_ADD_KEYPTR(hh, curGroup->options, option->optionName, strlen(option->optionName), option);
+                
+                /* if the subkey is new, and no default key exists, so we can assign it to default value */
+                if (subkeyname)
+                {
+                    ConfigOptionSubkey* subkey = NULL;
+                    subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
+                    subkey->subkeyName = strdup(subkeyname);
+                    subkey->rawValue = strdup(value);
+                    HASH_ADD_KEYPTR(hh, option->subkey, subkey->subkeyName, strlen(subkey->subkeyName), subkey);
+                }
             }
         }
 
@@ -797,6 +889,9 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
         case T_String:
             f = ConfigOptionString;
             break;
+        case T_I18NString:
+            f = ConfigOptionI18NString;
+            break;
         case T_Hotkey:
             f = ConfigOptionHotkey;
             break;
@@ -861,7 +956,6 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
             if (optiondesc->desc && strlen(optiondesc->desc) != 0)
                 fprintf(fp, "# %s\n", dgettext(cdesc->domain, optiondesc->desc));
 
-
             if (!option)
             {
                 if (optiondesc->rawDefaultValue)
@@ -873,6 +967,13 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
             {
                 ConfigSyncValue(config, group, option, Value2Raw);
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
+                ConfigOptionSubkey* subkey;
+                for (subkey = option->subkey;
+                     subkey != NULL;
+                     subkey = subkey->hh.next)
+                {
+                    fprintf(fp, "%s[%s]=%s\n", option->optionName, subkey->subkeyName, subkey->rawValue);
+                }
             }
         }
         fprintf(fp, "\n");
@@ -919,6 +1020,7 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
                 case T_Enum:
                     option->value.enumerate = (int*) var;
                     break;
+                case T_I18NString:
                 case T_String:
                 case T_File:
                 case T_Font:

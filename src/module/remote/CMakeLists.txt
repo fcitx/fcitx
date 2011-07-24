@@ -4,11 +4,7 @@ set(FCITX_REMOTE_MODULE_SOURCES
     remote.c
 )
 
-add_library(fcitx-remote-module MODULE ${FCITX_REMOTE_MODULE_SOURCES})
-install(TARGETS fcitx-remote-module DESTINATION ${addondir})
-set_target_properties( fcitx-remote-module PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+fcitx_add_addon(fcitx-remote-module ${FCITX_REMOTE_MODULE_SOURCES})
 target_link_libraries( fcitx-remote-module fcitx-core)
 
-install(FILES fcitx-remote-module.conf DESTINATION ${addonconfigdir})
-
-
+fcitx_add_addon_conf_file(fcitx-remote-module.conf)

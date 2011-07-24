@@ -919,7 +919,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     if (val == IRV_DISPLAY_CANDWORDS) {
         SetMessageCount(GetMessageUp(instance), 0);
         if (pystate->iPYSelected) {
-            struct Messages* messageUp = GetMessageUp(instance);
+            Messages* messageUp = GetMessageUp(instance);
             AddMessageAtLast(GetMessageUp(instance), MSG_OTHER, "");
             for (i = 0; i < pystate->iPYSelected; i++)
                 MessageConcat(messageUp, GetMessageCount(messageUp) - 1, pystate->pySelected[i].strHZ);

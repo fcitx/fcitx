@@ -26,9 +26,9 @@
 #include <cairo.h>
 #include "fcitx-config/fcitx-config.h"
 
-struct FcitxClassicUI;
+struct _FcitxClassicUI;
 
-typedef struct MessageWindow
+typedef struct _MessageWindow
 {
     Window window;
     cairo_surface_t* surface;
@@ -39,9 +39,9 @@ typedef struct MessageWindow
     char *title;
     char **msg;
     int length;
-    struct FcitxClassicUI* owner;
+    struct _FcitxClassicUI* owner;
 } MessageWindow;
 
-MessageWindow* CreateMessageWindow (struct FcitxClassicUI * classicui);
+MessageWindow* CreateMessageWindow (struct _FcitxClassicUI * classicui);
 void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length);
 #endif

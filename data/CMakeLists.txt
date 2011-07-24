@@ -35,18 +35,14 @@ set(PY_URL http://fcitx.googlecode.com/files/pinyin.tar.gz)
 add_subdirectory(png)
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/desc.po
-                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/getdescpo ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/getdescpo ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+                   DEPENDS getdescpo)
 
 add_custom_target(desc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/desc.po)
 
-add_custom_command(OUTPUT fcitx-configtool.desktop
-                   COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${CMAKE_CURRENT_SOURCE_DIR}/../po ${CMAKE_CURRENT_SOURCE_DIR}/fcitx-configtool.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop )
-
-add_custom_command(OUTPUT fcitx-kimpanel.desktop
-                   COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${CMAKE_CURRENT_SOURCE_DIR}/../po ${CMAKE_CURRENT_SOURCE_DIR}/fcitx-kimpanel.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop )
-
-add_custom_command(OUTPUT fcitx.desktop
-                   COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${CMAKE_CURRENT_SOURCE_DIR}/../po ${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop )
+intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-configtool.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop )
+intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-kimpanel.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop )
+intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop )
 
 add_custom_target(pinyin_data ALL DEPENDS ${PY_DATA})
 
@@ -67,7 +63,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop DESTINATION sha
 install(FILES fcitx-config DESTINATION ${bindir} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 install(FILES ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
-install(FILES ${FCITX_DESC_FILES} DESTINATION ${configdescdir})
+fcitx_add_configdesc_file(${FCITX_DESC_FILES})
 install(FILES ${FCITX_PY_FILES} ${CMAKE_CURRENT_BINARY_DIR}/pybase.mb ${CMAKE_CURRENT_BINARY_DIR}/pyphrase.mb DESTINATION ${pkgdatadir}/pinyin)
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_CURRENT_BINARY_DIR}/pyERROR,${CMAKE_CURRENT_BINARY_DIR}/pyPhrase.ok")

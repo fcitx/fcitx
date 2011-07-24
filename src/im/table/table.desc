@@ -1,6 +1,6 @@
 [CodeTable/Name]
 Description=Code Table Name
-Type=String
+Type=I18NString
 
 [CodeTable/IconName]
 Description=Icon Name

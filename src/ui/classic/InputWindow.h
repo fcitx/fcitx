@@ -37,10 +37,10 @@
 #define INPUT_BAR_MAX_WIDTH 1500
 #define INPUT_BAR_MAX_HEIGHT 600
 
-struct FcitxSkin;
-struct FcitxClassicUI;
+struct _FcitxSkin;
+struct _FcitxClassicUI;
 
-typedef struct InputWindow {
+typedef struct _InputWindow {
     Window window;
     
     uint            iInputWindowHeight;
@@ -58,11 +58,11 @@ typedef struct InputWindow {
     cairo_t *c_font[8];
     Display* dpy;
     int iScreen;
-    struct FcitxSkin* skin;
-    struct FcitxClassicUI *owner;
+    struct _FcitxSkin* skin;
+    struct _FcitxClassicUI *owner;
 } InputWindow;
 
-InputWindow* CreateInputWindow(struct FcitxClassicUI* classicui);
+InputWindow* CreateInputWindow(struct _FcitxClassicUI* classicui);
 void MoveInputWindowInternal(InputWindow* inputWindow);
 void CloseInputWindowInternal(InputWindow* inputWindow);
 void DrawInputWindow(InputWindow* inputWindow);

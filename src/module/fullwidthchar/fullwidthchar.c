@@ -69,7 +69,7 @@ static void ToggleFullWidthState(void *arg);
 static boolean GetFullWidthState(void *arg);
 static INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void *arg);
 
-typedef struct FcitxFullWidthChar {
+typedef struct _FcitxFullWidthChar {
     FcitxInstance* owner;
 } FcitxFullWidthChar;
 

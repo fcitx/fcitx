@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-vk
+_GenernalName=Virtual Key Board
+_Comment=Virtual Key Board in order to input special character
 Category=Module
 Enabled=True
 Library=fcitx-vk.so

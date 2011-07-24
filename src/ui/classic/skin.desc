@@ -1,5 +1,5 @@
 [SkinInfo/Name]
-Type=String
+Type=I18NString
 Description=Skin Name
 
 [SkinInfo/Version]
@@ -11,7 +11,7 @@ Type=String
 Description=Skin Author
 
 [SkinInfo/Desc]
-Type=String
+Type=I18NString
 Description=Description of Skin
 
 [SkinFont/FontSize]

@@ -34,11 +34,11 @@
 extern "C" {
 #endif
 
-struct FcitxInstance;
+struct _FcitxInstance;
 /**
  * @brief Addon Category Definition
  **/
-typedef enum AddonCategory
+typedef enum _AddonCategory
 {
     /**
      * @brief Input method
@@ -61,7 +61,7 @@ typedef enum AddonCategory
 /**
  * @brief Supported Addon Type, Currently only sharedlibrary
  **/
-typedef enum AddonType
+typedef enum _AddonType
 {
     AT_SHAREDLIBRARY = 0
 } AddonType;
@@ -69,7 +69,7 @@ typedef enum AddonType
 /**
  * @brief Addon Instance in Fcitx
  **/
-typedef struct FcitxAddon
+typedef struct _FcitxAddon
 {
     GenericConfig config;
     char *name;
@@ -80,10 +80,10 @@ typedef struct FcitxAddon
     char *depend;
     int priority;
     union {
-        struct FcitxFrontend *frontend;
-        struct FcitxModule *module;
-        struct FcitxIMClass* imclass;
-        struct FcitxUI* ui;
+        struct _FcitxFrontend *frontend;
+        struct _FcitxModule *module;
+        struct _FcitxIMClass* imclass;
+        struct _FcitxUI* ui;
     };
     void *addonInstance;
     pthread_t pid;
@@ -116,7 +116,7 @@ void LoadAddonInfo(UT_array* addons);
  *
  * @return void
  **/
-void AddonResolveDependency(struct FcitxInstance* instance);
+void AddonResolveDependency(struct _FcitxInstance* instance);
 
 /**
  * @brief Check whether an addon is enabled or not by addon name

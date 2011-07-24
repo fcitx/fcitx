@@ -32,12 +32,12 @@
 
 #define GetIPCIC(ic) ((FcitxIPCIC*) (ic)->privateic)
 
-typedef struct FcitxIPCIC {
+typedef struct _FcitxIPCIC {
     int id;
     char path[32];
 } FcitxIPCIC;
 
-typedef struct FcitxIPCFrontend {
+typedef struct _FcitxIPCFrontend {
     int frontendid;
     int maxid;
     DBusConnection* conn;

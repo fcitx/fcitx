@@ -48,14 +48,14 @@
 #define VK_NUMBERS      47
 #define VK_MAX          50
 
-struct FcitxVKState;
+struct _FcitxVKState;
 
-typedef struct VKS {
+typedef struct _VKS {
     char            strSymbol[VK_NUMBERS][2][UTF8_MAX_LENGTH + 1]; //相应的符号
     char            strName[MAX_IM_NAME + 1];
 } VKS;
 
-typedef struct VKWindow
+typedef struct _VKWindow
 {
     Window          window;
     ConfigColor* fontColor;
@@ -63,14 +63,14 @@ typedef struct VKWindow
     cairo_surface_t* surface;
     cairo_surface_t* keyboard;
     Display*        dpy;
-    struct FcitxVKState* owner;
+    struct _FcitxVKState* owner;
     char **font;
     char *defaultFont;
     int iVKWindowX;
     int iVKWindowY;
 } VKWindow;
 
-typedef struct FcitxVKState {
+typedef struct _FcitxVKState {
     VKWindow*       vkWindow;
     int             iCurrentVK ;
     int             iVKCount ;

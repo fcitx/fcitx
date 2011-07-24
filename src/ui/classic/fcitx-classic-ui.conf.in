@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-classic-ui
+_GeneralName=Classic
+_Comment=Classic User Interface with Skin support
 Category=UI
 Enabled=True
 Library=fcitx-classic-ui.so

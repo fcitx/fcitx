@@ -99,7 +99,7 @@ const char * kimpanel_introspection_xml =
 "  </interface>\n"
 "</node>\n";
 
-typedef struct FcitxKimpanelUI
+typedef struct _FcitxKimpanelUI
 {
     FcitxInstance* owner;
     DBusConnection* conn;

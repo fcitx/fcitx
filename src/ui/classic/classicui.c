@@ -48,7 +48,7 @@
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
 
-struct FcitxSkin;
+struct _FcitxSkin;
 boolean MainMenuAction(FcitxUIMenu* menu, int index);
 
 static void* ClassicUICreate(FcitxInstance* instance);

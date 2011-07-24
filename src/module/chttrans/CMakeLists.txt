@@ -8,15 +8,13 @@ set(FCITX_CHTTRANS_SOURCES
     chttrans.c
 )
 
-add_library(fcitx-chttrans MODULE ${FCITX_CHTTRANS_SOURCES})
-install(TARGETS fcitx-chttrans DESTINATION ${addondir})
-set_target_properties( fcitx-chttrans PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
-    target_link_libraries( fcitx-chttrans fcitx-config fcitx-core )
+fcitx_add_addon(fcitx-chttrans ${FCITX_CHTTRANS_SOURCES})
+target_link_libraries( fcitx-chttrans fcitx-config fcitx-core )
 
 if (_ENABLE_OPENCC)
     target_link_libraries( fcitx-chttrans ${OPENCC_LIBRARIES} )
     include_directories(${OPENCC_INCLUDE_DIRS})
 endif (_ENABLE_OPENCC)
 
-install(FILES fcitx-chttrans.conf DESTINATION ${addonconfigdir})
-install(FILES fcitx-chttrans.desc DESTINATION ${configdescdir})
+fcitx_add_configdesc_file(fcitx-chttrans.desc)
+fcitx_add_addon_conf_file(fcitx-chttrans.conf)

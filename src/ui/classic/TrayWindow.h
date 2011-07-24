@@ -35,9 +35,9 @@
 
 #define INACTIVE_ICON 0
 #define ACTIVE_ICON   1
-struct FcitxClassicUI;
+struct _FcitxClassicUI;
 
-typedef struct TrayWindow {
+typedef struct _TrayWindow {
     Window window;
 
     XImage* icon[2];
@@ -49,11 +49,11 @@ typedef struct TrayWindow {
 
     cairo_surface_t *cs;
     int size;
-    struct FcitxClassicUI* owner;
+    struct _FcitxClassicUI* owner;
     Window dockWindow;
 } TrayWindow;
 
-TrayWindow* CreateTrayWindow(struct FcitxClassicUI *classicui);
+TrayWindow* CreateTrayWindow(struct _FcitxClassicUI *classicui);
 void DrawTrayWindow(TrayWindow* trayWindow);
 void DeInitTrayWindow(TrayWindow *f_tray);
 void RedrawTrayWindow(TrayWindow* trayWindow);

@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <fcitx-utils/uthash.h>
 
-struct HOTKEYS;
+struct _HOTKEYS;
 typedef int32_t boolean;
 #define true (1)
 #define false (0)
@@ -42,21 +42,21 @@ typedef int32_t boolean;
 extern "C" {
 #endif
 
-typedef struct ConfigColor
+typedef struct _ConfigColor
 {
     double r;
     double g;
     double b;
 } ConfigColor;
 
-typedef enum
+typedef enum _MouseE
 {
     RELEASE,//鼠标释放状态
     PRESS,//鼠标按下
     MOTION//鼠标停留
 } MouseE;
 
-typedef enum ConfigType
+typedef enum _ConfigType
 {
     T_Integer,
     T_Color,
@@ -66,61 +66,63 @@ typedef enum ConfigType
     T_Enum,
     T_File,
     T_Hotkey,
-    T_Font
+    T_Font,
+    T_I18NString
 } ConfigType;
 
-typedef enum ConfigSync
+typedef enum _ConfigSync
 {
     Raw2Value,
     Value2Raw
 } ConfigSync;
 
-typedef enum ConfigSyncResult
+typedef enum _ConfigSyncResult
 {
     SyncSuccess,
     SyncNoBinding,
     SyncInvalid
 } ConfigSyncResult;
 
-typedef union ConfigValueType{
+typedef union _ConfigValueType{
     void *untype;
     int *integer;
     boolean *boolvalue;
-    struct HOTKEYS *hotkey;
+    struct _HOTKEYS *hotkey;
     ConfigColor *color;
     int *enumerate;
     char **string;
     char *chr;
 } ConfigValueType;
 
-typedef struct ConfigGroup ConfigGroup;
-typedef struct ConfigOption ConfigOption;
-typedef struct ConfigFileDesc ConfigFileDesc;
-typedef struct ConfigGroupDesc ConfigGroupDesc;
-typedef struct ConfigOptionDesc ConfigOptionDesc;
-typedef struct GenericConfig GenericConfig;
+typedef struct _ConfigGroup ConfigGroup;
+typedef struct _ConfigOption ConfigOption;
+typedef struct _ConfigFileDesc ConfigFileDesc;
+typedef struct _ConfigGroupDesc ConfigGroupDesc;
+typedef struct _ConfigOptionDesc ConfigOptionDesc;
+typedef struct _GenericConfig GenericConfig;
+typedef struct _ConfigOptionSubkey ConfigOptionSubkey;
 
 typedef void (*SyncFilter)(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
-typedef struct ConfigEnum
+typedef struct _ConfigEnum
 {
     char **enumDesc;
     int enumCount;
 } ConfigEnum;
 
-typedef struct ConfigFile
+typedef struct _ConfigFile
 {
     ConfigFileDesc *fileDesc;
     ConfigGroup* groups;
 } ConfigFile;
 
 
-struct GenericConfig
+struct _GenericConfig
 {
     ConfigFile *configFile;
 };
 
-struct ConfigOptionDesc
+struct _ConfigOptionDesc
 {
     char *optionName;
     char *desc;
@@ -134,7 +136,7 @@ struct ConfigOptionDesc
 /**
  * @brief Config Group Description
  **/
-struct ConfigGroupDesc
+struct _ConfigGroupDesc
 {
     /**
      * @brief Group Name
@@ -150,13 +152,13 @@ struct ConfigGroupDesc
 /**
  * @brief Description of a config file
  **/
-struct ConfigFileDesc
+struct _ConfigFileDesc
 {
     ConfigGroupDesc *groupsDesc;
     char* domain;
 };
 
-struct ConfigOption
+struct _ConfigOption
 {
     char *optionName;
     char *rawValue;
@@ -164,13 +166,21 @@ struct ConfigOption
     SyncFilter filter;
     void *filterArg;
     ConfigOptionDesc *optionDesc;
+    ConfigOptionSubkey *subkey;
     UT_hash_handle hh;
 } ;
+
+struct _ConfigOptionSubkey
+{
+    char *subkeyName;
+    char *rawValue;
+    UT_hash_handle hh;
+};
 
 /**
  * @brief Config group
  **/
-struct ConfigGroup
+struct _ConfigGroup
 {
     /**
      * @brief Group Name, unique in ConfigFile
@@ -258,6 +268,7 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *cfile, ConfigFileDesc* cdesc);
 void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption* option, ConfigSync sync);
 ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, const char* option);
 const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
+const char* ConfigOptionGetLocaleString(ConfigOption* option);
 void ConfigBindSync(GenericConfig* config);
 
 typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);

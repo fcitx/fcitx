@@ -1,5 +1,7 @@
 [Addon]
 Name=fcitx-qw
+_GenernalName=Quwei
+_Comment=Quwei Input Method for Fcitx
 Category=InputMethod
 Enabled=False
 Library=fcitx-qw.so
