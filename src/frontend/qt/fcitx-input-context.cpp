@@ -114,7 +114,8 @@ FcitxInputContext::FcitxInputContext()
     m_path(""),
     m_enable(false),
     m_has_focus(false),
-    m_slave(0)
+    m_slave(0),
+    m_n_compose(0)
 {
 #if defined(Q_WS_X11)
     /* slave has too much limitation, ibus compose by hand is better, so m_slave will be NULL then */
@@ -122,6 +123,8 @@ FcitxInputContext::FcitxInputContext()
     m_slave = QInputContextFactory::create("xims", 0);
 #endif
 #endif
+    memset(m_compose_buffer, 0, sizeof(uint)* (FCITX_MAX_COMPOSE_LEN + 1));
+
     if (m_slave)
     {
         qDebug() << "slave created";
