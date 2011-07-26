@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QEventLoop>
+#include <QInputContextFactory>
 
 #include <fcitx/ime.h>
 #include <sys/time.h>
@@ -42,8 +44,21 @@ FcitxInputContext::FcitxInputContext()
     m_id(0),
     m_path(""),
     m_enable(false),
-    m_has_focus(false)
+    m_has_focus(false),
+    m_slave(0)
 {
+    qDebug() << "fffffff";
+
+#if defined(Q_WS_X11)
+    m_slave = QInputContextFactory::create("xim", 0);
+#endif
+    if (m_slave)
+    {
+        qDebug() << "slave created";
+        m_slave->setParent(this);
+        connect(m_slave, SIGNAL(destroyed(QObject*)), this, SLOT(destroySlaveContext()));
+    }
+    
     m_dbusproxy = new org::freedesktop::DBus(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, m_connection, this);    
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
     
@@ -82,6 +97,8 @@ void FcitxInputContext::reset()
 {
     if (isValid())
         m_icproxy->Reset();
+    if (m_slave)
+        m_slave->reset();
 }
 
 void FcitxInputContext::update()
@@ -129,7 +146,12 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
         uint fcitxstate;
         GetKey(key_event->nativeVirtualKey(), key_event->nativeModifiers(), &fcitxsym, &fcitxstate);
         if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
-            return QInputContext::filterEvent(event);
+        {
+            if (m_slave && m_slave->filterEvent(event ))
+                return true;
+            else
+                return QInputContext::filterEvent(event);
+        }
         
     }
     m_icproxy->FocusIn();
@@ -144,7 +166,13 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
                                               (event->type() == QEvent::KeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
                                               time
                                               );
-    result.waitForFinished();
+    {
+        QEventLoop loop;
+        QDBusPendingCallWatcher watcher (result);
+        loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
+        loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
+    }
+    
     if (result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
     else
@@ -181,6 +209,10 @@ void FcitxInputContext::setFocusWidget(QWidget* w)
     }
     
     QInputContext::setFocusWidget(w);
+    if (m_slave)
+    {
+        m_slave->setFocusWidget(w);
+    }
     
     if (!w || w->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return;
@@ -202,6 +234,8 @@ void FcitxInputContext::setFocusWidget(QWidget* w)
 void FcitxInputContext::widgetDestroyed(QWidget* w)
 {
     QInputContext::widgetDestroyed(w);
+    if (m_slave)
+        m_slave->widgetDestroyed(w);
     if (!isValid())
         return;
     if (w == focusWidget())
@@ -226,11 +260,13 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return false;
     
-    if (!isValid())
-        return QInputContext::x11FilterEvent(keywidget, event);
-
-    if (event->type != XKeyRelease && event->type != XKeyPress)
-        return QInputContext::x11FilterEvent(keywidget, event);
+    if (!isValid() || (event->type != XKeyRelease && event->type != XKeyPress))
+    {
+        if (m_slave && m_slave->x11FilterEvent(keywidget, event ))
+            return true;
+        else
+            return QInputContext::x11FilterEvent(keywidget, event);
+    }
 
     KeySym sym;
     char strbuf[64];
@@ -244,7 +280,12 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
         uint fcitxstate;
         GetKey(sym, event->xkey.state, &fcitxsym, &fcitxstate);
         if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
-            return QInputContext::x11FilterEvent(keywidget, event);
+        {
+            if (m_slave && m_slave->x11FilterEvent(keywidget, event ))
+                return true;
+            else
+                return QInputContext::x11FilterEvent(keywidget, event);
+        }
     }
     
     m_icproxy->FocusIn();
@@ -255,10 +296,22 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                               (event->type == XKeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
                                               event->xkey.time
                                               );
-    result.waitForFinished();
+    
+    
+    {
+        QEventLoop loop;
+        QDBusPendingCallWatcher watcher (result);
+        loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
+        loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
+    }
 
     if (result.isError() || result.value() <= 0)
-        return QInputContext::x11FilterEvent(keywidget, event);
+    {
+        if (m_slave && m_slave->x11FilterEvent(keywidget, event))
+            return true;
+        else
+            return QInputContext::x11FilterEvent(keywidget, event);
+    }
     else
     {
         update();
@@ -303,9 +356,13 @@ void FcitxInputContext::createInputContext()
     
     if (!m_improxy->isValid())
         return;
-    
+        
     QDBusPendingReply< uint, uint, uint, uint > triggerKey = m_improxy->GetTriggerKey();
     triggerKey.waitForFinished();
+    
+    if (triggerKey.isError())
+        return ;
+    
     m_triggerKey[0].sym = qdbus_cast<uint>(triggerKey.argumentAt(0));
     m_triggerKey[0].state = qdbus_cast<uint>(triggerKey.argumentAt(1));
     m_triggerKey[1].sym = qdbus_cast<uint>(triggerKey.argumentAt(2));
@@ -405,4 +462,13 @@ XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint
 bool FcitxInputContext::isValid()
 {
     return m_icproxy != NULL && m_icproxy->isValid();
+}
+
+void FcitxInputContext::destroySlaveContext()
+{
+    if ( m_slave )
+    {
+        m_slave->deleteLater();
+        m_slave = 0;
+    }
 }

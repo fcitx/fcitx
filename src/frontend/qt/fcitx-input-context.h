@@ -39,6 +39,7 @@ private Q_SLOTS:
     void enableIM();
     void commitString(const QString& str);
     void forwardKey(uint keyval, uint state, int type);
+    void destroySlaveContext();
 private:
     void createInputContext();
 #if defined(Q_WS_X11)
@@ -56,6 +57,7 @@ private:
     bool m_enable;
     bool m_has_focus;
     HOTKEYS m_triggerKey[2];
+    QInputContext* m_slave;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

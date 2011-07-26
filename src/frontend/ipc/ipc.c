@@ -441,7 +441,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
          (type == FCITX_RELEASE_KEY), state, keycode, sym);
     
     if (originsym == 0)
-        return 1;
+        return 0;
     
     if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, ipc->owner->config.hkTrigger))
     {
