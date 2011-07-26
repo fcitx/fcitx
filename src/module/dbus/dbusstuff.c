@@ -79,6 +79,7 @@ void* DBusCreate(FcitxInstance* instance)
         if (dbus_error_is_set(&err)) {
             FcitxLog(WARNING, _("Connection Error (%s)"), err.message);
             dbus_error_free(&err);
+            dbus_error_init(&err);
         }
         
         if (NULL == conn)
@@ -93,23 +94,32 @@ void* DBusCreate(FcitxInstance* instance)
         free(dbusmodule);
         return NULL;
     }
+    
+    if (!dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch, 
+                      NULL, dbusmodule, NULL))
+    {
+        FcitxLog(WARNING, _("Add Watch Function Error"));
+        free(dbusmodule);
+        return NULL;
+    }
+
     dbusmodule->conn = conn;
     dbusmodule->owner = instance;
 
     // request a name on the bus
     int ret = dbus_bus_request_name(conn, FCITX_DBUS_SERVICE,
-                                DBUS_NAME_FLAG_REPLACE_EXISTING,
+                                DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                 &err);
     if (dbus_error_is_set(&err)) {
-        FcitxLog(DEBUG, _("Name Error (%s)"), err.message);
+        FcitxLog(WARNING, _("Name Error (%s)"), err.message);
         dbus_error_free(&err);
-    }
-    if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
+        free(dbusmodule);
         return NULL;
     }
-    if (dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch, 
-                      NULL, dbusmodule, NULL))
-    {
+    if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
+        FcitxLog(WARNING, _("Name Error"));
+        free(dbusmodule);
+        return NULL;
     }
 
     dbus_connection_flush(conn);
