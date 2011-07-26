@@ -107,6 +107,11 @@ void* ClassicUICreate(FcitxInstance* instance)
         return NULL;
     }
     classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
+    if (classicui->dpy == NULL)
+    {
+        free(classicui);
+        return NULL;
+    }
     
     XLockDisplay(classicui->dpy);
     

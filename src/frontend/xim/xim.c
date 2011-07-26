@@ -119,6 +119,14 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     FcitxModuleFunctionArg arg;
     
     xim->display = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
+    
+    if (xim->display == NULL)
+    {
+        FcitxLog(FATAL, _("X11 not initialized"));
+        free(xim);
+        return NULL;
+    }
+    
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
