@@ -1,6 +1,6 @@
 if (ENABLE_QT_IM_MODULE)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
-pkg_check_modules(ICU "icu-i18n")
+find_package(ICU REQUIRED)
 
 include_directories(
     ${QT_INCLUDE_DIR}
@@ -9,13 +9,13 @@ include_directories(
     ${QT_QTDBUS_INCLUDE_DIR}
     ${X11_INCLUDE_DIRS}
     ${DBUS_INCLUDE_DIRS}
+    ${ICU_INCLUDE_DIRS}
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 link_directories(
     ${X11_LIBRARY_DIRS}
     ${DBUS_LIBRARY_DIRS}
-    ${ICU_LIBRARY_DIRS}
 )
 
 set(
