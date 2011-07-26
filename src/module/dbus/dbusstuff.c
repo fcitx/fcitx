@@ -41,7 +41,7 @@ typedef struct _FcitxDBus {
     FcitxDBusWatch* watches;
 } FcitxDBus;
 
-#define RETRY_INTERVAL 1000
+#define RETRY_INTERVAL 1
 #define MAX_RETRY_TIMES 5
 
 static void* DBusCreate(FcitxInstance* instance);
