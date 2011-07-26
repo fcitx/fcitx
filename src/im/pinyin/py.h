@@ -185,8 +185,8 @@ typedef struct _FcitxPinyinState
     char strPYAuto[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     char strPYAutoMap[MAX_WORDS_USER_INPUT * 2 + 1];
 
-    char iNewPYPhraseCount;
-    char iOrderCount;
+    int  iNewPYPhraseCount;
+    int  iOrderCount;
     char iNewFreqCount;
 
     int8_t iYCDZ;

@@ -32,6 +32,8 @@ extern "C" {
 
 #define FCITX_EXPORT_API __attribute__ ((visibility("default")))
 
+#define FCITX_UNUSED(x) (void)(x)
+
 #ifdef __cplusplus
 }
 #endif

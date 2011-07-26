@@ -53,7 +53,6 @@ void *custom_bsearch(const void *key, const void *base,
 void InitAsDaemon();
 int             CalculateRecordNumber (FILE* fpDict);
 void            SetSwitchKey (char *str);
-int             CalHZIndex (char *strHZ);
 UT_array* SplitString(const char *str, char delm);
 void FreeStringList(UT_array *list);
 char *fcitx_trim(char *s);

@@ -133,7 +133,7 @@ FCITX_EXPORT_API
 FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
     char buf[PATH_MAX];
-    int i;
+    size_t i;
     FILE *fp = NULL;
 
     /* check absolute path */

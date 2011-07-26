@@ -48,7 +48,7 @@ CONFIG_BINDING_REGISTER("Addon", "Dependency", depend)
 CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
 CONFIG_BINDING_END()
 
-const static UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
+static const UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
 static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
 static int AddonPriorityCmp(const void* a, const void* b)
 {
@@ -71,7 +71,7 @@ void LoadAddonInfo(UT_array* addons)
     char **addonPath;
     size_t len;
     char pathBuf[PATH_MAX];
-    int i = 0;
+    size_t i = 0;
     DIR *dir;
     struct dirent *drt;
     struct stat fileStat;

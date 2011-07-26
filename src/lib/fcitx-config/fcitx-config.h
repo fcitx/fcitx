@@ -207,6 +207,7 @@ typedef void(*ConfigBindingFunc)(GenericConfig*);
     void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc);
 #define CONFIG_BINDING_BEGIN(config_type) \
     void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc) { \
+        (void) cfdesc; \
         GenericConfig *gconfig = (GenericConfig*) config; \
         if (gconfig->configFile) { \
             FreeConfigFile(gconfig->configFile); \

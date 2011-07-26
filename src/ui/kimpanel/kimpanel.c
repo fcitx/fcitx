@@ -492,7 +492,8 @@ static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, D
 }
 
 DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
-{
+{    
+    FCITX_UNUSED(connection);
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) user_data;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = &kimpanel->owner->input;
@@ -1182,7 +1183,7 @@ void KimUpdateScreen(FcitxKimpanelUI* kimpanel, int id)
 
 int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 {
-    int             i = 0;
+    size_t             i = 0;
     int             iChar;
     int             iCount = 0;
     FcitxInstance* instance = kimpanel->owner;

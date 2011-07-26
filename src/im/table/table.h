@@ -165,7 +165,7 @@ typedef struct _FcitxTableState {
     boolean            bIsTableAddPhrase;
     HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT];
     
-    char            iTableChanged;
+    int             iTableChanged;
     char            iTableNewPhraseHZCount;
     boolean            bCanntFindCode;	//Records if new phrase has corresponding code - should be always false
     char           *strNewPhraseCode;

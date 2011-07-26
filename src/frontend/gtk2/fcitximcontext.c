@@ -201,6 +201,7 @@ fcitx_im_context_register_type (GTypeModule *type_module)
         sizeof (FcitxIMContext),
         0,
         (GInstanceInitFunc) fcitx_im_context_init,
+        0
     };
 
     if (!_fcitx_type_im_context) {

@@ -38,13 +38,7 @@
 #include "fcitx/fcitx.h"
 #include "utils.h"
 #include "utf8.h"
-#include "utf8_in_gb18030.h"
 #include <ctype.h>
-
-static int cmpi(const void * a, const void *b)
-{
-    return (*((int*)a)) - (*((int*)b));
-}
 
 /*
  * 计算文件中有多少行
@@ -66,43 +60,6 @@ int CalculateRecordNumber (FILE * fpDict)
         free(strBuf);
 
     return nNumber;
-}
-
-FCITX_EXPORT_API
-int CalHZIndex (char *strHZ)
-{
-    unsigned int iutf = 0;
-    int l = utf8_char_len(strHZ);
-    unsigned char* utf = (unsigned char*) strHZ;
-    unsigned int *res;
-    int idx;
-
-    if (l == 2)
-    {
-        iutf = *utf++ << 8;
-        iutf |= *utf++;
-    }
-    else if (l == 3)
-    {
-        iutf = *utf++ << 16;
-        iutf |= *utf++ << 8;
-        iutf |= *utf++;
-    }
-    else if (l == 4)
-    {
-        iutf = *utf++ << 24;
-
-        iutf |= *utf++ << 16;
-        iutf |= *utf++ << 8;
-        iutf |= *utf++;
-    }
-
-    res = bsearch(&iutf, utf8_in_gb18030, 63360, sizeof(int), cmpi);
-    if (res)
-        idx = res - utf8_in_gb18030;
-    else
-        idx = 63361;
-    return idx;
 }
 
 /**
@@ -181,7 +138,7 @@ UT_array* SplitString(const char *str, char delm)
     utarray_new(array, &ut_str_icd);
     char *bakstr = strdup(str);
     size_t len = strlen(bakstr);
-    int i = 0, last = 0;
+    size_t i = 0, last = 0;
     for (i =0 ; i <= len ; i++)
     {
         if (bakstr[i] == delm || bakstr[i] == '\0')

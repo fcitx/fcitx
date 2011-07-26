@@ -63,6 +63,9 @@ CONFIG_BINDING_END()
 
 void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
+    FCITX_UNUSED(arg);
     FcitxConfig* fc = (FcitxConfig*) config;
     char *pstr = *(char**) value;
 
@@ -110,6 +113,9 @@ void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *op
 
 void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
 {
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
+    FCITX_UNUSED(arg);
     FcitxConfig* fc = (FcitxConfig*) config;
     HOTKEYS* hkey = NULL;
     if (sync == Raw2Value)

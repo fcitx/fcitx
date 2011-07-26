@@ -252,6 +252,7 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
         return true;
     }
 #else
+    Q_UNUSED(event);
     return false;
 #endif
 
@@ -259,6 +260,8 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
 
 QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 {
+    Q_UNUSED(keyval);
+    Q_UNUSED(state);
     QKeyEvent* keyevent = new QKeyEvent(
         (type == FCITX_PRESS_KEY)? (QEvent::KeyPress) : (QEvent::KeyRelease),
         0,
@@ -557,6 +560,7 @@ void FcitxInputContext::destroySlaveContext()
 bool
 FcitxInputContext::processCompose (uint keyval, uint state, FcitxKeyEventType event)
 {
+    Q_UNUSED(state);
     int i;
     
     if (event == FCITX_RELEASE_KEY)

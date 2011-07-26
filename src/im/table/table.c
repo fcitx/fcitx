@@ -45,10 +45,16 @@
 #include "fcitx/profile.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
-#include <module/punc/punc.h>
+#include "module/punc/punc.h"
 #include "fcitx/module.h"
+#include "utf8_in_gb18030.h"
 
 #define TEMP_FILE       "FCITX_TABLE_TEMP"
+
+static int cmpi(const void * a, const void *b)
+{
+    return (*((int*)a)) - (*((int*)b));
+}
 
 static void FreeTableConfig(void *v);
 static void FreeTable (FcitxTableState* tbl, char iTableIndex);
@@ -65,6 +71,8 @@ static void Table_PYGetCandWords(FcitxTableState *tbl, SEARCH_MODE mode);
 static void Table_PYGetCandText(FcitxTableState *tbl, int iIndex, char *strText);
 static void Table_ResetPY(FcitxTableState *tbl);
 static char* Table_PYGetFindString(FcitxTableState *tbl);
+
+static unsigned int    CalHZIndex (char *strHZ);
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -377,7 +385,7 @@ boolean LoadTableDict (FcitxTableState *tbl)
         /** 为单字生成一个表   */
         if (utf8_strlen (recTemp->strHZ) == 1 && !IsIgnoreChar (tbl, strCode[0]) && !recTemp->bPinyin) {
             iTemp = CalHZIndex (recTemp->strHZ);
-            if (iTemp >= 0 && iTemp < SINGLE_HZ_COUNT) {
+            if (iTemp < SINGLE_HZ_COUNT) {
                 if (tbl->tableSingleHZ[iTemp]) {
                     if (strlen (strCode) > strlen (tbl->tableSingleHZ[iTemp]->strCode))
                         tbl->tableSingleHZ[iTemp] = recTemp;
@@ -2437,4 +2445,40 @@ char* Table_PYGetFindString(FcitxTableState *tbl)
     FcitxModuleFunctionArg args;
     char * str = InvokeModuleFunction(tbl->pyaddon, FCITX_PINYIN_PYGETFINDSTRING, args);
     return str;
+}
+
+unsigned int CalHZIndex (char *strHZ)
+{
+    unsigned int iutf = 0;
+    int l = utf8_char_len(strHZ);
+    unsigned char* utf = (unsigned char*) strHZ;
+    unsigned int *res;
+    int idx;
+
+    if (l == 2)
+    {
+        iutf = *utf++ << 8;
+        iutf |= *utf++;
+    }
+    else if (l == 3)
+    {
+        iutf = *utf++ << 16;
+        iutf |= *utf++ << 8;
+        iutf |= *utf++;
+    }
+    else if (l == 4)
+    {
+        iutf = *utf++ << 24;
+
+        iutf |= *utf++ << 16;
+        iutf |= *utf++ << 8;
+        iutf |= *utf++;
+    }
+
+    res = bsearch(&iutf, utf8_in_gb18030, 63360, sizeof(int), cmpi);
+    if (res)
+        idx = res - utf8_in_gb18030;
+    else
+        idx = 63361;
+    return idx;
 }
