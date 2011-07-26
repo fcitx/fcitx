@@ -41,6 +41,9 @@ typedef struct _FcitxDBus {
     FcitxDBusWatch* watches;
 } FcitxDBus;
 
+#define RETRY_INTERVAL 1000
+#define MAX_RETRY_TIMES 5
+
 static void* DBusCreate(FcitxInstance* instance);
 static void DBusSetFD(void* arg);
 static void DBusProcessEvent(void* arg);
@@ -67,12 +70,26 @@ void* DBusCreate(FcitxInstance* instance)
 
     // first init dbus
     dbus_error_init(&err);
-    DBusConnection* conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
-    if (dbus_error_is_set(&err)) {
-        FcitxLog(DEBUG, _("Connection Error (%s)"), err.message);
-        dbus_error_free(&err);
-    }
-    if (NULL == conn) {
+    
+    int retry = 0;
+    DBusConnection* conn = NULL;
+    
+    do {
+        conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
+        if (dbus_error_is_set(&err)) {
+            FcitxLog(WARNING, _("Connection Error (%s)"), err.message);
+            dbus_error_free(&err);
+        }
+        
+        if (NULL == conn)
+        {
+            sleep(RETRY_INTERVAL);
+            retry ++;
+        }
+    } while (NULL == conn && retry < MAX_RETRY_TIMES);
+    
+    if ( NULL == conn )
+    {
         free(dbusmodule);
         return NULL;
     }
