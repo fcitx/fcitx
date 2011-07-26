@@ -2431,7 +2431,8 @@ typedef enum _KEY_STATE {
     KEY_NUMLOCK = 1 << 4,
     KEY_SUPER_COMP = 1 << 6,
     KEY_SCROLLLOCK = 1 << 7,
-    KEY_MOUSE_PRESSED = 1 << 8
+    KEY_MOUSE_PRESSED = 1 << 8,
+    KEY_USED_MASK = 0x5c001fff
 } KEY_STATE;
 
 void SetHotKey (char *strKey, HOTKEYS * hotkey);
