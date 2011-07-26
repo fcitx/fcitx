@@ -37,7 +37,6 @@
 #include <ui/cairostuff/cairostuff.h>
 #include <ui/classic/classicuiinterface.h>
 #include "fcitx/hook.h"
-#include <X11/keysym.h>
 #include <ui/cairostuff/font.h>
 #include <fcitx-utils/utils.h>
 
@@ -108,7 +107,7 @@ static void ToggleVKState(void *arg);
 static INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg);
 static void DrawVKWindow (VKWindow* vkWindow);
 static boolean VKMouseKey (FcitxVKState* vkstate, int x, int y);
-static boolean VKPreFilter(void* arg, long unsigned int sym,
+static boolean VKPreFilter(void* arg, FcitxKeySym sym,
                                     unsigned int state,
                                     INPUT_RETURN_VALUE *retval
                                    );
@@ -215,7 +214,7 @@ void VKUpdate(void* arg)
     }
 }
 
-boolean VKPreFilter(void* arg, long unsigned int sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+boolean VKPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
     FcitxVKState *vkstate =(FcitxVKState*) arg;
     if (vkstate->bVK)
@@ -449,7 +448,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
             x -= 4;
             if (x >= 313 && x <= 344) { //backspace
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_BackSpace, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_BackSpace, 0);
                 return true;
             }
             else {
@@ -468,7 +467,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
                 return false;
 
             if (x >= 4 && x < 38) { //Tab
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Tab, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Tab, 0);
                 return true;
             }
             else {
@@ -523,11 +522,11 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
         else if (y >= 140 && y <= 162) {    //第五行
             if (x >= 4 && x < 38) { //Ins
                 //改变INS键状态
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Insert, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Insert, 0);
                 return true;
             }
             else if (x >= 61 && x < 98) {   //DEL
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, XK_Delete, 0);
+                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Delete, 0);
                 return true;
             }
             else if (x >= 99 && x < 270)    //空格

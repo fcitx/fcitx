@@ -29,7 +29,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <X11/keysym.h>
 
 #ifdef HAVE_MACHINE_ENDIAN_H
 #include <machine/endian.h>
@@ -806,7 +805,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 
     if (val == IRV_TO_PROCESS) {
         if (IsHotKeyDigit(sym, state)) {
-            int iKey = sym - XK_0;
+            int iKey = sym - Key_0;
             if (iKey == 0)
                 iKey = 10;
 
@@ -883,26 +882,28 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 } else if (!input->bIsInRemind) {
                     val = -1;
                     switch (sym) {
-                    case XK_parenright:
+                    case Key_parenright:
                         val++;
-                    case XK_parenleft:
+                    case Key_parenleft:
                         val++;
-                    case XK_asterisk:
+                    case Key_asterisk:
                         val++;
-                    case XK_ampersand:
+                    case Key_ampersand:
                         val++;
-                    case XK_asciicircum:
+                    case Key_asciicircum:
                         val++;
-                    case XK_percent:
+                    case Key_percent:
                         val++;
-                    case XK_dollar:
+                    case Key_dollar:
                         val++;
-                    case XK_numbersign:
+                    case Key_numbersign:
                         val++;
-                    case XK_at:
+                    case Key_at:
                         val++;
-                    case XK_exclam:
+                    case Key_exclam:
                         val++;
+                    default:
+                        break;
                     }
 
                     if (val != -1 && val < input->iCandWordCount) {

@@ -65,11 +65,11 @@ FcitxModule module =
     ReloadQuickPhrase
 };
 
-static boolean QuickPhrasePostFilter(void* arg, long unsigned int sym,
+static boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                                      unsigned int state,
                                      INPUT_RETURN_VALUE *retval
                                     );
-static boolean QuickPhrasePreFilter(void* arg, long unsigned int sym,
+static boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                                     unsigned int state,
                                     INPUT_RETURN_VALUE *retval
                                    );
@@ -212,7 +212,7 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     input->iCursorPos += strlen(_("Quick Phrase: "));
 }
 
-boolean QuickPhrasePreFilter(void* arg, long unsigned int sym,
+boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                              unsigned int state,
                              INPUT_RETURN_VALUE *retval
                             )
@@ -299,7 +299,7 @@ boolean QuickPhrasePreFilter(void* arg, long unsigned int sym,
     }
     return false;
 }
-boolean QuickPhrasePostFilter(void* arg, long unsigned int sym,
+boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              )

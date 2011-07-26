@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-typedef boolean (*FcitxKeyFilter)(void* arg, long unsigned int sym, 
+typedef boolean (*FcitxKeyFilter)(void* arg, FcitxKeySym sym, 
                              unsigned int state,
                              INPUT_RETURN_VALUE *retval
                             );

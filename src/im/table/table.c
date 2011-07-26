@@ -36,7 +36,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <libintl.h>
-#include <X11/keysym.h>
 
 #include "im/pinyin/pydef.h"
 #include "fcitx/keys.h"
@@ -145,9 +144,9 @@ void LoadTableInfo (FcitxTableState *tbl)
         tbl->table = NULL;
     }
 
-    tbl->hkTableDelPhrase[0].sym = XK_7; tbl->hkTableDelPhrase[0].state = KEY_CTRL_COMP;
-    tbl->hkTableAdjustOrder[0].sym = XK_6; tbl->hkTableAdjustOrder[0].state = KEY_CTRL_COMP;
-    tbl->hkTableAddPhrase[0].sym = XK_8; tbl->hkTableAddPhrase[0].state = KEY_CTRL_COMP;
+    tbl->hkTableDelPhrase[0].sym = Key_7; tbl->hkTableDelPhrase[0].state = KEY_CTRL_COMP;
+    tbl->hkTableAdjustOrder[0].sym = Key_6; tbl->hkTableAdjustOrder[0].state = KEY_CTRL_COMP;
+    tbl->hkTableAddPhrase[0].sym = Key_8; tbl->hkTableAddPhrase[0].state = KEY_CTRL_COMP;
 
     tbl->table = malloc(sizeof(UT_array));
     tbl->iTableCount = 0;
@@ -791,7 +790,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             TableDelPhraseByHZ (tbl, GetMessageString(instance->messageUp, 1));
             return IRV_CLEAN;
         }
-        else if (state == KEY_NONE && (sym != XK_Control_L && sym != XK_Control_R && sym != XK_Shift_L && sym != XK_Shift_R )) {
+        else if (state == KEY_NONE && (sym != Key_Control_L && sym != Key_Control_R && sym != Key_Shift_L && sym != Key_Shift_R )) {
             SetMessageCount(instance->messageUp, 0);
             SetMessageCount(instance->messageDown, 0);
             tbl->bTablePhraseTips = false;

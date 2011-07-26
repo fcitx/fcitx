@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <X11/keysym.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,22 +28,22 @@
 
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {
-    {"TAB", XK_Tab},
-    {"ENTER", XK_Return},
-    {"LCTRL", XK_Control_L},
-    {"LSHIFT", XK_Shift_L},
-    {"LALT", XK_Alt_L},
-    {"RCTRL", XK_Control_R},
-    {"RSHIFT", XK_Shift_R},
-    {"RALT", XK_Alt_R},
-    {"INSERT", XK_Insert},
-    {"HOME", XK_Home},
-    {"PGUP", XK_Page_Up},
-    {"END", XK_End},
-    {"PGDN", XK_Page_Down},
-    {"ESCAPE", XK_Escape},
-    {"SPACE", XK_space},
-    {"DELETE", XK_Delete},
+    {"TAB", Key_Tab},
+    {"ENTER", Key_Return},
+    {"LCTRL", Key_Control_L},
+    {"LSHIFT", Key_Shift_L},
+    {"LALT", Key_Alt_L},
+    {"RCTRL", Key_Control_R},
+    {"RSHIFT", Key_Shift_R},
+    {"RALT", Key_Alt_R},
+    {"INSERT", Key_Insert},
+    {"HOME", Key_Home},
+    {"PGUP", Key_Page_Up},
+    {"END", Key_End},
+    {"PGDN", Key_Page_Down},
+    {"ESCAPE", Key_Escape},
+    {"SPACE", Key_space},
+    {"DELETE", Key_Delete},
     {"\0", 0}
 };
 
@@ -56,7 +55,7 @@ boolean IsHotKeyDigit(FcitxKeySym sym, int state)
     if (state)
         return false;
 
-    if (sym >= XK_0 && sym <= XK_9)
+    if (sym >= Key_0 && sym <= Key_9)
         return true;
 
     return false;
@@ -68,7 +67,7 @@ boolean IsHotKeyUAZ(FcitxKeySym sym, int state)
     if (state)
         return false;
 
-    if (sym >= XK_A && sym <= XK_Z)
+    if (sym >= Key_A && sym <= Key_Z)
         return true;
 
     return false;
@@ -80,7 +79,7 @@ boolean IsHotKeySimple(FcitxKeySym sym, int state)
     if (state)
         return false;
 
-    if (sym >= XK_space && sym <= XK_asciitilde)
+    if (sym >= Key_space && sym <= Key_asciitilde)
         return true;
 
     return false;
@@ -92,7 +91,7 @@ boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
     if (state)
         return false;
 
-    if (sym >= XK_a && sym <= XK_z)
+    if (sym >= Key_a && sym <= Key_z)
         return true;
 
     return false;
@@ -107,10 +106,10 @@ void GetKey (FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsi
     if (iKeyState)
     {
         if (IsHotKeyLAZ(keysym, 0))
-            keysym = keysym + XK_A - XK_a;
+            keysym = keysym + Key_A - Key_a;
 
         if (iKeyState == KEY_SHIFT_COMP)
-            if (IsHotKeySimple(keysym, 0) && keysym != XK_space)
+            if (IsHotKeySimple(keysym, 0) && keysym != Key_space)
                 iKeyState = KEY_NONE;
     }
     *outk = keysym;
@@ -210,7 +209,7 @@ int GetKeyList (char *strKey)
 
 char *GetKeyListString(int key)
 {
-    if (key > XK_space && key <= XK_asciitilde)
+    if (key > Key_space && key <= Key_asciitilde)
     {
         char *p;
         p = malloc(sizeof(char) * 2);

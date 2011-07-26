@@ -8,10 +8,16 @@
 #include "org.freedesktop.DBus.h"
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
-#include <fcitx-config/hotkey.h>
+#include "fcitx-config/hotkey.h"
+#include "fcitx/ime.h"
+
+#if defined(Q_WS_X11)
+#include <X11/Xlib.h>
+#endif
 
 
 #define FCITX_IDENTIFIER_NAME "fcitx"
+#define FCITX_MAX_COMPOSE_LEN 7
 
 class FcitxInputContext : public QInputContext {
     Q_OBJECT
@@ -42,7 +48,11 @@ private Q_SLOTS:
     void destroySlaveContext();
 private:
     void createInputContext();
+    bool processCompose (uint keyval, uint state, FcitxKeyEventType event);
+    bool checkAlgorithmically ();
+    bool checkCompactTable (const struct _FcitxComposeTableCompact *table);
 #if defined(Q_WS_X11)
+    bool x11FilterEventFallback( QWidget *keywidget, XEvent *event , KeySym sym );
     XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
@@ -58,6 +68,8 @@ private:
     bool m_has_focus;
     HOTKEYS m_triggerKey[2];
     QInputContext* m_slave;
+    uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
+    int m_n_compose;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

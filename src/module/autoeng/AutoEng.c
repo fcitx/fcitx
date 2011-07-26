@@ -71,7 +71,7 @@ static void            LoadAutoEng (FcitxAutoEngState* autoEngState);
  * @return boolean
  **/
 static boolean ProcessAutoEng(void* arg,
-                              long unsigned int sym,
+                              FcitxKeySym sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              );
@@ -138,7 +138,7 @@ void* AutoEngCreate(FcitxInstance *instance)
     return autoEngState;
 }
 
-static boolean ProcessAutoEng(void* arg,long unsigned int sym,
+static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              )

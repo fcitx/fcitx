@@ -58,7 +58,7 @@ static char *GetPunc (struct _FcitxPuncState* puncState, int iKey);
 static void FreePunc (struct _FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
-static void* PuncGetPunc(void* x11priv, FcitxModuleFunctionArg arg);
+static void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg);
 static void TogglePuncState(void *arg);
 static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);

@@ -1,5 +1,6 @@
 if (ENABLE_QT_IM_MODULE)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
+pkg_check_modules(ICU "icu-i18n")
 
 include_directories(
     ${QT_INCLUDE_DIR}
@@ -14,12 +15,14 @@ include_directories(
 link_directories(
     ${X11_LIBRARY_DIRS}
     ${DBUS_LIBRARY_DIRS}
+    ${ICU_LIBRARY_DIRS}
 )
 
 set(
     qtim_fcitx_SRCS
     fcitx-plugin.cpp
     fcitx-input-context.cpp
+    fcitxkeyuni.cpp
 )
 
 
@@ -65,6 +68,7 @@ target_link_libraries(
     optimized ${QT_QTDBUS_LIBRARY_RELEASE}
     optimized ${QT_QTGUI_LIBRARY_RELEASE}
     ${X11_LIBRARIES}
+    ${ICU_LIBRARIES}
     fcitx-config
 )
 
