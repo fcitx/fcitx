@@ -93,7 +93,6 @@
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utils.c
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utarray.h
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utf8.h
-@REL_SOURCE_ROOT@/src/lib/fcitx-utils/utf8_in_gb18030.h
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/utils.h
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/log.c
 @REL_SOURCE_ROOT@/src/lib/fcitx-utils/log.h
