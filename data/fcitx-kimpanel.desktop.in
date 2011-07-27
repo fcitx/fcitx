@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 _Name=Fcitx Kimpanel
 _Comment=Chinese Input Method (Use Kimpanel)
 Exec=fcitx -u fcitx-kimpanel-ui
