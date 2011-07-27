@@ -429,9 +429,9 @@ void DrawVKWindow (VKWindow* vkWindow)
  */
 boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 {
-    int             iIndex;
-    char            strKey[3];
-    char           *pstr;
+    int             iIndex = 0;
+    char            strKey[3] = { 0, 0, 0};
+    char           *pstr = NULL;
     FcitxInstance* instance = vkstate->owner;
 
     if (IsInBox (x, y, 1, 1, VK_WINDOW_WIDTH, 16))

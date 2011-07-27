@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cairo.h>
+#include "fcitx/fcitx.h"
 #include "fcitx-utils/utf8.h"
 #include "fcitx-config/fcitx-config.h"
 #include "cairostuff.h"
@@ -100,6 +101,7 @@ FontHeight(const char *font, int fontSize)
 int
 FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
 {
+    FCITX_UNUSED(c);
     int height;
 
     if (pango_font_description_get_size_is_absolute(fontDesc)) /* it must be this case */
