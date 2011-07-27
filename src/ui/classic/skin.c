@@ -434,6 +434,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     FcitxInputState* input = &inputWindow->owner->owner->input;
     FcitxInstance* instance = inputWindow->owner->owner;
     int iChar = input->iCursorPos;
+    int strWidth = 0, strHeight = 0;
     
     SkinImage *inputimg, *prev, *next;
     inputimg = LoadImage(sc, sc->skinInputBar.backImg, false);
@@ -457,9 +458,11 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
         else
             strUp[i] = GetMessageString(msgup, i);
         posUpX[i] = sc->skinInputBar.marginLeft + inputWidth;
-        posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
 
-        inputWidth += StringWidthWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i]);
+        StringSizeWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i], &strWidth, &strHeight);
+        
+        posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
+        inputWidth += strWidth;
         if (instance->bShowCursor)
         {
             int length = strlen(GetMessageString(msgup, i));
@@ -471,9 +474,10 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
                     char *strGBKT = NULL;
                     strncpy(strTemp, strUp[i], iChar);
                     strTemp[iChar] = '\0';
-                    strGBKT = strTemp;  
+                    strGBKT = strTemp;
+                    StringSizeWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strGBKT, &strWidth, &strHeight);
                     cursor_pos= posUpX[i]
-                                + StringWidthWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strGBKT) + 2;
+                                + strWidth + 2;
                 }
                 iChar -= length;
             }
@@ -508,14 +512,16 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
                 }
             }
             posDownX[i] = sc->skinInputBar.marginLeft + currentX;
-            currentX += StringWidthWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i]);
-            posDownY[i] =  sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos + outputHeight;
+            StringSizeWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i], &strWidth, &strHeight);
+            currentX += strWidth;
+            posDownY[i] =  sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos + outputHeight - strHeight;
         }
         else /* horizontal */
         {
             posDownX[i] = sc->skinInputBar.marginLeft + outputWidth;
-            posDownY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos;
-            outputWidth += StringWidthWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i]);
+            StringSizeWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i], &strWidth, &strHeight);
+            posDownY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - strHeight;
+            outputWidth += strWidth;
         }
     }
     if (inputWindow->owner->bVerticalList && currentX > outputWidth)
@@ -580,14 +586,14 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
 
     for (i = 0; i < GetMessageCount(msgup) ; i++)
     {
-        OutputStringWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i], posUpX[i], posUpY[i] - sc->skinFont.fontSize);
+        OutputStringWithContext(inputWindow->c_font[GetMessageType(msgup, i)], strUp[i], posUpX[i], posUpY[i]);
         if (strUp[i] != GetMessageString(msgup, i))
             free(strUp[i]);
     }
 
     for (i = 0; i < GetMessageCount(msgdown) ; i++)
     {
-        OutputStringWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i], posDownX[i], posDownY[i] - sc->skinFont.fontSize);
+        OutputStringWithContext(inputWindow->c_font[GetMessageType(msgdown, i)], strDown[i], posDownX[i], posDownY[i]);
         if (strDown[i] != GetMessageString(msgdown, i))
             free(strDown[i]);
     }
@@ -597,8 +603,8 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     //画光标
     if (instance->bShowCursor )
     {
-        cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + 2);
-        cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos -sc->skinFont.fontSize);
+        cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos);
+        cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - FontHeightWithContext(inputWindow->c_font[0]) - 4);
         cairo_stroke(inputWindow->c_cursor);
     }
 

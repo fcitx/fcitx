@@ -38,7 +38,8 @@ StringWidth(const char *str, const char *font, int fontSize)
     cairo_t        *c = cairo_create(surface);
     SetFontContext(c, font, fontSize);
 
-    int             width = StringWidthWithContext(c, str);
+    int             width = 0;
+    StringSizeWithContext(c, str, &width, NULL);
     ResetFontContext();
 
     cairo_destroy(c);
@@ -48,36 +49,55 @@ StringWidth(const char *str, const char *font, int fontSize)
 }
 
 #ifdef _ENABLE_PANGO
-int
-StringWidthWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str)
+void
+StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str, int* w, int* h)
 {
     if (!str || str[0] == 0)
-        return 0;
+    {
+        if (w) *w= 0;
+        if (h) *h= 0;
+        return;
+    }
     if (!utf8_check_string(str))
-        return 0;
+    {
+        if (w) *w= 0;
+        if (h) *h= 0;
 
-    int             width;
+        return;
+    }
+
     PangoLayout *layout = pango_cairo_create_layout (c);
     pango_layout_set_text (layout, str, -1);
     pango_layout_set_font_description (layout, fontDesc);
-    pango_layout_get_pixel_size(layout, &width, NULL);
+    pango_layout_get_pixel_size(layout, w, h);
     g_object_unref (layout);
-
-    return width;
 }
 #else
 
-int
-StringWidthWithContextReal(cairo_t * c, const char *str)
+void
+StringSizeWithContextReal(cairo_t * c, const char *str, int* w, int* h)
 {
     if (!str || str[0] == 0)
-        return 0;
+    {
+        if (w) *w= 0;
+        if (h) *h= 0;
+        return;
+    }
     if (!utf8_check_string(str))
-        return 0;
+    {
+        if (w) *w= 0;
+        if (h) *h= 0;
+
+        return;
+    }
     cairo_text_extents_t extents;
+    cairo_font_extents_t fontextents;
     cairo_text_extents(c, str, &extents);
-    int             width = extents.x_advance;
-    return width;
+    cairo_font_extents(c, &fontextents);
+    if (w)
+        *w = extents.x_advance;
+    if (h)
+        *h = fontextents.height;
 }
 #endif
 

@@ -31,12 +31,12 @@ void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, 
 #include <pango/pango.h>
 
 #define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
-#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, fontDesc, str)
+#define StringSizeWithContext(c,str,w,h) StringSizeWithContextReal(c, fontDesc, str, w, h)
 #define FontHeightWithContext(c) FontHeightWithContextReal(c, fontDesc)
 
 PangoFontDescription* GetPangoFontDescription(const char* font, int size);
 void OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
-int StringWidthWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str);
+void StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str, int* x, int* h);
 int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
 
 #define SetFontContext(context, fontname, size) \
@@ -50,11 +50,11 @@ int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
 #else
 
 #define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, str, x, y)
-#define StringWidthWithContext(c,str) StringWidthWithContextReal(c, str)
+#define StringSizeWithContext(c,str,w,h) StringSizeWithContextReal(c, str, w, h)
 #define FontHeightWithContext(c) FontHeightWithContextReal(c)
 
 void OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y);
-int StringWidthWithContextReal(cairo_t * c, const char *str);
+void StringSizeWithContextReal(cairo_t * c, const char *str, int* x, int* h);
 int FontHeightWithContextReal(cairo_t* c);
 
 #define SetFontContext(context, fontname, size) \
