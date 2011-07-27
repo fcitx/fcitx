@@ -38,6 +38,7 @@ check_include_files(stdbool.h HAVE_STDBOOL_H)
 check_function_exists(asprintf HAVE_ASPRINTF)
 
 FIND_PACKAGE(Gettext REQUIRED)
+FIND_PACKAGE(Libintl REQUIRED)
 FIND_PROGRAM(WGET wget)
 FIND_PROGRAM(TAR tar) 
 
