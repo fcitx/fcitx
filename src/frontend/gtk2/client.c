@@ -231,7 +231,7 @@ void FcitxIMClientFocusOut(FcitxIMClient* client)
 {
     if (client->icproxy)
     {
-        dbus_g_proxy_call_no_reply(client->icproxy, "FocusIn", G_TYPE_INVALID);
+        dbus_g_proxy_call_no_reply(client->icproxy, "FocusOut", G_TYPE_INVALID);
     }
 }
 

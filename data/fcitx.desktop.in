@@ -5,7 +5,6 @@ _Comment=Chinese Input Method
 Exec=fcitx
 Icon=fcitx
 Terminal=false
-Categories=
 Type=Application
 Categories=System;Utility;
 StartupNotify=false

@@ -5,7 +5,6 @@ _Comment=Chinese Input Method (Use Kimpanel)
 Exec=fcitx -u fcitx-kimpanel-ui
 Icon=fcitx
 Terminal=false
-Categories=
 Type=Application
 Categories=System;Utility;
 StartupNotify=false
