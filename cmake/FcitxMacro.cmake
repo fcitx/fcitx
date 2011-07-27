@@ -12,7 +12,7 @@ ENDMACRO(INTLTOOL_MERGE_TRANSLATION)
 
 MACRO(FCITX_ADD_ADDON_CONF_FILE conffilename)
     intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/${conffilename}.in ${CMAKE_CURRENT_BINARY_DIR}/${conffilename})
-    add_custom_target(${conffilename} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${conffilename})
+    add_custom_target(${conffilename}.target ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${conffilename})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${conffilename} DESTINATION ${FCITX4_ADDON_CONFIG_INSTALL_DIR})
 ENDMACRO(FCITX_ADD_ADDON_CONF_FILE addonname)
 

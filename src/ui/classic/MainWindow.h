@@ -65,3 +65,4 @@ void ShowMainWindow (MainWindow* mainWindow);
 boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other);
 
 #endif
+

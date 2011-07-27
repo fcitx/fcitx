@@ -129,3 +129,4 @@ Bool FrameMgrIsIterLoopEnd(FrameMgr, FmStatus*);
 #define FrameMgrGetToken(fm, obj) _FrameMgrGetToken((fm), &(obj), sizeof(obj))
 
 #endif /* FRAMEMGR_H */
+

@@ -136,3 +136,4 @@ INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
     UpdateStatus(fwchar->owner, "fullwidth");
     return IRV_DO_NOTHING;
 }
+

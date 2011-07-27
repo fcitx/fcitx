@@ -142,3 +142,4 @@ int IMSyncXlib (XIMS, XPointer);
 #endif
 
 #endif /* IMdkit_h */
+

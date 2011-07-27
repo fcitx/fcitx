@@ -96,3 +96,4 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 
     free(buffer);
 }
+

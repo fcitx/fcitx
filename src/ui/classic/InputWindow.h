@@ -69,3 +69,4 @@ void DrawInputWindow(InputWindow* inputWindow);
 void ShowInputWindowInternal(InputWindow* inputWindow);
 
 #endif
+

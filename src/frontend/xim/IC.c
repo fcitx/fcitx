@@ -352,3 +352,4 @@ void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
         }
     }
 }
+

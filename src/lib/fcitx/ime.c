@@ -887,3 +887,4 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg)
     SaveAllIM(instance);
     return IRV_DO_NOTHING;
 }
+

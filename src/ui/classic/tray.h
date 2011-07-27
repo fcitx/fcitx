@@ -49,3 +49,4 @@ void TraySendOpcode( Display* dpy, Window dock,  TrayWindow* tray, long message,
 #define ATOM_VISUAL 4
 
 #endif
+

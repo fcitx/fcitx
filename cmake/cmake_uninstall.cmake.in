@@ -6,7 +6,8 @@ file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
 string(REGEX REPLACE "\n" ";" files "${files}")
 foreach (file ${files})
     message(STATUS "Uninstalling \"$ENV{DESTDIR}${file}\"")
-    if (EXISTS "$ENV{DESTDIR}${file}" OR IS_SYMLINK "$ENV{DESTDIR}${file}")
+	#if ((EXISTS "$ENV{DESTDIR}${file}") OR (IS_SYMLINK "$ENV{DESTDIR}${file}"))
+    if (EXISTS "$ENV{DESTDIR}${file}")
         execute_process(
             COMMAND @CMAKE_COMMAND@ -E remove "$ENV{DESTDIR}${file}"
             OUTPUT_VARIABLE rm_out

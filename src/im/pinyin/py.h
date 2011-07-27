@@ -253,3 +253,4 @@ void            PYSetRemindCandWordsFlag (struct _FcitxPinyinState* pystate, boo
 void		PYGetPYByHZ(struct _FcitxPinyinState* pystate, char *strHZ, char *strPY);
 
 #endif
+

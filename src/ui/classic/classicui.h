@@ -100,3 +100,4 @@ boolean WindowIsVisable(Display* dpy, Window window);
 
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif
+

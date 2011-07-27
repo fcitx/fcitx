@@ -754,3 +754,4 @@ xim_externaldef XimFrameRec ext_move_fr[] =
     _FRAME(BIT16), 		/* Y */
     _FRAME(EOL),
 };
+

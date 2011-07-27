@@ -516,3 +516,4 @@ int _Xi18nStringConversionCallback (XIMS ims, IMProtocol *call_data)
     /*endif*/
     return True;
 }
+

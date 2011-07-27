@@ -190,3 +190,4 @@ void SwitchIM (struct _FcitxInstance* instance, int index);
 #endif
 
 #endif
+

@@ -70,3 +70,4 @@ void _XUnregisterFilter(Display*, Window,
 		Bool (*filter)(Display*, Window, XEvent*, XPointer), XPointer);
 
 #endif
+

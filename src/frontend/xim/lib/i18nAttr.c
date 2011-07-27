@@ -173,3 +173,4 @@ void _Xi18nInitExtension(Xi18n i18n_core)
     /*endfor*/
     i18n_core->address.ext_num = i;
 }
+

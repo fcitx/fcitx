@@ -223,3 +223,4 @@ static const UT_icd ut_int_icd _UNUSED_ = {sizeof(int),NULL,NULL,NULL};
 #define utarray_custom_bsearch(key, a, acc, cmp) custom_bsearch((key), (a)->d, (a)->i, (a)->icd->sz, (acc), cmp )
 
 #endif /* UTARRAY_H */
+

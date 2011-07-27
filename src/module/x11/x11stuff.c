@@ -60,7 +60,6 @@ void* X11Create(FcitxInstance* instance)
 {
     FcitxX11* x11priv = fcitx_malloc0(sizeof(FcitxX11));
     FcitxAddon* x11addon = GetAddonByName(&instance->addons, FCITX_X11_NAME);
-    XInitThreads();
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
         return false;
@@ -407,3 +406,4 @@ boolean X11GetCompositeManager(FcitxX11* x11stuff)
     else
         return false;
 }
+

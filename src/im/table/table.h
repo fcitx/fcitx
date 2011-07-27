@@ -230,3 +230,4 @@ ConfigFileDesc *GetTableConfigDesc();
 CONFIG_BINDING_DECLARE(TABLE);
 
 #endif
+

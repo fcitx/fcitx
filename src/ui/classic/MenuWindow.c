@@ -565,3 +565,4 @@ void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)
     
     XMoveWindow(parent->owner->dpy, sub->menuWindow, sub->iPosX, sub->iPosY);
 }
+

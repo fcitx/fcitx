@@ -274,3 +274,4 @@ void _Xi18nSetEventMask (XIMS ims,
     FrameMgrFree (fm);
     XFree(reply);
 }
+

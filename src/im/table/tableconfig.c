@@ -47,3 +47,4 @@ CONFIG_BINDING_REGISTER("CodeTable", "Choose", strChoose)
 CONFIG_BINDING_REGISTER("CodeTable", "Enabled", bEnabled)
 CONFIG_BINDING_END()
 
+

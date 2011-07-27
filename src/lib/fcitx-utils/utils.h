@@ -63,3 +63,4 @@ void *fcitx_malloc0(size_t bytes);
 #endif
 
 #endif
+

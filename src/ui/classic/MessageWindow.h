@@ -45,3 +45,4 @@ typedef struct _MessageWindow
 MessageWindow* CreateMessageWindow (struct _FcitxClassicUI * classicui);
 void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length);
 #endif
+

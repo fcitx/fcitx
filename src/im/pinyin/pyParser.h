@@ -61,3 +61,4 @@ int     Cmp1Map (struct _FcitxPinyinConfig* pyconfig, char map1, char map2, bool
 int             Cmp2Map (struct _FcitxPinyinConfig* pyconfig, char map1[3], char map2[3], boolean bSP);
 
 #endif
+

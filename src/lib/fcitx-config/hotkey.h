@@ -2451,3 +2451,4 @@ boolean IsHotKeySimple(FcitxKeySym sym, int state);
 #endif
 
 #endif
+

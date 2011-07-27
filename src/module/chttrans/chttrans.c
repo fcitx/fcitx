@@ -302,3 +302,4 @@ void ReloadChttrans(void* arg)
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     LoadChttransConfig(transState);
 }
+

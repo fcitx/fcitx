@@ -270,3 +270,4 @@ void ShowInputWindowInternal(InputWindow* inputWindow)
     XMapRaised(inputWindow->dpy, inputWindow->window);
     DrawInputWindow(inputWindow);
 }
+

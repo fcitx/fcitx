@@ -409,3 +409,4 @@ void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
     if (instance->ui && instance->ui->ui->MainWindowSizeHint)
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
+

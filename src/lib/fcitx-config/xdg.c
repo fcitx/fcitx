@@ -265,3 +265,4 @@ char **GetXDGPath(
     *len = dirsCount;
     return dirsArray;
 }
+

@@ -99,3 +99,4 @@ QString FcitxPlugin::displayName (const QString &key)
 }
 
 Q_EXPORT_PLUGIN2 (FcitxPlugin, FcitxPlugin)
+

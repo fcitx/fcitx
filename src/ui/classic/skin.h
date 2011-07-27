@@ -184,3 +184,4 @@ CONFIG_BINDING_DECLARE(FcitxSkin);
 #endif
 
 
+

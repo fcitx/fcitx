@@ -335,3 +335,4 @@ int GetSPIndexJP_C (FcitxPinyinConfig* pyconfig, char c, int iStart)
 
     return -1;
 }
+

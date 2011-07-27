@@ -31,3 +31,4 @@ typedef struct _QUICK_PHRASE {
 } QUICK_PHRASE;
 
 #endif
+

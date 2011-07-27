@@ -73,3 +73,4 @@ private:
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_
+

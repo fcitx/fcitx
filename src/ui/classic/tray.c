@@ -217,3 +217,4 @@ Window TrayGetDock(Display* dpy, TrayWindow* tray)
     Window dock = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
     return dock;
 }
+

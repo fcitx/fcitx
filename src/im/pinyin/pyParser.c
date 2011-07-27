@@ -442,3 +442,4 @@ int CmpMap (FcitxPinyinConfig* pyconfig, char *strMap1, char *strMap2, int *iMat
 
     return 0;
 }
+

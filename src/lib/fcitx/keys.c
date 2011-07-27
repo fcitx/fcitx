@@ -198,3 +198,4 @@ boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
 
    return false;
 }
+

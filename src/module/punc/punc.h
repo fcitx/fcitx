@@ -25,3 +25,4 @@
 #define FCITX_PUNC_GETPUNC_RETURNTYPE char*
 
 #endif
+

@@ -45,3 +45,4 @@ boolean UseRemind(FcitxProfile* profile);
 #endif
 
 #endif
+

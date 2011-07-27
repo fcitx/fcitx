@@ -1285,3 +1285,4 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
     }
 }
 
+

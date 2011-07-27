@@ -71,7 +71,7 @@ endif(_ENABLE_CAIRO)
 
 set(_ENABLE_DBUS 0)
 if (ENABLE_DBUS)
-    PKG_CHECK_MODULES(DBUS "dbus-1 >= 1.2.0" )
+    PKG_CHECK_MODULES(DBUS "dbus-1 >= 1.1.0" )
     if (DBUS_FOUND)
         set(_ENABLE_DBUS 1)
     endif (DBUS_FOUND)

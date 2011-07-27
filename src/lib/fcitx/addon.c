@@ -284,3 +284,4 @@ void FreeAddon(void *v)
     free(addon->name);
     free(addon->library);
 }
+

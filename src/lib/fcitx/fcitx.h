@@ -39,3 +39,4 @@ extern "C" {
 #endif
 
 #endif/*_FCITX_H_*/
+

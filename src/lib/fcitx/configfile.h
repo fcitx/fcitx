@@ -102,3 +102,4 @@ boolean ConfigGetPointAfterNumber(FcitxConfig* fc);
 #endif
 
 #endif
+

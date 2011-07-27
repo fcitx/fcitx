@@ -122,3 +122,4 @@ char *IMSetIMValues (XIMS ims, ...)
     /*endif*/
     return ret;
 }
+

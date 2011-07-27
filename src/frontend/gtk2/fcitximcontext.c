@@ -540,9 +540,18 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
 #endif
     }
 
+#if GTK_CHECK_VERSION (2, 18, 0)
     gdk_window_get_root_coords (fcitxcontext->client_window,
                                 area.x, area.y,
                                 &area.x, &area.y);
+#else
+    {
+        int rootx, rooty;
+        gdk_window_get_origin (fcitxcontext->client_window, &rootx, &rooty);
+        area.x = rootx + area.x;
+        area.y = rooty + area.y;
+    }
+#endif
     
     FcitxIMClientSetCursorLocation(fcitxcontext->client, area.x, area.y + area.height);
     return FALSE;
@@ -855,9 +864,6 @@ _key_is_modifier (guint keyval)
     case GDK_ISO_Level3_Shift:
     case GDK_ISO_Level3_Latch:
     case GDK_ISO_Level3_Lock:
-    case GDK_ISO_Level5_Shift:
-    case GDK_ISO_Level5_Latch:
-    case GDK_ISO_Level5_Lock:
     case GDK_ISO_Group_Shift:
     case GDK_ISO_Group_Latch:
     case GDK_ISO_Group_Lock:
@@ -916,3 +922,4 @@ void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     context->enable = false;
 }
+

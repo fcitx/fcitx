@@ -70,3 +70,4 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
 
     return 0;
 }
+

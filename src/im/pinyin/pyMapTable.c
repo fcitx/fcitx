@@ -237,3 +237,4 @@ const SyllabaryMap    syllabaryMapTable[] = {
 
     {"\0", '\0'}
 };
+

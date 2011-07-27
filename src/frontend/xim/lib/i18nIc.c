@@ -1050,3 +1050,4 @@ void _Xi18nGetIC (XIMS ims, IMProtocol *call_data, unsigned char *p)
     /*endif*/
     FrameMgrFree (fm);
 }
+

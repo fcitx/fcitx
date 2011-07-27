@@ -152,3 +152,4 @@ void DrawAboutWindow (AboutWindow* aboutWindow)
 
     cairo_destroy(c);
 }
+

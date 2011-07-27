@@ -204,3 +204,4 @@ char *fcitx_trim(char *s)
     end[1] = csave;
     return (s);
 }
+

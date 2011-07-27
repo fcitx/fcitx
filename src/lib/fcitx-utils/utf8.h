@@ -46,3 +46,4 @@ extern int utf8_get_char_validated (const char *p, int max_len);
 
 #endif /* ifndef UTF8_H */
 
+

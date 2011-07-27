@@ -183,3 +183,4 @@ Status IMCloseIM (XIMS ims)
     XFree (ims);
     return True;
 }
+

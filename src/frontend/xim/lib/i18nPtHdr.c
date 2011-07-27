@@ -1813,3 +1813,4 @@ void _Xi18nMessageHandler (XIMS ims,
     }
     /*endswitch*/
 }
+

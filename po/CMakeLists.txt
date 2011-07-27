@@ -6,7 +6,7 @@ endif("${REL_SOURCE_ROOT}" STREQUAL "")
 
 set(POT_FILE ${CMAKE_CURRENT_BINARY_DIR}/fcitx.pot)
 
-configure_file(POTFILES.in.in POTFILES.in)
+configure_file(POTFILES.in.in ${CMAKE_CURRENT_BINARY_DIR}/POTFILES.in)
 
 extract_fcitx_addon_conf_postring()
 

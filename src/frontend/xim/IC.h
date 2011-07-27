@@ -89,3 +89,4 @@ void     XimSetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 void     XimGetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 
 #endif
+

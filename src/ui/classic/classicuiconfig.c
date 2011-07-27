@@ -73,3 +73,4 @@ static void FilterScreenSizeY(GenericConfig* config, ConfigGroup *group, ConfigO
 
 
 }
+

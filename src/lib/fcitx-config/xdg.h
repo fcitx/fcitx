@@ -54,3 +54,4 @@ void FreeXDGPath(char **path);
 #endif
 
 #endif
+

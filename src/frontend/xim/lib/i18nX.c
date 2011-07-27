@@ -495,3 +495,4 @@ static Bool WaitXIMProtocol (Display *dpy,
     /*endif*/
     return False;
 }
+

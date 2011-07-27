@@ -17,6 +17,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkimmodule.h>
 #include "fcitx/fcitx.h"
@@ -62,7 +63,7 @@ FCITX_EXPORT_API
 G_MODULE_EXPORT GtkIMContext *
 im_module_create (const gchar *context_id)
 {
-    if (g_strcmp0 (context_id, "fcitx") == 0) {
+    if (context_id != NULL && strcmp (context_id, "fcitx") == 0) {
         FcitxIMContext *context;
         context = fcitx_im_context_new ();
         return (GtkIMContext *) context;
@@ -78,4 +79,5 @@ im_module_list (const GtkIMContextInfo ***contexts,
     *contexts = info_list;
     *n_contexts = G_N_ELEMENTS (info_list);
 }
+
 

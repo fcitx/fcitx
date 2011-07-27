@@ -214,3 +214,4 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
 
     ActivateWindow(dpy, classicui->iScreen, messageWindow->window);
 }
+

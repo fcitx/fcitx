@@ -272,3 +272,4 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
     free(strKeys);
 }
 
+

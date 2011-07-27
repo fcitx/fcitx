@@ -65,3 +65,4 @@ void DrawXlibMenu(XlibMenu * menu);
 void DisplayXlibMenu(XlibMenu * menu);
 
 #endif
+

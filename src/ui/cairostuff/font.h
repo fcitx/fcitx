@@ -30,3 +30,4 @@ void GetValidFont(const char* strUserLocale, char **font);
 #endif
 
 #endif
+

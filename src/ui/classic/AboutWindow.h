@@ -50,3 +50,4 @@ void            DisplayAboutWindow (AboutWindow* aboutWindow);
 void            DrawAboutWindow (AboutWindow* aboutWindow);
 
 #endif
+

@@ -349,3 +349,4 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     
     return true;
 }
+

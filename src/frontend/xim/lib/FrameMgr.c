@@ -2451,3 +2451,4 @@ static int _FrameInstGetItemSize (FrameInst fi, int cur_no)
     /*endswitch*/
     return NO_VALUE;
 }
+

@@ -565,3 +565,4 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
     }
     return false;
 }
+

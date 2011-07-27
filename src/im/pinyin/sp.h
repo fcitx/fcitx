@@ -52,3 +52,4 @@ int             GetSPIndexJP_C (struct _FcitxPinyinConfig* pyconfig, char c, int
 int             GetSPIndexJP_S (struct _FcitxPinyinConfig* pyconfig, char c);
 
 #endif
+

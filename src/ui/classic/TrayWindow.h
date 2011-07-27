@@ -59,3 +59,4 @@ void DeInitTrayWindow(TrayWindow *f_tray);
 void RedrawTrayWindow(TrayWindow* trayWindow);
 void ReleaseTrayWindow(TrayWindow* trayWindow);
 #endif
+
