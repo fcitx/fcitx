@@ -13,3 +13,4 @@ data/desc.po
 .kdev_include_paths
 .directory
 *.kate-swp
+*.orig

@@ -22,7 +22,6 @@
 #include <stdlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <cairo-xlib.h>
 #include <libintl.h>
 
 #include "fcitx/ui.h"
@@ -39,6 +38,8 @@
 #include "module/x11/x11stuff.h"
 #include "MainWindow.h"
 #include <fcitx-utils/log.h>
+#include <cairo/cairo.h>
+#include <cairo/cairo-xlib.h>
 
 static boolean InputWindowEventHandler(void *arg, XEvent* event);
 static void InitInputWindow(InputWindow* inputWindow);
@@ -82,20 +83,15 @@ void InitInputWindow(InputWindow* inputWindow)
                                       vs,attribmask,
                                       &attrib);
 
-    inputWindow->pm_input_bar=XCreatePixmap(
+    inputWindow->cs_x_input_bar= cairo_xlib_surface_create(
                                  dpy,
                                  inputWindow->window,
-                                 INPUT_BAR_MAX_WIDTH,
-                                 INPUT_BAR_MAX_HEIGHT,
-                                 depth);
-    inputWindow->cs_input_bar=cairo_xlib_surface_create(
-                                 dpy,
-                                 inputWindow->pm_input_bar,
                                  vs,
                                  INPUT_BAR_MAX_WIDTH,
                                  INPUT_BAR_MAX_HEIGHT);
-
-    inputWindow->gc = XCreateGC( inputWindow->dpy, inputWindow->window, 0, NULL );
+    inputWindow->cs_input_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,        
+                                 INPUT_BAR_MAX_WIDTH,
+                                 INPUT_BAR_MAX_HEIGHT);
 
     inputWindow->cs_input_back = cairo_surface_create_similar(inputWindow->cs_input_bar,
             CAIRO_CONTENT_COLOR_ALPHA,
@@ -186,14 +182,14 @@ void DrawInputWindow(InputWindow* inputWindow)
                 inputWindow->iInputWindowHeight);
         MoveInputWindowInternal(inputWindow);
     }
-    XCopyArea (inputWindow->dpy,
-            inputWindow->pm_input_bar,
-            inputWindow->window,
-            inputWindow->gc,
-            0,
-            0,
-            inputWindow->iInputWindowWidth,
-            inputWindow->iInputWindowHeight, 0, 0);
+    
+    cairo_t* c = cairo_create(inputWindow->cs_x_input_bar);
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_surface(c, inputWindow->cs_input_bar, 0, 0);
+    cairo_rectangle(c, 0, 0, inputWindow->iInputWindowWidth, inputWindow->iInputWindowHeight);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_destroy(c);
 }
 
 void MoveInputWindowInternal(InputWindow* inputWindow)
@@ -251,13 +247,12 @@ void ReloadInputWindow(void* arg, boolean enabled)
 
     cairo_surface_destroy(inputWindow->cs_input_bar);
     cairo_surface_destroy(inputWindow->cs_input_back);
-    XFreePixmap(inputWindow->dpy, inputWindow->pm_input_bar);
+    cairo_surface_destroy(inputWindow->cs_x_input_bar);
     XDestroyWindow(inputWindow->dpy, inputWindow->window);
-    XFreeGC(inputWindow->dpy, inputWindow->gc);
     
     inputWindow->cs_input_back = NULL;
     inputWindow->cs_input_bar = NULL;
-    inputWindow->pm_input_bar = None;
+    inputWindow->cs_x_input_bar = NULL;
     inputWindow->window = None;
     
     InitInputWindow(inputWindow);

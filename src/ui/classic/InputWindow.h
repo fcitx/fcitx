@@ -32,6 +32,8 @@
 #include <X11/Xlib.h>
 #include <cairo.h>
 
+#include "fcitx/fcitx.h"
+
 #define ROUND_SIZE 100
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
@@ -53,8 +55,7 @@ typedef struct _InputWindow {
     int		iOffsetX;
     int		iOffsetY;
     
-    Pixmap pm_input_bar;
-    
+    cairo_surface_t* cs_x_input_bar;
     cairo_surface_t *cs_input_bar;
     cairo_surface_t *cs_input_back;
     cairo_t *c_back, *c_cursor;
@@ -63,7 +64,6 @@ typedef struct _InputWindow {
     int iScreen;
     struct _FcitxSkin* skin;
     struct _FcitxClassicUI *owner;
-    GC gc;
 } InputWindow;
 
 InputWindow* CreateInputWindow(struct _FcitxClassicUI* classicui);
