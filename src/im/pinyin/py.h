@@ -62,16 +62,16 @@ typedef enum _PY_CAND_WORD_TYPE {
 typedef struct _HZ {
     char            strHZ[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
     int             iPYFA;
-    uint            iHit;
-    uint            iIndex;
+    unsigned int            iHit;
+    unsigned int            iIndex;
     struct _HZ     *next;
-    uint            flag:1;
+    unsigned int            flag:1;
 } HZ;
 
 typedef struct _PYFREQ {
     HZ             *HZList;
     char            strPY[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1];
-    uint            iCount;
+    unsigned int            iCount;
     boolean            bIsSym;	//For special symbols
     struct _PYFREQ  *next;
 } PyFreq;
@@ -80,9 +80,9 @@ typedef struct _PYPHRASE {
     char           *strPhrase;
     char           *strMap;
     struct _PYPHRASE *next;
-    uint            iIndex;
-    uint            iHit;
-    uint            flag:1;
+    unsigned int            iIndex;
+    unsigned int            iHit;
+    unsigned int            flag:1;
 } PyPhrase;
 
 typedef struct _PYBASE {
@@ -91,9 +91,9 @@ typedef struct _PYBASE {
     int             iPhrase;
     struct _PYPHRASE *userPhrase;
     int             iUserPhrase;
-    uint            iIndex;
-    uint            iHit;
-    uint            flag:1;
+    unsigned int            iIndex;
+    unsigned int            iHit;
+    unsigned int            flag:1;
 } PyBase;
 
 typedef struct _PYFA {
@@ -140,7 +140,7 @@ typedef union {
 
 typedef struct _PYCANDWORD {
     PCand           cand;
-    uint            iWhich:3;	//0->Auto 1->System single HZ 2->System phrase 3->User phrase 4->frequent HZ
+    unsigned int            iWhich:3;	//0->Auto 1->System single HZ 2->System phrase 3->User phrase 4->frequent HZ
 } PYCandWord;
 
 typedef struct _PYCANDINDEX {
@@ -161,13 +161,13 @@ typedef struct _FcitxPinyinState
 
     int iPYFACount;
     PYFA *PYFAList;
-    uint iCounter;
-    uint iOrigCounter;
+    unsigned int iCounter;
+    unsigned int iOrigCounter;
     boolean bPYBaseDictLoaded;
     boolean bPYOtherDictLoaded;
 
     PyFreq *pyFreq, *pCurFreq;
-    uint iPYFreqCount;
+    unsigned int iPYFreqCount;
 
     char strFindString[MAX_USER_INPUT + 2];
     ParsePYStruct findMap;
@@ -179,7 +179,7 @@ typedef struct _FcitxPinyinState
     PYRemindCandWord PYRemindCandWords[MAX_CAND_WORD];
 
     PY_SELECTED pySelected[MAX_WORDS_USER_INPUT + 1];
-    uint iPYSelected;
+    unsigned int iPYSelected;
 
     PYCandWord PYCandWords[MAX_CAND_WORD];
     char strPYAuto[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];

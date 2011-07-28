@@ -14,6 +14,7 @@ set(FCITX_UTILS_HEADERS
 
 add_library(fcitx-utils SHARED ${FCITX_UTILS_SOURCES})
 set_target_properties(fcitx-utils PROPERTIES VERSION 0.1.0 SOVERSION 0.1 COMPILE_FLAGS "-fvisibility=hidden")
+target_link_libraries(fcitx-utils ${LIBINTL_LIBRARIES} ${LIBICONV_LIBRARIES})
 
 configure_file(fcitx-utils.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-utils.pc)
 

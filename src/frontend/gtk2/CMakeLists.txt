@@ -10,6 +10,7 @@ set(GTK2_IM_MODULEDIR
 include_directories(${GTK2_INCLUDE_DIRS})
 include_directories(${DBUS_GLIB_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+link_directories(${GTK2_LIBRARY_DIRS} ${DBUS_GLIB_LIBRARY_DIRS})
 
 add_custom_command(OUTPUT marshall.c
                    COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.c

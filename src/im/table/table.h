@@ -149,9 +149,9 @@ typedef struct _FcitxTableState {
     AUTOPHRASE     *autoPhrase;
     AUTOPHRASE     *insertPoint;
     
-    uint            iAutoPhrase;
-    uint            iTableCandDisplayed;
-    uint            iTableTotalCandCount;
+    unsigned int            iAutoPhrase;
+    unsigned int            iTableCandDisplayed;
+    unsigned int            iTableTotalCandCount;
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
     
     FH             *fh;

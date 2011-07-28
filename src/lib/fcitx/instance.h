@@ -20,7 +20,9 @@
 #ifndef __FCITX_INSTANCE_H__
 #define __FCITX_INSTANCE_H__
 
+#include <pthread.h>
 #include <semaphore.h>
+#include <sys/select.h>
 #include <fcitx/ui.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx/configfile.h>

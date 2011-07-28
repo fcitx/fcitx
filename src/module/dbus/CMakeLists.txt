@@ -1,6 +1,8 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${DBUS_INCLUDE_DIRS})
 
+link_directories(${DBUS_LIBRARY_DIRS})
+
 set(FCITX_DBUS_SOURCES
 	dbusstuff.c
 )

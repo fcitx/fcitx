@@ -1,5 +1,6 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${DBUS_INCLUDE_DIRS})
+link_directories(${DBUS_LIBRARY_DIRS})
 
 set(fcitx_kimpanel_ui_SOURCES
     kimpanel.c

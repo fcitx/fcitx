@@ -29,6 +29,7 @@
 #ifndef _FCITX_IME_H_
 #define _FCITX_IME_H_
 
+#include <time.h>
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/hotkey.h>
 

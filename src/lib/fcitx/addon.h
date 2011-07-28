@@ -88,7 +88,6 @@ typedef struct _FcitxAddon
         struct _FcitxUI* ui;
     };
     void *addonInstance;
-    pthread_t pid;
     UT_array functionList;
 } FcitxAddon;
 

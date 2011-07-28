@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <X11/Xmd.h>
+#include <stdint.h>
 
 #include "pyTools.h"
 

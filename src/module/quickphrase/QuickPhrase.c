@@ -36,7 +36,7 @@
 #include "fcitx/frontend.h"
 
 typedef struct _QuickPhraseState {
-    uint uQuickPhraseCount;
+    unsigned int uQuickPhraseCount;
     UT_array *quickPhrases ;
     int iFirstQuickPhrase;
     int iLastQuickPhrase;

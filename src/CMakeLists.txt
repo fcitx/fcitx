@@ -1,5 +1,7 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
+include_directories(${LIBINTL_INCLUDE_DIR})
+include_directories(${PTHREAD_INCLUDE_DIR})
 
 add_subdirectory(lib)
 add_subdirectory(core)

@@ -5,4 +5,4 @@ set(FCITX_SOURCES
 
 add_executable(fcitx ${FCITX_SOURCES})
 install(TARGETS fcitx RUNTIME DESTINATION ${bindir})
-target_link_libraries(fcitx fcitx-core)
+target_link_libraries(fcitx fcitx-core ${LIBEXECINFO_LIBRARIES})
