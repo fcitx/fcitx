@@ -95,6 +95,8 @@ void InitInputWindow(InputWindow* inputWindow)
                                  INPUT_BAR_MAX_WIDTH,
                                  INPUT_BAR_MAX_HEIGHT);
 
+    inputWindow->gc = XCreateGC( inputWindow->dpy, inputWindow->window, 0, NULL );
+
     inputWindow->cs_input_back = cairo_surface_create_similar(inputWindow->cs_input_bar,
             CAIRO_CONTENT_COLOR_ALPHA,
             INPUT_BAR_MAX_WIDTH,
@@ -184,16 +186,14 @@ void DrawInputWindow(InputWindow* inputWindow)
                 inputWindow->iInputWindowHeight);
         MoveInputWindowInternal(inputWindow);
     }
-    GC gc = XCreateGC( inputWindow->dpy, inputWindow->window, 0, NULL );
     XCopyArea (inputWindow->dpy,
             inputWindow->pm_input_bar,
             inputWindow->window,
-            gc,
+            inputWindow->gc,
             0,
             0,
             inputWindow->iInputWindowWidth,
             inputWindow->iInputWindowHeight, 0, 0);
-    XFreeGC(inputWindow->dpy, gc);
 }
 
 void MoveInputWindowInternal(InputWindow* inputWindow)
@@ -253,6 +253,7 @@ void ReloadInputWindow(void* arg, boolean enabled)
     cairo_surface_destroy(inputWindow->cs_input_back);
     XFreePixmap(inputWindow->dpy, inputWindow->pm_input_bar);
     XDestroyWindow(inputWindow->dpy, inputWindow->window);
+    XFreeGC(inputWindow->dpy, inputWindow->gc);
     
     inputWindow->cs_input_back = NULL;
     inputWindow->cs_input_bar = NULL;

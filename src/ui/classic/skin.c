@@ -58,8 +58,6 @@
 #include "ui/cairostuff/font.h"
 #include <fcitx/hook.h>
 
-#define ROUND_SIZE 60
-
 static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
 
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
@@ -429,7 +427,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     int newHeight = 0, newWidth = 0;
     int cursor_pos=0;
     int inputWidth = 0, outputWidth = 0;
-    int inputHeight = 0, outputHeight = 0;
+    int outputHeight = 0;
     cairo_t *c = NULL;
     FcitxInputState* input = &inputWindow->owner->owner->input;
     FcitxInstance* instance = inputWindow->owner->owner;
@@ -445,7 +443,6 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
         return;
 
     inputWidth = 0;
-    inputHeight = sc->skinFont.fontSize;
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
     SetFontContext(dummy, inputWindow->owner->font, sc->skinFont.fontSize);
 #endif
@@ -537,11 +534,21 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
 
     //输入条长度应该比背景图长度要长,比最大长度要短
     newWidth=(newWidth>=INPUT_BAR_MAX_WIDTH)?INPUT_BAR_MAX_WIDTH:newWidth;
-    *iwidth=newWidth;
+    if (inputWindow->owner->bVerticalList) /* vertical */
+    {
+        newWidth = (newWidth < INPUT_BAR_VMIN_WIDTH)?INPUT_BAR_VMIN_WIDTH:newWidth;
+    }
+    else
+    {
+        newWidth = (newWidth < INPUT_BAR_HMIN_WIDTH)?INPUT_BAR_HMIN_WIDTH:newWidth;
+    }
+
+    *iwidth = newWidth;
     *iheight = newHeight;
     
     if (oldHeight != newHeight || oldWidth != newWidth)
     {
+        FcitxLog(INFO,"REDRAW");
         c=cairo_create(inputWindow->cs_input_back);
         DrawResizableBackground(c, inputimg->image, newHeight, newWidth,
             sc->skinInputBar.marginLeft,
@@ -554,8 +561,12 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
 
     c = cairo_create(inputWindow->cs_input_bar);
     cairo_set_source_surface(c, inputWindow->cs_input_back, 0, 0);
+    cairo_save(c);
+    cairo_rectangle (c, 0, 0, newWidth, newHeight);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_clip(c);
     cairo_paint(c);
+    cairo_restore(c);
 
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
     

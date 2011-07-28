@@ -32,10 +32,13 @@
 #include <X11/Xlib.h>
 #include <cairo.h>
 
+#define ROUND_SIZE 100
 #define INPUTWND_WIDTH	50
 #define INPUTWND_HEIGHT	40
-#define INPUT_BAR_MAX_WIDTH 1500
-#define INPUT_BAR_MAX_HEIGHT 600
+#define INPUT_BAR_HMIN_WIDTH 400
+#define INPUT_BAR_VMIN_WIDTH 200
+#define INPUT_BAR_MAX_WIDTH 1000
+#define INPUT_BAR_MAX_HEIGHT 300
 
 struct _FcitxSkin;
 struct _FcitxClassicUI;
@@ -60,6 +63,7 @@ typedef struct _InputWindow {
     int iScreen;
     struct _FcitxSkin* skin;
     struct _FcitxClassicUI *owner;
+    GC gc;
 } InputWindow;
 
 InputWindow* CreateInputWindow(struct _FcitxClassicUI* classicui);
