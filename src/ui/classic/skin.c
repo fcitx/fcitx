@@ -548,7 +548,6 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     
     if (oldHeight != newHeight || oldWidth != newWidth)
     {
-        FcitxLog(INFO,"REDRAW");
         c=cairo_create(inputWindow->cs_input_back);
         DrawResizableBackground(c, inputimg->image, newHeight, newWidth,
             sc->skinInputBar.marginLeft,
