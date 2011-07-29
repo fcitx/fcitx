@@ -76,7 +76,7 @@ void InitInputWindow(InputWindow* inputWindow)
                                       RootWindow(dpy, iScreen),
                                       classicui->iMainWindowOffsetX,
                                       classicui->iMainWindowOffsetY,
-                                      INPUT_BAR_MAX_WIDTH,
+                                      cairo_image_surface_get_width(back->image),
                                       inputWindow->iInputWindowHeight,
                                       0,
                                       depth,InputOutput,
@@ -87,11 +87,11 @@ void InitInputWindow(InputWindow* inputWindow)
                                  dpy,
                                  inputWindow->window,
                                  vs,
-                                 INPUT_BAR_MAX_WIDTH,
-                                 INPUT_BAR_MAX_HEIGHT);
-    inputWindow->cs_input_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,        
-                                 INPUT_BAR_MAX_WIDTH,
-                                 INPUT_BAR_MAX_HEIGHT);
+                                 cairo_image_surface_get_width(back->image),
+                                 cairo_image_surface_get_height(back->image));
+    inputWindow->cs_input_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+            INPUT_BAR_MAX_WIDTH,
+            INPUT_BAR_MAX_HEIGHT);
 
     inputWindow->cs_input_back = cairo_surface_create_similar(inputWindow->cs_input_bar,
             CAIRO_CONTENT_COLOR_ALPHA,
@@ -175,6 +175,9 @@ void DrawInputWindow(InputWindow* inputWindow)
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight)
     {
+        cairo_xlib_surface_set_size(inputWindow->cs_x_input_bar, 
+                inputWindow->iInputWindowWidth,
+                inputWindow->iInputWindowHeight);
         XResizeWindow(
                 inputWindow->dpy,
                 inputWindow->window,
@@ -190,6 +193,8 @@ void DrawInputWindow(InputWindow* inputWindow)
     cairo_clip(c);
     cairo_paint(c);
     cairo_destroy(c);
+    
+    XFlush(inputWindow->dpy);
 }
 
 void MoveInputWindowInternal(InputWindow* inputWindow)
