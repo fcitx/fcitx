@@ -272,6 +272,7 @@ ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, con
 const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
 const char* ConfigOptionGetLocaleString(ConfigOption* option);
 void ConfigBindSync(GenericConfig* config);
+void ResetConfigToDefaultValue(GenericConfig* config);
 
 typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);
 

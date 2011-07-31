@@ -1081,3 +1081,52 @@ const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const ch
     }
     return NULL;
 }
+
+FCITX_EXPORT_API
+void ResetConfigToDefaultValue(GenericConfig* config)
+{
+    ConfigFile* cfile = config->configFile;
+    if (!cfile)
+        return;
+    
+    ConfigFileDesc* cfdesc = cfile->fileDesc;
+    if (!cfdesc)
+        return;
+    
+    ConfigGroupDesc *cgdesc = NULL;
+    for(cgdesc = cfdesc->groupsDesc;
+        cgdesc != NULL;
+        cgdesc = (ConfigGroupDesc*)cgdesc->hh.next)
+    {
+        ConfigOptionDesc *codesc = NULL;
+        ConfigGroup* group;
+        HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
+        if (!group)
+        {
+            /* should not happen */
+            continue;
+        }
+        for(codesc = cgdesc->optionsDesc;
+            codesc != NULL;
+            codesc = (ConfigOptionDesc*)codesc->hh.next)
+        {
+            ConfigOption *option;
+            HASH_FIND_STR(group->options, codesc->optionName, option);
+            if (!option)
+            {
+                /* should not happen */
+                continue;
+            }
+                
+            if (!codesc->rawDefaultValue)
+            {
+                /* ignore it, actually if it doesn't have a default value, the reset is meaning less */
+                continue;
+            }
+            if (option->rawValue)
+                free(option->rawValue);
+        
+            option->rawValue = strdup(codesc->rawDefaultValue);
+        }
+    }
+}
