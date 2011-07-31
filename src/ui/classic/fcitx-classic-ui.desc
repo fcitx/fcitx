@@ -40,9 +40,12 @@ Description=Main Window Hide Mode
 [ClassicUI/VerticalList]
 Type=Boolean
 DefaultValue=False
-Description=Show Hint Window while ENV is not correctly configured.
+Description=Vertical Candidate Word List
 
 [ClassicUI/SkinType]
 Type=String
 DefaultValue=default
-Description=Skin Name in use
+Description=Skin Name
+
+[DescriptionFile]
+LocaleDomain=fcitx

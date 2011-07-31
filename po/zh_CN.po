@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-27 22:08+0800\n"
-"PO-Revision-Date: 2011-07-24 19:30+0800\n"
+"POT-Creation-Date: 2011-07-31 15:59+0800\n"
+"PO-Revision-Date: 2011-07-31 16:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -47,7 +47,7 @@ msgstr "活动输入法图标"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:101
 msgid "Add Watch Function Error"
-msgstr ""
+msgstr "增加监听函数错误"
 
 # unknown
 msgid "Addon"
@@ -129,11 +129,11 @@ msgstr "冰蟾全息"
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:141
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:139
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:146
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:144
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -284,7 +284,7 @@ msgstr "当前输入法"
 msgid "DBus Support"
 msgstr "DBus 支持"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:165
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
@@ -586,8 +586,7 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr ""
-"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:145
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -772,9 +771,8 @@ msgid "Name"
 msgstr "名称"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:120
-#, fuzzy
 msgid "Name Error"
-msgstr "名称错误 (%s)"
+msgstr "名称错误"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:114
 #, c-format
@@ -812,7 +810,7 @@ msgstr "无操作"
 
 #: unknown
 msgid "OpenCC"
-msgstr "OpenCC 错误"
+msgstr "OpenCC"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:179
 msgid "OpenCC error"
@@ -1040,10 +1038,6 @@ msgstr "共享库"
 msgid "Show"
 msgstr "显示"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:43
-msgid "Show Hint Window while ENV is not correctly configured."
-msgstr "环境未配置正确时显示提示窗口"
-
 #: /home/saber/Develop/fcitx/data/config.desc:58
 msgid "Show Input Speed"
 msgstr "显示输入速度"
@@ -1077,7 +1071,7 @@ msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:710
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:726
 msgid "Skin"
 msgstr "皮肤"
 
@@ -1085,12 +1079,9 @@ msgstr "皮肤"
 msgid "Skin Author"
 msgstr "皮肤作者"
 
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:48
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr "皮肤名称"
-
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:48
-msgid "Skin Name in use"
 msgstr "皮肤名称"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:7
@@ -1250,6 +1241,10 @@ msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
 msgid "User Phrase Color"
 msgstr "用户词组颜色"
 
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:43
+msgid "Vertical Candidate Word List"
+msgstr "竖排候选词列表"
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:1
 msgid "Virtual Key Board"
 msgstr "虚拟键盘"
@@ -1293,7 +1288,7 @@ msgstr "由其他插件使用的 X11 工具函数"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:125
 msgid "X11 not initialized"
-msgstr ""
+msgstr "X11 未初始化"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:147
 msgid "XMODIFIERS Error."
@@ -1890,6 +1885,9 @@ msgstr "当前字体为: %s"
 #~ msgid "SetRecordingKey"
 #~ msgstr "快捷键: 切换记录模式"
 
+#~ msgid "Show Hint Window while ENV is not correctly configured."
+#~ msgstr "环境未配置正确时显示提示窗口"
+
 #~ msgid "Show Input Window In the center of screen"
 #~ msgstr "输入窗口显示在正中"
 
@@ -1916,6 +1914,9 @@ msgstr "当前字体为: %s"
 
 #~ msgid "ShuangpinOrder"
 #~ msgstr "双拼顺序"
+
+#~ msgid "Skin Name in use"
+#~ msgstr "皮肤名称"
 
 #~ msgid "SkinType"
 #~ msgstr "皮肤名称"
