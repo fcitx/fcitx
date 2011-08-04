@@ -73,6 +73,7 @@ static void * PYGetCandTextWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetFindStringWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
 static void ReloadConfigPY(void* arg);
+static void PinyinMigration();
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -89,6 +90,8 @@ void *PYCreate(FcitxInstance* instance)
         free(pystate);
         return NULL;
     }
+    
+    PinyinMigration();
     
     FcitxRegisterIM(instance,
                     pystate,
@@ -223,6 +226,13 @@ StringHashSet *GetPYPhraseFiles()
                 continue;
             if (strcmp(drt->d_name, PY_PHRASE_FILE) == 0)
                 continue;
+            if (strcmp(drt->d_name, PY_USERPHRASE_FILE) == 0)
+                continue;
+            if (strcmp(drt->d_name, PY_SYMBOL_FILE) == 0)
+                continue;
+            if (strcmp(drt->d_name, PY_BASE_FILE) == 0)
+                continue;
+            FcitxLog(INFO, "Try %s", drt->d_name);
             snprintf(pathBuf, sizeof(pathBuf), "%s/%s", pinyinPath[i], drt->d_name );
 
             if (stat(pathBuf, &fileStat) == -1)
@@ -401,7 +411,10 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         {
             curStr = sset;
             HASH_DEL(sset, curStr);
-            fp = GetXDGFileWithPrefix("pinyin", curStr->name, "r", NULL);
+            char *filename;
+            fp = GetXDGFileWithPrefix("pinyin", curStr->name, "r", &filename);
+            FcitxLog(INFO, _("Load extra dict: %s"), filename);
+            free(filename);
             LoadPYPhraseDict(pystate, fp, true);
             fclose(fp);
             free(curStr->name);
@@ -3177,3 +3190,32 @@ void ReloadConfigPY(void* arg)
     LoadPYConfig(&pystate->pyconfig);
 }
 
+void PinyinMigration()
+{
+    char* olduserphrase, *oldpyindex, *newuserphrase, *newpyindex;
+    GetXDGFileUserWithPrefix("", PY_USERPHRASE_FILE, NULL, &olduserphrase);
+    GetXDGFileUserWithPrefix("", PY_INDEX_FILE, NULL, &oldpyindex);
+    GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, NULL, &newuserphrase);
+    GetXDGFileUserWithPrefix("pinyin", PY_INDEX_FILE, NULL, &newpyindex);
+    
+    struct stat olduserphrasestat, oldpyindexstat, newuserphrasestat, newpyindexstat;
+    
+    /* check old file are all not exist */
+    if (stat(newpyindex, &newpyindexstat) == -1 && stat(newuserphrase, &newuserphrasestat) == -1)
+    {
+        if (stat(oldpyindex, &oldpyindexstat) == 0 || stat(olduserphrase, &olduserphrasestat) == 0)
+        {
+            FcitxLog(INFO, _("Migrate the old file path to the new one"));
+            /* there might be a very very rare case, that ~/.config/fcitx/pinyin 
+             * and ~/.config/fcitx in different filesystem, who the fucking guy
+             * do this meaningless go die */
+            link(oldpyindex, newpyindex);
+            link(olduserphrase, newuserphrase);
+        }
+    }
+    
+    free(oldpyindex);
+    free(olduserphrase);
+    free(newpyindex);
+    free(newuserphrase);
+}

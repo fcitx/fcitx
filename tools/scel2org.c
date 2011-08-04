@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "utarray.h"
+#include "fcitx-utils/utarray.h"
 
 #define HEADER_SIZE 12
 #define BUFLEN 0x1000
@@ -44,7 +44,7 @@ typedef struct _ScelPinyin {
     char pinyin[10];
 } ScelPinyin;
 
-UT_icd py_icd = { sizeof(ScelPinyin), NULL, NULL};
+UT_icd py_icd = { sizeof(ScelPinyin), NULL, NULL, NULL};
 static void usage();
 
 void usage()
