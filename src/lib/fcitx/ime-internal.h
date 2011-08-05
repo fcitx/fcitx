@@ -35,17 +35,100 @@
 struct _FcitxInputContext;
 struct _FcitxInstance;
 
+/**
+ * @brief init fcitx im array
+ *
+ * @param instance instance
+ * @return void
+ **/
 void InitFcitxIM(struct _FcitxInstance* instance);
+
+/**
+ * @brief init builtin hotkey (ESC, ENTER)
+ *
+ * @param instance instance
+ * @return void
+ **/
 void InitBuiltInHotkey(struct _FcitxInstance* instance);
+
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @return void
+ **/
 void DoPhraseTips (struct _FcitxInstance* instance);
+
+/**
+ * @brief unload all input method
+ *
+ * @param ims im array
+ * @return void
+ **/
 void UnloadAllIM(UT_array* ims);
+
+/**
+ * @brief load all im from addons
+ *
+ * @param instance instance
+ * @return boolean
+ **/
 boolean LoadAllIM (struct _FcitxInstance* instance);
+
+/**
+ * @brief init builtin im menu
+ *
+ * @param instance instance
+ * @return void
+ **/
 void InitIMMenu(struct _FcitxInstance* instance);
+
+/**
+ * @brief show input speed
+ *
+ * @param instance instance
+ * @return void
+ **/
 void ShowInputSpeed(struct _FcitxInstance* instance);
+
+/**
+ * @brief process enter action
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
+
+/**
+ * @brief process escape action
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
+
+/**
+ * @brief process hkRemind
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImProcessRemind(void *arg);
+
+/**
+ * @brief process reload key
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImProcessReload(void *arg);
+
+/**
+ * @brief process hkSaveAll
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
 
 #endif

@@ -69,13 +69,37 @@ typedef struct _Messages Messages;
 #define MAX_STATUS_SDESC 32
 #define MAX_STATUS_LDESC 32
 
+/**
+ * @brief Fcitx Status icon to be displayed on the UI
+ **/
 typedef struct _FcitxUIStatus {
+    /**
+     * @brief status name, will not displayed on the UI.
+     **/
     char name[MAX_STATUS_NAME + 1];
+    /**
+     * @brief short desription for this status, can be displayed on the UI
+     **/
     char shortDescription[MAX_STATUS_SDESC + 1];
+    /**
+     * @brief long description for this status, can be displayed on the UI
+     **/
     char longDescription[MAX_STATUS_LDESC + 1];
+    /**
+     * @brief toogle function
+     **/
     void (*toggleStatus)(void *arg);
+    /**
+     * @brief get current value function
+     **/
     boolean (*getCurrentStatus)(void *arg);
+    /**
+     * @brief private data for the UI implementation
+     **/
     void *priv;
+    /**
+     * @brief extra argument for tooglefunction
+     **/
     void* arg;
 } FcitxUIStatus;
 
@@ -94,44 +118,136 @@ typedef enum _MenuShellType
 
 struct _FcitxUIMenu;
 
-//菜单项属性
+/**
+ * @brief a menu entry in a menu.
+ **/
 typedef struct _MenuShell
 {
+    /**
+     * @brief The displayed string
+     **/
     char tipstr[MAX_MENU_STRING_LENGTH + 1];
+    /**
+     * @brief Can be used by ui to mark it's selected or not.
+     **/
     int  isselect;
+    /**
+     * @brief The type of menu shell
+     **/
     MenuShellType type;
+    /**
+     * @brief the submenu to this entry
+     **/
     struct _FcitxUIMenu *subMenu;
 } MenuShell;
 
 typedef boolean (*MenuActionFunction)(struct _FcitxUIMenu *arg, int index);
+typedef void (*UpdateMenuShellFunction)(struct _FcitxUIMenu *arg);
 
+/**
+ * @brief Fcitx Menu Component, a UI doesn't need to support it,
+ *        This struct is used by other module to register a menu.
+ **/
 typedef struct _FcitxUIMenu {
+    /**
+     * @brief shell entries for this menu
+     **/
     UT_array shell;
+    /**
+     * @brief menu name, can be displayed on the ui
+     **/
     char name[MAX_MENU_STRING_LENGTH + 1];
+    /**
+     * @brief you might want to bind the menu on a status icon, but this is only a hint,
+     * depends on the ui implementation
+     **/
     char candStatusBind[MAX_STATUS_NAME + 1];
-    void (*UpdateMenuShell)(struct _FcitxUIMenu *arg);
+    /**
+     * @brief update the menu content
+     **/
+    UpdateMenuShellFunction UpdateMenuShell;
+    /**
+     * @brief function for process click on a menu entry
+     **/
     MenuActionFunction MenuAction;
+    /**
+     * @brief private data for this menu
+     **/
     void *priv;
+    /**
+     * @brief ui implementation private
+     **/
     void *uipriv;
+    /**
+     * @brief this is sub menu or not
+     **/
     boolean isSubMenu;
+    /**
+     * @brief mark of this menu
+     **/
     int mark;
 } FcitxUIMenu;
 
+/**
+ * @brief user interface implementation
+ **/
 typedef struct _FcitxUI
 {
+    /**
+     * @brief construct function for this ui
+     */
     void* (*Create)(struct _FcitxInstance*);
+    /**
+     * @brief close the input window
+     */
     void (*CloseInputWindow)(void *arg);
+    /**
+     * @brief show the input window
+     */
     void (*ShowInputWindow)(void *arg);
+    /**
+     * @brief move the input window
+     */
     void (*MoveInputWindow)(void *arg);
+    /**
+     * @brief action on update status
+     */
     void (*UpdateStatus)(void *arg, FcitxUIStatus* );
+    /**
+     * @brief action on register status
+     */
     void (*RegisterStatus)(void *arg, FcitxUIStatus* );
+    /**
+     * @brief action on register menu
+     */
     void (*RegisterMenu)(void *arg, FcitxUIMenu* );
+    /**
+     * @brief action on focus
+     */
     void (*OnInputFocus)(void *arg);
+    /**
+     * @brief action on unfocus
+     */
     void (*OnInputUnFocus)(void *arg);
+    /**
+     * @brief action on trigger on
+     */
     void (*OnTriggerOn)(void *arg);
+    /**
+     * @brief action on trigger off
+     */
     void (*OnTriggerOff)(void *arg);
+    /**
+     * @brief display a message is ui support it
+     */
     void (*DisplayMessage)(void *arg, char *title, char **msg, int length);
+    /**
+     * @brief get the main window size if ui support it
+     */
     void (*MainWindowSizeHint)(void *arg, int* x, int* y, int* w, int* h);
+    /**
+     * @brief reload config
+     */
     void (*ReloadConfig)(void*);
 } FcitxUI;
 

@@ -23,7 +23,7 @@
  * @author CSSlayer wengxt@gmail.com
  * @date 2010-04-30
  *
- * @brief 新配置文件读写
+ * @brief ini style config file 
  */
 #include <stdlib.h>
 #include <string.h>
@@ -37,13 +37,28 @@
 #include <fcitx-utils/utils.h>
 #include <locale.h>
 
+/**
+ * @brief Config Option parse function
+ **/
+typedef ConfigSyncResult (*ConfigOptionFunc)(ConfigOption *, ConfigSync);
+
 static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync);
 static ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync);
+static ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync);
+
+/**
+ * @brief File type is basically a string, but can be a hint for config tool
+ */
 #define ConfigOptionFile ConfigOptionString
+
+/**
+ * @brief Font type is basically a string, but can be a hint for config tool
+ */
 #define ConfigOptionFont ConfigOptionString
 
 FCITX_EXPORT_API
@@ -666,13 +681,6 @@ void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
     free(codesc);
 }
 
-/** 
- * @brief 
- * 
- * @param filename
- * 
- * @return 
- */
 FCITX_EXPORT_API
 ConfigFile* ParseIni(char* filename, ConfigFile* reuse)
 {

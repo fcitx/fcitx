@@ -42,6 +42,13 @@ struct _InputWindow;
 struct _Messages;
 struct _FcitxClassicUI;
 
+typedef enum _MouseE
+{
+    RELEASE,//鼠标释放状态
+    PRESS,//鼠标按下
+    MOTION//鼠标停留
+} MouseE;
+
 typedef struct _SkinImage
 {
     char *name;

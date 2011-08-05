@@ -19,11 +19,9 @@
  ***************************************************************************/
 /**
  * @file   utils.h
- * @author Yuking yuking_net@sohu.com
- * @date   2008-1-16
+ * @author CS Slayer wengxt@gmail.com
  * 
- * @brief  配置文件读写
- * 
+ * @brief  Misc function for Fcitx
  * 
  */
 
@@ -42,21 +40,81 @@ extern "C" {
  * @brief A hash set for string
  **/
 typedef struct _StringHashSet {
+    /**
+     * @brief String in Hash Set
+     **/
     char *name;
+    /**
+     * @brief UT Hash handle
+     **/
     UT_hash_handle hh;
 } StringHashSet;
 
+
+/**
+ * @brief Custom bsearch, it can search the most near value.
+ *
+ * @param key
+ * @param base
+ * @param nmemb
+ * @param size
+ * @param accurate
+ * @param compar
+ *
+ * @return
+ */
 void *custom_bsearch(const void *key, const void *base,
         size_t nmemb, size_t size, int accurate,
         int (*compar)(const void *, const void *));
 
+/**
+ * @brief Fork twice to run as daemon
+ *
+ * @return void
+ **/
 void InitAsDaemon();
-int             CalculateRecordNumber (FILE* fpDict);
-void            SetSwitchKey (char *str);
+
+/**
+ * @brief Count the file line number
+ *
+ * @param fpDict file pointer
+ * @return int line number
+ **/
+int CalculateRecordNumber (FILE* fpDict);
+
+/**
+ * @brief Split a string by delm
+ *
+ * @param str input string
+ * @param delm character as delimiter
+ * @return UT_array* a new utarray for store the split string
+ **/
 UT_array* SplitString(const char *str, char delm);
+
+/**
+ * @brief Helper function for free the SplitString Output
+ *
+ * @param list the SplitString Output
+ * @return void
+ * @see SplitString
+ **/
 void FreeStringList(UT_array *list);
-char *fcitx_trim(char *s);
-void *fcitx_malloc0(size_t bytes);
+
+/**
+ * @brief Trim the input string's white space
+ *
+ * @param s input string
+ * @return char* new malloced string, need to free'd by caller
+ **/
+char* fcitx_trim(char *s);
+
+/**
+ * @brief Malloc and memset all memory to zero
+ *
+ * @param bytes malloc size
+ * @return void* malloced pointer
+ **/
+void* fcitx_malloc0(size_t bytes);
 
 #ifdef __cplusplus
 }

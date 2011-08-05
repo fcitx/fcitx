@@ -22,8 +22,7 @@
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
  *
- * @brief  配置文件读写
- *
+ * @brief  misc util function
  *
  */
 
@@ -40,10 +39,6 @@
 #include "utf8.h"
 #include <ctype.h>
 
-/*
- * 计算文件中有多少行
- * 注意:文件中的空行也做为一行处理
- */
 FCITX_EXPORT_API
 int CalculateRecordNumber (FILE * fpDict)
 {
@@ -62,18 +57,6 @@ int CalculateRecordNumber (FILE * fpDict)
     return nNumber;
 }
 
-/**
- * @brief 自定义的二分查找，和bsearch库函数相比支持不精确位置的查询
- *
- * @param key
- * @param base
- * @param nmemb
- * @param size
- * @param accurate
- * @param compar
- *
- * @return
- */
 FCITX_EXPORT_API
 void *custom_bsearch(const void *key, const void *base,
                      size_t nmemb, size_t size, int accurate,
@@ -160,14 +143,6 @@ void FreeStringList(UT_array *list)
     utarray_free(list);
 }
 
-
-/** 
- * @brief 返回申请后的内存，并清零
- * 
- * @param 申请的内存长度
- * 
- * @return 申请的内存指针
- */
 FCITX_EXPORT_API
 void *fcitx_malloc0(size_t bytes)
 {
@@ -179,13 +154,6 @@ void *fcitx_malloc0(size_t bytes)
     return p;
 }
 
-/** 
- * @brief 去除字符串首末尾空白字符
- * 
- * @param s
- * 
- * @return malloc的字符串，需要free
- */
 FCITX_EXPORT_API
 char *fcitx_trim(char *s)
 {

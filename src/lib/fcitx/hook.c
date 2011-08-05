@@ -30,6 +30,11 @@
  * @file hook.c
  * @brief A list for a stack of processing
  **/
+
+
+/**
+ * @brief hook stack
+ **/
 typedef struct _HookStack {
     union {
         KeyFilterHook keyfilter;
@@ -37,10 +42,15 @@ typedef struct _HookStack {
         FcitxIMEventHook eventhook;
         HotkeyHook hotkey;
     };
+    /**
+     * @brief stack next
+     **/
     struct _HookStack* next;
 } HookStack;
 
-
+/**
+ * @brief internal macro to define a hook
+ */
 #define DEFINE_HOOK(name, type, field) \
 static HookStack* Get##name(FcitxInstance* instance); \
 HookStack* Get##name(FcitxInstance* instance) \

@@ -30,17 +30,42 @@ extern "C" {
 struct _FcitxInstance;
 struct _FcitxAddon;
 
+/**
+ * @brief A misc module in Fcitx, it can register hook, or add it's own event
+ *        to Fcitx main loop.
+ **/
 typedef struct _FcitxModule
 {
+    /**
+     * @brief construction function
+     */
     void* (*Create)(struct _FcitxInstance* instance);
+    /**
+     * @brief set main loop watch fd, no need to implement
+     */
     void (*SetFD)(void*);
+    /**
+     * @brief main loop event handle, no need to implement
+     */
     void (*ProcessEvent)(void*);
+    /**
+     * @brief destruct function
+     */
     void (*Destroy)(void*);
+    /**
+     * @brief reload config, no need to implement
+     */
     void (*ReloadConfig)(void*);
 } FcitxModule;
 
+/**
+ * @brief the argument to invoke module function
+ **/
 typedef struct _FcitxModuleFunctionArg
 {
+    /**
+     * @brief arguments
+     **/
     void* args[10];
 } FcitxModuleFunctionArg;
 

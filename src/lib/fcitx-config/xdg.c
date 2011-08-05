@@ -66,14 +66,6 @@ make_path (const char *path)
 }
 
 
-/** 
- * @brief 获得xdg路径的数据文件
- * 
- * @param 文件名
- * @param 模式
- * 
- * @return 文件指针
- */
 FCITX_EXPORT_API
 FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
@@ -119,16 +111,6 @@ FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const c
     return fp;
 }
 
-/** 
- * @brief 根据Path按顺序查找第一个符合要求的文件，在mode包含写入时，这个函数会尝试创建文件夹
- * 
- * @param 文件名
- * @param 路径数组
- * @param 模式
- * @param 路径数值长度
- * 
- * @return 文件指针
- */
 FCITX_EXPORT_API
 FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
@@ -187,11 +169,6 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
     return fp;
 }
 
-/** 
- * @brief 释放路径数组的内存
- * 
- * @param 路径数组
- */
 FCITX_EXPORT_API
 void FreeXDGPath(char **path)
 {
@@ -199,17 +176,6 @@ void FreeXDGPath(char **path)
     free(path);
 }
 
-/** 
- * @brief 获得字符串数组，返回对应的XDGPath
- * 
- * @param 用于返回字符串数组长度的指针
- * @param XDG_*_HOME环境变量名称
- * @param 默认XDG_*_HOME路径
- * @param XDG_*_DIRS环境变量名称
- * @param 默认XDG_*_DIRS路径
- * 
- * @return 字符串数组
- */
 FCITX_EXPORT_API
 char **GetXDGPath(
         size_t *len,

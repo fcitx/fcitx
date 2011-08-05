@@ -83,10 +83,10 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_GET_CANDWORDS_NEXT /* send the input to client, dont close input window */
 } INPUT_RETURN_VALUE;
 
-typedef struct _SINGLE_HZ {
-    char            strHZ[UTF8_MAX_LENGTH + 1];
-} SINGLE_HZ;
-
+/**
+ * @brief Fcitx Input Method class, it can register more than one input
+ *        method in create function
+ **/
 typedef struct _FcitxIMClass {
     void*              (*Create) (struct _FcitxInstance* instance);
     void               (*Destroy) (void *arg);
@@ -101,20 +101,65 @@ typedef boolean            (*FcitxIMPhraseTips) (void *arg);
 typedef void               (*FcitxIMSave) (void *arg);
 typedef void               (*FcitxIMReloadConfig) (void *arg);
 
+/**
+ * @brief Fcitx Input method instance
+ **/
 typedef struct _FcitxIM {
+    /**
+     * @brief The name that can be display on the UI
+     **/
     char               strName[MAX_IM_NAME + 1];
+    /**
+     * @brief icon name used to find icon
+     **/
     char               strIconName[MAX_IM_NAME + 1];
+    /**
+     * @brief reset im status
+     **/
     FcitxIMResetIM ResetIM;
+    /**
+     * @brief process key input
+     **/
     FcitxIMDoInput DoInput;
+    /**
+     * @brief update candidate works function
+     **/
     FcitxIMGetCandWords GetCandWords;
+    /**
+     * @brief get candidate word function
+     **/
     FcitxIMGetCandWord GetCandWord;
+    /**
+     * @brief phrase tips function
+     **/
     FcitxIMPhraseTips PhraseTips;
+    /**
+     * @brief save function
+     **/
     FcitxIMSave Save;
+    /**
+     * @brief init function
+     **/
     FcitxIMInit Init;
+    /**
+     * @brief reload config function
+     **/
     FcitxIMReloadConfig ReloadConfig;
-    void*              uiprivate;
+    /**
+     * @brief private data can be set by UI implementation
+     **/
+    void* uiprivate;
+    /**
+     * @brief the pointer to im class
+     **/
     void* klass;
+    /**
+     * @brief the priority order
+     **/
     int iPriority;
+    /**
+     * @brief private data for this input method
+     **/
     void* priv;
 } FcitxIM;
 
@@ -123,6 +168,9 @@ typedef enum _FcitxKeyEventType {
     FCITX_RELEASE_KEY
 } FcitxKeyEventType;
 
+/**
+ * @brief Global Input State, including displayed message.
+ **/
 typedef struct _FcitxInputState {
     long unsigned int lastKeyPressedTime;
     boolean bIsDoInputOnly;

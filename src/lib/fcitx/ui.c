@@ -33,14 +33,41 @@
 #include "hook-internal.h"
 #include "ime-internal.h"
 
+/**
+ * @file ui.c
+ * 
+ * @brief user interface related function.
+ */
+
+/**
+ * @brief a single string message
+ **/
 struct _MESSAGE{
+    /**
+     * @brief The string of the message
+     **/
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
+    /**
+     * @brief the type of the message
+     **/
     MSG_TYPE        type;
 } ;
 
+/**
+ * @brief Messages to display on the input bar, this cannot be accessed directly
+ **/
 struct _Messages {
+    /**
+     * @brief array of message strings
+     **/
     MESSAGE msg[MAX_MESSAGE_COUNT];
+    /**
+     * @brief number of message strings
+     **/
     uint msgCount;
+    /**
+     * @brief the messages is updated or not
+     **/
     boolean changed;
 };
 

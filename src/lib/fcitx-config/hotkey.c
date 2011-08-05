@@ -26,6 +26,20 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
 
+/**
+ * @brief String to key list.
+ **/
+typedef struct _KEY_LIST {
+    /**
+     * @brief string name for the key in fcitx
+     **/
+    char         *strKey;
+    /**
+     * @brief the keyval for the key.
+     **/
+    FcitxKeySym  code;
+} KEY_LIST;
+
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {
     {"TAB", Key_Tab},
@@ -47,6 +61,7 @@ KEY_LIST        keyList[] = {
     {"\0", 0}
 };
 
+static int GetKeyList (char *strKey);
 static char *GetKeyListString(int key);
 
 FCITX_EXPORT_API

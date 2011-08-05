@@ -37,6 +37,9 @@ extern "C" {
 struct _HookStack;
 struct _FcitxInputContext;
 
+/**
+ * @brief Fcitx Instance, including all global settings
+ **/
 typedef struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     int bShowCursor;

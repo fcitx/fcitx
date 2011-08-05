@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-31 15:59+0800\n"
+"POT-Creation-Date: 2011-08-04 15:17+0800\n"
 "PO-Revision-Date: 2011-07-31 16:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -125,7 +125,7 @@ msgstr "背景图片"
 msgid "Bingchan"
 msgstr "冰蟾全息"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:394
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:404
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
@@ -163,17 +163,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2588
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2601
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2659
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2672
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2526
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2539
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -586,7 +586,8 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr ""
+"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:145
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -685,7 +686,7 @@ msgstr "加载附加组件配置文件: %s"
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.h:241
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.h:276
 #, c-format
 msgid "Load Config Description File %s Erorr, Please Check your install."
 msgstr "加载配置描述文件 %s 错误，请检查您的安装。"
@@ -708,6 +709,11 @@ msgstr "加载码表文件成功"
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:283
 #, c-format
 msgid "Load Table Dict from %s"
+msgstr "加载码表%s"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:416
+#, fuzzy, c-format
+msgid "Load extra dict: %s"
 msgstr "加载码表%s"
 
 #. 读取上次保存的自动词组信息
@@ -747,6 +753,10 @@ msgstr "菜单字体"
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:3208
+msgid "Migrate the old file path to the new one"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:334
 msgid "Missing type, take it as string"
@@ -843,7 +853,7 @@ msgid "Output"
 msgstr "输出"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:1
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:95
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:98
 msgid "Pinyin"
 msgstr "拼音"
 
@@ -863,12 +873,12 @@ msgstr "请检查你的环境变量的设置"
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:792
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:805
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:794
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:807
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
@@ -878,11 +888,11 @@ msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 msgid "Press enter to input text"
 msgstr "按下回车输入文本"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:764
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:777
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:775
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:788
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
@@ -962,7 +972,7 @@ msgstr "右Ctrl"
 msgid "R_SHIFT"
 msgstr "右Shift"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2971
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2984
 msgid "Remind: "
 msgstr "联想："
 
@@ -1054,7 +1064,7 @@ msgstr "序号后加点"
 msgid "Show Version"
 msgstr "显示版本"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:110
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:113
 msgid "Shuangpin"
 msgstr "双拼"
 
@@ -1186,11 +1196,11 @@ msgstr "类型"
 msgid "UI"
 msgstr "界面"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:121
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:148
 msgid "UI: bad ui"
 msgstr "界面: 有问题的界面"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:115
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:142
 #, c-format
 msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"

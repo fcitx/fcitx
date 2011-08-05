@@ -20,6 +20,19 @@
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
+/**
+ * @mainpage Fcitx
+ * fcitx is a lightweight Input Method Framework, written by C.
+ * It can be used under X11 to support international input.
+ * 
+ */
+
+/**
+ * @file fcitx.h
+ * @author CS Slayer <wengxt@gmail.com>
+ * @brief some misc definition for Fcitx
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

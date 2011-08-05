@@ -19,13 +19,6 @@
  ***************************************************************************/
 
 /**
- * @mainpage Fcitx
- * fcitx is a lightweight Input Method Framework, written by C.
- * It can be used under X11 to support international input.
- * 
- */
-
-/**
  * @file fcitx.c
  * @brief Main Function for fcitx
  */

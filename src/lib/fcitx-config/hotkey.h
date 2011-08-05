@@ -19,11 +19,10 @@
  ***************************************************************************/
 /**
  * @file   hotkey.h
- * @author Yuking yuking_net@sohu.com
+ * @author Yuking yuking_net@sohu.com CS Slayer wengxt@gmail.com
  * @date   2008-1-16
  * 
- * @brief  键盘扫描码列表
- * 
+ * @brief  hotkey related config and functions
  * 
  */
 
@@ -2406,18 +2405,28 @@ Key_Sinh_luu2          = 0x1000df3,  /* U+0DF3 SINHALA DIGA GAYANUKITTA */
 Key_Sinh_kunddaliya    = 0x1000df4,  /* U+0DF4 SINHALA KUNDDALIYA */
 } FcitxKeySym;
 
+/**
+ * @brief A fcitx hotkey, define the keysym (keyval) and (state) modifiers key state.
+ **/
 typedef struct _HOTKEYS
 {
+    /**
+     * @brief A hotkey string
+     **/
     char *desc;
+    /**
+     * @brief keyval of hotkey
+     **/
     FcitxKeySym sym;
+    /**
+     * @brief state of hotkey
+     **/
     int state;
 } HOTKEYS;
 
-typedef struct _KEY_LIST {
-    char           *strKey;
-    int             code;
-} KEY_LIST;
-
+/**
+ * @brief fcitx key state (modifier keys)
+ **/
 typedef enum _KEY_STATE {
     KEY_NONE = 0,
     KEY_SHIFT_COMP = 1 << 0,
@@ -2435,15 +2444,78 @@ typedef enum _KEY_STATE {
     KEY_USED_MASK = 0x5c001fff
 } KEY_STATE;
 
+/**
+ * @brief Set the hotkey with a string
+ *
+ * @param strKey key string
+ * @param hotkey hotkey array, it should have length 2
+ * @return void
+ **/
 void SetHotKey (char *strKey, HOTKEYS * hotkey);
+
+/**
+ * @brief translate the fcitx key to it's own value,
+ * like uniform the keypad and the numbers, remove Shift from A-Z
+ *
+ * @param keysym keyval
+ * @param iKeyState state
+ * @param outk return of keyval
+ * @param outs return of state
+ * @return void
+ **/
 void GetKey (FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs);
+
+/**
+ * @brief parse the fcitx key string, like CTRL_SHIFT_A
+ *
+ * @param strKey key string
+ * @param sym return of keyval
+ * @param state return of key state
+ * @return boolean can be parsed or not
+ **/
 boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state);
-int GetKeyList (char *strKey);
+
+/**
+ * @brief Get the Fcitx Key String for given keyval and state
+ *
+ * @param sym keyval
+ * @param state state
+ * @return char* string like CTRL_SPACE
+ **/
 char* GetKeyString(FcitxKeySym sym, unsigned int state);
 
+/**
+ * @brief is hotkey 0-9
+ *
+ * @param sym keyval
+ * @param state state
+ * @return boolean
+ **/
 boolean IsHotKeyDigit(FcitxKeySym sym, int state);
+
+/**
+ * @brief is hotkey A-Z
+ *
+ * @param sym keyval
+ * @param state state
+ * @return boolean
+ **/
 boolean IsHotKeyUAZ(FcitxKeySym sym, int state);
+/**
+ * @brief is hotkey a-z
+ *
+ * @param sym keyval
+ * @param state keystate
+ * @return boolean
+ **/
 boolean IsHotKeyLAZ(FcitxKeySym sym, int state);
+/**
+ * @brief is hotkey printable
+ *
+ * @param sym keyval
+ * @param state state
+ * @return boolean
+ **/
 boolean IsHotKeySimple(FcitxKeySym sym, int state);
 
 #ifdef __cplusplus

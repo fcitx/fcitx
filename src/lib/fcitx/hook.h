@@ -33,11 +33,23 @@
 extern "C" {
 #endif
 
+/**
+ * @brief key filter function
+ **/
 typedef boolean (*FcitxKeyFilter)(void* arg, FcitxKeySym sym, 
                              unsigned int state,
                              INPUT_RETURN_VALUE *retval
                             );
+
+/**
+ * @brief string filter function
+ **/
+
 typedef char* (*FcitxStringFilter)(void* arg, const char* in);
+
+/**
+ * @brief ime event hook function
+ **/
 typedef void (*FcitxIMEventHookFunc)(void* arg);
 
 /**
@@ -60,33 +72,124 @@ typedef struct _HotkeyHook {
     void* arg;
 } HotkeyHook;
 
+/**
+ * @brief Key filter hook
+ **/
 typedef struct _KeyFilterHook 
 {
+    /**
+     * @brief Key filter function
+     **/
     FcitxKeyFilter func;
+    /**
+     * @brief extra argument for filter function
+     **/
     void *arg;
 } KeyFilterHook;
 
+/**
+ * @brief Hook for string filter, this hook can change the output string.
+ **/
 typedef struct _StringFilterHook 
 {
+    /**
+     * @brief Filter function
+     **/
     FcitxStringFilter func;
+    /**
+     * @brief Extra argument for the filter function.
+     **/
     void *arg;
 } StringFilterHook;
 
+/**
+ * @brief IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
+ **/
 typedef struct _FcitxIMEventHook 
 {
     FcitxIMEventHookFunc func;
     void *arg;
 } FcitxIMEventHook;
 
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param  ...
+ * @return void
+ **/
 void RegisterPreInputFilter(struct _FcitxInstance* instance, KeyFilterHook) ;
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param  ...
+ * @return void
+ **/
 void RegisterPostInputFilter(struct _FcitxInstance* instance, KeyFilterHook);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param  ...
+ * @return void
+ **/
 void RegisterOutputFilter(struct _FcitxInstance* instance, StringFilterHook);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param  ...
+ * @return void
+ **/
 void RegisterHotkeyFilter(struct _FcitxInstance* instance, HotkeyHook);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param value ...
+ * @return void
+ **/
 void RegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param value ...
+ * @return void
+ **/
 void RegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param value ...
+ * @return void
+ **/
 void RegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param value ...
+ * @return void
+ **/
 void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param value ...
+ * @return void
+ **/
 void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param in ...
+ * @return char*
+ **/
 char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
 #ifdef __cplusplus

@@ -140,17 +140,19 @@ reload:
             perror("fopen");
             ret = 1;    // 如果安装目录里面也没有配置文件，那就只好告诉用户，无法运行了
         }
-        perror("fopen");
-        FcitxLog(WARNING, _("Can not load skin %s, return to default"), *skinType);
-        if (*skinType)
-            free(*skinType);
-        *skinType = strdup("default");
-        isreload = true;
-        goto reload;
+        else {
+            perror("fopen");
+            FcitxLog(WARNING, _("Can not load skin %s, return to default"), *skinType);
+            if (*skinType)
+                free(*skinType);
+            *skinType = strdup("default");
+            isreload = true;
+            goto reload;
+        }
     }
 
-
-    fclose(fp);
+    if (fp)
+        fclose(fp);
     sc->skinType = skinType;
 
     return ret;

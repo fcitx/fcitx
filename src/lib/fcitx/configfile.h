@@ -52,49 +52,160 @@ typedef enum _SEMICOLON_TO_DO {
     K_SEMICOLON_QUICKPHRASE = 2
 } SEMICOLON_TO_DO;
 
+/**
+ * @brief struct opposite to ~/.config/fcitx/config 
+ **/
 typedef struct _FcitxConfig
 {
+    /**
+     * @brief derives GenericConfig
+     **/
     GenericConfig gconfig;
     /* program config */
+    /**
+     * @brief delay start seconds
+     **/
     int iDelayStart;
+    /**
+     * @brief is the first run
+     **/
     boolean bFirstRun;
 
     /* output config */
+    /**
+     * @brief input eng punc after input number
+     **/
     boolean bEngPuncAfterNumber;
+    /**
+     * @brief enter key action
+     **/
     ENTER_TO_DO enterToDo;
+    /**
+     * @brief Remind mode can has multipage
+     **/
     boolean bDisablePagingInRemind;
+    /**
+     * @brief switch to english with switch key commit string or not
+     **/
     boolean bSendTextWhenSwitchEng;
+    /**
+     * @brief max candidate word number
+     **/
     int iMaxCandWord;
+    /**
+     * @brief phrase tips
+     **/
     boolean bPhraseTips;
 
     /* appearance config */
+    /**
+     * @brief show input window after trigger on
+     **/
     boolean bShowInputWindowTriggering;
+    /**
+     * @brief index number follow with a '.'
+     **/
     boolean bPointAfterNumber;
+    /**
+     * @brief show user input speed
+     **/
     boolean bShowUserSpeed;
+    /**
+     * @brief show fcitx version
+     **/
     boolean bShowVersion;
 
     /* hotkey config */
+    /**
+     * @brief trigger key
+     **/
     HOTKEYS hkTrigger[2];
+    /**
+     * @brief switch key
+     **/
     SWITCHKEY iSwitchKey;
+    /**
+     * @brief hotkey format of switch key
+     **/
     HOTKEYS switchKey[2];
+    /**
+     * @brief enable double press switch action
+     **/
     boolean bDoubleSwitchKey;
+    /**
+     * @brief key hit interval
+     **/
     int iTimeInterval;
+    /**
+     * @brief hotkey for switch VK
+     **/
     HOTKEYS hkVK[2];
+    /**
+     * @brief hotkey for switch remind mode
+     **/
     HOTKEYS hkRemind[2];
+    /**
+     * @brief hotkey for switch full width char
+     **/
     HOTKEYS hkFullWidthChar[2];
+    /**
+     * @brief hotkey for switch punc
+     **/
     HOTKEYS hkPunc[2];
+    /**
+     * @brief prev page
+     **/
     HOTKEYS hkPrevPage[2];
+    /**
+     * @brief next page
+     **/
     HOTKEYS hkNextPage[2];
+    /**
+     * @brief 2nd 3rd candidate select key
+     **/
     HOTKEYS str2nd3rdCand[2];
+    /**
+     * @brief save all key
+     **/
     HOTKEYS hkSaveAll[2];
     
+    /**
+     * @brief hotkey format for 2nd select key
+     **/
     HOTKEYS i2ndSelectKey[2];
+    /**
+     * @brief hotkey format for 3rd select key
+     **/
     HOTKEYS i3rdSelectKey[2];
 } FcitxConfig;
 
+/**
+ * @brief load config
+ *
+ * @param fc config instance
+ * @return boolean load success or not
+ **/
 boolean LoadConfig(FcitxConfig* fc);
+/**
+ * @brief save config
+ *
+ * @param fc config instance 
+ * @return void
+ **/
 void SaveConfig(FcitxConfig* fc);
+/**
+ * @brief get max candidate word number
+ *
+ * @param fc config instance 
+ * @return int number
+ **/
 int ConfigGetMaxCandWord(FcitxConfig* fc);
+/**
+ * @brief get bPointAfterNumber
+ *
+ * @param fc config instance 
+ * @return boolean bPointAfterNumber
+ **/
 boolean ConfigGetPointAfterNumber(FcitxConfig* fc);
 
 #ifdef __cplusplus

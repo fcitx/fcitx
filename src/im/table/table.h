@@ -129,6 +129,10 @@ typedef enum _CANDTYPE {
     CT_PYPHRASE			//临时拼音转换过来的候选字/词
 } CANDTYPE;
 
+typedef struct _SINGLE_HZ {
+    char            strHZ[UTF8_MAX_LENGTH + 1];
+} SINGLE_HZ;
+
 typedef struct _FcitxTableState {
     UT_array* table; /* 码表 */
     

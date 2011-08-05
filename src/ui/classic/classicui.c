@@ -112,15 +112,18 @@ void* ClassicUICreate(FcitxInstance* instance)
         free(classicui);
         return NULL;
     }
-    
-    XLockDisplay(classicui->dpy);
+
+    if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
+    {
+        free(classicui);
+        return NULL;
+    }
     
     classicui->iScreen = DefaultScreen(classicui->dpy);
     
     classicui->protocolAtom = XInternAtom (classicui->dpy, "WM_PROTOCOLS", False);
     classicui->killAtom = XInternAtom (classicui->dpy, "WM_DELETE_WINDOW", False);
 
-    LoadSkinConfig(&classicui->skin, &classicui->skinType);
     
     InitSkinMenu(classicui);
     RegisterMenu(instance, &classicui->skinMenu);
@@ -159,8 +162,6 @@ void* ClassicUICreate(FcitxInstance* instance)
     resethk.arg = classicui;
     resethk.func = ClassicUIInputReset;
     RegisterResetInputHook(instance, resethk);
-    
-    XUnlockDisplay(classicui->dpy);
     
     DisplaySkin(classicui, classicui->skinType);
 
