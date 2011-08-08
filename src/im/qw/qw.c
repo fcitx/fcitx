@@ -83,7 +83,6 @@ boolean QWInit(void *arg)
 INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInstance* instance = qwstate->owner;
     FcitxInputState* input = &qwstate->owner->input;
     INPUT_RETURN_VALUE retVal;
 
@@ -96,10 +95,8 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
                 strcpy(GetOutputString(input), QWGetCandWord(arg, sym-'0'-1));
                 retVal= IRV_GET_CANDWORDS;
             }
-            else if (input->iCodeInputCount==3)
-                retVal=QWGetCandWords(arg, SM_FIRST);
             else
-                retVal=IRV_DISPLAY_CANDWORDS;
+                retVal = IRV_DISPLAY_FIRST_PAGE;
         }
     }
     else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
@@ -112,8 +109,7 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
             retVal = IRV_CLEAN;
         else {
             input->iCandPageCount = 0;
-            SetMessageCount(instance->messageDown, 0);
-            retVal = IRV_DISPLAY_CANDWORDS;
+            retVal = IRV_DISPLAY_FIRST_PAGE;
         }
     }
     else if (IsHotKey(sym, state, FCITX_SPACE)) {
@@ -127,12 +123,10 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
     else
         return IRV_TO_PROCESS;
-
-    SetMessageCount(instance->messageUp, 0);
-    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strCodeInput);
-    if ( input->iCodeInputCount!=3 )
-        SetMessageCount(instance->messageDown, 0);
     
+    if ( input->iCodeInputCount!=3 )
+        input->iCandWordCount = 0;
+
     input->iCursorPos = input->iCodeInputCount;
 
     return retVal;
@@ -141,12 +135,10 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
 char *QWGetCandWord (void *arg, int iIndex)
 {
     FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInstance* instance = qwstate->owner;
     FcitxInputState* input = &qwstate->owner->input;
     if ( !input->iCandPageCount )
         return NULL;
 
-    SetMessageCount(instance->messageDown, 0);
     if ( iIndex==-1 )
         iIndex=9;
     return GetQuWei(qwstate, (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0',input->iCurrentCandPage * 10+iIndex+1);
@@ -159,50 +151,44 @@ INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode)
     FcitxInputState* input = &qwstate->owner->input;
     int             iQu, iWei;
     int             i;
-    char            strTemp[3];
+    
+    if ( input->iCodeInputCount == 3 )
+    {
 
-    if ( ConfigGetPointAfterNumber(&qwstate->owner->config) ) {
-        strTemp[1] = '.';
-        strTemp[2] = '\0';
-    }
-    else
-        strTemp[1]='\0';
+        iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
 
-    iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
-
-    if (mode==SM_FIRST ) {
-        input->iCandPageCount = 9;
-        input->iCurrentCandPage = input->strCodeInput[2]-'0';
-    }
-    else {
-        if ( !input->iCandPageCount )
-            return IRV_TO_PROCESS;
-        if (mode==SM_NEXT) {
-            if ( input->iCurrentCandPage!=input->iCandPageCount )
-                input->iCurrentCandPage++;
+        if (mode==SM_FIRST ) {
+            input->iCandPageCount = 9;
+            input->iCurrentCandPage = input->strCodeInput[2]-'0';
         }
         else {
-            if ( input->iCurrentCandPage )
-                input->iCurrentCandPage--;
+            if ( !input->iCandPageCount )
+                return IRV_TO_PROCESS;
+            if (mode==SM_NEXT) {
+                if ( input->iCurrentCandPage!=input->iCandPageCount )
+                    input->iCurrentCandPage++;
+            }
+            else {
+                if ( input->iCurrentCandPage )
+                    input->iCurrentCandPage--;
+            }
         }
+
+        iWei = input->iCurrentCandPage * 10;
+
+        input->iCandWordCount = 10;
+        for (i = 0; i < 10; i++) {
+            char select;
+            select = i + 1 + '0';
+            if (i == 9)
+                select = '0';
+            SetCandidateWord(instance, i, select, GetQuWei (qwstate, iQu, iWei + i + 1), "");
+        }
+
+        input->strCodeInput[2]=input->iCurrentCandPage+'0';
     }
-
-    iWei = input->iCurrentCandPage * 10;
-
-    SetMessageCount(instance->messageDown, 0);
-    for (i = 0; i < 10; i++) {
-        strTemp[0] = i + 1 + '0';
-        if (i == 9)
-            strTemp[0] = '0';
-        AddMessageAtLast(instance->messageDown, MSG_INDEX, "%s", strTemp);
-        AddMessageAtLast(instance->messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (qwstate, iQu, iWei + i + 1));
-        if (i != 9)
-            MessageConcatLast(instance->messageDown, " ");
-    }
-
-    input->strCodeInput[2]=input->iCurrentCandPage+'0';
-    SetMessageCount(instance->messageUp, 0);
-    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strCodeInput);
+    SetMessageCount(input->msgPreedit, 0);
+    AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
 
     return IRV_DISPLAY_CANDWORDS;
 }

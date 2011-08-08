@@ -82,8 +82,9 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
-    instance->messageDown = InitMessages();
-    instance->messageUp = InitMessages();
+    instance->input.msgAuxUp = InitMessages();
+    instance->input.msgAuxDown = InitMessages();
+    instance->input.msgPreedit = InitMessages();
     instance->sem = sem;
     
     if (!LoadConfig(&instance->config))
@@ -228,18 +229,6 @@ void EndInstance(FcitxInstance* instance)
     }
     
     sem_post(instance->sem);
-}
-
-FCITX_EXPORT_API
-Messages* GetMessageUp(FcitxInstance *instance)
-{
-    return instance->messageUp;
-}
-
-FCITX_EXPORT_API
-Messages* GetMessageDown(FcitxInstance *instance)
-{
-    return instance->messageDown;
 }
 
 void FcitxInitThread(FcitxInstance* inst)

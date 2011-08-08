@@ -206,10 +206,9 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
 {
     FcitxInputState *input = &qpstate->owner->input;
     input->iCursorPos = strlen(input->strCodeInput);
-    SetMessageCount(GetMessageUp(qpstate->owner), 0);
-    AddMessageAtLast(GetMessageUp(qpstate->owner), MSG_TIPS, _("Quick Phrase: "));
-    AddMessageAtLast(GetMessageUp(qpstate->owner), MSG_INPUT, input->strCodeInput);
-    input->iCursorPos += strlen(_("Quick Phrase: "));
+    CleanInputWindowUp(qpstate->owner);
+    AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Quick Phrase: "));
+    AddMessageAtLast(input->msgPreedit, MSG_INPUT, input->strCodeInput);
 }
 
 boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
@@ -247,8 +246,8 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                     *retval = QuickPhraseGetCandWords(qpstate, SM_FIRST);
                     if (*retval == IRV_DISPLAY_MESSAGE)
                     {
-                        SetMessageCount(GetMessageDown(qpstate->owner), 0);
-                        AddMessageAtLast(GetMessageDown(qpstate->owner), MSG_OTHER, _("Press enter to input text"));
+                        SetMessageCount(input->msgAuxDown, 0);
+                        AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Press enter to input text"));
                     }
                 }
             }
@@ -306,15 +305,19 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
+    
+    if (*retval != IRV_TO_PROCESS)
+        return false;
+    
     if (!qpstate->enabled
             && input->iCodeInputCount == 0
             && IsHotKey(sym, state, FCITX_SEMICOLON))
     {
-        SetMessageCount(GetMessageUp(qpstate->owner), 0);
-        AddMessageAtLast(GetMessageUp(qpstate->owner), MSG_TIPS, _("Quick Phrase: "));
-        input->iCursorPos += strlen(_("Quick Phrase: "));
-        SetMessageCount(GetMessageDown(qpstate->owner), 0);
-        AddMessageAtLast(GetMessageDown(qpstate->owner), MSG_TIPS, _("Spcae for ； Enter for;"));
+        CleanInputWindow(qpstate->owner);
+        qpstate->owner->bShowCursor = true;
+        AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Quick Phrase: "));
+        input->iCursorPos = 0;
+        AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _("Spcae for ； Enter for;"));
 
         qpstate->enabled = true;
         *retval = IRV_DISPLAY_MESSAGE;
@@ -333,7 +336,6 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
-    FcitxInstance *instance = qpstate->owner;
     int retVal;
     int iKey;
 
@@ -352,7 +354,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
         else {
             strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[iKey-1]->strPhrase);
             retVal = IRV_GET_CANDWORDS;
-            SetMessageCount(GetMessageDown(instance), 0);
+            SetMessageCount(input->msgAuxDown, 0);
         }
     }
     else if (iKey==' ') {
@@ -361,7 +363,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
         else {
             strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[0]->strPhrase);
             retVal = IRV_GET_CANDWORDS;
-            SetMessageCount(GetMessageDown(instance), 0);
+            SetMessageCount(input->msgAuxDown, 0);
         }
     }
     else
@@ -374,7 +376,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
 {
     int i, iInputLen;
     QUICK_PHRASE searchKey, *pKey, *currentQuickPhrase, *lastQuickPhrase;
-    char strTemp[2];
     FcitxInputState *input = &qpstate->owner->input;
     FcitxInstance *instance = qpstate->owner;
 
@@ -401,7 +402,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
             qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
         input->iCandPageCount = (qpstate->iLastQuickPhrase - qpstate->iFirstQuickPhrase + ConfigGetMaxCandWord(&instance->config) - 1) / ConfigGetMaxCandWord(&instance->config) - 1;
         if ( !currentQuickPhrase || strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen) ) {
-            SetMessageCount(GetMessageDown(instance), 0);
+            SetMessageCount(input->msgAuxDown, 0);
             currentQuickPhrase = NULL;
             return IRV_DISPLAY_MESSAGE;
         }
@@ -436,20 +437,15 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
     if (!input->iCandWordCount)
         return IRV_DISPLAY_MESSAGE;
 
-    SetMessageCount(GetMessageDown(instance), 0);
-    strTemp[1]='\0';
+    SetMessageCount(input->msgAuxDown, 0);
 
     for (i = 0; i < input->iCandWordCount; i++) {
-        strTemp[0] = i + 1 + '0';
+        char select;
+        select = i + 1 + '0';
         if (i == 9)
-            strTemp[0] = '0';
-        AddMessageAtLast(GetMessageDown(instance), MSG_INDEX, "%s", strTemp);
-        AddMessageAtLast(GetMessageDown(instance), ((i == 0) ? MSG_FIRSTCAND : MSG_OTHER), "%s", qpstate->quickPhraseCandWords[i]->strPhrase);
-
-        //编码提示
-        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%s", qpstate->quickPhraseCandWords[i]->strCode + iInputLen);
-        if (i != (input->iCandWordCount - 1))
-            MessageConcatLast(GetMessageDown(instance), " ");
+            select = '0';
+        
+        SetCandidateWord(instance, i , select, qpstate->quickPhraseCandWords[i]->strPhrase, qpstate->quickPhraseCandWords[i]->strCode + iInputLen);
     }
 
     return IRV_DISPLAY_CANDWORDS;

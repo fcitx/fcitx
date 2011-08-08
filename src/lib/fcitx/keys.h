@@ -36,7 +36,6 @@ boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
 extern HOTKEYS FCITX_DELETE[2];
 extern HOTKEYS FCITX_CTRL_DELETE[2];
 extern HOTKEYS FCITX_BACKSPACE[2];
-extern HOTKEYS FCITX_CTRL_H[2];
 extern HOTKEYS FCITX_HOME[2];
 extern HOTKEYS FCITX_END[2];
 extern HOTKEYS FCITX_RIGHT[2];

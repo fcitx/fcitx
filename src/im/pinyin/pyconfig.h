@@ -26,6 +26,12 @@
 
 struct MHPY;
 
+typedef enum _ADJUSTORDER {
+    AD_NO = 0,
+    AD_FAST = 1,
+    AD_FREQ = 2
+} ADJUSTORDER;
+
 typedef struct _FcitxPinyinConfig
 {
     GenericConfig gconfig;

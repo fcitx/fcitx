@@ -105,6 +105,9 @@ typedef struct _FcitxKimpanelUI
     DBusConnection* conn;
     int iOffsetY;
     int iOffsetX;
+    Messages* messageUp;
+    Messages* messageDown;
+    int iCursorPos;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -161,6 +164,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     FcitxKimpanelUI *kimpanel = fcitx_malloc0(sizeof(FcitxKimpanelUI));
     FcitxModuleFunctionArg arg;
 
+    kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
     kimpanel->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
     
@@ -194,6 +198,9 @@ void* KimpanelCreate(FcitxInstance* instance)
     DBusObjectPathVTable vtable = {NULL, &KimpanelDBusEventHandler, NULL, NULL, NULL, NULL };
     
     dbus_connection_register_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH, &vtable, kimpanel);
+    
+    kimpanel->messageUp = InitMessages();
+    kimpanel->messageDown = InitMessages();
     
     FcitxIMEventHook resethk;
     resethk.arg = kimpanel;
@@ -357,8 +364,9 @@ void KimpanelShowInputWindow(void* arg)
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = &instance->input;
-    Messages* messageDown = GetMessageDown(instance);
-    Messages* messageUp = GetMessageUp(instance);
+    kimpanel->iCursorPos = NewMessageToOldStyleMessage(instance, kimpanel->messageUp, kimpanel->messageDown);
+    Messages* messageDown = kimpanel->messageDown;
+    Messages* messageUp = kimpanel->messageUp;
     FcitxLog(DEBUG, "KimpanelShowInputWindow");
 
     int n = GetMessageCount(messageDown);
@@ -1187,13 +1195,12 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
     int             iChar;
     int             iCount = 0;
     FcitxInstance* instance = kimpanel->owner;
-    FcitxInputState* input = &instance->input;
-    Messages* messageUp = GetMessageUp(instance);
+    Messages* messageUp = kimpanel->messageUp;
 
     const char      *p1;
     const char      *pivot;
 
-    iChar = input->iCursorPos;
+    iChar = kimpanel->iCursorPos;
     
 
     for (i = 0; i < GetMessageCount(messageUp) ; i++) {

@@ -137,6 +137,10 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     FcitxInputState* input = &puncState->owner->input;
     FcitxIM* currentIM = GetCurrentIM(puncState->owner);
     size_t iLen;
+    
+    if (*retVal != IRV_TO_PROCESS)
+        return false;
+    
     if (instance->profile.bUseWidePunc) {
         char *pPunc = NULL;
 
@@ -164,12 +168,11 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
             if (pstr)
                 strcpy(GetOutputString(input), pstr);
             strcat(GetOutputString(input), pPunc);
-            SetMessageCount(puncState->owner->messageDown, 0);
-            SetMessageCount(puncState->owner->messageUp, 0);
+            CleanInputWindow(instance);
             
             *retVal = IRV_PUNC;
             return true;
-        } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
+        } else if (IsHotKey(sym, state, FCITX_BACKSPACE)
                     && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
@@ -195,8 +198,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                     if (pstr)
                         strcpy(GetOutputString(input), pstr);
                     iLen = strlen(GetOutputString(input));
-                    SetMessageCount(puncState->owner->messageDown, 0);
-                    SetMessageCount(puncState->owner->messageUp, 0);
+                    CleanInputWindow(instance);
                     GetOutputString(input)[iLen] = sym;
                     GetOutputString(input)[iLen + 1] = '\0';
                     *retVal = IRV_ENG;

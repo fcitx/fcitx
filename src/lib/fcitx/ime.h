@@ -32,6 +32,7 @@
 #include <time.h>
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/hotkey.h>
+#include "ui.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,7 +56,8 @@ struct _FcitxAddon;
 typedef enum _SEARCH_MODE {
     SM_FIRST,
     SM_NEXT,
-    SM_PREV
+    SM_PREV,
+    SM_NONE
 } SEARCH_MODE;
 
 typedef enum _KEY_RELEASED {
@@ -73,6 +75,7 @@ typedef enum _INPUT_RETURN_VALUE {
     IRV_DONOT_PROCESS_CLEAN, /* key will be forward and process as IRV_CLEAN */
     IRV_CLEAN, /* reset input */
     IRV_TO_PROCESS, /* key will passed to next flow*/
+    IRV_DISPLAY_FIRST_PAGE, 
     IRV_DISPLAY_MESSAGE, /* it's a message, so next and prev will not be shown */
     IRV_DISPLAY_CANDWORDS, /* the only different with message it it will show next and prev button */
     IRV_DISPLAY_LAST, /* display the last input word */
@@ -169,6 +172,16 @@ typedef enum _FcitxKeyEventType {
 } FcitxKeyEventType;
 
 /**
+ * @brief Candidate Word
+ */
+typedef struct _FcitxCandidateWord {
+    HOTKEYS selectKey[2];
+    char strWord[MAX_USER_INPUT + 1];
+    char strExtra[MAX_USER_INPUT + 1];
+    void* source;
+} FcitxCandidateWord;
+
+/**
  * @brief Global Input State, including displayed message.
  **/
 typedef struct _FcitxInputState {
@@ -185,15 +198,18 @@ typedef struct _FcitxInputState {
     time_t timeStart;
     int iCursorPos;
     int iCurrentCandPage;
-    int iRemindCandWordCount;
-    int iRemindCandPageCount;
-    int iCurrentRemindCandPage;
     int bShowNext;
     int bShowPrev;
     int iHZInputed;
     int lastIsSingleHZ;
     boolean bLastIsNumber;
     boolean bStartRecordType;
+    
+    /* the ui message part, if there is something in it, then it will be shown */
+    FcitxCandidateWord candWords[MAX_CAND_WORD];
+    Messages* msgPreedit;
+    Messages* msgAuxUp;
+    Messages* msgAuxDown;
 } FcitxInputState;
 
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
@@ -201,6 +217,10 @@ char* GetOutputString(FcitxInputState* input);
 struct _FcitxIM* GetCurrentIM(struct _FcitxInstance *instance);
 void EnableIM(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, boolean keepState);
 void ResetInput (struct _FcitxInstance* instance);
+void CleanInputWindow(struct _FcitxInstance *instance);
+void CleanInputWindowUp(struct _FcitxInstance *instance);
+void CleanInputWindowDown(struct _FcitxInstance *instance);
+void UpdateInputWindow(struct _FcitxInstance* instance);
 /**
  * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
  *
@@ -233,6 +253,7 @@ void ForwardKey(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, 
 void SaveAllIM (struct _FcitxInstance* instance);
 void ReloadConfig(struct _FcitxInstance* instance);
 void SwitchIM (struct _FcitxInstance* instance, int index);
+void SetCandidateWord(struct _FcitxInstance* instance, int index, char selectKey, const char* word, const char* extra);
 
 #ifdef __cplusplus
 }

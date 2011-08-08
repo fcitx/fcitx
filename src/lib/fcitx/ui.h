@@ -49,7 +49,7 @@ typedef enum _MSG_TYPE {
     MSG_OTHER = 6,			//其它文本
 } MSG_TYPE;
 
-#define MAX_MESSAGE_COUNT 33
+#define MAX_MESSAGE_COUNT 64
 typedef struct _MESSAGE MESSAGE;
 typedef struct _Messages Messages;
 
@@ -284,6 +284,7 @@ void UpdateMenuShell(FcitxUIMenu* menu);
 boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
 boolean UISupportMainWindow(struct _FcitxInstance* instance);
 void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
+int NewMessageToOldStyleMessage(struct _FcitxInstance* instance, Messages* msgUp, Messages* msgDown);
 
 static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

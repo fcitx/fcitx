@@ -62,6 +62,8 @@ typedef struct _InputWindow {
     cairo_t *c_font[8];
     Display* dpy;
     int iScreen;
+    Messages* msgUp;
+    Messages* msgDown;
     struct _FcitxSkin* skin;
     struct _FcitxClassicUI *owner;
 } InputWindow;

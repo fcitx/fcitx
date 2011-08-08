@@ -99,7 +99,6 @@ void ProcessPostInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned i
 {
     HookStack* stack = GetPostInputFilter(instance);
     stack = stack->next;
-    *retval = IRV_TO_PROCESS;
     while(stack)
     {
         if (stack->keyfilter.func(stack->keyfilter.arg, sym, state, retval))

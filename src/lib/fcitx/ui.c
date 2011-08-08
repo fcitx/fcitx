@@ -437,3 +437,42 @@ void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
 
+FCITX_EXPORT_API
+int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messages* msgDown)
+{
+    int i = 0;
+    FcitxInputState* input = &instance->input;
+    int extraLength = input->iCursorPos;
+    SetMessageCount(msgUp, 0);
+    SetMessageCount(msgDown, 0);
+    for (i = 0; i < GetMessageCount(input->msgAuxUp) ; i ++)
+    {
+        AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), GetMessageString(input->msgAuxUp, i));
+        extraLength += strlen(GetMessageString(input->msgAuxUp, i));
+    }
+    
+    for (i = 0; i < GetMessageCount(input->msgPreedit) ; i ++)
+        AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), GetMessageString(input->msgPreedit, i));
+
+    for (i = 0; i < GetMessageCount(input->msgAuxDown) ; i ++)
+        AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), GetMessageString(input->msgAuxDown, i));
+
+    for (i = 0; i < input->iCandWordCount ; i ++)
+    {
+        char strTemp[3] = { '\0', '\0', '\0' };
+        strTemp[0] = input->candWords[i].selectKey[0].sym;
+        if (ConfigGetPointAfterNumber(&instance->config))
+            strTemp[1] = '.';
+
+        AddMessageAtLast(msgDown, MSG_INDEX, strTemp);
+        MSG_TYPE type = MSG_OTHER;
+        if (i == 0 && input->iCurrentCandPage == 0)
+            type = MSG_FIRSTCAND;
+        AddMessageAtLast(msgDown, MSG_OTHER, input->candWords[i].strWord);
+        if (strlen(input->candWords[i].strExtra) != 0)
+            AddMessageAtLast(msgDown, MSG_CODE, input->candWords[i].strExtra);
+        AddMessageAtLast(msgDown, MSG_OTHER, " ");
+    }
+
+    return extraLength;
+}

@@ -108,6 +108,7 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
 {
     InputWindow* inputWindow;
     
+    
     inputWindow = fcitx_malloc0(sizeof(InputWindow));
     inputWindow->owner = classicui;
     InitInputWindow(inputWindow);
@@ -120,6 +121,9 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     arg.args[0] = ReloadInputWindow;
     arg.args[1] = inputWindow;
     InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
+
+    inputWindow->msgUp = InitMessages();
+    inputWindow->msgDown = InitMessages();
     return inputWindow;
 }
 
@@ -170,7 +174,8 @@ void DisplayInputWindow (InputWindow* inputWindow)
 void DrawInputWindow(InputWindow* inputWindow)
 {
     int lastW = inputWindow->iInputWindowWidth, lastH = inputWindow->iInputWindowHeight;
-    DrawInputBar(inputWindow->skin, inputWindow, GetMessageUp(inputWindow->owner->owner), GetMessageDown(inputWindow->owner->owner), &inputWindow->iInputWindowHeight ,&inputWindow->iInputWindowWidth);
+    int cursorPos = NewMessageToOldStyleMessage(inputWindow->owner->owner, inputWindow->msgUp, inputWindow->msgDown);
+    DrawInputBar(inputWindow->skin, inputWindow, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight ,&inputWindow->iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight)

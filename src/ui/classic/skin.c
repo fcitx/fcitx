@@ -418,7 +418,7 @@ void DrawImage(cairo_t *c, cairo_surface_t * png, int x, int y, MouseE mouse)
     cairo_restore(c);
 }
 
-void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth)
+void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messages * msgup, Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth)
 {
     int i;
     char *strUp[MAX_MESSAGE_COUNT];
@@ -433,7 +433,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, Messages * msgup, Mes
     cairo_t *c = NULL;
     FcitxInputState* input = &inputWindow->owner->owner->input;
     FcitxInstance* instance = inputWindow->owner->owner;
-    int iChar = input->iCursorPos;
+    int iChar = iCursorPos;
     int strWidth = 0, strHeight = 0;
     
     SkinImage *inputimg, *prev, *next;

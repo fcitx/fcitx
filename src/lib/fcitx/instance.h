@@ -43,8 +43,6 @@ struct _FcitxInputContext;
 typedef struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     int bShowCursor;
-    Messages* messageUp;
-    Messages* messageDown;
     UT_array uistats;
     UT_array uimenus;
     FcitxAddon* ui;
@@ -83,9 +81,6 @@ typedef struct _FcitxInstance {
     struct _HookStack* hookInputFocusHook;
     struct _HookStack* hookInputUnFocusHook;
 } FcitxInstance;
-
-Messages* GetMessageUp(FcitxInstance* instance);
-Messages* GetMessageDown(FcitxInstance* instance);
 
 FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
 int FcitxLock(FcitxInstance* instance);

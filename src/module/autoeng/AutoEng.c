@@ -257,8 +257,9 @@ boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
-    Messages *msgUp = GetMessageUp(autoEngState->owner);
-    Messages *msgDown = GetMessageDown(autoEngState->owner);
+    FcitxInputState* input = &autoEngState->owner->input;
+    Messages *msgUp = input->msgAuxUp;
+    Messages *msgDown = input->msgAuxDown;
 
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);
