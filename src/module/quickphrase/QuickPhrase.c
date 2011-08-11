@@ -34,17 +34,24 @@
 #include "fcitx/hook.h"
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
+#include "fcitx/candidate.h"
+
+static INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, CandidateWord* candWord);
 
 typedef struct _QuickPhraseState {
     unsigned int uQuickPhraseCount;
     UT_array *quickPhrases ;
     int iFirstQuickPhrase;
     int iLastQuickPhrase;
-    QUICK_PHRASE *quickPhraseCandWords[MAX_CAND_WORD];
     boolean enabled;
     FcitxInstance* owner;
 } QuickPhraseState;
 
+typedef struct _QuickPhraseCand {
+    
+QUICK_PHRASE* cand;
+
+} QuickPhraseCand;
 
 static void * QuickPhraseCreate (FcitxInstance *instance);
 static void LoadQuickPhrase(QuickPhraseState* qpstate);
@@ -218,14 +225,9 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
-    FcitxConfig *fc = &qpstate->owner->config;
     if (qpstate->enabled)
     {
-        if (IsHotKey(sym, state, fc->hkPrevPage))
-            *retval = QuickPhraseGetCandWords(qpstate, SM_PREV);
-        else if (IsHotKey(sym, state, fc->hkNextPage))
-            *retval = QuickPhraseGetCandWords(qpstate, SM_NEXT);
-        else if (IsHotKeySimple(sym, state))
+        if (IsHotKeySimple(sym, state))
         {
             *retval = QuickPhraseDoInput(qpstate, sym, state);
             if (*retval == IRV_TO_PROCESS)
@@ -243,7 +245,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                     if (strlen(input->strCodeInput) < MAX_USER_INPUT)
                         strcat(input->strCodeInput, buf);
                     ShowQuickPhraseMessage(qpstate);
-                    *retval = QuickPhraseGetCandWords(qpstate, SM_FIRST);
+                    *retval = QuickPhraseGetCandWords(qpstate);
                     if (*retval == IRV_DISPLAY_MESSAGE)
                     {
                         SetMessageCount(input->msgAuxDown, 0);
@@ -266,7 +268,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             else
             {
                 ShowQuickPhraseMessage(qpstate);
-                *retval = QuickPhraseGetCandWords(qpstate, SM_FIRST);
+                *retval = QuickPhraseGetCandWords(qpstate);
             }
         }
         else if (IsHotKey(sym, state, FCITX_ENTER))
@@ -336,48 +338,42 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
-    int retVal;
-    int iKey;
+    FcitxConfig* fc = &qpstate->owner->config;
+    int retVal = IRV_TO_PROCESS;
 
-    iKey = sym;
-
-    if (iKey >= '0' && iKey <= '9') {
-        if (!input->iCandWordCount)
-            return IRV_TO_PROCESS;
-
-        iKey -= '0';
-        if (iKey == 0)
-            iKey = 10;
-
-        if (iKey > input->iCandWordCount)
-            retVal = IRV_DO_NOTHING;
-        else {
-            strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[iKey-1]->strPhrase);
-            retVal = IRV_COMMIT_STRING;
-            SetMessageCount(input->msgAuxDown, 0);
-        }
+    if (IsHotKey(sym, state, fc->hkPrevPage))
+    {
+        if (CandidateWordGoPrevPage(input->candList))
+            retVal = IRV_DISPLAY_MESSAGE;
     }
-    else if (iKey==' ') {
-        if (!input->iCandWordCount)
-            retVal = IRV_TO_PROCESS;
-        else {
-            strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[0]->strPhrase);
-            retVal = IRV_COMMIT_STRING;
-            SetMessageCount(input->msgAuxDown, 0);
-        }
+    else if (IsHotKey(sym, state, fc->hkNextPage))
+    {
+        if (CandidateWordGoNextPage(input->candList))
+            retVal = IRV_DISPLAY_MESSAGE;
     }
-    else
-        retVal = IRV_TO_PROCESS;
+    else if (IsHotKeyDigit(sym, state))
+    {
+        int iKey = CheckChooseKey(sym, state, DIGIT_STR_CHOOSE);
+        if (iKey >= 0)
+            retVal = CandidateWordChooseByIndex(input->candList, 0);
+    }
+    else if (IsHotKey(sym, state, FCITX_SPACE)) {
+        if (CandidateWordPageCount(input->candList) != 0)
+            retVal = CandidateWordChooseByIndex(input->candList, 0);
+    }
 
     return retVal;
 }
 
-INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MODE mode)
+INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate)
 {
-    int i, iInputLen;
+    int iInputLen;
     QUICK_PHRASE searchKey, *pKey, *currentQuickPhrase, *lastQuickPhrase;
     FcitxInputState *input = &qpstate->owner->input;
     FcitxInstance *instance = qpstate->owner;
+    
+    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(&instance->config));
+    CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
 
     pKey = &searchKey;
 
@@ -390,65 +386,39 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate, SEARCH_MO
 
     strcpy(searchKey.strCode, input->strCodeInput);
 
-    if (mode==SM_FIRST) {
-        input->iCandPageCount=0;
-        input->iCurrentCandPage=0;
-        input->iCandWordCount=0;
-        currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
-        qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
-        lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
-        qpstate->iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
-        if (qpstate->iLastQuickPhrase < 0)
-            qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
-        input->iCandPageCount = (qpstate->iLastQuickPhrase - qpstate->iFirstQuickPhrase + ConfigGetMaxCandWord(&instance->config) - 1) / ConfigGetMaxCandWord(&instance->config) - 1;
-        if ( !currentQuickPhrase || strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen) ) {
-            SetMessageCount(input->msgAuxDown, 0);
-            currentQuickPhrase = NULL;
-            return IRV_DISPLAY_MESSAGE;
-        }
-    }
-    else if (mode==SM_NEXT) {
-        if (input->iCurrentCandPage >= input->iCandPageCount)
-            return IRV_DO_NOTHING;
-        input->iCandWordCount=0;
-        input->iCurrentCandPage++;
-    }
-    else {
-        if (input->iCurrentCandPage <= 0)
-            return IRV_DO_NOTHING;
-        input->iCandWordCount=0;
-        input->iCurrentCandPage--;
+    CandidateWordReset(input->candList);
+    
+    currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
+    qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
+    lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
+    qpstate->iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
+    if (qpstate->iLastQuickPhrase < 0)
+        qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
+    if ( !currentQuickPhrase || strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen) ) {
+        CleanInputWindowDown(instance);
+        currentQuickPhrase = NULL;
+        return IRV_DISPLAY_MESSAGE;
     }
 
     for ( currentQuickPhrase = (QUICK_PHRASE*) utarray_eltptr(qpstate->quickPhrases,
-                               qpstate->iFirstQuickPhrase
-                               + input->iCurrentCandPage * ConfigGetMaxCandWord(&instance->config));
+                               qpstate->iFirstQuickPhrase);
             currentQuickPhrase != NULL;
             currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase))
     {
         if (!strncmp(input->strCodeInput,currentQuickPhrase->strCode,iInputLen)) {
-            qpstate->quickPhraseCandWords[input->iCandWordCount++]=currentQuickPhrase;
-            if (input->iCandWordCount==ConfigGetMaxCandWord(&instance->config)) {
-                break;
-            }
+            QuickPhraseCand* qpcand = fcitx_malloc0(sizeof(QuickPhraseCand));
+            qpcand->cand = currentQuickPhrase;
+            CandidateWord candWord;
+            candWord.callback = QuickPhraseGetCandWord;
+            candWord.owner = qpstate;
+            candWord.priv = qpcand;
+            candWord.strExtra = strdup(currentQuickPhrase->strCode + iInputLen);
+            candWord.strWord = strdup(currentQuickPhrase->strPhrase);
+            CandidateWordAppend(input->candList, &candWord);
         }
     }
 
-    if (!input->iCandWordCount)
-        return IRV_DISPLAY_MESSAGE;
-
-    SetMessageCount(input->msgAuxDown, 0);
-
-    for (i = 0; i < input->iCandWordCount; i++) {
-        char select;
-        select = i + 1 + '0';
-        if (i == 9)
-            select = '0';
-        
-        SetCandidateWord(instance, i , select, qpstate->quickPhraseCandWords[i]->strPhrase, qpstate->quickPhraseCandWords[i]->strCode + iInputLen);
-    }
-
-    return IRV_DISPLAY_CANDWORDS;
+    return IRV_DISPLAY_MESSAGE;
 }
 
 void ReloadQuickPhrase(void* arg)
@@ -458,5 +428,11 @@ void ReloadQuickPhrase(void* arg)
     LoadQuickPhrase(qpstate);
 }
 
-
+INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, CandidateWord* candWord)
+{
+    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
+    QuickPhraseCand* qpcand = candWord->priv;
+    strcpy(GetOutputString(&qpstate->owner->input), qpcand->cand->strPhrase);
+    return IRV_COMMIT_STRING;
+}
 

@@ -35,6 +35,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 #include "fcitx/instance.h"
+#include "fcitx/candidate.h"
 
 /**
  * @file punc.c
