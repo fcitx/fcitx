@@ -105,11 +105,16 @@ void* DBusCreate(FcitxInstance* instance)
 
     dbusmodule->conn = conn;
     dbusmodule->owner = instance;
+    
+    char* servicename = NULL;
+    asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, FcitxGetDisplayNumber());
 
     // request a name on the bus
-    int ret = dbus_bus_request_name(conn, FCITX_DBUS_SERVICE,
+    int ret = dbus_bus_request_name(conn, servicename,
                                 DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                 &err);
+    
+    free(servicename);
     if (dbus_error_is_set(&err)) {
         FcitxLog(WARNING, _("Name Error (%s)"), err.message);
         dbus_error_free(&err);

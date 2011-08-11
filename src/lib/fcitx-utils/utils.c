@@ -173,3 +173,31 @@ char *fcitx_trim(char *s)
     return (s);
 }
 
+FCITX_EXPORT_API
+int FcitxGetDisplayNumber()
+{
+    int displayNumber = 0;
+    char* display = getenv ("DISPLAY"), *strDisplayNumber = NULL;
+    if (display != NULL)
+    {
+        display = strdup(display);
+        char* p = display;
+        for (; *p != ':' && *p != '\0'; p++);
+        
+        if (*p == ':') {
+            *p = '\0';
+            p++;
+            strDisplayNumber = p;
+        }
+        for (; *p != '.' && *p != '\0'; p++);
+
+        if (*p == '.') {
+            *p = '\0';
+        }
+
+        sscanf(strDisplayNumber, "%d", &displayNumber);
+
+        free(display);
+    }
+    return displayNumber;
+}

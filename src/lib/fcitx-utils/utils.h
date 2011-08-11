@@ -116,6 +116,8 @@ char* fcitx_trim(char *s);
  **/
 void* fcitx_malloc0(size_t bytes);
 
+int FcitxGetDisplayNumber();
+
 #ifdef __cplusplus
 }
 #endif

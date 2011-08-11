@@ -17,6 +17,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+#include <fcitx-utils/utils.h>
 static const int XKeyPress = KeyPress;
 static const int XKeyRelease = KeyRelease;
 #undef KeyPress
@@ -137,6 +138,8 @@ FcitxInputContext::FcitxInputContext()
     
     m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
     m_triggerKey[0].state = m_triggerKey[1].state = 0;
+    
+    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(FcitxGetDisplayNumber());
     
     createInputContext();
 }
@@ -410,7 +413,7 @@ bool FcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event
 
 void FcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
 {
-    if (service == FCITX_DBUS_SERVICE)
+    if (service == m_serviceName)
     {        
         /* old die */
         if (oldowner.length() > 0 || newowner.length() > 0)
@@ -439,7 +442,7 @@ void FcitxInputContext::imChanged(const QString& service, const QString& oldowne
 
 void FcitxInputContext::createInputContext()
 {
-    m_improxy = new org::fcitx::Fcitx::InputMethod(FCITX_DBUS_SERVICE, FCITX_IM_DBUS_PATH, m_connection, this);
+    m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, m_connection, this);
     
     if (!m_improxy->isValid())
         return;
@@ -463,7 +466,7 @@ void FcitxInputContext::createInputContext()
     {
         this->m_id = result.value();
         this->m_path = QString(FCITX_IC_DBUS_PATH_QSTRING).arg(m_id);
-        m_icproxy = new org::fcitx::Fcitx::InputContext(FCITX_DBUS_SERVICE, m_path, m_connection, this);
+        m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, m_connection, this);
         connect(m_icproxy, SIGNAL(CloseIM()), this, SLOT(closeIM()));
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(EnableIM()), this, SLOT(enableIM()));

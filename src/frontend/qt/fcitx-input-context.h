@@ -70,6 +70,7 @@ private:
     QInputContext* m_slave;
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;
+    QString m_serviceName;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

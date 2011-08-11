@@ -44,6 +44,7 @@ struct _FcitxIMClient {
     FcitxIMClientDestroyCallback destroycb;
     void *data;
     HOTKEYS triggerkey[2];
+    char servicename[IC_NAME_MAX];
 };
 
 static void FcitxIMClientCreateIC(FcitxIMClient* client);
@@ -90,6 +91,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
         free(client);
         return NULL;
     }
+    sprintf(client->servicename, "%s-%d", FCITX_DBUS_SERVICE, FcitxGetDisplayNumber());
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_connect_signal(client->dbusproxy, "NameOwnerChanged",
@@ -105,7 +107,7 @@ static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char*
 {
     FcitxLog(LOG_LEVEL, "_changed_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
-    if (g_str_equal(service, FCITX_DBUS_SERVICE))
+    if (g_str_equal(service, client->servicename))
     {
         gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
         if (new_owner_good)
@@ -148,7 +150,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     int id = -1;
     
     client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                FCITX_DBUS_SERVICE,
+                                                client->servicename,
                                                 FCITX_IM_DBUS_PATH,
                                                 FCITX_IM_DBUS_INTERFACE,
                                                 &error);
@@ -180,7 +182,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);    
     
     client->icproxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                      FCITX_DBUS_SERVICE,
+                                                      client->servicename,
                                                       client->icname,
                                                       FCITX_IC_DBUS_INTERFACE,
                                                       &error
@@ -216,6 +218,7 @@ void FcitxIMClientClose(FcitxIMClient* client)
         g_object_unref(icproxy);
     if (proxy)
         g_object_unref(proxy);
+    free(client->servicename);
     free(client);
 }
 
