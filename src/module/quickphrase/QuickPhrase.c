@@ -355,7 +355,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
     {
         int iKey = CheckChooseKey(sym, state, DIGIT_STR_CHOOSE);
         if (iKey >= 0)
-            retVal = CandidateWordChooseByIndex(input->candList, 0);
+            retVal = CandidateWordChooseByIndex(input->candList, iKey);
     }
     else if (IsHotKey(sym, state, FCITX_SPACE)) {
         if (CandidateWordPageCount(input->candList) != 0)
