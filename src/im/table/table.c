@@ -486,7 +486,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 input->bShowCursor = false;
 
                 CleanInputWindow(instance);
-                AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Left/Right to increase selected character, Press Enter to confirm, Press Escape to Cancel"));
+                AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Left/Right to choose selected character, Press Enter to confirm, Press Escape to Cancel"));
 
                 AddMessageAtLast(input->msgAuxDown, MSG_FIRSTCAND, "");
                 AddMessageAtLast(input->msgAuxDown, MSG_CODE, "");

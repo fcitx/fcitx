@@ -218,7 +218,6 @@ void FcitxIMClientClose(FcitxIMClient* client)
         g_object_unref(icproxy);
     if (proxy)
         g_object_unref(proxy);
-    free(client->servicename);
     free(client);
 }
 
