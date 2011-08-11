@@ -34,6 +34,7 @@
 #include "module.h"
 #include "frontend.h"
 #include "fcitx-utils/utils.h"
+#include "candidate.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
         || (icase ? \

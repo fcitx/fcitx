@@ -53,6 +53,7 @@
 #include "fcitx/instance.h"
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"
+#include "fcitx/candidate.h"
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"
 

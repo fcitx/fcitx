@@ -56,7 +56,8 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "ui/cairostuff/font.h"
-#include <fcitx/hook.h>
+#include "fcitx/hook.h"
+#include "fcitx/candidate.h"
 
 static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
 

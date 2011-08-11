@@ -32,6 +32,7 @@
 #include "instance.h"
 #include "hook-internal.h"
 #include "ime-internal.h"
+#include "candidate.h"
 
 /**
  * @file ui.c

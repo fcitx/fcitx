@@ -35,7 +35,8 @@
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/hook.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
+#include "fcitx/candidate.h"
 
 #define FCITX_KIMPANEL_INTERFACE "org.fcitx.Fcitx.Kimpanel"
 #define FCITX_KIMPANEL_PATH "/kimpanel"

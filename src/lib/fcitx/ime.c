@@ -45,6 +45,7 @@
 #include "hook-internal.h"
 #include "instance.h"
 #include "module.h"
+#include "candidate.h"
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);

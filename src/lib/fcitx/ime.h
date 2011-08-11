@@ -32,7 +32,6 @@
 #include <time.h>
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/hotkey.h>
-#include <fcitx/candidate.h>
 #include <fcitx/ui.h>
 
 #ifdef __cplusplus

@@ -24,6 +24,7 @@
 #include "fcitx/ime.h"
 #include "fcitx-utils/utarray.h"
 #include "tabledict.h"
+#include "fcitx/candidate.h"
 
 struct _FcitxInstance;
 
