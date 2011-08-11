@@ -183,6 +183,7 @@ void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook va
  * @return void
  **/
 void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+
 /**
  * @brief ...
  *
@@ -192,6 +193,15 @@ void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook 
  **/
 char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
+
+/**
+ * @brief ...
+ *
+ * @param instance ...
+ * @param in ...
+ * @return char*
+ **/
+void ProcessUpdateCandidates(struct _FcitxInstance* instance);
 #ifdef __cplusplus
 }
 #endif

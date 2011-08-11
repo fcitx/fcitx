@@ -81,6 +81,7 @@ DEFINE_HOOK(TriggerOnHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(TriggerOffHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(UpdateCandidateWordHook, FcitxIMEventHook, eventhook);
 
 void ProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -103,6 +104,17 @@ void ProcessPostInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned i
     {
         if (stack->keyfilter.func(stack->keyfilter.arg, sym, state, retval))
             break;
+        stack = stack->next;
+    }
+}
+
+void ProcessUpdateCandidates(FcitxInstance* instance)
+{
+    HookStack* stack = GetUpdateCandidateWordHook(instance);
+    stack = stack->next;
+    while(stack)
+    {
+        stack->eventhook.func(stack->keyfilter.arg);
         stack = stack->next;
     }
 }

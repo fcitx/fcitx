@@ -79,6 +79,7 @@ typedef struct _FcitxInstance {
     struct _HookStack* hookTriggerOffHook;
     struct _HookStack* hookInputFocusHook;
     struct _HookStack* hookInputUnFocusHook;
+    struct _HookStack* hookUpdateCandidateWordHook;
 } FcitxInstance;
 
 FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);

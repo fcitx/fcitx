@@ -400,41 +400,42 @@ INPUT_RETURN_VALUE ProcessKey(
             if (index >= 0)
                 retVal = CandidateWordChooseByIndex(input->candList, index);
         }
+    }
         
-        if (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)
+    if (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)
+    {
+        CleanInputWindow(instance);
+        retVal = currentIM->GetCandWords(currentIM->klass);
+        ProcessUpdateCandidates(instance);
+    }
+        
+    /*
+        * since all candidate word are cached in candList, so we don't need to trigger
+        * GetCandWords after go for another page, simply update input window is ok.
+        */
+    if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    {
+        if (IsHotKey(sym, state, fc->hkPrevPage))
         {
-            CleanInputWindow(instance);
-            retVal = currentIM->GetCandWords(currentIM->klass);
+            if (CandidateWordGoPrevPage(input->candList))
+                retVal = IRV_DISPLAY_CANDWORDS;
+        }
+        else if (IsHotKey(sym, state, fc->hkNextPage))
+        {
+            if (CandidateWordGoNextPage(input->candList))
+                retVal = IRV_DISPLAY_CANDWORDS;
         }
         
-        /*
-         * since all candidate word are cached in candList, so we don't need to trigger
-         * GetCandWords after go for another page, simply update input window is ok.
-         */
-        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-        {
-            if (IsHotKey(sym, state, fc->hkPrevPage))
-            {
-                if (CandidateWordGoPrevPage(input->candList))
-                    retVal = IRV_DISPLAY_CANDWORDS;
-            }
-            else if (IsHotKey(sym, state, fc->hkNextPage))
-            {
-                if (CandidateWordGoNextPage(input->candList))
-                    retVal = IRV_DISPLAY_CANDWORDS;
-            }
-            
-        }
+    }
 
-        /* even the retVal is not IRV_TO_PROCESS, we will let the 
-         * PostInputFilter run.
-         * Actually we cannot control the behave of every module,
-         * User should make sure there isn't malware
-         */
-        if (!input->bIsDoInputOnly)
-        {
-             ProcessPostInputFilter(instance, sym, state, &retVal);
-        }
+    /* even the retVal is not IRV_TO_PROCESS, we will let the 
+     * PostInputFilter run.
+     * Actually we cannot control the behave of every module,
+     * User should make sure there isn't malware
+     */
+    if (!input->bIsDoInputOnly)
+    {
+            ProcessPostInputFilter(instance, sym, state, &retVal);
     }
     
     if (retVal == IRV_TO_PROCESS) {
