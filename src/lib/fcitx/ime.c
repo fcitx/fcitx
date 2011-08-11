@@ -425,7 +425,6 @@ INPUT_RETURN_VALUE ProcessKey(
             if (CandidateWordGoNextPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
         }
-        
     }
 
     /* even the retVal is not IRV_TO_PROCESS, we will let the 

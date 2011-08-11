@@ -24,6 +24,10 @@
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx/ime.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct _CandidateWord;
 struct _CandidateWordList;
 
@@ -64,5 +68,9 @@ CandidateWord* CandidateWordGetFirst(struct _CandidateWordList* candList);
 CandidateWord* CandidateWordGetNext(struct _CandidateWordList* candList, CandidateWord* candWord);
 
 #define DIGIT_STR_CHOOSE "1234567890"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
