@@ -491,7 +491,7 @@ void ProcessInputReturnValue(
     if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW)
         UpdateInputWindow(instance);
     
-    if (retVal & IRV_COMMIT_STRING) {
+    if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW) {
         if (!input->bStartRecordType)
         {
             input->bStartRecordType = true;
