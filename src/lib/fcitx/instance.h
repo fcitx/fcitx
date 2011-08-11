@@ -42,7 +42,6 @@ struct _FcitxInputContext;
  **/
 typedef struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
-    int bShowCursor;
     UT_array uistats;
     UT_array uimenus;
     FcitxAddon* ui;

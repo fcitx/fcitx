@@ -462,7 +462,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
         
         posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
         inputWidth += strWidth;
-        if (instance->bShowCursor)
+        if (input->bShowCursor)
         {
             int length = strlen(GetMessageString(msgup, i));
             if (iChar >= 0)
@@ -572,7 +572,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
     
 
-    if (instance->bShowCursor )
+    if (input->bShowCursor )
     {
         //画向前向后箭头
         if (prev && next )
@@ -580,7 +580,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
             cairo_set_source_surface(inputWindow->c_back, prev->image,
                                     newWidth - sc->skinInputBar.iBackArrowX ,
                                     sc->skinInputBar.iBackArrowY);
-            if (input->bShowPrev)
+            if (CandidateWordHasPrev(input->candList))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -589,7 +589,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
             cairo_set_source_surface(inputWindow->c_back, next->image,
                                     newWidth - sc->skinInputBar.iForwardArrowX ,
                                     sc->skinInputBar.iForwardArrowY);
-            if (input->bShowNext)
+            if (CandidateWordHasNext(input->candList))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -613,7 +613,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     ResetFontContext();
 
     //画光标
-    if (instance->bShowCursor )
+    if (input->bShowCursor )
     {
         cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos);
         cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - FontHeightWithContext(inputWindow->c_font[0]) - 4);

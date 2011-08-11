@@ -118,8 +118,6 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
             recTemp->bPinyin = cTemp;
         }
 
-        recTemp->flag = 0;
-
         fread (&(recTemp->iHit), sizeof (unsigned int), 1, fpDict);
         fread (&(recTemp->iIndex), sizeof (unsigned int), 1, fpDict);
         if (recTemp->iIndex > tableDict->iTableIndex)
@@ -453,7 +451,7 @@ void TableCreateAutoPhrase (TableMetaData* tableMetaData, char iCount)
         j = 0;
 
     for (; j < tableDict->iHZLastInputCount - 1; j++) {
-        for (i = tableDict->iAutoPhrase; i >= 2; i--) {
+        for (i = tableMetaData->iAutoPhraseLength; i >= 2; i--) {
             if ((j + i - 1) > tableDict->iHZLastInputCount)
                 continue;
 
@@ -472,14 +470,12 @@ void TableCreateAutoPhrase (TableMetaData* tableMetaData, char iCount)
 
             TableCreatePhraseCode (tableDict, strHZ);
             if (tableDict->iAutoPhrase != AUTO_PHRASE_COUNT) {
-                tableDict->autoPhrase[tableDict->iAutoPhrase].flag = false;
                 strcpy (tableDict->autoPhrase[tableDict->iAutoPhrase].strCode, tableDict->strNewPhraseCode);
                 strcpy (tableDict->autoPhrase[tableDict->iAutoPhrase].strHZ, strHZ);
                 tableDict->autoPhrase[tableDict->iAutoPhrase].iSelected = 0;
                 tableDict->iAutoPhrase++;
             }
             else {
-                tableDict->insertPoint->flag = false;
                 strcpy (tableDict->insertPoint->strCode, tableDict->strNewPhraseCode);
                 strcpy (tableDict->insertPoint->strHZ, strHZ);
                 tableDict->insertPoint->iSelected = 0;
@@ -574,19 +570,6 @@ RECORD         *TableHasPhrase (const TableDict* tableDict, const char *strCode,
     return recTemp;
 }
 
-void TableResetFlags (TableDict* tableDict)
-{
-    RECORD         *record = tableDict->recordHead->next;
-    short           i;
-
-    while (record != tableDict->recordHead) {
-        record->flag = false;
-        record = record->next;
-    }
-    for (i = 0; i < tableDict->iAutoPhrase; i++)
-        tableDict->autoPhrase[i].flag = false;
-}
-
 void TableInsertPhrase (TableDict* tableDict, const char *strCode, const char *strHZ)
 {
     RECORD         *insertPoint, *dictNew;
@@ -598,6 +581,7 @@ void TableInsertPhrase (TableDict* tableDict, const char *strCode, const char *s
 
     dictNew = (RECORD *) malloc (sizeof (RECORD));
     dictNew->strCode = (char *) malloc (sizeof (char) * (tableDict->iCodeLength + 1));
+    dictNew->bPinyin = 0;
     strcpy (dictNew->strCode, strCode);
     dictNew->strHZ = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
     strcpy (dictNew->strHZ, strHZ);
@@ -745,19 +729,6 @@ boolean IsIgnoreChar (const TableDict* tableDict, char cChar)
     }
 
     return false;
-}
-
-char IsChooseKey (const TableMetaData* tableMetaData, int iKey)
-{
-    int i = 0;
-
-    while (tableMetaData->strChoose[i]) {
-        if (iKey == tableMetaData->strChoose[i])
-            return i + 1;
-        i++;
-    }
-
-    return 0;
 }
 
 #include "utf8_in_gb18030.h"

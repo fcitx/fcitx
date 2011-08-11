@@ -150,23 +150,23 @@ typedef struct {
 
 #define utarray_resize(dst,num) do {                                          \
   size_t _ut_i;                                                               \
-  if (dst->i > (size_t)(num)) {                                               \
+  if ((dst)->i > (size_t)(num)) {                                             \
     if ((dst)->icd->dtor) {                                                   \
-      for(_ut_i=num; _ut_i < dst->i; _ut_i++) {                               \
+      for(_ut_i=num; _ut_i < (dst)->i; _ut_i++) {                             \
         (dst)->icd->dtor(utarray_eltptr(dst,_ut_i));                          \
       }                                                                       \
     }                                                                         \
-  } else if (dst->i < (size_t)(num)) {                                        \
-    utarray_reserve(dst,num-dst->i);                                          \
+  } else if ((dst)->i < (size_t)(num)) {                                      \
+    utarray_reserve(dst,num-(dst)->i);                                        \
     if ((dst)->icd->init) {                                                   \
-      for(_ut_i=dst->i; _ut_i < num; _ut_i++) {                               \
+      for(_ut_i=(dst)->i; _ut_i < num; _ut_i++) {                             \
         (dst)->icd->init(utarray_eltptr(dst,_ut_i));                          \
       }                                                                       \
     } else {                                                                  \
-      memset(_utarray_eltptr(dst,dst->i),0,(dst)->icd->sz*(num-dst->i));      \
+      memset(_utarray_eltptr(dst,(dst)->i),0,(dst)->icd->sz*(num-(dst)->i));  \
     }                                                                         \
   }                                                                           \
-  dst->i = num;                                                               \
+  (dst)->i = num;                                                             \
 } while(0)
 
 #define utarray_concat(dst,src) do {                                          \
@@ -201,6 +201,10 @@ typedef struct {
 
 #define utarray_sort(a,cmp) do {                                              \
   qsort((a)->d, (a)->i, (a)->icd->sz, cmp);                                   \
+} while(0)
+
+#define utarray_sort_r(a,cmp, arg) do {                                       \
+  qsort_r((a)->d, (a)->i, (a)->icd->sz, cmp, arg);                            \
 } while(0)
 
 #define utarray_front(a) (((a)->i) ? (_utarray_eltptr(a,0)) : NULL)

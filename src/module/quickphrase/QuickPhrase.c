@@ -234,7 +234,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                     && (IsHotKey(sym, state, FCITX_SEMICOLON) || IsHotKey(sym, state, FCITX_SPACE)))
                 {
                         strcpy(GetOutputString(input), "；");
-                        *retval = IRV_GET_CANDWORDS;
+                        *retval = IRV_COMMIT_STRING;
                 }
                 else {
                     char buf[2];
@@ -276,12 +276,12 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             {
                 strcpy(GetOutputString(input), input->strCodeInput);
                 QuickPhraseReset(qpstate);
-                *retval = IRV_GET_CANDWORDS;
+                *retval = IRV_COMMIT_STRING;
             }
             else 
             {
                 strcpy(GetOutputString(input), ";");
-                *retval = IRV_GET_CANDWORDS;
+                *retval = IRV_COMMIT_STRING;
             }
         }
         else if (IsHotKey(sym, state, FCITX_ESCAPE))
@@ -314,7 +314,7 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
             && IsHotKey(sym, state, FCITX_SEMICOLON))
     {
         CleanInputWindow(qpstate->owner);
-        qpstate->owner->bShowCursor = true;
+        input->bShowCursor = true;
         AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Quick Phrase: "));
         input->iCursorPos = 0;
         AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _("Spcae for ； Enter for;"));
@@ -353,7 +353,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
             retVal = IRV_DO_NOTHING;
         else {
             strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[iKey-1]->strPhrase);
-            retVal = IRV_GET_CANDWORDS;
+            retVal = IRV_COMMIT_STRING;
             SetMessageCount(input->msgAuxDown, 0);
         }
     }
@@ -362,7 +362,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
             retVal = IRV_TO_PROCESS;
         else {
             strcpy (GetOutputString(input), qpstate->quickPhraseCandWords[0]->strPhrase);
-            retVal = IRV_GET_CANDWORDS;
+            retVal = IRV_COMMIT_STRING;
             SetMessageCount(input->msgAuxDown, 0);
         }
     }

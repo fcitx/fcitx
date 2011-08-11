@@ -40,15 +40,13 @@ typedef struct _RECORD {
     struct _RECORD *prev;
     unsigned int    iHit;
     unsigned int    iIndex;
-    unsigned int    flag:1;
-    unsigned int    bPinyin:1;
+    boolean         bPinyin;
 } RECORD;
 
 typedef struct _AUTOPHRASE {
     char           *strHZ;
     char           *strCode;
     char            iSelected;
-    unsigned int    flag:1;
     struct _AUTOPHRASE *next;   //构造一个队列
 } AUTOPHRASE;
 
@@ -137,7 +135,6 @@ void TableResetFlags (TableDict* tableDict);
 boolean IsInputKey (const TableDict* tableDict, int iKey);
 boolean IsEndKey (const TableMetaData* tableMetaData, char cChar);
 boolean IsIgnoreChar (const TableDict* tableDict, char cChar);
-char IsChooseKey (const TableMetaData* tableMetaData, int iKey);
 unsigned int CalHZIndex (char *strHZ);
 boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeInput);
 CONFIG_BINDING_DECLARE(TableMetaData);

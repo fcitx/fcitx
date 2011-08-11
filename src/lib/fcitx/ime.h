@@ -32,7 +32,8 @@
 #include <time.h>
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/hotkey.h>
-#include "ui.h"
+#include <fcitx/candidate.h>
+#include <fcitx/ui.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,12 +54,6 @@ extern "C" {
 struct _FcitxInputContext;
 struct _FcitxInstance;
 struct _FcitxAddon;
-typedef enum _SEARCH_MODE {
-    SM_FIRST,
-    SM_NEXT,
-    SM_PREV,
-    SM_NONE
-} SEARCH_MODE;
 
 typedef enum _KEY_RELEASED {
     KR_OTHER = 0,
@@ -67,23 +62,32 @@ typedef enum _KEY_RELEASED {
     KR_3RD_SELECTKEY,
     KR_CTRL_SHIFT
 } KEY_RELEASED;
-
+    
 typedef enum _INPUT_RETURN_VALUE {
-    //IRV_UNKNOWN = -1,
-    IRV_DO_NOTHING = 0, /* do nothing */
-    IRV_DONOT_PROCESS, /* key will be forward */
-    IRV_DONOT_PROCESS_CLEAN, /* key will be forward and process as IRV_CLEAN */
-    IRV_CLEAN, /* reset input */
-    IRV_TO_PROCESS, /* key will passed to next flow*/
-    IRV_DISPLAY_FIRST_PAGE, 
-    IRV_DISPLAY_MESSAGE, /* it's a message, so next and prev will not be shown */
-    IRV_DISPLAY_CANDWORDS, /* the only different with message it it will show next and prev button */
-    IRV_DISPLAY_LAST, /* display the last input word */
-    IRV_PUNC,
-    IRV_ENG,
-    IRV_GET_REMIND, /* remind word */
-    IRV_GET_CANDWORDS, /* send the input to client, close input window */
-    IRV_GET_CANDWORDS_NEXT /* send the input to client, dont close input window */
+    IRV_TO_PROCESS = 0, /* do something */
+    IRV_FLAG_BLOCK_FOLLOWING_PROCESS = 1 << 0, /* nothing to do, actually non-zero is blocking, but you need a flag for do nothing */
+    IRV_FLAG_FORWARD_KEY = 1 << 1, /* the key will be forwarded */
+    IRV_FLAG_RESET_INPUT = 1 << 2, /* reset input */
+    IRV_FLAG_PENDING_COMMIT_STRING = 1 << 3, /* there is something in input strStringGet buffer, commit it */
+    IRV_FLAG_UPDATE_INPUT_WINDOW = 1 << 4, /* something updated in input window, let the UI update */
+    IRV_FLAG_UPDATE_CANDIDATE_WORDS = 1 << 5, /* update the candidate words */
+    IRV_FLAG_ENG = 1 << 6, /* special */
+    IRV_FLAG_PUNC = 1 << 7, /* special */
+    IRV_FLAG_DISPLAY_LAST = 1 << 8, /* special */
+    IRV_FLAG_DO_PHRASE_TIPS = 1 << 9, /* special */
+     /* compatible */
+    IRV_DONOT_PROCESS = IRV_FLAG_FORWARD_KEY,
+    IRV_COMMIT_STRING = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_DO_PHRASE_TIPS,
+    IRV_DO_NOTHING = IRV_FLAG_BLOCK_FOLLOWING_PROCESS,
+    IRV_CLEAN = IRV_FLAG_RESET_INPUT,
+    IRV_COMMIT_STRING_REMIND = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_UPDATE_INPUT_WINDOW,
+    IRV_DISPLAY_CANDWORDS = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_UPDATE_CANDIDATE_WORDS,
+    IRV_DONOT_PROCESS_CLEAN = IRV_FLAG_FORWARD_KEY | IRV_FLAG_RESET_INPUT,
+    IRV_COMMIT_STRING_NEXT =  IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_UPDATE_INPUT_WINDOW,
+    IRV_DISPLAY_MESSAGE = IRV_FLAG_UPDATE_INPUT_WINDOW,
+    IRV_ENG = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_ENG,
+    IRV_PUNC = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_PUNC,
+    IRV_DISPLAY_LAST = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_DISPLAY_LAST
 } INPUT_RETURN_VALUE;
 
 /**
@@ -98,8 +102,7 @@ typedef struct _FcitxIMClass {
 typedef boolean            (*FcitxIMInit) (void *arg);
 typedef void               (*FcitxIMResetIM) (void *arg);
 typedef INPUT_RETURN_VALUE (*FcitxIMDoInput) (void *arg, FcitxKeySym, unsigned int);
-typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg, SEARCH_MODE);
-typedef char              *(*FcitxIMGetCandWord) (void *arg, int);
+typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg);
 typedef boolean            (*FcitxIMPhraseTips) (void *arg);
 typedef void               (*FcitxIMSave) (void *arg);
 typedef void               (*FcitxIMReloadConfig) (void *arg);
@@ -128,10 +131,6 @@ typedef struct _FcitxIM {
      * @brief update candidate works function
      **/
     FcitxIMGetCandWords GetCandWords;
-    /**
-     * @brief get candidate word function
-     **/
-    FcitxIMGetCandWord GetCandWord;
     /**
      * @brief phrase tips function
      **/
@@ -172,16 +171,6 @@ typedef enum _FcitxKeyEventType {
 } FcitxKeyEventType;
 
 /**
- * @brief Candidate Word
- */
-typedef struct _FcitxCandidateWord {
-    HOTKEYS selectKey[2];
-    char strWord[MAX_USER_INPUT + 1];
-    char strExtra[MAX_USER_INPUT + 1];
-    void* source;
-} FcitxCandidateWord;
-
-/**
  * @brief Global Input State, including displayed message.
  **/
 typedef struct _FcitxInputState {
@@ -193,20 +182,16 @@ typedef struct _FcitxInputState {
     char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
     boolean bIsInRemind;
 
-    int iCandPageCount;
-    int iCandWordCount;
     time_t timeStart;
     int iCursorPos;
-    int iCurrentCandPage;
-    int bShowNext;
-    int bShowPrev;
+    boolean bShowCursor;
     int iHZInputed;
     int lastIsSingleHZ;
     boolean bLastIsNumber;
     boolean bStartRecordType;
     
     /* the ui message part, if there is something in it, then it will be shown */
-    FcitxCandidateWord candWords[MAX_CAND_WORD];
+    struct _CandidateWordList* candList;
     Messages* msgPreedit;
     Messages* msgAuxUp;
     Messages* msgAuxDown;
@@ -240,7 +225,6 @@ void FcitxRegisterIM(struct _FcitxInstance *instance,
                      FcitxIMResetIM ResetIM,
                      FcitxIMDoInput DoInput,
                      FcitxIMGetCandWords GetCandWords,
-                     FcitxIMGetCandWord GetCandWord,
                      FcitxIMPhraseTips PhraseTips,
                      FcitxIMSave Save,
                      FcitxIMReloadConfig ReloadConfig,
@@ -253,7 +237,7 @@ void ForwardKey(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, 
 void SaveAllIM (struct _FcitxInstance* instance);
 void ReloadConfig(struct _FcitxInstance* instance);
 void SwitchIM (struct _FcitxInstance* instance, int index);
-void SetCandidateWord(struct _FcitxInstance* instance, int index, char selectKey, const char* word, const char* extra);
+int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose);
 
 #ifdef __cplusplus
 }

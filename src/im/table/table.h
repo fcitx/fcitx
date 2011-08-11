@@ -27,23 +27,24 @@
 
 struct _FcitxInstance;
 
-//用union就会出错，不知道是啥原因
-typedef struct _CANDWORD {
+typedef union _CANDWORD {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
-    char            strPYPhrase[PHRASE_MAX_LENGTH * 2 + 1];
+    char            strPYPhrase[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
+    int             iFHIndex;
 } CANDWORD;
-
-typedef struct _TABLECANDWORD {
-    unsigned int    flag:2;	//指示该候选字/词是自动组的词还是正常的字/词
-    CANDWORD        candWord;
-} TABLECANDWORD;
 
 typedef enum _CANDTYPE {
     CT_NORMAL = 0,
     CT_AUTOPHRASE,
-    CT_PYPHRASE			//临时拼音转换过来的候选字/词
+    CT_REMIND,
+    CT_FH
 } CANDTYPE;
+
+typedef struct _TABLECANDWORD {
+    CANDTYPE        flag;	//指示该候选字/词是自动组的词还是正常的字/词
+    CANDWORD        candWord;
+} TABLECANDWORD;
 
 typedef struct _FcitxTableState {
     UT_array* table; /* 码表 */
@@ -53,12 +54,9 @@ typedef struct _FcitxTableState {
     
     char            iCurrentTableLoaded;
     RECORD	       *pCurCandRecord;	//Records current cand word selected, to update the hit-frequency information
-    TABLECANDWORD   tableCandWord[MAX_CAND_WORD*2];
     
     RECORD_INDEX   *recordIndex;
     
-    unsigned int            iTableCandDisplayed;
-    unsigned int            iTableTotalCandCount;
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
         
     boolean            bIsTableDelPhrase;
@@ -69,7 +67,6 @@ typedef struct _FcitxTableState {
     HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT];
     
     char            iTableNewPhraseHZCount;
-    char           *strNewPhraseCode;
     
     boolean            bTablePhraseTips;
     
@@ -78,6 +75,7 @@ typedef struct _FcitxTableState {
     
     struct _FcitxInstance* owner;
     struct _FcitxAddon* pyaddon;
+    CandidateWordCommitCallback pygetcandword;
 } FcitxTableState;
 
 void            LoadTableInfo (FcitxTableState* tbl);
@@ -86,21 +84,21 @@ void            FreeTableIM (FcitxTableState* tbl, char i);
 void            SaveTableIM (void* arg);
 
 INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state);
-INPUT_RETURN_VALUE TableGetCandWords (void* arg, SEARCH_MODE mode);
-void            TableAddCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
-void            TableAddAutoCandWord (FcitxTableState* tbl, short int which, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
-void            TableAddRemindCandWord (FcitxTableState* tbl, RECORD* record, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
-INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl, SEARCH_MODE mode);
+INPUT_RETURN_VALUE TableGetCandWords ();
+void TableAddCandWord (RECORD * record, TABLECANDWORD* tableCandWord);
+void            TableAddAutoCandWord (FcitxTableState* tbl, short int which, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl);
+void TableAddRemindCandWord (RECORD * record, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl);
+INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl);
 void            TableResetStatus (void* arg);
-char           *TableGetRemindCandWord (void* arg, int iIndex);
-char           *TableGetFHCandWord (FcitxTableState* tbl, int iIndex);
-void            TableAdjustOrderByIndex (FcitxTableState* tbl, int iIndex);
-void            TableDelPhraseByIndex (FcitxTableState* tbl, int iIndex);
+INPUT_RETURN_VALUE TableGetRemindCandWord (void* arg, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetFHCandWord (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
+void TableAdjustOrderByIndex (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
+void            TableDelPhraseByIndex (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
 void            TableCreateNewPhrase (FcitxTableState* tbl);
-char           *_TableGetCandWord (FcitxTableState* tbl, int iIndex, boolean _bRemind);		//Internal
-char           *TableGetCandWord (void* arg, int iIndex);
+INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* tableCandWord, boolean _bRemind);
+INPUT_RETURN_VALUE TableGetCandWord (void* arg, CandidateWord* candWord);
 boolean            TablePhraseTips (void* arg);
 void            TableSetCandWordsFlag (FcitxTableState* tbl, int iCount, boolean flag);
 

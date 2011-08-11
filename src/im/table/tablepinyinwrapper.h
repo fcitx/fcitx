@@ -8,10 +8,9 @@
 
 void Table_LoadPYBaseDict(FcitxAddon* pyaddon);
 void Table_PYGetPYByHZ(FcitxAddon* pyaddon, char *a, char* b);
-void Table_PYGetCandWord(FcitxAddon* pyaddon, int a);
+INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, CandidateWord* candidateWord);
 void Table_DoPYInput(FcitxAddon* pyaddon, FcitxKeySym sym, unsigned int state);
-void Table_PYGetCandWords(FcitxAddon* pyaddon, SEARCH_MODE mode);
-void Table_PYGetCandText(FcitxAddon* pyaddon, int iIndex, char *strText);
+void Table_PYGetCandWords(FcitxAddon* pyaddon);
 void Table_ResetPY(FcitxAddon* pyaddon);
 char* Table_PYGetFindString(FcitxAddon* pyaddon);
 

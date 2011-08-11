@@ -205,7 +205,7 @@ void DrawInputWindow(InputWindow* inputWindow)
 void MoveInputWindowInternal(InputWindow* inputWindow)
 {
     int dwidth, dheight;
-    int x, y;
+    int x = 0, y = 0;
     GetScreenSize(inputWindow->owner, &dwidth, &dheight);
     
     FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);

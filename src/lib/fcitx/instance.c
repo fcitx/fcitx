@@ -85,10 +85,14 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->input.msgAuxUp = InitMessages();
     instance->input.msgAuxDown = InitMessages();
     instance->input.msgPreedit = InitMessages();
+    instance->input.candList = CandidateWordInit();
     instance->sem = sem;
     
     if (!LoadConfig(&instance->config))
         goto error_exit;
+    
+    CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
+    
     if (!ProcessOption(instance, argc, argv))
         goto error_exit;
     

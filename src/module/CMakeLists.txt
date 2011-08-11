@@ -1,7 +1,7 @@
 add_subdirectory(x11)
 add_subdirectory(chttrans)
 add_subdirectory(punc)
-add_subdirectory(quickphrase)
+#add_subdirectory(quickphrase)
 add_subdirectory(autoeng)
 add_subdirectory(fullwidthchar)
 add_subdirectory(remote)
