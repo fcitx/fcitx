@@ -100,14 +100,6 @@ typedef struct _PYFA {
     int             iBase;
 } PYFA;
 
-typedef struct _PYINDEX {
-    int             iPYFA;
-    int             iBase;
-    int             iPhrase;
-    struct _PYINDEXCANDWORD *next;
-    struct _PYINDEXCANDWORD *prev;
-} PYIndex;
-
 typedef struct _PYFREQCANDWORD {
     HZ             *hz;
     char           *strPY;
@@ -191,10 +183,6 @@ typedef struct _FcitxPinyinState
     boolean bIsPYAddFreq;
     boolean bIsPYDelFreq;
     boolean bIsPYDelUserPhr;
-
-    boolean isSavingPYUserPhrase;
-    boolean isSavingPYIndex;
-    boolean isSavingPYFreq;
 
     boolean bSP_UseSemicolon;
     boolean bSP;

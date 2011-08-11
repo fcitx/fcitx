@@ -1744,14 +1744,8 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     PyPhrase *phrase;
     PYFA* PYFAList = pystate->PYFAList;
 
-    if (pystate->isSavingPYUserPhrase)
-        return;
-
-    pystate->isSavingPYUserPhrase = true;
-
     fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
-        pystate->isSavingPYUserPhrase = false;
         FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), pstr);
         return;
     }
@@ -1794,8 +1788,6 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
         unlink(pstr);
     rename(strPathTemp, pstr);
     free(pstr);
-
-    pystate->isSavingPYUserPhrase = false;
 }
 
 void SavePYFreq(FcitxPinyinState *pystate)
@@ -1807,13 +1799,8 @@ void SavePYFreq(FcitxPinyinState *pystate)
     PyFreq *pPyFreq;
     HZ *hz;
 
-    if (pystate->isSavingPYFreq)
-        return;
-
-    pystate->isSavingPYFreq = true;
     fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
-        pystate->isSavingPYFreq = false;
         FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), pstr);
         return;
     }
@@ -1863,8 +1850,6 @@ void SavePYFreq(FcitxPinyinState *pystate)
         unlink(pstr);
     rename(strPathTemp, pstr);
     free(pstr);
-
-    pystate->isSavingPYFreq = false;
 }
 
 /*
@@ -1878,13 +1863,8 @@ void SavePYIndex(FcitxPinyinState *pystate)
     FILE *fp;
     PYFA* PYFAList = pystate->PYFAList;
 
-    if (pystate->isSavingPYIndex)
-        return;
-
-    pystate->isSavingPYIndex = true;
     fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
     if (!fp) {
-        pystate->isSavingPYIndex = false;
         FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), pstr);
         return;
     }
@@ -1934,8 +1914,6 @@ void SavePYIndex(FcitxPinyinState *pystate)
     rename(strPathTemp, pstr);
 
     free(pstr);
-
-    pystate->isSavingPYIndex = false;
 }
 
 /*

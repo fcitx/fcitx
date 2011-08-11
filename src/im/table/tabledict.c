@@ -352,6 +352,12 @@ void FreeTableDict (TableMetaData* tableMetaData)
 
         recTemp = recNext;
     }
+    
+    free(tableDict->strIgnoreChars);
+    tableDict->strIgnoreChars = NULL;
+    
+    free(tableDict->strInputCode);
+    tableDict->strInputCode = NULL;
 
     free (tableDict->recordHead);
     tableDict->recordHead = NULL;
