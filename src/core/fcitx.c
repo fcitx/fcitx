@@ -22,11 +22,22 @@
  * @file fcitx.c
  * @brief Main Function for fcitx
  */
+#ifdef FCITX_HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <locale.h>
 #include <libintl.h>
 #include <unistd.h>
 #include <semaphore.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif // HAVE_UNISTD_H
+
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif // HAVE_MALLOC_H
 
 #include "fcitx/configfile.h"
 #include "fcitx/addon.h"
@@ -51,6 +62,15 @@ static void WaitForEnd(sem_t *sem, int count)
 
 int main(int argc, char* argv[])
 {
+#ifdef M_TRIM_THRESHOLD
+#ifdef HAVE_UNISTD_H
+    int pagesize = sysconf(_SC_PAGESIZE);
+#else
+    int pagesize = 4*1024;
+#endif // HAVE_UNISTD_H
+    mallopt(M_TRIM_THRESHOLD, 5*pagesize);
+#endif // M_TRIM_THRESHOLD
+    
     setlocale(LC_ALL, "");
     bindtextdomain("fcitx", LOCALEDIR);
     bind_textdomain_codeset("fcitx", "UTF-8");

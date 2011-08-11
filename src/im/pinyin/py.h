@@ -79,16 +79,22 @@ typedef struct _PYFREQ {
 typedef struct _PYPHRASE {
     char           *strPhrase;
     char           *strMap;
-    struct _PYPHRASE *next;
     unsigned int            iIndex;
     unsigned int            iHit;
 } PyPhrase;
+
+typedef struct _PYUSRPHRASE {
+    PyPhrase phrase;
+    struct _PYUSRPHRASE* next;
+} PyUsrPhrase;
+
+#define USER_PHRASE_NEXT(x) (&((PyUsrPhrase*)(x))->next->phrase)
 
 typedef struct _PYBASE {
     char            strHZ[UTF8_MAX_LENGTH + 1];
     struct _PYPHRASE *phrase;
     int             iPhrase;
-    struct _PYPHRASE *userPhrase;
+    struct _PYUSRPHRASE *userPhrase;
     int             iUserPhrase;
     unsigned int            iIndex;
     unsigned int            iHit;
@@ -212,7 +218,7 @@ void            PYAddFreqCandWord (PyFreq* pyFreq, HZ* hz, char* strPY, PYCandWo
 void            PYGetPhraseCandWords (struct _FcitxPinyinState* pystate);
 boolean         PYAddPhraseCandWord (struct _FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase* phrase, boolean b, PYCandWord* pycandWord);
 boolean PYAddUserPhrase (FcitxPinyinState* pystate, char* phrase, char* map);
-void            PYDelUserPhrase (struct _FcitxPinyinState* pystate, int iPYFA, int iBase, PyPhrase * phrase);
+void            PYDelUserPhrase (FcitxPinyinState* pystate, int iPYFA, int iBase, PyUsrPhrase* phrase);
 int             GetBaseMapIndex (struct _FcitxPinyinState* pystate, char *strMap);
 void            SavePYUserPhrase (struct _FcitxPinyinState* pystate);
 void            SavePYFreq (struct _FcitxPinyinState* pystate);

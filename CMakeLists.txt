@@ -33,6 +33,7 @@ include(FindPkgConfig)
 include(UseDoxygen OPTIONAL)
 include(FcitxMacro)
 
+check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(malloc.h HAVE_MALLOC_H)
 check_include_files(stdbool.h HAVE_STDBOOL_H)
 check_function_exists(asprintf HAVE_ASPRINTF)

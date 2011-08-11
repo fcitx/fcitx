@@ -55,7 +55,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     /*
      * 建立索引，加26是为了为拼音编码预留空间
      */
-    tableDict->recordIndex = (RECORD_INDEX *) malloc ((strlen (tableDict->strInputCode) + 26) * sizeof (RECORD_INDEX));
+    tableDict->recordIndex = (RECORD_INDEX *) fcitx_malloc0 ((strlen (tableDict->strInputCode) + 26) * sizeof (RECORD_INDEX));
     for (iTemp = 0; iTemp < strlen (tableDict->strInputCode) + 26; iTemp++) {
         tableDict->recordIndex[iTemp].cCode = 0;
         tableDict->recordIndex[iTemp].record = NULL;
@@ -74,17 +74,17 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         tableDict->iPYCodeLength = tableDict->iCodeLength;
 
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
-    tableDict->strIgnoreChars = (char *) malloc (sizeof (char) * (iTemp + 1));
+    tableDict->strIgnoreChars = (char *) fcitx_malloc0 (sizeof (char) * (iTemp + 1));
     fread (tableDict->strIgnoreChars, sizeof (char), iTemp + 1, fpDict);
 
     fread (&(tableDict->bRule), sizeof (unsigned char), 1, fpDict);
 
     if (tableDict->bRule) { //表示有组词规则
-        tableDict->rule = (RULE *) malloc (sizeof (RULE) * (tableDict->iCodeLength - 1));
+        tableDict->rule = (RULE *) fcitx_malloc0 (sizeof (RULE) * (tableDict->iCodeLength - 1));
         for (i = 0; i < tableDict->iCodeLength - 1; i++) {
             fread (&(tableDict->rule[i].iFlag), sizeof (unsigned char), 1, fpDict);
             fread (&(tableDict->rule[i].iWords), sizeof (unsigned char), 1, fpDict);
-            tableDict->rule[i].rule = (RULE_RULE *) malloc (sizeof (RULE_RULE) * tableDict->iCodeLength);
+            tableDict->rule[i].rule = (RULE_RULE *) fcitx_malloc0 (sizeof (RULE_RULE) * tableDict->iCodeLength);
             for (iTemp = 0; iTemp < tableDict->iCodeLength; iTemp++) {
                 fread (&(tableDict->rule[i].rule[iTemp].iFlag), sizeof (unsigned char), 1, fpDict);
                 fread (&(tableDict->rule[i].rule[iTemp].iWhich), sizeof (unsigned char), 1, fpDict);
@@ -93,7 +93,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         }
     }
 
-    tableDict->recordHead = (RECORD *) malloc (sizeof (RECORD));
+    tableDict->recordHead = (RECORD *) fcitx_malloc0 (sizeof (RECORD));
     tableDict->currentRecord = tableDict->recordHead;
 
     fread (&(tableDict->iRecordCount), sizeof (unsigned int), 1, fpDict);
@@ -106,11 +106,11 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         fread (strCode, sizeof (char), tableDict->iPYCodeLength + 1, fpDict);
         fread (&iTemp, sizeof (unsigned int), 1, fpDict);
         fread (strHZ, sizeof (char), iTemp, fpDict);
-        recTemp = (RECORD *) malloc (sizeof (RECORD));
-        recTemp->strCode = (char *) malloc (sizeof (char) * (tableDict->iPYCodeLength + 1));
+        recTemp = (RECORD *) fcitx_malloc0 (sizeof (RECORD));
+        recTemp->strCode = (char *) fcitx_malloc0 (sizeof (char) * (tableDict->iPYCodeLength + 1));
         memset(recTemp->strCode, 0, sizeof (char) * (tableDict->iPYCodeLength + 1));
         strcpy (recTemp->strCode, strCode);
-        recTemp->strHZ = (char *) malloc (sizeof (char) * iTemp);
+        recTemp->strHZ = (char *) fcitx_malloc0 (sizeof (char) * iTemp);
         strcpy (recTemp->strHZ, strHZ);
 
         if (!iVersion) {
@@ -163,7 +163,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
 
     if (fpDict) {
         tableDict->iFH = CalculateRecordNumber (fpDict);
-        tableDict->fh = (FH *) malloc (sizeof (FH) * tableDict->iFH);
+        tableDict->fh = (FH *) fcitx_malloc0 (sizeof (FH) * tableDict->iFH);
 
         for (i = 0; i < tableDict->iFH; i++) {
             if (EOF == fscanf (fpDict, "%s\n", tableDict->fh[i].strFH))
@@ -174,13 +174,13 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         fclose (fpDict);
     }
 
-    tableDict->strNewPhraseCode = (char *) malloc (sizeof (char) * (tableDict->iCodeLength + 1));
+    tableDict->strNewPhraseCode = (char *) fcitx_malloc0 (sizeof (char) * (tableDict->iCodeLength + 1));
     tableDict->strNewPhraseCode[tableDict->iCodeLength] = '\0';
 
     tableDict->iAutoPhrase = 0;
     if (tableMetaData->bAutoPhrase) {
         //为自动词组分配空间
-        tableDict->autoPhrase = (AUTOPHRASE *) malloc (sizeof (AUTOPHRASE) * AUTO_PHRASE_COUNT);
+        tableDict->autoPhrase = (AUTOPHRASE *) fcitx_malloc0 (sizeof (AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
@@ -193,8 +193,8 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
             fread (&tableDict->iAutoPhrase, sizeof (unsigned int), 1, fpDict);
 
             for (; i < tableDict->iAutoPhrase; i++) {
-                tableDict->autoPhrase[i].strCode = (char *) malloc (sizeof (char) * (tableDict->iCodeLength + 1));
-                tableDict->autoPhrase[i].strHZ = (char *) malloc (sizeof (char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
+                tableDict->autoPhrase[i].strCode = (char *) fcitx_malloc0 (sizeof (char) * (tableDict->iCodeLength + 1));
+                tableDict->autoPhrase[i].strHZ = (char *) fcitx_malloc0 (sizeof (char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
                 fread (tableDict->autoPhrase[i].strCode, tableDict->iCodeLength + 1, 1, fpDict);
                 fread (tableDict->autoPhrase[i].strHZ, PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1, 1, fpDict);
                 fread (&iTempCount, sizeof (unsigned int), 1, fpDict);
@@ -208,8 +208,8 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         }
 
         for (; i < AUTO_PHRASE_COUNT; i++) {
-            tableDict->autoPhrase[i].strCode = (char *) malloc (sizeof (char) * (tableDict->iCodeLength + 1));
-            tableDict->autoPhrase[i].strHZ = (char *) malloc (sizeof (char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
+            tableDict->autoPhrase[i].strCode = (char *) fcitx_malloc0 (sizeof (char) * (tableDict->iCodeLength + 1));
+            tableDict->autoPhrase[i].strHZ = (char *) fcitx_malloc0 (sizeof (char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
             tableDict->autoPhrase[i].iSelected = 0;
             if (i == AUTO_PHRASE_COUNT - 1)
                 tableDict->autoPhrase[i].next = &tableDict->autoPhrase[0];
@@ -448,7 +448,7 @@ void TableCreateAutoPhrase (TableMetaData* tableMetaData, char iCount)
     if (!tableDict->autoPhrase)
         return;
 
-    strHZ=(char *)malloc((tableMetaData->iAutoPhraseLength * UTF8_MAX_LENGTH + 1)*sizeof(char));
+    strHZ=(char *)fcitx_malloc0((tableMetaData->iAutoPhraseLength * UTF8_MAX_LENGTH + 1)*sizeof(char));
     /*
      * 为了提高效率，此处只重新生成新录入字构成的词组
      */
@@ -585,11 +585,11 @@ void TableInsertPhrase (TableDict* tableDict, const char *strCode, const char *s
     if (!insertPoint)
         return;
 
-    dictNew = (RECORD *) malloc (sizeof (RECORD));
-    dictNew->strCode = (char *) malloc (sizeof (char) * (tableDict->iCodeLength + 1));
+    dictNew = (RECORD *) fcitx_malloc0 (sizeof (RECORD));
+    dictNew->strCode = (char *) fcitx_malloc0 (sizeof (char) * (tableDict->iCodeLength + 1));
     dictNew->bPinyin = 0;
     strcpy (dictNew->strCode, strCode);
-    dictNew->strHZ = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
+    dictNew->strHZ = (char *) fcitx_malloc0 (sizeof (char) * (strlen (strHZ) + 1));
     strcpy (dictNew->strHZ, strHZ);
     dictNew->iHit = 0;
     dictNew->iIndex = tableDict->iTableIndex;

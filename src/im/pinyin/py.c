@@ -158,14 +158,14 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
         return false;
 
     fread(&pystate->iPYFACount, sizeof(int), 1, fp);
-    pystate->PYFAList = (PYFA *) malloc(sizeof(PYFA) * pystate->iPYFACount);
+    pystate->PYFAList = (PYFA *) fcitx_malloc0(sizeof(PYFA) * pystate->iPYFACount);
     PYFA* PYFAList = pystate->PYFAList;
     for (i = 0; i < pystate->iPYFACount; i++) {
         fread(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
         PYFAList[i].strMap[2] = '\0';
 
         fread(&(PYFAList[i].iBase), sizeof(int), 1, fp);
-        PYFAList[i].pyBase = (PyBase *) malloc(sizeof(PyBase) * PYFAList[i].iBase);
+        PYFAList[i].pyBase = (PyBase *) fcitx_malloc0(sizeof(PyBase) * PYFAList[i].iBase);
         for (j = 0; j < PYFAList[i].iBase; j++) {
             int8_t len;
             fread(&len, sizeof(char), 1, fp);
@@ -178,7 +178,7 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
                 pystate->iCounter = iLen;
             PYFAList[i].pyBase[j].iPhrase = 0;
             PYFAList[i].pyBase[j].iUserPhrase = 0;
-            PYFAList[i].pyBase[j].userPhrase = (PyPhrase *) malloc(sizeof(PyPhrase));
+            PYFAList[i].pyBase[j].userPhrase = (PyUsrPhrase *) fcitx_malloc0(sizeof(PyUsrPhrase));
             PYFAList[i].pyBase[j].userPhrase->next = PYFAList[i].pyBase[j].userPhrase;
         }
     }
@@ -188,7 +188,7 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
 
     pystate->iOrigCounter = pystate->iCounter;
 
-    pystate->pyFreq = (PyFreq *) malloc(sizeof(PyFreq));
+    pystate->pyFreq = (PyFreq *) fcitx_malloc0(sizeof(PyFreq));
     pystate->pyFreq->next = NULL;
 
     return true;
@@ -248,7 +248,7 @@ StringHashSet *GetPYPhraseFiles()
                 if (!string)
                 {
                     char *bStr = strdup(drt->d_name);
-                    string = malloc(sizeof(StringHashSet));
+                    string = fcitx_malloc0(sizeof(StringHashSet));
                     memset(string, 0, sizeof(StringHashSet));
                     string->name = bStr;
                     HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
@@ -268,7 +268,7 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
 {
     int i, j ,k, count, iLen;
     char strBase[UTF8_MAX_LENGTH + 1];
-    PyPhrase *temp, *phrase = NULL;
+    PyPhrase *phrase = NULL, *temp;
     PYFA* PYFAList = pystate->PYFAList;
     while (!feof(fp)) {
         int8_t clen;
@@ -290,24 +290,24 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
 
         if (isSystem)
         {
-            phrase = (PyPhrase *) malloc(sizeof(PyPhrase) * count);
+            phrase = (PyPhrase *) fcitx_malloc0(sizeof(PyPhrase) * count);
             temp = phrase;
         }
         else
         {
             PYFAList[i].pyBase[j].iUserPhrase = count;
-            temp = PYFAList[i].pyBase[j].userPhrase;
+            temp = &PYFAList[i].pyBase[j].userPhrase->phrase;
         }
 
         for (k = 0; k < count; k++) {
             if (!isSystem)
-                phrase = (PyPhrase *) malloc(sizeof(PyPhrase));
+                phrase = (PyPhrase *) fcitx_malloc0(sizeof(PyUsrPhrase));
             fread(&iLen, sizeof(int), 1, fp);
-            phrase->strMap = (char *) malloc(sizeof(char) * (iLen + 1));
+            phrase->strMap = (char *) fcitx_malloc0(sizeof(char) * (iLen + 1));
             fread(phrase->strMap, sizeof(char) * iLen, 1, fp);
             phrase->strMap[iLen] = '\0';
             fread(&iLen, sizeof(int), 1, fp);
-            phrase->strPhrase = (char *) malloc(sizeof(char) * (iLen + 1));
+            phrase->strPhrase = (char *) fcitx_malloc0(sizeof(char) * (iLen + 1));
             fread(phrase->strPhrase, sizeof(char) * iLen, 1, fp);
             phrase->strPhrase[iLen] = '\0';
             fread(&iLen, sizeof(unsigned int), 1, fp);
@@ -324,8 +324,8 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
                 fread(&iLen, sizeof(int), 1, fp);
                 phrase->iHit = iLen;
 
-                phrase->next = temp->next;
-                temp->next = phrase;
+                ((PyUsrPhrase*) phrase)->next = ((PyUsrPhrase*) temp)->next;
+                ((PyUsrPhrase*) temp)->next = (PyUsrPhrase*) phrase;
 
                 temp = phrase;
             }
@@ -341,7 +341,7 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
             else
             {
                 int m, n;
-                boolean *flag = malloc(sizeof(boolean) * count);
+                boolean *flag = fcitx_malloc0(sizeof(boolean) * count);
                 memset(flag, 0, sizeof(boolean) * count);
                 int left = count;
                 phrase = temp;
@@ -469,7 +469,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         fread(&pystate->iPYFreqCount, sizeof(uint), 1, fp);
 
         for (i = 0; i < pystate->iPYFreqCount; i++) {
-            pyFreqTemp = (PyFreq *) malloc(sizeof(PyFreq));
+            pyFreqTemp = (PyFreq *) fcitx_malloc0(sizeof(PyFreq));
             pyFreqTemp->next = NULL;
             pyFreqTemp->bIsSym = false;
 
@@ -477,13 +477,13 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
             fread(&j, sizeof(int), 1, fp);
             pyFreqTemp->iCount = j;
 
-            pyFreqTemp->HZList = (HZ *) malloc(sizeof(HZ));
+            pyFreqTemp->HZList = (HZ *) fcitx_malloc0(sizeof(HZ));
             pyFreqTemp->HZList->next = NULL;
             pHZ = pyFreqTemp->HZList;
 
             for (k = 0; k < pyFreqTemp->iCount; k++) {
                 int8_t slen;
-                HZTemp = (HZ *) malloc(sizeof(HZ));
+                HZTemp = (HZ *) fcitx_malloc0(sizeof(HZ));
                 fread(&slen, sizeof(int8_t), 1, fp);
                 fread(HZTemp->strHZ, sizeof(char) * slen, 1, fp);
                 HZTemp->strHZ[slen] = '\0';
@@ -536,12 +536,12 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
             }
 
             if (!pyFreqTemp) {
-                pyFreqTemp = (PyFreq *) malloc(sizeof(PyFreq));
+                pyFreqTemp = (PyFreq *) fcitx_malloc0(sizeof(PyFreq));
                 strcpy(pyFreqTemp->strPY, str1);
                 pyFreqTemp->next = NULL;
                 pyFreqTemp->iCount = 0;
                 pyFreqTemp->bIsSym = true;
-                pyFreqTemp->HZList = (HZ *) malloc(sizeof(HZ));
+                pyFreqTemp->HZList = (HZ *) fcitx_malloc0(sizeof(HZ));
                 pyFreqTemp->HZList->next = NULL;
                 pPyFreq->next = pyFreqTemp;
                 pystate->iPYFreqCount++;
@@ -550,7 +550,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
                     continue;
             }
 
-            HZTemp = (HZ *) malloc(sizeof(HZ));
+            HZTemp = (HZ *) fcitx_malloc0(sizeof(HZ));
             strcpy(HZTemp->strHZ, str2);
             HZTemp->next = NULL;
             pyFreqTemp->iCount++;
@@ -854,7 +854,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         } else {
                             if (pycandWord->iWhich == PY_CAND_USERPHRASE)
                                 PYDelUserPhrase(pystate, pycandWord->cand.phrase.iPYFA,
-                                                pycandWord->cand.phrase.iBase, pycandWord->cand.phrase.phrase);
+                                                pycandWord->cand.phrase.iBase, (PyUsrPhrase*) pycandWord->cand.phrase.phrase);
                             pystate->bIsPYDelUserPhr = false;
                         }
                         input->bIsDoInputOnly = false;
@@ -1122,7 +1122,7 @@ void PYCreateAuto(FcitxPinyinState* pystate)
             for (candPos.iPYFA = 0; candPos.iPYFA < pystate->iPYFACount; candPos.iPYFA++) {
                 if (!Cmp2Map(pyconfig, PYFAList[candPos.iPYFA].strMap, str, pystate->bSP)) {
                     for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-                        phrase = PYFAList[candPos.iPYFA].pyBase[candPos.iBase].userPhrase->next;
+                        phrase = USER_PHRASE_NEXT(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].userPhrase);
                         for (candPos.iPhrase = 0;
                              candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iUserPhrase; candPos.iPhrase++) {
                             val = CmpMap(pyconfig, phrase->strMap, strMap, &iMatchedLength, pystate->bSP);
@@ -1150,7 +1150,7 @@ void PYCreateAuto(FcitxPinyinState* pystate)
                                     }
                                 }
                             }
-                            phrase = phrase->next;
+                            phrase = USER_PHRASE_NEXT(phrase);
                         }
                     }
                 }
@@ -1389,7 +1389,7 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
     for (candPos.iPYFA = 0; candPos.iPYFA < pystate->iPYFACount; candPos.iPYFA++) {
         if (!Cmp2Map(pyconfig, PYFAList[candPos.iPYFA].strMap, str, pystate->bSP)) {
             for (candPos.iBase = 0; candPos.iBase < PYFAList[candPos.iPYFA].iBase; candPos.iBase++) {
-                    phrase = PYFAList[candPos.iPYFA].pyBase[candPos.iBase].userPhrase->next;
+                    phrase = USER_PHRASE_NEXT(PYFAList[candPos.iPYFA].pyBase[candPos.iBase].userPhrase);
                     for (candPos.iPhrase = 0;
                          candPos.iPhrase < PYFAList[candPos.iPYFA].pyBase[candPos.iBase].iUserPhrase; candPos.iPhrase++) {
                             val = CmpMap(pyconfig, phrase->strMap, strMap, &iMatchedLength, pystate->bSP);
@@ -1399,7 +1399,7 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
                                 utarray_push_back(&candtemp, &pycandWord);
                             }
 
-                        phrase = phrase->next;
+                        phrase = USER_PHRASE_NEXT(phrase);
                     }
             }
         }
@@ -1631,7 +1631,7 @@ void PYAddFreqCandWord(PyFreq* pyFreq, HZ * hz, char *strPY, PYCandWord* pycandW
  */
 boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
 {
-    PyPhrase *userPhrase, *newPhrase, *temp;
+    PyUsrPhrase *userPhrase, *newPhrase, *temp;
     char str[UTF8_MAX_LENGTH + 1];
     int i, j, k, iTemp;
     int clen;
@@ -1654,8 +1654,8 @@ boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
     //首先，看它是不是在用户词组库中
     userPhrase = PYFAList[i].pyBase[j].userPhrase->next;
     for (k = 0; k < PYFAList[i].pyBase[j].iUserPhrase; k++) {
-        if (!strcmp(map + 2, userPhrase->strMap)
-            && !strcmp(phrase + clen, userPhrase->strPhrase))
+        if (!strcmp(map + 2, userPhrase->phrase.strMap)
+            && !strcmp(phrase + clen, userPhrase->phrase.strPhrase))
             return false;
         userPhrase = userPhrase->next;
     }
@@ -1666,17 +1666,17 @@ boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
             && !strcmp(phrase + clen, PYFAList[i].pyBase[j].phrase[k].strPhrase))
             return false;
     //下面将词组添加到列表中
-    newPhrase = (PyPhrase *) malloc(sizeof(PyPhrase));
-    newPhrase->strMap = (char *) malloc(sizeof(char) * strlen(map + 2) + 1);
-    newPhrase->strPhrase = (char *) malloc(sizeof(char) * strlen(phrase + clen) + 1);
-    strcpy(newPhrase->strMap, map + 2);
-    strcpy(newPhrase->strPhrase, phrase + clen);
-    newPhrase->iIndex = ++pystate->iCounter;
-    newPhrase->iHit = 1;
+    newPhrase = (PyUsrPhrase *) fcitx_malloc0(sizeof(PyUsrPhrase));
+    newPhrase->phrase.strMap = (char *) fcitx_malloc0(sizeof(char) * strlen(map + 2) + 1);
+    newPhrase->phrase.strPhrase = (char *) fcitx_malloc0(sizeof(char) * strlen(phrase + clen) + 1);
+    strcpy(newPhrase->phrase.strMap, map + 2);
+    strcpy(newPhrase->phrase.strPhrase, phrase + clen);
+    newPhrase->phrase.iIndex = ++pystate->iCounter;
+    newPhrase->phrase.iHit = 1;
     temp = PYFAList[i].pyBase[j].userPhrase;
     userPhrase = PYFAList[i].pyBase[j].userPhrase->next;
     for (k = 0; k < PYFAList[i].pyBase[j].iUserPhrase; k++) {
-        if (CmpMap(pyconfig, map + 2, userPhrase->strMap, &iTemp, pystate->bSP) > 0)
+        if (CmpMap(pyconfig, map + 2, userPhrase->phrase.strMap, &iTemp, pystate->bSP) > 0)
             break;
         temp = userPhrase;
         userPhrase = userPhrase->next;
@@ -1694,9 +1694,9 @@ boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
     return true;
 }
 
-void PYDelUserPhrase(FcitxPinyinState* pystate, int iPYFA, int iBase, PyPhrase * phrase)
+void PYDelUserPhrase(FcitxPinyinState* pystate, int iPYFA, int iBase, PyUsrPhrase * phrase)
 {
-    PyPhrase *temp;
+    PyUsrPhrase *temp;
     PYFA* PYFAList = pystate->PYFAList;
 
     //首先定位该词组
@@ -1709,8 +1709,8 @@ void PYDelUserPhrase(FcitxPinyinState* pystate, int iPYFA, int iBase, PyPhrase *
     if (!temp)
         return;
     temp->next = phrase->next;
-    free(phrase->strPhrase);
-    free(phrase->strMap);
+    free(phrase->phrase.strPhrase);
+    free(phrase->phrase.strMap);
     free(phrase);
     PYFAList[iPYFA].pyBase[iBase].iUserPhrase--;
     pystate->iNewPYPhraseCount++;
@@ -1762,7 +1762,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
                 fwrite(&clen, sizeof(char), 1, fp);
                 fwrite(PYFAList[i].pyBase[j].strHZ, sizeof(char) * clen, 1, fp);
                 fwrite(&iTemp, sizeof(int), 1, fp);
-                phrase = PYFAList[i].pyBase[j].userPhrase->next;
+                phrase = USER_PHRASE_NEXT(PYFAList[i].pyBase[j].userPhrase);
                 for (k = 0; k < PYFAList[i].pyBase[j].iUserPhrase; k++) {
                     iTemp = strlen(phrase->strMap);
                     fwrite(&iTemp, sizeof(int), 1, fp);
@@ -1776,7 +1776,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
                     fwrite(&iTemp, sizeof(int), 1, fp);
                     iTemp = phrase->iHit;
                     fwrite(&iTemp, sizeof(int), 1, fp);
-                    phrase = phrase->next;
+                    phrase = USER_PHRASE_NEXT(phrase);
                 }
             }
         }
@@ -1958,8 +1958,8 @@ void PYAddFreq(FcitxPinyinState* pystate, PYCandWord* pycandWord)
         return;
     //需要添加该字，此时该字必然是系统单字
     if (!pCurFreq) {
-        freq = (PyFreq *) malloc(sizeof(PyFreq));
-        freq->HZList = (HZ *) malloc(sizeof(HZ));
+        freq = (PyFreq *) fcitx_malloc0(sizeof(PyFreq));
+        freq->HZList = (HZ *) fcitx_malloc0(sizeof(HZ));
         freq->HZList->next = NULL;
         strcpy(freq->strPY, pystate->strFindString);
         freq->next = NULL;
@@ -2097,7 +2097,7 @@ INPUT_RETURN_VALUE PYGetRemindCandWords(void *arg)
         }
     }
 
-    phrase = pyBaseForRemind->userPhrase->next;
+    phrase = &pyBaseForRemind->userPhrase->next->phrase;
     for (i = 0; i < pyBaseForRemind->iUserPhrase; i++) {
         if (bDisablePagingInRemind && utarray_len(&candtemp) >= CandidateWordGetPageSize(input->candList))
             break;
@@ -2118,7 +2118,7 @@ INPUT_RETURN_VALUE PYGetRemindCandWords(void *arg)
             }
         }
 
-        phrase = phrase->next;
+        phrase = USER_PHRASE_NEXT(phrase);
     }
 
     SetMessageCount(input->msgAuxUp, 0);

@@ -137,7 +137,7 @@ void LoadTableInfo (FcitxTableState *tbl)
     tbl->hkTableAdjustOrder[0].sym = Key_6; tbl->hkTableAdjustOrder[0].state = KEY_CTRL_COMP;
     tbl->hkTableAddPhrase[0].sym = Key_8; tbl->hkTableAddPhrase[0].state = KEY_CTRL_COMP;
 
-    tbl->table = malloc(sizeof(UT_array));
+    tbl->table = fcitx_malloc0(sizeof(UT_array));
     tbl->iTableCount = 0;
     utarray_init(tbl->table, &table_icd);
 
@@ -174,7 +174,7 @@ void LoadTableInfo (FcitxTableState *tbl)
                 if (!string)
                 {
                     char *bStr = strdup(drt->d_name);
-                    string = malloc(sizeof(StringHashSet));
+                    string = fcitx_malloc0(sizeof(StringHashSet));
                     memset(string, 0, sizeof(StringHashSet));
                     string->name = bStr;
                     HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
@@ -185,9 +185,9 @@ void LoadTableInfo (FcitxTableState *tbl)
         closedir(dir);
     }
 
-    char **paths = malloc(sizeof(char*) *len);
+    char **paths = fcitx_malloc0(sizeof(char*) *len);
     for (i = 0;i < len ;i ++)
-        paths[i] = malloc(sizeof(char) *PATH_MAX);
+        paths[i] = fcitx_malloc0(sizeof(char) *PATH_MAX);
     StringHashSet* string;
     for (string = sset;
             string != NULL;
