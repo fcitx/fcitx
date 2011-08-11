@@ -1010,14 +1010,6 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxPinyinState *pystate = (FcitxPinyinState*) arg;
     FcitxInputState *input = &pystate->owner->input;
     
-    if (pystate->findMap.iMode == PARSE_ERROR) {
-        CleanInputWindowDown(pystate->owner);
-        return IRV_DISPLAY_MESSAGE;
-    }
-
-    if (input->bIsInRemind)
-        return PYGetRemindCandWords(pystate);
-
     /* update preedit string */
     int i;
     SetMessageCount(input->msgPreedit, 0);
@@ -1030,8 +1022,16 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
         AddMessageAtLast(input->msgPreedit, MSG_CODE, "%s ", pystate->findMap.strPYParsed[i]);
-    }
+    }    
     
+    if (pystate->findMap.iMode == PARSE_ERROR) {
+        CleanInputWindowDown(pystate->owner);
+        return IRV_DISPLAY_MESSAGE;
+    }
+
+    if (input->bIsInRemind)
+        return PYGetRemindCandWords(pystate);
+
     CandidateWordSetPageSize(input->candList, pystate->owner->config.iMaxCandWord);
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
     
