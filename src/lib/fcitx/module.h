@@ -27,64 +27,65 @@
 extern "C" {
 #endif
 
-struct _FcitxInstance;
-struct _FcitxAddon;
+    struct _FcitxInstance;
+    struct _FcitxAddon;
 
-/**
- * @brief A misc module in Fcitx, it can register hook, or add it's own event
- *        to Fcitx main loop.
- **/
-typedef struct _FcitxModule
-{
     /**
-     * @brief construction function
-     */
-    void* (*Create)(struct _FcitxInstance* instance);
-    /**
-     * @brief set main loop watch fd, no need to implement
-     */
-    void (*SetFD)(void*);
-    /**
-     * @brief main loop event handle, no need to implement
-     */
-    void (*ProcessEvent)(void*);
-    /**
-     * @brief destruct function
-     */
-    void (*Destroy)(void*);
-    /**
-     * @brief reload config, no need to implement
-     */
-    void (*ReloadConfig)(void*);
-} FcitxModule;
-
-/**
- * @brief the argument to invoke module function
- **/
-typedef struct _FcitxModuleFunctionArg
-{
-    /**
-     * @brief arguments
+     * @brief A misc module in Fcitx, it can register hook, or add it's own event
+     *        to Fcitx main loop.
      **/
-    void* args[10];
-} FcitxModuleFunctionArg;
+    typedef struct _FcitxModule
+    {
+        /**
+         * @brief construction function
+         */
+        void* (*Create)(struct _FcitxInstance* instance);
+        /**
+         * @brief set main loop watch fd, no need to implement
+         */
+        void (*SetFD)(void*);
+        /**
+         * @brief main loop event handle, no need to implement
+         */
+        void (*ProcessEvent)(void*);
+        /**
+         * @brief destruct function
+         */
+        void (*Destroy)(void*);
+        /**
+         * @brief reload config, no need to implement
+         */
+        void (*ReloadConfig)(void*);
+    } FcitxModule;
 
-void InitFcitxModules(UT_array* modules);
-void LoadModule(struct _FcitxInstance* instance);
-void* InvokeModuleFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
-void* InvokeModuleFunctionWithName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
+    /**
+     * @brief the argument to invoke module function
+     **/
+    typedef struct _FcitxModuleFunctionArg
+    {
+        /**
+         * @brief arguments
+         **/
+        void* args[10];
+    } FcitxModuleFunctionArg;
+
+    void InitFcitxModules(UT_array* modules);
+    void LoadModule(struct _FcitxInstance* instance);
+    void* InvokeModuleFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+    void* InvokeModuleFunctionWithName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) InvokeModuleFunctionWithName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
-    
+
 #define AddFunction(ADDON, Realname) \
     do { \
         void *temp = Realname; \
         utarray_push_back(&ADDON->functionList, &temp); \
     } while(0)
-    
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

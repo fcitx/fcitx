@@ -174,11 +174,11 @@ static int process_message(Message *msg)
         msg.len = sizeof(msg);
         int ret = write(imfd, (char *)&msg, sizeof(msg));
         break;
-        }
+    }
 
     case SendKey:
         if (im_active && cbs.send_key) {
-                cbs.send_key(msg->keys, msg->len - OFFSET(Message, keys));
+            cbs.send_key(msg->keys, msg->len - OFFSET(Message, keys));
         }
         break;
 
@@ -278,3 +278,4 @@ int check_im_message()
     return !exit;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -159,13 +159,13 @@ char *fcitx_trim(char *s)
 {
     register char *end;
     register char csave;
-    
+
     while (isspace(*s))                 /* skip leading space */
         ++s;
     end = strchr(s,'\0') - 1;
     while (end >= s && isspace(*end))               /* skip trailing space */
         --end;
-    
+
     csave = end[1];
     end[1] = '\0';
     s = strdup(s);
@@ -183,7 +183,7 @@ int FcitxGetDisplayNumber()
         display = strdup(display);
         char* p = display;
         for (; *p != ':' && *p != '\0'; p++);
-        
+
         if (*p == ':') {
             *p = '\0';
             p++;
@@ -201,3 +201,4 @@ int FcitxGetDisplayNumber()
     }
     return displayNumber;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

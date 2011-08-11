@@ -49,3 +49,4 @@ typedef struct _FcitxXimFrontend
 } FcitxXimFrontend;
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -34,61 +34,62 @@
 extern "C" {
 #endif
 
-struct _HookStack;
-struct _FcitxInputContext;
+    struct _HookStack;
+    struct _FcitxInputContext;
 
-/**
- * @brief Fcitx Instance, including all global settings
- **/
-typedef struct _FcitxInstance {
-    pthread_mutex_t fcitxMutex;
-    UT_array uistats;
-    UT_array uimenus;
-    FcitxAddon* ui;
-    FcitxInputState input;
-    boolean bMutexInited;
-    FcitxUIMenu imMenu;
-    
-    /* Fcitx is not good at multi process, so put a readonlyMode in it */
-    boolean readonlyMode;
-    
-    /* config file */
-    FcitxConfig config;
-    FcitxProfile profile;
-    UT_array addons;
-    UT_array imeclasses;
-    UT_array imes;
-    UT_array frontends;
-    UT_array eventmodules;
-    
-    struct _FcitxInputContext *CurrentIC;
-    struct _FcitxInputContext *ic_list;
-    struct _FcitxInputContext *free_list;
-    sem_t* sem;
-    pthread_t pid;
-    fd_set rfds, wfds, efds;
-    int maxfd;
-    char* uiname;
-    
-    struct _HookStack* hookPreInputFilter;
-    struct _HookStack* hookPostInputFilter;
-    struct _HookStack* hookOutputFilter;
-    struct _HookStack* hookHotkeyFilter;
-    struct _HookStack* hookResetInputHook;
-    struct _HookStack* hookTriggerOnHook;
-    struct _HookStack* hookTriggerOffHook;
-    struct _HookStack* hookInputFocusHook;
-    struct _HookStack* hookInputUnFocusHook;
-    struct _HookStack* hookUpdateCandidateWordHook;
-} FcitxInstance;
+    /**
+     * @brief Fcitx Instance, including all global settings
+     **/
+    typedef struct _FcitxInstance {
+        pthread_mutex_t fcitxMutex;
+        UT_array uistats;
+        UT_array uimenus;
+        FcitxAddon* ui;
+        FcitxInputState input;
+        boolean bMutexInited;
+        FcitxUIMenu imMenu;
 
-FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
-int FcitxLock(FcitxInstance* instance);
-int FcitxUnlock(FcitxInstance* instance);
-void EndInstance(FcitxInstance* instance);
+        /* Fcitx is not good at multi process, so put a readonlyMode in it */
+        boolean readonlyMode;
+
+        /* config file */
+        FcitxConfig config;
+        FcitxProfile profile;
+        UT_array addons;
+        UT_array imeclasses;
+        UT_array imes;
+        UT_array frontends;
+        UT_array eventmodules;
+
+        struct _FcitxInputContext *CurrentIC;
+        struct _FcitxInputContext *ic_list;
+        struct _FcitxInputContext *free_list;
+        sem_t* sem;
+        pthread_t pid;
+        fd_set rfds, wfds, efds;
+        int maxfd;
+        char* uiname;
+
+        struct _HookStack* hookPreInputFilter;
+        struct _HookStack* hookPostInputFilter;
+        struct _HookStack* hookOutputFilter;
+        struct _HookStack* hookHotkeyFilter;
+        struct _HookStack* hookResetInputHook;
+        struct _HookStack* hookTriggerOnHook;
+        struct _HookStack* hookTriggerOffHook;
+        struct _HookStack* hookInputFocusHook;
+        struct _HookStack* hookInputUnFocusHook;
+        struct _HookStack* hookUpdateCandidateWordHook;
+    } FcitxInstance;
+
+    FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
+    int FcitxLock(FcitxInstance* instance);
+    int FcitxUnlock(FcitxInstance* instance);
+    void EndInstance(FcitxInstance* instance);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

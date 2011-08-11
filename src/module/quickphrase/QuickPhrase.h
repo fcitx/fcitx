@@ -32,3 +32,4 @@ typedef struct _QUICK_PHRASE {
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

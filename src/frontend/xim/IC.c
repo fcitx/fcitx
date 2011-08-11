@@ -37,7 +37,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 /**
  * @file IC.c
- * 
+ *
  * @brief Process XIM Input Context
  */
 
@@ -212,7 +212,7 @@ void XimDestroyIC (void* arg, FcitxInputContext* context)
 /**
  * @brief Set Input Context Data
  *
- * @param call_data 
+ * @param call_data
  * @return void
  **/
 void XimSetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
@@ -230,7 +230,7 @@ void XimSetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 /**
  * @brief Fetch Input Context Data
  *
- * @param call_data 
+ * @param call_data
  * @return void
  **/
 void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
@@ -353,3 +353,4 @@ void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
     }
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

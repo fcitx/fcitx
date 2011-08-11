@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #ifndef _Xi18n_h
@@ -37,7 +37,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "XimProto.h"
 
 /*
- * Minor Protocol Number for Extension Protocol 
+ * Minor Protocol Number for Extension Protocol
  */
 #define XIM_EXTENSION				128
 #define XIM_EXT_SET_EVENT_MASK			(0x30)
@@ -107,7 +107,7 @@ typedef struct
 typedef struct
 {
     int		attribute_id;
-    CARD16	name_length; 
+    CARD16	name_length;
     char	*name;
     int		value_length;
     void	*value;
@@ -373,9 +373,9 @@ typedef struct
     CARD16	icid;
     union
     {
-	int return_value;			/* PreeditStart */
-	XIMPreeditDrawCallbackStruct draw;	/* PreeditDraw */
-	XIMPreeditCaretCallbackStruct caret; 	/* PreeditCaret */
+        int return_value;			/* PreeditStart */
+        XIMPreeditDrawCallbackStruct draw;	/* PreeditDraw */
+        XIMPreeditCaretCallbackStruct caret; 	/* PreeditCaret */
     } todo;
 } IMPreeditCBStruct;
 
@@ -387,7 +387,7 @@ typedef struct
     CARD16	icid;
     union
     {
-	XIMStatusDrawCallbackStruct draw;	/* StatusDraw */
+        XIMStatusDrawCallbackStruct draw;	/* StatusDraw */
     } todo;
 } IMStatusCBStruct;
 
@@ -504,3 +504,4 @@ typedef struct _Xi18nCore
 #endif
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

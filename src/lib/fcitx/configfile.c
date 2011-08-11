@@ -69,7 +69,7 @@ void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *op
     FcitxConfig* fc = (FcitxConfig*) config;
     char *pstr = *(char**) value;
 
-    if(sync == Raw2Value){
+    if (sync == Raw2Value) {
         if (!strcasecmp (pstr, "SHIFT")) {
             fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = Key_Shift_L;        //左SHIFT的扫描码
             fc->i2ndSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
@@ -121,20 +121,20 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
     if (sync == Raw2Value)
     {
         SWITCHKEY *s = (SWITCHKEY*)value;
-        switch(*s)
+        switch (*s)
         {
-            case S_R_CTRL:
-                hkey = FCITX_RCTRL;
-                break;
-            case S_R_SHIFT:
-                hkey = FCITX_RSHIFT;
-                break;
-            case S_L_SHIFT:
-                hkey = FCITX_LSHIFT;
-                break;
-            case S_L_CTRL:
-                hkey = FCITX_LCTRL;
-                break;
+        case S_R_CTRL:
+            hkey = FCITX_RCTRL;
+            break;
+        case S_R_SHIFT:
+            hkey = FCITX_RSHIFT;
+            break;
+        case S_L_SHIFT:
+            hkey = FCITX_LSHIFT;
+            break;
+        case S_L_CTRL:
+            hkey = FCITX_LCTRL;
+            break;
         }
     }
     if (hkey != NULL)
@@ -148,10 +148,10 @@ FCITX_EXPORT_API
 boolean LoadConfig(FcitxConfig* fc)
 {
     ConfigFileDesc* configDesc = GetConfigDesc();
-    
+
     if (configDesc == NULL)
         return false;
-    
+
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("", "config", "rt", &file);
@@ -161,12 +161,12 @@ boolean LoadConfig(FcitxConfig* fc)
         if (errno == ENOENT)
             SaveConfig(fc);
     }
-    
+
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
-    
+
     FcitxConfigConfigBind(fc, cfile, configDesc);
     ConfigBindSync((GenericConfig*)fc);
-    
+
     if (fp)
         fclose(fp);
     return true;
@@ -198,3 +198,4 @@ boolean ConfigGetPointAfterNumber(FcitxConfig* fc)
 {
     return fc->bPointAfterNumber;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

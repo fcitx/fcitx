@@ -68,13 +68,13 @@ reloadfont:
     {
         pat = FcNameParse ((FcChar8*)(*font));
     }
-    
+
     os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
     fs = FcFontList(0, pat, os);
     if (os)
         FcObjectSetDestroy(os);
     os = NULL;
-    
+
     FcPatternDestroy(pat);
     pat = NULL;
 
@@ -107,9 +107,10 @@ nofont:
 
         goto reloadfont;
     }
-        
+
     FcitxLog(FATAL, _("no valid font."));
     return;
 }
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

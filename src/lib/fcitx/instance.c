@@ -88,23 +88,23 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->input.msgPreedit = InitMessages();
     instance->input.candList = CandidateWordInit();
     instance->sem = sem;
-    
+
     if (!LoadConfig(&instance->config))
         goto error_exit;
-    
+
     CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
-    
+
     if (!ProcessOption(instance, argc, argv))
         goto error_exit;
-    
+
     instance->input.timeStart = time(NULL);
-    
+
     FcitxInitThread(instance);
     if (!LoadProfile(&instance->profile))
         goto error_exit;
     if (GetAddonConfigDesc() == NULL)
         goto error_exit;
-    
+
     LoadAddonInfo(&instance->addons);
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
@@ -114,33 +114,33 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         EndInstance(instance);
         return instance;
     }
-    
+
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
     RegisterStatus(instance, instance, "remind", "Remind", "Remind", ToggleRemindState, GetRemindEnabled);
-    
+
     LoadUserInterface(instance);
 
     SwitchIM(instance, instance->profile.iIMIndex);
-    
+
     if (!LoadFrontend(instance))
     {
         EndInstance(instance);
         return instance;
     }
-    
+
     if (instance->config.bFirstRun)
     {
         instance->config.bFirstRun = false;
         SaveConfig(&instance->config);
-        
+
         const char *imname = "fcitx";
         char strTemp[PATH_MAX];
         snprintf(strTemp, PATH_MAX, "@im=%s", imname);
         strTemp[PATH_MAX - 1] = '\0';
 
         if ((getenv("XMODIFIERS") != NULL && CHECK_ENV("XMODIFIERS", strTemp, true)) ||
-            CHECK_ENV("GTK_IM_MODULE", "xim", false) || CHECK_ENV("QT_IM_MODULE", "xim", false)) {
+                CHECK_ENV("GTK_IM_MODULE", "xim", false) || CHECK_ENV("QT_IM_MODULE", "xim", false)) {
             char *msg[7];
             msg[0] = _("Please check your environment varibles.");
             msg[1] = _("You may need to set environment varibles below to make fcitx work correctly.");
@@ -169,23 +169,23 @@ void* RunInstance(void* arg)
     FcitxInstance* instance = (FcitxInstance*) arg;
     while (1)
     {
-        FcitxAddon** pmodule; 
+        FcitxAddon** pmodule;
         for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
-             pmodule != NULL;
-             pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
+                pmodule != NULL;
+                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
         {
             FcitxModule* module = (*pmodule)->module;
             module->ProcessEvent((*pmodule)->addonInstance);
         }
-        
+
         FD_ZERO(&instance->rfds);
         FD_ZERO(&instance->wfds);
         FD_ZERO(&instance->efds);
 
         instance->maxfd = 0;
         for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
-             pmodule != NULL;
-             pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
+                pmodule != NULL;
+                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
         {
             FcitxModule* module = (*pmodule)->module;
             module->SetFD((*pmodule)->addonInstance);
@@ -201,30 +201,30 @@ FCITX_EXPORT_API
 void EndInstance(FcitxInstance* instance)
 {
     SaveAllIM(instance);
- 
+
     /* handle exit */
     FcitxAddon** pfrontend;
-    FcitxFrontend* frontend;  
+    FcitxFrontend* frontend;
     FcitxInputContext* rec = NULL;
     FcitxInputContext* last = NULL;
-    
+
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
         pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->CloseIM((*pfrontend)->addonInstance, rec);
     }
-        
+
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
         pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->DestroyIC((*pfrontend)->addonInstance, rec);
     }
-    
+
     int frontendid = 0;
     for (pfrontend = (FcitxAddon**) utarray_front(&instance->frontends);
-        pfrontend != NULL;
-        pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend) 
-    )
+            pfrontend != NULL;
+            pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend)
+        )
     {
         if (pfrontend == NULL)
             return;
@@ -232,7 +232,7 @@ void EndInstance(FcitxInstance* instance)
         frontend->Destroy((*pfrontend)->addonInstance);
         frontendid++;
     }
-    
+
     sem_post(instance->sem);
 }
 
@@ -279,68 +279,69 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
         {"ui", 1, 0, 0},
         {"help", 0, 0, 0}
     };
-    
+
     int optionIndex = 0;
     int c;
     char* uiname = NULL;
     boolean runasdaemon = true;
     int             overrideDelay = -1;
-    while((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF)
+    while ((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF)
     {
-        switch(c)
+        switch (c)
         {
+        case 0:
+        {
+            switch (optionIndex)
+            {
             case 0:
-                {
-                    switch(optionIndex)
-                    {
-                        case 0:
-                            uiname = strdup(optarg);
-                            break;
-                        default:
-                            Usage();
-                            return false;
-                    }
-                }
-                break;
-            case 'u':
                 uiname = strdup(optarg);
-                break;
-            case 'd':
-                runasdaemon = true;
-                break;
-            case 'D':
-                runasdaemon = false;
-                break;
-            case 's':
-                overrideDelay = atoi(optarg);
-                break;
-            case 'h':
-                Usage();
-                return false;
-            case 'v':
-                Version();
-                return false;
                 break;
             default:
                 Usage();
                 return false;
+            }
+        }
+        break;
+        case 'u':
+            uiname = strdup(optarg);
+            break;
+        case 'd':
+            runasdaemon = true;
+            break;
+        case 'D':
+            runasdaemon = false;
+            break;
+        case 's':
+            overrideDelay = atoi(optarg);
+            break;
+        case 'h':
+            Usage();
+            return false;
+        case 'v':
+            Version();
+            return false;
+            break;
+        default:
+            Usage();
+            return false;
         }
     }
-    
+
     if (uiname)
         instance->uiname = uiname;
     else
         instance->uiname = NULL;
-    
+
     if (runasdaemon)
-        InitAsDaemon();    
-    
+        InitAsDaemon();
+
     if (overrideDelay < 0)
         overrideDelay = instance->config.iDelayStart;
 
     if (overrideDelay > 0)
         sleep(overrideDelay);
-    
+
     return true;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

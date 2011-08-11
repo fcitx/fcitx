@@ -54,7 +54,7 @@ typedef enum _ChttransEngine
 } ChttransEngine;
 
 
-typedef struct _FcitxChttrans{
+typedef struct _FcitxChttrans {
     GenericConfig gconfig;
     boolean enabled;
     ChttransEngine engine;
@@ -99,16 +99,16 @@ void* ChttransCreate(FcitxInstance* instance)
         free(transState);
         return NULL;
     }
-    
+
     HotkeyHook hk;
     hk.arg = transState;
     hk.hotkey = transState->hkToggle;
     hk.hotkeyhandle = HotkeyToggleChttransState;
-    
+
     StringFilterHook shk;
     shk.arg = transState;
     shk.func = ChttransOutputFilter;
-    
+
     RegisterHotkeyFilter(instance, hk);
     RegisterOutputFilter(instance, shk);
     RegisterStatus(instance, transState, "chttrans", "Traditional Chinese Translate", "Traditional Chinese Translate", ToggleChttransState, GetChttransEnabled);
@@ -156,9 +156,9 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
     if (strHZ == NULL)
         return NULL;
 
-    switch(transState->engine)
+    switch (transState->engine)
     {
-        case ENGINE_OPENCC:
+    case ENGINE_OPENCC:
 #ifdef _ENABLE_OPENCC
         {
             static opencc_t od = NULL;
@@ -183,75 +183,75 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             return res;
         }
 #endif
-        case ENGINE_NATIVE:
-        {
-            FILE           *fp;
-            char           *ret;
-            int             i, len, ret_len;
-            char           *strBuf = NULL;
-            size_t          bufLen = 0;
-            const char     *ps;
+    case ENGINE_NATIVE:
+    {
+        FILE           *fp;
+        char           *ret;
+        int             i, len, ret_len;
+        char           *strBuf = NULL;
+        size_t          bufLen = 0;
+        const char     *ps;
 
-            if (!transState->s2t_table) {
-                len = 0;
+        if (!transState->s2t_table) {
+            len = 0;
 
-                fp = GetXDGFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
-                if (!fp) {
-                    ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
-                    strcpy (ret, strHZ);
-                    return ret;
-                }
-                while (getline(&strBuf, &bufLen, fp) != -1)
-                {
-                    simple2trad_t *s2t;
-                    char *ps;
-                    int wc;
-
-                    ps = utf8_get_char(strBuf, &wc);
-                    s2t = (simple2trad_t*) malloc(sizeof(simple2trad_t));
-                    s2t->wc = wc;
-                    s2t->len = utf8_char_len(ps);
-                    strncpy(s2t->str, ps, s2t->len);
-                    s2t->str[s2t->len] = '\0';
-
-                    HASH_ADD_INT(transState->s2t_table, wc, s2t);
-                }
-                if (strBuf)
-                    free(strBuf);
+            fp = GetXDGFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
+            if (!fp) {
+                ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
+                strcpy (ret, strHZ);
+                return ret;
             }
-
-            i = 0;
-            len = utf8_strlen (strHZ);
-            ret_len = 0;
-            ret = (char *) malloc (sizeof (char) * (UTF8_MAX_LENGTH * len + 1));
-            ps = strHZ;
-            ret[0] = '\0';
-            for (; i < len; ++i) {
+            while (getline(&strBuf, &bufLen, fp) != -1)
+            {
+                simple2trad_t *s2t;
+                char *ps;
                 int wc;
-                simple2trad_t *s2t = NULL;
-                int chr_len = utf8_char_len(ps);
-                char *nps;
-                nps = utf8_get_char(ps , &wc);
-                HASH_FIND_INT(transState->s2t_table, &wc, s2t);
 
-                if (s2t)
-                {
-                    strcat(ret, s2t->str);
-                    ret_len += s2t->len;
-                }
-                else
-                {
-                    strncat(ret, ps, chr_len);
-                    ret_len += chr_len;
-                }
+                ps = utf8_get_char(strBuf, &wc);
+                s2t = (simple2trad_t*) malloc(sizeof(simple2trad_t));
+                s2t->wc = wc;
+                s2t->len = utf8_char_len(ps);
+                strncpy(s2t->str, ps, s2t->len);
+                s2t->str[s2t->len] = '\0';
 
-                ps = nps;
-
+                HASH_ADD_INT(transState->s2t_table, wc, s2t);
             }
-            ret[ret_len] = '\0';
-
-            return ret;
+            if (strBuf)
+                free(strBuf);
         }
+
+        i = 0;
+        len = utf8_strlen (strHZ);
+        ret_len = 0;
+        ret = (char *) malloc (sizeof (char) * (UTF8_MAX_LENGTH * len + 1));
+        ps = strHZ;
+        ret[0] = '\0';
+        for (; i < len; ++i) {
+            int wc;
+            simple2trad_t *s2t = NULL;
+            int chr_len = utf8_char_len(ps);
+            char *nps;
+            nps = utf8_get_char(ps , &wc);
+            HASH_FIND_INT(transState->s2t_table, &wc, s2t);
+
+            if (s2t)
+            {
+                strcat(ret, s2t->str);
+                ret_len += s2t->len;
+            }
+            else
+            {
+                strncat(ret, ps, chr_len);
+                ret_len += chr_len;
+            }
+
+            ps = nps;
+
+        }
+        ret[ret_len] = '\0';
+
+        return ret;
+    }
     }
     return NULL;
 }
@@ -261,7 +261,7 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     ConfigFileDesc* configDesc = GetChttransConfigDesc();
     if (configDesc == NULL)
         return false;
-    
+
     FILE *fp;
     char *file;
     fp = GetXDGFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
@@ -271,15 +271,15 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
         if (errno == ENOENT)
             SaveChttransConfig(transState);
     }
-    
+
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
-    
+
     FcitxChttransConfigBind(transState, cfile, configDesc);
     ConfigBindSync((GenericConfig*)transState);
 
     if (fp)
         fclose(fp);
-    
+
     return true;
 }
 
@@ -303,3 +303,4 @@ void ReloadChttrans(void* arg)
     LoadChttransConfig(transState);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

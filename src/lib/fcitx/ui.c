@@ -36,14 +36,14 @@
 
 /**
  * @file ui.c
- * 
+ *
  * @brief user interface related function.
  */
 
 /**
  * @brief a single string message
  **/
-struct _MESSAGE{
+struct _MESSAGE {
     /**
      * @brief The string of the message
      **/
@@ -122,74 +122,74 @@ void LoadUserInterface(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->bEnabled && addon->category == AC_UI)
         {
             char *modulePath;
             switch (addon->type)
             {
-                case AT_SHAREDLIBRARY:
-                    {
-                        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
-                        void *handle;
-                        if (!fp)
-                            break;
-                        fclose(fp);
-                        handle = dlopen(modulePath, RTLD_LAZY);
-                        if(!handle)
-                        {
-                            FcitxLog(ERROR, _("UI: open %s fail %s") ,modulePath ,dlerror());
-                            break;
-                        }
-                        addon->ui=dlsym(handle,"ui");
-                        if(!addon->ui || !addon->ui->Create)
-                        {
-                            FcitxLog(ERROR, _("UI: bad ui"));
-                            dlclose(handle);
-                            break;
-                        }
-                        if((addon->addonInstance = addon->ui->Create(instance)) == NULL)
-                        {
-                            dlclose(handle);
-                            return;
-                        }
-                        
-                        /* some may register before ui load, so load it here */
-                        if (addon->ui->RegisterStatus)
-                        {
-                            UT_array* uistats = &instance->uistats;
-                            FcitxUIStatus *status;
-                            for ( status = (FcitxUIStatus *) utarray_front(uistats);
-                                status != NULL;
-                                status = (FcitxUIStatus *) utarray_next(uistats, status))
-                                addon->ui->RegisterStatus(addon->addonInstance, status);
-                        }
-                        
-                        if (addon->ui->RegisterMenu)
-                        {
-                            UT_array* uimenus = &instance->uimenus;
-                            FcitxUIMenu **menupp;
-                            for ( menupp = (FcitxUIMenu **) utarray_front(uimenus);
-                                menupp != NULL;
-                                menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp))
-                                addon->ui->RegisterMenu(addon->addonInstance, *menupp);
-                        }
-                        
-                        instance->ui = addon;
-                    }
+            case AT_SHAREDLIBRARY:
+            {
+                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+                void *handle;
+                if (!fp)
                     break;
-                default:
+                fclose(fp);
+                handle = dlopen(modulePath, RTLD_LAZY);
+                if (!handle)
+                {
+                    FcitxLog(ERROR, _("UI: open %s fail %s") ,modulePath ,dlerror());
                     break;
+                }
+                addon->ui=dlsym(handle,"ui");
+                if (!addon->ui || !addon->ui->Create)
+                {
+                    FcitxLog(ERROR, _("UI: bad ui"));
+                    dlclose(handle);
+                    break;
+                }
+                if ((addon->addonInstance = addon->ui->Create(instance)) == NULL)
+                {
+                    dlclose(handle);
+                    return;
+                }
+
+                /* some may register before ui load, so load it here */
+                if (addon->ui->RegisterStatus)
+                {
+                    UT_array* uistats = &instance->uistats;
+                    FcitxUIStatus *status;
+                    for ( status = (FcitxUIStatus *) utarray_front(uistats);
+                            status != NULL;
+                            status = (FcitxUIStatus *) utarray_next(uistats, status))
+                        addon->ui->RegisterStatus(addon->addonInstance, status);
+                }
+
+                if (addon->ui->RegisterMenu)
+                {
+                    UT_array* uimenus = &instance->uimenus;
+                    FcitxUIMenu **menupp;
+                    for ( menupp = (FcitxUIMenu **) utarray_front(uimenus);
+                            menupp != NULL;
+                            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp))
+                        addon->ui->RegisterMenu(addon->addonInstance, *menupp);
+                }
+
+                instance->ui = addon;
             }
-            
+            break;
+            default:
+                break;
+            }
+
             free(modulePath);
             if (instance->ui != NULL)
                 break;
         }
     }
-    
+
     if (instance->ui == NULL)
         FcitxLog(ERROR, "no usable user interface.");
 }
@@ -279,20 +279,20 @@ FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
     UT_array* uistats = &instance->uistats;
     FcitxUIStatus *status;
     for ( status = (FcitxUIStatus *) utarray_front(uistats);
-          status != NULL;
-          status = (FcitxUIStatus *) utarray_next(uistats, status))
-         if (strcmp(status->name, name) == 0)
-             break;
-   return status;
+            status != NULL;
+            status = (FcitxUIStatus *) utarray_next(uistats, status))
+        if (strcmp(status->name, name) == 0)
+            break;
+    return status;
 }
 
 FCITX_EXPORT_API
 void UpdateStatus(FcitxInstance* instance, const char* name)
 {
     FcitxLog(DEBUG, "Update Status for %s", name);
-    
+
     FcitxUIStatus *status = GetUIStatus(instance, name);
-    
+
     if (status != NULL)
     {
         status->toggleStatus(status->arg);
@@ -315,7 +315,7 @@ void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name
     status.toggleStatus = toggleStatus;
     status.arg = arg;
     UT_array* uistats = &instance->uistats;
-    
+
     utarray_push_back(uistats, &status);
 }
 
@@ -326,7 +326,7 @@ void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
     if (!menu)
         return ;
     menu->mark = -1;
-    utarray_push_back(uimenus, &menu);    
+    utarray_push_back(uimenus, &menu);
 }
 
 FCITX_EXPORT_API
@@ -344,7 +344,7 @@ void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMe
     shell.isselect = false;
     if (type == MENUTYPE_SUBMENU)
         shell.subMenu = subMenu;
-        
+
     utarray_push_back(&menu->shell, &shell);
 }
 
@@ -359,7 +359,7 @@ void OnInputFocus(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputFocus)
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
-    
+
     InputFocusHook(instance);
     ResetInput(instance);
     CloseInputWindow(instance);
@@ -370,7 +370,7 @@ void OnInputUnFocus(struct _FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnInputUnFocus)
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
-    
+
     InputUnFocusHook(instance);
 }
 
@@ -379,7 +379,7 @@ void OnTriggerOn(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOn)
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
-    
+
     TriggerOnHook(instance);
     ShowInputSpeed(instance);
 }
@@ -396,7 +396,7 @@ void OnTriggerOff(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->OnTriggerOff)
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
-    
+
     TriggerOffHook(instance);
 }
 
@@ -451,7 +451,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), GetMessageString(input->msgAuxUp, i));
         extraLength += strlen(GetMessageString(input->msgAuxUp, i));
     }
-    
+
     for (i = 0; i < GetMessageCount(input->msgPreedit) ; i ++)
         AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), GetMessageString(input->msgPreedit, i));
 
@@ -459,7 +459,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), GetMessageString(input->msgAuxDown, i));
 
     CandidateWord* candWord = NULL;
-    
+
     for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
             candWord != NULL;
             candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
@@ -477,6 +477,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
             AddMessageAtLast(msgDown, MSG_CODE, candWord->strExtra);
         AddMessageAtLast(msgDown, MSG_OTHER, " ");
     }
-    
+
     return extraLength;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

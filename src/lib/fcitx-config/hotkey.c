@@ -29,7 +29,9 @@
 /**
  * @brief String to key list.
  **/
-typedef struct _KEY_LIST {
+
+typedef struct _KEY_LIST
+{
     /**
      * @brief string name for the key in fcitx
      **/
@@ -41,7 +43,8 @@ typedef struct _KEY_LIST {
 } KEY_LIST;
 
 /* fcitx key name translist */
-KEY_LIST        keyList[] = {
+KEY_LIST        keyList[] =
+{
     {"TAB", Key_Tab},
     {"ENTER", Key_Return},
     {"LCTRL", Key_Control_L},
@@ -61,7 +64,7 @@ KEY_LIST        keyList[] = {
     {"\0", 0}
 };
 
-static int GetKeyList (char *strKey);
+static int GetKeyList(char *strKey);
 static char *GetKeyListString(int key);
 
 FCITX_EXPORT_API
@@ -116,7 +119,7 @@ boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
  * Do some custom process
  */
 FCITX_EXPORT_API
-void GetKey (FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
+void GetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
     if (iKeyState)
     {
@@ -127,7 +130,9 @@ void GetKey (FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsi
             if (IsHotKeySimple(keysym, 0) && keysym != Key_space)
                 iKeyState = KEY_NONE;
     }
+
     *outk = keysym;
+
     *outs = iKeyState;
 }
 
@@ -137,10 +142,13 @@ char* GetKeyString(FcitxKeySym sym, unsigned int state)
 {
     char *str;
     size_t len = 0;
+
     if (state & KEY_CTRL_COMP)
         len += strlen("CTRL_");
+
     if (state & KEY_ALT_COMP)
         len += strlen("ALT_");
+
     if (state & KEY_SHIFT_COMP)
         len += strlen("SHIFT_");
 
@@ -152,14 +160,20 @@ char* GetKeyString(FcitxKeySym sym, unsigned int state)
     len += strlen(key);
 
     str = fcitx_malloc0(sizeof(char) * (len + 1));
+
     if (state & KEY_CTRL_COMP)
         strcat(str, "CTRL_");
+
     if (state & KEY_ALT_COMP)
         strcat(str, "ALT_");
+
     if (state & KEY_SHIFT_COMP)
         strcat(str, "SHIFT_");
+
     strcat(str, key);
+
     free(key);
+
     return str;
 }
 
@@ -169,13 +183,14 @@ char* GetKeyString(FcitxKeySym sym, unsigned int state)
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
 FCITX_EXPORT_API
-boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state)
+boolean ParseKey(char *strKey, FcitxKeySym* sym, int* state)
 {
     char           *p;
     int             iKey;
     int             iKeyState = 0;
 
     p = strKey;
+
     if (strstr(p, "CTRL_"))
     {
         iKeyState |= KEY_CTRL_COMP;
@@ -194,25 +209,33 @@ boolean ParseKey (char *strKey, FcitxKeySym* sym, int* state)
         p += strlen("SHIFT_");
     }
 
-    iKey = GetKeyList (p);
+    iKey = GetKeyList(p);
+
     if (iKey == -1)
         return false;
+
     *sym = iKey;
+
     *state = iKeyState;
+
     return true;
 }
 
 FCITX_EXPORT_API
-int GetKeyList (char *strKey)
+int GetKeyList(char *strKey)
 {
     int             i;
 
     i = 0;
-    for (;;) {
+
+    for (;;)
+    {
         if (!keyList[i].code)
             break;
-        if (!strcmp (strKey, keyList[i].strKey))
+
+        if (!strcmp(strKey, keyList[i].strKey))
             return keyList[i].code;
+
         i++;
     }
 
@@ -232,14 +255,19 @@ char *GetKeyListString(int key)
         p[1] = '\0';
         return p;
     }
+
     int             i;
 
     i = 0;
-    for (;;) {
+
+    for (;;)
+    {
         if (!keyList[i].code)
             break;
+
         if (keyList[i].code == key)
             return strdup(keyList[i].strKey);
+
         i++;
     }
 
@@ -248,7 +276,7 @@ char *GetKeyListString(int key)
 }
 
 FCITX_EXPORT_API
-void SetHotKey (char *strKeys, HOTKEYS * hotkey)
+void SetHotKey(char *strKeys, HOTKEYS * hotkey)
 {
     char           *p;
     char           *strKey;
@@ -262,29 +290,39 @@ void SetHotKey (char *strKeys, HOTKEYS * hotkey)
         FcitxKeySym sym;
         int state;
         i = 0;
+
         while (p[i] != ' ' && p[i] != '\0')
             i++;
-        strKey = strndup (p, i);
+
+        strKey = strndup(p, i);
+
         strKey[i] = '\0';
-        if (ParseKey (strKey, &sym, &state))
+
+        if (ParseKey(strKey, &sym, &state))
         {
             hotkey[j].sym = sym;
             hotkey[j].state = state;
             hotkey[j].desc = fcitx_trim(strKey);
             j ++;
         }
+
         free(strKey);
+
         if (p[i] == '\0')
             break;
+
         p = &p[i + 1];
     }
+
     for (; j < 2; j++)
     {
         hotkey[j].sym = 0;
         hotkey[j].state = 0;
-        hotkey[j].desc= NULL;
+        hotkey[j].desc = NULL;
     }
+
     free(strKeys);
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

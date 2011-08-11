@@ -31,8 +31,8 @@
 
 
 typedef struct _FcitxDBusWatch {
-  DBusWatch *watch;      
-  struct _FcitxDBusWatch *next;
+    DBusWatch *watch;
+    struct _FcitxDBusWatch *next;
 } FcitxDBusWatch;
 
 typedef struct _FcitxDBus {
@@ -65,15 +65,15 @@ void* DBusCreate(FcitxInstance* instance)
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_malloc0(sizeof(FcitxDBus));
     FcitxAddon* dbusaddon = GetAddonByName(&instance->addons, FCITX_DBUS_NAME);
     DBusError err;
-    
+
     dbus_threads_init_default();
 
     // first init dbus
     dbus_error_init(&err);
-    
+
     int retry = 0;
     DBusConnection* conn = NULL;
-    
+
     do {
         conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
         if (dbus_error_is_set(&err)) {
@@ -81,22 +81,22 @@ void* DBusCreate(FcitxInstance* instance)
             dbus_error_free(&err);
             dbus_error_init(&err);
         }
-        
+
         if (NULL == conn)
         {
             sleep(RETRY_INTERVAL);
             retry ++;
         }
     } while (NULL == conn && retry < MAX_RETRY_TIMES);
-    
+
     if ( NULL == conn )
     {
         free(dbusmodule);
         return NULL;
     }
-    
-    if (!dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch, 
-                      NULL, dbusmodule, NULL))
+
+    if (!dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch,
+            NULL, dbusmodule, NULL))
     {
         FcitxLog(WARNING, _("Add Watch Function Error"));
         free(dbusmodule);
@@ -105,15 +105,15 @@ void* DBusCreate(FcitxInstance* instance)
 
     dbusmodule->conn = conn;
     dbusmodule->owner = instance;
-    
+
     char* servicename = NULL;
     asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, FcitxGetDisplayNumber());
 
     // request a name on the bus
     int ret = dbus_bus_request_name(conn, servicename,
-                                DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
-                                &err);
-    
+                                    DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                    &err);
+
     free(servicename);
     if (dbus_error_is_set(&err)) {
         FcitxLog(WARNING, _("Name Error (%s)"), err.message);
@@ -143,25 +143,25 @@ static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data)
 {
     FcitxDBusWatch *w;
     FcitxDBus* dbusmodule = (FcitxDBus*) data;
-    
+
     for (w = dbusmodule->watches; w; w = w->next)
-    if (w->watch == watch)
-      return TRUE;
+        if (w->watch == watch)
+            return TRUE;
 
-  if (!(w = fcitx_malloc0(sizeof(FcitxDBusWatch))))
-    return FALSE;
+    if (!(w = fcitx_malloc0(sizeof(FcitxDBusWatch))))
+        return FALSE;
 
-  w->watch = watch;
-  w->next = dbusmodule->watches;
-  dbusmodule->watches = w;
-  return TRUE;
+    w->watch = watch;
+    w->next = dbusmodule->watches;
+    dbusmodule->watches = w;
+    return TRUE;
 }
 
 static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data)
 {
-    FcitxDBusWatch **up, *w;  
+    FcitxDBusWatch **up, *w;
     FcitxDBus* dbusmodule = (FcitxDBus*) data;
-    
+
     for (up = &(dbusmodule->watches), w = dbusmodule->watches; w; w = w->next)
     {
         if (w->watch == watch)
@@ -179,24 +179,24 @@ void DBusSetFD(void* arg)
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
     FcitxDBusWatch *w;
     FcitxInstance* instance = dbusmodule->owner;
-    
+
     for (w = dbusmodule->watches; w; w = w->next)
-    if (dbus_watch_get_enabled(w->watch))
-    {
-        unsigned int flags = dbus_watch_get_flags(w->watch);
-        int fd = dbus_watch_get_unix_fd(w->watch);
-        
-        if (dbusmodule->owner->maxfd < fd)
-            dbusmodule->owner->maxfd = fd;
-        
-        if (flags & DBUS_WATCH_READABLE)
-            FD_SET(fd, &instance->rfds);
-        
-        if (flags & DBUS_WATCH_WRITABLE)
-            FD_SET(fd, &instance->wfds);
-        
-        FD_SET(fd, &instance->efds);
-    }
+        if (dbus_watch_get_enabled(w->watch))
+        {
+            unsigned int flags = dbus_watch_get_flags(w->watch);
+            int fd = dbus_watch_get_unix_fd(w->watch);
+
+            if (dbusmodule->owner->maxfd < fd)
+                dbusmodule->owner->maxfd = fd;
+
+            if (flags & DBUS_WATCH_READABLE)
+                FD_SET(fd, &instance->rfds);
+
+            if (flags & DBUS_WATCH_WRITABLE)
+                FD_SET(fd, &instance->wfds);
+
+            FD_SET(fd, &instance->efds);
+        }
 }
 
 
@@ -205,20 +205,20 @@ void DBusProcessEvent(void* arg)
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
     DBusConnection *connection = (DBusConnection *)dbusmodule->conn;
     FcitxDBusWatch *w;
-    
+
     for (w = dbusmodule->watches; w; w = w->next)
     {
         if (dbus_watch_get_enabled(w->watch))
         {
             unsigned int flags = 0;
             int fd = dbus_watch_get_unix_fd(w->watch);
-            
+
             if (FD_ISSET(fd, &dbusmodule->owner->rfds))
                 flags |= DBUS_WATCH_READABLE;
-            
+
             if (FD_ISSET(fd, &dbusmodule->owner->wfds))
                 flags |= DBUS_WATCH_WRITABLE;
-            
+
             if (FD_ISSET(fd, &dbusmodule->owner->efds))
                 flags |= DBUS_WATCH_ERROR;
 
@@ -226,7 +226,7 @@ void DBusProcessEvent(void* arg)
                 dbus_watch_handle(w->watch, flags);
         }
     }
-    
+
     if (connection)
     {
         dbus_connection_ref (connection);
@@ -234,3 +234,4 @@ void DBusProcessEvent(void* arg)
         dbus_connection_unref (connection);
     }
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -50,8 +50,10 @@ struct _FcitxPuncState;
 typedef struct _WidePunc {
     int             ASCII;
     char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
-    unsigned        iCount:2;
-    unsigned        iWhich:2;
+unsigned        iCount:
+    2;
+unsigned        iWhich:
+    2;
 } WidePunc;
 
 static boolean LoadPuncDict (struct _FcitxPuncState* puncState);
@@ -92,9 +94,9 @@ void* PuncCreate(FcitxInstance* instance)
     KeyFilterHook hk;
     hk.arg = puncState;
     hk.func = ProcessPunc;
-    
+
     RegisterPostInputFilter(instance, hk);
-    
+
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
 
@@ -103,13 +105,13 @@ void* PuncCreate(FcitxInstance* instance)
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
     hotkey.arg = puncState;
     RegisterHotkeyFilter(instance, hotkey);
-    
+
     FcitxIMEventHook hook;
     hook.arg = puncState;
     hook.func = ResetPunc;
-    
+
     RegisterResetInputHook(instance, hook);
-    
+
     RegisterStatus(instance, puncState, "punc", "Full Width Punctuation", "Full Width Punctuation", TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
@@ -128,7 +130,7 @@ void ResetPunc(void* arg)
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     puncState->bLastIsNumber = false;
     puncState->cLastIsAutoConvert = '\0';
-    
+
 }
 
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
@@ -136,17 +138,17 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
     FcitxInputState* input = &puncState->owner->input;
-    
+
     if (*retVal != IRV_TO_PROCESS)
         return false;
-    
+
     if (instance->profile.bUseWidePunc) {
         char *pPunc = NULL;
-        
+
         if (puncState->bLastIsNumber && instance->config.bEngPuncAfterNumber
-            && (IsHotKey(sym, state, FCITX_PERIOD) 
-            || IsHotKey(sym, state, FCITX_SEMICOLON) 
-            || IsHotKey(sym, state, FCITX_COMMA)))
+                && (IsHotKey(sym, state, FCITX_PERIOD)
+                    || IsHotKey(sym, state, FCITX_SEMICOLON)
+                    || IsHotKey(sym, state, FCITX_COMMA)))
         {
             puncState->cLastIsAutoConvert = sym;
             puncState->bLastIsNumber = false;
@@ -156,7 +158,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         if (IsHotKeySimple(sym, state))
             pPunc = GetPunc(puncState, sym);
 
-        /* 
+        /*
          * 在有候选词未输入的情况下，选择第一个候选词并输入标点
          */
         if (pPunc) {
@@ -165,12 +167,12 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                 CandidateWordChooseByIndex(input->candList, 0);
             strcat(GetOutputString(input), pPunc);
             CleanInputWindow(instance);
-            
+
             *retVal = IRV_PUNC;
             return true;
         }
         else if (IsHotKey(sym, state, FCITX_BACKSPACE)
-                    && puncState->cLastIsAutoConvert) {
+                 && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
             ForwardKey(puncState->owner, GetCurrentIC(instance), FCITX_PRESS_KEY, sym, state);
@@ -344,3 +346,4 @@ void ReloadPunc(void* arg)
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

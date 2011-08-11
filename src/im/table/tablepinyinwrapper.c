@@ -56,6 +56,7 @@ INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, CandidateWord* candidateWord)
     {
         strcpy(GetOutputString(&tbl->owner->input), candidateWord->strWord);
     }
-        
+
     return IRV_COMMIT_STRING | IRV_FLAG_RESET_INPUT;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

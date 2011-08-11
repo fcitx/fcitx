@@ -33,7 +33,7 @@ int TrayFindDock(Display *dpy, TrayWindow* tray);
 XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray);
 Window TrayGetDock(Display* dpy, TrayWindow* tray);
 void TraySendOpcode( Display* dpy, Window dock,  TrayWindow* tray, long message,
-        long data1, long data2, long data3 );
+                     long data1, long data2, long data3 );
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -50,3 +50,4 @@ void TraySendOpcode( Display* dpy, Window dock,  TrayWindow* tray, long message,
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

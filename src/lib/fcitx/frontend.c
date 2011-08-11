@@ -63,7 +63,7 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv
     if (pfrontend == NULL)
         return NULL;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
-    
+
     FcitxInputContext *rec;
     if (instance->free_list != NULL)
     {
@@ -72,18 +72,18 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv
     }
     else
         rec = malloc(sizeof(FcitxInputContext));
-    
+
     memset (rec, 0, sizeof(FcitxInputContext));
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
     rec->state = IS_CLOSED;
-    
+
     frontend->CreateIC((*pfrontend)->addonInstance, rec, priv);
-    
+
     rec->next = instance->ic_list;
     instance->ic_list = rec;
-    
+
     return rec;
 }
 
@@ -114,7 +114,7 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
- 
+
     last = NULL;
 
     for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
@@ -123,10 +123,10 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
                 last->next = rec->next;
             else
                 instance->ic_list = rec->next;
-            
+
             rec->next = instance->free_list;
             instance->free_list = rec;
-            
+
             if (rec == GetCurrentIC(instance))
             {
                 CloseInputWindow(instance);
@@ -154,7 +154,7 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     ic->state = IS_CLOSED;
     frontend->CloseIM((*pfrontend)->addonInstance, ic);
-    
+
     if (ic == GetCurrentIC(instance))
     {
         OnTriggerOff(instance);
@@ -162,9 +162,9 @@ void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     }
 }
 
-/** 
+/**
  * @brief 更改输入法状态
- * 
+ *
  * @param _connect_id
  */
 FCITX_EXPORT_API
@@ -196,22 +196,22 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 {
     if (str == NULL)
         return ;
-    
+
     if (ic == NULL)
         return;
-    
+
     UT_array* frontends = &instance->frontends;
-    
+
     char *pstr = ProcessOutputFilter(instance, str);
     if (pstr != NULL)
         str = pstr;
-    
+
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     frontend->CommitString((*pfrontend)->addonInstance, ic, str);
-    
+
     if (pstr)
         free(pstr);
 }
@@ -233,7 +233,7 @@ void GetWindowPosition(FcitxInstance* instance, FcitxInputContext* ic, int* x, i
 {
     if (ic == NULL)
         return;
-    
+
     UT_array* frontends = &instance->frontends;
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
     if (pfrontend == NULL)
@@ -252,52 +252,52 @@ boolean LoadFrontend(FcitxInstance* instance)
     int frontendindex = 0;
     utarray_clear(frontends);
     for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->bEnabled && addon->category == AC_FRONTEND)
         {
             char *modulePath;
             switch (addon->type)
             {
-                case AT_SHAREDLIBRARY:
-                    {
-                        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
-                        void *handle;
-                        FcitxFrontend* frontend;
-                        if (!fp)
-                            break;
-                        fclose(fp);
-                        handle = dlopen(modulePath,RTLD_LAZY);
-                        if(!handle)
-                        {
-                            FcitxLog(ERROR, _("Frontend: open %s fail %s") ,modulePath ,dlerror());
-                            break;
-                        }
-                        frontend=dlsym(handle,"frontend");
-                        if(!frontend || !frontend->Create)
-                        {
-                            FcitxLog(ERROR, _("Frontend: bad frontend"));
-                            dlclose(handle);
-                            break;
-                        }
-                        if((addon->addonInstance = frontend->Create(instance, frontendindex)) == NULL)
-                        {
-                            dlclose(handle);
-                            break;
-                        }                        
-                        addon->frontend = frontend;
-                        frontendindex ++;
-                        utarray_push_back(frontends, &addon);
-                    }
+            case AT_SHAREDLIBRARY:
+            {
+                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+                void *handle;
+                FcitxFrontend* frontend;
+                if (!fp)
                     break;
-                default:
+                fclose(fp);
+                handle = dlopen(modulePath,RTLD_LAZY);
+                if (!handle)
+                {
+                    FcitxLog(ERROR, _("Frontend: open %s fail %s") ,modulePath ,dlerror());
                     break;
+                }
+                frontend=dlsym(handle,"frontend");
+                if (!frontend || !frontend->Create)
+                {
+                    FcitxLog(ERROR, _("Frontend: bad frontend"));
+                    dlclose(handle);
+                    break;
+                }
+                if ((addon->addonInstance = frontend->Create(instance, frontendindex)) == NULL)
+                {
+                    dlclose(handle);
+                    break;
+                }
+                addon->frontend = frontend;
+                frontendindex ++;
+                utarray_push_back(frontends, &addon);
+            }
+            break;
+            default:
+                break;
             }
             free(modulePath);
         }
     }
-    
+
     if (utarray_len(&instance->frontends) <= 0)
     {
         FcitxLog(ERROR, _("No available frontend"));
@@ -305,3 +305,4 @@ boolean LoadFrontend(FcitxInstance* instance)
     }
     return true;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

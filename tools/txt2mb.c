@@ -55,23 +55,28 @@ char            strInputCode[100] = "\0";
 char            strIgnoreChars[100] = "\0";
 char            cPinyinKey = '\0';
 
-typedef struct _RECORD {
+typedef struct _RECORD
+{
     char           *strCode;
     char           *strHZ;
     int8_t            bPinyin;
+
     struct _RECORD *next;
+
     struct _RECORD *prev;
     unsigned int    iHit;
     unsigned int    iIndex;
 } RECORD;
 
-typedef struct _RULE_RULE {
+typedef struct _RULE_RULE
+{
     unsigned char   iFlag;	// 1 --> 正序   0 --> 逆序
     unsigned char   iWhich;	//第几个字
     unsigned char   iIndex;	//第几个编码
 } RULE_RULE;
 
-typedef struct _RULE {
+typedef struct _RULE
+{
     unsigned char   iWords;	//多少个字
     unsigned char   iFlag;	//1 --> 大于等于iWords  0 --> 等于iWords
     RULE_RULE      *rule;
@@ -80,25 +85,32 @@ typedef struct _RULE {
 void InitStrLength()
 {
     int i;
-    for (i=0;i<CONST_STR_SIZE;i++)
+
+    for (i = 0;i < CONST_STR_SIZE;i++)
         strLength[i] = strlen(strConst[i]);
 }
 
-boolean IsValidCode (char cChar)
+boolean IsValidCode(char cChar)
 {
     char           *p;
 
     p = strInputCode;
-    while (*p) {
+
+    while (*p)
+    {
         if (cChar == *p)
             return true;
+
         p++;
     }
 
     p = strIgnoreChars;
-    while (*p) {
+
+    while (*p)
+    {
         if (cChar == *p)
             return true;
+
         p++;
     }
 
@@ -108,7 +120,7 @@ boolean IsValidCode (char cChar)
     return false;
 }
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char            strCode[100];
     char            strHZ[100];
@@ -129,153 +141,205 @@ int main (int argc, char *argv[])
 
     boolean            bPY;
 
-    if (argc != 3) {
-        printf ("\nUsage: txt2mb <Source File> <IM File>\n\n");
-        exit (1);
+    if (argc != 3)
+    {
+        printf("\nUsage: txt2mb <Source File> <IM File>\n\n");
+        exit(1);
     }
 
-    fpDict = fopen (argv[1], "rt");
-    if (!fpDict) {
-        printf ("\nCan not read source file!\n\n");
-        exit (2);
+    fpDict = fopen(argv[1], "rt");
+
+    if (!fpDict)
+    {
+        printf("\nCan not read source file!\n\n");
+        exit(2);
     }
 
     InitStrLength();
-    head = (RECORD *) malloc (sizeof (RECORD));
+
+    head = (RECORD *) malloc(sizeof(RECORD));
     head->next = head;
     head->prev = head;
     current = head;
 
     bRule = 0;
     l = 0;
-    for (;;) {
+
+    for (;;)
+    {
         l++;
-        if (!fgets (strCode, 100, fpDict))
+
+        if (!fgets(strCode, 100, fpDict))
             break;
 
-        i = strlen (strCode) - 1;
+        i = strlen(strCode) - 1;
+
         while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
             strCode[i--] = '\0';
 
         pstr = strCode;
+
         if (*pstr == ' ')
             pstr++;
+
         if (pstr[0] == '#')
             continue;
 
-        if (strstr (pstr, strConst[STR_KEYCODE])) {
+        if (strstr(pstr, strConst[STR_KEYCODE]))
+        {
             pstr += strLength[STR_KEYCODE];
-            strcpy (strInputCode, pstr);
+            strcpy(strInputCode, pstr);
         }
-        else if (strstr (pstr, strConst[STR_CODELEN])) {
-            pstr += strLength[STR_CODELEN];
-            iCodeLength = atoi (pstr);
-            if (iCodeLength > MAX_CODE_LENGTH)
+        else
+            if (strstr(pstr, strConst[STR_CODELEN]))
             {
-                iCodeLength = MAX_CODE_LENGTH;
-                printf("Max Code Length is %d\n", MAX_CODE_LENGTH);
+                pstr += strLength[STR_CODELEN];
+                iCodeLength = atoi(pstr);
+
+                if (iCodeLength > MAX_CODE_LENGTH)
+                {
+                    iCodeLength = MAX_CODE_LENGTH;
+                    printf("Max Code Length is %d\n", MAX_CODE_LENGTH);
+                }
             }
-        }
-        else if (strstr (pstr, strConst[STR_IGNORECHAR])) {
-            pstr += strLength[STR_IGNORECHAR];
-            strcpy (strIgnoreChars, pstr);
-        }
-        else if (strstr (pstr, strConst[STR_PINYIN])) {
-            pstr += strLength[STR_PINYIN];
-            while (*pstr == ' ')
-                pstr++;
-            cPinyinKey = *pstr;
-        }
-        else if (strstr (pstr, strConst[STR_PINYINLEN])) {
-            pstr += strLength[STR_PINYINLEN];
-            iPYCodeLength = atoi (pstr);
-        }
+            else
+                if (strstr(pstr, strConst[STR_IGNORECHAR]))
+                {
+                    pstr += strLength[STR_IGNORECHAR];
+                    strcpy(strIgnoreChars, pstr);
+                }
+                else
+                    if (strstr(pstr, strConst[STR_PINYIN]))
+                    {
+                        pstr += strLength[STR_PINYIN];
 
-        else if (strstr (pstr, strConst[STR_DATA]))
-            break;
-        else if (strstr (pstr, strConst[STR_RULE])) {
-            bRule = 1;
-            break;
-        }
+                        while (*pstr == ' ')
+                            pstr++;
+
+                        cPinyinKey = *pstr;
+                    }
+                    else
+                        if (strstr(pstr, strConst[STR_PINYINLEN]))
+                        {
+                            pstr += strLength[STR_PINYINLEN];
+                            iPYCodeLength = atoi(pstr);
+                        }
+
+                        else
+                            if (strstr(pstr, strConst[STR_DATA]))
+                                break;
+                            else
+                                if (strstr(pstr, strConst[STR_RULE]))
+                                {
+                                    bRule = 1;
+                                    break;
+                                }
     }
 
-    if (iCodeLength <= 0 || !strInputCode[0]) {
-        printf ("Source File Format Error!\n");
-        exit (1);
+    if (iCodeLength <= 0 || !strInputCode[0])
+    {
+        printf("Source File Format Error!\n");
+        exit(1);
     }
 
-    if (bRule) {
+    if (bRule)
+    {
         /*
          * 组词规则数应该比键码长度小1
          */
-        rule = (RULE *) malloc (sizeof (RULE) * (iCodeLength - 1));
+        rule = (RULE *) malloc(sizeof(RULE) * (iCodeLength - 1));
 
-        for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
+        for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++)
+        {
             l++;
-            if (!fgets (strCode, 100, fpDict))
+
+            if (!fgets(strCode, 100, fpDict))
                 break;
 
-            rule[iTemp].rule = (RULE_RULE *) malloc (sizeof (RULE_RULE) * iCodeLength);
+            rule[iTemp].rule = (RULE_RULE *) malloc(sizeof(RULE_RULE) * iCodeLength);
 
-            i = strlen (strCode) - 1;
+            i = strlen(strCode) - 1;
+
             while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
                 strCode[i--] = '\0';
 
             pstr = strCode;
+
             if (*pstr == ' ')
                 pstr++;
+
             if (pstr[0] == '#')
                 continue;
 
-            if (strstr (pstr, strConst[STR_DATA]))
+            if (strstr(pstr, strConst[STR_DATA]))
                 break;
 
-            switch (*pstr) {
+            switch (*pstr)
+            {
+
             case 'e':
+
             case 'E':
                 rule[iTemp].iFlag = 0;
                 break;
+
             case 'a':
+
             case 'A':
                 rule[iTemp].iFlag = 1;
                 break;
+
             default:
-                printf ("2   Phrase rules are not suitable!\n");
-                printf ("\t\t%s\n", strCode);
-                exit (1);
+                printf("2   Phrase rules are not suitable!\n");
+                printf("\t\t%s\n", strCode);
+                exit(1);
             }
+
             pstr++;
+
             p = pstr;
+
             while (*p && *p != '=')
                 p++;
-            if (!(*p)) {
-                printf ("3   Phrase rules are not suitable!\n");
-                printf ("\t\t%s\n", strCode);
-                exit (1);
+
+            if (!(*p))
+            {
+                printf("3   Phrase rules are not suitable!\n");
+                printf("\t\t%s\n", strCode);
+                exit(1);
             }
-            strncpy (strTemp, pstr, p - pstr);
+
+            strncpy(strTemp, pstr, p - pstr);
+
             strTemp[p - pstr] = '\0';
-            rule[iTemp].iWords = atoi (strTemp);
+            rule[iTemp].iWords = atoi(strTemp);
 
             p++;
 
-            for (i = 0; i < iCodeLength; i++) {
+            for (i = 0; i < iCodeLength; i++)
+            {
                 while (*p == ' ')
                     p++;
 
-                switch (*p) {
+                switch (*p)
+                {
+
                 case 'p':
+
                 case 'P':
                     rule[iTemp].rule[i].iFlag = 1;
                     break;
+
                 case 'n':
+
                 case 'N':
                     rule[iTemp].rule[i].iFlag = 0;
                     break;
+
                 default:
-                    printf ("4   Phrase rules are not suitable!\n");
-                    printf ("\t\t%s\n", strCode);
-                    exit (1);
+                    printf("4   Phrase rules are not suitable!\n");
+                    printf("\t\t%s\n", strCode);
+                    exit(1);
                 }
 
                 p++;
@@ -285,11 +349,14 @@ int main (int argc, char *argv[])
 
                 while (*p == ' ')
                     p++;
-                if (i != (iCodeLength - 1)) {
-                    if (*p != '+') {
-                        printf ("5   Phrase rules are not suitable!\n");
-                        printf ("\t\t%s  %d\n", strCode, iCodeLength);
-                        exit (1);
+
+                if (i != (iCodeLength - 1))
+                {
+                    if (*p != '+')
+                    {
+                        printf("5   Phrase rules are not suitable!\n");
+                        printf("\t\t%s  %d\n", strCode, iCodeLength);
+                        exit(1);
                     }
 
                     p++;
@@ -297,27 +364,33 @@ int main (int argc, char *argv[])
             }
         }
 
-        if (iTemp != iCodeLength - 1) {
-            printf ("6  Phrase rules are not suitable!\n");
-            exit (1);
+        if (iTemp != iCodeLength - 1)
+        {
+            printf("6  Phrase rules are not suitable!\n");
+            exit(1);
         }
 
-        for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
+        for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++)
+        {
             l++;
-            if (!fgets (strCode, 100, fpDict))
+
+            if (!fgets(strCode, 100, fpDict))
                 break;
 
-            i = strlen (strCode) - 1;
+            i = strlen(strCode) - 1;
+
             while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
                 strCode[i--] = '\0';
 
             pstr = strCode;
+
             if (*pstr == ' ')
                 pstr++;
+
             if (pstr[0] == '#')
                 continue;
 
-            if (strstr (pstr, strConst[STR_DATA]))
+            if (strstr(pstr, strConst[STR_DATA]))
                 break;
         }
     }
@@ -325,146 +398,185 @@ int main (int argc, char *argv[])
     if (iPYCodeLength < iCodeLength)
         iPYCodeLength = iCodeLength;
 
-    if (!strstr (pstr, strConst[STR_DATA])) {
-        printf ("Source File Format Error!\n");
-        exit (1);
+    if (!strstr(pstr, strConst[STR_DATA]))
+    {
+        printf("Source File Format Error!\n");
+        exit(1);
     }
 
-    for (;;) {
+    for (;;)
+    {
         l++;
-        if (EOF == fscanf (fpDict, "%s %s\n", strCode, strHZ))
+
+        if (EOF == fscanf(fpDict, "%s %s\n", strCode, strHZ))
             break;
 
-        if (!IsValidCode (strCode[0])) {
-            printf ("Invalid Format: Line-%d  %s %s\n", l, strCode, strHZ);
+        if (!IsValidCode(strCode[0]))
+        {
+            printf("Invalid Format: Line-%d  %s %s\n", l, strCode, strHZ);
 
-            exit (1);
+            exit(1);
         }
 
-        if (((strCode[0] != cPinyinKey) && (strlen (strCode) > iCodeLength)) || ((strCode[0] == cPinyinKey) && (strlen (strCode) > (iPYCodeLength + 1))))
+        if (((strCode[0] != cPinyinKey) && (strlen(strCode) > iCodeLength)) || ((strCode[0] == cPinyinKey) && (strlen(strCode) > (iPYCodeLength + 1))))
         {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);
             continue;
         }
 
-        if (utf8_strlen (strHZ) > PHRASE_MAX_LENGTH)	//最长词组长度为10个汉字
+        if (utf8_strlen(strHZ) > PHRASE_MAX_LENGTH)	//最长词组长度为10个汉字
         {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);
             continue;
         }
 
         bPY = false;
+
         pstr = strCode;
-        if (strCode[0] == cPinyinKey) {
+
+        if (strCode[0] == cPinyinKey)
+        {
             pstr ++;
             bPY = true;
         }
 
         //查找是否重复
         temp = current;
-        if (temp != head) {
-            if (strcmp (temp->strCode, pstr) >= 0) {
-                while (temp != head && strcmp (temp->strCode, pstr) >= 0) {
-                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, pstr)) {
-                        printf ("Delete:  %s %s\n", pstr, strHZ);
+
+        if (temp != head)
+        {
+            if (strcmp(temp->strCode, pstr) >= 0)
+            {
+                while (temp != head && strcmp(temp->strCode, pstr) >= 0)
+                {
+                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr))
+                    {
+                        printf("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }
+
                     temp = temp->prev;
                 }
 
                 if (temp == head)
                     temp = temp->next;
 
-                while (temp != head && strcmp (temp->strCode, pstr) <= 0)
+                while (temp != head && strcmp(temp->strCode, pstr) <= 0)
                     temp = temp->next;
             }
-            else {
-                while (temp != head && strcmp (temp->strCode, pstr) <= 0) {
-                    if (!strcmp (temp->strHZ, strHZ) && !strcmp (temp->strCode, pstr)) {
-                        printf ("Delete:  %s %s\n", pstr, strHZ);
+            else
+            {
+                while (temp != head && strcmp(temp->strCode, pstr) <= 0)
+                {
+                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr))
+                    {
+                        printf("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }
+
                     temp = temp->next;
                 }
             }
         }
 
         //插在temp的前面
-        newRec = (RECORD *) malloc (sizeof (RECORD));
-        newRec->strCode = (char *) malloc (sizeof (char) * (iPYCodeLength + 1));
-        newRec->strHZ = (char *) malloc (sizeof (char) * strlen (strHZ) + 1);
-        strcpy (newRec->strCode, pstr);
-        strcpy (newRec->strHZ, strHZ);
+        newRec = (RECORD *) malloc(sizeof(RECORD));
+
+        newRec->strCode = (char *) malloc(sizeof(char) * (iPYCodeLength + 1));
+
+        newRec->strHZ = (char *) malloc(sizeof(char) * strlen(strHZ) + 1);
+
+        strcpy(newRec->strCode, pstr);
+
+        strcpy(newRec->strHZ, strHZ);
+
         newRec->bPinyin = bPY;
+
         newRec->iHit = 0;
+
         newRec->iIndex = 0;
 
         temp->prev->next = newRec;
+
         newRec->next = temp;
+
         newRec->prev = temp->prev;
+
         temp->prev = newRec;
 
         current = newRec;
 
         s++;
-_next:
+
+    _next:
         continue;
     }
 
-    fclose (fpDict);
+    fclose(fpDict);
 
-    printf ("\nReading %d records.\n\n", s);
+    printf("\nReading %d records.\n\n", s);
 
-    fpNew = fopen (argv[2], "wb");
-    if (!fpNew) {
-        printf ("\nCan not create target file!\n\n");
-        exit (3);
+    fpNew = fopen(argv[2], "wb");
+
+    if (!fpNew)
+    {
+        printf("\nCan not create target file!\n\n");
+        exit(3);
     }
+
     int8_t iInternalVersion = INTERNAL_VERSION;
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号
     iTemp = 0;
-    fwrite (&iTemp, sizeof (unsigned int), 1, fpDict);
-    fwrite (&iInternalVersion, sizeof (int8_t), 1, fpDict);
+    fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fwrite(&iInternalVersion, sizeof(int8_t), 1, fpDict);
 
-    iTemp = (unsigned int) strlen (strInputCode);
-    fwrite (&iTemp, sizeof (unsigned int), 1, fpNew);
-    fwrite (strInputCode, sizeof (char), iTemp + 1, fpNew);
-    fwrite (&iCodeLength, sizeof (unsigned char), 1, fpNew);
-    fwrite (&iPYCodeLength, sizeof (unsigned char), 1, fpNew);
-    iTemp = (unsigned int) strlen (strIgnoreChars);
-    fwrite (&iTemp, sizeof (unsigned int), 1, fpNew);
-    fwrite (strIgnoreChars, sizeof (char), iTemp + 1, fpNew);
+    iTemp = (unsigned int) strlen(strInputCode);
+    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fwrite(strInputCode, sizeof(char), iTemp + 1, fpNew);
+    fwrite(&iCodeLength, sizeof(unsigned char), 1, fpNew);
+    fwrite(&iPYCodeLength, sizeof(unsigned char), 1, fpNew);
+    iTemp = (unsigned int) strlen(strIgnoreChars);
+    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fwrite(strIgnoreChars, sizeof(char), iTemp + 1, fpNew);
 
-    fwrite (&bRule, sizeof (unsigned char), 1, fpNew);
-    if (bRule) {
-        for (i = 0; i < iCodeLength - 1; i++) {
-            fwrite (&(rule[i].iFlag), sizeof (unsigned char), 1, fpNew);
-            fwrite (&(rule[i].iWords), sizeof (unsigned char), 1, fpNew);
-            for (iTemp = 0; iTemp < iCodeLength; iTemp++) {
-                fwrite (&(rule[i].rule[iTemp].iFlag), sizeof (unsigned char), 1, fpNew);
-                fwrite (&(rule[i].rule[iTemp].iWhich), sizeof (unsigned char), 1, fpNew);
-                fwrite (&(rule[i].rule[iTemp].iIndex), sizeof (unsigned char), 1, fpNew);
+    fwrite(&bRule, sizeof(unsigned char), 1, fpNew);
+
+    if (bRule)
+    {
+        for (i = 0; i < iCodeLength - 1; i++)
+        {
+            fwrite(&(rule[i].iFlag), sizeof(unsigned char), 1, fpNew);
+            fwrite(&(rule[i].iWords), sizeof(unsigned char), 1, fpNew);
+
+            for (iTemp = 0; iTemp < iCodeLength; iTemp++)
+            {
+                fwrite(&(rule[i].rule[iTemp].iFlag), sizeof(unsigned char), 1, fpNew);
+                fwrite(&(rule[i].rule[iTemp].iWhich), sizeof(unsigned char), 1, fpNew);
+                fwrite(&(rule[i].rule[iTemp].iIndex), sizeof(unsigned char), 1, fpNew);
             }
         }
     }
 
-    fwrite (&s, sizeof (unsigned int), 1, fpNew);
+    fwrite(&s, sizeof(unsigned int), 1, fpNew);
+
     current = head->next;
 
-    while (current != head) {
-        fwrite (current->strCode, sizeof (char), iPYCodeLength + 1, fpNew);
-        s = strlen (current->strHZ) + 1;
-        fwrite (&s, sizeof (unsigned int), 1, fpNew);
-        fwrite (current->strHZ, sizeof (char), s, fpNew);
-        fwrite (&(current->bPinyin), sizeof (char), 1, fpDict);
-        fwrite (&(current->iHit), sizeof (unsigned int), 1, fpNew);
-        fwrite (&(current->iIndex), sizeof (unsigned int), 1, fpNew);
+    while (current != head)
+    {
+        fwrite(current->strCode, sizeof(char), iPYCodeLength + 1, fpNew);
+        s = strlen(current->strHZ) + 1;
+        fwrite(&s, sizeof(unsigned int), 1, fpNew);
+        fwrite(current->strHZ, sizeof(char), s, fpNew);
+        fwrite(&(current->bPinyin), sizeof(char), 1, fpDict);
+        fwrite(&(current->iHit), sizeof(unsigned int), 1, fpNew);
+        fwrite(&(current->iIndex), sizeof(unsigned int), 1, fpNew);
         current = current->next;
     }
-    fclose (fpNew);
+
+    fclose(fpNew);
 
     return 0;
 }
-// vim: sw=4 sts=4 et tw=100
 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

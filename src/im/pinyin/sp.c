@@ -32,7 +32,8 @@
 #include "pyconfig.h"
 #include <string.h>
 
-const SP_C            SPMap_C_Template[] = {
+const SP_C            SPMap_C_Template[] =
+{
     {"ai", 'l'}
     ,
     {"an", 'j'}
@@ -96,7 +97,8 @@ const SP_C            SPMap_C_Template[] = {
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_Template[] = {
+const SP_S SPMap_S_Template[] =
+{
     {"ch", 'i'}
     ,
     {"sh", 'u'}
@@ -111,23 +113,24 @@ const SP_S SPMap_S_Template[] = {
 #define cstr(b) (strConstSPConf[STR_SPCONF_##b])
 #define cstrlen(b) (strlen(cstr(b)))
 
-char* strConstSPConf[] = {
+char* strConstSPConf[] =
+{
     "方案名称="
 };
 
-boolean SPInit (void *arg)
+boolean SPInit(void *arg)
 {
-    FcitxPinyinState *pystate = (FcitxPinyinState* )arg;
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     pystate->bSP = true;
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
     memcpy(pyconfig->SPMap_S, SPMap_S_Template, sizeof(SPMap_S_Template));
     memcpy(pyconfig->SPMap_C, SPMap_C_Template, sizeof(SPMap_C_Template));
 
-    LoadSPData (pystate);
+    LoadSPData(pystate);
     return true;
 }
 
-void LoadSPData (FcitxPinyinState *pystate)
+void LoadSPData(FcitxPinyinState *pystate)
 {
     FILE           *fp;
     char            str[100], strS[5], *pstr;
@@ -139,33 +142,44 @@ void LoadSPData (FcitxPinyinState *pystate)
 
     /* reset work around */
     i = 0;
-    while (SPMap_C[i].strQP[0]) {
+
+    while (SPMap_C[i].strQP[0])
+    {
         if (strlen(SPMap_C[i].strQP) == 1)
             SPMap_C[i].cJP = SPMap_C[i].strQP[0];
+
         i ++ ;
     }
 
     fp = GetXDGFileWithPrefix("pinyin", "sp.dat", "rt", NULL);
 
-    while (1) {
-        if (!fgets (str, 100, fp))
+    while (1)
+    {
+        if (!fgets(str, 100, fp))
             break;
 
-        i = strlen (str) - 1;
+        i = strlen(str) - 1;
+
         while ((i >= 0) && (str[i] == ' ' || str[i] == '\n'))
             str[i--] = '\0';
 
         pstr = str;
+
         if (*pstr == ' ' || *pstr == '\t')
             pstr++;
-        if (!strlen (pstr) || pstr[0] == '#')
+
+        if (!strlen(pstr) || pstr[0] == '#')
             continue;
 
-        if (!strncmp (pstr, cstr(NAME), cstrlen(NAME))) {
+        if (!strncmp(pstr, cstr(NAME), cstrlen(NAME)))
+        {
             pstr += cstrlen(NAME);
+
             if (*pstr == ' ' || *pstr == '\t')
                 pstr++;
-            bIsDefault = !(strcmp (pyconfig->strDefaultSP, pstr));
+
+            bIsDefault = !(strcmp(pyconfig->strDefaultSP, pstr));
+
             continue;
         }
 
@@ -173,54 +187,72 @@ void LoadSPData (FcitxPinyinState *pystate)
             continue;
 
         if (pstr[0] == '=') //是零声母设置
-            pyconfig->cNonS = tolower (pstr[1]);
-        else {
+            pyconfig->cNonS = tolower(pstr[1]);
+        else
+        {
             i = 0;
-            while (pstr[i]) {
-                if (pstr[i] == '=') {
-                    strncpy (strS, pstr, i);
+
+            while (pstr[i])
+            {
+                if (pstr[i] == '=')
+                {
+                    strncpy(strS, pstr, i);
                     strS[i] = '\0';
 
                     pstr += i;
-                    i = GetSPIndexQP_S (pyconfig, strS);
+                    i = GetSPIndexQP_S(pyconfig, strS);
+
                     if (i != -1)
-                        SPMap_S[i].cJP = tolower (pstr[1]);
-                    else {
-                        i = GetSPIndexQP_C (pyconfig, strS);
+                        SPMap_S[i].cJP = tolower(pstr[1]);
+                    else
+                    {
+                        i = GetSPIndexQP_C(pyconfig, strS);
+
                         if (i != -1)
-                            SPMap_C[i].cJP = tolower (pstr[1]);
+                            SPMap_C[i].cJP = tolower(pstr[1]);
                     }
+
                     break;
                 }
+
                 i++;
             }
         }
     }
 
-    fclose (fp);
+    fclose(fp);
 
     //下面判断是否使用了';'
     i = 0;
-    while (SPMap_C[i].strQP[0]) {
+
+    while (SPMap_C[i].strQP[0])
+    {
         if (SPMap_C[i++].cJP == ';')
             pystate->bSP_UseSemicolon = true;
     }
-    if (!pystate->bSP_UseSemicolon) {
+
+    if (!pystate->bSP_UseSemicolon)
+    {
         i = 0;
-        while (SPMap_S[i].strQP[0]) {
+
+        while (SPMap_S[i].strQP[0])
+        {
             if (SPMap_S[i++].cJP == ';')
                 pystate->bSP_UseSemicolon = true;
         }
     }
-    if (!pystate->bSP_UseSemicolon) {
+
+    if (!pystate->bSP_UseSemicolon)
+    {
         if (pyconfig->cNonS == ';')
             pystate->bSP_UseSemicolon = true;
     }
 }
+
 /*
  * 此处只转换单个双拼，并且不检查错误
  */
-void SP2QP (FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
+void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
 {
     int             iIndex1 = 0, iIndex2 = 0;
     char            strTmp[2];
@@ -231,57 +263,74 @@ void SP2QP (FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
     strTmp[1] = '\0';
     strQP[0] = '\0';
 
-    if (strSP[0] != pyconfig->cNonS) {
-        iIndex1 = GetSPIndexJP_S (pyconfig, *strSP);
-        if (iIndex1 == -1) {
+    if (strSP[0] != pyconfig->cNonS)
+    {
+        iIndex1 = GetSPIndexJP_S(pyconfig, *strSP);
+
+        if (iIndex1 == -1)
+        {
             strTmp[0] = strSP[0];
-            strcat (strQP, strTmp);
+            strcat(strQP, strTmp);
         }
         else
-            strcat (strQP, SPMap_S[iIndex1].strQP);
+            strcat(strQP, SPMap_S[iIndex1].strQP);
     }
-    else if (!strSP[1])
-        strcpy (strQP, strSP);
+    else
+        if (!strSP[1])
+            strcpy(strQP, strSP);
 
-    if (strSP[1]) {
+    if (strSP[1])
+    {
         iIndex2 = -1;
-        while (1) {
-            iIndex2 = GetSPIndexJP_C (pyconfig, strSP[1], iIndex2 + 1);
-            if (iIndex2 == -1) {
+
+        while (1)
+        {
+            iIndex2 = GetSPIndexJP_C(pyconfig, strSP[1], iIndex2 + 1);
+
+            if (iIndex2 == -1)
+            {
                 strTmp[0] = strSP[1];
-                strcat (strQP, strTmp);
+                strcat(strQP, strTmp);
                 break;
             }
 
-            strcpy (str_QP, strQP);
-            strcat (strQP, SPMap_C[iIndex2].strQP);
-            if (FindPYFAIndex (pyconfig, strQP, false) != -1)
+            strcpy(str_QP, strQP);
+
+            strcat(strQP, SPMap_C[iIndex2].strQP);
+
+            if (FindPYFAIndex(pyconfig, strQP, false) != -1)
                 break;
 
-            strcpy (strQP, str_QP);
+            strcpy(strQP, str_QP);
         }
     }
 
-    if (FindPYFAIndex (pyconfig, strQP, false) != -1)
+    if (FindPYFAIndex(pyconfig, strQP, false) != -1)
         iIndex2 = 0;        //这只是将iIndex2置为非-1,以免后面的判断
 
     strTmp[0] = strSP[0];
+
     strTmp[1] = '\0';
-    if ((iIndex1 == -1 && !(IsSyllabary (strTmp, 0))) || iIndex2 == -1) {
-        iIndex1 = FindPYFAIndex (pyconfig, strSP, false);
+
+    if ((iIndex1 == -1 && !(IsSyllabary(strTmp, 0))) || iIndex2 == -1)
+    {
+        iIndex1 = FindPYFAIndex(pyconfig, strSP, false);
+
         if (iIndex1 != -1)
-            strcpy (strQP, strSP);
+            strcpy(strQP, strSP);
     }
 }
 
-int GetSPIndexQP_S (FcitxPinyinConfig* pyconfig, char *str)
+int GetSPIndexQP_S(FcitxPinyinConfig* pyconfig, char *str)
 {
     int             i;
     SP_S* SPMap_S = pyconfig->SPMap_S;
 
     i = 0;
-    while (SPMap_S[i].strQP[0]) {
-        if (!strcmp (str, SPMap_S[i].strQP))
+
+    while (SPMap_S[i].strQP[0])
+    {
+        if (!strcmp(str, SPMap_S[i].strQP))
             return i;
 
         i++;
@@ -290,28 +339,33 @@ int GetSPIndexQP_S (FcitxPinyinConfig* pyconfig, char *str)
     return -1;
 }
 
-int GetSPIndexQP_C (FcitxPinyinConfig* pyconfig, char *str)
+int GetSPIndexQP_C(FcitxPinyinConfig* pyconfig, char *str)
 {
     int             i;
     SP_C* SPMap_C = pyconfig->SPMap_C;
 
     i = 0;
-    while (SPMap_C[i].strQP[0]) {
-        if (!strcmp (str, SPMap_C[i].strQP))
+
+    while (SPMap_C[i].strQP[0])
+    {
+        if (!strcmp(str, SPMap_C[i].strQP))
             return i;
+
         i++;
     }
 
     return -1;
 }
 
-int GetSPIndexJP_S (FcitxPinyinConfig* pyconfig, char c)
+int GetSPIndexJP_S(FcitxPinyinConfig* pyconfig, char c)
 {
     int             i;
     SP_S* SPMap_S = pyconfig->SPMap_S;
 
     i = 0;
-    while (SPMap_S[i].strQP[0]) {
+
+    while (SPMap_S[i].strQP[0])
+    {
         if (c == SPMap_S[i].cJP)
             return i;
 
@@ -321,18 +375,22 @@ int GetSPIndexJP_S (FcitxPinyinConfig* pyconfig, char c)
     return -1;
 }
 
-int GetSPIndexJP_C (FcitxPinyinConfig* pyconfig, char c, int iStart)
+int GetSPIndexJP_C(FcitxPinyinConfig* pyconfig, char c, int iStart)
 {
     int             i;
     SP_C* SPMap_C = pyconfig->SPMap_C;
 
     i = iStart;
-    while (SPMap_C[i].strQP[0]) {
+
+    while (SPMap_C[i].strQP[0])
+    {
         if (c == SPMap_C[i].cJP)
             return i;
+
         i++;
     }
 
     return -1;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

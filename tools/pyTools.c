@@ -27,117 +27,132 @@
 
 void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 {
-  struct _PYMB *PYMB;
-  int i, j, r, n, t;
 
-  /* Is there a way to avoid reading the whole file twice? */
+    struct _PYMB *PYMB;
+    int i, j, r, n, t;
 
-  /* First Pass: Determine the size of the PYMB array to be created */
+    /* Is there a way to avoid reading the whole file twice? */
 
-  n = 0;
-  while (1)
-  {
-      int8_t clen;
-      r = fread(&t, sizeof (int), 1, fi);
-      if (!r)
-          break;
-      ++n;
-      
-      fread(&clen, sizeof (int8_t), 1, fi);
-      fseek(fi, sizeof (char) * clen, SEEK_CUR);
-      fread(&t, sizeof(int), 1, fi);
-      
-      for (i = 0; i < t; ++i)
-      {
-          int iLen;
-          fread(&iLen, sizeof(int), 1, fi);
-          fseek(fi , sizeof(char) * iLen, SEEK_CUR);
-          fread(&iLen, sizeof(int), 1, fi);
-          fseek(fi , sizeof(char) * iLen, SEEK_CUR);
-          fread(&iLen, sizeof(int), 1, fi);
-          if (isUser)
-              fread(&iLen, sizeof(int), 1, fi);
-      }
-  }
+    /* First Pass: Determine the size of the PYMB array to be created */
 
-  /* Second Pass: Actually read the data */
+    n = 0;
 
-  fseek(fi, 0, SEEK_SET);
+    while (1)
+    {
+        int8_t clen;
+        r = fread(&t, sizeof(int), 1, fi);
 
-  *pPYMB = PYMB = malloc(sizeof (*PYMB) * (n + 1));
+        if (!r)
+            break;
 
-  for (i = 0; i < n; ++i)
-  {
-    r = fread(&(PYMB[i].PYFAIndex), sizeof (int), 1, fi);
+        ++n;
 
-    int8_t clen;
-    fread(&clen, sizeof (int8_t), 1, fi);
-    fread(PYMB[i].HZ, sizeof (char) * clen, 1, fi);
-    PYMB[i].HZ[clen] = '\0';
+        fread(&clen, sizeof(int8_t), 1, fi);
 
-    fread(&(PYMB[i].UserPhraseCount), sizeof (int), 1, fi);
-    PYMB[i].UserPhrase = malloc(sizeof(*(PYMB[i].UserPhrase)) * PYMB[i].UserPhraseCount);
+        fseek(fi, sizeof(char) * clen, SEEK_CUR);
+
+        fread(&t, sizeof(int), 1, fi);
+
+        for (i = 0; i < t; ++i)
+        {
+            int iLen;
+            fread(&iLen, sizeof(int), 1, fi);
+            fseek(fi , sizeof(char) * iLen, SEEK_CUR);
+            fread(&iLen, sizeof(int), 1, fi);
+            fseek(fi , sizeof(char) * iLen, SEEK_CUR);
+            fread(&iLen, sizeof(int), 1, fi);
+
+            if (isUser)
+                fread(&iLen, sizeof(int), 1, fi);
+        }
+    }
+
+    /* Second Pass: Actually read the data */
+
+    fseek(fi, 0, SEEK_SET);
+
+    *pPYMB = PYMB = malloc(sizeof(*PYMB) * (n + 1));
+
+    for (i = 0; i < n; ++i)
+    {
+        r = fread(&(PYMB[i].PYFAIndex), sizeof(int), 1, fi);
+
+        int8_t clen;
+        fread(&clen, sizeof(int8_t), 1, fi);
+        fread(PYMB[i].HZ, sizeof(char) * clen, 1, fi);
+        PYMB[i].HZ[clen] = '\0';
+
+        fread(&(PYMB[i].UserPhraseCount), sizeof(int), 1, fi);
+        PYMB[i].UserPhrase = malloc(sizeof(*(PYMB[i].UserPhrase)) * PYMB[i].UserPhraseCount);
 
 #define PU(i,j) (PYMB[(i)].UserPhrase[(j)])
-    for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
-    {
-      fread(&(PU(i,j).Length), sizeof (int), 1, fi);
 
-      PU(i,j).Map = malloc(sizeof (char) * PU(i,j).Length + 1);
-      fread(PU(i,j).Map, sizeof (char) * PU(i,j).Length, 1, fi);
-      PU(i,j).Map[PU(i,j).Length] = '\0';
+        for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
+        {
+            fread(&(PU(i, j).Length), sizeof(int), 1, fi);
 
-      int iLen;
-      fread(&iLen, sizeof (int), 1, fi);
-      PU(i,j).Phrase = malloc(sizeof (char) * iLen + 1);
-      fread(PU(i,j).Phrase, sizeof (char) * iLen, 1, fi);
-      PU(i,j).Phrase[iLen] = '\0';
+            PU(i, j).Map = malloc(sizeof(char) * PU(i, j).Length + 1);
+            fread(PU(i, j).Map, sizeof(char) * PU(i, j).Length, 1, fi);
+            PU(i, j).Map[PU(i,j).Length] = '\0';
 
-      fread(&(PU(i,j).Index), sizeof (int), 1, fi);
+            int iLen;
+            fread(&iLen, sizeof(int), 1, fi);
+            PU(i, j).Phrase = malloc(sizeof(char) * iLen + 1);
+            fread(PU(i, j).Phrase, sizeof(char) * iLen, 1, fi);
+            PU(i, j).Phrase[iLen] = '\0';
 
-      if (isUser)
-          fread(&(PU(i,j).Hit), sizeof (int), 1, fi);
-      else
-          PU(i,j).Hit = 0;
-    }
+            fread(&(PU(i, j).Index), sizeof(int), 1, fi);
+
+            if (isUser)
+                fread(&(PU(i, j).Hit), sizeof(int), 1, fi);
+            else
+                PU(i, j).Hit = 0;
+        }
+
 #undef PU
-  }
-  PYMB[n].HZ[0] = '\0';
+    }
 
-  return;
+    PYMB[n].HZ[0] = '\0';
+
+    return;
 }
 
 int LoadPYBase(FILE *fi, struct _HZMap **pHZMap)
 {
-  int i, j, r, PYFACount;
-  struct _HZMap *HZMap;
+    int i, j, r, PYFACount;
 
-  r = fread(&PYFACount, sizeof (int), 1, fi);
-  if (!r)
-    return 0;
+    struct _HZMap *HZMap;
 
-  *pHZMap = HZMap = malloc(sizeof (*HZMap) * (PYFACount + 1));
-  for (i = 0; i < PYFACount; ++i)
-  {
-    fread(HZMap[i].Map, sizeof(char) * 2, 1, fi);
-    HZMap[i].Map[2] = '\0';
+    r = fread(&PYFACount, sizeof(int), 1, fi);
 
-    fread(&(HZMap[i].BaseCount), sizeof (int), 1, fi);
-    HZMap[i].HZ = malloc(sizeof(char *) * HZMap[i].BaseCount);
-    HZMap[i].Index = malloc(sizeof (int) * HZMap[i].BaseCount);
+    if (!r)
+        return 0;
 
-    for (j = 0; j < HZMap[i].BaseCount; ++j)
+    *pHZMap = HZMap = malloc(sizeof(*HZMap) * (PYFACount + 1));
+
+    for (i = 0; i < PYFACount; ++i)
     {
-      int8_t clen;
-      fread(&clen, sizeof(int8_t), 1, fi);
-      HZMap[i].HZ[j] = malloc(sizeof(char) *( clen + 1));
-      fread(HZMap[i].HZ[j], sizeof(char) * clen, 1, fi);
-      HZMap[i].HZ[j][clen] = '\0';
-      fread(&HZMap[i].Index[j], sizeof (int), 1, fi);
-    }
-  }
-  HZMap[i].Map[0] = '\0';
+        fread(HZMap[i].Map, sizeof(char) * 2, 1, fi);
+        HZMap[i].Map[2] = '\0';
 
-  return PYFACount;
+        fread(&(HZMap[i].BaseCount), sizeof(int), 1, fi);
+        HZMap[i].HZ = malloc(sizeof(char *) * HZMap[i].BaseCount);
+        HZMap[i].Index = malloc(sizeof(int) * HZMap[i].BaseCount);
+
+        for (j = 0; j < HZMap[i].BaseCount; ++j)
+        {
+            int8_t clen;
+            fread(&clen, sizeof(int8_t), 1, fi);
+            HZMap[i].HZ[j] = malloc(sizeof(char) * (clen + 1));
+            fread(HZMap[i].HZ[j], sizeof(char) * clen, 1, fi);
+            HZMap[i].HZ[j][clen] = '\0';
+            fread(&HZMap[i].Index[j], sizeof(int), 1, fi);
+        }
+    }
+
+    HZMap[i].Map[0] = '\0';
+
+    return PYFACount;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 4; 

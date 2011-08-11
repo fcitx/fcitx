@@ -66,24 +66,25 @@ int main(int argc, char* argv[])
 #ifdef HAVE_UNISTD_H
     int pagesize = sysconf(_SC_PAGESIZE);
 #else
-    int pagesize = 4*1024;
+    int pagesize = 4 * 1024;
 #endif // HAVE_UNISTD_H
     mallopt(M_TRIM_THRESHOLD, 5*pagesize);
 #endif // M_TRIM_THRESHOLD
-    
+
     setlocale(LC_ALL, "");
     bindtextdomain("fcitx", LOCALEDIR);
     bind_textdomain_codeset("fcitx", "UTF-8");
     textdomain("fcitx");
     SetMyExceptionHandler();
-    
+
     int instanceCount = 1;
-    
+
     sem_t sem;
     sem_init(&sem, 0, 0);
-    
+
     instance = CreateFcitxInstance(&sem, argc, argv);
-    
+
     WaitForEnd(&sem, instanceCount);
-	return 0;
+    return 0;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

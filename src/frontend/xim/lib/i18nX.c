@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <X11/Xlib.h>
@@ -53,14 +53,14 @@ static XClient *NewXClient (Xi18n i18n_core, Window new_client)
     x_client = (XClient *) malloc (sizeof (XClient));
     x_client->client_win = new_client;
     x_client->accept_win = XCreateSimpleWindow (dpy,
-                                                DefaultRootWindow(dpy),
-                                                0,
-                                                0,
-                                                1,
-                                                1,
-                                                1,
-                                                0,
-                                                0);
+                           DefaultRootWindow(dpy),
+                           0,
+                           0,
+                           1,
+                           1,
+                           1,
+                           0,
+                           0);
     client->trans_rec = x_client;
     return ((XClient *) x_client);
 }
@@ -155,10 +155,10 @@ static unsigned char *ReadXIMMessage (XIMS ims,
         }
         if (length != nitems)
             length = nitems;
-	if (actual_format_ret == 16)
-	    length *= 2;
-	else if (actual_format_ret == 32)
-	    length *= 4;
+        if (actual_format_ret == 16)
+            length *= 2;
+        else if (actual_format_ret == 32)
+            length *= 4;
 
         /* if hit, it might be an error */
         if ((p = (unsigned char *) malloc (length)) == NULL)
@@ -187,7 +187,7 @@ static void ReadXConnectMessage (XIMS ims, XClientMessageEvent *ev)
     if (major_version != 0  ||  minor_version != 0)
     {
         major_version =
-        minor_version = 0;
+            minor_version = 0;
         /* Only supporting only-CM & Property-with-CM method */
     }
     /*endif*/
@@ -252,7 +252,7 @@ static Bool Xi18nXEnd(XIMS ims)
 static char *MakeNewAtom (CARD16 connect_id, char *atomName)
 {
     static int sequence = 0;
-    
+
     sprintf (atomName,
              "_server%d_%d",
              connect_id,
@@ -349,8 +349,8 @@ static Bool CheckCMEvent (Display *display, XEvent *event, XPointer xi18n_core)
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
 
     if ((event->type == ClientMessage)
-        &&
-        (event->xclient.message_type == spec->xim_request))
+            &&
+            (event->xclient.message_type == spec->xim_request))
     {
         return  True;
     }
@@ -383,7 +383,7 @@ static Bool Xi18nXWait (XIMS ims,
             if ((packet = ReadXIMMessage (ims,
                                           (XClientMessageEvent *) & event,
                                           &connect_id_ret))
-                == (unsigned char*) NULL)
+                    == (unsigned char*) NULL)
             {
                 return False;
             }
@@ -391,8 +391,8 @@ static Bool Xi18nXWait (XIMS ims,
             hdr = (XimProtoHdr *)packet;
 
             if ((hdr->major_opcode == major_opcode)
-                &&
-                (hdr->minor_opcode == minor_opcode))
+                    &&
+                    (hdr->minor_opcode == minor_opcode))
             {
                 return True;
             }
@@ -416,9 +416,9 @@ static Bool Xi18nXDisconnect (XIMS ims, CARD16 connect_id)
 
     XDestroyWindow (dpy, x_client->accept_win);
     _XUnregisterFilter (dpy,
-		        x_client->accept_win,
+                        x_client->accept_win,
                         WaitXIMProtocol,
-		        (XPointer)ims);
+                        (XPointer)ims);
     XFree (x_client);
     _Xi18nDeleteClient (i18n_core, connect_id);
     return True;
@@ -433,7 +433,7 @@ Bool _Xi18nCheckXAddress (Xi18n i18n_core,
     if (!(spec = (XSpecRec *) malloc (sizeof (XSpecRec))))
         return False;
     /*endif*/
-    
+
     i18n_core->address.connect_addr = (XSpecRec *) spec;
     i18n_core->methods.begin = Xi18nXBegin;
     i18n_core->methods.end = Xi18nXEnd;
@@ -453,7 +453,7 @@ static Bool WaitXConnectMessage (Display *dpy,
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
 
     if (((XClientMessageEvent *) ev)->message_type
-        == spec->connect_request)
+            == spec->connect_request)
     {
         ReadXConnectMessage (ims, (XClientMessageEvent *) ev);
         return True;
@@ -476,12 +476,12 @@ static Bool WaitXIMProtocol (Display *dpy,
     int connect_id;
 
     if (((XClientMessageEvent *) ev)->message_type
-        == spec->xim_request)
+            == spec->xim_request)
     {
         if ((packet = ReadXIMMessage (ims,
                                       (XClientMessageEvent *) ev,
                                       &connect_id))
-            == (unsigned char *)  NULL)
+                == (unsigned char *)  NULL)
         {
             return False;
         }
@@ -496,3 +496,4 @@ static Bool WaitXIMProtocol (Display *dpy,
     return False;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

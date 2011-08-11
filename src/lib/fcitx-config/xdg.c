@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/** 
+/**
  * @file xdg.c
  * @brief xdg related path handle
  * @author CSSlayer
@@ -37,31 +37,37 @@
 #include "fcitx/fcitx.h"
 #include "xdg.h"
 
-static void make_path (const char *path);
+static void make_path(const char *path);
 
 void
-make_path (const char *path)
+make_path(const char *path)
 {
     char opath[PATH_MAX];
     char *p;
     size_t len;
-    
+
     strncpy(opath, path, sizeof(opath));
     opath[PATH_MAX - 1] = '\0';
     len = strlen(opath);
-    while(opath[len - 1] == '/')
+
+    while (opath[len - 1] == '/')
     {
         opath[len - 1] = '\0';
         len --;
     }
-    for(p = opath; *p; p++)
-        if(*p == '/') {
+
+    for (p = opath; *p; p++)
+        if (*p == '/')
+        {
             *p = '\0';
-            if(access(opath, F_OK))
+
+            if (access(opath, F_OK))
                 mkdir(opath, S_IRWXU);
+
             *p = '/';
         }
-    if(access(opath, F_OK))         /* if path is not terminated with / */
+
+    if (access(opath, F_OK))        /* if path is not terminated with / */
         mkdir(opath, S_IRWXU);
 }
 
@@ -86,7 +92,7 @@ FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
     char ** path;
-    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE );
+    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE);
 
     FILE* fp = GetXDGFile(filename, path, mode, len, retFile);
 
@@ -119,11 +125,14 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
     FILE *fp = NULL;
 
     /* check absolute path */
+
     if (strlen(fileName) > 0 && fileName[0] == '/')
     {
-        fp = fopen (fileName, mode);
+        fp = fopen(fileName, mode);
+
         if (retFile)
             *retFile = strdup(fileName);
+
         return fp;
     }
 
@@ -134,17 +143,20 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
         if (retFile)
             *retFile = strdup(buf);
+
         return NULL;
     }
 
     if (len <= 0)
         return NULL;
-    for(i=0;i<len;i++)
+
+    for (i = 0;i < len;i++)
     {
         snprintf(buf, sizeof(buf), "%s/%s", path[i], fileName);
         buf[sizeof(buf) - 1] = '\0';
 
-        fp = fopen (buf, mode);
+        fp = fopen(buf, mode);
+
         if (fp)
             break;
 
@@ -160,12 +172,14 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
             char *dirc = strdup(buf);
             char *dir = dirname(dirc);
             make_path(dir);
-            fp = fopen (buf, mode);
+            fp = fopen(buf, mode);
             free(dirc);
         }
     }
+
     if (retFile)
         *retFile = strdup(buf);
+
     return fp;
 }
 
@@ -178,15 +192,16 @@ void FreeXDGPath(char **path)
 
 FCITX_EXPORT_API
 char **GetXDGPath(
-        size_t *len,
-        const char* homeEnv,
-        const char* homeDefault,
-        const char* suffixHome,
-        const char* dirsDefault,
-        const char* suffixGlobal)
+    size_t *len,
+    const char* homeEnv,
+    const char* homeDefault,
+    const char* suffixHome,
+    const char* dirsDefault,
+    const char* suffixGlobal)
 {
     char* dirHome;
     const char *xdgDirHome = getenv(homeEnv);
+
     if (xdgDirHome && xdgDirHome[0])
     {
         dirHome = strdup(xdgDirHome);
@@ -199,36 +214,50 @@ char **GetXDGPath(
     }
 
     char *dirs;
+
     if (dirsDefault)
         asprintf(&dirs, "%s/%s:%s/%s", dirHome, suffixHome , dirsDefault, suffixGlobal);
     else
         asprintf(&dirs, "%s/%s", dirHome, suffixHome);
-    
+
     free(dirHome);
-    
+
     /* count dirs and change ':' to '\0' */
     size_t dirsCount = 1;
+
     char *tmp = dirs;
-    while (*tmp) {
-        if (*tmp == ':') {
+
+    while (*tmp)
+    {
+        if (*tmp == ':')
+        {
             *tmp = '\0';
             dirsCount++;
         }
+
         tmp++;
     }
-    
+
     /* alloc char pointer array and puts locations */
     size_t i;
+
     char **dirsArray = malloc(dirsCount * sizeof(char*));
-    for (i = 0; i < dirsCount; ++i) {
+
+    for (i = 0; i < dirsCount; ++i)
+    {
         dirsArray[i] = dirs;
-        while (*dirs) {
+
+        while (*dirs)
+        {
             dirs++;
         }
+
         dirs++;
     }
-    
+
     *len = dirsCount;
+
     return dirsArray;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

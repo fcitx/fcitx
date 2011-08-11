@@ -122,15 +122,15 @@ void* AutoEngCreate(FcitxInstance *instance)
     FcitxAutoEngState* autoEngState = fcitx_malloc0(sizeof(FcitxAutoEngState));
     autoEngState->owner = instance;
     LoadAutoEng(autoEngState);
-    
+
     KeyFilterHook khk;
     khk.arg = autoEngState;
     khk.func = ProcessAutoEng;
-    
+
     FcitxIMEventHook rhk;
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
-    
+
     RegisterPreInputFilter(instance, khk);
     RegisterResetInputHook(instance, rhk);
 
@@ -180,11 +180,11 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         strncpy(autoEngState->buf, autoEngState->owner->input.strCodeInput, MAX_USER_INPUT);
         if (strlen(autoEngState->buf) >= MAX_USER_INPUT - 1)
             return true;
-        
+
         autoEngState->index = strlen(autoEngState->buf);
         autoEngState->buf[autoEngState->index ++ ] = sym;
         autoEngState->buf[autoEngState->index] = '\0';
-        
+
         if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
@@ -264,10 +264,10 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);
-    
+
     if (autoEngState->buf[0] == '\0')
         return;
-    
+
     AddMessageAtLast(msgUp, MSG_INPUT, autoEngState->buf);
     AddMessageAtLast(msgDown, MSG_OTHER, _("Press enter to input text"));
 }
@@ -278,3 +278,4 @@ void ReloadAutoEng(void* arg)
     FreeAutoEng(autoEngState);
     LoadAutoEng(autoEngState);
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

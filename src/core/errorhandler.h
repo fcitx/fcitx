@@ -40,15 +40,16 @@
  * @param  ...
  * @return void
  **/
-void            SetMyExceptionHandler (void);
+void            SetMyExceptionHandler(void);
 
 /**
  * @brief Process Posix signal
  *
- * @param signo 
+ * @param signo
  * @return void
  **/
-void            OnException (int signo);
+void            OnException(int signo);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

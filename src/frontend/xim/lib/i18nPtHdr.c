@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <stdlib.h>
@@ -47,7 +47,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 static void	DebugLog(char * msg)
 {
-	fprintf(stderr, msg);
+    fprintf(stderr, msg);
 }
 #endif
 
@@ -193,8 +193,8 @@ static void OpenMessageProc(XIMS ims, IMProtocol *call_data, unsigned char *p)
     }
     /*endif*/
     if ((i18n_core->address.imvalue_mask & I18N_ON_KEYS)
-        ||
-        (i18n_core->address.imvalue_mask & I18N_OFF_KEYS))
+            ||
+            (i18n_core->address.imvalue_mask & I18N_OFF_KEYS))
     {
         _Xi18nSendTriggerKey (ims, connect_id);
     }
@@ -453,7 +453,7 @@ static void QueryExtensionMessageProc (XIMS ims,
     {
         char *name;
         int str_length;
-        
+
         FrameMgrGetToken (fm, str_length);
         FrameMgrSetSize (fm, str_length);
         query_ext->extension[number].length = str_length;
@@ -568,14 +568,14 @@ static void SyncReplyMessageProc (XIMS ims,
     client->sync = False;
 
     if (ims->sync == True) {
-	ims->sync = False;
-	if (i18n_core->address.improto) {
-	    call_data->sync_xlib.major_code = XIM_SYNC_REPLY;
-	    call_data->sync_xlib.minor_code = 0;
-	    call_data->sync_xlib.connect_id = input_method_ID;
-	    call_data->sync_xlib.icid = input_context_ID;
-	    i18n_core->address.improto(ims, call_data);
-	}
+        ims->sync = False;
+        if (i18n_core->address.improto) {
+            call_data->sync_xlib.major_code = XIM_SYNC_REPLY;
+            call_data->sync_xlib.minor_code = 0;
+            call_data->sync_xlib.connect_id = input_method_ID;
+            call_data->sync_xlib.icid = input_context_ID;
+            i18n_core->address.improto(ims, call_data);
+        }
     }
 }
 
@@ -600,7 +600,7 @@ static void GetIMValueFromName (Xi18n i18n_core,
             extern XimFrameRec input_styles_fr[];
             unsigned char *data = NULL;
             int total_size;
-            
+
             fm = FrameMgrInit (input_styles_fr,
                                NULL,
                                _Xi18nNeedSwap (i18n_core, connect_id));
@@ -623,9 +623,9 @@ static void GetIMValueFromName (Xi18n i18n_core,
             memmove (buf, data, total_size);
             FrameMgrFree (fm);
 
-	    /* add by hurrica...@126.com */
-	    free (data);
-	    /* ************************* */
+            /* add by hurrica...@126.com */
+            free (data);
+            /* ************************* */
         }
         /*endif*/
     }
@@ -636,10 +636,10 @@ static void GetIMValueFromName (Xi18n i18n_core,
 }
 
 static XIMAttribute *MakeIMAttributeList (Xi18n i18n_core,
-                                          CARD16 connect_id,
-                                          CARD16 *list,
-                                          int *number,
-                                          int *length)
+        CARD16 connect_id,
+        CARD16 *list,
+        int *number,
+        int *length)
 {
     XIMAttribute *attrib_list;
     int list_num;
@@ -759,8 +759,8 @@ static void GetIMValuesMessageProc (XIMS ims,
         for (j = 0;  j < i18n_core->address.im_attr_num;  j++) {
             if (i18n_core->address.xim_attr[j].attribute_id ==
                     im_attrID_list[i]) {
-                name_list[name_number++] = 
-			i18n_core->address.xim_attr[j].name;
+                name_list[name_number++] =
+                    i18n_core->address.xim_attr[j].name;
                 break;
             }
         }
@@ -778,10 +778,10 @@ static void GetIMValuesMessageProc (XIMS ims,
 #endif  /* PROTOCOL_RICH */
 
     im_attribute_list = MakeIMAttributeList (i18n_core,
-                                             connect_id,
-                                             im_attrID_list,
-                                             &number,
-                                             &list_len);
+                        connect_id,
+                        im_attrID_list,
+                        &number,
+                        &list_len);
     if (im_attrID_list)
         XFree (im_attrID_list);
     /*endif*/
@@ -799,7 +799,7 @@ static void GetIMValuesMessageProc (XIMS ims,
     for (i = 0;  i < iter_count;  i++)
         FrameMgrSetSize (fm, im_attribute_list[i].value_length);
     /*endfor*/
-    
+
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
     if (!reply)
@@ -951,7 +951,7 @@ static void DestroyICMessageProc (XIMS ims,
         /*endif*/
     }
     /*endif*/
-    
+
     fm = FrameMgrInit (destroy_ic_reply_fr,
                        NULL,
                        _Xi18nNeedSwap (i18n_core, connect_id));
@@ -1012,7 +1012,7 @@ static void ResetICMessageProc (XIMS ims,
         /*endif*/
     }
     /*endif*/
-    
+
     /* create FrameMgr */
     fm = FrameMgrInit (reset_ic_reply_fr,
                        NULL,
@@ -1117,8 +1117,8 @@ static void ForwardEventMessageProc (XIMS ims,
 }
 
 static void ExtForwardKeyEventMessageProc (XIMS ims,
-                                           IMProtocol *call_data,
-                                           unsigned char *p)
+        IMProtocol *call_data,
+        unsigned char *p)
 {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
@@ -1154,7 +1154,7 @@ static void ExtForwardKeyEventMessageProc (XIMS ims,
         return;
     }
     /*endif*/
-    
+
     /* make a faked keypress event */
     ev->type = (int)type;
     ev->xany.send_event = True;
@@ -1265,7 +1265,7 @@ static void TriggerNotifyMessageProc (XIMS ims,
     fm = FrameMgrInit (trigger_notify_reply_fr,
                        NULL,
                        _Xi18nNeedSwap (i18n_core, connect_id));
- 
+
     total_size = FrameMgrGetTotalSize (fm);
     reply = (unsigned char *) malloc (total_size);
     if (!reply)
@@ -1358,8 +1358,8 @@ static INT16 ChooseEncoding (Xi18n i18n_core,
 }
 
 static void EncodingNegotiatonMessageProc (XIMS ims,
-                                           IMProtocol *call_data,
-                                           unsigned char *p)
+        IMProtocol *call_data,
+        unsigned char *p)
 {
     Xi18n i18n_core = ims->protocol;
     FrameMgr fm;
@@ -1391,7 +1391,7 @@ static void EncodingNegotiatonMessageProc (XIMS ims,
         {
             char *name;
             int str_length;
-            
+
             FrameMgrGetToken (fm, str_length);
             FrameMgrSetSize (fm, str_length);
             enc_nego->encoding[i].length = str_length;
@@ -1416,7 +1416,7 @@ static void EncodingNegotiatonMessageProc (XIMS ims,
         {
             char *name;
             int str_length;
-            
+
             FrameMgrGetToken (fm, str_length);
             FrameMgrSetSize (fm, str_length);
             enc_nego->encodinginfo[i].length = str_length;
@@ -1593,7 +1593,7 @@ static void ProcessQueue (XIMS ims, CARD16 connect_id)
 {
     Xi18n i18n_core = ims->protocol;
     Xi18nClient *client = (Xi18nClient *) _Xi18nFindClient (i18n_core,
-                                                            connect_id);
+                          connect_id);
 
     while (client->sync == False  &&  client->pending)
     {
@@ -1640,7 +1640,7 @@ void _Xi18nMessageHandler (XIMS ims,
     if (hdr == (XimProtoHdr *) NULL)
         return;
     /*endif*/
-    
+
     memset (&call_data, 0, sizeof(IMProtocol));
 
     call_data.major_code = hdr->major_opcode;
@@ -1651,98 +1651,98 @@ void _Xi18nMessageHandler (XIMS ims,
     {
     case XIM_CONNECT:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_CONNECT\n");
+        DebugLog("-- XIM_CONNECT\n");
 #endif
         ConnectMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_DISCONNECT:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_DISCONNECT\n");
+        DebugLog("-- XIM_DISCONNECT\n");
 #endif
         DisConnectMessageProc (ims, &call_data);
         break;
 
     case XIM_OPEN:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_OPEN\n");
+        DebugLog("-- XIM_OPEN\n");
 #endif
         OpenMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_CLOSE:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_CLOSE\n");
+        DebugLog("-- XIM_CLOSE\n");
 #endif
         CloseMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_QUERY_EXTENSION:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_QUERY_EXTENSION\n");
+        DebugLog("-- XIM_QUERY_EXTENSION\n");
 #endif
         QueryExtensionMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_GET_IM_VALUES:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_GET_IM_VALUES\n");
+        DebugLog("-- XIM_GET_IM_VALUES\n");
 #endif
         GetIMValuesMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_CREATE_IC:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_CREATE_IC\n");
+        DebugLog("-- XIM_CREATE_IC\n");
 #endif
         CreateICMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_SET_IC_VALUES:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_SET_IC_VALUES\n");
+        DebugLog("-- XIM_SET_IC_VALUES\n");
 #endif
         SetICValuesMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_GET_IC_VALUES:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_GET_IC_VALUES\n");
+        DebugLog("-- XIM_GET_IC_VALUES\n");
 #endif
         GetICValuesMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_SET_IC_FOCUS:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_SET_IC_FOCUS\n");
+        DebugLog("-- XIM_SET_IC_FOCUS\n");
 #endif
         SetICFocusMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_UNSET_IC_FOCUS:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_UNSET_IC_FOCUS\n");
+        DebugLog("-- XIM_UNSET_IC_FOCUS\n");
 #endif
         UnsetICFocusMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_DESTROY_IC:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_DESTROY_IC\n");
+        DebugLog("-- XIM_DESTROY_IC\n");
 #endif
         DestroyICMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_RESET_IC:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_RESET_IC\n");
+        DebugLog("-- XIM_RESET_IC\n");
 #endif
         ResetICMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_FORWARD_EVENT:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_FORWARD_EVENT\n");
+        DebugLog("-- XIM_FORWARD_EVENT\n");
 #endif
         if (client->sync == True)
         {
@@ -1757,20 +1757,20 @@ void _Xi18nMessageHandler (XIMS ims,
 
     case XIM_EXTENSION:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_EXTENSION\n");
+        DebugLog("-- XIM_EXTENSION\n");
 #endif
         ExtensionMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_SYNC:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_SYNC\n");
+        DebugLog("-- XIM_SYNC\n");
 #endif
         break;
 
     case XIM_SYNC_REPLY:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_SYNC_REPLY\n");
+        DebugLog("-- XIM_SYNC_REPLY\n");
 #endif
         SyncReplyMessageProc (ims, &call_data, p1);
         ProcessQueue (ims, connect_id);
@@ -1778,35 +1778,35 @@ void _Xi18nMessageHandler (XIMS ims,
 
     case XIM_TRIGGER_NOTIFY:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_TRIGGER_NOTIFY\n");
+        DebugLog("-- XIM_TRIGGER_NOTIFY\n");
 #endif
         TriggerNotifyMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_ENCODING_NEGOTIATION:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_ENCODING_NEGOTIATION\n");
+        DebugLog("-- XIM_ENCODING_NEGOTIATION\n");
 #endif
         EncodingNegotiatonMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_PREEDIT_START_REPLY:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_PREEDIT_START_REPLY\n");
+        DebugLog("-- XIM_PREEDIT_START_REPLY\n");
 #endif
         PreeditStartReplyMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_PREEDIT_CARET_REPLY:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_PREEDIT_CARET_REPLY\n");
+        DebugLog("-- XIM_PREEDIT_CARET_REPLY\n");
 #endif
         PreeditCaretReplyMessageProc (ims, &call_data, p1);
         break;
 
     case XIM_STR_CONVERSION_REPLY:
 #ifdef XIM_DEBUG
-	DebugLog("-- XIM_STR_CONVERSION_REPLY\n");
+        DebugLog("-- XIM_STR_CONVERSION_REPLY\n");
 #endif
         StrConvReplyMessageProc (ims, &call_data, p1);
         break;
@@ -1814,3 +1814,4 @@ void _Xi18nMessageHandler (XIMS ims,
     /*endswitch*/
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

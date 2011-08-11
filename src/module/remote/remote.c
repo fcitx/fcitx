@@ -61,7 +61,7 @@ void* RemoteCreate(FcitxInstance* instance)
 {
     FcitxRemote* remote = fcitx_malloc0(sizeof(FcitxRemote));
     remote->owner = instance;
-    
+
     char *socketfile = remote->socketfile;
     sprintf(socketfile, "/tmp/fcitx-socket");
     remote->socket_fd = CreateSocket(socketfile);
@@ -181,3 +181,4 @@ void RemoteSetFD (void* arg)
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

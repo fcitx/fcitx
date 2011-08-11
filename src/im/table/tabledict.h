@@ -84,12 +84,12 @@ typedef struct _TableMetaData {
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键
     boolean         bEnabled;
-    
+
     struct _TableDict* tableDict;
 } TableMetaData;
 
 typedef struct _TableDict {
-    
+
     char* strInputCode;
     RECORD_INDEX* recordIndex;
     unsigned char iCodeLength;
@@ -140,3 +140,4 @@ boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeI
 CONFIG_BINDING_DECLARE(TableMetaData);
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

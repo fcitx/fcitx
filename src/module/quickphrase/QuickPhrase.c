@@ -48,8 +48,8 @@ typedef struct _QuickPhraseState {
 } QuickPhraseState;
 
 typedef struct _QuickPhraseCand {
-    
-QUICK_PHRASE* cand;
+
+    QUICK_PHRASE* cand;
 
 } QuickPhraseCand;
 
@@ -180,11 +180,11 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
 
         utarray_push_back(qpstate->quickPhrases, &tempQuickPhrase);
     }
-    
+
     strcpy (tempQuickPhrase.strCode, "\x47\x4e\x4f\x4d\x45");
     strcpy (tempQuickPhrase.strPhrase, "\x48\x6f\x77\x20\x63\x61\x6e\x20\x69\x74\x20\x66\x75\x63\x6b\x73\x20\x66"
-                                       "\x63\x69\x74\x78\x20\x73\x6f\x20\x6d\x61\x6e\x79\x20\x74\x69\x6d\x65\x73"
-                                       "\x3f\x20\x49\x74\x20\x73\x75\x63\x6b\x73\x2e");
+            "\x63\x69\x74\x78\x20\x73\x6f\x20\x6d\x61\x6e\x79\x20\x74\x69\x6d\x65\x73"
+            "\x3f\x20\x49\x74\x20\x73\x75\x63\x6b\x73\x2e");
     utarray_push_back(qpstate->quickPhrases, &tempQuickPhrase);
 
     if (buf)
@@ -233,10 +233,10 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             if (*retval == IRV_TO_PROCESS)
             {
                 if (strlen(input->strCodeInput) == 0
-                    && (IsHotKey(sym, state, FCITX_SEMICOLON) || IsHotKey(sym, state, FCITX_SPACE)))
+                        && (IsHotKey(sym, state, FCITX_SEMICOLON) || IsHotKey(sym, state, FCITX_SPACE)))
                 {
-                        strcpy(GetOutputString(input), "；");
-                        *retval = IRV_COMMIT_STRING;
+                    strcpy(GetOutputString(input), "；");
+                    *retval = IRV_COMMIT_STRING;
                 }
                 else {
                     char buf[2];
@@ -273,14 +273,14 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
         }
         else if (IsHotKey(sym, state, FCITX_ENTER))
         {
-            
+
             if (strlen(input->strCodeInput) > 0)
             {
                 strcpy(GetOutputString(input), input->strCodeInput);
                 QuickPhraseReset(qpstate);
                 *retval = IRV_COMMIT_STRING;
             }
-            else 
+            else
             {
                 strcpy(GetOutputString(input), ";");
                 *retval = IRV_COMMIT_STRING;
@@ -307,10 +307,10 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
-    
+
     if (*retval != IRV_TO_PROCESS)
         return false;
-    
+
     if (!qpstate->enabled
             && input->iCodeInputCount == 0
             && IsHotKey(sym, state, FCITX_SEMICOLON))
@@ -371,7 +371,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate)
     QUICK_PHRASE searchKey, *pKey, *currentQuickPhrase, *lastQuickPhrase;
     FcitxInputState *input = &qpstate->owner->input;
     FcitxInstance *instance = qpstate->owner;
-    
+
     CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(&instance->config));
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
 
@@ -387,7 +387,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate)
     strcpy(searchKey.strCode, input->strCodeInput);
 
     CandidateWordReset(input->candList);
-    
+
     currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
     qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
     lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
@@ -436,3 +436,4 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, CandidateWord* candWord)
     return IRV_COMMIT_STRING;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

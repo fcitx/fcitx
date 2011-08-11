@@ -44,8 +44,9 @@ typedef struct _FcitxIMContextClass FcitxIMContextClass;
 
 GType fcitx_im_context_get_type (void);
 FcitxIMContext
-        *fcitx_im_context_new (void);
+*fcitx_im_context_new (void);
 void fcitx_im_context_register_type
-                                  (GTypeModule *type_module);
+(GTypeModule *type_module);
 G_END_DECLS
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

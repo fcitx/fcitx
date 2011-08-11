@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-/** 
+/**
  * @file xdg.h
  * @brief XDG Related path handle
  * @author CSSlayer
@@ -32,12 +32,13 @@
 #include <stdio.h>
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-FILE *GetLibFile(const char *filename, const char *mode, char **retFile);
-FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
-char **GetXDGPath(
+    FILE *GetLibFile(const char *filename, const char *mode, char **retFile);
+    FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
+    char **GetXDGPath(
         size_t *len,
         const char* homeEnv,
         const char* homeDefault,
@@ -45,13 +46,15 @@ char **GetXDGPath(
         const char* dirsDefault,
         const char* suffixGlobal);
 
-FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
-FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
-void FreeXDGPath(char **path);
+    FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
+    FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
+    void FreeXDGPath(char **path);
 
 #ifdef __cplusplus
 }
-#endif
 
 #endif
 
+#endif
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

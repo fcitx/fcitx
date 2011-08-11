@@ -60,3 +60,4 @@ void RedrawTrayWindow(TrayWindow* trayWindow);
 void ReleaseTrayWindow(TrayWindow* trayWindow);
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

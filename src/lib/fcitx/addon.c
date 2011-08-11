@@ -62,7 +62,7 @@ void InitFcitxAddons(UT_array* addons)
     utarray_init(addons, &addon_icd);
 }
 
-/** 
+/**
  * @brief Load Addon Info
  */
 FCITX_EXPORT_API
@@ -81,7 +81,7 @@ void LoadAddonInfo(UT_array* addons)
 
     addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon" );
 
-    for(i = 0; i< len; i++)
+    for (i = 0; i< len; i++)
     {
         snprintf(pathBuf, sizeof(pathBuf), "%s", addonPath[i]);
         pathBuf[sizeof(pathBuf) - 1] = '\0';
@@ -91,7 +91,7 @@ void LoadAddonInfo(UT_array* addons)
             continue;
 
         /* collect all *.conf files */
-        while((drt = readdir(dir)) != NULL)
+        while ((drt = readdir(dir)) != NULL)
         {
             size_t nameLen = strlen(drt->d_name);
             if (nameLen <= strlen(".conf") )
@@ -128,8 +128,8 @@ void LoadAddonInfo(UT_array* addons)
         paths[i] = malloc(sizeof(char) *PATH_MAX);
     StringHashSet* string;
     for (string = sset;
-         string != NULL;
-         string = (StringHashSet*)string->hh.next)
+            string != NULL;
+            string = (StringHashSet*)string->hh.next)
     {
         int i = 0;
         for (i = len -1; i >= 0; i--)
@@ -159,14 +159,14 @@ void LoadAddonInfo(UT_array* addons)
     FreeXDGPath(addonPath);
 
     StringHashSet *curStr;
-    while(sset)
+    while (sset)
     {
         curStr = sset;
         HASH_DEL(sset, curStr);
         free(curStr->name);
         free(curStr);
     }
-    
+
     utarray_sort(addons, AddonPriorityCmp);
 }
 
@@ -176,12 +176,12 @@ void AddonResolveDependency(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     boolean remove = true;
     FcitxAddon *addon;
-    
+
     /* choose ui */
     boolean founduiflag = false;
     for ( addon = (FcitxAddon *) utarray_front(addons);
-        addon != NULL;
-        addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->category == AC_UI)
         {
@@ -204,13 +204,13 @@ void AddonResolveDependency(FcitxInstance* instance)
             }
         }
     }
-    
-    while(remove)
+
+    while (remove)
     {
         remove = false;
         for ( addon = (FcitxAddon *) utarray_front(addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
+                addon != NULL;
+                addon = (FcitxAddon *) utarray_next(addons, addon))
         {
             if (!addon->bEnabled)
                 continue;
@@ -218,8 +218,8 @@ void AddonResolveDependency(FcitxInstance* instance)
             boolean valid = true;
             char **depend = NULL;
             for (depend = (char **) utarray_front(dependlist);
-                 depend != NULL;
-                 depend = (char **) utarray_next(dependlist, depend))
+                    depend != NULL;
+                    depend = (char **) utarray_next(dependlist, depend))
             {
                 if (!AddonIsAvailable(addons, *depend))
                 {
@@ -227,7 +227,7 @@ void AddonResolveDependency(FcitxInstance* instance)
                     break;
                 }
             }
-            
+
             utarray_free(dependlist);
             if (!valid)
             {
@@ -243,8 +243,8 @@ boolean AddonIsAvailable(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->bEnabled && strcmp(name, addon->name) == 0)
             return true;
@@ -257,8 +257,8 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->bEnabled && strcmp(name, addon->name) == 0)
             return addon;
@@ -266,9 +266,9 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
     return NULL;
 }
 
-/** 
+/**
  * @brief Load addon.desc file
- * 
+ *
  * @return the description of addon configure.
  */
 FCITX_EXPORT_API
@@ -285,3 +285,4 @@ void FreeAddon(void *v)
     free(addon->library);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

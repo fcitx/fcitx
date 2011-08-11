@@ -30,9 +30,9 @@
 
 static iconv_t iconvW = NULL;
 
-/** 
+/**
  * @brief Fcitx记录Log的函数
- * 
+ *
  * @param ErrorLevel
  * @param fmt
  * @param ...
@@ -46,21 +46,21 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 #endif
     switch (e)
     {
-        case INFO:
-            fprintf(stderr, "[INFO]");
-            break;
-        case ERROR:
-            fprintf(stderr, "[ERROR]");
-            break;
-        case DEBUG:
-            fprintf(stderr, "[DEBUG]");
-            break;
-        case WARNING:
-            fprintf(stderr, "[WARN]");
-            break;
-        case FATAL:
-            fprintf(stderr, "[FATAL]");
-            break;
+    case INFO:
+        fprintf(stderr, "[INFO]");
+        break;
+    case ERROR:
+        fprintf(stderr, "[ERROR]");
+        break;
+    case DEBUG:
+        fprintf(stderr, "[DEBUG]");
+        break;
+    case WARNING:
+        fprintf(stderr, "[WARN]");
+        break;
+    case FATAL:
+        fprintf(stderr, "[FATAL]");
+        break;
     }
 
     char *buffer;
@@ -86,9 +86,9 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 
         char *inp = buffer;
         char *outp = (char*) wmessage;
-        
+
         iconv(iconvW, &inp, &len, &outp, &wlen);
-        
+
         fprintf(stderr, "%ls\n", wmessage);
 
         free(wmessage);
@@ -97,3 +97,4 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
     free(buffer);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

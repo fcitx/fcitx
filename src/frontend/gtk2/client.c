@@ -58,7 +58,7 @@ boolean IsFcitxIMClientValid(FcitxIMClient* client)
         return false;
     if (client->proxy == NULL || client->icproxy == NULL)
         return false;
-    
+
     return true;
 }
 
@@ -71,7 +71,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
     client->data = data;
     client->conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
     client->id = -1;
-    
+
     /* You must have dbus to make it works */
     if (client->conn == NULL)
     {
@@ -79,12 +79,12 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
         free(client);
         return NULL;
     }
-    
+
     client->dbusproxy = dbus_g_proxy_new_for_name(client->conn,
-                                           DBUS_SERVICE_DBUS,
-                                           DBUS_PATH_DBUS,
-                                           DBUS_INTERFACE_DBUS);
-    
+                        DBUS_SERVICE_DBUS,
+                        DBUS_PATH_DBUS,
+                        DBUS_INTERFACE_DBUS);
+
     if (!client->dbusproxy)
     {
         g_object_unref(client->conn);
@@ -96,9 +96,9 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
     dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_connect_signal(client->dbusproxy, "NameOwnerChanged",
                                 G_CALLBACK(_changed_cb), client, NULL);
-    
+
     client->triggerkey[0].sym = client->triggerkey[0].state = client->triggerkey[1].sym = client->triggerkey[1].state = 0;
-    
+
     FcitxIMClientCreateIC(client);
     return client;
 }
@@ -112,18 +112,18 @@ static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char*
         gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
         if (new_owner_good)
         {
-            if (client->proxy) 
+            if (client->proxy)
             {
                 g_object_unref(client->proxy);
                 client->proxy = NULL;
             }
 
-            if (client->icproxy) 
+            if (client->icproxy)
             {
                 g_object_unref(client->icproxy);
                 client->icproxy = NULL;
             }
-            
+
             FcitxIMClientCreateIC(client);
         }
     }
@@ -148,16 +148,16 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
 {
     GError* error = NULL;
     int id = -1;
-    
+
     client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                client->servicename,
-                                                FCITX_IM_DBUS_PATH,
-                                                FCITX_IM_DBUS_INTERFACE,
-                                                &error);
-    
+                    client->servicename,
+                    FCITX_IM_DBUS_PATH,
+                    FCITX_IM_DBUS_INTERFACE,
+                    &error);
+
     if (!client->proxy)
         return;
-    
+
     g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
 
     dbus_g_proxy_call(client->proxy, "CreateIC", &error, G_TYPE_INVALID, G_TYPE_INT, &id, G_TYPE_INVALID);
@@ -165,7 +165,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
         client->id = id;
     else
         return;
-    
+
     guint arg1, arg2, arg3, arg4;
     dbus_g_proxy_call(client->proxy, "GetTriggerKey", &error, G_TYPE_INVALID,
                       G_TYPE_UINT, &arg1,
@@ -178,18 +178,18 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     client->triggerkey[0].state = arg2;
     client->triggerkey[1].sym = arg3;
     client->triggerkey[1].state = arg4;
-    
-    sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);    
-    
+
+    sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);
+
     client->icproxy = dbus_g_proxy_new_for_name_owner(client->conn,
-                                                      client->servicename,
-                                                      client->icname,
-                                                      FCITX_IC_DBUS_INTERFACE,
-                                                      &error
+                      client->servicename,
+                      client->icname,
+                      FCITX_IC_DBUS_INTERFACE,
+                      &error
                                                      );
     if (!client->icproxy)
         return;
-    
+
     dbus_g_proxy_add_signal(client->icproxy, "EnableIM", G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->icproxy, "CloseIM", G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->icproxy, "CommitString", G_TYPE_STRING, G_TYPE_INVALID);
@@ -259,63 +259,64 @@ int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t key
     int itype = type;
     GError* error = NULL;
     if (!dbus_g_proxy_call(client->icproxy, "ProcessKeyEvent",
-                      &error,
-                      G_TYPE_UINT, keyval,
-                      G_TYPE_UINT, keycode,
-                      G_TYPE_UINT, state,
-                      G_TYPE_INT, itype,
-                      G_TYPE_UINT, t,
-                      G_TYPE_INVALID,
-                      G_TYPE_INT, &ret,
-                      G_TYPE_INVALID
-                     ))
+                           &error,
+                           G_TYPE_UINT, keyval,
+                           G_TYPE_UINT, keycode,
+                           G_TYPE_UINT, state,
+                           G_TYPE_INT, itype,
+                           G_TYPE_UINT, t,
+                           G_TYPE_INVALID,
+                           G_TYPE_INT, &ret,
+                           G_TYPE_INVALID
+                          ))
     {
         return -1;
     }
-    
-    
+
+
     return ret;
 }
 
 void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
-    GCallback enableIM,
-    GCallback closeIM,
-    GCallback commitString,
-    GCallback forwardKey,
-    void* user_data,
-    GClosureNotify freefunc
-)
+                                GCallback enableIM,
+                                GCallback closeIM,
+                                GCallback commitString,
+                                GCallback forwardKey,
+                                void* user_data,
+                                GClosureNotify freefunc
+                               )
 {
     dbus_g_proxy_connect_signal(imclient->icproxy,
-        "EnableIM",
-        enableIM,
-        user_data,
-        freefunc
-    );
-        
+                                "EnableIM",
+                                enableIM,
+                                user_data,
+                                freefunc
+                               );
+
     dbus_g_proxy_connect_signal(imclient->icproxy,
-        "CloseIM",
-        closeIM,
-        user_data,
-        freefunc
-    );
-    
+                                "CloseIM",
+                                closeIM,
+                                user_data,
+                                freefunc
+                               );
+
     dbus_g_proxy_connect_signal(imclient->icproxy,
-        "CommitString",
-        commitString,
-        user_data,
-        freefunc
-    );
-    
+                                "CommitString",
+                                commitString,
+                                user_data,
+                                freefunc
+                               );
+
     dbus_g_proxy_connect_signal(imclient->icproxy,
-        "ForwardKey",
-        forwardKey,
-        user_data,
-        freefunc
-    );
+                                "ForwardKey",
+                                forwardKey,
+                                user_data,
+                                freefunc
+                               );
 }
 
 HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
 {
     return client->triggerkey;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

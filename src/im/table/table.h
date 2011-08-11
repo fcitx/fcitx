@@ -49,31 +49,31 @@ typedef struct _TABLECANDWORD {
 
 typedef struct _FcitxTableState {
     UT_array* table; /* 码表 */
-    
+
     char            iTableIMIndex;
     char            iTableCount;
-    
+
     char            iCurrentTableLoaded;
     RECORD	       *pCurCandRecord;	//Records current cand word selected, to update the hit-frequency information
-    
+
     RECORD_INDEX   *recordIndex;
-    
+
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
-        
+
     boolean            bIsTableDelPhrase;
     HOTKEYS         hkTableDelPhrase[HOT_KEY_COUNT];
     boolean            bIsTableAdjustOrder;
     HOTKEYS         hkTableAdjustOrder[HOT_KEY_COUNT];
     boolean            bIsTableAddPhrase;
     HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT];
-    
+
     char            iTableNewPhraseHZCount;
-    
+
     boolean            bTablePhraseTips;
-    
+
     ADJUSTORDER     PYBaseOrder;
     boolean		    isSavingTableDic;
-    
+
     struct _FcitxInstance* owner;
     struct _FcitxAddon* pyaddon;
     CandidateWordCommitCallback pygetcandword;
@@ -109,3 +109,4 @@ ConfigFileDesc *GetTableConfigDesc();
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

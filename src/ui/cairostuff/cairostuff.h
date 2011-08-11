@@ -70,3 +70,4 @@ int FontHeightWithContextReal(cairo_t* c);
 #endif
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

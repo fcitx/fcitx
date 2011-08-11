@@ -57,10 +57,10 @@ Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
     FcitxInputContext* ic =  FindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return True;
-    
+
     if (!SetCurrentIC(xim->owner, ic))
         return True;
-    
+
     if (ic)
     {
         OnInputFocus(xim->owner);
@@ -145,16 +145,16 @@ void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
         }
     }
     FcitxXimIC* ximic = GetXimIC(ic);
-    
+
     Window window = None;
     if (ximic->focus_win)
         window = ximic->focus_win;
-    else if(ximic->client_win)
+    else if (ximic->client_win)
         window = ximic->client_win;
 
-    if(window != None && (ic->offset_x < 0 || ic->offset_y < 0))
+    if (window != None && (ic->offset_x < 0 || ic->offset_y < 0))
     {
-            
+
         XWindowAttributes attr;
         XGetWindowAttributes(xim->display, window, &attr);
 
@@ -174,12 +174,12 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     unsigned int state, originstate;
     char strbuf[STRBUFLEN];
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
- 
+
     if (ic == NULL) {
         ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
         SetCurrentIC(xim->owner, ic);
     }
-    
+
     if (ic == NULL)
         return;
 
@@ -197,20 +197,20 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     originstate &= KEY_USED_MASK;
     GetKey((FcitxKeySym) originsym, originstate, &sym, &state);
     FcitxLog(DEBUG,
-        "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
-         (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
+             "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
+             (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
 
     xim->currentSerialNumberCallData = call_data->serial_number;
     xim->currentSerialNumberKey = kev->serial;
     INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
                                            kev->time,
                                            sym, state);
-    
+
     if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         XimForwardKeyInternal(xim,
-                           GetXimIC(ic),
-                           &call_data->event
-                          );
+                              GetXimIC(ic),
+                              &call_data->event
+                             );
     xim->currentSerialNumberCallData = xim->currentSerialNumberKey = 0L;
 }
 
@@ -227,7 +227,7 @@ void XimForwardKeyInternal(FcitxXimFrontend *xim,
     forwardEvent.icid = ic->id;
     forwardEvent.major_code = XIM_FORWARD_EVENT;
     forwardEvent.sync_bit = 0;
-    forwardEvent.serial_number = xim->currentSerialNumberCallData;    
+    forwardEvent.serial_number = xim->currentSerialNumberCallData;
 
     memcpy(&(forwardEvent.event), xEvent, sizeof(XEvent));
     IMForwardEvent(xim->ims, (XPointer) (&forwardEvent));
@@ -241,6 +241,7 @@ void XIMClose(FcitxXimFrontend* xim, FcitxInputContext* ic, FcitxKeySym sym, uns
 
     call_data.connect_id = GetXimIC(ic)->connect_id;
     call_data.icid = GetXimIC(ic)->id;
- 
+
     IMPreeditEnd(xim->ims, (XPointer) &call_data);
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

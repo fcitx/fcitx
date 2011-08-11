@@ -33,7 +33,7 @@ CONFIG_BINDING_REGISTER("SkinInfo","Name",skinInfo.skinName)
 CONFIG_BINDING_REGISTER("SkinInfo","Version",skinInfo.skinVersion)
 CONFIG_BINDING_REGISTER("SkinInfo","Author",skinInfo.skinAuthor)
 CONFIG_BINDING_REGISTER("SkinInfo","Desc",skinInfo.skinDesc)
-	
+
 CONFIG_BINDING_REGISTER("SkinFont","FontSize",skinFont.fontSize)
 CONFIG_BINDING_REGISTER("SkinFont","MenuFontSize",skinFont.menuFontSize)
 CONFIG_BINDING_REGISTER("SkinFont","TipColor",skinFont.fontColor[MSG_TIPS])
@@ -45,7 +45,7 @@ CONFIG_BINDING_REGISTER("SkinFont","CodeColor",skinFont.fontColor[MSG_CODE])
 CONFIG_BINDING_REGISTER("SkinFont","OtherColor",skinFont.fontColor[MSG_OTHER])
 CONFIG_BINDING_REGISTER("SkinFont","ActiveMenuColor",skinFont.menuFontColor[MENU_ACTIVE])
 CONFIG_BINDING_REGISTER("SkinFont","InactiveMenuColor",skinFont.menuFontColor[MENU_INACTIVE])
-	
+
 CONFIG_BINDING_REGISTER("SkinMainBar","BackImg",skinMainBar.backImg)
 CONFIG_BINDING_REGISTER("SkinMainBar","Logo",skinMainBar.logo)
 CONFIG_BINDING_REGISTER("SkinMainBar","Eng",skinMainBar.eng)
@@ -91,7 +91,8 @@ void FilterPlacement(GenericConfig* config, ConfigGroup *group, ConfigOption *op
 {
     FcitxSkin* sc = (FcitxSkin*) config;
     if (sync == Raw2Value)
-    {        
+    {
         ParsePlacement(&sc->skinMainBar.skinPlacement, *(char**) value);
     }
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <config.h>
@@ -52,8 +52,8 @@ static void _IMCountVaList(va_list var, int *total_count)
 
     for (attr = va_arg (var, char*);  attr;  attr = va_arg (var, char*))
     {
-	(void)va_arg (var, XIMArg *);
-	++(*total_count);
+        (void)va_arg (var, XIMArg *);
+        ++(*total_count);
     }
     /*endfor*/
 }
@@ -65,8 +65,8 @@ static void _IMVaToNestedList(va_list var, int max_count, XIMArg **args_return)
 
     if (max_count <= 0)
     {
-	*args_return = (XIMArg *) NULL;
-	return;
+        *args_return = (XIMArg *) NULL;
+        return;
     }
     /*endif*/
 
@@ -78,9 +78,9 @@ static void _IMVaToNestedList(va_list var, int max_count, XIMArg **args_return)
 
     for (attr = va_arg (var, char*);  attr;  attr = va_arg (var, char *))
     {
-	args->name = attr;
-	args->value = va_arg (var, XPointer);
-	args++;
+        args->name = attr;
+        args->value = va_arg (var, XPointer);
+        args++;
     }
     /*endfor*/
     args->name = (char*)NULL;
@@ -92,16 +92,16 @@ static char *_FindModifiers (XIMArg *args)
 
     while (args->name)
     {
-	if (strcmp (args->name, IMModifiers) == 0)
-	{
-	    modifiers = args->value;
-	    return modifiers;
-	}
-	else
-	{
-	    args++;
-	}
-	/*endif*/
+        if (strcmp (args->name, IMModifiers) == 0)
+        {
+            modifiers = args->value;
+            return modifiers;
+        }
+        else
+        {
+            args++;
+        }
+        /*endif*/
     }
     /*endwhile*/
     return NULL;
@@ -113,18 +113,18 @@ XIMS _GetIMS (char *modifiers)
     extern IMMethodsRec Xi18n_im_methods;
 
     if ((ims = (XIMS) malloc (sizeof (XIMProtocolRec))) == (XIMS) NULL)
-	return ((XIMS) NULL);
+        return ((XIMS) NULL);
     /*endif*/
     memset ((void *) ims, 0, sizeof (XIMProtocolRec));
 
     if (modifiers == NULL
-	||
-	modifiers[0] == '\0'
-	||
-	strcmp (modifiers, "Xi18n") == 0)
+            ||
+            modifiers[0] == '\0'
+            ||
+            strcmp (modifiers, "Xi18n") == 0)
     {
-	ims->methods = &Xi18n_im_methods;
-	return ims;
+        ims->methods = &Xi18n_im_methods;
+        return ims;
     }
     /*endif*/
     XFree (ims);
@@ -154,22 +154,22 @@ XIMS IMOpenIM (Display *display, ...)
     if (ims == (XIMS) NULL)
         return (XIMS) NULL;
     /*endif*/
-    
+
     ims->core.display = display;
 
     ims->protocol = (*ims->methods->setup) (display, args);
     XFree (args);
     if (ims->protocol == (void *) NULL)
     {
-	XFree (ims);
-	return (XIMS) NULL;
+        XFree (ims);
+        return (XIMS) NULL;
     }
     /*endif*/
     ret = (ims->methods->openIM) (ims);
     if (ret == False)
     {
-	XFree (ims);
-	return (XIMS) NULL;
+        XFree (ims);
+        return (XIMS) NULL;
     }
     /*endif*/
     return (XIMS) ims;
@@ -182,3 +182,4 @@ Status IMCloseIM (XIMS ims)
     return True;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

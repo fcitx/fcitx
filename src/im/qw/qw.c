@@ -119,7 +119,7 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
     else
         return IRV_TO_PROCESS;
-    
+
 
     return retVal;
 }
@@ -140,14 +140,14 @@ INPUT_RETURN_VALUE QWGetCandWords (void *arg)
     FcitxInputState* input = &qwstate->owner->input;
     int             iQu, iWei;
     int             i;
-    
+
     CandidateWordSetPageSize(input->candList, 10);
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
     if ( input->iCodeInputCount == 3 )
     {
         iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
         iWei = (input->strCodeInput[2]-'0') * 10;
-        
+
         for (i = 0; i < 10; i++) {
             CandidateWord candWord;
             candWord.callback = QWGetCandWord;
@@ -199,3 +199,4 @@ char           *GetQuWei (FcitxQWState* qwstate, int iQu, int iWei)
 
     return qwstate->strQWHZUTF8;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

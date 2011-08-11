@@ -216,3 +216,4 @@ PangoFontDescription* GetPangoFontDescription(const char* font, int size)
     return desc;
 }
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

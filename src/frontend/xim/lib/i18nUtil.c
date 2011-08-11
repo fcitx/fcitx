@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <X11/Xlib.h>
@@ -56,12 +56,12 @@ Xi18nClient *_Xi18nNewClient(Xi18n i18n_core)
     {
         client = i18n_core->address.free_clients;
         i18n_core->address.free_clients = client->next;
-	new_connect_id = client->connect_id;
+        new_connect_id = client->connect_id;
     }
     else
     {
         client = (Xi18nClient *) malloc (sizeof (Xi18nClient));
-	new_connect_id = ++connect_id;
+        new_connect_id = ++connect_id;
     }
     /*endif*/
     memset (client, 0, sizeof (Xi18nClient));
@@ -98,8 +98,8 @@ void _Xi18nDeleteClient (Xi18n i18n_core, CARD16 connect_id)
     Xi18nClient *ccp0;
 
     for (ccp = i18n_core->address.clients, ccp0 = NULL;
-         ccp != NULL;
-         ccp0 = ccp, ccp = ccp->next)
+            ccp != NULL;
+            ccp0 = ccp, ccp = ccp->next)
     {
         if (ccp == target)
         {
@@ -184,7 +184,7 @@ void _Xi18nSendTriggerKey (XIMS ims, CARD16 connect_id)
     if (on_key_num == 0  &&  off_key_num == 0)
         return;
     /*endif*/
-    
+
     fm = FrameMgrInit (register_triggerkeys_fr,
                        NULL,
                        _Xi18nNeedSwap (i18n_core, connect_id));
@@ -275,3 +275,4 @@ void _Xi18nSetEventMask (XIMS ims,
     XFree(reply);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

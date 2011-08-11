@@ -3,13 +3,13 @@ Copyright 1993, 1994 by Digital Equipment Corporation, Maynard, Massachusetts,
 
                         All Rights Reserved
 
-Permission to use, copy, modify, and distribute this software and its 
-documentation for any purpose and without fee is hereby granted, 
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
 provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in 
+both that copyright notice and this permission notice appear in
 supporting documentation, and that the names of Digital or MIT not be
 used in advertising or publicity pertaining to distribution of the
-software without specific, written prior permission.  
+software without specific, written prior permission.
 
 DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
 ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -57,7 +57,7 @@ typedef enum
     PTR_ITEM = 0x8,       /* specifies the item has a pointer */
     /* BOGUS - POINTER and PTR_ITEM
      *   In the current implementation, PTR_ITEM should be lead by
-     *   POINTER.  But actually, it's just redundant logically.  Someone 
+     *   POINTER.  But actually, it's just redundant logically.  Someone
      *   may remove this redundancy and POINTER from the enum member but he
      *   should also modify the logic in FrameMgr program.
      */
@@ -84,7 +84,7 @@ typedef enum
 
 #define FmCounterByte 0
 #define FmCounterNumber 1
-    
+
 #define _BYTE_COUNTER(type, offset) \
                {(COUNTER_MASK|type), (void*)((offset)<<8|FmCounterByte)}
 
@@ -99,7 +99,7 @@ typedef struct _XimFrame
 
 typedef enum
 {
-    FmSuccess, 
+    FmSuccess,
     FmEOD,
     FmInvalidCall,
     FmBufExist,
@@ -111,7 +111,7 @@ typedef struct _FrameMgr *FrameMgr;
 
 FrameMgr FrameMgrInit(XimFrame frame, char* area, Bool byte_swap);
 void FrameMgrInitWithData(FrameMgr fm, XimFrame frame, void* area,
-			  Bool byte_swap);
+                          Bool byte_swap);
 void FrameMgrFree(FrameMgr fm);
 FmStatus FrameMgrSetBuffer(FrameMgr, void*);
 FmStatus _FrameMgrPutToken(FrameMgr, void*, int);
@@ -130,3 +130,4 @@ Bool FrameMgrIsIterLoopEnd(FrameMgr, FmStatus*);
 
 #endif /* FRAMEMGR_H */
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

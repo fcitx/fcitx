@@ -11,7 +11,7 @@ in supporting documentation, and that the name of FUJITSU LIMITED
 not be used in advertising or publicity pertaining to distribution
 of the software without specific, written prior permission.
 FUJITSU LIMITED makes no representations about the suitability of
-this software for any purpose. 
+this software for any purpose.
 It is provided "as is" without express or implied warranty.
 
 FUJITSU LIMITED DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
@@ -22,7 +22,7 @@ USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 
-  Author: Takashi Fujiwara     FUJITSU LIMITED 
+  Author: Takashi Fujiwara     FUJITSU LIMITED
                                fujiwara@a80.tech.yk.fujitsu.co.jp
 
     This version tidied and debugged by Steve Underwood May 1999
@@ -229,3 +229,4 @@ typedef CARD16	XICID;		/* Input Context ID */
 #endif
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -38,7 +38,7 @@ public:
     virtual bool x11FilterEvent( QWidget *keywidget, XEvent *event );
 #endif // Q_WS_X11
     virtual bool filterEvent(const QEvent* event);
-    
+
 private Q_SLOTS:
     void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
     void closeIM();
@@ -57,7 +57,7 @@ private:
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
-    
+
     QDBusConnection m_connection;
     org::freedesktop::DBus* m_dbusproxy;
     org::fcitx::Fcitx::InputMethod* m_improxy;
@@ -75,3 +75,4 @@ private:
 
 #endif //__FCITX_INPUT_CONTEXT_H_
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

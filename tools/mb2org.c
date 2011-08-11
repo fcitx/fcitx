@@ -42,84 +42,98 @@ char *HZToPY(struct _HZMap *, char []);
 
 int main(int argc, char **argv)
 {
-  FILE *fi, *fi2;
-  int i, j, k;
-  char *pyusrphrase_mb = NULL, *pybase_mb = NULL, *HZPY, tMap[3], tPY[10];
-  struct _HZMap *HZMap;
-  struct _PYMB *PYMB;
-  char c;
-  boolean isUser = true;
+    FILE *fi, *fi2;
+    int i, j, k;
+    char *pyusrphrase_mb = NULL, *pybase_mb = NULL, *HZPY, tMap[3], tPY[10];
 
-  while((c = getopt(argc, argv, "f:b:sh")) != -1)
-  {
-      switch(c)
-      {
-          case 'f':
-              pyusrphrase_mb = strdup(optarg);
-              break;
-          case 'b':
-              pybase_mb = strdup(optarg);
-              break;
-          case 's':
-              isUser = false;
-              break;
-          case 'h':
-          default:
-              usage();
-      }
-  }
+    struct _HZMap *HZMap;
 
-  if (pyusrphrase_mb)
-      fi = fopen (pyusrphrase_mb , "r");
-  else
-      fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
-  if (!fi)
-  {
-    perror("fopen");
-    fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
-    exit(1);
-  }
-  free(pyusrphrase_mb);
+    struct _PYMB *PYMB;
+    char c;
+    boolean isUser = true;
 
-  if (pybase_mb)
-      fi2 = fopen (pybase_mb , "r");
-  else
-      fi2 = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
-  if (!fi2)
-  {
-    perror("fopen");
-    fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
-    exit(1);
-  }
-  free(pybase_mb);
-
-
-  LoadPYMB(fi, &PYMB, isUser);
-  LoadPYBase(fi2, &HZMap);
-
-  for (i = 0; PYMB[i].HZ[0]; ++i)
-  {
-    for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
+    while ((c = getopt(argc, argv, "f:b:sh")) != -1)
     {
-      HZPY = HZToPY(&(HZMap[PYMB[i].PYFAIndex]), PYMB[i].HZ);
-      printf("%s", HZPY);
+        switch (c)
+        {
 
-      for (k = 0; k < PYMB[i].UserPhrase[j].Length / 2; ++k)
-      {
-        memcpy(tMap, PYMB[i].UserPhrase[j].Map + 2 * k, 2);
-        tMap[2] = '\0';
-        tPY[0] = '\0';
-        if (!MapToPY(tMap, tPY))
-          strcpy(tPY, "'*");
-        printf("'%s", tPY);
-      }
-      printf(" %s%s\n", PYMB[i].HZ, PYMB[i].UserPhrase[j].Phrase);
+        case 'f':
+            pyusrphrase_mb = strdup(optarg);
+            break;
 
-      free(HZPY);
+        case 'b':
+            pybase_mb = strdup(optarg);
+            break;
+
+        case 's':
+            isUser = false;
+            break;
+
+        case 'h':
+
+        default:
+            usage();
+        }
     }
-  }
 
-  return 0;
+    if (pyusrphrase_mb)
+        fi = fopen(pyusrphrase_mb , "r");
+    else
+        fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
+
+    if (!fi)
+    {
+        perror("fopen");
+        fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
+        exit(1);
+    }
+
+    free(pyusrphrase_mb);
+
+    if (pybase_mb)
+        fi2 = fopen(pybase_mb , "r");
+    else
+        fi2 = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
+
+    if (!fi2)
+    {
+        perror("fopen");
+        fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
+        exit(1);
+    }
+
+    free(pybase_mb);
+
+
+    LoadPYMB(fi, &PYMB, isUser);
+    LoadPYBase(fi2, &HZMap);
+
+    for (i = 0; PYMB[i].HZ[0]; ++i)
+    {
+        for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
+        {
+            HZPY = HZToPY(&(HZMap[PYMB[i].PYFAIndex]), PYMB[i].HZ);
+            printf("%s", HZPY);
+
+            for (k = 0; k < PYMB[i].UserPhrase[j].Length / 2; ++k)
+            {
+                memcpy(tMap, PYMB[i].UserPhrase[j].Map + 2 * k, 2);
+                tMap[2] = '\0';
+                tPY[0] = '\0';
+
+                if (!MapToPY(tMap, tPY))
+                    strcpy(tPY, "'*");
+
+                printf("'%s", tPY);
+            }
+
+            printf(" %s%s\n", PYMB[i].HZ, PYMB[i].UserPhrase[j].Phrase);
+
+            free(HZPY);
+        }
+    }
+
+    return 0;
 }
 
 /*
@@ -129,49 +143,51 @@ int main(int argc, char **argv)
 
 char *HZToPY(struct _HZMap *pHZMap1, char* HZ)
 {
-  int i;
-  char Map[3], tPY[10];
+    int i;
+    char Map[3], tPY[10];
 
-  Map[0] = '\0';
-  for (i = 0; i < pHZMap1->BaseCount; ++i)
-    if (strcmp(HZ, pHZMap1->HZ[i]) == 0)
-    {
-      strcpy(Map, pHZMap1->Map);
-      break;
-    }
+    Map[0] = '\0';
 
-  if (!Map[0] || !MapToPY(Map, tPY))
-    strcpy(tPY, "*");
+    for (i = 0; i < pHZMap1->BaseCount; ++i)
+        if (strcmp(HZ, pHZMap1->HZ[i]) == 0)
+        {
+            strcpy(Map, pHZMap1->Map);
+            break;
+        }
 
-  return strdup(tPY);
+    if (!Map[0] || !MapToPY(Map, tPY))
+        strcpy(tPY, "*");
+
+    return strdup(tPY);
 }
 
 void usage()
 {
-  puts(
-"mb2org - Convert .mb file to .org file (SEE NOTES BELOW)\n"
-"\n"
-"  usage: mb2org [OPTION]\n"
-"\n"
-"  -f <pyusrphrase.mb> this is the .mb file to be decoded, usually this is\n"
-"                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
-"                      if not specified, defaults to\n"
-"                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
-"  -b <pybase.mb>      this is the pybase.mb file used to determine the\n"
-"                      of the first character in HZ. Usually, this is\n"
-"                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
-"                      if not specified, defaults to\n"
-"                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
-"  -s                  Is MB from user or from system (they have different format).\n"
-"  -h                  display this help\n"
-"\n"
-"NOTES:\n"
-"1. If no match is found for a particular HZ, then the pinyin for that HZ\n"
-"   will be `*'.\n"
-"2. Always check the produced output for errors.\n"
-  );
-  exit(1);
-  return;
+    puts(
+        "mb2org - Convert .mb file to .org file (SEE NOTES BELOW)\n"
+        "\n"
+        "  usage: mb2org [OPTION]\n"
+        "\n"
+        "  -f <pyusrphrase.mb> this is the .mb file to be decoded, usually this is\n"
+        "                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
+        "                      if not specified, defaults to\n"
+        "                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
+        "  -b <pybase.mb>      this is the pybase.mb file used to determine the\n"
+        "                      of the first character in HZ. Usually, this is\n"
+        "                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "                      if not specified, defaults to\n"
+        "                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "  -s                  Is MB from user or from system (they have different format).\n"
+        "  -h                  display this help\n"
+        "\n"
+        "NOTES:\n"
+        "1. If no match is found for a particular HZ, then the pinyin for that HZ\n"
+        "   will be `*'.\n"
+        "2. Always check the produced output for errors.\n"
+    );
+    exit(1);
+    return;
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 4; 

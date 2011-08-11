@@ -27,31 +27,32 @@
 extern "C" {
 #endif
 
-typedef struct _FcitxIMClient FcitxIMClient;
-typedef void (*FcitxIMClientDestroyCallback)(FcitxIMClient* client, void* data);
-typedef void (*FcitxIMClientConnectCallback)(FcitxIMClient* client, void* data);
+    typedef struct _FcitxIMClient FcitxIMClient;
+    typedef void (*FcitxIMClientDestroyCallback)(FcitxIMClient* client, void* data);
+    typedef void (*FcitxIMClientConnectCallback)(FcitxIMClient* client, void* data);
 
 
-FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data);
-boolean IsFcitxIMClientValid(FcitxIMClient* client);
-void FcitxIMClientClose(FcitxIMClient* client);
-void FcitxIMClientFocusIn(FcitxIMClient* client);
-void FcitxIMClientFocusOut(FcitxIMClient* client);
-void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y);
-void FcitxIMClientReset(FcitxIMClient* client);
-int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t time);
-void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
-    GCallback enableIM,
-    GCallback closeIM,
-    GCallback commitString,
-    GCallback forwardKey,
-    void* user_data,
-    GClosureNotify freefunc
-);
-HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client);
+    FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data);
+    boolean IsFcitxIMClientValid(FcitxIMClient* client);
+    void FcitxIMClientClose(FcitxIMClient* client);
+    void FcitxIMClientFocusIn(FcitxIMClient* client);
+    void FcitxIMClientFocusOut(FcitxIMClient* client);
+    void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y);
+    void FcitxIMClientReset(FcitxIMClient* client);
+    int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t time);
+    void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
+                                    GCallback enableIM,
+                                    GCallback closeIM,
+                                    GCallback commitString,
+                                    GCallback forwardKey,
+                                    void* user_data,
+                                    GClosureNotify freefunc
+                                   );
+    HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

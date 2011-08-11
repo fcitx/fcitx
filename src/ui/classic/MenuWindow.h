@@ -66,3 +66,4 @@ void DisplayXlibMenu(XlibMenu * menu);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -25,3 +25,4 @@ struct _FcitxX11;
 void InitXErrorHandler (struct _FcitxX11*);
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

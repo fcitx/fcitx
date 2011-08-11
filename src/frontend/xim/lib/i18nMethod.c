@@ -1,8 +1,8 @@
 /******************************************************************
- 
+
          Copyright 1994, 1995 by Sun Microsystems, Inc.
          Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Permission to use, copy, modify, distribute, and sell this software
 and its documentation for any purpose is hereby granted without fee,
 provided that the above copyright notice appear in all copies and
@@ -13,7 +13,7 @@ distribution of the software without specific, written prior permission.
 Sun Microsystems, Inc. and Hewlett-Packard make no representations about
 the suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
- 
+
 SUN MICROSYSTEMS INC. AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL
 WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
@@ -22,11 +22,11 @@ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
 IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 #include <X11/Xlib.h>
@@ -101,7 +101,7 @@ static Bool GetInputStyles (Xi18n i18n_core, XIMStyles **p_style)
     p = &address->input_styles;
     if ((*p_style = (XIMStyles *) malloc (sizeof (XIMStyles)
                                           + p->count_styles*sizeof (XIMStyle)))
-        == NULL)
+            == NULL)
     {
         return False;
     }
@@ -126,8 +126,8 @@ static Bool GetOnOffKeys (Xi18n i18n_core, long mask, XIMTriggerKeys **p_key)
         p = &address->off_keys;
     /*endif*/
     if ((*p_key = (XIMTriggerKeys *) malloc (sizeof(XIMTriggerKeys)
-                                             + p->count_keys*sizeof(XIMTriggerKey)))
-        == NULL)
+                  + p->count_keys*sizeof(XIMTriggerKey)))
+            == NULL)
     {
         return False;
     }
@@ -154,7 +154,7 @@ static Bool GetEncodings(Xi18n i18n_core, XIMEncodings **p_encoding)
     p = &address->encoding_list;
 
     if ((*p_encoding = (XIMEncodings *) malloc (sizeof (XIMEncodings)
-                                              + p->count_encodings*sizeof(XIMEncoding))) == NULL)
+                       + p->count_encodings*sizeof(XIMEncoding))) == NULL)
     {
         return False;
     }
@@ -165,7 +165,7 @@ static Bool GetEncodings(Xi18n i18n_core, XIMEncodings **p_encoding)
     for (i = 0;  i < (int) p->count_encodings;  i++)
     {
         (*p_encoding)->supported_encodings[i]
-            = (char *) malloc (strlen (p->supported_encodings[i]) + 1);
+        = (char *) malloc (strlen (p->supported_encodings[i]) + 1);
         strcpy ((*p_encoding)->supported_encodings[i],
                 p->supported_encodings[i]);
     }
@@ -292,7 +292,7 @@ static char *ParseArgs (Xi18n i18n_core, int mode, XIMArg *args)
                 address->encoding_list.supported_encodings =
                     (XIMEncoding *) malloc (sizeof (XIMEncoding)*address->encoding_list.count_encodings);
                 if (address->encoding_list.supported_encodings
-                    == (XIMEncoding *) NULL)
+                        == (XIMEncoding *) NULL)
                 {
                     return IMEncodingList;
                 }
@@ -474,8 +474,8 @@ static int CheckIMName (Xi18n i18n_core)
         if (strncmp (address,
                      _TransR[i].transportname,
                      _TransR[i].namelen) == 0
-            &&
-            address[_TransR[i].namelen] == '/')
+                &&
+                address[_TransR[i].namelen] == '/')
         {
             if (_TransR[i].checkAddr (i18n_core,
                                       &_TransR[i],
@@ -561,9 +561,9 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
                          1);
     }
     else {
-	/* 
-	 * We always need to generate the PropertyNotify to the Root Window 
-	 */
+        /*
+         * We always need to generate the PropertyNotify to the Root Window
+         */
         XChangeProperty (dpy,
                          root,
                          XIM_Servers,
@@ -575,7 +575,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     }
     if (data != NULL)
         XFree ((char *) data);
-    
+
     /* Intern "LOCALES" and "TRANSOPORT" Target Atoms */
     i18n_core->address.Localename = XInternAtom (dpy, LOCALES, False);
     i18n_core->address.Transportname = XInternAtom (dpy, TRANSPORT, False);
@@ -668,7 +668,7 @@ static void *xi18n_setup (Display *dpy, XIMArg *args)
     if ((i18n_core = (Xi18n) malloc (sizeof (Xi18nCore))) == (Xi18n) NULL)
         return NULL;
     /*endif*/
-    
+
     memset (i18n_core, 0, sizeof (Xi18nCore));
 
     i18n_core->address.dpy = dpy;
@@ -684,7 +684,7 @@ static void *xi18n_setup (Display *dpy, XIMArg *args)
     else
         i18n_core->address.im_byteOrder = 'B';
     /*endif*/
-    
+
     /* install IMAttr and ICAttr list in i18n_core */
     _Xi18nInitAttrList (i18n_core);
 
@@ -736,7 +736,7 @@ static Bool WaitXSelectionRequest (Display *dpy,
     Xi18n i18n_core = ims->protocol;
 
     if (((XSelectionRequestEvent *) ev)->selection
-        == i18n_core->address.selection)
+            == i18n_core->address.selection)
     {
         ReturnSelectionNotify (i18n_core, (XSelectionRequestEvent *) ev);
         return True;
@@ -751,10 +751,10 @@ static Status xi18n_openIM(XIMS ims)
     Display *dpy = i18n_core->address.dpy;
 
     if (!CheckIMName (i18n_core)
-        ||
-        !SetXi18nSelectionOwner (i18n_core)
-        ||
-        !i18n_core->methods.begin (ims))
+            ||
+            !SetXi18nSelectionOwner (i18n_core)
+            ||
+            !i18n_core->methods.begin (ims))
     {
         XFree (i18n_core->address.im_name);
         XFree (i18n_core->address.im_locale);
@@ -782,7 +782,7 @@ static Status xi18n_closeIM(XIMS ims)
     DeleteXi18nAtom(i18n_core);
     if (!i18n_core->methods.end (ims))
         return False;
-    
+
     _XUnregisterFilter (dpy,
                         i18n_core->address.im_window,
                         WaitXSelectionRequest,
@@ -826,22 +826,22 @@ static void EventToWireEvent (XEvent *ev, xEvent *event, CARD16 *serial)
     {
     case KeyPress:
     case KeyRelease:
-        {
-            XKeyEvent *kev = (XKeyEvent *) ev;
+    {
+        XKeyEvent *kev = (XKeyEvent *) ev;
 
-            event->u.u.type = ev->type;
-            event->u.keyButtonPointer.root = kev->root;
-            event->u.keyButtonPointer.state = kev->state;
-            event->u.keyButtonPointer.time = kev->time;
-            event->u.keyButtonPointer.event = kev->window;
-            event->u.keyButtonPointer.child = kev->subwindow;
-            event->u.keyButtonPointer.eventX = kev->x;
-            event->u.keyButtonPointer.eventY = kev->y;
-            event->u.keyButtonPointer.rootX = kev->x_root;
-            event->u.keyButtonPointer.rootY = kev->y_root;
-            event->u.keyButtonPointer.sameScreen = kev->same_screen;
-            event->u.u.detail = kev->keycode;
-        }
+        event->u.u.type = ev->type;
+        event->u.keyButtonPointer.root = kev->root;
+        event->u.keyButtonPointer.state = kev->state;
+        event->u.keyButtonPointer.time = kev->time;
+        event->u.keyButtonPointer.event = kev->window;
+        event->u.keyButtonPointer.child = kev->subwindow;
+        event->u.keyButtonPointer.eventX = kev->x;
+        event->u.keyButtonPointer.eventY = kev->y;
+        event->u.keyButtonPointer.rootX = kev->x_root;
+        event->u.keyButtonPointer.rootY = kev->y_root;
+        event->u.keyButtonPointer.sameScreen = kev->same_screen;
+        event->u.u.detail = kev->keycode;
+    }
     }
     /*endswitch*/
 }
@@ -923,8 +923,8 @@ static Status xi18n_commit (XIMS ims, XPointer xp)
     call_data->flag |= XimSYNCHRONUS;  /* always sync */
 
     if (!(call_data->flag & XimLookupKeySym)
-        &&
-        (call_data->flag & XimLookupChars))
+            &&
+            (call_data->flag & XimLookupChars))
     {
         fm = FrameMgrInit (commit_chars_fr,
                            NULL,
@@ -1082,7 +1082,7 @@ static int xi18n_preeditEnd (XIMS ims, XPointer xp)
     if (on_key_num == 0  &&  off_key_num == 0)
         return False;
     /*endif*/
-    
+
     _Xi18nSetEventMask (ims,
                         preedit_state->connect_id,
                         preedit_state->connect_id,
@@ -1128,3 +1128,4 @@ static int xi18n_syncXlib (XIMS ims, XPointer xp)
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010 by CSSlayer                                         
+ *   Copyright (C) 2010 by CSSlayer
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,3 +46,4 @@ MessageWindow* CreateMessageWindow (struct _FcitxClassicUI * classicui);
 void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length);
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

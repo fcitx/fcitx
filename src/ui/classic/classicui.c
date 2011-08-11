@@ -118,26 +118,26 @@ void* ClassicUICreate(FcitxInstance* instance)
         free(classicui);
         return NULL;
     }
-    
+
     classicui->iScreen = DefaultScreen(classicui->dpy);
-    
+
     classicui->protocolAtom = XInternAtom (classicui->dpy, "WM_PROTOCOLS", False);
     classicui->killAtom = XInternAtom (classicui->dpy, "WM_DELETE_WINDOW", False);
 
-    
+
     InitSkinMenu(classicui);
     RegisterMenu(instance, &classicui->skinMenu);
-    
+
     /* Main Menu Initial */
     utarray_init(&classicui->mainMenu.shell, &menuICD);
     AddMenuShell(&classicui->mainMenu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
     AddMenuShell(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
-    
+
     FcitxUIMenu **menupp;
     for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
-        menupp != NULL;
-        menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
-    )
+            menupp != NULL;
+            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+        )
     {
         FcitxUIMenu * menup = *menupp;
         if (!menup->isSubMenu)
@@ -149,27 +149,27 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->mainMenu.MenuAction = MainMenuAction;
     classicui->mainMenu.priv = classicui;
     classicui->mainMenu.mark = -1;
-    
-    
+
+
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
     classicui->trayWindow = CreateTrayWindow(classicui);
     classicui->aboutWindow = CreateAboutWindow(classicui);
     classicui->messageWindow = CreateMessageWindow(classicui);
     classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
-    
+
     FcitxIMEventHook resethk;
     resethk.arg = classicui;
     resethk.func = ClassicUIInputReset;
     RegisterResetInputHook(instance, resethk);
-    
+
     DisplaySkin(classicui, classicui->skinType);
 
     /* ensure order ! */
     AddFunction(classicuiaddon, ClassicUILoadImage);
     AddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
     AddFunction(classicuiaddon, ClassicUIGetFont);
-    
+
     return classicui;
 }
 
@@ -228,7 +228,7 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
     char activename[PATH_MAX], inactivename[PATH_MAX];
     sprintf(activename, "%s_active.png", status->name);
     sprintf(inactivename, "%s_inactive.png", status->name);
-    
+
     LoadImage(sc, activename, false);
     LoadImage(sc, inactivename, false);
 }
@@ -308,9 +308,9 @@ boolean LoadClassicUIConfig(FcitxClassicUI* classicui)
         if (errno == ENOENT)
             SaveClassicUIConfig(classicui);
     }
-    
+
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
-    
+
     FcitxClassicUIConfigBind(classicui, cfile, configDesc);
     ConfigBindSync(&classicui->gconfig);
 
@@ -379,7 +379,7 @@ void ClassicUIDisplayMessage(void* arg, char* title, char** msg, int length)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     XMapRaised(classicui->dpy, classicui->messageWindow->window);
-    DrawMessageWindow(classicui->messageWindow, title, msg, length);    
+    DrawMessageWindow(classicui->messageWindow, title, msg, length);
 }
 
 boolean MainMenuAction(FcitxUIMenu* menu, int index)
@@ -425,8 +425,8 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
 
 void
 ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
-                    XSetWindowAttributes * attrib,
-                    unsigned long *attribmask, int *depth)
+                             XSetWindowAttributes * attrib,
+                             unsigned long *attribmask, int *depth)
 {
     FcitxModuleFunctionArg arg;
     arg.args[0] = vs;
@@ -454,7 +454,7 @@ void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)
     {
         *y = classicui->iMainWindowOffsetY;
     }
-    
+
     XWindowAttributes attr;
     XGetWindowAttributes(classicui->dpy, classicui->mainWindow->window, &attr);
     if (w)
@@ -505,3 +505,4 @@ boolean WindowIsVisable(Display* dpy, Window window)
     XGetWindowAttributes(dpy, window, &attr);
     return attr.map_state == IsViewable;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

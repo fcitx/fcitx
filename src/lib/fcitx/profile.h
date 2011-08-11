@@ -27,60 +27,60 @@
 extern "C" {
 #endif
 
-/**
- * @file profile.h
- * 
- * @brief define and function for ~/.config/fcitx/profile
- */
+    /**
+     * @file profile.h
+     *
+     * @brief define and function for ~/.config/fcitx/profile
+     */
 
-/**
- * @brief struct for ~/.config/fcitx/profile
- **/
-typedef struct _FcitxProfile
-{
     /**
-     * @brief derives from GenericConfig
+     * @brief struct for ~/.config/fcitx/profile
      **/
-    GenericConfig gconfig;
-    /**
-     * @brief use remind mode
-     **/
-    boolean bUseRemind;
-    /**
-     * @brief current im index
-     **/
-    int iIMIndex;
-    /**
-     * @brief use full width punc
-     **/
-    boolean bUseWidePunc;
-    /**
-     * @brief use full width char
-     **/
-    boolean bUseFullWidthChar;
-} FcitxProfile;
+    typedef struct _FcitxProfile
+    {
+        /**
+         * @brief derives from GenericConfig
+         **/
+        GenericConfig gconfig;
+        /**
+         * @brief use remind mode
+         **/
+        boolean bUseRemind;
+        /**
+         * @brief current im index
+         **/
+        int iIMIndex;
+        /**
+         * @brief use full width punc
+         **/
+        boolean bUseWidePunc;
+        /**
+         * @brief use full width char
+         **/
+        boolean bUseFullWidthChar;
+    } FcitxProfile;
 
-/**
- * @brief load profile
- *
- * @param profile profile instance 
- * @return boolean loading successful
- **/
-boolean LoadProfile(FcitxProfile* profile);
-/**
- * @brief save profile
- *
- * @param profile profile instance
- * @return void
- **/
-void SaveProfile(FcitxProfile* profile);
-/**
- * @brief get bUseRemind
- *
- * @param profile profile instance 
- * @return boolean bUseRemind
- **/
-boolean UseRemind(FcitxProfile* profile);
+    /**
+     * @brief load profile
+     *
+     * @param profile profile instance
+     * @return boolean loading successful
+     **/
+    boolean LoadProfile(FcitxProfile* profile);
+    /**
+     * @brief save profile
+     *
+     * @param profile profile instance
+     * @return void
+     **/
+    void SaveProfile(FcitxProfile* profile);
+    /**
+     * @brief get bUseRemind
+     *
+     * @param profile profile instance
+     * @return boolean bUseRemind
+     **/
+    boolean UseRemind(FcitxProfile* profile);
 
 #ifdef __cplusplus
 }
@@ -88,3 +88,4 @@ boolean UseRemind(FcitxProfile* profile);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

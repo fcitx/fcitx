@@ -63,7 +63,7 @@ void* X11Create(FcitxInstance* instance)
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
         return false;
-    
+
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);
     x11priv->windowTypeAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE", False);
@@ -86,7 +86,7 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11MouseClick);
     AddFunction(x11addon, X11AddCompositeHandler);
     InitComposite(x11priv);
-    
+
     InitXErrorHandler (x11priv);
     return x11priv;
 }
@@ -96,7 +96,7 @@ void X11SetFD(void* arg)
     FcitxX11* x11priv = (FcitxX11*)arg;
     int fd = ConnectionNumber(x11priv->dpy);
     FD_SET(fd, &x11priv->owner->rfds);
-    
+
     if (x11priv->owner->maxfd < fd)
         x11priv->owner->maxfd = fd;
 }
@@ -106,7 +106,7 @@ void X11ProcessEvent(void* arg)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     XEvent event;
-    while(XPending(x11priv->dpy))
+    while (XPending(x11priv->dpy))
     {
         XNextEvent (x11priv->dpy, &event); //等待一个事件发生
 
@@ -127,7 +127,7 @@ void X11ProcessEvent(void* arg)
                 }
             }
 
-            
+
             FcitxXEventHandler* handler;
             for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
                     handler != NULL;
@@ -187,7 +187,7 @@ void InitComposite(FcitxX11* x11stuff)
     char *atom_names = NULL;
     asprintf(&atom_names, "_NET_WM_CM_S%d", x11stuff->iScreen);
     x11stuff->compManagerAtom = XInternAtom (x11stuff->dpy, atom_names, False);
-    
+
     free(atom_names);
     X11GetCompositeManager(x11stuff);
 }
@@ -262,7 +262,7 @@ X11InitWindowAttribute(void* arg, FcitxModuleFunctionArg args)
         attrib->background_pixel = 0;
         attrib->border_pixel = 0;
         *attribmask = (CWBackPixel | CWBorderPixel | CWOverrideRedirect | CWSaveUnder
-                | CWBitGravity | CWBackingStore);
+                       | CWBitGravity | CWBackingStore);
         *depth = DefaultDepth(dpy, iScreen);
     }
     return NULL;
@@ -272,34 +272,34 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     Atom* wintype = NULL;
-    
+
     Window window = *(Window*) args.args[0];
     FcitxXWindowType *type = args.args[1];
     char *windowTitle = args.args[2];
-    
-    switch(*type)
+
+    switch (*type)
     {
-        case FCITX_WINDOW_DIALOG:
-            wintype = &x11priv->typeDialogAtom;
-            break;
-        case FCITX_WINDOW_DOCK:
-            wintype = &x11priv->typeDockAtom;
-            break;
-        case FCITX_WINDOW_MENU:
-            wintype = &x11priv->typeMenuAtom;
-            break;
-        default:
-            wintype = NULL;
-            break;
+    case FCITX_WINDOW_DIALOG:
+        wintype = &x11priv->typeDialogAtom;
+        break;
+    case FCITX_WINDOW_DOCK:
+        wintype = &x11priv->typeDockAtom;
+        break;
+    case FCITX_WINDOW_MENU:
+        wintype = &x11priv->typeMenuAtom;
+        break;
+    default:
+        wintype = NULL;
+        break;
     }
     if (wintype)
         XChangeProperty (x11priv->dpy, window, x11priv->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
 
     pid_t pid = getpid();
     XChangeProperty(x11priv->dpy, window, x11priv->pidAtom, XA_CARDINAL, 32,
-            PropModeReplace, (unsigned char *)&pid, 1);
+                    PropModeReplace, (unsigned char *)&pid, 1);
     XChangeProperty( x11priv->dpy, window, XA_WM_CLASS, XA_STRING, 8, PropModeReplace, (const unsigned char*) "Fcitx", strlen("Fcitx") + 1);
-    
+
     if (windowTitle)
     {
         XTextProperty   tp;
@@ -307,7 +307,7 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
         XSetWMName (x11priv->dpy, window, &tp);
         XFree(tp.value);
     }
-    
+
     return NULL;
 }
 
@@ -324,7 +324,7 @@ void* X11GetScreenSize(void* arg, FcitxModuleFunctionArg args)
         (*width) = attrs.width;
     if (height != NULL)
         (*height) = attrs.height;
-    
+
     return NULL;
 }
 
@@ -334,7 +334,7 @@ X11MouseClick(void *arg, FcitxModuleFunctionArg args)
     FcitxX11* x11priv = (FcitxX11*)arg;
     Window window = *(Window*) args.args[0];
     int *x = args.args[1];
-    int *y = args.args[2]; 
+    int *y = args.args[2];
     XEvent          evtGrabbed;
     boolean           *bMoved = args.args[3];
 
@@ -369,7 +369,7 @@ X11MouseClick(void *arg, FcitxModuleFunctionArg args)
 
 void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
 {
-    
+
     if (enable)
     {
         x11priv->compManager = XGetSelectionOwner(x11priv->dpy, x11priv->compManagerAtom);
@@ -384,7 +384,7 @@ void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
     else {
         x11priv->compManager = None;
     }
-    
+
     FcitxCompositeChangedHandler* handler;
     for ( handler = (FcitxCompositeChangedHandler *) utarray_front(&x11priv->comphandlers);
             handler != NULL;
@@ -407,3 +407,4 @@ boolean X11GetCompositeManager(FcitxX11* x11stuff)
         return false;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

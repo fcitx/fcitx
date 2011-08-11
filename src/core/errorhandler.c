@@ -38,24 +38,24 @@
 
 extern FcitxInstance* instance;
 
-void SetMyExceptionHandler (void)
+void SetMyExceptionHandler(void)
 {
     int             signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++)
     {
-        signal (signo, OnException);
+        signal(signo, OnException);
     }
 }
 
-void OnException (int signo)
+void OnException(int signo)
 {
     if (signo == SIGCHLD)
         return;
 
     FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
 
-    if ( signo!=SIGSEGV && signo!=SIGCONT)
+    if (signo != SIGSEGV && signo != SIGCONT)
     {
         FcitxLock(instance);
         SaveAllIM(instance);
@@ -63,48 +63,61 @@ void OnException (int signo)
     }
 
     void *array[10];
+
     size_t size;
     char **strings = NULL;
     size_t i;
 
-    size = backtrace (array, 10);
-    strings = backtrace_symbols (array, size);
+    size = backtrace(array, 10);
+    strings = backtrace_symbols(array, size);
 
     if (strings)
     {
         FILE *fp = NULL;
-        if ( signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL || signo == SIGTERM )
-            fp = GetXDGFileWithPrefix("log", "crash.log","wt", NULL);
 
-        printf ("Obtained %zd stack frames.\n", size);
+        if (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL || signo == SIGTERM)
+            fp = GetXDGFileWithPrefix("log", "crash.log", "wt", NULL);
+
+        printf("Obtained %zd stack frames.\n", size);
+
         if (fp)
         {
-            fprintf (fp, "FCITX -- Get Signal No.: %d\n", signo);
-            fprintf (fp, "Obtained %zd stack frames.\n", size);
+            fprintf(fp, "FCITX -- Get Signal No.: %d\n", signo);
+            fprintf(fp, "Obtained %zd stack frames.\n", size);
         }
 
         for (i = 0; i < size; i++)
         {
-            printf ("%s\n", strings[i]);
+            printf("%s\n", strings[i]);
+
             if (fp)
-                fprintf (fp, "%s\n", strings[i]);
+                fprintf(fp, "%s\n", strings[i]);
         }
 
         if (fp)
             fclose(fp);
-        free (strings);
+
+        free(strings);
     }
 
-    switch (signo) {
+    switch (signo)
+    {
+
     case SIGHUP:
         break;
+
     case SIGINT:
+
     case SIGTERM:
+
     case SIGPIPE:
+
     case SIGSEGV:
-        exit (0);
+        exit(0);
+
     default:
         break;
     }
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

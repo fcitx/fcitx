@@ -147,13 +147,13 @@ typedef struct _PYCANDINDEX {
     int             iPhrase;
 } PYCandIndex;
 
-typedef struct _PY_SELECTED{
+typedef struct _PY_SELECTED {
     char            strPY[(MAX_PY_LENGTH + 1) * MAX_PY_PHRASE_LENGTH + 1];
     char            strHZ[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
     char            strMap[MAX_PY_PHRASE_LENGTH * 2 + 1];
 } PY_SELECTED;
 
-typedef struct _FcitxPinyinState 
+typedef struct _FcitxPinyinState
 {
     FcitxPinyinConfig pyconfig;
 
@@ -176,7 +176,7 @@ typedef struct _FcitxPinyinState
 
     PY_SELECTED pySelected[MAX_WORDS_USER_INPUT + 1];
     unsigned int iPYSelected;
-    
+
     char strPYAuto[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     char strPYAutoMap[MAX_WORDS_USER_INPUT * 2 + 1];
 
@@ -235,3 +235,4 @@ void		PYGetPYByHZ(struct _FcitxPinyinState* pystate, char *strHZ, char *strPY);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -19,8 +19,8 @@
 
 /**
  * @file fcitximcontext.c
- * 
- * @brief This is a gtk im module for fcitx, using DBus as a protocol. 
+ *
+ * @brief This is a gtk im module for fcitx, using DBus as a protocol.
  *        This is compromise to gtk and firefox, users are being sucked by them
  *        again and again.
  */
@@ -48,7 +48,7 @@
 
 #if GTK_CHECK_VERSION (2, 24, 0)
 # define NEW_GDK_WINDOW_GET_DISPLAY
-#endif 
+#endif
 
 struct _FcitxIMContext {
     GtkIMContext parent;
@@ -158,26 +158,26 @@ static guint _signal_retrieve_surrounding_id = 0;
 */
 static guint16 cedilla_compose_seqs[] = {
 #ifdef DEPRECATED_GDK_KEYSYMS
-  GDK_dead_acute, GDK_C, 0, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_dead_acute, GDK_c, 0, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
-  GDK_Multi_key, GDK_apostrophe, GDK_C, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_Multi_key, GDK_apostrophe, GDK_c, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
-  GDK_Multi_key, GDK_C, GDK_apostrophe, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_Multi_key, GDK_c, GDK_apostrophe, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_dead_acute, GDK_C, 0, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_dead_acute, GDK_c, 0, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_Multi_key, GDK_apostrophe, GDK_C, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_Multi_key, GDK_apostrophe, GDK_c, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_Multi_key, GDK_C, GDK_apostrophe, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_Multi_key, GDK_c, GDK_apostrophe, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
 #else
-  GDK_KEY_dead_acute, GDK_KEY_C, 0, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_KEY_dead_acute, GDK_KEY_c, 0, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
-  GDK_KEY_Multi_key, GDK_KEY_apostrophe, GDK_KEY_C, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_KEY_Multi_key, GDK_KEY_apostrophe, GDK_KEY_c, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
-  GDK_KEY_Multi_key, GDK_KEY_C, GDK_KEY_apostrophe, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
-  GDK_KEY_Multi_key, GDK_KEY_c, GDK_KEY_apostrophe, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_dead_acute, GDK_KEY_C, 0, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_dead_acute, GDK_KEY_c, 0, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_Multi_key, GDK_KEY_apostrophe, GDK_KEY_C, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_Multi_key, GDK_KEY_apostrophe, GDK_KEY_c, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_Multi_key, GDK_KEY_C, GDK_KEY_apostrophe, 0, 0, 0x00C7, /* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+    GDK_KEY_Multi_key, GDK_KEY_c, GDK_KEY_apostrophe, 0, 0, 0x00E7, /* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
 #endif
 };
 
-static 
+static
 boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
 
-static 
+static
 boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
@@ -257,7 +257,7 @@ fcitx_im_context_class_init (FcitxIMContextClass *klass)
     im_context_class->set_cursor_location = fcitx_im_context_set_cursor_location;
     im_context_class->set_use_preedit = fcitx_im_context_set_use_preedit;
     gobject_class->finalize = fcitx_im_context_finalize;
-    
+
     _signal_commit_id =
         g_signal_lookup ("commit", G_TYPE_FROM_CLASS (klass));
     g_assert (_signal_commit_id != 0);
@@ -295,7 +295,7 @@ fcitx_im_context_init (FcitxIMContext *context)
     context->area.height = 0;
     context->use_preedit = FALSE;
     context->is_inpreedit = FALSE;
-    
+
     context->slave = gtk_im_context_simple_new ();
     gtk_im_context_simple_add_table (GTK_IM_CONTEXT_SIMPLE (context->slave),
                                      cedilla_compose_seqs,
@@ -326,7 +326,7 @@ fcitx_im_context_init (FcitxIMContext *context)
                       "delete-surrounding",
                       G_CALLBACK (_slave_delete_surrounding_cb),
                       context);
-    
+
     context->time = GDK_CURRENT_TIME;
 
     context->client = FcitxIMClientOpen(_fcitx_im_context_connect_cb, _fcitx_im_context_destroy_cb, G_OBJECT(context));
@@ -340,7 +340,7 @@ fcitx_im_context_finalize (GObject *obj)
 
     FcitxIMClientClose(context->client);
     context->client = NULL;
-    
+
     if (context->slave)
     {
         g_object_unref(context->slave);
@@ -387,26 +387,26 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
     if (IsFcitxIMClientValid(fcitxcontext->client))
-    {        
+    {
         /* XXX it is a workaround for some applications do not set client window. */
         if (fcitxcontext->client_window == NULL && event->window != NULL)
         {
             gtk_im_context_set_client_window ((GtkIMContext *)fcitxcontext, event->window);
-            
+
             /* set_cursor_location_internal() will get origin from X server,
             * it blocks UI. So delay it to idle callback. */
             g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-                            (GSourceFunc) _set_cursor_location_internal,
-                            g_object_ref (fcitxcontext),
-                            (GDestroyNotify) g_object_unref);
+                             (GSourceFunc) _set_cursor_location_internal,
+                             g_object_ref (fcitxcontext),
+                             (GDestroyNotify) g_object_unref);
         }
-        
+
         if (!fcitxcontext->enable)
         {
             if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
                 return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
         }
-        
+
         fcitxcontext->time = event->time;
         int ret = FcitxIMClientProcessKey(fcitxcontext->client,
                                           event->keyval,
@@ -443,16 +443,16 @@ fcitx_im_context_focus_in (GtkIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_in");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    
+
     if (fcitxcontext->has_focus)
         return;
-    
+
     fcitxcontext->has_focus = true;
-    
+
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxIMClientFocusIn(fcitxcontext->client);
     }
-    
+
     gtk_im_context_focus_in (fcitxcontext->slave);
 
     /* set_cursor_location_internal() will get origin from X server,
@@ -470,24 +470,24 @@ fcitx_im_context_focus_out (GtkIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_out");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    
+
     if (!fcitxcontext->has_focus)
     {
         return;
     }
-    
+
     fcitxcontext->has_focus = false;
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxIMClientFocusOut(fcitxcontext->client);
     }
-    
+
     if (fcitxcontext->is_inpreedit)
     {
         fcitxcontext->is_inpreedit = FALSE;
         g_signal_emit (fcitxcontext, _signal_preedit_end_id, 0);
     }
-    
+
     gtk_im_context_focus_out(fcitxcontext->slave);
 
     return;
@@ -500,11 +500,11 @@ fcitx_im_context_set_cursor_location (GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_cursor_location %d %d %d %d", area->x, area->y, area->height, area->width);
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    
+
     if (fcitxcontext->area.x == area->x &&
-        fcitxcontext->area.y == area->y &&
-        fcitxcontext->area.width == area->width &&
-        fcitxcontext->area.height == area->height) {
+            fcitxcontext->area.y == area->y &&
+            fcitxcontext->area.width == area->width &&
+            fcitxcontext->area.height == area->height) {
         return;
     }
     fcitxcontext->area = *area;
@@ -522,8 +522,8 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
 {
     GdkRectangle area;
 
-    if(fcitxcontext->client_window == NULL ||
-       !IsFcitxIMClientValid(fcitxcontext->client)) {
+    if (fcitxcontext->client_window == NULL ||
+            !IsFcitxIMClientValid(fcitxcontext->client)) {
         return FALSE;
     }
 
@@ -552,7 +552,7 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
         area.y = rooty + area.y;
     }
 #endif
-    
+
     FcitxIMClientSetCursorLocation(fcitxcontext->client, area.x, area.y + area.height);
     return FALSE;
 }
@@ -564,10 +564,10 @@ fcitx_im_context_set_use_preedit (GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    
+
     fcitxcontext->use_preedit = use_preedit;
     fcitxcontext->is_inpreedit = FALSE;
-    
+
     gtk_im_context_set_use_preedit(fcitxcontext->slave, use_preedit);
 }
 
@@ -582,7 +582,7 @@ fcitx_im_context_reset (GtkIMContext *context)
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxIMClientReset(fcitxcontext->client);
     }
-    
+
     gtk_im_context_reset(fcitxcontext->slave);
 }
 
@@ -594,7 +594,7 @@ fcitx_im_context_get_preedit_string (GtkIMContext   *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    
+
     if (fcitxcontext->enable && IsFcitxIMClientValid(fcitxcontext->client) && fcitxcontext->is_inpreedit)
     {
         if (str)
@@ -695,7 +695,7 @@ void _fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user
 {
     FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    
+
     g_signal_emit (context, _signal_commit_id, 0, str);
 }
 
@@ -756,22 +756,22 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     if (event->window)
     {
 #ifndef NEW_GDK_WINDOW_GET_DISPLAY
-          GdkDisplay      *display = gdk_display_get_default();
+        GdkDisplay      *display = gdk_display_get_default();
 #else
-          GdkDisplay      *display = gdk_window_get_display (event->window);
+        GdkDisplay      *display = gdk_window_get_display (event->window);
 #endif
-          GdkKeymap       *keymap  = gdk_keymap_get_for_display (display);
-          GdkKeymapKey    *keys;
-          gint             n_keys = 0;
+        GdkKeymap       *keymap  = gdk_keymap_get_for_display (display);
+        GdkKeymapKey    *keys;
+        gint             n_keys = 0;
 
-          if (gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
-          {
-              if (n_keys)
-                  event->hardware_keycode = keys[0].keycode;
-              g_free(keys);
-          }
+        if (gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
+        {
+            if (n_keys)
+                event->hardware_keycode = keys[0].keycode;
+            g_free(keys);
+        }
     }
-    
+
     event->group = 0;
     event->is_modifier = _key_is_modifier (keyval);
 
@@ -787,7 +787,7 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
         gint len;
 
         /* Apply the control key - Taken from Xlib
-*/
+        */
         if (event->state & GDK_CONTROL_MASK) {
             if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
             else if (c == '2') {
@@ -840,8 +840,8 @@ out:
 static gboolean
 _key_is_modifier (guint keyval)
 {
-  /* See gdkkeys-x11.c:_gdk_keymap_key_is_modifier() for how this
-* really should be implemented */
+    /* See gdkkeys-x11.c:_gdk_keymap_key_is_modifier() for how this
+    * really should be implemented */
 
     switch (keyval) {
 #ifdef DEPRECATED_GDK_KEYSYMS
@@ -923,3 +923,4 @@ void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
     context->enable = false;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -35,7 +35,7 @@ CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex)
 CONFIG_BINDING_REGISTER("Profile", "WidePunc", bUseWidePunc)
 CONFIG_BINDING_END()
 
-/** 
+/**
  * @brief 加载配置文件
  */
 FCITX_EXPORT_API
@@ -44,7 +44,7 @@ boolean LoadProfile(FcitxProfile* profile)
     ConfigFileDesc* profileDesc = GetProfileDesc();
     if (!profileDesc)
         return false;
-    
+
     FILE *fp;
     fp = GetXDGFileUserWithPrefix("", "profile", "rt", NULL);
     if (!fp) {
@@ -53,13 +53,13 @@ boolean LoadProfile(FcitxProfile* profile)
     }
 
     ConfigFile *cfile = ParseConfigFileFp(fp, profileDesc);
-    
+
     FcitxProfileConfigBind(profile, cfile, profileDesc);
     ConfigBindSync(&profile->gconfig);
 
     if (fp)
         fclose(fp);
-    
+
     return true;
 }
 
@@ -80,3 +80,4 @@ boolean UseRemind(FcitxProfile* profile)
 {
     return profile->bUseRemind;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

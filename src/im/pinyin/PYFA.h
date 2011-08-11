@@ -75,3 +75,4 @@ extern const MHPY_TEMPLATE  MHPY_C_TEMPLATE[];
 extern const MHPY_TEMPLATE MHPY_S_TEMPLATE[];
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -64,14 +64,14 @@ void InitTrayWindow(TrayWindow *trayWindow)
         wsa.background_pixel = 0;
         wsa.border_pixel = 0;
         trayWindow->window = XCreateWindow(dpy, p, -1, -1, 1, 1,
-                                    0, vi->depth, InputOutput, vi->visual,
-                                    CWBackPixmap|CWBackPixel|CWBorderPixel|CWColormap, &wsa);
+                                           0, vi->depth, InputOutput, vi->visual,
+                                           CWBackPixmap|CWBackPixel|CWBorderPixel|CWColormap, &wsa);
     }
     else {
         trayWindow->window = XCreateSimpleWindow (dpy, DefaultRootWindow(dpy),
-                                           -1, -1, 1, 1, 0,
-                                           BlackPixel (dpy, DefaultScreen (dpy)),
-                                           WhitePixel (dpy, DefaultScreen (dpy)));
+                             -1, -1, 1, 1, 0,
+                             BlackPixel (dpy, DefaultScreen (dpy)),
+                             WhitePixel (dpy, DefaultScreen (dpy)));
         XSetWindowBackgroundPixmap(dpy, trayWindow->window, ParentRelative);
     }
     if (trayWindow->window == (Window) NULL)
@@ -96,7 +96,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
                   | EnterWindowMask | PointerMotionMask | LeaveWindowMask | VisibilityChangeMask);
 
     ClassicUISetWindowProperty(classicui, trayWindow->window, FCITX_WINDOW_DOCK, strWindowName);
-    
+
     TrayFindDock(dpy, trayWindow);
 }
 
@@ -224,50 +224,50 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         }
         break;
     case ButtonPress:
+    {
+        if (event->xbutton.window == trayWindow->window)
         {
-            if (event->xbutton.window == trayWindow->window)
+            switch (event->xbutton.button)
             {
-                switch(event->xbutton.button)
-                {
-                    case Button1:
-                        if (GetCurrentState(instance) == IS_CLOSED) {
-                            EnableIM(instance, GetCurrentIC(instance), false);
-                        }
-                        else {
-                            CloseIM(instance, GetCurrentIC(instance));
-                        }
-                        break;
-                    case Button3:
-                        {
-                            XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                            int dwidth, dheight;
-                            GetScreenSize(classicui, &dwidth, &dheight);
-                            GetMenuSize(mainMenuWindow);
-                            if (event->xbutton.x_root - event->xbutton.x +
-                                mainMenuWindow->width >= dwidth)
-                                mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
-                            else
-                                mainMenuWindow->iPosX =
-                                    event->xbutton.x_root - event->xbutton.x;
-
-                            // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
-                            if (event->xbutton.y_root + mainMenuWindow->height -
-                                event->xbutton.y >= dheight)
-                                mainMenuWindow->iPosY =
-                                    dheight - mainMenuWindow->height -
-                                    event->xbutton.y - 15;
-                            else
-                                mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
-
-                            DrawXlibMenu(mainMenuWindow);
-                            DisplayXlibMenu(mainMenuWindow);
-                        }
-                        break;
+            case Button1:
+                if (GetCurrentState(instance) == IS_CLOSED) {
+                    EnableIM(instance, GetCurrentIC(instance), false);
                 }
-                return true;
+                else {
+                    CloseIM(instance, GetCurrentIC(instance));
+                }
+                break;
+            case Button3:
+            {
+                XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
+                int dwidth, dheight;
+                GetScreenSize(classicui, &dwidth, &dheight);
+                GetMenuSize(mainMenuWindow);
+                if (event->xbutton.x_root - event->xbutton.x +
+                        mainMenuWindow->width >= dwidth)
+                    mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
+                else
+                    mainMenuWindow->iPosX =
+                        event->xbutton.x_root - event->xbutton.x;
+
+                // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
+                if (event->xbutton.y_root + mainMenuWindow->height -
+                        event->xbutton.y >= dheight)
+                    mainMenuWindow->iPosY =
+                        dheight - mainMenuWindow->height -
+                        event->xbutton.y - 15;
+                else
+                    mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
+
+                DrawXlibMenu(mainMenuWindow);
+                DisplayXlibMenu(mainMenuWindow);
             }
+            break;
+            }
+            return true;
         }
-        break;
+    }
+    break;
     case DestroyNotify:
         if (event->xdestroywindow.window == trayWindow->dockWindow)
         {
@@ -289,3 +289,4 @@ boolean TrayEventHandler(void *arg, XEvent* event)
     }
     return false;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

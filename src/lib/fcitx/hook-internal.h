@@ -95,3 +95,4 @@ void InputFocusHook(struct _FcitxInstance* instance);
  * @return void
  **/
 void InputUnFocusHook(struct _FcitxInstance* instance);
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

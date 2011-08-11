@@ -20,8 +20,8 @@
 
 /**
  * @file AboutWindow.h
- * @brief A very simple About Window for FCITX 
- * @author Yunfan yunfan_zg@163.com 
+ * @brief A very simple About Window for FCITX
+ * @author Yunfan yunfan_zg@163.com
  */
 
 #ifndef _ABOUT_WINDOW_H
@@ -51,3 +51,4 @@ void            DrawAboutWindow (AboutWindow* aboutWindow);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -22,7 +22,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 #define FCITX_IM_DBUS_PATH "/inputmethod"
 #define FCITX_IC_DBUS_PATH "/inputcontext_%d"
@@ -36,3 +36,4 @@ extern "C" {
 #endif
 
 #endif // FCITX_IPC_H
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

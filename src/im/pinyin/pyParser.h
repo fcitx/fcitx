@@ -62,3 +62,4 @@ int             Cmp2Map (struct _FcitxPinyinConfig* pyconfig, char map1[3], char
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

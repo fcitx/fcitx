@@ -21,10 +21,10 @@
  * @file   MainWindow.h
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief  主窗口
- * 
- * 
+ *
+ *
  */
 
 #ifndef _MAIN_WINDOW_H
@@ -54,7 +54,7 @@ typedef struct _MainWindow
     FcitxClassicUIStatus logostat;
     FcitxClassicUIStatus imiconstat;
     struct _FcitxSkin* skin;
-    
+
     struct _FcitxClassicUI* owner;
 } MainWindow;
 
@@ -66,3 +66,4 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

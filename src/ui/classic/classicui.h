@@ -61,11 +61,11 @@ typedef struct _FcitxClassicUI {
     struct _TrayWindow* trayWindow;
     struct _AboutWindow* aboutWindow;
     FcitxUIMenu skinMenu;
-    
+
     FcitxSkin skin;
     UT_array skinBuf;
     struct _FcitxInstance *owner;
-    
+
     char* font;
     char* menuFont;
     char* strUserLocale;
@@ -76,7 +76,7 @@ typedef struct _FcitxClassicUI {
     char* skinType;
     int iMainWindowOffsetX;
     int iMainWindowOffsetY;
-    
+
     UT_array status;
     struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
@@ -85,8 +85,8 @@ typedef struct _FcitxClassicUI {
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
 void
 ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
-                    XSetWindowAttributes * attrib,
-                    unsigned long *attribmask, int *depth);
+                             XSetWindowAttributes * attrib,
+                             unsigned long *attribmask, int *depth);
 Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui);
 boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y);
 boolean IsInRspArea(int x0, int y0, struct _FcitxClassicUIStatus* status);
@@ -101,3 +101,4 @@ boolean WindowIsVisable(Display* dpy, Window window);
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

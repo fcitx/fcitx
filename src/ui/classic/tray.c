@@ -64,7 +64,7 @@ static int (*hOldErrorHandler) (Display *d, XErrorEvent *e);
 
 static int
 ErrorHandler(Display     *display,
-        XErrorEvent *error)
+             XErrorEvent *error)
 {
     iTrappedErrorCode = error->error_code;
     return 0;
@@ -99,7 +99,7 @@ InitTray(Display* dpy, TrayWindow* tray)
 
     XInternAtoms (dpy, atom_names, 5, False, tray->atoms);
     tray->size = 22;
-    
+
     free(atom_names[0]);
 
     XWindowAttributes attr;
@@ -125,7 +125,7 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
 
     if (tray->dockWindow != None)
         XSelectInput(dpy, tray->dockWindow,
-                StructureNotifyMask|PropertyChangeMask);
+                     StructureNotifyMask|PropertyChangeMask);
 
     XUngrabServer (dpy);
     XFlush (dpy);
@@ -134,7 +134,7 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
         TraySendOpcode(dpy, tray->dockWindow, tray, SYSTEM_TRAY_REQUEST_DOCK, tray->window, 0, 0);
         tray->bTrayMapped = True;
         return 1;
-    } 
+    }
     else
     {
         tray->bTrayMapped = False;
@@ -145,7 +145,7 @@ TrayFindDock(Display *dpy, TrayWindow* tray)
 }
 
 void TraySendOpcode(Display* dpy, Window dock, TrayWindow* tray,
-        long message, long data1, long data2, long data3)
+                    long message, long data1, long data2, long data3)
 {
     XEvent ev;
 
@@ -165,7 +165,7 @@ void TraySendOpcode(Display* dpy, Window dock, TrayWindow* tray,
     XSync(dpy, False);
     if (UntrapErrors()) {
         FcitxLog(WARNING, _("X error %i on opcode send"),
-                iTrappedErrorCode );
+                 iTrappedErrorCode );
     }
 }
 
@@ -194,7 +194,7 @@ XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray)
             XFree(data);
         if (vid == 0)
             return 0;
-        
+
         uint mask = VisualIDMask;
         XVisualInfo *vi, rvi;
         int count;
@@ -218,3 +218,4 @@ Window TrayGetDock(Display* dpy, TrayWindow* tray)
     return dock;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

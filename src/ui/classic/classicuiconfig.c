@@ -38,16 +38,16 @@ static void FilterScreenSizeX(GenericConfig* config, ConfigGroup *group, ConfigO
     int width, height;
     GetScreenSize(classicui, &width, &height);
 
-    switch(sync)
+    switch (sync)
     {
-        case Raw2Value:
-            if (*X >= width)
-                *X = width - 10;
-            if (*X < 0)
-                *X = 0;
-            break;
-        case Value2Raw:
-            break;
+    case Raw2Value:
+        if (*X >= width)
+            *X = width - 10;
+        if (*X < 0)
+            *X = 0;
+        break;
+    case Value2Raw:
+        break;
     }
 
 }
@@ -59,18 +59,19 @@ static void FilterScreenSizeY(GenericConfig* config, ConfigGroup *group, ConfigO
     int width, height;
     GetScreenSize(classicui, &width, &height);
 
-    switch(sync)
+    switch (sync)
     {
-        case Raw2Value:
-            if (*Y >= height)
-                *Y = height - 10;
-            if (*Y < 0)
-                *Y = 0;
-            break;
-        case Value2Raw:
-            break;
+    case Raw2Value:
+        if (*Y >= height)
+            *Y = height - 10;
+        if (*Y < 0)
+            *Y = 0;
+        break;
+    case Value2Raw:
+        break;
     }
 
 
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

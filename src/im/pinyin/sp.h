@@ -53,3 +53,4 @@ int             GetSPIndexJP_S (struct _FcitxPinyinConfig* pyconfig, char c);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

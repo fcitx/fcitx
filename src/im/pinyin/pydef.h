@@ -40,3 +40,4 @@
 #define FCITX_PINYIN_PYRESET_RETURNTYPE void
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

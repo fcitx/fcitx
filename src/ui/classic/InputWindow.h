@@ -21,9 +21,9 @@
  * @file   InputWindow.h
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief  Preedit Window for Input
- * 
+ *
  */
 
 #ifndef _INPUT_WINDOW_H
@@ -47,14 +47,14 @@ struct _FcitxClassicUI;
 
 typedef struct _InputWindow {
     Window window;
-    
+
     uint            iInputWindowHeight;
     uint            iInputWindowWidth;
-    
+
     //这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
     int		iOffsetX;
     int		iOffsetY;
-    
+
     cairo_surface_t* cs_x_input_bar;
     cairo_surface_t *cs_input_bar;
     cairo_surface_t *cs_input_back;
@@ -76,3 +76,4 @@ void ShowInputWindowInternal(InputWindow* inputWindow);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -133,3 +133,4 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

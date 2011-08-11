@@ -19,9 +19,9 @@
  ***************************************************************************/
 /**
  * @file   AutoEng.h
- * @author Yuking yuking_net@sohu.com 
+ * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
- * 
+ *
  * @brief Auto Switch to English State
  *
  */
@@ -38,3 +38,4 @@ typedef struct _AUTO_ENG {
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

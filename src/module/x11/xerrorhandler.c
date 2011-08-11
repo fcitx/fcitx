@@ -25,7 +25,7 @@
 
 static XErrorHandler   oldXErrorHandler;
 static XIOErrorHandler oldXIOErrorHandler;
-static FcitxX11* x11handle; 
+static FcitxX11* x11handle;
 
 static int FcitxXErrorHandler (Display * dpy, XErrorEvent * event);
 static int FcitxXIOErrorHandler (Display *d);
@@ -41,7 +41,7 @@ int FcitxXIOErrorHandler (Display *d)
 {
     /* Do not log, because this is likely to happen while log out */
     SaveAllIM(x11handle->owner);
-    
+
     if (oldXIOErrorHandler)
         oldXIOErrorHandler(d);
     return 0;
@@ -60,7 +60,7 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
     }
 
     SaveAllIM(x11handle->owner);
-    
+
     if ( fp )
         fclose(fp);
     if (event->error_code != 3 && event->error_code != BadMatch) {  // xterm will generate 3
@@ -71,3 +71,4 @@ int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
     return 0;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

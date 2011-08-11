@@ -81,3 +81,4 @@ im_module_list (const GtkIMContextInfo ***contexts,
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

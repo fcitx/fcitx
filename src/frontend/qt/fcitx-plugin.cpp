@@ -100,3 +100,4 @@ QString FcitxPlugin::displayName (const QString &key)
 
 Q_EXPORT_PLUGIN2 (FcitxPlugin, FcitxPlugin)
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

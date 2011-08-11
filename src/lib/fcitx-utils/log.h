@@ -27,21 +27,22 @@
 extern "C" {
 #endif
 
-typedef enum _ErrorLevel
-{
-    DEBUG,
-    ERROR,
-    INFO,
-    FATAL,
-    WARNING
-} ErrorLevel;
+    typedef enum _ErrorLevel
+    {
+        DEBUG,
+        ERROR,
+        INFO,
+        FATAL,
+        WARNING
+    } ErrorLevel;
 
 #define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
 
-void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+    void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

@@ -34,12 +34,12 @@ FCITX_EXPORT_API
 CandidateWordList* CandidateWordInit()
 {
     CandidateWordList* candList = fcitx_malloc0(sizeof(CandidateWordList));
-    
+
     utarray_init(&candList->candWords, &cand_icd);
     utarray_reserve(&candList->candWords, 128);
     candList->wordPerPage = 5; /* anyway put a default value for safety */
     strncpy(candList->strChoose, DIGIT_STR_CHOOSE, MAX_CAND_WORD);
-    
+
     return candList;
 }
 
@@ -223,3 +223,4 @@ CandidateWord* CandidateWordGetNext(CandidateWordList* candList, CandidateWord* 
 {
     return (CandidateWord*) utarray_next(&candList->candWords, candWord);
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

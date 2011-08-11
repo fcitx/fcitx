@@ -88,8 +88,8 @@ const char            strCharTable[] = "`~1!2@3#4$5%6^7&8*9(0)-_=+[{]}\\|;:'\",<
 static boolean VKWindowEventHandler(void* arg, XEvent* event);
 static void
 VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
-                    XSetWindowAttributes * attrib,
-                    unsigned long *attribmask, int *depth);
+                      XSetWindowAttributes * attrib,
+                      unsigned long *attribmask, int *depth);
 static Visual * VKFindARGBVisual (FcitxVKState* vkstate);
 static void VKSetWindowProperty(FcitxVKState* vkstate, Window window, FcitxXWindowType type, char *windowTitle);
 static boolean VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y);
@@ -108,9 +108,9 @@ static INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg);
 static void DrawVKWindow (VKWindow* vkWindow);
 static boolean VKMouseKey (FcitxVKState* vkstate, int x, int y);
 static boolean VKPreFilter(void* arg, FcitxKeySym sym,
-                                    unsigned int state,
-                                    INPUT_RETURN_VALUE *retval
-                                   );
+                           unsigned int state,
+                           INPUT_RETURN_VALUE *retval
+                          );
 static  void VKReset(void* arg);
 static void VKUpdate(void* arg);
 static INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state);
@@ -136,17 +136,17 @@ void *VKCreate(FcitxInstance* instance)
     FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));
     vkstate->owner = instance;
     vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
-    
+
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
     RegisterHotkeyFilter(instance, hotkey);
-    
+
     RegisterStatus(instance, vkstate, "vk", "Virtual Keyboard", "Virtual Keyboard State",  ToggleVKState, GetVKState);
-    
+
     LoadVKMapFile(vkstate);
-    
+
     KeyFilterHook hk;
     hk.arg = vkstate ;
     hk.func = VKPreFilter;
@@ -157,26 +157,26 @@ void *VKCreate(FcitxInstance* instance)
     resethk.func = VKReset;
     RegisterTriggerOnHook(instance, resethk);
     RegisterTriggerOffHook(instance, resethk);
-    
+
     resethk.func = VKUpdate;
     RegisterInputFocusHook(instance, resethk);
     RegisterInputUnFocusHook(instance, resethk);
-    
+
     strcpy(vkstate->vkmenu.candStatusBind, "vk");
     strcpy(vkstate->vkmenu.name, _("Virtual Keyboard"));
-    
+
     utarray_init(&vkstate->vkmenu.shell, &menuICD);
     vkstate->vkmenu.UpdateMenuShell = UpdateVKMenuShell;
     vkstate->vkmenu.MenuAction = VKMenuAction;
     vkstate->vkmenu.priv = vkstate;
     vkstate->vkmenu.isSubMenu = false;
-    
+
     int i;
-    for(i = 0; i < vkstate->iVKCount; i ++)
+    for (i = 0; i < vkstate->iVKCount; i ++)
         AddMenuShell(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
 
     RegisterMenu(instance, &vkstate->vkmenu);
-    
+
     return vkstate;
 }
 
@@ -256,7 +256,7 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     FcitxModuleFunctionArg arg;
     VKWindow* vkWindow = fcitx_malloc0(sizeof(VKWindow));
     vkWindow->owner= vkstate;
-    
+
     LoadVKImage(vkWindow);
 
     vs = VKFindARGBVisual(vkstate);
@@ -270,7 +270,7 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
         vkWindow->fontColor = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETKEYBOARDFONTCOLOR, arg);
         vkWindow->font = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT, arg);
     }
-    else 
+    else
     {
         vkWindow->fontColor = &blackColor;
         vkWindow->defaultFont = strdup("sans");
@@ -281,10 +281,10 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     }
 
     vkWindow->window = XCreateWindow (vkWindow->dpy,
-            DefaultRootWindow (vkWindow->dpy),
-            0, 0,
-            VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT,
-            0, depth, InputOutput, vs, attribmask, &attrib);
+                                      DefaultRootWindow (vkWindow->dpy),
+                                      0, 0,
+                                      VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT,
+                                      0, depth, InputOutput, vs, attribmask, &attrib);
     if (vkWindow->window == (Window) None)
         return NULL;
 
@@ -293,11 +293,11 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     XSelectInput (vkWindow->dpy, vkWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
 
     VKSetWindowProperty(vkstate, vkWindow->window, FCITX_WINDOW_DOCK, strWindowName);
-    
+
     FcitxModuleFunctionArg arg2;
     arg2.args[0] = VKWindowEventHandler;
     arg2.args[1] = vkWindow;
-    InvokeFunction(vkstate->owner, FCITX_X11, ADDXEVENTHANDLER, arg2);    
+    InvokeFunction(vkstate->owner, FCITX_X11, ADDXEVENTHANDLER, arg2);
 
     return vkWindow;
 }
@@ -309,24 +309,24 @@ boolean VKWindowEventHandler(void* arg, XEvent* event)
     {
         switch (event->type)
         {
-            case Expose:
-                DrawVKWindow(vkWindow);
-                break;
-            case ButtonPress:
-                switch (event->xbutton.button) {
-                    case Button1:
-                        {
-                            if (!VKMouseKey(vkWindow->owner, event->xbutton.x, event->xbutton.y))
-                            {
-                                vkWindow->iVKWindowX = event->xbutton.x;
-                                vkWindow->iVKWindowY = event->xbutton.y;
-                                VKMouseClick(vkWindow->owner,vkWindow->window, &vkWindow->iVKWindowX, &vkWindow->iVKWindowY);
-                                DrawVKWindow(vkWindow);
-                            }
-                        }
-                        break;
+        case Expose:
+            DrawVKWindow(vkWindow);
+            break;
+        case ButtonPress:
+            switch (event->xbutton.button) {
+            case Button1:
+            {
+                if (!VKMouseKey(vkWindow->owner, event->xbutton.x, event->xbutton.y))
+                {
+                    vkWindow->iVKWindowX = event->xbutton.x;
+                    vkWindow->iVKWindowY = event->xbutton.y;
+                    VKMouseClick(vkWindow->owner,vkWindow->window, &vkWindow->iVKWindowX, &vkWindow->iVKWindowY);
+                    DrawVKWindow(vkWindow);
                 }
-                break;
+            }
+            break;
+            }
+            break;
         }
         return true;
     }
@@ -376,7 +376,7 @@ void DrawVKWindow (VKWindow* vkWindow)
     cairo_t *cr;
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
-    
+
     if (GetCurrentState(vkstate->owner) == IS_CLOSED || !vkstate->bVK)
     {
         XUnmapWindow(vkWindow->dpy, vkWindow->window);
@@ -714,9 +714,9 @@ void SwitchVK (FcitxVKState *vkstate)
     VKWindow *vkWindow = vkstate->vkWindow;
     if (!vkstate->iVKCount)
         return;
-    
+
     vkstate->bVK = !vkstate->bVK;
-    
+
     if (vkstate->bVK) {
         int             x, y;
         int dwidth, dheight;
@@ -750,7 +750,7 @@ void SwitchVK (FcitxVKState *vkstate)
         XMoveWindow (vkWindow->dpy, vkWindow->window, x, y);
         DisplayVKWindow (vkWindow);
         CloseInputWindow(vkstate->owner);
-        
+
         FcitxInputContext* ic = GetCurrentIC(vkstate->owner);
 
         if (ic && ic->state == IS_CLOSED)
@@ -760,7 +760,7 @@ void SwitchVK (FcitxVKState *vkstate)
         XUnmapWindow (vkWindow->dpy, vkWindow->window);
 
 
-    
+
 }
 
 /*
@@ -777,8 +777,8 @@ void SelectVK(FcitxVKState* vkstate, int vkidx)
 
 void
 VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
-                    XSetWindowAttributes * attrib,
-                    unsigned long *attribmask, int *depth)
+                      XSetWindowAttributes * attrib,
+                      unsigned long *attribmask, int *depth)
 {
     FcitxModuleFunctionArg arg;
     arg.args[0] = vs;
@@ -825,3 +825,4 @@ void ReloadVK(void* arg)
 }
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

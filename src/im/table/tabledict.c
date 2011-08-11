@@ -40,7 +40,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         FcitxLog( DEBUG, _("Cannot load table file: %s"), strPath);
         return false;
     }
-    
+
     //先读取码表的信息
     //判断版本信息
     fread (&iTemp, sizeof (unsigned int), 1, fpDict);
@@ -330,7 +330,7 @@ void SaveTableDict (TableMetaData *tableMetaData)
 }
 
 void FreeTableDict (TableMetaData* tableMetaData)
-{    
+{
     RECORD         *recTemp, *recNext;
     short           i;
     TableDict      *tableDict = tableMetaData->tableDict;
@@ -352,10 +352,10 @@ void FreeTableDict (TableMetaData* tableMetaData)
 
         recTemp = recNext;
     }
-    
+
     free(tableDict->strIgnoreChars);
     tableDict->strIgnoreChars = NULL;
-    
+
     free(tableDict->strInputCode);
     tableDict->strInputCode = NULL;
 
@@ -397,7 +397,7 @@ void FreeTableDict (TableMetaData* tableMetaData)
 
         tableDict->autoPhrase = (AUTOPHRASE *) NULL;
     }
-    
+
     free(tableDict);
     tableMetaData->tableDict = NULL;
 }
@@ -544,7 +544,7 @@ boolean TableCreatePhraseCode (TableDict* tableDict, char *strHZ)
 
         tableDict->strNewPhraseCode[i1] = recTemp->strCode[tableDict->rule[i].rule[i1].iIndex - 1];
     }
-    
+
     return bCanntFindCode;
 }
 
@@ -791,3 +791,4 @@ boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeI
     }
     return false;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

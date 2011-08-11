@@ -19,12 +19,12 @@
 /**
  * @file   skin.h
  * @author t3swing  t3swing@sina.com
- *        
+ *
  * @date   2009-10-9
- * 
+ *
  * @brief  皮肤设置相关定义及初始化加载工作
- * 
- * 
+ *
+ *
  */
 
 #ifndef _SKIN_H
@@ -101,7 +101,7 @@ typedef struct _SkinMainBar
 } SkinMainBar;
 
 typedef struct _SkinInputBar
-{    
+{
     char* backImg;
     ConfigColor cursorColor;
     int marginTop;
@@ -135,7 +135,7 @@ typedef struct _SkinTrayIcon
      * @brief Active Tray Icon Image
      **/
     char* active;
-    
+
     /**
      * @brief Inactive Tray Icon Image
      **/
@@ -148,7 +148,7 @@ typedef struct _SkinKeyboard
     ConfigColor keyColor;
 } SkinKeyboard;
 
-/** 
+/**
 * 配置文件结构,方便处理,结构固定
 */
 typedef struct _FcitxSkin
@@ -158,12 +158,12 @@ typedef struct _FcitxSkin
     SkinFont skinFont;
     SkinMainBar skinMainBar;
     SkinInputBar skinInputBar;
-    SkinTrayIcon skinTrayIcon;    
+    SkinTrayIcon skinTrayIcon;
     SkinMenu skinMenu;
     SkinKeyboard skinKeyboard;
-    
+
     char** skinType;
-    
+
     SkinImage* imageTable;
 } FcitxSkin;
 
@@ -192,3 +192,4 @@ CONFIG_BINDING_DECLARE(FcitxSkin);
 
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

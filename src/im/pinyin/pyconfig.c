@@ -67,7 +67,7 @@ void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOp
 {
     char *pstr = *(char**) value;
     FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
-    if(sync == Raw2Value){
+    if (sync == Raw2Value) {
         char a = '\0';
         char b = '\0';
         if (strlen(pstr) >= 1)
@@ -102,9 +102,9 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
         if (errno == ENOENT)
             SavePYConfig(pyconfig);
     }
-    
+
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
-    
+
     FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
     ConfigBindSync((GenericConfig*)pyconfig);
 
@@ -125,3 +125,4 @@ void SavePYConfig(FcitxPinyinConfig* pyconfig)
 }
 
 CONFIG_DESC_DEFINE(GetPYConfigDesc, "fcitx-pinyin.desc")
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

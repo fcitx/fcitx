@@ -14,7 +14,7 @@ static void im_active()
     /* patch */
     int buf_len = 5;
     unsigned char *buf = (unsigned char*)malloc( sizeof(unsigned char)*( buf_len+1) );
-    
+
     buf[0]=27;
     buf[1]=91;
     buf[2]=50;
@@ -29,13 +29,13 @@ static void im_deactive()
     /* patch */
     int buf_len = 5;
     unsigned char *buf = (unsigned char*)malloc( sizeof(unsigned char)*( buf_len+1) );
-    
+
     buf[0]=27;
     buf[1]=91;
     buf[2]=50;
     buf[3]=52;
     buf[4]=126;
-    buf[5]=0;                                      
+    buf[5]=0;
     /* patch */
 
     //UrDEBUG("im deactive\n");
@@ -43,13 +43,15 @@ static void im_deactive()
     first_show = 1;
 }
 
-static void process_raw_key(char *buf, unsigned int len) 
+static void process_raw_key(char *buf, unsigned int len)
 {
 
-    if( len <= 0 ) { return; }
+    if ( len <= 0 ) {
+        return;
+    }
 
-    if( len <= 0 ) { 
-        return; 
+    if ( len <= 0 ) {
+        return;
     }
     else
     {
@@ -87,3 +89,4 @@ int main()
     return 0;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

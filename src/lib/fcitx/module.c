@@ -44,49 +44,49 @@ void LoadModule(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     FcitxAddon *addon;
     for ( addon = (FcitxAddon *) utarray_front(addons);
-          addon != NULL;
-          addon = (FcitxAddon *) utarray_next(addons, addon))
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
     {
         if (addon->bEnabled && addon->category == AC_MODULE)
         {
             char *modulePath;
             switch (addon->type)
             {
-                case AT_SHAREDLIBRARY:
-                    {
-                        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
-                        void *handle;
-                        FcitxModule* module;
-                        void* moduleinstance = NULL;
-                        if (!fp)
-                            break;
-                        fclose(fp);
-                        handle = dlopen(modulePath,RTLD_LAZY);
-                        if(!handle)
-                        {
-                            FcitxLog(ERROR, _("Module: open %s fail %s") ,modulePath ,dlerror());
-                            break;
-                        }
-                        module=dlsym(handle,"module");
-                        if(!module || !module->Create)
-                        {
-                            FcitxLog(ERROR, _("Module: bad module"));
-                            dlclose(handle);
-                            break;
-                        }
-                        if((moduleinstance = module->Create(instance)) == NULL)
-                        {
-                            dlclose(handle);
-                            break;
-                        }
-                        addon->module = module;
-                        addon->addonInstance = moduleinstance;
-                        if (module->ProcessEvent && module->SetFD)
-                            utarray_push_back(&instance->eventmodules, &addon);
-                    }
+            case AT_SHAREDLIBRARY:
+            {
+                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+                void *handle;
+                FcitxModule* module;
+                void* moduleinstance = NULL;
+                if (!fp)
                     break;
-                default:
+                fclose(fp);
+                handle = dlopen(modulePath,RTLD_LAZY);
+                if (!handle)
+                {
+                    FcitxLog(ERROR, _("Module: open %s fail %s") ,modulePath ,dlerror());
                     break;
+                }
+                module=dlsym(handle,"module");
+                if (!module || !module->Create)
+                {
+                    FcitxLog(ERROR, _("Module: bad module"));
+                    dlclose(handle);
+                    break;
+                }
+                if ((moduleinstance = module->Create(instance)) == NULL)
+                {
+                    dlclose(handle);
+                    break;
+                }
+                addon->module = module;
+                addon->addonInstance = moduleinstance;
+                if (module->ProcessEvent && module->SetFD)
+                    utarray_push_back(&instance->eventmodules, &addon);
+            }
+            break;
+            default:
+                break;
             }
             free(modulePath);
         }
@@ -120,3 +120,4 @@ void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, in
     else
         return InvokeModuleFunction(module, functionId, args);
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

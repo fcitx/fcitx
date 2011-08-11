@@ -39,3 +39,4 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data);
 void XimForwardKeyInternal(FcitxXimFrontend *xim, struct _FcitxXimIC* ic, XEvent* xEvent );
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

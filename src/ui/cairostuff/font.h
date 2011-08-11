@@ -31,3 +31,4 @@ void GetValidFont(const char* strUserLocale, char **font);
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

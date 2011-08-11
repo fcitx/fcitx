@@ -104,49 +104,49 @@ HOTKEYS FCITX_LCTRL_LSHIFT2[2] =
 
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SEMICOLON[2] = 
+HOTKEYS FCITX_SEMICOLON[2] =
 {
     {NULL, Key_semicolon, KEY_NONE},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SEPARATOR[2] = 
+HOTKEYS FCITX_SEPARATOR[2] =
 {
     {NULL, Key_apostrophe, KEY_NONE},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_COMMA[2] = 
+HOTKEYS FCITX_COMMA[2] =
 {
     {NULL, Key_comma, KEY_NONE},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_PERIOD[2] = 
+HOTKEYS FCITX_PERIOD[2] =
 {
     {NULL, Key_period, KEY_NONE},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SPACE[2] = 
+HOTKEYS FCITX_SPACE[2] =
 {
     {NULL, Key_space, KEY_NONE},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_CTRL_5[2] = 
+HOTKEYS FCITX_CTRL_5[2] =
 {
     {NULL, Key_5, KEY_CTRL_COMP},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_CTRL_ALT_E[2] = 
+HOTKEYS FCITX_CTRL_ALT_E[2] =
 {
     {NULL, Key_E, KEY_CTRL_ALT_COMP},
     {NULL, 0, 0},
@@ -183,12 +183,13 @@ HOTKEYS FCITX_RSHIFT[2] =
 FCITX_EXPORT_API
 boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
 {
-   if (sym == Key_Control_L
-    || sym == Key_Control_R
-    || sym == Key_Shift_L
-    || sym == Key_Shift_R )
-       return true;
+    if (sym == Key_Control_L
+            || sym == Key_Control_R
+            || sym == Key_Shift_L
+            || sym == Key_Shift_R )
+        return true;
 
-   return false;
+    return false;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

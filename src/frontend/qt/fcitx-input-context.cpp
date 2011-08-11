@@ -107,16 +107,16 @@ boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 }
 
 FcitxInputContext::FcitxInputContext()
-    : m_connection(QDBusConnection::sessionBus()),
-    m_dbusproxy(0),
-    m_improxy(0),
-    m_icproxy(0),
-    m_id(0),
-    m_path(""),
-    m_enable(false),
-    m_has_focus(false),
-    m_slave(0),
-    m_n_compose(0)
+        : m_connection(QDBusConnection::sessionBus()),
+        m_dbusproxy(0),
+        m_improxy(0),
+        m_icproxy(0),
+        m_id(0),
+        m_path(""),
+        m_enable(false),
+        m_has_focus(false),
+        m_slave(0),
+        m_n_compose(0)
 {
 #if defined(Q_WS_X11)
     /* slave has too much limitation, ibus compose by hand is better, so m_slave will be NULL then */
@@ -132,15 +132,15 @@ FcitxInputContext::FcitxInputContext()
         m_slave->setParent(this);
         connect(m_slave, SIGNAL(destroyed(QObject*)), this, SLOT(destroySlaveContext()));
     }
-    
-    m_dbusproxy = new org::freedesktop::DBus(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, m_connection, this);    
+
+    m_dbusproxy = new org::freedesktop::DBus(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, m_connection, this);
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
-    
+
     m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
     m_triggerKey[0].state = m_triggerKey[1].state = 0;
-    
+
     m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(FcitxGetDisplayNumber());
-    
+
     createInputContext();
 }
 
@@ -155,7 +155,7 @@ FcitxInputContext::~FcitxInputContext()
         {
             m_icproxy->DestroyIC();
         }
-        
+
         delete m_icproxy;
     }
 }
@@ -185,7 +185,7 @@ void FcitxInputContext::update()
     {
         return;
     }
-    
+
     QRect rect = widget->inputMethodQuery(Qt::ImMicroFocus).toRect ();
 
     QPoint topleft = widget->mapToGlobal(QPoint(0,0));
@@ -208,14 +208,14 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
         return false;
     if (!isValid())
         return QInputContext::filterEvent(event);
-   
+
     QWidget* keywidget = focusWidget();
     if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return false;
 
     if (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease)
         return QInputContext::filterEvent(event);
-    
+
     const QKeyEvent *key_event = static_cast<const QKeyEvent*> (event);
     if (!m_enable)
     {
@@ -229,27 +229,27 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
             else
                 return QInputContext::filterEvent(event);
         }
-        
+
     }
     m_icproxy->FocusIn();
-    
+
     struct timeval current_time;
     gettimeofday (&current_time, NULL);
     uint time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
-    
+
     QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(key_event->nativeVirtualKey(),
-                                              key_event->nativeScanCode(),
-                                              key_event->nativeModifiers(),
-                                              (event->type() == QEvent::KeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
-                                              time
-                                              );
+                                       key_event->nativeScanCode(),
+                                       key_event->nativeModifiers(),
+                                       (event->type() == QEvent::KeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
+                                       time
+                                                                       );
     {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher (result);
         loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
         loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
     }
-    
+
     if (result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
     else
@@ -273,7 +273,7 @@ QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
         0,
         Qt::NoModifier
     );
-    
+
     return keyevent;
 }
 
@@ -287,16 +287,16 @@ void FcitxInputContext::setFocusWidget(QWidget* w)
     if (oldFocus && isValid()) {
         m_icproxy->FocusOut();
     }
-    
+
     QInputContext::setFocusWidget(w);
     if (m_slave)
     {
         m_slave->setFocusWidget(w);
     }
-    
+
     if (!w || w->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return;
-    
+
     bool has_focus = (w != NULL);
 
     if (!isValid())
@@ -330,16 +330,16 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 {
     if (key_filtered)
         return false;
-    
+
     if (!keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
-    
+
     if (keywidget != focusWidget())
         return false;
-    
+
     if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return false;
-    
+
     if (!isValid() || (event->type != XKeyRelease && event->type != XKeyPress))
     {
         return x11FilterEventFallback(keywidget, event, 0);
@@ -349,8 +349,8 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     char strbuf[64];
     memset(strbuf, 0, 64);
     XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
-    
-    
+
+
     if (!m_enable)
     {
         FcitxKeySym fcitxsym;
@@ -361,17 +361,17 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
             return x11FilterEventFallback(keywidget, event, sym);
         }
     }
-    
+
     m_icproxy->FocusIn();
 
     QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(sym,
-                                              event->xkey.keycode,
-                                              event->xkey.state,
-                                              (event->type == XKeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
-                                              event->xkey.time
-                                              );
-    
-    
+                                       event->xkey.keycode,
+                                       event->xkey.state,
+                                       (event->type == XKeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
+                                       event->xkey.time
+                                                                       );
+
+
     {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher (result);
@@ -414,7 +414,7 @@ bool FcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event
 void FcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
 {
     if (service == m_serviceName)
-    {        
+    {
         /* old die */
         if (oldowner.length() > 0 || newowner.length() > 0)
         {
@@ -433,7 +433,7 @@ void FcitxInputContext::imChanged(const QString& service, const QString& oldowne
             m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
             m_triggerKey[0].state = m_triggerKey[1].state = 0;
         }
-        
+
         /* new rise */
         if (newowner.length() > 0)
             createInputContext();
@@ -443,21 +443,21 @@ void FcitxInputContext::imChanged(const QString& service, const QString& oldowne
 void FcitxInputContext::createInputContext()
 {
     m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, m_connection, this);
-    
+
     if (!m_improxy->isValid())
         return;
-        
+
     QDBusPendingReply< uint, uint, uint, uint > triggerKey = m_improxy->GetTriggerKey();
     triggerKey.waitForFinished();
-    
+
     if (triggerKey.isError())
         return ;
-    
+
     m_triggerKey[0].sym = (FcitxKeySym) qdbus_cast<uint>(triggerKey.argumentAt(0));
     m_triggerKey[0].state = qdbus_cast<uint>(triggerKey.argumentAt(1));
     m_triggerKey[1].sym = (FcitxKeySym) qdbus_cast<uint>(triggerKey.argumentAt(2));
     m_triggerKey[1].state = qdbus_cast<uint>(triggerKey.argumentAt(3));
-    
+
     QDBusPendingReply< int > result = m_improxy->CreateIC();
     result.waitForFinished();
     if (result.isError())
@@ -471,7 +471,7 @@ void FcitxInputContext::createInputContext()
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(EnableIM()), this, SLOT(enableIM()));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
-        
+
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
     }
@@ -522,7 +522,7 @@ XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint
 {
     XEvent* xevent = static_cast<XEvent*> (malloc(sizeof(XEvent)));
     XKeyEvent *xkeyevent = &xevent->xkey;
-    
+
     xkeyevent->type = type == FCITX_PRESS_KEY? XKeyPress : XKeyRelease;
     xkeyevent->display = dpy;
     xkeyevent->window = wid;
@@ -534,7 +534,7 @@ XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint
     struct timeval current_time;
     gettimeofday (&current_time, NULL);
     xkeyevent->time = (current_time.tv_sec * 1000) + (current_time.tv_usec / 1000);
-    
+
     if (dpy != NULL) {
         xkeyevent->root = DefaultRootWindow (dpy);
         xkeyevent->keycode = XKeysymToKeycode (dpy, (KeySym) keyval);
@@ -544,7 +544,7 @@ XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint
     }
 
     xkeyevent->state = state;
-    
+
     return xevent;
 }
 #endif
@@ -568,7 +568,7 @@ FcitxInputContext::processCompose (uint keyval, uint state, FcitxKeyEventType ev
 {
     Q_UNUSED(state);
     int i;
-    
+
     if (event == FCITX_RELEASE_KEY)
         return false;
 
@@ -629,35 +629,37 @@ FcitxInputContext::checkAlgorithmically ()
             switch (m_compose_buffer[i]) {
 #define CASE(keysym, unicode) \
 case Key_dead_##keysym: combination_buffer[i + 1] = unicode; break
-            CASE (grave, 0x0300);
-            CASE (acute, 0x0301);
-            CASE (circumflex, 0x0302);
-            CASE (tilde, 0x0303); /* Also used with perispomeni, 0x342. */
-            CASE (macron, 0x0304);
-            CASE (breve, 0x0306);
-            CASE (abovedot, 0x0307);
-            CASE (diaeresis, 0x0308);
-            CASE (hook, 0x0309);
-            CASE (abovering, 0x030A);
-            CASE (doubleacute, 0x030B);
-            CASE (caron, 0x030C);
-            CASE (abovecomma, 0x0313); /* Equivalent to psili */
-            CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
-            CASE (horn, 0x031B); /* Legacy use for psili, 0x313 (or 0x343). */
-            CASE (belowdot, 0x0323);
-            CASE (cedilla, 0x0327);
-            CASE (ogonek, 0x0328); /* Legacy use for dasia, 0x314.*/
-            CASE (iota, 0x0345);
-            CASE (voiced_sound, 0x3099); /* Per Markus Kuhn keysyms.txt file. */
-            CASE (semivoiced_sound, 0x309A); /* Per Markus Kuhn keysyms.txt file. */
-            /* The following cases are to be removed once xkeyboard-config,
-* xorg are fully updated.
-**/
-            /* Workaround for typo in 1.4.x xserver-xorg */
-            case 0xfe66: combination_buffer[i + 1] = 0x314; break;
-/* CASE (dasia, 0x314); */
-/* CASE (perispomeni, 0x342); */
-/* CASE (psili, 0x343); */
+                CASE (grave, 0x0300);
+                CASE (acute, 0x0301);
+                CASE (circumflex, 0x0302);
+                CASE (tilde, 0x0303); /* Also used with perispomeni, 0x342. */
+                CASE (macron, 0x0304);
+                CASE (breve, 0x0306);
+                CASE (abovedot, 0x0307);
+                CASE (diaeresis, 0x0308);
+                CASE (hook, 0x0309);
+                CASE (abovering, 0x030A);
+                CASE (doubleacute, 0x030B);
+                CASE (caron, 0x030C);
+                CASE (abovecomma, 0x0313); /* Equivalent to psili */
+                CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+                CASE (horn, 0x031B); /* Legacy use for psili, 0x313 (or 0x343). */
+                CASE (belowdot, 0x0323);
+                CASE (cedilla, 0x0327);
+                CASE (ogonek, 0x0328); /* Legacy use for dasia, 0x314.*/
+                CASE (iota, 0x0345);
+                CASE (voiced_sound, 0x3099); /* Per Markus Kuhn keysyms.txt file. */
+                CASE (semivoiced_sound, 0x309A); /* Per Markus Kuhn keysyms.txt file. */
+                /* The following cases are to be removed once xkeyboard-config,
+                * xorg are fully updated.
+                **/
+                /* Workaround for typo in 1.4.x xserver-xorg */
+            case 0xfe66:
+                combination_buffer[i + 1] = 0x314;
+                break;
+                /* CASE (dasia, 0x314); */
+                /* CASE (perispomeni, 0x342); */
+                /* CASE (psili, 0x343); */
 #undef CASE
             default:
                 combination_buffer[i + 1] = fcitx_keyval_to_unicode (m_compose_buffer[i]);
@@ -666,25 +668,25 @@ case Key_dead_##keysym: combination_buffer[i + 1] = unicode; break
         }
 
         /* If the buffer normalizes to a single character,
-* then modify the order of combination_buffer accordingly, if necessary,
-* and return TRUE.
-**/
+        * then modify the order of combination_buffer accordingly, if necessary,
+        * and return TRUE.
+        **/
 #if 0
-if (check_normalize_nfc (combination_buffer, m_n_compose))
-{
-gunichar value;
-combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
-nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
+        if (check_normalize_nfc (combination_buffer, m_n_compose))
+        {
+            gunichar value;
+            combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
+            nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-value = g_utf8_get_char (nfc);
-gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-context_simple->compose_buffer[0] = 0;
+            value = g_utf8_get_char (nfc);
+            gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+            context_simple->compose_buffer[0] = 0;
 
-g_free (combination_utf8);
-g_free (nfc);
+            g_free (combination_utf8);
+            g_free (nfc);
 
-return TRUE;
-}
+            return TRUE;
+        }
 #endif
         UErrorCode state = U_ZERO_ERROR;
         UChar result[FCITX_MAX_COMPOSE_LEN + 1];
@@ -713,8 +715,8 @@ FcitxInputContext::checkCompactTable (const FcitxComposeTableCompact *table)
     int i;
 
     /* Will never match, if the sequence in the compose buffer is longer
-* than the sequences in the table. Further, compare_seq (key, val)
-* will overrun val if key is longer than val. */
+    * than the sequences in the table. Further, compare_seq (key, val)
+    * will overrun val if key is longer than val. */
     if (m_n_compose > table->max_seq_len)
         return false;
 
@@ -764,3 +766,4 @@ FcitxInputContext::checkCompactTable (const FcitxComposeTableCompact *table)
     }
     return false;
 }
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

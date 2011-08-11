@@ -1,19 +1,19 @@
 /******************************************************************
 Copyright 1993, 1994 by Digital Equipment Corporation, Maynard, Massachusetts,
 Copyright 1993, 1994 by Hewlett-Packard Company
- 
+
 Copyright 1994, 1995 by Sun Microsystems, Inc.
- 
+
                         All Rights Reserved
- 
-Permission to use, copy, modify, and distribute this software and its 
-documentation for any purpose and without fee is hereby granted, 
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
 provided that the above copyright notice appear in all copies and that
-both that copyright notice and this permission notice appear in 
+both that copyright notice and this permission notice appear in
 supporting documentation, and that the names of Digital or MIT not be
 used in advertising or publicity pertaining to distribution of the
-software without specific, written prior permission.  
- 
+software without specific, written prior permission.
+
 DIGITAL AND HEWLETT-PACKARD COMPANY DISCLAIMS ALL WARRANTIES WITH REGARD
 TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
 FITNESS, IN NO EVENT SHALL DIGITAL AND HEWLETT-PACKARD COMPANY BE LIABLE
@@ -21,13 +21,13 @@ FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- 
+
   Author: Hiroyuki Miyamoto  Digital Equipment Corporation
                              miyamoto@jrd.dec.com
 	  Hidetoshi Tajima(tajima@Eng.Sun.COM) Sun Microsystems, Inc.
 
     This version tidied and debugged by Steve Underwood May 1999
- 
+
 ******************************************************************/
 
 /* Protocol Packet frames */
@@ -755,3 +755,4 @@ xim_externaldef XimFrameRec ext_move_fr[] =
     _FRAME(EOL),
 };
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

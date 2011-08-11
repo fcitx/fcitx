@@ -34,115 +34,115 @@
 extern "C" {
 #endif
 
-struct _FcitxInstance;
-/**
- * @brief Addon Category Definition
- **/
-typedef enum _AddonCategory
-{
+    struct _FcitxInstance;
     /**
-     * @brief Input method
+     * @brief Addon Category Definition
      **/
-    AC_INPUTMETHOD = 0,
+    typedef enum _AddonCategory
+    {
+        /**
+         * @brief Input method
+         **/
+        AC_INPUTMETHOD = 0,
+        /**
+         * @brief Input frontend, like xim
+         **/
+        AC_FRONTEND,
+        /**
+         * @brief General module, can be implemented in a quite extensive way
+         **/
+        AC_MODULE,
+        /**
+         * @brief User Interface, only one of it can be enabled currently.
+         **/
+        AC_UI
+    } AddonCategory;
+
     /**
-     * @brief Input frontend, like xim
+     * @brief Supported Addon Type, Currently only sharedlibrary
      **/
-    AC_FRONTEND,
+    typedef enum _AddonType
+    {
+        AT_SHAREDLIBRARY = 0
+    } AddonType;
+
     /**
-     * @brief General module, can be implemented in a quite extensive way
+     * @brief Addon Instance in Fcitx
      **/
-    AC_MODULE,
+    typedef struct _FcitxAddon
+    {
+        GenericConfig config;
+        char *name;
+        char *generalname;
+        char *comment;
+        boolean bEnabled;
+        AddonCategory category;
+        AddonType type;
+        char *library;
+        char *depend;
+        int priority;
+        union {
+            struct _FcitxFrontend *frontend;
+            struct _FcitxModule *module;
+            struct _FcitxIMClass* imclass;
+            struct _FcitxUI* ui;
+        };
+        void *addonInstance;
+        UT_array functionList;
+    } FcitxAddon;
+
     /**
-     * @brief User Interface, only one of it can be enabled currently.
+     * @brief Init utarray for addon
+     *
+     * @return void
      **/
-    AC_UI
-} AddonCategory;
+    void InitFcitxAddons(UT_array* addons);
 
-/**
- * @brief Supported Addon Type, Currently only sharedlibrary
- **/
-typedef enum _AddonType
-{
-    AT_SHAREDLIBRARY = 0
-} AddonType;
+    /**
+     * @brief Free one addon info
+     *
+     * @param v addon info
+     */
+    void FreeAddon(void *v);
 
-/**
- * @brief Addon Instance in Fcitx
- **/
-typedef struct _FcitxAddon
-{
-    GenericConfig config;
-    char *name;
-    char *generalname;
-    char *comment;
-    boolean bEnabled;
-    AddonCategory category;
-    AddonType type;
-    char *library;
-    char *depend;
-    int priority;
-    union {
-        struct _FcitxFrontend *frontend;
-        struct _FcitxModule *module;
-        struct _FcitxIMClass* imclass;
-        struct _FcitxUI* ui;
-    };
-    void *addonInstance;
-    UT_array functionList;
-} FcitxAddon;
+    /**
+     * @brief Load all addon of fcitx during initialize
+     *
+     * @return void
+     **/
+    void LoadAddonInfo(UT_array* addons);
 
-/**
- * @brief Init utarray for addon
- *
- * @return void
- **/
-void InitFcitxAddons(UT_array* addons);
+    /**
+     * @brief Resolve addon dependency, in order to make every addon works
+     *
+     * @return void
+     **/
+    void AddonResolveDependency(struct _FcitxInstance* instance);
 
-/** 
- * @brief Free one addon info
- * 
- * @param v addon info
- */
-void FreeAddon(void *v);
+    /**
+     * @brief Check whether an addon is enabled or not by addon name
+     *
+     * @param addons addon array
+     * @param name addon name
+     * @return boolean
+     **/
+    boolean AddonIsAvailable(UT_array* addons, const char* name);
 
-/**
- * @brief Load all addon of fcitx during initialize
- *
- * @return void
- **/
-void LoadAddonInfo(UT_array* addons);
+    /**
+     * @brief Get addon instance by addon name
+     *
+     * @param addons addon array
+     * @param name addon name
+     * @return FcitxAddon*
+     **/
+    FcitxAddon* GetAddonByName(UT_array* addons, const char* name);
 
-/**
- * @brief Resolve addon dependency, in order to make every addon works
- *
- * @return void
- **/
-void AddonResolveDependency(struct _FcitxInstance* instance);
-
-/**
- * @brief Check whether an addon is enabled or not by addon name
- *
- * @param addons addon array
- * @param name addon name
- * @return boolean
- **/
-boolean AddonIsAvailable(UT_array* addons, const char* name);
-
-/**
- * @brief Get addon instance by addon name
- *
- * @param addons addon array
- * @param name addon name
- * @return FcitxAddon*
- **/
-FcitxAddon* GetAddonByName(UT_array* addons, const char* name);
-
-/**
- * @brief Load addon.desc file
- *
- * @return ConfigFileDesc*
- **/
-ConfigFileDesc* GetAddonConfigDesc();
+    /**
+     * @brief Load addon.desc file
+     *
+     * @return ConfigFileDesc*
+     **/
+    ConfigFileDesc* GetAddonConfigDesc();
 
 #ifdef __cplusplus
 }
@@ -150,3 +150,4 @@ ConfigFileDesc* GetAddonConfigDesc();
 
 #endif
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

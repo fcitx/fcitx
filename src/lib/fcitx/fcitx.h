@@ -24,7 +24,7 @@
  * @mainpage Fcitx
  * fcitx is a lightweight Input Method Framework, written by C.
  * It can be used under X11 to support international input.
- * 
+ *
  */
 
 /**
@@ -53,3 +53,4 @@ extern "C" {
 
 #endif/*_FCITX_H_*/
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

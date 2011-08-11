@@ -64,3 +64,4 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig);
 void SavePYConfig(FcitxPinyinConfig *pyconfig);
 
 #endif
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

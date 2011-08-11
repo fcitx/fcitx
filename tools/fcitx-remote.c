@@ -40,20 +40,27 @@ int create_socket(const char *name)
 {
     int fd;
     int r;
+
     struct sockaddr_un uds_addr;
 
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (fd < 0) {
+
+    if (fd < 0)
+    {
         return fd;
     }
 
     /* setup address struct */
     memset(&uds_addr, 0, sizeof(uds_addr));
+
     uds_addr.sun_family = AF_UNIX;
+
     strcpy(uds_addr.sun_path, name);
 
-    r = connect(fd, (struct sockaddr *)&uds_addr, sizeof(uds_addr));
-    if (r < 0) {
+    r = connect(fd, (struct sockaddr *) & uds_addr, sizeof(uds_addr));
+
+    if (r < 0)
+    {
         return r;
     }
 
@@ -71,26 +78,34 @@ void usage()
            IS_CLOSED, IS_ENG, IS_ACTIVE);
 }
 
-int main ( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
     char socketfile[PATH_MAX] = "";
     int socket_fd;
 
     int o = 0;
     char c;
-    while ((c = getopt(argc, argv, "chor")) != -1) {
-        switch (c) {
+
+    while ((c = getopt(argc, argv, "chor")) != -1)
+    {
+        switch (c)
+        {
+
         case 'o':
             o = 1;
             o |= (1 << 16);
             break;
+
         case 'c':
             o = 1;
             break;
+
         case 'r':
             o = 2;
             break;
+
         case 'h':
+
         default:
             usage();
             return 0;
@@ -101,18 +116,23 @@ int main ( int argc, char *argv[] )
     sprintf(socketfile, "/tmp/fcitx-socket");
 
     socket_fd = create_socket(socketfile);
-    if (socket_fd < 0) {
+
+    if (socket_fd < 0)
+    {
         fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
         return 1;
     }
 
-    if (o == 0) {
+    if (o == 0)
+    {
         write(socket_fd, &o, sizeof(o));
         int buf;
         read(socket_fd, &buf, sizeof(buf));
         printf("%d\n", buf);
         close(socket_fd);
-    } else {
+    }
+    else
+    {
         write(socket_fd, &o, sizeof(o));
         close(socket_fd);
     }
@@ -121,3 +141,4 @@ int main ( int argc, char *argv[] )
 }               /* ----------  end of function main  ---------- */
 
 
+// kate: indent-mode cstyle; space-indent on; indent-width 4; 

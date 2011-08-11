@@ -38,13 +38,14 @@ extern "C" {
 
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
 
-typedef struct _FcitxDBusEventHandler {
-    boolean (*eventHandler)(void* instance, DBusMessage * event);
-    void* instance;
-} FcitxDBusEventHandler;
+    typedef struct _FcitxDBusEventHandler {
+        boolean (*eventHandler)(void* instance, DBusMessage * event);
+        void* instance;
+    } FcitxDBusEventHandler;
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // _FCITX_DBUS_H
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

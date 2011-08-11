@@ -89,18 +89,18 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     KeyFilterHook hk;
     hk.arg = fwchar;
     hk.func = ProcessFullWidthChar;
-    
+
     RegisterPreInputFilter(instance, hk);
-    
+
     HotkeyHook hotkey;
     hotkey.hotkey = instance->config.hkFullWidthChar;
     hotkey.hotkeyhandle = ToggleFullWidthStateWithHotkey;
     hotkey.arg = fwchar;
-    
+
     RegisterHotkeyFilter(instance, hotkey);
-    
+
     RegisterStatus(instance, fwchar, "fullwidth", "Full Width Character", "Full Width Character",  ToggleFullWidthState, GetFullWidthState);
-    
+
     return fwchar;
 }
 
@@ -127,7 +127,7 @@ void ToggleFullWidthState(void* arg)
 boolean GetFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    return fwchar->owner->profile.bUseFullWidthChar; 
+    return fwchar->owner->profile.bUseFullWidthChar;
 }
 
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
@@ -137,3 +137,4 @@ INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
     return IRV_DO_NOTHING;
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

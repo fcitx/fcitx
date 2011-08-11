@@ -48,7 +48,7 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
     Display *dpy = classicui->dpy;
     int iScreen= classicui->iScreen;
     messageWindow->owner = classicui;
-    
+
     messageWindow->color.r = messageWindow->color.g = messageWindow->color.b = 220.0 / 256;
     messageWindow->fontColor.r = messageWindow->fontColor.g = messageWindow->fontColor.b = 0;
     messageWindow->fontSize = 15;
@@ -56,11 +56,11 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
     messageWindow->height = 1;
 
     messageWindow->window =
-	XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, 1, 1, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, 1, 1, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
 
-    messageWindow->surface = cairo_xlib_surface_create(dpy, messageWindow->window, DefaultVisual(dpy, iScreen), 1, 1); 
+    messageWindow->surface = cairo_xlib_surface_create(dpy, messageWindow->window, DefaultVisual(dpy, iScreen), 1, 1);
     if (messageWindow->window == None)
-	return False;
+        return False;
 
     InitMessageWindowProperty (messageWindow);
     XSelectInput (dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
@@ -69,7 +69,7 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
     arg.args[0] = MessageWindowEventHandler;
     arg.args[1] = messageWindow;
     InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
-    
+
     return messageWindow;
 }
 
@@ -77,32 +77,32 @@ boolean MessageWindowEventHandler(void *arg, XEvent* event)
 {
     MessageWindow* messageWindow = (MessageWindow*) arg;
     if (event->type == ClientMessage
-        && event->xclient.data.l[0] == messageWindow->owner->killAtom
-        && event->xclient.window == messageWindow->window
-    )
+            && event->xclient.data.l[0] == messageWindow->owner->killAtom
+            && event->xclient.window == messageWindow->window
+       )
     {
         XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
         return true;
     }
-    
+
     if (event->xany.window == messageWindow->window)
     {
         switch (event->type)
         {
-            case Expose:
-                DrawMessageWindow(messageWindow, NULL, NULL, 0);
-                DisplayMessageWindow(messageWindow);
+        case Expose:
+            DrawMessageWindow(messageWindow, NULL, NULL, 0);
+            DisplayMessageWindow(messageWindow);
+            break;
+        case ButtonRelease:
+        {
+            switch (event->xbutton.button)
+            {
+            case Button1:
+                XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
                 break;
-            case ButtonRelease:
-                {
-                    switch(event->xbutton.button)
-                    {
-                        case Button1:  
-                            XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
-                            break;
-                    }
-                }
-                break;
+            }
+        }
+        break;
         }
         return true;
     }
@@ -143,7 +143,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     else
         if (!messageWindow->title)
             return;
-    
+
     title = messageWindow->title;
     FcitxLog(DEBUG, "%s", title);
 
@@ -156,7 +156,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     {
         if (messageWindow->msg)
         {
-            for(i =0 ;i<messageWindow->length; i++)
+            for (i =0 ;i<messageWindow->length; i++)
                 free(messageWindow->msg[i]);
             free(messageWindow->msg);
         }
@@ -215,3 +215,4 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     ActivateWindow(dpy, classicui->iScreen, messageWindow->window);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 

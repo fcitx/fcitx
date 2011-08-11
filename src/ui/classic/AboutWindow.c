@@ -52,7 +52,7 @@ AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
     strcat (strTitle, " ");
     strcat (strTitle, VERSION);
     GetScreenSize(classicui, &dwidth, &dheight);
-    
+
     aboutWindow->owner = classicui;
 
     aboutWindow->color.r = aboutWindow->color.g = aboutWindow->color.b = 220.0 / 256;
@@ -69,7 +69,7 @@ AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
 
     InitAboutWindowProperty (aboutWindow);
     XSelectInput (dpy, aboutWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
-    
+
     FcitxModuleFunctionArg arg;
     arg.args[0] = AboutWindowEventHandler;
     arg.args[1] = aboutWindow;
@@ -82,31 +82,31 @@ boolean AboutWindowEventHandler(void *arg, XEvent* event)
 {
     AboutWindow* aboutWindow = (AboutWindow*) arg;
     if (event->type == ClientMessage
-        && event->xclient.data.l[0] == aboutWindow->owner->killAtom
-        && event->xclient.window == aboutWindow->window
-    )
+            && event->xclient.data.l[0] == aboutWindow->owner->killAtom
+            && event->xclient.window == aboutWindow->window
+       )
     {
         XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
         return true;
     }
-    
+
     if (event->xany.window == aboutWindow->window)
     {
         switch (event->type)
         {
-            case Expose:
-                DrawAboutWindow(aboutWindow);
+        case Expose:
+            DrawAboutWindow(aboutWindow);
+            break;
+        case ButtonRelease:
+        {
+            switch (event->xbutton.button)
+            {
+            case Button1:
+                XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
                 break;
-            case ButtonRelease:
-                {
-                    switch(event->xbutton.button)
-                    {
-                        case Button1:  
-                            XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
-                            break;
-                    }
-                }
-                break;
+            }
+        }
+        break;
         }
         return true;
     }
@@ -153,3 +153,4 @@ void DrawAboutWindow (AboutWindow* aboutWindow)
     cairo_destroy(c);
 }
 
+// kate: indent-mode cstyle; space-indent on; indent-width 0; 
