@@ -45,10 +45,10 @@
 #include "hook-internal.h"
 #include "instance.h"
 #include "module.h"
+#include "candidate.h"
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
-static void UpdateInputWindow(FcitxInstance* instance);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxIMClass*), NULL ,NULL, NULL};
 static int IMPriorityCmp(const void *a, const void *b);
@@ -127,35 +127,7 @@ void UnloadAllIM(UT_array* ims)
 
 static const char* GetStateName(INPUT_RETURN_VALUE retVal)
 {
-    switch (retVal)
-    {
-        case IRV_DO_NOTHING:
-            return "IRV_DO_NOTHING";
-        case IRV_DONOT_PROCESS:
-            return "IRV_DONOT_PROCESS";
-        case IRV_DONOT_PROCESS_CLEAN:
-            return "IRV_DONOT_PROCESS_CLEAN";
-        case IRV_CLEAN:
-            return "IRV_CLEAN";
-        case IRV_TO_PROCESS:
-            return "IRV_TO_PROCESS";
-        case IRV_DISPLAY_MESSAGE:
-            return "IRV_DISPLAY_MESSAGE";
-        case IRV_DISPLAY_CANDWORDS:
-            return "IRV_DISPLAY_CANDWORDS";
-        case IRV_DISPLAY_LAST:
-            return "IRV_DISPLAY_LAST";
-        case IRV_PUNC:
-            return "IRV_PUNC";
-        case IRV_ENG:
-            return "IRV_ENG";
-        case IRV_GET_REMIND:
-            return "IRV_GET_REMIND";
-        case IRV_GET_CANDWORDS:
-            return "IRV_GET_CANDWORDS";
-        case IRV_GET_CANDWORDS_NEXT:
-            return "IRV_GET_CANDWORDS_NEXT";
-    }
+
     return "unknown";
 }
 
@@ -175,7 +147,6 @@ void FcitxRegisterIM(FcitxInstance *instance,
                      FcitxIMResetIM ResetIM, 
                      FcitxIMDoInput DoInput, 
                      FcitxIMGetCandWords GetCandWords, 
-                     FcitxIMGetCandWord GetCandWord, 
                      FcitxIMPhraseTips PhraseTips, 
                      FcitxIMSave Save,
                      FcitxIMReloadConfig ReloadConfig,
@@ -192,7 +163,6 @@ void FcitxRegisterIM(FcitxInstance *instance,
     newime.Init = Init;
     newime.ResetIM = ResetIM;
     newime.DoInput = DoInput;
-    newime.GetCandWord =GetCandWord;
     newime.GetCandWords = GetCandWords;
     newime.PhraseTips = PhraseTips;
     newime.Save = Save;
@@ -290,7 +260,6 @@ INPUT_RETURN_VALUE ProcessKey(
     }
 
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
-    char *pstr;
     FcitxIM* currentIM = GetCurrentIM(instance);
     FcitxInputState *input = &instance->input;
     
@@ -331,38 +300,18 @@ INPUT_RETURN_VALUE ProcessKey(
                     ChangeIMState(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
                     if (!input->bIsInRemind) {
-                        pstr = currentIM->GetCandWord(currentIM->klass, 1);
-                        if (pstr) {
-                            strcpy(GetOutputString(input), pstr);
-                            if (input->bIsInRemind)
-                                retVal = IRV_GET_REMIND;
-                            else
-                                retVal = IRV_GET_CANDWORDS;
-                        } else if (input->iCandWordCount != 0)
-                            retVal = IRV_DISPLAY_CANDWORDS;
-                        else
-                            retVal = IRV_TO_PROCESS;
+                        retVal = CandidateWordChooseByIndex(input->candList, 1);
                     } else {
                         strcpy(GetOutputString(input), " ");
-                        SetMessageCount(instance->messageDown, 0);
-                        retVal = IRV_GET_CANDWORDS;
+                        retVal = IRV_COMMIT_STRING;
                     }
                     input->keyReleased = KR_OTHER;
                 } else if (IsHotKey(sym, state, fc->i3rdSelectKey) && input->keyReleased == KR_3RD_SELECTKEY) {
                     if (!input->bIsInRemind) {
-                        pstr = currentIM->GetCandWord(currentIM->klass, 2);
-                        if (pstr) {
-                            strcpy(GetOutputString(input), pstr);
-                            if (input->bIsInRemind)
-                                retVal = IRV_GET_REMIND;
-                            else
-                                retVal = IRV_GET_CANDWORDS;
-                        } else if (input->iCandWordCount)
-                            retVal = IRV_DISPLAY_CANDWORDS;
+                        retVal = CandidateWordChooseByIndex(input->candList, 2);
                     } else {
                         strcpy(GetOutputString(input), "　");
-                        SetMessageCount(instance->messageDown, 0);
-                        retVal = IRV_GET_CANDWORDS;
+                        retVal = IRV_COMMIT_STRING;
                     }
 
                     input->keyReleased = KR_OTHER;
@@ -415,21 +364,24 @@ INPUT_RETURN_VALUE ProcessKey(
     if (retVal == IRV_TO_PROCESS && event != FCITX_PRESS_KEY)
         retVal = IRV_DONOT_PROCESS;
 
-    if (GetCurrentIC(instance)->state == IS_ACTIVE) {
-        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    /* the key processed before this phase is very important, we don't let any interrupt */
+    if (GetCurrentIC(instance)->state == IS_ACTIVE
+        && retVal == IRV_TO_PROCESS
+    ) {
+        if (!input->bIsDoInputOnly) {
             ProcessPreInputFilter(instance, sym, state, &retVal);
         }
         
         if (retVal == IRV_TO_PROCESS)
         {
             if (IsHotKey(sym, state, fc->i2ndSelectKey)) {
-                if (input->iCandWordCount >= 2)
+                if (CandidateWordGetByIndex(input->candList, 1) != NULL)
                 {
                     input->keyReleased = KR_2ND_SELECTKEY;
                     return IRV_DONOT_PROCESS;
                 }
             } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
-                if (input->iCandWordCount >= 3)
+                if (CandidateWordGetByIndex(input->candList, 2) != NULL)
                 {
                     input->keyReleased = KR_3RD_SELECTKEY;
                     return IRV_DONOT_PROCESS;
@@ -441,15 +393,48 @@ INPUT_RETURN_VALUE ProcessKey(
             }
         }
         
+        /* check choose key first, because it might trigger update candidates */
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
         {
-            if (IsHotKey(sym, state, fc->hkPrevPage))
-                retVal = currentIM->GetCandWords(currentIM->klass, SM_PREV);
-            else if (IsHotKey(sym, state, fc->hkNextPage))
-                retVal = currentIM->GetCandWords(currentIM->klass, SM_NEXT);
+            int index = CheckChooseKey (sym, state, CandidateWordGetChoose(input->candList));
+            if (index >= 0)
+                retVal = CandidateWordChooseByIndex(input->candList, index);
         }
+    }
+        
+    if (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)
+    {
+        CleanInputWindow(instance);
+        retVal = currentIM->GetCandWords(currentIM->klass);
+        ProcessUpdateCandidates(instance);
+    }
+        
+    /*
+        * since all candidate word are cached in candList, so we don't need to trigger
+        * GetCandWords after go for another page, simply update input window is ok.
+        */
+    if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    {
+        if (IsHotKey(sym, state, fc->hkPrevPage))
+        {
+            if (CandidateWordGoPrevPage(input->candList))
+                retVal = IRV_DISPLAY_CANDWORDS;
+        }
+        else if (IsHotKey(sym, state, fc->hkNextPage))
+        {
+            if (CandidateWordGoNextPage(input->candList))
+                retVal = IRV_DISPLAY_CANDWORDS;
+        }
+        
+    }
 
-        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    /* even the retVal is not IRV_TO_PROCESS, we will let the 
+     * PostInputFilter run.
+     * Actually we cannot control the behave of every module,
+     * User should make sure there isn't malware
+     */
+    if (!input->bIsDoInputOnly)
+    {
             ProcessPostInputFilter(instance, sym, state, &retVal);
     }
     
@@ -474,100 +459,40 @@ void ProcessInputReturnValue(
     FcitxInputState *input = &instance->input;    
     FcitxConfig *fc = &instance->config;
     
-    switch (retVal)
+    if (retVal & IRV_FLAG_PENDING_COMMIT_STRING)
     {
-        case IRV_DO_NOTHING:
-        case IRV_TO_PROCESS:
-        case IRV_DONOT_PROCESS:
-            break;
-        case IRV_DONOT_PROCESS_CLEAN:
-        case IRV_CLEAN:
-            ResetInput(instance);
-            CloseInputWindow(instance);
-            break;
-            
-        case IRV_DISPLAY_CANDWORDS:
-            input->bShowPrev = input->bShowNext = false;
-            if (input->bIsInRemind) {
-                if (input->iCurrentRemindCandPage > 0)
-                    input->bShowPrev = true;
-                if (input->iCurrentRemindCandPage < input->iRemindCandPageCount)
-                    input->bShowNext = true;
-            } else {
-                if (input->iCurrentCandPage > 0)
-                    input->bShowPrev = true;
-                if (input->iCurrentCandPage < input->iCandPageCount)
-                    input->bShowNext = true;
-            }
-
-            ShowInputWindow(instance);
-            break;
-            
-        case IRV_DISPLAY_LAST:
-            input->bShowNext = input->bShowPrev = false;
-            SetMessageCount(instance->messageUp, 0);
-            AddMessageAtLast(instance->messageUp, MSG_INPUT, "%c", input->strCodeInput[0]);
-            SetMessageCount(instance->messageDown, 0);
-            AddMessageAtLast(instance->messageDown, MSG_TIPS, "%s", GetOutputString(input));
-            UpdateInputWindow(instance);
-            
-            break;
-        case IRV_DISPLAY_MESSAGE:
-            input->bShowNext = false;
-            input->bShowPrev = false;
-            UpdateInputWindow(instance);
-            break;
-        case IRV_GET_REMIND:
-            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));        //粗略统计字数
-            if (input->iRemindCandWordCount) {
-                input->bShowNext = input->bShowPrev = false;
-                if (input->iCurrentRemindCandPage > 0)
-                    input->bShowPrev = true;
-                if (input->iCurrentRemindCandPage < input->iRemindCandPageCount)
-                    input->bShowNext = true;
-                input->iCodeInputCount = 0;
-                ShowInputWindow(instance);
-            } else {
-                ResetInput(instance);
-                CloseInputWindow(instance);
-            }
-
-            break;
-        case IRV_GET_CANDWORDS:
-            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-            SetMessageCount(GetMessageUp(instance), 0);
-            SetMessageCount(GetMessageDown(instance), 0);
-            if (fc->bPhraseTips && currentIM->PhraseTips)
-                DoPhraseTips(instance);
-            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
-            UpdateInputWindow(instance);
-
-            ResetInput(instance);
-            input->lastIsSingleHZ = 0;
-            break;
-        case IRV_ENG:
-        case IRV_PUNC:
-            input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));        //粗略统计字数
-            ResetInput(instance);
-            SetMessageCount(GetMessageUp(instance), 0);
-            SetMessageCount(GetMessageDown(instance), 0);
-            UpdateInputWindow(instance);
-        case IRV_GET_CANDWORDS_NEXT:
-            CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-            input->bLastIsNumber = false;
-            input->lastIsSingleHZ = 0;
-
-            if (retVal == IRV_GET_CANDWORDS_NEXT || input->lastIsSingleHZ == -1) {
-                input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));    //粗略统计字数
-                ShowInputWindow(instance);
-            }
-
-            break;
-        default:
-            ;
+        CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
+        input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
     }
-    if (retVal == IRV_DISPLAY_MESSAGE || retVal == IRV_DISPLAY_CANDWORDS || retVal == IRV_PUNC) {
+    
+    if (retVal & IRV_FLAG_DO_PHRASE_TIPS)
+    {
+        CleanInputWindow(instance);
+        if (fc->bPhraseTips && currentIM->PhraseTips)
+            DoPhraseTips(instance);
+        UpdateInputWindow(instance);
+
+        ResetInput(instance);
+        input->lastIsSingleHZ = 0;
+    }
+    
+    if (retVal & IRV_FLAG_RESET_INPUT)
+    {
+        ResetInput(instance);
+        CloseInputWindow(instance);
+    }
+    
+    if (retVal & IRV_FLAG_DISPLAY_LAST)
+    {
+        CleanInputWindow(instance);
+        AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", input->strCodeInput[0]);
+        AddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", GetOutputString(input));
+    }
+    
+    if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW)
+        UpdateInputWindow(instance);
+    
+    if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW) {
         if (!input->bStartRecordType)
         {
             input->bStartRecordType = true;
@@ -594,6 +519,10 @@ void SwitchIM(FcitxInstance* instance, int index)
 {
     UT_array* imes = &instance->imes;
     int iIMCount = utarray_len(imes);
+    
+    CleanInputWindow(instance);
+    ResetInput(instance);
+    UpdateInputWindow(instance);
     
     FcitxIM* lastIM, *newIM;
 
@@ -640,22 +569,13 @@ FCITX_EXPORT_API
 void ResetInput(FcitxInstance* instance)
 {
     FcitxInputState *input = &instance->input;
-    input->iCandPageCount = 0;
-    input->iCurrentCandPage = 0;
-    input->iCandWordCount = 0;
-    input->iRemindCandWordCount = 0;
-    input->iCurrentRemindCandPage = 0;
-    input->iRemindCandPageCount = 0;
+    CandidateWordReset(input->candList);
     input->iCursorPos = 0;
 
     input->strCodeInput[0] = '\0';
     input->iCodeInputCount = 0;  
 
     input->bIsDoInputOnly = false;
-
-    input->bShowPrev = false;
-    input->bShowNext = false;
-
     input->bIsInRemind = false;
     
     UT_array* ims = &instance->imes;
@@ -698,8 +618,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
             retVal = IRV_CLEAN;
             break;
         case K_ENTER_SEND:
-            SetMessageCount(instance->messageDown, 0);
-            SetMessageCount(instance->messageUp, 0);
+            CleanInputWindow(instance);
             strcpy(GetOutputString(input), input->strCodeInput);
             retVal = IRV_ENG;
             break;
@@ -737,6 +656,8 @@ void ReloadConfig(FcitxInstance *instance)
 {
     if (!LoadConfig(&instance->config))
         EndInstance(instance);
+    
+    CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
         
     /* Reload All IM, Module, and UI Config */
     UT_array* addons = &instance->addons;
@@ -770,9 +691,14 @@ void ReloadConfig(FcitxInstance *instance)
         instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
 }
 
+FCITX_EXPORT_API
 void UpdateInputWindow(FcitxInstance *instance)
 {
-    if (GetMessageCount(instance->messageUp) == 0 && GetMessageCount(instance->messageDown) == 0)
+    FcitxInputState* input = &instance->input;
+    if (GetMessageCount(input->msgAuxUp) == 0
+        && GetMessageCount(input->msgAuxDown) == 0
+        && CandidateWordPageCount(input->candList) == 0
+        && GetMessageCount(input->msgPreedit) == 0)
         CloseInputWindow(instance);
     else
         ShowInputWindow(instance);
@@ -852,12 +778,11 @@ void ShowInputSpeed(FcitxInstance* instance)
     if (!instance->config.bShowInputWindowTriggering)
         return;
     
-    instance->bShowCursor = false;
+    input->bShowCursor = false;
     
-    SetMessageCount(GetMessageUp(instance), 0);
-    SetMessageCount(GetMessageDown(instance), 0);
+    CleanInputWindow(instance);
     if (instance->config.bShowVersion) {
-        AddMessageAtLast(GetMessageUp(instance), MSG_TIPS, "FCITX " VERSION);
+        AddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION);
     }
     
     //显示打字速度
@@ -868,13 +793,13 @@ void ShowInputSpeed(FcitxInstance* instance)
         if (((int) timePassed) == 0)
             timePassed = 1.0;
 
-        SetMessageCount(GetMessageDown(instance), 0);
-        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("Input Speed: "));
-        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%d", (int) ( input->iHZInputed * 60 / timePassed));
-        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("/min  Time Used: "));
-        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%d", (int) timePassed);
-        AddMessageAtLast(GetMessageDown(instance), MSG_OTHER, _("s  Num of Characters: "));
-        AddMessageAtLast(GetMessageDown(instance), MSG_CODE, "%u", input->iHZInputed);
+        SetMessageCount(input->msgAuxDown, 0);
+        AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Input Speed: "));
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) ( input->iHZInputed * 60 / timePassed));
+        AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("/min  Time Used: "));
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) timePassed / 60);
+        AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("min Num of Characters: "));
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%u", input->iHZInputed);
         
     }
 
@@ -888,3 +813,42 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg)
     return IRV_DO_NOTHING;
 }
 
+FCITX_EXPORT_API
+void CleanInputWindow(FcitxInstance *instance)
+{
+    CleanInputWindowUp(instance);
+    CleanInputWindowDown(instance);
+}
+
+FCITX_EXPORT_API
+void CleanInputWindowUp(FcitxInstance *instance)
+{
+    FcitxInputState* input = &instance->input;
+    SetMessageCount(input->msgAuxUp, 0);
+    SetMessageCount(input->msgPreedit, 0);
+}
+
+FCITX_EXPORT_API
+void CleanInputWindowDown(FcitxInstance* instance)
+{
+    FcitxInputState* input = &instance->input;
+    CandidateWordReset(input->candList);
+    SetMessageCount(input->msgAuxDown, 0);
+}
+
+FCITX_EXPORT_API
+int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose)
+{
+    if (state != 0)
+        return -1;
+    
+    int i = 0;
+
+    while (strChoose[i]) {
+        if (sym == strChoose[i])
+            return i;
+        i++;
+    }
+    
+    return -1;
+}

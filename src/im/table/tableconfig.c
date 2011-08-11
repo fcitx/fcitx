@@ -20,9 +20,9 @@
 
 #include "fcitx/fcitx.h"
 
-#include "table.h"
+#include "tabledict.h"
 
-CONFIG_BINDING_BEGIN(TABLE)
+CONFIG_BINDING_BEGIN(TableMetaData)
 CONFIG_BINDING_REGISTER("CodeTable", "Name", strName)
 CONFIG_BINDING_REGISTER("CodeTable", "IconName", strIconName)
 CONFIG_BINDING_REGISTER("CodeTable", "File", strPath)
@@ -37,7 +37,7 @@ CONFIG_BINDING_REGISTER("CodeTable", "UseMatchingKey", bUseMatchingKey)
 CONFIG_BINDING_REGISTER("CodeTable", "MatchingKey", cMatchingKey)
 CONFIG_BINDING_REGISTER("CodeTable", "ExactMatch", bTableExactMatch)
 CONFIG_BINDING_REGISTER("CodeTable", "AutoPhrase", bAutoPhrase)
-CONFIG_BINDING_REGISTER("CodeTable", "AutoPhraseLength", iAutoPhrase)
+CONFIG_BINDING_REGISTER("CodeTable", "AutoPhraseLength", iAutoPhraseLength)
 CONFIG_BINDING_REGISTER("CodeTable", "AutoPhrasePhrase", bAutoPhrasePhrase)
 CONFIG_BINDING_REGISTER("CodeTable", "SaveAutoPhrase", iSaveAutoPhraseAfter)
 CONFIG_BINDING_REGISTER("CodeTable", "PromptTableCode", bPromptTableCode)

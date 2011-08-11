@@ -1,4 +1,5 @@
 set(LIBFCITX_SOURCES
+    candidate.c
     configfile.c
     profile.c
     addon.c
@@ -12,6 +13,7 @@ set(LIBFCITX_SOURCES
 )
 
 set(FCITX_HEADERS
+    candidate.h
     ime.h
     ui.h
     hook.h

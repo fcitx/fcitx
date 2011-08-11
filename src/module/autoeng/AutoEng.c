@@ -144,6 +144,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
                              )
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    FcitxInputState* input = &autoEngState->owner->input;
     if (autoEngState->active)
     {
         if (IsHotKeySimple(sym,state))
@@ -169,7 +170,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         {
             strcpy(GetOutputString(&autoEngState->owner->input), autoEngState->buf);
             ResetAutoEng(autoEngState);
-            *retval = IRV_GET_CANDWORDS;
+            *retval = IRV_COMMIT_STRING;
         }
         ShowAutoEngMessage(autoEngState);
         return true;
@@ -187,7 +188,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
-            autoEngState->owner->bShowCursor = false;
+            input->bShowCursor = false;
             autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
             ShowAutoEngMessage(autoEngState);
@@ -257,8 +258,9 @@ boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
-    Messages *msgUp = GetMessageUp(autoEngState->owner);
-    Messages *msgDown = GetMessageDown(autoEngState->owner);
+    FcitxInputState* input = &autoEngState->owner->input;
+    Messages *msgUp = input->msgAuxUp;
+    Messages *msgDown = input->msgAuxDown;
 
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);

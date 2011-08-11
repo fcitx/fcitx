@@ -35,6 +35,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 #include "fcitx/instance.h"
+#include "fcitx/candidate.h"
 
 /**
  * @file punc.c
@@ -135,12 +136,13 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
     FcitxInputState* input = &puncState->owner->input;
-    FcitxIM* currentIM = GetCurrentIM(puncState->owner);
-    size_t iLen;
+    
+    if (*retVal != IRV_TO_PROCESS)
+        return false;
+    
     if (instance->profile.bUseWidePunc) {
         char *pPunc = NULL;
-
-        char *pstr = NULL;
+        
         if (puncState->bLastIsNumber && instance->config.bEngPuncAfterNumber
             && (IsHotKey(sym, state, FCITX_PERIOD) 
             || IsHotKey(sym, state, FCITX_SEMICOLON) 
@@ -160,16 +162,14 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         if (pPunc) {
             GetOutputString(input)[0] = '\0';
             if (!puncState->owner->input.bIsInRemind)
-                pstr = currentIM->GetCandWord(currentIM->klass, 0);
-            if (pstr)
-                strcpy(GetOutputString(input), pstr);
+                CandidateWordChooseByIndex(input->candList, 0);
             strcat(GetOutputString(input), pPunc);
-            SetMessageCount(puncState->owner->messageDown, 0);
-            SetMessageCount(puncState->owner->messageUp, 0);
+            CleanInputWindow(instance);
             
             *retVal = IRV_PUNC;
             return true;
-        } else if ((IsHotKey(sym, state, FCITX_BACKSPACE) || IsHotKey(sym, state, FCITX_CTRL_H))
+        }
+        else if (IsHotKey(sym, state, FCITX_BACKSPACE)
                     && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
@@ -186,22 +186,6 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
                 puncState->bLastIsNumber = true;
             else {
                 puncState->bLastIsNumber = false;
-                if (IsHotKey(sym, state, FCITX_SPACE))
-                    *retVal = IRV_DONOT_PROCESS_CLEAN;   //为了与mozilla兼容
-                else {
-                    GetOutputString(input)[0] = '\0';
-                    if (puncState->owner->input.bIsInRemind)
-                        pstr = currentIM->GetCandWord(currentIM->klass, 0);
-                    if (pstr)
-                        strcpy(GetOutputString(input), pstr);
-                    iLen = strlen(GetOutputString(input));
-                    SetMessageCount(puncState->owner->messageDown, 0);
-                    SetMessageCount(puncState->owner->messageUp, 0);
-                    GetOutputString(input)[iLen] = sym;
-                    GetOutputString(input)[iLen + 1] = '\0';
-                    *retVal = IRV_ENG;
-                    return true;
-                }
             }
         }
     }

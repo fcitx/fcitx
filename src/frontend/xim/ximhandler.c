@@ -206,7 +206,7 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
                                            kev->time,
                                            sym, state);
     
-    if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
+    if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         XimForwardKeyInternal(xim,
                            GetXimIC(ic),
                            &call_data->event

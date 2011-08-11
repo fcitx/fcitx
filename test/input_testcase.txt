@@ -1,0 +1,10 @@
+It's hard to give a test if GUI is involved, it's hard to confirm what whether a string is properly displayed
+or not by only using code. So I'd like to record the test case that should works.
+
+Pinyin:
+
+
+Table:
+Wubi
+
+Wubipinyin

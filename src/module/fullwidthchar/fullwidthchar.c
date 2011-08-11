@@ -110,7 +110,7 @@ boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INP
     if (fwchar->owner->profile.bUseFullWidthChar && IsHotKeySimple(sym, state))
     {
         sprintf(GetOutputString(&fwchar->owner->input), "%s", sCornerTrans[sym - 32]);
-        *retVal = IRV_GET_CANDWORDS;
+        *retVal = IRV_COMMIT_STRING;
         return true;
     }
     return false;

@@ -28,10 +28,10 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/keys.h"
 
-#include "qw.h"
 #include "fcitx/ui.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
+#include "fcitx/candidate.h"
 
 typedef struct _FcitxQWState {
     char     strQWHZ[3];
@@ -41,8 +41,8 @@ typedef struct _FcitxQWState {
 
 static void* QWCreate (struct _FcitxInstance* instance);
 INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state);
-INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode);
-char *QWGetCandWord (void *arg, int iIndex);
+INPUT_RETURN_VALUE QWGetCandWords (void *arg);
+INPUT_RETURN_VALUE QWGetCandWord (void *arg, CandidateWord* candWord);
 char           *GetQuWei (FcitxQWState* qwstate, int iQu, int iWei);
 boolean QWInit(void *arg);
 
@@ -64,7 +64,6 @@ void* QWCreate (struct _FcitxInstance* instance)
         NULL,
         DoQWInput,
         QWGetCandWords,
-        QWGetCandWord,
         NULL,
         NULL,
         NULL,
@@ -83,7 +82,6 @@ boolean QWInit(void *arg)
 INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInstance* instance = qwstate->owner;
     FcitxInputState* input = &qwstate->owner->input;
     INPUT_RETURN_VALUE retVal;
 
@@ -93,13 +91,10 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
             input->strCodeInput[input->iCodeInputCount++]=sym;
             input->strCodeInput[input->iCodeInputCount]='\0';
             if ( input->iCodeInputCount==4 ) {
-                strcpy(GetOutputString(input), QWGetCandWord(arg, sym-'0'-1));
-                retVal= IRV_GET_CANDWORDS;
+                retVal = IRV_TO_PROCESS;
             }
-            else if (input->iCodeInputCount==3)
-                retVal=QWGetCandWords(arg, SM_FIRST);
             else
-                retVal=IRV_DISPLAY_CANDWORDS;
+                retVal = IRV_DISPLAY_CANDWORDS;
         }
     }
     else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
@@ -111,8 +106,6 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
         if (!input->iCodeInputCount)
             retVal = IRV_CLEAN;
         else {
-            input->iCandPageCount = 0;
-            SetMessageCount(instance->messageDown, 0);
             retVal = IRV_DISPLAY_CANDWORDS;
         }
     }
@@ -122,87 +115,52 @@ INPUT_RETURN_VALUE DoQWInput(void* arg, FcitxKeySym sym, unsigned int state)
         if (input->iCodeInputCount!=3)
             return IRV_DO_NOTHING;
 
-        strcpy(GetOutputString(input), QWGetCandWord(arg, 0));
-        retVal= IRV_GET_CANDWORDS;
+        retVal= CandidateWordChooseByIndex(input->candList, 0);
     }
     else
         return IRV_TO_PROCESS;
-
-    SetMessageCount(instance->messageUp, 0);
-    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strCodeInput);
-    if ( input->iCodeInputCount!=3 )
-        SetMessageCount(instance->messageDown, 0);
     
-    input->iCursorPos = input->iCodeInputCount;
 
     return retVal;
 }
 
-char *QWGetCandWord (void *arg, int iIndex)
+INPUT_RETURN_VALUE QWGetCandWord (void *arg, CandidateWord* candWord)
 {
     FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInstance* instance = qwstate->owner;
     FcitxInputState* input = &qwstate->owner->input;
-    if ( !input->iCandPageCount )
-        return NULL;
 
-    SetMessageCount(instance->messageDown, 0);
-    if ( iIndex==-1 )
-        iIndex=9;
-    return GetQuWei(qwstate, (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0',input->iCurrentCandPage * 10+iIndex+1);
+    strcpy(GetOutputString(input),
+           candWord->strWord);
+    return IRV_COMMIT_STRING;
 }
 
-INPUT_RETURN_VALUE QWGetCandWords (void *arg, SEARCH_MODE mode)
+INPUT_RETURN_VALUE QWGetCandWords (void *arg)
 {
     FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInstance* instance = qwstate->owner;
     FcitxInputState* input = &qwstate->owner->input;
     int             iQu, iWei;
     int             i;
-    char            strTemp[3];
-
-    if ( ConfigGetPointAfterNumber(&qwstate->owner->config) ) {
-        strTemp[1] = '.';
-        strTemp[2] = '\0';
-    }
-    else
-        strTemp[1]='\0';
-
-    iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
-
-    if (mode==SM_FIRST ) {
-        input->iCandPageCount = 9;
-        input->iCurrentCandPage = input->strCodeInput[2]-'0';
-    }
-    else {
-        if ( !input->iCandPageCount )
-            return IRV_TO_PROCESS;
-        if (mode==SM_NEXT) {
-            if ( input->iCurrentCandPage!=input->iCandPageCount )
-                input->iCurrentCandPage++;
-        }
-        else {
-            if ( input->iCurrentCandPage )
-                input->iCurrentCandPage--;
+    
+    CandidateWordSetPageSize(input->candList, 10);
+    CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
+    if ( input->iCodeInputCount == 3 )
+    {
+        iQu = (input->strCodeInput[0] - '0') * 10 + input->strCodeInput[1] - '0';
+        iWei = (input->strCodeInput[2]-'0') * 10;
+        
+        for (i = 0; i < 10; i++) {
+            CandidateWord candWord;
+            candWord.callback = QWGetCandWord;
+            candWord.owner = qwstate;
+            candWord.priv = NULL;
+            candWord.strExtra = NULL;
+            candWord.strWord = strdup ( GetQuWei (qwstate, iQu, iWei + i + 1) );
+            CandidateWordAppend(input->candList, &candWord);
         }
     }
-
-    iWei = input->iCurrentCandPage * 10;
-
-    SetMessageCount(instance->messageDown, 0);
-    for (i = 0; i < 10; i++) {
-        strTemp[0] = i + 1 + '0';
-        if (i == 9)
-            strTemp[0] = '0';
-        AddMessageAtLast(instance->messageDown, MSG_INDEX, "%s", strTemp);
-        AddMessageAtLast(instance->messageDown, (i)? MSG_OTHER:MSG_FIRSTCAND, "%s", GetQuWei (qwstate, iQu, iWei + i + 1));
-        if (i != 9)
-            MessageConcatLast(instance->messageDown, " ");
-    }
-
-    input->strCodeInput[2]=input->iCurrentCandPage+'0';
-    SetMessageCount(instance->messageUp, 0);
-    AddMessageAtLast(instance->messageUp, MSG_INPUT, "%s", input->strCodeInput);
+    input->iCursorPos = input->iCodeInputCount;
+    SetMessageCount(input->msgPreedit, 0);
+    AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
 
     return IRV_DISPLAY_CANDWORDS;
 }

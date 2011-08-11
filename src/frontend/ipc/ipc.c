@@ -455,7 +455,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
                                            t,
                                            sym, state);
     
-    if (retVal == IRV_TO_PROCESS || retVal == IRV_DONOT_PROCESS || retVal == IRV_DONOT_PROCESS_CLEAN)
+    if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         return 0;
     else
         return 1;

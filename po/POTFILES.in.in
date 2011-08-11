@@ -31,7 +31,6 @@
 @REL_SOURCE_ROOT@/src/im/pinyin/sp.h
 @REL_SOURCE_ROOT@/src/im/pinyin/fcitx-pinyin.conf.in
 @REL_SOURCE_ROOT@/src/im/qw/qw.c
-@REL_SOURCE_ROOT@/src/im/qw/qw.h
 @REL_SOURCE_ROOT@/src/im/qw/fcitx-qw.conf.in
 @REL_SOURCE_ROOT@/src/im/table/table.c
 @REL_SOURCE_ROOT@/src/im/table/tableconfig.c

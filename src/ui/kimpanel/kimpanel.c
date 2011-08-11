@@ -35,7 +35,8 @@
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/hook.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
+#include "fcitx/candidate.h"
 
 #define FCITX_KIMPANEL_INTERFACE "org.fcitx.Fcitx.Kimpanel"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
@@ -105,6 +106,9 @@ typedef struct _FcitxKimpanelUI
     DBusConnection* conn;
     int iOffsetY;
     int iOffsetX;
+    Messages* messageUp;
+    Messages* messageDown;
+    int iCursorPos;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -161,6 +165,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     FcitxKimpanelUI *kimpanel = fcitx_malloc0(sizeof(FcitxKimpanelUI));
     FcitxModuleFunctionArg arg;
 
+    kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
     kimpanel->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
     
@@ -194,6 +199,9 @@ void* KimpanelCreate(FcitxInstance* instance)
     DBusObjectPathVTable vtable = {NULL, &KimpanelDBusEventHandler, NULL, NULL, NULL, NULL };
     
     dbus_connection_register_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH, &vtable, kimpanel);
+    
+    kimpanel->messageUp = InitMessages();
+    kimpanel->messageDown = InitMessages();
     
     FcitxIMEventHook resethk;
     resethk.arg = kimpanel;
@@ -357,8 +365,9 @@ void KimpanelShowInputWindow(void* arg)
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = &instance->input;
-    Messages* messageDown = GetMessageDown(instance);
-    Messages* messageUp = GetMessageUp(instance);
+    kimpanel->iCursorPos = NewMessageToOldStyleMessage(instance, kimpanel->messageUp, kimpanel->messageDown);
+    Messages* messageDown = kimpanel->messageDown;
+    Messages* messageUp = kimpanel->messageUp;
     FcitxLog(DEBUG, "KimpanelShowInputWindow");
 
     int n = GetMessageCount(messageDown);
@@ -415,7 +424,7 @@ void KimpanelShowInputWindow(void* arg)
             KimShowLookupTable(kimpanel, false);
         }
         else {
-            KimUpdateLookupTable(kimpanel, label,nLabels,text,nTexts,input->bShowPrev,input->bShowNext);
+            KimUpdateLookupTable(kimpanel, label,nLabels,text,nTexts,CandidateWordHasPrev(input->candList),CandidateWordHasNext(input->candList));
             KimShowLookupTable(kimpanel, true);
         }
         for (i = 0; i < nTexts; i++)
@@ -423,7 +432,7 @@ void KimpanelShowInputWindow(void* arg)
         for (i = 0; i < nLabels; i++)
             free(label[i]);
     } else {
-        KimUpdateLookupTable(kimpanel, NULL,0,NULL,0,input->bShowPrev,input->bShowNext);
+        KimUpdateLookupTable(kimpanel, NULL,0,NULL,0,CandidateWordHasPrev(input->candList),CandidateWordHasNext(input->candList));
         KimShowLookupTable(kimpanel, false);
     }
     
@@ -445,7 +454,7 @@ void KimpanelShowInputWindow(void* arg)
                 free(needfree);
             FcitxLog(DEBUG, "updateMesssages Up:%s", aux);
         }
-        if (instance->bShowCursor)
+        if (input->bShowCursor)
         {
             KimUpdatePreeditText(kimpanel, aux);
             KimUpdateAux(kimpanel, empty);
@@ -497,7 +506,6 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) user_data;
     FcitxInstance* instance = kimpanel->owner;
     FcitxInputState* input = &kimpanel->owner->input;
-    FcitxIM* im = GetCurrentIM(instance);
     int int0;
     const char* s0 = NULL;
     DBusError error;
@@ -511,38 +519,28 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         FcitxLog(DEBUG, "SelectCandidate: ");
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 ,DBUS_TYPE_INVALID))
         {
-            char *pstr = NULL;
-
-            if (im->GetCandWord)
-            {
-                pstr = im->GetCandWord(im->klass, int0);
-                INPUT_RETURN_VALUE retVal;
-                if (pstr) {
-                    strcpy(GetOutputString(input), pstr);
-                    if (input->bIsInRemind)
-                        retVal = IRV_GET_REMIND;
-                    else
-                        retVal = IRV_GET_CANDWORDS;
-                } else if (input->iCandWordCount != 0)
-                    retVal = IRV_DISPLAY_CANDWORDS;
-                else
-                    retVal = IRV_TO_PROCESS;
-                ProcessInputReturnValue(instance, retVal);
-            }
-            FcitxLog(DEBUG, "%d:%s", int0, pstr);
+            INPUT_RETURN_VALUE retVal;
+            retVal = CandidateWordChooseByIndex(input->candList, int0);
+            ProcessInputReturnValue(instance, retVal);
         }
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageUp")) {
         FcitxLog(DEBUG, "LookupTablePageUp");
-        INPUT_RETURN_VALUE retVal = im->GetCandWords (im->klass, SM_PREV);
-        ProcessInputReturnValue(instance, retVal);
+        if (CandidateWordPageCount(input->candList) != 0)
+        {
+            CandidateWordGoPrevPage(input->candList);
+            ProcessInputReturnValue(instance, IRV_DISPLAY_CANDWORDS);
+        }
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageDown")) {
         FcitxLog(DEBUG, "LookupTablePageDown");
-        INPUT_RETURN_VALUE retVal = im->GetCandWords (im->klass,SM_NEXT);
-        ProcessInputReturnValue(instance, retVal);
+        if (CandidateWordPageCount(input->candList) != 0)
+        {
+            CandidateWordGoNextPage(input->candList);
+            ProcessInputReturnValue(instance, IRV_DISPLAY_CANDWORDS);
+        }
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
@@ -1186,18 +1184,17 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
     size_t             i = 0;
     int             iChar;
     int             iCount = 0;
-    FcitxInstance* instance = kimpanel->owner;
-    FcitxInputState* input = &instance->input;
-    Messages* messageUp = GetMessageUp(instance);
+    FcitxInputState* input = &kimpanel->owner->input;
+    Messages* messageUp = kimpanel->messageUp;
 
     const char      *p1;
     const char      *pivot;
 
-    iChar = input->iCursorPos;
+    iChar = kimpanel->iCursorPos;
     
 
     for (i = 0; i < GetMessageCount(messageUp) ; i++) {
-        if (instance->bShowCursor && iChar) {
+        if (input->bShowCursor && iChar) {
             p1 = pivot = GetMessageString(messageUp, i);
             while (*p1 && p1 < pivot + iChar) {
                 p1 = p1 + utf8_char_len(p1);

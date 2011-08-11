@@ -702,7 +702,7 @@ INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state)
         return IRV_TO_PROCESS;
     else {
         strcpy (GetOutputString(input), pstr);
-        return IRV_GET_CANDWORDS;
+        return IRV_COMMIT_STRING;
     }
 }
 

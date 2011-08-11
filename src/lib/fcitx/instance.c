@@ -34,6 +34,7 @@
 #include "module.h"
 #include "frontend.h"
 #include "fcitx-utils/utils.h"
+#include "candidate.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
         || (icase ? \
@@ -82,12 +83,17 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
-    instance->messageDown = InitMessages();
-    instance->messageUp = InitMessages();
+    instance->input.msgAuxUp = InitMessages();
+    instance->input.msgAuxDown = InitMessages();
+    instance->input.msgPreedit = InitMessages();
+    instance->input.candList = CandidateWordInit();
     instance->sem = sem;
     
     if (!LoadConfig(&instance->config))
         goto error_exit;
+    
+    CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
+    
     if (!ProcessOption(instance, argc, argv))
         goto error_exit;
     
@@ -228,18 +234,6 @@ void EndInstance(FcitxInstance* instance)
     }
     
     sem_post(instance->sem);
-}
-
-FCITX_EXPORT_API
-Messages* GetMessageUp(FcitxInstance *instance)
-{
-    return instance->messageUp;
-}
-
-FCITX_EXPORT_API
-Messages* GetMessageDown(FcitxInstance *instance)
-{
-    return instance->messageDown;
 }
 
 void FcitxInitThread(FcitxInstance* inst)

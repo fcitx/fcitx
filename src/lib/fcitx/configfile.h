@@ -27,12 +27,6 @@
 extern "C" {
 #endif
 
-typedef enum _ADJUSTORDER {
-    AD_NO = 0,
-    AD_FAST = 1,
-    AD_FREQ = 2
-} ADJUSTORDER;
-
 typedef enum _SWITCHKEY {
     S_R_CTRL = 0,
     S_R_SHIFT = 1,

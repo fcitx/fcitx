@@ -32,6 +32,7 @@
 #include "instance.h"
 #include "hook-internal.h"
 #include "ime-internal.h"
+#include "candidate.h"
 
 /**
  * @file ui.c
@@ -437,3 +438,45 @@ void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
 
+FCITX_EXPORT_API
+int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messages* msgDown)
+{
+    int i = 0;
+    FcitxInputState* input = &instance->input;
+    int extraLength = input->iCursorPos;
+    SetMessageCount(msgUp, 0);
+    SetMessageCount(msgDown, 0);
+    for (i = 0; i < GetMessageCount(input->msgAuxUp) ; i ++)
+    {
+        AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), GetMessageString(input->msgAuxUp, i));
+        extraLength += strlen(GetMessageString(input->msgAuxUp, i));
+    }
+    
+    for (i = 0; i < GetMessageCount(input->msgPreedit) ; i ++)
+        AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), GetMessageString(input->msgPreedit, i));
+
+    for (i = 0; i < GetMessageCount(input->msgAuxDown) ; i ++)
+        AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), GetMessageString(input->msgAuxDown, i));
+
+    CandidateWord* candWord = NULL;
+    
+    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+            candWord != NULL;
+            candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
+        char strTemp[3] = { '\0', '\0', '\0' };
+        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+        if (ConfigGetPointAfterNumber(&instance->config))
+            strTemp[1] = '.';
+
+        AddMessageAtLast(msgDown, MSG_INDEX, strTemp);
+        MSG_TYPE type = MSG_OTHER;
+        if (i == 0 && CandidateWordGetCurrentPage(input->candList) == 0)
+            type = MSG_FIRSTCAND;
+        AddMessageAtLast(msgDown, MSG_OTHER, candWord->strWord);
+        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+            AddMessageAtLast(msgDown, MSG_CODE, candWord->strExtra);
+        AddMessageAtLast(msgDown, MSG_OTHER, " ");
+    }
+    
+    return extraLength;
+}
