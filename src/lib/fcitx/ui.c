@@ -472,7 +472,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         MSG_TYPE type = MSG_OTHER;
         if (i == 0 && CandidateWordGetCurrentPage(input->candList) == 0)
             type = MSG_FIRSTCAND;
-        AddMessageAtLast(msgDown, MSG_OTHER, candWord->strWord);
+        AddMessageAtLast(msgDown, type, candWord->strWord);
         if (candWord->strExtra && strlen(candWord->strExtra) != 0)
             AddMessageAtLast(msgDown, MSG_CODE, candWord->strExtra);
         AddMessageAtLast(msgDown, MSG_OTHER, " ");

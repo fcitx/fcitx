@@ -206,15 +206,14 @@ void EndInstance(FcitxInstance* instance)
     FcitxAddon** pfrontend;
     FcitxFrontend* frontend;
     FcitxInputContext* rec = NULL;
-    FcitxInputContext* last = NULL;
 
-    for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
+    for (rec = instance->ic_list; rec != NULL; rec = rec->next) {
         pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->CloseIM((*pfrontend)->addonInstance, rec);
     }
 
-    for (rec = instance->ic_list; rec != NULL; last = rec, rec = rec->next) {
+    for (rec = instance->ic_list; rec != NULL; rec = rec->next) {
         pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);
         frontend = (*pfrontend)->frontend;
         frontend->DestroyIC((*pfrontend)->addonInstance, rec);

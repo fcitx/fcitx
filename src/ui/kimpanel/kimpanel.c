@@ -319,18 +319,6 @@ void KimpanelMoveInputWindow(void* arg)
     FcitxInputContext* ic = GetCurrentIC(kimpanel->owner);
     GetWindowPosition(kimpanel->owner, ic, &x, &y);
 
-    int iTempInputWindowX, iTempInputWindowY;
-
-    if (x < 0)
-        iTempInputWindowX = 0;
-    else
-        iTempInputWindowX = x + kimpanel->iOffsetX;
-
-    if (y < 0)
-        iTempInputWindowY = 0;
-    else
-        iTempInputWindowY = y + kimpanel->iOffsetY;
-
     KimUpdateSpotLocation(kimpanel, x, y);
 }
 
