@@ -402,7 +402,7 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
-    if (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)
+    if (GetCurrentIC(instance)->state == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS))
     {
         CleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
@@ -413,7 +413,7 @@ INPUT_RETURN_VALUE ProcessKey(
         * since all candidate word are cached in candList, so we don't need to trigger
         * GetCandWords after go for another page, simply update input window is ok.
         */
-    if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    if (GetCurrentIC(instance)->state == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
     {
         if (IsHotKey(sym, state, fc->hkPrevPage))
         {
@@ -427,12 +427,7 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
-    /* even the retVal is not IRV_TO_PROCESS, we will let the
-     * PostInputFilter run.
-     * Actually we cannot control the behave of every module,
-     * User should make sure there isn't malware
-     */
-    if (!input->bIsDoInputOnly)
+    if (GetCurrentIC(instance)->state == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
     {
         ProcessPostInputFilter(instance, sym, state, &retVal);
     }
@@ -851,4 +846,4 @@ int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose)
 
     return -1;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

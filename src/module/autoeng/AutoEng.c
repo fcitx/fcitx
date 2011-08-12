@@ -259,17 +259,14 @@ boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
     FcitxInputState* input = &autoEngState->owner->input;
-    Messages *msgUp = input->msgAuxUp;
-    Messages *msgDown = input->msgAuxDown;
 
-    SetMessageCount(msgUp, 0);
-    SetMessageCount(msgDown, 0);
+    CleanInputWindow(autoEngState->owner);
 
     if (autoEngState->buf[0] == '\0')
         return;
 
-    AddMessageAtLast(msgUp, MSG_INPUT, autoEngState->buf);
-    AddMessageAtLast(msgDown, MSG_OTHER, _("Press enter to input text"));
+    AddMessageAtLast(input->msgPreedit, MSG_INPUT, autoEngState->buf);
+    AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Press enter to input text"));
 }
 
 void ReloadAutoEng(void* arg)
@@ -278,4 +275,4 @@ void ReloadAutoEng(void* arg)
     FreeAutoEng(autoEngState);
     LoadAutoEng(autoEngState);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
