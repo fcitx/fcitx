@@ -204,18 +204,21 @@ bool FcitxInputContext::isComposing() const
 bool FcitxInputContext::filterEvent(const QEvent* event)
 {
 #ifndef Q_WS_X11
+    QWidget* keywidget = focusWidget();
 
     if (key_filtered)
         return false;
-    if (!isValid())
-        return QInputContext::filterEvent(event);
 
-    QWidget* keywidget = focusWidget();
+    if (!keywidget->testAttribute(Qt::WA_WState_Created))
+        return false;
+
     if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         return false;
 
-    if (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease)
+    if (!isValid() || (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease))
+    {
         return QInputContext::filterEvent(event);
+    }
 
     const QKeyEvent *key_event = static_cast<const QKeyEvent*> (event);
     if (!m_enable)

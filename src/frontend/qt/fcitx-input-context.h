@@ -76,4 +76,4 @@ private:
 
 #endif //__FCITX_INPUT_CONTEXT_H_
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
