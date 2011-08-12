@@ -2445,6 +2445,8 @@ extern "C"
         KEY_SUPER_COMP = 1 << 6,
         KEY_SCROLLLOCK = 1 << 7,
         KEY_MOUSE_PRESSED = 1 << 8,
+        KEY_HANDLED_MASK = 1 << 24,
+        KEY_IGNORED_MASK = 1 << 25,
         KEY_USED_MASK = 0x5c001fff
     } KEY_STATE;
 

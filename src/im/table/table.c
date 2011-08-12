@@ -340,7 +340,6 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                         char        *strTemp;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
-                        RECORD      *pLastCandRecord = (RECORD *)NULL;
 
                         strLastFirstCand = (char *)NULL;
                         lastFirstCandType = CT_AUTOPHRASE;
@@ -355,7 +354,6 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                                 INPUT_RETURN_VALUE ret = _TableGetCandWord (tbl, tableCandWord, false);
                                 if (ret & IRV_FLAG_PENDING_COMMIT_STRING)
                                     strLastFirstCand = GetOutputString(input);
-                                pLastCandRecord = tbl->pCurCandRecord;
                             }
                         }
 

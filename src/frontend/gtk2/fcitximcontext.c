@@ -65,6 +65,11 @@ struct _FcitxIMContext {
     gboolean is_inpreedit;
 };
 
+typedef struct _ProcessKeyStruct {
+    FcitxIMContext* context;
+    GdkEventKey* event;
+} ProcessKeyStruct;
+
 struct _FcitxIMContextClass {
     GtkIMContextClass parent;
     /* klass members */
@@ -126,6 +131,8 @@ static void
 _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data);
 static void
 _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data);
+static void
+_fcitx_im_context_process_key_cb(DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer user_data);
 
 static GdkEventKey *
 _create_gdk_event (FcitxIMContext *fcitxcontext,
@@ -386,6 +393,13 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+
+    if (G_UNLIKELY (event->state & KEY_HANDLED_MASK))
+        return TRUE;
+
+    if (G_UNLIKELY (event->state & KEY_IGNORED_MASK))
+        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+
     if (IsFcitxIMClientValid(fcitxcontext->client))
     {
         /* XXX it is a workaround for some applications do not set client window. */
@@ -408,33 +422,55 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
         }
 
         fcitxcontext->time = event->time;
-        int ret = FcitxIMClientProcessKey(fcitxcontext->client,
-                                          event->keyval,
-                                          event->hardware_keycode,
-                                          event->state,
-                                          (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
-                                          event->time);
-        if (ret <= 0)
-        {
-            return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
-        }
-        else
-        {
-            /* this is a hack for mozilla firefox, maybe also for all xulrunner app */
-            if (!fcitxcontext->is_inpreedit)
-            {
-                fcitxcontext->is_inpreedit = true;
-                g_signal_emit (context, _signal_preedit_start_id, 0);
-                g_signal_emit (context, _signal_preedit_changed_id, 0);
-            }
-            return true;
-        }
+        ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
+        pks->context = fcitxcontext;
+        pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
+        FcitxIMClientProcessKey(fcitxcontext->client,
+                                _fcitx_im_context_process_key_cb,
+                                pks,
+                                g_free,
+                                event->keyval,
+                                event->hardware_keycode,
+                                event->state,
+                                (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
+                                event->time);
+        event->state |= KEY_HANDLED_MASK;
+        return TRUE;
     }
     else
     {
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
     }
     return FALSE;
+}
+
+static void
+_fcitx_im_context_process_key_cb(DBusGProxy *proxy,
+                                 DBusGProxyCall *call_id,
+                                 gpointer user_data)
+{
+    ProcessKeyStruct* pks = user_data;
+    FcitxIMContext* fcitxcontext = FCITX_IM_CONTEXT(pks->context);
+    GdkEventKey* event = pks->event;
+    GError* error = NULL;
+    int ret;
+    dbus_g_proxy_end_call(proxy, call_id, &error, G_TYPE_INT, &ret, G_TYPE_INVALID);
+    if (ret <= 0)
+    {
+        event->state |= KEY_IGNORED_MASK;
+        gdk_event_put ((GdkEvent *)event);
+    }
+    else
+    {
+        /* this is a hack for mozilla firefox, maybe also for all xulrunner app */
+        if (!fcitxcontext->is_inpreedit)
+        {
+            fcitxcontext->is_inpreedit = true;
+            g_signal_emit (fcitxcontext, _signal_preedit_start_id, 0);
+            g_signal_emit (fcitxcontext, _signal_preedit_changed_id, 0);
+        }
+    }
+    gdk_event_free ((GdkEvent *)event);
 }
 
 ///
@@ -705,6 +741,7 @@ void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint sta
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     FcitxKeyEventType tp = (FcitxKeyEventType) type;
     GdkEventKey* event = _create_gdk_event(context, keyval, state, tp);
+    event->state |= KEY_IGNORED_MASK;
     gdk_event_put ((GdkEvent *)event);
     gdk_event_free ((GdkEvent *)event);
 }
@@ -721,7 +758,7 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     gchar buf[8];
 
     GdkEventKey *event = (GdkEventKey *)gdk_event_new ((type == FCITX_RELEASE_KEY) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
-
+    
     if (fcitxcontext && fcitxcontext->client_window)
         event->window = g_object_ref (fcitxcontext->client_window);
 
@@ -923,4 +960,4 @@ void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
     context->enable = false;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

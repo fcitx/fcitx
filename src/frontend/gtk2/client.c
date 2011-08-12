@@ -52,6 +52,10 @@ static void FcitxIMClientCreateIC(FcitxIMClient* client);
 static void _destroy_cb(DBusGProxy *proxy, gpointer user_data);
 static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char* new_owner, gpointer user_data);
 
+static void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
+        DBusGProxyCall *call_id,
+        gpointer user_data);
+
 boolean IsFcitxIMClientValid(FcitxIMClient* client)
 {
     if (client == NULL)
@@ -147,7 +151,6 @@ static void _destroy_cb(DBusGProxy *proxy, gpointer user_data)
 void FcitxIMClientCreateIC(FcitxIMClient* client)
 {
     GError* error = NULL;
-    int id = -1;
 
     client->proxy = dbus_g_proxy_new_for_name_owner(client->conn,
                     client->servicename,
@@ -160,24 +163,35 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
 
     g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
 
-    dbus_g_proxy_call(client->proxy, "CreateIC", &error, G_TYPE_INVALID, G_TYPE_INT, &id, G_TYPE_INVALID);
-    if (id >= 0)
-        client->id = id;
-    else
-        return;
+    dbus_g_proxy_begin_call(client->proxy, "CreateIC", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_INVALID);
+}
+
+void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
+                                   DBusGProxyCall *call_id,
+                                   gpointer user_data)
+{
+    FcitxIMClient* client = (FcitxIMClient*) user_data;
+    GError *error = NULL;
 
     guint arg1, arg2, arg3, arg4;
-    dbus_g_proxy_call(client->proxy, "GetTriggerKey", &error, G_TYPE_INVALID,
-                      G_TYPE_UINT, &arg1,
-                      G_TYPE_UINT, &arg2,
-                      G_TYPE_UINT, &arg3,
-                      G_TYPE_UINT, &arg4,
-                      G_TYPE_INVALID
-                     );
+    int id = -1;
+    dbus_g_proxy_end_call(proxy, call_id, &error,
+                          G_TYPE_INT, &id,
+                          G_TYPE_UINT, &arg1,
+                          G_TYPE_UINT, &arg2,
+                          G_TYPE_UINT, &arg3,
+                          G_TYPE_UINT, &arg4,
+                          G_TYPE_INVALID
+                         );
     client->triggerkey[0].sym = arg1;
     client->triggerkey[0].state = arg2;
     client->triggerkey[1].sym = arg3;
     client->triggerkey[1].state = arg4;
+
+    if (id >= 0)
+        client->id = id;
+    else
+        return;
 
     sprintf(client->icname, FCITX_IC_DBUS_PATH, client->id);
 
@@ -253,28 +267,24 @@ void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y)
     }
 }
 
-int FcitxIMClientProcessKey(FcitxIMClient* client, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t)
+void FcitxIMClientProcessKey(FcitxIMClient* client,
+                             DBusGProxyCallNotify callback,
+                             void* user_data,
+                             GDestroyNotify notify,
+                             uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t)
 {
-    int ret;
     int itype = type;
-    GError* error = NULL;
-    if (!dbus_g_proxy_call(client->icproxy, "ProcessKeyEvent",
-                           &error,
-                           G_TYPE_UINT, keyval,
-                           G_TYPE_UINT, keycode,
-                           G_TYPE_UINT, state,
-                           G_TYPE_INT, itype,
-                           G_TYPE_UINT, t,
-                           G_TYPE_INVALID,
-                           G_TYPE_INT, &ret,
-                           G_TYPE_INVALID
-                          ))
-    {
-        return -1;
-    }
-
-
-    return ret;
+    dbus_g_proxy_begin_call(client->icproxy, "ProcessKeyEvent",
+                            callback,
+                            user_data,
+                            notify,
+                            G_TYPE_UINT, keyval,
+                            G_TYPE_UINT, keycode,
+                            G_TYPE_UINT, state,
+                            G_TYPE_INT, itype,
+                            G_TYPE_UINT, t,
+                            G_TYPE_INVALID
+                           );
 }
 
 void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
@@ -319,4 +329,4 @@ HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
 {
     return client->triggerkey;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

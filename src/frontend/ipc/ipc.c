@@ -75,8 +75,6 @@ const char * im_introspection_xml =
     "  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">\n"
     "    <method name=\"CreateIC\">\n"
     "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
-    "    </method>\n"
-    "    <method name=\"GetTriggerKey\">\n"
     "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
     "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
     "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
@@ -193,7 +191,18 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     ipc->maxid ++;
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
-    dbus_message_append_args(reply, DBUS_TYPE_INT32, &ipcic->id, DBUS_TYPE_INVALID);
+    uint32_t arg1, arg2, arg3, arg4;
+    arg1 = ipc->owner->config.hkTrigger[0].sym;
+    arg2 = ipc->owner->config.hkTrigger[0].state;
+    arg3 = ipc->owner->config.hkTrigger[1].sym;
+    arg4 = ipc->owner->config.hkTrigger[1].state;
+    dbus_message_append_args(reply,
+                             DBUS_TYPE_INT32, &ipcic->id,
+                             DBUS_TYPE_UINT32, &arg1,
+                             DBUS_TYPE_UINT32, &arg2,
+                             DBUS_TYPE_UINT32, &arg3,
+                             DBUS_TYPE_UINT32, &arg4,
+                             DBUS_TYPE_INVALID);
     dbus_connection_send (ipc->conn, reply, NULL);
     dbus_message_unref (reply);
 
@@ -319,24 +328,6 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
     else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
     {
         CreateIC(ipc->owner, ipc->frontendid, msg);
-        return DBUS_HANDLER_RESULT_HANDLED;
-    }
-    else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetTriggerKey"))
-    {
-        DBusMessage *reply = dbus_message_new_method_return(msg);
-        uint32_t arg1, arg2, arg3, arg4;
-        arg1 = ipc->owner->config.hkTrigger[0].sym;
-        arg2 = ipc->owner->config.hkTrigger[0].state;
-        arg3 = ipc->owner->config.hkTrigger[1].sym;
-        arg4 = ipc->owner->config.hkTrigger[1].state;
-        dbus_message_append_args(reply,
-                                 DBUS_TYPE_UINT32, &arg1,
-                                 DBUS_TYPE_UINT32, &arg2,
-                                 DBUS_TYPE_UINT32, &arg3,
-                                 DBUS_TYPE_UINT32, &arg4,
-                                 DBUS_TYPE_INVALID);
-        dbus_connection_send (ipc->conn, reply, NULL);
-        dbus_message_unref (reply);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

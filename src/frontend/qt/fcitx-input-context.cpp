@@ -10,6 +10,7 @@
 #include "frontend/ipc/ipc.h"
 #include "fcitx-compose-data.h"
 #include "fcitx-input-context.h"
+#include "keyserver_x11.h"
 
 #if defined(Q_WS_X11)
 #include <QX11Info>
@@ -221,7 +222,7 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
     {
         FcitxKeySym fcitxsym;
         uint fcitxstate;
-        GetKey(key_event->nativeVirtualKey(), key_event->nativeModifiers(), &fcitxsym, &fcitxstate);
+        GetKey((FcitxKeySym) key_event->nativeVirtualKey(), key_event->nativeModifiers(), &fcitxsym, &fcitxstate);
         if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey))
         {
             if (m_slave && m_slave->filterEvent(event ))
@@ -242,7 +243,7 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
                                        key_event->nativeModifiers(),
                                        (event->type() == QEvent::KeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
                                        time
-                                                                       );
+                                      );
     {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher (result);
@@ -268,10 +269,38 @@ QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 {
     Q_UNUSED(keyval);
     Q_UNUSED(state);
+
+    Qt::KeyboardModifiers qstate = Qt::NoModifier;
+
+    int count = 1;
+    if(state & KEY_ALT_COMP)
+    {
+        qstate |= Qt::AltModifier;
+        count ++;
+    }
+
+    if(state & KEY_SHIFT_COMP)
+    {
+        qstate |= Qt::ShiftModifier;
+        count ++;
+    }
+
+    if(state & KEY_CTRL_COMP)
+    {
+        qstate |= Qt::ControlModifier;
+        count ++;
+    }
+
+    int key;
+    symToKeyQt(keyval, key);
+
     QKeyEvent* keyevent = new QKeyEvent(
         (type == FCITX_PRESS_KEY)? (QEvent::KeyPress) : (QEvent::KeyRelease),
-        0,
-        Qt::NoModifier
+        key,
+        qstate,
+        QString(),
+        false,
+        count
     );
 
     return keyevent;
@@ -364,14 +393,13 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 
     m_icproxy->FocusIn();
 
-    QDBusPendingReply< int > result =  this->m_icproxy->ProcessKeyEvent(sym,
-                                       event->xkey.keycode,
-                                       event->xkey.state,
-                                       (event->type == XKeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
-                                       event->xkey.time
-                                                                       );
-
-
+    QDBusPendingReply< int > result = this->m_icproxy->ProcessKeyEvent(
+                                          sym,
+                                          event->xkey.keycode,
+                                          event->xkey.state,
+                                          (event->type == XKeyPress)?FCITX_PRESS_KEY:FCITX_RELEASE_KEY,
+                                          event->xkey.time
+                                      );
     {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher (result);
@@ -447,24 +475,24 @@ void FcitxInputContext::createInputContext()
     if (!m_improxy->isValid())
         return;
 
-    QDBusPendingReply< uint, uint, uint, uint > triggerKey = m_improxy->GetTriggerKey();
-    triggerKey.waitForFinished();
+    QDBusPendingReply< int, uint, uint, uint, uint > result = m_improxy->CreateIC();
+    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(result);
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(createInputContextFinished(QDBusPendingCallWatcher*)));
+}
 
-    if (triggerKey.isError())
-        return ;
-
-    m_triggerKey[0].sym = (FcitxKeySym) qdbus_cast<uint>(triggerKey.argumentAt(0));
-    m_triggerKey[0].state = qdbus_cast<uint>(triggerKey.argumentAt(1));
-    m_triggerKey[1].sym = (FcitxKeySym) qdbus_cast<uint>(triggerKey.argumentAt(2));
-    m_triggerKey[1].state = qdbus_cast<uint>(triggerKey.argumentAt(3));
-
-    QDBusPendingReply< int > result = m_improxy->CreateIC();
-    result.waitForFinished();
+void FcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* watcher)
+{
+    QDBusPendingReply< int, uint, uint, uint, uint > result = *watcher;
     if (result.isError())
         qWarning() << result.error();
     else
     {
-        this->m_id = result.value();
+
+        this->m_id = qdbus_cast<int>(result.argumentAt(0));
+        m_triggerKey[0].sym = (FcitxKeySym) qdbus_cast<uint>(result.argumentAt(1));
+        m_triggerKey[0].state = qdbus_cast<uint>(result.argumentAt(2));
+        m_triggerKey[1].sym = (FcitxKeySym) qdbus_cast<uint>(result.argumentAt(3));
+        m_triggerKey[1].state = qdbus_cast<uint>(result.argumentAt(4));
         this->m_path = QString(FCITX_IC_DBUS_PATH_QSTRING).arg(m_id);
         m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, m_connection, this);
         connect(m_icproxy, SIGNAL(CloseIM()), this, SLOT(closeIM()));
@@ -475,6 +503,7 @@ void FcitxInputContext::createInputContext()
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
     }
+    delete watcher;
 }
 
 void FcitxInputContext::closeIM()
@@ -509,7 +538,7 @@ void FcitxInputContext::forwardKey(uint keyval, uint state, int type)
         qApp->x11ProcessEvent(xevent);
         free(xevent);
 #else
-        QKeyEvent *keyevent = createKeyEvent(keyval, state, typedef);
+        QKeyEvent *keyevent = createKeyEvent(keyval, state, type);
         QApplication::sendEvent(widget, keyevent);
         delete keyevent;
 #endif
@@ -766,4 +795,4 @@ FcitxInputContext::checkCompactTable (const FcitxComposeTableCompact *table)
     }
     return false;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

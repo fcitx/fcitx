@@ -4,8 +4,6 @@
   <interface name="org.fcitx.Fcitx.InputMethod">
     <method name="CreateIC">
       <arg name="icid" direction="out" type="i"/>
-    </method>
-    <method name="GetTriggerKey">
       <arg name="keyval1" direction="out" type="u"/>
       <arg name="state1" direction="out" type="u"/>
       <arg name="keyval2" direction="out" type="u"/>

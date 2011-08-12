@@ -46,6 +46,7 @@ private Q_SLOTS:
     void commitString(const QString& str);
     void forwardKey(uint keyval, uint state, int type);
     void destroySlaveContext();
+    void createInputContextFinished(QDBusPendingCallWatcher* watcher);
 private:
     void createInputContext();
     bool processCompose (uint keyval, uint state, FcitxKeyEventType event);
