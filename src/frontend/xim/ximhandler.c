@@ -60,6 +60,8 @@ Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
     if (!SetCurrentIC(xim->owner, ic))
         return True;
 
+    SetTrackPos(xim, ic, NULL);
+
     if (ic)
     {
         OnInputFocus(xim->owner);
@@ -132,15 +134,19 @@ void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct 
         return;
 
     int i;
-    XICAttribute *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
+    FcitxXimIC* ximic = GetXimIC(ic);
+    if (call_data)
+    {
+        XICAttribute *pre_attr = ((IMChangeICStruct *) call_data)->preedit_attr;
 
-    for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
-        if (!strcmp(XNSpotLocation, pre_attr->name)) {
-            ic->offset_x = (*(XPoint *) pre_attr->value).x;
-            ic->offset_y = (*(XPoint *) pre_attr->value).y;
+        for (i = 0; i < (int) ((IMChangeICStruct *) call_data)->preedit_attr_num; i++, pre_attr++) {
+            if (!strcmp(XNSpotLocation, pre_attr->name)) {
+                ximic->bHasCursorLocation = true;
+                ximic->offset_x = (*(XPoint *) pre_attr->value).x;
+                ximic->offset_y = (*(XPoint *) pre_attr->value).y;
+            }
         }
     }
-    FcitxXimIC* ximic = GetXimIC(ic);
 
     Window window = None;
     if (ximic->focus_win)
@@ -148,14 +154,28 @@ void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct 
     else if (ximic->client_win)
         window = ximic->client_win;
 
-    if (window != None && (ic->offset_x < 0 || ic->offset_y < 0))
-    {
 
+    if (window != None)
+    {
+        Window dst;
         XWindowAttributes attr;
         XGetWindowAttributes(xim->display, window, &attr);
 
-        ic->offset_x = 0;
-        ic->offset_y = attr.height;
+        if  (ximic->offset_x < 0 && ximic->offset_y < 0)
+        {
+
+            XTranslateCoordinates (xim->display, window, RootWindow(xim->display, xim->iScreen),
+                                   0, attr.height,
+                                   &ic->offset_x, &ic->offset_y,
+                                   &dst
+                                  );
+        }
+        else {
+            XTranslateCoordinates (xim->display, window, RootWindow(xim->display, xim->iScreen),
+                                   ximic->offset_x, ximic->offset_y,
+                                   &ic->offset_x, &ic->offset_y,
+                                   &dst);
+        }
     }
 
     if (ic == GetCurrentIC(xim->owner))
@@ -203,11 +223,17 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
                                            kev->time,
                                            sym, state);
 
-    if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
+    if ((retVal & IRV_FLAG_FORWARD_KEY) || retVal == IRV_TO_PROCESS)
+    {
         XimForwardKeyInternal(xim,
                               GetXimIC(ic),
                               &call_data->event
                              );
+    }
+    else {
+        if (!GetXimIC(ic)->bHasCursorLocation)
+            SetTrackPos(xim, ic, NULL);
+    }
     xim->currentSerialNumberCallData = xim->currentSerialNumberKey = 0L;
 }
 
@@ -277,8 +303,6 @@ XimPreeditCallbackDraw (FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preed
     XIMText text;
     XTextProperty tp;
 
-    XIMFeedback *feedback = xim->feedback;
-    int feedback_len = xim->feedback_len;
     uint i, len;
 
     if (preedit_string == NULL)
@@ -286,20 +310,20 @@ XimPreeditCallbackDraw (FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preed
 
     len = utf8_strlen (preedit_string);
 
-    if (len + 1 > feedback_len) {
-        feedback_len = (len + 1 + 63) & ~63;
-        if (feedback) {
-            feedback = realloc (feedback, sizeof(XIMFeedback) * feedback_len);
+    if (len + 1 > xim->feedback_len) {
+        xim->feedback_len = len + 1;
+        if (xim->feedback) {
+            xim->feedback = realloc (xim->feedback, sizeof(XIMFeedback) * xim->feedback_len);
         }
         else {
-            feedback = fcitx_malloc0 (sizeof(XIMFeedback) * feedback_len);
+            xim->feedback = fcitx_malloc0 (sizeof(XIMFeedback) * xim->feedback_len);
         }
     }
 
     for (i = 0; i < len; i++) {
-        feedback[i] = XIMUnderline;
+        xim->feedback[i] = XIMUnderline;
     }
-    feedback[len] = 0;
+    xim->feedback[len] = 0;
 
     pcb.major_code = XIM_PREEDIT_DRAW;
     pcb.connect_id = ic->connect_id;
@@ -310,7 +334,7 @@ XimPreeditCallbackDraw (FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preed
     pcb.todo.draw.chg_length = ic->onspot_preedit_length;
     pcb.todo.draw.text = &text;
 
-    text.feedback = feedback;
+    text.feedback = xim->feedback;
 
     if (len > 0) {
         Xutf8TextListToTextProperty (xim->display,

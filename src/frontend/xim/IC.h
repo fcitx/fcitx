@@ -80,6 +80,9 @@ typedef struct _FcitxXimIC {
     CARD16 connect_id;
     int bPreeditStarted;
     uint onspot_preedit_length;
+    boolean bHasCursorLocation;
+    int offset_x;
+    int offset_y;
 } FcitxXimIC;
 
 struct FcitxXimFrontend;

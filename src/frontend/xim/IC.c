@@ -91,7 +91,6 @@ static void StoreIC (FcitxXimIC * rec, IMChangeICStruct * call_data)
         else if (Is (XNSpotLocation, pre_attr)) {
             rec->pre_attr.spot_location = *(XPoint *) pre_attr->value;
         }
-
         else if (Is (XNColormap, pre_attr))
             rec->pre_attr.cmap = *(Colormap *) pre_attr->value;
 
@@ -120,7 +119,6 @@ static void StoreIC (FcitxXimIC * rec, IMChangeICStruct * call_data)
         }
         else if (Is (XNLineSpace, pre_attr))
             rec->pre_attr.line_space = *(CARD32 *) pre_attr->value;
-
         else if (Is (XNCursor, pre_attr))
             rec->pre_attr.cursor = *(Cursor *) pre_attr->value;
     }
@@ -183,7 +181,9 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
 
     privic->connect_id = call_data->connect_id;
-    privic->id = ++ xim->icid  ;
+    privic->id = ++ xim->icid;
+    privic->offset_x = -1;
+    privic->offset_y = -1;
     StoreIC (privic, call_data);
     SetTrackPos(xim, context, call_data);
     call_data->icid = privic->id;

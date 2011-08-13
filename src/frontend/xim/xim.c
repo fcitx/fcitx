@@ -284,8 +284,8 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
                  ((IMForwardEventStruct *) call_data)->connect_id);
         break;
     default:
-        FcitxLog(DEBUG, "XIM_DEFAULT:\t\ticid=%d\tconnect_id=%d", ((IMForwardEventStruct *) call_data)->icid,
-                 ((IMForwardEventStruct *) call_data)->connect_id);
+        FcitxLog(DEBUG, "XIM_DEFAULT:\t\ticid=%d\tconnect_id=%d\t%d", ((IMForwardEventStruct *) call_data)->icid,
+                 ((IMForwardEventStruct *) call_data)->connect_id, call_data->major_code);
         break;
     }
 
@@ -313,6 +313,12 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
         return True;
     case XIM_TRIGGER_NOTIFY:
         return XIMTriggerNotifyHandler(ximfrontend, (IMTriggerNotifyStruct *) call_data);
+    case XIM_PREEDIT_START_REPLY:
+        return 0;
+    case XIM_PREEDIT_CARET_REPLY:
+        return 0;
+    case XIM_SYNC_REPLY:
+        return 0;
     default:
         return True;
     }
@@ -440,9 +446,20 @@ void XimCommitString(void* arg, FcitxInputContext* ic, char* str)
     if (!ic)
         return;
 
+    /*
+     * I'm not sure whether xim should commit string before preedit done
+     * but this can fix opera's crash in specific input box
+     * quite strange.
+     */
+    if (GetXimIC(ic)->bPreeditStarted == true) {
+        XimPreeditCallbackDraw (xim, GetXimIC(ic), "", 0);
+        XimPreeditCallbackDone (xim, GetXimIC(ic));
+        GetXimIC(ic)->bPreeditStarted = false;
+    }
+
     Xutf8TextListToTextProperty(xim->display, (char **) &str, 1, XCompoundTextStyle, &tp);
 
-    memset(&cms, 0, sizeof(cms));
+    memset(&cms, 0, sizeof(IMCommitStruct));
     cms.major_code = XIM_COMMIT;
     cms.icid = ximic->id;
     cms.connect_id = ximic->connect_id;
@@ -498,31 +515,8 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 
 void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 {
-    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    FcitxXimIC* ximic = GetXimIC(ic);
-    Window window = None, dst;
-    if (ximic->focus_win)
-        window = ximic->focus_win;
-    else if (ximic->client_win)
-        window = ximic->client_win;
-
-    if (window != None)
-    {
-        if (ic->offset_x < 0 || ic->offset_y < 0)
-        {
-
-            XWindowAttributes attr;
-            XGetWindowAttributes(xim->display, window, &attr);
-
-            ic->offset_x = 0;
-            ic->offset_y = attr.height;
-        }
-        XTranslateCoordinates(xim->display, window, RootWindow(xim->display, xim->iScreen),
-                              ic->offset_x, ic->offset_y,
-                              x, y,
-                              &dst
-                             );
-    }
+    *x= ic->offset_x;
+    *y= ic->offset_y;
 }
 
 void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
@@ -531,7 +525,7 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
     char* strPreedit = MessagesToCString(xim->owner->input.msgPreedit);
 
     if (strlen(strPreedit) == 0 && GetXimIC(ic)->bPreeditStarted == true) {
-        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, xim->owner->input.iCursorPos);
+        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, 0);
         XimPreeditCallbackDone (xim, GetXimIC(ic));
         GetXimIC(ic)->bPreeditStarted = false;
     }
@@ -543,6 +537,8 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
     if (strlen(strPreedit) != 0) {
         XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, xim->owner->input.iCursorPos);
     }
+
+    free(strPreedit);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

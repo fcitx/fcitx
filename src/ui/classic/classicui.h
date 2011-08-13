@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef _UI_H
-#define _UI_H
+#ifndef CLASSICUI_H
+#define CLASSICUI_H
 
 #include "fcitx/fcitx.h"
 #include "fcitx/ui.h"
