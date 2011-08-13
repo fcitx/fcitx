@@ -12,6 +12,9 @@
       <arg name="x" direction="in" type="i"/>
       <arg name="y" direction="in" type="i"/>
     </method>
+    <method name="SetCapacity">
+       <arg name="caps" direction="in" type="u"/>
+    </method>
     <method name="DestroyIC">
     </method>
     <method name="ProcessKeyEvent">

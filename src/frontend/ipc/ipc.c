@@ -104,6 +104,9 @@ const char * ic_introspection_xml =
     "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
     "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
     "    </method>\n"
+    "    <method name=\"SetCapacity\">\n"
+    "      <arg name=\"caps\" direction=\"in\" type=\"u\"/>\n"
+    "    </method>\n"
     "    <method name=\"DestroyIC\">\n"
     "    </method>\n"
     "    <method name=\"ProcessKeyEvent\">\n"
@@ -387,6 +390,13 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
             {
                 IPCICSetCursorLocation(ipc, ic, x, y);
             }
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity"))
+        {
+            uint flags;
+            if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID))
+                ic->contextCaps = flags;
             return DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))

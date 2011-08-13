@@ -176,6 +176,10 @@ extern "C" {
          * @brief hotkey format for 3rd select key
          **/
         HOTKEYS i3rdSelectKey[2];
+
+        boolean bHideInputWindowWhenOnlyPreeditString;
+
+        boolean bHideInputWindowWhenOnlyOneCandidate;
     } FcitxConfig;
 
     /**

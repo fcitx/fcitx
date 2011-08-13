@@ -187,6 +187,9 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     StoreIC (privic, call_data);
     SetTrackPos(xim, context, call_data);
     call_data->icid = privic->id;
+    if (privic->input_style & XIMPreeditCallbacks) {
+        context->contextCaps |= CAPACITY_PREEDIT;
+    }
 
     return;
 }

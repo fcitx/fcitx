@@ -263,6 +263,15 @@ void FcitxIMClientReset(FcitxIMClient* client)
     }
 }
 
+void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags)
+{
+    uint iflags = flags;
+    if (client->icproxy)
+    {
+        dbus_g_proxy_call_no_reply(client->icproxy, "SetCapacity", G_TYPE_UINT, iflags, G_TYPE_INVALID);
+    }
+}
+
 void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y)
 {
     if (client->icproxy)

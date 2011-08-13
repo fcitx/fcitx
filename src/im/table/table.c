@@ -600,6 +600,8 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             }
             else if (IsHotKey(sym, state, FCITX_SPACE)) {
                 retVal = CandidateWordChooseByIndex(input->candList, 0);
+                if (retVal == IRV_TO_PROCESS)
+                    retVal = IRV_DO_NOTHING;
             }
             else
             {
@@ -1241,4 +1243,4 @@ int TableCandCmp(const void* b, const void* a, void *arg)
     return 0;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

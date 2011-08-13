@@ -94,8 +94,6 @@ typedef struct _TableDict {
     RECORD_INDEX* recordIndex;
     unsigned char iCodeLength;
     unsigned char iPYCodeLength;
-    int iTableAutoSendToClientWhenNone;
-    int iTableAutoSendToClient;
     char* strIgnoreChars;
     unsigned char   bRule;
     RULE* rule;
@@ -140,4 +138,4 @@ boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeI
 CONFIG_BINDING_DECLARE(TableMetaData);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

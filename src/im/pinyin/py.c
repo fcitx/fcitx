@@ -1035,7 +1035,9 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     }
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
-        AddMessageAtLast(input->msgPreedit, MSG_CODE, "%s ", pystate->findMap.strPYParsed[i]);
+        AddMessageAtLast(input->msgPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
+        if (i < pystate->findMap.iHZCount - 1)
+            MessageConcat(input->msgPreedit, GetMessageCount(input->msgPreedit) - 1, " ");
     }
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
@@ -2391,4 +2393,4 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
 
     return 0;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

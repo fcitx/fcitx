@@ -23,6 +23,7 @@
 #include <dbus/dbus-glib.h>
 #include "fcitx-config/fcitx-config.h"
 #include "fcitx/ime.h"
+#include "fcitx/frontend.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +40,7 @@ extern "C" {
     void FcitxIMClientFocusIn(FcitxIMClient* client);
     void FcitxIMClientFocusOut(FcitxIMClient* client);
     void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y);
+    void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags);
     void FcitxIMClientReset(FcitxIMClient* client);
     void FcitxIMClientProcessKey(FcitxIMClient* client, DBusGProxyCallNotify callback, void* user_data, GDestroyNotify notify, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t);
     void FcitxIMClientConnectSignal(FcitxIMClient* imclient,

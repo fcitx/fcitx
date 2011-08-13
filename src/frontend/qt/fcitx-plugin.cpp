@@ -89,7 +89,7 @@ FcitxPlugin::create (const QString &key)
         return NULL;
     }
 
-    return static_cast<QInputContext *> (new FcitxInputContext ());
+    return static_cast<QInputContext *> (new QFcitxInputContext ());
 }
 
 

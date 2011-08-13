@@ -137,6 +137,8 @@ static void
 _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data);
 static void
 _fcitx_im_context_process_key_cb(DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer user_data);
+static void
+_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext);
 
 static GdkEventKey *
 _create_gdk_event (FcitxIMContext *fcitxcontext,
@@ -304,7 +306,7 @@ fcitx_im_context_init (FcitxIMContext *context)
     context->area.y = -1;
     context->area.width = 0;
     context->area.height = 0;
-    context->use_preedit = FALSE;
+    context->use_preedit = TRUE;
     context->cursor_pos = 0;
     context->preedit_string = NULL;
 
@@ -648,12 +650,26 @@ static void
 fcitx_im_context_set_use_preedit (GtkIMContext *context,
                                   gboolean      use_preedit)
 {
-    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
+    FcitxLog(INFO, "fcitx_im_context_set_use_preedit");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
 
     fcitxcontext->use_preedit = use_preedit;
+    _fcitx_im_context_set_capacity(fcitxcontext);
 
     gtk_im_context_set_use_preedit(fcitxcontext->slave, use_preedit);
+}
+
+void
+_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext)
+{
+    if (IsFcitxIMClientValid(fcitxcontext->client))
+    {
+        CapacityFlags flags = CAPACITY_NONE;
+        if (fcitxcontext->use_preedit)
+            flags |= CAPACITY_PREEDIT;
+        FcitxIMClientSetCapacity(fcitxcontext->client, flags);
+
+    }
 }
 
 ///
@@ -1022,6 +1038,7 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
                                    G_CALLBACK(_fcitx_im_context_update_preedit_cb),
                                    context,
                                    NULL);
+        _fcitx_im_context_set_capacity(context);
     }
 
 }

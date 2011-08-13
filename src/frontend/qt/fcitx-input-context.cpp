@@ -3,9 +3,12 @@
 #include <QInputContextFactory>
 #include <QTextCharFormat>
 
-#include <fcitx/ime.h>
 #include <sys/time.h>
 #include <unicode/unorm.h>
+
+#include "fcitx/ime.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx/frontend.h"
 #include "fcitx-config/hotkey.h"
 #include "module/dbus/dbusstuff.h"
 #include "frontend/ipc/ipc.h"
@@ -19,7 +22,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <fcitx-utils/utils.h>
 static const int XKeyPress = KeyPress;
 static const int XKeyRelease = KeyRelease;
 #undef KeyPress
@@ -108,7 +110,7 @@ boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
     return false;
 }
 
-FcitxInputContext::FcitxInputContext()
+QFcitxInputContext::QFcitxInputContext()
         : m_connection(QDBusConnection::sessionBus()),
         m_dbusproxy(0),
         m_improxy(0),
@@ -146,7 +148,7 @@ FcitxInputContext::FcitxInputContext()
     createInputContext();
 }
 
-FcitxInputContext::~FcitxInputContext()
+QFcitxInputContext::~QFcitxInputContext()
 {
     delete m_dbusproxy;
     if (m_improxy)
@@ -162,17 +164,17 @@ FcitxInputContext::~FcitxInputContext()
     }
 }
 
-QString FcitxInputContext::identifierName()
+QString QFcitxInputContext::identifierName()
 {
     return FCITX_IDENTIFIER_NAME;
 }
 
-QString FcitxInputContext::language()
+QString QFcitxInputContext::language()
 {
     return "";
 }
 
-void FcitxInputContext::reset()
+void QFcitxInputContext::reset()
 {
     if (isValid())
         m_icproxy->Reset();
@@ -180,7 +182,7 @@ void FcitxInputContext::reset()
         m_slave->reset();
 }
 
-void FcitxInputContext::update()
+void QFcitxInputContext::update()
 {
     QWidget* widget = focusWidget();
     if (widget == NULL || !isValid())
@@ -197,12 +199,12 @@ void FcitxInputContext::update()
 }
 
 
-bool FcitxInputContext::isComposing() const
+bool QFcitxInputContext::isComposing() const
 {
     return false;
 }
 
-bool FcitxInputContext::filterEvent(const QEvent* event)
+bool QFcitxInputContext::filterEvent(const QEvent* event)
 {
 #ifndef Q_WS_X11
     QWidget* keywidget = focusWidget();
@@ -269,7 +271,7 @@ bool FcitxInputContext::filterEvent(const QEvent* event)
 
 }
 
-QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
+QKeyEvent* QFcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 {
     Q_UNUSED(keyval);
     Q_UNUSED(state);
@@ -310,7 +312,7 @@ QKeyEvent* FcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
     return keyevent;
 }
 
-void FcitxInputContext::setFocusWidget(QWidget* w)
+void QFcitxInputContext::setFocusWidget(QWidget* w)
 {
     QWidget *oldFocus = focusWidget();
 
@@ -344,7 +346,7 @@ void FcitxInputContext::setFocusWidget(QWidget* w)
     update ();
 }
 
-void FcitxInputContext::widgetDestroyed(QWidget* w)
+void QFcitxInputContext::widgetDestroyed(QWidget* w)
 {
     QInputContext::widgetDestroyed(w);
     if (m_slave)
@@ -359,7 +361,7 @@ void FcitxInputContext::widgetDestroyed(QWidget* w)
 
 #if defined(Q_WS_X11)
 
-bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
+bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 {
     if (key_filtered)
         return false;
@@ -423,7 +425,7 @@ bool FcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     return false;
 }
 
-bool FcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event, KeySym sym)
+bool QFcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event, KeySym sym)
 {
     if (m_slave && m_slave->x11FilterEvent(keywidget, event))
         return true;
@@ -443,7 +445,7 @@ bool FcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event
 #endif // Q_WS_X11
 
 
-void FcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
+void QFcitxInputContext::imChanged(const QString& service, const QString& oldowner, const QString& newowner)
 {
     if (service == m_serviceName)
     {
@@ -472,7 +474,7 @@ void FcitxInputContext::imChanged(const QString& service, const QString& oldowne
     }
 }
 
-void FcitxInputContext::createInputContext()
+void QFcitxInputContext::createInputContext()
 {
     m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, m_connection, this);
 
@@ -484,7 +486,7 @@ void FcitxInputContext::createInputContext()
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(createInputContextFinished(QDBusPendingCallWatcher*)));
 }
 
-void FcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* watcher)
+void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* watcher)
 {
     QDBusPendingReply< int, uint, uint, uint, uint > result = *watcher;
     if (result.isError())
@@ -507,21 +509,24 @@ void FcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* watc
 
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
+
+        if (m_icproxy)
+            m_icproxy->SetCapacity(CAPACITY_PREEDIT);
     }
     delete watcher;
 }
 
-void FcitxInputContext::closeIM()
+void QFcitxInputContext::closeIM()
 {
     this->m_enable = false;
 }
 
-void FcitxInputContext::enableIM()
+void QFcitxInputContext::enableIM()
 {
     this->m_enable = true;
 }
 
-void FcitxInputContext::commitString(const QString& str)
+void QFcitxInputContext::commitString(const QString& str)
 {
     QInputMethodEvent event;
     event.setCommitString(str);
@@ -529,7 +534,7 @@ void FcitxInputContext::commitString(const QString& str)
     update();
 }
 
-void FcitxInputContext::updatePreedit(const QString& str, int cursorPos)
+void QFcitxInputContext::updatePreedit(const QString& str, int cursorPos)
 {
     QByteArray array = str.toUtf8();
     array.truncate(cursorPos);
@@ -545,7 +550,7 @@ void FcitxInputContext::updatePreedit(const QString& str, int cursorPos)
     update();
 }
 
-void FcitxInputContext::forwardKey(uint keyval, uint state, int type)
+void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
 {
     QWidget* widget = focusWidget();
     if (widget != NULL)
@@ -568,7 +573,7 @@ void FcitxInputContext::forwardKey(uint keyval, uint state, int type)
 }
 
 #ifdef Q_WS_X11
-XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type)
+XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type)
 {
     XEvent* xevent = static_cast<XEvent*> (malloc(sizeof(XEvent)));
     XKeyEvent *xkeyevent = &xevent->xkey;
@@ -599,12 +604,12 @@ XEvent* FcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint
 }
 #endif
 
-bool FcitxInputContext::isValid()
+bool QFcitxInputContext::isValid()
 {
     return m_icproxy != NULL && m_icproxy->isValid();
 }
 
-void FcitxInputContext::destroySlaveContext()
+void QFcitxInputContext::destroySlaveContext()
 {
     if ( m_slave )
     {
@@ -614,7 +619,7 @@ void FcitxInputContext::destroySlaveContext()
 }
 
 bool
-FcitxInputContext::processCompose (uint keyval, uint state, FcitxKeyEventType event)
+QFcitxInputContext::processCompose (uint keyval, uint state, FcitxKeyEventType event)
 {
     Q_UNUSED(state);
     int i;
@@ -659,7 +664,7 @@ FcitxInputContext::processCompose (uint keyval, uint state, FcitxKeyEventType ev
 quint32 fcitx_keyval_to_unicode (uint keyval);
 
 bool
-FcitxInputContext::checkAlgorithmically ()
+QFcitxInputContext::checkAlgorithmically ()
 {
     int i;
     UChar combination_buffer[FCITX_MAX_COMPOSE_LEN];
@@ -757,7 +762,7 @@ case Key_dead_##keysym: combination_buffer[i + 1] = unicode; break
 
 
 bool
-FcitxInputContext::checkCompactTable (const FcitxComposeTableCompact *table)
+QFcitxInputContext::checkCompactTable (const FcitxComposeTableCompact *table)
 {
     int row_stride;
     const quint32 *seq_index;

@@ -67,6 +67,16 @@ Type=Boolean
 DefaultValue=True
 Description=Show Version
 
+[Appearance/HideInputWindowWhenOnlyPreeditString]
+Type=Boolean
+DefaultValue=False
+Description=Do not show input window if there is only preedit string
+
+[Appearance/HideInputWindowWhenOnlyOneCandidate]
+Type=Boolean
+DefaultValue=False
+Description=Do not show input window if there is one one candidate (Hide when only preedit string must be selected)
+
 [Hotkey/TriggerKey]
 Type=Hotkey
 DefaultValue=CTRL_SPACE

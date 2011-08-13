@@ -225,6 +225,9 @@ void UpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
 
+    if (!(ic->contextCaps & CAPACITY_PREEDIT))
+        return;
+
     UT_array* frontends = &instance->frontends;
 
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);

@@ -63,10 +63,10 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     /* ********************************************************************** */
 
     fread (&(tableDict->iCodeLength), sizeof (unsigned char), 1, fpDict);
-    if (tableDict->iTableAutoSendToClient == -1)
-        tableDict->iTableAutoSendToClient = tableDict->iCodeLength;
-    if (tableDict->iTableAutoSendToClientWhenNone == -1)
-        tableDict->iTableAutoSendToClientWhenNone = tableDict->iCodeLength;
+    if (tableMetaData->iTableAutoSendToClient == -1)
+        tableMetaData->iTableAutoSendToClient = tableDict->iCodeLength;
+    if (tableMetaData->iTableAutoSendToClientWhenNone == -1)
+        tableMetaData->iTableAutoSendToClientWhenNone = tableDict->iCodeLength;
 
     if (!iVersion)
         fread (&(tableDict->iPYCodeLength), sizeof (unsigned char), 1, fpDict);
@@ -791,4 +791,4 @@ boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeI
     }
     return false;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

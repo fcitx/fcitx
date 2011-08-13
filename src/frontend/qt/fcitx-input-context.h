@@ -19,11 +19,11 @@
 #define FCITX_IDENTIFIER_NAME "fcitx"
 #define FCITX_MAX_COMPOSE_LEN 7
 
-class FcitxInputContext : public QInputContext {
+class QFcitxInputContext : public QInputContext {
     Q_OBJECT
 public:
-    FcitxInputContext ();
-    ~FcitxInputContext ();
+    QFcitxInputContext ();
+    ~QFcitxInputContext ();
 
     virtual QString identifierName();
     virtual QString language();

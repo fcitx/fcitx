@@ -564,12 +564,35 @@ char* MessagesToCString(Messages* messages)
 void UpdateInputWindowReal(FcitxInstance *instance)
 {
     FcitxInputState* input = &instance->input;
+    FcitxInputContext* ic = GetCurrentIC(instance);
+    CapacityFlags flags = CAPACITY_NONE;
+    if (ic != NULL)
+        flags = ic->contextCaps;
 
-    if (GetMessageCount(input->msgAuxUp) == 0
-            && GetMessageCount(input->msgAuxDown) == 0
-            && CandidateWordPageCount(input->candList) == 0
-            && GetMessageCount(input->msgPreedit) == 0)
-        CloseInputWindow(instance);
+    boolean toshow = false;
+
+    if (GetMessageCount(input->msgAuxUp) != 0
+       || GetMessageCount(input->msgAuxDown) != 0)
+        toshow = true;
+
+    if (CandidateWordGetListSize(input->candList) > 1)
+        toshow = true;
+
+    if (CandidateWordGetListSize(input->candList) == 1
+        && (!instance->config.bHideInputWindowWhenOnlyPreeditString
+        || !instance->config.bHideInputWindowWhenOnlyOneCandidate))
+        toshow = true;
+
+    if (GetMessageCount(input->msgPreedit) != 0
+        && !((flags & CAPACITY_PREEDIT ) && instance->config.bHideInputWindowWhenOnlyPreeditString))
+        toshow = true;
+
+    if (!toshow)
+    {
+        UpdatePreedit(instance, ic);
+        if (instance->ui && instance->ui->ui->CloseInputWindow)
+            instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
+    }
     else
         ShowInputWindow(instance);
 }

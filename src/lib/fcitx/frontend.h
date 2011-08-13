@@ -41,6 +41,11 @@ extern "C" {
         IS_ACTIVE
     } IME_STATE;
 
+    typedef enum _CapacityFlags {
+        CAPACITY_NONE = 0,
+        CAPACITY_PREEDIT = (1 << 1)
+    } CapacityFlags;
+
     /**
      * @brief Input Context, normally one for one program
      **/
@@ -50,6 +55,7 @@ extern "C" {
         int offset_x, offset_y;
         int frontendid;
         void *privateic;
+        CapacityFlags contextCaps;
         struct _FcitxInputContext* next;
     } FcitxInputContext;
 
