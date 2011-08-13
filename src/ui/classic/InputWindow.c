@@ -182,6 +182,7 @@ void DrawInputWindow(InputWindow* inputWindow)
         cairo_xlib_surface_set_size(inputWindow->cs_x_input_bar,
                                     inputWindow->iInputWindowWidth,
                                     inputWindow->iInputWindowHeight);
+        MoveInputWindowInternal(inputWindow);
         XResizeWindow(
             inputWindow->dpy,
             inputWindow->window,
@@ -226,9 +227,9 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
 
     if ((iTempInputWindowY + inputWindow->iInputWindowHeight) > dheight) {
         if ( iTempInputWindowY > dheight )
-            iTempInputWindowY = dheight - 2 * inputWindow->iInputWindowHeight;
+            iTempInputWindowY = dheight - inputWindow->iInputWindowHeight - 40;
         else
-            iTempInputWindowY = iTempInputWindowY - 2 * inputWindow->iInputWindowHeight;
+            iTempInputWindowY = iTempInputWindowY - inputWindow->iInputWindowHeight - 40;
     }
     XMoveWindow (inputWindow->dpy, inputWindow->window, iTempInputWindowX, iTempInputWindowY);
 }
