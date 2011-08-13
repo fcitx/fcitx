@@ -128,10 +128,6 @@
 @REL_SOURCE_ROOT@/src/lib/fcitx/profile.h
 @REL_SOURCE_ROOT@/src/lib/fcitx/frontend.c
 @REL_SOURCE_ROOT@/src/lib/fcitx/frontend.h
-@REL_SOURCE_ROOT@/src/frontend/fbterm/fcitx-fbterm.c
-@REL_SOURCE_ROOT@/src/frontend/fbterm/imapi.c
-@REL_SOURCE_ROOT@/src/frontend/fbterm/imapi.h
-@REL_SOURCE_ROOT@/src/frontend/fbterm/immessage.h
 @REL_SOURCE_ROOT@/src/frontend/gtk2/client.c
 @REL_SOURCE_ROOT@/src/frontend/gtk2/client.h
 @REL_SOURCE_ROOT@/src/frontend/gtk2/fcitxim.c

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-12 01:28+0800\n"
-"PO-Revision-Date: 2011-08-12 01:28+0800\n"
+"POT-Creation-Date: 2011-08-14 01:52+0800\n"
+"PO-Revision-Date: 2011-08-14 01:54+0800\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Lokalize 1.2\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1162
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1165
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:798
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:780
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -142,11 +142,11 @@ msgstr "无法加载默认皮肤，安装是否正确？"
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:136
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:214
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:216
 msgid "Can't open Chinese punc file."
 msgstr "无法打开中文标点文件。"
 
@@ -167,22 +167,22 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1804
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1820
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1868
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1884
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1749
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1765
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:519
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:520
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -208,11 +208,11 @@ msgstr "中文模式图标"
 msgid "Choose"
 msgstr "选择键"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:579
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:580
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:570
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:571
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
@@ -242,7 +242,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1160
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1163
 msgid "Code is "
 msgstr "编码为 "
 
@@ -268,7 +268,7 @@ msgstr "提交输入"
 msgid "Configure"
 msgstr "配置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:731
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:908
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
@@ -336,16 +336,26 @@ msgstr "禁用插件 %s，依赖 %s 无法满足。"
 msgid "Disabled"
 msgstr "禁用"
 
-#: /home/saber/Develop/fcitx/data/config.desc:83
+#: /home/saber/Develop/fcitx/data/config.desc:78
+msgid ""
+"Do not show input window if there is one one candidate (Hide when only "
+"preedit string must be selected)"
+msgstr "只有一个候选词时不显示输入窗口（只有预编辑字符串时不显示窗口必须选中）"
+
+#: /home/saber/Develop/fcitx/data/config.desc:73
+msgid "Do not show input window if there is only preedit string"
+msgstr "只有预编辑字符串时不显示输入窗口"
+
+#: /home/saber/Develop/fcitx/data/config.desc:98
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:741
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:921
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr "组名重复，和之前的组合并: %s :行 %d"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:805
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:997
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
@@ -370,15 +380,15 @@ msgstr "中止键"
 msgid "English Mode Icon"
 msgstr "英文模式图标"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:336
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:405
 msgid "Enum Option is invalid, take it as string"
 msgstr "枚举选项不合法，将类型作为字符串处理"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:313
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:373
 msgid "Enum option duplicated."
 msgstr "枚举选项重复"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:326
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:390
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
@@ -452,11 +462,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:280
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:301
 msgid "Frontend: bad frontend"
 msgstr "前端: 有问题的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:274
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:295
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
@@ -518,7 +528,7 @@ msgstr "提示词库中词组"
 msgid "Hide"
 msgstr "隐藏"
 
-#: /home/saber/Develop/fcitx/data/config.desc:68
+#: /home/saber/Develop/fcitx/data/config.desc:83
 msgid "Hot key of Triggering Input Method"
 msgstr "快捷键: 切换输入法"
 
@@ -538,11 +548,11 @@ msgstr "快捷键: 删除用户词组"
 msgid "Hotkey of Deleting Frequent Word"
 msgstr "快捷键: 删除常用字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:118
+#: /home/saber/Develop/fcitx/data/config.desc:133
 msgid "Hotkey of Going Next Page"
 msgstr "快捷键: 后一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:113
+#: /home/saber/Develop/fcitx/data/config.desc:128
 msgid "Hotkey of Going Prev Page"
 msgstr "快捷键: 前一页"
 
@@ -550,31 +560,31 @@ msgstr "快捷键: 前一页"
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr "快捷键: 以词定字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:128
+#: /home/saber/Develop/fcitx/data/config.desc:143
 msgid "Hotkey of Saving All Config and Input History"
 msgstr "快捷键: 保存配置及输入历史"
 
-#: /home/saber/Develop/fcitx/data/config.desc:108
+#: /home/saber/Develop/fcitx/data/config.desc:123
 msgid "Hotkey of Switch Full Width Punc Mode"
 msgstr "切换全角标点的快捷键"
 
-#: /home/saber/Develop/fcitx/data/config.desc:78
+#: /home/saber/Develop/fcitx/data/config.desc:93
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr "快捷键: 切换中英文输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:103
+#: /home/saber/Develop/fcitx/data/config.desc:118
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
-#: /home/saber/Develop/fcitx/data/config.desc:98
+#: /home/saber/Develop/fcitx/data/config.desc:113
 msgid "Hotkey of Switching Remind Mode"
 msgstr "快捷键: 切换联想模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:93
+#: /home/saber/Develop/fcitx/data/config.desc:108
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr "快捷键: 切换虚拟键盘"
 
-#: /home/saber/Develop/fcitx/data/config.desc:123
+#: /home/saber/Develop/fcitx/data/config.desc:138
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
@@ -592,14 +602,13 @@ msgstr "输入法: 打开%s 失败 %s"
 msgid "Icon Name"
 msgstr "图标名称"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:150
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:151
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr ""
-"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:151
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:152
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
 msgstr "如果您使用 ~/.xinitrc 和 startx，请将这些行加入到 ~/.xinitrc 中。"
 
@@ -621,7 +630,7 @@ msgid "Input Message Color"
 msgstr "输入信息颜色"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:744
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:726
 msgid "Input Method"
 msgstr "输入法"
 
@@ -631,7 +640,7 @@ msgstr "输入法"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:796
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:778
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -640,11 +649,11 @@ msgstr "输入速度: "
 msgid "InputMethod"
 msgstr "输入法"
 
-#: /home/saber/Develop/fcitx/data/config.desc:88
+#: /home/saber/Develop/fcitx/data/config.desc:103
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:758
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:942
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "配置项不合法:  行%d 缺少'='"
@@ -683,7 +692,7 @@ msgstr "输入文字左下角"
 msgid "Left-down position of Output"
 msgstr "输出文字左下角"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:489
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:490
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -701,7 +710,7 @@ msgstr "加载附加组件配置文件: %s"
 #. *
 #. * @brief define a singleton function to load config file description
 #. *
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.h:318
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.h:336
 #, c-format
 msgid "Load Config Description File %s Erorr, Please Check your install."
 msgstr "加载配置描述文件 %s 错误，请检查您的安装。"
@@ -712,7 +721,7 @@ msgstr "加载配置描述文件 %s 错误，请检查您的安装。"
 msgid "Load Config File %s"
 msgstr "加载配置文件: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:202
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:205
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
@@ -750,11 +759,11 @@ msgstr "菜单字体"
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2266
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2282
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:349
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:419
 msgid "Missing type, take it as string"
 msgstr "类型缺失，作为字符串处理"
 
@@ -805,7 +814,7 @@ msgid "No available Input Method"
 msgstr "无用输入法"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:303
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:324
 msgid "No available frontend"
 msgstr "无可用前端"
 
@@ -826,12 +835,12 @@ msgstr "OpenCC 错误"
 msgid "OpenCC initialization error"
 msgstr "OpenCC 初始化失败"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:933
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1152
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "配置项%s不合法，使用默认值%s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:942
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1164
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
@@ -848,7 +857,7 @@ msgstr "其他颜色"
 msgid "Output"
 msgstr "输出"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1160
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -865,38 +874,38 @@ msgstr "拼音键"
 msgid "Pinyin Priority Order, 0 to disable"
 msgstr "拼音输入法优先级，0为禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:517
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:518
 msgid "Pinyin: "
 msgstr "拼音："
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:145
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:146
 msgid "Please check your environment varibles."
 msgstr "请检查你的环境变量的设置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:151
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:174
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:819
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:833
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:821
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:835
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:252
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:272
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:277
 msgid "Press enter to input text"
 msgstr "按下回车输入文本"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:777
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:791
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr "按下索引来删除用户词组 (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:789
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:803
 msgid "Press number to make word in frequent list"
 msgstr "按下数字加入常用字表"
 
@@ -974,11 +983,11 @@ msgstr "右Ctrl"
 msgid "R_SHIFT"
 msgstr "右Shift"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1057
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1060
 msgid "Remind:"
 msgstr "联想："
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2125
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2141
 msgid "Remind: "
 msgstr "联想："
 
@@ -1038,7 +1047,7 @@ msgstr "Fcitx真正启动前延迟的秒数"
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:153
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:154
 msgid "Setting Hint"
 msgstr "设置提示"
 
@@ -1050,19 +1059,23 @@ msgstr "共享库"
 msgid "Show"
 msgstr "显示"
 
-#: /home/saber/Develop/fcitx/data/config.desc:58
+#: /home/saber/Develop/fcitx/data/config.desc:63
 msgid "Show Input Speed"
 msgstr "显示输入速度"
 
-#: /home/saber/Develop/fcitx/data/config.desc:48
+#: /home/saber/Develop/fcitx/data/config.desc:53
 msgid "Show Input Window After Trigger Input Mode"
 msgstr "切换输入时显示输入条"
 
-#: /home/saber/Develop/fcitx/data/config.desc:53
+#: /home/saber/Develop/fcitx/data/config.desc:58
 msgid "Show Point After Index"
 msgstr "序号后加点"
 
-#: /home/saber/Develop/fcitx/data/config.desc:63
+#: /home/saber/Develop/fcitx/data/config.desc:48
+msgid "Show Preedit String in Client Window"
+msgstr "在客户端窗口中显示预编辑字符串"
+
+#: /home/saber/Develop/fcitx/data/config.desc:68
 msgid "Show Version"
 msgstr "显示版本"
 
@@ -1140,7 +1153,7 @@ msgstr "空格输入 ； 回车输入;"
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:209
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:232
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
@@ -1161,7 +1174,7 @@ msgstr "码表"
 msgid "Table Code Color"
 msgstr "码表提示颜色"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:212
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:215
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
@@ -1179,7 +1192,7 @@ msgstr "提示信息颜色"
 msgid "Toggle for enable or disable"
 msgstr "切换来禁用或启用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:225
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:230
 msgid "Too long item for AutoEng"
 msgstr "自动英文条目过长"
 
@@ -1198,11 +1211,11 @@ msgstr "类型"
 msgid "UI"
 msgstr "界面"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:149
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:166
 msgid "UI: bad ui"
 msgstr "界面: 有问题的界面"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:143
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:158
 #, c-format
 msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"
@@ -1212,7 +1225,7 @@ msgstr "界面: 打开 %s 失败 %s"
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:343
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:413
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
@@ -1298,15 +1311,15 @@ msgstr "X11 支持"
 msgid "X11 Utilitiy used by other Addon"
 msgstr "由其他插件使用的 X11 工具函数"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:125
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
 msgid "X11 not initialized"
 msgstr "X11 未初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:147
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:170
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:146
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:147
 msgid ""
 "You may need to set environment varibles below to make fcitx work correctly."
 msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
@@ -1315,11 +1328,11 @@ msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:800
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:782
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:985
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1212
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"
@@ -1328,7 +1341,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:244
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:251
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
