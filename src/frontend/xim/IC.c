@@ -34,6 +34,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "fcitx-utils/log.h"
 #include "xim.h"
 #include <fcitx-utils/utils.h>
+#include "ximhandler.h"
 
 /**
  * @file IC.c
@@ -184,6 +185,7 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     privic->connect_id = call_data->connect_id;
     privic->id = ++ xim->icid  ;
     StoreIC (privic, call_data);
+    SetTrackPos(xim, context, call_data);
     call_data->icid = privic->id;
 
     return;
@@ -353,4 +355,4 @@ void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
     }
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

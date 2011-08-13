@@ -285,6 +285,7 @@ extern "C" {
     boolean UISupportMainWindow(struct _FcitxInstance* instance);
     void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
     int NewMessageToOldStyleMessage(struct _FcitxInstance* instance, Messages* msgUp, Messages* msgDown);
+    char* MessagesToCString(Messages* messages);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 
@@ -294,4 +295,4 @@ extern "C" {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

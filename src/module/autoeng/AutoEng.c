@@ -149,10 +149,15 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     {
         if (IsHotKeySimple(sym,state))
         {
-            autoEngState->buf[autoEngState->index] = sym;
-            autoEngState->index++;
-            autoEngState->buf[autoEngState->index] = '\0';
-            *retval = IRV_DISPLAY_MESSAGE;
+            if (autoEngState->index < MAX_USER_INPUT)
+            {
+                autoEngState->buf[autoEngState->index] = sym;
+                autoEngState->index++;
+                autoEngState->buf[autoEngState->index] = '\0';
+                *retval = IRV_DISPLAY_MESSAGE;
+            }
+            else
+                *retval = IRV_DO_NOTHING;
         }
         else if (IsHotKey(sym, state, FCITX_BACKSPACE))
         {
@@ -266,6 +271,9 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
         return;
 
     AddMessageAtLast(input->msgPreedit, MSG_INPUT, autoEngState->buf);
+    strcpy(input->strCodeInput, autoEngState->buf);
+    input->iCodeInputCount = strlen(autoEngState->buf);
+    input->iCursorPos = input->iCodeInputCount;
     AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Press enter to input text"));
 }
 

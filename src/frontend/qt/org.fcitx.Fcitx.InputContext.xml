@@ -29,6 +29,10 @@
     <signal name="CommitString">
       <arg name="str" type="s"/>
     </signal>
+    <signal name="UpdatePreedit">
+      <arg name="str" type="s"/>
+      <arg name="cursorpos" type="i"/>
+    </signal>
     <signal name="ForwardKey">
       <arg name="keyval" type="u"/>
       <arg name="state" type="u"/>

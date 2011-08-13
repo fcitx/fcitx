@@ -91,6 +91,11 @@ extern "C" {
          **/
         boolean bPhraseTips;
 
+        /**
+         * @brief phrase tips
+         **/
+        boolean bUsePreedit;
+
         /* appearance config */
         /**
          * @brief show input window after trigger on
@@ -208,4 +213,4 @@ extern "C" {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

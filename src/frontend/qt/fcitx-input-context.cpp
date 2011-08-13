@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QEventLoop>
 #include <QInputContextFactory>
+#include <QTextCharFormat>
 
 #include <fcitx/ime.h>
 #include <sys/time.h>
@@ -502,6 +503,7 @@ void FcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* watc
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(EnableIM()), this, SLOT(enableIM()));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
+        connect(m_icproxy, SIGNAL(UpdatePreedit(QString,int)), this, SLOT(updatePreedit(QString, int)));
 
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
@@ -523,6 +525,22 @@ void FcitxInputContext::commitString(const QString& str)
 {
     QInputMethodEvent event;
     event.setCommitString(str);
+    sendEvent(event);
+    update();
+}
+
+void FcitxInputContext::updatePreedit(const QString& str, int cursorPos)
+{
+    QByteArray array = str.toUtf8();
+    array.truncate(cursorPos);
+    cursorPos = QString::fromUtf8(array).length();
+
+    QList<QAttribute> attrList;
+    QTextCharFormat format;
+    format.setUnderlineStyle(QTextCharFormat::DashUnderline);
+    attrList.append(QAttribute(QInputMethodEvent::Cursor, cursorPos, 1, 0));
+    attrList.append(QAttribute(QInputMethodEvent::TextFormat, 0, str.length(), format));
+    QInputMethodEvent event(str, attrList);
     sendEvent(event);
     update();
 }

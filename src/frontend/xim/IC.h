@@ -78,6 +78,8 @@ typedef struct _FcitxXimIC {
     StatusAttributes sts_attr;	/* status attributes */
 
     CARD16 connect_id;
+    int bPreeditStarted;
+    uint onspot_preedit_length;
 } FcitxXimIC;
 
 struct FcitxXimFrontend;
@@ -90,4 +92,4 @@ void     XimGetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

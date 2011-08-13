@@ -208,6 +208,10 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
     dbus_g_proxy_add_signal(client->icproxy, "CloseIM", G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->icproxy, "CommitString", G_TYPE_STRING, G_TYPE_INVALID);
 
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_INT, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INVALID);
+
+    dbus_g_proxy_add_signal(client->icproxy, "UpdatePreedit", G_TYPE_STRING, G_TYPE_INT, G_TYPE_INVALID);
+
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
 
     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
@@ -292,6 +296,7 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                 GCallback closeIM,
                                 GCallback commitString,
                                 GCallback forwardKey,
+                                GCallback updatePreedit,
                                 void* user_data,
                                 GClosureNotify freefunc
                                )
@@ -320,6 +325,13 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
     dbus_g_proxy_connect_signal(imclient->icproxy,
                                 "ForwardKey",
                                 forwardKey,
+                                user_data,
+                                freefunc
+                               );
+
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+                                "UpdatePreedit",
+                                updatePreedit,
                                 user_data,
                                 freefunc
                                );

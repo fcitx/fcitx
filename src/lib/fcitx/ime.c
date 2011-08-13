@@ -689,6 +689,10 @@ FCITX_EXPORT_API
 void UpdateInputWindow(FcitxInstance *instance)
 {
     FcitxInputState* input = &instance->input;
+
+    if (IsMessageChanged(input->msgPreedit))
+        UpdatePreedit(instance, GetCurrentIC(instance));
+
     if (GetMessageCount(input->msgAuxUp) == 0
             && GetMessageCount(input->msgAuxDown) == 0
             && CandidateWordPageCount(input->candList) == 0

@@ -69,6 +69,11 @@ extern "C" {
         void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
         void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y);
         void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
+        void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
+        void (*padding1)();
+        void (*padding2)();
+        void (*padding3)();
+        void (*padding4)();
     } FcitxFrontend;
 
     /**
@@ -184,6 +189,8 @@ extern "C" {
      **/
     void GetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
 
+    void UpdatePreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
+
     /**
      * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
      *
@@ -197,4 +204,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

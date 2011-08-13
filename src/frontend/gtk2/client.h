@@ -46,6 +46,7 @@ extern "C" {
                                     GCallback closeIM,
                                     GCallback commitString,
                                     GCallback forwardKey,
+                                    GCallback updatePreedit,
                                     void* user_data,
                                     GClosureNotify freefunc
                                    );
@@ -56,4 +57,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

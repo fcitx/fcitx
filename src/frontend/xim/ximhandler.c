@@ -29,8 +29,6 @@
 #include "Xi18n.h"
 #include "IC.h"
 
-static void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct* call_data);
-
 Bool XIMOpenHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
     return True;
@@ -47,7 +45,8 @@ Bool XIMGetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     XimSetIC(xim, call_data);
-    SetTrackPos(xim, call_data);
+    FcitxInputContext* ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    SetTrackPos(xim, ic, call_data);
 
     return True;
 }
@@ -127,12 +126,9 @@ Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call
 }
 
 
-void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
+void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct * call_data)
 {
-    FcitxInputContext* ic = GetCurrentIC(xim->owner);
     if (ic == NULL)
-        return;
-    if (ic != FindIC(xim->owner, xim->frontendid, &call_data->icid))
         return;
 
     int i;
@@ -162,7 +158,8 @@ void SetTrackPos(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
         ic->offset_y = attr.height;
     }
 
-    MoveInputWindow(xim->owner);
+    if (ic == GetCurrentIC(xim->owner))
+        MoveInputWindow(xim->owner);
 }
 
 void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
@@ -244,4 +241,94 @@ void XIMClose(FcitxXimFrontend* xim, FcitxInputContext* ic, FcitxKeySym sym, uns
 
     IMPreeditEnd(xim->ims, (XPointer) &call_data);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+
+
+void
+XimPreeditCallbackStart (FcitxXimFrontend *xim, const FcitxXimIC* ic)
+{
+    IMPreeditCBStruct pcb;
+
+    pcb.major_code = XIM_PREEDIT_START;
+    pcb.minor_code = 0;
+    pcb.connect_id = ic->connect_id;
+    pcb.icid = ic->id;
+    pcb.todo.return_value = 0;
+    IMCallCallback (xim->ims, (XPointer) & pcb);
+}
+
+
+void
+XimPreeditCallbackDone (FcitxXimFrontend *xim, const FcitxXimIC* ic)
+{
+    IMPreeditCBStruct pcb;
+
+    pcb.major_code = XIM_PREEDIT_DONE;
+    pcb.minor_code = 0;
+    pcb.connect_id = ic->connect_id;
+    pcb.icid = ic->id;
+    pcb.todo.return_value = 0;
+    IMCallCallback (xim->ims, (XPointer) & pcb);
+}
+
+void
+XimPreeditCallbackDraw (FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedit_string, int cursorPos)
+{
+    IMPreeditCBStruct pcb;
+    XIMText text;
+    XTextProperty tp;
+
+    XIMFeedback *feedback = xim->feedback;
+    int feedback_len = xim->feedback_len;
+    uint i, len;
+
+    if (preedit_string == NULL)
+        return;
+
+    len = utf8_strlen (preedit_string);
+
+    if (len + 1 > feedback_len) {
+        feedback_len = (len + 1 + 63) & ~63;
+        if (feedback) {
+            feedback = realloc (feedback, sizeof(XIMFeedback) * feedback_len);
+        }
+        else {
+            feedback = fcitx_malloc0 (sizeof(XIMFeedback) * feedback_len);
+        }
+    }
+
+    for (i = 0; i < len; i++) {
+        feedback[i] = XIMUnderline;
+    }
+    feedback[len] = 0;
+
+    pcb.major_code = XIM_PREEDIT_DRAW;
+    pcb.connect_id = ic->connect_id;
+    pcb.icid = ic->id;
+
+    pcb.todo.draw.caret = cursorPos;
+    pcb.todo.draw.chg_first = 0;
+    pcb.todo.draw.chg_length = ic->onspot_preedit_length;
+    pcb.todo.draw.text = &text;
+
+    text.feedback = feedback;
+
+    if (len > 0) {
+        Xutf8TextListToTextProperty (xim->display,
+                                     (char **)&preedit_string,
+                                     1, XCompoundTextStyle, &tp);
+        text.encoding_is_wchar = 0;
+        text.length = strlen ((char*)tp.value);
+        text.string.multi_byte = (char*)tp.value;
+        IMCallCallback (xim->ims, (XPointer) & pcb);
+        XFree (tp.value);
+    } else {
+        text.encoding_is_wchar = 0;
+        text.length = 0;
+        text.string.multi_byte = "";
+        IMCallCallback (xim->ims, (XPointer) & pcb);
+        len = 0;
+    }
+    ic->onspot_preedit_length = len;
+}
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -273,8 +273,10 @@ void ReloadInputWindow(void* arg, boolean enabled)
 
 void ShowInputWindowInternal(InputWindow* inputWindow)
 {
+    if (!WindowIsVisable(inputWindow->dpy, inputWindow->window))
+        MoveInputWindowInternal(inputWindow);
     XMapRaised(inputWindow->dpy, inputWindow->window);
     DrawInputWindow(inputWindow);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

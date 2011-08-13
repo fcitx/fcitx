@@ -55,6 +55,7 @@ static void IPCCommitString(void* arg, FcitxInputContext* ic, char* str);
 static void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
+static void IPCUpdatePreedit(void* arg, FcitxInputContext* ic);
 static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data);
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
@@ -120,6 +121,10 @@ const char * ic_introspection_xml =
     "    <signal name=\"CommitString\">\n"
     "      <arg name=\"str\" type=\"s\"/>\n"
     "    </signal>\n"
+    "    <signal name=\"UpdatePreedit\">\n"
+    "      <arg name=\"str\" type=\"s\"/>\n"
+    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
+    "    </signal>\n"
     "    <signal name=\"ForwardKey\">\n"
     "      <arg name=\"keyval\" type=\"u\"/>\n"
     "      <arg name=\"state\" type=\"u\"/>\n"
@@ -141,7 +146,12 @@ FcitxFrontend frontend =
     IPCCommitString,
     IPCForwardKey,
     IPCSetWindowOffset,
-    IPCGetWindowPosition
+    IPCGetWindowPosition,
+    IPCUpdatePreedit,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 void* IPCCreate(FcitxInstance* instance, int frontendid)
@@ -506,4 +516,25 @@ static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic,
 
     return;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+
+void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                       FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                       "UpdatePreedit"); // name of the signal
+
+    char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+
+    dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &ipc->owner->input.iCursorPos, DBUS_TYPE_INVALID);
+
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
+    free(strPreedit);
+}
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

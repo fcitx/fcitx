@@ -217,6 +217,24 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 }
 
 FCITX_EXPORT_API
+void UpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (!instance->config.bUsePreedit)
+        return;
+
+    if (ic == NULL)
+        return;
+
+    UT_array* frontends = &instance->frontends;
+
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    frontend->UpdatePreedit((*pfrontend)->addonInstance, ic);
+}
+
+FCITX_EXPORT_API
 void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int y)
 {
     UT_array* frontends = &instance->frontends;
@@ -305,4 +323,4 @@ boolean LoadFrontend(FcitxInstance* instance)
     }
     return true;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -44,6 +44,7 @@ private Q_SLOTS:
     void closeIM();
     void enableIM();
     void commitString(const QString& str);
+    void updatePreedit(const QString& str, int cursorPos);
     void forwardKey(uint keyval, uint state, int type);
     void destroySlaveContext();
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);

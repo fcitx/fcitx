@@ -42,6 +42,11 @@ Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
 
+[Output/PreeditStringInClientWindow]
+Type=Boolean
+DefaultValue=True
+Description=Show Preedit String in Client Window
+
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
 DefaultValue=True

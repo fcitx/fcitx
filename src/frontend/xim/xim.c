@@ -48,25 +48,43 @@ static void XimCommitString(void* arg, FcitxInputContext* ic, char* str);
 static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
+static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 static void SetTriggerKeys (FcitxXimFrontend* xim, char** strKey, int length);
 static inline Bool MyStrcmp (char *str1, char *str2);
 
+#if 0
 static XIMStyle Styles[] = {
     XIMPreeditPosition | XIMStatusArea, //OverTheSpot
     XIMPreeditPosition | XIMStatusNothing,      //OverTheSpot
     XIMPreeditPosition | XIMStatusNone, //OverTheSpot
     XIMPreeditNothing | XIMStatusNothing,       //Root
     XIMPreeditNothing | XIMStatusNone,  //Root
-    /*    XIMPreeditCallbacks | XIMStatusCallbacks, //OnTheSpot
-        XIMPreeditCallbacks | XIMStatusArea,        //OnTheSpot
-        XIMPreeditCallbacks | XIMStatusNothing,     //OnTheSpot
-        XIMPreeditArea | XIMStatusArea,         //OffTheSpot
-        XIMPreeditArea | XIMStatusNothing,      //OffTheSpot
-        XIMPreeditArea | XIMStatusNone,         //OffTheSpot */
+    XIMPreeditCallbacks | XIMStatusNothing,
+    XIMPreeditPosition | XIMStatusCallbacks,
+    XIMPreeditCallbacks | XIMStatusCallbacks,
+    XIMPreeditNothing | XIMStatusCallbacks,
+    /*
+    XIMPreeditArea | XIMStatusArea,         //OffTheSpot
+    XIMPreeditArea | XIMStatusNothing,      //OffTheSpot
+    XIMPreeditArea | XIMStatusNone,         //OffTheSpot */
     0
 };
+#else
+
+static XIMStyle Styles [] = {
+        XIMPreeditPosition | XIMStatusNothing,
+        XIMPreeditCallbacks | XIMStatusNothing,
+        XIMPreeditNothing | XIMStatusNothing,
+        XIMPreeditPosition | XIMStatusCallbacks,
+        XIMPreeditCallbacks | XIMStatusCallbacks,
+        XIMPreeditNothing | XIMStatusCallbacks,
+        0
+    };
+
+
+#endif
 
 FCITX_EXPORT_API
 FcitxFrontend frontend =
@@ -81,7 +99,12 @@ FcitxFrontend frontend =
     XimCommitString,
     XimForwardKey,
     XimSetWindowOffset,
-    XimGetWindowPosition
+    XimGetWindowPosition,
+    XimUpdatePreedit,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 FcitxXimFrontend *ximfrontend;
@@ -501,4 +524,25 @@ void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
                              );
     }
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+
+void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
+{
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
+    char* strPreedit = MessagesToCString(xim->owner->input.msgPreedit);
+
+    if (strlen(strPreedit) == 0 && GetXimIC(ic)->bPreeditStarted == true) {
+        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, xim->owner->input.iCursorPos);
+        XimPreeditCallbackDone (xim, GetXimIC(ic));
+        GetXimIC(ic)->bPreeditStarted = false;
+    }
+
+    if (strlen(strPreedit) != 0 && GetXimIC(ic)->bPreeditStarted == false) {
+        XimPreeditCallbackStart (xim, GetXimIC(ic));
+        GetXimIC(ic)->bPreeditStarted = true;
+    }
+    if (strlen(strPreedit) != 0) {
+        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, xim->owner->input.iCursorPos);
+    }
+}
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
