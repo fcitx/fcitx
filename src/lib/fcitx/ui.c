@@ -288,6 +288,9 @@ FCITX_EXPORT_API
 void UpdateInputWindow(FcitxInstance *instance)
 {
     instance->uiflag |= UI_UPDATE;
+
+    if (IsMessageChanged(instance->input.msgPreedit))
+        UpdatePreedit(instance, GetCurrentIC(instance));
 }
 
 void ShowInputWindow(FcitxInstance* instance)
@@ -561,9 +564,6 @@ char* MessagesToCString(Messages* messages)
 void UpdateInputWindowReal(FcitxInstance *instance)
 {
     FcitxInputState* input = &instance->input;
-
-    if (IsMessageChanged(input->msgPreedit))
-        UpdatePreedit(instance, GetCurrentIC(instance));
 
     if (GetMessageCount(input->msgAuxUp) == 0
             && GetMessageCount(input->msgAuxDown) == 0

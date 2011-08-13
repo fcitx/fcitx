@@ -167,7 +167,6 @@ boolean InputWindowEventHandler(void *arg, XEvent* event)
 void DisplayInputWindow (InputWindow* inputWindow)
 {
     FcitxLog(DEBUG, _("DISPLAY InputWindow"));
-    MoveInputWindowInternal(inputWindow);
     XMapRaised (inputWindow->dpy, inputWindow->window);
 }
 
@@ -188,7 +187,6 @@ void DrawInputWindow(InputWindow* inputWindow)
             inputWindow->window,
             inputWindow->iInputWindowWidth,
             inputWindow->iInputWindowHeight);
-        MoveInputWindowInternal(inputWindow);
     }
 
     cairo_t* c = cairo_create(inputWindow->cs_x_input_bar);

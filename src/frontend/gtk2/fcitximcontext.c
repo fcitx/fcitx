@@ -571,6 +571,7 @@ fcitx_im_context_focus_out (GtkIMContext *context)
         g_free(fcitxcontext->preedit_string);
     fcitxcontext->preedit_string = NULL;
     fcitxcontext->cursor_pos = 0;
+    g_signal_emit (fcitxcontext, _signal_preedit_changed_id, 0);
     g_signal_emit (fcitxcontext, _signal_preedit_end_id, 0);
 
     gtk_im_context_focus_out(fcitxcontext->slave);
@@ -794,6 +795,7 @@ void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
         g_free(context->preedit_string);
     context->preedit_string = NULL;
     context->cursor_pos = 0;
+    g_signal_emit (context, _signal_preedit_changed_id, 0);
     g_signal_emit (context, _signal_preedit_end_id, 0);
 }
 
