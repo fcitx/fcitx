@@ -686,23 +686,6 @@ void ReloadConfig(FcitxInstance *instance)
 }
 
 FCITX_EXPORT_API
-void UpdateInputWindow(FcitxInstance *instance)
-{
-    FcitxInputState* input = &instance->input;
-
-    if (IsMessageChanged(input->msgPreedit))
-        UpdatePreedit(instance, GetCurrentIC(instance));
-
-    if (GetMessageCount(input->msgAuxUp) == 0
-            && GetMessageCount(input->msgAuxDown) == 0
-            && CandidateWordPageCount(input->candList) == 0
-            && GetMessageCount(input->msgPreedit) == 0)
-        CloseInputWindow(instance);
-    else
-        ShowInputWindow(instance);
-}
-
-FCITX_EXPORT_API
 char* GetOutputString(FcitxInputState* input)
 {
     return input->strStringGet;

@@ -38,6 +38,12 @@ extern "C" {
     /* 将输入条上显示的内容分为以下几类 */
 #define MESSAGE_TYPE_COUNT	7
 
+    typedef enum _FcitxUIFlag {
+        UI_NONE = 0,
+        UI_MOVE = (1 << 1),
+        UI_UPDATE = (1 << 2),
+    } FcitxUIFlag;
+
     struct _FcitxInstance;
     typedef enum _MSG_TYPE {
         MSG_TIPS = 0,			//提示文本
@@ -270,7 +276,6 @@ extern "C" {
 
     void MoveInputWindow(struct _FcitxInstance* instance);
     void CloseInputWindow(struct _FcitxInstance* instance);
-    void ShowInputWindow(struct _FcitxInstance* instance);
     void UpdateStatus(struct _FcitxInstance* instance, const char* name);
     void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
     void RegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
@@ -286,6 +291,7 @@ extern "C" {
     void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
     int NewMessageToOldStyleMessage(struct _FcitxInstance* instance, Messages* msgUp, Messages* msgDown);
     char* MessagesToCString(Messages* messages);
+    void UpdateInputWindow(struct _FcitxInstance* instance);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

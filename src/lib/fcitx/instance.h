@@ -80,6 +80,8 @@ extern "C" {
         struct _HookStack* hookInputFocusHook;
         struct _HookStack* hookInputUnFocusHook;
         struct _HookStack* hookUpdateCandidateWordHook;
+
+        FcitxUIFlag uiflag;
     } FcitxInstance;
 
     FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
@@ -92,4 +94,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

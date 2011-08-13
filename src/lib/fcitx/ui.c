@@ -77,6 +77,8 @@ struct _Messages
     boolean changed;
 };
 
+static void ShowInputWindow(FcitxInstance* instance);
+
 FCITX_EXPORT_API
 Messages* InitMessages()
 {
@@ -283,6 +285,11 @@ void CloseInputWindow(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+void UpdateInputWindow(FcitxInstance *instance)
+{
+    instance->uiflag |= UI_UPDATE;
+}
+
 void ShowInputWindow(FcitxInstance* instance)
 {
     if (instance->ui && instance->ui->ui->ShowInputWindow)
@@ -292,8 +299,7 @@ void ShowInputWindow(FcitxInstance* instance)
 FCITX_EXPORT_API
 void MoveInputWindow(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->MoveInputWindow)
-        instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
+    instance->uiflag |= UI_MOVE;
 }
 
 FCITX_EXPORT_API
@@ -550,6 +556,28 @@ char* MessagesToCString(Messages* messages)
         strcat(str, GetMessageString(messages, i));
 
     return str;
+}
+
+void UpdateInputWindowReal(FcitxInstance *instance)
+{
+    FcitxInputState* input = &instance->input;
+
+    if (IsMessageChanged(input->msgPreedit))
+        UpdatePreedit(instance, GetCurrentIC(instance));
+
+    if (GetMessageCount(input->msgAuxUp) == 0
+            && GetMessageCount(input->msgAuxDown) == 0
+            && CandidateWordPageCount(input->candList) == 0
+            && GetMessageCount(input->msgPreedit) == 0)
+        CloseInputWindow(instance);
+    else
+        ShowInputWindow(instance);
+}
+
+void MoveInputWindowReal(FcitxInstance *instance)
+{
+    if (instance->ui && instance->ui->ui->MoveInputWindow)
+        instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4;

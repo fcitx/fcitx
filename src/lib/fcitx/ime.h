@@ -204,7 +204,6 @@ extern "C" {
     void CleanInputWindow(struct _FcitxInstance *instance);
     void CleanInputWindowUp(struct _FcitxInstance *instance);
     void CleanInputWindowDown(struct _FcitxInstance *instance);
-    void UpdateInputWindow(struct _FcitxInstance* instance);
     /**
      * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
      *
@@ -244,4 +243,4 @@ extern "C" {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

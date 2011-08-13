@@ -35,6 +35,7 @@
 #include "frontend.h"
 #include "fcitx-utils/utils.h"
 #include "candidate.h"
+#include "ui-internal.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
         || (icase ? \
@@ -178,6 +179,13 @@ void* RunInstance(void* arg)
             module->ProcessEvent((*pmodule)->addonInstance);
         }
 
+        if (instance->uiflag & UI_MOVE)
+            MoveInputWindowReal(instance);
+
+        if (instance->uiflag & UI_UPDATE)
+            UpdateInputWindowReal(instance);
+
+        instance->uiflag = UI_NONE;
         FD_ZERO(&instance->rfds);
         FD_ZERO(&instance->wfds);
         FD_ZERO(&instance->efds);
@@ -343,4 +351,4 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     return true;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
