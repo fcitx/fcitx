@@ -805,6 +805,7 @@ INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg)
     FcitxInstance *instance = (FcitxInstance*) arg;
     instance->profile->bUsePreedit = !instance->profile->bUsePreedit;
     SaveProfile(instance->profile);
+    UpdateInputWindow(instance);
     return IRV_DO_NOTHING;
 }
 
