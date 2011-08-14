@@ -331,12 +331,6 @@ void SaveClassicUIConfig(FcitxClassicUI *classicui)
         fclose(fp);
 }
 
-Visual * FindARGBVisual (FcitxClassicUI* classicui)
-{
-    FcitxModuleFunctionArg arg;
-    return InvokeFunction(classicui->owner, FCITX_X11, FINDARGBVISUAL, arg);
-}
-
 boolean IsInRspArea(int x0, int y0, FcitxClassicUIStatus* status)
 {
     return IsInBox(x0, y0, status->x, status->y, status->w, status->h);
@@ -505,4 +499,4 @@ boolean WindowIsVisable(Display* dpy, Window window)
     XGetWindowAttributes(dpy, window, &attr);
     return attr.map_state == IsViewable;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
