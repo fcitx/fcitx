@@ -182,9 +182,22 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     }
     if (IsHotKeySimple(sym, state))
     {
+        if (autoEngState->owner->input.iCodeInputCount == 0 && IsHotKeyUAZ(sym, state))
+        {
+            autoEngState->index = 1;
+            autoEngState->buf[0] = sym;
+            autoEngState->buf[1] = '\0';
+            *retval = IRV_DISPLAY_MESSAGE;
+            input->bShowCursor = false;
+            autoEngState->index = strlen(autoEngState->buf);
+            autoEngState->active = true;
+            ShowAutoEngMessage(autoEngState);
+            return true;
+        }
+
         strncpy(autoEngState->buf, autoEngState->owner->input.strCodeInput, MAX_USER_INPUT);
         if (strlen(autoEngState->buf) >= MAX_USER_INPUT - 1)
-            return true;
+            return false;
 
         autoEngState->index = strlen(autoEngState->buf);
         autoEngState->buf[autoEngState->index ++ ] = sym;
