@@ -89,11 +89,13 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->input.msgPreedit = InitMessages();
     instance->input.candList = CandidateWordInit();
     instance->sem = sem;
+    instance->config = fcitx_malloc0(sizeof(FcitxConfig));
+    instance->profile = fcitx_malloc0(sizeof(FcitxProfile));
 
-    if (!LoadConfig(&instance->config))
+    if (!LoadConfig(instance->config))
         goto error_exit;
 
-    CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
+    CandidateWordSetPageSize(instance->input.candList, instance->config->iMaxCandWord);
 
     if (!ProcessOption(instance, argc, argv))
         goto error_exit;
@@ -101,7 +103,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->input.timeStart = time(NULL);
 
     FcitxInitThread(instance);
-    if (!LoadProfile(&instance->profile))
+    if (!LoadProfile(instance->profile))
         goto error_exit;
     if (GetAddonConfigDesc() == NULL)
         goto error_exit;
@@ -122,7 +124,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
     LoadUserInterface(instance);
 
-    SwitchIM(instance, instance->profile.iIMIndex);
+    SwitchIM(instance, instance->profile->iIMIndex);
 
     if (!LoadFrontend(instance))
     {
@@ -130,10 +132,10 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         return instance;
     }
 
-    if (instance->config.bFirstRun)
+    if (instance->config->bFirstRun)
     {
-        instance->config.bFirstRun = false;
-        SaveConfig(&instance->config);
+        instance->config->bFirstRun = false;
+        SaveConfig(instance->config);
 
         const char *imname = "fcitx";
         char strTemp[PATH_MAX];
@@ -270,14 +272,14 @@ int FcitxUnlock(FcitxInstance* inst)
 void ToggleRemindState(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    instance->profile.bUseRemind = !instance->profile.bUseRemind;
-    SaveProfile(&instance->profile);
+    instance->profile->bUseRemind = !instance->profile->bUseRemind;
+    SaveProfile(instance->profile);
 }
 
 boolean GetRemindEnabled(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    return instance->profile.bUseRemind;
+    return instance->profile->bUseRemind;
 }
 
 boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
@@ -343,7 +345,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
         InitAsDaemon();
 
     if (overrideDelay < 0)
-        overrideDelay = instance->config.iDelayStart;
+        overrideDelay = instance->config->iDelayStart;
 
     if (overrideDelay > 0)
         sleep(overrideDelay);

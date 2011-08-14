@@ -1048,7 +1048,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     if (input->bIsInRemind)
         return PYGetRemindCandWords(pystate);
 
-    CandidateWordSetPageSize(input->candList, pystate->owner->config.iMaxCandWord);
+    CandidateWordSetPageSize(input->candList, pystate->owner->config->iMaxCandWord);
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
 
     pystate->iYCDZ = 0;
@@ -1348,7 +1348,7 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, CandidateWord* candWord)
             PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString);
         CleanInputWindow(instance);
         strcpy(GetOutputString(&instance->input), pystate->strPYAuto);
-        if (UseRemind(&instance->profile)) {
+        if (UseRemind(instance->profile)) {
             strcpy(pystate->strPYRemindSource, pystate->strPYAuto);
             strcpy(pystate->strPYRemindMap, strHZString);
             PYGetRemindCandWords(pystate);
@@ -2062,7 +2062,7 @@ INPUT_RETURN_VALUE PYGetRemindCandWords(void *arg)
     int i, j;
     PyPhrase *phrase;
     FcitxPinyinState* pystate = (FcitxPinyinState*) arg;
-    GenericConfig *fc = &pystate->owner->config.gconfig;
+    GenericConfig *fc = &pystate->owner->config->gconfig;
     boolean bDisablePagingInRemind = *(ConfigGetBindValue(fc, "Output", "RemindModeDisablePaging").boolvalue);
     FcitxInputState *input = &pystate->owner->input;
     PYFA* PYFAList = pystate->PYFAList;

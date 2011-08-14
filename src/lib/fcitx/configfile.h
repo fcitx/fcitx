@@ -91,11 +91,6 @@ extern "C" {
          **/
         boolean bPhraseTips;
 
-        /**
-         * @brief phrase tips
-         **/
-        boolean bUsePreedit;
-
         /* appearance config */
         /**
          * @brief show input window after trigger on
@@ -180,6 +175,8 @@ extern "C" {
         boolean bHideInputWindowWhenOnlyPreeditString;
 
         boolean bHideInputWindowWhenOnlyOneCandidate;
+
+        HOTKEYS hkSwitchEmbeddedPreedit[2];
     } FcitxConfig;
 
     /**

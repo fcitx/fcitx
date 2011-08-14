@@ -219,7 +219,7 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 FCITX_EXPORT_API
 void UpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    if (!instance->config.bUsePreedit)
+    if (!instance->profile->bUsePreedit)
         return;
 
     if (ic == NULL)

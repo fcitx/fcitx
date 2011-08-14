@@ -338,7 +338,7 @@ INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = &qpstate->owner->input;
-    FcitxConfig* fc = &qpstate->owner->config;
+    FcitxConfig* fc = qpstate->owner->config;
     int retVal = IRV_TO_PROCESS;
 
     if (IsHotKey(sym, state, fc->hkPrevPage))
@@ -372,7 +372,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate)
     FcitxInputState *input = &qpstate->owner->input;
     FcitxInstance *instance = qpstate->owner;
 
-    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(&instance->config));
+    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(instance->config));
     CandidateWordSetChoose(input->candList, DIGIT_STR_CHOOSE);
 
     pKey = &searchKey;
@@ -436,4 +436,4 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, CandidateWord* candWord)
     return IRV_COMMIT_STRING;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

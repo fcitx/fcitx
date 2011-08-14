@@ -523,7 +523,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         char strTemp[3] = { '\0', '\0', '\0' };
         strTemp[0] = CandidateWordGetChoose(input->candList)[i];
 
-        if (ConfigGetPointAfterNumber(&instance->config))
+        if (ConfigGetPointAfterNumber(instance->config))
             strTemp[1] = '.';
 
         AddMessageAtLast(msgDown, MSG_INDEX, strTemp);
@@ -579,12 +579,12 @@ void UpdateInputWindowReal(FcitxInstance *instance)
         toshow = true;
 
     if (CandidateWordGetListSize(input->candList) == 1
-        && (!instance->config.bHideInputWindowWhenOnlyPreeditString
-        || !instance->config.bHideInputWindowWhenOnlyOneCandidate))
+        && (!instance->config->bHideInputWindowWhenOnlyPreeditString
+        || !instance->config->bHideInputWindowWhenOnlyOneCandidate))
         toshow = true;
 
     if (GetMessageCount(input->msgPreedit) != 0
-        && !((flags & CAPACITY_PREEDIT ) && instance->config.bHideInputWindowWhenOnlyPreeditString))
+        && !((flags & CAPACITY_PREEDIT ) && instance->config->bHideInputWindowWhenOnlyPreeditString && instance->profile->bUsePreedit))
         toshow = true;
 
     if (!toshow)

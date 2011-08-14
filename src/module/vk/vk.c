@@ -138,7 +138,7 @@ void *VKCreate(FcitxInstance* instance)
     vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
 
     HotkeyHook hotkey;
-    hotkey.hotkey = instance->config.hkVK;
+    hotkey.hotkey = instance->config->hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
     RegisterHotkeyFilter(instance, hotkey);

@@ -205,10 +205,10 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
     uint32_t arg1, arg2, arg3, arg4;
-    arg1 = ipc->owner->config.hkTrigger[0].sym;
-    arg2 = ipc->owner->config.hkTrigger[0].state;
-    arg3 = ipc->owner->config.hkTrigger[1].sym;
-    arg4 = ipc->owner->config.hkTrigger[1].state;
+    arg1 = ipc->owner->config->hkTrigger[0].sym;
+    arg2 = ipc->owner->config->hkTrigger[0].state;
+    arg3 = ipc->owner->config->hkTrigger[1].sym;
+    arg4 = ipc->owner->config->hkTrigger[1].state;
     dbus_message_append_args(reply,
                              DBUS_TYPE_INT32, &ipcic->id,
                              DBUS_TYPE_UINT32, &arg1,
@@ -455,7 +455,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     if (originsym == 0)
         return 0;
 
-    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, ipc->owner->config.hkTrigger))
+    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, ipc->owner->config->hkTrigger))
     {
         EnableIM(ipc->owner, ic, false);
         ipc->owner->input.keyReleased = KR_OTHER;

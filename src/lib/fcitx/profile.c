@@ -33,6 +33,7 @@ CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
 CONFIG_BINDING_REGISTER("Profile", "UseRemind", bUseRemind)
 CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex)
 CONFIG_BINDING_REGISTER("Profile", "WidePunc", bUseWidePunc)
+CONFIG_BINDING_REGISTER("Profile", "PreeditStringInClientWindow", bUsePreedit)
 CONFIG_BINDING_END()
 
 /**
@@ -80,4 +81,4 @@ boolean UseRemind(FcitxProfile* profile)
 {
     return profile->bUseRemind;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

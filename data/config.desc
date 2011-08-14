@@ -42,11 +42,6 @@ Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
 
-[Output/PreeditStringInClientWindow]
-Type=Boolean
-DefaultValue=True
-Description=Show Preedit String in Client Window
-
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
 DefaultValue=True
@@ -141,6 +136,11 @@ Description=Hotkey to Choose Second and Third Candidate Word
 Type=Hotkey
 DefaultValue=CTRL_ALT_S
 Description=Hotkey of Saving All Config and Input History
+
+[Hotkey/SwitchPreedit]
+Type=Hotkey
+DefaultValue=CTRL_ALT_P
+Description=Hotkey of Switch Embeded Preedit
 
 [DescriptionFile]
 LocaleDomain=fcitx

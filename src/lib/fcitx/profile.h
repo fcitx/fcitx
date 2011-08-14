@@ -58,6 +58,8 @@ extern "C" {
          * @brief use full width char
          **/
         boolean bUseFullWidthChar;
+
+        boolean bUsePreedit;
     } FcitxProfile;
 
     /**
@@ -88,4 +90,4 @@ extern "C" {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

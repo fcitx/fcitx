@@ -136,7 +136,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     XIMTriggerKeys *on_keys;
     XIMEncodings *encodings;
     char *imname = NULL;
-    GenericConfig *fc = &instance->config.gconfig;
+    GenericConfig *fc = &instance->config->gconfig;
     ConfigValueType triggerKey = ConfigGetBindValue(fc, "Hotkey", "TriggerKey");
     char *p;
     FcitxModuleFunctionArg arg;

@@ -81,13 +81,18 @@ void InitBuiltInHotkey(FcitxInstance *instance)
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
 
-    hk.hotkey = instance->config.hkRemind;
+    hk.hotkey = instance->config->hkRemind;
     hk.hotkeyhandle = ImProcessRemind;
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
 
-    hk.hotkey = instance->config.hkSaveAll;
+    hk.hotkey = instance->config->hkSaveAll;
     hk.hotkeyhandle = ImProcessSaveAll;
+    hk.arg = instance;
+    RegisterHotkeyFilter(instance, hk);
+
+    hk.hotkey = instance->config->hkSwitchEmbeddedPreedit;
+    hk.hotkeyhandle = ImSwitchEmbeddedPreedit;
     hk.arg = instance;
     RegisterHotkeyFilter(instance, hk);
 }
@@ -223,10 +228,10 @@ boolean LoadAllIM(FcitxInstance* instance)
             free(modulePath);
         }
     }
-    if (instance->profile.iIMIndex < 0)
-        instance->profile.iIMIndex = 0;
-    if (instance->profile.iIMIndex > utarray_len(&instance->imes))
-        instance->profile.iIMIndex = utarray_len(&instance->imes) - 1;
+    if (instance->profile->iIMIndex < 0)
+        instance->profile->iIMIndex = 0;
+    if (instance->profile->iIMIndex > utarray_len(&instance->imes))
+        instance->profile->iIMIndex = utarray_len(&instance->imes) - 1;
     if (utarray_len(&instance->imes) <= 0)
     {
         FcitxLog(ERROR, _("No available Input Method"));
@@ -263,7 +268,7 @@ INPUT_RETURN_VALUE ProcessKey(
     FcitxIM* currentIM = GetCurrentIM(instance);
     FcitxInputState *input = &instance->input;
 
-    FcitxConfig *fc = &instance->config;
+    FcitxConfig *fc = instance->config;
 
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
@@ -451,7 +456,7 @@ void ProcessInputReturnValue(
 {
     FcitxIM* currentIM = GetCurrentIM(instance);
     FcitxInputState *input = &instance->input;
-    FcitxConfig *fc = &instance->config;
+    FcitxConfig *fc = instance->config;
 
     if (retVal & IRV_FLAG_PENDING_COMMIT_STRING)
     {
@@ -520,31 +525,31 @@ void SwitchIM(FcitxInstance* instance, int index)
 
     FcitxIM* lastIM, *newIM;
 
-    if (instance->profile.iIMIndex >= iIMCount || instance->profile.iIMIndex < 0)
+    if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
         lastIM = NULL;
     else
     {
-        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
+        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
     }
 
     if (index >= iIMCount)
-        instance->profile.iIMIndex = iIMCount - 1;
+        instance->profile->iIMIndex = iIMCount - 1;
     else if (index < -1)
-        instance->profile.iIMIndex = 0;
+        instance->profile->iIMIndex = 0;
     else if (index == -1) {
-        if (instance->profile.iIMIndex >= (iIMCount - 1))
-            instance->profile.iIMIndex = 0;
+        if (instance->profile->iIMIndex >= (iIMCount - 1))
+            instance->profile->iIMIndex = 0;
         else
-            instance->profile.iIMIndex++;
+            instance->profile->iIMIndex++;
     }
     else if (index >= 0)
-        instance->profile.iIMIndex = index;
+        instance->profile->iIMIndex = index;
 
-    if (instance->profile.iIMIndex >= iIMCount || instance->profile.iIMIndex < 0)
+    if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
         newIM = NULL;
     else
     {
-        newIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
+        newIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
     }
 
     if (lastIM && lastIM->Save)
@@ -553,7 +558,7 @@ void SwitchIM(FcitxInstance* instance, int index)
         newIM->Init(newIM->klass);
 
     ResetInput(instance);
-    SaveProfile(&instance->profile);
+    SaveProfile(instance->profile);
 }
 
 /**
@@ -574,7 +579,7 @@ void ResetInput(FcitxInstance* instance)
 
     UT_array* ims = &instance->imes;
 
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile.iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile->iIMIndex);
 
     if (currentIM && currentIM->ResetIM)
         currentIM->ResetIM(currentIM->klass);
@@ -585,7 +590,7 @@ void ResetInput(FcitxInstance* instance)
 void DoPhraseTips(FcitxInstance* instance)
 {
     UT_array* ims = &instance->imes;
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile.iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile->iIMIndex);
     FcitxInputState *input = &instance->input;
 
     if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
@@ -599,7 +604,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
     FcitxInstance *instance = (FcitxInstance *)arg;
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     FcitxInputState *input = &instance->input;
-    FcitxConfig *fc = &instance->config;
+    FcitxConfig *fc = instance->config;
 
     if (!input->iCodeInputCount)
         retVal = IRV_DONOT_PROCESS;
@@ -648,10 +653,10 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg)
 FCITX_EXPORT_API
 void ReloadConfig(FcitxInstance *instance)
 {
-    if (!LoadConfig(&instance->config))
+    if (!LoadConfig(instance->config))
         EndInstance(instance);
 
-    CandidateWordSetPageSize(instance->input.candList, instance->config.iMaxCandWord);
+    CandidateWordSetPageSize(instance->input.candList, instance->config->iMaxCandWord);
 
     /* Reload All IM, Module, and UI Config */
     UT_array* addons = &instance->addons;
@@ -695,7 +700,7 @@ FCITX_EXPORT_API
 FcitxIM* GetCurrentIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->profile.iIMIndex);
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
     return pcurrentIM;
 }
 
@@ -749,25 +754,25 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
-    menu->mark = instance->profile.iIMIndex;
+    menu->mark = instance->profile->iIMIndex;
 }
 
 void ShowInputSpeed(FcitxInstance* instance)
 {
     FcitxInputState* input = &instance->input;
 
-    if (!instance->config.bShowInputWindowTriggering)
+    if (!instance->config->bShowInputWindowTriggering)
         return;
 
     input->bShowCursor = false;
 
     CleanInputWindow(instance);
-    if (instance->config.bShowVersion) {
+    if (instance->config->bShowVersion) {
         AddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION);
     }
 
     //显示打字速度
-    if (instance->config.bShowUserSpeed) {
+    if (instance->config->bShowUserSpeed) {
         double          timePassed;
 
         timePassed = difftime (time (NULL), input->timeStart);
@@ -791,6 +796,15 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg)
 {
     FcitxInstance *instance = (FcitxInstance*) arg;
     SaveAllIM(instance);
+    return IRV_DO_NOTHING;
+}
+
+
+INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg)
+{
+    FcitxInstance *instance = (FcitxInstance*) arg;
+    instance->profile->bUsePreedit = !instance->profile->bUsePreedit;
+    SaveProfile(instance->profile);
     return IRV_DO_NOTHING;
 }
 

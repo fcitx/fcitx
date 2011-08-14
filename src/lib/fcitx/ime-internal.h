@@ -131,6 +131,8 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg);
  **/
 INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
 
+INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
+
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

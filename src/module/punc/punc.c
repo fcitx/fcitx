@@ -101,7 +101,7 @@ void* PuncCreate(FcitxInstance* instance)
     puncState->bLastIsNumber = false;
 
     HotkeyHook hotkey;
-    hotkey.hotkey = instance->config.hkPunc;
+    hotkey.hotkey = instance->config->hkPunc;
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
     hotkey.arg = puncState;
     RegisterHotkeyFilter(instance, hotkey);
@@ -142,10 +142,10 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     if (*retVal != IRV_TO_PROCESS)
         return false;
 
-    if (instance->profile.bUseWidePunc) {
+    if (instance->profile->bUseWidePunc) {
         char *pPunc = NULL;
 
-        if (puncState->bLastIsNumber && instance->config.bEngPuncAfterNumber
+        if (puncState->bLastIsNumber && instance->config->bEngPuncAfterNumber
                 && (IsHotKey(sym, state, FCITX_PERIOD)
                     || IsHotKey(sym, state, FCITX_SEMICOLON)
                     || IsHotKey(sym, state, FCITX_COMMA)))
@@ -319,8 +319,8 @@ void TogglePuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState* )arg;
     FcitxInstance* instance = puncState->owner;
-    instance->profile.bUseWidePunc = !instance->profile.bUseWidePunc;
-    SaveProfile(&instance->profile);
+    instance->profile->bUseWidePunc = !instance->profile->bUseWidePunc;
+    SaveProfile(instance->profile);
     ResetInput(puncState->owner);
 }
 
@@ -335,7 +335,7 @@ boolean GetPuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
-    return instance->profile.bUseWidePunc;
+    return instance->profile->bUseWidePunc;
 }
 
 void ReloadPunc(void* arg)

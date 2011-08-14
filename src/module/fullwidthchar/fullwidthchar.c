@@ -93,7 +93,7 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     RegisterPreInputFilter(instance, hk);
 
     HotkeyHook hotkey;
-    hotkey.hotkey = instance->config.hkFullWidthChar;
+    hotkey.hotkey = instance->config->hkFullWidthChar;
     hotkey.hotkeyhandle = ToggleFullWidthStateWithHotkey;
     hotkey.arg = fwchar;
 
@@ -107,7 +107,7 @@ void* FullWidthCharCreate(FcitxInstance* instance)
 boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    if (fwchar->owner->profile.bUseFullWidthChar && IsHotKeySimple(sym, state))
+    if (fwchar->owner->profile->bUseFullWidthChar && IsHotKeySimple(sym, state))
     {
         sprintf(GetOutputString(&fwchar->owner->input), "%s", sCornerTrans[sym - 32]);
         *retVal = IRV_COMMIT_STRING;
@@ -119,15 +119,15 @@ boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INP
 void ToggleFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    fwchar->owner->profile.bUseFullWidthChar = !fwchar->owner->profile.bUseFullWidthChar;
-    SaveProfile(&fwchar->owner->profile);
+    fwchar->owner->profile->bUseFullWidthChar = !fwchar->owner->profile->bUseFullWidthChar;
+    SaveProfile(fwchar->owner->profile);
     ResetInput(fwchar->owner);
 }
 
 boolean GetFullWidthState(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
-    return fwchar->owner->profile.bUseFullWidthChar;
+    return fwchar->owner->profile->bUseFullWidthChar;
 }
 
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
@@ -137,4 +137,4 @@ INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
     return IRV_DO_NOTHING;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

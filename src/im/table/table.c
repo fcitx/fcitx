@@ -276,7 +276,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
     TableMetaData* table = (TableMetaData*) currentIM->priv;
 
     CandidateWordSetChoose(input->candList, table->strChoose);
-    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(&instance->config));
+    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(instance->config));
 
     tbl->iTableIMIndex = utarray_eltidx(tbl->table, currentIM->priv);
     if (tbl->iTableIMIndex != tbl->iCurrentTableLoaded)
@@ -664,7 +664,7 @@ INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* table
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
-    FcitxProfile *profile = &instance->profile;
+    FcitxProfile *profile = instance->profile;
 
     if (!strcmp (input->strCodeInput, table->strSymbol))
         return TableGetFHCandWord (tbl, tableCandWord);
@@ -1019,7 +1019,7 @@ INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl)
 {
     int             iLength;
     RECORD         *tableRemind = NULL;
-    GenericConfig *fc = &tbl->owner->config.gconfig;
+    GenericConfig *fc = &tbl->owner->config->gconfig;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = &instance->input;
     boolean bDisablePagingInRemind = *ConfigGetBindValue(fc, "Output", "RemindModeDisablePaging").boolvalue;

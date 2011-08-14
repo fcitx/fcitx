@@ -18,5 +18,10 @@ Description=Current Input Method Index
 Type=Integer
 DefaultValue=0
 
+[Profile/PreeditStringInClientWindow]
+Type=Boolean
+DefaultValue=True
+Description=Show Preedit String in Client Window
+
 [DescriptionFile]
 LocaleDomain=fcitx

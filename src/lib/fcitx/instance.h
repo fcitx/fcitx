@@ -53,8 +53,8 @@ extern "C" {
         boolean readonlyMode;
 
         /* config file */
-        FcitxConfig config;
-        FcitxProfile profile;
+        FcitxConfig* config;
+        FcitxProfile* profile;
         UT_array addons;
         UT_array imeclasses;
         UT_array imes;
