@@ -184,6 +184,8 @@ extern "C" {
      **/
     void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
 
+    void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+
     /**
      * @brief ...
      *
@@ -207,4 +209,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
