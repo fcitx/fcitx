@@ -81,6 +81,7 @@ extern "C" {
         char *library;
         char *depend;
         int priority;
+        char *subconfig;
         union {
             struct _FcitxFrontend *frontend;
             struct _FcitxModule *module;
@@ -150,4 +151,4 @@ extern "C" {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

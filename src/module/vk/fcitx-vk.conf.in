@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-vk.so
 Type=SharedLibrary
 Dependency=fcitx-x11
+SubConfig=virtualkey:native:data/vk.conf

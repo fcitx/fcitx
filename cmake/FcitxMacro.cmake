@@ -1,10 +1,38 @@
+# This file is included by FindFcitx4.cmake, don't include it directly.
+# - Useful macro for fcitx development
+#
+# Usage:
+#   INTLTOOL_MERGE_TRANSLATION([INFILE] [OUTFILE])
+#     merge translation to fcitx config and desktop file
+#
+#   FCITX_ADD_ADDON_CONF_FILE([conffilename])
+#     merge addon .conf.in translation and install it to correct path
+#     you shouldn't put .in in filename, just put foobar.conf
+#
+#   FCITX_ADD_CONFIGDESC_FILE([filename]*)
+#     install configuration description file to correct path
+#
+#   EXTRACT_FCITX_ADDON_CONF_POSTRING()
+#     extract fcitx addon conf translatable string from POFILES.in from
+#     ${CMAKE_CURRENT_BINARY_DIR}, the file need end with ,conf.in
+#
+
+#==============================================================================
+# Copyright 2011 Xuetian Weng
+#
+# Distributed under the GPLv2 License
+# see accompanying file COPYRIGHT for details
+#==============================================================================
+# (To distribute this file outside of Fcitx, substitute the full
+#  License text for the above reference.)
+
 FIND_PROGRAM(INTLTOOL_EXTRACT intltool-extract)
 FIND_PROGRAM(INTLTOOL_UPDATE intltool-update)
 FIND_PROGRAM(INTLTOOL_MERGE intltool-merge)
 
 MACRO(INTLTOOL_MERGE_TRANSLATION infile outfile)
-    ADD_CUSTOM_COMMAND( 
-        OUTPUT ${outfile} 
+    ADD_CUSTOM_COMMAND(
+        OUTPUT ${outfile}
         COMMAND LC_ALL=C ${INTLTOOL_MERGE} -d -u ${PROJECT_SOURCE_DIR}/po ${infile} ${outfile}
         DEPENDS ${infile}
     )

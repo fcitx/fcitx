@@ -31,10 +31,10 @@
 
 #include "fcitx/fcitx.h"
 #include "addon.h"
-#include "fcitx-utils/utils.h"
 #include "fcitx-config/xdg.h"
+#include "fcitx-utils/log.h"
+#include "fcitx-utils/utils.h"
 #include "instance.h"
-#include <fcitx-utils/log.h>
 
 CONFIG_BINDING_BEGIN(FcitxAddon)
 CONFIG_BINDING_REGISTER("Addon", "Name", name)
@@ -46,6 +46,7 @@ CONFIG_BINDING_REGISTER("Addon", "Library", library)
 CONFIG_BINDING_REGISTER("Addon", "Type", type)
 CONFIG_BINDING_REGISTER("Addon", "Dependency", depend)
 CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
+CONFIG_BINDING_REGISTER("Addon", "SubConfig", subconfig)
 CONFIG_BINDING_END()
 
 static const UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
@@ -285,4 +286,4 @@ void FreeAddon(void *v)
     free(addon->library);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

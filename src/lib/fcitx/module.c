@@ -20,13 +20,13 @@
 
 #include <dlfcn.h>
 #include <libintl.h>
+#include <pthread.h>
 
 #include "fcitx/fcitx.h"
 #include "module.h"
 #include "addon.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
-#include <pthread.h>
 #include "instance.h"
 
 static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
@@ -120,4 +120,4 @@ void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, in
     else
         return InvokeModuleFunction(module, functionId, args);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

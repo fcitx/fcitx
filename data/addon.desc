@@ -46,5 +46,10 @@ Type=Integer
 DefaultValue=50
 Description=Priority of addon
 
+[Addon/SubConfig]
+Type=String
+DefaultValue=
+Description=Sub Configuration for Module
+
 [DescriptionFile]
 LocaleDomain=fcitx

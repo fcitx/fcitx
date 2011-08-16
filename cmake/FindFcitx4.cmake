@@ -1,46 +1,32 @@
-# - Try to find the fcitx4 library
-# Once done this will define
+# - Locate the fcitx4 library
+# This module defines
+#  FCITX4_FCITX_FOUND found libfcitx
+#  FCITX4_FCITX_LIBRARIES the, library to link against
+#  FCITX4_FCITX_LIBRARY_DIRS, where to find library
+#  FCITX4_FCITX_INCLUDE_DIRS, where to find headers
+#  FCITX4_FCITX_CONFIG_FOUND found libfcitx-config
+#  FCITX4_FCITX_CONFIG_LIBRARIES, library to link against
+#  FCITX4_FCITX_CONFIG_LIBRARY_DIRS, where to find library
+#  FCITX4_FCITX_CONFIG_INCLUDE_DIRS, where to find headers
+#  FCITX4_FCITX_UTILS_FOUND found libfcitx-utils
+#  FCITX4_FCITX_UTILS_LIBRARIES, library to link against
+#  FCITX4_FCITX_UTILS_LIBRARY_DIRS, where to find library
+#  FCITX4_FCITX_UTILS_INCLUDE_DIRS, where to find headers
+#  FCITX4_ADDON_INSTALL_DIR directory to install fcitx addon
+#  FCITX4_CONFIGDESC_INSTALL_DIR directory to install fcitx configuration description file
+#  FCITX4_ADDON_CONFIG_INSTALL_DIR directory to install fcitx addon config
+#  FCITX4_PACKAGE_NAME package name of fcitx, normally is "fcitx"
+#  FCITX4_VERSION version of fcitx
 #
-# FCITX4_FCITX_FOUND
-# FCITX4_FCITX_LIBRARIES
-# FCITX4_FCITX_LIBRARY_DIRS
-# FCITX4_FCITX_LDFLAGS
-# FCITX4_FCITX_LDFLAGS_OTHER
-# FCITX4_FCITX_INCLUDE_DIRS
-# FCITX4_FCITX_CFLAGS
-# FCITX4_FCITX_CFLAGS_OTHER
+# Please look in FcitxMacro.cmake for more information.
 
-# FCITX4_FCITX_CONFIG_FOUND
-# FCITX4_FCITX_CONFIG_LIBRARIES
-# FCITX4_FCITX_CONFIG_LIBRARY_DIRS
-# FCITX4_FCITX_CONFIG_LDFLAGS
-# FCITX4_FCITX_CONFIG_LDFLAGS_OTHER
-# FCITX4_FCITX_CONFIG_INCLUDE_DIRS
-# FCITX4_FCITX_CONFIG_CFLAGS
-# FCITX4_FCITX_CONFIG_CFLAGS_OTHER
-#
-# FCITX4_FCITX_UTILS_FOUND
-# FCITX4_FCITX_UTILS_LIBRARIES
-# FCITX4_FCITX_UTILS_LIBRARY_DIRS
-# FCITX4_FCITX_UTILS_LDFLAGS
-# FCITX4_FCITX_UTILS_LDFLAGS_OTHER
-# FCITX4_FCITX_UTILS_INCLUDE_DIRS
-# FCITX4_FCITX_UTILS_CFLAGS
-# FCITX4_FCITX_UTILS_CFLAGS_OTHER
-#
-# FCITX4_ADDON_INSTALL_DIR
-# FCITX4_CONFIGDESC_INSTALL_DIR
-# FCITX4_ADDON_CONFIG_INSTALL_DIR
-# FCITX4_PACKAGE_NAME
-# FCITX4_VERSION
-#
 #==============================================================================
 # Copyright 2011 Xuetian Weng
 #
 # Distributed under the GPLv2 License
 # see accompanying file COPYRIGHT for details
 #==============================================================================
-# (To distribute this file outside of CMake, substitute the full
+# (To distribute this file outside of Fcitx, substitute the full
 #  License text for the above reference.)
 
 # use pkg-config to get the directories and then use these values
