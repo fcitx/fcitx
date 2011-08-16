@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-14 23:14+0800\n"
-"PO-Revision-Date: 2011-08-14 23:15+0800\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2011-08-17 01:46+0800\n"
+"PO-Revision-Date: 2011-08-17 01:47+0800\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "增加监听函数错误"
 msgid "Addon"
 msgstr "附加组件"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:151
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:152
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
@@ -142,7 +142,7 @@ msgstr "无法加载默认皮肤，安装是否正确？"
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:154
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
@@ -326,7 +326,7 @@ msgstr "电报码"
 msgid "Disable Paging in Remind Mode"
 msgstr "联想模式禁用翻页"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:234
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:235
 #, c-format
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
@@ -706,7 +706,7 @@ msgstr "按左/右选择单字，按回车确认，按Escape 取消"
 msgid "Library"
 msgstr "库"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:140
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:141
 #, c-format
 msgid "Load Addon Config File:%s"
 msgstr "加载附加组件配置文件: %s"
@@ -886,7 +886,7 @@ msgstr "拼音："
 msgid "Please check your environment varibles."
 msgstr "请检查你的环境变量的设置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:174
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:169
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMOIFIERS"
 
@@ -1157,10 +1157,14 @@ msgstr "空格输入 ； 回车输入;"
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:232
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:268
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
+
+#: /home/saber/Develop/fcitx/data/addon.desc:52
+msgid "Sub Configuration for Module"
+msgstr "子配置"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:91
 msgid "Symbol"
@@ -1250,6 +1254,10 @@ msgstr "使用全角字符"
 msgid "Use Matching Key"
 msgstr "使用模糊键"
 
+#: /home/saber/Develop/fcitx/src/frontend/xim/fcitx-xim.desc:4
+msgid "Use On The Spot Style for XIM (Can not change during running)"
+msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:28
 msgid "Use Pinyin"
 msgstr "使用拼音"
@@ -1315,13 +1323,17 @@ msgstr "X11 支持"
 msgid "X11 Utilitiy used by other Addon"
 msgstr "由其他插件使用的 X11 工具函数"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:143
 msgid "X11 not initialized"
 msgstr "X11 未初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:170
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:165
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
+
+# unknown
+msgid "Xim"
+msgstr "Xim"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:149
 msgid ""
@@ -1550,9 +1562,6 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Fcitx Config ..."
 #~ msgstr "配置Fcitx..."
-
-#~ msgid "Fcitx Configuration Tool"
-#~ msgstr "Fcitx配置工具"
 
 #~ msgid "File"
 #~ msgstr "文件"

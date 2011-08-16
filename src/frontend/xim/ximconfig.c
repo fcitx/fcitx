@@ -18,41 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _FCITX_XIM_H_
-#define _FCITX_XIM_H_
+#include "xim.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xmd.h>
-
-#include "fcitx/frontend.h"
-#include "IMdkit.h"
-
-#define DEFAULT_IMNAME "fcitx"
-#define STRBUFLEN 64
-
-#define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
-
-typedef struct _FcitxXimFrontend
-{
-    GenericConfig gconfig;
-    boolean bUseOnTheSpotStyle;
-    Window ximWindow;
-    Display* display;
-    int iScreen;
-    int iTriggerKeyCount;
-    XIMTriggerKey* Trigger_Keys;
-    XIMS ims;
-    CARD16 icid;
-    struct _FcitxFrontend* frontend;
-    struct _FcitxInstance* owner;
-    int frontendid;
-    CARD16 currentSerialNumberCallData;
-    long unsigned int currentSerialNumberKey;
-    XIMFeedback *feedback;
-    int feedback_len;
-} FcitxXimFrontend;
-
-CONFIG_BINDING_DECLARE(FcitxXimFrontend)
-
-#endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+CONFIG_BINDING_BEGIN(FcitxXimFrontend)
+CONFIG_BINDING_REGISTER("Xim", "UseOnTheSpotStyle", bUseOnTheSpotStyle)
+CONFIG_BINDING_END()

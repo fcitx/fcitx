@@ -1,0 +1,4 @@
+[Xim/UseOnTheSpotStyle]
+Type=Boolean
+DefaultValue=True
+Description=Use On The Spot Style for XIM (Can not change during running)

@@ -187,9 +187,10 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     StoreIC (privic, call_data);
     SetTrackPos(xim, context, call_data);
     call_data->icid = privic->id;
-    if (privic->input_style & XIMPreeditCallbacks) {
+    if (privic->input_style & XIMPreeditCallbacks)
         context->contextCaps |= CAPACITY_PREEDIT;
-    }
+    else
+        context->contextCaps &= ~CAPACITY_PREEDIT;
 
     return;
 }
@@ -228,6 +229,11 @@ void XimSetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
         return;
     FcitxXimIC* rec = (FcitxXimIC*) ic->privateic;
     StoreIC (rec, call_data);
+
+    if (rec->input_style & XIMPreeditCallbacks)
+        ic->contextCaps |= CAPACITY_PREEDIT;
+    else
+        ic->contextCaps &= ~CAPACITY_PREEDIT;
 
     return;
 }

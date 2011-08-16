@@ -6,6 +6,7 @@ set(fcitx_xim_SOURCES
     IC.c
     xim.c
     ximhandler.c
+    ximconfig.c
 )
 
 set(Ximd_SOURCES
@@ -28,3 +29,4 @@ fcitx_add_addon(fcitx-xim ${fcitx_xim_SOURCES} ${Ximd_SOURCES})
 target_link_libraries( fcitx-xim ${X11_LIBRARIES} fcitx-config fcitx-core)
 
 fcitx_add_addon_conf_file(fcitx-xim.conf)
+fcitx_add_configdesc_file(fcitx-xim.desc)

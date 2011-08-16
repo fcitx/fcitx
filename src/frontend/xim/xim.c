@@ -23,6 +23,7 @@
 #include <X11/Xutil.h>
 #include <libintl.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/addon.h"
@@ -39,6 +40,7 @@
 #include "xim.h"
 #include "ximhandler.h"
 #include "module/x11/x11stuff.h"
+#include "fcitx-config/xdg.h"
 
 static void* XimCreate(FcitxInstance* instance, int frontendid);
 static boolean XimDestroy(void* arg);
@@ -54,26 +56,20 @@ static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 static void SetTriggerKeys (FcitxXimFrontend* xim, char** strKey, int length);
 static inline Bool MyStrcmp (char *str1, char *str2);
 
-#if 0
-static XIMStyle Styles[] = {
+static XIMStyle OverTheSpot_Styles[] = {
     XIMPreeditPosition | XIMStatusArea, //OverTheSpot
     XIMPreeditPosition | XIMStatusNothing,      //OverTheSpot
     XIMPreeditPosition | XIMStatusNone, //OverTheSpot
     XIMPreeditNothing | XIMStatusNothing,       //Root
     XIMPreeditNothing | XIMStatusNone,  //Root
-    XIMPreeditCallbacks | XIMStatusNothing,
-    XIMPreeditPosition | XIMStatusCallbacks,
-    XIMPreeditCallbacks | XIMStatusCallbacks,
-    XIMPreeditNothing | XIMStatusCallbacks,
     /*
     XIMPreeditArea | XIMStatusArea,         //OffTheSpot
     XIMPreeditArea | XIMStatusNothing,      //OffTheSpot
     XIMPreeditArea | XIMStatusNone,         //OffTheSpot */
     0
 };
-#else
 
-static XIMStyle Styles [] = {
+static XIMStyle OnTheSpot_Styles [] = {
         XIMPreeditPosition | XIMStatusNothing,
         XIMPreeditCallbacks | XIMStatusNothing,
         XIMPreeditNothing | XIMStatusNothing,
@@ -82,9 +78,6 @@ static XIMStyle Styles [] = {
         XIMPreeditNothing | XIMStatusCallbacks,
         0
     };
-
-
-#endif
 
 FCITX_EXPORT_API
 FcitxFrontend frontend =
@@ -108,6 +101,8 @@ FcitxFrontend frontend =
 };
 
 FcitxXimFrontend *ximfrontend;
+
+CONFIG_DESC_DEFINE(GetXimConfigDesc, "fcitx-xim.desc")
 
 /* Supported Chinese Encodings */
 static XIMEncoding zhEncodings[] = {
@@ -186,9 +181,50 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     }
     SetTriggerKeys(xim, strkey, i);
 
+    if (GetXimConfigDesc() == NULL)
+        xim->bUseOnTheSpotStyle = false;
+    else
+    {
+        ConfigFileDesc* configDesc = GetXimConfigDesc();
+
+        FILE *fp;
+        char *file;
+        fp = GetXDGFileUserWithPrefix("conf", "fcitx-xim.config", "rt", &file);
+        FcitxLog(DEBUG, "Load Config File %s", file);
+        free(file);
+        if (!fp) {
+            if (errno == ENOENT)
+            {
+                char *file;
+                FILE *fp2 = GetXDGFileUserWithPrefix("conf", "fcitx-xim.config", "wt", &file);
+                FcitxLog(DEBUG, "Save Config to %s", file);
+                SaveConfigFileFp(fp2, &xim->gconfig, configDesc);
+                free(file);
+                if (fp2)
+                    fclose(fp2);
+            }
+        }
+
+        ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+
+        FcitxXimFrontendConfigBind(xim, cfile, configDesc);
+        ConfigBindSync((GenericConfig*)xim);
+
+        if (fp)
+            fclose(fp);
+    }
+
     input_styles = (XIMStyles *) malloc(sizeof(XIMStyles));
-    input_styles->count_styles = sizeof(Styles) / sizeof(XIMStyle) - 1;
-    input_styles->supported_styles = Styles;
+    if (xim->bUseOnTheSpotStyle)
+    {
+        input_styles->count_styles = sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles->supported_styles = OnTheSpot_Styles;
+    }
+    else
+    {
+        input_styles->count_styles = sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles->supported_styles = OverTheSpot_Styles;
+    }
 
     on_keys = (XIMTriggerKeys *) malloc(sizeof(XIMTriggerKeys));
     on_keys->count_keys = xim->iTriggerKeyCount + 1;
