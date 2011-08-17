@@ -201,7 +201,7 @@ boolean LoadAllIM(FcitxInstance* instance)
                 if (!fp)
                     break;
                 fclose(fp);
-                handle = dlopen(modulePath,RTLD_LAZY);
+                handle = dlopen(modulePath,RTLD_GLOBAL);
                 if (!handle)
                 {
                     FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath ,dlerror());
