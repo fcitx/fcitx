@@ -151,7 +151,7 @@ void LoadUserInterface(FcitxInstance* instance)
 
                     fclose(fp);
 
-                    handle = dlopen(modulePath, RTLD_GLOBAL);
+                    handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
 
                     if (!handle)
                     {
