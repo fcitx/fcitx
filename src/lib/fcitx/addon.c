@@ -284,6 +284,10 @@ void FreeAddon(void *v)
     FreeConfigFile(addon->config.configFile);
     free(addon->name);
     free(addon->library);
+    free(addon->comment);
+    free(addon->generalname);
+    free(addon->depend);
+    free(addon->subconfig);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

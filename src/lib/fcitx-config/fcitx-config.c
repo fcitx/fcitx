@@ -765,6 +765,8 @@ void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
         FreeConfigGroupDesc(curGroup);
     }
 
+    if (cfdesc->domain)
+        free(cfdesc->domain);
     free(cfdesc);
 }
 
@@ -814,6 +816,7 @@ void FreeConfigOption(ConfigOption *option)
         HASH_DEL(item, curitem);
         free(curitem->rawValue);
         free(curitem->subkeyName);
+        free(curitem);
     }
 
     if (option->rawValue)
