@@ -44,3 +44,18 @@ grep -nH '^\[' $descfiles | grep -v 'DescriptionFile' | awk ' "^[" { split($0, a
 # Extract Enum Name
 grep -h 'Enum[0-9]' $descfiles | sed -e 's/Enum[0-9]=//g' | sort | uniq | awk '{ print "#: unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 
+confinfiles=`find "$indir" -iname "*.conf.in"`
+for f in $confinfiles
+do
+    awk  '/SubConfig=.*/ {
+            value=substr($0,11);
+            split(value,a,",");
+            for (item in a) {
+                i = index(a[item],":");
+                if (substr(a[item], i + 1) != "domain")
+                {
+                    print "#: unknown\nmsgid \""substr(a[item],0, index(a[item],":") -1)"\"\nmsgstr \"\"\n"
+                }
+            }
+        }' $f >>  "$outdir/$filename"
+done

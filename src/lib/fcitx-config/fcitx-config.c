@@ -308,111 +308,102 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
         {
             if (!strcmp(option->rawValue, "Integer"))
                 codesc->type = T_Integer;
-            else
-                if (!strcmp(option->rawValue, "Color"))
-                    codesc->type = T_Color;
-                else
-                    if (!strcmp(option->rawValue, "Char"))
-                        codesc->type = T_Char;
-                    else
-                        if (!strcmp(option->rawValue, "String"))
-                            codesc->type = T_String;
-                        else
-                            if (!strcmp(option->rawValue, "I18NString"))
-                                codesc->type = T_I18NString;
+            else if (!strcmp(option->rawValue, "Color"))
+                codesc->type = T_Color;
+            else if (!strcmp(option->rawValue, "Char"))
+                codesc->type = T_Char;
+            else if (!strcmp(option->rawValue, "String"))
+                codesc->type = T_String;
+            else if (!strcmp(option->rawValue, "I18NString"))
+                codesc->type = T_I18NString;
+            else if (!strcmp(option->rawValue, "Boolean"))
+                codesc->type = T_Boolean;
+            else if (!strcmp(option->rawValue, "File"))
+                codesc->type = T_File;
+            else if (!strcmp(option->rawValue, "Font"))
+                codesc->type = T_Font;
+            else if (!strcmp(option->rawValue, "Hotkey"))
+                codesc->type = T_Hotkey;
+            else if (!strcmp(option->rawValue, "Enum"))
+            {
+                ConfigOption *eoption;
+                codesc->type = T_Enum;
+                HASH_FIND_STR(options, "EnumCount", eoption);
+                boolean enumError = false;
+                int i = 0;
+
+                if (eoption)
+                {
+                    int ecount = atoi(eoption->rawValue);
+
+                    if (ecount > 0)
+                    {
+                        /* 10个选项基本足够了，以后有需求再添加 */
+                        if (ecount > 10)
+                            ecount = 10;
+
+                        char *enumname = strdup("Enum0");
+
+                        codesc->configEnum.enumDesc = malloc(sizeof(char*) * ecount);
+
+                        codesc->configEnum.enumCount = ecount;
+
+                        size_t nel = 0;
+
+                        for (i = 0; i < ecount; i++)
+                        {
+                            enumname[4] = '0' + i;
+                            HASH_FIND_STR(options, enumname, eoption);
+
+                            if (eoption)
+                            {
+                                void* entry = lfind(eoption->rawValue, codesc->configEnum.enumDesc, &nel, sizeof(char*), (int (*)(const void *, const void *)) strcmp);
+
+                                if (entry)
+                                {
+                                    FcitxLog(WARNING, _("Enum option duplicated."));
+                                }
+
+                                codesc->configEnum.enumDesc[i] = strdup(eoption->rawValue);
+                            }
                             else
-                                if (!strcmp(option->rawValue, "Boolean"))
-                                    codesc->type = T_Boolean;
-                                else
-                                    if (!strcmp(option->rawValue, "File"))
-                                        codesc->type = T_File;
-                                    else
-                                        if (!strcmp(option->rawValue, "Font"))
-                                            codesc->type = T_Font;
-                                        else
-                                            if (!strcmp(option->rawValue, "Hotkey"))
-                                                codesc->type = T_Hotkey;
-                                            else
-                                                if (!strcmp(option->rawValue, "Enum"))
-                                                {
-                                                    ConfigOption *eoption;
-                                                    codesc->type = T_Enum;
-                                                    HASH_FIND_STR(options, "EnumCount", eoption);
-                                                    boolean enumError = false;
-                                                    int i = 0;
+                            {
+                                enumError = true;
+                                free(enumname);
+                                goto config_enum_final;
+                            }
+                        }
 
-                                                    if (eoption)
-                                                    {
-                                                        int ecount = atoi(eoption->rawValue);
+                        free(enumname);
+                    }
+                    else
+                    {
+                        FcitxLog(WARNING, _("Enum option number must larger than 0"));
+                        enumError = true;
+                        goto config_enum_final;
+                    }
+                }
 
-                                                        if (ecount > 0)
-                                                        {
-                                                            /* 10个选项基本足够了，以后有需求再添加 */
-                                                            if (ecount > 10)
-                                                                ecount = 10;
+            config_enum_final:
 
-                                                            char *enumname = strdup("Enum0");
+                if (enumError)
+                {
+                    int j = 0;
 
-                                                            codesc->configEnum.enumDesc = malloc(sizeof(char*) * ecount);
+                    for (;j < i;i++)
+                        free(codesc->configEnum.enumDesc[j]);
 
-                                                            codesc->configEnum.enumCount = ecount;
+                    FcitxLog(WARNING, _("Enum Option is invalid, take it as string"));
 
-                                                            size_t nel = 0;
+                    codesc->type = T_String;
+                }
 
-                                                            for (i = 0; i < ecount; i++)
-                                                            {
-                                                                enumname[4] = '0' + i;
-                                                                HASH_FIND_STR(options, enumname, eoption);
-
-                                                                if (eoption)
-                                                                {
-                                                                    void* entry = lfind(eoption->rawValue, codesc->configEnum.enumDesc, &nel, sizeof(char*), (int (*)(const void *, const void *)) strcmp);
-
-                                                                    if (entry)
-                                                                    {
-                                                                        FcitxLog(WARNING, _("Enum option duplicated."));
-                                                                    }
-
-                                                                    codesc->configEnum.enumDesc[i] = strdup(eoption->rawValue);
-                                                                }
-                                                                else
-                                                                {
-                                                                    enumError = true;
-                                                                    free(enumname);
-                                                                    goto config_enum_final;
-                                                                }
-                                                            }
-
-                                                            free(enumname);
-                                                        }
-                                                        else
-                                                        {
-                                                            FcitxLog(WARNING, _("Enum option number must larger than 0"));
-                                                            enumError = true;
-                                                            goto config_enum_final;
-                                                        }
-                                                    }
-
-config_enum_final:
-
-                                                    if (enumError)
-                                                    {
-                                                        int j = 0;
-
-                                                        for (;j < i;i++)
-                                                            free(codesc->configEnum.enumDesc[j]);
-
-                                                        FcitxLog(WARNING, _("Enum Option is invalid, take it as string"));
-
-                                                        codesc->type = T_String;
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    FcitxLog(WARNING, _("Unknown type, take it as string: %s"), option->rawValue);
-                                                    codesc->type = T_String;
-                                                }
+            }
+            else
+            {
+                FcitxLog(WARNING, _("Unknown type, take it as string: %s"), option->rawValue);
+                codesc->type = T_String;
+            }
         }
         else
         {
@@ -816,6 +807,15 @@ void FreeConfigOption(ConfigOption *option)
 {
     free(option->optionName);
 
+    ConfigOptionSubkey* item = option->subkey;
+    while(item)
+    {
+        ConfigOptionSubkey* curitem = item;
+        HASH_DEL(item, curitem);
+        free(curitem->rawValue);
+        free(curitem->subkeyName);
+    }
+
     if (option->rawValue)
         free(option->rawValue);
 
@@ -1019,7 +1019,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
             }
         }
 
-next_line:
+    next_line:
 
         continue;
     }
@@ -1395,4 +1395,4 @@ void ResetConfigToDefaultValue(GenericConfig* config)
         }
     }
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

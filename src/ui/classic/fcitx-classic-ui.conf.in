@@ -7,4 +7,4 @@ Enabled=True
 Library=fcitx-classic-ui.so
 Type=SharedLibrary
 Dependency=fcitx-x11
-SubConfig=skin:configfile:skin/*/fcitx_skin.conf
+SubConfig=Skin:configfile:skin/*/fcitx_skin.conf:skin.desc,fcitx:domain

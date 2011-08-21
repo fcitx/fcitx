@@ -6,4 +6,4 @@ Category=Module
 Enabled=True
 Library=fcitx-autoeng.so
 Type=SharedLibrary
-SubConfig=autoeng:native:data/AutoEng.dat
+SubConfig=Auto English Trigger Word:native:data/AutoEng.dat,fcitx:domain

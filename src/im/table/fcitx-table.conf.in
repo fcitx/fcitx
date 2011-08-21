@@ -7,4 +7,4 @@ Enabled=True
 Library=fcitx-table.so
 Type=SharedLibrary
 Dependency=fcitx-pinyin,fcitx-punc
-SubConfig=table:configfile:table/*.conf
+SubConfig=Table:configfile:table/*.conf:table.desc,fcitx:domain

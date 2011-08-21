@@ -84,6 +84,19 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
         free(sc->skinInfo.skinVersion);
         free(sc->skinInfo.skinAuthor);
         free(sc->skinInfo.skinDesc);
+        free(sc->skinMainBar.backImg);
+        free(sc->skinMainBar.logo);
+        free(sc->skinMainBar.eng);
+        free(sc->skinMainBar.active);
+        free(sc->skinMainBar.placement);
+        free(sc->skinInputBar.backImg);
+        free(sc->skinInputBar.backArrow);
+        free(sc->skinInputBar.forwardArrow);
+        free(sc->skinTrayIcon.active);
+        free(sc->skinTrayIcon.inactive);
+        free(sc->skinMenu.backImg);
+        free(sc->skinKeyboard.backImg);
+        UnloadImage(sc);
     }
     memset(sc, 0, sizeof(FcitxSkin));
     utarray_init(&sc->skinMainBar.skinPlacement, &place_icd);
@@ -370,6 +383,28 @@ void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
     int i = 0;
 
     ConfigColor cursorColor = sc->skinInputBar.cursorColor;
+
+    if (inputWindow->c_back)
+    {
+        cairo_destroy(inputWindow->c_back);
+        inputWindow->c_back = NULL;
+    }
+
+    for (i = 0; i < 7 ; i ++)
+    {
+        if (inputWindow->c_font[i])
+        {
+            cairo_destroy(inputWindow->c_font[i]);
+            inputWindow->c_font[i] = NULL;
+        }
+    }
+    inputWindow->c_font[7] = NULL;
+    if (inputWindow->c_cursor)
+    {
+        cairo_destroy(inputWindow->c_cursor);
+        inputWindow->c_cursor = NULL;
+    }
+
     //输入条背景图画笔
     inputWindow->c_back = cairo_create(inputWindow->cs_input_bar);
 
@@ -641,8 +676,6 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     GetValidFont(classicui->strUserLocale, &classicui->menuFont);
 #endif
 
-    UnloadImage(&classicui->skin);
-
     LoadInputMessage(&classicui->skin, classicui->inputWindow, classicui->font);
 
     DrawMainWindow (classicui->mainWindow);
@@ -661,6 +694,7 @@ void UnloadImage(FcitxSkin* skin)
         HASH_DEL(images, curimage);
         free(curimage->name);
         cairo_surface_destroy(curimage->image);
+        free(curimage);
     }
     skin->imageTable = NULL;
 }
@@ -794,4 +828,4 @@ void ParsePlacement(UT_array* sps, char* placment)
 
     utarray_free(array);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

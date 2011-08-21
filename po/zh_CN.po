@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-17 01:46+0800\n"
-"PO-Revision-Date: 2011-08-17 01:47+0800\n"
+"POT-Creation-Date: 2011-08-22 01:35+0800\n"
+"PO-Revision-Date: 2011-08-21 23:32+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -99,6 +99,10 @@ msgstr "自动组词"
 msgid "Auto English Mode"
 msgstr "自动英文模式"
 
+#: unknown
+msgid "Auto English Trigger Word"
+msgstr "自动英文模式触发词"
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:67
 msgid "Auto Phrase"
 msgstr "自动词组"
@@ -133,11 +137,11 @@ msgstr "冰蟾全息"
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:140
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:153
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:146
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:159
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -380,15 +384,15 @@ msgstr "中止键"
 msgid "English Mode Icon"
 msgstr "英文模式图标"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:405
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:396
 msgid "Enum Option is invalid, take it as string"
 msgstr "枚举选项不合法，将类型作为字符串处理"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:373
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:364
 msgid "Enum option duplicated."
 msgstr "枚举选项重复"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:390
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:381
 msgid "Enum option number must larger than 0"
 msgstr "枚举选项个数需要大于0"
 
@@ -610,7 +614,8 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr ""
+"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:154
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -767,7 +772,7 @@ msgstr "菜单字体大小"
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:410
 msgid "Missing type, take it as string"
 msgstr "类型缺失，作为字符串处理"
 
@@ -959,6 +964,10 @@ msgstr "标点转换支持"
 msgid "Punctuation Support"
 msgstr "标点支持"
 
+#: unknown
+msgid "Quick Phrase List"
+msgstr "快速输入列表"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:217
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:320
 msgid "Quick Phrase: "
@@ -1083,6 +1092,10 @@ msgstr "在客户端窗口中显示预编辑字符串"
 msgid "Show Version"
 msgstr "显示版本"
 
+#: unknown
+msgid "Shuang Pin Schema"
+msgstr "默认双拼方案"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:120
 msgid "Shuangpin"
 msgstr "双拼"
@@ -1100,7 +1113,7 @@ msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:729
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:763
 msgid "Skin"
 msgstr "皮肤"
 
@@ -1166,7 +1179,7 @@ msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运�
 msgid "Sub Configuration for Module"
 msgstr "子配置"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:91
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:91 unknown
 msgid "Symbol"
 msgstr "符号"
 
@@ -1174,7 +1187,7 @@ msgstr "符号"
 msgid "Symbol File"
 msgstr "符号文件"
 
-#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:1
+#: unknown /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:1
 msgid "Table"
 msgstr "码表"
 
@@ -1233,7 +1246,7 @@ msgstr "界面: 打开 %s 失败 %s"
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:404
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr "未知类型，作为字符串处理: %s"
@@ -1282,7 +1295,7 @@ msgstr "用户词组颜色"
 msgid "Vertical Candidate Word List"
 msgstr "竖排候选词列表"
 
-#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:1
+#: unknown /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:1
 msgid "Virtual Key Board"
 msgstr "虚拟键盘"
 
@@ -2100,6 +2113,10 @@ msgstr "当前字体为: %s"
 
 #~ msgid "ZhPunc"
 #~ msgstr "中文标点图标"
+
+#, fuzzy
+#~ msgid "fcitx"
+#~ msgstr "Fcitx"
 
 #~ msgid "pthread mutexattr init failed"
 #~ msgstr "pthread mutexattr init failed"
