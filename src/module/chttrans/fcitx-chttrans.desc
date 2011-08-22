@@ -4,7 +4,7 @@ EnumCount=2
 Enum0=Native
 Enum1=OpenCC
 Description=Traditional Chinese Translate Engine
-DefaultValue=Native
+DefaultValue=OpenCC
 
 [TraditionalChinese/Enabled]
 Type=Boolean
@@ -13,7 +13,7 @@ Description=Enabled in input
 
 [TraditionalChinese/Hotkey]
 Type=Hotkey
-DefaultValue=CTRL_ALT_F
+DefaultValue=CTRL_SHIFT_F
 Description=Toggle for enable or disable
 
 [DescriptionFile]
