@@ -173,21 +173,23 @@ void* RunInstance(void* arg)
     while (1)
     {
         FcitxAddon** pmodule;
-        for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
-                pmodule != NULL;
-                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
-        {
-            FcitxModule* module = (*pmodule)->module;
-            module->ProcessEvent((*pmodule)->addonInstance);
-        }
-
-        if (instance->uiflag & UI_MOVE)
-            MoveInputWindowReal(instance);
-
-        if (instance->uiflag & UI_UPDATE)
-            UpdateInputWindowReal(instance);
-
         instance->uiflag = UI_NONE;
+        do {
+            for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
+                    pmodule != NULL;
+                    pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
+            {
+                FcitxModule* module = (*pmodule)->module;
+                module->ProcessEvent((*pmodule)->addonInstance);
+            }
+
+            if (instance->uiflag & UI_MOVE)
+                MoveInputWindowReal(instance);
+
+            if (instance->uiflag & UI_UPDATE)
+                UpdateInputWindowReal(instance);
+        } while (instance->uiflag != UI_NONE);
+
         FD_ZERO(&instance->rfds);
         FD_ZERO(&instance->wfds);
         FD_ZERO(&instance->efds);
