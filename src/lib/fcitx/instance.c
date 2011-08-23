@@ -173,8 +173,8 @@ void* RunInstance(void* arg)
     while (1)
     {
         FcitxAddon** pmodule;
-        instance->uiflag = UI_NONE;
         do {
+            instance->uiflag = UI_NONE;
             for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
                     pmodule != NULL;
                     pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
