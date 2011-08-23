@@ -24,8 +24,8 @@ fcitx-shuangpin.png
 )
 
 foreach(size 16 22 24 32 48 128)
-    install(FILES fcitx-${size}.png RENAME fcitx.png DESTINATION share/icons/hicolor/${size}x${size})
+    install(FILES fcitx-${size}.png RENAME fcitx.png DESTINATION share/icons/hicolor/${size}x${size}/apps)
 endforeach(size 16 22 24 32 48 128)
 
-install(FILES ${FCITX_PNG_32_FILES} DESTINATION share/icons/hicolor/32x32 )
-install(FILES ${FCITX_PNG_48_FILES} DESTINATION share/icons/hicolor/48x48 )
+install(FILES ${FCITX_PNG_32_FILES} DESTINATION share/icons/hicolor/32x32/status )
+install(FILES ${FCITX_PNG_48_FILES} DESTINATION share/icons/hicolor/48x48/status )
