@@ -42,4 +42,4 @@
       <arg name="type" type="i"/>
     </signal>
   </interface>
-</node>";
+</node>

@@ -192,6 +192,15 @@ IME_STATE GetCurrentState(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+CapacityFlags GetCurrentCapacity(FcitxInstance* instance)
+{
+    if (instance->CurrentIC)
+        return instance->CurrentIC->contextCaps;
+    else
+        return CAPACITY_NONE;
+}
+
+FCITX_EXPORT_API
 void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 {
     if (str == NULL)

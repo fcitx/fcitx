@@ -245,6 +245,7 @@ void ReloadInputWindow(void* arg, boolean enabled)
     boolean visable = WindowIsVisable(inputWindow->dpy, inputWindow->window);
     int i = 0;
     cairo_destroy(inputWindow->c_back);
+    inputWindow->c_back = NULL;
 
     for ( i = 0 ; i < 7; i ++)
     {

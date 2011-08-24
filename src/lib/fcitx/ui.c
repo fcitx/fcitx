@@ -77,6 +77,8 @@ struct _Messages
     boolean changed;
 };
 
+#define UI_FUNC_IS_VALID(funcname) (!(GetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
+
 static void ShowInputWindow(FcitxInstance* instance);
 
 FCITX_EXPORT_API
@@ -280,7 +282,7 @@ void CloseInputWindow(FcitxInstance* instance)
 {
     CleanInputWindow(instance);
     UpdatePreedit(instance, GetCurrentIC(instance));
-    if (instance->ui && instance->ui->ui->CloseInputWindow)
+    if (UI_FUNC_IS_VALID(CloseInputWindow ))
         instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
 }
 
@@ -295,7 +297,7 @@ void UpdateInputWindow(FcitxInstance *instance)
 
 void ShowInputWindow(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->ShowInputWindow)
+    if (UI_FUNC_IS_VALID(ShowInputWindow))
         instance->ui->ui->ShowInputWindow(instance->ui->addonInstance);
 }
 
@@ -331,7 +333,7 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
     {
         status->toggleStatus(status->arg);
 
-        if (instance->ui && instance->ui->ui->UpdateStatus)
+        if (UI_FUNC_IS_VALID(UpdateStatus))
             instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
     }
 }
@@ -409,7 +411,7 @@ void ClearMenuShell(FcitxUIMenu* menu)
 FCITX_EXPORT_API
 void OnInputFocus(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->OnInputFocus)
+    if (UI_FUNC_IS_VALID(OnInputFocus))
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
 
     InputFocusHook(instance);
@@ -422,7 +424,7 @@ void OnInputFocus(FcitxInstance* instance)
 FCITX_EXPORT_API
 void OnInputUnFocus(struct _FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->OnInputUnFocus)
+    if (UI_FUNC_IS_VALID(OnInputUnFocus))
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
 
     InputUnFocusHook(instance);
@@ -431,7 +433,7 @@ void OnInputUnFocus(struct _FcitxInstance* instance)
 FCITX_EXPORT_API
 void OnTriggerOn(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->OnTriggerOn)
+    if (UI_FUNC_IS_VALID(OnTriggerOn))
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
 
     TriggerOnHook(instance);
@@ -442,14 +444,14 @@ void OnTriggerOn(FcitxInstance* instance)
 FCITX_EXPORT_API
 void DisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)
 {
-    if (instance->ui && instance->ui->ui->DisplayMessage)
+    if (UI_FUNC_IS_VALID(DisplayMessage))
         instance->ui->ui->DisplayMessage(instance->ui->addonInstance, title, msg, length);
 }
 
 FCITX_EXPORT_API
 void OnTriggerOff(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->OnTriggerOff)
+    if (UI_FUNC_IS_VALID(OnTriggerOff))
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
 
     TriggerOffHook(instance);
@@ -480,7 +482,7 @@ IsInBox(int x0, int y0, int x1, int y1, int w, int h)
 FCITX_EXPORT_API
 boolean UISupportMainWindow(FcitxInstance* instance)
 {
-    if (instance->ui && instance->ui->ui->MainWindowSizeHint)
+    if (UI_FUNC_IS_VALID(MainWindowSizeHint))
         return true;
     else
         return false;
@@ -489,7 +491,7 @@ boolean UISupportMainWindow(FcitxInstance* instance)
 FCITX_EXPORT_API
 void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
 {
-    if (instance->ui && instance->ui->ui->MainWindowSizeHint)
+    if (UI_FUNC_IS_VALID(MainWindowSizeHint))
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
 
@@ -590,7 +592,7 @@ void UpdateInputWindowReal(FcitxInstance *instance)
     if (!toshow)
     {
         UpdatePreedit(instance, ic);
-        if (instance->ui && instance->ui->ui->CloseInputWindow)
+        if (UI_FUNC_IS_VALID(CloseInputWindow))
             instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
     }
     else
@@ -599,7 +601,7 @@ void UpdateInputWindowReal(FcitxInstance *instance)
 
 void MoveInputWindowReal(FcitxInstance *instance)
 {
-    if (instance->ui && instance->ui->ui->MoveInputWindow)
+    if (UI_FUNC_IS_VALID(MoveInputWindow))
         instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
 

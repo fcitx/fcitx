@@ -43,6 +43,7 @@ extern "C" {
 
     typedef enum _CapacityFlags {
         CAPACITY_NONE = 0,
+        CAPACITY_CLIENT_SIDE_UI = (1 << 0),
         CAPACITY_PREEDIT = (1 << 1)
     } CapacityFlags;
 
@@ -204,6 +205,8 @@ extern "C" {
      * @return IME_STATE
      **/
     IME_STATE GetCurrentState(struct _FcitxInstance* instance);
+
+    CapacityFlags GetCurrentCapacity(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus
 }

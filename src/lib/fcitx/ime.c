@@ -686,7 +686,7 @@ void ReloadConfig(FcitxInstance *instance)
             pim->ReloadConfig(pim->klass);
     }
 
-    if (instance->ui->ui->ReloadConfig)
+    if (instance->ui && instance->ui->ui->ReloadConfig)
         instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
 }
 
