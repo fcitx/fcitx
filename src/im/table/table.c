@@ -59,7 +59,7 @@ typedef struct _TableCandWordSortContext {
 } TableCandWordSortContext;
 
 static void *TableCreate(FcitxInstance* instance);
-static int TableCandCmp(const void* b, const void* a, void *arg);
+static int TableCandCmp(const void* a, const void* b, void* arg);
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -1214,7 +1214,7 @@ void FreeTableConfig(void *v)
     free(table->strChoose);
 }
 
-int TableCandCmp(const void* b, const void* a, void *arg)
+int TableCandCmp(const void* a, const void* b, void *arg)
 {
     TABLECANDWORD* canda = *(TABLECANDWORD**)a;
     TABLECANDWORD* candb = *(TABLECANDWORD**)b;
@@ -1228,7 +1228,7 @@ int TableCandCmp(const void* b, const void* a, void *arg)
         int result = strcmp(canda->candWord.record->strCode, candb->candWord.record->strCode);
         if (result != 0)
             return result;
-        return canda->candWord.record->iIndex - canda->candWord.record->iIndex;
+        return candb->candWord.record->iIndex - canda->candWord.record->iIndex;
     }
     break;
     case AD_FREQ:
@@ -1236,7 +1236,7 @@ int TableCandCmp(const void* b, const void* a, void *arg)
         int result = strcmp(canda->candWord.record->strCode, candb->candWord.record->strCode);
         if (result != 0)
             return result;
-        return canda->candWord.record->iHit - canda->candWord.record->iHit;
+        return candb->candWord.record->iHit - canda->candWord.record->iHit;
     }
     break;
     }
