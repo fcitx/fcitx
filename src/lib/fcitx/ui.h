@@ -291,6 +291,7 @@ extern "C" {
     void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
     int NewMessageToOldStyleMessage(struct _FcitxInstance* instance, Messages* msgUp, Messages* msgDown);
     char* MessagesToCString(Messages* messages);
+    char* CandidateWordToCString(struct _FcitxInstance* instance);
     void UpdateInputWindow(struct _FcitxInstance* instance);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};

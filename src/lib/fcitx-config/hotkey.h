@@ -43,6 +43,7 @@ extern "C"
      **/
     typedef enum _FcitxKeySym
     {
+        Key_None                        = 0x0,
         Key_VoidSymbol                  = 0xffffff,  /* Void symbol */
 
 

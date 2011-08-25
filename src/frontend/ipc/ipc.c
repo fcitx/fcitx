@@ -56,6 +56,7 @@ static void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType ev
 static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
 static void IPCUpdatePreedit(void* arg, FcitxInputContext* ic);
+static void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic);
 static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data);
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
@@ -94,6 +95,10 @@ const char * ic_introspection_xml =
     "    </method>\n"
     "  </interface>\n"
     "  <interface name=\"" FCITX_IC_DBUS_INTERFACE "\">\n"
+    "    <method name=\"EnableIC\">\n"
+    "    </method>\n"
+    "    <method name=\"CloseIC\">\n"
+    "    </method>\n"
     "    <method name=\"FocusIn\">\n"
     "    </method>\n"
     "    <method name=\"FocusOut\">\n"
@@ -128,6 +133,14 @@ const char * ic_introspection_xml =
     "      <arg name=\"str\" type=\"s\"/>\n"
     "      <arg name=\"cursorpos\" type=\"i\"/>\n"
     "    </signal>\n"
+    "    <signal name=\"UpdateClientSideUI\">\n"
+    "      <arg name=\"auxup\" type=\"s\"/>\n"
+    "      <arg name=\"auxdown\" type=\"s\"/>\n"
+    "      <arg name=\"preedit\" type=\"s\"/>\n"
+    "      <arg name=\"candidateword\" type=\"s\"/>\n"
+    "      <arg name=\"imname\" type=\"s\"/>\n"
+    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
+    "    </signal>\n"
     "    <signal name=\"ForwardKey\">\n"
     "      <arg name=\"keyval\" type=\"u\"/>\n"
     "      <arg name=\"state\" type=\"u\"/>\n"
@@ -151,7 +164,7 @@ FcitxFrontend frontend =
     IPCSetWindowOffset,
     IPCGetWindowPosition,
     IPCUpdatePreedit,
-    NULL,
+    IPCUpdateClientSideUI,
     NULL,
     NULL,
     NULL
@@ -368,6 +381,16 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     {
         DBusError error;
         dbus_error_init(&error);
+        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC"))
+        {
+            EnableIM(ipc->owner, ic, false);
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC"))
+        {
+            CloseIM(ipc->owner, ic);
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
         {
             IPCICFocusIn(ipc, ic);
@@ -545,6 +568,45 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
     dbus_connection_flush(ipc->conn);
     dbus_message_unref(msg);
     free(strPreedit);
+}
+
+void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                       FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                       "UpdateClientSideUI"); // name of the signal
+
+    char* strAuxUp = MessagesToCString(ipc->owner->input.msgAuxUp);
+    char* strAuxDown = MessagesToCString(ipc->owner->input.msgAuxDown);
+    char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+    char* candidateword = CandidateWordToCString(ipc->owner);
+    FcitxIM* im = GetCurrentIM(ipc->owner);
+    char* imname = NULL;
+    if (im == NULL)
+        imname = "En";
+    else
+        imname = im->strName;
+
+    dbus_message_append_args(msg,
+                             DBUS_TYPE_STRING, &strAuxUp,
+                             DBUS_TYPE_STRING, &strAuxDown,
+                             DBUS_TYPE_STRING, &strPreedit,
+                             DBUS_TYPE_STRING, &candidateword,
+                             DBUS_TYPE_STRING, &imname,
+                             DBUS_TYPE_INT32, &ipc->owner->input.iCursorPos,
+                             DBUS_TYPE_INVALID);
+
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
+    free(strAuxUp);
+    free(strAuxDown);
+    free(strPreedit);
+    free(candidateword);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

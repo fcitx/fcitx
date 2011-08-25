@@ -247,6 +247,25 @@ void UpdatePreedit(FcitxInstance* instance, FcitxInputContext* ic)
 }
 
 FCITX_EXPORT_API
+void UpdateClientSideUI(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (ic == NULL)
+        return;
+
+    if (!(ic->contextCaps & CAPACITY_CLIENT_SIDE_UI))
+        return;
+
+    UT_array* frontends = &instance->frontends;
+
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->UpdateClientSideUI)
+        frontend->UpdateClientSideUI((*pfrontend)->addonInstance, ic);
+}
+
+FCITX_EXPORT_API
 void SetWindowOffset(FcitxInstance* instance, FcitxInputContext *ic, int x, int y)
 {
     UT_array* frontends = &instance->frontends;

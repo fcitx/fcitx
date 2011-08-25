@@ -77,7 +77,7 @@ extern "C" {
         void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y);
         void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
         void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
-        void (*padding1)();
+        void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic);
         void (*padding2)();
         void (*padding3)();
         void (*padding4)();
@@ -196,7 +196,23 @@ extern "C" {
      **/
     void GetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
 
+    /**
+     * @brief Update preedit text to client window
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @return void
+     **/
     void UpdatePreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
+
+    /**
+     * @brief Update all user interface element to client (Aux Text, Preedit, Candidate Word)
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @return void
+     **/
+    void UpdateClientSideUI(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
      * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.

@@ -2,6 +2,10 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="org.fcitx.Fcitx.InputContext">
+    <method name="EnableIC">
+    </method>
+    <method name="CloseIC">
+    </method>
     <method name="FocusIn">
     </method>
     <method name="FocusOut">
@@ -34,6 +38,14 @@
     </signal>
     <signal name="UpdatePreedit">
       <arg name="str" type="s"/>
+      <arg name="cursorpos" type="i"/>
+    </signal>
+    <signal name="UpdateClientSideUI">
+      <arg name="auxup" type="s"/>
+      <arg name="auxdown" type="s"/>
+      <arg name="preedit" type="s"/>
+      <arg name="candidateword" type="s"/>
+      <arg name="imname" type="s"/>
       <arg name="cursorpos" type="i"/>
     </signal>
     <signal name="ForwardKey">

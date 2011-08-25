@@ -281,7 +281,16 @@ FCITX_EXPORT_API
 void CloseInputWindow(FcitxInstance* instance)
 {
     CleanInputWindow(instance);
-    UpdatePreedit(instance, GetCurrentIC(instance));
+    FcitxInputContext* ic = GetCurrentIC(instance);
+    if (ic)
+    {
+        if (ic->contextCaps & CAPACITY_CLIENT_SIDE_UI)
+            UpdateClientSideUI(instance, ic);
+
+        if (ic->contextCaps & CAPACITY_PREEDIT)
+            UpdatePreedit(instance, GetCurrentIC(instance));
+    }
+
     if (UI_FUNC_IS_VALID(CloseInputWindow ))
         instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
 }
@@ -563,6 +572,56 @@ char* MessagesToCString(Messages* messages)
     return str;
 }
 
+FCITX_EXPORT_API
+char* CandidateWordToCString(FcitxInstance* instance)
+{
+    size_t len = 0;
+    int i;
+    FcitxInputState* input = &instance->input;
+    CandidateWord* candWord;
+    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+         candWord != NULL;
+         candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++)
+    {
+        char strTemp[3] = { '\0', '\0', '\0' };
+        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+
+        if (ConfigGetPointAfterNumber(instance->config))
+            strTemp[1] = '.';
+
+        len += strlen(strTemp);
+        len += strlen(candWord->strWord);
+
+        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+            len += strlen(candWord->strExtra);
+
+        len ++;
+    }
+
+    char *result = fcitx_malloc0(sizeof(char) * (len + 1));
+
+    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+         candWord != NULL;
+         candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++)
+    {
+        char strTemp[3] = { '\0', '\0', '\0' };
+        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+
+        if (ConfigGetPointAfterNumber(instance->config))
+            strTemp[1] = '.';
+
+        strcat(result, strTemp);
+        strcat(result, candWord->strWord);
+
+        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+            strcat(result, candWord->strExtra);
+
+        strcat(result, " ");
+    }
+
+    return result;
+}
+
 void UpdateInputWindowReal(FcitxInstance *instance)
 {
     FcitxInputState* input = &instance->input;
@@ -570,6 +629,12 @@ void UpdateInputWindowReal(FcitxInstance *instance)
     CapacityFlags flags = CAPACITY_NONE;
     if (ic != NULL)
         flags = ic->contextCaps;
+
+    if (flags & CAPACITY_CLIENT_SIDE_UI)
+    {
+        UpdateClientSideUI(instance, ic);
+        return;
+    }
 
     boolean toshow = false;
 
