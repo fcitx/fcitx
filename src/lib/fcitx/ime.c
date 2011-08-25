@@ -329,7 +329,7 @@ INPUT_RETURN_VALUE ProcessKey(
     if (event == FCITX_RELEASE_KEY
             && IsHotKeySimple(sym, state)
             && retVal == IRV_TO_PROCESS)
-        return IRV_DONOT_PROCESS;
+        return IRV_DO_NOTHING;
 
     if (retVal == IRV_TO_PROCESS) {
         /* process key event for switch key */
