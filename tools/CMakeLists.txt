@@ -55,5 +55,6 @@ target_link_libraries(readPYMB fcitx-config)
 target_link_libraries(mb2org fcitx-config)
 target_link_libraries(mb2txt fcitx-config fcitx-utils)
 target_link_libraries(txt2mb fcitx-config fcitx-utils)
+target_link_libraries(fcitx-remote fcitx-utils)
 
 install(TARGETS createPYMB readPYBase readPYMB fcitx-remote mb2org mb2txt txt2mb scel2org DESTINATION ${bindir})

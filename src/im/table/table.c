@@ -387,27 +387,6 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             input->strCodeInput[0] = sym;
                             input->strCodeInput[1] = '\0';
                         }
-                        else if (table->iTableAutoSendToClient && (input->iCodeInputCount >= table->iTableAutoSendToClient)) {
-                            if (CandidateWordGetCurrentWindowSize(input->candList) == 1) {  //如果只有一个候选词，则送到客户程序中
-                                CandidateWord* candWord = CandidateWordGetCurrentWindow(input->candList);
-                                if (candWord->owner == tbl)
-                                {
-                                    TABLECANDWORD* tableCandWord = candWord->priv;
-                                    if (tableCandWord->flag != CT_AUTOPHRASE || (tableCandWord->flag == CT_AUTOPHRASE && !table->iSaveAutoPhraseAfter))
-                                    {
-                                        retVal = IRV_DO_NOTHING;
-                                        if (tableCandWord->flag == CT_NORMAL) {
-                                            if (tableCandWord->candWord.record->bPinyin)
-                                                retVal = IRV_DISPLAY_CANDWORDS;
-                                        }
-
-                                        if (retVal != IRV_DISPLAY_CANDWORDS) {
-                                            retVal = CandidateWordChooseByIndex(input->candList, 0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         else if ((input->iCodeInputCount == 1) && strTemp && CandidateWordPageCount(input->candList) == 0) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
                             strcpy (GetOutputString(input), strTemp);
                             retVal = IRV_PUNC;
@@ -423,7 +402,12 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             {
                                 TABLECANDWORD* tableCandWord = candWord->priv;
                                 if (tableCandWord->flag != CT_AUTOPHRASE) {
-                                    retVal |= TableGetCandWord (tbl, candWord);
+                                    INPUT_RETURN_VALUE ret = TableGetCandWord (tbl, candWord);
+                                    if (ret & IRV_FLAG_PENDING_COMMIT_STRING)
+                                    {
+                                        CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
+                                        input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
+                                    }
                                 }
                             }
                         }
@@ -909,14 +893,28 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
 
     utarray_done(&candTemp);
 
-
     if (input->iCodeInputCount) {
         SetMessageCount(input->msgPreedit, 0);
         AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
         input->iCursorPos = strlen(input->strCodeInput);
     }
+    
+    INPUT_RETURN_VALUE retVal = IRV_DISPLAY_CANDWORDS;
 
-    return IRV_DISPLAY_CANDWORDS;
+    if (table->iTableAutoSendToClient && (input->iCodeInputCount >= table->iTableAutoSendToClient)) {
+        if (CandidateWordGetCurrentWindowSize(input->candList) == 1) {  //如果只有一个候选词，则送到客户程序中
+            CandidateWord* candWord = CandidateWordGetCurrentWindow(input->candList);
+            if (candWord->owner == tbl)
+            {
+                TABLECANDWORD* tableCandWord = candWord->priv;
+                if (tableCandWord->flag != CT_AUTOPHRASE || (tableCandWord->flag == CT_AUTOPHRASE && !table->iSaveAutoPhraseAfter))
+                    if (!(tableCandWord->flag == CT_NORMAL && tableCandWord->candWord.record->bPinyin))
+                        retVal = CandidateWordChooseByIndex(input->candList, 0);
+            }
+        }
+    }
+    
+    return retVal;
 }
 
 void TableAddAutoCandWord (FcitxTableState* tbl, short which, TABLECANDWORD* tableCandWord)

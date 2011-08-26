@@ -35,7 +35,7 @@
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/instance.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 static void* RemoteCreate(FcitxInstance* instance);
 static void RemoteProcessEvent(void* arg);
@@ -63,7 +63,7 @@ void* RemoteCreate(FcitxInstance* instance)
     remote->owner = instance;
 
     char *socketfile = remote->socketfile;
-    sprintf(socketfile, "/tmp/fcitx-socket");
+    sprintf(socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
     remote->socket_fd = CreateSocket(socketfile);
     if ( remote->socket_fd < 0) {
         FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));

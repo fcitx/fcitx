@@ -383,13 +383,13 @@ INPUT_RETURN_VALUE ProcessKey(
                 if (CandidateWordGetByIndex(input->candList, 1) != NULL)
                 {
                     input->keyReleased = KR_2ND_SELECTKEY;
-                    return IRV_DONOT_PROCESS;
+                    return IRV_DO_NOTHING;
                 }
             } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
                 if (CandidateWordGetByIndex(input->candList, 2) != NULL)
                 {
                     input->keyReleased = KR_3RD_SELECTKEY;
-                    return IRV_DONOT_PROCESS;
+                    return IRV_DO_NOTHING;
                 }
             }
 

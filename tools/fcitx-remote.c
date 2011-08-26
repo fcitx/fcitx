@@ -35,6 +35,7 @@
 #include <poll.h>
 #include <limits.h>
 #include "fcitx/frontend.h"
+#include "fcitx-utils/utils.h"
 
 int create_socket(const char *name)
 {
@@ -113,7 +114,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    sprintf(socketfile, "/tmp/fcitx-socket");
+    sprintf(socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
 
     socket_fd = create_socket(socketfile);
 
