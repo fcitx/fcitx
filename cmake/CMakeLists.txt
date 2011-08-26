@@ -1,1 +1,1 @@
-install(FILES FindFcitx4.cmake FcitxMacro.cmake DESTINATION ${CMAKE_ROOT}/Modules)
+install(FILES FcitxConfig.cmake FcitxMacro.cmake DESTINATION ${prefix}/share/cmake/fcitx/)

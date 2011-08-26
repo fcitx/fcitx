@@ -567,6 +567,8 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     newWidth = (inputWidth<outputWidth)?outputWidth:inputWidth;
     newWidth+=sc->skinInputBar.marginLeft+sc->skinInputBar.marginRight;
 
+    newWidth+= 3 +  (sc->skinInputBar.iBackArrowX > sc->skinInputBar.iForwardArrowX ? sc->skinInputBar.iBackArrowX : sc->skinInputBar.iForwardArrowX);
+
     /* round to ROUND_SIZE in order to decrease resize */
     newWidth =  (newWidth / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
 
