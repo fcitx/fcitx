@@ -3,6 +3,6 @@ Name=fcitx-qw
 _GeneralName=Quwei
 _Comment=Quwei Input Method for Fcitx
 Category=InputMethod
-Enabled=True
+Enabled=False
 Library=fcitx-qw.so
 Type=SharedLibrary
