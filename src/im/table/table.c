@@ -583,9 +583,13 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                     retVal = IRV_CLEAN;
             }
             else if (IsHotKey(sym, state, FCITX_SPACE)) {
-                retVal = CandidateWordChooseByIndex(input->candList, 0);
-                if (retVal == IRV_TO_PROCESS)
-                    retVal = IRV_DO_NOTHING;
+                if (input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
+                    retVal = IRV_COMMIT_STRING;
+                else {
+                    retVal = CandidateWordChooseByIndex(input->candList, 0);
+                    if (retVal == IRV_TO_PROCESS)
+                        retVal = IRV_DO_NOTHING;
+                }
             }
             else
             {

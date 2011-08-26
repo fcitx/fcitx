@@ -287,7 +287,7 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
     strcpy(input->strCodeInput, autoEngState->buf);
     input->iCodeInputCount = strlen(autoEngState->buf);
     input->iCursorPos = input->iCodeInputCount;
-    AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Press enter to input text"));
+    AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _("Press Enter to input text"));
 }
 
 void ReloadAutoEng(void* arg)
