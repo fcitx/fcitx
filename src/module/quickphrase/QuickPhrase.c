@@ -249,7 +249,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                     if (*retval == IRV_DISPLAY_MESSAGE)
                     {
                         SetMessageCount(input->msgAuxDown, 0);
-                        AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Press enter to input text"));
+                        AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _("Press Enter to input text"));
                     }
                 }
             }
