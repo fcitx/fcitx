@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-27 21:43+0800\n"
-"PO-Revision-Date: 2011-08-27 21:44+0800\n"
+"POT-Creation-Date: 2011-08-29 12:58+0800\n"
+"PO-Revision-Date: 2011-08-29 12:59+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -610,13 +610,13 @@ msgstr "输入法: 打开%s 失败 %s"
 msgid "Icon Name"
 msgstr "图标名称"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:153
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:159
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
 msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:154
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:160
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
 msgstr "如果您使用 ~/.xinitrc 和 startx，请将这些行加入到 ~/.xinitrc 中。"
 
@@ -853,6 +853,16 @@ msgstr "配置项%s不合法，使用默认值%s"
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:155
+msgid "Or (Depends on you install im module or not)"
+msgstr "或者（取决于您是否安装了im module）"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:151
+msgid ""
+"Or You may need to set environment varibles below to make fcitx work "
+"correctly."
+msgstr "或者你需要设置以下环境变量从而让Fcitx正常工作。"
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:23
 msgid "Order of Code Table"
 msgstr "码表顺序"
@@ -886,7 +896,7 @@ msgstr "拼音输入法优先级，0为禁用"
 msgid "Pinyin: "
 msgstr "拼音："
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:149
 msgid "Please check your environment varibles."
 msgstr "请检查你的环境变量的设置"
 
@@ -1059,7 +1069,7 @@ msgstr "Fcitx真正启动前延迟的秒数"
 msgid "Send inputed Text if Switch to English Mode"
 msgstr "快速切换英文模式时上屏"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:156
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:162
 msgid "Setting Hint"
 msgstr "设置提示"
 
@@ -1347,10 +1357,9 @@ msgstr "XMODIFIERS Error."
 msgid "Xim"
 msgstr "Xim"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:149
-msgid ""
-"You may need to set environment varibles below to make fcitx work correctly."
-msgstr "你需要设置以下环境变量从而让Fcitx正常工作。"
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:150
+msgid "You can use tools provided by your distribution."
+msgstr "您可以使用您发行版提供的工具。"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/zrm.conf.in.h:1
 msgid "Ziranma"
@@ -1369,7 +1378,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:255
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:261
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
