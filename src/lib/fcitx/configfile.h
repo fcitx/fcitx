@@ -172,10 +172,19 @@ extern "C" {
          **/
         HOTKEYS i3rdSelectKey[2];
 
+        /**
+         * @brief hide input window when there is only preedit string
+         **/
         boolean bHideInputWindowWhenOnlyPreeditString;
 
+        /**
+         * @brief hide input window when there is only one candidate word
+         **/
         boolean bHideInputWindowWhenOnlyOneCandidate;
 
+        /**
+         * @brief switch the preedit should show in client window or not
+         **/
         HOTKEYS hkSwitchEmbeddedPreedit[2];
     } FcitxConfig;
 

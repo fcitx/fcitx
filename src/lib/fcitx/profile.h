@@ -59,6 +59,9 @@ extern "C" {
          **/
         boolean bUseFullWidthChar;
 
+        /**
+         * @brief show preedit string in client or not
+         **/
         boolean bUsePreedit;
     } FcitxProfile;
 

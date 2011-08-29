@@ -52,9 +52,9 @@ void InitFcitxIM(struct _FcitxInstance* instance);
 void InitBuiltInHotkey(struct _FcitxInstance* instance);
 
 /**
- * @brief ...
+ * @brief generat phrase tips
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void DoPhraseTips (struct _FcitxInstance* instance);
@@ -131,6 +131,12 @@ INPUT_RETURN_VALUE ImProcessReload(void *arg);
  **/
 INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
 
+/**
+ * @brief switch between "on the spot" and "over the spot"
+ *
+ * @param arg instance
+ * @return INPUT_RETURN_VALUE
+ **/
 INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
 
 #endif

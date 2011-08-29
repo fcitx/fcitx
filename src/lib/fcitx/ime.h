@@ -196,14 +196,74 @@ extern "C" {
         Messages* msgAuxDown;
     } FcitxInputState;
 
+    /**
+     * @brief check the key is this hotkey or not
+     *
+     * @param sym keysym
+     * @param state key state
+     * @param hotkey hotkey
+     * @return boolean
+     **/
     boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
+
+    /**
+     * @brief the string pending commit
+     *
+     * @param input input state
+     * @return char*
+     **/
     char* GetOutputString(FcitxInputState* input);
+
+    /**
+     * @brief get current input method
+     *
+     * @param instance fcitx instance
+     * @return _FcitxIM*
+     **/
     struct _FcitxIM* GetCurrentIM(struct _FcitxInstance *instance);
+
+    /**
+     * @brief enable im
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @param keepState keep current state or not
+     * @return void
+     **/
     void EnableIM(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, boolean keepState);
+
+    /**
+     * @brief reset input state
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void ResetInput (struct _FcitxInstance* instance);
+
+    /**
+     * @brief clean whole input window
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void CleanInputWindow(struct _FcitxInstance *instance);
+
+    /**
+     * @brief clean preedit string and aux up
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void CleanInputWindowUp(struct _FcitxInstance *instance);
+
+    /**
+     * @brief clean candidate word list and aux down
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void CleanInputWindowDown(struct _FcitxInstance *instance);
+
     /**
      * @brief Sometimes, we use INPUT_RETURN_VALUE not from ProcessKey, so use this function to do the correct thing.
      *
@@ -215,6 +275,25 @@ extern "C" {
         struct _FcitxInstance* instance,
         INPUT_RETURN_VALUE retVal
     );
+
+    /**
+     * @brief register a new input method
+     *
+     * @param instance fcitx instance
+     * @param addonInstance instance of addon
+     * @param name input method name
+     * @param iconName icon name
+     * @param Init init callback
+     * @param ResetIM reset callback
+     * @param DoInput do input callback
+     * @param GetCandWords get candidate words callback
+     * @param PhraseTips phrase tips callback
+     * @param Save save callback
+     * @param ReloadConfig reload config callback
+     * @param priv private data for this input method.
+     * @param priority order of this input method
+     * @return void
+     **/
     void FcitxRegisterIM(struct _FcitxInstance *instance,
                          void *addonInstance,
                          const char* name,
@@ -230,11 +309,63 @@ extern "C" {
                          int priority
                         );
 
+    /**
+     * @brief process a key event, should only used by frontend
+     *
+     * @param instance fcitx instance
+     * @param event event type
+     * @param timestamp timestamp
+     * @param sym keysym
+     * @param state key state
+     * @return INPUT_RETURN_VALUE
+     **/
     INPUT_RETURN_VALUE ProcessKey(struct _FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
+
+    /**
+     * @brief send a new key event to client
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @param event event tpye
+     * @param sym keysym
+     * @param state key state
+     * @return void
+     **/
     void ForwardKey(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
+
+    /**
+     * @brief save all input method data
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void SaveAllIM (struct _FcitxInstance* instance);
+
+    /**
+     * @brief reload all config
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void ReloadConfig(struct _FcitxInstance* instance);
+
+    /**
+     * @brief switch to input method by index
+     *
+     * @param instance fcitx instance
+     * @param index input method index
+     * @return void
+     **/
     void SwitchIM (struct _FcitxInstance* instance, int index);
+
+    /**
+     * @brief check is choose key or not, if so, return the choose index
+     *
+     * @param sym keysym
+     * @param state keystate
+     * @param strChoose choose key string
+     * @return int
+     **/
     int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose);
 
 #ifdef __cplusplus

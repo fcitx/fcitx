@@ -69,9 +69,41 @@ extern "C" {
         void* args[10];
     } FcitxModuleFunctionArg;
 
+    /**
+     * @brief init module array
+     *
+     * @param modules module array
+     * @return void
+     **/
     void InitFcitxModules(UT_array* modules);
+
+    /**
+     * @brief load all modules
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void LoadModule(struct _FcitxInstance* instance);
+
+    /**
+     * @brief invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
+     *
+     * @param addon addon
+     * @param functionId function index
+     * @param args arguments
+     * @return void*
+     **/
     void* InvokeModuleFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+
+    /**
+     * @brief invoke inter module function with addon name, returns NULL when fails (the function itself can also return NULL)
+     *
+     * @param instance fcitx instance
+     * @param name addon name
+     * @param functionId function index
+     * @param args arguments
+     * @return void*
+     **/
     void* InvokeModuleFunctionWithName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
@@ -88,4 +120,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

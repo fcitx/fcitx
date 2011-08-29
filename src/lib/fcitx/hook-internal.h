@@ -26,73 +26,82 @@
 struct _FcitxInstance;
 
 /**
- * @brief ...
+ * @brief do the preinput phase
  *
- * @param instance ...
- * @param sym ...
- * @param state ...
- * @param retval ...
+ * @param instance fcitx instance
+ * @param sym keysym
+ * @param state keystate
+ * @param retval input return val
  * @return void
  **/
 void ProcessPreInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 
 /**
- * @brief ...
+ * @brief do the postinput phase
  *
- * @param instance ...
- * @param sym ...
- * @param state ...
- * @param retval ...
+ * @param instance fcitx instance
+ * @param sym keysym
+ * @param state keystate
+ * @param retval input return val
  * @return void
  **/
 void ProcessPostInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 
 /**
- * @brief ...
+ * @brief process hotkey phase
  *
- * @param instance ...
- * @param keysym ...
- * @param state ...
+ * @param instance fcitx instance
+ * @param sym keysym
+ * @param state keystate
  * @return INPUT_RETURN_VALUE
  **/
 INPUT_RETURN_VALUE CheckHotkey(struct _FcitxInstance* instance, FcitxKeySym keysym, unsigned int state);
 
 /**
- * @brief ...
+ * @brief process reset input
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void ResetInputHook(struct _FcitxInstance* instance);
 
 /**
- * @brief ...
+ * @brief process trigger off event
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void TriggerOffHook(struct _FcitxInstance* instance);
 
 /**
- * @brief ...
+ * @brief process trigger on event
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void TriggerOnHook(struct _FcitxInstance* instance);
 
 /**
- * @brief ...
+ * @brief process focus in event
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void InputFocusHook(struct _FcitxInstance* instance);
 /**
- * @brief ...
+ * @brief process focus out event
  *
- * @param instance ...
+ * @param instance fcitx instance
  * @return void
  **/
 void InputUnFocusHook(struct _FcitxInstance* instance);
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+
+/**
+ * @brief process update candidates event
+ *
+ * @param instance fcitx instance
+ * @return void
+ **/
+void ProcessUpdateCandidates(struct _FcitxInstance* instance);
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

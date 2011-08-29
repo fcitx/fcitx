@@ -38,6 +38,16 @@ extern "C" {
 
 #define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
 
+    /**
+     * @brief print a log string to stderr, should use FcitxLog instead of this function
+     *
+     * @param level log level
+     * @param filename current filename
+     * @param line line number
+     * @param fmt printf fmt
+     * @param  ...
+     * @return void
+     **/
     void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
 
 #ifdef __cplusplus
@@ -45,4 +55,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

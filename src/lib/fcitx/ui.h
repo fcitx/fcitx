@@ -257,41 +257,322 @@ extern "C" {
         void (*ReloadConfig)(void*);
     } FcitxUI;
 
+    /**
+     * @brief load user interface module
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void LoadUserInterface(struct _FcitxInstance* instance);
+
+    /**
+     * @brief init messages
+     *
+     * @return Messages*
+     **/
     Messages* InitMessages();
+
+    /**
+     * @brief add a message string at last
+     *
+     * @param message message
+     * @param type message type
+     * @param fmt  printf fmt
+     * @param  ...
+     * @return void
+     **/
     void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...);
+
+    /**
+     * @brief set a message string at position
+     *
+     * @param message message
+     * @param position position
+     * @param type message type
+     * @param fmt printf fmt
+     * @param  ...
+     * @return void
+     **/
     void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...);
+    /**
+     * @brief set only message string
+     *
+     * @param message message
+     * @param position position
+     * @param fmt printf format
+     * @param  ...
+     * @return void
+     **/
     void SetMessageText(Messages* message, int position, const char* fmt, ...);
+    /**
+     * @brief concat a string to message string at position
+     *
+     * @param message message
+     * @param position position
+     * @param text string
+     * @return void
+     **/
     void MessageConcat(Messages* message, int position, const char* text);
+    /**
+     * @brief concat a string to message string at last
+     *
+     * @param message message
+     * @param text string
+     * @return void
+     **/
     void MessageConcatLast(Messages* message, const char* text);
+    /**
+     * @brief set message string vprintf version
+     *
+     * @param message message
+     * @param position position
+     * @param type message type
+     * @param fmt printf format
+     * @param ap arguments
+     * @return void
+     **/
     void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt, va_list ap);
+    /**
+     * @brief set message count
+     *
+     * @param m message
+     * @param s count
+     * @return void
+     **/
     void SetMessageCount(Messages* m, int s);
+    /**
+     * @brief get message count
+     *
+     * @param m message
+     * @return int
+     **/
     int GetMessageCount(Messages* m);
+    /**
+     * @brief get message string at index
+     *
+     * @param m message
+     * @param index index
+     * @return char*
+     **/
     char* GetMessageString(Messages* m, int index);
+    /**
+     * @brief get message type at index
+     *
+     * @param m message
+     * @param index index
+     * @return MSG_TYPE
+     **/
     MSG_TYPE GetMessageType(Messages* m, int index);
+    /**
+     * @brief check whether message is changed
+     *
+     * @param m message
+     * @return boolean
+     **/
     boolean IsMessageChanged(Messages* m);
+    /**
+     * @brief set message is changed or not
+     *
+     * @param m message
+     * @param changed changed or not
+     * @return void
+     **/
     void SetMessageChanged(Messages* m, boolean changed);
+    /**
+     * @brief add a new menu shell
+     *
+     * @param menu menu
+     * @param string menu text
+     * @param type menu type
+     * @param subMenu submenu pointer
+     * @return void
+     **/
     void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMenu* subMenu);
+    /**
+     * @brief clear all menu shell
+     *
+     * @param menu menu
+     * @return void
+     **/
     void ClearMenuShell(FcitxUIMenu* menu);
 
+    /**
+     * @brief move input to cursor position
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void MoveInputWindow(struct _FcitxInstance* instance);
+
+    /**
+     * @brief close input window
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void CloseInputWindow(struct _FcitxInstance* instance);
+    /**
+     * @brief toggle a user interface status
+     *
+     * @param instance fcitx instance
+     * @param name status name
+     * @return void
+     **/
     void UpdateStatus(struct _FcitxInstance* instance, const char* name);
-    void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean (*getStatus)(void *arg));
+    /**
+     * @brief register a new ui status
+     *
+     * @param instance fcitx instance
+     * @param arg private data, pass to callback
+     * @param name name
+     * @param shortDesc short description
+     * @param longDesc long description
+     * @param toggleStatus callback for toggle status
+     * @param getStatus get current status
+     * @return void
+     **/
+    void RegisterStatus(struct _FcitxInstance* instance,
+                        void* arg,
+                        const char* name,
+                        const char* shortDesc,
+                        const char* longDesc,
+                        void (*toggleStatus)(void *arg),
+                        boolean (*getStatus)(void *arg));
+    /**
+     * @brief register a new menu
+     *
+     * @param instance fcitx instance
+     * @param menu menu
+     * @return void
+     **/
     void RegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
+
+    /**
+     * @brief process focus in event
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void OnInputFocus(struct _FcitxInstance* instance);
+
+    /**
+     * @brief process focus out event
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void OnInputUnFocus(struct _FcitxInstance* instance);
+
+    /**
+     * @brief process trigger on event
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void OnTriggerOn(struct _FcitxInstance* instance);
+
+    /**
+     * @brief process trigger off event
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void OnTriggerOff(struct _FcitxInstance* instance);
+
+    /**
+     * @brief if user interface support, display a message window on the screen
+     *
+     * @param instance fcitx instance
+     * @param title window title
+     * @param msg message
+     * @param length length or message
+     * @return void
+     **/
     void DisplayMessage(struct _FcitxInstance *instance, char *title, char **msg, int length);
+
+    /**
+     * @brief get status by status name
+     *
+     * @param instance fcitx instance
+     * @param name status name
+     * @return FcitxUIStatus*
+     **/
     FcitxUIStatus *GetUIStatus(struct _FcitxInstance* instance, const char* name);
+
+    /**
+     * @brief update menu shell of a menu
+     *
+     * @param menu menu
+     * @return void
+     **/
     void UpdateMenuShell(FcitxUIMenu* menu);
+
+    /**
+     * @brief check point is in rectangle or not
+     *
+     * @param x0 point x
+     * @param y0 point y
+     * @param x1 rectangle x
+     * @param y1 rectangle y
+     * @param w rectangle width
+     * @param h rectangle height
+     * @return boolean
+     **/
     boolean IsInBox(int x0, int y0, int x1, int y1, int w, int h);
+
+    /**
+     * @brief check user interface support main window or not
+     *
+     * @param instance fcitx instance
+     * @return boolean
+     **/
     boolean UISupportMainWindow(struct _FcitxInstance* instance);
+
+    /**
+     * @brief get main window geometry property if there is a main window
+     *
+     * @param instance fcitx instance
+     * @param x x
+     * @param y y
+     * @param w w
+     * @param h h
+     * @return void
+     **/
     void GetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
+
+    /**
+     * @brief convert new messages to old up and down style messages, return the new cursos pos
+     *
+     * @param instance fcitx instance
+     * @param msgUp messages up
+     * @param msgDown messages up
+     * @return int
+     **/
     int NewMessageToOldStyleMessage(struct _FcitxInstance* instance, Messages* msgUp, Messages* msgDown);
+
+    /**
+     * @brief convert messages to pure c string
+     *
+     * @param messages messages
+     * @return char*
+     **/
     char* MessagesToCString(Messages* messages);
+
+    /**
+     * @brief convert candidate words to a string which can direct displayed
+     *
+     * @param instance fcitx instance
+     * @return char*
+     **/
+
     char* CandidateWordToCString(struct _FcitxInstance* instance);
+
+    /**
+     * @brief mark input window should update
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void UpdateInputWindow(struct _FcitxInstance* instance);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};

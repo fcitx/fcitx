@@ -112,98 +112,97 @@ extern "C" {
     } FcitxIMEventHook;
 
     /**
-     * @brief ...
+     * @brief register pre input filter
      *
-     * @param instance ...
-     * @param  ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterPreInputFilter(struct _FcitxInstance* instance, KeyFilterHook) ;
+    void RegisterPreInputFilter(struct _FcitxInstance* instance, KeyFilterHook hook) ;
     /**
-     * @brief ...
+     * @brief register post input filter
      *
-     * @param instance ...
-     * @param  ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterPostInputFilter(struct _FcitxInstance* instance, KeyFilterHook);
+    void RegisterPostInputFilter(struct _FcitxInstance* instance, KeyFilterHook hook);
     /**
-     * @brief ...
+     * @brief register ouput string filter
      *
-     * @param instance ...
-     * @param  ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterOutputFilter(struct _FcitxInstance* instance, StringFilterHook);
+    void RegisterOutputFilter(struct _FcitxInstance* instance, StringFilterHook hook);
     /**
-     * @brief ...
+     * @brief register hotkey
      *
-     * @param instance ...
-     * @param  ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterHotkeyFilter(struct _FcitxInstance* instance, HotkeyHook);
+    void RegisterHotkeyFilter(struct _FcitxInstance* instance, HotkeyHook hook);
     /**
-     * @brief ...
+     * @brief register reset input hook
      *
-     * @param instance ...
-     * @param value ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+    void RegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief ...
+     * @brief register trigger on hook
      *
-     * @param instance ...
-     * @param value ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+    void RegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief ...
+     * @brief register trigger off hook
      *
-     * @param instance ...
-     * @param value ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+    void RegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief ...
+     * @brief register focus in hook
      *
-     * @param instance ...
-     * @param value ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+    void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief ...
+     * @brief register focus out hook
      *
-     * @param instance ...
-     * @param value ...
+     * @param instance fcitx instance
+     * @param hook new hook
      * @return void
      **/
-    void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
-
-    void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook value);
+    void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
-     * @brief ...
+     * @brief register update candidate word hook
      *
-     * @param instance ...
-     * @param in ...
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     **/
+    void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+
+    /**
+     * @brief process output filter, return string is malloced
+     *
+     * @param instance fcitx instance
+     * @param in input string
      * @return char*
      **/
     char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
 
-    /**
-     * @brief ...
-     *
-     * @param instance ...
-     * @param in ...
-     * @return char*
-     **/
-    void ProcessUpdateCandidates(struct _FcitxInstance* instance);
 #ifdef __cplusplus
 }
 #endif

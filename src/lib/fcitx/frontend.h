@@ -217,11 +217,17 @@ extern "C" {
     /**
      * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
      *
-     * @param instance
+     * @param instance fcitx instance
      * @return IME_STATE
      **/
     IME_STATE GetCurrentState(struct _FcitxInstance* instance);
 
+    /**
+     * @brief get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
+     *
+     * @param instance fcitx instance
+     * @return CapacityFlags
+     **/
     CapacityFlags GetCurrentCapacity(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus

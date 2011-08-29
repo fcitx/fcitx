@@ -84,9 +84,38 @@ extern "C" {
         FcitxUIFlag uiflag;
     } FcitxInstance;
 
+    /**
+     * @brief create new fcitx instance
+     *
+     * @param sem semaphore to notify the instance is end
+     * @param argc argc
+     * @param argv argv
+     * @return FcitxInstance*
+     **/
     FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
+
+    /**
+     * @brief lock the instance
+     *
+     * @param instance fcitx instance
+     * @return int
+     **/
     int FcitxLock(FcitxInstance* instance);
+
+    /**
+     * @brief lock the instance
+     *
+     * @param instance fcitx instance
+     * @return int
+     **/
     int FcitxUnlock(FcitxInstance* instance);
+
+    /**
+     * @brief notify the instance is end
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void EndInstance(FcitxInstance* instance);
 
 #ifdef __cplusplus

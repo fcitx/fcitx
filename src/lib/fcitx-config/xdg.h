@@ -36,8 +36,39 @@ extern "C"
 {
 #endif
 
+    /**
+     * @brief Get library file
+     *
+     * @param filename filename
+     * @param mode file open mode
+     * @param retFile return file name
+     * @return FILE*
+     **/
     FILE *GetLibFile(const char *filename, const char *mode, char **retFile);
+    /**
+     * @brief get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder
+     *
+     * @param fileName filename
+     * @param path returns by GetXDGPath
+     * @param mode file open mode
+     * @param len length of path
+     * @param retFile return file name
+     * @return FILE*
+     *
+     * @see GetXDGPath
+     **/
     FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
+    /**
+     * @brief get xdg path with given arguement
+     *
+     * @param len return array size
+     * @param homeEnv homeEnv
+     * @param homeDefault homeDefault
+     * @param suffixHome suffixHome
+     * @param dirsDefault dirsDefault
+     * @param suffixGlobal suffixGlobal
+     * @return char**
+     **/
     char **GetXDGPath(
         size_t *len,
         const char* homeEnv,
@@ -46,8 +77,37 @@ extern "C"
         const char* dirsDefault,
         const char* suffixGlobal);
 
+    /**
+     * @brief get xdg file with prefix string, usually [install_prefix]/fcitx/prefix/filename and ~/.config/fcitx/prefix/filename
+     *
+     * @param prefix prefix
+     * @param fileName filename
+     * @param mode file open mode
+     * @param retFile file name to return
+     * @return FILE*
+     *
+     * @see GetXDGFile
+     **/
     FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
+    /**
+     * @brief get xdg file with prefix string, usually ~/.config/fcitx/prefix/filename
+     *
+     * @param prefix prefix
+     * @param fileName filename
+     * @param mode file open mode
+     * @param retFile file name to return
+     * @return FILE*
+     *
+     * @see GetXDGFile
+     **/
     FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
+    /**
+     * @brief free xdg path return by GetXDGPath
+     *
+     * @param path path array
+     * @return void
+     * @see GetXDGFile
+     **/
     void FreeXDGPath(char **path);
 
 #ifdef __cplusplus
@@ -57,4 +117,4 @@ extern "C"
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
