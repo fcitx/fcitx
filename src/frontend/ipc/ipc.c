@@ -417,7 +417,7 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity"))
         {
-            uint flags;
+            uint32_t flags;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID))
                 ic->contextCaps = flags;
             return DBUS_HANDLER_RESULT_HANDLED;

@@ -265,7 +265,7 @@ void FcitxIMClientReset(FcitxIMClient* client)
 
 void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags)
 {
-    uint iflags = flags;
+    uint32_t iflags = flags;
     if (client->icproxy)
     {
         dbus_g_proxy_call_no_reply(client->icproxy, "SetCapacity", G_TYPE_UINT, iflags, G_TYPE_INVALID);

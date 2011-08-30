@@ -23,10 +23,8 @@ endforeach(tableconffile ${TABLE_CONF})
 add_custom_target(table_conf ALL DEPENDS ${INSTALL_TABLE_CONF} )
 add_custom_target(table_data ALL DEPENDS ${TABLE_DATA})
 
-add_custom_target(rawtable
-                   COMMAND ${PROJECT_SOURCE_DIR}/data/download.sh "${WGET}" "${TABLE_URL}" "${TABLE_TAR}")
 add_custom_command(OUTPUT ${TABLEORG_DATA}
-                   DEPENDS rawtable
+                   COMMAND ${PROJECT_SOURCE_DIR}/data/download.sh "${WGET}" "${TABLE_URL}" "${TABLE_TAR}"
                    COMMAND ${TAR} xzmvf ${TABLE_TAR})
 
 foreach(tblname ${TABLE_NAME})

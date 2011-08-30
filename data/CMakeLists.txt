@@ -42,10 +42,8 @@ intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_
 
 add_custom_target(pinyin_data ALL DEPENDS ${PY_DATA})
 
-add_custom_target(rawpinyin
-                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/download.sh "${WGET}" "${PY_URL}" "${PY_TAR}")
 add_custom_command(OUTPUT ${PY_ORGDATA}
-                   DEPENDS rawpinyin
+                   COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/download.sh "${WGET}" "${PY_URL}" "${PY_TAR}"
                    COMMAND ${TAR} xzmvf ${PY_TAR})
 add_custom_command(OUTPUT ${PY_DATA}
                    DEPENDS ${PY_ORGDATA}
