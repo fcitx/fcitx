@@ -2,6 +2,7 @@ set(FCITX_UTILS_SOURCES
     utf8.c
     utils.c
     log.c
+    qsort_r.c
 )
 
 set(FCITX_UTILS_HEADERS

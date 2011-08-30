@@ -203,8 +203,10 @@ typedef struct {
   qsort((a)->d, (a)->i, (a)->icd->sz, cmp);                                   \
 } while(0)
 
+void fcitx_qsort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *thunk);
+
 #define utarray_sort_r(a,cmp, arg) do {                                       \
-  qsort_r((a)->d, (a)->i, (a)->icd->sz, cmp, arg);                            \
+  fcitx_qsort_r((a)->d, (a)->i, (a)->icd->sz, cmp, arg);                            \
 } while(0)
 
 #define utarray_front(a) (((a)->i) ? (_utarray_eltptr(a,0)) : NULL)
@@ -228,4 +230,4 @@ static const UT_icd ut_int_icd _UNUSED_ = {sizeof(int),NULL,NULL,NULL};
 
 #endif /* UTARRAY_H */
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

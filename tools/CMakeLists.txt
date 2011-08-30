@@ -1,5 +1,6 @@
 include_directories(${PROJECT_SOURCE_DIR}/src/)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
+include_directories(${LIBICONV_INCLUDE_DIR})
 
 set(createPYMB_SOURCES
     createPYMB.c
@@ -40,7 +41,7 @@ set(scel2org_SOURCES
     scel2org.c
 )
 
-add_executable(createPYMB ${createPYMB_SOURCES}) 
+add_executable(createPYMB ${createPYMB_SOURCES})
 add_executable(readPYBase ${readPYBase_SOURCES})
 add_executable(readPYMB ${readPYMB_SOURCES})
 add_executable(fcitx-remote fcitx-remote.c)
@@ -56,5 +57,6 @@ target_link_libraries(mb2org fcitx-config)
 target_link_libraries(mb2txt fcitx-config fcitx-utils)
 target_link_libraries(txt2mb fcitx-config fcitx-utils)
 target_link_libraries(fcitx-remote fcitx-utils)
+target_link_libraries(scel2org ${LIBICONV_LIBRARIES})
 
 install(TARGETS createPYMB readPYBase readPYMB fcitx-remote mb2org mb2txt txt2mb scel2org DESTINATION ${bindir})
