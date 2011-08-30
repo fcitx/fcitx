@@ -209,8 +209,14 @@ void VKUpdate(void* arg)
     VKWindow* vkWindow = vkstate->vkWindow;
     if (vkWindow)
     {
-        DrawVKWindow(vkWindow);
-        DisplayVKWindow(vkWindow);
+
+        if (GetCurrentState(vkstate->owner) != IS_CLOSED && vkstate->bVK)
+        {
+            DrawVKWindow(vkWindow);
+            DisplayVKWindow(vkWindow);
+        }
+        else
+            XUnmapWindow (vkWindow->dpy, vkWindow->window);
     }
 }
 
@@ -377,11 +383,6 @@ void DrawVKWindow (VKWindow* vkWindow)
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
 
-    if (GetCurrentState(vkstate->owner) == IS_CLOSED || !vkstate->bVK)
-    {
-        XUnmapWindow(vkWindow->dpy, vkWindow->window);
-        return;
-    }
 
     cr = cairo_create(vkWindow->surface);
     cairo_surface_t* vkimage = LoadVKImage(vkWindow);
@@ -825,4 +826,4 @@ void ReloadVK(void* arg)
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
