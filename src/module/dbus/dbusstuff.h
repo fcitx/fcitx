@@ -31,10 +31,6 @@ extern "C" {
 #define FCITX_DBUS_NAME "fcitx-dbus"
 #define FCITX_DBUS_GETCONNECTION 0
 #define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
-#define FCITX_DBUS_ADDEVENTHANDLER 1
-#define FCITX_DBUS_ADDEVENTHANDLER_RETURNTYPE void
-#define FCITX_DBUS_REMOVEEVENTHANDLER 2
-#define FCITX_DBUS_REMOVEEVENTHANDLER_RETURNTYPE void
 
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
 
@@ -48,4 +44,4 @@ extern "C" {
 #endif
 
 #endif // _FCITX_DBUS_H
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

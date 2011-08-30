@@ -99,6 +99,7 @@ void* DBusCreate(FcitxInstance* instance)
             NULL, dbusmodule, NULL))
     {
         FcitxLog(WARNING, _("Add Watch Function Error"));
+        dbus_error_free(&err);
         free(dbusmodule);
         return NULL;
     }
@@ -123,12 +124,14 @@ void* DBusCreate(FcitxInstance* instance)
     }
     if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
         FcitxLog(WARNING, _("Name Error"));
+        dbus_error_free(&err);
         free(dbusmodule);
         return NULL;
     }
 
     dbus_connection_flush(conn);
     AddFunction(dbusaddon, DBusGetConnection);
+    dbus_error_free(&err);
 
     return dbusmodule;
 }
@@ -234,4 +237,4 @@ void DBusProcessEvent(void* arg)
         dbus_connection_unref (connection);
     }
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

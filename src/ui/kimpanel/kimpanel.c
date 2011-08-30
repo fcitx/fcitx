@@ -185,6 +185,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     dbus_connection_flush(kimpanel->conn);
     if (dbus_error_is_set(&err)) {
         FcitxLog(ERROR, "Match Error (%s)", err.message);
+        dbus_error_free(&err);
         free(kimpanel);
         return NULL;
     }
@@ -192,6 +193,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel, NULL))
     {
         FcitxLog(ERROR, "No memory");
+        dbus_error_free(&err);
         free(kimpanel);
         return NULL;
     }
@@ -209,6 +211,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     RegisterResetInputHook(instance, resethk);
 
     KimpanelRegisterAllStatus(kimpanel);
+    dbus_error_free(&err);
     return kimpanel;
 }
 
@@ -1199,4 +1202,4 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 
     return iCount;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

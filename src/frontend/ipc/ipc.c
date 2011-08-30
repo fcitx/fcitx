@@ -366,6 +366,7 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     int id;
     sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PATH, &id);
     FcitxInputContext* ic = FindIC(ipc->owner, ipc->frontendid, &id);
+    DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
     {
@@ -374,37 +375,37 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &ic_introspection_xml, DBUS_TYPE_INVALID);
         dbus_connection_send (ipc->conn, reply, NULL);
         dbus_message_unref (reply);
-        return DBUS_HANDLER_RESULT_HANDLED;
+        result = DBUS_HANDLER_RESULT_HANDLED;
     }
 
-    if (ic)
+    if (result == DBUS_HANDLER_RESULT_NOT_YET_HANDLED && ic)
     {
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC"))
         {
             EnableIM(ipc->owner, ic, false);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC"))
         {
             CloseIM(ipc->owner, ic);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
         {
             IPCICFocusIn(ipc, ic);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut"))
         {
             IPCICFocusOut(ipc, ic);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset"))
         {
             IPCICReset(ipc, ic);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation"))
         {
@@ -413,19 +414,19 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
             {
                 IPCICSetCursorLocation(ipc, ic, x, y);
             }
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity"))
         {
             uint32_t flags;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID))
                 ic->contextCaps = flags;
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))
         {
             DestroyIC(ipc->owner, ipc->frontendid, &id);
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent"))
         {
@@ -451,10 +452,11 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
                 dbus_connection_flush(ipc->conn);
             }
 
-            return DBUS_HANDLER_RESULT_HANDLED;
+            result = DBUS_HANDLER_RESULT_HANDLED;
         }
+        dbus_error_free(&error);
     }
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    return result;
 }
 
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
