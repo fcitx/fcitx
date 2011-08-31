@@ -650,7 +650,7 @@ static void
 fcitx_im_context_set_use_preedit (GtkIMContext *context,
                                   gboolean      use_preedit)
 {
-    FcitxLog(INFO, "fcitx_im_context_set_use_preedit");
+    FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
 
     fcitxcontext->use_preedit = use_preedit;
