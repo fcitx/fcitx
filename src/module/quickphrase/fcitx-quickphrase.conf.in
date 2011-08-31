@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-quickphrase.so
 Type=SharedLibrary
 SubConfig=Quick Phrase List:native:data/QuickPhrase.mb,fcitx:domain
+Priority=40
