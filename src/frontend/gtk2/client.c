@@ -300,6 +300,30 @@ void FcitxIMClientProcessKey(FcitxIMClient* client,
                            );
 }
 
+int FcitxIMClientProcessKeySync(FcitxIMClient* client,
+                             uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t)
+{
+    int itype = type;
+    GError *error = NULL;
+    int ret = -1;
+    if ( !dbus_g_proxy_call(client->icproxy, "ProcessKeyEvent",
+                      &error,
+                      G_TYPE_UINT, keyval,
+                      G_TYPE_UINT, keycode,
+                      G_TYPE_UINT, state,
+                      G_TYPE_INT, itype,
+                      G_TYPE_UINT, t,
+                      G_TYPE_INVALID,
+                      G_TYPE_INT, &ret,
+                      G_TYPE_INVALID
+                    ))
+    {
+        return -1;
+    }
+
+    return ret;
+}
+
 void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                 GCallback enableIM,
                                 GCallback closeIM,

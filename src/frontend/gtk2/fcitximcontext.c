@@ -151,6 +151,10 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
 static gboolean
 _key_is_modifier (guint keyval);
 
+static gboolean
+_get_boolean_env(const gchar *name,
+                 gboolean defval);
+
 static GType _fcitx_type_im_context = 0;
 
 static guint _signal_commit_id = 0;
@@ -159,6 +163,7 @@ static guint _signal_preedit_start_id = 0;
 static guint _signal_preedit_end_id = 0;
 static guint _signal_delete_surrounding_id = 0;
 static guint _signal_retrieve_surrounding_id = 0;
+static gboolean _use_sync_mode = 0;
 
 /* Copied from gtk+2.0-2.20.1/modules/input/imcedilla.c to fix crosbug.com/11421.
 * Overwrite the original Gtk+'s compose table in gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
@@ -294,6 +299,10 @@ fcitx_im_context_class_init (FcitxIMContextClass *klass)
     _signal_retrieve_surrounding_id =
         g_signal_lookup ("retrieve-surrounding", G_TYPE_FROM_CLASS (klass));
     g_assert (_signal_retrieve_surrounding_id != 0);
+
+    /* make ibus fix benefits us */
+    _use_sync_mode = _get_boolean_env ("IBUS_ENABLE_SYNC_MODE", FALSE)
+                    || _get_boolean_env ("FCITX_ENABLE_SYNC_MODE", FALSE);
 }
 
 
@@ -433,20 +442,44 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
         }
 
         fcitxcontext->time = event->time;
-        ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
-        pks->context = fcitxcontext;
-        pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
-        FcitxIMClientProcessKey(fcitxcontext->client,
-                                _fcitx_im_context_process_key_cb,
-                                pks,
-                                g_free,
-                                event->keyval,
-                                event->hardware_keycode,
-                                event->state,
-                                (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
-                                event->time);
-        event->state |= KEY_HANDLED_MASK;
-        return TRUE;
+
+        if (_use_sync_mode)
+        {
+            int ret = FcitxIMClientProcessKeySync(fcitxcontext->client,
+                                    event->keyval,
+                                    event->hardware_keycode,
+                                    event->state,
+                                    (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
+                                    event->time);
+            if (ret <= 0)
+            {
+                event->state |= KEY_IGNORED_MASK;
+                return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+            }
+            else
+            {
+                event->state |= KEY_HANDLED_MASK;
+                return TRUE;
+            }
+        }
+        else
+        {
+            ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
+            pks->context = fcitxcontext;
+            pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
+
+            FcitxIMClientProcessKey(fcitxcontext->client,
+                                    _fcitx_im_context_process_key_cb,
+                                    pks,
+                                    g_free,
+                                    event->keyval,
+                                    event->hardware_keycode,
+                                    event->state,
+                                    (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
+                                    event->time);
+            event->state |= KEY_HANDLED_MASK;
+            return TRUE;
+        }
     }
     else
     {
@@ -1047,6 +1080,25 @@ void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
 {
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     context->enable = false;
+}
+
+static gboolean
+_get_boolean_env(const gchar *name,
+                 gboolean defval)
+{
+    const gchar *value = g_getenv (name);
+
+    if (value == NULL)
+      return defval;
+
+    if (g_strcmp0 (value, "") == 0 ||
+        g_strcmp0 (value, "0") == 0 ||
+        g_strcmp0 (value, "false") == 0 ||
+        g_strcmp0 (value, "False") == 0 ||
+        g_strcmp0 (value, "FALSE") == 0)
+      return FALSE;
+
+    return TRUE;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

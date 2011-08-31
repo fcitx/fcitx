@@ -43,6 +43,8 @@ extern "C" {
     void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags);
     void FcitxIMClientReset(FcitxIMClient* client);
     void FcitxIMClientProcessKey(FcitxIMClient* client, DBusGProxyCallNotify callback, void* user_data, GDestroyNotify notify, uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t);
+    int FcitxIMClientProcessKeySync(FcitxIMClient* client,
+                             uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t);
     void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                     GCallback enableIM,
                                     GCallback closeIM,
