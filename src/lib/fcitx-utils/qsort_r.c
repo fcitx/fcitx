@@ -63,7 +63,7 @@ void fcitx_qsort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const v
           size_t i, j;
           for (i = 0; i+1 < nmemb; ++i)
                for (j = i+1; j < nmemb; ++j)
-                    if (compar(thunk, base+i*size, base+j*size) > 0)
+                    if (compar(base+i*size, base+j*size,thunk) > 0)
                          swap(base+i*size, base+j*size, size);
      }
      else {
