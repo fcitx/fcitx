@@ -2,3 +2,6 @@
 Type=Boolean
 DefaultValue=False
 Description=Use On The Spot Style for XIM (Can not change during running)
+
+[DescriptionFile]
+LocaleDomain=fcitx
