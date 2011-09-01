@@ -60,7 +60,11 @@ int IMPriorityCmp(const void *a, const void *b)
     FcitxIM *ta, *tb;
     ta = (FcitxIM*)a;
     tb = (FcitxIM*)b;
-    return ta->iPriority - tb->iPriority;
+    int delta = ta->iPriority - tb->iPriority;
+    if ( delta != 0 )
+        return delta;
+    else
+        return strcmp(ta->strIconName, tb->strIconName);
 }
 
 void InitBuiltInHotkey(FcitxInstance *instance)
