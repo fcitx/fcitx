@@ -385,26 +385,41 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC"))
         {
             EnableIM(ipc->owner, ic, false);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC"))
         {
             CloseIM(ipc->owner, ic);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
-        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
+        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
         {
             IPCICFocusIn(ipc, ic);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut"))
         {
             IPCICFocusOut(ipc, ic);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset"))
         {
             IPCICReset(ipc, ic);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation"))
@@ -413,6 +428,9 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID))
             {
                 IPCICSetCursorLocation(ipc, ic, x, y);
+                DBusMessage *reply = dbus_message_new_method_return(msg);
+                dbus_connection_send (ipc->conn, reply, NULL);
+                dbus_message_unref (reply);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
@@ -420,12 +438,20 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
         {
             uint32_t flags;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID))
+            {
                 ic->contextCaps = flags;
+                DBusMessage *reply = dbus_message_new_method_return(msg);
+                dbus_connection_send (ipc->conn, reply, NULL);
+                dbus_message_unref (reply);
+            }
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))
         {
             DestroyIC(ipc->owner, ipc->frontendid, &id);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send (ipc->conn, reply, NULL);
+            dbus_message_unref (reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         }
         else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent"))
