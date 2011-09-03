@@ -2,7 +2,7 @@
 _Name=Cangjie
 IconName=cangjie
 File=cj.mb
-Priority=3
+Priority=30
 AdjustOrder=AdjustNo
 UsePY=True
 PYKey=[
