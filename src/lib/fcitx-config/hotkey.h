@@ -2525,6 +2525,15 @@ extern "C"
      **/
     boolean IsHotKeySimple(FcitxKeySym sym, int state);
 
+    /**
+     * @brief convert key pad key to simple KEY_STATE
+     *
+     * @param sym keyval
+     * @return FcitxKeySym
+     * @since 4.1.1
+     */
+    FcitxKeySym KeyPadToMain(FcitxKeySym sym);
+
 #ifdef __cplusplus
 }
 
@@ -2532,4 +2541,4 @@ extern "C"
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

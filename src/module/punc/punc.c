@@ -67,6 +67,7 @@ static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);
 static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
 static void ResetPunc(void *arg);
+static boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state);
 
 
 typedef struct _FcitxPuncState {
@@ -138,12 +139,13 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
     FcitxInputState* input = &puncState->owner->input;
+    char *pPunc = NULL;
 
     if (*retVal != IRV_TO_PROCESS)
         return false;
 
+    sym = KeyPadToMain(sym);
     if (instance->profile->bUseWidePunc) {
-        char *pPunc = NULL;
 
         if (puncState->bLastIsNumber && instance->config->bEngPuncAfterNumber
                 && (IsHotKey(sym, state, FCITX_PERIOD)
@@ -157,21 +159,51 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         }
         if (IsHotKeySimple(sym, state))
             pPunc = GetPunc(puncState, sym);
+    }
 
-        /*
-         * 在有候选词未输入的情况下，选择第一个候选词并输入标点
-         */
-        if (pPunc) {
-            GetOutputString(input)[0] = '\0';
-            if (!puncState->owner->input.bIsInRemind)
-                CandidateWordChooseByIndex(input->candList, 0);
-            strcat(GetOutputString(input), pPunc);
+    /*
+     * 在有候选词未输入的情况下，选择第一个候选词并输入标点
+     */
+    if (IsHotKeyPunc(sym, state)) {
+        GetOutputString(input)[0] = '\0';
+        INPUT_RETURN_VALUE ret = IRV_TO_PROCESS;
+        if (!puncState->owner->input.bIsInRemind)
+            ret = CandidateWordChooseByIndex(input->candList, 0);
+
+        /* if there is nothing to commit */
+        if (ret == IRV_TO_PROCESS)
+        {
+            if (pPunc)
+            {
+                strcat(GetOutputString(input), pPunc);
+                *retVal = IRV_PUNC;
+                CleanInputWindow(instance);
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+        {
+            if (pPunc)
+                strcat(GetOutputString(input), pPunc);
+            else
+            {
+                char buf[2] = { sym, 0 };
+                strcat(GetOutputString(input), buf);
+            }
+
             CleanInputWindow(instance);
-
             *retVal = IRV_PUNC;
             return true;
         }
-        else if (IsHotKey(sym, state, FCITX_BACKSPACE)
+
+        return false;
+    }
+
+    if (instance->profile->bUseWidePunc)
+    {
+        if (IsHotKey(sym, state, FCITX_BACKSPACE)
                  && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
@@ -345,5 +377,17 @@ void ReloadPunc(void* arg)
     LoadPuncDict(puncState);
 }
 
+boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state)
+{
+    if (IsHotKeySimple(sym, state)
+        && !IsHotKeyDigit(sym, state)
+        && !IsHotKeyLAZ(sym, state)
+        && !IsHotKeyUAZ(sym, state)
+        && !IsHotKey(sym, state, FCITX_SPACE))
+        return true;
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+    return false;
+}
+
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

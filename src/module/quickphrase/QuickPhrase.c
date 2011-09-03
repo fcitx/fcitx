@@ -227,20 +227,21 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
     FcitxInputState *input = &qpstate->owner->input;
     if (qpstate->enabled)
     {
-        if (IsHotKeySimple(sym, state))
+        FcitxKeySym keymain = KeyPadToMain(sym);
+        if (IsHotKeySimple(keymain, state))
         {
-            *retval = QuickPhraseDoInput(qpstate, sym, state);
+            *retval = QuickPhraseDoInput(qpstate, keymain, state);
             if (*retval == IRV_TO_PROCESS)
             {
                 if (strlen(input->strCodeInput) == 0
-                        && (IsHotKey(sym, state, FCITX_SEMICOLON) || IsHotKey(sym, state, FCITX_SPACE)))
+                        && (IsHotKey(keymain, state, FCITX_SEMICOLON) || IsHotKey(keymain, state, FCITX_SPACE)))
                 {
                     strcpy(GetOutputString(input), "；");
                     *retval = IRV_COMMIT_STRING;
                 }
                 else {
                     char buf[2];
-                    buf[0] = sym;
+                    buf[0] = keymain;
                     buf[1] = '\0';
                     if (strlen(input->strCodeInput) < MAX_USER_INPUT)
                         strcat(input->strCodeInput, buf);

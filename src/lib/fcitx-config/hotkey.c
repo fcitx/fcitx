@@ -324,5 +324,71 @@ void SetHotKey(char *strKeys, HOTKEYS * hotkey)
     free(strKeys);
 }
 
+struct KeyPadTable {
+    FcitxKeySym keypad;
+    FcitxKeySym keymain;
+};
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+static int key_table_cmp(const void* a, const void* b)
+{
+    const struct KeyPadTable* ka = a;
+    const struct KeyPadTable* kb = b;
+    return ka->keypad - kb->keypad;
+}
+
+FCITX_EXPORT_API
+FcitxKeySym KeyPadToMain(FcitxKeySym sym)
+{
+    static struct KeyPadTable keytable[] =
+    {
+        {Key_KP_Space, Key_space},
+        {Key_KP_Tab, Key_Tab},
+        {Key_KP_Enter, Key_Return},
+        {Key_KP_F1, Key_F1},
+        {Key_KP_F2, Key_F2},
+        {Key_KP_F3, Key_F3},
+        {Key_KP_F4, Key_F4},
+        {Key_KP_Home, Key_Home},
+        {Key_KP_Left, Key_Left},
+        {Key_KP_Up, Key_Up},
+        {Key_KP_Right, Key_Right},
+        {Key_KP_Down, Key_Down},
+        {Key_KP_Prior, Key_Prior},
+        {Key_KP_Page_Up, Key_Page_Up},
+        {Key_KP_Next, Key_Next},
+        {Key_KP_Page_Down, Key_Page_Down},
+        {Key_KP_End, Key_End},
+        {Key_KP_Begin, Key_Begin},
+        {Key_KP_Insert, Key_Insert},
+        {Key_KP_Delete, Key_Delete},
+        {Key_KP_Equal, Key_equal},
+        {Key_KP_Multiply, Key_asterisk},
+        {Key_KP_Add, Key_plus},
+        {Key_KP_Separator, Key_comma},
+        {Key_KP_Subtract, Key_minus},
+        {Key_KP_Decimal, Key_period},
+        {Key_KP_Divide, Key_slash},
+
+        {Key_KP_0, Key_0},
+        {Key_KP_1, Key_1},
+        {Key_KP_2, Key_2},
+        {Key_KP_3, Key_3},
+        {Key_KP_4, Key_4},
+        {Key_KP_5, Key_5},
+        {Key_KP_6, Key_6},
+        {Key_KP_7, Key_7},
+        {Key_KP_8, Key_8},
+        {Key_KP_9, Key_9},
+    };
+
+    struct KeyPadTable key = { sym, Key_None };
+
+    struct KeyPadTable *result = bsearch(&key, keytable, sizeof(keytable) / sizeof(struct KeyPadTable) , sizeof (struct KeyPadTable), key_table_cmp);
+    if (result == NULL)
+        return sym;
+    else
+        return result->keymain;
+}
+
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

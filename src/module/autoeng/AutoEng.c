@@ -147,11 +147,12 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     FcitxInputState* input = &autoEngState->owner->input;
     if (autoEngState->active)
     {
-        if (IsHotKeySimple(sym,state))
+        FcitxKeySym keymain = KeyPadToMain(sym);
+        if (IsHotKeySimple(keymain,state))
         {
             if (autoEngState->index < MAX_USER_INPUT)
             {
-                autoEngState->buf[autoEngState->index] = sym;
+                autoEngState->buf[autoEngState->index] = keymain;
                 autoEngState->index++;
                 autoEngState->buf[autoEngState->index] = '\0';
                 *retval = IRV_DISPLAY_MESSAGE;
