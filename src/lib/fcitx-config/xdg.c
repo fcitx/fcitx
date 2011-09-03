@@ -136,6 +136,9 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
         return fp;
     }
 
+    if (len <= 0)
+        return NULL;
+
     if (!mode)
     {
         snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
@@ -146,9 +149,6 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
         return NULL;
     }
-
-    if (len <= 0)
-        return NULL;
 
     for (i = 0;i < len;i++)
     {
@@ -260,4 +260,4 @@ char **GetXDGPath(
     return dirsArray;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
