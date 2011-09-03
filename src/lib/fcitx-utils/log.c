@@ -40,7 +40,7 @@ static iconv_t iconvW = NULL;
 FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
-#ifndef _DEBUG
+#ifdef _DEBUG
     if (e == DEBUG)
         return;
 #endif
