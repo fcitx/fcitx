@@ -31,7 +31,6 @@ struct _FcitxInstance;
 typedef union _CANDWORD {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
-    char            strPYPhrase[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
     int             iFHIndex;
 } CANDWORD;
 
@@ -109,4 +108,4 @@ ConfigFileDesc *GetTableConfigDesc();
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

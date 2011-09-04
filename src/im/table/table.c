@@ -340,6 +340,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                         char        *strTemp;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
+                        int          lastPageCount = CandidateWordPageCount(input->candList);
 
                         strLastFirstCand = (char *)NULL;
                         lastFirstCandType = CT_AUTOPHRASE;
@@ -378,7 +379,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
                             return IRV_DISPLAY_CANDWORDS;
                         }
-                        else if (table->iTableAutoSendToClientWhenNone && (input->iCodeInputCount == (table->iTableAutoSendToClientWhenNone + 1)) && CandidateWordPageCount(input->candList) == 0) {
+                        else if (table->iTableAutoSendToClientWhenNone && (input->iCodeInputCount == (table->iTableAutoSendToClientWhenNone + 1)) && lastPageCount == 0) {
                             if ( strLastFirstCand && (lastFirstCandType!=CT_AUTOPHRASE)) {
                                 CommitString(instance, GetCurrentIC(instance), strLastFirstCand);
                             }
@@ -387,7 +388,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                             input->strCodeInput[0] = sym;
                             input->strCodeInput[1] = '\0';
                         }
-                        else if ((input->iCodeInputCount == 1) && strTemp && CandidateWordPageCount(input->candList) == 0) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
+                        else if ((input->iCodeInputCount == 1) && strTemp && lastPageCount == 0) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
                             strcpy (GetOutputString(input), strTemp);
                             retVal = IRV_PUNC;
                         }
@@ -826,7 +827,9 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
         table->tableDict->currentRecord = table->tableDict->currentRecord->next;
     }
 
-    utarray_sort_r(&candTemp, TableCandCmp, &context);
+    /* seems AD_NO will go back to n^2, really effect performance */
+    if (table->tableOrder != AD_NO)
+        utarray_sort_r(&candTemp, TableCandCmp, &context);
 
     TABLECANDWORD** pcand = NULL;
     for (pcand = (TABLECANDWORD**) utarray_front(&candTemp);
@@ -877,9 +880,6 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
         }
     }
 
-
-    utarray_sort_r(&candTemp, TableCandCmp, &context);
-
     for (pcand = (TABLECANDWORD**) utarray_front(&candTemp);
             pcand != NULL;
             pcand = (TABLECANDWORD**) utarray_next(&candTemp, pcand))
@@ -902,7 +902,7 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
         AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
         input->iCursorPos = strlen(input->strCodeInput);
     }
-    
+
     INPUT_RETURN_VALUE retVal = IRV_DISPLAY_CANDWORDS;
 
     if (table->iTableAutoSendToClient && (input->iCodeInputCount >= table->iTableAutoSendToClient)) {
@@ -917,7 +917,7 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
             }
         }
     }
-    
+
     return retVal;
 }
 
@@ -1221,6 +1221,11 @@ int TableCandCmp(const void* a, const void* b, void *arg)
     TABLECANDWORD* canda = *(TABLECANDWORD**)a;
     TABLECANDWORD* candb = *(TABLECANDWORD**)b;
     TableCandWordSortContext* context = arg;
+
+    if (candb->candWord.record->bPinyin && !canda->candWord.record->bPinyin)
+        return -1;
+    else if (canda->candWord.record->bPinyin && !candb->candWord.record->bPinyin)
+        return 1;
     switch (context->order)
     {
     case AD_NO:
