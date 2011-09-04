@@ -127,7 +127,8 @@ void GetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsig
             keysym = keysym + Key_A - Key_a;
 
         if (iKeyState == KEY_SHIFT_COMP)
-            if (IsHotKeySimple(keysym, 0) && keysym != Key_space)
+            if ((IsHotKeySimple(keysym, 0) && keysym != Key_space)
+                || (keysym >= Key_KP_0 && keysym <= Key_KP_9) )
                 iKeyState = KEY_NONE;
     }
 

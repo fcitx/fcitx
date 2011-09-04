@@ -842,6 +842,8 @@ int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose)
     if (state != 0)
         return -1;
 
+    sym = KeyPadToMain(sym);
+
     int i = 0;
 
     while (strChoose[i]) {

@@ -29,7 +29,7 @@ FCITX_EXPORT_API
 HOTKEYS FCITX_DELETE[2] =
 {
     {NULL, Key_Delete, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_Delete, 0},
 };
 
 FCITX_EXPORT_API
@@ -50,28 +50,28 @@ FCITX_EXPORT_API
 HOTKEYS FCITX_HOME[2] =
 {
     {NULL, Key_Home, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_Home, 0},
 };
 
 FCITX_EXPORT_API
 HOTKEYS FCITX_END[2] =
 {
     {NULL, Key_End, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_End, 0},
 };
 
 FCITX_EXPORT_API
 HOTKEYS FCITX_RIGHT[2] =
 {
     {NULL, Key_Right, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_Right, 0},
 };
 
 FCITX_EXPORT_API
 HOTKEYS FCITX_LEFT[2] =
 {
     {NULL, Key_Left, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_Left, 0},
 };
 
 FCITX_EXPORT_API
