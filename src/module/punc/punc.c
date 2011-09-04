@@ -144,21 +144,22 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     if (*retVal != IRV_TO_PROCESS)
         return false;
 
+    FcitxKeySym origsym = sym;
     sym = KeyPadToMain(sym);
     if (instance->profile->bUseWidePunc) {
 
         if (puncState->bLastIsNumber && instance->config->bEngPuncAfterNumber
-                && (IsHotKey(sym, state, FCITX_PERIOD)
-                    || IsHotKey(sym, state, FCITX_SEMICOLON)
-                    || IsHotKey(sym, state, FCITX_COMMA)))
+                && (IsHotKey(origsym, state, FCITX_PERIOD)
+                    || IsHotKey(origsym, state, FCITX_SEMICOLON)
+                    || IsHotKey(origsym, state, FCITX_COMMA)))
         {
-            puncState->cLastIsAutoConvert = sym;
+            puncState->cLastIsAutoConvert = origsym;
             puncState->bLastIsNumber = false;
             *retVal = IRV_DONOT_PROCESS;
             return true;
         }
         if (IsHotKeySimple(sym, state))
-            pPunc = GetPunc(puncState, sym);
+            pPunc = GetPunc(puncState, origsym);
     }
 
     /*

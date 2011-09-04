@@ -85,7 +85,7 @@ FCITX_EXPORT_API
 HOTKEYS FCITX_ENTER[2] =
 {
     {NULL, Key_Return, 0},
-    {NULL, 0, 0},
+    {NULL, Key_KP_Enter, 0},
 };
 
 FCITX_EXPORT_API
