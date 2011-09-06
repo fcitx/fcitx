@@ -1448,7 +1448,8 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
     context.order = pystate->pyconfig.phraseOrder;
     context.type = PY_CAND_SYSPHRASE;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1559,7 +1560,8 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.order = pystate->pyconfig.baseOrder;
     context.type = PY_CAND_BASE;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1610,7 +1612,8 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.order = pystate->pyconfig.freqOrder;
     context.type = PY_CAND_FREQ;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -2145,7 +2148,6 @@ _HIT:
     context.order = AD_NO;
     context.type = PY_CAND_REMIND;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
