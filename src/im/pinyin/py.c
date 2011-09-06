@@ -620,7 +620,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     if (!pystate->bIsPYAddFreq && !pystate->bIsPYDelFreq && !pystate->bIsPYDelUserPhr) {
         if ((IsHotKeyLAZ(sym, state)
                 || IsHotKey(sym, state, FCITX_SEPARATOR)
-                || (pystate->bSP && pystate->bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON))))
+                || (pystate->bSP && input->iCodeInputCount > 0 && pystate->bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON))))
         {
             input->bIsInRemind = false;
             input->bShowCursor = true;
@@ -762,7 +762,10 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 return IRV_DO_NOTHING;
 
             if (CandidateWordPageCount(input->candList) == 0) {
-                return IRV_TO_PROCESS;
+                if (input->iCodeInputCount == 0)
+                    return IRV_TO_PROCESS;
+                else
+                    return IRV_DO_NOTHING;
             }
 
             retVal = CandidateWordChooseByIndex(input->candList, 0);
