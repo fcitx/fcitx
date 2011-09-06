@@ -148,7 +148,7 @@ reload:
 
     if (!fp)
     {
-        if (strcmp(*skinType, "default") == 0)
+        if (isreload)
         {
             FcitxLog(FATAL, _("Can not load default skin, is installion correct?"));
             perror("fopen");
