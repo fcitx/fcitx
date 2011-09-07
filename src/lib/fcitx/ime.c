@@ -50,7 +50,7 @@
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
-static const UT_icd imclass_icd = {sizeof(FcitxIMClass*), NULL ,NULL, NULL};
+static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL ,NULL, NULL};
 static int IMPriorityCmp(const void *a, const void *b);
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuShell(FcitxUIMenu *menu);
