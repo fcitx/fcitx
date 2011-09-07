@@ -131,6 +131,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     /* Main Menu Initial */
     utarray_init(&classicui->mainMenu.shell, &menuICD);
     AddMenuShell(&classicui->mainMenu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
+    AddMenuShell(&classicui->mainMenu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
     AddMenuShell(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
 
     FcitxUIMenu **menupp;
@@ -383,6 +384,32 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     if (index == 0)
     {
         DisplayAboutWindow(classicui->mainWindow->owner->aboutWindow);
+    }
+    else if (index == 1)
+    {
+        pid_t id;
+
+        id = fork();
+
+        if (id < 0)
+            FcitxLog(ERROR, _("Unable to create process"));
+        else if (id == 0)
+        {
+            id = fork();
+
+            if (id < 0)
+            {
+                FcitxLog(ERROR, _("Unable to create process"));
+                exit(1);
+            }
+            else if (id > 0)
+                exit(0);
+            else
+            {
+                execlp("xdg-open", "xdg-open", "http://fcitx.github.com/handbook/", NULL);
+                exit(0);
+            }
+        }
     }
     else if (index == length - 1) /* Exit */
     {
