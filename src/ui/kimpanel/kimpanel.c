@@ -38,7 +38,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/candidate.h"
 
-#define FCITX_KIMPANEL_INTERFACE "org.fcitx.Fcitx.Kimpanel"
+#define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
 const char * kimpanel_introspection_xml =
@@ -97,6 +97,9 @@ const char * kimpanel_introspection_xml =
     "    <signal name=\"UpdateScreen\">\n"
     "      <arg name=\"screen\" direction=\"in\" type=\"i\"/>\n"
     "    </signal>\n"
+    "    <signal name=\"Enable\">\n"
+    "      <arg name=\"toenable\" direction=\"in\" type=\"b\"/>\n"
+    "    </signal>\n"
     "  </interface>\n"
     "</node>\n";
 
@@ -131,6 +134,7 @@ static void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int 
 static void KimUpdatePreeditText(FcitxKimpanelUI* kimpanel, char *text);
 static void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text);
 static void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position);
+static void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable);
 static void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n);
 static void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop);
 static DBusHandlerResult KimpanelDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
@@ -279,14 +283,14 @@ void KimpanelInputReset(void* arg)
 void KimpanelOnInputFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    KimEnable(kimpanel, (GetCurrentState(instance) == IS_ACTIVE));
+    KimEnable(kimpanel, (GetCurrentState(kimpanel->owner) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
 void KimpanelOnInputUnFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    KimEnable(kimpanel, (GetCurrentState(instance) == IS_ACTIVE));
+    KimEnable(kimpanel, (GetCurrentState(kimpanel->owner) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
@@ -598,6 +602,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     }
     if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
         FcitxLog(DEBUG, "ReloadConfig");
+        ReloadConfig(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
 
