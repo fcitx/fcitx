@@ -82,6 +82,7 @@ static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
 static void ReloadConfigPY(void* arg);
 static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
+static void* PYSP2QP(void* arg, FcitxModuleFunctionArg args);
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -138,6 +139,7 @@ void *PYCreate(FcitxInstance* instance)
     AddFunction(pyaddon, PYGetCandWordsWrapper); // 3
     AddFunction(pyaddon, PYGetFindStringWrapper); // 4
     AddFunction(pyaddon, PYResetWrapper); // 5
+    AddFunction(pyaddon, PYSP2QP); // 5
     return pystate;
 }
 
@@ -2398,4 +2400,18 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
 
     return 0;
 }
+
+
+void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    char* strSP = args.args[0];
+    char strQP[MAX_PY_LENGTH + 1];
+    strQP[0] = 0;
+
+    SP2QP(&pystate->pyconfig, strSP, strQP);
+
+    return strdup(strQP);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

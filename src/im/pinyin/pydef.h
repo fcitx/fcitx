@@ -38,6 +38,8 @@
 #define FCITX_PINYIN_PYGETFINDSTRING_RETURNTYPE char*
 #define FCITX_PINYIN_PYRESET 5
 #define FCITX_PINYIN_PYRESET_RETURNTYPE void
+#define FCITX_PINYIN_SP2QP 6
+#define FCITX_PINYIN_SP2QP_RETURNTYPE char*
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
