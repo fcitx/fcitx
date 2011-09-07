@@ -44,7 +44,10 @@ void SetMyExceptionHandler(void)
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++)
     {
-        signal(signo, OnException);
+        if (signo != SIGALRM && signo != SIGPIPE)
+            signal(signo, OnException);
+        else
+            signal(signo, SIG_IGN);
     }
 }
 
@@ -120,4 +123,4 @@ void OnException(int signo)
     }
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

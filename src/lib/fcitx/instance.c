@@ -221,9 +221,19 @@ void EndInstance(FcitxInstance* instance)
     SaveAllIM(instance);
 
     /* handle exit */
+    FcitxAddon** pimclass;
     FcitxAddon** pfrontend;
     FcitxFrontend* frontend;
     FcitxInputContext* rec = NULL;
+
+    for (pimclass = (FcitxAddon**) utarray_front(&instance->imeclasses);
+            pimclass != NULL;
+            pimclass = (FcitxAddon**) utarray_next(&instance->imeclasses, pimclass)
+        )
+    {
+        if ((*pimclass)->imclass->Destroy)
+            (*pimclass)->imclass->Destroy((*pimclass)->addonInstance);
+    }
 
     for (rec = instance->ic_list; rec != NULL; rec = rec->next) {
         pfrontend = (FcitxAddon**) utarray_eltptr(&instance->frontends, rec->frontendid);

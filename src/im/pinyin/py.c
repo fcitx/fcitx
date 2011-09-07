@@ -82,6 +82,7 @@ static void * PYResetWrapper(void* arg, FcitxModuleFunctionArg args);
 static void ReloadConfigPY(void* arg);
 static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
+static void* PYSP2QP(void* arg, FcitxModuleFunctionArg args);
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -138,6 +139,7 @@ void *PYCreate(FcitxInstance* instance)
     AddFunction(pyaddon, PYGetCandWordsWrapper); // 3
     AddFunction(pyaddon, PYGetFindStringWrapper); // 4
     AddFunction(pyaddon, PYResetWrapper); // 5
+    AddFunction(pyaddon, PYSP2QP); // 5
     return pystate;
 }
 
@@ -620,7 +622,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     if (!pystate->bIsPYAddFreq && !pystate->bIsPYDelFreq && !pystate->bIsPYDelUserPhr) {
         if ((IsHotKeyLAZ(sym, state)
                 || IsHotKey(sym, state, FCITX_SEPARATOR)
-                || (pystate->bSP && pystate->bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON))))
+                || (pystate->bSP && input->iCodeInputCount > 0 && pystate->bSP_UseSemicolon && IsHotKey(sym, state, FCITX_SEMICOLON))))
         {
             input->bIsInRemind = false;
             input->bShowCursor = true;
@@ -762,7 +764,10 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 return IRV_DO_NOTHING;
 
             if (CandidateWordPageCount(input->candList) == 0) {
-                return IRV_TO_PROCESS;
+                if (input->iCodeInputCount == 0)
+                    return IRV_TO_PROCESS;
+                else
+                    return IRV_DO_NOTHING;
             }
 
             retVal = CandidateWordChooseByIndex(input->candList, 0);
@@ -1448,7 +1453,8 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
     context.order = pystate->pyconfig.phraseOrder;
     context.type = PY_CAND_SYSPHRASE;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1559,7 +1565,8 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.order = pystate->pyconfig.baseOrder;
     context.type = PY_CAND_BASE;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1610,7 +1617,8 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.order = pystate->pyconfig.freqOrder;
     context.type = PY_CAND_FREQ;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+    if (context.order != AD_NO)
+        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -2145,7 +2153,6 @@ _HIT:
     context.order = AD_NO;
     context.type = PY_CAND_REMIND;
     context.pystate = pystate;
-    utarray_sort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -2393,4 +2400,18 @@ int PYCandWordCmp(const void* b, const void *a, void* arg)
 
     return 0;
 }
+
+
+void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    char* strSP = args.args[0];
+    char strQP[MAX_PY_LENGTH + 1];
+    strQP[0] = 0;
+
+    SP2QP(&pystate->pyconfig, strSP, strQP);
+
+    return strdup(strQP);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

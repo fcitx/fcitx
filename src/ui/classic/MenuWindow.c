@@ -152,18 +152,19 @@ boolean MenuWindowEventHandler(void *arg, XEvent* event)
             GetMenuSize(menu);
             int i=SelectShellIndex(menu, event->xmotion.x, event->xmotion.y, &offseth);
             boolean flag = ReverseColor(menu,i);
+            MenuShell *shell = GetMenuShell(menu->menushell, i);
             if (!flag)
             {
                 DrawXlibMenu(menu);
-            }
-            MenuShell *shell = GetMenuShell(menu->menushell, i);
-            if (shell && shell->type == MENUTYPE_SUBMENU && shell->subMenu)
-            {
-                XlibMenu* subxlibmenu = (XlibMenu*) shell->subMenu->uipriv;
-                CloseOtherSubMenuWindow(menu, subxlibmenu);
-                MoveSubMenu(subxlibmenu, menu, offseth);
-                DrawXlibMenu(subxlibmenu);
-                XMapRaised(menu->owner->dpy, subxlibmenu->menuWindow);
+
+                if (shell && shell->type == MENUTYPE_SUBMENU && shell->subMenu)
+                {
+                    XlibMenu* subxlibmenu = (XlibMenu*) shell->subMenu->uipriv;
+                    CloseOtherSubMenuWindow(menu, subxlibmenu);
+                    MoveSubMenu(subxlibmenu, menu, offseth);
+                    DrawXlibMenu(subxlibmenu);
+                    XMapRaised(menu->owner->dpy, subxlibmenu->menuWindow);
+                }
             }
             if (shell == NULL)
                 CloseOtherSubMenuWindow(menu, NULL);
@@ -508,7 +509,7 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
 
 boolean ReverseColor(XlibMenu * menu,int shellIndex)
 {
-    boolean flag = False;
+    boolean flag = false;
     int i;
 
     int last = -1;
@@ -521,7 +522,7 @@ boolean ReverseColor(XlibMenu * menu,int shellIndex)
         GetMenuShell(menu->menushell, i)->isselect=0;
     }
     if (shellIndex == last)
-        flag = True;
+        flag = true;
     if (shellIndex >=0 && shellIndex < utarray_len(&menu->menushell->shell))
         GetMenuShell(menu->menushell, shellIndex)->isselect = 1;
     return flag;
@@ -572,4 +573,4 @@ void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)
     XMoveWindow(parent->owner->dpy, sub->menuWindow, sub->iPosX, sub->iPosY);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
