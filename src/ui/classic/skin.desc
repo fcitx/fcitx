@@ -91,6 +91,22 @@ Description=Resize Margin Top
 Type=Integer
 Description=Resize Margin Bottom
 
+[SkinMainBar/FillVertical]
+Type=Enum
+Description=Fill Background Vertical rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
+
+[SkinMainBar/FillHorizontal]
+Type=Enum
+Description=Fill Background Horizontal rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
+
 [SkinMainBar/Placement]
 Type=String
 Description=Special Icon position
@@ -152,6 +168,22 @@ Description=Prev Page Icon
 Type=Integer
 Description=Next Page Icon
 
+[SkinInputBar/FillVertical]
+Type=Enum
+Description=Fill Background Vertical rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
+
+[SkinInputBar/FillHorizontal]
+Type=Enum
+Description=Fill Background Horizontal rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
+
 [SkinTrayIcon/Active]
 Type=String
 Description=Active Tray Icon
@@ -187,6 +219,22 @@ Description=Active Menu Color
 [SkinMenu/LineColor]
 Type=Color
 Description=Space Line Color
+
+[SkinMenu/FillVertical]
+Type=Enum
+Description=Fill Background Vertical rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
+
+[SkinMenu/FillHorizontal]
+Type=Enum
+Description=Fill Background Horizontal rule
+EnumCount=2
+Enum0=Copy
+Enum1=Resize
+DefaultValue=Resize
 
 [SkinKeyboard/BackImg]
 Type=String

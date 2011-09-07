@@ -5,7 +5,7 @@ includedir=@includedir@
 
 Name: fcitx
 Description: Fcitx - Free Chinese Input Toy of X
-Version: 4.1.0
+Version: @version@
 Requires: fcitx-config
 Cflags: -I${includedir}
 Libs: -L${libdir} -lfcitx-core

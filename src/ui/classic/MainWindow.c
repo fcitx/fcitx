@@ -181,7 +181,7 @@ void DrawMainWindow (MainWindow* mainWindow)
             int width = cairo_image_surface_get_width(back->image);
             int height = cairo_image_surface_get_height(back->image);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
-            DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0);
+            DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
 
             FcitxUIStatus* status;
             for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
@@ -312,7 +312,17 @@ void DrawMainWindow (MainWindow* mainWindow)
             height += sc->skinMainBar.marginTop + sc->skinMainBar.marginBottom;
 
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
-            DrawResizableBackground(c, back->image, height, width, sc->skinMainBar.marginLeft, sc->skinMainBar.marginTop, sc->skinMainBar.marginRight, sc->skinMainBar.marginBottom);
+            DrawResizableBackground(c,
+                                    back->image,
+                                    height,
+                                    width,
+                                    sc->skinMainBar.marginLeft,
+                                    sc->skinMainBar.marginTop,
+                                    sc->skinMainBar.marginRight,
+                                    sc->skinMainBar.marginBottom,
+                                    sc->skinMainBar.fillV,
+                                    sc->skinMainBar.fillH
+                                   );
 
             currentX = sc->skinMainBar.marginLeft;
             if (logo)

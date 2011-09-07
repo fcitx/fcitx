@@ -235,7 +235,9 @@ void DrawResizableBackground(cairo_t *c,
                              int marginLeft,
                              int marginTop,
                              int marginRight,
-                             int marginBottom
+                             int marginBottom,
+                             FillRule fillV,
+                             FillRule fillH
                             )
 {
     int resizeHeight = cairo_image_surface_get_height(background) - marginTop - marginBottom;
@@ -295,57 +297,177 @@ void DrawResizableBackground(cairo_t *c,
 
     /* part 2 & 8 */
     {
-        cairo_save(c);
-        cairo_translate(c, marginLeft, 0);
-        cairo_scale(c, (double)(width - marginLeft - marginRight)/(double)resizeWidth, 1);
-        cairo_set_source_surface(c, background, -marginLeft, 0);
-        cairo_rectangle (c,0,0, resizeWidth, marginTop);
-        cairo_clip(c);
-        cairo_paint(c);
-        cairo_restore(c);
+        printf("%d\n", fillH);
+        if ( fillH == F_COPY)
+        {
+            int repaint_times=(width - marginLeft - marginRight)/resizeWidth;
+            int remain_width=(width - marginLeft - marginRight)% resizeWidth;
+            int i=0;
 
-        cairo_save(c);
-        cairo_translate(c, marginLeft, height - marginBottom);
-        cairo_scale(c, (double)(width - marginLeft - marginRight)/(double)resizeWidth, 1);
-        cairo_set_source_surface(c, background, -marginLeft, -marginTop -resizeHeight);
-        cairo_rectangle (c,0,0, resizeWidth, marginBottom);
-        cairo_clip(c);
-        cairo_paint(c);
-        cairo_restore(c);
+            for (i=0;i<repaint_times;i++)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, marginLeft + i*resizeWidth, 0);
+                cairo_set_source_surface(c, background, -marginLeft, 0);
+                cairo_rectangle (c,0,0,resizeWidth, marginTop);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  marginLeft + i*resizeWidth, height - marginBottom);
+                cairo_set_source_surface(c, background,  -marginLeft, -marginTop -resizeHeight);
+                cairo_rectangle (c,0,0,resizeWidth,marginBottom);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+
+            if (remain_width != 0)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, marginLeft + repaint_times*resizeWidth, 0);
+                cairo_set_source_surface(c, background, -marginLeft, 0);
+                cairo_rectangle (c,0,0,remain_width, marginTop);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  marginLeft + repaint_times*resizeWidth, height - marginBottom);
+                cairo_set_source_surface(c, background,  -marginLeft, -marginTop -resizeHeight);
+                cairo_rectangle (c,0,0,remain_width,marginBottom);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+        }
+        else
+        {
+            cairo_save(c);
+            cairo_translate(c, marginLeft, 0);
+            cairo_scale(c, (double)(width - marginLeft - marginRight)/(double)resizeWidth, 1);
+            cairo_set_source_surface(c, background, -marginLeft, 0);
+            cairo_rectangle (c,0,0, resizeWidth, marginTop);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+                        
+            cairo_save(c);
+            cairo_translate(c, marginLeft, height - marginBottom);
+            cairo_scale(c, (double)(width - marginLeft - marginRight)/(double)resizeWidth, 1);
+            cairo_set_source_surface(c, background, -marginLeft, -marginTop -resizeHeight);
+            cairo_rectangle (c,0,0, resizeWidth, marginBottom);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+        }
     }
 
     /* part 4 & 6 */
-    {
-        cairo_save(c);
-        cairo_translate(c, 0, marginTop);
-        cairo_scale(c, 1, (double)(height - marginTop - marginBottom)/(double)resizeHeight);
-        cairo_set_source_surface(c, background, 0, -marginTop);
-        cairo_rectangle (c,0,0, marginLeft, resizeHeight);
-        cairo_clip(c);
-        cairo_paint(c);
-        cairo_restore(c);
+    {        
+        if ( fillV == F_COPY)
+        {
+            int repaint_times=(height - marginTop - marginBottom)/resizeHeight;
+            int remain_height=(height - marginTop - marginBottom)% resizeHeight;
+            int i=0;
 
-        cairo_save(c);
-        cairo_translate(c, width - marginRight, marginTop);
-        cairo_scale(c, 1, (double)(height - marginTop - marginBottom)/(double)resizeHeight);
-        cairo_set_source_surface(c, background, -marginLeft -resizeWidth, -marginTop);
-        cairo_rectangle (c,0,0, marginRight, resizeHeight);
-        cairo_clip(c);
-        cairo_paint(c);
-        cairo_restore(c);
+            for (i=0;i<repaint_times;i++)
+            {
+                /* part 4 */
+                cairo_save(c);
+                cairo_translate(c, 0, marginTop + i*resizeHeight);
+                cairo_set_source_surface(c, background, 0, -marginTop);
+                cairo_rectangle (c,0,0, marginLeft, resizeHeight);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 6 */
+                cairo_save(c);
+                cairo_translate(c, width - marginRight,  marginTop + i*resizeHeight);
+                cairo_set_source_surface(c, background, -marginLeft -resizeWidth,  -marginTop);
+                cairo_rectangle (c,0,0,marginRight,resizeHeight);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+
+            if (remain_height != 0)
+            {
+                /* part 8 */
+                cairo_save(c);
+                cairo_translate(c, 0, marginTop + repaint_times*resizeHeight);
+                cairo_set_source_surface(c, background, 0, -marginTop);
+                cairo_rectangle (c,0,0, marginLeft, remain_height);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+                
+                /* part 2 */
+                cairo_save(c);
+                cairo_translate(c,  width - marginRight,  marginTop + repaint_times*resizeHeight);
+                cairo_set_source_surface(c, background, -marginLeft -resizeWidth,  -marginTop);
+                cairo_rectangle (c,0,0,marginRight, remain_height);
+                cairo_clip(c);
+                cairo_paint(c);
+                cairo_restore(c);
+            }
+        }
+        else
+        {
+            cairo_save(c);
+            cairo_translate(c, 0, marginTop);
+            cairo_scale(c, 1, (double)(height - marginTop - marginBottom)/(double)resizeHeight);
+            cairo_set_source_surface(c, background, 0, -marginTop);
+            cairo_rectangle (c,0,0, marginLeft, resizeHeight);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+                        
+            cairo_save(c);
+            cairo_translate(c, width - marginRight, marginTop);
+            cairo_scale(c, 1, (double)(height - marginTop - marginBottom)/(double)resizeHeight);
+            cairo_set_source_surface(c, background, -marginLeft -resizeWidth, -marginTop);
+            cairo_rectangle (c,0,0, marginRight, resizeHeight);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_restore(c);
+        }
     }
 
     /* part 5 */
     {
         int repaintH = 0, repaintV = 0;
+        int remainW = 0, remainH = 0;
         double scaleX = 1.0, scaleY = 1.0;
-
-        repaintH = 1;
-        scaleX = (double)(width - marginLeft - marginRight)/(double)resizeWidth;
-
-        repaintV = 1;
-        scaleY = (double)(height - marginTop - marginBottom)/(double)resizeHeight;
-
+        
+        if (fillH == F_COPY)
+        {
+            repaintH = (width - marginLeft - marginRight)/resizeWidth + 1;
+            remainW = (width - marginLeft - marginRight)% resizeWidth;
+        }
+        else
+        {
+            repaintH = 1;
+            scaleX = (double)(width - marginLeft - marginRight)/(double)resizeWidth;
+        }
+        
+        if (fillV == F_COPY)
+        {            
+            repaintV = (height - marginTop - marginBottom)/(double)resizeHeight + 1;
+            remainH = (height - marginTop - marginBottom)%resizeHeight;
+        }
+        else
+        {
+            repaintV = 1;
+            scaleY = (double)(height - marginTop - marginBottom)/(double)resizeHeight;
+        }
+        
 
         int i, j;
         for (i = 0; i < repaintH; i ++)
@@ -358,6 +480,12 @@ void DrawResizableBackground(cairo_t *c,
                 cairo_set_source_surface(c, background, -marginLeft, -marginTop);
                 int w = resizeWidth,h = resizeHeight;
 
+                if (fillV == F_COPY && j == repaintV - 1)
+                    h = remainH;
+                
+                if (fillH == F_COPY && i == repaintH -1 )
+                    w = remainW;
+                
                 cairo_rectangle (c,0,0, w, h);
                 cairo_clip(c);
                 cairo_paint(c);
@@ -567,8 +695,6 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     newWidth = (inputWidth<outputWidth)?outputWidth:inputWidth;
     newWidth+=sc->skinInputBar.marginLeft+sc->skinInputBar.marginRight;
 
-    newWidth+= 3 +  (sc->skinInputBar.iBackArrowX > sc->skinInputBar.iForwardArrowX ? sc->skinInputBar.iBackArrowX : sc->skinInputBar.iForwardArrowX);
-
     /* round to ROUND_SIZE in order to decrease resize */
     newWidth =  (newWidth / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
 
@@ -593,7 +719,9 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
                                 sc->skinInputBar.marginLeft,
                                 sc->skinInputBar.marginTop,
                                 sc->skinInputBar.marginRight,
-                                sc->skinInputBar.marginBottom
+                                sc->skinInputBar.marginBottom,
+                                sc->skinInputBar.fillV,
+                                sc->skinInputBar.fillH
                                );
         cairo_destroy(c);
     }

@@ -5,6 +5,6 @@ includedir=@includedir@
 
 Name: fcitx-utils
 Description: Fcitx Utils Library
-Version: 4.1.0
+Version: @version@
 Cflags: -I${includedir}
 Libs: -L${libdir} -lfcitx-utils

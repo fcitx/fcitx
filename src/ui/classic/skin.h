@@ -42,6 +42,12 @@ struct _InputWindow;
 struct _Messages;
 struct _FcitxClassicUI;
 
+typedef enum _FillRule
+{
+    F_COPY = 0,
+    F_RESIZE = 1
+} FillRule;
+
 typedef enum _MouseE
 {
     RELEASE,//鼠标释放状态
@@ -81,6 +87,8 @@ typedef struct _SkinMenu
     int marginRight;
     ConfigColor activeColor;
     ConfigColor lineColor;
+    FillRule fillV;
+    FillRule fillH;
 } SkinMenu;
 
 /**
@@ -98,6 +106,8 @@ typedef struct _SkinMainBar
     int marginRight;
     char *placement;
     UT_array skinPlacement;
+    FillRule fillV;
+    FillRule fillH;
 } SkinMainBar;
 
 typedef struct _SkinInputBar
@@ -116,6 +126,8 @@ typedef struct _SkinInputBar
     int iForwardArrowY;
     int iInputPos;
     int iOutputPos;
+    FillRule fillV;
+    FillRule fillH;
 } SkinInputBar;
 
 typedef struct _SkinPlacement
@@ -183,7 +195,9 @@ void DrawResizableBackground(cairo_t *c,
                              int marginLeft,
                              int marginTop,
                              int marginRight,
-                             int marginBottom
+                             int marginBottom,
+                             FillRule fillV,
+                             FillRule fillH
                             );
 #define fcitx_cairo_set_color(c, color) cairo_set_source_rgb((c), (color)->r, (color)->g, (color)->b)
 
