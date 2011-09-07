@@ -279,24 +279,28 @@ void KimpanelInputReset(void* arg)
 void KimpanelOnInputFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimEnable(kimpanel, (GetCurrentState(instance) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
 void KimpanelOnInputUnFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimEnable(kimpanel, (GetCurrentState(instance) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
 void KimpanelOnTriggerOff(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimEnable(kimpanel, false);
     KimpanelSetIMStatus(kimpanel);
 }
 
 void KimpanelOnTriggerOn(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimEnable(kimpanel, true);
     KimpanelSetIMStatus(kimpanel);
 }
 
@@ -789,7 +793,6 @@ void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
 
 }
 
-#ifdef UNUSED
 void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable)
 {
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
@@ -822,7 +825,6 @@ void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable)
     dbus_message_unref(msg);
 
 }
-#endif
 
 void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow)
 {
