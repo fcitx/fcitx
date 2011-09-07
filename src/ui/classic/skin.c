@@ -297,7 +297,6 @@ void DrawResizableBackground(cairo_t *c,
 
     /* part 2 & 8 */
     {
-        printf("%d\n", fillH);
         if ( fillH == F_COPY)
         {
             int repaint_times=(width - marginLeft - marginRight)/resizeWidth;

@@ -533,6 +533,13 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                 }
                 if  (SetMouseStatus(mainWindow, mouse, PRESS, RELEASE))
                     DrawMainWindow(mainWindow);
+                if (mouse == NULL)
+                {
+                    classicui->iMainWindowOffsetX = event->xbutton.x;
+                    classicui->iMainWindowOffsetY = event->xbutton.y;
+                    ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY);
+                    SaveClassicUIConfig(classicui);
+                }
             }
             break;
             case Button3:
