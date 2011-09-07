@@ -28,6 +28,7 @@
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/configfile.h"
+#include "fcitx/hook.h"
 #include "ipc.h"
 
 #define GetIPCIC(ic) ((FcitxIPCIC*) (ic)->privateic)
@@ -587,6 +588,12 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
                        "UpdatePreedit"); // name of the signal
 
     char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+    char* str = ProcessOutputFilter(ipc->owner, strPreedit);
+    if (str)
+    {
+        free(strPreedit);
+        strPreedit = str;
+    }
 
     dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &ipc->owner->input.iCursorPos, DBUS_TYPE_INVALID);
 
@@ -606,10 +613,35 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "UpdateClientSideUI"); // name of the signal
 
+    char *str;
     char* strAuxUp = MessagesToCString(ipc->owner->input.msgAuxUp);
+    str = ProcessOutputFilter(ipc->owner, strAuxUp);
+    if (str)
+    {
+        free(strAuxUp);
+        strAuxUp = str;
+    }
     char* strAuxDown = MessagesToCString(ipc->owner->input.msgAuxDown);
+    str = ProcessOutputFilter(ipc->owner, strAuxDown);
+    if (str)
+    {
+        free(strAuxDown);
+        strAuxDown = str;
+    }
     char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+    str = ProcessOutputFilter(ipc->owner, strPreedit);
+    if (str)
+    {
+        free(strPreedit);
+        strPreedit = str;
+    }
     char* candidateword = CandidateWordToCString(ipc->owner);
+    str = ProcessOutputFilter(ipc->owner, candidateword);
+    if (str)
+    {
+        free(candidateword);
+        candidateword = str;
+    }
     FcitxIM* im = GetCurrentIM(ipc->owner);
     char* imname = NULL;
     if (im == NULL)

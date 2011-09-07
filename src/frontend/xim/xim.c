@@ -41,6 +41,7 @@
 #include "ximhandler.h"
 #include "module/x11/x11stuff.h"
 #include "fcitx-config/xdg.h"
+#include "fcitx/hook.h"
 
 static void* XimCreate(FcitxInstance* instance, int frontendid);
 static boolean XimDestroy(void* arg);
@@ -559,6 +560,12 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     char* strPreedit = MessagesToCString(xim->owner->input.msgPreedit);
+    char* str = ProcessOutputFilter(xim->owner, strPreedit);
+    if (str)
+    {
+        free(strPreedit);
+        strPreedit = str;
+    }
 
     if (strlen(strPreedit) == 0 && GetXimIC(ic)->bPreeditStarted == true) {
         XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, 0);
