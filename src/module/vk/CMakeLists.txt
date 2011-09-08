@@ -17,7 +17,7 @@ set(FCITX_VK_SOURCES
 )
 
 fcitx_add_addon(fcitx-vk ${FCITX_VK_SOURCES})
-target_link_libraries( fcitx-vk ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES} fcitx-config fcitx-core )
+target_link_libraries( fcitx-vk ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES})
 if (_ENABLE_PANGO)
     target_link_libraries( fcitx-vk ${PANGOCAIRO_LIBRARIES} )
 else (_ENABLE_PANGO)

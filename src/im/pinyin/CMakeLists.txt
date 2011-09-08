@@ -9,7 +9,6 @@ set(FCITX_PINYIN_SOURCES
 )
 
 fcitx_add_addon(fcitx-pinyin ${FCITX_PINYIN_SOURCES})
-target_link_libraries( fcitx-pinyin fcitx-config fcitx-core)
 
 fcitx_add_addon_header(pinyin pydef.h)
 fcitx_add_configdesc_file(fcitx-pinyin.desc)

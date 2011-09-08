@@ -28,7 +28,7 @@ set(FCITX_GTK2_IM_MODULE_SOURCES
 )
 
 add_library(im-fcitx MODULE ${FCITX_GTK2_IM_MODULE_SOURCES})
-set_target_properties( im-fcitx PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden")
+set_target_properties( im-fcitx PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
 target_link_libraries( im-fcitx ${GTK2_LIBRARIES} ${DBUS_GLIB_LIBRARIES} fcitx-utils)
 
 install(TARGETS im-fcitx DESTINATION ${GTK2_IM_MODULEDIR})

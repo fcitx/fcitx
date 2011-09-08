@@ -5,5 +5,4 @@ set(FCITX_FULLWIDTH_CHAR_SOURCES
 )
 
 fcitx_add_addon(fcitx-fullwidth-char ${FCITX_FULLWIDTH_CHAR_SOURCES})
-target_link_libraries( fcitx-fullwidth-char fcitx-core)
 fcitx_add_addon_conf_file(fcitx-fullwidth-char.conf)

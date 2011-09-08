@@ -13,7 +13,12 @@ set(FCITX_CONFIG_HEADERS
 
 add_library(fcitx-config SHARED ${FCITX_CONFIG_SOURCES})
 target_link_libraries(fcitx-config fcitx-utils)
-set_target_properties(fcitx-config PROPERTIES VERSION 4.1.0 SOVERSION 4.1 COMPILE_FLAGS "-fvisibility=hidden")
+set_target_properties(fcitx-config
+                      PROPERTIES VERSION 4.1.0
+                      SOVERSION 4.1
+                      COMPILE_FLAGS "-fvisibility=hidden"
+                      LINK_FLAGS "-Wl,--no-undefined"
+)
 
 configure_file(fcitx-config.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-config.pc)
 

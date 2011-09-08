@@ -32,7 +32,7 @@ set(CLASSICUI_DESC_FILES
 )
 
 fcitx_add_addon(fcitx-classic-ui ${fcitx_classic_ui_SOURCES})
-target_link_libraries( fcitx-classic-ui ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES} fcitx-config fcitx-core )
+target_link_libraries( fcitx-classic-ui ${X11_LIBRARIES} ${CAIRO_XLIB_LIBRARIES} )
 
 if (_ENABLE_PANGO)
     target_link_libraries( fcitx-classic-ui ${PANGOCAIRO_LIBRARIES} )

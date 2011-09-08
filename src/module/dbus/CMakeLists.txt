@@ -8,6 +8,6 @@ set(FCITX_DBUS_SOURCES
 )
 
 fcitx_add_addon(fcitx-dbus ${FCITX_DBUS_SOURCES})
-target_link_libraries( fcitx-dbus ${DBUS_LIBRARIES} fcitx-core)
+target_link_libraries( fcitx-dbus ${DBUS_LIBRARIES})
 fcitx_add_addon_header(dbus dbusstuff.h)
 fcitx_add_addon_conf_file(fcitx-dbus.conf)

@@ -5,5 +5,4 @@ set(FCITX_AUTOENG_SOURCES
 )
 
 fcitx_add_addon(fcitx-autoeng ${FCITX_AUTOENG_SOURCES})
-target_link_libraries( fcitx-autoeng fcitx-config fcitx-core)
 fcitx_add_addon_conf_file(fcitx-autoeng.conf)

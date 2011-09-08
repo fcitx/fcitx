@@ -59,6 +59,8 @@ add_library(
     ${qtim_fcitx_MOC_SRCS}
 )
 
+set_target_properties( qtim-fcitx PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
+
 target_link_libraries(
     qtim-fcitx
     debug ${QT_QTCORE_LIBRARY_DEBUG}

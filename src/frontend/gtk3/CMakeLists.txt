@@ -29,7 +29,7 @@ set(FCITX_GTK3_IM_MODULE_SOURCES
 )
 
 add_library(im-fcitx-gtk3 MODULE ${FCITX_GTK3_IM_MODULE_SOURCES})
-set_target_properties( im-fcitx-gtk3 PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" OUTPUT_NAME "im-fcitx")
+set_target_properties( im-fcitx-gtk3 PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" OUTPUT_NAME "im-fcitx" LINK_FLAGS "-Wl,--no-undefined")
 
 target_link_libraries( im-fcitx-gtk3 ${GTK3_LIBRARIES} ${DBUS_GLIB_LIBRARIES} fcitx-utils)
 

@@ -7,5 +7,5 @@ set(fcitx_kimpanel_ui_SOURCES
 )
 
 fcitx_add_addon(fcitx-kimpanel-ui ${fcitx_kimpanel_ui_SOURCES})
-target_link_libraries( fcitx-kimpanel-ui ${DBUS_LIBRARIES} fcitx-core)
+target_link_libraries( fcitx-kimpanel-ui ${DBUS_LIBRARIES})
 fcitx_add_addon_conf_file(fcitx-kimpanel-ui.conf)

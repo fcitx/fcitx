@@ -9,7 +9,6 @@ set(FCITX_CHTTRANS_SOURCES
 )
 
 fcitx_add_addon(fcitx-chttrans ${FCITX_CHTTRANS_SOURCES})
-target_link_libraries( fcitx-chttrans fcitx-config fcitx-core )
 
 if (_ENABLE_OPENCC)
     target_link_libraries( fcitx-chttrans ${OPENCC_LIBRARIES} )
