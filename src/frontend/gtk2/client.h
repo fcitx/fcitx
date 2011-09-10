@@ -36,6 +36,8 @@ extern "C" {
 
     FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data);
     boolean IsFcitxIMClientValid(FcitxIMClient* client);
+    boolean IsFcitxIMClientEnabled(FcitxIMClient* client);
+    void FcitxIMClientSetEnabled(FcitxIMClient* client, boolean enable);
     void FcitxIMClientClose(FcitxIMClient* client);
     void FcitxIMClientFocusIn(FcitxIMClient* client);
     void FcitxIMClientFocusOut(FcitxIMClient* client);

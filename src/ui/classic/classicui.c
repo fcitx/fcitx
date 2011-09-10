@@ -187,6 +187,7 @@ static void ClassicUIInputReset(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     DrawMainWindow(classicui->mainWindow);
+    DrawTrayWindow(classicui->trayWindow);
 }
 
 static void ClassicUICloseInputWindow(void *arg)
@@ -237,12 +238,7 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 static void ClassicUIOnInputFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    FcitxInstance *instance = classicui->owner;
     DrawMainWindow(classicui->mainWindow);
-    if (GetCurrentState(instance) == IS_ACTIVE)
-    {
-        ShowMainWindow(classicui->mainWindow);
-    }
     DrawTrayWindow(classicui->trayWindow);
 }
 
@@ -358,7 +354,6 @@ void ClassicUIOnTriggerOn(void* arg)
     if (GetCurrentState(instance) == IS_ACTIVE)
     {
         DrawMainWindow(classicui->mainWindow);
-        ShowMainWindow(classicui->mainWindow);
     }
     DrawTrayWindow(classicui->trayWindow);
 }

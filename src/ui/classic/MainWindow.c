@@ -363,6 +363,8 @@ void DrawMainWindow (MainWindow* mainWindow)
             XCopyArea (mainWindow->dpy, mainWindow->pm_main_bar, mainWindow->window, mainWindow->main_win_gc, 0, 0, width,
                        height, 0, 0);
         }
+
+        XMapRaised (mainWindow->dpy, mainWindow->window);
     }
     else
         XUnmapWindow (mainWindow->dpy, mainWindow->window);
@@ -387,7 +389,7 @@ void ReloadMainWindow(void *arg, boolean enabled)
     InitMainWindow(mainWindow);
 
     if (visable)
-        ShowMainWindow(mainWindow);
+        DrawMainWindow(mainWindow);
 }
 
 void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y)
@@ -396,11 +398,6 @@ void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int 
     privstat->y = y;
     privstat->w = cairo_image_surface_get_width(image->image);
     privstat->h = cairo_image_surface_get_height(image->image);
-}
-
-void ShowMainWindow(MainWindow* mainWindow)
-{
-    XMapRaised (mainWindow->dpy, mainWindow->window);
 }
 
 void CloseMainWindow(MainWindow *mainWindow)
@@ -586,4 +583,4 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
     return false;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

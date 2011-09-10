@@ -45,6 +45,7 @@ struct _FcitxIMClient {
     void *data;
     HOTKEYS triggerkey[2];
     char servicename[IC_NAME_MAX];
+    boolean enable;
 };
 
 static void FcitxIMClientCreateIC(FcitxIMClient* client);
@@ -64,6 +65,19 @@ boolean IsFcitxIMClientValid(FcitxIMClient* client)
         return false;
 
     return true;
+}
+
+boolean IsFcitxIMClientEnabled(FcitxIMClient* client)
+{
+    if (client == NULL)
+        return false;
+    return client->enable;
+}
+
+void FcitxIMClientSetEnabled(FcitxIMClient* client, boolean enable)
+{
+    if (client)
+        client->enable = true;
 }
 
 FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data)
@@ -163,7 +177,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
 
     g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
 
-    dbus_g_proxy_begin_call(client->proxy, "CreateIC", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_INVALID);
+    dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_INVALID);
 }
 
 void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
@@ -173,10 +187,12 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
     FcitxIMClient* client = (FcitxIMClient*) user_data;
     GError *error = NULL;
 
+    gboolean enable = FALSE;
     guint arg1, arg2, arg3, arg4;
     int id = -1;
     dbus_g_proxy_end_call(proxy, call_id, &error,
                           G_TYPE_INT, &id,
+                          G_TYPE_BOOLEAN, &enable,
                           G_TYPE_UINT, &arg1,
                           G_TYPE_UINT, &arg2,
                           G_TYPE_UINT, &arg3,
@@ -187,6 +203,8 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
     client->triggerkey[0].state = arg2;
     client->triggerkey[1].sym = arg3;
     client->triggerkey[1].state = arg4;
+    client->enable = enable;
+
 
     if (id >= 0)
         client->id = id;
@@ -200,7 +218,7 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
                       client->icname,
                       FCITX_IC_DBUS_INTERFACE,
                       &error
-                                                     );
+                      );
     if (!client->icproxy)
         return;
 

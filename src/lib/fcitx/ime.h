@@ -233,6 +233,24 @@ extern "C" {
     void EnableIM(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, boolean keepState);
 
     /**
+     * @brief End Input
+     *
+     * @param instance
+     * @param ic input context
+     * @return void
+     **/
+    void CloseIM(struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
+
+    /**
+     * @brief Change im state between IS_ACTIVE and IS_ENG
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @return void
+     **/
+    void ChangeIMState (struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
+
+    /**
      * @brief reset input state
      *
      * @param instance fcitx instance

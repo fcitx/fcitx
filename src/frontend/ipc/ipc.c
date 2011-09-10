@@ -83,6 +83,14 @@ const char * im_introspection_xml =
     "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
+    "    <method name=\"CreateICv2\">\n"
+    "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
+    "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
+    "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
+    "    </method>\n"
     "  </interface>\n"
     "</node>\n";
 
@@ -218,18 +226,36 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     ipc->maxid ++;
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
+
     uint32_t arg1, arg2, arg3, arg4;
     arg1 = ipc->owner->config->hkTrigger[0].sym;
     arg2 = ipc->owner->config->hkTrigger[0].state;
     arg3 = ipc->owner->config->hkTrigger[1].sym;
     arg4 = ipc->owner->config->hkTrigger[1].state;
-    dbus_message_append_args(reply,
-                             DBUS_TYPE_INT32, &ipcic->id,
-                             DBUS_TYPE_UINT32, &arg1,
-                             DBUS_TYPE_UINT32, &arg2,
-                             DBUS_TYPE_UINT32, &arg3,
-                             DBUS_TYPE_UINT32, &arg4,
-                             DBUS_TYPE_INVALID);
+    if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
+    {
+        /* CreateIC v1 indicates that default state can only be disabled */
+        context->state = IS_CLOSED;
+        dbus_message_append_args(reply,
+                                DBUS_TYPE_INT32, &ipcic->id,
+                                DBUS_TYPE_UINT32, &arg1,
+                                DBUS_TYPE_UINT32, &arg2,
+                                DBUS_TYPE_UINT32, &arg3,
+                                DBUS_TYPE_UINT32, &arg4,
+                                DBUS_TYPE_INVALID);
+    }
+    else if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateICv2"))
+    {
+        boolean arg0 = context->state != IS_CLOSED;
+        dbus_message_append_args(reply,
+                                DBUS_TYPE_INT32, &ipcic->id,
+                                DBUS_TYPE_BOOLEAN, &arg0,
+                                DBUS_TYPE_UINT32, &arg1,
+                                DBUS_TYPE_UINT32, &arg2,
+                                DBUS_TYPE_UINT32, &arg3,
+                                DBUS_TYPE_UINT32, &arg4,
+                                DBUS_TYPE_INVALID);
+    }
     dbus_connection_send (ipc->conn, reply, NULL);
     dbus_message_unref (reply);
 
@@ -353,6 +379,11 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
+    {
+        CreateIC(ipc->owner, ipc->frontendid, msg);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+    else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2"))
     {
         CreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;

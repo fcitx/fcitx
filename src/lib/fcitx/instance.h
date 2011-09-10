@@ -82,6 +82,11 @@ extern "C" {
         struct _HookStack* hookUpdateCandidateWordHook;
 
         FcitxUIFlag uiflag;
+
+        IME_STATE globalState;
+
+        /* gives more padding, since we want to break abi */
+        int padding[64];
     } FcitxInstance;
 
     /**

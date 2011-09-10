@@ -22,6 +22,7 @@
 
 #include "fcitx/ui.h"
 #include "fcitx/ime.h"
+#include "fcitx/instance.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx-utils/log.h"
 #include "xim.h"
@@ -219,7 +220,17 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
 
     xim->currentSerialNumberCallData = call_data->serial_number;
     xim->currentSerialNumberKey = kev->serial;
-    INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY),
+
+    FcitxKeyEventType type = (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY);
+
+    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, xim->owner->config->hkTrigger))
+    {
+        EnableIM(xim->owner, ic, false);
+        xim->owner->input.keyReleased = KR_OTHER;
+        return;
+    }
+
+    INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, type,
                                            kev->time,
                                            sym, state);
 

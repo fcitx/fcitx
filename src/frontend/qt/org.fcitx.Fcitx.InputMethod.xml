@@ -9,5 +9,13 @@
       <arg name="keyval2" direction="out" type="u"/>
       <arg name="state2" direction="out" type="u"/>
     </method>
+    <method name="CreateICv2">
+      <arg name="icid" direction="out" type="i"/>
+      <arg name="enabled" direction="out" type="b"/>
+      <arg name="keyval1" direction="out" type="u"/>
+      <arg name="state1" direction="out" type="u"/>
+      <arg name="keyval2" direction="out" type="u"/>
+      <arg name="state2" direction="out" type="u"/>
+    </method>
   </interface>
 </node>

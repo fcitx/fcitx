@@ -3,6 +3,20 @@ Type=Integer
 DefaultValue=0
 Description=Seconds sleep before fcitx really start
 
+[Program/ShareStateAmongAllInputMethod]
+Type=Boolean
+DefaultValue=False
+Description=Share State Among All Input Method
+
+[Program/DefaultInputMethodState]
+Type=Enum
+DefaultValue=Close
+EnumCount=3
+Enum0=Close
+Enum1=English
+Enum2=Active
+Description=Enable Input Method By Default
+
 [Program/FirstRun]
 Type=Boolean
 DefaultValue=True

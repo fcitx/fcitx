@@ -77,13 +77,15 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    rec->state = IS_CLOSED;
+    if (instance->config->bGlobalShareState)
+        rec->state = instance->globalState;
+    else
+        rec->state = instance->config->defaultIMState;
 
     frontend->CreateIC((*pfrontend)->addonInstance, rec, priv);
 
     rec->next = instance->ic_list;
     instance->ic_list = rec;
-
     return rec;
 }
 
@@ -140,46 +142,6 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
     }
 
     return;
-}
-
-FCITX_EXPORT_API
-void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
-{
-    if (ic == NULL)
-        return ;
-    UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-    if (pfrontend == NULL)
-        return;
-    FcitxFrontend* frontend = (*pfrontend)->frontend;
-    ic->state = IS_CLOSED;
-    frontend->CloseIM((*pfrontend)->addonInstance, ic);
-
-    if (ic == GetCurrentIC(instance))
-    {
-        OnTriggerOff(instance);
-        CloseInputWindow(instance);
-    }
-}
-
-/**
- * @brief 更改输入法状态
- *
- * @param _connect_id
- */
-FCITX_EXPORT_API
-void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
-{
-    if (!ic)
-        return;
-    if (ic->state == IS_ENG) {
-        ic->state = IS_ACTIVE;
-        ResetInput(instance);
-    } else {
-        ic->state = IS_ENG;
-        ResetInput(instance);
-        CloseInputWindow(instance);
-    }
 }
 
 FCITX_EXPORT_API

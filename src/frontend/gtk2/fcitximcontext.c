@@ -54,8 +54,6 @@ struct _FcitxIMContext {
     GtkIMContext parent;
 
     GdkWindow *client_window;
-    /* enable */
-    boolean enable;
     GdkRectangle area;
     FcitxIMClient* client;
     GtkIMContext* slave;
@@ -435,7 +433,7 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
                              (GDestroyNotify) g_object_unref);
         }
 
-        if (!fcitxcontext->enable)
+        if (!IsFcitxIMClientEnabled(fcitxcontext->client))
         {
             if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
                 return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
@@ -728,7 +726,7 @@ fcitx_im_context_get_preedit_string (GtkIMContext   *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
 
-    if (fcitxcontext->enable && IsFcitxIMClientValid(fcitxcontext->client))
+    if (IsFcitxIMClientValid(fcitxcontext->client) && IsFcitxIMClientEnabled(fcitxcontext->client))
     {
         if (str)
         {
@@ -771,7 +769,7 @@ static void
 _slave_preedit_changed_cb (GtkIMContext *slave,
                            FcitxIMContext *context)
 {
-    if (context->enable && context->client) {
+    if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
 
@@ -781,7 +779,7 @@ static void
 _slave_preedit_start_cb (GtkIMContext *slave,
                          FcitxIMContext *context)
 {
-    if (context->enable && context->client) {
+    if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
 
@@ -792,7 +790,7 @@ static void
 _slave_preedit_end_cb (GtkIMContext *slave,
                        FcitxIMContext *context)
 {
-    if (context->enable && context->client) {
+    if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
     g_signal_emit (context, _signal_preedit_end_id, 0);
@@ -804,7 +802,7 @@ _slave_retrieve_surrounding_cb (GtkIMContext *slave,
 {
     gboolean return_value;
 
-    if (context->enable && context->client) {
+    if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return FALSE;
     }
     g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
@@ -820,7 +818,7 @@ _slave_delete_surrounding_cb (GtkIMContext *slave,
 {
     gboolean return_value;
 
-    if (context->enable && context->client) {
+    if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return FALSE;
     }
     g_signal_emit (context, _signal_delete_surrounding_id, 0, offset_from_cursor, nchars, &return_value);
@@ -831,14 +829,14 @@ void _fcitx_im_context_enable_im_cb(DBusGProxy* proxy, void* user_data)
 {
     FcitxLog(LOG_LEVEL, "_fcitx_im_context_enable_im_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    context->enable = true;
+    FcitxIMClientSetEnabled(context->client, true);
 }
 
 void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
 {
     FcitxLog(LOG_LEVEL, "_fcitx_im_context_close_im_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    context->enable = false;
+    FcitxIMClientSetEnabled(context->client, false);
 
     if (context->preedit_string != NULL)
         g_free(context->preedit_string);
@@ -1078,8 +1076,7 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
 
 void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
 {
-    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    context->enable = false;
+    FcitxIMClientSetEnabled(client, false);
 }
 
 static gboolean

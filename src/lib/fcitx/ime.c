@@ -54,6 +54,9 @@ static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL ,NULL, NULL};
 static int IMPriorityCmp(const void *a, const void *b);
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuShell(FcitxUIMenu *menu);
+static void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
+static void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
+static void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState);
 
 int IMPriorityCmp(const void *a, const void *b)
 {
@@ -285,10 +288,10 @@ INPUT_RETURN_VALUE ProcessKey(
 
     /* process keyrelease event for switch key and 2nd, 3rd key */
     if (event == FCITX_RELEASE_KEY ) {
-        if (GetCurrentIC(instance)->state != IS_CLOSED) {
+        if (GetCurrentState(instance) != IS_CLOSED) {
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
                 if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                    if (GetCurrentIC(instance)->state == IS_ACTIVE)
+                    if (GetCurrentState(instance) == IS_ACTIVE)
                     {
                         if (input->keyReleased == KR_CTRL_SHIFT)
                             SwitchIM(instance, -1);
@@ -359,7 +362,7 @@ INPUT_RETURN_VALUE ProcessKey(
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
-                if (GetCurrentIC(instance)->state == IS_ENG) {
+                if (GetCurrentState(instance) == IS_ENG) {
                     ChangeIMState(instance, GetCurrentIC(instance));
                     ShowInputSpeed(instance);
                 } else
@@ -374,7 +377,7 @@ INPUT_RETURN_VALUE ProcessKey(
         retVal = IRV_DONOT_PROCESS;
 
     /* the key processed before this phase is very important, we don't let any interrupt */
-    if (GetCurrentIC(instance)->state == IS_ACTIVE
+    if (GetCurrentState(instance) == IS_ACTIVE
             && retVal == IRV_TO_PROCESS
        ) {
         if (!input->bIsDoInputOnly) {
@@ -411,7 +414,7 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
-    if (GetCurrentIC(instance)->state == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS))
+    if (GetCurrentState(instance) == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS))
     {
         CleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
@@ -422,7 +425,7 @@ INPUT_RETURN_VALUE ProcessKey(
         * since all candidate word are cached in candList, so we don't need to trigger
         * GetCandWords after go for another page, simply update input window is ok.
         */
-    if (GetCurrentIC(instance)->state == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
     {
         if (IsHotKey(sym, state, fc->hkPrevPage))
         {
@@ -436,7 +439,7 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
-    if (GetCurrentIC(instance)->state == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
+    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
     {
         ProcessPostInputFilter(instance, sym, state, &retVal);
     }
@@ -679,6 +682,19 @@ void ReloadConfig(FcitxInstance *instance)
         }
     }
 
+    for ( addon = (FcitxAddon *) utarray_front(addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon))
+    {
+        if (addon->category == AC_FRONTEND &&
+                addon->bEnabled &&
+                addon->addonInstance)
+        {
+            if (addon->frontend->ReloadConfig)
+                addon->frontend->ReloadConfig(addon->addonInstance);
+        }
+    }
+
 
     UT_array* imes = &instance->imes;
     FcitxIM* pim;
@@ -711,6 +727,25 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
 FCITX_EXPORT_API
 void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
+    if (instance->config->bGlobalShareState)
+    {
+        instance->globalState = IS_ACTIVE;
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL)
+        {
+            EnableIMInternal(instance, rec, keepState);
+            rec = rec->next;
+        }
+    }
+    else
+    {
+        EnableIMInternal(instance, ic, keepState);
+    }
+}
+
+
+void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
+{
     if (ic == NULL)
         return ;
     UT_array* frontends = &instance->frontends;
@@ -721,12 +756,106 @@ void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
     IME_STATE oldstate = ic->state;
     ic->state = IS_ACTIVE;
     if (oldstate == IS_CLOSED)
-    {
         frontend->EnableIM((*pfrontend)->addonInstance, ic);
-        OnTriggerOn(instance);
+
+    if (ic == GetCurrentIC(instance))
+    {
+        if (oldstate == IS_CLOSED)
+            OnTriggerOn(instance);
+        if (!keepState)
+            ResetInput(instance);
     }
-    if (!keepState)
-        ResetInput(instance);
+}
+
+FCITX_EXPORT_API
+void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (instance->config->bGlobalShareState)
+    {
+        instance->globalState = IS_CLOSED;
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL)
+        {
+            CloseIMInternal(instance, rec);
+            rec = rec->next;
+        }
+    }
+    else
+    {
+        CloseIMInternal(instance, ic);
+    }
+}
+
+void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (ic == NULL)
+        return ;
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    ic->state = IS_CLOSED;
+    frontend->CloseIM((*pfrontend)->addonInstance, ic);
+
+    if (ic == GetCurrentIC(instance))
+    {
+        OnTriggerOff(instance);
+        CloseInputWindow(instance);
+    }
+}
+
+/**
+ * @brief 更改输入法状态
+ *
+ * @param _connect_id
+ */
+FCITX_EXPORT_API
+void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (!ic)
+        return;
+    IME_STATE objectState;
+    if (ic->state == IS_ENG)
+        objectState = IS_ACTIVE;
+    else
+        objectState = IS_ENG;
+    instance->globalState = objectState;
+    if (instance->config->bGlobalShareState)
+    {
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL)
+        {
+            ChangeIMStateInternal(instance, rec, objectState);
+            rec = rec->next;
+        }
+    }
+    else
+    {
+        ChangeIMStateInternal(instance, ic, objectState);
+    }
+}
+
+void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState)
+{
+    if (!ic)
+        return;
+    if (ic->state == objectState)
+        return;
+    ic->state = objectState;
+    if (objectState == IS_ACTIVE)
+    {
+        if (ic == GetCurrentIC(instance))
+        {
+            ResetInput(instance);
+        }
+    } else {
+        if (ic == GetCurrentIC(instance))
+        {
+            ResetInput(instance);
+            CloseInputWindow(instance);
+        }
+    }
 }
 
 void InitIMMenu(FcitxInstance* instance)

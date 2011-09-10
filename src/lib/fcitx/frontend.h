@@ -78,7 +78,7 @@ extern "C" {
         void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
         void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
         void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic);
-        void (*padding2)();
+        void (*ReloadConfig)(void* arg);
         void (*padding3)();
         void (*padding4)();
     } FcitxFrontend;
@@ -147,15 +147,6 @@ extern "C" {
     boolean LoadFrontend(struct _FcitxInstance* instance );
 
     /**
-     * @brief End Input
-     *
-     * @param instance
-     * @param ic input context
-     * @return void
-     **/
-    void CloseIM(struct _FcitxInstance* instance, FcitxInputContext* ic);
-
-    /**
      * @brief Commit String to Client
      *
      * @param instance
@@ -166,24 +157,15 @@ extern "C" {
     void CommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, char* str);
 
     /**
-     * @brief ...
-     *
-     * @param  ...
-     * @param ic ...
-     * @return void
-     **/
-    void ChangeIMState (struct _FcitxInstance*, FcitxInputContext* ic);
-
-    /**
      * @brief Set Cursor Position
      *
-     * @param  ...
+     * @param instance fcitx instance
      * @param ic input context
      * @param x xpos
      * @param y ypos
      * @return void
      **/
-    void SetWindowOffset(struct _FcitxInstance*, FcitxInputContext* ic, int x, int y);
+    void SetWindowOffset(struct _FcitxInstance* instance, FcitxInputContext* ic, int x, int y);
 
     /**
      * @brief Get Cursor Position

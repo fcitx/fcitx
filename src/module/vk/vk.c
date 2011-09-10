@@ -754,7 +754,7 @@ void SwitchVK (FcitxVKState *vkstate)
 
         FcitxInputContext* ic = GetCurrentIC(vkstate->owner);
 
-        if (ic && ic->state == IS_CLOSED)
+        if (ic && GetCurrentState(instance) == IS_CLOSED)
             EnableIM (instance, ic, true);
     }
     else

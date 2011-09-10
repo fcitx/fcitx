@@ -22,6 +22,7 @@
 
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-config/hotkey.h>
+#include <fcitx/frontend.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -186,6 +187,16 @@ extern "C" {
          * @brief switch the preedit should show in client window or not
          **/
         HOTKEYS hkSwitchEmbeddedPreedit[2];
+
+        /**
+         * @brief Input method use global shared state
+         **/
+        boolean bGlobalShareState;
+
+        /**
+         * @brief Input method enable by default
+         **/
+        IME_STATE defaultIMState;
     } FcitxConfig;
 
     /**
