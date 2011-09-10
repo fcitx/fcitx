@@ -44,8 +44,20 @@ FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
+    IME_STATE prevstate = GetCurrentState(instance);
     boolean changed = (instance->CurrentIC != ic);
     instance->CurrentIC = ic;
+
+    IME_STATE nextstate = GetCurrentState(instance);
+
+    if (!((prevstate == IS_CLOSED && nextstate == IS_CLOSED) || (prevstate != IS_CLOSED && nextstate != IS_CLOSED)))
+    {
+        if (prevstate == IS_CLOSED)
+            instance->timeStart = time(NULL);
+        else
+            instance->totaltime += difftime(time(NULL), instance->timeStart);
+    }
+
     return changed;
 }
 

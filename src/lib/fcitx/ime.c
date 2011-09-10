@@ -468,7 +468,7 @@ void ProcessInputReturnValue(
     if (retVal & IRV_FLAG_PENDING_COMMIT_STRING)
     {
         CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-        input->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
+        instance->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
     }
 
     if (retVal & IRV_FLAG_DO_PHRASE_TIPS)
@@ -497,14 +497,6 @@ void ProcessInputReturnValue(
 
     if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW)
         UpdateInputWindow(instance);
-
-    if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW) {
-        if (!input->bStartRecordType)
-        {
-            input->bStartRecordType = true;
-            input->timeStart = time (NULL);
-        }
-    }
 }
 
 FCITX_EXPORT_API
@@ -908,17 +900,17 @@ void ShowInputSpeed(FcitxInstance* instance)
     if (instance->config->bShowUserSpeed) {
         double          timePassed;
 
-        timePassed = difftime (time (NULL), input->timeStart);
+        timePassed = instance->totaltime + difftime (time (NULL), instance->timeStart);
         if (((int) timePassed) == 0)
             timePassed = 1.0;
 
         SetMessageCount(input->msgAuxDown, 0);
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Input Speed: "));
-        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) ( input->iHZInputed * 60 / timePassed));
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) ( instance->iHZInputed * 60 / timePassed));
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("/min  Time Used: "));
         AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) timePassed / 60);
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("min Num of Characters: "));
-        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%u", input->iHZInputed);
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%u", instance->iHZInputed);
 
     }
 

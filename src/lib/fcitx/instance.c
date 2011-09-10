@@ -100,8 +100,9 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     if (!ProcessOption(instance, argc, argv))
         goto error_exit;
 
-    instance->input.timeStart = time(NULL);
+    instance->timeStart = time(NULL);
     instance->globalState = instance->config->defaultIMState;
+    instance->totaltime = 0;
 
     FcitxInitThread(instance);
     if (!LoadProfile(instance->profile))

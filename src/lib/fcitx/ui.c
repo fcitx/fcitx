@@ -447,6 +447,8 @@ void OnTriggerOn(FcitxInstance* instance)
 
     TriggerOnHook(instance);
 
+    instance->timeStart = time(NULL);
+
     ShowInputSpeed(instance);
 }
 
@@ -464,6 +466,8 @@ void OnTriggerOff(FcitxInstance* instance)
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
 
     TriggerOffHook(instance);
+
+    instance->totaltime += difftime(time(NULL), instance->timeStart);
 }
 
 FCITX_EXPORT_API

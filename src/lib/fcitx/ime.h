@@ -181,13 +181,13 @@ extern "C" {
         char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
         boolean bIsInRemind;
 
-        time_t timeStart;
+        time_t dummy;
         int iCursorPos;
         boolean bShowCursor;
-        int iHZInputed;
+        int dummy2;
         int lastIsSingleHZ;
         boolean bLastIsNumber;
-        boolean bStartRecordType;
+        boolean dummy3;
 
         /* the ui message part, if there is something in it, then it will be shown */
         struct _CandidateWordList* candList;

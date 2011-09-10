@@ -85,6 +85,10 @@ extern "C" {
 
         IME_STATE globalState;
 
+        time_t totaltime;
+        time_t timeStart;
+        int iHZInputed;
+
         /* gives more padding, since we want to break abi */
         int padding[64];
     } FcitxInstance;

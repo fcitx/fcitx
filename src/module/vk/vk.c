@@ -542,7 +542,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
         if (pstr) {
             CommitString (instance, GetCurrentIC(instance), pstr);
-            instance->input.iHZInputed += (int) (utf8_strlen (pstr));   //粗略统计字数
+            instance->iHZInputed += (int) (utf8_strlen (pstr));   //粗略统计字数
         }
     }
 
