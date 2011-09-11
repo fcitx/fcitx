@@ -32,13 +32,25 @@ typedef enum _ADJUSTORDER {
     AD_FREQ = 2
 } ADJUSTORDER;
 
+typedef enum _SHUANGPINSCHEME
+{
+    SP_ZIRANMA,
+    SP_MS,
+    SP_ZIGUANG,
+    SP_ABC,
+    SP_ZHONGWENZHIXING,
+    SP_PINYINJIAJIA,
+    SP_USERDEFINE
+} SHUANGPINSCHEME;
+
 typedef struct _FcitxPinyinConfig
 {
     GenericConfig gconfig;
     /* py config */
     int iPinyinPriority;
     int iShuangpinPriority;
-    char *strDefaultSP;
+
+    SHUANGPINSCHEME spscheme;
     boolean bFullPY;
     boolean bPYCreateAuto;
     boolean bPYSaveAutoAsPhrase;
@@ -64,4 +76,4 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig);
 void SavePYConfig(FcitxPinyinConfig *pyconfig);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

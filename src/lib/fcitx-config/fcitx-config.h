@@ -544,6 +544,20 @@ extern "C"
      **/
     const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
 
+
+    /**
+     * @brief Get a option description from config file description, return NULL if not found.
+     *
+     * @param cfdesc config file description
+     * @param groupName gropu name
+     * @param optionName option name
+     * @return const ConfigOptionDesc*
+     *
+     * @since 4.1.2
+     **/
+    ConfigOption* ConfigFileGetOption(ConfigFile* cfdesc, const char* groupName, const char* optionName);
+
+
     /**
      * @brief Get the I18NString value from current locale
      *
@@ -589,4 +603,4 @@ extern "C"
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

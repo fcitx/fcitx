@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-11 03:59+0800\n"
+"POT-Creation-Date: 2011-09-11 20:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -203,95 +203,95 @@ msgstr ""
 msgid "Shuangpin Priority Order, 0 to disable"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:14
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:22
 msgid "Default Shuangpin Schema"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:19
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:27
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:24
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:32
 msgid "Auto Create Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:29
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:37
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:34
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:42
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:39
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:47
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:44
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:52
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:49
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:57
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:58
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:66
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:67
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:75
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:76
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:84
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:81
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:89
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:86
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:94
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:91
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:99
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:96
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:104
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:101
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:109
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:106
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:114
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:111
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:119
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:116
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:124
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:121
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:129
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:126
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:134
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:131
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:139
 msgid "Fuzzy z and zh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:136
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:144
 msgid "Fix misstype gn/ng"
 msgstr ""
 
@@ -673,6 +673,10 @@ msgid "Xim"
 msgstr ""
 
 #: unknown
+msgid "ABC"
+msgstr ""
+
+#: unknown
 msgid "Active"
 msgstr ""
 
@@ -737,6 +741,10 @@ msgid "Module"
 msgstr ""
 
 #: unknown
+msgid "MS"
+msgstr ""
+
+#: unknown
 msgid "Native"
 msgstr ""
 
@@ -746,6 +754,10 @@ msgstr ""
 
 #: unknown
 msgid "OpenCC"
+msgstr ""
+
+#: unknown
+msgid "PinyinJiaJia"
 msgstr ""
 
 #: unknown
@@ -770,6 +782,22 @@ msgstr ""
 
 #: unknown
 msgid "UI"
+msgstr ""
+
+#: unknown
+msgid "User Defined"
+msgstr ""
+
+#: unknown
+msgid "Zhongwenzhixing"
+msgstr ""
+
+#: unknown
+msgid "Ziguang"
+msgstr ""
+
+#: unknown /home/saber/Develop/fcitx/build/po/tmp/zrm.conf.in.h:1
+msgid "Ziranma"
 msgstr ""
 
 #: unknown
@@ -822,10 +850,6 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/wbx.conf.in.h:1
 msgid "Wubi"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/tmp/zrm.conf.in.h:1
-msgid "Ziranma"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:2
@@ -1144,11 +1168,11 @@ msgstr ""
 msgid "DISPLAY InputWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:145
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:136
 msgid "DISPLAY MainWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:160
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:150
 msgid "DRAW MainWindow"
 msgstr ""
 
@@ -1305,19 +1329,19 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:856
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:854
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:908
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:906
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:910
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:908
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:912
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:910
 msgid "min Num of Characters: "
 msgstr ""
 

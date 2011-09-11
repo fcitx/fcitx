@@ -9,8 +9,16 @@ DefaultValue=2
 Description=Shuangpin Priority Order, 0 to disable
 
 [Pinyin/DefaultShuangpinSchema]
-Type=String
-DefaultValue=自然码
+Type=Enum
+EnumCount=7
+Enum0=Ziranma
+Enum1=MS
+Enum2=Ziguang
+Enum3=ABC
+Enum4=Zhongwenzhixing
+Enum5=PinyinJiaJia
+Enum6=User Defined
+DefaultValue=Ziranma
 Description=Default Shuangpin Schema
 
 [Pinyin/UseCompletePinyin]

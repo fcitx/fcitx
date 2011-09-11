@@ -37,7 +37,7 @@ static ConfigFileDesc* GetPYConfigDesc();
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
 CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority)
 CONFIG_BINDING_REGISTER("Pinyin", "ShuangpinPriority", iShuangpinPriority)
-CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", strDefaultSP)
+CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", spscheme)
 CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY)
 CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto)
 CONFIG_BINDING_REGISTER("Pinyin", "SaveAutoPhrase", bPYSaveAutoAsPhrase)
@@ -61,7 +61,6 @@ CONFIG_BINDING_REGISTER("Pinyin", "FuzzySSH", MHPY_S[3].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype)
 CONFIG_BINDING_END()
-
 
 void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
@@ -106,6 +105,45 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
     ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
 
     FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
+
+    ConfigOption* option = ConfigFileGetOption(cfile, "Pinyin", "DefaultShuangpinSchema");
+    if (option != NULL && option->rawValue && option->optionDesc)
+    {
+        char* needfree = NULL;
+        if (strcmp(option->rawValue, "自然码") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZIRANMA]);
+        }
+        else if (strcmp(option->rawValue, "微软") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_MS]);
+        }
+        else if (strcmp(option->rawValue, "紫光") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZIGUANG]);
+        }
+        else if (strcmp(option->rawValue, "拼音加加") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_PINYINJIAJIA]);
+        }
+        else if (strcmp(option->rawValue, "中文之星") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZHONGWENZHIXING]);
+        }
+        else if (strcmp(option->rawValue, "智能ABC") == 0)
+        {
+            needfree = option->rawValue;
+            option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ABC]);
+        }
+        if (needfree)
+            free(needfree);
+    }
+
     ConfigBindSync((GenericConfig*)pyconfig);
 
     if (fp)
@@ -125,4 +163,4 @@ void SavePYConfig(FcitxPinyinConfig* pyconfig)
 }
 
 CONFIG_DESC_DEFINE(GetPYConfigDesc, "fcitx-pinyin.desc")
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

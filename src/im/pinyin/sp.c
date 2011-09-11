@@ -21,92 +21,17 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "fcitx/fcitx.h"
 
 #include "py.h"
 #include "sp.h"
+#include "spdata.h"
 #include "pyMapTable.h"
 #include "pyParser.h"
 #include "fcitx-config/xdg.h"
 #include "pyconfig.h"
-#include <string.h>
-
-const SP_C            SPMap_C_Template[] =
-{
-    {"ai", 'l'}
-    ,
-    {"an", 'j'}
-    ,
-    {"ang", 'h'}
-    ,
-    {"ao", 'k'}
-    ,
-    {"ei", 'z'}
-    ,
-    {"en", 'f'}
-    ,
-    {"eng", 'g'}
-    ,
-    {"er", 'r'}
-    ,
-    {"ia", 'w'}
-    ,
-    {"ian", 'm'}
-    ,
-    {"iang", 'd'}
-    ,
-    {"iao", 'c'}
-    ,
-    {"ie", 'x'}
-    ,
-    {"in", 'n'}
-    ,
-    {"ing", 'y'}
-    ,
-    {"iong", 's'}
-    ,
-    {"iu", 'q'}
-    ,
-    {"ng", 'g'}
-    ,
-    {"ong", 's'}
-    ,
-    {"ou", 'b'}
-    ,
-    {"ua", 'w'}
-    ,
-    {"uai", 'y'}
-    ,
-    {"uan", 'r'}
-    ,
-    {"uang", 'd'}
-    ,
-    {"ue", 't'}
-    ,
-    {"ui", 'v'}
-    ,
-    {"un", 'p'}
-    ,
-    {"uo", 'o'}
-    ,
-    {"ve", 't'}
-    ,
-    {"v", 'v'}
-    ,
-    {"\0", '\0'}
-};
-
-const SP_S SPMap_S_Template[] =
-{
-    {"ch", 'i'}
-    ,
-    {"sh", 'u'}
-    ,
-    {"zh", 'v'}
-    ,
-    {"\0", '\0'}
-};
 
 #define STR_SPCONF_NAME 0
 
@@ -123,8 +48,9 @@ boolean SPInit(void *arg)
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     pystate->bSP = true;
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
-    memcpy(pyconfig->SPMap_S, SPMap_S_Template, sizeof(SPMap_S_Template));
-    memcpy(pyconfig->SPMap_C, SPMap_C_Template, sizeof(SPMap_C_Template));
+    pyconfig->cNonS = 'o';
+    memcpy(pyconfig->SPMap_S, SPMap_S_Ziranma, sizeof(SPMap_S_Ziranma));
+    memcpy(pyconfig->SPMap_C, SPMap_C_Ziranma, sizeof(SPMap_C_Ziranma));
 
     LoadSPData(pystate);
     return true;
@@ -135,92 +61,138 @@ void LoadSPData(FcitxPinyinState *pystate)
     FILE           *fp;
     char            str[100], strS[5], *pstr;
     int             i;
-    boolean            bIsDefault = false;
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
+    boolean            bIsDefault = false;
     SP_C* SPMap_C = pyconfig->SPMap_C;
     SP_S* SPMap_S = pyconfig->SPMap_S;
 
-    /* reset work around */
-    i = 0;
-
-    while (SPMap_C[i].strQP[0])
+    const SP_C* SPMap_C_source = NULL;
+    const SP_S* SPMap_S_source = NULL;
+    switch (pyconfig->spscheme)
     {
-        if (strlen(SPMap_C[i].strQP) == 1)
-            SPMap_C[i].cJP = SPMap_C[i].strQP[0];
-
-        i ++ ;
-    }
-
-    fp = GetXDGFileWithPrefix("pinyin", "sp.dat", "rt", NULL);
-
-    while (1)
-    {
-        if (!fgets(str, 100, fp))
+        case SP_ZIRANMA:
+            SPMap_C_source = SPMap_C_Ziranma;
+            SPMap_S_source = SPMap_S_Ziranma;
             break;
-
-        i = strlen(str) - 1;
-
-        while ((i >= 0) && (str[i] == ' ' || str[i] == '\n'))
-            str[i--] = '\0';
-
-        pstr = str;
-
-        if (*pstr == ' ' || *pstr == '\t')
-            pstr++;
-
-        if (!strlen(pstr) || pstr[0] == '#')
-            continue;
-
-        if (!strncmp(pstr, cstr(NAME), cstrlen(NAME)))
+        case SP_MS:
+            SPMap_C_source = SPMap_C_MS;
+            SPMap_S_source = SPMap_S_MS;
+            break;
+        case SP_ZIGUANG:
+            SPMap_C_source = SPMap_C_Ziguang;
+            SPMap_S_source = SPMap_S_Ziguang;
+            break;
+        case SP_PINYINJIAJIA:
+            SPMap_C_source = SPMap_C_PinyinJiaJia;
+            SPMap_S_source = SPMap_S_PinyinJiaJia;
+            break;
+        case SP_ZHONGWENZHIXING:
+            SPMap_C_source = SPMap_C_Zhongwenzhixing;
+            SPMap_S_source = SPMap_S_Zhongwenzhixing;
+            break;
+        case SP_ABC:
+            SPMap_C_source = SPMap_C_ABC;
+            SPMap_S_source = SPMap_S_ABC;
+            break;
+        default:
         {
-            pstr += cstrlen(NAME);
-
-            if (*pstr == ' ' || *pstr == '\t')
-                pstr++;
-
-            bIsDefault = !(strcmp(pyconfig->strDefaultSP, pstr));
-
-            continue;
-        }
-
-        if (!bIsDefault)
-            continue;
-
-        if (pstr[0] == '=') //是零声母设置
-            pyconfig->cNonS = tolower(pstr[1]);
-        else
-        {
+            /* reset work around */
             i = 0;
 
-            while (pstr[i])
+            while (SPMap_C[i].strQP[0])
             {
-                if (pstr[i] == '=')
+                if (strlen(SPMap_C[i].strQP) == 1)
+                    SPMap_C[i].cJP = SPMap_C[i].strQP[0];
+                i ++ ;
+            }
+
+            fp = GetXDGFileWithPrefix("pinyin", "sp.dat", "rt", NULL);
+
+            while (1)
+            {
+                if (!fgets(str, 100, fp))
+                    break;
+
+                i = strlen(str) - 1;
+
+                while ((i >= 0) && (str[i] == ' ' || str[i] == '\n'))
+                    str[i--] = '\0';
+
+                pstr = str;
+
+                if (*pstr == ' ' || *pstr == '\t')
+                    pstr++;
+
+                if (!strlen(pstr) || pstr[0] == '#')
+                    continue;
+
+                if (!strncmp(pstr, cstr(NAME), cstrlen(NAME)))
                 {
-                    strncpy(strS, pstr, i);
-                    strS[i] = '\0';
+                    pstr += cstrlen(NAME);
 
-                    pstr += i;
-                    i = GetSPIndexQP_S(pyconfig, strS);
+                    if (*pstr == ' ' || *pstr == '\t')
+                        pstr++;
 
-                    if (i != -1)
-                        SPMap_S[i].cJP = tolower(pstr[1]);
-                    else
+                    if (strcmp(pstr, "自然码") != 0
+                        && strcmp(pstr, "微软") != 0
+                        && strcmp(pstr, "紫光") != 0
+                        && strcmp(pstr, "拼音加加") != 0
+                        && strcmp(pstr, "中文之星") != 0
+                        && strcmp(pstr, "智能ABC") != 0)
                     {
-                        i = GetSPIndexQP_C(pyconfig, strS);
-
-                        if (i != -1)
-                            SPMap_C[i].cJP = tolower(pstr[1]);
+                        bIsDefault = true;
                     }
 
-                    break;
+                    continue;
                 }
+                if (!bIsDefault)
+                    continue;
 
-                i++;
+                if (pstr[0] == '=') //是零声母设置
+                    pyconfig->cNonS = tolower(pstr[1]);
+                else
+                {
+                    i = 0;
+
+                    while (pstr[i])
+                    {
+                        if (pstr[i] == '=')
+                        {
+                            strncpy(strS, pstr, i);
+                            strS[i] = '\0';
+
+                            pstr += i;
+                            i = GetSPIndexQP_S(pyconfig, strS);
+
+                            if (i != -1)
+                                SPMap_S[i].cJP = tolower(pstr[1]);
+                            else
+                            {
+                                i = GetSPIndexQP_C(pyconfig, strS);
+
+                                if (i != -1)
+                                    SPMap_C[i].cJP = tolower(pstr[1]);
+                            }
+
+                            break;
+                        }
+
+                        i++;
+                    }
+                }
             }
+
+            fclose(fp);
         }
+        break;
     }
 
-    fclose(fp);
+    if (SPMap_C_source && SPMap_S_source)
+    {
+        pyconfig->cNonS = 'o';
+        memcpy(pyconfig->SPMap_S, SPMap_S_source, 4 * sizeof(SP_S));
+        memcpy(pyconfig->SPMap_C, SPMap_C_source, 31 * sizeof(SP_C));
+    }
 
     //下面判断是否使用了';'
     i = 0;
@@ -393,4 +365,4 @@ int GetSPIndexJP_C(FcitxPinyinConfig* pyconfig, char c, int iStart)
     return -1;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
