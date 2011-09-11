@@ -223,11 +223,22 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
 
     FcitxKeyEventType type = (call_data->event.type == KeyRelease)?(FCITX_RELEASE_KEY):(FCITX_PRESS_KEY);
 
-    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, xim->owner->config->hkTrigger))
+    if (ic->state == IS_CLOSED)
     {
-        EnableIM(xim->owner, ic, false);
-        xim->owner->input.keyReleased = KR_OTHER;
-        return;
+        if ( type == FCITX_PRESS_KEY && IsHotKey(sym, state, xim->owner->config->hkTrigger))
+        {
+            EnableIM(xim->owner, ic, false);
+            xim->owner->input.keyReleased = KR_OTHER;
+            return;
+        }
+        else
+        {
+            XimForwardKeyInternal(xim,
+                                GetXimIC(ic),
+                                &call_data->event
+                                );
+            return;
+        }
     }
 
     INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, type,
