@@ -39,14 +39,11 @@ struct _FcitxClassicUI;
 
 typedef struct _TrayWindow {
     Window window;
-
-    XImage* icon[2];
-    Pixmap picon[2];
-    GC gc;
     boolean bTrayMapped;
     XVisualInfo visual;
     Atom atoms[6];
 
+    cairo_surface_t *cs_x;
     cairo_surface_t *cs;
     int size;
     struct _FcitxClassicUI* owner;
@@ -60,4 +57,4 @@ void RedrawTrayWindow(TrayWindow* trayWindow);
 void ReleaseTrayWindow(TrayWindow* trayWindow);
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

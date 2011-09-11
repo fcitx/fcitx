@@ -407,4 +407,4 @@ boolean X11GetCompositeManager(FcitxX11* x11stuff)
         return false;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

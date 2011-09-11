@@ -47,8 +47,8 @@ typedef struct _MainWindow
 {
     Display* dpy;
     Window window;
-    Pixmap pm_main_bar;
     cairo_surface_t* cs_main_bar;
+    cairo_surface_t* cs_x_main_bar;
     GC main_win_gc;
     boolean bMainWindowHidden;
     FcitxClassicUIStatus logostat;
@@ -66,4 +66,4 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

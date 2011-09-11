@@ -84,12 +84,13 @@ void InitTrayWindow(TrayWindow *trayWindow)
     XSetWMNormalHints(dpy, trayWindow->window, &size_hints);
 
     if (vi && vi->visual)
-        trayWindow->cs = cairo_xlib_surface_create(dpy, trayWindow->window, trayWindow->visual.visual, 200, 200);
+        trayWindow->cs_x = cairo_xlib_surface_create(dpy, trayWindow->window, trayWindow->visual.visual, 200, 200);
     else
     {
         Visual *target_visual = DefaultVisual (dpy, iScreen);
-        trayWindow->cs = cairo_xlib_surface_create(dpy, trayWindow->window, target_visual, 200, 200);
+        trayWindow->cs_x = cairo_xlib_surface_create(dpy, trayWindow->window, target_visual, 200, 200);
     }
+    trayWindow->cs = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 200, 200);
 
     XSelectInput (dpy, trayWindow->window, ExposureMask | KeyPressMask |
                   ButtonPressMask | ButtonReleaseMask | StructureNotifyMask
@@ -118,14 +119,16 @@ void ReleaseTrayWindow(TrayWindow *trayWindow)
     if (trayWindow->window == None)
         return;
     cairo_surface_destroy(trayWindow->cs);
+    cairo_surface_destroy(trayWindow->cs_x);
     XDestroyWindow(dpy, trayWindow->window);
     trayWindow->window = None;
+    trayWindow->cs = NULL;
+    trayWindow->cs_x = NULL;
 }
 
 void DrawTrayWindow(TrayWindow* trayWindow) {
     FcitxClassicUI *classicui = trayWindow->owner;
     FcitxSkin *sc = &classicui->skin;
-    Display *dpy = classicui->dpy;
     SkinImage *image;
     int f_state;
     if ( !classicui->bUseTrayIcon )
@@ -153,22 +156,12 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
         return;
     png_surface = image->image;
 
-    c=cairo_create(trayWindow->cs);
+    c = cairo_create(trayWindow->cs);
+    cairo_set_source_rgba(c, 0, 0, 0, 0);
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(c);
 
-    XVisualInfo* vi = trayWindow->visual.visual ? &trayWindow->visual : NULL;
-    if (vi && vi->visual)
-    {
-        /* 清空窗口 */
-        cairo_set_source_rgba(c, 0, 0, 0, 0);
-        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-        cairo_paint(c);
-    }
-    else
-    {
-        XClearArea (dpy, trayWindow->window, 0, 0, trayWindow->size, trayWindow->size, False);
-    }
-
-    if ( png_surface)
+    if (png_surface)
     {
         cairo_scale(c, ((double) trayWindow->size) / cairo_image_surface_get_height(png_surface), ((double) trayWindow->size) / cairo_image_surface_get_width(png_surface));
         cairo_set_source_surface(c, png_surface, 0 , 0 );
@@ -178,6 +171,25 @@ void DrawTrayWindow(TrayWindow* trayWindow) {
 
     cairo_destroy(c);
 
+    XVisualInfo* vi = trayWindow->visual.visual ? &trayWindow->visual : NULL;
+    if (!(vi && vi->visual))
+    {
+        XClearArea (trayWindow->owner->dpy, trayWindow->window, 0, 0, trayWindow->size, trayWindow->size, False);
+    }
+
+    c = cairo_create(trayWindow->cs_x);
+    if (vi && vi->visual)
+    {
+        cairo_set_source_rgba(c, 0, 0, 0, 0);
+        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+        cairo_paint(c);
+    }
+    cairo_set_operator(c, CAIRO_OPERATOR_OVER);
+    cairo_set_source_surface(c, trayWindow->cs, 0, 0);
+    cairo_rectangle(c, 0, 0, trayWindow->size, trayWindow->size);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_destroy(c);
 }
 
 boolean TrayEventHandler(void *arg, XEvent* event)
@@ -289,4 +301,5 @@ boolean TrayEventHandler(void *arg, XEvent* event)
     }
     return false;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;
+

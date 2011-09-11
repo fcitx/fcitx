@@ -281,18 +281,7 @@ FCITX_EXPORT_API
 void CloseInputWindow(FcitxInstance* instance)
 {
     CleanInputWindow(instance);
-    FcitxInputContext* ic = GetCurrentIC(instance);
-    if (ic)
-    {
-        if (ic->contextCaps & CAPACITY_CLIENT_SIDE_UI)
-            UpdateClientSideUI(instance, ic);
-
-        if (ic->contextCaps & CAPACITY_PREEDIT)
-            UpdatePreedit(instance, GetCurrentIC(instance));
-    }
-
-    if (UI_FUNC_IS_VALID(CloseInputWindow ))
-        instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
+    instance->uiflag |= UI_UPDATE;
 }
 
 FCITX_EXPORT_API

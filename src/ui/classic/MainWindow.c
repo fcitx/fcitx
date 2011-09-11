@@ -65,10 +65,8 @@ void InitMainWindow(MainWindow* mainWindow)
     Visual * vs;
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
-    GC gc;
     char        strWindowName[] = "Fcitx Main Window";
     int swidth, sheight;
-    XGCValues xgv;
     Display* dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     FcitxSkin *sc = &classicui->skin;
@@ -97,22 +95,15 @@ void InitMainWindow(MainWindow* mainWindow)
     if (mainWindow->window == None)
         return;
 
-    xgv.foreground = WhitePixel(dpy, iScreen);
-    mainWindow->pm_main_bar = XCreatePixmap(
-                                  dpy,
-                                  mainWindow->window,
-                                  MAIN_BAR_MAX_WIDTH,
-                                  MAIN_BAR_MAX_HEIGHT,
-                                  depth);
-    gc = XCreateGC(dpy,mainWindow->pm_main_bar, GCForeground, &xgv);
-    XFillRectangle(dpy, mainWindow->pm_main_bar, gc, 0, 0,cairo_image_surface_get_width(back->image), cairo_image_surface_get_height(back->image));
-    mainWindow->cs_main_bar=cairo_xlib_surface_create(
+    mainWindow->cs_x_main_bar=cairo_xlib_surface_create(
                                 dpy,
-                                mainWindow->pm_main_bar,
+                                mainWindow->window,
                                 vs,
                                 MAIN_BAR_MAX_WIDTH,
                                 MAIN_BAR_MAX_HEIGHT);
-    XFreeGC(dpy,gc);
+    mainWindow->cs_main_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                MAIN_BAR_MAX_WIDTH,
+                                MAIN_BAR_MAX_HEIGHT);
 
     mainWindow->main_win_gc = XCreateGC( dpy, mainWindow->window, 0, NULL );
     XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
@@ -152,34 +143,35 @@ void DrawMainWindow (MainWindow* mainWindow)
 {
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
-    cairo_t *c;
 
     if ( mainWindow->bMainWindowHidden )
         return;
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
-    c=cairo_create(mainWindow->cs_main_bar);
-    //把背景清空
-    cairo_save(c);
-    cairo_set_source_rgba(c, 0, 0, 0,0);
-    cairo_rectangle (c, 0, 0, SIZEX, SIZEY);
-    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_fill(c);
-    cairo_restore(c);
-
-    cairo_set_operator(c, CAIRO_OPERATOR_OVER);
-
     if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState(mainWindow->owner->owner) != IS_CLOSED)))
     {
+        cairo_t *c;
+
+        c=cairo_create(mainWindow->cs_main_bar);
+        //把背景清空
+        cairo_save(c);
+        cairo_set_source_rgba(c, 0, 0, 0,0);
+        cairo_rectangle (c, 0, 0, SIZEX, SIZEY);
+        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+        cairo_fill(c);
+        cairo_restore(c);
+
+        cairo_set_operator(c, CAIRO_OPERATOR_OVER);
+        int width = 0, height = 0;
         /* Check placement */
         if (utarray_len(&mainWindow->owner->skin.skinMainBar.skinPlacement) != 0)
         {
             SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
             if (back == NULL)
                 return;
-            int width = cairo_image_surface_get_width(back->image);
-            int height = cairo_image_surface_get_height(back->image);
+            width = cairo_image_surface_get_width(back->image);
+            height = cairo_image_surface_get_height(back->image);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
 
@@ -251,14 +243,12 @@ void DrawMainWindow (MainWindow* mainWindow)
                     }
                 }
             }
-            XCopyArea (mainWindow->dpy, mainWindow->pm_main_bar, mainWindow->window, mainWindow->main_win_gc, 0, 0, width,
-                       height, 0, 0);
         }
         else
         {
             /* Only logo and input status is hard-code, other should be status */
             int currentX = sc->skinMainBar.marginLeft;
-            int height = 0;
+            height = 0;
             SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
             SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
             SkinImage* imicon;
@@ -308,7 +298,7 @@ void DrawMainWindow (MainWindow* mainWindow)
                     height = imageheight;
             }
 
-            int width = currentX + sc->skinMainBar.marginRight;
+            width = currentX + sc->skinMainBar.marginRight;
             height += sc->skinMainBar.marginTop + sc->skinMainBar.marginBottom;
 
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
@@ -359,17 +349,27 @@ void DrawMainWindow (MainWindow* mainWindow)
                 UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(statusicon->image);
             }
+        }
 
-            XCopyArea (mainWindow->dpy, mainWindow->pm_main_bar, mainWindow->window, mainWindow->main_win_gc, 0, 0, width,
-                       height, 0, 0);
+        cairo_destroy(c);
+        {
+            cairo_xlib_surface_set_size(mainWindow->cs_x_main_bar,
+                                        width,
+                                        height);
+
+            c = cairo_create(mainWindow->cs_x_main_bar);
+            cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+            cairo_set_source_surface(c, mainWindow->cs_main_bar, 0, 0);
+            cairo_rectangle(c, 0, 0, width, height);
+            cairo_clip(c);
+            cairo_paint(c);
+            cairo_destroy(c);
         }
 
         XMapRaised (mainWindow->dpy, mainWindow->window);
     }
     else
         XUnmapWindow (mainWindow->dpy, mainWindow->window);
-
-    cairo_destroy(c);
 }
 
 void ReloadMainWindow(void *arg, boolean enabled)
@@ -377,12 +377,12 @@ void ReloadMainWindow(void *arg, boolean enabled)
     MainWindow* mainWindow = (MainWindow*) arg;
     boolean visable = WindowIsVisable(mainWindow->dpy, mainWindow->window);
     cairo_surface_destroy(mainWindow->cs_main_bar);
-    XFreePixmap(mainWindow->dpy, mainWindow->pm_main_bar);
+    cairo_surface_destroy(mainWindow->cs_x_main_bar);
     XFreeGC(mainWindow->dpy, mainWindow->main_win_gc);
     XDestroyWindow(mainWindow->dpy, mainWindow->window);
 
     mainWindow->cs_main_bar = NULL;
-    mainWindow->pm_main_bar = None;
+    mainWindow->cs_x_main_bar = NULL;
     mainWindow->main_win_gc = NULL;
     mainWindow->window = None;
 
