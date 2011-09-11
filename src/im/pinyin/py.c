@@ -83,6 +83,8 @@ static void ReloadConfigPY(void* arg);
 static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
 static void* PYSP2QP(void* arg, FcitxModuleFunctionArg args);
+static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ, char* mapHint, char *strMap);
+static void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args);
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -139,7 +141,8 @@ void *PYCreate(FcitxInstance* instance)
     AddFunction(pyaddon, PYGetCandWordsWrapper); // 3
     AddFunction(pyaddon, PYGetFindStringWrapper); // 4
     AddFunction(pyaddon, PYResetWrapper); // 5
-    AddFunction(pyaddon, PYSP2QP); // 5
+    AddFunction(pyaddon, PYSP2QP); // 6
+    AddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
     return pystate;
 }
 
@@ -2412,6 +2415,87 @@ void* PYSP2QP(void* arg, FcitxModuleFunctionArg args)
     SP2QP(&pystate->pyconfig, strSP, strQP);
 
     return strdup(strQP);
+}
+
+boolean PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ, char* mapHint, char* strMap)
+{
+    int i, j;
+    PYFA* PYFAList = pystate->PYFAList;
+
+    strMap[0] = '\0';
+    for (i = pystate->iPYFACount - 1; i >= 0; i--) {
+        if (!Cmp2Map(&pystate->pyconfig, PYFAList[i].strMap, mapHint, false)) {
+            for (j = 0; j < PYFAList[i].iBase; j++) {
+                if (!strcmp(PYFAList[i].pyBase[j].strHZ, strHZ)) {
+                    strcpy(strMap, PYFAList[i].strMap);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    char* strHZ = args.args[0], *sp, *pivot;
+    char singleHZ[UTF8_MAX_LENGTH + 1];
+    char strMap[3];
+    if (!utf8_check_string(strHZ))
+        return;
+
+    pivot = strHZ;
+    size_t hzCount = utf8_strlen(strHZ);
+    size_t hzCountLocal = 0;
+
+    if (pystate->iPYSelected)
+    {
+        int i = 0;
+        for ( i = 0 ; i < pystate->iPYSelected; i ++)
+            hzCountLocal += strlen(pystate->pySelected[i].strMap) / 2;
+    }
+    hzCountLocal += pystate->findMap.iHZCount;
+
+    /* in order not to get a wrong one, use strict check */
+    if (hzCountLocal != hzCount || hzCount > MAX_PY_PHRASE_LENGTH)
+        return;
+    char* totalMap = fcitx_malloc0(sizeof(char)*(1 + 2 * hzCount));
+
+    if (pystate->iPYSelected)
+    {
+        int i = 0;
+        for ( i = 0 ; i < pystate->iPYSelected; i ++)
+            strcat(totalMap, pystate->pySelected[i].strMap);
+        strHZ = utf8_get_nth_char(strHZ, strlen(totalMap) / 2);
+    }
+
+    int i = 0;
+    while (*strHZ)
+    {
+        int chr;
+
+        sp = utf8_get_char(strHZ, &chr);
+        size_t len = sp - strHZ;
+        strncpy(singleHZ, strHZ, len);
+        singleHZ[len] = '\0';
+
+        if (!PYGetPYMapByHZ(pystate, singleHZ, pystate->findMap.strMap[i], strMap))
+        {
+            free(totalMap);
+            return;
+        }
+
+        strncat(totalMap, strMap, 2);
+
+        strHZ = sp;
+        i ++;
+    }
+
+    PYAddUserPhrase(pystate, pivot, totalMap);
+    free(totalMap);
+
+    return;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
