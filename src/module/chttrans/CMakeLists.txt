@@ -2,6 +2,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 if (_ENABLE_OPENCC)
     include_directories(${OPENCC_INCLUDE_DIRS})
+    link_directories(${OPENCC_LIBRARY_DIRS})
 endif (_ENABLE_OPENCC)
 
 set(FCITX_CHTTRANS_SOURCES
