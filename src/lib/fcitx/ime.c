@@ -868,7 +868,6 @@ void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_S
     if (ic->state == objectState)
         return;
     ic->state = objectState;
-    FcitxLog(INFO, "%p %p\n", ic, GetCurrentIC(instance));
     if (ic == GetCurrentIC(instance))
     {
         if (objectState == IS_ACTIVE)
