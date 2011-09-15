@@ -197,6 +197,8 @@ extern "C" {
          * @brief Input method enable by default
          **/
         IME_STATE defaultIMState;
+
+        int padding[64];
     } FcitxConfig;
 
     /**

@@ -57,6 +57,8 @@ struct _FcitxInputState {
     Messages* msgPreedit;
     Messages* msgAuxUp;
     Messages* msgAuxDown;
+
+    int padding[64];
 };
 
 /**

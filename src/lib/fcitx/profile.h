@@ -63,6 +63,8 @@ extern "C" {
          * @brief show preedit string in client or not
          **/
         boolean bUsePreedit;
+
+        int padding[64];
     } FcitxProfile;
 
     /**
