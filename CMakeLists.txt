@@ -135,6 +135,7 @@ add_definitions("-D_GNU_SOURCE -DFCITX_HAVE_CONFIG_H")
 configure_file(${PROJECT_SOURCE_DIR}/config.h.in ${PROJECT_BINARY_DIR}/config.h)
 configure_file("${PROJECT_SOURCE_DIR}/cmake/FcitxConfigVersion.cmake.in"
                "${PROJECT_BINARY_DIR}/cmake/FcitxConfigVersion.cmake"
+                IMMEDIATE @ONLY
 )
 
 include_directories(${PROJECT_BINARY_DIR})

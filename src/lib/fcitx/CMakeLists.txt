@@ -1,4 +1,5 @@
 set(LIBFCITX_SOURCES
+    instance.c
     candidate.c
     configfile.c
     profile.c
@@ -7,7 +8,6 @@ set(LIBFCITX_SOURCES
     hook.c
     ime.c
     ui.c
-    instance.c
     module.c
     keys.c
 )
@@ -31,8 +31,8 @@ link_directories(${DL_LIBRARY_DIRS} ${PTHREAD_LIBRARY_DIRS})
 
 add_library(fcitx-core SHARED ${LIBFCITX_SOURCES})
 set_target_properties(fcitx-core
-                      PROPERTIES VERSION 0.1.0
-                      SOVERSION 0.1
+                      PROPERTIES VERSION 0.2.0
+                      SOVERSION 0.2
                       COMPILE_FLAGS "-fvisibility=hidden"
                       LINK_FLAGS "-Wl,--no-undefined"
 )

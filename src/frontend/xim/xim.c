@@ -458,7 +458,8 @@ void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    char* strPreedit = MessagesToCString(xim->owner->input.msgPreedit);
+    FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
+    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     char* str = ProcessOutputFilter(xim->owner, strPreedit);
     if (str)
     {
@@ -477,7 +478,7 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
         GetXimIC(ic)->bPreeditStarted = true;
     }
     if (strlen(strPreedit) != 0) {
-        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, xim->owner->input.iCursorPos);
+        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, FcitxInputStateGetCursorPos(input));
     }
 
     free(strPreedit);

@@ -1,12 +1,14 @@
 #include "fcitx/instance.h"
-#include <fcitx/candidate.h>
+#include "fcitx/candidate.h"
+#include "fcitx/instance-internal.h"
+#include "fcitx/ime-internal.h"
 
 int main()
 {
     char* words[] = { "a", "b", "c" ,"d", "e" };
     char* extras[] = { "A", "B", "C" ,"D", "E" };
     FcitxInstance* instance = fcitx_malloc0(sizeof(FcitxInstance));
-    instance->input.candList = CandidateWordInit();
+    instance->input->candList = CandidateWordInit();
     instance->config = fcitx_malloc0(sizeof(FcitxConfig));
     instance->config->bPointAfterNumber = true;
     CandidateWord word;
@@ -18,7 +20,7 @@ int main()
     {
         word.strWord = strdup(words[i]);
         word.strExtra = strdup(extras[i]);
-        CandidateWordAppend(instance->input.candList, &word);
+        CandidateWordAppend(instance->input->candList, &word);
     }
 
     char* result = CandidateWordToCString(instance);

@@ -79,13 +79,6 @@ extern "C" {
      * @return void
      **/
     void SaveProfile(FcitxProfile* profile);
-    /**
-     * @brief get bUseRemind
-     *
-     * @param profile profile instance
-     * @return boolean bUseRemind
-     **/
-    boolean UseRemind(FcitxProfile* profile);
 
 #ifdef __cplusplus
 }

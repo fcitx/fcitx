@@ -53,4 +53,4 @@ extern "C" {
 
 #endif/*_FCITX_H_*/
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

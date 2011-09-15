@@ -213,20 +213,6 @@ extern "C" {
      * @return void
      **/
     void SaveConfig(FcitxConfig* fc);
-    /**
-     * @brief get max candidate word number
-     *
-     * @param fc config instance
-     * @return int number
-     **/
-    int ConfigGetMaxCandWord(FcitxConfig* fc);
-    /**
-     * @brief get bPointAfterNumber
-     *
-     * @param fc config instance
-     * @return boolean bPointAfterNumber
-     **/
-    boolean ConfigGetPointAfterNumber(FcitxConfig* fc);
 
 #ifdef __cplusplus
 }

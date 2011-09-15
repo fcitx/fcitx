@@ -35,6 +35,30 @@
 struct _FcitxInputContext;
 struct _FcitxInstance;
 
+struct _FcitxInputState {
+    long unsigned int lastKeyPressedTime;
+    boolean bIsDoInputOnly;
+    KEY_RELEASED keyReleased;
+    int iCodeInputCount;
+    char strCodeInput[MAX_USER_INPUT + 1];
+    char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
+    boolean bIsInRemind;
+
+    time_t dummy;
+    int iCursorPos;
+    boolean bShowCursor;
+    int dummy2;
+    int lastIsSingleHZ;
+    boolean bLastIsNumber;
+    boolean dummy3;
+
+    /* the ui message part, if there is something in it, then it will be shown */
+    struct _CandidateWordList* candList;
+    Messages* msgPreedit;
+    Messages* msgAuxUp;
+    Messages* msgAuxDown;
+};
+
 /**
  * @brief init fcitx im array
  *

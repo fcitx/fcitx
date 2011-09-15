@@ -32,34 +32,9 @@
 #include "hook.h"
 #include "hook-internal.h"
 #include "instance.h"
+#include "instance-internal.h"
 
 static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
-
-FCITX_EXPORT_API
-FcitxInputContext* GetCurrentIC(FcitxInstance* instance)
-{
-    return instance->CurrentIC;
-}
-
-FCITX_EXPORT_API
-boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
-{
-    IME_STATE prevstate = GetCurrentState(instance);
-    boolean changed = (instance->CurrentIC != ic);
-    instance->CurrentIC = ic;
-
-    IME_STATE nextstate = GetCurrentState(instance);
-
-    if (!((prevstate == IS_CLOSED && nextstate == IS_CLOSED) || (prevstate != IS_CLOSED && nextstate != IS_CLOSED)))
-    {
-        if (prevstate == IS_CLOSED)
-            instance->timeStart = time(NULL);
-        else
-            instance->totaltime += difftime(time(NULL), instance->timeStart);
-    }
-
-    return changed;
-}
 
 FCITX_EXPORT_API
 void InitFcitxFrontends(UT_array* frontends)

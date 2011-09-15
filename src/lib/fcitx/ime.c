@@ -46,6 +46,8 @@
 #include "instance.h"
 #include "module.h"
 #include "candidate.h"
+#include "instance-internal.h"
+#include "fcitx-internal.h"
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
@@ -57,6 +59,37 @@ static void UpdateIMMenuShell(FcitxUIMenu *menu);
 static void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
 static void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
 static void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState);
+
+FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
+FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
+FCITX_GETTER_VALUE(FcitxInputState, IsDoInputOnly, bIsDoInputOnly, boolean)
+FCITX_SETTER(FcitxInputState, IsDoInputOnly, bIsDoInputOnly, boolean)
+FCITX_GETTER_VALUE(FcitxInputState, RawInputBuffer, strCodeInput, char*)
+FCITX_GETTER_VALUE(FcitxInputState, CursorPos, iCursorPos, int)
+FCITX_SETTER(FcitxInputState, CursorPos, iCursorPos, int)
+FCITX_GETTER_VALUE(FcitxInputState, CandidateList, candList, struct _CandidateWordList*)
+FCITX_GETTER_VALUE(FcitxInputState, AuxUp, msgAuxUp, Messages*)
+FCITX_GETTER_VALUE(FcitxInputState, AuxDown, msgAuxDown, Messages*)
+FCITX_GETTER_VALUE(FcitxInputState, Preedit, msgPreedit, Messages*)
+FCITX_GETTER_VALUE(FcitxInputState, RawInputBufferSize, iCodeInputCount, int)
+FCITX_SETTER(FcitxInputState, RawInputBufferSize, iCodeInputCount, int)
+FCITX_GETTER_VALUE(FcitxInputState, ShowCursor, bShowCursor, boolean)
+FCITX_SETTER(FcitxInputState, ShowCursor, bShowCursor, boolean)
+FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
+FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
+FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
+
+FcitxInputState* CreateFcitxInputState()
+{
+    FcitxInputState* input = fcitx_malloc0(sizeof(FcitxInputState));
+
+    input->msgAuxUp = InitMessages();
+    input->msgAuxDown = InitMessages();
+    input->msgPreedit = InitMessages();
+    input->candList = CandidateWordInit();
+
+    return input;
+}
 
 int IMPriorityCmp(const void *a, const void *b)
 {
@@ -273,7 +306,7 @@ INPUT_RETURN_VALUE ProcessKey(
 
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
     FcitxIM* currentIM = GetCurrentIM(instance);
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
 
     FcitxConfig *fc = instance->config;
 
@@ -302,7 +335,7 @@ INPUT_RETURN_VALUE ProcessKey(
                     retVal = IRV_DONOT_PROCESS;
                     if (fc->bSendTextWhenSwitchEng) {
                         if (input->iCodeInputCount != 0) {
-                            strcpy(GetOutputString(input), input->strCodeInput);
+                            strcpy(GetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
                             retVal = IRV_ENG;
                         }
                     }
@@ -347,7 +380,7 @@ INPUT_RETURN_VALUE ProcessKey(
                 if ((input->keyReleased == KR_CTRL)
                         && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
                         && fc->bDoubleSwitchKey) {
-                    CommitString(instance, GetCurrentIC(instance), input->strCodeInput);
+                    CommitString(instance, GetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));
                     ChangeIMState(instance, GetCurrentIC(instance));
                 }
             }
@@ -462,7 +495,7 @@ void ProcessInputReturnValue(
 )
 {
     FcitxIM* currentIM = GetCurrentIM(instance);
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
     FcitxConfig *fc = instance->config;
 
     if (retVal & IRV_FLAG_PENDING_COMMIT_STRING)
@@ -491,7 +524,7 @@ void ProcessInputReturnValue(
     if (retVal & IRV_FLAG_DISPLAY_LAST)
     {
         CleanInputWindow(instance);
-        AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", input->strCodeInput[0]);
+        AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", FcitxInputStateGetRawInputBuffer(input)[0]);
         AddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", GetOutputString(input));
     }
 
@@ -566,11 +599,11 @@ void SwitchIM(FcitxInstance* instance, int index)
 FCITX_EXPORT_API
 void ResetInput(FcitxInstance* instance)
 {
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
     CandidateWordReset(input->candList);
     input->iCursorPos = 0;
 
-    input->strCodeInput[0] = '\0';
+    FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
     input->iCodeInputCount = 0;
 
     input->bIsDoInputOnly = false;
@@ -590,7 +623,7 @@ void DoPhraseTips(FcitxInstance* instance)
 {
     UT_array* ims = &instance->imes;
     FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile->iIMIndex);
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
 
     if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
         input->lastIsSingleHZ = -1;
@@ -602,7 +635,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
 {
     FcitxInstance *instance = (FcitxInstance *)arg;
     INPUT_RETURN_VALUE retVal = IRV_TO_PROCESS;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
     FcitxConfig *fc = instance->config;
 
     if (!input->iCodeInputCount)
@@ -617,7 +650,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
             break;
         case K_ENTER_SEND:
             CleanInputWindow(instance);
-            strcpy(GetOutputString(input), input->strCodeInput);
+            strcpy(GetOutputString(input), FcitxInputStateGetRawInputBuffer(input));
             retVal = IRV_ENG;
             break;
         }
@@ -628,7 +661,7 @@ INPUT_RETURN_VALUE ImProcessEnter(void *arg)
 INPUT_RETURN_VALUE ImProcessEscape(void* arg)
 {
     FcitxInstance *instance = (FcitxInstance*) arg;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = instance->input;
     if (input->iCodeInputCount || input->bIsInRemind)
         return IRV_CLEAN;
     else
@@ -655,7 +688,7 @@ void ReloadConfig(FcitxInstance *instance)
     if (!LoadConfig(instance->config))
         EndInstance(instance);
 
-    CandidateWordSetPageSize(instance->input.candList, instance->config->iMaxCandWord);
+    CandidateWordSetPageSize(instance->input->candList, instance->config->iMaxCandWord);
 
     /* Reload All IM, Module, and UI Config */
     UT_array* addons = &instance->addons;
@@ -882,7 +915,7 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
 
 void ShowInputSpeed(FcitxInstance* instance)
 {
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
 
     if (!instance->config->bShowInputWindowTriggering)
         return;
@@ -942,7 +975,7 @@ void CleanInputWindow(FcitxInstance *instance)
 FCITX_EXPORT_API
 void CleanInputWindowUp(FcitxInstance *instance)
 {
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
     SetMessageCount(input->msgAuxUp, 0);
     SetMessageCount(input->msgPreedit, 0);
 }
@@ -950,7 +983,7 @@ void CleanInputWindowUp(FcitxInstance *instance)
 FCITX_EXPORT_API
 void CleanInputWindowDown(FcitxInstance* instance)
 {
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
     CandidateWordReset(input->candList);
     SetMessageCount(input->msgAuxDown, 0);
 }

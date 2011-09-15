@@ -192,6 +192,8 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     unsigned int state, originstate;
     char strbuf[STRBUFLEN];
     FcitxInputContext* ic = GetCurrentIC(xim->owner);
+    FcitxConfig* config = FcitxInstanceGetConfig(xim->owner);
+    FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
 
     if (ic == NULL) {
         ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
@@ -225,10 +227,10 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
 
     if (ic->state == IS_CLOSED)
     {
-        if ( type == FCITX_PRESS_KEY && IsHotKey(sym, state, xim->owner->config->hkTrigger))
+        if ( type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger))
         {
             EnableIM(xim->owner, ic, false);
-            xim->owner->input.keyReleased = KR_OTHER;
+            FcitxInputStateSetKeyReleased(input, KR_OTHER);
             return;
         }
         else

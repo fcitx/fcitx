@@ -175,10 +175,10 @@ static void RemoteProcessEvent (void* p)
 void RemoteSetFD (void* arg)
 {
     FcitxRemote* remote = (FcitxRemote*) arg;
-    FD_SET(remote->socket_fd, &remote->owner->rfds);
-    if (remote->owner->maxfd < remote->socket_fd)
-        remote->owner->maxfd = remote->socket_fd;
+    FD_SET(remote->socket_fd, FcitxInstanceGetReadFDSet(remote->owner));
+    if (FcitxInstanceGetMaxFD(remote->owner) < remote->socket_fd)
+        FcitxInstanceSetMaxFD(remote->owner, remote->socket_fd);
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

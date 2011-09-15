@@ -63,7 +63,7 @@ FcitxModule module = {
 void* DBusCreate(FcitxInstance* instance)
 {
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_malloc0(sizeof(FcitxDBus));
-    FcitxAddon* dbusaddon = GetAddonByName(&instance->addons, FCITX_DBUS_NAME);
+    FcitxAddon* dbusaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_DBUS_NAME);
     DBusError err;
 
     dbus_threads_init_default();
@@ -189,16 +189,16 @@ void DBusSetFD(void* arg)
             unsigned int flags = dbus_watch_get_flags(w->watch);
             int fd = dbus_watch_get_unix_fd(w->watch);
 
-            if (dbusmodule->owner->maxfd < fd)
-                dbusmodule->owner->maxfd = fd;
+            if (FcitxInstanceGetMaxFD(instance) < fd)
+                FcitxInstanceSetMaxFD(instance, fd);
 
             if (flags & DBUS_WATCH_READABLE)
-                FD_SET(fd, &instance->rfds);
+                FD_SET(fd, FcitxInstanceGetReadFDSet(instance));
 
             if (flags & DBUS_WATCH_WRITABLE)
-                FD_SET(fd, &instance->wfds);
+                FD_SET(fd, FcitxInstanceGetWriteFDSet(instance));
 
-            FD_SET(fd, &instance->efds);
+            FD_SET(fd, FcitxInstanceGetExceptFDSet(instance));
         }
 }
 
@@ -207,6 +207,7 @@ void DBusProcessEvent(void* arg)
 {
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
     DBusConnection *connection = (DBusConnection *)dbusmodule->conn;
+    FcitxInstance* instance = dbusmodule->owner;
     FcitxDBusWatch *w;
 
     for (w = dbusmodule->watches; w; w = w->next)
@@ -216,13 +217,13 @@ void DBusProcessEvent(void* arg)
             unsigned int flags = 0;
             int fd = dbus_watch_get_unix_fd(w->watch);
 
-            if (FD_ISSET(fd, &dbusmodule->owner->rfds))
+            if (FD_ISSET(fd, FcitxInstanceGetReadFDSet(instance)))
                 flags |= DBUS_WATCH_READABLE;
 
-            if (FD_ISSET(fd, &dbusmodule->owner->wfds))
+            if (FD_ISSET(fd, FcitxInstanceGetWriteFDSet(instance)))
                 flags |= DBUS_WATCH_WRITABLE;
 
-            if (FD_ISSET(fd, &dbusmodule->owner->efds))
+            if (FD_ISSET(fd, FcitxInstanceGetExceptFDSet(instance)))
                 flags |= DBUS_WATCH_ERROR;
 
             if (flags != 0)

@@ -217,10 +217,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxIPCIC* ipcic = (FcitxIPCIC*) fcitx_malloc0(sizeof(FcitxIPCIC));
-    context->privateic = ipcic;
     DBusMessage* message = (DBusMessage*) priv;
-
     DBusMessage *reply = dbus_message_new_method_return(message);
+    FcitxConfig* config = FcitxInstanceGetConfig(ipc->owner);
+
+    context->privateic = ipcic;
 
     ipcic->id = ipc->maxid;
     ipc->maxid ++;
@@ -228,10 +229,10 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
 
     uint32_t arg1, arg2, arg3, arg4;
-    arg1 = ipc->owner->config->hkTrigger[0].sym;
-    arg2 = ipc->owner->config->hkTrigger[0].state;
-    arg3 = ipc->owner->config->hkTrigger[1].sym;
-    arg4 = ipc->owner->config->hkTrigger[1].state;
+    arg1 = config->hkTrigger[0].sym;
+    arg2 = config->hkTrigger[0].state;
+    arg3 = config->hkTrigger[1].sym;
+    arg4 = config->hkTrigger[1].state;
     if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
     {
         /* CreateIC v1 indicates that default state can only be disabled */
@@ -520,6 +521,8 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
 {
     FcitxInputContext* ic = GetCurrentIC(ipc->owner);
+    FcitxConfig* config = FcitxInstanceGetConfig(ipc->owner);
+    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
 
     if (ic == NULL) {
         SetCurrentIC(ipc->owner, callic);
@@ -538,10 +541,10 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     if (originsym == 0)
         return 0;
 
-    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, ipc->owner->config->hkTrigger))
+    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger))
     {
         EnableIM(ipc->owner, ic, false);
-        ipc->owner->input.keyReleased = KR_OTHER;
+        FcitxInputStateSetKeyReleased(input, KR_OTHER);
         return 1;
     }
 
@@ -614,11 +617,12 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "UpdatePreedit"); // name of the signal
 
-    char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     char* str = ProcessOutputFilter(ipc->owner, strPreedit);
     if (str)
     {
@@ -626,7 +630,9 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
         strPreedit = str;
     }
 
-    dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &ipc->owner->input.iCursorPos, DBUS_TYPE_INVALID);
+    int iCursorPos = FcitxInputStateGetCursorPos(input);
+
+    dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &iCursorPos, DBUS_TYPE_INVALID);
 
     if (!dbus_connection_send(ipc->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
@@ -639,27 +645,28 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "UpdateClientSideUI"); // name of the signal
 
     char *str;
-    char* strAuxUp = MessagesToCString(ipc->owner->input.msgAuxUp);
+    char* strAuxUp = MessagesToCString(FcitxInputStateGetAuxUp(input));
     str = ProcessOutputFilter(ipc->owner, strAuxUp);
     if (str)
     {
         free(strAuxUp);
         strAuxUp = str;
     }
-    char* strAuxDown = MessagesToCString(ipc->owner->input.msgAuxDown);
+    char* strAuxDown = MessagesToCString(FcitxInputStateGetAuxDown(input));
     str = ProcessOutputFilter(ipc->owner, strAuxDown);
     if (str)
     {
         free(strAuxDown);
         strAuxDown = str;
     }
-    char* strPreedit = MessagesToCString(ipc->owner->input.msgPreedit);
+    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     str = ProcessOutputFilter(ipc->owner, strPreedit);
     if (str)
     {
@@ -680,13 +687,15 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
     else
         imname = im->strName;
 
+    int iCursorPos = FcitxInputStateGetCursorPos(input);
+
     dbus_message_append_args(msg,
                              DBUS_TYPE_STRING, &strAuxUp,
                              DBUS_TYPE_STRING, &strAuxDown,
                              DBUS_TYPE_STRING, &strPreedit,
                              DBUS_TYPE_STRING, &candidateword,
                              DBUS_TYPE_STRING, &imname,
-                             DBUS_TYPE_INT32, &ipc->owner->input.iCursorPos,
+                             DBUS_TYPE_INT32, &iCursorPos,
                              DBUS_TYPE_INVALID);
 
     if (!dbus_connection_send(ipc->conn, msg, &serial)) {

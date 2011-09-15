@@ -92,7 +92,7 @@ FcitxUI ui = {
 
 void* ClassicUICreate(FcitxInstance* instance)
 {
-    FcitxAddon* classicuiaddon = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
+    FcitxAddon* classicuiaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
     FcitxModuleFunctionArg arg;
     FcitxClassicUI* classicui = fcitx_malloc0(sizeof(FcitxClassicUI));
     classicui->owner = instance;
@@ -135,9 +135,10 @@ void* ClassicUICreate(FcitxInstance* instance)
     AddMenuShell(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
 
     FcitxUIMenu **menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
         FcitxUIMenu * menup = *menupp;

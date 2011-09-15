@@ -144,7 +144,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
                              )
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
-    FcitxInputState* input = &autoEngState->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
     if (autoEngState->active)
     {
         FcitxKeySym keymain = KeyPadToMain(sym);
@@ -174,7 +174,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         }
         else if (IsHotKey(sym, state, FCITX_ENTER))
         {
-            strcpy(GetOutputString(&autoEngState->owner->input), autoEngState->buf);
+            strcpy(GetOutputString(input), autoEngState->buf);
             ResetAutoEng(autoEngState);
             *retval = IRV_COMMIT_STRING;
         }
@@ -183,20 +183,20 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     }
     if (IsHotKeySimple(sym, state))
     {
-        if (autoEngState->owner->input.iCodeInputCount == 0 && IsHotKeyUAZ(sym, state))
+        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && IsHotKeyUAZ(sym, state))
         {
             autoEngState->index = 1;
             autoEngState->buf[0] = sym;
             autoEngState->buf[1] = '\0';
             *retval = IRV_DISPLAY_MESSAGE;
-            input->bShowCursor = false;
+            FcitxInputStateSetShowCursor(input, false);
             autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
             ShowAutoEngMessage(autoEngState);
             return true;
         }
 
-        strncpy(autoEngState->buf, autoEngState->owner->input.strCodeInput, MAX_USER_INPUT);
+        strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
         if (strlen(autoEngState->buf) >= MAX_USER_INPUT - 1)
             return false;
 
@@ -207,7 +207,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         if (SwitchToEng(autoEngState, autoEngState->buf))
         {
             *retval = IRV_DISPLAY_MESSAGE;
-            input->bShowCursor = false;
+            FcitxInputStateSetShowCursor(input, false);
             autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
             ShowAutoEngMessage(autoEngState);
@@ -277,18 +277,18 @@ boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
 
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
-    FcitxInputState* input = &autoEngState->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
 
     CleanInputWindow(autoEngState->owner);
 
     if (autoEngState->buf[0] == '\0')
         return;
 
-    AddMessageAtLast(input->msgPreedit, MSG_INPUT, autoEngState->buf);
-    strcpy(input->strCodeInput, autoEngState->buf);
-    input->iCodeInputCount = strlen(autoEngState->buf);
-    input->iCursorPos = input->iCodeInputCount;
-    AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _("Press Enter to input text"));
+    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, autoEngState->buf);
+    strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
+    FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
+    FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
+    AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
 }
 
 void ReloadAutoEng(void* arg)

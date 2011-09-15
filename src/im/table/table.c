@@ -244,7 +244,7 @@ CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
 boolean TableInit (void *arg)
 {
     FcitxTableState *tbl = (FcitxTableState*) arg;
-    FcitxAddon* pyaddon = GetAddonByName(&tbl->owner->addons, "fcitx-pinyin");
+    FcitxAddon* pyaddon = GetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
     tbl->pyaddon = pyaddon;
     if (pyaddon == NULL)
         return false;
@@ -257,11 +257,11 @@ boolean TableInit (void *arg)
 void TableResetStatus (void* arg)
 {
     FcitxTableState *tbl = (FcitxTableState*) arg;
-    FcitxInputState *input = &tbl->owner->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(tbl->owner);
     tbl->bIsTableAddPhrase = false;
     tbl->bIsTableDelPhrase = false;
     tbl->bIsTableAdjustOrder = false;
-    input->bIsDoInputOnly = false;
+    FcitxInputStateSetIsDoInputOnly(input, false);
     //bSingleHZMode = false;
 }
 
@@ -270,13 +270,15 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
     FcitxTableState *tbl = (FcitxTableState*) arg;
     INPUT_RETURN_VALUE retVal;
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxConfig* config = FcitxInstanceGetConfig(instance);
 
     FcitxIM* currentIM = GetCurrentIM(instance);
     TableMetaData* table = (TableMetaData*) currentIM->priv;
+    char* strCodeInput = FcitxInputStateGetRawInputBuffer(input);
 
-    CandidateWordSetChoose(input->candList, table->strChoose);
-    CandidateWordSetPageSize(input->candList, ConfigGetMaxCandWord(instance->config));
+    CandidateWordSetChoose(FcitxInputStateGetCandidateList(input), table->strChoose);
+    CandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
 
     tbl->iTableIMIndex = utarray_eltidx(tbl->table, currentIM->priv);
     if (tbl->iTableIMIndex != tbl->iCurrentTableLoaded)
@@ -299,7 +301,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
     if (tbl->bTablePhraseTips) {
         if (IsHotKey(sym, state, FCITX_CTRL_DELETE)) {
             tbl->bTablePhraseTips = false;
-            TableDelPhraseByHZ (table->tableDict, GetMessageString(input->msgAuxUp, 1));
+            TableDelPhraseByHZ (table->tableDict, GetMessageString(FcitxInputStateGetAuxUp(input), 1));
             return IRV_CLEAN;
         }
         else if (state == KEY_NONE && (sym != Key_Control_L && sym != Key_Control_R && sym != Key_Shift_L && sym != Key_Shift_R )) {
@@ -311,17 +313,18 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
     retVal = IRV_DO_NOTHING;
     if (state == KEY_NONE && (IsInputKey (table->tableDict, sym) || IsEndKey (table, sym) || sym == table->cMatchingKey || sym == table->cPinyin)) {
-        if (input->bIsInRemind)
-            CandidateWordReset(input->candList);
-        input->bIsInRemind = false;
+        if (FcitxInputStateGetIsInRemind(input))
+            CandidateWordReset(FcitxInputStateGetCandidateList(input));
+        FcitxInputStateSetIsInRemind(input, false);
 
         /* it's not in special state */
         if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             /* check we use Pinyin or Not */
-            if (input->strCodeInput[0] == table->cPinyin && table->bUsePY) {
-                if (input->iCodeInputCount != (MAX_PY_LENGTH * 5 + 1)) {
-                    input->strCodeInput[input->iCodeInputCount++] = (char) sym;
-                    input->strCodeInput[input->iCodeInputCount] = '\0';
+            if (strCodeInput[0] == table->cPinyin && table->bUsePY) {
+                if (FcitxInputStateGetRawInputBufferSize(input) != (MAX_PY_LENGTH * 5 + 1)) {
+                    strCodeInput[FcitxInputStateGetRawInputBufferSize(input)] = (char) sym;
+                    strCodeInput[FcitxInputStateGetRawInputBufferSize(input) + 1] = '\0';
+                    FcitxInputStateSetRawInputBufferSize(input, FcitxInputStateGetRawInputBufferSize(input) + 1);
                     retVal = IRV_DISPLAY_CANDWORDS;
                 }
                 else
@@ -329,25 +332,26 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             }
             else {
                 /* length is not too large */
-                if ((input->iCodeInputCount < table->tableDict->iCodeLength) || (table->tableDict->bHasPinyin && input->iCodeInputCount < table->tableDict->iPYCodeLength)) {
-                    input->strCodeInput[input->iCodeInputCount++] = (char) sym;
-                    input->strCodeInput[input->iCodeInputCount] = '\0';
+                if ((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength) || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)) {
+                    strCodeInput[FcitxInputStateGetRawInputBufferSize(input)] = (char) sym;
+                    strCodeInput[FcitxInputStateGetRawInputBufferSize(input) + 1] = '\0';
+                    FcitxInputStateSetRawInputBufferSize(input, FcitxInputStateGetRawInputBufferSize(input) + 1);
 
-                    if (input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin && table->bUsePY) {
+                    if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
                         retVal = IRV_DISPLAY_LAST;
                     }
                     else {
                         char        *strTemp;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
-                        int          lastPageCount = CandidateWordPageCount(input->candList);
+                        int          lastPageCount = CandidateWordPageCount(FcitxInputStateGetCandidateList(input));
 
                         strLastFirstCand = (char *)NULL;
                         lastFirstCandType = CT_AUTOPHRASE;
-                        if ( CandidateWordPageCount(input->candList) != 0 ) {
+                        if ( CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) != 0 ) {
                             // to realize auto-sending HZ to client
                             CandidateWord *candWord = NULL;
-                            candWord = CandidateWordGetCurrentWindow(input->candList);
+                            candWord = CandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
                             if (candWord->owner == tbl)
                             {
                                 TABLECANDWORD* tableCandWord = candWord->priv;
@@ -360,35 +364,35 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
 
                         retVal = IRV_DISPLAY_CANDWORDS;
                         FcitxModuleFunctionArg farg;
-                        int key = input->strCodeInput[0];
+                        int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         farg.args[0] = &key;
                         strTemp = InvokeFunction(instance, FCITX_PUNC, GETPUNC, farg);
                         if (IsEndKey (table, sym)) {
-                            if (input->iCodeInputCount == 1)
+                            if (FcitxInputStateGetRawInputBufferSize(input) == 1)
                                 return IRV_TO_PROCESS;
 
-                            if (CandidateWordPageCount(input->candList) == 0) {
-                                input->iCodeInputCount = 0;
+                            if (CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
+                                FcitxInputStateSetRawInputBufferSize(input, 0);
                                 return IRV_CLEAN;
                             }
 
-                            if (CandidateWordGetCurrentWindowSize(input->candList) == 1) {
-                                retVal = CandidateWordChooseByIndex(input->candList, 0);
+                            if (CandidateWordGetCurrentWindowSize(FcitxInputStateGetCandidateList(input)) == 1) {
+                                retVal = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
                                 return retVal;
                             }
 
                             return IRV_DISPLAY_CANDWORDS;
                         }
-                        else if (table->iTableAutoSendToClientWhenNone && (input->iCodeInputCount == (table->iTableAutoSendToClientWhenNone + 1)) && lastPageCount == 0) {
+                        else if (table->iTableAutoSendToClientWhenNone && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1)) && lastPageCount == 0) {
                             if ( strLastFirstCand && (lastFirstCandType!=CT_AUTOPHRASE)) {
                                 CommitString(instance, GetCurrentIC(instance), strLastFirstCand);
                             }
                             retVal = IRV_DISPLAY_CANDWORDS;
-                            input->iCodeInputCount = 1;
-                            input->strCodeInput[0] = sym;
-                            input->strCodeInput[1] = '\0';
+                            FcitxInputStateSetRawInputBufferSize(input, 1);
+                            strCodeInput[0] = sym;
+                            strCodeInput[1] = '\0';
                         }
-                        else if ((input->iCodeInputCount == 1) && strTemp && lastPageCount == 0) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
+                        else if ((FcitxInputStateGetRawInputBufferSize(input) == 1) && strTemp && lastPageCount == 0) {    //如果第一个字母是标点，并且没有候选字/词，则当做标点处理──适用于二笔这样的输入法
                             strcpy (GetOutputString(input), strTemp);
                             retVal = IRV_PUNC;
                         }
@@ -397,8 +401,8 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 else {
                     if (table->iTableAutoSendToClient) {
                         retVal = IRV_DISPLAY_CANDWORDS;
-                        if (CandidateWordPageCount(input->candList)) {
-                            CandidateWord* candWord = CandidateWordGetCurrentWindow(input->candList);
+                        if (CandidateWordPageCount(FcitxInputStateGetCandidateList(input))) {
+                            CandidateWord* candWord = CandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
                             if (candWord->owner == tbl)
                             {
                                 TABLECANDWORD* tableCandWord = candWord->priv;
@@ -407,16 +411,16 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                                     if (ret & IRV_FLAG_PENDING_COMMIT_STRING)
                                     {
                                         CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-                                        instance->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
+                                        FcitxInstanceIncreateInputCharactorCount(instance, utf8_strlen(GetOutputString(input)));
                                     }
                                 }
                             }
                         }
 
-                        input->iCodeInputCount = 1;
-                        input->strCodeInput[0] = sym;
-                        input->strCodeInput[1] = '\0';
-                        input->bIsInRemind = false;
+                        FcitxInputStateSetRawInputBufferSize(input, 1);
+                        strCodeInput[0] = sym;
+                        strCodeInput[1] = '\0';
+                        FcitxInputStateSetIsInRemind(input, false);
 
                     }
                     else
@@ -443,16 +447,16 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             }
             else if (IsHotKey(sym, state, FCITX_ENTER))
             {
-                if (strcmp("????", GetMessageString(input->msgAuxDown, 0)) != 0)
-                    TableInsertPhrase (table->tableDict, GetMessageString(input->msgAuxDown, 1), GetMessageString(input->msgAuxDown, 0));
+                if (strcmp("????", GetMessageString(FcitxInputStateGetAuxDown(input), 0)) != 0)
+                    TableInsertPhrase (table->tableDict, GetMessageString(FcitxInputStateGetAuxDown(input), 1), GetMessageString(FcitxInputStateGetAuxDown(input), 0));
                 tbl->bIsTableAddPhrase = false;
-                input->bIsDoInputOnly = false;
+                FcitxInputStateSetIsDoInputOnly(input, false);
                 return IRV_CLEAN;
             }
             else if (IsHotKey(sym, state, FCITX_ESCAPE))
             {
                 tbl->bIsTableAddPhrase = false;
-                input->bIsDoInputOnly = false;
+                FcitxInputStateSetIsDoInputOnly(input, false);
                 return IRV_CLEAN;
             }
             else {
@@ -468,14 +472,14 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                 tbl->bTablePhraseTips = false;
                 tbl->iTableNewPhraseHZCount = 2;
                 tbl->bIsTableAddPhrase = true;
-                input->bIsDoInputOnly = true;
-                input->bShowCursor = false;
+                FcitxInputStateSetIsDoInputOnly(input, true);
+                FcitxInputStateSetShowCursor(input, false);
 
                 CleanInputWindow(instance);
-                AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Left/Right to choose selected character, Press Enter to confirm, Press Escape to Cancel"));
+                AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Left/Right to choose selected character, Press Enter to confirm, Press Escape to Cancel"));
 
-                AddMessageAtLast(input->msgAuxDown, MSG_FIRSTCAND, "");
-                AddMessageAtLast(input->msgAuxDown, MSG_CODE, "");
+                AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_FIRSTCAND, "");
+                AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_CODE, "");
 
                 TableCreateNewPhrase (tbl);
                 retVal = IRV_DISPLAY_MESSAGE;
@@ -495,27 +499,27 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             if (utf8_strlen (GetOutputString(input)) != 1)
                 return IRV_DO_NOTHING;
 
-            input->iCodeInputCount = 0;
+            FcitxInputStateSetRawInputBufferSize(input, 0);
 
             CleanInputWindow(instance);
-            AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%s", GetOutputString(input));
+            AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", GetOutputString(input));
 
-            AddMessageAtLast(input->msgAuxDown, MSG_CODE, _("Pinyin: "));
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_CODE, _("Pinyin: "));
             Table_PYGetPYByHZ (tbl->pyaddon, GetOutputString(input), strPY);
-            AddMessageAtLast(input->msgAuxDown, MSG_TIPS, (strPY[0]) ? strPY : _("Cannot found Pinyin"));
-            input->bShowCursor = false;
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, (strPY[0]) ? strPY : _("Cannot found Pinyin"));
+            FcitxInputStateSetShowCursor(input, false);
 
             return IRV_DISPLAY_MESSAGE;
         }
 
-        if (!input->iCodeInputCount && !input->bIsInRemind)
+        if (!FcitxInputStateGetRawInputBufferSize(input) && !FcitxInputStateGetIsInRemind(input))
             return IRV_TO_PROCESS;
 
         if (IsHotKey(sym, state, FCITX_ESCAPE)) {
             if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder) {
                 TableResetStatus (tbl);
                 CleanInputWindowUp(instance);
-                AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
+                AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
                 retVal = IRV_DISPLAY_CANDWORDS;
             }
             else
@@ -525,13 +529,13 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             int iKey;
             iKey = CheckChooseKey(sym, state, table->strChoose);
 
-            if (CandidateWordPageCount(input->candList) == 0)
+            if (CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0)
                 return IRV_TO_PROCESS;
 
-            if (CandidateWordGetByIndex(input->candList, iKey) == NULL)
+            if (CandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), iKey) == NULL)
                 return IRV_DO_NOTHING;
             else {
-                CandidateWord* candWord = CandidateWordGetByIndex(input->candList, iKey);
+                CandidateWord* candWord = CandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), iKey);
                 if (candWord->owner == tbl && tbl->bIsTableDelPhrase) {
                     TableDelPhraseByIndex (tbl, candWord->priv);
                     tbl->bIsTableDelPhrase = false;
@@ -548,46 +552,46 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
         }
         else if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             if (IsHotKey (sym, state, tbl->hkTableAdjustOrder)) {
-                if (CandidateWordGetListSize(input->candList) < 2 || input->bIsInRemind)
+                if (CandidateWordGetListSize(FcitxInputStateGetCandidateList(input)) < 2 || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableAdjustOrder = true;
                 CleanInputWindowUp(instance);
-                AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Choose the phrase to be put in the front, Press Escape to Cancel"));
+                AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to be put in the front, Press Escape to Cancel"));
                 retVal = IRV_DISPLAY_MESSAGE;
             }
             else if (IsHotKey (sym, state, tbl->hkTableDelPhrase)) {
-                if (!CandidateWordPageCount(input->candList) || input->bIsInRemind)
+                if (!CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableDelPhrase = true;
                 CleanInputWindowUp(instance);
-                AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Choose the phrase to be deleted, Press Escape to Cancel"));
+                AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to be deleted, Press Escape to Cancel"));
                 retVal = IRV_DISPLAY_MESSAGE;
             }
             else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
-                if (!input->iCodeInputCount) {
-                    input->bIsInRemind = false;
+                if (!FcitxInputStateGetRawInputBufferSize(input)) {
+                    FcitxInputStateSetIsInRemind(input, false);
                     return IRV_DONOT_PROCESS_CLEAN;
                 }
 
-                input->iCodeInputCount--;
-                input->strCodeInput[input->iCodeInputCount] = '\0';
+                FcitxInputStateSetRawInputBufferSize(input, FcitxInputStateGetRawInputBufferSize(input) - 1);
+                strCodeInput[FcitxInputStateGetRawInputBufferSize(input)] = '\0';
 
-                if (input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin && table->bUsePY) {
-                    CandidateWordReset(input->candList);
+                if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
+                    CandidateWordReset(FcitxInputStateGetCandidateList(input));
                     retVal = IRV_DISPLAY_LAST;
                 }
-                else if (input->iCodeInputCount)
+                else if (FcitxInputStateGetRawInputBufferSize(input))
                     retVal = IRV_DISPLAY_CANDWORDS;
                 else
                     retVal = IRV_CLEAN;
             }
             else if (IsHotKey(sym, state, FCITX_SPACE)) {
-                if (input->iCodeInputCount == 1 && input->strCodeInput[0] == table->cPinyin && table->bUsePY)
+                if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY)
                     retVal = IRV_COMMIT_STRING;
                 else {
-                    retVal = CandidateWordChooseByIndex(input->candList, 0);
+                    retVal = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
                     if (retVal == IRV_TO_PROCESS)
                         retVal = IRV_DO_NOTHING;
                 }
@@ -595,7 +599,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
             else
             {
                 /* friendly to cursor move, don't left cursor move while input text */
-                if (input->iCodeInputCount != 0 &&
+                if (FcitxInputStateGetRawInputBufferSize(input) != 0 &&
                         (IsHotKey(sym, state, FCITX_LEFT) ||
                          IsHotKey(sym, state, FCITX_RIGHT) ||
                          IsHotKey(sym, state, FCITX_HOME) ||
@@ -609,17 +613,17 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
         }
     }
 
-    if (!input->bIsInRemind) {
+    if (!FcitxInputStateGetIsInRemind(input)) {
         if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder)
-            input->bIsDoInputOnly = true;
+            FcitxInputStateSetIsDoInputOnly(input, true);
     }
 
-    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || input->bIsInRemind)
-        input->bShowCursor = false;
+    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || FcitxInputStateGetIsInRemind(input))
+        FcitxInputStateSetShowCursor(input, false);
     else
     {
-        input->bShowCursor = true;
-        input->iCursorPos = strlen(input->strCodeInput);
+        FcitxInputStateSetShowCursor(input, true);
+        FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
     }
 
     return retVal;
@@ -629,7 +633,7 @@ INPUT_RETURN_VALUE TableGetCandWord (void* arg, CandidateWord* candWord)
 {
     FcitxTableState *tbl = (FcitxTableState*) arg;
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
-    FcitxInputState* input = &tbl->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(tbl->owner);
     TABLECANDWORD* tableCandWord = candWord->priv;
 
     INPUT_RETURN_VALUE retVal =_TableGetCandWord(tbl, tableCandWord, true);
@@ -652,13 +656,13 @@ INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* table
     char           *pCandWord = NULL;
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
-    FcitxProfile *profile = instance->profile;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxProfile *profile = FcitxInstanceGetProfile(instance);
 
-    if (!strcmp (input->strCodeInput, table->strSymbol))
+    if (!strcmp (FcitxInputStateGetRawInputBuffer(input), table->strSymbol))
         return TableGetFHCandWord (tbl, tableCandWord);
 
-    input->bIsInRemind = false;
+    FcitxInputStateSetIsInRemind(input, false);
 
     if (tableCandWord->flag == CT_NORMAL)
         tbl->pCurCandRecord = tableCandWord->candWord.record;
@@ -698,7 +702,7 @@ INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* table
     }
     }
 
-    if (UseRemind(profile) && _bRemind) {
+    if (profile->bUseRemind && _bRemind) {
         strcpy (tbl->strTableRemindSource, pCandWord);
         strcpy(GetOutputString(input), pCandWord);
         INPUT_RETURN_VALUE retVal = TableGetRemindCandWords (tbl);
@@ -710,12 +714,12 @@ INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* table
             RECORD         *temp;
 
             CleanInputWindow(instance);
-            AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%s", input->strCodeInput);
+            AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
 
-            AddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", pCandWord);
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", pCandWord);
             temp = table->tableDict->tableSingleHZ[CalHZIndex (pCandWord)];
             if (temp) {
-                AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%s", temp->strCode);
+                AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_CODE, "%s", temp->strCode);
             }
         }
         else {
@@ -724,9 +728,9 @@ INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* table
     }
 
     if (utf8_strlen (pCandWord) == 1)
-        input->lastIsSingleHZ = 1;
+        FcitxInputStateSetLastIsSingleChar(input, 1);
     else
-        input->lastIsSingleHZ = 0;
+        FcitxInputStateSetLastIsSingleChar(input, 0);
 
     strcpy(GetOutputString(input), pCandWord);
     return IRV_COMMIT_STRING;
@@ -736,29 +740,29 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl)
 {
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
-    strcpy (Table_PYGetFindString(tbl->pyaddon), input->strCodeInput + 1);
+    strcpy (Table_PYGetFindString(tbl->pyaddon), FcitxInputStateGetRawInputBuffer(input) + 1);
 
     Table_DoPYInput (tbl->pyaddon, 0,0);
     Table_PYGetCandWords (tbl->pyaddon);
 
-    input->strCodeInput[0] = table->cPinyin;
-    input->strCodeInput[1] = '\0';
+    FcitxInputStateGetRawInputBuffer(input)[0] = table->cPinyin;
+    FcitxInputStateGetRawInputBuffer(input)[1] = '\0';
 
-    strcat (input->strCodeInput, Table_PYGetFindString(tbl->pyaddon));
-    input->iCodeInputCount = strlen (input->strCodeInput);
+    strcat (FcitxInputStateGetRawInputBuffer(input), Table_PYGetFindString(tbl->pyaddon));
+    FcitxInputStateSetRawInputBufferSize(input, strlen (FcitxInputStateGetRawInputBuffer(input)));
 
     CleanInputWindowUp(instance);
-    AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
-    input->iCursorPos = input->iCodeInputCount;
+    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
 
 
     //下面将拼音的候选字表转换为码表输入法的样式
     CandidateWord* candWord;
-    for (candWord = CandidateWordGetFirst(input->candList);
+    for (candWord = CandidateWordGetFirst(FcitxInputStateGetCandidateList(input));
             candWord != NULL;
-            candWord = CandidateWordGetNext(input->candList, candWord))
+            candWord = CandidateWordGetNext(FcitxInputStateGetCandidateList(input), candWord))
     {
         char* pstr;
         if (utf8_strlen (candWord->strWord) == 1) {
@@ -789,25 +793,25 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
     RECORD         *recTemp;
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
-    if (input->strCodeInput[0] == '\0')
+    if (FcitxInputStateGetRawInputBuffer(input)[0] == '\0')
         return IRV_TO_PROCESS;
 
-    if (input->bIsInRemind)
+    if (FcitxInputStateGetIsInRemind(input))
         return TableGetRemindCandWords (tbl);
 
-    if (!strcmp (input->strCodeInput, table->strSymbol))
+    if (!strcmp (FcitxInputStateGetRawInputBuffer(input), table->strSymbol))
         return TableGetFHCandWords (tbl);
 
-    if (input->strCodeInput[0] == table->cPinyin && table->bUsePY)
+    if (FcitxInputStateGetRawInputBuffer(input)[0] == table->cPinyin && table->bUsePY)
         return TableGetPinyinCandWords (tbl);
 
-    if (TableFindFirstMatchCode (table, input->strCodeInput) == -1 && !table->tableDict->iAutoPhrase) {
-        if (input->iCodeInputCount) {
-            SetMessageCount(input->msgPreedit, 0);
-            AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
-            input->iCursorPos = strlen(input->strCodeInput);
+    if (TableFindFirstMatchCode (table, FcitxInputStateGetRawInputBuffer(input)) == -1 && !table->tableDict->iAutoPhrase) {
+        if (FcitxInputStateGetRawInputBufferSize(input)) {
+            SetMessageCount(FcitxInputStateGetPreedit(input), 0);
+            AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+            FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
         }
         //Not Found
         return IRV_DISPLAY_CANDWORDS;
@@ -819,7 +823,7 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
     utarray_init(&candTemp, &tableCand_icd);
 
     while (table->tableDict->currentRecord && table->tableDict->currentRecord != table->tableDict->recordHead) {
-        if (!TableCompareCode (table, input->strCodeInput, table->tableDict->currentRecord->strCode)) {
+        if (!TableCompareCode (table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->currentRecord->strCode)) {
             TABLECANDWORD* tableCandWord = fcitx_malloc0(sizeof(TABLECANDWORD));
             TableAddCandWord (table->tableDict->currentRecord, tableCandWord);
             utarray_push_back(&candTemp, &tableCandWord);
@@ -856,21 +860,21 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
             else
                 pstr = (char *) NULL;
         }
-        else if (HasMatchingKey (table, input->strCodeInput))
+        else if (HasMatchingKey (table, FcitxInputStateGetRawInputBuffer(input)))
             pstr = (tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode;
         else
-            pstr = ((tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode) + input->iCodeInputCount;
+            pstr = ((tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode) + FcitxInputStateGetRawInputBufferSize(input);
 
         if (pstr)
             candWord.strExtra = strdup(pstr);
 
-        CandidateWordAppend(input->candList, &candWord);
+        CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
     utarray_clear(&candTemp);
 
-    if (table->tableDict->bRule && table->bAutoPhrase && input->iCodeInputCount == table->tableDict->iCodeLength) {
+    if (table->tableDict->bRule && table->bAutoPhrase && FcitxInputStateGetRawInputBufferSize(input) == table->tableDict->iCodeLength) {
         for (i = table->tableDict->iAutoPhrase - 1; i >= 0; i--) {
-            if (!TableCompareCode (table, input->strCodeInput, table->tableDict->autoPhrase[i].strCode)) {
+            if (!TableCompareCode (table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->autoPhrase[i].strCode)) {
                 if (TableHasPhrase (table->tableDict, table->tableDict->autoPhrase[i].strCode, table->tableDict->autoPhrase[i].strHZ)) {
                     TABLECANDWORD* tableCandWord = fcitx_malloc0(sizeof(TABLECANDWORD));
                     TableAddAutoCandWord (tbl, i, tableCandWord);
@@ -892,28 +896,28 @@ INPUT_RETURN_VALUE TableGetCandWords (void* arg)
         candWord.strWord = strdup (tableCandWord->candWord.autoPhrase->strHZ);
         candWord.strExtra = NULL;
 
-        CandidateWordAppend(input->candList, &candWord);
+        CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
 
     utarray_done(&candTemp);
 
-    if (input->iCodeInputCount) {
-        SetMessageCount(input->msgPreedit, 0);
-        AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
-        input->iCursorPos = strlen(input->strCodeInput);
+    if (FcitxInputStateGetRawInputBufferSize(input)) {
+        SetMessageCount(FcitxInputStateGetPreedit(input), 0);
+        AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+        FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
     }
 
     INPUT_RETURN_VALUE retVal = IRV_DISPLAY_CANDWORDS;
 
-    if (table->iTableAutoSendToClient && (input->iCodeInputCount >= table->iTableAutoSendToClient)) {
-        if (CandidateWordGetCurrentWindowSize(input->candList) == 1) {  //如果只有一个候选词，则送到客户程序中
-            CandidateWord* candWord = CandidateWordGetCurrentWindow(input->candList);
+    if (table->iTableAutoSendToClient && (FcitxInputStateGetRawInputBufferSize(input) >= table->iTableAutoSendToClient)) {
+        if (CandidateWordGetCurrentWindowSize(FcitxInputStateGetCandidateList(input)) == 1) {  //如果只有一个候选词，则送到客户程序中
+            CandidateWord* candWord = CandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
             if (candWord->owner == tbl)
             {
                 TABLECANDWORD* tableCandWord = candWord->priv;
                 if (tableCandWord->flag != CT_AUTOPHRASE || (tableCandWord->flag == CT_AUTOPHRASE && !table->iSaveAutoPhraseAfter))
                     if (!(tableCandWord->flag == CT_NORMAL && tableCandWord->candWord.record->bPinyin))
-                        retVal = CandidateWordChooseByIndex(input->candList, 0);
+                        retVal = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
             }
         }
     }
@@ -992,24 +996,24 @@ void TableCreateNewPhrase (FcitxTableState* tbl)
 {
     int             i;
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(instance);
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
-    SetMessageText(input->msgAuxDown, 0, "");
+    SetMessageText(FcitxInputStateGetAuxDown(input), 0, "");
     for (i = tbl->iTableNewPhraseHZCount; i > 0; i--)
-        MessageConcat(input->msgAuxDown , 0 ,table->tableDict->hzLastInput[table->tableDict->iHZLastInputCount - i].strHZ);
+        MessageConcat(FcitxInputStateGetAuxDown(input) , 0 ,table->tableDict->hzLastInput[table->tableDict->iHZLastInputCount - i].strHZ);
 
-    boolean bCanntFindCode = TableCreatePhraseCode (table->tableDict, GetMessageString(input->msgAuxDown, 0));
+    boolean bCanntFindCode = TableCreatePhraseCode (table->tableDict, GetMessageString(FcitxInputStateGetAuxDown(input), 0));
 
     if (!bCanntFindCode)
     {
-        SetMessageCount(input->msgAuxDown, 2);
-        SetMessageText(input->msgAuxDown, 1, table->tableDict->strNewPhraseCode);
+        SetMessageCount(FcitxInputStateGetAuxDown(input), 2);
+        SetMessageText(FcitxInputStateGetAuxDown(input), 1, table->tableDict->strNewPhraseCode);
     }
     else
     {
-        SetMessageCount(input->msgAuxDown, 1);
-        SetMessageText(input->msgAuxDown, 0, "????");
+        SetMessageCount(FcitxInputStateGetAuxDown(input), 1);
+        SetMessageText(FcitxInputStateGetAuxDown(input), 0, "????");
     }
 
 }
@@ -1021,24 +1025,24 @@ INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl)
 {
     int             iLength;
     RECORD         *tableRemind = NULL;
-    GenericConfig *fc = &tbl->owner->config->gconfig;
+    FcitxConfig *config = FcitxInstanceGetConfig(tbl->owner);
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
-    boolean bDisablePagingInRemind = *ConfigGetBindValue(fc, "Output", "RemindModeDisablePaging").boolvalue;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    boolean bDisablePagingInRemind = config->bDisablePagingInRemind;
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
     if (!tbl->strTableRemindSource[0])
         return IRV_TO_PROCESS;
 
-    input->strCodeInput[0] = '\0';
-    input->iCodeInputCount = 0;
-    CandidateWordReset(input->candList);
+    FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
+    FcitxInputStateSetRawInputBufferSize(input, 0);
+    CandidateWordReset(FcitxInputStateGetCandidateList(input));
 
     iLength = utf8_strlen (tbl->strTableRemindSource);
     tableRemind = table->tableDict->recordHead->next;
 
     while (tableRemind != table->tableDict->recordHead) {
-        if (bDisablePagingInRemind && CandidateWordGetListSize(input->candList) >= CandidateWordGetPageSize(input->candList))
+        if (bDisablePagingInRemind && CandidateWordGetListSize(FcitxInputStateGetCandidateList(input)) >= CandidateWordGetPageSize(FcitxInputStateGetCandidateList(input)))
             break;
 
         if (((iLength + 1) == utf8_strlen (tableRemind->strHZ))) {
@@ -1051,7 +1055,7 @@ INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl)
                 candWord.priv = tableCandWord;
                 candWord.strExtra = NULL;
                 candWord.strWord = strdup(tableCandWord->candWord.record->strHZ + strlen (tbl->strTableRemindSource));
-                CandidateWordAppend(input->candList, &candWord);
+                CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
             }
         }
 
@@ -1059,11 +1063,11 @@ INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl)
     }
 
     CleanInputWindowUp(instance);
-    AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Remind:"));
-    AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%s", tbl->strTableRemindSource);
-    input->bIsInRemind = (CandidateWordPageCount(input->candList));
+    AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Remind:"));
+    AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", tbl->strTableRemindSource);
+    FcitxInputStateSetIsInRemind(input, (CandidateWordPageCount(FcitxInputStateGetCandidateList(input))));
 
-    if (input->bIsInRemind)
+    if (FcitxInputStateGetIsInRemind(input))
         return IRV_DISPLAY_CANDWORDS;
     else
         return IRV_CLEAN;
@@ -1079,7 +1083,7 @@ INPUT_RETURN_VALUE TableGetRemindCandWord (void* arg, TABLECANDWORD* tableCandWo
 {
     FcitxTableState* tbl = (FcitxTableState*) arg;
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
     tableCandWord->candWord.record->iHit++;
     strcpy (tbl->strTableRemindSource, tableCandWord->candWord.record->strHZ + strlen (tbl->strTableRemindSource));
@@ -1093,12 +1097,12 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl)
 {
     int             i;
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
     CleanInputWindowUp(instance);
-    AddMessageAtLast(input->msgPreedit, MSG_INPUT, "%s", input->strCodeInput);
-    input->iCursorPos = input->iCodeInputCount;
+    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
 
     if (!table->tableDict->iFH)
         return IRV_DISPLAY_MESSAGE;
@@ -1113,7 +1117,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl)
         candWord.priv = tableCandWord;
         candWord.strExtra = NULL;
         candWord.strWord = strdup(table->tableDict->fh[i].strFH);
-        CandidateWordAppend(input->candList, &candWord);
+        CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
     return IRV_DISPLAY_CANDWORDS;
 }
@@ -1121,7 +1125,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl)
 INPUT_RETURN_VALUE TableGetFHCandWord (FcitxTableState* tbl, TABLECANDWORD* tableCandWord)
 {
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
     CleanInputWindowDown(instance);
 
@@ -1136,14 +1140,14 @@ boolean TablePhraseTips (void *arg)
     char            strTemp[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1] = "\0", *ps;
     short           i, j;
     FcitxInstance *instance = tbl->owner;
-    FcitxInputState *input = &instance->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     TableMetaData* table = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iTableIMIndex);
 
     if (!table->tableDict->recordHead)
         return false;
 
     //如果最近输入了一个词组，这个工作就不需要了
-    if (input->lastIsSingleHZ != 1)
+    if (FcitxInputStateGetLastIsSingleChar(input) != 1)
         return false;
 
     j = (table->tableDict->iHZLastInputCount > PHRASE_MAX_LENGTH) ? table->tableDict->iHZLastInputCount - PHRASE_MAX_LENGTH : 0;
@@ -1159,14 +1163,14 @@ boolean TablePhraseTips (void *arg)
         recTemp = TableFindPhrase (table->tableDict, ps);
         if (recTemp) {
             CleanInputWindow(instance);
-            AddMessageAtLast(input->msgAuxUp, MSG_TIPS, _("Phrase is already in Dict "));
-            AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%s", ps);
+            AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Phrase is already in Dict "));
+            AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", ps);
 
-            AddMessageAtLast(input->msgAuxDown, MSG_FIRSTCAND, _("Code is "));
-            AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%s", recTemp->strCode);
-            AddMessageAtLast(input->msgAuxDown, MSG_TIPS, _(" Ctrl+Delete To Delete"));
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_FIRSTCAND, _("Code is "));
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_CODE, "%s", recTemp->strCode);
+            AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _(" Ctrl+Delete To Delete"));
             tbl->bTablePhraseTips = true;
-            input->bShowCursor = false;
+            FcitxInputStateSetShowCursor(input, false);
 
             return true;
         }

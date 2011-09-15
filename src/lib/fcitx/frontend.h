@@ -84,23 +84,6 @@ extern "C" {
     } FcitxFrontend;
 
     /**
-     * @brief Get Current Input Context
-     *
-     * @param instance
-     * @return FcitxInputContext*
-     **/
-    FcitxInputContext* GetCurrentIC(struct _FcitxInstance* instance);
-
-    /**
-     * @brief Set Current Input Context
-     *
-     * @param instance
-     * @param ic new input context
-     * @return current ic changed
-     **/
-    boolean SetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
-
-    /**
      * @brief Initial frontends array
      *
      * @param  frontends array

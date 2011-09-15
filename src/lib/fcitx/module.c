@@ -28,6 +28,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "instance.h"
+#include "instance-internal.h"
 
 static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);

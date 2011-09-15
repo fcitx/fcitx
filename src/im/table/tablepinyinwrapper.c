@@ -54,9 +54,9 @@ INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, CandidateWord* candidateWord)
     Table_ResetPY(tbl->pyaddon);
     if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
     {
-        strcpy(GetOutputString(&tbl->owner->input), candidateWord->strWord);
+        strcpy(GetOutputString(FcitxInstanceGetInputState(tbl->owner)), candidateWord->strWord);
     }
 
     return IRV_COMMIT_STRING | IRV_FLAG_RESET_INPUT;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

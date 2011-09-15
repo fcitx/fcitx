@@ -40,58 +40,7 @@ extern "C" {
     /**
      * @brief Fcitx Instance, including all global settings
      **/
-    typedef struct _FcitxInstance {
-        pthread_mutex_t fcitxMutex;
-        UT_array uistats;
-        UT_array uimenus;
-        FcitxAddon* ui;
-        FcitxInputState input;
-        boolean bMutexInited;
-        FcitxUIMenu imMenu;
-
-        /* Fcitx is not good at multi process, so put a readonlyMode in it */
-        boolean readonlyMode;
-
-        /* config file */
-        FcitxConfig* config;
-        FcitxProfile* profile;
-        UT_array addons;
-        UT_array imeclasses;
-        UT_array imes;
-        UT_array frontends;
-        UT_array eventmodules;
-
-        struct _FcitxInputContext *CurrentIC;
-        struct _FcitxInputContext *ic_list;
-        struct _FcitxInputContext *free_list;
-        sem_t* sem;
-        pthread_t pid;
-        fd_set rfds, wfds, efds;
-        int maxfd;
-        char* uiname;
-
-        struct _HookStack* hookPreInputFilter;
-        struct _HookStack* hookPostInputFilter;
-        struct _HookStack* hookOutputFilter;
-        struct _HookStack* hookHotkeyFilter;
-        struct _HookStack* hookResetInputHook;
-        struct _HookStack* hookTriggerOnHook;
-        struct _HookStack* hookTriggerOffHook;
-        struct _HookStack* hookInputFocusHook;
-        struct _HookStack* hookInputUnFocusHook;
-        struct _HookStack* hookUpdateCandidateWordHook;
-
-        FcitxUIFlag uiflag;
-
-        IME_STATE globalState;
-
-        time_t totaltime;
-        time_t timeStart;
-        int iHZInputed;
-
-        /* gives more padding, since we want to break abi */
-        int padding[64];
-    } FcitxInstance;
+    typedef struct _FcitxInstance FcitxInstance;
 
     /**
      * @brief create new fcitx instance
@@ -126,6 +75,56 @@ extern "C" {
      * @return void
      **/
     void EndInstance(FcitxInstance* instance);
+
+    /**
+     * @brief Get Current Input Context
+     *
+     * @param instance
+     * @return FcitxInputContext*
+     **/
+    FcitxInputContext* GetCurrentIC(struct _FcitxInstance* instance);
+
+    /**
+     * @brief Set Current Input Context
+     *
+     * @param instance
+     * @param ic new input context
+     * @return current ic changed
+     **/
+    boolean SetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
+
+
+    /**
+     * @brief Get Addons From Instance
+     *
+     * @param instance fcitx instance
+     * @return UT_array*
+     **/
+    UT_array* FcitxInstanceGetAddons(FcitxInstance* instance);
+
+    UT_array* FcitxInstanceGetUIMenus(FcitxInstance* instance);
+
+    UT_array* FcitxInstanceGetUIStats(FcitxInstance* instance);
+
+    UT_array* FcitxInstanceGetIMEs(FcitxInstance* instance);
+
+    fd_set* FcitxInstanceGetReadFDSet(FcitxInstance* instance);
+
+    fd_set* FcitxInstanceGetWriteFDSet(FcitxInstance* instance);
+
+    fd_set* FcitxInstanceGetExceptFDSet(FcitxInstance* instance);
+
+    int FcitxInstanceGetMaxFD(FcitxInstance* instance);
+
+    void FcitxInstanceSetMaxFD(FcitxInstance* instance, int maxfd);
+
+    FcitxConfig* FcitxInstanceGetConfig(FcitxInstance* instance);
+
+    FcitxProfile* FcitxInstanceGetProfile(FcitxInstance* instance);
+
+    FcitxInputState* FcitxInstanceGetInputState(FcitxInstance* instance);
+
+    void FcitxInstanceIncreateInputCharactorCount(FcitxInstance* instance, int count);
 
 #ifdef __cplusplus
 }

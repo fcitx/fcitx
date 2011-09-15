@@ -89,7 +89,7 @@ FcitxModule module = {
 void* PuncCreate(FcitxInstance* instance)
 {
     FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));
-    FcitxAddon* puncaddon = GetAddonByName(&instance->addons, FCITX_PUNC_NAME);
+    FcitxAddon* puncaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_PUNC_NAME);
     puncState->owner = instance;
     LoadPuncDict(puncState);
     KeyFilterHook hk;
@@ -102,7 +102,7 @@ void* PuncCreate(FcitxInstance* instance)
     puncState->bLastIsNumber = false;
 
     HotkeyHook hotkey;
-    hotkey.hotkey = instance->config->hkPunc;
+    hotkey.hotkey = FcitxInstanceGetConfig(instance)->hkPunc;
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
     hotkey.arg = puncState;
     RegisterHotkeyFilter(instance, hotkey);
@@ -138,7 +138,10 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
-    FcitxInputState* input = &puncState->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(puncState->owner);
+    FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+    FcitxConfig* config = FcitxInstanceGetConfig(instance);
+
     char *pPunc = NULL;
 
     if (*retVal != IRV_TO_PROCESS)
@@ -146,9 +149,9 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 
     FcitxKeySym origsym = sym;
     sym = KeyPadToMain(sym);
-    if (instance->profile->bUseWidePunc) {
+    if (profile->bUseWidePunc) {
 
-        if (puncState->bLastIsNumber && instance->config->bEngPuncAfterNumber
+        if (puncState->bLastIsNumber && config->bEngPuncAfterNumber
                 && (IsHotKey(origsym, state, FCITX_PERIOD)
                     || IsHotKey(origsym, state, FCITX_SEMICOLON)
                     || IsHotKey(origsym, state, FCITX_COMMA)))
@@ -168,8 +171,8 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     if (IsHotKeyPunc(sym, state)) {
         GetOutputString(input)[0] = '\0';
         INPUT_RETURN_VALUE ret = IRV_TO_PROCESS;
-        if (!puncState->owner->input.bIsInRemind)
-            ret = CandidateWordChooseByIndex(input->candList, 0);
+        if (!FcitxInputStateGetIsInRemind(input))
+            ret = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
 
         /* if there is nothing to commit */
         if (ret == IRV_TO_PROCESS)
@@ -202,7 +205,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         return false;
     }
 
-    if (instance->profile->bUseWidePunc)
+    if (profile->bUseWidePunc)
     {
         if (IsHotKey(sym, state, FCITX_BACKSPACE)
                  && puncState->cLastIsAutoConvert) {
@@ -352,8 +355,9 @@ void TogglePuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState* )arg;
     FcitxInstance* instance = puncState->owner;
-    instance->profile->bUseWidePunc = !instance->profile->bUseWidePunc;
-    SaveProfile(instance->profile);
+    FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+    profile->bUseWidePunc = !profile->bUseWidePunc;
+    SaveProfile(profile);
     ResetInput(puncState->owner);
 }
 
@@ -368,7 +372,8 @@ boolean GetPuncState(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FcitxInstance* instance = puncState->owner;
-    return instance->profile->bUseWidePunc;
+    FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+    return profile->bUseWidePunc;
 }
 
 void ReloadPunc(void* arg)

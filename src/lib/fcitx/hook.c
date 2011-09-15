@@ -25,6 +25,7 @@
 #include "instance.h"
 #include "fcitx/hook-internal.h"
 #include "fcitx-utils/utils.h"
+#include "instance-internal.h"
 
 /**
  * @file hook.c
@@ -202,4 +203,4 @@ INPUT_RETURN_VALUE CheckHotkey(FcitxInstance* instance, FcitxKeySym keysym, unsi
     }
     return out;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -313,7 +313,7 @@ void DrawResizableBackground(cairo_t *c,
                 cairo_clip(c);
                 cairo_paint(c);
                 cairo_restore(c);
-                
+
                 /* part 2 */
                 cairo_save(c);
                 cairo_translate(c,  marginLeft + i*resizeWidth, height - marginBottom);
@@ -334,7 +334,7 @@ void DrawResizableBackground(cairo_t *c,
                 cairo_clip(c);
                 cairo_paint(c);
                 cairo_restore(c);
-                
+
                 /* part 2 */
                 cairo_save(c);
                 cairo_translate(c,  marginLeft + repaint_times*resizeWidth, height - marginBottom);
@@ -355,7 +355,7 @@ void DrawResizableBackground(cairo_t *c,
             cairo_clip(c);
             cairo_paint(c);
             cairo_restore(c);
-                        
+
             cairo_save(c);
             cairo_translate(c, marginLeft, height - marginBottom);
             cairo_scale(c, (double)(width - marginLeft - marginRight)/(double)resizeWidth, 1);
@@ -368,7 +368,7 @@ void DrawResizableBackground(cairo_t *c,
     }
 
     /* part 4 & 6 */
-    {        
+    {
         if ( fillV == F_COPY)
         {
             int repaint_times=(height - marginTop - marginBottom)/resizeHeight;
@@ -385,7 +385,7 @@ void DrawResizableBackground(cairo_t *c,
                 cairo_clip(c);
                 cairo_paint(c);
                 cairo_restore(c);
-                
+
                 /* part 6 */
                 cairo_save(c);
                 cairo_translate(c, width - marginRight,  marginTop + i*resizeHeight);
@@ -406,7 +406,7 @@ void DrawResizableBackground(cairo_t *c,
                 cairo_clip(c);
                 cairo_paint(c);
                 cairo_restore(c);
-                
+
                 /* part 2 */
                 cairo_save(c);
                 cairo_translate(c,  width - marginRight,  marginTop + repaint_times*resizeHeight);
@@ -427,7 +427,7 @@ void DrawResizableBackground(cairo_t *c,
             cairo_clip(c);
             cairo_paint(c);
             cairo_restore(c);
-                        
+
             cairo_save(c);
             cairo_translate(c, width - marginRight, marginTop);
             cairo_scale(c, 1, (double)(height - marginTop - marginBottom)/(double)resizeHeight);
@@ -444,7 +444,7 @@ void DrawResizableBackground(cairo_t *c,
         int repaintH = 0, repaintV = 0;
         int remainW = 0, remainH = 0;
         double scaleX = 1.0, scaleY = 1.0;
-        
+
         if (fillH == F_COPY)
         {
             repaintH = (width - marginLeft - marginRight)/resizeWidth + 1;
@@ -455,9 +455,9 @@ void DrawResizableBackground(cairo_t *c,
             repaintH = 1;
             scaleX = (double)(width - marginLeft - marginRight)/(double)resizeWidth;
         }
-        
+
         if (fillV == F_COPY)
-        {            
+        {
             repaintV = (height - marginTop - marginBottom)/(double)resizeHeight + 1;
             remainH = (height - marginTop - marginBottom)%resizeHeight;
         }
@@ -466,7 +466,7 @@ void DrawResizableBackground(cairo_t *c,
             repaintV = 1;
             scaleY = (double)(height - marginTop - marginBottom)/(double)resizeHeight;
         }
-        
+
 
         int i, j;
         for (i = 0; i < repaintH; i ++)
@@ -481,10 +481,10 @@ void DrawResizableBackground(cairo_t *c,
 
                 if (fillV == F_COPY && j == repaintV - 1)
                     h = remainH;
-                
+
                 if (fillH == F_COPY && i == repaintH -1 )
                     w = remainW;
-                
+
                 cairo_rectangle (c,0,0, w, h);
                 cairo_clip(c);
                 cairo_paint(c);
@@ -594,7 +594,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     int inputWidth = 0, outputWidth = 0;
     int outputHeight = 0;
     cairo_t *c = NULL;
-    FcitxInputState* input = &inputWindow->owner->owner->input;
+    FcitxInputState* input = FcitxInstanceGetInputState(inputWindow->owner->owner);
     FcitxInstance* instance = inputWindow->owner->owner;
     int iChar = iCursorPos;
     int strWidth = 0, strHeight = 0;
@@ -625,7 +625,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
 
         posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
         inputWidth += strWidth;
-        if (input->bShowCursor)
+        if (FcitxInputStateGetShowCursor(input))
         {
             int length = strlen(GetMessageString(msgup, i));
             if (iChar >= 0)
@@ -737,7 +737,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     cairo_set_operator(c, CAIRO_OPERATOR_OVER);
 
 
-    if (input->bShowCursor )
+    if (FcitxInputStateGetShowCursor(input))
     {
         //画向前向后箭头
         if (prev && next )
@@ -745,7 +745,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
             cairo_set_source_surface(inputWindow->c_back, prev->image,
                                      newWidth - sc->skinInputBar.iBackArrowX ,
                                      sc->skinInputBar.iBackArrowY);
-            if (CandidateWordHasPrev(input->candList))
+            if (CandidateWordHasPrev(FcitxInputStateGetCandidateList(input)))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -754,7 +754,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
             cairo_set_source_surface(inputWindow->c_back, next->image,
                                      newWidth - sc->skinInputBar.iForwardArrowX ,
                                      sc->skinInputBar.iForwardArrowY);
-            if (CandidateWordHasNext(input->candList))
+            if (CandidateWordHasNext(FcitxInputStateGetCandidateList(input)))
                 cairo_paint(inputWindow->c_back);
             else
                 cairo_paint_with_alpha(inputWindow->c_back,0.5);
@@ -778,7 +778,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Messa
     ResetFontContext();
 
     //画光标
-    if (input->bShowCursor )
+    if (FcitxInputStateGetShowCursor(input))
     {
         cairo_move_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos);
         cairo_line_to(inputWindow->c_cursor,cursor_pos,sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - FontHeightWithContext(inputWindow->c_font[0]) - 4);

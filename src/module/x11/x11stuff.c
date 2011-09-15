@@ -18,14 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <unistd.h>
+#include <X11/extensions/Xrender.h>
+#include <X11/Xatom.h>
+
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
 #include "x11stuff.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
-#include <unistd.h>
-#include <X11/extensions/Xrender.h>
-#include <X11/Xatom.h>
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
@@ -59,7 +60,7 @@ FcitxModule module = {
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11* x11priv = fcitx_malloc0(sizeof(FcitxX11));
-    FcitxAddon* x11addon = GetAddonByName(&instance->addons, FCITX_X11_NAME);
+    FcitxAddon* x11addon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
         return false;
@@ -95,10 +96,10 @@ void X11SetFD(void* arg)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     int fd = ConnectionNumber(x11priv->dpy);
-    FD_SET(fd, &x11priv->owner->rfds);
+    FD_SET(fd, FcitxInstanceGetReadFDSet(x11priv->owner));
 
-    if (x11priv->owner->maxfd < fd)
-        x11priv->owner->maxfd = fd;
+    if (FcitxInstanceGetMaxFD(x11priv->owner) < fd)
+        FcitxInstanceSetMaxFD(x11priv->owner, fd);
 }
 
 

@@ -201,9 +201,10 @@ void CloseAllMenuWindow(FcitxClassicUI *classicui)
 {
     FcitxInstance* instance = classicui->owner;
     FcitxUIMenu** menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
         XlibMenu* xlibMenu = (XlibMenu*) (*menupp)->uipriv;
@@ -248,9 +249,10 @@ boolean IsMouseInOtherMenu(XlibMenu *xlibMenu, int x, int y)
     FcitxClassicUI *classicui = xlibMenu->owner;
     FcitxInstance* instance = classicui->owner;
     FcitxUIMenu** menupp;
-    for (menupp = (FcitxUIMenu **) utarray_front(&instance->uimenus);
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(&instance->uimenus, menupp)
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         )
     {
 
@@ -340,7 +342,7 @@ void DrawXlibMenu(XlibMenu * menu)
 
     DrawResizableBackground(cr, background->image, menu->height, menu->width,
                             sc->skinMenu.marginLeft,
-                            sc->skinMenu.marginTop, 
+                            sc->skinMenu.marginTop,
                             sc->skinMenu.marginRight,
                             sc->skinMenu.marginBottom,
                             sc->skinMenu.fillV,

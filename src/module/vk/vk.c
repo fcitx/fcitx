@@ -134,11 +134,12 @@ FcitxModule module =
 void *VKCreate(FcitxInstance* instance)
 {
     FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));
+    FcitxConfig* config = FcitxInstanceGetConfig(instance);
     vkstate->owner = instance;
-    vkstate->classicui = GetAddonByName(&instance->addons, FCITX_CLASSIC_UI_NAME);
+    vkstate->classicui = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
 
     HotkeyHook hotkey;
-    hotkey.hotkey = instance->config->hkVK;
+    hotkey.hotkey = config->hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
     RegisterHotkeyFilter(instance, hotkey);
@@ -542,7 +543,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
         if (pstr) {
             CommitString (instance, GetCurrentIC(instance), pstr);
-            instance->iHZInputed += (int) (utf8_strlen (pstr));   //粗略统计字数
+            FcitxInstanceIncreateInputCharactorCount(instance, utf8_strlen(pstr));
         }
     }
 
@@ -695,7 +696,7 @@ void ChangVK (FcitxVKState* vkstate)
 INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state)
 {
     char           *pstr = NULL;
-    FcitxInputState *input = &vkstate->owner->input;
+    FcitxInputState *input = FcitxInstanceGetInputState(vkstate->owner);
 
     if (IsHotKeySimple(sym, state))
         pstr = VKGetSymbol (vkstate, sym);

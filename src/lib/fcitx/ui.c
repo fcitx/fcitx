@@ -34,6 +34,7 @@
 #include "ime-internal.h"
 #include "candidate.h"
 #include "frontend.h"
+#include "instance-internal.h"
 
 /**
  * @file ui.c
@@ -289,7 +290,7 @@ void UpdateInputWindow(FcitxInstance *instance)
 {
     instance->uiflag |= UI_UPDATE;
 
-    if (IsMessageChanged(instance->input.msgPreedit))
+    if (IsMessageChanged(instance->input->msgPreedit))
         UpdatePreedit(instance, GetCurrentIC(instance));
 }
 
@@ -501,7 +502,7 @@ FCITX_EXPORT_API
 int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messages* msgDown)
 {
     int i = 0;
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
     int extraLength = input->iCursorPos;
     SetMessageCount(msgUp, 0);
     SetMessageCount(msgDown, 0);
@@ -527,7 +528,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         char strTemp[3] = { '\0', '\0', '\0' };
         strTemp[0] = CandidateWordGetChoose(input->candList)[i];
 
-        if (ConfigGetPointAfterNumber(instance->config))
+        if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
         AddMessageAtLast(msgDown, MSG_INDEX, strTemp);
@@ -570,7 +571,7 @@ char* CandidateWordToCString(FcitxInstance* instance)
 {
     size_t len = 0;
     int i;
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
     CandidateWord* candWord;
     for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
          candWord != NULL;
@@ -579,7 +580,7 @@ char* CandidateWordToCString(FcitxInstance* instance)
         char strTemp[3] = { '\0', '\0', '\0' };
         strTemp[0] = CandidateWordGetChoose(input->candList)[i];
 
-        if (ConfigGetPointAfterNumber(instance->config))
+        if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
         len += strlen(strTemp);
@@ -600,7 +601,7 @@ char* CandidateWordToCString(FcitxInstance* instance)
         char strTemp[3] = { '\0', '\0', '\0' };
         strTemp[0] = CandidateWordGetChoose(input->candList)[i];
 
-        if (ConfigGetPointAfterNumber(instance->config))
+        if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
         strcat(result, strTemp);
@@ -617,7 +618,7 @@ char* CandidateWordToCString(FcitxInstance* instance)
 
 void UpdateInputWindowReal(FcitxInstance *instance)
 {
-    FcitxInputState* input = &instance->input;
+    FcitxInputState* input = instance->input;
     FcitxInputContext* ic = GetCurrentIC(instance);
     CapacityFlags flags = CAPACITY_NONE;
     if (ic != NULL)

@@ -35,6 +35,7 @@
 #include <fcitx/ui.h>
 
 #ifdef __cplusplus
+
 extern "C" {
 #endif
 
@@ -53,6 +54,7 @@ extern "C" {
     struct _FcitxInputContext;
     struct _FcitxInstance;
     struct _FcitxAddon;
+    struct _CandidateWordList;
 
     typedef enum _KEY_RELEASED {
         KR_OTHER = 0,
@@ -172,29 +174,9 @@ extern "C" {
     /**
      * @brief Global Input State, including displayed message.
      **/
-    typedef struct _FcitxInputState {
-        long unsigned int lastKeyPressedTime;
-        boolean bIsDoInputOnly;
-        KEY_RELEASED keyReleased;
-        int iCodeInputCount;
-        char strCodeInput[MAX_USER_INPUT + 1];
-        char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
-        boolean bIsInRemind;
+    typedef struct _FcitxInputState FcitxInputState;
 
-        time_t dummy;
-        int iCursorPos;
-        boolean bShowCursor;
-        int dummy2;
-        int lastIsSingleHZ;
-        boolean bLastIsNumber;
-        boolean dummy3;
-
-        /* the ui message part, if there is something in it, then it will be shown */
-        struct _CandidateWordList* candList;
-        Messages* msgPreedit;
-        Messages* msgAuxUp;
-        Messages* msgAuxDown;
-    } FcitxInputState;
+    FcitxInputState* CreateFcitxInputState();
 
     /**
      * @brief check the key is this hotkey or not
@@ -385,6 +367,42 @@ extern "C" {
      * @return int
      **/
     int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose);
+
+    struct _CandidateWordList* FcitxInputStateGetCandidateList(FcitxInputState* input);
+
+    boolean FcitxInputStateGetIsInRemind(FcitxInputState* input);
+
+    void FcitxInputStateSetIsInRemind(FcitxInputState* input, boolean isInRemind);
+
+    boolean FcitxInputStateGetIsDoInputOnly(FcitxInputState* input);
+
+    void FcitxInputStateSetIsDoInputOnly(FcitxInputState* input, boolean isDoInputOnly);
+
+    char* FcitxInputStateGetRawInputBuffer(FcitxInputState* input);
+
+    int FcitxInputStateGetCursorPos(FcitxInputState* input);
+
+    void FcitxInputStateSetCursorPos(FcitxInputState* input, int cursorPos);
+
+    Messages* FcitxInputStateGetAuxUp(FcitxInputState* input);
+
+    Messages* FcitxInputStateGetAuxDown(FcitxInputState* input);
+
+    Messages* FcitxInputStateGetPreedit(FcitxInputState* input);
+
+    int FcitxInputStateGetRawInputBufferSize(FcitxInputState* input);
+
+    void FcitxInputStateSetRawInputBufferSize(FcitxInputState* input, int size);
+
+    boolean FcitxInputStateGetShowCursor(FcitxInputState* input);
+
+    void FcitxInputStateSetShowCursor(FcitxInputState* input, boolean showCursor);
+
+    int FcitxInputStateGetLastIsSingleChar(FcitxInputState* input);
+
+    void FcitxInputStateSetLastIsSingleChar(FcitxInputState* input, int lastIsSingleChar);
+
+    void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
 
 #ifdef __cplusplus
 }

@@ -176,9 +176,10 @@ void DrawMainWindow (MainWindow* mainWindow)
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
 
             FcitxUIStatus* status;
-            for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+            UT_array* uistats = FcitxInstanceGetUIStats(instance);
+            for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                    status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
@@ -278,9 +279,10 @@ void DrawMainWindow (MainWindow* mainWindow)
                 height = imageheight;
 
             FcitxUIStatus* status;
-            for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+            UT_array* uistats = FcitxInstanceGetUIStats(instance);
+            for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                    status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
                 boolean active = status->getCurrentStatus(status->arg);
@@ -325,9 +327,9 @@ void DrawMainWindow (MainWindow* mainWindow)
             UpdateStatusGeometry( &mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
             currentX += cairo_image_surface_get_width(imicon->image);
 
-            for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+            for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                    status = (FcitxUIStatus*) utarray_next(uistats, status)
                 )
             {
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
@@ -426,9 +428,10 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
         }
     }
     FcitxUIStatus *status;
-    for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+    for (status = (FcitxUIStatus*) utarray_front(uistats);
             status != NULL;
-            status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+            status = (FcitxUIStatus*) utarray_next(uistats, status)
         )
     {
         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
@@ -472,9 +475,10 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                 mouse = &mainWindow->imiconstat.mouse;
             } else {
                 FcitxUIStatus *status;
-                for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+                UT_array* uistats = FcitxInstanceGetUIStats(instance);
+                for (status = (FcitxUIStatus*) utarray_front(uistats);
                         status != NULL;
-                        status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                        status = (FcitxUIStatus*) utarray_next(uistats, status)
                     )
                 {
                     FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
@@ -515,9 +519,10 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     SwitchIM(instance, -1);
                 } else {
                     FcitxUIStatus *status;
-                    for (status = (FcitxUIStatus*) utarray_front(&instance->uistats);
+                    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+                    for (status = (FcitxUIStatus*) utarray_front(uistats);
                             status != NULL;
-                            status = (FcitxUIStatus*) utarray_next(&instance->uistats, status)
+                            status = (FcitxUIStatus*) utarray_next(uistats, status)
                         )
                     {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
