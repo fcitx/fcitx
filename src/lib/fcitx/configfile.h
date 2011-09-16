@@ -29,10 +29,11 @@ extern "C" {
 #endif
 
     typedef enum _SWITCHKEY {
-        S_R_CTRL = 0,
-        S_R_SHIFT = 1,
-        S_L_SHIFT = 2,
-        S_L_CTRL = 3
+        SWITCHKEY_R_CTRL = 0,
+        SWITCHKEY_R_SHIFT = 1,
+        SWITCHKEY_L_SHIFT = 2,
+        SWITCHKEY_L_CTRL = 3,
+        SWITCHKEY_NONE = 4
     } SWITCHKEY;
 
     typedef enum _ENTER_TO_DO {

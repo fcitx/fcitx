@@ -93,11 +93,12 @@ Description=Hot key of Triggering Input Method
 
 [Hotkey/SwitchKey]
 Type=Enum
-EnumCount=4
+EnumCount=5
 Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
 Enum3=L_CTRL
+Enum4=None
 DefaultValue=L_CTRL
 Description=Hotkey of Switching Chinese and English Mode
 

@@ -33,6 +33,7 @@ extern "C" {
 
     boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
 
+    extern HOTKEYS FCITX_NONE_KEY[2];
     extern HOTKEYS FCITX_DELETE[2];
     extern HOTKEYS FCITX_CTRL_DELETE[2];
     extern HOTKEYS FCITX_BACKSPACE[2];
@@ -63,4 +64,4 @@ extern "C" {
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

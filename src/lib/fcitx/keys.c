@@ -26,6 +26,13 @@
 #include "fcitx/keys.h"
 
 FCITX_EXPORT_API
+HOTKEYS FCITX_NONE_KEY[2] =
+{
+    {NULL, Key_None, 0},
+    {NULL, Key_None, 0},
+};
+
+FCITX_EXPORT_API
 HOTKEYS FCITX_DELETE[2] =
 {
     {NULL, Key_Delete, 0},
@@ -192,4 +199,4 @@ boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
     return false;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

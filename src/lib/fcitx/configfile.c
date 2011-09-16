@@ -128,18 +128,20 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
         SWITCHKEY *s = (SWITCHKEY*)value;
         switch (*s)
         {
-        case S_R_CTRL:
+        case SWITCHKEY_R_CTRL:
             hkey = FCITX_RCTRL;
             break;
-        case S_R_SHIFT:
+        case SWITCHKEY_R_SHIFT:
             hkey = FCITX_RSHIFT;
             break;
-        case S_L_SHIFT:
+        case SWITCHKEY_L_SHIFT:
             hkey = FCITX_LSHIFT;
             break;
-        case S_L_CTRL:
+        case SWITCHKEY_L_CTRL:
             hkey = FCITX_LCTRL;
             break;
+        case SWITCHKEY_NONE:
+            hkey = FCITX_NONE_KEY;
         }
     }
     if (hkey != NULL)
