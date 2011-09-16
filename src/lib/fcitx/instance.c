@@ -411,7 +411,8 @@ boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
     return changed;
 }
 
-void FcitxInstanceIncreateInputCharactorCount(FcitxInstance* instance, int count)
+FCITX_EXPORT_API
+void FcitxInstanceIncreateInputCharacterCount(FcitxInstance* instance, int count)
 {
     instance += count;
 }

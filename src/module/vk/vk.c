@@ -543,7 +543,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
         if (pstr) {
             CommitString (instance, GetCurrentIC(instance), pstr);
-            FcitxInstanceIncreateInputCharactorCount(instance, utf8_strlen(pstr));
+            FcitxInstanceIncreateInputCharacterCount(instance, utf8_strlen(pstr));
         }
     }
 

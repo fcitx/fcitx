@@ -411,7 +411,7 @@ INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state)
                                     if (ret & IRV_FLAG_PENDING_COMMIT_STRING)
                                     {
                                         CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-                                        FcitxInstanceIncreateInputCharactorCount(instance, utf8_strlen(GetOutputString(input)));
+                                        FcitxInstanceIncreateInputCharacterCount(instance, utf8_strlen(GetOutputString(input)));
                                     }
                                 }
                             }
