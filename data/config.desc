@@ -3,14 +3,14 @@ Type=Integer
 DefaultValue=0
 Description=Seconds sleep before fcitx really start
 
-[Program/ShareStateAmongAllProgram]
+[Program/ShareStateAmongWindow]
 Type=Enum
-DefaultValue=False
+DefaultValue=No
 EnumCount=3
-Enum0=False
-Enum1=True
+Enum0=No
+Enum1=All
 Enum2=PerProgram
-Description=Share State Among all program
+Description=Share State Among Window
 
 [Program/DefaultInputMethodState]
 Type=Enum

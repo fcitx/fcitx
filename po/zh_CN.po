@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx 20100424\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 20:52+0800\n"
-"PO-Revision-Date: 2011-09-16 20:51+0800\n"
+"POT-Creation-Date: 2011-09-16 20:57+0800\n"
+"PO-Revision-Date: 2011-09-16 20:58+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -86,6 +86,10 @@ msgstr "按频率"
 #: unknown
 msgid "AdjustNo"
 msgstr "不调整"
+
+#: unknown
+msgid "All"
+msgstr "所有"
 
 # unknown
 msgid "Appearance"
@@ -439,10 +443,6 @@ msgstr "退出"
 msgid "FCITX -- Get Signal No.: %d"
 msgstr "Fcitx接收到信号: %d"
 
-#: unknown
-msgid "False"
-msgstr "否"
-
 #: ../..//data/fcitx.desktop.in.h:2
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:227
 msgid "Fcitx"
@@ -660,8 +660,7 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr ""
-"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:174
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -870,6 +869,10 @@ msgstr "原生"
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:169
 msgid "Next Page Icon"
 msgstr "下一页图标"
+
+#: unknown
+msgid "No"
+msgstr "否"
 
 # unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:277
@@ -1150,8 +1153,8 @@ msgid "Setting Hint"
 msgstr "设置提示"
 
 #: /home/saber/Develop/fcitx/data/config.desc:13
-msgid "Share State Among all program"
-msgstr "在所有程序间共享状态"
+msgid "Share State Among Window"
+msgstr "在窗口间共享状态"
 
 #: unknown
 msgid "SharedLibrary"
@@ -1316,10 +1319,6 @@ msgstr "简繁转换引擎"
 
 msgid "TraditionalChinese"
 msgstr "繁体中文"
-
-#: unknown
-msgid "True"
-msgstr "是"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:37
 msgid "Type"
@@ -1683,6 +1682,9 @@ msgstr "当前字体为: %s"
 #~ msgid "FCITX can only run under X"
 #~ msgstr "Fcitx只能在X下运行"
 
+#~ msgid "False"
+#~ msgstr "否"
+
 #~ msgid "Fcitx Config ..."
 #~ msgstr "配置Fcitx..."
 
@@ -1946,9 +1948,6 @@ msgstr "当前字体为: %s"
 #~ msgid "NoChange"
 #~ msgstr "原始操作"
 
-#~ msgid "NoVK"
-#~ msgstr "软键盘未激活图标"
-
 #~ msgid "NoneMatchAutoSend"
 #~ msgstr "空码自动上屏"
 
@@ -2155,6 +2154,9 @@ msgstr "当前字体为: %s"
 #~ msgid "TriggerProperty: "
 #~ msgstr "TriggerProperty: "
 
+#~ msgid "True"
+#~ msgstr "是"
+
 #~ msgid "Type: %d Text: %s"
 #~ msgstr "Type: %d Text: %s"
 
@@ -2217,6 +2219,9 @@ msgstr "当前字体为: %s"
 
 #~ msgid "XEvent--Expose"
 #~ msgstr "XEvent--Expose"
+
+#~ msgid "Yes"
+#~ msgstr "是"
 
 #~ msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
 #~ msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"

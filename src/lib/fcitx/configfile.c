@@ -37,7 +37,7 @@ static void Filter2nd3rdKey(GenericConfig* config, ConfigGroup* group, ConfigOpt
 CONFIG_BINDING_BEGIN(FcitxConfig)
 CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "FirstRun", bFirstRun)
-CONFIG_BINDING_REGISTER("Program", "ShareStateAmongAllProgram", shareState)
+CONFIG_BINDING_REGISTER("Program", "ShareStateAmongWindow", shareState)
 CONFIG_BINDING_REGISTER("Program", "DefaultInputMethodState", defaultIMState)
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber)
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo)
