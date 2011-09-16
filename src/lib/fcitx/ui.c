@@ -338,7 +338,15 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
 }
 
 FCITX_EXPORT_API
-void RegisterStatus(struct _FcitxInstance* instance, void* arg, const char* name, const char* shortDesc, const char* longDesc, void (*toggleStatus)(void *arg), boolean(*getStatus)(void *arg))
+void RegisterStatus(
+    struct _FcitxInstance* instance,
+    void* arg,
+    const char* name,
+    const char* shortDesc,
+    const char* longDesc,
+    void (*toggleStatus)(void *arg),
+    boolean(*getStatus)(void *arg)
+)
 {
     FcitxUIStatus status;
 

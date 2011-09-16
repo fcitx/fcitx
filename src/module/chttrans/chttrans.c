@@ -111,7 +111,7 @@ void* ChttransCreate(FcitxInstance* instance)
 
     RegisterHotkeyFilter(instance, hk);
     RegisterOutputFilter(instance, shk);
-    RegisterStatus(instance, transState, "chttrans", "Traditional Chinese Translate", "Traditional Chinese Translate", ToggleChttransState, GetChttransEnabled);
+    RegisterStatus(instance, transState, "chttrans", _("Traditional Chinese Translate"), _("Traditional Chinese Translate"), ToggleChttransState, GetChttransEnabled);
     return transState;
 }
 

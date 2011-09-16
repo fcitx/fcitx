@@ -134,7 +134,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
     InitIMMenu(instance);
     RegisterMenu(instance, &instance->imMenu);
-    RegisterStatus(instance, instance, "remind", "Remind", "Remind", ToggleRemindState, GetRemindEnabled);
+    RegisterStatus(instance, instance, "remind", _("Remind"), _("Remind"), ToggleRemindState, GetRemindEnabled);
 
     LoadUserInterface(instance);
 

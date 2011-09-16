@@ -113,7 +113,7 @@ void* PuncCreate(FcitxInstance* instance)
 
     RegisterResetInputHook(instance, hook);
 
-    RegisterStatus(instance, puncState, "punc", "Full Width Punctuation", "Full Width Punctuation", TogglePuncState, GetPuncState);
+    RegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
     return puncState;
