@@ -36,6 +36,7 @@
 typedef struct _FcitxIPCIC {
     int id;
     char path[32];
+    uint64_t pid;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -65,6 +66,7 @@ static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y);
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
+static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 
 const char * im_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
@@ -84,6 +86,7 @@ const char * im_introspection_xml =
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
     "    <method name=\"CreateICv2\">\n"
+    "      <arg name=\"pid\" direction=\"int\" type=\"t\"/>\n"
     "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
     "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
     "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
@@ -175,7 +178,7 @@ FcitxFrontend frontend =
     IPCUpdatePreedit,
     IPCUpdateClientSideUI,
     NULL,
-    NULL,
+    IPCCheckICFromSameApplication,
     NULL
 };
 
@@ -227,7 +230,6 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     ipc->maxid ++;
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
-
     uint32_t arg1, arg2, arg3, arg4;
     arg1 = config->hkTrigger[0].sym;
     arg2 = config->hkTrigger[0].state;
@@ -237,6 +239,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     {
         /* CreateIC v1 indicates that default state can only be disabled */
         context->state = IS_CLOSED;
+        ipcic->pid = 0;
         dbus_message_append_args(reply,
                                 DBUS_TYPE_INT32, &ipcic->id,
                                 DBUS_TYPE_UINT32, &arg1,
@@ -247,7 +250,18 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     }
     else if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateICv2"))
     {
+
+        DBusError error;
+        dbus_error_init(&error);
+        if (!dbus_message_get_args(message, &error, DBUS_TYPE_UINT64, &ipcic->pid, DBUS_TYPE_INVALID))
+            ipcic->pid = 0;
+
+        if (config->shareState == ShareState_PerProgram)
+            SetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
+
         boolean arg0 = context->state != IS_CLOSED;
+
+        dbus_error_free(&error);
         dbus_message_append_args(reply,
                                 DBUS_TYPE_INT32, &ipcic->id,
                                 DBUS_TYPE_BOOLEAN, &arg0,
@@ -707,6 +721,15 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
     free(strAuxDown);
     free(strPreedit);
     free(candidateword);
+}
+
+boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic)
+{
+    FcitxIPCIC* ipcicToCheck = GetIPCIC(icToCheck);
+    FcitxIPCIC* ipcic = GetIPCIC(ic);
+    if (ipcic->pid == 0 || ipcicToCheck->pid == 0)
+        return false;
+    return ipcicToCheck->pid == ipcic->pid;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

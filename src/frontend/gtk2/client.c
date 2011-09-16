@@ -29,6 +29,7 @@
 
 #include "client.h"
 #include "marshall.h"
+#include <unistd.h>
 
 #define LOG_LEVEL DEBUG
 #define IC_NAME_MAX 64
@@ -177,7 +178,9 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
 
     g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
 
-    dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_INVALID);
+    pid_t pid = getpid();
+    guint64 uintpid = pid;
+    dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_UINT64, &uintpid, G_TYPE_INVALID);
 }
 
 void FcitxIMClientCreateICCallback(DBusGProxy *proxy,

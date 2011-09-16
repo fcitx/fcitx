@@ -64,10 +64,17 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    if (instance->config->bGlobalShareState)
-        rec->state = instance->globalState;
-    else
-        rec->state = instance->config->defaultIMState;
+    switch (instance->config->shareState)
+    {
+        case ShareState_All:
+            rec->state = instance->globalState;
+            break;
+        case ShareState_None:
+            rec->state = instance->config->defaultIMState;
+            break;
+        default:
+            break;
+    }
 
     frontend->CreateIC((*pfrontend)->addonInstance, rec, priv);
 
@@ -92,6 +99,28 @@ FcitxInputContext* FindIC(FcitxInstance* instance, int frontendid, void *filter)
         rec = rec->next;
     }
     return NULL;
+}
+
+FCITX_EXPORT_API
+void SetICStateFromSameApplication(FcitxInstance* instance, int frontendid, FcitxInputContext *ic)
+{
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->CheckICFromSameApplication)
+        return;
+    FcitxInputContext *rec = instance->ic_list;
+    while (rec != NULL)
+    {
+        if (rec->frontendid == frontendid && frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+        {
+            ic->state = rec->state;
+            break;
+        }
+        rec = rec->next;
+    }
 }
 
 FCITX_EXPORT_API

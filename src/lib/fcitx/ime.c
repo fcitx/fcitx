@@ -752,19 +752,40 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
 FCITX_EXPORT_API
 void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
-    if (instance->config->bGlobalShareState)
+    instance->globalState = IS_ACTIVE;
+    switch (instance->config->shareState)
     {
-        instance->globalState = IS_ACTIVE;
-        FcitxInputContext *rec = instance->ic_list;
-        while (rec != NULL)
+        case ShareState_All:
+        case ShareState_PerProgram:
         {
-            EnableIMInternal(instance, rec, keepState);
-            rec = rec->next;
+            FcitxInputContext *rec = instance->ic_list;
+            while (rec != NULL)
+            {
+                boolean flag = false;
+                if (instance->config->shareState == ShareState_All)
+                    flag = true;
+                else
+                {
+                    UT_array* frontends = &instance->frontends;
+                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                    if (pfrontend)
+                    {
+                        FcitxFrontend* frontend = (*pfrontend)->frontend;
+                        if (frontend->CheckICFromSameApplication &&
+                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+                            flag = true;
+                    }
+                }
+
+                if (flag)
+                    EnableIMInternal(instance, rec, keepState);
+                rec = rec->next;
+            }
         }
-    }
-    else
-    {
-        EnableIMInternal(instance, ic, keepState);
+        break;
+        case ShareState_None:
+            EnableIMInternal(instance, ic, keepState);
+            break;
     }
 }
 
@@ -795,19 +816,40 @@ void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean ke
 FCITX_EXPORT_API
 void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    if (instance->config->bGlobalShareState)
+    instance->globalState = IS_CLOSED;
+    switch (instance->config->shareState)
     {
-        instance->globalState = IS_CLOSED;
-        FcitxInputContext *rec = instance->ic_list;
-        while (rec != NULL)
+        case ShareState_All:
+        case ShareState_PerProgram:
         {
-            CloseIMInternal(instance, rec);
-            rec = rec->next;
+            FcitxInputContext *rec = instance->ic_list;
+            while (rec != NULL)
+            {
+                boolean flag = false;
+                if (instance->config->shareState == ShareState_All)
+                    flag = true;
+                else
+                {
+                    UT_array* frontends = &instance->frontends;
+                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                    if (pfrontend)
+                    {
+                        FcitxFrontend* frontend = (*pfrontend)->frontend;
+                        if (frontend->CheckICFromSameApplication &&
+                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+                            flag = true;
+                    }
+                }
+
+                if (flag)
+                    CloseIMInternal(instance, rec);
+                rec = rec->next;
+            }
         }
-    }
-    else
-    {
-        CloseIMInternal(instance, ic);
+        break;
+        case ShareState_None:
+            CloseIMInternal(instance, ic);
+            break;
     }
 }
 
@@ -845,19 +887,41 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         objectState = IS_ACTIVE;
     else
         objectState = IS_ENG;
+
     instance->globalState = objectState;
-    if (instance->config->bGlobalShareState)
+    switch (instance->config->shareState)
     {
-        FcitxInputContext *rec = instance->ic_list;
-        while (rec != NULL)
+        case ShareState_All:
+        case ShareState_PerProgram:
         {
-            ChangeIMStateInternal(instance, rec, objectState);
-            rec = rec->next;
+            FcitxInputContext *rec = instance->ic_list;
+            while (rec != NULL)
+            {
+                boolean flag = false;
+                if (instance->config->shareState == ShareState_All)
+                    flag = true;
+                else
+                {
+                    UT_array* frontends = &instance->frontends;
+                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                    if (pfrontend)
+                    {
+                        FcitxFrontend* frontend = (*pfrontend)->frontend;
+                        if (frontend->CheckICFromSameApplication &&
+                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+                            flag = true;
+                    }
+                }
+
+                if (flag)
+                    ChangeIMStateInternal(instance, rec, objectState);
+                rec = rec->next;
+            }
         }
-    }
-    else
-    {
-        ChangeIMStateInternal(instance, ic, objectState);
+        break;
+        case ShareState_None:
+            ChangeIMStateInternal(instance, ic, objectState);
+            break;
     }
 }
 

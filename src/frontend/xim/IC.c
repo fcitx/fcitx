@@ -33,8 +33,9 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "IC.h"
 #include "fcitx-utils/log.h"
 #include "xim.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 #include "ximhandler.h"
+#include "fcitx/instance.h"
 
 /**
  * @file IC.c
@@ -179,6 +180,7 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     IMChangeICStruct * call_data = (IMChangeICStruct *)priv;
     context->privateic = fcitx_malloc0(sizeof(FcitxXimIC));
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
+    FcitxConfig* config = FcitxInstanceGetConfig(xim->owner);
 
     privic->connect_id = call_data->connect_id;
     privic->id = ++ xim->icid;
@@ -187,6 +189,10 @@ void XimCreateIC (void* arg, FcitxInputContext* context, void *priv)
     StoreIC (privic, call_data);
     SetTrackPos(xim, context, call_data);
     call_data->icid = privic->id;
+
+    if (config->shareState == ShareState_PerProgram)
+        SetICStateFromSameApplication(xim->owner, xim->frontendid, context);
+
     if (privic->input_style & XIMPreeditCallbacks)
         context->contextCaps |= CAPACITY_PREEDIT;
     else
@@ -362,6 +368,14 @@ void XimGetIC (FcitxXimFrontend* xim, IMChangeICStruct * call_data)
             sts_attr->value_length = sizeof (long);
         }
     }
+}
+
+boolean XimCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic)
+{
+    FcitxXimIC* ximictoCheck = GetXimIC(icToCheck);
+    FcitxXimIC* ximic = GetXimIC(ic);
+
+    return ximictoCheck->connect_id == ximic->connect_id;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

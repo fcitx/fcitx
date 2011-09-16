@@ -4,8 +4,12 @@ DefaultValue=0
 Description=Seconds sleep before fcitx really start
 
 [Program/ShareStateAmongAllProgram]
-Type=Boolean
+Type=Enum
 DefaultValue=False
+EnumCount=3
+Enum0=False
+Enum1=True
+Enum2=PerProgram
 Description=Share State Among all program
 
 [Program/DefaultInputMethodState]
@@ -98,7 +102,7 @@ Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
 Enum3=L_CTRL
-Enum4=None
+Enum4=Disabled
 DefaultValue=L_CTRL
 Description=Hotkey of Switching Chinese and English Mode
 

@@ -48,6 +48,12 @@ extern "C" {
         K_SEMICOLON_QUICKPHRASE = 2
     } SEMICOLON_TO_DO;
 
+    typedef enum _ShareState {
+        ShareState_None = 0,
+        ShareState_All = 1,
+        ShareState_PerProgram = 2
+    } ShareState;
+
     /**
      * @brief struct opposite to ~/.config/fcitx/config
      **/
@@ -192,7 +198,7 @@ extern "C" {
         /**
          * @brief Input method use global shared state
          **/
-        boolean bGlobalShareState;
+        ShareState shareState;
 
         /**
          * @brief Input method enable by default

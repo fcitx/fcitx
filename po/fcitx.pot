@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-16 11:28+0800\n"
+"POT-Creation-Date: 2011-09-16 20:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,117 +61,117 @@ msgstr ""
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:9
+#: /home/saber/Develop/fcitx/data/config.desc:13
 msgid "Share State Among all program"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:18
+#: /home/saber/Develop/fcitx/data/config.desc:22
 msgid "Default Input Method State"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:23
+#: /home/saber/Develop/fcitx/data/config.desc:27
 msgid "It's the first time Fcitx Start."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:28
+#: /home/saber/Develop/fcitx/data/config.desc:32
 msgid "Use English Punc After a Number"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:37
+#: /home/saber/Develop/fcitx/data/config.desc:41
 msgid "Action after press enter"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:42
+#: /home/saber/Develop/fcitx/data/config.desc:46
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:47
+#: /home/saber/Develop/fcitx/data/config.desc:51
 msgid "Send inputed Text if Switch to English Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:52
+#: /home/saber/Develop/fcitx/data/config.desc:56
 msgid "Candidate Word Number"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:57
+#: /home/saber/Develop/fcitx/data/config.desc:61
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:62
+#: /home/saber/Develop/fcitx/data/config.desc:66
 msgid "Show Input Window After Trigger Input Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:67
+#: /home/saber/Develop/fcitx/data/config.desc:71
 msgid "Show Point After Index"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:72
+#: /home/saber/Develop/fcitx/data/config.desc:76
 msgid "Show Input Speed"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:77
+#: /home/saber/Develop/fcitx/data/config.desc:81
 msgid "Show Version"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:82
+#: /home/saber/Develop/fcitx/data/config.desc:86
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:87
+#: /home/saber/Develop/fcitx/data/config.desc:91
 msgid ""
 "Do not show input window if there is one one candidate (Hide when only "
 "preedit string must be selected)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:92
+#: /home/saber/Develop/fcitx/data/config.desc:96
 msgid "Hot key of Triggering Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:102
+#: /home/saber/Develop/fcitx/data/config.desc:107
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:107
+#: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Double click Switch Key to Change Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:112
+#: /home/saber/Develop/fcitx/data/config.desc:117
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:117
+#: /home/saber/Develop/fcitx/data/config.desc:122
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:122
+#: /home/saber/Develop/fcitx/data/config.desc:127
 msgid "Hotkey of Switching Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:127
+#: /home/saber/Develop/fcitx/data/config.desc:132
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:132
+#: /home/saber/Develop/fcitx/data/config.desc:137
 msgid "Hotkey of Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:137
+#: /home/saber/Develop/fcitx/data/config.desc:142
 msgid "Hotkey of Going Prev Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:142
+#: /home/saber/Develop/fcitx/data/config.desc:147
 msgid "Hotkey of Going Next Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:147
+#: /home/saber/Develop/fcitx/data/config.desc:152
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:152
+#: /home/saber/Develop/fcitx/data/config.desc:157
 msgid "Hotkey of Saving All Config and Input History"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:157
+#: /home/saber/Develop/fcitx/data/config.desc:162
 msgid "Hotkey of Switch Embeded Preedit"
 msgstr ""
 
@@ -713,6 +713,16 @@ msgid "Copy"
 msgstr ""
 
 #: unknown
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:228
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:259
+msgid "Disabled"
+msgstr ""
+
+#: unknown
+msgid "False"
+msgstr ""
+
+#: unknown
 msgid "Frontend"
 msgstr ""
 
@@ -757,6 +767,10 @@ msgid "OpenCC"
 msgstr ""
 
 #: unknown
+msgid "PerProgram"
+msgstr ""
+
+#: unknown
 msgid "PinyinJiaJia"
 msgstr ""
 
@@ -778,6 +792,10 @@ msgstr ""
 
 #: unknown
 msgid "Show"
+msgstr ""
+
+#: unknown
+msgid "True"
 msgstr ""
 
 #: unknown
@@ -1231,11 +1249,6 @@ msgid "X error %i on opcode send"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:228
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:259
-msgid "Disabled"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:228
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:260
 msgid "Input Method Disabled"
 msgstr ""
@@ -1346,19 +1359,19 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:886
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:950
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:938
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1002
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:940
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1004
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:942
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1006
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -1420,16 +1433,16 @@ msgstr ""
 msgid "UI: bad ui"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:272
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:301
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:278
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:307
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:301
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:330
 msgid "No available frontend"
 msgstr ""
 

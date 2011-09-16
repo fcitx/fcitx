@@ -79,7 +79,7 @@ extern "C" {
         void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
         void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic);
         void (*ReloadConfig)(void* arg);
-        void (*padding3)();
+        boolean (*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
         void (*padding4)();
     } FcitxFrontend;
 
@@ -194,6 +194,8 @@ extern "C" {
      * @return CapacityFlags
      **/
     CapacityFlags GetCurrentCapacity(struct _FcitxInstance* instance);
+
+    void SetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
 
 #ifdef __cplusplus
 }

@@ -96,7 +96,7 @@ FcitxFrontend frontend =
     XimUpdatePreedit,
     NULL,
     NULL,
-    NULL,
+    XimCheckICFromSameApplication,
     NULL
 };
 

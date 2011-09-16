@@ -92,6 +92,7 @@ void     XimDestroyIC (void* arg, FcitxInputContext* arg1);
 boolean  XimCheckIC (void* arg, FcitxInputContext* arg1, void* arg2);
 void     XimSetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 void     XimGetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+boolean  XimCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 
 #endif
 
