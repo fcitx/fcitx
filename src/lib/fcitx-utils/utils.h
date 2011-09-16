@@ -118,6 +118,8 @@ extern "C" {
 
     int FcitxGetDisplayNumber();
 
+    char* fcitx_get_process_name();
+
 #ifdef __cplusplus
 }
 #endif

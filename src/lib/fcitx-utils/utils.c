@@ -33,6 +33,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <limits.h>
 
 #include "fcitx/fcitx.h"
 #include "utils.h"
@@ -201,4 +202,20 @@ int FcitxGetDisplayNumber()
     }
     return displayNumber;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+
+FCITX_EXPORT_API
+char* fcitx_get_process_name()
+{
+    char path[PATH_MAX + 1];
+    char comm[PATH_MAX + 1];
+    path[PATH_MAX] = comm[PATH_MAX] = comm[0] = 0;
+    pid_t pid = getpid();
+    snprintf(path, PATH_MAX, "/proc/%d/comm", pid);
+    FILE* file = fopen(path, "r");
+    if (file)
+        fgets(comm, PATH_MAX, file);
+
+    return fcitx_trim(comm);
+}
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

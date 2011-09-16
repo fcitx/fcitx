@@ -10,7 +10,7 @@
       <arg name="state2" direction="out" type="u"/>
     </method>
     <method name="CreateICv2">
-      <arg name="pid" direction="in" type="t"/>
+      <arg name="appname" direction="in" type="s"/>
       <arg name="icid" direction="out" type="i"/>
       <arg name="enabled" direction="out" type="b"/>
       <arg name="keyval1" direction="out" type="u"/>

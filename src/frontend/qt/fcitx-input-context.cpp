@@ -481,7 +481,9 @@ void QFcitxInputContext::createInputContext()
     if (!m_improxy->isValid())
         return;
 
-    QDBusPendingReply< int, bool, uint, uint, uint, uint > result = m_improxy->CreateICv2(QApplication::applicationPid());
+    char* name = fcitx_get_process_name();
+    QDBusPendingReply< int, bool, uint, uint, uint, uint > result = m_improxy->CreateICv2(name);
+    free(name);
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(result);
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(createInputContextFinished(QDBusPendingCallWatcher*)));
 }

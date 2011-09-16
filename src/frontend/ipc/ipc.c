@@ -36,7 +36,7 @@
 typedef struct _FcitxIPCIC {
     int id;
     char path[32];
-    uint64_t pid;
+    char* appname;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -86,7 +86,7 @@ const char * im_introspection_xml =
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
     "    <method name=\"CreateICv2\">\n"
-    "      <arg name=\"pid\" direction=\"int\" type=\"t\"/>\n"
+    "      <arg name=\"appname\" direction=\"int\" type=\"s\"/>\n"
     "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
     "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
     "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
@@ -239,7 +239,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     {
         /* CreateIC v1 indicates that default state can only be disabled */
         context->state = IS_CLOSED;
-        ipcic->pid = 0;
+        ipcic->appname = NULL;
         dbus_message_append_args(reply,
                                 DBUS_TYPE_INT32, &ipcic->id,
                                 DBUS_TYPE_UINT32, &arg1,
@@ -253,8 +253,16 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         DBusError error;
         dbus_error_init(&error);
-        if (!dbus_message_get_args(message, &error, DBUS_TYPE_UINT64, &ipcic->pid, DBUS_TYPE_INVALID))
-            ipcic->pid = 0;
+        char* appname;
+        if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
+            ipcic->appname = NULL;
+        else
+        {
+            if (strlen(appname) == 0)
+                ipcic->appname = NULL;
+            else
+                ipcic->appname = strdup(appname);
+        }
 
         if (config->shareState == ShareState_PerProgram)
             SetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
@@ -295,8 +303,11 @@ boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv)
 void IPCDestroyIC(void* arg, FcitxInputContext* context)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxIPCIC* ipcic = GetIPCIC(context);
 
     dbus_connection_unregister_object_path(ipc->conn, GetIPCIC(context)->path);
+    if (ipcic->appname)
+        free(ipcic->appname);
     free(context->privateic);
     context->privateic = NULL;
 }
@@ -727,9 +738,9 @@ boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, F
 {
     FcitxIPCIC* ipcicToCheck = GetIPCIC(icToCheck);
     FcitxIPCIC* ipcic = GetIPCIC(ic);
-    if (ipcic->pid == 0 || ipcicToCheck->pid == 0)
+    if (ipcic->appname == NULL || ipcicToCheck->appname == NULL)
         return false;
-    return ipcicToCheck->pid == ipcic->pid;
+    return strcmp(ipcicToCheck->appname, ipcic->appname) == 0;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

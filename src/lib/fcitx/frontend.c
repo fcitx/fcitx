@@ -109,7 +109,7 @@ void SetICStateFromSameApplication(FcitxInstance* instance, int frontendid, Fcit
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
-    if (frontend->CheckICFromSameApplication)
+    if (!frontend->CheckICFromSameApplication)
         return;
     FcitxInputContext *rec = instance->ic_list;
     while (rec != NULL)
