@@ -70,6 +70,7 @@ FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv
             rec->state = instance->globalState;
             break;
         case ShareState_None:
+        case ShareState_PerProgram:
             rec->state = instance->config->defaultIMState;
             break;
         default:
