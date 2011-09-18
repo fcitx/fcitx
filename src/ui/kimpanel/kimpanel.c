@@ -611,6 +611,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     }
     else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
         FcitxLog(DEBUG, "Exit");
+        KimRegisterProperties(kimpanel, NULL, 0);
         EndInstance(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
