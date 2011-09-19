@@ -58,7 +58,7 @@ static void LoadQuickPhrase(QuickPhraseState* qpstate);
 static void FreeQuickPhrase(void* arg);
 static void ReloadQuickPhrase(void* arg);
 static INPUT_RETURN_VALUE QuickPhraseDoInput (void* arg, FcitxKeySym sym, int state);
-static INPUT_RETURN_VALUE QuickPhraseGetCandWords ();
+static INPUT_RETURN_VALUE QuickPhraseGetCandWords (QuickPhraseState* qpstate);
 static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
 static void ShowQuickPhraseMessage(QuickPhraseState *qpstate);
 
