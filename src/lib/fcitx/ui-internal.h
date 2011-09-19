@@ -43,3 +43,4 @@ void UpdateInputWindowReal(FcitxInstance *instance);
 void MoveInputWindowReal(FcitxInstance *instance);
 
 #endif
+

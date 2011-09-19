@@ -37,9 +37,18 @@
 #include <libgen.h>
 #include <ctype.h>
 
+#include "config.h"
 #include "fcitx/fcitx.h"
 #include "utils.h"
 #include "utf8.h"
+
+#if defined(LIBKVM_FOUND)
+#include <kvm.h>
+#include <fcntl.h>
+#include <sys/param.h>
+#include <sys/sysctl.h>
+#include <sys/user.h>
+#endif
 
 FCITX_EXPORT_API
 int CalculateRecordNumber (FILE * fpDict)
@@ -207,6 +216,7 @@ int FcitxGetDisplayNumber()
 FCITX_EXPORT_API
 char* fcitx_get_process_name()
 {
+#if defined(__linux__)
     char buf[PATH_MAX + 1];
     char *result = NULL;
     ssize_t len;
@@ -222,6 +232,30 @@ char* fcitx_get_process_name()
     }
 
     return fcitx_trim(result);
+#elif defined(LIBKVM_FOUND)
+    kvm_t *vm = kvm_open(0, "/dev/null", 0, O_RDONLY, NULL);
+    if (vm == 0)
+        return strdup("");
+
+    int cnt;
+    int mypid = getpid();
+    struct kinfo_proc * kp = kvm_getprocs(vm, KERN_PROC_PID, mypid, &cnt);
+    if ((cnt != 1) || (kp == 0))
+        return strdup("");
+    int i;
+    for (i=0; i<cnt; i++)
+        if (kp->ki_pid == mypid)
+            break;
+    char* result = NULL;
+    if (i != cnt)
+        result = strdup(kp->ki_comm);
+    else
+        result = strdup("");
+    kvm_close(vm);
+    return result;
+#else
+    return strdup("");
+#endif
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

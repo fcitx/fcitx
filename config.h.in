@@ -6,6 +6,7 @@
 #cmakedefine _ENABLE_DBUS
 #cmakedefine _ENABLE_PANGO
 #cmakedefine _ENABLE_OPENCC
+#cmakedefine LIBKVM_FOUND
 #define LOCALEDIR "@localedir@"
 #define PACKAGE "@package@"
 #define DATADIR "@prefix@/share"

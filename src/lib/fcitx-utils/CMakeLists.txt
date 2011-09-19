@@ -13,6 +13,10 @@ set(FCITX_UTILS_HEADERS
     uthash.h
 )
 
+if (LIBKVM_FOUND)
+    include_directories(LIBKVM_INCLUDE_DIR)
+endif (LIBKVM_FOUND)
+
 add_library(fcitx-utils SHARED ${FCITX_UTILS_SOURCES})
 set_target_properties(fcitx-utils
                       PROPERTIES VERSION 0.1.0
@@ -21,6 +25,10 @@ set_target_properties(fcitx-utils
                       LINK_FLAGS "-Wl,--no-undefined"
 )
 target_link_libraries(fcitx-utils ${LIBINTL_LIBRARIES} ${LIBICONV_LIBRARIES})
+
+if (LIBKVM_FOUND)
+    target_link_libraries(fcitx-utils ${LIBKVM_LIBRARIES})
+endif (LIBKVM_FOUND)
 
 configure_file(fcitx-utils.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-utils.pc)
 
