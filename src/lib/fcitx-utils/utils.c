@@ -206,11 +206,9 @@ int FcitxGetDisplayNumber()
 FCITX_EXPORT_API
 char* fcitx_get_process_name()
 {
-    char path[PATH_MAX + 1];
+    const char *path = "/proc/self/comm";
     char comm[PATH_MAX + 1];
-    path[PATH_MAX] = comm[PATH_MAX] = comm[0] = 0;
-    pid_t pid = getpid();
-    snprintf(path, PATH_MAX, "/proc/%d/comm", pid);
+    comm[PATH_MAX] = comm[0] = 0;
     FILE* file = fopen(path, "r");
     if (file)
         fgets(comm, PATH_MAX, file);
