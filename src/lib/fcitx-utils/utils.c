@@ -34,11 +34,12 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <limits.h>
+#include <libgen.h>
+#include <ctype.h>
 
 #include "fcitx/fcitx.h"
 #include "utils.h"
 #include "utf8.h"
-#include <ctype.h>
 
 FCITX_EXPORT_API
 int CalculateRecordNumber (FILE * fpDict)
@@ -206,14 +207,21 @@ int FcitxGetDisplayNumber()
 FCITX_EXPORT_API
 char* fcitx_get_process_name()
 {
-    const char *path = "/proc/self/comm";
-    char comm[PATH_MAX + 1];
-    comm[PATH_MAX] = comm[0] = 0;
-    FILE* file = fopen(path, "r");
-    if (file)
-        fgets(comm, PATH_MAX, file);
+    char buf[PATH_MAX + 1];
+    char *result = NULL;
+    ssize_t len;
+    if ((len = readlink("/proc/self/exe", buf, PATH_MAX)) != -1)
+    {
+        buf[len] = '\0';
+        result = basename(buf);
+    }
+    else
+    {
+        buf[0] = '\0';
+        result = buf;
+    }
 
-    return fcitx_trim(comm);
+    return fcitx_trim(result);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
