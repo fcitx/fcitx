@@ -82,6 +82,9 @@ FcitxModule module = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* FullWidthCharCreate(FcitxInstance* instance)
 {
     FcitxFullWidthChar* fwchar = fcitx_malloc0(sizeof(FcitxFullWidthChar));

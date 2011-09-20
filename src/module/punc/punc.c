@@ -86,6 +86,9 @@ FcitxModule module = {
     ReloadPunc
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* PuncCreate(FcitxInstance* instance)
 {
     FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));

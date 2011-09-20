@@ -22,7 +22,6 @@
  *
  */
 
-
 #ifndef _FCITX_INSTANCE_INTERNAL_H_
 #define _FCITX_INSTANCE_INTERNAL_H_
 

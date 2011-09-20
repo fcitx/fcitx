@@ -28,6 +28,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <libintl.h>
+#include <dlfcn.h>
 
 #include "fcitx/fcitx.h"
 #include "addon.h"
@@ -36,6 +37,7 @@
 #include "fcitx-utils/utils.h"
 #include "instance.h"
 #include "instance-internal.h"
+#include "addon-internal.h"
 
 CONFIG_BINDING_BEGIN(FcitxAddon)
 CONFIG_BINDING_REGISTER("Addon", "Name", name)
@@ -289,6 +291,16 @@ void FreeAddon(void *v)
     free(addon->generalname);
     free(addon->depend);
     free(addon->subconfig);
+}
+
+boolean CheckABIVersion(void* handle)
+{
+    int* version = (int*) dlsym(handle,"ABI_VERSION");
+    if (!version)
+        return false;
+    if (*version < FCITX_ABI_VERSION)
+        return false;
+    return true;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

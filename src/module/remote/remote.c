@@ -51,6 +51,9 @@ FcitxModule module = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 typedef struct _FcitxRemote {
     char socketfile[PATH_MAX];
     FcitxInstance* owner;

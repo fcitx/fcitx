@@ -52,6 +52,9 @@ FcitxIMClass ime = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* QWCreate (struct _FcitxInstance* instance)
 {
     FcitxQWState* qwstate = fcitx_malloc0(sizeof(FcitxQWState));

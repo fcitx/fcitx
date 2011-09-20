@@ -60,6 +60,9 @@ FcitxModule module = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* DBusCreate(FcitxInstance* instance)
 {
     FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_malloc0(sizeof(FcitxDBus));

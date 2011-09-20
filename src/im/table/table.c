@@ -67,6 +67,9 @@ FcitxIMClass ime = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void *TableCreate(FcitxInstance* instance)
 {
     FcitxTableState *tbl = fcitx_malloc0(sizeof(FcitxTableState));

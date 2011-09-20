@@ -182,6 +182,9 @@ FcitxFrontend frontend =
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* IPCCreate(FcitxInstance* instance, int frontendid)
 {
     FcitxIPCFrontend* ipc = fcitx_malloc0(sizeof(FcitxIPCFrontend));

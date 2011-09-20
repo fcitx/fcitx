@@ -48,6 +48,7 @@
 #include "candidate.h"
 #include "instance-internal.h"
 #include "fcitx-internal.h"
+#include "addon-internal.h"
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
@@ -247,6 +248,14 @@ boolean LoadAllIM(FcitxInstance* instance)
                     FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath ,dlerror());
                     break;
                 }
+                
+                if (!CheckABIVersion(handle))
+                {
+                    FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+                    dlclose(handle);
+                    break;
+                }
+                
                 imclass=dlsym(handle,"ime");
                 if (!imclass || !imclass->Create)
                 {

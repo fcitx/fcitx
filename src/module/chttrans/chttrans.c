@@ -90,6 +90,9 @@ FcitxModule module =
     ReloadChttrans
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* ChttransCreate(FcitxInstance* instance)
 {
     FcitxChttrans* transState = fcitx_malloc0(sizeof(FcitxChttrans));

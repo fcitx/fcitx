@@ -29,6 +29,7 @@
 #include "fcitx-utils/log.h"
 #include "instance.h"
 #include "instance-internal.h"
+#include "addon-internal.h"
 
 static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
@@ -68,6 +69,14 @@ void LoadModule(FcitxInstance* instance)
                     FcitxLog(ERROR, _("Module: open %s fail %s") ,modulePath ,dlerror());
                     break;
                 }
+                
+                if (!CheckABIVersion(handle))
+                {
+                    FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+                    dlclose(handle);
+                    break;
+                }
+                
                 module=dlsym(handle,"module");
                 if (!module || !module->Create)
                 {

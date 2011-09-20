@@ -48,9 +48,7 @@ typedef struct _QuickPhraseState {
 } QuickPhraseState;
 
 typedef struct _QuickPhraseCand {
-
     QUICK_PHRASE* cand;
-
 } QuickPhraseCand;
 
 static void * QuickPhraseCreate (FcitxInstance *instance);
@@ -71,6 +69,9 @@ FcitxModule module =
     FreeQuickPhrase,
     ReloadQuickPhrase
 };
+
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
 
 static boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                                      unsigned int state,

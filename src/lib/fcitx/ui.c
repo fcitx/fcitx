@@ -35,6 +35,7 @@
 #include "candidate.h"
 #include "frontend.h"
 #include "instance-internal.h"
+#include "addon-internal.h"
 
 /**
  * @file ui.c
@@ -159,6 +160,13 @@ void LoadUserInterface(FcitxInstance* instance)
                     if (!handle)
                     {
                         FcitxLog(ERROR, _("UI: open %s fail %s") , modulePath , dlerror());
+                        break;
+                    }
+                    
+                    if (!CheckABIVersion(handle))
+                    {
+                        FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+                        dlclose(handle);
                         break;
                     }
 

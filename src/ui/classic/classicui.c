@@ -90,6 +90,9 @@ FcitxUI ui = {
     ReloadConfigClassicUI
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* ClassicUICreate(FcitxInstance* instance)
 {
     FcitxAddon* classicuiaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);

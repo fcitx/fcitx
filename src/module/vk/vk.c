@@ -131,6 +131,9 @@ FcitxModule module =
     ReloadVK
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void *VKCreate(FcitxInstance* instance)
 {
     FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));

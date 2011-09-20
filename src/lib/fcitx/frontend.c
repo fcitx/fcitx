@@ -33,6 +33,7 @@
 #include "hook-internal.h"
 #include "instance.h"
 #include "instance-internal.h"
+#include "addon-internal.h"
 
 static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
 
@@ -302,6 +303,14 @@ boolean LoadFrontend(FcitxInstance* instance)
                     FcitxLog(ERROR, _("Frontend: open %s fail %s") ,modulePath ,dlerror());
                     break;
                 }
+                
+                if (!CheckABIVersion(handle))
+                {
+                    FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+                    dlclose(handle);
+                    break;
+                }
+                
                 frontend=dlsym(handle,"frontend");
                 if (!frontend || !frontend->Create)
                 {

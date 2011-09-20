@@ -117,6 +117,9 @@ FcitxModule module = {
     ReloadAutoEng
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* AutoEngCreate(FcitxInstance *instance)
 {
     FcitxAutoEngState* autoEngState = fcitx_malloc0(sizeof(FcitxAutoEngState));

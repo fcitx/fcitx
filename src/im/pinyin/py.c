@@ -63,6 +63,9 @@ FcitxIMClass ime = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
 
 typedef struct _PYCandWordSortContext {

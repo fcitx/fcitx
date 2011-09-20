@@ -57,6 +57,9 @@ FcitxModule module = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11* x11priv = fcitx_malloc0(sizeof(FcitxX11));
