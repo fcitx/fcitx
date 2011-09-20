@@ -108,11 +108,8 @@ reload:
         {
             snprintf(buf, PATH_MAX, "%s/fcitx_skin.conf", *skinType);
             buf[PATH_MAX-1] ='\0';
-            size_t len;
-            char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin" );
 
-            fp = GetXDGFile(buf, path, "r", len, NULL);
-            FreeXDGPath(path);
+            fp = GetXDGFileWithPrefix("skin", buf, "r", NULL);
         }
         else
         {
