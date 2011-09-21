@@ -386,29 +386,11 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     }
     else if (index == 1)
     {
-        pid_t id;
-
-        id = fork();
-
-        if (id < 0)
+        FILE* p = popen("xdg-open http://fcitx.github.com/handbook/ &", "r");
+        if (p)
+            pclose(p);
+        else
             FcitxLog(ERROR, _("Unable to create process"));
-        else if (id == 0)
-        {
-            id = fork();
-
-            if (id < 0)
-            {
-                FcitxLog(ERROR, _("Unable to create process"));
-                exit(1);
-            }
-            else if (id > 0)
-                exit(0);
-            else
-            {
-                execlp("xdg-open", "xdg-open", "http://fcitx.github.com/handbook/", NULL);
-                exit(0);
-            }
-        }
     }
     else if (index == length - 1) /* Exit */
     {
@@ -416,29 +398,11 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     }
     else if (index == length - 2) /* Configuration */
     {
-        pid_t id;
-
-        id = fork();
-
-        if (id < 0)
+        FILE* p = popen(BINDIR "/fcitx-configtool &", "r");
+        if (p)
+            pclose(p);
+        else
             FcitxLog(ERROR, _("Unable to create process"));
-        else if (id == 0)
-        {
-            id = fork();
-
-            if (id < 0)
-            {
-                FcitxLog(ERROR, _("Unable to create process"));
-                exit(1);
-            }
-            else if (id > 0)
-                exit(0);
-            else
-            {
-                execl(BINDIR "/fcitx-configtool", "fcitx-configtool", NULL);
-                exit(0);
-            }
-        }
     }
     return true;
 }

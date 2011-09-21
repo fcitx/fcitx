@@ -618,9 +618,19 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         EndInstance(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
-    if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
+    else if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
         FcitxLog(DEBUG, "ReloadConfig");
         ReloadConfig(instance);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+    else if (dbus_message_is_signal(msg, "org.kde.impanel", "Configure")) {
+        FcitxLog(DEBUG, "Configure");
+        
+        FILE* p = popen(BINDIR "/fcitx-configtool &", "r");
+        if (p)
+            pclose(p);
+        else
+            FcitxLog(ERROR, _("Unable to create process"));
         return DBUS_HANDLER_RESULT_HANDLED;
     }
 
