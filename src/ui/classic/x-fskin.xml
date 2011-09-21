@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-fskin">
+        <sub-class-of type="application/x-compressed-tar" />
+        <comment>Fcitx Skin File</comment>
+        <comment xml:lang="zh_CN">Fcitx 皮肤文件</comment>
+        <glob pattern="*.fskin"/>
+        <generic-icon name="package-x-generic"/>
+    </mime-type>
+</mime-info>

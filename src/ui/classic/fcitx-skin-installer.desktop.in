@@ -1,0 +1,14 @@
+[Desktop Entry]
+MimeType=application/x-fskin
+_Name=Fcitx Skin Installer
+_Comment=Installer Script for Fcitx Skin
+Exec=fcitx-skin-installer %U
+Icon=fcitx
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=false
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=false
+X-KDE-StartupNotify=false
+NoDisplay=true
