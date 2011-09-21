@@ -3,9 +3,9 @@ if(ENABLE_GTK3_IM_MODULE)
 PKG_CHECK_MODULES(GTK3 REQUIRED "gtk+-3.0" )
 
 _pkgconfig_invoke("gtk+-3.0" GTK3 BINARY_VERSION "" "--variable=gtk_binary_version")
-
+_pkgconfig_invoke("gtk+-3.0" GTK3 LIBDIR "" "--variable=libdir")
 set(GTK3_IM_MODULEDIR
- "${libdir}/gtk-3.0/${GTK3_BINARY_VERSION}/immodules"
+ "${GTK3_LIBDIR}/gtk-3.0/${GTK3_BINARY_VERSION}/immodules"
 )
 
 include_directories(${GTK3_INCLUDE_DIRS})

@@ -3,8 +3,9 @@ if(ENABLE_GTK2_IM_MODULE)
 PKG_CHECK_MODULES(GTK2 REQUIRED "gtk+-2.0" )
 
 _pkgconfig_invoke("gtk+-2.0" GTK2 BINARY_VERSION "" "--variable=gtk_binary_version")
+_pkgconfig_invoke("gtk+-2.0" GTK2 LIBDIR "" "--variable=libdir")
 set(GTK2_IM_MODULEDIR
- "${libdir}/gtk-2.0/${GTK2_BINARY_VERSION}/immodules"
+ "${GTK2_LIBDIR}/gtk-2.0/${GTK2_BINARY_VERSION}/immodules"
 )
 
 include_directories(${GTK2_INCLUDE_DIRS})
