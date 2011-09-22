@@ -2412,8 +2412,7 @@ extern "C"
      * @brief A fcitx hotkey, define the keysym (keyval) and (state) modifiers key state.
      **/
 
-    typedef struct _HOTKEYS
-    {
+    typedef struct _HOTKEYS {
         /**
          * @brief A hotkey string
          **/
@@ -2431,8 +2430,7 @@ extern "C"
     /**
      * @brief fcitx key state (modifier keys)
      **/
-    typedef enum _KEY_STATE
-    {
+    typedef enum _KEY_STATE {
         KEY_NONE = 0,
         KEY_SHIFT_COMP = 1 << 0,
         KEY_CAPSLOCK = 1 << 1,

@@ -47,7 +47,7 @@
 struct _FcitxInstance;
 
 typedef struct _FcitxXEventHandler {
-    boolean (*eventHandler)(void* instance, XEvent* event);
+    boolean(*eventHandler)(void* instance, XEvent* event);
     void* instance;
 } FcitxXEventHandler;
 
@@ -79,4 +79,4 @@ typedef enum _FcitxXWindowType {
 } FcitxXWindowType;
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

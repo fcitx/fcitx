@@ -36,4 +36,4 @@ extern "C" {
 #endif
 
 #endif // FCITX_IPC_H
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -75,40 +75,32 @@ void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *op
     char *pstr = *(char**) value;
 
     if (sync == Raw2Value) {
-        if (!strcasecmp (pstr, "SHIFT")) {
+        if (!strcasecmp(pstr, "SHIFT")) {
             fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = Key_Shift_L;        //左SHIFT的扫描码
             fc->i2ndSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
             fc->i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
             fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = Key_Shift_R;        //右SHIFT的扫描码
             fc->i3rdSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
             fc->i3rdSelectKey[1].state = KEY_NONE;
-        }
-        else if (!strcasecmp (pstr, "CTRL")) {
+        } else if (!strcasecmp(pstr, "CTRL")) {
             fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = Key_Control_L;        //左CTRL的扫描码
             fc->i2ndSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
             fc->i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
             fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = Key_Control_R;       //右CTRL的扫描码
             fc->i3rdSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
             fc->i3rdSelectKey[1].state = KEY_NONE;
-        }
-        else {
-            if (pstr[0] && pstr[0]!='0')
-            {
+        } else {
+            if (pstr[0] && pstr[0] != '0') {
                 fc->i2ndSelectKey[0].sym = pstr[0] & 0xFF;
                 fc->i2ndSelectKey[0].state = KEY_NONE;
-            }
-            else
-            {
+            } else {
                 fc->i2ndSelectKey[0].sym = 0;
                 fc->i2ndSelectKey[0].state = KEY_NONE;
             }
-            if (pstr[1] && pstr[1]!='0')
-            {
+            if (pstr[1] && pstr[1] != '0') {
                 fc->i3rdSelectKey[0].sym = pstr[1] & 0xFF;
                 fc->i3rdSelectKey[0].state = KEY_NONE;
-            }
-            else
-            {
+            } else {
                 fc->i3rdSelectKey[0].sym = 0;
                 fc->i3rdSelectKey[0].state = KEY_NONE;
             }
@@ -123,11 +115,9 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
     FCITX_UNUSED(arg);
     FcitxConfig* fc = (FcitxConfig*) config;
     HOTKEYS* hkey = NULL;
-    if (sync == Raw2Value)
-    {
+    if (sync == Raw2Value) {
         SWITCHKEY *s = (SWITCHKEY*)value;
-        switch (*s)
-        {
+        switch (*s) {
         case SWITCHKEY_R_CTRL:
             hkey = FCITX_RCTRL;
             break;
@@ -144,8 +134,7 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
             hkey = FCITX_NONE_KEY;
         }
     }
-    if (hkey != NULL)
-    {
+    if (hkey != NULL) {
         fc->switchKey[0] = hkey[0];
         fc->switchKey[1] = hkey[1];
     }

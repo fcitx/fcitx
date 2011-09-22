@@ -40,9 +40,9 @@
 #include "instance-internal.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
-        || (icase ? \
-            (0 != strcmp(getenv(env), (value))) \
-            : (0 != strcasecmp(getenv(env), (value)))))
+                                      || (icase ? \
+                                              (0 != strcmp(getenv(env), (value))) \
+                                              : (0 != strcasecmp(getenv(env), (value)))))
 
 FCITX_GETTER_REF(FcitxInstance, Addons, addons, UT_array)
 FCITX_GETTER_REF(FcitxInstance, UIMenus, uimenus, UT_array)
@@ -70,7 +70,7 @@ static void* RunInstance(void* arg);
 /**
  * @brief 显示命令行参数
  */
-void Usage ()
+void Usage()
 {
     printf("Usage: fcitx [OPTION]\n"
            "\t-d\t\t\trun as daemon(default)\n"
@@ -84,9 +84,9 @@ void Usage ()
 /**
  * @brief 显示版本
  */
-void Version ()
+void Version()
 {
-    printf ("fcitx version: %s\n", VERSION);
+    printf("fcitx version: %s\n", VERSION);
 }
 
 FCITX_EXPORT_API
@@ -126,8 +126,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);
-    if (!LoadAllIM(instance))
-    {
+    if (!LoadAllIM(instance)) {
         EndInstance(instance);
         return instance;
     }
@@ -140,14 +139,12 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
     SwitchIM(instance, instance->profile->iIMIndex);
 
-    if (!LoadFrontend(instance))
-    {
+    if (!LoadFrontend(instance)) {
         EndInstance(instance);
         return instance;
     }
 
-    if (instance->config->bFirstRun)
-    {
+    if (instance->config->bFirstRun) {
         instance->config->bFirstRun = false;
         SaveConfig(instance->config);
 
@@ -190,15 +187,13 @@ error_exit:
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
-    while (1)
-    {
+    while (1) {
         FcitxAddon** pmodule;
         do {
             instance->uiflag = UI_NONE;
             for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
                     pmodule != NULL;
-                    pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
-            {
+                    pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
                 FcitxModule* module = (*pmodule)->module;
                 module->ProcessEvent((*pmodule)->addonInstance);
             }
@@ -217,8 +212,7 @@ void* RunInstance(void* arg)
         instance->maxfd = 0;
         for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
                 pmodule != NULL;
-                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule))
-        {
+                pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
             FcitxModule* module = (*pmodule)->module;
             module->SetFD((*pmodule)->addonInstance);
         }
@@ -243,8 +237,7 @@ void EndInstance(FcitxInstance* instance)
     for (pimclass = (FcitxAddon**) utarray_front(&instance->imeclasses);
             pimclass != NULL;
             pimclass = (FcitxAddon**) utarray_next(&instance->imeclasses, pimclass)
-        )
-    {
+        ) {
         if ((*pimclass)->imclass->Destroy)
             (*pimclass)->imclass->Destroy((*pimclass)->addonInstance);
     }
@@ -265,8 +258,7 @@ void EndInstance(FcitxInstance* instance)
     for (pfrontend = (FcitxAddon**) utarray_front(&instance->frontends);
             pfrontend != NULL;
             pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend)
-        )
-    {
+        ) {
         if (pfrontend == NULL)
             return;
         FcitxFrontend* frontend = (*pfrontend)->frontend;
@@ -316,7 +308,7 @@ boolean GetRemindEnabled(void* arg)
 
 boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 {
-    struct option longOptions[] ={
+    struct option longOptions[] = {
         {"ui", 1, 0, 0},
         {"help", 0, 0, 0}
     };
@@ -326,14 +318,10 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     char* uiname = NULL;
     boolean runasdaemon = true;
     int             overrideDelay = -1;
-    while ((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF)
-    {
-        switch (c)
-        {
-        case 0:
-        {
-            switch (optionIndex)
-            {
+    while ((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF) {
+        switch (c) {
+        case 0: {
+            switch (optionIndex) {
             case 0:
                 uiname = strdup(optarg);
                 break;
@@ -400,8 +388,7 @@ boolean SetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 
     IME_STATE nextstate = GetCurrentState(instance);
 
-    if (!((prevstate == IS_CLOSED && nextstate == IS_CLOSED) || (prevstate != IS_CLOSED && nextstate != IS_CLOSED)))
-    {
+    if (!((prevstate == IS_CLOSED && nextstate == IS_CLOSED) || (prevstate != IS_CLOSED && nextstate != IS_CLOSED))) {
         if (prevstate == IS_CLOSED)
             instance->timeStart = time(NULL);
         else

@@ -39,16 +39,14 @@
 
 #define TABLE_GBKS2T "gbks2t.tab"
 
-typedef struct _simple2trad_t
-{
+typedef struct _simple2trad_t {
     int wc;
     char str[UTF8_MAX_LENGTH + 1];
     size_t len;
     UT_hash_handle hh;
 } simple2trad_t;
 
-typedef enum _ChttransEngine
-{
+typedef enum _ChttransEngine {
     ENGINE_NATIVE,
     ENGINE_OPENCC
 } ChttransEngine;
@@ -66,7 +64,7 @@ typedef struct _FcitxChttrans {
 static void* ChttransCreate(FcitxInstance* instance);
 static char* ChttransOutputFilter(void* arg, const char* strin);
 static void ReloadChttrans(void* arg);
-static char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char* strHZ);
+static char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char* strHZ);
 static boolean GetChttransEnabled();
 boolean LoadChttransConfig(FcitxChttrans* transState);
 static ConfigFileDesc* GetChttransConfigDesc();
@@ -75,14 +73,13 @@ static INPUT_RETURN_VALUE HotkeyToggleChttransState(void*);
 static void ToggleChttransState(void*);
 
 CONFIG_BINDING_BEGIN(FcitxChttrans)
-CONFIG_BINDING_REGISTER("TraditionalChinese","TransEngine", engine)
-CONFIG_BINDING_REGISTER("TraditionalChinese","Enabled", enabled)
-CONFIG_BINDING_REGISTER("TraditionalChinese","Hotkey", hkToggle)
+CONFIG_BINDING_REGISTER("TraditionalChinese", "TransEngine", engine)
+CONFIG_BINDING_REGISTER("TraditionalChinese", "Enabled", enabled)
+CONFIG_BINDING_REGISTER("TraditionalChinese", "Hotkey", hkToggle)
 CONFIG_BINDING_END()
 
 FCITX_EXPORT_API
-FcitxModule module =
-{
+FcitxModule module = {
     ChttransCreate,
     NULL,
     NULL,
@@ -97,8 +94,7 @@ void* ChttransCreate(FcitxInstance* instance)
 {
     FcitxChttrans* transState = fcitx_malloc0(sizeof(FcitxChttrans));
     transState->owner = instance;
-    if (!LoadChttransConfig(transState))
-    {
+    if (!LoadChttransConfig(transState)) {
         free(transState);
         return NULL;
     }
@@ -154,31 +150,27 @@ char* ChttransOutputFilter(void* arg, const char *strin)
  * WARNING： 该函数返回新分配内存字符串，请调用者
  * 注意释放。
  */
-char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
+char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
 {
     if (strHZ == NULL)
         return NULL;
 
-    switch (transState->engine)
-    {
+    switch (transState->engine) {
     case ENGINE_OPENCC:
 #ifdef _ENABLE_OPENCC
         {
             static opencc_t od = NULL;
-            if (od == NULL)
-            {
+            if (od == NULL) {
                 od = opencc_open(OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
-                if (od == (opencc_t) -1)
-                {
+                if (od == (opencc_t) - 1) {
                     opencc_perror(_("OpenCC initialization error"));
                     return NULL;
                 }
             }
 
-            char * res = opencc_convert_utf8(od, strHZ, (size_t) -1);
+            char * res = opencc_convert_utf8(od, strHZ, (size_t) - 1);
 
-            if (res == (char *) -1)
-            {
+            if (res == (char *) - 1) {
                 opencc_perror(_("OpenCC error"));
                 return NULL;
             }
@@ -186,8 +178,7 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             return res;
         }
 #endif
-    case ENGINE_NATIVE:
-    {
+    case ENGINE_NATIVE: {
         FILE           *fp;
         char           *ret;
         int             i, len, ret_len;
@@ -200,12 +191,11 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
 
             fp = GetXDGFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
             if (!fp) {
-                ret = (char *) malloc (sizeof (char) * (strlen (strHZ) + 1));
-                strcpy (ret, strHZ);
+                ret = (char *) malloc(sizeof(char) * (strlen(strHZ) + 1));
+                strcpy(ret, strHZ);
                 return ret;
             }
-            while (getline(&strBuf, &bufLen, fp) != -1)
-            {
+            while (getline(&strBuf, &bufLen, fp) != -1) {
                 simple2trad_t *s2t;
                 char *ps;
                 int wc;
@@ -224,9 +214,9 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
         }
 
         i = 0;
-        len = utf8_strlen (strHZ);
+        len = utf8_strlen(strHZ);
         ret_len = 0;
-        ret = (char *) malloc (sizeof (char) * (UTF8_MAX_LENGTH * len + 1));
+        ret = (char *) malloc(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {
@@ -237,13 +227,10 @@ char *ConvertGBKSimple2Tradition (FcitxChttrans* transState, const char *strHZ)
             nps = utf8_get_char(ps , &wc);
             HASH_FIND_INT(transState->s2t_table, &wc, s2t);
 
-            if (s2t)
-            {
+            if (s2t) {
                 strcat(ret, s2t->str);
                 ret_len += s2t->len;
-            }
-            else
-            {
+            } else {
                 strncat(ret, ps, chr_len);
                 ret_len += chr_len;
             }

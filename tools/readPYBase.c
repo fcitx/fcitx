@@ -37,10 +37,8 @@ int main(int argc, char **argv)
     struct _HZMap *HZMap;
     char c;
 
-    while ((c = getopt(argc, argv, "b:h")) != -1)
-    {
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "b:h")) != -1) {
+        switch (c) {
 
         case 'b':
             pybase_mb = strdup(optarg);
@@ -58,8 +56,7 @@ int main(int argc, char **argv)
     else
         fi = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
 
-    if (!fi)
-    {
+    if (!fi) {
         perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
         exit(1);
@@ -69,25 +66,21 @@ int main(int argc, char **argv)
 
     PYFACount = LoadPYBase(fi, &HZMap);
 
-    if (PYFACount > 0)
-    {
+    if (PYFACount > 0) {
 #if 0
 
-        for (i = 0; i < PYFACount; ++i)
-        {
+        for (i = 0; i < PYFACount; ++i) {
             printf("%s: ", HZMap[i].Map);
             fwrite(HZMap[i].HZ, 2, HZMap[i].BaseCount, stdout);
             printf("\n\n");
         }
 
 #else
-        for (i = 0; i < PYFACount; ++i)
-        {
+        for (i = 0; i < PYFACount; ++i) {
             int j;
             printf("%s: HZ Index\n", HZMap[i].Map);
 
-            for (j = 0; j < HZMap[i].BaseCount; ++j)
-            {
+            for (j = 0; j < HZMap[i].BaseCount; ++j) {
                 printf("\t%s %5d", HZMap[i].HZ[j], HZMap[i].Index[j]);
             }
 
@@ -119,4 +112,4 @@ void usage()
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

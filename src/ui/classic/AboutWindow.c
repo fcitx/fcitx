@@ -39,18 +39,18 @@ char            AboutEmail[] = "yuking_net@sohu.com";
 char            AboutCopyRight[] = "(c) 2005, Yuking";
 char            strTitle[100];
 
-static void            InitAboutWindowProperty (AboutWindow* aboutWindow);
+static void            InitAboutWindowProperty(AboutWindow* aboutWindow);
 static boolean AboutWindowEventHandler(void *arg, XEvent* event);
 
-AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
+AboutWindow* CreateAboutWindow(FcitxClassicUI *classicui)
 {
     AboutWindow *aboutWindow = fcitx_malloc0(sizeof(AboutWindow));
     Display* dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     int dwidth, dheight;
-    strcpy (strTitle, AboutTitle);
-    strcat (strTitle, " ");
-    strcat (strTitle, VERSION);
+    strcpy(strTitle, AboutTitle);
+    strcat(strTitle, " ");
+    strcat(strTitle, VERSION);
     GetScreenSize(classicui, &dwidth, &dheight);
 
     aboutWindow->owner = classicui;
@@ -59,16 +59,16 @@ AboutWindow* CreateAboutWindow (FcitxClassicUI *classicui)
     aboutWindow->fontColor.r = aboutWindow->fontColor.g = aboutWindow->fontColor.b = 0;
     aboutWindow->fontSize = 11;
 
-    ABOUT_WINDOW_WIDTH = StringWidth (strTitle, classicui->font, aboutWindow->fontSize ) + 50;
+    ABOUT_WINDOW_WIDTH = StringWidth(strTitle, classicui->font, aboutWindow->fontSize) + 50;
     aboutWindow->window =
-        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+        XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2, ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT, 0, WhitePixel(dpy, DefaultScreen(dpy)), WhitePixel(dpy, DefaultScreen(dpy)));
 
     aboutWindow->surface = cairo_xlib_surface_create(dpy, aboutWindow->window, DefaultVisual(dpy, iScreen), ABOUT_WINDOW_WIDTH, ABOUT_WINDOW_HEIGHT);
     if (aboutWindow->window == None)
         return NULL;
 
-    InitAboutWindowProperty (aboutWindow);
-    XSelectInput (dpy, aboutWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    InitAboutWindowProperty(aboutWindow);
+    XSelectInput(dpy, aboutWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = AboutWindowEventHandler;
@@ -84,23 +84,18 @@ boolean AboutWindowEventHandler(void *arg, XEvent* event)
     if (event->type == ClientMessage
             && event->xclient.data.l[0] == aboutWindow->owner->killAtom
             && event->xclient.window == aboutWindow->window
-       )
-    {
+       ) {
         XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
         return true;
     }
 
-    if (event->xany.window == aboutWindow->window)
-    {
-        switch (event->type)
-        {
+    if (event->xany.window == aboutWindow->window) {
+        switch (event->type) {
         case Expose:
             DrawAboutWindow(aboutWindow);
             break;
-        case ButtonRelease:
-        {
-            switch (event->xbutton.button)
-            {
+        case ButtonRelease: {
+            switch (event->xbutton.button) {
             case Button1:
                 XUnmapWindow(aboutWindow->owner->dpy, aboutWindow->window);
                 break;
@@ -113,30 +108,30 @@ boolean AboutWindowEventHandler(void *arg, XEvent* event)
     return false;
 }
 
-void InitAboutWindowProperty (AboutWindow* aboutWindow)
+void InitAboutWindowProperty(AboutWindow* aboutWindow)
 {
     FcitxClassicUI *classicui = aboutWindow->owner;
     Display* dpy = classicui->dpy;
-    XSetTransientForHint (dpy, aboutWindow->window, DefaultRootWindow (dpy));
+    XSetTransientForHint(dpy, aboutWindow->window, DefaultRootWindow(dpy));
 
     ClassicUISetWindowProperty(classicui, aboutWindow->window, FCITX_WINDOW_DIALOG, AboutCaption);
 
-    XSetWMProtocols (dpy, aboutWindow->window, &classicui->killAtom, 1);
+    XSetWMProtocols(dpy, aboutWindow->window, &classicui->killAtom, 1);
 }
 
-void DisplayAboutWindow (AboutWindow* aboutWindow)
+void DisplayAboutWindow(AboutWindow* aboutWindow)
 {
     FcitxClassicUI *classicui = aboutWindow->owner;
     Display* dpy = classicui->dpy;
     int dwidth, dheight;
     GetScreenSize(classicui, &dwidth, &dheight);
-    XMapRaised (dpy, aboutWindow->window);
-    XMoveWindow (dpy, aboutWindow->window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
+    XMapRaised(dpy, aboutWindow->window);
+    XMoveWindow(dpy, aboutWindow->window, (dwidth - ABOUT_WINDOW_WIDTH) / 2, (dheight - ABOUT_WINDOW_HEIGHT) / 2);
 }
 
 
 
-void DrawAboutWindow (AboutWindow* aboutWindow)
+void DrawAboutWindow(AboutWindow* aboutWindow)
 {
     FcitxClassicUI *classicui = aboutWindow->owner;
     cairo_t *c = cairo_create(aboutWindow->surface);
@@ -144,13 +139,13 @@ void DrawAboutWindow (AboutWindow* aboutWindow)
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_paint(c);
 
-    OutputString (c, strTitle, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (strTitle, classicui->font, aboutWindow->fontSize)) / 2, 6 + 30, &aboutWindow->fontColor);
+    OutputString(c, strTitle, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth(strTitle, classicui->font, aboutWindow->fontSize)) / 2, 6 + 30, &aboutWindow->fontColor);
 
-    OutputString (c, AboutEmail, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutEmail, classicui->font, aboutWindow->fontSize)) / 2, 6 + 60, &aboutWindow->fontColor);
+    OutputString(c, AboutEmail, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth(AboutEmail, classicui->font, aboutWindow->fontSize)) / 2, 6 + 60, &aboutWindow->fontColor);
 
-    OutputString (c, AboutCopyRight, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth (AboutCopyRight, classicui->font, aboutWindow->fontSize)) / 2, 6 + 80, &aboutWindow->fontColor);
+    OutputString(c, AboutCopyRight, classicui->font, aboutWindow->fontSize, (ABOUT_WINDOW_WIDTH - StringWidth(AboutCopyRight, classicui->font, aboutWindow->fontSize)) / 2, 6 + 80, &aboutWindow->fontColor);
 
     cairo_destroy(c);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

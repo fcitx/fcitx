@@ -57,8 +57,7 @@ extern "C" {
     /**
      * @brief struct opposite to ~/.config/fcitx/config
      **/
-    typedef struct _FcitxConfig
-    {
+    typedef struct _FcitxConfig {
         /**
          * @brief derives GenericConfig
          **/

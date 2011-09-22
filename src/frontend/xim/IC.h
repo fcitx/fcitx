@@ -37,45 +37,45 @@ struct _FcitxXimFrontend;
  * @brief XIM Preedit Attributes
  **/
 typedef struct {
-    XRectangle      area;	/* area */
-    XRectangle      area_needed;	/* area needed */
-    XPoint          spot_location;	/* spot location */
-    Colormap        cmap;	/* colormap */
-    CARD32          foreground;	/* foreground */
-    CARD32          background;	/* background */
-    Pixmap          bg_pixmap;	/* background pixmap */
-    char           *base_font;	/* base font of fontset */
-    CARD32          line_space;	/* line spacing */
-    Cursor          cursor;	/* cursor */
+    XRectangle      area;   /* area */
+    XRectangle      area_needed;    /* area needed */
+    XPoint          spot_location;  /* spot location */
+    Colormap        cmap;   /* colormap */
+    CARD32          foreground; /* foreground */
+    CARD32          background; /* background */
+    Pixmap          bg_pixmap;  /* background pixmap */
+    char           *base_font;  /* base font of fontset */
+    CARD32          line_space; /* line spacing */
+    Cursor          cursor; /* cursor */
 } PreeditAttributes;
 
 /**
  * @brief XIM Status Attributes
  **/
 typedef struct {
-    XRectangle      area;	/* area */
-    XRectangle      area_needed;	/* area needed */
-    Colormap        cmap;	/* colormap */
-    CARD32          foreground;	/* foreground */
-    CARD32          background;	/* background */
-    Pixmap          bg_pixmap;	/* background pixmap */
-    char           *base_font;	/* base font of fontset */
-    CARD32          line_space;	/* line spacing */
-    Cursor          cursor;	/* cursor */
+    XRectangle      area;   /* area */
+    XRectangle      area_needed;    /* area needed */
+    Colormap        cmap;   /* colormap */
+    CARD32          foreground; /* foreground */
+    CARD32          background; /* background */
+    Pixmap          bg_pixmap;  /* background pixmap */
+    char           *base_font;  /* base font of fontset */
+    CARD32          line_space; /* line spacing */
+    Cursor          cursor; /* cursor */
 } StatusAttributes;
 
 /**
  * @brief Input Context for Fcitx XIM Frontend
  **/
 typedef struct _FcitxXimIC {
-    CARD16          id;		/* ic id */
-    INT32           input_style;	/* input style */
-    Window          client_win;	/* client window */
-    Window          focus_win;	/* focus window */
-    char           *resource_name;	/* resource name */
-    char           *resource_class;	/* resource class */
-    PreeditAttributes pre_attr;	/* preedit attributes */
-    StatusAttributes sts_attr;	/* status attributes */
+    CARD16          id;     /* ic id */
+    INT32           input_style;    /* input style */
+    Window          client_win; /* client window */
+    Window          focus_win;  /* focus window */
+    char           *resource_name;  /* resource name */
+    char           *resource_class; /* resource class */
+    PreeditAttributes pre_attr; /* preedit attributes */
+    StatusAttributes sts_attr;  /* status attributes */
 
     CARD16 connect_id;
     int bPreeditStarted;
@@ -87,11 +87,11 @@ typedef struct _FcitxXimIC {
 
 struct FcitxXimFrontend;
 
-void     XimCreateIC (void* arg, FcitxInputContext* context, void *priv);
-void     XimDestroyIC (void* arg, FcitxInputContext* arg1);
-boolean  XimCheckIC (void* arg, FcitxInputContext* arg1, void* arg2);
-void     XimSetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
-void     XimGetIC (struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+void     XimCreateIC(void* arg, FcitxInputContext* context, void *priv);
+void     XimDestroyIC(void* arg, FcitxInputContext* arg1);
+boolean  XimCheckIC(void* arg, FcitxInputContext* arg1, void* arg2);
+void     XimSetIC(struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
+void     XimGetIC(struct _FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 boolean  XimCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 
 #endif

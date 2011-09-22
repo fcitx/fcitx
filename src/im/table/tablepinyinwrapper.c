@@ -52,8 +52,7 @@ INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, CandidateWord* candidateWord)
     FcitxTableState* tbl = arg;
     INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance, candidateWord);
     Table_ResetPY(tbl->pyaddon);
-    if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
-    {
+    if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING)) {
         strcpy(GetOutputString(FcitxInstanceGetInputState(tbl->owner)), candidateWord->strWord);
     }
 

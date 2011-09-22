@@ -47,35 +47,32 @@ FCITX_EXPORT_API
 FcitxInputContext* CreateIC(FcitxInstance* instance, int frontendid, void * priv)
 {
     UT_array* frontends = &instance->frontends;
-    FcitxAddon** pfrontend =(FcitxAddon**) utarray_eltptr(frontends, frontendid);
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
     if (pfrontend == NULL)
         return NULL;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
 
     FcitxInputContext *rec;
-    if (instance->free_list != NULL)
-    {
+    if (instance->free_list != NULL) {
         rec = instance->free_list;
         instance->free_list = instance->free_list->next;
-    }
-    else
+    } else
         rec = malloc(sizeof(FcitxInputContext));
 
-    memset (rec, 0, sizeof(FcitxInputContext));
+    memset(rec, 0, sizeof(FcitxInputContext));
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
-    switch (instance->config->shareState)
-    {
-        case ShareState_All:
-            rec->state = instance->globalState;
-            break;
-        case ShareState_None:
-        case ShareState_PerProgram:
-            rec->state = instance->config->defaultIMState;
-            break;
-        default:
-            break;
+    switch (instance->config->shareState) {
+    case ShareState_All:
+        rec->state = instance->globalState;
+        break;
+    case ShareState_None:
+    case ShareState_PerProgram:
+        rec->state = instance->config->defaultIMState;
+        break;
+    default:
+        break;
     }
 
     frontend->CreateIC((*pfrontend)->addonInstance, rec, priv);
@@ -94,8 +91,7 @@ FcitxInputContext* FindIC(FcitxInstance* instance, int frontendid, void *filter)
         return NULL;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     FcitxInputContext *rec = instance->ic_list;
-    while (rec != NULL)
-    {
+    while (rec != NULL) {
         if (rec->frontendid == frontendid && frontend->CheckIC((*pfrontend)->addonInstance, rec, filter))
             return rec;
         rec = rec->next;
@@ -114,10 +110,8 @@ void SetICStateFromSameApplication(FcitxInstance* instance, int frontendid, Fcit
     if (!frontend->CheckICFromSameApplication)
         return;
     FcitxInputContext *rec = instance->ic_list;
-    while (rec != NULL)
-    {
-        if (rec->frontendid == frontendid && frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-        {
+    while (rec != NULL) {
+        if (rec->frontendid == frontendid && frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic)) {
             ic->state = rec->state;
             break;
         }
@@ -147,8 +141,7 @@ void DestroyIC(FcitxInstance* instance, int frontendid, void* filter)
             rec->next = instance->free_list;
             instance->free_list = rec;
 
-            if (rec == GetCurrentIC(instance))
-            {
+            if (rec == GetCurrentIC(instance)) {
                 CloseInputWindow(instance);
                 OnInputUnFocus(instance);
                 SetCurrentIC(instance, NULL);
@@ -280,17 +273,13 @@ boolean LoadFrontend(FcitxInstance* instance)
     FcitxAddon *addon;
     int frontendindex = 0;
     utarray_clear(frontends);
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
-        if (addon->bEnabled && addon->category == AC_FRONTEND)
-        {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->bEnabled && addon->category == AC_FRONTEND) {
             char *modulePath;
-            switch (addon->type)
-            {
-            case AT_SHAREDLIBRARY:
-            {
+            switch (addon->type) {
+            case AT_SHAREDLIBRARY: {
                 FILE *fp = GetLibFile(addon->library, "r", &modulePath);
                 void *handle;
                 FcitxFrontend* frontend;
@@ -298,28 +287,24 @@ boolean LoadFrontend(FcitxInstance* instance)
                     break;
                 fclose(fp);
                 handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
-                if (!handle)
-                {
-                    FcitxLog(ERROR, _("Frontend: open %s fail %s") ,modulePath ,dlerror());
+                if (!handle) {
+                    FcitxLog(ERROR, _("Frontend: open %s fail %s") , modulePath , dlerror());
                     break;
                 }
-                
-                if (!CheckABIVersion(handle))
-                {
+
+                if (!CheckABIVersion(handle)) {
                     FcitxLog(ERROR, "%s ABI Version Error", addon->name);
                     dlclose(handle);
                     break;
                 }
-                
-                frontend=dlsym(handle,"frontend");
-                if (!frontend || !frontend->Create)
-                {
+
+                frontend = dlsym(handle, "frontend");
+                if (!frontend || !frontend->Create) {
                     FcitxLog(ERROR, _("Frontend: bad frontend"));
                     dlclose(handle);
                     break;
                 }
-                if ((addon->addonInstance = frontend->Create(instance, frontendindex)) == NULL)
-                {
+                if ((addon->addonInstance = frontend->Create(instance, frontendindex)) == NULL) {
                     dlclose(handle);
                     break;
                 }
@@ -335,8 +320,7 @@ boolean LoadFrontend(FcitxInstance* instance)
         }
     }
 
-    if (utarray_len(&instance->frontends) <= 0)
-    {
+    if (utarray_len(&instance->frontends) <= 0) {
         FcitxLog(ERROR, _("No available frontend"));
         return false;
     }

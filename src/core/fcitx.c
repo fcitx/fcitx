@@ -53,8 +53,7 @@ FcitxInstance* instance;
 
 static void WaitForEnd(sem_t *sem, int count)
 {
-    while (count)
-    {
+    while (count) {
         sem_wait(sem);
         count --;
     }
@@ -68,7 +67,7 @@ int main(int argc, char* argv[])
 #else
     int pagesize = 4 * 1024;
 #endif // HAVE_UNISTD_H
-    mallopt(M_TRIM_THRESHOLD, 5*pagesize);
+    mallopt(M_TRIM_THRESHOLD, 5 * pagesize);
 #endif // M_TRIM_THRESHOLD
 
     setlocale(LC_ALL, "");
@@ -87,4 +86,4 @@ int main(int argc, char* argv[])
     WaitForEnd(&sem, instanceCount);
     return 0;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

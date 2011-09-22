@@ -36,10 +36,10 @@ extern "C" {
     /**
      * @brief key filter function
      **/
-    typedef boolean (*FcitxKeyFilter)(void* arg, FcitxKeySym sym,
-                                      unsigned int state,
-                                      INPUT_RETURN_VALUE *retval
-                                     );
+    typedef boolean(*FcitxKeyFilter)(void* arg, FcitxKeySym sym,
+                                     unsigned int state,
+                                     INPUT_RETURN_VALUE *retval
+                                    );
 
     /**
      * @brief string filter function
@@ -65,7 +65,7 @@ extern "C" {
          *
          * @return INPUT_RETURN_VALUE*
          **/
-        INPUT_RETURN_VALUE (*hotkeyhandle)(void*);
+        INPUT_RETURN_VALUE(*hotkeyhandle)(void*);
         /**
          * @brief Argument
          **/
@@ -75,8 +75,7 @@ extern "C" {
     /**
      * @brief Key filter hook
      **/
-    typedef struct _KeyFilterHook
-    {
+    typedef struct _KeyFilterHook {
         /**
          * @brief Key filter function
          **/
@@ -90,8 +89,7 @@ extern "C" {
     /**
      * @brief Hook for string filter, this hook can change the output string.
      **/
-    typedef struct _StringFilterHook
-    {
+    typedef struct _StringFilterHook {
         /**
          * @brief Filter function
          **/
@@ -105,8 +103,7 @@ extern "C" {
     /**
      * @brief IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
      **/
-    typedef struct _FcitxIMEventHook
-    {
+    typedef struct _FcitxIMEventHook {
         FcitxIMEventHookFunc func;
         void *arg;
     } FcitxIMEventHook;

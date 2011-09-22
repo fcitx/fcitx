@@ -35,28 +35,24 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "Xi18n.h"
 #include "XimFunc.h"
 
-typedef struct
-{
+typedef struct {
     char *name;
     CARD16 type;
 } IMListOfAttr;
 
-typedef struct
-{
+typedef struct {
     char *name;
     CARD8 major_opcode;
     CARD8 minor_opcode;
 } IMExtList;
 
-IMListOfAttr Default_IMattr[] =
-{
+IMListOfAttr Default_IMattr[] = {
     {XNQueryInputStyle,   XimType_XIMStyles},
-    /*    {XNQueryIMValuesList, XimType_XIMValuesList},	*/
+    /*    {XNQueryIMValuesList, XimType_XIMValuesList}, */
     {(char *) NULL, (CARD16) 0}
 };
 
-IMListOfAttr Default_ICattr[] =
-{
+IMListOfAttr Default_ICattr[] = {
     {XNInputStyle,              XimType_CARD32},
     {XNClientWindow,            XimType_Window},
     {XNFocusWindow,             XimType_Window},
@@ -78,8 +74,7 @@ IMListOfAttr Default_ICattr[] =
     {(char *)NULL, (CARD16) 0}
 };
 
-IMExtList Default_Extension[] =
-{
+IMExtList Default_Extension[] = {
     {"XIM_EXT_MOVE", XIM_EXTENSION, XIM_EXT_MOVE},
     {"XIM_EXT_SET_EVENT_MASK", XIM_EXTENSION, XIM_EXT_SET_EVENT_MASK},
     {"XIM_EXT_FORWARD_KEYEVENT", XIM_EXTENSION, XIM_EXT_FORWARD_KEYEVENT},
@@ -90,40 +85,38 @@ static void CountAttrList(IMListOfAttr *attr, int *total_count)
 {
     *total_count = 0;
 
-    while (attr->name != NULL)
-    {
+    while (attr->name != NULL) {
         attr++;
         ++(*total_count);
     }
 }
 
-static XIMAttr *CreateAttrList (Xi18n i18n_core,
-                                IMListOfAttr *attr,
-                                int *total_count)
+static XIMAttr *CreateAttrList(Xi18n i18n_core,
+                               IMListOfAttr *attr,
+                               int *total_count)
 {
     XIMAttr *args, *p;
     unsigned int buf_size;
 
     CountAttrList(attr, total_count);
 
-    buf_size = (unsigned) (*total_count + 1)*sizeof (XIMAttr);
-    args = (XIMAttr *) malloc (buf_size);
+    buf_size = (unsigned)(*total_count + 1) * sizeof(XIMAttr);
+    args = (XIMAttr *) malloc(buf_size);
     if (!args)
         return (XIMAttr *) NULL;
     /*endif*/
-    memset (args, 0, buf_size);
+    memset(args, 0, buf_size);
 
-    for (p = args;  attr->name != NULL;  attr++, p++)
-    {
+    for (p = args;  attr->name != NULL;  attr++, p++) {
         p->name = attr->name;
-        p->length = strlen (attr->name);
+        p->length = strlen(attr->name);
         p->type = (CARD16) attr->type;
-        p->attribute_id = XrmStringToQuark (p->name);
-        if (strcmp (p->name, XNPreeditAttributes) == 0)
+        p->attribute_id = XrmStringToQuark(p->name);
+        if (strcmp(p->name, XNPreeditAttributes) == 0)
             i18n_core->address.preeditAttr_id = p->attribute_id;
-        else if (strcmp (p->name, XNStatusAttributes) == 0)
+        else if (strcmp(p->name, XNStatusAttributes) == 0)
             i18n_core->address.statusAttr_id = p->attribute_id;
-        else if (strcmp (p->name, XNSeparatorofNestedList) == 0)
+        else if (strcmp(p->name, XNSeparatorofNestedList) == 0)
             i18n_core->address.separatorAttr_id = p->attribute_id;
         /*endif*/
     }
@@ -133,25 +126,25 @@ static XIMAttr *CreateAttrList (Xi18n i18n_core,
     return args;
 }
 
-void _Xi18nInitAttrList (Xi18n i18n_core)
+void _Xi18nInitAttrList(Xi18n i18n_core)
 {
     XIMAttr *args;
-    int	total_count;
+    int total_count;
 
     /* init IMAttr list */
     if (i18n_core->address.xim_attr)
-        XFree ((char *)i18n_core->address.xim_attr);
+        XFree((char *)i18n_core->address.xim_attr);
     /*endif*/
-    args = CreateAttrList (i18n_core, Default_IMattr, &total_count);
+    args = CreateAttrList(i18n_core, Default_IMattr, &total_count);
 
     i18n_core->address.im_attr_num = total_count;
     i18n_core->address.xim_attr = (XIMAttr *)args;
 
     /* init ICAttr list */
     if (i18n_core->address.xic_attr)
-        XFree ((char *) i18n_core->address.xic_attr);
+        XFree((char *) i18n_core->address.xic_attr);
     /*endif*/
-    args = CreateAttrList (i18n_core, Default_ICattr, &total_count);
+    args = CreateAttrList(i18n_core, Default_ICattr, &total_count);
 
     i18n_core->address.ic_attr_num = total_count;
     i18n_core->address.xic_attr = (XICAttr *) args;
@@ -163,8 +156,7 @@ void _Xi18nInitExtension(Xi18n i18n_core)
     IMExtList *extensions = (IMExtList *) Default_Extension;
     XIMExt *ext_list = (XIMExt *) i18n_core->address.extension;
 
-    for (i = 0;  extensions->name;  i++, ext_list++, extensions++)
-    {
+    for (i = 0;  extensions->name;  i++, ext_list++, extensions++) {
         ext_list->major_opcode = extensions->major_opcode;
         ext_list->minor_opcode = extensions->minor_opcode;
         ext_list->name = extensions->name;
@@ -174,4 +166,4 @@ void _Xi18nInitExtension(Xi18n i18n_core)
     i18n_core->address.ext_num = i;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

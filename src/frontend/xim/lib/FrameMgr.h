@@ -45,12 +45,11 @@ SOFTWARE.
 
 #define COUNTER_MASK 0x10
 
-typedef enum
-{
+typedef enum {
     BIT8     = 0x1,       /* {CARD8* | INT8*}   */
     BIT16    = 0x2,       /* {CARD16* | INT16*} */
     BIT32    = 0x3,       /* {CARD32* | INT32*} */
-    BIT64    = 0x4,	  /* {CARD64* | INT64*} */
+    BIT64    = 0x4,   /* {CARD64* | INT64*} */
     BARRAY   = 0x5,       /* int*, void*        */
     ITER     = 0x6,       /* int*               */
     POINTER  = 0x7,       /* specifies next item is a PTR_ITEM */
@@ -62,8 +61,8 @@ typedef enum
      *   should also modify the logic in FrameMgr program.
      */
     PADDING  = 0x9,       /* specifies that a padding is needed.
-		           * This requires extra data in data field.
-		           */
+                   * This requires extra data in data field.
+                   */
     EOL      = 0xA,       /* specifies the end of list */
 
     COUNTER_BIT8  = COUNTER_MASK | 0x1,
@@ -86,19 +85,17 @@ typedef enum
 #define FmCounterNumber 1
 
 #define _BYTE_COUNTER(type, offset) \
-               {(COUNTER_MASK|type), (void*)((offset)<<8|FmCounterByte)}
+    {(COUNTER_MASK|type), (void*)((offset)<<8|FmCounterByte)}
 
 #define _NUMBER_COUNTER(type, offset) \
-               {(COUNTER_MASK|type), (void*)((offset)<<8|FmCounterNumber)}
+    {(COUNTER_MASK|type), (void*)((offset)<<8|FmCounterNumber)}
 
-typedef struct _XimFrame
-{
+typedef struct _XimFrame {
     XimFrameType type;
     void* data;       /* For PTR_ITEM and PADDING */
 } XimFrameRec, *XimFrame;
 
-typedef enum
-{
+typedef enum {
     FmSuccess,
     FmEOD,
     FmInvalidCall,
@@ -130,4 +127,4 @@ Bool FrameMgrIsIterLoopEnd(FrameMgr, FmStatus*);
 
 #endif /* FRAMEMGR_H */
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

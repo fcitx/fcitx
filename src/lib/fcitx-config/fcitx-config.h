@@ -57,8 +57,7 @@ extern "C"
      * @brief The Color type in config file
      **/
 
-    typedef struct _ConfigColor
-    {
+    typedef struct _ConfigColor {
         double r;
         double g;
         double b;
@@ -67,8 +66,7 @@ extern "C"
     /**
      * @brief config value type
      **/
-    typedef enum _ConfigType
-    {
+    typedef enum _ConfigType {
         T_Integer,
         T_Color,
         T_String,
@@ -84,8 +82,7 @@ extern "C"
     /**
      * @brief The sync direction
      **/
-    typedef enum _ConfigSync
-    {
+    typedef enum _ConfigSync {
         Raw2Value,
         Value2Raw
     } ConfigSync;
@@ -93,8 +90,7 @@ extern "C"
     /**
      * @brief Sync result
      **/
-    typedef enum _ConfigSyncResult
-    {
+    typedef enum _ConfigSyncResult {
         SyncSuccess,
         SyncNoBinding,
         SyncInvalid
@@ -103,8 +99,7 @@ extern "C"
     /**
      * @brief The value of config
      **/
-    typedef union _ConfigValueType
-    {
+    typedef union _ConfigValueType {
         void *untype;
         int *integer;
         boolean *boolvalue;
@@ -139,8 +134,7 @@ extern "C"
      * @brief Enum value type description
      **/
 
-    typedef struct _ConfigEnum
-    {
+    typedef struct _ConfigEnum {
         char **enumDesc;
         int enumCount;
     } ConfigEnum;
@@ -149,8 +143,7 @@ extern "C"
      * @brief Config file contains multiple config groups, and the opposite config file description
      **/
 
-    typedef struct _ConfigFile
-    {
+    typedef struct _ConfigFile {
         ConfigFileDesc *fileDesc;
         ConfigGroup* groups;
     } ConfigFile;
@@ -165,8 +158,7 @@ extern "C"
      *        };
      **/
 
-    struct _GenericConfig
-    {
+    struct _GenericConfig {
         /**
          * @brief config file pointer
          **/
@@ -177,8 +169,7 @@ extern "C"
      * @brief Config Option Description, it describe a Key=Value entry in config file.
      **/
 
-    struct _ConfigOptionDesc
-    {
+    struct _ConfigOptionDesc {
         char *optionName;
         char *desc;
         ConfigType type;
@@ -192,8 +183,7 @@ extern "C"
      * @brief Config Group Description, it describe a [Gruop] in config file
      **/
 
-    struct _ConfigGroupDesc
-    {
+    struct _ConfigGroupDesc {
         /**
          * @brief Group Name
          **/
@@ -209,8 +199,7 @@ extern "C"
      * @brief Description of a config file
      **/
 
-    struct _ConfigFileDesc
-    {
+    struct _ConfigFileDesc {
         ConfigGroupDesc *groupsDesc;
         char* domain;
     };
@@ -219,8 +208,7 @@ extern "C"
      * @brief Config Option in config file, Key=Value entry
      **/
 
-    struct _ConfigOption
-    {
+    struct _ConfigOption {
         char *optionName;
         char *rawValue;
         ConfigValueType value;
@@ -235,8 +223,7 @@ extern "C"
      * @brief Config Option subkey in config file, Key[Subkey]=Value entry
      **/
 
-    struct _ConfigOptionSubkey
-    {
+    struct _ConfigOptionSubkey {
         char *subkeyName;
         char *rawValue;
         UT_hash_handle hh;
@@ -246,8 +233,7 @@ extern "C"
      * @brief Config group in config file, [Group] Entry
      **/
 
-    struct _ConfigGroup
-    {
+    struct _ConfigGroup {
         /**
          * @brief Group Name, unique in ConfigFile
          **/

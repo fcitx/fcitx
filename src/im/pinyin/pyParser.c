@@ -38,15 +38,11 @@ int IsSyllabary(const char *strPY, boolean bMode)
 {
     register int    i;
 
-    for (i = 0; syllabaryMapTable[i].cMap; i++)
-    {
-        if (bMode)
-        {
+    for (i = 0; syllabaryMapTable[i].cMap; i++) {
+        if (bMode) {
             if (!strncmp(strPY, syllabaryMapTable[i].strPY, strlen(syllabaryMapTable[i].strPY)))
                 return i;
-        }
-        else
-        {
+        } else {
             if (!strcmp(strPY, syllabaryMapTable[i].strPY))
                 return i;
         }
@@ -59,15 +55,11 @@ int IsConsonant(const char *strPY, boolean bMode)
 {
     register int    i;
 
-    for (i = 0; consonantMapTable[i].cMap; i++)
-    {
-        if (bMode)
-        {
+    for (i = 0; consonantMapTable[i].cMap; i++) {
+        if (bMode) {
             if (!strncmp(strPY, consonantMapTable[i].strPY, strlen(consonantMapTable[i].strPY)))
                 return i;
-        }
-        else
-        {
+        } else {
             if (!strcmp(strPY, consonantMapTable[i].strPY))
                 return i;
         }
@@ -80,8 +72,7 @@ int FindPYFAIndex(FcitxPinyinConfig *pyconfig, const char *strPY, boolean bMode)
 {
     int             i;
 
-    for (i = 0; pyconfig->PYTable[i].strPY[0] != '\0'; i++)
-    {
+    for (i = 0; pyconfig->PYTable[i].strPY[0] != '\0'; i++) {
         int cmp;
 
         if (bMode)
@@ -89,21 +80,18 @@ int FindPYFAIndex(FcitxPinyinConfig *pyconfig, const char *strPY, boolean bMode)
         else
             cmp = strcmp(strPY, pyconfig->PYTable[i].strPY);
 
-        if (!cmp)
-        {
+        if (!cmp) {
             if (!pyconfig->PYTable[i].pMH)
                 return i;
-            else
-                if (*(pyconfig->PYTable[i].pMH))
-                {
-                    /* trick: not the kind of misstype */
-                    if (pyconfig->PYTable[i].pMH != &pyconfig->bMisstype)
+            else if (*(pyconfig->PYTable[i].pMH)) {
+                /* trick: not the kind of misstype */
+                if (pyconfig->PYTable[i].pMH != &pyconfig->bMisstype)
+                    return i;
+                else
+                    /* fixed pinyin is valid? */
+                    if (!pyconfig->PYTable[i + 1].pMH || *(pyconfig->PYTable[i + 1].pMH))
                         return i;
-                    else
-                        /* fixed pinyin is valid? */
-                        if (!pyconfig->PYTable[i + 1].pMH || *(pyconfig->PYTable[i + 1].pMH))
-                            return i;
-                }
+            }
         }
     }
 
@@ -122,22 +110,19 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
     strP = strPY;
     parsePY->iHZCount = 0;
 
-    if (bSP)
-    {
+    if (bSP) {
         char            strQP[7];
         char            strJP[3];
 
         strJP[2] = '\0';
 
-        while (*strP)
-        {
+        while (*strP) {
             strJP[0] = *strP++;
             strJP[1] = *strP;
             SP2QP(pyconfig, strJP, strQP);
             MapPY(pyconfig, strQP, str_Map, mode);
 
-            if (!*strP)
-            {
+            if (!*strP) {
                 strcpy(parsePY->strMap[parsePY->iHZCount], str_Map);
                 strcpy(parsePY->strPYParsed[parsePY->iHZCount++], strJP);
                 break;
@@ -145,14 +130,11 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
 
             iIndex = FindPYFAIndex(pyconfig, strQP, 0);
 
-            if (iIndex != -1)
-            {
+            if (iIndex != -1) {
                 strcpy(parsePY->strMap[parsePY->iHZCount], str_Map);
                 strcpy(parsePY->strPYParsed[parsePY->iHZCount++], strJP);
                 strP++;
-            }
-            else
-            {
+            } else {
                 strJP[1] = '\0';
                 SP2QP(pyconfig, strJP, strQP);
 
@@ -164,48 +146,39 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
                 strcpy(parsePY->strPYParsed[parsePY->iHZCount++], strJP);
             }
 
-            if (*strP == PY_SEPARATOR)
-            {
+            if (*strP == PY_SEPARATOR) {
                 strcat(parsePY->strPYParsed[parsePY->iHZCount - 1], PY_SEPARATOR_S);
 
                 while (*strP == PY_SEPARATOR)
                     strP++;
             }
         }
-    }
-    else
-    {
+    } else {
         boolean            bSeperator = false;
 
-        do
-        {
+        do {
             iIndex = FindPYFAIndex(pyconfig, strP, 1);
 
-            if (iIndex != -1)
-            {
+            if (iIndex != -1) {
                 size_t lIndex = strlen(pyconfig->PYTable[iIndex].strPY);
                 strTemp[0] = pyconfig->PYTable[iIndex].strPY[lIndex - 1];
                 iTemp = -1;
 
-                if (strTemp[0] == 'g' || strTemp[0] == 'n')
-                {
+                if (strTemp[0] == 'g' || strTemp[0] == 'n') {
                     strncpy(strTemp, strP, lIndex - 1);
                     strTemp[lIndex - 1] = '\0';
 
                     iTemp = FindPYFAIndex(pyconfig, strTemp, 0);
 
-                    if (iTemp != -1)
-                    {
+                    if (iTemp != -1) {
                         iTemp = FindPYFAIndex(pyconfig, strP + strlen(pyconfig->PYTable[iTemp].strPY), 1);
 
-                        if (iTemp != -1)
-                        {
+                        if (iTemp != -1) {
                             if (strlen(pyconfig->PYTable[iTemp].strPY) == 1 || !strcmp("ng", pyconfig->PYTable[iTemp].strPY))
                                 iTemp = -1;
                         }
 
-                        if (iTemp != -1)
-                        {
+                        if (iTemp != -1) {
                             strncpy(strTemp, strP, lIndex - 1);
                             strTemp[lIndex - 1] = '\0';
                         }
@@ -221,35 +194,28 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
 
                 strP += strlen(strTemp);
 
-                if (bSeperator)
-                {
+                if (bSeperator) {
                     bSeperator = false;
                     parsePY->strPYParsed[parsePY->iHZCount][0] = PY_SEPARATOR;
                     parsePY->strPYParsed[parsePY->iHZCount][1] = '\0';
-                }
-                else
+                } else
                     parsePY->strPYParsed[parsePY->iHZCount][0] = '\0';
 
                 strcat(parsePY->strPYParsed[parsePY->iHZCount++], strTemp);
-            }
-            else
-            {
+            } else {
                 if (pyconfig->bFullPY && *strP != PY_SEPARATOR)
                     parsePY->iMode = PARSE_ERROR;
 
                 iIndex = IsConsonant(strP, 1);
 
-                if (-1 != iIndex)
-                {
+                if (-1 != iIndex) {
                     parsePY->iMode = PARSE_ERROR;
 
-                    if (bSeperator)
-                    {
+                    if (bSeperator) {
                         bSeperator = false;
                         parsePY->strPYParsed[parsePY->iHZCount][0] = PY_SEPARATOR;
                         parsePY->strPYParsed[parsePY->iHZCount][1] = '\0';
-                    }
-                    else
+                    } else
                         parsePY->strPYParsed[parsePY->iHZCount][0] = '\0';
 
                     strcat(parsePY->strPYParsed[parsePY->iHZCount], consonantMapTable[iIndex].strPY);
@@ -259,20 +225,15 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
                     strcpy(parsePY->strMap[parsePY->iHZCount++], str_Map);
 
                     strP += strlen(consonantMapTable[iIndex].strPY);
-                }
-                else
-                {
+                } else {
                     iIndex = IsSyllabary(strP, 1);
 
-                    if (-1 != iIndex)
-                    {
-                        if (bSeperator)
-                        {
+                    if (-1 != iIndex) {
+                        if (bSeperator) {
                             bSeperator = false;
                             parsePY->strPYParsed[parsePY->iHZCount][0] = PY_SEPARATOR;
                             parsePY->strPYParsed[parsePY->iHZCount][1] = '\0';
-                        }
-                        else
+                        } else
                             parsePY->strPYParsed[parsePY->iHZCount][0] = '\0';
 
                         strcat(parsePY->strPYParsed[parsePY->iHZCount], syllabaryMapTable[iIndex].strPY);
@@ -285,9 +246,7 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
 
                         if (parsePY->iMode != PARSE_ERROR)
                             parsePY->iMode = PARSE_ABBR;
-                    }
-                    else
-                    {
+                    } else {
                         //必定是分隔符
                         strP++;
                         bSeperator = true;
@@ -299,15 +258,13 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
                     }
                 }
             }
-        }
-        while (*strP);
+        } while (*strP);
     }
 
     if (strPY[strlen(strPY) - 1] == PY_SEPARATOR && !bSP)
         parsePY->iHZCount++;
 
-    if (parsePY->iMode != PARSE_ERROR)
-    {
+    if (parsePY->iMode != PARSE_ERROR) {
         parsePY->iMode = parsePY->iMode & PARSE_ABBR;
 
         if (parsePY->iHZCount > 1)
@@ -331,15 +288,13 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     size_t          len = strlen(strPY);
 
-    if (pyconfig->bMisstype && strPY[len - 1] == 'n' && strPY[len - 2] == 'g')
-    {
+    if (pyconfig->bMisstype && strPY[len - 1] == 'n' && strPY[len - 2] == 'g') {
         strPY[len - 2] = 'n';
         strPY[len - 1] = 'g';
     }
 
     //特殊处理eng
-    if (!strcmp(strPY, "eng") && pyconfig->MHPY_C[1].bMode)
-    {
+    if (!strcmp(strPY, "eng") && pyconfig->MHPY_C[1].bMode) {
         strcpy(strMap, "X0");
         return true;
     }
@@ -348,8 +303,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     iIndex = IsSyllabary(strPY, 0);
 
-    if (-1 != iIndex)
-    {
+    if (-1 != iIndex) {
         strMap[0] = syllabaryMapTable[iIndex].cMap;
         strMap[1] = mode;
         return true;
@@ -357,8 +311,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     iIndex = IsConsonant(strPY, 0);
 
-    if (-1 != iIndex)
-    {
+    if (-1 != iIndex) {
         strMap[0] = mode;
         strMap[1] = consonantMapTable[iIndex].cMap;
         return true;
@@ -368,8 +321,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     str[1] = '\0';
 
-    if (strPY[1] == 'h' || strPY[1] == 'g')
-    {
+    if (strPY[1] == 'h' || strPY[1] == 'g') {
         str[0] = strPY[0];
         str[1] = strPY[1];
         str[2] = '\0';
@@ -377,9 +329,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
         strMap[0] = consonantMapTable[iIndex].cMap;
         iIndex = IsConsonant(strPY + 2, 0);
         strMap[1] = consonantMapTable[iIndex].cMap;
-    }
-    else
-    {
+    } else {
         str[0] = strPY[0];
         str[1] = '\0';
         iIndex = IsSyllabary(str, 0);
@@ -410,14 +360,11 @@ boolean MapToPY(char strMap[3], char *strPY)
 
     strPY[0] = '\0';
 
-    if (strMap[0] != ' ')
-    {
+    if (strMap[0] != ' ') {
         i = 0;
 
-        while (syllabaryMapTable[i].cMap)
-        {
-            if (syllabaryMapTable[i].cMap == strMap[0])
-            {
+        while (syllabaryMapTable[i].cMap) {
+            if (syllabaryMapTable[i].cMap == strMap[0]) {
                 strcpy(strPY, syllabaryMapTable[i].strPY);
                 break;
             }
@@ -429,22 +376,18 @@ boolean MapToPY(char strMap[3], char *strPY)
             return false;
     }
 
-    if (strMap[1] != ' ')
-    {
+    if (strMap[1] != ' ') {
         i = 0;
 
-        while (consonantMapTable[i].cMap)
-        {
-            if (consonantMapTable[i].cMap == strMap[1])
-            {
+        while (consonantMapTable[i].cMap) {
+            if (consonantMapTable[i].cMap == strMap[1]) {
                 strcat(strPY, consonantMapTable[i].strPY);
                 return true;
             }
 
             i++;
         }
-    }
-    else
+    } else
         return true;
 
     return false;
@@ -459,20 +402,14 @@ int Cmp1Map(FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolea
 {
     int             iVal1, iVal2;
 
-    if (map2 == '0' || map1 == '0')
-    {
+    if (map2 == '0' || map1 == '0') {
         if (map1 == ' ' || map2 == ' ' || !pyconfig->bFullPY || bSP)
             return 0;
-    }
-    else
-    {
-        if (b)
-        {
+    } else {
+        if (b) {
             iVal1 = GetMHIndex_S(pyconfig->MHPY_S, map1, bUseMH);
             iVal2 = GetMHIndex_S(pyconfig->MHPY_S, map2, bUseMH);
-        }
-        else
-        {
+        } else {
             iVal1 = GetMHIndex_C(pyconfig->MHPY_C, map1);
             iVal2 = GetMHIndex_C(pyconfig->MHPY_C, map2);
         }
@@ -518,8 +455,7 @@ int CmpMap(FcitxPinyinConfig* pyconfig, char *strMap1, char *strMap2, int *iMatc
 
     *iMatchedLength = 0;
 
-    for (;;)
-    {
+    for (;;) {
         if (!strMap2[*iMatchedLength])
             return (strMap1[*iMatchedLength] - strMap2[*iMatchedLength]);
 
@@ -537,4 +473,4 @@ int CmpMap(FcitxPinyinConfig* pyconfig, char *strMap1, char *strMap2, int *iMatc
     return 0;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

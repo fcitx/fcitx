@@ -27,8 +27,7 @@
 #include <string.h>
 #include <fcitx-utils/utils.h>
 
-const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] =      //韵母
-{
+const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
     //{"an","ang"},
     {"CD"}
     ,
@@ -51,8 +50,7 @@ const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] =      //韵母
     {"\0"}
 };
 
-const MHPY_TEMPLATE MHPY_S_TEMPLATE[] =      //声母
-{
+const MHPY_TEMPLATE MHPY_S_TEMPLATE[] = {    //声母
     //{"c","ch"},
     {"bc"}
     ,
@@ -76,8 +74,7 @@ const MHPY_TEMPLATE MHPY_S_TEMPLATE[] =      //声母
 };
 
 //其中增加了那些不是标准的拼音，但模糊输入中需要使用的拼音组合
-const PYTABLE_TEMPLATE  PYTable_template[] =
-{
+const PYTABLE_TEMPLATE  PYTable_template[] = {
     {"zuo", PYTABLE_NONE}
     ,
     {"zun", PYTABLE_NONE}
@@ -1173,10 +1170,8 @@ int GetMHIndex_C(MHPY* MHPY_C, char map)
 {
     int             i;
 
-    for (i = 0; MHPY_C[i].strMap[0]; i++)
-    {
-        if (map == MHPY_C[i].strMap[0] || map == MHPY_C[i].strMap[1])
-        {
+    for (i = 0; MHPY_C[i].strMap[0]; i++) {
+        if (map == MHPY_C[i].strMap[0] || map == MHPY_C[i].strMap[1]) {
             if (MHPY_C[i].bMode)
                 return i;
             else
@@ -1191,10 +1186,8 @@ int GetMHIndex_S(MHPY* MHPY_S, char map, boolean bMode)
 {
     int             i;
 
-    for (i = 0; MHPY_S[i].strMap[0]; i++)
-    {
-        if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1])
-        {
+    for (i = 0; MHPY_S[i].strMap[0]; i++) {
+        if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1]) {
             if (MHPY_S[i].bMode || bMode)
                 return i;
             else
@@ -1229,8 +1222,7 @@ void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)
 
     iBaseCount = 0;
 
-    while (MHPYtemplate[iBaseCount].strMap[0] != '\0')
-    {
+    while (MHPYtemplate[iBaseCount].strMap[0] != '\0') {
         strcpy(mhpy[iBaseCount].strMap, MHPYtemplate[iBaseCount].strMap);
         mhpy[iBaseCount].bMode = false;
         iBaseCount++;
@@ -1251,12 +1243,10 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
 
     iBaseCount = 0;
 
-    while (PYTable_template[iBaseCount].strPY[0] != '\0')
-    {
+    while (PYTable_template[iBaseCount].strPY[0] != '\0') {
         strcpy(pyconfig->PYTable[iBaseCount].strPY, PYTable_template[iBaseCount].strPY);
 
-        switch (PYTable_template[iBaseCount].control)
-        {
+        switch (PYTable_template[iBaseCount].control) {
 
         case PYTABLE_NONE:
             pyconfig->PYTable[iBaseCount].pMH = NULL;
@@ -1320,4 +1310,4 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

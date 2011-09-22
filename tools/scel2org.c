@@ -40,8 +40,7 @@ char header_str[HEADER_SIZE] = { '\x40', '\x15', '\0', '\0', '\x44', '\x43', '\x
 char pinyin_str[PINYIN_SIZE] = { '\x9d', '\x01', '\0', '\0' };
 iconv_t conv;
 
-typedef struct _ScelPinyin
-{
+typedef struct _ScelPinyin {
     char pinyin[10];
 } ScelPinyin;
 
@@ -70,10 +69,8 @@ int main(int argc, char **argv)
     FILE *fout = stdout;
     char c;
 
-    while ((c = getopt(argc, argv, "o:h")) != -1)
-    {
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "o:h")) != -1) {
+        switch (c) {
 
         case 'o':
             fout = fopen(optarg, "w");
@@ -101,8 +98,7 @@ int main(int argc, char **argv)
 
     size_t count = fread(buf, 1, HEADER_SIZE, fp);
 
-    if (count < HEADER_SIZE || memcmp(buf, header_str, HEADER_SIZE) != 0)
-    {
+    if (count < HEADER_SIZE || memcmp(buf, header_str, HEADER_SIZE) != 0) {
         fprintf(stderr, "format error.\n");
         fclose(fp);
         return 1;
@@ -135,8 +131,7 @@ int main(int argc, char **argv)
 
     count = fread(buf, 1, PINYIN_SIZE, fp);
 
-    if (count < PINYIN_SIZE || memcmp(buf, pinyin_str, PINYIN_SIZE) != 0)
-    {
+    if (count < PINYIN_SIZE || memcmp(buf, pinyin_str, PINYIN_SIZE) != 0) {
         fprintf(stderr, "format error.\n");
         fclose(fp);
         return 1;
@@ -146,8 +141,7 @@ int main(int argc, char **argv)
 
     utarray_init(pys, &py_icd);
 
-    for (; ;)
-    {
+    for (; ;) {
         short index;
         short count;
         fread(&index, 1, sizeof(short), fp);
@@ -169,8 +163,7 @@ int main(int argc, char **argv)
             break;
     }
 
-    while (!feof(fp))
-    {
+    while (!feof(fp)) {
         short symcount;
         short count;
         short wordcount;
@@ -189,14 +182,12 @@ int main(int argc, char **argv)
 
         int s;
 
-        for (s = 0; s < symcount ; s++)
-        {
+        for (s = 0; s < symcount ; s++) {
             ScelPinyin *py = (ScelPinyin*) utarray_eltptr(pys, pyindex[0]);
             fprintf(fout, "%s",  py->pinyin);
             int i;
 
-            for (i = 1 ; i < wordcount ; i ++)
-            {
+            for (i = 1 ; i < wordcount ; i ++) {
                 py = (ScelPinyin*) utarray_eltptr(pys, pyindex[i]);
                 fprintf(fout, "\'%s", py->pinyin);
             }
@@ -224,4 +215,4 @@ int main(int argc, char **argv)
     return 0;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

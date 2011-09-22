@@ -60,7 +60,7 @@ static void* AutoEngCreate(FcitxInstance *instance);
  *
  * @return void
  **/
-static void            LoadAutoEng (FcitxAutoEngState* autoEngState);
+static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
 
 /**
  * @brief Cache the input key for autoeng, only simple key without combine key will be record
@@ -88,9 +88,9 @@ static void ResetAutoEng(void *arg);
  *
  * @return void
  **/
-static void FreeAutoEng (void* arg);
+static void FreeAutoEng(void* arg);
 
-static void ReloadAutoEng (void* arg);
+static void ReloadAutoEng(void* arg);
 
 /**
  * @brief Check whether need to switch to English
@@ -98,7 +98,7 @@ static void ReloadAutoEng (void* arg);
  * @param  str string
  * @return boolean
  **/
-boolean            SwitchToEng (FcitxAutoEngState* autoEngState, char* str);
+boolean            SwitchToEng(FcitxAutoEngState* autoEngState, char* str);
 
 
 /**
@@ -148,35 +148,25 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
-    if (autoEngState->active)
-    {
+    if (autoEngState->active) {
         FcitxKeySym keymain = KeyPadToMain(sym);
-        if (IsHotKeySimple(keymain,state))
-        {
-            if (autoEngState->index < MAX_USER_INPUT)
-            {
+        if (IsHotKeySimple(keymain, state)) {
+            if (autoEngState->index < MAX_USER_INPUT) {
                 autoEngState->buf[autoEngState->index] = keymain;
                 autoEngState->index++;
                 autoEngState->buf[autoEngState->index] = '\0';
                 *retval = IRV_DISPLAY_MESSAGE;
-            }
-            else
+            } else
                 *retval = IRV_DO_NOTHING;
-        }
-        else if (IsHotKey(sym, state, FCITX_BACKSPACE))
-        {
+        } else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
             autoEngState->index -- ;
             autoEngState->buf[autoEngState->index] = '\0';
-            if (autoEngState->index == 0)
-            {
+            if (autoEngState->index == 0) {
                 ResetAutoEng(autoEngState);
                 *retval = IRV_CLEAN;
-            }
-            else
+            } else
                 *retval = IRV_DISPLAY_MESSAGE;
-        }
-        else if (IsHotKey(sym, state, FCITX_ENTER))
-        {
+        } else if (IsHotKey(sym, state, FCITX_ENTER)) {
             strcpy(GetOutputString(input), autoEngState->buf);
             ResetAutoEng(autoEngState);
             *retval = IRV_COMMIT_STRING;
@@ -184,10 +174,8 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         ShowAutoEngMessage(autoEngState);
         return true;
     }
-    if (IsHotKeySimple(sym, state))
-    {
-        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && IsHotKeyUAZ(sym, state))
-        {
+    if (IsHotKeySimple(sym, state)) {
+        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && IsHotKeyUAZ(sym, state)) {
             autoEngState->index = 1;
             autoEngState->buf[0] = sym;
             autoEngState->buf[1] = '\0';
@@ -207,8 +195,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         autoEngState->buf[autoEngState->index ++ ] = sym;
         autoEngState->buf[autoEngState->index] = '\0';
 
-        if (SwitchToEng(autoEngState, autoEngState->buf))
-        {
+        if (SwitchToEng(autoEngState, autoEngState->buf)) {
             *retval = IRV_DISPLAY_MESSAGE;
             FcitxInputStateSetShowCursor(input, false);
             autoEngState->index = strlen(autoEngState->buf);
@@ -228,7 +215,7 @@ void ResetAutoEng(void* arg)
     autoEngState->active = false;
 }
 
-void LoadAutoEng (FcitxAutoEngState* autoEngState)
+void LoadAutoEng(FcitxAutoEngState* autoEngState)
 {
     FILE    *fp;
     char    *buf = NULL;
@@ -241,7 +228,7 @@ void LoadAutoEng (FcitxAutoEngState* autoEngState)
     utarray_new(autoEngState->autoEng, &autoeng_icd);
     AUTO_ENG autoeng;
 
-    while  (getline(&buf, &length, fp) != -1) {
+    while (getline(&buf, &length, fp) != -1) {
         char* line = fcitx_trim(buf);
         if (strlen(line) > MAX_AUTO_TO_ENG)
             FcitxLog(WARNING, _("Too long item for AutoEng"));
@@ -253,26 +240,25 @@ void LoadAutoEng (FcitxAutoEngState* autoEngState)
 
     free(buf);
 
-    fclose (fp);
+    fclose(fp);
 }
 
-void FreeAutoEng (void* arg)
+void FreeAutoEng(void* arg)
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
-    if (autoEngState->autoEng)
-    {
+    if (autoEngState->autoEng) {
         utarray_free(autoEngState->autoEng);
         autoEngState->autoEng = NULL;
     }
 }
 
-boolean SwitchToEng (FcitxAutoEngState* autoEngState, char *str)
+boolean SwitchToEng(FcitxAutoEngState* autoEngState, char *str)
 {
     AUTO_ENG*       autoeng;
     for (autoeng = (AUTO_ENG *) utarray_front(autoEngState->autoEng);
             autoeng != NULL;
             autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
-        if (!strcmp (str, autoeng->str))
+        if (!strcmp(str, autoeng->str))
             return true;
 
     return false;

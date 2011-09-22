@@ -81,8 +81,7 @@ void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOp
 void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
 {
     FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
-    if (sync == Raw2Value)
-    {
+    if (sync == Raw2Value) {
         boolean *b = (boolean*)value;
         pyconfig->MHPY_S[5].bMode = *b;
     }
@@ -107,36 +106,24 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
     FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
 
     ConfigOption* option = ConfigFileGetOption(cfile, "Pinyin", "DefaultShuangpinSchema");
-    if (option != NULL && option->rawValue && option->optionDesc)
-    {
+    if (option != NULL && option->rawValue && option->optionDesc) {
         char* needfree = NULL;
-        if (strcmp(option->rawValue, "自然码") == 0)
-        {
+        if (strcmp(option->rawValue, "自然码") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZIRANMA]);
-        }
-        else if (strcmp(option->rawValue, "微软") == 0)
-        {
+        } else if (strcmp(option->rawValue, "微软") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_MS]);
-        }
-        else if (strcmp(option->rawValue, "紫光") == 0)
-        {
+        } else if (strcmp(option->rawValue, "紫光") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZIGUANG]);
-        }
-        else if (strcmp(option->rawValue, "拼音加加") == 0)
-        {
+        } else if (strcmp(option->rawValue, "拼音加加") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_PINYINJIAJIA]);
-        }
-        else if (strcmp(option->rawValue, "中文之星") == 0)
-        {
+        } else if (strcmp(option->rawValue, "中文之星") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ZHONGWENZHIXING]);
-        }
-        else if (strcmp(option->rawValue, "智能ABC") == 0)
-        {
+        } else if (strcmp(option->rawValue, "智能ABC") == 0) {
             needfree = option->rawValue;
             option->rawValue = strdup(option->optionDesc->configEnum.enumDesc[SP_ABC]);
         }

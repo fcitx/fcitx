@@ -39,10 +39,8 @@ int main(int argc, char **argv)
     boolean isUser = true;
     char c;
 
-    while ((c = getopt(argc, argv, "f:sh")) != -1)
-    {
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "f:sh")) != -1) {
+        switch (c) {
 
         case 'f':
             pyusrphrase_mb = strdup(optarg);
@@ -64,8 +62,7 @@ int main(int argc, char **argv)
     else
         fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
 
-    if (!fi)
-    {
+    if (!fi) {
         perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
         exit(1);
@@ -75,14 +72,12 @@ int main(int argc, char **argv)
 
     LoadPYMB(fi, &PYMB, isUser);
 
-    for (i = 0; PYMB[i].HZ[0]; ++i)
-    {
+    for (i = 0; PYMB[i].HZ[0]; ++i) {
         printf("PYFAIndex: %d\n", PYMB[i].PYFAIndex);
         printf("HZ: %s\n", PYMB[i].HZ);
         printf("UserPhraseCount: %d\n", PYMB[i].UserPhraseCount);
 
-        for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
-        {
+        for (j = 0; j < PYMB[i].UserPhraseCount; ++j) {
             printf("+-Length: %d\n", PYMB[i].UserPhrase[j].Length);
             printf("| Map: %s\n", PYMB[i].UserPhrase[j].Map);
             printf("| Phrase: %s\n", PYMB[i].UserPhrase[j].Phrase);
@@ -118,4 +113,4 @@ void usage()
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

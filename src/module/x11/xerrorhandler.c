@@ -27,17 +27,17 @@ static XErrorHandler   oldXErrorHandler;
 static XIOErrorHandler oldXIOErrorHandler;
 static FcitxX11* x11handle;
 
-static int FcitxXErrorHandler (Display * dpy, XErrorEvent * event);
-static int FcitxXIOErrorHandler (Display *d);
+static int FcitxXErrorHandler(Display * dpy, XErrorEvent * event);
+static int FcitxXIOErrorHandler(Display *d);
 
-void InitXErrorHandler (FcitxX11* x11priv)
+void InitXErrorHandler(FcitxX11* x11priv)
 {
     x11handle = x11priv;
-    oldXErrorHandler = XSetErrorHandler (FcitxXErrorHandler);
-    oldXIOErrorHandler = XSetIOErrorHandler (FcitxXIOErrorHandler);
+    oldXErrorHandler = XSetErrorHandler(FcitxXErrorHandler);
+    oldXIOErrorHandler = XSetIOErrorHandler(FcitxXIOErrorHandler);
 }
 
-int FcitxXIOErrorHandler (Display *d)
+int FcitxXIOErrorHandler(Display *d)
 {
     /* Do not log, because this is likely to happen while log out */
     SaveAllIM(x11handle->owner);
@@ -48,27 +48,27 @@ int FcitxXIOErrorHandler (Display *d)
 
 }
 
-int FcitxXErrorHandler (Display * dpy, XErrorEvent * event)
+int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
 {
     char    str[256];
     FILE* fp = NULL;
 
-    fp = GetXDGFileUserWithPrefix("log", "crash.log","wt" , NULL);
-    if ( fp ) {
-        XGetErrorText (dpy, event->error_code, str, 255);
-        fprintf (fp, "fcitx: %s\n", str);
+    fp = GetXDGFileUserWithPrefix("log", "crash.log", "wt" , NULL);
+    if (fp) {
+        XGetErrorText(dpy, event->error_code, str, 255);
+        fprintf(fp, "fcitx: %s\n", str);
     }
 
     SaveAllIM(x11handle->owner);
 
-    if ( fp )
+    if (fp)
         fclose(fp);
     if (event->error_code != 3 && event->error_code != BadMatch) {  // xterm will generate 3
         if (oldXErrorHandler)
-            oldXErrorHandler (dpy, event);
+            oldXErrorHandler(dpy, event);
     }
 
     return 0;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

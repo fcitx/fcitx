@@ -32,18 +32,16 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef _Xi18nTrTrans_h
 #define _Xi18nTrTrans_h
 
-typedef struct _TransClient
-{
+typedef struct _TransClient {
     int accept_fd;
     struct _XtransConnInfo *accept_conn;
 } TransClient;
 
-typedef struct
-{
+typedef struct {
     struct _XtransConnInfo *trans_conn; /* transport connection object */
     char *port;
 } TransSpecRec;
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -35,8 +35,8 @@
 #include "fcitx/fcitx.h"
 
 #define ROUND_SIZE 80
-#define INPUTWND_WIDTH	50
-#define INPUTWND_HEIGHT	40
+#define INPUTWND_WIDTH  50
+#define INPUTWND_HEIGHT 40
 #define INPUT_BAR_HMIN_WIDTH 320
 #define INPUT_BAR_VMIN_WIDTH 160
 #define INPUT_BAR_MAX_WIDTH 1000
@@ -52,8 +52,8 @@ typedef struct _InputWindow {
     uint            iInputWindowWidth;
 
     //这两个变量是GTK+ OverTheSpot光标跟随的临时解决方案
-    int		iOffsetX;
-    int		iOffsetY;
+    int     iOffsetX;
+    int     iOffsetY;
 
     cairo_surface_t* cs_x_input_bar;
     cairo_surface_t *cs_input_bar;
@@ -76,4 +76,4 @@ void ShowInputWindowInternal(InputWindow* inputWindow);
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

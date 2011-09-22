@@ -4447,4 +4447,4 @@ static const quint32 fcitx_compose_seqs_compact[] = {
 #endif
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

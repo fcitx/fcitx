@@ -30,8 +30,7 @@
  * @brief String to key list.
  **/
 
-typedef struct _KEY_LIST
-{
+typedef struct _KEY_LIST {
     /**
      * @brief string name for the key in fcitx
      **/
@@ -43,8 +42,7 @@ typedef struct _KEY_LIST
 } KEY_LIST;
 
 /* fcitx key name translist */
-KEY_LIST        keyList[] =
-{
+KEY_LIST        keyList[] = {
     {"TAB", Key_Tab},
     {"ENTER", Key_Return},
     {"LCTRL", Key_Control_L},
@@ -121,14 +119,13 @@ boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
 FCITX_EXPORT_API
 void GetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
-    if (iKeyState)
-    {
+    if (iKeyState) {
         if (IsHotKeyLAZ(keysym, 0))
             keysym = keysym + Key_A - Key_a;
 
         if (iKeyState == KEY_SHIFT_COMP)
             if ((IsHotKeySimple(keysym, 0) && keysym != Key_space)
-                || (keysym >= Key_KP_0 && keysym <= Key_KP_9) )
+                    || (keysym >= Key_KP_0 && keysym <= Key_KP_9))
                 iKeyState = KEY_NONE;
     }
 
@@ -192,20 +189,17 @@ boolean ParseKey(char *strKey, FcitxKeySym* sym, int* state)
 
     p = strKey;
 
-    if (strstr(p, "CTRL_"))
-    {
+    if (strstr(p, "CTRL_")) {
         iKeyState |= KEY_CTRL_COMP;
         p += strlen("CTRL_");
     }
 
-    if (strstr(p, "ALT_"))
-    {
+    if (strstr(p, "ALT_")) {
         iKeyState |= KEY_ALT_COMP;
         p += strlen("ALT_");
     }
 
-    if (strstr(strKey, "SHIFT_"))
-    {
+    if (strstr(strKey, "SHIFT_")) {
         iKeyState |= KEY_SHIFT_COMP;
         p += strlen("SHIFT_");
     }
@@ -229,8 +223,7 @@ int GetKeyList(char *strKey)
 
     i = 0;
 
-    for (;;)
-    {
+    for (;;) {
         if (!keyList[i].code)
             break;
 
@@ -248,8 +241,7 @@ int GetKeyList(char *strKey)
 
 char *GetKeyListString(int key)
 {
-    if (key > Key_space && key <= Key_asciitilde)
-    {
+    if (key > Key_space && key <= Key_asciitilde) {
         char *p;
         p = malloc(sizeof(char) * 2);
         p[0] = key;
@@ -261,8 +253,7 @@ char *GetKeyListString(int key)
 
     i = 0;
 
-    for (;;)
-    {
+    for (;;) {
         if (!keyList[i].code)
             break;
 
@@ -286,8 +277,7 @@ void SetHotKey(char *strKeys, HOTKEYS * hotkey)
     strKeys = fcitx_trim(strKeys);
     p = strKeys;
 
-    for (k = 0; k < 2; k++)
-    {
+    for (k = 0; k < 2; k++) {
         FcitxKeySym sym;
         int state;
         i = 0;
@@ -299,8 +289,7 @@ void SetHotKey(char *strKeys, HOTKEYS * hotkey)
 
         strKey[i] = '\0';
 
-        if (ParseKey(strKey, &sym, &state))
-        {
+        if (ParseKey(strKey, &sym, &state)) {
             hotkey[j].sym = sym;
             hotkey[j].state = state;
             hotkey[j].desc = fcitx_trim(strKey);
@@ -315,8 +304,7 @@ void SetHotKey(char *strKeys, HOTKEYS * hotkey)
         p = &p[i + 1];
     }
 
-    for (; j < 2; j++)
-    {
+    for (; j < 2; j++) {
         hotkey[j].sym = 0;
         hotkey[j].state = 0;
         hotkey[j].desc = NULL;
@@ -340,8 +328,7 @@ static int key_table_cmp(const void* a, const void* b)
 FCITX_EXPORT_API
 FcitxKeySym KeyPadToMain(FcitxKeySym sym)
 {
-    static struct KeyPadTable keytable[] =
-    {
+    static struct KeyPadTable keytable[] = {
         {Key_KP_Space, Key_space},
         {Key_KP_Tab, Key_Tab},
         {Key_KP_Enter, Key_Return},
@@ -384,7 +371,7 @@ FcitxKeySym KeyPadToMain(FcitxKeySym sym)
 
     struct KeyPadTable key = { sym, Key_None };
 
-    struct KeyPadTable *result = bsearch(&key, keytable, sizeof(keytable) / sizeof(struct KeyPadTable) , sizeof (struct KeyPadTable), key_table_cmp);
+    struct KeyPadTable *result = bsearch(&key, keytable, sizeof(keytable) / sizeof(struct KeyPadTable) , sizeof(struct KeyPadTable), key_table_cmp);
     if (result == NULL)
         return sym;
     else

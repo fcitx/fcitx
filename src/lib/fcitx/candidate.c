@@ -20,8 +20,7 @@
 
 #include "candidate.h"
 
-typedef struct _CandidateWordList
-{
+typedef struct _CandidateWordList {
     UT_array candWords;
     char strChoose[MAX_CAND_WORD + 1];
     int currentPage;
@@ -114,7 +113,7 @@ boolean CandidateWordHasNext(CandidateWordList* candList)
 FCITX_EXPORT_API
 int CandidateWordPageCount(CandidateWordList* candList)
 {
-    return ( utarray_len(&candList->candWords) + candList->wordPerPage - 1 ) / candList->wordPerPage;
+    return (utarray_len(&candList->candWords) + candList->wordPerPage - 1) / candList->wordPerPage;
 }
 
 FCITX_EXPORT_API
@@ -197,8 +196,7 @@ int CandidateWordGetCurrentWindowSize(CandidateWordList* candList)
     if (utarray_len(&candList->candWords) == 0)
         return 0;
     /* last page */
-    if (candList->currentPage + 1 == CandidateWordPageCount(candList))
-    {
+    if (candList->currentPage + 1 == CandidateWordPageCount(candList)) {
         int size = utarray_len(&candList->candWords) % candList->wordPerPage;
         if (size != 0)
             return size;
@@ -223,4 +221,4 @@ CandidateWord* CandidateWordGetNext(CandidateWordList* candList, CandidateWord* 
 {
     return (CandidateWord*) utarray_next(&candList->candWords, candWord);
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -83,7 +83,7 @@ void InitBuiltInHotkey(struct _FcitxInstance* instance);
  * @param instance fcitx instance
  * @return void
  **/
-void DoPhraseTips (struct _FcitxInstance* instance);
+void DoPhraseTips(struct _FcitxInstance* instance);
 
 /**
  * @brief unload all input method
@@ -99,7 +99,7 @@ void UnloadAllIM(UT_array* ims);
  * @param instance instance
  * @return boolean
  **/
-boolean LoadAllIM (struct _FcitxInstance* instance);
+boolean LoadAllIM(struct _FcitxInstance* instance);
 
 /**
  * @brief init builtin im menu

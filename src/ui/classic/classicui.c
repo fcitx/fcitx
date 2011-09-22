@@ -99,33 +99,29 @@ void* ClassicUICreate(FcitxInstance* instance)
     FcitxModuleFunctionArg arg;
     FcitxClassicUI* classicui = fcitx_malloc0(sizeof(FcitxClassicUI));
     classicui->owner = instance;
-    if (!LoadClassicUIConfig(classicui))
-    {
+    if (!LoadClassicUIConfig(classicui)) {
         free(classicui);
         return NULL;
     }
-    if (GetSkinDesc() == NULL)
-    {
+    if (GetSkinDesc() == NULL) {
         free(classicui);
         return NULL;
     }
     classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
-    if (classicui->dpy == NULL)
-    {
+    if (classicui->dpy == NULL) {
         free(classicui);
         return NULL;
     }
 
-    if (LoadSkinConfig(&classicui->skin, &classicui->skinType))
-    {
+    if (LoadSkinConfig(&classicui->skin, &classicui->skinType)) {
         free(classicui);
         return NULL;
     }
 
     classicui->iScreen = DefaultScreen(classicui->dpy);
 
-    classicui->protocolAtom = XInternAtom (classicui->dpy, "WM_PROTOCOLS", False);
-    classicui->killAtom = XInternAtom (classicui->dpy, "WM_DELETE_WINDOW", False);
+    classicui->protocolAtom = XInternAtom(classicui->dpy, "WM_PROTOCOLS", False);
+    classicui->killAtom = XInternAtom(classicui->dpy, "WM_DELETE_WINDOW", False);
 
 
     InitSkinMenu(classicui);
@@ -142,8 +138,7 @@ void* ClassicUICreate(FcitxInstance* instance)
     for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
             menupp != NULL;
             menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
-        )
-    {
+        ) {
         FcitxUIMenu * menup = *menupp;
         if (!menup->isSubMenu)
             AddMenuShell(&classicui->mainMenu, menup->name, MENUTYPE_SUBMENU, menup);
@@ -355,8 +350,7 @@ void ClassicUIOnTriggerOn(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxInstance *instance = classicui->owner;
-    if (GetCurrentState(instance) == IS_ACTIVE)
-    {
+    if (GetCurrentState(instance) == IS_ACTIVE) {
         DrawMainWindow(classicui->mainWindow);
     }
     DrawTrayWindow(classicui->trayWindow);
@@ -380,24 +374,17 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
     int length = utarray_len(&menu->shell);
-    if (index == 0)
-    {
+    if (index == 0) {
         DisplayAboutWindow(classicui->mainWindow->owner->aboutWindow);
-    }
-    else if (index == 1)
-    {
+    } else if (index == 1) {
         FILE* p = popen("xdg-open http://fcitx.github.com/handbook/ &", "r");
         if (p)
             pclose(p);
         else
             FcitxLog(ERROR, _("Unable to create process"));
-    }
-    else if (index == length - 1) /* Exit */
-    {
+    } else if (index == length - 1) { /* Exit */
         EndInstance(classicui->owner);
-    }
-    else if (index == length - 2) /* Configuration */
-    {
+    } else if (index == length - 2) { /* Configuration */
         FILE* p = popen(BINDIR "/fcitx-configtool &", "r");
         if (p)
             pclose(p);
@@ -421,7 +408,7 @@ ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap *
     InvokeFunction(classicui->owner, FCITX_X11, INITWINDOWATTR, arg);
 }
 
-Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui)
+Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui)
 {
     FcitxModuleFunctionArg arg;
     return InvokeFunction(classicui->owner, FCITX_X11, FINDARGBVISUAL, arg);
@@ -430,23 +417,19 @@ Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui)
 void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
-    if (x)
-    {
+    if (x) {
         *x = classicui->iMainWindowOffsetX;
     }
-    if (y)
-    {
+    if (y) {
         *y = classicui->iMainWindowOffsetY;
     }
 
     XWindowAttributes attr;
     XGetWindowAttributes(classicui->dpy, classicui->mainWindow->window, &attr);
-    if (w)
-    {
+    if (w) {
         *w = attr.width;
     }
-    if (h)
-    {
+    if (h) {
         *h = attr.height;
     }
 

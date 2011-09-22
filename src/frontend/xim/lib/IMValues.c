@@ -36,91 +36,88 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #define Va_start(a,b) va_start(a,b)
 
-static void _IMCountVaList (va_list var, int *total_count)
+static void _IMCountVaList(va_list var, int *total_count)
 {
     char *attr;
 
     *total_count = 0;
 
-    for (attr = va_arg (var, char *);  attr;  attr = va_arg (var, char *))
-    {
-        (void)va_arg (var, XIMArg *);
+    for (attr = va_arg(var, char *);  attr;  attr = va_arg(var, char *)) {
+        (void)va_arg(var, XIMArg *);
         ++(*total_count);
     }
     /*endfor*/
 }
 
-static void _IMVaToNestedList (va_list var, int max_count, XIMArg **args_return)
+static void _IMVaToNestedList(va_list var, int max_count, XIMArg **args_return)
 {
     XIMArg *args;
     char   *attr;
 
-    if (max_count <= 0)
-    {
+    if (max_count <= 0) {
         *args_return = (XIMArg *) NULL;
         return;
     }
     /*endif*/
 
-    args = (XIMArg *) malloc ((unsigned) (max_count + 1)*sizeof (XIMArg));
+    args = (XIMArg *) malloc((unsigned)(max_count + 1) * sizeof(XIMArg));
     *args_return = args;
     if (!args)
         return;
     /*endif*/
-    for (attr = va_arg (var, char *);  attr;  attr = va_arg (var, char *))
-    {
+    for (attr = va_arg(var, char *);  attr;  attr = va_arg(var, char *)) {
         args->name = attr;
-        args->value = va_arg (var, XPointer);
+        args->value = va_arg(var, XPointer);
         args++;
     }
     /*endfor*/
     args->name = (char *) NULL;
 }
 
-char *IMGetIMValues (XIMS ims, ...)
+char *IMGetIMValues(XIMS ims, ...)
 {
     va_list var;
     int total_count;
     XIMArg *args;
     char *ret;
 
-    Va_start (var, ims);
-    _IMCountVaList (var, &total_count);
-    va_end (var);
+    Va_start(var, ims);
+    _IMCountVaList(var, &total_count);
+    va_end(var);
 
-    Va_start (var, ims);
-    _IMVaToNestedList (var, total_count, &args);
-    va_end (var);
+    Va_start(var, ims);
+    _IMVaToNestedList(var, total_count, &args);
+    va_end(var);
 
-    ret = (*ims->methods->getIMValues) (ims, args);
+    ret = (*ims->methods->getIMValues)(ims, args);
 
     if (args)
-        XFree ((char *) args);
+        XFree((char *) args);
     /*endif*/
     return ret;
 }
 
-char *IMSetIMValues (XIMS ims, ...)
+char *IMSetIMValues(XIMS ims, ...)
 {
     va_list var;
     int total_count;
     XIMArg *args;
     char *ret;
 
-    Va_start (var, ims);
-    _IMCountVaList (var, &total_count);
-    va_end (var);
+    Va_start(var, ims);
+    _IMCountVaList(var, &total_count);
+    va_end(var);
 
-    Va_start (var, ims);
-    _IMVaToNestedList (var, total_count, &args);
-    va_end (var);
+    Va_start(var, ims);
+    _IMVaToNestedList(var, total_count, &args);
+    va_end(var);
 
-    ret = (*ims->methods->setIMValues) (ims, args);
+    ret = (*ims->methods->setIMValues)(ims, args);
 
     if (args)
-        XFree ((char *) args);
+        XFree((char *) args);
     /*endif*/
     return ret;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -32,4 +32,4 @@ typedef struct _SyllabaryMap {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -35,20 +35,18 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #define _XIM_PROTOCOL           "_XIM_PROTOCOL"
 #define _XIM_XCONNECT           "_XIM_XCONNECT"
 
-#define XCM_DATA_LIMIT		20
+#define XCM_DATA_LIMIT      20
 
-typedef struct _XClient
-{
-    Window	client_win;	/* client window */
-    Window	accept_win;	/* accept window */
+typedef struct _XClient {
+    Window  client_win; /* client window */
+    Window  accept_win; /* accept window */
 } XClient;
 
-typedef struct
-{
-    Atom	xim_request;
-    Atom	connect_request;
+typedef struct {
+    Atom    xim_request;
+    Atom    connect_request;
 } XSpecRec;
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

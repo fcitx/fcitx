@@ -87,7 +87,7 @@ void
 ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
                              XSetWindowAttributes * attrib,
                              unsigned long *attribmask, int *depth);
-Visual * ClassicUIFindARGBVisual (FcitxClassicUI* classicui);
+Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui);
 boolean ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y);
 boolean IsInRspArea(int x0, int y0, struct _FcitxClassicUIStatus* status);
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle);
@@ -101,4 +101,4 @@ boolean WindowIsVisable(Display* dpy, Window window);
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -32,8 +32,7 @@
 
 #define GetXimIC(c) ((FcitxXimIC*)(c)->privateic)
 
-typedef struct _FcitxXimFrontend
-{
+typedef struct _FcitxXimFrontend {
     GenericConfig gconfig;
     boolean bUseOnTheSpotStyle;
     Window ximWindow;

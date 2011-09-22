@@ -38,8 +38,7 @@ extern "C" {
     /**
      * @brief Addon Category Definition
      **/
-    typedef enum _AddonCategory
-    {
+    typedef enum _AddonCategory {
         /**
          * @brief Input method
          **/
@@ -61,16 +60,14 @@ extern "C" {
     /**
      * @brief Supported Addon Type, Currently only sharedlibrary
      **/
-    typedef enum _AddonType
-    {
+    typedef enum _AddonType {
         AT_SHAREDLIBRARY = 0
     } AddonType;
 
     /**
      * @brief Addon Instance in Fcitx
      **/
-    typedef struct _FcitxAddon
-    {
+    typedef struct _FcitxAddon {
         GenericConfig config;
         char *name;
         char *generalname;

@@ -31,13 +31,12 @@ extern "C" {
     struct _CandidateWord;
     struct _CandidateWordList;
 
-    typedef INPUT_RETURN_VALUE (*CandidateWordCommitCallback)(void* arg, struct _CandidateWord* candWord);
+    typedef INPUT_RETURN_VALUE(*CandidateWordCommitCallback)(void* arg, struct _CandidateWord* candWord);
 
     /**
      * @brief A Single Candidate Word
      **/
-    typedef struct _CandidateWord
-    {
+    typedef struct _CandidateWord {
         /**
          * @brief String display in the front
          **/

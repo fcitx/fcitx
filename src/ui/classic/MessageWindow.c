@@ -38,15 +38,15 @@
 
 #define MESSAGE_WINDOW_MARGIN 20
 #define MESSAGE_WINDOW_LINESPACE 2
-static void            InitMessageWindowProperty (MessageWindow* messageWindow);
+static void            InitMessageWindowProperty(MessageWindow* messageWindow);
 static boolean MessageWindowEventHandler(void *arg, XEvent* event);
-static void DisplayMessageWindow (MessageWindow *messageWindow);
+static void DisplayMessageWindow(MessageWindow *messageWindow);
 
-MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
+MessageWindow* CreateMessageWindow(FcitxClassicUI * classicui)
 {
     MessageWindow* messageWindow = fcitx_malloc0(sizeof(MessageWindow));
     Display *dpy = classicui->dpy;
-    int iScreen= classicui->iScreen;
+    int iScreen = classicui->iScreen;
     messageWindow->owner = classicui;
 
     messageWindow->color.r = messageWindow->color.g = messageWindow->color.b = 220.0 / 256;
@@ -56,14 +56,14 @@ MessageWindow* CreateMessageWindow (FcitxClassicUI * classicui)
     messageWindow->height = 1;
 
     messageWindow->window =
-        XCreateSimpleWindow (dpy, DefaultRootWindow (dpy), 0, 0, 1, 1, 0, WhitePixel (dpy, DefaultScreen (dpy)), WhitePixel (dpy, DefaultScreen (dpy)));
+        XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1, 1, 0, WhitePixel(dpy, DefaultScreen(dpy)), WhitePixel(dpy, DefaultScreen(dpy)));
 
     messageWindow->surface = cairo_xlib_surface_create(dpy, messageWindow->window, DefaultVisual(dpy, iScreen), 1, 1);
     if (messageWindow->window == None)
         return False;
 
-    InitMessageWindowProperty (messageWindow);
-    XSelectInput (dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    InitMessageWindowProperty(messageWindow);
+    XSelectInput(dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
 
     FcitxModuleFunctionArg arg;
     arg.args[0] = MessageWindowEventHandler;
@@ -79,24 +79,19 @@ boolean MessageWindowEventHandler(void *arg, XEvent* event)
     if (event->type == ClientMessage
             && event->xclient.data.l[0] == messageWindow->owner->killAtom
             && event->xclient.window == messageWindow->window
-       )
-    {
+       ) {
         XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
         return true;
     }
 
-    if (event->xany.window == messageWindow->window)
-    {
-        switch (event->type)
-        {
+    if (event->xany.window == messageWindow->window) {
+        switch (event->type) {
         case Expose:
             DrawMessageWindow(messageWindow, NULL, NULL, 0);
             DisplayMessageWindow(messageWindow);
             break;
-        case ButtonRelease:
-        {
-            switch (event->xbutton.button)
-            {
+        case ButtonRelease: {
+            switch (event->xbutton.button) {
             case Button1:
                 XUnmapWindow(messageWindow->owner->dpy, messageWindow->window);
                 break;
@@ -108,41 +103,38 @@ boolean MessageWindowEventHandler(void *arg, XEvent* event)
     }
     return false;
 }
-void InitMessageWindowProperty (MessageWindow *messageWindow)
+void InitMessageWindowProperty(MessageWindow *messageWindow)
 {
     FcitxClassicUI* classicui = messageWindow->owner;
     Display *dpy = classicui->dpy;
-    XSetTransientForHint (dpy, messageWindow->window, DefaultRootWindow (dpy));
+    XSetTransientForHint(dpy, messageWindow->window, DefaultRootWindow(dpy));
 
     ClassicUISetWindowProperty(classicui, messageWindow->window, FCITX_WINDOW_DIALOG, "Fcitx - Message");
 
     XSetWMProtocols(dpy, messageWindow->window, &classicui->killAtom, 1);
 }
 
-void DisplayMessageWindow (MessageWindow *messageWindow)
+void DisplayMessageWindow(MessageWindow *messageWindow)
 {
     FcitxClassicUI* classicui = messageWindow->owner;
     Display *dpy = classicui->dpy;
     int dwidth, dheight;
     GetScreenSize(classicui, &dwidth, &dheight);
-    XMapRaised (dpy, messageWindow->window);
-    XMoveWindow (dpy, messageWindow->window, (dwidth - messageWindow->width) / 2, (dheight - messageWindow->height) / 2);
+    XMapRaised(dpy, messageWindow->window);
+    XMoveWindow(dpy, messageWindow->window, (dwidth - messageWindow->width) / 2, (dheight - messageWindow->height) / 2);
 }
 
-void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length)
+void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, int length)
 {
     FcitxClassicUI* classicui = messageWindow->owner;
     Display *dpy = classicui->dpy;
     int i = 0;
-    if (title)
-    {
+    if (title) {
         if (messageWindow->title)
             free(messageWindow->title);
         messageWindow->title = strdup(title);
-    }
-    else
-        if (!messageWindow->title)
-            return;
+    } else if (!messageWindow->title)
+        return;
 
     title = messageWindow->title;
     FcitxLog(DEBUG, "%s", title);
@@ -152,11 +144,9 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     XSetWMName(dpy, messageWindow->window, &tp);
     XFree(tp.value);
 
-    if (msg)
-    {
-        if (messageWindow->msg)
-        {
-            for (i =0 ;i<messageWindow->length; i++)
+    if (msg) {
+        if (messageWindow->msg) {
+            for (i = 0 ; i < messageWindow->length; i++)
                 free(messageWindow->msg[i]);
             free(messageWindow->msg);
         }
@@ -164,9 +154,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
         messageWindow->msg = malloc(sizeof(char*) * length);
         for (i = 0; i < messageWindow->length; i++)
             messageWindow->msg[i] = strdup(msg[i]);
-    }
-    else
-    {
+    } else {
         if (!messageWindow->msg)
             return;
     }
@@ -176,11 +164,10 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     if (!msg || length == 0)
         return;
 
-    messageWindow->height = MESSAGE_WINDOW_MARGIN * 2 + length *(messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE);
+    messageWindow->height = MESSAGE_WINDOW_MARGIN * 2 + length * (messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE);
     messageWindow->width = 0;
 
-    for (i = 0; i< length ;i ++)
-    {
+    for (i = 0; i < length ; i ++) {
         int width = StringWidth(msg[i], classicui->font, messageWindow->fontSize);
         if (width > messageWindow->width)
             messageWindow->width = width;
@@ -188,7 +175,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
 
     messageWindow->width += MESSAGE_WINDOW_MARGIN * 2;
     XResizeWindow(dpy, messageWindow->window, messageWindow->width, messageWindow->height);
-    cairo_xlib_surface_set_size(messageWindow->surface, messageWindow->width,messageWindow->height);
+    cairo_xlib_surface_set_size(messageWindow->surface, messageWindow->width, messageWindow->height);
 
     cairo_t *c = cairo_create(messageWindow->surface);
     cairo_set_source_rgb(c, messageWindow->color.r, messageWindow->color.g, messageWindow->color.b);
@@ -203,8 +190,7 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     int x, y;
     x = MESSAGE_WINDOW_MARGIN;
     y = MESSAGE_WINDOW_MARGIN;
-    for (i = 0; i< length ;i ++)
-    {
+    for (i = 0; i < length ; i ++) {
         OutputStringWithContext(c, msg[i], x, y);
         y += messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE;
     }
@@ -215,4 +201,4 @@ void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, i
     ActivateWindow(dpy, classicui->iScreen, messageWindow->window);
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

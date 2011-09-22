@@ -37,8 +37,8 @@ extern "C" {
     extern int utf8_char_len(const char *in);
     extern char* utf8_get_nth_char(char* s, unsigned int n);
     extern int utf8_check_string(const char *s);
-    extern int utf8_get_char_extended (const char *p, int max_len);
-    extern int utf8_get_char_validated (const char *p, int max_len);
+    extern int utf8_get_char_extended(const char *p, int max_len);
+    extern int utf8_get_char_validated(const char *p, int max_len);
 
 #ifdef __cplusplus
 }
@@ -47,4 +47,4 @@ extern "C" {
 #endif /* ifndef UTF8_H */
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

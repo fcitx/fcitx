@@ -69,4 +69,4 @@ int asprintf(char **ptr, const char *format, ...)
 #endif
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

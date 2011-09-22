@@ -30,13 +30,13 @@
 extern "C" {
 #endif
 
-#define INPUTWND_START_POS_DOWN	8
-#define MESSAGE_MAX_CHARNUM	(150)	//输入条上显示的最长字数
+#define INPUTWND_START_POS_DOWN 8
+#define MESSAGE_MAX_CHARNUM (150)   //输入条上显示的最长字数
 
-#define MESSAGE_MAX_LENGTH	(MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)	//输入条上显示的最长长度，以字符计
+#define MESSAGE_MAX_LENGTH  (MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)   //输入条上显示的最长长度，以字符计
 
     /* 将输入条上显示的内容分为以下几类 */
-#define MESSAGE_TYPE_COUNT	7
+#define MESSAGE_TYPE_COUNT  7
 
     typedef enum _FcitxUIFlag {
         UI_NONE = 0,
@@ -46,13 +46,13 @@ extern "C" {
 
     struct _FcitxInstance;
     typedef enum _MSG_TYPE {
-        MSG_TIPS = 0,			//提示文本
-        MSG_INPUT = 1,			//用户的输入
-        MSG_INDEX = 2,			//候选字前面的序号
-        MSG_FIRSTCAND = 3,		//第一个候选字
-        MSG_USERPHR = 4,		//用户词组
-        MSG_CODE = 5,			//显示的编码
-        MSG_OTHER = 6,			//其它文本
+        MSG_TIPS = 0,           //提示文本
+        MSG_INPUT = 1,          //用户的输入
+        MSG_INDEX = 2,          //候选字前面的序号
+        MSG_FIRSTCAND = 3,      //第一个候选字
+        MSG_USERPHR = 4,        //用户词组
+        MSG_CODE = 5,           //显示的编码
+        MSG_OTHER = 6,          //其它文本
     } MSG_TYPE;
 
 #define MAX_MESSAGE_COUNT 64
@@ -98,7 +98,7 @@ extern "C" {
         /**
          * @brief get current value function
          **/
-        boolean (*getCurrentStatus)(void *arg);
+        boolean(*getCurrentStatus)(void *arg);
         /**
          * @brief private data for the UI implementation
          **/
@@ -109,14 +109,12 @@ extern "C" {
         void* arg;
     } FcitxUIStatus;
 
-    typedef enum _MenuState
-    {
+    typedef enum _MenuState {
         MENU_ACTIVE = 0,
         MENU_INACTIVE = 1
     } MenuState;
 
-    typedef enum _MenuShellType
-    {
+    typedef enum _MenuShellType {
         MENUTYPE_SIMPLE,
         MENUTYPE_SUBMENU,
         MENUTYPE_DIVLINE
@@ -127,8 +125,7 @@ extern "C" {
     /**
      * @brief a menu entry in a menu.
      **/
-    typedef struct _MenuShell
-    {
+    typedef struct _MenuShell {
         /**
          * @brief The displayed string
          **/
@@ -147,7 +144,7 @@ extern "C" {
         struct _FcitxUIMenu *subMenu;
     } MenuShell;
 
-    typedef boolean (*MenuActionFunction)(struct _FcitxUIMenu *arg, int index);
+    typedef boolean(*MenuActionFunction)(struct _FcitxUIMenu *arg, int index);
     typedef void (*UpdateMenuShellFunction)(struct _FcitxUIMenu *arg);
 
     /**
@@ -197,8 +194,7 @@ extern "C" {
     /**
      * @brief user interface implementation
      **/
-    typedef struct _FcitxUI
-    {
+    typedef struct _FcitxUI {
         /**
          * @brief construct function for this ui
          */
@@ -218,15 +214,15 @@ extern "C" {
         /**
          * @brief action on update status
          */
-        void (*UpdateStatus)(void *arg, FcitxUIStatus* );
+        void (*UpdateStatus)(void *arg, FcitxUIStatus*);
         /**
          * @brief action on register status
          */
-        void (*RegisterStatus)(void *arg, FcitxUIStatus* );
+        void (*RegisterStatus)(void *arg, FcitxUIStatus*);
         /**
          * @brief action on register menu
          */
-        void (*RegisterMenu)(void *arg, FcitxUIMenu* );
+        void (*RegisterMenu)(void *arg, FcitxUIMenu*);
         /**
          * @brief action on focus
          */
@@ -437,7 +433,7 @@ extern "C" {
                         const char* shortDesc,
                         const char* longDesc,
                         void (*toggleStatus)(void *arg),
-                        boolean (*getStatus)(void *arg));
+                        boolean(*getStatus)(void *arg));
     /**
      * @brief register a new menu
      *

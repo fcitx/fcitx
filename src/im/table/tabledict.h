@@ -115,26 +115,26 @@ typedef struct _TableDict {
 } TableDict;
 
 boolean LoadTableDict(TableMetaData* tableMetaData);
-void SaveTableDict (TableMetaData* tableMetaData);
-void FreeTableDict (TableMetaData* tableMetaData);
+void SaveTableDict(TableMetaData* tableMetaData);
+void FreeTableDict(TableMetaData* tableMetaData);
 
-void TableInsertPhrase (TableDict* tableDict, const char *strCode, const char *strHZ);
-RECORD *TableFindPhrase (const TableDict* tableDict, const char *strHZ);
-boolean TableCreatePhraseCode (TableDict* tableDict, char* strHZ);
-void TableCreateAutoPhrase (TableMetaData* tableMetaData, char iCount);
-RECORD *TableHasPhrase (const TableDict* tableDict, const char *strCode, const char *strHZ);
-void TableDelPhraseByHZ (TableDict* tableDict, const char *strHZ);
-void TableDelPhrase (TableDict* tableDict, RECORD * record);
-void TableUpdateHitFrequency (TableDict* tableDict, RECORD * record);
-int TableCompareCode (const TableMetaData* tableMetaData, const char *strUser, const char *strDict);
-int TableFindFirstMatchCode (TableMetaData* tableMetaData, const char* strCodeInput);
-void TableResetFlags (TableDict* tableDict);
+void TableInsertPhrase(TableDict* tableDict, const char *strCode, const char *strHZ);
+RECORD *TableFindPhrase(const TableDict* tableDict, const char *strHZ);
+boolean TableCreatePhraseCode(TableDict* tableDict, char* strHZ);
+void TableCreateAutoPhrase(TableMetaData* tableMetaData, char iCount);
+RECORD *TableHasPhrase(const TableDict* tableDict, const char *strCode, const char *strHZ);
+void TableDelPhraseByHZ(TableDict* tableDict, const char *strHZ);
+void TableDelPhrase(TableDict* tableDict, RECORD * record);
+void TableUpdateHitFrequency(TableDict* tableDict, RECORD * record);
+int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict);
+int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput);
+void TableResetFlags(TableDict* tableDict);
 
-boolean IsInputKey (const TableDict* tableDict, int iKey);
-boolean IsEndKey (const TableMetaData* tableMetaData, char cChar);
-boolean IsIgnoreChar (const TableDict* tableDict, char cChar);
-unsigned int CalHZIndex (char *strHZ);
-boolean HasMatchingKey (const TableMetaData* tableMetaData, const char* strCodeInput);
+boolean IsInputKey(const TableDict* tableDict, int iKey);
+boolean IsEndKey(const TableMetaData* tableMetaData, char cChar);
+boolean IsIgnoreChar(const TableDict* tableDict, char cChar);
+unsigned int CalHZIndex(char *strHZ);
+boolean HasMatchingKey(const TableMetaData* tableMetaData, const char* strCodeInput);
 CONFIG_BINDING_DECLARE(TableMetaData);
 
 #endif

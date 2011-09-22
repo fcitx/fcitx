@@ -41,8 +41,7 @@
 struct _FcitxClassicUI;
 struct _FcitxUIMenu;
 
-typedef struct _XlibMenu
-{
+typedef struct _XlibMenu {
     int iPosX;
     int iPosY;
     int width;
@@ -66,4 +65,4 @@ void DisplayXlibMenu(XlibMenu * menu);
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

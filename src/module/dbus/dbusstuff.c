@@ -85,22 +85,19 @@ void* DBusCreate(FcitxInstance* instance)
             dbus_error_init(&err);
         }
 
-        if (NULL == conn)
-        {
+        if (NULL == conn) {
             sleep(RETRY_INTERVAL);
             retry ++;
         }
     } while (NULL == conn && retry < MAX_RETRY_TIMES);
 
-    if ( NULL == conn )
-    {
+    if (NULL == conn) {
         free(dbusmodule);
         return NULL;
     }
 
     if (!dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch,
-            NULL, dbusmodule, NULL))
-    {
+            NULL, dbusmodule, NULL)) {
         FcitxLog(WARNING, _("Add Watch Function Error"));
         dbus_error_free(&err);
         free(dbusmodule);
@@ -168,14 +165,11 @@ static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data)
     FcitxDBusWatch **up, *w;
     FcitxDBus* dbusmodule = (FcitxDBus*) data;
 
-    for (up = &(dbusmodule->watches), w = dbusmodule->watches; w; w = w->next)
-    {
-        if (w->watch == watch)
-        {
+    for (up = &(dbusmodule->watches), w = dbusmodule->watches; w; w = w->next) {
+        if (w->watch == watch) {
             *up = w->next;
             free(w);
-        }
-        else
+        } else
             up = &(w->next);
     }
 }
@@ -187,8 +181,7 @@ void DBusSetFD(void* arg)
     FcitxInstance* instance = dbusmodule->owner;
 
     for (w = dbusmodule->watches; w; w = w->next)
-        if (dbus_watch_get_enabled(w->watch))
-        {
+        if (dbus_watch_get_enabled(w->watch)) {
             unsigned int flags = dbus_watch_get_flags(w->watch);
             int fd = dbus_watch_get_unix_fd(w->watch);
 
@@ -213,10 +206,8 @@ void DBusProcessEvent(void* arg)
     FcitxInstance* instance = dbusmodule->owner;
     FcitxDBusWatch *w;
 
-    for (w = dbusmodule->watches; w; w = w->next)
-    {
-        if (dbus_watch_get_enabled(w->watch))
-        {
+    for (w = dbusmodule->watches; w; w = w->next) {
+        if (dbus_watch_get_enabled(w->watch)) {
             unsigned int flags = 0;
             int fd = dbus_watch_get_unix_fd(w->watch);
 
@@ -234,11 +225,10 @@ void DBusProcessEvent(void* arg)
         }
     }
 
-    if (connection)
-    {
-        dbus_connection_ref (connection);
-        while (dbus_connection_dispatch (connection) == DBUS_DISPATCH_DATA_REMAINS);
-        dbus_connection_unref (connection);
+    if (connection) {
+        dbus_connection_ref(connection);
+        while (dbus_connection_dispatch(connection) == DBUS_DISPATCH_DATA_REMAINS);
+        dbus_connection_unref(connection);
     }
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

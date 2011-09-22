@@ -92,8 +92,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
     client->id = -1;
 
     /* You must have dbus to make it works */
-    if (client->conn == NULL)
-    {
+    if (client->conn == NULL) {
         g_warning("%s", error->message);
         free(client);
         return NULL;
@@ -104,8 +103,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
                         DBUS_PATH_DBUS,
                         DBUS_INTERFACE_DBUS);
 
-    if (!client->dbusproxy)
-    {
+    if (!client->dbusproxy) {
         g_object_unref(client->conn);
         free(client);
         return NULL;
@@ -126,19 +124,15 @@ static void _changed_cb(DBusGProxy* proxy, char* service, char* old_owner, char*
 {
     FcitxLog(LOG_LEVEL, "_changed_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
-    if (g_str_equal(service, client->servicename))
-    {
+    if (g_str_equal(service, client->servicename)) {
         gboolean new_owner_good = new_owner && (new_owner[0] != '\0');
-        if (new_owner_good)
-        {
-            if (client->proxy)
-            {
+        if (new_owner_good) {
+            if (client->proxy) {
                 g_object_unref(client->proxy);
                 client->proxy = NULL;
             }
 
-            if (client->icproxy)
-            {
+            if (client->icproxy) {
                 g_object_unref(client->icproxy);
                 client->icproxy = NULL;
             }
@@ -152,8 +146,7 @@ static void _destroy_cb(DBusGProxy *proxy, gpointer user_data)
 {
     FcitxLog(LOG_LEVEL, "_destroy_cb");
     FcitxIMClient* client = (FcitxIMClient*) user_data;
-    if (client->proxy == proxy)
-    {
+    if (client->proxy == proxy) {
         g_object_unref(client->proxy);
         g_object_unref(client->icproxy);
         client->proxy = NULL;
@@ -176,7 +169,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     if (!client->proxy)
         return;
 
-    g_signal_connect(client->proxy, "destroy", G_CALLBACK( _destroy_cb), client);
+    g_signal_connect(client->proxy, "destroy", G_CALLBACK(_destroy_cb), client);
 
     char* appname = fcitx_get_process_name();
     dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_STRING, appname, G_TYPE_INVALID);
@@ -221,7 +214,7 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
                       client->icname,
                       FCITX_IC_DBUS_INTERFACE,
                       &error
-                      );
+                                                     );
     if (!client->icproxy)
         return;
 
@@ -241,8 +234,7 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
 
 void FcitxIMClientClose(FcitxIMClient* client)
 {
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "DestroyIC", G_TYPE_INVALID);
     }
     DBusGProxy* icproxy = client->icproxy;
@@ -252,7 +244,7 @@ void FcitxIMClientClose(FcitxIMClient* client)
     if (client->dbusproxy)
         g_object_unref(client->dbusproxy);
     if (proxy)
-        g_signal_handlers_disconnect_by_func(proxy, G_CALLBACK( _destroy_cb), client);
+        g_signal_handlers_disconnect_by_func(proxy, G_CALLBACK(_destroy_cb), client);
     if (icproxy)
         g_object_unref(icproxy);
     if (proxy)
@@ -262,24 +254,21 @@ void FcitxIMClientClose(FcitxIMClient* client)
 
 void FcitxIMClientFocusIn(FcitxIMClient* client)
 {
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "FocusIn", G_TYPE_INVALID);
     }
 }
 
 void FcitxIMClientFocusOut(FcitxIMClient* client)
 {
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "FocusOut", G_TYPE_INVALID);
     }
 }
 
 void FcitxIMClientReset(FcitxIMClient* client)
 {
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "Reset", G_TYPE_INVALID);
     }
 }
@@ -287,16 +276,14 @@ void FcitxIMClientReset(FcitxIMClient* client)
 void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags)
 {
     uint32_t iflags = flags;
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "SetCapacity", G_TYPE_UINT, iflags, G_TYPE_INVALID);
     }
 }
 
 void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y)
 {
-    if (client->icproxy)
-    {
+    if (client->icproxy) {
         dbus_g_proxy_call_no_reply(client->icproxy, "SetCursorLocation", G_TYPE_INT, x, G_TYPE_INT, y, G_TYPE_INVALID);
     }
 }
@@ -322,23 +309,22 @@ void FcitxIMClientProcessKey(FcitxIMClient* client,
 }
 
 int FcitxIMClientProcessKeySync(FcitxIMClient* client,
-                             uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t)
+                                uint32_t keyval, uint32_t keycode, uint32_t state, FcitxKeyEventType type, uint32_t t)
 {
     int itype = type;
     GError *error = NULL;
     int ret = -1;
-    if ( !dbus_g_proxy_call(client->icproxy, "ProcessKeyEvent",
-                      &error,
-                      G_TYPE_UINT, keyval,
-                      G_TYPE_UINT, keycode,
-                      G_TYPE_UINT, state,
-                      G_TYPE_INT, itype,
-                      G_TYPE_UINT, t,
-                      G_TYPE_INVALID,
-                      G_TYPE_INT, &ret,
-                      G_TYPE_INVALID
-                    ))
-    {
+    if (!dbus_g_proxy_call(client->icproxy, "ProcessKeyEvent",
+                           &error,
+                           G_TYPE_UINT, keyval,
+                           G_TYPE_UINT, keycode,
+                           G_TYPE_UINT, state,
+                           G_TYPE_INT, itype,
+                           G_TYPE_UINT, t,
+                           G_TYPE_INVALID,
+                           G_TYPE_INT, &ret,
+                           G_TYPE_INVALID
+                          )) {
         return -1;
     }
 

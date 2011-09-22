@@ -19,12 +19,12 @@ CONFIG_BINDING_REGISTER("ClassicUI", "MainWindowHideMode", hideMainWindow)
 CONFIG_BINDING_REGISTER("ClassicUI", "VerticalList", bVerticalList)
 CONFIG_BINDING_END()
 
-void FilterCopyUseTray(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg) {
+void FilterCopyUseTray(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void *value, ConfigSync sync, void *filterArg)
+{
     static boolean firstRunOnUseTray = true;
     FcitxClassicUI *classicui = (FcitxClassicUI*) config;
     boolean *b = (boolean*)value;
-    if (sync == Raw2Value && b)
-    {
+    if (sync == Raw2Value && b) {
         if (firstRunOnUseTray)
             classicui->bUseTrayIcon = *b;
         firstRunOnUseTray = false;
@@ -38,8 +38,7 @@ static void FilterScreenSizeX(GenericConfig* config, ConfigGroup *group, ConfigO
     int width, height;
     GetScreenSize(classicui, &width, &height);
 
-    switch (sync)
-    {
+    switch (sync) {
     case Raw2Value:
         if (*X >= width)
             *X = width - 10;
@@ -59,8 +58,7 @@ static void FilterScreenSizeY(GenericConfig* config, ConfigGroup *group, ConfigO
     int width, height;
     GetScreenSize(classicui, &width, &height);
 
-    switch (sync)
-    {
+    switch (sync) {
     case Raw2Value:
         if (*Y >= height)
             *Y = height - 10;
@@ -74,4 +72,4 @@ static void FilterScreenSizeY(GenericConfig* config, ConfigGroup *group, ConfigO
 
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

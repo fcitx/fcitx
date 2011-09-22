@@ -52,8 +52,8 @@
 
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
-static const UT_icd ime_icd = {sizeof(FcitxIM), NULL ,NULL, NULL};
-static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL ,NULL, NULL};
+static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
+static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL , NULL, NULL};
 static int IMPriorityCmp(const void *a, const void *b);
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuShell(FcitxUIMenu *menu);
@@ -98,7 +98,7 @@ int IMPriorityCmp(const void *a, const void *b)
     ta = (FcitxIM*)a;
     tb = (FcitxIM*)b;
     int delta = ta->iPriority - tb->iPriority;
-    if ( delta != 0 )
+    if (delta != 0)
         return delta;
     else
         return strcmp(ta->strIconName, tb->strIconName);
@@ -149,10 +149,9 @@ void SaveAllIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
     FcitxIM *pim;
-    for ( pim = (FcitxIM *) utarray_front(imes);
+    for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
-            pim = (FcitxIM *) utarray_next(imes, pim))
-    {
+            pim = (FcitxIM *) utarray_next(imes, pim)) {
         if ((pim)->Save)
             (pim)->Save(pim->klass);
     }
@@ -161,10 +160,9 @@ void SaveAllIM(FcitxInstance* instance)
 void UnloadAllIM(UT_array* ims)
 {
     FcitxAddon **pim;
-    for ( pim = (FcitxAddon **) utarray_front(ims);
+    for (pim = (FcitxAddon **) utarray_front(ims);
             pim != NULL;
-            pim = (FcitxAddon **) utarray_next(ims, pim))
-    {
+            pim = (FcitxAddon **) utarray_next(ims, pim)) {
         FcitxAddon *im = *pim;
         UnloadIM(im);
     }
@@ -225,46 +223,38 @@ boolean LoadAllIM(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     UT_array* ims = &instance->imeclasses;
     FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
-        if (addon->bEnabled && addon->category == AC_INPUTMETHOD)
-        {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->bEnabled && addon->category == AC_INPUTMETHOD) {
             char *modulePath;
-            switch (addon->type)
-            {
-            case AT_SHAREDLIBRARY:
-            {
+            switch (addon->type) {
+            case AT_SHAREDLIBRARY: {
                 FILE *fp = GetLibFile(addon->library, "r", &modulePath);
                 void *handle;
                 FcitxIMClass * imclass;
                 if (!fp)
                     break;
                 fclose(fp);
-                handle = dlopen(modulePath,RTLD_LAZY | RTLD_GLOBAL);
-                if (!handle)
-                {
-                    FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath ,dlerror());
+                handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+                if (!handle) {
+                    FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath , dlerror());
                     break;
                 }
-                
-                if (!CheckABIVersion(handle))
-                {
+
+                if (!CheckABIVersion(handle)) {
                     FcitxLog(ERROR, "%s ABI Version Error", addon->name);
                     dlclose(handle);
                     break;
                 }
-                
-                imclass=dlsym(handle,"ime");
-                if (!imclass || !imclass->Create)
-                {
+
+                imclass = dlsym(handle, "ime");
+                if (!imclass || !imclass->Create) {
                     FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
                     dlclose(handle);
                     break;
                 }
-                if ((addon->addonInstance = imclass->Create(instance)) == NULL)
-                {
+                if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
                     dlclose(handle);
                     break;
                 }
@@ -281,8 +271,7 @@ boolean LoadAllIM(FcitxInstance* instance)
         instance->profile->iIMIndex = 0;
     if (instance->profile->iIMIndex > utarray_len(&instance->imes))
         instance->profile->iIMIndex = utarray_len(&instance->imes) - 1;
-    if (utarray_len(&instance->imes) <= 0)
-    {
+    if (utarray_len(&instance->imes) <= 0) {
         FcitxLog(ERROR, _("No available Input Method"));
         return false;
     }
@@ -294,9 +283,9 @@ FCITX_EXPORT_API
 boolean IsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
-    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state) )
+    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
         return true;
-    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state) )
+    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
         return true;
     return false;
 }
@@ -329,16 +318,14 @@ INPUT_RETURN_VALUE ProcessKey(
         return IRV_TO_PROCESS;
 
     /* process keyrelease event for switch key and 2nd, 3rd key */
-    if (event == FCITX_RELEASE_KEY ) {
+    if (event == FCITX_RELEASE_KEY) {
         if (GetCurrentState(instance) != IS_CLOSED) {
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
                 if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
-                    if (GetCurrentState(instance) == IS_ACTIVE)
-                    {
+                    if (GetCurrentState(instance) == IS_ACTIVE) {
                         if (input->keyReleased == KR_CTRL_SHIFT)
                             SwitchIM(instance, -1);
-                    }
-                    else if (IsHotKey(sym, state, fc->hkTrigger))
+                    } else if (IsHotKey(sym, state, fc->hkTrigger))
                         CloseIM(instance, GetCurrentIC(instance));
                 } else if (IsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
@@ -398,8 +385,7 @@ INPUT_RETURN_VALUE ProcessKey(
             if (IsHotKey(sym, state, fc->switchKey)) {
                 input->keyReleased = KR_CTRL;
                 retVal = IRV_DO_NOTHING;
-            }
-            else if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2)) {
+            } else if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2)) {
                 input->keyReleased = KR_CTRL_SHIFT;
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(sym, state, fc->hkTrigger)) {
@@ -426,17 +412,14 @@ INPUT_RETURN_VALUE ProcessKey(
             ProcessPreInputFilter(instance, sym, state, &retVal);
         }
 
-        if (retVal == IRV_TO_PROCESS)
-        {
+        if (retVal == IRV_TO_PROCESS) {
             if (IsHotKey(sym, state, fc->i2ndSelectKey)) {
-                if (CandidateWordGetByIndex(input->candList, 1) != NULL)
-                {
+                if (CandidateWordGetByIndex(input->candList, 1) != NULL) {
                     input->keyReleased = KR_2ND_SELECTKEY;
                     return IRV_DO_NOTHING;
                 }
             } else if (IsHotKey(sym, state, fc->i3rdSelectKey)) {
-                if (CandidateWordGetByIndex(input->candList, 2) != NULL)
-                {
+                if (CandidateWordGetByIndex(input->candList, 2) != NULL) {
                     input->keyReleased = KR_3RD_SELECTKEY;
                     return IRV_DO_NOTHING;
                 }
@@ -448,16 +431,14 @@ INPUT_RETURN_VALUE ProcessKey(
         }
 
         /* check choose key first, because it might trigger update candidates */
-        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-        {
-            int index = CheckChooseKey (sym, state, CandidateWordGetChoose(input->candList));
+        if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+            int index = CheckChooseKey(sym, state, CandidateWordGetChoose(input->candList));
             if (index >= 0)
                 retVal = CandidateWordChooseByIndex(input->candList, index);
         }
     }
 
-    if (GetCurrentState(instance) == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS))
-    {
+    if (GetCurrentState(instance) == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         CleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
         ProcessUpdateCandidates(instance);
@@ -467,22 +448,17 @@ INPUT_RETURN_VALUE ProcessKey(
         * since all candidate word are cached in candList, so we don't need to trigger
         * GetCandWords after go for another page, simply update input window is ok.
         */
-    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-    {
-        if (IsHotKey(sym, state, fc->hkPrevPage))
-        {
+    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+        if (IsHotKey(sym, state, fc->hkPrevPage)) {
             if (CandidateWordGoPrevPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
-        }
-        else if (IsHotKey(sym, state, fc->hkNextPage))
-        {
+        } else if (IsHotKey(sym, state, fc->hkNextPage)) {
             if (CandidateWordGoNextPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
         }
     }
 
-    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS)
-    {
+    if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         ProcessPostInputFilter(instance, sym, state, &retVal);
     }
 
@@ -507,14 +483,12 @@ void ProcessInputReturnValue(
     FcitxInputState *input = instance->input;
     FcitxConfig *fc = instance->config;
 
-    if (retVal & IRV_FLAG_PENDING_COMMIT_STRING)
-    {
+    if (retVal & IRV_FLAG_PENDING_COMMIT_STRING) {
         CommitString(instance, GetCurrentIC(instance), GetOutputString(input));
-        instance->iHZInputed += (int) (utf8_strlen(GetOutputString(input)));
+        instance->iHZInputed += (int)(utf8_strlen(GetOutputString(input)));
     }
 
-    if (retVal & IRV_FLAG_DO_PHRASE_TIPS)
-    {
+    if (retVal & IRV_FLAG_DO_PHRASE_TIPS) {
         CleanInputWindow(instance);
         if (fc->bPhraseTips && currentIM->PhraseTips)
             DoPhraseTips(instance);
@@ -524,14 +498,12 @@ void ProcessInputReturnValue(
         input->lastIsSingleHZ = 0;
     }
 
-    if (retVal & IRV_FLAG_RESET_INPUT)
-    {
+    if (retVal & IRV_FLAG_RESET_INPUT) {
         ResetInput(instance);
         CloseInputWindow(instance);
     }
 
-    if (retVal & IRV_FLAG_DISPLAY_LAST)
-    {
+    if (retVal & IRV_FLAG_DISPLAY_LAST) {
         CleanInputWindow(instance);
         AddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", FcitxInputStateGetRawInputBuffer(input)[0]);
         AddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", GetOutputString(input));
@@ -568,8 +540,7 @@ void SwitchIM(FcitxInstance* instance, int index)
 
     if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
         lastIM = NULL;
-    else
-    {
+    else {
         lastIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
     }
 
@@ -582,14 +553,12 @@ void SwitchIM(FcitxInstance* instance, int index)
             instance->profile->iIMIndex = 0;
         else
             instance->profile->iIMIndex++;
-    }
-    else if (index >= 0)
+    } else if (index >= 0)
         instance->profile->iIMIndex = index;
 
     if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
         newIM = NULL;
-    else
-    {
+    else {
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
     }
 
@@ -703,27 +672,23 @@ void ReloadConfig(FcitxInstance *instance)
     UT_array* addons = &instance->addons;
 
     FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_MODULE &&
                 addon->bEnabled &&
-                addon->addonInstance)
-        {
+                addon->addonInstance) {
             if (addon->module->ReloadConfig)
                 addon->module->ReloadConfig(addon->addonInstance);
         }
     }
 
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_FRONTEND &&
                 addon->bEnabled &&
-                addon->addonInstance)
-        {
+                addon->addonInstance) {
             if (addon->frontend->ReloadConfig)
                 addon->frontend->ReloadConfig(addon->addonInstance);
         }
@@ -734,8 +699,7 @@ void ReloadConfig(FcitxInstance *instance)
     FcitxIM* pim;
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
-            pim = (FcitxIM *) utarray_next(imes, pim))
-    {
+            pim = (FcitxIM *) utarray_next(imes, pim)) {
         if (pim->ReloadConfig)
             pim->ReloadConfig(pim->klass);
     }
@@ -762,39 +726,34 @@ FCITX_EXPORT_API
 void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
     instance->globalState = IS_ACTIVE;
-    switch (instance->config->shareState)
-    {
-        case ShareState_All:
-        case ShareState_PerProgram:
-        {
-            FcitxInputContext *rec = instance->ic_list;
-            while (rec != NULL)
-            {
-                boolean flag = false;
-                if (instance->config->shareState == ShareState_All)
-                    flag = true;
-                else
-                {
-                    UT_array* frontends = &instance->frontends;
-                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                    if (pfrontend)
-                    {
-                        FcitxFrontend* frontend = (*pfrontend)->frontend;
-                        if (frontend->CheckICFromSameApplication &&
+    switch (instance->config->shareState) {
+    case ShareState_All:
+    case ShareState_PerProgram: {
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL) {
+            boolean flag = false;
+            if (instance->config->shareState == ShareState_All)
+                flag = true;
+            else {
+                UT_array* frontends = &instance->frontends;
+                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                if (pfrontend) {
+                    FcitxFrontend* frontend = (*pfrontend)->frontend;
+                    if (frontend->CheckICFromSameApplication &&
                             frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                            flag = true;
-                    }
+                        flag = true;
                 }
-
-                if (flag)
-                    EnableIMInternal(instance, rec, keepState);
-                rec = rec->next;
             }
+
+            if (flag)
+                EnableIMInternal(instance, rec, keepState);
+            rec = rec->next;
         }
+    }
+    break;
+    case ShareState_None:
+        EnableIMInternal(instance, ic, keepState);
         break;
-        case ShareState_None:
-            EnableIMInternal(instance, ic, keepState);
-            break;
     }
 }
 
@@ -813,8 +772,7 @@ void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean ke
     if (oldstate == IS_CLOSED)
         frontend->EnableIM((*pfrontend)->addonInstance, ic);
 
-    if (ic == GetCurrentIC(instance))
-    {
+    if (ic == GetCurrentIC(instance)) {
         if (oldstate == IS_CLOSED)
             OnTriggerOn(instance);
         if (!keepState)
@@ -826,39 +784,34 @@ FCITX_EXPORT_API
 void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
     instance->globalState = IS_CLOSED;
-    switch (instance->config->shareState)
-    {
-        case ShareState_All:
-        case ShareState_PerProgram:
-        {
-            FcitxInputContext *rec = instance->ic_list;
-            while (rec != NULL)
-            {
-                boolean flag = false;
-                if (instance->config->shareState == ShareState_All)
-                    flag = true;
-                else
-                {
-                    UT_array* frontends = &instance->frontends;
-                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                    if (pfrontend)
-                    {
-                        FcitxFrontend* frontend = (*pfrontend)->frontend;
-                        if (frontend->CheckICFromSameApplication &&
+    switch (instance->config->shareState) {
+    case ShareState_All:
+    case ShareState_PerProgram: {
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL) {
+            boolean flag = false;
+            if (instance->config->shareState == ShareState_All)
+                flag = true;
+            else {
+                UT_array* frontends = &instance->frontends;
+                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                if (pfrontend) {
+                    FcitxFrontend* frontend = (*pfrontend)->frontend;
+                    if (frontend->CheckICFromSameApplication &&
                             frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                            flag = true;
-                    }
+                        flag = true;
                 }
-
-                if (flag)
-                    CloseIMInternal(instance, rec);
-                rec = rec->next;
             }
+
+            if (flag)
+                CloseIMInternal(instance, rec);
+            rec = rec->next;
         }
+    }
+    break;
+    case ShareState_None:
+        CloseIMInternal(instance, ic);
         break;
-        case ShareState_None:
-            CloseIMInternal(instance, ic);
-            break;
     }
 }
 
@@ -874,8 +827,7 @@ void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic)
     ic->state = IS_CLOSED;
     frontend->CloseIM((*pfrontend)->addonInstance, ic);
 
-    if (ic == GetCurrentIC(instance))
-    {
+    if (ic == GetCurrentIC(instance)) {
         OnTriggerOff(instance);
         CloseInputWindow(instance);
     }
@@ -898,39 +850,34 @@ void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         objectState = IS_ENG;
 
     instance->globalState = objectState;
-    switch (instance->config->shareState)
-    {
-        case ShareState_All:
-        case ShareState_PerProgram:
-        {
-            FcitxInputContext *rec = instance->ic_list;
-            while (rec != NULL)
-            {
-                boolean flag = false;
-                if (instance->config->shareState == ShareState_All)
-                    flag = true;
-                else
-                {
-                    UT_array* frontends = &instance->frontends;
-                    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                    if (pfrontend)
-                    {
-                        FcitxFrontend* frontend = (*pfrontend)->frontend;
-                        if (frontend->CheckICFromSameApplication &&
+    switch (instance->config->shareState) {
+    case ShareState_All:
+    case ShareState_PerProgram: {
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL) {
+            boolean flag = false;
+            if (instance->config->shareState == ShareState_All)
+                flag = true;
+            else {
+                UT_array* frontends = &instance->frontends;
+                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+                if (pfrontend) {
+                    FcitxFrontend* frontend = (*pfrontend)->frontend;
+                    if (frontend->CheckICFromSameApplication &&
                             frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                            flag = true;
-                    }
+                        flag = true;
                 }
-
-                if (flag)
-                    ChangeIMStateInternal(instance, rec, objectState);
-                rec = rec->next;
             }
+
+            if (flag)
+                ChangeIMStateInternal(instance, rec, objectState);
+            rec = rec->next;
         }
+    }
+    break;
+    case ShareState_None:
+        ChangeIMStateInternal(instance, ic, objectState);
         break;
-        case ShareState_None:
-            ChangeIMStateInternal(instance, ic, objectState);
-            break;
     }
 }
 
@@ -941,10 +888,8 @@ void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_S
     if (ic->state == objectState)
         return;
     ic->state = objectState;
-    if (ic == GetCurrentIC(instance))
-    {
-        if (objectState == IS_ACTIVE)
-        {
+    if (ic == GetCurrentIC(instance)) {
+        if (objectState == IS_ACTIVE) {
             ResetInput(instance);
         } else {
             ResetInput(instance);
@@ -960,7 +905,7 @@ void InitIMMenu(FcitxInstance* instance)
     FcitxIM* pim;
     UT_array* imes = &instance->imes;
     utarray_init(&instance->imMenu.shell, &menuICD);
-    for ( pim = (FcitxIM *) utarray_front(imes);
+    for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim))
         AddMenuShell(&instance->imMenu, pim->strName, MENUTYPE_SIMPLE, NULL);
@@ -1003,13 +948,13 @@ void ShowInputSpeed(FcitxInstance* instance)
     if (instance->config->bShowUserSpeed) {
         double          timePassed;
 
-        timePassed = instance->totaltime + difftime (time (NULL), instance->timeStart);
+        timePassed = instance->totaltime + difftime(time(NULL), instance->timeStart);
         if (((int) timePassed) == 0)
             timePassed = 1.0;
 
         SetMessageCount(input->msgAuxDown, 0);
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Input Speed: "));
-        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) ( instance->iHZInputed * 60 / timePassed));
+        AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int)(instance->iHZInputed * 60 / timePassed));
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("/min  Time Used: "));
         AddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) timePassed / 60);
         AddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("min Num of Characters: "));
@@ -1061,7 +1006,7 @@ void CleanInputWindowDown(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose)
+int CheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
 {
     if (state != 0)
         return -1;

@@ -1,7 +1,6 @@
 #include "sp.h"
 
-const SP_C            SPMap_C_MS[] =
-{
+const SP_C            SPMap_C_MS[] = {
     {"ai", 'l'},
     {"an", 'j'},
     {"ang", 'h'},
@@ -35,8 +34,7 @@ const SP_C            SPMap_C_MS[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_MS[] =
-{
+const SP_S SPMap_S_MS[] = {
     {"ch", 'i'},
     {"sh", 'u'},
     {"zh", 'v'},
@@ -44,8 +42,7 @@ const SP_S SPMap_S_MS[] =
 };
 
 
-const SP_C            SPMap_C_Ziguang[] =
-{
+const SP_C            SPMap_C_Ziguang[] = {
     {"ai", 'p'},
     {"an", 'r'},
     {"ang", 's'},
@@ -79,8 +76,7 @@ const SP_C            SPMap_C_Ziguang[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_Ziguang[] =
-{
+const SP_S SPMap_S_Ziguang[] = {
     {"ch", 'a'},
     {"sh", 'i'},
     {"zh", 'u'},
@@ -88,8 +84,7 @@ const SP_S SPMap_S_Ziguang[] =
 };
 
 
-const SP_C            SPMap_C_ABC[] =
-{
+const SP_C            SPMap_C_ABC[] = {
     {"ai", 'l'},
     {"an", 'j'},
     {"ang", 'h'},
@@ -123,8 +118,7 @@ const SP_C            SPMap_C_ABC[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_ABC[] =
-{
+const SP_S SPMap_S_ABC[] = {
     {"ch", 'e'},
     {"sh", 'v'},
     {"zh", 'a'},
@@ -132,8 +126,7 @@ const SP_S SPMap_S_ABC[] =
 };
 
 
-const SP_C            SPMap_C_Zhongwenzhixing[] =
-{
+const SP_C            SPMap_C_Zhongwenzhixing[] = {
     {"ai", 's'},
     {"an", 'f'},
     {"ang", 'g'},
@@ -167,8 +160,7 @@ const SP_C            SPMap_C_Zhongwenzhixing[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_Zhongwenzhixing[] =
-{
+const SP_S SPMap_S_Zhongwenzhixing[] = {
     {"ch", 'u'},
     {"sh", 'i'},
     {"zh", 'v'},
@@ -176,8 +168,7 @@ const SP_S SPMap_S_Zhongwenzhixing[] =
 };
 
 
-const SP_C            SPMap_C_PinyinJiaJia[] =
-{
+const SP_C            SPMap_C_PinyinJiaJia[] = {
     {"ai", 's'},
     {"an", 'f'},
     {"ang", 'g'},
@@ -211,8 +202,7 @@ const SP_C            SPMap_C_PinyinJiaJia[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_PinyinJiaJia[] =
-{
+const SP_S SPMap_S_PinyinJiaJia[] = {
     {"ch", 'u'},
     {"sh", 'i'},
     {"zh", 'v'},
@@ -220,8 +210,7 @@ const SP_S SPMap_S_PinyinJiaJia[] =
 };
 
 
-const SP_C            SPMap_C_Ziranma[] =
-{
+const SP_C            SPMap_C_Ziranma[] = {
     {"ai", 'l'},
     {"an", 'j'},
     {"ang", 'h'},
@@ -255,8 +244,7 @@ const SP_C            SPMap_C_Ziranma[] =
     {"\0", '\0'}
 };
 
-const SP_S SPMap_S_Ziranma[] =
-{
+const SP_S SPMap_S_Ziranma[] = {
     {"ch", 'i'},
     {"sh", 'u'},
     {"zh", 'v'},

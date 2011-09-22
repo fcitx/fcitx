@@ -70,10 +70,10 @@ void* X11Create(FcitxInstance* instance)
 
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);
-    x11priv->windowTypeAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE", False);
-    x11priv->typeMenuAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
-    x11priv->typeDialogAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-    x11priv->typeDockAtom = XInternAtom (x11priv->dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    x11priv->windowTypeAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE", False);
+    x11priv->typeMenuAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
+    x11priv->typeDialogAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    x11priv->typeDockAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
     x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
 
     utarray_init(&x11priv->handlers, &handler_icd);
@@ -91,7 +91,7 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11AddCompositeHandler);
     InitComposite(x11priv);
 
-    InitXErrorHandler (x11priv);
+    InitXErrorHandler(x11priv);
     return x11priv;
 }
 
@@ -110,22 +110,17 @@ void X11ProcessEvent(void* arg)
 {
     FcitxX11* x11priv = (FcitxX11*)arg;
     XEvent event;
-    while (XPending(x11priv->dpy))
-    {
-        XNextEvent (x11priv->dpy, &event); //等待一个事件发生
+    while (XPending(x11priv->dpy)) {
+        XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
 
         FcitxLock(x11priv->owner);
         /* 处理X事件 */
-        if (XFilterEvent (&event, None) == False)
-        {
-            if (event.type == DestroyNotify)
-            {
+        if (XFilterEvent(&event, None) == False) {
+            if (event.type == DestroyNotify) {
                 if (event.xany.window == x11priv->compManager)
                     X11HandlerComposite(x11priv, false);
-            }
-            else if (event.type == ClientMessage) {
-                if (event.xclient.data.l[1] == x11priv->compManagerAtom)
-                {
+            } else if (event.type == ClientMessage) {
+                if (event.xclient.data.l[1] == x11priv->compManagerAtom) {
                     if (X11GetCompositeManager(x11priv))
                         X11HandlerComposite(x11priv, true);
                 }
@@ -133,10 +128,10 @@ void X11ProcessEvent(void* arg)
 
 
             FcitxXEventHandler* handler;
-            for ( handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
+            for (handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
                     handler != NULL;
                     handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
-                if (handler->eventHandler (handler->instance, &event))
+                if (handler->eventHandler(handler->instance, &event))
                     break;
         }
         FcitxUnlock(x11priv->owner);
@@ -174,10 +169,9 @@ void* X11RemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
     FcitxX11* x11priv = (FcitxX11*)arg;
     FcitxXEventHandler* handler;
     int i = 0;
-    for ( i = 0 ;
+    for (i = 0 ;
             i < utarray_len(&x11priv->handlers);
-            i ++)
-    {
+            i ++) {
         handler = (FcitxXEventHandler*) utarray_eltptr(&x11priv->handlers, i);
         if (handler->instance == args.args[0])
             break;
@@ -190,7 +184,7 @@ void InitComposite(FcitxX11* x11stuff)
 {
     char *atom_names = NULL;
     asprintf(&atom_names, "_NET_WM_CM_S%d", x11stuff->iScreen);
-    x11stuff->compManagerAtom = XInternAtom (x11stuff->dpy, atom_names, False);
+    x11stuff->compManagerAtom = XInternAtom(x11stuff->dpy, atom_names, False);
 
     free(atom_names);
     X11GetCompositeManager(x11stuff);
@@ -215,21 +209,19 @@ X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args)
     temp.screen = scr;
     temp.depth = 32;
     temp.class = TrueColor;
-    xvi = XGetVisualInfo (dpy,  VisualScreenMask |VisualDepthMask |VisualClassMask,&temp,&nvi);
+    xvi = XGetVisualInfo(dpy,  VisualScreenMask | VisualDepthMask | VisualClassMask, &temp, &nvi);
     if (!xvi)
         return 0;
     visual = 0;
-    for (i = 0; i < nvi; i++)
-    {
-        format = XRenderFindVisualFormat (dpy, xvi[i].visual);
-        if (format->type == PictTypeDirect && format->direct.alphaMask)
-        {
+    for (i = 0; i < nvi; i++) {
+        format = XRenderFindVisualFormat(dpy, xvi[i].visual);
+        if (format->type == PictTypeDirect && format->direct.alphaMask) {
             visual = xvi[i].visual;
             break;
         }
     }
 
-    XFree (xvi);
+    XFree(xvi);
     return visual;
 }
 
@@ -281,8 +273,7 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
     FcitxXWindowType *type = args.args[1];
     char *windowTitle = args.args[2];
 
-    switch (*type)
-    {
+    switch (*type) {
     case FCITX_WINDOW_DIALOG:
         wintype = &x11priv->typeDialogAtom;
         break;
@@ -297,18 +288,17 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
         break;
     }
     if (wintype)
-        XChangeProperty (x11priv->dpy, window, x11priv->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
+        XChangeProperty(x11priv->dpy, window, x11priv->windowTypeAtom, XA_ATOM, 32, PropModeReplace, (void *) wintype, 1);
 
     pid_t pid = getpid();
     XChangeProperty(x11priv->dpy, window, x11priv->pidAtom, XA_CARDINAL, 32,
                     PropModeReplace, (unsigned char *)&pid, 1);
-    XChangeProperty( x11priv->dpy, window, XA_WM_CLASS, XA_STRING, 8, PropModeReplace, (const unsigned char*) "Fcitx", strlen("Fcitx") + 1);
+    XChangeProperty(x11priv->dpy, window, XA_WM_CLASS, XA_STRING, 8, PropModeReplace, (const unsigned char*) "Fcitx", strlen("Fcitx") + 1);
 
-    if (windowTitle)
-    {
+    if (windowTitle) {
         XTextProperty   tp;
         Xutf8TextListToTextProperty(x11priv->dpy, &windowTitle, 1, XUTF8StringStyle, &tp);
-        XSetWMName (x11priv->dpy, window, &tp);
+        XSetWMName(x11priv->dpy, window, &tp);
         XFree(tp.value);
     }
 
@@ -374,40 +364,35 @@ X11MouseClick(void *arg, FcitxModuleFunctionArg args)
 void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
 {
 
-    if (enable)
-    {
+    if (enable) {
         x11priv->compManager = XGetSelectionOwner(x11priv->dpy, x11priv->compManagerAtom);
 
-        if (x11priv->compManager)
-        {
+        if (x11priv->compManager) {
             XSetWindowAttributes attrs;
             attrs.event_mask = StructureNotifyMask;
-            XChangeWindowAttributes (x11priv->dpy, x11priv->compManager, CWEventMask, &attrs);
+            XChangeWindowAttributes(x11priv->dpy, x11priv->compManager, CWEventMask, &attrs);
         }
-    }
-    else {
+    } else {
         x11priv->compManager = None;
     }
 
     FcitxCompositeChangedHandler* handler;
-    for ( handler = (FcitxCompositeChangedHandler *) utarray_front(&x11priv->comphandlers);
+    for (handler = (FcitxCompositeChangedHandler *) utarray_front(&x11priv->comphandlers);
             handler != NULL;
             handler = (FcitxCompositeChangedHandler *) utarray_next(&x11priv->comphandlers, handler))
-        handler->eventHandler (handler->instance, enable);
+        handler->eventHandler(handler->instance, enable);
 }
 
 boolean X11GetCompositeManager(FcitxX11* x11stuff)
 {
     x11stuff->compManager = XGetSelectionOwner(x11stuff->dpy, x11stuff->compManagerAtom);
 
-    if (x11stuff->compManager)
-    {
+    if (x11stuff->compManager) {
         XSetWindowAttributes attrs;
         attrs.event_mask = StructureNotifyMask;
-        XChangeWindowAttributes (x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
+        XChangeWindowAttributes(x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
         return true;
-    }
-    else
+    } else
         return false;
 }
 

@@ -60,8 +60,8 @@ int FontHeightWithContextReal(cairo_t* c);
 #define SetFontContext(context, fontname, size) \
     do { \
         cairo_select_font_face(context, fontname, \
-                CAIRO_FONT_SLANT_NORMAL, \
-                CAIRO_FONT_WEIGHT_NORMAL); \
+                               CAIRO_FONT_SLANT_NORMAL, \
+                               CAIRO_FONT_WEIGHT_NORMAL); \
         cairo_set_font_size(context, size); \
     } while (0)
 
@@ -70,4 +70,4 @@ int FontHeightWithContextReal(cairo_t* c);
 #endif
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

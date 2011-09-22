@@ -28,8 +28,7 @@
 
 struct _FcitxClassicUI;
 
-typedef struct _MessageWindow
-{
+typedef struct _MessageWindow {
     Window window;
     cairo_surface_t* surface;
     ConfigColor color;
@@ -42,8 +41,8 @@ typedef struct _MessageWindow
     struct _FcitxClassicUI* owner;
 } MessageWindow;
 
-MessageWindow* CreateMessageWindow (struct _FcitxClassicUI * classicui);
-void DrawMessageWindow (MessageWindow* messageWindow, char *title, char **msg, int length);
+MessageWindow* CreateMessageWindow(struct _FcitxClassicUI * classicui);
+void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, int length);
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

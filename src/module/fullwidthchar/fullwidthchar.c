@@ -110,10 +110,9 @@ void* FullWidthCharCreate(FcitxInstance* instance)
 
 boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
 {
-    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
+    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
-    if (profile->bUseFullWidthChar && IsHotKeySimple(sym, state))
-    {
+    if (profile->bUseFullWidthChar && IsHotKeySimple(sym, state)) {
         sprintf(GetOutputString(FcitxInstanceGetInputState(fwchar->owner)), "%s", sCornerTrans[sym - 32]);
         *retVal = IRV_COMMIT_STRING;
         return true;
@@ -123,7 +122,7 @@ boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INP
 
 void ToggleFullWidthState(void* arg)
 {
-    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
+    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     profile->bUseFullWidthChar = !profile->bUseFullWidthChar;
     SaveProfile(profile);
@@ -132,14 +131,14 @@ void ToggleFullWidthState(void* arg)
 
 boolean GetFullWidthState(void* arg)
 {
-    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
+    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     return profile->bUseFullWidthChar;
 }
 
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
 {
-    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar* )arg;
+    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     UpdateStatus(fwchar->owner, "fullwidth");
     return IRV_DO_NOTHING;
 }

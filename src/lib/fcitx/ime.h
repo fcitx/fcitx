@@ -96,17 +96,17 @@ extern "C" {
      *        method in create function
      **/
     typedef struct _FcitxIMClass {
-        void*              (*Create) (struct _FcitxInstance* instance);
-        void               (*Destroy) (void *arg);
+        void*              (*Create)(struct _FcitxInstance* instance);
+        void (*Destroy)(void *arg);
     } FcitxIMClass;
 
-    typedef boolean            (*FcitxIMInit) (void *arg);
-    typedef void               (*FcitxIMResetIM) (void *arg);
-    typedef INPUT_RETURN_VALUE (*FcitxIMDoInput) (void *arg, FcitxKeySym, unsigned int);
-    typedef INPUT_RETURN_VALUE (*FcitxIMGetCandWords) (void *arg);
-    typedef boolean            (*FcitxIMPhraseTips) (void *arg);
-    typedef void               (*FcitxIMSave) (void *arg);
-    typedef void               (*FcitxIMReloadConfig) (void *arg);
+    typedef boolean(*FcitxIMInit)(void *arg);
+    typedef void (*FcitxIMResetIM)(void *arg);
+    typedef INPUT_RETURN_VALUE(*FcitxIMDoInput)(void *arg, FcitxKeySym, unsigned int);
+    typedef INPUT_RETURN_VALUE(*FcitxIMGetCandWords)(void *arg);
+    typedef boolean(*FcitxIMPhraseTips)(void *arg);
+    typedef void (*FcitxIMSave)(void *arg);
+    typedef void (*FcitxIMReloadConfig)(void *arg);
 
     /**
      * @brief Fcitx Input method instance
@@ -230,7 +230,7 @@ extern "C" {
      * @param ic input context
      * @return void
      **/
-    void ChangeIMState (struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
+    void ChangeIMState(struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
 
     /**
      * @brief reset input state
@@ -238,7 +238,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return void
      **/
-    void ResetInput (struct _FcitxInstance* instance);
+    void ResetInput(struct _FcitxInstance* instance);
 
     /**
      * @brief clean whole input window
@@ -339,7 +339,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return void
      **/
-    void SaveAllIM (struct _FcitxInstance* instance);
+    void SaveAllIM(struct _FcitxInstance* instance);
 
     /**
      * @brief reload all config
@@ -356,7 +356,7 @@ extern "C" {
      * @param index input method index
      * @return void
      **/
-    void SwitchIM (struct _FcitxInstance* instance, int index);
+    void SwitchIM(struct _FcitxInstance* instance, int index);
 
     /**
      * @brief check is choose key or not, if so, return the choose index
@@ -366,7 +366,7 @@ extern "C" {
      * @param strChoose choose key string
      * @return int
      **/
-    int CheckChooseKey (FcitxKeySym sym, int state, const char* strChoose);
+    int CheckChooseKey(FcitxKeySym sym, int state, const char* strChoose);
 
     struct _CandidateWordList* FcitxInputStateGetCandidateList(FcitxInputState* input);
 

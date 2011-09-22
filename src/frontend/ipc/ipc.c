@@ -48,9 +48,9 @@ typedef struct _FcitxIPCFrontend {
 
 static void* IPCCreate(FcitxInstance* instance, int frontendid);
 static boolean IPCDestroy(void* arg);
-void IPCCreateIC (void* arg, FcitxInputContext* context, void *priv);
-boolean IPCCheckIC (void* arg, FcitxInputContext* context, void* priv);
-void IPCDestroyIC (void* arg, FcitxInputContext* context);
+void IPCCreateIC(void* arg, FcitxInputContext* context, void *priv);
+boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv);
+void IPCDestroyIC(void* arg, FcitxInputContext* context);
 static void IPCEnableIM(void* arg, FcitxInputContext* ic);
 static void IPCCloseIM(void* arg, FcitxInputContext* ic);
 static void IPCCommitString(void* arg, FcitxInputContext* ic, char* str);
@@ -59,8 +59,8 @@ static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
 static void IPCUpdatePreedit(void* arg, FcitxInputContext* ic);
 static void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic);
-static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *message, void *user_data);
-static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data);
+static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *message, void *user_data);
+static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data);
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
@@ -162,8 +162,7 @@ const char * ic_introspection_xml =
     "</node>\n";
 
 FCITX_EXPORT_API
-FcitxFrontend frontend =
-{
+FcitxFrontend frontend = {
     IPCCreate,
     IPCDestroy,
     IPCCreateIC,
@@ -194,8 +193,7 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     FcitxModuleFunctionArg arg;
 
     ipc->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
-    if (ipc->conn == NULL)
-    {
+    if (ipc->conn == NULL) {
         FcitxLog(ERROR, "DBus Not initialized");
         free(ipc);
         return NULL;
@@ -204,8 +202,7 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     DBusObjectPathVTable fcitxIPCVTable = {NULL, &IPCDBusEventHandler, NULL, NULL, NULL, NULL };
 
     if (!dbus_connection_register_object_path(ipc->conn,  FCITX_IM_DBUS_PATH,
-            &fcitxIPCVTable, ipc))
-    {
+            &fcitxIPCVTable, ipc)) {
         FcitxLog(ERROR, "No memory");
         free(ipc);
         return NULL;
@@ -238,29 +235,25 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     arg2 = config->hkTrigger[0].state;
     arg3 = config->hkTrigger[1].sym;
     arg4 = config->hkTrigger[1].state;
-    if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
-    {
+    if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateIC")) {
         /* CreateIC v1 indicates that default state can only be disabled */
         context->state = IS_CLOSED;
         ipcic->appname = NULL;
         dbus_message_append_args(reply,
-                                DBUS_TYPE_INT32, &ipcic->id,
-                                DBUS_TYPE_UINT32, &arg1,
-                                DBUS_TYPE_UINT32, &arg2,
-                                DBUS_TYPE_UINT32, &arg3,
-                                DBUS_TYPE_UINT32, &arg4,
-                                DBUS_TYPE_INVALID);
-    }
-    else if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateICv2"))
-    {
+                                 DBUS_TYPE_INT32, &ipcic->id,
+                                 DBUS_TYPE_UINT32, &arg1,
+                                 DBUS_TYPE_UINT32, &arg2,
+                                 DBUS_TYPE_UINT32, &arg3,
+                                 DBUS_TYPE_UINT32, &arg4,
+                                 DBUS_TYPE_INVALID);
+    } else if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateICv2")) {
 
         DBusError error;
         dbus_error_init(&error);
         char* appname;
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
-        else
-        {
+        else {
             if (strlen(appname) == 0)
                 ipcic->appname = NULL;
             else
@@ -274,20 +267,19 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
         dbus_error_free(&error);
         dbus_message_append_args(reply,
-                                DBUS_TYPE_INT32, &ipcic->id,
-                                DBUS_TYPE_BOOLEAN, &arg0,
-                                DBUS_TYPE_UINT32, &arg1,
-                                DBUS_TYPE_UINT32, &arg2,
-                                DBUS_TYPE_UINT32, &arg3,
-                                DBUS_TYPE_UINT32, &arg4,
-                                DBUS_TYPE_INVALID);
+                                 DBUS_TYPE_INT32, &ipcic->id,
+                                 DBUS_TYPE_BOOLEAN, &arg0,
+                                 DBUS_TYPE_UINT32, &arg1,
+                                 DBUS_TYPE_UINT32, &arg2,
+                                 DBUS_TYPE_UINT32, &arg3,
+                                 DBUS_TYPE_UINT32, &arg4,
+                                 DBUS_TYPE_INVALID);
     }
-    dbus_connection_send (ipc->conn, reply, NULL);
-    dbus_message_unref (reply);
+    dbus_connection_send(ipc->conn, reply, NULL);
+    dbus_message_unref(reply);
 
     DBusObjectPathVTable vtable = {NULL, &IPCICDBusEventHandler, NULL, NULL, NULL, NULL };
-    if (!dbus_connection_register_object_path(ipc->conn, ipcic->path, &vtable, ipc))
-    {
+    if (!dbus_connection_register_object_path(ipc->conn, ipcic->path, &vtable, ipc)) {
         return ;
     }
 
@@ -390,30 +382,25 @@ void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 
 void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 {
-    *x= ic->offset_x;
-    *y= ic->offset_y;
+    *x = ic->offset_x;
+    *y = ic->offset_y;
 }
 
 
-static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data)
+static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
-    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
-    {
+    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
         DBusMessage *reply = dbus_message_new_method_return(msg);
 
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &im_introspection_xml, DBUS_TYPE_INVALID);
-        dbus_connection_send (ipc->conn, reply, NULL);
-        dbus_message_unref (reply);
+        dbus_connection_send(ipc->conn, reply, NULL);
+        dbus_message_unref(reply);
         return DBUS_HANDLER_RESULT_HANDLED;
-    }
-    else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC"))
-    {
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC")) {
         CreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
-    }
-    else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2"))
-    {
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")) {
         CreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
@@ -421,7 +408,7 @@ static DBusHandlerResult IPCDBusEventHandler (DBusConnection *connection, DBusMe
 }
 
 
-static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBusMessage *msg, void *user_data)
+static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
     int id;
@@ -429,94 +416,73 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
     FcitxInputContext* ic = FindIC(ipc->owner, ipc->frontendid, &id);
     DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
-    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
-    {
+    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
         DBusMessage *reply = dbus_message_new_method_return(msg);
 
         dbus_message_append_args(reply, DBUS_TYPE_STRING, &ic_introspection_xml, DBUS_TYPE_INVALID);
-        dbus_connection_send (ipc->conn, reply, NULL);
-        dbus_message_unref (reply);
+        dbus_connection_send(ipc->conn, reply, NULL);
+        dbus_message_unref(reply);
         result = DBUS_HANDLER_RESULT_HANDLED;
     }
 
-    if (result == DBUS_HANDLER_RESULT_NOT_YET_HANDLED && ic)
-    {
+    if (result == DBUS_HANDLER_RESULT_NOT_YET_HANDLED && ic) {
         DBusError error;
         dbus_error_init(&error);
-        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC"))
-        {
+        if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC")) {
             EnableIM(ipc->owner, ic, false);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC")) {
             CloseIM(ipc->owner, ic);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusIn")) {
             IPCICFocusIn(ipc, ic);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FocusOut")) {
             IPCICFocusOut(ipc, ic);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "Reset")) {
             IPCICReset(ipc, ic);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation")) {
             int x, y;
-            if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID))
-            {
+            if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID)) {
                 IPCICSetCursorLocation(ipc, ic, x, y);
                 DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send (ipc->conn, reply, NULL);
-                dbus_message_unref (reply);
+                dbus_connection_send(ipc->conn, reply, NULL);
+                dbus_message_unref(reply);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCapacity")) {
             uint32_t flags;
-            if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID))
-            {
+            if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID)) {
                 ic->contextCaps = flags;
                 DBusMessage *reply = dbus_message_new_method_return(msg);
-                dbus_connection_send (ipc->conn, reply, NULL);
-                dbus_message_unref (reply);
+                dbus_connection_send(ipc->conn, reply, NULL);
+                dbus_message_unref(reply);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
             DestroyIC(ipc->owner, ipc->frontendid, &id);
             DBusMessage *reply = dbus_message_new_method_return(msg);
-            dbus_connection_send (ipc->conn, reply, NULL);
-            dbus_message_unref (reply);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent"))
-        {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "ProcessKeyEvent")) {
             uint32_t keyval, keycode, state, t;
             int ret, itype;
             FcitxKeyEventType type;
@@ -526,16 +492,15 @@ static DBusHandlerResult IPCICDBusEventHandler (DBusConnection *connection, DBus
                                       DBUS_TYPE_UINT32, &state,
                                       DBUS_TYPE_INT32, &itype,
                                       DBUS_TYPE_UINT32, &t,
-                                      DBUS_TYPE_INVALID))
-            {
+                                      DBUS_TYPE_INVALID)) {
                 type = itype;
                 ret = IPCProcessKey(ipc, ic, keyval, keycode, state, t, type);
 
                 DBusMessage *reply = dbus_message_new_method_return(msg);
 
                 dbus_message_append_args(reply, DBUS_TYPE_INT32, &ret, DBUS_TYPE_INVALID);
-                dbus_connection_send (ipc->conn, reply, NULL);
-                dbus_message_unref (reply);
+                dbus_connection_send(ipc->conn, reply, NULL);
+                dbus_message_unref(reply);
                 dbus_connection_flush(ipc->conn);
             }
 
@@ -569,8 +534,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     if (originsym == 0)
         return 0;
 
-    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger))
-    {
+    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger)) {
         EnableIM(ipc->owner, ic, false);
         FcitxInputStateSetKeyReleased(input, KR_OTHER);
         return 1;
@@ -594,12 +558,9 @@ static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
     if (!SetCurrentIC(ipc->owner, ic))
         return;
 
-    if (ic)
-    {
+    if (ic) {
         OnInputFocus(ipc->owner);
-    }
-    else
-    {
+    } else {
         CloseInputWindow(ipc->owner);
         MoveInputWindow(ipc->owner);
     }
@@ -610,8 +571,7 @@ static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
-    if (ic && ic == currentic)
-    {
+    if (ic && ic == currentic) {
         SetCurrentIC(ipc->owner, NULL);
         CloseInputWindow(ipc->owner);
         OnInputUnFocus(ipc->owner);
@@ -623,8 +583,7 @@ static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
-    if (ic && ic == currentic)
-    {
+    if (ic && ic == currentic) {
         CloseInputWindow(ipc->owner);
         ResetInput(ipc->owner);
     }
@@ -652,8 +611,7 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 
     char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     char* str = ProcessOutputFilter(ipc->owner, strPreedit);
-    if (str)
-    {
+    if (str) {
         free(strPreedit);
         strPreedit = str;
     }
@@ -682,29 +640,25 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
     char *str;
     char* strAuxUp = MessagesToCString(FcitxInputStateGetAuxUp(input));
     str = ProcessOutputFilter(ipc->owner, strAuxUp);
-    if (str)
-    {
+    if (str) {
         free(strAuxUp);
         strAuxUp = str;
     }
     char* strAuxDown = MessagesToCString(FcitxInputStateGetAuxDown(input));
     str = ProcessOutputFilter(ipc->owner, strAuxDown);
-    if (str)
-    {
+    if (str) {
         free(strAuxDown);
         strAuxDown = str;
     }
     char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     str = ProcessOutputFilter(ipc->owner, strPreedit);
-    if (str)
-    {
+    if (str) {
         free(strPreedit);
         strPreedit = str;
     }
     char* candidateword = CandidateWordToCString(ipc->owner);
     str = ProcessOutputFilter(ipc->owner, candidateword);
-    if (str)
-    {
+    if (str) {
         free(candidateword);
         candidateword = str;
     }

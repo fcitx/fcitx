@@ -36,8 +36,7 @@ extern "C" {
     /**
      * @brief struct for ~/.config/fcitx/profile
      **/
-    typedef struct _FcitxProfile
-    {
+    typedef struct _FcitxProfile {
         /**
          * @brief derives from GenericConfig
          **/

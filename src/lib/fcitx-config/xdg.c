@@ -50,15 +50,13 @@ make_path(const char *path)
     opath[PATH_MAX - 1] = '\0';
     len = strlen(opath);
 
-    while (opath[len - 1] == '/')
-    {
+    while (opath[len - 1] == '/') {
         opath[len - 1] = '\0';
         len --;
     }
 
     for (p = opath; *p; p++)
-        if (*p == '/')
-        {
+        if (*p == '/') {
             *p = '\0';
 
             if (access(opath, F_OK))
@@ -126,8 +124,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
     /* check absolute path */
 
-    if (strlen(fileName) > 0 && fileName[0] == '/')
-    {
+    if (strlen(fileName) > 0 && fileName[0] == '/') {
         fp = fopen(fileName, mode);
 
         if (retFile)
@@ -139,8 +136,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
     if (len <= 0)
         return NULL;
 
-    if (!mode)
-    {
+    if (!mode) {
         snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
         buf[sizeof(buf) - 1] = '\0';
 
@@ -150,8 +146,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
         return NULL;
     }
 
-    for (i = 0;i < len;i++)
-    {
+    for (i = 0; i < len; i++) {
         snprintf(buf, sizeof(buf), "%s/%s", path[i], fileName);
         buf[sizeof(buf) - 1] = '\0';
 
@@ -162,10 +157,8 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
     }
 
-    if (!fp)
-    {
-        if (strchr(mode, 'w') || strchr(mode, 'a'))
-        {
+    if (!fp) {
+        if (strchr(mode, 'w') || strchr(mode, 'a')) {
             snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
             buf[sizeof(buf) - 1] = '\0';
 
@@ -202,12 +195,9 @@ char **GetXDGPath(
     char* dirHome;
     const char *xdgDirHome = getenv(homeEnv);
 
-    if (xdgDirHome && xdgDirHome[0])
-    {
+    if (xdgDirHome && xdgDirHome[0]) {
         dirHome = strdup(xdgDirHome);
-    }
-    else
-    {
+    } else {
         const char *home = getenv("HOME");
         dirHome = malloc(strlen(home) + 1 + strlen(homeDefault) + 1);
         sprintf(dirHome, "%s/%s", home, homeDefault);
@@ -227,10 +217,8 @@ char **GetXDGPath(
 
     char *tmp = dirs;
 
-    while (*tmp)
-    {
-        if (*tmp == ':')
-        {
+    while (*tmp) {
+        if (*tmp == ':') {
             *tmp = '\0';
             dirsCount++;
         }
@@ -243,12 +231,10 @@ char **GetXDGPath(
 
     char **dirsArray = malloc(dirsCount * sizeof(char*));
 
-    for (i = 0; i < dirsCount; ++i)
-    {
+    for (i = 0; i < dirsCount; ++i) {
         dirsArray[i] = dirs;
 
-        while (*dirs)
-        {
+        while (*dirs) {
             dirs++;
         }
 

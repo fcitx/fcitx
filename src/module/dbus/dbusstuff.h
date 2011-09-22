@@ -35,7 +35,7 @@ extern "C" {
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
 
     typedef struct _FcitxDBusEventHandler {
-        boolean (*eventHandler)(void* instance, DBusMessage * event);
+        boolean(*eventHandler)(void* instance, DBusMessage * event);
         void* instance;
     } FcitxDBusEventHandler;
 

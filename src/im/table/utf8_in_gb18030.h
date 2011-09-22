@@ -63381,4 +63381,4 @@ unsigned int utf8_in_gb18030[ 63360 ] = {
     0xefbfbf
 };
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

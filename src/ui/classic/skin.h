@@ -42,44 +42,38 @@ struct _InputWindow;
 struct _Messages;
 struct _FcitxClassicUI;
 
-typedef enum _FillRule
-{
+typedef enum _FillRule {
     F_COPY = 0,
     F_RESIZE = 1
 } FillRule;
 
-typedef enum _MouseE
-{
+typedef enum _MouseE {
     RELEASE,//鼠标释放状态
     PRESS,//鼠标按下
     MOTION//鼠标停留
 } MouseE;
 
-typedef struct _SkinImage
-{
+typedef struct _SkinImage {
     char *name;
     cairo_surface_t *image;
     UT_hash_handle hh;
 } SkinImage;
 
-typedef struct _SkinInfo
-{
+typedef struct _SkinInfo {
     char *skinName;
     char *skinVersion;
     char *skinAuthor;
     char *skinDesc;
 } SkinInfo;
 
-typedef struct _SkinFont
-{
+typedef struct _SkinFont {
     int fontSize;
     int menuFontSize;
     ConfigColor fontColor[7];
     ConfigColor menuFontColor[2];
 } SkinFont;
 
-typedef struct _SkinMenu
-{
+typedef struct _SkinMenu {
     char* backImg;
     int marginTop;
     int marginBottom;
@@ -94,8 +88,7 @@ typedef struct _SkinMenu
 /**
  * @brief The Main Window Skin description
  **/
-typedef struct _SkinMainBar
-{
+typedef struct _SkinMainBar {
     char* backImg;
     char* logo;
     char* eng;
@@ -110,8 +103,7 @@ typedef struct _SkinMainBar
     FillRule fillH;
 } SkinMainBar;
 
-typedef struct _SkinInputBar
-{
+typedef struct _SkinInputBar {
     char* backImg;
     ConfigColor cursorColor;
     int marginTop;
@@ -130,8 +122,7 @@ typedef struct _SkinInputBar
     FillRule fillH;
 } SkinInputBar;
 
-typedef struct _SkinPlacement
-{
+typedef struct _SkinPlacement {
     char name[MAX_STATUS_NAME + 1];
     int x;
     int y;
@@ -141,8 +132,7 @@ typedef struct _SkinPlacement
 /**
  * @brief Tray Icon Image
  **/
-typedef struct _SkinTrayIcon
-{
+typedef struct _SkinTrayIcon {
     /**
      * @brief Active Tray Icon Image
      **/
@@ -154,8 +144,7 @@ typedef struct _SkinTrayIcon
     char* inactive;
 } SkinTrayIcon;
 
-typedef struct _SkinKeyboard
-{
+typedef struct _SkinKeyboard {
     char* backImg;
     ConfigColor keyColor;
 } SkinKeyboard;
@@ -163,8 +152,7 @@ typedef struct _SkinKeyboard
 /**
 * 配置文件结构,方便处理,结构固定
 */
-typedef struct _FcitxSkin
-{
+typedef struct _FcitxSkin {
     GenericConfig config;
     SkinInfo skinInfo;
     SkinFont skinFont;
@@ -182,7 +170,7 @@ typedef struct _FcitxSkin
 ConfigFileDesc* GetSkinDesc();
 int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
-void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, int cursorPos, struct _Messages * msgup, struct _Messages *msgdown ,unsigned int * iheight, unsigned int *iwidth);
+void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, int cursorPos, struct _Messages * msgup, struct _Messages *msgdown , unsigned int * iheight, unsigned int *iwidth);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
 void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const char* font);
 void InitSkinMenu(struct _FcitxClassicUI* classicui);
@@ -206,4 +194,4 @@ CONFIG_BINDING_DECLARE(FcitxSkin);
 
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

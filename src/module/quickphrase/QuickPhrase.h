@@ -22,14 +22,14 @@
 
 #include "fcitx/ime.h"
 
-#define QUICKPHRASE_CODE_LEN	20
+#define QUICKPHRASE_CODE_LEN    20
 #define QUICKPHRASE_PHRASE_LEN  40
 
 typedef struct _QUICK_PHRASE {
-    char strCode[QUICKPHRASE_CODE_LEN+1];
-    char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH+1];
+    char strCode[QUICKPHRASE_CODE_LEN + 1];
+    char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1];
 } QUICK_PHRASE;
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

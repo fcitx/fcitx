@@ -34,8 +34,7 @@ extern "C" {
      * @brief A misc module in Fcitx, it can register hook, or add it's own event
      *        to Fcitx main loop.
      **/
-    typedef struct _FcitxModule
-    {
+    typedef struct _FcitxModule {
         /**
          * @brief construction function
          */
@@ -61,8 +60,7 @@ extern "C" {
     /**
      * @brief the argument to invoke module function
      **/
-    typedef struct _FcitxModuleFunctionArg
-    {
+    typedef struct _FcitxModuleFunctionArg {
         /**
          * @brief arguments
          **/

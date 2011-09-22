@@ -30,10 +30,9 @@
 #include <X11/Xlib.h>
 #include "skin.h"
 
-#define ABOUT_WINDOW_HEIGHT	150
+#define ABOUT_WINDOW_HEIGHT 150
 struct _FcitxClassicUI;
-typedef struct _AboutWindow
-{
+typedef struct _AboutWindow {
     Window window;
     cairo_surface_t* surface;
     ConfigColor color;
@@ -45,10 +44,10 @@ typedef struct _AboutWindow
 } AboutWindow;
 
 
-AboutWindow* CreateAboutWindow (struct _FcitxClassicUI *classicui);
-void            DisplayAboutWindow (AboutWindow* aboutWindow);
-void            DrawAboutWindow (AboutWindow* aboutWindow);
+AboutWindow* CreateAboutWindow(struct _FcitxClassicUI *classicui);
+void            DisplayAboutWindow(AboutWindow* aboutWindow);
+void            DrawAboutWindow(AboutWindow* aboutWindow);
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -23,7 +23,7 @@
 #include "fcitx-config/fcitx-config.h"
 
 typedef enum _SP_FROM {
-    SP_FROM_USER=0,
+    SP_FROM_USER = 0,
     SP_FROM_SYSTEM_CONFIG,
     SP_FROM_SYSTEM_SP_CONFIG
 } SP_FROM;
@@ -41,16 +41,16 @@ typedef struct _SP_S {
 struct _FcitxPinyinConfig;
 struct _FcitxPinyinState;
 
-boolean         SPInit (void* arg);
-void            LoadSPData (struct _FcitxPinyinState* pystate);
+boolean         SPInit(void* arg);
+void            LoadSPData(struct _FcitxPinyinState* pystate);
 
 //void            QP2SP (char *strQP, char *strSP);
-void            SP2QP (struct _FcitxPinyinConfig* pyconfig, char* strSP, char* strQP);
-int             GetSPIndexQP_C (struct _FcitxPinyinConfig* pyconfig, char *str);
-int             GetSPIndexQP_S (struct _FcitxPinyinConfig* pyconfig, char *str);
-int             GetSPIndexJP_C (struct _FcitxPinyinConfig* pyconfig, char c, int iStart);
-int             GetSPIndexJP_S (struct _FcitxPinyinConfig* pyconfig, char c);
+void            SP2QP(struct _FcitxPinyinConfig* pyconfig, char* strSP, char* strQP);
+int             GetSPIndexQP_C(struct _FcitxPinyinConfig* pyconfig, char *str);
+int             GetSPIndexQP_S(struct _FcitxPinyinConfig* pyconfig, char *str);
+int             GetSPIndexJP_C(struct _FcitxPinyinConfig* pyconfig, char c, int iStart);
+int             GetSPIndexJP_S(struct _FcitxPinyinConfig* pyconfig, char c);
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

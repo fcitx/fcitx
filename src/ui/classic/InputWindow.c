@@ -49,7 +49,7 @@ void InitInputWindow(InputWindow* inputWindow)
 {
     XSetWindowAttributes    attrib;
     unsigned long   attribmask;
-    char        strWindowName[]="Fcitx Input Window";
+    char        strWindowName[] = "Fcitx Input Window";
     int depth;
     Colormap cmap;
     Visual * vs;
@@ -68,30 +68,30 @@ void InitInputWindow(InputWindow* inputWindow)
 
     SkinImage *back = LoadImage(sc, sc->skinInputBar.backImg, false);
 
-    inputWindow->iInputWindowHeight= cairo_image_surface_get_height(back->image);
-    vs=ClassicUIFindARGBVisual (classicui);
+    inputWindow->iInputWindowHeight = cairo_image_surface_get_height(back->image);
+    vs = ClassicUIFindARGBVisual(classicui);
     ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
 
-    inputWindow->window=XCreateWindow (dpy,
-                                       RootWindow(dpy, iScreen),
-                                       classicui->iMainWindowOffsetX,
-                                       classicui->iMainWindowOffsetY,
-                                       cairo_image_surface_get_width(back->image),
-                                       inputWindow->iInputWindowHeight,
-                                       0,
-                                       depth,InputOutput,
-                                       vs,attribmask,
-                                       &attrib);
+    inputWindow->window = XCreateWindow(dpy,
+                                        RootWindow(dpy, iScreen),
+                                        classicui->iMainWindowOffsetX,
+                                        classicui->iMainWindowOffsetY,
+                                        cairo_image_surface_get_width(back->image),
+                                        inputWindow->iInputWindowHeight,
+                                        0,
+                                        depth, InputOutput,
+                                        vs, attribmask,
+                                        &attrib);
 
-    inputWindow->cs_x_input_bar= cairo_xlib_surface_create(
-                                     dpy,
-                                     inputWindow->window,
-                                     vs,
-                                     cairo_image_surface_get_width(back->image),
-                                     cairo_image_surface_get_height(back->image));
-    inputWindow->cs_input_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                              INPUT_BAR_MAX_WIDTH,
-                              INPUT_BAR_MAX_HEIGHT);
+    inputWindow->cs_x_input_bar = cairo_xlib_surface_create(
+                                      dpy,
+                                      inputWindow->window,
+                                      vs,
+                                      cairo_image_surface_get_width(back->image),
+                                      cairo_image_surface_get_height(back->image));
+    inputWindow->cs_input_bar = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                INPUT_BAR_MAX_WIDTH,
+                                INPUT_BAR_MAX_HEIGHT);
 
     inputWindow->cs_input_back = cairo_surface_create_similar(inputWindow->cs_input_bar,
                                  CAIRO_CONTENT_COLOR_ALPHA,
@@ -99,7 +99,7 @@ void InitInputWindow(InputWindow* inputWindow)
                                  INPUT_BAR_MAX_HEIGHT);
 
     LoadInputMessage(sc, inputWindow, classicui->font);
-    XSelectInput (dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
+    XSelectInput(dpy, inputWindow->window, ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | ExposureMask);
 
     ClassicUISetWindowProperty(classicui, inputWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 }
@@ -130,20 +130,17 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
 boolean InputWindowEventHandler(void *arg, XEvent* event)
 {
     InputWindow* inputWindow = arg;
-    if (event->xany.window == inputWindow->window)
-    {
-        switch (event->type)
-        {
+    if (event->xany.window == inputWindow->window) {
+        switch (event->type) {
         case Expose:
             DrawInputWindow(inputWindow);
             break;
         case ButtonPress:
             switch (event->xbutton.button) {
-            case Button1:
-            {
+            case Button1: {
                 SetMouseStatus(inputWindow->owner->mainWindow, NULL, RELEASE, RELEASE);
                 int             x,
-                y;
+                                y;
                 x = event->xbutton.x;
                 y = event->xbutton.y;
                 ClassicUIMouseClick(inputWindow->owner, inputWindow->window, &x, &y);
@@ -164,21 +161,20 @@ boolean InputWindowEventHandler(void *arg, XEvent* event)
     return false;
 }
 
-void DisplayInputWindow (InputWindow* inputWindow)
+void DisplayInputWindow(InputWindow* inputWindow)
 {
     FcitxLog(DEBUG, _("DISPLAY InputWindow"));
-    XMapRaised (inputWindow->dpy, inputWindow->window);
+    XMapRaised(inputWindow->dpy, inputWindow->window);
 }
 
 void DrawInputWindow(InputWindow* inputWindow)
 {
     int lastW = inputWindow->iInputWindowWidth, lastH = inputWindow->iInputWindowHeight;
     int cursorPos = NewMessageToOldStyleMessage(inputWindow->owner->owner, inputWindow->msgUp, inputWindow->msgDown);
-    DrawInputBar(inputWindow->skin, inputWindow, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight ,&inputWindow->iInputWindowWidth);
+    DrawInputBar(inputWindow->skin, inputWindow, cursorPos, inputWindow->msgUp, inputWindow->msgDown, &inputWindow->iInputWindowHeight , &inputWindow->iInputWindowWidth);
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
-    if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight)
-    {
+    if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight) {
         cairo_xlib_surface_set_size(inputWindow->cs_x_input_bar,
                                     inputWindow->iInputWindowWidth,
                                     inputWindow->iInputWindowHeight);
@@ -226,17 +222,17 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
         iTempInputWindowX = dwidth - inputWindow->iInputWindowWidth;
 
     if ((iTempInputWindowY + inputWindow->iInputWindowHeight) > dheight) {
-        if ( iTempInputWindowY > dheight )
+        if (iTempInputWindowY > dheight)
             iTempInputWindowY = dheight - inputWindow->iInputWindowHeight - 40;
         else
             iTempInputWindowY = iTempInputWindowY - inputWindow->iInputWindowHeight - 40;
     }
-    XMoveWindow (inputWindow->dpy, inputWindow->window, iTempInputWindowX, iTempInputWindowY);
+    XMoveWindow(inputWindow->dpy, inputWindow->window, iTempInputWindowX, iTempInputWindowY);
 }
 
 void CloseInputWindowInternal(InputWindow* inputWindow)
 {
-    XUnmapWindow (inputWindow->dpy, inputWindow->window);
+    XUnmapWindow(inputWindow->dpy, inputWindow->window);
 }
 
 void ReloadInputWindow(void* arg, boolean enabled)
@@ -247,8 +243,7 @@ void ReloadInputWindow(void* arg, boolean enabled)
     cairo_destroy(inputWindow->c_back);
     inputWindow->c_back = NULL;
 
-    for ( i = 0 ; i < 7; i ++)
-    {
+    for (i = 0 ; i < 7; i ++) {
         cairo_destroy(inputWindow->c_font[i]);
         inputWindow->c_font[i] = NULL;
     }

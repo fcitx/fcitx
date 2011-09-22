@@ -50,8 +50,7 @@ extern "C" {
     /**
      * @brief Input Context, normally one for one program
      **/
-    typedef struct _FcitxInputContext
-    {
+    typedef struct _FcitxInputContext {
         IME_STATE state; /* im state */
         int offset_x, offset_y;
         int frontendid;
@@ -63,13 +62,12 @@ extern "C" {
     /**
      * @brief Program IM Module Frontend
      **/
-    typedef struct _FcitxFrontend
-    {
+    typedef struct _FcitxFrontend {
         void* (*Create)(struct _FcitxInstance*, int frontendindex);
-        boolean (*Destroy)(void *arg);
+        boolean(*Destroy)(void *arg);
         void (*CreateIC)(void* arg, FcitxInputContext*, void* priv);
-        boolean (*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
-        void (*DestroyIC) (void* arg, FcitxInputContext *context);
+        boolean(*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
+        void (*DestroyIC)(void* arg, FcitxInputContext *context);
         void (*EnableIM)(void* arg, FcitxInputContext* arg1);
         void (*CloseIM)(void* arg, FcitxInputContext* arg1);
         void (*CommitString)(void* arg, FcitxInputContext* arg1, char* arg2);
@@ -79,7 +77,7 @@ extern "C" {
         void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
         void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic);
         void (*ReloadConfig)(void* arg);
-        boolean (*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
+        boolean(*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
         void (*padding4)();
     } FcitxFrontend;
 
@@ -89,7 +87,7 @@ extern "C" {
      * @param  frontends array
      * @return void
      **/
-    void InitFcitxFrontends(UT_array* );
+    void InitFcitxFrontends(UT_array*);
 
     /**
      * @brief Find Input Context By Frontend Specific filter
@@ -127,7 +125,7 @@ extern "C" {
      * @param instance
      * @return void
      **/
-    boolean LoadFrontend(struct _FcitxInstance* instance );
+    boolean LoadFrontend(struct _FcitxInstance* instance);
 
     /**
      * @brief Commit String to Client

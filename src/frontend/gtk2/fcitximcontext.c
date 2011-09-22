@@ -76,49 +76,49 @@ struct _FcitxIMContextClass {
 };
 
 /* functions prototype */
-static void     fcitx_im_context_class_init         (FcitxIMContextClass   *klass);
-static void     fcitx_im_context_init               (FcitxIMContext        *im_context);
-static void     fcitx_im_context_finalize           (GObject               *obj);
-static void     fcitx_im_context_set_client_window  (GtkIMContext          *context,
+static void     fcitx_im_context_class_init(FcitxIMContextClass   *klass);
+static void     fcitx_im_context_init(FcitxIMContext        *im_context);
+static void     fcitx_im_context_finalize(GObject               *obj);
+static void     fcitx_im_context_set_client_window(GtkIMContext          *context,
         GdkWindow             *client_window);
-static gboolean fcitx_im_context_filter_keypress    (GtkIMContext          *context,
+static gboolean fcitx_im_context_filter_keypress(GtkIMContext          *context,
         GdkEventKey           *key);
-static void     fcitx_im_context_reset              (GtkIMContext          *context);
-static void     fcitx_im_context_focus_in           (GtkIMContext          *context);
-static void     fcitx_im_context_focus_out          (GtkIMContext          *context);
-static void     fcitx_im_context_set_cursor_location (GtkIMContext          *context,
+static void     fcitx_im_context_reset(GtkIMContext          *context);
+static void     fcitx_im_context_focus_in(GtkIMContext          *context);
+static void     fcitx_im_context_focus_out(GtkIMContext          *context);
+static void     fcitx_im_context_set_cursor_location(GtkIMContext          *context,
         GdkRectangle             *area);
-static void     fcitx_im_context_set_use_preedit    (GtkIMContext          *context,
+static void     fcitx_im_context_set_use_preedit(GtkIMContext          *context,
         gboolean               use_preedit);
-static void     fcitx_im_context_get_preedit_string (GtkIMContext          *context,
+static void     fcitx_im_context_get_preedit_string(GtkIMContext          *context,
         gchar                **str,
         PangoAttrList        **attrs,
         gint                  *cursor_pos);
 
 
 static gboolean
-_set_cursor_location_internal (FcitxIMContext *fcitxcontext);
+_set_cursor_location_internal(FcitxIMContext *fcitxcontext);
 static void
-_slave_commit_cb (GtkIMContext *slave,
-                  gchar *string,
-                  FcitxIMContext *context);
+_slave_commit_cb(GtkIMContext *slave,
+                 gchar *string,
+                 FcitxIMContext *context);
 static void
-_slave_preedit_changed_cb (GtkIMContext *slave,
-                           FcitxIMContext *context);
+_slave_preedit_changed_cb(GtkIMContext *slave,
+                          FcitxIMContext *context);
 static void
-_slave_preedit_start_cb (GtkIMContext *slave,
-                         FcitxIMContext *context);
+_slave_preedit_start_cb(GtkIMContext *slave,
+                        FcitxIMContext *context);
 static void
-_slave_preedit_end_cb (GtkIMContext *slave,
-                       FcitxIMContext *context);
+_slave_preedit_end_cb(GtkIMContext *slave,
+                      FcitxIMContext *context);
 static gboolean
-_slave_retrieve_surrounding_cb (GtkIMContext *slave,
-                                FcitxIMContext *context);
+_slave_retrieve_surrounding_cb(GtkIMContext *slave,
+                               FcitxIMContext *context);
 static gboolean
-_slave_delete_surrounding_cb (GtkIMContext *slave,
-                              gint offset_from_cursor,
-                              guint nchars,
-                              FcitxIMContext *context);
+_slave_delete_surrounding_cb(GtkIMContext *slave,
+                             gint offset_from_cursor,
+                             guint nchars,
+                             FcitxIMContext *context);
 static void
 _fcitx_im_context_enable_im_cb(DBusGProxy* proxy, void* user_data);
 static void
@@ -139,15 +139,15 @@ static void
 _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext);
 
 static GdkEventKey *
-_create_gdk_event (FcitxIMContext *fcitxcontext,
-                   guint keyval,
-                   guint state,
-                   FcitxKeyEventType type
-                  );
+_create_gdk_event(FcitxIMContext *fcitxcontext,
+                  guint keyval,
+                  guint state,
+                  FcitxKeyEventType type
+                 );
 
 
 static gboolean
-_key_is_modifier (guint keyval);
+_key_is_modifier(guint keyval);
 
 static gboolean
 _get_boolean_env(const gchar *name,
@@ -197,24 +197,24 @@ static
 boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
 {
     state &= KEY_CTRL_ALT_SHIFT_COMP;
-    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state) )
+    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
         return true;
-    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state) )
+    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
         return true;
     return false;
 }
 
 void
-fcitx_im_context_register_type (GTypeModule *type_module)
+fcitx_im_context_register_type(GTypeModule *type_module)
 {
     static const GTypeInfo fcitx_im_context_info = {
-        sizeof (FcitxIMContextClass),
+        sizeof(FcitxIMContextClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc) fcitx_im_context_class_init,
         (GClassFinalizeFunc) NULL,
         NULL, /* klass data */
-        sizeof (FcitxIMContext),
+        sizeof(FcitxIMContext),
         0,
         (GInstanceInitFunc) fcitx_im_context_init,
         0
@@ -223,46 +223,45 @@ fcitx_im_context_register_type (GTypeModule *type_module)
     if (!_fcitx_type_im_context) {
         if (type_module) {
             _fcitx_type_im_context =
-                g_type_module_register_type (type_module,
-                                             GTK_TYPE_IM_CONTEXT,
-                                             "FcitxIMContext",
-                                             &fcitx_im_context_info,
-                                             (GTypeFlags)0);
-        }
-        else {
+                g_type_module_register_type(type_module,
+                                            GTK_TYPE_IM_CONTEXT,
+                                            "FcitxIMContext",
+                                            &fcitx_im_context_info,
+                                            (GTypeFlags)0);
+        } else {
             _fcitx_type_im_context =
-                g_type_register_static (GTK_TYPE_IM_CONTEXT,
-                                        "FcitxIMContext",
-                                        &fcitx_im_context_info,
-                                        (GTypeFlags)0);
+                g_type_register_static(GTK_TYPE_IM_CONTEXT,
+                                       "FcitxIMContext",
+                                       &fcitx_im_context_info,
+                                       (GTypeFlags)0);
         }
     }
 }
 
 GType
-fcitx_im_context_get_type (void)
+fcitx_im_context_get_type(void)
 {
     if (_fcitx_type_im_context == 0) {
-        fcitx_im_context_register_type (NULL);
+        fcitx_im_context_register_type(NULL);
     }
 
-    g_assert (_fcitx_type_im_context != 0);
+    g_assert(_fcitx_type_im_context != 0);
     return _fcitx_type_im_context;
 }
 
 FcitxIMContext *
-fcitx_im_context_new (void)
+fcitx_im_context_new(void)
 {
-    GObject *obj = g_object_new (FCITX_TYPE_IM_CONTEXT, NULL);
-    return FCITX_IM_CONTEXT (obj);
+    GObject *obj = g_object_new(FCITX_TYPE_IM_CONTEXT, NULL);
+    return FCITX_IM_CONTEXT(obj);
 }
 
 ///
 static void
-fcitx_im_context_class_init (FcitxIMContextClass *klass)
+fcitx_im_context_class_init(FcitxIMContextClass *klass)
 {
-    GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (klass);
-    GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+    GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS(klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
     im_context_class->set_client_window = fcitx_im_context_set_client_window;
     im_context_class->filter_keypress = fcitx_im_context_filter_keypress;
@@ -275,37 +274,37 @@ fcitx_im_context_class_init (FcitxIMContextClass *klass)
     gobject_class->finalize = fcitx_im_context_finalize;
 
     _signal_commit_id =
-        g_signal_lookup ("commit", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_commit_id != 0);
+        g_signal_lookup("commit", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_commit_id != 0);
 
     _signal_preedit_changed_id =
-        g_signal_lookup ("preedit-changed", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_preedit_changed_id != 0);
+        g_signal_lookup("preedit-changed", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_preedit_changed_id != 0);
 
     _signal_preedit_start_id =
-        g_signal_lookup ("preedit-start", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_preedit_start_id != 0);
+        g_signal_lookup("preedit-start", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_preedit_start_id != 0);
 
     _signal_preedit_end_id =
-        g_signal_lookup ("preedit-end", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_preedit_end_id != 0);
+        g_signal_lookup("preedit-end", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_preedit_end_id != 0);
 
     _signal_delete_surrounding_id =
-        g_signal_lookup ("delete-surrounding", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_delete_surrounding_id != 0);
+        g_signal_lookup("delete-surrounding", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_delete_surrounding_id != 0);
 
     _signal_retrieve_surrounding_id =
-        g_signal_lookup ("retrieve-surrounding", G_TYPE_FROM_CLASS (klass));
-    g_assert (_signal_retrieve_surrounding_id != 0);
+        g_signal_lookup("retrieve-surrounding", G_TYPE_FROM_CLASS(klass));
+    g_assert(_signal_retrieve_surrounding_id != 0);
 
     /* make ibus fix benefits us */
-    _use_sync_mode = _get_boolean_env ("IBUS_ENABLE_SYNC_MODE", FALSE)
-                    || _get_boolean_env ("FCITX_ENABLE_SYNC_MODE", FALSE);
+    _use_sync_mode = _get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
+                     || _get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
 }
 
 
 static void
-fcitx_im_context_init (FcitxIMContext *context)
+fcitx_im_context_init(FcitxIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_init");
     context->client = NULL;
@@ -317,36 +316,36 @@ fcitx_im_context_init (FcitxIMContext *context)
     context->cursor_pos = 0;
     context->preedit_string = NULL;
 
-    context->slave = gtk_im_context_simple_new ();
-    gtk_im_context_simple_add_table (GTK_IM_CONTEXT_SIMPLE (context->slave),
-                                     cedilla_compose_seqs,
-                                     4,
-                                     G_N_ELEMENTS (cedilla_compose_seqs) / (4 + 2));
+    context->slave = gtk_im_context_simple_new();
+    gtk_im_context_simple_add_table(GTK_IM_CONTEXT_SIMPLE(context->slave),
+                                    cedilla_compose_seqs,
+                                    4,
+                                    G_N_ELEMENTS(cedilla_compose_seqs) / (4 + 2));
 
-    g_signal_connect (context->slave,
-                      "commit",
-                      G_CALLBACK (_slave_commit_cb),
-                      context);
-    g_signal_connect (context->slave,
-                      "preedit-start",
-                      G_CALLBACK (_slave_preedit_start_cb),
-                      context);
-    g_signal_connect (context->slave,
-                      "preedit-end",
-                      G_CALLBACK (_slave_preedit_end_cb),
-                      context);
-    g_signal_connect (context->slave,
-                      "preedit-changed",
-                      G_CALLBACK (_slave_preedit_changed_cb),
-                      context);
-    g_signal_connect (context->slave,
-                      "retrieve-surrounding",
-                      G_CALLBACK (_slave_retrieve_surrounding_cb),
-                      context);
-    g_signal_connect (context->slave,
-                      "delete-surrounding",
-                      G_CALLBACK (_slave_delete_surrounding_cb),
-                      context);
+    g_signal_connect(context->slave,
+                     "commit",
+                     G_CALLBACK(_slave_commit_cb),
+                     context);
+    g_signal_connect(context->slave,
+                     "preedit-start",
+                     G_CALLBACK(_slave_preedit_start_cb),
+                     context);
+    g_signal_connect(context->slave,
+                     "preedit-end",
+                     G_CALLBACK(_slave_preedit_end_cb),
+                     context);
+    g_signal_connect(context->slave,
+                     "preedit-changed",
+                     G_CALLBACK(_slave_preedit_changed_cb),
+                     context);
+    g_signal_connect(context->slave,
+                     "retrieve-surrounding",
+                     G_CALLBACK(_slave_retrieve_surrounding_cb),
+                     context);
+    g_signal_connect(context->slave,
+                     "delete-surrounding",
+                     G_CALLBACK(_slave_delete_surrounding_cb),
+                     context);
 
     context->time = GDK_CURRENT_TIME;
 
@@ -354,16 +353,15 @@ fcitx_im_context_init (FcitxIMContext *context)
 }
 
 static void
-fcitx_im_context_finalize (GObject *obj)
+fcitx_im_context_finalize(GObject *obj)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_finalize");
-    FcitxIMContext *context = FCITX_IM_CONTEXT (obj);
+    FcitxIMContext *context = FCITX_IM_CONTEXT(obj);
 
     FcitxIMClientClose(context->client);
     context->client = NULL;
 
-    if (context->slave)
-    {
+    if (context->slave) {
         g_object_unref(context->slave);
         context->slave = NULL;
     }
@@ -375,93 +373,84 @@ fcitx_im_context_finalize (GObject *obj)
 
 
 static void
-set_ic_client_window (FcitxIMContext *context,
-                      GdkWindow       *client_window)
+set_ic_client_window(FcitxIMContext *context,
+                     GdkWindow       *client_window)
 {
     if (!client_window)
         return;
 
     if (context->client_window) {
-        g_object_unref (context->client_window);
+        g_object_unref(context->client_window);
         context->client_window = NULL;
     }
 
     if (client_window != NULL)
-        context->client_window = g_object_ref (client_window);
+        context->client_window = g_object_ref(client_window);
 
     if (context->slave)
-        gtk_im_context_set_client_window (context->slave, client_window);
+        gtk_im_context_set_client_window(context->slave, client_window);
 }
 
 
 ///
 static void
-fcitx_im_context_set_client_window (GtkIMContext          *context,
-                                    GdkWindow             *client_window)
+fcitx_im_context_set_client_window(GtkIMContext          *context,
+                                   GdkWindow             *client_window)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_client_window");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
-    set_ic_client_window (fcitxcontext, client_window);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
+    set_ic_client_window(fcitxcontext, client_window);
 }
 
 ///
 static gboolean
-fcitx_im_context_filter_keypress (GtkIMContext *context,
-                                  GdkEventKey  *event)
+fcitx_im_context_filter_keypress(GtkIMContext *context,
+                                 GdkEventKey  *event)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
-    if (G_UNLIKELY (event->state & KEY_HANDLED_MASK))
+    if (G_UNLIKELY(event->state & KEY_HANDLED_MASK))
         return TRUE;
 
-    if (G_UNLIKELY (event->state & KEY_IGNORED_MASK))
+    if (G_UNLIKELY(event->state & KEY_IGNORED_MASK))
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
 
-    if (IsFcitxIMClientValid(fcitxcontext->client))
-    {
+    if (IsFcitxIMClientValid(fcitxcontext->client)) {
         /* XXX it is a workaround for some applications do not set client window. */
-        if (fcitxcontext->client_window == NULL && event->window != NULL)
-        {
-            gtk_im_context_set_client_window ((GtkIMContext *)fcitxcontext, event->window);
+        if (fcitxcontext->client_window == NULL && event->window != NULL) {
+            gtk_im_context_set_client_window((GtkIMContext *)fcitxcontext, event->window);
 
             /* set_cursor_location_internal() will get origin from X server,
             * it blocks UI. So delay it to idle callback. */
-            g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-                             (GSourceFunc) _set_cursor_location_internal,
-                             g_object_ref (fcitxcontext),
-                             (GDestroyNotify) g_object_unref);
+            g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
+                            (GSourceFunc) _set_cursor_location_internal,
+                            g_object_ref(fcitxcontext),
+                            (GDestroyNotify) g_object_unref);
         }
 
-        if (!IsFcitxIMClientEnabled(fcitxcontext->client))
-        {
+        if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
             if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
                 return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
         }
 
         fcitxcontext->time = event->time;
 
-        if (_use_sync_mode)
-        {
+        if (_use_sync_mode) {
             int ret = FcitxIMClientProcessKeySync(fcitxcontext->client,
-                                    event->keyval,
-                                    event->hardware_keycode,
-                                    event->state,
-                                    (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
-                                    event->time);
-            if (ret <= 0)
-            {
+                                                  event->keyval,
+                                                  event->hardware_keycode,
+                                                  event->state,
+                                                  (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
+                                                  event->time);
+            if (ret <= 0) {
                 event->state |= KEY_IGNORED_MASK;
                 return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
-            }
-            else
-            {
+            } else {
                 event->state |= KEY_HANDLED_MASK;
                 return TRUE;
             }
-        }
-        else
-        {
+        } else {
             ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
@@ -473,14 +462,12 @@ fcitx_im_context_filter_keypress (GtkIMContext *context,
                                     event->keyval,
                                     event->hardware_keycode,
                                     event->state,
-                                    (event->type == GDK_KEY_PRESS)?(FCITX_PRESS_KEY):(FCITX_RELEASE_KEY),
+                                    (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
                                     event->time);
             event->state |= KEY_HANDLED_MASK;
             return TRUE;
         }
-    }
-    else
-    {
+    } else {
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
     }
     return FALSE;
@@ -496,12 +483,11 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
     GError* error = NULL;
     int ret;
     dbus_g_proxy_end_call(proxy, call_id, &error, G_TYPE_INT, &ret, G_TYPE_INVALID);
-    if (ret <= 0)
-    {
+    if (ret <= 0) {
         event->state |= KEY_IGNORED_MASK;
-        gdk_event_put ((GdkEvent *)event);
+        gdk_event_put((GdkEvent *)event);
     }
-    gdk_event_free ((GdkEvent *)event);
+    gdk_event_free((GdkEvent *)event);
 }
 
 static void
@@ -512,8 +498,7 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
 
     gboolean visible = false;
 
-    if (context->preedit_string != NULL)
-    {
+    if (context->preedit_string != NULL) {
         if (strlen(context->preedit_string) != 0)
             visible = true;
         g_free(context->preedit_string);
@@ -524,8 +509,7 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
 
     gboolean new_visible = false;
 
-    if (context->preedit_string != NULL)
-    {
+    if (context->preedit_string != NULL) {
         if (strlen(context->preedit_string) != 0)
             new_visible = true;
     }
@@ -534,32 +518,30 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
     if (new_visible) {
         if (flag) {
             /* invisible => visible */
-            g_signal_emit (context, _signal_preedit_start_id, 0);
+            g_signal_emit(context, _signal_preedit_start_id, 0);
         }
-        g_signal_emit (context, _signal_preedit_changed_id, 0);
-    }
-    else {
+        g_signal_emit(context, _signal_preedit_changed_id, 0);
+    } else {
         if (flag) {
             /* visible => invisible */
-            g_signal_emit (context, _signal_preedit_changed_id, 0);
-            g_signal_emit (context, _signal_preedit_end_id, 0);
-        }
-        else {
+            g_signal_emit(context, _signal_preedit_changed_id, 0);
+            g_signal_emit(context, _signal_preedit_end_id, 0);
+        } else {
             /* still invisible */
             /* do nothing */
         }
     }
 
-    g_signal_emit (context, _signal_preedit_changed_id, 0);
+    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
 
 ///
 static void
-fcitx_im_context_focus_in (GtkIMContext *context)
+fcitx_im_context_focus_in(GtkIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_in");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (fcitxcontext->has_focus)
         return;
@@ -570,26 +552,25 @@ fcitx_im_context_focus_in (GtkIMContext *context)
         FcitxIMClientFocusIn(fcitxcontext->client);
     }
 
-    gtk_im_context_focus_in (fcitxcontext->slave);
+    gtk_im_context_focus_in(fcitxcontext->slave);
 
     /* set_cursor_location_internal() will get origin from X server,
      * it blocks UI. So delay it to idle callback. */
-    g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-                     (GSourceFunc) _set_cursor_location_internal,
-                     g_object_ref (fcitxcontext),
-                     (GDestroyNotify) g_object_unref);
+    g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
+                    (GSourceFunc) _set_cursor_location_internal,
+                    g_object_ref(fcitxcontext),
+                    (GDestroyNotify) g_object_unref);
 
     return;
 }
 
 static void
-fcitx_im_context_focus_out (GtkIMContext *context)
+fcitx_im_context_focus_out(GtkIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_focus_out");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
-    if (!fcitxcontext->has_focus)
-    {
+    if (!fcitxcontext->has_focus) {
         return;
     }
 
@@ -604,8 +585,8 @@ fcitx_im_context_focus_out (GtkIMContext *context)
         g_free(fcitxcontext->preedit_string);
     fcitxcontext->preedit_string = NULL;
     fcitxcontext->cursor_pos = 0;
-    g_signal_emit (fcitxcontext, _signal_preedit_changed_id, 0);
-    g_signal_emit (fcitxcontext, _signal_preedit_end_id, 0);
+    g_signal_emit(fcitxcontext, _signal_preedit_changed_id, 0);
+    g_signal_emit(fcitxcontext, _signal_preedit_end_id, 0);
 
     gtk_im_context_focus_out(fcitxcontext->slave);
 
@@ -614,11 +595,11 @@ fcitx_im_context_focus_out (GtkIMContext *context)
 
 ///
 static void
-fcitx_im_context_set_cursor_location (GtkIMContext *context,
-                                      GdkRectangle *area)
+fcitx_im_context_set_cursor_location(GtkIMContext *context,
+                                     GdkRectangle *area)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_cursor_location %d %d %d %d", area->x, area->y, area->height, area->width);
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (fcitxcontext->area.x == area->x &&
             fcitxcontext->area.y == area->y &&
@@ -637,7 +618,7 @@ fcitx_im_context_set_cursor_location (GtkIMContext *context,
 }
 
 static gboolean
-_set_cursor_location_internal (FcitxIMContext *fcitxcontext)
+_set_cursor_location_internal(FcitxIMContext *fcitxcontext)
 {
     GdkRectangle area;
 
@@ -650,23 +631,23 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
     if (area.x == -1 && area.y == -1 && area.width == 0 && area.height == 0) {
 #if GTK_CHECK_VERSION (2, 91, 0)
         area.x = 0;
-        area.y += gdk_window_get_height (fcitxcontext->client_window);
+        area.y += gdk_window_get_height(fcitxcontext->client_window);
 #else
         gint w, h;
-        gdk_drawable_get_size (fcitxcontext->client_window, &w, &h);
+        gdk_drawable_get_size(fcitxcontext->client_window, &w, &h);
         area.y += h;
         area.x = 0;
 #endif
     }
 
 #if GTK_CHECK_VERSION (2, 18, 0)
-    gdk_window_get_root_coords (fcitxcontext->client_window,
-                                area.x, area.y,
-                                &area.x, &area.y);
+    gdk_window_get_root_coords(fcitxcontext->client_window,
+                               area.x, area.y,
+                               &area.x, &area.y);
 #else
     {
         int rootx, rooty;
-        gdk_window_get_origin (fcitxcontext->client_window, &rootx, &rooty);
+        gdk_window_get_origin(fcitxcontext->client_window, &rootx, &rooty);
         area.x = rootx + area.x;
         area.y = rooty + area.y;
     }
@@ -678,11 +659,11 @@ _set_cursor_location_internal (FcitxIMContext *fcitxcontext)
 
 ///
 static void
-fcitx_im_context_set_use_preedit (GtkIMContext *context,
-                                  gboolean      use_preedit)
+fcitx_im_context_set_use_preedit(GtkIMContext *context,
+                                 gboolean      use_preedit)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_set_use_preedit");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     fcitxcontext->use_preedit = use_preedit;
     _fcitx_im_context_set_capacity(fcitxcontext);
@@ -693,8 +674,7 @@ fcitx_im_context_set_use_preedit (GtkIMContext *context,
 void
 _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext)
 {
-    if (IsFcitxIMClientValid(fcitxcontext->client))
-    {
+    if (IsFcitxIMClientValid(fcitxcontext->client)) {
         CapacityFlags flags = CAPACITY_NONE;
         if (fcitxcontext->use_preedit)
             flags |= CAPACITY_PREEDIT;
@@ -705,10 +685,10 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext)
 
 ///
 static void
-fcitx_im_context_reset (GtkIMContext *context)
+fcitx_im_context_reset(GtkIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_reset");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxIMClientReset(fcitxcontext->client);
@@ -718,110 +698,105 @@ fcitx_im_context_reset (GtkIMContext *context)
 }
 
 static void
-fcitx_im_context_get_preedit_string (GtkIMContext   *context,
-                                     gchar         **str,
-                                     PangoAttrList **attrs,
-                                     gint           *cursor_pos)
+fcitx_im_context_get_preedit_string(GtkIMContext   *context,
+                                    gchar         **str,
+                                    PangoAttrList **attrs,
+                                    gint           *cursor_pos)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
-    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT (context);
+    FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
-    if (IsFcitxIMClientValid(fcitxcontext->client) && IsFcitxIMClientEnabled(fcitxcontext->client))
-    {
-        if (str)
-        {
+    if (IsFcitxIMClientValid(fcitxcontext->client) && IsFcitxIMClientEnabled(fcitxcontext->client)) {
+        if (str) {
             if (fcitxcontext->preedit_string)
                 *str = strdup(fcitxcontext->preedit_string);
             else
                 *str = strdup("");
         }
-        if (attrs)
-        {
-            *attrs = pango_attr_list_new ();
+        if (attrs) {
+            *attrs = pango_attr_list_new();
 
-            if (str)
-            {
+            if (str) {
                 PangoAttribute *pango_attr;
-                pango_attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+                pango_attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
                 pango_attr->start_index = 0;
                 pango_attr->end_index = strlen(*str);
-                pango_attr_list_insert (*attrs, pango_attr);
+                pango_attr_list_insert(*attrs, pango_attr);
             }
         }
         if (cursor_pos)
             *cursor_pos = fcitxcontext->cursor_pos;
 
-    }
-    else
-        gtk_im_context_get_preedit_string (fcitxcontext->slave, str, attrs, cursor_pos);
+    } else
+        gtk_im_context_get_preedit_string(fcitxcontext->slave, str, attrs, cursor_pos);
     return ;
 }
 
 /* Callback functions for slave context */
 static void
-_slave_commit_cb (GtkIMContext *slave,
-                  gchar *string,
-                  FcitxIMContext *context)
+_slave_commit_cb(GtkIMContext *slave,
+                 gchar *string,
+                 FcitxIMContext *context)
 {
-    g_signal_emit (context, _signal_commit_id, 0, string);
+    g_signal_emit(context, _signal_commit_id, 0, string);
 }
 static void
-_slave_preedit_changed_cb (GtkIMContext *slave,
-                           FcitxIMContext *context)
+_slave_preedit_changed_cb(GtkIMContext *slave,
+                          FcitxIMContext *context)
 {
     if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
 
-    g_signal_emit (context, _signal_preedit_changed_id, 0);
+    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 static void
-_slave_preedit_start_cb (GtkIMContext *slave,
-                         FcitxIMContext *context)
+_slave_preedit_start_cb(GtkIMContext *slave,
+                        FcitxIMContext *context)
 {
     if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
 
-    g_signal_emit (context, _signal_preedit_start_id, 0);
+    g_signal_emit(context, _signal_preedit_start_id, 0);
 }
 
 static void
-_slave_preedit_end_cb (GtkIMContext *slave,
-                       FcitxIMContext *context)
+_slave_preedit_end_cb(GtkIMContext *slave,
+                      FcitxIMContext *context)
 {
     if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return;
     }
-    g_signal_emit (context, _signal_preedit_end_id, 0);
+    g_signal_emit(context, _signal_preedit_end_id, 0);
 }
 
 static gboolean
-_slave_retrieve_surrounding_cb (GtkIMContext *slave,
-                                FcitxIMContext *context)
+_slave_retrieve_surrounding_cb(GtkIMContext *slave,
+                               FcitxIMContext *context)
 {
     gboolean return_value;
 
     if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return FALSE;
     }
-    g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
-                   &return_value);
+    g_signal_emit(context, _signal_retrieve_surrounding_id, 0,
+                  &return_value);
     return return_value;
 }
 
 static gboolean
-_slave_delete_surrounding_cb (GtkIMContext *slave,
-                              gint offset_from_cursor,
-                              guint nchars,
-                              FcitxIMContext *context)
+_slave_delete_surrounding_cb(GtkIMContext *slave,
+                             gint offset_from_cursor,
+                             guint nchars,
+                             FcitxIMContext *context)
 {
     gboolean return_value;
 
     if (context->client && IsFcitxIMClientEnabled(context->client)) {
         return FALSE;
     }
-    g_signal_emit (context, _signal_delete_surrounding_id, 0, offset_from_cursor, nchars, &return_value);
+    g_signal_emit(context, _signal_delete_surrounding_id, 0, offset_from_cursor, nchars, &return_value);
     return return_value;
 }
 
@@ -842,15 +817,15 @@ void _fcitx_im_context_close_im_cb(DBusGProxy* proxy, void* user_data)
         g_free(context->preedit_string);
     context->preedit_string = NULL;
     context->cursor_pos = 0;
-    g_signal_emit (context, _signal_preedit_changed_id, 0);
-    g_signal_emit (context, _signal_preedit_end_id, 0);
+    g_signal_emit(context, _signal_preedit_changed_id, 0);
+    g_signal_emit(context, _signal_preedit_end_id, 0);
 }
 
 void _fcitx_im_context_commit_string_cb(DBusGProxy* proxy, char* str, void* user_data)
 {
     FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    g_signal_emit (context, _signal_commit_id, 0, str);
+    g_signal_emit(context, _signal_commit_id, 0, str);
 }
 
 void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint state, gint type, void* user_data)
@@ -860,25 +835,25 @@ void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint sta
     FcitxKeyEventType tp = (FcitxKeyEventType) type;
     GdkEventKey* event = _create_gdk_event(context, keyval, state, tp);
     event->state |= KEY_IGNORED_MASK;
-    gdk_event_put ((GdkEvent *)event);
-    gdk_event_free ((GdkEvent *)event);
+    gdk_event_put((GdkEvent *)event);
+    gdk_event_free((GdkEvent *)event);
 }
 
 /* Copy from gdk */
 static GdkEventKey *
-_create_gdk_event (FcitxIMContext *fcitxcontext,
-                   guint keyval,
-                   guint state,
-                   FcitxKeyEventType type
-                  )
+_create_gdk_event(FcitxIMContext *fcitxcontext,
+                  guint keyval,
+                  guint state,
+                  FcitxKeyEventType type
+                 )
 {
     gunichar c = 0;
     gchar buf[8];
 
-    GdkEventKey *event = (GdkEventKey *)gdk_event_new ((type == FCITX_RELEASE_KEY) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
+    GdkEventKey *event = (GdkEventKey *)gdk_event_new((type == FCITX_RELEASE_KEY) ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
 
     if (fcitxcontext && fcitxcontext->client_window)
-        event->window = g_object_ref (fcitxcontext->client_window);
+        event->window = g_object_ref(fcitxcontext->client_window);
 
     /* The time is copied the latest value from the previous
      * GdkKeyEvent in filter_keypress().
@@ -908,19 +883,17 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     event->string = NULL;
     event->length = 0;
     event->hardware_keycode = 0;
-    if (event->window)
-    {
+    if (event->window) {
 #ifndef NEW_GDK_WINDOW_GET_DISPLAY
         GdkDisplay      *display = gdk_display_get_default();
 #else
-        GdkDisplay      *display = gdk_window_get_display (event->window);
+        GdkDisplay      *display = gdk_window_get_display(event->window);
 #endif
-        GdkKeymap       *keymap  = gdk_keymap_get_for_display (display);
+        GdkKeymap       *keymap  = gdk_keymap_get_for_display(display);
         GdkKeymapKey    *keys;
         gint             n_keys = 0;
 
-        if (gdk_keymap_get_entries_for_keyval (keymap, keyval, &keys, &n_keys))
-        {
+        if (gdk_keymap_get_entries_for_keyval(keymap, keyval, &keys, &n_keys)) {
             if (n_keys)
                 event->hardware_keycode = keys[0].keycode;
             g_free(keys);
@@ -928,14 +901,14 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     }
 
     event->group = 0;
-    event->is_modifier = _key_is_modifier (keyval);
+    event->is_modifier = _key_is_modifier(keyval);
 
 #ifdef DEPRECATED_GDK_KEYSYMS
     if (keyval != GDK_VoidSymbol)
 #else
     if (keyval != GDK_KEY_VoidSymbol)
 #endif
-        c = gdk_keyval_to_unicode (keyval);
+        c = gdk_keyval_to_unicode(keyval);
 
     if (c) {
         gsize bytes_written;
@@ -946,22 +919,21 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
         if (event->state & GDK_CONTROL_MASK) {
             if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
             else if (c == '2') {
-                event->string = g_memdup ("\0\0", 2);
+                event->string = g_memdup("\0\0", 2);
                 event->length = 1;
                 buf[0] = '\0';
                 goto out;
-            }
-            else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+            } else if (c >= '3' && c <= '7') c -= ('3' - '\033');
             else if (c == '8') c = '\177';
             else if (c == '/') c = '_' & 0x1F;
         }
 
-        len = g_unichar_to_utf8 (c, buf);
+        len = g_unichar_to_utf8(c, buf);
         buf[len] = '\0';
 
-        event->string = g_locale_from_utf8 (buf, len,
-                                            NULL, &bytes_written,
-                                            NULL);
+        event->string = g_locale_from_utf8(buf, len,
+                                           NULL, &bytes_written,
+                                           NULL);
         if (event->string)
             event->length = bytes_written;
 #ifdef DEPRECATED_GDK_KEYSYMS
@@ -970,7 +942,7 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
     } else if (keyval == GDK_KEY_Escape) {
 #endif
         event->length = 1;
-        event->string = g_strdup ("\033");
+        event->string = g_strdup("\033");
     }
 #ifdef DEPRECATED_GDK_KEYSYMS
     else if (keyval == GDK_Return ||
@@ -980,12 +952,12 @@ _create_gdk_event (FcitxIMContext *fcitxcontext,
              keyval == GDK_KEY_KP_Enter) {
 #endif
         event->length = 1;
-        event->string = g_strdup ("\r");
+        event->string = g_strdup("\r");
     }
 
     if (!event->string) {
         event->length = 0;
-        event->string = g_strdup ("");
+        event->string = g_strdup("");
     }
 out:
     return event;
@@ -993,7 +965,7 @@ out:
 
 
 static gboolean
-_key_is_modifier (guint keyval)
+_key_is_modifier(guint keyval)
 {
     /* See gdkkeys-x11.c:_gdk_keymap_key_is_modifier() for how this
     * really should be implemented */
@@ -1059,8 +1031,7 @@ _key_is_modifier (guint keyval)
 void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
 {
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
-    if (IsFcitxIMClientValid(client))
-    {
+    if (IsFcitxIMClientValid(client)) {
         FcitxIMClientConnectSignal(client,
                                    G_CALLBACK(_fcitx_im_context_enable_im_cb),
                                    G_CALLBACK(_fcitx_im_context_close_im_cb),
@@ -1083,17 +1054,17 @@ static gboolean
 _get_boolean_env(const gchar *name,
                  gboolean defval)
 {
-    const gchar *value = g_getenv (name);
+    const gchar *value = g_getenv(name);
 
     if (value == NULL)
-      return defval;
+        return defval;
 
-    if (g_strcmp0 (value, "") == 0 ||
-        g_strcmp0 (value, "0") == 0 ||
-        g_strcmp0 (value, "false") == 0 ||
-        g_strcmp0 (value, "False") == 0 ||
-        g_strcmp0 (value, "FALSE") == 0)
-      return FALSE;
+    if (g_strcmp0(value, "") == 0 ||
+            g_strcmp0(value, "0") == 0 ||
+            g_strcmp0(value, "false") == 0 ||
+            g_strcmp0(value, "False") == 0 ||
+            g_strcmp0(value, "FALSE") == 0)
+        return FALSE;
 
     return TRUE;
 }

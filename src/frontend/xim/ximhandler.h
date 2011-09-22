@@ -36,10 +36,10 @@ Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data);
 Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call_data);
 void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data);
-void XimForwardKeyInternal(FcitxXimFrontend *xim, struct _FcitxXimIC* ic, XEvent* xEvent );
-void XimPreeditCallbackStart (FcitxXimFrontend* xim, const struct _FcitxXimIC* ic);
-void XimPreeditCallbackDone (FcitxXimFrontend* xim, const struct _FcitxXimIC* ic);
-void XimPreeditCallbackDraw (FcitxXimFrontend *xim, struct _FcitxXimIC* ic, const char *preedit_string, int cursorPos);
+void XimForwardKeyInternal(FcitxXimFrontend *xim, struct _FcitxXimIC* ic, XEvent* xEvent);
+void XimPreeditCallbackStart(FcitxXimFrontend* xim, const struct _FcitxXimIC* ic);
+void XimPreeditCallbackDone(FcitxXimFrontend* xim, const struct _FcitxXimIC* ic);
+void XimPreeditCallbackDraw(FcitxXimFrontend *xim, struct _FcitxXimIC* ic, const char *preedit_string, int cursorPos);
 void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct* call_data);
 
 #endif

@@ -41,12 +41,11 @@
  **/
 void GetValidFont(const char* strUserLocale, char **font)
 {
-    FcFontSet	*fs = NULL;
+    FcFontSet   *fs = NULL;
     FcPattern   *pat = NULL;
     FcObjectSet *os = NULL;
 
-    if (!FcInit())
-    {
+    if (!FcInit()) {
         FcitxLog(ERROR, _("Error: Load fontconfig failed"));
         return;
     }
@@ -56,17 +55,14 @@ void GetValidFont(const char* strUserLocale, char **font)
         strncpy(locale, strUserLocale, 2);
     else
         strcpy(locale, "zh");
-    locale[2]='\0';
+    locale[2] = '\0';
 reloadfont:
-    if (strcmp(*font, "") == 0)
-    {
+    if (strcmp(*font, "") == 0) {
         FcChar8 strpat[9];
         sprintf((char*)strpat, ":lang=%s", locale);
         pat = FcNameParse(strpat);
-    }
-    else
-    {
-        pat = FcNameParse ((FcChar8*)(*font));
+    } else {
+        pat = FcNameParse((FcChar8*)(*font));
     }
 
     os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, (char*)0);
@@ -82,7 +78,7 @@ reloadfont:
         goto nofont;
 
     FcChar8* family;
-    if (FcPatternGetString (fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch)
+    if (FcPatternGetString(fs->fonts[0], FC_FAMILY, 0, &family) != FcResultMatch)
         goto nofont;
     if (*font)
         free(*font);
@@ -95,8 +91,7 @@ reloadfont:
     return;
 
 nofont:
-    if (strcmp(*font, "") != 0)
-    {
+    if (strcmp(*font, "") != 0) {
         strcpy(*font, "");
         if (pat)
             FcPatternDestroy(pat);
@@ -113,4 +108,4 @@ nofont:
 }
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -19,23 +19,24 @@
 #define FCITX_IDENTIFIER_NAME "fcitx"
 #define FCITX_MAX_COMPOSE_LEN 7
 
-class QFcitxInputContext : public QInputContext {
+class QFcitxInputContext : public QInputContext
+{
     Q_OBJECT
 public:
-    QFcitxInputContext ();
-    ~QFcitxInputContext ();
+    QFcitxInputContext();
+    ~QFcitxInputContext();
 
     virtual QString identifierName();
     virtual QString language();
     virtual void reset();
     virtual bool isComposing() const;
     virtual void update();
-    virtual void setFocusWidget( QWidget *w );
+    virtual void setFocusWidget(QWidget *w);
 
     virtual void widgetDestroyed(QWidget *w);
 
 #if defined(Q_WS_X11)
-    virtual bool x11FilterEvent( QWidget *keywidget, XEvent *event );
+    virtual bool x11FilterEvent(QWidget *keywidget, XEvent *event);
 #endif // Q_WS_X11
     virtual bool filterEvent(const QEvent* event);
 
@@ -50,11 +51,11 @@ private Q_SLOTS:
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
 private:
     void createInputContext();
-    bool processCompose (uint keyval, uint state, FcitxKeyEventType event);
-    bool checkAlgorithmically ();
-    bool checkCompactTable (const struct _FcitxComposeTableCompact *table);
+    bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
+    bool checkAlgorithmically();
+    bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
 #if defined(Q_WS_X11)
-    bool x11FilterEventFallback( QWidget *keywidget, XEvent *event , KeySym sym );
+    bool x11FilterEventFallback(QWidget *keywidget, XEvent *event , KeySym sym);
     XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);

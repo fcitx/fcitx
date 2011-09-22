@@ -29,7 +29,7 @@
 #ifndef _FCITX_AUTOENG_H_
 #define _FCITX_AUTOENG_H_
 
-#define MAX_AUTO_TO_ENG	10
+#define MAX_AUTO_TO_ENG 10
 #include "fcitx-config/fcitx-config.h"
 
 typedef struct _AUTO_ENG {
@@ -38,4 +38,4 @@ typedef struct _AUTO_ENG {
 
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

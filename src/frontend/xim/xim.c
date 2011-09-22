@@ -54,7 +54,7 @@ static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* 
 static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
-static inline Bool MyStrcmp (char *str1, char *str2);
+static inline Bool MyStrcmp(char *str1, char *str2);
 
 static XIMStyle OverTheSpot_Styles[] = {
     XIMPreeditPosition | XIMStatusArea, //OverTheSpot
@@ -70,18 +70,17 @@ static XIMStyle OverTheSpot_Styles[] = {
 };
 
 static XIMStyle OnTheSpot_Styles [] = {
-        XIMPreeditPosition | XIMStatusNothing,
-        XIMPreeditCallbacks | XIMStatusNothing,
-        XIMPreeditNothing | XIMStatusNothing,
-        XIMPreeditPosition | XIMStatusCallbacks,
-        XIMPreeditCallbacks | XIMStatusCallbacks,
-        XIMPreeditNothing | XIMStatusCallbacks,
-        0
-    };
+    XIMPreeditPosition | XIMStatusNothing,
+    XIMPreeditCallbacks | XIMStatusNothing,
+    XIMPreeditNothing | XIMStatusNothing,
+    XIMPreeditPosition | XIMStatusCallbacks,
+    XIMPreeditCallbacks | XIMStatusCallbacks,
+    XIMPreeditNothing | XIMStatusCallbacks,
+    0
+};
 
 FCITX_EXPORT_API
-FcitxFrontend frontend =
-{
+FcitxFrontend frontend = {
     XimCreate,
     XimDestroy,
     XimCreateIC,
@@ -115,9 +114,9 @@ static XIMEncoding zhEncodings[] = {
 
 char strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
 
-Bool MyStrcmp (char *str1, char *str2)
+Bool MyStrcmp(char *str1, char *str2)
 {
-    return !strncmp (str1, str2, strlen (str2));
+    return !strncmp(str1, str2, strlen(str2));
 }
 
 void* XimCreate(FcitxInstance* instance, int frontendid)
@@ -138,8 +137,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     xim->display = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
 
-    if (xim->display == NULL)
-    {
+    if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));
         free(xim);
         return NULL;
@@ -173,8 +171,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     if (GetXimConfigDesc() == NULL)
         xim->bUseOnTheSpotStyle = false;
-    else
-    {
+    else {
         ConfigFileDesc* configDesc = GetXimConfigDesc();
 
         FILE *fp;
@@ -183,8 +180,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         FcitxLog(DEBUG, "Load Config File %s", file);
         free(file);
         if (!fp) {
-            if (errno == ENOENT)
-            {
+            if (errno == ENOENT) {
                 char *file;
                 FILE *fp2 = GetXDGFileUserWithPrefix("conf", "fcitx-xim.config", "wt", &file);
                 FcitxLog(DEBUG, "Save Config to %s", file);
@@ -205,13 +201,10 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     }
 
     input_styles = (XIMStyles *) malloc(sizeof(XIMStyles));
-    if (xim->bUseOnTheSpotStyle)
-    {
+    if (xim->bUseOnTheSpotStyle) {
         input_styles->count_styles = sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
         input_styles->supported_styles = OnTheSpot_Styles;
-    }
-    else
-    {
+    } else {
         input_styles->count_styles = sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
         input_styles->supported_styles = OverTheSpot_Styles;
     }
@@ -391,8 +384,8 @@ void XimCommitString(void* arg, FcitxInputContext* ic, char* str)
      * quite strange.
      */
     if (GetXimIC(ic)->bPreeditStarted == true) {
-        XimPreeditCallbackDraw (xim, GetXimIC(ic), "", 0);
-        XimPreeditCallbackDone (xim, GetXimIC(ic));
+        XimPreeditCallbackDraw(xim, GetXimIC(ic), "", 0);
+        XimPreeditCallbackDone(xim, GetXimIC(ic));
         GetXimIC(ic)->bPreeditStarted = false;
     }
 
@@ -413,7 +406,7 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XEvent xEvent;
 
-    xEvent.xkey.type = (event == FCITX_PRESS_KEY)?KeyPress:KeyRelease;
+    xEvent.xkey.type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease;
     xEvent.xkey.display = xim->display;
     xEvent.xkey.serial = xim->currentSerialNumberKey;
     xEvent.xkey.send_event = False;
@@ -442,8 +435,7 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
     else if (ximic->client_win)
         window = ximic->client_win;
 
-    if (window != None)
-    {
+    if (window != None) {
         XTranslateCoordinates(xim->display, RootWindow(xim->display, xim->iScreen), window,
                               x, y,
                               &ic->offset_x, &ic->offset_y,
@@ -454,8 +446,8 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 
 void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
 {
-    *x= ic->offset_x;
-    *y= ic->offset_y;
+    *x = ic->offset_x;
+    *y = ic->offset_y;
 }
 
 void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
@@ -464,24 +456,23 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
     FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
     char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
     char* str = ProcessOutputFilter(xim->owner, strPreedit);
-    if (str)
-    {
+    if (str) {
         free(strPreedit);
         strPreedit = str;
     }
 
     if (strlen(strPreedit) == 0 && GetXimIC(ic)->bPreeditStarted == true) {
-        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, 0);
-        XimPreeditCallbackDone (xim, GetXimIC(ic));
+        XimPreeditCallbackDraw(xim, GetXimIC(ic), strPreedit, 0);
+        XimPreeditCallbackDone(xim, GetXimIC(ic));
         GetXimIC(ic)->bPreeditStarted = false;
     }
 
     if (strlen(strPreedit) != 0 && GetXimIC(ic)->bPreeditStarted == false) {
-        XimPreeditCallbackStart (xim, GetXimIC(ic));
+        XimPreeditCallbackStart(xim, GetXimIC(ic));
         GetXimIC(ic)->bPreeditStarted = true;
     }
     if (strlen(strPreedit) != 0) {
-        XimPreeditCallbackDraw (xim, GetXimIC(ic), strPreedit, FcitxInputStateGetCursorPos(input));
+        XimPreeditCallbackDraw(xim, GetXimIC(ic), strPreedit, FcitxInputStateGetCursorPos(input));
     }
 
     free(strPreedit);

@@ -34,16 +34,14 @@ FcitxPinyinConfig pyconfig;
 FILE           *fps, *fpt, *fp1, *fp2;
 boolean         bSingleHZMode = false;
 
-typedef struct _PY
-{
+typedef struct _PY {
     char            strPY[3];
-    char            strHZ[UTF8_MAX_LENGTH+1];
+    char            strHZ[UTF8_MAX_LENGTH + 1];
 
     struct _PY     *next, *prev;
 } _PyStruct;
 
-typedef struct _PyPhrase
-{
+typedef struct _PyPhrase {
     char           *strPhrase;
     char           *strMap;
 
@@ -51,8 +49,7 @@ typedef struct _PyPhrase
     unsigned int    uIndex;
 } _PyPhrase;
 
-typedef struct _PyBase
-{
+typedef struct _PyBase {
     char            strHZ[UTF8_MAX_LENGTH + 1];
 
     struct _PyPhrase *phrase;
@@ -60,8 +57,7 @@ typedef struct _PyBase
     unsigned int    iIndex;
 } _PyBase;
 
-typedef struct
-{
+typedef struct {
     char            strMap[3];
 
     struct _PyBase *pyBase;
@@ -91,15 +87,13 @@ boolean LoadPY(void)
 
     PYFAList = (__PYFA *) malloc(sizeof(__PYFA) * iPYFACount);
 
-    for (i = 0; i < iPYFACount; i++)
-    {
+    for (i = 0; i < iPYFACount; i++) {
         fread(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
         PYFAList[i].strMap[2] = '\0';
         fread(&(PYFAList[i].iHZCount), sizeof(int), 1, fp);
         PYFAList[i].pyBase = (_PyBase *) malloc(sizeof(_PyBase) * PYFAList[i].iHZCount);
 
-        for (j = 0; j < PYFAList[i].iHZCount; j++)
-        {
+        for (j = 0; j < PYFAList[i].iHZCount; j++) {
             int8_t len;
             fread(&len, sizeof(int8_t) , 1, fp);
             fread(PYFAList[i].pyBase[j].strHZ, sizeof(char) * len, 1, fp);
@@ -114,14 +108,11 @@ boolean LoadPY(void)
 
     i = 0;
 
-    while (1)
-    {
+    while (1) {
         iSW = 0;
 
-        for (j = 0; j < iPYFACount; j++)
-        {
-            if (i < PYFAList[j].iHZCount)
-            {
+        for (j = 0; j < iPYFACount; j++) {
+            if (i < PYFAList[j].iHZCount) {
                 PYFAList[j].pyBase[i].iIndex = iAllCount--;
                 iSW = 1;
             }
@@ -140,13 +131,11 @@ boolean LoadPY(void)
 
     fwrite(&iPYFACount, sizeof(int), 1, fp);
 
-    for (i = 0; i < iPYFACount; i++)
-    {
+    for (i = 0; i < iPYFACount; i++) {
         fwrite(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
         fwrite(&(PYFAList[i].iHZCount), sizeof(int), 1, fp);
 
-        for (j = 0; j < PYFAList[i].iHZCount; j++)
-        {
+        for (j = 0; j < PYFAList[i].iHZCount; j++) {
             int8_t len = strlen(PYFAList[i].pyBase[j].strHZ);
             fwrite(&len, sizeof(int8_t), 1, fp);
             fwrite(PYFAList[i].pyBase[j].strHZ, sizeof(char) * len, 1, fp);
@@ -183,8 +172,7 @@ void CreatePYPhrase(void)
     uIndex = 0;
     printf("Start Loading Phrase...\n");
 
-    while (!feof(fpt))
-    {
+    while (!feof(fpt)) {
         fscanf(fpt, "%s", strPY);
         fscanf(fpt, "%s\n", strPhrase);
 
@@ -197,8 +185,7 @@ void CreatePYPhrase(void)
 
         kkk = 0;
 
-        if (strTemp.iHZCount != utf8_strlen(strPhrase) || (strTemp.iMode & PARSE_ABBR))
-        {
+        if (strTemp.iHZCount != utf8_strlen(strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
             fprintf(f, "%s %s\n", strPY, strPhrase);
             continue;
         }
@@ -208,29 +195,22 @@ void CreatePYPhrase(void)
         for (iIndex = 0; iIndex < strTemp.iHZCount; iIndex++)
             strcat(strMap, strTemp.strMap[iIndex]);
 
-        for (iIndex = 0; iIndex < iPYFACount; iIndex++)
-        {
-            if (!strncmp(PYFAList[iIndex].strMap, strMap, 2))
-            {
-                for (i = 0; i < PYFAList[iIndex].iHZCount; i++)
-                {
-                    if (!utf8_strncmp(PYFAList[iIndex].pyBase[i].strHZ, strPhrase, 1))
-                    {
+        for (iIndex = 0; iIndex < iPYFACount; iIndex++) {
+            if (!strncmp(PYFAList[iIndex].strMap, strMap, 2)) {
+                for (i = 0; i < PYFAList[iIndex].iHZCount; i++) {
+                    if (!utf8_strncmp(PYFAList[iIndex].pyBase[i].strHZ, strPhrase, 1)) {
                         t = PYFAList[iIndex].pyBase[i].phrase;
 
-                        for (j = 0; j < PYFAList[iIndex].pyBase[i].iPhraseCount; j++)
-                        {
+                        for (j = 0; j < PYFAList[iIndex].pyBase[i].iPhraseCount; j++) {
                             tt = t;
                             t = t->next;
 
-                            if (!strcmp(t->strMap, strMap + 2) && !strcmp(t->strPhrase, strPhrase + utf8_char_len(strPhrase)))
-                            {
+                            if (!strcmp(t->strMap, strMap + 2) && !strcmp(t->strPhrase, strPhrase + utf8_char_len(strPhrase))) {
                                 printf("\n\t%d: %s %s ----->deleted.\n", s2, strPY, strPhrase);
                                 goto _next;
                             }
 
-                            if (strcmp(t->strMap, strMap + 2) > 0)
-                            {
+                            if (strcmp(t->strMap, strMap + 2) > 0) {
                                 t = tt;
                                 break;
                             }
@@ -266,14 +246,11 @@ void CreatePYPhrase(void)
 
     printf("%d Phrases, %d Converted!\nWriting Phrase file ...", s2, s1);
 
-    for (i = 0; i < iPYFACount; i++)
-    {
-        for (j = 0; j < PYFAList[i].iHZCount; j++)
-        {
+    for (i = 0; i < iPYFACount; i++) {
+        for (j = 0; j < PYFAList[i].iHZCount; j++) {
             iIndex = PYFAList[i].pyBase[j].iPhraseCount;
 
-            if (iIndex)
-            {
+            if (iIndex) {
                 int8_t clen = strlen(PYFAList[i].pyBase[j].strHZ);
                 fwrite(&i, sizeof(int), 1, fp2);
                 fwrite(&clen, sizeof(int8_t), 1, fp2);
@@ -282,8 +259,7 @@ void CreatePYPhrase(void)
                 fwrite(&iIndex, sizeof(int), 1, fp2);
                 t = PYFAList[i].pyBase[j].phrase->next;
 
-                for (k = 0; k < PYFAList[i].pyBase[j].iPhraseCount; k++)
-                {
+                for (k = 0; k < PYFAList[i].pyBase[j].iPhraseCount; k++) {
                     int slen = strlen(t->strPhrase);
                     iIndex = strlen(t->strMap);
                     fwrite(&iIndex, sizeof(int), 1, fp2);
@@ -327,21 +303,18 @@ void CreatePYBase(void)
 
     iIndex = 0;
 
-    while (!feof(fps))
-    {
+    while (!feof(fps)) {
         fscanf(fps, "%s", strPY);
         fscanf(fps, "%s\n", strHZ);
 
-        if (MapPY(&pyconfig, strPY, strMap, PARSE_INPUT_SYSTEM))
-        {
+        if (MapPY(&pyconfig, strPY, strMap, PARSE_INPUT_SYSTEM)) {
             for (i = 0; i < iBaseCount; i++)
                 if ((!strcmp(PYTable_template[i].strPY, strPY)) && PYTable_template[i].control == PYTABLE_NONE)
                     YY[i] += 1;
 
             iIndex++;
 
-            if (utf8_strlen(strHZ) > 1)
-            {
+            if (utf8_strlen(strHZ) > 1) {
                 int8_t charLen = utf8_char_len(strHZ);
                 fprintf(stderr, "%s length is larger that 1, truncated to ", strHZ);
                 strHZ[charLen] = '\0';
@@ -354,8 +327,7 @@ void CreatePYBase(void)
             strcpy(temp->strPY, strMap);
             pyList = head->prev;
 
-            while (pyList != head)
-            {
+            while (pyList != head) {
                 if (strcmp(pyList->strPY, strMap) <= 0)
                     break;
 
@@ -367,15 +339,13 @@ void CreatePYBase(void)
             temp->prev = pyList;
             pyList->next->prev = temp;
             pyList->next = temp;
-        }
-        else
+        } else
             fprintf(stderr, "%s Error!!!!\n", strPY);
     }
 
     iCount = 0;
 
-    for (i = 0; i < iBaseCount; i++)
-    {
+    for (i = 0; i < iBaseCount; i++) {
         if (YY[i])
             iCount++;
     }
@@ -391,20 +361,15 @@ void CreatePYBase(void)
     iCount = 0;
     t = pyList;
 
-    while (pyList != head)
-    {
-        if (!strcmp(strPY, pyList->strPY))
-        {
+    while (pyList != head) {
+        if (!strcmp(strPY, pyList->strPY)) {
             iCount++;
-        }
-        else
-        {
+        } else {
             tt++;
             fwrite(strPY, sizeof(char) * 2, 1, fp1);
             fwrite(&iCount, sizeof(int), 1, fp1);
 
-            for (i = 0; i < iCount; i++)
-            {
+            for (i = 0; i < iCount; i++) {
                 int8_t len = strlen(t->strHZ);
                 fwrite(&len, sizeof(int8_t), 1, fp1);
                 fwrite(t->strHZ, sizeof(char) * len , 1, fp1);
@@ -426,8 +391,7 @@ void CreatePYBase(void)
 
     fwrite(&iCount, sizeof(int), 1, fp1);
 
-    for (i = 0; i < iCount; i++)
-    {
+    for (i = 0; i < iCount; i++) {
         int8_t len = strlen(t->strHZ);
         fwrite(&len, sizeof(int8_t), 1, fp1);
         fwrite(t->strHZ, sizeof(char) * len , 1, fp1);
@@ -442,8 +406,7 @@ void CreatePYBase(void)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 3)
-    {
+    if (argc != 3) {
         Usage();
         exit(1);
     }
@@ -454,8 +417,7 @@ int main(int argc, char *argv[])
     fp1 = fopen("pybase.mb", "wb");
     fp2 = fopen("pyphrase.mb", "wb");
 
-    if (fps && fpt && fp1 && fp2)
-    {
+    if (fps && fpt && fp1 && fp2) {
         CreatePYBase();
         LoadPY();
         CreatePYPhrase();

@@ -48,4 +48,4 @@ CONFIG_BINDING_REGISTER("CodeTable", "Enabled", bEnabled)
 CONFIG_BINDING_END()
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

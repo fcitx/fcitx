@@ -32,8 +32,7 @@ typedef enum _ADJUSTORDER {
     AD_FREQ = 2
 } ADJUSTORDER;
 
-typedef enum _SHUANGPINSCHEME
-{
+typedef enum _SHUANGPINSCHEME {
     SP_ZIRANMA,
     SP_MS,
     SP_ZIGUANG,
@@ -43,8 +42,7 @@ typedef enum _SHUANGPINSCHEME
     SP_USERDEFINE
 } SHUANGPINSCHEME;
 
-typedef struct _FcitxPinyinConfig
-{
+typedef struct _FcitxPinyinConfig {
     GenericConfig gconfig;
     /* py config */
     int iPinyinPriority;

@@ -46,8 +46,7 @@ int create_socket(const char *name)
 
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
 
-    if (fd < 0)
-    {
+    if (fd < 0) {
         return fd;
     }
 
@@ -60,8 +59,7 @@ int create_socket(const char *name)
 
     r = connect(fd, (struct sockaddr *) & uds_addr, sizeof(uds_addr));
 
-    if (r < 0)
-    {
+    if (r < 0) {
         return r;
     }
 
@@ -87,10 +85,8 @@ int main(int argc, char *argv[])
     int o = 0;
     char c;
 
-    while ((c = getopt(argc, argv, "chor")) != -1)
-    {
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "chor")) != -1) {
+        switch (c) {
 
         case 'o':
             o = 1;
@@ -118,22 +114,18 @@ int main(int argc, char *argv[])
 
     socket_fd = create_socket(socketfile);
 
-    if (socket_fd < 0)
-    {
+    if (socket_fd < 0) {
         fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
         return 1;
     }
 
-    if (o == 0)
-    {
+    if (o == 0) {
         write(socket_fd, &o, sizeof(o));
         int buf;
         read(socket_fd, &buf, sizeof(buf));
         printf("%d\n", buf);
         close(socket_fd);
-    }
-    else
-    {
+    } else {
         write(socket_fd, &o, sizeof(o));
         close(socket_fd);
     }
@@ -142,4 +134,4 @@ int main(int argc, char *argv[])
 }               /* ----------  end of function main  ---------- */
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

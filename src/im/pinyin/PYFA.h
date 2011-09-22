@@ -52,8 +52,7 @@ typedef enum _PYTABLE_CONTROL {
     PYTABLE_AN_ANG_S //5
 } PYTABLE_CONTROL;
 
-typedef struct _PYTABLE_TEMPLATE
-{
+typedef struct _PYTABLE_TEMPLATE {
     char            strPY[7];
     PYTABLE_CONTROL control;
 } PYTABLE_TEMPLATE;
@@ -63,10 +62,10 @@ typedef struct _PYTABLE {
     boolean            *pMH;
 } PYTABLE;
 
-int GetMHIndex_C (MHPY* MHPY_C, char map);
+int GetMHIndex_C(MHPY* MHPY_C, char map);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
-int GetMHIndex_S (MHPY* MHPY_S, char map, boolean bMode);
-boolean		IsZ_C_S (char map);
+int GetMHIndex_S(MHPY* MHPY_S, char map, boolean bMode);
+boolean     IsZ_C_S(char map);
 void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate);
 void InitPYTable(struct _FcitxPinyinConfig* pyconfig);
 
@@ -75,4 +74,4 @@ extern const MHPY_TEMPLATE  MHPY_C_TEMPLATE[];
 extern const MHPY_TEMPLATE MHPY_S_TEMPLATE[];
 #endif
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

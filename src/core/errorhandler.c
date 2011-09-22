@@ -42,8 +42,7 @@ void SetMyExceptionHandler(void)
 {
     int             signo;
 
-    for (signo = SIGHUP; signo < SIGUNUSED; signo++)
-    {
+    for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
         if (signo != SIGALRM && signo != SIGPIPE)
             signal(signo, OnException);
         else
@@ -58,8 +57,7 @@ void OnException(int signo)
 
     FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
 
-    if (signo != SIGSEGV && signo != SIGCONT)
-    {
+    if (signo != SIGSEGV && signo != SIGCONT) {
         FcitxLock(instance);
         SaveAllIM(instance);
         FcitxUnlock(instance);
@@ -74,8 +72,7 @@ void OnException(int signo)
     size = backtrace(array, 10);
     strings = backtrace_symbols(array, size);
 
-    if (strings)
-    {
+    if (strings) {
         FILE *fp = NULL;
 
         if (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL)
@@ -83,14 +80,12 @@ void OnException(int signo)
 
         printf("Obtained %zd stack frames.\n", size);
 
-        if (fp)
-        {
+        if (fp) {
             fprintf(fp, "FCITX -- Get Signal No.: %d\n", signo);
             fprintf(fp, "Obtained %zd stack frames.\n", size);
         }
 
-        for (i = 0; i < size; i++)
-        {
+        for (i = 0; i < size; i++) {
             printf("%s\n", strings[i]);
 
             if (fp)
@@ -103,8 +98,7 @@ void OnException(int signo)
         free(strings);
     }
 
-    switch (signo)
-    {
+    switch (signo) {
 
     case SIGHUP:
         break;

@@ -44,8 +44,7 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
     if (e == DEBUG)
         return;
 #endif
-    switch (e)
-    {
+    switch (e) {
     case INFO:
         fprintf(stderr, "[INFO]");
         break;
@@ -73,16 +72,13 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
     if (iconvW == NULL)
         iconvW = iconv_open("WCHAR_T", "utf-8");
 
-    if (iconvW == (iconv_t) -1)
-    {
+    if (iconvW == (iconv_t) - 1) {
         fprintf(stderr, "%s\n", buffer);
-    }
-    else
-    {
+    } else {
         size_t len = strlen(buffer);
         wchar_t *wmessage;
-        size_t wlen = (len + 1) * sizeof (wchar_t);
-        wmessage = (wchar_t *) fcitx_malloc0 ((len + 1) * sizeof (wchar_t));
+        size_t wlen = (len + 1) * sizeof(wchar_t);
+        wmessage = (wchar_t *) fcitx_malloc0((len + 1) * sizeof(wchar_t));
 
         char *inp = buffer;
         char *outp = (char*) wmessage;

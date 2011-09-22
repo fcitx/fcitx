@@ -82,15 +82,14 @@ ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDe
     FILE **fp = malloc(sizeof(FILE*) * len);
     int i = 0;
 
-    for (i = 0 ;i < len ; i++)
-    {
+    for (i = 0 ; i < len ; i++) {
         fp[i] = NULL;
         fp[i] = fopen(filename[i], "r");
     }
 
     ConfigFile *cf = ParseMultiConfigFileFp(fp, len, fileDesc);
 
-    for (i = 0 ;i < len ; i++)
+    for (i = 0 ; i < len ; i++)
         if (fp[i])
             fclose(fp[i]);
 
@@ -105,15 +104,14 @@ ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc)
     ConfigFile* cfile = NULL;
     int i = 0;
 
-    for (i = 0 ; i < len ;i ++)
+    for (i = 0 ; i < len ; i ++)
         cfile = ParseIniFp(fp[i], cfile);
 
     /* create a empty one, CheckConfig will do other thing for us */
     if (cfile == NULL)
         cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
 
-    if (CheckConfig(cfile, fileDesc))
-    {
+    if (CheckConfig(cfile, fileDesc)) {
         return cfile;
     }
 
@@ -133,8 +131,7 @@ ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
     if (cfile == NULL)
         cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
 
-    if (CheckConfig(cfile, fileDesc))
-    {
+    if (CheckConfig(cfile, fileDesc)) {
         return cfile;
     }
 
@@ -153,14 +150,12 @@ boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
 
     for (cgdesc = cfdesc->groupsDesc;
             cgdesc != NULL;
-            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next)
-    {
+            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next) {
         ConfigOptionDesc *codesc = NULL;
         ConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
-        if (!group)
-        {
+        if (!group) {
             group = fcitx_malloc0(sizeof(ConfigGroup));
             group->groupName = strdup(cgdesc->groupName);
             group->groupDesc = cgdesc;
@@ -170,15 +165,12 @@ boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
 
         for (codesc = cgdesc->optionsDesc;
                 codesc != NULL;
-                codesc = (ConfigOptionDesc*)codesc->hh.next)
-        {
+                codesc = (ConfigOptionDesc*)codesc->hh.next) {
             ConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 
-            if (!option)
-            {
-                if (!codesc->rawDefaultValue)
-                {
+            if (!option) {
+                if (!codesc->rawDefaultValue) {
                     FcitxLog(WARNING, "missing value: %s", codesc->optionName);
                     return false;
                 }
@@ -242,13 +234,11 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
 
     for (group = cfile->groups;
             group != NULL;
-            group = (ConfigGroup*)group->hh.next)
-    {
+            group = (ConfigGroup*)group->hh.next) {
         ConfigGroupDesc *cgdesc = NULL;
         ConfigOption *options = group->options, *option = NULL;
 
-        if (strcmp(group->groupName, "DescriptionFile") == 0)
-        {
+        if (strcmp(group->groupName, "DescriptionFile") == 0) {
             HASH_FIND_STR(options, "LocaleDomain", option);
             cfdesc->domain = strdup(option->rawValue);
             continue;
@@ -276,14 +266,12 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
 
         HASH_FIND_STR(cfdesc->groupsDesc, groupName, cgdesc);
 
-        if (!cgdesc)
-        {
+        if (!cgdesc) {
             cgdesc = fcitx_malloc0(sizeof(ConfigGroupDesc));
             cgdesc->groupName = groupName;
             cgdesc->optionsDesc = NULL;
             HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName, groupNameLen, cgdesc);
-        }
-        else
+        } else
             free(groupName);
 
         ConfigOptionDesc *codesc = fcitx_malloc0(sizeof(ConfigOptionDesc));
@@ -304,8 +292,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
         /* Processing Type */
         HASH_FIND_STR(options, "Type", option);
 
-        if (option)
-        {
+        if (option) {
             if (!strcmp(option->rawValue, "Integer"))
                 codesc->type = T_Integer;
             else if (!strcmp(option->rawValue, "Color"))
@@ -324,20 +311,17 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                 codesc->type = T_Font;
             else if (!strcmp(option->rawValue, "Hotkey"))
                 codesc->type = T_Hotkey;
-            else if (!strcmp(option->rawValue, "Enum"))
-            {
+            else if (!strcmp(option->rawValue, "Enum")) {
                 ConfigOption *eoption;
                 codesc->type = T_Enum;
                 HASH_FIND_STR(options, "EnumCount", eoption);
                 boolean enumError = false;
                 int i = 0;
 
-                if (eoption)
-                {
+                if (eoption) {
                     int ecount = atoi(eoption->rawValue);
 
-                    if (ecount > 0)
-                    {
+                    if (ecount > 0) {
                         /* 10个选项基本足够了，以后有需求再添加 */
                         if (ecount > 10)
                             ecount = 10;
@@ -350,24 +334,19 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
 
                         size_t nel = 0;
 
-                        for (i = 0; i < ecount; i++)
-                        {
+                        for (i = 0; i < ecount; i++) {
                             enumname[4] = '0' + i;
                             HASH_FIND_STR(options, enumname, eoption);
 
-                            if (eoption)
-                            {
+                            if (eoption) {
                                 void* entry = lfind(eoption->rawValue, codesc->configEnum.enumDesc, &nel, sizeof(char*), (int (*)(const void *, const void *)) strcmp);
 
-                                if (entry)
-                                {
+                                if (entry) {
                                     FcitxLog(WARNING, _("Enum option duplicated."));
                                 }
 
                                 codesc->configEnum.enumDesc[i] = strdup(eoption->rawValue);
-                            }
-                            else
-                            {
+                            } else {
                                 enumError = true;
                                 free(enumname);
                                 goto config_enum_final;
@@ -375,9 +354,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                         }
 
                         free(enumname);
-                    }
-                    else
-                    {
+                    } else {
                         FcitxLog(WARNING, _("Enum option number must larger than 0"));
                         enumError = true;
                         goto config_enum_final;
@@ -386,11 +363,10 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
 
             config_enum_final:
 
-                if (enumError)
-                {
+                if (enumError) {
                     int j = 0;
 
-                    for (;j < i;i++)
+                    for (; j < i; i++)
                         free(codesc->configEnum.enumDesc[j]);
 
                     FcitxLog(WARNING, _("Enum Option is invalid, take it as string"));
@@ -398,15 +374,11 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
                     codesc->type = T_String;
                 }
 
-            }
-            else
-            {
+            } else {
                 FcitxLog(WARNING, _("Unknown type, take it as string: %s"), option->rawValue);
                 codesc->type = T_String;
             }
-        }
-        else
-        {
+        } else {
             FcitxLog(WARNING, _("Missing type, take it as string"));
             codesc->type = T_String;
         }
@@ -428,8 +400,7 @@ ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync)
     if (!option->value.integer)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
         *option->value.integer = atoi(option->rawValue);
@@ -453,8 +424,7 @@ ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync)
     if (!option->value.boolvalue)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
@@ -491,15 +461,12 @@ ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync)
 
     int i = 0;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
-        for (i = 0; i < cenum->enumCount; i++)
-        {
-            if (strcmp(cenum->enumDesc[i], option->rawValue) == 0)
-            {
+        for (i = 0; i < cenum->enumCount; i++) {
+            if (strcmp(cenum->enumDesc[i], option->rawValue) == 0) {
                 *option->value.enumerate = i;
                 return SyncSuccess;
             }
@@ -532,16 +499,14 @@ ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync)
 
     int r = 0, g = 0, b = 0;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
         if (sscanf(option->rawValue, "%d %d %d", &r, &g, &b) != 3)
             return SyncInvalid;
 
-        if (IsColorValid(r) && IsColorValid(g) && IsColorValid(b))
-        {
+        if (IsColorValid(r) && IsColorValid(g) && IsColorValid(b)) {
             color->r = r / 255.0;
             color->g = g / 255.0;
             color->b = b / 255.0;
@@ -577,8 +542,7 @@ ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync)
     if (!option->value.string)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
@@ -606,8 +570,7 @@ ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync)
     if (!option->value.string)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
@@ -660,8 +623,7 @@ ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync)
     if (!option->value.chr)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
@@ -690,19 +652,16 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
     if (!option->value.hotkey)
         return SyncNoBinding;
 
-    switch (sync)
-    {
+    switch (sync) {
 
     case Raw2Value:
 
-        if (option->value.hotkey[0].desc)
-        {
+        if (option->value.hotkey[0].desc) {
             free(option->value.hotkey[0].desc);
             option->value.hotkey[0].desc = NULL;
         }
 
-        if (option->value.hotkey[1].desc)
-        {
+        if (option->value.hotkey[1].desc) {
             free(option->value.hotkey[1].desc);
             option->value.hotkey[0].desc = NULL;
         }
@@ -718,13 +677,10 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
 
         if (option->value.hotkey[1].desc)
             asprintf(&option->rawValue, "%s %s", option->value.hotkey[0].desc, option->value.hotkey[1].desc);
-        else
-            if (option->value.hotkey[0].desc)
-            {
-                option->rawValue = strdup(option->value.hotkey[0].desc);
-            }
-            else
-                option->rawValue = strdup("");
+        else if (option->value.hotkey[0].desc) {
+            option->rawValue = strdup(option->value.hotkey[0].desc);
+        } else
+            option->rawValue = strdup("");
 
         return SyncSuccess;
     }
@@ -740,8 +696,7 @@ void FreeConfigFile(ConfigFile* cfile)
 
     ConfigGroup *groups = cfile->groups, *curGroup;
 
-    while (groups)
-    {
+    while (groups) {
         curGroup = groups;
         HASH_DEL(groups, curGroup);
         FreeConfigGroup(curGroup);
@@ -758,8 +713,7 @@ void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
 
     ConfigGroupDesc *cgdesc = cfdesc->groupsDesc, *curGroup;
 
-    while (cgdesc)
-    {
+    while (cgdesc) {
         curGroup = cgdesc;
         HASH_DEL(cgdesc, curGroup);
         FreeConfigGroupDesc(curGroup);
@@ -775,8 +729,7 @@ void FreeConfigGroup(ConfigGroup *group)
 {
     ConfigOption *option = group->options, *curOption;
 
-    while (option)
-    {
+    while (option) {
         curOption = option;
         HASH_DEL(option, curOption);
         FreeConfigOption(curOption);
@@ -792,8 +745,7 @@ void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc)
 {
     ConfigOptionDesc *codesc = cgdesc->optionsDesc, *curOption;
 
-    while (codesc)
-    {
+    while (codesc) {
         curOption = codesc;
         HASH_DEL(codesc, curOption);
         FreeConfigOptionDesc(curOption);
@@ -810,8 +762,7 @@ void FreeConfigOption(ConfigOption *option)
     free(option->optionName);
 
     ConfigOptionSubkey* item = option->subkey;
-    while(item)
-    {
+    while (item) {
         ConfigOptionSubkey* curitem = item;
         HASH_DEL(item, curitem);
         free(curitem->rawValue);
@@ -830,12 +781,10 @@ void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
 {
     free(codesc->optionName);
 
-    if (codesc->configEnum.enumCount > 0)
-    {
+    if (codesc->configEnum.enumCount > 0) {
         int i = 0;
 
-        for (i = 0 ;i < codesc->configEnum.enumCount; i ++)
-        {
+        for (i = 0 ; i < codesc->configEnum.enumCount; i ++) {
             free(codesc->configEnum.enumDesc[i]);
         }
 
@@ -873,8 +822,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
     int lineLen = 0;
     ConfigFile* cfile;
 
-    if (!fp)
-    {
+    if (!fp) {
         if (reuse)
             return reuse;
         else
@@ -890,8 +838,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
 
     int lineNo = 0;
 
-    while (getline(&buf, &len, fp) != -1)
-    {
+    while (getline(&buf, &len, fp) != -1) {
         lineNo ++;
 
         if (line)
@@ -904,10 +851,8 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
         if (lineLen == 0 || line[0] == '#')
             continue;
 
-        if (line[0] == '[')
-        {
-            if (!(line[lineLen - 1] == ']' && lineLen != 2))
-            {
+        if (line[0] == '[') {
+            if (!(line[lineLen - 1] == ']' && lineLen != 2)) {
                 FcitxLog(ERROR, _("Configure group name error: line %d"), lineNo);
                 return NULL;
             }
@@ -919,8 +864,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
             groupName[lineLen - 2] = '\0';
             HASH_FIND_STR(cfile->groups, groupName, curGroup);
 
-            if (curGroup)
-            {
+            if (curGroup) {
                 FcitxLog(DEBUG, _("Duplicate group name, merge with the previous: %s :line %d"), groupName, lineNo);
                 free(groupName);
                 continue;
@@ -932,16 +876,13 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
             curGroup->options = NULL;
             curGroup->groupDesc = NULL;
             HASH_ADD_KEYPTR(hh, cfile->groups, curGroup->groupName, strlen(curGroup->groupName), curGroup);
-        }
-        else
-        {
+        } else {
             if (curGroup == NULL)
                 continue;
 
             char *value = strchr(line, '=');
 
-            if (!value)
-            {
+            if (!value) {
                 FcitxLog(WARNING, _("Invalid Entry: line %d missing '='"), lineNo);
                 goto next_line;
             }
@@ -958,16 +899,14 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
             /* check subkey */
             char *subkeyname = NULL;
 
-            if ((subkeyname = strchr(name, '[')) != NULL)
-            {
+            if ((subkeyname = strchr(name, '[')) != NULL) {
                 size_t namelen = strlen(name);
 
-                if (name[namelen - 1] == ']')
-                {
+                if (name[namelen - 1] == ']') {
                     /* there is a subkey */
                     *subkeyname = '\0';
                     subkeyname++;
-                    name[namelen -1] = '\0';
+                    name[namelen - 1] = '\0';
                 }
             }
 
@@ -975,35 +914,26 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
 
             HASH_FIND_STR(curGroup->options, name, option);
 
-            if (option)
-            {
-                if (subkeyname)
-                {
+            if (option) {
+                if (subkeyname) {
                     ConfigOptionSubkey* subkey = NULL;
                     HASH_FIND_STR(option->subkey, subkeyname, subkey);
 
-                    if (subkey)
-                    {
+                    if (subkey) {
                         free(subkey->rawValue);
                         subkey->rawValue = strdup(value);
-                    }
-                    else
-                    {
+                    } else {
                         subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
                         subkey->subkeyName = strdup(subkeyname);
                         subkey->rawValue = strdup(value);
                         HASH_ADD_KEYPTR(hh, option->subkey, subkey->subkeyName, strlen(subkey->subkeyName), subkey);
                     }
-                }
-                else
-                {
+                } else {
                     FcitxLog(DEBUG, _("Duplicate option, overwrite: line %d"), lineNo);
                     free(option->rawValue);
                     option->rawValue = strdup(value);
                 }
-            }
-            else
-            {
+            } else {
                 option = fcitx_malloc0(sizeof(ConfigOption));
                 option->optionName = strdup(name);
                 option->rawValue = strdup(value);
@@ -1011,8 +941,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
 
                 /* if the subkey is new, and no default key exists, so we can assign it to default value */
 
-                if (subkeyname)
-                {
+                if (subkeyname) {
                     ConfigOptionSubkey* subkey = NULL;
                     subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
                     subkey->subkeyName = strdup(subkeyname);
@@ -1065,16 +994,14 @@ void ConfigBindSync(GenericConfig* config)
 
     for (groupdesc = cdesc->groupsDesc;
             groupdesc != NULL;
-            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next)
-    {
+            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next) {
         ConfigOptionDesc *optiondesc;
         ConfigGroup *group = NULL;
         HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
 
         for (optiondesc = groupdesc->optionsDesc;
                 optiondesc != NULL;
-                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next)
-        {
+                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next) {
             ConfigOption *option = NULL;
 
             if (group)
@@ -1099,8 +1026,7 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
         if (option->filter)
             option->filter(config, group, option, option->value.untype, sync, option->filterArg);
 
-    switch (codesc->type)
-    {
+    switch (codesc->type) {
 
     case T_Integer:
         f = ConfigOptionInteger;
@@ -1148,10 +1074,8 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
     if (f)
         r = f(option, sync);
 
-    if (r == SyncInvalid)
-    {
-        if (codesc->rawDefaultValue)
-        {
+    if (r == SyncInvalid) {
+        if (codesc->rawDefaultValue) {
             FcitxLog(WARNING, _("Option %s is Invalid, Use Default Value %s"), option->optionName, codesc->rawDefaultValue);
 
             if (option->rawValue)
@@ -1161,9 +1085,7 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
 
             if (sync == Raw2Value)
                 f(option, sync);
-        }
-        else
-        {
+        } else {
             FcitxLog(ERROR, _("Option %s is Invalid."), option->optionName);
         }
     }
@@ -1185,8 +1107,7 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
 
     for (groupdesc = cdesc->groupsDesc;
             groupdesc != NULL;
-            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next)
-    {
+            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next) {
         ConfigOptionDesc *optiondesc;
         fprintf(fp, "[%s]\n", groupdesc->groupName);
 
@@ -1197,8 +1118,7 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
 
         for (optiondesc = groupdesc->optionsDesc;
                 optiondesc != NULL;
-                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next)
-        {
+                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next) {
             ConfigOption *option = NULL;
 
             if (group)
@@ -1207,23 +1127,19 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
             if (optiondesc->desc && strlen(optiondesc->desc) != 0)
                 fprintf(fp, "# %s\n", dgettext(cdesc->domain, optiondesc->desc));
 
-            if (!option)
-            {
+            if (!option) {
                 if (optiondesc->rawDefaultValue)
                     fprintf(fp, "%s=%s\n", optiondesc->optionName, optiondesc->rawDefaultValue);
                 else
                     FcitxLog(FATAL, _("no default option for %s/%s"), groupdesc->groupName, optiondesc->optionName);
-            }
-            else
-            {
+            } else {
                 ConfigSyncValue(config, group, option, Value2Raw);
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
                 ConfigOptionSubkey* subkey;
 
                 for (subkey = option->subkey;
                         subkey != NULL;
-                        subkey = subkey->hh.next)
-                {
+                        subkey = subkey->hh.next) {
                     fprintf(fp, "%s[%s]=%s\n", option->optionName, subkey->subkeyName, subkey->rawValue);
                 }
             }
@@ -1241,25 +1157,21 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
     ConfigGroup *group = NULL;
     HASH_FIND_STR(cfile->groups, groupName, group);
 
-    if (group)
-    {
+    if (group) {
         ConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
-        if (option)
-        {
+        if (option) {
             ConfigOptionDesc* codesc = option->optionDesc;
             option->filter = filter;
             option->filterArg = arg;
 
-            if (!codesc)
-            {
+            if (!codesc) {
                 FcitxLog(WARNING, "Unknown Option: %s/%s", groupName, optionName);
                 return;
             }
 
-            switch (codesc->type)
-            {
+            switch (codesc->type) {
 
             case T_Char:
                 option->value.chr = (char*) var;
@@ -1308,13 +1220,11 @@ ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName,
     memset(&null, 0, sizeof(ConfigValueType));
     HASH_FIND_STR(cfile->groups, groupName, group);
 
-    if (group)
-    {
+    if (group) {
         ConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
-        if (option)
-        {
+        if (option) {
             return option->value;
         }
     }
@@ -1329,13 +1239,11 @@ const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const ch
     ConfigGroupDesc* groupDesc;
     HASH_FIND_STR(cfdesc->groupsDesc, groupName, groupDesc);
 
-    if (groupDesc)
-    {
+    if (groupDesc) {
         ConfigOptionDesc *optionDesc = NULL;
         HASH_FIND_STR(groupDesc->optionsDesc, optionName, optionDesc);
 
-        if (optionDesc)
-        {
+        if (optionDesc) {
             return optionDesc;
         }
     }
@@ -1349,13 +1257,11 @@ ConfigOption* ConfigFileGetOption(ConfigFile* cfile, const char* groupName, cons
     ConfigGroup* group;
     HASH_FIND_STR(cfile->groups, groupName, group);
 
-    if (group)
-    {
+    if (group) {
         ConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
-        if (option)
-        {
+        if (option) {
             return option;
         }
     }
@@ -1381,33 +1287,28 @@ void ResetConfigToDefaultValue(GenericConfig* config)
 
     for (cgdesc = cfdesc->groupsDesc;
             cgdesc != NULL;
-            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next)
-    {
+            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next) {
         ConfigOptionDesc *codesc = NULL;
         ConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
-        if (!group)
-        {
+        if (!group) {
             /* should not happen */
             continue;
         }
 
         for (codesc = cgdesc->optionsDesc;
                 codesc != NULL;
-                codesc = (ConfigOptionDesc*)codesc->hh.next)
-        {
+                codesc = (ConfigOptionDesc*)codesc->hh.next) {
             ConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 
-            if (!option)
-            {
+            if (!option) {
                 /* should not happen */
                 continue;
             }
 
-            if (!codesc->rawDefaultValue)
-            {
+            if (!codesc->rawDefaultValue) {
                 /* ignore it, actually if it doesn't have a default value, the reset is meaning less */
                 continue;
             }

@@ -16,4 +16,4 @@ void Table_ResetPY(FcitxAddon* pyaddon);
 char* Table_PYGetFindString(FcitxAddon* pyaddon);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

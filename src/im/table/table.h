@@ -42,7 +42,7 @@ typedef enum _CANDTYPE {
 } CANDTYPE;
 
 typedef struct _TABLECANDWORD {
-    CANDTYPE        flag;	//指示该候选字/词是自动组的词还是正常的字/词
+    CANDTYPE        flag;   //指示该候选字/词是自动组的词还是正常的字/词
     CANDWORD        candWord;
 } TABLECANDWORD;
 
@@ -53,7 +53,7 @@ typedef struct _FcitxTableState {
     char            iTableCount;
 
     char            iCurrentTableLoaded;
-    RECORD	       *pCurCandRecord;	//Records current cand word selected, to update the hit-frequency information
+    RECORD         *pCurCandRecord; //Records current cand word selected, to update the hit-frequency information
 
     RECORD_INDEX   *recordIndex;
 
@@ -71,38 +71,38 @@ typedef struct _FcitxTableState {
     boolean            bTablePhraseTips;
 
     ADJUSTORDER     PYBaseOrder;
-    boolean		    isSavingTableDic;
+    boolean         isSavingTableDic;
 
     struct _FcitxInstance* owner;
     struct _FcitxAddon* pyaddon;
     CandidateWordCommitCallback pygetcandword;
 } FcitxTableState;
 
-void            LoadTableInfo (FcitxTableState* tbl);
-boolean TableInit (void* arg);
-void            FreeTableIM (FcitxTableState* tbl, char i);
-void            SaveTableIM (void* arg);
+void            LoadTableInfo(FcitxTableState* tbl);
+boolean TableInit(void* arg);
+void            FreeTableIM(FcitxTableState* tbl, char i);
+void            SaveTableIM(void* arg);
 
-INPUT_RETURN_VALUE DoTableInput (void* arg, FcitxKeySym sym, unsigned int state);
-INPUT_RETURN_VALUE TableGetCandWords ();
-void TableAddCandWord (RECORD * record, TABLECANDWORD* tableCandWord);
-void            TableAddAutoCandWord (FcitxTableState* tbl, short int which, TABLECANDWORD* tableCandWord);
-INPUT_RETURN_VALUE TableGetRemindCandWords (FcitxTableState* tbl);
-void TableAddRemindCandWord (RECORD * record, TABLECANDWORD* tableCandWord);
-INPUT_RETURN_VALUE TableGetFHCandWords (FcitxTableState* tbl);
-INPUT_RETURN_VALUE TableGetPinyinCandWords (FcitxTableState* tbl);
-void            TableResetStatus (void* arg);
-INPUT_RETURN_VALUE TableGetRemindCandWord (void* arg, TABLECANDWORD* tableCandWord);
-INPUT_RETURN_VALUE TableGetFHCandWord (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
-void TableAdjustOrderByIndex (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
-void            TableDelPhraseByIndex (FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
-void            TableCreateNewPhrase (FcitxTableState* tbl);
-INPUT_RETURN_VALUE _TableGetCandWord (FcitxTableState* tbl, TABLECANDWORD* tableCandWord, boolean _bRemind);
-INPUT_RETURN_VALUE TableGetCandWord (void* arg, CandidateWord* candWord);
-boolean            TablePhraseTips (void* arg);
-void            TableSetCandWordsFlag (FcitxTableState* tbl, int iCount, boolean flag);
+INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state);
+INPUT_RETURN_VALUE TableGetCandWords();
+void TableAddCandWord(RECORD * record, TABLECANDWORD* tableCandWord);
+void            TableAddAutoCandWord(FcitxTableState* tbl, short int which, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetRemindCandWords(FcitxTableState* tbl);
+void TableAddRemindCandWord(RECORD * record, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetFHCandWords(FcitxTableState* tbl);
+INPUT_RETURN_VALUE TableGetPinyinCandWords(FcitxTableState* tbl);
+void            TableResetStatus(void* arg);
+INPUT_RETURN_VALUE TableGetRemindCandWord(void* arg, TABLECANDWORD* tableCandWord);
+INPUT_RETURN_VALUE TableGetFHCandWord(FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
+void TableAdjustOrderByIndex(FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
+void            TableDelPhraseByIndex(FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
+void            TableCreateNewPhrase(FcitxTableState* tbl);
+INPUT_RETURN_VALUE _TableGetCandWord(FcitxTableState* tbl, TABLECANDWORD* tableCandWord, boolean _bRemind);
+INPUT_RETURN_VALUE TableGetCandWord(void* arg, CandidateWord* candWord);
+boolean            TablePhraseTips(void* arg);
+void            TableSetCandWordsFlag(FcitxTableState* tbl, int iCount, boolean flag);
 
-void            UpdateHZLastInput (FcitxTableState* tbl, char* str);
+void            UpdateHZLastInput(FcitxTableState* tbl, char* str);
 
 ConfigFileDesc *GetTableConfigDesc();
 

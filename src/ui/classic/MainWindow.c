@@ -77,42 +77,42 @@ void InitMainWindow(MainWindow* mainWindow)
 
     vs = ClassicUIFindARGBVisual(classicui);
 
-    if (classicui->iMainWindowOffsetX + cairo_image_surface_get_width(back->image) > swidth )
+    if (classicui->iMainWindowOffsetX + cairo_image_surface_get_width(back->image) > swidth)
         classicui->iMainWindowOffsetX = swidth - cairo_image_surface_get_width(back->image);
 
-    if (classicui->iMainWindowOffsetY + cairo_image_surface_get_height(back->image) > sheight )
+    if (classicui->iMainWindowOffsetY + cairo_image_surface_get_height(back->image) > sheight)
         classicui->iMainWindowOffsetY = sheight - cairo_image_surface_get_height(back->image);
 
     ClassicUIInitWindowAttribute(classicui, &vs, &cmap, &attrib, &attribmask, &depth);
-    mainWindow->window=XCreateWindow (dpy,
-                                      RootWindow(dpy, iScreen),
-                                      classicui->iMainWindowOffsetX,
-                                      classicui->iMainWindowOffsetY,
-                                      cairo_image_surface_get_width(back->image),
-                                      cairo_image_surface_get_height(back->image),
-                                      0, depth,InputOutput, vs,attribmask, &attrib);
+    mainWindow->window = XCreateWindow(dpy,
+                                       RootWindow(dpy, iScreen),
+                                       classicui->iMainWindowOffsetX,
+                                       classicui->iMainWindowOffsetY,
+                                       cairo_image_surface_get_width(back->image),
+                                       cairo_image_surface_get_height(back->image),
+                                       0, depth, InputOutput, vs, attribmask, &attrib);
 
     if (mainWindow->window == None)
         return;
 
-    mainWindow->cs_x_main_bar=cairo_xlib_surface_create(
-                                dpy,
-                                mainWindow->window,
-                                vs,
-                                MAIN_BAR_MAX_WIDTH,
-                                MAIN_BAR_MAX_HEIGHT);
-    mainWindow->cs_main_bar=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                MAIN_BAR_MAX_WIDTH,
-                                MAIN_BAR_MAX_HEIGHT);
+    mainWindow->cs_x_main_bar = cairo_xlib_surface_create(
+                                    dpy,
+                                    mainWindow->window,
+                                    vs,
+                                    MAIN_BAR_MAX_WIDTH,
+                                    MAIN_BAR_MAX_HEIGHT);
+    mainWindow->cs_main_bar = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                              MAIN_BAR_MAX_WIDTH,
+                              MAIN_BAR_MAX_HEIGHT);
 
-    mainWindow->main_win_gc = XCreateGC( dpy, mainWindow->window, 0, NULL );
-    XChangeWindowAttributes (dpy, mainWindow->window, attribmask, &attrib);
-    XSelectInput (dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
+    mainWindow->main_win_gc = XCreateGC(dpy, mainWindow->window, 0, NULL);
+    XChangeWindowAttributes(dpy, mainWindow->window, attribmask, &attrib);
+    XSelectInput(dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
     ClassicUISetWindowProperty(classicui, mainWindow-> window, FCITX_WINDOW_DOCK, strWindowName);
 }
 
-MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
+MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
 {
     MainWindow *mainWindow;
 
@@ -131,33 +131,32 @@ MainWindow* CreateMainWindow (FcitxClassicUI* classicui)
     return mainWindow;
 }
 
-void DisplayMainWindow (Display* dpy, MainWindow* mainWindow)
+void DisplayMainWindow(Display* dpy, MainWindow* mainWindow)
 {
     FcitxLog(DEBUG, _("DISPLAY MainWindow"));
 
     if (!mainWindow->bMainWindowHidden)
-        XMapRaised (dpy, mainWindow->window);
+        XMapRaised(dpy, mainWindow->window);
 }
 
-void DrawMainWindow (MainWindow* mainWindow)
+void DrawMainWindow(MainWindow* mainWindow)
 {
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
 
-    if ( mainWindow->bMainWindowHidden )
+    if (mainWindow->bMainWindowHidden)
         return;
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState(mainWindow->owner->owner) != IS_CLOSED)))
-    {
+    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (GetCurrentState(mainWindow->owner->owner) != IS_CLOSED))) {
         cairo_t *c;
 
-        c=cairo_create(mainWindow->cs_main_bar);
+        c = cairo_create(mainWindow->cs_main_bar);
         //把背景清空
         cairo_save(c);
-        cairo_set_source_rgba(c, 0, 0, 0,0);
-        cairo_rectangle (c, 0, 0, SIZEX, SIZEY);
+        cairo_set_source_rgba(c, 0, 0, 0, 0);
+        cairo_rectangle(c, 0, 0, SIZEX, SIZEY);
         cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
         cairo_fill(c);
         cairo_restore(c);
@@ -165,8 +164,7 @@ void DrawMainWindow (MainWindow* mainWindow)
         cairo_set_operator(c, CAIRO_OPERATOR_OVER);
         int width = 0, height = 0;
         /* Check placement */
-        if (utarray_len(&mainWindow->owner->skin.skinMainBar.skinPlacement) != 0)
-        {
+        if (utarray_len(&mainWindow->owner->skin.skinMainBar.skinPlacement) != 0) {
             SkinImage* back = LoadImage(sc, sc->skinMainBar.backImg, false);
             if (back == NULL)
                 return;
@@ -180,8 +178,7 @@ void DrawMainWindow (MainWindow* mainWindow)
             for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
-                )
-            {
+                ) {
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;
@@ -193,39 +190,30 @@ void DrawMainWindow (MainWindow* mainWindow)
             SkinPlacement* sp;
             for (sp = (SkinPlacement*) utarray_front(&sc->skinMainBar.skinPlacement);
                     sp != NULL;
-                    sp = (SkinPlacement*) utarray_next(&sc->skinMainBar.skinPlacement, sp))
-            {
-                if (strcmp(sp->name, "logo") == 0)
-                {
+                    sp = (SkinPlacement*) utarray_next(&sc->skinMainBar.skinPlacement, sp)) {
+                if (strcmp(sp->name, "logo") == 0) {
                     SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
-                    if (logo)
-                    {
+                    if (logo) {
                         DrawImage(c, logo->image, sp->x, sp->y, mainWindow->logostat.mouse);
-                        UpdateStatusGeometry( &mainWindow->logostat, logo, sp->x, sp->y);
+                        UpdateStatusGeometry(&mainWindow->logostat, logo, sp->x, sp->y);
                     }
-                }
-                else if (strcmp(sp->name, "im") == 0)
-                {
+                } else if (strcmp(sp->name, "im") == 0) {
                     SkinImage* imicon = NULL;
-                    if (GetCurrentState(instance) != IS_ACTIVE )
+                    if (GetCurrentState(instance) != IS_ACTIVE)
                         imicon = LoadImage(sc, sc->skinMainBar.eng, false);
-                    else
-                    {
+                    else {
                         FcitxIM* im = GetCurrentIM(instance);
                         char path[PATH_MAX];
-                        snprintf(path, PATH_MAX, "%s.png", im->strIconName );
+                        snprintf(path, PATH_MAX, "%s.png", im->strIconName);
                         imicon = LoadImage(sc, path, false);
                         if (imicon == NULL)
                             imicon = LoadImage(sc, sc->skinMainBar.active, false);
                     }
                     DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
-                    UpdateStatusGeometry( &mainWindow->imiconstat, imicon, sp->x, sp->y);
-                }
-                else
-                {
+                    UpdateStatusGeometry(&mainWindow->imiconstat, imicon, sp->x, sp->y);
+                } else {
                     status = GetUIStatus(instance, sp->name);
-                    if (status)
-                    {
+                    if (status) {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                         if (privstat == NULL)
                             continue;
@@ -233,20 +221,18 @@ void DrawMainWindow (MainWindow* mainWindow)
                         boolean active = status->getCurrentStatus(status->arg);
                         char path[PATH_MAX];
                         if (active)
-                            snprintf(path, PATH_MAX, "%s_active.png", status->name );
+                            snprintf(path, PATH_MAX, "%s_active.png", status->name);
                         else
-                            snprintf(path, PATH_MAX, "%s_inactive.png", status->name );
+                            snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
                         SkinImage* statusicon = LoadImage(sc, path, false);
                         if (statusicon == NULL)
                             continue;
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
-                        UpdateStatusGeometry( privstat, statusicon, sp->x, sp->y);
+                        UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             /* Only logo and input status is hard-code, other should be status */
             int currentX = sc->skinMainBar.marginLeft;
             height = 0;
@@ -254,21 +240,19 @@ void DrawMainWindow (MainWindow* mainWindow)
             SkinImage* logo = LoadImage(sc, sc->skinMainBar.logo, false);
             SkinImage* imicon;
             int imageheight;
-            if (logo)
-            {
+            if (logo) {
                 currentX += cairo_image_surface_get_width(logo->image);
                 imageheight = cairo_image_surface_get_height(logo->image);
                 if (imageheight > height)
                     height = imageheight;
             }
 
-            if (GetCurrentState(instance) != IS_ACTIVE )
+            if (GetCurrentState(instance) != IS_ACTIVE)
                 imicon = LoadImage(sc, sc->skinMainBar.eng, false);
-            else
-            {
+            else {
                 FcitxIM* im = GetCurrentIM(instance);
                 char path[PATH_MAX];
-                snprintf(path, PATH_MAX, "%s.png", im->strIconName );
+                snprintf(path, PATH_MAX, "%s.png", im->strIconName);
                 imicon = LoadImage(sc, path, false);
                 if (imicon == NULL)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
@@ -283,14 +267,13 @@ void DrawMainWindow (MainWindow* mainWindow)
             for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
-                )
-            {
+                ) {
                 boolean active = status->getCurrentStatus(status->arg);
                 char path[PATH_MAX];
                 if (active)
-                    snprintf(path, PATH_MAX, "%s_active.png", status->name );
+                    snprintf(path, PATH_MAX, "%s_active.png", status->name);
                 else
-                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name );
+                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL)
                     continue;
@@ -317,21 +300,19 @@ void DrawMainWindow (MainWindow* mainWindow)
                                    );
 
             currentX = sc->skinMainBar.marginLeft;
-            if (logo)
-            {
+            if (logo) {
                 DrawImage(c, logo->image, currentX, sc->skinMainBar.marginTop, mainWindow->logostat.mouse);
-                UpdateStatusGeometry( &mainWindow->logostat, logo, currentX, sc->skinMainBar.marginTop);
+                UpdateStatusGeometry(&mainWindow->logostat, logo, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(logo->image);
             }
             DrawImage(c, imicon->image, currentX, sc->skinMainBar.marginTop, mainWindow->imiconstat.mouse);
-            UpdateStatusGeometry( &mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
+            UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
             currentX += cairo_image_surface_get_width(imicon->image);
 
             for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
-                )
-            {
+                ) {
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;
@@ -341,9 +322,9 @@ void DrawMainWindow (MainWindow* mainWindow)
                 boolean active = status->getCurrentStatus(status->arg);
                 char path[PATH_MAX];
                 if (active)
-                    snprintf(path, PATH_MAX, "%s_active.png", status->name );
+                    snprintf(path, PATH_MAX, "%s_active.png", status->name);
                 else
-                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name );
+                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL)
                     continue;
@@ -368,10 +349,9 @@ void DrawMainWindow (MainWindow* mainWindow)
             cairo_destroy(c);
         }
 
-        XMapRaised (mainWindow->dpy, mainWindow->window);
-    }
-    else
-        XUnmapWindow (mainWindow->dpy, mainWindow->window);
+        XMapRaised(mainWindow->dpy, mainWindow->window);
+    } else
+        XUnmapWindow(mainWindow->dpy, mainWindow->window);
 }
 
 void ReloadMainWindow(void *arg, boolean enabled)
@@ -404,25 +384,21 @@ void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int 
 
 void CloseMainWindow(MainWindow *mainWindow)
 {
-    XUnmapWindow (mainWindow->dpy, mainWindow->window);
+    XUnmapWindow(mainWindow->dpy, mainWindow->window);
 }
 
 boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other)
 {
     FcitxInstance *instance = mainWindow->owner->owner;
     boolean changed = false;
-    if (mouseE != &mainWindow->logostat.mouse)
-    {
-        if (mainWindow->logostat.mouse != other)
-        {
+    if (mouseE != &mainWindow->logostat.mouse) {
+        if (mainWindow->logostat.mouse != other) {
             changed = true;
             mainWindow->logostat.mouse = other;
         }
     }
-    if (mouseE != &mainWindow->imiconstat.mouse)
-    {
-        if (mainWindow->imiconstat.mouse != other)
-        {
+    if (mouseE != &mainWindow->imiconstat.mouse) {
+        if (mainWindow->imiconstat.mouse != other) {
             changed = true;
             mainWindow->imiconstat.mouse = other;
         }
@@ -432,20 +408,16 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
     for (status = (FcitxUIStatus*) utarray_front(uistats);
             status != NULL;
             status = (FcitxUIStatus*) utarray_next(uistats, status)
-        )
-    {
+        ) {
         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
-        if (mouseE != &privstat->mouse)
-        {
-            if (privstat->mouse != other)
-            {
+        if (mouseE != &privstat->mouse) {
+            if (privstat->mouse != other) {
                 changed = true;
                 privstat->mouse = other;
             }
         }
     }
-    if (mouseE != NULL && *mouseE != value)
-    {
+    if (mouseE != NULL && *mouseE != value) {
         changed = true;
         *mouseE = value;
     }
@@ -460,10 +432,8 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
     FcitxClassicUI *classicui = mainWindow->owner;
     MouseE *mouse;
 
-    if (event->xany.window == mainWindow->window)
-    {
-        switch (event->type)
-        {
+    if (event->xany.window == mainWindow->window) {
+        switch (event->type) {
         case Expose:
             DrawMainWindow(mainWindow);
             break;
@@ -479,14 +449,13 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                 for (status = (FcitxUIStatus*) utarray_front(uistats);
                         status != NULL;
                         status = (FcitxUIStatus*) utarray_next(uistats, status)
-                    )
-                {
+                    ) {
                     FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                     if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat))
                         mouse = &privstat->mouse;
                 }
             }
-            if  (SetMouseStatus(mainWindow, mouse, MOTION, RELEASE))
+            if (SetMouseStatus(mainWindow, mouse, MOTION, RELEASE))
                 DrawMainWindow(mainWindow);
             break;
         case LeaveNotify:
@@ -495,8 +464,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
             break;
         case ButtonPress:
             switch (event->xbutton.button) {
-            case Button1:
-            {
+            case Button1: {
                 mouse = NULL;
                 if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->logostat)) {
                     mouse = &mainWindow->logostat.mouse;
@@ -504,12 +472,10 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     classicui->iMainWindowOffsetX = event->xbutton.x;
                     classicui->iMainWindowOffsetY = event->xbutton.y;
 
-                    if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY))
-                    {
+                    if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY)) {
                         if (GetCurrentState(instance) == IS_CLOSED) {
                             EnableIM(instance, GetCurrentIC(instance), false);
-                        }
-                        else {
+                        } else {
                             CloseIM(instance, GetCurrentIC(instance));
                         }
                     }
@@ -523,20 +489,17 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     for (status = (FcitxUIStatus*) utarray_front(uistats);
                             status != NULL;
                             status = (FcitxUIStatus*) utarray_next(uistats, status)
-                        )
-                    {
+                        ) {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
-                        if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat))
-                        {
+                        if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat)) {
                             mouse = &privstat->mouse;
                             UpdateStatus(instance, status->name);
                         }
                     }
                 }
-                if  (SetMouseStatus(mainWindow, mouse, PRESS, RELEASE))
+                if (SetMouseStatus(mainWindow, mouse, PRESS, RELEASE))
                     DrawMainWindow(mainWindow);
-                if (mouse == NULL)
-                {
+                if (mouse == NULL) {
                     classicui->iMainWindowOffsetX = event->xbutton.x;
                     classicui->iMainWindowOffsetY = event->xbutton.y;
                     ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY);
@@ -544,8 +507,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                 }
             }
             break;
-            case Button3:
-            {
+            case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
                 unsigned int height;
                 int sheight;

@@ -27,14 +27,12 @@
  * @brief Code table for Pinyin
  **/
 
-struct _PYMB
-{
+struct _PYMB {
     int PYFAIndex;
     char HZ[UTF8_MAX_LENGTH + 1];
     int UserPhraseCount;
 
-    struct
-    {
+    struct {
         int Length;
         char *Map;
         char *Phrase;
@@ -43,8 +41,7 @@ struct _PYMB
     } *UserPhrase;
 };
 
-struct _HZMap
-{
+struct _HZMap {
     char Map[3];
     int BaseCount;
     char **HZ;
@@ -57,4 +54,4 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser);
 #endif /* _PY_TOOLS_H */
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

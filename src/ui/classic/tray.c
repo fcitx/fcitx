@@ -58,7 +58,7 @@
 #define XEMBED_ACTIVATE_ACCELERATOR     14
 
 static int iTrappedErrorCode = 0;
-static int (*hOldErrorHandler) (Display *d, XErrorEvent *e);
+static int (*hOldErrorHandler)(Display *d, XErrorEvent *e);
 
 /* static void tray_map_window (Display* dpy, Window win); */
 
@@ -97,7 +97,7 @@ InitTray(Display* dpy, TrayWindow* tray)
 
     asprintf(&atom_names[0], "_NET_SYSTEM_TRAY_S%d", tray->owner->iScreen);
 
-    XInternAtoms (dpy, atom_names, 5, False, tray->atoms);
+    XInternAtoms(dpy, atom_names, 5, False, tray->atoms);
     tray->size = 22;
 
     free(atom_names[0]);
@@ -113,30 +113,27 @@ InitTray(Display* dpy, TrayWindow* tray)
 int
 TrayFindDock(Display *dpy, TrayWindow* tray)
 {
-    if (tray->window == None)
-    {
+    if (tray->window == None) {
         tray->bTrayMapped = False;
         return 0;
     }
 
-    XGrabServer (dpy);
+    XGrabServer(dpy);
 
     tray->dockWindow = XGetSelectionOwner(dpy, tray->atoms[ATOM_SELECTION]);
 
     if (tray->dockWindow != None)
         XSelectInput(dpy, tray->dockWindow,
-                     StructureNotifyMask|PropertyChangeMask);
+                     StructureNotifyMask | PropertyChangeMask);
 
-    XUngrabServer (dpy);
-    XFlush (dpy);
+    XUngrabServer(dpy);
+    XFlush(dpy);
 
     if (tray->dockWindow != None) {
         TraySendOpcode(dpy, tray->dockWindow, tray, SYSTEM_TRAY_REQUEST_DOCK, tray->window, 0, 0);
         tray->bTrayMapped = True;
         return 1;
-    }
-    else
-    {
+    } else {
         tray->bTrayMapped = False;
         ReleaseTrayWindow(tray);
     }
@@ -165,14 +162,13 @@ void TraySendOpcode(Display* dpy, Window dock, TrayWindow* tray,
     XSync(dpy, False);
     if (UntrapErrors()) {
         FcitxLog(WARNING, _("X error %i on opcode send"),
-                 iTrappedErrorCode );
+                 iTrappedErrorCode);
     }
 }
 
 XVisualInfo* TrayGetVisual(Display* dpy, TrayWindow* tray)
 {
-    if (tray->visual.visual)
-    {
+    if (tray->visual.visual) {
         return &tray->visual;
     }
 
@@ -218,4 +214,4 @@ Window TrayGetDock(Display* dpy, TrayWindow* tray)
     return dock;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

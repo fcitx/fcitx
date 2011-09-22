@@ -80,7 +80,7 @@ extern "C" {
      * @param fpDict file pointer
      * @return int line number
      **/
-    int CalculateRecordNumber (FILE* fpDict);
+    int CalculateRecordNumber(FILE* fpDict);
 
     /**
      * @brief Split a string by delm

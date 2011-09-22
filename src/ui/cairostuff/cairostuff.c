@@ -52,41 +52,37 @@ StringWidth(const char *str, const char *font, int fontSize)
 void
 StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str, int* w, int* h)
 {
-    if (!str || str[0] == 0)
-    {
-        if (w) *w= 0;
-        if (h) *h= 0;
+    if (!str || str[0] == 0) {
+        if (w) *w = 0;
+        if (h) *h = 0;
         return;
     }
-    if (!utf8_check_string(str))
-    {
-        if (w) *w= 0;
-        if (h) *h= 0;
+    if (!utf8_check_string(str)) {
+        if (w) *w = 0;
+        if (h) *h = 0;
 
         return;
     }
 
-    PangoLayout *layout = pango_cairo_create_layout (c);
-    pango_layout_set_text (layout, str, -1);
-    pango_layout_set_font_description (layout, fontDesc);
+    PangoLayout *layout = pango_cairo_create_layout(c);
+    pango_layout_set_text(layout, str, -1);
+    pango_layout_set_font_description(layout, fontDesc);
     pango_layout_get_pixel_size(layout, w, h);
-    g_object_unref (layout);
+    g_object_unref(layout);
 }
 #else
 
 void
 StringSizeWithContextReal(cairo_t * c, const char *str, int* w, int* h)
 {
-    if (!str || str[0] == 0)
-    {
-        if (w) *w= 0;
-        if (h) *h= 0;
+    if (!str || str[0] == 0) {
+        if (w) *w = 0;
+        if (h) *h = 0;
         return;
     }
-    if (!utf8_check_string(str))
-    {
-        if (w) *w= 0;
-        if (h) *h= 0;
+    if (!utf8_check_string(str)) {
+        if (w) *w = 0;
+        if (h) *h = 0;
 
         return;
     }
@@ -124,12 +120,10 @@ FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
     FCITX_UNUSED(c);
     int height;
 
-    if (pango_font_description_get_size_is_absolute(fontDesc)) /* it must be this case */
-    {
+    if (pango_font_description_get_size_is_absolute(fontDesc)) { /* it must be this case */
         height = pango_font_description_get_size(fontDesc);
         height /= PANGO_SCALE;
-    }
-    else
+    } else
         height = 0;
 
     return height;
@@ -140,7 +134,7 @@ int
 FontHeightWithContextReal(cairo_t * c)
 {
     cairo_matrix_t matrix;
-    cairo_get_font_matrix (c, &matrix);
+    cairo_get_font_matrix(c, &matrix);
 
     int             height = matrix.xx;
     return height;
@@ -179,14 +173,14 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char 
 
     PangoLayout *layout;
 
-    layout = pango_cairo_create_layout (c);
-    pango_layout_set_text (layout, str, -1);
-    pango_layout_set_font_description (layout, desc);
+    layout = pango_cairo_create_layout(c);
+    pango_layout_set_text(layout, str, -1);
+    pango_layout_set_font_description(layout, desc);
     cairo_move_to(c, x, y);
-    pango_cairo_show_layout (c, layout);
+    pango_cairo_show_layout(c, layout);
 
     cairo_restore(c);
-    g_object_unref (layout);
+    g_object_unref(layout);
 }
 #else
 
@@ -210,10 +204,10 @@ OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y)
 PangoFontDescription* GetPangoFontDescription(const char* font, int size)
 {
     PangoFontDescription* desc;
-    desc = pango_font_description_new ();
+    desc = pango_font_description_new();
     pango_font_description_set_absolute_size(desc, size * PANGO_SCALE);
     pango_font_description_set_family(desc, font);
     return desc;
 }
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

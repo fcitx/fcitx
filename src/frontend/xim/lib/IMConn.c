@@ -50,9 +50,8 @@ static void _IMCountVaList(va_list var, int *total_count)
 
     *total_count = 0;
 
-    for (attr = va_arg (var, char*);  attr;  attr = va_arg (var, char*))
-    {
-        (void)va_arg (var, XIMArg *);
+    for (attr = va_arg(var, char*);  attr;  attr = va_arg(var, char*)) {
+        (void)va_arg(var, XIMArg *);
         ++(*total_count);
     }
     /*endfor*/
@@ -63,42 +62,36 @@ static void _IMVaToNestedList(va_list var, int max_count, XIMArg **args_return)
     XIMArg *args;
     char   *attr;
 
-    if (max_count <= 0)
-    {
+    if (max_count <= 0) {
         *args_return = (XIMArg *) NULL;
         return;
     }
     /*endif*/
 
-    args = (XIMArg *) malloc ((unsigned) (max_count + 1)*sizeof (XIMArg));
+    args = (XIMArg *) malloc((unsigned)(max_count + 1) * sizeof(XIMArg));
     *args_return = args;
     if (!args)
         return;
     /*endif*/
 
-    for (attr = va_arg (var, char*);  attr;  attr = va_arg (var, char *))
-    {
+    for (attr = va_arg(var, char*);  attr;  attr = va_arg(var, char *)) {
         args->name = attr;
-        args->value = va_arg (var, XPointer);
+        args->value = va_arg(var, XPointer);
         args++;
     }
     /*endfor*/
     args->name = (char*)NULL;
 }
 
-static char *_FindModifiers (XIMArg *args)
+static char *_FindModifiers(XIMArg *args)
 {
     char *modifiers;
 
-    while (args->name)
-    {
-        if (strcmp (args->name, IMModifiers) == 0)
-        {
+    while (args->name) {
+        if (strcmp(args->name, IMModifiers) == 0) {
             modifiers = args->value;
             return modifiers;
-        }
-        else
-        {
+        } else {
             args++;
         }
         /*endif*/
@@ -107,31 +100,30 @@ static char *_FindModifiers (XIMArg *args)
     return NULL;
 }
 
-XIMS _GetIMS (char *modifiers)
+XIMS _GetIMS(char *modifiers)
 {
     XIMS ims;
     extern IMMethodsRec Xi18n_im_methods;
 
-    if ((ims = (XIMS) malloc (sizeof (XIMProtocolRec))) == (XIMS) NULL)
+    if ((ims = (XIMS) malloc(sizeof(XIMProtocolRec))) == (XIMS) NULL)
         return ((XIMS) NULL);
     /*endif*/
-    memset ((void *) ims, 0, sizeof (XIMProtocolRec));
+    memset((void *) ims, 0, sizeof(XIMProtocolRec));
 
     if (modifiers == NULL
             ||
             modifiers[0] == '\0'
             ||
-            strcmp (modifiers, "Xi18n") == 0)
-    {
+            strcmp(modifiers, "Xi18n") == 0) {
         ims->methods = &Xi18n_im_methods;
         return ims;
     }
     /*endif*/
-    XFree (ims);
+    XFree(ims);
     return (XIMS) NULL;
 }
 
-XIMS IMOpenIM (Display *display, ...)
+XIMS IMOpenIM(Display *display, ...)
 {
     va_list var;
     int total_count;
@@ -140,46 +132,44 @@ XIMS IMOpenIM (Display *display, ...)
     char *modifiers;
     Status ret;
 
-    Va_start (var, display);
-    _IMCountVaList (var, &total_count);
-    va_end (var);
+    Va_start(var, display);
+    _IMCountVaList(var, &total_count);
+    va_end(var);
 
-    Va_start (var, display);
-    _IMVaToNestedList (var, total_count, &args);
-    va_end (var);
+    Va_start(var, display);
+    _IMVaToNestedList(var, total_count, &args);
+    va_end(var);
 
-    modifiers = _FindModifiers (args);
+    modifiers = _FindModifiers(args);
 
-    ims = _GetIMS (modifiers);
+    ims = _GetIMS(modifiers);
     if (ims == (XIMS) NULL)
         return (XIMS) NULL;
     /*endif*/
 
     ims->core.display = display;
 
-    ims->protocol = (*ims->methods->setup) (display, args);
-    XFree (args);
-    if (ims->protocol == (void *) NULL)
-    {
-        XFree (ims);
+    ims->protocol = (*ims->methods->setup)(display, args);
+    XFree(args);
+    if (ims->protocol == (void *) NULL) {
+        XFree(ims);
         return (XIMS) NULL;
     }
     /*endif*/
-    ret = (ims->methods->openIM) (ims);
-    if (ret == False)
-    {
-        XFree (ims);
+    ret = (ims->methods->openIM)(ims);
+    if (ret == False) {
+        XFree(ims);
         return (XIMS) NULL;
     }
     /*endif*/
     return (XIMS) ims;
 }
 
-Status IMCloseIM (XIMS ims)
+Status IMCloseIM(XIMS ims)
 {
-    (ims->methods->closeIM) (ims);
-    XFree (ims);
+    (ims->methods->closeIM)(ims);
+    XFree(ims);
     return True;
 }
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

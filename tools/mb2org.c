@@ -52,10 +52,8 @@ int main(int argc, char **argv)
     char c;
     boolean isUser = true;
 
-    while ((c = getopt(argc, argv, "f:b:sh")) != -1)
-    {
-        switch (c)
-        {
+    while ((c = getopt(argc, argv, "f:b:sh")) != -1) {
+        switch (c) {
 
         case 'f':
             pyusrphrase_mb = strdup(optarg);
@@ -81,8 +79,7 @@ int main(int argc, char **argv)
     else
         fi = GetXDGFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r" , &pyusrphrase_mb);
 
-    if (!fi)
-    {
+    if (!fi) {
         perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pyusrphrase_mb);
         exit(1);
@@ -95,8 +92,7 @@ int main(int argc, char **argv)
     else
         fi2 = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
 
-    if (!fi2)
-    {
+    if (!fi2) {
         perror("fopen");
         fprintf(stderr, "Can't open file `%s' for reading\n", pybase_mb);
         exit(1);
@@ -108,15 +104,12 @@ int main(int argc, char **argv)
     LoadPYMB(fi, &PYMB, isUser);
     LoadPYBase(fi2, &HZMap);
 
-    for (i = 0; PYMB[i].HZ[0]; ++i)
-    {
-        for (j = 0; j < PYMB[i].UserPhraseCount; ++j)
-        {
+    for (i = 0; PYMB[i].HZ[0]; ++i) {
+        for (j = 0; j < PYMB[i].UserPhraseCount; ++j) {
             HZPY = HZToPY(&(HZMap[PYMB[i].PYFAIndex]), PYMB[i].HZ);
             printf("%s", HZPY);
 
-            for (k = 0; k < PYMB[i].UserPhrase[j].Length / 2; ++k)
-            {
+            for (k = 0; k < PYMB[i].UserPhrase[j].Length / 2; ++k) {
                 memcpy(tMap, PYMB[i].UserPhrase[j].Map + 2 * k, 2);
                 tMap[2] = '\0';
                 tPY[0] = '\0';
@@ -149,8 +142,7 @@ char *HZToPY(struct _HZMap *pHZMap1, char* HZ)
     Map[0] = '\0';
 
     for (i = 0; i < pHZMap1->BaseCount; ++i)
-        if (strcmp(HZ, pHZMap1->HZ[i]) == 0)
-        {
+        if (strcmp(HZ, pHZMap1->HZ[i]) == 0) {
             strcpy(Map, pHZMap1->Map);
             break;
         }
@@ -190,4 +182,4 @@ void usage()
 }
 
 
-// kate: indent-mode cstyle; space-indent on; indent-width 4; 
+// kate: indent-mode cstyle; space-indent on; indent-width 4;

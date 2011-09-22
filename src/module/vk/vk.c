@@ -54,8 +54,7 @@ typedef struct _VKS {
     char            strName[MAX_IM_NAME + 1];
 } VKS;
 
-typedef struct _VKWindow
-{
+typedef struct _VKWindow {
     Window          window;
     ConfigColor* fontColor;
     int fontSize;
@@ -90,31 +89,31 @@ static void
 VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
                       XSetWindowAttributes * attrib,
                       unsigned long *attribmask, int *depth);
-static Visual * VKFindARGBVisual (FcitxVKState* vkstate);
+static Visual * VKFindARGBVisual(FcitxVKState* vkstate);
 static void VKSetWindowProperty(FcitxVKState* vkstate, Window window, FcitxXWindowType type, char *windowTitle);
 static boolean VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y);
-static void SwitchVK (FcitxVKState *vkstate);
-static void LoadVKMapFile ( FcitxVKState *vkstate);
-static void ChangVK (FcitxVKState* vkstate);
+static void SwitchVK(FcitxVKState *vkstate);
+static void LoadVKMapFile(FcitxVKState *vkstate);
+static void ChangVK(FcitxVKState* vkstate);
 static void ReloadVK(void *arg);
-static int MyToUpper (int iChar);
-static int MyToLower (int iChar);
+static int MyToUpper(int iChar);
+static int MyToLower(int iChar);
 static cairo_surface_t* LoadVKImage(VKWindow* vkWindow);
 static void *VKCreate(FcitxInstance* instance);
-static VKWindow* CreateVKWindow (FcitxVKState* vkstate);
+static VKWindow* CreateVKWindow(FcitxVKState* vkstate);
 static boolean GetVKState(void *arg);
 static void ToggleVKState(void *arg);
 static INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg);
-static void DrawVKWindow (VKWindow* vkWindow);
-static boolean VKMouseKey (FcitxVKState* vkstate, int x, int y);
+static void DrawVKWindow(VKWindow* vkWindow);
+static boolean VKMouseKey(FcitxVKState* vkstate, int x, int y);
 static boolean VKPreFilter(void* arg, FcitxKeySym sym,
                            unsigned int state,
                            INPUT_RETURN_VALUE *retval
                           );
 static  void VKReset(void* arg);
 static void VKUpdate(void* arg);
-static INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state);
-static void DisplayVKWindow (VKWindow* vkWindow);
+static INPUT_RETURN_VALUE DoVKInput(FcitxVKState* vkstate, KeySym sym, int state);
+static void DisplayVKWindow(VKWindow* vkWindow);
 static boolean VKMenuAction(FcitxUIMenu *menu, int index);
 static void UpdateVKMenuShell(FcitxUIMenu *menu);
 static void SelectVK(FcitxVKState* vkstate, int vkidx);
@@ -122,8 +121,7 @@ static void SelectVK(FcitxVKState* vkstate, int vkidx);
 static ConfigColor blackColor = {0, 0, 0};
 
 FCITX_EXPORT_API
-FcitxModule module =
-{
+FcitxModule module = {
     VKCreate,
     NULL,
     NULL,
@@ -199,36 +197,32 @@ void UpdateVKMenuShell(FcitxUIMenu *menu)
 
 void VKReset(void* arg)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
     VKWindow* vkWindow = vkstate->vkWindow;
     if (vkstate->bVK != false)
         UpdateStatus(vkstate->owner, "vk");
     if (vkWindow)
-        XUnmapWindow (vkWindow->dpy, vkWindow->window);
+        XUnmapWindow(vkWindow->dpy, vkWindow->window);
 }
 
 void VKUpdate(void* arg)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
     VKWindow* vkWindow = vkstate->vkWindow;
-    if (vkWindow)
-    {
+    if (vkWindow) {
 
-        if (GetCurrentState(vkstate->owner) != IS_CLOSED && vkstate->bVK)
-        {
+        if (GetCurrentState(vkstate->owner) != IS_CLOSED && vkstate->bVK) {
             DrawVKWindow(vkWindow);
             DisplayVKWindow(vkWindow);
-        }
-        else
-            XUnmapWindow (vkWindow->dpy, vkWindow->window);
+        } else
+            XUnmapWindow(vkWindow->dpy, vkWindow->window);
     }
 }
 
 boolean VKPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
-    if (vkstate->bVK)
-    {
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
+    if (vkstate->bVK) {
         INPUT_RETURN_VALUE ret = DoVKInput(vkstate, sym, state);
         *retval = ret;
         return true;
@@ -238,24 +232,24 @@ boolean VKPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 
 boolean GetVKState(void *arg)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
     return vkstate->bVK;
 }
 
 void ToggleVKState(void *arg)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
     SwitchVK(vkstate);
 }
 
 INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg)
 {
-    FcitxVKState *vkstate =(FcitxVKState*) arg;
+    FcitxVKState *vkstate = (FcitxVKState*) arg;
     UpdateStatus(vkstate->owner, "vk");
     return IRV_DO_NOTHING;
 }
 
-VKWindow* CreateVKWindow (FcitxVKState* vkstate)
+VKWindow* CreateVKWindow(FcitxVKState* vkstate)
 {
     XSetWindowAttributes attrib;
     unsigned long   attribmask;
@@ -265,7 +259,7 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     int depth;
     FcitxModuleFunctionArg arg;
     VKWindow* vkWindow = fcitx_malloc0(sizeof(VKWindow));
-    vkWindow->owner= vkstate;
+    vkWindow->owner = vkstate;
 
     LoadVKImage(vkWindow);
 
@@ -274,14 +268,11 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
     vkWindow->dpy = InvokeFunction(vkstate->owner, FCITX_X11, GETDISPLAY, arg);
 
     vkWindow->fontSize = 12;
-    if (vkstate->classicui)
-    {
+    if (vkstate->classicui) {
         FcitxModuleFunctionArg arg;
         vkWindow->fontColor = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETKEYBOARDFONTCOLOR, arg);
         vkWindow->font = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT, arg);
-    }
-    else
-    {
+    } else {
         vkWindow->fontColor = &blackColor;
         vkWindow->defaultFont = strdup("sans");
 #ifndef _ENABLE_PANGO
@@ -290,17 +281,17 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
         vkWindow->font = &vkWindow->defaultFont;
     }
 
-    vkWindow->window = XCreateWindow (vkWindow->dpy,
-                                      DefaultRootWindow (vkWindow->dpy),
-                                      0, 0,
-                                      VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT,
-                                      0, depth, InputOutput, vs, attribmask, &attrib);
+    vkWindow->window = XCreateWindow(vkWindow->dpy,
+                                     DefaultRootWindow(vkWindow->dpy),
+                                     0, 0,
+                                     VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT,
+                                     0, depth, InputOutput, vs, attribmask, &attrib);
     if (vkWindow->window == (Window) None)
         return NULL;
 
-    vkWindow->surface=cairo_xlib_surface_create(vkWindow->dpy, vkWindow->window, vs, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT);
+    vkWindow->surface = cairo_xlib_surface_create(vkWindow->dpy, vkWindow->window, vs, VK_WINDOW_WIDTH, VK_WINDOW_HEIGHT);
 
-    XSelectInput (vkWindow->dpy, vkWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask );
+    XSelectInput(vkWindow->dpy, vkWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
 
     VKSetWindowProperty(vkstate, vkWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
@@ -315,22 +306,18 @@ VKWindow* CreateVKWindow (FcitxVKState* vkstate)
 boolean VKWindowEventHandler(void* arg, XEvent* event)
 {
     VKWindow* vkWindow = arg;
-    if (event->xany.window == vkWindow->window)
-    {
-        switch (event->type)
-        {
+    if (event->xany.window == vkWindow->window) {
+        switch (event->type) {
         case Expose:
             DrawVKWindow(vkWindow);
             break;
         case ButtonPress:
             switch (event->xbutton.button) {
-            case Button1:
-            {
-                if (!VKMouseKey(vkWindow->owner, event->xbutton.x, event->xbutton.y))
-                {
+            case Button1: {
+                if (!VKMouseKey(vkWindow->owner, event->xbutton.x, event->xbutton.y)) {
                     vkWindow->iVKWindowX = event->xbutton.x;
                     vkWindow->iVKWindowY = event->xbutton.y;
-                    VKMouseClick(vkWindow->owner,vkWindow->window, &vkWindow->iVKWindowX, &vkWindow->iVKWindowY);
+                    VKMouseClick(vkWindow->owner, vkWindow->window, &vkWindow->iVKWindowX, &vkWindow->iVKWindowY);
                     DrawVKWindow(vkWindow);
                 }
             }
@@ -347,20 +334,17 @@ boolean VKWindowEventHandler(void* arg, XEvent* event)
 cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
 {
     FcitxVKState* vkstate = vkWindow->owner;
-    if (vkstate->classicui)
-    {
+    if (vkstate->classicui) {
         FcitxModuleFunctionArg arg;
         boolean fallback = true;
         char vkimage[] = "keyboard.png";
         arg.args[0] = vkimage;
         arg.args[1] = &fallback;
         return InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
-    }
-    else {
-        if (!vkWindow->keyboard)
-        {
+    } else {
+        if (!vkWindow->keyboard) {
             char path[PATH_MAX];
-            strncpy(path, PKGDATADIR "/skin/default/keyboard.png" ,PATH_MAX );
+            strncpy(path, PKGDATADIR "/skin/default/keyboard.png" , PATH_MAX);
             vkWindow->keyboard = cairo_image_surface_create_from_png(path);
         }
         return vkWindow->keyboard;
@@ -368,18 +352,18 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
     return NULL;
 }
 
-void DisplayVKWindow (VKWindow* vkWindow)
+void DisplayVKWindow(VKWindow* vkWindow)
 {
-    XMapRaised (vkWindow->dpy, vkWindow->window);
+    XMapRaised(vkWindow->dpy, vkWindow->window);
 }
 
-void DestroyVKWindow (VKWindow* vkWindow)
+void DestroyVKWindow(VKWindow* vkWindow)
 {
     cairo_surface_destroy(vkWindow->surface);
     XDestroyWindow(vkWindow->dpy, vkWindow->window);
 }
 
-void DrawVKWindow (VKWindow* vkWindow)
+void DrawVKWindow(VKWindow* vkWindow)
 {
     int             i;
     int             iPos;
@@ -394,35 +378,35 @@ void DrawVKWindow (VKWindow* vkWindow)
     cairo_paint(cr);
     /* 显示字符 */
     /* 名称 */
-    OutputString (cr, vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize , (VK_WINDOW_WIDTH - StringWidth (vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize)) / 2, 6, vkWindow->fontColor);
+    OutputString(cr, vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize , (VK_WINDOW_WIDTH - StringWidth(vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize)) / 2, 6, vkWindow->fontColor);
 
     /* 第一排 */
     iPos = 13;
     for (i = 0; i < 13; i++) {
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 27, vkWindow->fontColor);
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 40, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 27, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 40, vkWindow->fontColor);
         iPos += 24;
     }
     /* 第二排 */
     iPos = 48;
     for (i = 13; i < 26; i++) {
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 55, vkWindow->fontColor);
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 68, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 55, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 68, vkWindow->fontColor);
         iPos += 24;
     }
     /* 第三排 */
     iPos = 55;
     for (i = 26; i < 37; i++) {
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 83, vkWindow->fontColor);
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 96, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 83, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 96, vkWindow->fontColor);
         iPos += 24;
     }
 
     /* 第四排 */
     iPos = 72;
     for (i = 37; i < 47; i++) {
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 111, vkWindow->fontColor);
-        OutputString (cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 124, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 111, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 124, vkWindow->fontColor);
         iPos += 24;
     }
 
@@ -432,15 +416,15 @@ void DrawVKWindow (VKWindow* vkWindow)
 /*
  * 处理相关鼠标键
  */
-boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
+boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
 {
     int             iIndex = 0;
     char            strKey[3] = { 0, 0, 0};
     char           *pstr = NULL;
     FcitxInstance* instance = vkstate->owner;
 
-    if (IsInBox (x, y, 1, 1, VK_WINDOW_WIDTH, 16))
-        ChangVK (vkstate);
+    if (IsInBox(x, y, 1, 1, VK_WINDOW_WIDTH, 16))
+        ChangVK(vkstate);
     else {
         if (GetCurrentIC(instance) == NULL)
             return false;
@@ -453,38 +437,34 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 
             x -= 4;
             if (x >= 313 && x <= 344) { //backspace
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_BackSpace, 0);
+                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_BackSpace, 0);
                 return true;
-            }
-            else {
+            } else {
                 iIndex = x / 24;
                 if (iIndex > 12)    //避免出现错误
                     iIndex = 12;
                 pstr = vkstate->vks[vkstate->iCurrentVK].strSymbol[iIndex][vkstate->bShiftPressed ^ vkstate->bVKCaps];
                 if (vkstate->bShiftPressed) {
                     vkstate->bShiftPressed = false;
-                    DrawVKWindow (vkstate->vkWindow);
+                    DrawVKWindow(vkstate->vkWindow);
                 }
             }
-        }
-        else if (y >= 56 && y <= 83) {  //第二行
+        } else if (y >= 56 && y <= 83) { //第二行
             if (x < 4 || x > 350)
                 return false;
 
             if (x >= 4 && x < 38) { //Tab
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Tab, 0);
+                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Tab, 0);
                 return true;
-            }
-            else {
+            } else {
                 iIndex = 13 + (x - 38) / 24;
                 pstr = vkstate->vks[vkstate->iCurrentVK].strSymbol[iIndex][vkstate->bShiftPressed ^ vkstate->bVKCaps];
                 if (vkstate->bShiftPressed) {
                     vkstate->bShiftPressed = false;
-                    DrawVKWindow (vkstate->vkWindow);
+                    DrawVKWindow(vkstate->vkWindow);
                 }
             }
-        }
-        else if (y >= 84 && y <= 111) { //第三行
+        } else if (y >= 84 && y <= 111) { //第三行
             if (x < 4 || x > 350)
                 return false;
 
@@ -492,20 +472,18 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
                 //改变大写键状态
                 vkstate->bVKCaps = !vkstate->bVKCaps;
                 pstr = (char *) NULL;
-                DrawVKWindow (vkstate->vkWindow);
-            }
-            else if (x > 308 && x <= 350)   //Return
+                DrawVKWindow(vkstate->vkWindow);
+            } else if (x > 308 && x <= 350) //Return
                 strKey[0] = '\n';
             else {
                 iIndex = 26 + (x - 44) / 24;
                 pstr = vkstate->vks[vkstate->iCurrentVK].strSymbol[iIndex][vkstate->bShiftPressed ^ vkstate->bVKCaps];
                 if (vkstate->bShiftPressed) {
                     vkstate->bShiftPressed = false;
-                    DrawVKWindow (vkstate->vkWindow);
+                    DrawVKWindow(vkstate->vkWindow);
                 }
             }
-        }
-        else if (y >= 112 && y <= 139) {    //第四行
+        } else if (y >= 112 && y <= 139) {  //第四行
             if (x < 4 || x > 302)
                 return false;
 
@@ -513,39 +491,34 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
                 //改变SHIFT键状态
                 vkstate->bShiftPressed = !vkstate->bShiftPressed;
                 pstr = (char *) NULL;
-                DrawVKWindow (vkstate->vkWindow);
-            }
-            else {
+                DrawVKWindow(vkstate->vkWindow);
+            } else {
                 iIndex = 37 + (x - 62) / 24;
                 pstr = vkstate->vks[vkstate->iCurrentVK].strSymbol[iIndex][vkstate->bShiftPressed ^ vkstate->bVKCaps];
                 if (vkstate->bShiftPressed) {
                     vkstate->bShiftPressed = false;
-                    DrawVKWindow (vkstate->vkWindow);
+                    DrawVKWindow(vkstate->vkWindow);
                 }
             }
-        }
-        else if (y >= 140 && y <= 162) {    //第五行
+        } else if (y >= 140 && y <= 162) {  //第五行
             if (x >= 4 && x < 38) { //Ins
                 //改变INS键状态
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Insert, 0);
+                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Insert, 0);
                 return true;
-            }
-            else if (x >= 61 && x < 98) {   //DEL
-                ForwardKey (instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Delete, 0);
+            } else if (x >= 61 && x < 98) { //DEL
+                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Delete, 0);
                 return true;
-            }
-            else if (x >= 99 && x < 270)    //空格
-                strcpy (strKey, " ");
+            } else if (x >= 99 && x < 270)  //空格
+                strcpy(strKey, " ");
             else if (x >= 312 && x <= 350) {    //ESC
-                SwitchVK (vkstate);
+                SwitchVK(vkstate);
                 pstr = (char *) NULL;
-            }
-            else
+            } else
                 return false;
         }
 
         if (pstr) {
-            CommitString (instance, GetCurrentIC(instance), pstr);
+            CommitString(instance, GetCurrentIC(instance), pstr);
             FcitxInstanceIncreateInputCharacterCount(instance, utf8_strlen(pstr));
         }
     }
@@ -556,7 +529,7 @@ boolean VKMouseKey (FcitxVKState* vkstate, int x, int y)
 /*
  * 读取虚拟键盘映射文件
  */
-void LoadVKMapFile ( FcitxVKState *vkstate)
+void LoadVKMapFile(FcitxVKState *vkstate)
 {
     int             i, j;
     FILE           *fp;
@@ -580,7 +553,7 @@ void LoadVKMapFile ( FcitxVKState *vkstate)
     vkstate->iVKCount = 0;
 
     for (;;) {
-        if (!fgets (strPath, PATH_MAX, fp))
+        if (!fgets(strPath, PATH_MAX, fp))
             break;
         pstr = strPath;
         while (*pstr == ' ' || *pstr == '\t')
@@ -588,22 +561,22 @@ void LoadVKMapFile ( FcitxVKState *vkstate)
         if (pstr[0] == '#')
             continue;
 
-        i = strlen (pstr) - 1;
+        i = strlen(pstr) - 1;
         if (pstr[i] == '\n')
             pstr[i] = '\0';
-        if (!strlen (pstr))
+        if (!strlen(pstr))
             continue;
 
-        if (!strcmp (pstr, "[VK]"))
+        if (!strcmp(pstr, "[VK]"))
             vkstate->iVKCount++;
-        else if (!strncmp (pstr, "NAME=", 5))
-            strcpy (vks[vkstate->iVKCount - 1].strName, pstr + 5);
+        else if (!strncmp(pstr, "NAME=", 5))
+            strcpy(vks[vkstate->iVKCount - 1].strName, pstr + 5);
         else {
             if (pstr[1] != '=' && !vkstate->iVKCount)
                 continue;
 
             for (i = 0; i < VK_NUMBERS; i++) {
-                if (vkTable[i] == tolower (pstr[0])) {
+                if (vkTable[i] == tolower(pstr[0])) {
                     pstr += 2;
                     while (*pstr == ' ' || *pstr == '\t')
                         pstr++;
@@ -631,20 +604,20 @@ void LoadVKMapFile ( FcitxVKState *vkstate)
         }
     }
 
-    fclose (fp);
+    fclose(fp);
 }
 
 /*
  * 根据字符查找符号
  */
-char           *VKGetSymbol (FcitxVKState *vkstate, char cChar)
+char           *VKGetSymbol(FcitxVKState *vkstate, char cChar)
 {
     int             i;
 
     for (i = 0; i < VK_NUMBERS; i++) {
-        if (MyToUpper (vkTable[i]) == cChar)
+        if (MyToUpper(vkTable[i]) == cChar)
             return vkstate->vks[vkstate->iCurrentVK].strSymbol[i][1];
-        if (MyToLower (vkTable[i]) == cChar)
+        if (MyToLower(vkTable[i]) == cChar)
             return vkstate->vks[vkstate->iCurrentVK].strSymbol[i][0];
     }
 
@@ -654,7 +627,7 @@ char           *VKGetSymbol (FcitxVKState *vkstate, char cChar)
 /*
  * 上/下档键字符转换，以取代toupper和tolower
  */
-int MyToUpper (int iChar)
+int MyToUpper(int iChar)
 {
     const char           *pstr;
 
@@ -665,10 +638,10 @@ int MyToUpper (int iChar)
         pstr += 2;
     }
 
-    return toupper (iChar);
+    return toupper(iChar);
 }
 
-int MyToLower (int iChar)
+int MyToLower(int iChar)
 {
     const char           *pstr;
 
@@ -681,10 +654,10 @@ int MyToLower (int iChar)
         pstr += 2;
     }
 
-    return tolower (iChar);
+    return tolower(iChar);
 }
 
-void ChangVK (FcitxVKState* vkstate)
+void ChangVK(FcitxVKState* vkstate)
 {
     vkstate->iCurrentVK++;
     if (vkstate->iCurrentVK == vkstate->iVKCount)
@@ -693,25 +666,25 @@ void ChangVK (FcitxVKState* vkstate)
     vkstate->bVKCaps = false;
     vkstate->bShiftPressed = false;
 
-    DrawVKWindow (vkstate->vkWindow);
+    DrawVKWindow(vkstate->vkWindow);
 }
 
-INPUT_RETURN_VALUE DoVKInput (FcitxVKState* vkstate, KeySym sym, int state)
+INPUT_RETURN_VALUE DoVKInput(FcitxVKState* vkstate, KeySym sym, int state)
 {
     char           *pstr = NULL;
     FcitxInputState *input = FcitxInstanceGetInputState(vkstate->owner);
 
     if (IsHotKeySimple(sym, state))
-        pstr = VKGetSymbol (vkstate, sym);
+        pstr = VKGetSymbol(vkstate, sym);
     if (!pstr)
         return IRV_TO_PROCESS;
     else {
-        strcpy (GetOutputString(input), pstr);
+        strcpy(GetOutputString(input), pstr);
         return IRV_COMMIT_STRING;
     }
 }
 
-void SwitchVK (FcitxVKState *vkstate)
+void SwitchVK(FcitxVKState *vkstate)
 {
     FcitxInstance* instance = vkstate->owner;
     if (vkstate->vkWindow == NULL)
@@ -730,13 +703,10 @@ void SwitchVK (FcitxVKState *vkstate)
         arg.args[1] = &dheight;
         InvokeFunction(vkstate->owner, FCITX_X11, GETSCREENSIZE, arg);
 
-        if (!UISupportMainWindow(instance))
-        {
+        if (!UISupportMainWindow(instance)) {
             x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
             y = 0;
-        }
-        else
-        {
+        } else {
             int mx = 0, my = 0, mw = 0, mh = 0;
             GetMainWindowSize(instance, &mx, &my, &mw, &mh);
             x = mx;
@@ -752,17 +722,16 @@ void SwitchVK (FcitxVKState *vkstate)
             x = 0;
 
 
-        XMoveWindow (vkWindow->dpy, vkWindow->window, x, y);
-        DisplayVKWindow (vkWindow);
+        XMoveWindow(vkWindow->dpy, vkWindow->window, x, y);
+        DisplayVKWindow(vkWindow);
         CloseInputWindow(vkstate->owner);
 
         FcitxInputContext* ic = GetCurrentIC(vkstate->owner);
 
         if (ic && GetCurrentState(instance) == IS_CLOSED)
-            EnableIM (instance, ic, true);
-    }
-    else
-        XUnmapWindow (vkWindow->dpy, vkWindow->window);
+            EnableIM(instance, ic, true);
+    } else
+        XUnmapWindow(vkWindow->dpy, vkWindow->window);
 
 
 
@@ -774,7 +743,7 @@ void SwitchVK (FcitxVKState *vkstate)
 void SelectVK(FcitxVKState* vkstate, int vkidx)
 {
     vkstate->bVK = false;
-    vkstate->iCurrentVK=vkidx;
+    vkstate->iCurrentVK = vkidx;
     UpdateStatus(vkstate->owner, "vk");
     if (vkstate->vkWindow)
         DrawVKWindow(vkstate->vkWindow);
@@ -794,7 +763,7 @@ VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
     InvokeFunction(vkstate->owner, FCITX_X11, INITWINDOWATTR, arg);
 }
 
-Visual * VKFindARGBVisual (FcitxVKState* vkstate)
+Visual * VKFindARGBVisual(FcitxVKState* vkstate)
 {
     FcitxModuleFunctionArg arg;
     return InvokeFunction(vkstate->owner, FCITX_X11, FINDARGBVISUAL, arg);

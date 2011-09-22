@@ -52,8 +52,8 @@ CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
 CONFIG_BINDING_REGISTER("Addon", "SubConfig", subconfig)
 CONFIG_BINDING_END()
 
-static const UT_icd function_icd = {sizeof(void*), 0, 0 ,0};
-static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL ,NULL, FreeAddon};
+static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
+static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL , NULL, FreeAddon};
 static int AddonPriorityCmp(const void* a, const void* b)
 {
     FcitxAddon *aa = (FcitxAddon*)a, *ab = (FcitxAddon*)b;
@@ -83,10 +83,9 @@ void LoadAddonInfo(UT_array* addons)
 
     StringHashSet* sset = NULL;
 
-    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon" );
+    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
 
-    for (i = 0; i< len; i++)
-    {
+    for (i = 0; i < len; i++) {
         snprintf(pathBuf, sizeof(pathBuf), "%s", addonPath[i]);
         pathBuf[sizeof(pathBuf) - 1] = '\0';
 
@@ -95,26 +94,23 @@ void LoadAddonInfo(UT_array* addons)
             continue;
 
         /* collect all *.conf files */
-        while ((drt = readdir(dir)) != NULL)
-        {
+        while ((drt = readdir(dir)) != NULL) {
             size_t nameLen = strlen(drt->d_name);
-            if (nameLen <= strlen(".conf") )
+            if (nameLen <= strlen(".conf"))
                 continue;
-            memset(pathBuf,0,sizeof(pathBuf));
+            memset(pathBuf, 0, sizeof(pathBuf));
 
-            if (strcmp(drt->d_name + nameLen -strlen(".conf"), ".conf") != 0)
+            if (strcmp(drt->d_name + nameLen - strlen(".conf"), ".conf") != 0)
                 continue;
-            snprintf(pathBuf, sizeof(pathBuf), "%s/%s", addonPath[i], drt->d_name );
+            snprintf(pathBuf, sizeof(pathBuf), "%s/%s", addonPath[i], drt->d_name);
 
             if (stat(pathBuf, &fileStat) == -1)
                 continue;
 
-            if (fileStat.st_mode & S_IFREG)
-            {
+            if (fileStat.st_mode & S_IFREG) {
                 StringHashSet *string;
                 HASH_FIND_STR(sset, drt->d_name, string);
-                if (!string)
-                {
+                if (!string) {
                     char *bStr = strdup(drt->d_name);
                     string = malloc(sizeof(StringHashSet));
                     memset(string, 0, sizeof(StringHashSet));
@@ -127,24 +123,21 @@ void LoadAddonInfo(UT_array* addons)
         closedir(dir);
     }
 
-    char **paths = malloc(sizeof(char*) *len);
-    for (i = 0;i < len ;i ++)
-        paths[i] = malloc(sizeof(char) *PATH_MAX);
+    char **paths = malloc(sizeof(char*) * len);
+    for (i = 0; i < len ; i ++)
+        paths[i] = malloc(sizeof(char) * PATH_MAX);
     StringHashSet* string;
     for (string = sset;
             string != NULL;
-            string = (StringHashSet*)string->hh.next)
-    {
+            string = (StringHashSet*)string->hh.next) {
         int i = 0;
-        for (i = len -1; i >= 0; i--)
-        {
+        for (i = len - 1; i >= 0; i--) {
             snprintf(paths[i], PATH_MAX, "%s/%s", addonPath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
         FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
         ConfigFile* cfile = ParseMultiConfigFile(paths, len, GetAddonConfigDesc());
-        if (cfile)
-        {
+        if (cfile) {
             FcitxAddon addon;
             memset(&addon, 0, sizeof(FcitxAddon));
             utarray_push_back(addons, &addon);
@@ -152,19 +145,18 @@ void LoadAddonInfo(UT_array* addons)
             utarray_init(&a->functionList, &function_icd);
             FcitxAddonConfigBind(a, cfile, GetAddonConfigDesc());
             ConfigBindSync((GenericConfig*)a);
-            FcitxLog(DEBUG, _("Addon Config %s is %s"),string->name, (a->bEnabled)?"Enabled":"Disabled");
+            FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");
         }
     }
 
-    for (i = 0;i < len ;i ++)
+    for (i = 0; i < len ; i ++)
         free(paths[i]);
     free(paths);
 
     FreeXDGPath(addonPath);
 
     StringHashSet *curStr;
-    while (sset)
-    {
+    while (sset) {
         curStr = sset;
         HASH_DEL(sset, curStr);
         free(curStr->name);
@@ -183,24 +175,18 @@ void AddonResolveDependency(FcitxInstance* instance)
 
     /* choose ui */
     boolean founduiflag = false;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
-        if (addon->category == AC_UI)
-        {
-            if (instance->uiname == NULL)
-            {
-                if (addon->bEnabled)
-                {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->category == AC_UI) {
+            if (instance->uiname == NULL) {
+                if (addon->bEnabled) {
                     if (!founduiflag)
                         founduiflag = true;
                     else
                         addon->bEnabled = false;
                 }
-            }
-            else
-            {
+            } else {
                 if (strcmp(instance->uiname, addon->name) != 0)
                     addon->bEnabled = false;
                 else
@@ -209,13 +195,11 @@ void AddonResolveDependency(FcitxInstance* instance)
         }
     }
 
-    while (remove)
-    {
+    while (remove) {
         remove = false;
-        for ( addon = (FcitxAddon *) utarray_front(addons);
+        for (addon = (FcitxAddon *) utarray_front(addons);
                 addon != NULL;
-                addon = (FcitxAddon *) utarray_next(addons, addon))
-        {
+                addon = (FcitxAddon *) utarray_next(addons, addon)) {
             if (!addon->bEnabled)
                 continue;
             UT_array* dependlist = SplitString(addon->depend, ',');
@@ -223,18 +207,15 @@ void AddonResolveDependency(FcitxInstance* instance)
             char **depend = NULL;
             for (depend = (char **) utarray_front(dependlist);
                     depend != NULL;
-                    depend = (char **) utarray_next(dependlist, depend))
-            {
-                if (!AddonIsAvailable(addons, *depend))
-                {
+                    depend = (char **) utarray_next(dependlist, depend)) {
+                if (!AddonIsAvailable(addons, *depend)) {
                     valid = false;
                     break;
                 }
             }
 
             utarray_free(dependlist);
-            if (!valid)
-            {
+            if (!valid) {
                 FcitxLog(WARNING, _("Disable addon %s, dependency %s can not be satisfied."), addon->name, addon->depend);
                 addon->bEnabled = false;
             }
@@ -246,10 +227,9 @@ FCITX_EXPORT_API
 boolean AddonIsAvailable(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->bEnabled && strcmp(name, addon->name) == 0)
             return true;
     }
@@ -260,10 +240,9 @@ FCITX_EXPORT_API
 FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->bEnabled && strcmp(name, addon->name) == 0)
             return addon;
     }
@@ -295,7 +274,7 @@ void FreeAddon(void *v)
 
 boolean CheckABIVersion(void* handle)
 {
-    int* version = (int*) dlsym(handle,"ABI_VERSION");
+    int* version = (int*) dlsym(handle, "ABI_VERSION");
     if (!version)
         return false;
     if (*version < FCITX_ABI_VERSION)

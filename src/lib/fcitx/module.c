@@ -45,17 +45,13 @@ void LoadModule(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     FcitxAddon *addon;
-    for ( addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon))
-    {
-        if (addon->bEnabled && addon->category == AC_MODULE)
-        {
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->bEnabled && addon->category == AC_MODULE) {
             char *modulePath;
-            switch (addon->type)
-            {
-            case AT_SHAREDLIBRARY:
-            {
+            switch (addon->type) {
+            case AT_SHAREDLIBRARY: {
                 FILE *fp = GetLibFile(addon->library, "r", &modulePath);
                 void *handle;
                 FcitxModule* module;
@@ -63,29 +59,25 @@ void LoadModule(FcitxInstance* instance)
                 if (!fp)
                     break;
                 fclose(fp);
-                handle = dlopen(modulePath,RTLD_LAZY | RTLD_GLOBAL);
-                if (!handle)
-                {
-                    FcitxLog(ERROR, _("Module: open %s fail %s") ,modulePath ,dlerror());
+                handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+                if (!handle) {
+                    FcitxLog(ERROR, _("Module: open %s fail %s") , modulePath , dlerror());
                     break;
                 }
-                
-                if (!CheckABIVersion(handle))
-                {
+
+                if (!CheckABIVersion(handle)) {
                     FcitxLog(ERROR, "%s ABI Version Error", addon->name);
                     dlclose(handle);
                     break;
                 }
-                
-                module=dlsym(handle,"module");
-                if (!module || !module->Create)
-                {
+
+                module = dlsym(handle, "module");
+                if (!module || !module->Create) {
                     FcitxLog(ERROR, _("Module: bad module"));
                     dlclose(handle);
                     break;
                 }
-                if ((moduleinstance = module->Create(instance)) == NULL)
-                {
+                if ((moduleinstance = module->Create(instance)) == NULL) {
                     dlclose(handle);
                     break;
                 }
@@ -106,14 +98,12 @@ void LoadModule(FcitxInstance* instance)
 FCITX_EXPORT_API
 void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {
-    if (addon == NULL)
-    {
+    if (addon == NULL) {
         FcitxLog(ERROR, "addon is not valid");
         return NULL;
     }
-    FcitxModuleFunction* func =(FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
-    if (func == NULL)
-    {
+    FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
+    if (func == NULL) {
         FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
         return NULL;
     }

@@ -51,7 +51,7 @@
 #endif
 
 FCITX_EXPORT_API
-int CalculateRecordNumber (FILE * fpDict)
+int CalculateRecordNumber(FILE * fpDict)
 {
     char           *strBuf = NULL;
     size_t          bufLen = 0;
@@ -60,7 +60,7 @@ int CalculateRecordNumber (FILE * fpDict)
     while (getline(&strBuf, &bufLen, fpDict) != -1) {
         nNumber++;
     }
-    rewind (fpDict);
+    rewind(fpDict);
 
     if (strBuf)
         free(strBuf);
@@ -75,19 +75,17 @@ void *custom_bsearch(const void *key, const void *base,
 {
     if (accurate)
         return bsearch(key, base, nmemb, size, compar);
-    else
-    {
+    else {
         size_t l, u, idx;
         const void *p;
         int comparison;
 
         l = 0;
         u = nmemb;
-        while (l < u)
-        {
+        while (l < u) {
             idx = (l + u) / 2;
-            p = (void *) (((const char *) base) + (idx * size));
-            comparison = (*compar) (key, p);
+            p = (void *)(((const char *) base) + (idx * size));
+            comparison = (*compar)(key, p);
             if (comparison <= 0)
                 u = idx;
             else if (comparison > 0)
@@ -97,7 +95,7 @@ void *custom_bsearch(const void *key, const void *base,
         if (u >= nmemb)
             return NULL;
         else
-            return (void *) (((const char *) base) + (l * size));
+            return (void *)(((const char *) base) + (l * size));
     }
 }
 
@@ -105,8 +103,7 @@ FCITX_EXPORT_API
 void InitAsDaemon()
 {
     pid_t pid;
-    if ((pid = fork()) > 0)
-    {
+    if ((pid = fork()) > 0) {
         waitpid(pid, NULL, 0);
         exit(0);
     }
@@ -133,10 +130,8 @@ UT_array* SplitString(const char *str, char delm)
     char *bakstr = strdup(str);
     size_t len = strlen(bakstr);
     size_t i = 0, last = 0;
-    for (i =0 ; i <= len ; i++)
-    {
-        if (bakstr[i] == delm || bakstr[i] == '\0')
-        {
+    for (i = 0 ; i <= len ; i++) {
+        if (bakstr[i] == delm || bakstr[i] == '\0') {
             bakstr[i] = '\0';
             char *p = &bakstr[last];
             if (strlen(p) > 0)
@@ -173,7 +168,7 @@ char *fcitx_trim(char *s)
 
     while (isspace(*s))                 /* skip leading space */
         ++s;
-    end = strchr(s,'\0') - 1;
+    end = strchr(s, '\0') - 1;
     while (end >= s && isspace(*end))               /* skip trailing space */
         --end;
 
@@ -188,9 +183,8 @@ FCITX_EXPORT_API
 int FcitxGetDisplayNumber()
 {
     int displayNumber = 0;
-    char* display = getenv ("DISPLAY"), *strDisplayNumber = NULL;
-    if (display != NULL)
-    {
+    char* display = getenv("DISPLAY"), *strDisplayNumber = NULL;
+    if (display != NULL) {
         display = strdup(display);
         char* p = display;
         for (; *p != ':' && *p != '\0'; p++);
@@ -220,13 +214,10 @@ char* fcitx_get_process_name()
     char buf[PATH_MAX + 1];
     char *result = NULL;
     ssize_t len;
-    if ((len = readlink("/proc/self/exe", buf, PATH_MAX)) != -1)
-    {
+    if ((len = readlink("/proc/self/exe", buf, PATH_MAX)) != -1) {
         buf[len] = '\0';
         result = basename(buf);
-    }
-    else
-    {
+    } else {
         buf[0] = '\0';
         result = buf;
     }
@@ -243,7 +234,7 @@ char* fcitx_get_process_name()
     if ((cnt != 1) || (kp == 0))
         return strdup("");
     int i;
-    for (i=0; i<cnt; i++)
+    for (i = 0; i < cnt; i++)
         if (kp->ki_pid == mypid)
             break;
     char* result = NULL;
