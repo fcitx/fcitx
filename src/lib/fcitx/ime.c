@@ -321,7 +321,7 @@ INPUT_RETURN_VALUE ProcessKey(
     if (event == FCITX_RELEASE_KEY) {
         if (GetCurrentState(instance) != IS_CLOSED) {
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
-                if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+                if (fc->bIMSwitchKey && (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
                     if (GetCurrentState(instance) == IS_ACTIVE) {
                         if (input->keyReleased == KR_CTRL_SHIFT)
                             SwitchIM(instance, -1);
@@ -385,7 +385,7 @@ INPUT_RETURN_VALUE ProcessKey(
             if (IsHotKey(sym, state, fc->switchKey)) {
                 input->keyReleased = KR_CTRL;
                 retVal = IRV_DO_NOTHING;
-            } else if (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2)) {
+            } else if (fc->bIMSwitchKey && (IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || IsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
                 input->keyReleased = KR_CTRL_SHIFT;
                 retVal = IRV_DO_NOTHING;
             } else if (IsHotKey(sym, state, fc->hkTrigger)) {

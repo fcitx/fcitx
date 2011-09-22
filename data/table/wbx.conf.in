@@ -17,3 +17,4 @@ SaveAutoPhrase=3
 ExactMatch=False
 PromptTableCode=False
 Symbol=zzzz
+Enabled=True

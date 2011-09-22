@@ -203,8 +203,13 @@ extern "C" {
          * @brief Input method enable by default
          **/
         IME_STATE defaultIMState;
+        
+        /**
+         * @brief Enable Left Ctrl + Left Shift to Switch Between Input Method
+         **/
+        boolean bIMSwitchKey;
 
-        int padding[64];
+        int padding[63];
     } FcitxConfig;
 
     /**

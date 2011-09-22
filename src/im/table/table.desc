@@ -105,7 +105,7 @@ DefaultValue=1234567890
 [CodeTable/Enabled]
 Description=Enable This Table or Not
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 
 [DescriptionFile]
 LocaleDomain=fcitx

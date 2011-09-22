@@ -12,3 +12,4 @@ AutoPhrase=True
 SaveAutoPhrase=3
 ExactMatch=False
 PromptTableCode=False
+Enabled=True

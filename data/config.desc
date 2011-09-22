@@ -95,6 +95,11 @@ Type=Hotkey
 DefaultValue=CTRL_SPACE
 Description=Hot key of Triggering Input Method
 
+[Hotkey/IMSwitchKey]
+Type=Boolean
+DefaultValue=True
+Description=Enable Left Ctrl + Left Shift to Switch Between Input Method
+
 [Hotkey/SwitchKey]
 Type=Enum
 EnumCount=5
