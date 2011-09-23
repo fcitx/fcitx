@@ -84,7 +84,7 @@ void            FreeTableIM(FcitxTableState* tbl, char i);
 void            SaveTableIM(void* arg);
 
 INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state);
-INPUT_RETURN_VALUE TableGetCandWords();
+INPUT_RETURN_VALUE TableGetCandWords(void* arg);
 void TableAddCandWord(RECORD * record, TABLECANDWORD* tableCandWord);
 void            TableAddAutoCandWord(FcitxTableState* tbl, short int which, TABLECANDWORD* tableCandWord);
 INPUT_RETURN_VALUE TableGetRemindCandWords(FcitxTableState* tbl);

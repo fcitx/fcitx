@@ -3,6 +3,7 @@ set(FCITX_UTILS_SOURCES
     utils.c
     log.c
     qsort_r.c
+    msort_r.c
 )
 
 set(FCITX_UTILS_HEADERS

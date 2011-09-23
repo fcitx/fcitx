@@ -346,8 +346,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                     strLastFirstCand = GetOutputString(input);
                             }
                         }
-
-                        retVal = IRV_DISPLAY_CANDWORDS;
+                        
+                        retVal = TableGetCandWords(tbl);
                         FcitxModuleFunctionArg farg;
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         farg.args[0] = &key;
@@ -367,7 +367,9 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                             }
 
                             return IRV_DISPLAY_CANDWORDS;
-                        } else if (table->iTableAutoSendToClientWhenNone && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1)) && lastPageCount == 0) {
+                        } else if (table->iTableAutoSendToClientWhenNone
+                            && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1))
+                            && CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
                             if (strLastFirstCand && (lastFirstCandType != CT_AUTOPHRASE)) {
                                 CommitString(instance, GetCurrentIC(instance), strLastFirstCand);
                             }
@@ -782,7 +784,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
 
     /* seems AD_NO will go back to n^2, really effect performance */
     if (table->tableOrder != AD_NO)
-        utarray_sort_r(&candTemp, TableCandCmp, &context);
+        utarray_msort_r(&candTemp, TableCandCmp, &context);
 
     TABLECANDWORD** pcand = NULL;
     for (pcand = (TABLECANDWORD**) utarray_front(&candTemp);
@@ -1167,10 +1169,6 @@ int TableCandCmp(const void* a, const void* b, void *arg)
     TABLECANDWORD* candb = *(TABLECANDWORD**)b;
     TableCandWordSortContext* context = arg;
 
-    if (candb->candWord.record->bPinyin && !canda->candWord.record->bPinyin)
-        return -1;
-    else if (canda->candWord.record->bPinyin && !candb->candWord.record->bPinyin)
-        return 1;
     switch (context->order) {
     case AD_NO:
         return 0;
