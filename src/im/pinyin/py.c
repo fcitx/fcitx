@@ -56,6 +56,7 @@
 #include "fcitx/candidate.h"
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"
+#define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -74,8 +75,7 @@ typedef struct _PYCandWordSortContext {
     FcitxPinyinState* pystate;
 } PYCandWordSortContext;
 
-static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem);
-
+static void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE* fp, boolean isSystem, boolean stripDup);
 static void * LoadPYBaseDictWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * PYGetPYByHZWrapper(void* arg, FcitxModuleFunctionArg args);
 static void * DoPYInputWrapper(void* arg, FcitxModuleFunctionArg args);
@@ -240,6 +240,8 @@ StringHashSet *GetPYPhraseFiles()
                 continue;
             if (strcmp(drt->d_name, PY_BASE_FILE) == 0)
                 continue;
+            if (strcmp(drt->d_name, PY_FREQ_FILE) == 0)
+                continue;
             FcitxLog(INFO, "Try %s", drt->d_name);
             snprintf(pathBuf, sizeof(pathBuf), "%s/%s", pinyinPath[i], drt->d_name);
 
@@ -267,7 +269,7 @@ StringHashSet *GetPYPhraseFiles()
     return sset;
 }
 
-void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
+void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boolean stripDup)
 {
     int i, j , k, count, iLen;
     char strBase[UTF8_MAX_LENGTH + 1];
@@ -338,17 +340,20 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem)
                 memset(flag, 0, sizeof(boolean) * count);
                 int left = count;
                 phrase = temp;
-                for (m = 0; m < count; m++) {
-                    for (n = 0; n < PYFAList[i].pyBase[j].iPhrase; n++) {
-                        int result = strcmp(PYFAList[i].pyBase[j].phrase[n].strMap, phrase[m].strMap);
-                        if (result == 0) {
-                            if (strcmp(PYFAList[i].pyBase[j].phrase[n].strPhrase, phrase[m].strPhrase) == 0)
-                                break;
+                if (stripDup)
+                {
+                    for (m = 0; m < count; m++) {
+                        for (n = 0; n < PYFAList[i].pyBase[j].iPhrase; n++) {
+                            int result = strcmp(PYFAList[i].pyBase[j].phrase[n].strMap, phrase[m].strMap);
+                            if (result == 0) {
+                                if (strcmp(PYFAList[i].pyBase[j].phrase[n].strPhrase, phrase[m].strPhrase) == 0)
+                                    break;
+                            }
                         }
-                    }
-                    if (n != PYFAList[i].pyBase[j].iPhrase) {
-                        flag[m] = 1;
-                        left -- ;
+                        if (n != PYFAList[i].pyBase[j].iPhrase) {
+                            flag[m] = 1;
+                            left -- ;
+                        }
                     }
                 }
                 int orig = PYFAList[i].pyBase[j].iPhrase;
@@ -388,7 +393,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     if (!fp)
         FcitxLog(ERROR, _("Can not find System Database of Pinyin!"));
     else {
-        LoadPYPhraseDict(pystate, fp, true);
+        LoadPYPhraseDict(pystate, fp, true, false);
         fclose(fp);
         StringHashSet *sset = GetPYPhraseFiles();
         StringHashSet *curStr;
@@ -399,7 +404,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
             fp = GetXDGFileWithPrefix("pinyin", curStr->name, "r", &filename);
             FcitxLog(INFO, _("Load extra dict: %s"), filename);
             free(filename);
-            LoadPYPhraseDict(pystate, fp, true);
+            LoadPYPhraseDict(pystate, fp, true, true);
             fclose(fp);
             free(curStr->name);
             free(curStr);
@@ -411,35 +416,44 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     //下面开始读取用户词库
     fp = GetXDGFileWithPrefix("pinyin", PY_USERPHRASE_FILE, "rb", NULL);
     if (fp) {
-        LoadPYPhraseDict(pystate, fp, false);
+        LoadPYPhraseDict(pystate, fp, false, false);
         fclose(fp);
     }
     //下面读取索引文件
     fp = GetXDGFileWithPrefix("pinyin", PY_INDEX_FILE, "rb", NULL);
     if (fp) {
-        fread(&iLen, sizeof(uint), 1, fp);
-        if (iLen > pystate->iCounter)
-            pystate->iCounter = iLen;
-        while (!feof(fp)) {
-            fread(&i, sizeof(int), 1, fp);
-            fread(&j, sizeof(int), 1, fp);
-            fread(&k, sizeof(int), 1, fp);
-            fread(&iIndex, sizeof(uint), 1, fp);
+        uint32_t magic = 0;
+        fread(&magic, sizeof(uint32_t), 1, fp);
+        if (magic == PY_INDEX_MAGIC_NUMBER)
+        {
             fread(&iLen, sizeof(uint), 1, fp);
+            if (iLen > pystate->iCounter)
+                pystate->iCounter = iLen;
+            while (!feof(fp)) {
+                fread(&i, sizeof(int), 1, fp);
+                fread(&j, sizeof(int), 1, fp);
+                fread(&k, sizeof(int), 1, fp);
+                fread(&iIndex, sizeof(uint), 1, fp);
+                fread(&iLen, sizeof(uint), 1, fp);
 
-            if (i < pystate->iPYFACount) {
-                if (j < PYFAList[i].iBase) {
-                    if (k < PYFAList[i].pyBase[j].iPhrase) {
-                        if (k >= 0) {
-                            PYFAList[i].pyBase[j].phrase[k].iIndex = iIndex;
-                            PYFAList[i].pyBase[j].phrase[k].iHit = iLen;
-                        } else {
-                            PYFAList[i].pyBase[j].iIndex = iIndex;
-                            PYFAList[i].pyBase[j].iHit = iLen;
+                if (i < pystate->iPYFACount) {
+                    if (j < PYFAList[i].iBase) {
+                        if (k < PYFAList[i].pyBase[j].iPhrase) {
+                            if (k >= 0) {
+                                PYFAList[i].pyBase[j].phrase[k].iIndex = iIndex;
+                                PYFAList[i].pyBase[j].phrase[k].iHit = iLen;
+                            } else {
+                                PYFAList[i].pyBase[j].iIndex = iIndex;
+                                PYFAList[i].pyBase[j].iHit = iLen;
+                            }
                         }
                     }
                 }
             }
+        }
+        else
+        {
+            FcitxLog(WARNING, _("Pinyin Index Magic Number Doesn't match"));
         }
 
         fclose(fp);
@@ -1868,6 +1882,9 @@ void SavePYIndex(FcitxPinyinState *pystate)
     }
     strcpy(strPathTemp, pstr);
     free(pstr);
+    
+    uint32_t magic = PY_INDEX_MAGIC_NUMBER;
+    fwrite(&magic, sizeof(uint32_t), 1, fp);
 
     //保存计数器
     fwrite(&pystate->iCounter, sizeof(uint), 1, fp);
