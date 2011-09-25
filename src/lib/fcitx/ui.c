@@ -284,7 +284,7 @@ void UpdateInputWindow(FcitxInstance *instance)
 {
     instance->uiflag |= UI_UPDATE;
 
-    if (IsMessageChanged(instance->input->msgPreedit))
+    if (IsMessageChanged(instance->input->msgClientPreedit))
         UpdatePreedit(instance, GetCurrentIC(instance));
 }
 

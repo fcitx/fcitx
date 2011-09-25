@@ -454,7 +454,7 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
-    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
+    char* strPreedit = MessagesToCString(FcitxInputStateGetClientPreedit(input));
     char* str = ProcessOutputFilter(xim->owner, strPreedit);
     if (str) {
         free(strPreedit);

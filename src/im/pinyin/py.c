@@ -781,8 +781,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 pystate->bIsPYDelUserPhr = true;
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
-                SetMessageCount(FcitxInputStateGetPreedit(input), 0);
-                SetMessageCount(FcitxInputStateGetAuxUp(input), 0);
+                CleanInputWindowUp(pystate->owner);
                 AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press index to delete user phrase (ESC for cancel)"));
                 FcitxInputStateSetShowCursor(input, false);
 
@@ -793,8 +792,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 pystate->bIsPYAddFreq = true;
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
-                SetMessageCount(FcitxInputStateGetPreedit(input), 0);
-                SetMessageCount(FcitxInputStateGetAuxUp(input), 0);
+                CleanInputWindowUp(pystate->owner);
                 AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press number to make word in frequent list"), pystate->strFindString);
                 FcitxInputStateSetShowCursor(input, false);
 
@@ -820,8 +818,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 if (val == 0)
                     return IRV_DO_NOTHING;
 
-                SetMessageCount(FcitxInputStateGetPreedit(input), 0);
-                SetMessageCount(FcitxInputStateGetAuxUp(input), 0);
+                CleanInputWindowUp(pystate->owner);
                 if (val == 1)
                     AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press 1 to delete %s in frequent list (ESC for cancel)"), pystate->strFindString);
                 else
@@ -981,6 +978,7 @@ void CalculateCursorPosition(FcitxPinyinState* pystate)
         iTemp -= strlen(pystate->findMap.strPYParsed[i]);
     }
     FcitxInputStateSetCursorPos(input, iCursorPos);
+    FcitxInputStateSetClientCursorPos(input, 0);
 }
 
 /*
@@ -1019,21 +1017,27 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxPinyinState *pystate = (FcitxPinyinState*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(pystate->owner);
     FcitxConfig* config = FcitxInstanceGetConfig(pystate->owner);
+    Messages* msgPreedit = FcitxInputStateGetPreedit(input);
+    Messages* msgClientPreedit = FcitxInputStateGetClientPreedit(input);
+    struct _CandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
     /* update preedit string */
     int i;
-    SetMessageCount(FcitxInputStateGetPreedit(input), 0);
+    SetMessageCount(msgPreedit, 0);
+    SetMessageCount(msgClientPreedit, 0);
     if (pystate->iPYSelected) {
-        Messages* messageUp = FcitxInputStateGetPreedit(input);
-        AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_OTHER, "");
+        AddMessageAtLast(msgPreedit, MSG_OTHER, "");
         for (i = 0; i < pystate->iPYSelected; i++)
-            MessageConcat(messageUp, GetMessageCount(messageUp) - 1, pystate->pySelected[i].strHZ);
+        {
+            MessageConcat(msgPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
+            MessageConcat(msgClientPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
+        }
     }
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
-        AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
+        AddMessageAtLast(msgPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
         if (i < pystate->findMap.iHZCount - 1)
-            MessageConcat(FcitxInputStateGetPreedit(input), GetMessageCount(FcitxInputStateGetPreedit(input)) - 1, " ");
+            MessageConcat(msgPreedit, GetMessageCount(msgPreedit) - 1, " ");
     }
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
@@ -1044,8 +1048,8 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     if (FcitxInputStateGetIsInRemind(input))
         return PYGetRemindCandWords(pystate);
 
-    CandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
-    CandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    CandidateWordSetPageSize(candList, config->iMaxCandWord);
+    CandidateWordSetChoose(candList, DIGIT_STR_CHOOSE);
 
     pystate->iYCDZ = 0;
 
@@ -1072,7 +1076,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
             candWord.priv = pycandword;
             candWord.strWord = strdup(pystate->strPYAuto);
             candWord.strExtra = NULL;
-            CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+            CandidateWordAppend(candList, &candWord);
         }
 
         PYGetPhraseCandWords(pystate);
@@ -1081,6 +1085,12 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
         PYGetBaseCandWords(pystate, pCurFreq);
     } else {
         PYGetSymCandWords(pystate, pCurFreq);
+    }
+    
+    if (CandidateWordPageCount(candList) != 0)
+    {
+        CandidateWord* candWord = CandidateWordGetCurrentWindow(candList);
+        AddMessageAtLast(msgClientPreedit, MSG_INPUT, "%s", candWord->strWord);
     }
 
     return IRV_DISPLAY_CANDWORDS;

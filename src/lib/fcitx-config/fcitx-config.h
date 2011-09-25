@@ -277,6 +277,14 @@ extern "C"
         } \
         gconfig->configFile = cfile;
 
+#define CONFIG_BINDING_BEGIN_WITH_ARG(config_type, arg...) \
+    void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc, arg) { \
+        (void) cfdesc; \
+        GenericConfig *gconfig = (GenericConfig*) config; \
+        if (gconfig->configFile) { \
+            FreeConfigFile(gconfig->configFile); \
+        } \
+        gconfig->configFile = cfile;
     /**
      * @brief register a binding
      **/

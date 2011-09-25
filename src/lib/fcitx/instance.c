@@ -117,7 +117,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     instance->totaltime = 0;
 
     FcitxInitThread(instance);
-    if (!LoadProfile(instance->profile))
+    if (!LoadProfile(instance->profile, instance))
         goto error_exit;
     if (GetAddonConfigDesc() == NULL)
         goto error_exit;
@@ -136,8 +136,10 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     RegisterStatus(instance, instance, "remind", _("Remind"), _("Remind"), ToggleRemindState, GetRemindEnabled);
 
     LoadUserInterface(instance);
+    
+    instance->iIMIndex = GetIMIndexByName(instance, instance->profile->imName);
 
-    SwitchIM(instance, instance->profile->iIMIndex);
+    SwitchIM(instance, instance->iIMIndex);
 
     if (!LoadFrontend(instance)) {
         EndInstance(instance);

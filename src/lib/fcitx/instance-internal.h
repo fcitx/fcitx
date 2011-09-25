@@ -25,9 +25,12 @@
 #ifndef _FCITX_INSTANCE_INTERNAL_H_
 #define _FCITX_INSTANCE_INTERNAL_H_
 
+#include <semaphore.h>
+
 #include "fcitx-utils/utarray.h"
 #include "configfile.h"
 #include "profile.h"
+#include "addon.h"
 
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
@@ -77,9 +80,11 @@ struct _FcitxInstance {
     time_t totaltime;
     time_t timeStart;
     int iHZInputed;
+    
+    int iIMIndex;
 
     /* gives more padding, since we want to break abi */
-    int padding[64];
+    int padding[63];
 };
 
 #endif

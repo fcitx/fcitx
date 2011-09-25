@@ -68,10 +68,13 @@ FCITX_SETTER(FcitxInputState, IsDoInputOnly, bIsDoInputOnly, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, RawInputBuffer, strCodeInput, char*)
 FCITX_GETTER_VALUE(FcitxInputState, CursorPos, iCursorPos, int)
 FCITX_SETTER(FcitxInputState, CursorPos, iCursorPos, int)
+FCITX_GETTER_VALUE(FcitxInputState, ClientCursorPos, iClientCursorPos, int)
+FCITX_SETTER(FcitxInputState, ClientCursorPos, iClientCursorPos, int)
 FCITX_GETTER_VALUE(FcitxInputState, CandidateList, candList, struct _CandidateWordList*)
 FCITX_GETTER_VALUE(FcitxInputState, AuxUp, msgAuxUp, Messages*)
 FCITX_GETTER_VALUE(FcitxInputState, AuxDown, msgAuxDown, Messages*)
 FCITX_GETTER_VALUE(FcitxInputState, Preedit, msgPreedit, Messages*)
+FCITX_GETTER_VALUE(FcitxInputState, ClientPreedit, msgClientPreedit, Messages*)
 FCITX_GETTER_VALUE(FcitxInputState, RawInputBufferSize, iCodeInputCount, int)
 FCITX_SETTER(FcitxInputState, RawInputBufferSize, iCodeInputCount, int)
 FCITX_GETTER_VALUE(FcitxInputState, ShowCursor, bShowCursor, boolean)
@@ -87,6 +90,7 @@ FcitxInputState* CreateFcitxInputState()
     input->msgAuxUp = InitMessages();
     input->msgAuxDown = InitMessages();
     input->msgPreedit = InitMessages();
+    input->msgClientPreedit = InitMessages();
     input->candList = CandidateWordInit();
 
     return input;
@@ -267,10 +271,10 @@ boolean LoadAllIM(FcitxInstance* instance)
             free(modulePath);
         }
     }
-    if (instance->profile->iIMIndex < 0)
-        instance->profile->iIMIndex = 0;
-    if (instance->profile->iIMIndex > utarray_len(&instance->imes))
-        instance->profile->iIMIndex = utarray_len(&instance->imes) - 1;
+    if (instance->iIMIndex < 0)
+        instance->iIMIndex = 0;
+    if (instance->iIMIndex > utarray_len(&instance->imes))
+        instance->iIMIndex = utarray_len(&instance->imes) - 1;
     if (utarray_len(&instance->imes) <= 0) {
         FcitxLog(ERROR, _("No available Input Method"));
         return false;
@@ -538,28 +542,28 @@ void SwitchIM(FcitxInstance* instance, int index)
 
     FcitxIM* lastIM, *newIM;
 
-    if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
+    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
         lastIM = NULL;
     else {
-        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
+        lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
 
     if (index >= iIMCount)
-        instance->profile->iIMIndex = iIMCount - 1;
+        instance->iIMIndex = iIMCount - 1;
     else if (index < -1)
-        instance->profile->iIMIndex = 0;
+        instance->iIMIndex = 0;
     else if (index == -1) {
-        if (instance->profile->iIMIndex >= (iIMCount - 1))
-            instance->profile->iIMIndex = 0;
+        if (instance->iIMIndex >= (iIMCount - 1))
+            instance->iIMIndex = 0;
         else
-            instance->profile->iIMIndex++;
+            instance->iIMIndex++;
     } else if (index >= 0)
-        instance->profile->iIMIndex = index;
+        instance->iIMIndex = index;
 
-    if (instance->profile->iIMIndex >= iIMCount || instance->profile->iIMIndex < 0)
+    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
         newIM = NULL;
     else {
-        newIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
+        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
 
     if (lastIM && lastIM->Save)
@@ -580,6 +584,7 @@ void ResetInput(FcitxInstance* instance)
     FcitxInputState *input = instance->input;
     CandidateWordReset(input->candList);
     input->iCursorPos = 0;
+    input->iClientCursorPos = 0;
 
     FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
     input->iCodeInputCount = 0;
@@ -589,7 +594,7 @@ void ResetInput(FcitxInstance* instance)
 
     UT_array* ims = &instance->imes;
 
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile->iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
 
     if (currentIM && currentIM->ResetIM)
         currentIM->ResetIM(currentIM->klass);
@@ -600,7 +605,7 @@ void ResetInput(FcitxInstance* instance)
 void DoPhraseTips(FcitxInstance* instance)
 {
     UT_array* ims = &instance->imes;
-    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->profile->iIMIndex);
+    FcitxIM* currentIM = (FcitxIM*) utarray_eltptr(ims, instance->iIMIndex);
     FcitxInputState *input = instance->input;
 
     if (currentIM->PhraseTips && currentIM->PhraseTips(currentIM->klass))
@@ -718,7 +723,7 @@ FCITX_EXPORT_API
 FcitxIM* GetCurrentIM(FcitxInstance* instance)
 {
     UT_array* imes = &instance->imes;
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->profile->iIMIndex);
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     return pcurrentIM;
 }
 
@@ -927,7 +932,7 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
-    menu->mark = instance->profile->iIMIndex;
+    menu->mark = instance->iIMIndex;
 }
 
 void ShowInputSpeed(FcitxInstance* instance)
@@ -995,6 +1000,7 @@ void CleanInputWindowUp(FcitxInstance *instance)
     FcitxInputState* input = instance->input;
     SetMessageCount(input->msgAuxUp, 0);
     SetMessageCount(input->msgPreedit, 0);
+    SetMessageCount(input->msgClientPreedit, 0);
 }
 
 FCITX_EXPORT_API
@@ -1023,4 +1029,23 @@ int CheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
 
     return -1;
 }
+
+int GetIMIndexByName(FcitxInstance* instance, char* imName)
+{
+    UT_array* imes = &instance->imes;
+    FcitxIM *pim;
+    int index = 0, i = 0;
+    for (pim = (FcitxIM *) utarray_front(imes);
+            pim != NULL;
+            pim = (FcitxIM *) utarray_next(imes, pim)) {
+       if (strcmp(imName, pim->strIconName) == 0) 
+       {
+           index = i;
+           break;
+       }
+       i ++;
+    }
+    return index;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

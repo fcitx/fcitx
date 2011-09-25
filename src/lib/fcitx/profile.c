@@ -25,22 +25,26 @@
 #include "fcitx-utils/log.h"
 #include "profile.h"
 #include "fcitx-config/xdg.h"
+#include "instance-internal.h"
+#include "instance.h"
 
 static ConfigFileDesc* GetProfileDesc();
+static void FilterIMName(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
-CONFIG_BINDING_BEGIN(FcitxProfile)
+CONFIG_BINDING_BEGIN_WITH_ARG(FcitxProfile, FcitxInstance* instance)
 CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
 CONFIG_BINDING_REGISTER("Profile", "UseRemind", bUseRemind)
-CONFIG_BINDING_REGISTER("Profile", "IMIndex", iIMIndex)
+CONFIG_BINDING_REGISTER_WITH_FILTER_ARG("Profile", "IMName", imName, FilterIMName, instance)
 CONFIG_BINDING_REGISTER("Profile", "WidePunc", bUseWidePunc)
 CONFIG_BINDING_REGISTER("Profile", "PreeditStringInClientWindow", bUsePreedit)
+CONFIG_BINDING_REGISTER("Profile", "EnabledIMList", imList)
 CONFIG_BINDING_END()
 
 /**
  * @brief 加载配置文件
  */
 FCITX_EXPORT_API
-boolean LoadProfile(FcitxProfile* profile)
+boolean LoadProfile(FcitxProfile* profile, FcitxInstance* instance)
 {
     ConfigFileDesc* profileDesc = GetProfileDesc();
     if (!profileDesc)
@@ -55,7 +59,7 @@ boolean LoadProfile(FcitxProfile* profile)
 
     ConfigFile *cfile = ParseConfigFileFp(fp, profileDesc);
 
-    FcitxProfileConfigBind(profile, cfile, profileDesc);
+    FcitxProfileConfigBind(profile, cfile, profileDesc, instance);
     ConfigBindSync(&profile->gconfig);
 
     if (fp)
@@ -81,4 +85,24 @@ boolean UseRemind(FcitxProfile* profile)
 {
     return profile->bUseRemind;
 }
+
+void FilterIMName(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
+{
+    FcitxInstance* instance = arg;
+    if (sync == Value2Raw)
+    {
+        FcitxIM* im = GetCurrentIM(instance);
+        char** imName = (char**) value;
+        if (*imName)
+            free(*imName);
+        
+        if (im)
+            *imName = strdup(im->strIconName);
+        else
+            *imName = strdup("");        
+    }
+
+}
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

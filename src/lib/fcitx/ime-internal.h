@@ -46,6 +46,7 @@ struct _FcitxInputState {
 
     time_t dummy;
     int iCursorPos;
+    int iClientCursorPos;
     boolean bShowCursor;
     int dummy2;
     int lastIsSingleHZ;
@@ -57,8 +58,9 @@ struct _FcitxInputState {
     Messages* msgPreedit;
     Messages* msgAuxUp;
     Messages* msgAuxDown;
+    Messages* msgClientPreedit;
 
-    int padding[64];
+    int padding[63];
 };
 
 /**
@@ -164,6 +166,8 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
  * @return INPUT_RETURN_VALUE
  **/
 INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
+
+int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
 
 #endif
 

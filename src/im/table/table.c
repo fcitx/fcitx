@@ -488,6 +488,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 TableResetStatus(tbl);
                 CleanInputWindowUp(instance);
                 AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+                AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else
                 return IRV_CLEAN;
@@ -578,6 +579,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     else {
         FcitxInputStateSetShowCursor(input, true);
         FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
+        FcitxInputStateSetClientCursorPos(input, 0);
     }
 
     return retVal;
@@ -706,8 +708,9 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(FcitxTableState* tbl)
 
     CleanInputWindowUp(instance);
     AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
-
+    FcitxInputStateSetClientCursorPos(input, 0);
 
     //下面将拼音的候选字表转换为码表输入法的样式
     CandidateWord* candWord;
@@ -759,8 +762,11 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     if (TableFindFirstMatchCode(table, FcitxInputStateGetRawInputBuffer(input)) == -1 && !table->tableDict->iAutoPhrase) {
         if (FcitxInputStateGetRawInputBufferSize(input)) {
             SetMessageCount(FcitxInputStateGetPreedit(input), 0);
+            SetMessageCount(FcitxInputStateGetClientPreedit(input), 0);
             AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+            AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
             FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
+            FcitxInputStateSetClientCursorPos(input, 0);
         }
         //Not Found
         return IRV_DISPLAY_CANDWORDS;
@@ -848,8 +854,11 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
 
     if (FcitxInputStateGetRawInputBufferSize(input)) {
         SetMessageCount(FcitxInputStateGetPreedit(input), 0);
+        SetMessageCount(FcitxInputStateGetClientPreedit(input), 0);
         AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+        AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
         FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
+        FcitxInputStateSetClientCursorPos(input, 0);
     }
 
     INPUT_RETURN_VALUE retVal = IRV_DISPLAY_CANDWORDS;
@@ -1043,7 +1052,9 @@ INPUT_RETURN_VALUE TableGetFHCandWords(FcitxTableState* tbl)
 
     CleanInputWindowUp(instance);
     AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
+    FcitxInputStateSetClientCursorPos(input, 0);
 
     if (!table->tableDict->iFH)
         return IRV_DISPLAY_MESSAGE;

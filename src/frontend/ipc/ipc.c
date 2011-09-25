@@ -609,14 +609,14 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "UpdatePreedit"); // name of the signal
 
-    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
+    char* strPreedit = MessagesToCString(FcitxInputStateGetClientPreedit(input));
     char* str = ProcessOutputFilter(ipc->owner, strPreedit);
     if (str) {
         free(strPreedit);
         strPreedit = str;
     }
 
-    int iCursorPos = FcitxInputStateGetCursorPos(input);
+    int iCursorPos = FcitxInputStateGetClientCursorPos(input);
 
     dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &iCursorPos, DBUS_TYPE_INVALID);
 

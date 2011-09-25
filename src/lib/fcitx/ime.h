@@ -383,12 +383,18 @@ extern "C" {
     int FcitxInputStateGetCursorPos(FcitxInputState* input);
 
     void FcitxInputStateSetCursorPos(FcitxInputState* input, int cursorPos);
+    
+    int FcitxInputStateGetClientCursorPos(FcitxInputState* input);
+
+    void FcitxInputStateSetClientCursorPos(FcitxInputState* input, int cursorPos);
 
     Messages* FcitxInputStateGetAuxUp(FcitxInputState* input);
 
     Messages* FcitxInputStateGetAuxDown(FcitxInputState* input);
 
     Messages* FcitxInputStateGetPreedit(FcitxInputState* input);
+
+    Messages* FcitxInputStateGetClientPreedit(FcitxInputState* input);
 
     int FcitxInputStateGetRawInputBufferSize(FcitxInputState* input);
 

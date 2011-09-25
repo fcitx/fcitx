@@ -13,10 +13,15 @@ Description=Prompt the phrases after input
 Type=Boolean
 DefaultValue=False
 
-[Profile/IMIndex]
-Description=Current Input Method Index
-Type=Integer
-DefaultValue=0
+[Profile/IMName]
+Description=Current Input Method Name
+Type=String
+DefaultValue=
+
+[Profile/EnabledIMList]
+Description=Current Enabled Input Method List
+Type=String
+DefaultValue=
 
 [Profile/PreeditStringInClientWindow]
 Type=Boolean
