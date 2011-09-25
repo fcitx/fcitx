@@ -1452,7 +1452,7 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
     context.type = PY_CAND_SYSPHRASE;
     context.pystate = pystate;
     if (context.order != AD_NO)
-        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+        utarray_msort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1565,7 +1565,7 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.type = PY_CAND_BASE;
     context.pystate = pystate;
     if (context.order != AD_NO)
-        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+        utarray_msort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -1617,7 +1617,7 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     context.type = PY_CAND_FREQ;
     context.pystate = pystate;
     if (context.order != AD_NO)
-        utarray_sort_r(&candtemp, PYCandWordCmp, &context);
+        utarray_msort_r(&candtemp, PYCandWordCmp, &context);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);
@@ -2148,11 +2148,6 @@ _HIT:
     SetMessageCount(FcitxInputStateGetAuxUp(input), 0);
     AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Remind: "));
     AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", pystate->strPYRemindSource);
-
-    PYCandWordSortContext context;
-    context.order = AD_NO;
-    context.type = PY_CAND_REMIND;
-    context.pystate = pystate;
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);

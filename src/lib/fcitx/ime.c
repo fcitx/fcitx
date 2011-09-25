@@ -730,6 +730,8 @@ FcitxIM* GetCurrentIM(FcitxInstance* instance)
 FCITX_EXPORT_API
 void EnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
+    if (ic == NULL)
+        return;
     instance->globalState = IS_ACTIVE;
     switch (instance->config->shareState) {
     case ShareState_All:
@@ -788,6 +790,8 @@ void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean ke
 FCITX_EXPORT_API
 void CloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
+    if (ic == NULL)
+        return;
     instance->globalState = IS_CLOSED;
     switch (instance->config->shareState) {
     case ShareState_All:
@@ -846,7 +850,7 @@ void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic)
 FCITX_EXPORT_API
 void ChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    if (!ic)
+    if (ic == NULL)
         return;
     IME_STATE objectState;
     if (ic->state == IS_ENG)
