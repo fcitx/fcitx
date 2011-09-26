@@ -133,7 +133,7 @@ const char * im_introspection_xml =
     "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
-    "    <property access=\"readwrite\" type=\"a{sssb}\" name=\"IMList\">\n"
+    "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">\n"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>\n"
     "  </interface>\n"
@@ -797,7 +797,7 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxInstance* instance = ipc->owner;
     DBusMessageIter sub, ssub;
-    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "{sssb}", &sub);
+    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "(sssb)", &sub);
     FcitxIM* ime;
     UT_array* imes = FcitxInstanceGetIMEs(instance);
     for (ime = (FcitxIM*) utarray_front(imes);
