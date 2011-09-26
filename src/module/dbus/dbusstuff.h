@@ -25,7 +25,6 @@
 extern "C" {
 #endif
 
-#include <dbus/dbus.h>
 #include <fcitx-config/fcitx-config.h>
 
 #define FCITX_DBUS_NAME "fcitx-dbus"
@@ -33,11 +32,6 @@ extern "C" {
 #define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
 
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
-
-    typedef struct _FcitxDBusEventHandler {
-        boolean(*eventHandler)(void* instance, DBusMessage * event);
-        void* instance;
-    } FcitxDBusEventHandler;
 
 #ifdef __cplusplus
 }

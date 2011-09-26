@@ -137,7 +137,7 @@ QFcitxInputContext::QFcitxInputContext()
         connect(m_slave, SIGNAL(destroyed(QObject*)), this, SLOT(destroySlaveContext()));
     }
 
-    m_dbusproxy = new org::freedesktop::DBus(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, m_connection, this);
+    m_dbusproxy = new org::freedesktop::DBus("org.freedesktop.DBus", "/org/freedesktop/DBus", m_connection, this);
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
 
     m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
