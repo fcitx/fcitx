@@ -242,6 +242,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
         return ;
     UT_array* imes = &instance->availimes ;
     FcitxIM newime;
+    memset(&newime, 0, sizeof(FcitxIM));
     strncpy(newime.strName, name, MAX_IM_NAME);
     strncpy(newime.strIconName, iconName, MAX_IM_NAME);
     newime.Init = Init;
@@ -255,6 +256,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
     newime.iPriority = priority;
     newime.priv = priv;
     strncpy(newime.langCode, langCode, LANGCODE_LENGTH);
+    newime.langCode[LANGCODE_LENGTH] = 0;
 
     utarray_push_back(imes, &newime);
 }
