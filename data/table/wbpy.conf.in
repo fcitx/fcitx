@@ -1,4 +1,5 @@
 [CodeTable]
+UniqueName=wbpy
 _Name=WubiPinyin
 IconName=wbpy
 File=wbpy.mb

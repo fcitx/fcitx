@@ -1,8 +1,8 @@
 [CodeTable]
+UniqueName=cangjie
 _Name=Cangjie
 IconName=cangjie
 File=cj.mb
-Priority=30
 AdjustOrder=AdjustNo
 UsePY=True
 PYKey=[

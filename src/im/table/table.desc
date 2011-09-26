@@ -27,7 +27,7 @@ Enum2=AdjustFreq
 [CodeTable/Priority]
 Description=Order of Code Table
 Type=Integer
-DefaultValue=99
+DefaultValue=100
 
 [CodeTable/UsePY]
 Description=Use Pinyin
@@ -115,7 +115,7 @@ DefaultValue=
 [CodeTable/Enabled]
 Description=Enable This Table or Not
 Type=Boolean
-DefaultValue=False
+DefaultValue=True
 
 [DescriptionFile]
 LocaleDomain=fcitx

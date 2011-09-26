@@ -1,4 +1,5 @@
 [CodeTable]
+UniqueName=wubi
 _Name=Wubi
 IconName=wubi
 File=wbx.mb
