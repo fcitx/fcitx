@@ -106,34 +106,36 @@ void *PYCreate(FcitxInstance* instance)
 
     PinyinMigration();
 
-    FcitxRegisterIM(instance,
-                    pystate,
-                    _("Pinyin"),
-                    "pinyin",
-                    PYInit,
-                    ResetPYStatus,
-                    DoPYInput,
-                    PYGetCandWords,
-                    NULL,
-                    SavePY,
-                    ReloadConfigPY,
-                    NULL,
-                    pystate->pyconfig.iPinyinPriority
-                   );
-    FcitxRegisterIM(instance,
-                    pystate,
-                    _("Shuangpin"),
-                    "shuangpin",
-                    SPInit,
-                    ResetPYStatus,
-                    DoPYInput,
-                    PYGetCandWords,
-                    NULL,
-                    SavePY,
-                    ReloadConfigPY,
-                    NULL,
-                    pystate->pyconfig.iShuangpinPriority
-                   );
+    FcitxRegisterIMv2(instance,
+                      pystate,
+                      _("Pinyin"),
+                      "pinyin",
+                      PYInit,
+                      ResetPYStatus,
+                      DoPYInput,
+                      PYGetCandWords,
+                      NULL,
+                      SavePY,
+                      ReloadConfigPY,
+                      NULL,
+                      pystate->pyconfig.iPinyinPriority,
+                      "zh_CN"
+                     );
+    FcitxRegisterIMv2(instance,
+                      pystate,
+                      _("Shuangpin"),
+                      "shuangpin",
+                      SPInit,
+                      ResetPYStatus,
+                      DoPYInput,
+                      PYGetCandWords,
+                      NULL,
+                      SavePY,
+                      ReloadConfigPY,
+                      NULL,
+                      pystate->pyconfig.iShuangpinPriority,
+                      "zh_CN"
+                     );
     pystate->owner = instance;
 
     /* ensure the order! */
@@ -340,8 +342,7 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
                 memset(flag, 0, sizeof(boolean) * count);
                 int left = count;
                 phrase = temp;
-                if (stripDup)
-                {
+                if (stripDup) {
                     for (m = 0; m < count; m++) {
                         for (n = 0; n < PYFAList[i].pyBase[j].iPhrase; n++) {
                             int result = strcmp(PYFAList[i].pyBase[j].phrase[n].strMap, phrase[m].strMap);
@@ -424,8 +425,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     if (fp) {
         uint32_t magic = 0;
         fread(&magic, sizeof(uint32_t), 1, fp);
-        if (magic == PY_INDEX_MAGIC_NUMBER)
-        {
+        if (magic == PY_INDEX_MAGIC_NUMBER) {
             fread(&iLen, sizeof(uint), 1, fp);
             if (iLen > pystate->iCounter)
                 pystate->iCounter = iLen;
@@ -450,9 +450,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             FcitxLog(WARNING, _("Pinyin Index Magic Number Doesn't match"));
         }
 
@@ -1027,8 +1025,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     SetMessageCount(msgClientPreedit, 0);
     if (pystate->iPYSelected) {
         AddMessageAtLast(msgPreedit, MSG_OTHER, "");
-        for (i = 0; i < pystate->iPYSelected; i++)
-        {
+        for (i = 0; i < pystate->iPYSelected; i++) {
             MessageConcat(msgPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
             MessageConcat(msgClientPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
         }
@@ -1086,9 +1083,8 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     } else {
         PYGetSymCandWords(pystate, pCurFreq);
     }
-    
-    if (CandidateWordPageCount(candList) != 0)
-    {
+
+    if (CandidateWordPageCount(candList) != 0) {
         CandidateWord* candWord = CandidateWordGetCurrentWindow(candList);
         AddMessageAtLast(msgClientPreedit, MSG_INPUT, "%s", candWord->strWord);
     }
@@ -1349,7 +1345,7 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, CandidateWord* candWord)
         if (pPhraseMap)
             strcat(strHZString, pPhraseMap);
         if (bAddNewPhrase && (utf8_strlen(pystate->strPYAuto) <= (MAX_PY_PHRASE_LENGTH)))
-            PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString);
+            PYAddUserPhrase(pystate, pystate->strPYAuto, strHZString, false);
         CleanInputWindow(instance);
         strcpy(GetOutputString(input), pystate->strPYAuto);
         if (profile->bUseRemind) {
@@ -1651,7 +1647,7 @@ void PYAddFreqCandWord(PyFreq* pyFreq, HZ * hz, char *strPY, PYCandWord* pycandW
  * 将一个词组保存到用户词组库中
  * 返回true表示是新词组
  */
-boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
+boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map, boolean incHit)
 {
     PyUsrPhrase *userPhrase, *newPhrase, *temp;
     char str[UTF8_MAX_LENGTH + 1];
@@ -1677,16 +1673,26 @@ boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map)
     userPhrase = PYFAList[i].pyBase[j].userPhrase->next;
     for (k = 0; k < PYFAList[i].pyBase[j].iUserPhrase; k++) {
         if (!strcmp(map + 2, userPhrase->phrase.strMap)
-                && !strcmp(phrase + clen, userPhrase->phrase.strPhrase))
+                && !strcmp(phrase + clen, userPhrase->phrase.strPhrase)) {
+            if (incHit) {
+                userPhrase->phrase.iHit ++;
+                userPhrase->phrase.iIndex = ++pystate->iCounter;
+            }
             return false;
+        }
         userPhrase = userPhrase->next;
     }
 
     //然后，看它是不是在系统词组库中
     for (k = 0; k < PYFAList[i].pyBase[j].iPhrase; k++)
         if (!strcmp(map + 2, PYFAList[i].pyBase[j].phrase[k].strMap)
-                && !strcmp(phrase + clen, PYFAList[i].pyBase[j].phrase[k].strPhrase))
+                && !strcmp(phrase + clen, PYFAList[i].pyBase[j].phrase[k].strPhrase)) {
+            if (incHit) {
+                PYFAList[i].pyBase[j].phrase[k].iHit ++;
+                PYFAList[i].pyBase[j].phrase[k].iIndex = ++pystate->iCounter;
+            }
             return false;
+        }
     //下面将词组添加到列表中
     newPhrase = (PyUsrPhrase *) fcitx_malloc0(sizeof(PyUsrPhrase));
     newPhrase->phrase.strMap = (char *) fcitx_malloc0(sizeof(char) * strlen(map + 2) + 1);
@@ -1892,7 +1898,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
     }
     strcpy(strPathTemp, pstr);
     free(pstr);
-    
+
     uint32_t magic = PY_INDEX_MAGIC_NUMBER;
     fwrite(&magic, sizeof(uint32_t), 1, fp);
 
@@ -2466,7 +2472,7 @@ void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
         i ++;
     }
 
-    PYAddUserPhrase(pystate, pivot, totalMap);
+    PYAddUserPhrase(pystate, pivot, totalMap, true);
     free(totalMap);
 
     return;

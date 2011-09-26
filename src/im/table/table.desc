@@ -102,6 +102,11 @@ Description=Choose
 Type=String
 DefaultValue=1234567890
 
+[CodeTable/LangCode]
+Description=Language Code for this table
+Type=String
+DefaultValue=
+
 [CodeTable/Enabled]
 Description=Enable This Table or Not
 Type=Boolean

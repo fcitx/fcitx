@@ -83,6 +83,7 @@ typedef struct _TableMetaData {
     char           *strSymbol;
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键
+    char           *langCode;
     boolean         bEnabled;
 
     struct _TableDict* tableDict;

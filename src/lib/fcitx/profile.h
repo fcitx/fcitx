@@ -46,17 +46,17 @@ extern "C" {
          * @brief use remind mode
          **/
         boolean bUseRemind;
-        
+
         /**
          * @brief current im index
          **/
         char* imName;
-        
+
         /**
          * @brief use full width punc
          **/
         boolean bUseWidePunc;
-        
+
         /**
          * @brief use full width char
          **/
@@ -66,7 +66,7 @@ extern "C" {
          * @brief show preedit string in client or not
          **/
         boolean bUsePreedit;
-        
+
         /**
          * @brief enabled im list
          **/

@@ -6,3 +6,4 @@ AutoSend=-1
 ExactMatch=False
 PromptTableCode=True
 Choose=qwertyuiop
+LangCode=zh_CN

@@ -9,3 +9,4 @@ UseMatchingKey=False
 AutoPhrase=True
 ExactMatch=False
 PromptTableCode=True
+LangCode=zh_CN

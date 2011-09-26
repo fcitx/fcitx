@@ -108,6 +108,8 @@ extern "C" {
 
     UT_array* FcitxInstanceGetIMEs(FcitxInstance* instance);
 
+    UT_array* FcitxInstanceGetAvailIMEs(FcitxInstance* instance);
+
     fd_set* FcitxInstanceGetReadFDSet(FcitxInstance* instance);
 
     fd_set* FcitxInstanceGetWriteFDSet(FcitxInstance* instance);

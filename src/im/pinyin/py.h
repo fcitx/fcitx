@@ -216,7 +216,7 @@ void            PYGetFreqCandWords(struct _FcitxPinyinState* pystate, PyFreq* py
 void            PYAddFreqCandWord(PyFreq* pyFreq, HZ* hz, char* strPY, PYCandWord* pycandWord);
 void            PYGetPhraseCandWords(struct _FcitxPinyinState* pystate);
 boolean         PYAddPhraseCandWord(struct _FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase* phrase, boolean b, PYCandWord* pycandWord);
-boolean PYAddUserPhrase(FcitxPinyinState* pystate, char* phrase, char* map);
+boolean         PYAddUserPhrase(FcitxPinyinState* pystate, char* phrase, char* map, boolean incHit);
 void            PYDelUserPhrase(FcitxPinyinState* pystate, int iPYFA, int iBase, PyUsrPhrase* phrase);
 int             GetBaseMapIndex(struct _FcitxPinyinState* pystate, char *strMap);
 void            SavePYUserPhrase(struct _FcitxPinyinState* pystate);
@@ -226,11 +226,11 @@ void            SavePY(void *arg);
 
 void            PYAddFreq(struct _FcitxPinyinState* pystate, PYCandWord* pycandWord);
 void            PYDelFreq(struct _FcitxPinyinState* pystate, PYCandWord* pycandWord);
-boolean            PYIsInFreq(PyFreq* pCurFreq, char* strHZ);
+boolean         PYIsInFreq(PyFreq* pCurFreq, char* strHZ);
 
 INPUT_RETURN_VALUE PYGetRemindCandWords(void* arg);
 void            PYAddRemindCandWord(struct _FcitxPinyinState* pystate, PyPhrase * phrase, PYCandWord* pycandWord);
-void        PYGetPYByHZ(struct _FcitxPinyinState* pystate, char *strHZ, char *strPY);
+void            PYGetPYByHZ(struct _FcitxPinyinState* pystate, char *strHZ, char *strPY);
 
 #endif
 

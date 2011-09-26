@@ -11,3 +11,4 @@ UseMatchingKey=False
 AutoPhrase=False
 ExactMatch=False
 PromptTableCode=True
+LangCode=zh_CN

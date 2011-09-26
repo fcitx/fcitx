@@ -258,9 +258,15 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
         description = _("Input Method Disabled");
     } else {
         FcitxIM* im = GetCurrentIM(instance);
-        icon = im->strIconName;
-        imname = _(im->strName);
-        description = _(im->strName);
+        if (im) {
+            icon = im->strIconName;
+            imname = _(im->strName);
+            description = _(im->strName);
+        } else {
+            icon = "eng";
+            imname = _("Disabled");
+            description = _("Input Method Disabled");
+        }
     }
     /* add fcitx- prefix */
     asprintf(&status, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);

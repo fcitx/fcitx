@@ -209,7 +209,7 @@ void fcitx_msort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const v
 #define utarray_sort_r(a,cmp, arg) do {                                       \
         fcitx_qsort_r((a)->d, (a)->i, (a)->icd->sz, cmp, arg);                            \
     } while(0)
-    
+
 #define utarray_msort_r(a,cmp, arg) do {                                       \
         fcitx_msort_r((a)->d, (a)->i, (a)->icd->sz, cmp, arg);                            \
     } while(0)

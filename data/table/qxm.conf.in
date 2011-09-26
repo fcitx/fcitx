@@ -13,3 +13,4 @@ AutoPhrasePhrase=True
 SaveAutoPhrase=True
 ExactMatch=False
 PromptTableCode=True
+LangCode=zh_CN

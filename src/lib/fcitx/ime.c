@@ -145,13 +145,14 @@ void InitBuiltInHotkey(FcitxInstance *instance)
 void InitFcitxIM(FcitxInstance* instance)
 {
     utarray_init(&instance->imes, &ime_icd);
+    utarray_init(&instance->availimes, &ime_icd);
     utarray_init(&instance->imeclasses, &imclass_icd);
 }
 
 FCITX_EXPORT_API
 void SaveAllIM(FcitxInstance* instance)
 {
-    UT_array* imes = &instance->imes;
+    UT_array* imes = &instance->availimes;
     FcitxIM *pim;
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
@@ -202,9 +203,44 @@ void FcitxRegisterIM(FcitxInstance *instance,
                      int priority
                     )
 {
+    FcitxRegisterIMv2(instance,
+                      addonInstance,
+                      name,
+                      iconName,
+                      Init,
+                      ResetIM,
+                      DoInput,
+                      GetCandWords,
+                      PhraseTips,
+                      Save,
+                      ReloadConfig,
+                      priv,
+                      priority,
+                      ""
+                     );
+}
+
+
+FCITX_EXPORT_API
+void FcitxRegisterIMv2(FcitxInstance *instance,
+                       void *addonInstance,
+                       const char* name,
+                       const char* iconName,
+                       FcitxIMInit Init,
+                       FcitxIMResetIM ResetIM,
+                       FcitxIMDoInput DoInput,
+                       FcitxIMGetCandWords GetCandWords,
+                       FcitxIMPhraseTips PhraseTips,
+                       FcitxIMSave Save,
+                       FcitxIMReloadConfig ReloadConfig,
+                       void *priv,
+                       int priority,
+                       const char *langCode
+                      )
+{
     if (priority <= 0)
         return ;
-    UT_array* imes = &instance->imes ;
+    UT_array* imes = &instance->availimes ;
     FcitxIM newime;
     strncpy(newime.strName, name, MAX_IM_NAME);
     strncpy(newime.strIconName, iconName, MAX_IM_NAME);
@@ -218,6 +254,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
     newime.klass = addonInstance;
     newime.iPriority = priority;
     newime.priv = priv;
+    strncpy(newime.langCode, langCode, LANGCODE_LENGTH);
 
     utarray_push_back(imes, &newime);
 }
@@ -271,15 +308,16 @@ boolean LoadAllIM(FcitxInstance* instance)
             free(modulePath);
         }
     }
-    if (instance->iIMIndex < 0)
-        instance->iIMIndex = 0;
-    if (instance->iIMIndex > utarray_len(&instance->imes))
-        instance->iIMIndex = utarray_len(&instance->imes) - 1;
-    if (utarray_len(&instance->imes) <= 0) {
+
+    if (utarray_len(&instance->availimes) <= 0) {
         FcitxLog(ERROR, _("No available Input Method"));
         return false;
     }
-    utarray_sort(&instance->imes, IMPriorityCmp);
+
+    instance->imLoaded = true;
+
+    UpdateIMList(instance);
+
     return true;
 }
 
@@ -429,7 +467,7 @@ INPUT_RETURN_VALUE ProcessKey(
                 }
             }
 
-            if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT)) {
+            if (!IsHotKey(sym, state, FCITX_LCTRL_LSHIFT) && currentIM) {
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
             }
         }
@@ -442,7 +480,7 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
-    if (GetCurrentState(instance) == IS_ACTIVE && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
+    if (GetCurrentState(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         CleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
         ProcessUpdateCandidates(instance);
@@ -494,7 +532,7 @@ void ProcessInputReturnValue(
 
     if (retVal & IRV_FLAG_DO_PHRASE_TIPS) {
         CleanInputWindow(instance);
-        if (fc->bPhraseTips && currentIM->PhraseTips)
+        if (fc->bPhraseTips && currentIM && currentIM->PhraseTips)
             DoPhraseTips(instance);
         UpdateInputWindow(instance);
 
@@ -669,6 +707,9 @@ FCITX_EXPORT_API
 void ReloadConfig(FcitxInstance *instance)
 {
     if (!LoadConfig(instance->config))
+        EndInstance(instance);
+
+    if (!LoadProfile(instance->profile, instance))
         EndInstance(instance);
 
     CandidateWordSetPageSize(instance->input->candList, instance->config->iMaxCandWord);
@@ -1042,14 +1083,81 @@ int GetIMIndexByName(FcitxInstance* instance, char* imName)
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {
-       if (strcmp(imName, pim->strIconName) == 0) 
-       {
-           index = i;
-           break;
-       }
-       i ++;
+        if (strcmp(imName, pim->strIconName) == 0) {
+            index = i;
+            break;
+        }
+        i ++;
     }
     return index;
+}
+
+void UpdateIMList(FcitxInstance* instance)
+{
+    if (!instance->imLoaded)
+        return;
+
+    UT_array* imList = SplitString(instance->profile->imList, ',');
+    utarray_sort(&instance->availimes, IMPriorityCmp);
+    utarray_clear(&instance->imes);
+
+    char** pstr;
+    FcitxIM* ime;
+    for (pstr = (char**) utarray_front(imList);
+            pstr != NULL;
+            pstr = (char**) utarray_next(imList, pstr)) {
+        char* str = *pstr;
+        char* pos = strchr(str, ':');
+        if (pos) {
+            ime = NULL;
+            *pos = '\0';
+            pos ++;
+            if (strcmp(pos, "True") == 0)
+                ime = GetIMFromIMList(&instance->availimes, str);
+
+            if (ime)
+                utarray_push_back(&instance->imes, ime);
+        }
+    }
+
+    for (ime = (FcitxIM*) utarray_front(&instance->availimes);
+            ime != NULL;
+            ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
+        if (!IMIsInIMNameList(imList, ime)) {
+            utarray_push_back(&instance->imes, ime);
+        }
+    }
+
+    utarray_free(imList);
+
+    instance->iIMIndex = GetIMIndexByName(instance, instance->profile->imName);
+
+    SwitchIM(instance, instance->iIMIndex);
+}
+
+FCITX_EXPORT_API
+FcitxIM* GetIMFromIMList(UT_array* imes, char* name)
+{
+    FcitxIM* ime = NULL;
+    for (ime = (FcitxIM*) utarray_front(imes);
+            ime !=  NULL;
+            ime = (FcitxIM*) utarray_next(imes, ime)) {
+        if (strcmp(ime->strIconName, name) == 0)
+            break;
+    }
+    return ime;
+}
+
+boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime)
+{
+    char** pstr;
+    for (pstr = (char**) utarray_front(imList);
+            pstr != NULL;
+            pstr = (char**) utarray_next(imList, pstr)) {
+        if (strncmp(ime->strIconName, *pstr, strlen(ime->strIconName)) == 0)
+            return true;
+    }
+    return false;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

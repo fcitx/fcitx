@@ -80,7 +80,7 @@ void *TableCreate(FcitxInstance* instance)
             table != NULL;
             table = (TableMetaData*) utarray_next(tbl->table, table)) {
         FcitxLog(INFO, table->strName);
-        FcitxRegisterIM(
+        FcitxRegisterIMv2(
             instance,
             tbl,
             table->strName,
@@ -93,7 +93,8 @@ void *TableCreate(FcitxInstance* instance)
             SaveTableIM,
             NULL,
             table,
-            table->iPriority
+            table->iPriority,
+            table->langCode
         );
     }
 
@@ -266,6 +267,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     FcitxConfig* config = FcitxInstanceGetConfig(instance);
 
     FcitxIM* currentIM = GetCurrentIM(instance);
+    if (currentIM == NULL)
+        return IRV_TO_PROCESS;
     TableMetaData* table = (TableMetaData*) currentIM->priv;
     char* strCodeInput = FcitxInputStateGetRawInputBuffer(input);
 
@@ -346,7 +349,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                     strLastFirstCand = GetOutputString(input);
                             }
                         }
-                        
+
                         retVal = TableGetCandWords(tbl);
                         FcitxModuleFunctionArg farg;
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
@@ -368,8 +371,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                             return IRV_DISPLAY_CANDWORDS;
                         } else if (table->iTableAutoSendToClientWhenNone
-                            && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1))
-                            && CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
+                                   && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1))
+                                   && CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
                             if (strLastFirstCand && (lastFirstCandType != CT_AUTOPHRASE)) {
                                 CommitString(instance, GetCurrentIC(instance), strLastFirstCand);
                             }

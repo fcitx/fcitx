@@ -58,7 +58,7 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 void* QWCreate(struct _FcitxInstance* instance)
 {
     FcitxQWState* qwstate = fcitx_malloc0(sizeof(FcitxQWState));
-    FcitxRegisterIM(
+    FcitxRegisterIMv2(
         instance,
         qwstate,
         _("Quwei"),
@@ -71,7 +71,8 @@ void* QWCreate(struct _FcitxInstance* instance)
         NULL,
         NULL,
         NULL,
-        100 /* make quwei place at last */
+        100 /* make quwei place at last */,
+        "zh_CN"
     );
     qwstate->owner = instance;
     return qwstate;

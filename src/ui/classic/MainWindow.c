@@ -199,7 +199,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     }
                 } else if (strcmp(sp->name, "im") == 0) {
                     SkinImage* imicon = NULL;
-                    if (GetCurrentState(instance) != IS_ACTIVE)
+                    if (GetCurrentState(instance) != IS_ACTIVE || GetCurrentIM(instance) == NULL)
                         imicon = LoadImage(sc, sc->skinMainBar.eng, false);
                     else {
                         FcitxIM* im = GetCurrentIM(instance);
@@ -247,7 +247,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     height = imageheight;
             }
 
-            if (GetCurrentState(instance) != IS_ACTIVE)
+            if (GetCurrentState(instance) != IS_ACTIVE || GetCurrentIM(instance) == NULL)
                 imicon = LoadImage(sc, sc->skinMainBar.eng, false);
             else {
                 FcitxIM* im = GetCurrentIM(instance);

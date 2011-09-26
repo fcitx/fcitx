@@ -27,9 +27,11 @@
 #include "fcitx-config/xdg.h"
 #include "instance-internal.h"
 #include "instance.h"
+#include "ime-internal.h"
 
 static ConfigFileDesc* GetProfileDesc();
 static void FilterIMName(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterIMList(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN_WITH_ARG(FcitxProfile, FcitxInstance* instance)
 CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
@@ -37,7 +39,7 @@ CONFIG_BINDING_REGISTER("Profile", "UseRemind", bUseRemind)
 CONFIG_BINDING_REGISTER_WITH_FILTER_ARG("Profile", "IMName", imName, FilterIMName, instance)
 CONFIG_BINDING_REGISTER("Profile", "WidePunc", bUseWidePunc)
 CONFIG_BINDING_REGISTER("Profile", "PreeditStringInClientWindow", bUsePreedit)
-CONFIG_BINDING_REGISTER("Profile", "EnabledIMList", imList)
+CONFIG_BINDING_REGISTER_WITH_FILTER_ARG("Profile", "EnabledIMList", imList, FilterIMList, instance)
 CONFIG_BINDING_END()
 
 /**
@@ -65,6 +67,8 @@ boolean LoadProfile(FcitxProfile* profile, FcitxInstance* instance)
     if (fp)
         fclose(fp);
 
+    UpdateIMList(instance);
+
     return true;
 }
 
@@ -86,22 +90,65 @@ boolean UseRemind(FcitxProfile* profile)
     return profile->bUseRemind;
 }
 
+void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
+{
+    FcitxInstance* instance = arg;
+    if (sync == Value2Raw) {
+        char* result = NULL;
+        FcitxIM* ime;
+        for (ime = (FcitxIM*) utarray_front(&instance->imes);
+                ime != NULL;
+                ime = (FcitxIM*) utarray_next(&instance->imes, ime)) {
+            char* newresult;
+            if (result == NULL)
+                asprintf(&newresult, "%s:True", ime->strIconName);
+            else
+                asprintf(&newresult, "%s,%s:True", result, ime->strIconName);
+            if (result)
+                free(result);
+            result = newresult;
+        }
+
+        for (ime = (FcitxIM*) utarray_front(&instance->availimes);
+                ime != NULL;
+                ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
+            if (!GetIMFromIMList(&instance->imes, ime->strIconName)) {
+                char* newresult;
+                if (result == NULL)
+                    asprintf(&newresult, "%s:False", ime->strIconName);
+                else
+                    asprintf(&newresult, "%s,%s:False", result, ime->strIconName);
+                if (result)
+                    free(result);
+                result = newresult;
+            }
+        }
+
+        char** imList = (char**) value;
+
+        if (*imList)
+            free(*imList);
+        if (result)
+            *imList = result;
+        else
+            *imList = strdup("");
+    }
+}
+
 void FilterIMName(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
 {
     FcitxInstance* instance = arg;
-    if (sync == Value2Raw)
-    {
+    if (sync == Value2Raw) {
         FcitxIM* im = GetCurrentIM(instance);
         char** imName = (char**) value;
         if (*imName)
             free(*imName);
-        
+
         if (im)
             *imName = strdup(im->strIconName);
         else
-            *imName = strdup("");        
+            *imName = strdup("");
     }
-
 }
 
 

@@ -51,6 +51,8 @@ extern "C" {
 
 #define HOT_KEY_COUNT   2
 
+#define LANGCODE_LENGTH 5
+
     struct _FcitxInputContext;
     struct _FcitxInstance;
     struct _FcitxAddon;
@@ -164,6 +166,12 @@ extern "C" {
          * @brief private data for this input method
          **/
         void* priv;
+        /**
+         * @brief Language Code
+         **/
+        char langCode[LANGCODE_LENGTH + 1];
+
+        int padding[5];
     } FcitxIM;
 
     typedef enum _FcitxKeyEventType {
@@ -310,6 +318,41 @@ extern "C" {
                         );
 
     /**
+     * @brief register a new input method
+     *
+     * @param instance fcitx instance
+     * @param addonInstance instance of addon
+     * @param name input method name
+     * @param iconName icon name
+     * @param Init init callback
+     * @param ResetIM reset callback
+     * @param DoInput do input callback
+     * @param GetCandWords get candidate words callback
+     * @param PhraseTips phrase tips callback
+     * @param Save save callback
+     * @param ReloadConfig reload config callback
+     * @param priv private data for this input method.
+     * @param priority order of this input method
+     * @param langCode language code for this input method
+     * @return void
+     **/
+    void FcitxRegisterIMv2(struct _FcitxInstance *instance,
+                           void *addonInstance,
+                           const char* name,
+                           const char* iconName,
+                           FcitxIMInit Init,
+                           FcitxIMResetIM ResetIM,
+                           FcitxIMDoInput DoInput,
+                           FcitxIMGetCandWords GetCandWords,
+                           FcitxIMPhraseTips PhraseTips,
+                           FcitxIMSave Save,
+                           FcitxIMReloadConfig ReloadConfig,
+                           void *priv,
+                           int priority,
+                           const char *langCode
+                          );
+
+    /**
      * @brief process a key event, should only used by frontend
      *
      * @param instance fcitx instance
@@ -383,7 +426,7 @@ extern "C" {
     int FcitxInputStateGetCursorPos(FcitxInputState* input);
 
     void FcitxInputStateSetCursorPos(FcitxInputState* input, int cursorPos);
-    
+
     int FcitxInputStateGetClientCursorPos(FcitxInputState* input);
 
     void FcitxInputStateSetClientCursorPos(FcitxInputState* input, int cursorPos);
@@ -409,6 +452,8 @@ extern "C" {
     void FcitxInputStateSetLastIsSingleChar(FcitxInputState* input, int lastIsSingleChar);
 
     void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
+
+    FcitxIM* GetIMFromIMList(UT_array* imes, char* name);
 
 #ifdef __cplusplus
 }

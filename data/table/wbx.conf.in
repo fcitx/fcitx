@@ -18,3 +18,4 @@ ExactMatch=False
 PromptTableCode=False
 Symbol=zzzz
 Enabled=True
+LangCode=zh_CN

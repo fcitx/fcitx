@@ -15,3 +15,4 @@ AutoPhrasePhrase=False
 SaveAutoPhrase=False
 ExactMatch=False
 PromptTableCode=False
+LangCode=zh_CN

@@ -48,6 +48,7 @@ FCITX_GETTER_REF(FcitxInstance, Addons, addons, UT_array)
 FCITX_GETTER_REF(FcitxInstance, UIMenus, uimenus, UT_array)
 FCITX_GETTER_REF(FcitxInstance, UIStats, uistats, UT_array)
 FCITX_GETTER_REF(FcitxInstance, IMEs, imes, UT_array)
+FCITX_GETTER_REF(FcitxInstance, AvailIMEs, availimes, UT_array)
 FCITX_GETTER_REF(FcitxInstance, ReadFDSet, rfds, fd_set)
 FCITX_GETTER_REF(FcitxInstance, WriteFDSet, wfds, fd_set)
 FCITX_GETTER_REF(FcitxInstance, ExceptFDSet, efds, fd_set)
@@ -136,7 +137,7 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
     RegisterStatus(instance, instance, "remind", _("Remind"), _("Remind"), ToggleRemindState, GetRemindEnabled);
 
     LoadUserInterface(instance);
-    
+
     instance->iIMIndex = GetIMIndexByName(instance, instance->profile->imName);
 
     SwitchIM(instance, instance->iIMIndex);

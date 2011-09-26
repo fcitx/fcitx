@@ -44,6 +44,7 @@ CONFIG_BINDING_REGISTER("CodeTable", "PromptTableCode", bPromptTableCode)
 CONFIG_BINDING_REGISTER("CodeTable", "Symbol", strSymbol)
 CONFIG_BINDING_REGISTER("CodeTable", "SymbolFile", strSymbolFile)
 CONFIG_BINDING_REGISTER("CodeTable", "Choose", strChoose)
+CONFIG_BINDING_REGISTER("CodeTable", "LangCode", langCode)
 CONFIG_BINDING_REGISTER("CodeTable", "Enabled", bEnabled)
 CONFIG_BINDING_END()
 

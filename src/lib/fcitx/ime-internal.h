@@ -169,6 +169,11 @@ INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
 
 int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
 
+void UpdateIMList(struct _FcitxInstance* instance);
+
+boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
+
+
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

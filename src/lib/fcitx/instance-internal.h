@@ -80,11 +80,15 @@ struct _FcitxInstance {
     time_t totaltime;
     time_t timeStart;
     int iHZInputed;
-    
+
     int iIMIndex;
 
+    UT_array availimes;
+
+    boolean imLoaded;
+
     /* gives more padding, since we want to break abi */
-    int padding[63];
+    int padding[62];
 };
 
 #endif
