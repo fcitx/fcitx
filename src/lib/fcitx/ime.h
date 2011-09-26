@@ -53,6 +53,8 @@ extern "C" {
 
 #define LANGCODE_LENGTH 5
 
+#define PRIORITY_DISABLE 100
+
     struct _FcitxInputContext;
     struct _FcitxInstance;
     struct _FcitxAddon;

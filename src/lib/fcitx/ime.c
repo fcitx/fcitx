@@ -1127,7 +1127,9 @@ void UpdateIMList(FcitxInstance* instance)
             ime != NULL;
             ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
         if (!IMIsInIMNameList(imList, ime)) {
-            utarray_push_back(&instance->imes, ime);
+            /* ok, make all im priority larger than 100 disable by default */
+            if (ime->iPriority < PRIORITY_DISABLE)
+                utarray_push_back(&instance->imes, ime);
         }
     }
 
