@@ -104,4 +104,12 @@ void InputUnFocusHook(struct _FcitxInstance* instance);
  **/
 void ProcessUpdateCandidates(struct _FcitxInstance* instance);
 
+/**
+ * @brief process update im list
+ *
+ * @param instance fcitx instance
+ * @return void
+ **/
+void UpdateIMListHook(struct _FcitxInstance* instance);
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

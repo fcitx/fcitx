@@ -189,6 +189,15 @@ extern "C" {
      * @return void
      **/
     void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    
+    /**
+     * @brief register update input method list hook
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     **/
+    void RegisterUpdateIMListHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
      * @brief process output filter, return string is malloced

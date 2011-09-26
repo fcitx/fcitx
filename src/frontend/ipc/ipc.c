@@ -75,6 +75,7 @@ static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic,
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 static void IPCGetPropertyIMList(void* arg, DBusMessageIter* iter);
+static void IPCUpdateIMList(void* arg);
 
 static void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message);
 static void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message);
@@ -109,6 +110,11 @@ const char * im_introspection_xml =
     "      <arg name=\"interface_name\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"values\" direction=\"out\" type=\"a{sv}\"/>\n"
     "    </method>\n"
+    "    <signal name=\"PropertiesChanged\">\n"
+    "      <arg name=\"interface_name\" type=\"s\"/>\n"
+    "      <arg name=\"changed_properties\" type=\"a{sv}\"/>\n"
+    "      <arg name=\"invalidated_properties\" type=\"as\"/>\n"
+    "    </signal>\n"
     "  </interface>\n"
     "  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">\n"
     "    <method name=\"CreateIC\">\n"
@@ -128,6 +134,7 @@ const char * im_introspection_xml =
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
     "    <property access=\"readwrite\" type=\"a{sssb}\" name=\"IMList\">\n"
+    "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>\n"
     "  </interface>\n"
     "</node>\n";
@@ -242,6 +249,11 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
         free(ipc);
         return NULL;
     }
+    
+    FcitxIMEventHook hook;
+    hook.arg = ipc;
+    hook.func = IPCUpdateIMList;
+    RegisterUpdateIMListHook(instance, hook);
 
     return ipc;
 }
@@ -785,7 +797,7 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxInstance* instance = ipc->owner;
     DBusMessageIter sub, ssub;
-    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "(sssb)", &sub);
+    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "{sssb}", &sub);
     FcitxIM* ime;
     UT_array* imes = FcitxInstanceGetIMEs(instance);
     for (ime = (FcitxIM*) utarray_front(imes);
@@ -821,6 +833,37 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
         }
     }
     dbus_message_iter_close_container(args, &sub);
+}
+
+void IPCUpdateIMList(void* arg)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    DBusMessage* msg = dbus_message_new_signal(FCITX_IM_DBUS_PATH, // object name of the signal
+                    DBUS_INTERFACE_PROPERTIES, // interface name of the signal
+                    "PropertiesChanged"); // name of the signal
+    
+    dbus_uint32_t serial;
+    DBusMessageIter args;
+    DBusMessageIter changed_properties, invalidated_properties;
+    char sinterface[] = FCITX_IM_DBUS_INTERFACE;
+    char sproperty[] = "IMList";
+    char* interface = sinterface;
+    char* property = sproperty;
+    dbus_message_iter_init_append(msg, &args);
+    dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &interface);
+    
+    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "{sv}", &changed_properties);
+    dbus_message_iter_close_container(&args, &changed_properties);
+    
+    dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "s", &invalidated_properties);
+    dbus_message_iter_append_basic(&invalidated_properties, DBUS_TYPE_STRING, &property);
+    dbus_message_iter_close_container(&args, &invalidated_properties);
+    
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
 }
 
 

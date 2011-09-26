@@ -83,6 +83,7 @@ DEFINE_HOOK(TriggerOffHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateCandidateWordHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(UpdateIMListHook, FcitxIMEventHook, eventhook);
 
 void ProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -171,6 +172,16 @@ void InputFocusHook(FcitxInstance* instance)
 void InputUnFocusHook(FcitxInstance* instance)
 {
     HookStack* stack = GetInputUnFocusHook(instance);
+    stack = stack->next;
+    while (stack) {
+        stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+
+void UpdateIMListHook(FcitxInstance* instance)
+{
+    HookStack* stack = GetUpdateIMListHook(instance);
     stack = stack->next;
     while (stack) {
         stack->eventhook.func(stack->eventhook.arg);

@@ -1094,6 +1094,7 @@ int GetIMIndexByName(FcitxInstance* instance, char* imName)
     return index;
 }
 
+FCITX_EXPORT_API
 void UpdateIMList(FcitxInstance* instance)
 {
     if (!instance->imLoaded)
@@ -1135,6 +1136,7 @@ void UpdateIMList(FcitxInstance* instance)
     instance->iIMIndex = GetIMIndexByName(instance, instance->profile->imName);
 
     SwitchIM(instance, instance->iIMIndex);
+    UpdateIMListHook(instance);
 }
 
 FCITX_EXPORT_API

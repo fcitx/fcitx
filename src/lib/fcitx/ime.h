@@ -454,6 +454,8 @@ extern "C" {
     void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
 
     FcitxIM* GetIMFromIMList(UT_array* imes, char* name);
+    
+    void UpdateIMList(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus
 }
