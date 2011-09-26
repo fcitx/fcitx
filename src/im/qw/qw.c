@@ -61,6 +61,7 @@ void* QWCreate(struct _FcitxInstance* instance)
     FcitxRegisterIMv2(
         instance,
         qwstate,
+        "quwei",
         _("Quwei"),
         "quwei",
         QWInit,

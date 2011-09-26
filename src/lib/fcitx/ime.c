@@ -105,7 +105,7 @@ int IMPriorityCmp(const void *a, const void *b)
     if (delta != 0)
         return delta;
     else
-        return strcmp(ta->strIconName, tb->strIconName);
+        return strcmp(ta->uniqueName, tb->uniqueName);
 }
 
 void InitBuiltInHotkey(FcitxInstance *instance)
@@ -205,6 +205,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
 {
     FcitxRegisterIMv2(instance,
                       addonInstance,
+                      iconName,
                       name,
                       iconName,
                       Init,
@@ -224,6 +225,7 @@ void FcitxRegisterIM(FcitxInstance *instance,
 FCITX_EXPORT_API
 void FcitxRegisterIMv2(FcitxInstance *instance,
                        void *addonInstance,
+                       const char* uniqueName,
                        const char* name,
                        const char* iconName,
                        FcitxIMInit Init,
@@ -242,7 +244,14 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
         return ;
     UT_array* imes = &instance->availimes ;
     FcitxIM newime;
+    
+    if (GetIMFromIMList(imes, uniqueName))
+    {
+        FcitxLog(ERROR, "%s already exists", uniqueName);
+    }
+    
     memset(&newime, 0, sizeof(FcitxIM));
+    strncpy(newime.uniqueName, uniqueName, MAX_IM_NAME);
     strncpy(newime.strName, name, MAX_IM_NAME);
     strncpy(newime.strIconName, iconName, MAX_IM_NAME);
     newime.Init = Init;
@@ -1085,7 +1094,7 @@ int GetIMIndexByName(FcitxInstance* instance, char* imName)
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {
-        if (strcmp(imName, pim->strIconName) == 0) {
+        if (strcmp(imName, pim->uniqueName) == 0) {
             index = i;
             break;
         }
@@ -1142,13 +1151,13 @@ void UpdateIMList(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-FcitxIM* GetIMFromIMList(UT_array* imes, char* name)
+FcitxIM* GetIMFromIMList(UT_array* imes, const char* name)
 {
     FcitxIM* ime = NULL;
     for (ime = (FcitxIM*) utarray_front(imes);
             ime !=  NULL;
             ime = (FcitxIM*) utarray_next(imes, ime)) {
-        if (strcmp(ime->strIconName, name) == 0)
+        if (strcmp(ime->uniqueName, name) == 0)
             break;
     }
     return ime;
@@ -1160,7 +1169,7 @@ boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime)
     for (pstr = (char**) utarray_front(imList);
             pstr != NULL;
             pstr = (char**) utarray_next(imList, pstr)) {
-        if (strncmp(ime->strIconName, *pstr, strlen(ime->strIconName)) == 0)
+        if (strncmp(ime->uniqueName, *pstr, strlen(ime->uniqueName)) == 0)
             return true;
     }
     return false;

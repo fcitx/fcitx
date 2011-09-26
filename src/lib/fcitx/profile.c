@@ -101,9 +101,9 @@ void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* optio
                 ime = (FcitxIM*) utarray_next(&instance->imes, ime)) {
             char* newresult;
             if (result == NULL)
-                asprintf(&newresult, "%s:True", ime->strIconName);
+                asprintf(&newresult, "%s:True", ime->uniqueName);
             else
-                asprintf(&newresult, "%s,%s:True", result, ime->strIconName);
+                asprintf(&newresult, "%s,%s:True", result, ime->uniqueName);
             if (result)
                 free(result);
             result = newresult;
@@ -112,12 +112,12 @@ void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* optio
         for (ime = (FcitxIM*) utarray_front(&instance->availimes);
                 ime != NULL;
                 ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
-            if (!GetIMFromIMList(&instance->imes, ime->strIconName)) {
+            if (!GetIMFromIMList(&instance->imes, ime->uniqueName)) {
                 char* newresult;
                 if (result == NULL)
-                    asprintf(&newresult, "%s:False", ime->strIconName);
+                    asprintf(&newresult, "%s:False", ime->uniqueName);
                 else
-                    asprintf(&newresult, "%s,%s:False", result, ime->strIconName);
+                    asprintf(&newresult, "%s,%s:False", result, ime->uniqueName);
                 if (result)
                     free(result);
                 result = newresult;
@@ -145,7 +145,7 @@ void FilterIMName(GenericConfig* config, ConfigGroup* group, ConfigOption* optio
             free(*imName);
 
         if (im)
-            *imName = strdup(im->strIconName);
+            *imName = strdup(im->uniqueName);
         else
             *imName = strdup("");
     }

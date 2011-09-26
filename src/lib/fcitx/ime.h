@@ -172,6 +172,11 @@ extern "C" {
          * @brief Language Code
          **/
         char langCode[LANGCODE_LENGTH + 1];
+        
+        /**
+         * @brief uniqueName
+         **/
+        char uniqueName[MAX_IM_NAME + 1];
 
         int padding[5];
     } FcitxIM;
@@ -340,6 +345,7 @@ extern "C" {
      **/
     void FcitxRegisterIMv2(struct _FcitxInstance *instance,
                            void *addonInstance,
+                           const char* uniqueName,
                            const char* name,
                            const char* iconName,
                            FcitxIMInit Init,
@@ -455,7 +461,7 @@ extern "C" {
 
     void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
 
-    FcitxIM* GetIMFromIMList(UT_array* imes, char* name);
+    FcitxIM* GetIMFromIMList(UT_array* imes, const char* name);
     
     void UpdateIMList(struct _FcitxInstance* instance);
 

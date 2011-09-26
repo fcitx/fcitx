@@ -83,6 +83,7 @@ void *TableCreate(FcitxInstance* instance)
         FcitxRegisterIMv2(
             instance,
             tbl,
+            (strlen(table->uniqueName) == 0)?table->strIconName:table->uniqueName,
             table->strName,
             table->strIconName,
             TableInit,
@@ -1170,6 +1171,7 @@ void FreeTableConfig(void *v)
     FreeConfigFile(table->config.configFile);
     free(table->strPath);
     free(table->strSymbolFile);
+    free(table->uniqueName);
     free(table->strName);
     free(table->strIconName);
     free(table->strEndCode);

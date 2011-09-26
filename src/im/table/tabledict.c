@@ -184,7 +184,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
 
-        strcpy(strPath, tableMetaData->strIconName);
+        strcpy(strPath, tableMetaData->uniqueName);
         strcat(strPath, "_LastAutoPhrase.tmp");
         fpDict = GetXDGFileWithPrefix("table", strPath, "rb", NULL);
         i = 0;
@@ -317,7 +317,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
         }
         free(pstr);
 
-        strncpy(strPath, tableMetaData->strName, PATH_MAX);
+        strncpy(strPath, tableMetaData->uniqueName, PATH_MAX);
         strncat(strPath, "_LastAutoPhrase.tmp", PATH_MAX);
         fpDict = GetXDGFileWithPrefix("table", strPath, NULL, &pstr);
         if (access(pstr, F_OK))

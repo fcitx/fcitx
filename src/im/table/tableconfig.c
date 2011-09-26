@@ -23,6 +23,7 @@
 #include "tabledict.h"
 
 CONFIG_BINDING_BEGIN(TableMetaData)
+CONFIG_BINDING_REGISTER("CodeTable", "UniqueName", uniqueName)
 CONFIG_BINDING_REGISTER("CodeTable", "Name", strName)
 CONFIG_BINDING_REGISTER("CodeTable", "IconName", strIconName)
 CONFIG_BINDING_REGISTER("CodeTable", "File", strPath)

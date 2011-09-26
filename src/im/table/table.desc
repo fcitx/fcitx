@@ -1,3 +1,8 @@
+[CodeTable/UniqueName]
+Description=Unique Name for Table
+Type=String
+DefaultValue=
+
 [CodeTable/Name]
 Description=Code Table Name
 Type=I18NString

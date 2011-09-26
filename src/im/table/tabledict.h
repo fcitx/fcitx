@@ -62,6 +62,7 @@ typedef struct _SINGLE_HZ {
 
 typedef struct _TableMetaData {
     GenericConfig   config;
+    char           *uniqueName;
     char           *strName;
     char           *strIconName;
     char           *strPath;

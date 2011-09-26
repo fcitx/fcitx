@@ -806,10 +806,10 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
         dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, 0, &ssub);
         boolean enable = true;
         char* name = ime->strName;
-        char* iconName = ime->strIconName;
+        char* uniqueName = ime->uniqueName;
         char* langCode = ime->langCode;
         dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &name);
-        dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &iconName);
+        dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &uniqueName);
         dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &langCode);
         dbus_message_iter_append_basic(&ssub, DBUS_TYPE_BOOLEAN, &enable);
         dbus_message_iter_close_container(&sub, &ssub);
@@ -819,14 +819,14 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
     for (ime = (FcitxIM*) utarray_front(availimes);
             ime != NULL;
             ime = (FcitxIM*) utarray_next(availimes, ime)) {
-        if (!GetIMFromIMList(availimes, ime->strIconName)) {
+        if (!GetIMFromIMList(availimes, ime->uniqueName)) {
             dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, 0, &ssub);
             boolean enable = false;
             char* name = ime->strName;
-            char* iconName = ime->strIconName;
+            char* uniqueName = ime->uniqueName;
             char* langCode = ime->langCode;
             dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &name);
-            dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &iconName);
+            dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &uniqueName);
             dbus_message_iter_append_basic(&ssub, DBUS_TYPE_STRING, &langCode);
             dbus_message_iter_append_basic(&ssub, DBUS_TYPE_BOOLEAN, &enable);
             dbus_message_iter_close_container(&sub, &ssub);

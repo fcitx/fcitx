@@ -108,6 +108,7 @@ void *PYCreate(FcitxInstance* instance)
 
     FcitxRegisterIMv2(instance,
                       pystate,
+                      "pinyin",
                       _("Pinyin"),
                       "pinyin",
                       PYInit,
@@ -123,6 +124,7 @@ void *PYCreate(FcitxInstance* instance)
                      );
     FcitxRegisterIMv2(instance,
                       pystate,
+                      "shuangpin",
                       _("Shuangpin"),
                       "shuangpin",
                       SPInit,
