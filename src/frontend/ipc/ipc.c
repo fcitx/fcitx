@@ -796,8 +796,9 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxInstance* instance = ipc->owner;
-    DBusMessageIter sub, ssub;
-    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "(sssb)", &sub);
+    DBusMessageIter array, sub, ssub;
+    dbus_message_iter_open_container(args, DBUS_TYPE_VARIANT, "a(sssb)", &array );
+    dbus_message_iter_open_container(&array, DBUS_TYPE_ARRAY, "(sssb)", &sub);
     FcitxIM* ime;
     UT_array* imes = FcitxInstanceGetIMEs(instance);
     for (ime = (FcitxIM*) utarray_front(imes);
@@ -819,7 +820,7 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
     for (ime = (FcitxIM*) utarray_front(availimes);
             ime != NULL;
             ime = (FcitxIM*) utarray_next(availimes, ime)) {
-        if (!GetIMFromIMList(availimes, ime->uniqueName)) {
+        if (!GetIMFromIMList(imes, ime->uniqueName)) {
             dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, 0, &ssub);
             boolean enable = false;
             char* name = ime->strName;
@@ -832,7 +833,8 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
             dbus_message_iter_close_container(&sub, &ssub);
         }
     }
-    dbus_message_iter_close_container(args, &sub);
+    dbus_message_iter_close_container(&array, &sub);
+    dbus_message_iter_close_container(args, &array);
 }
 
 void IPCUpdateIMList(void* arg)
