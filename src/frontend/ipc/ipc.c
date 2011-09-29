@@ -49,6 +49,7 @@ typedef struct _FcitxIPCFrontend {
 typedef struct _FcitxDBusPropertyTable {
     char* interface;
     char* name;
+    char* type;
     void (*getfunc)(void* arg, DBusMessageIter* iter);
     void (*setfunc)(void* arg, DBusMessageIter* iter);
 } FcitxDBusPropertyTable;
@@ -75,6 +76,7 @@ static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic,
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 static void IPCGetPropertyIMList(void* arg, DBusMessageIter* iter);
+static void IPCSetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCUpdateIMList(void* arg);
 
 static void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message);
@@ -82,8 +84,8 @@ static void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message);
 static void FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message);
 
 const FcitxDBusPropertyTable propertTable[] = {
-    { FCITX_IM_DBUS_INTERFACE, "IMList", IPCGetPropertyIMList, NULL },
-    { NULL, NULL, NULL, NULL }
+    { FCITX_IM_DBUS_INTERFACE, "IMList", "a(sssb)", IPCGetPropertyIMList, IPCSetPropertyIMList },
+    { NULL, NULL, NULL, NULL, NULL }
 };
 
 const char * im_introspection_xml =
@@ -774,10 +776,12 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message)
                 break;
             index ++;
         }
-        DBusMessageIter args;
+        DBusMessageIter args, variant;
         dbus_message_iter_init_append(reply, &args);
+        dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, "a(sssb)", &variant );
         if (propertTable[index].getfunc)
-            propertTable[index].getfunc(ipc, &args);
+            propertTable[index].getfunc(ipc, &variant);
+        dbus_message_iter_close_container(&args, &variant);
     }
     dbus_connection_send(ipc->conn, reply, NULL);
     dbus_message_unref(reply);
@@ -785,10 +789,80 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message)
 
 void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message)
 {
+    DBusError error;
+    dbus_error_init(&error);
+    char *interface;
+    char *property;
+    DBusMessage* reply = dbus_message_new_method_return(message);
+    
+    DBusMessageIter args, variant;
+    dbus_message_iter_init(message, &args);
+    
+    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
+        goto dbus_property_set_end;
+    
+    dbus_message_iter_get_basic(&args, &interface);
+    dbus_message_iter_next(&args);
+    
+    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_STRING)
+        goto dbus_property_set_end;
+    dbus_message_iter_get_basic(&args, &property);
+    dbus_message_iter_next(&args);
+    
+    if (dbus_message_iter_get_arg_type(&args) != DBUS_TYPE_VARIANT)
+        goto dbus_property_set_end;
+    
+    dbus_message_iter_recurse  (&args, &variant);
+    int index = 0;
+    while (propertTable[index].interface != NULL) {
+        if (strcmp(propertTable[index].interface, interface) == 0
+                && strcmp(propertTable[index].name, property) == 0)
+            break;
+        index ++;
+    }
+    if (propertTable[index].setfunc)
+        propertTable[index].setfunc(ipc, &variant);
+
+dbus_property_set_end:
+    dbus_connection_send(ipc->conn, reply, NULL);
+    dbus_message_unref(reply);
 }
 
 void FcitxDBusPropertyGetAll(FcitxIPCFrontend* ipc, DBusMessage* message)
 {
+    DBusError error;
+    dbus_error_init(&error);
+    char *interface;
+    DBusMessage* reply = dbus_message_new_method_return(message);
+    if (dbus_message_get_args(message, &error,
+                              DBUS_TYPE_STRING, &interface,
+                              DBUS_TYPE_INVALID)) {
+        int index = 0;
+        DBusMessageIter args;
+        dbus_message_iter_init_append(reply, &args);
+        DBusMessageIter array, entry;
+        dbus_message_iter_open_container(&args,DBUS_TYPE_ARRAY,"{sv}", &array);
+    
+        while (propertTable[index].interface != NULL) {
+            if (strcmp(propertTable[index].interface, interface) == 0 && propertTable[index].getfunc)
+            {
+                dbus_message_iter_open_container(&array, DBUS_TYPE_DICT_ENTRY,
+                                             NULL, &entry);
+                
+                dbus_message_iter_append_basic(&entry, DBUS_TYPE_STRING, &propertTable[index].name);
+                DBusMessageIter variant;
+                dbus_message_iter_open_container(&entry, DBUS_TYPE_VARIANT, propertTable[index].type, &variant );
+                propertTable[index].getfunc(ipc, &variant);
+                dbus_message_iter_close_container(&entry, &variant);
+
+                dbus_message_iter_close_container(&array, &entry);
+            }
+            index ++;
+        }
+        dbus_message_iter_close_container(&args, &array);
+    }
+    dbus_connection_send(ipc->conn, reply, NULL);
+    dbus_message_unref(reply);
 }
 
 
@@ -796,9 +870,8 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxInstance* instance = ipc->owner;
-    DBusMessageIter array, sub, ssub;
-    dbus_message_iter_open_container(args, DBUS_TYPE_VARIANT, "a(sssb)", &array );
-    dbus_message_iter_open_container(&array, DBUS_TYPE_ARRAY, "(sssb)", &sub);
+    DBusMessageIter sub, ssub;
+    dbus_message_iter_open_container(args, DBUS_TYPE_ARRAY, "(sssb)", &sub);
     FcitxIM* ime;
     UT_array* imes = FcitxInstanceGetIMEs(instance);
     for (ime = (FcitxIM*) utarray_front(imes);
@@ -833,8 +906,67 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
             dbus_message_iter_close_container(&sub, &ssub);
         }
     }
-    dbus_message_iter_close_container(&array, &sub);
-    dbus_message_iter_close_container(args, &array);
+    dbus_message_iter_close_container(args, &sub);
+}
+
+void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxInstance* instance = ipc->owner;
+    DBusMessageIter sub, ssub;
+    
+    if (dbus_message_iter_get_arg_type(args) != DBUS_TYPE_ARRAY)
+        return;
+    
+    dbus_message_iter_recurse(args, &sub);
+    
+    char* result = NULL;
+    while (dbus_message_iter_get_arg_type(&sub) == DBUS_TYPE_STRUCT)
+    {
+        dbus_message_iter_recurse(&sub, &ssub);
+        char* name, *uniqueName, *langCode;
+        boolean enable;
+        if (dbus_message_iter_get_arg_type(&ssub) != DBUS_TYPE_STRING)
+            goto ipc_set_imlist_end;
+        dbus_message_iter_get_basic(&ssub, &name);
+        dbus_message_iter_next(&ssub);
+        
+        if (dbus_message_iter_get_arg_type(&ssub) != DBUS_TYPE_STRING)
+            goto ipc_set_imlist_end;
+        dbus_message_iter_get_basic(&ssub, &uniqueName);
+        dbus_message_iter_next(&ssub);
+        
+        if (dbus_message_iter_get_arg_type(&ssub) != DBUS_TYPE_STRING)
+            goto ipc_set_imlist_end;
+        dbus_message_iter_get_basic(&ssub, &langCode);
+        dbus_message_iter_next(&ssub);
+        
+        if (dbus_message_iter_get_arg_type(&ssub) != DBUS_TYPE_BOOLEAN)
+            goto ipc_set_imlist_end;
+        dbus_message_iter_get_basic(&ssub, &enable);
+        dbus_message_iter_next(&ssub);
+        
+        char* newresult;
+        if (result == NULL)
+            asprintf(&newresult, "%s:%s", uniqueName, enable ? "True": "False");
+        else
+            asprintf(&newresult, "%s,%s:%s", result, uniqueName, enable ? "True": "False");
+        if (result)
+            free(result);
+        result = newresult;
+ipc_set_imlist_end:
+        dbus_message_iter_next(&sub);
+    }
+    
+    FcitxLog(DEBUG, "%s", result);
+    if (result)
+    {
+        FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+        if (profile->imList)
+            free(profile->imList);
+        profile->imList = result;
+        UpdateIMList(instance);
+    }
 }
 
 void IPCUpdateIMList(void* arg)

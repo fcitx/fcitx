@@ -963,13 +963,6 @@ void InitIMMenu(FcitxInstance* instance)
 {
     strcpy(instance->imMenu.candStatusBind, "im");
     strcpy(instance->imMenu.name, _("Input Method"));
-    FcitxIM* pim;
-    UT_array* imes = &instance->imes;
-    utarray_init(&instance->imMenu.shell, &menuICD);
-    for (pim = (FcitxIM *) utarray_front(imes);
-            pim != NULL;
-            pim = (FcitxIM *) utarray_next(imes, pim))
-        AddMenuShell(&instance->imMenu, pim->strName, MENUTYPE_SIMPLE, NULL);
 
     instance->imMenu.UpdateMenuShell = UpdateIMMenuShell;
     instance->imMenu.MenuAction = IMMenuAction;
@@ -987,6 +980,15 @@ boolean IMMenuAction(FcitxUIMenu *menu, int index)
 void UpdateIMMenuShell(FcitxUIMenu *menu)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
+    ClearMenuShell(menu);
+    
+    FcitxIM* pim;
+    UT_array* imes = &instance->imes;
+    utarray_init(&instance->imMenu.shell, &menuICD);
+    for (pim = (FcitxIM *) utarray_front(imes);
+            pim != NULL;
+            pim = (FcitxIM *) utarray_next(imes, pim))
+        AddMenuShell(&instance->imMenu, pim->strName, MENUTYPE_SIMPLE, NULL);
 
     menu->mark = instance->iIMIndex;
 }
