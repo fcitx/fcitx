@@ -1167,7 +1167,6 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
     size_t             i = 0;
     int             iChar;
     int             iCount = 0;
-    FcitxInputState* input = FcitxInstanceGetInputState(kimpanel->owner);
     Messages* messageUp = kimpanel->messageUp;
 
     const char      *p1;
@@ -1177,7 +1176,7 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 
 
     for (i = 0; i < GetMessageCount(messageUp) ; i++) {
-        if (FcitxInputStateGetCursorPos(input) && iChar) {
+        if (kimpanel->iCursorPos && iChar) {
             p1 = pivot = GetMessageString(messageUp, i);
             while (*p1 && p1 < pivot + iChar) {
                 p1 = p1 + utf8_char_len(p1);

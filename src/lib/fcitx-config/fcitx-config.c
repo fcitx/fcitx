@@ -1126,6 +1126,28 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
 
             if (optiondesc->desc && strlen(optiondesc->desc) != 0)
                 fprintf(fp, "# %s\n", dgettext(cdesc->domain, optiondesc->desc));
+            
+            switch (optiondesc->type)
+            {
+                case T_Enum:
+                    {
+                        fprintf(fp, "# %s\n", _("Available Value:"));
+                        fprintf(fp, "#");
+                        int i;
+                        for (i = 0; i < optiondesc->configEnum.enumCount; i++)
+                            fprintf(fp, " %s", optiondesc->configEnum.enumDesc[i]);
+                        fprintf(fp, "\n");
+                    }
+                    break;
+                case T_Boolean:
+                    {
+                        fprintf(fp, "# %s\n", _("Available Value:"));
+                        fprintf(fp, "# True False\n");
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             if (!option) {
                 if (optiondesc->rawDefaultValue)

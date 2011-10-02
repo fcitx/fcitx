@@ -542,14 +542,14 @@ extern "C"
     /**
      * @brief Get a option description from config file description, return NULL if not found.
      *
-     * @param cfdesc config file description
+     * @param cfile config file
      * @param groupName gropu name
      * @param optionName option name
      * @return const ConfigOptionDesc*
      *
      * @since 4.1.2
      **/
-    ConfigOption* ConfigFileGetOption(ConfigFile* cfdesc, const char* groupName, const char* optionName);
+    ConfigOption* ConfigFileGetOption(ConfigFile* cfile, const char* groupName, const char* optionName);
 
 
     /**

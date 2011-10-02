@@ -277,6 +277,7 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
     strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
+    FcitxInputStateSetShowCursor(input, true);
     AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
 }
 
