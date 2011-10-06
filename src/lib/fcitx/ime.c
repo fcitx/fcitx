@@ -248,6 +248,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
     if (GetIMFromIMList(imes, uniqueName))
     {
         FcitxLog(ERROR, "%s already exists", uniqueName);
+        return ;
     }
     
     memset(&newime, 0, sizeof(FcitxIM));
