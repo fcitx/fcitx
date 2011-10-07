@@ -7,6 +7,7 @@
 #cmakedefine _ENABLE_PANGO
 #cmakedefine _ENABLE_OPENCC
 #cmakedefine LIBKVM_FOUND
+#cmakedefine HAVE_XINERAMA
 #define LOCALEDIR "@localedir@"
 #define PACKAGE "@package@"
 #define DATADIR "@prefix@/share"

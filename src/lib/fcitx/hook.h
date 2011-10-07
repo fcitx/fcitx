@@ -189,7 +189,7 @@ extern "C" {
      * @return void
      **/
     void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
-    
+
     /**
      * @brief register update input method list hook
      *

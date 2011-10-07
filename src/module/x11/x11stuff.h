@@ -43,6 +43,9 @@
 #define FCITX_X11_MOUSECLICK_RETURNTYPE void
 #define FCITX_X11_ADDCOMPOSITEHANDLER 8
 #define FCITX_X11_ADDCOMPOSITEHANDLER_RETURNTYPE void
+#define FCITX_X11_GETSCREENGEOMETRY 9
+#define FCITX_X11_GETSCREENGEOMETRY_RETURNTYPE void
+
 
 struct _FcitxInstance;
 
@@ -55,6 +58,10 @@ typedef struct _FcitxCompositeChangedHandler {
     void (*eventHandler)(void* instance, boolean enable);
     void *instance;
 } FcitxCompositeChangedHandler;
+
+typedef struct _FcitxRect {
+    int x1, y1, x2, y2;
+} FcitxRect;
 
 typedef struct _FcitxX11 {
     Display *dpy;
@@ -69,6 +76,10 @@ typedef struct _FcitxX11 {
     Atom typeDialogAtom;
     Atom typeDockAtom;
     Atom pidAtom;
+    boolean bUseXinerama;
+    FcitxRect* rects;
+    int screenCount;
+    int defaultScreen;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {

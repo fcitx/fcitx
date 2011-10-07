@@ -172,7 +172,7 @@ extern "C" {
          * @brief Language Code
          **/
         char langCode[LANGCODE_LENGTH + 1];
-        
+
         /**
          * @brief uniqueName
          **/
@@ -462,7 +462,7 @@ extern "C" {
     void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
 
     FcitxIM* GetIMFromIMList(UT_array* imes, const char* name);
-    
+
     void UpdateIMList(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus

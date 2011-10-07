@@ -92,6 +92,11 @@ if (ENABLE_OPENCC)
     endif (OPENCC_FOUND)
 endif (ENABLE_OPENCC)
 
+set(HAVE_XINERAMA 0)
+if (X11_Xinerama_FOUND)
+    set(HAVE_XINERAMA 1)
+endif (X11_Xinerama_FOUND)
+
 if(ENABLE_DEBUG)
     set(_DEBUG)
 endif(ENABLE_DEBUG)

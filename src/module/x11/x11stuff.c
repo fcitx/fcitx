@@ -18,16 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "fcitx/fcitx.h"
+
+#include <limits.h>
 #include <unistd.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/Xatom.h>
 
-#include "fcitx/fcitx.h"
+#ifdef HAVE_XINERAMA
+#include <X11/extensions/Xinerama.h>
+#endif
+
 #include "fcitx/module.h"
 #include "x11stuff.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "xerrorhandler.h"
+#include <fcitx-utils/log.h>
 
 static void* X11Create(FcitxInstance* instance);
 static void X11SetFD(void* arg);
@@ -41,9 +48,15 @@ static void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetScreenSize(void *arg, FcitxModuleFunctionArg args);
 static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
+static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
 static void InitComposite(FcitxX11* x11stuff);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11stuff);
+static void X11InitScreen(FcitxX11* x11stuff);
+
+static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
+static inline int RectWidth(FcitxRect r);
+static inline int RectHeight(FcitxRect r);
 
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
@@ -89,7 +102,16 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11GetScreenSize);
     AddFunction(x11addon, X11MouseClick);
     AddFunction(x11addon, X11AddCompositeHandler);
+    AddFunction(x11addon, X11ScreenGeometry);
     InitComposite(x11priv);
+
+    X11InitScreen(x11priv);
+
+    XWindowAttributes attr;
+    XGetWindowAttributes(x11priv->dpy, DefaultRootWindow(x11priv->dpy), &attr);
+    if ((attr.your_event_mask & StructureNotifyMask) != StructureNotifyMask) {
+        XSelectInput(x11priv->dpy, DefaultRootWindow(x11priv->dpy), attr.your_event_mask | StructureNotifyMask);
+    }
 
     InitXErrorHandler(x11priv);
     return x11priv;
@@ -124,8 +146,10 @@ void X11ProcessEvent(void* arg)
                     if (X11GetCompositeManager(x11priv))
                         X11HandlerComposite(x11priv, true);
                 }
+            } else if (event.type == ConfigureNotify) {
+                if (event.xconfigure.window == DefaultRootWindow(x11priv->dpy))
+                    X11InitScreen(x11priv);
             }
-
 
             FcitxXEventHandler* handler;
             for (handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
@@ -310,14 +334,11 @@ void* X11GetScreenSize(void* arg, FcitxModuleFunctionArg args)
     FcitxX11* x11priv = (FcitxX11*)arg;
     int* width = args.args[0];
     int* height = args.args[1];
-    XWindowAttributes attrs;
-    if (XGetWindowAttributes(x11priv->dpy, RootWindow(x11priv->dpy, x11priv->iScreen), &attrs) < 0) {
-        printf("ERROR\n");
-    }
+
     if (width != NULL)
-        (*width) = attrs.width;
+        (*width) = RectWidth(x11priv->rects[x11priv->defaultScreen]);
     if (height != NULL)
-        (*height) = attrs.height;
+        (*height) = RectHeight(x11priv->rects[x11priv->defaultScreen]);
 
     return NULL;
 }
@@ -394,6 +415,183 @@ boolean X11GetCompositeManager(FcitxX11* x11stuff)
         return true;
     } else
         return false;
+}
+
+void X11InitScreen(FcitxX11* x11stuff)
+{
+    FcitxLog(INFO, "Resolution changed");
+    // get the screen count
+    int newScreenCount = ScreenCount(x11stuff->dpy);
+#ifdef HAVE_XINERAMA
+
+    XineramaScreenInfo *xinerama_screeninfo = 0;
+
+    // we ignore the Xinerama extension when using the display is
+    // using traditional multi-screen (with multiple root windows)
+    if (newScreenCount == 1) {
+        int unused;
+        x11stuff->bUseXinerama = (XineramaQueryExtension(x11stuff->dpy, &unused, &unused)
+                                  && XineramaIsActive(x11stuff->dpy));
+    }
+
+    if (x11stuff->bUseXinerama) {
+        xinerama_screeninfo =
+            XineramaQueryScreens(x11stuff->dpy, &newScreenCount);
+    }
+
+    if (xinerama_screeninfo) {
+        x11stuff->defaultScreen = 0;
+    } else
+#endif // HAVE_XINERAMA
+    {
+        x11stuff->defaultScreen = DefaultScreen(x11stuff->dpy);
+        newScreenCount = ScreenCount(x11stuff->dpy);
+        x11stuff->bUseXinerama = false;
+    }
+
+    if (x11stuff->rects)
+        free(x11stuff->rects);
+    x11stuff->rects = fcitx_malloc0(sizeof(FcitxRect) * newScreenCount);
+
+    // get the geometry of each screen
+    int i, j, x, y, w, h;
+    for (i = 0, j = 0; i < newScreenCount; i++, j++) {
+
+#ifdef HAVE_XINERAMA
+        if (x11stuff->bUseXinerama) {
+            x = xinerama_screeninfo[i].x_org;
+            y = xinerama_screeninfo[i].y_org;
+            w = xinerama_screeninfo[i].width;
+            h = xinerama_screeninfo[i].height;
+        } else
+#endif // HAVE_XINERAMA
+        {
+            x = 0;
+            y = 0;
+            w = WidthOfScreen(ScreenOfDisplay(x11stuff->dpy, i));
+            h = HeightOfScreen(ScreenOfDisplay(x11stuff->dpy, i));
+        }
+
+        FcitxRect rect;
+        rect.x1 = x;
+        rect.y1 = y;
+        rect.x2 = x + w - 1;
+        rect.y2 = y + h - 1;
+
+        x11stuff->rects[j] = rect;
+
+        if (x11stuff->bUseXinerama && j > 0 && RectIntersects(x11stuff->rects[j - 1], x11stuff->rects[j])) {
+            // merge a "cloned" screen with the previous, hiding all crtcs
+            // that are currently showing a sub-rect of the previous screen
+            if ((RectWidth(x11stuff->rects[j])* RectHeight(x11stuff->rects[j])) >
+                    (RectWidth(x11stuff->rects[j - 1])*RectHeight(x11stuff->rects[j - 1])))
+                x11stuff->rects[j - 1] = x11stuff->rects[j];
+            j--;
+        }
+    }
+
+    x11stuff->screenCount = j;
+
+#ifdef HAVE_XINERAMA
+    if (x11stuff->bUseXinerama && x11stuff->screenCount == 1)
+        x11stuff->bUseXinerama = false;
+
+    if (xinerama_screeninfo)
+        XFree(xinerama_screeninfo);
+#endif // HAVE_XINERAMA
+}
+
+inline
+boolean RectIntersects(FcitxRect rt1, FcitxRect rt2)
+{
+    int l1 = rt1.x1;
+    int r1 = rt1.x1;
+    if (rt1.x2 - rt1.x1 + 1 < 0)
+        l1 = rt1.x2;
+    else
+        r1 = rt1.x2;
+
+    int l2 = rt2.x1;
+    int r2 = rt2.x1;
+    if (rt2.x2 - rt2.x1 + 1 < 0)
+        l2 = rt2.x2;
+    else
+        r2 = rt2.x2;
+
+    if (l1 > r2 || l2 > r1)
+        return false;
+
+    int t1 = rt1.y1;
+    int b1 = rt1.y1;
+    if (rt1.y2 - rt1.y1 + 1 < 0)
+        t1 = rt1.y2;
+    else
+        b1 = rt1.y2;
+
+    int t2 = rt2.y1;
+    int b2 = rt2.y1;
+    if (rt2.y2 - rt2.y1 + 1 < 0)
+        t2 = rt2.y2;
+    else
+        b2 = rt2.y2;
+
+    if (t1 > b2 || t2 > b1)
+        return false;
+
+    return true;
+}
+
+inline
+int RectWidth(FcitxRect r)
+{
+    return r.x2 - r.x1 + 1;
+}
+
+inline
+int RectHeight(FcitxRect r)
+{
+    return r.y2 - r.y1 + 1;
+}
+
+int PointToRect(int x, int y, FcitxRect r)
+{
+    int dx = 0;
+    int dy = 0;
+    if (x < r.x1)
+        dx = r.x1 - x;
+    else if (x > r.x2)
+        dx = x - r.x2;
+    if (y < r.y1)
+        dy = r.y1 - y;
+    else if (y > r.y2)
+        dy = y - r.y2;
+    return dx + dy;
+}
+
+void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11stuff = (FcitxX11*)arg;
+    int x = *(int*) args.args[0];
+    int y = *(int*) args.args[1];
+    FcitxRect* rect = (FcitxRect*) args.args[2];
+
+    int closestScreen = -1;
+    int shortestDistance = INT_MAX;
+    int i;
+    for (i = 0; i < x11stuff->screenCount; ++i) {
+        int thisDistance = PointToRect(x, y, x11stuff->rects[i]);
+        if (thisDistance < shortestDistance) {
+            shortestDistance = thisDistance;
+            closestScreen = i;
+        }
+    }
+
+    if (closestScreen < 0 || closestScreen >= x11stuff->screenCount)
+        closestScreen = x11stuff->defaultScreen;
+
+    *rect = x11stuff->rects[closestScreen];
+
+    return NULL;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -83,6 +83,7 @@ typedef struct _FcitxClassicUI {
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
+FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y);
 void
 ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
                              XSetWindowAttributes * attrib,

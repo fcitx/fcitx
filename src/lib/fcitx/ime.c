@@ -244,12 +244,11 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
         return ;
     UT_array* imes = &instance->availimes ;
     FcitxIM newime;
-    
-    if (GetIMFromIMList(imes, uniqueName))
-    {
+
+    if (GetIMFromIMList(imes, uniqueName)) {
         FcitxLog(ERROR, "%s already exists", uniqueName);
     }
-    
+
     memset(&newime, 0, sizeof(FcitxIM));
     strncpy(newime.uniqueName, uniqueName, MAX_IM_NAME);
     strncpy(newime.strName, name, MAX_IM_NAME);
@@ -981,7 +980,7 @@ void UpdateIMMenuShell(FcitxUIMenu *menu)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
     ClearMenuShell(menu);
-    
+
     FcitxIM* pim;
     UT_array* imes = &instance->imes;
     utarray_init(&instance->imMenu.shell, &menuICD);

@@ -199,31 +199,32 @@ void DrawInputWindow(InputWindow* inputWindow)
 
 void MoveInputWindowInternal(InputWindow* inputWindow)
 {
-    int dwidth, dheight;
     int x = 0, y = 0;
-    GetScreenSize(inputWindow->owner, &dwidth, &dheight);
 
     FcitxInputContext* ic = GetCurrentIC(inputWindow->owner->owner);
     GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
+    FcitxRect rect = GetScreenGeometry(inputWindow->owner, x, y);
+
+    FcitxLog(INFO, "%d %d %d %d", rect.x1 , rect.y1, rect.x2, rect.y2);
 
     int iTempInputWindowX, iTempInputWindowY;
 
-    if (x < 0)
-        iTempInputWindowX = 0;
+    if (x < rect.x1)
+        iTempInputWindowX = rect.x1;
     else
         iTempInputWindowX = x + inputWindow->iOffsetX;
 
-    if (y < 0)
-        iTempInputWindowY = 0;
+    if (y < rect.y1)
+        iTempInputWindowY = rect.y1;
     else
         iTempInputWindowY = y + inputWindow->iOffsetY;
 
-    if ((iTempInputWindowX + inputWindow->iInputWindowWidth) > dwidth)
-        iTempInputWindowX = dwidth - inputWindow->iInputWindowWidth;
+    if ((iTempInputWindowX + inputWindow->iInputWindowWidth) > rect.x2)
+        iTempInputWindowX =  rect.x2 - inputWindow->iInputWindowWidth;
 
-    if ((iTempInputWindowY + inputWindow->iInputWindowHeight) > dheight) {
-        if (iTempInputWindowY > dheight)
-            iTempInputWindowY = dheight - inputWindow->iInputWindowHeight - 40;
+    if ((iTempInputWindowY + inputWindow->iInputWindowHeight) >  rect.y2) {
+        if (iTempInputWindowY >  rect.y2)
+            iTempInputWindowY =  rect.y2 - inputWindow->iInputWindowHeight - 40;
         else
             iTempInputWindowY = iTempInputWindowY - inputWindow->iInputWindowHeight - 40;
     }

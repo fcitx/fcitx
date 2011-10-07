@@ -288,6 +288,18 @@ void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
     InvokeFunction(classicui->owner, FCITX_X11, GETSCREENSIZE, arg);
 }
 
+FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y)
+{
+    FcitxModuleFunctionArg arg;
+    FcitxRect result = { 0, 0 , 0 , 0 };
+    arg.args[0] = &x;
+    arg.args[1] = &y;
+    arg.args[2] = &result;
+    InvokeFunction(classicui->owner, FCITX_X11, GETSCREENGEOMETRY, arg);
+
+    return result;
+}
+
 CONFIG_DESC_DEFINE(GetClassicUIDesc, "fcitx-classic-ui.desc")
 
 boolean LoadClassicUIConfig(FcitxClassicUI* classicui)
