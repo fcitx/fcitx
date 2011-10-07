@@ -247,6 +247,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
 
     if (GetIMFromIMList(imes, uniqueName)) {
         FcitxLog(ERROR, "%s already exists", uniqueName);
+        return ;
     }
 
     memset(&newime, 0, sizeof(FcitxIM));
@@ -413,11 +414,13 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
+#if 0
     /* Added by hubert_star AT forum.ubuntu.com.cn */
     if (event == FCITX_RELEASE_KEY
             && IsHotKeySimple(sym, state)
             && retVal == IRV_TO_PROCESS)
         return IRV_DO_NOTHING;
+#endif
 
     if (retVal == IRV_TO_PROCESS) {
         /* process key event for switch key */
