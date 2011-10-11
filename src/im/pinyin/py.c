@@ -1027,9 +1027,10 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     SetMessageCount(msgClientPreedit, 0);
     if (pystate->iPYSelected) {
         AddMessageAtLast(msgPreedit, MSG_OTHER, "");
+        AddMessageAtLast(msgClientPreedit, MSG_OTHER, "");
         for (i = 0; i < pystate->iPYSelected; i++) {
             MessageConcat(msgPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
-            MessageConcat(msgClientPreedit, GetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
+            MessageConcat(msgClientPreedit, GetMessageCount(msgClientPreedit) - 1, pystate->pySelected[i].strHZ);
         }
     }
 
@@ -1040,6 +1041,11 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     }
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
+        for (i = 0; i < pystate->findMap.iHZCount; i++) {
+            AddMessageAtLast(msgClientPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
+            if (i < pystate->findMap.iHZCount - 1)
+                MessageConcat(msgClientPreedit, GetMessageCount(msgClientPreedit) - 1, " ");
+        }
         CleanInputWindowDown(pystate->owner);
         return IRV_DISPLAY_MESSAGE;
     }
