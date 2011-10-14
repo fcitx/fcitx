@@ -32,8 +32,9 @@ Description=Library
 
 [Addon/Type]
 Type=Enum
-EnumCount=1
+EnumCount=2
 Enum0=SharedLibrary
+Enum1=DBus
 Description=Type
 
 [Addon/Dependency]
