@@ -507,15 +507,15 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
     SetMessageCount(msgDown, 0);
 
     for (i = 0; i < GetMessageCount(input->msgAuxUp) ; i ++) {
-        AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), GetMessageString(input->msgAuxUp, i));
+        AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), "%s", GetMessageString(input->msgAuxUp, i));
         extraLength += strlen(GetMessageString(input->msgAuxUp, i));
     }
 
     for (i = 0; i < GetMessageCount(input->msgPreedit) ; i ++)
-        AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), GetMessageString(input->msgPreedit, i));
+        AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), "%s", GetMessageString(input->msgPreedit, i));
 
     for (i = 0; i < GetMessageCount(input->msgAuxDown) ; i ++)
-        AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), GetMessageString(input->msgAuxDown, i));
+        AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), "%s", GetMessageString(input->msgAuxDown, i));
 
     CandidateWord* candWord = NULL;
 
@@ -528,17 +528,17 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
-        AddMessageAtLast(msgDown, MSG_INDEX, strTemp);
+        AddMessageAtLast(msgDown, MSG_INDEX, "%s", strTemp);
 
         MSG_TYPE type = MSG_OTHER;
 
         if (i == 0 && CandidateWordGetCurrentPage(input->candList) == 0)
             type = MSG_FIRSTCAND;
 
-        AddMessageAtLast(msgDown, type, candWord->strWord);
+        AddMessageAtLast(msgDown, type, "%s", candWord->strWord);
 
         if (candWord->strExtra && strlen(candWord->strExtra) != 0)
-            AddMessageAtLast(msgDown, MSG_CODE, candWord->strExtra);
+            AddMessageAtLast(msgDown, MSG_CODE, "%s", candWord->strExtra);
 
         AddMessageAtLast(msgDown, MSG_OTHER, " ");
     }
