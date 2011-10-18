@@ -205,8 +205,6 @@ void MoveInputWindowInternal(InputWindow* inputWindow)
     GetWindowPosition(inputWindow->owner->owner, ic, &x, &y);
     FcitxRect rect = GetScreenGeometry(inputWindow->owner, x, y);
 
-    FcitxLog(INFO, "%d %d %d %d", rect.x1 , rect.y1, rect.x2, rect.y2);
-
     int iTempInputWindowX, iTempInputWindowY;
 
     if (x < rect.x1)
