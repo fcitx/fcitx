@@ -9,5 +9,5 @@ set(FCITX_DBUSIM_SOURCES
 
 fcitx_add_addon(fcitx-inputbus ${FCITX_DBUSIM_SOURCES})
 target_link_libraries( fcitx-inputbus ${DBUS_LIBRARIES})
-fcitx_add_addon_header(dbus inputdbus.h)
+fcitx_add_addon_header(inputbus inputbus.h)
 fcitx_add_addon_conf_file(fcitx-inputbus.conf)

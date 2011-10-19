@@ -187,6 +187,41 @@ void UnloadIM(FcitxAddon* pim)
         im->Destroy(pim->addonInstance);
 }
 
+void FcitxRegisterEmptyEntry(FcitxInstance *instance,
+                                 const char* name,
+                                 const char* uniqueName,
+                                 const char* iconName,
+                                 int priority,
+                                 const char *langCode)
+{
+    UT_array* imes = &instance->availimes ;
+    FcitxIM* entry = GetIMFromIMList(imes, uniqueName);
+    if (entry) {
+        FcitxLog(ERROR, "%s already exists", uniqueName);
+        return;
+    }
+    else
+    {
+        FcitxIM newime;
+        memset(&newime, 0, sizeof(FcitxIM));
+        
+        utarray_push_back(imes, &newime);
+        
+        entry = (FcitxIM*) utarray_back(imes);
+    }
+    
+    if (entry == NULL)
+        return;
+
+    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
+    strncpy(entry->strName, name, MAX_IM_NAME);
+    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->iPriority = priority;
+    strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
+    entry->langCode[LANGCODE_LENGTH] = 0;
+    entry->initialized = false;
+}
+
 FCITX_EXPORT_API
 void FcitxRegisterIM(FcitxInstance *instance,
                      void *addonInstance,
@@ -243,31 +278,45 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
     if (priority <= 0)
         return ;
     UT_array* imes = &instance->availimes ;
-    FcitxIM newime;
+    FcitxIM* entry;
 
-    if (GetIMFromIMList(imes, uniqueName)) {
-        FcitxLog(ERROR, "%s already exists", uniqueName);
-        return ;
+    entry = GetIMFromIMList(imes, uniqueName);
+    if (entry) {
+        if (entry->initialized)
+        {
+            FcitxLog(ERROR, "%s already exists", uniqueName);
+            return ;
+        }
     }
+    else
+    {
+        FcitxIM newime;
+        memset(&newime, 0, sizeof(FcitxIM));
+        
+        utarray_push_back(imes, &newime);
+        
+        entry = (FcitxIM*) utarray_back(imes);
+    }
+    
+    if (entry == NULL)
+        return;
 
-    memset(&newime, 0, sizeof(FcitxIM));
-    strncpy(newime.uniqueName, uniqueName, MAX_IM_NAME);
-    strncpy(newime.strName, name, MAX_IM_NAME);
-    strncpy(newime.strIconName, iconName, MAX_IM_NAME);
-    newime.Init = Init;
-    newime.ResetIM = ResetIM;
-    newime.DoInput = DoInput;
-    newime.GetCandWords = GetCandWords;
-    newime.PhraseTips = PhraseTips;
-    newime.Save = Save;
-    newime.ReloadConfig = ReloadConfig;
-    newime.klass = addonInstance;
-    newime.iPriority = priority;
-    newime.priv = priv;
-    strncpy(newime.langCode, langCode, LANGCODE_LENGTH);
-    newime.langCode[LANGCODE_LENGTH] = 0;
-
-    utarray_push_back(imes, &newime);
+    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
+    strncpy(entry->strName, name, MAX_IM_NAME);
+    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->Init = Init;
+    entry->ResetIM = ResetIM;
+    entry->DoInput = DoInput;
+    entry->GetCandWords = GetCandWords;
+    entry->PhraseTips = PhraseTips;
+    entry->Save = Save;
+    entry->ReloadConfig = ReloadConfig;
+    entry->klass = addonInstance;
+    entry->iPriority = priority;
+    entry->priv = priv;
+    strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
+    entry->langCode[LANGCODE_LENGTH] = 0;
+    entry->initialized = true;
 }
 
 boolean LoadAllIM(FcitxInstance* instance)
@@ -313,6 +362,11 @@ boolean LoadAllIM(FcitxInstance* instance)
                 addon->imclass = imclass;
                 utarray_push_back(ims, &addon);
             }
+            break;
+            case AT_DBUS: {
+                
+            }
+            break;
             default:
                 break;
             }

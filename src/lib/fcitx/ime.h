@@ -177,8 +177,13 @@ extern "C" {
          * @brief uniqueName
          **/
         char uniqueName[MAX_IM_NAME + 1];
+        
+        /**
+         * @brief input method initialized or not
+         */
+        boolean initialized;
 
-        int padding[5];
+        int padding[4];
     } FcitxIM;
 
     typedef enum _FcitxKeyEventType {

@@ -52,5 +52,19 @@ Type=String
 DefaultValue=
 Description=Sub Configuration for Module
 
+[Addon/IMRegisterMethod]
+Type=Enum
+DefaultValue=Self
+Description=Register IM
+EnumCount=3
+Enum0=Self
+Enum1=Exec
+Enum2=ConfigFile
+
+[Addon/IMRegisterArgument]
+Type=String
+DefaultValue=
+Description=Argument for InputMethod Register
+
 [DescriptionFile]
 LocaleDomain=fcitx

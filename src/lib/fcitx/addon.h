@@ -61,8 +61,20 @@ extern "C" {
      * @brief Supported Addon Type, Currently only sharedlibrary
      **/
     typedef enum _AddonType {
-        AT_SHAREDLIBRARY = 0
+        AT_SHAREDLIBRARY = 0,
+        
+        AT_DBUS
     } AddonType;
+    
+    /**
+     * @brief How addon get input method list
+     **/
+    typedef enum _IMRegisterMethod
+    {
+        IMRM_SELF,
+        IMRM_EXEC,
+        IMRM_CONFIGFILE
+    } IMRegisterMethod;
 
     /**
      * @brief Addon Instance in Fcitx
@@ -87,6 +99,9 @@ extern "C" {
         };
         void *addonInstance;
         UT_array functionList;
+        
+        IMRegisterMethod registerMethod;
+        char* registerArgument;
     } FcitxAddon;
 
     /**
