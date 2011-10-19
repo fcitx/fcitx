@@ -210,8 +210,8 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
     FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
     CleanInputWindowUp(qpstate->owner);
-    AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Quick Phrase: "));
-    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, FcitxInputStateGetRawInputBuffer(input));
+    AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));
+    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
 }
 
 boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
@@ -240,7 +240,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                     *retval = QuickPhraseGetCandWords(qpstate);
                     if (*retval == IRV_DISPLAY_MESSAGE) {
                         SetMessageCount(FcitxInputStateGetAuxDown(input), 0);
-                        AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
+                        AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", _("Press Enter to input text"));
                     }
                 }
             } else
@@ -291,9 +291,9 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
             && IsHotKey(sym, state, FCITX_SEMICOLON)) {
         CleanInputWindow(qpstate->owner);
         FcitxInputStateSetShowCursor(input, true);
-        AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Quick Phrase: "));
+        AddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));
         FcitxInputStateSetCursorPos(input, 0);
-        AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Spcae for ； Enter for;"));
+        AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", _("Spcae for ； Enter for;"));
 
         qpstate->enabled = true;
         *retval = IRV_DISPLAY_MESSAGE;
