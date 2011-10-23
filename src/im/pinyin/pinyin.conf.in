@@ -1,0 +1,7 @@
+[InputMethod]
+UniqueName=pinyin
+_Name=Pinyin
+IconName=pinyin
+Priority=5
+LangCode=zh_CN
+Parent=fcitx-pinyin

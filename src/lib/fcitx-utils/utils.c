@@ -150,6 +150,18 @@ void FreeStringList(UT_array *list)
 }
 
 FCITX_EXPORT_API
+void FreeStringHashSet(StringHashSet* sset)
+{
+    StringHashSet *curStr;
+    while (sset) {
+        curStr = sset;
+        HASH_DEL(sset, curStr);
+        free(curStr->name);
+        free(curStr);
+    }
+}
+
+FCITX_EXPORT_API
 void *fcitx_malloc0(size_t bytes)
 {
     void *p = malloc(bytes);
@@ -211,10 +223,11 @@ FCITX_EXPORT_API
 char* fcitx_get_process_name()
 {
 #if defined(__linux__)
-    char buf[PATH_MAX + 1];
+    const size_t bufsize = 4096;
+    char buf[bufsize];
     char *result = NULL;
     ssize_t len;
-    if ((len = readlink("/proc/self/exe", buf, PATH_MAX)) != -1) {
+    if ((len = readlink("/proc/self/exe", buf, bufsize)) != -1) {
         buf[len] = '\0';
         result = basename(buf);
     } else {

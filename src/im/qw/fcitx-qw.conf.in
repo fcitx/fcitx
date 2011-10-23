@@ -6,3 +6,4 @@ Category=InputMethod
 Enabled=False
 Library=fcitx-qw.so
 Type=SharedLibrary
+IMRegisterMethod=ConfigFile

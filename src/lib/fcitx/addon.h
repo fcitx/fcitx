@@ -102,6 +102,8 @@ extern "C" {
         
         IMRegisterMethod registerMethod;
         char* registerArgument;
+        
+        int padding[10];
     } FcitxAddon;
 
     /**

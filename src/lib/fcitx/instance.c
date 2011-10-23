@@ -122,6 +122,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         goto error_exit;
     if (GetAddonConfigDesc() == NULL)
         goto error_exit;
+    if (GetIMConfigDesc() == NULL)
+        goto error_exit;
 
     LoadAddonInfo(&instance->addons);
     AddonResolveDependency(instance);
@@ -152,9 +154,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         SaveConfig(instance->config);
 
         const char *imname = "fcitx";
-        char strTemp[PATH_MAX];
-        snprintf(strTemp, PATH_MAX, "@im=%s", imname);
-        strTemp[PATH_MAX - 1] = '\0';
+        char *strTemp;
+        asprintf(&strTemp, "@im=%s", imname);
 
         if ((getenv("XMODIFIERS") != NULL && CHECK_ENV("XMODIFIERS", strTemp, true)) ||
                 (CHECK_ENV("GTK_IM_MODULE", "xim", false) && CHECK_ENV("GTK_IM_MODULE", "fcitx", false))
@@ -175,6 +176,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
             DisplayMessage(instance, _("Setting Hint"), msg, 12);
         }
+        
+        free(strTemp);
     }
     /* make in order to use block X, query is not good here */
     pthread_create(&instance->pid, NULL, RunInstance, instance);

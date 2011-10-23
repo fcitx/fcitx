@@ -425,7 +425,6 @@ boolean X11GetCompositeManager(FcitxX11* x11stuff)
 
 void X11InitScreen(FcitxX11* x11stuff)
 {
-    FcitxLog(INFO, "Resolution changed");
     // get the screen count
     int newScreenCount = ScreenCount(x11stuff->dpy);
 #ifdef HAVE_XINERAMA

@@ -17,3 +17,7 @@ Description=Priority
 [InputMethod/LangCode]
 Type=String
 Description=LangCode
+
+[InputMethod/Parent]
+Type=String
+Description=Parent

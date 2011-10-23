@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 
 project(fcitx)
 
-set(version 4.1.2)
+set(version 4.1.3)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -115,6 +115,7 @@ set(addondir ${libdir}/${package} )
 set(pkgdatadir ${prefix}/share/${package})
 set(configdescdir ${pkgdatadir}/configdesc)
 set(addonconfigdir ${pkgdatadir}/addon)
+set(imconfigdir ${pkgdatadir}/inputmethod)
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
 
@@ -130,6 +131,7 @@ endif("${isSystemDir}" STREQUAL "-1")
 set(FCITX4_ADDON_INSTALL_DIR ${addondir})
 set(FCITX4_CONFIGDESC_INSTALL_DIR ${configdescdir})
 set(FCITX4_ADDON_CONFIG_INSTALL_DIR ${addonconfigdir})
+set(FCITX4_INPUTMETHOD_CONFIG_INSTALL_DIR ${imconfigdir})
 set(FCITX4_PACKAGE_NAME ${package})
 
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-sign-compare -Wno-unused-parameter -fvisibility=hidden ${CMAKE_C_FLAGS}")

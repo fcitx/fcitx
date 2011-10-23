@@ -8,3 +8,4 @@ Library=fcitx-table.so
 Type=SharedLibrary
 Dependency=fcitx-pinyin,fcitx-punc
 SubConfig=Table:configfile:table/*.conf:table.desc,fcitx:domain
+IMRegisterMethod=Self

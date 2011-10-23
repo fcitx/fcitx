@@ -8,6 +8,7 @@ set(FCITX_DESC_FILES
     addon.desc
     config.desc
     profile.desc
+    inputmethod.desc
 )
 
 set(FCITX_DATA_FILES

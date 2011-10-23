@@ -63,6 +63,18 @@ struct _FcitxInputState {
     int padding[63];
 };
 
+struct _FcitxIMEntry {
+    GenericConfig config;
+    char* uniqueName;
+    char* name;
+    char* iconName;
+    int priority;
+    char* langCode;
+    char* parent;
+};
+
+typedef struct _FcitxIMEntry FcitxIMEntry;
+
 /**
  * @brief init fcitx im array
  *
@@ -171,6 +183,12 @@ int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
 
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
+/**
+ * @brief Load inputmethod.desc file
+ *
+ * @return ConfigFileDesc*
+ **/
+ConfigFileDesc* GetIMConfigDesc();
 
 #endif
 

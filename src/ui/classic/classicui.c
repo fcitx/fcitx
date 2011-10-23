@@ -226,12 +226,15 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
     status->priv = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
-    char activename[PATH_MAX], inactivename[PATH_MAX];
-    sprintf(activename, "%s_active.png", status->name);
-    sprintf(inactivename, "%s_inactive.png", status->name);
+    char* activename, *inactivename;
+    asprintf(&activename, "%s_active.png", status->name);
+    asprintf(&inactivename, "%s_inactive.png", status->name);
 
     LoadImage(sc, activename, false);
     LoadImage(sc, inactivename, false);
+    
+    free(activename);
+    free(inactivename);
 }
 
 static void ClassicUIOnInputFocus(void *arg)

@@ -31,8 +31,8 @@ link_directories(${DL_LIBRARY_DIRS} ${PTHREAD_LIBRARY_DIRS})
 
 add_library(fcitx-core SHARED ${LIBFCITX_SOURCES})
 set_target_properties(fcitx-core
-                      PROPERTIES VERSION 0.2.0
-                      SOVERSION 0.2
+                      PROPERTIES VERSION 0.3.0
+                      SOVERSION 0.3
                       COMPILE_FLAGS "-fvisibility=hidden"
                       LINK_FLAGS "-Wl,--no-undefined"
 )

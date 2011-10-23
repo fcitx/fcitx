@@ -203,11 +203,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                         imicon = LoadImage(sc, sc->skinMainBar.eng, false);
                     else {
                         FcitxIM* im = GetCurrentIM(instance);
-                        char path[PATH_MAX];
-                        snprintf(path, PATH_MAX, "%s.png", im->strIconName);
+                        char* path;
+                        asprintf(&path, "%s.png", im->strIconName);
                         imicon = LoadImage(sc, path, false);
                         if (imicon == NULL)
                             imicon = LoadImage(sc, sc->skinMainBar.active, false);
+                        free(path);
                     }
                     DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
                     UpdateStatusGeometry(&mainWindow->imiconstat, imicon, sp->x, sp->y);
@@ -219,12 +220,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                             continue;
 
                         boolean active = status->getCurrentStatus(status->arg);
-                        char path[PATH_MAX];
+                        char* path;
                         if (active)
-                            snprintf(path, PATH_MAX, "%s_active.png", status->name);
+                            asprintf(&path, "%s_active.png", status->name);
                         else
-                            snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
+                            asprintf(&path, "%s_inactive.png", status->name);
                         SkinImage* statusicon = LoadImage(sc, path, false);
+                        free(path);
                         if (statusicon == NULL)
                             continue;
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
@@ -251,11 +253,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                 imicon = LoadImage(sc, sc->skinMainBar.eng, false);
             else {
                 FcitxIM* im = GetCurrentIM(instance);
-                char path[PATH_MAX];
-                snprintf(path, PATH_MAX, "%s.png", im->strIconName);
+                char *path;
+                asprintf(&path, "%s.png", im->strIconName);
                 imicon = LoadImage(sc, path, false);
                 if (imicon == NULL)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
+                free(path);
             }
             currentX += cairo_image_surface_get_width(imicon->image);
             imageheight = cairo_image_surface_get_height(imicon->image);
@@ -269,12 +272,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
                 boolean active = status->getCurrentStatus(status->arg);
-                char path[PATH_MAX];
+                char *path;
                 if (active)
-                    snprintf(path, PATH_MAX, "%s_active.png", status->name);
+                    asprintf(&path, "%s_active.png", status->name);
                 else
-                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
+                    asprintf(&path, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 currentX += cairo_image_surface_get_width(statusicon->image);
@@ -320,12 +324,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
                 boolean active = status->getCurrentStatus(status->arg);
-                char path[PATH_MAX];
+                char *path;
                 if (active)
-                    snprintf(path, PATH_MAX, "%s_active.png", status->name);
+                    asprintf(&path, "%s_active.png", status->name);
                 else
-                    snprintf(path, PATH_MAX, "%s_inactive.png", status->name);
+                    asprintf(&path, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);

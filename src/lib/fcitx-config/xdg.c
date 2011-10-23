@@ -33,21 +33,22 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <libgen.h>
+#include <dirent.h>
 
 #include "fcitx/fcitx.h"
 #include "xdg.h"
+#include <fcitx-utils/utils.h>
 
 static void make_path(const char *path);
 
 void
 make_path(const char *path)
 {
-    char opath[PATH_MAX];
+    char *opath;
     char *p;
     size_t len;
 
-    strncpy(opath, path, sizeof(opath));
-    opath[PATH_MAX - 1] = '\0';
+    opath = strdup(path);
     len = strlen(opath);
 
     while (opath[len - 1] == '/') {
@@ -67,6 +68,8 @@ make_path(const char *path)
 
     if (access(opath, F_OK))        /* if path is not terminated with / */
         mkdir(opath, S_IRWXU);
+    
+    free(opath);
 }
 
 
@@ -74,9 +77,10 @@ FCITX_EXPORT_API
 FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char prefixpath[PATH_MAX];
-    snprintf(prefixpath, PATH_MAX, "%s/%s", PACKAGE, prefix);
+    char *prefixpath;
+    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
     char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , DATADIR, prefixpath);
+    free(prefixpath);
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 
@@ -104,9 +108,10 @@ FCITX_EXPORT_API
 FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char prefixpath[PATH_MAX];
-    snprintf(prefixpath, PATH_MAX, "%s/%s", PACKAGE, prefix);
+    char *prefixpath;
+    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
     char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , NULL, NULL);
+    free(prefixpath);
 
     FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
 
@@ -118,7 +123,7 @@ FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const c
 FCITX_EXPORT_API
 FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
-    char buf[PATH_MAX];
+    char* buf = NULL;
     size_t i;
     FILE *fp = NULL;
 
@@ -136,31 +141,27 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
     if (len <= 0)
         return NULL;
 
-    if (!mode) {
-        snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
-        buf[sizeof(buf) - 1] = '\0';
-
-        if (retFile)
-            *retFile = strdup(buf);
+    if (!mode && retFile) {
+        asprintf(retFile, "%s/%s", path[0], fileName);
 
         return NULL;
     }
 
     for (i = 0; i < len; i++) {
-        snprintf(buf, sizeof(buf), "%s/%s", path[i], fileName);
-        buf[sizeof(buf) - 1] = '\0';
+        asprintf(&buf, "%s/%s", path[i], fileName);
 
         fp = fopen(buf, mode);
 
         if (fp)
             break;
-
+        
+        free(buf);
+        buf = NULL;
     }
 
     if (!fp) {
         if (strchr(mode, 'w') || strchr(mode, 'a')) {
-            snprintf(buf, sizeof(buf), "%s/%s", path[0], fileName);
-            buf[sizeof(buf) - 1] = '\0';
+            asprintf(&buf, "%s/%s", path[0], fileName);
 
             char *dirc = strdup(buf);
             char *dir = dirname(dirc);
@@ -171,7 +172,9 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
     }
 
     if (retFile)
-        *retFile = strdup(buf);
+        *retFile = buf;
+    else if(buf)
+        free(buf);
 
     return fp;
 }
@@ -244,6 +247,68 @@ char **GetXDGPath(
     *len = dirsCount;
 
     return dirsArray;
+}
+
+FCITX_EXPORT_API
+StringHashSet* GetXDGFiles(
+    char* path,
+    char* suffix
+)
+{
+    char **xdgPath;
+    size_t len;
+    char *pathBuf;
+    size_t i = 0;
+    DIR *dir;
+    struct dirent *drt;
+    struct stat fileStat;
+
+    StringHashSet* sset = NULL;
+
+    xdgPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", path , DATADIR, path);
+
+    for (i = 0; i < len; i++) {
+        asprintf(&pathBuf, "%s", xdgPath[i]);
+
+        dir = opendir(pathBuf);
+        free(pathBuf);
+        if (dir == NULL)
+            continue;
+
+        /* collect all *.conf files */
+        while ((drt = readdir(dir)) != NULL) {
+            size_t nameLen = strlen(drt->d_name);
+            if (nameLen <= strlen(".conf"))
+                continue;
+
+            if (strcmp(drt->d_name + nameLen - strlen(suffix), suffix) != 0)
+                continue;
+            asprintf(&pathBuf, "%s/%s", xdgPath[i], drt->d_name);
+
+            int statresult = stat(pathBuf, &fileStat);
+            free(pathBuf);
+            if (statresult == -1)
+                continue;
+
+            if (fileStat.st_mode & S_IFREG) {
+                StringHashSet *string;
+                HASH_FIND_STR(sset, drt->d_name, string);
+                if (!string) {
+                    char *bStr = strdup(drt->d_name);
+                    string = malloc(sizeof(StringHashSet));
+                    memset(string, 0, sizeof(StringHashSet));
+                    string->name = bStr;
+                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
+                }
+            }
+        }
+
+        closedir(dir);
+    }
+
+    FreeXDGPath(xdgPath);
+    
+    return sset;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
