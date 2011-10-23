@@ -779,9 +779,18 @@ void SwitchIM(FcitxInstance* instance, int index)
     {
         char* name = strdup(newIM->uniqueName);
         LoadIM(instance, newIM->owner);
+        FcitxIM* im = GetIMFromIMList(&instance->availimes, name);
+        if (!im->initialized)
+        {
+            im->initialized = true;
+            int index = utarray_eltidx(&instance->availimes, im);
+            utarray_erase(&instance->availimes, index, 1);
+        }
+            
         UpdateIMList(instance);
         instance->iIMIndex = GetIMIndexByName(instance, name);
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        free(name);
     }
     
     if (newIM && newIM->Init)
