@@ -102,8 +102,9 @@ extern "C" {
         
         IMRegisterMethod registerMethod;
         char* registerArgument;
+        struct _FcitxInstance* owner;
         
-        int padding[10];
+        int padding[9];
     } FcitxAddon;
 
     /**

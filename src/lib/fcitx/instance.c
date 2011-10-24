@@ -126,6 +126,14 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         goto error_exit;
 
     LoadAddonInfo(&instance->addons);
+    
+    /* FIXME: a walkaround for not have instance in function InvokeModuleFunction */
+    FcitxAddon* addon;
+    for (addon = (FcitxAddon *) utarray_front(&instance->addons);
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(&instance->addons, addon)) {
+        addon->owner = instance;
+    }
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);

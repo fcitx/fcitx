@@ -183,6 +183,8 @@ int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
 
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
+void LoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
+
 /**
  * @brief Load inputmethod.desc file
  *

@@ -50,7 +50,6 @@
 #include "fcitx-internal.h"
 #include "addon-internal.h"
 
-static void LoadIM(FcitxInstance* instance, FcitxAddon* addon);
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
