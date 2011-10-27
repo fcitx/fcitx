@@ -5,4 +5,7 @@
 
 #define FCITX_INPUTBUS_PATH "/inputbus"
 
+#define FCITX_INPUTBUS_OBJECTPATH_PREFIX "/org/fcitx/Fcitx/InputBus/"
+
+
 #endif
