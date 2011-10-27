@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -50,7 +50,6 @@
 #include "fcitx-internal.h"
 #include "addon-internal.h"
 
-static void LoadIM(FcitxInstance* instance, FcitxAddon* addon);
 static void UnloadIM(FcitxAddon* pim);
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
@@ -779,9 +778,18 @@ void SwitchIM(FcitxInstance* instance, int index)
     {
         char* name = strdup(newIM->uniqueName);
         LoadIM(instance, newIM->owner);
+        FcitxIM* im = GetIMFromIMList(&instance->availimes, name);
+        if (!im->initialized)
+        {
+            im->initialized = true;
+            int index = utarray_eltidx(&instance->availimes, im);
+            utarray_erase(&instance->availimes, index, 1);
+        }
+            
         UpdateIMList(instance);
         instance->iIMIndex = GetIMIndexByName(instance, name);
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        free(name);
     }
     
     if (newIM && newIM->Init)

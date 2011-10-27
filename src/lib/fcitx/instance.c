@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <unistd.h>
@@ -126,6 +126,14 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         goto error_exit;
 
     LoadAddonInfo(&instance->addons);
+    
+    /* FIXME: a walkaround for not have instance in function InvokeModuleFunction */
+    FcitxAddon* addon;
+    for (addon = (FcitxAddon *) utarray_front(&instance->addons);
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(&instance->addons, addon)) {
+        addon->owner = instance;
+    }
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);

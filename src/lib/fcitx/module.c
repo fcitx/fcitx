@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <dlfcn.h>
@@ -30,6 +30,7 @@
 #include "instance.h"
 #include "instance-internal.h"
 #include "addon-internal.h"
+#include "ime-internal.h"
 
 static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
@@ -102,6 +103,25 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
         FcitxLog(ERROR, "addon is not valid");
         return NULL;
     }
+    
+    if (addon->category == AC_INPUTMETHOD)
+    {
+        boolean flag = false;
+        FcitxAddon** pimclass = NULL;
+        for (pimclass = (FcitxAddon**) utarray_front(&addon->owner->imeclasses);
+            pimclass != NULL;
+            pimclass = (FcitxAddon**) utarray_next(&addon->owner->imeclasses, pimclass)
+            ) {
+            if (*pimclass == addon)
+            {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag)
+            LoadIM(addon->owner, addon);
+    }
+    
     FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
     if (func == NULL) {
         FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
@@ -115,6 +135,7 @@ FCITX_EXPORT_API
 void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
 {
     FcitxAddon* module = GetAddonByName(&instance->addons, name);
+    
     if (module == NULL)
         return NULL;
     else
