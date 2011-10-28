@@ -29,23 +29,27 @@
     "	    <arg name=\"key_mask\" type=\"a(uuu)\" direction=\"in\" />" \
     "	</method>" \
     "	<method name=\"KeyProcessHint\">" \
-    "	    <arg name=\"hints\" type=\"uu\" direction=\"in\" />" \
+    "	    <arg name=\"hints\" type=\"u\" direction=\"in\" />" \
+    "       <arg name=\"serial\" type=\"u\" />" \
     "	</method>" \
     "	<method name=\"CommitString\">" \
     "	    <arg name=\"string\" type=\"s\" direction=\"in\"/>" \
     "	</method>" \
     "	<signal name=\"Input\">" \
-    "	    <arg name=\"key\" type=\"uu\" />" \
+    "	    <arg name=\"key\" type=\"u\" />" \
+    "       <arg name=\"state\" type=\"u\" />" \
+    "       <arg name=\"serial\" type=\"u\" />" \
+    "       <arg name=\"hintinfo\" type=\"u\" />" \
     "	</signal>" \
     "	<signal name=\"Reset\" />" \
     "	<signal name=\"Save\" />" \
-    "       <signal name=\"Init\" />" \
-    "    </interface>" \
-    "    <interface name=\"org.freedesktop.DBus.Introspectable\">" \
+    "   <signal name=\"Init\" />" \
+    "   </interface>" \
+    "   <interface name=\"org.freedesktop.DBus.Introspectable\">" \
     "       <method name=\"Introspect\">" \
     "           <arg name=\"data\" direction=\"out\" type=\"s\"/>" \
     "       </method>" \
-    "    </interface>" \
+    "   </interface>" \
     "</node>"
 
 #define FCITX_INPUTBUS_INTROSPECT_DATA "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"" \
