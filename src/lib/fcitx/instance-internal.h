@@ -25,6 +25,8 @@
 #ifndef _FCITX_INSTANCE_INTERNAL_H_
 #define _FCITX_INSTANCE_INTERNAL_H_
 
+#include <sys/stat.h>
+#include <pthread.h>
 #include <semaphore.h>
 
 #include "fcitx-utils/utarray.h"
