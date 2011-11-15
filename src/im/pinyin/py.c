@@ -709,12 +709,12 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
         } else if (IsHotKey(sym, state, FCITX_HOME)) {
             if (FcitxInputStateGetRawInputBufferSize(input) == 0)
-                return IRV_DONOT_PROCESS;
+                return IRV_TO_PROCESS;
             pystate->iPYInsertPoint = 0;
             retVal = IRV_DISPLAY_CANDWORDS;
         } else if (IsHotKey(sym, state, FCITX_END)) {
             if (FcitxInputStateGetRawInputBufferSize(input) == 0)
-                return IRV_DONOT_PROCESS;
+                return IRV_TO_PROCESS;
             pystate->iPYInsertPoint = strlen(pystate->strFindString);
             retVal = IRV_DISPLAY_CANDWORDS;
         } else if (IsHotKey(sym, state, FCITX_RIGHT)) {
@@ -932,17 +932,24 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         pystate->iYCDZ = val;
                         return IRV_DISPLAY_CANDWORDS;
                     }
-
-                    return IRV_TO_PROCESS;
                 }
-            } else
-                return IRV_TO_PROCESS;
+            }
         }
     }
 
     if (!FcitxInputStateGetIsInRemind(input)) {
         UpdateCodeInputPY(pystate);
         CalculateCursorPosition(pystate);
+    }
+
+    if (retVal == IRV_TO_PROCESS)
+    {
+        FcitxConfig* config = FcitxInstanceGetConfig(pystate->owner);
+        if (FcitxInputStateGetRawInputBufferSize(input) != 0
+            && IsHotkeyCursorMove(sym, state)
+            && !IsHotKey(sym, state, config->hkPrevPage)
+            && !IsHotKey(sym, state, config->hkNextPage))
+            retVal = IRV_DO_NOTHING;
     }
 
     return retVal;

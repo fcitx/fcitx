@@ -2522,6 +2522,15 @@ extern "C"
      * @return boolean
      **/
     boolean IsHotKeySimple(FcitxKeySym sym, int state);
+    
+    /**
+     * @brief is key will make cursor move, include left, right, home, end, and so on.
+     *
+     * @param sym keyval
+     * @param state state
+     * @return boolean
+     **/
+    boolean IsHotkeyCursorMove(FcitxKeySym sym, int state);
 
     /**
      * @brief convert key pad key to simple KEY_STATE

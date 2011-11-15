@@ -517,11 +517,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 }
             } else {
                 /* friendly to cursor move, don't left cursor move while input text */
-                if (FcitxInputStateGetRawInputBufferSize(input) != 0 &&
-                        (IsHotKey(sym, state, FCITX_LEFT) ||
-                         IsHotKey(sym, state, FCITX_RIGHT) ||
-                         IsHotKey(sym, state, FCITX_HOME) ||
-                         IsHotKey(sym, state, FCITX_END))) {
+                if (FcitxInputStateGetRawInputBufferSize(input) != 0
+                    && IsHotkeyCursorMove(sym, state)
+                    && !IsHotKey(sym, state, config->hkPrevPage)
+                    && !IsHotKey(sym, state, config->hkNextPage)) {
                     return IRV_DO_NOTHING;
                 } else
                     return IRV_TO_PROCESS;
