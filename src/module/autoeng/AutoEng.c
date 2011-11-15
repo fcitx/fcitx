@@ -273,7 +273,7 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
     if (autoEngState->buf[0] == '\0')
         return;
 
-    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, autoEngState->buf);
+    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", autoEngState->buf);
     strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
