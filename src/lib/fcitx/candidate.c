@@ -87,7 +87,12 @@ INPUT_RETURN_VALUE CandidateWordChooseByIndex(CandidateWordList* candList, int i
 {
     CandidateWord* candWord = CandidateWordGetByIndex(candList, index);
     if (candWord == NULL)
-        return IRV_TO_PROCESS;
+    {
+        if (CandidateWordGetListSize(candList) > 0)
+            return IRV_DO_NOTHING;
+        else
+            return IRV_TO_PROCESS;        
+    }
     else
         return candWord->callback(candWord->owner, candWord);
 }

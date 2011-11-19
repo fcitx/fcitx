@@ -1,24 +1,22 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
+# Translators:
 # Weng Xuetian <wengxt@gmail.com>, 2010, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: fcitx 20100424\n"
+"Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-02 18:14+0800\n"
-"PO-Revision-Date: 2011-10-02 18:15+0800\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
-"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
+"PO-Revision-Date: 2011-11-16 01:55+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: UTF-8\n"
-"X-Poedit-Language: Chinese\n"
-"X-Poedit-Country: CHINA\n"
-"X-Poedit-Basepath: ../\n"
-"Plural-Forms: \n"
-"X-Generator: Lokalize 1.2\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1129
 msgid " Ctrl+Delete To Delete"
@@ -52,7 +50,6 @@ msgstr "活动菜单项颜色"
 msgid "Active Menu Item Character Color"
 msgstr "活动菜单项颜色"
 
-# unknown
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:189
 msgid "Active Tray Icon"
 msgstr "活动输入法图标"
@@ -74,7 +71,6 @@ msgstr "Addon Config %s is %s"
 msgid "Adjust Order"
 msgstr "输入顺序"
 
-# unknown
 #: unknown
 msgid "AdjustFast"
 msgstr "快速"
@@ -216,12 +212,10 @@ msgstr "无法加载码表文件: %s"
 msgid "Category"
 msgstr "种类"
 
-# unknown
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Chinese Input Method"
 msgstr "中文输入法"
 
-# unknown
 #: ../..//data/fcitx-kimpanel.desktop.in.h:1
 msgid "Chinese Input Method (Use Kimpanel)"
 msgstr "中文输入法 (使用 Kimpanel)"
@@ -242,7 +236,6 @@ msgstr "选择要删除的词组，按Escape 取消"
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
 msgid "Classic"
 msgstr "经典界面"
@@ -255,7 +248,6 @@ msgstr "带皮肤支持的经典界面"
 msgid "ClassicUI"
 msgstr "经典界面"
 
-# unknown
 #: unknown
 msgid "Clean"
 msgstr "清除"
@@ -284,12 +276,10 @@ msgstr "码表"
 msgid "Color of Cursor"
 msgstr "光标颜色"
 
-# unknown
 #: /home/saber/Develop/fcitx/data/addon.desc:12
 msgid "Comment"
 msgstr "描述"
 
-# unknown
 #: unknown
 msgid "Commit"
 msgstr "提交输入"
@@ -316,7 +306,6 @@ msgstr "方便地输入英文或用户定义的码表"
 msgid "Convert Simplified Chinese To Traditional Chinese"
 msgstr "简体中文转换为繁体中文"
 
-# unknown
 #: unknown
 msgid "Copy"
 msgstr "复制"
@@ -615,7 +604,6 @@ msgstr "模糊z和zh"
 msgid "Give the tips of Phrase"
 msgstr "提示词库中词组"
 
-# unknown
 #: unknown
 msgid "Hide"
 msgstr "隐藏"
@@ -702,7 +690,8 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr ""
+"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:174
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -716,7 +705,6 @@ msgstr "非激活"
 msgid "Inactive Menu Item Character Color"
 msgstr "非活动菜单项颜色"
 
-# unknown
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:193
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
@@ -729,12 +717,10 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:965
 msgid "Input Method"
 msgstr "输入法"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:228
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:258
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:268
@@ -745,7 +731,6 @@ msgstr "输入法被禁用"
 msgid "Input Speed: "
 msgstr "输入速度: "
 
-# unknown
 #: unknown
 msgid "InputMethod"
 msgstr "输入法"
@@ -779,12 +764,10 @@ msgstr "Kimpanel"
 msgid "Kimpanel Support for Fcitx"
 msgstr "Fcitx 的 Kimpanel 支持"
 
-# unknown
 #: unknown
 msgid "L_CTRL"
 msgstr "左Ctrl"
 
-# unknown
 #: unknown
 msgid "L_SHIFT"
 msgstr "左Shift"
@@ -903,7 +886,6 @@ msgstr "迁移老文件路径到新文件路径"
 msgid "Missing type, take it as string"
 msgstr "类型缺失，作为字符串处理"
 
-# unknown
 #: unknown
 msgid "Module"
 msgstr "模块"
@@ -948,17 +930,14 @@ msgstr "下一页图标"
 msgid "No"
 msgstr "否"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:324
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:324
 msgid "No available frontend"
 msgstr "无可用前端"
 
-# unknown
 #: unknown
 msgid "Nothing"
 msgstr "无操作"
@@ -1011,7 +990,6 @@ msgstr "其他颜色"
 msgid "Output"
 msgstr "输出"
 
-# unknown
 #: unknown
 msgid "PerProgram"
 msgstr "按程序"
@@ -1020,6 +998,7 @@ msgstr "按程序"
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
+# unknown
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:112
 msgid "Pinyin"
@@ -1144,12 +1123,10 @@ msgstr "区位"
 msgid "Quwei Input Method for Fcitx"
 msgstr "Fcitx 的区位输入法"
 
-# unknown
 #: unknown
 msgid "R_CTRL"
 msgstr "右Ctrl"
 
-# unknown
 #: unknown
 msgid "R_SHIFT"
 msgstr "右Shift"
@@ -1286,7 +1263,6 @@ msgstr "Fcitx 简单的拼音支持"
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
-# unknown
 #: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:817
 msgid "Skin"
 msgstr "皮肤"
@@ -1378,7 +1354,6 @@ msgstr "码表提示颜色"
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:2
 msgid "Table Input Method for Fcitx"
 msgstr "Fcitx 的码表输入法"
@@ -1403,6 +1378,7 @@ msgstr "简繁转换"
 msgid "Traditional Chinese Translate Engine"
 msgstr "简繁转换引擎"
 
+# unknown
 msgid "TraditionalChinese"
 msgstr "繁体中文"
 
@@ -1581,728 +1557,3 @@ msgstr "pthread mutex init failed"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
-
-#~ msgid "%d:%s"
-#~ msgstr "%d:%s"
-
-#~ msgid "%s"
-#~ msgstr "%s"
-
-#~ msgid "Action after press SemiColon"
-#~ msgstr "分号键操作"
-
-#~ msgid "ActiveColor"
-#~ msgstr "活动项背景颜色"
-
-#~ msgid "ActiveMenuColor"
-#~ msgstr "活动菜单项颜色"
-
-#~ msgid "AddFreqWordKey"
-#~ msgstr "快捷键: 增加常用字"
-
-#~ msgid "AdjustOrder"
-#~ msgstr "候选词顺序调整"
-
-#~ msgid "Argument is not INT32!"
-#~ msgstr "Argument is not INT32!"
-
-#~ msgid "Argument is not STRING!"
-#~ msgstr "Argument is not STRING!"
-
-#~ msgid "Author"
-#~ msgstr "作者"
-
-#~ msgid "AutoCreatePhrase"
-#~ msgstr "自动组词"
-
-#~ msgid "AutoPhrase"
-#~ msgstr "自动组词"
-
-#~ msgid "AutoPhraseLength"
-#~ msgstr "自动组词长度"
-
-#~ msgid "AutoPhrasePhrase"
-#~ msgstr "词组参与自动造词"
-
-#~ msgid "AutoSend"
-#~ msgstr "自动上屏"
-
-#~ msgid "BackArrow"
-#~ msgstr "向后翻页"
-
-#~ msgid "BackImg"
-#~ msgstr "背景图片"
-
-#~ msgid "Backend"
-#~ msgstr "后端"
-
-#~ msgid "Backend: bad backend"
-#~ msgstr "后端: 有问题的后端"
-
-#~ msgid "Background Resize Rule on Horizontal Direction"
-#~ msgstr "横向变形规则"
-
-#~ msgid "Background Resize Rule on Vertical Direction"
-#~ msgstr "纵向变形规则"
-
-#~ msgid "BaseOrder"
-#~ msgstr "单字重码顺序调整"
-
-#~ msgid "CAL InputWindow"
-#~ msgstr "CAL InputWindow"
-
-#~ msgid "CandidateWordNumber"
-#~ msgstr "候选词个数"
-
-#~ msgid "Cannot create table file: %s"
-#~ msgstr "无法创建码表文件: %s"
-
-#~ msgid "CenterInputWindow"
-#~ msgstr "输入窗口居中"
-
-#~ msgid "Chinese Punc Icon"
-#~ msgstr "中文标点图标"
-
-#~ msgid "Chn"
-#~ msgstr "中文"
-
-#~ msgid "ChnPunc"
-#~ msgstr "中文标点"
-
-#~ msgid "ChnPuncSwitchKey"
-#~ msgstr "快捷键: 切换中英文标点"
-
-#~ msgid "Chs"
-#~ msgstr "简体图标"
-
-#~ msgid "Cht"
-#~ msgstr "繁体图标"
-
-#~ msgid "CodeColor"
-#~ msgstr "码表提升颜色"
-
-#~ msgid "CompactMainWindow"
-#~ msgstr "压缩主窗口"
-
-#~ msgid "Convert Punc to Chinese Punc"
-#~ msgstr "转换中文标点"
-
-#~ msgid "ConvertPunc"
-#~ msgstr "转换中文标点"
-
-#~ msgid "Corner"
-#~ msgstr "全角"
-
-#~ msgid "CursorColor"
-#~ msgstr "光标颜色"
-
-#~ msgid "DefaultShuangpinSchema"
-#~ msgstr "默认双拼方案"
-
-#~ msgid "DelayStart"
-#~ msgstr "延迟启动"
-
-#~ msgid "DeleteFreqWordKey"
-#~ msgstr "快捷键: 删除常用字"
-
-#~ msgid "DeleteUserPhraseKey"
-#~ msgstr "快捷键: 删除用户词组"
-
-#~ msgid "Desc"
-#~ msgstr "描述"
-
-#, fuzzy
-#~ msgid "DescriptionFile]"
-#~ msgstr "描述"
-
-#~ msgid "DoubleSwitchKey"
-#~ msgstr "双击中英文切换"
-
-#~ msgid "EnPunc"
-#~ msgstr "英文标点图标"
-
-#~ msgid "Enable Addons to Fcitx"
-#~ msgstr "在Fcitx启用附加组件"
-
-# unknown
-#, fuzzy
-#~ msgid "Enable Input Method By Default"
-#~ msgstr "Fcitx 的码表输入法"
-
-#~ msgid "EnableAddons"
-#~ msgstr "启用附加组件"
-
-#~ msgid "EndKey"
-#~ msgstr "中止键"
-
-#~ msgid "Eng"
-#~ msgstr "英文"
-
-#~ msgid "English Punc Icon"
-#~ msgstr "英文标点图标"
-
-#~ msgid "EnterAction"
-#~ msgstr "回车键行为"
-
-#~ msgid "ExactMatch"
-#~ msgstr "精确匹配"
-
-#~ msgid "Exit Fcitx"
-#~ msgstr "退出Fcitx"
-
-#~ msgid "Extra"
-#~ msgstr "额外输入法"
-
-#~ msgid "ExtraIM"
-#~ msgstr "额外输入法"
-
-#~ msgid "ExtraIM: bad im"
-#~ msgstr "额外输入法: 不正确的输入法"
-
-#~ msgid "ExtraIM: init fail"
-#~ msgstr "额外输入法: 初始化失败"
-
-#~ msgid "ExtraIM: open %s fail %s"
-#~ msgstr "额外输入法: 打开%s失败 %s"
-
-#~ msgid "FCITX can only run under X"
-#~ msgstr "Fcitx只能在X下运行"
-
-#~ msgid "False"
-#~ msgstr "否"
-
-#~ msgid "Fcitx Config ..."
-#~ msgstr "配置Fcitx..."
-
-#~ msgid "File"
-#~ msgstr "文件"
-
-#~ msgid "FirstCandColor"
-#~ msgstr "第一候选词颜色"
-
-# unknown
-#~ msgid "Fix"
-#~ msgstr "固定长度"
-
-#~ msgid "FollowCursorKey"
-#~ msgstr "快捷键: 切换光标跟随"
-
-#~ msgid "FontLocale"
-#~ msgstr "字体区域"
-
-#~ msgid "FontSize"
-#~ msgstr "字体大小"
-
-#~ msgid "FontZh"
-#~ msgstr "中文字体"
-
-#~ msgid "ForwardArrow"
-#~ msgstr "向前翻页"
-
-#~ msgid "Free Chinese Input Toy of X"
-#~ msgstr "Free Chinese Input Toy of X"
-
-#, fuzzy
-#~ msgid "Free Chinese Input Toy of X (Use Kimpanel)"
-#~ msgstr "Free Chinese Input Toy of X"
-
-#~ msgid "FreqOrder"
-#~ msgstr "常用词重码顺序调整"
-
-#~ msgid "FullCorner"
-#~ msgstr "全角图标"
-
-#~ msgid "FullWidthSwitchKey"
-#~ msgstr "快捷键: 切换全半角"
-
-#~ msgid "FuzzyAnAng"
-#~ msgstr "FuzzyAnAng"
-
-#~ msgid "FuzzyCCh"
-#~ msgstr "FuzzyCCh"
-
-#~ msgid "FuzzyEnEng"
-#~ msgstr "FuzzyEnEng"
-
-#~ msgid "FuzzyFH"
-#~ msgstr "FuzzyFH"
-
-#~ msgid "FuzzyIanIang"
-#~ msgstr "模糊ian和iang"
-
-#~ msgid "FuzzyInIng"
-#~ msgstr "FuzzyInIng"
-
-#~ msgid "FuzzyLN"
-#~ msgstr "FuzzyLN"
-
-#~ msgid "FuzzyOuU"
-#~ msgstr "FuzzyOuU"
-
-#~ msgid "FuzzySSH"
-#~ msgstr "FuzzySSH"
-
-#~ msgid "FuzzyUanUang"
-#~ msgstr "模糊uan和uang"
-
-#~ msgid "FuzzyZZH"
-#~ msgstr "FuzzyZZH"
-
-#~ msgid "Got Signal with value %d"
-#~ msgstr "Got Signal with value %d"
-
-#~ msgid "Half Width Character Icon"
-#~ msgstr "半角图标"
-
-#~ msgid "HalfCorner"
-#~ msgstr "半角图标"
-
-#~ msgid "HalfPuncAfterNumber"
-#~ msgstr "数字后跟半角符号"
-
-#~ msgid "Help"
-#~ msgstr "在线帮助"
-
-#~ msgid "HideMainWindowKey"
-#~ msgstr "快捷键: 隐藏主窗口"
-
-#~ msgid "Hotkey of Hiding Main Window"
-#~ msgstr "快捷键: 隐藏主窗口"
-
-#~ msgid "Hotkey of Looking up the Corresponding pinyin of Word."
-#~ msgstr "快捷键: 反查拼音"
-
-#~ msgid "Hotkey of Reseting Recording Mode"
-#~ msgstr "快捷键: 重置记录模式"
-
-#~ msgid "Hotkey of Switching Follow Cursor Mode"
-#~ msgstr "快捷键: 切换光标跟随"
-
-#~ msgid "Hotkey of Switching Recording Mode"
-#~ msgstr "快捷键: 切换记录模式"
-
-#~ msgid "Hotkey of Switching Traditional Chinese Input Mode On."
-#~ msgstr "快捷键: 切换简繁体中文输入"
-
-#~ msgid "IMIndex"
-#~ msgstr "当前输入法编号"
-
-#~ msgid "IconName"
-#~ msgstr "图标名称"
-
-#~ msgid "InactiveMenuColor"
-#~ msgstr "非活动菜单项颜色"
-
-#~ msgid "IndexColor"
-#~ msgstr "索引标记颜色"
-
-#~ msgid "Input English Character if you input upper case"
-#~ msgstr "大写时输入英文"
-
-#~ msgid "Input Window Position X"
-#~ msgstr "输入框X位置"
-
-#~ msgid "Input Window Position Y"
-#~ msgstr "输入框Y位置"
-
-#~ msgid "Input Window Shows at the position of cursor"
-#~ msgstr "光标跟随"
-
-#~ msgid "InputColor"
-#~ msgstr "输入颜色"
-
-#~ msgid "InputEngByCapitalChar"
-#~ msgstr "大写字母输入英文"
-
-#~ msgid "InputPos"
-#~ msgstr "上排文字位置"
-
-#~ msgid "InputWindowOffsetX"
-#~ msgstr "输入窗口X位置"
-
-#~ msgid "InputWindowOffsetY"
-#~ msgstr "输入窗口Y位置"
-
-#~ msgid "InputWordFromPhraseKey"
-#~ msgstr "以词定字键"
-
-# unknown
-#~ msgid "L_SUPER"
-#~ msgstr "左Super"
-
-#~ msgid "Labels %d, Texts %d, CMB:%s"
-#~ msgstr "Labels %d, Texts %d, CMB:%s"
-
-#~ msgid "LayoutLeft"
-#~ msgstr "左边距"
-
-#~ msgid "LayoutRight"
-#~ msgstr "右边距"
-
-#, fuzzy
-#~ msgid "Legend: "
-#~ msgstr "联想: "
-
-#~ msgid "LineColor"
-#~ msgstr "分隔线颜色"
-
-#~ msgid "Lock"
-#~ msgstr "锁定图标"
-
-#~ msgid "Lock Icon"
-#~ msgstr "锁定图标"
-
-#~ msgid "Locked"
-#~ msgstr "锁定"
-
-#~ msgid "Logo"
-#~ msgstr "Logo图标"
-
-#~ msgid "LookupPinyinKey"
-#~ msgstr "快捷键: 反查拼音"
-
-#~ msgid "LookupTablePageDown"
-#~ msgstr "LookupTablePageDown"
-
-#~ msgid "LookupTablePageUp"
-#~ msgstr "LookupTablePageUp"
-
-#~ msgid "MainWindowHideMode"
-#~ msgstr "主窗口隐藏模式"
-
-#~ msgid "MainWindowOffsetX"
-#~ msgstr "主窗口X位置"
-
-#~ msgid "MainWindowOffsetY"
-#~ msgstr "主窗口Y位置"
-
-#~ msgid "Margin to bottom"
-#~ msgstr "下边距"
-
-#~ msgid "Margin to left"
-#~ msgstr "左边距"
-
-#~ msgid "Margin to right"
-#~ msgstr "右边距"
-
-#~ msgid "Margin to top"
-#~ msgstr "上边距"
-
-#~ msgid "Match Error (%s)"
-#~ msgstr "匹配错误 (%s)"
-
-#~ msgid "MatchingKey"
-#~ msgstr "模糊键"
-
-#~ msgid "MenuFont"
-#~ msgstr "菜单字体"
-
-#~ msgid "MenuFontSize"
-#~ msgstr "菜单字体大小"
-
-#~ msgid "Message Null"
-#~ msgstr "Message Null"
-
-#~ msgid "Message has no arguments!"
-#~ msgstr "Message has no arguments!"
-
-#~ msgid "Misstype"
-#~ msgstr "gn/ng输入错误"
-
-#~ msgid "MovePreeditCaret"
-#~ msgstr "MovePreeditCaret"
-
-#~ msgid "NextPageKey"
-#~ msgstr "快捷键: 下一页"
-
-# unknown
-#~ msgid "NoChange"
-#~ msgstr "原始操作"
-
-#~ msgid "NoneMatchAutoSend"
-#~ msgstr "空码自动上屏"
-
-#~ msgid "OtherColor"
-#~ msgstr "其他颜色"
-
-#~ msgid "Out Of Memory!"
-#~ msgstr "Out Of Memory!"
-
-#~ msgid "OutputPos"
-#~ msgstr "下排文字位置"
-
-#~ msgid "PYKey"
-#~ msgstr "拼音键"
-
-#~ msgid "PanelCreated"
-#~ msgstr "PanelCreated"
-
-#~ msgid "PhraseOrder"
-#~ msgstr "词组重码顺序调整"
-
-#~ msgid "PhraseTips"
-#~ msgstr "提示词库中的词组"
-
-#~ msgid "PinyinOrder"
-#~ msgstr "拼音顺序"
-
-#~ msgid "PrevPageKey"
-#~ msgstr "快捷键: 上一页"
-
-#~ msgid "PromptTableCode"
-#~ msgstr "提示编码"
-
-#~ msgid "Quwei Priority Order, Zero to Disable"
-#~ msgstr "区位输入法优先级，0为禁用"
-
-#~ msgid "QuweiOrder"
-#~ msgstr "区位顺序"
-
-# unknown
-#~ msgid "R_SUPER"
-#~ msgstr "右Super"
-
-#~ msgid "Record File of Input"
-#~ msgstr "记录文件"
-
-#~ msgid "RecordFile"
-#~ msgstr "记录文件"
-
-#~ msgid "Recording"
-#~ msgstr "记录模式"
-
-#~ msgid "Recording file must be an absolute path."
-#~ msgstr "记录文件必须是绝对路径"
-
-#~ msgid "ReloadConfig"
-#~ msgstr "ReloadConfig"
-
-#~ msgid "Remind disabled Icon"
-#~ msgstr "禁用联想图标"
-
-#~ msgid "Remind mode Icon"
-#~ msgstr "联想激活图标"
-
-#~ msgid "RemindModeDisablePaging"
-#~ msgstr "联想模式禁止翻页"
-
-#~ msgid "RemindSwitchKey"
-#~ msgstr "快捷键: 切换联想模式"
-
-#~ msgid "ResetRecordingKey"
-#~ msgstr "快捷键: 重置记录模式"
-
-#~ msgid "ResizeHorizontal"
-#~ msgstr "横向变形规则"
-
-#~ msgid "ResizePos"
-#~ msgstr "变形区域位置"
-
-#~ msgid "ResizeVertical"
-#~ msgstr "纵向变形规则"
-
-#~ msgid "ResizeWidth"
-#~ msgstr "变形区域宽度"
-
-#~ msgid "SaveAllKey"
-#~ msgstr "快捷键: 保存"
-
-#~ msgid "SaveAutoPhrase"
-#~ msgstr "自动保存词组"
-
-#~ msgid "Saving TABLE Dict."
-#~ msgstr "保存码表词典"
-
-#~ msgid "SecondThirdCandWordKey"
-#~ msgstr "第二三候选词选择键"
-
-#~ msgid "SelectCandidate: "
-#~ msgstr "SelectCandidate: "
-
-#~ msgid "SemiColonAction"
-#~ msgstr "分号键行为"
-
-#~ msgid "SendTextWhenSwitchEng"
-#~ msgstr "快速切换中英文时将已有英文上屏"
-
-#~ msgid "Sending %s  icid=%d connectid=%d\n"
-#~ msgstr "Sending %s  icid=%d connectid=%d\n"
-
-#~ msgid "Set icid=%d(connect_id=%d) to %d"
-#~ msgstr "Set icid=%d(connect_id=%d) to %d"
-
-#~ msgid "SetRecordingKey"
-#~ msgstr "快捷键: 切换记录模式"
-
-#~ msgid "Show Hint Window while ENV is not correctly configured."
-#~ msgstr "环境未配置正确时显示提示窗口"
-
-#~ msgid "Show Input Window In the center of screen"
-#~ msgstr "输入窗口显示在正中"
-
-#~ msgid "Show Main Window in a compact way"
-#~ msgstr "用紧凑的方式显示主窗口"
-
-#~ msgid "Show Point After Index of Candidate Word "
-#~ msgstr "候选序号后加点"
-
-#~ msgid "ShowHintWindow"
-#~ msgstr "显示配置提示窗口"
-
-#~ msgid "ShowInputSpeed"
-#~ msgstr "显示输入速度"
-
-#~ msgid "ShowInputWindowAfterTriggering"
-#~ msgstr "首次显示输入条"
-
-#~ msgid "ShowPointAfterIndex"
-#~ msgstr "候选序号后加点"
-
-#~ msgid "ShowVersion"
-#~ msgstr "显示版本"
-
-#~ msgid "ShuangpinOrder"
-#~ msgstr "双拼顺序"
-
-#~ msgid "Skin Name in use"
-#~ msgstr "皮肤名称"
-
-#~ msgid "SkinType"
-#~ msgstr "皮肤名称"
-
-#~ msgid "Space to the left"
-#~ msgstr "左侧空白宽度"
-
-#~ msgid "Space to the right"
-#~ msgstr "右侧空白宽度"
-
-#~ msgid "Switch IM"
-#~ msgstr "选择输入法"
-
-#~ msgid "Switch Skin"
-#~ msgstr "切换皮肤"
-
-#~ msgid "Switch VK"
-#~ msgstr "选择软键盘"
-
-#~ msgid "SwitchKey"
-#~ msgstr "中英文快速切换键"
-
-#~ msgid "SymbolFile"
-#~ msgstr "符号文件"
-
-#~ msgid "Table Priority Order, Zero to Disable"
-#~ msgstr "码表输入法优先级，0为禁用"
-
-#~ msgid "TableOrder"
-#~ msgstr "码表顺序"
-
-#, fuzzy
-#~ msgid "Test Name"
-#~ msgstr "名称"
-
-#~ msgid "The Resize Position to Left"
-#~ msgstr "变形区域距左侧距离"
-
-#~ msgid "TimeInterval"
-#~ msgstr "击键时间间隔"
-
-#~ msgid "TipColor"
-#~ msgstr "提升颜色"
-
-#~ msgid "TrackCursor"
-#~ msgstr "光标跟随"
-
-#~ msgid "TraditionalChnSwitchKey"
-#~ msgstr "快捷键: 切换简体繁体"
-
-#~ msgid "TriggerKey"
-#~ msgstr "输入法切换键"
-
-#~ msgid "TriggerProperty: "
-#~ msgstr "TriggerProperty: "
-
-#~ msgid "True"
-#~ msgstr "是"
-
-#~ msgid "Type: %d Text: %s"
-#~ msgstr "Type: %d Text: %s"
-
-#~ msgid "UnLock Icon"
-#~ msgstr "未锁定图标"
-
-#~ msgid "Unlock"
-#~ msgstr "未锁定图标"
-
-#~ msgid "Use DBus to display UI (Require KIMPanel)"
-#~ msgstr "使用DBus来显示界面(需要KIMPanel)"
-
-#~ msgid "Use Traditional Chinese in Input"
-#~ msgstr "使用繁体中文输入"
-
-#~ msgid "Use recording mode"
-#~ msgstr "使用记录模式"
-
-#~ msgid "UseCompletePinyin"
-#~ msgstr "使用全拼"
-
-#~ msgid "UseDBus"
-#~ msgstr "启用DBus"
-
-#~ msgid "UseGBKT"
-#~ msgstr "使用繁体"
-
-#~ msgid "UseMatchingKey"
-#~ msgstr "使用模糊键"
-
-#~ msgid "UsePY"
-#~ msgstr "使用拼音"
-
-#~ msgid "UseRemind"
-#~ msgstr "联想模式"
-
-#~ msgid "UseTray"
-#~ msgstr "启用托盘"
-
-#~ msgid "UserPhraseColor"
-#~ msgstr "用户词组颜色"
-
-#~ msgid "VK"
-#~ msgstr "软键盘激活图标"
-
-#~ msgid "VKSwitchKey"
-#~ msgstr "快捷键: 切换软键盘"
-
-#~ msgid "Version"
-#~ msgstr "版本"
-
-#~ msgid "Virtual Keyboard disabled Icon"
-#~ msgstr "禁用软键盘图标"
-
-#~ msgid "Virtual Keyboard enabled Icon"
-#~ msgstr "启用软键盘图标"
-
-#~ msgid "Width of Resize Part "
-#~ msgstr "变形区域宽度"
-
-#~ msgid "XEvent--Expose"
-#~ msgstr "XEvent--Expose"
-
-#~ msgid "Yes"
-#~ msgstr "是"
-
-#~ msgid "You can set those variables in ~/.bashrc or ~/.xprofile ."
-#~ msgstr "这些环境变量可以设置在~/.bashrc或者~/.xprofile当中。"
-
-#~ msgid "ZhPunc"
-#~ msgstr "中文标点图标"
-
-#, fuzzy
-#~ msgid "fcitx"
-#~ msgstr "Fcitx"
-
-#~ msgid "pthread mutexattr init failed"
-#~ msgstr "pthread mutexattr init failed"
-
-#~ msgid "updateMesssages Up:%s"
-#~ msgstr "updateMesssages Up:%s"
