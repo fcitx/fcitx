@@ -52,6 +52,7 @@ CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
 CONFIG_BINDING_REGISTER("Addon", "SubConfig", subconfig)
 CONFIG_BINDING_REGISTER("Addon", "IMRegisterMethod", registerMethod)
 CONFIG_BINDING_REGISTER("Addon", "IMRegisterArgument", registerArgument)
+CONFIG_BINDING_REGISTER("Addon", "UIFallback", uifallback)
 CONFIG_BINDING_END()
 
 static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
@@ -78,11 +79,11 @@ void LoadAddonInfo(UT_array* addons)
     size_t len;
     size_t i = 0;
     utarray_clear(addons);
-    
+
     StringHashSet* sset = GetXDGFiles(
-        PACKAGE "/addon",
-        ".conf"
-    );
+                              PACKAGE "/addon",
+                              ".conf"
+                          );
     addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
     char **paths = malloc(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
@@ -109,8 +110,7 @@ void LoadAddonInfo(UT_array* addons)
             FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");
         }
 
-        for (i = 0; i < len ; i ++)
-        {
+        for (i = 0; i < len ; i ++) {
             free(paths[i]);
             paths[i] = NULL;
         }
@@ -130,6 +130,7 @@ void AddonResolveDependency(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     boolean remove = true;
     FcitxAddon *addon;
+    FcitxAddon *uiaddon = NULL;
 
     /* choose ui */
     boolean founduiflag = false;
@@ -139,16 +140,38 @@ void AddonResolveDependency(FcitxInstance* instance)
         if (addon->category == AC_UI) {
             if (instance->uiname == NULL) {
                 if (addon->bEnabled) {
-                    if (!founduiflag)
+                    if (!founduiflag) {
+                        uiaddon = addon;
                         founduiflag = true;
-                    else
+                    } else
                         addon->bEnabled = false;
                 }
             } else {
                 if (strcmp(instance->uiname, addon->name) != 0)
                     addon->bEnabled = false;
-                else
+                else {
+                    uiaddon = addon;
                     addon->bEnabled = true;
+                }
+            }
+        }
+    }
+
+    if (uiaddon && uiaddon->uifallback) {
+        for (addon = (FcitxAddon *) utarray_front(addons);
+                addon != NULL;
+                addon = (FcitxAddon *) utarray_next(addons, addon)) {
+            if (addon->category == AC_UI && strcmp(uiaddon->uifallback, addon->name) == 0) {
+                addon->bEnabled = true;
+                FcitxAddon temp;
+                int uiidx = utarray_eltidx(addons, uiaddon);
+                int fallbackidx = utarray_eltidx(addons, addon);
+                if (fallbackidx < uiidx) {
+                    temp = *uiaddon;
+                    *uiaddon = *addon;
+                    *addon = temp;
+                }
+                break;
             }
         }
     }

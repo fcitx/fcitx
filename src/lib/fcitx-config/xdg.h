@@ -110,14 +110,14 @@ extern "C"
      * @see GetXDGFile
      **/
     void FreeXDGPath(char **path);
-    
+
     /**
      * @brief Get All files under directory with a suffix
      *
      * @param path xdg subpath
      * @param suffix filename suffix
      * @return StringHashSet*
-     * 
+     *
      * @since 4.1.3
      **/
     StringHashSet* GetXDGFiles(

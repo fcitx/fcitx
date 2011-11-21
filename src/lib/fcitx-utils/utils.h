@@ -99,13 +99,13 @@ extern "C" {
      * @see SplitString
      **/
     void FreeStringList(UT_array *list);
-    
+
     /**
      * @brief Free String Hash Set
      *
      * @param sset String Hash Set
      * @return void
-     * 
+     *
      * @since 4.1.3
      **/
     void FreeStringHashSet(StringHashSet* sset);

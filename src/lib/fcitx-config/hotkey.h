@@ -2522,7 +2522,7 @@ extern "C"
      * @return boolean
      **/
     boolean IsHotKeySimple(FcitxKeySym sym, int state);
-    
+
     /**
      * @brief is key will make cursor move, include left, right, home, end, and so on.
      *

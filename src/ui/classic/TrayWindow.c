@@ -49,7 +49,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
     Display *dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     char   strWindowName[] = "Fcitx Tray Window";
-    if (!classicui->bUseTrayIcon)
+    if (!classicui->bUseTrayIcon || classicui->isSuspend)
         return;
 
     InitTray(dpy, trayWindow);
@@ -123,6 +123,7 @@ void ReleaseTrayWindow(TrayWindow *trayWindow)
     trayWindow->window = None;
     trayWindow->cs = NULL;
     trayWindow->cs_x = NULL;
+    trayWindow->bTrayMapped = false;
 }
 
 void DrawTrayWindow(TrayWindow* trayWindow)

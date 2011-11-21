@@ -80,6 +80,7 @@ typedef struct _FcitxClassicUI {
     UT_array status;
     struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
+    boolean isSuspend;
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);

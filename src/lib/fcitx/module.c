@@ -103,17 +103,15 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
         FcitxLog(ERROR, "addon is not valid");
         return NULL;
     }
-    
-    if (addon->category == AC_INPUTMETHOD)
-    {
+
+    if (addon->category == AC_INPUTMETHOD) {
         boolean flag = false;
         FcitxAddon** pimclass = NULL;
         for (pimclass = (FcitxAddon**) utarray_front(&addon->owner->imeclasses);
-            pimclass != NULL;
-            pimclass = (FcitxAddon**) utarray_next(&addon->owner->imeclasses, pimclass)
+                pimclass != NULL;
+                pimclass = (FcitxAddon**) utarray_next(&addon->owner->imeclasses, pimclass)
             ) {
-            if (*pimclass == addon)
-            {
+            if (*pimclass == addon) {
                 flag = true;
                 break;
             }
@@ -121,7 +119,7 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
         if (!flag)
             LoadIM(addon->owner, addon);
     }
-    
+
     FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
     if (func == NULL) {
         FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
@@ -135,7 +133,7 @@ FCITX_EXPORT_API
 void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
 {
     FcitxAddon* module = GetAddonByName(&instance->addons, name);
-    
+
     if (module == NULL)
         return NULL;
     else

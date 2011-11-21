@@ -65,6 +65,9 @@ static void ClassicUIOnTriggerOff(void *arg);
 static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static void ClassicUIInputReset(void *arg);
 static void ReloadConfigClassicUI(void *arg);
+static void ClassicUISuspend(void *arg);
+static void ClassicUIResume(void *arg);
+
 static ConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y, int* w, int* h);
 
@@ -87,7 +90,13 @@ FcitxUI ui = {
     ClassicUIOnTriggerOff,
     ClassicUIDisplayMessage,
     ClassicUIMainWindowSizeHint,
-    ReloadConfigClassicUI
+    ReloadConfigClassicUI,
+    ClassicUISuspend,
+    ClassicUIResume,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 FCITX_EXPORT_API
@@ -185,6 +194,8 @@ void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxX
 static void ClassicUIInputReset(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
@@ -232,7 +243,7 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 
     LoadImage(sc, activename, false);
     LoadImage(sc, inactivename, false);
-    
+
     free(activename);
     free(inactivename);
 }
@@ -240,6 +251,8 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 static void ClassicUIOnInputFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
@@ -247,20 +260,26 @@ static void ClassicUIOnInputFocus(void *arg)
 static void ClassicUIOnInputUnFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
-Bool
-IsWindowVisible(Display* dpy, Window window)
+
+void ClassicUISuspend(void* arg)
 {
-    XWindowAttributes attrs;
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    classicui->isSuspend = true;
+    CloseInputWindowInternal(classicui->inputWindow);
+    CloseMainWindow(classicui->mainWindow);
+    ReleaseTrayWindow(classicui->trayWindow);
+}
 
-    XGetWindowAttributes(dpy, window, &attrs);
-
-    if (attrs.map_state == IsUnmapped)
-        return False;
-
-    return True;
+void ClassicUIResume(void* arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    classicui->isSuspend = false;
+    InitTrayWindow(classicui->trayWindow);
 }
 
 void ActivateWindow(Display *dpy, int iScreen, Window window)

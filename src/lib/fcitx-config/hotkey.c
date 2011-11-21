@@ -117,23 +117,22 @@ FCITX_EXPORT_API
 boolean IsHotkeyCursorMove(FcitxKeySym sym, int state)
 {
     if ((
-        sym == Key_Left
-     || sym == Key_Right
-     || sym == Key_Up
-     || sym == Key_Down
-     || sym == Key_Page_Up
-     || sym == Key_Page_Down
-     || sym == Key_Home
-     || sym == Key_End
-    ) && (
-        state == KEY_CTRL_COMP
-        || state == KEY_CTRL_SHIFT_COMP
-        || state == KEY_SHIFT_COMP
-        || state == KEY_NONE
-    )
-        
-    )
-    {
+                sym == Key_Left
+                || sym == Key_Right
+                || sym == Key_Up
+                || sym == Key_Down
+                || sym == Key_Page_Up
+                || sym == Key_Page_Down
+                || sym == Key_Home
+                || sym == Key_End
+            ) && (
+                state == KEY_CTRL_COMP
+                || state == KEY_CTRL_SHIFT_COMP
+                || state == KEY_SHIFT_COMP
+                || state == KEY_NONE
+            )
+
+       ) {
         return true;
     }
     return false;

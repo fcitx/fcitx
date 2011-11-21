@@ -52,9 +52,9 @@ typedef struct _TrayWindow {
 
 TrayWindow* CreateTrayWindow(struct _FcitxClassicUI *classicui);
 void DrawTrayWindow(TrayWindow* trayWindow);
-void DeInitTrayWindow(TrayWindow *f_tray);
 void RedrawTrayWindow(TrayWindow* trayWindow);
 void ReleaseTrayWindow(TrayWindow* trayWindow);
+void InitTrayWindow(TrayWindow *trayWindow);
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

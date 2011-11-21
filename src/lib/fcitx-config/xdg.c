@@ -68,7 +68,7 @@ make_path(const char *path)
 
     if (access(opath, F_OK))        /* if path is not terminated with / */
         mkdir(opath, S_IRWXU);
-    
+
     free(opath);
 }
 
@@ -154,7 +154,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
         if (fp)
             break;
-        
+
         free(buf);
         buf = NULL;
     }
@@ -173,7 +173,7 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 
     if (retFile)
         *retFile = buf;
-    else if(buf)
+    else if (buf)
         free(buf);
 
     return fp;
@@ -307,7 +307,7 @@ StringHashSet* GetXDGFiles(
     }
 
     FreeXDGPath(xdgPath);
-    
+
     return sset;
 }
 

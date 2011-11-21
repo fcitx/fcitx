@@ -66,5 +66,10 @@ Type=String
 DefaultValue=
 Description=Argument for InputMethod Register
 
+[Addon/UIFallback]
+Type=String
+DefaultValue=
+Description=Fallback UI Addon
+
 [DescriptionFile]
 LocaleDomain=fcitx

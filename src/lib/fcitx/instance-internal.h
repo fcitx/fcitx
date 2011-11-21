@@ -90,8 +90,12 @@ struct _FcitxInstance {
 
     boolean imLoaded;
 
+    FcitxAddon* uifallback;
+
+    FcitxAddon* uinormal;
+
     /* gives more padding, since we want to break abi */
-    int padding[62];
+    int padding[60];
 };
 
 #endif

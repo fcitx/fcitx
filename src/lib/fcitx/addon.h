@@ -62,15 +62,14 @@ extern "C" {
      **/
     typedef enum _AddonType {
         AT_SHAREDLIBRARY = 0,
-        
+
         AT_DBUS
     } AddonType;
-    
+
     /**
      * @brief How addon get input method list
      **/
-    typedef enum _IMRegisterMethod
-    {
+    typedef enum _IMRegisterMethod {
         IMRM_SELF,
         IMRM_EXEC,
         IMRM_CONFIGFILE
@@ -99,12 +98,13 @@ extern "C" {
         };
         void *addonInstance;
         UT_array functionList;
-        
+
         IMRegisterMethod registerMethod;
         char* registerArgument;
+        char* uifallback;
         struct _FcitxInstance* owner;
-        
-        int padding[9];
+
+        void* padding[9];
     } FcitxAddon;
 
     /**

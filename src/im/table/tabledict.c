@@ -237,8 +237,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
         return;
 
     fpDict = GetXDGFileUserWithPrefix("table", TEMP_FILE, "wb", &tempfile);
-    if (!fpDict)
-    {
+    if (!fpDict) {
         FcitxLog(ERROR, _("Save dict error"));
         free(tempfile);
         return;

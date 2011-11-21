@@ -86,14 +86,12 @@ FCITX_EXPORT_API
 INPUT_RETURN_VALUE CandidateWordChooseByIndex(CandidateWordList* candList, int index)
 {
     CandidateWord* candWord = CandidateWordGetByIndex(candList, index);
-    if (candWord == NULL)
-    {
+    if (candWord == NULL) {
         if (CandidateWordGetListSize(candList) > 0)
             return IRV_DO_NOTHING;
         else
-            return IRV_TO_PROCESS;        
-    }
-    else
+            return IRV_TO_PROCESS;
+    } else
         return candWord->callback(candWord->owner, candWord);
 }
 

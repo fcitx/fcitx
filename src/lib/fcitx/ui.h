@@ -251,6 +251,19 @@ extern "C" {
          * @brief reload config
          */
         void (*ReloadConfig)(void*);
+        /**
+         * @brief suspend to switch from/to fallback
+         */
+        void (*Suspend)(void*);
+        /**
+         * @brief resume from suspend
+         */
+        void (*Resume)(void*);
+
+        void (*padding0)(void*);
+        void (*padding1)(void*);
+        void (*padding2)(void*);
+        void (*padding3)(void*);
     } FcitxUI;
 
     /**
@@ -570,6 +583,23 @@ extern "C" {
      * @return void
      **/
     void UpdateInputWindow(struct _FcitxInstance* instance);
+
+
+    /**
+     * @brief User interface should switch to the fallback
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void SwitchUIToFallback(struct _FcitxInstance* instance);
+
+    /**
+     * @brief User interface should resume from the fallback
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void ResumeUIFromFallback(struct _FcitxInstance* instance);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

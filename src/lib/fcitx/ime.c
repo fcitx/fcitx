@@ -194,14 +194,13 @@ void LoadIM(FcitxInstance* instance, FcitxAddon* addon)
 {
     if (!addon)
         return;
-    
-    if (addon->type == AT_SHAREDLIBRARY ) {
+
+    if (addon->type == AT_SHAREDLIBRARY) {
         char* modulePath;
         FILE *fp = GetLibFile(addon->library, "r", &modulePath);
         void *handle;
         FcitxIMClass * imclass;
-        if (!fp)
-        {
+        if (!fp) {
             free(modulePath);
             return;
         }
@@ -231,9 +230,7 @@ void LoadIM(FcitxInstance* instance, FcitxAddon* addon)
         }
         addon->imclass = imclass;
         utarray_push_back(&instance->imeclasses, &addon);
-    }
-    else if (addon->type == AT_DBUS)
-    {
+    } else if (addon->type == AT_DBUS) {
     }
 }
 
@@ -258,17 +255,15 @@ void FcitxRegisterEmptyEntry(FcitxInstance *instance,
     if (entry) {
         FcitxLog(ERROR, "%s already exists", uniqueName);
         return;
-    }
-    else
-    {
+    } else {
         FcitxIM newime;
         memset(&newime, 0, sizeof(FcitxIM));
-        
+
         utarray_push_back(imes, &newime);
-        
+
         entry = (FcitxIM*) utarray_back(imes);
     }
-    
+
     if (entry == NULL)
         return;
 
@@ -342,22 +337,19 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
 
     entry = GetIMFromIMList(imes, uniqueName);
     if (entry) {
-        if (entry->initialized)
-        {
+        if (entry->initialized) {
             FcitxLog(ERROR, "%s already exists", uniqueName);
             return ;
         }
-    }
-    else
-    {
+    } else {
         FcitxIM newime;
         memset(&newime, 0, sizeof(FcitxIM));
-        
+
         utarray_push_back(imes, &newime);
-        
+
         entry = (FcitxIM*) utarray_back(imes);
     }
-    
+
     if (entry == NULL)
         return;
 
@@ -383,46 +375,45 @@ CONFIG_DESC_DEFINE(GetIMConfigDesc, "inputmethod.desc")
 
 boolean LoadAllIM(FcitxInstance* instance)
 {
-    StringHashSet* sset = GetXDGFiles(PACKAGE "/inputmethod", ".conf" );
+    StringHashSet* sset = GetXDGFiles(PACKAGE "/inputmethod", ".conf");
     StringHashSet* curs = sset;
     UT_array* addons = &instance->addons;
-    
-    while(curs)
-    {
+
+    while (curs) {
         FILE* fp = GetXDGFileWithPrefix("inputmethod", curs->name, "r", NULL);
         ConfigFile* cfile = NULL;
         if (fp) {
             cfile = ParseConfigFileFp(fp, GetIMConfigDesc());
             fclose(fp);
         }
-        
+
         if (cfile) {
             FcitxIMEntry* entry = fcitx_malloc0(sizeof(FcitxIMEntry));
             FcitxIMEntryConfigBind(entry, cfile, GetIMConfigDesc());
             ConfigBindSync(&entry->config);
             FcitxAddon *addon = GetAddonByName(&instance->addons, entry->parent);
-            
+
             if (addon
-                && addon->bEnabled
-                && addon->category == AC_INPUTMETHOD
-                && addon->registerMethod == IMRM_CONFIGFILE
-                ) {
+                    && addon->bEnabled
+                    && addon->category == AC_INPUTMETHOD
+                    && addon->registerMethod == IMRM_CONFIGFILE
+               ) {
                 FcitxRegisterEmptyEntry(instance,
-                    entry->name,
-                    entry->uniqueName,
-                    entry->iconName,
-                    entry->priority,
-                    entry->langCode,
-                    addon
-                );
+                                        entry->name,
+                                        entry->uniqueName,
+                                        entry->iconName,
+                                        entry->priority,
+                                        entry->langCode,
+                                        addon
+                                       );
             }
             FreeIMEntry(entry);
         }
         curs = curs->hh.next;
     }
-    
+
     FreeStringHashSet(sset);
-    
+
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
@@ -435,7 +426,7 @@ boolean LoadAllIM(FcitxInstance* instance)
             }
             break;
             case AT_DBUS: {
-                
+
             }
             break;
             default:
@@ -616,18 +607,16 @@ INPUT_RETURN_VALUE ProcessKey(
                 retVal = CandidateWordChooseByIndex(input->candList, index);
         }
     }
-    
-    if (retVal != IRV_ASYNC)
-    {
+
+    if (retVal != IRV_ASYNC) {
         return DoInputCallback(
-            instance,
-            retVal,
-            event,
-            timestamp,
-            sym,
-            state);
-    }
-    else
+                   instance,
+                   retVal,
+                   event,
+                   timestamp,
+                   sym,
+                   state);
+    } else
         return retVal;
 }
 
@@ -772,26 +761,24 @@ void SwitchIM(FcitxInstance* instance, int index)
 
     if (lastIM && lastIM->Save)
         lastIM->Save(lastIM->klass);
-    
+
     /* lazy load */
-    if (newIM && !newIM->initialized)
-    {
+    if (newIM && !newIM->initialized) {
         char* name = strdup(newIM->uniqueName);
         LoadIM(instance, newIM->owner);
         FcitxIM* im = GetIMFromIMList(&instance->availimes, name);
-        if (!im->initialized)
-        {
+        if (!im->initialized) {
             im->initialized = true;
             int index = utarray_eltidx(&instance->availimes, im);
             utarray_erase(&instance->availimes, index, 1);
         }
-            
+
         UpdateIMList(instance);
         instance->iIMIndex = GetIMIndexByName(instance, name);
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
         free(name);
     }
-    
+
     if (newIM && newIM->Init)
         newIM->Init(newIM->klass);
 

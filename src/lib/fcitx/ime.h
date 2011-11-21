@@ -180,12 +180,12 @@ extern "C" {
          * @brief uniqueName
          **/
         char uniqueName[MAX_IM_NAME + 1];
-        
+
         /**
          * @brief input method initialized or not
          */
         boolean initialized;
-        
+
         /**
          * @brief Fcitx Addon
          **/
@@ -393,7 +393,7 @@ extern "C" {
         long unsigned int timestamp,
         FcitxKeySym sym,
         unsigned int state);
-    
+
     /**
      * @brief send a new key event to client
      *

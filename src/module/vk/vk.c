@@ -601,7 +601,7 @@ void LoadVKMapFile(FcitxVKState *vkstate)
             }
         }
     }
-    
+
     if (buf)
         free(buf);
 
