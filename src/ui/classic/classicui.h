@@ -81,6 +81,7 @@ typedef struct _FcitxClassicUI {
     struct _XlibMenu* mainMenuWindow;
     FcitxUIMenu mainMenu;
     boolean isSuspend;
+    boolean isfallback;
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);
@@ -98,7 +99,7 @@ boolean LoadClassicUIConfig(FcitxClassicUI* classicui);
 void SaveClassicUIConfig(FcitxClassicUI* classicui);
 boolean WindowIsVisable(Display* dpy, Window window);
 
-#define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->priv)
+#define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->uipriv[classicui->isfallback])
 
 CONFIG_BINDING_DECLARE(FcitxClassicUI);
 #endif

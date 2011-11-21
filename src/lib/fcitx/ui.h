@@ -27,6 +27,7 @@
 #include <fcitx-utils/utarray.h>
 
 #ifdef __cplusplus
+
 extern "C" {
 #endif
 
@@ -58,6 +59,7 @@ extern "C" {
 #define MAX_MESSAGE_COUNT 64
     typedef struct _MESSAGE MESSAGE;
     typedef struct _Messages Messages;
+    struct _FcitxAddon;
 
 #define MESSAGE_IS_NOT_EMPTY (messageUp.msgCount || messageDown.msgCount)
 #define MESSAGE_IS_EMPTY (!MESSAGE_IS_NOT_EMPTY)
@@ -102,7 +104,7 @@ extern "C" {
         /**
          * @brief private data for the UI implementation
          **/
-        void *priv;
+        void *uipriv[2];
         /**
          * @brief extra argument for tooglefunction
          **/
@@ -180,7 +182,7 @@ extern "C" {
         /**
          * @brief ui implementation private
          **/
-        void *uipriv;
+        void *uipriv[2];
         /**
          * @brief this is sub menu or not
          **/
@@ -600,6 +602,8 @@ extern "C" {
      * @return void
      **/
     void ResumeUIFromFallback(struct _FcitxInstance* instance);
+
+    boolean UIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

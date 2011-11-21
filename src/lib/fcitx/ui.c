@@ -713,4 +713,11 @@ void ResumeUIFromFallback(struct _FcitxInstance* instance)
 
 }
 
+FCITX_EXPORT_API
+boolean UIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
+{
+    return instance->uifallback == addon;
+}
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 4;

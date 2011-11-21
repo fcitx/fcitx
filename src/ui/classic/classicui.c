@@ -127,6 +127,8 @@ void* ClassicUICreate(FcitxInstance* instance)
         return NULL;
     }
 
+    classicui->isfallback = UIIsFallback(instance, classicuiaddon);
+
     classicui->iScreen = DefaultScreen(classicui->dpy);
 
     classicui->protocolAtom = XInternAtom(classicui->dpy, "WM_PROTOCOLS", False);
@@ -228,7 +230,7 @@ static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     XlibMenu* xlibMenu = CreateXlibMenu(classicui);
-    menu->uipriv = xlibMenu;
+    menu->uipriv[classicui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
 }
 
@@ -236,7 +238,7 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
-    status->priv = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
+    status->uipriv[classicui->isfallback] = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
     char* activename, *inactivename;
     asprintf(&activename, "%s_active.png", status->name);
     asprintf(&inactivename, "%s_inactive.png", status->name);

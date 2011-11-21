@@ -141,6 +141,7 @@ void DisplayMainWindow(Display* dpy, MainWindow* mainWindow)
 
 void DrawMainWindow(MainWindow* mainWindow)
 {
+    FcitxClassicUI* classicui = mainWindow->owner;
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
 
@@ -394,6 +395,7 @@ void CloseMainWindow(MainWindow *mainWindow)
 
 boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other)
 {
+    FcitxClassicUI* classicui = mainWindow->owner;
     FcitxInstance *instance = mainWindow->owner->owner;
     boolean changed = false;
     if (mouseE != &mainWindow->logostat.mouse) {

@@ -25,7 +25,6 @@ set(FCITX_PY_FILES
 
 set(FCITX_DSEKTOP_FILES
     fcitx.desktop
-    fcitx-kimpanel.desktop
     fcitx-configtool.desktop
 )
 
@@ -38,7 +37,6 @@ set(PY_URL http://fcitx.googlecode.com/files/pinyin.tar.gz)
 add_subdirectory(png)
 
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-configtool.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop )
-intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-kimpanel.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop )
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop )
 
 add_custom_target(pinyin_data ALL DEPENDS ${PY_DATA})
@@ -53,9 +51,6 @@ add_custom_command(OUTPUT ${PY_DATA}
 add_custom_target(desktopfile ALL DEPENDS ${FCITX_DSEKTOP_FILES})
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop DESTINATION share/applications/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop DESTINATION share/applications/)
-if (_ENABLE_DBUS)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-kimpanel.desktop DESTINATION share/applications/)
-endif(_ENABLE_DBUS)
 
 install(FILES ${FCITX_DATA_FILES} DESTINATION ${pkgdatadir}/data)
 fcitx_add_configdesc_file(${FCITX_DESC_FILES})
