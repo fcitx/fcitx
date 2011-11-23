@@ -573,7 +573,9 @@ INPUT_RETURN_VALUE _TableGetCandWord(FcitxTableState* tbl, TABLECANDWORD* tableC
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxProfile *profile = FcitxInstanceGetProfile(instance);
 
-    if (!strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol))
+    if (table->strSymbol
+        && strlen(table->strSymbol) > 0
+        && strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol) == 0)
         return TableGetFHCandWord(tbl, tableCandWord);
 
     FcitxInputStateSetIsInRemind(input, false);
