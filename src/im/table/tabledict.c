@@ -99,7 +99,10 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     fread(&(tableDict->iRecordCount), sizeof(unsigned int), 1, fpDict);
 
     for (i = 0; i < SINGLE_HZ_COUNT; i++)
+    {
         tableDict->tableSingleHZ[i] = (RECORD *) NULL;
+        tableDict->tableSingleHZCons[i] = (RECORD *) NULL;
+    }
 
     iRecordIndex = 0;
     for (i = 0; i < tableDict->iRecordCount; i++) {
@@ -114,8 +117,8 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         strcpy(recTemp->strHZ, strHZ);
 
         if (!iVersion) {
-            fread(&cTemp, sizeof(char), 1, fpDict);
-            recTemp->bPinyin = cTemp;
+            fread(&cTemp, sizeof(int8_t), 1, fpDict);
+            recTemp->type = cTemp;
         }
 
         fread(&(recTemp->iHit), sizeof(unsigned int), 1, fpDict);
@@ -132,18 +135,27 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         }
         /* **************************************************************** */
         /** 为单字生成一个表   */
-        if (utf8_strlen(recTemp->strHZ) == 1 && !IsIgnoreChar(tableDict, strCode[0]) && !recTemp->bPinyin) {
-            iTemp = CalHZIndex(recTemp->strHZ);
-            if (iTemp < SINGLE_HZ_COUNT) {
-                if (tableDict->tableSingleHZ[iTemp]) {
-                    if (strlen(strCode) > strlen(tableDict->tableSingleHZ[iTemp]->strCode))
-                        tableDict->tableSingleHZ[iTemp] = recTemp;
-                } else
-                    tableDict->tableSingleHZ[iTemp] = recTemp;
+        if (utf8_strlen(recTemp->strHZ) == 1 && !IsIgnoreChar(tableDict, strCode[0]))
+        {
+            RECORD** tableSingleHZ = NULL;
+            if (recTemp->type == RECORDTYPE_NORMAL)
+                tableSingleHZ = tableDict->tableSingleHZ;
+            else if (recTemp->type == RECORDTYPE_CONSTRUCT)
+                tableSingleHZ = tableDict->tableSingleHZCons;
+            
+            if (tableSingleHZ) {
+                iTemp = CalHZIndex(recTemp->strHZ);
+                if (iTemp < SINGLE_HZ_COUNT) {
+                    if (tableSingleHZ[iTemp]) {
+                        if (strlen(strCode) > strlen(tableDict->tableSingleHZ[iTemp]->strCode))
+                            tableSingleHZ[iTemp] = recTemp;
+                    } else
+                        tableSingleHZ[iTemp] = recTemp;
+                }
             }
         }
 
-        if (recTemp->bPinyin)
+        if (recTemp->type == RECORDTYPE_PINYIN)
             tableDict->bHasPinyin = true;
 
         tableDict->currentRecord->next = recTemp;
@@ -237,7 +249,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
-    char            cTemp;
+    int8_t          cTemp;
     TableDict      *tableDict = tableMetaData->tableDict;
 
     if (!tableDict->iTableChanged)
@@ -283,8 +295,8 @@ void SaveTableDict(TableMetaData *tableMetaData)
         fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
         fwrite(recTemp->strHZ, sizeof(char), iTemp, fpDict);
 
-        cTemp = recTemp->bPinyin;
-        fwrite(&cTemp, sizeof(char), 1, fpDict);
+        cTemp = recTemp->type;
+        fwrite(&cTemp, sizeof(int8_t), 1, fpDict);
         fwrite(&(recTemp->iHit), sizeof(unsigned int), 1, fpDict);
         fwrite(&(recTemp->iIndex), sizeof(unsigned int), 1, fpDict);
         recTemp = recTemp->next;
@@ -427,7 +439,7 @@ RECORD         *TableFindPhrase(const TableDict* tableDict, const char *strHZ)
         if (recTemp->strCode[0] != tableDict->recordIndex[i].cCode)
             break;
         if (!strcmp(recTemp->strHZ, strHZ)) {
-            if (!recTemp->bPinyin)
+            if (recTemp->type != RECORDTYPE_PINYIN)
                 return recTemp;
         }
 
@@ -516,6 +528,9 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
         if (tableDict->rule[i].iWords == i2 && tableDict->rule[i].iFlag == i1)
             break;
     }
+    
+    if (i == tableDict->iCodeLength - 1)
+        return true;
 
     for (i1 = 0; i1 < tableDict->iCodeLength; i1++) {
         int clen;
@@ -530,9 +545,15 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
             strncpy(strTemp, ps, clen);
         }
 
-        recTemp = tableDict->tableSingleHZ[CalHZIndex(strTemp)];
-
-        if (!recTemp) {
+        int hzIndex = CalHZIndex(strTemp);
+        
+        if (tableDict->tableSingleHZ[hzIndex]) {
+            if (tableDict->tableSingleHZCons[hzIndex])
+                recTemp = tableDict->tableSingleHZCons[hzIndex];
+            else
+                recTemp = tableDict->tableSingleHZ[hzIndex];
+        }
+        else {
             bCanntFindCode = true;
             break;
         }
@@ -557,7 +578,7 @@ RECORD         *TableHasPhrase(const TableDict* tableDict, const char *strCode, 
 
     recTemp = tableDict->recordIndex[i].record;
     while (recTemp != tableDict->recordHead) {
-        if (!recTemp->bPinyin) {
+        if (recTemp->type != RECORDTYPE_PINYIN) {
             if (strcmp(recTemp->strCode, strCode) > 0)
                 break;
             else if (!strcmp(recTemp->strCode, strCode)) {
@@ -582,7 +603,7 @@ void TableInsertPhrase(TableDict* tableDict, const char *strCode, const char *st
 
     dictNew = (RECORD *) fcitx_malloc0(sizeof(RECORD));
     dictNew->strCode = (char *) fcitx_malloc0(sizeof(char) * (tableDict->iCodeLength + 1));
-    dictNew->bPinyin = 0;
+    dictNew->type = RECORDTYPE_NORMAL;
     strcpy(dictNew->strCode, strCode);
     dictNew->strHZ = (char *) fcitx_malloc0(sizeof(char) * (strlen(strHZ) + 1));
     strcpy(dictNew->strHZ, strHZ);

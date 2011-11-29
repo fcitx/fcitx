@@ -144,8 +144,10 @@ int main(int argc, char *argv[])
         if (iVersion) {
             fread(&iRule, sizeof(unsigned char), 1, fpDict);
 
-            if (iRule)
+            if (iRule == 1)
                 printf("@%s %s\n", strCode, strHZ);
+            else if (iRule == 2)
+                printf("^%s %s\n", strCode, strHZ);
             else
                 printf("%s %s\n", strCode, strHZ);
         } else

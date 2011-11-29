@@ -809,7 +809,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
         candWord.strExtra = NULL;
 
         const char* pstr = NULL;
-        if ((tableCandWord->flag == CT_NORMAL) && (tableCandWord->candWord.record->bPinyin)) {
+        if ((tableCandWord->flag == CT_NORMAL) && (tableCandWord->candWord.record->type == RECORDTYPE_PINYIN)) {
             if (utf8_strlen(tableCandWord->candWord.record->strHZ) == 1) {
                 recTemp = table->tableDict->tableSingleHZ[CalHZIndex(tableCandWord->candWord.record->strHZ)];
                 if (!recTemp)
@@ -875,7 +875,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
             if (candWord->owner == tbl) {
                 TABLECANDWORD* tableCandWord = candWord->priv;
                 if (tableCandWord->flag != CT_AUTOPHRASE || (tableCandWord->flag == CT_AUTOPHRASE && !table->iSaveAutoPhraseAfter))
-                    if (!(tableCandWord->flag == CT_NORMAL && tableCandWord->candWord.record->bPinyin))
+                    if (!(tableCandWord->flag == CT_NORMAL && tableCandWord->candWord.record->type == RECORDTYPE_PINYIN))
                         retVal = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
             }
         }
