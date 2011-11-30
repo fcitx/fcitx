@@ -208,6 +208,26 @@ extern "C" {
      **/
     char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
+    /**
+     * @brief process output filter, return string is malloced
+     *
+     * @param instance fcitx instance
+     * @param in input string
+     * @return char*
+     **/
+    char* ProcessCommitFilter(struct _FcitxInstance* instance, char *in);
+    
+    /**
+     * @brief register ouput string filter
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     * 
+     * @since 4.2.0
+     **/
+    void RegisterCommitFilter(struct _FcitxInstance* instance, StringFilterHook hook);
+
 
 #ifdef __cplusplus
 }

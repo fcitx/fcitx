@@ -184,7 +184,7 @@ void CommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
 
     UT_array* frontends = &instance->frontends;
 
-    char *pstr = ProcessOutputFilter(instance, str);
+    char *pstr = ProcessCommitFilter(instance, str);
     if (pstr != NULL)
         str = pstr;
 

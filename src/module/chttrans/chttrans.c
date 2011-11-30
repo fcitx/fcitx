@@ -110,6 +110,7 @@ void* ChttransCreate(FcitxInstance* instance)
 
     RegisterHotkeyFilter(instance, hk);
     RegisterOutputFilter(instance, shk);
+    RegisterCommitFilter(instance, shk);
     RegisterStatus(instance, transState, "chttrans", _("Traditional Chinese Translate"), _("Traditional Chinese Translate"), ToggleChttransState, GetChttransEnabled);
     return transState;
 }
@@ -216,7 +217,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
         i = 0;
         len = utf8_strlen(strHZ);
         ret_len = 0;
-        ret = (char *) malloc(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
+        ret = (char *) fcitx_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {

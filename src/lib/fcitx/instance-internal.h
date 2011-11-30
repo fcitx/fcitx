@@ -75,6 +75,7 @@ struct _FcitxInstance {
     struct _HookStack* hookInputUnFocusHook;
     struct _HookStack* hookUpdateCandidateWordHook;
     struct _HookStack* hookUpdateIMListHook;
+    struct _HookStack* hookCommitFilter;
 
     FcitxUIFlag uiflag;
 

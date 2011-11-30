@@ -942,15 +942,6 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         CalculateCursorPosition(pystate);
     }
 
-    if (retVal == IRV_TO_PROCESS) {
-        FcitxConfig* config = FcitxInstanceGetConfig(pystate->owner);
-        if (FcitxInputStateGetRawInputBufferSize(input) != 0
-                && IsHotkeyCursorMove(sym, state)
-                && !IsHotKey(sym, state, config->hkPrevPage)
-                && !IsHotKey(sym, state, config->hkNextPage))
-            retVal = IRV_DO_NOTHING;
-    }
-
     return retVal;
 }
 

@@ -76,6 +76,7 @@ typedef struct _HookStack {
 DEFINE_HOOK(PreInputFilter, KeyFilterHook, keyfilter)
 DEFINE_HOOK(PostInputFilter, KeyFilterHook, keyfilter)
 DEFINE_HOOK(OutputFilter, StringFilterHook, stringfilter)
+DEFINE_HOOK(CommitFilter, StringFilterHook, stringfilter)
 DEFINE_HOOK(HotkeyFilter, HotkeyHook, hotkey)
 DEFINE_HOOK(ResetInputHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(TriggerOnHook, FcitxIMEventHook, eventhook);
@@ -122,6 +123,20 @@ FCITX_EXPORT_API
 char* ProcessOutputFilter(FcitxInstance* instance, char *in)
 {
     HookStack* stack = GetOutputFilter(instance);
+    stack = stack->next;
+    char *out = NULL;
+    while (stack) {
+        if ((out = stack->stringfilter.func(stack->stringfilter.arg, in)) != NULL)
+            break;
+        stack = stack->next;
+    }
+    return out;
+}
+
+FCITX_EXPORT_API
+char* ProcessCommitFilter(FcitxInstance* instance, char *in)
+{
+    HookStack* stack = GetCommitFilter(instance);
     stack = stack->next;
     char *out = NULL;
     while (stack) {

@@ -114,6 +114,7 @@ extern "C" {
     typedef boolean(*FcitxIMPhraseTips)(void *arg);
     typedef void (*FcitxIMSave)(void *arg);
     typedef void (*FcitxIMReloadConfig)(void *arg);
+    typedef INPUT_RETURN_VALUE (*FcitxIMKeyBlocker)(void* arg, FcitxKeySym, unsigned int);
 
     /**
      * @brief Fcitx Input method instance
@@ -190,8 +191,12 @@ extern "C" {
          * @brief Fcitx Addon
          **/
         FcitxAddon* owner;
+        /**
+         * @brief reload config function
+         **/
+        FcitxIMKeyBlocker KeyBlocker;
 
-        int padding[3];
+        void* padding[2];
     } FcitxIM;
 
     typedef enum _FcitxKeyEventType {
@@ -373,6 +378,42 @@ extern "C" {
                            const char *langCode
                           );
 
+    /**
+     * @brief register a new input method
+     *
+     * @param instance fcitx instance
+     * @param addonInstance instance of addon
+     * @param name input method name
+     * @param iconName icon name
+     * @param Init init callback
+     * @param ResetIM reset callback
+     * @param DoInput do input callback
+     * @param GetCandWords get candidate words callback
+     * @param PhraseTips phrase tips callback
+     * @param Save save callback
+     * @param ReloadConfig reload config callback
+     * @param priv private data for this input method.
+     * @param priority order of this input method
+     * @param langCode language code for this input method
+     * @return void
+     **/
+    void FcitxRegisterIMv3(struct _FcitxInstance *instance,
+                           void *addonInstance,
+                           const char* uniqueName,
+                           const char* name,
+                           const char* iconName,
+                           FcitxIMInit Init,
+                           FcitxIMResetIM ResetIM,
+                           FcitxIMDoInput DoInput,
+                           FcitxIMGetCandWords GetCandWords,
+                           FcitxIMPhraseTips PhraseTips,
+                           FcitxIMSave Save,
+                           FcitxIMReloadConfig ReloadConfig,
+                           FcitxIMKeyBlocker KeyBlocker,
+                           void *priv,
+                           int priority,
+                           const char *langCode
+                          );
     /**
      * @brief process a key event, should only used by frontend
      *

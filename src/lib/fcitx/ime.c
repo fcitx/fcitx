@@ -61,6 +61,7 @@ static void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boo
 static void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
 static void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
+static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -311,7 +312,6 @@ void FcitxRegisterIM(FcitxInstance *instance,
                      );
 }
 
-
 FCITX_EXPORT_API
 void FcitxRegisterIMv2(FcitxInstance *instance,
                        void *addonInstance,
@@ -325,6 +325,44 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
                        FcitxIMPhraseTips PhraseTips,
                        FcitxIMSave Save,
                        FcitxIMReloadConfig ReloadConfig,
+                       void *priv,
+                       int priority,
+                       const char *langCode
+                      )
+{
+    FcitxRegisterIMv3(instance,
+                      addonInstance,
+                      iconName,
+                      name,
+                      iconName,
+                      Init,
+                      ResetIM,
+                      DoInput,
+                      GetCandWords,
+                      PhraseTips,
+                      Save,
+                      ReloadConfig,
+                      NULL,
+                      priv,
+                      priority,
+                      ""
+                     );
+}
+
+FCITX_EXPORT_API
+void FcitxRegisterIMv3(FcitxInstance *instance,
+                       void *addonInstance,
+                       const char* uniqueName,
+                       const char* name,
+                       const char* iconName,
+                       FcitxIMInit Init,
+                       FcitxIMResetIM ResetIM,
+                       FcitxIMDoInput DoInput,
+                       FcitxIMGetCandWords GetCandWords,
+                       FcitxIMPhraseTips PhraseTips,
+                       FcitxIMSave Save,
+                       FcitxIMReloadConfig ReloadConfig,
+                       FcitxIMKeyBlocker KeyBlocker,
                        void *priv,
                        int priority,
                        const char *langCode
@@ -363,6 +401,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
     entry->PhraseTips = PhraseTips;
     entry->Save = Save;
     entry->ReloadConfig = ReloadConfig;
+    entry->KeyBlocker = KeyBlocker;
     entry->klass = addonInstance;
     entry->iPriority = priority;
     entry->priv = priv;
@@ -657,6 +696,13 @@ INPUT_RETURN_VALUE DoInputCallback(
 
     if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         ProcessPostInputFilter(instance, sym, state, &retVal);
+        
+        if (retVal == IRV_TO_PROCESS) {
+            if (currentIM->KeyBlocker)
+                retVal = currentIM->KeyBlocker(currentIM->klass, sym, state);
+            else
+                retVal = FcitxStandardKeyBlocker(input, sym, state);
+        }
     }
 
     if (retVal == IRV_TO_PROCESS) {
@@ -1350,6 +1396,15 @@ void FreeIMEntry(FcitxIMEntry* entry)
     free(entry->uniqueName);
     free(entry->parent);
     free(entry);
+}
+
+INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state)
+{
+    if (FcitxInputStateGetRawInputBufferSize(input) != 0
+        && (IsHotKeySimple(key, state) || IsHotkeyCursorMove(key, state)))
+        return IRV_DO_NOTHING;
+    else
+        return IRV_TO_PROCESS;
 }
 
 

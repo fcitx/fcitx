@@ -64,7 +64,7 @@ char *sCornerTrans[] = {
  */
 
 static void* FullWidthCharCreate(FcitxInstance* instance);
-static boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
+char* ProcessFullWidthChar(void* arg, const char* str);
 static void ToggleFullWidthState(void *arg);
 static boolean GetFullWidthState(void *arg);
 static INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void *arg);
@@ -90,11 +90,11 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     FcitxFullWidthChar* fwchar = fcitx_malloc0(sizeof(FcitxFullWidthChar));
     FcitxConfig* config = FcitxInstanceGetConfig(instance);
     fwchar->owner = instance;
-    KeyFilterHook hk;
+    StringFilterHook hk;
     hk.arg = fwchar;
     hk.func = ProcessFullWidthChar;
 
-    RegisterPreInputFilter(instance, hk);
+    RegisterCommitFilter(instance, hk);
 
     HotkeyHook hotkey;
     hotkey.hotkey = config->hkFullWidthChar;
@@ -108,16 +108,37 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     return fwchar;
 }
 
-boolean ProcessFullWidthChar(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
+char* ProcessFullWidthChar(void* arg, const char* str)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
-    if (profile->bUseFullWidthChar && IsHotKeySimple(sym, state)) {
-        sprintf(GetOutputString(FcitxInstanceGetInputState(fwchar->owner)), "%s", sCornerTrans[sym - 32]);
-        *retVal = IRV_COMMIT_STRING;
-        return true;
+    if (profile->bUseFullWidthChar) {
+        size_t i = 0, ret_len = 0, len = utf8_strlen(str);
+        char* ret = (char *) fcitx_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
+        const char* ps = str;
+        ret[0] = '\0';
+        for (; i < len; ++i) {
+            int wc;
+            int chr_len = utf8_char_len(ps);
+            char *nps;
+            nps = utf8_get_char(ps , &wc);
+
+            if (chr_len == 1 && ps[0] >= '\x20' && ps[0] <= '\x7e') {
+                strcat(ret, sCornerTrans[ps[0] - 32]);
+                ret_len += strlen(sCornerTrans[ps[0] - 32]);
+            } else {
+                strncat(ret, ps, chr_len);
+                ret_len += chr_len;
+            }
+
+            ps = nps;
+
+        }
+        ret[ret_len] = '\0';
+        return ret;
     }
-    return false;
+    else
+        return NULL;
 }
 
 void ToggleFullWidthState(void* arg)
