@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #ifdef FCITX_HAVE_CONFIG_H
@@ -79,7 +79,7 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-    char socketfile[PATH_MAX] = "";
+    char *socketfile = NULL;
     int socket_fd;
 
     int o = 0;
@@ -110,14 +110,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    sprintf(socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
+    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
 
     socket_fd = create_socket(socketfile);
 
     if (socket_fd < 0) {
         fprintf(stderr, "Can't open socket %s: %s\n", socketfile, strerror(errno));
+        free(socketfile);
         return 1;
     }
+    free(socketfile);
 
     if (o == 0) {
         write(socket_fd, &o, sizeof(o));

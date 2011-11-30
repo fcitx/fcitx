@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include <errno.h>
 #include <stdio.h>
@@ -55,7 +55,6 @@ FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
 typedef struct _FcitxRemote {
-    char socketfile[PATH_MAX];
     FcitxInstance* owner;
     int socket_fd;
 } FcitxRemote;
@@ -65,18 +64,20 @@ void* RemoteCreate(FcitxInstance* instance)
     FcitxRemote* remote = fcitx_malloc0(sizeof(FcitxRemote));
     remote->owner = instance;
 
-    char *socketfile = remote->socketfile;
-    sprintf(socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
+    char *socketfile;
+    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
     remote->socket_fd = CreateSocket(socketfile);
     if (remote->socket_fd < 0) {
         FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
         free(remote);
+        free(socketfile);
         return NULL;
     }
 
     fcntl(remote->socket_fd, F_SETFD, FD_CLOEXEC);
     fcntl(remote->socket_fd, F_SETFL, O_NONBLOCK);
     chmod(socketfile, 0600);
+    free(socketfile);
     return remote;
 }
 

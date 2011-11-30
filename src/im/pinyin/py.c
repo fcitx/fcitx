@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #ifdef FCITX_HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ StringHashSet *GetPYPhraseFiles()
 {
     char **pinyinPath;
     size_t len;
-    char pathBuf[PATH_MAX];
+    char *pathBuf;
     int i = 0;
     DIR *dir;
     struct dirent *drt;
@@ -220,10 +220,7 @@ StringHashSet *GetPYPhraseFiles()
     pinyinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/pinyin");
 
     for (i = 0; i < len; i++) {
-        snprintf(pathBuf, sizeof(pathBuf), "%s", pinyinPath[i]);
-        pathBuf[sizeof(pathBuf) - 1] = '\0';
-
-        dir = opendir(pathBuf);
+        dir = opendir(pinyinPath[i]);
         if (dir == NULL)
             continue;
 
@@ -232,7 +229,6 @@ StringHashSet *GetPYPhraseFiles()
             size_t nameLen = strlen(drt->d_name);
             if (nameLen <= strlen(".mb"))
                 continue;
-            memset(pathBuf, 0, sizeof(pathBuf));
 
             if (strcmp(drt->d_name + nameLen - strlen(".mb"), ".mb") != 0)
                 continue;
@@ -247,9 +243,12 @@ StringHashSet *GetPYPhraseFiles()
             if (strcmp(drt->d_name, PY_FREQ_FILE) == 0)
                 continue;
             FcitxLog(INFO, "Try %s", drt->d_name);
-            snprintf(pathBuf, sizeof(pathBuf), "%s/%s", pinyinPath[i], drt->d_name);
+            asprintf(&pathBuf, "%s/%s", pinyinPath[i], drt->d_name);
 
-            if (stat(pathBuf, &fileStat) == -1)
+            int statresult = stat(pathBuf, &fileStat);
+            free(pathBuf);
+
+            if (statresult == -1)
                 continue;
 
             if (fileStat.st_mode & S_IFREG) {
@@ -710,12 +709,12 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
         } else if (IsHotKey(sym, state, FCITX_HOME)) {
             if (FcitxInputStateGetRawInputBufferSize(input) == 0)
-                return IRV_DONOT_PROCESS;
+                return IRV_TO_PROCESS;
             pystate->iPYInsertPoint = 0;
             retVal = IRV_DISPLAY_CANDWORDS;
         } else if (IsHotKey(sym, state, FCITX_END)) {
             if (FcitxInputStateGetRawInputBufferSize(input) == 0)
-                return IRV_DONOT_PROCESS;
+                return IRV_TO_PROCESS;
             pystate->iPYInsertPoint = strlen(pystate->strFindString);
             retVal = IRV_DISPLAY_CANDWORDS;
         } else if (IsHotKey(sym, state, FCITX_RIGHT)) {
@@ -933,17 +932,23 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         pystate->iYCDZ = val;
                         return IRV_DISPLAY_CANDWORDS;
                     }
-
-                    return IRV_TO_PROCESS;
                 }
-            } else
-                return IRV_TO_PROCESS;
+            }
         }
     }
 
     if (!FcitxInputStateGetIsInRemind(input)) {
         UpdateCodeInputPY(pystate);
         CalculateCursorPosition(pystate);
+    }
+
+    if (retVal == IRV_TO_PROCESS) {
+        FcitxConfig* config = FcitxInstanceGetConfig(pystate->owner);
+        if (FcitxInputStateGetRawInputBufferSize(input) != 0
+                && IsHotkeyCursorMove(sym, state)
+                && !IsHotKey(sym, state, config->hkPrevPage)
+                && !IsHotKey(sym, state, config->hkNextPage))
+            retVal = IRV_DO_NOTHING;
     }
 
     return retVal;
@@ -1782,19 +1787,17 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
 {
     int i, j, k;
     int iTemp;
-    char *pstr;
-    char strPathTemp[PATH_MAX];
+    char *tempfile, *pstr;
     FILE *fp;
     PyPhrase *phrase;
     PYFA* PYFAList = pystate->PYFAList;
 
-    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
     if (!fp) {
-        FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), pstr);
+        FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), tempfile);
+        free(tempfile);
         return;
     }
-    strcpy(strPathTemp, pstr);
-    free(pstr);
 
     for (i = 0; i < pystate->iPYFACount; i++) {
         for (j = 0; j < PYFAList[i].iBase; j++) {
@@ -1827,29 +1830,29 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     }
 
     fclose(fp);
-    fp = GetXDGFileWithPrefix("pinyin", PY_USERPHRASE_FILE, NULL, &pstr);
+    GetXDGFileWithPrefix("pinyin", PY_USERPHRASE_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
-    rename(strPathTemp, pstr);
+    rename(tempfile, pstr);
     free(pstr);
+    free(tempfile);
 }
 
 void SavePYFreq(FcitxPinyinState *pystate)
 {
     int i, j, k;
     char *pstr;
-    char strPathTemp[PATH_MAX];
+    char *tempfile;
     FILE *fp;
     PyFreq *pPyFreq;
     HZ *hz;
 
-    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
     if (!fp) {
-        FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), pstr);
+        FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), tempfile);
+        free(tempfile);
         return;
     }
-    strcpy(strPathTemp, pstr);
-    free(pstr);
 
     i = 0;
     pPyFreq = pystate->pyFreq->next;
@@ -1892,8 +1895,9 @@ void SavePYFreq(FcitxPinyinState *pystate)
     fp = GetXDGFileWithPrefix("pinyin", PY_FREQ_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
-    rename(strPathTemp, pstr);
+    rename(tempfile, pstr);
     free(pstr);
+    free(tempfile);
 }
 
 /*
@@ -1903,17 +1907,16 @@ void SavePYIndex(FcitxPinyinState *pystate)
 {
     int i, j, k, l;
     char *pstr;
-    char strPathTemp[PATH_MAX];
+    char *tempfile;
     FILE *fp;
     PYFA* PYFAList = pystate->PYFAList;
 
-    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &pstr);
+    fp = GetXDGFileWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
     if (!fp) {
-        FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), pstr);
+        FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), tempfile);
+        free(tempfile);
         return;
     }
-    strcpy(strPathTemp, pstr);
-    free(pstr);
 
     uint32_t magic = PY_INDEX_MAGIC_NUMBER;
     fwrite(&magic, sizeof(uint32_t), 1, fp);
@@ -1958,9 +1961,10 @@ void SavePYIndex(FcitxPinyinState *pystate)
     fp = GetXDGFileWithPrefix("pinyin", PY_INDEX_FILE, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
-    rename(strPathTemp, pstr);
+    rename(tempfile, pstr);
 
     free(pstr);
+    free(tempfile);
 }
 
 /*

@@ -1,0 +1,7 @@
+[InputMethod]
+UniqueName=quwei
+_Name=Quwei
+IconName=quwei
+Priority=0
+LangCode=zh_CN
+Parent=fcitx-qw

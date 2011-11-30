@@ -6,6 +6,7 @@ exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
 addondir=@addondir@
+imconfigdir=@imconfigdir@
 configdescdir=@configdescdir@
 addonconfigdir=@addonconfigdir@
 
@@ -23,7 +24,8 @@ Known values for OPTION are:
   --includedir          Fcitx Include Prefix
   --addondir            Fcitx Addon Library Dir
   --configdescdir       Fcitx Configure Description File Dir
-  --addonconfigdir      Fcitx Addon Config file Dir
+  --addonconfigdir      Fcitx Addon Config File Dir
+  --imconfigdir         Fcitx Input Method Config File Dir
   --help                display this help and exit
   --version             output version information
 EOF
@@ -76,6 +78,10 @@ while test $# -gt 0; do
 
     --addonconfigdir)
       echo $addonconfigdir
+      ;;
+
+    --imconfigdir)
+      echo $imconfigdir
       ;;
 
     --version)

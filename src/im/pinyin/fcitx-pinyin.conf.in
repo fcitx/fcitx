@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-pinyin.so
 Type=SharedLibrary
 SubConfig=Shuang Pin Schema:native:pinyin/sp.dat,Symbol:native:pinyin/pySym.mb,fcitx:domain
+IMRegisterMethod=ConfigFile

@@ -8,3 +8,4 @@ Library=fcitx-classic-ui.so
 Type=SharedLibrary
 Dependency=fcitx-x11
 SubConfig=Skin:configfile:skin/*/fcitx_skin.conf:skin.desc,fcitx:domain
+Priority=70

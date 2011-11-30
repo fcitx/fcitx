@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <dlfcn.h>
@@ -80,6 +80,7 @@ struct _Messages {
 #define UI_FUNC_IS_VALID(funcname) (!(GetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
 
 static void ShowInputWindow(FcitxInstance* instance);
+static boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon);
 
 FCITX_EXPORT_API
 Messages* InitMessages()
@@ -136,84 +137,110 @@ void LoadUserInterface(FcitxInstance* instance)
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->bEnabled && addon->category == AC_UI) {
-            char *modulePath;
+            if (LoadUserInterfaceInternal(instance, addon))
+                instance->uinormal = addon;
 
-            switch (addon->type) {
-
-            case AT_SHAREDLIBRARY: {
-                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
-                void *handle;
-
-                if (!fp)
-                    break;
-
-                fclose(fp);
-
-                handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
-
-                if (!handle) {
-                    FcitxLog(ERROR, _("UI: open %s fail %s") , modulePath , dlerror());
-                    break;
-                }
-
-                if (!CheckABIVersion(handle)) {
-                    FcitxLog(ERROR, "%s ABI Version Error", addon->name);
-                    dlclose(handle);
-                    break;
-                }
-
-                addon->ui = dlsym(handle, "ui");
-
-                if (!addon->ui || !addon->ui->Create) {
-                    FcitxLog(ERROR, _("UI: bad ui"));
-                    dlclose(handle);
-                    break;
-                }
-
-                if ((addon->addonInstance = addon->ui->Create(instance)) == NULL) {
-                    dlclose(handle);
-                    return;
-                }
-
-                /* some may register before ui load, so load it here */
-                if (addon->ui->RegisterStatus) {
-                    UT_array* uistats = &instance->uistats;
-                    FcitxUIStatus *status;
-
-                    for (status = (FcitxUIStatus *) utarray_front(uistats);
-                            status != NULL;
-                            status = (FcitxUIStatus *) utarray_next(uistats, status))
-                        addon->ui->RegisterStatus(addon->addonInstance, status);
-                }
-
-                if (addon->ui->RegisterMenu) {
-                    UT_array* uimenus = &instance->uimenus;
-                    FcitxUIMenu **menupp;
-
-                    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
-                            menupp != NULL;
-                            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp))
-                        addon->ui->RegisterMenu(addon->addonInstance, *menupp);
-                }
-
-                instance->ui = addon;
-            }
-
-            break;
-
-            default:
-                break;
-            }
-
-            free(modulePath);
-
-            if (instance->ui != NULL)
+            if (instance->uinormal != NULL)
                 break;
         }
     }
 
+    instance->ui = instance->uinormal;
+
     if (instance->ui == NULL)
         FcitxLog(ERROR, "no usable user interface.");
+    else {
+        do {
+            FcitxAddon* fallbackAddon = GetAddonByName(&instance->addons, addon->uifallback);
+            if (fallbackAddon == NULL)
+                break;
+
+            if (!fallbackAddon->bEnabled)
+                break;
+
+            if (LoadUserInterfaceInternal(instance, fallbackAddon)) {
+                instance->uifallback = fallbackAddon;
+                if (instance->uifallback->ui->Suspend)
+                    instance->uifallback->ui->Suspend(instance->uifallback->addonInstance);
+            }
+        } while (0);
+    }
+}
+
+boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon)
+{
+    boolean success = false;
+    char *modulePath;
+
+    switch (addon->type) {
+
+    case AT_SHAREDLIBRARY: {
+        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+        void *handle;
+
+        if (!fp)
+            break;
+
+        fclose(fp);
+
+        handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+
+        if (!handle) {
+            FcitxLog(ERROR, _("UI: open %s fail %s") , modulePath , dlerror());
+            break;
+        }
+
+        if (!CheckABIVersion(handle)) {
+            FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+            dlclose(handle);
+            break;
+        }
+
+        addon->ui = dlsym(handle, "ui");
+
+        if (!addon->ui || !addon->ui->Create) {
+            FcitxLog(ERROR, _("UI: bad ui"));
+            dlclose(handle);
+            break;
+        }
+
+        if ((addon->addonInstance = addon->ui->Create(instance)) == NULL) {
+            dlclose(handle);
+            break;
+        }
+
+        /* some may register before ui load, so load it here */
+        if (addon->ui->RegisterStatus) {
+            UT_array* uistats = &instance->uistats;
+            FcitxUIStatus *status;
+
+            for (status = (FcitxUIStatus *) utarray_front(uistats);
+                    status != NULL;
+                    status = (FcitxUIStatus *) utarray_next(uistats, status))
+                addon->ui->RegisterStatus(addon->addonInstance, status);
+        }
+
+        if (addon->ui->RegisterMenu) {
+            UT_array* uimenus = &instance->uimenus;
+            FcitxUIMenu **menupp;
+
+            for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
+                    menupp != NULL;
+                    menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp))
+                addon->ui->RegisterMenu(addon->addonInstance, *menupp);
+        }
+
+        success = true;
+    }
+
+    break;
+
+    default:
+        break;
+    }
+
+    free(modulePath);
+    return success;
 }
 
 FCITX_EXPORT_API
@@ -655,5 +682,42 @@ void MoveInputWindowReal(FcitxInstance *instance)
     if (UI_FUNC_IS_VALID(MoveInputWindow))
         instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
+
+FCITX_EXPORT_API
+void SwitchUIToFallback(struct _FcitxInstance* instance)
+{
+    if (!instance->uifallback || instance->ui != instance->uinormal)
+        return;
+
+    if (instance->uinormal->ui->Suspend)
+        instance->uinormal->ui->Suspend(instance->uinormal->addonInstance);
+
+    if (instance->uifallback->ui->Resume)
+        instance->uifallback->ui->Resume(instance->uifallback->addonInstance);
+
+    instance->ui = instance->uifallback;
+}
+
+FCITX_EXPORT_API
+void ResumeUIFromFallback(struct _FcitxInstance* instance)
+{
+    if (!instance->uifallback || instance->ui != instance->uifallback)
+        return;
+    if (instance->uifallback->ui->Suspend)
+        instance->uifallback->ui->Suspend(instance->uifallback->addonInstance);
+
+    if (instance->uinormal->ui->Resume)
+        instance->uinormal->ui->Resume(instance->uinormal->addonInstance);
+
+    instance->ui = instance->uinormal;
+
+}
+
+FCITX_EXPORT_API
+boolean UIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
+{
+    return instance->uifallback == addon;
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4;

@@ -32,8 +32,9 @@ Description=Library
 
 [Addon/Type]
 Type=Enum
-EnumCount=1
+EnumCount=2
 Enum0=SharedLibrary
+Enum1=DBus
 Description=Type
 
 [Addon/Dependency]
@@ -50,6 +51,25 @@ Description=Priority of addon
 Type=String
 DefaultValue=
 Description=Sub Configuration for Module
+
+[Addon/IMRegisterMethod]
+Type=Enum
+DefaultValue=Self
+Description=Register IM
+EnumCount=3
+Enum0=Self
+Enum1=Exec
+Enum2=ConfigFile
+
+[Addon/IMRegisterArgument]
+Type=String
+DefaultValue=
+Description=Argument for InputMethod Register
+
+[Addon/UIFallback]
+Type=String
+DefaultValue=
+Description=Fallback UI Addon
 
 [DescriptionFile]
 LocaleDomain=fcitx

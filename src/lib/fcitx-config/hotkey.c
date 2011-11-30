@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <stdlib.h>
@@ -110,6 +110,31 @@ boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
     if (sym >= Key_a && sym <= Key_z)
         return true;
 
+    return false;
+}
+
+FCITX_EXPORT_API
+boolean IsHotkeyCursorMove(FcitxKeySym sym, int state)
+{
+    if ((
+                sym == Key_Left
+                || sym == Key_Right
+                || sym == Key_Up
+                || sym == Key_Down
+                || sym == Key_Page_Up
+                || sym == Key_Page_Down
+                || sym == Key_Home
+                || sym == Key_End
+            ) && (
+                state == KEY_CTRL_COMP
+                || state == KEY_CTRL_SHIFT_COMP
+                || state == KEY_SHIFT_COMP
+                || state == KEY_NONE
+            )
+
+       ) {
+        return true;
+    }
     return false;
 }
 

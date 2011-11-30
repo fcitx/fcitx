@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include "fcitx/fcitx.h"
@@ -41,7 +41,7 @@ typedef struct _FcitxDBus {
     FcitxDBusWatch* watches;
 } FcitxDBus;
 
-#define RETRY_INTERVAL 1
+#define RETRY_INTERVAL 2
 #define MAX_RETRY_TIMES 5
 
 static void* DBusCreate(FcitxInstance* instance);
@@ -86,7 +86,7 @@ void* DBusCreate(FcitxInstance* instance)
         }
 
         if (NULL == conn) {
-            sleep(RETRY_INTERVAL);
+            sleep(RETRY_INTERVAL * MAX_RETRY_TIMES);
             retry ++;
         }
     } while (NULL == conn && retry < MAX_RETRY_TIMES);

@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include <limits.h>
 #include <ctype.h>
@@ -343,8 +343,7 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
         return InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
     } else {
         if (!vkWindow->keyboard) {
-            char path[PATH_MAX];
-            strncpy(path, PKGDATADIR "/skin/default/keyboard.png" , PATH_MAX);
+            char path[] = PKGDATADIR "/skin/default/keyboard.png";
             vkWindow->keyboard = cairo_image_surface_create_from_png(path);
         }
         return vkWindow->keyboard;
@@ -533,9 +532,10 @@ void LoadVKMapFile(FcitxVKState *vkstate)
 {
     int             i, j;
     FILE           *fp;
-    char            strPath[PATH_MAX];
+    char           *buf = NULL;
     char           *pstr;
     VKS*            vks = vkstate->vks;
+    size_t          len;
 
     for (j = 0; j < VK_MAX; j++) {
         for (i = 0; i < VK_NUMBERS; i++) {
@@ -552,10 +552,8 @@ void LoadVKMapFile(FcitxVKState *vkstate)
 
     vkstate->iVKCount = 0;
 
-    for (;;) {
-        if (!fgets(strPath, PATH_MAX, fp))
-            break;
-        pstr = strPath;
+    while (getline(&buf, &len, fp) != -1) {
+        pstr = buf;
         while (*pstr == ' ' || *pstr == '\t')
             pstr++;
         if (pstr[0] == '#')
@@ -603,6 +601,9 @@ void LoadVKMapFile(FcitxVKState *vkstate)
             }
         }
     }
+
+    if (buf)
+        free(buf);
 
     fclose(fp);
 }

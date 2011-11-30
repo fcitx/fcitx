@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #ifndef _FCITX_UI_H_
@@ -27,6 +27,7 @@
 #include <fcitx-utils/utarray.h>
 
 #ifdef __cplusplus
+
 extern "C" {
 #endif
 
@@ -58,6 +59,7 @@ extern "C" {
 #define MAX_MESSAGE_COUNT 64
     typedef struct _MESSAGE MESSAGE;
     typedef struct _Messages Messages;
+    struct _FcitxAddon;
 
 #define MESSAGE_IS_NOT_EMPTY (messageUp.msgCount || messageDown.msgCount)
 #define MESSAGE_IS_EMPTY (!MESSAGE_IS_NOT_EMPTY)
@@ -102,7 +104,7 @@ extern "C" {
         /**
          * @brief private data for the UI implementation
          **/
-        void *priv;
+        void *uipriv[2];
         /**
          * @brief extra argument for tooglefunction
          **/
@@ -180,7 +182,7 @@ extern "C" {
         /**
          * @brief ui implementation private
          **/
-        void *uipriv;
+        void *uipriv[2];
         /**
          * @brief this is sub menu or not
          **/
@@ -251,6 +253,19 @@ extern "C" {
          * @brief reload config
          */
         void (*ReloadConfig)(void*);
+        /**
+         * @brief suspend to switch from/to fallback
+         */
+        void (*Suspend)(void*);
+        /**
+         * @brief resume from suspend
+         */
+        void (*Resume)(void*);
+
+        void (*padding0)(void*);
+        void (*padding1)(void*);
+        void (*padding2)(void*);
+        void (*padding3)(void*);
     } FcitxUI;
 
     /**
@@ -570,6 +585,25 @@ extern "C" {
      * @return void
      **/
     void UpdateInputWindow(struct _FcitxInstance* instance);
+
+
+    /**
+     * @brief User interface should switch to the fallback
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void SwitchUIToFallback(struct _FcitxInstance* instance);
+
+    /**
+     * @brief User interface should resume from the fallback
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void ResumeUIFromFallback(struct _FcitxInstance* instance);
+
+    boolean UIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon);
 
     static const UT_icd menuICD = {sizeof(MenuShell), NULL, NULL, NULL};
 

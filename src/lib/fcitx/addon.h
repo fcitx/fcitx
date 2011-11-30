@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -61,8 +61,19 @@ extern "C" {
      * @brief Supported Addon Type, Currently only sharedlibrary
      **/
     typedef enum _AddonType {
-        AT_SHAREDLIBRARY = 0
+        AT_SHAREDLIBRARY = 0,
+
+        AT_DBUS
     } AddonType;
+
+    /**
+     * @brief How addon get input method list
+     **/
+    typedef enum _IMRegisterMethod {
+        IMRM_SELF,
+        IMRM_EXEC,
+        IMRM_CONFIGFILE
+    } IMRegisterMethod;
 
     /**
      * @brief Addon Instance in Fcitx
@@ -87,6 +98,13 @@ extern "C" {
         };
         void *addonInstance;
         UT_array functionList;
+
+        IMRegisterMethod registerMethod;
+        char* registerArgument;
+        char* uifallback;
+        struct _FcitxInstance* owner;
+
+        void* padding[9];
     } FcitxAddon;
 
     /**

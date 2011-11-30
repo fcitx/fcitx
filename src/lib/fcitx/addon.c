@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -50,6 +50,9 @@ CONFIG_BINDING_REGISTER("Addon", "Type", type)
 CONFIG_BINDING_REGISTER("Addon", "Dependency", depend)
 CONFIG_BINDING_REGISTER("Addon", "Priority", priority)
 CONFIG_BINDING_REGISTER("Addon", "SubConfig", subconfig)
+CONFIG_BINDING_REGISTER("Addon", "IMRegisterMethod", registerMethod)
+CONFIG_BINDING_REGISTER("Addon", "IMRegisterArgument", registerArgument)
+CONFIG_BINDING_REGISTER("Addon", "UIFallback", uifallback)
 CONFIG_BINDING_END()
 
 static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
@@ -74,65 +77,24 @@ void LoadAddonInfo(UT_array* addons)
 {
     char **addonPath;
     size_t len;
-    char pathBuf[PATH_MAX];
     size_t i = 0;
-    DIR *dir;
-    struct dirent *drt;
-    struct stat fileStat;
     utarray_clear(addons);
 
-    StringHashSet* sset = NULL;
-
+    StringHashSet* sset = GetXDGFiles(
+                              PACKAGE "/addon",
+                              ".conf"
+                          );
     addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
-
-    for (i = 0; i < len; i++) {
-        snprintf(pathBuf, sizeof(pathBuf), "%s", addonPath[i]);
-        pathBuf[sizeof(pathBuf) - 1] = '\0';
-
-        dir = opendir(pathBuf);
-        if (dir == NULL)
-            continue;
-
-        /* collect all *.conf files */
-        while ((drt = readdir(dir)) != NULL) {
-            size_t nameLen = strlen(drt->d_name);
-            if (nameLen <= strlen(".conf"))
-                continue;
-            memset(pathBuf, 0, sizeof(pathBuf));
-
-            if (strcmp(drt->d_name + nameLen - strlen(".conf"), ".conf") != 0)
-                continue;
-            snprintf(pathBuf, sizeof(pathBuf), "%s/%s", addonPath[i], drt->d_name);
-
-            if (stat(pathBuf, &fileStat) == -1)
-                continue;
-
-            if (fileStat.st_mode & S_IFREG) {
-                StringHashSet *string;
-                HASH_FIND_STR(sset, drt->d_name, string);
-                if (!string) {
-                    char *bStr = strdup(drt->d_name);
-                    string = malloc(sizeof(StringHashSet));
-                    memset(string, 0, sizeof(StringHashSet));
-                    string->name = bStr;
-                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
-                }
-            }
-        }
-
-        closedir(dir);
-    }
-
     char **paths = malloc(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
-        paths[i] = malloc(sizeof(char) * PATH_MAX);
+        paths[i] = NULL;
     StringHashSet* string;
     for (string = sset;
             string != NULL;
             string = (StringHashSet*)string->hh.next) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
-            snprintf(paths[i], PATH_MAX, "%s/%s", addonPath[len - i - 1], string->name);
+            asprintf(&paths[i], "%s/%s", addonPath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
         FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
@@ -147,21 +109,17 @@ void LoadAddonInfo(UT_array* addons)
             ConfigBindSync((GenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");
         }
-    }
 
-    for (i = 0; i < len ; i ++)
-        free(paths[i]);
+        for (i = 0; i < len ; i ++) {
+            free(paths[i]);
+            paths[i] = NULL;
+        }
+    }
     free(paths);
 
     FreeXDGPath(addonPath);
 
-    StringHashSet *curStr;
-    while (sset) {
-        curStr = sset;
-        HASH_DEL(sset, curStr);
-        free(curStr->name);
-        free(curStr);
-    }
+    FreeStringHashSet(sset);
 
     utarray_sort(addons, AddonPriorityCmp);
 }
@@ -172,6 +130,7 @@ void AddonResolveDependency(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     boolean remove = true;
     FcitxAddon *addon;
+    FcitxAddon *uiaddon = NULL;
 
     /* choose ui */
     boolean founduiflag = false;
@@ -181,16 +140,38 @@ void AddonResolveDependency(FcitxInstance* instance)
         if (addon->category == AC_UI) {
             if (instance->uiname == NULL) {
                 if (addon->bEnabled) {
-                    if (!founduiflag)
+                    if (!founduiflag) {
+                        uiaddon = addon;
                         founduiflag = true;
-                    else
+                    } else
                         addon->bEnabled = false;
                 }
             } else {
                 if (strcmp(instance->uiname, addon->name) != 0)
                     addon->bEnabled = false;
-                else
+                else {
+                    uiaddon = addon;
                     addon->bEnabled = true;
+                }
+            }
+        }
+    }
+
+    if (uiaddon && uiaddon->uifallback) {
+        for (addon = (FcitxAddon *) utarray_front(addons);
+                addon != NULL;
+                addon = (FcitxAddon *) utarray_next(addons, addon)) {
+            if (addon->category == AC_UI && strcmp(uiaddon->uifallback, addon->name) == 0) {
+                addon->bEnabled = true;
+                FcitxAddon temp;
+                int uiidx = utarray_eltidx(addons, uiaddon);
+                int fallbackidx = utarray_eltidx(addons, addon);
+                if (fallbackidx < uiidx) {
+                    temp = *uiaddon;
+                    *uiaddon = *addon;
+                    *addon = temp;
+                }
+                break;
             }
         }
     }

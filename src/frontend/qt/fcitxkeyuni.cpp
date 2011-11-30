@@ -863,10 +863,10 @@ static const struct {
  *               is no corresponding character.
  **/
 quint32
-fcitx_keyval_to_unicode (uint keyval)
+fcitx_keyval_to_unicode(uint keyval)
 {
     int min = 0;
-    int max = sizeof (fcitx_keysym_to_unicode_tab) / sizeof (fcitx_keysym_to_unicode_tab[0]) - 1;
+    int max = sizeof(fcitx_keysym_to_unicode_tab) / sizeof(fcitx_keysym_to_unicode_tab[0]) - 1;
     int mid;
 
     /* First check for Latin-1 characters (1:1 mapping) */
@@ -1663,10 +1663,10 @@ static const struct {
  *               wc | 0x01000000
  **/
 uint
-fcitx_unicode_to_keyval (quint32 wc)
+fcitx_unicode_to_keyval(quint32 wc)
 {
     int min = 0;
-    int max = sizeof (fcitx_unicode_to_keysym_tab) / sizeof (fcitx_unicode_to_keysym_tab[0]) - 1;
+    int max = sizeof(fcitx_unicode_to_keysym_tab) / sizeof(fcitx_unicode_to_keysym_tab[0]) - 1;
     int mid;
 
     /* First check for Latin-1 characters (1:1 mapping) */
@@ -1693,4 +1693,4 @@ fcitx_unicode_to_keyval (quint32 wc)
      */
     return wc | 0x01000000;
 }
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

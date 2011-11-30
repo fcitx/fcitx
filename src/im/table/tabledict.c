@@ -18,7 +18,6 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     char            strHZ[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
     FILE           *fpDict;
     RECORD         *recTemp;
-    char            strPath[PATH_MAX];
     unsigned int    i = 0;
     unsigned int    iTemp, iTempCount;
     char            cChar = 0, cTemp;
@@ -35,11 +34,6 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     fpDict = GetXDGFileWithPrefix("table", tableMetaData->strPath, "r", &pstr);
     FcitxLog(INFO, _("Load Table Dict from %s"), pstr);
     free(pstr);
-
-    if (!fpDict) {
-        FcitxLog(DEBUG, _("Cannot load table file: %s"), strPath);
-        return false;
-    }
 
     //先读取码表的信息
     //判断版本信息
@@ -196,9 +190,10 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
 
-        strcpy(strPath, tableMetaData->uniqueName);
-        strcat(strPath, "_LastAutoPhrase.tmp");
-        fpDict = GetXDGFileWithPrefix("table", strPath, "rb", NULL);
+        char* temppath;
+        asprintf(&temppath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
+        fpDict = GetXDGFileWithPrefix("table", temppath, "rb", NULL);
+        free(temppath);
         i = 0;
         if (fpDict) {
             fread(&tableDict->iAutoPhrase, sizeof(unsigned int), 1, fpDict);
@@ -243,9 +238,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
 void SaveTableDict(TableMetaData *tableMetaData)
 {
     RECORD         *recTemp;
-    char            strPathTemp[PATH_MAX];
-    char            strPath[PATH_MAX];
-    char       *pstr;
+    char           *pstr, *tempfile;
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
@@ -255,9 +248,12 @@ void SaveTableDict(TableMetaData *tableMetaData)
     if (!tableDict->iTableChanged)
         return;
 
-    fpDict = GetXDGFileUserWithPrefix("table", TEMP_FILE, "wb", &pstr);
-    strcpy(strPathTemp, pstr);
-    free(pstr);
+    fpDict = GetXDGFileUserWithPrefix("table", TEMP_FILE, "wb", &tempfile);
+    if (!fpDict) {
+        FcitxLog(ERROR, _("Save dict error"));
+        free(tempfile);
+        return;
+    }
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号，为了与老版本兼容
     iTemp = 0;
@@ -306,8 +302,9 @@ void SaveTableDict(TableMetaData *tableMetaData)
     fpDict = GetXDGFileUserWithPrefix("table", tableMetaData->strPath, NULL, &pstr);
     if (access(pstr, 0))
         unlink(pstr);
-    rename(strPathTemp, pstr);
+    rename(tempfile, pstr);
     free(pstr);
+    free(tempfile);
 
     FcitxLog(DEBUG, _("Rename OK"));
 
@@ -315,8 +312,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
 
     if (tableDict->autoPhrase) {
         //保存上次的自动词组信息
-        fpDict = GetXDGFileUserWithPrefix("table", TEMP_FILE, "wb", &pstr);
-        strncpy(strPathTemp, pstr, PATH_MAX);
+        fpDict = GetXDGFileUserWithPrefix("table", TEMP_FILE, "wb", &tempfile);
         if (fpDict) {
             fwrite(&tableDict->iAutoPhrase, sizeof(int), 1, fpDict);
             for (i = 0; i < tableDict->iAutoPhrase; i++) {
@@ -327,15 +323,16 @@ void SaveTableDict(TableMetaData *tableMetaData)
             }
             fclose(fpDict);
         }
-        free(pstr);
 
-        strncpy(strPath, tableMetaData->uniqueName, PATH_MAX);
-        strncat(strPath, "_LastAutoPhrase.tmp", PATH_MAX);
+        char* strPath;
+        asprintf(&strPath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
         fpDict = GetXDGFileWithPrefix("table", strPath, NULL, &pstr);
+        free(strPath);
         if (access(pstr, F_OK))
             unlink(pstr);
-        rename(strPathTemp, pstr);
+        rename(tempfile, pstr);
         free(pstr);
+        free(tempfile);
     }
 }
 

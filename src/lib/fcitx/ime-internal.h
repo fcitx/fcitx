@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 /**
  * @file   ime-internal.h
@@ -62,6 +62,18 @@ struct _FcitxInputState {
 
     int padding[63];
 };
+
+struct _FcitxIMEntry {
+    GenericConfig config;
+    char* uniqueName;
+    char* name;
+    char* iconName;
+    int priority;
+    char* langCode;
+    char* parent;
+};
+
+typedef struct _FcitxIMEntry FcitxIMEntry;
 
 /**
  * @brief init fcitx im array
@@ -171,6 +183,14 @@ int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
 
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
+void LoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
+
+/**
+ * @brief Load inputmethod.desc file
+ *
+ * @return ConfigFileDesc*
+ **/
+ConfigFileDesc* GetIMConfigDesc();
 
 #endif
 

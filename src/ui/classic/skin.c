@@ -17,7 +17,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -73,7 +73,6 @@ CONFIG_DESC_DEFINE(GetSkinDesc, "skin.desc")
 int LoadSkinConfig(FcitxSkin* sc, char** skinType)
 {
     FILE    *fp;
-    char  buf[PATH_MAX] = {0};
     boolean    isreload = False;
     int ret = 0;
     if (sc->config.configFile) {
@@ -104,10 +103,11 @@ reload:
     //获取配置文件的绝对路径
     {
         if (!isreload) {
-            snprintf(buf, PATH_MAX, "%s/fcitx_skin.conf", *skinType);
-            buf[PATH_MAX - 1] = '\0';
+            char* buf;
+            asprintf(&buf, "%s/fcitx_skin.conf", *skinType);
 
             fp = GetXDGFileWithPrefix("skin", buf, "r", NULL);
+            free(buf);
         } else {
             FcitxLog(INFO, PKGDATADIR "/skin/default/fcitx_skin.conf");
             fp = fopen(PKGDATADIR "/skin/default/fcitx_skin.conf", "r");
@@ -158,7 +158,6 @@ reload:
 
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
 {
-    char buf[PATH_MAX];
     cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
 
@@ -170,11 +169,12 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
         size_t len;
         char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin");
         char *filename;
-        while (True) {
-            snprintf(buf, PATH_MAX, "%s/%s", skintype, name);
-            buf[PATH_MAX - 1] = '\0';
+        while (true) {
+            char* buf = NULL;
+            asprintf(&buf, "%s/%s", skintype, name);
 
             FILE* fp = GetXDGFile(buf, path, "r", len, &filename);
+            free(buf);
 
             Bool flagNoFile = (fp == NULL);
             if (fp) {
@@ -772,7 +772,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
     struct dirent *drt;
     struct stat fileStat;
     size_t len;
-    char pathBuf[PATH_MAX];
+    char *pathBuf;
     char **skinPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin");
     for (i = 0; i < len; i++) {
         dir = opendir(skinPath[i]);
@@ -782,9 +782,11 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
         while ((drt = readdir(dir)) != NULL) {
             if (strcmp(drt->d_name , ".") == 0 || strcmp(drt->d_name, "..") == 0)
                 continue;
-            sprintf(pathBuf, "%s/%s", skinPath[i], drt->d_name);
+            asprintf(&pathBuf, "%s/%s", skinPath[i], drt->d_name);
 
-            if (stat(pathBuf, &fileStat) == -1) {
+            int statresult = stat(pathBuf, &fileStat);
+            free(pathBuf);
+            if (statresult == -1) {
                 continue;
             }
             if (fileStat.st_mode & S_IFDIR) {

@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -60,6 +60,7 @@ static void UpdateIMMenuShell(FcitxUIMenu *menu);
 static void EnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
 static void CloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
 static void ChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState);
+static void FreeIMEntry(FcitxIMEntry* entry);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -82,6 +83,15 @@ FCITX_SETTER(FcitxInputState, ShowCursor, bShowCursor, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
+
+CONFIG_BINDING_BEGIN(FcitxIMEntry)
+CONFIG_BINDING_REGISTER("InputMethod", "UniqueName", uniqueName)
+CONFIG_BINDING_REGISTER("InputMethod", "Name", name)
+CONFIG_BINDING_REGISTER("InputMethod", "IconName", iconName)
+CONFIG_BINDING_REGISTER("InputMethod", "Parent", parent)
+CONFIG_BINDING_REGISTER("InputMethod", "LangCode", langCode)
+CONFIG_BINDING_REGISTER("InputMethod", "Priority", priority)
+CONFIG_BINDING_END()
 
 FcitxInputState* CreateFcitxInputState()
 {
@@ -180,11 +190,91 @@ static const char* GetStateName(INPUT_RETURN_VALUE retVal)
     return "unknown";
 }
 
+void LoadIM(FcitxInstance* instance, FcitxAddon* addon)
+{
+    if (!addon)
+        return;
+
+    if (addon->type == AT_SHAREDLIBRARY) {
+        char* modulePath;
+        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+        void *handle;
+        FcitxIMClass * imclass;
+        if (!fp) {
+            free(modulePath);
+            return;
+        }
+        fclose(fp);
+        handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+        free(modulePath);
+        if (!handle) {
+            FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath , dlerror());
+            return;
+        }
+
+        if (!CheckABIVersion(handle)) {
+            FcitxLog(ERROR, "%s ABI Version Error", addon->name);
+            dlclose(handle);
+            return;
+        }
+
+        imclass = dlsym(handle, "ime");
+        if (!imclass || !imclass->Create) {
+            FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
+            dlclose(handle);
+            return;
+        }
+        if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
+            dlclose(handle);
+            return;
+        }
+        addon->imclass = imclass;
+        utarray_push_back(&instance->imeclasses, &addon);
+    } else if (addon->type == AT_DBUS) {
+    }
+}
+
 void UnloadIM(FcitxAddon* pim)
 {
     FcitxIMClass *im = pim->imclass;
     if (im->Destroy)
         im->Destroy(pim->addonInstance);
+}
+
+void FcitxRegisterEmptyEntry(FcitxInstance *instance,
+                             const char* name,
+                             const char* uniqueName,
+                             const char* iconName,
+                             int priority,
+                             const char *langCode,
+                             FcitxAddon* addon
+                            )
+{
+    UT_array* imes = &instance->availimes ;
+    FcitxIM* entry = GetIMFromIMList(imes, uniqueName);
+    if (entry) {
+        FcitxLog(ERROR, "%s already exists", uniqueName);
+        return;
+    } else {
+        FcitxIM newime;
+        memset(&newime, 0, sizeof(FcitxIM));
+
+        utarray_push_back(imes, &newime);
+
+        entry = (FcitxIM*) utarray_back(imes);
+    }
+
+    if (entry == NULL)
+        return;
+
+    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
+    strncpy(entry->strName, name, MAX_IM_NAME);
+    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->iPriority = priority;
+    strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
+    entry->langCode[LANGCODE_LENGTH] = 0;
+    entry->initialized = false;
+    entry->owner = addon;
 }
 
 FCITX_EXPORT_API
@@ -243,80 +333,105 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
     if (priority <= 0)
         return ;
     UT_array* imes = &instance->availimes ;
-    FcitxIM newime;
+    FcitxIM* entry;
 
-    if (GetIMFromIMList(imes, uniqueName)) {
-        FcitxLog(ERROR, "%s already exists", uniqueName);
-        return ;
+    entry = GetIMFromIMList(imes, uniqueName);
+    if (entry) {
+        if (entry->initialized) {
+            FcitxLog(ERROR, "%s already exists", uniqueName);
+            return ;
+        }
+    } else {
+        FcitxIM newime;
+        memset(&newime, 0, sizeof(FcitxIM));
+
+        utarray_push_back(imes, &newime);
+
+        entry = (FcitxIM*) utarray_back(imes);
     }
 
-    memset(&newime, 0, sizeof(FcitxIM));
-    strncpy(newime.uniqueName, uniqueName, MAX_IM_NAME);
-    strncpy(newime.strName, name, MAX_IM_NAME);
-    strncpy(newime.strIconName, iconName, MAX_IM_NAME);
-    newime.Init = Init;
-    newime.ResetIM = ResetIM;
-    newime.DoInput = DoInput;
-    newime.GetCandWords = GetCandWords;
-    newime.PhraseTips = PhraseTips;
-    newime.Save = Save;
-    newime.ReloadConfig = ReloadConfig;
-    newime.klass = addonInstance;
-    newime.iPriority = priority;
-    newime.priv = priv;
-    strncpy(newime.langCode, langCode, LANGCODE_LENGTH);
-    newime.langCode[LANGCODE_LENGTH] = 0;
+    if (entry == NULL)
+        return;
 
-    utarray_push_back(imes, &newime);
+    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
+    strncpy(entry->strName, name, MAX_IM_NAME);
+    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->Init = Init;
+    entry->ResetIM = ResetIM;
+    entry->DoInput = DoInput;
+    entry->GetCandWords = GetCandWords;
+    entry->PhraseTips = PhraseTips;
+    entry->Save = Save;
+    entry->ReloadConfig = ReloadConfig;
+    entry->klass = addonInstance;
+    entry->iPriority = priority;
+    entry->priv = priv;
+    strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
+    entry->langCode[LANGCODE_LENGTH] = 0;
+    entry->initialized = true;
 }
+
+CONFIG_DESC_DEFINE(GetIMConfigDesc, "inputmethod.desc")
 
 boolean LoadAllIM(FcitxInstance* instance)
 {
+    StringHashSet* sset = GetXDGFiles(PACKAGE "/inputmethod", ".conf");
+    StringHashSet* curs = sset;
     UT_array* addons = &instance->addons;
-    UT_array* ims = &instance->imeclasses;
+
+    while (curs) {
+        FILE* fp = GetXDGFileWithPrefix("inputmethod", curs->name, "r", NULL);
+        ConfigFile* cfile = NULL;
+        if (fp) {
+            cfile = ParseConfigFileFp(fp, GetIMConfigDesc());
+            fclose(fp);
+        }
+
+        if (cfile) {
+            FcitxIMEntry* entry = fcitx_malloc0(sizeof(FcitxIMEntry));
+            FcitxIMEntryConfigBind(entry, cfile, GetIMConfigDesc());
+            ConfigBindSync(&entry->config);
+            FcitxAddon *addon = GetAddonByName(&instance->addons, entry->parent);
+
+            if (addon
+                    && addon->bEnabled
+                    && addon->category == AC_INPUTMETHOD
+                    && addon->registerMethod == IMRM_CONFIGFILE
+               ) {
+                FcitxRegisterEmptyEntry(instance,
+                                        entry->name,
+                                        entry->uniqueName,
+                                        entry->iconName,
+                                        entry->priority,
+                                        entry->langCode,
+                                        addon
+                                       );
+            }
+            FreeIMEntry(entry);
+        }
+        curs = curs->hh.next;
+    }
+
+    FreeStringHashSet(sset);
+
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->bEnabled && addon->category == AC_INPUTMETHOD) {
-            char *modulePath;
             switch (addon->type) {
             case AT_SHAREDLIBRARY: {
-                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
-                void *handle;
-                FcitxIMClass * imclass;
-                if (!fp)
-                    break;
-                fclose(fp);
-                handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
-                if (!handle) {
-                    FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath , dlerror());
-                    break;
-                }
-
-                if (!CheckABIVersion(handle)) {
-                    FcitxLog(ERROR, "%s ABI Version Error", addon->name);
-                    dlclose(handle);
-                    break;
-                }
-
-                imclass = dlsym(handle, "ime");
-                if (!imclass || !imclass->Create) {
-                    FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
-                    dlclose(handle);
-                    break;
-                }
-                if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
-                    dlclose(handle);
-                    break;
-                }
-                addon->imclass = imclass;
-                utarray_push_back(ims, &addon);
+                if (addon->registerMethod == IMRM_SELF)
+                    LoadIM(instance, addon);
             }
+            break;
+            case AT_DBUS: {
+
+            }
+            break;
             default:
                 break;
             }
-            free(modulePath);
         }
     }
 
@@ -493,6 +608,33 @@ INPUT_RETURN_VALUE ProcessKey(
         }
     }
 
+    if (retVal != IRV_ASYNC) {
+        return DoInputCallback(
+                   instance,
+                   retVal,
+                   event,
+                   timestamp,
+                   sym,
+                   state);
+    } else
+        return retVal;
+}
+
+
+FCITX_EXPORT_API
+INPUT_RETURN_VALUE DoInputCallback(
+    FcitxInstance* instance,
+    INPUT_RETURN_VALUE retVal,
+    FcitxKeyEventType event,
+    long unsigned int timestamp,
+    FcitxKeySym sym,
+    unsigned int state)
+{
+    FcitxIM* currentIM = GetCurrentIM(instance);
+    FcitxInputState *input = instance->input;
+
+    FcitxConfig *fc = instance->config;
+
     if (GetCurrentState(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         CleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
@@ -500,9 +642,9 @@ INPUT_RETURN_VALUE ProcessKey(
     }
 
     /*
-        * since all candidate word are cached in candList, so we don't need to trigger
-        * GetCandWords after go for another page, simply update input window is ok.
-        */
+     * since all candidate word are cached in candList, so we don't need to trigger
+     * GetCandWords after go for another page, simply update input window is ok.
+     */
     if (GetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         if (IsHotKey(sym, state, fc->hkPrevPage)) {
             if (CandidateWordGoPrevPage(input->candList))
@@ -619,6 +761,24 @@ void SwitchIM(FcitxInstance* instance, int index)
 
     if (lastIM && lastIM->Save)
         lastIM->Save(lastIM->klass);
+
+    /* lazy load */
+    if (newIM && !newIM->initialized) {
+        char* name = strdup(newIM->uniqueName);
+        LoadIM(instance, newIM->owner);
+        FcitxIM* im = GetIMFromIMList(&instance->availimes, name);
+        if (!im->initialized) {
+            im->initialized = true;
+            int index = utarray_eltidx(&instance->availimes, im);
+            utarray_erase(&instance->availimes, index, 1);
+        }
+
+        UpdateIMList(instance);
+        instance->iIMIndex = GetIMIndexByName(instance, name);
+        newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+        free(name);
+    }
+
     if (newIM && newIM->Init)
         newIM->Init(newIM->klass);
 
@@ -1178,5 +1338,19 @@ boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime)
     }
     return false;
 }
+
+void FreeIMEntry(FcitxIMEntry* entry)
+{
+    if (!entry)
+        return ;
+    FreeConfigFile(entry->config.configFile);
+    free(entry->name);
+    free(entry->iconName);
+    free(entry->langCode);
+    free(entry->uniqueName);
+    free(entry->parent);
+    free(entry);
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

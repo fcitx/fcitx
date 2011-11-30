@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include <iconv.h>
 #include <stdio.h>
@@ -37,6 +37,7 @@
 #include "fcitx/hook.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/candidate.h"
+#include <sys/socket.h>
 
 #define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
@@ -144,6 +145,7 @@ static char* Status2String(FcitxUIStatus* status);
 static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
 static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n);
+static void KimpanelServiceExistCallback(DBusPendingCall *call, void *data);
 
 #define KIMPANEL_BUFFER_SIZE 4096
 
@@ -162,6 +164,12 @@ FcitxUI ui = {
     KimpanelOnTriggerOff,
     NULL,
     NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
     NULL
 };
 
@@ -177,48 +185,79 @@ void* KimpanelCreate(FcitxInstance* instance)
     kimpanel->owner = instance;
     kimpanel->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
 
-    if (kimpanel->conn == NULL) {
-        FcitxLog(ERROR, "DBus Not initialized");
-        free(kimpanel);
-        return NULL;
-    }
-
-    // add a rule to receive signals from kimpanel
     DBusError err;
     dbus_error_init(&err);
-    dbus_bus_add_match(kimpanel->conn,
-                       "type='signal',interface='org.kde.impanel'",
-                       &err);
-    dbus_connection_flush(kimpanel->conn);
-    if (dbus_error_is_set(&err)) {
-        FcitxLog(ERROR, "Match Error (%s)", err.message);
+    do {
+        if (kimpanel->conn == NULL) {
+            FcitxLog(ERROR, "DBus Not initialized");
+            break;
+        }
+
+        // add a rule to receive signals from kimpanel
+        dbus_bus_add_match(kimpanel->conn,
+                           "type='signal',interface='org.kde.impanel'",
+                           &err);
+        dbus_connection_flush(kimpanel->conn);
+        if (dbus_error_is_set(&err)) {
+            FcitxLog(ERROR, "Match Error (%s)", err.message);
+            break;
+        }
+
+        dbus_bus_add_match(kimpanel->conn,
+                           "type='signal',"
+                           "interface='" DBUS_INTERFACE_DBUS "',"
+                           "path='" DBUS_PATH_DBUS "',"
+                           "member='NameOwnerChanged'",
+                           &err);
+
+        dbus_connection_flush(kimpanel->conn);
+        if (dbus_error_is_set(&err)) {
+            FcitxLog(ERROR, "Match Error (%s)", err.message);
+            break;
+        }
+
+        if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel, NULL)) {
+            FcitxLog(ERROR, "No memory");
+            break;
+        }
+
+        DBusObjectPathVTable vtable = {NULL, &KimpanelDBusEventHandler, NULL, NULL, NULL, NULL };
+
+        dbus_connection_register_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH, &vtable, kimpanel);
+
+        kimpanel->messageUp = InitMessages();
+        kimpanel->messageDown = InitMessages();
+
+        FcitxIMEventHook resethk;
+        resethk.arg = kimpanel;
+        resethk.func = KimpanelInputReset;
+        RegisterResetInputHook(instance, resethk);
+
+        const char* kimpanelServiceName = "org.kde.impanel";
+        DBusMessage* message = dbus_message_new_method_call(DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS, "NameHasOwner");
+        dbus_message_append_args(message, DBUS_TYPE_STRING, &kimpanelServiceName, DBUS_TYPE_INVALID);
+        dbus_connection_send(kimpanel->conn, message, NULL);
+
+        DBusPendingCall* call = NULL;
+        dbus_bool_t reply = dbus_connection_send_with_reply(kimpanel->conn, message,
+                            &call,
+                            0);
+        if (reply == TRUE) {
+            dbus_pending_call_set_notify(call,
+                                         KimpanelServiceExistCallback,
+                                         kimpanel,
+                                         NULL);
+        }
+        dbus_connection_flush(kimpanel->conn);
+
+        KimpanelRegisterAllStatus(kimpanel);
         dbus_error_free(&err);
-        free(kimpanel);
-        return NULL;
-    }
+        return kimpanel;
+    } while (0);
 
-    if (!dbus_connection_add_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel, NULL)) {
-        FcitxLog(ERROR, "No memory");
-        dbus_error_free(&err);
-        free(kimpanel);
-        return NULL;
-    }
-
-    DBusObjectPathVTable vtable = {NULL, &KimpanelDBusEventHandler, NULL, NULL, NULL, NULL };
-
-    dbus_connection_register_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH, &vtable, kimpanel);
-
-    kimpanel->messageUp = InitMessages();
-    kimpanel->messageDown = InitMessages();
-
-    FcitxIMEventHook resethk;
-    resethk.arg = kimpanel;
-    resethk.func = KimpanelInputReset;
-    RegisterResetInputHook(instance, resethk);
-
-    KimpanelRegisterAllStatus(kimpanel);
     dbus_error_free(&err);
-    return kimpanel;
+    free(kimpanel);
+    return NULL;
 }
 
 void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
@@ -518,14 +557,17 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     FcitxInputState* input = FcitxInstanceGetInputState(kimpanel->owner);
     int int0;
     const char* s0 = NULL;
-    DBusError error;
-    dbus_error_init(&error);
     if (dbus_message_is_signal(msg, "org.kde.impanel", "MovePreeditCaret")) {
         FcitxLog(DEBUG, "MovePreeditCaret");
+        DBusError error;
+        dbus_error_init(&error);
         dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 , DBUS_TYPE_INVALID);
+        dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "SelectCandidate")) {
         FcitxLog(DEBUG, "SelectCandidate: ");
+        DBusError error;
+        dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 , DBUS_TYPE_INVALID)) {
             if (GetCurrentState(instance) == IS_ACTIVE && int0 < 10) {
                 struct _CandidateWordList* candList = FcitxInputStateGetCandidateList(input);
@@ -533,6 +575,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                 ProcessKey(kimpanel->owner, FCITX_PRESS_KEY, 0, choose[int0], 0);
             }
         }
+        dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "LookupTablePageUp")) {
         FcitxLog(DEBUG, "LookupTablePageUp");
@@ -550,6 +593,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "TriggerProperty")) {
         FcitxLog(DEBUG, "TriggerProperty: ");
+        DBusError error;
+        dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s0 , DBUS_TYPE_INVALID)) {
             size_t len = strlen("/Fcitx/");
             if (strlen(s0) > len) {
@@ -583,10 +628,11 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     UpdateStatus(instance, s0);
             }
         }
+        dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
         FcitxLog(DEBUG, "PanelCreated");
-
+        ResumeUIFromFallback(instance);
         KimpanelRegisterAllStatus(kimpanel);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
@@ -606,6 +652,27 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             pclose(p);
         else
             FcitxLog(ERROR, _("Unable to create process"));
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
+        const char* service, *oldowner, *newowner;
+        DBusError error;
+        dbus_error_init(&error);
+        if (dbus_message_get_args(msg, &error,
+                                  DBUS_TYPE_STRING, &service ,
+                                  DBUS_TYPE_STRING, &oldowner ,
+                                  DBUS_TYPE_STRING, &newowner ,
+                                  DBUS_TYPE_INVALID)) {
+            /* old die and no new one */
+            if (strcmp(service, "org.kde.impanel") == 0
+                    && strlen(oldowner) > 0
+                    && strlen(newowner) == 0)
+                SwitchUIToFallback(instance);
+            /*
+             * since if new rise, it will send PanelCreated,
+             * So don't need to re-register here
+             */
+        }
+        dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
 
@@ -1195,4 +1262,26 @@ int CalKimCursorPos(FcitxKimpanelUI *kimpanel)
 
     return iCount;
 }
+
+void KimpanelServiceExistCallback(DBusPendingCall *call, void *data)
+{
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) data;
+
+    DBusMessage* msg = dbus_pending_call_steal_reply(call);
+
+    if (msg) {
+        dbus_bool_t has;
+        DBusError error;
+        dbus_error_init(&error);
+        dbus_message_get_args(msg, &error, DBUS_TYPE_BOOLEAN, &has , DBUS_TYPE_INVALID);
+        if (!has)
+            SwitchUIToFallback(kimpanel->owner);
+        dbus_message_unref(msg);
+        dbus_error_free(&error);
+    }
+
+    dbus_pending_call_cancel(call);
+    dbus_pending_call_unref(call);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

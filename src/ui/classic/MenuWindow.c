@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #include <ctype.h>
 #include <math.h>
@@ -125,6 +125,7 @@ XlibMenu* CreateMainMenuWindow(FcitxClassicUI *classicui)
 boolean MenuWindowEventHandler(void *arg, XEvent* event)
 {
     XlibMenu* menu = (XlibMenu*) arg;
+    FcitxClassicUI* classicui = menu->owner;
     if (event->xany.window == menu->menuWindow) {
         switch (event->type) {
         case MapNotify:
@@ -152,7 +153,7 @@ boolean MenuWindowEventHandler(void *arg, XEvent* event)
                 DrawXlibMenu(menu);
 
                 if (shell && shell->type == MENUTYPE_SUBMENU && shell->subMenu) {
-                    XlibMenu* subxlibmenu = (XlibMenu*) shell->subMenu->uipriv;
+                    XlibMenu* subxlibmenu = (XlibMenu*) shell->subMenu->uipriv[classicui->isfallback];
                     CloseOtherSubMenuWindow(menu, subxlibmenu);
                     MoveSubMenu(subxlibmenu, menu, offseth);
                     DrawXlibMenu(subxlibmenu);
@@ -195,7 +196,7 @@ void CloseAllMenuWindow(FcitxClassicUI *classicui)
             menupp != NULL;
             menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         ) {
-        XlibMenu* xlibMenu = (XlibMenu*)(*menupp)->uipriv;
+        XlibMenu* xlibMenu = (XlibMenu*)(*menupp)->uipriv[classicui->isfallback];
         XUnmapWindow(classicui->dpy, xlibMenu->menuWindow);
     }
     XUnmapWindow(classicui->dpy, classicui->mainMenuWindow->menuWindow);
@@ -203,26 +204,28 @@ void CloseAllMenuWindow(FcitxClassicUI *classicui)
 
 void CloseOtherSubMenuWindow(XlibMenu *xlibMenu, XlibMenu* subMenu)
 {
+    FcitxClassicUI* classicui = xlibMenu->owner;
     MenuShell *menu;
     for (menu = (MenuShell *) utarray_front(&xlibMenu->menushell->shell);
             menu != NULL;
             menu = (MenuShell *) utarray_next(&xlibMenu->menushell->shell, menu)
         ) {
-        if (menu->type == MENUTYPE_SUBMENU && menu->subMenu && menu->subMenu->uipriv != subMenu) {
-            CloseAllSubMenuWindow((XlibMenu *)menu->subMenu->uipriv);
+        if (menu->type == MENUTYPE_SUBMENU && menu->subMenu && menu->subMenu->uipriv[classicui->isfallback] != subMenu) {
+            CloseAllSubMenuWindow((XlibMenu *)menu->subMenu->uipriv[classicui->isfallback]);
         }
     }
 }
 
 void CloseAllSubMenuWindow(XlibMenu *xlibMenu)
 {
+    FcitxClassicUI* classicui = xlibMenu->owner;
     MenuShell *menu;
     for (menu = (MenuShell *) utarray_front(&xlibMenu->menushell->shell);
             menu != NULL;
             menu = (MenuShell *) utarray_next(&xlibMenu->menushell->shell, menu)
         ) {
         if (menu->type == MENUTYPE_SUBMENU && menu->subMenu) {
-            CloseAllSubMenuWindow((XlibMenu *)menu->subMenu->uipriv);
+            CloseAllSubMenuWindow((XlibMenu *)menu->subMenu->uipriv[classicui->isfallback]);
         }
     }
     XUnmapWindow(xlibMenu->owner->dpy, xlibMenu->menuWindow);
@@ -239,7 +242,7 @@ boolean IsMouseInOtherMenu(XlibMenu *xlibMenu, int x, int y)
             menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
         ) {
 
-        XlibMenu* otherXlibMenu = (XlibMenu*)(*menupp)->uipriv;
+        XlibMenu* otherXlibMenu = (XlibMenu*)(*menupp)->uipriv[classicui->isfallback];
         if (otherXlibMenu == xlibMenu)
             continue;
         XWindowAttributes attr;

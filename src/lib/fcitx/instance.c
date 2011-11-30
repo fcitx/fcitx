@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <unistd.h>
@@ -122,8 +122,18 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         goto error_exit;
     if (GetAddonConfigDesc() == NULL)
         goto error_exit;
+    if (GetIMConfigDesc() == NULL)
+        goto error_exit;
 
     LoadAddonInfo(&instance->addons);
+
+    /* FIXME: a walkaround for not have instance in function InvokeModuleFunction */
+    FcitxAddon* addon;
+    for (addon = (FcitxAddon *) utarray_front(&instance->addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(&instance->addons, addon)) {
+        addon->owner = instance;
+    }
     AddonResolveDependency(instance);
     InitBuiltInHotkey(instance);
     LoadModule(instance);
@@ -152,9 +162,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
         SaveConfig(instance->config);
 
         const char *imname = "fcitx";
-        char strTemp[PATH_MAX];
-        snprintf(strTemp, PATH_MAX, "@im=%s", imname);
-        strTemp[PATH_MAX - 1] = '\0';
+        char *strTemp;
+        asprintf(&strTemp, "@im=%s", imname);
 
         if ((getenv("XMODIFIERS") != NULL && CHECK_ENV("XMODIFIERS", strTemp, true)) ||
                 (CHECK_ENV("GTK_IM_MODULE", "xim", false) && CHECK_ENV("GTK_IM_MODULE", "fcitx", false))
@@ -175,6 +184,8 @@ FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[])
 
             DisplayMessage(instance, _("Setting Hint"), msg, 12);
         }
+
+        free(strTemp);
     }
     /* make in order to use block X, query is not good here */
     pthread_create(&instance->pid, NULL, RunInstance, instance);

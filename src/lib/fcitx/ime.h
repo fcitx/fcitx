@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 /**
@@ -33,6 +33,7 @@
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/hotkey.h>
 #include <fcitx/ui.h>
+#include <fcitx/addon.h>
 
 #ifdef __cplusplus
 
@@ -80,6 +81,7 @@ extern "C" {
         IRV_FLAG_PUNC = 1 << 7, /* special */
         IRV_FLAG_DISPLAY_LAST = 1 << 8, /* special */
         IRV_FLAG_DO_PHRASE_TIPS = 1 << 9, /* special */
+        IRV_FLAG_ASYNC = 1 << 10,
         /* compatible */
         IRV_DONOT_PROCESS = IRV_FLAG_FORWARD_KEY,
         IRV_COMMIT_STRING = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_DO_PHRASE_TIPS,
@@ -92,7 +94,8 @@ extern "C" {
         IRV_DISPLAY_MESSAGE = IRV_FLAG_UPDATE_INPUT_WINDOW,
         IRV_ENG = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_ENG | IRV_FLAG_RESET_INPUT,
         IRV_PUNC = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_PUNC | IRV_FLAG_RESET_INPUT,
-        IRV_DISPLAY_LAST = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_DISPLAY_LAST
+        IRV_DISPLAY_LAST = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_DISPLAY_LAST,
+        IRV_ASYNC = IRV_FLAG_ASYNC
     } INPUT_RETURN_VALUE;
 
     /**
@@ -178,7 +181,17 @@ extern "C" {
          **/
         char uniqueName[MAX_IM_NAME + 1];
 
-        int padding[5];
+        /**
+         * @brief input method initialized or not
+         */
+        boolean initialized;
+
+        /**
+         * @brief Fcitx Addon
+         **/
+        FcitxAddon* owner;
+
+        int padding[3];
     } FcitxIM;
 
     typedef enum _FcitxKeyEventType {
@@ -371,6 +384,15 @@ extern "C" {
      * @return INPUT_RETURN_VALUE
      **/
     INPUT_RETURN_VALUE ProcessKey(struct _FcitxInstance* instance, FcitxKeyEventType event, long unsigned int timestamp, FcitxKeySym sym, unsigned int state);
+
+    FCITX_EXPORT_API
+    INPUT_RETURN_VALUE DoInputCallback(
+        struct _FcitxInstance* instance,
+        INPUT_RETURN_VALUE retVal,
+        FcitxKeyEventType event,
+        long unsigned int timestamp,
+        FcitxKeySym sym,
+        unsigned int state);
 
     /**
      * @brief send a new key event to client

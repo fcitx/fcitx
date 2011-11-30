@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 #ifdef FCITX_HAVE_CONFIG_H
 #include "config.h"
@@ -121,11 +121,7 @@ void LoadTableInfo(FcitxTableState *tbl)
 {
     char **tablePath;
     size_t len;
-    char pathBuf[PATH_MAX];
     int i = 0;
-    DIR *dir;
-    struct dirent *drt;
-    struct stat fileStat;
 
     StringHashSet* sset = NULL;
     tbl->bTablePhraseTips = false;
@@ -148,55 +144,18 @@ void LoadTableInfo(FcitxTableState *tbl)
     utarray_init(tbl->table, &table_icd);
 
     tablePath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table");
-
-    for (i = 0; i < len; i++) {
-        snprintf(pathBuf, sizeof(pathBuf), "%s", tablePath[i]);
-        pathBuf[sizeof(pathBuf) - 1] = '\0';
-
-        dir = opendir(pathBuf);
-        if (dir == NULL)
-            continue;
-
-        /* collect all *.conf files */
-        while ((drt = readdir(dir)) != NULL) {
-            size_t nameLen = strlen(drt->d_name);
-            if (nameLen <= strlen(".conf"))
-                continue;
-            memset(pathBuf, 0, sizeof(pathBuf));
-
-            if (strcmp(drt->d_name + nameLen - strlen(".conf"), ".conf") != 0)
-                continue;
-            snprintf(pathBuf, sizeof(pathBuf), "%s/%s", tablePath[i], drt->d_name);
-
-            if (stat(pathBuf, &fileStat) == -1)
-                continue;
-
-            if (fileStat.st_mode & S_IFREG) {
-                StringHashSet *string;
-                HASH_FIND_STR(sset, drt->d_name, string);
-                if (!string) {
-                    char *bStr = strdup(drt->d_name);
-                    string = fcitx_malloc0(sizeof(StringHashSet));
-                    memset(string, 0, sizeof(StringHashSet));
-                    string->name = bStr;
-                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
-                }
-            }
-        }
-
-        closedir(dir);
-    }
+    sset = GetXDGFiles(PACKAGE "/table", ".conf");
 
     char **paths = fcitx_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
-        paths[i] = fcitx_malloc0(sizeof(char) * PATH_MAX);
+        paths[i] = NULL;
     StringHashSet* string;
     for (string = sset;
             string != NULL;
             string = (StringHashSet*)string->hh.next) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
-            snprintf(paths[i], PATH_MAX, "%s/%s", tablePath[len - i - 1], string->name);
+            asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
         }
         FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
@@ -215,22 +174,16 @@ void LoadTableInfo(FcitxTableState *tbl)
                 utarray_pop_back(tbl->table);
             }
         }
+
+        for (i = 0; i < len ; i ++) {
+            free(paths[i]);
+            paths[i] = NULL;
+        }
     }
 
-    for (i = 0; i < len ; i ++)
-        free(paths[i]);
     free(paths);
-
-
     FreeXDGPath(tablePath);
-
-    StringHashSet *curStr;
-    while (sset) {
-        curStr = sset;
-        HASH_DEL(sset, curStr);
-        free(curStr->name);
-        free(curStr);
-    }
+    FreeStringHashSet(sset);
 }
 
 CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
@@ -563,11 +516,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 }
             } else {
                 /* friendly to cursor move, don't left cursor move while input text */
-                if (FcitxInputStateGetRawInputBufferSize(input) != 0 &&
-                        (IsHotKey(sym, state, FCITX_LEFT) ||
-                         IsHotKey(sym, state, FCITX_RIGHT) ||
-                         IsHotKey(sym, state, FCITX_HOME) ||
-                         IsHotKey(sym, state, FCITX_END))) {
+                if (FcitxInputStateGetRawInputBufferSize(input) != 0
+                        && IsHotkeyCursorMove(sym, state)
+                        && !IsHotKey(sym, state, config->hkPrevPage)
+                        && !IsHotKey(sym, state, config->hkNextPage)) {
                     return IRV_DO_NOTHING;
                 } else
                     return IRV_TO_PROCESS;
@@ -621,7 +573,9 @@ INPUT_RETURN_VALUE _TableGetCandWord(FcitxTableState* tbl, TABLECANDWORD* tableC
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxProfile *profile = FcitxInstanceGetProfile(instance);
 
-    if (!strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol))
+    if (table->strSymbol
+        && strlen(table->strSymbol) > 0
+        && strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol) == 0)
         return TableGetFHCandWord(tbl, tableCandWord);
 
     FcitxInputStateSetIsInRemind(input, false);

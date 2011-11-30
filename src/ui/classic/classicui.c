@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with this program; if not, write to the                         *
  *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
 #include <X11/Xutil.h>
@@ -65,6 +65,9 @@ static void ClassicUIOnTriggerOff(void *arg);
 static void ClassicUIDisplayMessage(void *arg, char *title, char **msg, int length);
 static void ClassicUIInputReset(void *arg);
 static void ReloadConfigClassicUI(void *arg);
+static void ClassicUISuspend(void *arg);
+static void ClassicUIResume(void *arg);
+
 static ConfigFileDesc* GetClassicUIDesc();
 static void ClassicUIMainWindowSizeHint(void *arg, int* x, int* y, int* w, int* h);
 
@@ -87,7 +90,13 @@ FcitxUI ui = {
     ClassicUIOnTriggerOff,
     ClassicUIDisplayMessage,
     ClassicUIMainWindowSizeHint,
-    ReloadConfigClassicUI
+    ReloadConfigClassicUI,
+    ClassicUISuspend,
+    ClassicUIResume,
+    NULL,
+    NULL,
+    NULL,
+    NULL
 };
 
 FCITX_EXPORT_API
@@ -117,6 +126,8 @@ void* ClassicUICreate(FcitxInstance* instance)
         free(classicui);
         return NULL;
     }
+
+    classicui->isfallback = UIIsFallback(instance, classicuiaddon);
 
     classicui->iScreen = DefaultScreen(classicui->dpy);
 
@@ -185,6 +196,8 @@ void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxX
 static void ClassicUIInputReset(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
@@ -217,7 +230,7 @@ static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     XlibMenu* xlibMenu = CreateXlibMenu(classicui);
-    menu->uipriv = xlibMenu;
+    menu->uipriv[classicui->isfallback] = xlibMenu;
     xlibMenu->menushell = menu;
 }
 
@@ -225,18 +238,23 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
-    status->priv = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
-    char activename[PATH_MAX], inactivename[PATH_MAX];
-    sprintf(activename, "%s_active.png", status->name);
-    sprintf(inactivename, "%s_inactive.png", status->name);
+    status->uipriv[classicui->isfallback] = fcitx_malloc0(sizeof(FcitxClassicUIStatus));
+    char* activename, *inactivename;
+    asprintf(&activename, "%s_active.png", status->name);
+    asprintf(&inactivename, "%s_inactive.png", status->name);
 
     LoadImage(sc, activename, false);
     LoadImage(sc, inactivename, false);
+
+    free(activename);
+    free(inactivename);
 }
 
 static void ClassicUIOnInputFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
@@ -244,20 +262,26 @@ static void ClassicUIOnInputFocus(void *arg)
 static void ClassicUIOnInputUnFocus(void *arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    if (classicui->isSuspend)
+        return;
     DrawMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
-Bool
-IsWindowVisible(Display* dpy, Window window)
+
+void ClassicUISuspend(void* arg)
 {
-    XWindowAttributes attrs;
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    classicui->isSuspend = true;
+    CloseInputWindowInternal(classicui->inputWindow);
+    CloseMainWindow(classicui->mainWindow);
+    ReleaseTrayWindow(classicui->trayWindow);
+}
 
-    XGetWindowAttributes(dpy, window, &attrs);
-
-    if (attrs.map_state == IsUnmapped)
-        return False;
-
-    return True;
+void ClassicUIResume(void* arg)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    classicui->isSuspend = false;
+    InitTrayWindow(classicui->trayWindow);
 }
 
 void ActivateWindow(Display *dpy, int iScreen, Window window)

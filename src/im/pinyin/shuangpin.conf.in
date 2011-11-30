@@ -1,0 +1,7 @@
+[InputMethod]
+UniqueName=shuangpin
+_Name=Shuangpin
+IconName=shuangpin
+Priority=5
+LangCode=zh_CN
+Parent=fcitx-pinyin
