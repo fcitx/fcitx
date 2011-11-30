@@ -145,6 +145,8 @@ static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
 static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n);
 
+#define KIMPANEL_BUFFER_SIZE 4096
+
 FCITX_EXPORT_API
 FcitxUI ui = {
     KimpanelCreate,
@@ -375,7 +377,7 @@ void KimpanelShowInputWindow(void* arg)
     int nTexts = 0;
     char *label[33];
     char *text[33];
-    char cmb[100] = "";
+    char cmb[KIMPANEL_BUFFER_SIZE] = "";
     int i;
 
     if (n) {
@@ -402,8 +404,9 @@ void KimpanelShowInputWindow(void* arg)
                     msgstr = needfree;
                 else
                     msgstr = GetMessageString(messageDown, i);
-
-                strcat(cmb, msgstr);
+                
+                if (strlen(cmb) + strlen(msgstr) + 1 < KIMPANEL_BUFFER_SIZE)
+                    strcat(cmb, msgstr);
                 if (needfree)
                     free(needfree);
             }
