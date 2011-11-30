@@ -11,6 +11,10 @@
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
 
+#define RECORDTYPE_NORMAL 0
+#define RECORDTYPE_PINYIN 1
+#define RECORDTYPE_CONSTRUCT 2
+
 typedef enum _ADJUSTORDER {
     AD_NO = 0,
     AD_FAST = 1,
@@ -40,7 +44,7 @@ typedef struct _RECORD {
     struct _RECORD *prev;
     unsigned int    iHit;
     unsigned int    iIndex;
-    boolean         bPinyin;
+    int8_t          type;
 } RECORD;
 
 typedef struct _AUTOPHRASE {
@@ -101,6 +105,7 @@ typedef struct _TableDict {
     RULE* rule;
     unsigned int iRecordCount;
     RECORD* tableSingleHZ[SINGLE_HZ_COUNT];
+    RECORD* tableSingleHZCons[SINGLE_HZ_COUNT];
     unsigned int iTableIndex;
     boolean bHasPinyin;
     RECORD* currentRecord;

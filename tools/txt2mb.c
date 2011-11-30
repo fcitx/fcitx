@@ -58,7 +58,7 @@ char            cPinyinKey = '\0';
 typedef struct _RECORD {
     char           *strCode;
     char           *strHZ;
-    int8_t            bPinyin;
+    int8_t          type;
 
     struct _RECORD *next;
 
@@ -109,7 +109,7 @@ boolean IsValidCode(char cChar)
         p++;
     }
 
-    if (cChar == cPinyinKey)
+    if (cChar == cPinyinKey || cChar == '^')
         return true;
 
     return false;
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     unsigned char   iCodeLength = 0;
     unsigned char   iPYCodeLength = 0;
 
-    boolean            bPY;
+    int8_t          type;
 
     if (argc != 3) {
         printf("\nUsage: txt2mb <Source File> <IM File>\n\n");
@@ -379,23 +379,30 @@ int main(int argc, char *argv[])
             exit(1);
         }
 
-        if (((strCode[0] != cPinyinKey) && (strlen(strCode) > iCodeLength)) || ((strCode[0] == cPinyinKey) && (strlen(strCode) > (iPYCodeLength + 1)))) {
+        if (((strCode[0] != cPinyinKey) && (strlen(strCode) > iCodeLength))
+            || ((strCode[0] == cPinyinKey) && (strlen(strCode) > (iPYCodeLength + 1)))
+            || ((strCode[0] == '^') && (strlen(strCode) > (iCodeLength + 1)))) {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);
             continue;
         }
 
-        if (utf8_strlen(strHZ) > PHRASE_MAX_LENGTH) { //最长词组长度为10个汉字
+        size_t hzLen = utf8_strlen(strHZ);
+         // Utf-8 Longest Phrase Length is 10, longest construct code length is 1
+        if (hzLen > PHRASE_MAX_LENGTH || (strCode[0] == '^' && hzLen != 1)) {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);
             continue;
         }
 
-        bPY = false;
+        type = 0;
 
         pstr = strCode;
 
         if (strCode[0] == cPinyinKey) {
             pstr ++;
-            bPY = true;
+            type = 1;
+        } else if (strCode[0] == '^') {
+            pstr ++;
+            type = 2;
         }
 
         //查找是否重复
@@ -440,7 +447,7 @@ int main(int argc, char *argv[])
 
         strcpy(newRec->strHZ, strHZ);
 
-        newRec->bPinyin = bPY;
+        newRec->type = type;
 
         newRec->iHit = 0;
 
@@ -477,8 +484,8 @@ int main(int argc, char *argv[])
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号
     iTemp = 0;
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
-    fwrite(&iInternalVersion, sizeof(int8_t), 1, fpDict);
+    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fwrite(&iInternalVersion, sizeof(int8_t), 1, fpNew);
 
     iTemp = (unsigned int) strlen(strInputCode);
     fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
@@ -513,7 +520,7 @@ int main(int argc, char *argv[])
         s = strlen(current->strHZ) + 1;
         fwrite(&s, sizeof(unsigned int), 1, fpNew);
         fwrite(current->strHZ, sizeof(char), s, fpNew);
-        fwrite(&(current->bPinyin), sizeof(char), 1, fpDict);
+        fwrite(&(current->type), sizeof(int8_t), 1, fpNew);
         fwrite(&(current->iHit), sizeof(unsigned int), 1, fpNew);
         fwrite(&(current->iIndex), sizeof(unsigned int), 1, fpNew);
         current = current->next;
