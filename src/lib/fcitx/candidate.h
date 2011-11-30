@@ -50,6 +50,14 @@ extern "C" {
          **/
         CandidateWordCommitCallback callback;
         /**
+         * @brief Store the candidateWord Type
+         **/
+        MSG_TYPE wordType;
+        /**
+         * @brief Store the extra Type
+         **/
+        MSG_TYPE extraType;
+        /**
          * @brief Pointer can identify where the candidatework come from
          **/
         void* owner;

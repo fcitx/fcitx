@@ -1081,6 +1081,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
             candWord.priv = pycandword;
             candWord.strWord = strdup(pystate->strPYAuto);
             candWord.strExtra = NULL;
+            candWord.wordType = MSG_OTHER;
             CandidateWordAppend(candList, &candWord);
         }
 
@@ -1468,6 +1469,10 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
         candWord.priv = *pcand;
         candWord.strExtra = NULL;
         candWord.strWord = NULL;
+        if ((*pcand)->iWhich == PY_CAND_USERPHRASE)
+            candWord.wordType = MSG_USERPHR;
+        else
+            candWord.wordType = MSG_OTHER;
         const char* pBase = PYFAList[(*pcand)->cand.phrase.iPYFA].pyBase[(*pcand)->cand.phrase.iBase].strHZ;
         const char* pPhrase = (*pcand)->cand.phrase.phrase->strPhrase;
         asprintf(&candWord.strWord, "%s%s", pBase, pPhrase);
@@ -1519,6 +1524,7 @@ void PYGetSymCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
             candWord.priv = pycandWord;
             candWord.strExtra = NULL;
             candWord.strWord = strdup(hz->strHZ);
+            candWord.wordType = MSG_OTHER;
             CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
             hz = hz->next;
         }
@@ -1581,6 +1587,7 @@ void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
         candWord.priv = *pcand;
         candWord.strExtra = NULL;
         candWord.strWord = strdup(PYFAList[(*pcand)->cand.base.iPYFA].pyBase[(*pcand)->cand.base.iBase].strHZ);
+        candWord.wordType = MSG_OTHER;
 
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
@@ -1633,6 +1640,7 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
         candWord.priv = *pcand;
         candWord.strExtra = NULL;
         candWord.strWord = strdup((*pcand)->cand.freq.hz->strHZ);
+        candWord.wordType = MSG_USERPHR;
 
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
@@ -2173,6 +2181,7 @@ _HIT:
         candWord.priv = *pcand;
         candWord.strExtra = NULL;
         candWord.strWord = strdup((*pcand)->cand.remind.phrase->strPhrase + (*pcand)->cand.remind.iLength);
+        candWord.wordType = MSG_OTHER;
 
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }

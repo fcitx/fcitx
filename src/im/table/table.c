@@ -734,8 +734,10 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(FcitxTableState* tbl)
         } else
             pstr = (char *) NULL;
 
-        if (pstr)
+        if (pstr) {
             candWord->strExtra = strdup(pstr);
+            candWord->extraType = MSG_CODE;
+        }
         tbl->pygetcandword = candWord->callback;
         candWord->callback = Table_PYGetCandWord;
         candWord->owner = tbl;
@@ -807,6 +809,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
         candWord.priv = tableCandWord;
         candWord.strWord = strdup(tableCandWord->candWord.record->strHZ);
         candWord.strExtra = NULL;
+        candWord.wordType = MSG_OTHER;
 
         const char* pstr = NULL;
         if ((tableCandWord->flag == CT_NORMAL) && (tableCandWord->candWord.record->type == RECORDTYPE_PINYIN)) {
@@ -823,8 +826,10 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
         else
             pstr = ((tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode) + FcitxInputStateGetRawInputBufferSize(input);
 
-        if (pstr)
+        if (pstr) {
             candWord.strExtra = strdup(pstr);
+            candWord.extraType = MSG_CODE;
+        }
 
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
@@ -852,6 +857,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
         candWord.priv = tableCandWord;
         candWord.strWord = strdup(tableCandWord->candWord.autoPhrase->strHZ);
         candWord.strExtra = NULL;
+        candWord.wordType = MSG_USERPHR;
 
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
@@ -1011,6 +1017,7 @@ INPUT_RETURN_VALUE TableGetRemindCandWords(FcitxTableState* tbl)
                 candWord.priv = tableCandWord;
                 candWord.strExtra = NULL;
                 candWord.strWord = strdup(tableCandWord->candWord.record->strHZ + strlen(tbl->strTableRemindSource));
+                candWord.wordType = MSG_OTHER;
                 CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
             }
         }
@@ -1075,6 +1082,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords(FcitxTableState* tbl)
         candWord.priv = tableCandWord;
         candWord.strExtra = NULL;
         candWord.strWord = strdup(table->tableDict->fh[i].strFH);
+        candWord.wordType = MSG_OTHER;
         CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }
     return IRV_DISPLAY_CANDWORDS;

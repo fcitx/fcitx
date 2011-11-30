@@ -530,7 +530,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
 
         AddMessageAtLast(msgDown, MSG_INDEX, "%s", strTemp);
 
-        MSG_TYPE type = MSG_OTHER;
+        MSG_TYPE type = candWord->wordType;
 
         if (i == 0 && CandidateWordGetCurrentPage(input->candList) == 0)
             type = MSG_FIRSTCAND;
@@ -538,7 +538,7 @@ int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messag
         AddMessageAtLast(msgDown, type, "%s", candWord->strWord);
 
         if (candWord->strExtra && strlen(candWord->strExtra) != 0)
-            AddMessageAtLast(msgDown, MSG_CODE, "%s", candWord->strExtra);
+            AddMessageAtLast(msgDown, candWord->extraType, "%s", candWord->strExtra);
 
         AddMessageAtLast(msgDown, MSG_OTHER, " ");
     }

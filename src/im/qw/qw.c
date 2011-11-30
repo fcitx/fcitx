@@ -157,6 +157,7 @@ INPUT_RETURN_VALUE QWGetCandWords(void *arg)
             candWord.priv = NULL;
             candWord.strExtra = NULL;
             candWord.strWord = strdup(GetQuWei(qwstate, iQu, iWei + i + 1));
+            candWord.wordType = MSG_OTHER;
             CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
         }
     }
