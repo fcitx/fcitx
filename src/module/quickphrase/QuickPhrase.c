@@ -382,6 +382,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
             candWord.priv = qpcand;
             candWord.strExtra = strdup(currentQuickPhrase->strCode + iInputLen);
             candWord.strWord = strdup(currentQuickPhrase->strPhrase);
+            candWord.wordType = MSG_OTHER;
+            candWord.extraType = MSG_CODE;
             CandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
         }
     }
