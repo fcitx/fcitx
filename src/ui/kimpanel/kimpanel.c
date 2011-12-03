@@ -265,10 +265,9 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     FcitxInstance* instance = kimpanel->owner;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
     char **prop = fcitx_malloc0(sizeof(char*) * (2 + utarray_len(uistats)));
-    asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
-    asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-eng", _("Input Method Disabled"));
+    asprintf(&prop[0], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-keyboard", _("Input Method Disabled"));
 
-    int count = 2;
+    int count = 1;
 
     FcitxUIStatus *status;
     for (status = (FcitxUIStatus *) utarray_front(uistats);
@@ -294,7 +293,7 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
     char* imname;
     char* description;
     if (GetCurrentState(instance) != IS_ACTIVE) {
-        icon = "eng";
+        icon = "keyboard";
         imname = _("Disabled");
         description = _("Input Method Disabled");
     } else {
@@ -304,7 +303,7 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
             imname = _(im->strName);
             description = _(im->strName);
         } else {
-            icon = "eng";
+            icon = "keyboard";
             imname = _("Disabled");
             description = _("Input Method Disabled");
         }
@@ -599,22 +598,22 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             size_t len = strlen("/Fcitx/");
             if (strlen(s0) > len) {
                 s0 += len;
-                if (strcmp("logo", s0) == 0) {
-                    if (GetCurrentState(instance) == IS_CLOSED) {
-                        EnableIM(instance, GetCurrentIC(instance), false);
-                    } else {
-                        CloseIM(instance, GetCurrentIC(instance));
-                    }
+                if (strcmp("keyboard", s0) == 0) {
+                    CloseIM(instance, GetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
                     int index = atoi(s0);
                     SwitchIM(instance, index);
+                    if (GetCurrentState(instance) != IS_ACTIVE) {
+                        EnableIM(instance, GetCurrentIC(instance), false);
+                    }
                 } else if (strncmp("im", s0, strlen("im")) == 0) {
                     UT_array* imes = FcitxInstanceGetIMEs(instance);
                     FcitxIM* pim;
-                    int index = 0;
-                    size_t len = utarray_len(imes);
+                    int index = 1;
+                    size_t len = utarray_len(imes) + 1;
                     char **prop = fcitx_malloc0(len * sizeof(char*));
+                    asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "keyboard", _("Input Method Disabled"));
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {

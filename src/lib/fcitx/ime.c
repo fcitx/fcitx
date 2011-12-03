@@ -345,7 +345,7 @@ void FcitxRegisterIMv2(FcitxInstance *instance,
                       NULL,
                       priv,
                       priority,
-                      ""
+                      langCode
                      );
 }
 

@@ -3,6 +3,7 @@ if (ENABLE_TABLE)
 endif (ENABLE_TABLE)
 
 add_subdirectory(script)
+add_subdirectory(icon)
 
 set(FCITX_DESC_FILES
     addon.desc
@@ -33,8 +34,6 @@ set(PY_DATA ${CMAKE_CURRENT_BINARY_DIR}/pybase.mb ${CMAKE_CURRENT_BINARY_DIR}/py
 set(PY_TAR ${CMAKE_CURRENT_SOURCE_DIR}/pinyin.tar.gz)
 set(PY_URL http://fcitx.googlecode.com/files/pinyin.tar.gz)
 
-
-add_subdirectory(png)
 
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx-configtool.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-configtool.desktop )
 intltool_merge_translation(${CMAKE_CURRENT_SOURCE_DIR}/fcitx.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx.desktop )

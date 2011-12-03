@@ -238,10 +238,6 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                         strcat(FcitxInputStateGetRawInputBuffer(input), buf);
                     ShowQuickPhraseMessage(qpstate);
                     *retval = QuickPhraseGetCandWords(qpstate);
-                    if (*retval == IRV_DISPLAY_MESSAGE) {
-                        SetMessageCount(FcitxInputStateGetAuxDown(input), 0);
-                        AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", _("Press Enter to input text"));
-                    }
                 }
             } else
                 return true;
@@ -271,6 +267,11 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             return false;
         } else
             *retval = IRV_DO_NOTHING;
+        if (*retval == IRV_DISPLAY_MESSAGE) {
+            SetMessageCount(FcitxInputStateGetAuxDown(input), 0);
+            if (CandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0)
+                AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", _("Press Enter to input text"));
+        }
         return true;
     }
     return false;
@@ -340,6 +341,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
     FcitxInstance *instance = qpstate->owner;
     FcitxConfig* config = FcitxInstanceGetConfig(instance);
+    
+    CleanInputWindowDown(qpstate->owner);
 
     CandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
     CandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);

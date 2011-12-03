@@ -725,17 +725,17 @@ void SwitchVK(FcitxVKState *vkstate)
 
         XMoveWindow(vkWindow->dpy, vkWindow->window, x, y);
         DisplayVKWindow(vkWindow);
-        CloseInputWindow(vkstate->owner);
+        CloseInputWindow(instance);
 
-        FcitxInputContext* ic = GetCurrentIC(vkstate->owner);
+        FcitxInputContext* ic = GetCurrentIC(instance);
 
         if (ic && GetCurrentState(instance) == IS_CLOSED)
             EnableIM(instance, ic, true);
-    } else
+    } else {
         XUnmapWindow(vkWindow->dpy, vkWindow->window);
-
-
-
+        CleanInputWindow(instance);
+        UpdateInputWindow(instance);
+    }
 }
 
 /*

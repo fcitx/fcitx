@@ -79,7 +79,7 @@ void *TableCreate(FcitxInstance* instance)
     for (table = (TableMetaData*) utarray_front(tbl->table);
             table != NULL;
             table = (TableMetaData*) utarray_next(tbl->table, table)) {
-        FcitxLog(INFO, table->strName);
+        FcitxLog(INFO, table->langCode);
         FcitxRegisterIMv2(
             instance,
             tbl,
