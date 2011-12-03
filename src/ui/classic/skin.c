@@ -26,7 +26,7 @@
  *
  * @date   2009-10-9
  *
- * @brief  皮肤设置相关定义及初始化加载工作
+ * @brief  Skin setting related code and draw code.
  *
  *
  */

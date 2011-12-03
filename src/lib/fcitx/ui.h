@@ -47,6 +47,8 @@ extern "C" {
 
     struct _FcitxInstance;
     typedef enum _MSG_TYPE {
+        MSG_TYPE_FIRST = 0,
+        MSG_TYPE_LAST = 6,
         MSG_TIPS = 0,           //提示文本
         MSG_INPUT = 1,          //用户的输入
         MSG_INDEX = 2,          //候选字前面的序号

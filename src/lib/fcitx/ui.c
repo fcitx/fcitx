@@ -118,7 +118,10 @@ char* GetMessageString(Messages* m, int index)
 FCITX_EXPORT_API
 MSG_TYPE GetMessageType(Messages* m, int index)
 {
-    return m->msg[index].type;
+    if (m->msg[index].type <= MSG_TYPE_LAST)
+        return m->msg[index].type;
+    else
+        return MSG_OTHER;
 }
 
 FCITX_EXPORT_API
