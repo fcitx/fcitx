@@ -2,7 +2,7 @@
 
 a=`find scabable/status/ -type f -name \*.svg`
 echo $a
-size="24 32 48"
+size="24 48"
 for f in $a
 do
     ff=`basename $f`
