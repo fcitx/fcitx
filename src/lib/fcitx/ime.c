@@ -1296,7 +1296,8 @@ int CheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
     return -1;
 }
 
-int GetIMIndexByName(FcitxInstance* instance, char* imName)
+FCITX_EXPORT_API
+int GetIMIndexByName(FcitxInstance* instance, const char* imName)
 {
     UT_array* imes = &instance->imes;
     FcitxIM *pim;

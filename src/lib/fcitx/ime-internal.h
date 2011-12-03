@@ -179,8 +179,6 @@ INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
  **/
 INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
 
-int GetIMIndexByName(struct _FcitxInstance* instance, char* imName);
-
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
 void LoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);

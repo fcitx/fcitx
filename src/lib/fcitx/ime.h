@@ -481,6 +481,17 @@ extern "C" {
      * @return int
      **/
     int CheckChooseKey(FcitxKeySym sym, int state, const char* strChoose);
+    
+    /**
+     * @brief get im index by im name
+     *
+     * @param instance fcitx instance
+     * @param imName im name
+     * @return int im index
+     * 
+     * @since 4.2
+     **/
+    int GetIMIndexByName(struct _FcitxInstance* instance, const char* imName);
 
     struct _CandidateWordList* FcitxInputStateGetCandidateList(FcitxInputState* input);
 

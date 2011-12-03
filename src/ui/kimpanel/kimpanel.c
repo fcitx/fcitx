@@ -609,7 +609,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     CloseIM(instance, GetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
-                    int index = atoi(s0);
+                    int index = GetIMIndexByName(instance, s0);
                     SwitchIM(instance, index);
                     if (GetCurrentState(instance) != IS_ACTIVE) {
                         EnableIM(instance, GetCurrentIC(instance), false);
@@ -624,7 +624,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {
-                        asprintf(&prop[index], "/Fcitx/im/%d:%s:fcitx-%s:%s", index, _(pim->strName), pim->strIconName, _(pim->strName));
+                        asprintf(&prop[index], "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, _(pim->strName), pim->strIconName, _(pim->strName));
                         index ++;
                     }
                     KimExecMenu(kimpanel, prop , len);
