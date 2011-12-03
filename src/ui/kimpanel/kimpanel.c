@@ -265,9 +265,10 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     FcitxInstance* instance = kimpanel->owner;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
     char **prop = fcitx_malloc0(sizeof(char*) * (2 + utarray_len(uistats)));
-    asprintf(&prop[0], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-keyboard", _("Input Method Disabled"));
+    asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
+    asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-keyboard", _("Input Method Disabled"));
 
-    int count = 1;
+    int count = 2;
 
     FcitxUIStatus *status;
     for (status = (FcitxUIStatus *) utarray_front(uistats);
@@ -598,7 +599,13 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             size_t len = strlen("/Fcitx/");
             if (strlen(s0) > len) {
                 s0 += len;
-                if (strcmp("keyboard", s0) == 0) {
+                if (strcmp("logo", s0) == 0) {
+                    if (GetCurrentState(instance) == IS_CLOSED) {
+                        EnableIM(instance, GetCurrentIC(instance), false);
+                    } else {
+                        CloseIM(instance, GetCurrentIC(instance));
+                    }
+                } else if (strcmp("keyboard", s0) == 0) {
                     CloseIM(instance, GetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
