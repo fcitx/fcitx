@@ -36,7 +36,7 @@
 #define AUTOSAVE_ORDER_COUNT    1024
 #define AUTOSAVE_FREQ_COUNT     32
 
-struct _CandidateWord;
+struct _FcitxCandidateWord;
 struct _FcitxInstance;
 struct _FcitxPinyinState;
 struct MHPY;
@@ -207,7 +207,7 @@ void            CalculateCursorPosition(struct _FcitxPinyinState* pystate);
 
 void            PYCreateAuto(struct _FcitxPinyinState* pystate);
 INPUT_RETURN_VALUE PYGetCandWords(void* arg);
-INPUT_RETURN_VALUE PYGetCandWord(void* arg, struct _CandidateWord* pycandWord);
+INPUT_RETURN_VALUE PYGetCandWord(void* arg, struct _FcitxCandidateWord* pycandWord);
 void            PYGetSymCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq);
 void PYAddSymCandWord(HZ* hz, PYCandWord* pycandWord);
 void            PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq);

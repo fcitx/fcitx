@@ -50,7 +50,7 @@ extern "C" {
      * @param argv argv
      * @return FcitxInstance*
      **/
-    FcitxInstance* CreateFcitxInstance(sem_t *sem, int argc, char* argv[]);
+    FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[]);
 
     /**
      * @brief lock the instance
@@ -58,7 +58,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return int
      **/
-    int FcitxLock(FcitxInstance* instance);
+    int FcitxInstanceLock(FcitxInstance* instance);
 
     /**
      * @brief lock the instance
@@ -66,7 +66,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return int
      **/
-    int FcitxUnlock(FcitxInstance* instance);
+    int FcitxInstanceUnlock(FcitxInstance* instance);
 
     /**
      * @brief notify the instance is end
@@ -74,7 +74,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return void
      **/
-    void EndInstance(FcitxInstance* instance);
+    void FcitxInstanceEnd(FcitxInstance* instance);
 
     /**
      * @brief Get Current Input Context
@@ -82,7 +82,7 @@ extern "C" {
      * @param instance
      * @return FcitxInputContext*
      **/
-    FcitxInputContext* GetCurrentIC(struct _FcitxInstance* instance);
+    FcitxInputContext* FcitxInstanceGetCurrentIC(struct _FcitxInstance* instance);
 
     /**
      * @brief Set Current Input Context
@@ -91,7 +91,7 @@ extern "C" {
      * @param ic new input context
      * @return current ic changed
      **/
-    boolean SetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
+    boolean FcitxInstanceSetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
 
     /**
@@ -120,7 +120,7 @@ extern "C" {
 
     void FcitxInstanceSetMaxFD(FcitxInstance* instance, int maxfd);
 
-    FcitxConfig* FcitxInstanceGetConfig(FcitxInstance* instance);
+    FcitxGlobalConfig* FcitxInstanceGetGlobalConfig(FcitxInstance* instance);
 
     FcitxProfile* FcitxInstanceGetProfile(FcitxInstance* instance);
 

@@ -61,11 +61,11 @@ typedef struct _FcitxRemote {
 
 void* RemoteCreate(FcitxInstance* instance)
 {
-    FcitxRemote* remote = fcitx_malloc0(sizeof(FcitxRemote));
+    FcitxRemote* remote = fcitx_utils_malloc0(sizeof(FcitxRemote));
     remote->owner = instance;
 
     char *socketfile;
-    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
+    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", fcitx_utils_get_display_number());
     remote->socket_fd = CreateSocket(socketfile);
     if (remote->socket_fd < 0) {
         FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
@@ -137,7 +137,7 @@ int UdAccept(int listenfd)
 
 static void SendIMState(FcitxRemote* remote, int fd)
 {
-    IME_STATE r = GetCurrentState(remote->owner);
+    IME_STATE r = FcitxInstanceGetCurrentState(remote->owner);
     write(fd, &r, sizeof(r));
 }
 
@@ -152,7 +152,7 @@ static void RemoteProcessEvent(void* p)
     read(client_fd, &O, sizeof(int));
     unsigned int cmd = O & 0xFFFF;
     unsigned int arg = (O >> 16) & 0xFFFF;
-    FcitxLock(remote->owner);
+    FcitxInstanceLock(remote->owner);
     switch (cmd) {
         /// {{{
     case 0:
@@ -160,18 +160,18 @@ static void RemoteProcessEvent(void* p)
         break;
     case 1:
         if (arg == IS_CLOSED)
-            CloseIM(remote->owner, GetCurrentIC(remote->owner));
+            FcitxInstanceCloseIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         else
-            EnableIM(remote->owner, GetCurrentIC(remote->owner), false);
+            FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
         break;
     case 2:
-        ReloadConfig(remote->owner);
+        FcitxInstanceReloadConfig(remote->owner);
         break;
     default:
         break;
         /// }}}
     }
-    FcitxUnlock(remote->owner);
+    FcitxInstanceUnlock(remote->owner);
     close(client_fd);
 }
 

@@ -43,7 +43,7 @@ typedef enum _SHUANGPINSCHEME {
 } SHUANGPINSCHEME;
 
 typedef struct _FcitxPinyinConfig {
-    GenericConfig gconfig;
+    FcitxGenericConfig gconfig;
     /* py config */
     int iPinyinPriority;
     int iShuangpinPriority;
@@ -55,9 +55,9 @@ typedef struct _FcitxPinyinConfig {
     ADJUSTORDER baseOrder;
     ADJUSTORDER phraseOrder;
     ADJUSTORDER freqOrder;
-    HOTKEYS hkPYAddFreq[2];
-    HOTKEYS hkPYDelFreq[2];
-    HOTKEYS hkPYDelUserPhr[2];
+    FcitxHotkey hkPYAddFreq[2];
+    FcitxHotkey hkPYDelFreq[2];
+    FcitxHotkey hkPYDelUserPhr[2];
     char* strPYGetWordFromPhrase;
     char cPYYCDZ[3];
     struct _MHPY *MHPY_C;

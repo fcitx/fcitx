@@ -27,20 +27,23 @@
 #ifndef _FCITX_UI_INTERNAL_H_
 #define _FCITX_UI_INTERNAL_H_
 
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx/instance.h"
+
 /**
  * @brief real input window updates, will trigger user interface module to redraw
  *
  * @param instance fcitx instance
  * @return void
  **/
-void UpdateInputWindowReal(FcitxInstance *instance);
+void FcitxUIUpdateInputWindowReal(FcitxInstance *instance);
 /**
  * @brief real move input window, will trigger user interface module to move
  *
  * @param instance fcitx instance
  * @return void
  **/
-void MoveInputWindowReal(FcitxInstance *instance);
+void FcitxUIMoveInputWindowReal(FcitxInstance *instance);
 
 #endif
 

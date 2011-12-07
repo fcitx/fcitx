@@ -46,7 +46,7 @@ Bool XIMGetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     XimSetIC(xim, call_data);
-    FcitxInputContext* ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInputContext* ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
     SetTrackPos(xim, ic, call_data);
 
     return True;
@@ -54,20 +54,20 @@ Bool XIMSetICValuesHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
 {
-    FcitxInputContext* ic =  FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInputContext* ic =  FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return True;
 
-    if (!SetCurrentIC(xim->owner, ic))
+    if (!FcitxInstanceSetCurrentIC(xim->owner, ic))
         return True;
 
     SetTrackPos(xim, ic, NULL);
 
     if (ic) {
-        OnInputFocus(xim->owner);
+        FcitxUIOnInputFocus(xim->owner);
     } else {
-        CloseInputWindow(xim->owner);
-        MoveInputWindow(xim->owner);
+        FcitxUICloseInputWindow(xim->owner);
+        FcitxUIMoveInputWindow(xim->owner);
     }
 
     return True;
@@ -75,11 +75,11 @@ Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
 
 Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext* ic = GetCurrentIC(xim->owner);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid) {
-        SetCurrentIC(xim->owner, NULL);
-        CloseInputWindow(xim->owner);
-        OnInputUnFocus(xim->owner);
+        FcitxInstanceSetCurrentIC(xim->owner, NULL);
+        FcitxUICloseInputWindow(xim->owner);
+        FcitxUIOnInputUnFocus(xim->owner);
     }
 
     return True;
@@ -87,19 +87,19 @@ Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 Bool XIMCloseHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
-    CloseInputWindow(xim->owner);
-    SaveAllIM(xim->owner);
+    FcitxUICloseInputWindow(xim->owner);
+    FcitxInstanceSaveAllIM(xim->owner);
     return True;
 }
 
 Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    CreateIC(xim->owner, xim->frontendid, call_data);
-    FcitxInputContext* ic = GetCurrentIC(xim->owner);
+    FcitxInstanceCreateIC(xim->owner, xim->frontendid, call_data);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
 
     if (ic == NULL) {
-        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
-        SetCurrentIC(xim->owner, ic);
+        ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
+        FcitxInstanceSetCurrentIC(xim->owner, ic);
     }
 
     return True;
@@ -107,20 +107,20 @@ Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
 Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    DestroyIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInstanceDestroyIC(xim->owner, xim->frontendid, &call_data->icid);
 
     return True;
 }
 
 Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call_data)
 {
-    FcitxInputContext* ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInputContext* ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return True;
 
-    SetCurrentIC(xim->owner, ic);
-    EnableIM(xim->owner, ic, false);
-    OnTriggerOn(xim->owner);
+    FcitxInstanceSetCurrentIC(xim->owner, ic);
+    FcitxInstanceEnableIM(xim->owner, ic, false);
+    FcitxUIOnTriggerOn(xim->owner);
     return True;
 }
 
@@ -171,8 +171,8 @@ void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct 
         }
     }
 
-    if (ic == GetCurrentIC(xim->owner))
-        MoveInputWindow(xim->owner);
+    if (ic == FcitxInstanceGetCurrentIC(xim->owner))
+        FcitxUIMoveInputWindow(xim->owner);
 }
 
 void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
@@ -183,20 +183,20 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     int keyCount;
     unsigned int state, originstate;
     char strbuf[STRBUFLEN];
-    FcitxInputContext* ic = GetCurrentIC(xim->owner);
-    FcitxConfig* config = FcitxInstanceGetConfig(xim->owner);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(xim->owner);
     FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
 
     if (ic == NULL) {
-        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
-        SetCurrentIC(xim->owner, ic);
+        ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
+        FcitxInstanceSetCurrentIC(xim->owner, ic);
     }
 
     if (ic == NULL)
         return;
 
     if (GetXimIC(ic)->id != call_data->icid) {
-        ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+        ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
         if (ic == NULL)
             return;
     }
@@ -205,9 +205,9 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     memset(strbuf, 0, STRBUFLEN);
     keyCount = XLookupString(kev, strbuf, STRBUFLEN, &originsym, NULL);
 
-    originstate = kev->state - (kev->state & KEY_NUMLOCK) - (kev->state & KEY_CAPSLOCK) - (kev->state & KEY_SCROLLLOCK);
-    originstate &= KEY_USED_MASK;
-    GetKey((FcitxKeySym) originsym, originstate, &sym, &state);
+    originstate = kev->state - (kev->state & FcitxKeyState_NumLock) - (kev->state & FcitxKeyState_CapsLock) - (kev->state & FcitxKeyState_ScrollLock);
+    originstate &= FcitxKeyState_UsedMask;
+    FcitxHotkeyGetKey((FcitxKeySym) originsym, originstate, &sym, &state);
     FcitxLog(DEBUG,
              "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
              (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
@@ -218,8 +218,8 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     FcitxKeyEventType type = (call_data->event.type == KeyRelease) ? (FCITX_RELEASE_KEY) : (FCITX_PRESS_KEY);
 
     if (ic->state == IS_CLOSED) {
-        if (type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger)) {
-            EnableIM(xim->owner, ic, false);
+        if (type == FCITX_PRESS_KEY && FcitxHotkeyIsHotKey(sym, state, config->hkTrigger)) {
+            FcitxInstanceEnableIM(xim->owner, ic, false);
             FcitxInputStateSetKeyReleased(input, KR_OTHER);
             return;
         } else {
@@ -231,7 +231,7 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
         }
     }
 
-    INPUT_RETURN_VALUE retVal = ProcessKey(xim->owner, type,
+    INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(xim->owner, type,
                                            kev->time,
                                            sym, state);
 
@@ -318,14 +318,14 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
     if (preedit_string == NULL)
         return;
 
-    len = utf8_strlen(preedit_string);
+    len = fcitx_utf8_strlen(preedit_string);
 
     if (len + 1 > xim->feedback_len) {
         xim->feedback_len = len + 1;
         if (xim->feedback) {
             xim->feedback = realloc(xim->feedback, sizeof(XIMFeedback) * xim->feedback_len);
         } else {
-            xim->feedback = fcitx_malloc0(sizeof(XIMFeedback) * xim->feedback_len);
+            xim->feedback = fcitx_utils_malloc0(sizeof(XIMFeedback) * xim->feedback_len);
         }
     }
 

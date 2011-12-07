@@ -30,6 +30,7 @@
 #include <semaphore.h>
 
 #include "fcitx-utils/utarray.h"
+#include "ui-internal.h"
 #include "configfile.h"
 #include "profile.h"
 #include "addon.h"
@@ -47,7 +48,7 @@ struct _FcitxInstance {
     boolean readonlyMode;
 
     /* config file */
-    FcitxConfig* config;
+    FcitxGlobalConfig* config;
     FcitxProfile* profile;
     UT_array addons;
     UT_array imeclasses;

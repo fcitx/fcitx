@@ -96,34 +96,34 @@ compare_seq(const void *key, const void *value)
 }
 
 static const uint fcitx_compose_ignore[] = {
-    Key_Shift_L,
-    Key_Shift_R,
-    Key_Control_L,
-    Key_Control_R,
-    Key_Caps_Lock,
-    Key_Shift_Lock,
-    Key_Meta_L,
-    Key_Meta_R,
-    Key_Alt_L,
-    Key_Alt_R,
-    Key_Super_L,
-    Key_Super_R,
-    Key_Hyper_L,
-    Key_Hyper_R,
-    Key_Mode_switch,
-    Key_ISO_Level3_Shift,
-    Key_VoidSymbol
+    FcitxKey_Shift_L,
+    FcitxKey_Shift_R,
+    FcitxKey_Control_L,
+    FcitxKey_Control_R,
+    FcitxKey_Caps_Lock,
+    FcitxKey_Shift_Lock,
+    FcitxKey_Meta_L,
+    FcitxKey_Meta_R,
+    FcitxKey_Alt_L,
+    FcitxKey_Alt_R,
+    FcitxKey_Super_L,
+    FcitxKey_Super_R,
+    FcitxKey_Hyper_L,
+    FcitxKey_Hyper_R,
+    FcitxKey_Mode_switch,
+    FcitxKey_ISO_Level3_Shift,
+    FcitxKey_VoidSymbol
 };
 
 typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
-static boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
+static boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey);
 
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
+boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
 {
-    state &= KEY_CTRL_ALT_SHIFT_COMP;
+    state &= FcitxKeyState_Ctrl_Alt_Shift;
     if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
         return true;
     if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
@@ -163,7 +163,7 @@ QFcitxInputContext::QFcitxInputContext()
     m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
     m_triggerKey[0].state = m_triggerKey[1].state = 0;
 
-    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(FcitxGetDisplayNumber());
+    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(fcitx_utils_get_display_number());
 
     createInputContext();
 }
@@ -292,17 +292,17 @@ QKeyEvent* QFcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
     Qt::KeyboardModifiers qstate = Qt::NoModifier;
 
     int count = 1;
-    if (state & KEY_ALT_COMP) {
+    if (state & FcitxKeyState_Alt) {
         qstate |= Qt::AltModifier;
         count ++;
     }
 
-    if (state & KEY_SHIFT_COMP) {
+    if (state & FcitxKeyState_Shift) {
         qstate |= Qt::ShiftModifier;
         count ++;
     }
 
-    if (state & KEY_CTRL_COMP) {
+    if (state & FcitxKeyState_Ctrl) {
         qstate |= Qt::ControlModifier;
         count ++;
     }
@@ -396,7 +396,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (!m_enable) {
         FcitxKeySym fcitxsym;
         uint fcitxstate;
-        GetKey((FcitxKeySym) sym, event->xkey.state, &fcitxsym, &fcitxstate);
+        FcitxHotkeyGetKey((FcitxKeySym) sym, event->xkey.state, &fcitxsym, &fcitxstate);
         if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey)) {
             return x11FilterEventFallback(keywidget, event, sym);
         }
@@ -476,7 +476,7 @@ void QFcitxInputContext::createInputContext()
     if (!m_improxy->isValid())
         return;
 
-    char* name = fcitx_get_process_name();
+    char* name = fcitx_utils_get_process_name();
     QDBusPendingReply< int, bool, uint, uint, uint, uint > result = m_improxy->CreateICv2(name);
     free(name);
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(result);
@@ -621,7 +621,7 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
     if (event == FCITX_RELEASE_KEY)
         return false;
 
-    for (i = 0; fcitx_compose_ignore[i] != Key_VoidSymbol; i++) {
+    for (i = 0; fcitx_compose_ignore[i] != FcitxKey_VoidSymbol; i++) {
         if (keyval == fcitx_compose_ignore[i])
             return false;
     }
@@ -653,7 +653,7 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
 
 
 #define IS_DEAD_KEY(k) \
-    ((k) >= Key_dead_grave && (k) <= (Key_dead_dasia+1))
+    ((k) >= FcitxKey_dead_grave && (k) <= (FcitxKey_dead_dasia+1))
 quint32 fcitx_keyval_to_unicode(uint keyval);
 
 bool
@@ -676,7 +676,7 @@ QFcitxInputContext::checkAlgorithmically()
         while (i >= 0) {
             switch (m_compose_buffer[i]) {
 #define CASE(keysym, unicode) \
-case Key_dead_##keysym: combination_buffer[i + 1] = unicode; break
+case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
                 CASE(grave, 0x0300);
                 CASE(acute, 0x0301);
                 CASE(circumflex, 0x0302);

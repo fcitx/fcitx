@@ -1216,7 +1216,7 @@ void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)
 
     iBaseCount++;
 
-    *pMHPY = fcitx_malloc0(sizeof(MHPY) * iBaseCount);
+    *pMHPY = fcitx_utils_malloc0(sizeof(MHPY) * iBaseCount);
 
     MHPY *mhpy = *pMHPY;
 
@@ -1239,7 +1239,7 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
 
     iBaseCount++;
 
-    pyconfig->PYTable = fcitx_malloc0(sizeof(PYTABLE) * iBaseCount);
+    pyconfig->PYTable = fcitx_utils_malloc0(sizeof(PYTABLE) * iBaseCount);
 
     iBaseCount = 0;
 

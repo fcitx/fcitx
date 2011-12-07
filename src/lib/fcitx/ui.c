@@ -36,6 +36,7 @@
 #include "frontend.h"
 #include "instance-internal.h"
 #include "addon-internal.h"
+#include "ui-internal.h"
 
 /**
  * @file ui.c
@@ -47,7 +48,7 @@
  * @brief a single string message
  **/
 
-struct _MESSAGE {
+struct _FcitxMessage {
     /**
      * @brief The string of the message
      **/
@@ -55,18 +56,18 @@ struct _MESSAGE {
     /**
      * @brief the type of the message
      **/
-    MSG_TYPE        type;
+    FcitxMessageType        type;
 } ;
 
 /**
- * @brief Messages to display on the input bar, this cannot be accessed directly
+ * @brief FcitxMessages to display on the input bar, this cannot be accessed directly
  **/
 
-struct _Messages {
+struct _FcitxMessages {
     /**
      * @brief array of message strings
      **/
-    MESSAGE msg[MAX_MESSAGE_COUNT];
+    struct _FcitxMessage msg[MAX_MESSAGE_COUNT];
     /**
      * @brief number of message strings
      **/
@@ -77,19 +78,21 @@ struct _Messages {
     boolean changed;
 };
 
-#define UI_FUNC_IS_VALID(funcname) (!(GetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
+static const UT_icd menuICD = { sizeof(FcitxMenuItem), NULL, NULL, NULL };
 
-static void ShowInputWindow(FcitxInstance* instance);
-static boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon);
+#define UI_FUNC_IS_VALID(funcname) (!(FcitxInstanceGetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
+
+static void FcitxUIShowInputWindow(FcitxInstance* instance);
+static boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon);
 
 FCITX_EXPORT_API
-Messages* InitMessages()
+FcitxMessages* FcitxMessagesNew()
 {
-    return fcitx_malloc0(sizeof(Messages));
+    return fcitx_utils_malloc0(sizeof(FcitxMessages));
 }
 
 FCITX_EXPORT_API
-void SetMessageCount(Messages* m, int s)
+void FcitxMessagesSetMessageCount(FcitxMessages* m, int s)
 {
     if ((s) <= MAX_MESSAGE_COUNT && s >= 0)
         ((m)->msgCount = (s));
@@ -98,25 +101,25 @@ void SetMessageCount(Messages* m, int s)
 }
 
 FCITX_EXPORT_API
-int GetMessageCount(Messages* m)
+int FcitxMessagesGetMessageCount(FcitxMessages* m)
 {
     return m->msgCount;
 }
 
 FCITX_EXPORT_API
-boolean IsMessageChanged(Messages* m)
+boolean FcitxMessagesIsMessageChanged(FcitxMessages* m)
 {
     return m->changed;
 }
 
 FCITX_EXPORT_API
-char* GetMessageString(Messages* m, int index)
+char* FcitxMessagesGetMessageString(FcitxMessages* m, int index)
 {
     return m->msg[index].strMsg;
 }
 
 FCITX_EXPORT_API
-MSG_TYPE GetMessageType(Messages* m, int index)
+FcitxMessageType FcitxMessagesGetMessageType(FcitxMessages* m, int index)
 {
     if (m->msg[index].type <= MSG_TYPE_LAST)
         return m->msg[index].type;
@@ -125,13 +128,13 @@ MSG_TYPE GetMessageType(Messages* m, int index)
 }
 
 FCITX_EXPORT_API
-void SetMessageChanged(Messages* m, boolean changed)
+void FcitxMessagesSetMessageChanged(FcitxMessages* m, boolean changed)
 {
     m->changed = changed;
 }
 
 FCITX_EXPORT_API
-void LoadUserInterface(FcitxInstance* instance)
+void FcitxUILoad(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     FcitxAddon *addon;
@@ -140,7 +143,7 @@ void LoadUserInterface(FcitxInstance* instance)
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->bEnabled && addon->category == AC_UI) {
-            if (LoadUserInterfaceInternal(instance, addon))
+            if (FcitxUILoadInternal(instance, addon))
                 instance->uinormal = addon;
 
             if (instance->uinormal != NULL)
@@ -154,14 +157,14 @@ void LoadUserInterface(FcitxInstance* instance)
         FcitxLog(ERROR, "no usable user interface.");
     else {
         do {
-            FcitxAddon* fallbackAddon = GetAddonByName(&instance->addons, addon->uifallback);
+            FcitxAddon* fallbackAddon = FcitxAddonsGetAddonByName(&instance->addons, addon->uifallback);
             if (fallbackAddon == NULL)
                 break;
 
             if (!fallbackAddon->bEnabled)
                 break;
 
-            if (LoadUserInterfaceInternal(instance, fallbackAddon)) {
+            if (FcitxUILoadInternal(instance, fallbackAddon)) {
                 instance->uifallback = fallbackAddon;
                 if (instance->uifallback->ui->Suspend)
                     instance->uifallback->ui->Suspend(instance->uifallback->addonInstance);
@@ -170,7 +173,7 @@ void LoadUserInterface(FcitxInstance* instance)
     }
 }
 
-boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon)
+boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
 {
     boolean success = false;
     char *modulePath;
@@ -178,7 +181,7 @@ boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon)
     switch (addon->type) {
 
     case AT_SHAREDLIBRARY: {
-        FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+        FILE *fp = FcitxXDGGetLibFile(addon->library, "r", &modulePath);
         void *handle;
 
         if (!fp)
@@ -247,13 +250,13 @@ boolean LoadUserInterfaceInternal(FcitxInstance* instance, FcitxAddon* addon)
 }
 
 FCITX_EXPORT_API
-void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...)
+void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type, const char *fmt, ...)
 {
 
     if (message->msgCount < MAX_MESSAGE_COUNT) {
         va_list ap;
         va_start(ap, fmt);
-        SetMessageV(message, message->msgCount, type, fmt, ap);
+        FcitxMessagesSetMessageV(message, message->msgCount, type, fmt, ap);
         va_end(ap);
         message->msgCount ++;
         message->changed = true;
@@ -261,25 +264,25 @@ void AddMessageAtLast(Messages* message, MSG_TYPE type, const char *fmt, ...)
 }
 
 FCITX_EXPORT_API
-void SetMessage(Messages* message, int position, MSG_TYPE type, const char* fmt, ...)
+void FcitxMessagesSetMessage(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    SetMessageV(message, position, type, fmt, ap);
+    FcitxMessagesSetMessageV(message, position, type, fmt, ap);
     va_end(ap);
 }
 
 FCITX_EXPORT_API
-void SetMessageText(Messages* message, int position, const char* fmt, ...)
+void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    SetMessageV(message, position, message->msg[position].type, fmt, ap);
+    FcitxMessagesSetMessageV(message, position, message->msg[position].type, fmt, ap);
     va_end(ap);
 }
 
 FCITX_EXPORT_API
-void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt, va_list ap)
+void FcitxMessagesSetMessageV(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, va_list ap)
 {
     if (position < MAX_MESSAGE_COUNT) {
         vsnprintf(message->msg[position].strMsg, MESSAGE_MAX_LENGTH, fmt, ap);
@@ -289,49 +292,49 @@ void SetMessageV(Messages* message, int position, MSG_TYPE type, const char* fmt
 }
 
 FCITX_EXPORT_API
-void MessageConcatLast(Messages* message, const char* text)
+void FcitxMessagesMessageConcatLast(FcitxMessages* message, const char* text)
 {
     strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
 FCITX_EXPORT_API
-void MessageConcat(Messages* message, int position, const char* text)
+void FcitxMessagesMessageConcat(FcitxMessages* message, int position, const char* text)
 {
     strncat(message->msg[position].strMsg, text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
 FCITX_EXPORT_API
-void CloseInputWindow(FcitxInstance* instance)
+void FcitxUICloseInputWindow(FcitxInstance* instance)
 {
-    CleanInputWindow(instance);
+    FcitxInstanceCleanInputWindow(instance);
     instance->uiflag |= UI_UPDATE;
 }
 
 FCITX_EXPORT_API
-void UpdateInputWindow(FcitxInstance *instance)
+void FcitxUIUpdateInputWindow(FcitxInstance *instance)
 {
     instance->uiflag |= UI_UPDATE;
 
-    if (IsMessageChanged(instance->input->msgClientPreedit))
-        UpdatePreedit(instance, GetCurrentIC(instance));
+    if (FcitxMessagesIsMessageChanged(instance->input->msgClientPreedit))
+        FcitxInstanceUpdatePreedit(instance, FcitxInstanceGetCurrentIC(instance));
 }
 
-void ShowInputWindow(FcitxInstance* instance)
+void FcitxUIShowInputWindow(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(ShowInputWindow))
         instance->ui->ui->ShowInputWindow(instance->ui->addonInstance);
 }
 
 FCITX_EXPORT_API
-void MoveInputWindow(FcitxInstance* instance)
+void FcitxUIMoveInputWindow(FcitxInstance* instance)
 {
     instance->uiflag |= UI_MOVE;
 }
 
 FCITX_EXPORT_API
-FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
+FcitxUIStatus *FcitxUIGetStatusByName(FcitxInstance* instance, const char* name)
 {
     UT_array* uistats = &instance->uistats;
     FcitxUIStatus *status;
@@ -346,11 +349,11 @@ FcitxUIStatus *GetUIStatus(FcitxInstance* instance, const char* name)
 }
 
 FCITX_EXPORT_API
-void UpdateStatus(FcitxInstance* instance, const char* name)
+void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
 {
     FcitxLog(DEBUG, "Update Status for %s", name);
 
-    FcitxUIStatus *status = GetUIStatus(instance, name);
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
 
     if (status != NULL) {
         status->toggleStatus(status->arg);
@@ -361,7 +364,7 @@ void UpdateStatus(FcitxInstance* instance, const char* name)
 }
 
 FCITX_EXPORT_API
-void RegisterStatus(
+void FcitxUIRegisterStatus(
     struct _FcitxInstance* instance,
     void* arg,
     const char* name,
@@ -396,7 +399,7 @@ void RegisterStatus(
 }
 
 FCITX_EXPORT_API
-void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
+void FcitxUIRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
 {
     UT_array* uimenus = &instance->uimenus;
 
@@ -409,10 +412,10 @@ void RegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
 }
 
 FCITX_EXPORT_API
-void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMenu* subMenu)
+void FcitxMenuAddMenuItem(FcitxUIMenu* menu, char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu)
 {
-    MenuShell shell;
-    memset(&shell, 0, sizeof(MenuShell));
+    FcitxMenuItem shell;
+    memset(&shell, 0, sizeof(FcitxMenuItem));
 
     if (string) {
         if (strlen(string) > MAX_MENU_STRING_LENGTH)
@@ -432,69 +435,69 @@ void AddMenuShell(FcitxUIMenu* menu, char* string, MenuShellType type, FcitxUIMe
 }
 
 FCITX_EXPORT_API
-void ClearMenuShell(FcitxUIMenu* menu)
+void FcitxMenuClear(FcitxUIMenu* menu)
 {
     utarray_clear(&menu->shell);
 }
 
 FCITX_EXPORT_API
-void OnInputFocus(FcitxInstance* instance)
+void FcitxUIOnInputFocus(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnInputFocus))
         instance->ui->ui->OnInputFocus(instance->ui->addonInstance);
 
-    InputFocusHook(instance);
+    FcitxInstanceProcessInputFocusHook(instance);
 
-    ResetInput(instance);
+    FcitxInstanceResetInput(instance);
 
-    CloseInputWindow(instance);
+    FcitxUICloseInputWindow(instance);
 }
 
 FCITX_EXPORT_API
-void OnInputUnFocus(struct _FcitxInstance* instance)
+void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnInputUnFocus))
         instance->ui->ui->OnInputUnFocus(instance->ui->addonInstance);
 
-    InputUnFocusHook(instance);
+    FcitxInstanceProcessInputUnFocusHook(instance);
 }
 
 FCITX_EXPORT_API
-void OnTriggerOn(FcitxInstance* instance)
+void FcitxUIOnTriggerOn(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnTriggerOn))
         instance->ui->ui->OnTriggerOn(instance->ui->addonInstance);
 
-    TriggerOnHook(instance);
+    FcitxInstanceProcessTriggerOnHook(instance);
 
     instance->timeStart = time(NULL);
 
-    ShowInputSpeed(instance);
+    FcitxInstanceShowInputSpeed(instance);
 }
 
 FCITX_EXPORT_API
-void DisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)
+void FcitxUIDisplayMessage(FcitxInstance *instance, char *title, char **msg, int length)
 {
     if (UI_FUNC_IS_VALID(DisplayMessage))
         instance->ui->ui->DisplayMessage(instance->ui->addonInstance, title, msg, length);
 }
 
 FCITX_EXPORT_API
-void OnTriggerOff(FcitxInstance* instance)
+void FcitxUIOnTriggerOff(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnTriggerOff))
         instance->ui->ui->OnTriggerOff(instance->ui->addonInstance);
 
-    TriggerOffHook(instance);
+    FcitxInstanceProcessTriggerOffHook(instance);
 
     instance->totaltime += difftime(time(NULL), instance->timeStart);
 }
 
 FCITX_EXPORT_API
-void UpdateMenuShell(FcitxUIMenu* menu)
+void FcitxMenuUpdate(FcitxUIMenu* menu)
 {
-    if (menu && menu->UpdateMenuShell) {
-        menu->UpdateMenuShell(menu);
+    if (menu && menu->UpdateMenu) {
+        menu->UpdateMenu(menu);
     }
 }
 
@@ -503,7 +506,7 @@ void UpdateMenuShell(FcitxUIMenu* menu)
  */
 FCITX_EXPORT_API
 boolean
-IsInBox(int x0, int y0, int x1, int y1, int w, int h)
+FcitxUIIsInBox(int x0, int y0, int x1, int y1, int w, int h)
 {
     if (x0 >= x1 && x0 <= x1 + w && y0 >= y1 && y0 <= y1 + h)
         return true;
@@ -512,7 +515,7 @@ IsInBox(int x0, int y0, int x1, int y1, int w, int h)
 }
 
 FCITX_EXPORT_API
-boolean UISupportMainWindow(FcitxInstance* instance)
+boolean FcitxUISupportMainWindow(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(MainWindowSizeHint))
         return true;
@@ -521,90 +524,90 @@ boolean UISupportMainWindow(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void GetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
+void FcitxUIGetMainWindowSize(FcitxInstance* instance, int* x, int* y, int* w, int* h)
 {
     if (UI_FUNC_IS_VALID(MainWindowSizeHint))
         instance->ui->ui->MainWindowSizeHint(instance->ui->addonInstance, x, y, w, h);
 }
 
 FCITX_EXPORT_API
-int NewMessageToOldStyleMessage(FcitxInstance* instance, Messages* msgUp, Messages* msgDown)
+int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* msgUp, FcitxMessages* msgDown)
 {
     int i = 0;
     FcitxInputState* input = instance->input;
     int extraLength = input->iCursorPos;
-    SetMessageCount(msgUp, 0);
-    SetMessageCount(msgDown, 0);
+    FcitxMessagesSetMessageCount(msgUp, 0);
+    FcitxMessagesSetMessageCount(msgDown, 0);
 
-    for (i = 0; i < GetMessageCount(input->msgAuxUp) ; i ++) {
-        AddMessageAtLast(msgUp, GetMessageType(input->msgAuxUp, i), "%s", GetMessageString(input->msgAuxUp, i));
-        extraLength += strlen(GetMessageString(input->msgAuxUp, i));
+    for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxUp) ; i ++) {
+        FcitxMessagesAddMessageAtLast(msgUp, FcitxMessagesGetMessageType(input->msgAuxUp, i), "%s", FcitxMessagesGetMessageString(input->msgAuxUp, i));
+        extraLength += strlen(FcitxMessagesGetMessageString(input->msgAuxUp, i));
     }
 
-    for (i = 0; i < GetMessageCount(input->msgPreedit) ; i ++)
-        AddMessageAtLast(msgUp, GetMessageType(input->msgPreedit, i), "%s", GetMessageString(input->msgPreedit, i));
+    for (i = 0; i < FcitxMessagesGetMessageCount(input->msgPreedit) ; i ++)
+        FcitxMessagesAddMessageAtLast(msgUp, FcitxMessagesGetMessageType(input->msgPreedit, i), "%s", FcitxMessagesGetMessageString(input->msgPreedit, i));
 
-    for (i = 0; i < GetMessageCount(input->msgAuxDown) ; i ++)
-        AddMessageAtLast(msgDown, GetMessageType(input->msgAuxDown, i), "%s", GetMessageString(input->msgAuxDown, i));
+    for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxDown) ; i ++)
+        FcitxMessagesAddMessageAtLast(msgDown, FcitxMessagesGetMessageType(input->msgAuxDown, i), "%s", FcitxMessagesGetMessageString(input->msgAuxDown, i));
 
-    CandidateWord* candWord = NULL;
+    FcitxCandidateWord* candWord = NULL;
 
-    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+    for (candWord = FcitxCandidateWordGetCurrentWindow(input->candList), i = 0;
             candWord != NULL;
-            candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
+            candWord = FcitxCandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
         char strTemp[3] = { '\0', '\0', '\0' };
-        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+        strTemp[0] = FcitxCandidateWordGetChoose(input->candList)[i];
 
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
-        AddMessageAtLast(msgDown, MSG_INDEX, "%s", strTemp);
+        FcitxMessagesAddMessageAtLast(msgDown, MSG_INDEX, "%s", strTemp);
 
-        MSG_TYPE type = candWord->wordType;
+        FcitxMessageType type = candWord->wordType;
 
-        if (i == 0 && CandidateWordGetCurrentPage(input->candList) == 0)
+        if (i == 0 && FcitxCandidateWordGetCurrentPage(input->candList) == 0)
             type = MSG_FIRSTCAND;
 
-        AddMessageAtLast(msgDown, type, "%s", candWord->strWord);
+        FcitxMessagesAddMessageAtLast(msgDown, type, "%s", candWord->strWord);
 
         if (candWord->strExtra && strlen(candWord->strExtra) != 0)
-            AddMessageAtLast(msgDown, candWord->extraType, "%s", candWord->strExtra);
+            FcitxMessagesAddMessageAtLast(msgDown, candWord->extraType, "%s", candWord->strExtra);
 
-        AddMessageAtLast(msgDown, MSG_OTHER, " ");
+        FcitxMessagesAddMessageAtLast(msgDown, MSG_OTHER, " ");
     }
 
     return extraLength;
 }
 
 FCITX_EXPORT_API
-char* MessagesToCString(Messages* messages)
+char* FcitxUIMessagesToCString(FcitxMessages* messages)
 {
     int length = 0;
     int i = 0;
 
-    for (i = 0; i < GetMessageCount(messages) ; i ++)
-        length += strlen(GetMessageString(messages, i));
+    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++)
+        length += strlen(FcitxMessagesGetMessageString(messages, i));
 
-    char* str = fcitx_malloc0(sizeof(char) * (length + 1));
+    char* str = fcitx_utils_malloc0(sizeof(char) * (length + 1));
 
-    for (i = 0; i < GetMessageCount(messages) ; i ++)
-        strcat(str, GetMessageString(messages, i));
+    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++)
+        strcat(str, FcitxMessagesGetMessageString(messages, i));
 
     return str;
 }
 
 FCITX_EXPORT_API
-char* CandidateWordToCString(FcitxInstance* instance)
+char* FcitxUICandidateWordToCString(FcitxInstance* instance)
 {
     size_t len = 0;
     int i;
     FcitxInputState* input = instance->input;
-    CandidateWord* candWord;
-    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+    FcitxCandidateWord* candWord;
+    for (candWord = FcitxCandidateWordGetCurrentWindow(input->candList), i = 0;
             candWord != NULL;
-            candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
+            candWord = FcitxCandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
         char strTemp[3] = { '\0', '\0', '\0' };
-        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+        strTemp[0] = FcitxCandidateWordGetChoose(input->candList)[i];
 
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
@@ -618,13 +621,13 @@ char* CandidateWordToCString(FcitxInstance* instance)
         len ++;
     }
 
-    char *result = fcitx_malloc0(sizeof(char) * (len + 1));
+    char *result = fcitx_utils_malloc0(sizeof(char) * (len + 1));
 
-    for (candWord = CandidateWordGetCurrentWindow(input->candList), i = 0;
+    for (candWord = FcitxCandidateWordGetCurrentWindow(input->candList), i = 0;
             candWord != NULL;
-            candWord = CandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
+            candWord = FcitxCandidateWordGetCurrentWindowNext(input->candList, candWord), i ++) {
         char strTemp[3] = { '\0', '\0', '\0' };
-        strTemp[0] = CandidateWordGetChoose(input->candList)[i];
+        strTemp[0] = FcitxCandidateWordGetChoose(input->candList)[i];
 
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
@@ -641,53 +644,53 @@ char* CandidateWordToCString(FcitxInstance* instance)
     return result;
 }
 
-void UpdateInputWindowReal(FcitxInstance *instance)
+void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
 {
     FcitxInputState* input = instance->input;
-    FcitxInputContext* ic = GetCurrentIC(instance);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     CapacityFlags flags = CAPACITY_NONE;
     if (ic != NULL)
         flags = ic->contextCaps;
 
     if (flags & CAPACITY_CLIENT_SIDE_UI) {
-        UpdateClientSideUI(instance, ic);
+        FcitxInstanceUpdateClientSideUI(instance, ic);
         return;
     }
 
     boolean toshow = false;
 
-    if (GetMessageCount(input->msgAuxUp) != 0
-            || GetMessageCount(input->msgAuxDown) != 0)
+    if (FcitxMessagesGetMessageCount(input->msgAuxUp) != 0
+            || FcitxMessagesGetMessageCount(input->msgAuxDown) != 0)
         toshow = true;
 
-    if (CandidateWordGetListSize(input->candList) > 1)
+    if (FcitxCandidateWordGetListSize(input->candList) > 1)
         toshow = true;
 
-    if (CandidateWordGetListSize(input->candList) == 1
+    if (FcitxCandidateWordGetListSize(input->candList) == 1
             && (!instance->config->bHideInputWindowWhenOnlyPreeditString
                 || !instance->config->bHideInputWindowWhenOnlyOneCandidate))
         toshow = true;
 
-    if (GetMessageCount(input->msgPreedit) != 0
+    if (FcitxMessagesGetMessageCount(input->msgPreedit) != 0
             && !((flags & CAPACITY_PREEDIT) && instance->config->bHideInputWindowWhenOnlyPreeditString && instance->profile->bUsePreedit))
         toshow = true;
 
     if (!toshow) {
-        UpdatePreedit(instance, ic);
+        FcitxInstanceUpdatePreedit(instance, ic);
         if (UI_FUNC_IS_VALID(CloseInputWindow))
             instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
     } else
-        ShowInputWindow(instance);
+        FcitxUIShowInputWindow(instance);
 }
 
-void MoveInputWindowReal(FcitxInstance *instance)
+void FcitxUIMoveInputWindowReal(FcitxInstance *instance)
 {
     if (UI_FUNC_IS_VALID(MoveInputWindow))
         instance->ui->ui->MoveInputWindow(instance->ui->addonInstance);
 }
 
 FCITX_EXPORT_API
-void SwitchUIToFallback(struct _FcitxInstance* instance)
+void FcitxUISwitchToFallback(struct _FcitxInstance* instance)
 {
     if (!instance->uifallback || instance->ui != instance->uinormal)
         return;
@@ -702,7 +705,7 @@ void SwitchUIToFallback(struct _FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void ResumeUIFromFallback(struct _FcitxInstance* instance)
+void FcitxUIResumeFromFallback(struct _FcitxInstance* instance)
 {
     if (!instance->uifallback || instance->ui != instance->uifallback)
         return;
@@ -717,9 +720,15 @@ void ResumeUIFromFallback(struct _FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-boolean UIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
+boolean FcitxUIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
 {
     return instance->uifallback == addon;
+}
+
+FCITX_EXPORT_API
+void FcitxMenuInit(FcitxUIMenu* menu)
+{
+    utarray_init(&menu->shell, &menuICD);
 }
 
 

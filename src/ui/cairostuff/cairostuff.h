@@ -24,7 +24,7 @@
 #include <cairo.h>
 
 int StringWidth(const char *str, const char *font, int fontSize);
-void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,  int y, ConfigColor * color);
+void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,  int y, FcitxConfigColor * color);
 
 #ifdef _ENABLE_PANGO
 

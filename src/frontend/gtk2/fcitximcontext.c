@@ -191,12 +191,12 @@ static guint16 cedilla_compose_seqs[] = {
 };
 
 static
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey);
+boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey);
 
 static
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, HOTKEYS * hotkey)
+boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
 {
-    state &= KEY_CTRL_ALT_SHIFT_COMP;
+    state &= FcitxKeyState_Ctrl_Alt_Shift;
     if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
         return true;
     if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
@@ -410,10 +410,10 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
-    if (G_UNLIKELY(event->state & KEY_HANDLED_MASK))
+    if (G_UNLIKELY(event->state & FcitxKeyState_HandledMask))
         return TRUE;
 
-    if (G_UNLIKELY(event->state & KEY_IGNORED_MASK))
+    if (G_UNLIKELY(event->state & FcitxKeyState_IgnoredMask))
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
@@ -444,10 +444,10 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                                                   (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
                                                   event->time);
             if (ret <= 0) {
-                event->state |= KEY_IGNORED_MASK;
+                event->state |= FcitxKeyState_IgnoredMask;
                 return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
             } else {
-                event->state |= KEY_HANDLED_MASK;
+                event->state |= FcitxKeyState_HandledMask;
                 return TRUE;
             }
         } else {
@@ -464,7 +464,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                                     event->state,
                                     (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
                                     event->time);
-            event->state |= KEY_HANDLED_MASK;
+            event->state |= FcitxKeyState_HandledMask;
             return TRUE;
         }
     } else {
@@ -484,7 +484,7 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
     int ret;
     dbus_g_proxy_end_call(proxy, call_id, &error, G_TYPE_INT, &ret, G_TYPE_INVALID);
     if (ret <= 0) {
-        event->state |= KEY_IGNORED_MASK;
+        event->state |= FcitxKeyState_IgnoredMask;
         gdk_event_put((GdkEvent *)event);
     }
     gdk_event_free((GdkEvent *)event);
@@ -834,7 +834,7 @@ void _fcitx_im_context_forward_key_cb(DBusGProxy* proxy, guint keyval, guint sta
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     FcitxKeyEventType tp = (FcitxKeyEventType) type;
     GdkEventKey* event = _create_gdk_event(context, keyval, state, tp);
-    event->state |= KEY_IGNORED_MASK;
+    event->state |= FcitxKeyState_IgnoredMask;
     gdk_event_put((GdkEvent *)event);
     gdk_event_free((GdkEvent *)event);
 }

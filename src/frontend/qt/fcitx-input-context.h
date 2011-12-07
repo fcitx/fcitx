@@ -88,7 +88,7 @@ private:
     QString m_path;
     bool m_enable;
     bool m_has_focus;
-    HOTKEYS m_triggerKey[2];
+    FcitxHotkey m_triggerKey[2];
     QInputContext* m_slave;
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;

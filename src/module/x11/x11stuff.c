@@ -75,8 +75,8 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* X11Create(FcitxInstance* instance)
 {
-    FcitxX11* x11priv = fcitx_malloc0(sizeof(FcitxX11));
-    FcitxAddon* x11addon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
+    FcitxX11* x11priv = fcitx_utils_malloc0(sizeof(FcitxX11));
+    FcitxAddon* x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
     x11priv->dpy = XOpenDisplay(NULL);
     if (x11priv->dpy == NULL)
         return false;
@@ -135,7 +135,7 @@ void X11ProcessEvent(void* arg)
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
 
-        FcitxLock(x11priv->owner);
+        FcitxInstanceLock(x11priv->owner);
         /* 处理X事件 */
         if (XFilterEvent(&event, None) == False) {
             if (event.type == DestroyNotify) {
@@ -158,7 +158,7 @@ void X11ProcessEvent(void* arg)
                 if (handler->eventHandler(handler->instance, &event))
                     break;
         }
-        FcitxUnlock(x11priv->owner);
+        FcitxInstanceUnlock(x11priv->owner);
     }
 }
 
@@ -459,7 +459,7 @@ void X11InitScreen(FcitxX11* x11stuff)
 
     if (x11stuff->rects)
         free(x11stuff->rects);
-    x11stuff->rects = fcitx_malloc0(sizeof(FcitxRect) * newScreenCount);
+    x11stuff->rects = fcitx_utils_malloc0(sizeof(FcitxRect) * newScreenCount);
 
     // get the geometry of each screen
     int i, j, x, y, w, h;

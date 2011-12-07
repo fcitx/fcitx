@@ -39,7 +39,7 @@ extern "C" {
     /**
      * @brief A hash set for string
      **/
-    typedef struct _StringHashSet {
+    typedef struct _FcitxStringHashSet {
         /**
          * @brief String in Hash Set
          **/
@@ -48,7 +48,7 @@ extern "C" {
          * @brief UT Hash handle
          **/
         UT_hash_handle hh;
-    } StringHashSet;
+    } FcitxStringHashSet;
 
 
     /**
@@ -63,16 +63,16 @@ extern "C" {
      *
      * @return
      */
-    void *custom_bsearch(const void *key, const void *base,
-                         size_t nmemb, size_t size, int accurate,
-                         int (*compar)(const void *, const void *));
+    void *fcitx_utils_custom_bsearch(const void *key, const void *base,
+                                     size_t nmemb, size_t size, int accurate,
+                                     int (*compar)(const void *, const void *));
 
     /**
      * @brief Fork twice to run as daemon
      *
      * @return void
      **/
-    void InitAsDaemon();
+    void fcitx_utils_init_as_daemon();
 
     /**
      * @brief Count the file line number
@@ -80,7 +80,7 @@ extern "C" {
      * @param fpDict file pointer
      * @return int line number
      **/
-    int CalculateRecordNumber(FILE* fpDict);
+    int fcitx_utils_calculate_record_number(FILE* fpDict);
 
     /**
      * @brief Split a string by delm
@@ -89,7 +89,7 @@ extern "C" {
      * @param delm character as delimiter
      * @return UT_array* a new utarray for store the split string
      **/
-    UT_array* SplitString(const char *str, char delm);
+    UT_array* fcitx_utils_split_string(const char *str, char delm);
 
     /**
      * @brief Helper function for free the SplitString Output
@@ -98,7 +98,7 @@ extern "C" {
      * @return void
      * @see SplitString
      **/
-    void FreeStringList(UT_array *list);
+    void fcitx_utils_free_string_list(UT_array *list);
 
     /**
      * @brief Free String Hash Set
@@ -108,7 +108,7 @@ extern "C" {
      *
      * @since 4.1.3
      **/
-    void FreeStringHashSet(StringHashSet* sset);
+    void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset);
 
     /**
      * @brief Trim the input string's white space
@@ -116,7 +116,7 @@ extern "C" {
      * @param s input string
      * @return char* new malloced string, need to free'd by caller
      **/
-    char* fcitx_trim(char *s);
+    char* fcitx_utils_trim(char *s);
 
     /**
      * @brief Malloc and memset all memory to zero
@@ -124,11 +124,21 @@ extern "C" {
      * @param bytes malloc size
      * @return void* malloced pointer
      **/
-    void* fcitx_malloc0(size_t bytes);
+    void* fcitx_utils_malloc0(size_t bytes);
 
-    int FcitxGetDisplayNumber();
+    /**
+     * @brief Get Display number
+     *
+     * @return int
+     **/
+    int fcitx_utils_get_display_number();
 
-    char* fcitx_get_process_name();
+    /**
+     * @brief Get Current Process Name
+     *
+     * @return char*
+     **/
+    char* fcitx_utils_get_process_name();
 
 #ifdef __cplusplus
 }

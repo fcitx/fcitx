@@ -42,7 +42,7 @@ void InitFcitxModules(UT_array* modules)
 }
 
 FCITX_EXPORT_API
-void LoadModule(FcitxInstance* instance)
+void FcitxModuleLoad(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     FcitxAddon *addon;
@@ -53,7 +53,7 @@ void LoadModule(FcitxInstance* instance)
             char *modulePath;
             switch (addon->type) {
             case AT_SHAREDLIBRARY: {
-                FILE *fp = GetLibFile(addon->library, "r", &modulePath);
+                FILE *fp = FcitxXDGGetLibFile(addon->library, "r", &modulePath);
                 void *handle;
                 FcitxModule* module;
                 void* moduleinstance = NULL;
@@ -97,7 +97,7 @@ void LoadModule(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
+void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {
     if (addon == NULL) {
         FcitxLog(ERROR, "addon is not valid");
@@ -117,7 +117,7 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
             }
         }
         if (!flag)
-            LoadIM(addon->owner, addon);
+            FcitxInstanceLoadIM(addon->owner, addon);
     }
 
     FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
@@ -130,13 +130,13 @@ void* InvokeModuleFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctio
 }
 
 FCITX_EXPORT_API
-void* InvokeModuleFunctionWithName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
+void* FcitxModuleInvokeFunctionByName(FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args)
 {
-    FcitxAddon* module = GetAddonByName(&instance->addons, name);
+    FcitxAddon* module = FcitxAddonsGetAddonByName(&instance->addons, name);
 
     if (module == NULL)
         return NULL;
     else
-        return InvokeModuleFunction(module, functionId, args);
+        return FcitxModuleInvokeFunction(module, functionId, args);
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

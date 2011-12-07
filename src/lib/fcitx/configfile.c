@@ -30,11 +30,11 @@
 #include "fcitx/keys.h"
 #include "instance.h"
 
-static ConfigFileDesc* GetConfigDesc();
-static void FilterSwitchKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void Filter2nd3rdKey(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg);
+static FcitxConfigFileDesc* GetConfigDesc();
+static void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
+static void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
 
-CONFIG_BINDING_BEGIN(FcitxConfig)
+CONFIG_BINDING_BEGIN(FcitxGlobalConfig)
 CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "FirstRun", bFirstRun)
 CONFIG_BINDING_REGISTER("Program", "ShareStateAmongWindow", shareState)
@@ -67,55 +67,55 @@ CONFIG_BINDING_REGISTER("Hotkey", "SaveAllKey", hkSaveAll)
 CONFIG_BINDING_REGISTER("Hotkey", "SwitchPreedit", hkSwitchEmbeddedPreedit);
 CONFIG_BINDING_END()
 
-void Filter2nd3rdKey(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
 {
     FCITX_UNUSED(group);
     FCITX_UNUSED(option);
     FCITX_UNUSED(arg);
-    FcitxConfig* fc = (FcitxConfig*) config;
+    FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
     char *pstr = *(char**) value;
 
     if (sync == Raw2Value) {
         if (!strcasecmp(pstr, "SHIFT")) {
-            fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = Key_Shift_L;        //左SHIFT的扫描码
-            fc->i2ndSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
-            fc->i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
-            fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = Key_Shift_R;        //右SHIFT的扫描码
-            fc->i3rdSelectKey[0].state = KEY_SHIFT_COMP ;        //左SHIFT的扫描码
-            fc->i3rdSelectKey[1].state = KEY_NONE;
+            fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = FcitxKey_Shift_L;        //左SHIFT的扫描码
+            fc->i2ndSelectKey[0].state = FcitxKeyState_Shift ;        //左SHIFT的扫描码
+            fc->i2ndSelectKey[1].state = FcitxKeyState_None ;        //左SHIFT的扫描码
+            fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = FcitxKey_Shift_R;        //右SHIFT的扫描码
+            fc->i3rdSelectKey[0].state = FcitxKeyState_Shift ;        //左SHIFT的扫描码
+            fc->i3rdSelectKey[1].state = FcitxKeyState_None;
         } else if (!strcasecmp(pstr, "CTRL")) {
-            fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = Key_Control_L;        //左CTRL的扫描码
-            fc->i2ndSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
-            fc->i2ndSelectKey[1].state = KEY_NONE ;        //左SHIFT的扫描码
-            fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = Key_Control_R;       //右CTRL的扫描码
-            fc->i3rdSelectKey[0].state = KEY_CTRL_COMP ;        //左SHIFT的扫描码
-            fc->i3rdSelectKey[1].state = KEY_NONE;
+            fc->i2ndSelectKey[0].sym = fc->i2ndSelectKey[1].sym = FcitxKey_Control_L;        //左CTRL的扫描码
+            fc->i2ndSelectKey[0].state = FcitxKeyState_Ctrl ;        //左SHIFT的扫描码
+            fc->i2ndSelectKey[1].state = FcitxKeyState_None ;        //左SHIFT的扫描码
+            fc->i3rdSelectKey[0].sym = fc->i3rdSelectKey[1].sym = FcitxKey_Control_R;       //右CTRL的扫描码
+            fc->i3rdSelectKey[0].state = FcitxKeyState_Ctrl ;        //左SHIFT的扫描码
+            fc->i3rdSelectKey[1].state = FcitxKeyState_None;
         } else {
             if (pstr[0] && pstr[0] != '0') {
                 fc->i2ndSelectKey[0].sym = pstr[0] & 0xFF;
-                fc->i2ndSelectKey[0].state = KEY_NONE;
+                fc->i2ndSelectKey[0].state = FcitxKeyState_None;
             } else {
                 fc->i2ndSelectKey[0].sym = 0;
-                fc->i2ndSelectKey[0].state = KEY_NONE;
+                fc->i2ndSelectKey[0].state = FcitxKeyState_None;
             }
             if (pstr[1] && pstr[1] != '0') {
                 fc->i3rdSelectKey[0].sym = pstr[1] & 0xFF;
-                fc->i3rdSelectKey[0].state = KEY_NONE;
+                fc->i3rdSelectKey[0].state = FcitxKeyState_None;
             } else {
                 fc->i3rdSelectKey[0].sym = 0;
-                fc->i3rdSelectKey[0].state = KEY_NONE;
+                fc->i3rdSelectKey[0].state = FcitxKeyState_None;
             }
         }
     }
 }
 
-void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
+void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
 {
     FCITX_UNUSED(group);
     FCITX_UNUSED(option);
     FCITX_UNUSED(arg);
-    FcitxConfig* fc = (FcitxConfig*) config;
-    HOTKEYS* hkey = NULL;
+    FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
+    FcitxHotkey* hkey = NULL;
     if (sync == Raw2Value) {
         SWITCHKEY *s = (SWITCHKEY*)value;
         switch (*s) {
@@ -131,7 +131,7 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
         case SWITCHKEY_L_CTRL:
             hkey = FCITX_LCTRL;
             break;
-        case SWITCHKEY_NONE:
+        case SWITCHFcitxKeyState_None:
             hkey = FCITX_NONE_KEY;
         }
     }
@@ -142,27 +142,27 @@ void FilterSwitchKey(GenericConfig* config, ConfigGroup* group, ConfigOption* op
 }
 
 FCITX_EXPORT_API
-boolean LoadConfig(FcitxConfig* fc)
+boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 {
-    ConfigFileDesc* configDesc = GetConfigDesc();
+    FcitxConfigFileDesc* configDesc = GetConfigDesc();
 
     if (configDesc == NULL)
         return false;
 
     FILE *fp;
     char *file;
-    fp = GetXDGFileUserWithPrefix("", "config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("", "config", "rt", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
-            SaveConfig(fc);
+            FcitxGlobalConfigSave(fc);
     }
 
-    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
-    FcitxConfigConfigBind(fc, cfile, configDesc);
-    ConfigBindSync((GenericConfig*)fc);
+    FcitxGlobalConfigConfigBind(fc, cfile, configDesc);
+    FcitxConfigBindSync((FcitxGenericConfig*)fc);
 
     if (fp)
         fclose(fp);
@@ -172,27 +172,15 @@ boolean LoadConfig(FcitxConfig* fc)
 CONFIG_DESC_DEFINE(GetConfigDesc, "config.desc")
 
 FCITX_EXPORT_API
-void SaveConfig(FcitxConfig* fc)
+void FcitxGlobalConfigSave(FcitxGlobalConfig* fc)
 {
-    ConfigFileDesc* configDesc = GetConfigDesc();
+    FcitxConfigFileDesc* configDesc = GetConfigDesc();
     char *file;
-    FILE *fp = GetXDGFileUserWithPrefix("", "config", "wt", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("", "config", "wt", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
-    SaveConfigFileFp(fp, &fc->gconfig, configDesc);
+    FcitxConfigSaveConfigFileFp(fp, &fc->gconfig, configDesc);
     free(file);
     if (fp)
         fclose(fp);
-}
-
-FCITX_EXPORT_API
-int ConfigGetMaxCandWord(FcitxConfig* fc)
-{
-    return fc->iMaxCandWord;
-}
-
-FCITX_EXPORT_API
-boolean ConfigGetPointAfterNumber(FcitxConfig* fc)
-{
-    return fc->bPointAfterNumber;
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

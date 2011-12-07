@@ -102,7 +102,7 @@ void LoadSPData(FcitxPinyinState *pystate)
             i ++ ;
         }
 
-        fp = GetXDGFileWithPrefix("pinyin", "sp.dat", "rt", NULL);
+        fp = FcitxXDGGetFileWithPrefix("pinyin", "sp.dat", "rt", NULL);
 
         while (1) {
             if (!fgets(str, 100, fp))

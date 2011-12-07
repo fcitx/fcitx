@@ -33,7 +33,7 @@ extern "C" {
         SWITCHKEY_R_SHIFT = 1,
         SWITCHKEY_L_SHIFT = 2,
         SWITCHKEY_L_CTRL = 3,
-        SWITCHKEY_NONE = 4
+        SWITCHFcitxKeyState_None = 4
     } SWITCHKEY;
 
     typedef enum _ENTER_TO_DO {
@@ -59,9 +59,9 @@ extern "C" {
      **/
     typedef struct _FcitxConfig {
         /**
-         * @brief derives GenericConfig
+         * @brief derives FcitxGenericConfig
          **/
-        GenericConfig gconfig;
+        FcitxGenericConfig gconfig;
         /* program config */
         /**
          * @brief delay start seconds
@@ -120,7 +120,7 @@ extern "C" {
         /**
          * @brief trigger key
          **/
-        HOTKEYS hkTrigger[2];
+        FcitxHotkey hkTrigger[2];
         /**
          * @brief switch key
          **/
@@ -128,7 +128,7 @@ extern "C" {
         /**
          * @brief hotkey format of switch key
          **/
-        HOTKEYS switchKey[2];
+        FcitxHotkey switchKey[2];
         /**
          * @brief enable double press switch action
          **/
@@ -140,44 +140,44 @@ extern "C" {
         /**
          * @brief hotkey for switch VK
          **/
-        HOTKEYS hkVK[2];
+        FcitxHotkey hkVK[2];
         /**
          * @brief hotkey for switch remind mode
          **/
-        HOTKEYS hkRemind[2];
+        FcitxHotkey hkRemind[2];
         /**
          * @brief hotkey for switch full width char
          **/
-        HOTKEYS hkFullWidthChar[2];
+        FcitxHotkey hkFullWidthChar[2];
         /**
          * @brief hotkey for switch punc
          **/
-        HOTKEYS hkPunc[2];
+        FcitxHotkey hkPunc[2];
         /**
          * @brief prev page
          **/
-        HOTKEYS hkPrevPage[2];
+        FcitxHotkey hkPrevPage[2];
         /**
          * @brief next page
          **/
-        HOTKEYS hkNextPage[2];
+        FcitxHotkey hkNextPage[2];
         /**
          * @brief 2nd 3rd candidate select key
          **/
-        HOTKEYS str2nd3rdCand[2];
+        FcitxHotkey str2nd3rdCand[2];
         /**
          * @brief save all key
          **/
-        HOTKEYS hkSaveAll[2];
+        FcitxHotkey hkSaveAll[2];
 
         /**
          * @brief hotkey format for 2nd select key
          **/
-        HOTKEYS i2ndSelectKey[2];
+        FcitxHotkey i2ndSelectKey[2];
         /**
          * @brief hotkey format for 3rd select key
          **/
-        HOTKEYS i3rdSelectKey[2];
+        FcitxHotkey i3rdSelectKey[2];
 
         /**
          * @brief hide input window when there is only preedit string
@@ -192,7 +192,7 @@ extern "C" {
         /**
          * @brief switch the preedit should show in client window or not
          **/
-        HOTKEYS hkSwitchEmbeddedPreedit[2];
+        FcitxHotkey hkSwitchEmbeddedPreedit[2];
 
         /**
          * @brief Input method use global shared state
@@ -210,7 +210,7 @@ extern "C" {
         boolean bIMSwitchKey;
 
         int padding[63];
-    } FcitxConfig;
+    } FcitxGlobalConfig;
 
     /**
      * @brief load config
@@ -218,14 +218,14 @@ extern "C" {
      * @param fc config instance
      * @return boolean load success or not
      **/
-    boolean LoadConfig(FcitxConfig* fc);
+    boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc);
     /**
      * @brief save config
      *
      * @param fc config instance
      * @return void
      **/
-    void SaveConfig(FcitxConfig* fc);
+    void FcitxGlobalConfigSave(FcitxGlobalConfig* fc);
 
 #ifdef __cplusplus
 }

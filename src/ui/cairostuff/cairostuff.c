@@ -57,7 +57,7 @@ StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const cha
         if (h) *h = 0;
         return;
     }
-    if (!utf8_check_string(str)) {
+    if (!fcitx_utf8_check_string(str)) {
         if (w) *w = 0;
         if (h) *h = 0;
 
@@ -146,7 +146,7 @@ FontHeightWithContextReal(cairo_t * c)
  */
 void
 OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,
-             int y, ConfigColor * color)
+             int y, FcitxConfigColor * color)
 {
     if (!str || str[0] == 0)
         return;
@@ -167,7 +167,7 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char 
 {
     if (!str || str[0] == 0)
         return;
-    if (!utf8_check_string(str))
+    if (!fcitx_utf8_check_string(str))
         return;
     cairo_save(c);
 

@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", FcitxGetDisplayNumber());
+    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", fcitx_utils_get_display_number());
 
     socket_fd = create_socket(socketfile);
 

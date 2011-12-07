@@ -39,9 +39,9 @@ extern "C" {
      **/
     typedef struct _FcitxProfile {
         /**
-         * @brief derives from GenericConfig
+         * @brief derives from FcitxGenericConfig
          **/
-        GenericConfig gconfig;
+        FcitxGenericConfig gconfig;
         /**
          * @brief use remind mode
          **/
@@ -80,14 +80,14 @@ extern "C" {
      * @param profile profile instance
      * @return boolean loading successful
      **/
-    boolean LoadProfile(FcitxProfile* profile, struct _FcitxInstance* instance);
+    boolean FcitxProfileLoad(FcitxProfile* profile, struct _FcitxInstance* instance);
     /**
      * @brief save profile
      *
      * @param profile profile instance
      * @return void
      **/
-    void SaveProfile(FcitxProfile* profile);
+    void FcitxProfileSave(FcitxProfile* profile);
 
 #ifdef __cplusplus
 }

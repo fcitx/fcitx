@@ -91,32 +91,32 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* PuncCreate(FcitxInstance* instance)
 {
-    FcitxPuncState* puncState = fcitx_malloc0(sizeof(FcitxPuncState));
-    FcitxAddon* puncaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_PUNC_NAME);
+    FcitxPuncState* puncState = fcitx_utils_malloc0(sizeof(FcitxPuncState));
+    FcitxAddon* puncaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_PUNC_NAME);
     puncState->owner = instance;
     LoadPuncDict(puncState);
-    KeyFilterHook hk;
+    FcitxKeyFilterHook hk;
     hk.arg = puncState;
     hk.func = ProcessPunc;
 
-    RegisterPostInputFilter(instance, hk);
+    FcitxInstanceRegisterPostInputFilter(instance, hk);
 
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
 
-    HotkeyHook hotkey;
-    hotkey.hotkey = FcitxInstanceGetConfig(instance)->hkPunc;
+    FcitxHotkeyHook hotkey;
+    hotkey.hotkey = FcitxInstanceGetGlobalConfig(instance)->hkPunc;
     hotkey.hotkeyhandle = TogglePuncStateWithHotkey;
     hotkey.arg = puncState;
-    RegisterHotkeyFilter(instance, hotkey);
+    FcitxInstanceRegisterHotkeyFilter(instance, hotkey);
 
     FcitxIMEventHook hook;
     hook.arg = puncState;
     hook.func = ResetPunc;
 
-    RegisterResetInputHook(instance, hook);
+    FcitxInstanceRegisterResetInputHook(instance, hook);
 
-    RegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
+    FcitxUIRegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
     return puncState;
@@ -143,7 +143,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     FcitxInstance* instance = puncState->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(puncState->owner);
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
-    FcitxConfig* config = FcitxInstanceGetConfig(instance);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
 
     char *pPunc = NULL;
 
@@ -151,19 +151,19 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
         return false;
 
     FcitxKeySym origsym = sym;
-    sym = KeyPadToMain(sym);
+    sym = FcitxHotkeyPadToMain(sym);
     if (profile->bUseWidePunc) {
 
         if (puncState->bLastIsNumber && config->bEngPuncAfterNumber
-                && (IsHotKey(origsym, state, FCITX_PERIOD)
-                    || IsHotKey(origsym, state, FCITX_SEMICOLON)
-                    || IsHotKey(origsym, state, FCITX_COMMA))) {
+                && (FcitxHotkeyIsHotKey(origsym, state, FCITX_PERIOD)
+                    || FcitxHotkeyIsHotKey(origsym, state, FCITX_SEMICOLON)
+                    || FcitxHotkeyIsHotKey(origsym, state, FCITX_COMMA))) {
             puncState->cLastIsAutoConvert = origsym;
             puncState->bLastIsNumber = false;
             *retVal = IRV_DONOT_PROCESS;
             return true;
         }
-        if (IsHotKeySimple(sym, state))
+        if (FcitxHotkeyIsHotKeySimple(sym, state))
             pPunc = GetPunc(puncState, origsym);
     }
 
@@ -171,29 +171,29 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
      * 在有候选词未输入的情况下，选择第一个候选词并输入标点
      */
     if (IsHotKeyPunc(sym, state)) {
-        GetOutputString(input)[0] = '\0';
+        FcitxInputStateGetOutputString(input)[0] = '\0';
         INPUT_RETURN_VALUE ret = IRV_TO_PROCESS;
         if (!FcitxInputStateGetIsInRemind(input))
-            ret = CandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
+            ret = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
 
         /* if there is nothing to commit */
         if (ret == IRV_TO_PROCESS) {
             if (pPunc) {
-                strcat(GetOutputString(input), pPunc);
+                strcat(FcitxInputStateGetOutputString(input), pPunc);
                 *retVal = IRV_PUNC;
-                CleanInputWindow(instance);
+                FcitxInstanceCleanInputWindow(instance);
                 return true;
             } else
                 return false;
         } else {
             if (pPunc)
-                strcat(GetOutputString(input), pPunc);
+                strcat(FcitxInputStateGetOutputString(input), pPunc);
             else {
                 char buf[2] = { sym, 0 };
-                strcat(GetOutputString(input), buf);
+                strcat(FcitxInputStateGetOutputString(input), buf);
             }
 
-            CleanInputWindow(instance);
+            FcitxInstanceCleanInputWindow(instance);
             *retVal = IRV_PUNC;
             return true;
         }
@@ -202,20 +202,20 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
     }
 
     if (profile->bUseWidePunc) {
-        if (IsHotKey(sym, state, FCITX_BACKSPACE)
+        if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)
                 && puncState->cLastIsAutoConvert) {
             char *pPunc;
 
-            ForwardKey(puncState->owner, GetCurrentIC(instance), FCITX_PRESS_KEY, sym, state);
+            FcitxInstanceForwardKey(puncState->owner, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, sym, state);
             pPunc = GetPunc(puncState, puncState->cLastIsAutoConvert);
             if (pPunc)
-                CommitString(puncState->owner, GetCurrentIC(instance), pPunc);
+                FcitxInstanceCommitString(puncState->owner, FcitxInstanceGetCurrentIC(instance), pPunc);
 
             puncState->cLastIsAutoConvert = 0;
             *retVal = IRV_DO_NOTHING;
             return true;
-        } else if (IsHotKeySimple(sym, state)) {
-            if (IsHotKeyDigit(sym, state))
+        } else if (FcitxHotkeyIsHotKeySimple(sym, state)) {
+            if (FcitxHotkeyIsHotKeyDigit(sym, state))
                 puncState->bLastIsNumber = true;
             else {
                 puncState->bLastIsNumber = false;
@@ -241,7 +241,7 @@ boolean LoadPuncDict(FcitxPuncState* puncState)
     char           *pstr;               // 临时指针
     int             i;
 
-    fpDict = GetXDGFileWithPrefix("data", PUNC_DICT_FILENAME, "rt", NULL);
+    fpDict = FcitxXDGGetFileWithPrefix("data", PUNC_DICT_FILENAME, "rt", NULL);
 
     if (!fpDict) {
         FcitxLog(WARNING, _("Can't open Chinese punc file."));
@@ -252,9 +252,9 @@ boolean LoadPuncDict(FcitxPuncState* puncState)
      * 这个函数非常简单，就是计算该文件有多少行（包含空行）。
      * 因为空行，在下面会略去，所以，这儿存在内存的浪费现象。
      * 没有一个空行就是浪费sizeof (WidePunc)字节内存*/
-    iRecordNo = CalculateRecordNumber(fpDict);
+    iRecordNo = fcitx_utils_calculate_record_number(fpDict);
     // 申请空间，用来存放这些数据。这儿没有检查是否申请到内存，严格说有小隐患
-    puncState->chnPunc = (WidePunc *) malloc(sizeof(WidePunc) * (iRecordNo + 1));
+    puncState->chnPunc = (WidePunc *) fcitx_utils_malloc0(sizeof(WidePunc) * (iRecordNo + 1));
 
     iRecordNo = 0;
 
@@ -352,14 +352,14 @@ void TogglePuncState(void* arg)
     FcitxInstance* instance = puncState->owner;
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     profile->bUseWidePunc = !profile->bUseWidePunc;
-    SaveProfile(profile);
-    ResetInput(puncState->owner);
+    FcitxProfileSave(profile);
+    FcitxInstanceResetInput(puncState->owner);
 }
 
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*)arg;
-    UpdateStatus(puncState->owner, "punc");
+    FcitxUIUpdateStatus(puncState->owner, "punc");
     return IRV_DO_NOTHING;
 }
 
@@ -380,11 +380,11 @@ void ReloadPunc(void* arg)
 
 boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state)
 {
-    if (IsHotKeySimple(sym, state)
-            && !IsHotKeyDigit(sym, state)
-            && !IsHotKeyLAZ(sym, state)
-            && !IsHotKeyUAZ(sym, state)
-            && !IsHotKey(sym, state, FCITX_SPACE))
+    if (FcitxHotkeyIsHotKeySimple(sym, state)
+            && !FcitxHotkeyIsHotKeyDigit(sym, state)
+            && !FcitxHotkeyIsHotKeyLAZ(sym, state)
+            && !FcitxHotkeyIsHotKeyUAZ(sym, state)
+            && !FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE))
         return true;
 
     return false;

@@ -31,33 +31,31 @@ extern "C" {
      * Define const keys that will be used in code
      */
 
-    boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state);
-
-    extern HOTKEYS FCITX_NONE_KEY[2];
-    extern HOTKEYS FCITX_DELETE[2];
-    extern HOTKEYS FCITX_CTRL_DELETE[2];
-    extern HOTKEYS FCITX_BACKSPACE[2];
-    extern HOTKEYS FCITX_HOME[2];
-    extern HOTKEYS FCITX_END[2];
-    extern HOTKEYS FCITX_RIGHT[2];
-    extern HOTKEYS FCITX_LEFT[2];
-    extern HOTKEYS FCITX_ESCAPE[2];
-    extern HOTKEYS FCITX_ENTER[2];
-    extern HOTKEYS FCITX_LCTRL_LSHIFT[2];
-    extern HOTKEYS FCITX_LCTRL_LSHIFT2[2];
-    extern HOTKEYS FCITX_SEMICOLON[2];
-    extern HOTKEYS FCITX_SPACE[2];
-    extern HOTKEYS FCITX_COMMA[2];
-    extern HOTKEYS FCITX_PERIOD[2];
-    extern HOTKEYS FCITX_CTRL_5[2];
-    extern HOTKEYS FCITX_SEPARATOR[2];
-    extern HOTKEYS FCITX_CTRL_ALT_E[2];
-    extern HOTKEYS FCITX_LCTRL[2];
-    extern HOTKEYS FCITX_LSHIFT[2];
-    extern HOTKEYS FCITX_RCTRL[2];
-    extern HOTKEYS FCITX_RSHIFT[2];
-    extern HOTKEYS FCITX_LSUPER[2];
-    extern HOTKEYS FCITX_RSUPER[2];
+    extern FcitxHotkey FCITX_NONE_KEY[2];
+    extern FcitxHotkey FCITX_DELETE[2];
+    extern FcitxHotkey FCITX_CTRL_DELETE[2];
+    extern FcitxHotkey FCITX_BACKSPACE[2];
+    extern FcitxHotkey FCITX_HOME[2];
+    extern FcitxHotkey FCITX_END[2];
+    extern FcitxHotkey FCITX_RIGHT[2];
+    extern FcitxHotkey FCITX_LEFT[2];
+    extern FcitxHotkey FCITX_ESCAPE[2];
+    extern FcitxHotkey FCITX_ENTER[2];
+    extern FcitxHotkey FCITX_LCTRL_LSHIFT[2];
+    extern FcitxHotkey FCITX_LCTRL_LSHIFT2[2];
+    extern FcitxHotkey FCITX_SEMICOLON[2];
+    extern FcitxHotkey FCITX_SPACE[2];
+    extern FcitxHotkey FCITX_COMMA[2];
+    extern FcitxHotkey FCITX_PERIOD[2];
+    extern FcitxHotkey FCITX_CTRL_5[2];
+    extern FcitxHotkey FCITX_SEPARATOR[2];
+    extern FcitxHotkey FCITX_CTRL_ALT_E[2];
+    extern FcitxHotkey FCITX_LCTRL[2];
+    extern FcitxHotkey FCITX_LSHIFT[2];
+    extern FcitxHotkey FCITX_RCTRL[2];
+    extern FcitxHotkey FCITX_RSHIFT[2];
+    extern FcitxHotkey FCITX_LSUPER[2];
+    extern FcitxHotkey FCITX_RSUPER[2];
 
 #ifdef __cplusplus
 }

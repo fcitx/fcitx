@@ -35,8 +35,8 @@ struct _FcitxClassicUI;
 typedef struct _AboutWindow {
     Window window;
     cairo_surface_t* surface;
-    ConfigColor color;
-    ConfigColor fontColor;
+    FcitxConfigColor color;
+    FcitxConfigColor fontColor;
     int width;
     int fontSize;
     Atom     about_kill_atom;

@@ -87,23 +87,23 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* FullWidthCharCreate(FcitxInstance* instance)
 {
-    FcitxFullWidthChar* fwchar = fcitx_malloc0(sizeof(FcitxFullWidthChar));
-    FcitxConfig* config = FcitxInstanceGetConfig(instance);
+    FcitxFullWidthChar* fwchar = fcitx_utils_malloc0(sizeof(FcitxFullWidthChar));
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     fwchar->owner = instance;
-    StringFilterHook hk;
+    FcitxStringFilterHook hk;
     hk.arg = fwchar;
     hk.func = ProcessFullWidthChar;
 
-    RegisterCommitFilter(instance, hk);
+    FcitxInstanceRegisterCommitFilter(instance, hk);
 
-    HotkeyHook hotkey;
+    FcitxHotkeyHook hotkey;
     hotkey.hotkey = config->hkFullWidthChar;
     hotkey.hotkeyhandle = ToggleFullWidthStateWithHotkey;
     hotkey.arg = fwchar;
 
-    RegisterHotkeyFilter(instance, hotkey);
+    FcitxInstanceRegisterHotkeyFilter(instance, hotkey);
 
-    RegisterStatus(instance, fwchar, "fullwidth", _("Full Width Character"), _("Full Width Character"),  ToggleFullWidthState, GetFullWidthState);
+    FcitxUIRegisterStatus(instance, fwchar, "fullwidth", _("Full Width Character"), _("Full Width Character"),  ToggleFullWidthState, GetFullWidthState);
 
     return fwchar;
 }
@@ -113,15 +113,15 @@ char* ProcessFullWidthChar(void* arg, const char* str)
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     if (profile->bUseFullWidthChar) {
-        size_t i = 0, ret_len = 0, len = utf8_strlen(str);
-        char* ret = (char *) fcitx_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
+        size_t i = 0, ret_len = 0, len = fcitx_utf8_strlen(str);
+        char* ret = (char *) fcitx_utils_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
         const char* ps = str;
         ret[0] = '\0';
         for (; i < len; ++i) {
             int wc;
-            int chr_len = utf8_char_len(ps);
+            int chr_len = fcitx_utf8_char_len(ps);
             char *nps;
-            nps = utf8_get_char(ps , &wc);
+            nps = fcitx_utf8_get_char(ps , &wc);
 
             if (chr_len == 1 && ps[0] >= '\x20' && ps[0] <= '\x7e') {
                 strcat(ret, sCornerTrans[ps[0] - 32]);
@@ -146,8 +146,8 @@ void ToggleFullWidthState(void* arg)
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     profile->bUseFullWidthChar = !profile->bUseFullWidthChar;
-    SaveProfile(profile);
-    ResetInput(fwchar->owner);
+    FcitxProfileSave(profile);
+    FcitxInstanceResetInput(fwchar->owner);
 }
 
 boolean GetFullWidthState(void* arg)
@@ -160,7 +160,7 @@ boolean GetFullWidthState(void* arg)
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
-    UpdateStatus(fwchar->owner, "fullwidth");
+    FcitxUIUpdateStatus(fwchar->owner, "fullwidth");
     return IRV_DO_NOTHING;
 }
 

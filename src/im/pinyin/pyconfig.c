@@ -30,9 +30,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
-static void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static ConfigFileDesc* GetPYConfigDesc();
+static void FilterGetWordFromPhrase(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
+static void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
+static FcitxConfigFileDesc* GetPYConfigDesc();
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
 CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority)
@@ -62,7 +62,7 @@ CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstype)
 CONFIG_BINDING_END()
 
-void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterGetWordFromPhrase(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
 {
     char *pstr = *(char**) value;
     FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
@@ -78,7 +78,7 @@ void FilterGetWordFromPhrase(GenericConfig* config, ConfigGroup *group, ConfigOp
     }
 }
 
-void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
 {
     FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
     if (sync == Raw2Value) {
@@ -89,23 +89,23 @@ void FilterAnAng(GenericConfig* config, ConfigGroup *group, ConfigOption *option
 
 boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
 {
-    ConfigFileDesc* configDesc = GetPYConfigDesc();
+    FcitxConfigFileDesc* configDesc = GetPYConfigDesc();
     if (configDesc == NULL)
         return false;
     FILE *fp;
     char *file;
-    fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "rt", &file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
             SavePYConfig(pyconfig);
     }
 
-    ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
     FcitxPinyinConfigConfigBind(pyconfig, cfile, configDesc);
 
-    ConfigOption* option = ConfigFileGetOption(cfile, "Pinyin", "DefaultShuangpinSchema");
+    FcitxConfigOption* option = FcitxConfigFileGetOption(cfile, "Pinyin", "DefaultShuangpinSchema");
     if (option != NULL && option->rawValue && option->optionDesc) {
         char* needfree = NULL;
         if (strcmp(option->rawValue, "自然码") == 0) {
@@ -131,7 +131,7 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
             free(needfree);
     }
 
-    ConfigBindSync((GenericConfig*)pyconfig);
+    FcitxConfigBindSync((FcitxGenericConfig*)pyconfig);
 
     if (fp)
         fclose(fp);
@@ -140,10 +140,10 @@ boolean LoadPYConfig(FcitxPinyinConfig *pyconfig)
 
 void SavePYConfig(FcitxPinyinConfig* pyconfig)
 {
-    ConfigFileDesc* configDesc = GetPYConfigDesc();
+    FcitxConfigFileDesc* configDesc = GetPYConfigDesc();
     char *file;
-    FILE *fp = GetXDGFileUserWithPrefix("conf", "fcitx-pinyin.config", "wt", &file);
-    SaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-pinyin.config", "wt", &file);
+    FcitxConfigSaveConfigFileFp(fp, &pyconfig->gconfig, configDesc);
     free(file);
     if (fp)
         fclose(fp);

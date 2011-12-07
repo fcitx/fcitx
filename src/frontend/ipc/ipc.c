@@ -230,7 +230,7 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* IPCCreate(FcitxInstance* instance, int frontendid)
 {
-    FcitxIPCFrontend* ipc = fcitx_malloc0(sizeof(FcitxIPCFrontend));
+    FcitxIPCFrontend* ipc = fcitx_utils_malloc0(sizeof(FcitxIPCFrontend));
     ipc->frontendid = frontendid;
     ipc->owner = instance;
 
@@ -255,7 +255,7 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     FcitxIMEventHook hook;
     hook.arg = ipc;
     hook.func = IPCUpdateIMList;
-    RegisterUpdateIMListHook(instance, hook);
+    FcitxInstanceRegisterUpdateIMListHook(instance, hook);
 
     return ipc;
 }
@@ -268,10 +268,10 @@ boolean IPCDestroy(void* arg)
 void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
-    FcitxIPCIC* ipcic = (FcitxIPCIC*) fcitx_malloc0(sizeof(FcitxIPCIC));
+    FcitxIPCIC* ipcic = (FcitxIPCIC*) fcitx_utils_malloc0(sizeof(FcitxIPCIC));
     DBusMessage* message = (DBusMessage*) priv;
     DBusMessage *reply = dbus_message_new_method_return(message);
-    FcitxConfig* config = FcitxInstanceGetConfig(ipc->owner);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(ipc->owner);
 
     context->privateic = ipcic;
 
@@ -310,7 +310,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         }
 
         if (config->shareState == ShareState_PerProgram)
-            SetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
+            FcitxInstanceSetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
 
         boolean arg0 = context->state != IS_CLOSED;
 
@@ -456,10 +456,10 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         FcitxDBusPropertyGetAll(ipc, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateIC")) {
-        CreateIC(ipc->owner, ipc->frontendid, msg);
+        FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")) {
-        CreateIC(ipc->owner, ipc->frontendid, msg);
+        FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
@@ -471,7 +471,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) user_data;
     int id;
     sscanf(dbus_message_get_path(msg), FCITX_IC_DBUS_PATH, &id);
-    FcitxInputContext* ic = FindIC(ipc->owner, ipc->frontendid, &id);
+    FcitxInputContext* ic = FcitxInstanceFindIC(ipc->owner, ipc->frontendid, &id);
     DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 
     if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect")) {
@@ -487,13 +487,13 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "EnableIC")) {
-            EnableIM(ipc->owner, ic, false);
+            FcitxInstanceEnableIM(ipc->owner, ic, false);
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(ipc->conn, reply, NULL);
             dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CloseIC")) {
-            CloseIM(ipc->owner, ic);
+            FcitxInstanceCloseIM(ipc->owner, ic);
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(ipc->conn, reply, NULL);
             dbus_message_unref(reply);
@@ -534,8 +534,8 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 dbus_message_unref(reply);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
-        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
-            DestroyIC(ipc->owner, ipc->frontendid, &id);
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FcitxInstanceDestroyIC")) {
+            FcitxInstanceDestroyIC(ipc->owner, ipc->frontendid, &id);
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(ipc->conn, reply, NULL);
             dbus_message_unref(reply);
@@ -571,20 +571,20 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
 
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
 {
-    FcitxInputContext* ic = GetCurrentIC(ipc->owner);
-    FcitxConfig* config = FcitxInstanceGetConfig(ipc->owner);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(ipc->owner);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(ipc->owner);
     FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
 
     if (ic == NULL) {
-        SetCurrentIC(ipc->owner, callic);
+        FcitxInstanceSetCurrentIC(ipc->owner, callic);
     }
     ic = callic;
     FcitxKeySym sym;
     unsigned int state;
 
-    originstate = originstate - (originstate & KEY_NUMLOCK) - (originstate & KEY_CAPSLOCK) - (originstate & KEY_SCROLLLOCK);
-    originstate &= KEY_USED_MASK;
-    GetKey(originsym, originstate, &sym, &state);
+    originstate = originstate - (originstate & FcitxKeyState_NumLock) - (originstate & FcitxKeyState_CapsLock) - (originstate & FcitxKeyState_ScrollLock);
+    originstate &= FcitxKeyState_UsedMask;
+    FcitxHotkeyGetKey(originsym, originstate, &sym, &state);
     FcitxLog(DEBUG,
              "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%u ",
              (type == FCITX_RELEASE_KEY), state, keycode, sym);
@@ -592,13 +592,13 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     if (originsym == 0)
         return 0;
 
-    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && IsHotKey(sym, state, config->hkTrigger)) {
-        EnableIM(ipc->owner, ic, false);
+    if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && FcitxHotkeyIsHotKey(sym, state, config->hkTrigger)) {
+        FcitxInstanceEnableIM(ipc->owner, ic, false);
         FcitxInputStateSetKeyReleased(input, KR_OTHER);
         return 1;
     }
 
-    INPUT_RETURN_VALUE retVal = ProcessKey(ipc->owner, type,
+    INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(ipc->owner, type,
                                            t,
                                            sym, state);
 
@@ -613,14 +613,14 @@ static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
     if (ic == NULL)
         return;
 
-    if (!SetCurrentIC(ipc->owner, ic))
+    if (!FcitxInstanceSetCurrentIC(ipc->owner, ic))
         return;
 
     if (ic) {
-        OnInputFocus(ipc->owner);
+        FcitxUIOnInputFocus(ipc->owner);
     } else {
-        CloseInputWindow(ipc->owner);
-        MoveInputWindow(ipc->owner);
+        FcitxUICloseInputWindow(ipc->owner);
+        FcitxUIMoveInputWindow(ipc->owner);
     }
 
     return;
@@ -628,11 +628,11 @@ static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
-    FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
+    FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
     if (ic && ic == currentic) {
-        SetCurrentIC(ipc->owner, NULL);
-        CloseInputWindow(ipc->owner);
-        OnInputUnFocus(ipc->owner);
+        FcitxInstanceSetCurrentIC(ipc->owner, NULL);
+        FcitxUICloseInputWindow(ipc->owner);
+        FcitxUIOnInputUnFocus(ipc->owner);
     }
 
     return;
@@ -640,10 +640,10 @@ static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
-    FcitxInputContext* currentic = GetCurrentIC(ipc->owner);
+    FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
     if (ic && ic == currentic) {
-        CloseInputWindow(ipc->owner);
-        ResetInput(ipc->owner);
+        FcitxUICloseInputWindow(ipc->owner);
+        FcitxInstanceResetInput(ipc->owner);
     }
 
     return;
@@ -653,7 +653,7 @@ static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic,
 {
     ic->offset_x = x;
     ic->offset_y = y;
-    MoveInputWindow(ipc->owner);
+    FcitxUIMoveInputWindow(ipc->owner);
 
     return;
 }
@@ -667,8 +667,8 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "UpdatePreedit"); // name of the signal
 
-    char* strPreedit = MessagesToCString(FcitxInputStateGetClientPreedit(input));
-    char* str = ProcessOutputFilter(ipc->owner, strPreedit);
+    char* strPreedit = FcitxUIMessagesToCString(FcitxInputStateGetClientPreedit(input));
+    char* str = FcitxInstanceProcessOutputFilter(ipc->owner, strPreedit);
     if (str) {
         free(strPreedit);
         strPreedit = str;
@@ -696,31 +696,31 @@ void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
                        "UpdateClientSideUI"); // name of the signal
 
     char *str;
-    char* strAuxUp = MessagesToCString(FcitxInputStateGetAuxUp(input));
-    str = ProcessOutputFilter(ipc->owner, strAuxUp);
+    char* strAuxUp = FcitxUIMessagesToCString(FcitxInputStateGetAuxUp(input));
+    str = FcitxInstanceProcessOutputFilter(ipc->owner, strAuxUp);
     if (str) {
         free(strAuxUp);
         strAuxUp = str;
     }
-    char* strAuxDown = MessagesToCString(FcitxInputStateGetAuxDown(input));
-    str = ProcessOutputFilter(ipc->owner, strAuxDown);
+    char* strAuxDown = FcitxUIMessagesToCString(FcitxInputStateGetAuxDown(input));
+    str = FcitxInstanceProcessOutputFilter(ipc->owner, strAuxDown);
     if (str) {
         free(strAuxDown);
         strAuxDown = str;
     }
-    char* strPreedit = MessagesToCString(FcitxInputStateGetPreedit(input));
-    str = ProcessOutputFilter(ipc->owner, strPreedit);
+    char* strPreedit = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    str = FcitxInstanceProcessOutputFilter(ipc->owner, strPreedit);
     if (str) {
         free(strPreedit);
         strPreedit = str;
     }
-    char* candidateword = CandidateWordToCString(ipc->owner);
-    str = ProcessOutputFilter(ipc->owner, candidateword);
+    char* candidateword = FcitxUICandidateWordToCString(ipc->owner);
+    str = FcitxInstanceProcessOutputFilter(ipc->owner, candidateword);
     if (str) {
         free(candidateword);
         candidateword = str;
     }
-    FcitxIM* im = GetCurrentIM(ipc->owner);
+    FcitxIM* im = FcitxInstanceGetCurrentIM(ipc->owner);
     char* imname = NULL;
     if (im == NULL)
         imname = "En";
@@ -892,7 +892,7 @@ void IPCGetPropertyIMList(void* arg, DBusMessageIter* args)
     for (ime = (FcitxIM*) utarray_front(availimes);
             ime != NULL;
             ime = (FcitxIM*) utarray_next(availimes, ime)) {
-        if (!GetIMFromIMList(imes, ime->uniqueName)) {
+        if (!FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, ime->uniqueName)) {
             dbus_message_iter_open_container(&sub, DBUS_TYPE_STRUCT, 0, &ssub);
             boolean enable = false;
             char* name = ime->strName;
@@ -962,7 +962,7 @@ void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
         if (profile->imList)
             free(profile->imList);
         profile->imList = result;
-        UpdateIMList(instance);
+        FcitxInstanceUpdateIMList(instance);
     }
 }
 

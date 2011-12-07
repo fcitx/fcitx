@@ -43,93 +43,105 @@ typedef struct _KEY_LIST {
 
 /* fcitx key name translist */
 KEY_LIST        keyList[] = {
-    {"TAB", Key_Tab},
-    {"ENTER", Key_Return},
-    {"LCTRL", Key_Control_L},
-    {"LSHIFT", Key_Shift_L},
-    {"LALT", Key_Alt_L},
-    {"RCTRL", Key_Control_R},
-    {"RSHIFT", Key_Shift_R},
-    {"RALT", Key_Alt_R},
-    {"INSERT", Key_Insert},
-    {"HOME", Key_Home},
-    {"PGUP", Key_Page_Up},
-    {"END", Key_End},
-    {"PGDN", Key_Page_Down},
-    {"ESCAPE", Key_Escape},
-    {"SPACE", Key_space},
-    {"DELETE", Key_Delete},
+    {"TAB", FcitxKey_Tab},
+    {"ENTER", FcitxKey_Return},
+    {"LCTRL", FcitxKey_Control_L},
+    {"LSHIFT", FcitxKey_Shift_L},
+    {"LALT", FcitxKey_Alt_L},
+    {"RCTRL", FcitxKey_Control_R},
+    {"RSHIFT", FcitxKey_Shift_R},
+    {"RALT", FcitxKey_Alt_R},
+    {"INSERT", FcitxKey_Insert},
+    {"HOME", FcitxKey_Home},
+    {"PGUP", FcitxKey_Page_Up},
+    {"END", FcitxKey_End},
+    {"PGDN", FcitxKey_Page_Down},
+    {"ESCAPE", FcitxKey_Escape},
+    {"SPACE", FcitxKey_space},
+    {"DELETE", FcitxKey_Delete},
     {"\0", 0}
 };
 
-static int GetKeyList(char *strKey);
-static char *GetKeyListString(int key);
+static int FcitxHotkeyGetKeyList(char *strKey);
+static char *FcitxHotkeyGetKeyListString(int key);
 
 FCITX_EXPORT_API
-boolean IsHotKeyDigit(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, int state)
 {
     if (state)
         return false;
 
-    if (sym >= Key_0 && sym <= Key_9)
+    if (sym >= FcitxKey_0 && sym <= FcitxKey_9)
         return true;
 
     return false;
 }
 
 FCITX_EXPORT_API
-boolean IsHotKeyUAZ(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, int state)
 {
     if (state)
         return false;
 
-    if (sym >= Key_A && sym <= Key_Z)
+    if (sym >= FcitxKey_A && sym <= FcitxKey_Z)
         return true;
 
     return false;
 }
 
 FCITX_EXPORT_API
-boolean IsHotKeySimple(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state)
 {
     if (state)
         return false;
 
-    if (sym >= Key_space && sym <= Key_asciitilde)
+    if (sym >= FcitxKey_space && sym <= FcitxKey_asciitilde)
         return true;
 
     return false;
 }
 
 FCITX_EXPORT_API
-boolean IsHotKeyLAZ(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state)
 {
     if (state)
         return false;
 
-    if (sym >= Key_a && sym <= Key_z)
+    if (sym >= FcitxKey_a && sym <= FcitxKey_z)
         return true;
 
     return false;
 }
 
+
 FCITX_EXPORT_API
-boolean IsHotkeyCursorMove(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
+{
+    state &= FcitxKeyState_Ctrl_Alt_Shift;
+    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
+        return true;
+    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
+        return true;
+    return false;
+}
+
+FCITX_EXPORT_API
+boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, int state)
 {
     if ((
-                sym == Key_Left
-                || sym == Key_Right
-                || sym == Key_Up
-                || sym == Key_Down
-                || sym == Key_Page_Up
-                || sym == Key_Page_Down
-                || sym == Key_Home
-                || sym == Key_End
+                sym == FcitxKey_Left
+                || sym == FcitxKey_Right
+                || sym == FcitxKey_Up
+                || sym == FcitxKey_Down
+                || sym == FcitxKey_Page_Up
+                || sym == FcitxKey_Page_Down
+                || sym == FcitxKey_Home
+                || sym == FcitxKey_End
             ) && (
-                state == KEY_CTRL_COMP
-                || state == KEY_CTRL_SHIFT_COMP
-                || state == KEY_SHIFT_COMP
-                || state == KEY_NONE
+                state == FcitxKeyState_Ctrl
+                || state == FcitxKeyState_Ctrl_Shift
+                || state == FcitxKeyState_Shift
+                || state == FcitxKeyState_None
             )
 
        ) {
@@ -138,20 +150,32 @@ boolean IsHotkeyCursorMove(FcitxKeySym sym, int state)
     return false;
 }
 
+FCITX_EXPORT_API
+boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, int state)
+{
+    if (sym == FcitxKey_Control_L
+            || sym == FcitxKey_Control_R
+            || sym == FcitxKey_Shift_L
+            || sym == FcitxKey_Shift_R)
+        return true;
+
+    return false;
+}
+
 /*
  * Do some custom process
  */
 FCITX_EXPORT_API
-void GetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
+void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
     if (iKeyState) {
-        if (IsHotKeyLAZ(keysym, 0))
-            keysym = keysym + Key_A - Key_a;
+        if (FcitxHotkeyIsHotKeyLAZ(keysym, 0))
+            keysym = keysym + FcitxKey_A - FcitxKey_a;
 
-        if (iKeyState == KEY_SHIFT_COMP)
-            if ((IsHotKeySimple(keysym, 0) && keysym != Key_space)
-                    || (keysym >= Key_KP_0 && keysym <= Key_KP_9))
-                iKeyState = KEY_NONE;
+        if (iKeyState == FcitxKeyState_Shift)
+            if ((FcitxHotkeyIsHotKeySimple(keysym, 0) && keysym != FcitxKey_space)
+                    || (keysym >= FcitxKey_KP_0 && keysym <= FcitxKey_KP_9))
+                iKeyState = FcitxKeyState_None;
     }
 
     *outk = keysym;
@@ -161,36 +185,36 @@ void GetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsig
 
 
 FCITX_EXPORT_API
-char* GetKeyString(FcitxKeySym sym, unsigned int state)
+char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
 {
     char *str;
     size_t len = 0;
 
-    if (state & KEY_CTRL_COMP)
+    if (state & FcitxKeyState_Ctrl)
         len += strlen("CTRL_");
 
-    if (state & KEY_ALT_COMP)
+    if (state & FcitxKeyState_Alt)
         len += strlen("ALT_");
 
-    if (state & KEY_SHIFT_COMP)
+    if (state & FcitxKeyState_Shift)
         len += strlen("SHIFT_");
 
-    char *key = GetKeyListString(sym);
+    char *key = FcitxHotkeyGetKeyListString(sym);
 
     if (!key)
         return NULL;
 
     len += strlen(key);
 
-    str = fcitx_malloc0(sizeof(char) * (len + 1));
+    str = fcitx_utils_malloc0(sizeof(char) * (len + 1));
 
-    if (state & KEY_CTRL_COMP)
+    if (state & FcitxKeyState_Ctrl)
         strcat(str, "CTRL_");
 
-    if (state & KEY_ALT_COMP)
+    if (state & FcitxKeyState_Alt)
         strcat(str, "ALT_");
 
-    if (state & KEY_SHIFT_COMP)
+    if (state & FcitxKeyState_Shift)
         strcat(str, "SHIFT_");
 
     strcat(str, key);
@@ -206,7 +230,7 @@ char* GetKeyString(FcitxKeySym sym, unsigned int state)
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
 FCITX_EXPORT_API
-boolean ParseKey(char *strKey, FcitxKeySym* sym, int* state)
+boolean FcitxHotkeyParseKey(char *strKey, FcitxKeySym* sym, int* state)
 {
     char           *p;
     int             iKey;
@@ -215,21 +239,21 @@ boolean ParseKey(char *strKey, FcitxKeySym* sym, int* state)
     p = strKey;
 
     if (strstr(p, "CTRL_")) {
-        iKeyState |= KEY_CTRL_COMP;
+        iKeyState |= FcitxKeyState_Ctrl;
         p += strlen("CTRL_");
     }
 
     if (strstr(p, "ALT_")) {
-        iKeyState |= KEY_ALT_COMP;
+        iKeyState |= FcitxKeyState_Alt;
         p += strlen("ALT_");
     }
 
     if (strstr(strKey, "SHIFT_")) {
-        iKeyState |= KEY_SHIFT_COMP;
+        iKeyState |= FcitxKeyState_Shift;
         p += strlen("SHIFT_");
     }
 
-    iKey = GetKeyList(p);
+    iKey = FcitxHotkeyGetKeyList(p);
 
     if (iKey == -1)
         return false;
@@ -242,7 +266,7 @@ boolean ParseKey(char *strKey, FcitxKeySym* sym, int* state)
 }
 
 FCITX_EXPORT_API
-int GetKeyList(char *strKey)
+int FcitxHotkeyGetKeyList(char *strKey)
 {
     int             i;
 
@@ -264,9 +288,9 @@ int GetKeyList(char *strKey)
     return -1;
 }
 
-char *GetKeyListString(int key)
+char *FcitxHotkeyGetKeyListString(int key)
 {
-    if (key > Key_space && key <= Key_asciitilde) {
+    if (key > FcitxKey_space && key <= FcitxKey_asciitilde) {
         char *p;
         p = malloc(sizeof(char) * 2);
         p[0] = key;
@@ -293,13 +317,13 @@ char *GetKeyListString(int key)
 }
 
 FCITX_EXPORT_API
-void SetHotKey(char *strKeys, HOTKEYS * hotkey)
+void FcitxHotkeySetKey(char *strKeys, FcitxHotkey * hotkey)
 {
     char           *p;
     char           *strKey;
     int             i = 0, j = 0, k;
 
-    strKeys = fcitx_trim(strKeys);
+    strKeys = fcitx_utils_trim(strKeys);
     p = strKeys;
 
     for (k = 0; k < 2; k++) {
@@ -314,10 +338,10 @@ void SetHotKey(char *strKeys, HOTKEYS * hotkey)
 
         strKey[i] = '\0';
 
-        if (ParseKey(strKey, &sym, &state)) {
+        if (FcitxHotkeyParseKey(strKey, &sym, &state)) {
             hotkey[j].sym = sym;
             hotkey[j].state = state;
-            hotkey[j].desc = fcitx_trim(strKey);
+            hotkey[j].desc = fcitx_utils_trim(strKey);
             j ++;
         }
 
@@ -351,50 +375,50 @@ static int key_table_cmp(const void* a, const void* b)
 }
 
 FCITX_EXPORT_API
-FcitxKeySym KeyPadToMain(FcitxKeySym sym)
+FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
 {
     static struct KeyPadTable keytable[] = {
-        {Key_KP_Space, Key_space},
-        {Key_KP_Tab, Key_Tab},
-        {Key_KP_Enter, Key_Return},
-        {Key_KP_F1, Key_F1},
-        {Key_KP_F2, Key_F2},
-        {Key_KP_F3, Key_F3},
-        {Key_KP_F4, Key_F4},
-        {Key_KP_Home, Key_Home},
-        {Key_KP_Left, Key_Left},
-        {Key_KP_Up, Key_Up},
-        {Key_KP_Right, Key_Right},
-        {Key_KP_Down, Key_Down},
-        {Key_KP_Prior, Key_Prior},
-        {Key_KP_Page_Up, Key_Page_Up},
-        {Key_KP_Next, Key_Next},
-        {Key_KP_Page_Down, Key_Page_Down},
-        {Key_KP_End, Key_End},
-        {Key_KP_Begin, Key_Begin},
-        {Key_KP_Insert, Key_Insert},
-        {Key_KP_Delete, Key_Delete},
-        {Key_KP_Equal, Key_equal},
-        {Key_KP_Multiply, Key_asterisk},
-        {Key_KP_Add, Key_plus},
-        {Key_KP_Separator, Key_comma},
-        {Key_KP_Subtract, Key_minus},
-        {Key_KP_Decimal, Key_period},
-        {Key_KP_Divide, Key_slash},
+        {FcitxKey_KP_Space, FcitxKey_space},
+        {FcitxKey_KP_Tab, FcitxKey_Tab},
+        {FcitxKey_KP_Enter, FcitxKey_Return},
+        {FcitxKey_KP_F1, FcitxKey_F1},
+        {FcitxKey_KP_F2, FcitxKey_F2},
+        {FcitxKey_KP_F3, FcitxKey_F3},
+        {FcitxKey_KP_F4, FcitxKey_F4},
+        {FcitxKey_KP_Home, FcitxKey_Home},
+        {FcitxKey_KP_Left, FcitxKey_Left},
+        {FcitxKey_KP_Up, FcitxKey_Up},
+        {FcitxKey_KP_Right, FcitxKey_Right},
+        {FcitxKey_KP_Down, FcitxKey_Down},
+        {FcitxKey_KP_Prior, FcitxKey_Prior},
+        {FcitxKey_KP_Page_Up, FcitxKey_Page_Up},
+        {FcitxKey_KP_Next, FcitxKey_Next},
+        {FcitxKey_KP_Page_Down, FcitxKey_Page_Down},
+        {FcitxKey_KP_End, FcitxKey_End},
+        {FcitxKey_KP_Begin, FcitxKey_Begin},
+        {FcitxKey_KP_Insert, FcitxKey_Insert},
+        {FcitxKey_KP_Delete, FcitxKey_Delete},
+        {FcitxKey_KP_Equal, FcitxKey_equal},
+        {FcitxKey_KP_Multiply, FcitxKey_asterisk},
+        {FcitxKey_KP_Add, FcitxKey_plus},
+        {FcitxKey_KP_Separator, FcitxKey_comma},
+        {FcitxKey_KP_Subtract, FcitxKey_minus},
+        {FcitxKey_KP_Decimal, FcitxKey_period},
+        {FcitxKey_KP_Divide, FcitxKey_slash},
 
-        {Key_KP_0, Key_0},
-        {Key_KP_1, Key_1},
-        {Key_KP_2, Key_2},
-        {Key_KP_3, Key_3},
-        {Key_KP_4, Key_4},
-        {Key_KP_5, Key_5},
-        {Key_KP_6, Key_6},
-        {Key_KP_7, Key_7},
-        {Key_KP_8, Key_8},
-        {Key_KP_9, Key_9},
+        {FcitxKey_KP_0, FcitxKey_0},
+        {FcitxKey_KP_1, FcitxKey_1},
+        {FcitxKey_KP_2, FcitxKey_2},
+        {FcitxKey_KP_3, FcitxKey_3},
+        {FcitxKey_KP_4, FcitxKey_4},
+        {FcitxKey_KP_5, FcitxKey_5},
+        {FcitxKey_KP_6, FcitxKey_6},
+        {FcitxKey_KP_7, FcitxKey_7},
+        {FcitxKey_KP_8, FcitxKey_8},
+        {FcitxKey_KP_9, FcitxKey_9},
     };
 
-    struct KeyPadTable key = { sym, Key_None };
+    struct KeyPadTable key = { sym, FcitxKey_None };
 
     struct KeyPadTable *result = bsearch(&key, keytable, sizeof(keytable) / sizeof(struct KeyPadTable) , sizeof(struct KeyPadTable), key_table_cmp);
     if (result == NULL)

@@ -87,7 +87,7 @@ extern "C" {
      * @param  frontends array
      * @return void
      **/
-    void InitFcitxFrontends(UT_array*);
+    void FcitxFrontendsInit(UT_array*);
 
     /**
      * @brief Find Input Context By Frontend Specific filter
@@ -97,7 +97,7 @@ extern "C" {
      * @param filter frontend specfic filter
      * @return FcitxInputContext*
      **/
-    FcitxInputContext* FindIC(struct _FcitxInstance* instance, int frontendid, void* filter);
+    FcitxInputContext* FcitxInstanceFindIC(struct _FcitxInstance* instance, int frontendid, void* filter);
 
     /**
      * @brief Creat New Input Context
@@ -107,7 +107,7 @@ extern "C" {
      * @param priv frontend specfic data
      * @return FcitxInputContext*
      **/
-    FcitxInputContext* CreateIC(struct _FcitxInstance* instance, int frontendid, void* priv);
+    FcitxInputContext* FcitxInstanceCreateIC(struct _FcitxInstance* instance, int frontendid, void* priv);
 
     /**
      * @brief Destroy Input context
@@ -117,7 +117,7 @@ extern "C" {
      * @param filter frontend specfic filter
      * @return void
      **/
-    void DestroyIC(struct _FcitxInstance* instance, int frontendid, void* filter);
+    void FcitxInstanceDestroyIC(struct _FcitxInstance* instance, int frontendid, void* filter);
 
     /**
      * @brief Load All frontend
@@ -125,7 +125,7 @@ extern "C" {
      * @param instance
      * @return void
      **/
-    boolean LoadFrontend(struct _FcitxInstance* instance);
+    boolean FcitxInstanceLoadFrontend(struct _FcitxInstance* instance);
 
     /**
      * @brief Commit String to Client
@@ -135,7 +135,7 @@ extern "C" {
      * @param str String to commit
      * @return void
      **/
-    void CommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, char* str);
+    void FcitxInstanceCommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, char* str);
 
     /**
      * @brief Set Cursor Position
@@ -146,7 +146,7 @@ extern "C" {
      * @param y ypos
      * @return void
      **/
-    void SetWindowOffset(struct _FcitxInstance* instance, FcitxInputContext* ic, int x, int y);
+    void FcitxInstanceSetWindowOffset(struct _FcitxInstance* instance, FcitxInputContext* ic, int x, int y);
 
     /**
      * @brief Get Cursor Position
@@ -157,7 +157,7 @@ extern "C" {
      * @param y ypos
      * @return void
      **/
-    void GetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
+    void FcitxInstanceGetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
 
     /**
      * @brief Update preedit text to client window
@@ -166,7 +166,7 @@ extern "C" {
      * @param ic input context
      * @return void
      **/
-    void UpdatePreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
+    void FcitxInstanceUpdatePreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
      * @brief Update all user interface element to client (Aux Text, Preedit, Candidate Word)
@@ -175,7 +175,7 @@ extern "C" {
      * @param ic input context
      * @return void
      **/
-    void UpdateClientSideUI(struct _FcitxInstance* instance, FcitxInputContext* ic);
+    void FcitxInstanceUpdateClientSideUI(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
      * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
@@ -183,7 +183,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return IME_STATE
      **/
-    IME_STATE GetCurrentState(struct _FcitxInstance* instance);
+    IME_STATE FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
 
     /**
      * @brief get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
@@ -191,9 +191,9 @@ extern "C" {
      * @param instance fcitx instance
      * @return CapacityFlags
      **/
-    CapacityFlags GetCurrentCapacity(struct _FcitxInstance* instance);
+    CapacityFlags FcitxInstanceGetCurrentCapacity(struct _FcitxInstance* instance);
 
-    void SetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
+    void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
 
 #ifdef __cplusplus
 }

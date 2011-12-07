@@ -7,8 +7,8 @@ int main(int argc, char* argv[])
         return 1;
 
 
-    ConfigFileDesc* configDesc = ParseConfigFileDesc(argv[1]);
-    GenericConfig gc;
+    FcitxConfigFileDesc* configDesc = ParseFcitxConfigFileDesc(argv[1]);
+    FcitxGenericConfig gc;
     gc.configFile = ParseConfigFile(argv[2], configDesc);
     SaveConfigFile(argv[3], &gc, configDesc);
     return 0;

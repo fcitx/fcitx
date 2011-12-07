@@ -60,11 +60,11 @@ typedef struct _FcitxTableState {
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
 
     boolean            bIsTableDelPhrase;
-    HOTKEYS         hkTableDelPhrase[HOT_KEY_COUNT];
+    FcitxHotkey         hkTableDelPhrase[HOT_KEY_COUNT];
     boolean            bIsTableAdjustOrder;
-    HOTKEYS         hkTableAdjustOrder[HOT_KEY_COUNT];
+    FcitxHotkey         hkTableAdjustOrder[HOT_KEY_COUNT];
     boolean            bIsTableAddPhrase;
-    HOTKEYS         hkTableAddPhrase[HOT_KEY_COUNT];
+    FcitxHotkey         hkTableAddPhrase[HOT_KEY_COUNT];
 
     char            iTableNewPhraseHZCount;
 
@@ -75,7 +75,7 @@ typedef struct _FcitxTableState {
 
     struct _FcitxInstance* owner;
     struct _FcitxAddon* pyaddon;
-    CandidateWordCommitCallback pygetcandword;
+    FcitxCandidateWordCommitCallback pygetcandword;
 } FcitxTableState;
 
 void            LoadTableInfo(FcitxTableState* tbl);
@@ -98,13 +98,13 @@ void TableAdjustOrderByIndex(FcitxTableState* tbl, TABLECANDWORD* tableCandWord)
 void            TableDelPhraseByIndex(FcitxTableState* tbl, TABLECANDWORD* tableCandWord);
 void            TableCreateNewPhrase(FcitxTableState* tbl);
 INPUT_RETURN_VALUE _TableGetCandWord(FcitxTableState* tbl, TABLECANDWORD* tableCandWord, boolean _bRemind);
-INPUT_RETURN_VALUE TableGetCandWord(void* arg, CandidateWord* candWord);
+INPUT_RETURN_VALUE TableGetCandWord(void* arg, FcitxCandidateWord* candWord);
 boolean            TablePhraseTips(void* arg);
 void            TableSetCandWordsFlag(FcitxTableState* tbl, int iCount, boolean flag);
 
 void            UpdateHZLastInput(FcitxTableState* tbl, char* str);
 
-ConfigFileDesc *GetTableConfigDesc();
+FcitxConfigFileDesc *GetTableConfigDesc();
 
 #endif
 

@@ -34,7 +34,7 @@
 #include <fcitx-utils/uthash.h>
 #include <fcitx-utils/utils.h>
 
-struct _HOTKEYS;
+struct _FcitxHotkey;
 /**
  * @brief fcitx boolean
  **/
@@ -57,16 +57,16 @@ extern "C"
      * @brief The Color type in config file
      **/
 
-    typedef struct _ConfigColor {
+    typedef struct _FcitxConfigColor {
         double r;
         double g;
         double b;
-    } ConfigColor;
+    } FcitxConfigColor;
 
     /**
      * @brief config value type
      **/
-    typedef enum _ConfigType {
+    typedef enum _FcitxConfigType {
         T_Integer,
         T_Color,
         T_String,
@@ -77,104 +77,104 @@ extern "C"
         T_Hotkey,
         T_Font,
         T_I18NString
-    } ConfigType;
+    } FcitxConfigType;
 
     /**
      * @brief The sync direction
      **/
-    typedef enum _ConfigSync {
+    typedef enum _FcitxConfigSync {
         Raw2Value,
         Value2Raw
-    } ConfigSync;
+    } FcitxConfigSync;
 
     /**
      * @brief Sync result
      **/
-    typedef enum _ConfigSyncResult {
+    typedef enum _FcitxConfigSyncResult {
         SyncSuccess,
         SyncNoBinding,
         SyncInvalid
-    } ConfigSyncResult;
+    } FcitxConfigSyncResult;
 
     /**
      * @brief The value of config
      **/
-    typedef union _ConfigValueType {
+    typedef union _FcitxConfigValueType {
         void *untype;
         int *integer;
         boolean *boolvalue;
 
-        struct _HOTKEYS *hotkey;
-        ConfigColor *color;
+        struct _FcitxHotkey *hotkey;
+        FcitxConfigColor *color;
         int *enumerate;
         char **string;
         char *chr;
-    } ConfigValueType;
+    } FcitxConfigValueType;
 
-    typedef struct _ConfigGroup ConfigGroup;
+    typedef struct _FcitxConfigGroup FcitxConfigGroup;
 
-    typedef struct _ConfigOption ConfigOption;
+    typedef struct _FcitxConfigOption FcitxConfigOption;
 
-    typedef struct _ConfigFileDesc ConfigFileDesc;
+    typedef struct _FcitxConfigFileDesc FcitxConfigFileDesc;
 
-    typedef struct _ConfigGroupDesc ConfigGroupDesc;
+    typedef struct _FcitxConfigGroupDesc FcitxConfigGroupDesc;
 
-    typedef struct _ConfigOptionDesc ConfigOptionDesc;
+    typedef struct _FcitxConfigOptionDesc FcitxConfigOptionDesc;
 
-    typedef struct _GenericConfig GenericConfig;
+    typedef struct _FcitxGenericConfig FcitxGenericConfig;
 
-    typedef struct _ConfigOptionSubkey ConfigOptionSubkey;
+    typedef struct _FcitxConfigOptionSubkey FcitxConfigOptionSubkey;
 
     /**
      * @brief sync filter function
      **/
-    typedef void (*SyncFilter)(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+    typedef void (*FcitxSyncFilter)(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
 
     /**
      * @brief Enum value type description
      **/
 
-    typedef struct _ConfigEnum {
+    typedef struct _FcitxConfigEnum {
         char **enumDesc;
         int enumCount;
-    } ConfigEnum;
+    } FcitxConfigEnum;
 
     /**
      * @brief Config file contains multiple config groups, and the opposite config file description
      **/
 
-    typedef struct _ConfigFile {
-        ConfigFileDesc *fileDesc;
-        ConfigGroup* groups;
-    } ConfigFile;
+    typedef struct _FcitxConfigFile {
+        FcitxConfigFileDesc *fileDesc;
+        FcitxConfigGroup* groups;
+    } FcitxConfigFile;
 
 
     /**
      * @brief A generic config struct, config struct can derive from it.
      *        Like: <br>
      *        struct TestConfig { <br>
-     *            GenericConfig gconfig; <br>
+     *            FcitxGenericConfig gconfig; <br>
      *            int own_value; <br>
      *        };
      **/
 
-    struct _GenericConfig {
+    struct _FcitxGenericConfig {
         /**
          * @brief config file pointer
          **/
-        ConfigFile *configFile;
+        FcitxConfigFile *configFile;
     };
 
     /**
      * @brief Config Option Description, it describe a Key=Value entry in config file.
      **/
 
-    struct _ConfigOptionDesc {
+    struct _FcitxConfigOptionDesc {
         char *optionName;
         char *desc;
-        ConfigType type;
+        FcitxConfigType type;
         char *rawDefaultValue;
-        ConfigEnum configEnum;
+        FcitxConfigEnum configEnum;
 
         UT_hash_handle hh;
     };
@@ -183,7 +183,7 @@ extern "C"
      * @brief Config Group Description, it describe a [Gruop] in config file
      **/
 
-    struct _ConfigGroupDesc {
+    struct _FcitxConfigGroupDesc {
         /**
          * @brief Group Name
          **/
@@ -191,7 +191,7 @@ extern "C"
         /**
          * @brief Hash table for option description
          **/
-        ConfigOptionDesc *optionsDesc;
+        FcitxConfigOptionDesc *optionsDesc;
         UT_hash_handle hh;
     };
 
@@ -199,8 +199,8 @@ extern "C"
      * @brief Description of a config file
      **/
 
-    struct _ConfigFileDesc {
-        ConfigGroupDesc *groupsDesc;
+    struct _FcitxConfigFileDesc {
+        FcitxConfigGroupDesc *groupsDesc;
         char* domain;
     };
 
@@ -208,14 +208,14 @@ extern "C"
      * @brief Config Option in config file, Key=Value entry
      **/
 
-    struct _ConfigOption {
+    struct _FcitxConfigOption {
         char *optionName;
         char *rawValue;
-        ConfigValueType value;
-        SyncFilter filter;
+        FcitxConfigValueType value;
+        FcitxSyncFilter filter;
         void *filterArg;
-        ConfigOptionDesc *optionDesc;
-        ConfigOptionSubkey *subkey;
+        FcitxConfigOptionDesc *optionDesc;
+        FcitxConfigOptionSubkey *subkey;
         UT_hash_handle hh;
     } ;
 
@@ -223,7 +223,7 @@ extern "C"
      * @brief Config Option subkey in config file, Key[Subkey]=Value entry
      **/
 
-    struct _ConfigOptionSubkey {
+    struct _FcitxConfigOptionSubkey {
         char *subkeyName;
         char *rawValue;
         UT_hash_handle hh;
@@ -233,19 +233,19 @@ extern "C"
      * @brief Config group in config file, [Group] Entry
      **/
 
-    struct _ConfigGroup {
+    struct _FcitxConfigGroup {
         /**
-         * @brief Group Name, unique in ConfigFile
+         * @brief Group Name, unique in FcitxConfigFile
          **/
         char *groupName;
         /**
          * @brief Group Description
          **/
-        ConfigGroupDesc *groupDesc;
+        FcitxConfigGroupDesc *groupDesc;
         /**
          * @brief Option store with a hash table
          **/
-        ConfigOption* options;
+        FcitxConfigOption* options;
         /**
          * @brief UTHash handler
          **/
@@ -256,7 +256,7 @@ extern "C"
      * @brief declare the binding function
      **/
 #define CONFIG_BINDING_DECLARE(config_type) \
-    void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc);
+    void config_type##ConfigBind(config_type* config, FcitxConfigFile* cfile, FcitxConfigFileDesc* cfdesc);
 
     /**
      * @brief define the binding function
@@ -269,20 +269,20 @@ extern "C"
      * CONFIG_BINDING_END
      **/
 #define CONFIG_BINDING_BEGIN(config_type) \
-    void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc) { \
+    void config_type##ConfigBind(config_type* config, FcitxConfigFile* cfile, FcitxConfigFileDesc* cfdesc) { \
         (void) cfdesc; \
-        GenericConfig *gconfig = (GenericConfig*) config; \
+        FcitxGenericConfig *gconfig = (FcitxGenericConfig*) config; \
         if (gconfig->configFile) { \
-            FreeConfigFile(gconfig->configFile); \
+            FcitxConfigFreeConfigFile(gconfig->configFile); \
         } \
         gconfig->configFile = cfile;
 
 #define CONFIG_BINDING_BEGIN_WITH_ARG(config_type, arg...) \
-    void config_type##ConfigBind(config_type* config, ConfigFile* cfile, ConfigFileDesc* cfdesc, arg) { \
+    void config_type##ConfigBind(config_type* config, FcitxConfigFile* cfile, FcitxConfigFileDesc* cfdesc, arg) { \
         (void) cfdesc; \
-        GenericConfig *gconfig = (GenericConfig*) config; \
+        FcitxGenericConfig *gconfig = (FcitxGenericConfig*) config; \
         if (gconfig->configFile) { \
-            FreeConfigFile(gconfig->configFile); \
+            FcitxConfigFreeConfigFile(gconfig->configFile); \
         } \
         gconfig->configFile = cfile;
     /**
@@ -290,7 +290,7 @@ extern "C"
      **/
 #define CONFIG_BINDING_REGISTER(g, o, var) \
     do { \
-        ConfigBindValue(cfile, g, o, &config->var, NULL, NULL); \
+        FcitxConfigBindValue(cfile, g, o, &config->var, NULL, NULL); \
     } while(0);
 
     /**
@@ -298,7 +298,7 @@ extern "C"
      **/
 #define CONFIG_BINDING_REGISTER_WITH_FILTER(g, o, var, filter_func) \
     do { \
-        ConfigBindValue(cfile, g, o, &config->var, filter_func, NULL); \
+        FcitxConfigBindValue(cfile, g, o, &config->var, filter_func, NULL); \
     } while(0);
 
     /**
@@ -306,7 +306,7 @@ extern "C"
      **/
 #define CONFIG_BINDING_REGISTER_WITH_FILTER_ARG(g, o, var, filter_func, arg) \
     do { \
-        ConfigBindValue(cfile, g, o, &config->var, filter_func, arg); \
+        FcitxConfigBindValue(cfile, g, o, &config->var, filter_func, arg); \
     } while(0);
 
     /**
@@ -318,45 +318,35 @@ extern "C"
      * @brief define a singleton function to load config file description
      **/
 #define CONFIG_DESC_DEFINE(funcname, path) \
-    ConfigFileDesc *funcname() \
+    FcitxConfigFileDesc *funcname() \
     { \
-        static ConfigFileDesc *configDesc = NULL; \
+        static FcitxConfigFileDesc *configDesc = NULL; \
         if (!configDesc) \
         { \
             FILE *tmpfp; \
-            tmpfp = GetXDGFileWithPrefix("configdesc", path, "r", NULL); \
+            tmpfp = FcitxXDGGetFileWithPrefix("configdesc", path, "r", NULL); \
             if (tmpfp == NULL) \
             { \
                 FcitxLog(ERROR, _("Load Config Description File %s Erorr, Please Check your install."), path); \
                 return NULL; \
             } \
-            configDesc = ParseConfigFileDescFp(tmpfp); \
+            configDesc = FcitxConfigParseConfigFileDescFp(tmpfp); \
             fclose(tmpfp); \
         } \
         return configDesc; \
     }
 
     /**
-     * @brief check the rgb within 0 - 255 or not
-     **/
-#define IsColorValid(c) ((c) >=0 && (c) <= 255)
-
-    /**
-     * @brief round the color within 0 - 255
-     **/
-#define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
-
-    /**
      * @brief parse a config file with file name.
      * even the file cannot be read, or with wrong format,
-     * it will try to return a usable ConfigFile (missing
+     * it will try to return a usable FcitxConfigFile (missing
      * entry with defaul value).
      *
      * @param filename file name of a configfile
      * @param cfdesc config file description
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc* cfdesc);
+    FcitxConfigFile *FcitxConfigParseConfigFile(char *filename, FcitxConfigFileDesc* cfdesc);
 
     /**
      * @brief parse multi config file, the main difference
@@ -368,9 +358,9 @@ extern "C"
      * @param filename filenames
      * @param len len of filenames
      * @param cfdesc config file description
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc* cfdesc);
+    FcitxConfigFile *FcitxConfigParseMultiConfigFile(char **filename, int len, FcitxConfigFileDesc* cfdesc);
 
     /**
      * @brief same with ParseConfigFile, the input is FILE*
@@ -378,55 +368,55 @@ extern "C"
      * @see ParseConfigFile
      * @param fp file pointer
      * @param fileDesc config file description
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile *ParseConfigFileFp(FILE* fp, ConfigFileDesc* fileDesc);
+    FcitxConfigFile *FcitxConfigParseConfigFileFp(FILE* fp, FcitxConfigFileDesc* fileDesc);
 
     /**
-     * @brief same with ParseMultiConfigFileFp, the input is array of FILE*
+     * @brief same with FcitxConfigParseMultiConfigFileFp, the input is array of FILE*
      *
-     * @see ParseMultiConfigFileFp
+     * @see FcitxConfigParseMultiConfigFileFp
      * @param fp array of file pointers
      * @param len lenght of fp
      * @param fileDesc config file description
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc);
+    FcitxConfigFile *FcitxConfigParseMultiConfigFileFp(FILE **fp, int len, FcitxConfigFileDesc* fileDesc);
 
     /**
-     * @brief Check the raw ConfigFile and try to fill the default value
+     * @brief Check the raw FcitxConfigFile and try to fill the default value
      *
      * @param configFile config file
      * @param fileDesc config file description
      * @return boolean
      **/
-    boolean CheckConfig(ConfigFile *configFile, ConfigFileDesc* fileDesc);
+    boolean FcitxConfigCheckConfigFile(FcitxConfigFile *configFile, FcitxConfigFileDesc* fileDesc);
 
     /**
      * @brief parse config file description from file
      *
      * @param filename filename
-     * @return ConfigFileDesc*
+     * @return FcitxConfigFileDesc*
      **/
-    ConfigFileDesc *ParseConfigFileDesc(char* filename);
+    FcitxConfigFileDesc *FcitxConfigParseConfigFileDesc(char* filename);
 
     /**
      * @brief parse config file description from file pointer
      *
      * @see ParseConfigFileDesc
      * @param fp file pointer
-     * @return ConfigFileDesc*
+     * @return FcitxConfigFileDesc*
      **/
-    ConfigFileDesc *ParseConfigFileDescFp(FILE* fp);
+    FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE* fp);
 
     /**
      * @brief internal raw file parse, it can merge the config to existing config file
      *
      * @param filename file
      * @param reuse NULL or existing config file
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile* ParseIni(char* filename, ConfigFile* reuse);
+    FcitxConfigFile* FcitxConfigParseIni(char* filename, FcitxConfigFile* reuse);
 
     /**
      * @brief internal raw file parse, it can merge the config to existing config file
@@ -434,9 +424,9 @@ extern "C"
      * @see ParseIni
      * @param fp file pointer
      * @param reuse NULL or existing config file
-     * @return ConfigFile*
+     * @return FcitxConfigFile*
      **/
-    ConfigFile* ParseIniFp(FILE* fp, ConfigFile* reuse);
+    FcitxConfigFile* FcitxConfigParseIniFp(FILE* fp, FcitxConfigFile* reuse);
 
     /**
      * @brief free a config file
@@ -444,7 +434,7 @@ extern "C"
      * @param cfile config file
      * @return void
      **/
-    void FreeConfigFile(ConfigFile* cfile);
+    void FcitxConfigFreeConfigFile(FcitxConfigFile* cfile);
 
     /**
      * @brief free a config file description
@@ -452,7 +442,7 @@ extern "C"
      * @param cfdesc config file description
      * @return void
      **/
-    void FreeConfigFileDesc(ConfigFileDesc* cfdesc);
+    void FcitxConfigFreeConfigFileDesc(FcitxConfigFileDesc* cfdesc);
 
     /**
      * @brief free a config group
@@ -460,7 +450,7 @@ extern "C"
      * @param group config group
      * @return void
      **/
-    void FreeConfigGroup(ConfigGroup *group);
+    void FcitxConfigFreeConfigGroup(FcitxConfigGroup *group);
 
     /**
      * @brief free a config group description
@@ -468,7 +458,7 @@ extern "C"
      * @param cgdesc config group description
      * @return void
      **/
-    void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc);
+    void FcitxConfigFreeConfigGroupDesc(FcitxConfigGroupDesc *cgdesc);
 
     /**
      * @brief free a config option
@@ -476,7 +466,7 @@ extern "C"
      * @param option config option
      * @return void
      **/
-    void FreeConfigOption(ConfigOption *option);
+    void FcitxConfigFreeConfigOption(FcitxConfigOption *option);
 
     /**
      * @brief free a config option description
@@ -484,7 +474,7 @@ extern "C"
      * @param codesc config option description
      * @return void
      **/
-    void FreeConfigOptionDesc(ConfigOptionDesc *codesc);
+    void FcitxConfigFreeConfigOptionDesc(FcitxConfigOptionDesc *codesc);
 
     /**
      * @brief Save config file to fp, it will do the Value2Raw sync
@@ -494,7 +484,7 @@ extern "C"
      * @param cdesc config file description
      * @return boolean
      **/
-    boolean SaveConfigFile(char *filename, GenericConfig *cfile, ConfigFileDesc* cdesc);
+    boolean FcitxConfigSaveConfigFile(char *filename, FcitxGenericConfig *cfile, FcitxConfigFileDesc* cdesc);
 
     /**
      * @brief Save config file to fp
@@ -505,7 +495,7 @@ extern "C"
      * @param cdesc config file dsecription
      * @return boolean
      **/
-    boolean SaveConfigFileFp(FILE* fp, GenericConfig *cfile, ConfigFileDesc* cdesc);
+    boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *cfile, FcitxConfigFileDesc* cdesc);
 
     /**
      * @brief sync a single value
@@ -516,7 +506,7 @@ extern "C"
      * @param sync sync direction
      * @return Svoid
      **/
-    void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption* option, ConfigSync sync);
+    void FcitxConfigSyncValue(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, FcitxConfigSync sync);
 
     /**
      * @brief Get the binded value type
@@ -524,9 +514,9 @@ extern "C"
      * @param config config
      * @param group group name
      * @param option option name
-     * @return ConfigValueType
+     * @return FcitxConfigValueType
      **/
-    ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *group, const char* option);
+    FcitxConfigValueType FcitxConfigGetBindValue(FcitxGenericConfig *config, const char *group, const char* option);
 
     /**
      * @brief Get a option description from config file description, return NULL if not found.
@@ -534,9 +524,9 @@ extern "C"
      * @param cfdesc config file description
      * @param groupName gropu name
      * @param optionName option name
-     * @return const ConfigOptionDesc*
+     * @return const FcitxConfigOptionDesc*
      **/
-    const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
+    const FcitxConfigOptionDesc* FcitxConfigDescGetOptionDesc(FcitxConfigFileDesc* cfdesc, const char* groupName, const char* optionName);
 
 
     /**
@@ -545,11 +535,11 @@ extern "C"
      * @param cfile config file
      * @param groupName gropu name
      * @param optionName option name
-     * @return const ConfigOptionDesc*
+     * @return const FcitxConfigOptionDesc*
      *
      * @since 4.1.2
      **/
-    ConfigOption* ConfigFileGetOption(ConfigFile* cfile, const char* groupName, const char* optionName);
+    FcitxConfigOption* FcitxConfigFileGetOption(FcitxConfigFile* cfile, const char* groupName, const char* optionName);
 
 
     /**
@@ -558,7 +548,7 @@ extern "C"
      * @param option config option
      * @return const char*
      **/
-    const char* ConfigOptionGetLocaleString(ConfigOption* option);
+    const char* FcitxConfigOptionGetLocaleString(FcitxConfigOption* option);
 
     /**
      * @brief do the Raw2Value sync for config
@@ -566,7 +556,7 @@ extern "C"
      * @param config config
      * @return void
      **/
-    void ConfigBindSync(GenericConfig* config);
+    void FcitxConfigBindSync(FcitxGenericConfig* config);
 
     /**
      * @brief reset a config to default value
@@ -574,7 +564,7 @@ extern "C"
      * @param config config
      * @return Svoid
      **/
-    void ResetConfigToDefaultValue(GenericConfig* config);
+    void FcitxConfigResetConfigToDefaultValue(FcitxGenericConfig* config);
 
     /**
      * @brief bind a value with a struct, normally you should use
@@ -588,7 +578,7 @@ extern "C"
      * @param arg extra argument
      * @return void
      **/
-    void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg);
+    void FcitxConfigBindValue(FcitxConfigFile* cfile, const char *groupName, const char *optionName, void* var, FcitxSyncFilter filter, void *arg);
 
 #ifdef __cplusplus
 }

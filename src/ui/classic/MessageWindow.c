@@ -44,7 +44,7 @@ static void DisplayMessageWindow(MessageWindow *messageWindow);
 
 MessageWindow* CreateMessageWindow(FcitxClassicUI * classicui)
 {
-    MessageWindow* messageWindow = fcitx_malloc0(sizeof(MessageWindow));
+    MessageWindow* messageWindow = fcitx_utils_malloc0(sizeof(MessageWindow));
     Display *dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     messageWindow->owner = classicui;

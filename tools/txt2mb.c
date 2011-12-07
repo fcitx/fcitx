@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        size_t hzLen = utf8_strlen(strHZ);
+        size_t hzLen = fcitx_utf8_strlen(strHZ);
          // Utf-8 Longest Phrase Length is 10, longest construct code length is 1
         if (hzLen > PHRASE_MAX_LENGTH || (strCode[0] == '^' && hzLen != 1)) {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);

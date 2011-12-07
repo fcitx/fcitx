@@ -51,7 +51,7 @@
 #endif
 
 FCITX_EXPORT_API
-int CalculateRecordNumber(FILE * fpDict)
+int fcitx_utils_calculate_record_number(FILE* fpDict)
 {
     char           *strBuf = NULL;
     size_t          bufLen = 0;
@@ -69,9 +69,9 @@ int CalculateRecordNumber(FILE * fpDict)
 }
 
 FCITX_EXPORT_API
-void *custom_bsearch(const void *key, const void *base,
-                     size_t nmemb, size_t size, int accurate,
-                     int (*compar)(const void *, const void *))
+void *fcitx_utils_custom_bsearch(const void *key, const void *base,
+                                 size_t nmemb, size_t size, int accurate,
+                                 int (*compar)(const void *, const void *))
 {
     if (accurate)
         return bsearch(key, base, nmemb, size, compar);
@@ -100,7 +100,7 @@ void *custom_bsearch(const void *key, const void *base,
 }
 
 FCITX_EXPORT_API
-void InitAsDaemon()
+void fcitx_utils_init_as_daemon()
 {
     pid_t pid;
     if ((pid = fork()) > 0) {
@@ -123,7 +123,7 @@ void InitAsDaemon()
 }
 
 FCITX_EXPORT_API
-UT_array* SplitString(const char *str, char delm)
+UT_array* fcitx_utils_split_string(const char* str, char delm)
 {
     UT_array* array;
     utarray_new(array, &ut_str_icd);
@@ -144,15 +144,15 @@ UT_array* SplitString(const char *str, char delm)
 }
 
 FCITX_EXPORT_API
-void FreeStringList(UT_array *list)
+void fcitx_utils_free_string_list(UT_array* list)
 {
     utarray_free(list);
 }
 
 FCITX_EXPORT_API
-void FreeStringHashSet(StringHashSet* sset)
+void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset)
 {
-    StringHashSet *curStr;
+    FcitxStringHashSet *curStr;
     while (sset) {
         curStr = sset;
         HASH_DEL(sset, curStr);
@@ -162,7 +162,7 @@ void FreeStringHashSet(StringHashSet* sset)
 }
 
 FCITX_EXPORT_API
-void *fcitx_malloc0(size_t bytes)
+void* fcitx_utils_malloc0(size_t bytes)
 {
     void *p = malloc(bytes);
     if (!p)
@@ -173,7 +173,7 @@ void *fcitx_malloc0(size_t bytes)
 }
 
 FCITX_EXPORT_API
-char *fcitx_trim(char *s)
+char* fcitx_utils_trim(char* s)
 {
     register char *end;
     register char csave;
@@ -192,7 +192,7 @@ char *fcitx_trim(char *s)
 }
 
 FCITX_EXPORT_API
-int FcitxGetDisplayNumber()
+int fcitx_utils_get_display_number()
 {
     int displayNumber = 0;
     char* display = getenv("DISPLAY"), *strDisplayNumber = NULL;
@@ -220,7 +220,7 @@ int FcitxGetDisplayNumber()
 }
 
 FCITX_EXPORT_API
-char* fcitx_get_process_name()
+char* fcitx_utils_get_process_name()
 {
 #if defined(__linux__)
     const size_t bufsize = 4096;
@@ -235,7 +235,7 @@ char* fcitx_get_process_name()
         result = buf;
     }
 
-    return fcitx_trim(result);
+    return fcitx_utils_trim(result);
 #elif defined(LIBKVM_FOUND)
     kvm_t *vm = kvm_open(0, "/dev/null", 0, O_RDONLY, NULL);
     if (vm == 0)

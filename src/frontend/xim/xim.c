@@ -123,7 +123,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 {
     if (ximfrontend != NULL)
         return NULL;
-    FcitxXimFrontend* xim = fcitx_malloc0(sizeof(FcitxXimFrontend));
+    FcitxXimFrontend* xim = fcitx_utils_malloc0(sizeof(FcitxXimFrontend));
     if (xim == NULL)
         return NULL;
 
@@ -172,29 +172,29 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     if (GetXimConfigDesc() == NULL)
         xim->bUseOnTheSpotStyle = false;
     else {
-        ConfigFileDesc* configDesc = GetXimConfigDesc();
+        FcitxConfigFileDesc* configDesc = GetXimConfigDesc();
 
         FILE *fp;
         char *file;
-        fp = GetXDGFileUserWithPrefix("conf", "fcitx-xim.config", "rt", &file);
+        fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xim.config", "rt", &file);
         FcitxLog(DEBUG, "Load Config File %s", file);
         free(file);
         if (!fp) {
             if (errno == ENOENT) {
                 char *file;
-                FILE *fp2 = GetXDGFileUserWithPrefix("conf", "fcitx-xim.config", "wt", &file);
+                FILE *fp2 = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xim.config", "wt", &file);
                 FcitxLog(DEBUG, "Save Config to %s", file);
-                SaveConfigFileFp(fp2, &xim->gconfig, configDesc);
+                FcitxConfigSaveConfigFileFp(fp2, &xim->gconfig, configDesc);
                 free(file);
                 if (fp2)
                     fclose(fp2);
             }
         }
 
-        ConfigFile *cfile = ParseConfigFileFp(fp, configDesc);
+        FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
         FcitxXimFrontendConfigBind(xim, cfile, configDesc);
-        ConfigBindSync((GenericConfig*)xim);
+        FcitxConfigBindSync((FcitxGenericConfig*)xim);
 
         if (fp)
             fclose(fp);
@@ -454,8 +454,8 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
-    char* strPreedit = MessagesToCString(FcitxInputStateGetClientPreedit(input));
-    char* str = ProcessOutputFilter(xim->owner, strPreedit);
+    char* strPreedit = FcitxUIMessagesToCString(FcitxInputStateGetClientPreedit(input));
+    char* str = FcitxInstanceProcessOutputFilter(xim->owner, strPreedit);
     if (str) {
         free(strPreedit);
         strPreedit = str;

@@ -112,8 +112,8 @@ FcitxModule module = {
 
 void *FcitxInputBusCreate(FcitxInstance *instance)
 {
-    FcitxInputBus    *inputbus = (FcitxInputBus *)fcitx_malloc0(sizeof(FcitxInputBus));
-    FcitxAddon* inputbusaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_INPUTBUS_NAME);
+    FcitxInputBus    *inputbus = (FcitxInputBus *)fcitx_utils_malloc0(sizeof(FcitxInputBus));
+    FcitxAddon* inputbusaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_INPUTBUS_NAME);
     if (!inputbus)
         return NULL;
 
@@ -196,7 +196,7 @@ DBusHandlerResult FcitxInputBusCommitString(DBusConnection *conn,
     dbus_connection_send(conn, retmsg, NULL);
     return DBUS_HANDLER_RESULT_HANDLED;
 }
-INPUT_RETURN_VALUE FcitxInputBusMethodCommitCallback(void *user_data, CandidateWord *cand)
+INPUT_RETURN_VALUE FcitxInputBusMethodCommitCallback(void *user_data, FcitxCandidateWord *cand)
 {
     return IRV_TO_PROCESS;
 }
@@ -235,12 +235,12 @@ DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
     dbusim->name = strdup(unique_name);
     dbusim->nameOwner = strdup(dbus_message_get_sender(msg));
     // /org/fcitx/Fcitx/InputBus/${unique_name}
-    char *obj_path = (char *)fcitx_malloc0(sizeof(char) * (strlen(FCITX_INPUTBUS_IM_PATH_PREFIX) + strlen(unique_name) + 1));
+    char *obj_path = (char *)fcitx_utils_malloc0(sizeof(char) * (strlen(FCITX_INPUTBUS_IM_PATH_PREFIX) + strlen(unique_name) + 1));
     sprintf(obj_path, "%s%s", FCITX_INPUTBUS_IM_PATH_PREFIX, unique_name);
     dbusim->objectPath = obj_path;
 
     //Register this input method to Fcitx
-    FcitxRegisterIMv2(inputbus->owner,
+    FcitxInstanceRegisterIM(inputbus->owner,
                       inputbus,
                       unique_name,
                       name,
@@ -252,6 +252,7 @@ DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
                       NULL,
                       FcitxInputBusMethodSave,
                       FcitxInputBusMethodReload,
+                      NULL,
                       dbusim,
                       priority,
                       lang_code);
@@ -288,7 +289,7 @@ DBusHandlerResult FcitxInputBusUpdateCandidate(
         dbus_connection_send(conn, retmsg, NULL);
         goto update_cand_end;
     }
-    FcitxIM* im = GetCurrentIM(inputbus->owner);
+    FcitxIM* im = FcitxInstanceGetCurrentIM(inputbus->owner);
 
     if (dbusim != im->priv) {
         //Input method not active, reply error
@@ -304,23 +305,23 @@ DBusHandlerResult FcitxInputBusUpdateCandidate(
     dbus_message_get_args(msg, &err,
                           DBUS_TYPE_ARRAY, DBUS_TYPE_STRING, &cands, &ncands,
                           DBUS_TYPE_INVALID);
-    CleanInputWindowDown(inputbus->owner);
+    FcitxInstanceCleanInputWindowDown(inputbus->owner);
     dbus_error_free(&err);
 
     int i;
     FcitxInputState *input = FcitxInstanceGetInputState(inputbus->owner);
     for (i = 0; i < ncands; i++) {
-        CandidateWord cand;
+        FcitxCandidateWord cand;
         cand.callback = FcitxInputBusMethodCommitCallback;
         cand.owner = inputbus;
         cand.priv = dbusim;
         cand.strExtra = NULL;
         cand.strWord = strdup(cands[i]);
-        CandidateWordAppend(
+        FcitxCandidateWordAppend(
             FcitxInputStateGetCandidateList(input),
             &cand);
         if (i == 0)
-            AddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", cand.strWord);
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", cand.strWord);
     }
 update_cand_end:
     free(obj_path);
@@ -346,7 +347,7 @@ DBusHandlerResult FcitxInputBusSetKeyMasks(DBusConnection *conn, DBusMessage *ms
         if (current_type != DBUS_TYPE_STRUCT)
             goto invalid_args;
         DBusMessageIter subiter;
-        FcitxInputBusKey *key = (FcitxInputBusKey *)fcitx_malloc0(sizeof(FcitxInputBusKey));
+        FcitxInputBusKey *key = (FcitxInputBusKey *)fcitx_utils_malloc0(sizeof(FcitxInputBusKey));
         dbus_message_iter_recurse(&iter, &subiter);
         if (dbus_message_iter_get_arg_type(&subiter) != DBUS_TYPE_UINT32)
             goto invalid_args;

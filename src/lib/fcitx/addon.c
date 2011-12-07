@@ -56,7 +56,7 @@ CONFIG_BINDING_REGISTER("Addon", "UIFallback", uifallback)
 CONFIG_BINDING_END()
 
 static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
-static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL , NULL, FreeAddon};
+static const UT_icd addon_icd = {sizeof(FcitxAddon), NULL , NULL, FcitxAddonFree};
 static int AddonPriorityCmp(const void* a, const void* b)
 {
     FcitxAddon *aa = (FcitxAddon*)a, *ab = (FcitxAddon*)b;
@@ -64,7 +64,7 @@ static int AddonPriorityCmp(const void* a, const void* b)
 }
 
 FCITX_EXPORT_API
-void InitFcitxAddons(UT_array* addons)
+void FcitxAddonsInit(UT_array* addons)
 {
     utarray_init(addons, &addon_icd);
 }
@@ -73,40 +73,40 @@ void InitFcitxAddons(UT_array* addons)
  * @brief Load Addon Info
  */
 FCITX_EXPORT_API
-void LoadAddonInfo(UT_array* addons)
+void FcitxAddonsLoad(UT_array* addons)
 {
     char **addonPath;
     size_t len;
     size_t i = 0;
     utarray_clear(addons);
 
-    StringHashSet* sset = GetXDGFiles(
+    FcitxStringHashSet* sset = FcitxXDGGetFiles(
                               PACKAGE "/addon",
                               ".conf"
                           );
-    addonPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
+    addonPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
     char **paths = malloc(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
         paths[i] = NULL;
-    StringHashSet* string;
+    FcitxStringHashSet* string;
     for (string = sset;
             string != NULL;
-            string = (StringHashSet*)string->hh.next) {
+            string = (FcitxStringHashSet*)string->hh.next) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
             asprintf(&paths[i], "%s/%s", addonPath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
         FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
-        ConfigFile* cfile = ParseMultiConfigFile(paths, len, GetAddonConfigDesc());
+        FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, FcitxAddonGetConfigDesc());
         if (cfile) {
             FcitxAddon addon;
             memset(&addon, 0, sizeof(FcitxAddon));
             utarray_push_back(addons, &addon);
             FcitxAddon *a = (FcitxAddon*) utarray_back(addons);
             utarray_init(&a->functionList, &function_icd);
-            FcitxAddonConfigBind(a, cfile, GetAddonConfigDesc());
-            ConfigBindSync((GenericConfig*)a);
+            FcitxAddonConfigBind(a, cfile, FcitxAddonGetConfigDesc());
+            FcitxConfigBindSync((FcitxGenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");
         }
 
@@ -117,15 +117,15 @@ void LoadAddonInfo(UT_array* addons)
     }
     free(paths);
 
-    FreeXDGPath(addonPath);
+    FcitxXDGFreePath(addonPath);
 
-    FreeStringHashSet(sset);
+    fcitx_utils_free_string_hash_set(sset);
 
     utarray_sort(addons, AddonPriorityCmp);
 }
 
 FCITX_EXPORT_API
-void AddonResolveDependency(FcitxInstance* instance)
+void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
 {
     UT_array* addons = &instance->addons;
     boolean remove = true;
@@ -183,13 +183,13 @@ void AddonResolveDependency(FcitxInstance* instance)
                 addon = (FcitxAddon *) utarray_next(addons, addon)) {
             if (!addon->bEnabled)
                 continue;
-            UT_array* dependlist = SplitString(addon->depend, ',');
+            UT_array* dependlist = fcitx_utils_split_string(addon->depend, ',');
             boolean valid = true;
             char **depend = NULL;
             for (depend = (char **) utarray_front(dependlist);
                     depend != NULL;
                     depend = (char **) utarray_next(dependlist, depend)) {
-                if (!AddonIsAvailable(addons, *depend)) {
+                if (!FcitxAddonsIsAddonAvailable(addons, *depend)) {
                     valid = false;
                     break;
                 }
@@ -205,7 +205,7 @@ void AddonResolveDependency(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-boolean AddonIsAvailable(UT_array* addons, const char* name)
+boolean FcitxAddonsIsAddonAvailable(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
@@ -218,7 +218,7 @@ boolean AddonIsAvailable(UT_array* addons, const char* name)
 }
 
 FCITX_EXPORT_API
-FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
+FcitxAddon* FcitxAddonsGetAddonByName(UT_array* addons, const char* name)
 {
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
@@ -236,15 +236,15 @@ FcitxAddon* GetAddonByName(UT_array* addons, const char* name)
  * @return the description of addon configure.
  */
 FCITX_EXPORT_API
-CONFIG_DESC_DEFINE(GetAddonConfigDesc, "addon.desc")
+CONFIG_DESC_DEFINE(FcitxAddonGetConfigDesc, "addon.desc")
 
 FCITX_EXPORT_API
-void FreeAddon(void *v)
+void FcitxAddonFree(void* v)
 {
     FcitxAddon *addon = (FcitxAddon*) v;
     if (!addon)
         return ;
-    FreeConfigFile(addon->config.configFile);
+    FcitxConfigFreeConfigFile(addon->config.configFile);
     free(addon->name);
     free(addon->library);
     free(addon->comment);

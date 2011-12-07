@@ -26,154 +26,142 @@
 #include "fcitx/keys.h"
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_NONE_KEY[2] = {
-    {NULL, Key_None, 0},
-    {NULL, Key_None, 0},
+FcitxHotkey FCITX_NONE_KEY[2] = {
+    {NULL, FcitxKey_None, 0},
+    {NULL, FcitxKey_None, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_DELETE[2] = {
-    {NULL, Key_Delete, 0},
-    {NULL, Key_KP_Delete, 0},
+FcitxHotkey FCITX_DELETE[2] = {
+    {NULL, FcitxKey_Delete, 0},
+    {NULL, FcitxKey_KP_Delete, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_CTRL_DELETE[2] = {
-    {NULL, Key_Delete, KEY_CTRL_COMP},
+FcitxHotkey FCITX_CTRL_DELETE[2] = {
+    {NULL, FcitxKey_Delete, FcitxKeyState_Ctrl},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_BACKSPACE[2] = {
-    {NULL, Key_BackSpace, 0},
+FcitxHotkey FCITX_BACKSPACE[2] = {
+    {NULL, FcitxKey_BackSpace, 0},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_HOME[2] = {
-    {NULL, Key_Home, 0},
-    {NULL, Key_KP_Home, 0},
+FcitxHotkey FCITX_HOME[2] = {
+    {NULL, FcitxKey_Home, 0},
+    {NULL, FcitxKey_KP_Home, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_END[2] = {
-    {NULL, Key_End, 0},
-    {NULL, Key_KP_End, 0},
+FcitxHotkey FCITX_END[2] = {
+    {NULL, FcitxKey_End, 0},
+    {NULL, FcitxKey_KP_End, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_RIGHT[2] = {
-    {NULL, Key_Right, 0},
-    {NULL, Key_KP_Right, 0},
+FcitxHotkey FCITX_RIGHT[2] = {
+    {NULL, FcitxKey_Right, 0},
+    {NULL, FcitxKey_KP_Right, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_LEFT[2] = {
-    {NULL, Key_Left, 0},
-    {NULL, Key_KP_Left, 0},
+FcitxHotkey FCITX_LEFT[2] = {
+    {NULL, FcitxKey_Left, 0},
+    {NULL, FcitxKey_KP_Left, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_ESCAPE[2] = {
-    {NULL, Key_Escape, 0},
+FcitxHotkey FCITX_ESCAPE[2] = {
+    {NULL, FcitxKey_Escape, 0},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_ENTER[2] = {
-    {NULL, Key_Return, 0},
-    {NULL, Key_KP_Enter, 0},
+FcitxHotkey FCITX_ENTER[2] = {
+    {NULL, FcitxKey_Return, 0},
+    {NULL, FcitxKey_KP_Enter, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_LCTRL_LSHIFT[2] = {
-    {NULL, Key_Shift_L, KEY_CTRL_SHIFT_COMP},
-    {NULL, Key_Control_L, KEY_CTRL_SHIFT_COMP},
+FcitxHotkey FCITX_LCTRL_LSHIFT[2] = {
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_Ctrl_Shift},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Ctrl_Shift},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_LCTRL_LSHIFT2[2] = {
-    {NULL, Key_Shift_L, KEY_CTRL_COMP},
+FcitxHotkey FCITX_LCTRL_LSHIFT2[2] = {
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_Ctrl},
     {NULL, 0, 0},
 };
 
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SEMICOLON[2] = {
-    {NULL, Key_semicolon, KEY_NONE},
+FcitxHotkey FCITX_SEMICOLON[2] = {
+    {NULL, FcitxKey_semicolon, FcitxKeyState_None},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SEPARATOR[2] = {
-    {NULL, Key_apostrophe, KEY_NONE},
+FcitxHotkey FCITX_SEPARATOR[2] = {
+    {NULL, FcitxKey_apostrophe, FcitxKeyState_None},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_COMMA[2] = {
-    {NULL, Key_comma, KEY_NONE},
+FcitxHotkey FCITX_COMMA[2] = {
+    {NULL, FcitxKey_comma, FcitxKeyState_None},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_PERIOD[2] = {
-    {NULL, Key_period, KEY_NONE},
+FcitxHotkey FCITX_PERIOD[2] = {
+    {NULL, FcitxKey_period, FcitxKeyState_None},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_SPACE[2] = {
-    {NULL, Key_space, KEY_NONE},
+FcitxHotkey FCITX_SPACE[2] = {
+    {NULL, FcitxKey_space, FcitxKeyState_None},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_CTRL_5[2] = {
-    {NULL, Key_5, KEY_CTRL_COMP},
+FcitxHotkey FCITX_CTRL_5[2] = {
+    {NULL, FcitxKey_5, FcitxKeyState_Ctrl},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_CTRL_ALT_E[2] = {
-    {NULL, Key_E, KEY_CTRL_ALT_COMP},
+FcitxHotkey FCITX_CTRL_ALT_E[2] = {
+    {NULL, FcitxKey_E, FcitxKeyState_Ctrl_Alt},
     {NULL, 0, 0},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_LCTRL[2] = {
-    {NULL, Key_Control_L, KEY_NONE},
-    {NULL, Key_Control_L, KEY_CTRL_COMP},
+FcitxHotkey FCITX_LCTRL[2] = {
+    {NULL, FcitxKey_Control_L, FcitxKeyState_None},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Ctrl},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_LSHIFT[2] = {
-    {NULL, Key_Shift_L, KEY_NONE},
-    {NULL, Key_Shift_L, KEY_SHIFT_COMP},
+FcitxHotkey FCITX_LSHIFT[2] = {
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_None},
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_Shift},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_RCTRL[2] = {
-    {NULL, Key_Control_R, KEY_NONE},
-    {NULL, Key_Control_R, KEY_CTRL_COMP},
+FcitxHotkey FCITX_RCTRL[2] = {
+    {NULL, FcitxKey_Control_R, FcitxKeyState_None},
+    {NULL, FcitxKey_Control_R, FcitxKeyState_Ctrl},
 };
 
 FCITX_EXPORT_API
-HOTKEYS FCITX_RSHIFT[2] = {
-    {NULL, Key_Shift_R, KEY_NONE},
-    {NULL, Key_Shift_R, KEY_SHIFT_COMP},
+FcitxHotkey FCITX_RSHIFT[2] = {
+    {NULL, FcitxKey_Shift_R, FcitxKeyState_None},
+    {NULL, FcitxKey_Shift_R, FcitxKeyState_Shift},
 };
-
-FCITX_EXPORT_API
-boolean IsHotKeyModifierCombine(FcitxKeySym sym, int state)
-{
-    if (sym == Key_Control_L
-            || sym == Key_Control_R
-            || sym == Key_Shift_L
-            || sym == Key_Shift_R)
-        return true;
-
-    return false;
-}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -31,8 +31,8 @@ struct _FcitxClassicUI;
 typedef struct _MessageWindow {
     Window window;
     cairo_surface_t* surface;
-    ConfigColor color;
-    ConfigColor fontColor;
+    FcitxConfigColor color;
+    FcitxConfigColor fontColor;
     int height, width;
     int fontSize;
     char *title;

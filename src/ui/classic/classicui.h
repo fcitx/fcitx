@@ -50,7 +50,7 @@ typedef enum _HIDE_MAINWINDOW {
  * @brief Config and Global State for Classic UI
  **/
 typedef struct _FcitxClassicUI {
-    GenericConfig gconfig;
+    FcitxGenericConfig gconfig;
     Display* dpy;
     int iScreen;
     Atom protocolAtom;

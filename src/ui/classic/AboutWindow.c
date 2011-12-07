@@ -44,7 +44,7 @@ static boolean AboutWindowEventHandler(void *arg, XEvent* event);
 
 AboutWindow* CreateAboutWindow(FcitxClassicUI *classicui)
 {
-    AboutWindow *aboutWindow = fcitx_malloc0(sizeof(AboutWindow));
+    AboutWindow *aboutWindow = fcitx_utils_malloc0(sizeof(AboutWindow));
     Display* dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
     int dwidth, dheight;

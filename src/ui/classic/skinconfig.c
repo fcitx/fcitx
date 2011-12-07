@@ -26,7 +26,7 @@
 #include "fcitx/ui.h"
 
 
-static void FilterPlacement(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static void FilterPlacement(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN(FcitxSkin)
 CONFIG_BINDING_REGISTER("SkinInfo", "Name", skinInfo.skinName)
@@ -93,7 +93,7 @@ CONFIG_BINDING_REGISTER("SkinKeyboard", "KeyColor", skinKeyboard.keyColor)
 
 CONFIG_BINDING_END()
 
-void FilterPlacement(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg)
+void FilterPlacement(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
 {
     FcitxSkin* sc = (FcitxSkin*) config;
     if (sync == Raw2Value) {

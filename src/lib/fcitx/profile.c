@@ -29,9 +29,9 @@
 #include "instance.h"
 #include "ime-internal.h"
 
-static ConfigFileDesc* GetProfileDesc();
-static void FilterIMName(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
-static void FilterIMList(GenericConfig* config, ConfigGroup *group, ConfigOption *option, void* value, ConfigSync sync, void* arg);
+static FcitxConfigFileDesc* GetProfileDesc();
+static void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
+static void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN_WITH_ARG(FcitxProfile, FcitxInstance* instance)
 CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
@@ -46,28 +46,28 @@ CONFIG_BINDING_END()
  * @brief 加载配置文件
  */
 FCITX_EXPORT_API
-boolean LoadProfile(FcitxProfile* profile, FcitxInstance* instance)
+boolean FcitxProfileLoad(FcitxProfile* profile, FcitxInstance* instance)
 {
-    ConfigFileDesc* profileDesc = GetProfileDesc();
+    FcitxConfigFileDesc* profileDesc = GetProfileDesc();
     if (!profileDesc)
         return false;
 
     FILE *fp;
-    fp = GetXDGFileUserWithPrefix("", "profile", "rt", NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("", "profile", "rt", NULL);
     if (!fp) {
         if (errno == ENOENT)
-            SaveProfile(profile);
+            FcitxProfileSave(profile);
     }
 
-    ConfigFile *cfile = ParseConfigFileFp(fp, profileDesc);
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, profileDesc);
 
     FcitxProfileConfigBind(profile, cfile, profileDesc, instance);
-    ConfigBindSync(&profile->gconfig);
+    FcitxConfigBindSync(&profile->gconfig);
 
     if (fp)
         fclose(fp);
 
-    UpdateIMList(instance);
+    FcitxInstanceUpdateIMList(instance);
 
     return true;
 }
@@ -75,11 +75,11 @@ boolean LoadProfile(FcitxProfile* profile, FcitxInstance* instance)
 CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
 
 FCITX_EXPORT_API
-void SaveProfile(FcitxProfile* profile)
+void FcitxProfileSave(FcitxProfile* profile)
 {
-    ConfigFileDesc* profileDesc = GetProfileDesc();
-    FILE* fp = GetXDGFileUserWithPrefix("", "profile", "wt", NULL);
-    SaveConfigFileFp(fp, &profile->gconfig, profileDesc);
+    FcitxConfigFileDesc* profileDesc = GetProfileDesc();
+    FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "wt", NULL);
+    FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);
     if (fp)
         fclose(fp);
 }
@@ -90,7 +90,7 @@ boolean UseRemind(FcitxProfile* profile)
     return profile->bUseRemind;
 }
 
-void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
+void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
 {
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
@@ -112,7 +112,7 @@ void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* optio
         for (ime = (FcitxIM*) utarray_front(&instance->availimes);
                 ime != NULL;
                 ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
-            if (!GetIMFromIMList(&instance->imes, ime->uniqueName)) {
+            if (!FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, ime->uniqueName)) {
                 char* newresult;
                 if (result == NULL)
                     asprintf(&newresult, "%s:False", ime->uniqueName);
@@ -135,11 +135,11 @@ void FilterIMList(GenericConfig* config, ConfigGroup* group, ConfigOption* optio
     }
 }
 
-void FilterIMName(GenericConfig* config, ConfigGroup* group, ConfigOption* option, void* value, ConfigSync sync, void* arg)
+void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
 {
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
-        FcitxIM* im = GetCurrentIM(instance);
+        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         char** imName = (char**) value;
         if (*imName)
             free(*imName);

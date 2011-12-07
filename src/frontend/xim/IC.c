@@ -166,9 +166,9 @@ void XimCreateIC(void* arg, FcitxInputContext* context, void *priv)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     IMChangeICStruct * call_data = (IMChangeICStruct *)priv;
-    context->privateic = fcitx_malloc0(sizeof(FcitxXimIC));
+    context->privateic = fcitx_utils_malloc0(sizeof(FcitxXimIC));
     FcitxXimIC* privic = (FcitxXimIC*) context->privateic;
-    FcitxConfig* config = FcitxInstanceGetConfig(xim->owner);
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(xim->owner);
 
     privic->connect_id = call_data->connect_id;
     privic->id = ++ xim->icid;
@@ -179,7 +179,7 @@ void XimCreateIC(void* arg, FcitxInputContext* context, void *priv)
     call_data->icid = privic->id;
 
     if (config->shareState == ShareState_PerProgram)
-        SetICStateFromSameApplication(xim->owner, xim->frontendid, context);
+        FcitxInstanceSetICStateFromSameApplication(xim->owner, xim->frontendid, context);
 
     if (privic->input_style & XIMPreeditCallbacks)
         context->contextCaps |= CAPACITY_PREEDIT;
@@ -217,7 +217,7 @@ void XimDestroyIC(void* arg, FcitxInputContext* context)
  **/
 void XimSetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
-    FcitxInputContext   *ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInputContext   *ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
 
     if (ic == NULL)
         return;
@@ -244,7 +244,7 @@ void XimGetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
     XICAttribute   *pre_attr = call_data->preedit_attr;
     XICAttribute   *sts_attr = call_data->status_attr;
     register int    i;
-    FcitxInputContext *ic = FindIC(xim->owner, xim->frontendid, &call_data->icid);
+    FcitxInputContext *ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
     if (ic == NULL)
         return;
     FcitxXimIC* rec = (FcitxXimIC*) ic->privateic;

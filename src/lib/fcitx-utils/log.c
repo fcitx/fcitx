@@ -78,7 +78,7 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
         size_t len = strlen(buffer);
         wchar_t *wmessage;
         size_t wlen = (len + 1) * sizeof(wchar_t);
-        wmessage = (wchar_t *) fcitx_malloc0((len + 1) * sizeof(wchar_t));
+        wmessage = (wchar_t *) fcitx_utils_malloc0((len + 1) * sizeof(wchar_t));
 
         char *inp = buffer;
         char *outp = (char*) wmessage;

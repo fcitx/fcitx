@@ -56,7 +56,7 @@ typedef struct _VKS {
 
 typedef struct _VKWindow {
     Window          window;
-    ConfigColor* fontColor;
+    FcitxConfigColor* fontColor;
     int fontSize;
     cairo_surface_t* surface;
     cairo_surface_t* keyboard;
@@ -115,10 +115,10 @@ static void VKUpdate(void* arg);
 static INPUT_RETURN_VALUE DoVKInput(FcitxVKState* vkstate, KeySym sym, int state);
 static void DisplayVKWindow(VKWindow* vkWindow);
 static boolean VKMenuAction(FcitxUIMenu *menu, int index);
-static void UpdateVKMenuShell(FcitxUIMenu *menu);
+static void UpdateVKMenu(FcitxUIMenu *menu);
 static void SelectVK(FcitxVKState* vkstate, int vkidx);
 
-static ConfigColor blackColor = {0, 0, 0};
+static FcitxConfigColor blackColor = {0, 0, 0};
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -134,50 +134,50 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void *VKCreate(FcitxInstance* instance)
 {
-    FcitxVKState *vkstate = fcitx_malloc0(sizeof(FcitxVKState));
-    FcitxConfig* config = FcitxInstanceGetConfig(instance);
+    FcitxVKState *vkstate = fcitx_utils_malloc0(sizeof(FcitxVKState));
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     vkstate->owner = instance;
-    vkstate->classicui = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
+    vkstate->classicui = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
 
-    HotkeyHook hotkey;
+    FcitxHotkeyHook hotkey;
     hotkey.hotkey = config->hkVK;
     hotkey.hotkeyhandle = ToggleVKStateWithHotkey;
     hotkey.arg = vkstate;
-    RegisterHotkeyFilter(instance, hotkey);
+    FcitxInstanceRegisterHotkeyFilter(instance, hotkey);
 
-    RegisterStatus(instance, vkstate, "vk", _("Virtual Keyboard"), _("Virtual Keyboard State"),  ToggleVKState, GetVKState);
+    FcitxUIRegisterStatus(instance, vkstate, "vk", _("Virtual Keyboard"), _("Virtual Keyboard State"),  ToggleVKState, GetVKState);
 
     LoadVKMapFile(vkstate);
 
-    KeyFilterHook hk;
+    FcitxKeyFilterHook hk;
     hk.arg = vkstate ;
     hk.func = VKPreFilter;
-    RegisterPreInputFilter(instance, hk);
+    FcitxInstanceRegisterPreInputFilter(instance, hk);
 
     FcitxIMEventHook resethk;
     resethk.arg = vkstate;
     resethk.func = VKReset;
-    RegisterTriggerOnHook(instance, resethk);
-    RegisterTriggerOffHook(instance, resethk);
+    FcitxInstanceRegisterTriggerOnHook(instance, resethk);
+    FcitxInstanceRegisterTriggerOffHook(instance, resethk);
 
     resethk.func = VKUpdate;
-    RegisterInputFocusHook(instance, resethk);
-    RegisterInputUnFocusHook(instance, resethk);
+    FcitxInstanceRegisterInputFocusHook(instance, resethk);
+    FcitxInstanceRegisterInputUnFocusHook(instance, resethk);
 
+    FcitxMenuInit(&vkstate->vkmenu);
     strcpy(vkstate->vkmenu.candStatusBind, "vk");
     strcpy(vkstate->vkmenu.name, _("Virtual Keyboard"));
 
-    utarray_init(&vkstate->vkmenu.shell, &menuICD);
-    vkstate->vkmenu.UpdateMenuShell = UpdateVKMenuShell;
+    vkstate->vkmenu.UpdateMenu = UpdateVKMenu;
     vkstate->vkmenu.MenuAction = VKMenuAction;
     vkstate->vkmenu.priv = vkstate;
     vkstate->vkmenu.isSubMenu = false;
 
     int i;
     for (i = 0; i < vkstate->iVKCount; i ++)
-        AddMenuShell(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
+        FcitxMenuAddMenuItem(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
 
-    RegisterMenu(instance, &vkstate->vkmenu);
+    FcitxUIRegisterMenu(instance, &vkstate->vkmenu);
 
     return vkstate;
 }
@@ -189,7 +189,7 @@ boolean VKMenuAction(FcitxUIMenu *menu, int index)
     return true;
 }
 
-void UpdateVKMenuShell(FcitxUIMenu *menu)
+void UpdateVKMenu(FcitxUIMenu *menu)
 {
     FcitxVKState* vkstate = (FcitxVKState*) menu->priv;
     menu->mark = vkstate->iCurrentVK;
@@ -200,7 +200,7 @@ void VKReset(void* arg)
     FcitxVKState *vkstate = (FcitxVKState*) arg;
     VKWindow* vkWindow = vkstate->vkWindow;
     if (vkstate->bVK != false)
-        UpdateStatus(vkstate->owner, "vk");
+        FcitxUIUpdateStatus(vkstate->owner, "vk");
     if (vkWindow)
         XUnmapWindow(vkWindow->dpy, vkWindow->window);
 }
@@ -211,7 +211,7 @@ void VKUpdate(void* arg)
     VKWindow* vkWindow = vkstate->vkWindow;
     if (vkWindow) {
 
-        if (GetCurrentState(vkstate->owner) != IS_CLOSED && vkstate->bVK) {
+        if (FcitxInstanceGetCurrentState(vkstate->owner) != IS_CLOSED && vkstate->bVK) {
             DrawVKWindow(vkWindow);
             DisplayVKWindow(vkWindow);
         } else
@@ -245,7 +245,7 @@ void ToggleVKState(void *arg)
 INPUT_RETURN_VALUE ToggleVKStateWithHotkey(void* arg)
 {
     FcitxVKState *vkstate = (FcitxVKState*) arg;
-    UpdateStatus(vkstate->owner, "vk");
+    FcitxUIUpdateStatus(vkstate->owner, "vk");
     return IRV_DO_NOTHING;
 }
 
@@ -258,7 +258,7 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
     Visual * vs;
     int depth;
     FcitxModuleFunctionArg arg;
-    VKWindow* vkWindow = fcitx_malloc0(sizeof(VKWindow));
+    VKWindow* vkWindow = fcitx_utils_malloc0(sizeof(VKWindow));
     vkWindow->owner = vkstate;
 
     LoadVKImage(vkWindow);
@@ -422,10 +422,10 @@ boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
     char           *pstr = NULL;
     FcitxInstance* instance = vkstate->owner;
 
-    if (IsInBox(x, y, 1, 1, VK_WINDOW_WIDTH, 16))
+    if (FcitxUIIsInBox(x, y, 1, 1, VK_WINDOW_WIDTH, 16))
         ChangVK(vkstate);
     else {
-        if (GetCurrentIC(instance) == NULL)
+        if (FcitxInstanceGetCurrentIC(instance) == NULL)
             return false;
 
         strKey[1] = '\0';
@@ -436,7 +436,7 @@ boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
 
             x -= 4;
             if (x >= 313 && x <= 344) { //backspace
-                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_BackSpace, 0);
+                FcitxInstanceForwardKey(instance, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, FcitxKey_BackSpace, 0);
                 return true;
             } else {
                 iIndex = x / 24;
@@ -453,7 +453,7 @@ boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
                 return false;
 
             if (x >= 4 && x < 38) { //Tab
-                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Tab, 0);
+                FcitxInstanceForwardKey(instance, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, FcitxKey_Tab, 0);
                 return true;
             } else {
                 iIndex = 13 + (x - 38) / 24;
@@ -502,10 +502,10 @@ boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
         } else if (y >= 140 && y <= 162) {  //第五行
             if (x >= 4 && x < 38) { //Ins
                 //改变INS键状态
-                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Insert, 0);
+                FcitxInstanceForwardKey(instance, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, FcitxKey_Insert, 0);
                 return true;
             } else if (x >= 61 && x < 98) { //DEL
-                ForwardKey(instance, GetCurrentIC(instance), FCITX_PRESS_KEY, Key_Delete, 0);
+                FcitxInstanceForwardKey(instance, FcitxInstanceGetCurrentIC(instance), FCITX_PRESS_KEY, FcitxKey_Delete, 0);
                 return true;
             } else if (x >= 99 && x < 270)  //空格
                 strcpy(strKey, " ");
@@ -517,8 +517,8 @@ boolean VKMouseKey(FcitxVKState* vkstate, int x, int y)
         }
 
         if (pstr) {
-            CommitString(instance, GetCurrentIC(instance), pstr);
-            FcitxInstanceIncreateInputCharacterCount(instance, utf8_strlen(pstr));
+            FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), pstr);
+            FcitxInstanceIncreateInputCharacterCount(instance, fcitx_utf8_strlen(pstr));
         }
     }
 
@@ -545,7 +545,7 @@ void LoadVKMapFile(FcitxVKState *vkstate)
         vks[j].strName[0] = '\0';
     }
 
-    fp = GetXDGFileWithPrefix("data", VK_FILE, "rt", NULL);
+    fp = FcitxXDGGetFileWithPrefix("data", VK_FILE, "rt", NULL);
 
     if (!fp)
         return;
@@ -675,12 +675,12 @@ INPUT_RETURN_VALUE DoVKInput(FcitxVKState* vkstate, KeySym sym, int state)
     char           *pstr = NULL;
     FcitxInputState *input = FcitxInstanceGetInputState(vkstate->owner);
 
-    if (IsHotKeySimple(sym, state))
+    if (FcitxHotkeyIsHotKeySimple(sym, state))
         pstr = VKGetSymbol(vkstate, sym);
     if (!pstr)
         return IRV_TO_PROCESS;
     else {
-        strcpy(GetOutputString(input), pstr);
+        strcpy(FcitxInputStateGetOutputString(input), pstr);
         return IRV_COMMIT_STRING;
     }
 }
@@ -704,12 +704,12 @@ void SwitchVK(FcitxVKState *vkstate)
         arg.args[1] = &dheight;
         InvokeFunction(vkstate->owner, FCITX_X11, GETSCREENSIZE, arg);
 
-        if (!UISupportMainWindow(instance)) {
+        if (!FcitxUISupportMainWindow(instance)) {
             x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
             y = 0;
         } else {
             int mx = 0, my = 0, mw = 0, mh = 0;
-            GetMainWindowSize(instance, &mx, &my, &mw, &mh);
+            FcitxUIGetMainWindowSize(instance, &mx, &my, &mw, &mh);
             x = mx;
             y = my + mh + 2;
             if ((y + VK_WINDOW_HEIGHT) >= dheight)
@@ -725,16 +725,16 @@ void SwitchVK(FcitxVKState *vkstate)
 
         XMoveWindow(vkWindow->dpy, vkWindow->window, x, y);
         DisplayVKWindow(vkWindow);
-        CloseInputWindow(instance);
+        FcitxUICloseInputWindow(instance);
 
-        FcitxInputContext* ic = GetCurrentIC(instance);
+        FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
 
-        if (ic && GetCurrentState(instance) == IS_CLOSED)
-            EnableIM(instance, ic, true);
+        if (ic && FcitxInstanceGetCurrentState(instance) == IS_CLOSED)
+            FcitxInstanceEnableIM(instance, ic, true);
     } else {
         XUnmapWindow(vkWindow->dpy, vkWindow->window);
-        CleanInputWindow(instance);
-        UpdateInputWindow(instance);
+        FcitxInstanceCleanInputWindow(instance);
+        FcitxUIUpdateInputWindow(instance);
     }
 }
 
@@ -745,7 +745,7 @@ void SelectVK(FcitxVKState* vkstate, int vkidx)
 {
     vkstate->bVK = false;
     vkstate->iCurrentVK = vkidx;
-    UpdateStatus(vkstate->owner, "vk");
+    FcitxUIUpdateStatus(vkstate->owner, "vk");
     if (vkstate->vkWindow)
         DrawVKWindow(vkstate->vkWindow);
 }

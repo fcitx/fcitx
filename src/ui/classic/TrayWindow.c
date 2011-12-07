@@ -101,7 +101,7 @@ void InitTrayWindow(TrayWindow *trayWindow)
 
 TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
 {
-    TrayWindow *trayWindow = fcitx_malloc0(sizeof(TrayWindow));
+    TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
     FcitxModuleFunctionArg arg;
     arg.args[0] = TrayEventHandler;
@@ -135,7 +135,7 @@ void DrawTrayWindow(TrayWindow* trayWindow)
     if (!classicui->bUseTrayIcon)
         return;
 
-    if (GetCurrentState(classicui->owner) == IS_ACTIVE)
+    if (FcitxInstanceGetCurrentState(classicui->owner) == IS_ACTIVE)
         f_state = ACTIVE_ICON;
     else
         f_state = INACTIVE_ICON;
@@ -231,10 +231,10 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         if (event->xbutton.window == trayWindow->window) {
             switch (event->xbutton.button) {
             case Button1:
-                if (GetCurrentState(instance) == IS_CLOSED) {
-                    EnableIM(instance, GetCurrentIC(instance), false);
+                if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
+                    FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
                 } else {
-                    CloseIM(instance, GetCurrentIC(instance));
+                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                 }
                 break;
             case Button3: {

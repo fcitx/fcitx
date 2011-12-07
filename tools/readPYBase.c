@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     if (pybase_mb)
         fi = fopen(pybase_mb , "r");
     else
-        fi = GetXDGFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
+        fi = FcitxXDGGetFileWithPrefix("pinyin", PY_BASE_FILE, "r", &pybase_mb);
 
     if (!fi) {
         perror("fopen");

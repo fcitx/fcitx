@@ -54,17 +54,17 @@ struct _FcitxInputState {
     boolean dummy3;
 
     /* the ui message part, if there is something in it, then it will be shown */
-    struct _CandidateWordList* candList;
-    Messages* msgPreedit;
-    Messages* msgAuxUp;
-    Messages* msgAuxDown;
-    Messages* msgClientPreedit;
+    struct _FcitxCandidateWordList* candList;
+    FcitxMessages* msgPreedit;
+    FcitxMessages* msgAuxUp;
+    FcitxMessages* msgAuxDown;
+    FcitxMessages* msgClientPreedit;
 
     int padding[63];
 };
 
 struct _FcitxIMEntry {
-    GenericConfig config;
+    FcitxGenericConfig config;
     char* uniqueName;
     char* name;
     char* iconName;
@@ -81,7 +81,7 @@ typedef struct _FcitxIMEntry FcitxIMEntry;
  * @param instance instance
  * @return void
  **/
-void InitFcitxIM(struct _FcitxInstance* instance);
+void FcitxInstanceInitIM(struct _FcitxInstance* instance);
 
 /**
  * @brief init builtin hotkey (ESC, ENTER)
@@ -89,7 +89,7 @@ void InitFcitxIM(struct _FcitxInstance* instance);
  * @param instance instance
  * @return void
  **/
-void InitBuiltInHotkey(struct _FcitxInstance* instance);
+void FcitxInstanceInitBuiltInHotkey(struct _FcitxInstance* instance);
 
 /**
  * @brief generat phrase tips
@@ -97,15 +97,7 @@ void InitBuiltInHotkey(struct _FcitxInstance* instance);
  * @param instance fcitx instance
  * @return void
  **/
-void DoPhraseTips(struct _FcitxInstance* instance);
-
-/**
- * @brief unload all input method
- *
- * @param ims im array
- * @return void
- **/
-void UnloadAllIM(UT_array* ims);
+void FcitxInstanceDoPhraseTips(struct _FcitxInstance* instance);
 
 /**
  * @brief load all im from addons
@@ -121,7 +113,7 @@ boolean LoadAllIM(struct _FcitxInstance* instance);
  * @param instance instance
  * @return void
  **/
-void InitIMMenu(struct _FcitxInstance* instance);
+void FcitxInstanceInitIMMenu(struct _FcitxInstance* instance);
 
 /**
  * @brief show input speed
@@ -129,7 +121,7 @@ void InitIMMenu(struct _FcitxInstance* instance);
  * @param instance instance
  * @return void
  **/
-void ShowInputSpeed(struct _FcitxInstance* instance);
+void FcitxInstanceShowInputSpeed(struct _FcitxInstance* instance);
 
 /**
  * @brief process enter action
@@ -181,14 +173,14 @@ INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
 
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
-void LoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
+void FcitxInstanceLoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
 
 /**
  * @brief Load inputmethod.desc file
  *
- * @return ConfigFileDesc*
+ * @return FcitxConfigFileDesc*
  **/
-ConfigFileDesc* GetIMConfigDesc();
+FcitxConfigFileDesc* GetIMConfigDesc();
 
 #endif
 

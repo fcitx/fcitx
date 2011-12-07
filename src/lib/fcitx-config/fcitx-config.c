@@ -37,39 +37,44 @@
 #include <fcitx-utils/utils.h>
 #include <locale.h>
 
+
+#define IsColorValid(c) ((c) >=0 && (c) <= 255)
+
+#define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
+
 /**
  * @brief Config Option parse function
  **/
-typedef ConfigSyncResult(*ConfigOptionFunc)(ConfigOption *, ConfigSync);
+typedef FcitxConfigSyncResult(*FcitxConfigOptionFunc)(FcitxConfigOption *, FcitxConfigSync);
 
-static ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync);
-static ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionInteger(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionBoolean(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionEnum(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionColor(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionString(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConfigSync sync);
+static FcitxConfigSyncResult FcitxConfigOptionI18NString(FcitxConfigOption *option, FcitxConfigSync sync);
 
 /**
  * @brief File type is basically a string, but can be a hint for config tool
  */
-#define ConfigOptionFile ConfigOptionString
+#define FcitxConfigOptionFile FcitxConfigOptionString
 
 /**
  * @brief Font type is basically a string, but can be a hint for config tool
  */
-#define ConfigOptionFont ConfigOptionString
+#define FcitxConfigOptionFont FcitxConfigOptionString
 
 FCITX_EXPORT_API
-ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc* fileDesc)
+FcitxConfigFile *FcitxConfigParseConfigFile(char *filename, FcitxConfigFileDesc* fileDesc)
 {
     FILE* fp = fopen(filename, "r");
 
     if (!fp)
         return NULL;
 
-    ConfigFile *cf = ParseConfigFileFp(fp, fileDesc);
+    FcitxConfigFile *cf = FcitxConfigParseConfigFileFp(fp, fileDesc);
 
     fclose(fp);
 
@@ -77,7 +82,7 @@ ConfigFile *ParseConfigFile(char *filename, ConfigFileDesc* fileDesc)
 }
 
 FCITX_EXPORT_API
-ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDesc)
+FcitxConfigFile *FcitxConfigParseMultiConfigFile(char **filename, int len, FcitxConfigFileDesc*fileDesc)
 {
     FILE **fp = malloc(sizeof(FILE*) * len);
     int i = 0;
@@ -87,7 +92,7 @@ ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDe
         fp[i] = fopen(filename[i], "r");
     }
 
-    ConfigFile *cf = ParseMultiConfigFileFp(fp, len, fileDesc);
+    FcitxConfigFile *cf = FcitxConfigParseMultiConfigFileFp(fp, len, fileDesc);
 
     for (i = 0 ; i < len ; i++)
         if (fp[i])
@@ -99,64 +104,64 @@ ConfigFile *ParseMultiConfigFile(char **filename, int len, ConfigFileDesc*fileDe
 }
 
 FCITX_EXPORT_API
-ConfigFile *ParseMultiConfigFileFp(FILE **fp, int len, ConfigFileDesc* fileDesc)
+FcitxConfigFile *FcitxConfigParseMultiConfigFileFp(FILE **fp, int len, FcitxConfigFileDesc* fileDesc)
 {
-    ConfigFile* cfile = NULL;
+    FcitxConfigFile* cfile = NULL;
     int i = 0;
 
     for (i = 0 ; i < len ; i ++)
-        cfile = ParseIniFp(fp[i], cfile);
+        cfile = FcitxConfigParseIniFp(fp[i], cfile);
 
     /* create a empty one, CheckConfig will do other thing for us */
     if (cfile == NULL)
-        cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
+        cfile = (FcitxConfigFile*) fcitx_utils_malloc0(sizeof(FcitxConfigFile));
 
-    if (CheckConfig(cfile, fileDesc)) {
+    if (FcitxConfigCheckConfigFile(cfile, fileDesc)) {
         return cfile;
     }
 
-    FreeConfigFile(cfile);
+    FcitxConfigFreeConfigFile(cfile);
 
     return NULL;
 
 }
 
 FCITX_EXPORT_API
-ConfigFile *ParseConfigFileFp(FILE *fp, ConfigFileDesc* fileDesc)
+FcitxConfigFile *FcitxConfigParseConfigFileFp(FILE *fp, FcitxConfigFileDesc* fileDesc)
 {
-    ConfigFile *cfile = ParseIniFp(fp, NULL);
+    FcitxConfigFile *cfile = FcitxConfigParseIniFp(fp, NULL);
 
     /* create a empty one, CheckConfig will do other thing for us */
 
     if (cfile == NULL)
-        cfile = (ConfigFile*) fcitx_malloc0(sizeof(ConfigFile));
+        cfile = (FcitxConfigFile*) fcitx_utils_malloc0(sizeof(FcitxConfigFile));
 
-    if (CheckConfig(cfile, fileDesc)) {
+    if (FcitxConfigCheckConfigFile(cfile, fileDesc)) {
         return cfile;
     }
 
-    FreeConfigFile(cfile);
+    FcitxConfigFreeConfigFile(cfile);
 
     return NULL;
 }
 
 FCITX_EXPORT_API
-boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
+boolean FcitxConfigCheckConfigFile(FcitxConfigFile *cfile, FcitxConfigFileDesc* cfdesc)
 {
     if (!cfile)
         return false;
 
-    ConfigGroupDesc *cgdesc = NULL;
+    FcitxConfigGroupDesc *cgdesc = NULL;
 
     for (cgdesc = cfdesc->groupsDesc;
             cgdesc != NULL;
-            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next) {
-        ConfigOptionDesc *codesc = NULL;
-        ConfigGroup* group;
+            cgdesc = (FcitxConfigGroupDesc*)cgdesc->hh.next) {
+        FcitxConfigOptionDesc *codesc = NULL;
+        FcitxConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
         if (!group) {
-            group = fcitx_malloc0(sizeof(ConfigGroup));
+            group = fcitx_utils_malloc0(sizeof(FcitxConfigGroup));
             group->groupName = strdup(cgdesc->groupName);
             group->groupDesc = cgdesc;
             group->options = NULL;
@@ -165,8 +170,8 @@ boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
 
         for (codesc = cgdesc->optionsDesc;
                 codesc != NULL;
-                codesc = (ConfigOptionDesc*)codesc->hh.next) {
-            ConfigOption *option;
+                codesc = (FcitxConfigOptionDesc*)codesc->hh.next) {
+            FcitxConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 
             if (!option) {
@@ -175,7 +180,7 @@ boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
                     return false;
                 }
 
-                option = fcitx_malloc0(sizeof(ConfigOption));
+                option = fcitx_utils_malloc0(sizeof(FcitxConfigOption));
 
                 option->optionName = strdup(codesc->optionName);
                 option->rawValue = strdup(codesc->rawDefaultValue);
@@ -199,14 +204,14 @@ boolean CheckConfig(ConfigFile *cfile, ConfigFileDesc* cfdesc)
  * @return
  */
 FCITX_EXPORT_API
-ConfigFileDesc *ParseConfigFileDesc(char* filename)
+FcitxConfigFileDesc *FcitxConfigParseConfigFileDesc(char* filename)
 {
     FILE* fp = fopen(filename, "r");
 
     if (!fp)
         return NULL;
 
-    ConfigFileDesc *cfdesc = ParseConfigFileDescFp(fp);
+    FcitxConfigFileDesc *cfdesc = FcitxConfigParseConfigFileDescFp(fp);
 
     fclose(fp);
 
@@ -221,22 +226,22 @@ ConfigFileDesc *ParseConfigFileDesc(char* filename)
  * @return
  */
 FCITX_EXPORT_API
-ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
+FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
 {
-    ConfigFile *cfile = ParseIniFp(fp, NULL);
+    FcitxConfigFile *cfile = FcitxConfigParseIniFp(fp, NULL);
 
     if (!cfile)
         return NULL;
 
-    ConfigFileDesc *cfdesc = fcitx_malloc0(sizeof(ConfigFileDesc));
+    FcitxConfigFileDesc *cfdesc = fcitx_utils_malloc0(sizeof(FcitxConfigFileDesc));
 
-    ConfigGroup* group;
+    FcitxConfigGroup* group;
 
     for (group = cfile->groups;
             group != NULL;
-            group = (ConfigGroup*)group->hh.next) {
-        ConfigGroupDesc *cgdesc = NULL;
-        ConfigOption *options = group->options, *option = NULL;
+            group = (FcitxConfigGroup*)group->hh.next) {
+        FcitxConfigGroupDesc *cgdesc = NULL;
+        FcitxConfigOption *options = group->options, *option = NULL;
 
         if (strcmp(group->groupName, "DescriptionFile") == 0) {
             HASH_FIND_STR(options, "LocaleDomain", option);
@@ -267,14 +272,14 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
         HASH_FIND_STR(cfdesc->groupsDesc, groupName, cgdesc);
 
         if (!cgdesc) {
-            cgdesc = fcitx_malloc0(sizeof(ConfigGroupDesc));
+            cgdesc = fcitx_utils_malloc0(sizeof(FcitxConfigGroupDesc));
             cgdesc->groupName = groupName;
             cgdesc->optionsDesc = NULL;
             HASH_ADD_KEYPTR(hh, cfdesc->groupsDesc, cgdesc->groupName, groupNameLen, cgdesc);
         } else
             free(groupName);
 
-        ConfigOptionDesc *codesc = fcitx_malloc0(sizeof(ConfigOptionDesc));
+        FcitxConfigOptionDesc *codesc = fcitx_utils_malloc0(sizeof(FcitxConfigOptionDesc));
 
         codesc->optionName = optionName;
 
@@ -312,7 +317,7 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
             else if (!strcmp(option->rawValue, "Hotkey"))
                 codesc->type = T_Hotkey;
             else if (!strcmp(option->rawValue, "Enum")) {
-                ConfigOption *eoption;
+                FcitxConfigOption *eoption;
                 codesc->type = T_Enum;
                 HASH_FIND_STR(options, "EnumCount", eoption);
                 boolean enumError = false;
@@ -390,12 +395,12 @@ ConfigFileDesc *ParseConfigFileDescFp(FILE *fp)
             codesc->rawDefaultValue = strdup(option->rawValue);
     }
 
-    FreeConfigFile(cfile);
+    FcitxConfigFreeConfigFile(cfile);
 
     return cfdesc;
 }
 
-ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionInteger(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.integer)
         return SyncNoBinding;
@@ -419,7 +424,7 @@ ConfigSyncResult ConfigOptionInteger(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionBoolean(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.boolvalue)
         return SyncNoBinding;
@@ -450,14 +455,14 @@ ConfigSyncResult ConfigOptionBoolean(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionEnum(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.enumerate || !option->optionDesc)
         return SyncNoBinding;
 
-    ConfigOptionDesc *codesc = option->optionDesc;
+    FcitxConfigOptionDesc *codesc = option->optionDesc;
 
-    ConfigEnum* cenum = &codesc->configEnum;
+    FcitxConfigEnum* cenum = &codesc->configEnum;
 
     int i = 0;
 
@@ -490,12 +495,12 @@ ConfigSyncResult ConfigOptionEnum(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionColor(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.color)
         return SyncNoBinding;
 
-    ConfigColor *color = option->value.color;
+    FcitxConfigColor *color = option->value.color;
 
     int r = 0, g = 0, b = 0;
 
@@ -537,7 +542,7 @@ ConfigSyncResult ConfigOptionColor(ConfigOption *option, ConfigSync sync)
 
 }
 
-ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionString(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.string)
         return SyncNoBinding;
@@ -565,7 +570,7 @@ ConfigSyncResult ConfigOptionString(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionI18NString(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.string)
         return SyncNoBinding;
@@ -577,7 +582,7 @@ ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync)
         if (*option->value.string)
             free(*option->value.string);
 
-        *option->value.string = strdup(ConfigOptionGetLocaleString(option));
+        *option->value.string = strdup(FcitxConfigOptionGetLocaleString(option));
 
         return SyncSuccess;
 
@@ -589,7 +594,7 @@ ConfigSyncResult ConfigOptionI18NString(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-const char* ConfigOptionGetLocaleString(ConfigOption* option)
+const char* FcitxConfigOptionGetLocaleString(FcitxConfigOption* option)
 {
     char* locale = setlocale(LC_MESSAGES, NULL);
     char buf[40];
@@ -608,7 +613,7 @@ const char* ConfigOptionGetLocaleString(ConfigOption* option)
 
     buf[len] = '\0';
 
-    ConfigOptionSubkey* subkey = NULL;
+    FcitxConfigOptionSubkey* subkey = NULL;
 
     HASH_FIND_STR(option->subkey, buf, subkey);
 
@@ -618,7 +623,7 @@ const char* ConfigOptionGetLocaleString(ConfigOption* option)
         return option->rawValue;
 }
 
-ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     if (!option->value.chr)
         return SyncNoBinding;
@@ -646,7 +651,7 @@ ConfigSyncResult ConfigOptionChar(ConfigOption *option, ConfigSync sync)
     return SyncInvalid;
 }
 
-ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
+FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxConfigSync sync)
 {
     /* we assume all hotkey can have 2 candiate key */
     if (!option->value.hotkey)
@@ -666,7 +671,7 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
             option->value.hotkey[0].desc = NULL;
         }
 
-        SetHotKey(option->rawValue, option->value.hotkey);
+        FcitxHotkeySetKey(option->rawValue, option->value.hotkey);
 
         return SyncSuccess;
 
@@ -689,34 +694,34 @@ ConfigSyncResult ConfigOptionHotkey(ConfigOption *option, ConfigSync sync)
 }
 
 FCITX_EXPORT_API
-void FreeConfigFile(ConfigFile* cfile)
+void FcitxConfigFreeConfigFile(FcitxConfigFile* cfile)
 {
     if (!cfile)
         return;
 
-    ConfigGroup *groups = cfile->groups, *curGroup;
+    FcitxConfigGroup *groups = cfile->groups, *curGroup;
 
     while (groups) {
         curGroup = groups;
         HASH_DEL(groups, curGroup);
-        FreeConfigGroup(curGroup);
+        FcitxConfigFreeConfigGroup(curGroup);
     }
 
     free(cfile);
 }
 
 FCITX_EXPORT_API
-void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
+void FcitxConfigFreeConfigFileDesc(FcitxConfigFileDesc* cfdesc)
 {
     if (!cfdesc)
         return;
 
-    ConfigGroupDesc *cgdesc = cfdesc->groupsDesc, *curGroup;
+    FcitxConfigGroupDesc *cgdesc = cfdesc->groupsDesc, *curGroup;
 
     while (cgdesc) {
         curGroup = cgdesc;
         HASH_DEL(cgdesc, curGroup);
-        FreeConfigGroupDesc(curGroup);
+        FcitxConfigFreeConfigGroupDesc(curGroup);
     }
 
     if (cfdesc->domain)
@@ -725,14 +730,14 @@ void FreeConfigFileDesc(ConfigFileDesc* cfdesc)
 }
 
 FCITX_EXPORT_API
-void FreeConfigGroup(ConfigGroup *group)
+void FcitxConfigFreeConfigGroup(FcitxConfigGroup *group)
 {
-    ConfigOption *option = group->options, *curOption;
+    FcitxConfigOption *option = group->options, *curOption;
 
     while (option) {
         curOption = option;
         HASH_DEL(option, curOption);
-        FreeConfigOption(curOption);
+        FcitxConfigFreeConfigOption(curOption);
     }
 
     free(group->groupName);
@@ -741,14 +746,14 @@ void FreeConfigGroup(ConfigGroup *group)
 }
 
 FCITX_EXPORT_API
-void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc)
+void FcitxConfigFreeConfigGroupDesc(FcitxConfigGroupDesc *cgdesc)
 {
-    ConfigOptionDesc *codesc = cgdesc->optionsDesc, *curOption;
+    FcitxConfigOptionDesc *codesc = cgdesc->optionsDesc, *curOption;
 
     while (codesc) {
         curOption = codesc;
         HASH_DEL(codesc, curOption);
-        FreeConfigOptionDesc(curOption);
+        FcitxConfigFreeConfigOptionDesc(curOption);
     }
 
     free(cgdesc->groupName);
@@ -757,13 +762,13 @@ void FreeConfigGroupDesc(ConfigGroupDesc *cgdesc)
 }
 
 FCITX_EXPORT_API
-void FreeConfigOption(ConfigOption *option)
+void FcitxConfigFreeConfigOption(FcitxConfigOption *option)
 {
     free(option->optionName);
 
-    ConfigOptionSubkey* item = option->subkey;
+    FcitxConfigOptionSubkey* item = option->subkey;
     while (item) {
-        ConfigOptionSubkey* curitem = item;
+        FcitxConfigOptionSubkey* curitem = item;
         HASH_DEL(item, curitem);
         free(curitem->rawValue);
         free(curitem->subkeyName);
@@ -777,7 +782,7 @@ void FreeConfigOption(ConfigOption *option)
 }
 
 FCITX_EXPORT_API
-void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
+void FcitxConfigFreeConfigOptionDesc(FcitxConfigOptionDesc *codesc)
 {
     free(codesc->optionName);
 
@@ -800,14 +805,14 @@ void FreeConfigOptionDesc(ConfigOptionDesc *codesc)
 }
 
 FCITX_EXPORT_API
-ConfigFile* ParseIni(char* filename, ConfigFile* reuse)
+FcitxConfigFile* FcitxConfigParseIni(char* filename, FcitxConfigFile* reuse)
 {
     FILE* fp = fopen(filename, "r");
 
     if (!fp)
         return NULL;
 
-    ConfigFile *cf = ParseIniFp(fp, reuse);
+    FcitxConfigFile *cf = FcitxConfigParseIniFp(fp, reuse);
 
     fclose(fp);
 
@@ -815,12 +820,12 @@ ConfigFile* ParseIni(char* filename, ConfigFile* reuse)
 }
 
 FCITX_EXPORT_API
-ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
+FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile* reuse)
 {
     char *line = NULL, *buf = NULL;
     size_t len = 0;
     int lineLen = 0;
-    ConfigFile* cfile;
+    FcitxConfigFile* cfile;
 
     if (!fp) {
         if (reuse)
@@ -832,9 +837,9 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
     if (reuse)
         cfile = reuse;
     else
-        cfile = fcitx_malloc0(sizeof(ConfigFile));
+        cfile = fcitx_utils_malloc0(sizeof(FcitxConfigFile));
 
-    ConfigGroup* curGroup = NULL;
+    FcitxConfigGroup* curGroup = NULL;
 
     int lineNo = 0;
 
@@ -844,7 +849,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
         if (line)
             free(line);
 
-        line = fcitx_trim(buf);
+        line = fcitx_utils_trim(buf);
 
         lineLen = strlen(line);
 
@@ -870,7 +875,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                 continue;
             }
 
-            curGroup = fcitx_malloc0(sizeof(ConfigGroup));
+            curGroup = fcitx_utils_malloc0(sizeof(FcitxConfigGroup));
 
             curGroup->groupName = groupName;
             curGroup->options = NULL;
@@ -910,20 +915,20 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                 }
             }
 
-            ConfigOption *option;
+            FcitxConfigOption *option;
 
             HASH_FIND_STR(curGroup->options, name, option);
 
             if (option) {
                 if (subkeyname) {
-                    ConfigOptionSubkey* subkey = NULL;
+                    FcitxConfigOptionSubkey* subkey = NULL;
                     HASH_FIND_STR(option->subkey, subkeyname, subkey);
 
                     if (subkey) {
                         free(subkey->rawValue);
                         subkey->rawValue = strdup(value);
                     } else {
-                        subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
+                        subkey = fcitx_utils_malloc0(sizeof(FcitxConfigOptionSubkey));
                         subkey->subkeyName = strdup(subkeyname);
                         subkey->rawValue = strdup(value);
                         HASH_ADD_KEYPTR(hh, option->subkey, subkey->subkeyName, strlen(subkey->subkeyName), subkey);
@@ -934,7 +939,7 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                     option->rawValue = strdup(value);
                 }
             } else {
-                option = fcitx_malloc0(sizeof(ConfigOption));
+                option = fcitx_utils_malloc0(sizeof(FcitxConfigOption));
                 option->optionName = strdup(name);
                 option->rawValue = strdup(value);
                 HASH_ADD_KEYPTR(hh, curGroup->options, option->optionName, strlen(option->optionName), option);
@@ -942,8 +947,8 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
                 /* if the subkey is new, and no default key exists, so we can assign it to default value */
 
                 if (subkeyname) {
-                    ConfigOptionSubkey* subkey = NULL;
-                    subkey = fcitx_malloc0(sizeof(ConfigOptionSubkey));
+                    FcitxConfigOptionSubkey* subkey = NULL;
+                    subkey = fcitx_utils_malloc0(sizeof(FcitxConfigOptionSubkey));
                     subkey->subkeyName = strdup(subkeyname);
                     subkey->rawValue = strdup(value);
                     HASH_ADD_KEYPTR(hh, option->subkey, subkey->subkeyName, strlen(subkey->subkeyName), subkey);
@@ -966,14 +971,14 @@ ConfigFile* ParseIniFp(FILE *fp, ConfigFile* reuse)
 }
 
 FCITX_EXPORT_API
-boolean SaveConfigFile(char *filename, GenericConfig *cfile, ConfigFileDesc* cdesc)
+boolean FcitxConfigSaveConfigFile(char *filename, FcitxGenericConfig *cfile, FcitxConfigFileDesc* cdesc)
 {
     FILE* fp = fopen(filename, "w");
 
     if (!fp)
         return false;
 
-    boolean result = SaveConfigFileFp(fp, cfile, cdesc);
+    boolean result = FcitxConfigSaveConfigFileFp(fp, cfile, cdesc);
 
     fclose(fp);
 
@@ -981,11 +986,11 @@ boolean SaveConfigFile(char *filename, GenericConfig *cfile, ConfigFileDesc* cde
 }
 
 FCITX_EXPORT_API
-void ConfigBindSync(GenericConfig* config)
+void FcitxConfigBindSync(FcitxGenericConfig* config)
 {
-    ConfigFile *cfile = config->configFile;
-    ConfigFileDesc *cdesc = NULL;
-    ConfigGroupDesc* groupdesc = NULL;
+    FcitxConfigFile *cfile = config->configFile;
+    FcitxConfigFileDesc *cdesc = NULL;
+    FcitxConfigGroupDesc* groupdesc = NULL;
 
     if (!cfile)
         return;
@@ -994,30 +999,30 @@ void ConfigBindSync(GenericConfig* config)
 
     for (groupdesc = cdesc->groupsDesc;
             groupdesc != NULL;
-            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next) {
-        ConfigOptionDesc *optiondesc;
-        ConfigGroup *group = NULL;
+            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
+        FcitxConfigOptionDesc *optiondesc;
+        FcitxConfigGroup *group = NULL;
         HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
 
         for (optiondesc = groupdesc->optionsDesc;
                 optiondesc != NULL;
-                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next) {
-            ConfigOption *option = NULL;
+                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+            FcitxConfigOption *option = NULL;
 
             if (group)
                 HASH_FIND_STR(group->options, optiondesc->optionName, option);
 
-            ConfigSyncValue(config, group, option, Raw2Value);
+            FcitxConfigSyncValue(config, group, option, Raw2Value);
         }
     }
 }
 
 FCITX_EXPORT_API
-void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *option, ConfigSync sync)
+void FcitxConfigSyncValue(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption *option, FcitxConfigSync sync)
 {
-    ConfigOptionDesc *codesc = option->optionDesc;
+    FcitxConfigOptionDesc *codesc = option->optionDesc;
 
-    ConfigOptionFunc f = NULL;
+    FcitxConfigOptionFunc f = NULL;
 
     if (codesc == NULL)
         return;
@@ -1029,47 +1034,47 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
     switch (codesc->type) {
 
     case T_Integer:
-        f = ConfigOptionInteger;
+        f = FcitxConfigOptionInteger;
         break;
 
     case T_Color:
-        f = ConfigOptionColor;
+        f = FcitxConfigOptionColor;
         break;
 
     case T_Boolean:
-        f = ConfigOptionBoolean;
+        f = FcitxConfigOptionBoolean;
         break;
 
     case T_Enum:
-        f = ConfigOptionEnum;
+        f = FcitxConfigOptionEnum;
         break;
 
     case T_String:
-        f = ConfigOptionString;
+        f = FcitxConfigOptionString;
         break;
 
     case T_I18NString:
-        f = ConfigOptionI18NString;
+        f = FcitxConfigOptionI18NString;
         break;
 
     case T_Hotkey:
-        f = ConfigOptionHotkey;
+        f = FcitxConfigOptionHotkey;
         break;
 
     case T_File:
-        f = ConfigOptionFile;
+        f = FcitxConfigOptionFile;
         break;
 
     case T_Font:
-        f = ConfigOptionFont;
+        f = FcitxConfigOptionFont;
         break;
 
     case T_Char:
-        f = ConfigOptionChar;
+        f = FcitxConfigOptionChar;
         break;
     }
 
-    ConfigSyncResult r = SyncNoBinding;
+    FcitxConfigSyncResult r = SyncNoBinding;
 
     if (f)
         r = f(option, sync);
@@ -1096,30 +1101,30 @@ void ConfigSyncValue(GenericConfig* config, ConfigGroup* group, ConfigOption *op
 }
 
 FCITX_EXPORT_API
-boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
+boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxConfigFileDesc* cdesc)
 {
     if (!fp)
         return false;
 
-    ConfigFile* cfile = config->configFile;
+    FcitxConfigFile* cfile = config->configFile;
 
-    ConfigGroupDesc* groupdesc = NULL;
+    FcitxConfigGroupDesc* groupdesc = NULL;
 
     for (groupdesc = cdesc->groupsDesc;
             groupdesc != NULL;
-            groupdesc = (ConfigGroupDesc*)groupdesc->hh.next) {
-        ConfigOptionDesc *optiondesc;
+            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
+        FcitxConfigOptionDesc *optiondesc;
         fprintf(fp, "[%s]\n", groupdesc->groupName);
 
-        ConfigGroup *group = NULL;
+        FcitxConfigGroup *group = NULL;
 
         if (cfile)
             HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
 
         for (optiondesc = groupdesc->optionsDesc;
                 optiondesc != NULL;
-                optiondesc = (ConfigOptionDesc*)optiondesc->hh.next) {
-            ConfigOption *option = NULL;
+                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+            FcitxConfigOption *option = NULL;
 
             if (group)
                 HASH_FIND_STR(group->options, optiondesc->optionName, option);
@@ -1152,9 +1157,9 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
                 else
                     FcitxLog(FATAL, _("no default option for %s/%s"), groupdesc->groupName, optiondesc->optionName);
             } else {
-                ConfigSyncValue(config, group, option, Value2Raw);
+                FcitxConfigSyncValue(config, group, option, Value2Raw);
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
-                ConfigOptionSubkey* subkey;
+                FcitxConfigOptionSubkey* subkey;
 
                 for (subkey = option->subkey;
                         subkey != NULL;
@@ -1171,17 +1176,17 @@ boolean SaveConfigFileFp(FILE* fp, GenericConfig *config, ConfigFileDesc* cdesc)
 }
 
 FCITX_EXPORT_API
-void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optionName, void* var, SyncFilter filter, void *arg)
+void FcitxConfigBindValue(FcitxConfigFile* cfile, const char *groupName, const char *optionName, void* var, FcitxSyncFilter filter, void *arg)
 {
-    ConfigGroup *group = NULL;
+    FcitxConfigGroup *group = NULL;
     HASH_FIND_STR(cfile->groups, groupName, group);
 
     if (group) {
-        ConfigOption *option = NULL;
+        FcitxConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
         if (option) {
-            ConfigOptionDesc* codesc = option->optionDesc;
+            FcitxConfigOptionDesc* codesc = option->optionDesc;
             option->filter = filter;
             option->filterArg = arg;
 
@@ -1201,7 +1206,7 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
                 break;
 
             case T_Color:
-                option->value.color = (ConfigColor*) var;
+                option->value.color = (FcitxConfigColor*) var;
                 break;
 
             case T_Boolean:
@@ -1209,7 +1214,7 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
                 break;
 
             case T_Hotkey:
-                option->value.hotkey = (HOTKEYS*) var;
+                option->value.hotkey = (FcitxHotkey*) var;
                 break;
 
             case T_Enum:
@@ -1231,16 +1236,16 @@ void ConfigBindValue(ConfigFile* cfile, const char *groupName, const char *optio
 }
 
 FCITX_EXPORT_API
-ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName, const char* optionName)
+FcitxConfigValueType FcitxConfigGetBindValue(FcitxGenericConfig *config, const char *groupName, const char* optionName)
 {
-    ConfigFile* cfile = config->configFile;
-    ConfigGroup *group = NULL;
-    ConfigValueType null;
-    memset(&null, 0, sizeof(ConfigValueType));
+    FcitxConfigFile* cfile = config->configFile;
+    FcitxConfigGroup *group = NULL;
+    FcitxConfigValueType null;
+    memset(&null, 0, sizeof(FcitxConfigValueType));
     HASH_FIND_STR(cfile->groups, groupName, group);
 
     if (group) {
-        ConfigOption *option = NULL;
+        FcitxConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
         if (option) {
@@ -1253,13 +1258,13 @@ ConfigValueType ConfigGetBindValue(GenericConfig *config, const char *groupName,
 }
 
 FCITX_EXPORT_API
-const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const char* groupName, const char* optionName)
+const FcitxConfigOptionDesc* FcitxConfigDescGetOptionDesc(FcitxConfigFileDesc* cfdesc, const char* groupName, const char* optionName)
 {
-    ConfigGroupDesc* groupDesc;
+    FcitxConfigGroupDesc* groupDesc;
     HASH_FIND_STR(cfdesc->groupsDesc, groupName, groupDesc);
 
     if (groupDesc) {
-        ConfigOptionDesc *optionDesc = NULL;
+        FcitxConfigOptionDesc *optionDesc = NULL;
         HASH_FIND_STR(groupDesc->optionsDesc, optionName, optionDesc);
 
         if (optionDesc) {
@@ -1271,13 +1276,13 @@ const ConfigOptionDesc* ConfigDescGetOptionDesc(ConfigFileDesc* cfdesc, const ch
 }
 
 FCITX_EXPORT_API
-ConfigOption* ConfigFileGetOption(ConfigFile* cfile, const char* groupName, const char* optionName)
+FcitxConfigOption* FcitxConfigFileGetOption(FcitxConfigFile* cfile, const char* groupName, const char* optionName)
 {
-    ConfigGroup* group;
+    FcitxConfigGroup* group;
     HASH_FIND_STR(cfile->groups, groupName, group);
 
     if (group) {
-        ConfigOption *option = NULL;
+        FcitxConfigOption *option = NULL;
         HASH_FIND_STR(group->options, optionName, option);
 
         if (option) {
@@ -1290,25 +1295,25 @@ ConfigOption* ConfigFileGetOption(ConfigFile* cfile, const char* groupName, cons
 
 
 FCITX_EXPORT_API
-void ResetConfigToDefaultValue(GenericConfig* config)
+void FcitxConfigResetConfigToDefaultValue(FcitxGenericConfig* config)
 {
-    ConfigFile* cfile = config->configFile;
+    FcitxConfigFile* cfile = config->configFile;
 
     if (!cfile)
         return;
 
-    ConfigFileDesc* cfdesc = cfile->fileDesc;
+    FcitxConfigFileDesc* cfdesc = cfile->fileDesc;
 
     if (!cfdesc)
         return;
 
-    ConfigGroupDesc *cgdesc = NULL;
+    FcitxConfigGroupDesc *cgdesc = NULL;
 
     for (cgdesc = cfdesc->groupsDesc;
             cgdesc != NULL;
-            cgdesc = (ConfigGroupDesc*)cgdesc->hh.next) {
-        ConfigOptionDesc *codesc = NULL;
-        ConfigGroup* group;
+            cgdesc = (FcitxConfigGroupDesc*)cgdesc->hh.next) {
+        FcitxConfigOptionDesc *codesc = NULL;
+        FcitxConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
         if (!group) {
@@ -1318,8 +1323,8 @@ void ResetConfigToDefaultValue(GenericConfig* config)
 
         for (codesc = cgdesc->optionsDesc;
                 codesc != NULL;
-                codesc = (ConfigOptionDesc*)codesc->hh.next) {
-            ConfigOption *option;
+                codesc = (FcitxConfigOptionDesc*)codesc->hh.next) {
+            FcitxConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 
             if (!option) {

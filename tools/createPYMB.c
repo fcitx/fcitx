@@ -185,7 +185,7 @@ void CreatePYPhrase(void)
 
         kkk = 0;
 
-        if (strTemp.iHZCount != utf8_strlen(strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
+        if (strTemp.iHZCount != fcitx_utf8_strlen(strPhrase) || (strTemp.iMode & PARSE_ABBR)) {
             fprintf(f, "%s %s\n", strPY, strPhrase);
             continue;
         }
@@ -198,14 +198,14 @@ void CreatePYPhrase(void)
         for (iIndex = 0; iIndex < iPYFACount; iIndex++) {
             if (!strncmp(PYFAList[iIndex].strMap, strMap, 2)) {
                 for (i = 0; i < PYFAList[iIndex].iHZCount; i++) {
-                    if (!utf8_strncmp(PYFAList[iIndex].pyBase[i].strHZ, strPhrase, 1)) {
+                    if (!fcitx_utf8_strncmp(PYFAList[iIndex].pyBase[i].strHZ, strPhrase, 1)) {
                         t = PYFAList[iIndex].pyBase[i].phrase;
 
                         for (j = 0; j < PYFAList[iIndex].pyBase[i].iPhraseCount; j++) {
                             tt = t;
                             t = t->next;
 
-                            if (!strcmp(t->strMap, strMap + 2) && !strcmp(t->strPhrase, strPhrase + utf8_char_len(strPhrase))) {
+                            if (!strcmp(t->strMap, strMap + 2) && !strcmp(t->strPhrase, strPhrase + fcitx_utf8_char_len(strPhrase))) {
                                 printf("\n\t%d: %s %s ----->deleted.\n", s2, strPY, strPhrase);
                                 goto _next;
                             }
@@ -218,10 +218,10 @@ void CreatePYPhrase(void)
 
                         phrase = (_PyPhrase *) malloc(sizeof(_PyPhrase));
 
-                        phrase->strPhrase = (char *) malloc(sizeof(char) * (strlen(strPhrase) - utf8_char_len(strPhrase) + 1));
+                        phrase->strPhrase = (char *) malloc(sizeof(char) * (strlen(strPhrase) - fcitx_utf8_char_len(strPhrase) + 1));
                         phrase->strMap = (char *) malloc(sizeof(char) * ((strTemp.iHZCount - 1) * 2 + 1));
                         phrase->uIndex = uIndex++;
-                        strcpy(phrase->strPhrase, strPhrase + utf8_char_len(strPhrase));
+                        strcpy(phrase->strPhrase, strPhrase + fcitx_utf8_char_len(strPhrase));
                         strcpy(phrase->strMap, strMap + 2);
 
                         tt = t->next;
@@ -314,8 +314,8 @@ void CreatePYBase(void)
 
             iIndex++;
 
-            if (utf8_strlen(strHZ) > 1) {
-                int8_t charLen = utf8_char_len(strHZ);
+            if (fcitx_utf8_strlen(strHZ) > 1) {
+                int8_t charLen = fcitx_utf8_char_len(strHZ);
                 fprintf(stderr, "%s length is larger that 1, truncated to ", strHZ);
                 strHZ[charLen] = '\0';
                 fprintf(stderr, "%s.\n", strHZ);

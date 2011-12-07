@@ -18,7 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-unsigned int utf8_in_gb18030[ 63360 ] = {
+unsigned int fcitx_utf8_in_gb18030[ 63360 ] = {
     0xc280,
     0xc281,
     0xc282,

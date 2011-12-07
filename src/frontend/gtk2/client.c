@@ -44,7 +44,7 @@ struct _FcitxIMClient {
     FcitxIMClientConnectCallback connectcb;
     FcitxIMClientDestroyCallback destroycb;
     void *data;
-    HOTKEYS triggerkey[2];
+    FcitxHotkey triggerkey[2];
     char servicename[IC_NAME_MAX];
     boolean enable;
 };
@@ -83,7 +83,7 @@ void FcitxIMClientSetEnabled(FcitxIMClient* client, boolean enable)
 
 FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data)
 {
-    FcitxIMClient* client = fcitx_malloc0(sizeof(FcitxIMClient));
+    FcitxIMClient* client = fcitx_utils_malloc0(sizeof(FcitxIMClient));
     GError *error = NULL;
     client->connectcb = connectcb;
     client->destroycb = destroycb;
@@ -108,7 +108,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
         free(client);
         return NULL;
     }
-    sprintf(client->servicename, "%s-%d", FCITX_DBUS_SERVICE, FcitxGetDisplayNumber());
+    sprintf(client->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_connect_signal(client->dbusproxy, "NameOwnerChanged",
@@ -171,7 +171,7 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
 
     g_signal_connect(client->proxy, "destroy", G_CALLBACK(_destroy_cb), client);
 
-    char* appname = fcitx_get_process_name();
+    char* appname = fcitx_utils_get_process_name();
     dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_STRING, appname, G_TYPE_INVALID);
     free(appname);
 }
@@ -377,7 +377,7 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                );
 }
 
-HOTKEYS* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
+FcitxHotkey* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
 {
     return client->triggerkey;
 }

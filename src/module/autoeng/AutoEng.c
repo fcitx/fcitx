@@ -122,11 +122,11 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* AutoEngCreate(FcitxInstance *instance)
 {
-    FcitxAutoEngState* autoEngState = fcitx_malloc0(sizeof(FcitxAutoEngState));
+    FcitxAutoEngState* autoEngState = fcitx_utils_malloc0(sizeof(FcitxAutoEngState));
     autoEngState->owner = instance;
     LoadAutoEng(autoEngState);
 
-    KeyFilterHook khk;
+    FcitxKeyFilterHook khk;
     khk.arg = autoEngState;
     khk.func = ProcessAutoEng;
 
@@ -134,8 +134,8 @@ void* AutoEngCreate(FcitxInstance *instance)
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
 
-    RegisterPreInputFilter(instance, khk);
-    RegisterResetInputHook(instance, rhk);
+    FcitxInstanceRegisterPreInputFilter(instance, khk);
+    FcitxInstanceRegisterResetInputHook(instance, rhk);
 
     ResetAutoEng(autoEngState);
     return autoEngState;
@@ -149,8 +149,8 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
     if (autoEngState->active) {
-        FcitxKeySym keymain = KeyPadToMain(sym);
-        if (IsHotKeySimple(keymain, state)) {
+        FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
+        if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
             if (autoEngState->index < MAX_USER_INPUT) {
                 autoEngState->buf[autoEngState->index] = keymain;
                 autoEngState->index++;
@@ -158,7 +158,7 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
                 *retval = IRV_DISPLAY_MESSAGE;
             } else
                 *retval = IRV_DO_NOTHING;
-        } else if (IsHotKey(sym, state, FCITX_BACKSPACE)) {
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
             autoEngState->index -- ;
             autoEngState->buf[autoEngState->index] = '\0';
             if (autoEngState->index == 0) {
@@ -166,16 +166,16 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
                 *retval = IRV_CLEAN;
             } else
                 *retval = IRV_DISPLAY_MESSAGE;
-        } else if (IsHotKey(sym, state, FCITX_ENTER)) {
-            strcpy(GetOutputString(input), autoEngState->buf);
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+            strcpy(FcitxInputStateGetOutputString(input), autoEngState->buf);
             ResetAutoEng(autoEngState);
             *retval = IRV_COMMIT_STRING;
         }
         ShowAutoEngMessage(autoEngState);
         return true;
     }
-    if (IsHotKeySimple(sym, state)) {
-        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && IsHotKeyUAZ(sym, state)) {
+    if (FcitxHotkeyIsHotKeySimple(sym, state)) {
+        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && FcitxHotkeyIsHotKeyUAZ(sym, state)) {
             autoEngState->index = 1;
             autoEngState->buf[0] = sym;
             autoEngState->buf[1] = '\0';
@@ -221,7 +221,7 @@ void LoadAutoEng(FcitxAutoEngState* autoEngState)
     char    *buf = NULL;
     size_t   length = 0;
 
-    fp = GetXDGFileWithPrefix("data", "AutoEng.dat", "rt", NULL);
+    fp = FcitxXDGGetFileWithPrefix("data", "AutoEng.dat", "rt", NULL);
     if (!fp)
         return;
 
@@ -229,7 +229,7 @@ void LoadAutoEng(FcitxAutoEngState* autoEngState)
     AUTO_ENG autoeng;
 
     while (getline(&buf, &length, fp) != -1) {
-        char* line = fcitx_trim(buf);
+        char* line = fcitx_utils_trim(buf);
         if (strlen(line) > MAX_AUTO_TO_ENG)
             FcitxLog(WARNING, _("Too long item for AutoEng"));
         strncpy(autoeng.str, line, MAX_AUTO_TO_ENG);
@@ -268,17 +268,17 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
 {
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
 
-    CleanInputWindow(autoEngState->owner);
+    FcitxInstanceCleanInputWindow(autoEngState->owner);
 
     if (autoEngState->buf[0] == '\0')
         return;
 
-    AddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", autoEngState->buf);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", autoEngState->buf);
     strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetShowCursor(input, true);
-    AddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
 }
 
 void ReloadAutoEng(void* arg)

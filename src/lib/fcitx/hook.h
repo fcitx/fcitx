@@ -55,11 +55,11 @@ extern "C" {
     /**
      * @brief Hotkey process struct
      **/
-    typedef struct _HotkeyHook {
+    typedef struct _FcitxHotkeyHook {
         /**
          * @brief Pointer to fcitx hotkeys, fcitx hotkey is length 2 array.
          **/
-        HOTKEYS* hotkey;
+        FcitxHotkey* hotkey;
         /**
          * @brief Function to be called while hotkey is pressed.
          *
@@ -70,12 +70,12 @@ extern "C" {
          * @brief Argument
          **/
         void* arg;
-    } HotkeyHook;
+    } FcitxHotkeyHook;
 
     /**
      * @brief Key filter hook
      **/
-    typedef struct _KeyFilterHook {
+    typedef struct _FcitxKeyFilterHook {
         /**
          * @brief Key filter function
          **/
@@ -84,12 +84,12 @@ extern "C" {
          * @brief extra argument for filter function
          **/
         void *arg;
-    } KeyFilterHook;
+    } FcitxKeyFilterHook;
 
     /**
      * @brief Hook for string filter, this hook can change the output string.
      **/
-    typedef struct _StringFilterHook {
+    typedef struct _FcitxStringFilterHook {
         /**
          * @brief Filter function
          **/
@@ -98,7 +98,7 @@ extern "C" {
          * @brief Extra argument for the filter function.
          **/
         void *arg;
-    } StringFilterHook;
+    } FcitxStringFilterHook;
 
     /**
      * @brief IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
@@ -115,7 +115,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterPreInputFilter(struct _FcitxInstance* instance, KeyFilterHook hook) ;
+    void FcitxInstanceRegisterPreInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook) ;
     /**
      * @brief register post input filter
      *
@@ -123,7 +123,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterPostInputFilter(struct _FcitxInstance* instance, KeyFilterHook hook);
+    void FcitxInstanceRegisterPostInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook);
     /**
      * @brief register ouput string filter
      *
@@ -131,7 +131,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterOutputFilter(struct _FcitxInstance* instance, StringFilterHook hook);
+    void FcitxInstanceRegisterOutputFilter(struct _FcitxInstance* instance, FcitxStringFilterHook hook);
     /**
      * @brief register hotkey
      *
@@ -139,7 +139,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterHotkeyFilter(struct _FcitxInstance* instance, HotkeyHook hook);
+    void FcitxInstanceRegisterHotkeyFilter(struct _FcitxInstance* instance, FcitxHotkeyHook hook);
     /**
      * @brief register reset input hook
      *
@@ -147,7 +147,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
      * @brief register trigger on hook
      *
@@ -155,7 +155,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
      * @brief register trigger off hook
      *
@@ -163,7 +163,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
      * @brief register focus in hook
      *
@@ -171,7 +171,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
      * @brief register focus out hook
      *
@@ -179,7 +179,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
      * @brief register update candidate word hook
@@ -188,7 +188,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
      * @brief register update input method list hook
@@ -197,7 +197,7 @@ extern "C" {
      * @param hook new hook
      * @return void
      **/
-    void RegisterUpdateIMListHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
+    void FcitxInstanceRegisterUpdateIMListHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
      * @brief process output filter, return string is malloced
@@ -206,7 +206,7 @@ extern "C" {
      * @param in input string
      * @return char*
      **/
-    char* ProcessOutputFilter(struct _FcitxInstance* instance, char *in);
+    char* FcitxInstanceProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
     /**
      * @brief process output filter, return string is malloced
@@ -215,7 +215,7 @@ extern "C" {
      * @param in input string
      * @return char*
      **/
-    char* ProcessCommitFilter(struct _FcitxInstance* instance, char *in);
+    char* FcitxInstanceProcessCommitFilter(struct _FcitxInstance* instance, char *in);
     
     /**
      * @brief register ouput string filter
@@ -226,7 +226,7 @@ extern "C" {
      * 
      * @since 4.2.0
      **/
-    void RegisterCommitFilter(struct _FcitxInstance* instance, StringFilterHook hook);
+    void FcitxInstanceRegisterCommitFilter(struct _FcitxInstance* instance, FcitxStringFilterHook hook);
 
 
 #ifdef __cplusplus

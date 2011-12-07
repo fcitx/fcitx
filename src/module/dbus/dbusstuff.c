@@ -65,8 +65,8 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* DBusCreate(FcitxInstance* instance)
 {
-    FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_malloc0(sizeof(FcitxDBus));
-    FcitxAddon* dbusaddon = GetAddonByName(FcitxInstanceGetAddons(instance), FCITX_DBUS_NAME);
+    FcitxDBus *dbusmodule = (FcitxDBus*) fcitx_utils_malloc0(sizeof(FcitxDBus));
+    FcitxAddon* dbusaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_DBUS_NAME);
     DBusError err;
 
     dbus_threads_init_default();
@@ -108,7 +108,7 @@ void* DBusCreate(FcitxInstance* instance)
     dbusmodule->owner = instance;
 
     char* servicename = NULL;
-    asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, FcitxGetDisplayNumber());
+    asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
 
     // request a name on the bus
     int ret = dbus_bus_request_name(conn, servicename,
@@ -151,7 +151,7 @@ static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data)
         if (w->watch == watch)
             return TRUE;
 
-    if (!(w = fcitx_malloc0(sizeof(FcitxDBusWatch))))
+    if (!(w = fcitx_utils_malloc0(sizeof(FcitxDBusWatch))))
         return FALSE;
 
     w->watch = watch;

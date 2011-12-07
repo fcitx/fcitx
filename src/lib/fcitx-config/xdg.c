@@ -74,54 +74,54 @@ make_path(const char *path)
 
 
 FCITX_EXPORT_API
-FILE *GetXDGFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
+FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
     char *prefixpath;
     asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , DATADIR, prefixpath);
+    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , DATADIR, prefixpath);
     free(prefixpath);
 
-    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
+    FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
 
-    FreeXDGPath(path);
+    FcitxXDGFreePath(path);
 
     return fp;
 }
 
 FCITX_EXPORT_API
-FILE *GetLibFile(const char *filename, const char *mode, char **retFile)
+FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
     char ** path;
-    path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE);
+    path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE);
 
-    FILE* fp = GetXDGFile(filename, path, mode, len, retFile);
+    FILE* fp = FcitxXDGGetFile(filename, path, mode, len, retFile);
 
-    FreeXDGPath(path);
+    FcitxXDGFreePath(path);
 
     return fp;
 
 }
 
 FCITX_EXPORT_API
-FILE *GetXDGFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
+FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
     char *prefixpath;
     asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char ** path = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , NULL, NULL);
+    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , NULL, NULL);
     free(prefixpath);
 
-    FILE* fp = GetXDGFile(fileName, path, mode, len, retFile);
+    FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
 
-    FreeXDGPath(path);
+    FcitxXDGFreePath(path);
 
     return fp;
 }
 
 FCITX_EXPORT_API
-FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
+FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
     char* buf = NULL;
     size_t i;
@@ -180,14 +180,14 @@ FILE *GetXDGFile(const char *fileName, char **path, const char *mode, size_t len
 }
 
 FCITX_EXPORT_API
-void FreeXDGPath(char **path)
+void FcitxXDGFreePath(char **path)
 {
     free(path[0]);
     free(path);
 }
 
 FCITX_EXPORT_API
-char **GetXDGPath(
+char **FcitxXDGGetPath(
     size_t *len,
     const char* homeEnv,
     const char* homeDefault,
@@ -250,7 +250,7 @@ char **GetXDGPath(
 }
 
 FCITX_EXPORT_API
-StringHashSet* GetXDGFiles(
+FcitxStringHashSet* FcitxXDGGetFiles(
     char* path,
     char* suffix
 )
@@ -263,9 +263,9 @@ StringHashSet* GetXDGFiles(
     struct dirent *drt;
     struct stat fileStat;
 
-    StringHashSet* sset = NULL;
+    FcitxStringHashSet* sset = NULL;
 
-    xdgPath = GetXDGPath(&len, "XDG_CONFIG_HOME", ".config", path , DATADIR, path);
+    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", path , DATADIR, path);
 
     for (i = 0; i < len; i++) {
         asprintf(&pathBuf, "%s", xdgPath[i]);
@@ -291,12 +291,12 @@ StringHashSet* GetXDGFiles(
                 continue;
 
             if (fileStat.st_mode & S_IFREG) {
-                StringHashSet *string;
+                FcitxStringHashSet *string;
                 HASH_FIND_STR(sset, drt->d_name, string);
                 if (!string) {
                     char *bStr = strdup(drt->d_name);
-                    string = malloc(sizeof(StringHashSet));
-                    memset(string, 0, sizeof(StringHashSet));
+                    string = malloc(sizeof(FcitxStringHashSet));
+                    memset(string, 0, sizeof(FcitxStringHashSet));
                     string->name = bStr;
                     HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
                 }
@@ -306,7 +306,7 @@ StringHashSet* GetXDGFiles(
         closedir(dir);
     }
 
-    FreeXDGPath(xdgPath);
+    FcitxXDGFreePath(xdgPath);
 
     return sset;
 }
