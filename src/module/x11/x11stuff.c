@@ -327,9 +327,12 @@ void* X11SetWindowProperty(void* arg, FcitxModuleFunctionArg args)
 
     if (windowTitle) {
         XTextProperty   tp;
+        memset(&tp, 0, sizeof(XTextProperty));
         Xutf8TextListToTextProperty(x11priv->dpy, &windowTitle, 1, XUTF8StringStyle, &tp);
-        XSetWMName(x11priv->dpy, window, &tp);
-        XFree(tp.value);
+        if (tp.value) {
+            XSetWMName(x11priv->dpy, window, &tp);
+            XFree(tp.value);
+        }
     }
 
     return NULL;

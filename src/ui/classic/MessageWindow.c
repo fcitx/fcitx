@@ -140,9 +140,12 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
     FcitxLog(DEBUG, "%s", title);
 
     XTextProperty   tp;
-    Xutf8TextListToTextProperty(dpy, &title, 1, XUTF8StringStyle, &tp);
-    XSetWMName(dpy, messageWindow->window, &tp);
-    XFree(tp.value);
+    memset(&tp, 0, sizeof(XTextProperty));
+    if (tp.value) {
+        Xutf8TextListToTextProperty(dpy, &title, 1, XUTF8StringStyle, &tp);
+        XSetWMName(dpy, messageWindow->window, &tp);
+        XFree(tp.value);
+    }
 
     if (msg) {
         if (messageWindow->msg) {
