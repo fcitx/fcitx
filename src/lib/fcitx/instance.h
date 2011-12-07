@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-    struct _HookStack;
     struct _FcitxInputContext;
 
     /**

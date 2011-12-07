@@ -28,31 +28,25 @@
 extern "C" {
 #endif
 
-    typedef enum _SWITCHKEY {
+    typedef enum _FcitxSwitchKey {
         SWITCHKEY_R_CTRL = 0,
         SWITCHKEY_R_SHIFT = 1,
         SWITCHKEY_L_SHIFT = 2,
         SWITCHKEY_L_CTRL = 3,
-        SWITCHFcitxKeyState_None = 4
-    } SWITCHKEY;
+        SWITCHKEY_None = 4
+    } FcitxSwitchKey;
 
-    typedef enum _ENTER_TO_DO {
+    typedef enum _FcitxEnterAcion {
         K_ENTER_NOTHING = 0,
         K_ENTER_CLEAN = 1,
         K_ENTER_SEND = 2
-    } ENTER_TO_DO;
+    } FcitxEnterAcion;
 
-    typedef enum _SEMICOLON_TO_DO {
-        K_SEMICOLON_NOCHANGE = 0,
-        K_SEMICOLON_ENG = 1,
-        K_SEMICOLON_QUICKPHRASE = 2
-    } SEMICOLON_TO_DO;
-
-    typedef enum _ShareState {
+    typedef enum _FcitxShareState {
         ShareState_None = 0,
         ShareState_All = 1,
         ShareState_PerProgram = 2
-    } ShareState;
+    } FcitxShareState;
 
     /**
      * @brief struct opposite to ~/.config/fcitx/config
@@ -80,7 +74,7 @@ extern "C" {
         /**
          * @brief enter key action
          **/
-        ENTER_TO_DO enterToDo;
+        FcitxEnterAcion enterToDo;
         /**
          * @brief Remind mode can has multipage
          **/
@@ -124,7 +118,7 @@ extern "C" {
         /**
          * @brief switch key
          **/
-        SWITCHKEY iSwitchKey;
+        FcitxSwitchKey iSwitchKey;
         /**
          * @brief hotkey format of switch key
          **/
@@ -197,12 +191,12 @@ extern "C" {
         /**
          * @brief Input method use global shared state
          **/
-        ShareState shareState;
+        FcitxShareState shareState;
 
         /**
          * @brief Input method enable by default
          **/
-        IME_STATE defaultIMState;
+        FcitxContextState defaultIMState;
 
         /**
          * @brief Enable Left Ctrl + Left Shift to Switch Between Input Method

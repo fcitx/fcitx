@@ -675,7 +675,7 @@ void
 _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext)
 {
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
-        CapacityFlags flags = CAPACITY_NONE;
+        FcitxCapacityFlags flags = CAPACITY_NONE;
         if (fcitxcontext->use_preedit)
             flags |= CAPACITY_PREEDIT;
         FcitxIMClientSetCapacity(fcitxcontext->client, flags);

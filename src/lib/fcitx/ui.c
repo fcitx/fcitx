@@ -648,7 +648,7 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
 {
     FcitxInputState* input = instance->input;
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
-    CapacityFlags flags = CAPACITY_NONE;
+    FcitxCapacityFlags flags = CAPACITY_NONE;
     if (ic != NULL)
         flags = ic->contextCaps;
 

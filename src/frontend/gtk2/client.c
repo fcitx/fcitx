@@ -273,7 +273,7 @@ void FcitxIMClientReset(FcitxIMClient* client)
     }
 }
 
-void FcitxIMClientSetCapacity(FcitxIMClient* client, CapacityFlags flags)
+void FcitxIMClientSetCapacity(FcitxIMClient* client, FcitxCapacityFlags flags)
 {
     uint32_t iflags = flags;
     if (client->icproxy) {

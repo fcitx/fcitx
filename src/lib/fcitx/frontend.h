@@ -35,27 +35,27 @@ extern "C" {
     /**
      * @brief Input Method State
      **/
-    typedef enum _IME_STATE {
+    typedef enum _FcitxContextState {
         IS_CLOSED = 0,
         IS_ENG,
         IS_ACTIVE
-    } IME_STATE;
+    } FcitxContextState;
 
-    typedef enum _CapacityFlags {
+    typedef enum _FcitxCapacityFlags {
         CAPACITY_NONE = 0,
         CAPACITY_CLIENT_SIDE_UI = (1 << 0),
         CAPACITY_PREEDIT = (1 << 1)
-    } CapacityFlags;
+    } FcitxCapacityFlags;
 
     /**
      * @brief Input Context, normally one for one program
      **/
     typedef struct _FcitxInputContext {
-        IME_STATE state; /* im state */
+        FcitxContextState state; /* im state */
         int offset_x, offset_y;
         int frontendid;
         void *privateic;
-        CapacityFlags contextCaps;
+        FcitxCapacityFlags contextCaps;
         struct _FcitxInputContext* next;
     } FcitxInputContext;
 
@@ -183,7 +183,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return IME_STATE
      **/
-    IME_STATE FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
+    FcitxContextState FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
 
     /**
      * @brief get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
@@ -191,7 +191,7 @@ extern "C" {
      * @param instance fcitx instance
      * @return CapacityFlags
      **/
-    CapacityFlags FcitxInstanceGetCurrentCapacity(struct _FcitxInstance* instance);
+    FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(struct _FcitxInstance* instance);
 
     void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
 

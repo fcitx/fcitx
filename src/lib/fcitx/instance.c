@@ -396,11 +396,11 @@ FcitxInputContext* FcitxInstanceGetCurrentIC(FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean FcitxInstanceSetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic)
 {
-    IME_STATE prevstate = FcitxInstanceGetCurrentState(instance);
+    FcitxContextState prevstate = FcitxInstanceGetCurrentState(instance);
     boolean changed = (instance->CurrentIC != ic);
     instance->CurrentIC = ic;
 
-    IME_STATE nextstate = FcitxInstanceGetCurrentState(instance);
+    FcitxContextState nextstate = FcitxInstanceGetCurrentState(instance);
 
     if (!((prevstate == IS_CLOSED && nextstate == IS_CLOSED) || (prevstate != IS_CLOSED && nextstate != IS_CLOSED))) {
         if (prevstate == IS_CLOSED)

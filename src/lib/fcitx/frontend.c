@@ -156,7 +156,7 @@ void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filte
 }
 
 FCITX_EXPORT_API
-IME_STATE FcitxInstanceGetCurrentState(FcitxInstance* instance)
+FcitxContextState FcitxInstanceGetCurrentState(FcitxInstance* instance)
 {
     if (instance->CurrentIC)
         return instance->CurrentIC->state;
@@ -165,7 +165,7 @@ IME_STATE FcitxInstanceGetCurrentState(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-CapacityFlags FcitxInstanceGetCurrentCapacity(FcitxInstance* instance)
+FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(FcitxInstance* instance)
 {
     if (instance->CurrentIC)
         return instance->CurrentIC->contextCaps;

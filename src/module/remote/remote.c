@@ -137,7 +137,7 @@ int UdAccept(int listenfd)
 
 static void SendIMState(FcitxRemote* remote, int fd)
 {
-    IME_STATE r = FcitxInstanceGetCurrentState(remote->owner);
+    FcitxContextState r = FcitxInstanceGetCurrentState(remote->owner);
     write(fd, &r, sizeof(r));
 }
 

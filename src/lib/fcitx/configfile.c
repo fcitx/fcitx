@@ -117,7 +117,7 @@ void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxC
     FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
     FcitxHotkey* hkey = NULL;
     if (sync == Raw2Value) {
-        SWITCHKEY *s = (SWITCHKEY*)value;
+        FcitxSwitchKey *s = (FcitxSwitchKey*)value;
         switch (*s) {
         case SWITCHKEY_R_CTRL:
             hkey = FCITX_RCTRL;
@@ -131,7 +131,7 @@ void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxC
         case SWITCHKEY_L_CTRL:
             hkey = FCITX_LCTRL;
             break;
-        case SWITCHFcitxKeyState_None:
+        case SWITCHKEY_None:
             hkey = FCITX_NONE_KEY;
         }
     }

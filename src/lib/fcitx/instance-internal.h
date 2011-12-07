@@ -80,7 +80,7 @@ struct _FcitxInstance {
 
     FcitxUIFlag uiflag;
 
-    IME_STATE globalState;
+    FcitxContextState globalState;
 
     time_t totaltime;
     time_t timeStart;

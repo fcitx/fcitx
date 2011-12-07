@@ -58,7 +58,7 @@ static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuItem(FcitxUIMenu *menu);
 static void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
 static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
-static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState);
+static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
 static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 
@@ -926,7 +926,7 @@ void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* i
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
-    IME_STATE oldstate = ic->state;
+    FcitxContextState oldstate = ic->state;
     ic->state = IS_ACTIVE;
     if (oldstate == IS_CLOSED)
         frontend->EnableIM((*pfrontend)->addonInstance, ic);
@@ -1004,7 +1004,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (ic == NULL)
         return;
-    IME_STATE objectState;
+    FcitxContextState objectState;
     if (ic->state == IS_ENG)
         objectState = IS_ACTIVE;
     else
@@ -1042,7 +1042,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     }
 }
 
-void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, IME_STATE objectState)
+void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState)
 {
     if (!ic)
         return;

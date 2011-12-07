@@ -38,7 +38,7 @@ extern "C" {
     /**
      * @brief Addon Category Definition
      **/
-    typedef enum _AddonCategory {
+    typedef enum _FcitxAddonCategory {
         /**
          * @brief Input method
          **/
@@ -55,16 +55,16 @@ extern "C" {
          * @brief User Interface, only one of it can be enabled currently.
          **/
         AC_UI
-    } AddonCategory;
+    } FcitxAddonCategory;
 
     /**
      * @brief Supported Addon Type, Currently only sharedlibrary
      **/
-    typedef enum _AddonType {
+    typedef enum _FcitxAddonType {
         AT_SHAREDLIBRARY = 0,
 
         AT_DBUS
-    } AddonType;
+    } FcitxAddonType;
 
     /**
      * @brief How addon get input method list
@@ -84,8 +84,8 @@ extern "C" {
         char *generalname;
         char *comment;
         boolean bEnabled;
-        AddonCategory category;
-        AddonType type;
+        FcitxAddonCategory category;
+        FcitxAddonType type;
         char *library;
         char *depend;
         int priority;
