@@ -280,12 +280,12 @@ DBusHandlerResult FcitxInputBusUpdateCandidate(
     DBusMessage *retmsg = NULL;
     if (dbusim == NULL) {
         //Not found, reply error
-        retmsg = dbus_message_new_error(msg, DBUS_ERROR_UNKNOWN_OBJECT, ":P");
+        retmsg = dbus_message_new_error(msg, DBUS_ERROR_FAILED, ":P");
         dbus_connection_send(conn, retmsg, NULL);
         goto update_cand_end;
     }
     if (strcmp(dbusim->nameOwner, dbus_message_get_sender(msg)) != 0) {
-        retmsg = dbus_message_new_error(msg, DBUS_ERROR_BAD_ADDRESS, ":P");
+        retmsg = dbus_message_new_error(msg, DBUS_ERROR_FAILED, ":P");
         dbus_connection_send(conn, retmsg, NULL);
         goto update_cand_end;
     }

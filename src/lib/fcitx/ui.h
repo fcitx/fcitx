@@ -187,7 +187,6 @@ extern "C" {
 
     typedef struct _FcitxUIMenu FcitxUIMenu;
     typedef struct _FcitxUIStatus FcitxUIStatus;
-    typedef struct _FcitxUIMenu FcitxUIMenu;
 
     /**
      * @brief user interface implementation
