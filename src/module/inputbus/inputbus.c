@@ -1,13 +1,14 @@
 #include <dbus/dbus.h>
-#include <fcitx/addon.h>
-#include <fcitx/ime.h>
-#include <fcitx/candidate.h>
-#include <fcitx/instance.h>
-#include <fcitx/module.h>
-#include <fcitx/module/dbus/dbusstuff.h>
-#include <fcitx-config/hotkey.h>
-#include <fcitx-utils/log.h>
 #include <libgen.h>
+
+#include "fcitx/addon.h"
+#include "fcitx/ime.h"
+#include "fcitx/candidate.h"
+#include "fcitx/instance.h"
+#include "fcitx/module.h"
+#include "module/dbus/dbusstuff.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-utils/log.h"
 
 #include "inputbus.h"
 
