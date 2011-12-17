@@ -38,6 +38,16 @@ run_gtk()
     if [ $? -eq 0 ]; then
         exec $command
     else
+        run_gtk3
+    fi
+}
+
+run_gtk3()
+{
+    command=`which fcitx-config-gtk3 2>&1`
+    if [ $? -eq 0 ]; then
+        exec $command
+    else
         run_xdg
     fi
 }
