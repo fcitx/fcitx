@@ -1,13 +1,14 @@
 #include <dbus/dbus.h>
-#include <fcitx/addon.h>
-#include <fcitx/ime.h>
-#include <fcitx/candidate.h>
-#include <fcitx/instance.h>
-#include <fcitx/module.h>
-#include <fcitx/module/dbus/dbusstuff.h>
-#include <fcitx-config/hotkey.h>
-#include <fcitx-utils/log.h>
 #include <libgen.h>
+
+#include "fcitx/addon.h"
+#include "fcitx/ime.h"
+#include "fcitx/candidate.h"
+#include "fcitx/instance.h"
+#include "fcitx/module.h"
+#include "module/dbus/dbusstuff.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-utils/log.h"
 
 #include "inputbus.h"
 
@@ -280,12 +281,12 @@ DBusHandlerResult FcitxInputBusUpdateCandidate(
     DBusMessage *retmsg = NULL;
     if (dbusim == NULL) {
         //Not found, reply error
-        retmsg = dbus_message_new_error(msg, DBUS_ERROR_UNKNOWN_OBJECT, ":P");
+        retmsg = dbus_message_new_error(msg, DBUS_ERROR_FAILED, ":P");
         dbus_connection_send(conn, retmsg, NULL);
         goto update_cand_end;
     }
     if (strcmp(dbusim->nameOwner, dbus_message_get_sender(msg)) != 0) {
-        retmsg = dbus_message_new_error(msg, DBUS_ERROR_BAD_ADDRESS, ":P");
+        retmsg = dbus_message_new_error(msg, DBUS_ERROR_FAILED, ":P");
         dbus_connection_send(conn, retmsg, NULL);
         goto update_cand_end;
     }

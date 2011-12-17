@@ -211,8 +211,11 @@ void DrawMainWindow(MainWindow* mainWindow)
                             imicon = LoadImage(sc, sc->skinMainBar.active, false);
                         free(path);
                     }
-                    DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
-                    UpdateStatusGeometry(&mainWindow->imiconstat, imicon, sp->x, sp->y);
+
+                    if (imicon) {
+                        DrawImage(c, imicon->image, sp->x, sp->y, mainWindow->imiconstat.mouse);
+                        UpdateStatusGeometry(&mainWindow->imiconstat, imicon, sp->x, sp->y);
+                    }
                 } else {
                     status = FcitxUIGetStatusByName(instance, sp->name);
                     if (status) {
@@ -261,10 +264,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
                 free(path);
             }
-            currentX += cairo_image_surface_get_width(imicon->image);
-            imageheight = cairo_image_surface_get_height(imicon->image);
-            if (imageheight > height)
-                height = imageheight;
+
+            if (imicon) {
+                currentX += cairo_image_surface_get_width(imicon->image);
+                imageheight = cairo_image_surface_get_height(imicon->image);
+                if (imageheight > height)
+                    height = imageheight;
+            }
 
             FcitxUIStatus* status;
             UT_array* uistats = FcitxInstanceGetUIStats(instance);
@@ -310,9 +316,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                 UpdateStatusGeometry(&mainWindow->logostat, logo, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(logo->image);
             }
-            DrawImage(c, imicon->image, currentX, sc->skinMainBar.marginTop, mainWindow->imiconstat.mouse);
-            UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
-            currentX += cairo_image_surface_get_width(imicon->image);
+
+            if (imicon) {
+                DrawImage(c, imicon->image, currentX, sc->skinMainBar.marginTop, mainWindow->imiconstat.mouse);
+                UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
+                currentX += cairo_image_surface_get_width(imicon->image);
+            }
 
             for (status = (FcitxUIStatus*) utarray_front(uistats);
                     status != NULL;

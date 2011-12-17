@@ -1054,16 +1054,16 @@ static gboolean
 _get_boolean_env(const gchar *name,
                  gboolean defval)
 {
-    const gchar *value = g_getenv(name);
+    const char *value = getenv(name);
 
     if (value == NULL)
         return defval;
 
-    if (g_strcmp0(value, "") == 0 ||
-            g_strcmp0(value, "0") == 0 ||
-            g_strcmp0(value, "false") == 0 ||
-            g_strcmp0(value, "False") == 0 ||
-            g_strcmp0(value, "FALSE") == 0)
+    if (strcmp(value, "") == 0 ||
+        strcmp(value, "0") == 0 ||
+        strcmp(value, "false") == 0 ||
+        strcmp(value, "False") == 0 ||
+        strcmp(value, "FALSE") == 0)
         return FALSE;
 
     return TRUE;
