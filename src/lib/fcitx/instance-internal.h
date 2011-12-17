@@ -35,6 +35,24 @@
 #include "profile.h"
 #include "addon.h"
 
+#define FCITX_KEY_EVENT_QUEUE_LENGTH 64
+
+typedef struct _FcitxKeyEvent {
+    void* event;
+    uint64_t sequenceId;
+} FcitxKeyEvent;
+
+typedef struct _FcitxKeyEventQueue {
+    uint32_t cur;
+    
+    uint32_t tail;
+    
+    uint64_t sequenceId;
+    
+    /* too long key event doesn't make sense */
+    FcitxKeyEvent queue[FCITX_KEY_EVENT_QUEUE_LENGTH];
+} FcitxKeyEventQueue;
+
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -95,9 +113,8 @@ struct _FcitxInstance {
     FcitxAddon* uifallback;
 
     FcitxAddon* uinormal;
-
-    /* gives more padding, since we want to break abi */
-    int padding[60];
+    
+    FcitxKeyEventQueue eventQueue;
 };
 
 #endif

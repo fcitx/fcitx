@@ -173,22 +173,24 @@ void* fcitx_utils_malloc0(size_t bytes)
 }
 
 FCITX_EXPORT_API
-char* fcitx_utils_trim(char* s)
+char* fcitx_utils_trim(const char* s)
 {
-    register char *end;
-    register char csave;
+    register const char *end;
 
     while (isspace(*s))                 /* skip leading space */
         ++s;
-    end = strchr(s, '\0') - 1;
+    end = s + (strlen(s) - 1);
     while (end >= s && isspace(*end))               /* skip trailing space */
         --end;
 
-    csave = end[1];
-    end[1] = '\0';
-    s = strdup(s);
-    end[1] = csave;
-    return (s);
+    end++;
+
+    size_t len = end - s;
+
+    char* result = fcitx_utils_malloc0(len + 1);
+    memcpy(result, s, len);
+    result[len] = '\0';
+    return result;
 }
 
 FCITX_EXPORT_API

@@ -116,7 +116,7 @@ extern "C" {
      * @param s input string
      * @return char* new malloced string, need to free'd by caller
      **/
-    char* fcitx_utils_trim(char *s);
+    char* fcitx_utils_trim(const char *s);
 
     /**
      * @brief Malloc and memset all memory to zero

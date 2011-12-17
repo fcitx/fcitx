@@ -34,11 +34,11 @@
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include <cairo-xlib.h>
-#include <ui/cairostuff/cairostuff.h>
-#include <ui/classic/classicuiinterface.h>
+#include "ui/cairostuff/cairostuff.h"
+#include "ui/cairostuff/font.h"
+#include "ui/classic/classicuiinterface.h"
 #include "fcitx/hook.h"
-#include <ui/cairostuff/font.h>
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 #define VK_FILE "vk.conf"
 

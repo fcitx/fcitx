@@ -848,7 +848,6 @@ FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile* reuse)
 
         if (line)
             free(line);
-
         line = fcitx_utils_trim(buf);
 
         lineLen = strlen(line);
