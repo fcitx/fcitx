@@ -46,6 +46,15 @@ extern "C" {
         CAPACITY_CLIENT_SIDE_UI = (1 << 0),
         CAPACITY_PREEDIT = (1 << 1)
     } FcitxCapacityFlags;
+    
+    /**
+     * @brief queued key event
+     **/
+    typedef struct _FcitxKeyEvent {
+        int frontendid;
+        void* event;
+        uint64_t sequenceId;
+    } FcitxKeyEvent;
 
     /**
      * @brief Input Context, normally one for one program
@@ -193,8 +202,34 @@ extern "C" {
      **/
     FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(struct _FcitxInstance* instance);
 
+    /**
+     * @brief set all ic from same application to the given ic
+     *
+     * @param instance fcitx instance
+     * @param frontendid frontend id
+     * @param ic object ic
+     * @return void
+     **/
     void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
 
+    
+    /**
+     * @brief push a key event into the key event queue
+     *
+     * @param instance fcitx instance
+     * @param keyEvent private key event
+     * @return uint64_t key seqence
+     **/
+    uint64_t FcitxInstancePushKeyEvent(struct _FcitxInstance* instance, int frontendid, void* keyEvent);
+    
+    /**
+     * @brief pop a key event out
+     *
+     * @param instance fcitx instance
+     * @param seqenceId key sequence
+     * @return void*
+     **/
+    FcitxKeyEvent FcitxInstancePopKeyEvent(struct _FcitxInstance* instance, uint64_t seqenceId);
 #ifdef __cplusplus
 }
 #endif

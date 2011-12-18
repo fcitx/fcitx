@@ -104,6 +104,9 @@ void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFu
         return NULL;
     }
 
+    /*
+     * Input Method can support lazy load
+     */
     if (addon->category == AC_INPUTMETHOD) {
         boolean flag = false;
         FcitxAddon** pimclass = NULL;

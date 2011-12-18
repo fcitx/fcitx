@@ -54,6 +54,11 @@ typedef struct _FcitxDBusPropertyTable {
     void (*setfunc)(void* arg, DBusMessageIter* iter);
 } FcitxDBusPropertyTable;
 
+typedef struct _FcitxIPCKeyEvent {
+    FcitxKeySym sym;
+    unsigned int state;
+} FcitxIPCKeyEvent;
+
 static void* IPCCreate(FcitxInstance* instance, int frontendid);
 static boolean IPCDestroy(void* arg);
 void IPCCreateIC(void* arg, FcitxInputContext* context, void *priv);
@@ -601,6 +606,13 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(ipc->owner, type,
                                            t,
                                            sym, state);
+    
+    if (retVal & IRV_FLAG_ASYNC) {
+        FcitxIPCKeyEvent* event = fcitx_utils_malloc0(sizeof(FcitxIPCKeyEvent));
+        event->sym = originsym;
+        event->state = originstate;
+        FcitxInstancePushKeyEvent(ipc->owner, ipc->frontendid, event);
+    }
 
     if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         return 0;

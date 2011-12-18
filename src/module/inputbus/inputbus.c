@@ -1,5 +1,6 @@
 #include <dbus/dbus.h>
 #include <libgen.h>
+#include <libintl.h>
 
 #include "fcitx/addon.h"
 #include "fcitx/ime.h"
@@ -12,65 +13,67 @@
 
 #include "inputbus.h"
 
-#define FCITX_INPUTBUS_IM_INTROSPECT_DATA "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"" \
-    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">" \
-    "<node>" \
-    "    <interface name=\"" FCITX_INPUTBUS_INTERFACE "\">" \
-    "	<method name=\"NewInputMethod\">" \
-    "           <arg name=\"unique_name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"icon_name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"priority\" type=\"u\" direction=\"in\" />" \
-    "	    <arg name=\"lang_code\" type=\"s\" direction=\"in\" /> " \
-    "	</method> " \
-    "	<method name=\"UpdateStatus\"> " \
-    "	    <arg name=\"status\" type=\"a{sv}\" direction=\"in\"/> " \
-    "	</method> " \
-    "	<method name=\"SetKeyMasks\">" \
-    "	    <arg name=\"key_mask\" type=\"a(uuu)\" direction=\"in\" />" \
-    "	</method>" \
-    "	<method name=\"KeyProcessHint\">" \
-    "	    <arg name=\"hints\" type=\"u\" direction=\"in\" />" \
-    "       <arg name=\"serial\" type=\"u\" />" \
-    "	</method>" \
-    "	<method name=\"CommitString\">" \
-    "	    <arg name=\"string\" type=\"s\" direction=\"in\"/>" \
-    "	</method>" \
-    "	<signal name=\"Input\">" \
-    "	    <arg name=\"key\" type=\"u\" />" \
-    "       <arg name=\"state\" type=\"u\" />" \
-    "       <arg name=\"serial\" type=\"u\" />" \
-    "       <arg name=\"hintinfo\" type=\"u\" />" \
-    "	</signal>" \
-    "	<signal name=\"Reset\" />" \
-    "	<signal name=\"Save\" />" \
-    "   <signal name=\"Init\" />" \
-    "   </interface>" \
-    "   <interface name=\"org.freedesktop.DBus.Introspectable\">" \
-    "       <method name=\"Introspect\">" \
-    "           <arg name=\"data\" direction=\"out\" type=\"s\"/>" \
-    "       </method>" \
-    "   </interface>" \
-    "</node>"
+const char* inputbus_im_introspection_xml = 
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
+    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
+    "<node>\n"
+    "  <interface name=\"" FCITX_INPUTBUS_INTERFACE "\">\n"
+    "    <method name=\"NewInputMethod\">\n"
+    "      <arg name=\"unique_name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"icon_name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"priority\" type=\"u\" direction=\"in\" />\n"
+    "      <arg name=\"lang_code\" type=\"s\" direction=\"in\" /> \n"
+    "    </method> \n"
+    "    <method name=\"UpdateStatus\"> \n"
+    "      <arg name=\"status\" type=\"a{sv}\" direction=\"in\"/> \n"
+    "    </method> \n"
+    "    <method name=\"SetKeyMasks\">\n"
+    "      <arg name=\"key_mask\" type=\"a(uuu)\" direction=\"in\" />\n"
+    "    </method>\n"
+    "    <method name=\"KeyProcessHint\">\n"
+    "      <arg name=\"hints\" type=\"u\" direction=\"in\" />\n"
+    "      <arg name=\"serial\" type=\"u\" />\n"
+    "    </method>\n"
+    "    <method name=\"CommitString\">\n"
+    "      <arg name=\"string\" type=\"s\" direction=\"in\"/>\n"
+    "    </method>\n"
+    "    <signal name=\"Input\">\n"
+    "      <arg name=\"key\" type=\"u\" />\n"
+    "      <arg name=\"state\" type=\"u\" />\n"
+    "      <arg name=\"serial\" type=\"u\" />\n"
+    "      <arg name=\"hintinfo\" type=\"u\" />\n"
+    "    </signal>\n"
+    "    <signal name=\"Reset\" />\n"
+    "    <signal name=\"Save\" />\n"
+    "    <signal name=\"Init\" />\n"
+    "  </interface>\n"
+    "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
+    "    <method name=\"Introspect\">\n"
+    "      <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
+    "    </method>\n"
+    "  </interface>\n"
+    "</node>";
 
-#define FCITX_INPUTBUS_INTROSPECT_DATA "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"" \
-    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">" \
-    "<node>" \
-    "    <interface name=\"" FCITX_INPUTBUS_INTERFACE "\">" \
-    "	<method name=\"NewInputMethod\">" \
-    "           <arg name=\"unique_name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"icon_name\" type=\"s\" direction=\"in\"/>" \
-    "	    <arg name=\"priority\" type=\"u\" direction=\"in\" />" \
-    "	    <arg name=\"lang_code\" type=\"s\" direction=\"in\" /> " \
-    "	</method> " \
-    "    </interface>" \
-    "    <interface name=\"org.freedesktop.DBus.Introspectable\">" \
-    "       <method name=\"Introspect\">" \
-    "           <arg name=\"data\" direction=\"out\" type=\"s\"/>" \
-    "       </method>" \
-    "    </interface>" \
-    "</node>"
+const char* inputbus_introspection_xml =
+    "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
+    "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
+    "<node>\n"
+    "  <interface name=\"" FCITX_INPUTBUS_INTERFACE "\">\n"
+    "    <method name=\"NewInputMethod\">\n"
+    "      <arg name=\"unique_name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"icon_name\" type=\"s\" direction=\"in\"/>\n"
+    "      <arg name=\"priority\" type=\"u\" direction=\"in\" />\n"
+    "      <arg name=\"lang_code\" type=\"s\" direction=\"in\" /> \n"
+    "    </method> \n"
+    "  </interface>\n"
+    "  <interface name=\"org.freedesktop.DBus.Introspectable\">\n"
+    "     <method name=\"Introspect\">\n"
+    "        <arg name=\"data\" direction=\"out\" type=\"s\"/>\n"
+    "     </method>\n"
+    "  </interface>\n"
+    "</node>";
 
 typedef struct _FcitxInputBus {
     DBusConnection *conn;
@@ -85,7 +88,9 @@ typedef struct _FcitxInputBusKey {
 } FcitxInputBusKey;
 
 typedef struct _FcitxDBusInputMethod {
-    const char *name, *nameOwner, *objectPath; //Name owner for dbus name owner, tracked via NameOwnerChange signal, as input method identification
+    char* name;
+    char* nameOwner;
+    char* objectPath;
     UT_array keyMasks;
     FcitxInputBus *owner;
 } FcitxDBusInputMethod;
@@ -98,6 +103,7 @@ static FcitxDBusInputMethod* FcitxInputBusFindDBusInputMethodByName(
     FcitxInputBus* inputbus,
     const char* name
 );
+static void* FcitxInputBusRegisterIM(void* arg, FcitxModuleFunctionArg args);
 
 static const UT_icd dbusim_icd = { sizeof(FcitxDBusInputMethod), NULL, NULL, NULL };
 static const UT_icd inputBusKey_icd = { sizeof(FcitxInputBusKey), NULL, NULL, NULL };
@@ -111,6 +117,9 @@ FcitxModule module = {
     NULL
 };
 
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
 void *FcitxInputBusCreate(FcitxInstance *instance)
 {
     FcitxInputBus    *inputbus = (FcitxInputBus *)fcitx_utils_malloc0(sizeof(FcitxInputBus));
@@ -120,7 +129,7 @@ void *FcitxInputBusCreate(FcitxInstance *instance)
 
     FcitxModuleFunctionArg arg;
 
-    //So the dbus module has been successfully initialized, right? Thus no error handling...
+    // So the dbus module has been successfully initialized, right? Thus no error handling...
     inputbus->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
     if (inputbus->conn == NULL) {
         free(inputbus);
@@ -132,13 +141,14 @@ void *FcitxInputBusCreate(FcitxInstance *instance)
 
     DBusObjectPathVTable vtable = {NULL, &FcitxInputBusEventHandler, NULL, NULL, NULL, NULL };
     dbus_connection_register_object_path(inputbus->conn, FCITX_INPUTBUS_PATH, &vtable, inputbus);
+    AddFunction(inputbusaddon, FcitxInputBusRegisterIM);
 
     return inputbus;
 }
 
 boolean FcitxInputBusMethodInit(void *user_data)
 {
-    FcitxDBusInputMethod *input_method = (FcitxDBusInputMethod *)user_data;
+    FcitxDBusInputMethod *input_method = user_data;
     DBusMessage *signal = dbus_message_new_signal(input_method->objectPath, "org.fcitx.Fcitx.InputBus", "Init");
     dbus_connection_send(input_method->owner->conn, signal, NULL);
     dbus_connection_flush(input_method->owner->conn);
@@ -148,7 +158,7 @@ boolean FcitxInputBusMethodInit(void *user_data)
 
 void FcitxInputBusMethodReset(void *user_data)
 {
-    FcitxDBusInputMethod *input_method = (FcitxDBusInputMethod *)user_data;
+    FcitxDBusInputMethod *input_method = user_data;
     DBusMessage *signal = dbus_message_new_signal(input_method->objectPath, "org.fcitx.Fcitx.InputBus", "Reset");
     dbus_connection_send(input_method->owner->conn, signal, NULL);
     dbus_connection_flush(input_method->owner->conn);
@@ -157,7 +167,7 @@ void FcitxInputBusMethodReset(void *user_data)
 
 INPUT_RETURN_VALUE FcitxInputBusMethodDoInput(void *user_data, FcitxKeySym sym, unsigned int state)
 {
-    FcitxDBusInputMethod *input_method = (FcitxDBusInputMethod *)user_data;
+    FcitxDBusInputMethod *input_method = user_data;
     DBusMessage *signal = dbus_message_new_signal(input_method->objectPath, "org.fcitx.Fcitx.InputBus", "Input");
     dbus_message_append_args(signal, DBUS_TYPE_UINT32, &sym, DBUS_TYPE_UINT32, &state, DBUS_TYPE_INVALID);
     dbus_connection_send(input_method->owner->conn, signal, NULL);
@@ -174,7 +184,7 @@ INPUT_RETURN_VALUE FcitxInputBusMethodDoInput(void *user_data, FcitxKeySym sym, 
 
 void FcitxInputBusMethodSave(void *user_data)
 {
-    FcitxDBusInputMethod *input_method = (FcitxDBusInputMethod *)user_data;
+    FcitxDBusInputMethod *input_method = user_data;
     DBusMessage *signal = dbus_message_new_signal(input_method->objectPath, "org.fcitx.Fcitx.InputBus", "Save");
     dbus_connection_send(input_method->owner->conn, signal, NULL);
     dbus_connection_flush(input_method->owner->conn);
@@ -183,7 +193,7 @@ void FcitxInputBusMethodSave(void *user_data)
 
 void FcitxInputBusMethodReload(void *user_data)
 {
-    FcitxDBusInputMethod *input_method = (FcitxDBusInputMethod *)user_data;
+    FcitxDBusInputMethod *input_method = user_data;
     DBusMessage *signal = dbus_message_new_signal(input_method->objectPath, "org.fcitx.Fcitx.InputBus", "Reload");
     dbus_connection_send(input_method->owner->conn, signal, NULL);
     dbus_connection_flush(input_method->owner->conn);
@@ -200,6 +210,53 @@ DBusHandlerResult FcitxInputBusCommitString(DBusConnection *conn,
 INPUT_RETURN_VALUE FcitxInputBusMethodCommitCallback(void *user_data, FcitxCandidateWord *cand)
 {
     return IRV_TO_PROCESS;
+}
+
+void* FcitxInputBusRegisterIM(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxInputBus* inputbus = arg;
+    FcitxIM* im = args.args[0];
+    
+    char* cmd = NULL;
+    asprintf(&cmd, "%s &", im->owner->library);
+    FILE* p = popen(cmd, "r");
+    free(cmd);
+    if (!p) {
+        FcitxLog(ERROR, _("Unable to create process"));
+        return NULL;
+    }
+    
+    //Build an instance for this input method, use unique_name to identify it
+    FcitxDBusInputMethod d, *dbusim;
+    memset(&d, 0, sizeof(FcitxDBusInputMethod));
+    utarray_push_back(&inputbus->inputMethodTable, &d);
+    dbusim = (FcitxDBusInputMethod*)utarray_back(&inputbus->inputMethodTable);
+    dbusim->owner = inputbus;
+    dbusim->name = strdup(im->uniqueName);
+    dbusim->nameOwner = NULL;
+    asprintf(&dbusim->objectPath, "%s/%s", FCITX_INPUTBUS_IM_PATH_PREFIX, im->uniqueName);
+    //Register this input method to Fcitx
+    FcitxInstanceRegisterIM(inputbus->owner,
+                      dbusim,
+                      im->uniqueName,
+                      im->strName,
+                      im->strIconName,
+                      FcitxInputBusMethodInit,
+                      FcitxInputBusMethodReset,
+                      FcitxInputBusMethodDoInput,
+                      NULL,
+                      NULL,
+                      FcitxInputBusMethodSave,
+                      FcitxInputBusMethodReload,
+                      NULL,
+                      NULL,
+                      im->iPriority,
+                      im->langCode);
+    //Reply the caller with object path
+    DBusObjectPathVTable vtable = {NULL, &FcitxInputBusIMEventHandler, NULL, NULL, NULL, NULL };
+    dbus_connection_register_object_path(inputbus->conn, dbusim->objectPath, &vtable, arg);
+    
+    return NULL;
 }
 
 DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
@@ -236,9 +293,6 @@ DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
     dbusim->name = strdup(unique_name);
     dbusim->nameOwner = strdup(dbus_message_get_sender(msg));
     // /org/fcitx/Fcitx/InputBus/${unique_name}
-    char *obj_path = (char *)fcitx_utils_malloc0(sizeof(char) * (strlen(FCITX_INPUTBUS_IM_PATH_PREFIX) + strlen(unique_name) + 1));
-    sprintf(obj_path, "%s%s", FCITX_INPUTBUS_IM_PATH_PREFIX, unique_name);
-    dbusim->objectPath = obj_path;
 
     //Register this input method to Fcitx
     FcitxInstanceRegisterIM(inputbus->owner,
@@ -257,15 +311,6 @@ DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
                       dbusim,
                       priority,
                       lang_code);
-    //Reply the caller with object path
-    DBusObjectPathVTable vtable = {NULL, &FcitxInputBusIMEventHandler, NULL, NULL, NULL, NULL };
-    dbus_connection_register_object_path(conn, obj_path, &vtable, arg);
-    DBusMessage *retmsg = dbus_message_new_method_return(msg);
-    dbus_message_append_args(msg,
-                             DBUS_TYPE_OBJECT_PATH, &obj_path,
-                             DBUS_TYPE_INVALID);
-    dbus_connection_send(conn, retmsg, NULL);
-    dbus_message_unref(retmsg);
     return DBUS_HANDLER_RESULT_HANDLED;
 }
 DBusHandlerResult FcitxInputBusUpdateCandidate(
@@ -369,25 +414,29 @@ DBusHandlerResult FcitxInputBusSetKeyMasks(DBusConnection *conn, DBusMessage *ms
 
 invalid_args:
     retmsg = dbus_message_new_error(msg, DBUS_ERROR_INVALID_ARGS, ":P");
-    dbus_connection_send(conn, msg, NULL);
-    dbus_message_unref(msg);
+    dbus_connection_send(conn, retmsg, NULL);
+    dbus_message_unref(retmsg);
     free(obj_path);
     utarray_free(&dbusim->keyMasks);
     return DBUS_HANDLER_RESULT_HANDLED;
 
 }
+
 inline static DBusHandlerResult FcitxInputBusIntrospect(DBusConnection *conn, DBusMessage *msg, void *user_data)
 {
-    DBusMessage *retmsg = dbus_message_new_method_return(msg);
-    dbus_message_append_args(retmsg, DBUS_TYPE_STRING, FCITX_INPUTBUS_INTROSPECT_DATA, DBUS_TYPE_INVALID);
-    dbus_connection_send(conn, retmsg, NULL);
-    dbus_message_unref(retmsg);
+    FcitxInputBus* inputbus = (FcitxInputBus*) user_data;
+    DBusMessage *reply = dbus_message_new_method_return(msg);
+
+    dbus_message_append_args(reply, DBUS_TYPE_STRING, &inputbus_introspection_xml, DBUS_TYPE_INVALID);
+    dbus_connection_send(inputbus->conn, reply, NULL);
+    dbus_message_unref(reply);
     return DBUS_HANDLER_RESULT_HANDLED;
 }
+
 inline static DBusHandlerResult FcitxInputBusIMIntrospect(DBusConnection *conn, DBusMessage *msg, void *user_data)
 {
     DBusMessage *retmsg = dbus_message_new_method_return(msg);
-    dbus_message_append_args(retmsg, DBUS_TYPE_STRING, FCITX_INPUTBUS_IM_INTROSPECT_DATA, DBUS_TYPE_INVALID);
+    dbus_message_append_args(retmsg, DBUS_TYPE_STRING, &inputbus_im_introspection_xml, DBUS_TYPE_INVALID);
     dbus_connection_send(conn, retmsg, NULL);
     dbus_message_unref(retmsg);
     return DBUS_HANDLER_RESULT_HANDLED;
@@ -422,7 +471,7 @@ DBusHandlerResult FcitxInputBusIMEventHandler(DBusConnection *conn, DBusMessage 
         ret = FcitxInputBusCommitString(conn, msg, user_data);
     if (dbus_message_is_method_call(msg, "org.fcitx.Fcitx.InputBus", "SetKeyMasks"))
         ret = FcitxInputBusSetKeyMasks(conn, msg, user_data);
-    if (dbus_message_is_method_call(msg, "org.freedesktop.Introspectable", "Introspect"))
+    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
         ret = FcitxInputBusIMIntrospect(conn, msg, user_data);
     else {
         DBusMessage *retmsg = dbus_message_new_error(msg, DBUS_ERROR_UNKNOWN_METHOD, "The method you call doesn't exists");
@@ -431,7 +480,6 @@ DBusHandlerResult FcitxInputBusIMEventHandler(DBusConnection *conn, DBusMessage 
         ret = DBUS_HANDLER_RESULT_HANDLED;
     }
     dbus_connection_flush(conn);
-    dbus_message_unref(msg);
     return ret;
 }
 
@@ -440,7 +488,7 @@ DBusHandlerResult FcitxInputBusEventHandler(DBusConnection *conn, DBusMessage *m
     DBusHandlerResult ret;
     if (dbus_message_is_method_call(msg, "org.fcitx.Fcitx.InputBus", "NewInputMethod"))
         ret = FcitxInputBusNewMethod(conn, msg, user_data);
-    if (dbus_message_is_method_call(msg, "org.freedesktop.DBus.Introspectable", "Introspect"))
+    if (dbus_message_is_method_call(msg, DBUS_INTERFACE_INTROSPECTABLE, "Introspect"))
         ret = FcitxInputBusIntrospect(conn, msg, user_data);
     else {
         DBusMessage *retmsg = dbus_message_new_error(msg, DBUS_ERROR_UNKNOWN_METHOD, "The method you call doesn't exists");
@@ -449,7 +497,6 @@ DBusHandlerResult FcitxInputBusEventHandler(DBusConnection *conn, DBusMessage *m
         ret = DBUS_HANDLER_RESULT_HANDLED;
     }
     dbus_connection_flush(conn);
-    dbus_message_unref(msg);
     return ret;
 }
 // vim:set sw=4 et:

@@ -137,7 +137,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     FcitxInstanceResolveAddonDependency(instance);
     FcitxInstanceInitBuiltInHotkey(instance);
     FcitxModuleLoad(instance);
-    if (!LoadAllIM(instance)) {
+    if (!FcitxInstanceLoadAllIM(instance)) {
         FcitxInstanceEnd(instance);
         return instance;
     }

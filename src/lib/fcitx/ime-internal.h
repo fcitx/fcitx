@@ -105,7 +105,7 @@ void FcitxInstanceDoPhraseTips(struct _FcitxInstance* instance);
  * @param instance instance
  * @return boolean
  **/
-boolean LoadAllIM(struct _FcitxInstance* instance);
+boolean FcitxInstanceLoadAllIM(struct _FcitxInstance* instance);
 
 /**
  * @brief init builtin im menu

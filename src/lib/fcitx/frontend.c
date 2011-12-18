@@ -83,7 +83,7 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
 }
 
 FCITX_EXPORT_API
-uint64_t FcitxInstancePushKeyEvent(FcitxInstance* instance, void* keyEvent)
+uint64_t FcitxInstancePushKeyEvent(FcitxInstance* instance, int frontendid, void* keyEvent)
 {
     FcitxKeyEventQueue* eq = &instance->eventQueue;
     
@@ -108,15 +108,15 @@ uint64_t FcitxInstancePushKeyEvent(FcitxInstance* instance, void* keyEvent)
 }
 
 FCITX_EXPORT_API
-void* FcitxInstancePopKeyEvent(FcitxInstance* instance, uint64_t seqenceId)
+FcitxKeyEvent FcitxInstancePopKeyEvent(FcitxInstance* instance, uint64_t seqenceId)
 {
     FcitxKeyEventQueue* eq = &instance->eventQueue;
-    void* result = NULL;
+    FcitxKeyEvent result;
     while (eq->cur != eq->tail) {
         uint32_t nexttail = (eq->tail + FCITX_KEY_EVENT_QUEUE_LENGTH - 1) % FCITX_KEY_EVENT_QUEUE_LENGTH;
         
         if (seqenceId == eq->queue[nexttail].sequenceId) {        
-            result = eq->queue[nexttail].event;
+            result = eq->queue[nexttail];
             break;
         } else if (seqenceId < eq->queue[nexttail].sequenceId) {
             break;

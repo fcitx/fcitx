@@ -37,11 +37,6 @@
 
 #define FCITX_KEY_EVENT_QUEUE_LENGTH 64
 
-typedef struct _FcitxKeyEvent {
-    void* event;
-    uint64_t sequenceId;
-} FcitxKeyEvent;
-
 typedef struct _FcitxKeyEventQueue {
     uint32_t cur;
     
