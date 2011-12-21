@@ -565,7 +565,9 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
 
         FcitxMessageType type = candWord->wordType;
 
-        if (i == 0 && FcitxCandidateWordGetCurrentPage(input->candList) == 0)
+        if (i == 0
+            && FcitxCandidateWordGetCurrentPage(input->candList) == 0
+            && type == MSG_OTHER)
             type = MSG_FIRSTCAND;
 
         FcitxMessagesAddMessageAtLast(msgDown, type, "%s", candWord->strWord);
