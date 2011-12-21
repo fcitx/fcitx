@@ -23,24 +23,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "im/table/tabledict.h"
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
 
 #define MAX_CODE_LENGTH 30
-
-typedef struct _RULE_RULE {
-    unsigned char   iFlag;  // 1 --> 正序   0 --> 逆序
-    unsigned char   iWhich; //第几个字
-    unsigned char   iIndex; //第几个编码
-} RULE_RULE;
-
-typedef struct _RULE {
-    unsigned char   iWords; //多少个字
-    unsigned char   iFlag;  //1 --> 大于等于iWords  0 --> 等于iWords
-    RULE_RULE      *rule;
-} RULE;
 
 int main(int argc, char *argv[])
 {
@@ -144,14 +133,15 @@ int main(int argc, char *argv[])
         if (iVersion) {
             fread(&iRule, sizeof(unsigned char), 1, fpDict);
 
-            if (iRule == 1)
+            if (iRule == RECORDTYPE_PINYIN)
                 printf("@%s %s\n", strCode, strHZ);
-            else if (iRule == 2)
+            else if (iRule == RECORDTYPE_CONSTRUCT)
                 printf("^%s %s\n", strCode, strHZ);
+            else if (iRule == RECORDTYPE_PROMPT)
+                printf("&%s %s\n", strCode, strHZ);
             else
                 printf("%s %s\n", strCode, strHZ);
-        } else
-            printf("%s %s\n", strCode, strHZ);
+        }
 
         fread(&iTemp, sizeof(unsigned int), 1, fpDict);
 

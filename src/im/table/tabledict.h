@@ -11,9 +11,10 @@
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
 
-#define RECORDTYPE_NORMAL 0
-#define RECORDTYPE_PINYIN 1
-#define RECORDTYPE_CONSTRUCT 2
+#define RECORDTYPE_NORMAL 0x0
+#define RECORDTYPE_PINYIN 0x1
+#define RECORDTYPE_CONSTRUCT 0x2
+#define RECORDTYPE_PROMPT 0x3
 
 typedef enum _ADJUSTORDER {
     AD_NO = 0,
@@ -89,6 +90,7 @@ typedef struct _TableMetaData {
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键
     char           *langCode;
+    boolean         customPrompt;
     boolean         bEnabled;
 
     struct _TableDict* tableDict;
@@ -119,6 +121,7 @@ typedef struct _TableDict {
     int iTableChanged;
     int iHZLastInputCount;
     SINGLE_HZ       hzLastInput[PHRASE_MAX_LENGTH]; //Records last HZ input
+    RECORD* promptCode[256];
 } TableDict;
 
 boolean LoadTableDict(TableMetaData* tableMetaData);

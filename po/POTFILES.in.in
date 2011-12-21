@@ -28,7 +28,6 @@
 @REL_SOURCE_ROOT@/src/frontend/xim/fcitx-xim.conf.in
 @REL_SOURCE_ROOT@/data/fcitx-configtool.desktop.in
 @REL_SOURCE_ROOT@/data/fcitx.desktop.in
-@REL_SOURCE_ROOT@/data/fcitx-kimpanel.desktop.in
 @REL_SOURCE_ROOT@/src/ui/classic/fcitx-skin-installer.desktop.in
 @REL_SOURCE_ROOT@/src/core/fcitx.c
 @REL_SOURCE_ROOT@/src/core/errorhandler.c

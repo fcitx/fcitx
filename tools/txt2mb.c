@@ -30,6 +30,7 @@
 #include "fcitx-utils/utf8.h"
 #include "fcitx/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
+#include "im/table/tabledict.h"
 
 #define STR_KEYCODE 0
 #define STR_CODELEN 1
@@ -54,30 +55,6 @@ int strLength[CONST_STR_SIZE];
 char            strInputCode[100] = "\0";
 char            strIgnoreChars[100] = "\0";
 char            cPinyinKey = '\0';
-
-typedef struct _RECORD {
-    char           *strCode;
-    char           *strHZ;
-    int8_t          type;
-
-    struct _RECORD *next;
-
-    struct _RECORD *prev;
-    unsigned int    iHit;
-    unsigned int    iIndex;
-} RECORD;
-
-typedef struct _RULE_RULE {
-    unsigned char   iFlag;  // 1 --> 正序   0 --> 逆序
-    unsigned char   iWhich; //第几个字
-    unsigned char   iIndex; //第几个编码
-} RULE_RULE;
-
-typedef struct _RULE {
-    unsigned char   iWords; //多少个字
-    unsigned char   iFlag;  //1 --> 大于等于iWords  0 --> 等于iWords
-    RULE_RULE      *rule;
-} RULE;
 
 void InitStrLength()
 {
@@ -109,7 +86,7 @@ boolean IsValidCode(char cChar)
         p++;
     }
 
-    if (cChar == cPinyinKey || cChar == '^')
+    if (cChar == cPinyinKey || cChar == '^' || cChar == '&')
         return true;
 
     return false;
@@ -381,7 +358,9 @@ int main(int argc, char *argv[])
 
         if (((strCode[0] != cPinyinKey) && (strlen(strCode) > iCodeLength))
             || ((strCode[0] == cPinyinKey) && (strlen(strCode) > (iPYCodeLength + 1)))
-            || ((strCode[0] == '^') && (strlen(strCode) > (iCodeLength + 1)))) {
+            || ((strCode[0] == '^') && (strlen(strCode) > (iCodeLength + 1)))
+            || ((strCode[0] == '&') && (strlen(strCode) > (iPYCodeLength + 1)))
+        ) {
             printf("Delete:  %s %s, Too long\n", strCode, strHZ);
             continue;
         }
@@ -393,16 +372,19 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        type = 0;
+        type = RECORDTYPE_NORMAL;
 
         pstr = strCode;
 
         if (strCode[0] == cPinyinKey) {
             pstr ++;
-            type = 1;
+            type = RECORDTYPE_PINYIN;
         } else if (strCode[0] == '^') {
             pstr ++;
-            type = 2;
+            type = RECORDTYPE_CONSTRUCT;
+        } else if (strCode[0] == '&') {
+            pstr ++;
+            type = RECORDTYPE_PROMPT;
         }
 
         //查找是否重复
@@ -411,7 +393,7 @@ int main(int argc, char *argv[])
         if (temp != head) {
             if (strcmp(temp->strCode, pstr) >= 0) {
                 while (temp != head && strcmp(temp->strCode, pstr) >= 0) {
-                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr)) {
+                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr) && temp->type == type) {
                         printf("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }
@@ -426,7 +408,7 @@ int main(int argc, char *argv[])
                     temp = temp->next;
             } else {
                 while (temp != head && strcmp(temp->strCode, pstr) <= 0) {
-                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr)) {
+                    if (!strcmp(temp->strHZ, strHZ) && !strcmp(temp->strCode, pstr) && temp->type == type) {
                         printf("Delete:  %s %s\n", pstr, strHZ);
                         goto _next;
                     }

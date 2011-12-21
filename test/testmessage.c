@@ -8,8 +8,9 @@ int main()
     char* words[] = { "a", "b", "c" , "d", "e" };
     char* extras[] = { "A", "B", "C" , "D", "E" };
     FcitxInstance* instance = fcitx_utils_malloc0(sizeof(FcitxInstance));
-    instance->input->candList = FcitxCandidateWordInit();
-    instance->config = fcitx_utils_malloc0(sizeof(FcitxConfig));
+    instance->input = fcitx_utils_malloc0(sizeof(FcitxInputState));
+    instance->input->candList = FcitxCandidateWordNewList();
+    instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));
     instance->config->bPointAfterNumber = true;
     FcitxCandidateWord word;
     word.callback = NULL;
@@ -22,7 +23,7 @@ int main()
         FcitxCandidateWordAppend(instance->input->candList, &word);
     }
 
-    char* result = FcitxCandidateWordToCString(instance);
+    char* result = FcitxUICandidateWordToCString(instance);
     if (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0) {
         return 0;
     }

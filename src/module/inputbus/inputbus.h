@@ -9,6 +9,8 @@
 
 #define FCITX_INPUTBUS_INTERFACE "org.fcitx.Fcitx.InputBus"
 
+#define FCITX_DBUSIM_INTERFACE "org.fcitx.Fcitx.DBusIM"
+
 #define FCITX_INPUTBUS_REGISTERIM 0
 #define FCITX_INPUTBUS_REGISTERIM_RETURNTYPE void
 

@@ -151,7 +151,10 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
 
         if (recTemp->type == RECORDTYPE_PINYIN)
             tableDict->bHasPinyin = true;
-
+        
+        if (recTemp->type == RECORDTYPE_PROMPT && strlen(recTemp->strCode) == 1)
+            tableDict->promptCode[(uint8_t) recTemp->strCode[0]] = recTemp;
+            
         tableDict->currentRecord->next = recTemp;
         recTemp->prev = tableDict->currentRecord;
         tableDict->currentRecord = recTemp;

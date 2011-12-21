@@ -733,7 +733,9 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     utarray_init(&candTemp, &tableCand_icd);
 
     while (table->tableDict->currentRecord && table->tableDict->currentRecord != table->tableDict->recordHead) {
-        if (!TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->currentRecord->strCode)) {
+        if (table->tableDict->currentRecord->type != RECORDTYPE_CONSTRUCT &&
+            table->tableDict->currentRecord->type != RECORDTYPE_PROMPT &&
+            !TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->currentRecord->strCode)) {
             TABLECANDWORD* tableCandWord = fcitx_utils_malloc0(sizeof(TABLECANDWORD));
             TableAddCandWord(table->tableDict->currentRecord, tableCandWord);
             utarray_push_back(&candTemp, &tableCandWord);
@@ -774,7 +776,33 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
             pstr = ((tableCandWord->flag == CT_NORMAL) ? tableCandWord->candWord.record->strCode : tableCandWord->candWord.autoPhrase->strCode) + FcitxInputStateGetRawInputBufferSize(input);
 
         if (pstr) {
-            candWord.strExtra = strdup(pstr);
+            if (table->customPrompt) {
+                size_t codelen = strlen(pstr);
+                int i = 0;
+                int totallen = 0;
+                for (i = 0; i < codelen; i ++) {
+                    RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
+                    if (rec) {
+                        totallen += strlen(rec->strHZ);
+                    } else
+                        totallen += 1;
+                }
+                
+                candWord.strExtra = fcitx_utils_malloc0(sizeof(char) * (totallen + 2));
+                candWord.strExtra[0] = ' ';
+                for (i = 0; i < codelen; i ++) {
+                    RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
+                    if (rec) {
+                        strcat(candWord.strExtra, rec->strHZ);
+                    } else {
+                        char temp[2] = {pstr[i], '\0'};
+                        strcat(candWord.strExtra, temp);
+                    }
+                }
+            }
+            else {
+                candWord.strExtra = strdup(pstr);
+            }
             candWord.extraType = MSG_CODE;
         }
 

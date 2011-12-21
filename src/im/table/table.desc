@@ -113,9 +113,14 @@ Type=String
 DefaultValue=
 
 [CodeTable/Enabled]
-Description=Enable This Table or Not
+Description=Enable
 Type=Boolean
 DefaultValue=True
+
+[CodeTable/UseCustomPrompt]
+Description=Use Custom Prompt String defined in table
+Type=Boolean
+DefaultValue=False
 
 [DescriptionFile]
 LocaleDomain=fcitx

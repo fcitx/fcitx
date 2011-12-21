@@ -17,7 +17,7 @@ const char* inputbus_im_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
     "<node>\n"
-    "  <interface name=\"" FCITX_INPUTBUS_INTERFACE "\">\n"
+    "  <interface name=\"" FCITX_DBUSIM_INTERFACE "\">\n"
     "    <method name=\"NewInputMethod\">\n"
     "      <arg name=\"unique_name\" type=\"s\" direction=\"in\"/>\n"
     "      <arg name=\"name\" type=\"s\" direction=\"in\"/>\n"
