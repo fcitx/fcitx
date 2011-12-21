@@ -1136,6 +1136,10 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
     FcitxInstanceCleanInputWindow(instance);
     if (instance->config->bShowVersion) {
         FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION);
+        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+        if (im) {
+            FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, " %s", im->strName);
+        }
     }
 
     //显示打字速度
