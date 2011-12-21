@@ -16,6 +16,8 @@
 #define RECORDTYPE_CONSTRUCT 0x2
 #define RECORDTYPE_PROMPT 0x3
 
+struct _FcitxTableState;
+
 typedef enum _ADJUSTORDER {
     AD_NO = 0,
     AD_FAST = 1,
@@ -93,6 +95,7 @@ typedef struct _TableMetaData {
     boolean         customPrompt;
     boolean         bEnabled;
 
+    struct _FcitxTableState* owner;
     struct _TableDict* tableDict;
 } TableMetaData;
 

@@ -72,7 +72,6 @@ void* QWCreate(struct _FcitxInstance* instance)
         NULL,
         NULL,
         NULL,
-        NULL,
         100 /* make quwei place at last */,
         "zh_CN"
     );

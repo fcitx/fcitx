@@ -174,10 +174,6 @@ extern "C" {
          **/
         int iPriority;
         /**
-         * @brief private data for this input method
-         **/
-        void* priv;
-        /**
          * @brief Language Code
          **/
         char langCode[LANGCODE_LENGTH + 1];
@@ -324,7 +320,7 @@ extern "C" {
      * @return void
      **/
     void FcitxInstanceRegisterIM(struct _FcitxInstance *instance,
-                           void *addonInstance,
+                           void *imclass,
                            const char* uniqueName,
                            const char* name,
                            const char* iconName,
@@ -336,7 +332,6 @@ extern "C" {
                            FcitxIMSave Save,
                            FcitxIMReloadConfig ReloadConfig,
                            FcitxIMKeyBlocker KeyBlocker,
-                           void *priv,
                            int priority,
                            const char *langCode
                           );

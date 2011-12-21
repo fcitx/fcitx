@@ -47,7 +47,7 @@ extern "C" {
 
 #define FCITX_UNUSED(x) (void)(x)
 
-#define FCITX_ABI_VERSION 3
+#define FCITX_ABI_VERSION 4
 
 #ifdef __cplusplus
 }

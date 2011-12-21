@@ -119,7 +119,6 @@ void *PYCreate(FcitxInstance* instance)
                       SavePY,
                       ReloadConfigPY,
                       NULL,
-                      NULL,
                       pystate->pyconfig.iPinyinPriority,
                       "zh_CN"
                      );
@@ -135,7 +134,6 @@ void *PYCreate(FcitxInstance* instance)
                       NULL,
                       SavePY,
                       ReloadConfigPY,
-                      NULL,
                       NULL,
                       pystate->pyconfig.iShuangpinPriority,
                       "zh_CN"

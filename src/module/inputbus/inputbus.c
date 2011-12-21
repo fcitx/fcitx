@@ -249,7 +249,6 @@ void* FcitxInputBusRegisterIM(void* arg, FcitxModuleFunctionArg args)
                       FcitxInputBusMethodSave,
                       FcitxInputBusMethodReload,
                       NULL,
-                      NULL,
                       im->iPriority,
                       im->langCode);
     //Reply the caller with object path
@@ -293,24 +292,6 @@ DBusHandlerResult FcitxInputBusNewMethod(DBusConnection *conn,
     dbusim->name = strdup(unique_name);
     dbusim->nameOwner = strdup(dbus_message_get_sender(msg));
     // /org/fcitx/Fcitx/InputBus/${unique_name}
-
-    //Register this input method to Fcitx
-    FcitxInstanceRegisterIM(inputbus->owner,
-                      inputbus,
-                      unique_name,
-                      name,
-                      icon_name,
-                      FcitxInputBusMethodInit,
-                      FcitxInputBusMethodReset,
-                      FcitxInputBusMethodDoInput,
-                      NULL,
-                      NULL,
-                      FcitxInputBusMethodSave,
-                      FcitxInputBusMethodReload,
-                      NULL,
-                      dbusim,
-                      priority,
-                      lang_code);
     return DBUS_HANDLER_RESULT_HANDLED;
 }
 DBusHandlerResult FcitxInputBusUpdateCandidate(
@@ -337,7 +318,7 @@ DBusHandlerResult FcitxInputBusUpdateCandidate(
     }
     FcitxIM* im = FcitxInstanceGetCurrentIM(inputbus->owner);
 
-    if (dbusim != im->priv) {
+    if (dbusim != im->klass) {
         //Input method not active, reply error
         retmsg = dbus_message_new_error(msg, DBUS_ERROR_AUTH_FAILED, "Input method not active.");
         dbus_connection_send(conn, retmsg, NULL);

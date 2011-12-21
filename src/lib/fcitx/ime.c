@@ -286,7 +286,7 @@ void FcitxRegisterEmptyEntry(FcitxInstance *instance,
 
 FCITX_EXPORT_API
 void FcitxInstanceRegisterIM(FcitxInstance *instance,
-                       void *addonInstance,
+                       void *imclass,
                        const char* uniqueName,
                        const char* name,
                        const char* iconName,
@@ -298,7 +298,6 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
                        FcitxIMSave Save,
                        FcitxIMReloadConfig ReloadConfig,
                        FcitxIMKeyBlocker KeyBlocker,
-                       void *priv,
                        int priority,
                        const char *langCode
                       )
@@ -337,9 +336,8 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
     entry->Save = Save;
     entry->ReloadConfig = ReloadConfig;
     entry->KeyBlocker = KeyBlocker;
-    entry->klass = addonInstance;
+    entry->klass = imclass;
     entry->iPriority = priority;
-    entry->priv = priv;
     strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
     entry->langCode[LANGCODE_LENGTH] = 0;
     entry->initialized = true;
