@@ -23,6 +23,7 @@
 typedef struct _FcitxCandidateWordList {
     UT_array candWords;
     char strChoose[MAX_CAND_WORD + 1];
+    unsigned int candiateModifier;
     int currentPage;
     int wordPerPage;
 } FcitxCandidateWordList;
@@ -160,7 +161,20 @@ boolean FcitxCandidateWordGoNextPage(FcitxCandidateWordList* candList)
 FCITX_EXPORT_API
 void FcitxCandidateWordSetChoose(FcitxCandidateWordList* candList, const char* strChoose)
 {
+    FcitxCandidateWordSetChooseAndModifier(candList, strChoose, FcitxKeyState_None);
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordSetChooseAndModifier(FcitxCandidateWordList* candList, const char* strChoose, unsigned int state)
+{
     strncpy(candList->strChoose, strChoose, MAX_CAND_WORD);
+    candList->candiateModifier = state;
+}
+
+FCITX_EXPORT_API
+unsigned int FcitxCandidateWordGetModifier(FcitxCandidateWordList* candList)
+{
+    return candList->candiateModifier;
 }
 
 FCITX_EXPORT_API

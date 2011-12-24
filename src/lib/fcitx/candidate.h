@@ -192,6 +192,16 @@ extern "C" {
      * @return void
      **/
     void FcitxCandidateWordSetChoose(struct _FcitxCandidateWordList* candList, const char* strChoose);
+    
+    /**
+     * @brief set the select key string, length up to 10, usually "1234567890"
+     *
+     * @param candList candidate word list
+     * @param strChoose select key string
+     * @param state keystate
+     * @return void
+     **/
+    void FcitxCandidateWordSetChooseAndModifier(struct _FcitxCandidateWordList* candList, const char* strChoose, unsigned int state);
 
     /**
      * @brief get the select key string
@@ -200,6 +210,15 @@ extern "C" {
      * @return void
      **/
     const char* FcitxCandidateWordGetChoose(struct _FcitxCandidateWordList* candList);
+    
+    
+    /**
+     * @brief get select key state
+     *
+     * @param candList candidate word list
+     * @return unsigned int
+     **/
+    unsigned int FcitxCandidateWordGetModifier(struct _FcitxCandidateWordList* candList);
 
     /**
      * @brief resize the candidate word length

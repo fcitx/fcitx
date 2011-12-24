@@ -568,7 +568,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
         /* check choose key first, because it might trigger update candidates */
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-            int index = FcitxHotkeyCheckChooseKey(sym, state, FcitxCandidateWordGetChoose(input->candList));
+            int index = FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
+                                                  FcitxCandidateWordGetChoose(input->candList),
+                                                  FcitxCandidateWordGetModifier(input->candList)
+                                                 );
             if (index >= 0)
                 retVal = FcitxCandidateWordChooseByIndex(input->candList, index);
         }
@@ -1205,7 +1208,13 @@ void FcitxInstanceCleanInputWindowDown(FcitxInstance* instance)
 FCITX_EXPORT_API
 int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
 {
-    if (state != 0)
+    return FcitxHotkeyCheckChooseKeyAndModifier(sym, state, strChoose, FcitxKeyState_None);
+}
+
+FCITX_EXPORT_API
+int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState)
+{
+    if (state != candState)
         return -1;
 
     sym = FcitxHotkeyPadToMain(sym);

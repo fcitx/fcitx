@@ -402,6 +402,17 @@ extern "C" {
      * @return int
      **/
     int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, int state, const char* strChoose);
+
+    /**
+     * @brief check is choose key or not, if so, return the choose index
+     *
+     * @param sym keysym
+     * @param state keystate
+     * @param strChoose choose key string
+     * @param candState candidate keystate
+     * @return int
+     **/
+    int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState);
     
     /**
      * @brief get im index by im name
