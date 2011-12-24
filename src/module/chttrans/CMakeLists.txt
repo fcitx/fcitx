@@ -18,3 +18,4 @@ endif (_ENABLE_OPENCC)
 
 fcitx_add_configdesc_file(fcitx-chttrans.desc)
 fcitx_add_addon_conf_file(fcitx-chttrans.conf)
+fcitx_add_addon_header(chttrans chttrans.h)
