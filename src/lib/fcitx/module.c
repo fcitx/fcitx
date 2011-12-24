@@ -100,7 +100,7 @@ FCITX_EXPORT_API
 void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args)
 {
     if (addon == NULL) {
-        FcitxLog(ERROR, "addon is not valid");
+        FcitxLog(DEBUG, "addon is not valid");
         return NULL;
     }
 
@@ -125,7 +125,7 @@ void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFu
 
     FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
     if (func == NULL) {
-        FcitxLog(ERROR, "addon %s doesn't have function with id %d", addon->name, functionId);
+        FcitxLog(DEBUG, "addon %s doesn't have function with id %d", addon->name, functionId);
         return NULL;
     }
     void* result = (*func)(addon->addonInstance, args);
