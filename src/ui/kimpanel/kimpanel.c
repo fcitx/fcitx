@@ -570,9 +570,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 , DBUS_TYPE_INVALID)) {
             if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && int0 < 10) {
-                struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
-                const char* choose = FcitxCandidateWordGetChoose(candList);
-                FcitxInstanceProcessKey(kimpanel->owner, FCITX_PRESS_KEY, 0, choose[int0], 0);
+                INPUT_RETURN_VALUE retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), int0);
+                FcitxInstanceProcessInputReturnValue(instance, retVal);
             }
         }
         dbus_error_free(&error);
