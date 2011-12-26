@@ -49,7 +49,8 @@ char* Table_PYGetFindString(FcitxAddon* pyaddon)
 
 INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, FcitxCandidateWord* candidateWord)
 {
-    FcitxTableState* tbl = arg;
+    TableMetaData* table = arg;
+    FcitxTableState* tbl = table->owner;
     INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance, candidateWord);
     Table_ResetPY(tbl->pyaddon);
     if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING)) {

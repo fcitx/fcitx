@@ -67,6 +67,7 @@ static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);
 static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
 static void ResetPunc(void *arg);
+static void ResetPuncWhichStatus(void* arg);
 static boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state);
 
 
@@ -115,6 +116,10 @@ void* PuncCreate(FcitxInstance* instance)
     hook.func = ResetPunc;
 
     FcitxInstanceRegisterResetInputHook(instance, hook);
+    
+    hook.func = ResetPuncWhichStatus;
+
+    FcitxInstanceRegisterInputUnFocusHook(instance, hook);
 
     FcitxUIRegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
 
@@ -134,7 +139,19 @@ void ResetPunc(void* arg)
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     puncState->bLastIsNumber = false;
     puncState->cLastIsAutoConvert = '\0';
+}
 
+void ResetPuncWhichStatus(void* arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    WidePunc       *chnPunc = puncState->chnPunc;
+    
+    int iIndex = 0;
+    
+    while (chnPunc[iIndex].ASCII) {
+        chnPunc[iIndex].iWhich = 0;
+        iIndex++;
+    }
 }
 
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
