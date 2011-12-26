@@ -34,6 +34,7 @@
 #include "configfile.h"
 #include "profile.h"
 #include "addon.h"
+#include "context.h"
 
 #define FCITX_KEY_EVENT_QUEUE_LENGTH 64
 
@@ -110,6 +111,8 @@ struct _FcitxInstance {
     FcitxAddon* uinormal;
     
     FcitxKeyEventQueue eventQueue;
+    
+    FcitxContext* context;
 };
 
 #endif

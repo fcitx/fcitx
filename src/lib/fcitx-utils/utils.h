@@ -90,6 +90,15 @@ extern "C" {
      * @return UT_array* a new utarray for store the split string
      **/
     UT_array* fcitx_utils_split_string(const char *str, char delm);
+    
+    /**
+     * @brief Join string list with delm
+     *
+     * @param list string list
+     * @param delm delm
+     * @return char* return string, need to be free'd
+     **/
+    char* fcitx_utils_join_string_list(UT_array* list, char delm);
 
     /**
      * @brief Helper function for free the SplitString Output

@@ -144,6 +144,37 @@ UT_array* fcitx_utils_split_string(const char* str, char delm)
 }
 
 FCITX_EXPORT_API
+char* fcitx_utils_join_string_list(UT_array* list, char delm)
+{
+    if (!list)
+        return NULL;
+    
+    size_t len = 0;
+    char** str;
+    for (str = (char**) utarray_front(list);
+         str != NULL;
+         str = (char**) utarray_next(list, str))
+    {
+        len += strlen(*str) + 1;
+    }
+    
+    char* result = (char*) fcitx_utils_malloc0(sizeof(char) * len);
+    char* p = result;
+    for (str = (char**) utarray_front(list);
+         str != NULL;
+         str = (char**) utarray_next(list, str))
+    {
+        size_t strl = strlen(*str);
+        strcpy(p, *str);
+        p[strl] = delm;
+        p += strl + 1;
+    }
+    result[len - 1] = '\0';
+    
+    return result;
+}
+
+FCITX_EXPORT_API
 void fcitx_utils_free_string_list(UT_array* list)
 {
     utarray_free(list);

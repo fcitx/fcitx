@@ -50,6 +50,7 @@
 #include "instance-internal.h"
 #include "fcitx-internal.h"
 #include "addon-internal.h"
+#include "context-internal.h"
 
 #ifdef _ENABLE_DBUS
 #include "module/inputbus/inputbus.h"
@@ -615,10 +616,18 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
      * GetCandWords after go for another page, simply update input window is ok.
      */
     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-        if (FcitxHotkeyIsHotKey(sym, state, fc->hkPrevPage)) {
+        const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+        if (hkPrevPage == NULL)
+            hkPrevPage = fc->hkPrevPage;
+        
+        const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+        if (hkNextPage == NULL)
+            hkNextPage = fc->hkNextPage;
+        
+        if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
             if (FcitxCandidateWordGoPrevPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
-        } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkNextPage)) {
+        } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
             if (FcitxCandidateWordGoNextPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
         }
@@ -755,8 +764,10 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
         free(name);
     }
 
-    if (newIM && newIM->Init)
+    if (newIM && newIM->Init) {
+        FcitxInstanceResetContext(instance, FCF_ResetOnInputMethodChange);
         newIM->Init(newIM->klass);
+    }
 
     FcitxInstanceResetInput(instance);
     FcitxProfileSave(instance->profile);

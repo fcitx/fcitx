@@ -67,6 +67,7 @@ static boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[]);
 static void Usage();
 static void Version();
 static void* RunInstance(void* arg);
+static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
 
 /**
  * @brief 显示命令行参数
@@ -136,6 +137,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     }
     FcitxInstanceResolveAddonDependency(instance);
     FcitxInstanceInitBuiltInHotkey(instance);
+    FcitxInstanceInitBuiltContext(instance);
     FcitxModuleLoad(instance);
     if (!FcitxInstanceLoadAllIM(instance)) {
         FcitxInstanceEnd(instance);
@@ -416,6 +418,12 @@ FCITX_EXPORT_API
 void FcitxInstanceIncreateInputCharacterCount(FcitxInstance* instance, int count)
 {
     instance += count;
+}
+
+void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
+{
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

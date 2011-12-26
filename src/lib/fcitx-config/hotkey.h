@@ -2478,7 +2478,7 @@ extern "C"
      * @param state return of key state
      * @return boolean can be parsed or not
      **/
-    boolean FcitxHotkeyParseKey(char *strKey, FcitxKeySym* sym, int* state);
+    boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state);
 
     /**
      * @brief Get the Fcitx Key String for given keyval and state
@@ -2533,7 +2533,7 @@ extern "C"
      * @param hotkey hotkey
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey);
+    boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey);
 
     /**
      * @brief is key will make cursor move, include left, right, home, end, and so on.

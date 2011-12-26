@@ -4,6 +4,9 @@ target_link_libraries(testconfig fcitx-config)
 add_executable(testmessage testmessage.c)
 target_link_libraries(testmessage fcitx-core)
 
+add_executable(teststring teststring.c)
+target_link_libraries(teststring fcitx-utils)
+
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 
@@ -12,3 +15,7 @@ add_test(NAME testconfig
 
 add_test(NAME testmessage
          COMMAND testmessage)
+         
+add_test(NAME teststring
+         COMMAND teststring)
+         

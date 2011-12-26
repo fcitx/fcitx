@@ -59,10 +59,14 @@ KEY_LIST        keyList[] = {
     {"ESCAPE", FcitxKey_Escape},
     {"SPACE", FcitxKey_space},
     {"DELETE", FcitxKey_Delete},
+    {"UP", FcitxKey_Up},
+    {"DOWN", FcitxKey_Down},
+    {"LEFT", FcitxKey_Left},
+    {"RIGHT", FcitxKey_Right},
     {"\0", 0}
 };
 
-static int FcitxHotkeyGetKeyList(char *strKey);
+static int FcitxHotkeyGetKeyList(const char *strKey);
 static char *FcitxHotkeyGetKeyListString(int key);
 
 FCITX_EXPORT_API
@@ -115,7 +119,7 @@ boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state)
 
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
+boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey)
 {
     state &= FcitxKeyState_Ctrl_Alt_Shift;
     if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
@@ -230,9 +234,9 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
 FCITX_EXPORT_API
-boolean FcitxHotkeyParseKey(char *strKey, FcitxKeySym* sym, int* state)
+boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state)
 {
-    char           *p;
+    const char      *p;
     int             iKey;
     int             iKeyState = 0;
 
@@ -266,7 +270,7 @@ boolean FcitxHotkeyParseKey(char *strKey, FcitxKeySym* sym, int* state)
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyGetKeyList(char *strKey)
+int FcitxHotkeyGetKeyList(const char *strKey)
 {
     int             i;
 

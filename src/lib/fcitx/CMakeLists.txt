@@ -10,6 +10,7 @@ set(LIBFCITX_SOURCES
     ui.c
     module.c
     keys.c
+    context.c
 )
 
 set(FCITX_HEADERS
@@ -25,6 +26,7 @@ set(FCITX_HEADERS
     frontend.h
     fcitx.h
     keys.h
+    context.h
 )
 
 link_directories(${DL_LIBRARY_DIRS} ${PTHREAD_LIBRARY_DIRS})

@@ -35,6 +35,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 #include "fcitx/candidate.h"
+#include "fcitx/context.h"
 
 static INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWord);
 
@@ -315,11 +316,19 @@ INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
     FcitxGlobalConfig* fc = FcitxInstanceGetGlobalConfig(qpstate->owner);
     int retVal = IRV_TO_PROCESS;
+    
+    const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(qpstate->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
+    if (hkPrevPage == NULL)
+        hkPrevPage = fc->hkPrevPage;
+    
+    const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(qpstate->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
+    if (hkNextPage == NULL)
+        hkNextPage = fc->hkNextPage;
 
-    if (FcitxHotkeyIsHotKey(sym, state, fc->hkPrevPage)) {
+    if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
         if (FcitxCandidateWordGoPrevPage(FcitxInputStateGetCandidateList(input)))
             retVal = IRV_DISPLAY_MESSAGE;
-    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkNextPage)) {
+    } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
         if (FcitxCandidateWordGoNextPage(FcitxInputStateGetCandidateList(input)))
             retVal = IRV_DISPLAY_MESSAGE;
     } else if (FcitxHotkeyIsHotKeyDigit(sym, state)) {
