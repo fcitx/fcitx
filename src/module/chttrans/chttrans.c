@@ -403,15 +403,33 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
     FcitxLog(INFO, _("Load Config File %s"), file);
     free(file);
+    boolean newconfig = true;
     if (!fp) {
         if (errno == ENOENT)
             SaveChttransConfig(transState);
+        newconfig = true;
     }
 
     FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
     FcitxChttransConfigBind(transState, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)transState);
+    
+    if (newconfig) {
+        char *p;
+        p = getenv("LC_CTYPE");
+        if (!p) {
+            p = getenv("LC_ALL");
+            if (!p)
+                p = getenv("LANG");
+        }
+        if (p) {
+            if (strstr(p, "zh_TW") || strstr(p, "zh_HK")) {
+                transState->enabled = true;
+                SaveChttransConfig(transState);
+            }
+        }
+    }
 
     if (fp)
         fclose(fp);
