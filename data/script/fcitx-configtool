@@ -56,11 +56,18 @@ run_xdg()
 {
     command=`which xdg-open`
     if [ $? -eq 0 ]; then
-        exec $command ~/.config/fcitx/config
+        exec $command $HOME/.config/fcitx/config
     else
         exit 0
     fi
 }
+
+if [ ! -n "$DISPLAY" ]; then
+    [ -n "$EDITOR" ] && which $EDITOR >& /dev/null && exec $EDITOR $HOME/.config/fcitx/config
+    [ -n "$VISUAL" ] && which $VISUAL >& /dev/null && exec $VISUAL $HOME/.config/fcitx/config
+    echo 'Please run it under X, or set $EDITOR or $VISUAL'
+    exit 0
+fi
 
 detectDE
 
