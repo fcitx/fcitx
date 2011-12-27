@@ -141,6 +141,13 @@ extern "C" {
      * @return int
      **/
     int fcitx_utils_get_display_number();
+    
+    /**
+     * @brief Get current language code, result need to be free'd
+     *
+     * @return char*
+     **/
+    char* fcitx_utils_get_current_langcode();
 
     /**
      * @brief Get Current Process Name

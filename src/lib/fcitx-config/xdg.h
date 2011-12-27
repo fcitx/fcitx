@@ -115,13 +115,15 @@ extern "C"
      * @brief Get All files under directory with a suffix
      *
      * @param path xdg subpath
+     * @param prefix filename prefix
      * @param suffix filename suffix
      * @return StringHashSet*
      *
-     * @since 4.1.3
+     * @since 4.2.0
      **/
     FcitxStringHashSet* FcitxXDGGetFiles(
         char* path,
+        char* prefix,
         char* suffix
     );
 

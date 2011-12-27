@@ -348,7 +348,7 @@ CONFIG_DESC_DEFINE(GetIMConfigDesc, "inputmethod.desc")
 
 boolean FcitxInstanceLoadAllIM(FcitxInstance* instance)
 {
-    FcitxStringHashSet* sset = FcitxXDGGetFiles(PACKAGE "/inputmethod", ".conf");
+    FcitxStringHashSet* sset = FcitxXDGGetFiles("inputmethod", NULL, ".conf");
     FcitxStringHashSet* curs = sset;
     UT_array* addons = &instance->addons;
 
@@ -766,6 +766,7 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
 
     if (newIM && newIM->Init) {
         FcitxInstanceResetContext(instance, FCF_ResetOnInputMethodChange);
+        FcitxInstanceSetContext(instance, CONTEXT_IM_LANGUAGE, newIM->langCode);
         newIM->Init(newIM->klass);
     }
 

@@ -17,25 +17,17 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifdef FCITX_HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include <libintl.h>
 #include <stdio.h>
-#include <sys/stat.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <dirent.h>
-
-#ifdef HAVE_MACHINE_ENDIAN_H
-#include <machine/endian.h>
-#endif
+#include <sys/stat.h>
 
 #include "fcitx/fcitx.h"
-
 #include "fcitx-utils/utils.h"
 #include "fcitx/ime.h"
 #include "fcitx/keys.h"
@@ -205,73 +197,6 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
     return true;
 }
 
-FcitxStringHashSet *GetPYPhraseFiles()
-{
-    char **pinyinPath;
-    size_t len;
-    char *pathBuf;
-    int i = 0;
-    DIR *dir;
-    struct dirent *drt;
-    struct stat fileStat;
-
-    FcitxStringHashSet* sset = NULL;
-
-    pinyinPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/pinyin" , DATADIR, PACKAGE "/pinyin");
-
-    for (i = 0; i < len; i++) {
-        dir = opendir(pinyinPath[i]);
-        if (dir == NULL)
-            continue;
-
-        /* collect all *.conf files */
-        while ((drt = readdir(dir)) != NULL) {
-            size_t nameLen = strlen(drt->d_name);
-            if (nameLen <= strlen(".mb"))
-                continue;
-
-            if (strcmp(drt->d_name + nameLen - strlen(".mb"), ".mb") != 0)
-                continue;
-            if (strcmp(drt->d_name, PY_PHRASE_FILE) == 0)
-                continue;
-            if (strcmp(drt->d_name, PY_USERPHRASE_FILE) == 0)
-                continue;
-            if (strcmp(drt->d_name, PY_SYMBOL_FILE) == 0)
-                continue;
-            if (strcmp(drt->d_name, PY_BASE_FILE) == 0)
-                continue;
-            if (strcmp(drt->d_name, PY_FREQ_FILE) == 0)
-                continue;
-            FcitxLog(INFO, "Try %s", drt->d_name);
-            asprintf(&pathBuf, "%s/%s", pinyinPath[i], drt->d_name);
-
-            int statresult = stat(pathBuf, &fileStat);
-            free(pathBuf);
-
-            if (statresult == -1)
-                continue;
-
-            if (fileStat.st_mode & S_IFREG) {
-                FcitxStringHashSet *string;
-                HASH_FIND_STR(sset, drt->d_name, string);
-                if (!string) {
-                    char *bStr = strdup(drt->d_name);
-                    string = fcitx_utils_malloc0(sizeof(FcitxStringHashSet));
-                    memset(string, 0, sizeof(FcitxStringHashSet));
-                    string->name = bStr;
-                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
-                }
-            }
-        }
-
-        closedir(dir);
-    }
-
-    FcitxXDGFreePath(pinyinPath);
-
-    return sset;
-}
-
 void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boolean stripDup)
 {
     int i, j , k, count, iLen;
@@ -397,20 +322,27 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     else {
         LoadPYPhraseDict(pystate, fp, true, false);
         fclose(fp);
-        FcitxStringHashSet *sset = GetPYPhraseFiles();
-        FcitxStringHashSet *curStr;
-        while (sset) {
-            curStr = sset;
-            HASH_DEL(sset, curStr);
+        FcitxStringHashSet *sset = FcitxXDGGetFiles(PACKAGE "/pinyin", NULL, ".mb");
+        FcitxStringHashSet *curStr = sset;
+        while (curStr) {
             char *filename;
-            fp = FcitxXDGGetFileWithPrefix("pinyin", curStr->name, "r", &filename);
-            FcitxLog(INFO, _("Load extra dict: %s"), filename);
-            free(filename);
-            LoadPYPhraseDict(pystate, fp, true, true);
-            fclose(fp);
-            free(curStr->name);
-            free(curStr);
+                
+            if (strcmp(curStr->name, PY_PHRASE_FILE) != 0
+                && strcmp(curStr->name, PY_USERPHRASE_FILE) == 0
+                && strcmp(curStr->name, PY_SYMBOL_FILE) == 0
+                && strcmp(curStr->name, PY_BASE_FILE) == 0 
+                && strcmp(curStr->name, PY_FREQ_FILE) == 0) {
+                
+                fp = FcitxXDGGetFileWithPrefix("pinyin", curStr->name, "r", &filename);
+                FcitxLog(INFO, _("Load extra dict: %s"), filename);
+                free(filename);
+                LoadPYPhraseDict(pystate, fp, true, true);
+                fclose(fp);
+            }
+            curStr = curStr->hh.next;
         }
+        
+        fcitx_utils_free_string_hash_set(sset);
 
         pystate->iOrigCounter = pystate->iCounter;
     }

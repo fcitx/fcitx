@@ -24,18 +24,19 @@
 #include <stdlib.h>
 #include <libintl.h>
 
+#include "punc.h"
 #include "fcitx/module.h"
 #include "fcitx/fcitx.h"
 #include "fcitx/hook.h"
-#include "punc.h"
 #include "fcitx/ime.h"
-#include "fcitx-config/xdg.h"
-#include "fcitx-utils/log.h"
-#include "fcitx-utils/utils.h"
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 #include "fcitx/instance.h"
 #include "fcitx/candidate.h"
+#include "fcitx/context.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-utils/log.h"
+#include "fcitx-utils/utils.h"
 
 /**
  * @file punc.c
@@ -50,13 +51,19 @@ struct _FcitxPuncState;
 typedef struct _WidePunc {
     int             ASCII;
     char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
-unsigned        iCount:
-    2;
-unsigned        iWhich:
-    2;
+    unsigned        iCount: 2;
+    unsigned        iWhich: 2;
 } WidePunc;
 
+typedef struct _FcitxPunc {
+    char* langCode;
+    WidePunc* curPunc;
+    
+    UT_hash_handle hh;
+} FcitxPunc;
+
 static boolean LoadPuncDict(struct _FcitxPuncState* puncState);
+static FcitxPunc* LoadPuncFile(const char* filename);
 static char *GetPunc(struct _FcitxPuncState* puncState, int iKey);
 static void FreePunc(struct _FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
@@ -69,13 +76,14 @@ static INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void *arg);
 static void ResetPunc(void *arg);
 static void ResetPuncWhichStatus(void* arg);
 static boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state);
-
+static void PuncLanguageChanged(void* arg, const void* value);
 
 typedef struct _FcitxPuncState {
     char cLastIsAutoConvert;
     boolean bLastIsNumber;
     FcitxInstance* owner;
-    WidePunc* chnPunc;
+    FcitxPunc* puncSet;
+    WidePunc* curPunc;
 } FcitxPuncState;
 
 FCITX_EXPORT_API
@@ -120,11 +128,28 @@ void* PuncCreate(FcitxInstance* instance)
     hook.func = ResetPuncWhichStatus;
 
     FcitxInstanceRegisterInputUnFocusHook(instance, hook);
+    
+    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, PuncLanguageChanged, puncState);
 
     FcitxUIRegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
     return puncState;
+}
+
+void PuncLanguageChanged(void* arg, const void* value)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    const char* lang = (const char*) value;
+    FcitxPunc* punc = NULL;
+    if (lang) {
+        HASH_FIND_STR(puncState->puncSet, lang, punc);
+        if (punc)
+            puncState->curPunc = punc->curPunc;
+        else
+            puncState->curPunc = 0;
+    } else 
+        puncState->curPunc = 0;
 }
 
 void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
@@ -144,12 +169,15 @@ void ResetPunc(void* arg)
 void ResetPuncWhichStatus(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
-    WidePunc       *chnPunc = puncState->chnPunc;
+    WidePunc       *curPunc = puncState->curPunc;
+    
+    if (!curPunc)
+        return;
     
     int iIndex = 0;
     
-    while (chnPunc[iIndex].ASCII) {
-        chnPunc[iIndex].iWhich = 0;
+    while (curPunc[iIndex].ASCII) {
+        curPunc[iIndex].iWhich = 0;
         iIndex++;
     }
 }
@@ -252,17 +280,36 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
  */
 boolean LoadPuncDict(FcitxPuncState* puncState)
 {
+    
+    FcitxStringHashSet* puncfiles = FcitxXDGGetFiles("data", PUNC_DICT_FILENAME "." , NULL);
+    FcitxStringHashSet *curpuncfile = puncfiles;
+    FcitxPunc* punc;
+    while (curpuncfile) {
+        punc = LoadPuncFile(curpuncfile->name);
+        if (punc)
+            HASH_ADD_KEYPTR(hh, puncState->puncSet, punc->langCode, strlen(punc->langCode), punc);
+        curpuncfile = curpuncfile->hh.next;
+    }
+    
+    fcitx_utils_free_string_hash_set(puncfiles);
+    return true;
+}
+
+FcitxPunc* LoadPuncFile(const char* filename)
+{
     FILE           *fpDict;             // 词典文件指针
     int             iRecordNo;
     char            strText[4 + MAX_PUNC_LENGTH * UTF8_MAX_LENGTH];
     char           *pstr;               // 临时指针
     int             i;
-
-    fpDict = FcitxXDGGetFileWithPrefix("data", PUNC_DICT_FILENAME, "rt", NULL);
+    fpDict = FcitxXDGGetFileWithPrefix("data", filename, "rt", NULL);
+    
+    if (strlen(filename) < strlen(PUNC_DICT_FILENAME))
+        return NULL;
 
     if (!fpDict) {
-        FcitxLog(WARNING, _("Can't open Chinese punc file."));
-        return false;
+        FcitxLog(WARNING, _("Can't open punc file."));
+        return NULL;
     }
 
     /* 计算词典里面有多少的数据
@@ -271,11 +318,11 @@ boolean LoadPuncDict(FcitxPuncState* puncState)
      * 没有一个空行就是浪费sizeof (WidePunc)字节内存*/
     iRecordNo = fcitx_utils_calculate_record_number(fpDict);
     // 申请空间，用来存放这些数据。这儿没有检查是否申请到内存，严格说有小隐患
-    puncState->chnPunc = (WidePunc *) fcitx_utils_malloc0(sizeof(WidePunc) * (iRecordNo + 1));
+    WidePunc* punc = (WidePunc *) fcitx_utils_malloc0(sizeof(WidePunc) * (iRecordNo + 1));
 
     iRecordNo = 0;
 
-    // 下面这个循环，就是一行一行的读入词典文件的数据。并将其放入到chnPunc里面去。
+    // 下面这个循环，就是一行一行的读入词典文件的数据。并将其放入到curPunc里面去。
     for (;;) {
         if (!fgets(strText, (MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 3), fpDict))
             break;
@@ -294,46 +341,61 @@ boolean LoadPuncDict(FcitxPuncState* puncState)
             pstr = strText;                     // 将pstr指向第一个非空字符
             while (*pstr == ' ')
                 pstr++;
-            puncState->chnPunc[iRecordNo].ASCII = *pstr++; // 这个就是中文符号所对应的ASCII码值
+            punc[iRecordNo].ASCII = *pstr++; // 这个就是中文符号所对应的ASCII码值
             while (*pstr == ' ')                // 然后，将pstr指向下一个非空字符
                 pstr++;
 
-            puncState->chnPunc[iRecordNo].iCount = 0;      // 该符号有几个转化，比如英文"就可以转换成“和”
-            puncState->chnPunc[iRecordNo].iWhich = 0;      // 标示该符号的输入状态，即处于第几个转换。如"，iWhich标示是转换成“还是”
+            punc[iRecordNo].iCount = 0;      // 该符号有几个转化，比如英文"就可以转换成“和”
+            punc[iRecordNo].iWhich = 0;      // 标示该符号的输入状态，即处于第几个转换。如"，iWhich标示是转换成“还是”
             // 依次将该ASCII码所对应的符号放入到结构中
             while (*pstr) {
                 i = 0;
                 // 因为中文符号都是多字节（这里读取并不像其他地方是固定两个，所以没有问题）的，所以，要一直往后读，知道空格或者字符串的末尾
                 while (*pstr != ' ' && *pstr) {
-                    puncState->chnPunc[iRecordNo].strWidePunc[puncState->chnPunc[iRecordNo].iCount][i] = *pstr;
+                    punc[iRecordNo].strWidePunc[punc[iRecordNo].iCount][i] = *pstr;
                     i++;
                     pstr++;
                 }
 
                 // 每个中文符号用'\0'隔开
-                puncState->chnPunc[iRecordNo].strWidePunc[puncState->chnPunc[iRecordNo].iCount][i] = '\0';
+                punc[iRecordNo].strWidePunc[punc[iRecordNo].iCount][i] = '\0';
                 while (*pstr == ' ')
                     pstr++;
-                puncState->chnPunc[iRecordNo].iCount++;
+                punc[iRecordNo].iCount++;
             }
 
             iRecordNo++;
         }
     }
 
-    puncState->chnPunc[iRecordNo].ASCII = '\0';
+    punc[iRecordNo].ASCII = '\0';
     fclose(fpDict);
-
-    return true;
+    
+    FcitxPunc* p = fcitx_utils_malloc0(sizeof(FcitxPunc));
+    p->langCode = "";
+    
+    const char* langcode = filename + strlen(PUNC_DICT_FILENAME);
+    if (*langcode == '\0')
+        p->langCode = strdup("C");
+    else
+        p->langCode = strdup(langcode + 1);
+        
+    p->curPunc = punc;
+    
+    return p;
 }
 
 void FreePunc(FcitxPuncState* puncState)
 {
-    if (!puncState->chnPunc)
-        return;
-
-    free(puncState->chnPunc);
-    puncState->chnPunc = (WidePunc *) NULL;
+    puncState->curPunc = NULL;
+    FcitxPunc* cur;
+    while (puncState->puncSet) {
+        cur = puncState->puncSet;
+        HASH_DEL(puncState->puncSet, cur);
+        free(cur->langCode);
+        free(cur->curPunc);
+        free(cur);
+    }
 }
 
 /*
@@ -344,17 +406,17 @@ char           *GetPunc(FcitxPuncState* puncState, int iKey)
 {
     int             iIndex = 0;
     char           *pPunc;
-    WidePunc       *chnPunc = puncState->chnPunc;
+    WidePunc       *curPunc = puncState->curPunc;
 
-    if (!chnPunc)
+    if (!curPunc)
         return (char *) NULL;
 
-    while (chnPunc[iIndex].ASCII) {
-        if (chnPunc[iIndex].ASCII == iKey) {
-            pPunc = chnPunc[iIndex].strWidePunc[chnPunc[iIndex].iWhich];
-            chnPunc[iIndex].iWhich++;
-            if (chnPunc[iIndex].iWhich >= chnPunc[iIndex].iCount)
-                chnPunc[iIndex].iWhich = 0;
+    while (curPunc[iIndex].ASCII) {
+        if (curPunc[iIndex].ASCII == iKey) {
+            pPunc = curPunc[iIndex].strWidePunc[curPunc[iIndex].iWhich];
+            curPunc[iIndex].iWhich++;
+            if (curPunc[iIndex].iWhich >= curPunc[iIndex].iCount)
+                curPunc[iIndex].iWhich = 0;
             return pPunc;
         }
         iIndex++;

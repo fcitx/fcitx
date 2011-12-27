@@ -252,6 +252,7 @@ char **FcitxXDGGetPath(
 FCITX_EXPORT_API
 FcitxStringHashSet* FcitxXDGGetFiles(
     char* path,
+    char* prefix,
     char* suffix
 )
 {
@@ -265,7 +266,7 @@ FcitxStringHashSet* FcitxXDGGetFiles(
 
     FcitxStringHashSet* sset = NULL;
 
-    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", path , DATADIR, path);
+    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config/" PACKAGE, path , DATADIR "/" PACKAGE, path);
 
     for (i = 0; i < len; i++) {
         asprintf(&pathBuf, "%s", xdgPath[i]);
@@ -274,14 +275,22 @@ FcitxStringHashSet* FcitxXDGGetFiles(
         free(pathBuf);
         if (dir == NULL)
             continue;
+        
+        size_t suffixlen = 0;
+        size_t prefixlen = 0;
+        
+        if (suffix) suffixlen = strlen(suffix);
+        if (prefix) prefixlen = strlen(prefix);
 
         /* collect all *.conf files */
         while ((drt = readdir(dir)) != NULL) {
             size_t nameLen = strlen(drt->d_name);
-            if (nameLen <= strlen(".conf"))
+            if (nameLen <= suffixlen + prefixlen)
                 continue;
 
-            if (strcmp(drt->d_name + nameLen - strlen(suffix), suffix) != 0)
+            if (suffix && strcmp(drt->d_name + nameLen - suffixlen, suffix) != 0)
+                continue;
+            if (prefix && strncmp(drt->d_name, prefix, prefixlen) != 0)
                 continue;
             asprintf(&pathBuf, "%s/%s", xdgPath[i], drt->d_name);
 

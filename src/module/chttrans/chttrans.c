@@ -416,19 +416,12 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     FcitxConfigBindSync((FcitxGenericConfig*)transState);
     
     if (newconfig) {
-        char *p;
-        p = getenv("LC_CTYPE");
-        if (!p) {
-            p = getenv("LC_ALL");
-            if (!p)
-                p = getenv("LANG");
+        char *p = fcitx_utils_get_current_langcode();
+        if (strcmp(p, "zh_TW") || strcmp(p, "zh_HK")) {
+            transState->enabled = true;
+            SaveChttransConfig(transState);
         }
-        if (p) {
-            if (strstr(p, "zh_TW") || strstr(p, "zh_HK")) {
-                transState->enabled = true;
-                SaveChttransConfig(transState);
-            }
-        }
+        free(p);
     }
 
     if (fp)

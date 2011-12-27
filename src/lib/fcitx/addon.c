@@ -24,8 +24,6 @@
  * @author CSSlayer wengxt@gmail.com
  */
 
-#include <limits.h>
-#include <dirent.h>
 #include <sys/stat.h>
 #include <libintl.h>
 #include <dlfcn.h>
@@ -81,7 +79,8 @@ void FcitxAddonsLoad(UT_array* addons)
     utarray_clear(addons);
 
     FcitxStringHashSet* sset = FcitxXDGGetFiles(
-                              PACKAGE "/addon",
+                              "addon",
+                              NULL,
                               ".conf"
                           );
     addonPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");

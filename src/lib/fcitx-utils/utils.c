@@ -253,6 +253,30 @@ int fcitx_utils_get_display_number()
 }
 
 FCITX_EXPORT_API
+char* fcitx_utils_get_current_langcode()
+{
+    /* language[_territory][.codeset][@modifier]" or "C" */
+    const char* p;
+    p = getenv("LC_CTYPE");
+    if (!p) {
+        p = getenv("LC_ALL");
+        if (!p)
+            p = getenv("LANG");
+    }
+    if (p) {
+        char* result = strdup(p);
+        char* m;
+        m = strchr(result, '.');
+        if (m) *m = '\0';
+        
+        m = strchr(result, '@');
+        if (m) *m= '\0';
+        return result;
+    }
+    return strdup("C");
+}
+
+FCITX_EXPORT_API
 char* fcitx_utils_get_process_name()
 {
 #if defined(__linux__)

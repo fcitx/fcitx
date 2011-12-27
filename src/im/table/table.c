@@ -17,39 +17,31 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifdef FCITX_HAVE_CONFIG_H
 #include "config.h"
-#endif
 
-#include "fcitx/fcitx.h"
-#include "fcitx-utils/utils.h"
 
 #include "table.h"
 
-#include <limits.h>
-#include <errno.h>
 #include <stdio.h>
-#include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <dirent.h>
 #include <libintl.h>
 
-#include "im/pinyin/pydef.h"
+#include "fcitx/fcitx.h"
 #include "fcitx/keys.h"
 #include "fcitx/ui.h"
-#include "fcitx-utils/utarray.h"
-#include "fcitx-config/xdg.h"
 #include "fcitx/profile.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
-#include "module/punc/punc.h"
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
+#include "fcitx/candidate.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-utils/utarray.h"
+#include "fcitx-utils/utils.h"
+#include "im/pinyin/pydef.h"
+#include "module/punc/punc.h"
 #include "tablepinyinwrapper.h"
-#include <fcitx/candidate.h>
 
 static void FreeTableConfig(void *v);
 const UT_icd table_icd = {sizeof(TableMetaData), NULL , NULL, FreeTableConfig};
@@ -142,8 +134,8 @@ void LoadTableInfo(FcitxTableState *tbl)
     tbl->iTableCount = 0;
     utarray_init(tbl->table, &table_icd);
 
-    tablePath = FcitxXDGGetPath(&len, "XDG_CONFI'. G_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table");
-    sset = FcitxXDGGetFiles(PACKAGE "/table", ".conf");
+    tablePath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table");
+    sset = FcitxXDGGetFiles("table", NULL, ".conf");
 
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)

@@ -44,6 +44,7 @@ extern "C" {
 
     #define CONTEXT_ALTERNATIVE_PREVPAGE_KEY "CONTEXT_ALTERNATIVE_PREVPAGE_KEY"
     #define CONTEXT_ALTERNATIVE_NEXTPAGE_KEY "CONTEXT_ALTERNATIVE_NEXTPAGE_KEY"
+    #define CONTEXT_IM_LANGUAGE "CONTEXT_IM_LANGUAGE"
 
     void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag );
     void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxContextCallback callback, void* arg);

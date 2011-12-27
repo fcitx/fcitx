@@ -424,6 +424,8 @@ void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
 {
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_LANGUAGE, FCT_String, FCF_None);
+    
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
