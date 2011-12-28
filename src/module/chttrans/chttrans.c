@@ -417,7 +417,7 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     
     if (newconfig) {
         char *p = fcitx_utils_get_current_langcode();
-        if (strcmp(p, "zh_TW") || strcmp(p, "zh_HK")) {
+        if (strcmp(p, "zh_TW") == 0 || strcmp(p, "zh_HK") == 0) {
             transState->enabled = true;
             SaveChttransConfig(transState);
         }
