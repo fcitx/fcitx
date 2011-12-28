@@ -403,7 +403,7 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
     FcitxLog(INFO, _("Load Config File %s"), file);
     free(file);
-    boolean newconfig = true;
+    boolean newconfig = false;
     if (!fp) {
         if (errno == ENOENT)
             SaveChttransConfig(transState);
