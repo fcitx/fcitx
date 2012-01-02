@@ -4,7 +4,7 @@ project(fcitx)
 
 set(version 4.2.0)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 option(ENABLE_CAIRO "Enable Cairo" ON)
 option(ENABLE_DBUS "Enable DBus Support" ON)
