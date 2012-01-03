@@ -140,6 +140,8 @@ const char * im_introspection_xml =
     "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
+    "    <method name=\"Exit\">\n"
+    "    </method>\n"
     "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">\n"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>\n"
@@ -465,6 +467,13 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")) {
         FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Exit")) {
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(ipc->conn, reply, NULL);
+        dbus_message_unref(reply);
+        dbus_connection_flush(ipc->conn);
+        FcitxInstanceEnd(ipc->owner);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

@@ -18,16 +18,19 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#include <unistd.h>
+#include <dbus/dbus.h>
+#include <libintl.h>
+
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
-#include <dbus/dbus.h>
-#include <libintl.h>
+#include "fcitx-utils/utils.h"
+
+#include "frontend/ipc/ipc.h"
 #include "dbusstuff.h"
-#include <unistd.h>
-#include <fcitx-utils/utils.h>
 
 
 typedef struct _FcitxDBusWatch {
@@ -107,27 +110,57 @@ void* DBusCreate(FcitxInstance* instance)
     dbusmodule->conn = conn;
     dbusmodule->owner = instance;
 
+    boolean request_retry = false;
     char* servicename = NULL;
     asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+    do {
+        request_retry = false;
 
-    // request a name on the bus
-    int ret = dbus_bus_request_name(conn, servicename,
-                                    DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
-                                    &err);
+        // request a name on the bus
+        int ret = dbus_bus_request_name(conn, servicename,
+                                        DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                        &err);
+        if (dbus_error_is_set(&err)) {
+            FcitxLog(WARNING, _("Name Error (%s)"), err.message);
+            dbus_error_free(&err);
+            free(servicename);
+            free(dbusmodule);
+            return NULL;
+        }
+        if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
+            FcitxLog(WARNING, "DBus Service Already Exists");
+            
+            if (FcitxInstanceIsTryReplace(instance)) {
+                FcitxInstanceResetTryReplace(instance);
+                DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
+                dbus_connection_send(dbusmodule->conn, message, NULL);
+                /* synchronize call here */
+                DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 0, &err);
+                
+                if (dbus_error_is_set(&err)) {
+                    dbus_error_free(&err);
+                    dbus_error_init(&err);
+                }
+                
+                if (reply)
+                    dbus_message_unref(reply);
+                dbus_message_unref(message);
+                
+                /* sleep for a while and retry */
+                sleep(1);
+                
+                request_retry = true;
+                continue;
+            }
+            
+            dbus_error_free(&err);
+            free(servicename);
+            free(dbusmodule);
+            return NULL;
+        }
+    } while (request_retry);
 
     free(servicename);
-    if (dbus_error_is_set(&err)) {
-        FcitxLog(WARNING, _("Name Error (%s)"), err.message);
-        dbus_error_free(&err);
-        free(dbusmodule);
-        return NULL;
-    }
-    if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
-        FcitxLog(WARNING, _("Name Error"));
-        dbus_error_free(&err);
-        free(dbusmodule);
-        return NULL;
-    }
 
     dbus_connection_flush(conn);
     AddFunction(dbusaddon, DBusGetConnection);

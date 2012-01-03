@@ -113,6 +113,8 @@ struct _FcitxInstance {
     FcitxKeyEventQueue eventQueue;
     
     FcitxContext* context;
+    
+    boolean tryReplace;
 };
 
 #endif

@@ -75,6 +75,7 @@ static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
 void Usage()
 {
     printf("Usage: fcitx [OPTION]\n"
+           "\t-r, --replace\t\ttry replace existing fcitx, need module support.\n"
            "\t-d\t\t\trun as daemon(default)\n"
            "\t-D\t\t\tdon't run as daemon\n"
            "\t-s[sleep time]\t\toverride delay start time in config file, 0 for immediate start\n"
@@ -243,6 +244,16 @@ FCITX_EXPORT_API
 void FcitxInstanceEnd(FcitxInstance* instance)
 {
     FcitxInstanceSaveAllIM(instance);
+    
+    if (instance->uinormal && instance->uinormal->ui->Destroy)
+        instance->uinormal->ui->Destroy(instance->uinormal->addonInstance);
+    
+    if (instance->uifallback && instance->uifallback->ui->Destroy)
+        instance->uifallback->ui->Destroy(instance->uifallback->addonInstance);
+    
+    instance->uifallback = NULL;
+    instance->ui = NULL;
+    instance->uinormal = NULL;
 
     /* handle exit */
     FcitxAddon** pimclass;
@@ -326,6 +337,7 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
 {
     struct option longOptions[] = {
         {"ui", 1, 0, 0},
+        {"replace", 0, 0, 0},
         {"help", 0, 0, 0}
     };
 
@@ -334,12 +346,15 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     char* uiname = NULL;
     boolean runasdaemon = true;
     int             overrideDelay = -1;
-    while ((c = getopt_long(argc, argv, "u:dDs:hv", longOptions, &optionIndex)) != EOF) {
+    while ((c = getopt_long(argc, argv, "ru:dDs:hv", longOptions, &optionIndex)) != EOF) {
         switch (c) {
         case 0: {
             switch (optionIndex) {
             case 0:
                 uiname = strdup(optarg);
+                break;
+            case 1:
+                instance->tryReplace = true;
                 break;
             default:
                 Usage();
@@ -347,6 +362,9 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
             }
         }
         break;
+        case 'r':
+            instance->tryReplace = true;
+            break;
         case 'u':
             uiname = strdup(optarg);
             break;
@@ -426,6 +444,18 @@ void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_LANGUAGE, FCT_String, FCF_None);
     
+}
+
+FCITX_EXPORT_API
+boolean FcitxInstanceIsTryReplace(FcitxInstance* instance)
+{
+    return instance->tryReplace;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceResetTryReplace(FcitxInstance* instance)
+{
+    instance->tryReplace = false;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

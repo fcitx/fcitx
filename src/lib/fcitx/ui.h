@@ -257,7 +257,7 @@ extern "C" {
          */
         void (*Resume)(void*);
 
-        void (*padding0)(void*);
+        void (*Destroy)(void*);
         void (*padding1)(void*);
         void (*padding2)(void*);
         void (*padding3)(void*);

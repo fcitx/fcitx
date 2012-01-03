@@ -52,6 +52,22 @@ extern "C" {
     FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[]);
 
     /**
+     * @brief replace existing fcitx instance
+     *
+     * @param instance fcitx instance
+     * @return boolean
+     **/
+    boolean FcitxInstanceIsTryReplace(FcitxInstance* instance);
+
+    /**
+     * @brief replace existing fcitx instance
+     *
+     * @param instance fcitx instance
+     * @return bool
+     **/
+    void FcitxInstanceResetTryReplace(FcitxInstance* instance);
+
+    /**
      * @brief lock the instance
      *
      * @param instance fcitx instance
@@ -91,7 +107,6 @@ extern "C" {
      * @return current ic changed
      **/
     boolean FcitxInstanceSetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
-
 
     /**
      * @brief Get Addons From Instance

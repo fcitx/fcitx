@@ -125,6 +125,7 @@ static void KimpanelOnInputFocus(void *arg);
 static void KimpanelOnInputUnFocus(void *arg);
 static void KimpanelOnTriggerOn(void *arg);
 static void KimpanelOnTriggerOff(void *arg);
+static void KimpanelDestroy(void* arg);
 
 static void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow);
@@ -167,7 +168,7 @@ FcitxUI ui = {
     NULL,
     NULL,
     NULL,
-    NULL,
+    KimpanelDestroy,
     NULL,
     NULL,
     NULL
@@ -642,7 +643,6 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
         FcitxLog(DEBUG, "Exit");
-        KimRegisterProperties(kimpanel, NULL, 0);
         FcitxInstanceEnd(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "ReloadConfig")) {
@@ -1287,6 +1287,36 @@ void KimpanelServiceExistCallback(DBusPendingCall *call, void *data)
 
     dbus_pending_call_cancel(call);
     dbus_pending_call_unref(call);
+}
+
+void KimpanelDestroy(void* arg)
+{
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimpanelCloseInputWindow(kimpanel);
+    KimRegisterProperties(kimpanel, NULL, 0);
+    dbus_connection_unregister_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH);
+    dbus_connection_remove_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel);
+
+    DBusError err;
+    dbus_error_init(&err);
+    dbus_bus_remove_match(kimpanel->conn,
+                          "type='signal',interface='org.kde.impanel'",
+                          &err);
+    dbus_connection_flush(kimpanel->conn);
+
+    dbus_bus_remove_match(kimpanel->conn,
+                        "type='signal',"
+                        "interface='" DBUS_INTERFACE_DBUS "',"
+                        "path='" DBUS_PATH_DBUS "',"
+                        "member='NameOwnerChanged'",
+                        &err);
+
+    dbus_connection_flush(kimpanel->conn);
+    dbus_error_free(&err);
+    
+    free(kimpanel->messageUp);
+    free(kimpanel->messageDown);
+    free(kimpanel);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
