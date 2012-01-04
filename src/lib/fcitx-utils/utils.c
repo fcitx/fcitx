@@ -244,8 +244,9 @@ int fcitx_utils_get_display_number()
         if (*p == '.') {
             *p = '\0';
         }
-
-        sscanf(strDisplayNumber, "%d", &displayNumber);
+        
+        if (strDisplayNumber)
+            sscanf(strDisplayNumber, "%d", &displayNumber);
 
         free(display);
     }
