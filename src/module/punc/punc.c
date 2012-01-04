@@ -280,7 +280,6 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
  */
 boolean LoadPuncDict(FcitxPuncState* puncState)
 {
-    
     FcitxStringHashSet* puncfiles = FcitxXDGGetFiles("data", PUNC_DICT_FILENAME "." , NULL);
     FcitxStringHashSet *curpuncfile = puncfiles;
     FcitxPunc* punc;
@@ -455,6 +454,8 @@ void ReloadPunc(void* arg)
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FreePunc(puncState);
     LoadPuncDict(puncState);
+    
+    PuncLanguageChanged(puncState, FcitxInstanceGetContextString(puncState->owner, CONTEXT_IM_LANGUAGE));
 }
 
 boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state)
