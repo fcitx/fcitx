@@ -36,8 +36,8 @@
 #include <dirent.h>
 
 #include "fcitx/fcitx.h"
+#include "fcitx-utils/utils.h"
 #include "xdg.h"
-#include <fcitx-utils/utils.h>
 
 static void make_path(const char *path);
 
@@ -266,7 +266,10 @@ FcitxStringHashSet* FcitxXDGGetFiles(
 
     FcitxStringHashSet* sset = NULL;
 
-    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config/" PACKAGE, path , DATADIR "/" PACKAGE, path);
+    char *prefixpath;
+    asprintf(&prefixpath, "%s/%s", PACKAGE, path);
+    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config" , prefixpath , DATADIR , prefixpath);
+    free(prefixpath);
 
     for (i = 0; i < len; i++) {
         asprintf(&pathBuf, "%s", xdgPath[i]);
