@@ -49,8 +49,8 @@
 
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
 
-#define MAIN_BAR_MAX_WIDTH 400
-#define MAIN_BAR_MAX_HEIGHT 400
+#define MAIN_BAR_MAX_WIDTH 2
+#define MAIN_BAR_MAX_HEIGHT 2
 
 static boolean MainWindowEventHandler(void *arg, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
@@ -105,7 +105,6 @@ void InitMainWindow(MainWindow* mainWindow)
                               MAIN_BAR_MAX_WIDTH,
                               MAIN_BAR_MAX_HEIGHT);
 
-    mainWindow->main_win_gc = XCreateGC(dpy, mainWindow->window, 0, NULL);
     XChangeWindowAttributes(dpy, mainWindow->window, attribmask, &attrib);
     XSelectInput(dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
 
@@ -171,6 +170,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 return;
             width = cairo_image_surface_get_width(back->image);
             height = cairo_image_surface_get_height(back->image);
+            EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
 
@@ -297,6 +297,7 @@ void DrawMainWindow(MainWindow* mainWindow)
             width = currentX + sc->skinMainBar.marginRight;
             height += sc->skinMainBar.marginTop + sc->skinMainBar.marginBottom;
 
+            EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c,
                                     back->image,
@@ -350,19 +351,17 @@ void DrawMainWindow(MainWindow* mainWindow)
         }
 
         cairo_destroy(c);
-        {
-            cairo_xlib_surface_set_size(mainWindow->cs_x_main_bar,
-                                        width,
-                                        height);
+        cairo_xlib_surface_set_size(mainWindow->cs_x_main_bar,
+                                    width,
+                                    height);
 
-            c = cairo_create(mainWindow->cs_x_main_bar);
-            cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-            cairo_set_source_surface(c, mainWindow->cs_main_bar, 0, 0);
-            cairo_rectangle(c, 0, 0, width, height);
-            cairo_clip(c);
-            cairo_paint(c);
-            cairo_destroy(c);
-        }
+        c = cairo_create(mainWindow->cs_x_main_bar);
+        cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+        cairo_set_source_surface(c, mainWindow->cs_main_bar, 0, 0);
+        cairo_rectangle(c, 0, 0, width, height);
+        cairo_clip(c);
+        cairo_paint(c);
+        cairo_destroy(c);
 
         XMapRaised(mainWindow->dpy, mainWindow->window);
     } else
@@ -375,12 +374,10 @@ void ReloadMainWindow(void *arg, boolean enabled)
     boolean visable = WindowIsVisable(mainWindow->dpy, mainWindow->window);
     cairo_surface_destroy(mainWindow->cs_main_bar);
     cairo_surface_destroy(mainWindow->cs_x_main_bar);
-    XFreeGC(mainWindow->dpy, mainWindow->main_win_gc);
     XDestroyWindow(mainWindow->dpy, mainWindow->window);
 
     mainWindow->cs_main_bar = NULL;
     mainWindow->cs_x_main_bar = NULL;
-    mainWindow->main_win_gc = NULL;
     mainWindow->window = None;
 
     InitMainWindow(mainWindow);

@@ -547,6 +547,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     cairo_t *c = NULL;
     FcitxInputState* input = FcitxInstanceGetInputState(inputWindow->owner->owner);
     FcitxInstance* instance = inputWindow->owner->owner;
+    FcitxClassicUI* classicui = inputWindow->owner;
     int iChar = iCursorPos;
     int strWidth = 0, strHeight = 0;
 
@@ -638,16 +639,19 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     /* round to ROUND_SIZE in order to decrease resize */
     newWidth = (newWidth / ROUND_SIZE) * ROUND_SIZE + ROUND_SIZE;
 
-    //输入条长度应该比背景图长度要长,比最大长度要短
-    newWidth = (newWidth >= INPUT_BAR_MAX_WIDTH) ? INPUT_BAR_MAX_WIDTH : newWidth;
     if (inputWindow->owner->bVerticalList) { /* vertical */
         newWidth = (newWidth < INPUT_BAR_VMIN_WIDTH) ? INPUT_BAR_VMIN_WIDTH : newWidth;
     } else {
         newWidth = (newWidth < INPUT_BAR_HMIN_WIDTH) ? INPUT_BAR_HMIN_WIDTH : newWidth;
     }
-
+    
     *iwidth = newWidth;
     *iheight = newHeight;
+
+    EnlargeCairoSurface(&inputWindow->cs_input_back, newWidth, newHeight);
+    if (EnlargeCairoSurface(&inputWindow->cs_input_bar, newWidth, newHeight)) {
+        LoadInputMessage(&classicui->skin, classicui->inputWindow, classicui->font);
+    }
 
     if (oldHeight != newHeight || oldWidth != newWidth) {
         c = cairo_create(inputWindow->cs_input_back);

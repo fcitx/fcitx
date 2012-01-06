@@ -33,7 +33,10 @@
 #include "classicui.h"
 #include "MenuWindow.h"
 #include "fcitx/instance.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
+
+#define MENU_WINDOW_WIDTH   100
+#define MENU_WINDOW_HEIGHT  100
 
 static boolean ReverseColor(XlibMenu * Menu, int shellIndex);
 static void MenuMark(XlibMenu* menu, int y, int i);
@@ -61,8 +64,6 @@ void InitXlibMenu(XlibMenu* menu)
     int depth;
     Colormap cmap;
     Visual * vs;
-    XGCValues xgv;
-    GC gc;
     Display* dpy = classicui->dpy;
     int iScreen = classicui->iScreen;
 
@@ -82,27 +83,15 @@ void InitXlibMenu(XlibMenu* menu)
 
     XSetTransientForHint(dpy, menu->menuWindow, DefaultRootWindow(dpy));
 
-    menu->pixmap = XCreatePixmap(dpy,
-                                 menu->menuWindow,
-                                 MENU_WINDOW_WIDTH,
-                                 MENU_WINDOW_HEIGHT,
-                                 depth);
+    menu->menu_x_cs = cairo_xlib_surface_create(
+                                    dpy,
+                                    menu->menuWindow,
+                                    vs,
+                                    MENU_WINDOW_WIDTH,
+                                    MENU_WINDOW_HEIGHT);
 
-    xgv.foreground = WhitePixel(dpy, iScreen);
-    gc = XCreateGC(dpy, menu->pixmap, GCForeground, &xgv);
-    XFillRectangle(
-        dpy,
-        menu->pixmap,
-        gc,
-        0,
-        0,
-        MENU_WINDOW_WIDTH,
-        MENU_WINDOW_HEIGHT);
-    menu->menu_cs = cairo_xlib_surface_create(dpy,
-                    menu->pixmap,
-                    vs,
-                    MENU_WINDOW_WIDTH, MENU_WINDOW_HEIGHT);
-    XFreeGC(dpy, gc);
+    menu->menu_cs = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                               MENU_WINDOW_WIDTH, MENU_WINDOW_HEIGHT);
 
     XSelectInput(dpy, menu->menuWindow, KeyPressMask | ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask | StructureNotifyMask);
 
@@ -316,23 +305,25 @@ void DrawXlibMenu(XlibMenu * menu)
     int i = 0;
     int fontheight;
     int iPosY = 0;
-    cairo_t* cr = cairo_create(menu->menu_cs);
+    fontheight = sc->skinFont.menuFontSize;
     SkinImage *background = LoadImage(sc, sc->skinMenu.backImg, false);
 
-    fontheight = sc->skinFont.menuFontSize;
-
     GetMenuSize(menu);
+    EnlargeCairoSurface(&menu->menu_cs, menu->width, menu->height);
+    
+    if (background) {
+        cairo_t* cr = cairo_create(menu->menu_cs);
+        DrawResizableBackground(cr, background->image, menu->height, menu->width,
+                                sc->skinMenu.marginLeft,
+                                sc->skinMenu.marginTop,
+                                sc->skinMenu.marginRight,
+                                sc->skinMenu.marginBottom,
+                                sc->skinMenu.fillV,
+                                sc->skinMenu.fillH
+                            );
 
-    DrawResizableBackground(cr, background->image, menu->height, menu->width,
-                            sc->skinMenu.marginLeft,
-                            sc->skinMenu.marginTop,
-                            sc->skinMenu.marginRight,
-                            sc->skinMenu.marginBottom,
-                            sc->skinMenu.fillV,
-                            sc->skinMenu.fillH
-                           );
-
-    cairo_destroy(cr);
+        cairo_destroy(cr);
+    }
 
     iPosY = sc->skinMenu.marginTop;
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
@@ -349,16 +340,16 @@ void DrawXlibMenu(XlibMenu * menu)
             iPosY += 5;
         }
     }
-
     XResizeWindow(dpy, menu->menuWindow, menu->width, menu->height);
-    XCopyArea(dpy,
-              menu->pixmap,
-              menu->menuWindow,
-              gc,
-              0,
-              0,
-              menu->width,
-              menu->height, 0, 0);
+    cairo_xlib_surface_set_size(menu->menu_x_cs,
+                                menu->width, menu->height);
+    cairo_t* c = cairo_create(menu->menu_x_cs);
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_surface(c, menu->menu_cs, 0, 0);
+    cairo_rectangle(c, 0, 0, menu->width, menu->height);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_destroy(c);
     XFreeGC(dpy, gc);
 }
 
@@ -511,11 +502,11 @@ void ReloadXlibMenu(void* arg, boolean enabled)
     XlibMenu* menu = (XlibMenu*) arg;
     boolean visable = WindowIsVisable(menu->owner->dpy, menu->menuWindow);
     cairo_surface_destroy(menu->menu_cs);
-    XFreePixmap(menu->owner->dpy, menu->pixmap);
+    cairo_surface_destroy(menu->menu_x_cs);
     XDestroyWindow(menu->owner->dpy, menu->menuWindow);
 
     menu->menu_cs = NULL;
-    menu->pixmap = None;
+    menu->menu_x_cs = NULL;
     menu->menuWindow = None;
 
     InitXlibMenu(menu);

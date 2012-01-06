@@ -22,20 +22,9 @@
 #ifndef _MENUWINDOW_H_
 #define _MENUWINDOW_H_
 
-#define MENU_WINDOW_WIDTH   200
-#define MENU_WINDOW_HEIGHT  400
-
-#define IM_MENU_WINDOW_WIDTH    110
-#define IM_MENU_WINDOW_HEIGHT   300
-
-#define SKIN_MENU_WINDOW_WIDTH  110
-#define SKIN_MENU_WINDOW_HEIGHT 300
-
-#define VK_MENU_WINDOW_WIDTH    110
-#define VK_MENU_WINDOW_HEIGHT   300
 #include <X11/Xlib.h>
-#include "fcitx-utils/utarray.h"
 #include <cairo.h>
+#include "fcitx-utils/utarray.h"
 #include "fcitx-config/fcitx-config.h"
 
 struct _FcitxClassicUI;
@@ -47,7 +36,7 @@ typedef struct _XlibMenu {
     int width;
     int height;
     Window menuWindow;
-    Pixmap pixmap;
+    cairo_surface_t *menu_x_cs;
     cairo_surface_t *menu_cs;
     XColor bgcolor;
     XColor bgselectcolor;

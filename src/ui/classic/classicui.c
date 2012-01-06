@@ -334,7 +334,7 @@ boolean LoadClassicUIConfig(FcitxClassicUI* classicui)
     FILE *fp;
     char *file;
     fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-classic-ui.config", "rt", &file);
-    FcitxLog(INFO, _("Load Config File %s"), file);
+    FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
@@ -356,7 +356,7 @@ void SaveClassicUIConfig(FcitxClassicUI *classicui)
     FcitxConfigFileDesc* configDesc = GetClassicUIDesc();
     char *file;
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-classic-ui.config", "wt", &file);
-    FcitxLog(INFO, "Save Config to %s", file);
+    FcitxLog(DEBUG, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &classicui->gconfig, configDesc);
     free(file);
     if (fp)
@@ -508,4 +508,26 @@ boolean WindowIsVisable(Display* dpy, Window window)
     XGetWindowAttributes(dpy, window, &attr);
     return attr.map_state == IsViewable;
 }
+
+boolean EnlargeCairoSurface(cairo_surface_t** sur, int w, int h)
+{
+    int ow = cairo_image_surface_get_width(*sur);
+    int oh = cairo_image_surface_get_height(*sur);
+    
+    if (ow >= w && ow >= h)
+        return false;
+    
+    while (ow < w) {
+        ow *= 2;
+    }
+    
+    while (oh < h) {
+        oh *= 2;
+    }
+    
+    cairo_surface_destroy(*sur);
+    *sur = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ow, oh);
+    return true;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
