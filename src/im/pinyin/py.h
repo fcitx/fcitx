@@ -22,6 +22,7 @@
 
 #include "fcitx/ime.h"
 #include "fcitx/fcitx.h"
+#include "fcitx-utils/memory.h"
 #include "pyconfig.h"
 #include "pyParser.h"
 
@@ -191,6 +192,9 @@ typedef struct _FcitxPinyinState {
 
     boolean bSP_UseSemicolon;
     boolean bSP;
+    
+    FcitxMemoryPool* pool;
+    
     struct _FcitxInstance *owner;
 } FcitxPinyinState;
 

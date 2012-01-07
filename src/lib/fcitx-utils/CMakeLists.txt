@@ -4,6 +4,7 @@ set(FCITX_UTILS_SOURCES
     log.c
     qsort_r.c
     msort_r.c
+    memory.c
 )
 
 set(FCITX_UTILS_HEADERS
@@ -12,6 +13,7 @@ set(FCITX_UTILS_HEADERS
     utf8.h
     utils.h
     uthash.h
+    memory.h
 )
 
 if (LIBKVM_FOUND)

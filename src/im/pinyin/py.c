@@ -97,6 +97,8 @@ void *PYCreate(FcitxInstance* instance)
     }
 
     PinyinMigration();
+    
+    pystate->pool = fcitx_memory_pool_create();
 
     FcitxInstanceRegisterIM(instance,
                       pystate,
@@ -222,7 +224,7 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
             break;
 
         if (isSystem) {
-            phrase = (PyPhrase *) fcitx_utils_malloc0(sizeof(PyPhrase) * count);
+            phrase = (PyPhrase *) fcitx_memory_pool_alloc(pystate->pool, sizeof(PyPhrase) * count);
             temp = phrase;
         } else {
             PYFAList[i].pyBase[j].iUserPhrase = count;
@@ -232,14 +234,25 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
         for (k = 0; k < count; k++) {
             if (!isSystem)
                 phrase = (PyPhrase *) fcitx_utils_malloc0(sizeof(PyUsrPhrase));
+            
             fread(&iLen, sizeof(int), 1, fp);
-            phrase->strMap = (char *) fcitx_utils_malloc0(sizeof(char) * (iLen + 1));
+            
+            if (isSystem)
+                phrase->strMap = (char* ) fcitx_memory_pool_alloc(pystate->pool, sizeof(char) * (iLen + 1));
+            else
+                phrase->strMap = (char *) fcitx_utils_malloc0(sizeof(char) * (iLen + 1));
             fread(phrase->strMap, sizeof(char) * iLen, 1, fp);
             phrase->strMap[iLen] = '\0';
+            
             fread(&iLen, sizeof(int), 1, fp);
-            phrase->strPhrase = (char *) fcitx_utils_malloc0(sizeof(char) * (iLen + 1));
+            
+            if (isSystem)
+                phrase->strPhrase = (char* ) fcitx_memory_pool_alloc(pystate->pool, sizeof(char) * (iLen + 1));
+            else
+                phrase->strPhrase = (char *) fcitx_utils_malloc0(sizeof(char) * (iLen + 1));
             fread(phrase->strPhrase, sizeof(char) * iLen, 1, fp);
             phrase->strPhrase[iLen] = '\0';
+            
             fread(&iLen, sizeof(unsigned int), 1, fp);
             phrase->iIndex = iLen;
             if (iLen > pystate->iCounter)
@@ -290,15 +303,16 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
                 }
                 for (m = 0; m < count; m ++) {
                     if (flag[m]) {
-                        free(phrase[m].strMap);
-                        free(phrase[m].strPhrase);
-                    } else {
                         memcpy(&PYFAList[i].pyBase[j].phrase[orig], &phrase[m], sizeof(PyPhrase));
                         orig ++ ;
                     }
+                    else {
+                        // free(phrase[m].strMap);
+                        // free(phrase[m].strPhrase);
+                    }
                 }
                 free(flag);
-                free(phrase);
+                // free(phrase);
             }
         }
     }

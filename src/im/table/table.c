@@ -130,9 +130,8 @@ void LoadTableInfo(FcitxTableState *tbl)
     tbl->hkTableAddPhrase[0].sym = FcitxKey_8;
     tbl->hkTableAddPhrase[0].state = FcitxKeyState_Ctrl;
 
-    tbl->table = fcitx_utils_malloc0(sizeof(UT_array));
     tbl->iTableCount = 0;
-    utarray_init(tbl->table, &table_icd);
+    utarray_new(tbl->table, &table_icd);
 
     tablePath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table");
     sset = FcitxXDGGetFiles("table", NULL, ".conf");

@@ -3,6 +3,7 @@
 
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/fcitx-config.h>
+#include <fcitx-utils/memory.h>
 
 #define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10
@@ -125,6 +126,7 @@ typedef struct _TableDict {
     int iHZLastInputCount;
     SINGLE_HZ       hzLastInput[PHRASE_MAX_LENGTH]; //Records last HZ input
     RECORD* promptCode[256];
+    FcitxMemoryPool* pool;
 } TableDict;
 
 boolean LoadTableDict(TableMetaData* tableMetaData);

@@ -186,6 +186,12 @@ typedef struct {
         }                                                                           \
         (a)->i -= (len);                                                            \
     } while(0)
+    
+#define utarray_remove_quick(a,pos) do {                                         \
+        if ((a)->i - 1 != (pos))                                                 \
+            memcpy( _utarray_eltptr(a,pos), _utarray_eltptr(a,(a)->i-1), (a)->icd->sz); \
+        (a)->i --;                                                           \
+    } while(0)
 
 #define utarray_clear(a) do {                                                 \
         if ((a)->i > 0) {                                                           \
