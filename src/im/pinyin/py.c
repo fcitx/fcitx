@@ -26,6 +26,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
@@ -224,7 +225,7 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
             break;
 
         if (isSystem) {
-            phrase = (PyPhrase *) fcitx_memory_pool_alloc(pystate->pool, sizeof(PyPhrase) * count);
+            phrase = (PyPhrase *) fcitx_utils_malloc0(sizeof(PyPhrase) * count);
             temp = phrase;
         } else {
             PYFAList[i].pyBase[j].iUserPhrase = count;
@@ -278,7 +279,6 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
             } else {
                 int m, n;
                 boolean *flag = fcitx_utils_malloc0(sizeof(boolean) * count);
-                memset(flag, 0, sizeof(boolean) * count);
                 int left = count;
                 phrase = temp;
                 if (stripDup) {
@@ -300,9 +300,10 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
                 if (left >= 0) {
                     PYFAList[i].pyBase[j].iPhrase += left;
                     PYFAList[i].pyBase[j].phrase = realloc(PYFAList[i].pyBase[j].phrase, sizeof(PyPhrase) * PYFAList[i].pyBase[j].iPhrase);
+                    //memcpy(phrase, oldph, sizeof(PyPhrase) * old);
                 }
                 for (m = 0; m < count; m ++) {
-                    if (flag[m]) {
+                    if (!flag[m]) {
                         memcpy(&PYFAList[i].pyBase[j].phrase[orig], &phrase[m], sizeof(PyPhrase));
                         orig ++ ;
                     }
@@ -311,8 +312,9 @@ void LoadPYPhraseDict(FcitxPinyinState* pystate, FILE *fp, boolean isSystem, boo
                         // free(phrase[m].strPhrase);
                     }
                 }
+                assert(orig == PYFAList[i].pyBase[j].iPhrase);
                 free(flag);
-                // free(phrase);
+                free(phrase);
             }
         }
     }
@@ -336,16 +338,16 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     else {
         LoadPYPhraseDict(pystate, fp, true, false);
         fclose(fp);
-        FcitxStringHashSet *sset = FcitxXDGGetFiles(PACKAGE "/pinyin", NULL, ".mb");
+        FcitxStringHashSet *sset = FcitxXDGGetFiles("pinyin", NULL, ".mb");
         FcitxStringHashSet *curStr = sset;
         while (curStr) {
             char *filename;
                 
             if (strcmp(curStr->name, PY_PHRASE_FILE) != 0
-                && strcmp(curStr->name, PY_USERPHRASE_FILE) == 0
-                && strcmp(curStr->name, PY_SYMBOL_FILE) == 0
-                && strcmp(curStr->name, PY_BASE_FILE) == 0 
-                && strcmp(curStr->name, PY_FREQ_FILE) == 0) {
+                && strcmp(curStr->name, PY_USERPHRASE_FILE) != 0
+                && strcmp(curStr->name, PY_SYMBOL_FILE) != 0
+                && strcmp(curStr->name, PY_BASE_FILE) != 0 
+                && strcmp(curStr->name, PY_FREQ_FILE) != 0) {
                 
                 fp = FcitxXDGGetFileWithPrefix("pinyin", curStr->name, "r", &filename);
                 FcitxLog(INFO, _("Load extra dict: %s"), filename);
