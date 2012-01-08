@@ -11,5 +11,4 @@ endif (_ENABLE_CAIRO)
 
 if (_ENABLE_DBUS)
     add_subdirectory(dbus)
-    add_subdirectory(inputbus)
 endif (_ENABLE_DBUS)

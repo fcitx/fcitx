@@ -52,10 +52,6 @@
 #include "addon-internal.h"
 #include "context-internal.h"
 
-#ifdef _ENABLE_DBUS
-#include "module/inputbus/inputbus.h"
-#endif
-
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL , NULL, NULL};
@@ -225,28 +221,6 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         addon->imclass = imclass;
         utarray_push_back(&instance->imeclasses, &addon);
     }
-#ifdef _ENABLE_DBUS
-    else if (addon->type == AT_DBUS) {
-        UT_array* imes = &instance->imes;
-        /* dbus can not be self */
-        if (addon->registerMethod == IMRM_SELF)
-            return;
-        FcitxAddon* inputbusaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_INPUTBUS_NAME);
-        if (inputbusaddon == NULL || inputbusaddon->addonInstance == NULL)
-            return;
-        
-        FcitxIM* pim;
-        for (pim = (FcitxIM *) utarray_front(imes);
-                pim != NULL;
-                pim = (FcitxIM *) utarray_next(imes, pim)) {
-            if (pim->owner == addon) {
-                FcitxModuleFunctionArg arg;
-                arg.args[0] = pim;
-                InvokeFunction(instance, FCITX_INPUTBUS, REGISTERIM, arg);
-            }
-        }
-    }
-#endif
 }
 
 void FcitxRegisterEmptyEntry(FcitxInstance *instance,
@@ -365,19 +339,11 @@ boolean FcitxInstanceLoadAllIM(FcitxInstance* instance)
             FcitxIMEntryConfigBind(entry, cfile, GetIMConfigDesc());
             FcitxConfigBindSync(&entry->config);
             FcitxAddon *addon = FcitxAddonsGetAddonByName(&instance->addons, entry->parent);
-#ifdef _ENABLE_DBUS
-            FcitxAddon* inputbusaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_INPUTBUS_NAME);
-#endif
 
             if (addon
                 && addon->bEnabled
                 && addon->category == AC_INPUTMETHOD
                 && addon->registerMethod == IMRM_CONFIGFILE
-#ifdef _ENABLE_DBUS
-                && (addon->type != AT_DBUS || (addon->type == AT_DBUS && inputbusaddon != NULL && inputbusaddon->addonInstance != NULL))
-#else
-                && addon->type != AT_DBUS
-#endif
                ) {
                 FcitxRegisterEmptyEntry(instance,
                                         entry->name,

@@ -1,8 +1,0 @@
-[Addon]
-Name=fcitx-inputbus
-_GeneralName=DBus Support for Input Method
-_Comment=Provides DBus Support for Input Method
-Category=Module
-Enabled=True
-Library=fcitx-inputbus.so
-Type=SharedLibrary

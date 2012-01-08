@@ -6,3 +6,4 @@ Category=Module
 Enabled=True
 Library=fcitx-x11.so
 Type=SharedLibrary
+Priority=30

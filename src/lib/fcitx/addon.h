@@ -61,9 +61,7 @@ extern "C" {
      * @brief Supported Addon Type, Currently only sharedlibrary
      **/
     typedef enum _FcitxAddonType {
-        AT_SHAREDLIBRARY = 0,
-
-        AT_DBUS
+        AT_SHAREDLIBRARY = 0
     } FcitxAddonType;
 
     /**
