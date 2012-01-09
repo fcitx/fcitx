@@ -93,6 +93,7 @@ typedef struct _TableMetaData {
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键
     char           *langCode;
+    char           *kbdlayout;
     boolean         customPrompt;
     boolean         bEnabled;
 

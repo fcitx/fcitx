@@ -24,13 +24,14 @@
 #include <string.h>
 
 #include "fcitx/fcitx.h"
+#include "fcitx/context.h"
+#include "fcitx-config/xdg.h"
 
 #include "py.h"
 #include "sp.h"
 #include "spdata.h"
 #include "pyMapTable.h"
 #include "pyParser.h"
-#include "fcitx-config/xdg.h"
 #include "pyconfig.h"
 
 #define STR_SPCONF_NAME 0
@@ -41,19 +42,6 @@
 char* strConstSPConf[] = {
     "方案名称="
 };
-
-boolean SPInit(void *arg)
-{
-    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
-    pystate->bSP = true;
-    FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
-    pyconfig->cNonS = 'o';
-    memcpy(pyconfig->SPMap_S, SPMap_S_Ziranma, sizeof(SPMap_S_Ziranma));
-    memcpy(pyconfig->SPMap_C, SPMap_C_Ziranma, sizeof(SPMap_C_Ziranma));
-
-    LoadSPData(pystate);
-    return true;
-}
 
 void LoadSPData(FcitxPinyinState *pystate)
 {

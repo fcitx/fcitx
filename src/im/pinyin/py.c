@@ -47,6 +47,8 @@
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"
 #include "fcitx/candidate.h"
+#include "fcitx/context.h"
+#include "spdata.h"
 
 #define TEMP_FILE       "FCITX_DICT_TEMP"
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
@@ -150,7 +152,22 @@ void *PYCreate(FcitxInstance* instance)
 boolean PYInit(void *arg)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    FcitxInstanceSetContext(pystate->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
     pystate->bSP = false;
+    return true;
+}
+
+boolean SPInit(void *arg)
+{
+    FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    FcitxInstanceSetContext(pystate->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
+    pystate->bSP = true;
+    FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
+    pyconfig->cNonS = 'o';
+    memcpy(pyconfig->SPMap_S, SPMap_S_Ziranma, sizeof(SPMap_S_Ziranma));
+    memcpy(pyconfig->SPMap_C, SPMap_C_Ziranma, sizeof(SPMap_C_Ziranma));
+
+    LoadSPData(pystate);
     return true;
 }
 

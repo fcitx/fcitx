@@ -41,7 +41,6 @@ typedef struct _SP_S {
 struct _FcitxPinyinConfig;
 struct _FcitxPinyinState;
 
-boolean         SPInit(void* arg);
 void            LoadSPData(struct _FcitxPinyinState* pystate);
 
 //void            QP2SP (char *strQP, char *strSP);

@@ -36,6 +36,7 @@
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/candidate.h"
+#include "fcitx/context.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-utils/utils.h"
@@ -184,6 +185,7 @@ boolean TableInit(void *arg)
 {
     TableMetaData* table = (TableMetaData*) arg;
     FcitxTableState *tbl = table->owner;
+    FcitxInstanceSetContext(tbl->owner, CONTEXT_IM_KEYBOARD_LAYOUT, table->kbdlayout);
     FcitxAddon* pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
     tbl->pyaddon = pyaddon;
     if (pyaddon == NULL)

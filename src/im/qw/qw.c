@@ -32,6 +32,7 @@
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
 #include "fcitx/candidate.h"
+#include "fcitx/context.h"
 
 typedef struct _FcitxQWState {
     char     strQWHZ[3];
@@ -81,6 +82,8 @@ void* QWCreate(struct _FcitxInstance* instance)
 
 boolean QWInit(void *arg)
 {
+    FcitxQWState* qwstate = (FcitxQWState*) arg;
+    FcitxInstanceSetContext(qwstate->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
     return true;
 }
 

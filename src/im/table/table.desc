@@ -122,5 +122,10 @@ Description=Use Custom Prompt String defined in table
 Type=Boolean
 DefaultValue=False
 
+[CodeTable/KeyboardLayout]
+Description=Keyboard Layout to be used
+Type=String
+DefaultValue=us
+
 [DescriptionFile]
 LocaleDomain=fcitx

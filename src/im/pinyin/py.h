@@ -199,7 +199,8 @@ typedef struct _FcitxPinyinState {
 } FcitxPinyinState;
 
 void *PYCreate(struct _FcitxInstance* instance);
-boolean            PYInit(void* arg);
+boolean         PYInit(void* arg);
+boolean         SPInit(void* arg);
 boolean         LoadPYBaseDict(struct _FcitxPinyinState* pystate);
 boolean         LoadPYOtherDict(struct _FcitxPinyinState* pystate);
 void            ResetPYStatus(void* pystate);
