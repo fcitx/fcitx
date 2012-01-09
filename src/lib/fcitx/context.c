@@ -43,7 +43,7 @@ struct _FcitxContext {
 };
 
 static const UT_icd ci_icd = {sizeof(FcitxContextCallbackInfo), NULL, NULL, NULL};
-static void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, void* value);
+static void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, const void* value);
 
 FCITX_EXPORT_API
 void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag)
@@ -57,7 +57,7 @@ void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* 
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, void* value)
+void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, const void* value)
 {
     FcitxContext* context;
     HASH_FIND_STR(instance->context, key, context);
@@ -67,7 +67,7 @@ void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, void* val
     FcitxInstanceSetContextInternal(instance, context, value);
 }
  
-void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, void* value)
+void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, const void* value)
 {
     FCITX_UNUSED(instance);
     boolean changed = false;
@@ -75,7 +75,7 @@ void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* cont
     
     switch(context->type) {
         case FCT_String: {
-            char* s = (char*) value;
+            const char* s = (const char*) value;
             char* old = context->str;
             if (s)
                 context->str = strdup(s);

@@ -49,7 +49,7 @@ extern "C" {
 
     void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag );
     void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxContextCallback callback, void* arg);
-    void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, void* value);
+    void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, const void* value);
     const char* FcitxInstanceGetContextString(FcitxInstance* instance, const char* key);
     const FcitxHotkey* FcitxInstanceGetContextHotkey(FcitxInstance* instance, const char* key);
 
