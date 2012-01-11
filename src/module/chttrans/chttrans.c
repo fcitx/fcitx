@@ -36,6 +36,7 @@
 #include "fcitx/ui.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/instance.h"
+#include "fcitx/context.h"
 #include "fcitx-utils/utils.h"
 #include "chttrans.h"
 
@@ -73,7 +74,8 @@ static char* ChttransOutputFilter(void* arg, const char* strin);
 static void ReloadChttrans(void* arg);
 static char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char* strHZ);
 static char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ);
-static boolean GetChttransEnabled();
+static boolean GetChttransEnabled(void* arg);
+static void ChttransLanguageChanged(void* arg, const void* value);
 boolean LoadChttransConfig(FcitxChttrans* transState);
 static FcitxConfigFileDesc* GetChttransConfigDesc();
 static void SaveChttransConfig(FcitxChttrans* transState);
@@ -123,6 +125,8 @@ void* ChttransCreate(FcitxInstance* instance)
     FcitxInstanceRegisterOutputFilter(instance, shk);
     FcitxInstanceRegisterCommitFilter(instance, shk);
     FcitxUIRegisterStatus(instance, transState, "chttrans", _("Traditional Chinese Translate"), _("Traditional Chinese Translate"), ToggleChttransState, GetChttransEnabled);
+    
+    FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, ChttransLanguageChanged, transState);
     
     AddFunction(transAddon, ChttransS2T);
     AddFunction(transAddon, ChttransT2S);
@@ -449,5 +453,17 @@ void ReloadChttrans(void* arg)
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     LoadChttransConfig(transState);
 }
+
+void ChttransLanguageChanged(void* arg, const void* value)
+{
+    FcitxChttrans* transState = (FcitxChttrans*) arg;
+    const char* lang = (const char*) value;
+    boolean visible = false;
+    if (lang && strncmp(lang, "zh", 2) == 0)
+        visible = true;
+    
+    FcitxUISetStatusVisable(transState->owner, "chttrans", visible);
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

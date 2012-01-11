@@ -147,9 +147,11 @@ void PuncLanguageChanged(void* arg, const void* value)
         if (punc)
             puncState->curPunc = punc->curPunc;
         else
-            puncState->curPunc = 0;
+            puncState->curPunc = NULL;
     } else 
-        puncState->curPunc = 0;
+        puncState->curPunc = NULL;
+    
+    FcitxUISetStatusVisable (puncState->owner, "punc",  puncState->curPunc != NULL) ;
 }
 
 void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)

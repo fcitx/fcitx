@@ -275,6 +275,8 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     for (status = (FcitxUIStatus *) utarray_front(uistats);
             status != NULL;
             status = (FcitxUIStatus *) utarray_next(uistats, status)) {
+        if (!status->visible)
+            continue;
         prop[count] = Status2String(status);
         count ++;
     }
@@ -529,9 +531,7 @@ void KimpanelShowInputWindow(void* arg)
 void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    char *prop = NULL;
-    prop = Status2String(status);
-    KimUpdateProperty(kimpanel, prop);
+    KimpanelRegisterAllStatus(kimpanel);
     return ;
 }
 

@@ -83,6 +83,8 @@ extern "C" {
          * @brief the submenu to this entry
          **/
         struct _FcitxUIMenu *subMenu;
+        
+        int padding[16];
     };
 
     /**
@@ -127,6 +129,8 @@ extern "C" {
          * @brief mark of this menu
          **/
         int mark;
+        
+        int padding[16];
     };
 
     /**
@@ -161,6 +165,12 @@ extern "C" {
          * @brief extra argument for tooglefunction
          **/
         void* arg;
+        /**
+         * @brief visible
+         */
+        boolean visible;
+        
+        int padding[16];
     };
 
     typedef enum _FcitxUIFlag {
@@ -505,6 +515,17 @@ extern "C" {
      * @return FcitxUIStatus*
      **/
     FcitxUIStatus *FcitxUIGetStatusByName(struct _FcitxInstance* instance, const char* name);
+    
+    
+    /**
+     * @brief set visibility for a status icon
+     *
+     * @param instance fcitx instance
+     * @param name name
+     * @param visible visibility
+     * @return void
+     **/
+    void FcitxUISetStatusVisable(struct _FcitxInstance* instance, const char* name, boolean visible);
 
     /**
      * @brief update menu shell of a menu

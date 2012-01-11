@@ -218,7 +218,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     }
                 } else {
                     status = FcitxUIGetStatusByName(instance, sp->name);
-                    if (status) {
+                    if (status && status->visible) {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                         if (privstat == NULL)
                             continue;
@@ -278,6 +278,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
+                if (!status->visible)
+                    continue;
                 boolean active = status->getCurrentStatus(status->arg);
                 char *path;
                 if (active)
@@ -328,6 +330,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
+                if (!status->visible)
+                    continue;
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;

@@ -21,13 +21,13 @@
 #include <dlfcn.h>
 #include <libintl.h>
 #include <stdarg.h>
+#include <sys/stat.h>
 
 #include "ui.h"
 #include "addon.h"
 #include "fcitx-utils/utarray.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
-#include <sys/stat.h>
 #include "fcitx-utils/utils.h"
 #include "instance.h"
 #include "hook-internal.h"
@@ -364,6 +364,21 @@ void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
 }
 
 FCITX_EXPORT_API
+void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean visible)
+{
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
+    if (!status)
+        return;
+    
+    if (status->visible != visible) {
+        status->visible = visible;
+
+        if (UI_FUNC_IS_VALID(UpdateStatus))
+            instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxUIRegisterStatus(
     struct _FcitxInstance* instance,
     void* arg,
@@ -392,6 +407,8 @@ void FcitxUIRegisterStatus(
     status.toggleStatus = toggleStatus;
 
     status.arg = arg;
+    
+    status.visible = true;
 
     UT_array* uistats = &instance->uistats;
 
