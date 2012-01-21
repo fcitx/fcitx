@@ -505,7 +505,9 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
         context->preedit_string = NULL;
     }
     context->preedit_string = g_strdup(str);
-    context->cursor_pos = cursor_pos;
+    char* tempstr = g_strndup(str, cursor_pos);
+    context->cursor_pos =  fcitx_utf8_strlen(tempstr);
+    g_free(tempstr);
 
     gboolean new_visible = false;
 
