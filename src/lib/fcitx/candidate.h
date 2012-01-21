@@ -84,6 +84,7 @@ extern "C" {
      **/
 
     void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
+
     /**
      * @brief add a candidate word at last
      *
@@ -92,6 +93,17 @@ extern "C" {
      * @return void
      **/
     void FcitxCandidateWordAppend(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
+
+    /**
+     * @brief remove a candidate word from list
+     *
+     * @param candList candidate word list
+     * @param candWord candidate word
+     * @return void
+     * 
+     * @since 4.2
+     **/
+    void FcitxCandidateWordRemove(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
      * @brief Get first of current page

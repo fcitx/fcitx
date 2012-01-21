@@ -50,6 +50,13 @@ void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWo
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
+{
+    int idx = utarray_eltidx(&candList->candWords, candWord);
+    utarray_erase(&candList->candWords, idx, 1);
+}
+
+FCITX_EXPORT_API
 void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
 {
     utarray_clear(&candList->candWords);
