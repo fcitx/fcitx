@@ -39,18 +39,21 @@ extern "C" {
     typedef enum _FcitxContextType {
         FCT_Hotkey,
         FCT_String,
-        FCT_Void
+        FCT_Void,
+        FCT_Boolean
     } FcitxContextType;
 
     #define CONTEXT_ALTERNATIVE_PREVPAGE_KEY "CONTEXT_ALTERNATIVE_PREVPAGE_KEY"
     #define CONTEXT_ALTERNATIVE_NEXTPAGE_KEY "CONTEXT_ALTERNATIVE_NEXTPAGE_KEY"
     #define CONTEXT_IM_LANGUAGE "CONTEXT_IM_LANGUAGE"
     #define CONTEXT_IM_KEYBOARD_LAYOUT "CONTEXT_IM_KEYBOARD_LAYOUT"
+    #define CONTEXT_DISABLE_AUTOENG "CONTEXT_DISABLE_AUTOENG"
 
     void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag );
     void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxContextCallback callback, void* arg);
     void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, const void* value);
     const char* FcitxInstanceGetContextString(FcitxInstance* instance, const char* key);
+    boolean FcitxInstanceGetContextBoolean(FcitxInstance* instance, const char* key);
     const FcitxHotkey* FcitxInstanceGetContextHotkey(FcitxInstance* instance, const char* key);
 
 #ifdef __cplusplus

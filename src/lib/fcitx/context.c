@@ -35,6 +35,7 @@ struct _FcitxContext {
     union {
         FcitxHotkey hotkey[2];
         char* str;
+        boolean b;
     };
     
     UT_array* callback;
@@ -113,6 +114,20 @@ void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* cont
             changed = true;
             break;
         }
+        case FCT_Boolean: {
+            boolean* pb = (boolean*) value;
+            boolean b = false;
+            if (pb == NULL)
+                b = false;
+            else
+                b = *pb;
+            if (b != context->b) {
+                context->b = b;
+                changed = true;
+            }
+            newvalue = &context->b;
+            break;
+        }
         case FCT_Void: {
             newvalue = NULL;
             changed = true;
@@ -172,6 +187,17 @@ const char* FcitxInstanceGetContextString(FcitxInstance* instance, const char* k
         return NULL;
 
     return context->str;
+}
+
+FCITX_EXPORT_API
+boolean FcitxInstanceGetContextBoolean(FcitxInstance* instance, const char* key)
+{
+    FcitxContext* context;
+    HASH_FIND_STR(instance->context, key, context);
+    if (context == NULL)
+        return false;
+
+    return context->b;
 }
 
 void FcitxInstanceResetContext(FcitxInstance* instance, FcitxContextFlag flag)

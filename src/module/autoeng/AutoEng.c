@@ -28,14 +28,15 @@
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
-#include "fcitx-utils/utils.h"
-#include "fcitx-config/xdg.h"
-
-#include "AutoEng.h"
 #include "fcitx/keys.h"
 #include "fcitx/ui.h"
 #include "fcitx/instance.h"
-#include <fcitx-utils/log.h>
+#include "fcitx/context.h"
+#include "fcitx-utils/utils.h"
+#include "fcitx-utils/log.h"
+#include "fcitx-config/xdg.h"
+
+#include "AutoEng.h"
 
 typedef struct _FcitxAutoEngState {
     UT_array* autoEng;
@@ -136,6 +137,8 @@ void* AutoEngCreate(FcitxInstance *instance)
 
     FcitxInstanceRegisterPreInputFilter(instance, khk);
     FcitxInstanceRegisterResetInputHook(instance, rhk);
+    
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_AUTOENG, FCT_Boolean, FCF_ResetOnInputMethodChange);
 
     ResetAutoEng(autoEngState);
     return autoEngState;
@@ -148,6 +151,10 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
+    boolean disableCheckUAZ = FcitxInstanceGetContextBoolean(autoEngState->owner, CONTEXT_DISABLE_AUTOENG);
+    if (disableCheckUAZ)
+        return false;
+    
     if (autoEngState->active) {
         FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
         if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
