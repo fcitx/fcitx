@@ -26,6 +26,11 @@ Type=Boolean
 DefaultValue=True
 Description=It's the first time Fcitx Start.
 
+[Program/FirstAsInactive]
+Type=Boolean
+DefaultValue=False
+Description=Use first input method as inactive state
+
 [Output/HalfPuncAfterNumber]
 Type=Boolean
 DefaultValue=True

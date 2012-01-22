@@ -202,8 +202,10 @@ extern "C" {
          * @brief Enable Left Ctrl + Left Shift to Switch Between Input Method
          **/
         boolean bIMSwitchKey;
+        
+        boolean firstAsInactive;
 
-        int padding[63];
+        int padding[62];
     } FcitxGlobalConfig;
 
     /**

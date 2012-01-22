@@ -42,6 +42,9 @@
 #define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
+#define CHECK_IM_STATE ((!config->firstAsInactive && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) || \
+        (config->firstAsInactive && FcitxInstanceGetCurrentState(instance) != IS_CLOSED))
+
 const char * kimpanel_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
@@ -292,15 +295,12 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
 void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
 {
     FcitxInstance* instance = kimpanel->owner;
+    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     char* status = NULL;
     char* icon;
     char* imname;
     char* description;
-    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-        icon = "keyboard";
-        imname = _("Disabled");
-        description = _("Input Method Disabled");
-    } else {
+    if (CHECK_IM_STATE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             icon = im->strIconName;
@@ -311,6 +311,10 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
             imname = _("Disabled");
             description = _("Input Method Disabled");
         }
+    } else {
+        icon = "keyboard";
+        imname = _("Disabled");
+        description = _("Input Method Disabled");
     }
     /* add fcitx- prefix */
     asprintf(&status, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);

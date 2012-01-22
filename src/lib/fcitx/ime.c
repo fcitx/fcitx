@@ -63,6 +63,7 @@ static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputCont
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
 static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
+static void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -86,6 +87,9 @@ FCITX_SETTER(FcitxInputState, ShowCursor, bShowCursor, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
+
+#define CHECK_IM_STATE ((!instance->config->firstAsInactive && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) || \
+        (instance->config->firstAsInactive && FcitxInstanceGetCurrentState(instance) != IS_CLOSED))
 
 CONFIG_BINDING_BEGIN(FcitxIMEntry)
 CONFIG_BINDING_REGISTER("InputMethod", "UniqueName", uniqueName)
@@ -508,8 +512,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         retVal = IRV_DONOT_PROCESS;
 
     /* the key processed before this phase is very important, we don't let any interrupt */
-    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE
-            && retVal == IRV_TO_PROCESS
+    if (CHECK_IM_STATE
+        && retVal == IRV_TO_PROCESS
        ) {
         if (!input->bIsDoInputOnly) {
             FcitxInstanceProcessPreInputFilter(instance, sym, state, &retVal);
@@ -571,7 +575,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
 
     FcitxGlobalConfig *fc = instance->config;
 
-    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
+    if (CHECK_IM_STATE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         FcitxInstanceCleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
         FcitxInstanceProcessUpdateCandidates(instance);
@@ -581,7 +585,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
      * since all candidate word are cached in candList, so we don't need to trigger
      * GetCandWords after go for another page, simply update input window is ok.
      */
-    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (CHECK_IM_STATE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
         if (hkPrevPage == NULL)
             hkPrevPage = fc->hkPrevPage;
@@ -599,7 +603,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
         }
     }
 
-    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (CHECK_IM_STATE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
         
         if (retVal == IRV_TO_PROCESS) {
@@ -677,6 +681,11 @@ void FcitxInstanceForwardKey(FcitxInstance* instance, FcitxInputContext *ic, Fci
 FCITX_EXPORT_API
 void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
 {
+    FcitxInstanceSwitchIMInternal(instance, index, instance->config->firstAsInactive);
+}
+
+void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero)
+{
     UT_array* imes = &instance->imes;
     int iIMCount = utarray_len(imes);
 
@@ -703,6 +712,9 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
             instance->iIMIndex++;
     } else if (index >= 0)
         instance->iIMIndex = index;
+    
+    if (skipZero && instance->iIMIndex == 0)
+        instance->iIMIndex = 1;
 
     if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
         newIM = NULL;
@@ -730,13 +742,8 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
         free(name);
     }
 
-    if (newIM && newIM->Init) {
-        FcitxInstanceResetContext(instance, FCF_ResetOnInputMethodChange);
-        FcitxInstanceSetContext(instance, CONTEXT_IM_LANGUAGE, newIM->langCode);
-        newIM->Init(newIM->klass);
-    }
-
     FcitxInstanceResetInput(instance);
+    
     FcitxProfileSave(instance->profile);
 }
 
@@ -1019,6 +1026,15 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         objectState = IS_ACTIVE;
     else
         objectState = IS_ENG;
+    
+    if (instance->config->firstAsInactive) {
+        if (objectState == IS_ACTIVE)
+            FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
+        else {
+            instance->lastIMIndex = instance->iIMIndex;
+            FcitxInstanceSwitchIMInternal(instance, 0, false);
+        }
+    }
 
     instance->globalState = objectState;
     switch (instance->config->shareState) {

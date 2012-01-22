@@ -115,6 +115,8 @@ struct _FcitxInstance {
     FcitxContext* context;
     
     boolean tryReplace;
+    
+    int lastIMIndex;
 };
 
 #endif
