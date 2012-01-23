@@ -44,7 +44,8 @@ extern "C" {
     typedef enum _FcitxCapacityFlags {
         CAPACITY_NONE = 0,
         CAPACITY_CLIENT_SIDE_UI = (1 << 0),
-        CAPACITY_PREEDIT = (1 << 1)
+        CAPACITY_PREEDIT = (1 << 1),
+        CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2)
     } FcitxCapacityFlags;
     
     /**

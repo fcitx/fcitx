@@ -921,7 +921,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
                 }
             }
 
-            if (flag)
+            if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
                 FcitxInstanceEnableIMInternal(instance, rec, keepState);
             rec = rec->next;
         }
@@ -969,7 +969,7 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
     
-    if (instance->config->firstAsInactive) {
+    if (instance->config->firstAsInactive && !(ic->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)) {
         FcitxInstanceChangeIMState(instance, ic);
         return;
     }
@@ -994,7 +994,7 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
                 }
             }
 
-            if (flag)
+            if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
                 FcitxInstanceCloseIMInternal(instance, rec);
             rec = rec->next;
         }
@@ -1071,7 +1071,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
                 }
             }
 
-            if (flag)
+            if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
                 FcitxInstanceChangeIMStateInternal(instance, rec, objectState);
             rec = rec->next;
         }

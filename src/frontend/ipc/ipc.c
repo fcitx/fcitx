@@ -294,6 +294,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
     if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateIC")) {
         /* CreateIC v1 indicates that default state can only be disabled */
         context->state = IS_CLOSED;
+        context->contextCaps |= CAPACITY_CLIENT_SIDE_CONTROL_STATE;
         ipcic->appname = NULL;
         dbus_message_append_args(reply,
                                  DBUS_TYPE_INT32, &ipcic->id,
