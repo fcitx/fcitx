@@ -741,6 +741,12 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
         free(name);
     }
+    
+    if (newIM && newIM->Init) {
+        FcitxInstanceResetContext(instance, FCF_ResetOnInputMethodChange);
+        FcitxInstanceSetContext(instance, CONTEXT_IM_LANGUAGE, newIM->langCode);
+        newIM->Init(newIM->klass);
+    }
 
     FcitxInstanceResetInput(instance);
     
