@@ -154,6 +154,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
 
     FcitxInstanceSwitchIM(instance, instance->iIMIndex);
+    instance->lastIMIndex = instance->iIMIndex;
 
     if (!FcitxInstanceLoadFrontend(instance)) {
         FcitxInstanceEnd(instance);

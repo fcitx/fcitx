@@ -33,13 +33,14 @@
 static FcitxConfigFileDesc* GetConfigDesc();
 static void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
 static void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
+static void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN(FcitxGlobalConfig)
 CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "FirstRun", bFirstRun)
 CONFIG_BINDING_REGISTER("Program", "ShareStateAmongWindow", shareState)
-CONFIG_BINDING_REGISTER("Program", "DefaultInputMethodState", defaultIMState)
-CONFIG_BINDING_REGISTER("Program", "FirstAsInactive", firstAsInactive)
+CONFIG_BINDING_REGISTER("Program", "DefaultInputMethodState", _defaultIMState)
+CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "FirstAsInactive", firstAsInactive, FilterFirstAsInactive)
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber)
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo)
 CONFIG_BINDING_REGISTER("Output", "RemindModeDisablePaging", bDisablePagingInRemind)
@@ -139,6 +140,20 @@ void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxC
     if (hkey != NULL) {
         fc->switchKey[0] = hkey[0];
         fc->switchKey[1] = hkey[1];
+    }
+}
+
+void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
+{
+    FCITX_UNUSED(group);
+    FCITX_UNUSED(option);
+    FCITX_UNUSED(arg);
+    FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
+    if (sync == Raw2Value) {
+        fc->defaultIMState = fc->_defaultIMState;
+        boolean firstAsInactive = *(boolean*) value;
+        if (firstAsInactive && fc->defaultIMState == IS_CLOSED)
+            fc->defaultIMState = IS_ENG;
     }
 }
 

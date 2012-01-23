@@ -205,7 +205,8 @@ extern "C" {
         
         boolean firstAsInactive;
 
-        int padding[62];
+        FcitxContextState _defaultIMState;
+        int padding[61];
     } FcitxGlobalConfig;
 
     /**

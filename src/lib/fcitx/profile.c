@@ -140,13 +140,13 @@ void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConf
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
         FcitxIM* im;
-        if (instance->config->firstAsInactive) {
+        if (!instance->config->firstAsInactive) {
             im = FcitxInstanceGetCurrentIM(instance);
         }
         else {
             int idx = instance->iIMIndex;
             if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
-                idx = instance->iIMIndex;
+                idx = instance->lastIMIndex;
             UT_array* imes = &instance->imes;
             im = (FcitxIM*) utarray_eltptr(imes, idx);
         }

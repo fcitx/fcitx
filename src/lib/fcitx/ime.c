@@ -63,7 +63,6 @@ static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputCont
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
 static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
-static void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -430,8 +429,9 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
                         if (input->keyReleased == KR_CTRL_SHIFT)
                             FcitxInstanceSwitchIM(instance, -1);
-                    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger))
-                        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
+                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    }
                 } else if (FcitxHotkeyIsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
                     if (fc->bSendTextWhenSwitchEng) {
@@ -931,6 +931,13 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
         FcitxInstanceEnableIMInternal(instance, ic, keepState);
         break;
     }
+    
+    if (instance->config->firstAsInactive
+        && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE
+        && instance->iIMIndex == 0
+    ) {
+        FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
+    }
 }
 
 
@@ -961,6 +968,12 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (ic == NULL)
         return;
+    
+    if (instance->config->firstAsInactive) {
+        FcitxInstanceChangeIMState(instance, ic);
+        return;
+    }
+    
     instance->globalState = IS_CLOSED;
     switch (instance->config->shareState) {
     case ShareState_All:
@@ -1031,7 +1044,9 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         if (objectState == IS_ACTIVE)
             FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
         else {
-            instance->lastIMIndex = instance->iIMIndex;
+            if (instance->iIMIndex != 0)
+                instance->lastIMIndex = instance->iIMIndex;
+
             FcitxInstanceSwitchIMInternal(instance, 0, false);
         }
     }

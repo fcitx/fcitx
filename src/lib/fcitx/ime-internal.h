@@ -175,6 +175,8 @@ boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
 void FcitxInstanceLoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
 
+void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero);
+
 /**
  * @brief Load inputmethod.desc file
  *
