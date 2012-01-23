@@ -210,6 +210,18 @@ FcitxContextState FcitxInstanceGetCurrentState(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+FcitxContextState FcitxInstanceGetCurrentStatev2(FcitxInstance* instance)
+{
+    if (instance->CurrentIC) {
+        if (instance->config->firstAsInactive && instance->CurrentIC->state == IS_ENG)
+            return IS_ACTIVE;
+        return instance->CurrentIC->state;
+    }
+    else
+        return IS_CLOSED;
+}
+
+FCITX_EXPORT_API
 FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(FcitxInstance* instance)
 {
     if (instance->CurrentIC)

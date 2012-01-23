@@ -42,9 +42,6 @@
 #define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
-#define CHECK_IM_STATE ((!config->firstAsInactive && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) || \
-        (config->firstAsInactive && FcitxInstanceGetCurrentState(instance) != IS_CLOSED))
-
 const char * kimpanel_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
@@ -295,12 +292,11 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
 void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
 {
     FcitxInstance* instance = kimpanel->owner;
-    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     char* status = NULL;
     char* icon;
     char* imname;
     char* description;
-    if (CHECK_IM_STATE) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             icon = im->strIconName;

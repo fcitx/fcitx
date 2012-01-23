@@ -87,9 +87,6 @@ FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
 
-#define CHECK_IM_STATE ((!instance->config->firstAsInactive && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) || \
-        (instance->config->firstAsInactive && FcitxInstanceGetCurrentState(instance) != IS_CLOSED))
-
 CONFIG_BINDING_BEGIN(FcitxIMEntry)
 CONFIG_BINDING_REGISTER("InputMethod", "UniqueName", uniqueName)
 CONFIG_BINDING_REGISTER("InputMethod", "Name", name)
@@ -512,7 +509,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         retVal = IRV_DONOT_PROCESS;
 
     /* the key processed before this phase is very important, we don't let any interrupt */
-    if (CHECK_IM_STATE
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE
         && retVal == IRV_TO_PROCESS
        ) {
         if (!input->bIsDoInputOnly) {
@@ -575,7 +572,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
 
     FcitxGlobalConfig *fc = instance->config;
 
-    if (CHECK_IM_STATE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
         FcitxInstanceCleanInputWindow(instance);
         retVal = currentIM->GetCandWords(currentIM->klass);
         FcitxInstanceProcessUpdateCandidates(instance);
@@ -585,7 +582,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
      * since all candidate word are cached in candList, so we don't need to trigger
      * GetCandWords after go for another page, simply update input window is ok.
      */
-    if (CHECK_IM_STATE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
         if (hkPrevPage == NULL)
             hkPrevPage = fc->hkPrevPage;
@@ -603,7 +600,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
         }
     }
 
-    if (CHECK_IM_STATE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
         
         if (retVal == IRV_TO_PROCESS) {

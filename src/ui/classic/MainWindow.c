@@ -52,9 +52,6 @@
 #define MAIN_BAR_MAX_WIDTH 2
 #define MAIN_BAR_MAX_HEIGHT 2
 
-#define CHECK_IM_STATE ((!config->firstAsInactive && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) || \
-        (config->firstAsInactive && FcitxInstanceGetCurrentState(instance) != IS_CLOSED))
-
 static boolean MainWindowEventHandler(void *arg, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
 static void ReloadMainWindow(void* arg, boolean enabled);
@@ -146,7 +143,6 @@ void DrawMainWindow(MainWindow* mainWindow)
     FcitxClassicUI* classicui = mainWindow->owner;
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
-    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
 
     if (mainWindow->bMainWindowHidden)
         return;
@@ -204,7 +200,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     }
                 } else if (strcmp(sp->name, "im") == 0) {
                     SkinImage* imicon = NULL;
-                    if (!CHECK_IM_STATE || FcitxInstanceGetCurrentIM(instance) == NULL)
+                    if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
                         imicon = LoadImage(sc, sc->skinMainBar.eng, false);
                     else {
                         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
@@ -257,7 +253,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     height = imageheight;
             }
 
-            if (!CHECK_IM_STATE || FcitxInstanceGetCurrentIM(instance) == NULL)
+            if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
                 imicon = LoadImage(sc, sc->skinMainBar.eng, false);
             else {
                 FcitxIM* im = FcitxInstanceGetCurrentIM(instance);

@@ -194,6 +194,16 @@ extern "C" {
      * @return IME_STATE
      **/
     FcitxContextState FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
+    
+    /**
+     * @brief Get Current State, consider the option firstAsInactive
+     *
+     * @param instance fcitx instance
+     * @return IME_STATE
+     * 
+     * @see FcitxInstanceGetCurrentState
+     **/
+    FcitxContextState FcitxInstanceGetCurrentStatev2(struct _FcitxInstance* instance);
 
     /**
      * @brief get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
