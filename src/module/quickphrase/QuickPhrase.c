@@ -119,6 +119,8 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     resethk.arg = qpstate;
     resethk.func = QuickPhraseReset;
     FcitxInstanceRegisterResetInputHook(instance, resethk);
+    
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_QUICKPHRASE, FCT_Boolean, FCF_ResetOnInputMethodChange);
 
     return qpstate;
 }
@@ -284,13 +286,15 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
+    boolean disableQuickPhrase = FcitxInstanceGetContextBoolean(qpstate->owner, CONTEXT_DISABLE_QUICKPHRASE);
 
     if (*retval != IRV_TO_PROCESS)
         return false;
 
-    if (!qpstate->enabled
-            && FcitxInputStateGetRawInputBufferSize(input) == 0
-            && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)) {
+    if (!disableQuickPhrase 
+        && !qpstate->enabled
+        && FcitxInputStateGetRawInputBufferSize(input) == 0
+        && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)) {
         FcitxInstanceCleanInputWindow(qpstate->owner);
         FcitxInputStateSetShowCursor(input, true);
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));

@@ -36,6 +36,7 @@
 #include <limits.h>
 #include <libgen.h>
 #include <ctype.h>
+#include <stdarg.h>
 
 #include "config.h"
 #include "fcitx/fcitx.h"
@@ -123,6 +124,14 @@ void fcitx_utils_init_as_daemon()
 }
 
 FCITX_EXPORT_API
+UT_array* fcitx_utils_new_string_list()
+{
+    UT_array* array;
+    utarray_new(array, &ut_str_icd);
+    return array;
+}
+
+FCITX_EXPORT_API
 UT_array* fcitx_utils_split_string(const char* str, char delm)
 {
     UT_array* array;
@@ -144,10 +153,25 @@ UT_array* fcitx_utils_split_string(const char* str, char delm)
 }
 
 FCITX_EXPORT_API
+void fcitx_utils_string_list_printf_append(UT_array* list, const char* fmt,...)
+{
+    char* buffer;
+    va_list ap;
+    va_start(ap, fmt);
+    vasprintf(&buffer, fmt, ap);
+    va_end(ap);
+    utarray_push_back(list, &buffer);
+    free(buffer);
+}
+
+FCITX_EXPORT_API
 char* fcitx_utils_join_string_list(UT_array* list, char delm)
 {
     if (!list)
         return NULL;
+    
+    if (utarray_len(list) == 0)
+        return strdup("");
     
     size_t len = 0;
     char** str;

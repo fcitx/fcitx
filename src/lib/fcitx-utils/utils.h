@@ -81,6 +81,14 @@ extern "C" {
      * @return int line number
      **/
     int fcitx_utils_calculate_record_number(FILE* fpDict);
+    
+    
+    /**
+     * @brief new empty string list
+     *
+     * @return UT_array*
+     **/
+    UT_array* fcitx_utils_new_string_list();
 
     /**
      * @brief Split a string by delm
@@ -90,6 +98,15 @@ extern "C" {
      * @return UT_array* a new utarray for store the split string
      **/
     UT_array* fcitx_utils_split_string(const char *str, char delm);
+    
+    /**
+     * @brief append a string with printf format
+     *
+     * @param list string list
+     * @param fmt printf fmt
+     * @return void
+     **/
+    void fcitx_utils_string_list_printf_append(UT_array* list, const char* fmt,...);
     
     /**
      * @brief Join string list with delm

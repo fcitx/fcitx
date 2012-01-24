@@ -196,11 +196,12 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         }
         fclose(fp);
         handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
-        free(modulePath);
         if (!handle) {
             FcitxLog(ERROR, _("IM: open %s fail %s") , modulePath , dlerror());
+            free(modulePath);
             return;
         }
+        free(modulePath);
 
         if (!CheckABIVersion(handle)) {
             FcitxLog(ERROR, "%s ABI Version Error", addon->name);
@@ -573,9 +574,11 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
     FcitxGlobalConfig *fc = instance->config;
 
     if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
-        FcitxInstanceCleanInputWindow(instance);
-        retVal = currentIM->GetCandWords(currentIM->klass);
-        FcitxInstanceProcessUpdateCandidates(instance);
+        if (currentIM->GetCandWords) {
+            FcitxInstanceCleanInputWindow(instance);
+            retVal = currentIM->GetCandWords(currentIM->klass);
+            FcitxInstanceProcessUpdateCandidates(instance);
+        }
     }
 
     /*
