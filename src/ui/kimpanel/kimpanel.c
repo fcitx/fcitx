@@ -267,7 +267,28 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats)));
     asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
-    asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", _("Disabled"), "fcitx-keyboard", _("Input Method Disabled"));
+    
+    char* icon;
+    char* imname;
+    char* description;
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
+        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+        if (im) {
+            icon = im->strIconName;
+            imname = _(im->strName);
+            description = _(im->strName);
+        } else {
+            icon = "keyboard";
+            imname = _("Disabled");
+            description = _("Input Method Disabled");
+        }
+    } else {
+        icon = "keyboard";
+        imname = _("Disabled");
+        description = _("Input Method Disabled");
+    }
+    /* add fcitx- prefix */
+    asprintf(&prop[1], "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
 
     int count = 2;
 
