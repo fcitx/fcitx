@@ -12,7 +12,7 @@ do
     done
 done
 
-for f in fcitx-keyboard-16.svg fcitx-vk-active-16.svg fcitx-vk-inactive-16.svg
+for f in fcitx-kbd-16.svg fcitx-vk-active-16.svg fcitx-vk-inactive-16.svg
 do
 inkscape -e /home/saber/Develop/fcitx/data/icon/16x16/status/${f/-16.svg/.png} -w 16 -h 16 -b "000000" -y 0.0 /home/saber/Develop/fcitx/data/icon/data/$f
 done

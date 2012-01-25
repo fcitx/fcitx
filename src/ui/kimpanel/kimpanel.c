@@ -349,14 +349,14 @@ void KimpanelInputReset(void* arg)
 void KimpanelOnInputFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    KimEnable(kimpanel, (FcitxInstanceGetCurrentState(kimpanel->owner) == IS_ACTIVE));
+    KimEnable(kimpanel, (FcitxInstanceGetCurrentStatev2(kimpanel->owner) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
 void KimpanelOnInputUnFocus(void* arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
-    KimEnable(kimpanel, (FcitxInstanceGetCurrentState(kimpanel->owner) == IS_ACTIVE));
+    KimEnable(kimpanel, (FcitxInstanceGetCurrentStatev2(kimpanel->owner) == IS_ACTIVE));
     KimpanelSetIMStatus(kimpanel);
 }
 
@@ -591,7 +591,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 , DBUS_TYPE_INVALID)) {
-            if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && int0 < 10) {
+            if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && int0 < 10) {
                 INPUT_RETURN_VALUE retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), int0);
                 FcitxInstanceProcessInputReturnValue(instance, retVal);
             }
