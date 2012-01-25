@@ -246,9 +246,9 @@ void FcitxRegisterEmptyEntry(FcitxInstance *instance,
     if (entry == NULL)
         return;
 
-    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
-    strncpy(entry->strName, name, MAX_IM_NAME);
-    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->uniqueName = strdup(uniqueName);
+    entry->strName = strdup(name);
+    entry->strIconName = strdup(iconName);
     entry->iPriority = priority;
     strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
     entry->langCode[LANGCODE_LENGTH] = 0;
@@ -293,9 +293,9 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
     if (entry == NULL)
         return;
 
-    strncpy(entry->uniqueName, uniqueName, MAX_IM_NAME);
-    strncpy(entry->strName, name, MAX_IM_NAME);
-    strncpy(entry->strIconName, iconName, MAX_IM_NAME);
+    entry->uniqueName = strdup(uniqueName);
+    entry->strName = strdup(name);
+    entry->strIconName = strdup(iconName);
     entry->Init = Init;
     entry->ResetIM = ResetIM;
     entry->DoInput = DoInput;

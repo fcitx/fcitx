@@ -51,7 +51,7 @@ struct _FcitxVKState;
 
 typedef struct _VKS {
     char            strSymbol[VK_NUMBERS][2][UTF8_MAX_LENGTH + 1]; //相应的符号
-    char            strName[MAX_IM_NAME + 1];
+    char           *strName;
 } VKS;
 
 typedef struct _VKWindow {
@@ -542,7 +542,10 @@ void LoadVKMapFile(FcitxVKState *vkstate)
             vks[j].strSymbol[i][0][0] = '\0';
             vks[j].strSymbol[i][1][0] = '\0';
         }
-        vks[j].strName[0] = '\0';
+        if (vks[j].strName) {
+            free(vks[j].strName);
+            vks[j].strName = NULL;
+        }
     }
 
     fp = FcitxXDGGetFileWithPrefix("data", VK_FILE, "rt", NULL);
@@ -568,7 +571,7 @@ void LoadVKMapFile(FcitxVKState *vkstate)
         if (!strcmp(pstr, "[VK]"))
             vkstate->iVKCount++;
         else if (!strncmp(pstr, "NAME=", 5))
-            strcpy(vks[vkstate->iVKCount - 1].strName, pstr + 5);
+            vks[vkstate->iVKCount - 1].strName = strdup(pstr + 5);
         else {
             if (pstr[1] != '=' && !vkstate->iVKCount)
                 continue;

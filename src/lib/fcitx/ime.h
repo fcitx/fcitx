@@ -42,8 +42,6 @@ extern "C" {
 
 #define MAX_CODE_LEN    63
 
-#define MAX_IM_NAME    (8 * UTF8_MAX_LENGTH)
-
 #define MAX_CAND_LEN    127
 #define MAX_TIPS_LEN    9
 
@@ -128,11 +126,11 @@ extern "C" {
         /**
          * @brief The name that can be display on the UI
          **/
-        char               strName[MAX_IM_NAME + 1];
+        char              *strName;
         /**
          * @brief icon name used to find icon
          **/
-        char               strIconName[MAX_IM_NAME + 1];
+        char              *strIconName;
         /**
          * @brief reset im status
          **/
@@ -181,7 +179,7 @@ extern "C" {
         /**
          * @brief uniqueName
          **/
-        char uniqueName[MAX_IM_NAME + 1];
+        char *uniqueName;
 
         /**
          * @brief input method initialized or not
@@ -197,7 +195,7 @@ extern "C" {
          **/
         FcitxIMKeyBlocker KeyBlocker;
 
-        void* padding[2];
+        void* padding[10];
     } FcitxIM;
 
     typedef enum _FcitxKeyEventType {
