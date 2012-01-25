@@ -33,7 +33,9 @@ extern "C" {
         SWITCHKEY_R_SHIFT = 1,
         SWITCHKEY_L_SHIFT = 2,
         SWITCHKEY_L_CTRL = 3,
-        SWITCHKEY_None = 4
+        SWITCHKEY_ALT_L_SHIFT = 4,
+        SWITCHKEY_ALT_R_SHIFT = 5,
+        SWITCHKEY_None = 6
     } FcitxSwitchKey;
 
     typedef enum _FcitxEnterAcion {

@@ -54,6 +54,8 @@ extern "C" {
     extern FcitxHotkey FCITX_LSHIFT[2];
     extern FcitxHotkey FCITX_RCTRL[2];
     extern FcitxHotkey FCITX_RSHIFT[2];
+    extern FcitxHotkey FCITX_ALT_LSHIFT[2];
+    extern FcitxHotkey FCITX_ALT_RSHIFT[2];
     extern FcitxHotkey FCITX_LSUPER[2];
     extern FcitxHotkey FCITX_RSUPER[2];
 

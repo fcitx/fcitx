@@ -133,6 +133,12 @@ void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxC
         case SWITCHKEY_L_CTRL:
             hkey = FCITX_LCTRL;
             break;
+        case SWITCHKEY_ALT_L_SHIFT:
+            hkey = FCITX_ALT_LSHIFT;
+            break;
+        case SWITCHKEY_ALT_R_SHIFT:
+            hkey = FCITX_ALT_RSHIFT;
+            break;
         case SWITCHKEY_None:
             hkey = FCITX_NONE_KEY;
         }

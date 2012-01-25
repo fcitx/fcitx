@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-25 05:42+0800\n"
-"PO-Revision-Date: 2012-01-25 05:43+0800\n"
+"POT-Creation-Date: 2012-01-25 16:10+0800\n"
+"PO-Revision-Date: 2012-01-25 16:11+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -29,6 +29,14 @@ msgstr "/分  经过时间: "
 #: unknown
 msgid "ABC"
 msgstr "智能ABC"
+
+#: unknown
+msgid "ALT_L_SHIFT"
+msgstr "Alt+左Shift"
+
+#: unknown
+msgid "ALT_R_SHIFT"
+msgstr "Alt+右Shift"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:143
 msgid "About Fcitx"
@@ -384,7 +392,7 @@ msgstr "只有一个候选词时不显示输入窗口（只有预编辑字符串
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有预编辑字符串时不显示输入窗口"
 
-#: /home/saber/Develop/fcitx/data/config.desc:122
+#: /home/saber/Develop/fcitx/data/config.desc:124
 msgid "Double click Switch Key to Change Mode"
 msgstr "双击中英文切换键时切换"
 
@@ -636,11 +644,11 @@ msgstr "快捷键: 删除用户词组"
 msgid "Hotkey of Deleting Frequent Word"
 msgstr "快捷键: 删除常用字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:157
+#: /home/saber/Develop/fcitx/data/config.desc:159
 msgid "Hotkey of Going Next Page"
 msgstr "快捷键: 后一页"
 
-#: /home/saber/Develop/fcitx/data/config.desc:152
+#: /home/saber/Develop/fcitx/data/config.desc:154
 msgid "Hotkey of Going Prev Page"
 msgstr "快捷键: 前一页"
 
@@ -648,35 +656,35 @@ msgstr "快捷键: 前一页"
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr "快捷键: 以词定字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:167
+#: /home/saber/Develop/fcitx/data/config.desc:169
 msgid "Hotkey of Saving All Config and Input History"
 msgstr "快捷键: 保存配置及输入历史"
 
-#: /home/saber/Develop/fcitx/data/config.desc:172
+#: /home/saber/Develop/fcitx/data/config.desc:174
 msgid "Hotkey of Switch Embeded Preedit"
 msgstr "快捷键: 切换嵌入预编辑字符串"
 
-#: /home/saber/Develop/fcitx/data/config.desc:147
+#: /home/saber/Develop/fcitx/data/config.desc:149
 msgid "Hotkey of Switch Full Width Punc Mode"
 msgstr "切换全角标点的快捷键"
 
-#: /home/saber/Develop/fcitx/data/config.desc:117
+#: /home/saber/Develop/fcitx/data/config.desc:119
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr "快捷键: 切换中英文输入"
 
-#: /home/saber/Develop/fcitx/data/config.desc:142
+#: /home/saber/Develop/fcitx/data/config.desc:144
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr "快捷键: 切换全角"
 
-#: /home/saber/Develop/fcitx/data/config.desc:137
+#: /home/saber/Develop/fcitx/data/config.desc:139
 msgid "Hotkey of Switching Remind Mode"
 msgstr "快捷键: 切换联想模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:132
+#: /home/saber/Develop/fcitx/data/config.desc:134
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr "快捷键: 切换虚拟键盘"
 
-#: /home/saber/Develop/fcitx/data/config.desc:162
+#: /home/saber/Develop/fcitx/data/config.desc:164
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr "快捷键: 选择第二第三候选词"
 
@@ -751,7 +759,7 @@ msgstr "输入法"
 msgid "Installer Script for Fcitx Skin"
 msgstr "Fcitx 皮肤的安装器"
 
-#: /home/saber/Develop/fcitx/data/config.desc:127
+#: /home/saber/Develop/fcitx/data/config.desc:129
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 

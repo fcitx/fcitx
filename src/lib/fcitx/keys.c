@@ -164,4 +164,16 @@ FcitxHotkey FCITX_RSHIFT[2] = {
     {NULL, FcitxKey_Shift_R, FcitxKeyState_Shift},
 };
 
+FCITX_EXPORT_API
+FcitxHotkey FCITX_ALT_LSHIFT[2] = {
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_Alt_Shift},
+    {NULL, FcitxKey_Shift_L, FcitxKeyState_Alt},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_ALT_RSHIFT[2] = {
+    {NULL, FcitxKey_Shift_R, FcitxKeyState_Alt_Shift},
+    {NULL, FcitxKey_Shift_R, FcitxKeyState_Alt},
+};
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-25 05:42+0800\n"
+"POT-Creation-Date: 2012-01-25 16:10+0800\n"
 "PO-Revision-Date: 2011-11-16 01:54+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.net/projects/p/fcitx/"
@@ -28,6 +28,14 @@ msgstr ""
 
 #: unknown
 msgid "ABC"
+msgstr ""
+
+#: unknown
+msgid "ALT_L_SHIFT"
+msgstr ""
+
+#: unknown
+msgid "ALT_R_SHIFT"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:143
@@ -384,7 +392,7 @@ msgstr ""
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:122
+#: /home/saber/Develop/fcitx/data/config.desc:124
 msgid "Double click Switch Key to Change Mode"
 msgstr ""
 
@@ -636,11 +644,11 @@ msgstr ""
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:157
+#: /home/saber/Develop/fcitx/data/config.desc:159
 msgid "Hotkey of Going Next Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:152
+#: /home/saber/Develop/fcitx/data/config.desc:154
 msgid "Hotkey of Going Prev Page"
 msgstr ""
 
@@ -648,35 +656,35 @@ msgstr ""
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:167
+#: /home/saber/Develop/fcitx/data/config.desc:169
 msgid "Hotkey of Saving All Config and Input History"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:172
+#: /home/saber/Develop/fcitx/data/config.desc:174
 msgid "Hotkey of Switch Embeded Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:147
+#: /home/saber/Develop/fcitx/data/config.desc:149
 msgid "Hotkey of Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:117
+#: /home/saber/Develop/fcitx/data/config.desc:119
 msgid "Hotkey of Switching Chinese and English Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:142
+#: /home/saber/Develop/fcitx/data/config.desc:144
 msgid "Hotkey of Switching Full Width Character Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:137
+#: /home/saber/Develop/fcitx/data/config.desc:139
 msgid "Hotkey of Switching Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:132
+#: /home/saber/Develop/fcitx/data/config.desc:134
 msgid "Hotkey of Switching Virtual Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:162
+#: /home/saber/Develop/fcitx/data/config.desc:164
 msgid "Hotkey to Choose Second and Third Candidate Word"
 msgstr ""
 
@@ -752,7 +760,7 @@ msgstr ""
 msgid "Installer Script for Fcitx Skin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:127
+#: /home/saber/Develop/fcitx/data/config.desc:129
 msgid "Interval of Two Key Input"
 msgstr ""
 

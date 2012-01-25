@@ -107,12 +107,14 @@ Description=Enable Left Ctrl + Left Shift to Switch Between Input Method
 
 [Hotkey/SwitchKey]
 Type=Enum
-EnumCount=5
+EnumCount=7
 Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
 Enum3=L_CTRL
-Enum4=Disabled
+Enum4=ALT_L_SHIFT
+Enum5=ALT_R_SHIFT
+Enum6=Disabled
 DefaultValue=L_CTRL
 Description=Hotkey of Switching Chinese and English Mode
 
