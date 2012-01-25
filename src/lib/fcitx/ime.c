@@ -239,11 +239,7 @@ void FcitxRegisterEmptyEntry(FcitxInstance *instance,
         FcitxLog(ERROR, "%s already exists", uniqueName);
         return;
     } else {
-        FcitxIM newime;
-        memset(&newime, 0, sizeof(FcitxIM));
-
-        utarray_push_back(imes, &newime);
-
+        utarray_extend_back(imes);
         entry = (FcitxIM*) utarray_back(imes);
     }
 
@@ -290,11 +286,7 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
             return ;
         }
     } else {
-        FcitxIM newime;
-        memset(&newime, 0, sizeof(FcitxIM));
-
-        utarray_push_back(imes, &newime);
-
+        utarray_extend_back(imes);
         entry = (FcitxIM*) utarray_back(imes);
     }
 
@@ -314,7 +306,8 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
     entry->KeyBlocker = KeyBlocker;
     entry->klass = imclass;
     entry->iPriority = priority;
-    strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
+    if (langCode)
+        strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
     entry->langCode[LANGCODE_LENGTH] = 0;
     entry->initialized = true;
 }

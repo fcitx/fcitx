@@ -99,9 +99,7 @@ void FcitxAddonsLoad(UT_array* addons)
         FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, FcitxAddonGetConfigDesc());
         if (cfile) {
-            FcitxAddon addon;
-            memset(&addon, 0, sizeof(FcitxAddon));
-            utarray_push_back(addons, &addon);
+            utarray_extend_back(addons);
             FcitxAddon *a = (FcitxAddon*) utarray_back(addons);
             utarray_init(&a->functionList, &function_icd);
             FcitxAddonConfigBind(a, cfile, FcitxAddonGetConfigDesc());

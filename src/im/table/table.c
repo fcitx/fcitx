@@ -152,9 +152,7 @@ void LoadTableInfo(FcitxTableState *tbl)
         FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, GetTableConfigDesc());
         if (cfile) {
-            TableMetaData table;
-            memset(&table, 0, sizeof(TableMetaData));
-            utarray_push_back(tbl->table, &table);
+            utarray_extend_back(tbl->table);
             TableMetaData *t = (TableMetaData*)utarray_back(tbl->table);
             TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
             FcitxConfigBindSync((FcitxGenericConfig*)t);
