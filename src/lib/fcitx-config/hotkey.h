@@ -2552,6 +2552,9 @@ extern "C"
      * @since 4.1.1
      */
     FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym);
+    
+    FcitxKeySym FcitxUnicodeToKeySym (unsigned int wc);
+    unsigned int FcitxKeySymToUnicode (FcitxKeySym keyval);
 
 #ifdef __cplusplus
 }
