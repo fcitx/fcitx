@@ -740,6 +740,9 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
         FcitxInstanceSetContext(instance, CONTEXT_IM_LANGUAGE, newIM->langCode);
         newIM->Init(newIM->klass);
     }
+    
+    if (instance->iIMIndex != 0 && instance->config->firstAsInactive)
+        instance->lastIMIndex = instance->iIMIndex;
 
     FcitxInstanceResetInput(instance);
     
@@ -1043,9 +1046,6 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         if (objectState == IS_ACTIVE)
             FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
         else {
-            if (instance->iIMIndex != 0)
-                instance->lastIMIndex = instance->iIMIndex;
-
             FcitxInstanceSwitchIMInternal(instance, 0, false);
         }
     }
