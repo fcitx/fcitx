@@ -80,7 +80,7 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
         size_t wlen = (len + 1) * sizeof(wchar_t);
         wmessage = (wchar_t *) fcitx_utils_malloc0((len + 1) * sizeof(wchar_t));
 
-        char *inp = buffer;
+        IconvStr inp = buffer;
         char *outp = (char*) wmessage;
 
         iconv(iconvW, &inp, &len, &outp, &wlen);

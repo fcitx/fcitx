@@ -22,6 +22,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "config.h"
 
 #include "fcitx-utils/utarray.h"
 
@@ -108,7 +109,8 @@ int main(int argc, char **argv)
 
     fseek(fp, DESC_START, SEEK_SET);
     fread(buf, 1, DESC_LENGTH, fp);
-    char *in = buf, *out = bufout;
+    IconvStr in = buf;
+    char *out = bufout;
     size_t inlen = DESC_LENGTH, outlen = BUFLEN;
     iconv(conv, &in, &inlen, &out, &outlen);
     fprintf(stderr, "%s\n", bufout);

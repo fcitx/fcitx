@@ -19,7 +19,6 @@
  ***************************************************************************/
 #include <ctype.h>
 #include <math.h>
-#include <iconv.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #include "fcitx-config/fcitx-config.h"

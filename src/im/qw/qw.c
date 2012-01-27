@@ -173,7 +173,7 @@ INPUT_RETURN_VALUE QWGetCandWords(void *arg)
 
 char           *GetQuWei(FcitxQWState* qwstate, int iQu, int iWei)
 {
-    char *inbuf;
+    IconvStr inbuf;
     char *outbuf;
 
     size_t insize = 2, avail = UTF8_MAX_LENGTH + 1;

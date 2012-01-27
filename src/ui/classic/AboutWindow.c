@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <ctype.h>
-#include <iconv.h>
 #include <X11/Xatom.h>
 #include <cairo/cairo-xlib.h>
 

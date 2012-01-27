@@ -24,8 +24,6 @@
 #include "fcitx-utils/log.h"
 
 #include <ctype.h>
-
-#include <iconv.h>
 #include <X11/Xatom.h>
 #include <string.h>
 #include "classicui.h"

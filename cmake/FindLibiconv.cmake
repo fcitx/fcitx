@@ -4,6 +4,7 @@
 #  LIBICONV_FOUND - system has Libiconv
 #  LIBICONV_INCLUDE_DIR - Libiconv include directory
 #  LIBICONV_LIBRARIES - Libraries needed to use Libiconv
+#  LIBICONV_SECOND_ARGUMENT_IS_CONST - iconv second argument is const
 #
 # TODO: This will enable translations only if Gettext functionality is
 # present in libc. Must have more robust system for release, where Gettext
@@ -19,6 +20,9 @@
 if(LIBICONV_INCLUDE_DIR AND LIBICONV_LIB_FOUND)
   set(Libiconv_FIND_QUIETLY TRUE)
 endif(LIBICONV_INCLUDE_DIR AND LIBICONV_LIB_FOUND)
+ 
+include(CheckCCompilerFlag)
+include(CheckCSourceCompiles)
  
 find_path(LIBICONV_INCLUDE_DIR iconv.h)
  
@@ -37,6 +41,27 @@ if(LIBICONV_INCLUDE_DIR)
       set(LIBICONV_LIB_FOUND TRUE)
     endif(LIBICONV_LIBRARIES)
   endif (LIBICONV_LIBC_HAS_ICONV_OPEN)
+  
+  if (LIBICONV_LIB_FOUND) 
+    check_c_compiler_flag("-Werror" ICONV_HAVE_WERROR)
+    set (CMAKE_C_FLAGS_BACKUP "${CMAKE_C_FLAGS}")
+    if(ICONV_HAVE_WERROR)
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
+    endif(ICONV_HAVE_WERROR)
+    check_c_source_compiles("
+    #include <iconv.h>
+    int main(){
+        iconv_t conv = 0;
+        const char* in = 0;
+        size_t ilen = 0;
+        char* out = 0;
+        size_t olen = 0;
+        iconv(conv, &in, &ilen, &out, &olen);
+        return 0;
+    }
+    " LIBICONV_SECOND_ARGUMENT_IS_CONST )
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_BACKUP}")
+  endif(LIBICONV_LIB_FOUND)
  
 endif(LIBICONV_INCLUDE_DIR)
  
