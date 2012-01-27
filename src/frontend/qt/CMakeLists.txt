@@ -22,9 +22,7 @@ set(
     qtim_fcitx_SRCS
     fcitx-plugin.cpp
     fcitx-input-context.cpp
-    fcitxkeyuni.cpp
 )
-
 
 QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
     org.fcitx.Fcitx.InputContext.xml

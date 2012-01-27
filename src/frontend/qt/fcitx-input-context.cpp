@@ -57,7 +57,7 @@ struct _FcitxComposeTableCompact {
     int n_index_stride;
 };
 
-static const FcitxComposeTableCompact ibus_compose_table_compact = {
+static const FcitxComposeTableCompact fcitx_compose_table_compact = {
     fcitx_compose_seqs_compact,
     5,
     23,
@@ -629,7 +629,7 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
     m_compose_buffer[m_n_compose ++] = keyval;
     m_compose_buffer[m_n_compose] = 0;
 
-    if (checkCompactTable(&ibus_compose_table_compact)) {
+    if (checkCompactTable(&fcitx_compose_table_compact)) {
         // qDebug () << "checkCompactTable ->true";
         return true;
     }
@@ -654,7 +654,6 @@ QFcitxInputContext::processCompose(uint keyval, uint state, FcitxKeyEventType ev
 
 #define IS_DEAD_KEY(k) \
     ((k) >= FcitxKey_dead_grave && (k) <= (FcitxKey_dead_dasia+1))
-quint32 fcitx_keyval_to_unicode(uint keyval);
 
 bool
 QFcitxInputContext::checkAlgorithmically()
@@ -670,7 +669,7 @@ QFcitxInputContext::checkAlgorithmically()
         return true;
 
     if (i > 0 && i == m_n_compose - 1) {
-        combination_buffer[0] = fcitx_keyval_to_unicode(m_compose_buffer[i]);
+        combination_buffer[0] = FcitxKeySymToUnicode((FcitxKeySym) m_compose_buffer[i]);
         combination_buffer[m_n_compose] = 0;
         i--;
         while (i >= 0) {
@@ -710,7 +709,7 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
                 /* CASE (psili, 0x343); */
 #undef CASE
             default:
-                combination_buffer[i + 1] = fcitx_keyval_to_unicode(m_compose_buffer[i]);
+                combination_buffer[i + 1] = FcitxKeySymToUnicode((FcitxKeySym) m_compose_buffer[i]);
             }
             i--;
         }

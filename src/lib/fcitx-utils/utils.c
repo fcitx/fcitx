@@ -139,13 +139,14 @@ UT_array* fcitx_utils_split_string(const char* str, char delm)
     char *bakstr = strdup(str);
     size_t len = strlen(bakstr);
     size_t i = 0, last = 0;
-    for (i = 0 ; i <= len ; i++) {
-        if (bakstr[i] == delm || bakstr[i] == '\0') {
-            bakstr[i] = '\0';
-            char *p = &bakstr[last];
-            if (strlen(p) > 0)
+    if (len) {
+        for (i = 0 ; i <= len ; i++) {
+            if (bakstr[i] == delm || bakstr[i] == '\0') {
+                bakstr[i] = '\0';
+                char *p = &bakstr[last];
                 utarray_push_back(array, &p);
-            last = i + 1;
+                last = i + 1;
+            }
         }
     }
     free(bakstr);

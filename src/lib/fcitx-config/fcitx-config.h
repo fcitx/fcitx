@@ -327,7 +327,7 @@ extern "C"
             tmpfp = FcitxXDGGetFileWithPrefix("configdesc", path, "r", NULL); \
             if (tmpfp == NULL) \
             { \
-                FcitxLog(ERROR, _("Load Config Description File %s Erorr, Please Check your install."), path); \
+                FcitxLog(ERROR, "Load Config Description File %s Erorr, Please Check your install.", path); \
                 return NULL; \
             } \
             configDesc = FcitxConfigParseConfigFileDescFp(tmpfp); \
