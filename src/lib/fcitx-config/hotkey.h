@@ -26,18 +26,16 @@
  *
  */
 
-#ifndef _FCITX_HOTFcitxKeyState_H_
-#define _FCITX_HOTFcitxKeyState_H_
+#ifndef _FCITX_HOTKEY_H_
+#define _FCITX_HOTKEY_H_
 
+#include <stdint.h>
 #include <fcitx-config/fcitx-config.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-
-
     /**
      * @brief mainly come from X11/keysymdef.h
      **/
@@ -2553,8 +2551,8 @@ extern "C"
      */
     FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym);
     
-    FcitxKeySym FcitxUnicodeToKeySym (unsigned int wc);
-    unsigned int FcitxKeySymToUnicode (FcitxKeySym keyval);
+    FcitxKeySym FcitxUnicodeToKeySym (uint32_t wc);
+    uint32_t FcitxKeySymToUnicode (FcitxKeySym keyval);
 
 #ifdef __cplusplus
 }

@@ -101,8 +101,8 @@ KEY_LIST        keyList[] = {
 */
 
 struct _FcitxKeySymToUnicode{
-    unsigned short keysym;
-    unsigned short ucs;
+    uint16_t keysym;
+    uint16_t ucs;
 };
 static const struct _FcitxKeySymToUnicode gdk_keysym_to_unicode_tab[] = {
     { 0x01a1, 0x0104 }, /* Aogonek Ą LATIN CAPITAL LETTER A WITH OGONEK */
@@ -930,7 +930,8 @@ static const struct _FcitxKeySymToUnicode gdk_keysym_to_unicode_tab[] = {
     { 0xFFFF /* Delete */, '\177' }
 };
 
-unsigned int
+FCITX_EXPORT_API
+uint32_t
 FcitxKeySymToUnicode (FcitxKeySym keyval)
 {
     int min = 0;
@@ -965,8 +966,8 @@ FcitxKeySymToUnicode (FcitxKeySym keyval)
 }
 
 struct _FcitxUnicodeToKeySym {
-    unsigned short keysym;
-    unsigned short ucs;
+    uint16_t keysym;
+    uint16_t ucs;
 };
 static const struct _FcitxUnicodeToKeySym gdk_unicode_to_keysym_tab[] = {
     { 0x0abd, 0x002e }, /* decimalpoint . FULL STOP */
@@ -1721,8 +1722,9 @@ static const struct _FcitxUnicodeToKeySym gdk_unicode_to_keysym_tab[] = {
     { 0x0ef7, 0x318e }, /* Hangul_AraeAE ㆎ HANGUL LETTER ARAEAE */
 };
 
+FCITX_EXPORT_API
 FcitxKeySym
-FcitxUnicodeToKeySym (unsigned int wc)
+FcitxUnicodeToKeySym (uint32_t wc)
 {
     int min = 0;
     int max = sizeof(gdk_unicode_to_keysym_tab) / sizeof(gdk_unicode_to_keysym_tab[0]) - 1;

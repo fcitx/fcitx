@@ -125,9 +125,16 @@ char* FcitxInstanceProcessOutputFilter(FcitxInstance* instance, char *in)
     HookStack* stack = GetOutputFilter(instance);
     stack = stack->next;
     char *out = NULL;
+    char* newout = NULL;
     while (stack) {
-        if ((out = stack->stringfilter.func(stack->stringfilter.arg, in)) != NULL)
-            break;
+        newout = stack->stringfilter.func(stack->stringfilter.arg, in);
+        if (newout) {
+            if (out) {
+                free(out);
+                out = NULL;
+            }
+            out = newout;
+        }
         stack = stack->next;
     }
     return out;
@@ -139,9 +146,16 @@ char* FcitxInstanceProcessCommitFilter(FcitxInstance* instance, char *in)
     HookStack* stack = GetCommitFilter(instance);
     stack = stack->next;
     char *out = NULL;
+    char* newout = NULL;
     while (stack) {
-        if ((out = stack->stringfilter.func(stack->stringfilter.arg, in)) != NULL)
-            break;
+        newout = stack->stringfilter.func(stack->stringfilter.arg, in);
+        if (newout) {
+            if (out) {
+                free(out);
+                out = NULL;
+            }
+            out = newout;
+        }
         stack = stack->next;
     }
     return out;
