@@ -53,6 +53,8 @@ FCITX_EXPORT_API
 void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
 {
     int idx = utarray_eltidx(&candList->candWords, candWord);
+    if (idx < 0 || idx >= utarray_len(&candList->candWords))
+        return;
     utarray_erase(&candList->candWords, idx, 1);
 }
 
