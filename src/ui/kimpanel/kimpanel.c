@@ -323,12 +323,12 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
             imname = _(im->strName);
             description = _(im->strName);
         } else {
-            icon = "keyboard";
+            icon = "kbd";
             imname = _("Disabled");
             description = _("Input Method Disabled");
         }
     } else {
-        icon = "keyboard";
+        icon = "kbd";
         imname = _("Disabled");
         description = _("Input Method Disabled");
     }
@@ -640,7 +640,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     int index = 1;
                     size_t len = utarray_len(imes) + 1;
                     char **prop = fcitx_utils_malloc0(len * sizeof(char*));
-                    asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "keyboard", _("Input Method Disabled"));
+                    asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "kbd", _("Input Method Disabled"));
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {
