@@ -39,10 +39,6 @@ extern "C" {
     /* 将输入条上显示的内容分为以下几类 */
 #define MESSAGE_TYPE_COUNT  7
 
-#define MAX_STATUS_NAME 32
-#define MAX_MENU_STRING_LENGTH 32
-#define MAX_STATUS_SDESC 32
-#define MAX_STATUS_LDESC 32
 #define MAX_MESSAGE_COUNT 64
 
     typedef struct _FcitxMenuItem FcitxMenuItem;
@@ -70,7 +66,7 @@ extern "C" {
         /**
          * @brief The displayed string
          **/
-        char tipstr[MAX_MENU_STRING_LENGTH + 1];
+        char *tipstr;
         /**
          * @brief Can be used by ui to mark it's selected or not.
          **/
@@ -99,12 +95,12 @@ extern "C" {
         /**
          * @brief menu name, can be displayed on the ui
          **/
-        char name[MAX_MENU_STRING_LENGTH + 1];
+        char *name;
         /**
          * @brief you might want to bind the menu on a status icon, but this is only a hint,
          * depends on the ui implementation
          **/
-        char candStatusBind[MAX_STATUS_NAME + 1];
+        char *candStatusBind;
         /**
          * @brief update the menu content
          **/
@@ -140,15 +136,15 @@ extern "C" {
         /**
          * @brief status name, will not displayed on the UI.
          **/
-        char name[MAX_STATUS_NAME + 1];
+        char *name;
         /**
          * @brief short desription for this status, can be displayed on the UI
          **/
-        char shortDescription[MAX_STATUS_SDESC + 1];
+        char *shortDescription;
         /**
          * @brief long description for this status, can be displayed on the UI
          **/
-        char longDescription[MAX_STATUS_LDESC + 1];
+        char *longDescription;
         /**
          * @brief toogle function
          **/

@@ -123,7 +123,7 @@ typedef struct _SkinInputBar {
 } SkinInputBar;
 
 typedef struct _SkinPlacement {
-    char name[MAX_STATUS_NAME + 1];
+    char *name;;
     int x;
     int y;
     UT_hash_handle hh;

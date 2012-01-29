@@ -78,12 +78,13 @@ struct _FcitxMessages {
     boolean changed;
 };
 
-static const UT_icd menuICD = { sizeof(FcitxMenuItem), NULL, NULL, NULL };
-
 #define UI_FUNC_IS_VALID(funcname) (!(FcitxInstanceGetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
 
 static void FcitxUIShowInputWindow(FcitxInstance* instance);
 static boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon);
+static void FcitxMenuItemFree(void* arg);
+
+static const UT_icd menuICD = { sizeof(FcitxMenuItem), NULL, NULL, FcitxMenuItemFree };
 
 FCITX_EXPORT_API
 FcitxMessages* FcitxMessagesNew()
@@ -391,16 +392,13 @@ void FcitxUIRegisterStatus(
 {
     FcitxUIStatus status;
 
-    if (strlen(name) > MAX_STATUS_NAME)
-        return;
-
     memset(&status, 0 , sizeof(FcitxUIStatus));
 
-    strncpy(status.name, name, MAX_STATUS_NAME);
+    status.name = strdup(name);
 
-    strncpy(status.shortDescription, shortDesc, MAX_STATUS_NAME);
+    status.shortDescription = strdup(shortDesc);
 
-    strncpy(status.longDescription, longDesc, MAX_STATUS_NAME);
+    status.longDescription = strdup(longDesc);
 
     status.getCurrentStatus = getStatus;
 
@@ -434,12 +432,13 @@ void FcitxMenuAddMenuItem(FcitxUIMenu* menu, char* string, FcitxMenuItemType typ
     FcitxMenuItem shell;
     memset(&shell, 0, sizeof(FcitxMenuItem));
 
-    if (string) {
-        if (strlen(string) > MAX_MENU_STRING_LENGTH)
-            return;
-        else
-            strncpy(shell.tipstr, string, MAX_MENU_STRING_LENGTH);
+    if (string == NULL && type != MENUTYPE_DIVLINE) {
+        return;
     }
+    if (string)
+        shell.tipstr = strdup(string);
+    else
+        shell.tipstr = NULL;
 
     shell.type = type;
 
@@ -757,6 +756,13 @@ FCITX_EXPORT_API
 void FcitxMenuInit(FcitxUIMenu* menu)
 {
     utarray_init(&menu->shell, &menuICD);
+}
+
+void FcitxMenuItemFree(void* arg)
+{
+    FcitxMenuItem* item = arg;
+    if (item->tipstr)
+        free(item->tipstr);
 }
 
 

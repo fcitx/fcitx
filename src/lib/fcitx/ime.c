@@ -1101,8 +1101,8 @@ void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputConte
 
 void FcitxInstanceInitIMMenu(FcitxInstance* instance)
 {
-    strcpy(instance->imMenu.candStatusBind, "im");
-    strcpy(instance->imMenu.name, _("Input Method"));
+    instance->imMenu.candStatusBind = strdup("im");
+    instance->imMenu.name = strdup(_("Input Method"));
 
     instance->imMenu.UpdateMenu = UpdateIMMenuItem;
     instance->imMenu.MenuAction = IMMenuAction;

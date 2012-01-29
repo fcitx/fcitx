@@ -820,8 +820,8 @@ void InitSkinMenu(FcitxClassicUI* classicui)
 {
     utarray_init(&classicui->skinBuf, &ut_str_icd);
     FcitxMenuInit(&classicui->skinMenu);
-    strcpy(classicui->skinMenu.candStatusBind, "skin");
-    strcpy(classicui->skinMenu.name, _("Skin"));
+    classicui->skinMenu.candStatusBind = strdup("skin");
+    classicui->skinMenu.name =  strdup(_("Skin"));
 
     classicui->skinMenu.UpdateMenu = UpdateSkinMenu;
     classicui->skinMenu.MenuAction = SkinMenuAction;
@@ -870,13 +870,10 @@ void ParsePlacement(UT_array* sps, char* placment)
         char* p = strchr(s, ':');
         if (p == NULL)
             continue;
-        if ((strchr(s, ':') - s) > MAX_STATUS_NAME)
-            continue;
 
         int len = p - s;
         SkinPlacement sp;
-        strncpy(sp.name, s, len);
-        sp.name[len] = '\0';
+        sp.name = strndup(s, len);
         int ret = sscanf(p + 1, "%d,%d", &sp.x, &sp.y);
         if (ret != 2)
             continue;

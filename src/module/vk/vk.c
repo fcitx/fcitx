@@ -165,8 +165,8 @@ void *VKCreate(FcitxInstance* instance)
     FcitxInstanceRegisterInputUnFocusHook(instance, resethk);
 
     FcitxMenuInit(&vkstate->vkmenu);
-    strcpy(vkstate->vkmenu.candStatusBind, "vk");
-    strcpy(vkstate->vkmenu.name, _("Virtual Keyboard"));
+    vkstate->vkmenu.candStatusBind = strdup("vk");
+    vkstate->vkmenu.name = strdup(_("Virtual Keyboard"));
 
     vkstate->vkmenu.UpdateMenu = UpdateVKMenu;
     vkstate->vkmenu.MenuAction = VKMenuAction;
