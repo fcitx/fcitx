@@ -277,12 +277,12 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
             imname = _(im->strName);
             description = _(im->strName);
         } else {
-            icon = "keyboard";
+            icon = "kbd";
             imname = _("Disabled");
             description = _("Input Method Disabled");
         }
     } else {
-        icon = "keyboard";
+        icon = "kbd";
         imname = _("Disabled");
         description = _("Input Method Disabled");
     }
