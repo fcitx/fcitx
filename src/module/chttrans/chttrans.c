@@ -137,8 +137,14 @@ void* ChttransCreate(FcitxInstance* instance)
 INPUT_RETURN_VALUE HotkeyToggleChttransState(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
-    FcitxUIUpdateStatus(transState->owner, "chttrans");
-    return IRV_DO_NOTHING;
+
+    FcitxUIStatus *status = FcitxUIGetStatusByName(transState->owner, "chttrans");
+    if (status->visible){
+        FcitxUIUpdateStatus(transState->owner, "chttrans");
+        return IRV_DO_NOTHING;
+    }
+    else
+        return IRV_TO_PROCESS;
 }
 
 void ToggleChttransState(void* arg)

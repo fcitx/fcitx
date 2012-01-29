@@ -439,8 +439,14 @@ void TogglePuncState(void* arg)
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*)arg;
-    FcitxUIUpdateStatus(puncState->owner, "punc");
-    return IRV_DO_NOTHING;
+
+    FcitxUIStatus *status = FcitxUIGetStatusByName(puncState->owner, "punc");
+    if (status->visible){
+        FcitxUIUpdateStatus(puncState->owner, "punc");
+        return IRV_DO_NOTHING;
+    }
+    else
+        return IRV_TO_PROCESS;
 }
 
 boolean GetPuncState(void* arg)
