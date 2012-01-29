@@ -1,3 +1,6 @@
+#ifndef ___CONFIG_H___
+#define ___CONFIG_H___
+
 #cmakedefine HAVE_UNISTD_H
 #cmakedefine HAVE_MALLOC_H
 #cmakedefine HAVE_STDBOOL_H
@@ -22,4 +25,6 @@
 typedef const char* IconvStr;
 #else
 typedef char* IconvStr;
+#endif
+
 #endif
