@@ -600,7 +600,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
         
         if (retVal == IRV_TO_PROCESS) {
-            if (currentIM->KeyBlocker)
+            if (currentIM && currentIM->KeyBlocker)
                 retVal = currentIM->KeyBlocker(currentIM->klass, sym, state);
             else
                 retVal = FcitxStandardKeyBlocker(input, sym, state);

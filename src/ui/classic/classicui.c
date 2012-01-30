@@ -514,7 +514,7 @@ boolean EnlargeCairoSurface(cairo_surface_t** sur, int w, int h)
     int ow = cairo_image_surface_get_width(*sur);
     int oh = cairo_image_surface_get_height(*sur);
     
-    if (ow >= w && ow >= h)
+    if (ow >= w && oh >= h)
         return false;
     
     while (ow < w) {
