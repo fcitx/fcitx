@@ -386,7 +386,7 @@ void ClassicUIOnTriggerOn(void* arg)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxInstance *instance = classicui->owner;
-    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         DrawMainWindow(classicui->mainWindow);
     }
     DrawTrayWindow(classicui->trayWindow);
