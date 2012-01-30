@@ -21,6 +21,7 @@
 #ifndef _FCITX_UI_H_
 #define _FCITX_UI_H_
 
+#include <stdarg.h>
 #include <fcitx/fcitx.h>
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-utils/utf8.h>
