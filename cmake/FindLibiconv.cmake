@@ -48,6 +48,8 @@ if(LIBICONV_INCLUDE_DIR)
     if(ICONV_HAVE_WERROR)
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror")
     endif(ICONV_HAVE_WERROR)
+    set(CMAKE_REQUIRED_INCLUDES "${LIBICONV_INCLUDE_DIR}")
+    set(CMAKE_REQUIRED_LIBRARIES "${LIBICONV_LIBRARIES}")
     check_c_source_compiles("
     #include <iconv.h>
     int main(){
@@ -60,6 +62,8 @@ if(LIBICONV_INCLUDE_DIR)
         return 0;
     }
     " LIBICONV_SECOND_ARGUMENT_IS_CONST )
+    set(CMAKE_REQUIRED_INCLUDES)
+    set(CMAKE_REQUIRED_LIBRARIES)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS_BACKUP}")
   endif(LIBICONV_LIB_FOUND)
  
