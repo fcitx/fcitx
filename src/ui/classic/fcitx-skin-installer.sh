@@ -13,28 +13,28 @@ else
     MESSAGE_COMMON="echo"
 fi
 
-function zenity_error()
+zenity_error()
 {
     zenity --error --text="$1"
 }
 
-function zenity_info()
+zenity_info()
 {
     zenity --info --text="$1"
 }
 
-function usage()
+usage()
 {
     echo "Usage: fcitx-skin-installer [skin file]"
     exit 1
 }
 
-function message()
+message()
 {
     $MESSAGE_COMMON "$1"
 }
 
-function error()
+error()
 {
     $MESSAGE_ERROR "$1"
 }
