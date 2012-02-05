@@ -25,7 +25,7 @@
 
 static const GtkIMContextInfo fcitx_im_info = {
     "fcitx",
-    "Fcitx (Free Chinese Input Toy of X)",
+    "Fcitx (Flexible Input Method Framework)",
     "fcitx",
     LOCALEDIR,
     "ja:ko:zh:*"
