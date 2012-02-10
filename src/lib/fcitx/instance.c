@@ -244,6 +244,7 @@ void* RunInstance(void* arg)
 FCITX_EXPORT_API
 void FcitxInstanceEnd(FcitxInstance* instance)
 {
+    FcitxProfileSave(instance->profile);
     FcitxInstanceSaveAllIM(instance);
     
     if (instance->uinormal && instance->uinormal->ui->Destroy)

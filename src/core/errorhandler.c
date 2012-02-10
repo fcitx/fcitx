@@ -25,6 +25,7 @@
 #include <libintl.h>
 
 #include "fcitx/fcitx.h"
+#include "fcitx/instance-internal.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/configfile.h"
 #include "fcitx/instance.h"
@@ -59,6 +60,7 @@ void OnException(int signo)
 
     if (signo != SIGSEGV && signo != SIGCONT) {
         FcitxInstanceLock(instance);
+        FcitxProfileSave(instance->profile);
         FcitxInstanceSaveAllIM(instance);
         FcitxInstanceUnlock(instance);
     }

@@ -681,6 +681,9 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
 {
     UT_array* imes = &instance->imes;
     int iIMCount = utarray_len(imes);
+    int oldIMIndex = instance->iIMIndex;
+    if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
+        oldIMIndex = instance->lastIMIndex;
 
     FcitxInstanceCleanInputWindow(instance);
     FcitxInstanceResetInput(instance);
@@ -705,7 +708,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
             instance->iIMIndex++;
     } else if (index >= 0)
         instance->iIMIndex = index;
-    
+
     if (skipZero && instance->iIMIndex == 0)
         instance->iIMIndex = 1;
 
@@ -734,19 +737,24 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
         newIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
         free(name);
     }
-    
+
     if (newIM && newIM->Init) {
         FcitxInstanceResetContext(instance, FCF_ResetOnInputMethodChange);
         FcitxInstanceSetContext(instance, CONTEXT_IM_LANGUAGE, newIM->langCode);
         newIM->Init(newIM->klass);
     }
-    
-    if (instance->iIMIndex != 0 && instance->config->firstAsInactive)
+
+    if (instance->config->firstAsInactive && instance->iIMIndex != 0)
         instance->lastIMIndex = instance->iIMIndex;
 
+    int newIMIndex = instance->iIMIndex;
+    if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
+        newIMIndex = instance->lastIMIndex;
+
     FcitxInstanceResetInput(instance);
-    
-    FcitxProfileSave(instance->profile);
+
+    if (newIMIndex != oldIMIndex)
+        FcitxProfileSave(instance->profile);
 }
 
 /**
@@ -1301,6 +1309,7 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
 
     FcitxInstanceSwitchIM(instance, instance->iIMIndex);
     FcitxInstanceProcessUpdateIMListHook(instance);
+    FcitxProfileSave(instance->profile);
 }
 
 FCITX_EXPORT_API
