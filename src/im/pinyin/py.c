@@ -1290,11 +1290,9 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
         *pIndex = ++pystate->iCounter;
     if (pystate->iOrderCount >= AUTOSAVE_ORDER_COUNT) {
         SavePYIndex(pystate);
-        pystate->iOrderCount = 0;
     }
     if (pystate->iNewFreqCount >= AUTOSAVE_FREQ_COUNT) {
         SavePYFreq(pystate);
-        pystate->iNewFreqCount = 0;
     }
 
     strcpy(strHZString, pBase);
@@ -1691,9 +1689,8 @@ boolean PYAddUserPhrase(FcitxPinyinState* pystate, char *phrase, char *map, bool
     temp->next = newPhrase;
     PYFAList[i].pyBase[j].iUserPhrase++;
     pystate->iNewPYPhraseCount++;
-    if (pystate->iNewPYPhraseCount == AUTOSAVE_PHRASE_COUNT) {
+    if (pystate->iNewPYPhraseCount >= AUTOSAVE_PHRASE_COUNT) {
         SavePYUserPhrase(pystate);
-        pystate->iNewPYPhraseCount = 0;
     }
 
     return true;
@@ -1719,9 +1716,8 @@ void PYDelUserPhrase(FcitxPinyinState* pystate, int iPYFA, int iBase, PyUsrPhras
     free(phrase);
     PYFAList[iPYFA].pyBase[iBase].iUserPhrase--;
     pystate->iNewPYPhraseCount++;
-    if (pystate->iNewPYPhraseCount == AUTOSAVE_PHRASE_COUNT) {
+    if (pystate->iNewPYPhraseCount >= AUTOSAVE_PHRASE_COUNT) {
         SavePYUserPhrase(pystate);
-        pystate->iNewPYPhraseCount = 0;
     }
 }
 
@@ -1792,6 +1788,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     rename(tempfile, pstr);
     free(pstr);
     free(tempfile);
+    pystate->iNewPYPhraseCount = 0;
 }
 
 void SavePYFreq(FcitxPinyinState *pystate)
@@ -1854,6 +1851,7 @@ void SavePYFreq(FcitxPinyinState *pystate)
     rename(tempfile, pstr);
     free(pstr);
     free(tempfile);
+    pystate->iNewFreqCount = 0;
 }
 
 /*
@@ -1921,6 +1919,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
 
     free(pstr);
     free(tempfile);
+    pystate->iOrderCount = 0;
 }
 
 /*
@@ -1993,9 +1992,8 @@ void PYAddFreq(FcitxPinyinState* pystate, PYCandWord* pycandWord)
     hz->next = HZTemp;
     pCurFreq->iCount++;
     pystate->iNewFreqCount++;
-    if (pystate->iNewFreqCount == AUTOSAVE_FREQ_COUNT) {
+    if (pystate->iNewFreqCount >= AUTOSAVE_FREQ_COUNT) {
         SavePYFreq(pystate);
-        pystate->iNewFreqCount = 0;
     }
 }
 
@@ -2018,9 +2016,8 @@ void PYDelFreq(FcitxPinyinState *pystate, PYCandWord* pycandWord)
     free(pycandWord->cand.freq.hz);
     pycandWord->cand.freq.pyFreq->iCount--;
     pystate->iNewFreqCount++;
-    if (pystate->iNewFreqCount == AUTOSAVE_FREQ_COUNT) {
+    if (pystate->iNewFreqCount >= AUTOSAVE_FREQ_COUNT) {
         SavePYFreq(pystate);
-        pystate->iNewFreqCount = 0;
     }
 }
 

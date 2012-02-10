@@ -37,8 +37,9 @@ extern "C" {
      **/
     typedef enum _FcitxContextState {
         IS_CLOSED = 0,
-        IS_ENG,
-        IS_ACTIVE
+        IS_INACTIVE,
+        IS_ACTIVE,
+        IS_ENG = IS_INACTIVE /* backward compatible */
     } FcitxContextState;
 
     typedef enum _FcitxCapacityFlags {

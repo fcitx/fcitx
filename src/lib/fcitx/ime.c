@@ -432,7 +432,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                         }
                     }
                     input->keyReleased = KR_OTHER;
-                    if (FcitxInstanceGetCurrentState(instance) == IS_ENG)
+                    if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE)
                         FcitxInstanceShowInputSpeed(instance);
                     FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                 } else if (FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
@@ -488,7 +488,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                 retVal = IRV_DO_NOTHING;
             } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
-                if (FcitxInstanceGetCurrentState(instance) == IS_ENG) {
+                if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
                     FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                     FcitxInstanceShowInputSpeed(instance);
                 } else
@@ -1037,10 +1037,10 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
     FcitxContextState objectState;
-    if (ic->state == IS_ENG)
+    if (ic->state == IS_INACTIVE)
         objectState = IS_ACTIVE;
     else
-        objectState = IS_ENG;
+        objectState = IS_INACTIVE;
     
     if (instance->config->firstAsInactive) {
         if (objectState == IS_ACTIVE)

@@ -159,7 +159,7 @@ void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, 
         fc->defaultIMState = fc->_defaultIMState;
         boolean firstAsInactive = *(boolean*) value;
         if (firstAsInactive && fc->defaultIMState == IS_CLOSED)
-            fc->defaultIMState = IS_ENG;
+            fc->defaultIMState = IS_INACTIVE;
     }
 }
 
