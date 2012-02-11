@@ -224,24 +224,6 @@ extern "C" {
      **/
     void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
 
-    
-    /**
-     * @brief push a key event into the key event queue
-     *
-     * @param instance fcitx instance
-     * @param keyEvent private key event
-     * @return uint64_t key seqence
-     **/
-    uint64_t FcitxInstancePushKeyEvent(struct _FcitxInstance* instance, int frontendid, void* keyEvent);
-    
-    /**
-     * @brief pop a key event out
-     *
-     * @param instance fcitx instance
-     * @param seqenceId key sequence
-     * @return void*
-     **/
-    FcitxKeyEvent FcitxInstancePopKeyEvent(struct _FcitxInstance* instance, uint64_t seqenceId);
 #ifdef __cplusplus
 }
 #endif

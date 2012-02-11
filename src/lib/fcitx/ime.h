@@ -84,7 +84,6 @@ extern "C" {
         IRV_FLAG_PUNC = 1 << 7, /* special */
         IRV_FLAG_DISPLAY_LAST = 1 << 8, /* special */
         IRV_FLAG_DO_PHRASE_TIPS = 1 << 9, /* special */
-        IRV_FLAG_ASYNC = 1 << 10,
         /* compatible */
         IRV_DONOT_PROCESS = IRV_FLAG_FORWARD_KEY,
         IRV_COMMIT_STRING = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_DO_PHRASE_TIPS,
@@ -97,8 +96,7 @@ extern "C" {
         IRV_DISPLAY_MESSAGE = IRV_FLAG_UPDATE_INPUT_WINDOW,
         IRV_ENG = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_ENG | IRV_FLAG_RESET_INPUT,
         IRV_PUNC = IRV_FLAG_PENDING_COMMIT_STRING | IRV_FLAG_PUNC | IRV_FLAG_RESET_INPUT,
-        IRV_DISPLAY_LAST = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_DISPLAY_LAST,
-        IRV_ASYNC = IRV_FLAG_ASYNC
+        IRV_DISPLAY_LAST = IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_DISPLAY_LAST
     } INPUT_RETURN_VALUE;
 
     /**
@@ -159,10 +157,8 @@ extern "C" {
          * @brief reload config function
          **/
         FcitxIMReloadConfig ReloadConfig;
-        /**
-         * @brief private data can be set by UI implementation
-         **/
-        void* uiprivate;
+
+        void* unused;
         /**
          * @brief the pointer to im class
          **/
@@ -462,6 +458,10 @@ extern "C" {
     int FcitxInputStateGetLastIsSingleChar(FcitxInputState* input);
 
     void FcitxInputStateSetLastIsSingleChar(FcitxInputState* input, int lastIsSingleChar);
+    
+    void FcitxInputStateSetKeyCode( FcitxInputState* input, uint32_t value );
+    
+    uint32_t FcitxInputStateGetKeyCode( FcitxInputState* input);
 
     void FcitxInputStateSetKeyReleased(FcitxInputState* input, KEY_RELEASED keyReleased);
 

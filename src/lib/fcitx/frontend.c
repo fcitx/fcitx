@@ -82,50 +82,6 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
     return rec;
 }
 
-FCITX_EXPORT_API
-uint64_t FcitxInstancePushKeyEvent(FcitxInstance* instance, int frontendid, void* keyEvent)
-{
-    FcitxKeyEventQueue* eq = &instance->eventQueue;
-    
-    uint32_t next = (eq->cur + 1) % FCITX_KEY_EVENT_QUEUE_LENGTH;
-    
-    /* ok lets throw the new event anyway, on any system,
-     * it should not be such slow on system, otherwise 
-     * there might be a bug some where.
-     * 
-     * Input method is something that requires highly consistency.
-     */
-    if (next == eq->tail) {
-        return 0; 
-    }
-    
-    eq->queue[next].event = keyEvent;
-    eq->queue[next].sequenceId = ++eq->sequenceId; /* make it start with 1 */
-    
-    eq->cur = next;
-    
-    return eq->sequenceId;
-}
-
-FCITX_EXPORT_API
-FcitxKeyEvent FcitxInstancePopKeyEvent(FcitxInstance* instance, uint64_t seqenceId)
-{
-    FcitxKeyEventQueue* eq = &instance->eventQueue;
-    FcitxKeyEvent result;
-    while (eq->cur != eq->tail) {
-        uint32_t nexttail = (eq->tail + FCITX_KEY_EVENT_QUEUE_LENGTH - 1) % FCITX_KEY_EVENT_QUEUE_LENGTH;
-        
-        if (seqenceId == eq->queue[nexttail].sequenceId) {        
-            result = eq->queue[nexttail];
-            break;
-        } else if (seqenceId < eq->queue[nexttail].sequenceId) {
-            break;
-        }
-        eq->tail = nexttail;
-    }
-    
-    return result;
-}
 
 FCITX_EXPORT_API
 FcitxInputContext* FcitxInstanceFindIC(FcitxInstance* instance, int frontendid, void *filter)

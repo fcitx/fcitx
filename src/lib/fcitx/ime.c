@@ -84,6 +84,8 @@ FCITX_SETTER(FcitxInputState, RawInputBufferSize, iCodeInputCount, int)
 FCITX_GETTER_VALUE(FcitxInputState, ShowCursor, bShowCursor, boolean)
 FCITX_SETTER(FcitxInputState, ShowCursor, bShowCursor, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
+FCITX_SETTER(FcitxInputState, KeyCode, keycode, uint32_t)
+FCITX_GETTER_VALUE(FcitxInputState, KeyCode, keycode, uint32_t)
 FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
 
@@ -539,16 +541,13 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         }
     }
 
-    if (retVal != IRV_ASYNC) {
-        return FcitxInstanceDoInputCallback(
-                   instance,
-                   retVal,
-                   event,
-                   timestamp,
-                   sym,
-                   state);
-    } else
-        return retVal;
+    return FcitxInstanceDoInputCallback(
+                instance,
+                retVal,
+                event,
+                timestamp,
+                sym,
+                state);
 }
 
 

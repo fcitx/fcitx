@@ -36,19 +36,6 @@
 #include "addon.h"
 #include "context.h"
 
-#define FCITX_KEY_EVENT_QUEUE_LENGTH 64
-
-typedef struct _FcitxKeyEventQueue {
-    uint32_t cur;
-    
-    uint32_t tail;
-    
-    uint64_t sequenceId;
-    
-    /* too long key event doesn't make sense */
-    FcitxKeyEvent queue[FCITX_KEY_EVENT_QUEUE_LENGTH];
-} FcitxKeyEventQueue;
-
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -109,8 +96,6 @@ struct _FcitxInstance {
     FcitxAddon* uifallback;
 
     FcitxAddon* uinormal;
-    
-    FcitxKeyEventQueue eventQueue;
     
     FcitxContext* context;
     

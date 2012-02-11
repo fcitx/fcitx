@@ -613,16 +613,11 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
         return 1;
     }
 
+    FcitxInputStateSetKeyCode(input, keycode);
     INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(ipc->owner, type,
                                            t,
                                            sym, state);
-    
-    if (retVal & IRV_FLAG_ASYNC) {
-        FcitxIPCKeyEvent* event = fcitx_utils_malloc0(sizeof(FcitxIPCKeyEvent));
-        event->sym = originsym;
-        event->state = originstate;
-        FcitxInstancePushKeyEvent(ipc->owner, ipc->frontendid, event);
-    }
+    FcitxInputStateSetKeyCode(input, 0);
 
     if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         return 0;

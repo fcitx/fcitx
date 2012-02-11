@@ -231,9 +231,11 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
         }
     }
 
+    FcitxInputStateSetKeyCode(input, kev->keycode);
     INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(xim->owner, type,
                                            kev->time,
                                            sym, state);
+    FcitxInputStateSetKeyCode(input, 0);
 
     if ((retVal & IRV_FLAG_FORWARD_KEY) || retVal == IRV_TO_PROCESS) {
         XimForwardKeyInternal(xim,
