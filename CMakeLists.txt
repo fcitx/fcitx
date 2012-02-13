@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 
 project(fcitx)
 
-set(version 4.2.0)
+set(version 4.2.1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 

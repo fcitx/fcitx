@@ -78,10 +78,12 @@ FCITX_EXPORT_API
 void FcitxProfileSave(FcitxProfile* profile)
 {
     FcitxConfigFileDesc* profileDesc = GetProfileDesc();
-    FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "wt", NULL);
-    FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);
-    if (fp)
-        fclose(fp);
+    if (profileDesc) {
+        FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "wt", NULL);
+        FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);
+        if (fp)
+            fclose(fp);
+    }
 }
 
 FCITX_EXPORT_API

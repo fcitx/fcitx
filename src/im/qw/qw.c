@@ -20,6 +20,8 @@
 /*
  * 区位的算法来自于rfinput-2.0
  */
+#include "config.h"
+
 #include <string.h>
 #include <iconv.h>
 #include <libintl.h>

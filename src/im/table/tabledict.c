@@ -1,12 +1,14 @@
+#include "config.h"
+
 #include <stdio.h>
 #include <limits.h>
 #include <libintl.h>
+#include <unistd.h>
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utf8.h"
 #include "tabledict.h"
-#include <unistd.h>
 
 #define TEMP_FILE       "FCITX_TABLE_TEMP"
 

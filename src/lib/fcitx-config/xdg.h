@@ -46,8 +46,10 @@ extern "C"
      * @return FILE*
      **/
     FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile);
+    
+#ifdef FCITX_CONFIG_XDG_DEPRECATED
     /**
-     * @brief get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder
+     * @brief get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder,
      *
      * @param fileName filename
      * @param path returns by FcitxXDGGetPath
@@ -55,12 +57,15 @@ extern "C"
      * @param len length of path
      * @param retFile return file name
      * @return FILE*
-     *
+     * 
+     * @deprecated
+     * 
      * @see FcitxXDGGetPath
      **/
     FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
+    
     /**
-     * @brief get xdg path with given arguement
+     * @brief get xdg path with given arguement, do not use this directly
      *
      * @param len return array size
      * @param homeEnv homeEnv
@@ -68,6 +73,9 @@ extern "C"
      * @param suffixHome suffixHome
      * @param dirsDefault dirsDefault
      * @param suffixGlobal suffixGlobal
+     * 
+     * @deprecated
+     * 
      * @return char**
      **/
     char **FcitxXDGGetPath(
@@ -77,6 +85,21 @@ extern "C"
         const char* suffixHome,
         const char* dirsDefault,
         const char* suffixGlobal);
+#endif
+    
+    /**
+     * @brief get xdg path with prefix
+     *
+     * @param len return array size
+     * @param prefix prefix
+     * 
+     * @return char**
+     * 
+     * @since 4.2.1
+     **/
+    char **FcitxXDGGetPathWithPrefix(
+        size_t *len,
+        const char* prefix);
 
     /**
      * @brief get xdg file with prefix string, usually [install_prefix]/fcitx/prefix/filename and ~/.config/fcitx/prefix/filename
@@ -87,7 +110,6 @@ extern "C"
      * @param retFile file name to return
      * @return FILE*
      *
-     * @see GetXDGFile
      **/
     FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
     /**
@@ -99,7 +121,6 @@ extern "C"
      * @param retFile file name to return
      * @return FILE*
      *
-     * @see GetXDGFile
      **/
     FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
     /**
@@ -107,7 +128,6 @@ extern "C"
      *
      * @param path path array
      * @return void
-     * @see GetXDGFile
      **/
     void FcitxXDGFreePath(char **path);
 

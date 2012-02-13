@@ -172,6 +172,29 @@ extern "C" {
      * @return char*
      **/
     char* fcitx_utils_get_process_name();
+    
+    /**
+     * @brief Get Fcitx install path, need be free'd
+     * 
+     * @param path path type
+     * 
+     * @return char*
+     * 
+     * @since 4.2.1
+     */
+    char* fcitx_utils_get_fcitx_path(const char* type);
+    
+    /**
+     * @brief Get fcitx install path with file name, need to be free'd
+     * 
+     * @param path path type
+     * @param filename filename
+     * 
+     * @return char*
+     * 
+     * @since 4.2.1
+     */
+    char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename);
 
 #ifdef __cplusplus
 }

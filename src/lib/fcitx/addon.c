@@ -83,7 +83,7 @@ void FcitxAddonsLoad(UT_array* addons)
                               NULL,
                               ".conf"
                           );
-    addonPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/addon" , DATADIR, PACKAGE "/addon");
+    addonPath = FcitxXDGGetPathWithPrefix(&len, "addon");
     char **paths = malloc(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
         paths[i] = NULL;

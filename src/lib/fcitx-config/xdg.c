@@ -26,6 +26,10 @@
  * @date 2010-05-02
  */
 
+#define FCITX_CONFIG_XDG_DEPRECATED
+
+#include "config.h"
+
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,7 +83,9 @@ FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const 
     size_t len;
     char *prefixpath;
     asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , DATADIR, prefixpath);
+    char* datadir = fcitx_utils_get_fcitx_path("datadir");
+    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , datadir, prefixpath);
+    free(datadir);
     free(prefixpath);
 
     FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
@@ -94,7 +100,9 @@ FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
     char ** path;
-    path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , LIBDIR, PACKAGE);
+    char* libdir = fcitx_utils_get_fcitx_path("libdir");
+    path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , libdir, PACKAGE);
+    free(libdir);
 
     FILE* fp = FcitxXDGGetFile(filename, path, mode, len, retFile);
 
@@ -250,6 +258,19 @@ char **FcitxXDGGetPath(
 }
 
 FCITX_EXPORT_API
+char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
+{
+    char *prefixpath;
+    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
+    char* datadir = fcitx_utils_get_fcitx_path("datadir");
+    char** xdgPath = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config" , prefixpath , datadir , prefixpath);
+    free(datadir);
+    free(prefixpath);
+    return xdgPath;
+}
+
+
+FCITX_EXPORT_API
 FcitxStringHashSet* FcitxXDGGetFiles(
     char* path,
     char* prefix,
@@ -268,7 +289,9 @@ FcitxStringHashSet* FcitxXDGGetFiles(
 
     char *prefixpath;
     asprintf(&prefixpath, "%s/%s", PACKAGE, path);
-    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config" , prefixpath , DATADIR , prefixpath);
+    char* datadir = fcitx_utils_get_fcitx_path("datadir");
+    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config" , prefixpath , datadir , prefixpath);
+    free(datadir);
     free(prefixpath);
 
     for (i = 0; i < len; i++) {

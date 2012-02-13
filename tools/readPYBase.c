@@ -95,18 +95,21 @@ int main(int argc, char **argv)
 
 void usage()
 {
-    puts(
+    char* pkgdatadir = fcitx_utils_get_fcitx_path("pkgdatadir");
+    printf(
         "readPYBase - read pybase.mb file and display its contents\n"
         "\n"
         "  usage: readPYBase [OPTION]\n"
         "\n"
         "  -b <pybase.mb> full path to the file, usually\n"
-        "                 " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "                 %s/pinyin/" PY_BASE_FILE "\n"
         "                 if not specified, defaults to\n"
-        "                 " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "                 %s/pinyin/" PY_BASE_FILE "\n"
         "  -h             display this help\n"
-        "\n"
+        "\n",
+        pkgdatadir, pkgdatadir
     );
+    free(pkgdatadir);
     exit(1);
     return;
 }

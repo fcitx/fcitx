@@ -38,7 +38,6 @@ extern "C" {
 #endif
 
 #if defined(FCITX_HAVE_CONFIG_H)
-#include "config.h"
 #define _(msgid) gettext(msgid)
 #define __(msgid) (msgid)
 #endif

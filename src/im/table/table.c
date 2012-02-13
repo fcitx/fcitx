@@ -134,7 +134,7 @@ void LoadTableInfo(FcitxTableState *tbl)
     tbl->iTableCount = 0;
     utarray_new(tbl->table, &table_icd);
 
-    tablePath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/table" , DATADIR, PACKAGE "/table");
+    tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
     sset = FcitxXDGGetFiles("table", NULL, ".conf");
 
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);

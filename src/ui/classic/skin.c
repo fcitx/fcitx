@@ -109,8 +109,9 @@ reload:
             fp = FcitxXDGGetFileWithPrefix("skin", buf, "r", NULL);
             free(buf);
         } else {
-            FcitxLog(INFO, PKGDATADIR "/skin/default/fcitx_skin.conf");
-            fp = fopen(PKGDATADIR "/skin/default/fcitx_skin.conf", "r");
+            char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "/skin/default/fcitx_skin.conf");
+            fp = fopen(path, "r");
+            free(path);
         }
     }
 
@@ -166,14 +167,12 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
         return image;
     if (strlen(name) > 0 && strcmp(name , "NONE") != 0) {
         char *skintype = strdup(*sc->skinType);
-        size_t len;
-        char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin");
         char *filename;
         while (true) {
             char* buf = NULL;
-            asprintf(&buf, "%s/%s", skintype, name);
+            asprintf(&buf, "skin/%s", skintype);
 
-            FILE* fp = FcitxXDGGetFile(buf, path, "r", len, &filename);
+            FILE* fp = FcitxXDGGetFileWithPrefix(buf, name, "r", &filename);
             free(buf);
 
             Bool flagNoFile = (fp == NULL);
@@ -194,7 +193,6 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
         }
         free(filename);
         free(skintype);
-        FcitxXDGFreePath(path);
     }
 
     if (png != NULL) {
@@ -777,7 +775,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
     struct stat fileStat;
     size_t len;
     char *pathBuf;
-    char **skinPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/skin" , DATADIR, PACKAGE "/skin");
+    char **skinPath = FcitxXDGGetPathWithPrefix(&len, "skin");
     for (i = 0; i < len; i++) {
         dir = opendir(skinPath[i]);
         if (dir == NULL)

@@ -12,12 +12,16 @@
 #cmakedefine LIBKVM_FOUND
 #cmakedefine HAVE_XINERAMA
 #cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
-#define LOCALEDIR "@localedir@"
+
 #define PACKAGE "@package@"
+#ifdef FCITX_USE_INTERNAL_PATH
+#define LOCALEDIR "@localedir@"
 #define DATADIR "@prefix@/share"
 #define PKGDATADIR "@pkgdatadir@"
 #define BINDIR "@bindir@"
 #define LIBDIR "@libdir@"
+#endif
+
 #define VERSION "@version@"
 #define INTERNAL_VERSION 3
 

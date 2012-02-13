@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "config.h"
 #include "fcitx/fcitx.h"
 #include "log.h"
 #include "utils.h"

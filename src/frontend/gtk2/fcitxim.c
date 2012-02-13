@@ -17,6 +17,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#define FCITX_USE_INTERNAL_PATH
+#include "config.h"
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkimmodule.h>

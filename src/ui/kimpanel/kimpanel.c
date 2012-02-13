@@ -672,7 +672,9 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Configure")) {
         FcitxLog(DEBUG, "Configure");
 
-        FILE* p = popen(BINDIR "/fcitx-configtool &", "r");
+        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool &");
+        FILE* p = popen(command, "r");
+        free(command);
         if (p)
             pclose(p);
         else

@@ -70,8 +70,10 @@ int main(int argc, char* argv[])
     mallopt(M_TRIM_THRESHOLD, 5 * pagesize);
 #endif // M_TRIM_THRESHOLD
 
+    char* localedir = fcitx_utils_get_fcitx_path("localedir");
     setlocale(LC_ALL, "");
-    bindtextdomain("fcitx", LOCALEDIR);
+    bindtextdomain("fcitx", localedir);
+    free(localedir);
     bind_textdomain_codeset("fcitx", "UTF-8");
     textdomain("fcitx");
     SetMyExceptionHandler();

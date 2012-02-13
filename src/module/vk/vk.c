@@ -23,22 +23,22 @@
 #include <X11/Xlib.h>
 #include <cairo.h>
 #include <libintl.h>
+#include <cairo-xlib.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
-#include <module/x11/x11stuff.h>
 
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
-#include <cairo-xlib.h>
+#include "fcitx/hook.h"
+#include "fcitx-utils/utils.h"
+#include "module/x11/x11stuff.h"
 #include "ui/cairostuff/cairostuff.h"
 #include "ui/cairostuff/font.h"
 #include "ui/classic/classicuiinterface.h"
-#include "fcitx/hook.h"
-#include "fcitx-utils/utils.h"
 
 #define VK_FILE "vk.conf"
 
@@ -343,8 +343,9 @@ cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
         return InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
     } else {
         if (!vkWindow->keyboard) {
-            char path[] = PKGDATADIR "/skin/default/keyboard.png";
+            char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "skin/default/keyboard.png");
             vkWindow->keyboard = cairo_image_surface_create_from_png(path);
+            free(path);
         }
         return vkWindow->keyboard;
     }

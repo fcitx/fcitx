@@ -155,7 +155,8 @@ char *HZToPY(struct _HZMap *pHZMap1, char* HZ)
 
 void usage()
 {
-    puts(
+    char* pkgdatadir = fcitx_utils_get_fcitx_path("pkgdatadir");
+    printf(
         "mb2org - Convert .mb file to .org file (SEE NOTES BELOW)\n"
         "\n"
         "  usage: mb2org [OPTION]\n"
@@ -166,17 +167,19 @@ void usage()
         "                      ~/.fcitx/" PY_USERPHRASE_FILE "\n"
         "  -b <pybase.mb>      this is the pybase.mb file used to determine the\n"
         "                      of the first character in HZ. Usually, this is\n"
-        "                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "                      %s/pinyin/" PY_BASE_FILE "\n"
         "                      if not specified, defaults to\n"
-        "                      " PKGDATADIR "/pinyin/" PY_BASE_FILE "\n"
+        "                      %s/pinyin/" PY_BASE_FILE "\n"
         "  -s                  Is MB from user or from system (they have different format).\n"
         "  -h                  display this help\n"
         "\n"
         "NOTES:\n"
         "1. If no match is found for a particular HZ, then the pinyin for that HZ\n"
         "   will be `*'.\n"
-        "2. Always check the produced output for errors.\n"
+        "2. Always check the produced output for errors.\n",
+        pkgdatadir, pkgdatadir
     );
+    free(pkgdatadir);
     exit(1);
     return;
 }

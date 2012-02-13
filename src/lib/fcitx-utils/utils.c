@@ -26,6 +26,8 @@
  *
  */
 
+#define FCITX_USE_INTERNAL_PATH
+
 #include <pthread.h>
 #include <stdio.h>
 #include <libintl.h>
@@ -344,5 +346,61 @@ char* fcitx_utils_get_process_name()
     return strdup("");
 #endif
 }
+
+FCITX_EXPORT_API
+char* fcitx_utils_get_fcitx_path(const char* type)
+{
+    char* fcitxdir = getenv("FCITXDIR");
+    char* result = NULL;
+    if (strcmp(type, "datadir") == 0) {
+        if (fcitxdir) {
+            asprintf(&result, "%s/share", fcitxdir);
+        }
+        else
+            result = strdup(DATADIR);
+    }
+    else if (strcmp(type, "pkgdatadir") == 0) {
+        if (fcitxdir) {
+            asprintf(&result, "%s/" PACKAGE "/share", fcitxdir);
+        }
+        else
+            result = strdup(PKGDATADIR);
+    }
+    else if (strcmp(type, "bindir") == 0) {
+        if (fcitxdir) {
+            asprintf(&result, "%s/bin", fcitxdir);
+        }
+        else
+            result = strdup(BINDIR);
+    }
+    else if (strcmp(type, "libdir") == 0) {
+        if (fcitxdir) {
+            asprintf(&result, "%s/lib", fcitxdir);
+        }
+        else
+            result = strdup(LIBDIR);
+    }
+    else if (strcmp(type, "localedir") == 0) {
+        if (fcitxdir) {
+            asprintf(&result, "%s/share/locale", fcitxdir);
+        }
+        else
+            result = strdup(LOCALEDIR);
+    }
+    return result;
+}
+
+FCITX_EXPORT_API
+char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename)
+{
+    char* path = fcitx_utils_get_fcitx_path(type);
+    if (path == NULL)
+        return NULL;
+    char* result;
+    asprintf(&result, "%s/%s", path, filename);
+    free(path);
+    return result;
+}
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
