@@ -20,7 +20,7 @@
 
 /**
  * @file xdg.c
- * @brief xdg related path handle
+ * xdg related path handle
  * @author CSSlayer
  * @version 4.0.0
  * @date 2010-05-02

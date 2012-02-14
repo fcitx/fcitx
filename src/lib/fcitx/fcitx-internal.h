@@ -23,7 +23,7 @@
 /**
  * @file fcitx-internal.h
  * @author CS Slayer <wengxt@gmail.com>
- * @brief some misc definition for Fcitx
+ * some misc definition for Fcitx
  */
 
 #ifdef __cplusplus

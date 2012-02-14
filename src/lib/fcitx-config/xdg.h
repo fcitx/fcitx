@@ -19,8 +19,12 @@
  ***************************************************************************/
 
 /**
+ * @addtogroup FcitxConfig
+ */
+
+/**
  * @file xdg.h
- * @brief XDG Related path handle
+ * XDG Related path handle
  * @author CSSlayer
  * @version 4.0.0
  * @date 2010-05-02
@@ -38,7 +42,7 @@ extern "C"
 #endif
 
     /**
-     * @brief Get library file
+     * Get library file
      *
      * @param filename filename
      * @param mode file open mode
@@ -49,7 +53,7 @@ extern "C"
     
 #ifdef FCITX_CONFIG_XDG_DEPRECATED
     /**
-     * @brief get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder,
+     * get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder,
      *
      * @param fileName filename
      * @param path returns by FcitxXDGGetPath
@@ -65,7 +69,7 @@ extern "C"
     FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
     
     /**
-     * @brief get xdg path with given arguement, do not use this directly
+     * get xdg path with given arguement, do not use this directly
      *
      * @param len return array size
      * @param homeEnv homeEnv
@@ -88,7 +92,7 @@ extern "C"
 #endif
     
     /**
-     * @brief get xdg path with prefix
+     * get xdg path with prefix
      *
      * @param len return array size
      * @param prefix prefix
@@ -102,7 +106,7 @@ extern "C"
         const char* prefix);
 
     /**
-     * @brief get xdg file with prefix string, usually [install_prefix]/fcitx/prefix/filename and ~/.config/fcitx/prefix/filename
+     * get xdg file with prefix string, usually [install_prefix]/fcitx/prefix/filename and ~/.config/fcitx/prefix/filename
      *
      * @param prefix prefix
      * @param fileName filename
@@ -113,7 +117,7 @@ extern "C"
      **/
     FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char**retFile);
     /**
-     * @brief get xdg file with prefix string, usually ~/.config/fcitx/prefix/filename
+     * get xdg file with prefix string, usually ~/.config/fcitx/prefix/filename
      *
      * @param prefix prefix
      * @param fileName filename
@@ -124,7 +128,7 @@ extern "C"
      **/
     FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
     /**
-     * @brief free xdg path return by FcitxXDGGetPath
+     * free xdg path return by FcitxXDGGetPath
      *
      * @param path path array
      * @return void
@@ -132,7 +136,7 @@ extern "C"
     void FcitxXDGFreePath(char **path);
 
     /**
-     * @brief Get All files under directory with a suffix
+     * Get All files under directory with a suffix
      *
      * @param path xdg subpath
      * @param suffix filename suffix

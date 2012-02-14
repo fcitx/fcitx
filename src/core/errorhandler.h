@@ -35,7 +35,7 @@
  * *********************************************************** */
 
 /**
- * @brief Set Posix Signal Handler
+ * Set Posix Signal Handler
  *
  * @param  ...
  * @return void
@@ -43,7 +43,7 @@
 void            SetMyExceptionHandler(void);
 
 /**
- * @brief Process Posix signal
+ * Process Posix signal
  *
  * @param signo
  * @return void

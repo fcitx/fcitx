@@ -26,7 +26,7 @@
  *
  * @date   2009-10-9
  *
- * @brief  Skin setting related code and draw code.
+ *  Skin setting related code and draw code.
  *
  *
  */

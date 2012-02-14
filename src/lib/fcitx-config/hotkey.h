@@ -22,7 +22,7 @@
  * @author Yuking yuking_net@sohu.com CS Slayer wengxt@gmail.com
  * @date   2008-1-16
  *
- * @brief  hotkey related config and functions
+ *  hotkey related config and functions
  *
  */
 
@@ -37,7 +37,7 @@ extern "C"
 {
 #endif
     /**
-     * @brief mainly come from X11/keysymdef.h
+     * mainly come from X11/keysymdef.h
      **/
     typedef enum _FcitxKeySym
     {
@@ -2407,26 +2407,26 @@ extern "C"
     } FcitxKeySym;
 
     /**
-     * @brief A fcitx hotkey, define the keysym (keyval) and (state) modifiers key state.
+     * A fcitx hotkey, define the keysym (keyval) and (state) modifiers key state.
      **/
 
     typedef struct _FcitxHotkey {
         /**
-         * @brief A hotkey string
+         * A hotkey string
          **/
         char *desc;
         /**
-         * @brief keyval of hotkey
+         * keyval of hotkey
          **/
         FcitxKeySym sym;
         /**
-         * @brief state of hotkey
+         * state of hotkey
          **/
         int state;
     } FcitxHotkey;
 
     /**
-     * @brief fcitx key state (modifier keys)
+     * fcitx key state (modifier keys)
      **/
     typedef enum _FcitxKeyState {
         FcitxKeyState_None = 0,
@@ -2451,7 +2451,7 @@ extern "C"
     } FcitxKeyState;
 
     /**
-     * @brief Set the hotkey with a string
+     * Set the hotkey with a string
      *
      * @param strKey key string
      * @param hotkey hotkey array, it should have length 2
@@ -2460,7 +2460,7 @@ extern "C"
     void FcitxHotkeySetKey(char *strKey, FcitxHotkey * hotkey);
 
     /**
-     * @brief translate the fcitx key to it's own value,
+     * translate the fcitx key to it's own value,
      * like uniform the keypad and the numbers, remove Shift from A-Z
      *
      * @param keysym keyval
@@ -2472,7 +2472,7 @@ extern "C"
     void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs);
 
     /**
-     * @brief parse the fcitx key string, like CTRL_SHIFT_A
+     * parse the fcitx key string, like CTRL_SHIFT_A
      *
      * @param strKey key string
      * @param sym return of keyval
@@ -2482,7 +2482,7 @@ extern "C"
     boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state);
 
     /**
-     * @brief Get the Fcitx Key String for given keyval and state
+     * Get the Fcitx Key String for given keyval and state
      *
      * @param sym keyval
      * @param state state
@@ -2491,7 +2491,7 @@ extern "C"
     char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state);
 
     /**
-     * @brief is hotkey 0-9
+     * is hotkey 0-9
      *
      * @param sym keyval
      * @param state state
@@ -2500,7 +2500,7 @@ extern "C"
     boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, int state);
 
     /**
-     * @brief is hotkey A-Z
+     * is hotkey A-Z
      *
      * @param sym keyval
      * @param state state
@@ -2508,7 +2508,7 @@ extern "C"
      **/
     boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, int state);
     /**
-     * @brief is hotkey a-z
+     * is hotkey a-z
      *
      * @param sym keyval
      * @param state keystate
@@ -2516,7 +2516,7 @@ extern "C"
      **/
     boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state);
     /**
-     * @brief is hotkey printable
+     * is hotkey printable
      *
      * @param sym keyval
      * @param state state
@@ -2524,10 +2524,17 @@ extern "C"
      **/
     boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state);
     
+    /**
+     * hotkey have combine modifier
+     *
+     * @param sym keyval
+     * @param state state
+     * @return state is combine modifier or not
+     **/
     boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, int state);
 
     /**
-     * @brief check the key is this hotkey or not
+     * check the key is this hotkey or not
      *
      * @param sym keysym
      * @param state key state
@@ -2537,7 +2544,7 @@ extern "C"
     boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey);
 
     /**
-     * @brief is key will make cursor move, include left, right, home, end, and so on.
+     * is key will make cursor move, include left, right, home, end, and so on.
      *
      * @param sym keyval
      * @param state state
@@ -2546,7 +2553,7 @@ extern "C"
     boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, int state);
 
     /**
-     * @brief convert key pad key to simple FcitxKeyState_STATE
+     * convert key pad key to simple FcitxKeyState_STATE
      *
      * @param sym keyval
      * @return FcitxKeySym
@@ -2554,7 +2561,23 @@ extern "C"
      */
     FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym);
     
+    /**
+     * convert unicode character to keyval 
+     *
+     * If No matching keysym value found, return Unicode value plus 0x01000000
+     * (a convention introduced in the UTF-8 work on xterm).
+     * 
+     * @param wc unicode
+     * @return FcitxKeySym
+     **/
     FcitxKeySym FcitxUnicodeToKeySym (uint32_t wc);
+    
+    /**
+     * convert keyval to unicode character
+     *
+     * @param keyval keyval
+     * @return unicode
+     **/
     uint32_t FcitxKeySymToUnicode (FcitxKeySym keyval);
 
 #ifdef __cplusplus

@@ -20,7 +20,7 @@
 
 /**
  * @file hook.h
- * @brief Register function to be called automatically.
+ * Register function to be called automatically.
  */
 
 #ifndef _HOOK_H
@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
     /**
-     * @brief key filter function
+     * key filter function
      **/
     typedef boolean(*FcitxKeyFilter)(void* arg, FcitxKeySym sym,
                                      unsigned int state,
@@ -42,66 +42,66 @@ extern "C" {
                                     );
 
     /**
-     * @brief string filter function
+     * string filter function
      **/
 
     typedef char* (*FcitxStringFilter)(void* arg, const char* in);
 
     /**
-     * @brief ime event hook function
+     * ime event hook function
      **/
     typedef void (*FcitxIMEventHookFunc)(void* arg);
 
     /**
-     * @brief Hotkey process struct
+     * Hotkey process struct
      **/
     typedef struct _FcitxHotkeyHook {
         /**
-         * @brief Pointer to fcitx hotkeys, fcitx hotkey is length 2 array.
+         * Pointer to fcitx hotkeys, fcitx hotkey is length 2 array.
          **/
         FcitxHotkey* hotkey;
         /**
-         * @brief Function to be called while hotkey is pressed.
+         * Function to be called while hotkey is pressed.
          *
          * @return INPUT_RETURN_VALUE*
          **/
         INPUT_RETURN_VALUE(*hotkeyhandle)(void*);
         /**
-         * @brief Argument
+         * Argument
          **/
         void* arg;
     } FcitxHotkeyHook;
 
     /**
-     * @brief Key filter hook
+     * Key filter hook
      **/
     typedef struct _FcitxKeyFilterHook {
         /**
-         * @brief Key filter function
+         * Key filter function
          **/
         FcitxKeyFilter func;
         /**
-         * @brief extra argument for filter function
+         * extra argument for filter function
          **/
         void *arg;
     } FcitxKeyFilterHook;
 
     /**
-     * @brief Hook for string filter, this hook can change the output string.
+     * Hook for string filter, this hook can change the output string.
      **/
     typedef struct _FcitxStringFilterHook {
         /**
-         * @brief Filter function
+         * Filter function
          **/
         FcitxStringFilter func;
         /**
-         * @brief Extra argument for the filter function.
+         * Extra argument for the filter function.
          **/
         void *arg;
     } FcitxStringFilterHook;
 
     /**
-     * @brief IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
+     * IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
      **/
     typedef struct _FcitxIMEventHook {
         FcitxIMEventHookFunc func;
@@ -109,7 +109,7 @@ extern "C" {
     } FcitxIMEventHook;
 
     /**
-     * @brief register pre input filter
+     * register pre input filter
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -117,7 +117,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterPreInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook) ;
     /**
-     * @brief register post input filter
+     * register post input filter
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -125,7 +125,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterPostInputFilter(struct _FcitxInstance* instance, FcitxKeyFilterHook hook);
     /**
-     * @brief register ouput string filter
+     * register ouput string filter
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -133,7 +133,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterOutputFilter(struct _FcitxInstance* instance, FcitxStringFilterHook hook);
     /**
-     * @brief register hotkey
+     * register hotkey
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -141,7 +141,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterHotkeyFilter(struct _FcitxInstance* instance, FcitxHotkeyHook hook);
     /**
-     * @brief register reset input hook
+     * register reset input hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -149,7 +149,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterResetInputHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief register trigger on hook
+     * register trigger on hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -157,7 +157,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterTriggerOnHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief register trigger off hook
+     * register trigger off hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -165,7 +165,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterTriggerOffHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief register focus in hook
+     * register focus in hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -173,7 +173,7 @@ extern "C" {
      **/
     void FcitxInstanceRegisterInputFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
     /**
-     * @brief register focus out hook
+     * register focus out hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -182,7 +182,7 @@ extern "C" {
     void FcitxInstanceRegisterInputUnFocusHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
-     * @brief register update candidate word hook
+     * register update candidate word hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -191,7 +191,7 @@ extern "C" {
     void FcitxInstanceRegisterUpdateCandidateWordHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
-     * @brief register update input method list hook
+     * register update input method list hook
      *
      * @param instance fcitx instance
      * @param hook new hook
@@ -200,7 +200,7 @@ extern "C" {
     void FcitxInstanceRegisterUpdateIMListHook(struct _FcitxInstance* instance, FcitxIMEventHook hook);
 
     /**
-     * @brief process output filter, return string is malloced
+     * process output filter, return string is malloced
      *
      * @param instance fcitx instance
      * @param in input string
@@ -209,7 +209,7 @@ extern "C" {
     char* FcitxInstanceProcessOutputFilter(struct _FcitxInstance* instance, char *in);
 
     /**
-     * @brief process output filter, return string is malloced
+     * process output filter, return string is malloced
      *
      * @param instance fcitx instance
      * @param in input string
@@ -218,7 +218,7 @@ extern "C" {
     char* FcitxInstanceProcessCommitFilter(struct _FcitxInstance* instance, char *in);
     
     /**
-     * @brief register ouput string filter
+     * register ouput string filter
      *
      * @param instance fcitx instance
      * @param hook new hook

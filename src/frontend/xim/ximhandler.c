@@ -220,7 +220,6 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     if (ic->state == IS_CLOSED) {
         if (type == FCITX_PRESS_KEY && FcitxHotkeyIsHotKey(sym, state, config->hkTrigger)) {
             FcitxInstanceEnableIM(xim->owner, ic, false);
-            FcitxInputStateSetKeyReleased(input, KR_OTHER);
             return;
         } else {
             XimForwardKeyInternal(xim,

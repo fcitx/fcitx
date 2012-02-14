@@ -31,44 +31,44 @@ extern "C" {
     struct _FcitxAddon;
 
     /**
-     * @brief A misc module in Fcitx, it can register hook, or add it's own event
+     * A misc module in Fcitx, it can register hook, or add it's own event
      *        to Fcitx main loop.
      **/
     typedef struct _FcitxModule {
         /**
-         * @brief construction function
+         * construction function
          */
         void* (*Create)(struct _FcitxInstance* instance);
         /**
-         * @brief set main loop watch fd, no need to implement
+         * set main loop watch fd, no need to implement
          */
         void (*SetFD)(void*);
         /**
-         * @brief main loop event handle, no need to implement
+         * main loop event handle, no need to implement
          */
         void (*ProcessEvent)(void*);
         /**
-         * @brief destruct function
+         * destruct function
          */
         void (*Destroy)(void*);
         /**
-         * @brief reload config, no need to implement
+         * reload config, no need to implement
          */
         void (*ReloadConfig)(void*);
     } FcitxModule;
 
     /**
-     * @brief the argument to invoke module function
+     * the argument to invoke module function
      **/
     typedef struct _FcitxModuleFunctionArg {
         /**
-         * @brief arguments
+         * arguments
          **/
         void* args[10];
     } FcitxModuleFunctionArg;
 
     /**
-     * @brief init module array
+     * init module array
      *
      * @param modules module array
      * @return void
@@ -76,7 +76,7 @@ extern "C" {
     void InitFcitxModules(UT_array* modules);
 
     /**
-     * @brief load all modules
+     * load all modules
      *
      * @param instance fcitx instance
      * @return void
@@ -84,7 +84,7 @@ extern "C" {
     void FcitxModuleLoad(struct _FcitxInstance* instance);
 
     /**
-     * @brief invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
+     * invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
      *
      * @param addon addon
      * @param functionId function index
@@ -94,7 +94,7 @@ extern "C" {
     void* FcitxModuleInvokeFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 
     /**
-     * @brief invoke inter module function with addon name, returns NULL when fails (the function itself can also return NULL)
+     * invoke inter module function with addon name, returns NULL when fails (the function itself can also return NULL)
      *
      * @param instance fcitx instance
      * @param name addon name

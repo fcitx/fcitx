@@ -20,7 +20,7 @@
 
 /**
  * @file AutoEng.c
- * @brief Auto Switch to English
+ * Auto Switch to English
  */
 #include <limits.h>
 #include <libintl.h>
@@ -50,21 +50,21 @@ static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 
 
 /**
- * @brief Initialize for Auto English
+ * Initialize for Auto English
  *
  * @return boolean
  **/
 static void* AutoEngCreate(FcitxInstance *instance);
 
 /**
- * @brief Load AutoEng File
+ * Load AutoEng File
  *
  * @return void
  **/
 static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
 
 /**
- * @brief Cache the input key for autoeng, only simple key without combine key will be record
+ * Cache the input key for autoeng, only simple key without combine key will be record
  *
  * @param sym keysym
  * @param state key state
@@ -78,14 +78,14 @@ static boolean ProcessAutoEng(void* arg,
                              );
 
 /**
- * @brief clean the cache while reset input
+ * clean the cache while reset input
  *
  * @return void
  **/
 static void ResetAutoEng(void *arg);
 
 /**
- * @brief Free Auto Eng Data
+ * Free Auto Eng Data
  *
  * @return void
  **/
@@ -94,7 +94,7 @@ static void FreeAutoEng(void* arg);
 static void ReloadAutoEng(void* arg);
 
 /**
- * @brief Check whether need to switch to English
+ * Check whether need to switch to English
  *
  * @param  str string
  * @return boolean
@@ -103,7 +103,7 @@ boolean            SwitchToEng(FcitxAutoEngState* autoEngState, char* str);
 
 
 /**
- * @brief Update message for Auto eng
+ * Update message for Auto eng
  *
  * @return void
  **/

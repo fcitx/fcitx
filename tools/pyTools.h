@@ -24,7 +24,7 @@
 #include "fcitx-utils/utf8.h"
 
 /**
- * @brief Code table for Pinyin
+ * Code table for Pinyin
  **/
 
 struct _PYMB {

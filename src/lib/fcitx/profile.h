@@ -31,58 +31,60 @@ extern "C" {
     /**
      * @file profile.h
      *
-     * @brief define and function for ~/.config/fcitx/profile
+     * define and function for ~/.config/fcitx/profile
      */
 
     /**
-     * @brief struct for ~/.config/fcitx/profile
+     * struct for ~/.config/fcitx/profile
      **/
     typedef struct _FcitxProfile {
         /**
-         * @brief derives from FcitxGenericConfig
+         * derives from FcitxGenericConfig
          **/
         FcitxGenericConfig gconfig;
         /**
-         * @brief use remind mode
+         * use remind mode
          **/
         boolean bUseRemind;
 
         /**
-         * @brief current im index
+         * current im index
          **/
         char* imName;
 
         /**
-         * @brief use full width punc
+         * use full width punc
          **/
         boolean bUseWidePunc;
 
         /**
-         * @brief use full width char
+         * use full width char
          **/
         boolean bUseFullWidthChar;
 
         /**
-         * @brief show preedit string in client or not
+         * show preedit string in client or not
          **/
         boolean bUsePreedit;
 
         /**
-         * @brief enabled im list
+         * enabled im list
          **/
         char* imList;
 
     } FcitxProfile;
 
     /**
-     * @brief load profile
+     * load profile
      *
-     * @param profile profile instance
+     * @param profile profile
+     * @param instance instance
+     * 
      * @return boolean loading successful
      **/
     boolean FcitxProfileLoad(FcitxProfile* profile, struct _FcitxInstance* instance);
     /**
-     * @brief save profile
+     * save profile
      *
      * @param profile profile instance
      * @return void

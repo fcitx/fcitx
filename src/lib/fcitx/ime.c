@@ -23,7 +23,7 @@
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
  *
- * @brief  Process Keyboard Event and Input Method
+ *  Process Keyboard Event and Input Method
  *
  */
 #include <dlfcn.h>
@@ -55,7 +55,6 @@
 static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL , NULL, NULL};
-static int IMPriorityCmp(const void *a, const void *b);
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuItem(FcitxUIMenu *menu);
 static void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
@@ -87,7 +86,6 @@ FCITX_GETTER_VALUE(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
 FCITX_SETTER(FcitxInputState, KeyCode, keycode, uint32_t)
 FCITX_GETTER_VALUE(FcitxInputState, KeyCode, keycode, uint32_t)
 FCITX_SETTER(FcitxInputState, LastIsSingleChar, lastIsSingleHZ, boolean)
-FCITX_SETTER(FcitxInputState, KeyReleased, keyReleased, KEY_RELEASED)
 
 CONFIG_BINDING_BEGIN(FcitxIMEntry)
 CONFIG_BINDING_REGISTER("InputMethod", "UniqueName", uniqueName)
@@ -757,7 +755,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
 }
 
 /**
- * @brief 重置输入状态
+ * 重置输入状态
  */
 FCITX_EXPORT_API
 void FcitxInstanceResetInput(FcitxInstance* instance)
@@ -947,6 +945,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
     ) {
         FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
     }
+    instance->input->keyReleased = KR_OTHER;
 }
 
 
@@ -1034,7 +1033,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
 }
 
 /**
- * @brief 更改输入法状态
+ * 更改输入法状态
  *
  * @param _connect_id
  */

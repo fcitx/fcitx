@@ -116,7 +116,7 @@ void *PYCreate(FcitxInstance* instance)
                       SavePY,
                       ReloadConfigPY,
                       NULL,
-                      pystate->pyconfig.iPinyinPriority,
+                      5,
                       "zh_CN"
                      );
     FcitxInstanceRegisterIM(instance,
@@ -132,7 +132,7 @@ void *PYCreate(FcitxInstance* instance)
                       SavePY,
                       ReloadConfigPY,
                       NULL,
-                      pystate->pyconfig.iShuangpinPriority,
+                      5,
                       "zh_CN"
                      );
     pystate->owner = instance;

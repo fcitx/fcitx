@@ -34,48 +34,48 @@ extern "C" {
     typedef INPUT_RETURN_VALUE(*FcitxCandidateWordCommitCallback)(void* arg, struct _FcitxCandidateWord* candWord);
 
     /**
-     * @brief A Single Candidate Word
+     * A Single Candidate Word
      **/
     typedef struct _FcitxCandidateWord {
         /**
-         * @brief String display in the front
+         * String display in the front
          **/
         char* strWord;
         /**
-         * @brief String display before strWord
+         * String display before strWord
          **/
         char* strExtra;
         /**
-         * @brief Callback when string is going to commit
+         * Callback when string is going to commit
          **/
         FcitxCandidateWordCommitCallback callback;
         /**
-         * @brief Store the candidateWord Type
+         * Store the candidateWord Type
          **/
         FcitxMessageType wordType;
         /**
-         * @brief Store the extra Type
+         * Store the extra Type
          **/
         FcitxMessageType extraType;
         /**
-         * @brief Pointer can identify where the candidatework come from
+         * Pointer can identify where the candidatework come from
          **/
         void* owner;
         /**
-         * @brief Store a candidateWord Specific data, usually index of input method data
+         * Store a candidateWord Specific data, usually index of input method data
          **/
         void* priv;
     } FcitxCandidateWord;
 
     /**
-     * @brief Initialize a word list, should only used by runtime
+     * Initialize a word list, should only used by runtime
      *
      * @return _FcitxCandidateWordList*
      **/
     struct _FcitxCandidateWordList* FcitxCandidateWordNewList();
 
     /**
-     * @brief Insert a candidate to position
+     * Insert a candidate to position
      *
      * @param candList candidate word list
      * @param candWord candidate word
@@ -86,7 +86,7 @@ extern "C" {
     void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
 
     /**
-     * @brief add a candidate word at last
+     * add a candidate word at last
      *
      * @param candList candidate word list
      * @param candWord candidate word
@@ -95,7 +95,7 @@ extern "C" {
     void FcitxCandidateWordAppend(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
-     * @brief remove a candidate word from list
+     * remove a candidate word from list
      *
      * @param candList candidate word list
      * @param candWord candidate word
@@ -106,7 +106,7 @@ extern "C" {
     void FcitxCandidateWordRemove(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
-     * @brief Get first of current page
+     * Get first of current page
      *
      * @param candList candidate word list
      * @return FcitxCandidateWord* first candidate word of current page
@@ -114,7 +114,7 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetCurrentWindow(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get next word of current page, useful when you want to iteration over current candidate words
+     * get next word of current page, useful when you want to iteration over current candidate words
      *
      * @param candList candidate word list
      * @param candWord current cand word
@@ -123,7 +123,7 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
-     * @brief get candidate word by index
+     * get candidate word by index
      *
      * @param candList candidate word list
      * @param index index of current page
@@ -132,7 +132,7 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetByIndex(struct _FcitxCandidateWordList* candList, int index);
 
     /**
-     * @brief do the candidate word selection, will trigger the candidate word callback
+     * do the candidate word selection, will trigger the candidate word callback
      *
      * @param candList candidate word list
      * @param index index of current page
@@ -141,7 +141,7 @@ extern "C" {
     INPUT_RETURN_VALUE FcitxCandidateWordChooseByIndex(struct _FcitxCandidateWordList* candList, int index);
 
     /**
-     * @brief Free a candidate word, used by utarray
+     * Free a candidate word, used by utarray
      *
      * @param arg candidateWord
      * @return void
@@ -149,7 +149,7 @@ extern "C" {
     void FcitxCandidateWordFree(void* arg);
 
     /**
-     * @brief check candidate word has next page or not
+     * check candidate word has next page or not
      *
      * @param candList candidate word list
      * @return boolean
@@ -157,7 +157,7 @@ extern "C" {
     boolean FcitxCandidateWordHasNext(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief check candidate word has prev page or not
+     * check candidate word has prev page or not
      *
      * @param candList candidate word list
      * @return boolean
@@ -165,7 +165,7 @@ extern "C" {
     boolean FcitxCandidateWordHasPrev(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get number of total page
+     * get number of total page
      *
      * @param candList candidate word list
      * @return int
@@ -173,7 +173,7 @@ extern "C" {
     int FcitxCandidateWordPageCount(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief clear all candidate words
+     * clear all candidate words
      *
      * @param candList candidate word list
      * @return void
@@ -181,7 +181,7 @@ extern "C" {
     void FcitxCandidateWordReset(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief go to prev page, return operation successful or not
+     * go to prev page, return operation successful or not
      *
      * @param candList candidate word list
      * @return boolean
@@ -189,7 +189,7 @@ extern "C" {
     boolean FcitxCandidateWordGoPrevPage(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief go to next page, return operation successful or not
+     * go to next page, return operation successful or not
      *
      * @param candList candidate word list
      * @return boolean
@@ -197,7 +197,7 @@ extern "C" {
     boolean FcitxCandidateWordGoNextPage(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief set the select key string, length up to 10, usually "1234567890"
+     * set the select key string, length up to 10, usually "1234567890"
      *
      * @param candList candidate word list
      * @param strChoose select key string
@@ -206,7 +206,7 @@ extern "C" {
     void FcitxCandidateWordSetChoose(struct _FcitxCandidateWordList* candList, const char* strChoose);
     
     /**
-     * @brief set the select key string, length up to 10, usually "1234567890"
+     * set the select key string, length up to 10, usually "1234567890"
      *
      * @param candList candidate word list
      * @param strChoose select key string
@@ -216,7 +216,7 @@ extern "C" {
     void FcitxCandidateWordSetChooseAndModifier(struct _FcitxCandidateWordList* candList, const char* strChoose, unsigned int state);
 
     /**
-     * @brief get the select key string
+     * get the select key string
      *
      * @param candList candidate word list
      * @return void
@@ -225,7 +225,7 @@ extern "C" {
     
     
     /**
-     * @brief get select key state
+     * get select key state
      *
      * @param candList candidate word list
      * @return unsigned int
@@ -233,7 +233,7 @@ extern "C" {
     unsigned int FcitxCandidateWordGetModifier(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief resize the candidate word length
+     * resize the candidate word length
      *
      * @param candList candidate word list
      * @param length new length
@@ -242,7 +242,7 @@ extern "C" {
     void FcitxCandidateWordResize(struct _FcitxCandidateWordList* candList, int length);
 
     /**
-     * @brief Get current page size of candidate list
+     * Get current page size of candidate list
      *
      * @param candList candidate word list
      * @return int
@@ -250,7 +250,7 @@ extern "C" {
     int FcitxCandidateWordGetPageSize(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief Set current page size of candidate list
+     * Set current page size of candidate list
      *
      * @param candList candidate word list
      * @param size new page size
@@ -259,7 +259,7 @@ extern "C" {
     void FcitxCandidateWordSetPageSize(struct _FcitxCandidateWordList* candList, int size);
 
     /**
-     * @brief get current page number
+     * get current page number
      *
      * @param candList candidate word list
      * @return int
@@ -267,7 +267,7 @@ extern "C" {
     int FcitxCandidateWordGetCurrentPage(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get current page window size, may less than max page size
+     * get current page window size, may less than max page size
      *
      * @param candList candidate word list
      * @return int
@@ -275,7 +275,7 @@ extern "C" {
     int FcitxCandidateWordGetCurrentWindowSize(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get total candidate word count
+     * get total candidate word count
      *
      * @param candList candidate word list
      * @return int
@@ -284,7 +284,7 @@ extern "C" {
     int FcitxCandidateWordGetListSize(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get first candidate word
+     * get first candidate word
      *
      * @param candList candidate word list
      * @return FcitxCandidateWord*
@@ -292,7 +292,7 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetFirst(struct _FcitxCandidateWordList* candList);
 
     /**
-     * @brief get next candidate word, useful when want to iterate over whole list
+     * get next candidate word, useful when want to iterate over whole list
      *
      * @param candList candidate word list
      * @param candWord current candidate word

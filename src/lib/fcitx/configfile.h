@@ -51,157 +51,157 @@ extern "C" {
     } FcitxShareState;
 
     /**
-     * @brief struct opposite to ~/.config/fcitx/config
+     * struct opposite to ~/.config/fcitx/config
      **/
     typedef struct _FcitxConfig {
         /**
-         * @brief derives FcitxGenericConfig
+         * derives FcitxGenericConfig
          **/
         FcitxGenericConfig gconfig;
         /* program config */
         /**
-         * @brief delay start seconds
+         * delay start seconds
          **/
         int iDelayStart;
         /**
-         * @brief is the first run
+         * is the first run
          **/
         boolean bFirstRun;
 
         /* output config */
         /**
-         * @brief input eng punc after input number
+         * input eng punc after input number
          **/
         boolean bEngPuncAfterNumber;
         /**
-         * @brief enter key action
+         * enter key action
          **/
         FcitxEnterAcion enterToDo;
         /**
-         * @brief Remind mode can has multipage
+         * Remind mode can has multipage
          **/
         boolean bDisablePagingInRemind;
         /**
-         * @brief switch to english with switch key commit string or not
+         * switch to english with switch key commit string or not
          **/
         boolean bSendTextWhenSwitchEng;
         /**
-         * @brief max candidate word number
+         * max candidate word number
          **/
         int iMaxCandWord;
         /**
-         * @brief phrase tips
+         * phrase tips
          **/
         boolean bPhraseTips;
 
         /* appearance config */
         /**
-         * @brief show input window after trigger on
+         * show input window after trigger on
          **/
         boolean bShowInputWindowTriggering;
         /**
-         * @brief index number follow with a '.'
+         * index number follow with a '.'
          **/
         boolean bPointAfterNumber;
         /**
-         * @brief show user input speed
+         * show user input speed
          **/
         boolean bShowUserSpeed;
         /**
-         * @brief show fcitx version
+         * show fcitx version
          **/
         boolean bShowVersion;
 
         /* hotkey config */
         /**
-         * @brief trigger key
+         * trigger key
          **/
         FcitxHotkey hkTrigger[2];
         /**
-         * @brief switch key
+         * switch key
          **/
         FcitxSwitchKey iSwitchKey;
         /**
-         * @brief hotkey format of switch key
+         * hotkey format of switch key
          **/
         FcitxHotkey switchKey[2];
         /**
-         * @brief enable double press switch action
+         * enable double press switch action
          **/
         boolean bDoubleSwitchKey;
         /**
-         * @brief key hit interval
+         * key hit interval
          **/
         int iTimeInterval;
         /**
-         * @brief hotkey for switch VK
+         * hotkey for switch VK
          **/
         FcitxHotkey hkVK[2];
         /**
-         * @brief hotkey for switch remind mode
+         * hotkey for switch remind mode
          **/
         FcitxHotkey hkRemind[2];
         /**
-         * @brief hotkey for switch full width char
+         * hotkey for switch full width char
          **/
         FcitxHotkey hkFullWidthChar[2];
         /**
-         * @brief hotkey for switch punc
+         * hotkey for switch punc
          **/
         FcitxHotkey hkPunc[2];
         /**
-         * @brief prev page
+         * prev page
          **/
         FcitxHotkey hkPrevPage[2];
         /**
-         * @brief next page
+         * next page
          **/
         FcitxHotkey hkNextPage[2];
         /**
-         * @brief 2nd 3rd candidate select key
+         * 2nd 3rd candidate select key
          **/
         FcitxHotkey str2nd3rdCand[2];
         /**
-         * @brief save all key
+         * save all key
          **/
         FcitxHotkey hkSaveAll[2];
 
         /**
-         * @brief hotkey format for 2nd select key
+         * hotkey format for 2nd select key
          **/
         FcitxHotkey i2ndSelectKey[2];
         /**
-         * @brief hotkey format for 3rd select key
+         * hotkey format for 3rd select key
          **/
         FcitxHotkey i3rdSelectKey[2];
 
         /**
-         * @brief hide input window when there is only preedit string
+         * hide input window when there is only preedit string
          **/
         boolean bHideInputWindowWhenOnlyPreeditString;
 
         /**
-         * @brief hide input window when there is only one candidate word
+         * hide input window when there is only one candidate word
          **/
         boolean bHideInputWindowWhenOnlyOneCandidate;
 
         /**
-         * @brief switch the preedit should show in client window or not
+         * switch the preedit should show in client window or not
          **/
         FcitxHotkey hkSwitchEmbeddedPreedit[2];
 
         /**
-         * @brief Input method use global shared state
+         * Input method use global shared state
          **/
         FcitxShareState shareState;
 
         /**
-         * @brief Input method enable by default
+         * Input method enable by default
          **/
         FcitxContextState defaultIMState;
 
         /**
-         * @brief Enable Left Ctrl + Left Shift to Switch Between Input Method
+         * Enable Left Ctrl + Left Shift to Switch Between Input Method
          **/
         boolean bIMSwitchKey;
         
@@ -212,14 +212,14 @@ extern "C" {
     } FcitxGlobalConfig;
 
     /**
-     * @brief load config
+     * load config
      *
      * @param fc config instance
      * @return boolean load success or not
      **/
     boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc);
     /**
-     * @brief save config
+     * save config
      *
      * @param fc config instance
      * @return void

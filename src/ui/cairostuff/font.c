@@ -33,7 +33,7 @@
 #include "fcitx-utils/log.h"
 
 /**
- * @brief Get Usable Font
+ * Get Usable Font
  *
  * @param strUserLocale font language
  * @param font input as a malloc-ed font name, out put as new malloc-ed font name.

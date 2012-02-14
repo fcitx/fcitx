@@ -126,7 +126,7 @@ void * QuickPhraseCreate(FcitxInstance *instance)
 }
 
 /**
- * @brief 加载快速输入词典
+ * 加载快速输入词典
  * @param void
  * @return void
  * @note 快速输入是在;的行为定义为2,并且输入;以后才可以使用的。

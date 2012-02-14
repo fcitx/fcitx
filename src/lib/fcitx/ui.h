@@ -61,23 +61,23 @@ extern "C" {
     typedef void    (*FcitxUpdateMenuFunction)(struct _FcitxUIMenu *arg);
 
     /**
-     * @brief a menu entry in a menu.
+     * a menu entry in a menu.
      **/
     struct _FcitxMenuItem {
         /**
-         * @brief The displayed string
+         * The displayed string
          **/
         char *tipstr;
         /**
-         * @brief Can be used by ui to mark it's selected or not.
+         * Can be used by ui to mark it's selected or not.
          **/
         int  isselect;
         /**
-         * @brief The type of menu shell
+         * The type of menu shell
          **/
         FcitxMenuItemType type;
         /**
-         * @brief the submenu to this entry
+         * the submenu to this entry
          **/
         struct _FcitxUIMenu *subMenu;
         
@@ -85,45 +85,45 @@ extern "C" {
     };
 
     /**
-     * @brief Fcitx Menu Component, a UI doesn't need to support it,
+     * Fcitx Menu Component, a UI doesn't need to support it,
      *        This struct is used by other module to register a menu.
      **/
     struct _FcitxUIMenu {
         /**
-         * @brief shell entries for this menu
+         * shell entries for this menu
          **/
         UT_array shell;
         /**
-         * @brief menu name, can be displayed on the ui
+         * menu name, can be displayed on the ui
          **/
         char *name;
         /**
-         * @brief you might want to bind the menu on a status icon, but this is only a hint,
+         * you might want to bind the menu on a status icon, but this is only a hint,
          * depends on the ui implementation
          **/
         char *candStatusBind;
         /**
-         * @brief update the menu content
+         * update the menu content
          **/
         FcitxUpdateMenuFunction UpdateMenu;
         /**
-         * @brief function for process click on a menu entry
+         * function for process click on a menu entry
          **/
         FcitxMenuActionFunction MenuAction;
         /**
-         * @brief private data for this menu
+         * private data for this menu
          **/
         void *priv;
         /**
-         * @brief ui implementation private
+         * ui implementation private
          **/
         void *uipriv[2];
         /**
-         * @brief this is sub menu or not
+         * this is sub menu or not
          **/
         boolean isSubMenu;
         /**
-         * @brief mark of this menu
+         * mark of this menu
          **/
         int mark;
         
@@ -131,39 +131,39 @@ extern "C" {
     };
 
     /**
-     * @brief Fcitx Status icon to be displayed on the UI
+     * Fcitx Status icon to be displayed on the UI
      **/
     struct _FcitxUIStatus {
         /**
-         * @brief status name, will not displayed on the UI.
+         * status name, will not displayed on the UI.
          **/
         char *name;
         /**
-         * @brief short desription for this status, can be displayed on the UI
+         * short desription for this status, can be displayed on the UI
          **/
         char *shortDescription;
         /**
-         * @brief long description for this status, can be displayed on the UI
+         * long description for this status, can be displayed on the UI
          **/
         char *longDescription;
         /**
-         * @brief toogle function
+         * toogle function
          **/
         void (*toggleStatus)(void *arg);
         /**
-         * @brief get current value function
+         * get current value function
          **/
         boolean(*getCurrentStatus)(void *arg);
         /**
-         * @brief private data for the UI implementation
+         * private data for the UI implementation
          **/
         void *uipriv[2];
         /**
-         * @brief extra argument for tooglefunction
+         * extra argument for tooglefunction
          **/
         void* arg;
         /**
-         * @brief visible
+         * visible
          */
         boolean visible;
         
@@ -196,71 +196,71 @@ extern "C" {
     typedef struct _FcitxUIStatus FcitxUIStatus;
 
     /**
-     * @brief user interface implementation
+     * user interface implementation
      **/
     typedef struct _FcitxUI {
         /**
-         * @brief construct function for this ui
+         * construct function for this ui
          */
         void* (*Create)(struct _FcitxInstance*);
         /**
-         * @brief close the input window
+         * close the input window
          */
         void (*CloseInputWindow)(void *arg);
         /**
-         * @brief show the input window
+         * show the input window
          */
         void (*ShowInputWindow)(void *arg);
         /**
-         * @brief move the input window
+         * move the input window
          */
         void (*MoveInputWindow)(void *arg);
         /**
-         * @brief action on update status
+         * action on update status
          */
         void (*UpdateStatus)(void *arg, FcitxUIStatus*);
         /**
-         * @brief action on register status
+         * action on register status
          */
         void (*RegisterStatus)(void *arg, FcitxUIStatus*);
         /**
-         * @brief action on register menu
+         * action on register menu
          */
         void (*RegisterMenu)(void *arg, FcitxUIMenu*);
         /**
-         * @brief action on focus
+         * action on focus
          */
         void (*OnInputFocus)(void *arg);
         /**
-         * @brief action on unfocus
+         * action on unfocus
          */
         void (*OnInputUnFocus)(void *arg);
         /**
-         * @brief action on trigger on
+         * action on trigger on
          */
         void (*OnTriggerOn)(void *arg);
         /**
-         * @brief action on trigger off
+         * action on trigger off
          */
         void (*OnTriggerOff)(void *arg);
         /**
-         * @brief display a message is ui support it
+         * display a message is ui support it
          */
         void (*DisplayMessage)(void *arg, char *title, char **msg, int length);
         /**
-         * @brief get the main window size if ui support it
+         * get the main window size if ui support it
          */
         void (*MainWindowSizeHint)(void *arg, int* x, int* y, int* w, int* h);
         /**
-         * @brief reload config
+         * reload config
          */
         void (*ReloadConfig)(void*);
         /**
-         * @brief suspend to switch from/to fallback
+         * suspend to switch from/to fallback
          */
         void (*Suspend)(void*);
         /**
-         * @brief resume from suspend
+         * resume from suspend
          */
         void (*Resume)(void*);
 
@@ -271,7 +271,7 @@ extern "C" {
     } FcitxUI;
 
     /**
-     * @brief load user interface module
+     * load user interface module
      *
      * @param instance fcitx instance
      * @return void
@@ -279,14 +279,14 @@ extern "C" {
     void FcitxUILoad(struct _FcitxInstance* instance);
 
     /**
-     * @brief init messages
+     * init messages
      *
      * @return FcitxMessages*
      **/
     FcitxMessages* FcitxMessagesNew();
 
     /**
-     * @brief add a message string at last
+     * add a message string at last
      *
      * @param message message
      * @param type message type
@@ -297,7 +297,7 @@ extern "C" {
     void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type, const char *fmt, ...);
 
     /**
-     * @brief set a message string at position
+     * set a message string at position
      *
      * @param message message
      * @param position position
@@ -308,7 +308,7 @@ extern "C" {
      **/
     void FcitxMessagesSetMessage(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, ...);
     /**
-     * @brief set only message string
+     * set only message string
      *
      * @param message message
      * @param position position
@@ -318,7 +318,7 @@ extern "C" {
      **/
     void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const char* fmt, ...);
     /**
-     * @brief concat a string to message string at position
+     * concat a string to message string at position
      *
      * @param message message
      * @param position position
@@ -327,7 +327,7 @@ extern "C" {
      **/
     void FcitxMessagesMessageConcat(FcitxMessages* message, int position, const char* text);
     /**
-     * @brief concat a string to message string at last
+     * concat a string to message string at last
      *
      * @param message message
      * @param text string
@@ -335,7 +335,7 @@ extern "C" {
      **/
     void FcitxMessagesMessageConcatLast(FcitxMessages* message, const char* text);
     /**
-     * @brief set message string vprintf version
+     * set message string vprintf version
      *
      * @param message message
      * @param position position
@@ -346,7 +346,7 @@ extern "C" {
      **/
     void FcitxMessagesSetMessageV(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, va_list ap);
     /**
-     * @brief set message count
+     * set message count
      *
      * @param m message
      * @param s count
@@ -354,14 +354,14 @@ extern "C" {
      **/
     void FcitxMessagesSetMessageCount(FcitxMessages* m, int s);
     /**
-     * @brief get message count
+     * get message count
      *
      * @param m message
      * @return int
      **/
     int FcitxMessagesGetMessageCount(FcitxMessages* m);
     /**
-     * @brief get message string at index
+     * get message string at index
      *
      * @param m message
      * @param index index
@@ -369,7 +369,7 @@ extern "C" {
      **/
     char* FcitxMessagesGetMessageString(FcitxMessages* m, int index);
     /**
-     * @brief get message type at index
+     * get message type at index
      *
      * @param m message
      * @param index index
@@ -377,14 +377,14 @@ extern "C" {
      **/
     FcitxMessageType FcitxMessagesGetMessageType(FcitxMessages* m, int index);
     /**
-     * @brief check whether message is changed
+     * check whether message is changed
      *
      * @param m message
      * @return boolean
      **/
     boolean FcitxMessagesIsMessageChanged(FcitxMessages* m);
     /**
-     * @brief set message is changed or not
+     * set message is changed or not
      *
      * @param m message
      * @param changed changed or not
@@ -392,7 +392,7 @@ extern "C" {
      **/
     void FcitxMessagesSetMessageChanged(FcitxMessages* m, boolean changed);
     /**
-     * @brief add a new menu shell
+     * add a new menu shell
      *
      * @param menu menu
      * @param string menu text
@@ -403,7 +403,7 @@ extern "C" {
     void FcitxMenuAddMenuItem(FcitxUIMenu* menu, char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu);
 
     /**
-     * @brief clear all menu shell
+     * clear all menu shell
      *
      * @param menu menu
      * @return void
@@ -411,7 +411,7 @@ extern "C" {
     void FcitxMenuClear(FcitxUIMenu* menu);
 
     /**
-     * @brief move input to cursor position
+     * move input to cursor position
      *
      * @param instance fcitx instance
      * @return void
@@ -419,14 +419,14 @@ extern "C" {
     void FcitxUIMoveInputWindow(struct _FcitxInstance* instance);
 
     /**
-     * @brief close input window
+     * close input window
      *
      * @param instance fcitx instance
      * @return void
      **/
     void FcitxUICloseInputWindow(struct _FcitxInstance* instance);
     /**
-     * @brief toggle a user interface status
+     * toggle a user interface status
      *
      * @param instance fcitx instance
      * @param name status name
@@ -434,7 +434,7 @@ extern "C" {
      **/
     void FcitxUIUpdateStatus(struct _FcitxInstance* instance, const char* name);
     /**
-     * @brief register a new ui status
+     * register a new ui status
      *
      * @param instance fcitx instance
      * @param arg private data, pass to callback
@@ -453,7 +453,7 @@ extern "C" {
                                void (*toggleStatus)(void *arg),
                                boolean(*getStatus)(void *arg));
     /**
-     * @brief register a new menu
+     * register a new menu
      *
      * @param instance fcitx instance
      * @param menu menu
@@ -462,7 +462,7 @@ extern "C" {
     void FcitxUIRegisterMenu(struct _FcitxInstance* instance, FcitxUIMenu* menu);
 
     /**
-     * @brief process focus in event
+     * process focus in event
      *
      * @param instance fcitx instance
      * @return void
@@ -470,7 +470,7 @@ extern "C" {
     void FcitxUIOnInputFocus(struct _FcitxInstance* instance);
 
     /**
-     * @brief process focus out event
+     * process focus out event
      *
      * @param instance fcitx instance
      * @return void
@@ -478,7 +478,7 @@ extern "C" {
     void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance);
 
     /**
-     * @brief process trigger on event
+     * process trigger on event
      *
      * @param instance fcitx instance
      * @return void
@@ -486,7 +486,7 @@ extern "C" {
     void FcitxUIOnTriggerOn(struct _FcitxInstance* instance);
 
     /**
-     * @brief process trigger off event
+     * process trigger off event
      *
      * @param instance fcitx instance
      * @return void
@@ -494,7 +494,7 @@ extern "C" {
     void FcitxUIOnTriggerOff(struct _FcitxInstance* instance);
 
     /**
-     * @brief if user interface support, display a message window on the screen
+     * if user interface support, display a message window on the screen
      *
      * @param instance fcitx instance
      * @param title window title
@@ -505,7 +505,7 @@ extern "C" {
     void FcitxUIDisplayMessage(struct _FcitxInstance *instance, char *title, char **msg, int length);
 
     /**
-     * @brief get status by status name
+     * get status by status name
      *
      * @param instance fcitx instance
      * @param name status name
@@ -515,7 +515,7 @@ extern "C" {
     
     
     /**
-     * @brief set visibility for a status icon
+     * set visibility for a status icon
      *
      * @param instance fcitx instance
      * @param name name
@@ -525,7 +525,7 @@ extern "C" {
     void FcitxUISetStatusVisable(struct _FcitxInstance* instance, const char* name, boolean visible);
 
     /**
-     * @brief update menu shell of a menu
+     * update menu shell of a menu
      *
      * @param menu menu
      * @return void
@@ -533,7 +533,7 @@ extern "C" {
     void FcitxMenuUpdate(FcitxUIMenu* menu);
 
     /**
-     * @brief check point is in rectangle or not
+     * check point is in rectangle or not
      *
      * @param x0 point x
      * @param y0 point y
@@ -546,7 +546,7 @@ extern "C" {
     boolean FcitxUIIsInBox(int x0, int y0, int x1, int y1, int w, int h);
 
     /**
-     * @brief check user interface support main window or not
+     * check user interface support main window or not
      *
      * @param instance fcitx instance
      * @return boolean
@@ -554,7 +554,7 @@ extern "C" {
     boolean FcitxUISupportMainWindow(struct _FcitxInstance* instance);
 
     /**
-     * @brief get main window geometry property if there is a main window
+     * get main window geometry property if there is a main window
      *
      * @param instance fcitx instance
      * @param x x
@@ -566,7 +566,7 @@ extern "C" {
     void FcitxUIGetMainWindowSize(struct _FcitxInstance* instance, int* x, int* y, int* w, int* h);
 
     /**
-     * @brief convert new messages to old up and down style messages, return the new cursos pos
+     * convert new messages to old up and down style messages, return the new cursos pos
      *
      * @param instance fcitx instance
      * @param msgUp messages up
@@ -576,7 +576,7 @@ extern "C" {
     int FcitxUINewMessageToOldStyleMessage(struct _FcitxInstance* instance, FcitxMessages* msgUp, FcitxMessages* msgDown);
 
     /**
-     * @brief convert messages to pure c string
+     * convert messages to pure c string
      *
      * @param messages messages
      * @return char*
@@ -584,7 +584,7 @@ extern "C" {
     char* FcitxUIMessagesToCString(FcitxMessages* messages);
 
     /**
-     * @brief convert candidate words to a string which can direct displayed
+     * convert candidate words to a string which can direct displayed
      *
      * @param instance fcitx instance
      * @return char*
@@ -593,7 +593,7 @@ extern "C" {
     char* FcitxUICandidateWordToCString(struct _FcitxInstance* instance);
 
     /**
-     * @brief mark input window should update
+     * mark input window should update
      *
      * @param instance fcitx instance
      * @return void
@@ -602,7 +602,7 @@ extern "C" {
 
 
     /**
-     * @brief User interface should switch to the fallback
+     * User interface should switch to the fallback
      *
      * @param instance fcitx instance
      * @return void
@@ -610,7 +610,7 @@ extern "C" {
     void FcitxUISwitchToFallback(struct _FcitxInstance* instance);
 
     /**
-     * @brief User interface should resume from the fallback
+     * User interface should resume from the fallback
      *
      * @param instance fcitx instance
      * @return void

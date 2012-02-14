@@ -34,7 +34,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 struct _FcitxXimFrontend;
 
 /**
- * @brief XIM Preedit Attributes
+ * XIM Preedit Attributes
  **/
 typedef struct {
     XRectangle      area;   /* area */
@@ -50,7 +50,7 @@ typedef struct {
 } PreeditAttributes;
 
 /**
- * @brief XIM Status Attributes
+ * XIM Status Attributes
  **/
 typedef struct {
     XRectangle      area;   /* area */
@@ -65,7 +65,7 @@ typedef struct {
 } StatusAttributes;
 
 /**
- * @brief Input Context for Fcitx XIM Frontend
+ * Input Context for Fcitx XIM Frontend
  **/
 typedef struct _FcitxXimIC {
     CARD16          id;     /* ic id */

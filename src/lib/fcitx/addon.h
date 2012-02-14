@@ -20,7 +20,7 @@
 
 /**
  * @file addon.h
- * @brief Header Addon Support for fcitx
+ * Header Addon Support for fcitx
  * @author CSSlayer wengxt@gmail.com
  */
 
@@ -36,36 +36,36 @@ extern "C" {
 
     struct _FcitxInstance;
     /**
-     * @brief Addon Category Definition
+     * Addon Category Definition
      **/
     typedef enum _FcitxAddonCategory {
         /**
-         * @brief Input method
+         * Input method
          **/
         AC_INPUTMETHOD = 0,
         /**
-         * @brief Input frontend, like xim
+         * Input frontend, like xim
          **/
         AC_FRONTEND,
         /**
-         * @brief General module, can be implemented in a quite extensive way
+         * General module, can be implemented in a quite extensive way
          **/
         AC_MODULE,
         /**
-         * @brief User Interface, only one of it can be enabled currently.
+         * User Interface, only one of it can be enabled currently.
          **/
         AC_UI
     } FcitxAddonCategory;
 
     /**
-     * @brief Supported Addon Type, Currently only sharedlibrary
+     * Supported Addon Type, Currently only sharedlibrary
      **/
     typedef enum _FcitxAddonType {
         AT_SHAREDLIBRARY = 0
     } FcitxAddonType;
 
     /**
-     * @brief How addon get input method list
+     * How addon get input method list
      **/
     typedef enum _IMRegisterMethod {
         IMRM_SELF,
@@ -74,20 +74,20 @@ extern "C" {
     } IMRegisterMethod;
 
     /**
-     * @brief Addon Instance in Fcitx
+     * Addon Instance in Fcitx
      **/
     typedef struct _FcitxAddon {
-        FcitxGenericConfig config;
-        char *name;
-        char *generalname;
-        char *comment;
-        boolean bEnabled;
-        FcitxAddonCategory category;
-        FcitxAddonType type;
-        char *library;
-        char *depend;
-        int priority;
-        char *subconfig;
+        FcitxGenericConfig config; /**< config file */
+        char *name; /**< addon name, used as a identifier */
+        char *generalname; /**< addon name, translatable user visible string */
+        char *comment; /**< longer desc translatable user visible string */
+        boolean bEnabled; /**< enabled or not*/
+        FcitxAddonCategory category; /**< addon category */
+        FcitxAddonType type; /**< addon type */
+        char *library; /**< library string */
+        char *depend; /**< dependency string */
+        int priority; /**< priority */
+        char *subconfig; /**< used by ui for subconfig */
         union {
             struct _FcitxFrontend *frontend;
             struct _FcitxModule *module;
@@ -106,35 +106,35 @@ extern "C" {
     } FcitxAddon;
 
     /**
-     * @brief Init utarray for addon
+     * Init utarray for addon
      *
      * @return void
      **/
     void FcitxAddonsInit(UT_array* addons);
 
     /**
-     * @brief Free one addon info
+     * Free one addon info
      *
      * @param v addon info
      */
     void FcitxAddonFree(void *v);
 
     /**
-     * @brief Load all addon of fcitx during initialize
+     * Load all addon of fcitx during initialize
      *
      * @return void
      **/
     void FcitxAddonsLoad(UT_array* addons);
 
     /**
-     * @brief Resolve addon dependency, in order to make every addon works
+     * Resolve addon dependency, in order to make every addon works
      *
      * @return void
      **/
     void FcitxInstanceResolveAddonDependency(struct _FcitxInstance* instance);
 
     /**
-     * @brief Check whether an addon is enabled or not by addon name
+     * Check whether an addon is enabled or not by addon name
      *
      * @param addons addon array
      * @param name addon name
@@ -143,7 +143,7 @@ extern "C" {
     boolean FcitxAddonsIsAddonAvailable(UT_array* addons, const char* name);
 
     /**
-     * @brief Get addon instance by addon name
+     * Get addon instance by addon name
      *
      * @param addons addon array
      * @param name addon name
@@ -152,7 +152,7 @@ extern "C" {
     FcitxAddon* FcitxAddonsGetAddonByName(UT_array* addons, const char* name);
 
     /**
-     * @brief Load addon.desc file
+     * Load addon.desc file
      *
      * @return FcitxConfigFileDesc*
      **/

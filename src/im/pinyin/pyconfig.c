@@ -35,8 +35,6 @@ static void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group, Fci
 static FcitxConfigFileDesc* GetPYConfigDesc();
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
-CONFIG_BINDING_REGISTER("Pinyin", "PinyinPriority", iPinyinPriority)
-CONFIG_BINDING_REGISTER("Pinyin", "ShuangpinPriority", iShuangpinPriority)
 CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", spscheme)
 CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY)
 CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto)

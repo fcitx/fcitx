@@ -609,7 +609,6 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
 
     if (ic->state == IS_CLOSED && type == FCITX_PRESS_KEY && FcitxHotkeyIsHotKey(sym, state, config->hkTrigger)) {
         FcitxInstanceEnableIM(ipc->owner, ic, false);
-        FcitxInputStateSetKeyReleased(input, KR_OTHER);
         return 1;
     }
 

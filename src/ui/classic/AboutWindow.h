@@ -20,7 +20,7 @@
 
 /**
  * @file AboutWindow.h
- * @brief A very simple About Window for FCITX
+ * A very simple About Window for FCITX
  * @author Yunfan yunfan_zg@163.com
  */
 

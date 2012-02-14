@@ -20,13 +20,13 @@
 
 /**
  * @file hook-internal.h
- * @brief private header of hook
+ * private header of hook
  */
 
 struct _FcitxInstance;
 
 /**
- * @brief do the preinput phase
+ * do the preinput phase
  *
  * @param instance fcitx instance
  * @param sym keysym
@@ -37,7 +37,7 @@ struct _FcitxInstance;
 void FcitxInstanceProcessPreInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 
 /**
- * @brief do the postinput phase
+ * do the postinput phase
  *
  * @param instance fcitx instance
  * @param sym keysym
@@ -48,7 +48,7 @@ void FcitxInstanceProcessPreInputFilter(struct _FcitxInstance* instance, FcitxKe
 void FcitxInstanceProcessPostInputFilter(struct _FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval);
 
 /**
- * @brief process hotkey phase
+ * process hotkey phase
  *
  * @param instance fcitx instance
  * @param sym keysym
@@ -58,7 +58,7 @@ void FcitxInstanceProcessPostInputFilter(struct _FcitxInstance* instance, FcitxK
 INPUT_RETURN_VALUE FcitxInstanceProcessHotkey(struct _FcitxInstance* instance, FcitxKeySym keysym, unsigned int state);
 
 /**
- * @brief process reset input
+ * process reset input
  *
  * @param instance fcitx instance
  * @return void
@@ -66,7 +66,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessHotkey(struct _FcitxInstance* instance, F
 void FcitxInstanceProcessResetInputHook(struct _FcitxInstance* instance);
 
 /**
- * @brief process trigger off event
+ * process trigger off event
  *
  * @param instance fcitx instance
  * @return void
@@ -74,7 +74,7 @@ void FcitxInstanceProcessResetInputHook(struct _FcitxInstance* instance);
 void FcitxInstanceProcessTriggerOffHook(struct _FcitxInstance* instance);
 
 /**
- * @brief process trigger on event
+ * process trigger on event
  *
  * @param instance fcitx instance
  * @return void
@@ -82,14 +82,14 @@ void FcitxInstanceProcessTriggerOffHook(struct _FcitxInstance* instance);
 void FcitxInstanceProcessTriggerOnHook(struct _FcitxInstance* instance);
 
 /**
- * @brief process focus in event
+ * process focus in event
  *
  * @param instance fcitx instance
  * @return void
  **/
 void FcitxInstanceProcessInputFocusHook(struct _FcitxInstance* instance);
 /**
- * @brief process focus out event
+ * process focus out event
  *
  * @param instance fcitx instance
  * @return void
@@ -97,7 +97,7 @@ void FcitxInstanceProcessInputFocusHook(struct _FcitxInstance* instance);
 void FcitxInstanceProcessInputUnFocusHook(struct _FcitxInstance* instance);
 
 /**
- * @brief process update candidates event
+ * process update candidates event
  *
  * @param instance fcitx instance
  * @return void
@@ -105,7 +105,7 @@ void FcitxInstanceProcessInputUnFocusHook(struct _FcitxInstance* instance);
 void FcitxInstanceProcessUpdateCandidates(struct _FcitxInstance* instance);
 
 /**
- * @brief process update im list
+ * process update im list
  *
  * @param instance fcitx instance
  * @return void

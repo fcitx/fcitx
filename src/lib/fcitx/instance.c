@@ -72,7 +72,7 @@ static void* RunInstance(void* arg);
 static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
 
 /**
- * @brief 显示命令行参数
+ * 显示命令行参数
  */
 void Usage()
 {
@@ -87,7 +87,7 @@ void Usage()
 }
 
 /**
- * @brief 显示版本
+ * 显示版本
  */
 void Version()
 {

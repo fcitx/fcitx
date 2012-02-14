@@ -27,16 +27,16 @@
 #include "fcitx-utils/utils.h"
 
 /**
- * @brief String to key list.
+ * String to key list.
  **/
 
 typedef struct _KEY_LIST {
     /**
-     * @brief string name for the key in fcitx
+     * string name for the key in fcitx
      **/
     char         *strKey;
     /**
-     * @brief the keyval for the key.
+     * the keyval for the key.
      **/
     FcitxKeySym  code;
 } KEY_LIST;

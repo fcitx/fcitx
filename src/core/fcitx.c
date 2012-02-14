@@ -20,7 +20,7 @@
 
 /**
  * @file fcitx.c
- * @brief Main Function for fcitx
+ * Main Function for fcitx
  */
 #ifdef FCITX_HAVE_CONFIG_H
 #include "config.h"

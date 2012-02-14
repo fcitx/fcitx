@@ -40,7 +40,7 @@
 
 /**
  * @file punc.c
- * @brief Trans full width punc for Fcitx
+ * Trans full width punc for Fcitx
  */
 
 #define PUNC_DICT_FILENAME  "punc.mb"
@@ -274,7 +274,7 @@ boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN
 }
 
 /**
- * @brief 加载标点词典
+ * 加载标点词典
  * @param void
  * @return void
  * @note 文件中数据的格式为： 对应的英文符号 中文标点 <中文标点>

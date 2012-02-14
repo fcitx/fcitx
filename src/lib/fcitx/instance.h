@@ -37,12 +37,12 @@ extern "C" {
     struct _FcitxInputContext;
 
     /**
-     * @brief Fcitx Instance, including all global settings
+     * Fcitx Instance, including all global settings
      **/
     typedef struct _FcitxInstance FcitxInstance;
 
     /**
-     * @brief create new fcitx instance
+     * create new fcitx instance
      *
      * @param sem semaphore to notify the instance is end
      * @param argc argc
@@ -52,7 +52,7 @@ extern "C" {
     FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[]);
 
     /**
-     * @brief replace existing fcitx instance
+     * replace existing fcitx instance
      *
      * @param instance fcitx instance
      * @return boolean
@@ -60,7 +60,7 @@ extern "C" {
     boolean FcitxInstanceIsTryReplace(FcitxInstance* instance);
 
     /**
-     * @brief replace existing fcitx instance
+     * replace existing fcitx instance
      *
      * @param instance fcitx instance
      * @return bool
@@ -68,7 +68,7 @@ extern "C" {
     void FcitxInstanceResetTryReplace(FcitxInstance* instance);
 
     /**
-     * @brief lock the instance
+     * lock the instance
      *
      * @param instance fcitx instance
      * @return int
@@ -76,7 +76,7 @@ extern "C" {
     int FcitxInstanceLock(FcitxInstance* instance);
 
     /**
-     * @brief lock the instance
+     * lock the instance
      *
      * @param instance fcitx instance
      * @return int
@@ -84,7 +84,7 @@ extern "C" {
     int FcitxInstanceUnlock(FcitxInstance* instance);
 
     /**
-     * @brief notify the instance is end
+     * notify the instance is end
      *
      * @param instance fcitx instance
      * @return void
@@ -92,7 +92,7 @@ extern "C" {
     void FcitxInstanceEnd(FcitxInstance* instance);
 
     /**
-     * @brief Get Current Input Context
+     * Get Current Input Context
      *
      * @param instance
      * @return FcitxInputContext*
@@ -100,7 +100,7 @@ extern "C" {
     FcitxInputContext* FcitxInstanceGetCurrentIC(struct _FcitxInstance* instance);
 
     /**
-     * @brief Set Current Input Context
+     * Set Current Input Context
      *
      * @param instance
      * @param ic new input context
@@ -109,7 +109,7 @@ extern "C" {
     boolean FcitxInstanceSetCurrentIC(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
-     * @brief Get Addons From Instance
+     * Get Addons From Instance
      *
      * @param instance fcitx instance
      * @return UT_array*

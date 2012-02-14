@@ -40,7 +40,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /**
  * @file IC.c
  *
- * @brief Process XIM Input Context
+ * Process XIM Input Context
  */
 
 static int Is(char *attr, XICAttribute * attr_list);
@@ -156,7 +156,7 @@ static void StoreIC(FcitxXimIC * rec, IMChangeICStruct * call_data)
 }
 
 /**
- * @brief Interface for XIM Create Input Context
+ * Interface for XIM Create Input Context
  *
  * @param  context Input Context
  * @param  priv private data passed by CreateIC
@@ -190,7 +190,7 @@ void XimCreateIC(void* arg, FcitxInputContext* context, void *priv)
 }
 
 /**
- * @brief Destroy Input Context for XIM
+ * Destroy Input Context for XIM
  *
  * @param context Input Context to Destroy
  * @return void
@@ -210,7 +210,7 @@ void XimDestroyIC(void* arg, FcitxInputContext* context)
 }
 
 /**
- * @brief Set Input Context Data
+ * Set Input Context Data
  *
  * @param call_data
  * @return void
@@ -233,7 +233,7 @@ void XimSetIC(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 }
 
 /**
- * @brief Fetch Input Context Data
+ * Fetch Input Context Data
  *
  * @param call_data
  * @return void

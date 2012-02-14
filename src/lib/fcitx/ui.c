@@ -41,39 +41,39 @@
 /**
  * @file ui.c
  *
- * @brief user interface related function.
+ * user interface related function.
  */
 
 /**
- * @brief a single string message
+ * a single string message
  **/
 
 struct _FcitxMessage {
     /**
-     * @brief The string of the message
+     * The string of the message
      **/
     char            strMsg[MESSAGE_MAX_LENGTH + 1];
     /**
-     * @brief the type of the message
+     * the type of the message
      **/
     FcitxMessageType        type;
 } ;
 
 /**
- * @brief FcitxMessages to display on the input bar, this cannot be accessed directly
+ * FcitxMessages to display on the input bar, this cannot be accessed directly
  **/
 
 struct _FcitxMessages {
     /**
-     * @brief array of message strings
+     * array of message strings
      **/
     struct _FcitxMessage msg[MAX_MESSAGE_COUNT];
     /**
-     * @brief number of message strings
+     * number of message strings
      **/
     uint msgCount;
     /**
-     * @brief the messages is updated or not
+     * the messages is updated or not
      **/
     boolean changed;
 };

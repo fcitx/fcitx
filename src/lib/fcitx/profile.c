@@ -43,7 +43,7 @@ CONFIG_BINDING_REGISTER_WITH_FILTER_ARG("Profile", "EnabledIMList", imList, Filt
 CONFIG_BINDING_END()
 
 /**
- * @brief 加载配置文件
+ * 加载配置文件
  */
 FCITX_EXPORT_API
 boolean FcitxProfileLoad(FcitxProfile* profile, FcitxInstance* instance)
@@ -84,12 +84,6 @@ void FcitxProfileSave(FcitxProfile* profile)
         if (fp)
             fclose(fp);
     }
-}
-
-FCITX_EXPORT_API
-boolean UseRemind(FcitxProfile* profile)
-{
-    return profile->bUseRemind;
 }
 
 void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)

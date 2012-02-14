@@ -20,7 +20,7 @@
 
 /**
  * @file addon.c
- * @brief Addon Support for fcitx
+ * Addon Support for fcitx
  * @author CSSlayer wengxt@gmail.com
  */
 
@@ -68,7 +68,7 @@ void FcitxAddonsInit(UT_array* addons)
 }
 
 /**
- * @brief Load Addon Info
+ * Load Addon Info
  */
 FCITX_EXPORT_API
 void FcitxAddonsLoad(UT_array* addons)
@@ -228,7 +228,7 @@ FcitxAddon* FcitxAddonsGetAddonByName(UT_array* addons, const char* name)
 }
 
 /**
- * @brief Load addon.desc file
+ * Load addon.desc file
  *
  * @return the description of addon configure.
  */

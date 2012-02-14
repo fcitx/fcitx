@@ -31,17 +31,18 @@
  *
  */
 
+/** memory pool private struct */
 typedef struct _FcitxMemoryPool FcitxMemoryPool;
 
 /**
- * @brief create a memroy pool
+ * create a memroy pool
  *
  * @return FcitxMemoryPool*
  **/
 FcitxMemoryPool* fcitx_memory_pool_create();
 
 /**
- * @brief allocate piece of memory from pool
+ * allocate piece of memory from pool
  *
  * @param pool memory pool
  * @param size size of wanted memory
@@ -50,7 +51,7 @@ FcitxMemoryPool* fcitx_memory_pool_create();
 void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size);
 
 /**
- * @brief free memory pool and free all the memory inside the pool
+ * free memory pool and free all the memory inside the pool
  *
  * @param pool memory ppol
  * @return void

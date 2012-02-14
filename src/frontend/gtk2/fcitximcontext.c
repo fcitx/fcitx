@@ -20,7 +20,7 @@
 /**
  * @file fcitximcontext.c
  *
- * @brief This is a gtk im module for fcitx, using DBus as a protocol.
+ * This is a gtk im module for fcitx, using DBus as a protocol.
  *        This is compromise to gtk and firefox, users are being sucked by them
  *        again and again.
  */

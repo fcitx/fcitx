@@ -1,13 +1,3 @@
-[Pinyin/PinyinPriority]
-Type=Integer
-DefaultValue=1
-Description=Pinyin Priority Order, 0 to disable
-
-[Pinyin/ShuangpinPriority]
-Type=Integer
-DefaultValue=2
-Description=Shuangpin Priority Order, 0 to disable
-
 [Pinyin/DefaultShuangpinSchema]
 Type=Enum
 EnumCount=7

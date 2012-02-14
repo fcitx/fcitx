@@ -33,7 +33,7 @@ extern "C" {
     struct _FcitxInstance;
 
     /**
-     * @brief Input Method State
+     * Input Method State
      **/
     typedef enum _FcitxContextState {
         IS_CLOSED = 0,
@@ -50,7 +50,7 @@ extern "C" {
     } FcitxCapacityFlags;
     
     /**
-     * @brief queued key event
+     * queued key event
      **/
     typedef struct _FcitxKeyEvent {
         int frontendid;
@@ -59,7 +59,7 @@ extern "C" {
     } FcitxKeyEvent;
 
     /**
-     * @brief Input Context, normally one for one program
+     * Input Context, normally one for one program
      **/
     typedef struct _FcitxInputContext {
         FcitxContextState state; /* im state */
@@ -71,7 +71,7 @@ extern "C" {
     } FcitxInputContext;
 
     /**
-     * @brief Program IM Module Frontend
+     * Program IM Module Frontend
      **/
     typedef struct _FcitxFrontend {
         void* (*Create)(struct _FcitxInstance*, int frontendindex);
@@ -93,7 +93,7 @@ extern "C" {
     } FcitxFrontend;
 
     /**
-     * @brief Initial frontends array
+     * Initial frontends array
      *
      * @param  frontends array
      * @return void
@@ -101,7 +101,7 @@ extern "C" {
     void FcitxFrontendsInit(UT_array*);
 
     /**
-     * @brief Find Input Context By Frontend Specific filter
+     * Find Input Context By Frontend Specific filter
      *
      * @param instance
      * @param frontendid frontend id
@@ -111,7 +111,7 @@ extern "C" {
     FcitxInputContext* FcitxInstanceFindIC(struct _FcitxInstance* instance, int frontendid, void* filter);
 
     /**
-     * @brief Creat New Input Context
+     * Creat New Input Context
      *
      * @param instance
      * @param frontendid frontend id
@@ -121,7 +121,7 @@ extern "C" {
     FcitxInputContext* FcitxInstanceCreateIC(struct _FcitxInstance* instance, int frontendid, void* priv);
 
     /**
-     * @brief Destroy Input context
+     * Destroy Input context
      *
      * @param instance
      * @param frontendid frontend id
@@ -131,7 +131,7 @@ extern "C" {
     void FcitxInstanceDestroyIC(struct _FcitxInstance* instance, int frontendid, void* filter);
 
     /**
-     * @brief Load All frontend
+     * Load All frontend
      *
      * @param instance
      * @return void
@@ -139,7 +139,7 @@ extern "C" {
     boolean FcitxInstanceLoadFrontend(struct _FcitxInstance* instance);
 
     /**
-     * @brief Commit String to Client
+     * Commit String to Client
      *
      * @param instance
      * @param ic input context
@@ -149,7 +149,7 @@ extern "C" {
     void FcitxInstanceCommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, char* str);
 
     /**
-     * @brief Set Cursor Position
+     * Set Cursor Position
      *
      * @param instance fcitx instance
      * @param ic input context
@@ -160,7 +160,7 @@ extern "C" {
     void FcitxInstanceSetWindowOffset(struct _FcitxInstance* instance, FcitxInputContext* ic, int x, int y);
 
     /**
-     * @brief Get Cursor Position
+     * Get Cursor Position
      *
      * @param  ...
      * @param ic input context
@@ -171,7 +171,7 @@ extern "C" {
     void FcitxInstanceGetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
 
     /**
-     * @brief Update preedit text to client window
+     * Update preedit text to client window
      *
      * @param instance fcitx instance
      * @param ic input context
@@ -180,7 +180,7 @@ extern "C" {
     void FcitxInstanceUpdatePreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
-     * @brief Update all user interface element to client (Aux Text, Preedit, Candidate Word)
+     * Update all user interface element to client (Aux Text, Preedit, Candidate Word)
      *
      * @param instance fcitx instance
      * @param ic input context
@@ -189,7 +189,7 @@ extern "C" {
     void FcitxInstanceUpdateClientSideUI(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
     /**
-     * @brief Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
+     * Get Current State, if only want to get state, this function is better, because it will handle the case that Input Context is NULL.
      *
      * @param instance fcitx instance
      * @return IME_STATE
@@ -197,7 +197,7 @@ extern "C" {
     FcitxContextState FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
     
     /**
-     * @brief Get Current State, consider the option firstAsInactive
+     * Get Current State, consider the option firstAsInactive
      *
      * @param instance fcitx instance
      * @return IME_STATE
@@ -207,7 +207,7 @@ extern "C" {
     FcitxContextState FcitxInstanceGetCurrentStatev2(struct _FcitxInstance* instance);
 
     /**
-     * @brief get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
+     * get current ic capacity flag, if only want to get capacity, this function is better, because it will handle the case that Input Context is NULL.
      *
      * @param instance fcitx instance
      * @return CapacityFlags
@@ -215,7 +215,7 @@ extern "C" {
     FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(struct _FcitxInstance* instance);
 
     /**
-     * @brief set all ic from same application to the given ic
+     * set all ic from same application to the given ic
      *
      * @param instance fcitx instance
      * @param frontendid frontend id

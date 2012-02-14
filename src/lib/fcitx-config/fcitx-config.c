@@ -23,7 +23,7 @@
  * @author CSSlayer wengxt@gmail.com
  * @date 2010-04-30
  *
- * @brief ini style config file
+ * ini style config file
  */
 #include <stdlib.h>
 #include <string.h>
@@ -43,7 +43,7 @@
 #define RoundColor(c) ((c)>=0?((c)<=255?c:255):0)
 
 /**
- * @brief Config Option parse function
+ * Config Option parse function
  **/
 typedef FcitxConfigSyncResult(*FcitxConfigOptionFunc)(FcitxConfigOption *, FcitxConfigSync);
 
@@ -57,12 +57,12 @@ static FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, Fc
 static FcitxConfigSyncResult FcitxConfigOptionI18NString(FcitxConfigOption *option, FcitxConfigSync sync);
 
 /**
- * @brief File type is basically a string, but can be a hint for config tool
+ * File type is basically a string, but can be a hint for config tool
  */
 #define FcitxConfigOptionFile FcitxConfigOptionString
 
 /**
- * @brief Font type is basically a string, but can be a hint for config tool
+ * Font type is basically a string, but can be a hint for config tool
  */
 #define FcitxConfigOptionFont FcitxConfigOptionString
 

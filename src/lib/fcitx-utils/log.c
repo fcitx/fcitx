@@ -32,7 +32,7 @@
 static iconv_t iconvW = NULL;
 
 /**
- * @brief Fcitx记录Log的函数
+ * Fcitx记录Log的函数
  *
  * @param ErrorLevel
  * @param fmt

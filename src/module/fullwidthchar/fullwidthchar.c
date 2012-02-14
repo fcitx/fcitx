@@ -60,7 +60,7 @@ char *sCornerTrans[] = {
 
 /**
  * @file fullwidthchar.c
- * @brief Trans full width punc for Fcitx
+ * Trans full width punc for Fcitx
  */
 
 static void* FullWidthCharCreate(FcitxInstance* instance);

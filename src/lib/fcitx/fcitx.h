@@ -30,7 +30,7 @@
 /**
  * @file fcitx.h
  * @author CS Slayer <wengxt@gmail.com>
- * @brief some misc definition for Fcitx
+ * some misc definition for Fcitx
  */
 
 #ifdef __cplusplus
@@ -42,10 +42,13 @@ extern "C" {
 #define __(msgid) (msgid)
 #endif
 
+/** export the symbol */
 #define FCITX_EXPORT_API __attribute__ ((visibility("default")))
 
+/** suppress the unused warning */
 #define FCITX_UNUSED(x) (void)(x)
 
+/** fcitx addon ABI version, need to be used with addon */
 #define FCITX_ABI_VERSION 5
 
 #ifdef __cplusplus

@@ -22,7 +22,7 @@
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
  *
- * @brief  misc util function
+ *  misc util function
  *
  */
 

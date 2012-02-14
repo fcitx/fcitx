@@ -39,7 +39,7 @@ extern "C" {
 #define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
 
     /**
-     * @brief print a log string to stderr, should use FcitxLog instead of this function
+     * print a log string to stderr, should use FcitxLog instead of this function
      *
      * @param level log level
      * @param filename current filename

@@ -21,7 +21,7 @@
  * @file   ime-internal.h
  * @date   2008-1-16
  *
- * @brief  Private Header for Input Method
+ *  Private Header for Input Method
  *
  */
 
@@ -35,13 +35,21 @@
 struct _FcitxInputContext;
 struct _FcitxInstance;
 
+typedef enum _KEY_RELEASED {
+    KR_OTHER = 0,
+    KR_CTRL,
+    KR_2ND_SELECTKEY,
+    KR_3RD_SELECTKEY,
+    KR_CTRL_SHIFT
+} KEY_RELEASED;
+
 struct _FcitxInputState {
     long unsigned int lastKeyPressedTime;
     boolean bIsDoInputOnly;
     KEY_RELEASED keyReleased;
     int iCodeInputCount;
     char strCodeInput[MAX_USER_INPUT + 1];
-    char strStringGet[MAX_USER_INPUT + 1];  //保存输入法返回的需要送到客户程序中的字串
+    char strStringGet[MAX_USER_INPUT + 1];
     boolean bIsInRemind;
 
     time_t dummy;
@@ -77,100 +85,28 @@ struct _FcitxIMEntry {
 
 typedef struct _FcitxIMEntry FcitxIMEntry;
 
-/**
- * @brief init fcitx im array
- *
- * @param instance instance
- * @return void
- **/
 void FcitxInstanceInitIM(struct _FcitxInstance* instance);
 
-/**
- * @brief init builtin hotkey (ESC, ENTER)
- *
- * @param instance instance
- * @return void
- **/
 void FcitxInstanceInitBuiltInHotkey(struct _FcitxInstance* instance);
 
-/**
- * @brief generat phrase tips
- *
- * @param instance fcitx instance
- * @return void
- **/
 void FcitxInstanceDoPhraseTips(struct _FcitxInstance* instance);
 
-/**
- * @brief load all im from addons
- *
- * @param instance instance
- * @return boolean
- **/
 boolean FcitxInstanceLoadAllIM(struct _FcitxInstance* instance);
 
-/**
- * @brief init builtin im menu
- *
- * @param instance instance
- * @return void
- **/
 void FcitxInstanceInitIMMenu(struct _FcitxInstance* instance);
 
-/**
- * @brief show input speed
- *
- * @param instance instance
- * @return void
- **/
 void FcitxInstanceShowInputSpeed(struct _FcitxInstance* instance);
 
-/**
- * @brief process enter action
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImProcessEnter(void *arg);
 
-/**
- * @brief process escape action
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImProcessEscape(void *arg);
 
-/**
- * @brief process hkRemind
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImProcessRemind(void *arg);
 
-/**
- * @brief process reload key
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImProcessReload(void *arg);
 
-/**
- * @brief process hkSaveAll
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImProcessSaveAll(void *arg);
 
-/**
- * @brief switch between "on the spot" and "over the spot"
- *
- * @param arg instance
- * @return INPUT_RETURN_VALUE
- **/
 INPUT_RETURN_VALUE ImSwitchEmbeddedPreedit(void *arg);
 
 boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
@@ -179,12 +115,9 @@ void FcitxInstanceLoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
 
 void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero);
 
-/**
- * @brief Load inputmethod.desc file
- *
- * @return FcitxConfigFileDesc*
- **/
 FcitxConfigFileDesc* GetIMConfigDesc();
+
+int IMPriorityCmp(const void *a, const void *b);
 
 #endif
 

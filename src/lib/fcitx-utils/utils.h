@@ -18,10 +18,32 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 /**
+ * @defgroup FcitxUtils FcitxUtils
+ * 
+ * Fcitx Utils contains a bunch of functions, with extend common c library.
+ * It contains uthash/utarray as macro based hash table and dynamic array.
+ * 
+ * Some Fcitx path related function, includes fcitx_utils_get_fcitx_path()
+ * and fcitx_utils_get_fcitx_path_with_filename()
+ * 
+ * Some string related function, providing split, join string list.
+ * 
+ * A simple memory pool, if you need to allocate many small memory block, and 
+ * only need to free them at once.
+ * 
+ * Some log function, which prints the current file number, with printf format.
+ */
+
+/**
+ * @addtogroup FcitxUtils
+ * @{
+ */
+
+/**
  * @file   utils.h
  * @author CS Slayer wengxt@gmail.com
  *
- * @brief  Misc function for Fcitx
+ *  Misc function for Fcitx.
  *
  */
 
@@ -37,22 +59,22 @@ extern "C" {
 #endif
 
     /**
-     * @brief A hash set for string
+     * A hash set for string
      **/
     typedef struct _FcitxStringHashSet {
         /**
-         * @brief String in Hash Set
+         * String in Hash Set
          **/
         char *name;
         /**
-         * @brief UT Hash handle
+         * UT Hash handle
          **/
         UT_hash_handle hh;
     } FcitxStringHashSet;
 
 
     /**
-     * @brief Custom bsearch, it can search the most near value.
+     * Custom bsearch, it can search the most near value.
      *
      * @param key
      * @param base
@@ -68,30 +90,30 @@ extern "C" {
                                      int (*compar)(const void *, const void *));
 
     /**
-     * @brief Fork twice to run as daemon
+     * Fork twice to run as daemon
      *
      * @return void
      **/
     void fcitx_utils_init_as_daemon();
 
     /**
-     * @brief Count the file line number
+     * Count the file line count
      *
      * @param fpDict file pointer
-     * @return int line number
+     * @return int line count
      **/
     int fcitx_utils_calculate_record_number(FILE* fpDict);
     
     
     /**
-     * @brief new empty string list
+     * create empty string list
      *
      * @return UT_array*
      **/
     UT_array* fcitx_utils_new_string_list();
 
     /**
-     * @brief Split a string by delm
+     * Split a string by delm
      *
      * @param str input string
      * @param delm character as delimiter
@@ -100,7 +122,7 @@ extern "C" {
     UT_array* fcitx_utils_split_string(const char *str, char delm);
     
     /**
-     * @brief append a string with printf format
+     * append a string with printf format
      *
      * @param list string list
      * @param fmt printf fmt
@@ -109,7 +131,7 @@ extern "C" {
     void fcitx_utils_string_list_printf_append(UT_array* list, const char* fmt,...);
     
     /**
-     * @brief Join string list with delm
+     * Join string list with delm
      *
      * @param list string list
      * @param delm delm
@@ -118,7 +140,7 @@ extern "C" {
     char* fcitx_utils_join_string_list(UT_array* list, char delm);
 
     /**
-     * @brief Helper function for free the SplitString Output
+     * Helper function for free the SplitString Output
      *
      * @param list the SplitString Output
      * @return void
@@ -127,17 +149,17 @@ extern "C" {
     void fcitx_utils_free_string_list(UT_array *list);
 
     /**
-     * @brief Free String Hash Set
+     * Free String Hash Set
      *
      * @param sset String Hash Set
      * @return void
      *
-     * @since 4.1.3
+     * @since 4.2.0
      **/
     void fcitx_utils_free_string_hash_set(FcitxStringHashSet* sset);
 
     /**
-     * @brief Trim the input string's white space
+     * Trim the input string's white space
      *
      * @param s input string
      * @return char* new malloced string, need to free'd by caller
@@ -145,7 +167,7 @@ extern "C" {
     char* fcitx_utils_trim(const char *s);
 
     /**
-     * @brief Malloc and memset all memory to zero
+     * Malloc and memset all memory to zero
      *
      * @param bytes malloc size
      * @return void* malloced pointer
@@ -153,30 +175,43 @@ extern "C" {
     void* fcitx_utils_malloc0(size_t bytes);
 
     /**
-     * @brief Get Display number
+     * Get Display number, Fcitx DBus and Socket are identified by display number.
      *
      * @return int
      **/
     int fcitx_utils_get_display_number();
     
     /**
-     * @brief Get current language code, result need to be free'd
+     * Get current language code, result need to be free'd
+     * It will check LC_CTYPE, LC_ALL, LANG, for current language code.
      *
      * @return char*
      **/
     char* fcitx_utils_get_current_langcode();
 
     /**
-     * @brief Get Current Process Name
+     * Get Current Process Name, implementation depends on OS,
+     * Always return a string need to be free'd, if cannot get
+     * current process name, it will return "".
      *
      * @return char*
      **/
     char* fcitx_utils_get_process_name();
     
     /**
-     * @brief Get Fcitx install path, need be free'd
+     * Get Fcitx install path, need be free'd
+     * All possible type includes:
+     * datadir
+     * pkgdatadir
+     * bindir
+     * libdir
+     * localedir
      * 
-     * @param path path type
+     * It's determined at compile time, and can be changed via environment variable: FCITXDIR
+     * 
+     * It will only return NULL while the type is invalid.
+     * 
+     * @param type path type
      * 
      * @return char*
      * 
@@ -185,12 +220,18 @@ extern "C" {
     char* fcitx_utils_get_fcitx_path(const char* type);
     
     /**
-     * @brief Get fcitx install path with file name, need to be free'd
+     * Get fcitx install path with file name, need to be free'd
      * 
-     * @param path path type
+     * It's just simply return the path/filename string.
+     * 
+     * It will only return NULL while the type is invalid.
+     * 
+     * @param type path type
      * @param filename filename
      * 
      * @return char*
+     * 
+     * @see fcitx_utils_get_fcitx_path
      * 
      * @since 4.2.1
      */
@@ -201,5 +242,9 @@ extern "C" {
 #endif
 
 #endif
+
+/**
+ * @}
+ */
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

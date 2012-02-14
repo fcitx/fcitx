@@ -22,7 +22,7 @@
  *
  * @date   2009-10-9
  *
- * @brief  皮肤设置相关定义及初始化加载工作
+ *  皮肤设置相关定义及初始化加载工作
  *
  *
  */
@@ -86,7 +86,7 @@ typedef struct _SkinMenu {
 } SkinMenu;
 
 /**
- * @brief The Main Window Skin description
+ * The Main Window Skin description
  **/
 typedef struct _SkinMainBar {
     char* backImg;
@@ -130,16 +130,16 @@ typedef struct _SkinPlacement {
 } SkinPlacement;
 
 /**
- * @brief Tray Icon Image
+ * Tray Icon Image
  **/
 typedef struct _SkinTrayIcon {
     /**
-     * @brief Active Tray Icon Image
+     * Active Tray Icon Image
      **/
     char* active;
 
     /**
-     * @brief Inactive Tray Icon Image
+     * Inactive Tray Icon Image
      **/
     char* inactive;
 } SkinTrayIcon;

@@ -44,9 +44,6 @@ typedef enum _SHUANGPINSCHEME {
 
 typedef struct _FcitxPinyinConfig {
     FcitxGenericConfig gconfig;
-    /* py config */
-    int iPinyinPriority;
-    int iShuangpinPriority;
 
     SHUANGPINSCHEME spscheme;
     boolean bFullPY;

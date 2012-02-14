@@ -20,7 +20,7 @@
 /**
  * @file   ui-internal.h
  *
- * @brief  Private Header for UI
+ *  Private Header for UI
  *
  */
 
@@ -31,14 +31,14 @@
 #include "fcitx/instance.h"
 
 /**
- * @brief real input window updates, will trigger user interface module to redraw
+ * real input window updates, will trigger user interface module to redraw
  *
  * @param instance fcitx instance
  * @return void
  **/
 void FcitxUIUpdateInputWindowReal(FcitxInstance *instance);
 /**
- * @brief real move input window, will trigger user interface module to move
+ * real move input window, will trigger user interface module to move
  *
  * @param instance fcitx instance
  * @return void

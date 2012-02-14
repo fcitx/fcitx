@@ -24,7 +24,7 @@
 struct _FcitxPinyinConfig;
 
 /**
- * @brief ...
+ * ...
  **/
 typedef struct _MHPY_TEMPLATE {
     char           strMap[3];

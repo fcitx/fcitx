@@ -47,7 +47,7 @@ typedef enum _HIDE_MAINWINDOW {
 } HIDE_MAINWINDOW;
 
 /**
- * @brief Config and Global State for Classic UI
+ * Config and Global State for Classic UI
  **/
 typedef struct _FcitxClassicUI {
     FcitxGenericConfig gconfig;
