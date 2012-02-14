@@ -18,6 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_UI_H_
 #define _FCITX_UI_H_
 
@@ -32,13 +37,9 @@
 extern "C" {
 #endif
 
-#define INPUTWND_START_POS_DOWN 8
 #define MESSAGE_MAX_CHARNUM (150)   //输入条上显示的最长字数
 
 #define MESSAGE_MAX_LENGTH  (MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)   //输入条上显示的最长长度，以字符计
-
-    /* 将输入条上显示的内容分为以下几类 */
-#define MESSAGE_TYPE_COUNT  7
 
 #define MAX_MESSAGE_COUNT 64
 
@@ -81,7 +82,7 @@ extern "C" {
          **/
         struct _FcitxUIMenu *subMenu;
         
-        int padding[16];
+        int padding[16]; /**< padding */
     };
 
     /**
@@ -127,7 +128,7 @@ extern "C" {
          **/
         int mark;
         
-        int padding[16];
+        int padding[16]; /**< padding */
     };
 
     /**
@@ -167,7 +168,7 @@ extern "C" {
          */
         boolean visible;
         
-        int padding[16];
+        int padding[16]; /**< padding */
     };
 
     typedef enum _FcitxUIFlag {
@@ -264,10 +265,10 @@ extern "C" {
          */
         void (*Resume)(void*);
 
-        void (*Destroy)(void*);
-        void (*padding1)(void*);
-        void (*padding2)(void*);
-        void (*padding3)(void*);
+        void (*Destroy)(void*); /**< destroy user interface addon */
+        void (*padding1)(void*); /**< padding */
+        void (*padding2)(void*); /**< padding */
+        void (*padding3)(void*); /**< padding */
     } FcitxUI;
 
     /**
@@ -617,8 +618,21 @@ extern "C" {
      **/
     void FcitxUIResumeFromFallback(struct _FcitxInstance* instance);
 
+    /**
+     * checkk a user interface is fallback or not
+     *
+     * @param instance fcitx instance
+     * @param addon addon
+     * @return boolean
+     **/
     boolean FcitxUIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon);
 
+    /**
+     * initialize a menu pointer
+     *
+     * @param menu menu
+     * @return void
+     **/
     void FcitxMenuInit(FcitxUIMenu* menu);
 
 #ifdef __cplusplus
@@ -626,5 +640,9 @@ extern "C" {
 #endif
 
 #endif
+
+/**
+ * @}
+ */
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

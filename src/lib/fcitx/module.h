@@ -18,6 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_MODULE_H
 #define _FCITX_MODULE_H
 #include <fcitx-config/fcitx-config.h>
@@ -104,9 +109,11 @@ extern "C" {
      **/
     void* FcitxModuleInvokeFunctionByName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
 
+/** call a function provides by other addon */
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
 
+/** add a function to current addon */
 #define AddFunction(ADDON, Realname) \
     do { \
         void *temp = Realname; \
@@ -118,4 +125,7 @@ extern "C" {
 #endif
 
 #endif
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

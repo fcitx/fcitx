@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 /**
+ * @addtogroup Fcitx
+ * @{
+ */
+
+/**
  * @file hook.h
  * Register function to be called automatically.
  */
@@ -104,8 +109,8 @@ extern "C" {
      * IME Event hook for Reset, Trigger On/Off, Focus/Unfocus
      **/
     typedef struct _FcitxIMEventHook {
-        FcitxIMEventHookFunc func;
-        void *arg;
+        FcitxIMEventHookFunc func; /**< callback function */
+        void *arg; /**< argument for callback */
     } FcitxIMEventHook;
 
     /**
@@ -234,4 +239,7 @@ extern "C" {
 #endif
 
 #endif
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

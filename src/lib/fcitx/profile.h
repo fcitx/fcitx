@@ -18,6 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_PROFILE_H_
 #define _FCITX_PROFILE_H_
 
@@ -97,4 +102,7 @@ extern "C" {
 
 #endif
 
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

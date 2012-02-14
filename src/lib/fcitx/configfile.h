@@ -17,6 +17,13 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+
+
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_CONFIGFILE_H_
 #define _FCITX_CONFIGFILE_H_
 
@@ -205,10 +212,10 @@ extern "C" {
          **/
         boolean bIMSwitchKey;
         
-        boolean firstAsInactive;
+        boolean firstAsInactive; /**< use first input method as inactive state */
 
-        FcitxContextState _defaultIMState;
-        int padding[61];
+        FcitxContextState _defaultIMState; /**< default input method state */
+        int padding[61]; /**< padding */
     } FcitxGlobalConfig;
 
     /**
@@ -232,4 +239,7 @@ extern "C" {
 
 #endif
 
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

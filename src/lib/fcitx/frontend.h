@@ -18,6 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_FRONTEND_H_
 #define _FCITX_FRONTEND_H_
 
@@ -48,48 +53,40 @@ extern "C" {
         CAPACITY_PREEDIT = (1 << 1),
         CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2)
     } FcitxCapacityFlags;
-    
-    /**
-     * queued key event
-     **/
-    typedef struct _FcitxKeyEvent {
-        int frontendid;
-        void* event;
-        uint64_t sequenceId;
-    } FcitxKeyEvent;
 
     /**
      * Input Context, normally one for one program
      **/
     typedef struct _FcitxInputContext {
-        FcitxContextState state; /* im state */
-        int offset_x, offset_y;
-        int frontendid;
-        void *privateic;
-        FcitxCapacityFlags contextCaps;
-        struct _FcitxInputContext* next;
+        FcitxContextState state; /**< input method state */
+        int offset_x; /**< x offset to the window */
+        int offset_y; /**< y offset to the window */
+        int frontendid; /**< frontend id */
+        void *privateic; /**< private input context data */
+        FcitxCapacityFlags contextCaps; /**< input context capacity */
+        struct _FcitxInputContext* next; /**< next input context */
     } FcitxInputContext;
 
     /**
      * Program IM Module Frontend
      **/
     typedef struct _FcitxFrontend {
-        void* (*Create)(struct _FcitxInstance*, int frontendindex);
-        boolean(*Destroy)(void *arg);
-        void (*CreateIC)(void* arg, FcitxInputContext*, void* priv);
-        boolean(*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2);
-        void (*DestroyIC)(void* arg, FcitxInputContext *context);
-        void (*EnableIM)(void* arg, FcitxInputContext* arg1);
-        void (*CloseIM)(void* arg, FcitxInputContext* arg1);
-        void (*CommitString)(void* arg, FcitxInputContext* arg1, char* arg2);
-        void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
-        void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y);
-        void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y);
-        void (*UpdatePreedit)(void* arg, FcitxInputContext* ic);
-        void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic);
-        void (*ReloadConfig)(void* arg);
-        boolean(*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
-        void (*padding4)();
+        void* (*Create)(struct _FcitxInstance*, int frontendindex); /**< frontend create callback */
+        boolean(*Destroy)(void *arg); /**< frontend destroy callback */
+        void (*CreateIC)(void* arg, FcitxInputContext*, void* priv); /**< frontend create input context callback */
+        boolean(*CheckIC)(void* arg, FcitxInputContext* arg1, void* arg2); /**< frontend check context with private value callback */
+        void (*DestroyIC)(void* arg, FcitxInputContext *context); /**< frontend destroy input context callback */
+        void (*EnableIM)(void* arg, FcitxInputContext* arg1); /**< frontend enable input method to client callback */
+        void (*CloseIM)(void* arg, FcitxInputContext* arg1); /**< frontend close input method to client callback */
+        void (*CommitString)(void* arg, FcitxInputContext* arg1, char* arg2); /**< frontend commit string callback */
+        void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state); /**< frontend forward key callback */
+        void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y); /**< frontend set window offset callback */
+        void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y); /**< frontend get window position callback */
+        void (*UpdatePreedit)(void* arg, FcitxInputContext* ic); /**< frontend update preedit callback */
+        void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic); /**< frontend update client side user interface callback */
+        void (*ReloadConfig)(void* arg); /**< frontend reload config callback */
+        boolean(*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic); /**< frontend check input context from same application callback */
+        void (*padding4)(); /**< padding */
     } FcitxFrontend;
 
     /**
@@ -98,7 +95,7 @@ extern "C" {
      * @param  frontends array
      * @return void
      **/
-    void FcitxFrontendsInit(UT_array*);
+    void FcitxFrontendsInit(UT_array* frontends);
 
     /**
      * Find Input Context By Frontend Specific filter
@@ -229,4 +226,7 @@ extern "C" {
 #endif
 
 #endif
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

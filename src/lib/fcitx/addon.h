@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 /**
+ * @addtogroup Fcitx
+ * @{
+ */
+
+/**
  * @file addon.h
  * Header Addon Support for fcitx
  * @author CSSlayer wengxt@gmail.com
@@ -94,15 +99,15 @@ extern "C" {
             struct _FcitxIMClass* imclass;
             struct _FcitxUI* ui;
         };
-        void *addonInstance;
-        UT_array functionList;
+        void *addonInstance; /**< addon private pointer */
+        UT_array functionList; /**< addon exposed function */
 
-        IMRegisterMethod registerMethod;
-        char* registerArgument;
-        char* uifallback;
-        struct _FcitxInstance* owner;
+        IMRegisterMethod registerMethod; /**< the input method register method */
+        char* registerArgument; /**< extra argument for register, unused for now */
+        char* uifallback; /**< if's a user interface addon, the fallback UI addon name */
+        struct _FcitxInstance* owner; /**< upper pointer to instance */
 
-        void* padding[9];
+        void* padding[9]; /**< padding */
     } FcitxAddon;
 
     /**
@@ -164,4 +169,7 @@ extern "C" {
 
 #endif
 
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

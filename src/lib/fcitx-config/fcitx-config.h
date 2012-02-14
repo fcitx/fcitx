@@ -168,15 +168,15 @@ extern "C"
      * The value of config
      **/
     typedef union _FcitxConfigValueType {
-        void *untype;
-        int *integer;
-        boolean *boolvalue;
+        void *untype; /**< simple pointer */
+        int *integer; /**< pointer to integer */
+        boolean *boolvalue; /**< pointer to boolean */
 
-        struct _FcitxHotkey *hotkey;
-        FcitxConfigColor *color;
-        int *enumerate;
-        char **string;
-        char *chr;
+        struct _FcitxHotkey *hotkey; /**< pointer to two hotkeys */
+        FcitxConfigColor *color; /**< pointer to color */
+        int *enumerate; /**< pointer to enum */
+        char **string; /**< pointer to string */
+        char *chr; /**< pointer to char */
     } FcitxConfigValueType;
 
     typedef struct _FcitxConfigGroup FcitxConfigGroup; /**< FcitxConfigGroup */
@@ -210,20 +210,20 @@ extern "C"
      * Config file contains multiple config groups, and the opposite config file description
      **/
     typedef struct _FcitxConfigFile {
-        FcitxConfigFileDesc *fileDesc;
-        FcitxConfigGroup* groups;
+        FcitxConfigFileDesc *fileDesc; /**< configuration file description */
+        FcitxConfigGroup* groups; /**< contained group */
     } FcitxConfigFile;
 
 
     /**
      * A generic config struct, config struct can derive from it.
-     *        Like: <br>
-     *        struct TestConfig { <br>
-     *            FcitxGenericConfig gconfig; <br>
-     *            int own_value; <br>
+     * @code
+     *        struct TestConfig {
+     *            FcitxGenericConfig gconfig;
+     *            int own_value;
      *        };
+     * @endcode
      **/
-
     struct _FcitxGenericConfig {
         /**
          * config file pointer
@@ -234,15 +234,14 @@ extern "C"
     /**
      * Config Option Description, it describe a Key=Value entry in config file.
      **/
-
     struct _FcitxConfigOptionDesc {
-        char *optionName;
-        char *desc;
-        FcitxConfigType type;
-        char *rawDefaultValue;
-        FcitxConfigEnum configEnum;
+        char *optionName; /**< option name */
+        char *desc; /**< optiont description string, user visible */
+        FcitxConfigType type; /**< value type */
+        char *rawDefaultValue; /**< raw string default value */
+        FcitxConfigEnum configEnum; /**< if type is enum, the enum item info */
 
-        UT_hash_handle hh;
+        UT_hash_handle hh; /**< hash handle */
     };
 
     /**
@@ -259,8 +258,8 @@ extern "C"
      * Description of a config file
      **/
     struct _FcitxConfigFileDesc {
-        FcitxConfigGroupDesc *groupsDesc;
-        char* domain;
+        FcitxConfigGroupDesc *groupsDesc; /**< group description */
+        char* domain; /**< domain for translation */
     };
 
     /**
@@ -280,17 +279,15 @@ extern "C"
     /**
      * Config Option subkey in config file, Key[Subkey]=Value entry
      **/
-
     struct _FcitxConfigOptionSubkey {
-        char *subkeyName;
-        char *rawValue;
-        UT_hash_handle hh;
+        char *subkeyName; /**< subkey name */
+        char *rawValue; /**< subkey raw value */
+        UT_hash_handle hh; /**< hash handle */
     };
 
     /**
      * Config group in config file, [Group] Entry
      **/
-
     struct _FcitxConfigGroup {
         /**
          * Group Name, unique in FcitxConfigFile

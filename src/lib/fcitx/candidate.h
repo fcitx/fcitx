@@ -18,6 +18,17 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
+/**
+ * @file candidate.h
+ * 
+ * Fcitx candidate word list related definition and function
+ */
+
 #ifndef FCITX_CANDIDATE_H
 #define FCITX_CANDIDATE_H
 #include <fcitx-utils/utarray.h>
@@ -28,9 +39,16 @@
 extern "C" {
 #endif
 
+/** max candidate word number for single page */
+#define MAX_CAND_WORD    10
+
     struct _FcitxCandidateWord;
     struct _FcitxCandidateWordList;
+    
+    /** fcitx candidate workd list */
+    typedef struct _FcitxCandidateWordList FcitxCandidateWordList;
 
+    /** callback for a single candidate word being chosen */
     typedef INPUT_RETURN_VALUE(*FcitxCandidateWordCommitCallback)(void* arg, struct _FcitxCandidateWord* candWord);
 
     /**
@@ -300,6 +318,7 @@ extern "C" {
      **/
     FcitxCandidateWord* FcitxCandidateWordGetNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
+/** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"
 
 #ifdef __cplusplus
@@ -307,4 +326,7 @@ extern "C" {
 #endif
 
 #endif
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

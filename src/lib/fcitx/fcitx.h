@@ -17,6 +17,12 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
@@ -25,6 +31,13 @@
  * fcitx is a lightweight Input Method Framework, written by C.
  * It can be used under X11 to support international input.
  *
+ */
+
+/**
+ * @defgroup Fcitx Fcitx
+ * 
+ * All fcitx core related function, including addon process, mainloop,
+ * user interface, and all misc stuff needed by fcitx.
  */
 
 /**
@@ -57,4 +70,7 @@ extern "C" {
 
 #endif/*_FCITX_H_*/
 
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -19,6 +19,11 @@
  ***************************************************************************/
 
 /**
+ * @addtogroup Fcitx
+ * @{
+ */
+
+/**
  * @file   ime.h
  * @author Yuking yuking_net@sohu.com
  * @date   2008-1-16
@@ -40,18 +45,18 @@
 extern "C" {
 #endif
 
-#define MAX_CODE_LEN    63
-
-#define MAX_CAND_LEN    127
-#define MAX_TIPS_LEN    9
-
-#define MAX_CAND_WORD    10
+/** max length of rawInputBuffer and outputString */
 #define MAX_USER_INPUT    300
 
+/** FcitxHotkey internally use 2 hotkeys for everycase */
 #define HOT_KEY_COUNT   2
 
+/** max language code length, common 5 length is zh_CN
+ * a shorter case is en
+ */
 #define LANGCODE_LENGTH 5
 
+/** when input method priority is larger than 100, it will be disabled by default after install */
 #define PRIORITY_DISABLE 100
 
     struct _FcitxInputContext;
@@ -98,8 +103,8 @@ extern "C" {
      *        method in create function
      **/
     typedef struct _FcitxIMClass {
-        void* (*Create)(struct _FcitxInstance* instance);
-        void  (*Destroy)(void *arg);
+        void* (*Create)(struct _FcitxInstance* instance); /**< interface for create a input method */
+        void  (*Destroy)(void *arg); /**< interface for destroy all input method created by this class */
     } FcitxIMClass;
 
     typedef boolean(*FcitxIMInit)(void *arg); /**< FcitxIMInit */
@@ -152,7 +157,7 @@ extern "C" {
          **/
         FcitxIMReloadConfig ReloadConfig;
 
-        void* unused;
+        void* unused; /**< unused */
         /**
          * the pointer to im class
          **/
@@ -185,7 +190,7 @@ extern "C" {
          **/
         FcitxIMKeyBlocker KeyBlocker;
 
-        void* padding[10];
+        void* padding[10]; /**< padding */
     } FcitxIM;
 
     /** a key event is press or release */
@@ -200,7 +205,7 @@ extern "C" {
     typedef struct _FcitxInputState FcitxInputState;
 
     /**
-     * @brief create a new input state
+     * create a new input state
      *
      * @return FcitxInputState*
      **/
@@ -430,52 +435,206 @@ extern "C" {
      **/
     int FcitxInstanceGetIMIndexByName(struct _FcitxInstance* instance, const char* imName);
 
+    /**
+     * ...
+     *
+     * @param input ...
+     * @return _FcitxCandidateWordList*
+     **/
     struct _FcitxCandidateWordList* FcitxInputStateGetCandidateList(FcitxInputState* input);
 
+    /**
+     * get current is in remind or not.
+     *
+     * @param input input state
+     * @return remind state
+     **/
     boolean FcitxInputStateGetIsInRemind(FcitxInputState* input);
 
+    /**
+     * set remind state
+     *
+     * @param input input state
+     * @param isInRemind remind state
+     * @return void
+     **/
     void FcitxInputStateSetIsInRemind(FcitxInputState* input, boolean isInRemind);
 
+    /**
+     * get current key will be only processed by DoInput or not.
+     *
+     * @param input input state
+     * @return DoInput Only state
+     **/
     boolean FcitxInputStateGetIsDoInputOnly(FcitxInputState* input);
 
+    /**
+     * set current key will be only processed by DoInput or not.
+     *
+     * @param input input state
+     * @param isDoInputOnly DoInput Only state
+     * @return void
+     **/
     void FcitxInputStateSetIsDoInputOnly(FcitxInputState* input, boolean isDoInputOnly);
 
+    /**
+     * get a writable raw input buffer, which is used as a hint for other module
+     *
+     * @param input input state
+     * @return char*
+     **/
     char* FcitxInputStateGetRawInputBuffer(FcitxInputState* input);
 
+    /**
+     * get current cursor position, offset is counted by byte in Preedit String
+     *
+     * @param input input state
+     * @return current cursor position
+     **/
     int FcitxInputStateGetCursorPos(FcitxInputState* input);
 
+    /**
+     * set current cursor position, offset is counted by byte in Preedit String
+     *
+     * @param input input state
+     * @param cursorPos current cursor position
+     * @return void
+     **/
     void FcitxInputStateSetCursorPos(FcitxInputState* input, int cursorPos);
 
+    /**
+     * get client cursor position, which is similar to cursor position, but used with client preedit
+     *
+     * @param input input state
+     * @return current client cursor position
+     **/
     int FcitxInputStateGetClientCursorPos(FcitxInputState* input);
 
+    /**
+     * set client cursor position, which is similar to cursor position, but used with client preedit
+     *
+     * @param input input state
+     * @param cursorPos current client cursor position
+     * @return void
+     **/
     void FcitxInputStateSetClientCursorPos(FcitxInputState* input, int cursorPos);
 
+    /**
+     * get auxiliary string displayed in the upper side of input panel
+     *
+     * @param input input state
+     * @return upper auxiliary string
+     **/
     FcitxMessages* FcitxInputStateGetAuxUp(FcitxInputState* input);
 
+    /**
+     * get auxiliary string displayed in the lower side of input panel
+     *
+     * @param input input state
+     * @return lower auxiliary string
+     **/
     FcitxMessages* FcitxInputStateGetAuxDown(FcitxInputState* input);
 
+    /**
+     * get preedit string which will be displayed in the input panel with a cursor
+     *
+     * @param input input state
+     * @return preedit string
+     **/
     FcitxMessages* FcitxInputStateGetPreedit(FcitxInputState* input);
 
+    /**
+     * get preedit string which will be displayed in the client window with a cursor
+     *
+     * @param input input state
+     * @return client preedit string
+     **/
     FcitxMessages* FcitxInputStateGetClientPreedit(FcitxInputState* input);
 
+    /**
+     * get current raw input buffer size
+     *
+     * @param input input state
+     * @return raw input buffer size
+     **/
     int FcitxInputStateGetRawInputBufferSize(FcitxInputState* input);
 
+    /**
+     * set current raw input buffer size
+     *
+     * @param input input state
+     * @param size raw input buffer size
+     * @return void
+     **/
     void FcitxInputStateSetRawInputBufferSize(FcitxInputState* input, int size);
 
+    /**
+     * get cursor is visible or not
+     *
+     * @param input input state
+     * @return cursor visibility
+     **/
     boolean FcitxInputStateGetShowCursor(FcitxInputState* input);
 
+    /**
+     * set cursor is visible or not
+     *
+     * @param input input state
+     * @param showCursor cursor visibility
+     * @return void
+     **/
     void FcitxInputStateSetShowCursor(FcitxInputState* input, boolean showCursor);
 
+    /**
+     * get last char is single char or not
+     *
+     * @param input input state
+     * @return int
+     **/
     int FcitxInputStateGetLastIsSingleChar(FcitxInputState* input);
 
+    /**
+     * set last char is single char or not
+     *
+     * @param input input state
+     * @param lastIsSingleChar ...
+     * @return void
+     **/
     void FcitxInputStateSetLastIsSingleChar(FcitxInputState* input, int lastIsSingleChar);
     
+    /**
+     * set keycode for current key event
+     *
+     * @param input input state
+     * @param value keycode
+     * @return void
+     **/
     void FcitxInputStateSetKeyCode( FcitxInputState* input, uint32_t value );
     
+    /**
+     * get keycode for current key event
+     *
+     * @param input input state
+     * @return uint32_t
+     **/
     uint32_t FcitxInputStateGetKeyCode( FcitxInputState* input);
 
+    /**
+     * get input method from input method list by name
+     *
+     * @param instance fcitx instance
+     * @param imas from available list or full list
+     * @param name input method name
+     * @return input method pointer
+     **/
     FcitxIM* FcitxInstanceGetIMFromIMList(struct _FcitxInstance* instance, FcitxIMAvailableStatus imas, const char* name);
 
+    /**
+     * update current input method list
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
     void FcitxInstanceUpdateIMList(struct _FcitxInstance* instance);
 
 #ifdef __cplusplus
@@ -484,4 +643,7 @@ extern "C" {
 
 #endif
 
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

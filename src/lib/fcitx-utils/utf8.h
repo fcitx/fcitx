@@ -55,7 +55,7 @@ extern "C" {
 size_t fcitx_utf8_strlen(const char *s);
 
 /**
- * @brief get next char in the utf8 string
+ * get next char in the utf8 string
  *
  * @param in string
  * @param chr return unicode
@@ -75,7 +75,7 @@ char*  fcitx_utf8_get_char(const char *in, int *chr);
 int    fcitx_utf8_strncmp(const char *s1, const char *s2, int n);
 
 /**
- * @brief get next character length
+ * get next character length
  *
  * @param in string
  * @return length
@@ -83,7 +83,7 @@ int    fcitx_utf8_strncmp(const char *s1, const char *s2, int n);
 int    fcitx_utf8_char_len(const char *in);
 
 /**
- * @brief next pointer to the nth character, n start with 0
+ * next pointer to the nth character, n start with 0
  *
  * @param s string
  * @param n index

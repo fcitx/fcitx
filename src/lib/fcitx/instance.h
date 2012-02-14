@@ -17,6 +17,12 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+
+/**
+ * @addtogroup Fcitx
+ * @{
+ */
+
 #ifndef __FCITX_INSTANCE_H__
 #define __FCITX_INSTANCE_H__
 
@@ -147,4 +153,7 @@ extern "C" {
 #endif
 
 #endif
+/**
+ * @}
+ */
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

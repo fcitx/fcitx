@@ -20,13 +20,13 @@
 
 #include "candidate.h"
 
-typedef struct _FcitxCandidateWordList {
+struct _FcitxCandidateWordList {
     UT_array candWords;
     char strChoose[MAX_CAND_WORD + 1];
     unsigned int candiateModifier;
     int currentPage;
     int wordPerPage;
-} FcitxCandidateWordList;
+};
 
 const UT_icd cand_icd = { sizeof(FcitxCandidateWord), NULL, NULL, FcitxCandidateWordFree };
 
