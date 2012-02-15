@@ -155,6 +155,7 @@ char* FcitxInstanceProcessCommitFilter(FcitxInstance* instance, char *in)
                 out = NULL;
             }
             out = newout;
+            in = out;
         }
         stack = stack->next;
     }

@@ -68,6 +68,10 @@ char* ProcessFullWidthChar(void* arg, const char* str);
 static void ToggleFullWidthState(void *arg);
 static boolean GetFullWidthState(void *arg);
 static INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void *arg);
+static boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
+                              unsigned int state,
+                              INPUT_RETURN_VALUE *retval
+                             );
 
 typedef struct _FcitxFullWidthChar {
     FcitxInstance* owner;
@@ -93,8 +97,12 @@ void* FullWidthCharCreate(FcitxInstance* instance)
     FcitxStringFilterHook hk;
     hk.arg = fwchar;
     hk.func = ProcessFullWidthChar;
-
     FcitxInstanceRegisterCommitFilter(instance, hk);
+
+    FcitxKeyFilterHook phk;
+    phk.arg = fwchar;
+    phk.func = FullWidthPostFilter;
+    FcitxInstanceRegisterPostInputFilter(instance, phk);
 
     FcitxHotkeyHook hotkey;
     hotkey.hotkey = config->hkFullWidthChar;
@@ -107,6 +115,25 @@ void* FullWidthCharCreate(FcitxInstance* instance)
 
     return fwchar;
 }
+
+boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
+                              unsigned int state,
+                              INPUT_RETURN_VALUE *retval
+                             )
+{
+    FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
+    FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
+    if (*retval != IRV_TO_PROCESS)
+        return false;
+
+    if (profile->bUseFullWidthChar && FcitxHotkeyIsHotKeySimple(sym, state)) {
+        sprintf(FcitxInputStateGetOutputString(FcitxInstanceGetInputState(fwchar->owner)), "%s", sCornerTrans[sym - 32]);
+        *retval = IRV_COMMIT_STRING;
+        return true;
+    }
+    return false;
+}
+
 
 char* ProcessFullWidthChar(void* arg, const char* str)
 {
