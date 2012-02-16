@@ -1,0 +1,10 @@
+[QuickPhrase/QuickPhraseTriggerKey]
+Type=Enum
+DefaultValue=Semicolon
+EnumCount=2
+Enum0=Semicolon
+Enum1=Grave
+Description=Trigger Key for QuickPhrase
+
+[DescriptionFile]
+LocaleDomain=fcitx

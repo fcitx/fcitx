@@ -37,9 +37,11 @@
 extern "C" {
 #endif
 
-#define MESSAGE_MAX_CHARNUM (150)   //输入条上显示的最长字数
+#define MESSAGE_TYPE_COUNT 7
 
-#define MESSAGE_MAX_LENGTH  (MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)   //输入条上显示的最长长度，以字符计
+#define MESSAGE_MAX_CHARNUM (150)   /**< Maximum length per-message */
+
+#define MESSAGE_MAX_LENGTH  (MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)   /**< maximum byte per message */
 
 #define MAX_MESSAGE_COUNT 64
 
