@@ -54,7 +54,6 @@ static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* 
 static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
-static inline Bool MyStrcmp(char *str1, char *str2);
 
 static XIMStyle OverTheSpot_Styles[] = {
     XIMPreeditPosition | XIMStatusArea, //OverTheSpot
@@ -113,11 +112,6 @@ static XIMEncoding zhEncodings[] = {
 };
 
 char strLocale[201] = "zh_CN.GB18030,zh_CN.GB2312,zh_CN,zh_CN.GBK,zh_CN.UTF-8,zh_CN.UTF8,en_US.UTF-8,en_US.UTF8";
-
-Bool MyStrcmp(char *str1, char *str2)
-{
-    return !strncmp(str1, str2, strlen(str2));
-}
 
 void* XimCreate(FcitxInstance* instance, int frontendid)
 {

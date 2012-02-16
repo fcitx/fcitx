@@ -134,7 +134,7 @@ int fcitx_utf8_strncmp(const char *s1, const char *s2, int n)
     int i;
 
     for (i = 0; i < n; i++) {
-        if (!(*s1 && 0x80)) {
+        if (!(*s1 & 0x80)) {
             if (*s1 != *s2)
                 return 1;
 
