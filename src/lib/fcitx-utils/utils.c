@@ -361,7 +361,7 @@ char* fcitx_utils_get_fcitx_path(const char* type)
     }
     else if (strcmp(type, "pkgdatadir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/" PACKAGE "/share", fcitxdir);
+            asprintf(&result, "%s/share/" PACKAGE, fcitxdir);
         }
         else
             result = strdup(PKGDATADIR);
