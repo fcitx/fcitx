@@ -439,12 +439,19 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     input->keyReleased = KR_OTHER;
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
                     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
-                        if (input->keyReleased == KR_CTRL_SHIFT)
+                        if (input->keyReleased == KR_SWITCH_IM)
                             FcitxInstanceSwitchIM(instance, -1);
                     } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
                             FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                     }
-                } else if (FcitxHotkeyIsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_CTRL && !fc->bDoubleSwitchKey) {
+                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_RCTRL_RSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_RCTRL_RSHIFT2))) {
+                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
+                        if (input->keyReleased == KR_SWITCH_IM_REVERSE)
+                            FcitxInstanceSwitchIM(instance, -2);
+                    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
+                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    }
+                } else if (FcitxHotkeyIsHotKey(sym, state, fc->switchKey) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
                     if (fc->bSendTextWhenSwitchEng) {
                         if (input->iCodeInputCount != 0) {
@@ -487,7 +494,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             if (!FcitxHotkeyIsHotKey(sym, state, fc->switchKey))
                 input->keyReleased = KR_OTHER;
             else {
-                if ((input->keyReleased == KR_CTRL)
+                if ((input->keyReleased == KR_SWITCH)
                         && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
                         && fc->bDoubleSwitchKey) {
                     FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));
@@ -496,10 +503,13 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             }
 
             if (FcitxHotkeyIsHotKey(sym, state, fc->switchKey)) {
-                input->keyReleased = KR_CTRL;
+                input->keyReleased = KR_SWITCH;
                 retVal = IRV_DO_NOTHING;
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
-                input->keyReleased = KR_CTRL_SHIFT;
+                input->keyReleased = KR_SWITCH_IM;
+                retVal = IRV_DO_NOTHING;
+            } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_RCTRL_RSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_RCTRL_RSHIFT2))) {
+                input->keyReleased = KR_SWITCH_IM_REVERSE;
                 retVal = IRV_DO_NOTHING;
             } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
@@ -699,9 +709,14 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
 
     if (index >= iIMCount)
         instance->iIMIndex = iIMCount - 1;
-    else if (index < -1)
+    else if (index < -2)
         instance->iIMIndex = 0;
-    else if (index == -1) {
+    else if (index == -2) {
+        if (instance->iIMIndex > 0)
+            instance->iIMIndex--;
+        else
+            instance->iIMIndex = iIMCount - 1;
+    } else if (index == -1) {
         if (instance->iIMIndex >= (iIMCount - 1))
             instance->iIMIndex = 0;
         else

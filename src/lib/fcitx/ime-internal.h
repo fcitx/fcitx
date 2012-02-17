@@ -37,10 +37,11 @@ struct _FcitxInstance;
 
 typedef enum _KEY_RELEASED {
     KR_OTHER = 0,
-    KR_CTRL,
+    KR_SWITCH,
     KR_2ND_SELECTKEY,
     KR_3RD_SELECTKEY,
-    KR_CTRL_SHIFT
+    KR_SWITCH_IM,
+    KR_SWITCH_IM_REVERSE
 } KEY_RELEASED;
 
 struct _FcitxInputState {
