@@ -416,7 +416,28 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (event == FCITX_RELEASE_KEY) {
         if (FcitxInstanceGetCurrentState(instance) != IS_CLOSED) {
             if ((timestamp - input->lastKeyPressedTime) < 500 && (!input->bIsDoInputOnly)) {
-                if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
+                if ((input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0)
+                    && FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey)
+                    && input->keyReleased == KR_2ND_SELECTKEY) {
+                    if (!input->bIsInRemind) {
+                        retVal = FcitxCandidateWordChooseByIndex(input->candList, 1);
+                    } else {
+                        strcpy(FcitxInputStateGetOutputString(input), " ");
+                        retVal = IRV_COMMIT_STRING;
+                    }
+                    input->keyReleased = KR_OTHER;
+                } else if ((input->bIsInRemind || FcitxCandidateWordGetPageSize(input->candList) != 0)
+                            && FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey)
+                            && input->keyReleased == KR_3RD_SELECTKEY) {
+                    if (!input->bIsInRemind) {
+                        retVal = FcitxCandidateWordChooseByIndex(input->candList, 2);
+                    } else {
+                        strcpy(FcitxInputStateGetOutputString(input), "\xe3\x80\x80");
+                        retVal = IRV_COMMIT_STRING;
+                    }
+
+                    input->keyReleased = KR_OTHER;
+                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT) || FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT2))) {
                     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
                         if (input->keyReleased == KR_CTRL_SHIFT)
                             FcitxInstanceSwitchIM(instance, -1);
@@ -435,23 +456,6 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE)
                         FcitxInstanceShowInputSpeed(instance);
                     FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
-                } else if (FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey) && input->keyReleased == KR_2ND_SELECTKEY) {
-                    if (!input->bIsInRemind) {
-                        retVal = FcitxCandidateWordChooseByIndex(input->candList, 1);
-                    } else {
-                        strcpy(FcitxInputStateGetOutputString(input), " ");
-                        retVal = IRV_COMMIT_STRING;
-                    }
-                    input->keyReleased = KR_OTHER;
-                } else if (FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey) && input->keyReleased == KR_3RD_SELECTKEY) {
-                    if (!input->bIsInRemind) {
-                        retVal = FcitxCandidateWordChooseByIndex(input->candList, 2);
-                    } else {
-                        strcpy(FcitxInputStateGetOutputString(input), "　");
-                        retVal = IRV_COMMIT_STRING;
-                    }
-
-                    input->keyReleased = KR_OTHER;
                 }
             }
         }
@@ -468,6 +472,18 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (retVal == IRV_TO_PROCESS) {
         /* process key event for switch key */
         if (event == FCITX_PRESS_KEY) {
+            input->lastKeyPressedTime = timestamp;
+            if (FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey)) {
+                if (FcitxCandidateWordGetByIndex(input->candList, 1) != NULL) {
+                    input->keyReleased = KR_2ND_SELECTKEY;
+                    return IRV_DO_NOTHING;
+                }
+            } else if (FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey)) {
+                if (FcitxCandidateWordGetByIndex(input->candList, 2) != NULL) {
+                    input->keyReleased = KR_3RD_SELECTKEY;
+                    return IRV_DO_NOTHING;
+                }
+            }
             if (!FcitxHotkeyIsHotKey(sym, state, fc->switchKey))
                 input->keyReleased = KR_OTHER;
             else {
@@ -479,7 +495,6 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                 }
             }
 
-            input->lastKeyPressedTime = timestamp;
             if (FcitxHotkeyIsHotKey(sym, state, fc->switchKey)) {
                 input->keyReleased = KR_CTRL;
                 retVal = IRV_DO_NOTHING;
@@ -511,18 +526,6 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         }
 
         if (retVal == IRV_TO_PROCESS) {
-            if (FcitxHotkeyIsHotKey(sym, state, fc->i2ndSelectKey)) {
-                if (FcitxCandidateWordGetByIndex(input->candList, 1) != NULL) {
-                    input->keyReleased = KR_2ND_SELECTKEY;
-                    return IRV_DO_NOTHING;
-                }
-            } else if (FcitxHotkeyIsHotKey(sym, state, fc->i3rdSelectKey)) {
-                if (FcitxCandidateWordGetByIndex(input->candList, 2) != NULL) {
-                    input->keyReleased = KR_3RD_SELECTKEY;
-                    return IRV_DO_NOTHING;
-                }
-            }
-
             if (!FcitxHotkeyIsHotKey(sym, state, FCITX_LCTRL_LSHIFT) && currentIM) {
                 retVal = currentIM->DoInput(currentIM->klass, sym, state);
             }
