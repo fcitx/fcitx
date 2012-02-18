@@ -181,7 +181,7 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     FcitxKeySym sym;
     XKeyEvent *kev;
     int keyCount;
-    unsigned int state, originstate;
+    uint32_t state;
     char strbuf[STRBUFLEN];
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(xim->owner);
@@ -205,9 +205,10 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     memset(strbuf, 0, STRBUFLEN);
     keyCount = XLookupString(kev, strbuf, STRBUFLEN, &originsym, NULL);
 
-    originstate = kev->state - (kev->state & FcitxKeyState_NumLock) - (kev->state & FcitxKeyState_CapsLock) - (kev->state & FcitxKeyState_ScrollLock);
-    originstate &= FcitxKeyState_UsedMask;
-    FcitxHotkeyGetKey((FcitxKeySym) originsym, originstate, &sym, &state);
+    const uint32_t originstate = kev->state;
+    state = kev->state - (kev->state & FcitxKeyState_NumLock) - (kev->state & FcitxKeyState_CapsLock) - (kev->state & FcitxKeyState_ScrollLock);
+    state &= FcitxKeyState_UsedMask;
+    FcitxHotkeyGetKey((FcitxKeySym) originsym, state, &sym, &state);
     FcitxLog(DEBUG,
              "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%d  keyCount=%d",
              (call_data->event.type == KeyRelease), state, kev->keycode, (int) sym, keyCount);
@@ -231,10 +232,14 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     }
 
     FcitxInputStateSetKeyCode(input, kev->keycode);
+    FcitxInputStateSetKeySym(input, originsym);
+    FcitxInputStateSetKeyState(input, originstate);
     INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(xim->owner, type,
                                            kev->time,
                                            sym, state);
     FcitxInputStateSetKeyCode(input, 0);
+    FcitxInputStateSetKeySym(input, 0);
+    FcitxInputStateSetKeyState(input, 0);
 
     if ((retVal & IRV_FLAG_FORWARD_KEY) || retVal == IRV_TO_PROCESS) {
         XimForwardKeyInternal(xim,

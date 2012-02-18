@@ -612,12 +612,46 @@ extern "C" {
     void FcitxInputStateSetKeyCode( FcitxInputState* input, uint32_t value );
     
     /**
+     * set keysym for current key event
+     *
+     * @param input input state
+     * @param value sym
+     * @return void
+     **/
+    void FcitxInputStateSetKeySym( FcitxInputState* input, uint32_t value );
+
+    /**
+     * set keystate for current key state
+     *
+     * @param input input state
+     * @param value state
+     * @return void
+     **/
+    void FcitxInputStateSetKeyState( FcitxInputState* input, uint32_t state );
+    
+    /**
      * get keycode for current key event
      *
      * @param input input state
      * @return uint32_t
      **/
     uint32_t FcitxInputStateGetKeyCode( FcitxInputState* input);
+    
+    /**
+     * get keysym for current key event
+     *
+     * @param input input state
+     * @return uint32_t
+     **/
+    uint32_t FcitxInputStateGetKeySym( FcitxInputState* input);
+
+    /**
+     * get keystate for current key event
+     *
+     * @param input input state
+     * @return uint32_t
+     **/
+    uint32_t FcitxInputStateGetKeyState( FcitxInputState* input);
 
     /**
      * get input method from input method list by name

@@ -78,7 +78,7 @@ static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y);
-static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t time, FcitxKeyEventType type);
+static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const uint32_t originsym, const uint32_t keycode, const uint32_t originstate, uint32_t t, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 static void IPCGetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCSetPropertyIMList(void* arg, DBusMessageIter* iter);
@@ -584,7 +584,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
     return result;
 }
 
-static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint32_t originsym, uint32_t keycode, uint32_t originstate, uint32_t t, FcitxKeyEventType type)
+static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const uint32_t originsym, const uint32_t keycode, const uint32_t originstate, uint32_t t, FcitxKeyEventType type)
 {
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(ipc->owner);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(ipc->owner);
@@ -597,9 +597,9 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     FcitxKeySym sym;
     unsigned int state;
 
-    originstate = originstate - (originstate & FcitxKeyState_NumLock) - (originstate & FcitxKeyState_CapsLock) - (originstate & FcitxKeyState_ScrollLock);
-    originstate &= FcitxKeyState_UsedMask;
-    FcitxHotkeyGetKey(originsym, originstate, &sym, &state);
+    state = originstate - (originstate & FcitxKeyState_NumLock) - (originstate & FcitxKeyState_CapsLock) - (originstate & FcitxKeyState_ScrollLock);
+    state &= FcitxKeyState_UsedMask;
+    FcitxHotkeyGetKey(originsym, state, &sym, &state);
     FcitxLog(DEBUG,
              "KeyRelease=%d  state=%d  KEYCODE=%d  KEYSYM=%u ",
              (type == FCITX_RELEASE_KEY), state, keycode, sym);
@@ -613,10 +613,14 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, uint3
     }
 
     FcitxInputStateSetKeyCode(input, keycode);
+    FcitxInputStateSetKeySym(input, originsym);
+    FcitxInputStateSetKeyState(input, originstate);
     INPUT_RETURN_VALUE retVal = FcitxInstanceProcessKey(ipc->owner, type,
                                            t,
                                            sym, state);
     FcitxInputStateSetKeyCode(input, 0);
+    FcitxInputStateSetKeySym(input, 0);
+    FcitxInputStateSetKeyState(input, 0);
 
     if (retVal & IRV_FLAG_FORWARD_KEY || retVal == IRV_TO_PROCESS)
         return 0;

@@ -70,8 +70,10 @@ struct _FcitxInputState {
     FcitxMessages* msgClientPreedit;
     
     uint32_t keycode;
+    uint32_t keysym;
+    uint32_t keystate;
 
-    int padding[62];
+    int padding[60];
 };
 
 struct _FcitxIMEntry {

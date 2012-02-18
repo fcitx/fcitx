@@ -2523,6 +2523,15 @@ extern "C"
      * @return boolean
      **/
     boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state);
+
+    /**
+     * is hotkey upper case
+     *
+     * @param sym keyval
+     * @param state keystate
+     * @return boolean
+     **/
+    boolean FcitxHotkeyIsHotKeyCapital(FcitxKeySym sym, int state);
     
     /**
      * hotkey have combine modifier
