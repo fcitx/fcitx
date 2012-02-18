@@ -119,13 +119,14 @@ set(imconfigdir ${pkgdatadir}/inputmethod)
 set(localedir ${CMAKE_INSTALL_PREFIX}/share/locale)
 set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
 
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemPlatformLibDir)
+list(FIND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemCxxLibDir)
+if("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
     set(CMAKE_SKIP_BUILD_RPATH  FALSE)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
     set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-endif("${isSystemDir}" STREQUAL "-1")
+endif("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
 
 # For FcitxMacro
 set(FCITX4_ADDON_INSTALL_DIR ${addondir})
