@@ -304,8 +304,6 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
             *retval = IRV_CLEAN;
-        } else if (FcitxHotkeyIsHotKeyModifierCombine(sym, state)) {
-            return false;
         } else
             *retval = IRV_DO_NOTHING;
         if (*retval == IRV_DISPLAY_MESSAGE) {

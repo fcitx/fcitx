@@ -71,11 +71,17 @@ static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
  * @param retval Return state value
  * @return boolean
  **/
-static boolean ProcessAutoEng(void* arg,
-                              FcitxKeySym sym,
-                              unsigned int state,
-                              INPUT_RETURN_VALUE *retval
-                             );
+static boolean PreInputProcessAutoEng(void* arg,
+                                      FcitxKeySym sym,
+                                      unsigned int state,
+                                      INPUT_RETURN_VALUE *retval
+                                     );
+
+static boolean PostInputProcessAutoEng(void* arg,
+                                      FcitxKeySym sym,
+                                      unsigned int state,
+                                      INPUT_RETURN_VALUE *retval
+                                     );
 
 /**
  * clean the cache while reset input
@@ -129,13 +135,16 @@ void* AutoEngCreate(FcitxInstance *instance)
 
     FcitxKeyFilterHook khk;
     khk.arg = autoEngState;
-    khk.func = ProcessAutoEng;
+    khk.func = PreInputProcessAutoEng;
+
+    FcitxInstanceRegisterPreInputFilter(instance, khk);
+    
+    khk.func = PostInputProcessAutoEng;
+    FcitxInstanceRegisterPostInputFilter(instance, khk);
 
     FcitxIMEventHook rhk;
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
-
-    FcitxInstanceRegisterPreInputFilter(instance, khk);
     FcitxInstanceRegisterResetInputHook(instance, rhk);
     
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_AUTOENG, FCT_Boolean, FCF_ResetOnInputMethodChange);
@@ -144,10 +153,10 @@ void* AutoEngCreate(FcitxInstance *instance)
     return autoEngState;
 }
 
-static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
-                              unsigned int state,
-                              INPUT_RETURN_VALUE *retval
-                             )
+static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
+                                      unsigned int state,
+                                      INPUT_RETURN_VALUE *retval
+                                     )
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
@@ -182,18 +191,6 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
         return true;
     }
     if (FcitxHotkeyIsHotKeySimple(sym, state)) {
-        if (FcitxInputStateGetRawInputBufferSize(input) == 0 && FcitxHotkeyIsHotKeyUAZ(sym, state)) {
-            autoEngState->index = 1;
-            autoEngState->buf[0] = sym;
-            autoEngState->buf[1] = '\0';
-            *retval = IRV_DISPLAY_MESSAGE;
-            FcitxInputStateSetShowCursor(input, false);
-            autoEngState->index = strlen(autoEngState->buf);
-            autoEngState->active = true;
-            ShowAutoEngMessage(autoEngState);
-            return true;
-        }
-
         strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
         if (strlen(autoEngState->buf) >= MAX_USER_INPUT - 1)
             return false;
@@ -213,6 +210,29 @@ static boolean ProcessAutoEng(void* arg, FcitxKeySym sym,
     }
     return false;
 }
+
+boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
+{
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
+    boolean disableCheckUAZ = FcitxInstanceGetContextBoolean(autoEngState->owner, CONTEXT_DISABLE_AUTOENG);
+    if (disableCheckUAZ)
+        return false;
+    if (FcitxHotkeyIsHotKeyUAZ(sym, state)) {
+        *retval = IRV_DISPLAY_MESSAGE;
+        FcitxInputStateSetShowCursor(input, false);
+        strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
+        autoEngState->index = strlen(autoEngState->buf);
+        autoEngState->buf[autoEngState->index ++ ] = sym;
+        autoEngState->buf[autoEngState->index] = '\0';
+        autoEngState->active = true;
+        ShowAutoEngMessage(autoEngState);
+        return true;
+    }
+    
+    return false;
+}
+
 
 void ResetAutoEng(void* arg)
 {
