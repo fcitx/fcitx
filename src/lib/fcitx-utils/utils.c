@@ -308,19 +308,26 @@ FCITX_EXPORT_API
 char* fcitx_utils_get_process_name()
 {
 #if defined(__linux__)
-    const size_t bufsize = 4096;
-    char buf[bufsize];
-    char *result = NULL;
-    ssize_t len;
-    if ((len = readlink("/proc/self/exe", buf, bufsize)) != -1) {
-        buf[len] = '\0';
-        result = basename(buf);
-    } else {
-        buf[0] = '\0';
-        result = buf;
-    }
+    do {
+        FILE* fp = fopen("/proc/self/stat", "r");
+        if (!fp)
+            break;
+        
+        const size_t bufsize = 1024;
+        char buf[bufsize];
+        fgets(buf, bufsize, fp);
+        fclose(fp);
+        
+        char* S = strchr(buf, '(');
+        if (!S)
+            break;
+        char* E = strchr(S, ')');
+        if (!E)
+            break;
 
-    return fcitx_utils_trim(result);
+        return strndup(S+1, E-S-1);
+    } while(0);
+    return strdup("");
 #elif defined(LIBKVM_FOUND)
     kvm_t *vm = kvm_open(0, "/dev/null", 0, O_RDONLY, NULL);
     if (vm == 0)

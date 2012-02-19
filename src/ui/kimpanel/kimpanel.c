@@ -111,6 +111,8 @@ typedef struct _FcitxKimpanelUI {
     FcitxMessages* messageUp;
     FcitxMessages* messageDown;
     int iCursorPos;
+    int lastUpdateY;
+    int lastUpdateX;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -1192,7 +1194,10 @@ void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text)
 
 void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y)
 {
-
+    if (kimpanel->lastUpdateX == x && kimpanel->lastUpdateY == y)
+        return;
+    kimpanel->lastUpdateX = x;
+    kimpanel->lastUpdateY = y;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
     DBusMessageIter args;
