@@ -243,7 +243,7 @@ FCITX_EXPORT_API
 void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* outk, unsigned int* outs)
 {
     if (iKeyState) {
-        if (FcitxHotkeyIsHotKeyLAZ(keysym, 0))
+        if (iKeyState != FcitxKeyState_Shift && FcitxHotkeyIsHotKeyLAZ(keysym, 0))
             keysym = keysym + FcitxKey_A - FcitxKey_a;
 
         if (iKeyState == FcitxKeyState_Shift)

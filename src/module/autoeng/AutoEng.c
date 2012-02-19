@@ -218,7 +218,9 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
     boolean disableCheckUAZ = FcitxInstanceGetContextBoolean(autoEngState->owner, CONTEXT_DISABLE_AUTOENG);
     if (disableCheckUAZ)
         return false;
-    if (FcitxHotkeyIsHotKeyUAZ(sym, state)) {
+    if (FcitxHotkeyIsHotKeyUAZ(sym, state)
+        && (FcitxInputStateGetRawInputBufferSize(input) != 0
+        || (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0)) {
         *retval = IRV_DISPLAY_MESSAGE;
         FcitxInputStateSetShowCursor(input, false);
         strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
