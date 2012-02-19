@@ -51,6 +51,12 @@ extern "C" {
 /** FcitxHotkey internally use 2 hotkeys for everycase */
 #define HOT_KEY_COUNT   2
 
+/**
+ * Only keep for compatible
+ * @deprecated
+ */
+#define MAX_CAND_LEN    127
+
 /** max language code length, common 5 length is zh_CN
  * a shorter case is en
  */
