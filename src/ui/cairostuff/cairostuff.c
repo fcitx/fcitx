@@ -80,7 +80,7 @@ StringSizeWithContextReal(cairo_t * c, const char *str, int* w, int* h)
         if (h) *h = 0;
         return;
     }
-    if (!utf8_check_string(str)) {
+    if (!fcitx_utf8_check_string(str)) {
         if (w) *w = 0;
         if (h) *h = 0;
 
