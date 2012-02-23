@@ -113,7 +113,7 @@ typedef int32_t boolean;
  */
 #define true (1)
 /**
- * fcitx true
+ * fcitx false
  */
 #define false (0)
 

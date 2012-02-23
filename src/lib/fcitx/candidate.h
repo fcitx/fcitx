@@ -60,7 +60,7 @@ extern "C" {
          **/
         char* strWord;
         /**
-         * String display before strWord
+         * String display after strWord
          **/
         char* strExtra;
         /**
