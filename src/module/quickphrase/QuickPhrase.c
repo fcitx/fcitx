@@ -342,7 +342,7 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
         farg.args[0] = &s;
         char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
         const char* full = strTemp ? strTemp : c;
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Spcae for %s Enter for %s") , full, c);
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
 
         qpstate->enabled = true;
         *retval = IRV_DISPLAY_MESSAGE;
