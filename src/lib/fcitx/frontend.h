@@ -51,7 +51,8 @@ extern "C" {
         CAPACITY_NONE = 0,
         CAPACITY_CLIENT_SIDE_UI = (1 << 0),
         CAPACITY_PREEDIT = (1 << 1),
-        CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2)
+        CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2),
+        CAPACITY_PASSWORD = (1 << 3)
     } FcitxCapacityFlags;
 
     /**

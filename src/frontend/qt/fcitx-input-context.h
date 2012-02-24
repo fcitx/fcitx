@@ -32,6 +32,7 @@
 
 #if defined(Q_WS_X11)
 #include <X11/Xlib.h>
+#include <fcitx/frontend.h>
 #endif
 
 
@@ -79,11 +80,32 @@ private:
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
+    
+    void addCapacity(QFlags<FcitxCapacityFlags> capacity)
+    {
+        QFlags< FcitxCapacityFlags > newcaps = m_capacity | capacity;
+        if (m_capacity != newcaps) {
+            m_capacity = newcaps;
+            updateCapacity();
+        }
+    }
+    
+    void removeCapacity(QFlags<FcitxCapacityFlags> capacity)
+    {
+        QFlags< FcitxCapacityFlags > newcaps = m_capacity & (~capacity);
+        if (m_capacity != newcaps) {
+            m_capacity = newcaps;
+            updateCapacity();
+        }
+    }
+    
+    void updateCapacity();
 
     QDBusConnection m_connection;
     org::freedesktop::DBus* m_dbusproxy;
     org::fcitx::Fcitx::InputMethod* m_improxy;
     org::fcitx::Fcitx::InputContext* m_icproxy;
+    QFlags<FcitxCapacityFlags> m_capacity;
     int m_id;
     QString m_path;
     bool m_enable;

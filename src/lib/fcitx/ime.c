@@ -406,6 +406,12 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     FcitxInputState *input = instance->input;
 
     FcitxGlobalConfig *fc = instance->config;
+    
+    if (FcitxInstanceGetCurrentIC(instance) == NULL)
+        return IRV_TO_PROCESS;
+    
+    if (FcitxInstanceGetCurrentIC(instance)->contextCaps & CAPACITY_PASSWORD)
+        return IRV_TO_PROCESS;
 
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
@@ -413,8 +419,6 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
      * release event for ctrl key, so we must make sure the key release right now is the key just
      * pressed.
      */
-    if (FcitxInstanceGetCurrentIC(instance) == NULL)
-        return IRV_TO_PROCESS;
 
     /* process keyrelease event for switch key and 2nd, 3rd key */
     if (event == FCITX_RELEASE_KEY) {

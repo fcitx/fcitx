@@ -233,7 +233,9 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
         return false;
 
     if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
-        return false;
+        addCapacity(CAPACITY_PASSWORD);
+    else
+        removeCapacity(CAPACITY_PASSWORD);
 
     if (!isValid() || (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease)) {
         return QInputContext::filterEvent(event);
@@ -338,9 +340,6 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
         m_slave->setFocusWidget(w);
     }
 
-    if (!w || w->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
-        return;
-
     bool has_focus = (w != NULL);
 
     if (!isValid())
@@ -374,14 +373,16 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     if (key_filtered)
         return false;
 
-    if (!keywidget->testAttribute(Qt::WA_WState_Created))
+    if (!keywidget || !keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
 
     if (keywidget != focusWidget())
         return false;
 
-    if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
-        return false;
+    if (keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
+        addCapacity(CAPACITY_PASSWORD);
+    else
+        removeCapacity(CAPACITY_PASSWORD);
 
     if (!isValid() || (event->type != XKeyRelease && event->type != XKeyPress)) {
         return x11FilterEventFallback(keywidget, event, 0);
@@ -506,10 +507,22 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
 
-        if (m_icproxy)
-            m_icproxy->SetCapacity(CAPACITY_PREEDIT);
+        addCapacity(CAPACITY_PREEDIT);
     }
     delete watcher;
+}
+
+void QFcitxInputContext::updateCapacity()
+{
+    if (!m_icproxy || !m_icproxy->isValid())
+        return;
+    
+    QDBusPendingReply< void > result = m_icproxy->SetCapacity((uint) m_capacity);
+    
+    QEventLoop loop;
+    QDBusPendingCallWatcher watcher(result);
+    loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
+    loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
 }
 
 void QFcitxInputContext::closeIM()

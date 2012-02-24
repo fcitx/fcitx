@@ -63,6 +63,7 @@ struct _FcitxIMContext {
     gboolean is_inpreedit;
     char* preedit_string;
     int cursor_pos;
+    FcitxCapacityFlags capacity;
 };
 
 typedef struct _ProcessKeyStruct {
@@ -136,7 +137,7 @@ _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data);
 static void
 _fcitx_im_context_process_key_cb(DBusGProxy *proxy, DBusGProxyCall *call_id, gpointer user_data);
 static void
-_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext);
+_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force);
 
 static GdkEventKey *
 _create_gdk_event(FcitxIMContext *fcitxcontext,
@@ -547,6 +548,8 @@ fcitx_im_context_focus_in(GtkIMContext *context)
 
     if (fcitxcontext->has_focus)
         return;
+   
+    _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
 
     fcitxcontext->has_focus = true;
 
@@ -668,20 +671,36 @@ fcitx_im_context_set_use_preedit(GtkIMContext *context,
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
     fcitxcontext->use_preedit = use_preedit;
-    _fcitx_im_context_set_capacity(fcitxcontext);
+    _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
 
     gtk_im_context_set_use_preedit(fcitxcontext->slave, use_preedit);
 }
 
 void
-_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext)
+_fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
 {
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxCapacityFlags flags = CAPACITY_NONE;
         if (fcitxcontext->use_preedit)
             flags |= CAPACITY_PREEDIT;
-        FcitxIMClientSetCapacity(fcitxcontext->client, flags);
-
+        
+        if (fcitxcontext->client_window != NULL) {
+            GtkWidget *widget;
+            gdk_window_get_user_data (fcitxcontext->client_window,
+                                    (gpointer *)&widget);
+            if (GTK_IS_ENTRY (widget) &&
+                !gtk_entry_get_visibility (GTK_ENTRY (widget))) {
+                flags |= CAPACITY_PASSWORD;
+            }
+        }
+        
+        gboolean update = FALSE;
+        if (G_UNLIKELY(fcitxcontext->capacity != flags)) {
+            fcitxcontext->capacity = flags;
+            update = TRUE;
+        }
+        if (G_UNLIKELY(update || force))
+            FcitxIMClientSetCapacity(fcitxcontext->client, fcitxcontext->capacity);
     }
 }
 
@@ -1042,7 +1061,7 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
                                    G_CALLBACK(_fcitx_im_context_update_preedit_cb),
                                    context,
                                    NULL);
-        _fcitx_im_context_set_capacity(context);
+        _fcitx_im_context_set_capacity(context, TRUE);
     }
 
 }
