@@ -79,7 +79,7 @@ extern "C" {
         void (*DestroyIC)(void* arg, FcitxInputContext *context); /**< frontend destroy input context callback */
         void (*EnableIM)(void* arg, FcitxInputContext* arg1); /**< frontend enable input method to client callback */
         void (*CloseIM)(void* arg, FcitxInputContext* arg1); /**< frontend close input method to client callback */
-        void (*CommitString)(void* arg, FcitxInputContext* arg1, char* arg2); /**< frontend commit string callback */
+        void (*CommitString)(void* arg, FcitxInputContext* arg1, const char* arg2); /**< frontend commit string callback */
         void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state); /**< frontend forward key callback */
         void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y); /**< frontend set window offset callback */
         void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y); /**< frontend get window position callback */
@@ -144,7 +144,7 @@ extern "C" {
      * @param str String to commit
      * @return void
      **/
-    void FcitxInstanceCommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, char* str);
+    void FcitxInstanceCommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, const char* str);
 
     /**
      * Set Cursor Position

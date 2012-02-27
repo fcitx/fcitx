@@ -187,7 +187,7 @@ FcitxCapacityFlags FcitxInstanceGetCurrentCapacity(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, char* str)
+void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, const char* str)
 {
     if (str == NULL)
         return ;

@@ -211,7 +211,7 @@ extern "C" {
      * @param in input string
      * @return char*
      **/
-    char* FcitxInstanceProcessOutputFilter(struct _FcitxInstance* instance, char *in);
+    char* FcitxInstanceProcessOutputFilter(struct _FcitxInstance* instance, const char *in);
 
     /**
      * process output filter, return string is malloced
@@ -220,7 +220,7 @@ extern "C" {
      * @param in input string
      * @return char*
      **/
-    char* FcitxInstanceProcessCommitFilter(struct _FcitxInstance* instance, char *in);
+    char* FcitxInstanceProcessCommitFilter(struct _FcitxInstance* instance, const char *in);
     
     /**
      * register ouput string filter

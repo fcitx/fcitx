@@ -47,7 +47,7 @@ static void* XimCreate(FcitxInstance* instance, int frontendid);
 static boolean XimDestroy(void* arg);
 static void XimEnableIM(void* arg, FcitxInputContext* ic);
 static void XimCloseIM(void* arg, FcitxInputContext* ic);
-static void XimCommitString(void* arg, FcitxInputContext* ic, char* str);
+static void XimCommitString(void* arg, FcitxInputContext* ic, const char* str);
 static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
@@ -361,7 +361,7 @@ void XimCloseIM(void* arg, FcitxInputContext* ic)
     IMPreeditEnd(xim->ims, (XPointer) &call_data);
 }
 
-void XimCommitString(void* arg, FcitxInputContext* ic, char* str)
+void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XTextProperty tp;

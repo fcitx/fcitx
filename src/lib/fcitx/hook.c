@@ -120,7 +120,7 @@ void FcitxInstanceProcessUpdateCandidates(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-char* FcitxInstanceProcessOutputFilter(FcitxInstance* instance, char *in)
+char* FcitxInstanceProcessOutputFilter(FcitxInstance* instance, const char *in)
 {
     HookStack* stack = GetOutputFilter(instance);
     stack = stack->next;
@@ -141,7 +141,7 @@ char* FcitxInstanceProcessOutputFilter(FcitxInstance* instance, char *in)
 }
 
 FCITX_EXPORT_API
-char* FcitxInstanceProcessCommitFilter(FcitxInstance* instance, char *in)
+char* FcitxInstanceProcessCommitFilter(FcitxInstance* instance, const char *in)
 {
     HookStack* stack = GetCommitFilter(instance);
     stack = stack->next;

@@ -66,7 +66,7 @@ boolean IPCCheckIC(void* arg, FcitxInputContext* context, void* priv);
 void IPCDestroyIC(void* arg, FcitxInputContext* context);
 static void IPCEnableIM(void* arg, FcitxInputContext* ic);
 static void IPCCloseIM(void* arg, FcitxInputContext* ic);
-static void IPCCommitString(void* arg, FcitxInputContext* ic, char* str);
+static void IPCCommitString(void* arg, FcitxInputContext* ic, const char* str);
 static void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
@@ -394,7 +394,7 @@ void IPCCloseIM(void* arg, FcitxInputContext* ic)
     dbus_message_unref(msg);
 }
 
-void IPCCommitString(void* arg, FcitxInputContext* ic, char* str)
+void IPCCommitString(void* arg, FcitxInputContext* ic, const char* str)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
