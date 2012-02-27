@@ -81,19 +81,19 @@ private:
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
     
-    void addCapacity(QFlags<FcitxCapacityFlags> capacity)
+    void addCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
     {
         QFlags< FcitxCapacityFlags > newcaps = m_capacity | capacity;
-        if (m_capacity != newcaps) {
+        if (m_capacity != newcaps || forceUpdage) {
             m_capacity = newcaps;
             updateCapacity();
         }
     }
     
-    void removeCapacity(QFlags<FcitxCapacityFlags> capacity)
+    void removeCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
     {
         QFlags< FcitxCapacityFlags > newcaps = m_capacity & (~capacity);
-        if (m_capacity != newcaps) {
+        if (m_capacity != newcaps || forceUpdage) {
             m_capacity = newcaps;
             updateCapacity();
         }

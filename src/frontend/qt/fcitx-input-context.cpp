@@ -507,7 +507,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
 
-        addCapacity(CAPACITY_PREEDIT);
+        addCapacity(CAPACITY_PREEDIT, true);
     }
     delete watcher;
 }
