@@ -52,6 +52,7 @@
 #define MAIN_BAR_MAX_WIDTH 2
 #define MAIN_BAR_MAX_HEIGHT 2
 
+static void ResizeSurface(cairo_surface_t** surface, int w, int h);
 static boolean MainWindowEventHandler(void *arg, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
 static void ReloadMainWindow(void* arg, boolean enabled);
@@ -205,10 +206,21 @@ void DrawMainWindow(MainWindow* mainWindow)
                     else {
                         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
                         char* path;
-                        asprintf(&path, "%s.png", im->strIconName);
+                        if (im->strIconName[0] == '/')
+                            path = strdup(im->strIconName);
+                        else
+                            asprintf(&path, "%s.png", im->strIconName);
                         imicon = LoadImage(sc, path, false);
                         if (imicon == NULL)
                             imicon = LoadImage(sc, sc->skinMainBar.active, false);
+                        else {
+                            SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
+                            if (activeIcon) {
+                                ResizeSurface(&imicon->image,
+                                              cairo_image_surface_get_width(activeIcon->image),
+                                              cairo_image_surface_get_height(activeIcon->image));
+                            }
+                        }
                         free(path);
                     }
 
@@ -258,10 +270,21 @@ void DrawMainWindow(MainWindow* mainWindow)
             else {
                 FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
                 char *path;
-                asprintf(&path, "%s.png", im->strIconName);
+                if (im->strIconName[0] == '/')
+                    path = strdup(im->strIconName);
+                else
+                    asprintf(&path, "%s.png", im->strIconName);
                 imicon = LoadImage(sc, path, false);
                 if (imicon == NULL)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
+                else {
+                    SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
+                    if (activeIcon) {
+                        ResizeSurface(&imicon->image,
+                                      cairo_image_surface_get_width(activeIcon->image),
+                                      cairo_image_surface_get_height(activeIcon->image));
+                    }
+                }
                 free(path);
             }
 
@@ -565,6 +588,39 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
         return true;
     }
     return false;
+}
+
+static void ResizeSurface(cairo_surface_t** surface, int w, int h)
+{
+    int ow = cairo_image_surface_get_width(*surface);
+    int oh = cairo_image_surface_get_height(*surface);
+
+    if ((ow == w && oh == h) || w == 0 || h == 0 || ow == 0 || oh == 0)
+        return;
+    
+    double scalex = (double)w / ow;
+    double scaley = (double)h / oh;
+    double scale = (scalex > scaley) ? scaley : scalex;
+
+    int nw = ow * scale;
+    int nh = oh * scale;
+
+    cairo_surface_t* newsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+    cairo_t* c = cairo_create(newsurface);
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_rgba(c ,1, 1, 1, 0.0);
+    cairo_paint(c);
+    cairo_translate(c, (w - nw) / 2.0 , (h - nh) / 2.0);
+    cairo_scale(c, scale, scale);
+    cairo_set_source_surface(c, *surface, 0, 0);
+    cairo_rectangle(c, 0, 0, ow, oh);
+    cairo_clip(c);
+    cairo_paint(c);
+    cairo_destroy(c);
+
+    cairo_surface_destroy(*surface);
+
+    *surface = newsurface;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

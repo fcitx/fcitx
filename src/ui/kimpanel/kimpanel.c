@@ -289,7 +289,10 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
         description = _("Input Method Disabled");
     }
     /* add fcitx- prefix */
-    asprintf(&prop[1], "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
+    if (icon[0] == '/')
+        asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", imname, icon, description);
+    else
+        asprintf(&prop[1], "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
 
     int count = 2;
 
@@ -335,7 +338,10 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
         description = _("Input Method Disabled");
     }
     /* add fcitx- prefix */
-    asprintf(&status, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
+    if (icon[0] == '/')
+        asprintf(&status, "/Fcitx/im:%s:%s:%s", imname, icon, description);
+    else
+        asprintf(&status, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
 
     KimUpdateProperty(kimpanel, status);
     free(status);
