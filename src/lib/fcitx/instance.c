@@ -49,6 +49,7 @@
 FCITX_GETTER_REF(FcitxInstance, Addons, addons, UT_array)
 FCITX_GETTER_REF(FcitxInstance, UIMenus, uimenus, UT_array)
 FCITX_GETTER_REF(FcitxInstance, UIStats, uistats, UT_array)
+FCITX_GETTER_REF(FcitxInstance, UIComplexStats, uicompstats, UT_array)
 FCITX_GETTER_REF(FcitxInstance, IMEs, imes, UT_array)
 FCITX_GETTER_REF(FcitxInstance, AvailIMEs, availimes, UT_array)
 FCITX_GETTER_REF(FcitxInstance, ReadFDSet, rfds, fd_set)
@@ -61,6 +62,7 @@ FCITX_GETTER_VALUE(FcitxInstance, Profile, profile, FcitxProfile*)
 FCITX_GETTER_VALUE(FcitxInstance, InputState, input, FcitxInputState*)
 
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
+const UT_icd compstat_icd = {sizeof(FcitxUIComplexStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleRemindState(void* arg);
@@ -103,6 +105,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     FcitxFrontendsInit(&instance->frontends);
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
+    utarray_init(&instance->uicompstats, &compstat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
     instance->input = FcitxInputStateCreate();
     instance->sem = sem;

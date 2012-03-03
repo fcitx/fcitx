@@ -371,6 +371,18 @@ extern "C" {
         long unsigned int timestamp,
         FcitxKeySym sym,
         unsigned int state);
+    
+    
+    /**
+     * @brief choose candidate by index
+     *
+     * @param instance instance
+     * @param index idx
+     * @return INPUT_RETURN_VALUE
+     **/
+    void FcitxInstanceChooseCandidateByIndex(
+        struct _FcitxInstance* instance,
+        int index);
 
     /**
      * send a new key event to client

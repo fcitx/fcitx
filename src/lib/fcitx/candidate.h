@@ -122,6 +122,18 @@ extern "C" {
      * @since 4.2
      **/
     void FcitxCandidateWordRemove(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
+    
+    
+    /**
+     * set page by index
+     *
+     * @param candList candidate word list
+     * @param index candidate word
+     * @return void
+     * 
+     * @since 4.2.1
+     **/
+    void FcitxCandidateWordSetFocus(struct _FcitxCandidateWordList* candList, int index);
 
     /**
      * Get first of current page

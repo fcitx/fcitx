@@ -79,6 +79,7 @@ struct _FcitxMessages {
 };
 
 #define UI_FUNC_IS_VALID(funcname) (!(FcitxInstanceGetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->ui && instance->ui->ui->funcname)
+#define UI_FUNC_IS_VALID_FALLBACK(funcname) (!(FcitxInstanceGetCurrentCapacity(instance) & CAPACITY_CLIENT_SIDE_UI) && instance->uifallback && instance->uifallback->ui->funcname)
 
 static void FcitxUIShowInputWindow(FcitxInstance* instance);
 static boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon);
@@ -227,6 +228,17 @@ boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
                 addon->ui->RegisterStatus(addon->addonInstance, status);
         }
 
+        /* some may register before ui load, so load it here */
+        if (addon->ui->RegisterComplexStatus) {
+            UT_array* uicompstats = &instance->uicompstats;
+            FcitxUIComplexStatus *status;
+
+            for (status = (FcitxUIComplexStatus *) utarray_front(uicompstats);
+                    status != NULL;
+                    status = (FcitxUIComplexStatus *) utarray_next(uicompstats, status))
+                addon->ui->RegisterComplexStatus(addon->addonInstance, status);
+        }
+
         if (addon->ui->RegisterMenu) {
             UT_array* uimenus = &instance->uimenus;
             FcitxUIMenu **menupp;
@@ -341,12 +353,27 @@ FcitxUIStatus *FcitxUIGetStatusByName(FcitxInstance* instance, const char* name)
     FcitxUIStatus *status;
 
     for (status = (FcitxUIStatus *) utarray_front(uistats);
-            status != NULL;
-            status = (FcitxUIStatus *) utarray_next(uistats, status))
+         status != NULL;
+         status = (FcitxUIStatus *) utarray_next(uistats, status))
         if (strcmp(status->name, name) == 0)
             break;
 
     return status;
+}
+
+FCITX_EXPORT_API
+FcitxUIComplexStatus *FcitxUIGetComplexStatusByName(FcitxInstance* instance, const char* name)
+{
+    UT_array* uicompstats = &instance->uicompstats;
+    FcitxUIComplexStatus *compstatus;
+
+    for (compstatus = (FcitxUIComplexStatus *) utarray_front(uicompstats);
+         compstatus != NULL;
+         compstatus = (FcitxUIComplexStatus *) utarray_next(uicompstats, compstatus))
+        if (strcmp(compstatus->name, name) == 0)
+            break;
+
+    return compstatus;
 }
 
 FCITX_EXPORT_API
@@ -357,10 +384,59 @@ void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
     FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
 
     if (status != NULL) {
-        status->toggleStatus(status->arg);
+        if (status->toggleStatus)
+            status->toggleStatus(status->arg);
 
         if (UI_FUNC_IS_VALID(UpdateStatus))
             instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+    }
+    else {
+        FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
+        if (!compstatus)
+            return;
+        
+        if (compstatus->toggleStatus)
+            compstatus->toggleStatus(compstatus->arg);
+        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
+            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance , compstatus);
+    }
+}
+
+FCITX_EXPORT_API
+void FcitxUISetStatusString(FcitxInstance* instance, const char* name, const char* shortDesc, const char* longDesc)
+{
+    char** pShort = NULL, **pLong = NULL;
+    FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
+    FcitxUIComplexStatus *compstatus = NULL;
+    if (!status) {
+        compstatus = FcitxUIGetComplexStatusByName(instance, name);
+        if (!compstatus)
+            return;
+        
+        pShort = &compstatus->shortDescription;
+        pLong = &compstatus->longDescription;
+    }
+    else {
+        pShort = &status->shortDescription;
+        pLong = &status->longDescription;
+    }
+    
+    if (*pShort)
+        free(*pShort);
+    
+    if (*pLong)
+        free(*pLong);
+    
+    *pShort = strdup(shortDesc);
+    *pLong = strdup(longDesc);
+    
+    if (status){
+        if (UI_FUNC_IS_VALID(UpdateStatus))
+            instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
+    }
+    else if (compstatus) {
+        if (UI_FUNC_IS_VALID(UpdateComplexStatus))
+            instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance, compstatus);
     }
 }
 
@@ -368,14 +444,25 @@ FCITX_EXPORT_API
 void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean visible)
 {
     FcitxUIStatus *status = FcitxUIGetStatusByName(instance, name);
-    if (!status)
+    if (!status) {
+        FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
+        if (!compstatus)
+            return;
+        
+        if (compstatus->visible != visible) {
+            compstatus->visible = visible;
+
+            if (UI_FUNC_IS_VALID(UpdateComplexStatus))
+                instance->ui->ui->UpdateComplexStatus(instance->ui->addonInstance, compstatus);
+        }
         return;
+    }
     
     if (status->visible != visible) {
         status->visible = visible;
 
         if (UI_FUNC_IS_VALID(UpdateStatus))
-            instance->ui->ui->UpdateStatus(instance->ui->addonInstance , status);
+            instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
     }
 }
 
@@ -393,24 +480,52 @@ void FcitxUIRegisterStatus(
     FcitxUIStatus status;
 
     memset(&status, 0 , sizeof(FcitxUIStatus));
-
     status.name = strdup(name);
-
     status.shortDescription = strdup(shortDesc);
-
     status.longDescription = strdup(longDesc);
-
     status.getCurrentStatus = getStatus;
-
     status.toggleStatus = toggleStatus;
-
-    status.arg = arg;
-    
+    status.arg = arg;    
     status.visible = true;
 
     UT_array* uistats = &instance->uistats;
 
     utarray_push_back(uistats, &status);
+    if (UI_FUNC_IS_VALID(RegisterStatus))
+        instance->ui->ui->RegisterStatus(instance->ui->addonInstance, *(FcitxUIStatus**) utarray_back(uistats));
+    if (UI_FUNC_IS_VALID_FALLBACK(RegisterStatus))
+        instance->uifallback->ui->RegisterStatus(instance->uifallback->addonInstance, *(FcitxUIStatus**) utarray_back(uistats));
+}
+
+FCITX_EXPORT_API
+void FcitxUIRegisterComplexStatus(
+    struct _FcitxInstance* instance,
+    void* arg,
+    const char* name,
+    const char* shortDesc,
+    const char* longDesc,
+    void (*toggleStatus)(void *arg),
+    const char*(*getIconName)(void *arg)
+)
+{
+    FcitxUIComplexStatus compstatus;
+
+    memset(&compstatus, 0 , sizeof(FcitxUIComplexStatus));
+    compstatus.name = strdup(name);
+    compstatus.shortDescription = strdup(shortDesc);
+    compstatus.longDescription = strdup(longDesc);
+    compstatus.getIconName = getIconName;
+    compstatus.toggleStatus = toggleStatus;
+    compstatus.arg = arg;    
+    compstatus.visible = true;
+
+    UT_array* uicompstats = &instance->uicompstats;
+
+    utarray_push_back(uicompstats, &compstatus);
+    if (UI_FUNC_IS_VALID(RegisterComplexStatus))
+        instance->ui->ui->RegisterComplexStatus(instance->ui->addonInstance, *(FcitxUIComplexStatus**) utarray_back(uicompstats));
+    if (UI_FUNC_IS_VALID_FALLBACK(RegisterComplexStatus))
+        instance->uifallback->ui->RegisterComplexStatus(instance->uifallback->addonInstance, *(FcitxUIComplexStatus**) utarray_back(uicompstats));
 }
 
 FCITX_EXPORT_API
@@ -424,10 +539,14 @@ void FcitxUIRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
     menu->mark = -1;
 
     utarray_push_back(uimenus, &menu);
+    if (UI_FUNC_IS_VALID(RegisterMenu))
+        instance->ui->ui->RegisterMenu(instance->ui->addonInstance, menu);
+    if (UI_FUNC_IS_VALID_FALLBACK(RegisterMenu))
+        instance->uifallback->ui->RegisterMenu(instance->uifallback->addonInstance, menu);
 }
 
 FCITX_EXPORT_API
-void FcitxMenuAddMenuItem(FcitxUIMenu* menu, char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu)
+void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu)
 {
     FcitxMenuItem shell;
     memset(&shell, 0, sizeof(FcitxMenuItem));
@@ -755,6 +874,7 @@ boolean FcitxUIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* a
 FCITX_EXPORT_API
 void FcitxMenuInit(FcitxUIMenu* menu)
 {
+    memset(menu, 0, sizeof(FcitxUIMenu));
     utarray_init(&menu->shell, &menuICD);
 }
 
@@ -765,5 +885,29 @@ void FcitxMenuItemFree(void* arg)
         free(item->tipstr);
 }
 
+FCITX_EXPORT_API
+FcitxUIMenu* FcitxUIGetMenuByStatusName(FcitxInstance* instance, const char* name)
+{
+    FcitxUIStatus* status = FcitxUIGetStatusByName(instance, name);
+    if (!status) {
+        FcitxUIComplexStatus* compstatus = FcitxUIGetComplexStatusByName(instance, name);
+        if (!compstatus)
+            return NULL;
+    }
+    
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    FcitxUIMenu** menupp, *menup = NULL;
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
+            menupp != NULL;
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
+        ) {
+        if ((*menupp)->candStatusBind && strcmp((*menupp)->candStatusBind, name) == 0) {
+            menup = *menupp;
+            break;
+        }
+    }
+    
+    return menup;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 4;

@@ -40,6 +40,7 @@ struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
     UT_array uimenus;
+    UT_array uicompstats;
     FcitxAddon* ui;
     FcitxInputState* input;
     boolean bMutexInited;

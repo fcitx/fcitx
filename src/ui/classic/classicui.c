@@ -58,6 +58,8 @@ static void ClassicUIMoveInputWindow(void* arg);
 static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu);
 static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status);
 static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status);
+static void ClassicUIUpdateComplexStatus(void *arg, FcitxUIComplexStatus* status);
+static void ClassicUIRegisterComplexStatus(void *arg, FcitxUIComplexStatus* status);
 static void ClassicUIOnInputFocus(void *arg);
 static void ClassicUIOnInputUnFocus(void *arg);
 static void ClassicUIOnTriggerOn(void *arg);
@@ -94,8 +96,8 @@ FcitxUI ui = {
     ClassicUISuspend,
     ClassicUIResume,
     NULL,
-    NULL,
-    NULL,
+    ClassicUIUpdateComplexStatus,
+    ClassicUIRegisterComplexStatus,
     NULL
 };
 
@@ -225,6 +227,19 @@ static void ClassicUIUpdateStatus(void *arg, FcitxUIStatus* status)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     DrawMainWindow(classicui->mainWindow);
 }
+
+void ClassicUIUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    DrawMainWindow(classicui->mainWindow);
+}
+
+void ClassicUIRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
+    status->uipriv[classicui->isfallback] = fcitx_utils_malloc0(sizeof(FcitxClassicUIStatus));
+}
+
 
 static void ClassicUIRegisterMenu(void *arg, FcitxUIMenu* menu)
 {

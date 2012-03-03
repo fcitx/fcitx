@@ -57,6 +57,7 @@ static boolean MainWindowEventHandler(void *arg, XEvent* event);
 static void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int x, int y);
 static void ReloadMainWindow(void* arg, boolean enabled);
 static void InitMainWindow(MainWindow* mainWindow);
+static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow);
 
 void InitMainWindow(MainWindow* mainWindow)
 {
@@ -151,6 +152,7 @@ void DrawMainWindow(MainWindow* mainWindow)
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
     if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) != IS_CLOSED))) {
+        SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
         cairo_t *c;
 
         c = cairo_create(mainWindow->cs_main_bar);
@@ -174,7 +176,7 @@ void DrawMainWindow(MainWindow* mainWindow)
             EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
-
+            
             FcitxUIStatus* status;
             UT_array* uistats = FcitxInstanceGetUIStats(instance);
             for (status = (FcitxUIStatus*) utarray_front(uistats);
@@ -182,6 +184,20 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
                 FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
+                if (privstat == NULL)
+                    continue;
+                /* reset status */
+                privstat->x = privstat->y = -1;
+                privstat->w = privstat->h = 0;
+            }
+            
+            FcitxUIComplexStatus* compstatus;
+            UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                 compstatus != NULL;
+                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+                ) {
+                FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
                 if (privstat == NULL)
                     continue;
                 /* reset status */
@@ -248,6 +264,26 @@ void DrawMainWindow(MainWindow* mainWindow)
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
+                    
+                    compstatus = FcitxUIGetComplexStatusByName(instance, sp->name);
+                    if (compstatus && compstatus->visible) {
+                        FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+                        if (privstat == NULL)
+                            continue;
+
+                        const char* icon = compstatus->getIconName(compstatus->arg);
+                        char* path;
+                        if (icon[0] != '/')
+                            asprintf(&path, "%s.png", compstatus->name);
+                        else
+                            path = strdup(icon);
+                        SkinImage* statusicon = LoadImage(sc, path, false);
+                        free(path);
+                        if (statusicon == NULL)
+                            continue;
+                        DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
+                        UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
+                    }
                 }
             }
         } else {
@@ -278,7 +314,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                 if (imicon == NULL)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
                 else {
-                    SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
                     if (activeIcon) {
                         ResizeSurface(&imicon->image,
                                       cairo_image_surface_get_width(activeIcon->image),
@@ -295,6 +330,37 @@ void DrawMainWindow(MainWindow* mainWindow)
                     height = imageheight;
             }
 
+            
+            FcitxUIComplexStatus* compstatus;
+            UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                 compstatus != NULL;
+                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+                ) {
+                if (!compstatus->visible)
+                    continue;
+                const char* icon = compstatus->getIconName(compstatus->arg);
+                char* path;
+                if (icon[0] != '/')
+                    asprintf(&path, "%s.png", compstatus->name);
+                else
+                    path = strdup(icon);
+                SkinImage* statusicon = LoadImage(sc, path, false);
+                if (statusicon == NULL)
+                    continue;
+                else {
+                    if (icon[0] == '/' && activeIcon) {
+                        ResizeSurface(&statusicon->image,
+                                        cairo_image_surface_get_width(activeIcon->image),
+                                        cairo_image_surface_get_height(activeIcon->image));
+                    }
+                }
+                free(path);
+                currentX += cairo_image_surface_get_width(statusicon->image);
+                imageheight = cairo_image_surface_get_height(statusicon->image);
+                if (imageheight > height)
+                    height = imageheight;
+            }
             FcitxUIStatus* status;
             UT_array* uistats = FcitxInstanceGetUIStats(instance);
             for (status = (FcitxUIStatus*) utarray_front(uistats);
@@ -318,7 +384,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                 if (imageheight > height)
                     height = imageheight;
             }
-
             width = currentX + sc->skinMainBar.marginRight;
             height += sc->skinMainBar.marginTop + sc->skinMainBar.marginBottom;
 
@@ -347,6 +412,34 @@ void DrawMainWindow(MainWindow* mainWindow)
                 DrawImage(c, imicon->image, currentX, sc->skinMainBar.marginTop, mainWindow->imiconstat.mouse);
                 UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(imicon->image);
+            }
+            
+            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                 compstatus != NULL;
+                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+                ) {
+                
+                if (!compstatus->visible)
+                    continue;
+                FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+                if (privstat == NULL)
+                    continue;
+                /* reset status */
+                privstat->x = privstat->y = -1;
+                privstat->w = privstat->h = 0;
+                const char* icon = compstatus->getIconName(compstatus->arg);
+                char* path;
+                if (icon[0] != '/')
+                    asprintf(&path, "%s.png", compstatus->name);
+                else
+                    path = strdup(icon);
+                SkinImage* statusicon = LoadImage(sc, path, false);
+                free(path);
+                if (statusicon == NULL)
+                    continue;
+                DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
+                UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
+                currentX += cairo_image_surface_get_width(statusicon->image);
             }
 
             for (status = (FcitxUIStatus*) utarray_front(uistats);
@@ -443,6 +536,20 @@ boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, Mou
             mainWindow->imiconstat.mouse = other;
         }
     }
+    FcitxUIComplexStatus *compstatus;
+    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+    for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+         compstatus != NULL;
+         compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+    ) {
+        FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+        if (mouseE != &privstat->mouse) {
+            if (privstat->mouse != other) {
+                changed = true;
+                privstat->mouse = other;
+            }
+        }
+    }
     FcitxUIStatus *status;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
     for (status = (FcitxUIStatus*) utarray_front(uistats);
@@ -484,12 +591,22 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
             } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
                 mouse = &mainWindow->imiconstat.mouse;
             } else {
+                FcitxUIComplexStatus *compstatus;
+                UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+                for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                    compstatus != NULL;
+                    compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+                ) {
+                    FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+                    if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat))
+                        mouse = &privstat->mouse;
+                }
                 FcitxUIStatus *status;
                 UT_array* uistats = FcitxInstanceGetUIStats(instance);
                 for (status = (FcitxUIStatus*) utarray_front(uistats);
-                        status != NULL;
-                        status = (FcitxUIStatus*) utarray_next(uistats, status)
-                    ) {
+                     status != NULL;
+                     status = (FcitxUIStatus*) utarray_next(uistats, status)
+                ) {
                     FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                     if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat))
                         mouse = &privstat->mouse;
@@ -524,11 +641,33 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     mouse = &mainWindow->imiconstat.mouse;
                     FcitxInstanceSwitchIM(instance, -1);
                 } else {
+                    FcitxUIComplexStatus *compstatus;
+                    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+                    for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+                         compstatus != NULL;
+                         compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+                    ) {
+                        FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
+                        if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat)) {
+                            mouse = &privstat->mouse;
+                            if (!compstatus->toggleStatus) {
+                                FcitxUIMenu* menu = FcitxUIGetMenuByStatusName(instance, compstatus->name);
+                                if (menu) {
+                                    XlibMenu *menuWindow = (XlibMenu*) menu->uipriv[classicui->isfallback];
+                                    UpdateMenuGeometry(mainWindow, menuWindow);
+                                    DrawXlibMenu(menuWindow);
+                                    DisplayXlibMenu(menuWindow);
+                                }
+                            }
+                            else
+                                FcitxUIUpdateStatus(instance, compstatus->name);
+                        }
+                    }
                     FcitxUIStatus *status;
                     UT_array* uistats = FcitxInstanceGetUIStats(instance);
                     for (status = (FcitxUIStatus*) utarray_front(uistats);
-                            status != NULL;
-                            status = (FcitxUIStatus*) utarray_next(uistats, status)
+                         status != NULL;
+                         status = (FcitxUIStatus*) utarray_next(uistats, status)
                         ) {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                         if (IsInRspArea(event->xbutton.x, event->xbutton.y, privstat)) {
@@ -549,22 +688,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
             break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                unsigned int height;
-                int sheight;
-                XWindowAttributes attr;
-                GetMenuSize(mainMenuWindow);
-                GetScreenSize(classicui, NULL, &sheight);
-                XGetWindowAttributes(classicui->dpy, mainWindow->window, &attr);
-                height = attr.height;
-
-                mainMenuWindow->iPosX = classicui->iMainWindowOffsetX;
-                mainMenuWindow->iPosY =
-                    classicui->iMainWindowOffsetY +
-                    height;
-                if ((mainMenuWindow->iPosY + mainMenuWindow->height) >
-                        sheight)
-                    mainMenuWindow->iPosY = classicui->iMainWindowOffsetY - 5 - mainMenuWindow->height;
-
+                UpdateMenuGeometry(mainWindow, mainMenuWindow);
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);
 
@@ -621,6 +745,27 @@ static void ResizeSurface(cairo_surface_t** surface, int w, int h)
     cairo_surface_destroy(*surface);
 
     *surface = newsurface;
+}
+
+static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow)
+{
+    FcitxClassicUI* classicui = mainWindow->owner;
+    
+    unsigned int height;
+    int sheight;
+    XWindowAttributes attr;
+    GetMenuSize(menuWindow);
+    GetScreenSize(classicui, NULL, &sheight);
+    XGetWindowAttributes(classicui->dpy, mainWindow->window, &attr);
+    height = attr.height;
+
+    menuWindow->iPosX = classicui->iMainWindowOffsetX;
+    menuWindow->iPosY =
+        classicui->iMainWindowOffsetY +
+        height;
+    if ((menuWindow->iPosY + menuWindow->height) >
+            sheight)
+        menuWindow->iPosY = classicui->iMainWindowOffsetY - 5 - menuWindow->height;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

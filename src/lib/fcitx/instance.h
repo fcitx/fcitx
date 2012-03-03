@@ -126,6 +126,8 @@ extern "C" {
 
     UT_array* FcitxInstanceGetUIStats(FcitxInstance* instance);
 
+    UT_array* FcitxInstanceGetUIComplexStats(FcitxInstance* instance);
+
     UT_array* FcitxInstanceGetIMEs(FcitxInstance* instance);
 
     UT_array* FcitxInstanceGetAvailIMEs(FcitxInstance* instance);

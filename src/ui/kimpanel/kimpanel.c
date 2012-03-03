@@ -41,6 +41,8 @@
 #define FCITX_KIMPANEL_INTERFACE "org.kde.kimpanel.inputmethod"
 #define FCITX_KIMPANEL_PATH "/kimpanel"
 
+#define GetMenuItem(m, i) ((FcitxMenuItem*) utarray_eltptr(&(m)->shell, (i)))
+
 const char * kimpanel_introspection_xml =
     "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"\n"
     "\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
@@ -122,6 +124,8 @@ static void KimpanelMoveInputWindow(void* arg);
 static void KimpanelRegisterMenu(void *arg, FcitxUIMenu* menu);
 static void KimpanelUpdateStatus(void *arg, FcitxUIStatus* status);
 static void KimpanelRegisterStatus(void *arg, FcitxUIStatus* status);
+static void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status);
+static void KimpanelUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status);
 static void KimpanelOnInputFocus(void *arg);
 static void KimpanelOnInputUnFocus(void *arg);
 static void KimpanelOnTriggerOn(void *arg);
@@ -144,6 +148,7 @@ static DBusHandlerResult KimpanelDBusFilter(DBusConnection *connection, DBusMess
 static int CalKimCursorPos(FcitxKimpanelUI *kimpanel);
 static void KimpanelInputReset(void *arg);
 static char* Status2String(FcitxUIStatus* status);
+static char* ComplexStatus2String(FcitxUIComplexStatus* status);
 static void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel);
 static void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel);
 static void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n);
@@ -170,8 +175,8 @@ FcitxUI ui = {
     NULL,
     NULL,
     KimpanelDestroy,
-    NULL,
-    NULL,
+    KimpanelRegisterComplexStatus,
+    KimpanelUpdateComplexStatus,
     NULL
 };
 
@@ -266,7 +271,8 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
 {
     FcitxInstance* instance = kimpanel->owner;
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
-    char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats)));
+    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+    char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
     asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
     
     char* icon;
@@ -295,6 +301,16 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
         asprintf(&prop[1], "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
 
     int count = 2;
+
+    FcitxUIComplexStatus *compstatus;
+    for (compstatus = (FcitxUIComplexStatus *) utarray_front(uicompstats);
+         compstatus != NULL;
+         compstatus = (FcitxUIComplexStatus *) utarray_next(uicompstats, compstatus)) {
+        if (!compstatus->visible)
+            continue;
+        prop[count] = ComplexStatus2String(compstatus);
+        count ++;
+    }
 
     FcitxUIStatus *status;
     for (status = (FcitxUIStatus *) utarray_front(uistats);
@@ -418,6 +434,13 @@ void KimpanelRegisterStatus(void* arg, FcitxUIStatus* status)
     return ;
 }
 
+void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimpanelRegisterAllStatus(kimpanel);
+    return ;
+}
+
 char* Status2String(FcitxUIStatus* status)
 {
     char *result = NULL;
@@ -426,6 +449,22 @@ char* Status2String(FcitxUIStatus* status)
              status->shortDescription,
              status->name,
              ((status->getCurrentStatus(status->arg)) ? "active" : "inactive"),
+             status->longDescription
+            );
+
+    return result;
+}
+
+
+char* ComplexStatus2String(FcitxUIComplexStatus* status)
+{
+    const char* iconName = status->getIconName(status->arg);
+    
+    char *result = NULL;
+    asprintf(&result, iconName[0] == '/' ? "/Fcitx/%s:%s:%s:%s" :  "/Fcitx/%s:%s:fcitx-%s:%s",
+             status->name,
+             status->shortDescription,
+             iconName,
              status->longDescription
             );
 
@@ -563,6 +602,13 @@ void KimpanelUpdateStatus(void* arg, FcitxUIStatus* status)
     return ;
 }
 
+void KimpanelUpdateComplexStatus(void* arg, FcitxUIComplexStatus* status)
+{
+    FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
+    KimpanelRegisterAllStatus(kimpanel);
+    return ;
+}
+
 static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *arg)
 {
     FcitxKimpanelUI* kimpanel = (FcitxKimpanelUI*) arg;
@@ -598,10 +644,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &int0 , DBUS_TYPE_INVALID)) {
-            if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && int0 < 10) {
-                INPUT_RETURN_VALUE retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), int0);
-                FcitxInstanceProcessInputReturnValue(instance, retVal);
-            }
+            FcitxInstanceChooseCandidateByIndex(instance, int0);
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
@@ -655,11 +698,45 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                         asprintf(&prop[index], "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, _(pim->strName), pim->strIconName, _(pim->strName));
                         index ++;
                     }
-                    KimExecMenu(kimpanel, prop , len);
+                    KimExecMenu(kimpanel, prop, len);
                     while (len --)
                         free(prop[len]);
-                } else
-                    FcitxUIUpdateStatus(instance, s0);
+                    free(prop);
+                } else {
+                    /* menu */
+                    const char* pos;
+                    if ((pos = strchr(s0, '/'))) {
+                        char* statusName = strndup(s0, pos - s0);
+                        FcitxUIMenu* menup = FcitxUIGetMenuByStatusName(instance, statusName);
+                        free(statusName);
+                        pos ++;
+                        int index = 0;
+                        sscanf(pos, "%d", &index);
+                        if (menup)
+                            menup->MenuAction(menup, index);
+                    }
+                    else {
+                        FcitxUIMenu* menu = FcitxUIGetMenuByStatusName(instance, s0);
+                        if (menu) {
+                            menu->UpdateMenu(menu);
+                            
+                            int i = 0, index = 0;
+                            char **prop = fcitx_utils_malloc0(utarray_len(&menu->shell) * sizeof(char*));
+                            for (i = 0; i < utarray_len(&menu->shell); i++) {
+                                if (GetMenuItem(menu, i)->type == MENUTYPE_SIMPLE) {
+                                    asprintf(&prop[index], "/Fcitx/%s/%d:%s::%s", s0, index, GetMenuItem(menu, i)->tipstr, GetMenuItem(menu, i)->tipstr);
+                                    index ++;
+                                }
+                            }
+                            KimExecMenu(kimpanel, prop, index);
+                            while (index --)
+                                free(prop[index]);
+                            free(prop);
+                        }
+                        else
+                            FcitxUIUpdateStatus(instance, s0);
+                    }
+                }
             }
         }
         dbus_error_free(&error);

@@ -150,13 +150,54 @@ extern "C" {
          **/
         char *longDescription;
         /**
-         * toogle function
+         * toggle function
          **/
         void (*toggleStatus)(void *arg);
         /**
          * get current value function
          **/
         boolean(*getCurrentStatus)(void *arg);
+        /**
+         * private data for the UI implementation
+         **/
+        void *uipriv[2];
+        /**
+         * extra argument for tooglefunction
+         **/
+        void* arg;
+        /**
+         * visible
+         */
+        boolean visible;
+        
+        int padding[16]; /**< padding */
+    };
+    
+
+    /**
+     * Fcitx Status icon to be displayed on the UI
+     **/
+    struct _FcitxUIComplexStatus {
+        /**
+         * status name, will not displayed on the UI.
+         **/
+        char *name;
+        /**
+         * short desription for this status, can be displayed on the UI
+         **/
+        char *shortDescription;
+        /**
+         * long description for this status, can be displayed on the UI
+         **/
+        char *longDescription;
+        /**
+         * toggle function
+         **/
+        void (*toggleStatus)(void *arg);
+        /**
+         * get current value function
+         **/
+        const char*(*getIconName)(void *arg);
         /**
          * private data for the UI implementation
          **/
@@ -197,6 +238,7 @@ extern "C" {
 
     typedef struct _FcitxUIMenu FcitxUIMenu;
     typedef struct _FcitxUIStatus FcitxUIStatus;
+    typedef struct _FcitxUIComplexStatus FcitxUIComplexStatus;
 
     /**
      * user interface implementation
@@ -268,8 +310,8 @@ extern "C" {
         void (*Resume)(void*);
 
         void (*Destroy)(void*); /**< destroy user interface addon */
-        void (*padding1)(void*); /**< padding */
-        void (*padding2)(void*); /**< padding */
+        void (*RegisterComplexStatus)(void*, FcitxUIComplexStatus*); /**< register complex status */
+        void (*UpdateComplexStatus)(void *arg, FcitxUIComplexStatus*);; /**< register complext status */
         void (*padding3)(void*); /**< padding */
     } FcitxUI;
 
@@ -403,7 +445,7 @@ extern "C" {
      * @param subMenu submenu pointer
      * @return void
      **/
-    void FcitxMenuAddMenuItem(FcitxUIMenu* menu, char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu);
+    void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu);
 
     /**
      * clear all menu shell
@@ -455,6 +497,25 @@ extern "C" {
                                const char* longDesc,
                                void (*toggleStatus)(void *arg),
                                boolean(*getStatus)(void *arg));
+    /**
+     * register a new ui status
+     *
+     * @param instance fcitx instance
+     * @param arg private data, pass to callback
+     * @param name name
+     * @param shortDesc short description
+     * @param longDesc long description
+     * @param toggleStatus callback for toggle status
+     * @param getStatus get current status
+     * @return void
+     **/
+    void FcitxUIRegisterComplexStatus(struct _FcitxInstance* instance,
+                                      void* arg,
+                                      const char* name,
+                                      const char* shortDesc,
+                                      const char* longDesc,
+                                      void (*toggleStatus)(void *arg),
+                                      const char*(*getIconName)(void *arg));
     /**
      * register a new menu
      *
@@ -515,6 +576,26 @@ extern "C" {
      * @return FcitxUIStatus*
      **/
     FcitxUIStatus *FcitxUIGetStatusByName(struct _FcitxInstance* instance, const char* name);
+
+    /**
+     * get menu by status name
+     *
+     * @param instance fcitx instance
+     * @param name status name
+     * @return FcitxUIMenu*
+     * 
+     * @since 4.2.1
+     **/
+    FcitxUIMenu* FcitxUIGetMenuByStatusName(struct _FcitxInstance* instance, const char* name);
+
+    /**
+     * get status by status name
+     *
+     * @param instance fcitx instance
+     * @param name status name
+     * @return FcitxUIStatus*
+     **/
+    FcitxUIComplexStatus *FcitxUIGetComplexStatusByName(struct _FcitxInstance* instance, const char* name);
     
     
     /**
@@ -526,6 +607,19 @@ extern "C" {
      * @return void
      **/
     void FcitxUISetStatusVisable(struct _FcitxInstance* instance, const char* name, boolean visible);
+    
+    /**
+     * @brief set string for a status icon
+     *
+     * @param instance fcitx instance
+     * @param name name
+     * @param shortDesc short description
+     * @param longDesc long description
+     * @return void
+     * 
+     * @since 4.2.1
+     **/
+    void FcitxUISetStatusString(struct _FcitxInstance* instance, const char* name, const char* shortDesc, const char* longDesc);
 
     /**
      * update menu shell of a menu

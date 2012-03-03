@@ -571,6 +571,28 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
 
 FCITX_EXPORT_API
+void FcitxInstanceChooseCandidateByIndex(
+    FcitxInstance* instance,
+    int index)
+{
+    if (!(FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && index < 10)) {
+        return;
+    }
+    FcitxInputState *input = instance->input;
+    INPUT_RETURN_VALUE retVal = FcitxCandidateWordChooseByIndex(input->candList, index);
+    FcitxIM* currentIM = FcitxInstanceGetCurrentIM(instance);
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && currentIM && (retVal & IRV_FLAG_UPDATE_CANDIDATE_WORDS)) {
+        if (currentIM->GetCandWords) {
+            FcitxInstanceCleanInputWindow(instance);
+            retVal = currentIM->GetCandWords(currentIM->klass);
+            FcitxInstanceProcessUpdateCandidates(instance);
+        }
+    }
+    FcitxInstanceProcessInputReturnValue(instance, retVal);
+}
+
+
+FCITX_EXPORT_API
 INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
     FcitxInstance* instance,
     INPUT_RETURN_VALUE retVal,
@@ -1133,6 +1155,7 @@ void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputConte
 
 void FcitxInstanceInitIMMenu(FcitxInstance* instance)
 {
+    FcitxMenuInit(&instance->imMenu);
     instance->imMenu.candStatusBind = strdup("im");
     instance->imMenu.name = strdup(_("Input Method"));
 
@@ -1156,7 +1179,6 @@ void UpdateIMMenuItem(FcitxUIMenu *menu)
 
     FcitxIM* pim;
     UT_array* imes = &instance->imes;
-    FcitxMenuInit(&instance->imMenu);
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim))
