@@ -332,7 +332,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
 
         char* strPath;
         asprintf(&strPath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
-        fpDict = FcitxXDGGetFileWithPrefix("table", strPath, NULL, &pstr);
+        fpDict = FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
         free(strPath);
         if (access(pstr, F_OK))
             unlink(pstr);
