@@ -196,6 +196,10 @@ const char * ic_introspection_xml =
     "      <arg name=\"str\" type=\"s\"/>\n"
     "      <arg name=\"cursorpos\" type=\"i\"/>\n"
     "    </signal>\n"
+    "    <signal name=\"UpdateFormattedPreedit\">\n"
+    "      <arg name=\"str\" type=\"a(si)\"/>\n"
+    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
+    "    </signal>\n"
     "    <signal name=\"UpdateClientSideUI\">\n"
     "      <arg name=\"auxup\" type=\"s\"/>\n"
     "      <arg name=\"auxdown\" type=\"s\"/>\n"
@@ -680,30 +684,71 @@ static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic,
 
 void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
-    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
-    dbus_uint32_t serial = 0; // unique number to associate replies with requests
-    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
-    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
-                       FCITX_IC_DBUS_INTERFACE, // interface name of the signal
-                       "UpdatePreedit"); // name of the signal
+    if (ic->contextCaps & CAPACITY_FORMATTED_PREEDIT) {
+        FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+        dbus_uint32_t serial = 0; // unique number to associate replies with requests
+        FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
+        DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                        "UpdateFormattedPreedit"); // name of the signal
+        
+        FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
+        
+        DBusMessageIter args, array, sub;
+        dbus_message_iter_init_append(msg, &args);
+        dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "(si)", &array);
+        int i = 0;
+        for (i = 0; i < FcitxMessagesGetMessageCount(clientPreedit) ; i ++) {
+            dbus_message_iter_open_container(&array, DBUS_TYPE_STRUCT, 0, &sub);
+            char* str = FcitxMessagesGetMessageString(clientPreedit, i);
+            char* needtofree = FcitxInstanceProcessOutputFilter(ipc->owner, str);
+            if (needtofree) {
+                str = needtofree;
+            }
+            int type = FcitxMessagesGetClientMessageType(clientPreedit, i);
+            dbus_message_iter_append_basic(&sub, DBUS_TYPE_STRING, &str);
+            dbus_message_iter_append_basic(&sub, DBUS_TYPE_INT32, &type);
+            dbus_message_iter_close_container(&array, &sub);
+            if (needtofree)
+                free(needtofree);
+        }
+        dbus_message_iter_close_container(&args, &array);
+        
+        int iCursorPos = FcitxInputStateGetClientCursorPos(input);
+        dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &iCursorPos);
 
-    char* strPreedit = FcitxUIMessagesToCString(FcitxInputStateGetClientPreedit(input));
-    char* str = FcitxInstanceProcessOutputFilter(ipc->owner, strPreedit);
-    if (str) {
+        if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+            FcitxLog(DEBUG, "Out Of Memory!");
+        }
+        dbus_connection_flush(ipc->conn);
+        dbus_message_unref(msg);
+    }
+    else {
+        FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+        dbus_uint32_t serial = 0; // unique number to associate replies with requests
+        FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
+        DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                        "UpdatePreedit"); // name of the signal
+
+        char* strPreedit = FcitxUIMessagesToCString(FcitxInputStateGetClientPreedit(input));
+        char* str = FcitxInstanceProcessOutputFilter(ipc->owner, strPreedit);
+        if (str) {
+            free(strPreedit);
+            strPreedit = str;
+        }
+
+        int iCursorPos = FcitxInputStateGetClientCursorPos(input);
+
+        dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &iCursorPos, DBUS_TYPE_INVALID);
+
+        if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+            FcitxLog(DEBUG, "Out Of Memory!");
+        }
+        dbus_connection_flush(ipc->conn);
+        dbus_message_unref(msg);
         free(strPreedit);
-        strPreedit = str;
     }
-
-    int iCursorPos = FcitxInputStateGetClientCursorPos(input);
-
-    dbus_message_append_args(msg, DBUS_TYPE_STRING, &strPreedit, DBUS_TYPE_INT32, &iCursorPos, DBUS_TYPE_INVALID);
-
-    if (!dbus_connection_send(ipc->conn, msg, &serial)) {
-        FcitxLog(DEBUG, "Out Of Memory!");
-    }
-    dbus_connection_flush(ipc->conn);
-    dbus_message_unref(msg);
-    free(strPreedit);
 }
 
 void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
@@ -798,7 +843,7 @@ void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message)
         }
         DBusMessageIter args, variant;
         dbus_message_iter_init_append(reply, &args);
-        dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, "a(sssb)", &variant);
+        dbus_message_iter_open_container(&args, DBUS_TYPE_VARIANT, propertTable[index].type, &variant);
         if (propertTable[index].getfunc)
             propertTable[index].getfunc(ipc, &variant);
         dbus_message_iter_close_container(&args, &variant);

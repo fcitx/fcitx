@@ -103,6 +103,8 @@ struct _FcitxInstance {
     boolean tryReplace;
     
     int lastIMIndex;
+    
+    char* fallbackuiName;
 };
 
 #endif

@@ -25,6 +25,7 @@
 #include <sys/time.h>
 #include <unicode/unorm.h>
 
+#include "fcitx/ui.h"
 #include "fcitx/ime.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/frontend.h"
@@ -149,6 +150,9 @@ QFcitxInputContext::QFcitxInputContext()
     m_slave = QInputContextFactory::create("xims", 0);
 #endif
 #endif
+
+    FcitxFormattedPreedit::registerMetaType();
+
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
 
     if (m_slave) {
@@ -503,11 +507,16 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         connect(m_icproxy, SIGNAL(EnableIM()), this, SLOT(enableIM()));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
         connect(m_icproxy, SIGNAL(UpdatePreedit(QString, int)), this, SLOT(updatePreedit(QString, int)));
+        connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxFormattedPreeditList,int)));
 
         if (m_icproxy->isValid() && focusWidget() != NULL)
             m_icproxy->FocusIn();
 
-        addCapacity(CAPACITY_PREEDIT, true);
+        QFlags<FcitxCapacityFlags> flag;
+        flag |= CAPACITY_PREEDIT;
+        flag |= CAPACITY_FORMATTED_PREEDIT;
+        
+        addCapacity(flag, true);
     }
     delete watcher;
 }
@@ -558,6 +567,43 @@ void QFcitxInputContext::updatePreedit(const QString& str, int cursorPos)
     sendEvent(event);
     update();
 }
+
+void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos)
+{
+    QString str;
+    int pos = 0;
+    QList<QAttribute> attrList;
+    Q_FOREACH(const FcitxFormattedPreedit& preedit, preeditList)
+    {
+        str += preedit.string();
+        QTextCharFormat format;
+        if ((preedit.format() & MSG_NOUNDERLINE) == 0) {
+            format.setUnderlineStyle(QTextCharFormat::DashUnderline);
+        }
+        if (preedit.format() & MSG_HIGHLIGHT) {
+            QBrush brush;
+            QPalette palette;
+            if (focusWidget())
+                palette = focusWidget()->palette();
+            else
+                palette = QApplication::palette();
+            format.setBackground(QBrush(QColor(palette.color(QPalette::Active, QPalette::Highlight))));
+            format.setForeground(QBrush(QColor(palette.color(QPalette::Active, QPalette::HighlightedText))));
+        }
+        attrList.append(QAttribute(QInputMethodEvent::TextFormat, pos, preedit.string().length(), format));
+        pos += preedit.string().length();
+    }
+    
+    QByteArray array = str.toUtf8();
+    array.truncate(cursorPos);
+    cursorPos = QString::fromUtf8(array).length();
+
+    attrList.append(QAttribute(QInputMethodEvent::Cursor, cursorPos, 1, 0));
+    QInputMethodEvent event(str, attrList);
+    sendEvent(event);
+    update();
+}
+
 
 void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
 {

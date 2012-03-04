@@ -40,6 +40,11 @@
       <arg name="str" type="s"/>
       <arg name="cursorpos" type="i"/>
     </signal>
+    <signal name="UpdateFormattedPreedit">
+      <arg name="str" type="a(si)" />
+      <arg name="cursorpos" type="i"/>
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="FcitxFormattedPreeditList" />
+    </signal>
     <signal name="UpdateClientSideUI">
       <arg name="auxup" type="s"/>
       <arg name="auxdown" type="s"/>

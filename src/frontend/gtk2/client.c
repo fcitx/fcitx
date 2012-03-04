@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <dbus/dbus-glib.h>
 #include "module/dbus/dbusstuff.h"
 #include "frontend/ipc/ipc.h"
@@ -29,10 +30,15 @@
 
 #include "client.h"
 #include "marshall.h"
-#include <unistd.h>
 
 #define LOG_LEVEL DEBUG
 #define IC_NAME_MAX 64
+
+#define PREEDIT_TYPE_STRING_INT \
+    dbus_g_type_get_struct("GValueArray", G_TYPE_STRING, G_TYPE_INT, G_TYPE_INVALID)
+
+#define PREEDIT_TYPE_STRING_INT_ARRAY \
+    dbus_g_type_get_collection("GPtrArray", PREEDIT_TYPE_STRING_INT)
 
 struct _FcitxIMClient {
     DBusGConnection* conn;
@@ -108,6 +114,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
         free(client);
         return NULL;
     }
+    
     sprintf(client->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
@@ -226,8 +233,12 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
 
     dbus_g_proxy_add_signal(client->icproxy, "UpdatePreedit", G_TYPE_STRING, G_TYPE_INT, G_TYPE_INVALID);
 
-    dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__BOXED_INT, G_TYPE_NONE, PREEDIT_TYPE_STRING_INT_ARRAY, G_TYPE_INT, G_TYPE_INVALID);
+    
+    dbus_g_proxy_add_signal(client->icproxy, "UpdateFormattedPreedit", PREEDIT_TYPE_STRING_INT_ARRAY, G_TYPE_INT, G_TYPE_INVALID);
 
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+    
     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
     client->connectcb(client, client->data);
 }
@@ -337,6 +348,7 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                 GCallback commitString,
                                 GCallback forwardKey,
                                 GCallback updatePreedit,
+                                GCallback updateFormattedPreedit,
                                 void* user_data,
                                 GClosureNotify freefunc
                                )
@@ -372,6 +384,13 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
     dbus_g_proxy_connect_signal(imclient->icproxy,
                                 "UpdatePreedit",
                                 updatePreedit,
+                                user_data,
+                                freefunc
+                               );
+
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+                                "UpdateFormattedPreedit",
+                                updateFormattedPreedit,
                                 user_data,
                                 freefunc
                                );

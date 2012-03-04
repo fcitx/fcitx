@@ -64,6 +64,7 @@ struct _FcitxIMContext {
     char* preedit_string;
     int cursor_pos;
     FcitxCapacityFlags capacity;
+    PangoAttrList* attrlist;
 };
 
 typedef struct _ProcessKeyStruct {
@@ -316,6 +317,7 @@ fcitx_im_context_init(FcitxIMContext *context)
     context->use_preedit = TRUE;
     context->cursor_pos = 0;
     context->preedit_string = NULL;
+    context->attrlist = NULL;
 
     context->slave = gtk_im_context_simple_new();
     gtk_im_context_simple_add_table(GTK_IM_CONTEXT_SIMPLE(context->slave),
@@ -370,6 +372,10 @@ fcitx_im_context_finalize(GObject *obj)
     if (context->preedit_string)
         g_free(context->preedit_string);
     context->preedit_string = NULL;
+
+    if (context->attrlist)
+        pango_attr_list_unref(context->attrlist);
+    context->attrlist = NULL;
 }
 
 
@@ -506,6 +512,10 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
         context->preedit_string = NULL;
     }
     context->preedit_string = g_strdup(str);
+    if (context->attrlist) {
+        pango_attr_list_unref(context->attrlist);
+        context->attrlist = NULL;
+    }
     char* tempstr = g_strndup(str, cursor_pos);
     context->cursor_pos =  fcitx_utf8_strlen(tempstr);
     g_free(tempstr);
@@ -538,6 +548,116 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
     g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
+static void
+_fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* array, int cursor_pos, void* user_data)
+{
+    FcitxLog(LOG_LEVEL, "_fcitx_im_context_commit_string_cb");
+    FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
+
+    gboolean visible = false;
+
+    if (context->preedit_string != NULL) {
+        if (strlen(context->preedit_string) != 0)
+            visible = true;
+        g_free(context->preedit_string);
+        context->preedit_string = NULL;
+    }
+    
+    if (context->attrlist != NULL) {
+        pango_attr_list_unref(context->attrlist);
+    }
+    
+    context->attrlist = pango_attr_list_new();
+    
+    GString* gstr = g_string_new(NULL);
+    
+    int i = 0;
+    for (i = 0; i < array->len; i++) {
+        size_t bytelen = strlen(gstr->str);
+        GValueArray* preedit = g_ptr_array_index(array, i);
+        const gchar* s = g_value_get_string(g_value_array_get_nth(preedit, 0));
+        gint type = g_value_get_int(g_value_array_get_nth(preedit, 1));
+        
+        PangoAttribute *pango_attr = NULL;
+        if ((type & MSG_NOUNDERLINE) == 0) {
+            pango_attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+            pango_attr->start_index = bytelen;
+            pango_attr->end_index = bytelen + strlen(s);
+            pango_attr_list_insert(context->attrlist, pango_attr);
+        }
+        
+        if (type & MSG_HIGHLIGHT) {
+            gboolean hasColor;
+            GdkColor fg;
+            GdkColor bg;
+            
+            if (context->client_window) {
+                GtkWidget *widget;
+                gdk_window_get_user_data (context->client_window,
+                                        (gpointer *)&widget);
+                if (GTK_IS_WIDGET(widget)) {
+                    hasColor = true;
+                    GtkStyle* style = gtk_widget_get_style(widget);
+                    fg = style->text[GTK_STATE_SELECTED];
+                    bg = style->bg[GTK_STATE_SELECTED];
+                }
+            }
+            
+            if (!hasColor) {
+                fg.red = 0xffff;
+                fg.green = 0xffff;
+                fg.blue = 0xffff;
+                bg.red = 0x43ff;
+                bg.green = 0xacff;
+                bg.blue = 0xe8ff;
+            }
+            
+            pango_attr = pango_attr_foreground_new(fg.red, fg.green, fg.blue);
+            pango_attr->start_index = bytelen;
+            pango_attr->end_index = bytelen + strlen(s);
+            pango_attr_list_insert(context->attrlist, pango_attr);
+            pango_attr = pango_attr_background_new(bg.red, bg.green, bg.blue);
+            pango_attr->start_index = bytelen;
+            pango_attr->end_index = bytelen + strlen(s);
+            pango_attr_list_insert(context->attrlist, pango_attr);
+        }
+        gstr = g_string_append(gstr, s);
+    }
+    
+    gchar* str = g_string_free(gstr, FALSE);
+    
+    context->preedit_string = g_strdup(str);
+    char* tempstr = g_strndup(str, cursor_pos);
+    context->cursor_pos =  fcitx_utf8_strlen(tempstr);
+    g_free(tempstr);
+
+    gboolean new_visible = false;
+
+    if (context->preedit_string != NULL) {
+        if (strlen(context->preedit_string) != 0)
+            new_visible = true;
+    }
+    gboolean flag = new_visible != visible;
+
+    if (new_visible) {
+        if (flag) {
+            /* invisible => visible */
+            g_signal_emit(context, _signal_preedit_start_id, 0);
+        }
+        g_signal_emit(context, _signal_preedit_changed_id, 0);
+    } else {
+        if (flag) {
+            /* visible => invisible */
+            g_signal_emit(context, _signal_preedit_changed_id, 0);
+            g_signal_emit(context, _signal_preedit_end_id, 0);
+        } else {
+            /* still invisible */
+            /* do nothing */
+        }
+    }
+
+    g_signal_emit(context, _signal_preedit_changed_id, 0);
+}
 
 ///
 static void
@@ -682,7 +802,7 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxCapacityFlags flags = CAPACITY_NONE;
         if (fcitxcontext->use_preedit)
-            flags |= CAPACITY_PREEDIT;
+            flags |= CAPACITY_PREEDIT | CAPACITY_FORMATTED_PREEDIT;
         
         if (fcitxcontext->client_window != NULL) {
             GtkWidget *widget;
@@ -735,14 +855,19 @@ fcitx_im_context_get_preedit_string(GtkIMContext   *context,
                 *str = strdup("");
         }
         if (attrs) {
-            *attrs = pango_attr_list_new();
+            if (fcitxcontext->attrlist == NULL) {
+                *attrs = pango_attr_list_new();
 
-            if (str) {
-                PangoAttribute *pango_attr;
-                pango_attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
-                pango_attr->start_index = 0;
-                pango_attr->end_index = strlen(*str);
-                pango_attr_list_insert(*attrs, pango_attr);
+                if (str) {
+                    PangoAttribute *pango_attr;
+                    pango_attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+                    pango_attr->start_index = 0;
+                    pango_attr->end_index = strlen(*str);
+                    pango_attr_list_insert(*attrs, pango_attr);
+                }
+            }
+            else {
+                *attrs = pango_attr_list_ref (fcitxcontext->attrlist);
             }
         }
         if (cursor_pos)
@@ -1059,6 +1184,7 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
                                    G_CALLBACK(_fcitx_im_context_commit_string_cb),
                                    G_CALLBACK(_fcitx_im_context_forward_key_cb),
                                    G_CALLBACK(_fcitx_im_context_update_preedit_cb),
+                                   G_CALLBACK(_fcitx_im_context_update_formatted_preedit_cb),
                                    context,
                                    NULL);
         _fcitx_im_context_set_capacity(context, TRUE);

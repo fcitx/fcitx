@@ -96,8 +96,8 @@ FcitxUI ui = {
     ClassicUISuspend,
     ClassicUIResume,
     NULL,
-    ClassicUIUpdateComplexStatus,
     ClassicUIRegisterComplexStatus,
+    ClassicUIUpdateComplexStatus,
     NULL
 };
 

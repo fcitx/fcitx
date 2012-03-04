@@ -11,6 +11,7 @@ include_directories(
     ${DBUS_INCLUDE_DIRS}
     ${ICU_INCLUDE_DIRS}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 link_directories(
@@ -22,6 +23,12 @@ set(
     qtim_fcitx_SRCS
     fcitx-plugin.cpp
     fcitx-input-context.cpp
+    fcitx-formatted-preedit.cpp
+)
+
+set_property(
+    SOURCE org.fcitx.Fcitx.InputContext.xml
+    PROPERTY INCLUDE fcitx-formatted-preedit.h
 )
 
 QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS

@@ -123,10 +123,13 @@ char* FcitxMessagesGetMessageString(FcitxMessages* m, int index)
 FCITX_EXPORT_API
 FcitxMessageType FcitxMessagesGetMessageType(FcitxMessages* m, int index)
 {
-    if (m->msg[index].type <= MSG_TYPE_LAST)
-        return m->msg[index].type;
-    else
-        return MSG_OTHER;
+    return m->msg[index].type & MSG_REGULAR_MASK;
+}
+
+FCITX_EXPORT_API
+FcitxMessageType FcitxMessagesGetClientMessageType(FcitxMessages* m, int index)
+{
+    return m->msg[index].type;
 }
 
 FCITX_EXPORT_API
@@ -165,7 +168,10 @@ void FcitxUILoad(FcitxInstance* instance)
 
             if (!fallbackAddon->bEnabled)
                 break;
+            
+            instance->fallbackuiName = strdup(addon->uifallback);
 
+            /* ui is fallback */
             if (FcitxUILoadInternal(instance, fallbackAddon)) {
                 instance->uifallback = fallbackAddon;
                 if (instance->uifallback->ui->Suspend)
@@ -868,7 +874,7 @@ void FcitxUIResumeFromFallback(struct _FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean FcitxUIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
 {
-    return instance->uifallback == addon;
+    return strcmp(instance->fallbackuiName, addon->name) == 0;
 }
 
 FCITX_EXPORT_API

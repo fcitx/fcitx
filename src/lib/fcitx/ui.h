@@ -224,13 +224,16 @@ extern "C" {
     typedef enum _FcitxMessageType {
         MSG_TYPE_FIRST = 0,
         MSG_TYPE_LAST = 6,
-        MSG_TIPS = 0,           //提示文本
-        MSG_INPUT = 1,          //用户的输入
-        MSG_INDEX = 2,          //候选字前面的序号
-        MSG_FIRSTCAND = 3,      //第一个候选字
-        MSG_USERPHR = 4,        //用户词组
-        MSG_CODE = 5,           //显示的编码
-        MSG_OTHER = 6,          //其它文本
+        MSG_TIPS = 0,           /**< Hint Text */
+        MSG_INPUT = 1,          /**< User Input */
+        MSG_INDEX = 2,          /**< Index Number */
+        MSG_FIRSTCAND = 3,      /**< First candidate */
+        MSG_USERPHR = 4,        /**< User Phrase */
+        MSG_CODE = 5,           /**< Typed character */
+        MSG_OTHER = 6,          /**< Other Text */
+        MSG_NOUNDERLINE = (1 << 3), /**< backward compatible, no underline is a flag */
+        MSG_HIGHLIGHT = (1 << 4),
+        MSG_REGULAR_MASK = 0x7
     } FcitxMessageType;
 
     typedef struct _FcitxMessages FcitxMessages;
@@ -414,13 +417,25 @@ extern "C" {
      **/
     char* FcitxMessagesGetMessageString(FcitxMessages* m, int index);
     /**
-     * get message type at index
+     * get message type at index, will filter non regular type
      *
      * @param m message
      * @param index index
      * @return FcitxMessageType
      **/
     FcitxMessageType FcitxMessagesGetMessageType(FcitxMessages* m, int index);
+    
+    /**
+     * get message type at index, will not filter non regular type
+     *
+     * @param m message
+     * @param index index
+     * @return FcitxMessageType
+     * 
+     * @see FcitxMessagesGetMessageType
+     * @since 4.2.1
+     **/
+    FcitxMessageType FcitxMessagesGetClientMessageType(FcitxMessages* m, int index);
     /**
      * check whether message is changed
      *

@@ -53,6 +53,7 @@ extern "C" {
                                     GCallback commitString,
                                     GCallback forwardKey,
                                     GCallback updatePreedit,
+                                    GCallback updateFormattedPreedit,
                                     void* user_data,
                                     GClosureNotify freefunc
                                    );
