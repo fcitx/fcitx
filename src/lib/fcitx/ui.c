@@ -874,7 +874,7 @@ void FcitxUIResumeFromFallback(struct _FcitxInstance* instance)
 FCITX_EXPORT_API
 boolean FcitxUIIsFallback(struct _FcitxInstance* instance, struct _FcitxAddon* addon)
 {
-    return strcmp(instance->fallbackuiName, addon->name) == 0;
+    return instance->fallbackuiName != NULL && strcmp(instance->fallbackuiName, addon->name) == 0;
 }
 
 FCITX_EXPORT_API
