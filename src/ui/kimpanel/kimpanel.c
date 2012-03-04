@@ -282,8 +282,8 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             icon = im->strIconName;
-            imname = _(im->strName);
-            description = _(im->strName);
+            imname = im->strName;
+            description = im->strName;
         } else {
             icon = "kbd";
             imname = _("Disabled");
@@ -341,8 +341,8 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             icon = im->strIconName;
-            imname = _(im->strName);
-            description = _(im->strName);
+            imname = im->strName;
+            description = im->strName;
         } else {
             icon = "kbd";
             imname = _("Disabled");
@@ -695,7 +695,11 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {
-                        asprintf(&prop[index], "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, _(pim->strName), pim->strIconName, _(pim->strName));
+                        
+                        if (pim->strIconName[0] == '/')
+                            asprintf(&prop[index], "/Fcitx/im/%s:%s:%s:%s", pim->uniqueName, pim->strName, pim->strIconName, pim->strName);
+                        else
+                            asprintf(&prop[index], "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, pim->strName, pim->strIconName, pim->strName);
                         index ++;
                     }
                     KimExecMenu(kimpanel, prop, len);
