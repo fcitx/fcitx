@@ -498,9 +498,9 @@ void FcitxUIRegisterStatus(
 
     utarray_push_back(uistats, &status);
     if (UI_FUNC_IS_VALID(RegisterStatus))
-        instance->ui->ui->RegisterStatus(instance->ui->addonInstance, *(FcitxUIStatus**) utarray_back(uistats));
+        instance->ui->ui->RegisterStatus(instance->ui->addonInstance, (FcitxUIStatus*) utarray_back(uistats));
     if (UI_FUNC_IS_VALID_FALLBACK(RegisterStatus))
-        instance->uifallback->ui->RegisterStatus(instance->uifallback->addonInstance, *(FcitxUIStatus**) utarray_back(uistats));
+        instance->uifallback->ui->RegisterStatus(instance->uifallback->addonInstance, (FcitxUIStatus*) utarray_back(uistats));
 }
 
 FCITX_EXPORT_API
@@ -529,9 +529,9 @@ void FcitxUIRegisterComplexStatus(
 
     utarray_push_back(uicompstats, &compstatus);
     if (UI_FUNC_IS_VALID(RegisterComplexStatus))
-        instance->ui->ui->RegisterComplexStatus(instance->ui->addonInstance, *(FcitxUIComplexStatus**) utarray_back(uicompstats));
+        instance->ui->ui->RegisterComplexStatus(instance->ui->addonInstance, (FcitxUIComplexStatus*) utarray_back(uicompstats));
     if (UI_FUNC_IS_VALID_FALLBACK(RegisterComplexStatus))
-        instance->uifallback->ui->RegisterComplexStatus(instance->uifallback->addonInstance, *(FcitxUIComplexStatus**) utarray_back(uicompstats));
+        instance->uifallback->ui->RegisterComplexStatus(instance->uifallback->addonInstance, (FcitxUIComplexStatus*) utarray_back(uicompstats));
 }
 
 FCITX_EXPORT_API
