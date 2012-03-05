@@ -78,7 +78,7 @@ void OnException(int signo)
         FILE *fp = NULL;
 
         if (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL)
-            fp = FcitxXDGGetFileWithPrefix("log", "crash.log", "wt", NULL);
+            fp = FcitxXDGGetFileWithPrefix("log", "crash.log", "w", NULL);
 
         printf("Obtained %zd stack frames.\n", size);
 

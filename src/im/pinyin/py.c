@@ -381,13 +381,13 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     }
 
     //下面开始读取用户词库
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "rb", NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_USERPHRASE_FILE, "r", NULL);
     if (fp) {
         LoadPYPhraseDict(pystate, fp, false, false);
         fclose(fp);
     }
     //下面读取索引文件
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_INDEX_FILE, "rb", NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_INDEX_FILE, "r", NULL);
     if (fp) {
         uint32_t magic = 0;
         fread(&magic, sizeof(uint32_t), 1, fp);
@@ -423,7 +423,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         fclose(fp);
     }
     //下面读取常用词表
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_FREQ_FILE, "rb", NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", PY_FREQ_FILE, "r", NULL);
     if (fp) {
         pPyFreq = pystate->pyFreq;
 
@@ -465,7 +465,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         fclose(fp);
     }
     //下面读取特殊符号表
-    fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "rb", NULL);
+    fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
     if (fp) {
         char strTxt[256];
         char str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
@@ -1744,7 +1744,7 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     PyPhrase *phrase;
     PYFA* PYFAList = pystate->PYFAList;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), tempfile);
         free(tempfile);
@@ -1800,7 +1800,7 @@ void SavePYFreq(FcitxPinyinState *pystate)
     PyFreq *pPyFreq;
     HZ *hz;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), tempfile);
         free(tempfile);
@@ -1865,7 +1865,7 @@ void SavePYIndex(FcitxPinyinState *pystate)
     FILE *fp;
     PYFA* PYFAList = pystate->PYFAList;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "wb", &tempfile);
+    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), tempfile);
         free(tempfile);

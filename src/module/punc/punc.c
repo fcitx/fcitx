@@ -303,7 +303,7 @@ FcitxPunc* LoadPuncFile(const char* filename)
     char            strText[4 + MAX_PUNC_LENGTH * UTF8_MAX_LENGTH];
     char           *pstr;               // 临时指针
     int             i;
-    fpDict = FcitxXDGGetFileWithPrefix("data", filename, "rt", NULL);
+    fpDict = FcitxXDGGetFileWithPrefix("data", filename, "r", NULL);
     
     if (strlen(filename) < strlen(PUNC_DICT_FILENAME))
         return NULL;

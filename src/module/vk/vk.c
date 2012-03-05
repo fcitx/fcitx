@@ -549,7 +549,7 @@ void LoadVKMapFile(FcitxVKState *vkstate)
         }
     }
 
-    fp = FcitxXDGGetFileWithPrefix("data", VK_FILE, "rt", NULL);
+    fp = FcitxXDGGetFileWithPrefix("data", VK_FILE, "r", NULL);
 
     if (!fp)
         return;

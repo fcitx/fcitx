@@ -53,7 +53,7 @@ boolean FcitxProfileLoad(FcitxProfile* profile, FcitxInstance* instance)
         return false;
 
     FILE *fp;
-    fp = FcitxXDGGetFileUserWithPrefix("", "profile", "rt", NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("", "profile", "r", NULL);
     if (!fp) {
         if (errno == ENOENT)
             FcitxProfileSave(profile);
@@ -79,7 +79,7 @@ void FcitxProfileSave(FcitxProfile* profile)
 {
     FcitxConfigFileDesc* profileDesc = GetProfileDesc();
     if (profileDesc) {
-        FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "wt", NULL);
+        FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "w", NULL);
         FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);
         if (fp)
             fclose(fp);

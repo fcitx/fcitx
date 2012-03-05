@@ -250,7 +250,7 @@ void LoadAutoEng(FcitxAutoEngState* autoEngState)
     char    *buf = NULL;
     size_t   length = 0;
 
-    fp = FcitxXDGGetFileWithPrefix("data", "AutoEng.dat", "rt", NULL);
+    fp = FcitxXDGGetFileWithPrefix("data", "AutoEng.dat", "r", NULL);
     if (!fp)
         return;
 

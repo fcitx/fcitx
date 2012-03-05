@@ -245,7 +245,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
         if (!transState->s2t_table) {
             len = 0;
 
-            fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
+            fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "r", NULL);
             if (!fp) {
                 ret = (char *) malloc(sizeof(char) * (strlen(strHZ) + 1));
                 strcpy(ret, strHZ);
@@ -347,7 +347,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
         if (!transState->t2s_table) {
             len = 0;
 
-            fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "rb", NULL);
+            fp = FcitxXDGGetFileWithPrefix("data", TABLE_GBKS2T, "r", NULL);
             if (!fp) {
                 ret = (char *) malloc(sizeof(char) * (strlen(strHZ) + 1));
                 strcpy(ret, strHZ);
@@ -414,7 +414,7 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
 
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     boolean newconfig = false;
@@ -450,7 +450,7 @@ void SaveChttransConfig(FcitxChttrans* transState)
 {
     FcitxConfigFileDesc* configDesc = GetChttransConfigDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "wt", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chttrans.config", "w", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &transState->gconfig, configDesc);
     free(file);

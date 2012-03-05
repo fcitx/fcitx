@@ -78,7 +78,7 @@ boolean LoadPY(void)
     int             i, j;
     int             iSW;;
 
-    fp = fopen("pybase.mb", "rb");
+    fp = fopen("pybase.mb", "r");
 
     if (!fp)
         return false;
@@ -124,7 +124,7 @@ boolean LoadPY(void)
         i++;
     }
 
-    fp = fopen("pybase.mb", "wb");
+    fp = fopen("pybase.mb", "w");
 
     if (!fp)
         return false;
@@ -156,8 +156,8 @@ void CreatePYPhrase(void)
     ParsePYStruct   strTemp;
     int             iIndex, i, s1, s2, j, k;
     _PyPhrase      *phrase, *t, *tt;
-    FILE           *f = fopen("pyERROR", "wt");
-    FILE           *fg = fopen("pyPhrase.ok", "wt");
+    FILE           *f = fopen("pyERROR", "w");
+    FILE           *fg = fopen("pyPhrase.ok", "w");
     int             kkk;
     unsigned int    uIndex, uTemp;
     FcitxPinyinConfig pyconfig;
@@ -411,11 +411,11 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    fps = fopen(argv[1], "rt");
+    fps = fopen(argv[1], "r");
 
-    fpt = fopen(argv[2], "rt");
-    fp1 = fopen("pybase.mb", "wb");
-    fp2 = fopen("pyphrase.mb", "wb");
+    fpt = fopen(argv[2], "r");
+    fp1 = fopen("pybase.mb", "w");
+    fp2 = fopen("pyphrase.mb", "w");
 
     if (fps && fpt && fp1 && fp2) {
         CreatePYBase();

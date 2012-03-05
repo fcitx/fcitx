@@ -177,7 +177,7 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
 
     qpstate->uQuickPhraseCount = 0;
 
-    fp =  FcitxXDGGetFileWithPrefix("data", "QuickPhrase.mb", "rt", NULL);
+    fp =  FcitxXDGGetFileWithPrefix("data", "QuickPhrase.mb", "r", NULL);
     if (!fp)
         return;
 
@@ -477,7 +477,7 @@ boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate)
 
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
@@ -500,7 +500,7 @@ void SaveQuickPhraseConfig(QuickPhraseState* qpstate)
 {
     FcitxConfigFileDesc* configDesc = GetQuickPhraseConfigDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "wt", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "w", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &qpstate->gconfig, configDesc);
     free(file);

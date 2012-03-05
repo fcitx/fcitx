@@ -170,7 +170,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     FcitxLog(DEBUG, _("Load Table Dict OK"));
 
     //读取相应的特殊符号表
-    fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strSymbolFile, "rt", NULL);
+    fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strSymbolFile, "r", NULL);
 
     if (fpDict) {
         tableDict->iFH = fcitx_utils_calculate_record_number(fpDict);
@@ -198,7 +198,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
 
         char* temppath;
         asprintf(&temppath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
-        fpDict = FcitxXDGGetFileWithPrefix("table", temppath, "rb", NULL);
+        fpDict = FcitxXDGGetFileWithPrefix("table", temppath, "r", NULL);
         free(temppath);
         i = 0;
         if (fpDict) {
@@ -254,7 +254,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
     if (!tableDict->iTableChanged)
         return;
 
-    fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "wb", &tempfile);
+    fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "w", &tempfile);
     if (!fpDict) {
         FcitxLog(ERROR, _("Save dict error"));
         free(tempfile);
@@ -318,7 +318,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
 
     if (tableDict->autoPhrase) {
         //保存上次的自动词组信息
-        fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "wb", &tempfile);
+        fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "w", &tempfile);
         if (fpDict) {
             fwrite(&tableDict->iAutoPhrase, sizeof(int), 1, fpDict);
             for (i = 0; i < tableDict->iAutoPhrase; i++) {

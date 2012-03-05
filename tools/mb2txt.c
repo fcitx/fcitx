@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    fpDict = fopen(argv[1], "rb");
+    fpDict = fopen(argv[1], "r");
 
     if (!fpDict) {
         printf("\nCan not read source file!\n\n");

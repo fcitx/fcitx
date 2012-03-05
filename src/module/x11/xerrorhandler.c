@@ -53,7 +53,7 @@ int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
     char    str[256];
     FILE* fp = NULL;
 
-    fp = FcitxXDGGetFileUserWithPrefix("log", "crash.log", "wt" , NULL);
+    fp = FcitxXDGGetFileUserWithPrefix("log", "crash.log", "w" , NULL);
     if (fp) {
         XGetErrorText(dpy, event->error_code, str, 255);
         fprintf(fp, "fcitx: %s\n", str);

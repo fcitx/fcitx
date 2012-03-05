@@ -173,7 +173,7 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("", "config", "rt", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("", "config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
@@ -198,7 +198,7 @@ void FcitxGlobalConfigSave(FcitxGlobalConfig* fc)
 {
     FcitxConfigFileDesc* configDesc = GetConfigDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("", "config", "wt", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("", "config", "w", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
     FcitxConfigSaveConfigFileFp(fp, &fc->gconfig, configDesc);
     free(file);

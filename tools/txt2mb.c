@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    fpDict = fopen(argv[1], "rt");
+    fpDict = fopen(argv[1], "r");
 
     if (!fpDict) {
         printf("\nCan not read source file!\n\n");
@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
 
     printf("\nReading %d records.\n\n", s);
 
-    fpNew = fopen(argv[2], "wb");
+    fpNew = fopen(argv[2], "w");
 
     if (!fpNew) {
         printf("\nCan not create target file!\n\n");
