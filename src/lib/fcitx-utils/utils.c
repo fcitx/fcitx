@@ -121,8 +121,6 @@ void fcitx_utils_init_as_daemon()
     if (fork() > 0)
         exit(0);
     chdir("/");
-
-    umask(0);
 }
 
 FCITX_EXPORT_API
