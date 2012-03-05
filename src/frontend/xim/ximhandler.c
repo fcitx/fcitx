@@ -335,8 +335,22 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
         }
     }
 
-    for (i = 0; i < len; i++) {
-        xim->feedback[i] = XIMUnderline;
+    FcitxInputState* input = FcitxInstanceGetInputState(xim->owner);
+    FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
+    int offset = 0;
+    for (i = 0; i < FcitxMessagesGetMessageCount(clientPreedit) ; i ++) {
+        int type = FcitxMessagesGetClientMessageType(clientPreedit, i);
+        char* str = FcitxMessagesGetMessageString(clientPreedit, i);
+        int j = 0;
+        XIMFeedback fb = 0;
+        if ((type & MSG_NOUNDERLINE) == 0)
+            fb |= XIMUnderline;
+        if (type & MSG_HIGHLIGHT) 
+            fb |= XIMReverse;
+        for (; j < fcitx_utf8_strlen(str); j++) {
+            xim->feedback[offset] = fb;
+            offset ++;
+        }
     }
     xim->feedback[len] = 0;
 
