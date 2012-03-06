@@ -173,18 +173,35 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     FILE *fp;
     char *file;
+    boolean newconfig = true;
     fp = FcitxXDGGetFileUserWithPrefix("", "config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
         if (errno == ENOENT)
             FcitxGlobalConfigSave(fc);
+        newconfig = true;
     }
 
     FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
     FcitxGlobalConfigConfigBind(fc, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)fc);
+
+    if (newconfig) {
+        char *p = fcitx_utils_get_current_langcode();
+        if (strncmp(p, "ja", 2) == 0) {
+            fc->hkTrigger[1].desc = strdup("ZENKAKUHANKAKU");
+            fc->hkTrigger[1].sym = FcitxKey_Zenkaku_Hankaku;
+            fc->hkTrigger[1].state = FcitxKeyState_None;
+        }
+        if (strncmp(p, "ko", 2) == 0) {
+            fc->hkTrigger[1].desc = strdup("HANGUL");
+            fc->hkTrigger[1].sym = FcitxKey_Hangul;
+            fc->hkTrigger[1].state = FcitxKeyState_None;
+        }
+        FcitxGlobalConfigSave(fc);
+    }
 
     if (fp)
         fclose(fp);

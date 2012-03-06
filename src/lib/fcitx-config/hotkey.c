@@ -64,6 +64,8 @@ KEY_LIST        keyList[] = {
     {"DOWN", FcitxKey_Down},
     {"LEFT", FcitxKey_Left},
     {"RIGHT", FcitxKey_Right},
+    {"HANGUL", FcitxKey_Hangul},
+    {"ZENKAKUHANKAKU", FcitxKey_Zenkaku_Hankaku},
     {"\0", 0}
 };
 
