@@ -38,7 +38,7 @@ run_gtk()
     if [ $? -eq 0 ]; then
         exec $command
     else
-        run_gtk3
+        run_xdg
     fi
 }
 
@@ -48,7 +48,7 @@ run_gtk3()
     if [ $? -eq 0 ]; then
         exec $command
     else
-        run_xdg
+        run_gtk
     fi
 }
 
@@ -76,6 +76,6 @@ case "$DE" in
         run_kde
         ;;
     *)
-        run_gtk
+        run_gtk3
         ;;
 esac
