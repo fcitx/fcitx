@@ -6,6 +6,7 @@ dianbaoma.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png ke
 remind_active.png remind_inactive.png vk_active.png vk_inactive.png
 punc_active.png punc_inactive.png fullwidth_active.png fullwidth_inactive.png
 chttrans_active.png chttrans_inactive.png
+kbd.png
 )
 
 install(FILES ${FCITX_DARK_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/dark)

@@ -54,6 +54,7 @@ extern "C" {
     #define CONTEXT_IM_KEYBOARD_LAYOUT "CONTEXT_IM_KEYBOARD_LAYOUT"
     #define CONTEXT_DISABLE_AUTOENG "CONTEXT_DISABLE_AUTOENG"
     #define CONTEXT_DISABLE_QUICKPHRASE "CONTEXT_DISABLE_QUICKPHRASE"
+    #define CONTEXT_SHOW_REMIND_STATUS "CONTEXT_SHOW_REMIND_STATUS"
 
     void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag );
     void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxContextCallback callback, void* arg);

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="102.4pt"
+   height="102.4pt"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="fcitx-punc-active-symbolic.svg">
+  <metadata
+     id="metadata27">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="846"
+     id="namedview25"
+     showgrid="false"
+     inkscape:zoom="1.84375"
+     inkscape:cx="-98.169491"
+     inkscape:cy="64"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="gradient0"
+       gradientTransform="translate(-17.2067, -36.2106)"
+       gradientUnits="objectBoundingBox"
+       x1="0.49745066041"
+       y1="1.54657239292"
+       x2="1.49745067174"
+       y2="1.54657239292"
+       spreadMethod="pad">
+      <stop
+         stop-color="#ffffff"
+         offset="0.00000000000"
+         stop-opacity="1.00000000000"
+         id="stop7" />
+      <stop
+         stop-color="#ffffff"
+         offset="0.81999999285"
+         stop-opacity="0.71372549020"
+         id="stop9" />
+      <stop
+         stop-color="#ffffff"
+         offset="1.00000000000"
+         stop-opacity="1.00000000000"
+         id="stop11" />
+    </linearGradient>
+    <linearGradient
+       id="gradient1"
+       gradientTransform="translate(-72.7198, -35.7286)"
+       gradientUnits="objectBoundingBox"
+       x1="2.10266998451"
+       y1="1.53425337414"
+       x2="3.10266988584"
+       y2="1.53425337414"
+       spreadMethod="pad">
+      <stop
+         stop-color="#ffffff"
+         offset="0.00000000000"
+         stop-opacity="1.00000000000"
+         id="stop14" />
+      <stop
+         stop-color="#ffffff"
+         offset="0.81999999285"
+         stop-opacity="0.71372549020"
+         id="stop16" />
+      <stop
+         stop-color="#ffffff"
+         offset="1.00000000000"
+         stop-opacity="1.00000000000"
+         id="stop18" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1">
+    <path
+       id="path4715"
+       transform="translate(14.5, 33.5)"
+       fill="none"
+       stroke="#000000"
+       stroke-width="5.00000000000"
+       stroke-linecap="butt"
+       stroke-linejoin="miter"
+       stroke-miterlimit="4.00000000000"
+       opacity="0.40000000000"
+       d="M40 20C40 31.0457 31.0457 40 20 40C8.95431 40 5.32907e-15 31.0457 3.55271e-15 20C1.77636e-15 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20Z"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#bebebe;stroke-opacity:1" />
+    <path
+       id="path5271"
+       transform="translate(70, 33)"
+       fill="none"
+       stroke="#000000"
+       stroke-width="5.00000000000"
+       stroke-linecap="butt"
+       stroke-linejoin="miter"
+       stroke-miterlimit="4.00000000000"
+       opacity="0.40000000000"
+       d="M5 70C25.9679 62.2448 40.5806 45.2634 40 20M40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20C0 8.9543 8.95431 0 20 0C31.0457 0 40 8.9543 40 20Z"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#bebebe;stroke-opacity:1" />
+  </g>
+</svg>

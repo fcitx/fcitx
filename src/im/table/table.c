@@ -183,7 +183,9 @@ boolean TableInit(void *arg)
 {
     TableMetaData* table = (TableMetaData*) arg;
     FcitxTableState *tbl = table->owner;
+    boolean flag = true;
     FcitxInstanceSetContext(tbl->owner, CONTEXT_IM_KEYBOARD_LAYOUT, table->kbdlayout);
+    FcitxInstanceSetContext(tbl->owner, CONTEXT_SHOW_REMIND_STATUS, &flag);
     FcitxAddon* pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
     tbl->pyaddon = pyaddon;
     if (pyaddon == NULL)

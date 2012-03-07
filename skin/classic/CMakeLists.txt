@@ -6,6 +6,7 @@ punc_active.png punc_inactive.png
  input.png  remind_active.png remind_inactive.png  quwei.png  vk_active.png vk_inactive.png wubi.png wbpy.png ziranma.png
  bar.png cangjie.png  cn.png en.png inactive.png logo.png
  dianbaoma.png shuangpin.png wanfeng.png pinyin.png prev.png next.png menu.png
+ kbd.png
 )
 
 install(FILES ${FCITX_CLASSIC_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/classic)

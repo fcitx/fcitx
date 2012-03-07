@@ -7,6 +7,7 @@ input.png  remind_active.png remind_inactive.png  quwei.png vk_active.png vk_ina
 wubi.png wbpy.png ziranma.png
 bar.png cangjie.png  cn.png en.png  inactive.png logo.png
 dianbaoma.png shuangpin.png wanfeng.png pinyin.png prev.png next.png keyboard.png menu.png
+kbd.png
 )
 
 install(FILES ${FCITX_DEFAULT_SKIN_FILES} DESTINATION ${pkgdatadir}/skin/default)

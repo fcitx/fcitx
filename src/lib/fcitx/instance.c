@@ -72,6 +72,7 @@ static void Usage();
 static void Version();
 static void* RunInstance(void* arg);
 static void FcitxInstanceInitBuiltContext(FcitxInstance* instance);
+static void FcitxInstanceShowRemindStatusChanged(void* arg, const void* value);
 
 /**
  * 显示命令行参数
@@ -451,7 +452,16 @@ void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_KEYBOARD_LAYOUT, FCT_String, FCF_ResetOnInputMethodChange);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_LANGUAGE, FCT_String, FCF_None);
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_SHOW_REMIND_STATUS, FCT_Boolean, FCF_ResetOnInputMethodChange);
     
+    FcitxInstanceWatchContext(instance, CONTEXT_SHOW_REMIND_STATUS, FcitxInstanceShowRemindStatusChanged, instance);
+}
+
+void FcitxInstanceShowRemindStatusChanged(void* arg, const void* value)
+{
+    const boolean* b = value;
+    FcitxInstance* instance = arg;
+    FcitxUISetStatusVisable(instance, "remind",  *b);
 }
 
 FCITX_EXPORT_API

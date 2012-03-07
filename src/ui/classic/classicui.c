@@ -279,7 +279,7 @@ static void ClassicUIOnInputUnFocus(void *arg)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     if (classicui->isSuspend)
         return;
-    DrawMainWindow(classicui->mainWindow);
+    CloseMainWindow(classicui->mainWindow);
     DrawTrayWindow(classicui->trayWindow);
 }
 

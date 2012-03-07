@@ -152,7 +152,9 @@ void *PYCreate(FcitxInstance* instance)
 boolean PYInit(void *arg)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    boolean flag = true;
     FcitxInstanceSetContext(pystate->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
+    FcitxInstanceSetContext(pystate->owner, CONTEXT_SHOW_REMIND_STATUS, &flag);
     pystate->bSP = false;
     return true;
 }
@@ -160,7 +162,9 @@ boolean PYInit(void *arg)
 boolean SPInit(void *arg)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    boolean flag = true;
     FcitxInstanceSetContext(pystate->owner, CONTEXT_IM_KEYBOARD_LAYOUT, "us");
+    FcitxInstanceSetContext(pystate->owner, CONTEXT_SHOW_REMIND_STATUS, &flag);
     pystate->bSP = true;
     FcitxPinyinConfig* pyconfig = &pystate->pyconfig;
     pyconfig->cNonS = 'o';
