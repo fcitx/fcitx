@@ -5,10 +5,10 @@ foreach(size 16 24 32 48 128)
              PATTERN *~ EXCLUDE)
 endforeach(size 16 22 24 32 48 128)
 
-install(DIRECTORY scabable DESTINATION share/icons/hicolor 
+install(DIRECTORY scalable DESTINATION share/icons/hicolor 
          PATTERN ".*" EXCLUDE
          PATTERN "*~" EXCLUDE)
 
-install(DIRECTORY symbolic/scabable DESTINATION share/icons/gnome
+install(DIRECTORY symbolic/scalable DESTINATION share/icons/gnome
          PATTERN ".*" EXCLUDE
          PATTERN "*~" EXCLUDE )

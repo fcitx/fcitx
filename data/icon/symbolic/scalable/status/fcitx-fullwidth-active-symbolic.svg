@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="102.4pt"
-   height="102.4pt"
+   width="16"
+   height="16"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
@@ -36,14 +36,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1440"
-     inkscape:window-height="846"
+     inkscape:window-height="845"
      id="namedview16"
      showgrid="false"
-     inkscape:zoom="1.84375"
-     inkscape:cx="-97.627118"
-     inkscape:cy="64"
-     inkscape:window-x="-2"
-     inkscape:window-y="-3"
+     inkscape:zoom="10.429825"
+     inkscape:cx="18.468459"
+     inkscape:cy="16.357429"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
@@ -53,9 +53,9 @@
        gradientTransform="scale(0.99942505,1.0005753)"
        gradientUnits="userSpaceOnUse"
        x1="18.89105"
-       y1="64.043023"
+       y1="64.043022"
        x2="109.27539"
-       y2="64.043023"
+       y2="64.043022"
        spreadMethod="pad">
       <stop
          stop-color="#ffffff"
@@ -76,7 +76,7 @@
   </defs>
   <path
      inkscape:connector-curvature="0"
-     style="opacity:1;fill:#bebebe;fill-opacity:1"
-     d="M 57.0746,108.7669 C 38.502,105.8604 23.56335,91.5676 19.561096,72.8753 18.652999,68.6341 18.653287,59.2503 19.561644,55.0351 23.09616,38.6332 34.9211,25.63392 50.73,20.77119 c 4.9217,-1.51387 7.7566,-1.913715 13.5383,-1.909456 16.9236,0.01246 32.2251,9.399706 40.0721,24.583766 5.4997,10.642 6.414,24.2978 2.3827,35.5847 -7.3039,20.4492 -28.3701,33.0667 -49.6485,29.7367 z"
+     style="fill:#bebebe;fill-opacity:1"
+     d="M 6.766552,15.906033 C 3.4806867,15.391814 0.83773975,12.863131 0.12966085,9.5560884 -0.03099955,8.8057351 -0.03094855,7.1455528 0.12975785,6.3997994 0.75508455,3.4979746 2.8471537,1.1981412 5.6440651,0.33782681 6.5148125,0.06999281 7.0163631,-7.475901e-4 8.039262,5.8099039e-6 11.033385,0.00219581 13.740528,1.6630023 15.12882,4.3493669 c 0.973006,1.882783 1.134765,4.298768 0.421546,6.2956471 -1.292205,3.617873 -5.019238,5.850163 -8.783814,5.261019 z"
      id="path4444" />
 </svg>
