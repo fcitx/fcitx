@@ -13,8 +13,8 @@
    height="16"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="fcitx-kbd-symbolic.svg">
+   inkscape:version="0.48.3 r9882"
+   sodipodi:docname="fcitx-kbd.svg">
   <metadata
      id="metadata19">
     <rdf:RDF>
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="845"
+     inkscape:window-width="1366"
+     inkscape:window-height="714"
      id="namedview17"
      showgrid="true"
      inkscape:zoom="27.812867"
      inkscape:cx="14.464975"
-     inkscape:cy="9.0306266"
-     inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:cy="7.5924433"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -112,8 +112,10 @@
      transform="translate(0,-176)">
     <path
        style="fill:#bebebe;fill-opacity:1"
-       d="M 2 3 C 0.85629 3 0 3.848 0 5 L 0 12 C 0 13.1551 0.91667 14 2 14 L 14 14 C 15.1277 14 16 13.1104 16 12 L 16 5 C 16 3.9007 15.0993 3 14 3 L 2 3 z M 2 4 L 14 4 C 14.5469 4 15 4.4531 15 5 L 15 12 C 15 12.524 14.5391 13 14 13 L 2 13 C 1.5 13 1 12.5625 1 12 L 1 5 C 1 4.4844 1.49219 4 2 4 z M 2 5 L 2 12 L 14 12 L 14 5 L 2 5 z M 3 6 L 5 6 L 5 7 L 3 7 L 3 6 z M 6 6 L 7 6 L 7 7 L 6 7 L 6 6 z M 8 6 L 9 6 L 9 7 L 8 7 L 8 6 z M 10 6 L 11 6 L 11 9 L 10 9 L 10 6 z M 12 6 L 13 6 L 13 7 L 12 7 L 12 6 z M 3 8 L 5 8 L 5 9 L 3 9 L 3 8 z M 6 8 L 7 8 L 7 9 L 6 9 L 6 8 z M 8 8 L 9 8 L 9 9 L 8 9 L 8 8 z M 12 8 L 13 8 L 13 9 L 12 9 L 12 8 z M 3 10 L 7 10 L 7 11 L 3 11 L 3 10 z M 8 10 L 11 10 L 11 11 L 8 11 L 8 10 z M 12 10 L 13 10 L 13 11 L 12 11 L 12 10 z "
+       d="M 2,2 C 0.85629,2 0,2.848 0,4 l 0,8 c 0,1.1551 0.91667,2 2,2 l 12,0 c 1.1277,0 2,-0.8896 2,-2 L 16,4 C 16,2.9007 15.0993,2 14,2 z M 1,4 3,4 3,6 1,6 z M 4,4 6,4 6,6 4,6 z M 7,4 9,4 9,6 7,6 z m 3,0 2,0 0,2 -2,0 z m 3,0 2,0 0,2 -2,0 z M 2,7 4,7 4,9 2,9 z M 5,7 7,7 7,9 5,9 z m 3,0 2,0 0,2 -2,0 z m 3,0 4,0 0,2 -4,0 z m -10,3 2,0 0,2 -2,0 z m 3,0 8,0 0,2 -8,0 z m 9,0 2,0 0,2 -2,0 z"
        transform="translate(0,176)"
-       id="path3850" />
+       id="path3850"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssssssscccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
   </g>
 </svg>
