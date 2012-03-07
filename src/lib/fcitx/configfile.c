@@ -173,7 +173,7 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     FILE *fp;
     char *file;
-    boolean newconfig = true;
+    boolean newconfig = false;
     fp = FcitxXDGGetFileUserWithPrefix("", "config", "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
@@ -201,6 +201,7 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
             fc->hkTrigger[1].state = FcitxKeyState_None;
         }
         FcitxGlobalConfigSave(fc);
+        free(p);
     }
 
     if (fp)
