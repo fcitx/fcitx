@@ -2,6 +2,43 @@ if (ENABLE_QT_IM_MODULE)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
 find_package(ICU REQUIRED)
 
+# use newer macro from Qt4Macro.cmake
+MACRO(FCITX_QT4_ADD_DBUS_INTERFACE _sources _interface _basename)
+  GET_FILENAME_COMPONENT(_infile ${_interface} ABSOLUTE)
+  SET(_header ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
+  SET(_impl   ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
+  SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc)
+
+  GET_SOURCE_FILE_PROPERTY(_nonamespace ${_interface} NO_NAMESPACE)
+  IF(_nonamespace)
+    SET(_params -N -m)
+  ELSE(_nonamespace)
+    SET(_params -m)
+  ENDIF(_nonamespace)
+
+  GET_SOURCE_FILE_PROPERTY(_classname ${_interface} CLASSNAME)
+  IF(_classname)
+    SET(_params ${_params} -c ${_classname})
+  ENDIF(_classname)
+
+  GET_SOURCE_FILE_PROPERTY(_include ${_interface} INCLUDE)
+  IF(_include)
+    SET(_params ${_params} -i ${_include})
+  ENDIF(_include)
+
+  ADD_CUSTOM_COMMAND(OUTPUT ${_impl} ${_header}
+      COMMAND ${QT_DBUSXML2CPP_EXECUTABLE} ${_params} -p ${_basename} ${_infile}
+      DEPENDS ${_infile} VERBATIM)
+
+  SET_SOURCE_FILES_PROPERTIES(${_impl} PROPERTIES SKIP_AUTOMOC TRUE)
+
+  QT4_GENERATE_MOC(${_header} ${_moc})
+
+  SET(${_sources} ${${_sources}} ${_impl} ${_header} ${_moc})
+  MACRO_ADD_FILE_DEPENDENCIES(${_impl} ${_moc})
+
+ENDMACRO(FCITX_QT4_ADD_DBUS_INTERFACE)
+
 include_directories(
     ${QT_INCLUDE_DIR}
     ${QT_QTCORE_INCLUDE_DIR}
@@ -31,17 +68,17 @@ set_property(
     PROPERTY INCLUDE fcitx-formatted-preedit.h
 )
 
-QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
+FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
     org.fcitx.Fcitx.InputContext.xml
     org.fcitx.Fcitx.InputContext
 )
 
-QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
+FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
     org.fcitx.Fcitx.InputMethod.xml
     org.fcitx.Fcitx.InputMethod
 )
 
-QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
+FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
     org.freedesktop.DBus.xml
     org.freedesktop.DBus
 )
