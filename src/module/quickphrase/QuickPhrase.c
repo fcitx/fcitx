@@ -247,6 +247,7 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     FcitxInstanceCleanInputWindowUp(qpstate->owner);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
 }
 
 boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
