@@ -450,13 +450,8 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
-
-    if (G_UNLIKELY(event->state & FcitxKeyState_HandledMask))
-        return TRUE;
-
-    if (G_UNLIKELY(event->state & FcitxKeyState_IgnoredMask))
-        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
-
+    
+    /* check this first, since we use key snooper, most key will be handled. */
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         /* XXX it is a workaround for some applications do not set client window. */
         if (fcitxcontext->client_window == NULL && event->window != NULL) {
@@ -469,6 +464,15 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                             g_object_ref(fcitxcontext),
                             (GDestroyNotify) g_object_unref);
         }
+    }
+
+    if (G_UNLIKELY(event->state & FcitxKeyState_HandledMask))
+        return TRUE;
+
+    if (G_UNLIKELY(event->state & FcitxKeyState_IgnoredMask))
+        return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
+
+    if (IsFcitxIMClientValid(fcitxcontext->client)) {
 
         if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
             if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
