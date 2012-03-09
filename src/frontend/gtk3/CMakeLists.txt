@@ -15,9 +15,11 @@ link_directories(${GTK3_LIBRARY_DIRS} ${DBUS_GLIB_LIBRARY_DIRS})
 
 add_custom_command(OUTPUT marshall.c
                    COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.c
+                   DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list 
 )
 add_custom_command(OUTPUT marshall.h
                    COMMAND ${GLIB_GENMARSHAL} --header --prefix=fcitx_marshall ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.h
+                   DEPENDS ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list 
 )
 
 set(FCITX_GTK3_IM_MODULE_SOURCES

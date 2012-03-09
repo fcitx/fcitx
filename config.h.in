@@ -12,6 +12,8 @@
 #cmakedefine LIBKVM_FOUND
 #cmakedefine HAVE_XINERAMA
 #cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
+#cmakedefine ENABLE_SNOOPER
+#define NO_SNOOPER_APPS "@NO_SNOOPER_APPS@"
 
 #define PACKAGE "@package@"
 #ifdef FCITX_USE_INTERNAL_PATH
@@ -20,6 +22,12 @@
 #define PKGDATADIR "@pkgdatadir@"
 #define BINDIR "@bindir@"
 #define LIBDIR "@libdir@"
+#endif
+
+#ifdef ENABLE_SNOOPER
+#define _ENABLE_SNOOPER 1
+#else
+#define _ENABLE_SNOOPER 0
 #endif
 
 #define VERSION "@version@"

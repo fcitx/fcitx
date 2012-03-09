@@ -25,9 +25,7 @@
  *        again and again.
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include <config.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -151,6 +149,11 @@ _create_gdk_event(FcitxIMContext *fcitxcontext,
 static gboolean
 _key_is_modifier(guint keyval);
 
+static gint
+_key_snooper_cb (GtkWidget   *widget,
+                 GdkEventKey *event,
+                 gpointer     user_data);
+
 static gboolean
 _get_boolean_env(const gchar *name,
                  gboolean defval);
@@ -164,6 +167,11 @@ static guint _signal_preedit_end_id = 0;
 static guint _signal_delete_surrounding_id = 0;
 static guint _signal_retrieve_surrounding_id = 0;
 static gboolean _use_sync_mode = 0;
+
+static GtkIMContext *_focus_im_context = NULL;
+static const gchar *_no_snooper_apps = NO_SNOOPER_APPS;
+static gboolean _use_key_snooper = _ENABLE_SNOOPER;
+static guint    _key_snooper_id = 0;
 
 /* Copied from gtk+2.0-2.20.1/modules/input/imcedilla.c to fix crosbug.com/11421.
 * Overwrite the original Gtk+'s compose table in gtk+-2.x.y/gtk/gtkimcontextsimple.c. */
@@ -299,9 +307,35 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
         g_signal_lookup("retrieve-surrounding", G_TYPE_FROM_CLASS(klass));
     g_assert(_signal_retrieve_surrounding_id != 0);
 
+    _use_key_snooper = !_get_boolean_env ("IBUS_DISABLE_SNOOPER", !(_ENABLE_SNOOPER))
+                       && !_get_boolean_env("FCITX_DISABLE_SNOOPER", !(_ENABLE_SNOOPER));
+        /* env IBUS_DISABLE_SNOOPER does not exist */
+    if (_use_key_snooper) {
+        /* disable snooper if app is in _no_snooper_apps */
+        const gchar * prgname = g_get_prgname ();
+        if (g_getenv ("IBUS_NO_SNOOPER_APPS")) {
+            _no_snooper_apps = g_getenv ("IBUS_NO_SNOOPER_APPS");
+        }
+        if (g_getenv ("FCITX_NO_SNOOPER_APPS")) {
+            _no_snooper_apps = g_getenv ("FCITX_NO_SNOOPER_APPS");
+        }
+        gchar **p;
+        gchar ** apps = g_strsplit (_no_snooper_apps, ",", 0);
+        for (p = apps; *p != NULL; p++) {
+            if (g_regex_match_simple (*p, prgname, 0, 0)) {
+                _use_key_snooper = FALSE;
+                break;
+            }
+        }
+        g_strfreev (apps);
+    }
+    
     /* make ibus fix benefits us */
     _use_sync_mode = _get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
                      || _get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
+    /* always install snooper */
+    if (_key_snooper_id == 0)
+        _key_snooper_id = gtk_key_snooper_install (_key_snooper_cb, NULL);
 }
 
 
@@ -672,6 +706,12 @@ fcitx_im_context_focus_in(GtkIMContext *context)
     _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
 
     fcitxcontext->has_focus = true;
+    
+    if (_focus_im_context != NULL) {
+        g_assert (_focus_im_context != context);
+        gtk_im_context_focus_out (_focus_im_context);
+        g_assert (_focus_im_context == NULL);
+    }
 
     if (IsFcitxIMClientValid(fcitxcontext->client)) {
         FcitxIMClientFocusIn(fcitxcontext->client);
@@ -686,6 +726,10 @@ fcitx_im_context_focus_in(GtkIMContext *context)
                     g_object_ref(fcitxcontext),
                     (GDestroyNotify) g_object_unref);
 
+    g_object_add_weak_pointer ((GObject *) context,
+                               (gpointer *) &_focus_im_context);
+    _focus_im_context = context;
+
     return;
 }
 
@@ -698,6 +742,11 @@ fcitx_im_context_focus_out(GtkIMContext *context)
     if (!fcitxcontext->has_focus) {
         return;
     }
+    
+    g_assert (context == _focus_im_context);
+    g_object_remove_weak_pointer ((GObject *) context,
+                                  (gpointer *) &_focus_im_context);
+    _focus_im_context = NULL;
 
     fcitxcontext->has_focus = false;
 
@@ -1195,6 +1244,76 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
 void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
 {
     FcitxIMClientSetEnabled(client, false);
+}
+
+
+static gint
+_key_snooper_cb (GtkWidget   *widget,
+                 GdkEventKey *event,
+                 gpointer     user_data)
+{
+    gboolean retval = FALSE;
+
+    FcitxIMContext *fcitxcontext = (FcitxIMContext *) _focus_im_context;
+
+    if (fcitxcontext == NULL || !fcitxcontext->has_focus)
+        return FALSE;
+
+    if (G_UNLIKELY (event->state & FcitxKeyState_HandledMask))
+        return TRUE;
+
+    if (G_UNLIKELY (event->state & FcitxKeyState_IgnoredMask))
+        return FALSE;
+
+    do {
+        if (!IsFcitxIMClientValid(fcitxcontext->client)) {
+            break;
+        }
+        if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
+            if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
+                break;
+        }
+        fcitxcontext->time = event->time;
+
+        if (_use_sync_mode) {
+            
+            int ret = FcitxIMClientProcessKeySync(fcitxcontext->client,
+                                                    event->keyval,
+                                                    event->hardware_keycode,
+                                                    event->state,
+                                                    (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
+                                                    event->time);
+            if (ret <= 0)
+                retval = FALSE;
+            else
+                retval = TRUE;
+        } else {
+            ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
+            pks->context = fcitxcontext;
+            pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
+
+            FcitxIMClientProcessKey(fcitxcontext->client,
+                                    _fcitx_im_context_process_key_cb,
+                                    pks,
+                                    g_free,
+                                    event->keyval,
+                                    event->hardware_keycode,
+                                    event->state,
+                                    (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
+                                    event->time);
+            retval = TRUE;
+        }
+    } while(0);
+    
+    if (!retval) {
+        event->state |= FcitxKeyState_IgnoredMask;
+        return FALSE;
+    } else {
+        event->state |= FcitxKeyState_HandledMask;
+        return TRUE;
+    }
+
+    return retval;
 }
 
 static gboolean

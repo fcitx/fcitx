@@ -17,6 +17,11 @@ option(ENABLE_QT_IM_MODULE "Enable Qt IM Module" OFF)
 option(ENABLE_OPENCC "Enable OpenCC for Chinese Transform" ON)
 option(ENABLE_STATIC "Build Static Library" OFF)
 option(ENABLE_TEST "Test build" OFF)
+option(ENABLE_SNOOPER "Enable Key Snooper for gtk app" On)
+
+if (NOT NO_SNOOPER_APPS)
+set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")
+endif (NOT NO_SNOOPER_APPS)
 
 # uninstall target
 configure_file(
