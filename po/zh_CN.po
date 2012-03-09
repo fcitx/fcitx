@@ -1051,7 +1051,7 @@ msgstr "请检查你的环境变量的设置"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:161
 msgid "Please set XMODIFIERS."
-msgstr "请设置环境变量XMOIFIERS"
+msgstr "请设置环境变量XMODIFIERS"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:787
 #, c-format
