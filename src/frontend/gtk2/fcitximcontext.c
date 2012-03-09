@@ -410,6 +410,11 @@ fcitx_im_context_finalize(GObject *obj)
     if (context->attrlist)
         pango_attr_list_unref(context->attrlist);
     context->attrlist = NULL;
+    
+    if (_key_snooper_id != 0) {
+        gtk_key_snooper_remove (_key_snooper_id);
+        _key_snooper_id = 0;
+    }
 }
 
 
