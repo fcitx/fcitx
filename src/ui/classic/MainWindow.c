@@ -226,7 +226,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                             path = strdup(im->strIconName);
                         else
                             asprintf(&path, "%s.png", im->strIconName);
-                        imicon = LoadImage(sc, path, false);
+                        imicon = LoadImage(sc, path, true);
                         if (imicon == NULL)
                             imicon = LoadImage(sc, sc->skinMainBar.active, false);
                         else {
@@ -310,7 +310,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     path = strdup(im->strIconName);
                 else
                     asprintf(&path, "%s.png", im->strIconName);
-                imicon = LoadImage(sc, path, false);
+                imicon = LoadImage(sc, path, true);
                 if (imicon == NULL)
                     imicon = LoadImage(sc, sc->skinMainBar.active, false);
                 else {

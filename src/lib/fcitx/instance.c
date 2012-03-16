@@ -154,6 +154,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     FcitxInstanceInitIMMenu(instance);
     FcitxUIRegisterMenu(instance, &instance->imMenu);
     FcitxUIRegisterStatus(instance, instance, "remind", _("Remind"), _("Remind"), ToggleRemindState, GetRemindEnabled);
+    FcitxUISetStatusVisable(instance, "remind",  false);
 
     FcitxUILoad(instance);
 
