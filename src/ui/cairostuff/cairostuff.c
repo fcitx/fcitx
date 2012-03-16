@@ -28,6 +28,50 @@
 #include <pango/pangocairo.h>
 #endif
 
+void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, int* h)
+{
+    if (!str || str[0] == 0) {
+        if (w) *w = 0;
+        if (h) *h = 0;
+        return;
+    }
+    if (!fcitx_utf8_check_string(str)) {
+        if (w) *w = 0;
+        if (h) *h = 0;
+
+        return;
+    }
+    cairo_surface_t *surface =
+        cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
+    cairo_t        *c = cairo_create(surface);
+    
+#ifdef _ENABLE_PANGO
+    SetFontContext(c, font, fontSize);
+    PangoRectangle rect;
+    PangoLayout *layout = pango_cairo_create_layout(c);
+    pango_layout_set_text(layout, str, -1);
+    pango_layout_set_font_description(layout, fontDesc);
+    pango_layout_get_pixel_extents(layout, &rect, NULL);
+    if (w)
+        *w = rect.width;
+    if (h)
+        *h = rect.height;
+    g_object_unref(layout);
+#else
+    SetFontContext(c, font, fontSize);
+    cairo_text_extents_t extents;
+    cairo_text_extents(c, str, &extents);
+    if (w)
+        *w = extents.width;
+    if (h)
+        *h = extents.height;
+#endif
+
+    cairo_destroy(c);
+    cairo_surface_destroy(surface);
+}
+
+
 int
 StringWidth(const char *str, const char *font, int fontSize)
 {
@@ -189,7 +233,7 @@ OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y)
 {
     if (!str || str[0] == 0)
         return;
-    if (!utf8_check_string(str))
+    if (!fcitx_utf8_check_string(str))
         return;
     cairo_save(c);
     int             height = FontHeightWithContextReal(c);

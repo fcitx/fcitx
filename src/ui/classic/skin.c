@@ -157,6 +157,37 @@ reload:
 
 }
 
+SkinImage* LoadImageWithText(FcitxClassicUI *classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h)
+{
+    if (!text || strlen(text) == 0)
+        return NULL;
+    
+    int len = fcitx_utf8_char_len(text);
+    
+    char* iconText = strndup(text, len);
+    
+    FcitxLog(DEBUG, "%s", iconText);
+
+    cairo_surface_t* newsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+    cairo_t* c = cairo_create(newsurface);
+    
+    int min = w > h? h: w;
+    min = min * 0.8;
+    
+    cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_rgba(c ,1, 1, 1, 0.0);
+    cairo_paint(c);
+    
+    OutputString(c, iconText, classicui->font, min, 0, 0, &sc->skinFont.menuFontColor[1]);
+    
+    cairo_destroy(c);
+    SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
+    image->name = strdup(name);
+    image->image = newsurface;
+    HASH_ADD_KEYPTR(hh, sc->imageTable, image->name, strlen(image->name), image);
+    return image;
+}
+
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
 {
     cairo_surface_t *png = NULL;

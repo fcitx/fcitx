@@ -172,6 +172,7 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType);
 void DrawImage(cairo_t* c, cairo_surface_t* png, int x, int y, MouseE mouse);
 void DrawInputBar(FcitxSkin* sc, struct _InputWindow* inputWindow, int cursorPos, struct _FcitxMessages * msgup, struct _FcitxMessages *msgdown , unsigned int * iheight, unsigned int *iwidth);
 SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback);
+SkinImage* LoadImageWithText(struct _FcitxClassicUI *classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h);
 void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const char* font);
 void InitSkinMenu(struct _FcitxClassicUI* classicui);
 void DisplaySkin(struct _FcitxClassicUI* classicui, char * skinname);

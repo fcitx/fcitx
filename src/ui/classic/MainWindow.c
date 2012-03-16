@@ -346,8 +346,9 @@ void DrawMainWindow(MainWindow* mainWindow)
                 else
                     path = strdup(icon);
                 SkinImage* statusicon = LoadImage(sc, path, false);
-                if (statusicon == NULL)
+                if (statusicon == NULL) {
                     continue;
+                }
                 else {
                     if (icon[0] == '/' && activeIcon) {
                         ResizeSurface(&statusicon->image,
@@ -376,6 +377,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                 else
                     asprintf(&path, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
+                if (statusicon == NULL) {
+                    if (activeIcon) {
+                        statusicon = LoadImageWithText(classicui, sc, path, status->shortDescription,
+                                                       cairo_image_surface_get_width(activeIcon->image),
+                                                       cairo_image_surface_get_height(activeIcon->image));
+                    }
+                }
                 free(path);
                 if (statusicon == NULL)
                     continue;
