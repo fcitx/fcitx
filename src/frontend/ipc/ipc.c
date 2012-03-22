@@ -553,7 +553,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                 dbus_message_unref(reply);
             }
             result = DBUS_HANDLER_RESULT_HANDLED;
-        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "FcitxInstanceDestroyIC")) {
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "DestroyIC")) {
             FcitxInstanceDestroyIC(ipc->owner, ipc->frontendid, &id);
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(ipc->conn, reply, NULL);
@@ -691,9 +691,9 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
         DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                         "UpdateFormattedPreedit"); // name of the signal
-        
+
         FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
-        
+
         DBusMessageIter args, array, sub;
         dbus_message_iter_init_append(msg, &args);
         dbus_message_iter_open_container(&args, DBUS_TYPE_ARRAY, "(si)", &array);
@@ -713,7 +713,7 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
                 free(needtofree);
         }
         dbus_message_iter_close_container(&args, &array);
-        
+
         int iCursorPos = FcitxInputStateGetClientCursorPos(input);
         dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &iCursorPos);
 

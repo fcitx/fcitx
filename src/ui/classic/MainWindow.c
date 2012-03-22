@@ -176,7 +176,7 @@ void DrawMainWindow(MainWindow* mainWindow)
             EnlargeCairoSurface(&mainWindow->cs_main_bar, width, height);
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
-            
+
             FcitxUIStatus* status;
             UT_array* uistats = FcitxInstanceGetUIStats(instance);
             for (status = (FcitxUIStatus*) utarray_front(uistats);
@@ -190,7 +190,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
             }
-            
+
             FcitxUIComplexStatus* compstatus;
             UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
             for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
@@ -264,7 +264,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
-                    
+
                     compstatus = FcitxUIGetComplexStatusByName(instance, sp->name);
                     if (compstatus && compstatus->visible) {
                         FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
@@ -330,7 +330,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     height = imageheight;
             }
 
-            
+
             FcitxUIComplexStatus* compstatus;
             UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
             for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
@@ -421,12 +421,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                 UpdateStatusGeometry(&mainWindow->imiconstat, imicon, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(imicon->image);
             }
-            
+
             for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
                  compstatus != NULL;
                  compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
                 ) {
-                
+
                 if (!compstatus->visible)
                     continue;
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
@@ -729,7 +729,7 @@ static void ResizeSurface(cairo_surface_t** surface, int w, int h)
 
     if ((ow == w && oh == h) || w == 0 || h == 0 || ow == 0 || oh == 0)
         return;
-    
+
     double scalex = (double)w / ow;
     double scaley = (double)h / oh;
     double scale = (scalex > scaley) ? scaley : scalex;
@@ -758,7 +758,7 @@ static void ResizeSurface(cairo_surface_t** surface, int w, int h)
 static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow)
 {
     FcitxClassicUI* classicui = mainWindow->owner;
-    
+
     unsigned int height;
     int sheight;
     XWindowAttributes attr;
