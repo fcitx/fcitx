@@ -457,7 +457,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
     
     /* check this first, since we use key snooper, most key will be handled. */
-    if (IsFcitxIMClientValid(fcitxcontext->client)) {
+    if (IsFcitxIMClientValid(fcitxcontext->client) ) {
         /* XXX it is a workaround for some applications do not set client window. */
         if (fcitxcontext->client_window == NULL && event->window != NULL) {
             gtk_im_context_set_client_window((GtkIMContext *)fcitxcontext, event->window);
@@ -477,7 +477,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
     if (G_UNLIKELY(event->state & FcitxKeyState_IgnoredMask))
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
 
-    if (IsFcitxIMClientValid(fcitxcontext->client)) {
+    if (IsFcitxIMClientValid(fcitxcontext->client) && fcitxcontext->has_focus) {
 
         if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
             if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
