@@ -274,7 +274,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
     asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
-    
+
     char* icon;
     char* imname;
     char* description;
@@ -459,7 +459,7 @@ char* Status2String(FcitxUIStatus* status)
 char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
     const char* iconName = status->getIconName(status->arg);
-    
+
     char *result = NULL;
     asprintf(&result, iconName[0] == '/' ? "/Fcitx/%s:%s:%s:%s" :  "/Fcitx/%s:%s:fcitx-%s:%s",
              status->name,
@@ -513,7 +513,7 @@ void KimpanelShowInputWindow(void* arg)
                     msgstr = needfree;
                 else
                     msgstr = FcitxMessagesGetMessageString(messageDown, i);
-                
+
                 if (strlen(cmb) + strlen(msgstr) + 1 < KIMPANEL_BUFFER_SIZE)
                     strcat(cmb, msgstr);
                 if (needfree)
@@ -681,21 +681,32 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
                     int index = FcitxInstanceGetIMIndexByName(instance, s0);
-                    FcitxInstanceSwitchIM(instance, index);
-                    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-                        FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+
+                    if (index == 0 && FcitxInstanceGetGlobalConfig(instance)->firstAsInactive)
+                        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    else {
+                        FcitxInstanceSwitchIM(instance, index);
+                        if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+                            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+                        }
                     }
                 } else if (strncmp("im", s0, strlen("im")) == 0) {
                     UT_array* imes = FcitxInstanceGetIMEs(instance);
                     FcitxIM* pim;
-                    int index = 1;
-                    size_t len = utarray_len(imes) + 1;
+                    int index = 0;
+                    size_t len = utarray_len(imes);
+                    if (!FcitxInstanceGetGlobalConfig(instance)->firstAsInactive) {
+                        index++;
+                        len ++;
+                    }
                     char **prop = fcitx_utils_malloc0(len * sizeof(char*));
-                    asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "kbd", _("Input Method Disabled"));
+                    if (!FcitxInstanceGetGlobalConfig(instance)->firstAsInactive) {
+                        asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "kbd", _("Input Method Disabled"));
+                    }
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {
-                        
+
                         if (pim->strIconName[0] == '/')
                             asprintf(&prop[index], "/Fcitx/im/%s:%s:%s:%s", pim->uniqueName, pim->strName, pim->strIconName, pim->strName);
                         else
@@ -723,7 +734,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                         FcitxUIMenu* menu = FcitxUIGetMenuByStatusName(instance, s0);
                         if (menu) {
                             menu->UpdateMenu(menu);
-                            
+
                             int i = 0, index = 0;
                             char **prop = fcitx_utils_malloc0(utarray_len(&menu->shell) * sizeof(char*));
                             for (i = 0; i < utarray_len(&menu->shell); i++) {
@@ -1427,7 +1438,7 @@ void KimpanelDestroy(void* arg)
 
     dbus_connection_flush(kimpanel->conn);
     dbus_error_free(&err);
-    
+
     free(kimpanel->messageUp);
     free(kimpanel->messageDown);
     free(kimpanel);

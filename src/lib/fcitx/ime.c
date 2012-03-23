@@ -406,10 +406,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     FcitxInputState *input = instance->input;
 
     FcitxGlobalConfig *fc = instance->config;
-    
+
     if (FcitxInstanceGetCurrentIC(instance) == NULL)
         return IRV_TO_PROCESS;
-    
+
     if (FcitxInstanceGetCurrentIC(instance)->contextCaps & CAPACITY_PASSWORD)
         return IRV_TO_PROCESS;
 
@@ -622,11 +622,11 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
         const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);
         if (hkPrevPage == NULL)
             hkPrevPage = fc->hkPrevPage;
-        
+
         const FcitxHotkey* hkNextPage = FcitxInstanceGetContextHotkey(instance, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY);
         if (hkNextPage == NULL)
             hkNextPage = fc->hkNextPage;
-        
+
         if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
             if (FcitxCandidateWordGoPrevPage(input->candList))
                 retVal = IRV_DISPLAY_CANDWORDS;
@@ -638,7 +638,7 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
 
     if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE && !input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
         FcitxInstanceProcessPostInputFilter(instance, sym, state, &retVal);
-        
+
         if (retVal == IRV_TO_PROCESS) {
             if (currentIM && currentIM->KeyBlocker)
                 retVal = currentIM->KeyBlocker(currentIM->klass, sym, state);
@@ -986,7 +986,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
         FcitxInstanceEnableIMInternal(instance, ic, keepState);
         break;
     }
-    
+
     if (instance->config->firstAsInactive
         && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE
         && instance->iIMIndex == 0
@@ -1024,12 +1024,12 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
 {
     if (ic == NULL)
         return;
-    
+
     if (instance->config->firstAsInactive && !(ic->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)) {
         FcitxInstanceChangeIMState(instance, ic);
         return;
     }
-    
+
     instance->globalState = IS_CLOSED;
     switch (instance->config->shareState) {
     case ShareState_All:
@@ -1095,7 +1095,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         objectState = IS_ACTIVE;
     else
         objectState = IS_INACTIVE;
-    
+
     if (instance->config->firstAsInactive) {
         if (objectState == IS_ACTIVE)
             FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
@@ -1168,7 +1168,15 @@ void FcitxInstanceInitIMMenu(FcitxInstance* instance)
 boolean IMMenuAction(FcitxUIMenu *menu, int index)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
-    FcitxInstanceSwitchIM(instance, index);
+
+    if (index == 0 && FcitxInstanceGetGlobalConfig(instance)->firstAsInactive)
+        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+    else {
+        FcitxInstanceSwitchIM(instance, index);
+        if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+        }
+    }
     return true;
 }
 

@@ -168,7 +168,7 @@ void FcitxUILoad(FcitxInstance* instance)
 
             if (!fallbackAddon->bEnabled)
                 break;
-            
+
             instance->fallbackuiName = strdup(addon->uifallback);
 
             /* ui is fallback */
@@ -400,7 +400,7 @@ void FcitxUIUpdateStatus(FcitxInstance* instance, const char* name)
         FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
         if (!compstatus)
             return;
-        
+
         if (compstatus->toggleStatus)
             compstatus->toggleStatus(compstatus->arg);
         if (UI_FUNC_IS_VALID(UpdateComplexStatus))
@@ -418,7 +418,7 @@ void FcitxUISetStatusString(FcitxInstance* instance, const char* name, const cha
         compstatus = FcitxUIGetComplexStatusByName(instance, name);
         if (!compstatus)
             return;
-        
+
         pShort = &compstatus->shortDescription;
         pLong = &compstatus->longDescription;
     }
@@ -426,16 +426,16 @@ void FcitxUISetStatusString(FcitxInstance* instance, const char* name, const cha
         pShort = &status->shortDescription;
         pLong = &status->longDescription;
     }
-    
+
     if (*pShort)
         free(*pShort);
-    
+
     if (*pLong)
         free(*pLong);
-    
+
     *pShort = strdup(shortDesc);
     *pLong = strdup(longDesc);
-    
+
     if (status){
         if (UI_FUNC_IS_VALID(UpdateStatus))
             instance->ui->ui->UpdateStatus(instance->ui->addonInstance, status);
@@ -454,7 +454,7 @@ void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean 
         FcitxUIComplexStatus *compstatus = FcitxUIGetComplexStatusByName(instance, name);
         if (!compstatus)
             return;
-        
+
         if (compstatus->visible != visible) {
             compstatus->visible = visible;
 
@@ -463,7 +463,7 @@ void FcitxUISetStatusVisable(FcitxInstance* instance, const char* name, boolean 
         }
         return;
     }
-    
+
     if (status->visible != visible) {
         status->visible = visible;
 
@@ -491,7 +491,7 @@ void FcitxUIRegisterStatus(
     status.longDescription = strdup(longDesc);
     status.getCurrentStatus = getStatus;
     status.toggleStatus = toggleStatus;
-    status.arg = arg;    
+    status.arg = arg;
     status.visible = true;
 
     UT_array* uistats = &instance->uistats;
@@ -522,7 +522,7 @@ void FcitxUIRegisterComplexStatus(
     compstatus.longDescription = strdup(longDesc);
     compstatus.getIconName = getIconName;
     compstatus.toggleStatus = toggleStatus;
-    compstatus.arg = arg;    
+    compstatus.arg = arg;
     compstatus.visible = true;
 
     UT_array* uicompstats = &instance->uicompstats;
@@ -900,7 +900,7 @@ FcitxUIMenu* FcitxUIGetMenuByStatusName(FcitxInstance* instance, const char* nam
         if (!compstatus)
             return NULL;
     }
-    
+
     UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
     FcitxUIMenu** menupp, *menup = NULL;
     for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
@@ -912,7 +912,7 @@ FcitxUIMenu* FcitxUIGetMenuByStatusName(FcitxInstance* instance, const char* nam
             break;
         }
     }
-    
+
     return menup;
 }
 
