@@ -1,9 +1,12 @@
 set(FCITX_CONFIG_SOURCES
     fcitx-config.c
     hotkey.c
-    sprintf.c
     xdg.c
 )
+
+if (NOT HAVE_ASPRINTF)
+    set(FCITX_CONFIG_SOURCES ${FCITX_CONFIG_SOURCES} sprintf.c)
+endif (NOT HAVE_ASPRINTF)
 
 set(FCITX_CONFIG_HEADERS
     fcitx-config.h
