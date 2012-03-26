@@ -37,9 +37,9 @@ struct _FcitxContext {
         char* str;
         boolean b;
     };
-    
+
     UT_array* callback;
-    
+
     UT_hash_handle hh;
 };
 
@@ -64,16 +64,16 @@ void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, const voi
     HASH_FIND_STR(instance->context, key, context);
     if (context == NULL)
         return;
-    
+
     FcitxInstanceSetContextInternal(instance, context, value);
 }
- 
+
 void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* context, const void* value)
 {
     FCITX_UNUSED(instance);
     boolean changed = false;
     void* newvalue = NULL;
-    
+
     switch(context->type) {
         case FCT_String: {
             const char* s = (const char*) value;
@@ -82,17 +82,17 @@ void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* cont
                 context->str = strdup(s);
             else
                 context->str = NULL;
-            
+
             if ((old == NULL && context->str != NULL)
                 || (old != NULL && context->str == NULL)
                 || (old && context->str && strcmp(old, context->str) != 0))
                 changed = true;
-            
+
             if (old)
                 free(old);
-            
+
             newvalue = context->str;
-            
+
             break;
         }
         case FCT_Hotkey: {
@@ -109,7 +109,7 @@ void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* cont
                 context->hotkey[1].sym = FcitxKey_None;
                 context->hotkey[1].state = FcitxKeyState_None;
             }
-            
+
             newvalue = context->hotkey;
             changed = true;
             break;
@@ -134,7 +134,7 @@ void FcitxInstanceSetContextInternal(FcitxInstance* instance, FcitxContext* cont
             break;
         }
     }
-    
+
     if (changed) {
         FcitxContextCallbackInfo* info;
         for (info = (FcitxContextCallbackInfo*) utarray_front(context->callback);
@@ -153,7 +153,7 @@ void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxCo
     HASH_FIND_STR(instance->context, key, context);
     if (context == NULL)
         return;
-    
+
     FcitxContextCallbackInfo info;
     info.callback = callback;
     info.arg = arg;
@@ -168,7 +168,7 @@ const FcitxHotkey* FcitxInstanceGetContextHotkey(FcitxInstance* instance, const 
     HASH_FIND_STR(instance->context, key, context);
     if (context == NULL)
         return NULL;
-    
+
     if (context->hotkey[0].sym == FcitxKey_None
         && context->hotkey[0].state == FcitxKeyState_None
         && context->hotkey[1].sym == FcitxKey_None
