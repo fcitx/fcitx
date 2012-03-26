@@ -141,25 +141,11 @@ QFcitxInputContext::QFcitxInputContext()
       m_path(""),
       m_enable(false),
       m_has_focus(false),
-      m_slave(0),
       m_n_compose(0)
 {
-#if defined(Q_WS_X11)
-    /* slave has too much limitation, ibus compose by hand is better, so m_slave will be NULL then */
-#if 0
-    m_slave = QInputContextFactory::create("xims", 0);
-#endif
-#endif
-
     FcitxFormattedPreedit::registerMetaType();
 
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
-
-    if (m_slave) {
-        qDebug() << "slave created";
-        m_slave->setParent(this);
-        connect(m_slave, SIGNAL(destroyed(QObject*)), this, SLOT(destroySlaveContext()));
-    }
 
     m_dbusproxy = new org::freedesktop::DBus("org.freedesktop.DBus", "/org/freedesktop/DBus", m_connection, this);
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString, QString, QString)), this, SLOT(imChanged(QString, QString, QString)));
@@ -200,8 +186,6 @@ void QFcitxInputContext::reset()
 {
     if (isValid())
         m_icproxy->Reset();
-    if (m_slave)
-        m_slave->reset();
 }
 
 void QFcitxInputContext::update()
@@ -340,9 +324,6 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
     }
 
     QInputContext::setFocusWidget(w);
-    if (m_slave) {
-        m_slave->setFocusWidget(w);
-    }
 
     bool has_focus = (w != NULL);
 
@@ -360,8 +341,6 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
 void QFcitxInputContext::widgetDestroyed(QWidget* w)
 {
     QInputContext::widgetDestroyed(w);
-    if (m_slave)
-        m_slave->widgetDestroyed(w);
     if (!isValid())
         return;
     if (w == focusWidget())
@@ -434,16 +413,12 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 
 bool QFcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event, KeySym sym)
 {
-    if (m_slave && m_slave->x11FilterEvent(keywidget, event))
-        return true;
-    else {
-        if (event->type == XKeyPress || event->type == XKeyRelease) {
-            if (processCompose(sym, event->xkey.state, (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY)) {
-                return true;
-            }
+    if (event->type == XKeyPress || event->type == XKeyRelease) {
+        if (processCompose(sym, event->xkey.state, (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY)) {
+            return true;
         }
-        return QInputContext::x11FilterEvent(keywidget, event);
     }
+    return QInputContext::x11FilterEvent(keywidget, event);
 }
 
 #endif // Q_WS_X11
@@ -661,14 +636,6 @@ XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uin
 bool QFcitxInputContext::isValid()
 {
     return m_icproxy != NULL && m_icproxy->isValid();
-}
-
-void QFcitxInputContext::destroySlaveContext()
-{
-    if (m_slave) {
-        m_slave->deleteLater();
-        m_slave = 0;
-    }
 }
 
 bool
