@@ -58,6 +58,11 @@ Bool XIMSetFocusHandler(FcitxXimFrontend* xim, IMChangeFocusStruct * call_data)
     if (ic == NULL)
         return True;
 
+    FcitxInputContext* oldic = FcitxInstanceGetCurrentIC(xim->owner);
+
+    if (oldic && oldic != ic)
+        FcitxUICommitPreedit(xim->owner);
+
     if (!FcitxInstanceSetCurrentIC(xim->owner, ic))
         return True;
 
@@ -77,8 +82,9 @@ Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 {
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid) {
-        FcitxUICloseInputWindow(xim->owner);
+        FcitxUICommitPreedit(xim->owner);
         FcitxUIOnInputUnFocus(xim->owner);
+        FcitxUICloseInputWindow(xim->owner);
         FcitxInstanceSetCurrentIC(xim->owner, NULL);
     }
 
@@ -345,7 +351,7 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
         XIMFeedback fb = 0;
         if ((type & MSG_NOUNDERLINE) == 0)
             fb |= XIMUnderline;
-        if (type & MSG_HIGHLIGHT) 
+        if (type & MSG_HIGHLIGHT)
             fb |= XIMReverse;
         for (; j < fcitx_utf8_strlen(str); j++) {
             xim->feedback[offset] = fb;

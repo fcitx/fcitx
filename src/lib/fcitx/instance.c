@@ -253,13 +253,13 @@ void FcitxInstanceEnd(FcitxInstance* instance)
 {
     FcitxProfileSave(instance->profile);
     FcitxInstanceSaveAllIM(instance);
-    
+
     if (instance->uinormal && instance->uinormal->ui->Destroy)
         instance->uinormal->ui->Destroy(instance->uinormal->addonInstance);
-    
+
     if (instance->uifallback && instance->uifallback->ui->Destroy)
         instance->uifallback->ui->Destroy(instance->uifallback->addonInstance);
-    
+
     instance->uifallback = NULL;
     instance->ui = NULL;
     instance->uinormal = NULL;
@@ -427,6 +427,7 @@ boolean FcitxInstanceSetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic
 {
     FcitxContextState prevstate = FcitxInstanceGetCurrentState(instance);
     boolean changed = (instance->CurrentIC != ic);
+
     instance->CurrentIC = ic;
 
     FcitxContextState nextstate = FcitxInstanceGetCurrentState(instance);
@@ -454,7 +455,7 @@ void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_KEYBOARD_LAYOUT, FCT_String, FCF_ResetOnInputMethodChange);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_IM_LANGUAGE, FCT_String, FCF_None);
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_SHOW_REMIND_STATUS, FCT_Boolean, FCF_ResetOnInputMethodChange);
-    
+
     FcitxInstanceWatchContext(instance, CONTEXT_SHOW_REMIND_STATUS, FcitxInstanceShowRemindStatusChanged, instance);
 }
 

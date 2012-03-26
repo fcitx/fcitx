@@ -45,5 +45,15 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance);
  **/
 void FcitxUIMoveInputWindowReal(FcitxInstance *instance);
 
+/**
+ * @brief Get string without MSG_DONOT_COMMIT_WHEN_UNFOCUS
+ *
+ * @param messages message
+ * @return return string
+ *
+ * @see MSG_DONOT_COMMIT_WHEN_UNFOCUS
+ **/
+char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages);
+
 #endif
 

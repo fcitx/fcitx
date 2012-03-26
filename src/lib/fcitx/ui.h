@@ -58,8 +58,8 @@ extern "C" {
         MENUTYPE_SUBMENU,
         MENUTYPE_DIVLINE
     } FcitxMenuItemType;
-    
-    
+
+
     typedef boolean (*FcitxMenuActionFunction)(struct _FcitxUIMenu *arg, int index);
     typedef void    (*FcitxUpdateMenuFunction)(struct _FcitxUIMenu *arg);
 
@@ -83,7 +83,7 @@ extern "C" {
          * the submenu to this entry
          **/
         struct _FcitxUIMenu *subMenu;
-        
+
         int padding[16]; /**< padding */
     };
 
@@ -129,7 +129,7 @@ extern "C" {
          * mark of this menu
          **/
         int mark;
-        
+
         int padding[16]; /**< padding */
     };
 
@@ -169,10 +169,10 @@ extern "C" {
          * visible
          */
         boolean visible;
-        
+
         int padding[16]; /**< padding */
     };
-    
+
 
     /**
      * Fcitx Status icon to be displayed on the UI
@@ -210,7 +210,7 @@ extern "C" {
          * visible
          */
         boolean visible;
-        
+
         int padding[16]; /**< padding */
     };
 
@@ -233,6 +233,7 @@ extern "C" {
         MSG_OTHER = 6,          /**< Other Text */
         MSG_NOUNDERLINE = (1 << 3), /**< backward compatible, no underline is a flag */
         MSG_HIGHLIGHT = (1 << 4),
+        MSG_DONOT_COMMIT_WHEN_UNFOCUS = (1 << 5), /**< backward compatible */
         MSG_REGULAR_MASK = 0x7
     } FcitxMessageType;
 
@@ -424,14 +425,14 @@ extern "C" {
      * @return FcitxMessageType
      **/
     FcitxMessageType FcitxMessagesGetMessageType(FcitxMessages* m, int index);
-    
+
     /**
      * get message type at index, will not filter non regular type
      *
      * @param m message
      * @param index index
      * @return FcitxMessageType
-     * 
+     *
      * @see FcitxMessagesGetMessageType
      * @since 4.2.1
      **/
@@ -598,7 +599,7 @@ extern "C" {
      * @param instance fcitx instance
      * @param name status name
      * @return FcitxUIMenu*
-     * 
+     *
      * @since 4.2.1
      **/
     FcitxUIMenu* FcitxUIGetMenuByStatusName(struct _FcitxInstance* instance, const char* name);
@@ -611,8 +612,8 @@ extern "C" {
      * @return FcitxUIStatus*
      **/
     FcitxUIComplexStatus *FcitxUIGetComplexStatusByName(struct _FcitxInstance* instance, const char* name);
-    
-    
+
+
     /**
      * set visibility for a status icon
      *
@@ -622,7 +623,7 @@ extern "C" {
      * @return void
      **/
     void FcitxUISetStatusVisable(struct _FcitxInstance* instance, const char* name, boolean visible);
-    
+
     /**
      * @brief set string for a status icon
      *
@@ -631,7 +632,7 @@ extern "C" {
      * @param shortDesc short description
      * @param longDesc long description
      * @return void
-     * 
+     *
      * @since 4.2.1
      **/
     void FcitxUISetStatusString(struct _FcitxInstance* instance, const char* name, const char* shortDesc, const char* longDesc);
@@ -703,6 +704,15 @@ extern "C" {
      **/
 
     char* FcitxUICandidateWordToCString(struct _FcitxInstance* instance);
+
+
+    /**
+     * @brief commit current preedit string if any
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void FcitxUICommitPreedit(struct _FcitxInstance* instance);
 
     /**
      * mark input window should update

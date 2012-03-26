@@ -613,6 +613,24 @@ void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+void FcitxUICommitPreedit(struct _FcitxInstance* instance)
+{
+    if (instance->CurrentIC) {
+        FcitxInputState* input = FcitxInstanceGetInputState(instance);
+        FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
+
+        if (FcitxMessagesGetMessageCount(clientPreedit) > 0) {
+            char* str = FcitxUIMessagesToCStringForCommit(clientPreedit);
+            if (str[0]) {
+                FcitxInstanceCommitString(instance, instance->CurrentIC, str);
+            }
+            free(str);
+        }
+        FcitxMessagesSetMessageCount(clientPreedit, 0);
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxUIOnTriggerOn(FcitxInstance* instance)
 {
     if (UI_FUNC_IS_VALID(OnTriggerOn))
@@ -747,6 +765,27 @@ char* FcitxUIMessagesToCString(FcitxMessages* messages)
 
     return str;
 }
+
+char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages)
+{
+    int length = 0;
+    int i = 0;
+
+    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++) {
+        if ((FcitxMessagesGetClientMessageType(messages, i) & MSG_DONOT_COMMIT_WHEN_UNFOCUS) == 0)
+            length += strlen(FcitxMessagesGetMessageString(messages, i));
+    }
+
+    char* str = fcitx_utils_malloc0(sizeof(char) * (length + 1));
+
+    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++) {
+        if ((FcitxMessagesGetClientMessageType(messages, i) & MSG_DONOT_COMMIT_WHEN_UNFOCUS) == 0)
+            strcat(str, FcitxMessagesGetMessageString(messages, i));
+    }
+
+    return str;
+}
+
 
 FCITX_EXPORT_API
 char* FcitxUICandidateWordToCString(FcitxInstance* instance)

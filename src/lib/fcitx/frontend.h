@@ -53,7 +53,7 @@ extern "C" {
         CAPACITY_PREEDIT = (1 << 1),
         CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2),
         CAPACITY_PASSWORD = (1 << 3),
-        CAPACITY_FORMATTED_PREEDIT = (1 << 4)
+        CAPACITY_FORMATTED_PREEDIT = (1 << 4),
     } FcitxCapacityFlags;
 
     /**
@@ -194,13 +194,13 @@ extern "C" {
      * @return IME_STATE
      **/
     FcitxContextState FcitxInstanceGetCurrentState(struct _FcitxInstance* instance);
-    
+
     /**
      * Get Current State, consider the option firstAsInactive
      *
      * @param instance fcitx instance
      * @return IME_STATE
-     * 
+     *
      * @see FcitxInstanceGetCurrentState
      **/
     FcitxContextState FcitxInstanceGetCurrentStatev2(struct _FcitxInstance* instance);

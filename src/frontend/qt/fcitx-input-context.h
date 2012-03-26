@@ -80,7 +80,7 @@ private:
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
-    
+
     void addCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
     {
         QFlags< FcitxCapacityFlags > newcaps = m_capacity | capacity;
@@ -89,7 +89,7 @@ private:
             updateCapacity();
         }
     }
-    
+
     void removeCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
     {
         QFlags< FcitxCapacityFlags > newcaps = m_capacity & (~capacity);
@@ -98,7 +98,7 @@ private:
             updateCapacity();
         }
     }
-    
+
     void updateCapacity();
 
     QDBusConnection m_connection;

@@ -490,7 +490,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         QFlags<FcitxCapacityFlags> flag;
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
-        
+
         addCapacity(flag, true);
     }
     delete watcher;
@@ -500,9 +500,9 @@ void QFcitxInputContext::updateCapacity()
 {
     if (!m_icproxy || !m_icproxy->isValid())
         return;
-    
+
     QDBusPendingReply< void > result = m_icproxy->SetCapacity((uint) m_capacity);
-    
+
     QEventLoop loop;
     QDBusPendingCallWatcher watcher(result);
     loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
@@ -568,7 +568,7 @@ void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList&
         attrList.append(QAttribute(QInputMethodEvent::TextFormat, pos, preedit.string().length(), format));
         pos += preedit.string().length();
     }
-    
+
     QByteArray array = str.toUtf8();
     array.truncate(cursorPos);
     cursorPos = QString::fromUtf8(array).length();
