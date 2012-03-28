@@ -1,6 +1,6 @@
 [Xim/UseOnTheSpotStyle]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Use On The Spot Style for XIM (Can not change during running)
 
 [DescriptionFile]
