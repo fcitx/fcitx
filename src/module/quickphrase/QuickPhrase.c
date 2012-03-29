@@ -213,12 +213,6 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
         utarray_push_back(qpstate->quickPhrases, &tempQuickPhrase);
     }
 
-    strcpy(tempQuickPhrase.strCode, "\x47\x4e\x4f\x4d\x45");
-    strcpy(tempQuickPhrase.strPhrase, "\x48\x6f\x77\x20\x63\x61\x6e\x20\x69\x74\x20\x66\x75\x63\x6b\x20\x66"
-           "\x63\x69\x74\x78\x20\x73\x6f\x20\x6d\x61\x6e\x79\x20\x74\x69\x6d\x65\x73"
-           "\x3f\x20\x49\x74\x20\x73\x75\x63\x6b\x73\x2e");
-    utarray_push_back(qpstate->quickPhrases, &tempQuickPhrase);
-
     if (buf)
         free(buf);
     if (buf1)
