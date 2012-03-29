@@ -159,12 +159,31 @@ void DrawTrayWindow(TrayWindow* trayWindow)
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_paint(c);
 
-    if (png_surface) {
-        cairo_scale(c, ((double) trayWindow->size) / cairo_image_surface_get_height(png_surface), ((double) trayWindow->size) / cairo_image_surface_get_width(png_surface));
-        cairo_set_source_surface(c, png_surface, 0 , 0);
-        cairo_set_operator(c, CAIRO_OPERATOR_OVER);
-        cairo_paint_with_alpha(c, 1);
-    }
+    do {
+        if (png_surface) {
+            int w = cairo_image_surface_get_width(png_surface);
+            int h = cairo_image_surface_get_height(png_surface);
+            if (w == 0 || h == 0)
+                break;
+            double scaleW = 1.0, scaleH = 1.0;
+            if (w > trayWindow->size || h > trayWindow->size)
+            {
+                scaleW = ((double) trayWindow->size) / w;
+                scaleH = ((double) trayWindow->size) / h;
+                if (scaleW > scaleH)
+                    scaleH = scaleW;
+                else
+                    scaleW = scaleH;
+            }
+            int aw = scaleW * w;
+            int ah = scaleH * h;
+            
+            cairo_scale(c, scaleW, scaleH);
+            cairo_set_source_surface(c, png_surface, (trayWindow->size - aw) / 2 , (trayWindow->size - ah) / 2);
+            cairo_set_operator(c, CAIRO_OPERATOR_OVER);
+            cairo_paint_with_alpha(c, 1);
+        }
+    } while(0);
 
     cairo_destroy(c);
 
