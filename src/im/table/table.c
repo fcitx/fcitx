@@ -439,7 +439,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 TableResetStatus(table);
                 FcitxInstanceCleanInputWindowUp(instance);
                 FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
-                FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+                FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT | MSG_DONOT_COMMIT_WHEN_UNFOCUS, "%s", FcitxInputStateGetRawInputBuffer(input));
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else
                 return IRV_CLEAN;
@@ -653,7 +653,7 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
 
     FcitxInstanceCleanInputWindowUp(instance);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT | MSG_DONOT_COMMIT_WHEN_UNFOCUS, "%s", FcitxInputStateGetRawInputBuffer(input));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetClientCursorPos(input, 0);
 
@@ -711,7 +711,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
             FcitxMessagesSetMessageCount(FcitxInputStateGetPreedit(input), 0);
             FcitxMessagesSetMessageCount(FcitxInputStateGetClientPreedit(input), 0);
             FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
-            FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT | MSG_DONOT_COMMIT_WHEN_UNFOCUS, "%s", FcitxInputStateGetRawInputBuffer(input));
             FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
             FcitxInputStateSetClientCursorPos(input, 0);
         }
@@ -835,7 +835,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
         FcitxMessagesSetMessageCount(FcitxInputStateGetPreedit(input), 0);
         FcitxMessagesSetMessageCount(FcitxInputStateGetClientPreedit(input), 0);
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT | MSG_DONOT_COMMIT_WHEN_UNFOCUS, "%s", FcitxInputStateGetRawInputBuffer(input));
         FcitxInputStateSetCursorPos(input, strlen(FcitxInputStateGetRawInputBuffer(input)));
         FcitxInputStateSetClientCursorPos(input, 0);
     }
@@ -1030,7 +1030,7 @@ INPUT_RETURN_VALUE TableGetFHCandWords(TableMetaData* table)
 
     FcitxInstanceCleanInputWindowUp(instance);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT | MSG_DONOT_COMMIT_WHEN_UNFOCUS, "%s", FcitxInputStateGetRawInputBuffer(input));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetClientCursorPos(input, 0);
 
