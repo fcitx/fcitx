@@ -144,8 +144,8 @@ static void SendIMState(FcitxRemote* remote, int fd)
 static void RemoteProcessEvent(void* p)
 {
     FcitxRemote* remote = (FcitxRemote*) p;
-    unsigned int O;  // 低16位, 0 = get, 1 = set;
-    // 高16位, 只用于 set, 0 关闭输入法, 1 打开输入法.
+    unsigned int O;
+    // lower 16bit 0->get 1->set, 2->reload, 3->toggle
     int client_fd = UdAccept(remote->socket_fd);
     if (client_fd < 0)
         return;
@@ -159,13 +159,29 @@ static void RemoteProcessEvent(void* p)
         SendIMState(remote, client_fd);
         break;
     case 1:
-        if (arg == IS_CLOSED)
+        /* arg is not state, due to backward compatible */
+        if (arg == 0)
+            FcitxInstanceCloseIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
+        else {
+            FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
+            if (arg == 2)
+                FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
+        }
+        break;
+    case 2:
+        FcitxInstanceReloadConfig(remote->owner);
+        break;
+    case 3:
+        if (FcitxInstanceGetCurrentStatev2(remote->owner) == IS_ACTIVE)
             FcitxInstanceCloseIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         else
             FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
         break;
-    case 2:
-        FcitxInstanceReloadConfig(remote->owner);
+    case 4:
+        if (FcitxInstanceGetCurrentStatev2(remote->owner) == IS_CLOSED)
+            FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
+        else
+            FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         break;
     default:
         break;

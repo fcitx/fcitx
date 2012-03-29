@@ -121,7 +121,7 @@ Description=Hotkey of Switching Active and Inactive Mode
 [Hotkey/DoubleSwitchKey]
 Type=Boolean
 DefaultValue=False
-Description=Double click Switch Key to Change Mode
+Description=Press Switch Key twice to Change Mode
 
 [Hotkey/TimeInterval]
 Type=Integer
