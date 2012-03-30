@@ -10,8 +10,7 @@
 #include "fcitx-utils/utf8.h"
 #include "tabledict.h"
 
-#define TEMP_FILE       "FCITX_TABLE_TEMP"
-
+#define TABLE_TEMP_FILE "table_XXXXXX"
 const int iInternalVersion = INTERNAL_VERSION;
 
 boolean LoadTableDict(TableMetaData* tableMetaData)
@@ -248,20 +247,29 @@ void SaveTableDict(TableMetaData *tableMetaData)
     FILE           *fpDict;
     unsigned int    iTemp;
     unsigned int    i;
+    int             fd;
     int8_t          cTemp;
     TableDict      *tableDict = tableMetaData->tableDict;
 
     if (!tableDict->iTableChanged)
         return;
 
-    fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "w", &tempfile);
+    // make ~/.config/fcitx/table/ dir
+    FcitxXDGGetFileUserWithPrefix("table", "", "w", NULL);
+    FcitxXDGGetFileUserWithPrefix("table", TABLE_TEMP_FILE, NULL, &tempfile);
+    fd = mkstemp(tempfile);
+    fpDict = NULL;
+
+    if (fd > 0)
+        fpDict = fdopen(fd, "w");
+
     if (!fpDict) {
         FcitxLog(ERROR, _("Save dict error"));
         free(tempfile);
         return;
     }
 
-    //写入版本号--如果第一个字为0,表示后面那个字节为版本号，为了与老版本兼容
+    // write version number
     iTemp = 0;
     fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
     fwrite(&iInternalVersion, sizeof(char), 1, fpDict);
@@ -276,7 +284,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
     fwrite(tableDict->strIgnoreChars, sizeof(char), iTemp + 1, fpDict);
 
     fwrite(&(tableDict->bRule), sizeof(unsigned char), 1, fpDict);
-    if (tableDict->bRule) { //表示有组词规则
+    if (tableDict->bRule) { // table contains rule
         for (i = 0; i < tableDict->iCodeLength - 1; i++) {
             fwrite(&(tableDict->rule[i].iFlag), sizeof(unsigned char), 1, fpDict);
             fwrite(&(tableDict->rule[i].iWords), sizeof(unsigned char), 1, fpDict);
@@ -317,8 +325,16 @@ void SaveTableDict(TableMetaData *tableMetaData)
     tableDict->iTableChanged = 0;
 
     if (tableDict->autoPhrase) {
-        //保存上次的自动词组信息
-        fpDict = FcitxXDGGetFileUserWithPrefix("table", TEMP_FILE, "w", &tempfile);
+        // Save auto phrase
+        // make ~/.config/fcitx/table/ dir
+        FcitxXDGGetFileUserWithPrefix("table", "", "w", NULL);
+        FcitxXDGGetFileUserWithPrefix("table", TABLE_TEMP_FILE, NULL, &tempfile);
+        fd = mkstemp(tempfile);
+        fpDict = NULL;
+
+        if (fd > 0)
+            fpDict = fdopen(fd, "w");
+
         if (fpDict) {
             fwrite(&tableDict->iAutoPhrase, sizeof(int), 1, fpDict);
             for (i = 0; i < tableDict->iAutoPhrase; i++) {

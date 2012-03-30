@@ -50,8 +50,8 @@
 #include "fcitx/context.h"
 #include "spdata.h"
 
-#define TEMP_FILE       "FCITX_DICT_TEMP"
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
+#define PINYIN_TEMP_FILE "pinyin_XXXXXX"
 
 FCITX_EXPORT_API
 FcitxIMClass ime = {
@@ -1747,8 +1747,16 @@ void SavePYUserPhrase(FcitxPinyinState* pystate)
     FILE *fp;
     PyPhrase *phrase;
     PYFA* PYFAList = pystate->PYFAList;
+    int fd;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
+    FcitxXDGGetFileUserWithPrefix("pinyin", "", "w", NULL);
+    FcitxXDGGetFileUserWithPrefix("pinyin", PINYIN_TEMP_FILE, NULL, &tempfile);
+    fd = mkstemp(tempfile);
+    fp = NULL;
+
+    if (fd > 0)
+        fp = fdopen(fd, "w");
+
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save User Pinyin Database: %s"), tempfile);
         free(tempfile);
@@ -1803,8 +1811,16 @@ void SavePYFreq(FcitxPinyinState *pystate)
     FILE *fp;
     PyFreq *pPyFreq;
     HZ *hz;
+    int fd;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
+    FcitxXDGGetFileUserWithPrefix("pinyin", "", "w", NULL);
+    FcitxXDGGetFileUserWithPrefix("pinyin", PINYIN_TEMP_FILE, NULL, &tempfile);
+    fd = mkstemp(tempfile);
+    fp = NULL;
+
+    if (fd > 0)
+        fp = fdopen(fd, "w");
+
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save Frequent word: %s"), tempfile);
         free(tempfile);
@@ -1868,8 +1884,16 @@ void SavePYIndex(FcitxPinyinState *pystate)
     char *tempfile;
     FILE *fp;
     PYFA* PYFAList = pystate->PYFAList;
+    int fd;
 
-    fp = FcitxXDGGetFileUserWithPrefix("pinyin", TEMP_FILE, "w", &tempfile);
+    FcitxXDGGetFileUserWithPrefix("pinyin", "", "w", NULL);
+    FcitxXDGGetFileUserWithPrefix("pinyin", PINYIN_TEMP_FILE, NULL, &tempfile);
+    fd = mkstemp(tempfile);
+    fp = NULL;
+
+    if (fd > 0)
+        fp = fdopen(fd, "w");
+
     if (!fp) {
         FcitxLog(ERROR, _("Cannot Save Pinyin Index: %s"), tempfile);
         free(tempfile);

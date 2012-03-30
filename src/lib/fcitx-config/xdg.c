@@ -155,6 +155,15 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_
         return NULL;
     }
 
+    if (strlen(fileName) == 0) {
+        if (retFile)
+            asprintf(retFile, "%s", path[0]);
+        if (strchr(mode, 'w') || strchr(mode, 'a')) {
+            make_path(path[0]);
+        }
+        return NULL;
+    }
+
     for (i = 0; i < len; i++) {
         asprintf(&buf, "%s/%s", path[i], fileName);
 
