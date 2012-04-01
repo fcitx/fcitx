@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utils.h"
@@ -471,30 +472,36 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
     //下面读取特殊符号表
     fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
     if (fp) {
-        char strTxt[256];
-        char str1[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1], str2[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
-        char *str;
+        char* buf = NULL, *buf1 = NULL;
+        size_t len;
 
-        for (;;) {
-            if (!fgets(strTxt, 255, fp))
-                break;
-            i = strlen(strTxt) - 1;
-            if (strTxt[0] == '#')
+        while (getline(&buf, &len, fp) != -1) {
+            if (buf1)
+                free(buf1);
+            buf1 = fcitx_utils_trim(buf);
+            char *p = buf1;
+
+            while (*p && !isspace(*p))
+                p ++;
+            if (*p == '\0' || *p == '#')
                 continue;
-            if (strTxt[i] == '\n')
-                strTxt[i] = '\0';
-            str = strTxt;
-            while (*str == ' ' || *str == '\t')
-                str++;
-            if (!strlen(str))
+
+            while (isspace(*p)) {
+                *p = '\0';
+                p ++;
+            }
+
+            if (strlen(buf1) >= MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH)
                 continue;
-            sscanf(str, "%s %s", str1, str2);
+
+            if (strlen(p) >= MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH)
+                continue;
 
             //首先看看str1是否已经在列表中
             pyFreqTemp = pystate->pyFreq->next;
             pPyFreq = pystate->pyFreq;
             while (pyFreqTemp) {
-                if (!strcmp(pyFreqTemp->strPY, str1))
+                if (!strcmp(pyFreqTemp->strPY, buf1))
                     break;
                 pPyFreq = pPyFreq->next;
                 pyFreqTemp = pyFreqTemp->next;
@@ -502,7 +509,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
 
             if (!pyFreqTemp) {
                 pyFreqTemp = (PyFreq *) fcitx_utils_malloc0(sizeof(PyFreq));
-                strcpy(pyFreqTemp->strPY, str1);
+                strcpy(pyFreqTemp->strPY, buf1);
                 pyFreqTemp->next = NULL;
                 pyFreqTemp->iCount = 0;
                 pyFreqTemp->bIsSym = true;
@@ -516,7 +523,7 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
             }
 
             HZTemp = (HZ *) fcitx_utils_malloc0(sizeof(HZ));
-            strcpy(HZTemp->strHZ, str2);
+            strcpy(HZTemp->strHZ, p);
             HZTemp->next = NULL;
             pyFreqTemp->iCount++;
 
@@ -526,6 +533,11 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
 
             pHZ->next = HZTemp;
         }
+
+        if (buf)
+            free(buf);
+        if (buf1)
+            free(buf1);
 
         fclose(fp);
     }

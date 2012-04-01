@@ -193,7 +193,7 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
         while (*p && !isspace(*p))
             p ++;
 
-        if (p == '\0')
+        if (*p == '\0')
             continue;
 
         while (isspace(*p)) {
@@ -204,7 +204,7 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
         if (strlen(buf1) >= QUICKPHRASE_CODE_LEN)
             continue;
 
-        if (strlen(p) >= QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1)
+        if (strlen(p) >= QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH)
             continue;
 
         strcpy(tempQuickPhrase.strCode, buf1);
