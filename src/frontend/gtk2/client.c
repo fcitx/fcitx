@@ -84,7 +84,7 @@ boolean IsFcitxIMClientEnabled(FcitxIMClient* client)
 void FcitxIMClientSetEnabled(FcitxIMClient* client, boolean enable)
 {
     if (client)
-        client->enable = true;
+        client->enable = enable;
 }
 
 FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIMClientDestroyCallback destroycb, GObject* data)

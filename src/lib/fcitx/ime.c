@@ -1077,6 +1077,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
     if (ic == FcitxInstanceGetCurrentIC(instance)) {
         FcitxUIOnTriggerOff(instance);
         FcitxUICloseInputWindow(instance);
+        FcitxInstanceResetInput(instance);
     }
 }
 
