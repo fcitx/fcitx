@@ -201,10 +201,11 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
     if (ic == NULL)
         return;
 
-    if (GetXimIC(ic)->id != call_data->icid) {
+    if (ic->frontendid != xim->frontendid || GetXimIC(ic)->id != call_data->icid) {
         ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
         if (ic == NULL)
             return;
+        FcitxInstanceSetCurrentIC(xim->owner, ic);
     }
 
     kev = (XKeyEvent *) & call_data->event;

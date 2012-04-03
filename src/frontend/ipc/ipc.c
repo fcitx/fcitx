@@ -594,7 +594,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(ipc->owner);
     FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
 
-    if (ic == NULL) {
+    if (ic == NULL || ic->frontendid != callic->frontendid || GetIPCIC(ic)->id != GetIPCIC(callic)->id) {
         FcitxInstanceSetCurrentIC(ipc->owner, callic);
     }
     ic = callic;

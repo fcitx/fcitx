@@ -329,7 +329,7 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
         }
         g_strfreev (apps);
     }
-    
+
     /* make ibus fix benefits us */
     _use_sync_mode = _get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
                      || _get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
@@ -410,7 +410,7 @@ fcitx_im_context_finalize(GObject *obj)
     if (context->attrlist)
         pango_attr_list_unref(context->attrlist);
     context->attrlist = NULL;
-    
+
     if (_key_snooper_id != 0) {
         gtk_key_snooper_remove (_key_snooper_id);
         _key_snooper_id = 0;
@@ -455,7 +455,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_filter_keypress");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
-    
+
     /* check this first, since we use key snooper, most key will be handled. */
     if (IsFcitxIMClientValid(fcitxcontext->client) ) {
         /* XXX it is a workaround for some applications do not set client window. */
@@ -605,22 +605,22 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
         g_free(context->preedit_string);
         context->preedit_string = NULL;
     }
-    
+
     if (context->attrlist != NULL) {
         pango_attr_list_unref(context->attrlist);
     }
-    
+
     context->attrlist = pango_attr_list_new();
-    
+
     GString* gstr = g_string_new(NULL);
-    
+
     int i = 0;
     for (i = 0; i < array->len; i++) {
         size_t bytelen = strlen(gstr->str);
         GValueArray* preedit = g_ptr_array_index(array, i);
         const gchar* s = g_value_get_string(g_value_array_get_nth(preedit, 0));
         gint type = g_value_get_int(g_value_array_get_nth(preedit, 1));
-        
+
         PangoAttribute *pango_attr = NULL;
         if ((type & MSG_NOUNDERLINE) == 0) {
             pango_attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
@@ -628,12 +628,12 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
             pango_attr->end_index = bytelen + strlen(s);
             pango_attr_list_insert(context->attrlist, pango_attr);
         }
-        
+
         if (type & MSG_HIGHLIGHT) {
             gboolean hasColor;
             GdkColor fg;
             GdkColor bg;
-            
+
             if (context->client_window) {
                 GtkWidget *widget;
                 gdk_window_get_user_data (context->client_window,
@@ -645,7 +645,7 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
                     bg = style->bg[GTK_STATE_SELECTED];
                 }
             }
-            
+
             if (!hasColor) {
                 fg.red = 0xffff;
                 fg.green = 0xffff;
@@ -654,7 +654,7 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
                 bg.green = 0xacff;
                 bg.blue = 0xe8ff;
             }
-            
+
             pango_attr = pango_attr_foreground_new(fg.red, fg.green, fg.blue);
             pango_attr->start_index = bytelen;
             pango_attr->end_index = bytelen + strlen(s);
@@ -666,9 +666,9 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
         }
         gstr = g_string_append(gstr, s);
     }
-    
+
     gchar* str = g_string_free(gstr, FALSE);
-    
+
     context->preedit_string = g_strdup(str);
     char* tempstr = g_strndup(str, cursor_pos);
     context->cursor_pos =  fcitx_utf8_strlen(tempstr);
@@ -711,11 +711,11 @@ fcitx_im_context_focus_in(GtkIMContext *context)
 
     if (fcitxcontext->has_focus)
         return;
-   
+
     _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
 
     fcitxcontext->has_focus = true;
-    
+
     if (_focus_im_context != NULL) {
         g_assert (_focus_im_context != context);
         gtk_im_context_focus_out (_focus_im_context);
@@ -751,7 +751,7 @@ fcitx_im_context_focus_out(GtkIMContext *context)
     if (!fcitxcontext->has_focus) {
         return;
     }
-    
+
     g_assert (context == _focus_im_context);
     g_object_remove_weak_pointer ((GObject *) context,
                                   (gpointer *) &_focus_im_context);
@@ -861,7 +861,7 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
         FcitxCapacityFlags flags = CAPACITY_NONE;
         if (fcitxcontext->use_preedit)
             flags |= CAPACITY_PREEDIT | CAPACITY_FORMATTED_PREEDIT;
-        
+
         if (fcitxcontext->client_window != NULL) {
             GtkWidget *widget;
             gdk_window_get_user_data (fcitxcontext->client_window,
@@ -871,7 +871,7 @@ _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force)
                 flags |= CAPACITY_PASSWORD;
             }
         }
-        
+
         gboolean update = FALSE;
         if (G_UNLIKELY(fcitxcontext->capacity != flags)) {
             fcitxcontext->capacity = flags;
@@ -1285,7 +1285,7 @@ _key_snooper_cb (GtkWidget   *widget,
         fcitxcontext->time = event->time;
 
         if (_use_sync_mode) {
-            
+
             int ret = FcitxIMClientProcessKeySync(fcitxcontext->client,
                                                     event->keyval,
                                                     event->hardware_keycode,
@@ -1313,7 +1313,7 @@ _key_snooper_cb (GtkWidget   *widget,
             retval = TRUE;
         }
     } while(0);
-    
+
     if (!retval) {
         event->state |= FcitxKeyState_IgnoredMask;
         return FALSE;

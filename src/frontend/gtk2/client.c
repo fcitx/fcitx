@@ -114,7 +114,7 @@ FcitxIMClient* FcitxIMClientOpen(FcitxIMClientConnectCallback connectcb, FcitxIM
         free(client);
         return NULL;
     }
-    
+
     sprintf(client->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__STRING_STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
     dbus_g_proxy_add_signal(client->dbusproxy, "NameOwnerChanged", G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
@@ -234,11 +234,11 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
     dbus_g_proxy_add_signal(client->icproxy, "UpdatePreedit", G_TYPE_STRING, G_TYPE_INT, G_TYPE_INVALID);
 
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__BOXED_INT, G_TYPE_NONE, PREEDIT_TYPE_STRING_INT_ARRAY, G_TYPE_INT, G_TYPE_INVALID);
-    
+
     dbus_g_proxy_add_signal(client->icproxy, "UpdateFormattedPreedit", PREEDIT_TYPE_STRING_INT_ARRAY, G_TYPE_INT, G_TYPE_INVALID);
 
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
-    
+
     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
     client->connectcb(client, client->data);
 }
