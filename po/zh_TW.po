@@ -1,24 +1,23 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
 # Alisha <alisha.4m@gmail.com>, 2012.
-# Xuetian Weng <wengxt@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-29 19:28+0800\n"
-"PO-Revision-Date: 2012-03-29 19:52+0800\n"
-"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
-"Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2012-04-01 07:53+0000\n"
+"Last-Translator: Alisha <alisha.4m@gmail.com>\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.net/projects/p/fcitx/"
+"language/zh_TW/)\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"language/zh_TW/)\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Lokalize 1.4\n"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1102
 msgid " Ctrl+Delete To Delete"
@@ -34,11 +33,11 @@ msgstr "智能ABC"
 
 #: unknown
 msgid "ALT_L_SHIFT"
-msgstr ""
+msgstr "Alt+左Shift"
 
 #: unknown
 msgid "ALT_R_SHIFT"
-msgstr ""
+msgstr "Alt+右Shift"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:145
 msgid "About Fcitx"
@@ -50,7 +49,7 @@ msgstr "按下 enter 鍵後動作"
 
 #: unknown
 msgid "Active"
-msgstr "作用中"
+msgstr "作用"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:217
 msgid "Active Menu Color"
@@ -383,7 +382,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:353
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:704
 msgid "Disabled"
-msgstr "已停用"
+msgstr "停用"
 
 #: /home/saber/Develop/fcitx/data/config.desc:96
 msgid ""
@@ -411,7 +410,7 @@ msgstr "啟用"
 
 #: /home/saber/Develop/fcitx/data/config.desc:106
 msgid "Enable Left Ctrl + Left Shift to Switch Between Input Method"
-msgstr "啟用左Ctrl + 左Shift 在輸入法間切換"
+msgstr "啟用左Ctrl + 左Shift 切換輸入法"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:27
 msgid "Enabled"
@@ -722,7 +721,7 @@ msgstr "如果您使用 ~/.xinitrc 和 startx，請將這幾行加入到 ~/.xini
 
 #: unknown
 msgid "Inactive"
-msgstr "非作用中"
+msgstr "非作用"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:60
 msgid "Inactive Menu Item Character Color"
@@ -750,7 +749,7 @@ msgstr "輸入法"
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:354
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:704
 msgid "Input Method Disabled"
-msgstr "輸入法已停用"
+msgstr "停用輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1225
 msgid "Input Speed: "
@@ -796,11 +795,11 @@ msgstr "Fcitx 的 Kimpanel 支援"
 
 #: unknown
 msgid "L_CTRL"
-msgstr ""
+msgstr "左 Ctrl"
 
 #: unknown
 msgid "L_SHIFT"
-msgstr ""
+msgstr "左 Shift"
 
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:19
 msgid "LangCode"
@@ -1015,7 +1014,7 @@ msgstr "所屬附加元件"
 
 #: unknown
 msgid "PerProgram"
-msgstr ""
+msgstr "按程式"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1097
 msgid "Phrase is already in Dict "
@@ -1068,7 +1067,7 @@ msgstr "按下 Enter 輸入文字"
 
 #: /home/saber/Develop/fcitx/data/config.desc:124
 msgid "Press Switch Key twice to Change Mode"
-msgstr "按兩下切換鍵時切換模式"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:753
 msgid "Press index to delete user phrase (ESC for cancel)"
@@ -1130,20 +1129,20 @@ msgstr "標點支援"
 
 #: unknown
 msgid "Quick Phrase List"
-msgstr "快速詞組清單"
+msgstr "快速字詞清單"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:242
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:331
 msgid "Quick Phrase: "
-msgstr "快速詞組："
+msgstr "快速字詞："
 
 # unknown
 msgid "QuickPhrase"
-msgstr "快速詞組"
+msgstr "快速字詞"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-quickphrase.conf.in.h:1
 msgid "Quickphrase"
-msgstr "快速詞組"
+msgstr "快速字詞"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-qw.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/qw/qw.c:68
@@ -1156,11 +1155,11 @@ msgstr "Fcitx 的區位輸入法"
 
 #: unknown
 msgid "R_CTRL"
-msgstr ""
+msgstr "右Ctrl"
 
 #: unknown
 msgid "R_SHIFT"
-msgstr ""
+msgstr "右Shift"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:58
 msgid "Register IM"
@@ -1248,7 +1247,7 @@ msgstr ""
 
 #: unknown
 msgid "Semicolon"
-msgstr ""
+msgstr "分號"
 
 #: /home/saber/Develop/fcitx/data/config.desc:56
 msgid "Send typed raw text if Switch to inactive Mode"
@@ -1408,7 +1407,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Toggle for enable or disable"
-msgstr ""
+msgstr "啟用停用切換鍵"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:263
 msgid "Too long item for AutoEng"
@@ -1428,7 +1427,7 @@ msgstr "正體中文"
 
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:7
 msgid "Trigger Key for QuickPhrase"
-msgstr ""
+msgstr "快速字詞觸發鍵"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:38
 msgid "Type"
