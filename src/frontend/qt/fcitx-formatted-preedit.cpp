@@ -51,11 +51,11 @@ void FcitxFormattedPreedit::setString(const QString& str)
 }
 
 
-QDBusArgument& operator<<(QDBusArgument& argument, const FcitxFormattedPreedit& im)
+QDBusArgument& operator<<(QDBusArgument& argument, const FcitxFormattedPreedit& preedit)
 {
     argument.beginStructure();
-    argument << im.string();
-    argument << im.format();
+    argument << preedit.string();
+    argument << preedit.format();
     argument.endStructure();
     return argument;
 }
