@@ -59,10 +59,12 @@ void OnException(int signo)
     FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
 
     if (signo != SIGSEGV && signo != SIGCONT) {
-        FcitxInstanceLock(instance);
-        FcitxProfileSave(instance->profile);
-        FcitxInstanceSaveAllIM(instance);
-        FcitxInstanceUnlock(instance);
+        if (instance) {
+            FcitxInstanceLock(instance);
+            FcitxProfileSave(instance->profile);
+            FcitxInstanceSaveAllIM(instance);
+            FcitxInstanceUnlock(instance);
+        }
     }
 
     void *array[10];

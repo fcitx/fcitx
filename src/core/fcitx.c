@@ -49,7 +49,7 @@
 #include "fcitx-utils/utils.h"
 #include "errorhandler.h"
 
-FcitxInstance* instance;
+FcitxInstance* instance = NULL;
 
 static void WaitForEnd(sem_t *sem, int count)
 {
