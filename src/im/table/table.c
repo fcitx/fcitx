@@ -98,7 +98,7 @@ void *TableCreate(FcitxInstance* instance)
 void SaveTableIM(void *arg)
 {
     TableMetaData* table = (TableMetaData*) arg;
-    
+
     if (!table->tableDict)
         return;
     if (table->tableDict && table->tableDict->iTableChanged)
@@ -250,7 +250,14 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
 
     retVal = IRV_DO_NOTHING;
-    if (state == FcitxKeyState_None && (IsInputKey(table->tableDict, sym) || IsEndKey(table, sym) || sym == table->cMatchingKey || sym == table->cPinyin)) {
+    if (state == FcitxKeyState_None &&
+        (IsInputKey(table->tableDict, sym)
+         || IsEndKey(table, sym)
+         || sym == table->cMatchingKey
+         || sym == table->cPinyin
+         || (strCodeInput[0] == table->cPinyin && table->bUsePY && sym == FcitxKey_apostrophe)
+        )
+       ) {
         if (FcitxInputStateGetIsInRemind(input))
             FcitxCandidateWordReset(FcitxInputStateGetCandidateList(input));
         FcitxInputStateSetIsInRemind(input, false);
@@ -779,7 +786,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
                     } else
                         totallen += 1;
                 }
-                
+
                 candWord.strExtra = fcitx_utils_malloc0(sizeof(char) * (totallen + 2));
                 candWord.strExtra[0] = ' ';
                 for (i = 0; i < codelen; i ++) {
@@ -877,7 +884,7 @@ void TableAdjustOrderByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord)
 {
     RECORD         *recTemp;
     int             iTemp;
-    
+
     FcitxTableState* tbl = table->owner;
 
     recTemp = tableCandWord->candWord.record;
