@@ -615,7 +615,7 @@ void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 FCITX_EXPORT_API
 void FcitxUICommitPreedit(struct _FcitxInstance* instance)
 {
-    if (instance->CurrentIC) {
+    if (instance->CurrentIC && !instance->config->bDontCommitPreeditWhenUnfocus) {
         FcitxInputState* input = FcitxInstanceGetInputState(instance);
         FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
 

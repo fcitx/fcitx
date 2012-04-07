@@ -211,11 +211,14 @@ extern "C" {
          * Enable Left Ctrl + Left Shift to Switch Between Input Method
          **/
         boolean bIMSwitchKey;
-        
+
         boolean firstAsInactive; /**< use first input method as inactive state */
 
         FcitxContextState _defaultIMState; /**< default input method state */
-        int padding[61]; /**< padding */
+
+        boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
+
+        int padding[60]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

@@ -47,6 +47,7 @@ CONFIG_BINDING_REGISTER("Output", "RemindModeDisablePaging", bDisablePagingInRem
 CONFIG_BINDING_REGISTER("Output", "SendTextWhenSwitchEng", bSendTextWhenSwitchEng)
 CONFIG_BINDING_REGISTER("Output", "CandidateWordNumber", iMaxCandWord)
 CONFIG_BINDING_REGISTER("Output", "PhraseTips", bPhraseTips)
+CONFIG_BINDING_REGISTER("Output", "DontCommitPreeditWhenUnfocus", bDontCommitPreeditWhenUnfocus)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering)
 CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed)

@@ -65,6 +65,11 @@ Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
 
+[Output/DontCommitPreeditWhenUnfocus]
+Type=Boolean
+DefaultValue=False
+Description=Do not commit preedit text when unfocus a window
+
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
 DefaultValue=True
