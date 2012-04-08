@@ -42,8 +42,16 @@ extern "C" {
         SWITCHKEY_L_CTRL = 3,
         SWITCHKEY_ALT_L_SHIFT = 4,
         SWITCHKEY_ALT_R_SHIFT = 5,
-        SWITCHKEY_None = 6
+        SWITCHKEY_CTRL_BOTH = 6,
+        SWITCHKEY_SHIFT_BOTH = 7,
+        SWITCHKEY_None = 8
     } FcitxSwitchKey;
+
+    typedef enum _FcitxIMSwitchKey {
+        IMSWITCHKEY_CTRL_SHIFT = 0,
+        IMSWITCHKEY_ALT_SHIFT = 1
+    } FcitxIMSwitchKey;
+
 
     typedef enum _FcitxEnterAcion {
         K_ENTER_NOTHING = 0,
@@ -131,7 +139,7 @@ extern "C" {
         /**
          * hotkey format of switch key
          **/
-        FcitxHotkey switchKey[2];
+        FcitxHotkey dummykey[2];
         /**
          * enable double press switch action
          **/
@@ -218,7 +226,9 @@ extern "C" {
 
         boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
 
-        int padding[60]; /**< padding */
+        int iIMSwitchKey;
+
+        int padding[59]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

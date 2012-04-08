@@ -31,7 +31,6 @@
 #include "instance.h"
 
 static FcitxConfigFileDesc* GetConfigDesc();
-static void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
 static void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
 static void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
 
@@ -56,10 +55,8 @@ CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyPreeditString", bH
 CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyOneCandidate", bHideInputWindowWhenOnlyOneCandidate);
 CONFIG_BINDING_REGISTER("Hotkey", "TriggerKey", hkTrigger)
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchKey", bIMSwitchKey)
-CONFIG_BINDING_REGISTER_WITH_FILTER("Hotkey", "SwitchKey", iSwitchKey, FilterSwitchKey)
-CONFIG_BINDING_REGISTER("Hotkey", "DoubleSwitchKey", bDoubleSwitchKey)
-CONFIG_BINDING_REGISTER("Hotkey", "TimeInterval", iTimeInterval)
-CONFIG_BINDING_REGISTER("Hotkey", "VKSwitchKey", hkVK)
+CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchHotkey", iIMSwitchKey)
+CONFIG_BINDING_REGISTER("Hotkey", "SwitchKey", iSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "RemindSwitchKey", hkRemind)
 CONFIG_BINDING_REGISTER("Hotkey", "FullWidthSwitchKey", hkFullWidthChar)
 CONFIG_BINDING_REGISTER("Hotkey", "PuncSwitchKey", hkPunc)
@@ -109,44 +106,6 @@ void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxC
                 fc->i3rdSelectKey[0].state = FcitxKeyState_None;
             }
         }
-    }
-}
-
-void FilterSwitchKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
-{
-    FCITX_UNUSED(group);
-    FCITX_UNUSED(option);
-    FCITX_UNUSED(arg);
-    FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
-    FcitxHotkey* hkey = NULL;
-    if (sync == Raw2Value) {
-        FcitxSwitchKey *s = (FcitxSwitchKey*)value;
-        switch (*s) {
-        case SWITCHKEY_R_CTRL:
-            hkey = FCITX_RCTRL;
-            break;
-        case SWITCHKEY_R_SHIFT:
-            hkey = FCITX_RSHIFT;
-            break;
-        case SWITCHKEY_L_SHIFT:
-            hkey = FCITX_LSHIFT;
-            break;
-        case SWITCHKEY_L_CTRL:
-            hkey = FCITX_LCTRL;
-            break;
-        case SWITCHKEY_ALT_L_SHIFT:
-            hkey = FCITX_ALT_LSHIFT;
-            break;
-        case SWITCHKEY_ALT_R_SHIFT:
-            hkey = FCITX_ALT_RSHIFT;
-            break;
-        case SWITCHKEY_None:
-            hkey = FCITX_NONE_KEY;
-        }
-    }
-    if (hkey != NULL) {
-        fc->switchKey[0] = hkey[0];
-        fc->switchKey[1] = hkey[1];
     }
 }
 

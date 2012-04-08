@@ -108,18 +108,28 @@ Description=Hot key of Triggering Input Method
 [Hotkey/IMSwitchKey]
 Type=Boolean
 DefaultValue=True
-Description=Enable Left Ctrl + Left Shift to Switch Between Input Method
+Description=Enable Switch Key to switch Between Input Method
+
+[Hotkey/IMSwitchHotkey]
+Type=Enum
+EnumCount=2
+Enum0=CTRL_SHIFT
+Enum1=ALT_SHIFT
+DefaultValue=CTRL_SHIFT
+Description=Switch Key to switch Between Input Method
 
 [Hotkey/SwitchKey]
 Type=Enum
-EnumCount=7
+EnumCount=9
 Enum0=R_CTRL
 Enum1=R_SHIFT
 Enum2=L_SHIFT
 Enum3=L_CTRL
 Enum4=ALT_L_SHIFT
 Enum5=ALT_R_SHIFT
-Enum6=Disabled
+Enum6=CTRL Both
+Enum7=SHIFT Both
+Enum8=Disabled
 DefaultValue=L_CTRL
 Description=Hotkey of Switching Active and Inactive Mode
 
