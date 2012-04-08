@@ -461,7 +461,7 @@ boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state)
 FCITX_EXPORT_API
 boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey)
 {
-    state &= FcitxKeyState_Ctrl_Alt_Shift;
+    state &= FcitxKeyState_Ctrl_Alt_Shift | FcitxKeyState_Super;
     if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
         return true;
     if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
@@ -544,6 +544,9 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
     if (state & FcitxKeyState_Shift)
         len += strlen("SHIFT_");
 
+    if (state & FcitxKeyState_Super)
+        len += strlen("SUPER_");
+
     char *key = FcitxHotkeyGetKeyListString(sym);
 
     if (!key)
@@ -561,6 +564,9 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
 
     if (state & FcitxKeyState_Shift)
         strcat(str, "SHIFT_");
+
+    if (state & FcitxKeyState_Super)
+        strcat(str, "SUPER_");
 
     strcat(str, key);
 
@@ -596,6 +602,11 @@ boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state)
     if (strstr(strKey, "SHIFT_")) {
         iKeyState |= FcitxKeyState_Shift;
         p += strlen("SHIFT_");
+    }
+
+    if (strstr(strKey, "SUPER_")) {
+        iKeyState |= FcitxKeyState_Super;
+        p += strlen("SUPER_");
     }
 
     iKey = FcitxHotkeyGetKeyList(p);
