@@ -120,18 +120,6 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
-static boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey);
-
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
-{
-    state &= FcitxKeyState_Ctrl_Alt_Shift;
-    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
-        return true;
-    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
-        return true;
-    return false;
-}
-
 QFcitxInputContext::QFcitxInputContext()
     : m_connection(QDBusConnection::sessionBus()),
       m_dbusproxy(0),
@@ -381,7 +369,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
         FcitxKeySym fcitxsym;
         uint fcitxstate;
         FcitxHotkeyGetKey((FcitxKeySym) sym, event->xkey.state, &fcitxsym, &fcitxstate);
-        if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey)) {
+        if (!FcitxHotkeyIsHotKey(fcitxsym, fcitxstate, m_triggerKey)) {
             return x11FilterEventFallback(keywidget, event, sym);
         }
     }
