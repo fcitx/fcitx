@@ -299,6 +299,13 @@ void FcitxIMClientSetCursorLocation(FcitxIMClient* client, int x, int y)
     }
 }
 
+void FcitxIMClientSetCursorRect(FcitxIMClient* client, int x, int y, int w, int h)
+{
+    if (client->icproxy) {
+        dbus_g_proxy_call_no_reply(client->icproxy, "SetCursorRect", G_TYPE_INT, x, G_TYPE_INT, y, G_TYPE_INT, w, G_TYPE_INT, h, G_TYPE_INVALID);
+    }
+}
+
 void FcitxIMClientProcessKey(FcitxIMClient* client,
                              DBusGProxyCallNotify callback,
                              void* user_data,

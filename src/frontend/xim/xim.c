@@ -50,7 +50,7 @@ static void XimCloseIM(void* arg, FcitxInputContext* ic);
 static void XimCommitString(void* arg, FcitxInputContext* ic, const char* str);
 static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
-static void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
+static void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
@@ -90,7 +90,7 @@ FcitxFrontend frontend = {
     XimCommitString,
     XimForwardKey,
     XimSetWindowOffset,
-    XimGetWindowPosition,
+    XimGetWindowRect,
     XimUpdatePreedit,
     NULL,
     NULL,
@@ -438,10 +438,12 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
     }
 }
 
-void XimGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
+void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
 {
     *x = ic->offset_x;
     *y = ic->offset_y;
+    *w = 0;
+    *h = 0;
 }
 
 void XimUpdatePreedit(void* arg, FcitxInputContext* ic)

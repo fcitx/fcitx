@@ -836,7 +836,7 @@ _set_cursor_location_internal(FcitxIMContext *fcitxcontext)
     }
 #endif
 
-    FcitxIMClientSetCursorLocation(fcitxcontext->client, area.x, area.y + area.height);
+    FcitxIMClientSetCursorRect(fcitxcontext->client, area.x, area.y, area.width, area.height);
     return FALSE;
 }
 

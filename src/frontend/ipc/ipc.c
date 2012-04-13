@@ -37,6 +37,8 @@ typedef struct _FcitxIPCIC {
     int id;
     char path[32];
     char* appname;
+    int width;
+    int height;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -69,7 +71,7 @@ static void IPCCloseIM(void* arg, FcitxInputContext* ic);
 static void IPCCommitString(void* arg, FcitxInputContext* ic, const char* str);
 static void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state);
 static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
-static void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y);
+static void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 static void IPCUpdatePreedit(void* arg, FcitxInputContext* ic);
 static void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic);
 static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *message, void *user_data);
@@ -77,7 +79,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
-static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y);
+static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y, int w, int h);
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const uint32_t originsym, const uint32_t keycode, const uint32_t originstate, uint32_t t, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
 static void IPCGetPropertyIMList(void* arg, DBusMessageIter* iter);
@@ -172,6 +174,12 @@ const char * ic_introspection_xml =
     "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
     "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
     "    </method>\n"
+    "    <method name=\"SetCursorRect\">\n"
+    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
+    "      <arg name=\"y\" direction=\"in\" type=\"i\"/>\n"
+    "      <arg name=\"w\" direction=\"in\" type=\"i\"/>\n"
+    "      <arg name=\"h\" direction=\"in\" type=\"i\"/>\n"
+    "    </method>\n"
     "    <method name=\"SetCapacity\">\n"
     "      <arg name=\"caps\" direction=\"in\" type=\"u\"/>\n"
     "    </method>\n"
@@ -228,7 +236,7 @@ FcitxFrontend frontend = {
     IPCCommitString,
     IPCForwardKey,
     IPCSetWindowOffset,
-    IPCGetWindowPosition,
+    IPCGetWindowRect,
     IPCUpdatePreedit,
     IPCUpdateClientSideUI,
     NULL,
@@ -441,10 +449,12 @@ void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
     ic->offset_y = y;
 }
 
-void IPCGetWindowPosition(void* arg, FcitxInputContext* ic, int* x, int* y)
+void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
 {
     *x = ic->offset_x;
     *y = ic->offset_y;
+    *w = GetIPCIC(ic)->width;
+    *h = GetIPCIC(ic)->height;
 }
 
 
@@ -538,7 +548,19 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation")) {
             int x, y;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID)) {
-                IPCICSetCursorLocation(ipc, ic, x, y);
+                IPCICSetCursorRect(ipc, ic, x, y, 0, 0);
+                DBusMessage *reply = dbus_message_new_method_return(msg);
+                dbus_connection_send(ipc->conn, reply, NULL);
+                dbus_message_unref(reply);
+            }
+            result = DBUS_HANDLER_RESULT_HANDLED;
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorRect")) {
+            int x, y, w, h;
+            if (dbus_message_get_args(msg, &error,
+                DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y,
+                DBUS_TYPE_INT32, &w, DBUS_TYPE_INT32, &h,
+                DBUS_TYPE_INVALID)) {
+                IPCICSetCursorRect(ipc, ic, x, y, w, h);
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(ipc->conn, reply, NULL);
                 dbus_message_unref(reply);
@@ -680,10 +702,12 @@ static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
     return;
 }
 
-static void IPCICSetCursorLocation(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y)
+static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y, int w, int h)
 {
     ic->offset_x = x;
     ic->offset_y = y;
+    GetIPCIC(ic)->width = w;
+    GetIPCIC(ic)->height = h;
     FcitxUIMoveInputWindow(ipc->owner);
 
     return;

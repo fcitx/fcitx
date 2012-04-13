@@ -83,7 +83,7 @@ extern "C" {
         void (*CommitString)(void* arg, FcitxInputContext* arg1, const char* arg2); /**< frontend commit string callback */
         void (*ForwardKey)(void* arg, FcitxInputContext* arg1, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state); /**< frontend forward key callback */
         void (*SetWindowOffset)(void* arg, FcitxInputContext* ic, int x, int y); /**< frontend set window offset callback */
-        void (*GetWindowPosition)(void* arg, FcitxInputContext* ic, int* x, int* y); /**< frontend get window position callback */
+        void (*GetWindowRect)(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h); /**< frontend get window position callback */
         void (*UpdatePreedit)(void* arg, FcitxInputContext* ic); /**< frontend update preedit callback */
         void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic); /**< frontend update client side user interface callback */
         void (*ReloadConfig)(void* arg); /**< frontend reload config callback */
@@ -168,6 +168,19 @@ extern "C" {
      * @return void
      **/
     void FcitxInstanceGetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
+
+    /**
+     * Get Cursor Rect
+     *
+     * @param  ...
+     * @param ic input context
+     * @param x xpos
+     * @param y ypos
+     * @param w width
+     * @param h height
+     * @return void
+     **/
+     void FcitxInstanceGetWindowRect(struct _FcitxInstance* instance, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 
     /**
      * Update preedit text to client window

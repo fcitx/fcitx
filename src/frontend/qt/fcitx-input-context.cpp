@@ -188,7 +188,7 @@ void QFcitxInputContext::update()
     QPoint topleft = widget->mapToGlobal(QPoint(0, 0));
     rect.translate(topleft);
 
-    m_icproxy->SetCursorLocation(rect.x(), rect.y() + rect.height());
+    m_icproxy->SetCursorRect(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 

@@ -274,8 +274,28 @@ void FcitxInstanceGetWindowPosition(FcitxInstance* instance, FcitxInputContext* 
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
-    if (frontend->GetWindowPosition)
-        frontend->GetWindowPosition((*pfrontend)->addonInstance, ic, x, y);
+    int rx, ry, rw, rh;
+    if (frontend->GetWindowRect) {
+        frontend->GetWindowRect((*pfrontend)->addonInstance, ic, &rx, &ry, &rw, &rh);
+        *x = rx;
+        *y = ry + rh;
+    }
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceGetWindowRect(FcitxInstance* instance, FcitxInputContext* ic, int* x, int* y, int* w, int* h)
+{
+    if (ic == NULL)
+        return;
+
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->GetWindowRect) {
+        frontend->GetWindowRect((*pfrontend)->addonInstance, ic, x, y, w, h);
+    }
 }
 
 FCITX_EXPORT_API
