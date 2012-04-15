@@ -349,7 +349,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                     INPUT_RETURN_VALUE ret = TableGetCandWord(table, candWord);
                                     if (ret & IRV_FLAG_PENDING_COMMIT_STRING) {
                                         FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetOutputString(input));
-                                        FcitxInstanceIncreateInputCharacterCount(instance, fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
+                                        FcitxInstanceIncreaseInputCharacterCount(instance, fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
                                     }
                                 }
                             }

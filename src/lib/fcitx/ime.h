@@ -69,7 +69,7 @@ extern "C" {
     struct _FcitxInstance;
     struct _FcitxAddon;
     struct _FcitxCandidateWordList;
-    
+
     /** input method available status */
     typedef enum _FcitxIMAvailableStatus {
         IMAS_Enable,
@@ -371,8 +371,8 @@ extern "C" {
         long unsigned int timestamp,
         FcitxKeySym sym,
         unsigned int state);
-    
-    
+
+
     /**
      * @brief choose candidate by index
      *
@@ -441,14 +441,14 @@ extern "C" {
      * @return int
      **/
     int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState);
-    
+
     /**
      * get im index by im name
      *
      * @param instance fcitx instance
      * @param imName im name
      * @return int im index
-     * 
+     *
      * @since 4.2
      **/
     int FcitxInstanceGetIMIndexByName(struct _FcitxInstance* instance, const char* imName);
@@ -619,7 +619,7 @@ extern "C" {
      * @return void
      **/
     void FcitxInputStateSetLastIsSingleChar(FcitxInputState* input, int lastIsSingleChar);
-    
+
     /**
      * set keycode for current key event
      *
@@ -628,7 +628,7 @@ extern "C" {
      * @return void
      **/
     void FcitxInputStateSetKeyCode( FcitxInputState* input, uint32_t value );
-    
+
     /**
      * set keysym for current key event
      *
@@ -642,11 +642,11 @@ extern "C" {
      * set keystate for current key state
      *
      * @param input input state
-     * @param value state
+     * @param state key state
      * @return void
      **/
     void FcitxInputStateSetKeyState( FcitxInputState* input, uint32_t state );
-    
+
     /**
      * get keycode for current key event
      *
@@ -654,7 +654,7 @@ extern "C" {
      * @return uint32_t
      **/
     uint32_t FcitxInputStateGetKeyCode( FcitxInputState* input);
-    
+
     /**
      * get keysym for current key event
      *

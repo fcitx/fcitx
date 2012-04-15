@@ -310,7 +310,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
         imname = _("Disabled");
         description = _("Input Method Disabled");
     }
-    /* add fcitx- prefix */
+    /* add fcitx- prefix, unless icon name is an absolute path */
     if (icon[0] == '/')
         asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", imname, icon, description);
     else

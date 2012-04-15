@@ -315,7 +315,7 @@ extern "C" {
 
         void (*Destroy)(void*); /**< destroy user interface addon */
         void (*RegisterComplexStatus)(void*, FcitxUIComplexStatus*); /**< register complex status */
-        void (*UpdateComplexStatus)(void *arg, FcitxUIComplexStatus*);; /**< register complext status */
+        void (*UpdateComplexStatus)(void *arg, FcitxUIComplexStatus*); /**< register complext status */
         void (*padding3)(void*); /**< padding */
     } FcitxUI;
 
@@ -522,7 +522,7 @@ extern "C" {
      * @param shortDesc short description
      * @param longDesc long description
      * @param toggleStatus callback for toggle status
-     * @param getStatus get current status
+     * @param getIconName get current icon name
      * @return void
      **/
     void FcitxUIRegisterComplexStatus(struct _FcitxInstance* instance,

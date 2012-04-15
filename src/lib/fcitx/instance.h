@@ -148,7 +148,7 @@ extern "C" {
 
     FcitxInputState* FcitxInstanceGetInputState(FcitxInstance* instance);
 
-    void FcitxInstanceIncreateInputCharacterCount(FcitxInstance* instance, int count);
+    void FcitxInstanceIncreaseInputCharacterCount(FcitxInstance* instance, int count);
 
 #ifdef __cplusplus
 }

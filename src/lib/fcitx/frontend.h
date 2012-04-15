@@ -161,18 +161,18 @@ extern "C" {
     /**
      * Get Cursor Position
      *
-     * @param  ...
+     * @param instance fcitx instance
      * @param ic input context
      * @param x xpos
      * @param y ypos
      * @return void
      **/
-    void FcitxInstanceGetWindowPosition(struct _FcitxInstance*, FcitxInputContext *ic, int* x, int* y);
+    void FcitxInstanceGetWindowPosition(struct _FcitxInstance* instance, FcitxInputContext *ic, int* x, int* y);
 
     /**
      * Get Cursor Rect
      *
-     * @param  ...
+     * @param instance fcitx instance
      * @param ic input context
      * @param x xpos
      * @param y ypos

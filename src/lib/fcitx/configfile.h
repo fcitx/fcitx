@@ -69,165 +69,45 @@ extern "C" {
      * struct opposite to ~/.config/fcitx/config
      **/
     typedef struct _FcitxConfig {
-        /**
-         * derives FcitxGenericConfig
-         **/
-        FcitxGenericConfig gconfig;
-        /* program config */
-        /**
-         * delay start seconds
-         **/
-        int iDelayStart;
-        /**
-         * is the first run
-         **/
-        boolean bFirstRun;
+        FcitxGenericConfig gconfig;        /**< derives FcitxGenericConfig */
 
-        /* output config */
-        /**
-         * input eng punc after input number
-         **/
-        boolean bEngPuncAfterNumber;
-        /**
-         * enter key action
-         **/
-        FcitxEnterAcion enterToDo;
-        /**
-         * Remind mode can has multipage
-         **/
-        boolean bDisablePagingInRemind;
-        /**
-         * switch to english with switch key commit string or not
-         **/
-        boolean bSendTextWhenSwitchEng;
-        /**
-         * max candidate word number
-         **/
-        int iMaxCandWord;
-        /**
-         * phrase tips
-         **/
-        boolean bPhraseTips;
-
-        /* appearance config */
-        /**
-         * show input window after trigger on
-         **/
-        boolean bShowInputWindowTriggering;
-        /**
-         * index number follow with a '.'
-         **/
-        boolean bPointAfterNumber;
-        /**
-         * show user input speed
-         **/
-        boolean bShowUserSpeed;
-        /**
-         * show fcitx version
-         **/
-        boolean bShowVersion;
-
-        /* hotkey config */
-        /**
-         * trigger key
-         **/
-        FcitxHotkey hkTrigger[2];
-        /**
-         * switch key
-         **/
-        FcitxSwitchKey iSwitchKey;
-        /**
-         * hotkey format of switch key
-         **/
-        FcitxHotkey dummykey[2];
-        /**
-         * enable double press switch action
-         **/
-        boolean bDoubleSwitchKey;
-        /**
-         * key hit interval
-         **/
-        int iTimeInterval;
-        /**
-         * hotkey for switch VK
-         **/
-        FcitxHotkey hkVK[2];
-        /**
-         * hotkey for switch remind mode
-         **/
-        FcitxHotkey hkRemind[2];
-        /**
-         * hotkey for switch full width char
-         **/
-        FcitxHotkey hkFullWidthChar[2];
-        /**
-         * hotkey for switch punc
-         **/
-        FcitxHotkey hkPunc[2];
-        /**
-         * prev page
-         **/
-        FcitxHotkey hkPrevPage[2];
-        /**
-         * next page
-         **/
-        FcitxHotkey hkNextPage[2];
-        /**
-         * 2nd 3rd candidate select key
-         **/
-        FcitxHotkey str2nd3rdCand[2];
-        /**
-         * save all key
-         **/
-        FcitxHotkey hkSaveAll[2];
-
-        /**
-         * hotkey format for 2nd select key
-         **/
-        FcitxHotkey i2ndSelectKey[2];
-        /**
-         * hotkey format for 3rd select key
-         **/
-        FcitxHotkey i3rdSelectKey[2];
-
-        /**
-         * hide input window when there is only preedit string
-         **/
-        boolean bHideInputWindowWhenOnlyPreeditString;
-
-        /**
-         * hide input window when there is only one candidate word
-         **/
-        boolean bHideInputWindowWhenOnlyOneCandidate;
-
-        /**
-         * switch the preedit should show in client window or not
-         **/
-        FcitxHotkey hkSwitchEmbeddedPreedit[2];
-
-        /**
-         * Input method use global shared state
-         **/
-        FcitxShareState shareState;
-
-        /**
-         * Input method enable by default
-         **/
-        FcitxContextState defaultIMState;
-
-        /**
-         * Enable Left Ctrl + Left Shift to Switch Between Input Method
-         **/
-        boolean bIMSwitchKey;
-
+        int iDelayStart;        /**< delay start seconds*/
+        boolean bFirstRun; /**< is the first run */
+        boolean bEngPuncAfterNumber;  /**< input eng punc after input number */
+        FcitxEnterAcion enterToDo;        /**< enter key action */
+        boolean bDisablePagingInRemind;        /**< Remind mode can has multipage */
+        boolean bSendTextWhenSwitchEng;   /**< switch to english with switch key commit string or not */
+        int iMaxCandWord;/**< max candidate word number */
+        boolean bPhraseTips;/**< phrase tips*/
+        boolean bShowInputWindowTriggering;/**< show input window after trigger on*/
+        boolean bPointAfterNumber;/**< index number follow with a '.'*/
+        boolean bShowUserSpeed;/**< show user input speed*/
+        boolean bShowVersion;/**< show fcitx version*/
+        FcitxHotkey hkTrigger[2];/**< trigger key*/
+        FcitxSwitchKey iSwitchKey;/**< switch key*/
+        FcitxHotkey dummykey[2];/**< hotkey format of switch key*/
+        boolean bDoubleSwitchKey;/**< enable double press switch action*/
+        int iTimeInterval;/**< key hit interval*/
+        FcitxHotkey hkVK[2];/**< hotkey for switch VK*/
+        FcitxHotkey hkRemind[2];/**< hotkey for switch remind mode*/
+        FcitxHotkey hkFullWidthChar[2];/**< hotkey for switch full width char*/
+        FcitxHotkey hkPunc[2];/**< hotkey for switch punc*/
+        FcitxHotkey hkPrevPage[2];/**< prev page*/
+        FcitxHotkey hkNextPage[2];/**< next page*/
+        FcitxHotkey str2nd3rdCand[2];/**< 2nd 3rd candidate select key*/
+        FcitxHotkey hkSaveAll[2];/**< save all key*/
+        FcitxHotkey i2ndSelectKey[2];/**< hotkey format for 2nd select key*/
+        FcitxHotkey i3rdSelectKey[2];/**< hotkey format for 3rd select key*/
+        boolean bHideInputWindowWhenOnlyPreeditString;/**< hide input window when there is only preedit string*/
+        boolean bHideInputWindowWhenOnlyOneCandidate;/**< hide input window when there is only one candidate word*/
+        FcitxHotkey hkSwitchEmbeddedPreedit[2];/**< switch the preedit should show in client window or not*/
+        FcitxShareState shareState;        /**< Input method use global shared state*/
+        FcitxContextState defaultIMState;        /**< Input method enable by default */
+        boolean bIMSwitchKey; /**< Enable Left Ctrl + Left Shift to Switch Between Input Method */
         boolean firstAsInactive; /**< use first input method as inactive state */
-
         FcitxContextState _defaultIMState; /**< default input method state */
-
         boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
-
-        int iIMSwitchKey;
-
+        int iIMSwitchKey; /**< the type of input method switch key */
         int padding[59]; /**< padding */
     } FcitxGlobalConfig;
 
@@ -238,6 +118,7 @@ extern "C" {
      * @return boolean load success or not
      **/
     boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc);
+
     /**
      * save config
      *

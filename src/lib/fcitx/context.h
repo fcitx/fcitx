@@ -56,11 +56,60 @@ extern "C" {
     #define CONTEXT_DISABLE_QUICKPHRASE "CONTEXT_DISABLE_QUICKPHRASE"
     #define CONTEXT_SHOW_REMIND_STATUS "CONTEXT_SHOW_REMIND_STATUS"
 
+    /**
+     * @brief register a new global context variable
+     *
+     * @param instance fcitx instance
+     * @param key context name
+     * @param type contex value type
+     * @param flag context flag
+     * @return void
+     **/
     void FcitxInstanceRegisterWatchableContext(FcitxInstance* instance, const char* key, FcitxContextType type, unsigned int flag );
+
+    /**
+     * @brief bind a callback function to this context, callback will be called when context value changed.
+     *
+     * @param instance fcitx instance
+     * @param key context name
+     * @param callback callback function
+     * @param arg extra argument to the callback
+     * @return void
+     **/
     void FcitxInstanceWatchContext(FcitxInstance* instance, const char* key, FcitxContextCallback callback, void* arg);
+
+    /**
+     * @brief update the value of a context
+     *
+     * @param instance instance
+     * @param key context name
+     * @param value context value
+     * @return void
+     **/
     void FcitxInstanceSetContext(FcitxInstance* instance, const char* key, const void* value);
+    /**
+     * @brief get string type context value
+     *
+     * @param instance fcitx instance
+     * @param key contex name
+     * @return const char*
+     **/
     const char* FcitxInstanceGetContextString(FcitxInstance* instance, const char* key);
+    /**
+     * @brief get boolean type context value
+     *
+     * @param instance fcitx instance
+     * @param key context name
+     * @return boolean
+     **/
     boolean FcitxInstanceGetContextBoolean(FcitxInstance* instance, const char* key);
+    /**
+     * @brief get hotkey type context value
+     *
+     * @param instance fcitx instance
+     * @param key key
+     * @return const FcitxHotkey*
+     **/
     const FcitxHotkey* FcitxInstanceGetContextHotkey(FcitxInstance* instance, const char* key);
 
 #ifdef __cplusplus

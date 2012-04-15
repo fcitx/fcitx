@@ -25,7 +25,7 @@
 
 /**
  * @file candidate.h
- * 
+ *
  * Fcitx candidate word list related definition and function
  */
 
@@ -44,7 +44,7 @@ extern "C" {
 
     struct _FcitxCandidateWord;
     struct _FcitxCandidateWordList;
-    
+
     /** fcitx candidate workd list */
     typedef struct _FcitxCandidateWordList FcitxCandidateWordList;
 
@@ -118,19 +118,19 @@ extern "C" {
      * @param candList candidate word list
      * @param candWord candidate word
      * @return void
-     * 
+     *
      * @since 4.2
      **/
     void FcitxCandidateWordRemove(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
-    
-    
+
+
     /**
      * set page by index
      *
      * @param candList candidate word list
      * @param index candidate word
      * @return void
-     * 
+     *
      * @since 4.2.1
      **/
     void FcitxCandidateWordSetFocus(struct _FcitxCandidateWordList* candList, int index);
@@ -234,7 +234,7 @@ extern "C" {
      * @return void
      **/
     void FcitxCandidateWordSetChoose(struct _FcitxCandidateWordList* candList, const char* strChoose);
-    
+
     /**
      * set the select key string, length up to 10, usually "1234567890"
      *
@@ -252,8 +252,8 @@ extern "C" {
      * @return void
      **/
     const char* FcitxCandidateWordGetChoose(struct _FcitxCandidateWordList* candList);
-    
-    
+
+
     /**
      * get select key state
      *

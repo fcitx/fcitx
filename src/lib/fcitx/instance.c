@@ -443,7 +443,7 @@ boolean FcitxInstanceSetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceIncreateInputCharacterCount(FcitxInstance* instance, int count)
+void FcitxInstanceIncreaseInputCharacterCount(FcitxInstance* instance, int count)
 {
     instance += count;
 }
