@@ -47,6 +47,7 @@ extern "C" {
         IS_ENG = IS_INACTIVE /* backward compatible */
     } FcitxContextState;
 
+    /** fcitx input context capacity flags */
     typedef enum _FcitxCapacityFlags {
         CAPACITY_NONE = 0,
         CAPACITY_CLIENT_SIDE_UI = (1 << 0),

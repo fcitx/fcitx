@@ -35,6 +35,7 @@
 extern "C" {
 #endif
 
+    /** switch key for active/inactive */
     typedef enum _FcitxSwitchKey {
         SWITCHKEY_R_CTRL = 0,
         SWITCHKEY_R_SHIFT = 1,
@@ -47,18 +48,20 @@ extern "C" {
         SWITCHKEY_None = 8
     } FcitxSwitchKey;
 
+    /** switch key for change current input method */
     typedef enum _FcitxIMSwitchKey {
         IMSWITCHKEY_CTRL_SHIFT = 0,
         IMSWITCHKEY_ALT_SHIFT = 1
     } FcitxIMSwitchKey;
 
-
+    /** action after press enter */
     typedef enum _FcitxEnterAcion {
         K_ENTER_NOTHING = 0,
         K_ENTER_CLEAN = 1,
         K_ENTER_SEND = 2
     } FcitxEnterAcion;
 
+    /** policy of how input method state is shared */
     typedef enum _FcitxShareState {
         ShareState_None = 0,
         ShareState_All = 1,

@@ -32,15 +32,19 @@
 extern "C" {
 #endif
 
+    /** context callback function prototype */
     typedef void (*FcitxContextCallback)(void* arg, const void* value);
 
+    /** fcitx context type */
     typedef struct _FcitxContext FcitxContext;
 
+    /** fcitx context flag */
     typedef enum _FcitxContextFlag {
         FCF_None = 0,
         FCF_ResetOnInputMethodChange = (1 << 0)
     } FcitxContextFlag;
 
+    /** fcitx context value type */
     typedef enum _FcitxContextType {
         FCT_Hotkey,
         FCT_String,
@@ -48,12 +52,19 @@ extern "C" {
         FCT_Boolean
     } FcitxContextType;
 
+    /** alternative prevpage key, if this input method requires different key for paging */
     #define CONTEXT_ALTERNATIVE_PREVPAGE_KEY "CONTEXT_ALTERNATIVE_PREVPAGE_KEY"
+    /** alternative nextpage key, if this input method requires different key for paging */
     #define CONTEXT_ALTERNATIVE_NEXTPAGE_KEY "CONTEXT_ALTERNATIVE_NEXTPAGE_KEY"
+    /** current input method language */
     #define CONTEXT_IM_LANGUAGE "CONTEXT_IM_LANGUAGE"
+    /** current input method prefered layout, requires fcitx-xkb to really works */
     #define CONTEXT_IM_KEYBOARD_LAYOUT "CONTEXT_IM_KEYBOARD_LAYOUT"
+    /** disable built-in autoeng module */
     #define CONTEXT_DISABLE_AUTOENG "CONTEXT_DISABLE_AUTOENG"
+    /** disable built-in quichphrase module */
     #define CONTEXT_DISABLE_QUICKPHRASE "CONTEXT_DISABLE_QUICKPHRASE"
+    /** show a built-in remind button or not */
     #define CONTEXT_SHOW_REMIND_STATUS "CONTEXT_SHOW_REMIND_STATUS"
 
     /**

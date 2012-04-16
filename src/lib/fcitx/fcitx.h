@@ -18,11 +18,6 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-/**
- * @addtogroup Fcitx
- * @{
- */
-
 #ifndef _FCITX_H_
 #define _FCITX_H_
 
@@ -35,9 +30,15 @@
 
 /**
  * @defgroup Fcitx Fcitx
- * 
+ *
  * All fcitx core related function, including addon process, mainloop,
  * user interface, and all misc stuff needed by fcitx.
+ */
+
+
+/**
+ * @addtogroup Fcitx
+ * @{
  */
 
 /**

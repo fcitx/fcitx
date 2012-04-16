@@ -18,18 +18,34 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+
+/**
+ * @addtogroup FcitxUtils
+ * @{
+ */
+
+/**
+ * @file memory.h
+ *
+ * a simple naive memory pool for fcitx, scenerio is many small allocation,
+ * but don't need to free, or only free all the allocated memory at once.
+ *
+ * A common usage for simple memory pool
+ * @code
+ * FcitxMemoryPool* pool = fcitx_memory_pool_create();
+ * void* mem = fcitx_memory_pool_alloc(pool, 20);
+ * ...
+ * fcitx_memory_pool_destroy(pool);
+ * @endcode
+ *
+ * Memory pool will alloc new memory block by 8k, and mark the page to full when there
+ * is only 16 bytes left. It can achieve good performance and little memory foot print
+ * when you need a lot of small allocation.
+ */
 #ifndef _FCITX_MEMORY_H_
 #define _FCITX_MEMORY_H_
 
 #include <stdlib.h>
-
-/**
- * @file memory.h
- * 
- * a simple naive memory pool for fcitx, scenerio is many small allocate,
- * but nearly no single memory free, but it may only free all the allocated memory
- *
- */
 
 /** memory pool private struct */
 typedef struct _FcitxMemoryPool FcitxMemoryPool;
@@ -59,3 +75,7 @@ void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size);
 void fcitx_memory_pool_destroy(FcitxMemoryPool* pool);
 
 #endif
+
+/**
+ * @}
+ */

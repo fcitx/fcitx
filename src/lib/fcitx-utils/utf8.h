@@ -84,6 +84,8 @@ int    fcitx_utf8_char_len(const char *in);
 
 /**
  * next pointer to the nth character, n start with 0
+ * this function will not touch the content for s, so const pointer
+ * can be safely passed and converted.
  *
  * @param s string
  * @param n index

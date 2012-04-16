@@ -23,6 +23,40 @@
  * @{
  */
 
+/**
+ * @file ui.h
+ *
+ * this file provides the UI component for Fcitx, fcitx doesn't provides any platform specific
+ * UI element, all UI are implemented via Fcitx's addon.
+ *
+ * For input method and module, they can register UI component and get native UI for free from
+ * Fcitx.
+ *
+ * There is two abstract UI element in Fcitx, one is Status, and the other is Menu. Both of them
+ * require a unique name in Fcitx. Usually this name is meaningful in order to increase
+ * readability.
+ *
+ * For status, due to backward compatible problem, there are two kinds of status, simple and complex
+ * one. Status have three property, short description, long description and icon name. The actual
+ * UI depends on specific UI implementation, but usually, status are displayed as a button, with
+ * an icon. Icon name can be absolute png file path. All description need to be I18N'ed by addon
+ * themselves.
+ *
+ * For menu, each menu item contains a string, like status, it need to I18N'ed before set. Though
+ * there is different type in menu item, DONOT use submenu or divline, they are not supported by
+ * specific implementation, and suppose to be only used internally.
+ *
+ * For display string, there are five field can be used to display string:
+ *  - Client Preedit
+ *  - Preedit
+ *  - AuxUp
+ *  - AuxDown
+ *  - Candidate words
+ *
+ * In spite of candidate words, other four fields are FcitxMessages pointer. FcitxMessages is
+ * basically a fixed length string array. Each string inside FcitxMessages can have a type.
+ */
+
 #ifndef _FCITX_UI_H_
 #define _FCITX_UI_H_
 
@@ -37,22 +71,25 @@
 extern "C" {
 #endif
 
-#define MESSAGE_TYPE_COUNT 7
+#define MESSAGE_TYPE_COUNT 7 /**< message color type count */
 
 #define MESSAGE_MAX_CHARNUM (150)   /**< Maximum length per-message */
 
 #define MESSAGE_MAX_LENGTH  (MESSAGE_MAX_CHARNUM*UTF8_MAX_LENGTH)   /**< maximum byte per message */
 
-#define MAX_MESSAGE_COUNT 64
+#define MAX_MESSAGE_COUNT 64 /**< maximum message string number */
 
+    /** fcitx menu item */
     typedef struct _FcitxMenuItem FcitxMenuItem;
     struct _FcitxUIMenu;
 
+    /** fcitx menu state */
     typedef enum _FcitxMenuState {
         MENU_ACTIVE = 0,
         MENU_INACTIVE = 1
     } FcitxMenuState;
 
+    /** fcitx menu item type */
     typedef enum _FcitxMenuItemType {
         MENUTYPE_SIMPLE,
         MENUTYPE_SUBMENU,
@@ -60,7 +97,9 @@ extern "C" {
     } FcitxMenuItemType;
 
 
+    /** menu action prototype */
     typedef boolean (*FcitxMenuActionFunction)(struct _FcitxUIMenu *arg, int index);
+    /** menu update prototype */
     typedef void    (*FcitxUpdateMenuFunction)(struct _FcitxUIMenu *arg);
 
     /**
@@ -214,13 +253,9 @@ extern "C" {
         int padding[16]; /**< padding */
     };
 
-    typedef enum _FcitxUIFlag {
-        UI_NONE = 0,
-        UI_MOVE = (1 << 1),
-        UI_UPDATE = (1 << 2),
-    } FcitxUIFlag;
-
     struct _FcitxInstance;
+
+    /** message type and flags */
     typedef enum _FcitxMessageType {
         MSG_TYPE_FIRST = 0,
         MSG_TYPE_LAST = 6,
@@ -232,16 +267,19 @@ extern "C" {
         MSG_CODE = 5,           /**< Typed character */
         MSG_OTHER = 6,          /**< Other Text */
         MSG_NOUNDERLINE = (1 << 3), /**< backward compatible, no underline is a flag */
-        MSG_HIGHLIGHT = (1 << 4),
+        MSG_HIGHLIGHT = (1 << 4), /**< highlight the preedit */
         MSG_DONOT_COMMIT_WHEN_UNFOCUS = (1 << 5), /**< backward compatible */
-        MSG_REGULAR_MASK = 0x7
+        MSG_REGULAR_MASK = 0x7 /**< regular color type mask */
     } FcitxMessageType;
 
     typedef struct _FcitxMessages FcitxMessages;
     struct _FcitxAddon;
 
+    /** Fcitx Menu */
     typedef struct _FcitxUIMenu FcitxUIMenu;
+    /** Fcitx Status, supports active/inactive */
     typedef struct _FcitxUIStatus FcitxUIStatus;
+    /** Fcitx Complex Status, ability to use custom icon */
     typedef struct _FcitxUIComplexStatus FcitxUIComplexStatus;
 
     /**

@@ -18,6 +18,26 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+/**
+ * @addtogroup FcitxUtils
+ * @{
+ */
+
+/**
+ * @file log.h
+ *
+ * Fcitx provides a simply log function in order to record usually message for developers.
+ *
+ * A common use case for log function will like this:
+ *
+ * @code
+ * FcitxLog(INFO, "Log for %s", str);
+ * @endcode
+ *
+ * FcitxLog uses printf style argument, please make sure you don't use format string with some
+ * unsafe string, for example, contains percent symbol.
+ *
+ */
 #ifndef _FCITX_LOG_H_
 #define _FCITX_LOG_H_
 
@@ -27,6 +47,9 @@
 extern "C" {
 #endif
 
+    /**
+     * @brief ErrorLevel, DEBUG will not be printed if -DENABLE_DEBUG=On is not specified while compiling
+     **/
     typedef enum _ErrorLevel
     {
         DEBUG,
@@ -36,6 +59,9 @@ extern "C" {
         WARNING
     } ErrorLevel;
 
+/**
+ * a convenient macro for log, it will automatically printed current file and code line number.
+ */
 #define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
 
     /**
@@ -48,11 +74,16 @@ extern "C" {
      * @param  ...
      * @return void
      **/
-    void FcitxLogFunc(ErrorLevel, const char* filename, const int line, const char* fmt, ...);
+    void FcitxLogFunc(ErrorLevel level, const char* filename, const int line, const char* fmt, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+
+/**
+ * @}
+ */
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

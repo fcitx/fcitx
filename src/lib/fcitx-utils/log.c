@@ -31,13 +31,6 @@
 
 static iconv_t iconvW = NULL;
 
-/**
- * Fcitx记录Log的函数
- *
- * @param ErrorLevel
- * @param fmt
- * @param ...
- */
 FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
