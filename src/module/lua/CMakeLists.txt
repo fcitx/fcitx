@@ -1,4 +1,4 @@
-find_package(Lua REQUIRED)
+find_package(Lua51 REQUIRED)
 
 include_directories(${LUA_INCLUDE_DIR})
 
