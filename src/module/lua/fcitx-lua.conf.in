@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-lua
+_GeneralName=Fcitx Lua Support
+_Comment=Add Lua script support for Fcitx
+Category=Module
+Enabled=True
+Library=fcitx-lua.so
+Type=SharedLibrary
+Priority=80
