@@ -28,10 +28,9 @@
 #include "fcitx/fcitx.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
+#include "fcitx-utils/log.h"
 #include "fcitx-utils/uthash.h"
 #include "fcitx-utils/utarray.h"
-#include "fcitx-utils/log.h"
-
 
 typedef struct _CommandItem {
     char input[4];
@@ -454,8 +453,7 @@ static int LuaCallFunction(lua_State *lua,
     return 0;
 }
 
-static int LuaCallInputTrigger(lua_State *lua, const char *input) {
-    LuaModule *module = GetModule(lua);
+static int LuaCallInputTrigger(LuaModule *module, const char *input) {
     if (module == NULL) {
         FcitxLog(ERROR, "LuaModule not found");
         return -1;
@@ -471,9 +469,12 @@ static int LuaCallInputTrigger(lua_State *lua, const char *input) {
     FunctionItem *f = NULL;
     while ((f = (FunctionItem *)utarray_next(trigger->functions, f))) {
         if (LuaCallFunction(f->lua, f->name, input) == 0) {
-            if (lua_type(lua, -1) == LUA_TSTRING) {
+            int type = lua_type(f->lua, -1);
+            if (type == LUA_TSTRING) {
                 const char *str = lua_tostring(f->lua, -1);
                 printf("%s\n", str);
+            } else {
+                FcitxLog(WARNING, "lua function return type not expected:%s", lua_typename(f->lua, type)); 
             }
             lua_pop(f->lua, lua_gettop(f->lua));
         }
