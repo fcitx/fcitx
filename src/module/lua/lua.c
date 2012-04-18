@@ -82,7 +82,7 @@ static void FunctionItemDtor(void *_elt);
 
 const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end";
-UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
+const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -304,6 +304,10 @@ static LuaExtension * LoadExtension(LuaModule *module, const char *name) {
 static int RegisterInputTrigger(lua_State *lua,
                                 const char *input,
                                 const char *function_name) {
+    if (lua == NULL || input == NULL || function_name == NULL) {
+        FcitxLog(WARNING, "RegisterInputTrigger() argument error");
+        return -1;
+    }
     LuaExtension *extension = FindExtension(lua);
     if (extension == NULL) {
         FcitxLog(ERROR, "find extension failed");
@@ -337,14 +341,21 @@ static int RegisterInputTrigger(lua_State *lua,
     FunctionItem function;
     function.lua = lua;
     function.name = strdup(function_name);
+    if (function.name == NULL) {
+        FcitxLog(ERROR, "function.name memory alloc failed");
+        goto cleanup;
+    }
     utarray_push_back(trigger->functions, &function);
     free(function.name);
     return 0;
 cleanup:
-    if (trigger->text) {
-        free(trigger->text);
-    }
     if (trigger) {
+        if (trigger->functions) {
+            utarray_free(trigger->functions);
+        }
+        if (trigger->text) {
+            free(trigger->text);
+        }
         free(trigger);
     }
     return -1;
@@ -453,6 +464,7 @@ static int LuaCallInputTrigger(lua_State *lua, const char *input) {
     TriggerItem *trigger;
     HASH_FIND_STR(module->input_triggers, input, trigger);
     if (trigger == NULL) {
+        FcitxLog(WARNING, "%s's trigger not found", input);
         return -1;
     }
 
