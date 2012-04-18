@@ -454,11 +454,6 @@ static int LuaCallFunction(lua_State *lua,
 }
 
 static int LuaCallInputTrigger(LuaModule *module, const char *input) {
-    if (module == NULL) {
-        FcitxLog(ERROR, "LuaModule not found");
-        return -1;
-    }
-
     TriggerItem *trigger;
     HASH_FIND_STR(module->input_triggers, input, trigger);
     if (trigger == NULL) {
