@@ -90,7 +90,7 @@ void* LuaCreate(FcitxInstance* instance) {
     
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
-    return NULL;
+    return luamodule;
 err:
     if (luamodule) {
         LuaModuleFree(luamodule);

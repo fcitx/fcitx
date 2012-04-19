@@ -114,7 +114,7 @@ void FcitxInstanceProcessUpdateCandidates(FcitxInstance* instance)
     HookStack* stack = GetUpdateCandidateWordHook(instance);
     stack = stack->next;
     while (stack) {
-        stack->eventhook.func(stack->keyfilter.arg);
+        stack->eventhook.func(stack->eventhook.arg);
         stack = stack->next;
     }
 }
