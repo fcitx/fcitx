@@ -48,6 +48,9 @@ static int LoadLuaConfig(LuaModule *luamodule) {
 }
 
 INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
+    LuaModule *luamodule = (LuaModule *)candWord->owner;
+    FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+    snprintf(FcitxInputStateGetOutputString(input), MAX_USER_INPUT, "%s", candWord->strWord);
     return IRV_COMMIT_STRING;
 }
 
@@ -68,9 +71,8 @@ void TriggerCallback(LuaModule *luamodule, const char *in, const char *out) {
 void LuaUpdateCandidateWordHookCallback(void *arg) {
     LuaModule *luamodule = (LuaModule *)arg;
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
-    char *text = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    char *text = FcitxInputStateGetRawInputBuffer(input);
     InputTrigger(luamodule, text, TriggerCallback);
-    free(text);
 }
 
 void* LuaCreate(FcitxInstance* instance) {

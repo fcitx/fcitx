@@ -487,12 +487,12 @@ int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
                     FcitxLog(WARNING, "lua function return return null"); 
                 }
             } else {
-                FcitxLog(WARNING, "lua function return type not expected:%s", lua_typename(f->lua, type)); 
+                FcitxLog(WARNING, "lua function return type not expected:%s",
+                                  lua_typename(f->lua, type)); 
             }
-            lua_pop(f->lua, lua_gettop(f->lua));
         }
+        lua_pop(f->lua, lua_gettop(f->lua));
     }
-    lua_pop(f->lua, lua_gettop(f->lua));
     return 0;
 }
 
