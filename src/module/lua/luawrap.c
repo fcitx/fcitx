@@ -32,8 +32,6 @@
 #include "fcitx-utils/uthash.h"
 #include "fcitx-utils/utarray.h"
 
-typedef void (*TriggerFn)(const char *in, const char *out);
-
 typedef struct _CommandItem {
     char input[4];
     char *function_name;
@@ -73,6 +71,8 @@ typedef struct _LuaModule {
     ConverterItem *converters;
     ConverterItem *current_converter;
 } LuaModule;
+
+typedef void (*TriggerFn)(LuaModule *luamodule, const char *in, const char *out);
 
 static int RegisterInputTrigger(lua_State *lua, const char *input_string, const char *function_name); 
 static lua_State * LuaCreateState(LuaModule *module); 

@@ -19,8 +19,10 @@
  ***************************************************************************/
 
 #include "fcitx/fcitx.h"
+#include "fcitx/candidate.h"
 #include "fcitx/instance.h"
 #include "fcitx/module.h"
+#include "fcitx/hook.h"
 #include "fcitx-utils/log.h"
 
 #include "luawrap.h"
@@ -57,6 +59,9 @@ void TriggerCallback(LuaModule *luamodule, const char *in, const char *out) {
     candWord.wordType = MSG_TIPS;
     candWord.strExtra = NULL;
     candWord.strWord = strdup(out);
+    
+    FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
     FcitxCandidateWordInsert(candList, &candWord, 0);
 }
 
@@ -65,7 +70,7 @@ void LuaUpdateCandidateWordHookCallback(void *arg) {
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
     char *text = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
     InputTrigger(luamodule, text, TriggerCallback);
-    free(str);
+    free(text);
 }
 
 void* LuaCreate(FcitxInstance* instance) {
@@ -80,9 +85,9 @@ void* LuaCreate(FcitxInstance* instance) {
         goto err;
     }
 
-    FcitxIMEventHook hook = {0};
-    hook.arg = luamodule;
-    hook.func = LuaUpdateCandidateWordHookCallback;
+    FcitxIMEventHook hook = {.arg = luamodule,
+                             .func = LuaUpdateCandidateWordHookCallback};
+    
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
     return NULL;
