@@ -18,15 +18,11 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitx/fcitx.h"
-#include "fcitx/instance.h"
-#include "fcitx/module.h"
-#include "fcitx-utils/log.h"
+typedef struct lua_State lua_State;
+typedef struct LuaModule LuaModule;
+typedef struct LuaExtension LuaExtension;
+typedef void (*TriggerFn)(const char *in, const char *out);
 
-#include "luawrap.h"
-
-void* LuaCreate(FcitxInstance* instance)
-{
-    return NULL;
-}
-
+LuaExtension * LoadExtension(LuaModule *module, const char *name); 
+void UnloadExtension(LuaModule *module, const char *name); 
+int InputTrigger(LuaModule *module, const char *input, TriggerFn callback); 

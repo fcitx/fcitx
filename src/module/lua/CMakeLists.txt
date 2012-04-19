@@ -4,6 +4,7 @@ include_directories(${LUA_INCLUDE_DIR})
 
 set(FCITX_LUA_SOURCES
     lua.c
+    luawrap.c
 )
 
 fcitx_add_addon(fcitx-lua ${FCITX_LUA_SOURCES})
