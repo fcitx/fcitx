@@ -24,6 +24,7 @@
 #include "fcitx/module.h"
 #include "fcitx/hook.h"
 #include "fcitx-utils/log.h"
+#include "fcitx-config/xdg.h"
 
 #include "luawrap.h"
 
@@ -42,8 +43,27 @@ FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
 static int LoadLuaConfig(LuaModule *luamodule) {
-    //TODO(xubin): read config
-    LoadExtension(luamodule, "/home/xubin/a.lua"); 
+    FcitxStringHashSet *sset = FcitxXDGGetFiles("lua", NULL, ".lua");
+    FcitxStringHashSet *str;
+    for (str = sset; str != NULL;) {
+        FcitxStringHashSet *tmp = str->hh.next;
+        char *path;
+        FILE *f = FcitxXDGGetFileWithPrefix("lua", str->name, "r", &path);
+        if (f && path) {
+            FcitxLog(INFO, "lua load extension file:%s", path);
+            LoadExtension(luamodule, path); 
+        }
+        if (f) {
+            fclose(f);
+        }
+        if (path) {
+            free(path);
+        }
+        HASH_DEL(sset, str);
+        free(str->name);
+        free(str);
+        str = tmp;
+    }
     return 0;
 }
 

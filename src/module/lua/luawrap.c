@@ -471,7 +471,6 @@ int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
     TriggerItem *trigger;
     HASH_FIND_STR(module->input_triggers, input, trigger);
     if (trigger == NULL) {
-        FcitxLog(WARNING, "%s's trigger not found", input);
         return -1;
     }
 
