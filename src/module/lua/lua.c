@@ -25,8 +25,22 @@
 
 #include "luawrap.h"
 
-void* LuaCreate(FcitxInstance* instance)
-{
+static void* LuaCreate(FcitxInstance* instance);
+
+FCITX_EXPORT_API
+FcitxModule module = {
+    LuaCreate,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
+
+FCITX_EXPORT_API
+int ABI_VERSION = FCITX_ABI_VERSION;
+
+void* LuaCreate(FcitxInstance* instance) {
+
     return NULL;
 }
 

@@ -21,6 +21,7 @@
 typedef struct lua_State lua_State;
 typedef struct LuaModule LuaModule;
 typedef struct LuaExtension LuaExtension;
+
 typedef void (*TriggerFn)(const char *in, const char *out);
 
 LuaExtension * LoadExtension(LuaModule *module, const char *name); 
