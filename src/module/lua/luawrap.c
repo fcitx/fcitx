@@ -70,6 +70,7 @@ typedef struct _LuaModule {
     TriggerItem *candidate_tiggers;
     ConverterItem *converters;
     ConverterItem *current_converter;
+    size_t shortest_input_trigger_key_length;
 } LuaModule;
 
 typedef void (*TriggerFn)(LuaModule *luamodule, const char *in, const char *out);
@@ -80,6 +81,7 @@ static void LuaPrintError(lua_State *lua);
 static void LuaPError(int err, const char *s);
 static void FunctionItemCopy(void *_dst, const void *_src); 
 static void FunctionItemDtor(void *_elt); 
+void UnloadExtension(LuaModule *module, const char *name); 
 
 const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end";
@@ -220,48 +222,18 @@ static void FreeConverter(ConverterItem **converters, LuaExtension *extension) {
     }
 }
 
-static void UnloadExtension(LuaModule *module, const char *name) {
-    LuaExtension *extension;
-    HASH_FIND_STR(module->extensions, name, extension);
-    if (extension == NULL) {
-        FcitxLog(WARNING, "extension:%s unload failed, not found", name);
-        return;
-    }
-   
-    FreeCommand(&module->commands, extension);
-    FreeTrigger(&module->input_triggers, extension);
-    FreeTrigger(&module->candidate_tiggers, extension);
-    if (module->current_converter && module->current_converter->lua == extension->lua) {
-        module->current_converter = NULL;
-    }
-    FreeConverter(&module->converters, extension);
-
-    free(extension->name);
-    lua_close(extension->lua);
-    HASH_DEL(module->extensions, extension);
-    free(extension);
-}
-
-static LuaModule * GetModule(lua_State *lua) {
-    lua_getglobal(lua, kLuaModuleName);
-    LuaModule **module = lua_touserdata(lua, -1);
-    lua_pop(lua, 1);
-    return *module;
-}
-
-static LuaExtension * FindExtension(lua_State *lua) {
-    LuaModule *module = GetModule(lua);
-    if (!module) {
-        FcitxLog(ERROR, "LuaModule not found");
-        return NULL;
-    }
-    LuaExtension *e;
-    for (e = module->extensions; e != NULL; e = e->hh.next) {
-        if (e->lua == lua) {
-            return e;
+static void UpdateShortestInputTriggerKeyLength(LuaModule *module) {
+    size_t length = UINT_MAX;
+    TriggerItem *trigger;
+    for (trigger = module->input_triggers; trigger; trigger = trigger->hh.next) {
+        size_t keylen = strlen(trigger->text);
+        if (keylen < length) {
+            length = keylen;
         }
     }
-    return NULL;
+    if (length != UINT_MAX) {
+        module->shortest_input_trigger_key_length = length;
+    }
 }
 
 LuaExtension * LoadExtension(LuaModule *module, const char *name) {
@@ -313,7 +285,54 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
         UnloadExtension(module, name);
         return NULL;
     }
+    UpdateShortestInputTriggerKeyLength(module);
     return extension;
+}
+
+void UnloadExtension(LuaModule *module, const char *name) {
+    LuaExtension *extension;
+    HASH_FIND_STR(module->extensions, name, extension);
+    if (extension == NULL) {
+        FcitxLog(WARNING, "extension:%s unload failed, not found", name);
+        return;
+    }
+   
+    FreeCommand(&module->commands, extension);
+    FreeTrigger(&module->input_triggers, extension);
+    FreeTrigger(&module->candidate_tiggers, extension);
+    if (module->current_converter && module->current_converter->lua == extension->lua) {
+        module->current_converter = NULL;
+    }
+    FreeConverter(&module->converters, extension);
+
+    free(extension->name);
+    lua_close(extension->lua);
+    HASH_DEL(module->extensions, extension);
+    free(extension);
+
+    UpdateShortestInputTriggerKeyLength(module);
+}
+
+static LuaModule * GetModule(lua_State *lua) {
+    lua_getglobal(lua, kLuaModuleName);
+    LuaModule **module = lua_touserdata(lua, -1);
+    lua_pop(lua, 1);
+    return *module;
+}
+
+static LuaExtension * FindExtension(lua_State *lua) {
+    LuaModule *module = GetModule(lua);
+    if (!module) {
+        FcitxLog(ERROR, "LuaModule not found");
+        return NULL;
+    }
+    LuaExtension *e;
+    for (e = module->extensions; e != NULL; e = e->hh.next) {
+        if (e->lua == lua) {
+            return e;
+        }
+    }
+    return NULL;
 }
 
 static int RegisterInputTrigger(lua_State *lua,
@@ -468,6 +487,9 @@ static int LuaCallFunction(lua_State *lua,
 }
 
 int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
+    if (strlen(input) < module->shortest_input_trigger_key_length) {
+        return -1;
+    }
     TriggerItem *trigger;
     HASH_FIND_STR(module->input_triggers, input, trigger);
     if (trigger == NULL) {

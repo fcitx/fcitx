@@ -43,6 +43,7 @@ FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
 static int LoadLuaConfig(LuaModule *luamodule) {
+    int count = 0;
     FcitxStringHashSet *sset = FcitxXDGGetFiles("lua", NULL, ".lua");
     FcitxStringHashSet *str;
     for (str = sset; str != NULL;) {
@@ -50,8 +51,12 @@ static int LoadLuaConfig(LuaModule *luamodule) {
         char *path;
         FILE *f = FcitxXDGGetFileWithPrefix("lua", str->name, "r", &path);
         if (f && path) {
-            FcitxLog(INFO, "lua load extension file:%s", path);
-            LoadExtension(luamodule, path); 
+            if (LoadExtension(luamodule, path)) {
+                FcitxLog(INFO, "lua load extension file:%s", path);
+                ++count;
+            } else {
+                FcitxLog(ERROR, "LoadExtension() failed");
+            }
         }
         if (f) {
             fclose(f);
@@ -64,7 +69,7 @@ static int LoadLuaConfig(LuaModule *luamodule) {
         free(str);
         str = tmp;
     }
-    return 0;
+    return count;
 }
 
 INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
@@ -102,8 +107,9 @@ void* LuaCreate(FcitxInstance* instance) {
         goto err;
     }
     int rv = LoadLuaConfig(luamodule);
-    if (rv == -1) {
-        FcitxLog(ERROR, "LoadLuaConfig() failed");
+    if (rv == 0) {
+        //TODO(xubin): continue load if support dynamic load extension
+        FcitxLog(INFO, "Extension count:0, skip load");
         goto err;
     }
 
