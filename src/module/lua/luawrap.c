@@ -45,7 +45,7 @@ typedef struct _FunctionItem {
 } FunctionItem;
 
 typedef struct _TriggerItem {
-    char *text;
+    char *key;
     UT_array *functions; // need linklist
     UT_hash_handle hh;
 } TriggerItem;
@@ -185,7 +185,7 @@ static void FreeTrigger(TriggerItem **triggers, LuaExtension *extension) {
         if (utarray_len(trigger->functions) == 0) {
             HASH_DEL(*triggers, trigger);
             utarray_free(trigger->functions);
-            free(trigger->text);
+            free(trigger->key);
             free(trigger);
         }
         trigger = temp;
@@ -226,12 +226,14 @@ static void UpdateShortestInputTriggerKeyLength(LuaModule *module) {
     size_t length = UINT_MAX;
     TriggerItem *trigger;
     for (trigger = module->input_triggers; trigger; trigger = trigger->hh.next) {
-        size_t keylen = strlen(trigger->text);
+        size_t keylen = strlen(trigger->key);
         if (keylen < length) {
             length = keylen;
         }
     }
-    if (length != UINT_MAX) {
+    if (length == UINT_MAX) {
+        module->shortest_input_trigger_key_length = 0;
+    } else {
         module->shortest_input_trigger_key_length = length;
     }
 }
@@ -360,8 +362,8 @@ static int RegisterInputTrigger(lua_State *lua,
             FcitxLog(ERROR, "trigger memory alloc failed");
             goto cleanup;
         }
-        trigger->text = strdup(input);
-        if (trigger->text == NULL) {
+        trigger->key = strdup(input);
+        if (trigger->key == NULL) {
             FcitxLog(ERROR, "trigger->text memory alloc failed");
             goto cleanup;
         }
@@ -387,8 +389,8 @@ cleanup:
         if (trigger->functions) {
             utarray_free(trigger->functions);
         }
-        if (trigger->text) {
-            free(trigger->text);
+        if (trigger->key) {
+            free(trigger->key);
         }
         free(trigger);
     }
