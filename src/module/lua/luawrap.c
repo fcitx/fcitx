@@ -489,7 +489,8 @@ static int LuaCallFunction(lua_State *lua,
 }
 
 int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
-    if (strlen(input) < module->shortest_input_trigger_key_length) {
+    if (module->shortest_input_trigger_key_length == 0
+            || strlen(input) < module->shortest_input_trigger_key_length) {
         return -1;
     }
     TriggerItem *trigger;
