@@ -39,8 +39,58 @@ FcitxModule module = {
 FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
+static int LoadLuaConfig(LuaModule *luamodule) {
+    //TODO(xubin): read config
+    LoadExtension(luamodule, "/home/xubin/a.lua"); 
+    return 0;
+}
+
+INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
+    return IRV_COMMIT_STRING;
+}
+
+void TriggerCallback(LuaModule *luamodule, const char *in, const char *out) {
+    FcitxCandidateWord candWord;
+    candWord.callback = LuaGetCandWord;
+    candWord.owner = luamodule;
+    candWord.priv = NULL;
+    candWord.wordType = MSG_TIPS;
+    candWord.strExtra = NULL;
+    candWord.strWord = strdup(out);
+    FcitxCandidateWordInsert(candList, &candWord, 0);
+}
+
+void LuaUpdateCandidateWordHookCallback(void *arg) {
+    LuaModule *luamodule = (LuaModule *)arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+    char *text = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    InputTrigger(luamodule, text, TriggerCallback);
+    free(str);
+}
+
 void* LuaCreate(FcitxInstance* instance) {
+    LuaModule *luamodule = LuaModuleAlloc(instance);
+    if (luamodule == NULL) {
+        FcitxLog(ERROR, "LuaModule alloc failed");
+        goto err;
+    }
+    int rv = LoadLuaConfig(luamodule);
+    if (rv == -1) {
+        FcitxLog(ERROR, "LoadLuaConfig() failed");
+        goto err;
+    }
+
+    FcitxIMEventHook hook = {0};
+    hook.arg = luamodule;
+    hook.func = LuaUpdateCandidateWordHookCallback;
+    FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
     return NULL;
+err:
+    if (luamodule) {
+        LuaModuleFree(luamodule);
+    }
+    return NULL;
 }
+
 

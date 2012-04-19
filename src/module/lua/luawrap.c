@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by xubin                                      *
+ *   nybux.tsui@gmail.com                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,6 +65,7 @@ typedef struct _LuaExtension {
 } LuaExtension;
 
 typedef struct _LuaModule {
+    FcitxInstance *fcitx;
     LuaExtension *extensions;
     CommandItem *commands;
     TriggerItem *input_triggers;
@@ -84,9 +85,25 @@ const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end";
 const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
 
+LuaModule * LuaModuleAlloc(FcitxInstance *fcitx) {
+    LuaModule *module;
+    module = calloc(sizeof(*module), 1);
+    if (module) {
+        module->fcitx = fcitx;
+    }
+    return module;
+}
+void LuaModuleFree(LuaModule *luamodule) {
+    free(luamodule);
+}
+FcitxInstance *GetFcitx(LuaModule *luamodule) {
+    if (luamodule) {
+        return luamodule->fcitx;
+    } else {
+        return NULL;
+    }
+}
 
-////////////////////////////////////////////////////////////////////////////////
-// export function
 static int FcitxLog_Export(lua_State *lua) {
     int c = lua_gettop(lua);
     if (c == 0) {
@@ -135,8 +152,6 @@ static int ImeRegisterTrigger_Export(lua_State *lua) {
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// extension manager function
 static void FunctionItemCopy(void *_dst, const void *_src) {
     FunctionItem *dst = (FunctionItem *)_dst;
     FunctionItem *src = (FunctionItem *)_src;
@@ -361,8 +376,6 @@ cleanup:
     return -1;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// lua help function
 static void LuaPrintError(lua_State *lua) {
     if (lua_gettop(lua) > 0) {
         FcitxLog(ERROR, "    %s", lua_tostring(lua, -1));
@@ -469,7 +482,7 @@ int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
             if (type == LUA_TSTRING) {
                 const char *str = lua_tostring(f->lua, -1);
                 if (str) {
-                    callback(input, str);
+                    callback(module, input, str);
                 } else {
                     FcitxLog(WARNING, "lua function return return null"); 
                 }
