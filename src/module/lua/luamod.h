@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by xubin                                      *
- *   nybux.tsui@gmail.com                                                  *
+ *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,28 +18,20 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-typedef struct lua_State lua_State;
-typedef struct _LuaModule LuaModule;
-typedef struct _LuaExtension LuaExtension;
-typedef struct _FcitxInstance FcitxInstance;
+#ifndef _FCITX_MODULE_LUA_H_
+#define _FCITX_MODULE_LUA_H_
 
-// IME Lua trigger callback
-// in is user input
-// out is retrun by lua
-typedef void (*TriggerFn)(LuaModule *luamodule, const char *in, const char *out);
 
-// alloc/free luamodule
-LuaModule * LuaModuleAlloc(FcitxInstance *fcitx);
-void LuaModuleFree(LuaModule *luamodule);
-FcitxInstance *GetFcitx(LuaModule *luamodule);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// Load lua extension, name is filename of lua source file
-LuaExtension * LoadExtension(LuaModule *luamodule, const char *name); 
+#define FCITX_LUA_NAME "fcitx-lua"
+#define FCITX_LUA_CALLCOMMAND 0
+#define FCITX_LUA_CALLCOMMAND_RETURNTYPE char*
 
-// Unload extension by name
-void UnloadExtension(LuaModule *luamodule, const char *name); 
+#ifdef __cplusplus
+}
+#endif
 
-// call lua trigger, input is user input
-// callback is called when valid candidate generated
-int InputTrigger(LuaModule *luamodule, const char *input, TriggerFn callback); 
-char * InputCommand(LuaModule *module, const char *input); 
+#endif

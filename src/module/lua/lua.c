@@ -26,9 +26,11 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 
+#include "luamod.h"
 #include "luawrap.h"
 
 static void* LuaCreate(FcitxInstance* instance);
+static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -70,6 +72,11 @@ static int LoadLuaConfig(LuaModule *luamodule) {
         str = tmp;
     }
     return count;
+}
+
+static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
+    LuaModule *luamodule = (LuaModule *)arg;
+    return InputCommand(luamodule, (const char *)args.args[0]);
 }
 
 INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
@@ -117,6 +124,11 @@ void* LuaCreate(FcitxInstance* instance) {
                              .func = LuaUpdateCandidateWordHookCallback};
     
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
+
+    FcitxAddon* luaAddon = FcitxAddonsGetAddonByName(
+            FcitxInstanceGetAddons(instance),
+            FCITX_LUA_NAME);
+    AddFunction(luaAddon, LuaCallCommand);
 
     return luamodule;
 err:
