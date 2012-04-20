@@ -158,27 +158,13 @@ void FcitxUILoad(FcitxInstance* instance)
 
     instance->ui = instance->uinormal;
 
-    if (instance->ui == NULL)
+    if (instance->ui == NULL) {
         FcitxLog(ERROR, "no usable user interface.");
-    else {
-        do {
-            FcitxAddon* fallbackAddon = FcitxAddonsGetAddonByName(&instance->addons, addon->uifallback);
-            if (fallbackAddon == NULL)
-                break;
-
-            if (!fallbackAddon->bEnabled)
-                break;
-
-            instance->fallbackuiName = strdup(addon->uifallback);
-
-            /* ui is fallback */
-            if (FcitxUILoadInternal(instance, fallbackAddon)) {
-                instance->uifallback = fallbackAddon;
-                if (instance->uifallback->ui->Suspend)
-                    instance->uifallback->ui->Suspend(instance->uifallback->addonInstance);
-            }
-        } while (0);
+        return;
     }
+
+    if (addon->uifallback)
+        instance->fallbackuiName = strdup(addon->uifallback);
 }
 
 boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
@@ -883,8 +869,22 @@ void FcitxUIMoveInputWindowReal(FcitxInstance *instance)
 FCITX_EXPORT_API
 void FcitxUISwitchToFallback(struct _FcitxInstance* instance)
 {
-    if (!instance->uifallback || instance->ui != instance->uinormal)
+    if (!instance->fallbackuiName || instance->ui != instance->uinormal)
         return;
+
+    if (!instance->uifallback) {
+        // load fallback ui
+        FcitxAddon* fallbackAddon = FcitxAddonsGetAddonByName(&instance->addons, instance->fallbackuiName);
+        if (!fallbackAddon || !fallbackAddon->bEnabled || !FcitxUILoadInternal(instance, fallbackAddon)) {
+            // reset fallbackuiName, never load it again and again
+            free(instance->fallbackuiName);
+            instance->fallbackuiName = NULL;
+            return;
+        }
+        instance->uifallback = fallbackAddon;
+        if (instance->uifallback->ui->Suspend)
+            instance->uifallback->ui->Suspend(instance->uifallback->addonInstance);
+    }
 
     if (instance->uinormal->ui->Suspend)
         instance->uinormal->ui->Suspend(instance->uinormal->addonInstance);
