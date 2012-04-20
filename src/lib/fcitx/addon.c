@@ -127,28 +127,22 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
     UT_array* addons = &instance->addons;
     boolean remove = true;
     FcitxAddon *addon;
-    FcitxAddon *uiaddon = NULL;
+    FcitxAddon *uiaddon = NULL, *uifallbackaddon = NULL;
 
     /* choose ui */
-    boolean founduiflag = false;
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_UI) {
             if (instance->uiname == NULL) {
                 if (addon->bEnabled) {
-                    if (!founduiflag) {
-                        uiaddon = addon;
-                        founduiflag = true;
-                    } else
-                        addon->bEnabled = false;
+                    uiaddon = addon;
+                    break;
                 }
             } else {
-                if (strcmp(instance->uiname, addon->name) != 0)
-                    addon->bEnabled = false;
-                else {
+                if (strcmp(instance->uiname, addon->name) == 0) {
                     uiaddon = addon;
-                    addon->bEnabled = true;
+                    break;
                 }
             }
         }
@@ -158,8 +152,7 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
         for (addon = (FcitxAddon *) utarray_front(addons);
                 addon != NULL;
                 addon = (FcitxAddon *) utarray_next(addons, addon)) {
-            if (addon->category == AC_UI && strcmp(uiaddon->uifallback, addon->name) == 0) {
-                addon->bEnabled = true;
+            if (addon->category == AC_UI && addon->bEnabled && strcmp(uiaddon->uifallback, addon->name) == 0) {
                 FcitxAddon temp;
                 int uiidx = utarray_eltidx(addons, uiaddon);
                 int fallbackidx = utarray_eltidx(addons, addon);
@@ -167,9 +160,24 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
                     temp = *uiaddon;
                     *uiaddon = *addon;
                     *addon = temp;
+
+                    /* they swapped, addon is normal ui, and ui addon is fallback */
+                    uifallbackaddon = uiaddon;
+                    uiaddon = addon;
+                }
+                else {
+                    uifallbackaddon = addon;
                 }
                 break;
             }
+        }
+    }
+    
+    for (addon = (FcitxAddon *) utarray_front(addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->category == AC_UI && addon != uiaddon && addon != uifallbackaddon) {
+            addon->bEnabled = false;
         }
     }
 
