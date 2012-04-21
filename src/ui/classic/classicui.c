@@ -428,7 +428,7 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     if (index == 0) {
         DisplayAboutWindow(classicui->mainWindow->owner->aboutWindow);
     } else if (index == 1) {
-        FILE* p = popen("xdg-open http://fcitx.github.com/handbook/ &", "r");
+        FILE* p = popen("xdg-open http://fcitx-im.org/ &", "r");
         if (p)
             pclose(p);
         else
