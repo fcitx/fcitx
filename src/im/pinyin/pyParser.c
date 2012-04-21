@@ -22,17 +22,20 @@
 #include <string.h>
 
 #include "fcitx/fcitx.h"
+#include "fcitx/ime.h"
+#include "fcitx-utils/log.h"
 
 #include "pyMapTable.h"
 #include "PYFA.h"
 #include "sp.h"
 #include "pyParser.h"
 #include "pyconfig.h"
-#include "fcitx/ime.h"
 #include "py.h"
 
 extern const ConsonantMap consonantMapTable[];
 extern const SyllabaryMap syllabaryMapTable[];
+
+static double LookupPYFreq(FcitxPinyinConfig* pyconfig, int index1, int index2);
 
 int IsSyllabary(const char *strPY, boolean bMode)
 {
@@ -164,23 +167,68 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
                 strTemp[0] = pyconfig->PYTable[iIndex].strPY[lIndex - 1];
                 iTemp = -1;
 
-                if (strTemp[0] == 'g' || strTemp[0] == 'n') {
+                /*
+                 * if the end of pinyin is 'g', 'n', 'e'
+                 * there might be another possbility, for example "wanan" can be "wa nan" and "wan an"
+                 * try resolve these problem here
+                 */
+                if (strTemp[0] == 'g' || strTemp[0] == 'n' || strTemp[0] == 'e') {
                     strncpy(strTemp, strP, lIndex - 1);
                     strTemp[lIndex - 1] = '\0';
 
+                    /* for example we have "wan", so we try to check "wa" is valid or not, with exact match */
                     iTemp = FindPYFAIndex(pyconfig, strTemp, 0);
 
+                    /* if "wa" is valid */
                     if (iTemp != -1) {
+                        /* also check "nan" is valid or not */
+                        int firstIndex;
+                        firstIndex = iTemp;
                         iTemp = FindPYFAIndex(pyconfig, strP + strlen(pyconfig->PYTable[iTemp].strPY), 1);
 
+                        /* if still is valid */
                         if (iTemp != -1) {
+                            /*
+                             * length 1 split is what we must avoid,
+                             * for example, "nin" can be "ni n", but no separator can for "nin" if we split here
+                             *
+                             * and "ying" can be also "yi ng", for just the same case"
+                             */
                             if (strlen(pyconfig->PYTable[iTemp].strPY) == 1 || !strcmp("ng", pyconfig->PYTable[iTemp].strPY))
                                 iTemp = -1;
                         }
 
                         if (iTemp != -1) {
-                            strncpy(strTemp, strP, lIndex - 1);
-                            strTemp[lIndex - 1] = '\0';
+                            /* check the general frequency that this shoud split or not */
+                            int index2 = FindPYFAIndex(pyconfig, strP + strlen(pyconfig->PYTable[iIndex].strPY), 1);
+
+                            boolean resplit = false;
+                            do {
+                                /* prefer longer */
+                                if (index2 == -1) {
+                                    resplit = true;
+                                    break;
+                                }
+
+                                size_t length1 = strlen(pyconfig->PYTable[iIndex].strPY) + strlen(pyconfig->PYTable[index2].strPY);
+                                size_t length2 = strlen(pyconfig->PYTable[firstIndex].strPY) + strlen(pyconfig->PYTable[iTemp].strPY);
+                                if (length1 != length2) {
+                                    resplit = (length1 < length2);
+                                    break;
+                                }
+
+                                double freq1 = LookupPYFreq(pyconfig, iIndex, index2);
+                                double freq2 = LookupPYFreq(pyconfig, firstIndex, iTemp);
+
+                                resplit = (freq1 <= freq2);
+                            } while(0);
+
+                            if (resplit) {
+                                strncpy(strTemp, strP, lIndex - 1);
+                                strTemp[lIndex - 1] = '\0';
+                            }
+                            else
+                                iTemp = -1;
                         }
                     }
                 }
@@ -471,6 +519,44 @@ int CmpMap(FcitxPinyinConfig* pyconfig, char *strMap1, char *strMap2, int *iMatc
     }
 
     return 0;
+}
+
+#include "pysplitdata.h"
+
+struct _PYMappedSplitData {
+    char py[MAX_PY_LENGTH * 2 + 2];
+    float freq;
+    UT_hash_handle hh;
+};
+
+const UT_icd splitData_icd = { sizeof(PYMappedSplitData), 0, 0, 0 };
+
+void InitPYSplitData(FcitxPinyinConfig* pyconfig)
+{
+    size_t size = sizeof(pySplitData) / sizeof(pySplitData[0]);
+    int i = 0;
+    for (i = 0; i < size; i ++) {
+        PYMappedSplitData* data = fcitx_utils_malloc0(sizeof(PYMappedSplitData));
+        sprintf(data->py, "%s %s", pySplitData[i].py1, pySplitData[i].py2);
+        data->freq = pySplitData[i].freq;
+        HASH_ADD_STR(pyconfig->splitData, py, data);
+    }
+}
+
+double LookupPYFreq(FcitxPinyinConfig* pyconfig, int index1, int index2)
+{
+    char py[MAX_PY_LENGTH * 2 + 2];
+    if (index1 < 0 || index2 < 0)
+        return 0;
+
+    sprintf(py, "%s %s", pyconfig->PYTable[index1].strPY, pyconfig->PYTable[index2].strPY);
+
+    PYMappedSplitData* s = NULL;
+    HASH_FIND_STR(pyconfig->splitData, py, s);
+
+    if (s == NULL)
+        return 0;
+    return s->freq;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

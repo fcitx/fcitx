@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define PARSE_INPUT_SYSTEM ' '
-
 #include "im/pinyin/pyParser.h"
 #include "im/pinyin/pyMapTable.h"
 #include "im/pinyin/PYFA.h"
@@ -307,7 +305,7 @@ void CreatePYBase(void)
         fscanf(fps, "%s", strPY);
         fscanf(fps, "%s\n", strHZ);
 
-        if (MapPY(&pyconfig, strPY, strMap, PARSE_INPUT_SYSTEM)) {
+        if (MapPY(&pyconfig, strPY, strMap, PY_PARSE_INPUT_SYSTEM)) {
             for (i = 0; i < iBaseCount; i++)
                 if ((!strcmp(PYTable_template[i].strPY, strPY)) && PYTable_template[i].control == PYTABLE_NONE)
                     YY[i] += 1;

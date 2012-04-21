@@ -42,6 +42,8 @@ typedef enum _SHUANGPINSCHEME {
     SP_USERDEFINE
 } SHUANGPINSCHEME;
 
+typedef struct _PYMappedSplitData PYMappedSplitData;
+
 typedef struct _FcitxPinyinConfig {
     FcitxGenericConfig gconfig;
 
@@ -64,6 +66,8 @@ typedef struct _FcitxPinyinConfig {
     char cNonS;
     SP_C SPMap_C[31];
     SP_S SPMap_S[4];
+
+    PYMappedSplitData* splitData;
 } FcitxPinyinConfig;
 
 CONFIG_BINDING_DECLARE(FcitxPinyinConfig);

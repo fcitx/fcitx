@@ -129,7 +129,7 @@ typedef struct _PYREMINDCANDWORD {
     int             iLength;
 } PYRemindCandWord;
 
-typedef union {
+typedef union _PCand {
     PYFreqCandWord  sym;
     PYFreqCandWord  freq;
     PYBaseCandWord  base;
@@ -192,9 +192,9 @@ typedef struct _FcitxPinyinState {
 
     boolean bSP_UseSemicolon;
     boolean bSP;
-    
+
     FcitxMemoryPool* pool;
-    
+
     struct _FcitxInstance *owner;
 } FcitxPinyinState;
 

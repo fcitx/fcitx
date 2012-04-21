@@ -1231,7 +1231,6 @@ void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate)
 
 void InitPYTable(FcitxPinyinConfig* pyconfig)
 {
-
     int iBaseCount = 0;
 
     while (PYTable_template[iBaseCount].strPY[0] != '\0')
