@@ -172,7 +172,7 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
             }
         }
     }
-    
+
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {

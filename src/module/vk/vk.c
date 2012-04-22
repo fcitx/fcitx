@@ -56,13 +56,11 @@ typedef struct _VKS {
 
 typedef struct _VKWindow {
     Window          window;
-    FcitxConfigColor* fontColor;
     int fontSize;
     cairo_surface_t* surface;
     cairo_surface_t* keyboard;
     Display*        dpy;
     struct _FcitxVKState* owner;
-    char **font;
     char *defaultFont;
     int iVKWindowX;
     int iVKWindowY;
@@ -78,7 +76,6 @@ typedef struct _FcitxVKState {
     boolean         bVK;
     FcitxUIMenu     vkmenu;
     FcitxInstance* owner;
-    FcitxAddon* classicui;
 } FcitxVKState;
 
 const char            vkTable[VK_NUMBERS + 1] = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
@@ -137,7 +134,6 @@ void *VKCreate(FcitxInstance* instance)
     FcitxVKState *vkstate = fcitx_utils_malloc0(sizeof(FcitxVKState));
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     vkstate->owner = instance;
-    vkstate->classicui = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
 
     FcitxHotkeyHook hotkey;
     hotkey.hotkey = config->hkVK;
@@ -268,18 +264,10 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
     vkWindow->dpy = InvokeFunction(vkstate->owner, FCITX_X11, GETDISPLAY, arg);
 
     vkWindow->fontSize = 12;
-    if (vkstate->classicui) {
-        FcitxModuleFunctionArg arg;
-        vkWindow->fontColor = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETKEYBOARDFONTCOLOR, arg);
-        vkWindow->font = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT, arg);
-    } else {
-        vkWindow->fontColor = &blackColor;
-        vkWindow->defaultFont = strdup("sans");
+    vkWindow->defaultFont = strdup("sans");
 #ifndef _ENABLE_PANGO
-        GetValidFont("zh", &vkWindow->defaultFont);
+    GetValidFont("zh", &vkWindow->defaultFont);
 #endif
-        vkWindow->font = &vkWindow->defaultFont;
-    }
 
     vkWindow->window = XCreateWindow(vkWindow->dpy,
                                      DefaultRootWindow(vkWindow->dpy),
@@ -334,22 +322,22 @@ boolean VKWindowEventHandler(void* arg, XEvent* event)
 cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
 {
     FcitxVKState* vkstate = vkWindow->owner;
-    if (vkstate->classicui) {
-        FcitxModuleFunctionArg arg;
-        boolean fallback = true;
-        char vkimage[] = "keyboard.png";
-        arg.args[0] = vkimage;
-        arg.args[1] = &fallback;
-        return InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
-    } else {
-        if (!vkWindow->keyboard) {
-            char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "skin/default/keyboard.png");
-            vkWindow->keyboard = cairo_image_surface_create_from_png(path);
-            free(path);
-        }
-        return vkWindow->keyboard;
+    FcitxModuleFunctionArg arg;
+    boolean fallback = true;
+    char vkimage[] = "keyboard.png";
+    arg.args[0] = vkimage;
+    arg.args[1] = &fallback;
+    cairo_surface_t* image = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
+
+    if (image)
+        return image;
+
+    if (!vkWindow->keyboard) {
+        char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "skin/default/keyboard.png");
+        vkWindow->keyboard = cairo_image_surface_create_from_png(path);
+        free(path);
     }
-    return NULL;
+    return vkWindow->keyboard;
 }
 
 void DisplayVKWindow(VKWindow* vkWindow)
@@ -371,6 +359,14 @@ void DrawVKWindow(VKWindow* vkWindow)
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
 
+    FcitxModuleFunctionArg arg;
+    FcitxConfigColor* fontColor = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETKEYBOARDFONTCOLOR, arg);
+    char** font = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT, arg);
+
+    if (!fontColor || !font) {
+        fontColor = &blackColor;
+        font = &vkWindow->defaultFont;
+    }
 
     cr = cairo_create(vkWindow->surface);
     cairo_surface_t* vkimage = LoadVKImage(vkWindow);
@@ -378,35 +374,35 @@ void DrawVKWindow(VKWindow* vkWindow)
     cairo_paint(cr);
     /* 显示字符 */
     /* 名称 */
-    OutputString(cr, vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize , (VK_WINDOW_WIDTH - StringWidth(vks[vkstate->iCurrentVK].strName, *vkWindow->font, vkWindow->fontSize)) / 2, 6, vkWindow->fontColor);
+    OutputString(cr, vks[vkstate->iCurrentVK].strName, *font, vkWindow->fontSize , (VK_WINDOW_WIDTH - StringWidth(vks[vkstate->iCurrentVK].strName, *font, vkWindow->fontSize)) / 2, 6, fontColor);
 
     /* 第一排 */
     iPos = 13;
     for (i = 0; i < 13; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 27, vkWindow->fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 40, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, iPos, 27, fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, iPos - 5, 40, fontColor);
         iPos += 24;
     }
     /* 第二排 */
     iPos = 48;
     for (i = 13; i < 26; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 55, vkWindow->fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 68, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, iPos, 55, fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, iPos - 5, 68, fontColor);
         iPos += 24;
     }
     /* 第三排 */
     iPos = 55;
     for (i = 26; i < 37; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 83, vkWindow->fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 96, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, iPos, 83, fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, iPos - 5, 96, fontColor);
         iPos += 24;
     }
 
     /* 第四排 */
     iPos = 72;
     for (i = 37; i < 47; i++) {
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *vkWindow->font, vkWindow->fontSize, iPos, 111, vkWindow->fontColor);
-        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *vkWindow->font, vkWindow->fontSize, iPos - 5, 124, vkWindow->fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][1], *font, vkWindow->fontSize, iPos, 111, fontColor);
+        OutputString(cr, vks[vkstate->iCurrentVK].strSymbol[i][0], *font, vkWindow->fontSize, iPos - 5, 124, fontColor);
         iPos += 24;
     }
 
