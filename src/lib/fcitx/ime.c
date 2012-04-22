@@ -82,7 +82,7 @@ static const FcitxHotkey* imSWNextKey1[] = {
     FCITX_LALT_LSHIFT
 };
 
-static const FcitxHotkey* imSWNextKey2[] = { 
+static const FcitxHotkey* imSWNextKey2[] = {
     FCITX_LCTRL_LSHIFT2,
     FCITX_LALT_LSHIFT2
 };
@@ -108,6 +108,7 @@ static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputCont
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
 static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
+static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -223,6 +224,22 @@ void FcitxInstanceSaveAllIM(FcitxInstance* instance)
         if ((pim)->Save)
             (pim)->Save(pim->klass);
     }
+}
+
+
+static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
+    if (rec->frontendid != ic->frontendid)
+        return false;
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend) {
+        FcitxFrontend* frontend = (*pfrontend)->frontend;
+        if (frontend->CheckICFromSameApplication
+            && frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
+            return true;
+    }
+
+    return false;
 }
 
 static const char* GetStateName(INPUT_RETURN_VALUE retVal)
@@ -1012,14 +1029,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
             if (instance->config->shareState == ShareState_All)
                 flag = true;
             else {
-                UT_array* frontends = &instance->frontends;
-                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                if (pfrontend) {
-                    FcitxFrontend* frontend = (*pfrontend)->frontend;
-                    if (frontend->CheckICFromSameApplication &&
-                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                        flag = true;
-                }
+                flag = FcitxInstanceCheckICFromSameApplication(instance, rec, ic);
             }
 
             if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
@@ -1086,14 +1096,7 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
             if (instance->config->shareState == ShareState_All)
                 flag = true;
             else {
-                UT_array* frontends = &instance->frontends;
-                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                if (pfrontend) {
-                    FcitxFrontend* frontend = (*pfrontend)->frontend;
-                    if (frontend->CheckICFromSameApplication &&
-                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                        flag = true;
-                }
+                flag = FcitxInstanceCheckICFromSameApplication(instance, rec, ic);
             }
 
             if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
@@ -1161,14 +1164,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
             if (instance->config->shareState == ShareState_All)
                 flag = true;
             else {
-                UT_array* frontends = &instance->frontends;
-                FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
-                if (pfrontend) {
-                    FcitxFrontend* frontend = (*pfrontend)->frontend;
-                    if (frontend->CheckICFromSameApplication &&
-                            frontend->CheckICFromSameApplication((*pfrontend)->addonInstance, rec, ic))
-                        flag = true;
-                }
+                flag = FcitxInstanceCheckICFromSameApplication(instance, rec, ic);
             }
 
             if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
