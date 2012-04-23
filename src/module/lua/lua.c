@@ -30,7 +30,7 @@
 #include "luawrap.h"
 
 static void * LuaCreate(FcitxInstance* instance);
-static UT_array * LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
+static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -74,16 +74,36 @@ static int LoadLuaConfig(LuaModule *luamodule) {
     return count;
 }
 
-static UT_array * LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
-    LuaModule *luamodule = (LuaModule *)arg;
-    return InputCommand(luamodule, (const char *)args.args[0]);
-}
-
-INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
+static INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
     LuaModule *luamodule = (LuaModule *)candWord->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
     snprintf(FcitxInputStateGetOutputString(input), MAX_USER_INPUT, "%s", candWord->strWord);
     return IRV_COMMIT_STRING;
+}
+
+static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
+    LuaModule *luamodule = (LuaModule *)arg;
+    UT_array *result = InputCommand(luamodule, (const char *)args.args[0]);
+    if (result) {
+        FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+        LuaResultItem *p = NULL;
+        while ((p = (LuaResultItem *)utarray_next(result, p))) {
+            FcitxCandidateWord candWord;
+            candWord.callback = LuaGetCandWord;
+            candWord.owner = luamodule;
+            candWord.priv = NULL;
+            if (p->help) {
+                candWord.strExtra = strdup(p->help);
+            } else {
+                candWord.strExtra = NULL;
+            }
+            candWord.strWord = strdup(p->result);
+            candWord.wordType = MSG_TIPS;
+            candWord.extraType = MSG_CODE;
+            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        }
+        utarray_free(result);
+    }
 }
 
 void AddToCandList(LuaModule *luamodule, const char *in, const char *out) {

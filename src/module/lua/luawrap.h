@@ -1,3 +1,6 @@
+#ifndef _LUA_WRAP_H_
+#define _LUA_WRAP_H_
+
 /***************************************************************************
  *   Copyright (C) 2012~2012 by xubin                                      *
  *   nybux.tsui@gmail.com                                                  *
@@ -18,12 +21,15 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "luamod.h"
-
 typedef struct lua_State lua_State;
 typedef struct _LuaModule LuaModule;
 typedef struct _LuaExtension LuaExtension;
 typedef struct _FcitxInstance FcitxInstance;
+
+typedef struct _LuaResultItem {
+    char *result;
+    char *help;
+} LuaResultItem;
 
 // alloc/free luamodule
 LuaModule * LuaModuleAlloc(FcitxInstance *fcitx);
@@ -40,3 +46,5 @@ void UnloadExtension(LuaModule *luamodule, const char *name);
 // callback is called when valid candidate generated
 UT_array * InputTrigger(LuaModule *luamodule, const char *input); 
 UT_array * InputCommand(LuaModule *module, const char *input); 
+
+#endif

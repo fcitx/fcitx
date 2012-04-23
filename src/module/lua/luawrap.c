@@ -31,8 +31,7 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/uthash.h"
 #include "fcitx-utils/utarray.h"
-
-#include "luamod.h"
+#include "luawrap.h"
 
 typedef struct _CommandItem {
     char *function_name;
@@ -86,8 +85,6 @@ static void FunctionItemDtor(void *_elt);
 static void LuaResultItemCopy(void *_dst, const void *_src); 
 static void LuaResultItemDtor(void *_elt); 
 static LuaModule * GetModule(lua_State *lua); 
-
-void UnloadExtension(LuaModule *module, const char *name); 
 
 const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end; ime.register_command = function(command_name, lua_function_name) __ime_register_command(command_name, lua_function_name); end;";
@@ -595,7 +592,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
         const char *str = lua_tostring(lua, -1);
         if (str) {
             utarray_new(result, &LuaResultItem_icd);
-            LuaResultItem r = {.result = (char *)str};
+            LuaResultItem r = {.result = (char *)str, .help = NULL};
             utarray_push_back(result, &r);
         } else {
             FcitxLog(WARNING, "lua function return return null"); 

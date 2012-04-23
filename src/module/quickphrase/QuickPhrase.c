@@ -71,7 +71,6 @@ static INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate);
 static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
 static void ShowQuickPhraseMessage(QuickPhraseState *qpstate);
 static INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWord);
-static INPUT_RETURN_VALUE QuickPhraseLuaCandWord(void* arg, FcitxCandidateWord* candWord);
 static boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate);
 static void SaveQuickPhraseConfig(QuickPhraseState* qpstate);
 static boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
@@ -406,26 +405,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         FcitxModuleFunctionArg arg;
         char *text = FcitxInputStateGetRawInputBuffer(input);
         arg.args[0] = text;
-        UT_array *result = InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
-        if (result) {
-            LuaResultItem *p;
-            while ((p = (LuaResultItem *)utarray_next(result, p))) {
-                FcitxCandidateWord candWord;
-                candWord.callback = QuickPhraseLuaCandWord;
-                candWord.owner = qpstate;
-                candWord.priv = NULL;
-                if (p->help) {
-                    candWord.strExtra = strdup(p->help);
-                } else {
-                    candWord.strExtra = NULL;
-                }
-                candWord.strWord = strdup(p->result);
-                candWord.wordType = MSG_TIPS;
-                candWord.extraType = MSG_CODE;
-                FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
-            }
-            utarray_free(result);
-        }
+        InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
     }
 
     if (!qpstate->quickPhrases)
@@ -479,14 +459,6 @@ void ReloadQuickPhrase(void* arg)
     LoadQuickPhraseConfig(qpstate);
     FreeQuickPhrase(arg);
     LoadQuickPhrase(qpstate);
-}
-
-INPUT_RETURN_VALUE QuickPhraseLuaCandWord(void* arg, FcitxCandidateWord* candWord)
-{
-    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
-    FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
-    snprintf(FcitxInputStateGetOutputString(input), MAX_USER_INPUT, "%s", candWord->strWord);
-    return IRV_COMMIT_STRING;
 }
 
 INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWord)

@@ -28,12 +28,7 @@ extern "C" {
 
 #define FCITX_LUA_NAME "fcitx-lua"
 #define FCITX_LUA_CALLCOMMAND 0
-#define FCITX_LUA_CALLCOMMAND_RETURNTYPE UT_array *
-
-typedef struct _LuaResultItem {
-    char *result;
-    char *help;
-} LuaResultItem;
+#define FCITX_LUA_CALLCOMMAND_RETURNTYPE void 
 
 
 #ifdef __cplusplus
