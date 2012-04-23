@@ -32,6 +32,7 @@ extern "C" {
 
 typedef struct _LuaResultItem {
     char *result;
+    char *help;
 } LuaResultItem;
 
 

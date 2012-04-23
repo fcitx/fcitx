@@ -207,11 +207,15 @@ static void LuaResultItemCopy(void *_dst, const void *_src) {
     LuaResultItem *dst = (LuaResultItem *)_dst;
     LuaResultItem *src = (LuaResultItem *)_src;
     dst->result = src->result ? strdup(src->result) : NULL;
+    dst->help = src->help ? strdup(src->help) : NULL;
 }
 static void LuaResultItemDtor(void *_elt) {
     LuaResultItem *elt = (LuaResultItem *)_elt;
     if (elt->result) {
         free(elt->result);
+    }
+    if (elt->help) {
+        free(elt->help);
     }
 }
 
@@ -605,14 +609,32 @@ static UT_array * LuaCallFunction(lua_State *lua,
         for (i = 1; i <= len; ++i) {
             lua_pushinteger(lua, i);
             lua_gettable(lua, -2);
+            char istable = 0;
+            if (lua_type(lua, -1) == LUA_TTABLE) {
+                istable = 1;
+                lua_pushstring(lua, "suggest");
+                lua_gettable(lua, -2);
+            }
             const char *str = lua_tostring(lua, -1);
             if (str == NULL) {
                 FcitxLog(WARNING, "function %s() result[%d] is not string", i);
             } else {
-                LuaResultItem r = {.result = (char *)str};
+                LuaResultItem r;
+                r.result = (char *)str;
+                if (istable) {
+                    lua_pushstring(lua, "help");
+                    lua_gettable(lua, -3);
+                    r.help = (char *)lua_tostring(lua, -1);
+                } else {
+                    r.help = NULL;
+                }
                 utarray_push_back(result, &r);
             }
-            lua_pop(lua, 1);
+            if (istable) {
+                lua_pop(lua, 3);
+            } else {
+                lua_pop(lua, 1);
+            }
         }
         if (utarray_len(result) == 0) {
             utarray_free(result);
@@ -628,11 +650,20 @@ static UT_array * LuaCallFunction(lua_State *lua,
 
 UT_array * InputCommand(LuaModule *module, const char *input) {
     CommandItem *command;
-    HASH_FIND_STR(module->commands, input, command);
+    char key[3];
+    strncpy(key, input, sizeof(key));
+    key[2] = 0;
+    HASH_FIND_STR(module->commands, key, command);
     if (command == NULL) {
         return NULL;
     }
-    return LuaCallFunction(command->lua, command->function_name, input);
+    const char *arg;
+    if (strlen(input) > 2) {
+        arg = input + 2;
+    } else {
+        arg = "";
+    }
+    return LuaCallFunction(command->lua, command->function_name, arg);
 }
 
 UT_array * InputTrigger(LuaModule *module, const char *input) {
