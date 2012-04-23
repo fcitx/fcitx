@@ -911,4 +911,28 @@ void ParsePlacement(UT_array* sps, char* placment)
 
     utarray_free(array);
 }
+
+SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon,  boolean imfallbackToDefault, boolean fallbackToDefault)
+{
+    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+    char* path;
+    if (im->strIconName[0] == '/')
+        path = strdup(im->strIconName);
+    else
+        asprintf(&path, "%s.png", im->strIconName);
+    SkinImage* imicon = LoadImage(sc, path, imfallbackToDefault);
+    if (imicon == NULL)
+        imicon = LoadImage(sc, fallbackIcon, fallbackToDefault);
+    else {
+        SkinImage* activeIcon = LoadImage(sc, fallbackIcon, fallbackToDefault);
+        if (activeIcon) {
+            ResizeSurface(&imicon->image,
+                          cairo_image_surface_get_width(activeIcon->image),
+                          cairo_image_surface_get_height(activeIcon->image));
+        }
+    }
+    free(path);
+    return imicon;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

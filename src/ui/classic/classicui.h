@@ -99,6 +99,7 @@ boolean LoadClassicUIConfig(FcitxClassicUI* classicui);
 void SaveClassicUIConfig(FcitxClassicUI* classicui);
 boolean WindowIsVisable(Display* dpy, Window window);
 boolean EnlargeCairoSurface(cairo_surface_t** sur, int w, int h);
+void ResizeSurface(cairo_surface_t** surface, int w, int h);
 
 #define GetPrivateStatus(status) ((FcitxClassicUIStatus*)(status)->uipriv[classicui->isfallback])
 

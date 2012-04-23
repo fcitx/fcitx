@@ -177,7 +177,7 @@ void DrawTrayWindow(TrayWindow* trayWindow)
             }
             int aw = scaleW * w;
             int ah = scaleH * h;
-            
+
             cairo_scale(c, scaleW, scaleH);
             cairo_set_source_surface(c, png_surface, (trayWindow->size - aw) / 2 , (trayWindow->size - ah) / 2);
             cairo_set_operator(c, CAIRO_OPERATOR_OVER);
