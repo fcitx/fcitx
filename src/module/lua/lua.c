@@ -29,8 +29,8 @@
 #include "luamod.h"
 #include "luawrap.h"
 
-static void* LuaCreate(FcitxInstance* instance);
-static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
+static void * LuaCreate(FcitxInstance* instance);
+static UT_array * LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -74,7 +74,7 @@ static int LoadLuaConfig(LuaModule *luamodule) {
     return count;
 }
 
-static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
+static UT_array * LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
     LuaModule *luamodule = (LuaModule *)arg;
     return InputCommand(luamodule, (const char *)args.args[0]);
 }
@@ -86,7 +86,7 @@ INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
     return IRV_COMMIT_STRING;
 }
 
-void TriggerCallback(LuaModule *luamodule, const char *in, const char *out) {
+void AddToCandList(LuaModule *luamodule, const char *in, const char *out) {
     FcitxCandidateWord candWord;
     candWord.callback = LuaGetCandWord;
     candWord.owner = luamodule;
@@ -104,7 +104,14 @@ void LuaUpdateCandidateWordHookCallback(void *arg) {
     LuaModule *luamodule = (LuaModule *)arg;
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
     char *text = FcitxInputStateGetRawInputBuffer(input);
-    InputTrigger(luamodule, text, TriggerCallback);
+    UT_array *result = InputTrigger(luamodule, text);
+    if (result) {
+        LuaResultItem *p;
+        while ((p = (LuaResultItem *)utarray_next(result, p))) {
+            AddToCandList(luamodule, text, p->result);
+        }
+        utarray_free(result);
+    }
 }
 
 void* LuaCreate(FcitxInstance* instance) {

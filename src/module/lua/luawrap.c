@@ -32,8 +32,10 @@
 #include "fcitx-utils/uthash.h"
 #include "fcitx-utils/utarray.h"
 
+#include "luamod.h"
+
 typedef struct _CommandItem {
-    char *key;
+    char dummy;
     char *function_name;
     lua_State *lua;
     UT_hash_handle hh;
@@ -73,7 +75,7 @@ typedef struct _LuaModule {
     size_t shortest_input_trigger_key_length;
 } LuaModule;
 
-typedef void (*TriggerFn)(LuaModule *luamodule, const char *in, const char *out);
+typedef void (*LuaResultFn)(LuaModule *luamodule, const char *in, const char *out);
 
 static int RegisterInputTrigger(lua_State *lua, const char *input_string, const char *function_name);
 static int RegisterCommand(lua_State *lua, const char *command_name, const char *function_name);
@@ -82,11 +84,16 @@ static void LuaPrintError(lua_State *lua);
 static void LuaPError(int err, const char *s);
 static void FunctionItemCopy(void *_dst, const void *_src); 
 static void FunctionItemDtor(void *_elt); 
+static void LuaResultItemCopy(void *_dst, const void *_src); 
+static void LuaResultItemDtor(void *_elt); 
+static LuaModule * GetModule(lua_State *lua); 
+
 void UnloadExtension(LuaModule *module, const char *name); 
 
 const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end; ime.register_command = function(command_name, lua_function_name) __ime_register_command(command_name, lua_function_name); end;";
 const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
+const UT_icd LuaResultItem_icd = {sizeof(LuaResultItem), NULL, LuaResultItemCopy, LuaResultItemDtor};
 
 LuaModule * LuaModuleAlloc(FcitxInstance *fcitx) {
     LuaModule *module;
@@ -105,6 +112,12 @@ FcitxInstance *GetFcitx(LuaModule *luamodule) {
     } else {
         return NULL;
     }
+}
+
+static int GetUniqueName_Export(lua_State *lua) {
+    FcitxIM *im = FcitxInstanceGetCurrentIM(GetModule(lua)->fcitx);
+    lua_pushstring(lua, im->uniqueName);
+    return 1;
 }
 
 static int FcitxLog_Export(lua_State *lua) {
@@ -129,6 +142,10 @@ static int ImeRegisterCommand_Export(lua_State *lua) {
     const char *function_name = lua_tostring(lua, 2);
     if (command_name == NULL || function_name == NULL) {
         FcitxLog(WARNING, "register command command_name or function_name empty");
+        return 0;
+    }
+    if (strlen(command_name) > 2) {
+        FcitxLog(WARNING, "register command command_name length great than 2");
         return 0;
     }
     if (RegisterCommand(lua, command_name, function_name) == -1) {
@@ -187,6 +204,18 @@ static void FunctionItemDtor(void *_elt) {
     }
 }
 
+static void LuaResultItemCopy(void *_dst, const void *_src) {
+    LuaResultItem *dst = (LuaResultItem *)_dst;
+    LuaResultItem *src = (LuaResultItem *)_src;
+    dst->result = src->result ? strdup(src->result) : NULL;
+}
+static void LuaResultItemDtor(void *_elt) {
+    LuaResultItem *elt = (LuaResultItem *)_elt;
+    if (elt->result) {
+        free(elt->result);
+    }
+}
+
 static void FreeTrigger(TriggerItem **triggers, LuaExtension *extension) {
     TriggerItem *trigger;
     for (trigger = *triggers; trigger != NULL; ) {
@@ -218,7 +247,6 @@ static void FreeCommand(CommandItem **commands, LuaExtension *extension) {
         if (command->lua == extension->lua) {
             CommandItem *temp = command->hh.next;
             HASH_DEL(*commands, command);
-            free(command->key);
             free(command->function_name);
             free(command);
             command = temp;
@@ -392,11 +420,6 @@ static int RegisterCommand(lua_State *lua,
         FcitxLog(ERROR, "Command::function_name alloc failed");
         goto err;
     }
-    command->key = strdup(command_name);
-    if (command->key == NULL) {
-        FcitxLog(ERROR, "Command::input alloc failed");
-        goto err;
-    }
     HASH_ADD_KEYPTR(hh, 
                     module->commands,
                     command_name,
@@ -407,9 +430,6 @@ err:
     if (command) {
         if (command->function_name) {
             free(command->function_name);
-        }
-        if (command->key) {
-            free(command->key);
         }
         free(command);
     }
@@ -530,6 +550,7 @@ static lua_State * LuaCreateState(LuaModule *module) {
     lua_register(lua, "fcitx_log", FcitxLog_Export);
     lua_register(lua, "__ime_register_trigger", ImeRegisterTrigger_Export);
     lua_register(lua, "__ime_register_command", ImeRegisterCommand_Export);
+    lua_register(lua, "__ime_unique_name", GetUniqueName_Export);
     LuaModule **ppmodule = lua_newuserdata(lua, sizeof(LuaModule *));
     *ppmodule = module;
     lua_setglobal(lua, kLuaModuleName);
@@ -549,9 +570,10 @@ cleanup:
     return NULL;
 }
 
-static int LuaCallFunction(lua_State *lua,
-                           const char *function_name,
-                           const char *argument) {
+static UT_array * LuaCallFunction(lua_State *lua,
+                                  const char *function_name,
+                                  const char *argument) {
+    UT_array *result = NULL;
     lua_getfield(lua, LUA_GLOBALSINDEX, "__ime_call_function");
     lua_pushstring(lua, function_name);
     lua_pushstring(lua, argument);
@@ -559,68 +581,87 @@ static int LuaCallFunction(lua_State *lua,
     if (rv != 0) {
         LuaPError(rv, "lua_pcall() failed");
         LuaPrintError(lua);
-        return -1;
+        return result;
     }
     if (lua_gettop(lua) == 0) {
         FcitxLog(WARNING, "lua_gettop() not retrun");
-        return -1;
+        return result;
     } 
-    return 0;
+    int type = lua_type(lua, -1);
+    if (type == LUA_TSTRING) {
+        const char *str = lua_tostring(lua, -1);
+        if (str) {
+            utarray_new(result, &LuaResultItem_icd);
+            LuaResultItem r = {.result = (char *)str};
+            utarray_push_back(result, &r);
+        } else {
+            FcitxLog(WARNING, "lua function return return null"); 
+        }
+    } else if (type == LUA_TTABLE) {
+        size_t i, len = lua_objlen(lua, -1);
+        if (len < 1) {
+            return result;
+        }
+        utarray_new(result, &LuaResultItem_icd);
+        for (i = 1; i <= len; ++i) {
+            lua_pushinteger(lua, i);
+            lua_gettable(lua, -2);
+            const char *str = lua_tostring(lua, -1);
+            if (str == NULL) {
+                FcitxLog(WARNING, "function %s() result[%d] is not string", i);
+            } else {
+                LuaResultItem r = {.result = (char *)str};
+                utarray_push_back(result, &r);
+            }
+            lua_pop(lua, 1);
+        }
+        if (utarray_len(result) == 0) {
+            utarray_free(result);
+            result = NULL;
+        }
+    } else {
+        FcitxLog(WARNING, "lua function return type not expected:%s",
+                lua_typename(lua, type)); 
+    }
+    lua_pop(lua, lua_gettop(lua));
+    return result;
 }
 
-char * InputCommand(LuaModule *module, const char *input) {
+UT_array * InputCommand(LuaModule *module, const char *input) {
     CommandItem *command;
     HASH_FIND_STR(module->commands, input, command);
     if (command == NULL) {
         return NULL;
     }
-    if (LuaCallFunction(command->lua, command->function_name, input) == 0) {
-        int type = lua_type(command->lua, -1);
-        if (type == LUA_TSTRING) {
-            const char *str = lua_tostring(command->lua, -1);
-            if (str) {
-                return strdup(str);
-            } else {
-                FcitxLog(WARNING, "lua function return return null"); 
-            }
-        } else {
-            FcitxLog(WARNING, "lua function return type not expected:%s",
-                              lua_typename(command->lua, type)); 
-        }
-    }
-    lua_pop(command->lua, lua_gettop(command->lua));
-    return NULL;
+    return LuaCallFunction(command->lua, command->function_name, input);
 }
 
-int InputTrigger(LuaModule *module, const char *input, TriggerFn callback) {
+UT_array * InputTrigger(LuaModule *module, const char *input) {
     if (module->shortest_input_trigger_key_length == 0
             || strlen(input) < module->shortest_input_trigger_key_length) {
-        return -1;
+        return NULL;
     }
     TriggerItem *trigger;
     HASH_FIND_STR(module->input_triggers, input, trigger);
     if (trigger == NULL) {
-        return -1;
+        return NULL;
     }
 
+    UT_array *result = NULL;
     FunctionItem *f = NULL;
     while ((f = (FunctionItem *)utarray_next(trigger->functions, f))) {
-        if (LuaCallFunction(f->lua, f->name, input) == 0) {
-            int type = lua_type(f->lua, -1);
-            if (type == LUA_TSTRING) {
-                const char *str = lua_tostring(f->lua, -1);
-                if (str) {
-                    callback(module, input, str);
-                } else {
-                    FcitxLog(WARNING, "lua function return return null"); 
+        UT_array *temp = LuaCallFunction(f->lua, f->name, input); 
+        if (temp) {
+            if (result) {
+                LuaResultItem *p;
+                while ((p = (LuaResultItem *)utarray_next(temp, p))) {
+                    utarray_push_back(result, p);
                 }
             } else {
-                FcitxLog(WARNING, "lua function return type not expected:%s",
-                                  lua_typename(f->lua, type)); 
+                result = temp;
             }
         }
-        lua_pop(f->lua, lua_gettop(f->lua));
     }
-    return 0;
+    return result;
 }
 

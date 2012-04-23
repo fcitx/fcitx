@@ -404,19 +404,27 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     {
         FcitxModuleFunctionArg arg;
-        arg.args[0] = FcitxInputStateGetRawInputBuffer(input);
-        char* strTemp = InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
-        if (strTemp != NULL) {
-            FcitxCandidateWord candWord;
-            candWord.callback = QuickPhraseLuaCandWord;
-            candWord.owner = qpstate;
-            candWord.priv = NULL;
-            candWord.strExtra = NULL;
-            candWord.strWord = strTemp;
-            candWord.wordType = MSG_TIPS;
-            candWord.extraType = MSG_CODE;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
-            return IRV_DISPLAY_MESSAGE;
+        char *text = FcitxInputStateGetRawInputBuffer(input);
+        if (strlen(text) > 2) {
+            arg.args[0] = text + 2;
+        } else {
+            arg.args[0] = "";
+        }
+        UT_array *result = InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
+        if (result) {
+            LuaResultItem *p;
+            while ((p = (LuaResultItem *)utarray_next(result, p))) {
+                FcitxCandidateWord candWord;
+                candWord.callback = QuickPhraseLuaCandWord;
+                candWord.owner = qpstate;
+                candWord.priv = NULL;
+                candWord.strExtra = NULL;
+                candWord.strWord = strdup(p->result);
+                candWord.wordType = MSG_TIPS;
+                candWord.extraType = MSG_CODE;
+                FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+            }
+            utarray_free(result);
         }
     }
 

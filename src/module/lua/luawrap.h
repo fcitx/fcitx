@@ -18,15 +18,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#include "luamod.h"
+
 typedef struct lua_State lua_State;
 typedef struct _LuaModule LuaModule;
 typedef struct _LuaExtension LuaExtension;
 typedef struct _FcitxInstance FcitxInstance;
-
-// IME Lua trigger callback
-// in is user input
-// out is retrun by lua
-typedef void (*TriggerFn)(LuaModule *luamodule, const char *in, const char *out);
 
 // alloc/free luamodule
 LuaModule * LuaModuleAlloc(FcitxInstance *fcitx);
@@ -41,5 +38,5 @@ void UnloadExtension(LuaModule *luamodule, const char *name);
 
 // call lua trigger, input is user input
 // callback is called when valid candidate generated
-int InputTrigger(LuaModule *luamodule, const char *input, TriggerFn callback); 
-char * InputCommand(LuaModule *module, const char *input); 
+UT_array * InputTrigger(LuaModule *luamodule, const char *input); 
+UT_array * InputCommand(LuaModule *module, const char *input); 
