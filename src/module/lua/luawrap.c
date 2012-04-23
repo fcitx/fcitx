@@ -35,7 +35,6 @@
 #include "luamod.h"
 
 typedef struct _CommandItem {
-    char dummy;
     char *function_name;
     lua_State *lua;
     UT_hash_handle hh;
