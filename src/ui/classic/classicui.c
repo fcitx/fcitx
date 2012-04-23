@@ -49,7 +49,8 @@
 #include <fcitx-utils/utils.h>
 
 struct _FcitxSkin;
-boolean MainMenuAction(FcitxUIMenu* menu, int index);
+static boolean MainMenuAction(FcitxUIMenu* menu, int index);
+static void UpdateMainMenu(FcitxUIMenu* menu);
 
 static void* ClassicUICreate(FcitxInstance* instance);
 static void ClassicUICloseInputWindow(void* arg);
@@ -139,26 +140,9 @@ void* ClassicUICreate(FcitxInstance* instance)
 
     InitSkinMenu(classicui);
     FcitxUIRegisterMenu(instance, &classicui->skinMenu);
-
     /* Main Menu Initial */
     FcitxMenuInit(&classicui->mainMenu);
-    FcitxMenuAddMenuItem(&classicui->mainMenu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
-    FcitxMenuAddMenuItem(&classicui->mainMenu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
-    FcitxMenuAddMenuItem(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
-
-    FcitxUIMenu **menupp;
-    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
-    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
-            menupp != NULL;
-            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
-        ) {
-        FcitxUIMenu * menup = *menupp;
-        if (!menup->isSubMenu)
-            FcitxMenuAddMenuItem(&classicui->mainMenu, menup->name, MENUTYPE_SUBMENU, menup);
-    }
-    FcitxMenuAddMenuItem(&classicui->mainMenu, NULL, MENUTYPE_DIVLINE, NULL);
-    FcitxMenuAddMenuItem(&classicui->mainMenu, _("Configure"), MENUTYPE_SIMPLE, NULL);
-    FcitxMenuAddMenuItem(&classicui->mainMenu, _("Exit"), MENUTYPE_SIMPLE, NULL);
+    classicui->mainMenu.UpdateMenu = UpdateMainMenu;
     classicui->mainMenu.MenuAction = MainMenuAction;
     classicui->mainMenu.priv = classicui;
     classicui->mainMenu.mark = -1;
@@ -421,6 +405,37 @@ void ClassicUIDisplayMessage(void* arg, char* title, char** msg, int length)
     DrawMessageWindow(classicui->messageWindow, title, msg, length);
 }
 
+
+static void UpdateMainMenu(FcitxUIMenu* menu)
+{
+    FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
+    FcitxInstance* instance = classicui->owner;
+    FcitxMenuClear(menu);
+
+    FcitxMenuAddMenuItem(menu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+
+    FcitxUIMenu **menupp;
+    UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
+    for (menupp = (FcitxUIMenu **) utarray_front(uimenus);
+            menupp != NULL;
+            menupp = (FcitxUIMenu **) utarray_next(uimenus, menupp)
+        ) {
+        FcitxUIMenu * menup = *menupp;
+        if (menup->isSubMenu)
+            continue;
+
+        if (menup->candStatusBind && FcitxUIGetComplexStatusByName(instance, menup->candStatusBind))
+            continue;
+
+        FcitxMenuAddMenuItem(menu, menup->name, MENUTYPE_SUBMENU, menup);
+    }
+    FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Configure"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Exit"), MENUTYPE_SIMPLE, NULL);
+}
+
 boolean MainMenuAction(FcitxUIMenu* menu, int index)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
@@ -530,18 +545,18 @@ boolean EnlargeCairoSurface(cairo_surface_t** sur, int w, int h)
 {
     int ow = cairo_image_surface_get_width(*sur);
     int oh = cairo_image_surface_get_height(*sur);
-    
+
     if (ow >= w && oh >= h)
         return false;
-    
+
     while (ow < w) {
         ow *= 2;
     }
-    
+
     while (oh < h) {
         oh *= 2;
     }
-    
+
     cairo_surface_destroy(*sur);
     *sur = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ow, oh);
     return true;

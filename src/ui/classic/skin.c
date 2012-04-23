@@ -161,25 +161,25 @@ SkinImage* LoadImageWithText(FcitxClassicUI *classicui, FcitxSkin* sc, const cha
 {
     if (!text || strlen(text) == 0)
         return NULL;
-    
+
     int len = fcitx_utf8_char_len(text);
-    
+
     char* iconText = strndup(text, len);
-    
+
     FcitxLog(DEBUG, "%s", iconText);
 
     cairo_surface_t* newsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
     cairo_t* c = cairo_create(newsurface);
-    
+
     int min = w > h? h: w;
     min = min * 0.8;
-    
+
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_rgba(c ,1, 1, 1, 0.0);
     cairo_paint(c);
-    
+
     OutputString(c, iconText, classicui->font, min, 0, 0, &sc->skinFont.menuFontColor[1]);
-    
+
     cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
     image->name = strdup(name);
@@ -673,7 +673,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     } else {
         newWidth = (newWidth < INPUT_BAR_HMIN_WIDTH) ? INPUT_BAR_HMIN_WIDTH : newWidth;
     }
-    
+
     *iwidth = newWidth;
     *iheight = newHeight;
 
@@ -849,7 +849,7 @@ void InitSkinMenu(FcitxClassicUI* classicui)
 {
     utarray_init(&classicui->skinBuf, &ut_str_icd);
     FcitxMenuInit(&classicui->skinMenu);
-    classicui->skinMenu.candStatusBind = strdup("skin");
+    classicui->skinMenu.candStatusBind = NULL;
     classicui->skinMenu.name =  strdup(_("Skin"));
 
     classicui->skinMenu.UpdateMenu = UpdateSkinMenu;
