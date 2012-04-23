@@ -202,6 +202,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 /* reset status */
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
+                privstat->avail = false;
             }
 
             SkinPlacement* sp;
@@ -263,6 +264,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                         free(path);
                         if (statusicon == NULL)
                             continue;
+                        privstat->avail = true;
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
@@ -409,8 +411,11 @@ void DrawMainWindow(MainWindow* mainWindow)
                     path = strdup(icon);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 free(path);
-                if (statusicon == NULL)
+                if (statusicon == NULL) {
+                    privstat->avail = false;
                     continue;
+                }
+                privstat->avail = true;
                 DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
                 UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(statusicon->image);

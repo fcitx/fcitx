@@ -529,6 +529,7 @@ void FcitxUIRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
         return ;
 
     menu->mark = -1;
+    menu->visible = true;
 
     utarray_push_back(uimenus, &menu);
     if (UI_FUNC_IS_VALID(RegisterMenu))

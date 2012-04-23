@@ -426,8 +426,18 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
         if (menup->isSubMenu)
             continue;
 
-        if (menup->candStatusBind && FcitxUIGetComplexStatusByName(instance, menup->candStatusBind))
+        if (!menup->visible)
             continue;
+
+        if (menup->candStatusBind) {
+            FcitxUIComplexStatus* compStatus = FcitxUIGetComplexStatusByName(instance, menup->candStatusBind);
+            if (compStatus) {
+                if (!compStatus->visible)
+                    continue;
+                if (GetPrivateStatus(compStatus)->avail)
+                    continue;
+            }
+        }
 
         FcitxMenuAddMenuItem(menu, menup->name, MENUTYPE_SUBMENU, menup);
     }

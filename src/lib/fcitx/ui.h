@@ -169,7 +169,9 @@ extern "C" {
          **/
         int mark;
 
-        int padding[16]; /**< padding */
+        boolean visible;
+
+        int padding[15]; /**< padding */
     };
 
     /**

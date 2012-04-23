@@ -141,6 +141,7 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
                 }
             } else {
                 if (strcmp(instance->uiname, addon->name) == 0) {
+                    addon->bEnabled = true;
                     uiaddon = addon;
                     break;
                 }

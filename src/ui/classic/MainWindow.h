@@ -41,6 +41,7 @@ typedef struct _FcitxClassicUIStatus {
     MouseE mouse;
     int x, y;
     int w, h;
+    boolean avail;
 } FcitxClassicUIStatus;
 
 typedef struct _MainWindow {
