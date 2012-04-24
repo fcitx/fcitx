@@ -115,6 +115,7 @@ FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, IsDoInputOnly, bIsDoInputOnly, boolean)
 FCITX_SETTER(FcitxInputState, IsDoInputOnly, bIsDoInputOnly, boolean)
 FCITX_GETTER_VALUE(FcitxInputState, OutputString, strStringGet, char*)
+FCITX_GETTER_VALUE(FcitxInputState, LastCommitString, strLastCommit, const char*)
 FCITX_GETTER_VALUE(FcitxInputState, RawInputBuffer, strCodeInput, char*)
 FCITX_GETTER_VALUE(FcitxInputState, CursorPos, iCursorPos, int)
 FCITX_SETTER(FcitxInputState, CursorPos, iCursorPos, int)
@@ -754,7 +755,7 @@ void FcitxInstanceProcessInputReturnValue(
     if (retVal & IRV_FLAG_DISPLAY_LAST) {
         FcitxInstanceCleanInputWindow(instance);
         FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", FcitxInputStateGetRawInputBuffer(input)[0]);
-        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", FcitxInputStateGetOutputString(input));
+        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", FcitxInputStateGetLastCommitString(input));
     }
 
     if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW)

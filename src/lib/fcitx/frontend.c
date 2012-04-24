@@ -207,6 +207,10 @@ void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, c
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     frontend->CommitString((*pfrontend)->addonInstance, ic, str);
 
+    FcitxInputState* input = instance->input;
+    fcitx_utf8_strncpy(input->strLastCommit, str, MAX_USER_INPUT);
+    input->strLastCommit[MAX_USER_INPUT] = '\0';
+
     if (pstr)
         free(pstr);
 }

@@ -27,6 +27,7 @@
 
 #include "fcitx/fcitx.h"
 #include "fcitx/instance.h"
+#include "fcitx/ime.h"
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/uthash.h"
@@ -103,6 +104,9 @@ const char *kFcitxLua =
     "end;"
     "ime.unique_name = function()"
     "    return __ime_unique_name();"
+    "end;"
+    "ime.get_last_commit = function()"
+    "    return __ime_get_last_commit();"
     "end;";
 const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
 const UT_icd LuaResultItem_icd = {sizeof(LuaResultItem), NULL, LuaResultItemCopy, LuaResultItemDtor};
@@ -129,6 +133,12 @@ FcitxInstance *GetFcitx(LuaModule *luamodule) {
 static int GetUniqueName_Export(lua_State *lua) {
     FcitxIM *im = FcitxInstanceGetCurrentIM(GetModule(lua)->fcitx);
     lua_pushstring(lua, im->uniqueName);
+    return 1;
+}
+
+static int GetLastCommit_Export(lua_State *lua) {
+    FcitxInputState* input = FcitxInstanceGetInputState(GetModule(lua)->fcitx);
+    lua_pushstring(lua, FcitxInputStateGetLastCommitString(input));
     return 1;
 }
 
@@ -567,6 +577,7 @@ static lua_State * LuaCreateState(LuaModule *module) {
     lua_register(lua, "__ime_register_trigger", ImeRegisterTrigger_Export);
     lua_register(lua, "__ime_register_command", ImeRegisterCommand_Export);
     lua_register(lua, "__ime_unique_name", GetUniqueName_Export);
+    lua_register(lua, "__ime_get_last_commit", GetLastCommit_Export);
     LuaModule **ppmodule = lua_newuserdata(lua, sizeof(LuaModule *));
     *ppmodule = module;
     lua_setglobal(lua, kLuaModuleName);

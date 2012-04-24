@@ -18,6 +18,7 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#include <string.h>
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/utf8.h"
 
@@ -266,4 +267,28 @@ int fcitx_utf8_check_string(const char *s)
 
     return 1;
 }
+
+FCITX_EXPORT_API
+void fcitx_utf8_strncpy(char* str, const char* s, size_t byte)
+{
+    while (*s) {
+        int chr;
+
+        const char* next = fcitx_utf8_get_char(s, &chr);
+        size_t diff = next - s;
+        if (byte < diff)
+            break;
+
+        memcpy(str, s, diff);
+        str += diff;
+        byte -= diff;
+        s = next;
+    }
+
+    while(byte --) {
+        *str = '\0';
+        str++;
+    }
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

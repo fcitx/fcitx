@@ -119,6 +119,19 @@ int    fcitx_utf8_get_char_extended(const char *p, int max_len);
  **/
 int    fcitx_utf8_get_char_validated(const char *p, int max_len);
 
+
+/**
+ * @brief copy most byte length, but keep utf8 valid
+ *
+ * @param str dest string
+ * @param s source string
+ * @param byte max length
+ * @return void*
+ *
+ * @since 4.2.3
+ **/
+void fcitx_utf8_strncpy(char* str, const char* s, size_t byte);
+
 #ifdef __cplusplus
 }
 #endif

@@ -226,6 +226,16 @@ extern "C" {
     char* FcitxInputStateGetOutputString(FcitxInputState* input);
 
     /**
+     * @brief get last commit string
+     *
+     * @param input input state
+     * @return const char*
+     *
+     * @since 4.2.3
+     **/
+    const char* FcitxInputStateGetLastCommitString(FcitxInputState * input);
+
+    /**
      * get current input method
      *
      * @param instance fcitx instance

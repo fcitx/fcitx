@@ -11,6 +11,9 @@ target_link_libraries(testmessage fcitx-core)
 add_executable(teststring teststring.c)
 target_link_libraries(teststring fcitx-utils)
 
+add_executable(testutf8 testutf8.c)
+target_link_libraries(testutf8 fcitx-utils)
+
 add_executable(testpinyin
     ../src/im/pinyin/pyParser.c
     ../src/im/pinyin/pyMapTable.c
@@ -31,3 +34,6 @@ add_test(NAME testpinyin
 
 add_test(NAME teststring
          COMMAND teststring)
+
+add_test(NAME testutf8
+         COMMAND testutf8)

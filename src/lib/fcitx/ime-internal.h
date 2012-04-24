@@ -51,6 +51,7 @@ struct _FcitxInputState {
     int iCodeInputCount;
     char strCodeInput[MAX_USER_INPUT + 1];
     char strStringGet[MAX_USER_INPUT + 1];
+    char strLastCommit[MAX_USER_INPUT + 1];
     boolean bIsInRemind;
 
     time_t dummy;
@@ -68,7 +69,7 @@ struct _FcitxInputState {
     FcitxMessages* msgAuxUp;
     FcitxMessages* msgAuxDown;
     FcitxMessages* msgClientPreedit;
-    
+
     uint32_t keycode;
     uint32_t keysym;
     uint32_t keystate;
