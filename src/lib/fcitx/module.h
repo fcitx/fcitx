@@ -73,14 +73,6 @@ extern "C" {
     } FcitxModuleFunctionArg;
 
     /**
-     * init module array
-     *
-     * @param modules module array
-     * @return void
-     **/
-    void InitFcitxModules(UT_array* modules);
-
-    /**
      * load all modules
      *
      * @param instance fcitx instance

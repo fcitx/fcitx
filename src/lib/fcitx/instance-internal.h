@@ -56,6 +56,7 @@ struct _FcitxInstance {
     UT_array imeclasses;
     UT_array imes;
     UT_array frontends;
+    UT_array modules;
     UT_array eventmodules;
 
     struct _FcitxInputContext *CurrentIC;
@@ -97,13 +98,13 @@ struct _FcitxInstance {
     FcitxAddon* uifallback;
 
     FcitxAddon* uinormal;
-    
+
     FcitxContext* context;
-    
+
     boolean tryReplace;
-    
+
     int lastIMIndex;
-    
+
     char* fallbackuiName;
 };
 

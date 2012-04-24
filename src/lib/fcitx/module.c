@@ -32,10 +32,9 @@
 #include "addon-internal.h"
 #include "ime-internal.h"
 
-static UT_icd  module_icd = {sizeof(FcitxModule*), NULL, NULL, NULL};
+static UT_icd  module_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL};
 typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
-FCITX_EXPORT_API
 void InitFcitxModules(UT_array* modules)
 {
     utarray_init(modules, &module_icd);
@@ -86,6 +85,7 @@ void FcitxModuleLoad(FcitxInstance* instance)
                 addon->addonInstance = moduleinstance;
                 if (module->ProcessEvent && module->SetFD)
                     utarray_push_back(&instance->eventmodules, &addon);
+                utarray_push_back(&instance->modules, &addon);
             }
             break;
             default:

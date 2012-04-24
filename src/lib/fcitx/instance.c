@@ -40,6 +40,7 @@
 #include "ui-internal.h"
 #include "fcitx-internal.h"
 #include "instance-internal.h"
+#include "module-internal.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
                                       || (icase ? \
@@ -104,6 +105,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     FcitxAddonsInit(&instance->addons);
     FcitxInstanceInitIM(instance);
     FcitxFrontendsInit(&instance->frontends);
+    InitFcitxModules(&instance->modules);
     InitFcitxModules(&instance->eventmodules);
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uicompstats, &compstat_icd);
@@ -290,16 +292,26 @@ void FcitxInstanceEnd(FcitxInstance* instance)
         frontend->DestroyIC((*pfrontend)->addonInstance, rec);
     }
 
-    int frontendid = 0;
     for (pfrontend = (FcitxAddon**) utarray_front(&instance->frontends);
             pfrontend != NULL;
             pfrontend = (FcitxAddon**) utarray_next(&instance->frontends, pfrontend)
         ) {
         if (pfrontend == NULL)
-            return;
+            continue;
         FcitxFrontend* frontend = (*pfrontend)->frontend;
         frontend->Destroy((*pfrontend)->addonInstance);
-        frontendid++;
+    }
+
+    FcitxAddon** pmodule;
+    for (pmodule = (FcitxAddon**) utarray_front(&instance->modules);
+            pmodule != NULL;
+            pmodule = (FcitxAddon**) utarray_next(&instance->modules, pmodule)
+        ) {
+        if (pmodule == NULL)
+            return;
+        FcitxModule* module = (*pmodule)->module;
+        if (module->Destroy)
+            module->Destroy((*pmodule)->addonInstance);
     }
 
     sem_post(instance->sem);
