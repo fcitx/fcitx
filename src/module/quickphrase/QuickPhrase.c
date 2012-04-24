@@ -393,7 +393,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
     FcitxInstance *instance = qpstate->owner;
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
-    
     FcitxInstanceCleanInputWindowDown(qpstate->owner);
 
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
@@ -417,8 +416,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     strcpy(searchKey.strCode, FcitxInputStateGetRawInputBuffer(input));
 
-    FcitxCandidateWordReset(FcitxInputStateGetCandidateList(input));
-
     currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
     qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
     lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
@@ -426,7 +423,6 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     if (qpstate->iLastQuickPhrase < 0)
         qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
     if (!currentQuickPhrase || strncmp(FcitxInputStateGetRawInputBuffer(input), currentQuickPhrase->strCode, iInputLen)) {
-        FcitxInstanceCleanInputWindowDown(instance);
         currentQuickPhrase = NULL;
         return IRV_DISPLAY_MESSAGE;
     }
