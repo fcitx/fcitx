@@ -29,8 +29,8 @@
 #include "luamod.h"
 #include "luawrap.h"
 
-static void * LuaCreate(FcitxInstance* instance);
-static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
+static void* LuaCreate(FcitxInstance* instance);
+static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -81,7 +81,7 @@ static INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord
     return IRV_COMMIT_STRING;
 }
 
-static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
+static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
     LuaModule *luamodule = (LuaModule *)arg;
     UT_array *result = InputCommand(luamodule, (const char *)args.args[0]);
     if (result) {
@@ -89,8 +89,14 @@ static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
         LuaResultItem *p = NULL;
         while ((p = (LuaResultItem *)utarray_next(result, p))) {
             FcitxCandidateWord candWord;
-            candWord.callback = LuaGetCandWord;
-            candWord.owner = luamodule;
+            if (args.args[1] && args.args[2]) {
+                candWord.callback = args.args[1];
+                candWord.owner = args.args[2];
+            }
+            else {
+                candWord.callback = LuaGetCandWord;
+                candWord.owner = luamodule;
+            }
             candWord.priv = NULL;
             if (p->help) {
                 candWord.strExtra = strdup(p->help);
@@ -104,6 +110,7 @@ static void LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
         }
         utarray_free(result);
     }
+    return NULL;
 }
 
 void AddToCandList(LuaModule *luamodule, const char *in, const char *out) {
@@ -114,7 +121,7 @@ void AddToCandList(LuaModule *luamodule, const char *in, const char *out) {
     candWord.wordType = MSG_TIPS;
     candWord.strExtra = NULL;
     candWord.strWord = strdup(out);
-    
+
     FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
     FcitxCandidateWordInsert(candList, &candWord, 0);
@@ -149,7 +156,7 @@ void* LuaCreate(FcitxInstance* instance) {
 
     FcitxIMEventHook hook = {.arg = luamodule,
                              .func = LuaUpdateCandidateWordHookCallback};
-    
+
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
     FcitxAddon* luaAddon = FcitxAddonsGetAddonByName(

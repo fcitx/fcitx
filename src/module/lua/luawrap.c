@@ -77,17 +77,33 @@ typedef void (*LuaResultFn)(LuaModule *luamodule, const char *in, const char *ou
 
 static int RegisterInputTrigger(lua_State *lua, const char *input_string, const char *function_name);
 static int RegisterCommand(lua_State *lua, const char *command_name, const char *function_name);
-static lua_State * LuaCreateState(LuaModule *module); 
-static void LuaPrintError(lua_State *lua); 
+static lua_State * LuaCreateState(LuaModule *module);
+static void LuaPrintError(lua_State *lua);
 static void LuaPError(int err, const char *s);
-static void FunctionItemCopy(void *_dst, const void *_src); 
-static void FunctionItemDtor(void *_elt); 
-static void LuaResultItemCopy(void *_dst, const void *_src); 
-static void LuaResultItemDtor(void *_elt); 
-static LuaModule * GetModule(lua_State *lua); 
+static void FunctionItemCopy(void *_dst, const void *_src);
+static void FunctionItemDtor(void *_elt);
+static void LuaResultItemCopy(void *_dst, const void *_src);
+static void LuaResultItemDtor(void *_elt);
+static LuaModule * GetModule(lua_State *lua);
 
 const char *kLuaModuleName = "__fcitx_luamodule";
-const char *kFcitxLua = "function __ime_call_function(function_name, p1) if type(_G[function_name]) ~= 'function' then return nil end return _G[function_name](p1) end; ime = {}; ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings) __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings); end; ime.register_command = function(command_name, lua_function_name) __ime_register_command(command_name, lua_function_name); end;";
+const char *kFcitxLua =
+    "function __ime_call_function(function_name, p1)"
+    "    if type(_G[function_name]) ~= 'function' then"
+    "        return nil"
+    "    end"
+    "    return _G[function_name](p1)"
+    "end;"
+    "ime = {};"
+    "ime.register_trigger = function(lua_function_name, description, input_trigger_strings, candidate_trigger_strings)"
+    "    __ime_register_trigger(lua_function_name, desc, input_trigger_strings, candidate_trigger_strings);"
+    "end;"
+    "ime.register_command = function(command_name, lua_function_name)"
+    "    __ime_register_command(command_name, lua_function_name);"
+    "end;"
+    "ime.unique_name = function()"
+    "    return __ime_unique_name();"
+    "end;";
 const UT_icd FunctionItem_icd = {sizeof(FunctionItem), NULL, FunctionItemCopy, FunctionItemDtor};
 const UT_icd LuaResultItem_icd = {sizeof(LuaResultItem), NULL, LuaResultItemCopy, LuaResultItemDtor};
 
@@ -347,7 +363,7 @@ void UnloadExtension(LuaModule *module, const char *name) {
         FcitxLog(WARNING, "extension:%s unload failed, not found", name);
         return;
     }
-   
+
     FreeCommand(&module->commands, extension);
     FreeTrigger(&module->input_triggers, extension);
     FreeTrigger(&module->candidate_tiggers, extension);
@@ -420,7 +436,7 @@ static int RegisterCommand(lua_State *lua,
         FcitxLog(ERROR, "Command::function_name alloc failed");
         goto err;
     }
-    HASH_ADD_KEYPTR(hh, 
+    HASH_ADD_KEYPTR(hh,
                     module->commands,
                     command_name,
                     strlen(command_name),
@@ -504,7 +520,7 @@ static void LuaPrintError(lua_State *lua) {
 
 static void LuaPError(int err, const char *s) {
     switch (err) {
-        case LUA_ERRSYNTAX: 
+        case LUA_ERRSYNTAX:
             FcitxLog(ERROR, "%s:syntax error during pre-compilation", s);
             break;
         case LUA_ERRMEM:
@@ -513,7 +529,7 @@ static void LuaPError(int err, const char *s) {
         case LUA_ERRFILE:
             FcitxLog(ERROR, "%s:cannot open/read the file", s);
             break;
-        case LUA_ERRRUN:    
+        case LUA_ERRRUN:
             FcitxLog(ERROR, "%s:a runtime error", s);
             break;
         case LUA_ERRERR:
@@ -586,7 +602,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
     if (lua_gettop(lua) == 0) {
         FcitxLog(WARNING, "lua_gettop() not retrun");
         return result;
-    } 
+    }
     int type = lua_type(lua, -1);
     if (type == LUA_TSTRING) {
         const char *str = lua_tostring(lua, -1);
@@ -595,7 +611,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
             LuaResultItem r = {.result = (char *)str, .help = NULL};
             utarray_push_back(result, &r);
         } else {
-            FcitxLog(WARNING, "lua function return return null"); 
+            FcitxLog(WARNING, "lua function return return null");
         }
     } else if (type == LUA_TTABLE) {
         size_t i, len = lua_objlen(lua, -1);
@@ -609,7 +625,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
             char istable = 0;
             if (lua_type(lua, -1) == LUA_TTABLE) {
                 istable = 1;
-                lua_pushstring(lua, "suggest");
+                lua_pushstring(lua, "help");
                 lua_gettable(lua, -2);
             }
             const char *str = lua_tostring(lua, -1);
@@ -619,7 +635,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
                 LuaResultItem r;
                 r.result = (char *)str;
                 if (istable) {
-                    lua_pushstring(lua, "help");
+                    lua_pushstring(lua, "suggest");
                     lua_gettable(lua, -3);
                     r.help = (char *)lua_tostring(lua, -1);
                 } else {
@@ -639,7 +655,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
         }
     } else {
         FcitxLog(WARNING, "lua function return type not expected:%s",
-                lua_typename(lua, type)); 
+                lua_typename(lua, type));
     }
     lua_pop(lua, lua_gettop(lua));
     return result;
@@ -677,7 +693,7 @@ UT_array * InputTrigger(LuaModule *module, const char *input) {
     UT_array *result = NULL;
     FunctionItem *f = NULL;
     while ((f = (FunctionItem *)utarray_next(trigger->functions, f))) {
-        UT_array *temp = LuaCallFunction(f->lua, f->name, input); 
+        UT_array *temp = LuaCallFunction(f->lua, f->name, input);
         if (temp) {
             if (result) {
                 LuaResultItem *p;
