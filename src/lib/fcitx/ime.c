@@ -342,8 +342,12 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
                        const char *langCode
                       )
 {
-    if (priority <= 0)
+    if (priority < 0)
         return ;
+
+    if (priority == PRIORITY_MAGIC_FIRST)
+        priority = 0;
+
     UT_array* imes = &instance->availimes ;
     FcitxIM* entry;
 
@@ -1396,7 +1400,9 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
             ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
         if (!IMIsInIMNameList(imList, ime)) {
             /* ok, make all im priority larger than 100 disable by default */
-            if (ime->iPriority < PRIORITY_DISABLE)
+            if (ime->iPriority == 0)
+                utarray_insert(&instance->imes, ime, 0);
+            else if (ime->iPriority < PRIORITY_DISABLE)
                 utarray_push_back(&instance->imes, ime);
         }
     }

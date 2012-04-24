@@ -65,6 +65,9 @@ extern "C" {
 /** when input method priority is larger than 100, it will be disabled by default after install */
 #define PRIORITY_DISABLE 100
 
+/** due to backward compatible, this priority will be the most priority one */
+#define PRIORITY_MAGIC_FIRST 0xf1527
+
     struct _FcitxInputContext;
     struct _FcitxInstance;
     struct _FcitxAddon;
