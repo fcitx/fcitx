@@ -385,7 +385,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
             int chr_len = fcitx_utf8_char_len(ps);
             char *nps;
             nps = fcitx_utf8_get_char(ps , &wc);
-            HASH_FIND_INT(transState->s2t_table, &wc, t2s);
+            HASH_FIND_INT(transState->t2s_table, &wc, t2s);
 
             if (t2s) {
                 strcat(ret, t2s->str);
