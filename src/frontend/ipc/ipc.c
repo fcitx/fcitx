@@ -79,6 +79,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
 static void IPCICFocusIn(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
+static void IPCICCommitPreedit(FcitxIPCFrontend* ipc, FcitxInputContext* ic);
 static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int x, int y, int w, int h);
 static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const uint32_t originsym, const uint32_t keycode, const uint32_t originstate, uint32_t t, FcitxKeyEventType type);
 static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic);
@@ -169,6 +170,11 @@ const char * ic_introspection_xml =
     "    <method name=\"FocusOut\">\n"
     "    </method>\n"
     "    <method name=\"Reset\">\n"
+    "    </method>\n"
+    "    <method name=\"CommitPreedit\">\n"
+    "    </method>\n"
+    "    <method name=\"MouseEvent\">\n"
+    "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
     "    </method>\n"
     "    <method name=\"SetCursorLocation\">\n"
     "      <arg name=\"x\" direction=\"in\" type=\"i\"/>\n"
@@ -545,6 +551,17 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
             dbus_connection_send(ipc->conn, reply, NULL);
             dbus_message_unref(reply);
             result = DBUS_HANDLER_RESULT_HANDLED;
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "CommitPreedit")) {
+            IPCICCommitPreedit(ipc, ic);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
+            result = DBUS_HANDLER_RESULT_HANDLED;
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "MouseEvent")) {
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send(ipc->conn, reply, NULL);
+            dbus_message_unref(reply);
+            result = DBUS_HANDLER_RESULT_HANDLED;
         } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetCursorLocation")) {
             int x, y;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y, DBUS_TYPE_INVALID)) {
@@ -695,6 +712,18 @@ static void IPCICReset(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
 {
     FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
     if (ic && ic == currentic) {
+        FcitxUICloseInputWindow(ipc->owner);
+        FcitxInstanceResetInput(ipc->owner);
+    }
+
+    return;
+}
+
+static void IPCICCommitPreedit(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
+{
+    FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
+    if (ic && ic == currentic) {
+        FcitxUICommitPreedit(ipc->owner);
         FcitxUICloseInputWindow(ipc->owner);
         FcitxInstanceResetInput(ipc->owner);
     }

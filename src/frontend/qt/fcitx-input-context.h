@@ -59,6 +59,7 @@ public:
     virtual bool x11FilterEvent(QWidget *keywidget, XEvent *event);
 #endif // Q_WS_X11
     virtual bool filterEvent(const QEvent* event);
+    virtual void mouseHandler(int x, QMouseEvent* event);
 
 private Q_SLOTS:
     void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
@@ -114,6 +115,8 @@ private:
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;
     QString m_serviceName;
+    QString m_preedit;
+    QString m_commitPreedit;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

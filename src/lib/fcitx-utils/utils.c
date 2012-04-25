@@ -170,10 +170,10 @@ char* fcitx_utils_join_string_list(UT_array* list, char delm)
 {
     if (!list)
         return NULL;
-    
+
     if (utarray_len(list) == 0)
         return strdup("");
-    
+
     size_t len = 0;
     char** str;
     for (str = (char**) utarray_front(list);
@@ -182,7 +182,7 @@ char* fcitx_utils_join_string_list(UT_array* list, char delm)
     {
         len += strlen(*str) + 1;
     }
-    
+
     char* result = (char*) fcitx_utils_malloc0(sizeof(char) * len);
     char* p = result;
     for (str = (char**) utarray_front(list);
@@ -195,7 +195,7 @@ char* fcitx_utils_join_string_list(UT_array* list, char delm)
         p += strl + 1;
     }
     result[len - 1] = '\0';
-    
+
     return result;
 }
 
@@ -269,7 +269,7 @@ int fcitx_utils_get_display_number()
         if (*p == '.') {
             *p = '\0';
         }
-        
+
         if (strDisplayNumber)
             sscanf(strDisplayNumber, "%d", &displayNumber);
 
@@ -294,7 +294,7 @@ char* fcitx_utils_get_current_langcode()
         char* m;
         m = strchr(result, '.');
         if (m) *m = '\0';
-        
+
         m = strchr(result, '@');
         if (m) *m= '\0';
         return result;
@@ -310,12 +310,12 @@ char* fcitx_utils_get_process_name()
         FILE* fp = fopen("/proc/self/stat", "r");
         if (!fp)
             break;
-        
+
         const size_t bufsize = 1024;
         char buf[bufsize];
         fgets(buf, bufsize, fp);
         fclose(fp);
-        
+
         char* S = strchr(buf, '(');
         if (!S)
             break;

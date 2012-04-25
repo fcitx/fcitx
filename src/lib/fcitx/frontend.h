@@ -55,6 +55,7 @@ extern "C" {
         CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2),
         CAPACITY_PASSWORD = (1 << 3),
         CAPACITY_FORMATTED_PREEDIT = (1 << 4),
+        CAPACITY_CLIENT_UNFOCUS_COMMIT = (1 << 5)
     } FcitxCapacityFlags;
 
     /**

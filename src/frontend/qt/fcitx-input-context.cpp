@@ -174,6 +174,9 @@ void QFcitxInputContext::reset()
 {
     if (isValid())
         m_icproxy->Reset();
+    QInputMethodEvent e;
+    e.setCommitString(m_commitPreedit);
+    sendEvent(e);
 }
 
 void QFcitxInputContext::update()
@@ -261,6 +264,20 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
 #endif
 
 }
+
+void QFcitxInputContext::mouseHandler(int x, QMouseEvent* event)
+{
+    if ((event->type() == QEvent::MouseButtonPress
+        || event->type() == QEvent::MouseButtonRelease)
+        && (x <= 0 || x >= m_preedit.length())
+    )
+    {
+        if (isValid())
+            m_icproxy->CommitPreedit();
+        return;
+    }
+}
+
 
 QKeyEvent* QFcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 {
@@ -478,6 +495,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         QFlags<FcitxCapacityFlags> flag;
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
+        flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
 
         addCapacity(flag, true);
     }
@@ -527,18 +545,22 @@ void QFcitxInputContext::updatePreedit(const QString& str, int cursorPos)
     attrList.append(QAttribute(QInputMethodEvent::Cursor, cursorPos, 1, 0));
     attrList.append(QAttribute(QInputMethodEvent::TextFormat, 0, str.length(), format));
     QInputMethodEvent event(str, attrList);
+    m_preedit = str;
+    m_commitPreedit = str;
     sendEvent(event);
     update();
 }
 
 void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos)
 {
-    QString str;
+    QString str, commitStr;
     int pos = 0;
     QList<QAttribute> attrList;
     Q_FOREACH(const FcitxFormattedPreedit& preedit, preeditList)
     {
         str += preedit.string();
+        if (!(preedit.format() & MSG_DONOT_COMMIT_WHEN_UNFOCUS))
+            commitStr += preedit.string();
         QTextCharFormat format;
         if ((preedit.format() & MSG_NOUNDERLINE) == 0) {
             format.setUnderlineStyle(QTextCharFormat::DashUnderline);
@@ -563,6 +585,8 @@ void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList&
 
     attrList.append(QAttribute(QInputMethodEvent::Cursor, cursorPos, 1, 0));
     QInputMethodEvent event(str, attrList);
+    m_preedit = str;
+    m_commitPreedit = commitStr;
     sendEvent(event);
     update();
 }
