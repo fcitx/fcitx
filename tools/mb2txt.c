@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
 #include "im/table/tabledict.h"
 
 #ifdef HAVE_STDLIB_H
@@ -30,6 +31,48 @@
 #endif
 
 #define MAX_CODE_LENGTH 30
+
+enum {
+    TEMPL_VERNEW = 0,
+    TEMPL_VEROLD,
+    TEMPL_KEYCODE,
+    TEMPL_LEN,
+    TEMPL_PY,
+    TEMPL_PYLEN,
+    TEMPL_INVALIDCHAR,
+    TEMPL_RULE,
+    TEMPL_DATA
+};
+
+const char* templateOld[] = {
+    ";fcitx 版本 0x%02x 码表文件\n",
+    ";fcitx 版本 0x02 码表文件\n",
+    "键码=%s\n",
+    "码长=%d\n",
+    "拼音=@\n",
+    "拼音长度=%d\n",
+    "规避字符=%s\n",
+    "[组词规则]\n",
+    "[数据]\n"
+};
+const char* templateNew[] = {
+    ";fcitx Version 0x%02x Table file\n",
+    ";fcitx Version 0x02 Table file\n",
+    "KeyCode=%s\n",
+    "Length=%d\n",
+    "Pinyin=@\n",
+    "PinyinLength=%d\n",
+    "InvalidChar=%s\n",
+    "[Rule]\n",
+    "[Data]\n"
+};
+
+void usage()
+{
+    printf("Usage: mb2txt [-o] <Source File>\n");
+    printf("\t-o\t\tOld format table file\n\n");
+    exit(1);
+}
 
 int main(int argc, char *argv[])
 {
@@ -43,13 +86,29 @@ int main(int argc, char *argv[])
     unsigned char   iRule;
     unsigned char   iPYLen;
     char            iVersion = 0;
+    boolean         old = false;
+    const char**          templ = NULL;
 
-    if (argc != 2) {
-        printf("\nUsage: mb2txt <Source File>\n\n");
-        exit(1);
+    int c;
+    while ((c = getopt(argc, argv, "oh")) != -1) {
+        switch (c) {
+        case 'o':
+            old = true;
+            break;
+        case 'h':
+
+        default:
+            usage();
+        }
     }
 
-    fpDict = fopen(argv[1], "r");
+    templ = old ? templateOld : templateNew;
+
+    if (optind + 1 != argc) {
+        usage();
+    }
+
+    fpDict = fopen(argv[optind], "r");
 
     if (!fpDict) {
         printf("\nCan not read source file!\n\n");
@@ -61,25 +120,25 @@ int main(int argc, char *argv[])
 
     if (iTemp == 0) {
         fread(&iVersion, sizeof(char), 1, fpDict);
-        printf(";fcitx 版本 0x%02x 码表文件\n", iVersion);
+        printf(templ[TEMPL_VERNEW], iVersion);
         fread(&iTemp, sizeof(unsigned int), 1, fpDict);
     } else
-        printf(";fcitx 版本 0x02 码表文件\n");
+        printf(templ[TEMPL_VEROLD]);
 
     fread(strCode, sizeof(char), iTemp + 1, fpDict);
 
-    printf("键码=%s\n", strCode);
+    printf(templ[TEMPL_KEYCODE], strCode);
 
     fread(&iLen, sizeof(unsigned char), 1, fpDict);
 
-    printf("码长=%d\n", iLen);
+    printf(templ[TEMPL_LEN], iLen);
 
     if (iVersion) {
         fread(&iPYLen, sizeof(unsigned char), 1, fpDict);
 
         if (iPYLen) {
-            printf("拼音=@\n");
-            printf("拼音长度=%d\n", iPYLen);
+            printf(templ[TEMPL_PY]);
+            printf(templ[TEMPL_PYLEN], iPYLen);
         }
     }
 
@@ -88,13 +147,13 @@ int main(int argc, char *argv[])
     fread(strCode, sizeof(char), iTemp + 1, fpDict);
 
     if (iTemp)
-        printf("规避字符=%s\n", strCode);
+        printf(templ[TEMPL_INVALIDCHAR], strCode);
 
     fread(&iRule, sizeof(unsigned char), 1, fpDict);
 
     if (iRule) {
         //表示有组词规则
-        printf("[组词规则]\n");
+        printf(templ[TEMPL_RULE]);
 
         for (i = 0; i < iLen - 1; i++) {
             fread(&iRule, sizeof(unsigned char), 1, fpDict);
@@ -118,7 +177,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("[数据]\n");
+    printf(templ[TEMPL_DATA]);
 
     fread(&j, sizeof(unsigned int), 1, fpDict);
 

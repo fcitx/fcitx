@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
             if (pstr[0] == '#')
                 continue;
 
-            if (strstr(pstr, strConst[STR_DATA]))
+            if (CHECK_OPTION(pstr, STR_DATA))
                 break;
 
             switch (*pstr) {
@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
             if (pstr[0] == '#')
                 continue;
 
-            if (strstr(pstr, strConst[STR_DATA]))
+            if (CHECK_OPTION(pstr, STR_DATA))
                 break;
         }
     }
