@@ -107,7 +107,6 @@ static void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputCon
 static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
 static void FreeIMEntry(FcitxIMEntry* entry);
-static INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -1459,6 +1458,7 @@ void FreeIMEntry(FcitxIMEntry* entry)
     free(entry);
 }
 
+FCITX_EXPORT_API
 INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state)
 {
     if (FcitxInputStateGetRawInputBufferSize(input) != 0

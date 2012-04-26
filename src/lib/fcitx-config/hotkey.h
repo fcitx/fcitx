@@ -2532,7 +2532,7 @@ extern "C"
      * @return boolean
      **/
     boolean FcitxHotkeyIsHotKeyCapital(FcitxKeySym sym, int state);
-    
+
     /**
      * hotkey have combine modifier
      *
@@ -2569,18 +2569,28 @@ extern "C"
      * @since 4.1.1
      */
     FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym);
-    
+
     /**
-     * convert unicode character to keyval 
+     * @brief free hotkey description
+     *
+     * @param hotkey hotkey array
+     * @return void
+     *
+     * @since 4.2.3
+     **/
+    void FcitxHotkeyFree(FcitxHotkey* hotkey);
+
+    /**
+     * convert unicode character to keyval
      *
      * If No matching keysym value found, return Unicode value plus 0x01000000
      * (a convention introduced in the UTF-8 work on xterm).
-     * 
+     *
      * @param wc unicode
      * @return FcitxKeySym
      **/
     FcitxKeySym FcitxUnicodeToKeySym (uint32_t wc);
-    
+
     /**
      * convert keyval to unicode character
      *

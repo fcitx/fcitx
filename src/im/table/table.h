@@ -99,7 +99,6 @@ void            TableCreateNewPhrase(TableMetaData* table);
 INPUT_RETURN_VALUE _TableGetCandWord(TableMetaData* table, TABLECANDWORD* tableCandWord, boolean _bRemind);
 INPUT_RETURN_VALUE TableGetCandWord(void* arg, FcitxCandidateWord* candWord);
 boolean            TablePhraseTips(void* arg);
-void            TableSetCandWordsFlag(TableMetaData* table, int iCount, boolean flag);
 
 void            UpdateHZLastInput(TableMetaData* table, char* str);
 

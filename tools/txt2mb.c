@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
@@ -31,6 +32,9 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-config/fcitx-config.h"
 #include "im/table/tabledict.h"
+
+#define CHECK_OPTION(str, x) ((strstr((str), strConst[x]) == (str)) || (strstr((str), strConstNew[x]) == (str)))
+#define ADD_LENGTH(str, x) ((strstr((str), strConst[x]) == (str)) ? (strlen(strConst[x])) : (strlen(strConstNew[x])))
 
 #define STR_KEYCODE 0
 #define STR_CODELEN 1
@@ -43,26 +47,17 @@
 #define CONST_STR_SIZE 7
 
 #define MAX_CODE_LENGTH  30
-#define PHRASE_MAX_LENGTH 10
 #define FH_MAX_LENGTH  10
 #define TABLE_AUTO_SAVE_AFTER 1024
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
 
 char* strConst[CONST_STR_SIZE] = { "键码=", "码长=", "规避字符=", "拼音=", "拼音长度=" , "[数据]", "[组词规则]"};
-int strLength[CONST_STR_SIZE];
+char* strConstNew[CONST_STR_SIZE] = { "KeyCode=", "Length=", "InvalidChar=", "Pinyin=", "PinyinLength=" , "[Data]", "[Rule]"};
 
 char            strInputCode[100] = "\0";
 char            strIgnoreChars[100] = "\0";
 char            cPinyinKey = '\0';
-
-void InitStrLength()
-{
-    int i;
-
-    for (i = 0; i < CONST_STR_SIZE; i++)
-        strLength[i] = strlen(strConst[i]);
-}
 
 boolean IsValidCode(char cChar)
 {
@@ -94,9 +89,6 @@ boolean IsValidCode(char cChar)
 
 int main(int argc, char *argv[])
 {
-    char            strCode[100];
-    char            strHZ[100];
-    char           *p;
     FILE           *fpDict, *fpNew;
     RECORD         *temp, *head, *newRec, *current;
     unsigned int    s = 0;
@@ -125,8 +117,6 @@ int main(int argc, char *argv[])
         exit(2);
     }
 
-    InitStrLength();
-
     head = (RECORD *) malloc(sizeof(RECORD));
     head->next = head;
     head->prev = head;
@@ -135,18 +125,20 @@ int main(int argc, char *argv[])
     bRule = 0;
     l = 0;
 
+    char* buf = NULL, *buf1 = NULL;
+    size_t len;
     for (;;) {
         l++;
 
-        if (!fgets(strCode, 100, fpDict))
+        if (getline(&buf, &len, fpDict) == -1)
             break;
 
-        i = strlen(strCode) - 1;
+        i = strlen(buf) - 1;
 
-        while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
-            strCode[i--] = '\0';
+        while ((i >= 0) && (buf[i] == ' ' || buf[i] == '\n' || buf[i] == '\r'))
+            buf[i--] = '\0';
 
-        pstr = strCode;
+        pstr = buf;
 
         if (*pstr == ' ')
             pstr++;
@@ -154,35 +146,35 @@ int main(int argc, char *argv[])
         if (pstr[0] == '#')
             continue;
 
-        if (strstr(pstr, strConst[STR_KEYCODE])) {
-            pstr += strLength[STR_KEYCODE];
+        if (CHECK_OPTION(pstr, STR_KEYCODE)) {
+            pstr += ADD_LENGTH(pstr, STR_KEYCODE);
             strcpy(strInputCode, pstr);
-        } else if (strstr(pstr, strConst[STR_CODELEN])) {
-            pstr += strLength[STR_CODELEN];
+        } else if (CHECK_OPTION(pstr, STR_CODELEN)) {
+            pstr += ADD_LENGTH(pstr, STR_CODELEN);
             iCodeLength = atoi(pstr);
 
             if (iCodeLength > MAX_CODE_LENGTH) {
                 iCodeLength = MAX_CODE_LENGTH;
                 printf("Max Code Length is %d\n", MAX_CODE_LENGTH);
             }
-        } else if (strstr(pstr, strConst[STR_IGNORECHAR])) {
-            pstr += strLength[STR_IGNORECHAR];
+        } else if (CHECK_OPTION(pstr, STR_IGNORECHAR)) {
+            pstr += ADD_LENGTH(pstr, STR_IGNORECHAR);
             strcpy(strIgnoreChars, pstr);
-        } else if (strstr(pstr, strConst[STR_PINYIN])) {
-            pstr += strLength[STR_PINYIN];
+        } else if (CHECK_OPTION(pstr, STR_PINYIN)) {
+            pstr += ADD_LENGTH(pstr, STR_PINYIN);
 
             while (*pstr == ' ')
                 pstr++;
 
             cPinyinKey = *pstr;
-        } else if (strstr(pstr, strConst[STR_PINYINLEN])) {
-            pstr += strLength[STR_PINYINLEN];
+        } else if (CHECK_OPTION(pstr, STR_PINYINLEN)) {
+            pstr += ADD_LENGTH(pstr, STR_PINYINLEN);
             iPYCodeLength = atoi(pstr);
         }
 
-        else if (strstr(pstr, strConst[STR_DATA]))
+        else if (CHECK_OPTION(pstr, STR_DATA))
             break;
-        else if (strstr(pstr, strConst[STR_RULE])) {
+        else if (CHECK_OPTION(pstr, STR_RULE)) {
             bRule = 1;
             break;
         }
@@ -202,17 +194,17 @@ int main(int argc, char *argv[])
         for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
             l++;
 
-            if (!fgets(strCode, 100, fpDict))
+            if (getline(&buf, &len, fpDict) == -1)
                 break;
 
             rule[iTemp].rule = (RULE_RULE *) malloc(sizeof(RULE_RULE) * iCodeLength);
 
-            i = strlen(strCode) - 1;
+            i = strlen(buf) - 1;
 
-            while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
-                strCode[i--] = '\0';
+            while ((i >= 0) && (buf[i] == ' ' || buf[i] == '\n' || buf[i] == '\r'))
+                buf[i--] = '\0';
 
-            pstr = strCode;
+            pstr = buf;
 
             if (*pstr == ' ')
                 pstr++;
@@ -239,20 +231,20 @@ int main(int argc, char *argv[])
 
             default:
                 printf("2   Phrase rules are not suitable!\n");
-                printf("\t\t%s\n", strCode);
+                printf("\t\t%s\n", buf);
                 exit(1);
             }
 
             pstr++;
 
-            p = pstr;
+            char* p = pstr;
 
             while (*p && *p != '=')
                 p++;
 
             if (!(*p)) {
                 printf("3   Phrase rules are not suitable!\n");
-                printf("\t\t%s\n", strCode);
+                printf("\t\t%s\n", buf);
                 exit(1);
             }
 
@@ -283,7 +275,7 @@ int main(int argc, char *argv[])
 
                 default:
                     printf("4   Phrase rules are not suitable!\n");
-                    printf("\t\t%s\n", strCode);
+                    printf("\t\t%s\n", buf);
                     exit(1);
                 }
 
@@ -298,7 +290,7 @@ int main(int argc, char *argv[])
                 if (i != (iCodeLength - 1)) {
                     if (*p != '+') {
                         printf("5   Phrase rules are not suitable!\n");
-                        printf("\t\t%s  %d\n", strCode, iCodeLength);
+                        printf("\t\t%s  %d\n", buf, iCodeLength);
                         exit(1);
                     }
 
@@ -315,15 +307,15 @@ int main(int argc, char *argv[])
         for (iTemp = 0; iTemp < (iCodeLength - 1); iTemp++) {
             l++;
 
-            if (!fgets(strCode, 100, fpDict))
+            if (getline(&buf, &len, fpDict) == -1)
                 break;
 
-            i = strlen(strCode) - 1;
+            i = strlen(buf) - 1;
 
-            while ((i >= 0) && (strCode[i] == ' ' || strCode[i] == '\n' || strCode[i] == '\r'))
-                strCode[i--] = '\0';
+            while ((i >= 0) && (buf[i] == ' ' || buf[i] == '\n' || buf[i] == '\r'))
+                buf[i--] = '\0';
 
-            pstr = strCode;
+            pstr = buf;
 
             if (*pstr == ' ')
                 pstr++;
@@ -339,50 +331,63 @@ int main(int argc, char *argv[])
     if (iPYCodeLength < iCodeLength)
         iPYCodeLength = iCodeLength;
 
-    if (!strstr(pstr, strConst[STR_DATA])) {
+    if (!CHECK_OPTION(pstr, STR_DATA)) {
         printf("Source File Format Error!\n");
         exit(1);
     }
 
-    for (;;) {
+    while (getline(&buf, &len, fpDict) != -1) {
         l++;
+        if (buf1)
+            free(buf1);
+        buf1 = fcitx_utils_trim(buf);
+        char *p = buf1;
 
-        if (EOF == fscanf(fpDict, "%s %s\n", strCode, strHZ))
-            break;
+        while (*p && !isspace(*p))
+            p ++;
 
-        if (!IsValidCode(strCode[0])) {
-            printf("Invalid Format: Line-%d  %s %s\n", l, strCode, strHZ);
+        if (*p == '\0')
+            continue;
+
+        while (isspace(*p)) {
+            *p = '\0';
+            p ++;
+        }
+
+        char* strHZ = p;
+
+        if (!IsValidCode(buf1[0])) {
+            printf("Invalid Format: Line-%d  %s %s\n", l, buf1, strHZ);
 
             exit(1);
         }
 
-        if (((strCode[0] != cPinyinKey) && (strlen(strCode) > iCodeLength))
-            || ((strCode[0] == cPinyinKey) && (strlen(strCode) > (iPYCodeLength + 1)))
-            || ((strCode[0] == '^') && (strlen(strCode) > (iCodeLength + 1)))
-            || ((strCode[0] == '&') && (strlen(strCode) > (iPYCodeLength + 1)))
+        if (((buf1[0] != cPinyinKey) && (strlen(buf1) > iCodeLength))
+            || ((buf1[0] == cPinyinKey) && (strlen(buf1) > (iPYCodeLength + 1)))
+            || ((buf1[0] == '^') && (strlen(buf1) > (iCodeLength + 1)))
+            || ((buf1[0] == '&') && (strlen(buf1) > (iPYCodeLength + 1)))
         ) {
-            printf("Delete:  %s %s, Too long\n", strCode, strHZ);
+            printf("Delete:  %s %s, Too long\n", buf1, strHZ);
             continue;
         }
 
         size_t hzLen = fcitx_utf8_strlen(strHZ);
-         // Utf-8 Longest Phrase Length is 10, longest construct code length is 1
-        if (hzLen > PHRASE_MAX_LENGTH || (strCode[0] == '^' && hzLen != 1)) {
-            printf("Delete:  %s %s, Too long\n", strCode, strHZ);
+        if (buf1[0] == '^' && hzLen != 1) {
+            printf("Delete:  %s %s, Too long\n", buf1, strHZ);
             continue;
         }
 
         type = RECORDTYPE_NORMAL;
 
-        pstr = strCode;
+        pstr = buf1;
 
-        if (strCode[0] == cPinyinKey) {
+        if (buf1[0] == cPinyinKey) {
             pstr ++;
             type = RECORDTYPE_PINYIN;
-        } else if (strCode[0] == '^') {
+        } else if (buf1[0] == '^') {
             pstr ++;
             type = RECORDTYPE_CONSTRUCT;
-        } else if (strCode[0] == '&') {
+        } else if (buf1[0] == '&') {
             pstr ++;
             type = RECORDTYPE_PROMPT;
         }
@@ -419,11 +424,11 @@ int main(int argc, char *argv[])
         }
 
         //插在temp的前面
-        newRec = (RECORD *) malloc(sizeof(RECORD));
+        newRec = (RECORD *) fcitx_utils_malloc0(sizeof(RECORD));
 
-        newRec->strCode = (char *) malloc(sizeof(char) * (iPYCodeLength + 1));
+        newRec->strCode = (char *) fcitx_utils_malloc0(sizeof(char) * (iPYCodeLength + 1));
 
-        newRec->strHZ = (char *) malloc(sizeof(char) * strlen(strHZ) + 1);
+        newRec->strHZ = (char *) fcitx_utils_malloc0(sizeof(char) * strlen(strHZ) + 1);
 
         strcpy(newRec->strCode, pstr);
 
@@ -449,7 +454,14 @@ int main(int argc, char *argv[])
 
     _next:
         continue;
+
     }
+
+
+    if (buf)
+        free(buf);
+    if (buf1)
+        free(buf1);
 
     fclose(fpDict);
 

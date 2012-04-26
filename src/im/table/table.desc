@@ -37,7 +37,7 @@ DefaultValue=False
 [CodeTable/PYKey]
 Description=Pinyin Key
 Type=Char
-DefaultValue=@
+DefaultValue=
 
 [CodeTable/AutoSend]
 Description=Auto Send Candidate Word to Client
@@ -48,6 +48,11 @@ DefaultValue=-1
 Description=Auto Send Candidate Word if no match in Code Table
 Type=Integer
 DefaultValue=-1
+
+[CodeTable/SendRawPreedit]
+Description=Send Raw Preedit
+Type=Boolean
+DefaultValue=False
 
 [CodeTable/EndKey]
 Description=End Key
@@ -126,6 +131,31 @@ DefaultValue=False
 Description=Keyboard Layout to be used
 Type=String
 DefaultValue=us
+
+[CodeTable/UseAlternativePageKey]
+Description=Alternative Prev Page Key
+Type=Boolean
+DefaultValue=False
+
+[CodeTable/AlternativePrevPage]
+Description=Alternative Prev Page Key
+Type=Hotkey
+DefaultValue=
+
+[CodeTable/AlternativeNextPage]
+Description=Alternative Next Page Key
+Type=Hotkey
+DefaultValue=
+
+[CodeTable/FirstCandidateAsPreedit]
+Description=First Candidate Display as Preedit
+Type=Boolean
+DefaultValue=True
+
+[CodeTable/CommitAndPassByInvalidKey]
+Description=Commit and pass when invalid key of this table pressed
+Type=Boolean
+DefaultValue=False
 
 [DescriptionFile]
 LocaleDomain=fcitx

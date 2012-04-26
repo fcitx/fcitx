@@ -16,7 +16,7 @@ const int iInternalVersion = INTERNAL_VERSION;
 boolean LoadTableDict(TableMetaData* tableMetaData)
 {
     char            strCode[MAX_CODE_LENGTH + 1];
-    char            strHZ[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
+    char           *strHZ = 0;
     FILE           *fpDict;
     RECORD         *recTemp;
     unsigned int    i = 0;
@@ -101,9 +101,14 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     }
 
     iRecordIndex = 0;
+    size_t bufSize = 0;
     for (i = 0; i < tableDict->iRecordCount; i++) {
         fread(strCode, sizeof(char), tableDict->iPYCodeLength + 1, fpDict);
         fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+        if (iTemp > bufSize) {
+            bufSize = iTemp;
+            strHZ = realloc(strHZ, bufSize);
+        }
         fread(strHZ, sizeof(char), iTemp, fpDict);
         recTemp = (RECORD *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
         recTemp->strCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iPYCodeLength + 1));
@@ -138,7 +143,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
                 tableSingleHZ = tableDict->tableSingleHZ;
             else if (recTemp->type == RECORDTYPE_CONSTRUCT)
                 tableSingleHZ = tableDict->tableSingleHZCons;
-            
+
             if (tableSingleHZ) {
                 iTemp = CalHZIndex(recTemp->strHZ);
                 if (iTemp < SINGLE_HZ_COUNT) {
@@ -153,14 +158,16 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
 
         if (recTemp->type == RECORDTYPE_PINYIN)
             tableDict->bHasPinyin = true;
-        
+
         if (recTemp->type == RECORDTYPE_PROMPT && strlen(recTemp->strCode) == 1)
             tableDict->promptCode[(uint8_t) recTemp->strCode[0]] = recTemp;
-            
+
         tableDict->currentRecord->next = recTemp;
         recTemp->prev = tableDict->currentRecord;
         tableDict->currentRecord = recTemp;
     }
+    if (strHZ)
+        free(strHZ);
 
     tableDict->currentRecord->next = tableDict->recordHead;
     tableDict->recordHead->prev = tableDict->currentRecord;
@@ -457,6 +464,7 @@ void TableCreateAutoPhrase(TableMetaData* tableMetaData, char iCount)
                 tableDict->insertPoint->iSelected = 0;
                 tableDict->insertPoint = tableDict->insertPoint->next;
             }
+            tableDict->iTableChanged++;
 
         _next:
             continue;
@@ -489,7 +497,7 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
         if (tableDict->rule[i].iWords == i2 && tableDict->rule[i].iFlag == i1)
             break;
     }
-    
+
     if (i == tableDict->iCodeLength - 1)
         return true;
 
@@ -507,7 +515,7 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
         }
 
         int hzIndex = CalHZIndex(strTemp);
-        
+
         if (tableDict->tableSingleHZ[hzIndex]) {
             if (tableDict->tableSingleHZCons[hzIndex])
                 recTemp = tableDict->tableSingleHZCons[hzIndex];
@@ -577,6 +585,7 @@ void TableInsertPhrase(TableDict* tableDict, const char *strCode, const char *st
     dictNew->next = insertPoint;
 
     tableDict->iRecordCount++;
+    tableDict->iTableChanged++;
 }
 
 /*
@@ -603,12 +612,16 @@ void TableDelPhrase(TableDict* tableDict, RECORD * record)
      */
 
     tableDict->iRecordCount--;
+    tableDict->iTableChanged++;
 }
 
-void TableUpdateHitFrequency(TableDict* tableDict, RECORD * record)
+void TableUpdateHitFrequency(TableMetaData* tableMetaData, RECORD * record)
 {
-    record->iHit++;
-    record->iIndex = ++tableDict->iTableIndex;
+    if (tableMetaData->tableOrder != AD_NO) {
+        tableMetaData->tableDict->iTableChanged++;
+        record->iHit++;
+        record->iIndex = ++tableMetaData->tableDict->iTableIndex;
+    }
 }
 
 int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict)

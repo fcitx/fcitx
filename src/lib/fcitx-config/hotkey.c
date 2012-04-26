@@ -783,4 +783,13 @@ FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
         return result->keymain;
 }
 
+FCITX_EXPORT_API
+void FcitxHotkeyFree(FcitxHotkey* hotkey)
+{
+    if (hotkey[0].desc)
+        free(hotkey[0].desc);
+    if (hotkey[1].desc)
+        free(hotkey[1].desc);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

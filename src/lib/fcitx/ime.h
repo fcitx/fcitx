@@ -702,6 +702,9 @@ extern "C" {
      **/
     void FcitxInstanceUpdateIMList(struct _FcitxInstance* instance);
 
+
+    INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
+
 #ifdef __cplusplus
 }
 #endif

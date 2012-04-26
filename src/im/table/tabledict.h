@@ -3,6 +3,7 @@
 
 #include <fcitx-utils/utf8.h>
 #include <fcitx-config/fcitx-config.h>
+#include <fcitx-config/hotkey.h>
 #include <fcitx-utils/memory.h>
 
 #define MAX_CODE_LENGTH  30
@@ -80,6 +81,7 @@ typedef struct _TableMetaData {
     char            cPinyin;    //输入该键后，表示进入临时拼音状态
     int             iTableAutoSendToClient; //自动上屏
     int             iTableAutoSendToClientWhenNone; //空码自动上屏
+    boolean         bSendRawPreedit;
     char           *strEndCode; //中止键，按下该键相当于输入该键后再按一个空格
     boolean         bUseMatchingKey; //是否模糊匹配
     char            cMatchingKey;
@@ -95,6 +97,11 @@ typedef struct _TableMetaData {
     char           *langCode;
     char           *kbdlayout;
     boolean         customPrompt;
+    boolean         bUseAlternativePageKey;
+    boolean         bFirstCandidateAsPreedit;
+    boolean         bCommitAndPassByInvalidKey;
+    FcitxHotkey     hkAlternativePrevPage[2];
+    FcitxHotkey     hkAlternativeNextPage[2];
     boolean         bEnabled;
 
     struct _FcitxTableState* owner;
@@ -141,7 +148,7 @@ void TableCreateAutoPhrase(TableMetaData* tableMetaData, char iCount);
 RECORD *TableHasPhrase(const TableDict* tableDict, const char *strCode, const char *strHZ);
 void TableDelPhraseByHZ(TableDict* tableDict, const char *strHZ);
 void TableDelPhrase(TableDict* tableDict, RECORD * record);
-void TableUpdateHitFrequency(TableDict* tableDict, RECORD * record);
+void TableUpdateHitFrequency(TableMetaData* tableMetaData, RECORD * record);
 int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict);
 int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput);
 void TableResetFlags(TableDict* tableDict);
