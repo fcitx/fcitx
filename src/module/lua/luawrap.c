@@ -86,6 +86,7 @@ static void FunctionItemDtor(void *_elt);
 static void LuaResultItemCopy(void *_dst, const void *_src);
 static void LuaResultItemDtor(void *_elt);
 static LuaModule * GetModule(lua_State *lua);
+static void UnloadExtension(LuaModule *module, LuaExtension* extension);
 
 const char *kLuaModuleName = "__fcitx_luamodule";
 const char *kFcitxLua =
@@ -318,7 +319,7 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
     HASH_FIND_STR(module->extensions, name, extension);
     if (extension) {
         FcitxLog(DEBUG, "extension:%s reload", name);
-        UnloadExtension(module, name);
+        UnloadExtension(module, extension);
     }
     extension = calloc(sizeof(*extension), 1);
     if (extension == NULL) {
@@ -344,7 +345,7 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
     if (rv != 0) {
         LuaPError(rv, "lua_pcall() failed");
         LuaPrintError(extension->lua);
-        UnloadExtension(module, name);
+        UnloadExtensionByName(module, name);
         return NULL;
     }
 
@@ -352,27 +353,31 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
     if (rv != 0) {
         LuaPError(rv, "luaL_loadfile() failed");
         LuaPrintError(extension->lua);
-        UnloadExtension(module, name);
+        UnloadExtensionByName(module, name);
         return NULL;
     }
     rv = lua_pcall(extension->lua, 0, 0, 0);
     if (rv != 0) {
         LuaPError(rv, "lua_pcall() failed");
         LuaPrintError(extension->lua);
-        UnloadExtension(module, name);
+        UnloadExtensionByName(module, name);
         return NULL;
     }
     UpdateShortestInputTriggerKeyLength(module);
     return extension;
 }
 
-void UnloadExtension(LuaModule *module, const char *name) {
+void UnloadExtensionByName(LuaModule *module, const char *name) {
     LuaExtension *extension;
     HASH_FIND_STR(module->extensions, name, extension);
     if (extension == NULL) {
         FcitxLog(WARNING, "extension:%s unload failed, not found", name);
         return;
     }
+    UnloadExtension(module, extension);
+}
+
+void UnloadExtension(LuaModule *module, LuaExtension* extension) {
 
     FreeCommand(&module->commands, extension);
     FreeTrigger(&module->input_triggers, extension);
@@ -719,3 +724,8 @@ UT_array * InputTrigger(LuaModule *module, const char *input) {
     return result;
 }
 
+void UnloadAllExtension(LuaModule* luamodule)
+{
+    while(luamodule->extensions)
+        UnloadExtension(luamodule, luamodule->extensions);
+}

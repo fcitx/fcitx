@@ -37,14 +37,15 @@ void LuaModuleFree(LuaModule *luamodule);
 FcitxInstance *GetFcitx(LuaModule *luamodule);
 
 // Load lua extension, name is filename of lua source file
-LuaExtension * LoadExtension(LuaModule *luamodule, const char *name); 
+LuaExtension * LoadExtension(LuaModule *luamodule, const char *name);
 
 // Unload extension by name
-void UnloadExtension(LuaModule *luamodule, const char *name); 
+void UnloadExtensionByName(LuaModule *luamodule, const char *name);
+void UnloadAllExtension(LuaModule *luamodule);
 
 // call lua trigger, input is user input
 // callback is called when valid candidate generated
-UT_array * InputTrigger(LuaModule *luamodule, const char *input); 
-UT_array * InputCommand(LuaModule *module, const char *input); 
+UT_array * InputTrigger(LuaModule *luamodule, const char *input);
+UT_array * InputCommand(LuaModule *module, const char *input);
 
 #endif

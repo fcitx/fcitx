@@ -30,6 +30,7 @@
 #include "luawrap.h"
 
 static void* LuaCreate(FcitxInstance* instance);
+static void LuaReloadConfig(void* arg);
 static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
@@ -38,7 +39,7 @@ FcitxModule module = {
     NULL,
     NULL,
     NULL,
-    NULL
+    LuaReloadConfig
 };
 
 FCITX_EXPORT_API
@@ -147,12 +148,7 @@ void* LuaCreate(FcitxInstance* instance) {
         FcitxLog(ERROR, "LuaModule alloc failed");
         goto err;
     }
-    int rv = LoadLuaConfig(luamodule);
-    if (rv == 0) {
-        //TODO(xubin): continue load if support dynamic load extension
-        FcitxLog(INFO, "Extension count:0, skip load");
-        goto err;
-    }
+    LoadLuaConfig(luamodule);
 
     FcitxIMEventHook hook = {.arg = luamodule,
                              .func = LuaUpdateCandidateWordHookCallback};
@@ -172,4 +168,9 @@ err:
     return NULL;
 }
 
-
+void LuaReloadConfig(void* arg)
+{
+    LuaModule* luamodule = arg;
+    UnloadAllExtension(luamodule);
+    LoadLuaConfig(luamodule);
+}
