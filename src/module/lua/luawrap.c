@@ -38,6 +38,7 @@ typedef struct _CommandItem {
     char *function_name;
     lua_State *lua;
     UT_hash_handle hh;
+    char* command_name;
 } CommandItem;
 
 typedef struct _FunctionItem {
@@ -339,7 +340,7 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
         free(extension);
         return NULL;
     }
-    HASH_ADD_KEYPTR(hh, module->extensions, name, strlen(name), extension);
+    HASH_ADD_KEYPTR(hh, module->extensions, extension->name, strlen(extension->name), extension);
 
     int rv = lua_pcall(extension->lua, 0, 0, 0);
     if (rv != 0) {
@@ -368,7 +369,7 @@ LuaExtension * LoadExtension(LuaModule *module, const char *name) {
 }
 
 void UnloadExtensionByName(LuaModule *module, const char *name) {
-    LuaExtension *extension;
+    LuaExtension *extension = NULL;
     HASH_FIND_STR(module->extensions, name, extension);
     if (extension == NULL) {
         FcitxLog(WARNING, "extension:%s unload failed, not found", name);
@@ -451,16 +452,24 @@ static int RegisterCommand(lua_State *lua,
         FcitxLog(ERROR, "Command::function_name alloc failed");
         goto err;
     }
+    command->command_name = strdup(command_name);
+    if (command->command_name == NULL) {
+        FcitxLog(ERROR, "Command::command_name alloc failed");
+        goto err;
+    }
     HASH_ADD_KEYPTR(hh,
                     module->commands,
-                    command_name,
-                    strlen(command_name),
+                    command->command_name,
+                    strlen(command->command_name),
                     command);
     return 0;
 err:
     if (command) {
         if (command->function_name) {
             free(command->function_name);
+        }
+        if (command->command_name) {
+            free(command->command_name);
         }
         free(command);
     }
@@ -502,7 +511,7 @@ static int RegisterInputTrigger(lua_State *lua,
             FcitxLog(ERROR, "trigger->functions memory alloc failed");
             goto cleanup;
         }
-        HASH_ADD_KEYPTR(hh, module->input_triggers, input, strlen(input), trigger);
+        HASH_ADD_KEYPTR(hh, module->input_triggers, trigger->key, strlen(trigger->key), trigger);
     }
     FunctionItem function;
     function.lua = lua;
@@ -727,5 +736,5 @@ UT_array * InputTrigger(LuaModule *module, const char *input) {
 void UnloadAllExtension(LuaModule* luamodule)
 {
     while(luamodule->extensions)
-        UnloadExtension(luamodule, luamodule->extensions);
+        UnloadExtensionByName(luamodule, luamodule->extensions->name);
 }
