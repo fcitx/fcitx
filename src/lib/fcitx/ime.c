@@ -583,7 +583,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
                 input->keyReleased = KR_SWITCH_IM;
                 retVal = IRV_DO_NOTHING;
-            } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
+            } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
                 input->keyReleased = KR_SWITCH_IM_REVERSE;
                 retVal = IRV_DO_NOTHING;
             } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
@@ -821,8 +821,12 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     } else if (index >= 0)
         instance->iIMIndex = index;
 
-    if (skipZero && instance->iIMIndex == 0)
-        instance->iIMIndex = 1;
+    if (skipZero && instance->iIMIndex == 0) {
+        if (index == -2)
+            instance->iIMIndex = iIMCount -1;
+        else
+            instance->iIMIndex = 1;
+    }
 
     if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
         newIM = NULL;
