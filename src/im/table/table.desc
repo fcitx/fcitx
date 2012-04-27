@@ -157,5 +157,10 @@ Description=Commit and pass when invalid key of this table pressed
 Type=Boolean
 DefaultValue=False
 
+[CodeTable/IgnorePunc]
+Description=Ignore Punctuation
+Type=Boolean
+DefaultValue=False
+
 [DescriptionFile]
 LocaleDomain=fcitx

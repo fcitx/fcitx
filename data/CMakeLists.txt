@@ -16,6 +16,7 @@ set(FCITX_DATA_FILES
     AutoEng.dat
     gbks2t.tab
     punc.mb.zh_CN
+    punc.mb.zh_HK
     punc.mb.zh_TW
     vk.conf
 )

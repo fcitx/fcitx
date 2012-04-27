@@ -100,6 +100,7 @@ typedef struct _TableMetaData {
     boolean         bUseAlternativePageKey;
     boolean         bFirstCandidateAsPreedit;
     boolean         bCommitAndPassByInvalidKey;
+    boolean         bIgnorePunc;
     FcitxHotkey     hkAlternativePrevPage[2];
     FcitxHotkey     hkAlternativeNextPage[2];
     boolean         bEnabled;

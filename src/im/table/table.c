@@ -312,7 +312,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         FcitxModuleFunctionArg farg;
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         farg.args[0] = &key;
-                        strTemp = InvokeFunction(instance, FCITX_PUNC, GETPUNC, farg);
+                        if (!table->bIgnorePunc)
+                            strTemp = InvokeFunction(instance, FCITX_PUNC, GETPUNC, farg);
+                        else
+                            strTemp = NULL;
                         if (IsEndKey(table, sym)) {
                             if (FcitxInputStateGetRawInputBufferSize(input) == 1)
                                 return IRV_TO_PROCESS;
@@ -329,11 +332,13 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                             return IRV_DISPLAY_CANDWORDS;
                         } else if (table->iTableAutoSendToClientWhenNone
-                                   && (FcitxInputStateGetRawInputBufferSize(input) == (table->iTableAutoSendToClientWhenNone + 1))
+                                   && (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
+                                   && (FcitxInputStateGetRawInputBufferSize(input) >= (table->iTableAutoSendToClientWhenNone + 1))
                                    && FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
                             if (strLastFirstCand && (lastFirstCandType != CT_AUTOPHRASE)) {
                                 FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), strLastFirstCand);
                             } else if (table->bSendRawPreedit) {
+                                strCodeInput[FcitxInputStateGetRawInputBufferSize(input) - 1] = '\0';
                                 FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), strCodeInput);
                             }
                             retVal = IRV_DISPLAY_CANDWORDS;
