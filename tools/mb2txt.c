@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <ctype.h>
 #include "im/table/tabledict.h"
 
 #ifdef HAVE_STDLIB_H
@@ -39,9 +40,13 @@ enum {
     TEMPL_LEN,
     TEMPL_PY,
     TEMPL_PYLEN,
+    TEMPL_PROMPT,
+    TEMPL_CONSTRUCTPHRASE,
     TEMPL_INVALIDCHAR,
     TEMPL_RULE,
-    TEMPL_DATA
+    TEMPL_DATA,
+    TEMPL_PROMPT2,
+    TEMPL_CONSTRUCTPHRASE2,
 };
 
 const char* templateOld[] = {
@@ -49,23 +54,47 @@ const char* templateOld[] = {
     ";fcitx 版本 0x02 码表文件\n",
     "键码=%s\n",
     "码长=%d\n",
-    "拼音=@\n",
+    "拼音=%c\n",
     "拼音长度=%d\n",
+    "提示=%c\n",
+    "构词=%c\n",
     "规避字符=%s\n",
     "[组词规则]\n",
-    "[数据]\n"
+    "[数据]\n",
+    "提示=\n",
+    "构词=\n",
 };
 const char* templateNew[] = {
     ";fcitx Version 0x%02x Table file\n",
     ";fcitx Version 0x02 Table file\n",
     "KeyCode=%s\n",
     "Length=%d\n",
-    "Pinyin=@\n",
+    "Pinyin=%c\n",
     "PinyinLength=%d\n",
+    "Prompt=%c\n",
+    "ConstructPhrase=%c\n",
     "InvalidChar=%s\n",
     "[Rule]\n",
-    "[Data]\n"
+    "[Data]\n",
+    "Prompt=\n",
+    "ConstructPhrase=\n",
 };
+
+char guessValidChar(char prefer, const char* invalid) {
+    if (!strchr(invalid, prefer))
+        return prefer;
+    unsigned char c = 0;
+    for (c = 0; c <= 127; c ++) {
+        if (ispunct(c) || isalnum(c)) {
+            if (!strchr(invalid, c))
+                break;
+        }
+    }
+    if (c == 128)
+        return 0;
+    else
+        return c;
+}
 
 void usage()
 {
@@ -128,6 +157,7 @@ int main(int argc, char *argv[])
     fread(strCode, sizeof(char), iTemp + 1, fpDict);
 
     printf(templ[TEMPL_KEYCODE], strCode);
+    char cPinyin = '\0';
 
     fread(&iLen, sizeof(unsigned char), 1, fpDict);
 
@@ -137,9 +167,31 @@ int main(int argc, char *argv[])
         fread(&iPYLen, sizeof(unsigned char), 1, fpDict);
 
         if (iPYLen) {
-            printf(templ[TEMPL_PY]);
+            cPinyin = guessValidChar('@', strCode);
+            printf(templ[TEMPL_PY], cPinyin);
             printf(templ[TEMPL_PYLEN], iPYLen);
         }
+    }
+    char* temp = malloc(strlen(strCode) * sizeof(char) + 3);
+    strcpy(temp, strCode);
+    char pyStr[] = {cPinyin, '\0'};
+    strcat(temp, pyStr);
+    char cPrompt = guessValidChar('&', temp);
+    char prStr[] = {cPrompt, '\0'};
+    strcat(temp, prStr);
+    char cPhrase = guessValidChar('^', temp);
+    free(temp);
+    if (cPrompt == 0) {
+        printf(templ[TEMPL_PROMPT2]);
+    }
+    else {
+        printf(templ[TEMPL_PROMPT], cPrompt);
+    }
+    if (cPhrase == 0) {
+        printf(templ[TEMPL_CONSTRUCTPHRASE2]);
+    }
+    else {
+        printf(templ[TEMPL_CONSTRUCTPHRASE], cPhrase);
     }
 
     fread(&iTemp, sizeof(unsigned int), 1, fpDict);
@@ -193,11 +245,22 @@ int main(int argc, char *argv[])
             fread(&iRule, sizeof(unsigned char), 1, fpDict);
 
             if (iRule == RECORDTYPE_PINYIN)
-                printf("@%s %s\n", strCode, strHZ);
-            else if (iRule == RECORDTYPE_CONSTRUCT)
-                printf("^%s %s\n", strCode, strHZ);
+                printf("%c%s %s\n", cPinyin, strCode, strHZ);
+            else if (iRule == RECORDTYPE_CONSTRUCT) {
+                if (cPhrase == 0) {
+                    fprintf(stderr, "Could not find a valid char for construct phrase\n");
+                    exit(1);
+                }
+                else
+                    printf("%c%s %s\n", cPhrase, strCode, strHZ);
+            }
             else if (iRule == RECORDTYPE_PROMPT)
-                printf("&%s %s\n", strCode, strHZ);
+                if (cPrompt == 0) {
+                    fprintf(stderr, "Could not find a valid char for prompt\n");
+                    exit(1);
+                }
+                else
+                    printf("%c%s %s\n", cPrompt, strCode, strHZ);
             else
                 printf("%s %s\n", strCode, strHZ);
         }

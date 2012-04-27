@@ -43,8 +43,10 @@
 #define STR_PINYINLEN 4
 #define STR_DATA 5
 #define STR_RULE 6
+#define STR_PROMPT 7
+#define STR_CONSTRUCTPHRASE 8
 
-#define CONST_STR_SIZE 7
+#define CONST_STR_SIZE 9
 
 #define MAX_CODE_LENGTH  30
 #define FH_MAX_LENGTH  10
@@ -52,12 +54,14 @@
 #define AUTO_PHRASE_COUNT 10000
 #define SINGLE_HZ_COUNT 66000
 
-char* strConst[CONST_STR_SIZE] = { "键码=", "码长=", "规避字符=", "拼音=", "拼音长度=" , "[数据]", "[组词规则]"};
-char* strConstNew[CONST_STR_SIZE] = { "KeyCode=", "Length=", "InvalidChar=", "Pinyin=", "PinyinLength=" , "[Data]", "[Rule]"};
+char* strConst[CONST_STR_SIZE] = { "键码=", "码长=", "规避字符=", "拼音=", "拼音长度=" , "[数据]", "[组词规则]", "提示=", "构词="};
+char* strConstNew[CONST_STR_SIZE] = { "KeyCode=", "Length=", "InvalidChar=", "Pinyin=", "PinyinLength=" , "[Data]", "[Rule]", "Prompt=", "ConstructPhrase="};
 
 char            strInputCode[100] = "\0";
 char            strIgnoreChars[100] = "\0";
 char            cPinyinKey = '\0';
+char            cPromptKey = '&';
+char            cPhraseKey = '^';
 
 boolean IsValidCode(char cChar)
 {
@@ -81,7 +85,7 @@ boolean IsValidCode(char cChar)
         p++;
     }
 
-    if (cChar == cPinyinKey || cChar == '^' || cChar == '&')
+    if (cChar == cPinyinKey || cChar == cPhraseKey || cChar == cPromptKey)
         return true;
 
     return false;
@@ -163,10 +167,24 @@ int main(int argc, char *argv[])
         } else if (CHECK_OPTION(pstr, STR_PINYIN)) {
             pstr += ADD_LENGTH(pstr, STR_PINYIN);
 
-            while (*pstr == ' ')
+            while (*pstr == ' ' && *pstr != '\0')
                 pstr++;
 
             cPinyinKey = *pstr;
+        } else if (CHECK_OPTION(pstr, STR_PROMPT)) {
+            pstr += ADD_LENGTH(pstr, STR_PROMPT);
+
+            while (*pstr == ' ' && *pstr != '\0')
+                pstr++;
+
+            cPromptKey = *pstr;
+        } else if (CHECK_OPTION(pstr, STR_CONSTRUCTPHRASE)) {
+            pstr += ADD_LENGTH(pstr, STR_CONSTRUCTPHRASE);
+
+            while (*pstr == ' ' && *pstr != '\0')
+                pstr++;
+
+            cPhraseKey = *pstr;
         } else if (CHECK_OPTION(pstr, STR_PINYINLEN)) {
             pstr += ADD_LENGTH(pstr, STR_PINYINLEN);
             iPYCodeLength = atoi(pstr);
@@ -364,15 +382,15 @@ int main(int argc, char *argv[])
 
         if (((buf1[0] != cPinyinKey) && (strlen(buf1) > iCodeLength))
             || ((buf1[0] == cPinyinKey) && (strlen(buf1) > (iPYCodeLength + 1)))
-            || ((buf1[0] == '^') && (strlen(buf1) > (iCodeLength + 1)))
-            || ((buf1[0] == '&') && (strlen(buf1) > (iPYCodeLength + 1)))
+            || ((buf1[0] == cPhraseKey) && (strlen(buf1) > (iCodeLength + 1)))
+            || ((buf1[0] == cPromptKey) && (strlen(buf1) > (iPYCodeLength + 1)))
         ) {
             printf("Delete:  %s %s, Too long\n", buf1, strHZ);
             continue;
         }
 
         size_t hzLen = fcitx_utf8_strlen(strHZ);
-        if (buf1[0] == '^' && hzLen != 1) {
+        if (buf1[0] == cPhraseKey && hzLen != 1) {
             printf("Delete:  %s %s, Too long\n", buf1, strHZ);
             continue;
         }
@@ -384,10 +402,10 @@ int main(int argc, char *argv[])
         if (buf1[0] == cPinyinKey) {
             pstr ++;
             type = RECORDTYPE_PINYIN;
-        } else if (buf1[0] == '^') {
+        } else if (buf1[0] == cPhraseKey) {
             pstr ++;
             type = RECORDTYPE_CONSTRUCT;
-        } else if (buf1[0] == '&') {
+        } else if (buf1[0] == cPromptKey) {
             pstr ++;
             type = RECORDTYPE_PROMPT;
         }
