@@ -72,7 +72,7 @@ Description=Do not commit preedit text when unfocus a window
 
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Show Input Window After Trigger Input Mode
 
 [Appearance/ShowPointAfterIndex]
