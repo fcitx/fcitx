@@ -67,6 +67,7 @@ static FcitxPunc* LoadPuncFile(const char* filename);
 static char *GetPunc(struct _FcitxPuncState* puncState, int iKey);
 static void FreePunc(struct _FcitxPuncState* puncState);
 static void* PuncCreate(FcitxInstance* instance);
+static boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg);
 static void TogglePuncState(void *arg);
@@ -109,6 +110,9 @@ void* PuncCreate(FcitxInstance* instance)
     hk.func = ProcessPunc;
 
     FcitxInstanceRegisterPostInputFilter(instance, hk);
+    
+    hk.func = PuncPreFilter;
+    FcitxInstanceRegisterPreInputFilter(instance, hk);
 
     puncState->cLastIsAutoConvert = '\0';
     puncState->bLastIsNumber = false;
@@ -182,6 +186,18 @@ void ResetPuncWhichStatus(void* arg)
         curPunc[iIndex].iWhich = 0;
         iIndex++;
     }
+}
+
+boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
+{
+    if (!FcitxHotkeyIsHotKeySimple(sym, state))
+        return false;
+
+    FcitxPuncState* puncState = (FcitxPuncState*) arg;
+    if (!FcitxHotkeyIsHotKeyDigit(sym, state) && !IsHotKeyPunc(sym, state))
+        puncState->bLastIsNumber = false;
+
+    return false;
 }
 
 boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
