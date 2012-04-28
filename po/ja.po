@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-28 21:11+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2012-04-28 13:17+0000\n"
+"Last-Translator: csslayer <wengxt@gmail.com>\n"
+"Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -580,7 +580,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:46
 msgid "Action after press enter"
-msgstr ""
+msgstr "Enterキーの動作"
 
 #: /home/saber/Develop/fcitx/data/config.desc:51
 msgid "Disable Paging in Remind Mode"
@@ -588,7 +588,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:56
 msgid "Send typed raw text if Switch to inactive Mode"
-msgstr ""
+msgstr "非活動モードの時入力したテキストをそのままに送信する"
 
 #: /home/saber/Develop/fcitx/data/config.desc:61
 msgid "Candidate Word Number"
@@ -608,11 +608,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:81
 msgid "Show Input Speed"
-msgstr ""
+msgstr "入力スピードを表示する"
 
 #: /home/saber/Develop/fcitx/data/config.desc:86
 msgid "Show Version"
-msgstr ""
+msgstr "バージョンを表示する"
 
 #: /home/saber/Develop/fcitx/data/config.desc:91
 msgid "Do not show input window if there is only preedit string"
@@ -1388,19 +1388,19 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:415
 msgid "About Fcitx"
-msgstr ""
+msgstr "Fcitxについて"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:416
 msgid "Online Help"
-msgstr ""
+msgstr "オンラインヘルプ"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:445
 msgid "Configure"
-msgstr ""
+msgstr "設定"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:446
 msgid "Exit"
-msgstr ""
+msgstr "閉じる"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:470
@@ -1410,12 +1410,12 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:138
 msgid "Can not load default skin, is installion correct?"
-msgstr ""
+msgstr "デフォールトスキンをロードできません、インストールが失敗した可能性があります"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:143
 #, c-format
 msgid "Can not load skin %s, return to default"
-msgstr ""
+msgstr "%sスキンをロードできません、デフォールトスキンに戻ります。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:306
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
@@ -1569,8 +1569,8 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:195
 msgid ""
-"If you use login manager like gdm or kdm, put those lines in your ~/."
-"xprofile."
+"If you use login manager like gdm or kdm, put those lines in your "
+"~/.xprofile."
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:196
