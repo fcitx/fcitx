@@ -51,6 +51,7 @@
 #define _FCITX_UTILS_H_
 
 #include <stdio.h>
+#include <unistd.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-utils/uthash.h>
 
