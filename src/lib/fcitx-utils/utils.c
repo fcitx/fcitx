@@ -303,6 +303,46 @@ char* fcitx_utils_get_current_langcode()
 }
 
 FCITX_EXPORT_API
+int fcitx_utils_pid_exists(pid_t pid)
+{
+#if defined(__linux__)
+    // verify if a process is running
+    char path[256];
+    snprintf(path, 255, "/proc/%d", pid);
+    struct stat buf;
+    if (stat(path, &buf) != 0) {
+        return 0;
+    }
+    if (!S_ISDIR(buf.st_mode)) {
+        return 0;
+    }
+    return 1;
+#elif defined(LIBKVM_FOUND)
+    kvm_t *vm = kvm_open(0, "/dev/null", 0, O_RDONLY, NULL);
+    if (vm == 0) // ignore all error
+        return 1;
+
+    int cnt;
+    struct kinfo_proc * kp = kvm_getprocs(vm, KERN_PROC_PID, pid, &cnt);
+    if (kp == 0)
+        return 1;
+    int i;
+    for (i = 0; i < cnt; i++)
+        if (kp->ki_pid == pid)
+            break;
+    int result;
+    if (i != cnt)
+        result = 1;
+    else
+        result = 0;
+    kvm_close(vm);
+    return result;
+#else
+    return 1;
+#endif
+}
+
+FCITX_EXPORT_API
 char* fcitx_utils_get_process_name()
 {
 #if defined(__linux__)

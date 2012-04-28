@@ -179,7 +179,8 @@ void FcitxIMClientCreateIC(FcitxIMClient* client)
     g_signal_connect(client->proxy, "destroy", G_CALLBACK(_destroy_cb), client);
 
     char* appname = fcitx_utils_get_process_name();
-    dbus_g_proxy_begin_call(client->proxy, "CreateICv2", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_STRING, appname, G_TYPE_INVALID);
+    pid_t curpid = getpid();
+    dbus_g_proxy_begin_call(client->proxy, "CreateICv3", FcitxIMClientCreateICCallback, client, NULL, G_TYPE_STRING, appname, G_TYPE_INT, curpid, G_TYPE_INVALID);
     free(appname);
 }
 

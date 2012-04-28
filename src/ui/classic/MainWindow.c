@@ -700,6 +700,7 @@ static void UpdateMenuGeometry(MainWindow* mainWindow, XlibMenu* menuWindow)
     unsigned int height;
     int sheight;
     XWindowAttributes attr;
+    FcitxMenuUpdate(menuWindow->menushell);
     GetMenuSize(menuWindow);
     GetScreenSize(classicui, NULL, &sheight);
     XGetWindowAttributes(classicui->dpy, mainWindow->window, &attr);

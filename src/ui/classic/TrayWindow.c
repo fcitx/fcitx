@@ -259,6 +259,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
                 int dwidth, dheight;
+                FcitxMenuUpdate(mainMenuWindow->menushell);
                 GetScreenSize(classicui, &dwidth, &dheight);
                 GetMenuSize(mainMenuWindow);
                 if (event->xbutton.x_root - event->xbutton.x +

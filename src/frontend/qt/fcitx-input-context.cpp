@@ -42,6 +42,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+#include <unistd.h>
 static const int XKeyPress = KeyPress;
 static const int XKeyRelease = KeyRelease;
 #undef KeyPress
@@ -462,7 +463,7 @@ void QFcitxInputContext::createInputContext()
         return;
 
     char* name = fcitx_utils_get_process_name();
-    QDBusPendingReply< int, bool, uint, uint, uint, uint > result = m_improxy->CreateICv2(name);
+    QDBusPendingReply< int, bool, uint, uint, uint, uint > result = m_improxy->CreateICv3(name, getpid());
     free(name);
     QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(result);
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(createInputContextFinished(QDBusPendingCallWatcher*)));

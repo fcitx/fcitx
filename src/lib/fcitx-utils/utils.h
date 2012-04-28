@@ -19,18 +19,18 @@
  ***************************************************************************/
 /**
  * @defgroup FcitxUtils FcitxUtils
- * 
+ *
  * Fcitx Utils contains a bunch of functions, with extend common c library.
  * It contains uthash/utarray as macro based hash table and dynamic array.
- * 
+ *
  * Some Fcitx path related function, includes fcitx_utils_get_fcitx_path()
  * and fcitx_utils_get_fcitx_path_with_filename()
- * 
+ *
  * Some string related function, providing split, join string list.
- * 
- * A simple memory pool, if you need to allocate many small memory block, and 
+ *
+ * A simple memory pool, if you need to allocate many small memory block, and
  * only need to free them at once.
- * 
+ *
  * Some log function, which prints the current file number, with printf format.
  */
 
@@ -103,8 +103,8 @@ extern "C" {
      * @return int line count
      **/
     int fcitx_utils_calculate_record_number(FILE* fpDict);
-    
-    
+
+
     /**
      * create empty string list
      *
@@ -120,7 +120,7 @@ extern "C" {
      * @return UT_array* a new utarray for store the split string
      **/
     UT_array* fcitx_utils_split_string(const char *str, char delm);
-    
+
     /**
      * append a string with printf format
      *
@@ -129,7 +129,7 @@ extern "C" {
      * @return void
      **/
     void fcitx_utils_string_list_printf_append(UT_array* list, const char* fmt,...);
-    
+
     /**
      * Join string list with delm
      *
@@ -180,7 +180,7 @@ extern "C" {
      * @return int
      **/
     int fcitx_utils_get_display_number();
-    
+
     /**
      * Get current language code, result need to be free'd
      * It will check LC_CTYPE, LC_ALL, LANG, for current language code.
@@ -197,7 +197,16 @@ extern "C" {
      * @return char*
      **/
     char* fcitx_utils_get_process_name();
-    
+
+
+    /**
+     * @brief check a process is running or not
+     *
+     * @param pid pid
+     * @return 1 for exists or error, 0 for non exists
+     **/
+    int fcitx_utils_pid_exists(pid_t pid);
+
     /**
      * Get Fcitx install path, need be free'd
      * All possible type includes:
@@ -206,33 +215,33 @@ extern "C" {
      * bindir
      * libdir
      * localedir
-     * 
+     *
      * It's determined at compile time, and can be changed via environment variable: FCITXDIR
-     * 
+     *
      * It will only return NULL while the type is invalid.
-     * 
+     *
      * @param type path type
-     * 
+     *
      * @return char*
-     * 
+     *
      * @since 4.2.1
      */
     char* fcitx_utils_get_fcitx_path(const char* type);
-    
+
     /**
      * Get fcitx install path with file name, need to be free'd
-     * 
+     *
      * It's just simply return the path/filename string.
-     * 
+     *
      * It will only return NULL while the type is invalid.
-     * 
+     *
      * @param type path type
      * @param filename filename
-     * 
+     *
      * @return char*
-     * 
+     *
      * @see fcitx_utils_get_fcitx_path
-     * 
+     *
      * @since 4.2.1
      */
     char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename);

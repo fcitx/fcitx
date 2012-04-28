@@ -52,6 +52,8 @@ static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType ev
 static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
+static pid_t XimGetPid(void* arg, FcitxInputContext* ic);
+static pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 
@@ -95,7 +97,7 @@ FcitxFrontend frontend = {
     NULL,
     NULL,
     XimCheckICFromSameApplication,
-    NULL
+    XimGetPid
 };
 
 FCITX_EXPORT_API
@@ -472,6 +474,57 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
     }
 
     free(strPreedit);
+}
+
+pid_t XimGetPid(void* arg, FcitxInputContext* ic)
+{
+    FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
+    Window w = None;
+    FcitxXimIC* ximic = GetXimIC(ic);
+    if (ximic->focus_win)
+        w = ximic->focus_win;
+    else if (ximic->client_win)
+        w = ximic->client_win;
+
+    return XimFindApplicationPid(xim, w);
+}
+
+pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
+    if (w == DefaultRootWindow(xim->display))
+        return 0;
+
+    Atom actual_type;
+    int actual_format;
+    unsigned long nitems;
+    unsigned long bytes;
+    unsigned char* prop;
+    int status = XGetWindowProperty(
+        xim->display, w, XInternAtom(xim->display, "_NET_WM_PID", True), 0,
+        1024L, False, AnyPropertyType, &actual_type, &actual_format, &nitems,
+        &bytes, (unsigned char**) &prop);
+    if (status != 0) {
+        if (status == BadRequest)
+            return 0;
+        return 0;
+    }
+    if (!prop) {
+        Window parent;
+        Window root;
+        Window* children = NULL;
+        unsigned int sz = 0;
+        status = XQueryTree(xim->display, w, &root, &parent, &children, &sz);
+        if (status != 0) {
+            if (status == BadRequest)
+                return 0;
+            return 0;
+        }
+        if (children)
+            XFree(children);
+        return XimFindApplicationPid(xim, parent);
+    } else {
+        // TODO: is this portable?
+        return prop[1] * 256 + prop[0];
+    }
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

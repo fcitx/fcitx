@@ -115,6 +115,17 @@ typedef struct {
 #define utarray_eltptr(a,j) (((j) < (a)->i) ? _utarray_eltptr(a,j) : NULL)
 #define _utarray_eltptr(a,j) ((char*)((a)->d + ((a)->icd->sz*(j) )))
 
+#define utarray_push_front(a,p) do {                                                \
+        utarray_reserve(a,1);                                                       \
+        if ((0) < (a)->i) {                                                         \
+            memmove( _utarray_eltptr(a,1), _utarray_eltptr(a,0),                    \
+                     ((a)->i)*((a)->icd->sz));                                      \
+        }                                                                           \
+        if ((a)->icd->copy) { (a)->icd->copy( _utarray_eltptr(a,0), p); }           \
+        else { memcpy(_utarray_eltptr(a,0), p, (a)->icd->sz); };                    \
+        (a)->i++;                                                                   \
+    } while(0)
+
 #define utarray_insert(a,p,j) do {                                            \
         utarray_reserve(a,1);                                                       \
         if (j > (a)->i) break;                                                      \
@@ -186,7 +197,7 @@ typedef struct {
         }                                                                           \
         (a)->i -= (len);                                                            \
     } while(0)
-    
+
 #define utarray_remove_quick(a,pos) do {                                         \
         if ((a)->i - 1 != (pos))                                                 \
             memcpy( _utarray_eltptr(a,pos), _utarray_eltptr(a,(a)->i-1), (a)->icd->sz); \

@@ -1404,7 +1404,7 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
         if (!IMIsInIMNameList(imList, ime)) {
             /* ok, make all im priority larger than 100 disable by default */
             if (ime->iPriority == 0)
-                utarray_insert(&instance->imes, ime, 0);
+                utarray_push_front(&instance->imes, ime);
             else if (ime->iPriority < PRIORITY_DISABLE)
                 utarray_push_back(&instance->imes, ime);
         }

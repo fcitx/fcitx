@@ -39,6 +39,7 @@ typedef struct _FcitxIPCIC {
     char* appname;
     int width;
     int height;
+    pid_t pid;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -86,6 +87,7 @@ static boolean IPCCheckICFromSameApplication(void* arg, FcitxInputContext* icToC
 static void IPCGetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCSetPropertyIMList(void* arg, DBusMessageIter* iter);
 static void IPCUpdateIMList(void* arg);
+static pid_t IPCGetPid(void* arg, FcitxInputContext* ic);
 
 static void FcitxDBusPropertyGet(FcitxIPCFrontend* ipc, DBusMessage* message);
 static void FcitxDBusPropertySet(FcitxIPCFrontend* ipc, DBusMessage* message);
@@ -135,7 +137,17 @@ const char * im_introspection_xml =
     "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
     "    </method>\n"
     "    <method name=\"CreateICv2\">\n"
-    "      <arg name=\"appname\" direction=\"int\" type=\"s\"/>\n"
+    "      <arg name=\"appname\" direction=\"in\" type=\"s\"/>\n"
+    "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
+    "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
+    "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"state1\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"keyval2\" direction=\"out\" type=\"u\"/>\n"
+    "      <arg name=\"state2\" direction=\"out\" type=\"u\"/>\n"
+    "    </method>\n"
+    "    <method name=\"CreateICv3\">\n"
+    "      <arg name=\"appname\" direction=\"in\" type=\"s\"/>\n"
+    "      <arg name=\"pid\" direction=\"in\" type=\"i\"/>\n"
     "      <arg name=\"icid\" direction=\"out\" type=\"i\"/>\n"
     "      <arg name=\"enable\" direction=\"out\" type=\"b\"/>\n"
     "      <arg name=\"keyval1\" direction=\"out\" type=\"u\"/>\n"
@@ -247,7 +259,7 @@ FcitxFrontend frontend = {
     IPCUpdateClientSideUI,
     NULL,
     IPCCheckICFromSameApplication,
-    NULL
+    IPCGetPid
 };
 
 FCITX_EXPORT_API
@@ -334,6 +346,36 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
             else
                 ipcic->appname = strdup(appname);
         }
+
+        if (config->shareState == ShareState_PerProgram)
+            FcitxInstanceSetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
+
+        boolean arg0 = context->state != IS_CLOSED;
+
+        dbus_error_free(&error);
+        dbus_message_append_args(reply,
+                                 DBUS_TYPE_INT32, &ipcic->id,
+                                 DBUS_TYPE_BOOLEAN, &arg0,
+                                 DBUS_TYPE_UINT32, &arg1,
+                                 DBUS_TYPE_UINT32, &arg2,
+                                 DBUS_TYPE_UINT32, &arg3,
+                                 DBUS_TYPE_UINT32, &arg4,
+                                 DBUS_TYPE_INVALID);
+    } else if (dbus_message_is_method_call(message, FCITX_IM_DBUS_INTERFACE, "CreateICv3")) {
+
+        DBusError error;
+        dbus_error_init(&error);
+        char* appname;
+        int icpid;
+        if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
+            ipcic->appname = NULL;
+        else {
+            if (strlen(appname) == 0)
+                ipcic->appname = NULL;
+            else
+                ipcic->appname = strdup(appname);
+        }
+        ipcic->pid = icpid;
 
         if (config->shareState == ShareState_PerProgram)
             FcitxInstanceSetICStateFromSameApplication(ipc->owner, ipc->frontendid, context);
@@ -487,6 +529,9 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv2")) {
+        FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CreateICv3")) {
         FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Exit")) {
@@ -1122,6 +1167,9 @@ void IPCUpdateIMList(void* arg)
     dbus_message_unref(msg);
 }
 
-
+pid_t IPCGetPid(void* arg, FcitxInputContext* ic)
+{
+    return GetIPCIC(ic)->pid;
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

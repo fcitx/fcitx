@@ -75,11 +75,6 @@ Type=Boolean
 DefaultValue=False
 Description=Show Input Window After Trigger Input Mode
 
-[Appearance/ShowPointAfterIndex]
-Type=Boolean
-DefaultValue=True
-Description=Show Point After Index
-
 [Appearance/ShowInputSpeed]
 Type=Boolean
 DefaultValue=True
@@ -103,7 +98,7 @@ Description=Do not show input window if there is one one candidate (Hide when on
 [Hotkey/TriggerKey]
 Type=Hotkey
 DefaultValue=CTRL_SPACE
-Description=Hot key of Triggering Input Method
+Description=Triggering Input Method
 
 [Hotkey/IMSwitchKey]
 Type=Boolean
@@ -131,7 +126,7 @@ Enum6=CTRL Both
 Enum7=SHIFT Both
 Enum8=Disabled
 DefaultValue=L_CTRL
-Description=Hotkey of Switching Active and Inactive Mode
+Description=Switching Active and Inactive Mode
 
 [Hotkey/DoubleSwitchKey]
 Type=Boolean
@@ -146,47 +141,47 @@ Description=Interval of Two Key Input
 [Hotkey/VKSwitchKey]
 Type=Hotkey
 DefaultValue=CTRL_ALT_B
-Description=Hotkey of Switching Virtual Keyboard
+Description=Switching Virtual Keyboard
 
 [Hotkey/RemindSwitchKey]
 Type=Hotkey
 DefaultValue=
-Description=Hotkey of Switching Remind Mode
+Description=Switching Remind Mode
 
 [Hotkey/FullWidthSwitchKey]
 Type=Hotkey
 DefaultValue=SHIFT_SPACE
-Description=Hotkey of Switching Full Width Character Mode
+Description=Switching Full Width Character Mode
 
 [Hotkey/PuncSwitchKey]
 Type=Hotkey
 DefaultValue=ALT_SPACE
-Description=Hotkey of Switch Full Width Punc Mode
+Description=Switch Full Width Punc Mode
 
 [Hotkey/PrevPageKey]
 Type=Hotkey
 DefaultValue=-
-Description=Hotkey of Going Prev Page
+Description=Prev Page
 
 [Hotkey/NextPageKey]
 Type=Hotkey
 DefaultValue==
-Description=Hotkey of Going Next Page
+Description=Next Page
 
 [Hotkey/SecondThirdCandWordKey]
 Type=String
 DefaultValue=SHIFT
-Description=Hotkey to Choose Second and Third Candidate Word
+Description=Choose Second and Third Candidate Word
 
 [Hotkey/SaveAllKey]
 Type=Hotkey
 DefaultValue=CTRL_ALT_S
-Description=Hotkey of Saving All Config and Input History
+Description=Saving All Config and Input History
 
 [Hotkey/SwitchPreedit]
 Type=Hotkey
 DefaultValue=CTRL_ALT_P
-Description=Hotkey of Switch Embeded Preedit
+Description=Switch Embeded Preedit
 
 [DescriptionFile]
 LocaleDomain=fcitx

@@ -2,15 +2,9 @@
  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="org.fcitx.Fcitx.InputMethod">
-    <method name="CreateIC">
-      <arg name="icid" direction="out" type="i"/>
-      <arg name="keyval1" direction="out" type="u"/>
-      <arg name="state1" direction="out" type="u"/>
-      <arg name="keyval2" direction="out" type="u"/>
-      <arg name="state2" direction="out" type="u"/>
-    </method>
-    <method name="CreateICv2">
+    <method name="CreateICv3">
       <arg name="appname" direction="in" type="s"/>
+      <arg name="pid" direction="in" type="i"/>
       <arg name="icid" direction="out" type="i"/>
       <arg name="enabled" direction="out" type="b"/>
       <arg name="keyval1" direction="out" type="u"/>

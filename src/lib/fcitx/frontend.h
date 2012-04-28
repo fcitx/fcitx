@@ -90,7 +90,7 @@ extern "C" {
         void (*UpdateClientSideUI)(void* arg, FcitxInputContext* ic); /**< frontend update client side user interface callback */
         void (*ReloadConfig)(void* arg); /**< frontend reload config callback */
         boolean(*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic); /**< frontend check input context from same application callback */
-        void (*padding4)(); /**< padding */
+        pid_t (*GetPid)(void* arg, FcitxInputContext* arg1); /**< get pid for ic, zero for unknown */
     } FcitxFrontend;
 
     /**

@@ -36,6 +36,7 @@
 #include "addon-internal.h"
 
 static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
+static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
 
 FCITX_EXPORT_API
 void FcitxFrontendsInit(UT_array* frontends)
@@ -46,6 +47,8 @@ void FcitxFrontendsInit(UT_array* frontends)
 FCITX_EXPORT_API
 FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid, void * priv)
 {
+    /* clean up invalid ic here */
+    FcitxInstanceCleanUpIC(instance);
     UT_array* frontends = &instance->frontends;
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, frontendid);
     if (pfrontend == NULL)
@@ -82,6 +85,32 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
     return rec;
 }
 
+void FcitxInstanceCleanUpIC(FcitxInstance* instance)
+{
+    UT_array* frontends = &instance->frontends;
+    FcitxInputContext *rec = instance->ic_list, *last = NULL, *todel;
+
+    while (rec) {
+        FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, rec->frontendid);
+        FcitxFrontend* frontend = (*pfrontend)->frontend;
+        pid_t pid = frontend->GetPid((*pfrontend)->addonInstance, rec);
+        if (pid && !fcitx_utils_pid_exists(pid)) {
+            if (last != NULL)
+                last->next = rec->next;
+            else
+                instance->ic_list = rec->next;
+            todel = rec;
+            rec = rec->next;
+            todel->next = instance->free_list;
+            instance->free_list = todel;
+            frontend->DestroyIC((*pfrontend)->addonInstance, todel);
+        }
+        else {
+            last = rec;
+            rec = rec->next;
+        }
+    }
+}
 
 FCITX_EXPORT_API
 FcitxInputContext* FcitxInstanceFindIC(FcitxInstance* instance, int frontendid, void *filter)
