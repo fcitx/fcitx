@@ -499,6 +499,7 @@ void KimpanelShowInputWindow(void* arg)
     FcitxMessages* messageDown = kimpanel->messageDown;
     FcitxMessages* messageUp = kimpanel->messageUp;
     FcitxLog(DEBUG, "KimpanelShowInputWindow");
+    KimpanelMoveInputWindow(kimpanel);
 
     int n = FcitxMessagesGetMessageCount(messageDown);
     int nLabels = 0;
