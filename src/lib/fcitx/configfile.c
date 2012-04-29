@@ -48,7 +48,6 @@ CONFIG_BINDING_REGISTER("Output", "CandidateWordNumber", iMaxCandWord)
 CONFIG_BINDING_REGISTER("Output", "PhraseTips", bPhraseTips)
 CONFIG_BINDING_REGISTER("Output", "DontCommitPreeditWhenUnfocus", bDontCommitPreeditWhenUnfocus)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputWindowAfterTriggering", bShowInputWindowTriggering)
-CONFIG_BINDING_REGISTER("Appearance", "ShowPointAfterIndex", bPointAfterNumber)
 CONFIG_BINDING_REGISTER("Appearance", "ShowInputSpeed", bShowUserSpeed)
 CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion)
 CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyPreeditString", bHideInputWindowWhenOnlyPreeditString);
@@ -133,6 +132,9 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     if (configDesc == NULL)
         return false;
+
+    /* removed option */
+    fc->bPointAfterNumber = true;
 
     FILE *fp;
     char *file;
