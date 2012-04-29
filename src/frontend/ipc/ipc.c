@@ -671,7 +671,6 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
                         free(ipcic->surroundingText);
                     }
                     ipcic->surroundingText = strdup(text);
-                    FcitxLog(INFO, "%s %u %u", text, cursor, anchor);
                     ipcic->cursor = cursor;
                     ipcic->anchor = anchor;
                     FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);
@@ -907,8 +906,6 @@ void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsi
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                        "DeleteSurroundingText"); // name of the signal
-
-    FcitxLog(INFO, "%d %u", offset, size);
 
     dbus_message_append_args(msg, DBUS_TYPE_INT32, &offset, DBUS_TYPE_UINT32, &size, DBUS_TYPE_INVALID);
 

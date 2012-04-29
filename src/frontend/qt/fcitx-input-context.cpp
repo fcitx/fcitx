@@ -97,6 +97,25 @@ compare_seq(const void *key, const void *value)
     return 0;
 }
 
+static boolean
+get_boolean_env(const char *name,
+                 boolean defval)
+{
+    const char *value = getenv(name);
+
+    if (value == NULL)
+        return defval;
+
+    if (strcmp(value, "") == 0 ||
+        strcmp(value, "0") == 0 ||
+        strcmp(value, "false") == 0 ||
+        strcmp(value, "False") == 0 ||
+        strcmp(value, "FALSE") == 0)
+        return false;
+
+    return true;
+}
+
 static const uint fcitx_compose_ignore[] = {
     FcitxKey_Shift_L,
     FcitxKey_Shift_R,
@@ -187,20 +206,19 @@ void QFcitxInputContext::update()
         return;
     }
 
-    QVariant var = widget->inputMethodQuery(Qt::ImSurroundingText);
-    if (var.isValid()) {
-        QString text = var.toString();
-        qDebug() << var;
-        var = widget->inputMethodQuery(Qt::ImCursorPosition).toInt();
-        int cursor = var.toInt();
-        qDebug() << var;
-        var = widget->inputMethodQuery(Qt::ImAnchorPosition).toInt();
-        int anchor = var.toInt();
-        qDebug() << var;
-        m_icproxy->SetSurroundingText(text, cursor, anchor);
-    }
-    else {
-        removeCapacity(CAPACITY_SURROUNDING_TEXT);
+    if (m_capacity & CAPACITY_SURROUNDING_TEXT) {
+        QVariant var = widget->inputMethodQuery(Qt::ImSurroundingText);
+        QVariant var1 = widget->inputMethodQuery(Qt::ImCursorPosition);
+        QVariant var2 = widget->inputMethodQuery(Qt::ImAnchorPosition);
+        if (var.isValid() && var1.isValid() && var2.isValid()) {
+            QString text = var.toString();
+            int cursor = var1.toInt();
+            int anchor = var2.toInt();
+            m_icproxy->SetSurroundingText(text, cursor, anchor);
+        }
+        else {
+            removeCapacity(CAPACITY_SURROUNDING_TEXT);
+        }
     }
 
     QRect rect = widget->inputMethodQuery(Qt::ImMicroFocus).toRect();
@@ -516,7 +534,8 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
         flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
-        flag |= CAPACITY_SURROUNDING_TEXT;
+        if (get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false))
+            flag |= CAPACITY_SURROUNDING_TEXT;
 
         addCapacity(flag, true);
     }
