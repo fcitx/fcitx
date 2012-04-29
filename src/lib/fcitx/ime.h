@@ -124,6 +124,20 @@ extern "C" {
     typedef void (*FcitxIMSave)(void *arg); /**< FcitxIMSave */
     typedef void (*FcitxIMReloadConfig)(void *arg); /**< FcitxIMReloadConfig */
     typedef INPUT_RETURN_VALUE (*FcitxIMKeyBlocker)(void* arg, FcitxKeySym, unsigned int); /**< FcitxIMKeyBlocker */
+    typedef void (*FcitxIMUpdateSurroundingText)(void* arg); /**< FcitxIMKeyBlocker */
+
+    typedef struct _FcitxIMIFace {
+        FcitxIMResetIM ResetIM;
+        FcitxIMDoInput DoInput;
+        FcitxIMGetCandWords GetCandWords;
+        FcitxIMPhraseTips PhraseTips;
+        FcitxIMSave Save;
+        FcitxIMInit Init;
+        FcitxIMReloadConfig ReloadConfig;
+        FcitxIMKeyBlocker KeyBlocker;
+        FcitxIMUpdateSurroundingText UpdateSurroundingText;
+        void* padding[64];
+    } FcitxIMIFace;
 
     /**
      * Fcitx Input method instance
@@ -199,7 +213,9 @@ extern "C" {
          **/
         FcitxIMKeyBlocker KeyBlocker;
 
-        void* padding[10]; /**< padding */
+        FcitxIMUpdateSurroundingText UpdateSurroundingText;
+
+        void* padding[9]; /**< padding */
     } FcitxIM;
 
     /** a key event is press or release */
@@ -354,6 +370,41 @@ extern "C" {
                            int priority,
                            const char *langCode
                           );
+
+    /**
+     * register a new input method
+     *
+     * @param instance fcitx instance
+     * @param imclass pointer to input method class
+     * @param uniqueName uniqueName which cannot be duplicated to others
+     * @param name input method name
+     * @param iconName icon name
+     * @param Init init callback
+     * @param ResetIM reset callback
+     * @param DoInput do input callback
+     * @param GetCandWords get candidate words callback
+     * @param PhraseTips phrase tips callback
+     * @param Save save callback
+     * @param ReloadConfig reload config callback
+     * @param KeyBlocker key blocker callback
+     * @param priority order of this input method
+     * @param langCode language code for this input method
+     * @return void
+     *
+     * @see FcitxInstanceRegisterIMv2
+     *
+     * @since 4.2.3
+     **/
+    void FcitxInstanceRegisterIMv2(struct _FcitxInstance *instance,
+                       void *imclass,
+                       const char* uniqueName,
+                       const char* name,
+                       const char* iconName,
+                       FcitxIMIFace iface,
+                       int priority,
+                       const char *langCode
+                      );
+
     /**
      * process a key event, should only used by frontend
      *
@@ -702,6 +753,14 @@ extern "C" {
      **/
     void FcitxInstanceUpdateIMList(struct _FcitxInstance* instance);
 
+    /**
+     * notify surrounding text changed to im
+     *
+     * @param instance instance
+     * @param ic ic
+     * @return void
+     **/
+    void FcitxInstanceNotifyUpdateSurroundingText(struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
 
     INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 

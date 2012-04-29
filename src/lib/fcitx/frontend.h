@@ -55,7 +55,8 @@ extern "C" {
         CAPACITY_CLIENT_SIDE_CONTROL_STATE =  (1 << 2),
         CAPACITY_PASSWORD = (1 << 3),
         CAPACITY_FORMATTED_PREEDIT = (1 << 4),
-        CAPACITY_CLIENT_UNFOCUS_COMMIT = (1 << 5)
+        CAPACITY_CLIENT_UNFOCUS_COMMIT = (1 << 5),
+        CAPACITY_SURROUNDING_TEXT = (1 << 6)
     } FcitxCapacityFlags;
 
     /**
@@ -91,6 +92,8 @@ extern "C" {
         void (*ReloadConfig)(void* arg); /**< frontend reload config callback */
         boolean(*CheckICFromSameApplication)(void* arg, FcitxInputContext* icToCheck, FcitxInputContext* ic); /**< frontend check input context from same application callback */
         pid_t (*GetPid)(void* arg, FcitxInputContext* arg1); /**< get pid for ic, zero for unknown */
+        void (*DeleteSurroundingText)(void* addonInstance, FcitxInputContext* ic, int offset, unsigned int size);
+        boolean (*GetSurroundingPreedit)(void* addonInstance, FcitxInputContext* ic, char** str, unsigned int* cursor, unsigned int* anchor);
     } FcitxFrontend;
 
     /**
@@ -142,12 +145,33 @@ extern "C" {
     /**
      * Commit String to Client
      *
-     * @param instance
+     * @param instance fcitx instance
      * @param ic input context
      * @param str String to commit
      * @return void
      **/
     void FcitxInstanceCommitString(struct _FcitxInstance* instance, FcitxInputContext* ic, const char* str);
+
+    /**
+     * Get surrounding text for an ic
+     *
+     * @param instance fcitx instance
+     * @param ic input context
+     * @param str s
+     * @return boolean
+     **/
+    boolean FcitxInstanceGetSurroundingText(struct _FcitxInstance* instance, FcitxInputContext* ic, char** str, unsigned int* cursor, unsigned int* anchor);
+
+    /**
+     * Delete client surrounding text
+     *
+     * @param instance fcitx instance
+     * @param ic input conext
+     * @param offset offset
+     * @param size size
+     * @return void
+     **/
+    void FcitxInstanceDeleteSurroundingText(struct _FcitxInstance* instance, FcitxInputContext* ic, int offset, unsigned int size);
 
     /**
      * Set Cursor Position

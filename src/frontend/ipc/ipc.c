@@ -40,6 +40,9 @@ typedef struct _FcitxIPCIC {
     int width;
     int height;
     pid_t pid;
+    char* surroundingText;
+    unsigned int anchor;
+    unsigned int cursor;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -74,6 +77,8 @@ static void IPCForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType ev
 static void IPCSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void IPCGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 static void IPCUpdatePreedit(void* arg, FcitxInputContext* ic);
+static void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsigned int size);
+static boolean IPCGetSurroundingText(void* arg, FcitxInputContext* ic, char** str, unsigned int* cursor, unsigned int* anchor);
 static void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic);
 static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMessage *message, void *user_data);
 static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusMessage *msg, void *user_data);
@@ -201,6 +206,11 @@ const char * ic_introspection_xml =
     "    <method name=\"SetCapacity\">\n"
     "      <arg name=\"caps\" direction=\"in\" type=\"u\"/>\n"
     "    </method>\n"
+    "    <method name=\"SetSurroundingText\">\n"
+    "      <arg name=\"text\" direction=\"in\" type=\"s\"/>\n"
+    "      <arg name=\"cursor\" direction=\"in\" type=\"u\"/>\n"
+    "      <arg name=\"anchor\" direction=\"in\" type=\"u\"/>\n"
+    "    </method>\n"
     "    <method name=\"DestroyIC\">\n"
     "    </method>\n"
     "    <method name=\"ProcessKeyEvent\">\n"
@@ -221,6 +231,10 @@ const char * ic_introspection_xml =
     "    <signal name=\"UpdatePreedit\">\n"
     "      <arg name=\"str\" type=\"s\"/>\n"
     "      <arg name=\"cursorpos\" type=\"i\"/>\n"
+    "    </signal>\n"
+    "    <signal name=\"DeleteSurroundingText\">\n"
+    "      <arg name=\"offset\" type=\"i\"/>\n"
+    "      <arg name=\"nchar\" type=\"u\"/>\n"
     "    </signal>\n"
     "    <signal name=\"UpdateFormattedPreedit\">\n"
     "      <arg name=\"str\" type=\"a(si)\"/>\n"
@@ -259,7 +273,9 @@ FcitxFrontend frontend = {
     IPCUpdateClientSideUI,
     NULL,
     IPCCheckICFromSameApplication,
-    IPCGetPid
+    IPCGetPid,
+    IPCDeleteSurroundingText,
+    IPCGetSurroundingText
 };
 
 FCITX_EXPORT_API
@@ -420,6 +436,8 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
     dbus_connection_unregister_object_path(ipc->conn, GetIPCIC(context)->path);
     if (ipcic->appname)
         free(ipcic->appname);
+    if (ipcic->surroundingText)
+        free(ipcic->surroundingText);
     free(context->privateic);
     context->privateic = NULL;
 }
@@ -632,6 +650,32 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
             uint32_t flags;
             if (dbus_message_get_args(msg, &error, DBUS_TYPE_UINT32, &flags, DBUS_TYPE_INVALID)) {
                 ic->contextCaps = flags;
+                if (!(ic->contextCaps & CAPACITY_SURROUNDING_TEXT)) {
+                    if (GetIPCIC(ic)->surroundingText)
+                        free(GetIPCIC(ic)->surroundingText);
+                    GetIPCIC(ic)->surroundingText = NULL;
+                }
+                DBusMessage *reply = dbus_message_new_method_return(msg);
+                dbus_connection_send(ipc->conn, reply, NULL);
+                dbus_message_unref(reply);
+            }
+            result = DBUS_HANDLER_RESULT_HANDLED;
+        } else if (dbus_message_is_method_call(msg, FCITX_IC_DBUS_INTERFACE, "SetSurroundingText")) {
+            char* text;
+            uint32_t cursor, anchor;
+            if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &text,  DBUS_TYPE_UINT32, &cursor, DBUS_TYPE_UINT32, &anchor, DBUS_TYPE_INVALID)) {
+                FcitxIPCIC* ipcic = GetIPCIC(ic);
+                if (!ipcic->surroundingText || strcmp(ipcic->surroundingText, text) != 0 || cursor != ipcic->cursor || anchor != ipcic->anchor)
+                {
+                    if (ipcic->surroundingText) {
+                        free(ipcic->surroundingText);
+                    }
+                    ipcic->surroundingText = strdup(text);
+                    FcitxLog(INFO, "%s %u %u", text, cursor, anchor);
+                    ipcic->cursor = cursor;
+                    ipcic->anchor = anchor;
+                    FcitxInstanceNotifyUpdateSurroundingText(ipc->owner, ic);
+                }
                 DBusMessage *reply = dbus_message_new_method_return(msg);
                 dbus_connection_send(ipc->conn, reply, NULL);
                 dbus_message_unref(reply);
@@ -855,6 +899,46 @@ void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
         free(strPreedit);
     }
 }
+
+void IPCDeleteSurroundingText(void* arg, FcitxInputContext* ic, int offset, unsigned int size)
+{
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
+                       FCITX_IC_DBUS_INTERFACE, // interface name of the signal
+                       "DeleteSurroundingText"); // name of the signal
+
+    FcitxLog(INFO, "%d %u", offset, size);
+
+    dbus_message_append_args(msg, DBUS_TYPE_INT32, &offset, DBUS_TYPE_UINT32, &size, DBUS_TYPE_INVALID);
+
+    if (!dbus_connection_send(ipc->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+    dbus_connection_flush(ipc->conn);
+    dbus_message_unref(msg);
+}
+
+
+boolean IPCGetSurroundingText(void* arg, FcitxInputContext* ic, char** str, unsigned int *cursor, unsigned int *anchor)
+{
+    FcitxIPCIC* ipcic = GetIPCIC(ic);
+
+    if (!ipcic->surroundingText)
+        return false;
+
+    if (str)
+        *str = strdup(ipcic->surroundingText);
+
+    if (cursor)
+        *cursor = ipcic->cursor;
+
+    if (anchor)
+        *anchor = ipcic->anchor;
+
+    return true;
+}
+
 
 void IPCUpdateClientSideUI(void* arg, FcitxInputContext* ic)
 {

@@ -97,7 +97,9 @@ FcitxFrontend frontend = {
     NULL,
     NULL,
     XimCheckICFromSameApplication,
-    XimGetPid
+    XimGetPid,
+    NULL,
+    NULL
 };
 
 FCITX_EXPORT_API

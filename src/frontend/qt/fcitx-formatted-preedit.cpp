@@ -50,6 +50,12 @@ void FcitxFormattedPreedit::setString(const QString& str)
     m_string = str;
 }
 
+bool FcitxFormattedPreedit::operator==(const FcitxFormattedPreedit& preedit) const
+{
+    return (preedit.m_format == m_format) && (preedit.m_string == m_string);
+}
+
+
 
 QDBusArgument& operator<<(QDBusArgument& argument, const FcitxFormattedPreedit& preedit)
 {

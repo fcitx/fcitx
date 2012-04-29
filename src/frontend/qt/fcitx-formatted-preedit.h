@@ -32,6 +32,8 @@ public:
     void setFormat(qint32 format);
 
     static void registerMetaType();
+
+    bool operator ==(const FcitxFormattedPreedit& preedit) const;
 private:
     QString m_string;
     qint32 m_format;

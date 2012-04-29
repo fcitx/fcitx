@@ -241,6 +241,10 @@ void FcitxIMClientCreateICCallback(DBusGProxy *proxy,
     dbus_g_object_register_marshaller(fcitx_marshall_VOID__UINT_UINT_INT, G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
 
     dbus_g_proxy_add_signal(client->icproxy, "ForwardKey", G_TYPE_UINT, G_TYPE_UINT, G_TYPE_INT, G_TYPE_INVALID);
+
+    dbus_g_object_register_marshaller(fcitx_marshall_VOID__INT_UINT, G_TYPE_NONE, G_TYPE_INT, G_TYPE_UINT, G_TYPE_INVALID);
+
+    dbus_g_proxy_add_signal(client->icproxy, "DeleteSurroundingText", G_TYPE_INT, G_TYPE_UINT, G_TYPE_INVALID);
     client->connectcb(client, client->data);
 }
 
@@ -357,6 +361,7 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                 GCallback forwardKey,
                                 GCallback updatePreedit,
                                 GCallback updateFormattedPreedit,
+                                GCallback deleteSurroundingText,
                                 void* user_data,
                                 GClosureNotify freefunc
                                )
@@ -402,7 +407,26 @@ void FcitxIMClientConnectSignal(FcitxIMClient* imclient,
                                 user_data,
                                 freefunc
                                );
+
+    dbus_g_proxy_connect_signal(imclient->icproxy,
+                                "DeleteSurroundingText",
+                                deleteSurroundingText,
+                                user_data,
+                                freefunc
+                               );
 }
+
+void FcitxIMClientSetSurroundingText(FcitxIMClient* client, const gchar* text, guint cursorPos, guint anchorPos)
+{
+    if (client->icproxy) {
+        dbus_g_proxy_call_no_reply(client->icproxy, "SetSurroundingText",
+                          G_TYPE_STRING, text,
+                          G_TYPE_UINT, cursorPos,
+                          G_TYPE_UINT, anchorPos,
+                          G_TYPE_INVALID);
+    }
+}
+
 
 FcitxHotkey* FcitxIMClientGetTriggerKey(FcitxIMClient* client)
 {

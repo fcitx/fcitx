@@ -104,6 +104,12 @@ void FcitxInstanceCleanUpIC(FcitxInstance* instance)
             todel->next = instance->free_list;
             instance->free_list = todel;
             frontend->DestroyIC((*pfrontend)->addonInstance, todel);
+            if (todel == instance->CurrentIC) {
+                instance->CurrentIC = NULL;
+                FcitxUICloseInputWindow(instance);
+                FcitxUIOnInputUnFocus(instance);
+                FcitxInstanceSetCurrentIC(instance, NULL);
+            }
         }
         else {
             last = rec;
@@ -242,6 +248,44 @@ void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, c
 
     if (pstr)
         free(pstr);
+}
+
+FCITX_EXPORT_API
+boolean FcitxInstanceGetSurroundingText(FcitxInstance* instance, FcitxInputContext* ic, char** str, unsigned int* cursor, unsigned int* anchor)
+{
+    if (ic == NULL)
+        return false;
+
+    if (!(ic->contextCaps & CAPACITY_SURROUNDING_TEXT))
+        return false;
+
+    UT_array* frontends = &instance->frontends;
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return false;
+
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->GetSurroundingPreedit) {
+        return frontend->GetSurroundingPreedit((*pfrontend)->addonInstance, ic, str, cursor, anchor);
+    }
+    return false;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceDeleteSurroundingText(FcitxInstance* instance, FcitxInputContext* ic, int offset, unsigned int size)
+{
+    if (ic == NULL)
+        return;
+
+    UT_array* frontends = &instance->frontends;
+
+    FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
+    if (pfrontend == NULL)
+        return;
+    FcitxFrontend* frontend = (*pfrontend)->frontend;
+    if (frontend->DeleteSurroundingText) {
+        frontend->DeleteSurroundingText((*pfrontend)->addonInstance, ic, offset, size);
+    }
 }
 
 FCITX_EXPORT_API

@@ -69,6 +69,7 @@ private Q_SLOTS:
     void updatePreedit(const QString& str, int cursorPos);
     void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
     void forwardKey(uint keyval, uint state, int type);
+    void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
 private:
     void createInputContext();
@@ -117,6 +118,8 @@ private:
     QString m_serviceName;
     QString m_preedit;
     QString m_commitPreedit;
+    FcitxFormattedPreeditList m_preeditList;
+    int m_cursorPos;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

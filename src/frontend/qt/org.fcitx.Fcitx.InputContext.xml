@@ -30,6 +30,11 @@
     <method name="SetCapacity">
        <arg name="caps" direction="in" type="u"/>
     </method>
+    <method name="SetSurroundingText">
+      <arg name="text" direction="in" type="s"/>
+      <arg name="cursor" direction="in" type="u"/>
+      <arg name="anchor" direction="in" type="u"/>
+    </method>
     <method name="DestroyIC">
     </method>
     <method name="ProcessKeyEvent">
@@ -68,6 +73,10 @@
       <arg name="keyval" type="u"/>
       <arg name="state" type="u"/>
       <arg name="type" type="i"/>
+    </signal>
+    <signal name="DeleteSurroundingText">
+      <arg name="offset" type="i"/>
+      <arg name="nchar" type="u"/>
     </signal>
   </interface>
 </node>

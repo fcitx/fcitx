@@ -341,6 +341,38 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
                        const char *langCode
                       )
 {
+    FcitxIMIFace iface;
+    memset(&iface, 0, sizeof(FcitxIMIFace));
+    iface.Init = Init;
+    iface.ResetIM = ResetIM;
+    iface.DoInput = DoInput;
+    iface.GetCandWords = GetCandWords;
+    iface.PhraseTips = PhraseTips;
+    iface.Save = Save;
+    iface.ReloadConfig = ReloadConfig;
+    iface.KeyBlocker = KeyBlocker;
+    FcitxInstanceRegisterIMv2(instance,
+                       imclass,
+                       uniqueName,
+                       name,
+                       iconName,
+                       iface,
+                       priority,
+                       langCode
+                      );
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
+                       void *imclass,
+                       const char* uniqueName,
+                       const char* name,
+                       const char* iconName,
+                       FcitxIMIFace iface,
+                       int priority,
+                       const char *langCode
+                      )
+{
     if (priority < 0)
         return ;
 
@@ -367,14 +399,15 @@ void FcitxInstanceRegisterIM(FcitxInstance *instance,
     entry->uniqueName = strdup(uniqueName);
     entry->strName = strdup(name);
     entry->strIconName = strdup(iconName);
-    entry->Init = Init;
-    entry->ResetIM = ResetIM;
-    entry->DoInput = DoInput;
-    entry->GetCandWords = GetCandWords;
-    entry->PhraseTips = PhraseTips;
-    entry->Save = Save;
-    entry->ReloadConfig = ReloadConfig;
-    entry->KeyBlocker = KeyBlocker;
+    entry->Init = iface.Init;
+    entry->ResetIM = iface.ResetIM;
+    entry->DoInput = iface.DoInput;
+    entry->GetCandWords = iface.GetCandWords;
+    entry->PhraseTips = iface.PhraseTips;
+    entry->Save = iface.Save;
+    entry->ReloadConfig = iface.ReloadConfig;
+    entry->KeyBlocker = iface.KeyBlocker;
+    entry->UpdateSurroundingText = iface.UpdateSurroundingText;
     entry->klass = imclass;
     entry->iPriority = priority;
     if (langCode)
@@ -474,10 +507,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
     FcitxGlobalConfig *fc = instance->config;
 
-    if (FcitxInstanceGetCurrentIC(instance) == NULL)
+    if (instance->CurrentIC == NULL)
         return IRV_TO_PROCESS;
 
-    if (FcitxInstanceGetCurrentIC(instance)->contextCaps & CAPACITY_PASSWORD)
+    if (instance->CurrentIC->contextCaps & CAPACITY_PASSWORD)
         return IRV_TO_PROCESS;
 
     /*
@@ -517,14 +550,14 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                         if (input->keyReleased == KR_SWITCH_IM)
                             FcitxInstanceSwitchIM(instance, -1);
                     } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
-                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                            FcitxInstanceCloseIM(instance, instance->CurrentIC);
                     }
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
                     if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
                         if (input->keyReleased == KR_SWITCH_IM_REVERSE)
                             FcitxInstanceSwitchIM(instance, -2);
                     } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
-                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                            FcitxInstanceCloseIM(instance, instance->CurrentIC);
                     }
                 } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
@@ -537,7 +570,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     input->keyReleased = KR_OTHER;
                     if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE)
                         FcitxInstanceShowInputSpeed(instance);
-                    FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
+                    FcitxInstanceChangeIMState(instance, instance->CurrentIC);
                 }
             }
         }
@@ -572,8 +605,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                 if ((input->keyReleased == KR_SWITCH)
                         && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
                         && fc->bDoubleSwitchKey) {
-                    FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));
-                    FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
+                    FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetRawInputBuffer(input));
+                    FcitxInstanceChangeIMState(instance, instance->CurrentIC);
                 }
             }
 
@@ -589,10 +622,10 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
             } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
                 if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
-                    FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
+                    FcitxInstanceChangeIMState(instance, instance->CurrentIC);
                     FcitxInstanceShowInputSpeed(instance);
                 } else
-                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    FcitxInstanceCloseIM(instance, instance->CurrentIC);
 
                 retVal = IRV_DO_NOTHING;
             }
@@ -736,7 +769,7 @@ void FcitxInstanceProcessInputReturnValue(
     FcitxGlobalConfig *fc = instance->config;
 
     if (retVal & IRV_FLAG_PENDING_COMMIT_STRING) {
-        FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetOutputString(input));
+        FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetOutputString(input));
         instance->iHZInputed += (int)(fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
     }
 
@@ -1075,7 +1108,7 @@ void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* i
     if (oldstate == IS_CLOSED)
         frontend->EnableIM((*pfrontend)->addonInstance, ic);
 
-    if (ic == FcitxInstanceGetCurrentIC(instance)) {
+    if (ic == instance->CurrentIC) {
         if (oldstate == IS_CLOSED)
             FcitxUIOnTriggerOn(instance);
         if (!keepState)
@@ -1131,7 +1164,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
     ic->state = IS_CLOSED;
     frontend->CloseIM((*pfrontend)->addonInstance, ic);
 
-    if (ic == FcitxInstanceGetCurrentIC(instance)) {
+    if (ic == instance->CurrentIC) {
         FcitxUIOnTriggerOff(instance);
         FcitxUICloseInputWindow(instance);
         FcitxInstanceResetInput(instance);
@@ -1194,7 +1227,7 @@ void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputConte
     if (ic->state == objectState)
         return;
     ic->state = objectState;
-    if (ic == FcitxInstanceGetCurrentIC(instance)) {
+    if (ic == instance->CurrentIC) {
         if (objectState == IS_ACTIVE) {
             FcitxInstanceResetInput(instance);
         } else {
@@ -1221,11 +1254,11 @@ boolean IMMenuAction(FcitxUIMenu *menu, int index)
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
     if (index == 0 && FcitxInstanceGetGlobalConfig(instance)->firstAsInactive)
-        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+        FcitxInstanceCloseIM(instance, instance->CurrentIC);
     else {
         FcitxInstanceSwitchIM(instance, index);
         if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+            FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
         }
     }
     return true;
@@ -1367,6 +1400,22 @@ int FcitxInstanceGetIMIndexByName(FcitxInstance* instance, const char* imName)
         i ++;
     }
     return index;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceNotifyUpdateSurroundingText(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (!ic)
+        return;
+    if (ic != instance->CurrentIC)
+        return;
+
+    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+    if (!im)
+        return;
+
+    if (im->UpdateSurroundingText)
+        im->UpdateSurroundingText(im->klass);
 }
 
 FCITX_EXPORT_API

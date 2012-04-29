@@ -55,10 +55,16 @@ extern "C" {
                                     GCallback forwardKey,
                                     GCallback updatePreedit,
                                     GCallback updateFormattedPreedit,
+                                    GCallback deleteSurroundingText,
                                     void* user_data,
                                     GClosureNotify freefunc
                                    );
     FcitxHotkey* FcitxIMClientGetTriggerKey(FcitxIMClient* client);
+    void FcitxIMClientSetSurroundingText(FcitxIMClient* imclient,
+                                         const gchar* text,
+                                         guint cursorPos,
+                                         guint anchorPos
+                                        );
 
 #ifdef __cplusplus
 }
