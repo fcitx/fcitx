@@ -1,6 +1,6 @@
 [Desktop Entry]
 _Name=Fcitx
-_Comment=Chinese Input Method
+_Comment=Input Method
 Exec=fcitx
 Icon=fcitx
 Terminal=false

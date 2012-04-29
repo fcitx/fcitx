@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-28 21:11+0800\n"
+"POT-Creation-Date: 2012-04-29 14:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1138,12 +1138,13 @@ msgid "Fcitx GUI Config Tool"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:1
-msgid "Chinese Input Method"
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:292
+msgid "Fcitx"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:292
-msgid "Fcitx"
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1211
+msgid "Input Method"
 msgstr ""
 
 #: ../..//src/ui/classic/fcitx-skin-installer.desktop.in.h:1
@@ -1597,10 +1598,6 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:448
 msgid "No available Input Method"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1211
-msgid "Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
