@@ -149,7 +149,9 @@ QFcitxInputContext::QFcitxInputContext()
       m_path(""),
       m_enable(false),
       m_has_focus(false),
-      m_n_compose(0)
+      m_n_compose(0),
+      m_cursorPos(0),
+      m_useSurroundingText(false)
 {
     FcitxFormattedPreedit::registerMetaType();
 
@@ -206,14 +208,19 @@ void QFcitxInputContext::update()
         return;
     }
 
-    if (m_capacity & CAPACITY_SURROUNDING_TEXT) {
+    if (m_useSurroundingText) {
         QVariant var = widget->inputMethodQuery(Qt::ImSurroundingText);
         QVariant var1 = widget->inputMethodQuery(Qt::ImCursorPosition);
         QVariant var2 = widget->inputMethodQuery(Qt::ImAnchorPosition);
-        if (var.isValid() && var1.isValid() && var2.isValid()) {
+        if (var.isValid() && var1.isValid() && !m_capacity.testFlag(CAPACITY_PASSWORD) ) {
+            addCapacity(CAPACITY_SURROUNDING_TEXT);
             QString text = var.toString();
             int cursor = var1.toInt();
-            int anchor = var2.toInt();
+            int anchor;
+            if (var2.isValid())
+                anchor = var2.toInt();
+            else
+                anchor = cursor;
             m_icproxy->SetSurroundingText(text, cursor, anchor);
         }
         else {
@@ -445,6 +452,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     }
 
     if (result.isError() || result.value() <= 0) {
+        QTimer::singleShot(0, this, SLOT(updateIM()));
         return x11FilterEventFallback(keywidget, event, sym);
     } else {
         update();
@@ -534,7 +542,8 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
         flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
-        if (get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false))
+        m_useSurroundingText = get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
+        if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 
         addCapacity(flag, true);
@@ -899,4 +908,10 @@ QFcitxInputContext::checkCompactTable(const FcitxComposeTableCompact *table)
     }
     return false;
 }
+
+void QFcitxInputContext::updateIM()
+{
+    update();
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

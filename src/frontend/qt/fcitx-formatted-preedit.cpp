@@ -55,8 +55,6 @@ bool FcitxFormattedPreedit::operator==(const FcitxFormattedPreedit& preedit) con
     return (preedit.m_format == m_format) && (preedit.m_string == m_string);
 }
 
-
-
 QDBusArgument& operator<<(QDBusArgument& argument, const FcitxFormattedPreedit& preedit)
 {
     argument.beginStructure();

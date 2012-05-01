@@ -71,6 +71,7 @@ private Q_SLOTS:
     void forwardKey(uint keyval, uint state, int type);
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
+    void updateIM();
 private:
     void createInputContext();
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
@@ -120,6 +121,7 @@ private:
     QString m_commitPreedit;
     FcitxFormattedPreeditList m_preeditList;
     int m_cursorPos;
+    boolean m_useSurroundingText;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

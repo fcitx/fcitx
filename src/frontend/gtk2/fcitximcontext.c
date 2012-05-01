@@ -1389,16 +1389,20 @@ static void
 _request_surrounding_text (FcitxIMContext *context)
 {
     if (context &&
-        (context->capacity & CAPACITY_SURROUNDING_TEXT) != 0 &&
         IsFcitxIMClientValid(context->client)) {
         gboolean return_value;
         FcitxLog(LOG_LEVEL, "requesting surrounding text");
         g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
                        &return_value);
-        if (!return_value) {
+        if (return_value) {
+            context->capacity |= CAPACITY_SURROUNDING_TEXT;
+            _fcitx_im_context_set_capacity (context,
+                                            FALSE);
+        }
+        else {
             context->capacity &= ~CAPACITY_SURROUNDING_TEXT;
             _fcitx_im_context_set_capacity (context,
-                                            TRUE);
+                                            FALSE);
         }
     }
 }
