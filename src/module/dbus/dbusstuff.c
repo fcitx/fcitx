@@ -42,15 +42,21 @@ typedef struct _FcitxDBus {
     DBusConnection *conn;
     FcitxInstance* owner;
     FcitxDBusWatch* watches;
+    char* listenAddress;
+    char* serverAddress;
+    DBusServer* server;
+    DBusConnection* privconn;
 } FcitxDBus;
 
 #define RETRY_INTERVAL 2
-#define MAX_RETRY_TIMES 5
+#define MAX_RETRY_TIMES 4
 
 static void* DBusCreate(FcitxInstance* instance);
 static void DBusSetFD(void* arg);
 static void DBusProcessEvent(void* arg);
 static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
+static void* DBusGetAddress(void* arg, FcitxModuleFunctionArg args);
+static void* DBusGetPrivConnection(void* arg, FcitxModuleFunctionArg args);
 static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data);
 static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data);
 
@@ -162,8 +168,26 @@ void* DBusCreate(FcitxInstance* instance)
 
     free(servicename);
 
+    asprintf(&dbusmodule->listenAddress, "%s-%d", FCITX_DBUS_SERVER_ADDRESS, fcitx_utils_get_display_number());
+    FcitxLog(WARNING, _("Start Private server: %s"), dbusmodule->serverAddress);
+
+    dbusmodule->server = dbus_server_listen(dbusmodule->listenAddress, &err);
+    dbus_server_set_watch_functions(dbusmodule->server, FcitxDBusAddWatch, FcitxDBusRemoveWatch, NULL, dbusmodule, NULL);
+
+    dbusmodule->serverAddress = strdup(dbus_server_get_address(dbusmodule->server));
+
+    dbusmodule->privconn = dbus_connection_open(dbusmodule->serverAddress, &err);
+    if (dbus_error_is_set(&err)) {
+        FcitxLog(WARNING, _("Open Private Connection Error (%s)"), err.message);
+        dbus_error_free(&err);
+    }
+    dbus_connection_set_watch_functions(dbusmodule->privconn, FcitxDBusAddWatch, FcitxDBusRemoveWatch,
+            NULL, dbusmodule, NULL);
+
     dbus_connection_flush(conn);
     AddFunction(dbusaddon, DBusGetConnection);
+    AddFunction(dbusaddon, DBusGetAddress);
+    AddFunction(dbusaddon, DBusGetPrivConnection);
     dbus_error_free(&err);
 
     return dbusmodule;
@@ -174,6 +198,19 @@ void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
     return dbusmodule->conn;
 }
+
+void* DBusGetAddress(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+    return dbusmodule->serverAddress;
+}
+
+void* DBusGetPrivConnection(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+    return dbusmodule->privconn;
+}
+
 
 static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data)
 {

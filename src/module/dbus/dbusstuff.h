@@ -30,7 +30,12 @@ extern "C" {
 #define FCITX_DBUS_NAME "fcitx-dbus"
 #define FCITX_DBUS_GETCONNECTION 0
 #define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
+#define FCITX_DBUS_GETADDRESS 1
+#define FCITX_DBUS_GETADDRESS_RETURNTYPE const char*
+#define FCITX_DBUS_GETPRIVCONNECTION 2
+#define FCITX_DBUS_GETPRIVCONNECTION_RETURNTYPE DBusConnection*
 
+#define FCITX_DBUS_SERVER_ADDRESS "unix:tmpdir=/tmp/fcitx-server"
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
 
 #ifdef __cplusplus

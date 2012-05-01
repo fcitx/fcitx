@@ -140,18 +140,18 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
-QFcitxInputContext::QFcitxInputContext()
-    : m_connection(QDBusConnection::sessionBus()),
-      m_dbusproxy(0),
-      m_improxy(0),
-      m_icproxy(0),
-      m_id(0),
-      m_path(""),
-      m_enable(false),
-      m_has_focus(false),
-      m_n_compose(0),
-      m_cursorPos(0),
-      m_useSurroundingText(false)
+QFcitxInputContext::QFcitxInputContext(QObject* parent) : QObject(parent)
+      ,m_connection(QDBusConnection::sessionBus())
+      ,m_dbusproxy(0),
+      ,m_improxy(0),
+      ,m_icproxy(0),
+      ,m_id(0),
+      ,m_path(""),
+      ,m_enable(false),
+      ,m_has_focus(false),
+      ,m_n_compose(0),
+      ,m_cursorPos(0),
+      ,m_useSurroundingText(false)
 {
     FcitxFormattedPreedit::registerMetaType();
 

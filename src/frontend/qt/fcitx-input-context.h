@@ -43,7 +43,7 @@ class QFcitxInputContext : public QInputContext
 {
     Q_OBJECT
 public:
-    QFcitxInputContext();
+    QFcitxInputContext(QObject* parent = 0);
     ~QFcitxInputContext();
 
     virtual QString identifierName();
