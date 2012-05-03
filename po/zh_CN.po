@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 14:24+0800\n"
-"PO-Revision-Date: 2012-04-28 21:12+0800\n"
+"POT-Creation-Date: 2012-05-03 19:24+0800\n"
+"PO-Revision-Date: 2012-05-03 19:25+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1278
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1311
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -61,6 +61,10 @@ msgstr "活动菜单项颜色"
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:56
 msgid "Active Menu Item Character Color"
 msgstr "活动菜单项颜色"
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
+msgid "Active Mode Icon"
+msgstr "激活状态输入法图标"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:189
 msgid "Active Tray Icon"
@@ -192,7 +196,7 @@ msgstr "无法加载默认皮肤，安装是否正确？"
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:150
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
@@ -239,10 +243,6 @@ msgstr "无法找到拼音"
 #: /home/saber/Develop/fcitx/data/addon.desc:22
 msgid "Category"
 msgstr "种类"
-
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
-msgid "Chinese Mode Icon"
-msgstr "中文模式图标"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:111
 msgid "Choose"
@@ -581,11 +581,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:369
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:413
 msgid "Frontend: bad frontend"
 msgstr "前端: 有问题的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:357
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:401
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
@@ -700,8 +700,7 @@ msgstr "图标名称"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr ""
-"如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
+msgstr "如果您使用登录管理器，比如 gdm 或 kdm，请将这些行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:196
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -732,7 +731,7 @@ msgid "Input Message Color"
 msgstr "输入信息颜色"
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1211
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1244
 msgid "Input Method"
 msgstr "输入法"
 
@@ -744,7 +743,7 @@ msgstr "输入法"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1309
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -943,11 +942,11 @@ msgstr "下一页图标"
 msgid "No"
 msgstr "否"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:448
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:481
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:390
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:434
 msgid "No available frontend"
 msgstr "无可用前端"
 
@@ -1043,7 +1042,7 @@ msgstr "拼音加加"
 msgid "Please check your environment varibles."
 msgstr "请检查你的环境变量的设置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:163
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:165
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMODIFIERS"
 
@@ -1372,7 +1371,7 @@ msgstr "空格输入 %s 回车输入 %s"
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:241
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:243
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
@@ -1608,11 +1607,11 @@ msgstr "X11 支持"
 msgid "X11 Utilitiy used by other Addon"
 msgstr "由其他插件使用的 X11 工具函数"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:137
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:139
 msgid "X11 not initialized"
 msgstr "X11 未初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:161
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
 
@@ -1636,7 +1635,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1280
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1313
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -1660,6 +1659,9 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Chinese Input Method"
 #~ msgstr "中文输入法"
+
+#~ msgid "Chinese Mode Icon"
+#~ msgstr "中文模式图标"
 
 #~ msgid "Hotkey of Going Next Page"
 #~ msgstr "快捷键: 后一页"

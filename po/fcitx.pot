@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 14:24+0800\n"
+"POT-Creation-Date: 2012-05-03 19:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgid "English Mode Icon"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
-msgid "Chinese Mode Icon"
+msgid "Active Mode Icon"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:80
@@ -1143,7 +1143,7 @@ msgid "Fcitx"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1211
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1244
 msgid "Input Method"
 msgstr ""
 
@@ -1515,16 +1515,16 @@ msgstr ""
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:357
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:401
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:369
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:413
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:390
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:434
 msgid "No available frontend"
 msgstr ""
 
@@ -1596,39 +1596,39 @@ msgstr ""
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:448
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:481
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1309
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1278
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1311
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1280
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1313
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:137
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:139
 msgid "X11 not initialized"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:150
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:161
 msgid "XMODIFIERS Error."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:163
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:165
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:241
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:243
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""

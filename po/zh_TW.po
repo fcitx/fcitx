@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-29 14:24+0800\n"
+"POT-Creation-Date: 2012-05-03 19:24+0800\n"
 "PO-Revision-Date: 2012-04-28 21:14+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1278
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1311
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -62,6 +62,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:56
 msgid "Active Menu Item Character Color"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
+msgid "Active Mode Icon"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:189
@@ -194,7 +198,7 @@ msgstr ""
 msgid "Can not load skin %s, return to default"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:150
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
@@ -241,10 +245,6 @@ msgstr ""
 #: /home/saber/Develop/fcitx/data/addon.desc:22
 msgid "Category"
 msgstr "類別"
-
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
-msgid "Chinese Mode Icon"
-msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:111
 msgid "Choose"
@@ -583,11 +583,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "輸入法模組使用的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:369
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:413
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:357
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:401
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端：開啟 %s 失敗 %s"
@@ -734,7 +734,7 @@ msgid "Input Message Color"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1211
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1244
 msgid "Input Method"
 msgstr "輸入法"
 
@@ -746,7 +746,7 @@ msgstr "輸入法"
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1309
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -945,11 +945,11 @@ msgstr ""
 msgid "No"
 msgstr "否"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:448
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:481
 msgid "No available Input Method"
 msgstr "無可用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:390
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:434
 msgid "No available frontend"
 msgstr "無可用前端"
 
@@ -1045,7 +1045,7 @@ msgstr "拼音加加"
 msgid "Please check your environment varibles."
 msgstr "請檢查您的環境變數設定。"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:163
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:165
 msgid "Please set XMODIFIERS."
 msgstr "請設定環境變數 XMOIFIERS。"
 
@@ -1374,7 +1374,7 @@ msgstr ""
 msgid "Special Icon position"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:241
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:243
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
@@ -1610,11 +1610,11 @@ msgstr "X11 支援"
 msgid "X11 Utilitiy used by other Addon"
 msgstr "給其他附加元件使用的 X11 工具"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:137
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:139
 msgid "X11 not initialized"
 msgstr "X11 無法初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:161
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS 錯誤。"
 
@@ -1638,7 +1638,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1280
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1313
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 

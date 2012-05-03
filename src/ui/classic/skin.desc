@@ -73,7 +73,7 @@ Description=English Mode Icon
 
 [SkinMainBar/Active]
 Type=String
-Description=Chinese Mode Icon
+Description=Active Mode Icon
 
 [SkinMainBar/MarginLeft]
 Type=Integer
