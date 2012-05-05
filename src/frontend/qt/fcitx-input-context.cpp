@@ -188,11 +188,19 @@ QString QFcitxInputContext::language()
     return "";
 }
 
+void QFcitxInputContext::commitPreedit()
+{
+    if (m_commitPreedit.length() > 0) {
+        QInputMethodEvent e;
+        e.setCommitString(m_commitPreedit);
+        m_commitPreedit.clear();
+        sendEvent(e);
+    }
+}
+
 void QFcitxInputContext::reset()
 {
-    QInputMethodEvent e;
-    e.setCommitString(m_commitPreedit);
-    sendEvent(e);
+    commitPreedit();
     if (isValid())
         m_icproxy->Reset();
 }
@@ -310,9 +318,7 @@ void QFcitxInputContext::mouseHandler(int x, QMouseEvent* event)
         && (x <= 0 || x >= m_preedit.length())
     )
     {
-        QInputMethodEvent e;
-        e.setCommitString(m_commitPreedit);
-        sendEvent(e);
+        commitPreedit();
         if (isValid())
             m_icproxy->Reset();
     }

@@ -345,11 +345,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                 else
                     asprintf(&path, "%s_inactive.png", status->name);
                 SkinImage* statusicon = LoadImage(sc, path, false);
-                if (statusicon == NULL) {
+                if (statusicon == NULL || statusicon->textIcon) {
                     if (activeIcon) {
                         statusicon = LoadImageWithText(classicui, sc, path, status->shortDescription,
                                                        cairo_image_surface_get_width(activeIcon->image),
-                                                       cairo_image_surface_get_height(activeIcon->image));
+                                                       cairo_image_surface_get_height(activeIcon->image),
+                                                       active
+                                                      );
                     }
                 }
                 free(path);

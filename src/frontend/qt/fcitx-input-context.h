@@ -101,6 +101,7 @@ private:
     }
 
     void updateCapacity();
+    void commitPreedit();
 
     QDBusConnection m_connection;
     org::freedesktop::DBus* m_dbusproxy;

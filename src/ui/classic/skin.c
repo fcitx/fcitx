@@ -64,6 +64,7 @@ static const UT_icd place_icd = {sizeof(SkinPlacement), NULL, NULL, NULL };
 static boolean SkinMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateSkinMenu(FcitxUIMenu* menu);
 static void UnloadImage(FcitxSkin* skin);
+static void UnloadSingleImage(FcitxSkin* sc, const char* name);
 
 CONFIG_DESC_DEFINE(GetSkinDesc, "skin.desc")
 
@@ -157,10 +158,13 @@ reload:
 
 }
 
-SkinImage* LoadImageWithText(FcitxClassicUI *classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h)
+SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h, boolean active)
 {
     if (!text || strlen(text) == 0)
         return NULL;
+
+    UnloadSingleImage(sc, name);
+
 
     int len = fcitx_utf8_char_len(text);
 
@@ -175,15 +179,30 @@ SkinImage* LoadImageWithText(FcitxClassicUI *classicui, FcitxSkin* sc, const cha
     min = min * 0.8;
 
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_set_source_rgba(c ,1, 1, 1, 0.0);
+    cairo_set_source_rgba(c ,1, 1, 1, 1.0);
     cairo_paint(c);
 
-    OutputString(c, iconText, classicui->font, min, 0, 0, &sc->skinFont.menuFontColor[1]);
+    FcitxConfigColor color;
+    if (sc->skinMainBar.bUseCustomTextIconColor) {
+        if (active)
+            color = sc->skinMainBar.textIconColor[0];
+        else
+            color = sc->skinMainBar.textIconColor[1];
+    }
+    else
+        color = sc->skinFont.menuFontColor[1];
+
+    int textw, texth;
+    StringSizeStrict(iconText, classicui->font, min, &textw, &texth);
+
+    int fh = FontHeight(classicui->font, min);
+    OutputString(c, iconText, classicui->font, min, (w - textw) * 0.5, (h - texth) * 0.5 - (fh - texth), &color);
 
     cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
     image->name = strdup(name);
     image->image = newsurface;
+    image->textIcon = true;
     HASH_ADD_KEYPTR(hh, sc->imageTable, image->name, strlen(image->name), image);
     return image;
 }
@@ -194,8 +213,9 @@ SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
     SkinImage *image = NULL;
 
     HASH_FIND_STR(sc->imageTable, name, image);
-    if (image != NULL)
+    if (image != NULL) {
         return image;
+    }
     if (strlen(name) > 0 && strcmp(name , "NONE") != 0) {
         char *skintype = strdup(*sc->skinType);
         char *filename;
@@ -790,6 +810,19 @@ void UnloadImage(FcitxSkin* skin)
         free(curimage);
     }
     skin->imageTable = NULL;
+}
+
+void UnloadSingleImage(FcitxSkin* sc, const char* name)
+{
+    SkinImage *image;
+    HASH_FIND_STR(sc->imageTable, name, image);
+    if (image != NULL) {
+        SkinImage* curimage = image;
+        HASH_DEL(sc->imageTable, image);
+        free(curimage->name);
+        cairo_surface_destroy(curimage->image);
+        free(curimage);
+    }
 }
 
 //图片文件加载函数完成

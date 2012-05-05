@@ -107,6 +107,21 @@ Enum0=Copy
 Enum1=Resize
 DefaultValue=Resize
 
+[SkinMainBar/UseCustomTextIconColor]
+Type=Boolean
+Description=Use Custom text icon color
+DefaultValue=False
+
+[SkinMainBar/ActiveTextIconColor]
+Type=Color
+Description=Active Text Icon Color
+DefaultValue=0 0 0
+
+[SkinMainBar/InactiveTextIconColor]
+Type=Color
+Description=Inactive Text Icon Color
+DefaultValue=0 0 0
+
 [SkinMainBar/Placement]
 Type=String
 Description=Special Icon position

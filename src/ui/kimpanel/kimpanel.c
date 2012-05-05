@@ -479,8 +479,21 @@ char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
     const char* iconName = status->getIconName(status->arg);
 
+    const char* templ;
+    switch(iconName[0]) {
+        case '/':
+            templ = "/Fcitx/%s:%s:%s:%s";
+            break;
+        case '\0':
+            templ = "/Fcitx/%s:%s:%s:%s";
+            break;
+        default:
+            templ = "/Fcitx/%s:%s:fcitx-%s:%s";
+            break;
+    }
+
     char *result = NULL;
-    asprintf(&result, iconName[0] == '/' ? "/Fcitx/%s:%s:%s:%s" :  "/Fcitx/%s:%s:fcitx-%s:%s",
+    asprintf(&result, templ,
              status->name,
              status->shortDescription,
              iconName,
