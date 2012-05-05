@@ -27,6 +27,7 @@
 #include "org.freedesktop.DBus.h"
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
+#include "fcitx-bus.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx/ime.h"
 
@@ -122,6 +123,7 @@ private:
     FcitxFormattedPreeditList m_preeditList;
     int m_cursorPos;
     boolean m_useSurroundingText;
+    FcitxBus m_fcitxBus;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

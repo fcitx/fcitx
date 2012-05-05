@@ -140,24 +140,28 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
-QFcitxInputContext::QFcitxInputContext(QObject* parent) : QObject(parent)
+QFcitxInputContext::QFcitxInputContext(QObject* parent) : QInputContext(parent)
       ,m_connection(QDBusConnection::sessionBus())
-      ,m_dbusproxy(0),
-      ,m_improxy(0),
-      ,m_icproxy(0),
-      ,m_id(0),
-      ,m_path(""),
-      ,m_enable(false),
-      ,m_has_focus(false),
-      ,m_n_compose(0),
-      ,m_cursorPos(0),
+      ,m_dbusproxy(0)
+      ,m_improxy(0)
+      ,m_icproxy(0)
+      ,m_id(0)
+      ,m_path("")
+      ,m_enable(false)
+      ,m_has_focus(false)
+      ,m_n_compose(0)
+      ,m_cursorPos(0)
       ,m_useSurroundingText(false)
+      ,m_fcitxBus(this)
 {
     FcitxFormattedPreedit::registerMetaType();
 
+    if (m_fcitxBus.connection().isConnected())
+        m_connection = m_fcitxBus.connection();
+
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
 
-    m_dbusproxy = new org::freedesktop::DBus("org.freedesktop.DBus", "/org/freedesktop/DBus", m_connection, this);
+    m_dbusproxy = new org::freedesktop::DBus("org.freedesktop.DBus", "/org/freedesktop/DBus", QDBusConnection::sessionBus(), this);
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString, QString, QString)), this, SLOT(imChanged(QString, QString, QString)));
 
     m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;

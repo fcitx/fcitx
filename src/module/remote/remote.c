@@ -40,6 +40,7 @@
 static void* RemoteCreate(FcitxInstance* instance);
 static void RemoteProcessEvent(void* arg);
 static void RemoteSetFD(void* arg);
+static void RemoteDestroy(void* arg);
 static int CreateSocket(const char *name);
 
 FCITX_EXPORT_API
@@ -47,7 +48,7 @@ FcitxModule module = {
     RemoteCreate,
     RemoteSetFD,
     RemoteProcessEvent,
-    NULL,
+    RemoteDestroy,
     NULL
 };
 
@@ -56,6 +57,7 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 typedef struct _FcitxRemote {
     FcitxInstance* owner;
+    char* socketfile;
     int socket_fd;
 } FcitxRemote;
 
@@ -64,20 +66,18 @@ void* RemoteCreate(FcitxInstance* instance)
     FcitxRemote* remote = fcitx_utils_malloc0(sizeof(FcitxRemote));
     remote->owner = instance;
 
-    char *socketfile;
-    asprintf(&socketfile, "/tmp/fcitx-socket-:%d", fcitx_utils_get_display_number());
-    remote->socket_fd = CreateSocket(socketfile);
+    asprintf(&remote->socketfile, "/tmp/fcitx-socket-:%d", fcitx_utils_get_display_number());
+    remote->socket_fd = CreateSocket(remote->socketfile);
     if (remote->socket_fd < 0) {
-        FcitxLog(ERROR, _("Can't open socket %s: %s"), socketfile, strerror(errno));
+        FcitxLog(ERROR, _("Can't open socket %s: %s"), remote->socketfile, strerror(errno));
         free(remote);
-        free(socketfile);
+        free(remote->socketfile);
         return NULL;
     }
 
     fcntl(remote->socket_fd, F_SETFD, FD_CLOEXEC);
     fcntl(remote->socket_fd, F_SETFL, O_NONBLOCK);
-    chmod(socketfile, 0600);
-    free(socketfile);
+    chmod(remote->socketfile, 0600);
     return remote;
 }
 
@@ -197,6 +197,15 @@ void RemoteSetFD(void* arg)
     FD_SET(remote->socket_fd, FcitxInstanceGetReadFDSet(remote->owner));
     if (FcitxInstanceGetMaxFD(remote->owner) < remote->socket_fd)
         FcitxInstanceSetMaxFD(remote->owner, remote->socket_fd);
+}
+
+void RemoteDestroy(void* arg)
+{
+    FcitxRemote* remote = (FcitxRemote*) arg;
+    close(remote->socket_fd);
+    unlink(remote->socketfile);
+    free(remote->socketfile);
+    free(remote);
 }
 
 

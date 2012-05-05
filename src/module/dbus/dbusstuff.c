@@ -54,6 +54,7 @@ typedef struct _FcitxDBus {
 static void* DBusCreate(FcitxInstance* instance);
 static void DBusSetFD(void* arg);
 static void DBusProcessEvent(void* arg);
+static void DBusDestroy(void* arg);
 static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
 static void* DBusGetAddress(void* arg, FcitxModuleFunctionArg args);
 static void* DBusGetPrivConnection(void* arg, FcitxModuleFunctionArg args);
@@ -66,7 +67,7 @@ FcitxModule module = {
     DBusSetFD,
     DBusProcessEvent,
     NULL,
-    NULL
+    DBusDestroy
 };
 
 FCITX_EXPORT_API
@@ -135,30 +136,30 @@ void* DBusCreate(FcitxInstance* instance)
         }
         if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
             FcitxLog(WARNING, "DBus Service Already Exists");
-            
+
             if (FcitxInstanceIsTryReplace(instance)) {
                 FcitxInstanceResetTryReplace(instance);
                 DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
                 dbus_connection_send(dbusmodule->conn, message, NULL);
                 /* synchronize call here */
                 DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 0, &err);
-                
+
                 if (dbus_error_is_set(&err)) {
                     dbus_error_free(&err);
                     dbus_error_init(&err);
                 }
-                
+
                 if (reply)
                     dbus_message_unref(reply);
                 dbus_message_unref(message);
-                
+
                 /* sleep for a while and retry */
                 sleep(1);
-                
+
                 request_retry = true;
                 continue;
             }
-            
+
             dbus_error_free(&err);
             free(servicename);
             free(dbusmodule);
@@ -192,6 +193,13 @@ void* DBusCreate(FcitxInstance* instance)
 
     return dbusmodule;
 }
+
+void DBusDestroy(void* arg)
+{
+    FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+    dbus_server_unref(dbusmodule->server);
+}
+
 
 void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args)
 {

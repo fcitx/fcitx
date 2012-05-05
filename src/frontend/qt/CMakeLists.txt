@@ -61,6 +61,7 @@ set(
     fcitx-plugin.cpp
     fcitx-input-context.cpp
     fcitx-formatted-preedit.cpp
+    fcitx-bus.cpp
 )
 
 set_property(
@@ -87,6 +88,7 @@ FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
 set(
     qtim_fcitx_MOC_HDRS
     fcitx-input-context.h
+    fcitx-bus.h
 )
 
 QT4_AUTOMOC(${qtim_fcitx_SRCS})
