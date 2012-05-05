@@ -63,8 +63,6 @@ public:
 
 private Q_SLOTS:
     void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
-    void closeIM();
-    void enableIM();
     void commitString(const QString& str);
     void updatePreedit(const QString& str, int cursorPos);
     void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
@@ -111,9 +109,7 @@ private:
     QFlags<FcitxCapacityFlags> m_capacity;
     int m_id;
     QString m_path;
-    bool m_enable;
     bool m_has_focus;
-    FcitxHotkey m_triggerKey[2];
     uint m_compose_buffer[FCITX_MAX_COMPOSE_LEN + 1];
     int m_n_compose;
     QString m_serviceName;

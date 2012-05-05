@@ -213,20 +213,6 @@ static guint16 cedilla_compose_seqs[] = {
 #endif
 };
 
-static
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey);
-
-static
-boolean FcitxIsHotKey(FcitxKeySym sym, int state, FcitxHotkey * hotkey)
-{
-    state &= FcitxKeyState_Ctrl_Alt_Shift;
-    if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
-        return true;
-    if (hotkey[1].sym && sym == hotkey[1].sym && (hotkey[1].state == state))
-        return true;
-    return false;
-}
-
 void
 fcitx_im_context_register_type(GTypeModule *type_module)
 {
@@ -494,11 +480,6 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
 
     if (IsFcitxIMClientValid(fcitxcontext->client) && fcitxcontext->has_focus) {
         _request_surrounding_text (fcitxcontext);
-
-        if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
-            if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
-                return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
-        }
 
         fcitxcontext->time = event->time;
 
@@ -1023,7 +1004,7 @@ fcitx_im_context_get_preedit_string(GtkIMContext   *context,
     FcitxLog(LOG_LEVEL, "fcitx_im_context_get_preedit_string");
     FcitxIMContext *fcitxcontext = FCITX_IM_CONTEXT(context);
 
-    if (IsFcitxIMClientValid(fcitxcontext->client) && IsFcitxIMClientEnabled(fcitxcontext->client)) {
+    if (IsFcitxIMClientValid(fcitxcontext->client)) {
         if (str) {
             if (fcitxcontext->preedit_string)
                 *str = strdup(fcitxcontext->preedit_string);
@@ -1066,7 +1047,7 @@ static void
 _slave_preedit_changed_cb(GtkIMContext *slave,
                           FcitxIMContext *context)
 {
-    if (context->client && IsFcitxIMClientEnabled(context->client)) {
+    if (context->client) {
         return;
     }
 
@@ -1076,7 +1057,7 @@ static void
 _slave_preedit_start_cb(GtkIMContext *slave,
                         FcitxIMContext *context)
 {
-    if (context->client && IsFcitxIMClientEnabled(context->client)) {
+    if (context->client) {
         return;
     }
 
@@ -1087,7 +1068,7 @@ static void
 _slave_preedit_end_cb(GtkIMContext *slave,
                       FcitxIMContext *context)
 {
-    if (context->client && IsFcitxIMClientEnabled(context->client)) {
+    if (context->client) {
         return;
     }
     g_signal_emit(context, _signal_preedit_end_id, 0);
@@ -1099,7 +1080,7 @@ _slave_retrieve_surrounding_cb(GtkIMContext *slave,
 {
     gboolean return_value;
 
-    if (context->client && IsFcitxIMClientEnabled(context->client)) {
+    if (context->client) {
         return FALSE;
     }
     g_signal_emit(context, _signal_retrieve_surrounding_id, 0,
@@ -1115,7 +1096,7 @@ _slave_delete_surrounding_cb(GtkIMContext *slave,
 {
     gboolean return_value;
 
-    if (context->client && IsFcitxIMClientEnabled(context->client)) {
+    if (context->client) {
         return FALSE;
     }
     g_signal_emit(context, _signal_delete_surrounding_id, 0, offset_from_cursor, nchars, &return_value);
@@ -1429,10 +1410,6 @@ _key_snooper_cb (GtkWidget   *widget,
     do {
         if (!IsFcitxIMClientValid(fcitxcontext->client)) {
             break;
-        }
-        if (!IsFcitxIMClientEnabled(fcitxcontext->client)) {
-            if (!FcitxIsHotKey(event->keyval, event->state, FcitxIMClientGetTriggerKey(fcitxcontext->client)))
-                break;
         }
 
         _request_surrounding_text (fcitxcontext);

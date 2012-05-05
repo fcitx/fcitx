@@ -147,7 +147,6 @@ QFcitxInputContext::QFcitxInputContext()
       m_icproxy(0),
       m_id(0),
       m_path(""),
-      m_enable(false),
       m_has_focus(false),
       m_n_compose(0),
       m_cursorPos(0),
@@ -159,9 +158,6 @@ QFcitxInputContext::QFcitxInputContext()
 
     m_dbusproxy = new org::freedesktop::DBus("org.freedesktop.DBus", "/org/freedesktop/DBus", m_connection, this);
     connect(m_dbusproxy, SIGNAL(NameOwnerChanged(QString, QString, QString)), this, SLOT(imChanged(QString, QString, QString)));
-
-    m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
-    m_triggerKey[0].state = m_triggerKey[1].state = 0;
 
     m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(fcitx_utils_get_display_number());
 
@@ -425,16 +421,6 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     memset(strbuf, 0, 64);
     XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
 
-
-    if (!m_enable) {
-        FcitxKeySym fcitxsym;
-        uint fcitxstate;
-        FcitxHotkeyGetKey((FcitxKeySym) sym, event->xkey.state, &fcitxsym, &fcitxstate);
-        if (!FcitxHotkeyIsHotKey(fcitxsym, fcitxstate, m_triggerKey)) {
-            return x11FilterEventFallback(keywidget, event, sym);
-        }
-    }
-
     m_icproxy->FocusIn();
 
     QDBusPendingReply< int > result = this->m_icproxy->ProcessKeyEvent(
@@ -488,9 +474,6 @@ void QFcitxInputContext::imChanged(const QString& service, const QString& oldown
                 delete m_icproxy;
                 m_icproxy = NULL;
             }
-            m_enable = false;
-            m_triggerKey[0].sym = m_triggerKey[1].sym = (FcitxKeySym) 0;
-            m_triggerKey[0].state = m_triggerKey[1].state = 0;
         }
 
         /* new rise */
@@ -520,16 +503,9 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         qWarning() << result.error();
     else {
         this->m_id = qdbus_cast<int>(result.argumentAt(0));
-        this->m_enable = qdbus_cast<bool>(result.argumentAt(1));
-        m_triggerKey[0].sym = (FcitxKeySym) qdbus_cast<uint>(result.argumentAt(2));
-        m_triggerKey[0].state = qdbus_cast<uint>(result.argumentAt(3));
-        m_triggerKey[1].sym = (FcitxKeySym) qdbus_cast<uint>(result.argumentAt(4));
-        m_triggerKey[1].state = qdbus_cast<uint>(result.argumentAt(5));
         this->m_path = QString(FCITX_IC_DBUS_PATH_QSTRING).arg(m_id);
         m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, m_connection, this);
-        connect(m_icproxy, SIGNAL(CloseIM()), this, SLOT(closeIM()));
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
-        connect(m_icproxy, SIGNAL(EnableIM()), this, SLOT(enableIM()));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
         connect(m_icproxy, SIGNAL(UpdatePreedit(QString, int)), this, SLOT(updatePreedit(QString, int)));
         connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxFormattedPreeditList,int)));
@@ -562,16 +538,6 @@ void QFcitxInputContext::updateCapacity()
     QDBusPendingCallWatcher watcher(result);
     loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
     loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
-}
-
-void QFcitxInputContext::closeIM()
-{
-    this->m_enable = false;
-}
-
-void QFcitxInputContext::enableIM()
-{
-    this->m_enable = true;
 }
 
 void QFcitxInputContext::commitString(const QString& str)
