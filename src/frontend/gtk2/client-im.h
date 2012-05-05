@@ -8,13 +8,13 @@
 
 G_BEGIN_DECLS
 
-typedef struct _FcitxInputMethod        FcitxInputMethod;
-typedef struct _FcitxInputMethodClass   FcitxInputMethodClass;
+typedef struct _FcitxClient        FcitxClient;
+typedef struct _FcitxClientClass   FcitxClientClass;
 
-#define FCITX_TYPE_INPUTMETHOD         (fcitx_inputmethod_get_type ())
-#define FCITX_INPUTMETHOD(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_INPUTMETHOD, FcitxInputMethod))
-#define FCITX_INPUTMETHOD_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_INPUTMETHOD, FcitxInputMethodClass))
-#define FCITX_INPUTMETHOD_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), FCITX_TYPE_INPUTMETHOD, FcitxInputMethodClass))
+#define FCITX_TYPE_CLIENT         (fcitx_client_get_type ())
+#define FCITX_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_CLIENT, FcitxClient))
+#define FCITX_CLIENT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_CLIENT, FcitxClientClass))
+#define FCITX_CLIENT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), FCITX_TYPE_CLIENT, FcitxClientClass))
 
 
 typedef struct _FcitxPreeditItem {
@@ -22,7 +22,7 @@ typedef struct _FcitxPreeditItem {
     gint32 type;
 } FcitxPreeditItem;
 
-struct _FcitxInputMethod {
+struct _FcitxClient {
     GObject parent_instance;
     GDBusProxy* improxy;
     GDBusProxy* icproxy;
@@ -32,7 +32,7 @@ struct _FcitxInputMethod {
     guint watch_id;
 };
 
-struct _FcitxInputMethodClass {
+struct _FcitxClientClass {
     GObjectClass parent_class;
 };
 
@@ -44,20 +44,20 @@ typedef struct _FcitxIMItem {
 } FcitxIMItem;
 
 
-FcitxInputMethod* fcitx_inputmethod_new();
+FcitxClient* fcitx_client_new();
 
-gboolean fcitx_inputmethod_is_valid(FcitxInputMethod* im);
-int fcitx_inputmethod_process_key_sync(FcitxInputMethod* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
-void fcitx_inputmethod_process_key(FcitxInputMethod* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
+gboolean fcitx_client_is_valid(FcitxClient* im);
+int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
+void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
 
-void fcitx_inputmethod_focusin(FcitxInputMethod* im);
-void fcitx_inputmethod_focusout(FcitxInputMethod* im);
-void fcitx_inputmethod_set_cusor_rect(FcitxInputMethod* im, int x, int y, int w, int h);
-void fcitx_inputmethod_set_surrounding_text(FcitxInputMethod* im, gchar* text, guint cursor, guint anchor);
-void fcitx_inputmethod_set_capacity(FcitxInputMethod* im, FcitxCapacityFlags flags);
-void fcitx_inputmethod_reset(FcitxInputMethod* im);
+void fcitx_client_focusin(FcitxClient* im);
+void fcitx_client_focusout(FcitxClient* im);
+void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h);
+void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor);
+void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags);
+void fcitx_client_reset(FcitxClient* im);
 
-GType        fcitx_inputmethod_get_type(void) G_GNUC_CONST;
+GType        fcitx_client_get_type(void) G_GNUC_CONST;
 
 G_END_DECLS
 

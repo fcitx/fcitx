@@ -43,7 +43,6 @@
 #include "MainWindow.h"
 #include "TrayWindow.h"
 #include "MenuWindow.h"
-#include "AboutWindow.h"
 #include "MessageWindow.h"
 #include "fcitx/hook.h"
 #include <fcitx-utils/utils.h>
@@ -151,7 +150,6 @@ void* ClassicUICreate(FcitxInstance* instance)
     classicui->inputWindow = CreateInputWindow(classicui);
     classicui->mainWindow = CreateMainWindow(classicui);
     classicui->trayWindow = CreateTrayWindow(classicui);
-    classicui->aboutWindow = CreateAboutWindow(classicui);
     classicui->messageWindow = CreateMessageWindow(classicui);
     classicui->mainMenuWindow = CreateMainMenuWindow(classicui);
 
@@ -412,7 +410,6 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
     FcitxInstance* instance = classicui->owner;
     FcitxMenuClear(menu);
 
-    FcitxMenuAddMenuItem(menu, _("About Fcitx"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
 
@@ -451,8 +448,6 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
     int length = utarray_len(&menu->shell);
     if (index == 0) {
-        DisplayAboutWindow(classicui->mainWindow->owner->aboutWindow);
-    } else if (index == 1) {
         FILE* p = popen("xdg-open http://fcitx-im.org/ &", "r");
         if (p)
             pclose(p);

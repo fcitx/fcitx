@@ -17,7 +17,6 @@ set(fcitx_classic_ui_SOURCES
     MainWindow.c
     MenuWindow.c
     MessageWindow.c
-    AboutWindow.c
     TrayWindow.c
     tray.c
     skinconfig.c

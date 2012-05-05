@@ -59,7 +59,6 @@ typedef struct _FcitxClassicUI {
     struct _MainWindow* mainWindow;
     struct _MessageWindow* messageWindow;
     struct _TrayWindow* trayWindow;
-    struct _AboutWindow* aboutWindow;
     FcitxUIMenu skinMenu;
 
     FcitxSkin skin;

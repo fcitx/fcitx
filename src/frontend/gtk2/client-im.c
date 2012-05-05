@@ -32,7 +32,7 @@
 
 static const gchar introspection_xml[] =
     "<node>"
-    "  <interface name=\"org.fcitx.Fcitx.InputMethod\">"
+    "  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">"
     "    <method name=\"CreateICv3\">\n"
     "      <arg name=\"appname\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"pid\" direction=\"in\" type=\"i\"/>\n"
@@ -103,7 +103,7 @@ static const gchar ic_introspection_xml[] =
     "  </interface>\n"
     "</node>\n";
 
-G_DEFINE_TYPE(FcitxInputMethod, fcitx_inputmethod, G_TYPE_OBJECT);
+G_DEFINE_TYPE(FcitxClient, fcitx_client, G_TYPE_OBJECT);
 
 enum {
     CONNTECTED_SIGNAL,
@@ -119,26 +119,26 @@ enum {
 static guint signals[LAST_SIGNAL] = {0};
 
 static GDBusInterfaceInfo *
-fcitx_inputmethod_get_interface_info(void);
+fcitx_client_get_interface_info(void);
 
 
-static void         fcitx_inputmethod_create_ic(FcitxInputMethod* im);
+static void         fcitx_client_create_ic(FcitxClient* im);
 
 static void
-_fcitx_inputmethod_create_ic_cb(GObject *source_object,
+_fcitx_client_create_ic_cb(GObject *source_object,
                                GAsyncResult *res,
                                gpointer user_data);
 
 
 static void
-fcitx_inputmethod_g_signal(GDBusProxy *proxy,
+fcitx_client_g_signal(GDBusProxy *proxy,
                             gchar      *sender_name,
                             gchar      *signal_name,
                             GVariant   *parameters,
                             gpointer    user_data);
 
 static GDBusInterfaceInfo *
-fcitx_inputmethod_get_interface_info(void)
+fcitx_client_get_interface_info(void)
 {
     static gsize has_info = 0;
     static GDBusInterfaceInfo *info = NULL;
@@ -152,7 +152,7 @@ fcitx_inputmethod_get_interface_info(void)
 }
 
 static GDBusInterfaceInfo *
-fcitx_inputmethod_get_clientic_info(void)
+fcitx_client_get_clientic_info(void)
 {
     static gsize has_info = 0;
     static GDBusInterfaceInfo *info = NULL;
@@ -166,9 +166,9 @@ fcitx_inputmethod_get_clientic_info(void)
 }
 
 static void
-fcitx_inputmethod_finalize(GObject *object)
+fcitx_client_finalize(GObject *object)
 {
-    FcitxInputMethod *im = FCITX_INPUTMETHOD(object);
+    FcitxClient *im = FCITX_CLIENT(object);
 
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "DestroyIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
@@ -183,11 +183,11 @@ fcitx_inputmethod_finalize(GObject *object)
     if (improxy)
         g_object_unref(improxy);
 
-    if (G_OBJECT_CLASS(fcitx_inputmethod_parent_class)->finalize != NULL)
-        G_OBJECT_CLASS(fcitx_inputmethod_parent_class)->finalize(object);
+    if (G_OBJECT_CLASS(fcitx_client_parent_class)->finalize != NULL)
+        G_OBJECT_CLASS(fcitx_client_parent_class)->finalize(object);
 }
 
-void fcitx_inputmethod_focusin(FcitxInputMethod* im)
+void fcitx_client_focusin(FcitxClient* im)
 {
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "FocusIn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
@@ -195,7 +195,7 @@ void fcitx_inputmethod_focusin(FcitxInputMethod* im)
 }
 
 
-void fcitx_inputmethod_focusout(FcitxInputMethod* im)
+void fcitx_client_focusout(FcitxClient* im)
 {
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "FocusOut", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
@@ -203,7 +203,7 @@ void fcitx_inputmethod_focusout(FcitxInputMethod* im)
 }
 
 
-void fcitx_inputmethod_reset(FcitxInputMethod* im)
+void fcitx_client_reset(FcitxClient* im)
 {
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "Reset", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
@@ -211,7 +211,7 @@ void fcitx_inputmethod_reset(FcitxInputMethod* im)
 }
 
 
-void fcitx_inputmethod_set_capacity(FcitxInputMethod* im, FcitxCapacityFlags flags)
+void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags)
 {
     uint32_t iflags = flags;
     if (im->icproxy) {
@@ -220,21 +220,21 @@ void fcitx_inputmethod_set_capacity(FcitxInputMethod* im, FcitxCapacityFlags fla
 }
 
 
-void fcitx_inputmethod_set_cusor_rect(FcitxInputMethod* im, int x, int y, int w, int h)
+void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h)
 {
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "SetCursorRect", g_variant_new("(iiii)", x, y, w, h), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
-void fcitx_inputmethod_set_surrounding_text(FcitxInputMethod* im, gchar* text, guint cursor, guint anchor)
+void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor)
 {
     if (im->icproxy) {
         g_dbus_proxy_call(im->icproxy, "SetSurroundingText", g_variant_new("(suu)", text, cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
-void fcitx_inputmethod_process_key(FcitxInputMethod* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
+void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
 {
     int itype = type;
     if (im->icproxy) {
@@ -248,7 +248,7 @@ void fcitx_inputmethod_process_key(FcitxInputMethod* im, GAsyncReadyCallback cb,
     }
 }
 
-int fcitx_inputmethod_process_key_sync(FcitxInputMethod* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
+int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
 {
     int itype = type;
     GError *error = NULL;
@@ -274,12 +274,12 @@ int fcitx_inputmethod_process_key_sync(FcitxInputMethod* im, guint32 keyval, gui
 }
 
 
-void fcitx_inputmethod_appear (GDBusConnection *connection,
+void fcitx_client_appear (GDBusConnection *connection,
                                 const gchar     *name,
                                 const gchar     *name_owner,
                                 gpointer         user_data)
 {
-    FcitxInputMethod* im = (FcitxInputMethod*) user_data;
+    FcitxClient* im = (FcitxClient*) user_data;
     gboolean new_owner_good = name_owner && (name_owner[0] != '\0');
     if (new_owner_good) {
         if (im->improxy) {
@@ -292,15 +292,15 @@ void fcitx_inputmethod_appear (GDBusConnection *connection,
             im->icproxy = NULL;
         }
 
-        fcitx_inputmethod_create_ic(im);
+        fcitx_client_create_ic(im);
     }
 }
 
-void fcitx_inputmethod_vanish (GDBusConnection *connection,
+void fcitx_client_vanish (GDBusConnection *connection,
                                const gchar     *name,
                                gpointer         user_data)
 {
-    FcitxInputMethod* im = (FcitxInputMethod*) user_data;
+    FcitxClient* im = (FcitxClient*) user_data;
     if (im->improxy) {
         g_object_unref(im->improxy);
         im->improxy = NULL;
@@ -313,7 +313,7 @@ void fcitx_inputmethod_vanish (GDBusConnection *connection,
 }
 
 static void
-fcitx_inputmethod_init(FcitxInputMethod *im)
+fcitx_client_init(FcitxClient *im)
 {
     sprintf(im->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
 
@@ -321,23 +321,23 @@ fcitx_inputmethod_init(FcitxInputMethod *im)
         G_BUS_TYPE_SESSION,
         im->servicename,
         G_BUS_NAME_WATCHER_FLAGS_NONE,
-        fcitx_inputmethod_appear,
-        fcitx_inputmethod_vanish,
+        fcitx_client_appear,
+        fcitx_client_vanish,
         im,
         NULL
     );
     im->improxy = NULL;
     im->icproxy = NULL;
 
-    fcitx_inputmethod_create_ic(im);
+    fcitx_client_create_ic(im);
 }
 static void
-fcitx_inputmethod_create_ic(FcitxInputMethod *im)
+fcitx_client_create_ic(FcitxClient *im)
 {
     GError* error = NULL;
     im->improxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
                                                 G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                            fcitx_inputmethod_get_interface_info(),
+                                            fcitx_client_get_interface_info(),
                                             im->servicename,
                                             FCITX_IM_DBUS_PATH,
                                             FCITX_IM_DBUS_INTERFACE,
@@ -362,20 +362,20 @@ fcitx_inputmethod_create_ic(FcitxInputMethod *im)
                       G_DBUS_CALL_FLAGS_NONE,
                       -1,           /* timeout */
                       NULL,
-                      _fcitx_inputmethod_create_ic_cb,
+                      _fcitx_client_create_ic_cb,
                       im);
     free(appname);
 
 }
 
 void
-_fcitx_inputmethod_create_ic_cb(GObject *source_object,
+_fcitx_client_create_ic_cb(GObject *source_object,
                                GAsyncResult *res,
                                gpointer user_data)
 {
     GError* error = NULL;
     GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
-    FcitxInputMethod* im = (FcitxInputMethod*) user_data;
+    FcitxClient* im = (FcitxClient*) user_data;
 
     if (error) {
         g_error_free(error);
@@ -390,7 +390,7 @@ _fcitx_inputmethod_create_ic_cb(GObject *source_object,
 
     im->icproxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
         G_DBUS_PROXY_FLAGS_NONE,
-        fcitx_inputmethod_get_clientic_info(),
+        fcitx_client_get_clientic_info(),
         im->servicename,
         im->icname,
         FCITX_IC_DBUS_INTERFACE,
@@ -414,7 +414,7 @@ _fcitx_inputmethod_create_ic_cb(GObject *source_object,
     }
     g_free(owner_name);
 
-    g_signal_connect(im->icproxy, "g-signal", G_CALLBACK(fcitx_inputmethod_g_signal), im);
+    g_signal_connect(im->icproxy, "g-signal", G_CALLBACK(fcitx_client_g_signal), im);
     g_signal_emit(user_data, signals[CONNTECTED_SIGNAL], 0);
 }
 
@@ -426,7 +426,7 @@ void _item_free(gpointer arg)
 }
 
 static void
-fcitx_inputmethod_g_signal(GDBusProxy *proxy,
+fcitx_client_g_signal(GDBusProxy *proxy,
                             gchar      *sender_name,
                             gchar      *signal_name,
                             GVariant   *parameters,
@@ -480,15 +480,15 @@ fcitx_inputmethod_g_signal(GDBusProxy *proxy,
 }
 
 static void
-fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
+fcitx_client_class_init(FcitxClientClass *klass)
 {
     GObjectClass *gobject_class;
 
     gobject_class = G_OBJECT_CLASS(klass);
-    gobject_class->finalize = fcitx_inputmethod_finalize;
+    gobject_class->finalize = fcitx_client_finalize;
 
     signals[CONNTECTED_SIGNAL] = g_signal_new("connected",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -498,7 +498,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                      0);
 
     signals[ENABLE_IM_SIGNAL] = g_signal_new("enable-im",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -508,7 +508,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                      0);
 
     signals[CLOSE_IM_SIGNAL] = g_signal_new("close-im",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -518,7 +518,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                      0);
 
     signals[FORWARD_KEY_SIGNAL] = g_signal_new("forward-key",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -530,7 +530,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                               );
 
     signals[COMMIT_STRING_SIGNAL] = g_signal_new("commit-string",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -541,7 +541,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                      G_TYPE_STRING);
 
     signals[DELETE_SURROUNDING_TEXT_SIGNAL] = g_signal_new("delete-surrounding-text",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -552,7 +552,7 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                      G_TYPE_INT, G_TYPE_UINT);
 
     signals[UPDATED_FORMATTED_PREEDIT_SIGNAL] = g_signal_new("update-formatted-preedit",
-                                     FCITX_TYPE_INPUTMETHOD,
+                                     FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
                                      NULL,
@@ -564,20 +564,20 @@ fcitx_inputmethod_class_init(FcitxInputMethodClass *klass)
                                                             );
 }
 
-FcitxInputMethod*
-fcitx_inputmethod_new()
+FcitxClient*
+fcitx_client_new()
 {
-    FcitxInputMethod* im = g_object_new(FCITX_TYPE_INPUTMETHOD, NULL);
+    FcitxClient* im = g_object_new(FCITX_TYPE_CLIENT, NULL);
 
     if (im != NULL) {
-        return FCITX_INPUTMETHOD(im);
+        return FCITX_CLIENT(im);
     }
     else
         return NULL;
     return im;
 }
 
-gboolean fcitx_inputmethod_is_valid(FcitxInputMethod* im)
+gboolean fcitx_client_is_valid(FcitxClient* im)
 {
     return im->icproxy != NULL;
 }

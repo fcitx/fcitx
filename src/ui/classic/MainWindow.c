@@ -43,7 +43,6 @@
 #include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
-#include "AboutWindow.h"
 #include "MenuWindow.h"
 #include <fcitx-utils/utils.h>
 
@@ -683,9 +682,6 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
             case Button1:
                 if (SetMouseStatus(mainWindow, NULL, RELEASE, RELEASE))
                     DrawMainWindow(mainWindow);
-                break;
-            case Button2:
-                DisplayAboutWindow(mainWindow->owner->aboutWindow);
                 break;
             }
             break;
