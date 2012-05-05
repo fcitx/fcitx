@@ -37,3 +37,4 @@ add_test(NAME teststring
 
 add_test(NAME testutf8
          COMMAND testutf8)
+
