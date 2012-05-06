@@ -1,6 +1,3 @@
-#ifndef _LUA_WRAP_H_
-#define _LUA_WRAP_H_
-
 /***************************************************************************
  *   Copyright (C) 2012~2012 by xubin                                      *
  *   nybux.tsui@gmail.com                                                  *
@@ -20,6 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+
+#ifndef _LUA_WRAP_H_
+#define _LUA_WRAP_H_
 
 typedef struct lua_State lua_State;
 typedef struct _LuaModule LuaModule;

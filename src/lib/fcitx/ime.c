@@ -770,7 +770,6 @@ void FcitxInstanceProcessInputReturnValue(
 
     if (retVal & IRV_FLAG_PENDING_COMMIT_STRING) {
         FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetOutputString(input));
-        instance->iHZInputed += (int)(fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
     }
 
     if (retVal & IRV_FLAG_DO_PHRASE_TIPS) {

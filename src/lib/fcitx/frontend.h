@@ -157,7 +157,9 @@ extern "C" {
      *
      * @param instance fcitx instance
      * @param ic input context
-     * @param str s
+     * @param str surrounding text
+     * @param cursor cursor of surrounding text
+     * @param anchor selection anchor of surrounding text
      * @return boolean
      **/
     boolean FcitxInstanceGetSurroundingText(struct _FcitxInstance* instance, FcitxInputContext* ic, char** str, unsigned int* cursor, unsigned int* anchor);

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by xubin                                      *
+ *   nybux.tsui@gmail.com                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,7 @@ extern "C" {
 
 #define FCITX_LUA_NAME "fcitx-lua"
 #define FCITX_LUA_CALLCOMMAND 0
-#define FCITX_LUA_CALLCOMMAND_RETURNTYPE void 
+#define FCITX_LUA_CALLCOMMAND_RETURNTYPE void
 
 
 #ifdef __cplusplus

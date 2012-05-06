@@ -79,6 +79,8 @@ extern "C" {
 
 #define MAX_MESSAGE_COUNT 64 /**< maximum message string number */
 
+    struct _FcitxAddon;
+
     /** fcitx menu item */
     typedef struct _FcitxMenuItem FcitxMenuItem;
     struct _FcitxUIMenu;
@@ -169,7 +171,7 @@ extern "C" {
          **/
         int mark;
 
-        boolean visible;
+        boolean visible; /**< menu is visible or not */
 
         int padding[15]; /**< padding */
     };
@@ -274,9 +276,8 @@ extern "C" {
         MSG_REGULAR_MASK = 0x7 /**< regular color type mask */
     } FcitxMessageType;
 
+    /** an array of message for display */
     typedef struct _FcitxMessages FcitxMessages;
-    struct _FcitxAddon;
-
     /** Fcitx Menu */
     typedef struct _FcitxUIMenu FcitxUIMenu;
     /** Fcitx Status, supports active/inactive */

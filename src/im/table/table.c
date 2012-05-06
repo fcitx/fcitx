@@ -361,7 +361,6 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                     INPUT_RETURN_VALUE ret = TableGetCandWord(table, candWord);
                                     if (ret & IRV_FLAG_PENDING_COMMIT_STRING) {
                                         FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetOutputString(input));
-                                        FcitxInstanceIncreaseInputCharacterCount(instance, fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
                                     }
                                 }
                             }
@@ -1238,7 +1237,6 @@ INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int stat
             if (!(ret & IRV_FLAG_PENDING_COMMIT_STRING))
                 break;
             FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetOutputString(input));
-            FcitxInstanceIncreaseInputCharacterCount(instance, fcitx_utf8_strlen(FcitxInputStateGetOutputString(input)));
         }
         else if (table->bSendRawPreedit) {
             FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));

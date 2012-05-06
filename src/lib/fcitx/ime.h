@@ -126,17 +126,22 @@ extern "C" {
     typedef INPUT_RETURN_VALUE (*FcitxIMKeyBlocker)(void* arg, FcitxKeySym, unsigned int); /**< FcitxIMKeyBlocker */
     typedef void (*FcitxIMUpdateSurroundingText)(void* arg); /**< FcitxIMKeyBlocker */
 
+    /**
+     * a more fexible interface for input method
+     *
+     * @since 4.2.3
+     **/
     typedef struct _FcitxIMIFace {
-        FcitxIMResetIM ResetIM;
-        FcitxIMDoInput DoInput;
-        FcitxIMGetCandWords GetCandWords;
-        FcitxIMPhraseTips PhraseTips;
-        FcitxIMSave Save;
-        FcitxIMInit Init;
-        FcitxIMReloadConfig ReloadConfig;
-        FcitxIMKeyBlocker KeyBlocker;
-        FcitxIMUpdateSurroundingText UpdateSurroundingText;
-        void* padding[64];
+        FcitxIMResetIM ResetIM /**< Reset input method state */;
+        FcitxIMDoInput DoInput /**< process key input */;
+        FcitxIMGetCandWords GetCandWords; /**< get candidate words */
+        FcitxIMPhraseTips PhraseTips; /**< don't use it */
+        FcitxIMSave Save; /**< force save input method data */
+        FcitxIMInit Init; /**< called when switch to this input method */
+        FcitxIMReloadConfig ReloadConfig; /**< reload configuration */
+        FcitxIMKeyBlocker KeyBlocker; /**< block unused key */
+        FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< surrounding text update trigger */
+        void* padding[64]; /**< padding */
     } FcitxIMIFace;
 
     /**
@@ -213,7 +218,7 @@ extern "C" {
          **/
         FcitxIMKeyBlocker KeyBlocker;
 
-        FcitxIMUpdateSurroundingText UpdateSurroundingText;
+        FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< called when surrounding text updated */
 
         void* padding[9]; /**< padding */
     } FcitxIM;
@@ -379,14 +384,7 @@ extern "C" {
      * @param uniqueName uniqueName which cannot be duplicated to others
      * @param name input method name
      * @param iconName icon name
-     * @param Init init callback
-     * @param ResetIM reset callback
-     * @param DoInput do input callback
-     * @param GetCandWords get candidate words callback
-     * @param PhraseTips phrase tips callback
-     * @param Save save callback
-     * @param ReloadConfig reload config callback
-     * @param KeyBlocker key blocker callback
+     * @param iface interface
      * @param priority order of this input method
      * @param langCode language code for this input method
      * @return void
@@ -762,6 +760,14 @@ extern "C" {
      **/
     void FcitxInstanceNotifyUpdateSurroundingText(struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
 
+    /**
+     * an standard key blocker, block all the key that cause cursor move when raw input buffer is not empty.
+     *
+     * @param input input state
+     * @param key keysym
+     * @param state key state
+     * @return INPUT_RETURN_VALUE
+     **/
     INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 
 #ifdef __cplusplus

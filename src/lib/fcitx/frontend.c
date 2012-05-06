@@ -245,6 +245,7 @@ void FcitxInstanceCommitString(FcitxInstance* instance, FcitxInputContext* ic, c
     FcitxInputState* input = instance->input;
     fcitx_utf8_strncpy(input->strLastCommit, str, MAX_USER_INPUT);
     input->strLastCommit[MAX_USER_INPUT] = '\0';
+    instance->iHZInputed += (int)(fcitx_utf8_strlen(str));
 
     if (pstr)
         free(pstr);

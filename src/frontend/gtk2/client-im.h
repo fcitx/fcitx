@@ -1,10 +1,29 @@
+/***************************************************************************
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
+ ***************************************************************************/
+
 #ifndef CLIENT_IM_H
 #define CLIENT_IM_H
 
 
 #include <gio/gio.h>
-#include <fcitx/ime.h>
-#include <fcitx/frontend.h>
+#include "fcitx/ime.h"
+#include "fcitx/frontend.h"
 
 G_BEGIN_DECLS
 
@@ -45,7 +64,6 @@ typedef struct _FcitxIMItem {
 
 
 FcitxClient* fcitx_client_new();
-
 gboolean fcitx_client_is_valid(FcitxClient* im);
 int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
 void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);

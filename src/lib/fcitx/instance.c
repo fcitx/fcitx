@@ -454,12 +454,6 @@ boolean FcitxInstanceSetCurrentIC(FcitxInstance* instance, FcitxInputContext* ic
     return changed;
 }
 
-FCITX_EXPORT_API
-void FcitxInstanceIncreaseInputCharacterCount(FcitxInstance* instance, int count)
-{
-    instance += count;
-}
-
 void FcitxInstanceInitBuiltContext(FcitxInstance* instance)
 {
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCT_Hotkey, FCF_ResetOnInputMethodChange);
