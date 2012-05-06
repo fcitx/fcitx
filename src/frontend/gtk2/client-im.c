@@ -432,7 +432,6 @@ fcitx_client_g_signal(GDBusProxy *proxy,
                             GVariant   *parameters,
                             gpointer    user_data)
 {
-    g_warning("%s %s", signal_name,  g_variant_print(parameters, true));
     if (strcmp(signal_name, "EnableIM") == 0) {
         g_signal_emit(user_data, signals[ENABLE_IM_SIGNAL], 0);
     }
