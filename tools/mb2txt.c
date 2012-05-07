@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
         printf(templ[TEMPL_VERNEW], iVersion);
         fread(&iTemp, sizeof(unsigned int), 1, fpDict);
     } else
-        printf(templ[TEMPL_VEROLD]);
+        printf("%s", templ[TEMPL_VEROLD]);
 
     fread(strCode, sizeof(char), iTemp + 1, fpDict);
 
@@ -182,13 +182,13 @@ int main(int argc, char *argv[])
     char cPhrase = guessValidChar('^', temp);
     free(temp);
     if (cPrompt == 0) {
-        printf(templ[TEMPL_PROMPT2]);
+        printf("%s", templ[TEMPL_PROMPT2]);
     }
     else {
         printf(templ[TEMPL_PROMPT], cPrompt);
     }
     if (cPhrase == 0) {
-        printf(templ[TEMPL_CONSTRUCTPHRASE2]);
+        printf("%s", templ[TEMPL_CONSTRUCTPHRASE2]);
     }
     else {
         printf(templ[TEMPL_CONSTRUCTPHRASE], cPhrase);
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 
     if (iRule) {
         //表示有组词规则
-        printf(templ[TEMPL_RULE]);
+        printf("%s", templ[TEMPL_RULE]);
 
         for (i = 0; i < iLen - 1; i++) {
             fread(&iRule, sizeof(unsigned char), 1, fpDict);
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf(templ[TEMPL_DATA]);
+    printf("%s", templ[TEMPL_DATA]);
 
     fread(&j, sizeof(unsigned int), 1, fpDict);
 
