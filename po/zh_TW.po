@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"f
 "POT-Creation-Date: 2012-05-03 19:24+0800\n"
 "PO-Revision-Date: 2012-04-28 21:14+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
@@ -416,7 +416,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:96
 msgid ""
-"Do not show input window if there is one one candidate (Hide when only "
+"Do not show input window if there is only one candidate (Hide when only "
 "preedit string must be selected)"
 msgstr "只有一個候選字時不顯示輸入視窗（必須勾選只有預編輯字串時不顯示視窗）"
 
