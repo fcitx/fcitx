@@ -133,9 +133,7 @@ MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
 void DisplayMainWindow(Display* dpy, MainWindow* mainWindow)
 {
     FcitxLog(DEBUG, _("DISPLAY MainWindow"));
-
-    if (!mainWindow->bMainWindowHidden)
-        XMapRaised(dpy, mainWindow->window);
+    XMapRaised(dpy, mainWindow->window);
 }
 
 void DrawMainWindow(MainWindow* mainWindow)
@@ -143,9 +141,6 @@ void DrawMainWindow(MainWindow* mainWindow)
     FcitxClassicUI* classicui = mainWindow->owner;
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
-
-    if (mainWindow->bMainWindowHidden)
-        return;
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
@@ -496,7 +491,8 @@ void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int 
 
 void CloseMainWindow(MainWindow *mainWindow)
 {
-    XUnmapWindow(mainWindow->dpy, mainWindow->window);
+    if (mainWindow->owner->hideMainWindow != HM_SHOW)
+        XUnmapWindow(mainWindow->dpy, mainWindow->window);
 }
 
 boolean SetMouseStatus(MainWindow *mainWindow, MouseE* mouseE, MouseE value, MouseE other)

@@ -49,7 +49,6 @@ typedef struct _MainWindow {
     Window window;
     cairo_surface_t* cs_main_bar;
     cairo_surface_t* cs_x_main_bar;
-    boolean bMainWindowHidden;
     FcitxClassicUIStatus logostat;
     FcitxClassicUIStatus imiconstat;
     struct _FcitxSkin* skin;
