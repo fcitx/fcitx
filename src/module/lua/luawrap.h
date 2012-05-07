@@ -21,18 +21,18 @@
 #ifndef _LUA_WRAP_H_
 #define _LUA_WRAP_H_
 
-typedef struct lua_State lua_State;
-typedef struct _LuaModule LuaModule;
-typedef struct _LuaExtension LuaExtension;
-typedef struct _FcitxInstance FcitxInstance;
+#include <lua.h>
 
 typedef struct _LuaResultItem {
     char *result;
     char *help;
 } LuaResultItem;
 
+typedef struct _LuaModule LuaModule;
+typedef struct _LuaExtension LuaExtension;
+
 // alloc/free luamodule
-LuaModule * LuaModuleAlloc(FcitxInstance *fcitx);
+LuaModule * LuaModuleAlloc(struct _FcitxInstance *fcitx);
 void LuaModuleFree(LuaModule *luamodule);
 FcitxInstance *GetFcitx(LuaModule *luamodule);
 

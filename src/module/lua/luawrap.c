@@ -58,13 +58,13 @@ typedef struct _ConverterItem {
     UT_hash_handle hh;
 } ConverterItem;
 
-typedef struct _LuaExtension {
+struct _LuaExtension {
     char *name;
     lua_State *lua;
     UT_hash_handle hh;
-} LuaExtension;
+};
 
-typedef struct _LuaModule {
+struct _LuaModule {
     FcitxInstance *fcitx;
     LuaExtension *extensions;
     CommandItem *commands;
@@ -73,7 +73,7 @@ typedef struct _LuaModule {
     ConverterItem *converters;
     ConverterItem *current_converter;
     size_t shortest_input_trigger_key_length;
-} LuaModule;
+};
 
 typedef void (*LuaResultFn)(LuaModule *luamodule, const char *in, const char *out);
 
