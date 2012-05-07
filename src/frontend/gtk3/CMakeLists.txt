@@ -52,7 +52,7 @@ add_library(im-fcitx-gtk3 MODULE ${FCITX_GTK3_IM_MODULE_SOURCES})
 set_target_properties( im-fcitx-gtk3 PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" OUTPUT_NAME "im-fcitx" LINK_FLAGS "-Wl,--no-undefined")
 
 if (GIO2_FOUND)
-target_link_libraries( im-fcitx-gtk3 ${GTK2_LIBRARIES} ${GIO2_LIBRARIES} fcitx-utils)
+target_link_libraries( im-fcitx-gtk3 ${GTK3_LIBRARIES} ${GIO2_LIBRARIES} fcitx-utils)
 else (GIO2_FOUND)
 target_link_libraries( im-fcitx-gtk3 ${GTK3_LIBRARIES} ${DBUS_GLIB_LIBRARIES} fcitx-utils)
 endif (GIO2_FOUND)
