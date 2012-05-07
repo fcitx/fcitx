@@ -620,7 +620,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:96
 msgid ""
-"Do not show input window if there is one one candidate (Hide when only "
+"Do not show input window if there is only one candidate (Hide when only "
 "preedit string must be selected)"
 msgstr ""
 
