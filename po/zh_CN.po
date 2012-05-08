@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-03 19:24+0800\n"
-"PO-Revision-Date: 2012-05-03 19:25+0800\n"
+"POT-Creation-Date: 2012-05-08 17:13+0800\n"
+"PO-Revision-Date: 2012-05-08 17:13+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.4\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1137
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1136
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1311
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1310
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -42,10 +42,6 @@ msgstr "Alt+右Shift"
 msgid "ALT_SHIFT"
 msgstr "Alt+Shift"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:415
-msgid "About Fcitx"
-msgstr "关于Fcitx"
-
 #: /home/saber/Develop/fcitx/data/config.desc:46
 msgid "Action after press enter"
 msgstr "回车键操作"
@@ -54,7 +50,7 @@ msgstr "回车键操作"
 msgid "Active"
 msgstr "激活"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:217
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:232
 msgid "Active Menu Color"
 msgstr "活动菜单项颜色"
 
@@ -66,7 +62,12 @@ msgstr "活动菜单项颜色"
 msgid "Active Mode Icon"
 msgstr "激活状态输入法图标"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:189
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:117
+#, fuzzy
+msgid "Active Text Icon Color"
+msgstr "活动菜单项颜色"
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:204
 msgid "Active Tray Icon"
 msgstr "活动输入法图标"
 
@@ -166,8 +167,8 @@ msgid "Available Value:"
 msgstr "可选值："
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:64
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:117
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:197
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:132
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:212
 msgid "Background Image"
 msgstr "背景图片"
 
@@ -187,11 +188,11 @@ msgstr "Ctrl+Shift"
 msgid "Can not find System Database of Pinyin!"
 msgstr "无法找到系统的拼音词库"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:138
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:139
 msgid "Can not load default skin, is installion correct?"
 msgstr "无法加载默认皮肤，安装是否正确？"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:143
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:144
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
@@ -236,7 +237,7 @@ msgstr "无法保存拼音索引: %s"
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:449
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:448
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -252,11 +253,11 @@ msgstr "选择键"
 msgid "Choose Second and Third Candidate Word"
 msgstr "选择第二第三候选词"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:504
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:503
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:496
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:495
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
 
@@ -280,6 +281,10 @@ msgstr "清除"
 msgid "Close"
 msgstr "关闭"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:198
+msgid "Close virtual keyboard"
+msgstr "关闭虚拟键盘"
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:15
 msgid "Code Table File"
 msgstr "码表文件"
@@ -288,7 +293,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1135
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1134
 msgid "Code is "
 msgstr "编码为 "
 
@@ -296,7 +301,7 @@ msgstr "编码为 "
 msgid "CodeTable"
 msgstr "码表"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:137
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:152
 msgid "Color of Cursor"
 msgstr "光标颜色"
 
@@ -316,7 +321,7 @@ msgstr "当输入码表中非法的按键时提交输入并且发送这个按键
 msgid "ConfigFile"
 msgstr "配置文件"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:445
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:442
 msgid "Configure"
 msgstr "配置"
 
@@ -362,11 +367,11 @@ msgstr "DBus 支持"
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:136
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:135
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:151
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:145
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -404,7 +409,7 @@ msgstr "禁用插件 %s，依赖 %s 无法满足。"
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:310
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:369
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:724
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
 msgid "Disabled"
 msgstr "禁用"
 
@@ -503,7 +508,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:446
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:443
 msgid "Exit"
 msgstr "退出"
 
@@ -542,14 +547,14 @@ msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:104
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:181
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:233
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:196
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:248
 msgid "Fill Background Horizontal rule"
 msgstr "横向填充规则"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:96
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:173
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:225
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:188
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:240
 msgid "Fill Background Vertical rule"
 msgstr "纵向填充规则"
 
@@ -581,11 +586,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:414
 msgid "Frontend: bad frontend"
 msgstr "前端: 有问题的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:401
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:402
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
@@ -718,7 +723,12 @@ msgstr "非激活"
 msgid "Inactive Menu Item Character Color"
 msgstr "非活动菜单项颜色"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:193
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:122
+#, fuzzy
+msgid "Inactive Text Icon Color"
+msgstr "活动菜单项颜色"
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:208
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
 
@@ -731,7 +741,7 @@ msgid "Input Message Color"
 msgstr "输入信息颜色"
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1244
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1243
 msgid "Input Method"
 msgstr "输入法"
 
@@ -739,11 +749,11 @@ msgstr "输入法"
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:724
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1309
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -769,7 +779,7 @@ msgstr "配置项不合法:  行%d 缺少'='"
 msgid "It's the first time Fcitx Start."
 msgstr "这是 Fcitx 首次启动"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:246
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:261
 msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
 
@@ -801,15 +811,15 @@ msgstr "语言代码"
 msgid "Language Code for this table"
 msgstr "这个码表的语言代码"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:141
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:156
 msgid "Left-down position of Input"
 msgstr "输入文字左下角"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:145
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:160
 msgid "Left-down position of Output"
 msgstr "输出文字左下角"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:421
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:420
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -932,9 +942,9 @@ msgstr "原生"
 msgid "Next Page"
 msgstr "下一页"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:153
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:161
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:169
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:168
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:176
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:184
 msgid "Next Page Icon"
 msgstr "下一页图标"
 
@@ -946,7 +956,7 @@ msgstr "否"
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:434
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:435
 msgid "No available frontend"
 msgstr "无可用前端"
 
@@ -954,7 +964,7 @@ msgstr "无可用前端"
 msgid "Nothing"
 msgstr "无操作"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:416
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:413
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -1012,7 +1022,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1132
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1131
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -1030,7 +1040,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:447
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:446
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1077,9 +1087,9 @@ msgstr "按下数字加入常用字表"
 msgid "Prev Page"
 msgstr "上一页"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:149
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:157
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:165
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:164
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:172
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:180
 msgid "Prev Page Icon"
 msgstr "上一页图标"
 
@@ -1169,7 +1179,7 @@ msgstr "注册输入法方法"
 msgid "Remind"
 msgstr "联想"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1028
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1027
 msgid "Remind:"
 msgstr "联想："
 
@@ -1190,26 +1200,26 @@ msgid "Resize"
 msgstr "变形规则"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:92
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:133
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:205
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:148
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:220
 msgid "Resize Margin Bottom"
 msgstr "下边距"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:80
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:121
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:209
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:136
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:224
 msgid "Resize Margin Left"
 msgstr "左边距"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:84
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:125
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:213
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:140
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:228
 msgid "Resize Margin Right"
 msgstr "右边距"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:88
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:129
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:201
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:144
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:216
 msgid "Resize Margin Top"
 msgstr "上边距"
 
@@ -1313,7 +1323,7 @@ msgstr "Fcitx 简单的拼音支持"
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "简繁转换"
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:853
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:886
 msgid "Skin"
 msgstr "皮肤"
 
@@ -1358,7 +1368,7 @@ msgstr "皮肤菜单设置"
 msgid "SkinTrayIcon"
 msgstr "皮肤托盘图标设置"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:221
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:236
 msgid "Space Line Color"
 msgstr "分隔线颜色"
 
@@ -1367,7 +1377,7 @@ msgstr "分隔线颜色"
 msgid "Space for %s Enter for %s"
 msgstr "空格输入 %s 回车输入 %s"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:112
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:127
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
@@ -1490,9 +1500,9 @@ msgstr "界面: 有问题的界面"
 msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:470
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:807
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:455
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:465
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:820
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1516,6 +1526,10 @@ msgstr "使用完整拼音"
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:126
 msgid "Use Custom Prompt String defined in table"
 msgstr "使用码表中自定义的提示文本"
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:112
+msgid "Use Custom text icon color"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Use Full Width Character"
@@ -1574,7 +1588,7 @@ msgstr "用于输入特殊字符的虚拟键盘"
 msgid "Virtual Keyboard"
 msgstr "虚拟键盘"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:241
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:256
 msgid "Virtual Keyboard Image"
 msgstr "虚拟键盘图片"
 
@@ -1635,7 +1649,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1313
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1312
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -1656,6 +1670,9 @@ msgstr "pthread mutex init failed"
 #, c-format
 msgid "your current font is: %s"
 msgstr "当前字体为: %s"
+
+#~ msgid "About Fcitx"
+#~ msgstr "关于Fcitx"
 
 #~ msgid "Chinese Input Method"
 #~ msgstr "中文输入法"

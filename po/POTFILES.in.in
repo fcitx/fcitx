@@ -52,7 +52,6 @@
 @REL_SOURCE_ROOT@/src/module/dbus/dbusstuff.c
 @REL_SOURCE_ROOT@/src/module/fullwidthchar/fullwidthchar.c
 @REL_SOURCE_ROOT@/src/module/remote/remote.c
-@REL_SOURCE_ROOT@/src/ui/classic/AboutWindow.c
 @REL_SOURCE_ROOT@/src/ui/classic/MessageWindow.c
 @REL_SOURCE_ROOT@/src/ui/classic/TrayWindow.c
 @REL_SOURCE_ROOT@/src/ui/classic/classicuiconfig.c
@@ -133,7 +132,6 @@
 @REL_SOURCE_ROOT@/src/module/x11/xerrorhandler.h
 @REL_SOURCE_ROOT@/src/module/autoeng/AutoEng.h
 @REL_SOURCE_ROOT@/src/module/dbus/dbusstuff.h
-@REL_SOURCE_ROOT@/src/ui/classic/AboutWindow.h
 @REL_SOURCE_ROOT@/src/ui/classic/InputWindow.h
 @REL_SOURCE_ROOT@/src/ui/classic/MainWindow.h
 @REL_SOURCE_ROOT@/src/ui/classic/MenuWindow.h

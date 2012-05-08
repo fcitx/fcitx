@@ -169,10 +169,6 @@ void *VKCreate(FcitxInstance* instance)
     vkstate->vkmenu.priv = vkstate;
     vkstate->vkmenu.isSubMenu = false;
 
-    int i;
-    for (i = 0; i < vkstate->iVKCount; i ++)
-        FcitxMenuAddMenuItem(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
-
     FcitxUIRegisterMenu(instance, &vkstate->vkmenu);
 
     return vkstate;
@@ -181,13 +177,26 @@ void *VKCreate(FcitxInstance* instance)
 boolean VKMenuAction(FcitxUIMenu *menu, int index)
 {
     FcitxVKState* vkstate = (FcitxVKState*) menu->priv;
-    SelectVK(vkstate, index);
+    if (index < vkstate->iVKCount)
+        SelectVK(vkstate, index);
+    else {
+        if (vkstate->bVK) {
+            FcitxUIUpdateStatus(vkstate->owner, "vk");
+        }
+    }
     return true;
 }
 
 void UpdateVKMenu(FcitxUIMenu *menu)
 {
     FcitxVKState* vkstate = (FcitxVKState*) menu->priv;
+    FcitxMenuClear(menu);
+    int i;
+    for (i = 0; i < vkstate->iVKCount; i ++)
+        FcitxMenuAddMenuItem(&vkstate->vkmenu, vkstate->vks[i].strName, MENUTYPE_SIMPLE, NULL);
+    if (vkstate->bVK) {
+        FcitxMenuAddMenuItem(&vkstate->vkmenu, _("Close virtual keyboard"), MENUTYPE_SIMPLE, NULL);
+    }
     menu->mark = vkstate->iCurrentVK;
 }
 
