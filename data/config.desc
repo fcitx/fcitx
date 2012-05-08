@@ -93,7 +93,7 @@ Description=Do not show input window if there is only preedit string
 [Appearance/HideInputWindowWhenOnlyOneCandidate]
 Type=Boolean
 DefaultValue=False
-Description=Do not show input window if there is one one candidate (Hide when only preedit string must be selected)
+Description=Do not show input window if there is only one candidate (Hide when only preedit string must be selected)
 
 [Hotkey/TriggerKey]
 Type=Hotkey

@@ -419,7 +419,7 @@ msgstr "窗口失去焦点时不提交预编辑文本"
 
 #: /home/saber/Develop/fcitx/data/config.desc:96
 msgid ""
-"Do not show input window if there is one one candidate (Hide when only "
+"Do not show input window if there is only one candidate (Hide when only "
 "preedit string must be selected)"
 msgstr "只有一个候选词时不显示输入窗口（只有预编辑字符串时不显示窗口必须选中）"
 
