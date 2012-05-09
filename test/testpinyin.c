@@ -41,5 +41,7 @@ int main(int argc, char* argv[])
     PrintParsedPY(&parse, "bi er");
     ParsePY(&pyconfig, "bingan", &parse, PY_PARSE_INPUT_USER, false);
     PrintParsedPY(&parse, "bing an");
+    ParsePY(&pyconfig, "xiai", &parse, PY_PARSE_INPUT_USER, false);
+    PrintParsedPY(&parse, "xi ai");
     return 0;
 }

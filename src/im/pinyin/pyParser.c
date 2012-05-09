@@ -172,7 +172,7 @@ void ParsePY(FcitxPinyinConfig *pyconfig, const char *strPY, ParsePYStruct * par
                  * there might be another possbility, for example "wanan" can be "wa nan" and "wan an"
                  * try resolve these problem here
                  */
-                if (strTemp[0] == 'g' || strTemp[0] == 'n' || strTemp[0] == 'e') {
+                if (strTemp[0] == 'g' || strTemp[0] == 'n' || strTemp[0] == 'e' || strTemp[0] == 'a') {
                     strncpy(strTemp, strP, lIndex - 1);
                     strTemp[lIndex - 1] = '\0';
 
