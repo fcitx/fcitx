@@ -23,6 +23,8 @@
 #define FCITX_PUNC_NAME "fcitx-punc"
 #define FCITX_PUNC_GETPUNC 0
 #define FCITX_PUNC_GETPUNC_RETURNTYPE char*
+#define FCITX_PUNC_GETPUNC2 1
+#define FCITX_PUNC_GETPUNC2_RETURNTYPE void*
 
 #endif
 

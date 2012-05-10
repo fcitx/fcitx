@@ -58,7 +58,7 @@ typedef struct _WidePunc {
 typedef struct _FcitxPunc {
     char* langCode;
     WidePunc* curPunc;
-    
+
     UT_hash_handle hh;
 } FcitxPunc;
 
@@ -70,6 +70,7 @@ static void* PuncCreate(FcitxInstance* instance);
 static boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static boolean ProcessPunc(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal);
 static void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg);
+static void* PuncGetPunc2(void* a, FcitxModuleFunctionArg arg);
 static void TogglePuncState(void *arg);
 static boolean GetPuncState(void *arg);
 static void ReloadPunc(void *arg);
@@ -110,7 +111,7 @@ void* PuncCreate(FcitxInstance* instance)
     hk.func = ProcessPunc;
 
     FcitxInstanceRegisterPostInputFilter(instance, hk);
-    
+
     hk.func = PuncPreFilter;
     FcitxInstanceRegisterPreInputFilter(instance, hk);
 
@@ -128,16 +129,17 @@ void* PuncCreate(FcitxInstance* instance)
     hook.func = ResetPunc;
 
     FcitxInstanceRegisterResetInputHook(instance, hook);
-    
+
     hook.func = ResetPuncWhichStatus;
 
     FcitxInstanceRegisterInputUnFocusHook(instance, hook);
-    
+
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, PuncLanguageChanged, puncState);
 
     FcitxUIRegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
+    AddFunction(puncaddon, PuncGetPunc2);
     return puncState;
 }
 
@@ -152,9 +154,9 @@ void PuncLanguageChanged(void* arg, const void* value)
             puncState->curPunc = punc->curPunc;
         else
             puncState->curPunc = NULL;
-    } else 
+    } else
         puncState->curPunc = NULL;
-    
+
     FcitxUISetStatusVisable (puncState->owner, "punc",  puncState->curPunc != NULL) ;
 }
 
@@ -163,6 +165,33 @@ void* PuncGetPunc(void* a, FcitxModuleFunctionArg arg)
     FcitxPuncState* puncState = (FcitxPuncState*) a;
     int *key = arg.args[0];
     return GetPunc(puncState, *key);
+}
+
+
+void* PuncGetPunc2(void* a, FcitxModuleFunctionArg arg)
+{
+    FcitxPuncState* puncState = (FcitxPuncState*) a;
+    int *key = arg.args[0];
+    char** p1 = arg.args[1];
+    char** p2 = arg.args[2];
+    int             iIndex = 0;
+    WidePunc       *curPunc = puncState->curPunc;
+
+    if (!curPunc)
+        return NULL;
+
+    while (curPunc[iIndex].ASCII) {
+        if (curPunc[iIndex].ASCII == *key) {
+            if (p1)
+                *p1 = curPunc[iIndex].strWidePunc[0];
+            if (curPunc[iIndex].iCount > 1 && p2)
+                *p2 = curPunc[iIndex].strWidePunc[1];
+            break;
+        }
+        iIndex++;
+    }
+
+    return NULL;
 }
 
 void ResetPunc(void* arg)
@@ -176,12 +205,12 @@ void ResetPuncWhichStatus(void* arg)
 {
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     WidePunc       *curPunc = puncState->curPunc;
-    
+
     if (!curPunc)
         return;
-    
+
     int iIndex = 0;
-    
+
     while (curPunc[iIndex].ASCII) {
         curPunc[iIndex].iWhich = 0;
         iIndex++;
@@ -307,7 +336,7 @@ boolean LoadPuncDict(FcitxPuncState* puncState)
             HASH_ADD_KEYPTR(hh, puncState->puncSet, punc->langCode, strlen(punc->langCode), punc);
         curpuncfile = curpuncfile->hh.next;
     }
-    
+
     fcitx_utils_free_string_hash_set(puncfiles);
     return true;
 }
@@ -320,7 +349,7 @@ FcitxPunc* LoadPuncFile(const char* filename)
     char           *pstr;               // 临时指针
     int             i;
     fpDict = FcitxXDGGetFileWithPrefix("data", filename, "r", NULL);
-    
+
     if (strlen(filename) < strlen(PUNC_DICT_FILENAME))
         return NULL;
 
@@ -387,18 +416,18 @@ FcitxPunc* LoadPuncFile(const char* filename)
 
     punc[iRecordNo].ASCII = '\0';
     fclose(fpDict);
-    
+
     FcitxPunc* p = fcitx_utils_malloc0(sizeof(FcitxPunc));
     p->langCode = "";
-    
+
     const char* langcode = filename + strlen(PUNC_DICT_FILENAME);
     if (*langcode == '\0')
         p->langCode = strdup("C");
     else
         p->langCode = strdup(langcode + 1);
-        
+
     p->curPunc = punc;
-    
+
     return p;
 }
 
@@ -478,7 +507,7 @@ void ReloadPunc(void* arg)
     FcitxPuncState* puncState = (FcitxPuncState*) arg;
     FreePunc(puncState);
     LoadPuncDict(puncState);
-    
+
     PuncLanguageChanged(puncState, FcitxInstanceGetContextString(puncState->owner, CONTEXT_IM_LANGUAGE));
 }
 
