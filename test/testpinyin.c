@@ -25,6 +25,8 @@ int main(int argc, char* argv[])
 {
     FcitxPinyinConfig pyconfig;
     ParsePYStruct parse;
+    memset(&pyconfig, sizeof(pyconfig), 0);
+    memset(&parse, sizeof(pyconfig), 0);
     InitPYTable(&pyconfig);
     InitPYSplitData(&pyconfig);
     ParsePY(&pyconfig, "wanan", &parse, PY_PARSE_INPUT_USER, false);
