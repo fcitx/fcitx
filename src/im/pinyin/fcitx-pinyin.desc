@@ -11,6 +11,11 @@ Enum6=User Defined
 DefaultValue=Ziranma
 Description=Default Shuangpin Schema
 
+[Pinyin/FixCursorAtHead]
+Type=Boolean
+DefaultValue=False
+Description=Fix preedit cursor at head
+
 [Pinyin/UseCompletePinyin]
 Type=Boolean
 DefaultValue=False

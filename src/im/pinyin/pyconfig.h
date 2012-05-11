@@ -51,6 +51,7 @@ typedef struct _FcitxPinyinConfig {
     boolean bFullPY;
     boolean bPYCreateAuto;
     boolean bPYSaveAutoAsPhrase;
+    boolean bFixCursorAtHead;
     ADJUSTORDER baseOrder;
     ADJUSTORDER phraseOrder;
     ADJUSTORDER freqOrder;

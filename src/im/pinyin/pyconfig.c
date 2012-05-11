@@ -36,6 +36,7 @@ static FcitxConfigFileDesc* GetPYConfigDesc();
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
 CONFIG_BINDING_REGISTER("Pinyin", "DefaultShuangpinSchema", spscheme)
+CONFIG_BINDING_REGISTER("Pinyin", "FixCursorAtHead", bFixCursorAtHead)
 CONFIG_BINDING_REGISTER("Pinyin", "UseCompletePinyin", bFullPY)
 CONFIG_BINDING_REGISTER("Pinyin", "AutoCreatePhrase", bPYCreateAuto)
 CONFIG_BINDING_REGISTER("Pinyin", "SaveAutoPhrase", bPYSaveAutoAsPhrase)
