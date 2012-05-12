@@ -439,6 +439,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
         FcitxMenuAddMenuItem(menu, menup->name, MENUTYPE_SUBMENU, menup);
     }
     FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Configure Current Input Method"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Configure"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Exit"), MENUTYPE_SIMPLE, NULL);
 }
@@ -463,6 +464,20 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
             pclose(p);
         else
             FcitxLog(ERROR, _("Unable to create process"));
+    } else if (index == length - 3) { /* Configuration */
+        FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
+        if (im && im->owner) {
+            char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
+            char* commandf;
+            asprintf(&commandf, "%s %s &", command, im->owner->name);
+            FILE* p = popen(commandf, "r");
+            free(command);
+            free(commandf);
+            if (p)
+                pclose(p);
+            else
+                FcitxLog(ERROR, _("Unable to create process"));
+        }
     }
     return true;
 }

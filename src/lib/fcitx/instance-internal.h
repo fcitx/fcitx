@@ -106,6 +106,8 @@ struct _FcitxInstance {
     int lastIMIndex;
 
     char* fallbackuiName;
+
+    FcitxAddon* currentIMAddon;
 };
 
 #endif

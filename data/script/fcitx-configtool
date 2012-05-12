@@ -26,9 +26,13 @@ run_kde()
     fi
 
     if [ $haskde = "1" ]; then
-        exec $command kcm_fcitx
+        if [ x"$1" != x ]; then
+            exec $command kcm_fcitx --args $1
+        else
+            exec $command kcm_fcitx
+        fi
     else
-        run_gtk
+        run_gtk $1
     fi
 }
 
@@ -46,9 +50,9 @@ run_gtk3()
 {
     command=`which fcitx-config-gtk3 2>&1`
     if [ $? -eq 0 ]; then
-        exec $command
+        exec $command $1
     else
-        run_gtk
+        run_gtk $1
     fi
 }
 
@@ -56,7 +60,11 @@ run_xdg()
 {
     command=`which xdg-open`
     if [ $? -eq 0 ]; then
-        exec $command $HOME/.config/fcitx/config
+        if [ x"$1" != x ]; then
+            exec $command "$HOME/.config/fcitx/conf/$1.config"
+        else
+            exec $command "$HOME/.config/fcitx/config"
+        fi
     else
         exit 0
     fi
@@ -73,9 +81,9 @@ detectDE
 
 case "$DE" in
     kde)
-        run_kde
+        run_kde $1
         ;;
     *)
-        run_gtk3
+        run_gtk3 $1
         ;;
 esac

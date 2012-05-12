@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-08 17:13+0800\n"
+"POT-Creation-Date: 2012-05-12 17:17+0800\n"
 "PO-Revision-Date: 2012-05-08 17:13+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1310
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1306
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -130,7 +130,7 @@ msgstr "自動"
 msgid "Auto Change to English Mode while Input Specific String"
 msgstr "在輸入特定字串時自動切換到英文模式"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:22
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:27
 msgid "Auto Create Phrase"
 msgstr ""
 
@@ -202,7 +202,7 @@ msgstr ""
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:328
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:357
 msgid "Can't open punc file."
 msgstr ""
 
@@ -223,17 +223,17 @@ msgstr "候選字數"
 msgid "Cangjie"
 msgstr "倉頡"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1838
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1845
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1911
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1918
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1774
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1781
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
@@ -322,9 +322,14 @@ msgstr ""
 msgid "ConfigFile"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:442
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:443
 msgid "Configure"
 msgstr "設定"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:442
+#, fuzzy
+msgid "Configure Current Input Method"
+msgstr "中文輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:860
 #, c-format
@@ -509,7 +514,7 @@ msgstr "精確相符"
 msgid "Exec"
 msgstr "Exec"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:443
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:444
 msgid "Exit"
 msgstr "離開"
 
@@ -567,8 +572,12 @@ msgstr ""
 msgid "First Candidate Display as Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:134
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:139
 msgid "Fix misstype gn/ng"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:17
+msgid "Fix preedit cursor at head"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:14
@@ -600,7 +609,7 @@ msgstr "前端：開啟 %s 失敗 %s"
 msgid "Full Width Character"
 msgstr "全形字元"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:138
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:139
 msgid "Full Width Punctuation"
 msgstr "全形標點符號"
 
@@ -608,47 +617,47 @@ msgstr "全形標點符號"
 msgid "Fullwidth Character"
 msgstr "全形字元"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:79
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:84
 msgid "Fuzzy an and ang"
 msgstr "模糊 an 和 ang"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:109
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:114
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:84
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:89
 msgid "Fuzzy en and eng"
 msgstr "模糊 en 和 eng"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:114
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:119
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:89
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:94
 msgid "Fuzzy ian and iang"
 msgstr "模糊 ian 和 iang"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:94
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:99
 msgid "Fuzzy in and ing"
 msgstr "模糊 in 和 ing"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:119
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:124
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:99
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:104
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:124
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:129
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:104
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:109
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:129
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:134
 msgid "Fuzzy z and zh"
 msgstr ""
 
@@ -668,28 +677,28 @@ msgstr "隱藏"
 msgid "Hotkey"
 msgstr "快捷鍵"
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:32
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:37
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:42
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:47
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:37
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:42
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:47
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:52
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:281
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:275
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:267
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:261
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr "輸入法：開啟 %s 失敗 %s"
@@ -706,7 +715,8 @@ msgstr "圖示名稱"
 msgid ""
 "If you use login manager like gdm or kdm, put those lines in your ~/."
 "xprofile."
-msgstr "如果您使用登錄管理器，比如 gdm 或 kdm，請將這幾行加入到 ~/.xprofile 中。"
+msgstr ""
+"如果您使用登錄管理器，比如 gdm 或 kdm，請將這幾行加入到 ~/.xprofile 中。"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:196
 msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
@@ -741,7 +751,7 @@ msgid "Input Message Color"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1243
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1239
 msgid "Input Method"
 msgstr "輸入法"
 
@@ -753,7 +763,7 @@ msgstr "輸入法"
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1304
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -899,7 +909,7 @@ msgstr "選單字型"
 msgid "Menu Font Size"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2302
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2309
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -952,7 +962,7 @@ msgstr ""
 msgid "No"
 msgstr "否"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:481
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:479
 msgid "No available Input Method"
 msgstr "無可用輸入法"
 
@@ -1183,7 +1193,7 @@ msgstr "聯想"
 msgid "Remind:"
 msgstr "聯想："
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2169
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2176
 msgid "Remind: "
 msgstr "聯想："
 
@@ -1223,15 +1233,15 @@ msgstr ""
 msgid "Resize Margin Top"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:65
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:70
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:56
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:61
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:74
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:79
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
@@ -1239,7 +1249,7 @@ msgstr ""
 msgid "SHIFT Both"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:27
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:32
 msgid "Save Auto Created Phrase"
 msgstr ""
 
@@ -1500,8 +1510,9 @@ msgstr ""
 msgid "UI: open %s fail %s"
 msgstr "使用者界面：開啟 %s 失敗 %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:455
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:465
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:820
 msgid "Unable to create process"
 msgstr "無法建立行程"
@@ -1519,7 +1530,7 @@ msgstr "唯一名稱"
 msgid "Unknown type, take it as string: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:17
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:22
 msgid "Use Complete Pinyin"
 msgstr ""
 
@@ -1649,7 +1660,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1312
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 
@@ -1673,9 +1684,6 @@ msgstr ""
 
 #~ msgid "About Fcitx"
 #~ msgstr "關於 Fcitx"
-
-#~ msgid "Chinese Input Method"
-#~ msgstr "中文輸入法"
 
 #~ msgid "Hotkey of Going Next Page"
 #~ msgstr "快捷鍵：下一頁"

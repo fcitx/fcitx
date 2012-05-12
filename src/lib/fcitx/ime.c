@@ -98,7 +98,6 @@ static const FcitxHotkey* imSWPrevKey2[] = {
 };
 
 
-static const char* GetStateName(INPUT_RETURN_VALUE retVal);
 static const UT_icd ime_icd = {sizeof(FcitxIM), NULL , NULL, NULL};
 static const UT_icd imclass_icd = {sizeof(FcitxAddon*), NULL , NULL, NULL};
 static boolean IMMenuAction(FcitxUIMenu* menu, int index);
@@ -242,11 +241,6 @@ static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance,
     return false;
 }
 
-static const char* GetStateName(INPUT_RETURN_VALUE retVal)
-{
-    return "unknown";
-}
-
 void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
 {
     if (!addon)
@@ -282,10 +276,13 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
             dlclose(handle);
             return;
         }
+
+        instance->currentIMAddon = addon;
         if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
             dlclose(handle);
             return;
         }
+        instance->currentIMAddon = NULL;
         addon->imclass = imclass;
         utarray_push_back(&instance->imeclasses, &addon);
     }
@@ -414,6 +411,7 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
         strncpy(entry->langCode, langCode, LANGCODE_LENGTH);
     entry->langCode[LANGCODE_LENGTH] = 0;
     entry->initialized = true;
+    entry->owner = instance->currentIMAddon;
 }
 
 CONFIG_DESC_DEFINE(GetIMConfigDesc, "inputmethod.desc")
@@ -750,8 +748,6 @@ INPUT_RETURN_VALUE FcitxInstanceDoInputCallback(
     if (retVal == IRV_TO_PROCESS) {
         retVal = FcitxInstanceProcessHotkey(instance, sym, state);
     }
-
-    FcitxLog(DEBUG, "ProcessKey Return State: %s", GetStateName(retVal));
 
     FcitxInstanceProcessInputReturnValue(instance, retVal);
 
