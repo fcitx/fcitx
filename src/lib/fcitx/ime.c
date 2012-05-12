@@ -815,6 +815,9 @@ void FcitxInstanceForwardKey(FcitxInstance* instance, FcitxInputContext *ic, Fci
 FCITX_EXPORT_API
 void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
 {
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+    if (ic)
+        FcitxInstanceSetLocalIMName(instance, ic, NULL);
     FcitxInstanceSwitchIMInternal(instance, index, instance->config->firstAsInactive, true);
 }
 
@@ -1095,7 +1098,8 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
             targetIMIndex = globalIndex;
     }
 
-    FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, false);
+    if (targetIMIndex != instance->iIMIndex)
+        FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, false);
 }
 
 FCITX_EXPORT_API

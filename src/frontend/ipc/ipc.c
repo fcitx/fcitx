@@ -742,6 +742,9 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const
         FcitxInstanceEnableIM(ipc->owner, ic, false);
         return 1;
     }
+    else if (ic->state == IS_CLOSED) {
+        return 0;
+    }
 
     FcitxInputStateSetKeyCode(input, keycode);
     FcitxInputStateSetKeySym(input, originsym);

@@ -135,7 +135,7 @@ boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPU
         if (iKey >= 0)
             *retval = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), iKey);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
-        FcitxInstanceResetInput(instance);
+        *retval = IRV_CLEAN;
     } else {
         *retval = IRV_DO_NOTHING;
     }
