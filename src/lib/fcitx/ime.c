@@ -1078,17 +1078,17 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
     int targetIMIndex = 0;
-    boolean skipZero = true;
+    boolean skipZero = false;
     if (instance->config->firstAsInactive) {
-        if (ic->state == IS_INACTIVE) {
+        if (ic->state != IS_ACTIVE) {
             targetIMIndex = 0;
-            skipZero = false;
         }
         else {
             if (ic2->imname)
                 targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
             else
                 targetIMIndex = globalIndex;
+            skipZero = true;
         }
     }
     else {
