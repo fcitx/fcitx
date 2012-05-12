@@ -16,6 +16,7 @@
 @REL_SOURCE_ROOT@/src/module/chttrans/fcitx-chttrans.conf.in
 @REL_SOURCE_ROOT@/src/module/punc/fcitx-punc.conf.in
 @REL_SOURCE_ROOT@/src/module/quickphrase/fcitx-quickphrase.conf.in
+@REL_SOURCE_ROOT@/src/module/imselector/fcitx-imselector.conf.in
 @REL_SOURCE_ROOT@/src/module/vk/fcitx-vk.conf.in
 @REL_SOURCE_ROOT@/src/module/x11/fcitx-x11.conf.in
 @REL_SOURCE_ROOT@/src/module/autoeng/fcitx-autoeng.conf.in
@@ -45,6 +46,7 @@
 @REL_SOURCE_ROOT@/src/module/chttrans/chttrans.c
 @REL_SOURCE_ROOT@/src/module/punc/punc.c
 @REL_SOURCE_ROOT@/src/module/quickphrase/QuickPhrase.c
+@REL_SOURCE_ROOT@/src/module/imselector/imselector.c
 @REL_SOURCE_ROOT@/src/module/vk/vk.c
 @REL_SOURCE_ROOT@/src/module/x11/x11stuff.c
 @REL_SOURCE_ROOT@/src/module/x11/xerrorhandler.c

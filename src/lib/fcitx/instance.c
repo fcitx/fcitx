@@ -163,7 +163,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
 
     FcitxInstanceSwitchIM(instance, instance->iIMIndex);
-    instance->lastIMIndex = instance->iIMIndex;
+    instance->globalIMName = strdup(FcitxInstanceGetCurrentIM(instance)->uniqueName);
 
     if (!FcitxInstanceLoadFrontend(instance)) {
         FcitxInstanceEnd(instance);

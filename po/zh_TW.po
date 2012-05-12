@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-12 17:17+0800\n"
+"POT-Creation-Date: 2012-05-12 21:09+0800\n"
 "PO-Revision-Date: 2012-05-08 17:13+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1306
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1343
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -278,6 +278,10 @@ msgstr "經典介面"
 msgid "Clean"
 msgstr "清除"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:205
+msgid "Clear local state"
+msgstr ""
+
 #: unknown
 msgid "Close"
 msgstr "關閉"
@@ -413,9 +417,9 @@ msgstr ""
 #: unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:305
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:310
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:369
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:375
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Disabled"
 msgstr "停用"
 
@@ -665,6 +669,11 @@ msgstr ""
 msgid "Give the tips of Phrase"
 msgstr "提示詞庫中字詞"
 
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:9
+#, fuzzy
+msgid "Global Input Method SelectKey"
+msgstr "預設輸入法狀態"
+
 #: unknown
 msgid "Grave"
 msgstr ""
@@ -693,15 +702,19 @@ msgstr ""
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:275
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:281
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:261
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:267
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr "輸入法：開啟 %s 失敗 %s"
+
+# unknown
+msgid "IMSelector"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:11
 msgid "Icon Name"
@@ -751,21 +764,26 @@ msgid "Input Message Color"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1239
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
 msgid "Input Method"
 msgstr "輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:306
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:371
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1304
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1341
 msgid "Input Speed: "
 msgstr "輸入速度："
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:1
+#, fuzzy
+msgid "Input method selector"
+msgstr "停用輸入法"
 
 # unknown
 #: unknown
@@ -877,6 +895,11 @@ msgstr "載入自動字詞中"
 msgid "Loading Table Dict"
 msgstr "載入碼表字典"
 
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:4
+#, fuzzy
+msgid "Local Input Method SelectKey"
+msgstr "預設輸入法狀態"
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:68
 msgid "Logo Icon"
 msgstr ""
@@ -962,13 +985,18 @@ msgstr ""
 msgid "No"
 msgstr "否"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:479
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:485
 msgid "No available Input Method"
 msgstr "無可用輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:435
 msgid "No available frontend"
 msgstr "無可用前端"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:359
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:360
+msgid "No input window"
+msgstr ""
 
 #: unknown
 msgid "Nothing"
@@ -1269,6 +1297,20 @@ msgstr "保存所有設定及輸入歷史"
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+#, fuzzy
+msgid "Select global input method"
+msgstr "無可用輸入法"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+#, fuzzy
+msgid "Select local input method"
+msgstr "無可用輸入法"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:2
+msgid "Select specific input method via keyboard"
+msgstr ""
+
 #: unknown
 msgid "Self"
 msgstr ""
@@ -1513,7 +1555,7 @@ msgstr "使用者界面：開啟 %s 失敗 %s"
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:820
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:826
 msgid "Unable to create process"
 msgstr "無法建立行程"
 
@@ -1660,7 +1702,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1345
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 

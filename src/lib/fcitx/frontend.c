@@ -60,9 +60,9 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
         rec = instance->free_list;
         instance->free_list = instance->free_list->next;
     } else
-        rec = malloc(sizeof(FcitxInputContext));
+        rec = malloc(sizeof(FcitxInputContext2));
 
-    memset(rec, 0, sizeof(FcitxInputContext));
+    memset(rec, 0, sizeof(FcitxInputContext2));
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
@@ -437,4 +437,5 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
     }
     return true;
 }
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

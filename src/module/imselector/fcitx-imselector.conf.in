@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-imselector
+_GeneralName=Input method selector
+_Comment=Select specific input method via keyboard
+Category=Module
+Enabled=True
+Library=fcitx-imselector.so
+Type=SharedLibrary
+Priority=40

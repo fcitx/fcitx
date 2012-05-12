@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-12 17:17+0800\n"
+"POT-Creation-Date: 2012-05-12 21:09+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -22,7 +22,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1306
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1343
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -277,6 +277,10 @@ msgstr ""
 msgid "Clean"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:205
+msgid "Clear local state"
+msgstr ""
+
 #: unknown
 msgid "Close"
 msgstr ""
@@ -411,9 +415,9 @@ msgstr ""
 #: unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:305
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:310
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:369
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:375
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Disabled"
 msgstr ""
 
@@ -663,6 +667,10 @@ msgstr ""
 msgid "Give the tips of Phrase"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:9
+msgid "Global Input Method SelectKey"
+msgstr ""
+
 #: unknown
 msgid "Grave"
 msgstr ""
@@ -691,14 +699,18 @@ msgstr ""
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:275
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:281
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:261
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:267
 #, c-format
 msgid "IM: open %s fail %s"
+msgstr ""
+
+# unknown
+msgid "IMSelector"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:11
@@ -748,20 +760,24 @@ msgid "Input Message Color"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1239
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
 msgid "Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:306
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:371
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Input Method Disabled"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1304
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1341
 msgid "Input Speed: "
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:1
+msgid "Input method selector"
 msgstr ""
 
 # unknown
@@ -874,6 +890,10 @@ msgstr ""
 msgid "Loading Table Dict"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:4
+msgid "Local Input Method SelectKey"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:68
 msgid "Logo Icon"
 msgstr ""
@@ -959,12 +979,17 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:479
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:485
 msgid "No available Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:435
 msgid "No available frontend"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:359
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:360
+msgid "No input window"
 msgstr ""
 
 #: unknown
@@ -1266,6 +1291,18 @@ msgstr ""
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+msgid "Select global input method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+msgid "Select local input method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:2
+msgid "Select specific input method via keyboard"
+msgstr ""
+
 #: unknown
 msgid "Self"
 msgstr ""
@@ -1510,7 +1547,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:820
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:826
 msgid "Unable to create process"
 msgstr ""
 
@@ -1657,7 +1694,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1345
 msgid "min Num of Characters: "
 msgstr ""
 

@@ -135,25 +135,14 @@ void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConf
 {
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
-        FcitxIM* im;
-        if (!instance->config->firstAsInactive) {
-            im = FcitxInstanceGetCurrentIM(instance);
-        }
-        else {
-            int idx = instance->iIMIndex;
-            if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
-                idx = instance->lastIMIndex;
-            UT_array* imes = &instance->imes;
-            im = (FcitxIM*) utarray_eltptr(imes, idx);
-        }
         char** imName = (char**) value;
-        if (*imName)
-            free(*imName);
 
-        if (im)
-            *imName = strdup(im->uniqueName);
-        else
-            *imName = strdup("");
+        if (instance->globalIMName) {
+            if (*imName)
+                free(*imName);
+
+            *imName = strdup(instance->globalIMName);
+        }
     }
 }
 

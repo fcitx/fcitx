@@ -72,6 +72,12 @@ extern "C" {
         struct _FcitxInputContext* next; /**< next input context */
     } FcitxInputContext;
 
+    typedef struct _FcitxInputContext2 {
+        FcitxInputContext inputContext;
+        char* imname;
+        void* padding[16];
+    } FcitxInputContext2;
+
     /**
      * Program IM Module Frontend
      **/

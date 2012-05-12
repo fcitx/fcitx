@@ -353,7 +353,13 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
     char* icon;
     char* imname;
     char* description;
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+    if (ic == NULL) {
+        icon = "kbd";
+        imname = _("No input window");
+        description = _("No input window");
+    }
+    else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             icon = im->strIconName;

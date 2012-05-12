@@ -1,0 +1,12 @@
+[IMSelector/LocalInputMethodSelectKey]
+Type=Hotkey
+DefaultValue=
+Description=Local Input Method SelectKey
+
+[IMSelector/GlobalInputMethodSelectKey]
+Type=Hotkey
+DefaultValue=
+Description=Global Input Method SelectKey
+
+[DescriptionFile]
+LocaleDomain=fcitx

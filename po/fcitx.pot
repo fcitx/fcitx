@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-12 17:17+0800\n"
+"POT-Creation-Date: 2012-05-12 21:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:4
+msgid "Local Input Method SelectKey"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:9
+msgid "Global Input Method SelectKey"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:6
 msgid "Traditional Chinese Translate Engine"
@@ -721,6 +729,10 @@ msgid "Hotkey"
 msgstr ""
 
 # unknown
+msgid "IMSelector"
+msgstr ""
+
+# unknown
 #: unknown
 msgid "InputMethod"
 msgstr ""
@@ -858,9 +870,9 @@ msgstr ""
 #: unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:305
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:310
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:369
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:375
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Disabled"
 msgstr ""
 
@@ -1069,6 +1081,14 @@ msgstr ""
 msgid "Quickphrase"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:1
+msgid "Input method selector"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:2
+msgid "Select specific input method via keyboard"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-vk.conf.in.h:2
 msgid "Virtual Key Board in order to input special character"
 msgstr ""
@@ -1159,7 +1179,7 @@ msgid "Fcitx"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1239
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
 msgid "Input Method"
 msgstr ""
 
@@ -1350,6 +1370,18 @@ msgstr ""
 msgid "Space for %s Enter for %s"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:205
+msgid "Clear local state"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+msgid "Select global input method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:211
+msgid "Select local input method"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:144
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:165
 msgid "Virtual Keyboard"
@@ -1426,7 +1458,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:820
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:826
 msgid "Unable to create process"
 msgstr ""
 
@@ -1441,10 +1473,15 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:306
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:370
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:737
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:371
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:743
 msgid "Input Method Disabled"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:359
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:360
+msgid "No input window"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:49
@@ -1607,29 +1644,29 @@ msgstr ""
 msgid "pthread mutex init failed"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:261
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:267
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:275
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:281
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:479
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:485
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1304
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1341
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1306
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1343
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1308
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1345
 msgid "min Num of Characters: "
 msgstr ""
 

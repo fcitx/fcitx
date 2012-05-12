@@ -117,11 +117,13 @@ boolean IMIsInIMNameList(UT_array* imList, FcitxIM* ime);
 
 void FcitxInstanceLoadIM(struct _FcitxInstance* instance, FcitxAddon* addon);
 
-void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero);
+void FcitxInstanceSwitchIMInternal(struct _FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal);
 
 FcitxConfigFileDesc* GetIMConfigDesc();
 
 int IMPriorityCmp(const void *a, const void *b);
+
+void FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance);
 
 #endif
 

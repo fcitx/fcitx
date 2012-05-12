@@ -229,6 +229,12 @@ void FcitxInstanceSaveAllIM(FcitxInstance* instance)
 static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
     if (rec->frontendid != ic->frontendid)
         return false;
+    if (rec == ic)
+        return true;
+    FcitxInputContext2* rec2 = (FcitxInputContext2*) rec;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    if (rec2->imname || ic2->imname)
+        return false;
     UT_array* frontends = &instance->frontends;
     FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, ic->frontendid);
     if (pfrontend) {
@@ -809,16 +815,13 @@ void FcitxInstanceForwardKey(FcitxInstance* instance, FcitxInputContext *ic, Fci
 FCITX_EXPORT_API
 void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
 {
-    FcitxInstanceSwitchIMInternal(instance, index, instance->config->firstAsInactive);
+    FcitxInstanceSwitchIMInternal(instance, index, instance->config->firstAsInactive, true);
 }
 
-void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero)
+void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
 {
     UT_array* imes = &instance->imes;
     int iIMCount = utarray_len(imes);
-    int oldIMIndex = instance->iIMIndex;
-    if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
-        oldIMIndex = instance->lastIMIndex;
 
     FcitxInstanceCleanInputWindow(instance);
     FcitxInstanceResetInput(instance);
@@ -888,17 +891,16 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
         newIM->Init(newIM->klass);
     }
 
-    if (instance->config->firstAsInactive && instance->iIMIndex != 0)
-        instance->lastIMIndex = instance->iIMIndex;
-
-    int newIMIndex = instance->iIMIndex;
-    if (instance->iIMIndex == 0 && instance->lastIMIndex != 0)
-        newIMIndex = instance->lastIMIndex;
+    if (newIM && updateGlobal) {
+        if (instance->globalIMName) {
+            free(instance->globalIMName);
+            instance->globalIMName = NULL;
+        }
+        instance->globalIMName = strdup(newIM->uniqueName);
+    }
 
     FcitxInstanceResetInput(instance);
 
-    if (newIMIndex != oldIMIndex)
-        FcitxProfileSave(instance->profile);
 }
 
 /**
@@ -1051,6 +1053,52 @@ FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
+void FcitxInstanceSetLocalIMName(FcitxInstance* instance, FcitxInputContext* ic, const char* imname)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    if (ic2->imname) {
+        free(ic2->imname);
+        ic2->imname = NULL;
+    }
+
+    if (imname)
+        ic2->imname = strdup(imname);
+
+    if (ic == FcitxInstanceGetCurrentIC(instance))
+        FcitxInstanceUpdateCurrentIM(instance);
+}
+
+void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+    if (!ic)
+        return;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
+    int targetIMIndex = 0;
+    boolean skipZero = true;
+    if (instance->config->firstAsInactive) {
+        if (ic->state == IS_INACTIVE) {
+            targetIMIndex = 0;
+            skipZero = false;
+        }
+        else {
+            if (ic2->imname)
+                targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
+            else
+                targetIMIndex = globalIndex;
+        }
+    }
+    else {
+        if (ic2->imname)
+            targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
+        else
+            targetIMIndex = globalIndex;
+    }
+
+    FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, false);
+}
+
+FCITX_EXPORT_API
 void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState)
 {
     if (ic == NULL)
@@ -1079,12 +1127,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
         break;
     }
 
-    if (instance->config->firstAsInactive
-        && FcitxInstanceGetCurrentState(instance) == IS_ACTIVE
-        && instance->iIMIndex == 0
-    ) {
-        FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
-    }
+    FcitxInstanceUpdateCurrentIM(instance);
     instance->input->keyReleased = KR_OTHER;
 }
 
@@ -1182,14 +1225,6 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
     else
         objectState = IS_INACTIVE;
 
-    if (instance->config->firstAsInactive) {
-        if (objectState == IS_ACTIVE)
-            FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
-        else {
-            FcitxInstanceSwitchIMInternal(instance, 0, false);
-        }
-    }
-
     instance->globalState = objectState;
     switch (instance->config->shareState) {
     case ShareState_All:
@@ -1213,6 +1248,8 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         FcitxInstanceChangeIMStateInternal(instance, ic, objectState);
         break;
     }
+
+    FcitxInstanceUpdateCurrentIM(instance);
 }
 
 void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState)
@@ -1458,19 +1495,11 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
 
     instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
 
-    if (instance->config->firstAsInactive) {
-        if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
-            FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
-        else if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
-            if (instance->iIMIndex != 0)
-                instance->lastIMIndex = instance->iIMIndex;
-            FcitxInstanceSwitchIMInternal(instance, 0, false);
-        }
-    } else {
-        FcitxInstanceSwitchIM(instance, instance->iIMIndex);
-    }
+    FcitxInstanceUpdateCurrentIM(instance);
     FcitxInstanceProcessUpdateIMListHook(instance);
-    FcitxProfileSave(instance->profile);
+
+    if (instance->globalIMName)
+        FcitxProfileSave(instance->profile);
 }
 
 FCITX_EXPORT_API

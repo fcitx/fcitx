@@ -577,15 +577,8 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
     FcitxInstanceProcessInputFocusHook(instance);
 
     FcitxInstanceResetInput(instance);
-    if (instance->config->firstAsInactive) {
-        if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
-            FcitxInstanceSwitchIM(instance, instance->lastIMIndex);
-        else if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
-            if (instance->iIMIndex != 0)
-                instance->lastIMIndex = instance->iIMIndex;
-            FcitxInstanceSwitchIMInternal(instance, 0, false);
-        }
-    }
+
+    FcitxInstanceUpdateCurrentIM(instance);
 
     FcitxUICloseInputWindow(instance);
 }

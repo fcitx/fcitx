@@ -770,6 +770,15 @@ extern "C" {
      **/
     INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state);
 
+    /**
+     * set local input method name
+     *
+     * @param ic name
+     * @param imname im name
+     * @return void
+     **/
+    void FcitxInstanceSetLocalIMName(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, const char* imname);
+
 #ifdef __cplusplus
 }
 #endif
