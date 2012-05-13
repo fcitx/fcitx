@@ -390,15 +390,15 @@ void DrawMainWindow(MainWindow* mainWindow)
                  compstatus != NULL;
                  compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
                 ) {
-
-                if (!compstatus->visible)
-                    continue;
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
                 if (privstat == NULL)
                     continue;
-                /* reset status */
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
+                privstat->avail = false;
+                if (!compstatus->visible)
+                    continue;
+                /* reset status */
                 const char* icon = compstatus->getIconName(compstatus->arg);
                 char* path;
                 if (icon[0] != '/')
@@ -408,7 +408,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 free(path);
                 if (statusicon == NULL) {
-                    privstat->avail = false;
                     continue;
                 }
                 privstat->avail = true;
@@ -615,7 +614,11 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     SaveClassicUIConfig(classicui);
                 } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
                     mouse = &mainWindow->imiconstat.mouse;
-                    FcitxInstanceSwitchIM(instance, -1);
+                    /* if close, we enable it, if enabled, we scroll it */
+                    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE)
+                        FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+                    else
+                        FcitxInstanceSwitchIM(instance, -1);
                 } else {
                     FcitxUIComplexStatus *compstatus;
                     UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
