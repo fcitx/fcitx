@@ -141,7 +141,8 @@ extern "C" {
         FcitxIMReloadConfig ReloadConfig; /**< reload configuration */
         FcitxIMKeyBlocker KeyBlocker; /**< block unused key */
         FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< surrounding text update trigger */
-        void* padding[64]; /**< padding */
+        FcitxIMDoInput DoReleaseInput;
+        void* padding[63]; /**< padding */
     } FcitxIMIFace;
 
     /**
@@ -220,7 +221,9 @@ extern "C" {
 
         FcitxIMUpdateSurroundingText UpdateSurroundingText; /**< called when surrounding text updated */
 
-        void* padding[9]; /**< padding */
+        FcitxIMDoInput DoReleaseInput;
+
+        void* padding[8]; /**< padding */
     } FcitxIM;
 
     /** a key event is press or release */

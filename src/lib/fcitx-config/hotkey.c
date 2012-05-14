@@ -332,8 +332,17 @@ KEY_LIST        keyList[] = {
     {"BRAILLEDOT7", FcitxKey_braille_dot_7 },
     {"BRAILLEDOT8", FcitxKey_braille_dot_8 },
     {"BRAILLEDOT9", FcitxKey_braille_dot_9 },
-    {"BRAILLEDOT10", FcitxKey_braille_dot_10 },
-
+    {"BRAILLEDOT10",FcitxKey_braille_dot_10 },
+    {"SELECT",      FcitxKey_Select },
+    {"EXECUTE",     FcitxKey_Execute },
+    {"PRINT",       FcitxKey_Print },
+    {"UNDO",        FcitxKey_Undo },
+    {"REDO",        FcitxKey_Redo },
+    {"MENU",        FcitxKey_Menu },
+    {"FIND",        FcitxKey_Find },
+    {"CANCEL",      FcitxKey_Cancel },
+    {"HELP",        FcitxKey_Help },
+    {"BREAK",       FcitxKey_Break },
     {"\0", 0}
 };
 

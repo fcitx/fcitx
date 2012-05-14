@@ -212,4 +212,54 @@ FcitxHotkey FCITX_ALT_RSHIFT[2] = {
     {NULL, FcitxKey_Shift_R, FcitxKeyState_Alt},
 };
 
+FCITX_EXPORT_API
+FcitxHotkey FCITX_LCTRL_LSUPER[2] = {
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Control_L, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_LCTRL_LSUPER2[2] = {
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Ctrl},
+    {NULL, 0, 0},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_RCTRL_RSUPER[2] = {
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+    {NULL, FcitxKey_Control_R, FcitxKeyState_Ctrl | FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_RCTRL_RSUPER2[2] = {
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Ctrl},
+    {NULL, 0, 0},
+};
+
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_LALT_LSUPER[2] = {
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Alt | FcitxKeyState_Super},
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_Alt | FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_LALT_LSUPER2[2] = {
+    {NULL, FcitxKey_Super_L, FcitxKeyState_Alt},
+    {NULL, 0, 0},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_RALT_RSUPER[2] = {
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Alt | FcitxKeyState_Super},
+    {NULL, FcitxKey_Alt_R, FcitxKeyState_Alt | FcitxKeyState_Super},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_RALT_RSUPER2[2] = {
+    {NULL, FcitxKey_Super_R, FcitxKeyState_Alt},
+    {NULL, 0, 0},
+};
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -107,9 +107,11 @@ Description=Enable Switch Key to switch Between Input Method
 
 [Hotkey/IMSwitchHotkey]
 Type=Enum
-EnumCount=2
+EnumCount=4
 Enum0=CTRL_SHIFT
 Enum1=ALT_SHIFT
+Enum2=CTRL_SUPER
+Enum3=ALT_SUPER
 DefaultValue=CTRL_SHIFT
 Description=Switch Key to switch Between Input Method
 

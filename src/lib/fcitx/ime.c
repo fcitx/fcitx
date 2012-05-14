@@ -79,22 +79,30 @@ static const FcitxHotkey* switchKey2[] = {
 
 static const FcitxHotkey* imSWNextKey1[] = {
     FCITX_LCTRL_LSHIFT,
-    FCITX_LALT_LSHIFT
+    FCITX_LALT_LSHIFT,
+    FCITX_LCTRL_LSUPER,
+    FCITX_LALT_LSUPER,
 };
 
 static const FcitxHotkey* imSWNextKey2[] = {
     FCITX_LCTRL_LSHIFT2,
-    FCITX_LALT_LSHIFT2
+    FCITX_LALT_LSHIFT2,
+    FCITX_LCTRL_LSUPER2,
+    FCITX_LALT_LSUPER2,
 };
 
 static const FcitxHotkey* imSWPrevKey1[] = {
     FCITX_RCTRL_RSHIFT,
-    FCITX_RALT_RSHIFT
+    FCITX_RALT_RSHIFT,
+    FCITX_RCTRL_RSUPER,
+    FCITX_RALT_RSUPER,
 };
 
 static const FcitxHotkey* imSWPrevKey2[] = {
     FCITX_RCTRL_RSHIFT2,
-    FCITX_RALT_RSHIFT2
+    FCITX_RALT_RSHIFT2,
+    FCITX_RCTRL_RSUPER2,
+    FCITX_RALT_RSUPER2,
 };
 
 
@@ -411,6 +419,7 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
     entry->ReloadConfig = iface.ReloadConfig;
     entry->KeyBlocker = iface.KeyBlocker;
     entry->UpdateSurroundingText = iface.UpdateSurroundingText;
+    entry->DoReleaseInput = iface.DoReleaseInput;
     entry->klass = imclass;
     entry->iPriority = priority;
     if (langCode)
@@ -636,8 +645,15 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
         }
     }
 
-    if (retVal == IRV_TO_PROCESS && event != FCITX_PRESS_KEY)
-        retVal = IRV_DONOT_PROCESS;
+    if (retVal == IRV_TO_PROCESS && event == FCITX_RELEASE_KEY) {
+        if (currentIM->DoReleaseInput) {
+            retVal = currentIM->DoReleaseInput(currentIM->klass, sym, state);
+            if (retVal == IRV_TO_PROCESS)
+                retVal = IRV_DONOT_PROCESS;
+        }
+        else
+            retVal = IRV_DONOT_PROCESS;
+    }
 
     /* the key processed before this phase is very important, we don't let any interrupt */
     if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE

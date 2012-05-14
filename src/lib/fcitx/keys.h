@@ -49,6 +49,14 @@ extern "C" {
     extern FcitxHotkey FCITX_LALT_LSHIFT2[2];
     extern FcitxHotkey FCITX_RALT_RSHIFT[2];
     extern FcitxHotkey FCITX_RALT_RSHIFT2[2];
+    extern FcitxHotkey FCITX_LCTRL_LSUPER[2];
+    extern FcitxHotkey FCITX_LCTRL_LSUPER2[2];
+    extern FcitxHotkey FCITX_RCTRL_RSUPER[2];
+    extern FcitxHotkey FCITX_RCTRL_RSUPER2[2];
+    extern FcitxHotkey FCITX_LALT_LSUPER[2];
+    extern FcitxHotkey FCITX_LALT_LSUPER2[2];
+    extern FcitxHotkey FCITX_RALT_RSUPER[2];
+    extern FcitxHotkey FCITX_RALT_RSUPER2[2];
     extern FcitxHotkey FCITX_SEMICOLON[2];
     extern FcitxHotkey FCITX_SPACE[2];
     extern FcitxHotkey FCITX_COMMA[2];
