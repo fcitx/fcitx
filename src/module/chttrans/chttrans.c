@@ -125,12 +125,12 @@ void* ChttransCreate(FcitxInstance* instance)
     FcitxInstanceRegisterOutputFilter(instance, shk);
     FcitxInstanceRegisterCommitFilter(instance, shk);
     FcitxUIRegisterStatus(instance, transState, "chttrans", _("Traditional Chinese Translate"), _("Traditional Chinese Translate"), ToggleChttransState, GetChttransEnabled);
-    
+
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, ChttransLanguageChanged, transState);
-    
+
     AddFunction(transAddon, ChttransS2T);
     AddFunction(transAddon, ChttransT2S);
-    
+
     return transState;
 }
 
@@ -151,6 +151,7 @@ void ToggleChttransState(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     transState->enabled = !transState->enabled;
+    FcitxUIUpdateInputWindow(transState->owner);
     SaveChttransConfig(transState);
 }
 
@@ -188,7 +189,7 @@ void* ChttransS2T(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     const char* s = args.args[0];
-    
+
     return ConvertGBKSimple2Tradition(transState, s);
 }
 
@@ -196,7 +197,7 @@ void* ChttransT2S(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     const char* s = args.args[0];
-    
+
     return ConvertGBKTradition2Simple(transState, s);
 }
 
@@ -360,7 +361,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
 
                 ps = fcitx_utf8_get_char(strBuf, &wc);
                 t2s = (simple2trad_t*) malloc(sizeof(simple2trad_t));
-                
+
                 fcitx_utf8_get_char(ps, &wc);
                 t2s->wc = wc;
                 t2s->len = fcitx_utf8_char_len(strBuf);
@@ -428,7 +429,7 @@ boolean LoadChttransConfig(FcitxChttrans* transState)
 
     FcitxChttransConfigBind(transState, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)transState);
-    
+
     if (newconfig) {
         char *p = fcitx_utils_get_current_langcode();
         if (strcmp(p, "zh_TW") == 0 || strcmp(p, "zh_HK") == 0) {
@@ -471,7 +472,7 @@ void ChttransLanguageChanged(void* arg, const void* value)
     boolean visible = false;
     if (lang && strncmp(lang, "zh", 2) == 0 && strlen(lang) > 2)
         visible = true;
-    
+
     FcitxUISetStatusVisable(transState->owner, "chttrans", visible);
 }
 
