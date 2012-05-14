@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-12 21:09+0800\n"
+"POT-Creation-Date: 2012-05-14 23:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -656,55 +656,55 @@ msgstr ""
 msgid "Enable Switch Key to switch Between Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:114
+#: /home/saber/Develop/fcitx/data/config.desc:116
 msgid "Switch Key to switch Between Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:129
+#: /home/saber/Develop/fcitx/data/config.desc:131
 msgid "Switching Active and Inactive Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:134
+#: /home/saber/Develop/fcitx/data/config.desc:136
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:139
+#: /home/saber/Develop/fcitx/data/config.desc:141
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:144
+#: /home/saber/Develop/fcitx/data/config.desc:146
 msgid "Switching Virtual Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:149
+#: /home/saber/Develop/fcitx/data/config.desc:151
 msgid "Switching Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:154
+#: /home/saber/Develop/fcitx/data/config.desc:156
 msgid "Switching Full Width Character Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:159
+#: /home/saber/Develop/fcitx/data/config.desc:161
 msgid "Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:164
+#: /home/saber/Develop/fcitx/data/config.desc:166
 msgid "Prev Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:169
+#: /home/saber/Develop/fcitx/data/config.desc:171
 msgid "Next Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:174
+#: /home/saber/Develop/fcitx/data/config.desc:176
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:179
+#: /home/saber/Develop/fcitx/data/config.desc:181
 msgid "Saving All Config and Input History"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:184
+#: /home/saber/Develop/fcitx/data/config.desc:186
 msgid "Switch Embeded Preedit"
 msgstr ""
 
@@ -832,6 +832,10 @@ msgid "ALT_SHIFT"
 msgstr ""
 
 #: unknown
+msgid "ALT_SUPER"
+msgstr ""
+
+#: unknown
 msgid "Auto"
 msgstr ""
 
@@ -861,6 +865,10 @@ msgstr ""
 
 #: unknown
 msgid "CTRL_SHIFT"
+msgstr ""
+
+#: unknown
+msgid "CTRL_SUPER"
 msgstr ""
 
 #: unknown
@@ -1179,7 +1187,7 @@ msgid "Fcitx"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1276
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1297
 msgid "Input Method"
 msgstr ""
 
@@ -1644,29 +1652,29 @@ msgstr ""
 msgid "pthread mutex init failed"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:267
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:275
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:281
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:289
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:485
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:494
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1341
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1362
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1343
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1364
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1345
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1366
 msgid "min Num of Characters: "
 msgstr ""
 
