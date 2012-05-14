@@ -900,6 +900,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
             instance->globalIMName = NULL;
         }
         instance->globalIMName = strdup(newIM->uniqueName);
+        FcitxProfileSave(instance->profile);
     }
 
     FcitxInstanceResetInput(instance);
