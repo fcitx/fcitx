@@ -167,7 +167,7 @@ INPUT_RETURN_VALUE IMSelectorGetCand(void* arg, FcitxCandidateWord* candWord)
 
     if (!candWord->priv) {
         FcitxInstanceSetLocalIMName(instance, FcitxInstanceGetCurrentIC(instance), NULL);
-        return IRV_DO_NOTHING;
+        return IRV_CLEAN;
     }
 
     int index = FcitxInstanceGetIMIndexByName(imselector->owner, (char*) candWord->priv);
@@ -183,7 +183,7 @@ INPUT_RETURN_VALUE IMSelectorGetCand(void* arg, FcitxCandidateWord* candWord)
         if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE)
             FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
     }
-    return IRV_DO_NOTHING;
+    return IRV_CLEAN;
 }
 
 void IMSelectorGetCands(IMSelector* imselector)
@@ -196,28 +196,38 @@ void IMSelectorGetCands(IMSelector* imselector)
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), 10);
     FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
     FcitxInputStateSetShowCursor(input, false);
-    if (!imselector->global) {
-        FcitxCandidateWord candWord;
-        candWord.callback = IMSelectorGetCand;
-        candWord.owner = imselector;
-        candWord.priv = NULL;
-        candWord.strExtra = NULL;
-        candWord.strWord = strdup(_("Clear local state"));
-        candWord.wordType = MSG_OTHER;
-        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    if (!ic)
+        return;
+
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", imselector->global ? _("Select global input method: ") : _("Select local input method: "));
+    if (ic2->imname && !imselector->global) {
+        int idx = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
+        FcitxIM* im = (FcitxIM*) utarray_eltptr(imes, idx);
+        if (im) {
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Current is %s"), im->strName);
+        }
     }
-
-
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", imselector->global ? _("Select global input method") : _("Select local input method"));
+    else {
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("No local input method"));
+    }
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {
         FcitxCandidateWord candWord;
         candWord.callback = IMSelectorGetCand;
         candWord.owner = imselector;
-        candWord.priv = strdup(pim->uniqueName);
         candWord.strExtra = NULL;
-        candWord.strWord = strdup(pim->strName);
+        if (ic2->imname && strcmp(ic2->imname, pim->uniqueName) == 0) {
+            candWord.priv = NULL;
+            candWord.strWord = strdup(_("Clear local input method"));
+        }
+        else {
+            candWord.priv = strdup(pim->uniqueName);
+            candWord.strWord = strdup(pim->strName);
+        }
         candWord.wordType = MSG_OTHER;
         FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
     }

@@ -1096,6 +1096,15 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
     int targetIMIndex = 0;
     boolean skipZero = false;
+
+    if (ic2->imname) {
+        FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, ic2->imname);
+        if (!im) {
+            free(ic2->imname);
+            ic2->imname = NULL;
+        }
+    }
+
     if (instance->config->firstAsInactive) {
         if (ic->state != IS_ACTIVE) {
             targetIMIndex = 0;
