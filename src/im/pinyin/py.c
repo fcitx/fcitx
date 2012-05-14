@@ -709,7 +709,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_LEFT)) {
             if (!FcitxInputStateGetRawInputBufferSize(input))
                 return IRV_TO_PROCESS;
-            if (pystate->iPYInsertPoint < 2) {
+            if (pystate->iPYInsertPoint <= 0) {
                 if (pystate->iPYSelected) {
                     char strTemp[MAX_USER_INPUT + 1];
 
@@ -721,9 +721,6 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     pystate->iPYSelected--;
                     ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
 
-                    retVal = IRV_DISPLAY_CANDWORDS;
-                } else if (pystate->iPYInsertPoint) {
-                    pystate->iPYInsertPoint--;
                     retVal = IRV_DISPLAY_CANDWORDS;
                 } else
                     retVal = IRV_DO_NOTHING;
