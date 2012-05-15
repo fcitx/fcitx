@@ -418,10 +418,10 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     else
         removeCapacity(CAPACITY_PASSWORD);
 
-    if (event->xkey.state & FcitxKeyState_IgnoredMask)
+    if (Q_UNLIKELY(event->xkey.state & FcitxKeyState_IgnoredMask))
         return false;
 
-    if (!isValid() || (event->type != XKeyRelease && event->type != XKeyPress)) {
+    if (Q_UNLIKELY(!isValid() || (event->type != XKeyRelease && event->type != XKeyPress))) {
         return x11FilterEventFallback(event, 0);
     }
 
@@ -439,7 +439,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                           (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY,
                                           event->xkey.time
                                       );
-    if (m_syncMode) {
+    if (Q_LIKELY(m_syncMode)) {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher(result);
         loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
@@ -558,7 +558,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 
-        m_syncMode = get_boolean_env("FCITX_QT_USE_SYNC", false);
+        m_syncMode = get_boolean_env("FCITX_QT_USE_SYNC", true);
 
         addCapacity(flag, true);
     }
@@ -654,7 +654,7 @@ void QFcitxInputContext::deleteSurroundingText(int offset, uint nchar)
 void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
 {
     QWidget* widget = focusWidget();
-    if (widget != NULL) {
+    if (Q_LIKELY(widget != NULL)) {
         key_filtered = true;
 #ifdef Q_WS_X11
         const WId window_id = widget->winId();
