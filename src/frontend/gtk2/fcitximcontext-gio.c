@@ -37,7 +37,7 @@
 #include "fcitx/frontend.h"
 
 #include "fcitximcontext.h"
-#include "client-im.h"
+#include "fcitx-gclient/fcitxclient.h"
 
 #define LOG_LEVEL DEBUG
 

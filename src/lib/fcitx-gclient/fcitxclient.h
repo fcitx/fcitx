@@ -55,14 +55,6 @@ struct _FcitxClientClass {
     GObjectClass parent_class;
 };
 
-typedef struct _FcitxIMItem {
-    gchar* name;
-    gchar* unique_name;
-    gchar* langcode;
-    gboolean enable;
-} FcitxIMItem;
-
-
 FcitxClient* fcitx_client_new();
 gboolean fcitx_client_is_valid(FcitxClient* im);
 int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);

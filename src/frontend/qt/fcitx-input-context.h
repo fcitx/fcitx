@@ -24,6 +24,7 @@
 #include <QList>
 #include <QDBusConnection>
 #include <QDir>
+#include <QApplication>
 #include "org.freedesktop.DBus.h"
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
@@ -33,6 +34,26 @@
 #if defined(Q_WS_X11)
 #include <X11/Xlib.h>
 #include <fcitx/frontend.h>
+
+class ProcessKeyWatcher : public QDBusPendingCallWatcher
+{
+    Q_OBJECT
+public:
+    ProcessKeyWatcher(XEvent* e, KeySym s, const QDBusPendingCall &call, QObject *parent = 0) : QDBusPendingCallWatcher(call, parent) {
+        event = static_cast<XEvent*>(malloc(sizeof(XEvent)));
+        *event = *e;
+        sym = s;
+    }
+
+public slots:
+    void processEvent() {
+        qApp->x11ProcessEvent(event);
+        this->deleteLater();
+    }
+public:
+    XEvent* event;
+    KeySym sym;
+};
 #endif
 
 
@@ -70,13 +91,16 @@ private Q_SLOTS:
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
     void updateIM();
+#if defined(Q_WS_X11)
+    void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
+#endif
 private:
     void createInputContext();
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
     bool checkAlgorithmically();
     bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
 #if defined(Q_WS_X11)
-    bool x11FilterEventFallback(QWidget *keywidget, XEvent *event , KeySym sym);
+    bool x11FilterEventFallback(XEvent *event , KeySym sym);
     XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
@@ -119,6 +143,7 @@ private:
     FcitxFormattedPreeditList m_preeditList;
     int m_cursorPos;
     boolean m_useSurroundingText;
+    boolean m_syncMode;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

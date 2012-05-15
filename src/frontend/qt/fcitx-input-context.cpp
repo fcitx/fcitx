@@ -418,8 +418,11 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     else
         removeCapacity(CAPACITY_PASSWORD);
 
+    if (event->xkey.state & FcitxKeyState_IgnoredMask)
+        return false;
+
     if (!isValid() || (event->type != XKeyRelease && event->type != XKeyPress)) {
-        return x11FilterEventFallback(keywidget, event, 0);
+        return x11FilterEventFallback(event, 0);
     }
 
     KeySym sym = 0;
@@ -436,31 +439,58 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                           (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY,
                                           event->xkey.time
                                       );
-    {
+    if (m_syncMode) {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher(result);
         loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
-        loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
-    }
+        loop.exec(QEventLoop::ExcludeUserInputEvents);
 
-    if (result.isError() || result.value() <= 0) {
-        QTimer::singleShot(0, this, SLOT(updateIM()));
-        return x11FilterEventFallback(keywidget, event, sym);
-    } else {
-        update();
+        if (result.isError() || result.value() <= 0) {
+            QTimer::singleShot(0, this, SLOT(updateIM()));
+            return x11FilterEventFallback(event, sym);
+        } else {
+            update();
+            return true;
+        }
+        return false;
+    }
+    else {
+        ProcessKeyWatcher* watcher = new ProcessKeyWatcher(event, sym, result);
+        connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(x11ProcessKeyEventCallback(QDBusPendingCallWatcher*)));
         return true;
     }
-    return false;
 }
 
-bool QFcitxInputContext::x11FilterEventFallback(QWidget *keywidget, XEvent *event, KeySym sym)
+void QFcitxInputContext::x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher)
+{
+    ProcessKeyWatcher* pkwatcher = static_cast<ProcessKeyWatcher*>(watcher);
+    QDBusPendingReply< int > result(*watcher);
+    bool r = false;
+    if (result.isError() || result.value() <= 0) {
+        QTimer::singleShot(0, this, SLOT(updateIM()));
+        r = x11FilterEventFallback(pkwatcher->event, pkwatcher->sym);
+    } else {
+        update();
+        r = true;
+    }
+    if (r) {
+        free(pkwatcher->event);
+        delete pkwatcher;
+    }
+    else {
+        pkwatcher->event->xkey.state |= FcitxKeyState_IgnoredMask;
+        QTimer::singleShot(0, pkwatcher, SLOT(processEvent()));
+    }
+}
+
+bool QFcitxInputContext::x11FilterEventFallback(XEvent *event, KeySym sym)
 {
     if (event->type == XKeyPress || event->type == XKeyRelease) {
         if (processCompose(sym, event->xkey.state, (event->type == XKeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY)) {
             return true;
         }
     }
-    return QInputContext::x11FilterEvent(keywidget, event);
+    return false;
 }
 
 #endif // Q_WS_X11
@@ -528,6 +558,8 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 
+        m_syncMode = get_boolean_env("FCITX_QT_USE_SYNC", false);
+
         addCapacity(flag, true);
     }
     delete watcher;
@@ -539,11 +571,6 @@ void QFcitxInputContext::updateCapacity()
         return;
 
     QDBusPendingReply< void > result = m_icproxy->SetCapacity((uint) m_capacity);
-
-    QEventLoop loop;
-    QDBusPendingCallWatcher watcher(result);
-    loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
-    loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
 }
 
 void QFcitxInputContext::commitString(const QString& str)
@@ -633,7 +660,7 @@ void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
         const WId window_id = widget->winId();
         Display* x11_display = QX11Info::display();
 
-        XEvent* xevent = createXEvent(x11_display, window_id, keyval, state, type);
+        XEvent* xevent = createXEvent(x11_display, window_id, keyval, state | FcitxKeyState_IgnoredMask, type);
         qApp->x11ProcessEvent(xevent);
         free(xevent);
 #else

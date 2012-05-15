@@ -22,7 +22,7 @@
 #include "module/dbus/dbusstuff.h"
 #include "frontend/ipc/ipc.h"
 #include "fcitx/fcitx.h"
-#include "client-im.h"
+#include "fcitxclient.h"
 #include "marshall.h"
 
 static const gchar introspection_xml[] =
@@ -177,6 +177,7 @@ fcitx_client_finalize(GObject *object)
         G_OBJECT_CLASS(fcitx_client_parent_class)->finalize(object);
 }
 
+FCITX_EXPORT_API
 void fcitx_client_focusin(FcitxClient* im)
 {
     if (im->icproxy) {
@@ -184,7 +185,7 @@ void fcitx_client_focusin(FcitxClient* im)
     }
 }
 
-
+FCITX_EXPORT_API
 void fcitx_client_focusout(FcitxClient* im)
 {
     if (im->icproxy) {
@@ -192,7 +193,7 @@ void fcitx_client_focusout(FcitxClient* im)
     }
 }
 
-
+FCITX_EXPORT_API
 void fcitx_client_reset(FcitxClient* im)
 {
     if (im->icproxy) {
@@ -200,7 +201,7 @@ void fcitx_client_reset(FcitxClient* im)
     }
 }
 
-
+FCITX_EXPORT_API
 void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags)
 {
     uint32_t iflags = flags;
@@ -209,7 +210,7 @@ void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags)
     }
 }
 
-
+FCITX_EXPORT_API
 void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h)
 {
     if (im->icproxy) {
@@ -217,6 +218,7 @@ void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h)
     }
 }
 
+FCITX_EXPORT_API
 void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor)
 {
     if (im->icproxy) {
@@ -224,6 +226,7 @@ void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint curso
     }
 }
 
+FCITX_EXPORT_API
 void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
 {
     int itype = type;
@@ -238,6 +241,7 @@ void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer 
     }
 }
 
+FCITX_EXPORT_API
 int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
 {
     int itype = type;
@@ -569,6 +573,7 @@ fcitx_client_class_init(FcitxClientClass *klass)
             );
 }
 
+FCITX_EXPORT_API
 FcitxClient*
 fcitx_client_new()
 {
@@ -582,6 +587,7 @@ fcitx_client_new()
     return im;
 }
 
+FCITX_EXPORT_API
 gboolean
 fcitx_client_is_valid(FcitxClient* im)
 {

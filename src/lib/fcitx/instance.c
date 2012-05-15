@@ -173,32 +173,6 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     if (instance->config->bFirstRun) {
         instance->config->bFirstRun = false;
         FcitxGlobalConfigSave(instance->config);
-
-        const char *imname = "fcitx";
-        char *strTemp;
-        asprintf(&strTemp, "@im=%s", imname);
-
-        if ((getenv("XMODIFIERS") != NULL && CHECK_ENV("XMODIFIERS", strTemp, true)) ||
-                (CHECK_ENV("GTK_IM_MODULE", "xim", false) && CHECK_ENV("GTK_IM_MODULE", "fcitx", false))
-                || (CHECK_ENV("QT_IM_MODULE", "xim", false) && CHECK_ENV("QT_IM_MODULE", "fcitx", false))) {
-            char *msg[12];
-            msg[0] = _("Please check your environment varibles.");
-            msg[1] = _("You can use tools provided by your distribution.");
-            msg[2] = _("Or You may need to set environment varibles below to make fcitx work correctly.");
-            msg[3] = "export XMODIFIERS=\"@im=fcitx\"";
-            msg[4] = "export QT_IM_MODULE=xim";
-            msg[5] = "export GTK_IM_MODULE=xim";
-            msg[6] = _("Or (Depends on you install im module or not)");
-            msg[7] = "export XMODIFIERS=\"@im=fcitx\"";
-            msg[8] = "export QT_IM_MODULE=fcitx";
-            msg[9] = "export GTK_IM_MODULE=fcitx";
-            msg[10] = _("If you use login manager like gdm or kdm, put those lines in your ~/.xprofile.");
-            msg[11] = _("If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc.");
-
-            FcitxUIDisplayMessage(instance, _("Setting Hint"), msg, 12);
-        }
-
-        free(strTemp);
     }
     /* make in order to use block X, query is not good here */
     pthread_create(&instance->pid, NULL, RunInstance, instance);

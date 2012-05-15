@@ -492,6 +492,9 @@ pid_t XimGetPid(void* arg, FcitxInputContext* ic)
 }
 
 pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
+#ifdef XIM_GET_PID
+    return 0;
+#else
     if (w == DefaultRootWindow(xim->display))
         return 0;
 
@@ -527,6 +530,7 @@ pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
         // TODO: is this portable?
         return prop[1] * 256 + prop[0];
     }
+#endif
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

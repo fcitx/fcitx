@@ -26,11 +26,8 @@ include_directories(${GIO2_INCLUDE_DIRS})
 link_directories(${GIO2_LIBRARY_DIRS})
 
 set(FCITX_GTK2_IM_MODULE_SOURCES
-    client-im.c
     fcitxim.c
     fcitximcontext-gio.c
-    ${CMAKE_CURRENT_BINARY_DIR}/marshall.c
-    ${CMAKE_CURRENT_BINARY_DIR}/marshall.h
 )
 else (GIO2_FOUND)
 include_directories(${DBUS_GLIB_INCLUDE_DIRS})
@@ -49,7 +46,7 @@ add_library(im-fcitx MODULE ${FCITX_GTK2_IM_MODULE_SOURCES})
 set_target_properties( im-fcitx PROPERTIES PREFIX "" COMPILE_FLAGS "-fvisibility=hidden" LINK_FLAGS "-Wl,--no-undefined")
 target_link_libraries( im-fcitx ${GTK2_LIBRARIES} fcitx-utils)
 if (GIO2_FOUND)
-target_link_libraries( im-fcitx ${GTK2_LIBRARIES} ${GIO2_LIBRARIES} fcitx-utils)
+target_link_libraries( im-fcitx ${GTK2_LIBRARIES} ${GIO2_LIBRARIES} fcitx-gclient fcitx-utils)
 else (GIO2_FOUND)
 target_link_libraries( im-fcitx ${GTK2_LIBRARIES} ${DBUS_GLIB_LIBRARIES} fcitx-utils)
 endif (GIO2_FOUND)

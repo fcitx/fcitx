@@ -1,7 +1,6 @@
 add_subdirectory(xim)
 
 if (_ENABLE_DBUS)
-    #add_subdirectory(fbterm)
     add_subdirectory(ipc)
 
     if (ENABLE_GTK2_IM_MODULE OR ENABLE_GTK3_IM_MODULE)
