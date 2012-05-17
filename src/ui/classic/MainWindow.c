@@ -490,7 +490,7 @@ void UpdateStatusGeometry(FcitxClassicUIStatus *privstat, SkinImage *image, int 
 
 void CloseMainWindow(MainWindow *mainWindow)
 {
-    if (mainWindow->owner->hideMainWindow != HM_SHOW)
+    if (mainWindow->owner->hideMainWindow != HM_SHOW || mainWindow->owner->isSuspend)
         XUnmapWindow(mainWindow->dpy, mainWindow->window);
 }
 
