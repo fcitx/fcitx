@@ -49,6 +49,7 @@ struct _FcitxClient {
     char icname[64];
     int id;
     guint watch_id;
+    GCancellable* cancellable;
 };
 
 struct _FcitxClientClass {
