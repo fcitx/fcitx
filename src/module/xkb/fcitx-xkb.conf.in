@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-xkb
+_GeneralName=X Keyboard Integration
+_Comment=X Keyboard Integration
+Category=Module
+Enabled=True
+Library=fcitx-xkb.so
+Type=SharedLibrary
+Dependency=fcitx-x11,fcitx-dbus

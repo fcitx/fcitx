@@ -32,14 +32,12 @@
 
 static FcitxConfigFileDesc* GetConfigDesc();
 static void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
-static void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg);
 
 CONFIG_BINDING_BEGIN(FcitxGlobalConfig)
 CONFIG_BINDING_REGISTER("Program", "DelayStart", iDelayStart)
 CONFIG_BINDING_REGISTER("Program", "FirstRun", bFirstRun)
 CONFIG_BINDING_REGISTER("Program", "ShareStateAmongWindow", shareState)
 CONFIG_BINDING_REGISTER("Program", "DefaultInputMethodState", _defaultIMState)
-CONFIG_BINDING_REGISTER_WITH_FILTER("Program", "FirstAsInactive", firstAsInactive, FilterFirstAsInactive)
 CONFIG_BINDING_REGISTER("Output", "HalfPuncAfterNumber", bEngPuncAfterNumber)
 CONFIG_BINDING_REGISTER("Output", "EnterAction", enterToDo)
 CONFIG_BINDING_REGISTER("Output", "RemindModeDisablePaging", bDisablePagingInRemind)
@@ -111,20 +109,6 @@ void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxC
     }
 }
 
-void FilterFirstAsInactive(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
-{
-    FCITX_UNUSED(group);
-    FCITX_UNUSED(option);
-    FCITX_UNUSED(arg);
-    FcitxGlobalConfig* fc = (FcitxGlobalConfig*) config;
-    if (sync == Raw2Value) {
-        fc->defaultIMState = fc->_defaultIMState;
-        boolean firstAsInactive = *(boolean*) value;
-        if (firstAsInactive && fc->defaultIMState == IS_CLOSED)
-            fc->defaultIMState = IS_INACTIVE;
-    }
-}
-
 FCITX_EXPORT_API
 boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 {
@@ -152,6 +136,11 @@ boolean FcitxGlobalConfigLoad(FcitxGlobalConfig* fc)
 
     FcitxGlobalConfigConfigBind(fc, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)fc);
+    if (fc->_defaultIMState == 0) {
+        fc->defaultIMState = IS_INACTIVE;
+    }
+    else
+        fc->defaultIMState = IS_ACTIVE;
 
     if (newconfig) {
         char *p = fcitx_utils_get_current_langcode();

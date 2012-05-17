@@ -45,7 +45,7 @@
 #include "MenuWindow.h"
 #include "MessageWindow.h"
 #include "fcitx/hook.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 struct _FcitxSkin;
 static boolean MainMenuAction(FcitxUIMenu* menu, int index);

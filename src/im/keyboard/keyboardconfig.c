@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,20 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+#include "keyboard.h"
 
-#ifndef CLASSICUIINTERFACE_H
-#define CLASSICUIINTERFACE_H
-
-#include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
-
-#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
-#define FCITX_CLASSIC_UI_LOADIMAGE 0
-#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE FcitxConfigColor *
-#define FCITX_CLASSIC_UI_GETFONT 2
-#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
-
-#endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+CONFIG_BINDING_BEGIN(FcitxKeyboardConfig);
+CONFIG_BINDING_REGISTER("Keyboard", "CommitWithExtraSpace", bCommitWithExtraSpace);
+CONFIG_BINDING_REGISTER("Keyboard", "HotkeyToggleWordHint", hkToggleWordHint);
+CONFIG_BINDING_REGISTER("Keyboard", "EnableWordHint", bEnableWordHint);
+CONFIG_BINDING_REGISTER("Keyboard", "MinimumHintLength", minimumHintLength);
+CONFIG_BINDING_REGISTER("Keyboard", "UsePresage", bUsePresage);
+CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);
+CONFIG_BINDING_REGISTER("Keyboard", "HotkeyAddToUserDict", hkAddToUserDict);
+CONFIG_BINDING_REGISTER("Keyboard", "PreferredEnchantProvider", provider);
+CONFIG_BINDING_END();

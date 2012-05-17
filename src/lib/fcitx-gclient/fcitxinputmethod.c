@@ -17,8 +17,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include <fcitx/module/dbus/dbusstuff.h>
-#include <fcitx/module/ipc/ipc.h>
+#include "module/dbus/dbusstuff.h"
+#include "frontend/ipc/ipc.h"
 
 
 #include "fcitxinputmethod.h"

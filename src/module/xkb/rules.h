@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,19 +18,59 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef CLASSICUIINTERFACE_H
-#define CLASSICUIINTERFACE_H
+#ifndef FCITX_KEYBOARD_RULES_H
+#define FCITX_KEYBOARD_RULES_H
 
-#include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
+#include <fcitx-utils/utarray.h>
+#include <fcitx-config/fcitx-config.h>
 
-#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
-#define FCITX_CLASSIC_UI_LOADIMAGE 0
-#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE FcitxConfigColor *
-#define FCITX_CLASSIC_UI_GETFONT 2
-#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
+typedef struct _FcitxXkbRules {
+    UT_array* layoutInfos;
+    UT_array* modelInfos;
+    UT_array* optionGroupInfos;
+    char* version;
+} FcitxXkbRules;
+
+typedef struct _FcitxXkbRulesHandler {
+    UT_array* path;
+    FcitxXkbRules* rules;
+    boolean fromExtra;
+} FcitxXkbRulesHandler;
+
+typedef struct _FcitxXkbLayoutInfo {
+    UT_array* variantInfos;
+    char* name;
+    char* description;
+    UT_array* languages;
+} FcitxXkbLayoutInfo;
+
+typedef struct _FcitxXkbVariantInfo {
+    char* name;
+    char* description;
+    UT_array* languages;
+} FcitxXkbVariantInfo;
+
+typedef struct _FcitxXkbModelInfo {
+    char* name;
+    char* description;
+    char* vendor;
+} FcitxXkbModelInfo;
+
+typedef struct _FcitxXkbOptionGroupInfo {
+    UT_array* optionInfos;
+    char* name;
+    char* description;
+    boolean exclusive;
+} FcitxXkbOptionGroupInfo;
+
+typedef struct _FcitxXkbOptionInfo {
+    char* name;
+    char* description;
+} FcitxXkbOptionInfo;
+
+FcitxXkbRules* FcitxXkbReadRules(const char* file);
+void FcitxXkbRulesFree(FcitxXkbRules* rules);
+char* FcitxXkbRulesToReadableString(FcitxXkbRules* rules);
+boolean StringEndsWith(const char* str, const char* suffix);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

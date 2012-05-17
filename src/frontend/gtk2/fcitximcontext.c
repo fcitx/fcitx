@@ -35,7 +35,7 @@
 #include "fcitximcontext.h"
 #include "fcitx-config/fcitx-config.h"
 #include "client.h"
-#include <fcitx-utils/log.h>
+#include "fcitx-utils/log.h"
 #include <dbus/dbus-glib.h>
 
 #define LOG_LEVEL DEBUG

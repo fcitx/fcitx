@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,19 +18,42 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef CLASSICUIINTERFACE_H
-#define CLASSICUIINTERFACE_H
+#ifndef FCITX_XKB_H
+#define FCITX_XKB_H
 
-#include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
+#include <X11/Xlib.h>
 
-#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
-#define FCITX_CLASSIC_UI_LOADIMAGE 0
-#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE FcitxConfigColor *
-#define FCITX_CLASSIC_UI_GETFONT 2
-#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
+#include "fcitx/instance.h"
+#include "rules.h"
+
+typedef struct _FcitxXkbConfig {
+    FcitxGenericConfig gconfig;
+    boolean bOverrideSystemXKBSettings;
+    boolean bIgnoreInputMethodLayoutRequest;
+} FcitxXkbConfig;
+
+typedef struct _FcitxXkb
+{
+    Display* dpy;
+    UT_array *defaultLayouts;
+    UT_array *defaultModels;
+    UT_array *defaultOptions;
+    UT_array* defaultVariants;
+    FcitxInstance* owner;
+    int closeGroup;
+    FcitxXkbRules* rules;
+    FcitxXkbConfig config;
+    int xkbOpcode;
+} FcitxXkb;
+
+#define FCITX_XKB_NAME "fcitx-xkb"
+#define FCITX_XKB_GETRULES 0
+#define FCITX_XKB_GETRULES_RETURNTYPE FcitxXkbRules*
+#define FCITX_XKB_GETCURRENTLAYOUT 1
+#define FCITX_XKB_GETCURRENTLAYOUT_RETURNTYPE void
+#define FCITX_XKB_LAYOUTEXISTS 2
+#define FCITX_XKB_LAYOUTEXISTS_RETURNTYPE void
+
+CONFIG_BINDING_DECLARE(FcitxXkbConfig);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

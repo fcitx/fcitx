@@ -37,7 +37,7 @@
 #include "skin.h"
 #include "module/x11/x11stuff.h"
 #include "MainWindow.h"
-#include <fcitx-utils/log.h>
+#include "fcitx-utils/log.h"
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
 

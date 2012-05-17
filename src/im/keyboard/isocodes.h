@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,19 +18,34 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef CLASSICUIINTERFACE_H
-#define CLASSICUIINTERFACE_H
+#ifndef FCITX_ISOCODES_H
+#define FCITX_ISOCODES_H
 
-#include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
+#include "fcitx-utils/uthash.h"
 
-#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
-#define FCITX_CLASSIC_UI_LOADIMAGE 0
-#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE FcitxConfigColor *
-#define FCITX_CLASSIC_UI_GETFONT 2
-#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
+typedef struct _FcitxIsoCodes639Entry {
+    char* name;
+    char* iso_639_2B_code;
+    char* iso_639_2T_code;
+    char* iso_639_1_code;
+    UT_hash_handle hh1;
+    UT_hash_handle hh2;
+} FcitxIsoCodes639Entry;
+
+typedef struct _FcitxIsoCodes3166Entry {
+    char* name;
+    char* alpha_2_code;
+    UT_hash_handle hh;
+} FcitxIsoCodes3166Entry;
+
+typedef struct _FcitxIsoCodes {
+    FcitxIsoCodes639Entry* iso6392B;
+    FcitxIsoCodes639Entry* iso6392T;
+    FcitxIsoCodes3166Entry* iso3166;
+} FcitxIsoCodes;
+
+FcitxIsoCodes* FcitxXkbReadIsoCodes(const char* iso639, const char* iso3166);
+FcitxIsoCodes639Entry* FcitxIsoCodesGetEntry(FcitxIsoCodes* isocodes, const char* lang);
+void FcitxIsoCodesFree(FcitxIsoCodes* isocodes);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

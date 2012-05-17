@@ -721,7 +721,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     s0 += strlen("im/");
                     int index = FcitxInstanceGetIMIndexByName(instance, s0);
 
-                    if (index == 0 && FcitxInstanceGetGlobalConfig(instance)->firstAsInactive)
+                    if (index == 0)
                         FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                     else {
                         FcitxInstanceSwitchIM(instance, index);
@@ -734,14 +734,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     FcitxIM* pim;
                     int index = 0;
                     size_t len = utarray_len(imes);
-                    if (!FcitxInstanceGetGlobalConfig(instance)->firstAsInactive) {
-                        index++;
-                        len ++;
-                    }
                     char **prop = fcitx_utils_malloc0(len * sizeof(char*));
-                    if (!FcitxInstanceGetGlobalConfig(instance)->firstAsInactive) {
-                        asprintf(&prop[0], "/Fcitx/keyboard:%s:fcitx-%s:%s", _("Disabled"), "kbd", _("Input Method Disabled"));
-                    }
                     for (pim = (FcitxIM *) utarray_front(imes);
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {

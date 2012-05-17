@@ -44,7 +44,7 @@
 #include "classicui.h"
 #include "skin.h"
 #include "MenuWindow.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 #define FCITX_MAX(a,b) ((a) > (b)?(a) : (b))
 

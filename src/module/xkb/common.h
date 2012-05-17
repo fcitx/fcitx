@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,19 +18,14 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef CLASSICUIINTERFACE_H
-#define CLASSICUIINTERFACE_H
+#ifndef FCITX_XKB_COMMON_H
+#define FCITX_XKB_COMMON_H
 
-#include <cairo.h>
-#include "fcitx-config/fcitx-config.h"
-
-#define FCITX_CLASSIC_UI_NAME "fcitx-classic-ui"
-#define FCITX_CLASSIC_UI_LOADIMAGE 0
-#define FCITX_CLASSIC_UI_LOADIMAGE_RETURNTYPE cairo_surface_t*
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR 1
-#define FCITX_CLASSIC_UI_GETKEYBOARDFONTCOLOR_RETURNTYPE FcitxConfigColor *
-#define FCITX_CLASSIC_UI_GETFONT 2
-#define FCITX_CLASSIC_UI_GETFONT_RETURNTYPE char**
-
+#define XMLCHAR_CAST (const char*)
+#define FREE_IF_NOT_NULL(x) do { \
+    if (x) \
+        free(x); \
+    x = NULL; \
+    } while(0)
+    
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

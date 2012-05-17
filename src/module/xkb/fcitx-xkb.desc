@@ -1,0 +1,12 @@
+[X Keyboard/OverrideSystemXKBSettings]
+Type=Boolean
+DefaultValue=True
+Description=Allow to Override System XKB Settings
+
+[X Keyboard/IgnoreInputMethodLayoutRequest]
+Type=Boolean
+DefaultValue=False
+Description=Ignore Input Method Layout Request
+
+[DescriptionFile]
+LocaleDomain=fcitx-keyboard

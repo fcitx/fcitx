@@ -1,0 +1,46 @@
+[Keyboard/CommitWithExtraSpace]
+Type=Boolean
+DefaultValue=False
+Description=Commit with extra space when choose candidate word
+
+[Keyboard/HotkeyToggleWordHint]
+Type=Hotkey
+DefaultValue=CTRL_ALT_H
+Description=Toggle the word hint
+
+[Keyboard/EnableWordHint]
+Type=Boolean
+DefaultValue=False
+Description=Enable word hint if available
+
+[Keyboard/MinimumHintLength]
+Type=Integer
+DefaultValue=1
+Description=Minimum Length to trigger word hint
+
+[Keyboard/UseEnterToCommit]
+Type=Boolean
+DefaultValue=True
+Description=Use enter to commit the existing string
+
+[Keyboard/UsePresage]
+Type=Boolean
+DefaultValue=False
+Description=Use presage to predict if possible.
+
+[Keyboard/PreferredEnchantProvider]
+Type=Enum
+DefaultValue=Myspell
+EnumCount=3
+Enum0=Default
+Enum1=Aspell
+Enum2=Myspell
+Description=Preferred Enchant Provider (Need Restart)
+
+[DescriptionFile]
+LocaleDomain=fcitx-keyboard
+
+[Keyboard/HotkeyAddToUserDict]
+Type=Hotkey
+DefaultValue=CTRL_ALT_N
+Description=Add current input buffer to user dictionary

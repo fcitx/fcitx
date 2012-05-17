@@ -1,10 +1,10 @@
 #ifndef TABLEDICT_H
 #define TABLEDICT_H
 
-#include <fcitx-utils/utf8.h>
-#include <fcitx-config/fcitx-config.h>
-#include <fcitx-config/hotkey.h>
-#include <fcitx-utils/memory.h>
+#include "fcitx-utils/utf8.h"
+#include "fcitx-config/fcitx-config.h"
+#include "fcitx-config/hotkey.h"
+#include "fcitx-utils/memory.h"
 
 #define MAX_CODE_LENGTH  30
 #define PHRASE_MAX_LENGTH 10

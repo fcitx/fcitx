@@ -204,7 +204,7 @@ FCITX_EXPORT_API
 FcitxContextState FcitxInstanceGetCurrentStatev2(FcitxInstance* instance)
 {
     if (instance->CurrentIC) {
-        if (instance->config->firstAsInactive && instance->CurrentIC->state == IS_INACTIVE)
+        if (instance->CurrentIC->state == IS_INACTIVE)
             return IS_ACTIVE;
         return instance->CurrentIC->state;
     }

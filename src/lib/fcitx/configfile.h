@@ -107,8 +107,8 @@ extern "C" {
         FcitxShareState shareState;        /**< Input method use global shared state*/
         FcitxContextState defaultIMState;        /**< Input method enable by default */
         boolean bIMSwitchKey; /**< Enable Left Ctrl + Left Shift to Switch Between Input Method */
-        boolean firstAsInactive; /**< use first input method as inactive state */
-        FcitxContextState _defaultIMState; /**< default input method state */
+        boolean dummy; /**< dummy */
+        int _defaultIMState; /**< default input method state */
         boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
         int iIMSwitchKey; /**< the type of input method switch key */
         int padding[59]; /**< padding */

@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-keyboard
+_GeneralName=Keyboard Input Method
+_Comment=Use Keyboard Layout as Input Method
+Category=InputMethod
+Enabled=True
+Library=fcitx-keyboard.so
+Type=SharedLibrary
+Dependency=fcitx-xkb
+IMRegisterMethod=Self

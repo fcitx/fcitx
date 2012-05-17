@@ -34,7 +34,7 @@
 #include "fcitx-config.h"
 #include "fcitx-utils/log.h"
 #include "hotkey.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 #include <locale.h>
 
 

@@ -31,7 +31,7 @@
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
 #include "module/x11/x11stuff.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 
 #define MESSAGE_WINDOW_MARGIN 20

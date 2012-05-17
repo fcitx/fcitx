@@ -834,7 +834,7 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     if (ic)
         FcitxInstanceSetLocalIMName(instance, ic, NULL);
-    FcitxInstanceSwitchIMInternal(instance, index, instance->config->firstAsInactive, true);
+    FcitxInstanceSwitchIMInternal(instance, index, true, true);
 }
 
 void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
@@ -1105,23 +1105,15 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
         }
     }
 
-    if (instance->config->firstAsInactive) {
-        if (ic->state != IS_ACTIVE) {
-            targetIMIndex = 0;
-        }
-        else {
-            if (ic2->imname)
-                targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
-            else
-                targetIMIndex = globalIndex;
-            skipZero = true;
-        }
+    if (ic->state != IS_ACTIVE) {
+        targetIMIndex = 0;
     }
     else {
         if (ic2->imname)
             targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
         else
             targetIMIndex = globalIndex;
+        skipZero = true;
     }
 
     if (targetIMIndex != instance->iIMIndex)
@@ -1190,7 +1182,7 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
     if (ic == NULL)
         return;
 
-    if (instance->config->firstAsInactive && !(ic->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)) {
+    if (!(ic->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)) {
         FcitxInstanceChangeIMState(instance, ic);
         return;
     }
@@ -1315,7 +1307,7 @@ boolean IMMenuAction(FcitxUIMenu *menu, int index)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
-    if (index == 0 && FcitxInstanceGetGlobalConfig(instance)->firstAsInactive)
+    if (index == 0)
         FcitxInstanceCloseIM(instance, instance->CurrentIC);
     else {
         FcitxInstanceSwitchIM(instance, index);

@@ -39,7 +39,7 @@
 #include "fcitx/module.h"
 #include "MenuWindow.h"
 #include "fcitx/instance.h"
-#include <fcitx-utils/utils.h>
+#include "fcitx-utils/utils.h"
 
 static boolean TrayEventHandler(void *arg, XEvent* event);
 

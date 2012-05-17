@@ -33,7 +33,7 @@
 
 #if defined(Q_WS_X11)
 #include <X11/Xlib.h>
-#include <fcitx/frontend.h>
+#include "fcitx/frontend.h"
 
 class ProcessKeyWatcher : public QDBusPendingCallWatcher
 {

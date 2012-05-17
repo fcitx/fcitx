@@ -14,22 +14,16 @@ Description=Share State Among Window
 
 [Program/DefaultInputMethodState]
 Type=Enum
-DefaultValue=Close
-EnumCount=3
-Enum0=Close
-Enum1=Inactive
-Enum2=Active
+DefaultValue=Inactive
+EnumCount=2
+Enum0=Inactive
+Enum1=Active
 Description=Default Input Method State
 
 [Program/FirstRun]
 Type=Boolean
 DefaultValue=True
 Description=It's the first time Fcitx Start.
-
-[Program/FirstAsInactive]
-Type=Boolean
-DefaultValue=False
-Description=Use first input method as inactive state
 
 [Output/HalfPuncAfterNumber]
 Type=Boolean
