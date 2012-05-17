@@ -336,6 +336,15 @@ _fcitx_client_create_ic(FcitxClient *im)
         g_object_unref (im->cancellable);
         im->cancellable = NULL;
     }
+    if (im->improxy) {
+        g_object_unref(im->improxy);
+        im->improxy = NULL;
+    }
+
+    if (im->icproxy) {
+        g_object_unref(im->icproxy);
+        im->icproxy = NULL;
+    }
     im->cancellable = g_cancellable_new ();
     g_dbus_proxy_new_for_bus(
         G_BUS_TYPE_SESSION,
@@ -361,6 +370,8 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
         g_object_unref (im->cancellable);
         im->cancellable = NULL;
     }
+    if (im->improxy)
+        g_object_unref(im->improxy);
     im->improxy = g_dbus_proxy_new_for_bus_finish(res, &error);
     if (error) {
         g_warning ("Create fcitx input method proxy failed: %s.", error->message);
@@ -445,6 +456,8 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
         g_object_unref (im->cancellable);
         im->cancellable = NULL;
     }
+    if (im->icproxy)
+        g_object_unref(im->icproxy);
     im->icproxy = g_dbus_proxy_new_for_bus_finish(res, &error);
 
     if (error) {
