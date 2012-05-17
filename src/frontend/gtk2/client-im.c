@@ -116,7 +116,9 @@ static guint signals[LAST_SIGNAL] = {0};
 static GDBusInterfaceInfo *_fcitx_client_get_interface_info(void);
 static GDBusInterfaceInfo *_fcitx_client_get_clientic_info(void);
 static void _fcitx_client_create_ic(FcitxClient* im);
+static void _fcitx_client_create_ic_phase1_finished(GObject* source_object, GAsyncResult* res, gpointer user_data);
 static void _fcitx_client_create_ic_cb(GObject *source_object, GAsyncResult *res, gpointer user_data);
+static void _fcitx_client_create_ic_phase2_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_g_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 static void fcitx_client_init(FcitxClient *im);
 static void fcitx_client_finalize(GObject *object);
@@ -320,23 +322,48 @@ fcitx_client_init(FcitxClient *im)
                    );
     im->improxy = NULL;
     im->icproxy = NULL;
-
-    _fcitx_client_create_ic(im);
 }
 
 static void
 _fcitx_client_create_ic(FcitxClient *im)
 {
+    if (im->cancellable) {
+        g_cancellable_cancel (im->cancellable);
+        g_object_unref (im->cancellable);
+        im->cancellable = NULL;
+    }
+    im->cancellable = g_cancellable_new ();
+    g_dbus_proxy_new_for_bus(
+        G_BUS_TYPE_SESSION,
+        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+        _fcitx_client_get_interface_info(),
+        im->servicename,
+        FCITX_IM_DBUS_PATH,
+        FCITX_IM_DBUS_INTERFACE,
+        im->cancellable,
+        _fcitx_client_create_ic_phase1_finished,
+        im
+    );
+};
+
+static void
+_fcitx_client_create_ic_phase1_finished(GObject *source_object,
+                                        GAsyncResult *res,
+                                        gpointer user_data)
+{
+    FcitxClient* im = (FcitxClient*) user_data;
     GError* error = NULL;
-    im->improxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
-                  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                  _fcitx_client_get_interface_info(),
-                  im->servicename,
-                  FCITX_IM_DBUS_PATH,
-                  FCITX_IM_DBUS_INTERFACE,
-                  NULL,
-                  &error
-                                               );
+    if (im->cancellable) {
+        g_object_unref (im->cancellable);
+        im->cancellable = NULL;
+    }
+    im->improxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+    if (error) {
+        g_warning ("Create fcitx input method proxy failed: %s.", error->message);
+        g_error_free(error);
+    }
+    if (!im->improxy)
+        return;
 
     gchar* owner_name = g_dbus_proxy_get_name_owner(im->improxy);
 
@@ -347,6 +374,7 @@ _fcitx_client_create_ic(FcitxClient *im)
     }
     g_free(owner_name);
 
+    im->cancellable = g_cancellable_new ();
     char* appname = fcitx_utils_get_process_name();
     int pid = getpid();
     g_dbus_proxy_call(
@@ -355,7 +383,7 @@ _fcitx_client_create_ic(FcitxClient *im)
         g_variant_new("(si)", appname, pid),
         G_DBUS_CALL_FLAGS_NONE,
         -1,           /* timeout */
-        NULL,
+        im->cancellable,
         _fcitx_client_create_ic_cb,
         im
     );
@@ -368,9 +396,13 @@ _fcitx_client_create_ic_cb(GObject *source_object,
                            GAsyncResult *res,
                            gpointer user_data)
 {
-    GError* error = NULL;
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
     FcitxClient* im = (FcitxClient*) user_data;
+    GError* error = NULL;
+    if (im->cancellable) {
+        g_object_unref (im->cancellable);
+        im->cancellable = NULL;
+    }
+    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
 
     if (error) {
         g_error_free(error);
@@ -383,16 +415,33 @@ _fcitx_client_create_ic_cb(GObject *source_object,
 
     sprintf(im->icname, FCITX_IC_DBUS_PATH, im->id);
 
-    im->icproxy = g_dbus_proxy_new_for_bus_sync(
-                      G_BUS_TYPE_SESSION,
-                      G_DBUS_PROXY_FLAGS_NONE,
-                      _fcitx_client_get_clientic_info(),
-                      im->servicename,
-                      im->icname,
-                      FCITX_IC_DBUS_INTERFACE,
-                      NULL,
-                      &error
-                  );
+    im->cancellable = g_cancellable_new ();
+    g_dbus_proxy_new_for_bus(
+        G_BUS_TYPE_SESSION,
+        G_DBUS_PROXY_FLAGS_NONE,
+        _fcitx_client_get_clientic_info(),
+        im->servicename,
+        im->icname,
+        FCITX_IC_DBUS_INTERFACE,
+        im->cancellable,
+        _fcitx_client_create_ic_phase2_finished,
+        im
+    );
+}
+
+
+static void
+_fcitx_client_create_ic_phase2_finished(GObject *source_object,
+                                        GAsyncResult *res,
+                                        gpointer user_data)
+{
+    FcitxClient* im = (FcitxClient*) user_data;
+    GError* error = NULL;
+    if (im->cancellable) {
+        g_object_unref (im->cancellable);
+        im->cancellable = NULL;
+    }
+    im->icproxy = g_dbus_proxy_new_for_bus_finish(res, &error);
 
     if (error) {
         g_error_free(error);
