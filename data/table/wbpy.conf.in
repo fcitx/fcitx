@@ -15,3 +15,4 @@ ExactMatch=False
 PromptTableCode=False
 Enabled=True
 LangCode=zh_CN
+NoMatchDontCommit=True
