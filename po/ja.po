@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-17 22:10+0800\n"
+"POT-Creation-Date: 2012-05-18 13:02+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -22,7 +22,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1365
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1420
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -176,8 +176,8 @@ msgstr ""
 msgid "Auto Send Candidate Word to Client"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1136
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1145
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1117
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1126
 msgid "Available Value:"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgstr "設定"
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:860
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:841
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr ""
@@ -463,12 +463,12 @@ msgstr ""
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:872
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:853
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:936
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:917
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
@@ -477,8 +477,8 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:100
-msgid "Enable Switch Key to switch Between Input Method"
+#: /home/saber/Develop/fcitx/data/config.desc:115
+msgid "Enable Hotkey to scroll Between Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
@@ -555,6 +555,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:444
 msgid "Exit"
 msgstr "閉じる"
+
+#: /home/saber/Develop/fcitx/data/config.desc:110
+msgid "Extra key for trigger input method"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/core/errorhandler.c:59
 #, c-format
@@ -790,7 +794,7 @@ msgid "Input Message Color"
 msgstr ""
 
 #: ../..//data/fcitx.desktop.in.h:2
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1298
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1353
 msgid "Input Method"
 msgstr ""
 
@@ -801,7 +805,7 @@ msgstr ""
 msgid "Input Method Disabled"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1363
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1418
 msgid "Input Speed: "
 msgstr ""
 
@@ -822,7 +826,7 @@ msgstr ""
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:890
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:871
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
@@ -1070,12 +1074,12 @@ msgstr ""
 msgid "OpenCC initialization error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1083
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1064
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1093
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1074
 #, c-format
 msgid "Option %s is Invalid."
 msgstr ""
@@ -1333,6 +1337,10 @@ msgstr ""
 msgid "Saving All Config and Input History"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/data/config.desc:125
+msgid "Scroll between Input Method"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/data/config.desc:4
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
@@ -1488,14 +1496,6 @@ msgstr ""
 msgid "Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:110
-msgid "Switch Key to switch Between Input Method"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/config.desc:125
-msgid "Switching Active and Inactive Mode"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/data/config.desc:150
 msgid "Switching Full Width Character Mode"
 msgstr ""
@@ -1561,12 +1561,12 @@ msgstr ""
 msgid "TraditionalChinese"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:7
-msgid "Trigger Key for QuickPhrase"
+#: /home/saber/Develop/fcitx/data/config.desc:95
+msgid "Trigger Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:95
-msgid "Triggering Input Method"
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:7
+msgid "Trigger Key for QuickPhrase"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:38
@@ -1593,7 +1593,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:819
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:806
 msgid "Unable to create process"
 msgstr ""
 
@@ -1744,11 +1744,11 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1367
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1422
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1138
 #, c-format
 msgid "no default option for %s/%s"
 msgstr ""

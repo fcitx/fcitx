@@ -92,22 +92,7 @@ Description=Do not show input window if there is only one candidate (Hide when o
 [Hotkey/TriggerKey]
 Type=Hotkey
 DefaultValue=CTRL_SPACE
-Description=Triggering Input Method
-
-[Hotkey/IMSwitchKey]
-Type=Boolean
-DefaultValue=True
-Description=Enable Switch Key to switch Between Input Method
-
-[Hotkey/IMSwitchHotkey]
-Type=Enum
-EnumCount=4
-Enum0=CTRL_SHIFT
-Enum1=ALT_SHIFT
-Enum2=CTRL_SUPER
-Enum3=ALT_SUPER
-DefaultValue=CTRL_SHIFT
-Description=Switch Key to switch Between Input Method
+Description=Trigger Input Method
 
 [Hotkey/SwitchKey]
 Type=Enum
@@ -122,7 +107,22 @@ Enum6=CTRL Both
 Enum7=SHIFT Both
 Enum8=Disabled
 DefaultValue=L_CTRL
-Description=Switching Active and Inactive Mode
+Description=Extra key for trigger input method
+
+[Hotkey/IMSwitchKey]
+Type=Boolean
+DefaultValue=True
+Description=Enable Hotkey to scroll Between Input Method
+
+[Hotkey/IMSwitchHotkey]
+Type=Enum
+EnumCount=4
+Enum0=CTRL_SHIFT
+Enum1=ALT_SHIFT
+Enum2=CTRL_SUPER
+Enum3=ALT_SUPER
+DefaultValue=CTRL_SHIFT
+Description=Scroll between Input Method
 
 [Hotkey/DoubleSwitchKey]
 Type=Boolean

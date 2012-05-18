@@ -250,11 +250,7 @@ boolean TrayEventHandler(void *arg, XEvent* event)
         if (event->xbutton.window == trayWindow->window) {
             switch (event->xbutton.button) {
             case Button1:
-                if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
-                    FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-                } else {
-                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-                }
+                FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                 break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;

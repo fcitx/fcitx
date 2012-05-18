@@ -83,9 +83,9 @@ Bool XIMUnsetFocusHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(xim->owner);
     if (ic && GetXimIC(ic)->id == call_data->icid) {
         FcitxUICommitPreedit(xim->owner);
-        FcitxUIOnInputUnFocus(xim->owner);
         FcitxUICloseInputWindow(xim->owner);
         FcitxInstanceSetCurrentIC(xim->owner, NULL);
+        FcitxUIOnInputUnFocus(xim->owner);
     }
 
     return True;

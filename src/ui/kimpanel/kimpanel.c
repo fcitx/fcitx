@@ -355,6 +355,7 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
     char* description;
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     if (ic == NULL) {
+        FcitxLog(INFO, "AAAAA");
         icon = "kbd";
         imname = _("No input window");
         description = _("No input window");
@@ -710,11 +711,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             if (strlen(s0) > len) {
                 s0 += len;
                 if (strcmp("logo", s0) == 0) {
-                    if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
-                        FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-                    } else {
-                        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-                    }
+                    FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                 } else if (strcmp("keyboard", s0) == 0) {
                     FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {

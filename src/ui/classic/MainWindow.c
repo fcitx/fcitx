@@ -605,11 +605,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     classicui->iMainWindowOffsetY = event->xbutton.y;
 
                     if (!ClassicUIMouseClick(mainWindow->owner, mainWindow->window, &classicui->iMainWindowOffsetX, &classicui->iMainWindowOffsetY)) {
-                        if (FcitxInstanceGetCurrentState(instance) == IS_CLOSED) {
-                            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-                        } else {
-                            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-                        }
+                        FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                     }
                     SaveClassicUIConfig(classicui);
                 } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {

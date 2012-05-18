@@ -821,9 +821,9 @@ static void IPCICFocusOut(FcitxIPCFrontend* ipc, FcitxInputContext* ic)
     FcitxInputContext* currentic = FcitxInstanceGetCurrentIC(ipc->owner);
     if (ic && ic == currentic) {
         FcitxUICommitPreedit(ipc->owner);
-        FcitxUIOnInputUnFocus(ipc->owner);
         FcitxUICloseInputWindow(ipc->owner);
         FcitxInstanceSetCurrentIC(ipc->owner, NULL);
+        FcitxUIOnInputUnFocus(ipc->owner);
     }
 
     return;
