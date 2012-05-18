@@ -91,6 +91,7 @@ typedef struct _TableMetaData {
     int             iAutoPhraseLength;    //自动造词长度
     int             iSaveAutoPhraseAfter;   //选择N次后保存自动词组，0-不保存，1-立即保存
     boolean         bPromptTableCode;    //输入完毕后是否提示编码
+    boolean         bNoMatchDontCommit;
     char           *strSymbol;
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键

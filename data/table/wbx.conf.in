@@ -20,3 +20,4 @@ PromptTableCode=False
 Symbol=zzzz
 Enabled=True
 LangCode=zh_CN
+NoMatchDontCommit=True

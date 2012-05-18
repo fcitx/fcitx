@@ -40,10 +40,8 @@
 #include "fcitx-utils/utils.h"
 
 #include "config.h"
-#include "common.h"
 #include "xkb.h"
 #include "rules.h"
-#include "xkbdbus.h"
 
 #ifndef XKB_RULES_XML_FILE
 #define XKB_RULES_XML_FILE "/usr/share/X11/xkb/rules/evdev.xml"
@@ -192,10 +190,10 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
 
         rulesFile = fcitx_utils_malloc0(sizeof(char) * (1 + strlen(xkbParentDir) + strlen(rulesName) + strlen("/xkb/rules/")));
         sprintf(rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
-        FREE_IF_NOT_NULL(xkbParentDir);
+        fcitx_utils_free(xkbParentDir);
     }
 
-    FREE_IF_NOT_NULL(rulesName);
+    fcitx_utils_free(rulesName);
 
     if (rulesFile == NULL)
         rulesFile = strdup(XKB_RULES_XML_FILE);
@@ -629,8 +627,6 @@ void* FcitxXkbCreate(FcitxInstance* instance)
         AddFunction(addon, FcitxXkbGetRules);
         AddFunction(addon, FcitxXkbGetCurrentLayout);
         AddFunction(addon, FcitxXkbLayoutExists);
-
-        FcitxXkbDBusInit(xkb);
 
         return xkb;
     } while (0);

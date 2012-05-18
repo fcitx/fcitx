@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "config.h"
-#include "common.h"
 
 #include <libxml/parser.h>
 
@@ -27,6 +26,8 @@
 
 #include <fcitx-utils/utils.h>
 #include "isocodes.h"
+
+#define XMLCHAR_CAST (const char*)
 
 static void IsoCodes639HandlerStartElement(void *ctx,
                                            const xmlChar *name,
@@ -41,11 +42,11 @@ FcitxIsoCodes* FcitxXkbReadIsoCodes(const char* iso639, const char* iso3166)
 {
     xmlSAXHandler handle;
     memset(&handle, 0, sizeof(xmlSAXHandler));
-    
+
     xmlInitParser();
-    
+
     FcitxIsoCodes* isocodes = (FcitxIsoCodes*) fcitx_utils_malloc0(sizeof(FcitxIsoCodes));
-    
+
     handle.startElement = IsoCodes639HandlerStartElement;
     xmlSAXUserParseFile(&handle, isocodes, iso639);
     handle.startElement = IsoCodes3166HandlerStartElement;
@@ -85,17 +86,17 @@ static void IsoCodes639HandlerStartElement(void *ctx,
 
 void FcitxIsoCodes639EntryFree(FcitxIsoCodes639Entry* entry)
 {
-    FREE_IF_NOT_NULL(entry->iso_639_1_code);
-    FREE_IF_NOT_NULL(entry->iso_639_2B_code);
-    FREE_IF_NOT_NULL(entry->iso_639_2T_code);
-    FREE_IF_NOT_NULL(entry->name);
+    fcitx_utils_free(entry->iso_639_1_code);
+    fcitx_utils_free(entry->iso_639_2B_code);
+    fcitx_utils_free(entry->iso_639_2T_code);
+    fcitx_utils_free(entry->name);
     free(entry);
 }
 
 void FcitxIsoCodes3166EntryFree(FcitxIsoCodes3166Entry* entry)
 {
-    FREE_IF_NOT_NULL(entry->alpha_2_code);
-    FREE_IF_NOT_NULL(entry->name);
+    fcitx_utils_free(entry->alpha_2_code);
+    fcitx_utils_free(entry->name);
     free(entry);
 }
 
@@ -139,7 +140,7 @@ void FcitxIsoCodesFree(FcitxIsoCodes* isocodes)
         FcitxIsoCodes639Entry* curisocodes639 = isocodes639;
         HASH_DELETE(hh1, isocodes639, curisocodes639);
     }
-    
+
     isocodes639 = isocodes->iso6392T;
     while (isocodes639) {
         FcitxIsoCodes639Entry* curisocodes639 = isocodes639;
@@ -152,6 +153,6 @@ void FcitxIsoCodesFree(FcitxIsoCodes* isocodes)
         HASH_DEL(isocodes3166, curisocodes3166);
         FcitxIsoCodes3166EntryFree(curisocodes3166);
     }
-    
+
     free(isocodes);
 }

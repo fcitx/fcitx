@@ -44,6 +44,8 @@
 #include "module/punc/punc.h"
 #include "tablepinyinwrapper.h"
 
+#define MAX_TABLE_INPUT 50
+
 static void FreeTableConfig(void *v);
 const UT_icd table_icd = {sizeof(TableMetaData), NULL , NULL, FreeTableConfig};
 const UT_icd tableCand_icd = {sizeof(TABLECANDWORD*), NULL, NULL, NULL };
@@ -280,7 +282,14 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                     retVal = IRV_DO_NOTHING;
             } else {
                 /* length is not too large */
-                if ((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength) || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)) {
+                if (((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength)
+                    || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)
+                    || (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0
+                        && table->bNoMatchDontCommit
+                        && FcitxInputStateGetRawInputBufferSize(input) >= table->tableDict->iCodeLength
+                    ))
+                    && FcitxInputStateGetRawInputBufferSize(input) <= MAX_TABLE_INPUT
+                ) {
                     strCodeInput[FcitxInputStateGetRawInputBufferSize(input)] = (char) sym;
                     strCodeInput[FcitxInputStateGetRawInputBufferSize(input) + 1] = '\0';
                     FcitxInputStateSetRawInputBufferSize(input, FcitxInputStateGetRawInputBufferSize(input) + 1);

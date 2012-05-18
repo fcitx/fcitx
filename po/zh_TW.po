@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 13:02+0800\n"
-"PO-Revision-Date: 2012-05-08 17:13+0800\n"
+"POT-Creation-Date: 2012-05-19 00:45+0800\n"
+"PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_TW\n"
@@ -20,9 +20,14 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.4\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1136
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1145
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:149
+#, c-format
+msgid "%s"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1420
 msgid "/min  Time Used: "
@@ -76,6 +81,11 @@ msgstr ""
 msgid "Active Tray Icon"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:1
+#, fuzzy
+msgid "Add Lua script support for Fcitx"
+msgstr "Fcitx 的 Kimpanel 支援"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:104
 msgid "Add Watch Function Error"
 msgstr ""
@@ -117,12 +127,12 @@ msgstr "所有"
 msgid "Allow to Override System XKB Settings"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:146
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:151
 msgid "Alternative Next Page Key"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:136
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:141
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:146
 msgid "Alternative Prev Page Key"
 msgstr ""
 
@@ -162,16 +172,12 @@ msgstr "自動觸發英文模式字詞"
 msgid "Auto Phrase"
 msgstr "自動字詞"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:82
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:87
 msgid "Auto Phrase Length"
 msgstr "自動字詞長度"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:87
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:92
 msgid "Auto Phrase Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:48
-msgid "Auto Send Candidate Word if no match in Code Table"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:43
@@ -202,9 +208,8 @@ msgid "CTRL_SHIFT"
 msgstr "Ctrl+Shift"
 
 #: unknown
-#, fuzzy
 msgid "CTRL_SUPER"
-msgstr "Ctrl+Shift"
+msgstr "Ctrl+Super"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:360
 msgid "Can not find System Database of Pinyin!"
@@ -259,7 +264,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:448
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:457
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -267,7 +272,7 @@ msgstr ""
 msgid "Category"
 msgstr "類別"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:111
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:116
 msgid "Choose"
 msgstr "選擇鍵"
 
@@ -275,11 +280,11 @@ msgstr "選擇鍵"
 msgid "Choose Second and Third Candidate Word"
 msgstr "選擇第二第三候選詞"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:503
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:512
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:495
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:504
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
@@ -316,7 +321,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1134
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1143
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -336,7 +341,7 @@ msgstr "描述"
 msgid "Commit"
 msgstr "提交輸入"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:156
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:161
 msgid "Commit and pass when invalid key of this table pressed"
 msgstr ""
 
@@ -477,7 +482,7 @@ msgstr ""
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:121
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:126
 msgid "Enable"
 msgstr "啟用"
 
@@ -502,6 +507,7 @@ msgstr "輸入中啟用"
 msgid "End Key"
 msgstr "中止鍵"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:174
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
 msgid "English (US)"
 msgstr ""
@@ -574,11 +580,12 @@ msgstr "Fcitx 接收到信號：%d"
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: ../..//data/fcitx.desktop.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:292
+#: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr "Fcitx"
 
+#. kate: indent-mode cstyle; space-indent on; indent-width 4;
 #: ../..//data/fcitx-configtool.desktop.in.h:1
 msgid "Fcitx Config Tool"
 msgstr "Fcitx 設定工具"
@@ -590,6 +597,11 @@ msgstr "Fcitx DBus 前端 "
 #: ../..//data/fcitx-configtool.desktop.in.h:2
 msgid "Fcitx GUI Config Tool"
 msgstr "Fcitx GUI 設定工具"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:2
+#, fuzzy
+msgid "Fcitx Lua Support"
+msgstr "標點支援"
 
 #: ../..//src/ui/classic/fcitx-skin-installer.desktop.in.h:1
 msgid "Fcitx Skin Installer"
@@ -615,7 +627,7 @@ msgstr ""
 msgid "First Candidate Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:151
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:156
 msgid "First Candidate Display as Preedit"
 msgstr ""
 
@@ -772,7 +784,7 @@ msgstr "圖示名稱"
 msgid "Ignore Input Method Layout Request"
 msgstr "目前輸入法名稱"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:161
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:166
 msgid "Ignore Punctuation"
 msgstr "忽略標點"
 
@@ -800,8 +812,8 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: ../..//data/fcitx.desktop.in.h:2
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1353
+#: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr "輸入法"
 
@@ -843,13 +855,18 @@ msgstr ""
 msgid "It's the first time Fcitx Start."
 msgstr "這是 Fcitx 第一次啟動。"
 
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:82
+msgid ""
+"Keep current buffer when there is no match item and input length is equal "
+"code length"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:261
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
-#, fuzzy
 msgid "Keyboard"
-msgstr "虛擬鍵盤"
+msgstr "鍵盤"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:375
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:409
@@ -862,7 +879,12 @@ msgstr "虛擬鍵盤"
 msgid "Keyboard - %s - %s"
 msgstr "虛擬鍵盤"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:131
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:1
+#, fuzzy
+msgid "Keyboard Input Method"
+msgstr "切換輸入法"
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:136
 msgid "Keyboard Layout to be used"
 msgstr "鍵盤配置"
 
@@ -886,7 +908,7 @@ msgstr "左 Shift"
 msgid "LangCode"
 msgstr "語言代碼"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:116
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:121
 msgid "Language Code for this table"
 msgstr "這個碼表的語言代碼"
 
@@ -898,7 +920,7 @@ msgstr ""
 msgid "Left-down position of Output"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:429
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -917,7 +939,7 @@ msgstr ""
 msgid "Load Autophrase OK"
 msgstr "載入自動字詞成功"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:153
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:155
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr ""
@@ -989,6 +1011,12 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Minimum Length to trigger word hint"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:48
+msgid ""
+"Minimum length trigger committing current candidate when there is match item "
+"and with next input will be no match item"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:387
@@ -1114,11 +1142,12 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1131
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1140
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/tmp/pinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:111
 msgid "Pinyin"
@@ -1132,7 +1161,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "拼音鍵"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:446
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:455
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1158,8 +1187,8 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:309
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:311
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:309
 msgid "Press Enter to input text"
 msgstr "按下 Enter 輸入文字"
 
@@ -1201,7 +1230,7 @@ msgstr "設定檔"
 msgid "Program"
 msgstr "程式"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:97
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:102
 msgid "Prompt Table Code"
 msgstr "提示碼表編碼"
 
@@ -1246,6 +1275,7 @@ msgstr "快速字詞"
 msgid "Quickphrase"
 msgstr "快速字詞"
 
+#: /home/saber/Develop/fcitx/build/po/tmp/qw.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-qw.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/qw/qw.c:68
 msgid "Quwei"
@@ -1271,7 +1301,7 @@ msgstr ""
 msgid "Remind"
 msgstr "聯想"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1027
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1036
 msgid "Remind:"
 msgstr "聯想："
 
@@ -1335,7 +1365,7 @@ msgstr ""
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:92
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:97
 msgid "Save Auto Phrase"
 msgstr "儲存自動字詞"
 
@@ -1418,6 +1448,7 @@ msgstr "顯示版本"
 msgid "Shuang Pin Schema"
 msgstr "預設雙拼方案"
 
+#: /home/saber/Develop/fcitx/build/po/tmp/shuangpin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:127
 msgid "Shuangpin"
 msgstr "雙拼"
@@ -1521,11 +1552,11 @@ msgstr "切換聯想模式"
 msgid "Switching Virtual Keyboard"
 msgstr "切換虛擬鍵盤"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:101 unknown
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:106 unknown
 msgid "Symbol"
 msgstr "符號"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:106
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:111
 msgid "Symbol File"
 msgstr "符號檔案"
 
@@ -1537,7 +1568,7 @@ msgstr "碼表"
 msgid "Table Code Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:160
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:162
 #, c-format
 msgid "Table Config %s is %s"
 msgstr ""
@@ -1628,7 +1659,7 @@ msgstr ""
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:126
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:131
 msgid "Use Custom Prompt String defined in table"
 msgstr "使用碼表中自訂的提示文字"
 
@@ -1639,6 +1670,11 @@ msgstr ""
 #: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Use Full Width Character"
 msgstr "使用全形字元"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:2
+#, fuzzy
+msgid "Use Keyboard Layout as Input Method"
+msgstr "鍵盤配置"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:63
 msgid "Use Matching Key"
@@ -1720,6 +1756,15 @@ msgstr "五筆拼音"
 #, fuzzy
 msgid "X Keyboard"
 msgstr "虛擬鍵盤"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xkb.conf.in.h:1
+#, fuzzy
+msgid "X Keyboard Integration"
+msgstr "虛擬鍵盤"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xkbdbus.conf.in.h:1
+msgid "X Keyboard Integration export with DBus"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/tray.c:164
 #, c-format

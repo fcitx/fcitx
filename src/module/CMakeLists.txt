@@ -13,6 +13,7 @@ endif (_ENABLE_CAIRO)
 
 if (_ENABLE_DBUS)
     add_subdirectory(dbus)
+    add_subdirectory(xkbdbus)
 endif (_ENABLE_DBUS)
 
 if (ENABLE_LUA)

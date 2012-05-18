@@ -20,8 +20,8 @@
 
 #include <libxml/parser.h>
 
-#include "common.h"
 #include "rules.h"
+#define XMLCHAR_CAST (const char*)
 
 static void RulesHandlerStartElement(void *ctx,
                               const xmlChar *name,
@@ -79,22 +79,22 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
     handle.startElement = RulesHandlerStartElement;
     handle.endElement = RulesHandlerEndElement;
     handle.characters = RulesHandlerCharacters;
-    
+
     xmlInitParser();
-    
+
     FcitxXkbRules* rules = (FcitxXkbRules*) fcitx_utils_malloc0(sizeof(FcitxXkbRules));
     utarray_new(rules->layoutInfos, &layout_icd);
     utarray_new(rules->modelInfos, &model_icd);
     utarray_new(rules->optionGroupInfos, &option_group_icd);
-    
+
     FcitxXkbRulesHandler ruleshandler;
     ruleshandler.rules = rules;
     ruleshandler.path = fcitx_utils_new_string_list();
     ruleshandler.fromExtra = false;
-    
+
     xmlSAXUserParseFile(&handle, &ruleshandler, file);
     utarray_free(ruleshandler.path);
-    
+
     if (strcmp (file + strlen(file) - 4, ".xml") == 0) {
         char* extra = strndup (file, strlen (file) - 4), *extrafile;
         asprintf(&extrafile, "%s.extras.xml", extra);
@@ -108,11 +108,11 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
         utarray_free(ruleshandler.path);
         free(extra);
         free(extrafile);
-        
+
         MergeRules(rules, rulesextra);
     }
-    
-    
+
+
     xmlCleanupParser();
 
     return rules;
@@ -122,12 +122,12 @@ void FcitxXkbRulesFree(FcitxXkbRules* rules)
 {
     if (!rules)
         return;
-    
+
     utarray_free(rules->layoutInfos);
     utarray_free(rules->modelInfos);
     utarray_free(rules->optionGroupInfos);
-    
-    FREE_IF_NOT_NULL(rules->version);
+
+    fcitx_utils_free(rules->version);
     free(rules);
 }
 
@@ -135,7 +135,7 @@ void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra)
 {
     utarray_concat(rules->modelInfos, rulesextra->modelInfos);
     utarray_concat(rules->optionGroupInfos, rulesextra->optionGroupInfos);
-    
+
     FcitxXkbLayoutInfo* layoutInfo;
     UT_icd icd = {sizeof(FcitxXkbLayoutInfo*), 0, 0, 0};
     UT_array toAdd;
@@ -152,13 +152,13 @@ void MergeRules(FcitxXkbRules* rules, FcitxXkbRules* rulesextra)
         else
             utarray_push_back(&toAdd, &layoutInfo);
     }
-    
+
     int i;
     for(i = 0; i < utarray_len(&toAdd); i ++) {
         FcitxXkbLayoutInfo* p = *(FcitxXkbLayoutInfo**) utarray_eltptr(&toAdd, i);
         utarray_push_back(rules->layoutInfos, p);
     }
-    
+
     utarray_done(&toAdd);
     FcitxXkbRulesFree(rulesextra);
 }
@@ -171,11 +171,11 @@ char* FcitxXkbRulesToReadableString(FcitxXkbRules* rules)
     FcitxXkbVariantInfo* variantInfo;
     FcitxXkbOptionInfo* optionInfo;
     FcitxXkbOptionGroupInfo* optionGroupInfo;
-    
+
     UT_array* list = fcitx_utils_new_string_list();
-    
+
     fcitx_utils_string_list_printf_append(list, "Version: %s", rules->version);
-    
+
     for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rules->layoutInfos);
          layoutInfo != NULL;
          layoutInfo = (FcitxXkbLayoutInfo*) utarray_next(rules->layoutInfos, layoutInfo))
@@ -205,7 +205,7 @@ char* FcitxXkbRulesToReadableString(FcitxXkbRules* rules)
         fcitx_utils_string_list_printf_append(list, "\tModel Description: %s", modelInfo->description);
         fcitx_utils_string_list_printf_append(list, "\tModel Vendor: %s", modelInfo->vendor);
     }
-    
+
     for (optionGroupInfo = (FcitxXkbOptionGroupInfo*) utarray_front(rules->optionGroupInfos);
          optionGroupInfo != NULL;
          optionGroupInfo = (FcitxXkbOptionGroupInfo*) utarray_next(rules->optionGroupInfos, optionGroupInfo))
@@ -221,7 +221,7 @@ char* FcitxXkbRulesToReadableString(FcitxXkbRules* rules)
             fcitx_utils_string_list_printf_append(list, "\t\tOption Description: %s", optionInfo->description);
         }
     }
-    
+
     char* result = fcitx_utils_join_string_list(list, '\n');
     utarray_free(list);
     return result;
@@ -324,7 +324,7 @@ void RulesHandlerCharacters(void *ctx,
         }
         else if ( StringEndsWith(strPath, "layoutList/layout/variantList/variant/configItem/description") ) {
             FcitxXkbVariantInfo* variantInfo = (FcitxXkbVariantInfo*) utarray_back(layoutInfo->variantInfos);
-            FREE_IF_NOT_NULL(variantInfo->description);
+            fcitx_utils_free(variantInfo->description);
             variantInfo->description = strdup(trimmed);
         }
         else if ( StringEndsWith(strPath, "layoutList/layout/variantList/variant/configItem/languageList/iso639Id") ) {
@@ -352,7 +352,7 @@ void RulesHandlerCharacters(void *ctx,
         }
         else if ( StringEndsWith(strPath, "optionList/group/option/configItem/description") ) {
             FcitxXkbOptionInfo* optionInfo = (FcitxXkbOptionInfo*) utarray_back(optionGroupInfo->optionInfos);
-            FREE_IF_NOT_NULL(optionInfo->description);
+            fcitx_utils_free(optionInfo->description);
             optionInfo->description = strdup(trimmed);
         }
         free(strPath);
@@ -403,8 +403,8 @@ void FcitxXkbOptionInfoInit(void* arg)
 void FcitxXkbLayoutInfoFree(void* arg)
 {
     FcitxXkbLayoutInfo* layoutInfo = (FcitxXkbLayoutInfo*) arg;
-    FREE_IF_NOT_NULL(layoutInfo->name);
-    FREE_IF_NOT_NULL(layoutInfo->description);
+    fcitx_utils_free(layoutInfo->name);
+    fcitx_utils_free(layoutInfo->description);
     utarray_free(layoutInfo->languages);
     utarray_free(layoutInfo->variantInfos);
 }
@@ -413,8 +413,8 @@ void FcitxXkbLayoutInfoFree(void* arg)
 void FcitxXkbVariantInfoFree(void* arg)
 {
     FcitxXkbVariantInfo* variantInfo = (FcitxXkbVariantInfo*) arg;
-    FREE_IF_NOT_NULL(variantInfo->name);
-    FREE_IF_NOT_NULL(variantInfo->description);
+    fcitx_utils_free(variantInfo->name);
+    fcitx_utils_free(variantInfo->description);
     utarray_free(variantInfo->languages);
 }
 
@@ -422,17 +422,17 @@ void FcitxXkbVariantInfoFree(void* arg)
 void FcitxXkbModelInfoFree(void* arg)
 {
     FcitxXkbModelInfo* modelInfo = (FcitxXkbModelInfo*) arg;
-    FREE_IF_NOT_NULL(modelInfo->name);
-    FREE_IF_NOT_NULL(modelInfo->description);
-    FREE_IF_NOT_NULL(modelInfo->vendor);
+    fcitx_utils_free(modelInfo->name);
+    fcitx_utils_free(modelInfo->description);
+    fcitx_utils_free(modelInfo->vendor);
 }
 
 
 void FcitxXkbOptionGroupInfoFree(void* arg)
 {
     FcitxXkbOptionGroupInfo* optionGroupInfo = (FcitxXkbOptionGroupInfo*) arg;
-    FREE_IF_NOT_NULL(optionGroupInfo->name);
-    FREE_IF_NOT_NULL(optionGroupInfo->description);
+    fcitx_utils_free(optionGroupInfo->name);
+    fcitx_utils_free(optionGroupInfo->description);
     utarray_free(optionGroupInfo->optionInfos);
 }
 
@@ -440,8 +440,8 @@ void FcitxXkbOptionGroupInfoFree(void* arg)
 void FcitxXkbOptionInfoFree(void* arg)
 {
     FcitxXkbOptionInfo* optionInfo = (FcitxXkbOptionInfo*) arg;
-    FREE_IF_NOT_NULL(optionInfo->name);
-    FREE_IF_NOT_NULL(optionInfo->description);
+    fcitx_utils_free(optionInfo->name);
+    fcitx_utils_free(optionInfo->description);
 }
 
 void FcitxXkbLayoutInfoCopy(void* dst, const void* src)

@@ -175,6 +175,8 @@ extern "C" {
      **/
     void* fcitx_utils_malloc0(size_t bytes);
 
+#define fcitx_utils_new(TYPE) ((TYPE*) fcitx_utils_malloc0(sizeof(TYPE)))
+
     /**
      * Get Display number, Fcitx DBus and Socket are identified by display number.
      *

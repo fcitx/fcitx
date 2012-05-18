@@ -6,4 +6,4 @@ Category=Module
 Enabled=True
 Library=fcitx-xkb.so
 Type=SharedLibrary
-Dependency=fcitx-x11,fcitx-dbus
+Dependency=fcitx-x11

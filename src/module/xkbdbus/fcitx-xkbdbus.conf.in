@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-xkbdbus
+_GeneralName=X Keyboard Integration export with DBus
+_Comment=X Keyboard Integration export with DBus
+Category=Module
+Enabled=True
+Library=fcitx-xkbdbus.so
+Type=SharedLibrary
+Priority=80
+Dependency=fcitx-xkb,fcitx-dbus

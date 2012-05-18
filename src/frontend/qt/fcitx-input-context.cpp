@@ -32,7 +32,7 @@
 #include "fcitx-config/hotkey.h"
 #include "module/dbus/dbusstuff.h"
 #include "frontend/ipc/ipc.h"
-#include "fcitx-compose-data.h"
+#include "im/keyboard/fcitx-compose-data.h"
 #include "fcitx-input-context.h"
 #include "keyserver_x11.h"
 

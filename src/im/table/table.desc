@@ -45,7 +45,7 @@ Type=Integer
 DefaultValue=-1
 
 [CodeTable/NoneMatchAutoSend]
-Description=Auto Send Candidate Word if no match in Code Table
+Description=Minimum length trigger committing current candidate when there is match item and with next input will be no match item
 Type=Integer
 DefaultValue=-1
 
@@ -77,6 +77,11 @@ Type=Boolean
 Description=Auto Phrase
 Type=Boolean
 DefaultValue=True
+
+[CodeTable/NoMatchDontCommit]
+Description=Keep current buffer when there is no match item and input length is equal code length
+Type=Boolean
+DefaultValue=False
 
 [CodeTable/AutoPhraseLength]
 Description=Auto Phrase Length
