@@ -441,13 +441,10 @@ FcitxConfigSyncResult FcitxConfigOptionBoolean(FcitxConfigOption *option, FcitxC
         return SyncSuccess;
 
     case Value2Raw:
-        if (option->rawValue)
-            free(option->rawValue);
-
         if (*option->value.boolvalue)
-            option->rawValue = strdup("True");
+            fcitx_utils_string_swap(&option->rawValue, "True");
         else
-            option->rawValue = strdup("False");
+            fcitx_utils_string_swap(&option->rawValue, "False");
 
         return SyncSuccess;
     }
@@ -484,10 +481,7 @@ FcitxConfigSyncResult FcitxConfigOptionEnum(FcitxConfigOption *option, FcitxConf
         if (*option->value.enumerate < 0 || *option->value.enumerate >= cenum->enumCount)
             return SyncInvalid;
 
-        if (option->rawValue)
-            free(option->rawValue);
-
-        option->rawValue = strdup(cenum->enumDesc[*option->value.enumerate]);
+        fcitx_utils_string_swap(&option->rawValue, cenum->enumDesc[*option->value.enumerate]);
 
         return SyncSuccess;
     }
@@ -528,9 +522,7 @@ FcitxConfigSyncResult FcitxConfigOptionColor(FcitxConfigOption *option, FcitxCon
         g = RoundColor(g);
         b = RoundColor(b);
 
-        if (option->rawValue)
-            free(option->rawValue);
-
+        fcitx_utils_free(option->rawValue);
         option->rawValue = NULL;
 
         asprintf(&option->rawValue, "%d %d %d", r, g , b);
@@ -550,19 +542,12 @@ FcitxConfigSyncResult FcitxConfigOptionString(FcitxConfigOption *option, FcitxCo
     switch (sync) {
 
     case Raw2Value:
-
-        if (*option->value.string)
-            free(*option->value.string);
-
-        *option->value.string = strdup(option->rawValue);
+        fcitx_utils_string_swap(option->value.string, option->rawValue);
 
         return SyncSuccess;
 
     case Value2Raw:
-        if (option->rawValue)
-            free(option->rawValue);
-
-        option->rawValue = strdup(*option->value.string);
+        fcitx_utils_string_swap(&option->rawValue, *option->value.string);
 
         return SyncSuccess;
     }
@@ -578,11 +563,7 @@ FcitxConfigSyncResult FcitxConfigOptionI18NString(FcitxConfigOption *option, Fci
     switch (sync) {
 
     case Raw2Value:
-
-        if (*option->value.string)
-            free(*option->value.string);
-
-        *option->value.string = strdup(FcitxConfigOptionGetLocaleString(option));
+        fcitx_utils_string_swap(option->value.string, FcitxConfigOptionGetLocaleString(option));
 
         return SyncSuccess;
 

@@ -247,6 +247,22 @@ extern "C" {
      */
     char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename);
 
+    /**
+     * if obj is null, free it, after that, if str is NULL set it with NULL,
+     * if str is not NULL, set it with strdup(str)
+     *
+     * @param obj object string
+     * @param str source string
+     * @return void
+     **/
+    void fcitx_utils_string_swap(char** obj, const char* str);
+
+    /** free a pointer if it's not NULL */
+#define fcitx_utils_free(ptr) do { \
+        if (ptr) \
+            free(ptr); \
+    } while(0)
+
 #ifdef __cplusplus
 }
 #endif

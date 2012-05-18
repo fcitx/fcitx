@@ -559,18 +559,12 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
                     input->keyReleased = KR_OTHER;
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
-                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
-                        if (input->keyReleased == KR_SWITCH_IM)
-                            FcitxInstanceSwitchIM(instance, -1);
-                    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
-                            FcitxInstanceCloseIM(instance, instance->CurrentIC);
+                    if (input->keyReleased == KR_SWITCH_IM) {
+                        FcitxInstanceSwitchIMByIndex(instance, -1);
                     }
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
-                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
-                        if (input->keyReleased == KR_SWITCH_IM_REVERSE)
-                            FcitxInstanceSwitchIM(instance, -2);
-                    } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
-                            FcitxInstanceCloseIM(instance, instance->CurrentIC);
+                    if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
+                        FcitxInstanceSwitchIMByIndex(instance, -2);
                     }
                 } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
@@ -837,6 +831,56 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
     FcitxInstanceSwitchIMInternal(instance, index, true, true);
 }
 
+FCITX_EXPORT_API
+void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
+{
+    FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, name);
+    if (im) {
+        int idx = FcitxInstanceGetIMIndexByName(instance, name);
+        if (idx == 0)
+            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+        else {
+            FcitxInstanceSwitchIM(instance, idx);
+            if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+                FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+            }
+        }
+    }
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
+{
+    UT_array* imes = &instance->imes;
+    int iIMCount = utarray_len(imes);
+    /* less than -2, invalid, set to zero
+     * -2 scroll back
+     * -1 scroll forward
+     * 0~positive select
+     */
+    if (index < -2 || index >= iIMCount)
+        return;
+    else if (index == -2) {
+        if (index > 0)
+            index--;
+        else
+            index = iIMCount - 1;
+    } else if (index == -1) {
+        if (index >= (iIMCount - 1))
+            index = 0;
+        else
+            index++;
+    }
+    if (index == 0)
+        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+    else {
+        FcitxInstanceSwitchIM(instance, index);
+        if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
+        }
+    }
+}
+
 void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
 {
     UT_array* imes = &instance->imes;
@@ -920,7 +964,6 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     }
 
     FcitxInstanceResetInput(instance);
-
 }
 
 /**
@@ -1094,6 +1137,17 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
         return;
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
+    boolean forceSwtich = false;
+    /* fix it here */
+    if (globalIndex == 0) {
+        UT_array* ime = &instance->imes;
+        FcitxIM* im = (FcitxIM*) utarray_eltptr(ime, 1);
+        if (im) {
+            fcitx_utils_string_swap(&instance->globalIMName, im->uniqueName);
+            globalIndex = 1;
+            forceSwtich = true;
+        }
+    }
     int targetIMIndex = 0;
     boolean skipZero = false;
 
@@ -1116,8 +1170,8 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
         skipZero = true;
     }
 
-    if (targetIMIndex != instance->iIMIndex)
-        FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, false);
+    if (forceSwtich || targetIMIndex != instance->iIMIndex)
+        FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, forceSwtich);
 }
 
 FCITX_EXPORT_API
@@ -1183,7 +1237,8 @@ void FcitxInstanceCloseIM(FcitxInstance* instance, FcitxInputContext* ic)
         return;
 
     if (!(ic->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)) {
-        FcitxInstanceChangeIMState(instance, ic);
+        if (ic->state == IS_ACTIVE)
+            FcitxInstanceChangeIMState(instance, ic);
         return;
     }
 

@@ -54,6 +54,9 @@ typedef struct _FcitxXkb
 #define FCITX_XKB_LAYOUTEXISTS 2
 #define FCITX_XKB_LAYOUTEXISTS_RETURNTYPE void
 
+#define FCITX_XKB_PATH "/keyboard"
+#define FCITX_XKB_INTERFACE "org.fcitx.Fcitx.Keyboard"
+
 CONFIG_BINDING_DECLARE(FcitxXkbConfig);
 
 #endif

@@ -719,16 +719,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
-                    int index = FcitxInstanceGetIMIndexByName(instance, s0);
-
-                    if (index == 0)
-                        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-                    else {
-                        FcitxInstanceSwitchIM(instance, index);
-                        if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-                            FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-                        }
-                    }
+                    FcitxInstanceSwitchIMByName(instance, s0);
                 } else if (strncmp("im", s0, strlen("im")) == 0) {
                     UT_array* imes = FcitxInstanceGetIMEs(instance);
                     FcitxIM* pim;
@@ -955,7 +946,6 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -988,7 +978,6 @@ void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1021,7 +1010,6 @@ void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1053,7 +1041,6 @@ void KimEnable(FcitxKimpanelUI* kimpanel, boolean toEnable)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1086,7 +1073,6 @@ void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1119,7 +1105,6 @@ void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1152,7 +1137,6 @@ void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1213,7 +1197,6 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1246,7 +1229,6 @@ void KimUpdatePreeditCaret(FcitxKimpanelUI* kimpanel, int position)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1283,7 +1265,6 @@ void KimUpdatePreeditText(FcitxKimpanelUI* kimpanel, char *text)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1321,7 +1302,6 @@ void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1360,7 +1340,6 @@ void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1403,7 +1382,6 @@ void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);
@@ -1436,7 +1414,6 @@ void KimUpdateScreen(FcitxKimpanelUI* kimpanel, int id)
     if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
-    dbus_connection_flush(kimpanel->conn);
 
     // free the message
     dbus_message_unref(msg);

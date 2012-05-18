@@ -52,8 +52,8 @@ static void XimForwardKey(void* arg, FcitxInputContext* ic, FcitxKeyEventType ev
 static void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y);
 static void XimGetWindowRect(void* arg, FcitxInputContext* ic, int* x, int* y, int* w, int* h);
 static void XimUpdatePreedit(void* arg, FcitxInputContext* ic);
-static pid_t XimGetPid(void* arg, FcitxInputContext* ic);
-static pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w);
+// static pid_t XimGetPid(void* arg, FcitxInputContext* ic);
+// static pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w);
 
 static Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data);
 
@@ -97,7 +97,7 @@ FcitxFrontend frontend = {
     NULL,
     NULL,
     XimCheckICFromSameApplication,
-    XimGetPid,
+    NULL,
     NULL,
     NULL
 };
@@ -478,6 +478,7 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
     free(strPreedit);
 }
 
+#if 0
 pid_t XimGetPid(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
@@ -492,9 +493,6 @@ pid_t XimGetPid(void* arg, FcitxInputContext* ic)
 }
 
 pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
-#ifdef XIM_GET_PID
-    return 0;
-#else
     if (w == DefaultRootWindow(xim->display))
         return 0;
 
@@ -530,7 +528,7 @@ pid_t XimFindApplicationPid(FcitxXimFrontend* xim, Window w) {
         // TODO: is this portable?
         return prop[1] * 256 + prop[0];
     }
-#endif
 }
+#endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

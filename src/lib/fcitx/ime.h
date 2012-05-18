@@ -478,13 +478,44 @@ extern "C" {
     void FcitxInstanceReloadConfig(struct _FcitxInstance* instance);
 
     /**
-     * switch to input method by index
+     * switch to input method by index, if index is zero, it will be skipped
+     *
+     * @deprecated
+     *
+     * @see FcitxInstanceSwitchIMByIndex
      *
      * @param instance fcitx instance
      * @param index input method index
      * @return void
      **/
     void FcitxInstanceSwitchIM(struct _FcitxInstance* instance, int index);
+
+
+    /**
+     * switch to a input method by name, name need to be valid, otherwise it have no effect
+     * And if the index is zero, the state will automatically change to inactive
+     *
+     * @param instance fcitx instance
+     * @param name ...
+     * @return void
+     *
+     * @since 4.2.4
+     **/
+    void FcitxInstanceSwitchIMByName(struct _FcitxInstance* instance, const char* name);
+
+    /**
+     * switch to a input method by index, index need to be valid, otherwise it have no effect
+     * And if the object index is zero, the state will automatically change to inactive
+     * -1 means scroll forward, and -2 means scroll back.
+     *
+     *
+     * @param instance fcitx instance
+     * @param name ...
+     * @return void
+     *
+     * @since 4.2.4
+     **/
+    void FcitxInstanceSwitchIMByIndex(struct _FcitxInstance* instance, int index);
 
     /**
      * check is choose key or not, if so, return the choose index

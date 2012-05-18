@@ -447,5 +447,17 @@ char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* fil
     return result;
 }
 
+FCITX_EXPORT_API
+void fcitx_utils_string_swap(char** obj, const char* str)
+{
+    fcitx_utils_free(*obj);
+
+    if (str)
+        *obj = strdup(str);
+    else
+        *obj = NULL;
+}
+
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

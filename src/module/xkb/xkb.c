@@ -34,7 +34,7 @@
 #include "fcitx/hook.h"
 #include "fcitx/addon.h"
 #include "fcitx/module.h"
-#include "fcitx/module/x11/x11stuff.h"
+#include "module/x11/x11stuff.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
@@ -43,6 +43,7 @@
 #include "common.h"
 #include "xkb.h"
 #include "rules.h"
+#include "xkbdbus.h"
 
 #ifndef XKB_RULES_XML_FILE
 #define XKB_RULES_XML_FILE "/usr/share/X11/xkb/rules/evdev.xml"
@@ -628,6 +629,8 @@ void* FcitxXkbCreate(FcitxInstance* instance)
         AddFunction(addon, FcitxXkbGetRules);
         AddFunction(addon, FcitxXkbGetCurrentLayout);
         AddFunction(addon, FcitxXkbLayoutExists);
+
+        FcitxXkbDBusInit(xkb);
 
         return xkb;
     } while (0);
