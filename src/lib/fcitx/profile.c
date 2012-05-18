@@ -74,16 +74,40 @@ boolean FcitxProfileLoad(FcitxProfile* profile, FcitxInstance* instance)
 
 CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
 
+#define PROFILE_TEMP_FILE "profile_XXXXXX"
+
+
 FCITX_EXPORT_API
 void FcitxProfileSave(FcitxProfile* profile)
 {
+    /* profile save need to be safe, so we put an rename trick here */
     FcitxConfigFileDesc* profileDesc = GetProfileDesc();
-    if (profileDesc) {
-        FILE* fp = FcitxXDGGetFileUserWithPrefix("", "profile", "w", NULL);
+    do {
+        if (!profileDesc)
+            break;
+        // make ~/.config/fcitx
+        char* tempfile;
+        FcitxXDGGetFileUserWithPrefix("", "", "w", NULL);
+        FcitxXDGGetFileUserWithPrefix("", PROFILE_TEMP_FILE, NULL, &tempfile);
+        int fd = mkstemp(tempfile);
+
+        FILE* fp;
+        if (fd <= 0)
+            break;
+
+        fp = fdopen(fd, "w");
         FcitxConfigSaveConfigFileFp(fp, &profile->gconfig, profileDesc);
         if (fp)
             fclose(fp);
-    }
+        char* profileFileName = 0;
+        FcitxXDGGetFileUserWithPrefix("", "profile", NULL, &profileFileName);
+        if (access(profileFileName, 0))
+            unlink(profileFileName);
+        rename(tempfile, profileFileName);
+
+        free(tempfile);
+        free(profileFileName);
+    } while(0);
 }
 
 void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
