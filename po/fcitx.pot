@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 00:45+0800\n"
+"POT-Creation-Date: 2012-05-19 01:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -701,54 +701,62 @@ msgid "Extra key for trigger input method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:115
-msgid "Enable Hotkey to scroll Between Input Method"
+msgid "Activate input method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:120
+msgid "Inactivate Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:125
-msgid "Scroll between Input Method"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/config.desc:130
-msgid "Press Switch Key twice to Change Mode"
+msgid "Enable Hotkey to scroll Between Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:135
-msgid "Interval of Two Key Input"
+msgid "Scroll between Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:140
-msgid "Switching Virtual Keyboard"
+msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:145
-msgid "Switching Remind Mode"
+msgid "Interval of Two Key Input"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:150
-msgid "Switching Full Width Character Mode"
+msgid "Switching Virtual Keyboard"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:155
-msgid "Switch Full Width Punc Mode"
+msgid "Switching Remind Mode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:160
-msgid "Prev Page"
+msgid "Switching Full Width Character Mode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:165
-msgid "Next Page"
+msgid "Switch Full Width Punc Mode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:170
-msgid "Choose Second and Third Candidate Word"
+msgid "Prev Page"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:175
-msgid "Saving All Config and Input History"
+msgid "Next Page"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:180
+msgid "Choose Second and Third Candidate Word"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:185
+msgid "Saving All Config and Input History"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:190
 msgid "Switch Embeded Preedit"
 msgstr ""
 
@@ -1634,20 +1642,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1353
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1357
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1418
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1422
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1424
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1422
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1426
 msgid "min Num of Characters: "
 msgstr ""
 

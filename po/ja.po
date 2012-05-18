@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 00:45+0800\n"
+"POT-Creation-Date: 2012-05-19 01:07+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1424
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -54,6 +54,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/data/config.desc:40
 msgid "Action after press enter"
 msgstr "Enterキーの動作"
+
+#: /home/saber/Develop/fcitx/data/config.desc:115
+msgid "Activate input method"
+msgstr ""
 
 #: unknown
 msgid "Active"
@@ -274,7 +278,7 @@ msgstr ""
 msgid "Choose"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:170
+#: /home/saber/Develop/fcitx/data/config.desc:180
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
@@ -482,7 +486,7 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:115
+#: /home/saber/Develop/fcitx/data/config.desc:125
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr ""
 
@@ -780,6 +784,10 @@ msgstr ""
 msgid "Ignore Punctuation"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/data/config.desc:120
+msgid "Inactivate Input Method"
+msgstr ""
+
 #: unknown
 msgid "Inactive"
 msgstr ""
@@ -804,7 +812,7 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1353
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1357
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
@@ -816,7 +824,7 @@ msgstr ""
 msgid "Input Method Disabled"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1418
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1422
 msgid "Input Speed: "
 msgstr ""
 
@@ -833,7 +841,7 @@ msgstr ""
 msgid "Installer Script for Fcitx Skin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:135
+#: /home/saber/Develop/fcitx/data/config.desc:145
 msgid "Interval of Two Key Input"
 msgstr ""
 
@@ -1048,7 +1056,7 @@ msgstr ""
 msgid "Native"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:165
+#: /home/saber/Develop/fcitx/data/config.desc:175
 msgid "Next Page"
 msgstr ""
 
@@ -1181,7 +1189,7 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:130
+#: /home/saber/Develop/fcitx/data/config.desc:140
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
@@ -1193,7 +1201,7 @@ msgstr ""
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:160
+#: /home/saber/Develop/fcitx/data/config.desc:170
 msgid "Prev Page"
 msgstr ""
 
@@ -1362,11 +1370,11 @@ msgstr ""
 msgid "Save dict error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:175
+#: /home/saber/Develop/fcitx/data/config.desc:185
 msgid "Saving All Config and Input History"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:125
+#: /home/saber/Develop/fcitx/data/config.desc:135
 msgid "Scroll between Input Method"
 msgstr ""
 
@@ -1518,23 +1526,23 @@ msgstr ""
 msgid "Successfully Installed skin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:180
+#: /home/saber/Develop/fcitx/data/config.desc:190
 msgid "Switch Embeded Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:155
+#: /home/saber/Develop/fcitx/data/config.desc:165
 msgid "Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:150
+#: /home/saber/Develop/fcitx/data/config.desc:160
 msgid "Switching Full Width Character Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:145
+#: /home/saber/Develop/fcitx/data/config.desc:155
 msgid "Switching Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:140
+#: /home/saber/Develop/fcitx/data/config.desc:150
 msgid "Switching Virtual Keyboard"
 msgstr ""
 
@@ -1786,7 +1794,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1422
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1426
 msgid "min Num of Characters: "
 msgstr ""
 

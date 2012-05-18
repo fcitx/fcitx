@@ -111,7 +111,17 @@ extern "C" {
         int _defaultIMState; /**< default input method state */
         boolean bDontCommitPreeditWhenUnfocus; /**< commit preedit when unfocus or not */
         int iIMSwitchKey; /**< the type of input method switch key */
-        int padding[59]; /**< padding */
+
+        union {
+            FcitxHotkey hkActivate[2];
+            int dummy1[8];
+        };
+
+        union {
+            FcitxHotkey hkInactivate[2];
+            int dummy2[8];
+        };
+        int padding[43]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

@@ -51,6 +51,8 @@ CONFIG_BINDING_REGISTER("Appearance", "ShowVersion", bShowVersion)
 CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyPreeditString", bHideInputWindowWhenOnlyPreeditString);
 CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyOneCandidate", bHideInputWindowWhenOnlyOneCandidate);
 CONFIG_BINDING_REGISTER("Hotkey", "TriggerKey", hkTrigger)
+CONFIG_BINDING_REGISTER("Hotkey", "ActivateKey", hkActivate)
+CONFIG_BINDING_REGISTER("Hotkey", "InactivateKey", hkInactivate)
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchKey", bIMSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchHotkey", iIMSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "SwitchKey", iSwitchKey)

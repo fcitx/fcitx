@@ -635,6 +635,16 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     FcitxInstanceCloseIM(instance, instance->CurrentIC);
 
                 retVal = IRV_DO_NOTHING;
+            } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkActivate)) {
+                if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
+                    FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
+                    retVal = IRV_DO_NOTHING;
+                }
+            } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkInactivate)) {
+                if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE) {
+                    FcitxInstanceCloseIM(instance, instance->CurrentIC);
+                    retVal = IRV_DO_NOTHING;
+                }
             }
         }
     }
