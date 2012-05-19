@@ -1138,16 +1138,16 @@ void FcitxInstanceSetLocalIMName(FcitxInstance* instance, FcitxInputContext* ic,
         ic2->imname = strdup(imname);
 
     if (ic == FcitxInstanceGetCurrentIC(instance))
-        FcitxInstanceUpdateCurrentIM(instance);
+        FcitxInstanceUpdateCurrentIM(instance, false);
 }
 
-void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
+void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
-    if (!ic)
+    if (!ic && !force)
         return;
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
-    boolean forceSwtich = false;
+    boolean forceSwtich = force;
     /* fix it here */
     if (globalIndex == 0) {
         UT_array* ime = &instance->imes;
@@ -1161,7 +1161,7 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
     int targetIMIndex = 0;
     boolean skipZero = false;
 
-    if (ic2->imname) {
+    if (ic2 && ic2->imname) {
         FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, ic2->imname);
         if (!im) {
             free(ic2->imname);
@@ -1169,11 +1169,11 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance) {
         }
     }
 
-    if (ic->state != IS_ACTIVE) {
+    if (ic && ic->state != IS_ACTIVE) {
         targetIMIndex = 0;
     }
     else {
-        if (ic2->imname)
+        if (ic2 && ic2->imname)
             targetIMIndex = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
         else
             targetIMIndex = globalIndex;
@@ -1213,7 +1213,7 @@ void FcitxInstanceEnableIM(FcitxInstance* instance, FcitxInputContext* ic, boole
         break;
     }
 
-    FcitxInstanceUpdateCurrentIM(instance);
+    FcitxInstanceUpdateCurrentIM(instance, false);
     instance->input->keyReleased = KR_OTHER;
 }
 
@@ -1336,7 +1336,7 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
         break;
     }
 
-    FcitxInstanceUpdateCurrentIM(instance);
+    FcitxInstanceUpdateCurrentIM(instance, false);
 }
 
 void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState)
@@ -1584,7 +1584,7 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
 
     utarray_free(imList);
 
-    FcitxInstanceUpdateCurrentIM(instance);
+    FcitxInstanceUpdateCurrentIM(instance, true);
     FcitxInstanceProcessUpdateIMListHook(instance);
 
     if (instance->globalIMName)

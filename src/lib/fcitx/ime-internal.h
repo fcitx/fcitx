@@ -123,7 +123,7 @@ FcitxConfigFileDesc* GetIMConfigDesc();
 
 int IMPriorityCmp(const void *a, const void *b);
 
-void FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance);
+void FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force);
 
 #endif
 

@@ -578,7 +578,7 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 
     FcitxInstanceResetInput(instance);
 
-    FcitxInstanceUpdateCurrentIM(instance);
+    FcitxInstanceUpdateCurrentIM(instance, false);
 
     FcitxUICloseInputWindow(instance);
 }
