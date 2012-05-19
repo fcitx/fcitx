@@ -71,5 +71,10 @@ Type=String
 DefaultValue=
 Description=Fallback UI Addon
 
+[Addon/Advance]
+Type=Boolean
+DefaultValue=False
+Description=Do not show in GUI
+
 [DescriptionFile]
 LocaleDomain=fcitx

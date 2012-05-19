@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-lua.so
 Type=SharedLibrary
 Priority=80
+Advance=True

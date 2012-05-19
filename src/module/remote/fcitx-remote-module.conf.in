@@ -6,3 +6,4 @@ Category=Module
 Enabled=True
 Library=fcitx-remote-module.so
 Type=SharedLibrary
+Advance=True

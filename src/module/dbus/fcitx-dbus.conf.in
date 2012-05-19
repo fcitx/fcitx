@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-dbus.so
 Type=SharedLibrary
 Priority=30
+Advance=True

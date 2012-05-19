@@ -8,3 +8,4 @@ Library=fcitx-xkbdbus.so
 Type=SharedLibrary
 Priority=80
 Dependency=fcitx-xkb,fcitx-dbus
+Advance=True

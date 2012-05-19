@@ -284,8 +284,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 /* length is not too large */
                 if (((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength)
                     || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)
-                    || (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0
-                        && table->bNoMatchDontCommit
+                    || (((FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0
+                        && table->bNoMatchDontCommit) || !table->bUseAutoSend)
                         && FcitxInputStateGetRawInputBufferSize(input) >= table->tableDict->iCodeLength
                     ))
                     && FcitxInputStateGetRawInputBufferSize(input) <= MAX_TABLE_INPUT
@@ -340,7 +340,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                             }
 
                             return IRV_DISPLAY_CANDWORDS;
-                        } else if (table->iTableAutoSendToClientWhenNone
+                        } else if (table->bUseAutoSend
+                                   && table->iTableAutoSendToClientWhenNone
                                    && (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
                                    && (FcitxInputStateGetRawInputBufferSize(input) >= (table->iTableAutoSendToClientWhenNone + 1))
                                    && FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
@@ -360,7 +361,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         }
                     }
                 } else {
-                    if (table->iTableAutoSendToClient) {
+                    if (table->bUseAutoSend && table->iTableAutoSendToClient) {
                         retVal = IRV_DISPLAY_CANDWORDS;
                         if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input))) {
                             FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
@@ -865,7 +866,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
 
     INPUT_RETURN_VALUE retVal = IRV_DISPLAY_CANDWORDS;
 
-    if (table->iTableAutoSendToClient && (FcitxInputStateGetRawInputBufferSize(input) >= table->iTableAutoSendToClient)) {
+    if (table->bUseAutoSend && table->iTableAutoSendToClient && (FcitxInputStateGetRawInputBufferSize(input) >= table->iTableAutoSendToClient)) {
         if (FcitxCandidateWordGetCurrentWindowSize(candList) == 1) {  //如果只有一个候选词，则送到客户程序中
             FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(candList);
             if (candWord->owner == table) {

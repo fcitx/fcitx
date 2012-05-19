@@ -39,13 +39,18 @@ Description=Pinyin Key
 Type=Char
 DefaultValue=
 
+[CodeTable/UseAutoSend]
+Description=Auto Send Candidate Word
+Type=Boolean
+DefaultValue=True
+
 [CodeTable/AutoSend]
-Description=Auto Send Candidate Word to Client
+Description=Minimum length trigger auto send candidate word when only one candidate
 Type=Integer
 DefaultValue=-1
 
 [CodeTable/NoneMatchAutoSend]
-Description=Minimum length trigger committing current candidate when there is match item and with next input will be no match item
+Description=Minimum length trigger auto send candidate when there will be no candidate
 Type=Integer
 DefaultValue=-1
 

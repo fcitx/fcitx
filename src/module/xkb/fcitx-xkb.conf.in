@@ -7,3 +7,4 @@ Enabled=True
 Library=fcitx-xkb.so
 Type=SharedLibrary
 Dependency=fcitx-x11
+Advance=True

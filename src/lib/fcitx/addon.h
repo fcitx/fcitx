@@ -106,8 +106,12 @@ extern "C" {
         char* registerArgument; /**< extra argument for register, unused for now */
         char* uifallback; /**< if's a user interface addon, the fallback UI addon name */
         struct _FcitxInstance* owner; /**< upper pointer to instance */
+        union {
+            boolean advance; /**< a hint for GUI */
+            void* dummy;
+        };
 
-        void* padding[9]; /**< padding */
+        void* padding[8]; /**< padding */
     } FcitxAddon;
 
     /**

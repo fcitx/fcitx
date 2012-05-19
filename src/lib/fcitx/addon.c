@@ -51,6 +51,7 @@ CONFIG_BINDING_REGISTER("Addon", "SubConfig", subconfig)
 CONFIG_BINDING_REGISTER("Addon", "IMRegisterMethod", registerMethod)
 CONFIG_BINDING_REGISTER("Addon", "IMRegisterArgument", registerArgument)
 CONFIG_BINDING_REGISTER("Addon", "UIFallback", uifallback)
+CONFIG_BINDING_REGISTER("Addon", "Advance", advance)
 CONFIG_BINDING_END()
 
 static const UT_icd function_icd = {sizeof(void*), 0, 0 , 0};
