@@ -30,6 +30,25 @@
  *
  *  Public Header for Input Method Develop
  *
+ * The input method is key event centric application. When a key event comes to fcitx,
+ * the process handling the keyboard event can be separated into 7 phases, PreInput, DoInput, Update Candidates, Prev/Next Page
+ * PostInput, Hotkey, and key blocker.
+ * 
+ * The input method engine process key event inside "DoInput".
+ * 
+ * Each phase will change the INPUT_RETURN_VALUE, if INPUT_RETURN_VALUE is non-zero (non IRV_TO_PROCESS), the following
+ * phases will not run.
+ * 
+ * If a key event goes through all phase and still the state is IRV_TO_PROCESS, it will be forwarded.
+ * 
+ * When it comes to update candidates, if the flag contains IRV_FLAG_UPDATE_CANDIDATE_WORDS, it will trigger the GetCandWords
+ * of input method engine and clean up all stiring in the input window, after that, it will trigger update candidates hook.
+ * 
+ * Key blocker is useful if you want to post input phase to do something, but you don't want forward key if they do nothing.
+ * There is an default implemention inside fcitx, it will blocks key when raw input buffer is not empty. Those keys
+ * contains direction key(left/right..), key will cause something input (a,b,c...), key will cause cursor move (home/end...).
+ * 
+ * DoInput, Update Candidates, Key Blocker are belongs to input method engine, other can be registered by other addon.
  */
 #ifndef _FCITX_IME_H_
 #define _FCITX_IME_H_
