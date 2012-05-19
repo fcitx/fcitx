@@ -161,7 +161,7 @@ Description=Switching Full Width Character Mode
 
 [Hotkey/PuncSwitchKey]
 Type=Hotkey
-DefaultValue=ALT_SPACE
+DefaultValue=CTRL_.
 Description=Switch Full Width Punc Mode
 
 [Hotkey/PrevPageKey]
