@@ -526,6 +526,9 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (instance->CurrentIC->contextCaps & CAPACITY_PASSWORD)
         return IRV_TO_PROCESS;
 
+    if (currentIM == NULL)
+        return IRV_TO_PROCESS;
+
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
      * because ctrl, shift, alt are compose key, so hotkey like ctrl+a will also produce a key
@@ -650,7 +653,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     }
 
     if (retVal == IRV_TO_PROCESS && event == FCITX_RELEASE_KEY) {
-        if (currentIM->DoReleaseInput) {
+         if (currentIM && currentIM->DoReleaseInput) {
             retVal = currentIM->DoReleaseInput(currentIM->klass, sym, state);
             if (retVal == IRV_TO_PROCESS)
                 retVal = IRV_DONOT_PROCESS;
@@ -965,10 +968,7 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     }
 
     if (newIM && updateGlobal) {
-        if (instance->globalIMName) {
-            free(instance->globalIMName);
-            instance->globalIMName = NULL;
-        }
+        fcitx_utils_free(instance->globalIMName);
         instance->globalIMName = strdup(newIM->uniqueName);
         FcitxProfileSave(instance->profile);
     }
@@ -1408,9 +1408,13 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
     input->bShowCursor = false;
 
     FcitxInstanceCleanInputWindow(instance);
+
+    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+    if (!im)
+        return;
+
     if (instance->config->bShowVersion) {
         FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION);
-        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
             FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, " %s", im->strName);
         }
@@ -1579,8 +1583,6 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
     }
 
     utarray_free(imList);
-
-    instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
 
     FcitxInstanceUpdateCurrentIM(instance);
     FcitxInstanceProcessUpdateIMListHook(instance);

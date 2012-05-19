@@ -158,14 +158,14 @@ void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConf
 void FilterIMName(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
 {
     FcitxInstance* instance = arg;
+    char** imName = (char**) value;
     if (sync == Value2Raw) {
-        char** imName = (char**) value;
-
         if (instance->globalIMName) {
-            if (*imName)
-                free(*imName);
-
-            *imName = strdup(instance->globalIMName);
+            fcitx_utils_string_swap(imName, instance->globalIMName);
+        }
+    } else if (sync == Raw2Value) {
+        if (*imName) {
+            fcitx_utils_string_swap(&instance->globalIMName, *imName);
         }
     }
 }

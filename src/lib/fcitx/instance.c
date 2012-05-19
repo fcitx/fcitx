@@ -114,6 +114,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     instance->sem = sem;
     instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));
     instance->profile = fcitx_utils_malloc0(sizeof(FcitxProfile));
+    instance->globalIMName = strdup("");
 
     if (!FcitxGlobalConfigLoad(instance->config))
         goto error_exit;
@@ -163,7 +164,6 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     instance->iIMIndex = FcitxInstanceGetIMIndexByName(instance, instance->profile->imName);
 
     FcitxInstanceSwitchIM(instance, instance->iIMIndex);
-    instance->globalIMName = strdup(FcitxInstanceGetCurrentIM(instance)->uniqueName);
 
     if (!FcitxInstanceLoadFrontend(instance)) {
         FcitxInstanceEnd(instance);

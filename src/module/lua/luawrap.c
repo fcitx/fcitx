@@ -134,7 +134,10 @@ FcitxInstance *GetFcitx(LuaModule *luamodule) {
 
 static int GetUniqueName_Export(lua_State *lua) {
     FcitxIM *im = FcitxInstanceGetCurrentIM(GetModule(lua)->fcitx);
-    lua_pushstring(lua, im->uniqueName);
+    if (im)
+        lua_pushstring(lua, im->uniqueName);
+    else
+        lua_pushstring(lua, "");
     return 1;
 }
 
