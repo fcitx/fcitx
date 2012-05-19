@@ -93,6 +93,8 @@ void FcitxInstanceCleanUpIC(FcitxInstance* instance)
     while (rec) {
         FcitxAddon** pfrontend = (FcitxAddon**) utarray_eltptr(frontends, rec->frontendid);
         FcitxFrontend* frontend = (*pfrontend)->frontend;
+        if (!frontend->GetPid)
+            continue;
         pid_t pid = frontend->GetPid((*pfrontend)->addonInstance, rec);
         if (pid && !fcitx_utils_pid_exists(pid)) {
             if (last != NULL)
