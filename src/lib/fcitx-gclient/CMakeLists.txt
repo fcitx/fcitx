@@ -1,3 +1,6 @@
+_pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL "" "--variable=glib_genmarshal")
+FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
+
 include_directories(${GIO2_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 link_directories(${GIO2_LIBRARY_DIRS})
