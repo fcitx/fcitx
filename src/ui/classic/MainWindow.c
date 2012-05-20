@@ -144,7 +144,7 @@ void DrawMainWindow(MainWindow* mainWindow)
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) != IS_CLOSED))) {
+    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) == IS_ACTIVE))) {
         SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
         cairo_t *c;
 
