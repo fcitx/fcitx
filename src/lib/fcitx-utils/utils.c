@@ -44,6 +44,7 @@
 #include "fcitx/fcitx.h"
 #include "utils.h"
 #include "utf8.h"
+#include "log.h"
 
 #if defined(LIBKVM_FOUND)
 #include <kvm.h>
@@ -458,6 +459,32 @@ void fcitx_utils_string_swap(char** obj, const char* str)
         *obj = NULL;
 }
 
+FCITX_EXPORT_API
+void fcitx_utils_launch_configure_tool()
+{
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool &");
+    FILE* p = popen(command, "r");
+    free(command);
+    if (p)
+        pclose(p);
+    else
+        FcitxLog(ERROR, _("Unable to create process"));
+}
 
+
+FCITX_EXPORT_API
+void fcitx_utils_launch_configure_tool_for_im(const char* imaddon)
+{
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
+    char* commandf;
+    asprintf(&commandf, "%s %s &", command, imaddon);
+    FILE* p = popen(commandf, "r");
+    free(command);
+    free(commandf);
+    if (p)
+        pclose(p);
+    else
+        FcitxLog(ERROR, _("Unable to create process"));
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

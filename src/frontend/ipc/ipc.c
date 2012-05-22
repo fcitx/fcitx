@@ -168,6 +168,15 @@ const char * im_introspection_xml =
     "    <method name=\"SetCurrentIM\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"Configure\">\n"
+    "    </method>\n"
+    "    <method name=\"ConfigureAddon\">\n"
+    "      <arg name=\"addon\" direction=\"in\" type=\"s\"/>\n"
+    "    </method>\n"
+    "    <method name=\"GetIMAddon\">\n"
+    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
+    "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">\n"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>\n"
@@ -583,6 +592,42 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         char* imname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
             FcitxInstanceSwitchIMByName(instance, imname);
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetIMAddon")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* imname = NULL;
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
+            FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, imname);
+            const char* name = "";
+            if (im)
+                name = im->owner->name;
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Configure")) {
+        fcitx_utils_launch_configure_tool();
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureAddon")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* addonname = NULL;
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &addonname, DBUS_TYPE_INVALID)) {
+            if (addonname) {
+                fcitx_utils_launch_configure_tool_for_addon(addonname);
+            }
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);

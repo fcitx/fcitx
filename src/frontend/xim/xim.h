@@ -49,6 +49,7 @@ typedef struct _FcitxXimFrontend {
     long unsigned int currentSerialNumberKey;
     XIMFeedback *feedback;
     int feedback_len;
+    FcitxAddon* x11addon;
 } FcitxXimFrontend;
 
 CONFIG_BINDING_DECLARE(FcitxXimFrontend)

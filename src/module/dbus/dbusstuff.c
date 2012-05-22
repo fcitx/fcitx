@@ -80,7 +80,7 @@ void* DBusCreate(FcitxInstance* instance)
     int retry = 0;
     DBusConnection* conn = NULL;
 
-    do {
+    while (1) {
         conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
         if (dbus_error_is_set(&err)) {
             FcitxLog(WARNING, _("Connection Error (%s)"), err.message);
@@ -88,11 +88,13 @@ void* DBusCreate(FcitxInstance* instance)
             dbus_error_init(&err);
         }
 
-        if (NULL == conn) {
-            sleep(RETRY_INTERVAL * MAX_RETRY_TIMES);
+        if (NULL == conn && retry < MAX_RETRY_TIMES) {
             retry ++;
+            sleep(RETRY_INTERVAL * retry);
+        } else {
+            break;
         }
-    } while (NULL == conn && retry < MAX_RETRY_TIMES);
+    }
 
     if (NULL == conn) {
         free(dbusmodule);
@@ -129,30 +131,30 @@ void* DBusCreate(FcitxInstance* instance)
         }
         if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
             FcitxLog(WARNING, "DBus Service Already Exists");
-            
+
             if (FcitxInstanceIsTryReplace(instance)) {
                 FcitxInstanceResetTryReplace(instance);
                 DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
                 dbus_connection_send(dbusmodule->conn, message, NULL);
                 /* synchronize call here */
                 DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 0, &err);
-                
+
                 if (dbus_error_is_set(&err)) {
                     dbus_error_free(&err);
                     dbus_error_init(&err);
                 }
-                
+
                 if (reply)
                     dbus_message_unref(reply);
                 dbus_message_unref(message);
-                
+
                 /* sleep for a while and retry */
                 sleep(1);
-                
+
                 request_retry = true;
                 continue;
             }
-            
+
             dbus_error_free(&err);
             free(servicename);
             free(dbusmodule);

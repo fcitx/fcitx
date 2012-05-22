@@ -543,7 +543,6 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, m_connection, this);
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
-        connect(m_icproxy, SIGNAL(UpdatePreedit(QString, int)), this, SLOT(updatePreedit(QString, int)));
         connect(m_icproxy, SIGNAL(UpdateFormattedPreedit(FcitxFormattedPreeditList,int)), this, SLOT(updateFormattedPreedit(FcitxFormattedPreeditList,int)));
         connect(m_icproxy, SIGNAL(DeleteSurroundingText(int,uint)), this, SLOT(deleteSurroundingText(int,uint)));
 
@@ -581,28 +580,8 @@ void QFcitxInputContext::commitString(const QString& str)
     update();
 }
 
-void QFcitxInputContext::updatePreedit(const QString& str, int cursorPos)
-{
-    QByteArray array = str.toUtf8();
-    array.truncate(cursorPos);
-    cursorPos = QString::fromUtf8(array).length();
-
-    QList<QAttribute> attrList;
-    QTextCharFormat format;
-    format.setUnderlineStyle(QTextCharFormat::DashUnderline);
-    attrList.append(QAttribute(QInputMethodEvent::Cursor, cursorPos, 1, 0));
-    attrList.append(QAttribute(QInputMethodEvent::TextFormat, 0, str.length(), format));
-    QInputMethodEvent event(str, attrList);
-    m_preedit = str;
-    m_commitPreedit = str;
-    sendEvent(event);
-    update();
-}
-
 void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos)
 {
-    if (cursorPos == m_cursorPos && preeditList == m_preeditList)
-        return;
     m_preeditList = preeditList;
     m_cursorPos = cursorPos;
     QString str, commitStr;

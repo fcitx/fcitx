@@ -144,6 +144,20 @@ void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConf
             }
         }
 
+        UnusedIMItem* item = instance->unusedItem;
+        while(item) {
+            char* newresult;
+            const char* status = item->status ? "True" : "False";
+            if (result == NULL)
+                asprintf(&newresult, "%s:%s", item->name, status);
+            else
+                asprintf(&newresult, "%s,%s:%s", result, item->name, status);
+            if (result)
+                free(result);
+            result = newresult;
+            item = item->hh.next;
+        }
+
         char** imList = (char**) value;
 
         if (*imList)

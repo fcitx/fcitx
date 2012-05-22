@@ -87,7 +87,7 @@ void *TableCreate(FcitxInstance* instance)
             TableGetCandWords,
             TablePhraseTips,
             SaveTableIM,
-            NULL,
+            ReloadTableConfig,
             TableKeyBlocker,
             table->iPriority,
             table->langCode
@@ -161,6 +161,7 @@ void LoadTableInfo(FcitxTableState *tbl)
             FcitxConfigBindSync((FcitxGenericConfig*)t);
             FcitxLog(DEBUG, _("Table Config %s is %s"), string->name, (t->bEnabled) ? "Enabled" : "Disabled");
             if (t->bEnabled) {
+                t->confName = strdup(string->name);
                 t->owner = tbl;
                 tbl->iTableCount ++;
             }
@@ -1195,6 +1196,7 @@ void FreeTableConfig(void *v)
     free(table->strEndCode);
     free(table->strSymbol);
     free(table->strChoose);
+    fcitx_utils_free(table->confName);
 }
 
 int TableCandCmp(const void* a, const void* b, void *arg)
@@ -1261,5 +1263,34 @@ INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int stat
     return FcitxStandardKeyBlocker(input, sym, state);
 }
 
+/* we should try not to break the existing on even if the config file is not exist anymore */
+void ReloadTableConfig(void* arg)
+{
+    TableMetaData* table = arg;
+    size_t len = 0;
+    int i = 0;
+    char** tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
+
+    char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
+    for (i = 0; i < len ; i ++)
+        paths[i] = NULL;
+
+    for (i = len - 1; i >= 0; i--) {
+        asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], table->confName);
+        FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
+    }
+    FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, GetTableConfigDesc());
+    if (cfile) {
+        TableMetaDataConfigBind(table, cfile, GetTableConfigDesc());
+        FcitxConfigBindSync((FcitxGenericConfig*)table);
+    }
+    for (i = 0; i < len ; i ++) {
+        free(paths[i]);
+        paths[i] = NULL;
+    }
+
+    free(paths);
+    FcitxXDGFreePath(tablePath);
+}
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -1541,6 +1541,16 @@ void FcitxInstanceNotifyUpdateSurroundingText(FcitxInstance* instance, FcitxInpu
         im->UpdateSurroundingText(im->klass);
 }
 
+void UnusedIMItemFreeAll(UnusedIMItem* item)
+{
+    UnusedIMItem *cur;
+    while (item) {
+        cur = item;
+        HASH_DEL(item, cur);
+        fcitx_utils_free(cur->name);
+    }
+}
+
 FCITX_EXPORT_API
 void FcitxInstanceUpdateIMList(FcitxInstance* instance)
 {
@@ -1550,6 +1560,8 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
     UT_array* imList = fcitx_utils_split_string(instance->profile->imList, ',');
     utarray_sort(&instance->availimes, IMPriorityCmp);
     utarray_clear(&instance->imes);
+    UnusedIMItemFreeAll(instance->unusedItem);
+    instance->unusedItem = NULL;
 
     char** pstr;
     FcitxIM* ime;
@@ -1562,11 +1574,21 @@ void FcitxInstanceUpdateIMList(FcitxInstance* instance)
             ime = NULL;
             *pos = '\0';
             pos ++;
-            if (strcmp(pos, "True") == 0)
-                ime = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, str);
-
-            if (ime)
+            ime = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, str);
+            boolean status = (strcmp(pos, "True") == 0);
+            if (status && ime)
                 utarray_push_back(&instance->imes, ime);
+
+            if (!ime) {
+                UnusedIMItem* item;
+                HASH_FIND_STR(instance->unusedItem, str, item);
+                if (!item) {
+                    item = fcitx_utils_new(UnusedIMItem);
+                    item->name = strdup(str);
+                    item->status = status;
+                    HASH_ADD_KEYPTR(hh, instance->unusedItem, item->name, strlen(item->name), item);
+                }
+            }
         }
     }
 

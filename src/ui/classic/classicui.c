@@ -457,26 +457,11 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     } else if (index == length - 1) { /* Exit */
         FcitxInstanceEnd(classicui->owner);
     } else if (index == length - 2) { /* Configuration */
-        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool &");
-        FILE* p = popen(command, "r");
-        free(command);
-        if (p)
-            pclose(p);
-        else
-            FcitxLog(ERROR, _("Unable to create process"));
+        fcitx_utils_launch_configure_tool();
     } else if (index == length - 3) { /* Configuration */
         FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
         if (im && im->owner) {
-            char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
-            char* commandf;
-            asprintf(&commandf, "%s %s &", command, im->owner->name);
-            FILE* p = popen(commandf, "r");
-            free(command);
-            free(commandf);
-            if (p)
-                pclose(p);
-            else
-                FcitxLog(ERROR, _("Unable to create process"));
+            fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
         }
     }
     return true;

@@ -109,6 +109,7 @@ typedef struct _TableMetaData {
     struct _FcitxTableState* owner;
     struct _TableDict* tableDict;
     boolean bUseAutoSend;
+    char* confName;
 } TableMetaData;
 
 typedef struct _TableDict {

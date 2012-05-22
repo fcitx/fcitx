@@ -23,6 +23,7 @@
 #include "fcitx/ui.h"
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
+#include "fcitx/module.h"
 #include "fcitx-config/hotkey.h"
 #include "fcitx-utils/log.h"
 #include "xim.h"
@@ -277,6 +278,8 @@ void XimForwardKeyInternal(FcitxXimFrontend *xim,
 
     memcpy(&(forwardEvent.event), xEvent, sizeof(XEvent));
     IMForwardEvent(xim->ims, (XPointer)(&forwardEvent));
+
+    xim->x11addon->module->ProcessEvent(xim->x11addon->addonInstance);
 }
 
 void XIMClose(FcitxXimFrontend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)

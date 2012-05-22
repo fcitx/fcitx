@@ -141,6 +141,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
+    xim->x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-x11");
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
@@ -397,6 +398,8 @@ void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
     cms.commit_string = (char *) tp.value;
     IMCommitString(xim->ims, (XPointer) & cms);
     XFree(tp.value);
+
+    xim->x11addon->module->ProcessEvent(xim->x11addon->addonInstance);
 }
 
 void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)

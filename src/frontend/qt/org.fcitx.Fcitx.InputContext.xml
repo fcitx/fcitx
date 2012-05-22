@@ -52,10 +52,6 @@
     <signal name="CommitString">
       <arg name="str" type="s"/>
     </signal>
-    <signal name="UpdatePreedit">
-      <arg name="str" type="s"/>
-      <arg name="cursorpos" type="i"/>
-    </signal>
     <signal name="UpdateFormattedPreedit">
       <arg name="str" type="a(si)" />
       <arg name="cursorpos" type="i"/>

@@ -796,14 +796,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Configure")) {
         FcitxLog(DEBUG, "Configure");
-
-        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool &");
-        FILE* p = popen(command, "r");
-        free(command);
-        if (p)
-            pclose(p);
-        else
-            FcitxLog(ERROR, _("Unable to create process"));
+        fcitx_utils_launch_configure_tool();
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
         const char* service, *oldowner, *newowner;

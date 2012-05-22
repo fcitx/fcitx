@@ -85,7 +85,6 @@ public:
 private Q_SLOTS:
     void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
     void commitString(const QString& str);
-    void updatePreedit(const QString& str, int cursorPos);
     void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
     void forwardKey(uint keyval, uint state, int type);
     void deleteSurroundingText(int offset, uint nchar);

@@ -36,6 +36,12 @@
 #include "addon.h"
 #include "context.h"
 
+typedef struct _UnusedIMItem {
+    char* name;
+    boolean status;
+    UT_hash_handle hh;
+} UnusedIMItem;
+
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -108,6 +114,8 @@ struct _FcitxInstance {
     char* fallbackuiName;
 
     FcitxAddon* currentIMAddon;
+
+    UnusedIMItem* unusedItem;
 };
 
 #endif

@@ -458,4 +458,6 @@ void FcitxInstanceResetTryReplace(FcitxInstance* instance)
     instance->tryReplace = false;
 }
 
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

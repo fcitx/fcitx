@@ -263,7 +263,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         iPriority = PRIORITY_MAGIC_FIRST;
     }
     else {
-        boolean result;
+        boolean result = false;
         FcitxModuleFunctionArg args;
         args.args[0] = (void*) layoutString;
         args.args[1] = (void*) variantString;

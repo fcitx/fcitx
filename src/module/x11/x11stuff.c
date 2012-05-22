@@ -135,8 +135,6 @@ void X11ProcessEvent(void* arg)
     XEvent event;
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
-
-        FcitxInstanceLock(x11priv->owner);
         /* 处理X事件 */
         if (XFilterEvent(&event, None) == False) {
             if (event.type == DestroyNotify) {
@@ -159,7 +157,6 @@ void X11ProcessEvent(void* arg)
                 if (handler->eventHandler(handler->instance, &event))
                     break;
         }
-        FcitxInstanceUnlock(x11priv->owner);
     }
 }
 

@@ -6,5 +6,5 @@ Category=InputMethod
 Enabled=True
 Library=fcitx-keyboard.so
 Type=SharedLibrary
-Dependency=fcitx-xkb
+Dependency=
 IMRegisterMethod=Self

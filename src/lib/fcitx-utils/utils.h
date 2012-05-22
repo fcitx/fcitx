@@ -250,6 +250,20 @@ extern "C" {
     char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename);
 
     /**
+     * launch fcitx-configtool
+     *
+     * @return void
+     **/
+    void fcitx_utils_launch_configure_tool();
+
+    /**
+     * launch fcitx-configtool for an addon
+     *
+     * @return void
+     **/
+    void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon);
+
+    /**
      * if obj is null, free it, after that, if str is NULL set it with NULL,
      * if str is not NULL, set it with strdup(str)
      *
