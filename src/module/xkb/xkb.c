@@ -53,6 +53,8 @@
 static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbGetCurrentLayout(void* arg, FcitxModuleFunctionArg args);
+static void* FcitxXkbGetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
+static void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbCreate(struct _FcitxInstance* instance);
 static void FcitxXkbDestroy(void*);
 static void FcitxXkbReloadConfig(void*);
@@ -81,11 +83,18 @@ static void FcitxXkbCurrentStateChanged(void* arg);
 static void FcitxXkbCurrentStateChangedTriggerOn(void* arg);
 static char* FcitxXkbGetRulesName(FcitxXkb* xkb);
 static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb);
-static boolean LoadXkbConfig(FcitxXkbConfig* fs);
-static void SaveXkbConfig(FcitxXkbConfig* fs);
+static boolean LoadXkbConfig(FcitxXkb* xkb);
+static void SaveXkbConfig(FcitxXkb* fs);
 static boolean FcitxXkbEventHandler(void* arg, XEvent* event);
 
 CONFIG_DESC_DEFINE(GetXkbConfigDesc, "fcitx-xkb.desc")
+
+typedef struct _LayoutOverride {
+    char* im;
+    char* layout;
+    char* variant;
+    UT_hash_handle hh;
+} LayoutOverride;
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -512,12 +521,24 @@ void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
         if (value == NULL)
             return;
 
-        const char* layout = (const char*) value;
-        UT_array* s = fcitx_utils_split_string(layout, ',');
-        char** pLayoutString = (char**) utarray_eltptr(s, 0);
-        char** pVariantString = (char**) utarray_eltptr(s, 1);
-        char* layoutString = (pLayoutString)? *pLayoutString: NULL;
-        char* variantString = (pVariantString)? *pVariantString: NULL;
+        char* layoutString = NULL;
+        char* variantString = NULL;
+        LayoutOverride* item = NULL;
+        UT_array* s = NULL;
+        if (currentIM)
+            HASH_FIND_STR(xkb->layoutOverride, currentIM->uniqueName, item);
+        if (item) {
+            layoutString = item->layout;
+            variantString = item->variant;
+        }
+        else {
+            const char* layout = (const char*) value;
+            UT_array* s = fcitx_utils_split_string(layout, ',');
+            char** pLayoutString = (char**) utarray_eltptr(s, 0);
+            char** pVariantString = (char**) utarray_eltptr(s, 1);
+            layoutString = (pLayoutString)? *pLayoutString: NULL;
+            variantString = (pVariantString)? *pVariantString: NULL;
+        }
         int idx = FcitxXkbFindLayoutIndex(xkb, layoutString, variantString);
         if (idx >= 0) {
             XkbLockGroup(xkb->dpy, XkbUseCoreKbd, idx);
@@ -535,7 +556,8 @@ void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
             else
                 XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
         }
-        fcitx_utils_free_string_list(s);
+        if (s)
+            fcitx_utils_free_string_list(s);
     }
     else {
         XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
@@ -591,7 +613,7 @@ void* FcitxXkbCreate(FcitxInstance* instance)
         if (!FcitxXkbSupported(xkb, &xkb->xkbOpcode))
             break;
 
-        if (!LoadXkbConfig(&xkb->config)) {
+        if (!LoadXkbConfig(xkb)) {
             break;
         }
 
@@ -627,6 +649,8 @@ void* FcitxXkbCreate(FcitxInstance* instance)
         AddFunction(addon, FcitxXkbGetRules);
         AddFunction(addon, FcitxXkbGetCurrentLayout);
         AddFunction(addon, FcitxXkbLayoutExists);
+        AddFunction(addon, FcitxXkbGetLayoutOverride);
+        AddFunction(addon, FcitxXkbSetLayoutOverride);
 
         return xkb;
     } while (0);
@@ -693,7 +717,8 @@ void FcitxXkbDestroy(void* arg)
 void FcitxXkbReloadConfig(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
-    LoadXkbConfig(&xkb->config);
+    LoadXkbConfig(xkb);
+    FcitxXkbCurrentStateChanged(xkb);
 }
 
 
@@ -712,7 +737,69 @@ void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
     return NULL;
 }
 
-boolean LoadXkbConfig(FcitxXkbConfig* fs)
+static inline void LayoutOverrideFree(LayoutOverride* item) {
+    fcitx_utils_free(item->im);
+    fcitx_utils_free(item->layout);
+    fcitx_utils_free(item->variant);
+    free(item);
+}
+
+void LoadLayoutOverride(FcitxXkb* xkb)
+{
+    char *buf = NULL;
+    size_t len = 0;
+    char *trimedbuf = NULL;
+
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("data", "layout_override", "r", NULL);
+    if (!fp)
+        return;
+
+    /* clean all old configuration */
+    while (xkb->layoutOverride) {
+        LayoutOverride* cur = xkb->layoutOverride;
+        HASH_DEL(xkb->layoutOverride, cur);
+        LayoutOverrideFree(cur);
+    }
+
+    while (getline(&buf, &len, fp) != -1) {
+        if (trimedbuf)
+            free(trimedbuf);
+        trimedbuf = fcitx_utils_trim(buf);
+
+        UT_array* s = fcitx_utils_split_string(trimedbuf, ',');
+        char** pIMString = (char**) utarray_eltptr(s, 0);
+        char** pLayoutString = (char**) utarray_eltptr(s, 1);
+        char** pVariantString = (char**) utarray_eltptr(s, 2);
+        char* imString = (pIMString)? *pIMString: NULL;
+        char* layoutString = (pLayoutString)? *pLayoutString: NULL;
+        char* variantString = (pVariantString)? *pVariantString: NULL;
+
+        if (!imString || !layoutString)
+            continue;
+        LayoutOverride* override = NULL;
+        HASH_FIND_STR(xkb->layoutOverride, imString, override);
+        /* if rule exists or the rule is for fcitx-keyboard, skip it */
+        if (override || strncmp(imString, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
+            continue;
+        }
+
+        override = fcitx_utils_new(LayoutOverride);
+        override->im = strdup(imString);
+        override->layout = strdup(layoutString);
+        override->variant= variantString? strdup(variantString) : NULL;
+
+        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, override->im, strlen(override->im), override);
+    }
+
+    if (buf)
+        free(buf);
+    if (trimedbuf)
+        free(trimedbuf);
+
+    fclose(fp);
+}
+
+boolean LoadXkbConfig(FcitxXkb* xkb)
 {
     FcitxConfigFileDesc *configDesc = GetXkbConfigDesc();
     if (configDesc == NULL)
@@ -723,23 +810,94 @@ boolean LoadXkbConfig(FcitxXkbConfig* fs)
     if (!fp)
     {
         if (errno == ENOENT)
-            SaveXkbConfig(fs);
+            SaveXkbConfig(xkb);
     }
     FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
-    FcitxXkbConfigConfigBind(fs, cfile, configDesc);
-    FcitxConfigBindSync(&fs->gconfig);
+    FcitxXkbConfigConfigBind(&xkb->config, cfile, configDesc);
+    FcitxConfigBindSync(&xkb->config.gconfig);
 
     if (fp)
         fclose(fp);
+
+    LoadLayoutOverride(xkb);
 
     return true;
 }
 
-void SaveXkbConfig(FcitxXkbConfig* fs)
+void SaveLayoutOverride(FcitxXkb* xkb)
+{
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("data", "layout_override", "w", NULL);
+    if (!fp)
+        return;
+
+    LayoutOverride* item = xkb->layoutOverride;
+    while(item) {
+        if (item->variant)
+            fprintf(fp, "%s,%s,%s", item->im, item->layout, item->variant);
+        else
+            fprintf(fp, "%s,%s", item->im, item->layout);
+        item = item->hh.next;
+    }
+
+    fclose(fp);
+}
+
+void SaveXkbConfig(FcitxXkb* xkb)
 {
     FcitxConfigFileDesc *configDesc = GetXkbConfigDesc();
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-xkb.config", "w", NULL);
-    FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
+    FcitxConfigSaveConfigFileFp(fp, &xkb->config.gconfig, configDesc);
     if (fp)
         fclose(fp);
+
+    SaveLayoutOverride(xkb);
+}
+
+
+void* FcitxXkbGetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxXkb* xkb = arg;
+    const char* imname = args.args[0];
+    char** layout = args.args[1];
+    char** variant = args.args[2];
+    LayoutOverride* item = NULL;
+    HASH_FIND_STR(xkb->layoutOverride, imname, item);
+    if (item) {
+        *layout = item->layout;
+        *variant = item->variant;
+    }
+    else {
+        *layout = NULL;
+        *variant = NULL;
+    }
+    return NULL;
+}
+
+
+void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxXkb* xkb = arg;
+    const char* imname = args.args[0];
+    const char* layout = args.args[1];
+    const char* variant = args.args[2];
+    LayoutOverride* item = NULL;
+    HASH_FIND_STR(xkb->layoutOverride, imname, item);
+    if (item) {
+        HASH_DEL(xkb->layoutOverride, item);
+        LayoutOverrideFree(item);
+    }
+
+    if (layout && layout[0] != '\0' && strncmp(imname, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0) {
+        item = fcitx_utils_new(LayoutOverride);
+        item->im = strdup(imname);
+        item->layout = strdup(layout);
+        item->variant= (variant && variant[0] != '\0')? strdup(variant) : NULL;
+
+        HASH_ADD_KEYPTR(hh, xkb->layoutOverride, item->im, strlen(item->im), item);
+    }
+
+    SaveLayoutOverride(xkb);
+    FcitxXkbCurrentStateChanged(xkb);
+
+    return NULL;
 }

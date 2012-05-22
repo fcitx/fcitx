@@ -65,6 +65,16 @@ const char *introspection_xml =
     "    <method name=\"GetLayouts\">\n"
     "      <arg name=\"layouts\" direction=\"out\" type=\"a(ssss)\"/>\n"
     "    </method>\n"
+    "    <method name=\"GetLayoutForIM\">"
+    "        <arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "        <arg name=\"layout\" direction=\"out\" type=\"s\"/>"
+    "        <arg name=\"variant\" direction=\"out\" type=\"s\"/>"
+    "    </method>"
+    "    <method name=\"SetLayoutForIM\">"
+    "        <arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "        <arg name=\"layout\" direction=\"in\" type=\"s\"/>"
+    "        <arg name=\"variant\" direction=\"in\" type=\"s\"/>"
+    "    </method>"
     "  </interface>\n"
     "</node>\n";
 
@@ -197,6 +207,45 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
         dbus_connection_flush(connection);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "SetLayoutForIM")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* im, *layout, *variant;
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
+            FcitxModuleFunctionArg args;
+            args.args[0] = im;
+            args.args[1] = layout;
+            args.args[2] = variant;
+            InvokeFunction(xkbdbus->owner, FCITX_XKB, SETLAYOUTOVERRIDE, args);
+        }
+        DBusMessage *reply = dbus_message_new_method_return(message);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        dbus_connection_flush(connection);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "GetLayoutForIM")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* im = NULL, *layout = NULL, *variant = NULL;
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_INVALID)) {
+            FcitxModuleFunctionArg args;
+            args.args[0] = im;
+            args.args[1] = &layout;
+            args.args[2] = &variant;
+            InvokeFunction(xkbdbus->owner, FCITX_XKB, GETLAYOUTOVERRIDE, args);
+
+            if (!layout)
+                layout = "";
+            if (!variant)
+                variant = "";
+
+            DBusMessage *reply = dbus_message_new_method_return(message);
+            dbus_message_append_args(reply, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID);
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+            dbus_connection_flush(connection);
+        }
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

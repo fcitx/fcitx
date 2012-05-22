@@ -44,6 +44,7 @@ typedef struct _FcitxXkb
     FcitxXkbRules* rules;
     FcitxXkbConfig config;
     int xkbOpcode;
+    struct _LayoutOverride* layoutOverride;
 } FcitxXkb;
 
 #define FCITX_XKB_NAME "fcitx-xkb"
@@ -53,6 +54,10 @@ typedef struct _FcitxXkb
 #define FCITX_XKB_GETCURRENTLAYOUT_RETURNTYPE void
 #define FCITX_XKB_LAYOUTEXISTS 2
 #define FCITX_XKB_LAYOUTEXISTS_RETURNTYPE void
+#define FCITX_XKB_GETLAYOUTOVERRIDE 3
+#define FCITX_XKB_GETLAYOUTOVERRIDE_RETURNTYPE void
+#define FCITX_XKB_SETLAYOUTOVERRIDE 4
+#define FCITX_XKB_SETLAYOUTOVERRIDE_RETURNTYPE void
 
 #define FCITX_XKB_PATH "/keyboard"
 #define FCITX_XKB_INTERFACE "org.fcitx.Fcitx.Keyboard"

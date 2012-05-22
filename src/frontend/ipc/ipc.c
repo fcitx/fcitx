@@ -619,36 +619,38 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Configure")) {
-        fcitx_utils_launch_configure_tool();
         DBusMessage *reply = dbus_message_new_method_return(msg);
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
+        fcitx_utils_launch_configure_tool();
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureAddon")) {
         DBusError error;
         dbus_error_init(&error);
         char* addonname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &addonname, DBUS_TYPE_INVALID)) {
-            if (addonname) {
-                fcitx_utils_launch_configure_tool_for_addon(addonname);
-            }
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_connection_send(connection, reply, NULL);
             dbus_message_unref(reply);
+            if (addonname) {
+                fcitx_utils_launch_configure_tool_for_addon(addonname);
+            }
         }
         dbus_error_free(&error);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadConfig")) {
-        FcitxInstanceReloadConfig(instance);
         DBusMessage *reply = dbus_message_new_method_return(msg);
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
+        dbus_connection_flush(connection);
+        FcitxInstanceReloadConfig(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Restart")) {
-        fcitx_utils_launch_restart();
         DBusMessage *reply = dbus_message_new_method_return(msg);
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
+        dbus_connection_flush(connection);
+        fcitx_utils_launch_restart();
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
