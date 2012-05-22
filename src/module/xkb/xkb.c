@@ -750,16 +750,16 @@ void LoadLayoutOverride(FcitxXkb* xkb)
     size_t len = 0;
     char *trimedbuf = NULL;
 
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("data", "layout_override", "r", NULL);
-    if (!fp)
-        return;
-
     /* clean all old configuration */
     while (xkb->layoutOverride) {
         LayoutOverride* cur = xkb->layoutOverride;
         HASH_DEL(xkb->layoutOverride, cur);
         LayoutOverrideFree(cur);
     }
+
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("data", "layout_override", "r", NULL);
+    if (!fp)
+        return;
 
     while (getline(&buf, &len, fp) != -1) {
         if (trimedbuf)
