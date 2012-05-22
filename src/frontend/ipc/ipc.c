@@ -168,6 +168,10 @@ const char * im_introspection_xml =
     "    <method name=\"SetCurrentIM\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"ReloadConfig\">\n"
+    "    </method>\n"
+    "    <method name=\"Restart\">\n"
+    "    </method>\n"
     "    <method name=\"Configure\">\n"
     "    </method>\n"
     "    <method name=\"ConfigureAddon\">\n"
@@ -633,6 +637,18 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_message_unref(reply);
         }
         dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ReloadConfig")) {
+        FcitxInstanceReloadConfig(instance);
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Restart")) {
+        fcitx_utils_launch_restart();
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

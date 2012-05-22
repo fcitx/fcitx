@@ -473,11 +473,26 @@ void fcitx_utils_launch_configure_tool()
 
 
 FCITX_EXPORT_API
-void fcitx_utils_launch_configure_tool_for_im(const char* imaddon)
+void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon)
 {
     char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
     char* commandf;
     asprintf(&commandf, "%s %s &", command, imaddon);
+    FILE* p = popen(commandf, "r");
+    free(command);
+    free(commandf);
+    if (p)
+        pclose(p);
+    else
+        FcitxLog(ERROR, _("Unable to create process"));
+}
+
+FCITX_EXPORT_API
+void fcitx_utils_launch_restart()
+{
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx");
+    char* commandf;
+    asprintf(&commandf, "%s -r &", command);
     FILE* p = popen(commandf, "r");
     free(command);
     free(commandf);

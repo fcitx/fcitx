@@ -95,7 +95,7 @@ extern "C" {
      *
      * @return void
      **/
-    void fcitx_utils_init_as_daemon();
+    void fcitx_utils_init_as_daemon(void);
 
     /**
      * Count the file line count
@@ -111,7 +111,7 @@ extern "C" {
      *
      * @return UT_array*
      **/
-    UT_array* fcitx_utils_new_string_list();
+    UT_array* fcitx_utils_new_string_list(void);
 
     /**
      * Split a string by delm
@@ -182,7 +182,7 @@ extern "C" {
      *
      * @return int
      **/
-    int fcitx_utils_get_display_number();
+    int fcitx_utils_get_display_number(void);
 
     /**
      * Get current language code, result need to be free'd
@@ -190,7 +190,7 @@ extern "C" {
      *
      * @return char*
      **/
-    char* fcitx_utils_get_current_langcode();
+    char* fcitx_utils_get_current_langcode(void);
 
     /**
      * Get Current Process Name, implementation depends on OS,
@@ -199,7 +199,7 @@ extern "C" {
      *
      * @return char*
      **/
-    char* fcitx_utils_get_process_name();
+    char* fcitx_utils_get_process_name(void);
 
 
     /**
@@ -254,14 +254,21 @@ extern "C" {
      *
      * @return void
      **/
-    void fcitx_utils_launch_configure_tool();
+    void fcitx_utils_launch_configure_tool(void);
 
     /**
      * launch fcitx-configtool for an addon
      *
      * @return void
      **/
-    void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon);
+    void fcitx_utils_launch_configure_tool_for_addon(const char* addon);
+
+    /**
+     * helper function to execute fcitx -r
+     *
+     * @return void
+     **/
+    void fcitx_utils_launch_restart(void);
 
     /**
      * if obj is null, free it, after that, if str is NULL set it with NULL,
