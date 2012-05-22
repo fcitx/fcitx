@@ -174,7 +174,6 @@ void ToggleFullWidthState(void* arg)
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     profile->bUseFullWidthChar = !profile->bUseFullWidthChar;
     FcitxProfileSave(profile);
-    FcitxInstanceResetInput(fwchar->owner);
 }
 
 boolean GetFullWidthState(void* arg)

@@ -478,7 +478,6 @@ void TogglePuncState(void* arg)
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     profile->bUseWidePunc = !profile->bUseWidePunc;
     FcitxProfileSave(profile);
-    FcitxInstanceResetInput(puncState->owner);
 }
 
 INPUT_RETURN_VALUE TogglePuncStateWithHotkey(void* arg)
