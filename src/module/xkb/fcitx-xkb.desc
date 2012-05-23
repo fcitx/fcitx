@@ -9,4 +9,4 @@ DefaultValue=False
 Description=Ignore Input Method Layout Request
 
 [DescriptionFile]
-LocaleDomain=fcitx-keyboard
+LocaleDomain=fcitx

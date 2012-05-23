@@ -37,10 +37,10 @@ Enum1=Aspell
 Enum2=Myspell
 Description=Preferred Enchant Provider (Need Restart)
 
-[DescriptionFile]
-LocaleDomain=fcitx-keyboard
-
 [Keyboard/HotkeyAddToUserDict]
 Type=Hotkey
 DefaultValue=CTRL_ALT_N
 Description=Add current input buffer to user dictionary
+
+[DescriptionFile]
+LocaleDomain=fcitx
