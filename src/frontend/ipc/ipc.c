@@ -674,6 +674,7 @@ static DBusHandlerResult IPCICDBusEventHandler(DBusConnection *connection, DBusM
         result = DBUS_HANDLER_RESULT_HANDLED;
     }
 
+    /* ic is not NULL */
     if (result == DBUS_HANDLER_RESULT_NOT_YET_HANDLED && ic) {
         DBusError error;
         dbus_error_init(&error);
@@ -816,6 +817,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const
 
     if (ic == NULL || ic->frontendid != callic->frontendid || GetIPCIC(ic)->id != GetIPCIC(callic)->id) {
         FcitxInstanceSetCurrentIC(ipc->owner, callic);
+        FcitxUIOnInputFocus(ipc->owner);
     }
     ic = callic;
     FcitxKeySym sym;

@@ -323,8 +323,6 @@ Bool XimProtocolHandler(XIMS _ims, IMProtocol * call_data)
         return XIMUnsetFocusHandler(ximfrontend, (IMChangeICStruct *) call_data);;
     case XIM_RESET_IC:
         return True;
-    case XIM_TRIGGER_NOTIFY:
-        return XIMTriggerNotifyHandler(ximfrontend, (IMTriggerNotifyStruct *) call_data);
     case XIM_PREEDIT_START_REPLY:
         return 0;
     case XIM_PREEDIT_CARET_REPLY:

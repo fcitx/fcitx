@@ -106,7 +106,8 @@ Bool XIMCreateICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
     if (ic == NULL) {
         ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
-        FcitxInstanceSetCurrentIC(xim->owner, ic);
+        if (FcitxInstanceSetCurrentIC(xim->owner, ic) && ic)
+            FcitxUIOnInputFocus(xim->owner);
     }
 
     return True;
@@ -118,19 +119,6 @@ Bool XIMDestroyICHandler(FcitxXimFrontend* xim, IMChangeICStruct * call_data)
 
     return True;
 }
-
-Bool XIMTriggerNotifyHandler(FcitxXimFrontend* xim, IMTriggerNotifyStruct * call_data)
-{
-    FcitxInputContext* ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
-    if (ic == NULL)
-        return True;
-
-    FcitxInstanceSetCurrentIC(xim->owner, ic);
-    FcitxInstanceEnableIM(xim->owner, ic, false);
-    FcitxUIOnTriggerOn(xim->owner);
-    return True;
-}
-
 
 void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct * call_data)
 {
@@ -196,7 +184,8 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
 
     if (ic == NULL) {
         ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
-        FcitxInstanceSetCurrentIC(xim->owner, ic);
+        if (FcitxInstanceSetCurrentIC(xim->owner, ic) && ic)
+            FcitxUIOnInputFocus(xim->owner);
     }
 
     if (ic == NULL)
@@ -206,7 +195,8 @@ void XIMProcessKey(FcitxXimFrontend* xim, IMForwardEventStruct * call_data)
         ic = FcitxInstanceFindIC(xim->owner, xim->frontendid, &call_data->icid);
         if (ic == NULL)
             return;
-        FcitxInstanceSetCurrentIC(xim->owner, ic);
+        if (FcitxInstanceSetCurrentIC(xim->owner, ic))
+            FcitxUIOnInputFocus(xim->owner);
     }
 
     kev = (XKeyEvent *) & call_data->event;
