@@ -1,3 +1,10 @@
-add_subdirectory(default)
-add_subdirectory(classic)
-add_subdirectory(dark)
+
+foreach(skin default classic dark)
+    install(DIRECTORY ${skin} DESTINATION ${pkgdatadir}/skin
+             PATTERN .* EXCLUDE
+             PATTERN *~ EXCLUDE)
+endforeach(skin default classic dark)
+
+install(DIRECTORY imicon DESTINATION ${pkgdatadir}
+            PATTERN .* EXCLUDE
+            PATTERN *~ EXCLUDE)

@@ -207,53 +207,78 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     return image;
 }
 
-SkinImage* LoadImage(FcitxSkin* sc, const char* name, boolean fallback)
+SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, const char* name, int flag)
 {
     cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
+    char* buf = NULL;
+    asprintf(&buf, "skin/%s", skinType);
+    const char* fallbackChainNoFallback[] = { buf };
+    const char* fallbackChainPanel[] = { buf, "skin/default"};
+    const char* fallbackChainTray[] = { "imicon" };
 
-    HASH_FIND_STR(sc->imageTable, name, image);
+    HASH_FIND_STR(*imageTable, name, image);
     if (image != NULL) {
         return image;
     }
+
+    const char** fallbackChain;
+    int fallbackSize;
+    switch(flag) {
+        case 1:
+            fallbackChain = fallbackChainPanel;
+            fallbackSize = 2;
+            break;
+        case 2:
+            fallbackChain = fallbackChainTray;
+            fallbackSize = 1;
+            break;
+        case 0:
+        default:
+            /* fall through */
+            fallbackChain = fallbackChainNoFallback;
+            fallbackSize = 1;
+            break;
+    }
+
     if (strlen(name) > 0 && strcmp(name , "NONE") != 0) {
-        char *skintype = strdup(*sc->skinType);
-        char *filename;
-        while (true) {
-            char* buf = NULL;
-            asprintf(&buf, "skin/%s", skintype);
+        int i = 0;
+        for (i = 0; i < fallbackSize; i ++) {
+            char* filename;
+            const char* skintype = fallbackChain[i];
 
-            FILE* fp = FcitxXDGGetFileWithPrefix(buf, name, "r", &filename);
-            free(buf);
-
-            Bool flagNoFile = (fp == NULL);
+            FILE* fp = FcitxXDGGetFileWithPrefix(skintype, name, "r", &filename);
             if (fp) {
-                fclose(fp);
-
                 png = cairo_image_surface_create_from_png(filename);
-                break;
-            }
-            if (flagNoFile && (!fallback || strcmp(skintype, "default") == 0)) {
-                png = NULL;
-                break;
+                if (cairo_surface_status (png)) {
+                    png = NULL;
+                }
             }
 
             free(filename);
-            free(skintype);
-            skintype = strdup("default");
+
+            if (png)
+                break;
         }
-        free(filename);
-        free(skintype);
     }
+    free(buf);
 
     if (png != NULL) {
         image = fcitx_utils_malloc0(sizeof(SkinImage));
         image->name = strdup(name);
         image->image = png;
-        HASH_ADD_KEYPTR(hh, sc->imageTable, image->name, strlen(image->name), image);
+        HASH_ADD_KEYPTR(hh, *imageTable, image->name, strlen(image->name), image);
         return image;
     }
     return NULL;
+}
+
+SkinImage* LoadImage(FcitxSkin* sc, const char* name, int flag)
+{
+    if (flag == 2)
+        return LoadImageFromTable(&sc->trayImageTable, *sc->skinType, name, flag);
+    else
+        return LoadImageFromTable(&sc->imageTable, *sc->skinType, name, flag);
 }
 
 void DrawResizableBackground(cairo_t *c,
@@ -799,9 +824,9 @@ void DisplaySkin(FcitxClassicUI* classicui, char * skinname)
     SaveClassicUIConfig(classicui);
 }
 
-void UnloadImage(FcitxSkin* skin)
+void FreeImageTable(SkinImage* table)
 {
-    SkinImage *images = skin->imageTable;
+    SkinImage *images = table;
     while (images) {
         SkinImage* curimage = images;
         HASH_DEL(images, curimage);
@@ -809,7 +834,15 @@ void UnloadImage(FcitxSkin* skin)
         cairo_surface_destroy(curimage->image);
         free(curimage);
     }
+}
+
+void UnloadImage(FcitxSkin* skin)
+{
+    FreeImageTable(skin->imageTable);
     skin->imageTable = NULL;
+
+    FreeImageTable(skin->trayImageTable);
+    skin->trayImageTable = NULL;
 }
 
 void UnloadSingleImage(FcitxSkin* sc, const char* name)
@@ -945,7 +978,7 @@ void ParsePlacement(UT_array* sps, char* placment)
     utarray_free(array);
 }
 
-SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon,  boolean imfallbackToDefault, boolean fallbackToDefault)
+SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon,  int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
     char* path;
@@ -953,7 +986,7 @@ SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbac
         path = strdup(im->strIconName);
     else
         asprintf(&path, "%s.png", im->strIconName);
-    SkinImage* imicon = LoadImage(sc, path, imfallbackToDefault);
+    SkinImage* imicon = LoadImage(sc, path, flag);
     if (imicon == NULL)
         imicon = LoadImage(sc, fallbackIcon, fallbackToDefault);
     else {

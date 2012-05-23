@@ -146,12 +146,16 @@ void DrawTrayWindow(TrayWindow* trayWindow)
 
     /* 画png */
     if (f_state) {
-        image = LoadImage(sc, sc->skinTrayIcon.active, true);
+        image = GetIMIcon(classicui->owner, sc, sc->skinTrayIcon.active, 2, true);
     } else {
         image = LoadImage(sc, sc->skinTrayIcon.inactive, true);
     }
     if (image == NULL)
         return;
+    /* active, try draw im icon on tray */
+    if (f_state && image) {
+
+    }
     png_surface = image->image;
 
     c = cairo_create(trayWindow->cs);
