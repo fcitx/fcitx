@@ -121,19 +121,21 @@ boolean IMSelectorPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPU
     if (hkNextPage == NULL)
         hkNextPage = fc->hkNextPage;
 
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+
     if (FcitxHotkeyIsHotKey(sym, state, hkPrevPage)) {
-        if (FcitxCandidateWordGoPrevPage(FcitxInputStateGetCandidateList(input)))
-            *retval = IRV_DISPLAY_MESSAGE;
+        FcitxCandidateWordGoPrevPage(candList);
+        *retval = IRV_DISPLAY_MESSAGE;
     } else if (FcitxHotkeyIsHotKey(sym, state, hkNextPage)) {
-        if (FcitxCandidateWordGoNextPage(FcitxInputStateGetCandidateList(input)))
-            *retval = IRV_DISPLAY_MESSAGE;
+        FcitxCandidateWordGoNextPage(candList);
+        *retval = IRV_DISPLAY_MESSAGE;
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-        if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) != 0)
-            *retval = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
-    } if (FcitxHotkeyIsHotKeyDigit(sym, state)) {
+        if (FcitxCandidateWordPageCount(candList) != 0)
+            *retval = FcitxCandidateWordChooseByIndex(candList, 0);
+    } else if (FcitxHotkeyIsHotKeyDigit(sym, state)) {
         int iKey = FcitxHotkeyCheckChooseKey(sym, state, DIGIT_STR_CHOOSE);
         if (iKey >= 0)
-            *retval = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), iKey);
+            *retval = FcitxCandidateWordChooseByIndex(candList, iKey);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
         *retval = IRV_CLEAN;
     } else {
