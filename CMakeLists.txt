@@ -19,6 +19,7 @@ option(ENABLE_LUA "Enable Lua support" OFF)
 option(ENABLE_STATIC "Build Static Library" OFF)
 option(ENABLE_TEST "Test build" OFF)
 option(ENABLE_SNOOPER "Enable Key Snooper for gtk app" On)
+option(ENABLE_GIR "Enable GObject Introspection" On)
 
 if (NOT NO_SNOOPER_APPS)
 set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")

@@ -97,6 +97,8 @@ static const gchar ic_introspection_xml[] =
     "    </signal>\n"
     "  </interface>\n"
     "</node>\n";
+FCITX_EXPORT_API
+GType        fcitx_client_get_type(void) G_GNUC_CONST;
 
 G_DEFINE_TYPE(FcitxClient, fcitx_client, G_TYPE_OBJECT);
 
@@ -229,7 +231,7 @@ void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint curso
 }
 
 FCITX_EXPORT_API
-void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
+void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
     if (im->icproxy) {
@@ -244,7 +246,7 @@ void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer 
 }
 
 FCITX_EXPORT_API
-int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t)
+int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
     GError *error = NULL;

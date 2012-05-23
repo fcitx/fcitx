@@ -58,14 +58,14 @@ struct _FcitxClientClass {
 
 FcitxClient* fcitx_client_new();
 gboolean fcitx_client_is_valid(FcitxClient* im);
-int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
-void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, FcitxKeyEventType type, guint32 t);
+int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
+void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
 
 void fcitx_client_focusin(FcitxClient* im);
 void fcitx_client_focusout(FcitxClient* im);
 void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h);
 void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor);
-void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags);
+void fcitx_client_set_capacity(FcitxClient* im, guint flags);
 void fcitx_client_reset(FcitxClient* im);
 
 GType        fcitx_client_get_type(void) G_GNUC_CONST;

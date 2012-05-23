@@ -1,3 +1,5 @@
+include(GObjectIntrospection)
+
 _pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL "" "--variable=glib_genmarshal")
 FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
 
@@ -17,8 +19,10 @@ add_custom_command(OUTPUT marshall.h
 set(FCITX_GCLIENT_SOURCES
     fcitxclient.c
     fcitxinputmethod.c
+)
+
+set(FCITX_GCLIENT_BUILT_SOURCES
     ${CMAKE_CURRENT_BINARY_DIR}/marshall.c
-    ${CMAKE_CURRENT_BINARY_DIR}/marshall.h
 )
 
 set(FCITX_GCLIENT_HEADERS
@@ -26,7 +30,11 @@ set(FCITX_GCLIENT_HEADERS
     fcitxinputmethod.h
 )
 
-add_library(fcitx-gclient SHARED ${FCITX_GCLIENT_SOURCES})
+set(FCITX_GCLIENT_BUILT_HEADERS
+    ${CMAKE_CURRENT_BINARY_DIR}/marshall.h
+)
+
+add_library(fcitx-gclient SHARED ${FCITX_GCLIENT_SOURCES} ${FCITX_GCLIENT_BUILT_SOURCES} ${FCITX_GCLIENT_BUILT_HEADERS})
 set_target_properties(fcitx-gclient
                       PROPERTIES VERSION 0.1
                       SOVERSION 0
@@ -40,6 +48,27 @@ configure_file(fcitx-gclient.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc)
 install(TARGETS fcitx-gclient LIBRARY DESTINATION "${libdir}")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc DESTINATION "${libdir}/pkgconfig")
 install(FILES ${FCITX_GCLIENT_HEADERS} DESTINATION "${includedir}/fcitx-gclient")
+
+if (ENABLE_GIR)
+
+gobject_introspection(
+    FILENAME Fcitx-1.0.gir
+    NSVERSION 1.0
+    INCLUDE Gio-2.0 GObject-2.0 GLib-2.0
+    PACKAGE_EXPORT fcitx-gclient
+    LIBRARY fcitx-gclient
+    SCANNER_ARGS --warn-all --add-include-path=${CMAKE_CURRENT_SOURCE_DIR}
+    COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}"
+    SYMBOL_PREFIXES fcitx
+    SOURCES ${FCITX_GCLIENT_SOURCES} ${FCITX_GCLIENT_HEADERS}
+)
+
+
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Fcitx-1.0.gir DESTINATION ${GOBJECT_INTROSPECTION_GIRDIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Fcitx-1.0.typelib DESTINATION ${GOBJECT_INTROSPECTION_TYPELIBDIR})
+
+endif (ENABLE_GIR)
 
 if (ENABLE_STATIC)
 
