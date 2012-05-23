@@ -8,6 +8,7 @@ set(fcitx_xim_SOURCES
     xim.c
     ximhandler.c
     ximconfig.c
+    ximqueue.c
 )
 
 set(Ximd_SOURCES

@@ -45,6 +45,8 @@
 #define FCITX_X11_ADDCOMPOSITEHANDLER_RETURNTYPE void
 #define FCITX_X11_GETSCREENGEOMETRY 9
 #define FCITX_X11_GETSCREENGEOMETRY_RETURNTYPE void
+#define FCITX_X11_PROCESSREMAINEVENT 10
+#define FCITX_X11_PROCESSREMAINEVENT_RETURNTYPE void
 
 
 struct _FcitxInstance;
@@ -80,6 +82,7 @@ typedef struct _FcitxX11 {
     FcitxRect* rects;
     int screenCount;
     int defaultScreen;
+    struct _FcitxAddon* xim;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {

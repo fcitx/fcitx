@@ -31,11 +31,11 @@
 #endif
 
 #include "fcitx/module.h"
+#include "fcitx-utils/log.h"
 #include "x11stuff.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "xerrorhandler.h"
-#include <fcitx-utils/log.h>
 
 static void* X11Create(FcitxInstance* instance);
 static void X11SetFD(void* arg);
@@ -54,6 +54,7 @@ static void InitComposite(FcitxX11* x11stuff);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11stuff);
 static void X11InitScreen(FcitxX11* x11stuff);
+static void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args);
 
 static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
@@ -79,6 +80,7 @@ void* X11Create(FcitxInstance* instance)
     FcitxX11* x11priv = fcitx_utils_malloc0(sizeof(FcitxX11));
     FcitxAddon* x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
     x11priv->dpy = XOpenDisplay(NULL);
+    x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
     if (x11priv->dpy == NULL)
         return false;
 
@@ -104,6 +106,7 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11MouseClick);
     AddFunction(x11addon, X11AddCompositeHandler);
     AddFunction(x11addon, X11ScreenGeometry);
+    AddFunction(x11addon, X11ProcessEventReal);
     InitComposite(x11priv);
 
     X11InitScreen(x11priv);
@@ -129,9 +132,9 @@ void X11SetFD(void* arg)
 }
 
 
-void X11ProcessEvent(void* arg)
+void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxX11* x11priv = (FcitxX11*)arg;
+    FcitxX11* x11priv = arg;
     XEvent event;
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
@@ -158,6 +161,16 @@ void X11ProcessEvent(void* arg)
                     break;
         }
     }
+}
+
+void X11ProcessEvent(void* arg)
+{
+    FcitxX11* x11priv = (FcitxX11*)arg;
+
+    FcitxModuleFunctionArg args;
+    X11ProcessEventReal(x11priv, args);
+
+    FcitxModuleInvokeFunction(x11priv->xim, 0, args);
 }
 
 void* X11GetDisplay(void* arg, FcitxModuleFunctionArg args)

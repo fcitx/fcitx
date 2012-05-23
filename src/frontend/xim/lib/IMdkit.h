@@ -123,6 +123,7 @@ extern "C" {
     extern Status IMCloseIM(XIMS);
     extern char *IMSetIMValues(XIMS, ...);
     extern char *IMGetIMValues(XIMS, ...);
+    /* pending operation */
     void IMForwardEvent(XIMS, XPointer);
     void IMCommitString(XIMS, XPointer);
     int IMCallCallback(XIMS, XPointer);

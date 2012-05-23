@@ -39,6 +39,7 @@
 #include "IC.h"
 #include "xim.h"
 #include "ximhandler.h"
+#include "ximqueue.h"
 #include "module/x11/x11stuff.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/hook.h"
@@ -141,6 +142,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
+    FcitxAddon* ximaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
     xim->x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-x11");
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
@@ -167,6 +169,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
             imname = DEFAULT_IMNAME;
         }
     }
+    XimQueueInit(xim);
 
     if (GetXimConfigDesc() == NULL)
         xim->bUseOnTheSpotStyle = false;
@@ -245,6 +248,9 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         free(xim);
         return NULL;
     }
+
+    AddFunction(ximaddon, XimCosumeQueue);
+
     return xim;
 }
 
@@ -347,28 +353,27 @@ boolean XimDestroy(void* arg)
 void XimEnableIM(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    IMChangeFocusStruct call_data;
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
-    call_data.connect_id = ximic->connect_id;
-    call_data.icid = ximic->id;
-    IMPreeditStart(xim->ims, (XPointer) &call_data);
+    IMChangeFocusStruct* call_data = fcitx_utils_new(IMChangeFocusStruct);
+    call_data->connect_id = ximic->connect_id;
+    call_data->icid = ximic->id;
+    XimPendingCall(xim, XCT_PREEDIT_START, (XPointer) call_data);
 }
 
 void XimCloseIM(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    IMChangeFocusStruct call_data;
+    IMChangeFocusStruct* call_data = fcitx_utils_new(IMChangeFocusStruct);
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
-    call_data.connect_id = ximic->connect_id;
-    call_data.icid = ximic->id;
-    IMPreeditEnd(xim->ims, (XPointer) &call_data);
+    call_data->connect_id = ximic->connect_id;
+    call_data->icid = ximic->id;
+    XimPendingCall(xim, XCT_PREEDIT_END, (XPointer) call_data);
 }
 
 void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XTextProperty tp;
-    IMCommitStruct cms;
     FcitxXimIC* ximic = (FcitxXimIC*) ic->privateic;
 
     /* avoid Seg fault */
@@ -387,17 +392,14 @@ void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
     }
 
     Xutf8TextListToTextProperty(xim->display, (char **) &str, 1, XCompoundTextStyle, &tp);
+    IMCommitStruct* cms = fcitx_utils_new(IMCommitStruct);
 
-    memset(&cms, 0, sizeof(IMCommitStruct));
-    cms.major_code = XIM_COMMIT;
-    cms.icid = ximic->id;
-    cms.connect_id = ximic->connect_id;
-    cms.flag = XimLookupChars;
-    cms.commit_string = (char *) tp.value;
-    IMCommitString(xim->ims, (XPointer) & cms);
-    XFree(tp.value);
-
-    xim->x11addon->module->ProcessEvent(xim->x11addon->addonInstance);
+    cms->major_code = XIM_COMMIT;
+    cms->icid = ximic->id;
+    cms->connect_id = ximic->connect_id;
+    cms->flag = XimLookupChars;
+    cms->commit_string = (char *) tp.value;
+    XimPendingCall(xim, XCT_COMMIT, (XPointer) cms);
 }
 
 void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)

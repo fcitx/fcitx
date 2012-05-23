@@ -30,6 +30,7 @@
 #include "ximhandler.h"
 #include "Xi18n.h"
 #include "IC.h"
+#include "ximqueue.h"
 
 Bool XIMOpenHandler(FcitxXimFrontend* xim, IMOpenStruct * call_data)
 {
@@ -257,66 +258,48 @@ void XimForwardKeyInternal(FcitxXimFrontend *xim,
                            XEvent* xEvent
                           )
 {
-    IMForwardEventStruct forwardEvent;
+    IMForwardEventStruct* forwardEvent = fcitx_utils_new(IMForwardEventStruct);
 
-    memset(&forwardEvent, 0, sizeof(IMForwardEventStruct));
-    forwardEvent.connect_id = ic->connect_id;
-    forwardEvent.icid = ic->id;
-    forwardEvent.major_code = XIM_FORWARD_EVENT;
-    forwardEvent.sync_bit = 0;
-    forwardEvent.serial_number = xim->currentSerialNumberCallData;
+    forwardEvent->connect_id = ic->connect_id;
+    forwardEvent->icid = ic->id;
+    forwardEvent->major_code = XIM_FORWARD_EVENT;
+    forwardEvent->sync_bit = 0;
+    forwardEvent->serial_number = xim->currentSerialNumberCallData;
 
-    memcpy(&(forwardEvent.event), xEvent, sizeof(XEvent));
-    IMForwardEvent(xim->ims, (XPointer)(&forwardEvent));
-
-    xim->x11addon->module->ProcessEvent(xim->x11addon->addonInstance);
+    memcpy(&(forwardEvent->event), xEvent, sizeof(XEvent));
+    XimPendingCall(xim, XCT_FORWARD, (XPointer)forwardEvent);
 }
-
-void XIMClose(FcitxXimFrontend* xim, FcitxInputContext* ic, FcitxKeySym sym, unsigned int state, int count)
-{
-    if (ic == NULL)
-        return;
-    IMChangeFocusStruct call_data;
-
-    call_data.connect_id = GetXimIC(ic)->connect_id;
-    call_data.icid = GetXimIC(ic)->id;
-
-    IMPreeditEnd(xim->ims, (XPointer) &call_data);
-}
-
 
 void
 XimPreeditCallbackStart(FcitxXimFrontend *xim, const FcitxXimIC* ic)
 {
-    IMPreeditCBStruct pcb;
+    IMPreeditCBStruct* pcb = fcitx_utils_new(IMPreeditCBStruct);
 
-    pcb.major_code = XIM_PREEDIT_START;
-    pcb.minor_code = 0;
-    pcb.connect_id = ic->connect_id;
-    pcb.icid = ic->id;
-    pcb.todo.return_value = 0;
-    IMCallCallback(xim->ims, (XPointer) & pcb);
+    pcb->major_code = XIM_PREEDIT_START;
+    pcb->minor_code = 0;
+    pcb->connect_id = ic->connect_id;
+    pcb->icid = ic->id;
+    pcb->todo.return_value = 0;
+    XimPendingCall(xim, XCT_CALLCALLBACK, (XPointer) pcb);
 }
 
 
 void
 XimPreeditCallbackDone(FcitxXimFrontend *xim, const FcitxXimIC* ic)
 {
-    IMPreeditCBStruct pcb;
+    IMPreeditCBStruct* pcb = fcitx_utils_new(IMPreeditCBStruct);
 
-    pcb.major_code = XIM_PREEDIT_DONE;
-    pcb.minor_code = 0;
-    pcb.connect_id = ic->connect_id;
-    pcb.icid = ic->id;
-    pcb.todo.return_value = 0;
-    IMCallCallback(xim->ims, (XPointer) & pcb);
+    pcb->major_code = XIM_PREEDIT_DONE;
+    pcb->minor_code = 0;
+    pcb->connect_id = ic->connect_id;
+    pcb->icid = ic->id;
+    pcb->todo.return_value = 0;
+    XimPendingCall(xim, XCT_CALLCALLBACK, (XPointer) pcb);
 }
 
 void
 XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedit_string, int cursorPos)
 {
-    IMPreeditCBStruct pcb;
-    XIMText text;
     XTextProperty tp;
 
     uint i, len;
@@ -354,33 +337,26 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
     }
     xim->feedback[len] = 0;
 
-    pcb.major_code = XIM_PREEDIT_DRAW;
-    pcb.connect_id = ic->connect_id;
-    pcb.icid = ic->id;
+    IMPreeditCBStruct* pcb = fcitx_utils_new(IMPreeditCBStruct);
+    XIMText* text = fcitx_utils_new(XIMText);
+    pcb->major_code = XIM_PREEDIT_DRAW;
+    pcb->connect_id = ic->connect_id;
+    pcb->icid = ic->id;
 
-    pcb.todo.draw.caret = cursorPos;
-    pcb.todo.draw.chg_first = 0;
-    pcb.todo.draw.chg_length = ic->onspot_preedit_length;
-    pcb.todo.draw.text = &text;
+    pcb->todo.draw.caret = cursorPos;
+    pcb->todo.draw.chg_first = 0;
+    pcb->todo.draw.chg_length = ic->onspot_preedit_length;
+    pcb->todo.draw.text = text;
 
-    text.feedback = xim->feedback;
+    text->feedback = xim->feedback;
 
-    if (len > 0) {
-        Xutf8TextListToTextProperty(xim->display,
-                                    (char **)&preedit_string,
-                                    1, XCompoundTextStyle, &tp);
-        text.encoding_is_wchar = 0;
-        text.length = strlen((char*)tp.value);
-        text.string.multi_byte = (char*)tp.value;
-        IMCallCallback(xim->ims, (XPointer) & pcb);
-        XFree(tp.value);
-    } else {
-        text.encoding_is_wchar = 0;
-        text.length = 0;
-        text.string.multi_byte = "";
-        IMCallCallback(xim->ims, (XPointer) & pcb);
-        len = 0;
-    }
+    Xutf8TextListToTextProperty(xim->display,
+                                (char **)&preedit_string,
+                                1, XCompoundTextStyle, &tp);
+    text->encoding_is_wchar = 0;
+    text->length = strlen((char*)tp.value);
+    text->string.multi_byte = (char*)tp.value;
+    XimPendingCall(xim, XCT_CALLCALLBACK, (XPointer) pcb);
     ic->onspot_preedit_length = len;
 }
 
