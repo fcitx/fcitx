@@ -214,8 +214,9 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
     char* buf = NULL;
     asprintf(&buf, "skin/%s", skinType);
     const char* fallbackChainNoFallback[] = { buf };
-    const char* fallbackChainPanel[] = { buf, "skin/default"};
+    const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
+    const char* fallbackChainPanelIMIcon[] = { buf, "imicon" };
 
     HASH_FIND_STR(*imageTable, name, image);
     if (image != NULL) {
@@ -232,6 +233,10 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
         case 2:
             fallbackChain = fallbackChainTray;
             fallbackSize = 1;
+            break;
+        case 3:
+            fallbackChain = fallbackChainPanelIMIcon;
+            fallbackSize = 3;
             break;
         case 0:
         default:
@@ -978,7 +983,7 @@ void ParsePlacement(UT_array* sps, char* placment)
     utarray_free(array);
 }
 
-SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon,  int flag, boolean fallbackToDefault)
+SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
     char* path;
