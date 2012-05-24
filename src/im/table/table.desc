@@ -167,6 +167,11 @@ Description=Commit and pass when invalid key of this table pressed
 Type=Boolean
 DefaultValue=False
 
+[CodeTable/CommitKey]
+Description=Commit key for select first candidate
+Type=Hotkey
+DefaultValue=SPACE
+
 [CodeTable/IgnorePunc]
 Description=Ignore Punctuation
 Type=Boolean

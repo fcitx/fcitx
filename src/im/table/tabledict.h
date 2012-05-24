@@ -104,6 +104,7 @@ typedef struct _TableMetaData {
     boolean         bIgnorePunc;
     FcitxHotkey     hkAlternativePrevPage[2];
     FcitxHotkey     hkAlternativeNextPage[2];
+    FcitxHotkey     hkCommitKey[2];
     boolean         bEnabled;
 
     struct _FcitxTableState* owner;

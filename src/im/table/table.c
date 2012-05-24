@@ -529,7 +529,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                     retVal = IRV_DISPLAY_CANDWORDS;
                 else
                     retVal = IRV_CLEAN;
-            } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
+            } else if (FcitxHotkeyIsHotKey(sym, state, table->hkCommitKey)) {
                 if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY)
                     retVal = IRV_COMMIT_STRING;
                 else {
