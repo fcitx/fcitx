@@ -172,6 +172,11 @@ Description=Commit key for select first candidate
 Type=Hotkey
 DefaultValue=SPACE
 
+[CodeTable/CommitKeyCommitWhenNoMatch]
+Description=Commit string when there is no match
+Type=Boolean
+DefaultValue=False
+
 [CodeTable/IgnorePunc]
 Description=Ignore Punctuation
 Type=Boolean

@@ -26,7 +26,6 @@ void XimCosumeQueue(void* arg, FcitxModuleFunctionArg args)
          item != NULL;
          item = (XimQueue*) utarray_next(xim->queue, item))
     {
-        FcitxModuleInvokeFunction(xim->x11addon, FCITX_X11_PROCESSREMAINEVENT, args);
         switch(item->type) {
         case XCT_FORWARD:
             IMForwardEvent(xim->ims, item->ptr);
@@ -56,6 +55,7 @@ void XimCosumeQueue(void* arg, FcitxModuleFunctionArg args)
             break;
         }
         free(item->ptr);
+        FcitxModuleInvokeFunction(xim->x11addon, FCITX_X11_PROCESSREMAINEVENT, args);
     }
 
     utarray_clear(xim->queue);

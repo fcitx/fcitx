@@ -225,9 +225,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     char* strCodeInput = FcitxInputStateGetRawInputBuffer(input);
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
-    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), table->strChoose);
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
+    FcitxCandidateWordSetChoose(candList, table->strChoose);
+    FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
 
     tbl->iTableIMIndex = utarray_eltidx(tbl->table, table);
     if (tbl->iTableIMIndex != tbl->iCurrentTableLoaded) {
@@ -267,7 +268,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
         )
        ) {
         if (FcitxInputStateGetIsInRemind(input))
-            FcitxCandidateWordReset(FcitxInputStateGetCandidateList(input));
+            FcitxCandidateWordReset(candList);
         FcitxInputStateSetIsInRemind(input, false);
 
         /* it's not in special state */
@@ -285,7 +286,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 /* length is not too large */
                 if (((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength)
                     || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)
-                    || (((FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0
+                    || (((FcitxCandidateWordPageCount(candList) == 0
                         && table->bNoMatchDontCommit) || !table->bUseAutoSend)
                         && FcitxInputStateGetRawInputBufferSize(input) >= table->tableDict->iCodeLength
                     ))
@@ -301,14 +302,14 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         char        *strTemp;
                         char        *strLastFirstCand;
                         CANDTYPE     lastFirstCandType;
-                        int          lastPageCount = FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input));
+                        int          lastPageCount = FcitxCandidateWordPageCount(candList);
 
                         strLastFirstCand = (char *)NULL;
                         lastFirstCandType = CT_AUTOPHRASE;
-                        if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) != 0) {
+                        if (FcitxCandidateWordPageCount(candList) != 0) {
                             // to realize auto-sending HZ to client
                             FcitxCandidateWord *candWord = NULL;
-                            candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
+                            candWord = FcitxCandidateWordGetCurrentWindow(candList);
                             if (candWord->owner == table) {
                                 TABLECANDWORD* tableCandWord = candWord->priv;
                                 lastFirstCandType = tableCandWord->flag;
@@ -330,13 +331,13 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                             if (FcitxInputStateGetRawInputBufferSize(input) == 1)
                                 return IRV_TO_PROCESS;
 
-                            if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
+                            if (FcitxCandidateWordPageCount(candList) == 0) {
                                 FcitxInputStateSetRawInputBufferSize(input, 0);
                                 return IRV_CLEAN;
                             }
 
-                            if (FcitxCandidateWordGetCurrentWindowSize(FcitxInputStateGetCandidateList(input)) == 1) {
-                                retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
+                            if (FcitxCandidateWordGetCurrentWindowSize(candList) == 1) {
+                                retVal = FcitxCandidateWordChooseByIndex(candList, 0);
                                 return retVal;
                             }
 
@@ -345,7 +346,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                    && table->iTableAutoSendToClientWhenNone
                                    && (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
                                    && (FcitxInputStateGetRawInputBufferSize(input) >= (table->iTableAutoSendToClientWhenNone + 1))
-                                   && FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
+                                   && FcitxCandidateWordPageCount(candList) == 0) {
                             if (strLastFirstCand && (lastFirstCandType != CT_AUTOPHRASE)) {
                                 FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), strLastFirstCand);
                             } else if (table->bSendRawPreedit) {
@@ -364,8 +365,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 } else {
                     if (table->bUseAutoSend && table->iTableAutoSendToClient) {
                         retVal = IRV_DISPLAY_CANDWORDS;
-                        if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input))) {
-                            FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
+                        if (FcitxCandidateWordPageCount(candList)) {
+                            FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(candList);
                             if (candWord->owner == table) {
                                 TABLECANDWORD* tableCandWord = candWord->priv;
                                 if (tableCandWord->flag != CT_AUTOPHRASE) {
@@ -478,13 +479,13 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             int iKey;
             iKey = FcitxHotkeyCheckChooseKey(sym, state, table->strChoose);
 
-            if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0)
+            if (FcitxCandidateWordPageCount(candList) == 0)
                 return IRV_TO_PROCESS;
 
-            if (FcitxCandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), iKey) == NULL)
+            if (FcitxCandidateWordGetByIndex(candList, iKey) == NULL)
                 return IRV_DO_NOTHING;
             else {
-                FcitxCandidateWord* candWord = FcitxCandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), iKey);
+                FcitxCandidateWord* candWord = FcitxCandidateWordGetByIndex(candList, iKey);
                 if (candWord->owner == table && tbl->bIsTableDelPhrase) {
                     TableDelPhraseByIndex(table, candWord->priv);
                     tbl->bIsTableDelPhrase = false;
@@ -498,7 +499,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
         } else if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
             if (FcitxHotkeyIsHotKey(sym, state, tbl->hkTableAdjustOrder)) {
-                if (FcitxCandidateWordGetListSize(FcitxInputStateGetCandidateList(input)) < 2 || FcitxInputStateGetIsInRemind(input))
+                if (FcitxCandidateWordGetListSize(candList) < 2 || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableAdjustOrder = true;
@@ -506,7 +507,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to be put in the front, Press Escape to Cancel"));
                 retVal = IRV_DISPLAY_MESSAGE;
             } else if (FcitxHotkeyIsHotKey(sym, state, tbl->hkTableDelPhrase)) {
-                if (!FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) || FcitxInputStateGetIsInRemind(input))
+                if (!FcitxCandidateWordPageCount(candList) || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableDelPhrase = true;
@@ -523,7 +524,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 strCodeInput[FcitxInputStateGetRawInputBufferSize(input)] = '\0';
 
                 if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY) {
-                    FcitxCandidateWordReset(FcitxInputStateGetCandidateList(input));
+                    FcitxCandidateWordReset(candList);
                     retVal = IRV_DISPLAY_LAST;
                 } else if (FcitxInputStateGetRawInputBufferSize(input))
                     retVal = IRV_DISPLAY_CANDWORDS;
@@ -533,9 +534,20 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 if (FcitxInputStateGetRawInputBufferSize(input) == 1 && strCodeInput[0] == table->cPinyin && table->bUsePY)
                     retVal = IRV_COMMIT_STRING;
                 else {
-                    retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
-                    if (retVal == IRV_TO_PROCESS)
+                    if (FcitxCandidateWordPageCount(candList) == 0 && table->bCommitKeyCommitWhenNoMatch) {
+                        FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), FcitxInputStateGetRawInputBuffer(input));
+                        FcitxInputStateSetRawInputBufferSize(input, 0);
+                        FcitxInputStateGetRawInputBuffer(input)[0] = '\0';
+                        FcitxInputStateSetIsInRemind(input, false);
+                        FcitxInstanceCleanInputWindow(instance);
+                        FcitxUIUpdateInputWindow(instance);
                         retVal = IRV_DO_NOTHING;
+                    }
+                    else {
+                        retVal = FcitxCandidateWordChooseByIndex(candList, 0);
+                        if (retVal == IRV_TO_PROCESS)
+                            retVal = IRV_DO_NOTHING;
+                    }
                 }
             } else {
                 return IRV_TO_PROCESS;

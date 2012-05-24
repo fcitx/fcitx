@@ -780,8 +780,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         FcitxUIResumeFromFallback(instance);
         KimpanelRegisterAllStatus(kimpanel);
         return DBUS_HANDLER_RESULT_HANDLED;
-    } else if (dbus_message_is_signal(msg, "org.kde.impanel2", "PanelCreated")) {
-        FcitxLog(DEBUG, "PanelCreated");
+    } else if (dbus_message_is_signal(msg, "org.kde.impanel2", "PanelCreated2")) {
+        FcitxLog(DEBUG, "PanelCreated2");
         FcitxUIResumeFromFallback(instance);
         kimpanel->version = 2;
         KimpanelRegisterAllStatus(kimpanel);

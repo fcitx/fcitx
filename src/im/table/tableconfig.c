@@ -57,6 +57,7 @@ CONFIG_BINDING_REGISTER("CodeTable", "AlternativeNextPage", hkAlternativeNextPag
 CONFIG_BINDING_REGISTER("CodeTable", "FirstCandidateAsPreedit", bFirstCandidateAsPreedit)
 CONFIG_BINDING_REGISTER("CodeTable", "CommitAndPassByInvalidKey", bCommitAndPassByInvalidKey)
 CONFIG_BINDING_REGISTER("CodeTable", "CommitKey", hkCommitKey)
+CONFIG_BINDING_REGISTER("CodeTable", "CommitKeyCommitWhenNoMatch", bCommitKeyCommitWhenNoMatch)
 CONFIG_BINDING_REGISTER("CodeTable", "IgnorePunc", bIgnorePunc)
 CONFIG_BINDING_REGISTER("CodeTable", "Enabled", bEnabled)
 CONFIG_BINDING_END()
