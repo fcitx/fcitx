@@ -176,7 +176,7 @@ Description=Next Page
 
 [Hotkey/SecondThirdCandWordKey]
 Type=String
-DefaultValue=CTRL
+DefaultValue=
 Description=Choose Second and Third Candidate Word
 
 [Hotkey/SaveAllKey]
