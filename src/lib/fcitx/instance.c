@@ -170,10 +170,6 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
         return instance;
     }
 
-    if (instance->config->bFirstRun) {
-        instance->config->bFirstRun = false;
-        FcitxGlobalConfigSave(instance->config);
-    }
     /* make in order to use block X, query is not good here */
     pthread_create(&instance->pid, NULL, RunInstance, instance);
 

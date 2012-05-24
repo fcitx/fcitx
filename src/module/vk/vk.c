@@ -47,6 +47,20 @@
 #define VK_NUMBERS      47
 #define VK_MAX          50
 
+const char* dummyTranslate[] = {
+    N_("Latin"),
+    N_("Fullwidth"),
+    N_("Greek"),
+    N_("Russian"),
+    N_("Index"),
+    N_("Math"),
+    N_("Number"),
+    N_("Special"),
+    N_("Hiragana"),
+    N_("Katakana"),
+    N_("Table Symbol")
+};
+
 struct _FcitxVKState;
 
 typedef struct _VKS {
@@ -576,7 +590,7 @@ void LoadVKMapFile(FcitxVKState *vkstate)
         if (!strcmp(pstr, "[VK]"))
             vkstate->iVKCount++;
         else if (!strncmp(pstr, "NAME=", 5))
-            vks[vkstate->iVKCount - 1].strName = strdup(pstr + 5);
+            vks[vkstate->iVKCount - 1].strName = strdup(gettext(pstr + 5));
         else {
             if (pstr[1] != '=' && !vkstate->iVKCount)
                 continue;

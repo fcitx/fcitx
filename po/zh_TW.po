@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 12:21+0800\n"
+"POT-Creation-Date: 2012-05-24 18:26+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -20,16 +20,16 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.4\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1146
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1147
 msgid " Ctrl+Delete To Delete"
 msgstr " 用 Ctrl+Delete 刪除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:149
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:159
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1430
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1434
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -53,11 +53,11 @@ msgstr "Alt+Shift"
 msgid "ALT_SUPER"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:40
+#: /home/saber/Develop/fcitx/data/config.desc:135
 msgid "Action after press enter"
 msgstr "按下 enter 鍵後動作"
 
-#: /home/saber/Develop/fcitx/data/config.desc:115
+#: /home/saber/Develop/fcitx/data/config.desc:24
 #, fuzzy
 msgid "Activate input method"
 msgstr "無可用輸入法"
@@ -91,11 +91,11 @@ msgstr ""
 msgid "Add Lua script support for Fcitx"
 msgstr "Fcitx 的 Kimpanel 支援"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:104
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:46
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Can not load skin %s, return to default"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:150
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:153
 msgid "Can't Create imWindow"
 msgstr "無法建立輸入法視窗"
 
@@ -247,7 +247,7 @@ msgstr "無法開啟 Socket %s：%s"
 msgid "Candidate Index Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:55
+#: /home/saber/Develop/fcitx/data/config.desc:150
 msgid "Candidate Word Number"
 msgstr "候選字數"
 
@@ -270,7 +270,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:458
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:459
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -282,15 +282,15 @@ msgstr "類別"
 msgid "Choose"
 msgstr "選擇鍵"
 
-#: /home/saber/Develop/fcitx/data/config.desc:180
+#: /home/saber/Develop/fcitx/data/config.desc:89
 msgid "Choose Second and Third Candidate Word"
 msgstr "選擇第二第三候選詞"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:513
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:514
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:505
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:506
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
@@ -310,12 +310,12 @@ msgstr "經典介面"
 msgid "Clean"
 msgstr "清除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:225
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:227
 #, fuzzy
 msgid "Clear local input method"
 msgstr "無可用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:198
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:212
 msgid "Close virtual keyboard"
 msgstr "關閉虛擬鍵盤"
 
@@ -327,7 +327,7 @@ msgstr "碼表檔案"
 msgid "Code Table Name"
 msgstr "碼表名稱"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1144
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1145
 msgid "Code is "
 msgstr "編碼為 "
 
@@ -398,7 +398,7 @@ msgstr "目前啟用的輸入法清單"
 msgid "Current Input Method Name"
 msgstr "目前輸入法名稱"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:210
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
 #, c-format
 msgid "Current is %s"
 msgstr ""
@@ -427,7 +427,7 @@ msgstr "DRAW MainWindow"
 msgid "Default"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:21
+#: /home/saber/Develop/fcitx/data/config.desc:121
 msgid "Default Input Method State"
 msgstr "預設輸入法狀態"
 
@@ -447,7 +447,7 @@ msgstr ""
 msgid "Dianbaoma"
 msgstr "電報碼"
 
-#: /home/saber/Develop/fcitx/data/config.desc:45
+#: /home/saber/Develop/fcitx/data/config.desc:140
 msgid "Disable Paging in Remind Mode"
 msgstr "聯想模式停用翻頁"
 
@@ -464,7 +464,7 @@ msgstr ""
 msgid "Disabled"
 msgstr "停用"
 
-#: /home/saber/Develop/fcitx/data/config.desc:65
+#: /home/saber/Develop/fcitx/data/config.desc:160
 msgid "Do not commit preedit text when unfocus a window"
 msgstr ""
 
@@ -472,13 +472,13 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:90
+#: /home/saber/Develop/fcitx/data/config.desc:185
 msgid ""
 "Do not show input window if there is only one candidate (Hide when only "
 "preedit string must be selected)"
 msgstr "只有一個候選字時不顯示輸入視窗（必須勾選只有預編輯字串時不顯示視窗）"
 
-#: /home/saber/Develop/fcitx/data/config.desc:85
+#: /home/saber/Develop/fcitx/data/config.desc:180
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有預編輯字串時不顯示輸入視窗"
 
@@ -496,7 +496,7 @@ msgstr ""
 msgid "Enable"
 msgstr "啟用"
 
-#: /home/saber/Develop/fcitx/data/config.desc:125
+#: /home/saber/Develop/fcitx/data/config.desc:34
 #, fuzzy
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr "啟用在輸入法之間切換的快捷鍵"
@@ -517,7 +517,7 @@ msgstr "輸入中啟用"
 msgid "End Key"
 msgstr "中止鍵"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:174
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
 msgid "English (US)"
 msgstr ""
@@ -577,7 +577,7 @@ msgstr "Exec"
 msgid "Exit"
 msgstr "離開"
 
-#: /home/saber/Develop/fcitx/data/config.desc:110
+#: /home/saber/Develop/fcitx/data/config.desc:19
 msgid "Extra key for trigger input method"
 msgstr ""
 
@@ -683,6 +683,11 @@ msgstr "全形字元"
 msgid "Full Width Punctuation"
 msgstr "全形標點符號"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:52
+#, fuzzy
+msgid "Fullwidth"
+msgstr "全形字元"
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-fullwidth-char.conf.in.h:1
 msgid "Fullwidth Character"
 msgstr "全形字元"
@@ -731,7 +736,7 @@ msgstr ""
 msgid "Fuzzy z and zh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:60
+#: /home/saber/Develop/fcitx/data/config.desc:155
 msgid "Give the tips of Phrase"
 msgstr "提示詞庫中字詞"
 
@@ -744,9 +749,17 @@ msgstr "預設輸入法狀態"
 msgid "Grave"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:53
+msgid "Greek"
+msgstr ""
+
 #: unknown
 msgid "Hide"
 msgstr "隱藏"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:59
+msgid "Hiragana"
+msgstr ""
 
 # unknown
 msgid "Hotkey"
@@ -799,7 +812,7 @@ msgstr "目前輸入法名稱"
 msgid "Ignore Punctuation"
 msgstr "忽略標點"
 
-#: /home/saber/Develop/fcitx/data/config.desc:120
+#: /home/saber/Develop/fcitx/data/config.desc:29
 #, fuzzy
 msgid "Inactivate Input Method"
 msgstr "無可用輸入法"
@@ -818,6 +831,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:208
 msgid "Inctive Tray Icon"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:55
+msgid "Index"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:19
@@ -840,7 +857,7 @@ msgstr "輸入法"
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1428
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1432
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -858,7 +875,7 @@ msgstr "輸入法"
 msgid "Installer Script for Fcitx Skin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:145
+#: /home/saber/Develop/fcitx/data/config.desc:54
 msgid "Interval of Two Key Input"
 msgstr "輸入間隔"
 
@@ -867,9 +884,9 @@ msgstr "輸入間隔"
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:26
-msgid "It's the first time Fcitx Start."
-msgstr "這是 Fcitx 第一次啟動。"
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:60
+msgid "Katakana"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:87
 msgid ""
@@ -928,6 +945,10 @@ msgstr "語言代碼"
 msgid "Language Code for this table"
 msgstr "這個碼表的語言代碼"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:51
+msgid "Latin"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:156
 msgid "Left-down position of Input"
 msgstr ""
@@ -936,7 +957,7 @@ msgstr ""
 msgid "Left-down position of Output"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:430
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:431
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -1013,6 +1034,10 @@ msgstr ""
 msgid "Matching Key"
 msgstr "模糊鍵"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:56
+msgid "Math"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:19
 msgid "Menu Font"
 msgstr "選單字型"
@@ -1064,7 +1089,7 @@ msgstr ""
 msgid "Name"
 msgstr "名稱"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:124
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:126
 #, c-format
 msgid "Name Error (%s)"
 msgstr "名稱錯誤（%s）"
@@ -1077,7 +1102,7 @@ msgstr "顯示於使用者介面的名稱"
 msgid "Native"
 msgstr "原生"
 
-#: /home/saber/Develop/fcitx/data/config.desc:175
+#: /home/saber/Develop/fcitx/data/config.desc:84
 msgid "Next Page"
 msgstr ""
 
@@ -1104,7 +1129,7 @@ msgstr "無可用前端"
 msgid "No input window"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:214
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:216
 #, fuzzy
 msgid "No local input method"
 msgstr "無可用輸入法"
@@ -1112,6 +1137,10 @@ msgstr "無可用輸入法"
 #: unknown
 msgid "Nothing"
 msgstr "不動作"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:57
+msgid "Number"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:413
 msgid "Online Help"
@@ -1161,7 +1190,7 @@ msgstr "所屬附加元件"
 msgid "PerProgram"
 msgstr "按程式"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1141
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1142
 msgid "Phrase is already in Dict "
 msgstr "字詞已在碼表中"
 
@@ -1180,7 +1209,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr "拼音鍵"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:456
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:457
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1188,7 +1217,7 @@ msgstr "拼音："
 msgid "PinyinJiaJia"
 msgstr "拼音加加"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:165
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:168
 msgid "Please set XMODIFIERS."
 msgstr "請設定環境變數 XMOIFIERS。"
 
@@ -1211,7 +1240,7 @@ msgstr ""
 msgid "Press Enter to input text"
 msgstr "按下 Enter 輸入文字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:140
+#: /home/saber/Develop/fcitx/data/config.desc:49
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
@@ -1223,7 +1252,7 @@ msgstr ""
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:170
+#: /home/saber/Develop/fcitx/data/config.desc:79
 msgid "Prev Page"
 msgstr ""
 
@@ -1316,11 +1345,11 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:158
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:159
 msgid "Remind"
 msgstr "聯想"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1037
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1038
 msgid "Remind:"
 msgstr "聯想："
 
@@ -1376,6 +1405,10 @@ msgstr ""
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:54
+msgid "Russian"
+msgstr ""
+
 #: unknown
 msgid "SHIFT Both"
 msgstr ""
@@ -1392,25 +1425,25 @@ msgstr "儲存自動字詞"
 msgid "Save dict error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:185
+#: /home/saber/Develop/fcitx/data/config.desc:94
 msgid "Saving All Config and Input History"
 msgstr "保存所有設定及輸入歷史"
 
-#: /home/saber/Develop/fcitx/data/config.desc:135
+#: /home/saber/Develop/fcitx/data/config.desc:44
 #, fuzzy
 msgid "Scroll between Input Method"
 msgstr "在輸入法之間切換的快捷鍵"
 
-#: /home/saber/Develop/fcitx/data/config.desc:4
+#: /home/saber/Develop/fcitx/data/config.desc:104
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:205
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:207
 #, fuzzy
 msgid "Select global input method: "
 msgstr "無可用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:205
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:207
 #, fuzzy
 msgid "Select local input method: "
 msgstr "無可用輸入法"
@@ -1431,11 +1464,11 @@ msgstr "分號"
 msgid "Send Raw Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:50
+#: /home/saber/Develop/fcitx/data/config.desc:145
 msgid "Send typed raw text if Switch to inactive Mode"
 msgstr "切換到非作用模式時直接送出輸入文字"
 
-#: /home/saber/Develop/fcitx/data/config.desc:13
+#: /home/saber/Develop/fcitx/data/config.desc:113
 msgid "Share State Among Window"
 msgstr "在視窗間共享狀態"
 
@@ -1447,11 +1480,11 @@ msgstr ""
 msgid "Show"
 msgstr "顯示"
 
-#: /home/saber/Develop/fcitx/data/config.desc:75
+#: /home/saber/Develop/fcitx/data/config.desc:170
 msgid "Show Input Speed"
 msgstr "顯示輸入速度"
 
-#: /home/saber/Develop/fcitx/data/config.desc:70
+#: /home/saber/Develop/fcitx/data/config.desc:165
 msgid "Show Input Window After Trigger Input Mode"
 msgstr "切換輸入模式時顯示輸入視窗"
 
@@ -1459,7 +1492,7 @@ msgstr "切換輸入模式時顯示輸入視窗"
 msgid "Show Preedit String in Client Window"
 msgstr "在用戶端視窗中顯示預編輯字串"
 
-#: /home/saber/Develop/fcitx/data/config.desc:80
+#: /home/saber/Develop/fcitx/data/config.desc:175
 msgid "Show Version"
 msgstr "顯示版本"
 
@@ -1480,7 +1513,7 @@ msgstr "Fcitx 簡單的拼音支援"
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "繁簡轉換"
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:886
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:924
 msgid "Skin"
 msgstr "皮膚"
 
@@ -1534,11 +1567,15 @@ msgstr ""
 msgid "Space for %s Enter for %s"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:58
+msgid "Special"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:127
 msgid "Special Icon position"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:243
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:247
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "啟動 XIM 錯誤。是否有另一個名為 %s 的 XIM 守護程式正在執行？"
@@ -1551,23 +1588,23 @@ msgstr ""
 msgid "Successfully Installed skin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:190
+#: /home/saber/Develop/fcitx/data/config.desc:99
 msgid "Switch Embeded Preedit"
 msgstr "切換嵌入預編輯字串"
 
-#: /home/saber/Develop/fcitx/data/config.desc:165
+#: /home/saber/Develop/fcitx/data/config.desc:74
 msgid "Switch Full Width Punc Mode"
 msgstr "切換全形標點符號"
 
-#: /home/saber/Develop/fcitx/data/config.desc:160
+#: /home/saber/Develop/fcitx/data/config.desc:69
 msgid "Switching Full Width Character Mode"
 msgstr "切換全形字元模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:155
+#: /home/saber/Develop/fcitx/data/config.desc:64
 msgid "Switching Remind Mode"
 msgstr "切換聯想模式"
 
-#: /home/saber/Develop/fcitx/data/config.desc:150
+#: /home/saber/Develop/fcitx/data/config.desc:59
 msgid "Switching Virtual Keyboard"
 msgstr "切換虛擬鍵盤"
 
@@ -1595,6 +1632,11 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:2
 msgid "Table Input Method for Fcitx"
 msgstr "Fcitx 的碼表輸入法"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:61
+#, fuzzy
+msgid "Table Symbol"
+msgstr "符號"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:28
 msgid "Tip Message Color"
@@ -1624,7 +1666,7 @@ msgstr "繁簡轉換引擎"
 msgid "TraditionalChinese"
 msgstr "正體中文"
 
-#: /home/saber/Develop/fcitx/data/config.desc:95
+#: /home/saber/Develop/fcitx/data/config.desc:4
 #, fuzzy
 msgid "Trigger Input Method"
 msgstr "切換輸入法"
@@ -1637,7 +1679,7 @@ msgstr "快速字詞觸發鍵"
 msgid "Type"
 msgstr "類型"
 
-#: /home/saber/Develop/fcitx/data/config.desc:31
+#: /home/saber/Develop/fcitx/data/config.desc:126
 msgid "Type half width Punc After a Number"
 msgstr "數字後跟半形標點符號"
 
@@ -1655,9 +1697,9 @@ msgid "UI: open %s fail %s"
 msgstr "使用者界面：開啟 %s 失敗 %s"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:466
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:806
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:471
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:487
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:502
 msgid "Unable to create process"
 msgstr "無法建立行程"
 
@@ -1747,8 +1789,8 @@ msgstr "虛擬鍵盤"
 msgid "Virtual Key Board in order to input special character"
 msgstr "用於輸入特殊字元的虛擬鍵盤"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:144
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:165
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:158
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:179
 msgid "Virtual Keyboard"
 msgstr "虛擬鍵盤"
 
@@ -1756,7 +1798,7 @@ msgstr "虛擬鍵盤"
 msgid "Virtual Keyboard Image"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:144
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:158
 msgid "Virtual Keyboard State"
 msgstr "虛擬鍵盤狀態"
 
@@ -1798,11 +1840,11 @@ msgstr "X11 支援"
 msgid "X11 Utilitiy used by other Addon"
 msgstr "給其他附加元件使用的 X11 工具"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:139
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:140
 msgid "X11 not initialized"
 msgstr "X11 無法初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:161
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:164
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS 錯誤。"
 
@@ -1822,7 +1864,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1432
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1436
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 
@@ -1835,7 +1877,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:299
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:295
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -1864,6 +1906,9 @@ msgstr ""
 
 #~ msgid "If you use ~/.xinitrc and startx, put those lines in ~/.xinitrc."
 #~ msgstr "如果您使用 ~/.xinitrc 和 startx，請將這幾行加入到 ~/.xinitrc 中。"
+
+#~ msgid "It's the first time Fcitx Start."
+#~ msgstr "這是 Fcitx 第一次啟動。"
 
 #~ msgid "Or (Depends on you install im module or not)"
 #~ msgstr "或者（取決於您是否安裝了im module）"

@@ -75,7 +75,7 @@ extern "C" {
         FcitxGenericConfig gconfig;        /**< derives FcitxGenericConfig */
 
         int iDelayStart;        /**< delay start seconds*/
-        boolean bFirstRun; /**< is the first run */
+        boolean dummy3; /**< dummy */
         boolean bEngPuncAfterNumber;  /**< input eng punc after input number */
         FcitxEnterAcion enterToDo;        /**< enter key action */
         boolean bDisablePagingInRemind;        /**< Remind mode can has multipage */

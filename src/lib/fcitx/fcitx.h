@@ -53,7 +53,7 @@ extern "C" {
 
 #if defined(FCITX_HAVE_CONFIG_H)
 #define _(msgid) gettext(msgid)
-#define __(msgid) (msgid)
+#define N_(msgid) (msgid)
 #endif
 
 /** export the symbol */
