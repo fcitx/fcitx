@@ -156,7 +156,9 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
 
     FcitxInstanceInitIMMenu(instance);
     FcitxUIRegisterMenu(instance, &instance->imMenu);
-    FcitxUIRegisterStatus(instance, instance, "remind", _("Remind"), _("Remind"), ToggleRemindState, GetRemindEnabled);
+    FcitxUIRegisterStatus(instance, instance, "remind",
+                           instance->profile->bUseRemind ? _("Use remind") :  _("No remind"),
+                          _("Toggle Remind"), ToggleRemindState, GetRemindEnabled);
     FcitxUISetStatusVisable(instance, "remind",  false);
 
     FcitxUILoad(instance);
@@ -315,6 +317,9 @@ void ToggleRemindState(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     instance->profile->bUseRemind = !instance->profile->bUseRemind;
+    FcitxUISetStatusString(instance, "remind",
+                           instance->profile->bUseRemind ? _("Use remind") :  _("No remind"),
+                          _("Toggle Remind"));
     FcitxProfileSave(instance->profile);
 }
 

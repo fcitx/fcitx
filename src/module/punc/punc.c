@@ -136,7 +136,10 @@ void* PuncCreate(FcitxInstance* instance)
 
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, PuncLanguageChanged, puncState);
 
-    FcitxUIRegisterStatus(instance, puncState, "punc", _("Full Width Punctuation"), _("Full Width Punctuation"), TogglePuncState, GetPuncState);
+    FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+    FcitxUIRegisterStatus(instance, puncState, "punc",
+                          profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
+                          _("Toggle Full Width Punctuation"), TogglePuncState, GetPuncState);
 
     AddFunction(puncaddon, PuncGetPunc);
     AddFunction(puncaddon, PuncGetPunc2);
@@ -477,6 +480,10 @@ void TogglePuncState(void* arg)
     FcitxInstance* instance = puncState->owner;
     FcitxProfile* profile = FcitxInstanceGetProfile(instance);
     profile->bUseWidePunc = !profile->bUseWidePunc;
+
+    FcitxUISetStatusString(puncState->owner, "punc",
+                           profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
+                          _("Toggle Full Width Punctuation"));
     FcitxProfileSave(profile);
 }
 

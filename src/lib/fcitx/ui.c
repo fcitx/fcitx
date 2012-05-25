@@ -539,7 +539,7 @@ void FcitxUIRegisterMenu(FcitxInstance* instance, FcitxUIMenu* menu)
 }
 
 FCITX_EXPORT_API
-void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu)
+void FcitxMenuAddMenuItemWithData(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu, void* arg)
 {
     FcitxMenuItem shell;
     memset(&shell, 0, sizeof(FcitxMenuItem));
@@ -553,6 +553,7 @@ void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemTy
         shell.tipstr = NULL;
 
     shell.type = type;
+    shell.data = arg;
 
     shell.isselect = false;
 
@@ -560,6 +561,13 @@ void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemTy
         shell.subMenu = subMenu;
 
     utarray_push_back(&menu->shell, &shell);
+}
+
+
+FCITX_EXPORT_API
+void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu)
+{
+    FcitxMenuAddMenuItemWithData(menu, string, type, subMenu, NULL);
 }
 
 FCITX_EXPORT_API
@@ -924,6 +932,9 @@ void FcitxMenuItemFree(void* arg)
     FcitxMenuItem* item = arg;
     if (item->tipstr)
         free(item->tipstr);
+    if (item->data) {
+        free(item->data);
+    }
 }
 
 FCITX_EXPORT_API

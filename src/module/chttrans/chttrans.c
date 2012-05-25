@@ -124,7 +124,11 @@ void* ChttransCreate(FcitxInstance* instance)
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
     FcitxInstanceRegisterOutputFilter(instance, shk);
     FcitxInstanceRegisterCommitFilter(instance, shk);
-    FcitxUIRegisterStatus(instance, transState, "chttrans", _("Traditional Chinese Translate"), _("Traditional Chinese Translate"), ToggleChttransState, GetChttransEnabled);
+    FcitxUIRegisterStatus(instance, transState, "chttrans",
+                          transState->enabled ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
+                          _("Toggle Simp/Trad Chinese Conversion"),
+                          ToggleChttransState,
+                          GetChttransEnabled);
 
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, ChttransLanguageChanged, transState);
 
@@ -151,6 +155,9 @@ void ToggleChttransState(void* arg)
 {
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     transState->enabled = !transState->enabled;
+    FcitxUISetStatusString(transState->owner, "chttrans",
+                           transState->enabled ? _("Convert to Traditional Chinese") :  _("Convert to Simplified Chinese"),
+                          _("Toggle Simp/Trad Chinese Conversion"));
     FcitxUIUpdateInputWindow(transState->owner);
     SaveChttransConfig(transState);
 }

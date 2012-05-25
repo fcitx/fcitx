@@ -125,7 +125,12 @@ extern "C" {
          **/
         struct _FcitxUIMenu *subMenu;
 
-        int padding[16]; /**< padding */
+        union {
+            void* data;
+            int dummy[2];
+        };
+
+        int padding[14]; /**< padding */
     };
 
     /**
@@ -503,6 +508,16 @@ extern "C" {
      * @return void
      **/
     void FcitxMenuAddMenuItem(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu);
+    /**
+     * add a new menu shell
+     *
+     * @param menu menu
+     * @param string menu text
+     * @param type menu type
+     * @param subMenu submenu pointer
+     * @return void
+     **/
+    void FcitxMenuAddMenuItemWithData(FcitxUIMenu* menu, const char* string, FcitxMenuItemType type, FcitxUIMenu* subMenu, void* arg);
 
     /**
      * clear all menu shell

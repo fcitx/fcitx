@@ -182,6 +182,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 /* reset status */
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
+                privstat->avail = false;
             }
 
             FcitxUIComplexStatus* compstatus;
@@ -238,6 +239,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                         free(path);
                         if (statusicon == NULL)
                             continue;
+                        privstat->avail = true;
                         DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
@@ -393,12 +395,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
                 if (privstat == NULL)
                     continue;
+                /* reset status */
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
                 privstat->avail = false;
                 if (!compstatus->visible)
                     continue;
-                /* reset status */
                 const char* icon = compstatus->getIconName(compstatus->arg);
                 char* path;
                 if (icon[0] != '/')
@@ -407,9 +409,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                     path = strdup(icon);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 free(path);
-                if (statusicon == NULL) {
+                if (statusicon == NULL)
                     continue;
-                }
                 privstat->avail = true;
                 DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
                 UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
@@ -420,14 +421,16 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
-                if (!status->visible)
-                    continue;
+                /* reset status */
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;
-                /* reset status */
                 privstat->x = privstat->y = -1;
                 privstat->w = privstat->h = 0;
+                privstat->avail = false;
+                if (!status->visible)
+                    continue;
+                /* reset status */
                 boolean active =  status->getCurrentStatus(status->arg);
                 char *path;
                 if (active)
@@ -438,6 +441,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                 free(path);
                 if (statusicon == NULL)
                     continue;
+                privstat->avail = true;
                 DrawImage(c, statusicon->image, currentX, sc->skinMainBar.marginTop, privstat->mouse);
                 UpdateStatusGeometry(privstat, statusicon, currentX, sc->skinMainBar.marginTop);
                 currentX += cairo_image_surface_get_width(statusicon->image);

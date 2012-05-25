@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 18:26+0800\n"
+"POT-Creation-Date: 2012-05-25 19:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -397,6 +397,14 @@ msgid "Commit and pass when invalid key of this table pressed"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:171
+msgid "Commit key for select first candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:176
+msgid "Commit string when there is no match"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:181
 msgid "Ignore Punctuation"
 msgstr ""
 
@@ -1274,11 +1282,22 @@ msgstr ""
 msgid "Cangjie"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:139
-msgid "Full Width Punctuation"
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:141
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:485
+msgid "Full width punct"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:357
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:141
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:485
+msgid "Latin punct"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:142
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:486
+msgid "Toggle Full Width Punctuation"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:360
 msgid "Can't open punc file."
 msgstr ""
 
@@ -1372,12 +1391,15 @@ msgid "Table Symbol"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:158
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:179
-msgid "Virtual Keyboard"
+msgid "Toggle Virtual Keyboard"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:158
 msgid "Virtual Keyboard State"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:179
+msgid "Virtual Keyboard"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:212
@@ -1398,22 +1420,44 @@ msgstr ""
 msgid "Name Error (%s)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:127
-msgid "Traditional Chinese Translate"
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:128
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:159
+msgid "Convert to Traditional Chinese"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:223
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:325
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:128
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:159
+msgid "Convert to Simplified Chinese"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:129
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:160
+msgid "Toggle Simp/Trad Chinese Conversion"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:230
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:332
 msgid "OpenCC initialization error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:231
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:333
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:238
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:340
 msgid "OpenCC error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:114
-msgid "Full Width Character"
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:116
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:181
+msgid "Full width Character"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:116
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:181
+msgid "Half width Character"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:117
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:182
+msgid "Toggle Half/Full width Character"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:244
@@ -1456,19 +1500,19 @@ msgstr ""
 msgid "Online Help"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:442
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:476
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:443
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:477
 msgid "Configure"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:444
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:478
 msgid "Exit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:456
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:491
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:471
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:487
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:502
@@ -1551,41 +1595,41 @@ msgstr ""
 msgid "Table Config %s is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:431
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:432
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:457
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:458
 msgid "Pinyin: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:459
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:460
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:506
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:507
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:514
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:515
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1038
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1050
 msgid "Remind:"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1142
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1154
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1145
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1157
 msgid "Code is "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1147
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1159
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -1706,11 +1750,22 @@ msgstr ""
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:159
-msgid "Remind"
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:160
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:321
+msgid "Use remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:295
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:160
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:321
+msgid "No remind"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:161
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:322
+msgid "Toggle Remind"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:297
 msgid "pthread mutex init failed"
 msgstr ""
 

@@ -412,6 +412,40 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
 
     FcitxMenuAddMenuItem(menu, _("Online Help"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
+    boolean flag = false;
+
+    FcitxUIStatus* status;
+    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+    for (status = (FcitxUIStatus*) utarray_front(uistats);
+            status != NULL;
+            status = (FcitxUIStatus*) utarray_next(uistats, status)
+        ) {
+        FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
+        if (privstat == NULL || !status->visible || privstat->avail )
+            continue;
+
+        flag = true;
+        FcitxMenuAddMenuItemWithData(menu, status->shortDescription, MENUTYPE_SIMPLE, NULL, strdup(status->name));
+    }
+
+    FcitxUIComplexStatus* compstatus;
+    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+    for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+            compstatus != NULL;
+            compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+        ) {
+        FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
+        if (privstat == NULL || !compstatus->visible || privstat->avail)
+            continue;
+        if (FcitxUIGetMenuByStatusName(instance, compstatus->name))
+            continue;
+
+        flag = true;
+        FcitxMenuAddMenuItemWithData(menu, compstatus->shortDescription, MENUTYPE_SIMPLE, NULL, strdup(compstatus->name));
+    }
+
+    if (flag)
+        FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
 
     FcitxUIMenu **menupp;
     UT_array* uimenus = FcitxInstanceGetUIMenus(instance);
@@ -447,6 +481,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
 boolean MainMenuAction(FcitxUIMenu* menu, int index)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) menu->priv;
+    FcitxInstance* instance = classicui->owner;
     int length = utarray_len(&menu->shell);
     if (index == 0) {
         FILE* p = popen("xdg-open http://fcitx-im.org/ &", "r");
@@ -462,6 +497,12 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
         FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
         if (im && im->owner) {
             fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
+        }
+    } else {
+        FcitxMenuItem* item = (FcitxMenuItem*) utarray_eltptr(&menu->shell, index);
+        if (item && item->type == MENUTYPE_SIMPLE && item->data) {
+            const char* name = item->data;
+            FcitxUIUpdateStatus(instance, name);
         }
     }
     return true;

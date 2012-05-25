@@ -111,7 +111,11 @@ void* FullWidthCharCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterHotkeyFilter(instance, hotkey);
 
-    FcitxUIRegisterStatus(instance, fwchar, "fullwidth", _("Full Width Character"), _("Full Width Character"),  ToggleFullWidthState, GetFullWidthState);
+    FcitxProfile* profile = FcitxInstanceGetProfile(instance);
+    FcitxUIRegisterStatus(instance, fwchar, "fullwidth",
+                          profile->bUseFullWidthChar ? _("Full width Character") :  _("Half width Character"),
+                          _("Toggle Half/Full width Character"),
+                          ToggleFullWidthState, GetFullWidthState);
 
     return fwchar;
 }
@@ -173,6 +177,9 @@ void ToggleFullWidthState(void* arg)
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
     profile->bUseFullWidthChar = !profile->bUseFullWidthChar;
+    FcitxUISetStatusString(fwchar->owner, "fullwidth",
+                            profile->bUseFullWidthChar ? _("Full width Character") :  _("Half width Character"),
+                          _("Toggle Half/Full width Character"));
     FcitxProfileSave(profile);
 }
 
