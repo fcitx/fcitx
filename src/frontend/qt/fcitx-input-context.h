@@ -143,6 +143,7 @@ private:
     int m_cursorPos;
     boolean m_useSurroundingText;
     boolean m_syncMode;
+    QRect m_rect;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_

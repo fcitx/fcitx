@@ -249,7 +249,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
-    AddFunction(ximaddon, XimCosumeQueue);
+    AddFunction(ximaddon, XimConsumeQueue);
 
     return xim;
 }
@@ -344,8 +344,10 @@ boolean XimDestroy(void* arg)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
 
-    if (xim->ims)
+    if (xim->ims) {
         IMCloseIM(xim->ims);
+        xim->ims = NULL;
+    }
 
     return true;
 }
@@ -380,16 +382,6 @@ void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
     if (!ic)
         return;
 
-    /*
-     * I'm not sure whether xim should commit string before preedit done
-     * but this can fix opera's crash in specific input box
-     * quite strange.
-     */
-    if (GetXimIC(ic)->bPreeditStarted == true) {
-        XimPreeditCallbackDraw(xim, GetXimIC(ic), "", 0);
-        XimPreeditCallbackDone(xim, GetXimIC(ic));
-        GetXimIC(ic)->bPreeditStarted = false;
-    }
 
     Xutf8TextListToTextProperty(xim->display, (char **) &str, 1, XCompoundTextStyle, &tp);
     IMCommitStruct* cms = fcitx_utils_new(IMCommitStruct);

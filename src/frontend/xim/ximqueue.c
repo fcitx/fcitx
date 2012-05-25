@@ -3,6 +3,7 @@
 #include <Xi18n.h>
 
 #include "fcitx/module.h"
+#include "fcitx-utils/log.h"
 #include "module/x11/x11stuff.h"
 #include "ximqueue.h"
 
@@ -18,9 +19,11 @@ void XimQueueInit(FcitxXimFrontend* xim)
     utarray_new(xim->queue, &ptr_icd);
 }
 
-void XimCosumeQueue(void* arg, FcitxModuleFunctionArg args)
+void XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXimFrontend* xim = arg;
+    if (!xim->ims)
+        return;
     XimQueue* item;
     for (item = (XimQueue*) utarray_front(xim->queue);
          item != NULL;

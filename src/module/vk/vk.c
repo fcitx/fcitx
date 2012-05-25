@@ -728,7 +728,7 @@ void SwitchVK(FcitxVKState *vkstate)
 
         if (!FcitxUISupportMainWindow(instance)) {
             x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
-            y = 0;
+            y = 40;
         } else {
             int mx = 0, my = 0, mw = 0, mh = 0;
             FcitxUIGetMainWindowSize(instance, &mx, &my, &mw, &mh);

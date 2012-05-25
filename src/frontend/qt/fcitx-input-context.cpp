@@ -237,7 +237,10 @@ void QFcitxInputContext::update()
     QPoint topleft = widget->mapToGlobal(QPoint(0, 0));
     rect.translate(topleft);
 
-    m_icproxy->SetCursorRect(rect.x(), rect.y(), rect.width(), rect.height());
+    if (m_rect != rect) {
+        m_rect = rect;
+        m_icproxy->SetCursorRect(rect.x(), rect.y(), rect.width(), rect.height());
+    }
 }
 
 
@@ -429,8 +432,6 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
     char strbuf[64];
     memset(strbuf, 0, 64);
     XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
-
-    m_icproxy->FocusIn();
 
     QDBusPendingReply< int > result = this->m_icproxy->ProcessKeyEvent(
                                           sym,
