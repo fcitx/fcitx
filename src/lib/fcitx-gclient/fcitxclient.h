@@ -22,53 +22,163 @@
 
 
 #include <gio/gio.h>
-#include "fcitx/ime.h"
-#include "fcitx/frontend.h"
+
+/*
+ * Type macros
+ */
+
+/* define GOBJECT macros */
+#define FCITX_TYPE_CLIENT         (fcitx_client_get_type ())
+#define FCITX_CLIENT(o) \
+        (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_CLIENT, FcitxClient))
+#define FCITX_IS_CLIENT(object) \
+        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FCITX_TYPE_CLIENT))
+#define FCITX_CLIENT_CLASS(k) \
+        (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_CLIENT, FcitxClientClass))
+#define FCITX_CLIENT_GET_CLASS(o) \
+        (G_TYPE_INSTANCE_GET_CLASS ((o), FCITX_TYPE_CLIENT, FcitxClientClass))
 
 G_BEGIN_DECLS
 
 typedef struct _FcitxClient        FcitxClient;
 typedef struct _FcitxClientClass   FcitxClientClass;
+typedef struct _FcitxClientPrivate FcitxClientPrivate;
+typedef struct _FcitxPreeditItem   FcitxPreeditItem;
 
-#define FCITX_TYPE_CLIENT         (fcitx_client_get_type ())
-#define FCITX_CLIENT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_CLIENT, FcitxClient))
-#define FCITX_CLIENT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), FCITX_TYPE_CLIENT, FcitxClientClass))
-#define FCITX_CLIENT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), FCITX_TYPE_CLIENT, FcitxClientClass))
-
-
-typedef struct _FcitxPreeditItem {
-    gchar* string;
-    gint32 type;
-} FcitxPreeditItem;
-
+/**
+ * FcitxClient:
+ *
+ * A FcitxClient allow to create a input context via DBus
+ */
 struct _FcitxClient {
     GObject parent_instance;
-    GDBusProxy* improxy;
-    GDBusProxy* icproxy;
-    char servicename[64];
-    char icname[64];
-    int id;
-    guint watch_id;
-    GCancellable* cancellable;
+    /* instance member */
+    FcitxClientPrivate* priv;
 };
 
 struct _FcitxClientClass {
     GObjectClass parent_class;
+    /* signals */
+
+    /*< private >*/
+    /* padding */
 };
 
-FcitxClient* fcitx_client_new();
-gboolean fcitx_client_is_valid(FcitxClient* im);
-int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
-void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
-
-void fcitx_client_focusin(FcitxClient* im);
-void fcitx_client_focusout(FcitxClient* im);
-void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h);
-void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor);
-void fcitx_client_set_capacity(FcitxClient* im, guint flags);
-void fcitx_client_reset(FcitxClient* im);
+struct _FcitxPreeditItem {
+    gchar* string;
+    gint32 type;
+};
 
 GType        fcitx_client_get_type(void) G_GNUC_CONST;
+
+/**
+ * fcitx_client_new
+ *
+ * @returns: A newly allocated FcitxClient
+ *
+ * New a FcitxClient
+ **/
+FcitxClient* fcitx_client_new();
+
+/**
+ * fcitx_client_is_valid:
+ *
+ * @client: A FcitxClient
+ * @returns: FcitxClient is valid or not
+ *
+ * Check FcitxClient is valid to communicate with Fcitx
+ **/
+gboolean fcitx_client_is_valid(FcitxClient* client);
+
+/**
+ * fcitx_client_process_key_sync:
+ *
+ * @client: A FcitxClient
+ * @keyval: key value
+ * @state: key state
+ * @type: event type
+ * @ts: timestamp
+ *
+ * @returns: the key is processed or not
+ *
+ * send a key event to fcitx synchronizely
+ */
+int fcitx_client_process_key_sync(FcitxClient* client, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 ts);
+
+/**
+ * fcitx_client_process_key:
+ *
+ * @client A FcitxClient
+ * @cb callback
+ * @user_data user data
+ * @keyval key value
+ * @keycode hardware key code
+ * @state key state
+ * @type event type
+ * @t timestamp
+ *
+ * send a key event to fcitx asynchronizely
+ **/
+void fcitx_client_process_key(FcitxClient* client, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
+
+/**
+ * fcitx_client_focus_in:
+ *
+ * @client A FcitxClient
+ *
+ * tell fcitx current client has focus
+ **/
+void fcitx_client_focus_in(FcitxClient* client);
+
+/**
+ * fcitx_client_focus_out:
+ *
+ * @client A FcitxClient
+ *
+ * tell fcitx current client has lost focus
+ **/
+void fcitx_client_focus_out(FcitxClient* client);
+
+/**
+ * fcitx_client_set_cusor_rect:
+ *
+ * @client A FcitxClient
+ * @x x of cursor
+ * @y y of cursor
+ * @w width of cursor
+ * @h height of cursor
+ *
+ * tell fcitx current client's cursor geometry info
+ **/
+void fcitx_client_set_cusor_rect(FcitxClient* client, int x, int y, int w, int h);
+
+/**
+ * fcitx_client_set_surrounding_text:
+ *
+ * @client A FcitxClient
+ * @text surroundng text
+ * @cursor cursor position coresponding to text
+ * @anchor anchor position coresponding to text
+ **/
+void fcitx_client_set_surrounding_text(FcitxClient* client, gchar* text, guint cursor, guint anchor);
+
+/**
+ * fcitx_client_set_capacity:
+ *
+ * @client A FcitxClient
+ *
+ * set client capacity of Fcitx
+ **/
+void fcitx_client_set_capacity(FcitxClient* client, guint flags);
+
+/**
+ * fcitx_client_reset:
+ *
+ * @client A FcitxClient
+ *
+ * tell fcitx current client is reset from client side
+ **/
+void fcitx_client_reset(FcitxClient* client);
 
 G_END_DECLS
 

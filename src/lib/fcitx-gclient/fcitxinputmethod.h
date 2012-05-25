@@ -31,7 +31,7 @@
 #define FCITX_INPUT_METHOD(object) \
         (G_TYPE_CHECK_INSTANCE_CAST ((object), FCITX_TYPE_INPUT_METHOD, FcitxInputMethod))
 #define FCITX_IS_INPUT_METHOD(object) \
-        (G_TYPE_CHECK_INSTANCE_TYPE ((object), KB_TYPE_BIBTEX))
+        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FCITX_TYPE_INPUT_METHOD))
 #define FCITX_INPUT_METHOD_CLASS(klass) \
         (G_TYPE_CHECK_CLASS_CAST((klass), FCITX_TYPE_INPUT_METHOD, FcitxInputMethodClass))
 #define FCITX_INPUT_METHOD_GET_CLASS(object)\
@@ -93,7 +93,7 @@ fcitx_input_method_new(GBusType             bus_type,
  * fcitx_input_method_get_imlist:
  *
  * @im: A FcitxInputMethod
- * @returns: (transfer full) (element-type FcitxIMItem): An FcitxInputMethod List
+ * @returns: (transfer full) (element-type FcitxIMItem): A FcitxIMItem List
  *
  * Get Fcitx all im list
  **/
@@ -103,7 +103,7 @@ GPtrArray*   fcitx_input_method_get_imlist(FcitxInputMethod* im);
  * fcitx_input_method_set_imlist:
  *
  * @im: A FcitxInputMethod
- * @array: An FcitxInputMethod List
+ * @array: A FcitxIMItem List
  *
  * Set Fcitx all im list
  **/
@@ -118,6 +118,76 @@ void         fcitx_input_method_set_imlist(FcitxInputMethod* im, GPtrArray* arra
  **/
 void         fcitx_input_method_exit(FcitxInputMethod* im);
 
+/**
+ * fcitx_input_method_restart:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * Send restart command to fcitx
+ **/
+void         fcitx_input_method_restart(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_reload_config:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * Send reload config command to fcitx
+ **/
+void         fcitx_input_method_reload_config(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_configure:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * Send configure command to fcitx
+ **/
+void         fcitx_input_method_configure(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_configure_addon:
+ *
+ * @im: A FcitxInputMethod
+ * @addon: addon name
+ *
+ * Send configure addon command to fcitx
+ **/
+void         fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon);
+
+/**
+ * fcitx_input_method_get_im_addon:
+ *
+ * @im: A FcitxInputMethod
+ * @imname: imname
+ *
+ * @returns: (transfer full): get addon name
+ *
+ * Get addon name by im
+ **/
+gchar*       fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname);
+
+/**
+ * fcitx_input_method_get_current_im:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * @returns: (transfer full): get im name
+ *
+ * Get im name
+ **/
+gchar*       fcitx_input_method_get_current_im(FcitxInputMethod* im);
+
+
+/**
+ * fcitx_input_method_set_current_im:
+ *
+ * @im: A FcitxInputMethod
+ * @imname: set im name
+ *
+ * Set im name
+ **/
+void         fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname);
 
 /**
  * fcitx_im_item_free

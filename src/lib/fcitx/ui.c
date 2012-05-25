@@ -269,7 +269,7 @@ void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type
 }
 
 FCITX_EXPORT_API
-void FcitxMessagesSetMessage(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, ...)
+void FcitxMessagesSetMessage(FcitxMessages* message, int position, int type, const char* fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -287,7 +287,7 @@ void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const cha
 }
 
 FCITX_EXPORT_API
-void FcitxMessagesSetMessageV(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, va_list ap)
+void FcitxMessagesSetMessageV(FcitxMessages* message, int position, int type, const char* fmt, va_list ap)
 {
     if (position < MAX_MESSAGE_COUNT) {
         vsnprintf(message->msg[position].strMsg, MESSAGE_MAX_LENGTH, fmt, ap);

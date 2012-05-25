@@ -25,6 +25,16 @@
 #include "fcitxclient.h"
 #include "marshall.h"
 
+struct _FcitxClientPrivate {
+    GDBusProxy* improxy;
+    GDBusProxy* icproxy;
+    char servicename[64];
+    char icname[64];
+    int id;
+    guint watch_id;
+    GCancellable* cancellable;
+};
+
 static const gchar introspection_xml[] =
     "<node>"
     "  <interface name=\"" FCITX_IM_DBUS_INTERFACE "\">"
@@ -102,6 +112,9 @@ GType        fcitx_client_get_type(void) G_GNUC_CONST;
 
 G_DEFINE_TYPE(FcitxClient, fcitx_client, G_TYPE_OBJECT);
 
+#define FCITX_CLIENT_GET_PRIVATE(obj) \
+    (G_TYPE_INSTANCE_GET_PRIVATE((obj), FCITX_TYPE_CLIENT, FcitxClientPrivate))
+
 enum {
     CONNTECTED_SIGNAL,
     ENABLE_IM_SIGNAL,
@@ -117,12 +130,12 @@ static guint signals[LAST_SIGNAL] = {0};
 
 static GDBusInterfaceInfo *_fcitx_client_get_interface_info(void);
 static GDBusInterfaceInfo *_fcitx_client_get_clientic_info(void);
-static void _fcitx_client_create_ic(FcitxClient* im);
+static void _fcitx_client_create_ic(FcitxClient* self);
 static void _fcitx_client_create_ic_phase1_finished(GObject* source_object, GAsyncResult* res, gpointer user_data);
 static void _fcitx_client_create_ic_cb(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_create_ic_phase2_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_g_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
-static void fcitx_client_init(FcitxClient *im);
+static void fcitx_client_init(FcitxClient *self);
 static void fcitx_client_finalize(GObject *object);
 static void _fcitx_client_appear (GDBusConnection *connection, const gchar *name, const gchar *name_owner, gpointer user_data);
 static void _fcitx_client_vanish (GDBusConnection *connection, const gchar *name, gpointer user_data);
@@ -162,16 +175,16 @@ _fcitx_client_get_clientic_info(void)
 static void
 fcitx_client_finalize(GObject *object)
 {
-    FcitxClient *im = FCITX_CLIENT(object);
+    FcitxClient *self = FCITX_CLIENT(object);
 
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "DestroyIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "DestroyIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
-    g_bus_unwatch_name(im->watch_id);
-    GDBusProxy* icproxy = im->icproxy;
-    GDBusProxy* improxy = im->improxy;
-    im->icproxy = NULL;
-    im->improxy = NULL;
+    g_bus_unwatch_name(self->priv->watch_id);
+    GDBusProxy* icproxy = self->priv->icproxy;
+    GDBusProxy* improxy = self->priv->improxy;
+    self->priv->icproxy = NULL;
+    self->priv->improxy = NULL;
     if (icproxy)
         g_object_unref(icproxy);
     if (improxy)
@@ -182,60 +195,60 @@ fcitx_client_finalize(GObject *object)
 }
 
 FCITX_EXPORT_API
-void fcitx_client_focusin(FcitxClient* im)
+void fcitx_client_focus_in(FcitxClient* self)
 {
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "FocusIn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "FocusIn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_focusout(FcitxClient* im)
+void fcitx_client_focus_out(FcitxClient* self)
 {
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "FocusOut", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "FocusOut", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_reset(FcitxClient* im)
+void fcitx_client_reset(FcitxClient* self)
 {
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "Reset", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "Reset", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_set_capacity(FcitxClient* im, FcitxCapacityFlags flags)
+void fcitx_client_set_capacity(FcitxClient* self, guint flags)
 {
     uint32_t iflags = flags;
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "SetCapacity", g_variant_new("(u)", iflags), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "SetCapacity", g_variant_new("(u)", iflags), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_set_cusor_rect(FcitxClient* im, int x, int y, int w, int h)
+void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h)
 {
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "SetCursorRect", g_variant_new("(iiii)", x, y, w, h), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "SetCursorRect", g_variant_new("(iiii)", x, y, w, h), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_set_surrounding_text(FcitxClient* im, gchar* text, guint cursor, guint anchor)
+void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor)
 {
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy, "SetSurroundingText", g_variant_new("(suu)", text, cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "SetSurroundingText", g_variant_new("(suu)", text, cursor, anchor), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
 }
 
 FCITX_EXPORT_API
-void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
+void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
-    if (im->icproxy) {
-        g_dbus_proxy_call(im->icproxy,
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy,
                           "ProcessKeyEvent",
                           g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
                           G_DBUS_CALL_FLAGS_NONE,
@@ -246,13 +259,13 @@ void fcitx_client_process_key(FcitxClient* im, GAsyncReadyCallback cb, gpointer 
 }
 
 FCITX_EXPORT_API
-int fcitx_client_process_key_sync(FcitxClient* im, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
+int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
     GError *error = NULL;
     int ret = -1;
-    if (im->icproxy) {
-        GVariant* result =  g_dbus_proxy_call_sync(im->icproxy,
+    if (self->priv->icproxy) {
+        GVariant* result =  g_dbus_proxy_call_sync(self->priv->icproxy,
                             "ProcessKeyEvent",
                             g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
                             G_DBUS_CALL_FLAGS_NONE,
@@ -278,20 +291,20 @@ _fcitx_client_appear (GDBusConnection *connection,
                       const gchar     *name_owner,
                       gpointer         user_data)
 {
-    FcitxClient* im = (FcitxClient*) user_data;
+    FcitxClient* self = (FcitxClient*) user_data;
     gboolean new_owner_good = name_owner && (name_owner[0] != '\0');
     if (new_owner_good) {
-        if (im->improxy) {
-            g_object_unref(im->improxy);
-            im->improxy = NULL;
+        if (self->priv->improxy) {
+            g_object_unref(self->priv->improxy);
+            self->priv->improxy = NULL;
         }
 
-        if (im->icproxy) {
-            g_object_unref(im->icproxy);
-            im->icproxy = NULL;
+        if (self->priv->icproxy) {
+            g_object_unref(self->priv->icproxy);
+            self->priv->icproxy = NULL;
         }
 
-        _fcitx_client_create_ic(im);
+        _fcitx_client_create_ic(self);
     }
 }
 
@@ -300,64 +313,66 @@ _fcitx_client_vanish (GDBusConnection *connection,
                       const gchar     *name,
                       gpointer         user_data)
 {
-    FcitxClient* im = (FcitxClient*) user_data;
-    if (im->improxy) {
-        g_object_unref(im->improxy);
-        im->improxy = NULL;
+    FcitxClient* self = (FcitxClient*) user_data;
+    if (self->priv->improxy) {
+        g_object_unref(self->priv->improxy);
+        self->priv->improxy = NULL;
     }
 
-    if (im->icproxy) {
-        g_object_unref(im->icproxy);
-        im->icproxy = NULL;
+    if (self->priv->icproxy) {
+        g_object_unref(self->priv->icproxy);
+        self->priv->icproxy = NULL;
     }
 }
 
 static void
-fcitx_client_init(FcitxClient *im)
+fcitx_client_init(FcitxClient *self)
 {
-    sprintf(im->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+    self->priv = FCITX_CLIENT_GET_PRIVATE(self);
 
-    im->watch_id = g_bus_watch_name(
+    sprintf(self->priv->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+
+    self->priv->watch_id = g_bus_watch_name(
                        G_BUS_TYPE_SESSION,
-                       im->servicename,
+                       self->priv->servicename,
                        G_BUS_NAME_WATCHER_FLAGS_NONE,
                        _fcitx_client_appear,
                        _fcitx_client_vanish,
-                       im,
+                       self,
                        NULL
                    );
-    im->improxy = NULL;
-    im->icproxy = NULL;
+    self->priv->improxy = NULL;
+    self->priv->icproxy = NULL;
 }
 
 static void
-_fcitx_client_create_ic(FcitxClient *im)
+_fcitx_client_create_ic(FcitxClient *self)
 {
-    if (im->cancellable) {
-        g_cancellable_cancel (im->cancellable);
-        g_object_unref (im->cancellable);
-        im->cancellable = NULL;
+    if (self->priv->cancellable) {
+        g_cancellable_cancel (self->priv->cancellable);
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
     }
-    if (im->improxy) {
-        g_object_unref(im->improxy);
-        im->improxy = NULL;
+    if (self->priv->improxy) {
+        g_object_unref(self->priv->improxy);
+        self->priv->improxy = NULL;
     }
 
-    if (im->icproxy) {
-        g_object_unref(im->icproxy);
-        im->icproxy = NULL;
+    if (self->priv->icproxy) {
+        g_object_unref(self->priv->icproxy);
+        self->priv->icproxy = NULL;
     }
-    im->cancellable = g_cancellable_new ();
+    self->priv->cancellable = g_cancellable_new ();
     g_dbus_proxy_new_for_bus(
         G_BUS_TYPE_SESSION,
         G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
         _fcitx_client_get_interface_info(),
-        im->servicename,
+        self->priv->servicename,
         FCITX_IM_DBUS_PATH,
         FCITX_IM_DBUS_INTERFACE,
-        im->cancellable,
+        self->priv->cancellable,
         _fcitx_client_create_ic_phase1_finished,
-        im
+        self
     );
 };
 
@@ -366,43 +381,43 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
-    FcitxClient* im = (FcitxClient*) user_data;
+    FcitxClient* self = (FcitxClient*) user_data;
     GError* error = NULL;
-    if (im->cancellable) {
-        g_object_unref (im->cancellable);
-        im->cancellable = NULL;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
     }
-    if (im->improxy)
-        g_object_unref(im->improxy);
-    im->improxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+    if (self->priv->improxy)
+        g_object_unref(self->priv->improxy);
+    self->priv->improxy = g_dbus_proxy_new_for_bus_finish(res, &error);
     if (error) {
         g_warning ("Create fcitx input method proxy failed: %s.", error->message);
         g_error_free(error);
     }
-    if (!im->improxy)
+    if (!self->priv->improxy)
         return;
 
-    gchar* owner_name = g_dbus_proxy_get_name_owner(im->improxy);
+    gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->improxy);
 
     if (!owner_name) {
-        g_object_unref(im->improxy);
-        im->improxy = NULL;
+        g_object_unref(self->priv->improxy);
+        self->priv->improxy = NULL;
         return;
     }
     g_free(owner_name);
 
-    im->cancellable = g_cancellable_new ();
+    self->priv->cancellable = g_cancellable_new ();
     char* appname = fcitx_utils_get_process_name();
     int pid = getpid();
     g_dbus_proxy_call(
-        im->improxy,
+        self->priv->improxy,
         "CreateICv3",
         g_variant_new("(si)", appname, pid),
         G_DBUS_CALL_FLAGS_NONE,
         -1,           /* timeout */
-        im->cancellable,
+        self->priv->cancellable,
         _fcitx_client_create_ic_cb,
-        im
+        self
     );
     free(appname);
 
@@ -413,11 +428,11 @@ _fcitx_client_create_ic_cb(GObject *source_object,
                            GAsyncResult *res,
                            gpointer user_data)
 {
-    FcitxClient* im = (FcitxClient*) user_data;
+    FcitxClient* self = (FcitxClient*) user_data;
     GError* error = NULL;
-    if (im->cancellable) {
-        g_object_unref (im->cancellable);
-        im->cancellable = NULL;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
     }
     GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
 
@@ -428,21 +443,21 @@ _fcitx_client_create_ic_cb(GObject *source_object,
 
     gboolean enable;
     guint32 key1, state1, key2, state2;
-    g_variant_get(result, "(ibuuuu)", &im->id, &enable, &key1, &state1, &key2, &state2);
+    g_variant_get(result, "(ibuuuu)", &self->priv->id, &enable, &key1, &state1, &key2, &state2);
 
-    sprintf(im->icname, FCITX_IC_DBUS_PATH, im->id);
+    sprintf(self->priv->icname, FCITX_IC_DBUS_PATH, self->priv->id);
 
-    im->cancellable = g_cancellable_new ();
+    self->priv->cancellable = g_cancellable_new ();
     g_dbus_proxy_new_for_bus(
         G_BUS_TYPE_SESSION,
         G_DBUS_PROXY_FLAGS_NONE,
         _fcitx_client_get_clientic_info(),
-        im->servicename,
-        im->icname,
+        self->priv->servicename,
+        self->priv->icname,
         FCITX_IC_DBUS_INTERFACE,
-        im->cancellable,
+        self->priv->cancellable,
         _fcitx_client_create_ic_phase2_finished,
-        im
+        self
     );
 }
 
@@ -452,33 +467,33 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
-    FcitxClient* im = (FcitxClient*) user_data;
+    FcitxClient* self = (FcitxClient*) user_data;
     GError* error = NULL;
-    if (im->cancellable) {
-        g_object_unref (im->cancellable);
-        im->cancellable = NULL;
+    if (self->priv->cancellable) {
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
     }
-    if (im->icproxy)
-        g_object_unref(im->icproxy);
-    im->icproxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+    if (self->priv->icproxy)
+        g_object_unref(self->priv->icproxy);
+    self->priv->icproxy = g_dbus_proxy_new_for_bus_finish(res, &error);
 
     if (error) {
         g_error_free(error);
     }
 
-    if (!im->icproxy)
+    if (!self->priv->icproxy)
         return;
 
-    gchar* owner_name = g_dbus_proxy_get_name_owner(im->icproxy);
+    gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->icproxy);
 
     if (!owner_name) {
-        g_object_unref(im->icproxy);
-        im->icproxy = NULL;
+        g_object_unref(self->priv->icproxy);
+        self->priv->icproxy = NULL;
         return;
     }
     g_free(owner_name);
 
-    g_signal_connect(im->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), im);
+    g_signal_connect(self->priv->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), self);
     g_signal_emit(user_data, signals[CONNTECTED_SIGNAL], 0);
 }
 
@@ -551,6 +566,16 @@ fcitx_client_class_init(FcitxClientClass *klass)
     gobject_class = G_OBJECT_CLASS(klass);
     gobject_class->finalize = fcitx_client_finalize;
 
+    g_type_class_add_private (klass, sizeof (FcitxClientPrivate));
+
+    /* install signals */
+    /**
+     * FcitxClient::connected
+     *
+     * @client: A FcitxClient
+     *
+     * Emit when connected to fcitx
+     */
     signals[CONNTECTED_SIGNAL] = g_signal_new(
                                      "connected",
                                      FCITX_TYPE_CLIENT,
@@ -562,6 +587,13 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                      G_TYPE_NONE,
                                      0);
 
+    /**
+     * FcitxClient::enable-im
+     *
+     * @client: A FcitxClient
+     *
+     * Emit when input method is enabled
+     */
     signals[ENABLE_IM_SIGNAL] = g_signal_new(
                                     "enable-im",
                                     FCITX_TYPE_CLIENT,
@@ -572,7 +604,13 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                     g_cclosure_marshal_VOID__VOID,
                                     G_TYPE_NONE,
                                     0);
-
+    /**
+     * FcitxClient::enable-im
+     *
+     * @client: A FcitxClient
+     *
+     * Emit when input method is closed
+     */
     signals[CLOSE_IM_SIGNAL] = g_signal_new(
                                    "close-im",
                                    FCITX_TYPE_CLIENT,
@@ -583,7 +621,16 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                    g_cclosure_marshal_VOID__VOID,
                                    G_TYPE_NONE,
                                    0);
-
+    /**
+     * FcitxClient::enable-im
+     *
+     * @client: A FcitxClient
+     * @keyval: key value
+     * @state: key state
+     * @type: event type
+     *
+     * Emit when input method ask for forward a key
+     */
     signals[FORWARD_KEY_SIGNAL] = g_signal_new(
                                       "forward-key",
                                       FCITX_TYPE_CLIENT,
@@ -596,7 +643,14 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                       3,
                                       G_TYPE_UINT, G_TYPE_INT, G_TYPE_INT
                                   );
-
+    /**
+     * FcitxClient::commit-string
+     *
+     * @client: A FcitxClient
+     * @string: string to be commited
+     *
+     * Emit when input method commit one string
+     */
     signals[COMMIT_STRING_SIGNAL] = g_signal_new(
                                         "commit-string",
                                         FCITX_TYPE_CLIENT,
@@ -610,6 +664,15 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                         G_TYPE_STRING
                                     );
 
+    /**
+     * FcitxClient::delete-surrounding-text
+     *
+     * @client: A FcitxClient
+     * @cursor: deletion start
+     * @len: deletion length
+     *
+     * Emit when input method need to delete surrounding text
+     */
     signals[DELETE_SURROUNDING_TEXT_SIGNAL] = g_signal_new(
                 "delete-surrounding-text",
                 FCITX_TYPE_CLIENT,
@@ -623,6 +686,15 @@ fcitx_client_class_init(FcitxClientClass *klass)
                 G_TYPE_INT, G_TYPE_UINT
             );
 
+    /**
+     * FcitxClient::update-formatted-preedit
+     *
+     * @client: A FcitxClient
+     * @preedit: (transfer none) (element-type FcitxPreeditItem): An FcitxPreeditItem List
+     * @cursor: cursor postion by utf8 byte
+     *
+     * Emit when input method need to delete surrounding text
+     */
     signals[UPDATED_FORMATTED_PREEDIT_SIGNAL] = g_signal_new(
                 "update-formatted-preedit",
                 FCITX_TYPE_CLIENT,
@@ -641,21 +713,21 @@ FCITX_EXPORT_API
 FcitxClient*
 fcitx_client_new()
 {
-    FcitxClient* im = g_object_new(FCITX_TYPE_CLIENT, NULL);
+    FcitxClient* self = g_object_new(FCITX_TYPE_CLIENT, NULL);
 
-    if (im != NULL) {
-        return FCITX_CLIENT(im);
+    if (self != NULL) {
+        return FCITX_CLIENT(self);
     }
     else
         return NULL;
-    return im;
+    return self;
 }
 
 FCITX_EXPORT_API
 gboolean
-fcitx_client_is_valid(FcitxClient* im)
+fcitx_client_is_valid(FcitxClient* self)
 {
-    return im->icproxy != NULL;
+    return self->priv->icproxy != NULL;
 }
 
 // kate: indent-mode cstyle; replace-tabs on;

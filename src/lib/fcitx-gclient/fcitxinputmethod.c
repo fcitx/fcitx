@@ -126,6 +126,7 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
             g_error_free(error);
         } else if (result) {
             g_variant_get(result, "(v)", &value);
+            g_variant_unref(result);
         }
     }
 
@@ -234,7 +235,7 @@ fcitx_input_method_class_init(FcitxInputMethodClass *klass)
     /**
      * FcitxInputMethod::imlist-changed
      *
-     * @context: An FcitxInputMethod
+     * @im: A FcitxInputMethod
      *
      * Emit when input method list changed
      */
@@ -301,6 +302,121 @@ void fcitx_input_method_exit(FcitxInputMethod* im)
     g_dbus_proxy_call(G_DBUS_PROXY(im),
                       "Exit",
                       NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_configure(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "Configure",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "ConfigureAddon",
+                      g_variant_new("(s)", addon),
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
+{
+    GError* error = NULL;
+    GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
+                                               "ConfigureAddon",
+                                               NULL,
+                                               G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                               0,
+                                               NULL,
+                                               &error
+                                              );
+
+    gchar* result = NULL;
+
+    if (error) {
+        g_warning("%s", error->message);
+        g_error_free(error);
+    } else if (variant) {
+        g_variant_get(variant, "(s)", &result);
+        g_variant_unref(variant);
+    }
+
+    return result;
+}
+
+gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
+{
+    GError* error = NULL;
+    GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
+                                               "GetIMAddon",
+                                               g_variant_new("(s)", imname),
+                                               G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                               0,
+                                               NULL,
+                                               &error
+                                              );
+
+    gchar* result = NULL;
+
+    if (error) {
+        g_warning("%s", error->message);
+        g_error_free(error);
+    } else if (variant) {
+        g_variant_get(variant, "(s)", &result);
+        g_variant_unref(variant);
+    }
+
+    return result;
+}
+
+void fcitx_input_method_reload_config(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "ReloadConfig",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_restart(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "Restart",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "SetCurrentIM",
+                      g_variant_new("(s)", imname),
                       G_DBUS_CALL_FLAGS_NO_AUTO_START,
                       0,
                       NULL,

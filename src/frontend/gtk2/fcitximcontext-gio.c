@@ -678,7 +678,7 @@ fcitx_im_context_focus_in(GtkIMContext *context)
     }
 
     if (fcitx_client_is_valid(fcitxcontext->client)) {
-        fcitx_client_focusin(fcitxcontext->client);
+        fcitx_client_focus_in(fcitxcontext->client);
     }
 
     gtk_im_context_focus_in(fcitxcontext->slave);
@@ -717,7 +717,7 @@ fcitx_im_context_focus_out(GtkIMContext *context)
     fcitxcontext->has_focus = false;
 
     if (fcitx_client_is_valid(fcitxcontext->client)) {
-        fcitx_client_focusout(fcitxcontext->client);
+        fcitx_client_focus_out(fcitxcontext->client);
     }
 
 

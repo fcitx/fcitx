@@ -401,7 +401,7 @@ extern "C" {
      * @param  ...
      * @return void
      **/
-    void FcitxMessagesSetMessage(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, ...);
+    void FcitxMessagesSetMessage(FcitxMessages* message, int position, int type, const char* fmt, ...);
     /**
      * set only message string
      *
@@ -439,7 +439,7 @@ extern "C" {
      * @param ap arguments
      * @return void
      **/
-    void FcitxMessagesSetMessageV(FcitxMessages* message, int position, FcitxMessageType type, const char* fmt, va_list ap);
+    void FcitxMessagesSetMessageV(FcitxMessages* message, int position, int type, const char* fmt, va_list ap);
     /**
      * set message count
      *
