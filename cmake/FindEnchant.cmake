@@ -16,20 +16,18 @@ if(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
 endif(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBENCHANT QUIET enchant)
+pkg_check_modules(PC_ENCHANT QUIET enchant)
 
-find_path(ENCHANT_MAIN_INCLUDE_DIR
+find_path(ENCHANT_INCLUDE_DIR
           NAMES enchant.h
-          HINTS ${PC_LIBENCHANT_INCLUDEDIR}
+          HINTS ${PC_ENCHANT_INCLUDEDIR}
           PATH_SUFFIXES "enchant")
 
 find_library(ENCHANT_LIBRARIES
              NAMES enchant
-             HINTS ${PC_LIBENCHANT_LIBDIR})
-
-set(ENCHANT_INCLUDE_DIR "${ENCHANT_MAIN_INCLUDE_DIR}")
+             HINTS ${PC_ENCHANT_LIBDIR})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(ENCHANT  DEFAULT_MSG  ENCHANT_LIBRARIES ENCHANT_MAIN_INCLUDE_DIR)
+find_package_handle_standard_args(Enchant  DEFAULT_MSG  ENCHANT_LIBRARIES ENCHANT_INCLUDE_DIR)
 
-mark_as_advanced(ENCHANT_INCLUDE_DIR ENCHANT_LIBRARIES)
+mark_as_advanced(ENCHANT_INCLUDE_DIR ENCHANT_LIBRARIES PC_ENCHANT_INCLUDEDIR PC_ENCHANT_LIBDIR)

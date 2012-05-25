@@ -22,6 +22,6 @@ find_library(PRESAGE_LIBRARIES
              NAMES presage)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(PRESAGE  DEFAULT_MSG  PRESAGE_LIBRARIES PRESAGE_INCLUDE_DIR)
+find_package_handle_standard_args(Presage  DEFAULT_MSG  PRESAGE_LIBRARIES PRESAGE_INCLUDE_DIR)
 
 mark_as_advanced(PRESAGE_INCLUDE_DIR PRESAGE_LIBRARIES)

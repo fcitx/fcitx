@@ -30,6 +30,6 @@ find_library(XKBFILE_LIBRARIES
 set(XKBFILE_INCLUDE_DIR "${XKBFILE_MAIN_INCLUDE_DIR}")
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(XKBFILE  DEFAULT_MSG  XKBFILE_LIBRARIES XKBFILE_MAIN_INCLUDE_DIR)
+find_package_handle_standard_args(XkbFile  DEFAULT_MSG  XKBFILE_LIBRARIES XKBFILE_MAIN_INCLUDE_DIR)
 
 mark_as_advanced(XKBFILE_INCLUDE_DIR XKBFILE_LIBRARIES)

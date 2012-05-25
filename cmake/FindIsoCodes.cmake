@@ -25,8 +25,8 @@ find_file(ISOCODES_ISO639_XML iso_639.xml
 find_file(ISOCODES_ISO3166_XML iso_3166.xml
           HINTS "${PC_ISOCODES_PREFIX}/share/xml/iso-codes/"
           )
-          
+
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(ISOCODES  DEFAULT_MSG  ISOCODES_ISO639_XML ISOCODES_ISO3166_XML)
+find_package_handle_standard_args(IsoCodes  DEFAULT_MSG  ISOCODES_ISO639_XML ISOCODES_ISO3166_XML)
 
 mark_as_advanced(ISOCODES_ISO639_XML ISOCODES_ISO3166_XML)
