@@ -205,11 +205,11 @@ void IMSelectorGetCands(IMSelector* imselector)
         return;
 
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", imselector->global ? _("Select global input method: ") : _("Select local input method: "));
-    if (ic2->imname && !imselector->global) {
+    if (ic2->imname) {
         int idx = FcitxInstanceGetIMIndexByName(instance, ic2->imname);
         FcitxIM* im = (FcitxIM*) utarray_eltptr(imes, idx);
         if (im) {
-            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Current is %s"), im->strName);
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Current local input method is %s"), im->strName);
         }
     }
     else {

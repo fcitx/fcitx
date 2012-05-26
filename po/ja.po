@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 19:36+0800\n"
+"POT-Creation-Date: 2012-05-26 20:27+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
 #, c-format
-msgid "Current is %s"
+msgid "Current local input method is %s"
 msgstr ""
 
 #: unknown

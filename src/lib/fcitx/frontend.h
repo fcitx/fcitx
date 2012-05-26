@@ -56,7 +56,15 @@ extern "C" {
         CAPACITY_PASSWORD = (1 << 3),
         CAPACITY_FORMATTED_PREEDIT = (1 << 4),
         CAPACITY_CLIENT_UNFOCUS_COMMIT = (1 << 5),
-        CAPACITY_SURROUNDING_TEXT = (1 << 6)
+        CAPACITY_SURROUNDING_TEXT = (1 << 6),
+        CAPACITY_EMAIL = (1 << 7),
+        CAPACITY_DIGIT = (1 << 8),
+        CAPACITY_UPPERCASE = (1 << 9),
+        CAPACITY_LOWERCASE = (1 << 10),
+        CAPACITY_NOAUTOUPPERCASE = (1 << 11),
+        CAPACITY_URL = (1 << 12),
+        CAPACITY_DIALABLE = (1 << 13),
+        CAPACITY_NUMBER = (1 << 14),
     } FcitxCapacityFlags;
 
     /**

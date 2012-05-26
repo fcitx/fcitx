@@ -164,24 +164,13 @@ static void RemoteProcessEvent(void* p)
             FcitxInstanceCloseIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         else {
             FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
-            if (arg == 2)
-                FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         }
         break;
     case 2:
         FcitxInstanceReloadConfig(remote->owner);
         break;
     case 3:
-        if (FcitxInstanceGetCurrentStatev2(remote->owner) == IS_ACTIVE)
-            FcitxInstanceCloseIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
-        else
-            FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
-        break;
-    case 4:
-        if (FcitxInstanceGetCurrentStatev2(remote->owner) == IS_CLOSED)
-            FcitxInstanceEnableIM(remote->owner, FcitxInstanceGetCurrentIC(remote->owner), false);
-        else
-            FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
+        FcitxInstanceChangeIMState(remote->owner, FcitxInstanceGetCurrentIC(remote->owner));
         break;
     default:
         break;

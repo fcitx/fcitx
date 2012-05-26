@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 19:36+0800\n"
-"PO-Revision-Date: 2012-05-25 19:36+0800\n"
+"POT-Creation-Date: 2012-05-26 20:27+0800\n"
+"PO-Revision-Date: 2012-05-26 20:28+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
@@ -412,8 +412,8 @@ msgstr "当前输入法名称"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
 #, c-format
-msgid "Current is %s"
-msgstr "当前为: %s"
+msgid "Current local input method is %s"
+msgstr "当前局部输入法为 %s"
 
 #: unknown
 msgid "DBus"
@@ -1935,6 +1935,9 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Close"
 #~ msgstr "关闭"
+
+#~ msgid "Current is %s"
+#~ msgstr "当前为: %s"
 
 #~ msgid "Full Width Character"
 #~ msgstr "全角字符"

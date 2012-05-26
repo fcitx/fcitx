@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 19:36+0800\n"
+"POT-Creation-Date: 2012-05-26 20:27+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -420,9 +420,9 @@ msgid "Current Input Method Name"
 msgstr "目前輸入法名稱"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
-#, c-format
-msgid "Current is %s"
-msgstr ""
+#, fuzzy, c-format
+msgid "Current local input method is %s"
+msgstr "無可用輸入法"
 
 #: unknown
 msgid "DBus"

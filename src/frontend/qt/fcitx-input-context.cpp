@@ -521,6 +521,7 @@ void QFcitxInputContext::imChanged(const QString& service, const QString& oldown
 
 void QFcitxInputContext::createInputContext()
 {
+    m_rect = QRect();
     m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, m_connection, this);
 
     if (!m_improxy->isValid())
