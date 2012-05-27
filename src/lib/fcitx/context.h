@@ -66,6 +66,8 @@ extern "C" {
     #define CONTEXT_DISABLE_QUICKPHRASE "CONTEXT_DISABLE_QUICKPHRASE"
     /** show a built-in remind button or not */
     #define CONTEXT_SHOW_REMIND_STATUS "CONTEXT_SHOW_REMIND_STATUS"
+    /** disable auto first candidate highlight */
+    #define CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT "CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT"
 
     /**
      * @brief register a new global context variable

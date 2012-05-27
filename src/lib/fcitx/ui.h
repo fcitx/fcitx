@@ -271,7 +271,8 @@ extern "C" {
         MSG_TIPS = 0,           /**< Hint Text */
         MSG_INPUT = 1,          /**< User Input */
         MSG_INDEX = 2,          /**< Index Number */
-        MSG_FIRSTCAND = 3,      /**< First candidate */
+        MSG_CANDIATE_CURSOR = 3,/**< candidate cursor */
+        MSG_FIRSTCAND = MSG_CANDIATE_CURSOR,      /**< deprecated */
         MSG_USERPHR = 4,        /**< User Phrase */
         MSG_CODE = 5,           /**< Typed character */
         MSG_OTHER = 6,          /**< Other Text */

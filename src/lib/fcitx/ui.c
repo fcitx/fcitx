@@ -725,7 +725,9 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
 
         if (i == 0
             && FcitxCandidateWordGetCurrentPage(input->candList) == 0
-            && type == MSG_OTHER)
+            && type == MSG_OTHER
+            && !FcitxInstanceGetContextBoolean(instance, CONTEXT_DISABLE_AUTO_FIRST_CANDIDATE_HIGHTLIGHT)
+        )
             type = MSG_FIRSTCAND;
 
         FcitxMessagesAddMessageAtLast(msgDown, type, "%s", candWord->strWord);
