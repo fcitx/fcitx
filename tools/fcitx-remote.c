@@ -72,7 +72,7 @@ void usage()
            "\t-c\t\tinactivate input method\n"
            "\t-o\t\tactivate input method\n"
            "\t-r\t\treload fcitx config\n"
-           "\t-t\t\tswitch Active/Inactive\n"
+           "\t-t,-T\t\tswitch Active/Inactive\n"
            "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
            "\t-h\t\tdisplay this help and exit\n",
            IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     int o = 0;
     char c;
 
-    while ((c = getopt(argc, argv, "ichortT")) != -1) {
+    while ((c = getopt(argc, argv, "chortT")) != -1) {
         switch (c) {
         case 'o':
             o = 1;
@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
             break;
 
         case 't':
+        case 'T':
             o = 3;
             break;
 

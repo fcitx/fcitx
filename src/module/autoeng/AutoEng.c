@@ -138,7 +138,7 @@ void* AutoEngCreate(FcitxInstance *instance)
     khk.func = PreInputProcessAutoEng;
 
     FcitxInstanceRegisterPreInputFilter(instance, khk);
-    
+
     khk.func = PostInputProcessAutoEng;
     FcitxInstanceRegisterPostInputFilter(instance, khk);
 
@@ -146,7 +146,7 @@ void* AutoEngCreate(FcitxInstance *instance)
     rhk.arg = autoEngState;
     rhk.func = ResetAutoEng;
     FcitxInstanceRegisterResetInputHook(instance, rhk);
-    
+
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_AUTOENG, FCT_Boolean, FCF_ResetOnInputMethodChange);
 
     ResetAutoEng(autoEngState);
@@ -163,7 +163,7 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
     boolean disableCheckUAZ = FcitxInstanceGetContextBoolean(autoEngState->owner, CONTEXT_DISABLE_AUTOENG);
     if (disableCheckUAZ)
         return false;
-    
+
     if (autoEngState->active) {
         FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
         if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
@@ -231,7 +231,7 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         ShowAutoEngMessage(autoEngState);
         return true;
     }
-    
+
     return false;
 }
 
@@ -307,6 +307,7 @@ void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
     strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
     FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
+    FcitxInputStateSetClientCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetShowCursor(input, true);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
 }
