@@ -179,7 +179,6 @@ fcitx_input_method_set_imlist(FcitxInputMethod *im, GPtrArray* array)
     }
 
     g_variant_unref(result);
-    g_variant_unref(value);
 }
 
 static void
@@ -310,6 +309,7 @@ void fcitx_input_method_exit(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_configure(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -323,6 +323,7 @@ void fcitx_input_method_configure(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -336,14 +337,15 @@ void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
                      );
 }
 
+FCITX_EXPORT_API
 gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
 {
     GError* error = NULL;
     GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
-                                               "ConfigureAddon",
+                                               "GetCurrentIM",
                                                NULL,
                                                G_DBUS_CALL_FLAGS_NO_AUTO_START,
-                                               0,
+                                               -1,
                                                NULL,
                                                &error
                                               );
@@ -361,6 +363,7 @@ gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
     return result;
 }
 
+FCITX_EXPORT_API
 gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
 {
     GError* error = NULL;
@@ -368,7 +371,7 @@ gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
                                                "GetIMAddon",
                                                g_variant_new("(s)", imname),
                                                G_DBUS_CALL_FLAGS_NO_AUTO_START,
-                                               0,
+                                               -1,
                                                NULL,
                                                &error
                                               );
@@ -386,6 +389,7 @@ gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
     return result;
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_reload_config(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -399,6 +403,7 @@ void fcitx_input_method_reload_config(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_restart(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -412,6 +417,7 @@ void fcitx_input_method_restart(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
