@@ -65,7 +65,7 @@ Description=Switching Remind Mode
 
 [Hotkey/FullWidthSwitchKey]
 Type=Hotkey
-DefaultValue=SHIFT_SPACE
+DefaultValue=
 Description=Switching Full Width Character Mode
 
 [Hotkey/PuncSwitchKey]
