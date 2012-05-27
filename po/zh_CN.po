@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-26 20:27+0800\n"
-"PO-Revision-Date: 2012-05-26 20:28+0800\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"PO-Revision-Date: 2012-05-28 07:43+0800\n"
+"Last-Translator: Xuetian Weng <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -1794,7 +1794,7 @@ msgstr "使用回车确认已输入字符串"
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:29
 msgid "Use presage to predict if possible."
-msgstr "如果可以则使用 Jovie 语音服务(&U)."
+msgstr "如果可以则使用 presage 增强单词提示功能"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:160
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:321
