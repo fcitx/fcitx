@@ -622,13 +622,13 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
             if (FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) {
                 input->keyReleased = KR_SWITCH;
-                retVal = IRV_DO_NOTHING;
+                retVal = IRV_DONOT_PROCESS;
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
                 input->keyReleased = KR_SWITCH_IM;
-                retVal = IRV_DO_NOTHING;
+                retVal = IRV_DONOT_PROCESS;
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
                 input->keyReleased = KR_SWITCH_IM_REVERSE;
-                retVal = IRV_DO_NOTHING;
+                retVal = IRV_DONOT_PROCESS;
             } else if (FcitxHotkeyIsHotKey(sym, state, fc->hkTrigger)) {
                 /* trigger key has the highest priority, so we check it first */
                 if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE) {
