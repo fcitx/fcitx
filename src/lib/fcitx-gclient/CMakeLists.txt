@@ -19,6 +19,7 @@ add_custom_command(OUTPUT marshall.h
 set(FCITX_GCLIENT_SOURCES
     fcitxclient.c
     fcitxinputmethod.c
+    fcitxkbd.c
 )
 
 set(FCITX_GCLIENT_BUILT_SOURCES
@@ -28,6 +29,7 @@ set(FCITX_GCLIENT_BUILT_SOURCES
 set(FCITX_GCLIENT_HEADERS
     fcitxclient.h
     fcitxinputmethod.h
+    fcitxkbd.h
 )
 
 set(FCITX_GCLIENT_BUILT_HEADERS
@@ -83,3 +85,5 @@ install(TARGETS fcitx-gclient-static
     ARCHIVE DESTINATION ${libdir}
 )
 endif (ENABLE_STATIC)
+
+add_subdirectory(test)

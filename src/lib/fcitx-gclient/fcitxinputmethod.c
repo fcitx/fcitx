@@ -131,14 +131,14 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
     }
 
     if (value) {
-        array = g_ptr_array_new();
+        array = g_ptr_array_new_with_free_func(fcitx_im_item_free);
         g_variant_get(value, "a(sssb)", &iter);
         while (g_variant_iter_next(iter, "(sssb)", &name, &unique_name, &langcode, &enable, NULL)) {
             FcitxIMItem* item = g_malloc0(sizeof(FcitxIMItem));
             item->enable = enable;
-            item->name = strdup(name);
-            item->unique_name = strdup(unique_name);
-            item->langcode = strdup(langcode);
+            item->name = g_strdup(name);
+            item->unique_name = g_strdup(unique_name);
+            item->langcode = g_strdup(langcode);
             g_ptr_array_add(array, item);
             g_free(name);
             g_free(unique_name);
