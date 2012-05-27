@@ -118,6 +118,7 @@ typedef struct _FcitxKimpanelUI {
     int version;
     int lastUpdateW;
     int lastUpdateH;
+    int lastCursor;
 } FcitxKimpanelUI;
 
 static void* KimpanelCreate(FcitxInstance* instance);
@@ -136,6 +137,7 @@ static void KimpanelOnTriggerOff(void *arg);
 static void KimpanelSuspend(void* arg);
 static void KimpanelDestroy(void* arg);
 
+static void KimUpdateLookupTableCursor(FcitxKimpanelUI* kimpanel, int cursor);
 static void KimShowAux(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow);
 static void KimUpdateSpotLocation(FcitxKimpanelUI* kimpanel, int x, int y);
@@ -195,6 +197,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     FcitxKimpanelUI *kimpanel = fcitx_utils_malloc0(sizeof(FcitxKimpanelUI));
     FcitxModuleFunctionArg arg;
 
+    kimpanel->lastCursor = -2;
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
@@ -527,6 +530,7 @@ void KimpanelShowInputWindow(void* arg)
     char *text[33];
     char cmb[KIMPANEL_BUFFER_SIZE] = "";
     int i;
+    int pos = -1;
 
     if (n) {
         for (i = 0; i < n; i++) {
@@ -557,6 +561,8 @@ void KimpanelShowInputWindow(void* arg)
                     strcat(cmb, msgstr);
                 if (needfree)
                     free(needfree);
+                if (FcitxMessagesGetMessageType(messageDown, i) == MSG_FIRSTCAND)
+                    pos = nTexts;
             }
         }
         text[nTexts++] = strdup(cmb);
@@ -596,6 +602,7 @@ void KimpanelShowInputWindow(void* arg)
                              FcitxCandidateWordHasNext(FcitxInputStateGetCandidateList(input)));
         KimShowLookupTable(kimpanel, false);
     }
+    KimUpdateLookupTableCursor(kimpanel, pos);
 
     n = FcitxMessagesGetMessageCount(messageUp);
     char aux[MESSAGE_MAX_LENGTH] = "";
@@ -661,6 +668,15 @@ static DBusHandlerResult KimpanelDBusEventHandler(DBusConnection *connection, DB
         return DBUS_HANDLER_RESULT_HANDLED;
     }
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+}
+
+void KimpanelReset(FcitxKimpanelUI* kimpanel)
+{
+    kimpanel->lastCursor = -2;
+    kimpanel->lastUpdateH = -2;
+    kimpanel->lastUpdateW = -2;
+    kimpanel->lastUpdateX = -2;
+    kimpanel->lastUpdateY = -2;
 }
 
 DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
@@ -778,12 +794,14 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "PanelCreated")) {
         FcitxLog(DEBUG, "PanelCreated");
         FcitxUIResumeFromFallback(instance);
+        KimpanelReset(kimpanel);
         KimpanelRegisterAllStatus(kimpanel);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel2", "PanelCreated2")) {
         FcitxLog(DEBUG, "PanelCreated2");
         FcitxUIResumeFromFallback(instance);
         kimpanel->version = 2;
+        KimpanelReset(kimpanel);
         KimpanelRegisterAllStatus(kimpanel);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Exit")) {
@@ -1098,6 +1116,40 @@ void KimShowPreedit(FcitxKimpanelUI* kimpanel, boolean toShow)
     // free the message
     dbus_message_unref(msg);
 
+}
+
+void KimUpdateLookupTableCursor(FcitxKimpanelUI* kimpanel, int cursor)
+{
+    if (kimpanel->lastCursor != cursor)
+        kimpanel->lastCursor = cursor;
+    else
+        return;
+    dbus_uint32_t serial = 0; // unique number to associate replies with requests
+    DBusMessage* msg;
+    DBusMessageIter args;
+
+    // create a signal and check for errors
+    msg = dbus_message_new_signal(FCITX_KIMPANEL_PATH, // object name of the signal
+                                  FCITX_KIMPANEL_INTERFACE, // interface name of the signal
+                                  "UpdateLookupTableCursor"); // name of the signal
+    if (NULL == msg) {
+        FcitxLog(DEBUG, "Message Null");
+        return;
+    }
+
+    // append arguments onto signal
+    dbus_message_iter_init_append(msg, &args);
+    if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_INT32, &cursor)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+
+    // send the message and flush the connection
+    if (!dbus_connection_send(kimpanel->conn, msg, &serial)) {
+        FcitxLog(DEBUG, "Out Of Memory!");
+    }
+
+    // free the message
+    dbus_message_unref(msg);
 }
 
 void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow)
