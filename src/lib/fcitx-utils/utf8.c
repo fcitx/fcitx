@@ -291,4 +291,25 @@ void fcitx_utf8_strncpy(char* str, const char* s, size_t byte)
     }
 }
 
+
+FCITX_EXPORT_API
+size_t fcitx_utf8_strnlen(const char* str, size_t byte)
+{
+    size_t len = 0;
+    while (*str && byte > 0) {
+        int chr;
+
+        const char* next = fcitx_utf8_get_char(str, &chr);
+        size_t diff = next - str;
+        if (byte < diff)
+            break;
+
+        str += diff;
+        byte -= diff;
+        str = next;
+        len ++ ;
+    }
+    return len;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

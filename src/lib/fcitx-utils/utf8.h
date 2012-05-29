@@ -132,6 +132,17 @@ int    fcitx_utf8_get_char_validated(const char *p, int max_len);
  **/
 void fcitx_utf8_strncpy(char* str, const char* s, size_t byte);
 
+/**
+ * @brief count most byte length, utf8 string length
+ *
+ * @param str string
+ * @param byte max length
+ * @return size_t
+ *
+ * @since 4.2.4
+ **/
+size_t fcitx_utf8_strnlen(const char* str, size_t byte);
+
 #ifdef __cplusplus
 }
 #endif

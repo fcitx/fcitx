@@ -624,12 +624,13 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             for (i = 0; i < pystate->iPYSelected; i++)
                 val += fcitx_utf8_strlen(pystate->pySelected[i].strHZ);
 
+            retVal = IRV_DISPLAY_CANDWORDS;
             if (pystate->findMap.iHZCount > (MAX_WORDS_USER_INPUT - val)) {
                 UpdateFindString(pystate, val);
                 ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
+                retVal = IRV_DO_NOTHING;
             }
 
-            retVal = IRV_DISPLAY_CANDWORDS;
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
             if (pystate->iPYSelected) {
                 char strTemp[MAX_USER_INPUT + 1];

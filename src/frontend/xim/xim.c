@@ -467,7 +467,7 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
         GetXimIC(ic)->bPreeditStarted = true;
     }
     if (strlen(strPreedit) != 0) {
-        XimPreeditCallbackDraw(xim, GetXimIC(ic), strPreedit, FcitxInputStateGetCursorPos(input));
+        XimPreeditCallbackDraw(xim, GetXimIC(ic), strPreedit, FcitxInputStateGetClientCursorPos(input));
     }
 
     free(strPreedit);

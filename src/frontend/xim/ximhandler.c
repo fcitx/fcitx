@@ -343,7 +343,7 @@ XimPreeditCallbackDraw(FcitxXimFrontend* xim, FcitxXimIC* ic, const char* preedi
     pcb->connect_id = ic->connect_id;
     pcb->icid = ic->id;
 
-    pcb->todo.draw.caret = cursorPos;
+    pcb->todo.draw.caret = fcitx_utf8_strnlen(preedit_string, cursorPos);
     pcb->todo.draw.chg_first = 0;
     pcb->todo.draw.chg_length = ic->onspot_preedit_length;
     pcb->todo.draw.text = text;

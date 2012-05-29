@@ -13,5 +13,13 @@ int main()
     buf[BUF_SIZE - 1] = 0;
     assert(memcmp(buf, result, BUF_SIZE) == 0);
 
+    assert(fcitx_utf8_strnlen(string, 0) == 0);
+    assert(fcitx_utf8_strnlen(string, 1) == 0);
+    assert(fcitx_utf8_strnlen(string, 2) == 0);
+    assert(fcitx_utf8_strnlen(string, 3) == 1);
+    assert(fcitx_utf8_strnlen(string, 6) == 2);
+    assert(fcitx_utf8_strnlen(string, 8) == 2);
+    assert(fcitx_utf8_strnlen(string, 9) == 3);
+
     return 0;
 }
