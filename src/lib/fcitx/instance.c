@@ -183,6 +183,12 @@ error_exit:
 
 }
 
+FCITX_EXPORT_API
+void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
+{
+    instance->uiflag |= UI_EVENT_CHECK;
+}
+
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;

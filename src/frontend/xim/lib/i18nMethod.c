@@ -777,6 +777,8 @@ static Status xi18n_forwardEvent(XIMS ims, XPointer xp)
     Xi18nClient *client;
 
     client = (Xi18nClient *) _Xi18nFindClient(i18n_core, call_data->connect_id);
+    if (!client)
+        return False;
 
     /* create FrameMgr */
     fm = FrameMgrInit(forward_event_fr,

@@ -3,6 +3,7 @@
 #include <Xi18n.h>
 
 #include "fcitx/module.h"
+#include "fcitx/instance.h"
 #include "fcitx-utils/log.h"
 #include "module/x11/x11stuff.h"
 #include "ximqueue.h"
@@ -19,19 +20,26 @@ void XimQueueInit(FcitxXimFrontend* xim)
     utarray_new(xim->queue, &ptr_icd);
 }
 
-void XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
+void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXimFrontend* xim = arg;
     if (!xim->ims)
-        return;
+        return NULL;
     XimQueue* item;
+
+    size_t len = utarray_len(xim->queue);
+
     for (item = (XimQueue*) utarray_front(xim->queue);
          item != NULL;
          item = (XimQueue*) utarray_next(xim->queue, item))
     {
         switch(item->type) {
         case XCT_FORWARD:
-            IMForwardEvent(xim->ims, item->ptr);
+            {
+                IMForwardEventStruct* fes = (IMForwardEventStruct*) item->ptr;
+                FcitxLog(INFO, "%d %d", fes->connect_id, fes->icid);
+                IMForwardEvent(xim->ims, item->ptr);
+            }
             break;
         case XCT_CALLCALLBACK:
             {
@@ -58,10 +66,12 @@ void XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
             break;
         }
         free(item->ptr);
-        FcitxModuleInvokeFunction(xim->x11addon, FCITX_X11_PROCESSREMAINEVENT, args);
     }
 
     utarray_clear(xim->queue);
+    if (len)
+        FcitxInstanceSetRecheckEvent(xim->owner);
+    return NULL;
 }
 
 void XimPendingCall(FcitxXimFrontend* xim, XimCallType type, XPointer ptr)

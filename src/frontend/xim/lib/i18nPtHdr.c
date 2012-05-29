@@ -528,6 +528,8 @@ static void SyncReplyMessageProc(XIMS ims,
     CARD16 input_context_ID;
 
     client = (Xi18nClient *)_Xi18nFindClient(i18n_core, connect_id);
+    if (!client)
+        return;
     fm = FrameMgrInit(sync_reply_fr,
                       (char *) p,
                       _Xi18nNeedSwap(i18n_core, connect_id));
@@ -1519,6 +1521,8 @@ static void ProcessQueue(XIMS ims, CARD16 connect_id)
     Xi18n i18n_core = ims->protocol;
     Xi18nClient *client = (Xi18nClient *) _Xi18nFindClient(i18n_core,
                           connect_id);
+    if (!client)
+        return;
 
     while (client->sync == False  &&  client->pending) {
         XimProtoHdr *hdr = (XimProtoHdr *) client->pending->p;
@@ -1560,6 +1564,8 @@ void _Xi18nMessageHandler(XIMS ims,
     Xi18nClient *client;
 
     client = (Xi18nClient *) _Xi18nFindClient(i18n_core, connect_id);
+    if (!client)
+        return;
     if (hdr == (XimProtoHdr *) NULL)
         return;
     /*endif*/

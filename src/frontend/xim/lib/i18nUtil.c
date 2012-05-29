@@ -92,6 +92,8 @@ void _Xi18nDeleteClient(Xi18n i18n_core, CARD16 connect_id)
     Xi18nClient *target = _Xi18nFindClient(i18n_core, connect_id);
     Xi18nClient *ccp;
     Xi18nClient *ccp0;
+    if (!target)
+        return;
 
     for (ccp = i18n_core->address.clients, ccp0 = NULL;
             ccp != NULL;

@@ -73,6 +73,15 @@ extern "C" {
      **/
     void FcitxInstanceResetTryReplace(FcitxInstance* instance);
 
+
+    /**
+     * some event maybe sync to the buffer, set this flag to force recheck
+     *
+     * @param instance fcitx instance
+     * @return void
+     **/
+    void FcitxInstanceSetRecheckEvent(FcitxInstance* instance);
+
     /**
      * lock the instance
      *

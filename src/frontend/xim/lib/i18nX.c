@@ -264,6 +264,8 @@ static Bool Xi18nXSend(XIMS ims,
 {
     Xi18n i18n_core = ims->protocol;
     Xi18nClient *client = _Xi18nFindClient(i18n_core, connect_id);
+    if (!client)
+        return False;
     XSpecRec *spec = (XSpecRec *) i18n_core->address.connect_addr;
     XClient *x_client = (XClient *) client->trans_rec;
     XEvent event;
@@ -359,6 +361,8 @@ static Bool Xi18nXWait(XIMS ims,
     Xi18n i18n_core = ims->protocol;
     XEvent event;
     Xi18nClient *client = _Xi18nFindClient(i18n_core, connect_id);
+    if (!client)
+        return False;
     XClient *x_client = (XClient *) client->trans_rec;
 
     for (;;) {
@@ -399,6 +403,8 @@ static Bool Xi18nXDisconnect(XIMS ims, CARD16 connect_id)
     Xi18n i18n_core = ims->protocol;
     Display *dpy = i18n_core->address.dpy;
     Xi18nClient *client = _Xi18nFindClient(i18n_core, connect_id);
+    if (!client)
+        return False;
     XClient *x_client = (XClient *) client->trans_rec;
 
     XDestroyWindow(dpy, x_client->accept_win);
