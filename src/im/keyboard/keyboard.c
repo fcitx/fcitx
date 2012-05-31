@@ -426,6 +426,7 @@ boolean FcitxKeyboardInit(void *arg)
     boolean flag = true;
     FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_AUTOENG, &flag);
     FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_QUICKPHRASE, &flag);
+    FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_FULLWIDTH, &flag);
     if (layout->variantString) {
         char* string;
         asprintf(&string, "%s,%s", layout->layoutString, layout->variantString);

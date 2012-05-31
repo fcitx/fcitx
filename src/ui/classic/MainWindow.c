@@ -144,6 +144,36 @@ void DrawMainWindow(MainWindow* mainWindow)
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
+    FcitxUIStatus* status;
+    UT_array* uistats = FcitxInstanceGetUIStats(instance);
+    for (status = (FcitxUIStatus*) utarray_front(uistats);
+            status != NULL;
+            status = (FcitxUIStatus*) utarray_next(uistats, status)
+        ) {
+        FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
+        if (privstat == NULL)
+            continue;
+        /* reset status */
+        privstat->x = privstat->y = -1;
+        privstat->w = privstat->h = 0;
+        privstat->avail = false;
+    }
+
+    FcitxUIComplexStatus* compstatus;
+    UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
+    for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
+            compstatus != NULL;
+            compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
+        ) {
+        FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
+        if (privstat == NULL)
+            continue;
+        /* reset status */
+        privstat->x = privstat->y = -1;
+        privstat->w = privstat->h = 0;
+        privstat->avail = false;
+    }
+
     if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) == IS_ACTIVE))) {
         SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
         cairo_t *c;
@@ -170,35 +200,6 @@ void DrawMainWindow(MainWindow* mainWindow)
             XResizeWindow(mainWindow->dpy, mainWindow->window, width, height);
             DrawResizableBackground(c, back->image, height, width, 0, 0, 0, 0, F_RESIZE, F_COPY);
 
-            FcitxUIStatus* status;
-            UT_array* uistats = FcitxInstanceGetUIStats(instance);
-            for (status = (FcitxUIStatus*) utarray_front(uistats);
-                    status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(uistats, status)
-                ) {
-                FcitxClassicUIStatus* privstat =  GetPrivateStatus(status);
-                if (privstat == NULL)
-                    continue;
-                /* reset status */
-                privstat->x = privstat->y = -1;
-                privstat->w = privstat->h = 0;
-                privstat->avail = false;
-            }
-
-            FcitxUIComplexStatus* compstatus;
-            UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
-            for (compstatus = (FcitxUIComplexStatus*) utarray_front(uicompstats);
-                 compstatus != NULL;
-                 compstatus = (FcitxUIComplexStatus*) utarray_next(uicompstats, compstatus)
-                ) {
-                FcitxClassicUIStatus* privstat =  GetPrivateStatus(compstatus);
-                if (privstat == NULL)
-                    continue;
-                /* reset status */
-                privstat->x = privstat->y = -1;
-                privstat->w = privstat->h = 0;
-                privstat->avail = false;
-            }
 
             SkinPlacement* sp;
             for (sp = (SkinPlacement*) utarray_front(&sc->skinMainBar.skinPlacement);
@@ -395,10 +396,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(compstatus);
                 if (privstat == NULL)
                     continue;
-                /* reset status */
-                privstat->x = privstat->y = -1;
-                privstat->w = privstat->h = 0;
-                privstat->avail = false;
                 if (!compstatus->visible)
                     continue;
                 const char* icon = compstatus->getIconName(compstatus->arg);
@@ -421,13 +418,9 @@ void DrawMainWindow(MainWindow* mainWindow)
                     status != NULL;
                     status = (FcitxUIStatus*) utarray_next(uistats, status)
                 ) {
-                /* reset status */
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;
-                privstat->x = privstat->y = -1;
-                privstat->w = privstat->h = 0;
-                privstat->avail = false;
                 if (!status->visible)
                     continue;
                 /* reset status */

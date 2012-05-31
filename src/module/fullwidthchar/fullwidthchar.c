@@ -34,6 +34,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/frontend.h"
 #include "fcitx/instance.h"
+#include <fcitx/context.h>
 
 char *sCornerTrans[] = {
     "　", "！", "＂", "＃", "￥", "％", "＆", "＇", "（", "）",
@@ -72,6 +73,7 @@ static boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
                               unsigned int state,
                               INPUT_RETURN_VALUE *retval
                              );
+static void DisableFullWidthCharChanged(void* arg, const void* value);
 
 typedef struct _FcitxFullWidthChar {
     FcitxInstance* owner;
@@ -117,7 +119,17 @@ void* FullWidthCharCreate(FcitxInstance* instance)
                           _("Toggle Half/Full width Character"),
                           ToggleFullWidthState, GetFullWidthState);
 
+    FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_FULLWIDTH, FCT_Boolean, FCF_ResetOnInputMethodChange);
+    FcitxInstanceWatchContext(instance, CONTEXT_DISABLE_FULLWIDTH, DisableFullWidthCharChanged, fwchar);
+
     return fwchar;
+}
+
+void DisableFullWidthCharChanged(void* arg, const void* value)
+{
+    const boolean* b = value;
+    FcitxFullWidthChar* fwchar = arg;
+    FcitxUISetStatusVisable(fwchar->owner, "fullwidth",  !(*b));
 }
 
 boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
@@ -130,7 +142,8 @@ boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
     if (*retval != IRV_TO_PROCESS)
         return false;
 
-    if (profile->bUseFullWidthChar && FcitxHotkeyIsHotKeySimple(sym, state)) {
+    FcitxUIStatus *status = FcitxUIGetStatusByName(fwchar->owner, "fullwidth");
+    if (profile->bUseFullWidthChar && status->visible && FcitxHotkeyIsHotKeySimple(sym, state)) {
         sprintf(FcitxInputStateGetOutputString(FcitxInstanceGetInputState(fwchar->owner)), "%s", sCornerTrans[sym - 32]);
         *retval = IRV_COMMIT_STRING;
         return true;
@@ -143,7 +156,8 @@ char* ProcessFullWidthChar(void* arg, const char* str)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
     FcitxProfile* profile = FcitxInstanceGetProfile(fwchar->owner);
-    if (profile->bUseFullWidthChar) {
+    FcitxUIStatus *status = FcitxUIGetStatusByName(fwchar->owner, "fullwidth");
+    if (profile->bUseFullWidthChar && status->visible) {
         size_t i = 0, ret_len = 0, len = fcitx_utf8_strlen(str);
         char* ret = (char *) fcitx_utils_malloc0(sizeof(char) * (UTF8_MAX_LENGTH * len + 1));
         const char* ps = str;
@@ -193,8 +207,13 @@ boolean GetFullWidthState(void* arg)
 INPUT_RETURN_VALUE ToggleFullWidthStateWithHotkey(void* arg)
 {
     FcitxFullWidthChar* fwchar = (FcitxFullWidthChar*)arg;
-    FcitxUIUpdateStatus(fwchar->owner, "fullwidth");
-    return IRV_DO_NOTHING;
+    FcitxUIStatus *status = FcitxUIGetStatusByName(fwchar->owner, "fullwidth");
+    if (status->visible) {
+        FcitxUIUpdateStatus(fwchar->owner, "fullwidth");
+        return IRV_DO_NOTHING;
+    }
+    else
+        return IRV_TO_PROCESS;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
