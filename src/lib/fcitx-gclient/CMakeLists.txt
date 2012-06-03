@@ -1,5 +1,3 @@
-include(GObjectIntrospection)
-
 _pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL "" "--variable=glib_genmarshal")
 FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
 
@@ -52,6 +50,8 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc DESTINATION "${libdir
 install(FILES ${FCITX_GCLIENT_HEADERS} DESTINATION "${includedir}/fcitx-gclient")
 
 if (ENABLE_GIR)
+
+include(GObjectIntrospection)
 
 gobject_introspection(
     FILENAME Fcitx-1.0.gir
