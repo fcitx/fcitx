@@ -141,6 +141,15 @@ function(gobject_introspection _FIRST_ARG)
         _gir_list_prefix(GIR_REAL_INCLUDE GIR_INCLUDE "--include=")
     endif(GIR_INCLUDE)
 
+	if (GIR_SOURCES)
+		set(GIR_REAL_SOURCES)
+
+		foreach(ITEM ${GIR_SOURCES})
+			get_source_file_property(LOCATION ${ITEM} LOCATION)
+			list(APPEND GIR_REAL_SOURCES "${LOCATION}")
+		endforeach(ITEM)
+	endif(GIR_SOURCES)
+
 	# if the user specified BUILT_SOURCES, we need to get their paths since
 	# they could be in CMAKE_CURRENT_BUILD_DIR
 	if(GIR_BUILT_SOURCES)
@@ -170,15 +179,15 @@ function(gobject_introspection _FIRST_ARG)
 			${GIR_REAL_PACKAGES}
             ${GIR_REAL_INCLUDE}
 			--no-libtool
-			-L${CMAKE_CURRENT_BINARY_DIR}
+			-L ${CMAKE_CURRENT_BINARY_DIR}
 			--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_FILENAME}
             ${GIR_PACKAGE_EXPORT}
             ${GIR_SCANNER_FLAGS}
-			${GIR_SOURCES}
+			${GIR_REAL_SOURCES}
 			${GIR_REAL_BUILT_SOURCES}
 		OUTPUT ${GIR_FILENAME}
 		DEPENDS ${GIR_LIBRARY}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 		VERBATIM
 	)
 
