@@ -51,6 +51,14 @@ static const int XKeyRelease = KeyRelease;
 #undef FocusOut
 #endif
 
+#ifndef Q_LIKELY
+#define Q_LIKELY(x) (x)
+#endif
+
+#ifndef Q_UNLIKELY
+#define Q_UNLIKELY(x) (x)
+#endif
+
 typedef struct _FcitxComposeTableCompact FcitxComposeTableCompact;
 struct _FcitxComposeTableCompact {
     const quint32 *data;
