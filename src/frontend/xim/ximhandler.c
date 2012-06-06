@@ -260,8 +260,6 @@ void XimForwardKeyInternal(FcitxXimFrontend *xim,
 {
     IMForwardEventStruct* forwardEvent = fcitx_utils_new(IMForwardEventStruct);
 
-    FcitxLog(INFO, "2: %d %d", ic->connect_id, ic->id);
-
     forwardEvent->connect_id = ic->connect_id;
     forwardEvent->icid = ic->id;
     forwardEvent->major_code = XIM_FORWARD_EVENT;

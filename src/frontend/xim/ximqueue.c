@@ -36,8 +36,6 @@ void* XimConsumeQueue(void* arg, FcitxModuleFunctionArg args)
         switch(item->type) {
         case XCT_FORWARD:
             {
-                IMForwardEventStruct* fes = (IMForwardEventStruct*) item->ptr;
-                FcitxLog(INFO, "%d %d", fes->connect_id, fes->icid);
                 IMForwardEvent(xim->ims, item->ptr);
             }
             break;

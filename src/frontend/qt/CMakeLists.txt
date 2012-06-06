@@ -1,6 +1,5 @@
 if (ENABLE_QT_IM_MODULE)
 find_package(Qt4 4.5 COMPONENTS QtCore QtGui QtDBus REQUIRED)
-find_package(ICU REQUIRED)
 
 # use newer macro from Qt4Macro.cmake
 MACRO(FCITX_QT4_ADD_DBUS_INTERFACE _sources _interface _basename)

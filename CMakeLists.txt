@@ -57,6 +57,7 @@ find_package(XkbFile REQUIRED)
 find_package(Enchant REQUIRED)
 find_package(IsoCodes REQUIRED)
 find_package(Presage)
+find_package(ICU REQUIRED)
 FIND_PACKAGE(X11 REQUIRED)
 
 if (NOT X11_Xkb_FOUND)
