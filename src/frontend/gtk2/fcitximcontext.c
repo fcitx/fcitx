@@ -25,12 +25,13 @@
  *        again and again.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+
 #include "fcitx/fcitx.h"
 #include "fcitximcontext.h"
 #include "fcitx-config/fcitx-config.h"
@@ -77,6 +78,7 @@ struct _FcitxIMContextClass {
 
 /* functions prototype */
 static void     fcitx_im_context_class_init(FcitxIMContextClass   *klass);
+static void     fcitx_im_context_class_fini (FcitxIMContextClass *klass);
 static void     fcitx_im_context_init(FcitxIMContext        *im_context);
 static void     fcitx_im_context_finalize(GObject               *obj);
 static void     fcitx_im_context_set_client_window(GtkIMContext          *context,
@@ -172,6 +174,7 @@ _get_boolean_env(const gchar *name,
                  gboolean defval);
 
 static GType _fcitx_type_im_context = 0;
+static GtkIMContextClass *parent_class = NULL;
 
 static guint _signal_commit_id = 0;
 static guint _signal_preedit_changed_id = 0;
@@ -221,7 +224,7 @@ fcitx_im_context_register_type(GTypeModule *type_module)
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc) fcitx_im_context_class_init,
-        (GClassFinalizeFunc) NULL,
+        (GClassFinalizeFunc) fcitx_im_context_class_fini,
         NULL, /* klass data */
         sizeof(FcitxIMContext),
         0,
@@ -272,6 +275,8 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
     GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS(klass);
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
+    parent_class = (GtkIMContextClass *) g_type_class_peek_parent (klass);
+
     im_context_class->set_client_window = fcitx_im_context_set_client_window;
     im_context_class->filter_keypress = fcitx_im_context_filter_keypress;
     im_context_class->reset = fcitx_im_context_reset;
@@ -309,7 +314,7 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
 
     _use_key_snooper = !_get_boolean_env ("IBUS_DISABLE_SNOOPER", !(_ENABLE_SNOOPER))
                        && !_get_boolean_env("FCITX_DISABLE_SNOOPER", !(_ENABLE_SNOOPER));
-        /* env IBUS_DISABLE_SNOOPER does not exist */
+    /* env IBUS_DISABLE_SNOOPER does not exist */
     if (_use_key_snooper) {
         /* disable snooper if app is in _no_snooper_apps */
         const gchar * prgname = g_get_prgname ();
@@ -336,6 +341,16 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
     /* always install snooper */
     if (_key_snooper_id == 0)
         _key_snooper_id = gtk_key_snooper_install (_key_snooper_cb, NULL);
+}
+
+
+static void
+fcitx_im_context_class_fini (FcitxIMContextClass *klass)
+{
+    if (_key_snooper_id != 0) {
+        gtk_key_snooper_remove (_key_snooper_id);
+        _key_snooper_id = 0;
+    }
 }
 
 
@@ -416,6 +431,8 @@ fcitx_im_context_finalize(GObject *obj)
         gtk_key_snooper_remove (_key_snooper_id);
         _key_snooper_id = 0;
     }
+
+    G_OBJECT_CLASS(parent_class)->finalize (obj);
 }
 
 

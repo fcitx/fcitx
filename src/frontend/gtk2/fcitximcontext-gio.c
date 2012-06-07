@@ -78,6 +78,7 @@ struct _FcitxIMContextClass {
 
 /* functions prototype */
 static void     fcitx_im_context_class_init(FcitxIMContextClass   *klass);
+static void     fcitx_im_context_class_fini (FcitxIMContextClass *klass);
 static void     fcitx_im_context_init(FcitxIMContext        *im_context);
 static void     fcitx_im_context_finalize(GObject               *obj);
 static void     fcitx_im_context_set_client_window(GtkIMContext          *context,
@@ -168,6 +169,7 @@ _get_boolean_env(const gchar *name,
                  gboolean defval);
 
 static GType _fcitx_type_im_context = 0;
+static GtkIMContextClass *parent_class = NULL;
 
 static guint _signal_commit_id = 0;
 static guint _signal_preedit_changed_id = 0;
@@ -217,7 +219,7 @@ fcitx_im_context_register_type(GTypeModule *type_module)
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
         (GClassInitFunc) fcitx_im_context_class_init,
-        (GClassFinalizeFunc) NULL,
+        (GClassFinalizeFunc) fcitx_im_context_class_fini,
         NULL, /* klass data */
         sizeof(FcitxIMContext),
         0,
@@ -267,6 +269,8 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
 {
     GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS(klass);
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+
+    parent_class = (GtkIMContextClass *) g_type_class_peek_parent (klass);
 
     im_context_class->set_client_window = fcitx_im_context_set_client_window;
     im_context_class->filter_keypress = fcitx_im_context_filter_keypress;
@@ -336,6 +340,16 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
 
 
 static void
+fcitx_im_context_class_fini (FcitxIMContextClass *klass)
+{
+    if (_key_snooper_id != 0) {
+        gtk_key_snooper_remove (_key_snooper_id);
+        _key_snooper_id = 0;
+    }
+}
+
+
+static void
 fcitx_im_context_init(FcitxIMContext *context)
 {
     FcitxLog(LOG_LEVEL, "fcitx_im_context_init");
@@ -399,6 +413,8 @@ fcitx_im_context_finalize(GObject *obj)
     FcitxLog(LOG_LEVEL, "fcitx_im_context_finalize");
     FcitxIMContext *context = FCITX_IM_CONTEXT(obj);
 
+    fcitx_im_context_set_client_window(GTK_IM_CONTEXT(context), NULL);
+
     g_object_unref(context->client);
     context->client = NULL;
 
@@ -415,10 +431,7 @@ fcitx_im_context_finalize(GObject *obj)
         pango_attr_list_unref(context->attrlist);
     context->attrlist = NULL;
 
-    if (_key_snooper_id != 0) {
-        gtk_key_snooper_remove (_key_snooper_id);
-        _key_snooper_id = 0;
-    }
+    G_OBJECT_CLASS(parent_class)->finalize (obj);
 }
 
 
