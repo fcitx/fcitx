@@ -179,7 +179,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     min = min * 0.8;
 
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_set_source_rgba(c ,1, 1, 1, 1.0);
+    cairo_set_source_rgba(c ,1, 1, 1, 0.0);
     cairo_paint(c);
 
     FcitxConfigColor color;
@@ -195,8 +195,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     int textw, texth;
     StringSizeStrict(iconText, classicui->font, min, &textw, &texth);
 
-    int fh = FontHeight(classicui->font, min);
-    OutputString(c, iconText, classicui->font, min, (w - textw) * 0.5, (h - texth) * 0.5 - (fh - texth), &color);
+    OutputString(c, iconText, classicui->font, min, (w - textw) * 0.5, 0, &color);
 
     cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));

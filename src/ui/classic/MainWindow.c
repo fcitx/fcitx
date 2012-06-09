@@ -306,13 +306,25 @@ void DrawMainWindow(MainWindow* mainWindow)
                     continue;
                 const char* icon = compstatus->getIconName(compstatus->arg);
                 char* path;
-                if (icon[0] != '/')
-                    asprintf(&path, "%s.png", compstatus->name);
+                if (icon[0] != '/') {
+                    if (icon[0] == '\0')
+                        asprintf(&path, "%s", compstatus->shortDescription);
+                    else
+                        asprintf(&path, "%s.png", icon);
+                }
                 else
                     path = strdup(icon);
-                SkinImage* statusicon = LoadImage(sc, path, false);
-                if (statusicon == NULL) {
-                    continue;
+                SkinImage* statusicon = NULL;
+                if (icon[0] != '\0')
+                    statusicon = LoadImage(sc, path, false);
+                if (statusicon == NULL || statusicon->textIcon) {
+                    if (activeIcon && icon[0] == '\0') {
+                        statusicon = LoadImageWithText(classicui, sc, path, compstatus->shortDescription,
+                                                       cairo_image_surface_get_width(activeIcon->image),
+                                                       cairo_image_surface_get_height(activeIcon->image),
+                                                       true
+                                                      );
+                    }
                 }
                 else {
                     if (icon[0] == '/' && activeIcon) {
@@ -322,6 +334,10 @@ void DrawMainWindow(MainWindow* mainWindow)
                     }
                 }
                 free(path);
+
+                if (statusicon == NULL)
+                    continue;
+
                 currentX += cairo_image_surface_get_width(statusicon->image);
                 imageheight = cairo_image_surface_get_height(statusicon->image);
                 if (imageheight > height)
@@ -400,8 +416,12 @@ void DrawMainWindow(MainWindow* mainWindow)
                     continue;
                 const char* icon = compstatus->getIconName(compstatus->arg);
                 char* path;
-                if (icon[0] != '/')
-                    asprintf(&path, "%s.png", compstatus->name);
+                if (icon[0] != '/') {
+                    if (icon[0] == '\0')
+                        asprintf(&path, "%s", compstatus->shortDescription);
+                    else
+                        asprintf(&path, "%s.png", compstatus->name);
+                }
                 else
                     path = strdup(icon);
                 SkinImage* statusicon = LoadImage(sc, path, false);
