@@ -87,6 +87,8 @@ void Usage()
            "\t-s[sleep time]\t\toverride delay start time in config file, 0 for immediate start\n"
            "\t-v\t\t\tdisplay the version information and exit\n"
            "\t-u, --ui\t\tspecify the user interface to use\n"
+           "\t--enable\t\tspecify a comma separated list for addon that will override the enable option\n"
+           "\t--disable\t\tspecify a comma separated list for addon that will explicitly disabled, priority is higher than --enable\n"
            "\t-h, --help\t\tdisplay this help and exit\n");
 }
 
@@ -340,7 +342,9 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     struct option longOptions[] = {
         {"ui", 1, 0, 0},
         {"replace", 0, 0, 0},
-        {"help", 0, 0, 0}
+        {"enable", 1, 0, 0},
+        {"disable", 1, 0, 0},
+        {"help", 0, 0, 0},
     };
 
     int optionIndex = 0;
@@ -357,6 +361,20 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
                 break;
             case 1:
                 instance->tryReplace = true;
+                break;
+            case 2:
+                {
+                    if (instance->enableList)
+                        fcitx_utils_free_string_list(instance->enableList);
+                    instance->enableList = fcitx_utils_split_string(optarg, ',');
+                }
+                break;
+            case 3:
+                {
+                    if (instance->disableList)
+                        fcitx_utils_free_string_list(instance->disableList);
+                    instance->disableList = fcitx_utils_split_string(optarg, ',');
+                }
                 break;
             default:
                 Usage();

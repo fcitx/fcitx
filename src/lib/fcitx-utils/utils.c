@@ -201,6 +201,20 @@ char* fcitx_utils_join_string_list(UT_array* list, char delm)
 }
 
 FCITX_EXPORT_API
+int fcitx_utils_string_list_contains(UT_array* list, const char* scmp)
+{
+    char** str;
+    for (str = (char**) utarray_front(list);
+         str != NULL;
+         str = (char**) utarray_next(list, str))
+    {
+        if (strcmp(scmp, *str) == 0)
+            return 1;
+    }
+    return 0;
+}
+
+FCITX_EXPORT_API
 void fcitx_utils_free_string_list(UT_array* list)
 {
     utarray_free(list);

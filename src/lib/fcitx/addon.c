@@ -130,6 +130,16 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
     FcitxAddon *addon;
     FcitxAddon *uiaddon = NULL, *uifallbackaddon = NULL;
 
+    /* override the enable and disable option */
+    for (addon = (FcitxAddon *) utarray_front(addons);
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (instance->disableList && fcitx_utils_string_list_contains(instance->disableList, addon->name))
+            addon->bEnabled = false;
+        else if (instance->enableList && fcitx_utils_string_list_contains(instance->enableList, addon->name))
+            addon->bEnabled = true;
+    }
+
     /* choose ui */
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;

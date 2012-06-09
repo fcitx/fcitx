@@ -59,6 +59,7 @@ KEY_LIST        keyList[] = {
     {"PGDN", FcitxKey_Page_Down},
     {"ESCAPE", FcitxKey_Escape},
     {"SPACE", FcitxKey_space},
+    {"BACKSPACE", FcitxKey_BackSpace},
     {"DELETE", FcitxKey_Delete},
     {"UP", FcitxKey_Up},
     {"DOWN", FcitxKey_Down},

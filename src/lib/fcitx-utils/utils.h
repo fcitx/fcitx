@@ -141,11 +141,23 @@ extern "C" {
     char* fcitx_utils_join_string_list(UT_array* list, char delm);
 
     /**
+     * check if a string list contains a specific string
+     *
+     * @param list string list
+     * @param scmp string to compare
+     *
+     * @return 1 for found, 0 for not found.
+     *
+     * @since 4.2.5
+     */
+    int fcitx_utils_string_list_contains(UT_array* list, const char* scmp);
+
+    /**
      * Helper function for free the SplitString Output
      *
      * @param list the SplitString Output
      * @return void
-     * @see SplitString
+     * @see fcitx_utils_split_string
      **/
     void fcitx_utils_free_string_list(UT_array *list);
 

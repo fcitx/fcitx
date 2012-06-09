@@ -116,6 +116,8 @@ struct _FcitxInstance {
     FcitxAddon* currentIMAddon;
 
     UnusedIMItem* unusedItem;
+    UT_array* disableList;
+    UT_array* enableList;
 };
 
 #endif
