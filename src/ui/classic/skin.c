@@ -179,7 +179,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
     min = min * 0.8;
 
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
-    cairo_set_source_rgba(c ,1, 1, 1, 1.0);
+    cairo_set_source_rgba(c ,1, 1, 1, 0.0);
     cairo_paint(c);
 
     FcitxConfigColor color;
