@@ -44,7 +44,12 @@ void SetMyExceptionHandler(void)
     int             signo;
 
     for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
-        if (signo != SIGALRM && signo != SIGPIPE)
+        if (signo != SIGALRM
+            && signo != SIGPIPE
+            && signo != SIGUSR1
+            && signo != SIGUSR2
+            && signo != SIGWINCH
+        )
             signal(signo, OnException);
         else
             signal(signo, SIG_IGN);
