@@ -183,6 +183,18 @@ FcitxHotkey FCITX_LCTRL[2] = {
 };
 
 FCITX_EXPORT_API
+FcitxHotkey FCITX_LALT[2] = {
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_None},
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_Alt},
+};
+
+FCITX_EXPORT_API
+FcitxHotkey FCITX_RALT[2] = {
+    {NULL, FcitxKey_Alt_L, FcitxKeyState_None},
+    {NULL, FcitxKey_Alt_R, FcitxKeyState_Alt},
+};
+
+FCITX_EXPORT_API
 FcitxHotkey FCITX_LSHIFT[2] = {
     {NULL, FcitxKey_Shift_L, FcitxKeyState_None},
     {NULL, FcitxKey_Shift_L, FcitxKeyState_Shift},

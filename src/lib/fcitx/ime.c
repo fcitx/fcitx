@@ -62,6 +62,9 @@ static const FcitxHotkey* switchKey1[] = {
     FCITX_ALT_RSHIFT,
     FCITX_RCTRL,
     FCITX_RSHIFT,
+    FCITX_LALT,
+    FCITX_RALT,
+    FCITX_LALT,
     FCITX_NONE_KEY,
 };
 
@@ -74,6 +77,9 @@ static const FcitxHotkey* switchKey2[] = {
     FCITX_NONE_KEY,
     FCITX_LCTRL,
     FCITX_LSHIFT,
+    FCITX_NONE_KEY,
+    FCITX_NONE_KEY,
+    FCITX_RALT,
     FCITX_NONE_KEY
 };
 
@@ -112,7 +118,8 @@ static boolean IMMenuAction(FcitxUIMenu* menu, int index);
 static void UpdateIMMenuItem(FcitxUIMenu *menu);
 static void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* ic, boolean keepState);
 static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic);
-static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState);
+static void FcitxInstanceChangeIMStateWithKey(FcitxInstance* instance, FcitxInputContext* ic, boolean withSwitchKey);
+static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState, boolean withSwitchKey);
 static void FreeIMEntry(FcitxIMEntry* entry);
 static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
@@ -580,7 +587,7 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     input->keyReleased = KR_OTHER;
                     if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE)
                         FcitxInstanceShowInputSpeed(instance);
-                    FcitxInstanceChangeIMState(instance, instance->CurrentIC);
+                    FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
                 }
             }
         }
@@ -610,17 +617,20 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                 }
             }
             if (!(FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])))
-                    input->keyReleased = KR_OTHER;
+                input->keyReleased = KR_OTHER;
             else {
                 if ((input->keyReleased == KR_SWITCH)
                         && (timestamp - input->lastKeyPressedTime < fc->iTimeInterval)
                         && fc->bDoubleSwitchKey) {
                     FcitxInstanceCommitString(instance, instance->CurrentIC, FcitxInputStateGetRawInputBuffer(input));
-                    FcitxInstanceChangeIMState(instance, instance->CurrentIC);
+                    FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
                 }
             }
 
-            if (FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) {
+            FcitxInputContext2* currentIC2 = (FcitxInputContext2*) instance->CurrentIC;
+
+            if ((instance->CurrentIC->state == IS_ACTIVE || !fc->bUseExtraTriggerKeyOnlyWhenUseItToInactivate || currentIC2->switchBySwitchKey) &&
+                (FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey]))) {
                 input->keyReleased = KR_SWITCH;
                 retVal = IRV_DONOT_PROCESS;
             } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
@@ -1296,13 +1306,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
     }
 }
 
-/**
- * 更改输入法状态
- *
- * @param _connect_id
- */
-FCITX_EXPORT_API
-void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
+void FcitxInstanceChangeIMStateWithKey(FcitxInstance* instance, FcitxInputContext* ic, boolean withSwitchKey)
 {
     if (ic == NULL)
         return;
@@ -1326,26 +1330,39 @@ void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
             }
 
             if (flag && (rec == ic || !(rec->contextCaps & CAPACITY_CLIENT_SIDE_CONTROL_STATE)))
-                FcitxInstanceChangeIMStateInternal(instance, rec, objectState);
+                FcitxInstanceChangeIMStateInternal(instance, rec, objectState, withSwitchKey);
             rec = rec->next;
         }
     }
     break;
     case ShareState_None:
-        FcitxInstanceChangeIMStateInternal(instance, ic, objectState);
+        FcitxInstanceChangeIMStateInternal(instance, ic, objectState, withSwitchKey);
         break;
     }
 
     FcitxInstanceUpdateCurrentIM(instance, false);
 }
 
-void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState)
+/**
+ * 更改输入法状态
+ *
+ * @param _connect_id
+ */
+FCITX_EXPORT_API
+void FcitxInstanceChangeIMState(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    FcitxInstanceChangeIMStateWithKey(instance, ic, false);
+}
+
+void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState, boolean withSwitchKey)
 {
     if (!ic)
         return;
     if (ic->state == objectState)
         return;
     ic->state = objectState;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    ic2->switchBySwitchKey = withSwitchKey;
     if (ic == instance->CurrentIC) {
         if (objectState == IS_ACTIVE) {
             FcitxInstanceResetInput(instance);

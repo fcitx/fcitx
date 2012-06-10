@@ -52,6 +52,7 @@ CONFIG_BINDING_REGISTER("Appearance", "HideInputWindowWhenOnlyOneCandidate", bHi
 CONFIG_BINDING_REGISTER("Hotkey", "TriggerKey", hkTrigger)
 CONFIG_BINDING_REGISTER("Hotkey", "ActivateKey", hkActivate)
 CONFIG_BINDING_REGISTER("Hotkey", "InactivateKey", hkInactivate)
+CONFIG_BINDING_REGISTER("Hotkey", "UseExtraTriggerKeyOnlyWhenUseItToInactivate", bUseExtraTriggerKeyOnlyWhenUseItToInactivate)
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchKey", bIMSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "IMSwitchHotkey", iIMSwitchKey)
 CONFIG_BINDING_REGISTER("Hotkey", "SwitchKey", iSwitchKey)

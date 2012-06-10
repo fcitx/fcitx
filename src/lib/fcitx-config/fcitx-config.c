@@ -327,11 +327,9 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                     int ecount = atoi(eoption->rawValue);
 
                     if (ecount > 0) {
-                        /* 10个选项基本足够了，以后有需求再添加 */
-                        if (ecount > 10)
-                            ecount = 10;
-
-                        char *enumname = strdup("Enum0");
+                        char *enumname;
+                        /* trick, max length is enough */
+                        asprintf(&enumname, "Enum%d", ecount);
 
                         codesc->configEnum.enumDesc = malloc(sizeof(char*) * ecount);
 
@@ -340,7 +338,7 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                         size_t nel = 0;
 
                         for (i = 0; i < ecount; i++) {
-                            enumname[4] = '0' + i;
+                            sprintf(enumname, "Enum%d", i);
                             HASH_FIND_STR(options, enumname, eoption);
 
                             if (eoption) {

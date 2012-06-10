@@ -45,7 +45,10 @@ extern "C" {
         SWITCHKEY_ALT_R_SHIFT = 5,
         SWITCHKEY_CTRL_BOTH = 6,
         SWITCHKEY_SHIFT_BOTH = 7,
-        SWITCHKEY_None = 8
+        SWITCHKEY_LALT = 8,
+        SWITCHKEY_RALT = 9,
+        SWITCHKEY_ALT_BOTH = 10,
+        SWITCHKEY_None = 11
     } FcitxSwitchKey;
 
     /** switch key for change current input method */
@@ -121,7 +124,9 @@ extern "C" {
             FcitxHotkey hkInactivate[2];
             int dummy2[8];
         };
-        int padding[43]; /**< padding */
+
+        boolean bUseExtraTriggerKeyOnlyWhenUseItToInactivate;
+        int padding[42]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

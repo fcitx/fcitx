@@ -26,6 +26,8 @@
 #ifndef _FCITX_FRONTEND_H_
 #define _FCITX_FRONTEND_H_
 
+#include <stdint.h>
+
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-config/hotkey.h>
@@ -83,7 +85,8 @@ extern "C" {
     typedef struct _FcitxInputContext2 {
         FcitxInputContext inputContext;
         char* imname;
-        void* padding[16];
+        intptr_t switchBySwitchKey;
+        void* padding[15];
     } FcitxInputContext2;
 
     /**
