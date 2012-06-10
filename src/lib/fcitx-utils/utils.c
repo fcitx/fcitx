@@ -337,6 +337,7 @@ int fcitx_utils_pid_exists(pid_t pid)
     if (vm == 0) // ignore all error
         return 1;
 
+    int result = 1;
     do {
         int cnt;
         struct kinfo_proc * kp = kvm_getprocs(vm, KERN_PROC_PID, pid, &cnt);
@@ -348,7 +349,6 @@ int fcitx_utils_pid_exists(pid_t pid)
         for (i = 0; i < cnt; i++)
             if (kp->ki_pid == pid)
                 break;
-        int result;
         if (i != cnt)
             result = 1;
         else
@@ -390,13 +390,12 @@ char* fcitx_utils_get_process_name()
     if (vm == 0)
         return strdup("");
 
+    char* result = NULL;
     do {
         int cnt;
         int mypid = getpid();
-        char* result = NULL;
         struct kinfo_proc * kp = kvm_getprocs(vm, KERN_PROC_PID, mypid, &cnt);
         if ((cnt != 1) || (kp == 0)) {
-            result = strdup("");
             break;
         }
         int i;
@@ -405,10 +404,10 @@ char* fcitx_utils_get_process_name()
                 break;
         if (i != cnt)
             result = strdup(kp->ki_comm);
-        else
-            result = strdup("");
     } while (0);
     kvm_close(vm);
+    if (result == NULL)
+        result = strdup("");
     return result;
 #else
     return strdup("");
