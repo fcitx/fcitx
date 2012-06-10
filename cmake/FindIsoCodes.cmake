@@ -16,7 +16,7 @@ if(ISOCODES_INCLUDE_DIR AND ISOCODES_LIBRARIES)
 endif(ISOCODES_INCLUDE_DIR AND ISOCODES_LIBRARIES)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_ISOCODES QUIET iso-codes)
+pkg_check_modules(PC_ISOCODES iso-codes)
 
 find_file(ISOCODES_ISO639_XML iso_639.xml
           HINTS "${PC_ISOCODES_PREFIX}/share/xml/iso-codes/"

@@ -16,7 +16,7 @@ if(XKBFILE_INCLUDE_DIR AND XKBFILE_LIBRARIES)
 endif(XKBFILE_INCLUDE_DIR AND XKBFILE_LIBRARIES)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBXKBFILE QUIET xkbfile)
+pkg_check_modules(PC_LIBXKBFILE xkbfile)
 
 find_path(XKBFILE_MAIN_INCLUDE_DIR
           NAMES XKBfile.h

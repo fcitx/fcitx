@@ -16,7 +16,7 @@ if(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
 endif(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_ENCHANT QUIET enchant)
+pkg_check_modules(PC_ENCHANT enchant)
 
 find_path(ENCHANT_INCLUDE_DIR
           NAMES enchant.h
