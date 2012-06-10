@@ -533,6 +533,9 @@ void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* 
                 iKeyState = FcitxKeyState_None;
     }
 
+    if (keysym == FcitxKey_ISO_Left_Tab)
+        keysym = FcitxKey_Tab;
+
     *outk = keysym;
 
     *outs = iKeyState;
@@ -585,11 +588,6 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
     return str;
 }
 
-/*
- * 根据字串来判断键
- * 主要用于从设置文件中读取热键设定
- * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
- */
 FCITX_EXPORT_API
 boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, unsigned int* state)
 {
