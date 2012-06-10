@@ -683,13 +683,13 @@ char *FcitxHotkeyGetKeyListString(int key)
 }
 
 FCITX_EXPORT_API
-void FcitxHotkeySetKey(char *strKeys, FcitxHotkey * hotkey)
+void FcitxHotkeySetKey(const char *str, FcitxHotkey * hotkey)
 {
     char           *p;
     char           *strKey;
     int             i = 0, j = 0, k;
 
-    strKeys = fcitx_utils_trim(strKeys);
+    char* strKeys = fcitx_utils_trim(str);
     p = strKeys;
 
     for (k = 0; k < 2; k++) {

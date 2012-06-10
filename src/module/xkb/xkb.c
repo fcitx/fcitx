@@ -486,6 +486,9 @@ FcitxXkbGetCurrentGroup (FcitxXkb* xkb)
 
 void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString, const char* variantString)
 {
+    if (!layoutString)
+        return;
+
     while (utarray_len(xkb->defaultVariants) < utarray_len(xkb->defaultLayouts)) {
         const char* dummy = "";
         utarray_push_back(xkb->defaultVariants, &dummy);
@@ -518,9 +521,6 @@ void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
 
     /* active means im will be take care */
     if (FcitxInstanceGetCurrentStatev2(xkb->owner) == IS_ACTIVE) {
-        if (value == NULL)
-            return;
-
         char* layoutString = NULL;
         char* variantString = NULL;
         LayoutOverride* item = NULL;
@@ -533,11 +533,17 @@ void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
         }
         else {
             const char* layout = (const char*) value;
-            UT_array* s = fcitx_utils_split_string(layout, ',');
-            char** pLayoutString = (char**) utarray_eltptr(s, 0);
-            char** pVariantString = (char**) utarray_eltptr(s, 1);
-            layoutString = (pLayoutString)? *pLayoutString: NULL;
-            variantString = (pVariantString)? *pVariantString: NULL;
+            if (layout) {
+                UT_array* s = fcitx_utils_split_string(layout, ',');
+                char** pLayoutString = (char**) utarray_eltptr(s, 0);
+                char** pVariantString = (char**) utarray_eltptr(s, 1);
+                layoutString = (pLayoutString)? *pLayoutString: NULL;
+                variantString = (pVariantString)? *pVariantString: NULL;
+            }
+            else {
+                layoutString = NULL;
+                variantString = NULL;
+            }
         }
         int idx = FcitxXkbFindLayoutIndex(xkb, layoutString, variantString);
         if (idx >= 0) {

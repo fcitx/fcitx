@@ -2457,7 +2457,7 @@ extern "C"
      * @param hotkey hotkey array, it should have length 2
      * @return void
      **/
-    void FcitxHotkeySetKey(char *strKey, FcitxHotkey * hotkey);
+    void FcitxHotkeySetKey(const char *strKey, FcitxHotkey * hotkey);
 
     /**
      * translate the fcitx key to it's own value,
