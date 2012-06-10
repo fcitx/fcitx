@@ -720,13 +720,13 @@ fcitx_im_context_focus_out(GtkIMContext *context)
         fcitx_client_focus_out(fcitxcontext->client);
     }
 
-
-    if (fcitxcontext->preedit_string != NULL)
-        g_free(fcitxcontext->preedit_string);
-    fcitxcontext->preedit_string = NULL;
     fcitxcontext->cursor_pos = 0;
-    g_signal_emit(fcitxcontext, _signal_preedit_changed_id, 0);
-    g_signal_emit(fcitxcontext, _signal_preedit_end_id, 0);
+    if (fcitxcontext->preedit_string != NULL) {
+        g_free(fcitxcontext->preedit_string);
+        fcitxcontext->preedit_string = NULL;
+        g_signal_emit(fcitxcontext, _signal_preedit_changed_id, 0);
+        g_signal_emit(fcitxcontext, _signal_preedit_end_id, 0);
+    }
 
     gtk_im_context_focus_out(fcitxcontext->slave);
 
