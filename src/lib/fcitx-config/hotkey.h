@@ -2479,7 +2479,7 @@ extern "C"
      * @param state return of key state
      * @return boolean can be parsed or not
      **/
-    boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state);
+    boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, unsigned int* state);
 
     /**
      * Get the Fcitx Key String for given keyval and state

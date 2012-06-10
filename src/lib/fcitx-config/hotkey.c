@@ -591,7 +591,7 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
  * 返回-1表示用户设置的热键不支持，一般是因为拼写错误或该热键不在列表中
  */
 FCITX_EXPORT_API
-boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, int* state)
+boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, unsigned int* state)
 {
     const char      *p;
     int             iKey;
@@ -694,7 +694,7 @@ void FcitxHotkeySetKey(char *strKeys, FcitxHotkey * hotkey)
 
     for (k = 0; k < 2; k++) {
         FcitxKeySym sym;
-        int state;
+        unsigned int state;
         i = 0;
 
         while (p[i] != ' ' && p[i] != '\0')
