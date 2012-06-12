@@ -1317,7 +1317,7 @@ void _fcitx_im_context_connect_cb(FcitxClient* im, void* user_data)
      * it blocks UI. So delay it to idle callback. */
     g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
                     (GSourceFunc) _set_cursor_location_internal,
-                    g_object_ref(fcitxcontext),
+                    g_object_ref(context),
                     (GDestroyNotify) g_object_unref);
 }
 
