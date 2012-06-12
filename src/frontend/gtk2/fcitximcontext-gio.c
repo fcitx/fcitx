@@ -1313,7 +1313,12 @@ void _fcitx_im_context_connect_cb(FcitxClient* im, void* user_data)
 {
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     _fcitx_im_context_set_capacity(context, TRUE);
-
+    /* set_cursor_location_internal() will get origin from X server,
+     * it blocks UI. So delay it to idle callback. */
+    g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
+                    (GSourceFunc) _set_cursor_location_internal,
+                    g_object_ref(fcitxcontext),
+                    (GDestroyNotify) g_object_unref);
 }
 
 
