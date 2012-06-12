@@ -273,5 +273,11 @@ FcitxHotkey FCITX_RALT_RSUPER2[2] = {
     {NULL, 0, 0},
 };
 
+FCITX_EXPORT_API
+FcitxHotkey FCITX_SHIFT_SPACE[2] = {
+    {NULL, FcitxKey_space, FcitxKeyState_Shift},
+    {NULL, 0, 0},
+};
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -839,9 +839,9 @@ void SaveLayoutOverride(FcitxXkb* xkb)
     LayoutOverride* item = xkb->layoutOverride;
     while(item) {
         if (item->variant)
-            fprintf(fp, "%s,%s,%s", item->im, item->layout, item->variant);
+            fprintf(fp, "%s,%s,%s\n", item->im, item->layout, item->variant);
         else
-            fprintf(fp, "%s,%s", item->im, item->layout);
+            fprintf(fp, "%s,%s\n", item->im, item->layout);
         item = item->hh.next;
     }
 

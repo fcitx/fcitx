@@ -1677,7 +1677,10 @@ FCITX_EXPORT_API
 INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym key, unsigned int state)
 {
     if (FcitxInputStateGetRawInputBufferSize(input) != 0
-        && (FcitxHotkeyIsHotKeySimple(key, state) || FcitxHotkeyIsHotkeyCursorMove(key, state)))
+        && (FcitxHotkeyIsHotKeySimple(key, state)
+        || FcitxHotkeyIsHotkeyCursorMove(key, state)
+        || FcitxHotkeyIsHotKey(key, state, FCITX_SHIFT_SPACE)
+        ))
         return IRV_DO_NOTHING;
     else
         return IRV_TO_PROCESS;
