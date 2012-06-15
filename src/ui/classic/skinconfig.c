@@ -34,6 +34,7 @@ CONFIG_BINDING_REGISTER("SkinInfo", "Version", skinInfo.skinVersion)
 CONFIG_BINDING_REGISTER("SkinInfo", "Author", skinInfo.skinAuthor)
 CONFIG_BINDING_REGISTER("SkinInfo", "Desc", skinInfo.skinDesc)
 
+CONFIG_BINDING_REGISTER("SkinFont", "RespectDPI", skinFont.respectDPI)
 CONFIG_BINDING_REGISTER("SkinFont", "FontSize", skinFont.fontSize)
 CONFIG_BINDING_REGISTER("SkinFont", "MenuFontSize", skinFont.menuFontSize)
 CONFIG_BINDING_REGISTER("SkinFont", "TipColor", skinFont.fontColor[MSG_TIPS])

@@ -81,6 +81,8 @@ typedef struct _FcitxClassicUI {
     FcitxUIMenu mainMenu;
     boolean isSuspend;
     boolean isfallback;
+
+    int dpi;
 } FcitxClassicUI;
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height);

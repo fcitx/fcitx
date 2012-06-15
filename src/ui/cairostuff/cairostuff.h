@@ -21,29 +21,30 @@
 #define CAIROSTUFF_H
 
 #include "config.h"
+#include "fcitx-config/fcitx-config.h"
 #include <cairo.h>
 
-int StringWidth(const char *str, const char *font, int fontSize);
-int FontHeight(const char *font, int fontSize);
-void OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,  int y, FcitxConfigColor * color);
+int StringWidth(const char* str, const char* font, int fontSize, int dpi);
+int FontHeight(const char *font, int fontSize, int dpi);
+void OutputString(cairo_t* c, const char* str, const char* font, int fontSize, int dpi, int x, int y, FcitxConfigColor* color);
 
-void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, int* h);
+void StringSizeStrict(const char* str, const char* font, int fontSize, int dpi, int* w, int* h);
 
 #ifdef _ENABLE_PANGO
 
 #include <pango/pango.h>
 
-#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, fontDesc, str, x, y)
-#define StringSizeWithContext(c,str,w,h) StringSizeWithContextReal(c, fontDesc, str, w, h)
-#define FontHeightWithContext(c) FontHeightWithContextReal(c, fontDesc)
+#define OutputStringWithContext(c,dpi,str,x,y) OutputStringWithContextReal(c, fontDesc, dpi, str, x, y)
+#define StringSizeWithContext(c,dpi,str,w,h) StringSizeWithContextReal(c, fontDesc, dpi, str, w, h)
+#define FontHeightWithContext(c,dpi) FontHeightWithContextReal(c, fontDesc, dpi)
 
-PangoFontDescription* GetPangoFontDescription(const char* font, int size);
-void OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y);
-void StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str, int* x, int* h);
-int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
+PangoFontDescription* GetPangoFontDescription(const char* font, int size, int dpi);
+void OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, int dpi, const char *str, int x, int y);
+void StringSizeWithContextReal(cairo_t* c, PangoFontDescription* fontDesc, int dpi, const char* str, int* w, int* h);
+int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc, int dpi);
 
-#define SetFontContext(context, fontname, size) \
-    PangoFontDescription* fontDesc = GetPangoFontDescription(fontname, size)
+#define SetFontContext(context, fontname, size, dpi) \
+    PangoFontDescription* fontDesc = GetPangoFontDescription(fontname, size, dpi)
 
 #define ResetFontContext() \
     do { \
@@ -52,15 +53,15 @@ int FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc);
 
 #else
 
-#define OutputStringWithContext(c,str,x,y) OutputStringWithContextReal(c, str, x, y)
-#define StringSizeWithContext(c,str,w,h) StringSizeWithContextReal(c, str, w, h)
-#define FontHeightWithContext(c) FontHeightWithContextReal(c)
+#define OutputStringWithContext(c,dpi,str,x,y) OutputStringWithContextReal(c, str, x, y)
+#define StringSizeWithContext(c,dpi,str,w,h) StringSizeWithContextReal(c, str, w, h)
+#define FontHeightWithContext(c,dpi) FontHeightWithContextReal(c)
 
 void OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y);
 void StringSizeWithContextReal(cairo_t * c, const char *str, int* x, int* h);
 int FontHeightWithContextReal(cairo_t* c);
 
-#define SetFontContext(context, fontname, size) \
+#define SetFontContext(context, fontname, size, dpi) \
     do { \
         cairo_select_font_face(context, fontname, \
                                CAIRO_FONT_SLANT_NORMAL, \

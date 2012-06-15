@@ -41,7 +41,7 @@ static boolean ReverseColor(XlibMenu * Menu, int shellIndex);
 static void MenuMark(XlibMenu* menu, int y, int i);
 static void DrawArrow(XlibMenu* menu, int line_y);
 static void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth);
-static void DisplayText(XlibMenu * menu, int shellindex, int line_y);
+static void DisplayText(XlibMenu* menu, int shellindex, int line_y, int fontHeight);
 static void DrawDivLine(XlibMenu * menu, int line_y);
 static boolean MenuWindowEventHandler(void *arg, XEvent* event);
 static int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth);
@@ -279,14 +279,14 @@ void GetMenuSize(XlibMenu * menu)
     FcitxSkin *sc = &menu->owner->skin;
 
     winheight = sc->skinMenu.marginTop + sc->skinMenu.marginBottom;//菜单头和尾都空8个pixel
-    fontheight = sc->skinFont.menuFontSize;
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
         if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU)
             winheight += 6 + fontheight;
         else if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_DIVLINE)
             winheight += 5;
 
-        int width = StringWidth(GetMenuItem(menu->menushell, i)->tipstr, menu->owner->menuFont, sc->skinFont.menuFontSize);
+        int width = StringWidth(GetMenuItem(menu->menushell, i)->tipstr, menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
         if (width > menuwidth)
             menuwidth = width;
     }
@@ -304,12 +304,12 @@ void DrawXlibMenu(XlibMenu * menu)
     int i = 0;
     int fontheight;
     int iPosY = 0;
-    fontheight = sc->skinFont.menuFontSize;
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
     SkinImage *background = LoadImage(sc, sc->skinMenu.backImg, false);
 
     GetMenuSize(menu);
     EnlargeCairoSurface(&menu->menu_cs, menu->width, menu->height);
-    
+
     if (background) {
         cairo_t* cr = cairo_create(menu->menu_cs);
         DrawResizableBackground(cr, background->image, menu->height, menu->width,
@@ -327,7 +327,7 @@ void DrawXlibMenu(XlibMenu * menu)
     iPosY = sc->skinMenu.marginTop;
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
         if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU) {
-            DisplayText(menu, i, iPosY);
+            DisplayText(menu, i, iPosY, fontheight);
             if (menu->menushell->mark == i)
                 MenuMark(menu, iPosY, i);
 
@@ -397,28 +397,30 @@ void MenuMark(XlibMenu * menu, int y, int i)
 * 显示菜单上面的文字信息,只需要指定窗口,窗口宽度,需要显示文字的上边界,字体,显示的字符串和是否选择(选择后反色)
 * 其他都固定,如背景和文字反色不反色的颜色,反色框和字的位置等
 */
-void DisplayText(XlibMenu * menu, int shellindex, int line_y)
+void DisplayText(XlibMenu * menu, int shellindex, int line_y, int fontHeight)
 {
     FcitxSkin *sc = &menu->owner->skin;
     int marginLeft = sc->skinMenu.marginLeft;
     int marginRight = sc->skinMenu.marginRight;
     cairo_t *  cr;
     cr = cairo_create(menu->menu_cs);
+    int dpi = sc->skinFont.respectDPI? menu->owner->dpi: 0;
+    FCITX_UNUSED(dpi);
 
-    SetFontContext(cr, menu->owner->menuFont, sc->skinFont.menuFontSize);
+    SetFontContext(cr, menu->owner->menuFont, sc->skinFont.menuFontSize, dpi);
 
     if (GetMenuItem(menu->menushell, shellindex)->isselect == 0) {
         fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_INACTIVE]);
 
-        OutputStringWithContext(cr, GetMenuItem(menu->menushell, shellindex)->tipstr , 15 + marginLeft , line_y);
+        OutputStringWithContext(cr, dpi, GetMenuItem(menu->menushell, shellindex)->tipstr, 15 + marginLeft , line_y);
     } else {
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         fcitx_cairo_set_color(cr, &sc->skinMenu.activeColor);
-        cairo_rectangle(cr, marginLeft , line_y, menu->width - marginRight - marginLeft, sc->skinFont.menuFontSize + 4);
+        cairo_rectangle(cr, marginLeft , line_y, menu->width - marginRight - marginLeft, fontHeight + 4);
         cairo_fill(cr);
 
         fcitx_cairo_set_color(cr, &sc->skinFont.menuFontColor[MENU_ACTIVE]);
-        OutputStringWithContext(cr, GetMenuItem(menu->menushell, shellindex)->tipstr , 15 + marginLeft , line_y);
+        OutputStringWithContext(cr, dpi, GetMenuItem(menu->menushell, shellindex)->tipstr , 15 + marginLeft , line_y);
     }
     ResetFontContext();
     cairo_destroy(cr);
@@ -453,7 +455,7 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
     if (x < marginLeft)
         return -1;
 
-    fontheight = sc->skinFont.menuFontSize;
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
         if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU) {
             if (y > winheight + 1 && y < winheight + 6 + fontheight - 1) {

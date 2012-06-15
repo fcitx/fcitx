@@ -169,7 +169,7 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
     messageWindow->width = 0;
 
     for (i = 0; i < length ; i ++) {
-        int width = StringWidth(msg[i], classicui->font, messageWindow->fontSize);
+        int width = StringWidth(msg[i], classicui->font, messageWindow->fontSize, false);
         if (width > messageWindow->width)
             messageWindow->width = width;
     }
@@ -182,7 +182,7 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
     cairo_set_source_rgb(c, messageWindow->color.r, messageWindow->color.g, messageWindow->color.b);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
 
-    SetFontContext(c, classicui->font, messageWindow->fontSize);
+    SetFontContext(c, classicui->font, messageWindow->fontSize, 0);
 
     cairo_paint(c);
 
@@ -192,7 +192,7 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
     x = MESSAGE_WINDOW_MARGIN;
     y = MESSAGE_WINDOW_MARGIN;
     for (i = 0; i < length ; i ++) {
-        OutputStringWithContext(c, msg[i], x, y);
+        OutputStringWithContext(c, 0, msg[i], x, y);
         y += messageWindow->fontSize + MESSAGE_WINDOW_LINESPACE;
     }
 

@@ -193,9 +193,9 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
         color = sc->skinFont.menuFontColor[1];
 
     int textw, texth;
-    StringSizeStrict(iconText, classicui->font, min, &textw, &texth);
+    StringSizeStrict(iconText, classicui->font, min, false, &textw, &texth);
 
-    OutputString(c, iconText, classicui->font, min, (w - textw) * 0.5, 0, &color);
+    OutputString(c, iconText, classicui->font, min, false, (w - textw) * 0.5, 0, &color);
 
     cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
@@ -574,7 +574,7 @@ void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
         inputWindow->c_font[i] = cairo_create(inputWindow->cs_input_bar);
         fcitx_cairo_set_color(inputWindow->c_font[i], &sc->skinFont.fontColor[i]);
 #ifndef _ENABLE_PANGO
-        SetFontContext(inputWindow->c_font[i], font, sc->skinFont.fontSize);
+        SetFontContext(inputWindow->c_font[i], font, sc->skinFont.fontSize, dpi);
 #endif
     }
     inputWindow->c_font[7] = inputWindow->c_font[0];
@@ -638,10 +638,13 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
         return;
 
     inputWidth = 0;
+    int dpi = sc->skinFont.respectDPI? classicui->dpi : 0;
+    FCITX_UNUSED(dpi);
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, inputWindow->owner->font, sc->skinFont.fontSize);
+    SetFontContext(dummy, inputWindow->owner->font, sc->skinFont.fontSize, dpi);
 #endif
 
+    int fontHeight = FontHeightWithContext(inputWindow->c_font[0], dpi);
     for (i = 0; i < FcitxMessagesGetMessageCount(msgup) ; i++) {
         char *trans = FcitxInstanceProcessOutputFilter(instance, FcitxMessagesGetMessageString(msgup, i));
         if (trans)
@@ -650,9 +653,12 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
             strUp[i] = FcitxMessagesGetMessageString(msgup, i);
         posUpX[i] = sc->skinInputBar.marginLeft + inputWidth;
 
-        StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], strUp[i], &strWidth, &strHeight);
+        StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strUp[i], &strWidth, &strHeight);
 
-        posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
+        if (sc->skinFont.respectDPI)
+            posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
+        else
+            posUpY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - strHeight;
         inputWidth += strWidth;
         if (FcitxInputStateGetShowCursor(input)) {
             int length = strlen(FcitxMessagesGetMessageString(msgup, i));
@@ -663,7 +669,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
                     strncpy(strTemp, strUp[i], iChar);
                     strTemp[iChar] = '\0';
                     strGBKT = strTemp;
-                    StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], strGBKT, &strWidth, &strHeight);
+                    StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strGBKT, &strWidth, &strHeight);
                     cursor_pos = posUpX[i]
                                  + strWidth + 2;
                 }
@@ -679,6 +685,11 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     outputWidth = 0;
     outputHeight = 0;
     int currentX = 0;
+    int offsetY;
+    if (sc->skinFont.respectDPI)
+        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight + sc->skinInputBar.iOutputPos;
+    else
+        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - fontHeight;
     for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
         char *trans = FcitxInstanceProcessOutputFilter(instance, FcitxMessagesGetMessageString(msgdown, i));
         if (trans)
@@ -691,25 +702,25 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
                 if (currentX > outputWidth)
                     outputWidth = currentX;
                 if (i != 0) {
-                    outputHeight += sc->skinFont.fontSize + 2;
                     currentX = 0;
                 }
             }
             posDownX[i] = sc->skinInputBar.marginLeft + currentX;
-            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], strDown[i], &strWidth, &strHeight);
+            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], &strWidth, &strHeight);
+            if (FcitxMessagesGetMessageType(msgdown, i) == MSG_INDEX && i != 0)
+                outputHeight += strHeight + 2;
             currentX += strWidth;
-            posDownY[i] =  sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos + outputHeight - strHeight;
         } else { /* horizontal */
             posDownX[i] = sc->skinInputBar.marginLeft + outputWidth;
-            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], strDown[i], &strWidth, &strHeight);
-            posDownY[i] = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - strHeight;
+            StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], &strWidth, &strHeight);
             outputWidth += strWidth;
         }
+        posDownY[i] = offsetY + outputHeight;
     }
     if (inputWindow->owner->bVerticalList && currentX > outputWidth)
         outputWidth = currentX;
 
-    newHeight = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos + outputHeight + sc->skinInputBar.marginBottom;
+    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + fontHeight;
 
     newWidth = (inputWidth < outputWidth) ? outputWidth : inputWidth;
     newWidth += sc->skinInputBar.marginLeft + sc->skinInputBar.marginRight;
@@ -779,25 +790,35 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     }
 
     for (i = 0; i < FcitxMessagesGetMessageCount(msgup) ; i++) {
-        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], strUp[i], posUpX[i], posUpY[i]);
+        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgup, i)], dpi, strUp[i], posUpX[i], posUpY[i]);
         if (strUp[i] != FcitxMessagesGetMessageString(msgup, i))
             free(strUp[i]);
     }
 
     for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
-        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], strDown[i], posDownX[i], posDownY[i]);
+        OutputStringWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], posDownX[i], posDownY[i]);
         if (strDown[i] != FcitxMessagesGetMessageString(msgdown, i))
             free(strDown[i]);
     }
 
-    ResetFontContext();
+    int cursorY1, cursorY2;
+    if (sc->skinFont.respectDPI) {
+        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
+        cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight;
+    }
+    else {
+        cursorY1 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - fontHeight - 4;
+        cursorY2 = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos;
+    }
 
     //画光标
     if (FcitxInputStateGetShowCursor(input)) {
-        cairo_move_to(inputWindow->c_cursor, cursor_pos, sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos);
-        cairo_line_to(inputWindow->c_cursor, cursor_pos, sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos - FontHeightWithContext(inputWindow->c_font[0]) - 4);
+        cairo_move_to(inputWindow->c_cursor, cursor_pos, cursorY1);
+        cairo_line_to(inputWindow->c_cursor, cursor_pos, cursorY2);
         cairo_stroke(inputWindow->c_cursor);
     }
+
+    ResetFontContext();
 
     cairo_destroy(c);
     FcitxMessagesSetMessageChanged(msgup, false);

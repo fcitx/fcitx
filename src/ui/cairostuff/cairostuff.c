@@ -28,7 +28,7 @@
 #include <pango/pangocairo.h>
 #endif
 
-void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, int* h)
+void StringSizeStrict(const char* str, const char* font, int fontSize, int dpi, int* w, int* h)
 {
     if (!str || str[0] == 0) {
         if (w) *w = 0;
@@ -44,11 +44,13 @@ void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, i
     cairo_surface_t *surface =
         cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
     cairo_t        *c = cairo_create(surface);
-    
+
+    SetFontContext(c, font, fontSize, dpi);
 #ifdef _ENABLE_PANGO
-    SetFontContext(c, font, fontSize);
     PangoRectangle rect;
-    PangoLayout *layout = pango_cairo_create_layout(c);
+    PangoContext* pc = pango_cairo_create_context(c);
+    pango_cairo_context_set_resolution(pc, dpi);
+    PangoLayout *layout = pango_layout_new(pc);
     pango_layout_set_text(layout, str, -1);
     pango_layout_set_font_description(layout, fontDesc);
     pango_layout_get_pixel_extents(layout, &rect, NULL);
@@ -58,7 +60,6 @@ void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, i
         *h = rect.height;
     g_object_unref(layout);
 #else
-    SetFontContext(c, font, fontSize);
     cairo_text_extents_t extents;
     cairo_text_extents(c, str, &extents);
     if (w)
@@ -66,6 +67,7 @@ void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, i
     if (h)
         *h = extents.height;
 #endif
+    ResetFontContext();
 
     cairo_destroy(c);
     cairo_surface_destroy(surface);
@@ -73,17 +75,17 @@ void StringSizeStrict(const char* str, const char* font, int fontSize, int* w, i
 
 
 int
-StringWidth(const char *str, const char *font, int fontSize)
+StringWidth(const char *str, const char *font, int fontSize, int dpi)
 {
     if (!str || str[0] == 0)
         return 0;
     cairo_surface_t *surface =
         cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
     cairo_t        *c = cairo_create(surface);
-    SetFontContext(c, font, fontSize);
+    SetFontContext(c, font, fontSize, dpi);
 
     int             width = 0;
-    StringSizeWithContext(c, str, &width, NULL);
+    StringSizeWithContext(c, dpi, str, &width, NULL);
     ResetFontContext();
 
     cairo_destroy(c);
@@ -94,7 +96,7 @@ StringWidth(const char *str, const char *font, int fontSize)
 
 #ifdef _ENABLE_PANGO
 void
-StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const char *str, int* w, int* h)
+StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, int dpi, const char *str, int* w, int* h)
 {
     if (!str || str[0] == 0) {
         if (w) *w = 0;
@@ -108,11 +110,14 @@ StringSizeWithContextReal(cairo_t * c, PangoFontDescription* fontDesc, const cha
         return;
     }
 
-    PangoLayout *layout = pango_cairo_create_layout(c);
+    PangoContext *pc = pango_cairo_create_context(c);
+    pango_cairo_context_set_resolution(pc, dpi);
+    PangoLayout *layout = pango_layout_new(pc);
     pango_layout_set_text(layout, str, -1);
     pango_layout_set_font_description(layout, fontDesc);
     pango_layout_get_pixel_size(layout, w, h);
     g_object_unref(layout);
+    g_object_unref(pc);
 }
 #else
 
@@ -142,14 +147,14 @@ StringSizeWithContextReal(cairo_t * c, const char *str, int* w, int* h)
 #endif
 
 int
-FontHeight(const char *font, int fontSize)
+FontHeight(const char *font, int fontSize, int dpi)
 {
     cairo_surface_t *surface =
         cairo_image_surface_create(CAIRO_FORMAT_RGB24, 10, 10);
     cairo_t        *c = cairo_create(surface);
 
-    SetFontContext(c, font, fontSize);
-    int             height = FontHeightWithContext(c);
+    SetFontContext(c, font, fontSize, dpi);
+    int             height = FontHeightWithContext(c, dpi);
     ResetFontContext();
 
     cairo_destroy(c);
@@ -159,16 +164,18 @@ FontHeight(const char *font, int fontSize)
 
 #ifdef _ENABLE_PANGO
 int
-FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc)
+FontHeightWithContextReal(cairo_t* c, PangoFontDescription* fontDesc, int dpi)
 {
-    FCITX_UNUSED(c);
     int height;
 
-    if (pango_font_description_get_size_is_absolute(fontDesc)) { /* it must be this case */
-        height = pango_font_description_get_size(fontDesc);
-        height /= PANGO_SCALE;
-    } else
-        height = 0;
+    PangoContext* pc = pango_cairo_create_context(c);
+    pango_cairo_context_set_resolution(pc, dpi);
+    PangoLayout *layout = pango_layout_new(pc);
+    pango_layout_set_text(layout, "Ayg中", -1);
+    pango_layout_set_font_description(layout, fontDesc);
+    pango_layout_get_pixel_size(layout, NULL, &height);
+    g_object_unref(layout);
+    g_object_unref(pc);
 
     return height;
 }
@@ -189,7 +196,7 @@ FontHeightWithContextReal(cairo_t * c)
  * 以指定的颜色在窗口的指定位置输出字串
  */
 void
-OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x,
+OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int dpi, int x,
              int y, FcitxConfigColor * color)
 {
     if (!str || str[0] == 0)
@@ -198,8 +205,8 @@ OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x
     cairo_save(c);
 
     cairo_set_source_rgb(c, color->r, color->g, color->b);
-    SetFontContext(c, font, fontSize);
-    OutputStringWithContext(c, str, x, y);
+    SetFontContext(c, font, fontSize, dpi);
+    OutputStringWithContext(c, dpi, str, x, y);
     ResetFontContext();
 
     cairo_restore(c);
@@ -207,7 +214,7 @@ OutputString(cairo_t * c, const char *str, const char *font, int fontSize, int x
 
 #ifdef _ENABLE_PANGO
 void
-OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char *str, int x, int y)
+OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, int dpi, const char *str, int x, int y)
 {
     if (!str || str[0] == 0)
         return;
@@ -215,9 +222,9 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char 
         return;
     cairo_save(c);
 
-    PangoLayout *layout;
-
-    layout = pango_cairo_create_layout(c);
+    PangoContext *pc = pango_cairo_create_context(c);
+    pango_cairo_context_set_resolution(pc, dpi);
+    PangoLayout *layout = pango_layout_new(pc);
     pango_layout_set_text(layout, str, -1);
     pango_layout_set_font_description(layout, desc);
     cairo_move_to(c, x, y);
@@ -225,6 +232,7 @@ OutputStringWithContextReal(cairo_t * c, PangoFontDescription* desc, const char 
 
     cairo_restore(c);
     g_object_unref(layout);
+    g_object_unref(pc);
 }
 #else
 
@@ -245,11 +253,14 @@ OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y)
 
 
 #ifdef _ENABLE_PANGO
-PangoFontDescription* GetPangoFontDescription(const char* font, int size)
+PangoFontDescription* GetPangoFontDescription(const char* font, int size, int dpi)
 {
     PangoFontDescription* desc;
     desc = pango_font_description_new();
-    pango_font_description_set_absolute_size(desc, size * PANGO_SCALE);
+    if (dpi)
+        pango_font_description_set_size(desc, size * PANGO_SCALE);
+    else
+        pango_font_description_set_absolute_size(desc, size * PANGO_SCALE);
     pango_font_description_set_family(desc, font);
     return desc;
 }

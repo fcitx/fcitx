@@ -47,6 +47,8 @@
 #define FCITX_X11_GETSCREENGEOMETRY_RETURNTYPE void
 #define FCITX_X11_PROCESSREMAINEVENT 10
 #define FCITX_X11_PROCESSREMAINEVENT_RETURNTYPE void
+#define FCITX_X11_GETDPI 11
+#define FCITX_X11_GETDPI_RETURNTYPE void
 
 
 struct _FcitxInstance;
@@ -83,6 +85,8 @@ typedef struct _FcitxX11 {
     int screenCount;
     int defaultScreen;
     struct _FcitxAddon* xim;
+    double dpif;
+    int dpi;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {

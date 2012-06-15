@@ -285,8 +285,9 @@ int fcitx_utils_get_display_number()
             *p = '\0';
         }
 
-        if (strDisplayNumber)
-            sscanf(strDisplayNumber, "%d", &displayNumber);
+        if (strDisplayNumber) {
+            displayNumber = atoi(strDisplayNumber);
+        }
 
         free(display);
     }

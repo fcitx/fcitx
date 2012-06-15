@@ -23,6 +23,11 @@ Type=Integer
 Description=Menu Font Size
 DefaultValue=15
 
+[SkinFont/RespectDPI]
+Type=Boolean
+Description=Font size repect dpi setting
+DefaultValue=False
+
 [SkinFont/TipColor]
 Type=Color
 Description=Tip Message Color
@@ -151,13 +156,24 @@ Description=Resize Margin Bottom
 Type=Color
 Description=Color of Cursor
 
+[SkinInputBar/InputPosOffset]
+Type=Integer
+DefaultValue=0
+Description=xx
+
+[SkinInputBar/OutputPosOffset]
+Type=Integer
+DefaultValue=0
+Description=xx
+
+
 [SkinInputBar/InputPos]
 Type=Integer
-Description=Left-down position of Input
+Description=Position or offset of Preedit
 
 [SkinInputBar/OutputPos]
 Type=Integer
-Description=Left-down position of Output
+Description=Position or offset of LookupTable
 
 [SkinInputBar/BackArrow]
 Type=String

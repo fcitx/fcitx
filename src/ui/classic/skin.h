@@ -68,6 +68,7 @@ typedef struct _SkinInfo {
 } SkinInfo;
 
 typedef struct _SkinFont {
+    boolean respectDPI;
     int fontSize;
     int menuFontSize;
     FcitxConfigColor fontColor[7];

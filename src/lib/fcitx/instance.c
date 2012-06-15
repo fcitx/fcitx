@@ -295,6 +295,13 @@ void FcitxInstanceEnd(FcitxInstance* instance)
     }
 
     sem_post(instance->sem);
+
+    /* don't return to main loop, wait for exit */
+    int countDown = 10;
+    while(countDown--) {
+        sleep(1000);
+        exit(0);
+    }
 }
 
 void FcitxInitThread(FcitxInstance* inst)

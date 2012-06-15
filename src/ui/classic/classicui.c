@@ -124,6 +124,13 @@ void* ClassicUICreate(FcitxInstance* instance)
         return NULL;
     }
 
+    arg.args[0] = &classicui->dpi;
+    arg.args[1] = NULL;
+
+    InvokeFunction(instance, FCITX_X11, GETDPI, arg);
+    if (classicui->dpi <= 0)
+        classicui->dpi = 96;
+
     if (LoadSkinConfig(&classicui->skin, &classicui->skinType)) {
         free(classicui);
         return NULL;

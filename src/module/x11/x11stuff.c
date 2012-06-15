@@ -50,6 +50,7 @@ static void* X11GetScreenSize(void *arg, FcitxModuleFunctionArg args);
 static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
+static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
 static void InitComposite(FcitxX11* x11stuff);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11stuff);
@@ -107,6 +108,7 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11AddCompositeHandler);
     AddFunction(x11addon, X11ScreenGeometry);
     AddFunction(x11addon, X11ProcessEventReal);
+    AddFunction(x11addon, X11GetDPI);
     InitComposite(x11priv);
 
     X11InitScreen(x11priv);
@@ -610,6 +612,46 @@ void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args)
 
     *rect = x11stuff->rects[closestScreen];
 
+    return NULL;
+}
+
+void* X11GetDPI(void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11* x11stuff = (FcitxX11*)arg;
+    if (!x11stuff->dpi) {
+        char* v = XGetDefault(x11stuff->dpy, "Xft", "dpi");
+        char* e = NULL;
+        double value;
+        if (v) {
+            value = strtod(v, &e);
+        }
+
+        /* NULL == NULL is also handle here */
+        if (e == v) {
+            double width = DisplayWidth(x11stuff->dpy, x11stuff->iScreen);
+            double height = DisplayHeight(x11stuff->dpy, x11stuff->iScreen);
+            double widthmm = DisplayWidthMM(x11stuff->dpy, x11stuff->iScreen);
+            double heightmm = DisplayHeightMM(x11stuff->dpy, x11stuff->iScreen);
+            value = ((width * 25.4) / widthmm + (height * 25.4) / heightmm) / 2;
+        }
+        x11stuff->dpi = (int) value;
+        if (!x11stuff->dpi) {
+            x11stuff->dpi = 96;
+            value = 96.0;
+        }
+        x11stuff->dpif = value;
+
+        FcitxLog(DEBUG, "DPI: %d %lf", x11stuff->dpi, x11stuff->dpif);
+    }
+
+    if (args.args[0]) {
+        int* i = (int*) args.args[0];
+        *i = x11stuff->dpi;
+    }
+    if (args.args[1]) {
+        double* d = (double*) args.args[1];
+        *d = x11stuff->dpif;
+    }
     return NULL;
 }
 
