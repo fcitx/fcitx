@@ -277,16 +277,18 @@ void GetMenuSize(XlibMenu * menu)
     int fontheight = 0;
     int menuwidth = 0;
     FcitxSkin *sc = &menu->owner->skin;
+    int dpi = sc->skinFont.respectDPI? menu->owner->dpi: 0;
+    FCITX_UNUSED(dpi);
 
     winheight = sc->skinMenu.marginTop + sc->skinMenu.marginBottom;//菜单头和尾都空8个pixel
-    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, dpi);
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
         if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU)
             winheight += 6 + fontheight;
         else if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_DIVLINE)
             winheight += 5;
 
-        int width = StringWidth(GetMenuItem(menu->menushell, i)->tipstr, menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
+        int width = StringWidth(GetMenuItem(menu->menushell, i)->tipstr, menu->owner->menuFont, sc->skinFont.menuFontSize, dpi);
         if (width > menuwidth)
             menuwidth = width;
     }
@@ -304,7 +306,10 @@ void DrawXlibMenu(XlibMenu * menu)
     int i = 0;
     int fontheight;
     int iPosY = 0;
-    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
+    int dpi = sc->skinFont.respectDPI? menu->owner->dpi: 0;
+    FCITX_UNUSED(dpi);
+
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, dpi);
     SkinImage *background = LoadImage(sc, sc->skinMenu.backImg, false);
 
     GetMenuSize(menu);
@@ -451,11 +456,12 @@ int SelectShellIndex(XlibMenu * menu, int x, int y, int* offseth)
     int winheight = sc->skinMenu.marginTop;
     int fontheight;
     int marginLeft = sc->skinMenu.marginLeft;
+    int dpi = sc->skinFont.respectDPI? menu->owner->dpi: 0;
 
     if (x < marginLeft)
         return -1;
 
-    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, sc->skinFont.respectDPI);
+    fontheight = FontHeight(menu->owner->menuFont, sc->skinFont.menuFontSize, dpi);
     for (i = 0; i < utarray_len(&menu->menushell->shell); i++) {
         if (GetMenuItem(menu->menushell, i)->type == MENUTYPE_SIMPLE || GetMenuItem(menu->menushell, i)->type == MENUTYPE_SUBMENU) {
             if (y > winheight + 1 && y < winheight + 6 + fontheight - 1) {
