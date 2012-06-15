@@ -156,17 +156,6 @@ Description=Resize Margin Bottom
 Type=Color
 Description=Color of Cursor
 
-[SkinInputBar/InputPosOffset]
-Type=Integer
-DefaultValue=0
-Description=xx
-
-[SkinInputBar/OutputPosOffset]
-Type=Integer
-DefaultValue=0
-Description=xx
-
-
 [SkinInputBar/InputPos]
 Type=Integer
 Description=Position or offset of Preedit

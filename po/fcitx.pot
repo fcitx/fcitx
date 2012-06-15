@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-11 00:45+0800\n"
+"POT-Creation-Date: 2012-06-15 13:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,156 +107,160 @@ msgid "Menu Font Size"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:28
+msgid "Font size repect dpi setting"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:33
 msgid "Tip Message Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:32
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:37
 msgid "Input Message Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:36
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:41
 msgid "Candidate Index Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:40
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:45
 msgid "First Candidate Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:44
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:49
 msgid "User Phrase Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:48
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:53
 msgid "Table Code Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:52
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:57
 msgid "Other Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:56
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:61
 msgid "Active Menu Item Character Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:60
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:65
 msgid "Inactive Menu Item Character Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:64
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:132
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:212
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:69
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:137
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:217
 msgid "Background Image"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:68
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:73
 msgid "Logo Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:72
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:76
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:81
 msgid "Active Mode Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:80
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:136
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:224
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:85
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:141
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:229
 msgid "Resize Margin Left"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:84
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:140
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:228
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:89
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:145
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:233
 msgid "Resize Margin Right"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:88
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:144
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:216
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:93
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:149
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:221
 msgid "Resize Margin Top"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:92
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:148
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:220
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:97
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:153
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:225
 msgid "Resize Margin Bottom"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:96
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:188
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:240
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:101
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:193
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:245
 msgid "Fill Background Vertical rule"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:104
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:196
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:248
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:109
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:201
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:253
 msgid "Fill Background Horizontal rule"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:112
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:117
 msgid "Use Custom text icon color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:117
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:122
 msgid "Active Text Icon Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:122
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:127
 msgid "Inactive Text Icon Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:127
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:132
 msgid "Special Icon position"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:152
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:157
 msgid "Color of Cursor"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:156
-msgid "Left-down position of Input"
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:161
+msgid "Position or offset of Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:160
-msgid "Left-down position of Output"
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:165
+msgid "Position or offset of LookupTable"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:164
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:172
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:180
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:169
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:177
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:185
 msgid "Prev Page Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:168
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:176
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:184
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:173
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:181
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:189
 msgid "Next Page Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:204
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:209
 msgid "Active Tray Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:208
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:213
 msgid "Inctive Tray Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:232
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:237
 msgid "Active Menu Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:236
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:241
 msgid "Space Line Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:256
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:261
 msgid "Virtual Keyboard Image"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:261
+#: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
@@ -1101,7 +1105,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:923
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:944
 msgid "Skin"
 msgstr ""
 
@@ -1510,26 +1514,26 @@ msgstr ""
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:420
 msgid "Online Help"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:476
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:483
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:477
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:484
 msgid "Configure"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:478
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
 msgid "Exit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:491
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:492
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:508
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:523
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:498
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:493
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:509
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:524
 msgid "Unable to create process"
 msgstr ""
 
@@ -1765,21 +1769,21 @@ msgid "min Num of Characters: "
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:162
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:329
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:336
 msgid "Use remind"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:162
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:329
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:336
 msgid "No remind"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:163
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:330
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:337
 msgid "Toggle Remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:305
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:312
 msgid "pthread mutex init failed"
 msgstr ""
 
