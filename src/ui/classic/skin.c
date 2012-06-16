@@ -216,7 +216,7 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
     const char* fallbackChainNoFallback[] = { buf };
     const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
-    const char* fallbackChainPanelIMIcon[] = { buf, "imicon" };
+    const char* fallbackChainPanelIMIcon[] = { buf, "imicon", "skin/default" };
 
     HASH_FIND_STR(*imageTable, name, image);
     if (image != NULL) {
