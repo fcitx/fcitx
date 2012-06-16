@@ -23,17 +23,26 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <wchar.h>
 
 #include "config.h"
 #include "fcitx/fcitx.h"
+#include "utf8.h"
 #include "log.h"
 #include "utils.h"
 
 static iconv_t iconvW = NULL;
+static int init = 0;
+static int is_utf8 = 0;
 
 FCITX_EXPORT_API
 void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char* fmt, ...)
 {
+    if (!init) {
+        init = 1;
+        is_utf8 = fcitx_utils_current_locale_is_utf8();
+    }
+
 #ifndef _DEBUG
     if (e == DEBUG)
         return;
@@ -56,12 +65,17 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
         break;
     }
 
-    char *buffer;
+    char *buffer = NULL;
     va_list ap;
     fprintf(stderr, " %s:%u-", filename, line);
     va_start(ap, fmt);
     vasprintf(&buffer, fmt, ap);
     va_end(ap);
+
+    if (is_utf8) {
+        fprintf(stderr, "%s\n", buffer);
+        return;
+    }
 
     if (iconvW == NULL)
         iconvW = iconv_open("WCHAR_T", "utf-8");
@@ -70,14 +84,16 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
         fprintf(stderr, "%s\n", buffer);
     } else {
         size_t len = strlen(buffer);
-        wchar_t *wmessage;
-        size_t wlen = (len + 1) * sizeof(wchar_t);
-        wmessage = (wchar_t *) fcitx_utils_malloc0((len + 1) * sizeof(wchar_t));
+        wchar_t *wmessage = NULL;
+        size_t wlen = (len) * sizeof(wchar_t);
+        wmessage = (wchar_t *) fcitx_utils_malloc0((len + 10) * sizeof(wchar_t));
 
         IconvStr inp = buffer;
         char *outp = (char*) wmessage;
 
         iconv(iconvW, &inp, &len, &outp, &wlen);
+
+        fprintf(stderr, "%lu %lu", fcitx_utf8_strlen(buffer), wcslen(wmessage));
 
         fprintf(stderr, "%ls\n", wmessage);
 

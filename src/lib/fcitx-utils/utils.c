@@ -295,6 +295,23 @@ int fcitx_utils_get_display_number()
 }
 
 FCITX_EXPORT_API
+int fcitx_utils_current_locale_is_utf8()
+{
+    const char* p;
+    p = getenv("LC_CTYPE");
+    if (!p) {
+        p = getenv("LC_ALL");
+        if (!p)
+            p = getenv("LANG");
+    }
+    if (p) {
+        if (strcasestr(p, "utf8") || strcasestr(p, "utf-8"))
+            return 1;
+    }
+    return 0;
+}
+
+FCITX_EXPORT_API
 char* fcitx_utils_get_current_langcode()
 {
     /* language[_territory][.codeset][@modifier]" or "C" */

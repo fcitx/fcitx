@@ -205,6 +205,13 @@ extern "C" {
     char* fcitx_utils_get_current_langcode(void);
 
     /**
+     * check the current locale is utf8 or not
+     *
+     * @return int
+     **/
+    int fcitx_utils_current_locale_is_utf8(void);
+
+    /**
      * Get Current Process Name, implementation depends on OS,
      * Always return a string need to be free'd, if cannot get
      * current process name, it will return "".
