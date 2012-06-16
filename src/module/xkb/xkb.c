@@ -197,8 +197,7 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
             xkbParentDir = strdup("/usr/share/X11");
         }
 
-        rulesFile = fcitx_utils_malloc0(sizeof(char) * (1 + strlen(xkbParentDir) + strlen(rulesName) + strlen("/xkb/rules/")));
-        sprintf(rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
+        asprintf(&rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
         fcitx_utils_free(xkbParentDir);
     }
 
