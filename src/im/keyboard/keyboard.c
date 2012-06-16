@@ -28,7 +28,9 @@
 
 #include <unicode/unorm.h>
 
+#ifdef ENCHANT_FOUND
 #include <enchant/enchant.h>
+#endif
 
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
@@ -316,10 +318,11 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         keyboard->iconv = iconv_open("utf-8", "ucs-4be");
     else
         keyboard->iconv = iconv_open("utf-8", "ucs-4le");
-    keyboard->broker = enchant_broker_init();
 #ifdef PRESAGE_FOUND
     presage_new(FcitxKeyboardGetPastStream, keyboard, FcitxKeyboardGetFutureStream, keyboard, &keyboard->presage);
 #endif
+#ifdef ENCHANT_FOUND
+    keyboard->broker = enchant_broker_init();
     /* new option, since hunspell/myspell is really toooo slow */
     switch (keyboard->config.provider) {
         case EP_Aspell:
@@ -333,6 +336,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
             break;
     }
     keyboard->enchantLanguages = fcitx_utils_new_string_list();
+#endif
 
     FcitxHotkeyHook hk;
     hk.arg = keyboard;
@@ -450,8 +454,10 @@ void  FcitxKeyboardResetIM(void *arg)
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
+#ifdef ENCHANT_FOUND
     if (keyboard->dict)
         return true;
+#endif
 #ifdef PRESAGE_FOUND
     if (keyboard->config.bUsePresage && keyboard->presage && strcmp(keyboard->dictLang, "en") == 0) {
         return true;
@@ -487,19 +493,24 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
     /* performance seems not trouble here, so we only keep one dict */
     if (layout->owner->config.bEnableWordHint && strcmp(keyboard->dictLang, currentLang) != 0) {
+#ifdef ENCHANT_FOUND
         if (keyboard->dict) {
             enchant_broker_free_dict(keyboard->broker, keyboard->dict);
             keyboard->dict = NULL;
         }
+#endif
 
         strncpy(keyboard->dictLang, currentLang, LANGCODE_LENGTH);
+#ifdef ENCHANT_FOUND
         keyboard->dict = enchant_broker_request_dict(keyboard->broker, keyboard->dictLang);
+#endif
     }
 
     if (IsDictAvailable(keyboard) && layout->owner->config.bEnableWordHint) {
         FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
         struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
+#ifdef ENCHANT_FOUND
         if (FcitxHotkeyIsHotKey(sym, state, layout->owner->config.hkAddToUserDict))
         {
             size_t len = strlen(keyboard->buffer);
@@ -508,6 +519,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 return IRV_DO_NOTHING;
             }
         }
+#endif
 
         if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) || IsValidSym(sym, state))
         {
@@ -611,11 +623,11 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 
-    char **suggestions = NULL;
 
 #ifdef PRESAGE_FOUND
     if (keyboard->config.bUsePresage && keyboard->presage && strcmp(keyboard->dictLang, "en") == 0) {
         do {
+            char **suggestions = NULL;
             char buf[20];
             sprintf(buf, "%d", config->iMaxCandWord);
             presage_config_set(keyboard->presage, "Presage.Selector.SUGGESTIONS", buf);
@@ -641,10 +653,12 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
                 presage_free_string_array(suggestions);
             }
         } while(0);
+        return IRV_DISPLAY_CANDWORDS;
     }
-    else
 #endif
+#ifdef ENCHANT_FOUND
     {
+        char **suggestions = NULL;
         if (bufferlen < keyboard->config.minimumHintLength)
             return IRV_DISPLAY_CANDWORDS;
         size_t number = 0;
@@ -667,6 +681,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
         if (suggestions && number)
             enchant_dict_free_string_list(keyboard->dict, suggestions);
     }
+#endif
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -761,6 +776,7 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
     FcitxIM* im = FcitxInstanceGetCurrentIM(keyboard->owner);
     if (im && strncmp(im->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
         keyboard->config.bEnableWordHint = !keyboard->config.bEnableWordHint;
+#ifdef ENCHANT_FOUND
         if (!keyboard->config.bEnableWordHint) {
             keyboard->dictLang[0] = 0;
             if (keyboard->dict) {
@@ -768,6 +784,7 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
                 keyboard->dict = NULL;
             }
         }
+#endif
         SaveKeyboardConfig(&keyboard->config);
         return IRV_DO_NOTHING;
     }

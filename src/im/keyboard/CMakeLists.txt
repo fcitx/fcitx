@@ -6,6 +6,9 @@ include_directories (
     ${LIBICONV_INCLUDE_DIR}
     ${ICU_INCLUDE_DIRS}
     )
+if (ENCHANT_FOUND)
+    include_directories(${ENCHANT_INCLUDE_DIR})
+endif (ENCHANT_FOUND)
 if (PRESAGE_FOUND)
     include_directories(${PRESAGE_INCLUDE_DIR})
 endif (PRESAGE_FOUND)
@@ -17,7 +20,10 @@ set(fcitx_keyboard_SOURCES
 )
 
 fcitx_add_addon(fcitx-keyboard ${fcitx_keyboard_SOURCES})
-target_link_libraries(fcitx-keyboard ${ENCHANT_LIBRARIES} ${LIBXML2_LIBRARIES} ${LIBICONV_LIBRARIES} ${ICU_LIBRARIES})
+target_link_libraries(fcitx-keyboard ${LIBXML2_LIBRARIES} ${LIBICONV_LIBRARIES} ${ICU_LIBRARIES})
+if (ENCHANT_FOUND)
+target_link_libraries(fcitx-keyboard ${ENCHANT_LIBRARIES})
+endif (ENCHANT_FOUND)
 if (PRESAGE_FOUND)
 target_link_libraries(fcitx-keyboard ${PRESAGE_LIBRARIES})
 endif (PRESAGE_FOUND)

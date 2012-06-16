@@ -24,13 +24,18 @@
 #include "config.h"
 
 #include <iconv.h>
+
+#ifdef ENCHANT_FOUND
 #include <enchant/enchant.h>
-#include <fcitx/ime.h>
-#include <fcitx-utils/utarray.h>
-#include <fcitx-config/fcitx-config.h>
+#endif
+
 #ifdef PRESAGE_FOUND
 #include <presage.h>
 #endif
+
+#include <fcitx/ime.h>
+#include <fcitx-utils/utarray.h>
+#include <fcitx-config/fcitx-config.h>
 #include "rules.h"
 
 #define FCITX_KEYBOARD_MAX_BUFFER 20
@@ -56,12 +61,14 @@ typedef struct _FcitxKeyboardConfig {
 
 typedef struct _FcitxKeyboard {
     struct _FcitxInstance* owner;
+    char dictLang[6];
+#ifdef ENCHANT_FOUND
     EnchantBroker* broker;
     UT_array* enchantLanguages;
+    EnchantDict* dict;
+#endif
     FcitxKeyboardConfig config;
     FcitxXkbRules* rules;
-    char dictLang[6];
-    EnchantDict* dict;
     iconv_t iconv;
     char* initialLayout;
     char* initialVariant;
