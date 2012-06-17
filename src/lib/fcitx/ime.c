@@ -530,18 +530,18 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (instance->CurrentIC == NULL)
         return IRV_TO_PROCESS;
 
-    if (instance->CurrentIC->contextCaps & CAPACITY_PASSWORD)
-        return IRV_TO_PROCESS;
-
-    if (currentIM == NULL)
-        return IRV_TO_PROCESS;
-
     if (event == FCITX_PRESS_KEY
         && !FcitxHotkeyIsHotKeyModifierCombine(sym, state))
     {
         if (FcitxInstanceRemoveTimeoutByFunc(instance, HideInputSpeed))
             HideInputSpeed(instance);
     }
+
+    if (instance->CurrentIC->contextCaps & CAPACITY_PASSWORD)
+        return IRV_TO_PROCESS;
+
+    if (currentIM == NULL)
+        return IRV_TO_PROCESS;
 
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
