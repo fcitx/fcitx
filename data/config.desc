@@ -179,7 +179,7 @@ Description=Show Input Method Hint After Input method changed and Focus in
 
 [Appearance/ShowInputWindowOnlyWhenActive]
 Type=Boolean
-DefaultValue=False
+DefaultValue=True
 Description=Input Method Hint will be only shown when state is active
 
 [Appearance/ShowInputSpeed]
