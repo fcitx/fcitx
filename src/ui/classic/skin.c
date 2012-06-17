@@ -687,7 +687,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     int currentX = 0;
     int offsetY;
     if (sc->skinFont.respectDPI)
-        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight + sc->skinInputBar.iOutputPos;
+        offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iInputPos + fontHeight + (FcitxMessagesGetMessageCount(msgdown) ? sc->skinInputBar.iOutputPos : 0);
     else
         offsetY = sc->skinInputBar.marginTop + sc->skinInputBar.iOutputPos - fontHeight;
     for (i = 0; i < FcitxMessagesGetMessageCount(msgdown) ; i++) {
@@ -708,7 +708,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
             posDownX[i] = sc->skinInputBar.marginLeft + currentX;
             StringSizeWithContext(inputWindow->c_font[FcitxMessagesGetMessageType(msgdown, i)], dpi, strDown[i], &strWidth, &strHeight);
             if (FcitxMessagesGetMessageType(msgdown, i) == MSG_INDEX && i != 0)
-                outputHeight += strHeight + 2;
+                outputHeight += fontHeight + 2;
             currentX += strWidth;
         } else { /* horizontal */
             posDownX[i] = sc->skinInputBar.marginLeft + outputWidth;
@@ -720,7 +720,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     if (inputWindow->owner->bVerticalList && currentX > outputWidth)
         outputWidth = currentX;
 
-    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + fontHeight;
+    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + (FcitxMessagesGetMessageCount(msgdown) ? fontHeight : 0);
 
     newWidth = (inputWidth < outputWidth) ? outputWidth : inputWidth;
     newWidth += sc->skinInputBar.marginLeft + sc->skinInputBar.marginRight;
