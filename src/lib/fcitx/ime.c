@@ -1443,6 +1443,9 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
 {
     FcitxInputState* input = instance->input;
 
+    if (!instance->initialized)
+        return;
+
     if (!instance->config->bShowInputWindowTriggering)
         return;
 

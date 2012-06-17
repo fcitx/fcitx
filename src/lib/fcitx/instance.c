@@ -197,6 +197,7 @@ void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
+    instance->initialized = true;
     long int deltaTime = 0;
     int64_t starttime = 0, endtime = 0;
     while (1) {

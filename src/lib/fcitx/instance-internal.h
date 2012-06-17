@@ -126,6 +126,7 @@ struct _FcitxInstance {
     UT_array* enableList;
 
     UT_array timeout;
+    boolean initialized;
 };
 
 #endif
