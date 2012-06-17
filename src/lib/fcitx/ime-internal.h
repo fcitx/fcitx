@@ -123,7 +123,9 @@ FcitxConfigFileDesc* GetIMConfigDesc();
 
 int IMPriorityCmp(const void *a, const void *b);
 
-void FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force);
+boolean FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force);
+
+void HideInputSpeed(void* arg);
 
 #endif
 

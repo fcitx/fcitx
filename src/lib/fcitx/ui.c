@@ -586,9 +586,12 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 
     FcitxInstanceResetInput(instance);
 
-    FcitxInstanceUpdateCurrentIM(instance, false);
+    boolean changed = FcitxInstanceUpdateCurrentIM(instance, false);
 
-    FcitxUICloseInputWindow(instance);
+    if (changed)
+        FcitxInstanceShowInputSpeed(instance);
+    else
+        FcitxUICloseInputWindow(instance);
 }
 
 FCITX_EXPORT_API
@@ -843,7 +846,7 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
     boolean toshow = false;
 
     if (FcitxMessagesGetMessageCount(input->msgAuxUp) != 0
-            || FcitxMessagesGetMessageCount(input->msgAuxDown) != 0)
+        || FcitxMessagesGetMessageCount(input->msgAuxDown) != 0)
         toshow = true;
 
     if (FcitxCandidateWordGetListSize(input->candList) > 1)
@@ -864,6 +867,11 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
             instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
     } else
         FcitxUIShowInputWindow(instance);
+
+    FcitxMessagesSetMessageChanged(input->msgAuxUp, false);
+    FcitxMessagesSetMessageChanged(input->msgAuxDown, false);
+    FcitxMessagesSetMessageChanged(input->msgPreedit, false);
+    FcitxMessagesSetMessageChanged(input->msgClientPreedit, false);
 }
 
 void FcitxUIMoveInputWindowReal(FcitxInstance *instance)

@@ -27,6 +27,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <getopt.h>
+#include <sys/time.h>
 
 #include "instance.h"
 #include "fcitx-utils/log.h"
@@ -65,6 +66,7 @@ FCITX_GETTER_VALUE(FcitxInstance, InputState, input, FcitxInputState*)
 const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd compstat_icd = {sizeof(FcitxUIComplexStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
+const UT_icd timeout_icd = {sizeof(TimeoutItem), 0, 0, 0};
 static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleRemindState(void* arg);
 static boolean GetRemindEnabled(void* arg);
@@ -112,6 +114,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     utarray_init(&instance->uistats, &stat_icd);
     utarray_init(&instance->uicompstats, &compstat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
+    utarray_init(&instance->timeout, &timeout_icd);
     instance->input = FcitxInputStateCreate();
     instance->sem = sem;
     instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));
@@ -194,6 +197,7 @@ void FcitxInstanceSetRecheckEvent(FcitxInstance* instance)
 void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
+    long int deltaTime = 0;
     while (1) {
         FcitxAddon** pmodule;
         do {
@@ -203,6 +207,21 @@ void* RunInstance(void* arg)
                     pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {
                 FcitxModule* module = (*pmodule)->module;
                 module->ProcessEvent((*pmodule)->addonInstance);
+            }
+
+            if (deltaTime > 0) {
+                int idx = 0;
+                while(idx < utarray_len(&instance->timeout))
+                {
+                    TimeoutItem* ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
+                    if (ti->milli < deltaTime) {
+                        ti->callback(ti->arg);
+                        utarray_remove_quick(&instance->timeout, idx);
+                    }
+                    else
+                        idx++;
+                }
+                deltaTime = 0;
             }
 
             if (instance->uiflag & UI_MOVE)
@@ -225,7 +244,31 @@ void* RunInstance(void* arg)
         }
         if (instance->maxfd == 0)
             break;
-        select(instance->maxfd + 1, &instance->rfds, &instance->wfds, &instance->efds, NULL);
+        struct timeval tval;
+        struct timeval* ptval = NULL;
+        if (utarray_len(&instance->timeout) != 0) {
+            long int min_time = LONG_MAX;
+            TimeoutItem* ti;
+            for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
+                 ti != NULL;
+                 ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
+            {
+                if (ti->milli < min_time) {
+                    min_time = ti->milli;
+                }
+            }
+            tval.tv_usec = (min_time % 1000) * 1000;
+            tval.tv_sec = min_time / 1000;
+            ptval = &tval;
+        }
+        struct timeval current_time;
+        gettimeofday(&current_time, NULL);
+        int64_t starttime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
+        select(instance->maxfd + 1, &instance->rfds, &instance->wfds, &instance->efds, ptval);
+        gettimeofday(&current_time, NULL);
+        int64_t endtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
+
+        deltaTime = endtime - starttime;
     }
     return NULL;
 }
@@ -491,6 +534,47 @@ void FcitxInstanceResetTryReplace(FcitxInstance* instance)
     instance->tryReplace = false;
 }
 
+FCITX_EXPORT_API
+void FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg)
+{
+    if (milli < 0)
+        return;
+    TimeoutItem item;
+    item.arg = arg;
+    item.callback =callback;
+    item.milli = milli;
+    utarray_push_back(&instance->timeout, &item);
+}
+
+FCITX_EXPORT_API
+boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
+{
+    TimeoutItem* ti;
+    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
+         ti != NULL;
+         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
+    {
+        if (ti->callback == callback)
+            return true;
+    }
+    return false;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
+{
+    TimeoutItem* ti;
+    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
+         ti != NULL;
+         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
+    {
+        if (ti->callback == callback) {
+            int idx = utarray_eltidx(&instance->timeout, ti);
+            utarray_remove_quick(&instance->timeout, idx);
+            return;
+        }
+    }
+}
 
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

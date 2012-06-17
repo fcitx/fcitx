@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-15 13:00+0800\n"
-"PO-Revision-Date: 2012-06-15 13:01+0800\n"
+"POT-Creation-Date: 2012-06-17 11:05+0800\n"
+"PO-Revision-Date: 2012-06-17 11:05+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -27,7 +27,7 @@ msgstr " Ctrl+Delete 删除"
 msgid "%s"
 msgstr "%s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1451
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1478
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -531,7 +531,7 @@ msgid "End Key"
 msgstr "中止键"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:414
 msgid "English (US)"
 msgstr "英语 (美国)"
 
@@ -863,7 +863,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1380
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1384
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr "输入法"
@@ -875,7 +875,7 @@ msgstr "输入法"
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1449
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1476
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -920,14 +920,14 @@ msgid "Keyboard"
 msgstr "键盘"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:375
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:409
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:413
 #, c-format
 msgid "Keyboard - %s"
 msgstr "键盘 - %s"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:398
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:402
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr "键盘 - %s - %s"
@@ -1152,8 +1152,8 @@ msgstr "无输入窗口"
 msgid "No local input method"
 msgstr "无局部输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:162
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:336
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
 msgid "No remind"
 msgstr "无联想"
 
@@ -1513,8 +1513,8 @@ msgid "Show Input Speed"
 msgstr "显示输入速度"
 
 #: /home/saber/Develop/fcitx/data/config.desc:173
-msgid "Show Input Window After Trigger Input Mode"
-msgstr "切换输入时显示输入条"
+msgid "Show Input Window After Input method changed"
+msgstr "切换输入法时显示输入条"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:29
 msgid "Show Preedit String in Client Window"
@@ -1679,8 +1679,8 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:163
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:337
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:166
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:380
 msgid "Toggle Remind"
 msgstr "切换联想"
 
@@ -1743,9 +1743,9 @@ msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:498
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:493
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:509
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:524
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541
 msgid "Unable to create process"
 msgstr "无法创建进程"
 
@@ -1814,8 +1814,8 @@ msgstr "只在用额外切换键取消激活后才使用它进行切换"
 msgid "Use presage to predict if possible."
 msgstr "如果可以则使用 presage 增强单词提示功能"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:162
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:336
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
 msgid "Use remind"
 msgstr "联想"
 
@@ -1917,7 +1917,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1453
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1480
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -1930,7 +1930,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:355
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 

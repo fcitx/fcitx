@@ -169,17 +169,17 @@ Description=Do not commit preedit text when unfocus a window
 
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
-DefaultValue=False
-Description=Show Input Window After Trigger Input Mode
+DefaultValue=True
+Description=Show Input Window After Input method changed
 
 [Appearance/ShowInputSpeed]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Show Input Speed
 
 [Appearance/ShowVersion]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Show Version
 
 [Appearance/HideInputWindowWhenOnlyPreeditString]

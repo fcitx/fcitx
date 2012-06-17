@@ -585,9 +585,8 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                         }
                     }
                     input->keyReleased = KR_OTHER;
-                    if (FcitxInstanceGetCurrentState(instance) == IS_INACTIVE)
-                        FcitxInstanceShowInputSpeed(instance);
                     FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC, true);
+                    FcitxInstanceShowInputSpeed(instance);
                 }
             }
         }
@@ -852,6 +851,7 @@ void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
     if (ic)
         FcitxInstanceSetLocalIMName(instance, ic, NULL);
     FcitxInstanceSwitchIMInternal(instance, index, true, true);
+    FcitxInstanceShowInputSpeed(instance);
 }
 
 FCITX_EXPORT_API
@@ -1151,10 +1151,10 @@ void FcitxInstanceSetLocalIMName(FcitxInstance* instance, FcitxInputContext* ic,
         FcitxInstanceUpdateCurrentIM(instance, false);
 }
 
-void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
+boolean FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     if (!ic && !force)
-        return;
+        return false;
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     int globalIndex = FcitxInstanceGetIMIndexByName(instance, instance->globalIMName);
     boolean forceSwtich = force;
@@ -1190,8 +1190,12 @@ void FcitxInstanceUpdateCurrentIM(FcitxInstance* instance, boolean force) {
         skipZero = true;
     }
 
-    if (forceSwtich || targetIMIndex != instance->iIMIndex)
+    if (forceSwtich || targetIMIndex != instance->iIMIndex) {
         FcitxInstanceSwitchIMInternal(instance, targetIMIndex, skipZero, forceSwtich);
+        return true;
+    }
+    else
+        return false;
 }
 
 FCITX_EXPORT_API
@@ -1415,11 +1419,34 @@ void UpdateIMMenuItem(FcitxUIMenu *menu)
     menu->mark = instance->iIMIndex;
 }
 
+void HideInputSpeed(void* arg)
+{
+    FcitxInstance *instance = arg;
+    FcitxInputState* input = instance->input;
+    if (FcitxMessagesIsMessageChanged(input->msgAuxUp)
+        || FcitxMessagesIsMessageChanged(input->msgAuxDown)
+        || FcitxMessagesGetMessageCount(input->msgPreedit)
+        || FcitxMessagesGetMessageCount(input->msgClientPreedit)
+        || FcitxCandidateWordGetListSize(input->candList))
+        return;
+    FcitxUICloseInputWindow(instance);
+}
+
 void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
 {
     FcitxInputState* input = instance->input;
 
     if (!instance->config->bShowInputWindowTriggering)
+        return;
+
+    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE)
+        return;
+
+    if (FcitxMessagesGetMessageCount(input->msgAuxUp)
+        || FcitxMessagesGetMessageCount(input->msgAuxDown)
+        || FcitxMessagesGetMessageCount(input->msgPreedit)
+        || FcitxMessagesGetMessageCount(input->msgClientPreedit)
+        || FcitxCandidateWordGetListSize(input->candList))
         return;
 
     input->bShowCursor = false;
@@ -1432,9 +1459,9 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
 
     if (instance->config->bShowVersion) {
         FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION);
-        if (im) {
-            FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, " %s", im->strName);
-        }
+    }
+    if (im) {
+        FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, " %s", im->strName);
     }
 
     //显示打字速度
@@ -1456,7 +1483,11 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
     }
 
     FcitxUIUpdateInputWindow(instance);
+
+    if (!FcitxInstanceCheckTimeoutByFunc(instance, HideInputSpeed))
+        FcitxInstanceAddTimeout(instance, 1000, HideInputSpeed, instance);
 }
+
 
 INPUT_RETURN_VALUE ImProcessSaveAll(void *arg)
 {

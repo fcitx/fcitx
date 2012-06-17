@@ -42,6 +42,12 @@ typedef struct _UnusedIMItem {
     UT_hash_handle hh;
 } UnusedIMItem;
 
+typedef struct _TimeoutItem {
+    FcitxTimeoutCallback callback;
+    void* arg;
+    long int milli;
+} TimeoutItem;
+
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -118,6 +124,8 @@ struct _FcitxInstance {
     UnusedIMItem* unusedItem;
     UT_array* disableList;
     UT_array* enableList;
+
+    UT_array timeout;
 };
 
 #endif

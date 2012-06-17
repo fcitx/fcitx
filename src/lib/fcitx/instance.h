@@ -47,6 +47,8 @@ extern "C" {
      **/
     typedef struct _FcitxInstance FcitxInstance;
 
+    typedef void (*FcitxTimeoutCallback)(void* arg);
+
     /**
      * create new fcitx instance
      *
@@ -157,6 +159,11 @@ extern "C" {
 
     FcitxInputState* FcitxInstanceGetInputState(FcitxInstance* instance);
 
+    void FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg);
+
+    boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
+
+    void FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
 #ifdef __cplusplus
 }
 #endif
