@@ -159,11 +159,13 @@ extern "C" {
 
     FcitxInputState* FcitxInstanceGetInputState(FcitxInstance* instance);
 
-    void FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg);
+    uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg);
 
     boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
 
     boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
+
+    boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id);
 #ifdef __cplusplus
 }
 #endif

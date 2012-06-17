@@ -46,6 +46,7 @@ typedef struct _TimeoutItem {
     FcitxTimeoutCallback callback;
     void* arg;
     long int milli;
+    uint64_t idx;
 } TimeoutItem;
 
 struct _FcitxInstance {
@@ -127,6 +128,7 @@ struct _FcitxInstance {
 
     UT_array timeout;
     boolean initialized;
+    uint64_t timeoutIdx;
 };
 
 #endif

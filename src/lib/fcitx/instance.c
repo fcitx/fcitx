@@ -222,9 +222,17 @@ void* RunInstance(void* arg)
                 while(idx < utarray_len(&instance->timeout))
                 {
                     TimeoutItem* ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
+                    uint64_t id = ti->idx;
                     if (ti->milli < deltaTime) {
                         ti->callback(ti->arg);
-                        utarray_remove_quick(&instance->timeout, idx);
+                        ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
+                        /* faster remove */
+                        if (ti && ti->idx == id)
+                            utarray_remove_quick(&instance->timeout, idx);
+                        else {
+                            FcitxInstanceRemoveTimeoutById(instance, id);
+                            idx = 0;
+                        }
                     }
                     else
                         idx++;
@@ -538,15 +546,17 @@ void FcitxInstanceResetTryReplace(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg)
+uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg)
 {
     if (milli < 0)
-        return;
+        return 0;
     TimeoutItem item;
     item.arg = arg;
     item.callback =callback;
     item.milli = milli;
+    item.idx = ++instance->timeoutIdx;
     utarray_push_back(&instance->timeout, &item);
+    return item.idx;
 }
 
 FCITX_EXPORT_API
@@ -572,6 +582,25 @@ boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCa
          ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
     {
         if (ti->callback == callback) {
+            int idx = utarray_eltidx(&instance->timeout, ti);
+            utarray_remove_quick(&instance->timeout, idx);
+            return true;
+        }
+    }
+    return false;
+}
+
+FCITX_EXPORT_API
+boolean FcitxInstanceRemoveTimeoutById(FcitxInstance* instance, uint64_t id)
+{
+    if (id == 0)
+        return false;
+    TimeoutItem* ti;
+    for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
+         ti != NULL;
+         ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
+    {
+        if (ti->idx == id) {
             int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
             return true;

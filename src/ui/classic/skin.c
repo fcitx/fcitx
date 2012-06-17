@@ -720,7 +720,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     if (inputWindow->owner->bVerticalList && currentX > outputWidth)
         outputWidth = currentX;
 
-    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + (FcitxMessagesGetMessageCount(msgdown) ? fontHeight : 0);
+    newHeight = offsetY + outputHeight + sc->skinInputBar.marginBottom + (FcitxMessagesGetMessageCount(msgdown) || !sc->skinFont.respectDPI ? fontHeight : 0);
 
     newWidth = (inputWidth < outputWidth) ? outputWidth : inputWidth;
     newWidth += sc->skinInputBar.marginLeft + sc->skinInputBar.marginRight;
