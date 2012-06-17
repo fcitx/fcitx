@@ -536,6 +536,13 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
     if (currentIM == NULL)
         return IRV_TO_PROCESS;
 
+    if (event == FCITX_PRESS_KEY
+        && !FcitxHotkeyIsHotKeyModifierCombine(sym, state))
+    {
+        if (FcitxInstanceRemoveTimeoutByFunc(instance, HideInputSpeed))
+            HideInputSpeed(instance);
+    }
+
     /*
      * for following reason, we cannot just process switch key, 2nd, 3rd key as other simple hotkey
      * because ctrl, shift, alt are compose key, so hotkey like ctrl+a will also produce a key
@@ -1439,7 +1446,7 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
     if (!instance->config->bShowInputWindowTriggering)
         return;
 
-    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE)
+    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE && instance->config->bShowInputWindowOnlyWhenActive)
         return;
 
     if (FcitxMessagesGetMessageCount(input->msgAuxUp)

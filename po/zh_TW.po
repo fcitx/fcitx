@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-17 11:05+0800\n"
+"POT-Creation-Date: 2012-06-17 11:37+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -29,7 +29,7 @@ msgstr " 用 Ctrl+Delete 刪除"
 msgid "%s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1478
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1485
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
 
@@ -501,12 +501,12 @@ msgstr ""
 msgid "Do not show in GUI"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:193
+#: /home/saber/Develop/fcitx/data/config.desc:203
 #, fuzzy
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr "只有預編輯字串時不顯示輸入視窗"
 
-#: /home/saber/Develop/fcitx/data/config.desc:188
+#: /home/saber/Develop/fcitx/data/config.desc:198
 msgid "Do not show input window if there is only preedit string"
 msgstr "只有預編輯字串時不顯示輸入視窗"
 
@@ -887,7 +887,7 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1391
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr "輸入法"
@@ -899,7 +899,11 @@ msgstr "輸入法"
 msgid "Input Method Disabled"
 msgstr "停用輸入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1476
+#: /home/saber/Develop/fcitx/data/config.desc:183
+msgid "Input Method Hint will be only shown when state is active"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1483
 msgid "Input Speed: "
 msgstr "輸入速度："
 
@@ -1538,20 +1542,25 @@ msgstr "程式庫"
 msgid "Show"
 msgstr "顯示"
 
-#: /home/saber/Develop/fcitx/data/config.desc:178
-msgid "Show Input Speed"
-msgstr "顯示輸入速度"
-
 #: /home/saber/Develop/fcitx/data/config.desc:173
 #, fuzzy
-msgid "Show Input Window After Input method changed"
+msgid "Show Input Method Hint After Input method changed"
 msgstr "切換輸入模式時顯示輸入視窗"
+
+#: /home/saber/Develop/fcitx/data/config.desc:178
+#, fuzzy
+msgid "Show Input Method Hint After Input method changed and Focus in"
+msgstr "切換輸入模式時顯示輸入視窗"
+
+#: /home/saber/Develop/fcitx/data/config.desc:188
+msgid "Show Input Speed"
+msgstr "顯示輸入速度"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:29
 msgid "Show Preedit String in Client Window"
 msgstr "在用戶端視窗中顯示預編輯字串"
 
-#: /home/saber/Develop/fcitx/data/config.desc:183
+#: /home/saber/Develop/fcitx/data/config.desc:193
 msgid "Show Version"
 msgstr "顯示版本"
 
@@ -1956,7 +1965,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然碼"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1480
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1487
 msgid "min Num of Characters: "
 msgstr "分 字元數："
 

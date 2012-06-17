@@ -198,6 +198,7 @@ void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     long int deltaTime = 0;
+    int64_t starttime = 0, endtime = 0;
     while (1) {
         FcitxAddon** pmodule;
         do {
@@ -208,6 +209,12 @@ void* RunInstance(void* arg)
                 FcitxModule* module = (*pmodule)->module;
                 module->ProcessEvent((*pmodule)->addonInstance);
             }
+            struct timeval current_time;
+            gettimeofday(&current_time, NULL);
+            endtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
+
+            if (starttime)
+                deltaTime = endtime - starttime;
 
             if (deltaTime > 0) {
                 int idx = 0;
@@ -223,6 +230,8 @@ void* RunInstance(void* arg)
                 }
                 deltaTime = 0;
             }
+            gettimeofday(&current_time, NULL);
+            starttime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
 
             if (instance->uiflag & UI_MOVE)
                 FcitxUIMoveInputWindowReal(instance);
@@ -261,14 +270,7 @@ void* RunInstance(void* arg)
             tval.tv_sec = min_time / 1000;
             ptval = &tval;
         }
-        struct timeval current_time;
-        gettimeofday(&current_time, NULL);
-        int64_t starttime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
         select(instance->maxfd + 1, &instance->rfds, &instance->wfds, &instance->efds, ptval);
-        gettimeofday(&current_time, NULL);
-        int64_t endtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
-
-        deltaTime = endtime - starttime;
     }
     return NULL;
 }
@@ -561,7 +563,7 @@ boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCal
 }
 
 FCITX_EXPORT_API
-void FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
+boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback)
 {
     TimeoutItem* ti;
     for (ti = (TimeoutItem*) utarray_front(&instance->timeout);
@@ -571,9 +573,10 @@ void FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallb
         if (ti->callback == callback) {
             int idx = utarray_eltidx(&instance->timeout, ti);
             utarray_remove_quick(&instance->timeout, idx);
-            return;
+            return true;
         }
     }
+    return false;
 }
 
 

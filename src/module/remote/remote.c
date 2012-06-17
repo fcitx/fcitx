@@ -152,7 +152,6 @@ static void RemoteProcessEvent(void* p)
     read(client_fd, &O, sizeof(int));
     unsigned int cmd = O & 0xFFFF;
     unsigned int arg = (O >> 16) & 0xFFFF;
-    FcitxInstanceLock(remote->owner);
     switch (cmd) {
         /// {{{
     case 0:
@@ -176,7 +175,6 @@ static void RemoteProcessEvent(void* p)
         break;
         /// }}}
     }
-    FcitxInstanceUnlock(remote->owner);
     close(client_fd);
 }
 

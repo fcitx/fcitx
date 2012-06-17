@@ -65,10 +65,8 @@ void OnException(int signo)
 
     if (signo != SIGSEGV && signo != SIGCONT) {
         if (instance) {
-            FcitxInstanceLock(instance);
             FcitxProfileSave(instance->profile);
             FcitxInstanceSaveAllIM(instance);
-            FcitxInstanceUnlock(instance);
         }
     }
 
@@ -113,11 +111,7 @@ void OnException(int signo)
         break;
 
     case SIGINT:
-
     case SIGTERM:
-
-    case SIGPIPE:
-
     case SIGSEGV:
         exit(0);
 

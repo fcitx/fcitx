@@ -170,7 +170,17 @@ Description=Do not commit preedit text when unfocus a window
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
 DefaultValue=True
-Description=Show Input Window After Input method changed
+Description=Show Input Method Hint After Input method changed
+
+[Appearance/ShowInputWindowWhenFocusIn]
+Type=Boolean
+DefaultValue=False
+Description=Show Input Method Hint After Input method changed and Focus in
+
+[Appearance/ShowInputWindowOnlyWhenActive]
+Type=Boolean
+DefaultValue=False
+Description=Input Method Hint will be only shown when state is active
 
 [Appearance/ShowInputSpeed]
 Type=Boolean

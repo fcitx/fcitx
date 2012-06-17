@@ -588,7 +588,7 @@ void FcitxUIOnInputFocus(FcitxInstance* instance)
 
     boolean changed = FcitxInstanceUpdateCurrentIM(instance, false);
 
-    if (changed)
+    if (instance->config->bShowInputWindowWhenFocusIn && changed)
         FcitxInstanceShowInputSpeed(instance);
     else
         FcitxUICloseInputWindow(instance);

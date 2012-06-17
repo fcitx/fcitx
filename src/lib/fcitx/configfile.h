@@ -126,7 +126,12 @@ extern "C" {
         };
 
         boolean bUseExtraTriggerKeyOnlyWhenUseItToInactivate;
-        int padding[42]; /**< padding */
+
+        boolean bShowInputWindowWhenFocusIn;
+
+        boolean bShowInputWindowOnlyWhenActive;
+
+        int padding[40]; /**< padding */
     } FcitxGlobalConfig;
 
     /**

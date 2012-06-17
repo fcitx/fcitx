@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-17 11:05+0800\n"
+"POT-Creation-Date: 2012-06-17 11:37+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -758,22 +758,30 @@ msgid "Do not commit preedit text when unfocus a window"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:173
-msgid "Show Input Window After Input method changed"
+msgid "Show Input Method Hint After Input method changed"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:178
-msgid "Show Input Speed"
+msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:183
-msgid "Show Version"
+msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:188
-msgid "Do not show input window if there is only preedit string"
+msgid "Show Input Speed"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:193
+msgid "Show Version"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:198
+msgid "Do not show input window if there is only preedit string"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:203
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 
@@ -1751,20 +1759,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1391
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1476
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1483
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1478
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1485
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1480
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1487
 msgid "min Num of Characters: "
 msgstr ""
 
