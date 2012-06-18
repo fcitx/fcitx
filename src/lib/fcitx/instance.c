@@ -198,8 +198,7 @@ void* RunInstance(void* arg)
 {
     FcitxInstance* instance = (FcitxInstance*) arg;
     instance->initialized = true;
-    long int deltaTime = 0;
-    int64_t starttime = 0, endtime = 0;
+    int64_t curtime = 0;
     while (1) {
         FcitxAddon** pmodule;
         do {
@@ -212,35 +211,28 @@ void* RunInstance(void* arg)
             }
             struct timeval current_time;
             gettimeofday(&current_time, NULL);
-            endtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
+            curtime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
 
-            if (starttime)
-                deltaTime = endtime - starttime;
-
-            if (deltaTime > 0) {
-                int idx = 0;
-                while(idx < utarray_len(&instance->timeout))
-                {
-                    TimeoutItem* ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
-                    uint64_t id = ti->idx;
-                    if (ti->milli < deltaTime) {
-                        ti->callback(ti->arg);
-                        ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
-                        /* faster remove */
-                        if (ti && ti->idx == id)
-                            utarray_remove_quick(&instance->timeout, idx);
-                        else {
-                            FcitxInstanceRemoveTimeoutById(instance, id);
-                            idx = 0;
-                        }
+            int idx = 0;
+            while(idx < utarray_len(&instance->timeout))
+            {
+                TimeoutItem* ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
+                uint64_t id = ti->idx;
+                if (ti->time + ti->milli <= curtime) {
+                    ti->callback(ti->arg);
+                    ti = (TimeoutItem*) utarray_eltptr(&instance->timeout, idx);
+                    /* faster remove */
+                    if (ti && ti->idx == id)
+                        utarray_remove_quick(&instance->timeout, idx);
+                    else {
+                        FcitxInstanceRemoveTimeoutById(instance, id);
+                        idx = 0;
                     }
-                    else
-                        idx++;
                 }
-                deltaTime = 0;
+                else {
+                    idx++;
+                }
             }
-            gettimeofday(&current_time, NULL);
-            starttime = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
 
             if (instance->uiflag & UI_MOVE)
                 FcitxUIMoveInputWindowReal(instance);
@@ -271,8 +263,8 @@ void* RunInstance(void* arg)
                  ti != NULL;
                  ti = (TimeoutItem*) utarray_next(&instance->timeout, ti))
             {
-                if (ti->milli < min_time) {
-                    min_time = ti->milli;
+                if (ti->time + ti->milli - curtime < min_time) {
+                    min_time = ti->time + ti->milli - curtime;
                 }
             }
             tval.tv_usec = (min_time % 1000) * 1000;
@@ -550,12 +542,17 @@ uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxT
 {
     if (milli < 0)
         return 0;
+
+    struct timeval current_time;
+    gettimeofday(&current_time, NULL);
     TimeoutItem item;
     item.arg = arg;
     item.callback =callback;
     item.milli = milli;
     item.idx = ++instance->timeoutIdx;
+    item.time = (current_time.tv_sec * 1000LL) + (current_time.tv_usec / 1000LL);
     utarray_push_back(&instance->timeout, &item);
+
     return item.idx;
 }
 

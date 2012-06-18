@@ -47,6 +47,7 @@ typedef struct _TimeoutItem {
     void* arg;
     long int milli;
     uint64_t idx;
+    uint64_t time;
 } TimeoutItem;
 
 struct _FcitxInstance {
