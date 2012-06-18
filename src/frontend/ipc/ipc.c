@@ -930,15 +930,21 @@ static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int
 
 void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
+    FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
+    int i = 0;
+    for (i = 0; i < FcitxMessagesGetMessageCount(clientPreedit) ; i ++) {
+        char* str = FcitxMessagesGetMessageString(clientPreedit, i);
+        if (!fcitx_utf8_check_string(str))
+            return;
+    }
+
     if (ic->contextCaps & CAPACITY_FORMATTED_PREEDIT) {
-        FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
         dbus_uint32_t serial = 0; // unique number to associate replies with requests
-        FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
         DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                         FCITX_IC_DBUS_INTERFACE, // interface name of the signal
                         "UpdateFormattedPreedit"); // name of the signal
-
-        FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
 
         DBusMessageIter args, array, sub;
         dbus_message_iter_init_append(msg, &args);

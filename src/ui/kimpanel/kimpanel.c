@@ -888,8 +888,11 @@ void KimExecMenu(FcitxKimpanelUI* kimpanel, char *props[], int n)
     if (n == -1) {
         n = 0;
         while (*(props[n]) != 0) {
+            if (!fcitx_utf8_check_string(props[n]))
+                return;
             n++;
         }
+
     }
 
     int i;
@@ -933,6 +936,8 @@ void KimRegisterProperties(FcitxKimpanelUI* kimpanel, char *props[], int n)
     if (n == -1) {
         n = 0;
         while (*(props[n]) != 0) {
+            if (!fcitx_utf8_check_string(props[n]))
+                return;
             n++;
         }
     }
@@ -975,6 +980,9 @@ void KimUpdateProperty(FcitxKimpanelUI* kimpanel, char *prop)
         return;
     }
 
+    if (!fcitx_utf8_check_string(prop))
+        return;
+
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
     if (!dbus_message_iter_append_basic(&args, DBUS_TYPE_STRING, &prop)) {
@@ -1006,6 +1014,9 @@ void KimRemoveProperty(FcitxKimpanelUI* kimpanel, char *prop)
         FcitxLog(DEBUG, "Message Null");
         return;
     }
+
+    if (!fcitx_utf8_check_string(prop))
+        return;
 
     // append arguments onto signal
     dbus_message_iter_init_append(msg, &args);
@@ -1186,7 +1197,7 @@ void KimShowLookupTable(FcitxKimpanelUI* kimpanel, boolean toShow)
 
 void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel, char *texts[], int nText, boolean has_prev, boolean has_next)
 {
-
+    int i;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg;
     DBusMessageIter args;
@@ -1199,8 +1210,14 @@ void KimUpdateLookupTable(FcitxKimpanelUI* kimpanel, char *labels[], int nLabel,
         FcitxLog(DEBUG, "Message Null");
         return;
     }
-
-    int i;
+    for (i = 0; i < nLabel; i++) {
+        if (!fcitx_utf8_check_string(labels[i]))
+            return;
+    }
+    for (i = 0; i < nText; i++) {
+        if (!fcitx_utf8_check_string(texts[i]))
+            return;
+    }
     DBusMessageIter subLabel;
     DBusMessageIter subText;
     DBusMessageIter subAttrs;
@@ -1327,6 +1344,8 @@ void KimUpdateAux(FcitxKimpanelUI* kimpanel, char *text)
         FcitxLog(DEBUG, "Message Null");
         return;
     }
+    if (!fcitx_utf8_check_string(text))
+        return;
 
     char *attr = "";
 
