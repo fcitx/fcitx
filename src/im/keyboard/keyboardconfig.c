@@ -22,7 +22,6 @@
 CONFIG_BINDING_BEGIN(FcitxKeyboardConfig);
 CONFIG_BINDING_REGISTER("Keyboard", "CommitWithExtraSpace", bCommitWithExtraSpace);
 CONFIG_BINDING_REGISTER("Keyboard", "HotkeyToggleWordHint", hkToggleWordHint);
-CONFIG_BINDING_REGISTER("Keyboard", "EnableWordHint", bEnableWordHint);
 CONFIG_BINDING_REGISTER("Keyboard", "MinimumHintLength", minimumHintLength);
 CONFIG_BINDING_REGISTER("Keyboard", "UsePresage", bUsePresage);
 CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);

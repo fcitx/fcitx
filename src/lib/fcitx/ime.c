@@ -121,7 +121,6 @@ static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputCont
 static void FcitxInstanceChangeIMStateWithKey(FcitxInstance* instance, FcitxInputContext* ic, boolean withSwitchKey);
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState, boolean withSwitchKey);
 static void FreeIMEntry(FcitxIMEntry* entry);
-static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -240,8 +239,7 @@ void FcitxInstanceSaveAllIM(FcitxInstance* instance)
     }
 }
 
-
-static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
+boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
     if (rec->frontendid != ic->frontendid)
         return false;
     if (rec == ic)

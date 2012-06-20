@@ -36,7 +36,105 @@
 #include "addon-internal.h"
 
 static const UT_icd frontend_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL };
+static const UT_icd ptr_icd = {sizeof(void*), NULL, NULL, NULL };
 static void FcitxInstanceCleanUpIC(FcitxInstance* instance);
+static void NewICData(FcitxInstance* instance, FcitxInputContext* ic);
+static void FreeICData(FcitxInstance* instance, FcitxInputContext* ic);
+static void FillICData(FcitxInstance* instance, FcitxInputContext* ic);
+
+void FillICData(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    int i = utarray_len(ic2->data);
+    for (; i < utarray_len(&instance->icdata); i ++) {
+        FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, i);
+        void* data = NULL;
+        if (info->allocCallback)
+            data = info->allocCallback(info->arg);
+        utarray_push_back(ic2->data, &data);
+    }
+}
+
+
+void NewICData(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    utarray_new(ic2->data, &ptr_icd);
+    FillICData(instance, ic);
+}
+
+void FreeICData(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    int i = 0;
+    for (; i < utarray_len(ic2->data); i ++) {
+        void** data = (void**) utarray_eltptr(ic2->data, i);
+        FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, i);
+        if (info->freeCallback) {
+            info->freeCallback(info->arg, *data);
+        }
+    }
+    utarray_free(ic2->data);
+}
+
+FCITX_EXPORT_API
+void* FcitxInstanceGetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid)
+{
+    if (!ic)
+        return NULL;
+
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    void** data = (void**) utarray_eltptr(ic2->data, icdataid);
+    if (!data)
+        return NULL;
+    return *data;
+}
+
+static
+void FcitxInstanceSetICDataInternal(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid, void* newdata, boolean copy)
+{
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
+    FcitxICDataInfo* info = (FcitxICDataInfo*) utarray_eltptr(&instance->icdata, icdataid);
+    void** data = (void**) utarray_eltptr(ic2->data, icdataid);
+    if (!data || !info)
+        return;
+    if (copy) {
+        if (info->copyCallback) {
+            *data = info->copyCallback(info->arg, *data, newdata);
+        }
+    }
+    else
+        *data = newdata;
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceSetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid, void* newdata)
+{
+    if (!ic)
+        return;
+    switch (instance->config->shareState) {
+    case ShareState_All:
+    case ShareState_PerProgram: {
+        FcitxInputContext *rec = instance->ic_list;
+        while (rec != NULL) {
+            boolean flag = false;
+            if (instance->config->shareState == ShareState_All)
+                flag = true;
+            else {
+                flag = FcitxInstanceCheckICFromSameApplication(instance, rec, ic);
+            }
+
+            if (flag)
+                FcitxInstanceSetICDataInternal(instance, rec, icdataid, newdata, (rec != ic));
+            rec = rec->next;
+        }
+    }
+    break;
+    case ShareState_None:
+        FcitxInstanceSetICDataInternal(instance, ic, icdataid, newdata, false);
+        break;
+    }
+}
 
 FCITX_EXPORT_API
 void FcitxFrontendsInit(UT_array* frontends)
@@ -66,6 +164,8 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
     rec->frontendid = frontendid;
     rec->offset_x = -1;
     rec->offset_y = -1;
+
+    NewICData(instance, rec);
     switch (instance->config->shareState) {
     case ShareState_All:
         rec->state = instance->globalState;
@@ -83,6 +183,27 @@ FcitxInputContext* FcitxInstanceCreateIC(FcitxInstance* instance, int frontendid
     rec->next = instance->ic_list;
     instance->ic_list = rec;
     return rec;
+}
+
+FCITX_EXPORT_API
+int FcitxInstanceAllocDataForIC(FcitxInstance* instance,
+                                FcitxICDataAllocCallback allocCallback,
+                                FcitxICDataCopyCallback copyCallback,
+                                FcitxICDataFreeCallback freeCallback, void* arg)
+{
+    FcitxICDataInfo info;
+    info.allocCallback = allocCallback;
+    info.copyCallback = copyCallback;
+    info.freeCallback = freeCallback;
+    info.arg = arg;
+
+    utarray_push_back(&instance->icdata, &info);
+    FcitxInputContext *rec = instance->ic_list;
+    while (rec) {
+        FillICData(instance, rec);
+        rec = rec->next;
+    }
+    return utarray_len(&instance->icdata) - 1;
 }
 
 void FcitxInstanceCleanUpIC(FcitxInstance* instance)
@@ -106,6 +227,7 @@ void FcitxInstanceCleanUpIC(FcitxInstance* instance)
             todel->next = instance->free_list;
             instance->free_list = todel;
             frontend->DestroyIC((*pfrontend)->addonInstance, todel);
+            FreeICData(instance, todel);
             if (todel == instance->CurrentIC) {
                 instance->CurrentIC = NULL;
                 FcitxUICloseInputWindow(instance);
@@ -185,6 +307,7 @@ void FcitxInstanceDestroyIC(FcitxInstance* instance, int frontendid, void* filte
                 FcitxInstanceSetCurrentIC(instance, NULL);
             }
 
+            FreeICData(instance, rec);
             frontend->DestroyIC((*pfrontend)->addonInstance, rec);
             return;
         }

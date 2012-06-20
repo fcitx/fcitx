@@ -67,6 +67,7 @@ const UT_icd stat_icd = {sizeof(FcitxUIStatus), 0, 0, 0};
 const UT_icd compstat_icd = {sizeof(FcitxUIComplexStatus), 0, 0, 0};
 const UT_icd menup_icd = {sizeof(FcitxUIMenu*), 0, 0, 0};
 const UT_icd timeout_icd = {sizeof(TimeoutItem), 0, 0, 0};
+const UT_icd icdata_icd = {sizeof(FcitxICDataInfo), NULL, NULL, NULL };
 static void FcitxInitThread(FcitxInstance* inst);
 static void ToggleRemindState(void* arg);
 static boolean GetRemindEnabled(void* arg);
@@ -115,6 +116,7 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     utarray_init(&instance->uicompstats, &compstat_icd);
     utarray_init(&instance->uimenus, &menup_icd);
     utarray_init(&instance->timeout, &timeout_icd);
+    utarray_init(&instance->icdata, &icdata_icd);
     instance->input = FcitxInputStateCreate();
     instance->sem = sem;
     instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));

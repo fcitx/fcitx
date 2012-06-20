@@ -50,6 +50,13 @@ typedef struct _TimeoutItem {
     uint64_t time;
 } TimeoutItem;
 
+typedef struct _FcitxICDataInfo {
+    FcitxICDataAllocCallback allocCallback;
+    FcitxICDataCopyCallback copyCallback;
+    FcitxICDataFreeCallback freeCallback;
+    void* arg;
+} FcitxICDataInfo;
+
 struct _FcitxInstance {
     pthread_mutex_t fcitxMutex;
     UT_array uistats;
@@ -130,6 +137,8 @@ struct _FcitxInstance {
     UT_array timeout;
     boolean initialized;
     uint64_t timeoutIdx;
+
+    UT_array icdata;
 };
 
 #endif

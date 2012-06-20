@@ -38,6 +38,9 @@ extern "C" {
 #endif
 
     struct _FcitxInstance;
+    typedef void* (*FcitxICDataAllocCallback)(void* arg);
+    typedef void (*FcitxICDataFreeCallback)(void* arg, void* data);
+    typedef void* (*FcitxICDataCopyCallback)(void* arg, void* data, void* src);
 
     /**
      * Input Method State
@@ -86,7 +89,8 @@ extern "C" {
         FcitxInputContext inputContext;
         char* imname;
         intptr_t switchBySwitchKey;
-        void* padding[15];
+        UT_array* data;
+        void* padding[14];
     } FcitxInputContext2;
 
     /**
@@ -280,6 +284,12 @@ extern "C" {
      * @return void
      **/
     void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
+
+    void* FcitxInstanceGetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid);
+
+    void FcitxInstanceSetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid, void* newdata);
+
+    int FcitxInstanceAllocDataForIC(struct _FcitxInstance* instance, FcitxICDataAllocCallback allocCallback, FcitxICDataCopyCallback copyCallback, FcitxICDataFreeCallback freeCallback, void* arg);
 
 #ifdef __cplusplus
 }
