@@ -59,11 +59,17 @@ void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWo
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordSetPage(FcitxCandidateWordList *candList, int index)
+{
+    if (index >= 0 && index < FcitxCandidateWordPageCount(candList)) {
+        candList->currentPage = index;
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxCandidateWordSetFocus(FcitxCandidateWordList* candList, int index)
 {
-    if (index >= 0 && index < utarray_len(&candList->candWords)) {
-        candList->currentPage = index / candList->wordPerPage;
-    }
+    FcitxCandidateWordSetPage(candList, index / candList->wordPerPage);
 }
 
 FCITX_EXPORT_API

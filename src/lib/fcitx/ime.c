@@ -1539,13 +1539,13 @@ void FcitxInstanceCleanInputWindowDown(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
+int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, unsigned int state, const char* strChoose)
 {
     return FcitxHotkeyCheckChooseKeyAndModifier(sym, state, strChoose, FcitxKeyState_None);
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState)
+int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, const char* strChoose, int candState)
 {
     if (state != candState)
         return -1;
