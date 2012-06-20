@@ -420,7 +420,7 @@ static int FcitxHotkeyGetKeyList(const char *strKey);
 static char *FcitxHotkeyGetKeyListString(int key);
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, unsigned int state)
 {
     if (state)
         return false;
@@ -432,7 +432,7 @@ boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, int state)
 }
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, unsigned int state)
 {
     if (state)
         return false;
@@ -444,7 +444,7 @@ boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, int state)
 }
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, unsigned int state)
 {
     if (state)
         return false;
@@ -456,7 +456,7 @@ boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state)
 }
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, unsigned int state)
 {
     if (state)
         return false;
@@ -469,7 +469,7 @@ boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state)
 
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey)
+boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, unsigned int state, const FcitxHotkey * hotkey)
 {
     state &= FcitxKeyState_Ctrl_Alt_Shift | FcitxKeyState_Super;
     if (hotkey[0].sym && sym == hotkey[0].sym && (hotkey[0].state == state))
@@ -480,7 +480,7 @@ boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotk
 }
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, unsigned int state)
 {
     if ((
                 sym == FcitxKey_Left
@@ -505,7 +505,7 @@ boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, int state)
 }
 
 FCITX_EXPORT_API
-boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, int state)
+boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, unsigned int state)
 {
     if (sym == FcitxKey_Control_L
             || sym == FcitxKey_Control_R

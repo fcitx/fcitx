@@ -1,5 +1,8 @@
 *~
 build/*
+.*
+!.git*
+.git/
 data/pinyin.tar.gz
 data/pinyin.tar.gz.md5
 data/table/table.tar.gz
@@ -8,9 +11,8 @@ fcitx.kdev4
 tools/pybase.mb
 tools/pyphrase.mb
 data/desc.po
-.kdev_include_paths
-.directory
 *.kate-swp
 *.orig
 tags
 astyle.sh
+cscope.*

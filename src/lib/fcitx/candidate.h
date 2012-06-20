@@ -249,7 +249,7 @@ extern "C" {
      * get the select key string
      *
      * @param candList candidate word list
-     * @return void
+     * @return select key string
      **/
     const char* FcitxCandidateWordGetChoose(struct _FcitxCandidateWordList* candList);
 
