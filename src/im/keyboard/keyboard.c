@@ -623,6 +623,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInstance* instance = layout->owner->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
+    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
@@ -630,8 +631,10 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     size_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    if (FcitxInstanceICSupportPreedit(instance, currentIC))
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    else
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 

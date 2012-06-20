@@ -563,4 +563,13 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
     return true;
 }
 
+FCITX_EXPORT_API
+boolean FcitxInstanceICSupportPreedit(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    if (!ic || ((ic->contextCaps & CAPACITY_PREEDIT) == 0 || !instance->profile->bUsePreedit))
+        return false;
+    return true;
+}
+
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
