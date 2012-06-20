@@ -128,7 +128,18 @@ extern "C" {
      * set page by index
      *
      * @param candList candidate word list
-     * @param index candidate word
+     * @param index page index
+     * @return void
+     *
+     * @since 4.2.5
+     **/
+    void FcitxCandidateWordSetPage(struct _FcitxCandidateWordList* candList, int index);
+
+    /**
+     * set page by word index
+     *
+     * @param candList candidate word list
+     * @param index index of candidate word
      * @return void
      *
      * @since 4.2.1
