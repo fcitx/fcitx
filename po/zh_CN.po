@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-17 11:37+0800\n"
-"PO-Revision-Date: 2012-06-17 11:41+0800\n"
+"POT-Creation-Date: 2012-06-20 18:54+0800\n"
+"PO-Revision-Date: 2012-06-20 18:54+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -27,7 +27,7 @@ msgstr " Ctrl+Delete 删除"
 msgid "%s"
 msgstr "%s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1485
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
@@ -95,7 +95,7 @@ msgstr "为 Fcitx 增加 Lua 支持"
 msgid "Add Watch Function Error"
 msgstr "增加监听函数错误"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
 msgid "Add current input buffer to user dictionary"
 msgstr "当前输入内容加入用户词典"
 
@@ -514,10 +514,6 @@ msgstr "启用"
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr "启用输入法间切换"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
-msgid "Enable word hint if available"
-msgstr "如果可用则使用单词提示"
-
 #: /home/saber/Develop/fcitx/data/addon.desc:27
 msgid "Enabled"
 msgstr "启用"
@@ -531,7 +527,6 @@ msgid "End Key"
 msgstr "中止键"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:414
 msgid "English (US)"
 msgstr "英语 (美国)"
 
@@ -681,11 +676,11 @@ msgstr "前端"
 msgid "Frontend Used by IM Modules"
 msgstr "输入法模块使用的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:416
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:539
 msgid "Frontend: bad frontend"
 msgstr "前端: 有问题的前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:404
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:527
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr "前端: 打开 %s 失败 %s"
@@ -801,12 +796,12 @@ msgstr "快捷键: 删除常用字"
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr "快捷键: 以词定字"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:296
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:294
 #, c-format
 msgid "IM: bad im %s"
 msgstr "输入法: 有问题的输入法 %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:282
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:280
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr "输入法: 打开%s 失败 %s"
@@ -863,7 +858,7 @@ msgstr "输入字体大小"
 msgid "Input Message Color"
 msgstr "输入信息颜色"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1391
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1389
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr "输入法"
@@ -879,7 +874,7 @@ msgstr "输入法被禁用"
 msgid "Input Method Hint will be only shown when state is active"
 msgstr "输入法提示只在激活状态显示"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1483
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1484
 msgid "Input Speed: "
 msgstr "输入速度: "
 
@@ -920,25 +915,26 @@ msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:421
 msgid "Keyboard"
 msgstr "键盘"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:387
 #, c-format
 msgid "Keyboard - %s"
 msgstr "键盘 - %s"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:402
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr "键盘 - %s - %s"
 
+# unknown
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:1
-msgid "Keyboard Input Method"
-msgstr "键盘输入法"
+msgid "Keyboard Layout"
+msgstr "键盘布局"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:141
 msgid "Keyboard Layout to be used"
@@ -1073,7 +1069,7 @@ msgstr "菜单字体大小"
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
 msgid "Minimum Length to trigger word hint"
 msgstr "最小触发单词提示长度"
 
@@ -1139,11 +1135,11 @@ msgstr "下一页图标"
 msgid "No"
 msgstr "否"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:501
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:499
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:437
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:560
 msgid "No available frontend"
 msgstr "无可用前端"
 
@@ -1156,8 +1152,8 @@ msgstr "无输入窗口"
 msgid "No local input method"
 msgstr "无局部输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "No remind"
 msgstr "无联想"
 
@@ -1256,7 +1252,7 @@ msgstr "候选词表的位置或偏移"
 msgid "Position or offset of Preedit"
 msgstr "预编辑文本的位置或偏移"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:33
 msgid "Preferred Enchant Provider (Need Restart)"
 msgstr "首选的Enchant后端 (需要重启)"
 
@@ -1687,8 +1683,8 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:166
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:380
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:168
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:385
 msgid "Toggle Remind"
 msgstr "切换联想"
 
@@ -1810,7 +1806,7 @@ msgstr "使用系统托盘"
 msgid "Use Wide Punctuation"
 msgstr "使用全角标点"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Use enter to commit the existing string"
 msgstr "使用回车确认已输入字符串"
 
@@ -1818,12 +1814,12 @@ msgstr "使用回车确认已输入字符串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用额外切换键取消激活后才使用它进行切换"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:29
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
 msgid "Use presage to predict if possible."
 msgstr "如果可以则使用 presage 增强单词提示功能"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "Use remind"
 msgstr "联想"
 
@@ -1925,7 +1921,7 @@ msgstr "紫光"
 msgid "Ziranma"
 msgstr "自然码"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1487
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1488
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
@@ -1938,7 +1934,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:355
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:360
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
@@ -1971,6 +1967,9 @@ msgstr "当前字体为: %s"
 #~ msgstr ""
 #~ "只有一个候选词时不显示输入窗口（只有预编辑字符串时不显示窗口必须选中）"
 
+#~ msgid "Enable word hint if available"
+#~ msgstr "如果可用则使用单词提示"
+
 #, fuzzy
 #~ msgid "Enum11=Disabled"
 #~ msgstr "禁用"
@@ -1995,6 +1994,13 @@ msgstr "当前字体为: %s"
 
 #~ msgid "It's the first time Fcitx Start."
 #~ msgstr "这是 Fcitx 首次启动"
+
+# unknown
+#~ msgid "Keyboard - Latin"
+#~ msgstr "键盘 - 拉丁字母"
+
+#~ msgid "Keyboard Input Method"
+#~ msgstr "键盘输入法"
 
 #~ msgid "Left-down position of Input"
 #~ msgstr "输入文字左下角"

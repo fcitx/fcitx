@@ -418,8 +418,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     }
     else {
         char* description;
-        asprintf(&description, _("Keyboard - %s"),
-                dgettext("xkeyboard-config", "English (US)"));
+        asprintf(&description, _("Keyboard"));
 
         FcitxKeyboardLayoutCreate(keyboard, description, "en", "us", NULL);
         free(description);

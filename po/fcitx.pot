@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-17 11:37+0800\n"
+"POT-Creation-Date: 2012-06-20 18:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -517,26 +517,22 @@ msgid "Toggle the word hint"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
-msgid "Enable word hint if available"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Minimum Length to trigger word hint"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Use enter to commit the existing string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:29
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
 msgid "Use presage to predict if possible."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:33
 msgid "Preferred Enchant Provider (Need Restart)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -815,6 +811,7 @@ msgid "InputMethod"
 msgstr ""
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:421
 msgid "Keyboard"
 msgstr ""
 
@@ -1257,7 +1254,7 @@ msgid "Simple Pinyin support for Fcitx"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:1
-msgid "Keyboard Input Method"
+msgid "Keyboard Layout"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:2
@@ -1368,7 +1365,6 @@ msgid "%s"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:414
 msgid "English (US)"
 msgstr ""
 
@@ -1713,13 +1709,12 @@ msgstr ""
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:387
 #, c-format
 msgid "Keyboard - %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:402
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr ""
@@ -1745,53 +1740,53 @@ msgstr ""
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:282
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:280
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:296
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:294
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:501
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:499
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1391
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1389
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1483
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1484
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1485
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1487
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1488
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "Use remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "No remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:166
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:380
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:168
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:385
 msgid "Toggle Remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:355
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:360
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -1804,16 +1799,16 @@ msgstr ""
 msgid "UI: bad ui"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:404
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:527
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:416
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:539
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:437
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:560
 msgid "No available frontend"
 msgstr ""
 
