@@ -151,6 +151,8 @@ extern "C" {
      *
      * @param candList candidate word list
      * @return int index of the current word
+     *
+     * @since 4.2.5
      **/
     int FcitxCandidateWordGetCurrentIndex(struct _FcitxCandidateWordList* candList);
 
