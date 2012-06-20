@@ -544,7 +544,7 @@ extern "C" {
      * @param strChoose choose key string
      * @return int
      **/
-    int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, int state, const char* strChoose);
+    int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, unsigned int state, const char* strChoose);
 
     /**
      * check is choose key or not, if so, return the choose index
@@ -555,7 +555,7 @@ extern "C" {
      * @param candState candidate keystate
      * @return int
      **/
-    int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState);
+    int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, const char* strChoose, int candState);
 
     /**
      * get im index by im name
