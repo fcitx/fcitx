@@ -147,7 +147,17 @@ extern "C" {
     void FcitxCandidateWordSetFocus(struct _FcitxCandidateWordList* candList, int index);
 
     /**
-     * Get first of current page
+     * Get index of the first word on current page
+     *
+     * @param candList candidate word list
+     * @return int index of the current word
+     *
+     * @since 4.2.5
+     **/
+    int FcitxCandidateWordGetCurrentIndex(struct _FcitxCandidateWordList* candList);
+
+    /**
+     * Get the first word on current page
      *
      * @param candList candidate word list
      * @return FcitxCandidateWord* first candidate word of current page
@@ -164,10 +174,21 @@ extern "C" {
     FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
     /**
-     * get candidate word by index
+     * get candidate word by total index
      *
      * @param candList candidate word list
-     * @param index index of current page
+     * @param index index of word
+     * @return FcitxCandidateWord*
+     *
+     * @since 4.2.5
+     **/
+    FcitxCandidateWord* FcitxCandidateWordGetByTotalIndex(struct _FcitxCandidateWordList* candList, int index);
+
+    /**
+     * get candidate word by index within current page
+     *
+     * @param candList candidate word list
+     * @param index index of word on current page
      * @return FcitxCandidateWord*
      **/
     FcitxCandidateWord* FcitxCandidateWordGetByIndex(struct _FcitxCandidateWordList* candList, int index);
@@ -260,7 +281,7 @@ extern "C" {
      * get the select key string
      *
      * @param candList candidate word list
-     * @return select key string
+     * @return const char* select key string
      **/
     const char* FcitxCandidateWordGetChoose(struct _FcitxCandidateWordList* candList);
 
