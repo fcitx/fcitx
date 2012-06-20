@@ -487,7 +487,9 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
     if (sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R
         || sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R
-        || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R)
+        || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R
+        || sym == FcitxKey_Super_L || sym == FcitxKey_Super_R
+    )
     {
         return IRV_TO_PROCESS;
     }
