@@ -521,6 +521,32 @@ void ReloadXlibMenu(void* arg, boolean enabled)
         XMapWindow(menu->owner->dpy, menu->menuWindow);
 }
 
+void CalMenuWindowPosition(XlibMenu *menu, int x, int y, int dodgeHeight)
+{
+    FcitxClassicUI *classicui = menu->owner;
+    FcitxRect rect = GetScreenGeometry(classicui, x, y);
+
+    if (x < rect.x1)
+        menu->iPosX = rect.x1;
+    else
+        menu->iPosX = x;
+
+    if (y < rect.y1)
+        menu->iPosY = rect.y1;
+    else
+        menu->iPosY = y + dodgeHeight;
+
+    if ((menu->iPosX + menu->width) > rect.x2)
+        menu->iPosX =  rect.x2 - menu->width;
+
+    if ((menu->iPosY + menu->height) >  rect.y2) {
+        if (menu->iPosY >  rect.y2)
+            menu->iPosY =  rect.y2 - menu->height;
+        else /* better position the window */
+            menu->iPosY = menu->iPosY - menu->height - dodgeHeight;
+    }
+}
+
 void MoveSubMenu(XlibMenu *sub, XlibMenu *parent, int offseth)
 {
     int dwidth, dheight;

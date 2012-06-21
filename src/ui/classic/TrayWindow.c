@@ -258,37 +258,9 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                int dwidth, dheight;
                 FcitxMenuUpdate(mainMenuWindow->menushell);
-                GetScreenSize(classicui, &dwidth, &dheight);
                 GetMenuSize(mainMenuWindow);
-
-                /* this ought to be tray window position */
-                int x = event->xbutton.x_root - event->xbutton.x;
-                int y = event->xbutton.y_root - event->xbutton.y;
-                /* get the screen geometry for the mouse click */
-                FcitxRect rect = GetScreenGeometry(classicui, x, y);
-
-                if (x < rect.x1)
-                    mainMenuWindow->iPosX = rect.x1;
-                else
-                    mainMenuWindow->iPosX = x;
-
-                if (y < rect.y1)
-                    mainMenuWindow->iPosY = rect.y1;
-                else
-                    mainMenuWindow->iPosY = y + trayWindow->size;
-
-                if ((mainMenuWindow->iPosX + mainMenuWindow->width) > rect.x2)
-                    mainMenuWindow->iPosX =  rect.x2 - mainMenuWindow->width;
-
-                if ((mainMenuWindow->iPosY + mainMenuWindow->height) >  rect.y2) {
-                    if (mainMenuWindow->iPosY >  rect.y2)
-                        mainMenuWindow->iPosY =  rect.y2 - mainMenuWindow->height - 40;
-                    else /* better position the window */
-                        mainMenuWindow->iPosY = mainMenuWindow->iPosY - mainMenuWindow->height - trayWindow->size;
-                }
-
+                CalMenuWindowPosition(mainMenuWindow, event->xbutton.x_root - event->xbutton.x, event->xbutton.y_root - event->xbutton.y, trayWindow->size);
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);
             }
