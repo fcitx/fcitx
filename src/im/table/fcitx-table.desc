@@ -17,3 +17,6 @@ Description=Adjust Order
 Type=Hotkey
 DefaultValue=
 Description=Clear Frequency
+
+[DescriptionFile]
+LocaleDomain=fcitx
