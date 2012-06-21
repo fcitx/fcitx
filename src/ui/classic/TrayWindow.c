@@ -262,21 +262,32 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 FcitxMenuUpdate(mainMenuWindow->menushell);
                 GetScreenSize(classicui, &dwidth, &dheight);
                 GetMenuSize(mainMenuWindow);
-                if (event->xbutton.x_root - event->xbutton.x +
-                        mainMenuWindow->width >= dwidth)
-                    mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
-                else
-                    mainMenuWindow->iPosX =
-                        event->xbutton.x_root - event->xbutton.x;
 
-                // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
-                if (event->xbutton.y_root + mainMenuWindow->height -
-                        event->xbutton.y >= dheight)
-                    mainMenuWindow->iPosY =
-                        dheight - mainMenuWindow->height -
-                        event->xbutton.y - 15;
+                /* this ought to be tray window position */
+                int x = event->xbutton.x_root - event->xbutton.x;
+                int y = event->xbutton.y_root - event->xbutton.y;
+                /* get the screen geometry for the mouse click */
+                FcitxRect rect = GetScreenGeometry(classicui, x, y);
+
+                if (x < rect.x1)
+                    mainMenuWindow->iPosX = rect.x1;
                 else
-                    mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
+                    mainMenuWindow->iPosX = x;
+
+                if (y < rect.y1)
+                    mainMenuWindow->iPosY = rect.y1;
+                else
+                    mainMenuWindow->iPosY = y + trayWindow->size;
+
+                if ((mainMenuWindow->iPosX + mainMenuWindow->width) > rect.x2)
+                    mainMenuWindow->iPosX =  rect.x2 - mainMenuWindow->width;
+
+                if ((mainMenuWindow->iPosY + mainMenuWindow->height) >  rect.y2) {
+                    if (mainMenuWindow->iPosY >  rect.y2)
+                        mainMenuWindow->iPosY =  rect.y2 - mainMenuWindow->height - 40;
+                    else /* better position the window */
+                        mainMenuWindow->iPosY = mainMenuWindow->iPosY - mainMenuWindow->height - trayWindow->size;
+                }
 
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);
