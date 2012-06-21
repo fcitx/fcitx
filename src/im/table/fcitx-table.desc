@@ -1,0 +1,19 @@
+[Key/AddPhrase]
+Type=Hotkey
+DefaultValue=CTRL_8
+Description=Add Phrase
+
+[Key/DeletePhrase]
+Type=Hotkey
+DefaultValue=CTRL_7
+Description=Delete Phrase
+
+[Key/AdjustOrder]
+Type=Hotkey
+DefaultValue=CTRL_6
+Description=Adjust Order
+
+[Key/ClearFreq]
+Type=Hotkey
+DefaultValue=
+Description=Clear Frequency

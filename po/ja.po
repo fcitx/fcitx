@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-20 18:54+0800\n"
+"POT-Creation-Date: 2012-06-22 00:45+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1159
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1216
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -91,6 +91,10 @@ msgstr ""
 msgid "Add Lua script support for Fcitx"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
+msgid "Add Phrase"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
 msgstr ""
@@ -109,6 +113,7 @@ msgid "Addon Config %s is %s"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:19
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
 msgid "Adjust Order"
 msgstr ""
 
@@ -270,7 +275,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:460
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:494
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -286,12 +291,16 @@ msgstr ""
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:515
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:554
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:507
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:546
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:562
+msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
@@ -310,6 +319,10 @@ msgstr ""
 msgid "Clean"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:19
+msgid "Clear Frequency"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:227
 msgid "Clear local input method"
 msgstr ""
@@ -326,7 +339,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1214
 msgid "Code is "
 msgstr ""
 
@@ -450,6 +463,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:12
 msgid "Default Shuangpin Schema"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
+msgid "Delete Phrase"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:43
@@ -911,6 +928,10 @@ msgid ""
 "code length"
 msgstr ""
 
+# unknown
+msgid "Key"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
@@ -975,7 +996,7 @@ msgstr ""
 msgid "Latin punct"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:432
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:466
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -994,7 +1015,7 @@ msgstr ""
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:155
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:187
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr ""
@@ -1211,7 +1232,7 @@ msgstr ""
 msgid "PerProgram"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1154
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1211
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -1230,7 +1251,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:458
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:492
 msgid "Pinyin: "
 msgstr ""
 
@@ -1378,7 +1399,7 @@ msgstr ""
 msgid "Register IM"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1050
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1107
 msgid "Remind:"
 msgstr ""
 
@@ -1654,7 +1675,7 @@ msgstr ""
 msgid "Table Code Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:162
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:194
 #, c-format
 msgid "Table Config %s is %s"
 msgstr ""

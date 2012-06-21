@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-20 18:54+0800\n"
-"PO-Revision-Date: 2012-06-20 18:54+0800\n"
+"POT-Creation-Date: 2012-06-22 00:45+0800\n"
+"PO-Revision-Date: 2012-06-22 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1159
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1216
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
@@ -91,6 +91,10 @@ msgstr "活动输入法图标"
 msgid "Add Lua script support for Fcitx"
 msgstr "为 Fcitx 增加 Lua 支持"
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
+msgid "Add Phrase"
+msgstr "添加词组"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
 msgstr "增加监听函数错误"
@@ -109,6 +113,7 @@ msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:19
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
 msgid "Adjust Order"
 msgstr "输入顺序"
 
@@ -269,7 +274,7 @@ msgstr "无法保存拼音索引: %s"
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:460
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:494
 msgid "Cannot found Pinyin"
 msgstr "无法找到拼音"
 
@@ -285,13 +290,17 @@ msgstr "选择键"
 msgid "Choose Second and Third Candidate Word"
 msgstr "选择第二第三候选词"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:515
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:554
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr "选择要删除的词组，按Escape 取消"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:507
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:546
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr "选择放在前面的词组，按Escape 取消"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:562
+msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
+msgstr "选择要清理输入频率的词组，按Escape 取消"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
 msgid "Classic"
@@ -309,6 +318,10 @@ msgstr "经典界面"
 msgid "Clean"
 msgstr "清除"
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:19
+msgid "Clear Frequency"
+msgstr "清除输入频率"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:227
 msgid "Clear local input method"
 msgstr "清除局部输入法"
@@ -325,7 +338,7 @@ msgstr "码表文件"
 msgid "Code Table Name"
 msgstr "码表名称"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1214
 msgid "Code is "
 msgstr "编码为 "
 
@@ -450,6 +463,10 @@ msgstr "默认输入法状态"
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:12
 msgid "Default Shuangpin Schema"
 msgstr "默认双拼方案"
+
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
+msgid "Delete Phrase"
+msgstr "删除词组"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:43
 msgid "Dependency"
@@ -910,6 +927,9 @@ msgid ""
 "code length"
 msgstr "当目前没有匹配项并且输入长度等于码长时保持当前的输入缓冲区"
 
+msgid "Key"
+msgstr "按键"
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
@@ -977,7 +997,7 @@ msgstr "拉丁字母"
 msgid "Latin punct"
 msgstr "英文标点"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:432
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:466
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -996,7 +1016,7 @@ msgstr "加载附加组件配置文件: %s"
 msgid "Load Autophrase OK"
 msgstr "加载自动组词信息完成"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:155
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:187
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr "加载码表文件: %s"
@@ -1213,7 +1233,7 @@ msgstr "所属附加组件"
 msgid "PerProgram"
 msgstr "按程序"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1154
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1211
 msgid "Phrase is already in Dict "
 msgstr "词组已在码表中"
 
@@ -1232,7 +1252,7 @@ msgstr "拼音索引的Magic Number不匹配"
 msgid "Pinyin Key"
 msgstr "拼音键"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:458
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:492
 msgid "Pinyin: "
 msgstr "拼音："
 
@@ -1380,7 +1400,7 @@ msgstr "右Shift"
 msgid "Register IM"
 msgstr "注册输入法方法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1050
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1107
 msgid "Remind:"
 msgstr "联想："
 
@@ -1656,7 +1676,7 @@ msgstr "码表"
 msgid "Table Code Color"
 msgstr "码表提示颜色"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:162
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:194
 #, c-format
 msgid "Table Config %s is %s"
 msgstr "Table Config %s is %s"

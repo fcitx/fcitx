@@ -21,6 +21,14 @@
 #include "fcitx/fcitx.h"
 
 #include "tabledict.h"
+#include "table.h"
+
+CONFIG_BINDING_BEGIN(TableConfig)
+CONFIG_BINDING_REGISTER("Key", "AddPhrase", hkTableAddPhrase)
+CONFIG_BINDING_REGISTER("Key", "DeletePhrase", hkTableDelPhrase)
+CONFIG_BINDING_REGISTER("Key", "AdjustOrder", hkTableAdjustOrder)
+CONFIG_BINDING_REGISTER("Key", "ClearFreq", hkTableClearFreq)
+CONFIG_BINDING_END()
 
 CONFIG_BINDING_BEGIN(TableMetaData)
 CONFIG_BINDING_REGISTER("CodeTable", "UniqueName", uniqueName)
