@@ -826,7 +826,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const
     FcitxKeySym sym;
     unsigned int state;
 
-    state = originstate - (originstate & FcitxKeyState_NumLock) - (originstate & FcitxKeyState_CapsLock) - (originstate & FcitxKeyState_ScrollLock);
+    state = originstate & FcitxKeyState_SimpleMask;
     state &= FcitxKeyState_UsedMask;
     FcitxHotkeyGetKey(originsym, state, &sym, &state);
     FcitxLog(DEBUG,
