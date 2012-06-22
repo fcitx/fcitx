@@ -507,6 +507,34 @@ static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString, const 
     FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
 }
 
+static int
+FcitxXkbFindOrAddLayout(FcitxXkb *xkb, const char *layout, const char *variant)
+{
+    int index;
+    if (layout == NULL)
+        return -1;
+    index = FcitxXkbFindLayoutIndex(xkb, layout, variant);
+    if (index >= 0)
+        return index;
+    if (!xkb->config.bOverrideSystemXKBSettings)
+        return -1;
+    FcitxXkbAddNewLayout(xkb, layout, variant);
+    FcitxXkbInitDefaultLayout(xkb);
+    return FcitxXkbFindLayoutIndex(xkb, layout, variant);
+}
+
+static boolean
+FcitxXkbSetLayoutByName(FcitxXkb *xkb, const char *layout, const char *variant)
+{
+    int index;
+    index = FcitxFindOrAddLayout(xkb, layout, variant);
+    if (index < 0) {
+        return false;
+    }
+    XkbLockGroup(xkb->dpy, XkbUseCoreKbd, index);
+    return true;
+}
+
 static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
 {
     /* fcitx-keyboard will be useless, if fcitx-xkb doesn't change the layout for them */
