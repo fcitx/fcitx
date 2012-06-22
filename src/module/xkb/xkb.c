@@ -52,6 +52,8 @@
 
 static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args);
+static void FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb,
+                                             char **layout, char **variant);
 static void* FcitxXkbGetCurrentLayout(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbGetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
 static void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args);
@@ -72,6 +74,11 @@ static char* FcitxXkbGetCurrentLayout (FcitxXkb* xkb);
 static char* FcitxXkbGetCurrentModel (FcitxXkb* xkb);
 static char* FcitxXkbGetCurrentOption (FcitxXkb* xkb);
 #endif
+static boolean
+FcitxXkbSetLayoutByName(FcitxXkb *xkb,
+                        const char *layout, const char *variant);
+static void
+FcitxXkbRetrieveCloseGroup(FcitxXkb *xkb);
 static boolean FcitxXkbSetLayout  (FcitxXkb* xkb,
                const char *layouts,
                const char *variants,
@@ -375,24 +382,26 @@ FcitxXkbUpdateProperties (FcitxXkb* xkb,
     return True;
 }
 
-static void*
-FcitxXkbGetCurrentLayout (void* arg, FcitxModuleFunctionArg args)
+static void
+FcitxXkbGetCurrentLayoutInternal(FcitxXkb *xkb, char **layout, char **variant)
 {
-    FcitxXkb* xkb = arg;
-    char** layout = args.args[0];
-    char** variant = args.args[1];
     char* const * layoutName = (char* const*) utarray_eltptr(xkb->defaultLayouts, FcitxXkbGetCurrentGroup(xkb));
     char* const * pVariantName = (char* const*) utarray_eltptr(xkb->defaultVariants, FcitxXkbGetCurrentGroup(xkb));
-    if (layoutName) {
+    if (layoutName)
         *layout = strdup(*layoutName);
-    }
     else
         *layout = NULL;
     if (pVariantName && strlen(*pVariantName) != 0)
         *variant = strdup(*pVariantName);
     else
         *variant = NULL;
+}
 
+static void*
+FcitxXkbGetCurrentLayout (void* arg, FcitxModuleFunctionArg args)
+{
+    FcitxXkbGetCurrentLayoutInternal((FcitxXkb*)arg,
+                                     args.args[0], args.args[1]);
     return NULL;
 }
 #if 0
@@ -527,12 +536,18 @@ static boolean
 FcitxXkbSetLayoutByName(FcitxXkb *xkb, const char *layout, const char *variant)
 {
     int index;
-    index = FcitxFindOrAddLayout(xkb, layout, variant);
+    index = FcitxXkbFindOrAddLayout(xkb, layout, variant);
     if (index < 0) {
         return false;
     }
     XkbLockGroup(xkb->dpy, XkbUseCoreKbd, index);
     return true;
+}
+
+static void
+FcitxXkbRetrieveCloseGroup(FcitxXkb *xkb)
+{
+    FcitxXkbSetLayoutByName(xkb, xkb->closeLayout, xkb->closeVariant);
 }
 
 static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
@@ -543,7 +558,7 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
     if (xkb->config.bIgnoreInputMethodLayoutRequest
         && (!currentIM || strncmp(currentIM->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0))
     {
-        XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
+        FcitxXkbRetrieveCloseGroup(xkb);
         return;
     }
 
@@ -573,28 +588,13 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
                 variantString = NULL;
             }
         }
-        int idx = FcitxXkbFindLayoutIndex(xkb, layoutString, variantString);
-        if (idx >= 0) {
-            XkbLockGroup(xkb->dpy, XkbUseCoreKbd, idx);
-        }
-        else {
-
-            if (xkb->config.bOverrideSystemXKBSettings) {
-                FcitxXkbAddNewLayout(xkb, layoutString, variantString);
-                FcitxXkbInitDefaultLayout(xkb);
-            }
-
-            int idx = FcitxXkbFindLayoutIndex(xkb, layoutString, variantString);
-            if (idx >= 0)
-                XkbLockGroup(xkb->dpy, XkbUseCoreKbd, idx);
-            else
-                XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
-        }
+        if (!FcitxXkbSetLayoutByName(xkb, layoutString, variantString))
+            FcitxXkbRetrieveCloseGroup(xkb);
         if (s)
             fcitx_utils_free_string_list(s);
     }
     else {
-        XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
+        FcitxXkbRetrieveCloseGroup(xkb);
     }
 }
 
@@ -629,6 +629,25 @@ static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char
     return -1;
 }
 
+static void
+FcitxXkbSaveCloseGroup(FcitxXkb *xkb)
+{
+    char *tmplayout;
+    char *tmpvariant;
+    FcitxXkbGetCurrentLayoutInternal(xkb, &tmplayout, &tmpvariant);
+    if (!tmplayout) {
+        if (tmpvariant)
+            free(tmpvariant);
+        return;
+    }
+    if (xkb->closeLayout)
+        free(xkb->closeLayout);
+    xkb->closeLayout = tmplayout;
+    if (xkb->closeVariant)
+        free(xkb->closeVariant);
+    xkb->closeVariant = tmpvariant;
+}
+
 static void* FcitxXkbCreate(FcitxInstance* instance)
 {
     FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xkb");
@@ -654,8 +673,7 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         free(rulesPath);
 
         FcitxXkbInitDefaultLayout(xkb);
-
-        xkb->closeGroup = FcitxXkbGetCurrentGroup(xkb);
+        FcitxXkbSaveCloseGroup(xkb);
 
         int eventMask = XkbNewKeyboardNotifyMask | XkbStateNotifyMask;
         XkbSelectEvents(xkb->dpy, XkbUseCoreKbd, eventMask, eventMask);
@@ -704,7 +722,7 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
             if (FcitxInstanceGetCurrentStatev2(xkb->owner) != IS_ACTIVE
                 || (xkb->config.bIgnoreInputMethodLayoutRequest
                     && (!currentIM || strncmp(currentIM->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0)))
-                xkb->closeGroup = FcitxXkbGetCurrentGroup(xkb);
+                FcitxXkbSaveCloseGroup(xkb);
         }
 
         if (xkbEvent->any.xkb_type == XkbNewKeyboardNotify) {
@@ -725,14 +743,14 @@ static void FcitxXkbCurrentStateChanged(void* arg)
 static void FcitxXkbCurrentStateChangedTriggerOn(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
-    xkb->closeGroup = FcitxXkbGetCurrentGroup(xkb);
+    FcitxXkbSaveCloseGroup(xkb);
     FcitxXkbCurrentStateChanged(arg);
 }
 
 static void FcitxXkbDestroy(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
-    XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
+    FcitxXkbRetrieveCloseGroup(xkb);
     XSync(xkb->dpy, False);
     FcitxXkbRulesFree(xkb->rules);
     fcitx_utils_free_string_list (xkb->defaultVariants);
