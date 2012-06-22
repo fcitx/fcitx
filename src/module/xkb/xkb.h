@@ -40,7 +40,8 @@ typedef struct _FcitxXkb
     UT_array *defaultOptions;
     UT_array* defaultVariants;
     FcitxInstance* owner;
-    int closeGroup;
+    char *closeLayout;
+    char *closeVariant;
     FcitxXkbRules* rules;
     FcitxXkbConfig config;
     int xkbOpcode;
