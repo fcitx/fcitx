@@ -46,8 +46,18 @@ typedef struct _TABLECANDWORD {
     CANDWORD        candWord;
 } TABLECANDWORD;
 
+typedef struct _TableConfig {
+    FcitxGenericConfig   config;
+    FcitxHotkey     hkTableDelPhrase[HOT_KEY_COUNT];
+    FcitxHotkey     hkTableAdjustOrder[HOT_KEY_COUNT];
+    FcitxHotkey     hkTableAddPhrase[HOT_KEY_COUNT];
+    FcitxHotkey     hkTableClearFreq[HOT_KEY_COUNT];
+} TableConfig;
+
 typedef struct _FcitxTableState {
     UT_array* table; /* 码表 */
+
+    TableConfig config;
 
     char            iTableIMIndex;
     char            iTableCount;
@@ -59,12 +69,10 @@ typedef struct _FcitxTableState {
 
     char            strTableRemindSource[PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
 
-    boolean            bIsTableDelPhrase;
-    FcitxHotkey         hkTableDelPhrase[HOT_KEY_COUNT];
-    boolean            bIsTableAdjustOrder;
-    FcitxHotkey         hkTableAdjustOrder[HOT_KEY_COUNT];
-    boolean            bIsTableAddPhrase;
-    FcitxHotkey         hkTableAddPhrase[HOT_KEY_COUNT];
+    boolean         bIsTableDelPhrase;
+    boolean         bIsTableAdjustOrder;
+    boolean         bIsTableAddPhrase;
+    boolean         bIsTableClearFreq;
 
     char            iTableNewPhraseHZCount;
 
@@ -95,6 +103,7 @@ void            TableResetStatus(void* arg);
 INPUT_RETURN_VALUE TableGetRemindCandWord(void* arg, TABLECANDWORD* tableCandWord);
 INPUT_RETURN_VALUE TableGetFHCandWord(TableMetaData* table, TABLECANDWORD* tableCandWord);
 void TableAdjustOrderByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord);
+void TableClearFreqByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord);
 void            TableDelPhraseByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord);
 void            TableCreateNewPhrase(TableMetaData* table);
 INPUT_RETURN_VALUE _TableGetCandWord(TableMetaData* table, TABLECANDWORD* tableCandWord, boolean _bRemind);
@@ -104,6 +113,8 @@ boolean            TablePhraseTips(void* arg);
 void            UpdateHZLastInput(TableMetaData* table, char* str);
 
 FcitxConfigFileDesc *GetTableConfigDesc();
+FcitxConfigFileDesc *GetTableGlobalConfigDesc();
+CONFIG_BINDING_DECLARE(TableConfig);
 
 #endif
 

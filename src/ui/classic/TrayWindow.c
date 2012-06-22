@@ -258,26 +258,9 @@ boolean TrayEventHandler(void *arg, XEvent* event)
                 break;
             case Button3: {
                 XlibMenu *mainMenuWindow = classicui->mainMenuWindow;
-                int dwidth, dheight;
                 FcitxMenuUpdate(mainMenuWindow->menushell);
-                GetScreenSize(classicui, &dwidth, &dheight);
                 GetMenuSize(mainMenuWindow);
-                if (event->xbutton.x_root - event->xbutton.x +
-                        mainMenuWindow->width >= dwidth)
-                    mainMenuWindow->iPosX = dwidth - mainMenuWindow->width - event->xbutton.x;
-                else
-                    mainMenuWindow->iPosX =
-                        event->xbutton.x_root - event->xbutton.x;
-
-                // 面板的高度是可以变动的，需要取得准确的面板高度，才能准确确定右键菜单位置。
-                if (event->xbutton.y_root + mainMenuWindow->height -
-                        event->xbutton.y >= dheight)
-                    mainMenuWindow->iPosY =
-                        dheight - mainMenuWindow->height -
-                        event->xbutton.y - 15;
-                else
-                    mainMenuWindow->iPosY = event->xbutton.y_root - event->xbutton.y + 25;     // +sc.skin_tray_icon.active_img.height;
-
+                CalMenuWindowPosition(mainMenuWindow, event->xbutton.x_root - event->xbutton.x, event->xbutton.y_root - event->xbutton.y, trayWindow->size);
                 DrawXlibMenu(mainMenuWindow);
                 DisplayXlibMenu(mainMenuWindow);
             }

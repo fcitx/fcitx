@@ -2447,7 +2447,8 @@ extern "C"
         FcitxKeyState_Super2    = 1 << 26,
         FcitxKeyState_Hyper    = 1 << 27,
         FcitxKeyState_Meta     = 1 << 28,
-        FcitxKeyState_UsedMask = 0x5c001fff
+        FcitxKeyState_UsedMask = 0x5c001fff,
+        FcitxKeyState_SimpleMask = FcitxKeyState_Ctrl_Alt_Shift | FcitxKeyState_Super | FcitxKeyState_Super2 | FcitxKeyState_Hyper | FcitxKeyState_Meta,
     } FcitxKeyState;
 
     /**

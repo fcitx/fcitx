@@ -26,6 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libintl.h>
+#include <errno.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/keys.h"
@@ -66,10 +67,48 @@ FcitxIMClass ime = {
 FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
+static boolean LoadTableConfig(TableConfig* config);
+static void SaveTableConfig(TableConfig* config);
+
+boolean LoadTableConfig(TableConfig* config)
+{
+    FcitxConfigFileDesc* configDesc = GetTableGlobalConfigDesc();
+    if (configDesc == NULL)
+        return false;
+
+    FILE *fp;
+    char *file;
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-table.config", "r", &file);
+    FcitxLog(DEBUG, "Load Config File %s", file);
+    free(file);
+    if (!fp) {
+        if (errno == ENOENT)
+            SaveTableConfig(config);
+    }
+
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
+
+    TableConfigConfigBind(config, cfile, configDesc);
+    FcitxConfigBindSync((FcitxGenericConfig*)config);
+
+    if (fp)
+        fclose(fp);
+
+    return true;
+}
+
+void SaveTableConfig(TableConfig* config)
+{
+}
+
 void *TableCreate(FcitxInstance* instance)
 {
     FcitxTableState *tbl = fcitx_utils_malloc0(sizeof(FcitxTableState));
     tbl->owner = instance;
+    if (!LoadTableConfig(&tbl->config)) {
+        free(tbl);
+        return NULL;
+    }
     LoadTableInfo(tbl);
     TableMetaData* table;
     for (table = (TableMetaData*) utarray_front(tbl->table);
@@ -127,13 +166,6 @@ void LoadTableInfo(FcitxTableState *tbl)
         tbl->table = NULL;
     }
 
-    tbl->hkTableDelPhrase[0].sym = FcitxKey_7;
-    tbl->hkTableDelPhrase[0].state = FcitxKeyState_Ctrl;
-    tbl->hkTableAdjustOrder[0].sym = FcitxKey_6;
-    tbl->hkTableAdjustOrder[0].state = FcitxKeyState_Ctrl;
-    tbl->hkTableAddPhrase[0].sym = FcitxKey_8;
-    tbl->hkTableAddPhrase[0].state = FcitxKeyState_Ctrl;
-
     tbl->iTableCount = 0;
     utarray_new(tbl->table, &table_icd);
 
@@ -182,6 +214,7 @@ void LoadTableInfo(FcitxTableState *tbl)
 }
 
 CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
+CONFIG_DESC_DEFINE(GetTableGlobalConfigDesc, "fcitx-table.desc")
 
 boolean TableInit(void *arg)
 {
@@ -211,6 +244,7 @@ void TableResetStatus(void* arg)
     FcitxInputState *input = FcitxInstanceGetInputState(tbl->owner);
     tbl->bIsTableAddPhrase = false;
     tbl->bIsTableDelPhrase = false;
+    tbl->bIsTableClearFreq = false;
     tbl->bIsTableAdjustOrder = false;
     FcitxInputStateSetIsDoInputOnly(input, false);
     //bSingleHZMode = false;
@@ -272,7 +306,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
         FcitxInputStateSetIsInRemind(input, false);
 
         /* it's not in special state */
-        if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
+        if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder && !tbl->bIsTableClearFreq) {
             /* check we use Pinyin or Not */
             if (strCodeInput[0] == table->cPinyin && table->bUsePY) {
                 if (FcitxInputStateGetRawInputBufferSize(input) != (MAX_PY_LENGTH * 5 + 1)) {
@@ -417,7 +451,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
             return IRV_DISPLAY_MESSAGE;
         }
-        if (FcitxHotkeyIsHotKey(sym, state, tbl->hkTableAddPhrase)) {
+        if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkTableAddPhrase)) {
             if (!tbl->bIsTableAddPhrase) {
                 if (table->tableDict->iHZLastInputCount < 2 || !table->tableDict->bRule) //词组最少为两个汉字
                     return IRV_DO_NOTHING;
@@ -467,7 +501,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
             return IRV_TO_PROCESS;
 
         if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
-            if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder) {
+            if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || tbl->bIsTableClearFreq) {
                 TableResetStatus(table);
                 FcitxInstanceCleanInputWindowUp(instance);
                 FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
@@ -492,13 +526,18 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                     retVal = IRV_DISPLAY_CANDWORDS;
                 } else if (candWord->owner == table && tbl->bIsTableAdjustOrder) {
                     TableAdjustOrderByIndex(table, candWord->priv);
-                    tbl->bIsTableDelPhrase = false;
+                    tbl->bIsTableAdjustOrder = false;
                     retVal = IRV_DISPLAY_CANDWORDS;
-                } else
+                } else if (candWord->owner == table && tbl->bIsTableClearFreq) {
+                    TableClearFreqByIndex(table, candWord->priv);
+                    tbl->bIsTableClearFreq = false;
+                    retVal = IRV_DISPLAY_CANDWORDS;
+                }
+                else
                     return IRV_TO_PROCESS;
             }
-        } else if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder) {
-            if (FcitxHotkeyIsHotKey(sym, state, tbl->hkTableAdjustOrder)) {
+        } else if (!tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder && !tbl->bIsTableClearFreq) {
+            if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkTableAdjustOrder)) {
                 if (FcitxCandidateWordGetListSize(candList) < 2 || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
@@ -506,13 +545,21 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxInstanceCleanInputWindowUp(instance);
                 FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to be put in the front, Press Escape to Cancel"));
                 retVal = IRV_DISPLAY_MESSAGE;
-            } else if (FcitxHotkeyIsHotKey(sym, state, tbl->hkTableDelPhrase)) {
+            } else if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkTableDelPhrase)) {
                 if (!FcitxCandidateWordPageCount(candList) || FcitxInputStateGetIsInRemind(input))
                     return IRV_DO_NOTHING;
 
                 tbl->bIsTableDelPhrase = true;
                 FcitxInstanceCleanInputWindowUp(instance);
                 FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to be deleted, Press Escape to Cancel"));
+                retVal = IRV_DISPLAY_MESSAGE;
+            } else if (FcitxHotkeyIsHotKey(sym, state, tbl->config.hkTableClearFreq)) {
+                if (!FcitxCandidateWordPageCount(candList) || FcitxInputStateGetIsInRemind(input))
+                    return IRV_DO_NOTHING;
+
+                tbl->bIsTableClearFreq = true;
+                FcitxInstanceCleanInputWindowUp(instance);
+                FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Choose the phrase to clear typing history, Press Escape to Cancel"));
                 retVal = IRV_DISPLAY_MESSAGE;
             } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
                 if (!FcitxInputStateGetRawInputBufferSize(input)) {
@@ -556,11 +603,11 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
 
     if (!FcitxInputStateGetIsInRemind(input)) {
-        if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder)
+        if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || tbl->bIsTableClearFreq)
             FcitxInputStateSetIsDoInputOnly(input, true);
     }
 
-    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || FcitxInputStateGetIsInRemind(input))
+    if (tbl->bIsTableDelPhrase || tbl->bIsTableAdjustOrder || tbl->bIsTableClearFreq || FcitxInputStateGetIsInRemind(input))
         FcitxInputStateSetShowCursor(input, false);
     else {
         FcitxInputStateSetShowCursor(input, true);
@@ -926,6 +973,16 @@ void TableAddCandWord(RECORD * record, TABLECANDWORD* tableCandWord)
     tableCandWord->candWord.record = record;
 }
 
+void TableClearFreqByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord)
+{
+    RECORD         *recTemp;
+
+    recTemp = tableCandWord->candWord.record;
+    recTemp->iHit = 0;
+
+    table->tableDict->iTableChanged++;
+}
+
 /*
  * 根据序号调整词组顺序，序号从1开始
  * 将指定的字/词调整到同样编码的最前面
@@ -1282,6 +1339,7 @@ void ReloadTableConfig(void* arg)
     size_t len = 0;
     int i = 0;
     char** tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
+    LoadTableConfig(&table->owner->config);
 
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
