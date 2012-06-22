@@ -11,7 +11,12 @@ fi
 
 DBUS_SEND=`which dbus-send`
 
-${DBUS_SEND} --print-reply --type=method_call --session --dest=org.fcitx.Fcitx-$number /inputmethod org.freedesktop.DBus.Introspectable.Introspect > /dev/null 2>&1
+if [ ! -x "${DBUS_SEND}" ]; then
+    echo "Cannot find dbus-send"
+    exit 1
+fi
+
+"${DBUS_SEND}" --print-reply --type=method_call --session --dest=org.fcitx.Fcitx-$number /inputmethod org.freedesktop.DBus.Introspectable.Introspect > /dev/null 2>&1
 
 if [ $? == "1" ]; then
     echo "Cannot communicate fcitx with DBus."
