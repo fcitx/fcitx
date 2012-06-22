@@ -342,6 +342,9 @@ void FcitxInstanceEnd(FcitxInstance* instance)
 
     sem_post(instance->sem);
 
+    if (!instance->initialized)
+        return;
+
     /* don't return to main loop, wait for exit */
     int countDown = 10;
     while(countDown--) {
