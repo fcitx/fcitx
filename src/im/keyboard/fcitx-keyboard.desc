@@ -8,11 +8,6 @@ Type=Hotkey
 DefaultValue=CTRL_ALT_H
 Description=Toggle the word hint
 
-[Keyboard/EnableWordHint]
-Type=Boolean
-DefaultValue=False
-Description=Enable word hint if available
-
 [Keyboard/MinimumHintLength]
 Type=Integer
 DefaultValue=1

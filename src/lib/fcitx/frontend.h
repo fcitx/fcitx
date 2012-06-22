@@ -38,6 +38,9 @@ extern "C" {
 #endif
 
     struct _FcitxInstance;
+    typedef void* (*FcitxICDataAllocCallback)(void* arg);
+    typedef void (*FcitxICDataFreeCallback)(void* arg, void* data);
+    typedef void* (*FcitxICDataCopyCallback)(void* arg, void* data, void* src);
 
     /**
      * Input Method State
@@ -86,7 +89,8 @@ extern "C" {
         FcitxInputContext inputContext;
         char* imname;
         intptr_t switchBySwitchKey;
-        void* padding[15];
+        UT_array* data;
+        void* padding[14];
     } FcitxInputContext2;
 
     /**
@@ -280,6 +284,59 @@ extern "C" {
      * @return void
      **/
     void FcitxInstanceSetICStateFromSameApplication(struct _FcitxInstance* instance, int frontendid, FcitxInputContext *ic);
+
+    /**
+     * get a per-ic data
+     *
+     * @param instance fcitx instnace
+     * @param ic input context
+     * @param data slot id
+     *
+     * @return data
+     *
+     * @since 4.2.5
+     **/
+    void* FcitxInstanceGetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid);
+
+
+    /**
+     * get a per-ic data
+     *
+     * @param instance fcitx instnace
+     * @param ic input context
+     * @param data slot id
+     * @param newdata new data
+     *
+     * @return void
+     *
+     * @since 4.2.5
+     **/
+    void FcitxInstanceSetICData(struct _FcitxInstance* instance, FcitxInputContext* ic, int icdataid, void* newdata);
+
+    /**
+     * alloc a per-ic data slot
+     *
+     * @param instance fcitx instnace
+     * @param allocCallback alloc callback (set pointer to null, when callback is null)
+     * @param copyCallback copy callback (used when need to share state)
+     * @param freeCallback free callback
+     * @param arg closure data
+     * @return data slot id
+     *
+     * @since 4.2.5
+     **/
+    int FcitxInstanceAllocDataForIC(struct _FcitxInstance* instance, FcitxICDataAllocCallback allocCallback, FcitxICDataCopyCallback copyCallback, FcitxICDataFreeCallback freeCallback, void* arg);
+
+    /**
+     * check current ic support preedit or not
+     *
+     * @param instance fcitx instnace
+     * @param ic input context
+     * @return result
+     *
+     * @since 4.2.5
+     **/
+    boolean FcitxInstanceICSupportPreedit(struct _FcitxInstance* instance, FcitxInputContext* ic);
 
 #ifdef __cplusplus
 }

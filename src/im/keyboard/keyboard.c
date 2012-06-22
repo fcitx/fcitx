@@ -38,6 +38,7 @@
 #include "fcitx/keys.h"
 #include "fcitx/candidate.h"
 #include "fcitx/module.h"
+#include "fcitx/frontend.h"
 #include "fcitx/hook.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
@@ -48,6 +49,9 @@
 #include "fcitx-compose-data.h"
 
 #define INVALID_COMPOSE_RESULT 0xffffffff
+
+#define PTR_TRUE ((void*)0x1)
+#define PTR_FALSE ((void*)0x0)
 
 typedef struct _FcitxComposeTableCompact FcitxComposeTableCompact;
 struct _FcitxComposeTableCompact {
@@ -296,6 +300,10 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     free(uniqueName);
 }
 
+void* SimpleCopy(void* arg, void* dest, void* src) {
+    return src;
+}
+
 void* FcitxKeyboardCreate(FcitxInstance* instance)
 {
     FcitxKeyboard* keyboard = fcitx_utils_malloc0(sizeof(FcitxKeyboard));
@@ -410,8 +418,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     }
     else {
         char* description;
-        asprintf(&description, _("Keyboard - %s"),
-                dgettext("xkeyboard-config", "English (US)"));
+        asprintf(&description, _("Keyboard"));
 
         FcitxKeyboardLayoutCreate(keyboard, description, "en", "us", NULL);
         free(description);
@@ -420,6 +427,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     FcitxIsoCodesFree(isocodes);
     keyboard->lastLength = 10;
     keyboard->tempBuffer = fcitx_utils_malloc0(keyboard->lastLength);
+
+    keyboard->dataSlot = FcitxInstanceAllocDataForIC(instance, NULL, SimpleCopy, NULL, keyboard);
 
     return keyboard;
 }
@@ -477,7 +486,9 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
     if (sym == FcitxKey_Shift_L || sym == FcitxKey_Shift_R
         || sym == FcitxKey_Alt_L || sym == FcitxKey_Alt_R
-        || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R)
+        || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R
+        || sym == FcitxKey_Super_L || sym == FcitxKey_Super_R
+    )
     {
         return IRV_TO_PROCESS;
     }
@@ -491,8 +502,10 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         state = 0;
     }
 
+    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
+    void* enableWordHint = FcitxInstanceGetICData(instance, currentIC, keyboard->dataSlot);
     /* performance seems not trouble here, so we only keep one dict */
-    if (layout->owner->config.bEnableWordHint && strcmp(keyboard->dictLang, currentLang) != 0) {
+    if (enableWordHint && strcmp(keyboard->dictLang, currentLang) != 0) {
 #ifdef ENCHANT_FOUND
         if (keyboard->dict) {
             enchant_broker_free_dict(keyboard->broker, keyboard->dict);
@@ -506,7 +519,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 #endif
     }
 
-    if (IsDictAvailable(keyboard) && layout->owner->config.bEnableWordHint) {
+    if (IsDictAvailable(keyboard) && enableWordHint) {
         FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
         struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
@@ -611,6 +624,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInstance* instance = layout->owner->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
+    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
@@ -618,8 +632,10 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     size_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    if (FcitxInstanceICSupportPreedit(instance, currentIC))
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    else
+        FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 
@@ -774,18 +790,16 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
 {
     FcitxKeyboard* keyboard = (FcitxKeyboard*) arg;
     FcitxIM* im = FcitxInstanceGetCurrentIM(keyboard->owner);
+    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(keyboard->owner);
+    if (!currentIC)
+        return IRV_TO_PROCESS;
     if (im && strncmp(im->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
-        keyboard->config.bEnableWordHint = !keyboard->config.bEnableWordHint;
-#ifdef ENCHANT_FOUND
-        if (!keyboard->config.bEnableWordHint) {
-            keyboard->dictLang[0] = 0;
-            if (keyboard->dict) {
-                enchant_broker_free_dict(keyboard->broker, keyboard->dict);
-                keyboard->dict = NULL;
-            }
-        }
-#endif
-        SaveKeyboardConfig(&keyboard->config);
+        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner, currentIC, keyboard->dataSlot);
+        if (!enableWordHint)
+            enableWordHint = PTR_TRUE;
+        else
+            enableWordHint = PTR_FALSE;
+        FcitxInstanceSetICData(keyboard->owner, currentIC, keyboard->dataSlot, enableWordHint);
         return IRV_DO_NOTHING;
     }
     else

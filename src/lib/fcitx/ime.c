@@ -121,7 +121,6 @@ static void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputCont
 static void FcitxInstanceChangeIMStateWithKey(FcitxInstance* instance, FcitxInputContext* ic, boolean withSwitchKey);
 static void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState objectState, boolean withSwitchKey);
 static void FreeIMEntry(FcitxIMEntry* entry);
-static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
 FCITX_GETTER_VALUE(FcitxInputState, IsInRemind, bIsInRemind, boolean)
 FCITX_SETTER(FcitxInputState, IsInRemind, bIsInRemind, boolean)
@@ -240,8 +239,7 @@ void FcitxInstanceSaveAllIM(FcitxInstance* instance)
     }
 }
 
-
-static boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
+boolean FcitxInstanceCheckICFromSameApplication (FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic) {
     if (rec->frontendid != ic->frontendid)
         return false;
     if (rec == ic)
@@ -1541,13 +1539,13 @@ void FcitxInstanceCleanInputWindowDown(FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, int state, const char* strChoose)
+int FcitxHotkeyCheckChooseKey(FcitxKeySym sym, unsigned int state, const char* strChoose)
 {
     return FcitxHotkeyCheckChooseKeyAndModifier(sym, state, strChoose, FcitxKeyState_None);
 }
 
 FCITX_EXPORT_API
-int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, int state, const char* strChoose, int candState)
+int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, const char* strChoose, int candState)
 {
     if (state != candState)
         return -1;

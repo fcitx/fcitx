@@ -24,6 +24,10 @@
 static const gchar introspection_xml[] =
 "<node>"
 "    <interface name=\"org.fcitx.Fcitx.Keyboard\">"
+"        <method name=\"SetDefaultLayout\">\n"
+"           <arg name=\"layout\" direction=\"out\" type=\"s\"/>"
+"           <arg name=\"variant\" direction=\"out\" type=\"s\"/>"
+"        </method>\n"
 "        <method name=\"GetLayouts\">"
 "            <arg name=\"layouts\" direction=\"out\" type=\"a(ssss)\"/>"
 "        </method>"
@@ -186,6 +190,20 @@ void fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar
     g_dbus_proxy_call(G_DBUS_PROXY(kbd),
                       "SetLayoutForIM",
                       g_variant_new("(sss)", imname, layout, variant),
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+FCITX_EXPORT_API
+void fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(kbd),
+                      "SetDefaultLayout",
+                      g_variant_new("(ss)", layout, variant),
                       G_DBUS_CALL_FLAGS_NO_AUTO_START,
                       0,
                       NULL,

@@ -494,6 +494,9 @@ void IPCCloseIM(void* arg, FcitxInputContext* ic)
 void IPCCommitString(void* arg, FcitxInputContext* ic, const char* str)
 {
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+
+    if (!fcitx_utf8_check_string(str))
+        return;
     dbus_uint32_t serial = 0; // unique number to associate replies with requests
     DBusMessage* msg = dbus_message_new_signal(GetIPCIC(ic)->path, // object name of the signal
                        FCITX_IC_DBUS_INTERFACE, // interface name of the signal
@@ -823,7 +826,7 @@ static int IPCProcessKey(FcitxIPCFrontend* ipc, FcitxInputContext* callic, const
     FcitxKeySym sym;
     unsigned int state;
 
-    state = originstate - (originstate & FcitxKeyState_NumLock) - (originstate & FcitxKeyState_CapsLock) - (originstate & FcitxKeyState_ScrollLock);
+    state = originstate & FcitxKeyState_SimpleMask;
     state &= FcitxKeyState_UsedMask;
     FcitxHotkeyGetKey(originsym, state, &sym, &state);
     FcitxLog(DEBUG,

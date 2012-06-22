@@ -59,11 +59,17 @@ void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWo
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordSetPage(FcitxCandidateWordList *candList, int index)
+{
+    if (index >= 0 && index < FcitxCandidateWordPageCount(candList)) {
+        candList->currentPage = index;
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxCandidateWordSetFocus(FcitxCandidateWordList* candList, int index)
 {
-    if (index >= 0 && index < utarray_len(&candList->candWords)) {
-        candList->currentPage = index / candList->wordPerPage;
-    }
+    FcitxCandidateWordSetPage(candList, index / candList->wordPerPage);
 }
 
 FCITX_EXPORT_API
@@ -74,9 +80,16 @@ void FcitxCandidateWordReset(FcitxCandidateWordList* candList)
 }
 
 FCITX_EXPORT_API
+int FcitxCandidateWordGetCurrentIndex(FcitxCandidateWordList* candList)
+{
+    return candList->currentPage * candList->wordPerPage;
+}
+
+FCITX_EXPORT_API
 FcitxCandidateWord* FcitxCandidateWordGetCurrentWindow(FcitxCandidateWordList* candList)
 {
-    return (FcitxCandidateWord*) utarray_eltptr(&candList->candWords, candList->currentPage * candList->wordPerPage);
+    return FcitxCandidateWordGetByTotalIndex(
+        candList, candList->currentPage * candList->wordPerPage);
 }
 
 FCITX_EXPORT_API
@@ -93,10 +106,17 @@ FcitxCandidateWord* FcitxCandidateWordGetCurrentWindowNext(FcitxCandidateWordLis
 }
 
 FCITX_EXPORT_API
+FcitxCandidateWord *FcitxCandidateWordGetByTotalIndex(FcitxCandidateWordList* candList, int index)
+{
+    return (FcitxCandidateWord*)utarray_eltptr(&candList->candWords, index);
+}
+
+FCITX_EXPORT_API
 FcitxCandidateWord* FcitxCandidateWordGetByIndex(FcitxCandidateWordList* candList, int index)
 {
     if (index < candList->wordPerPage && index >= 0)
-        return (FcitxCandidateWord*) utarray_eltptr(&candList->candWords, candList->currentPage * candList->wordPerPage + index);
+        return FcitxCandidateWordGetByTotalIndex(
+            candList, candList->currentPage * candList->wordPerPage + index);
     return NULL;
 }
 
@@ -223,7 +243,7 @@ void FcitxCandidateWordSetPageSize(FcitxCandidateWordList* candList, int size)
 {
     if (size <= 0 || size > 10)
         size = 5;
-    
+
     candList->wordPerPage = size;
 }
 

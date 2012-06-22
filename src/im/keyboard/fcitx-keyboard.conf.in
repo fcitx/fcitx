@@ -1,6 +1,6 @@
 [Addon]
 Name=fcitx-keyboard
-_GeneralName=Keyboard Input Method
+_GeneralName=Keyboard Layout
 _Comment=Use Keyboard Layout as Input Method
 Category=InputMethod
 Enabled=True

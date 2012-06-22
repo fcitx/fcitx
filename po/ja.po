@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-17 11:37+0800\n"
+"POT-Creation-Date: 2012-06-22 00:45+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1159
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1216
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 msgid "%s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1485
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
 msgstr ""
 
@@ -91,11 +91,15 @@ msgstr ""
 msgid "Add Lua script support for Fcitx"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
+msgid "Add Phrase"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -109,6 +113,7 @@ msgid "Addon Config %s is %s"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:19
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
 msgid "Adjust Order"
 msgstr ""
 
@@ -270,7 +275,7 @@ msgstr ""
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:460
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:494
 msgid "Cannot found Pinyin"
 msgstr ""
 
@@ -286,12 +291,16 @@ msgstr ""
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:515
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:554
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:507
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:546
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:562
+msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
@@ -310,6 +319,10 @@ msgstr ""
 msgid "Clean"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:19
+msgid "Clear Frequency"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:227
 msgid "Clear local input method"
 msgstr ""
@@ -326,7 +339,7 @@ msgstr ""
 msgid "Code Table Name"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1214
 msgid "Code is "
 msgstr ""
 
@@ -452,6 +465,10 @@ msgstr ""
 msgid "Default Shuangpin Schema"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
+msgid "Delete Phrase"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/data/addon.desc:43
 msgid "Dependency"
 msgstr ""
@@ -515,10 +532,6 @@ msgstr ""
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
-msgid "Enable word hint if available"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/data/addon.desc:27
 msgid "Enabled"
 msgstr ""
@@ -532,7 +545,6 @@ msgid "End Key"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:414
 msgid "English (US)"
 msgstr ""
 
@@ -682,11 +694,11 @@ msgstr ""
 msgid "Frontend Used by IM Modules"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:416
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:539
 msgid "Frontend: bad frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:404
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:527
 #, c-format
 msgid "Frontend: open %s fail %s"
 msgstr ""
@@ -802,12 +814,12 @@ msgstr ""
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:296
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:294
 #, c-format
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:282
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:280
 #, c-format
 msgid "IM: open %s fail %s"
 msgstr ""
@@ -864,7 +876,7 @@ msgstr ""
 msgid "Input Message Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1391
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1389
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
@@ -880,7 +892,7 @@ msgstr ""
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1483
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1484
 msgid "Input Speed: "
 msgstr ""
 
@@ -916,27 +928,31 @@ msgid ""
 "code length"
 msgstr ""
 
+# unknown
+msgid "Key"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:266
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:421
 msgid "Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:387
 #, c-format
 msgid "Keyboard - %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:402
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:410
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:1
-msgid "Keyboard Input Method"
+msgid "Keyboard Layout"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:141
@@ -980,7 +996,7 @@ msgstr ""
 msgid "Latin punct"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:432
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:466
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
@@ -999,7 +1015,7 @@ msgstr ""
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:155
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:187
 #, c-format
 msgid "Load Table Config File:%s"
 msgstr ""
@@ -1072,7 +1088,7 @@ msgstr ""
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:14
 msgid "Minimum Length to trigger word hint"
 msgstr ""
 
@@ -1138,11 +1154,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:501
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:499
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:437
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:560
 msgid "No available frontend"
 msgstr ""
 
@@ -1155,8 +1171,8 @@ msgstr ""
 msgid "No local input method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "No remind"
 msgstr ""
 
@@ -1216,7 +1232,7 @@ msgstr ""
 msgid "PerProgram"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1154
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1211
 msgid "Phrase is already in Dict "
 msgstr ""
 
@@ -1235,7 +1251,7 @@ msgstr ""
 msgid "Pinyin Key"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:458
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:492
 msgid "Pinyin: "
 msgstr ""
 
@@ -1255,7 +1271,7 @@ msgstr ""
 msgid "Position or offset of Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:38
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:33
 msgid "Preferred Enchant Provider (Need Restart)"
 msgstr ""
 
@@ -1383,7 +1399,7 @@ msgstr ""
 msgid "Register IM"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1050
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1107
 msgid "Remind:"
 msgstr ""
 
@@ -1659,7 +1675,7 @@ msgstr ""
 msgid "Table Code Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:162
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:194
 #, c-format
 msgid "Table Config %s is %s"
 msgstr ""
@@ -1686,8 +1702,8 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:166
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:380
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:168
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:385
 msgid "Toggle Remind"
 msgstr ""
 
@@ -1809,7 +1825,7 @@ msgstr ""
 msgid "Use Wide Punctuation"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
 msgid "Use enter to commit the existing string"
 msgstr ""
 
@@ -1817,12 +1833,12 @@ msgstr ""
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:29
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
 msgid "Use presage to predict if possible."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:165
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
 msgid "Use remind"
 msgstr ""
 
@@ -1923,7 +1939,7 @@ msgstr ""
 msgid "Ziranma"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1487
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1488
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -1936,7 +1952,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:355
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:360
 msgid "pthread mutex init failed"
 msgstr ""
 

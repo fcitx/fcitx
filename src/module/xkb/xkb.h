@@ -40,7 +40,8 @@ typedef struct _FcitxXkb
     UT_array *defaultOptions;
     UT_array* defaultVariants;
     FcitxInstance* owner;
-    int closeGroup;
+    char *closeLayout;
+    char *closeVariant;
     FcitxXkbRules* rules;
     FcitxXkbConfig config;
     int xkbOpcode;
@@ -58,6 +59,8 @@ typedef struct _FcitxXkb
 #define FCITX_XKB_GETLAYOUTOVERRIDE_RETURNTYPE void
 #define FCITX_XKB_SETLAYOUTOVERRIDE 4
 #define FCITX_XKB_SETLAYOUTOVERRIDE_RETURNTYPE void
+#define FCITX_XKB_SETDEFAULTLAYOUT 5
+#define FCITX_XKB_SETDEFAULTLAYOUT_RETURNTYPE void
 
 #define FCITX_XKB_PATH "/keyboard"
 #define FCITX_XKB_INTERFACE "org.fcitx.Fcitx.Keyboard"

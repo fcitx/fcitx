@@ -51,6 +51,7 @@ XlibMenu* CreateXlibMenu(struct _FcitxClassicUI* classicui);
 void GetMenuSize(XlibMenu * menu);
 void DrawXlibMenu(XlibMenu * menu);
 void DisplayXlibMenu(XlibMenu * menu);
+void CalMenuWindowPosition(XlibMenu *menu, int x, int y, int dodgeHeight);
 
 #endif
 

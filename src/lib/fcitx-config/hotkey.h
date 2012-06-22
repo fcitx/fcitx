@@ -2422,7 +2422,7 @@ extern "C"
         /**
          * state of hotkey
          **/
-        int state;
+        unsigned int state;
     } FcitxHotkey;
 
     /**
@@ -2447,7 +2447,8 @@ extern "C"
         FcitxKeyState_Super2    = 1 << 26,
         FcitxKeyState_Hyper    = 1 << 27,
         FcitxKeyState_Meta     = 1 << 28,
-        FcitxKeyState_UsedMask = 0x5c001fff
+        FcitxKeyState_UsedMask = 0x5c001fff,
+        FcitxKeyState_SimpleMask = FcitxKeyState_Ctrl_Alt_Shift | FcitxKeyState_Super | FcitxKeyState_Super2 | FcitxKeyState_Hyper | FcitxKeyState_Meta,
     } FcitxKeyState;
 
     /**
@@ -2497,7 +2498,7 @@ extern "C"
      * @param state state
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeyDigit(FcitxKeySym sym, unsigned int state);
 
     /**
      * is hotkey A-Z
@@ -2506,7 +2507,7 @@ extern "C"
      * @param state state
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeyUAZ(FcitxKeySym sym, unsigned int state);
     /**
      * is hotkey a-z
      *
@@ -2514,7 +2515,7 @@ extern "C"
      * @param state keystate
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, unsigned int state);
     /**
      * is hotkey printable
      *
@@ -2522,7 +2523,7 @@ extern "C"
      * @param state state
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, unsigned int state);
 
     /**
      * is hotkey upper case
@@ -2531,7 +2532,7 @@ extern "C"
      * @param state keystate
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKeyCapital(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeyCapital(FcitxKeySym sym, unsigned int state);
 
     /**
      * hotkey have combine modifier
@@ -2540,7 +2541,7 @@ extern "C"
      * @param state state
      * @return state is combine modifier or not
      **/
-    boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotKeyModifierCombine(FcitxKeySym sym, unsigned int state);
 
     /**
      * check the key is this hotkey or not
@@ -2550,7 +2551,7 @@ extern "C"
      * @param hotkey hotkey
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, int state, const FcitxHotkey * hotkey);
+    boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, unsigned int state, const FcitxHotkey * hotkey);
 
     /**
      * is key will make cursor move, include left, right, home, end, and so on.
@@ -2559,7 +2560,7 @@ extern "C"
      * @param state state
      * @return boolean
      **/
-    boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, int state);
+    boolean FcitxHotkeyIsHotkeyCursorMove(FcitxKeySym sym, unsigned int state);
 
     /**
      * convert key pad key to simple FcitxKeyState_STATE

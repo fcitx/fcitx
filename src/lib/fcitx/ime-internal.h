@@ -30,6 +30,7 @@
 
 #include "fcitx-config/hotkey.h"
 #include "ime.h"
+#include "frontend.h"
 #include "fcitx-utils/utarray.h"
 
 struct _FcitxInputContext;
@@ -126,6 +127,8 @@ int IMPriorityCmp(const void *a, const void *b);
 boolean FcitxInstanceUpdateCurrentIM(struct _FcitxInstance* instance, boolean force);
 
 void HideInputSpeed(void* arg);
+
+boolean FcitxInstanceCheckICFromSameApplication (struct  _FcitxInstance* instance, FcitxInputContext* rec, FcitxInputContext* ic);
 
 #endif
 

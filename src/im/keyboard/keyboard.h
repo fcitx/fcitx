@@ -50,7 +50,6 @@ typedef enum _EnchantProvider {
 typedef struct _FcitxKeyboardConfig {
     FcitxGenericConfig gconfig;
     boolean bCommitWithExtraSpace;
-    boolean bEnableWordHint;
     boolean bUseEnterToCommit;
     boolean bUsePresage;
     FcitxHotkey hkToggleWordHint[2];
@@ -81,6 +80,7 @@ typedef struct _FcitxKeyboard {
     int n_compose;
     char* tempBuffer;
     int lastLength;
+    int dataSlot;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {
