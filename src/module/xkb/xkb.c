@@ -139,7 +139,7 @@ boolean FcitxXkbSupported(FcitxXkb* xkb, int* xkbOpcode)
 }
 
 
-char* FcitxXkbGetRulesName(FcitxXkb* xkb)
+static char* FcitxXkbGetRulesName(FcitxXkb* xkb)
 {
     XkbRF_VarDefsRec vd;
     char *tmp = NULL;
@@ -375,7 +375,7 @@ FcitxXkbUpdateProperties (FcitxXkb* xkb,
     return True;
 }
 
-void*
+static void*
 FcitxXkbGetCurrentLayout (void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXkb* xkb = arg;
@@ -397,7 +397,7 @@ FcitxXkbGetCurrentLayout (void* arg, FcitxModuleFunctionArg args)
 }
 #if 0
 
-char *
+static char *
 FcitxXkbGetCurrentModel (FcitxXkb* xkb)
 {
     if (xkb->defaultModels == NULL) {
@@ -406,7 +406,7 @@ FcitxXkbGetCurrentModel (FcitxXkb* xkb)
     return fcitx_utils_join_string_list(xkb->defaultModels, ',');
 }
 
-char *
+static char *
 FcitxXkbGetCurrentOption (FcitxXkb* xkb)
 {
     if (xkb->defaultOptions == NULL) {
@@ -416,7 +416,8 @@ FcitxXkbGetCurrentOption (FcitxXkb* xkb)
 }
 #endif
 
-boolean
+/* This SHOULD be _SetLayouts_ .... */
+static boolean
 FcitxXkbSetLayout  (FcitxXkb* xkb,
                const char *layouts,
                const char *variants,
@@ -464,7 +465,7 @@ FcitxXkbSetLayout  (FcitxXkb* xkb,
     return retval;
 }
 
-int
+static int
 FcitxXkbGetCurrentGroup (FcitxXkb* xkb)
 {
     Display *dpy = xkb->dpy;
@@ -483,7 +484,7 @@ FcitxXkbGetCurrentGroup (FcitxXkb* xkb)
     return state.group;
 }
 
-void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString, const char* variantString)
+static void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString, const char* variantString)
 {
     if (!layoutString)
         return;
@@ -506,9 +507,9 @@ void FcitxXkbAddNewLayout(FcitxXkb* xkb, const char* layoutString, const char* v
     FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
 }
 
-void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
+static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
 {
-    /* fcitx-keyboard will be useless, if fcitx-xkb don't change the layout for them */
+    /* fcitx-keyboard will be useless, if fcitx-xkb doesn't change the layout for them */
     FcitxXkb* xkb = (FcitxXkb*) arg;
     FcitxIM* currentIM = FcitxInstanceGetCurrentIM(xkb->owner);
     if (xkb->config.bIgnoreInputMethodLayoutRequest
@@ -569,12 +570,10 @@ void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
     }
 }
 
-boolean strcmp0(const char* a, const char* b) {
-    boolean isemptya = false, isemptyb = false;
-    if (a == NULL || strlen(a) == 0)
-        isemptya = true;
-    if (b == NULL || strlen(b) == 0)
-        isemptyb = true;
+static boolean strcmp0(const char* a, const char* b)
+{
+    boolean isemptya = !(a && *a);
+    boolean isemptyb = !(b && *b);
     if (isemptya && isemptyb)
         return true;
     if (isemptya ^ isemptyb)
@@ -582,7 +581,7 @@ boolean strcmp0(const char* a, const char* b) {
     return strcmp(a, b) == 0;
 }
 
-int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char* variant)
+static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char* variant)
 {
     char** layoutName;
     char* variantName, **pVariantName;
@@ -602,7 +601,7 @@ int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char* varia
     return -1;
 }
 
-void* FcitxXkbCreate(FcitxInstance* instance)
+static void* FcitxXkbCreate(FcitxInstance* instance)
 {
     FcitxAddon* addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xkb");
     FcitxXkb* xkb = (FcitxXkb*) fcitx_utils_malloc0(sizeof(FcitxXkb));
@@ -665,7 +664,7 @@ void* FcitxXkbCreate(FcitxInstance* instance)
     return NULL;
 }
 
-boolean FcitxXkbEventHandler(void* arg, XEvent* event)
+static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
 
@@ -688,21 +687,21 @@ boolean FcitxXkbEventHandler(void* arg, XEvent* event)
     return false;
 }
 
-void FcitxXkbCurrentStateChanged(void* arg)
+static void FcitxXkbCurrentStateChanged(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     const char* layout = FcitxInstanceGetContextString(xkb->owner, CONTEXT_IM_KEYBOARD_LAYOUT);
     FcitxXkbIMKeyboardLayoutChanged(xkb, layout);
 }
 
-void FcitxXkbCurrentStateChangedTriggerOn(void* arg)
+static void FcitxXkbCurrentStateChangedTriggerOn(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     xkb->closeGroup = FcitxXkbGetCurrentGroup(xkb);
     FcitxXkbCurrentStateChanged(arg);
 }
 
-void FcitxXkbDestroy(void* arg)
+static void FcitxXkbDestroy(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     XkbLockGroup(xkb->dpy, XkbUseCoreKbd, xkb->closeGroup);
@@ -719,7 +718,7 @@ void FcitxXkbDestroy(void* arg)
     free(xkb);
 }
 
-void FcitxXkbReloadConfig(void* arg)
+static void FcitxXkbReloadConfig(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     LoadXkbConfig(xkb);
@@ -727,13 +726,13 @@ void FcitxXkbReloadConfig(void* arg)
 }
 
 
-void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args)
+static void* FcitxXkbGetRules(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     return xkb->rules;
 }
 
-void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
+static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
     int idx = FcitxXkbFindLayoutIndex(xkb, args.args[0], args.args[1]);
