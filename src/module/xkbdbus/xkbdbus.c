@@ -62,6 +62,10 @@ const char *introspection_xml =
     "    </method>\n"
     "  </interface>\n"
     "  <interface name=\"" FCITX_XKB_INTERFACE "\">\n"
+    "    <method name=\"SetDefaultLayout\">\n"
+    "        <arg name=\"layout\" direction=\"in\" type=\"s\"/>"
+    "        <arg name=\"variant\" direction=\"in\" type=\"s\"/>"
+    "    </method>\n"
     "    <method name=\"GetLayouts\">\n"
     "      <arg name=\"layouts\" direction=\"out\" type=\"a(ssss)\"/>\n"
     "    </method>\n"
@@ -224,7 +228,22 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_message_unref(reply);
         dbus_connection_flush(connection);
         return DBUS_HANDLER_RESULT_HANDLED;
-    } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "GetLayoutForIM")) {
+    } else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "SetDefaultLayout")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char *layout, *variant;
+        if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
+            FcitxModuleFunctionArg args;
+            args.args[0] = layout;
+            args.args[1] = variant;
+            InvokeFunction(xkbdbus->owner, FCITX_XKB, SETDEFAULTLAYOUT, args);
+        }
+        DBusMessage *reply = dbus_message_new_method_return(message);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        dbus_connection_flush(connection);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }  else if (dbus_message_is_method_call(message, FCITX_XKB_INTERFACE, "GetLayoutForIM")) {
         DBusError error;
         dbus_error_init(&error);
         char* im = NULL, *layout = NULL, *variant = NULL;

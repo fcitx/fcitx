@@ -116,10 +116,24 @@ void        fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gcha
  *
  * @kbd: A FcitxKbd
  * @imname: input method name
+ * @layout: layout
+ * @variant: variant
  *
  * Get a layout binding with input method
  **/
 void         fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar* layout, const gchar* variant);
+
+
+/**
+ * fcitx_kbd_set_default_layout:
+ *
+ * @kbd: A FcitxKbd
+ * @layout: layout
+ * @variant: variant
+ *
+ * Get a layout binding with the state when there is no input method
+ **/
+void         fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant);
 
 
 /**
