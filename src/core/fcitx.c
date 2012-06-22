@@ -46,6 +46,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx/profile.h"
 #include "fcitx/instance.h"
+#include <fcitx/instance-internal.h>
 #include "fcitx-utils/utils.h"
 #include "errorhandler.h"
 
@@ -77,6 +78,10 @@ int main(int argc, char* argv[])
     instance = FcitxInstanceCreate(&sem, argc, argv);
 
     WaitForEnd(&sem, instanceCount);
+
+    if (instance->loadingFatalError) {
+        return 1;
+    }
     return 0;
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

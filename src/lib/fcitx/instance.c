@@ -156,6 +156,8 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     FcitxInstanceInitBuiltInHotkey(instance);
     FcitxInstanceInitBuiltContext(instance);
     FcitxModuleLoad(instance);
+    if (instance->loadingFatalError)
+        return instance;
     if (!FcitxInstanceLoadAllIM(instance)) {
         FcitxInstanceEnd(instance);
         return instance;
@@ -281,6 +283,14 @@ void* RunInstance(void* arg)
 FCITX_EXPORT_API
 void FcitxInstanceEnd(FcitxInstance* instance)
 {
+    if (!instance->initialized) {
+        if (!instance->loadingFatalError) {
+            instance->loadingFatalError = true;
+            sem_post(instance->sem);
+        }
+        return;
+    }
+
     FcitxProfileSave(instance->profile);
     FcitxInstanceSaveAllIM(instance);
 
@@ -343,9 +353,6 @@ void FcitxInstanceEnd(FcitxInstance* instance)
     }
 
     sem_post(instance->sem);
-
-    if (!instance->initialized)
-        return;
 
     /* don't return to main loop, wait for exit */
     int countDown = 10;

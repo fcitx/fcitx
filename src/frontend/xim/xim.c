@@ -246,6 +246,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     if (xim->ims == (XIMS) NULL) {
         FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
         free(xim);
+        FcitxInstanceEnd(instance);
         return NULL;
     }
 

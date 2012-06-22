@@ -81,6 +81,8 @@ void FcitxModuleLoad(FcitxInstance* instance)
                     dlclose(handle);
                     break;
                 }
+                if (instance->loadingFatalError)
+                    return;
                 addon->module = module;
                 addon->addonInstance = moduleinstance;
                 if (module->ProcessEvent && module->SetFD)

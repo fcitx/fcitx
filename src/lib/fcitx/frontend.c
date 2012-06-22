@@ -544,6 +544,8 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
                     dlclose(handle);
                     break;
                 }
+                if (instance->loadingFatalError)
+                    return false;
                 addon->frontend = frontend;
                 frontendindex ++;
                 utarray_push_back(frontends, &addon);

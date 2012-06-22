@@ -139,6 +139,7 @@ struct _FcitxInstance {
     uint64_t timeoutIdx;
 
     UT_array icdata;
+    boolean loadingFatalError;
 };
 
 #endif

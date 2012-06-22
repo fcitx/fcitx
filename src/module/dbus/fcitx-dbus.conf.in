@@ -6,5 +6,5 @@ Category=Module
 Enabled=True
 Library=fcitx-dbus.so
 Type=SharedLibrary
-Priority=30
+Priority=25
 Advance=True

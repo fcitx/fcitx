@@ -158,6 +158,8 @@ void* DBusCreate(FcitxInstance* instance)
             dbus_error_free(&err);
             free(servicename);
             free(dbusmodule);
+
+            FcitxInstanceEnd(instance);
             return NULL;
         }
     } while (request_retry);
