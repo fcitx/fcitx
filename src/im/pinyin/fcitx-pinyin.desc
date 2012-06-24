@@ -138,5 +138,10 @@ Type=Boolean
 DefaultValue=False
 Description=Fix misstype gn/ng
 
+[Pinyin/MisstypeVU]
+Type=Boolean
+DefaultValue=False
+Description=Fix misstype v/u
+
 [DescriptionFile]
 LocaleDomain=fcitx

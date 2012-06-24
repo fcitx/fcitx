@@ -62,7 +62,7 @@ typedef struct _FcitxPinyinConfig {
     char cPYYCDZ[3];
     struct _MHPY *MHPY_C;
     struct _MHPY *MHPY_S;
-    boolean bMisstype;
+    boolean bMisstypeNGGN;
     struct _PYTABLE *PYTable;
     char cNonS;
     SP_C SPMap_C[31];

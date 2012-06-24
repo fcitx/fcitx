@@ -38,6 +38,7 @@ typedef struct _MHPY {
 typedef enum _PYTABLE_CONTROL {
     PYTABLE_NONE,
     PYTABLE_NG_GN,
+    PYTABLE_V_U,
     PYTABLE_AN_ANG, // 0
     PYTABLE_EN_ENG, // 1
     PYTABLE_IAN_IANG, // 2
@@ -48,7 +49,7 @@ typedef enum _PYTABLE_CONTROL {
     PYTABLE_F_H, // 1
     PYTABLE_L_N, // 2
     PYTABLE_S_SH, // 3
-    PYTABLE_Z_ZH, // 4struct _FcitxPinyinConfig
+    PYTABLE_Z_ZH, // 4
     PYTABLE_AN_ANG_S //5
 } PYTABLE_CONTROL;
 
@@ -62,9 +63,9 @@ typedef struct _PYTABLE {
     boolean            *pMH;
 } PYTABLE;
 
-int GetMHIndex_C(MHPY* MHPY_C, char map);
+int GetMHIndex_C2(MHPY* MHPY_C, char map1, char map2);
 //在输入词组时，比如，当用户输入“jiu's”时，应该可以出现“就是”这个词，而无论是否打开了模糊拼音
-int GetMHIndex_S(MHPY* MHPY_S, char map, boolean bMode);
+int GetMHIndex_S2(MHPY* MHPY_S, char map1, char map2, boolean bMode);
 boolean     IsZ_C_S(char map);
 void InitMHPY(MHPY** pMHPY, const MHPY_TEMPLATE* MHPYtemplate);
 void InitPYTable(struct _FcitxPinyinConfig* pyconfig);

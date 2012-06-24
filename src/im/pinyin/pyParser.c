@@ -88,7 +88,7 @@ int FindPYFAIndex(FcitxPinyinConfig *pyconfig, const char *strPY, boolean bMode)
                 return i;
             else if (*(pyconfig->PYTable[i].pMH)) {
                 /* trick: not the kind of misstype */
-                if (pyconfig->PYTable[i].pMH != &pyconfig->bMisstype)
+                if (pyconfig->PYTable[i].pMH != &pyconfig->bMisstypeNGGN)
                     return i;
                 else
                     /* fixed pinyin is valid? */
@@ -336,7 +336,7 @@ boolean MapPY(FcitxPinyinConfig* pyconfig, const char* strPYorigin, char strMap[
 
     size_t          len = strlen(strPY);
 
-    if (pyconfig->bMisstype && strPY[len - 1] == 'n' && strPY[len - 2] == 'g') {
+    if (pyconfig->bMisstypeNGGN && strPY[len - 1] == 'n' && strPY[len - 2] == 'g') {
         strPY[len - 2] = 'n';
         strPY[len - 1] = 'g';
     }
@@ -448,22 +448,22 @@ boolean MapToPY(char strMap[3], char *strPY)
  */
 int Cmp1Map(FcitxPinyinConfig* pyconfig, char map1, char map2, boolean b, boolean bUseMH, boolean bSP)
 {
-    int             iVal1, iVal2;
+    int             iVal;
 
     if (map2 == '0' || map1 == '0') {
         if (map1 == ' ' || map2 == ' ' || !pyconfig->bFullPY || bSP)
             return 0;
     } else {
+        if (map1 == map2)
+            return 0;
+
         if (b) {
-            iVal1 = GetMHIndex_S(pyconfig->MHPY_S, map1, bUseMH);
-            iVal2 = GetMHIndex_S(pyconfig->MHPY_S, map2, bUseMH);
+            iVal = GetMHIndex_S2(pyconfig->MHPY_S, map1, map2, bUseMH);
         } else {
-            iVal1 = GetMHIndex_C(pyconfig->MHPY_C, map1);
-            iVal2 = GetMHIndex_C(pyconfig->MHPY_C, map2);
+            iVal = GetMHIndex_C2(pyconfig->MHPY_C, map1, map2);
         }
 
-        if (iVal1 == iVal2)
-            if (iVal1 >= 0)
+        if (iVal >= 0)
                 return 0;
     }
 

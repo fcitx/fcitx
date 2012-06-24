@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-22 00:45+0800\n"
+"POT-Creation-Date: 2012-06-24 19:54+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -22,7 +22,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:163
 #, c-format
 msgid "%s"
 msgstr ""
@@ -491,10 +491,10 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
 #: unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:308
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:313
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:373
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:378
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:316
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:381
 msgid "Disabled"
 msgstr ""
 
@@ -544,7 +544,7 @@ msgstr ""
 msgid "End Key"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:188
 msgid "English (US)"
 msgstr ""
 
@@ -616,7 +616,7 @@ msgstr ""
 msgid "Fallback UI Addon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:295
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:298
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr ""
@@ -668,6 +668,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:139
 msgid "Fix misstype gn/ng"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:144
+msgid "Fix misstype v/u"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:17
@@ -881,10 +885,10 @@ msgstr ""
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:309
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:314
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:374
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:317
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:377
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:382
 msgid "Input Method Disabled"
 msgstr ""
 
@@ -1158,12 +1162,12 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:560
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:562
 msgid "No available frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:362
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:363
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:366
 msgid "No input window"
 msgstr ""
 
@@ -1171,8 +1175,8 @@ msgstr ""
 msgid "No local input method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
 msgid "No remind"
 msgstr ""
 
@@ -1702,8 +1706,8 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:168
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:385
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:170
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
 msgid "Toggle Remind"
 msgstr ""
 
@@ -1837,8 +1841,8 @@ msgstr ""
 msgid "Use presage to predict if possible."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
 msgid "Use remind"
 msgstr ""
 
@@ -1952,7 +1956,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:360
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:370
 msgid "pthread mutex init failed"
 msgstr ""
 

@@ -46,6 +46,9 @@ const MHPY_TEMPLATE  MHPY_C_TEMPLATE[] = {    //韵母
     //{"uan","uang"},
     {"Za"}
     ,
+    //{"v", "u"},
+    {"fW"}
+    ,
 
     {"\0"}
 };
@@ -222,6 +225,8 @@ const PYTABLE_TEMPLATE  PYTable_template[] = {
     {"xuan", PYTABLE_NONE}
     ,
     {"xu", PYTABLE_NONE}
+    ,
+    {"xv", PYTABLE_V_U}
     ,
     {"xou", PYTABLE_U_OU}
     ,
@@ -474,6 +479,8 @@ const PYTABLE_TEMPLATE  PYTable_template[] = {
     {"quan", PYTABLE_NONE}
     ,
     {"qu", PYTABLE_NONE}
+    ,
+    {"qv", PYTABLE_V_U}
     ,
     {"qiu", PYTABLE_NONE}
     ,
@@ -802,6 +809,8 @@ const PYTABLE_TEMPLATE  PYTable_template[] = {
     {"juan", PYTABLE_NONE}
     ,
     {"ju", PYTABLE_NONE}
+    ,
+    {"jv", PYTABLE_V_U}
     ,
     {"jiu", PYTABLE_NONE}
     ,
@@ -1182,12 +1191,30 @@ int GetMHIndex_C(MHPY* MHPY_C, char map)
     return -1;
 }
 
-int GetMHIndex_S(MHPY* MHPY_S, char map, boolean bMode)
+int GetMHIndex_C2(MHPY* MHPY_C, char map1, char map2)
+{
+    int             i;
+
+    for (i = 0; MHPY_C[i].strMap[0]; i++) {
+        if ((map1 == MHPY_C[i].strMap[0] || map1 == MHPY_C[i].strMap[1])
+        && (map2 == MHPY_C[i].strMap[0] || map2 == MHPY_C[i].strMap[1])) {
+            if (MHPY_C[i].bMode)
+                return i;
+            else
+                return -1;
+        }
+    }
+
+    return -1;
+}
+
+int GetMHIndex_S2(MHPY* MHPY_S, char map1, char map2, boolean bMode)
 {
     int             i;
 
     for (i = 0; MHPY_S[i].strMap[0]; i++) {
-        if (map == MHPY_S[i].strMap[0] || map == MHPY_S[i].strMap[1]) {
+        if ((map1 == MHPY_S[i].strMap[0] || map1 == MHPY_S[i].strMap[1])
+        && (map2 == MHPY_S[i].strMap[0] || map2 == MHPY_S[i].strMap[1])) {
             if (MHPY_S[i].bMode || bMode)
                 return i;
             else
@@ -1252,7 +1279,11 @@ void InitPYTable(FcitxPinyinConfig* pyconfig)
             break;
 
         case PYTABLE_NG_GN:
-            pyconfig->PYTable[iBaseCount].pMH = &pyconfig->bMisstype;
+            pyconfig->PYTable[iBaseCount].pMH = &pyconfig->bMisstypeNGGN;
+            break;
+
+        case PYTABLE_V_U:
+            pyconfig->PYTable[iBaseCount].pMH = &pyconfig->MHPY_C[6].bMode;
             break;
 
         case PYTABLE_AN_ANG: // 0

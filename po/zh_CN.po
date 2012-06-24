@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-22 00:45+0800\n"
-"PO-Revision-Date: 2012-06-22 00:46+0800\n"
+"POT-Creation-Date: 2012-06-24 19:54+0800\n"
+"PO-Revision-Date: 2012-06-24 19:55+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid " Ctrl+Delete To Delete"
 msgstr " Ctrl+Delete 删除"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:163
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -490,10 +490,10 @@ msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr "禁用插件 %s，依赖 %s 无法满足。"
 
 #: unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:308
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:313
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:373
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:378
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:311
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:316
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:381
 msgid "Disabled"
 msgstr "禁用"
 
@@ -543,7 +543,7 @@ msgstr "输入中启用"
 msgid "End Key"
 msgstr "中止键"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:188
 msgid "English (US)"
 msgstr "英语 (美国)"
 
@@ -615,7 +615,7 @@ msgstr "Fcitx接收到信号: %d"
 msgid "Fallback UI Addon"
 msgstr "备选界面附加组件"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:295
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:298
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr "Fcitx"
@@ -667,7 +667,11 @@ msgstr "将第一个候选词显示为预编辑文本"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:139
 msgid "Fix misstype gn/ng"
-msgstr "修复拼音中ng和gn的输入错误"
+msgstr "忽略拼音中ng->gn的输入错误"
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:144
+msgid "Fix misstype v/u"
+msgstr "忽略拼音中u->v的输入错误"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:17
 msgid "Fix preedit cursor at head"
@@ -880,10 +884,10 @@ msgstr "输入信息颜色"
 msgid "Input Method"
 msgstr "输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:309
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:314
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:374
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:317
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:377
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:382
 msgid "Input Method Disabled"
 msgstr "输入法被禁用"
 
@@ -1159,12 +1163,12 @@ msgstr "否"
 msgid "No available Input Method"
 msgstr "无用输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:560
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/frontend.c:562
 msgid "No available frontend"
 msgstr "无可用前端"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:362
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:363
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:365
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:366
 msgid "No input window"
 msgstr "无输入窗口"
 
@@ -1172,8 +1176,8 @@ msgstr "无输入窗口"
 msgid "No local input method"
 msgstr "无局部输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
 msgid "No remind"
 msgstr "无联想"
 
@@ -1703,8 +1707,8 @@ msgstr "切换全角标点"
 msgid "Toggle Half/Full width Character"
 msgstr "切换半/全角字符"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:168
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:385
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:170
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
 msgid "Toggle Remind"
 msgstr "切换联想"
 
@@ -1838,8 +1842,8 @@ msgstr "只在用额外切换键取消激活后才使用它进行切换"
 msgid "Use presage to predict if possible."
 msgstr "如果可以则使用 presage 增强单词提示功能"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:167
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:384
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
 msgid "Use remind"
 msgstr "联想"
 
@@ -1954,7 +1958,7 @@ msgstr "选项%s/%s没有默认选项"
 msgid "no valid font."
 msgstr "无可用字体"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:360
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:370
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
 
