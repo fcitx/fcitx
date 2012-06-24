@@ -482,6 +482,7 @@ static void UpdateMainMenu(FcitxUIMenu* menu)
     FcitxMenuAddMenuItem(menu, NULL, MENUTYPE_DIVLINE, NULL);
     FcitxMenuAddMenuItem(menu, _("Configure Current Input Method"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Configure"), MENUTYPE_SIMPLE, NULL);
+    FcitxMenuAddMenuItem(menu, _("Restart"), MENUTYPE_SIMPLE, NULL);
     FcitxMenuAddMenuItem(menu, _("Exit"), MENUTYPE_SIMPLE, NULL);
 }
 
@@ -498,9 +499,11 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
             FcitxLog(ERROR, _("Unable to create process"));
     } else if (index == length - 1) { /* Exit */
         FcitxInstanceEnd(classicui->owner);
-    } else if (index == length - 2) { /* Configuration */
-        fcitx_utils_launch_configure_tool();
+    } else if (index == length - 2) { /* Restart */
+        fcitx_utils_launch_restart();
     } else if (index == length - 3) { /* Configuration */
+        fcitx_utils_launch_configure_tool();
+    } else if (index == length - 4) { /* Configuration */
         FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
         if (im && im->owner) {
             fcitx_utils_launch_configure_tool_for_addon(im->owner->name);

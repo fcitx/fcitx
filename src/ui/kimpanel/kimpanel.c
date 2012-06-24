@@ -815,6 +815,10 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         FcitxLog(DEBUG, "ReloadConfig");
         FcitxInstanceReloadConfig(instance);
         return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Restart")) {
+        FcitxLog(DEBUG, "Restart");
+        fcitx_utils_launch_restart();
+        return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg, "org.kde.impanel", "Configure")) {
         FcitxLog(DEBUG, "Configure");
         fcitx_utils_launch_configure_tool();

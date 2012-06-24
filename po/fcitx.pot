@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 19:54+0800\n"
+"POT-Creation-Date: 2012-06-24 20:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1552,10 +1552,14 @@ msgid "Configure"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
+msgid "Restart"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:486
 msgid "Exit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:498
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541

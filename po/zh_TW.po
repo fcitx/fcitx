@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 19:54+0800\n"
+"POT-Creation-Date: 2012-06-24 20:22+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -615,7 +615,7 @@ msgstr "精確相符"
 msgid "Exec"
 msgstr "Exec"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:486
 msgid "Exit"
 msgstr "離開"
 
@@ -1476,6 +1476,10 @@ msgstr ""
 msgid "Resize Margin Top"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
+msgid "Restart"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:70
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
@@ -1810,7 +1814,7 @@ msgstr ""
 msgid "UI: open %s fail %s"
 msgstr "使用者界面：開啟 %s 失敗 %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:498
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541
