@@ -729,7 +729,30 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             if (strlen(s0) > len) {
                 s0 += len;
                 if (strcmp("logo", s0) == 0) {
-                    FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
+                    size_t len = 3;
+                    char **prop = fcitx_utils_malloc0(len * sizeof(char*));
+                    asprintf(&prop[0], "/Fcitx/logo/toggle:%s::%s", _("Toggle Input Method"), _("Toggle Input Method"));
+                    asprintf(&prop[1], "/Fcitx/logo/configureim:%s:configure:%s", _("Configure Current Input Method"), _("Configure Current Input Method"));
+                    asprintf(&prop[2], "/Fcitx/logo/restart:%s:view-refresh:%s",_("Restart"), _("Restart"));
+                    KimExecMenu(kimpanel, prop, len );
+                    while (len --)
+                        free(prop[len]);
+                    free(prop);
+                } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
+                    s0 += strlen("logo/");
+                    if (strcmp(s0, "toggle") == 0)
+                        FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
+                    else if (strcmp(s0, "configureim") == 0) {
+                        FcitxIM* im = FcitxInstanceGetCurrentIM(kimpanel->owner);
+                        if (im && im->owner) {
+                            fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
+                        }
+                        else
+                            fcitx_utils_launch_configure_tool();
+                    }
+                    else if (strcmp(s0, "restart") == 0) {
+                        fcitx_utils_launch_restart();
+                    }
                 } else if (strcmp("keyboard", s0) == 0) {
                     FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {

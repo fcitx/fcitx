@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 20:22+0800\n"
+"POT-Creation-Date: 2012-06-24 20:38+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -385,6 +385,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:483
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:735
 msgid "Configure Current Input Method"
 msgstr ""
 
@@ -1448,6 +1449,7 @@ msgid "Resize Margin Top"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:736
 msgid "Restart"
 msgstr ""
 
@@ -1708,6 +1710,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:119
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:196
 msgid "Toggle Half/Full width Character"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:734
+msgid "Toggle Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:170

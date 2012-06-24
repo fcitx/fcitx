@@ -508,6 +508,9 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
         if (im && im->owner) {
             fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
         }
+        else {
+            fcitx_utils_launch_configure_tool();
+        }
     } else {
         FcitxMenuItem* item = (FcitxMenuItem*) utarray_eltptr(&menu->shell, index);
         if (item && item->type == MENUTYPE_SIMPLE && item->data) {

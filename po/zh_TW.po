@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 20:22+0800\n"
+"POT-Creation-Date: 2012-06-24 20:38+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -394,6 +394,7 @@ msgid "Configure"
 msgstr "設定"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:483
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:735
 #, fuzzy
 msgid "Configure Current Input Method"
 msgstr "中文輸入法"
@@ -1477,6 +1478,7 @@ msgid "Resize Margin Top"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:485
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:736
 msgid "Restart"
 msgstr ""
 
@@ -1747,6 +1749,11 @@ msgstr "全形標點符號"
 #, fuzzy
 msgid "Toggle Half/Full width Character"
 msgstr "使用全形字元"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:734
+#, fuzzy
+msgid "Toggle Input Method"
+msgstr "切換輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:170
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
