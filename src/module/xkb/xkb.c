@@ -257,7 +257,6 @@ FcitxXkbInitDefaultLayout (FcitxXkb* xkb)
     }
     else
         xkb->defaultVariants = fcitx_utils_new_string_list();
-    FcitxXkbApplyCustomScript(xkb);
 }
 
 static Bool
@@ -712,6 +711,9 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         AddFunction(addon, FcitxXkbSetLayoutOverride);
         AddFunction(addon, FcitxXkbSetDefaultLayout);
 
+        if (xkb->config.bOverrideSystemXKBSettings)
+            FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
+
         return xkb;
     } while (0);
 
@@ -736,9 +738,10 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
         }
 
         if (xkbEvent->any.xkb_type == XkbNewKeyboardNotify) {
-            XSync(xkb->dpy, True);
+            XSync(xkb->dpy, False);
             FcitxUIUpdateInputWindow(xkb->owner);
             FcitxXkbInitDefaultLayout(xkb);
+            FcitxXkbApplyCustomScript(xkb);
         }
         return true;
     }
@@ -762,6 +765,8 @@ static void FcitxXkbCurrentStateChangedTriggerOn(void* arg)
 static void FcitxXkbDestroy(void* arg)
 {
     FcitxXkb* xkb = (FcitxXkb*) arg;
+    if (xkb->config.bOverrideSystemXKBSettings)
+        FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
     FcitxXkbRetrieveCloseGroup(xkb);
     XSync(xkb->dpy, False);
     FcitxXkbRulesFree(xkb->rules);
@@ -781,7 +786,8 @@ static void FcitxXkbReloadConfig(void* arg)
     FcitxXkb* xkb = (FcitxXkb*) arg;
     LoadXkbConfig(xkb);
     FcitxXkbCurrentStateChanged(xkb);
-    FcitxXkbApplyCustomScript(xkb);
+    if (xkb->config.bOverrideSystemXKBSettings)
+        FcitxXkbSetLayout(xkb, NULL, NULL, NULL);
 }
 
 
@@ -802,6 +808,11 @@ static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
 
 static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
 {
+    if (!xkb->config.bOverrideSystemXKBSettings)
+        return;
+
+    FcitxLog(INFO, "Apply");
+
     if (!(xkb->config.xmodmapCommand && xkb->config.xmodmapCommand[0]
         && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
         return;
