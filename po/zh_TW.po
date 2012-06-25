@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 20:38+0800\n"
+"POT-Creation-Date: 2012-06-25 14:12+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -157,6 +157,10 @@ msgstr ""
 # unknown
 msgid "Appearance"
 msgstr "外觀"
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
+msgid "Apply this custom xmodmap script after layout change"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -1821,6 +1825,7 @@ msgstr ""
 msgid "UI: open %s fail %s"
 msgstr "使用者界面：開啟 %s 失敗 %s"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkb/xkb.c:816
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
@@ -2013,6 +2018,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:370
 msgid "pthread mutex init failed"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:14
+msgid "xmodmap command"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:90

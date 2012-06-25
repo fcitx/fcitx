@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 20:38+0800\n"
-"PO-Revision-Date: 2012-06-24 20:39+0800\n"
+"POT-Creation-Date: 2012-06-25 14:12+0800\n"
+"PO-Revision-Date: 2012-06-25 14:13+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -149,6 +149,10 @@ msgstr "替代上一页快捷键"
 # unknown
 msgid "Appearance"
 msgstr "外观"
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
+msgid "Apply this custom xmodmap script after layout change"
+msgstr "在键盘布局修改之后应用自定义的 xmodmap 脚本"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:67
 msgid "Argument for InputMethod Register"
@@ -1780,6 +1784,7 @@ msgstr "界面: 有问题的界面"
 msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkb/xkb.c:816
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
@@ -1971,6 +1976,10 @@ msgstr "无可用字体"
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:370
 msgid "pthread mutex init failed"
 msgstr "pthread mutex init failed"
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:14
+msgid "xmodmap command"
+msgstr "xmodmap 命令"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:90
 #, c-format

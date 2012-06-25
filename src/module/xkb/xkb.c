@@ -70,6 +70,8 @@ static Bool FcitxXkbUpdateProperties (FcitxXkb* xkb,
                      const char *rules_file, const char *model,
                      const char *all_layouts, const char *all_variants,
                      const char *all_options);
+static void FcitxXkbApplyCustomScript(FcitxXkb* xkb);
+
 #if 0
 static char* FcitxXkbGetCurrentLayout (FcitxXkb* xkb);
 static char* FcitxXkbGetCurrentModel (FcitxXkb* xkb);
@@ -255,6 +257,7 @@ FcitxXkbInitDefaultLayout (FcitxXkb* xkb)
     }
     else
         xkb->defaultVariants = fcitx_utils_new_string_list();
+    FcitxXkbApplyCustomScript(xkb);
 }
 
 static Bool
@@ -733,6 +736,8 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
         }
 
         if (xkbEvent->any.xkb_type == XkbNewKeyboardNotify) {
+            XSync(xkb->dpy, True);
+            FcitxUIUpdateInputWindow(xkb->owner);
             FcitxXkbInitDefaultLayout(xkb);
         }
         return true;
@@ -776,6 +781,7 @@ static void FcitxXkbReloadConfig(void* arg)
     FcitxXkb* xkb = (FcitxXkb*) arg;
     LoadXkbConfig(xkb);
     FcitxXkbCurrentStateChanged(xkb);
+    FcitxXkbApplyCustomScript(xkb);
 }
 
 
@@ -792,6 +798,22 @@ static void* FcitxXkbLayoutExists(void* arg, FcitxModuleFunctionArg args)
     boolean* result = args.args[2];
     *result = (idx >= 0);
     return NULL;
+}
+
+static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
+{
+    if (!(xkb->config.xmodmapCommand && xkb->config.xmodmapCommand[0]
+        && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
+        return;
+
+    char* commandf;
+    asprintf(&commandf, "%s %s &", xkb->config.xmodmapCommand, xkb->config.customXModmapScript);
+    FILE* p = popen(commandf, "r");
+    free(commandf);
+    if (p)
+        pclose(p);
+    else
+        FcitxLog(ERROR, _("Unable to create process"));
 }
 
 static inline void LayoutOverrideFree(LayoutOverride* item) {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 20:38+0800\n"
+"POT-Creation-Date: 2012-06-25 14:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,14 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:9
 msgid "Ignore Input Method Layout Request"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:14
+msgid "xmodmap command"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
+msgid "Apply this custom xmodmap script after layout change"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:6
@@ -1449,6 +1457,14 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkb/xkb.c:816
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541
+msgid "Unable to create process"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:86
 #, c-format
 msgid "Connection Error (%s)"
@@ -1559,13 +1575,6 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:486
 msgid "Exit"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541
-msgid "Unable to create process"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:49

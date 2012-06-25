@@ -30,6 +30,8 @@ typedef struct _FcitxXkbConfig {
     FcitxGenericConfig gconfig;
     boolean bOverrideSystemXKBSettings;
     boolean bIgnoreInputMethodLayoutRequest;
+    char* xmodmapCommand;
+    char* customXModmapScript;
 } FcitxXkbConfig;
 
 typedef struct _FcitxXkb
