@@ -290,6 +290,14 @@ extern "C" {
     void fcitx_utils_launch_restart(void);
 
     /**
+     * @brief launch a process
+     *
+     * @param args argument and command
+     * @return void
+     **/
+    void fcitx_utils_start_process(char** args);
+
+    /**
      * if obj is null, free it, after that, if str is NULL set it with NULL,
      * if str is not NULL, set it with strdup(str)
      *

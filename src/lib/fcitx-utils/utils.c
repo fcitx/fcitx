@@ -501,13 +501,13 @@ void fcitx_utils_string_swap(char** obj, const char* str)
 FCITX_EXPORT_API
 void fcitx_utils_launch_configure_tool()
 {
-    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool &");
-    FILE* p = popen(command, "r");
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
+    char* args[] = {
+        command,
+        0
+    };
+    fcitx_utils_start_process(args);
     free(command);
-    if (p)
-        pclose(p);
-    else
-        FcitxLog(ERROR, _("Unable to create process"));
 }
 
 
@@ -515,30 +515,57 @@ FCITX_EXPORT_API
 void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon)
 {
     char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
-    char* commandf;
-    asprintf(&commandf, "%s %s &", command, imaddon);
-    FILE* p = popen(commandf, "r");
+    char* dimaddon = strdup(imaddon);
+    char* args[] = {
+        command,
+        dimaddon,
+        0
+    };
+    fcitx_utils_start_process(args);
+    free(dimaddon);
     free(command);
-    free(commandf);
-    if (p)
-        pclose(p);
-    else
-        FcitxLog(ERROR, _("Unable to create process"));
 }
 
 FCITX_EXPORT_API
 void fcitx_utils_launch_restart()
 {
     char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx");
-    char* commandf;
-    asprintf(&commandf, "%s -r &", command);
-    FILE* p = popen(commandf, "r");
+    char* args[] = {
+        command,
+        "-r",
+        0
+    };
+    fcitx_utils_start_process(args);
     free(command);
-    free(commandf);
-    if (p)
-        pclose(p);
-    else
-        FcitxLog(ERROR, _("Unable to create process"));
+}
+
+FCITX_EXPORT_API
+void fcitx_utils_start_process(char** args)
+{
+    /* exec command */
+    pid_t child_pid;
+
+    child_pid = fork();
+    if (child_pid < 0) {
+        perror("fork");
+    } else if (child_pid == 0) {         /* child process  */
+        pid_t grandchild_pid;
+
+        grandchild_pid = fork();
+        if (grandchild_pid < 0) {
+            perror("fork");
+            _exit(1);
+        } else if (grandchild_pid == 0) { /* grandchild process  */
+            execvp(args[0], args);
+            perror("execvp");
+            _exit(1);
+        } else {
+            _exit(0);
+        }
+    } else {                              /* parent process */
+        int status;
+        waitpid(child_pid, &status, 0);
+    }
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

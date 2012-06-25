@@ -806,14 +806,11 @@ static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
         && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
         return;
 
-    char* commandf;
-    asprintf(&commandf, "%s %s &", xkb->config.xmodmapCommand, xkb->config.customXModmapScript);
-    FILE* p = popen(commandf, "r");
-    free(commandf);
-    if (p)
-        pclose(p);
-    else
-        FcitxLog(ERROR, _("Unable to create process"));
+    char* args[] = {
+        xkb->config.xmodmapCommand,
+        xkb->config.customXModmapScript
+    };
+    fcitx_utils_start_process(args);
 }
 
 static inline void LayoutOverrideFree(LayoutOverride* item) {

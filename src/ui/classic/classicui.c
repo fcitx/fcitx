@@ -492,11 +492,12 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     FcitxInstance* instance = classicui->owner;
     int length = utarray_len(&menu->shell);
     if (index == 0) {
-        FILE* p = popen("xdg-open http://fcitx-im.org/ &", "r");
-        if (p)
-            pclose(p);
-        else
-            FcitxLog(ERROR, _("Unable to create process"));
+        char* args[] = {
+            "xdg-open",
+            "http://fcitx-im.org/",
+            0
+        };
+        fcitx_utils_start_process(args);
     } else if (index == length - 1) { /* Exit */
         FcitxInstanceEnd(classicui->owner);
     } else if (index == length - 2) { /* Restart */
