@@ -808,7 +808,8 @@ static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
 
     char* args[] = {
         xkb->config.xmodmapCommand,
-        xkb->config.customXModmapScript
+        xkb->config.customXModmapScript,
+        0
     };
     fcitx_utils_start_process(args);
 }
