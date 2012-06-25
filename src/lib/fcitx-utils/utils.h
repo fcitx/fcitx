@@ -294,6 +294,8 @@ extern "C" {
      *
      * @param args argument and command
      * @return void
+     *
+     * @since 4.2.5
      **/
     void fcitx_utils_start_process(char** args);
 
