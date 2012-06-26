@@ -23,7 +23,7 @@ Enum8=L_ALT
 Enum9=R_ALT
 Enum10=ALT Both
 Enum11=Disabled
-DefaultValue=L_CTRL
+DefaultValue=L_SHIFT
 Description=Extra key for trigger input method
 
 [Hotkey/ActivateKey]
