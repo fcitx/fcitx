@@ -811,8 +811,6 @@ static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
     if (!xkb->config.bOverrideSystemXKBSettings)
         return;
 
-    FcitxLog(INFO, "Apply");
-
     if (!(xkb->config.xmodmapCommand && xkb->config.xmodmapCommand[0]
         && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
         return;

@@ -329,6 +329,7 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
     if (!disableQuickPhrase
         && !qpstate->enabled
         && qpstate->buffer[0] == '\0'
+        && FcitxInputStateGetRawInputBufferSize(input) == 0
         && FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
         FcitxInstanceCleanInputWindow(qpstate->owner);
         FcitxInputStateSetShowCursor(input, true);
