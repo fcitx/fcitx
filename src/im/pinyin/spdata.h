@@ -254,4 +254,45 @@ static const SP_S SPMap_S_Ziranma[] = {
     {"\0", '\0'}
 };
 
+
+static const SP_C            SPMap_C_XIAOHE[] = {
+    {"ai", 'd'},
+    {"an", 'j'},
+    {"ang", 'h'},
+    {"ao", 'c'},
+    {"ei", 'w'},
+    {"en", 'f'},
+    {"eng", 'g'},
+    {"ia", 'x'},
+    {"ian", 'm'},
+    {"iang", 'l'},
+    {"iao", 'n'},
+    {"ie", 'p'},
+    {"in", 'b'},
+    {"ing", 'k'},
+    {"iong", 's'},
+    {"iu", 'q'},
+    {"ng", 'g'},
+    {"ong", 's'},
+    {"ou", 'z'},
+    {"ua", 'x'},
+    {"uai", 'k'},
+    {"uan", 'r'},
+    {"uang", 'l'},
+    {"ue", 't'},
+    {"ui", 'v'},
+    {"un", 'y'},
+    {"uo", 'o'},
+    {"ve", 't'},
+    {"v", 'v'},
+    {"\0", '\0'}
+};
+
+static const SP_S SPMap_S_XIAOHE[] = {
+    {"ch", 'i'},
+    {"sh", 'u'},
+    {"zh", 'v'},
+    {"\0", '\0'}
+};
+
 #endif

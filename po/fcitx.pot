@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 14:12+0800\n"
+"POT-Creation-Date: 2012-06-27 15:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -433,103 +433,103 @@ msgstr ""
 msgid "Clear Frequency"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:12
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:13
 msgid "Default Shuangpin Schema"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:17
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:18
 msgid "Fix preedit cursor at head"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:22
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use Complete Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:27
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:28
 msgid "Auto Create Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:32
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:33
 msgid "Save Auto Created Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:37
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Hotkey of Adding Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:42
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Deleting Frequent Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:47
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:48
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:52
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:53
 msgid "Hotkey of Inputing Word From Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:61
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:70
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:79
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:84
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:89
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:90
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:94
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:99
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:104
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:105
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:109
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:114
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:119
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:124
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:129
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:134
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy z and zh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:139
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:144
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u"
 msgstr ""
 
@@ -1116,6 +1116,10 @@ msgid "User Defined"
 msgstr ""
 
 #: unknown
+msgid "XiaoHe"
+msgstr ""
+
+#: unknown
 msgid "Zhongwenzhixing"
 msgstr ""
 
@@ -1457,14 +1461,6 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkb/xkb.c:816
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:499
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:510
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:526
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-utils/utils.c:541
-msgid "Unable to create process"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:86
 #, c-format
 msgid "Connection Error (%s)"
@@ -1520,11 +1516,11 @@ msgid "Toggle Half/Full width Character"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:246
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:335
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:336
 msgid "Quick Phrase: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:344
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/QuickPhrase.c:345
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""

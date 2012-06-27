@@ -39,7 +39,8 @@ typedef enum _SHUANGPINSCHEME {
     SP_ABC,
     SP_ZHONGWENZHIXING,
     SP_PINYINJIAJIA,
-    SP_USERDEFINE
+    SP_XIAOHE,
+    SP_USERDEFINE,
 } SHUANGPINSCHEME;
 
 typedef struct _PYMappedSplitData PYMappedSplitData;

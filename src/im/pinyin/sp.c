@@ -52,6 +52,7 @@ void LoadSPData(FcitxPinyinState *pystate)
     boolean            bIsDefault = false;
     SP_C* SPMap_C = pyconfig->SPMap_C;
     SP_S* SPMap_S = pyconfig->SPMap_S;
+    char            nonS = 'o';
 
     const SP_C* SPMap_C_source = NULL;
     const SP_S* SPMap_S_source = NULL;
@@ -79,6 +80,11 @@ void LoadSPData(FcitxPinyinState *pystate)
     case SP_ABC:
         SPMap_C_source = SPMap_C_ABC;
         SPMap_S_source = SPMap_S_ABC;
+        break;
+    case SP_XIAOHE:
+        nonS = '*';
+        SPMap_C_source = SPMap_C_XIAOHE;
+        SPMap_S_source = SPMap_S_XIAOHE;
         break;
     default: {
         /* reset work around */
@@ -120,7 +126,8 @@ void LoadSPData(FcitxPinyinState *pystate)
                         && strcmp(pstr, "紫光") != 0
                         && strcmp(pstr, "拼音加加") != 0
                         && strcmp(pstr, "中文之星") != 0
-                        && strcmp(pstr, "智能ABC") != 0) {
+                        && strcmp(pstr, "智能ABC") != 0
+                        && strcmp(pstr, "小鹤") != 0) {
                     bIsDefault = true;
                 }
 
@@ -165,7 +172,7 @@ void LoadSPData(FcitxPinyinState *pystate)
     }
 
     if (SPMap_C_source && SPMap_S_source) {
-        pyconfig->cNonS = 'o';
+        pyconfig->cNonS = nonS;
         memcpy(pyconfig->SPMap_S, SPMap_S_source, 4 * sizeof(SP_S));
         memcpy(pyconfig->SPMap_C, SPMap_C_source, 31 * sizeof(SP_C));
     }
@@ -206,8 +213,37 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
 
     strTmp[1] = '\0';
     strQP[0] = '\0';
+    const char aeiou[] = "aeiou";
 
-    if (strSP[0] != pyconfig->cNonS) {
+    boolean checkXiaoheNonS = false;
+    do {
+        if (pyconfig->cNonS != '*')
+            break;
+        if (!strchr(aeiou, strSP[0]))
+            break;
+        if (!strSP[1])
+            break;
+
+        if (strchr(aeiou, strSP[1])) {
+             if (strSP[0] == strSP[1])
+                 checkXiaoheNonS = true;
+        } else {
+            int idx = -1;
+            while (1) {
+                idx = GetSPIndexJP_C(pyconfig, strSP[1], idx + 1);
+                if (idx == -1)
+                    break;
+                if (SPMap_C[idx].strQP[0] == strSP[0]) {
+                    checkXiaoheNonS = true;
+                    break;
+                }
+            }
+        }
+    } while(0);
+
+
+    if (strSP[0] != pyconfig->cNonS
+        && !checkXiaoheNonS) {
         iIndex1 = GetSPIndexJP_S(pyconfig, *strSP);
 
         if (iIndex1 == -1) {
@@ -229,6 +265,9 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
                 strcat(strQP, strTmp);
                 break;
             }
+
+            if (pyconfig->cNonS == '*' && SPMap_C[iIndex2].strQP[0] != strSP[0])
+                continue;
 
             strcpy(str_QP, strQP);
 
