@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-unicode
+_GeneralName=Fcitx Unicode Typing Support
+_Comment=Add Unicode Typing Support
+Category=Module
+Enabled=True
+Library=fcitx-unicode.so
+Type=SharedLibrary
+Priority=80

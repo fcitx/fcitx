@@ -47,7 +47,7 @@ extern "C" {
 #define ISUTF8_CB(c)  (((c)&0xc0) == 0x80)
 
 /**
- * Get utf8 string lenght
+ * Get utf8 string length
  *
  * @param s string
  * @return length
@@ -61,7 +61,7 @@ size_t fcitx_utf8_strlen(const char *s);
  * @param chr return unicode
  * @return next char pointer
  **/
-char*  fcitx_utf8_get_char(const char *in, int *chr);
+char*  fcitx_utf8_get_char(const char *in, unsigned int *chr);
 
 /**
  * compare utf8 string, with utf8 string length n
@@ -142,6 +142,28 @@ void fcitx_utf8_strncpy(char* str, const char* s, size_t byte);
  * @since 4.2.4
  **/
 size_t fcitx_utf8_strnlen(const char* str, size_t byte);
+
+/**
+ * @brief get ucs4 char length
+ *
+ * @param c ucs4 char
+ * @return int
+ *
+ * @since 4.2.5
+ **/
+int fcitx_ucs4_char_len(unsigned int c);
+
+
+/**
+ * @brief convert ucs4 char to utf8
+ *
+ * @param c ucs4 char
+ * @param output output string, need to reserve enough space
+ * @return int
+ *
+ * @since 4.2.5
+ **/
+int fcitx_ucs4_to_utf8(unsigned int c, char* output);
 
 #ifdef __cplusplus
 }

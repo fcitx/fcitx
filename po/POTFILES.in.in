@@ -2,6 +2,9 @@
 [encoding: UTF-8]
 ./po/desc.po
 ./po/conf.po
+@REL_SOURCE_ROOT@/src/module/unicode/fcitx-unicode.conf.in
+@REL_SOURCE_ROOT@/src/module/unicode/unicode.c
+@REL_SOURCE_ROOT@/src/module/unicode/charselectdata.c
 @REL_SOURCE_ROOT@/src/module/lua/fcitx-lua.conf.in
 @REL_SOURCE_ROOT@/src/module/punc/fcitx-punc.conf.in
 @REL_SOURCE_ROOT@/src/module/autoeng/fcitx-autoeng.conf.in

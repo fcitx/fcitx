@@ -722,7 +722,14 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
-        FcitxMessagesAddMessageAtLast(msgDown, MSG_INDEX, "%s", strTemp);
+        unsigned int mod = FcitxCandidateWordGetModifier(input->candList);
+
+        FcitxMessagesAddMessageAtLast(msgDown, MSG_INDEX, "%s%s%s%s%s",
+                                      (mod & FcitxKeyState_Super) ? "M-" : "",
+                                      (mod & FcitxKeyState_Ctrl) ? "C-" : "",
+                                      (mod & FcitxKeyState_Alt) ? "A-" : "",
+                                      (mod & FcitxKeyState_Shift) ? "S-" : "",
+                                      strTemp);
 
         FcitxMessageType type = candWord->wordType;
 

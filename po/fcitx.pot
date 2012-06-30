@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:14+0800\n"
+"POT-Creation-Date: 2012-06-30 15:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+# unknown
+#: /home/saber/Develop/fcitx/src/module/unicode/fcitx-unicode.desc:3
+msgid "Key"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:4
 msgid "Local Input Method SelectKey"
@@ -836,10 +841,6 @@ msgid "InputMethod"
 msgstr ""
 
 # unknown
-msgid "Key"
-msgstr ""
-
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:421
 msgid "Keyboard"
 msgstr ""
@@ -897,6 +898,10 @@ msgstr ""
 
 # unknown
 msgid "TraditionalChinese"
+msgstr ""
+
+# unknown
+msgid "Unicode"
 msgstr ""
 
 # unknown
@@ -1155,12 +1160,20 @@ msgstr ""
 msgid "Shuang Pin Schema"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
+msgid "Fcitx Unicode Typing Support"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:2
+msgid "Add Unicode Typing Support"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:1
 msgid "Fcitx Lua Support"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:2
-msgid "Add Lua script support for Fcitx"
+msgid "Add Lua script support to Fcitx"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-punc.conf.in.h:1
@@ -1336,6 +1349,30 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/cangjie.conf.in.h:1
 msgid "Cangjie"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:229
+msgid "Search unicode"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+msgid "<Non Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+msgid "<Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+msgid "<Low Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+msgid "<Private Use>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+msgid "<not assigned>"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:141

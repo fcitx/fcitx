@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:14+0800\n"
+"POT-Creation-Date: 2012-06-30 15:03+0800\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -29,6 +29,26 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+msgid "<Low Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+msgid "<Non Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+msgid "<Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+msgid "<Private Use>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+msgid "<not assigned>"
 msgstr ""
 
 #: unknown
@@ -88,11 +108,15 @@ msgid "Active Tray Icon"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:2
-msgid "Add Lua script support for Fcitx"
+msgid "Add Lua script support to Fcitx"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:2
+msgid "Add Unicode Typing Support"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
@@ -647,6 +671,10 @@ msgstr ""
 msgid "Fcitx Skin Installer"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
+msgid "Fcitx Unicode Typing Support"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xim.conf.in.h:1
 msgid "Fcitx XIM Frontend"
 msgstr ""
@@ -938,6 +966,7 @@ msgid ""
 msgstr ""
 
 # unknown
+#: /home/saber/Develop/fcitx/src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
 msgstr ""
 
@@ -1497,6 +1526,10 @@ msgstr ""
 msgid "Scroll between Input Method"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:229
+msgid "Search unicode"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
@@ -1781,6 +1814,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ui.c:189
 #, c-format
 msgid "UI: open %s fail %s"
+msgstr ""
+
+# unknown
+msgid "Unicode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:2

@@ -1,6 +1,7 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${PROJECT_SOURCE_DIR}/src/im/pinyin)
+include_directories(${PROJECT_SOURCE_DIR}/src/module/unicode)
 
 add_executable(testconfig testconfig.c)
 target_link_libraries(testconfig fcitx-config)
@@ -13,6 +14,9 @@ target_link_libraries(teststring fcitx-utils)
 
 add_executable(testutf8 testutf8.c)
 target_link_libraries(testutf8 fcitx-utils)
+
+add_executable(testunicode testunicode.c ../src/module/unicode/charselectdata.c)
+target_link_libraries(testunicode fcitx-utils fcitx-config)
 
 add_executable(testpinyin
     ../src/im/pinyin/pyParser.c
@@ -38,3 +42,5 @@ add_test(NAME teststring
 add_test(NAME testutf8
          COMMAND testutf8)
 
+add_test(NAME testunicode
+         COMMAND testunicode ${PROJECT_SOURCE_DIR}/src/module/unicode/charselectdata)

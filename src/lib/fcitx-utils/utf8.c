@@ -45,7 +45,7 @@ fcitx_utf8_strlen(const char *s)
     unsigned int l = 0;
 
     while (*s) {
-        int chr;
+        unsigned int chr;
 
         s = fcitx_utf8_get_char(s, &chr);
         l++;
@@ -84,9 +84,76 @@ int fcitx_utf8_char_len(const char *in)
 }
 
 FCITX_EXPORT_API
-char *
-fcitx_utf8_get_char(const char *in, int *chr)
+int fcitx_ucs4_char_len(unsigned int c)
 {
+    if (c < 0x00080) {
+        return 1;
+    } else if (c < 0x00800) {
+        return 2;
+    } else if (c < 0x10000) {
+        return 3;
+    } else if (c < 0x200000) {
+        return 4;
+    // below is not in UCS4 but in 32bit int.
+    } else if (c < 0x8000000) {
+        return 5;
+    } else {
+        return 6;
+    }
+}
+
+FCITX_EXPORT_API
+int fcitx_ucs4_to_utf8(unsigned int c, char* output)
+{
+    if (c < 0x00080) {
+        output[0] = (char) (c & 0xFF);
+        output[1] = '\0';
+        return 1;
+    } else if (c < 0x00800) {
+        output[0] = (char) (0xC0 + ((c >> 6) & 0x1F));
+        output[1] = (char) (0x80 + (c & 0x3F));
+        output[2] = '\0';
+        return 2;
+    } else if (c < 0x10000) {
+        output[0] = (char) (0xE0 + ((c >> 12) & 0x0F));
+        output[1] = (char) (0x80 + ((c >> 6) & 0x3F));
+        output[2] = (char) (0x80 + (c & 0x3F));
+        output[3] = '\0';
+        return 3;
+    } else if (c < 0x200000) {
+        output[0] = (char) (0xF0 + ((c >> 18) & 0x07));
+        output[1] = (char) (0x80 + ((c >> 12) & 0x3F));
+        output[2] = (char) (0x80 + ((c >> 6)  & 0x3F));
+        output[3] = (char) (0x80 + (c & 0x3F));
+        output[4] = '\0';
+        return 4;
+    // below is not in UCS4 but in 32bit int.
+    } else if (c < 0x8000000) {
+        output[0] = (char) (0xF8 + ((c >> 24) & 0x03));
+        output[1] = (char) (0x80 + ((c >> 18) & 0x3F));
+        output[2] = (char) (0x80 + ((c >> 12) & 0x3F));
+        output[3] = (char) (0x80 + ((c >> 6)  & 0x3F));
+        output[4] = (char) (0x80 + (c & 0x3F));
+        output[5] = '\0';
+        return 5;
+    } else {
+        output[0] = (char) (0xFC + ((c >> 30) & 0x01));
+        output[1] = (char) (0x80 + ((c >> 24) & 0x3F));
+        output[2] = (char) (0x80 + ((c >> 18) & 0x3F));
+        output[3] = (char) (0x80 + ((c >> 12) & 0x3F));
+        output[4] = (char) (0x80 + ((c >> 6)  & 0x3F));
+        output[5] = (char) (0x80 + (c & 0x3F));
+        output[6] = '\0';
+        return 6;
+    }
+    return 6;
+}
+
+FCITX_EXPORT_API
+char *
+fcitx_utf8_get_char(const char *i, unsigned int *chr)
+{
+    const unsigned char* in = (const unsigned char *)i;
     if (!(in[0] & 0x80)) {
         *(chr) = *(in);
         return (char *)in + 1;
@@ -131,7 +198,7 @@ FCITX_EXPORT_API
 int fcitx_utf8_strncmp(const char *s1, const char *s2, int n)
 {
     // Seems to work.
-    int c1, c2;
+    unsigned int c1, c2;
     int i;
 
     for (i = 0; i < n; i++) {
@@ -163,7 +230,7 @@ char* fcitx_utf8_get_nth_char(char* s, unsigned int n)
     unsigned int l = 0;
 
     while (*s && l < n) {
-        int chr;
+        unsigned int chr;
 
         s = fcitx_utf8_get_char(s, &chr);
         l++;
@@ -257,7 +324,7 @@ FCITX_EXPORT_API
 int fcitx_utf8_check_string(const char *s)
 {
     while (*s) {
-        int chr;
+        unsigned int chr;
 
         if (fcitx_utf8_get_char_validated(s, 6) < 0)
             return 0;
@@ -272,7 +339,7 @@ FCITX_EXPORT_API
 void fcitx_utf8_strncpy(char* str, const char* s, size_t byte)
 {
     while (*s) {
-        int chr;
+        unsigned int chr;
 
         const char* next = fcitx_utf8_get_char(s, &chr);
         size_t diff = next - s;
@@ -297,7 +364,7 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte)
 {
     size_t len = 0;
     while (*str && byte > 0) {
-        int chr;
+        unsigned int chr;
 
         const char* next = fcitx_utf8_get_char(str, &chr);
         size_t diff = next - str;

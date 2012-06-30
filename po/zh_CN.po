@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:14+0800\n"
-"PO-Revision-Date: 2012-06-27 15:15+0800\n"
+"POT-Creation-Date: 2012-06-30 15:03+0800\n"
+"PO-Revision-Date: 2012-06-30 15:08+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -30,6 +30,26 @@ msgstr "%s"
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+msgid "<Low Surrogate>"
+msgstr "<低半代理区>"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+msgid "<Non Private Use High Surrogate>"
+msgstr "<非专用高半代理区>"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+msgid "<Private Use High Surrogate>"
+msgstr "<专用高半代理区>"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+msgid "<Private Use>"
+msgstr "<专用区>"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+msgid "<not assigned>"
+msgstr "<未指派>"
 
 #: unknown
 msgid "ABC"
@@ -88,12 +108,16 @@ msgid "Active Tray Icon"
 msgstr "活动输入法图标"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:2
-msgid "Add Lua script support for Fcitx"
+msgid "Add Lua script support to Fcitx"
 msgstr "为 Fcitx 增加 Lua 支持"
 
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
 msgid "Add Phrase"
 msgstr "添加词组"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:2
+msgid "Add Unicode Typing Support"
+msgstr "添加 Unicode 输入支持"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
@@ -646,6 +670,10 @@ msgstr "Fcitx 的 Lua 支持"
 msgid "Fcitx Skin Installer"
 msgstr "Fcitx 皮肤安装器"
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
+msgid "Fcitx Unicode Typing Support"
+msgstr "Fcitx 的 Unicode 输入支持"
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xim.conf.in.h:1
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
@@ -936,6 +964,7 @@ msgid ""
 "code length"
 msgstr "当目前没有匹配项并且输入长度等于码长时保持当前的输入缓冲区"
 
+#: /home/saber/Develop/fcitx/src/module/unicode/fcitx-unicode.desc:3
 msgid "Key"
 msgstr "按键"
 
@@ -1498,6 +1527,10 @@ msgstr "保存配置及输入历史"
 msgid "Scroll between Input Method"
 msgstr "输入法切换键"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:229
+msgid "Search unicode"
+msgstr "搜索 unicode"
+
 #: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx真正启动前延迟的秒数"
@@ -1783,6 +1816,10 @@ msgstr "界面: 有问题的界面"
 #, c-format
 msgid "UI: open %s fail %s"
 msgstr "界面: 打开 %s 失败 %s"
+
+# unknown
+msgid "Unicode"
+msgstr "Unicode"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:2
 msgid "Unique Name for Table"

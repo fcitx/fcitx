@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:14+0800\n"
+"POT-Creation-Date: 2012-06-30 15:03+0800\n"
 "PO-Revision-Date: 2012-05-19 00:46+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -32,6 +32,26 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1486
 msgid "/min  Time Used: "
 msgstr "/分 經過時間："
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+msgid "<Low Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+msgid "<Non Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+msgid "<Private Use High Surrogate>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+msgid "<Private Use>"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+msgid "<not assigned>"
+msgstr ""
 
 #: unknown
 msgid "ABC"
@@ -93,13 +113,17 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-lua.conf.in.h:2
 #, fuzzy
-msgid "Add Lua script support for Fcitx"
+msgid "Add Lua script support to Fcitx"
 msgstr "Fcitx 的 Kimpanel 支援"
 
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
 #, fuzzy
 msgid "Add Phrase"
 msgstr "自動字詞"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:2
+msgid "Add Unicode Typing Support"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:106
 msgid "Add Watch Function Error"
@@ -665,6 +689,11 @@ msgstr "標點支援"
 msgid "Fcitx Skin Installer"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
+#, fuzzy
+msgid "Fcitx Unicode Typing Support"
+msgstr "標點支援"
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xim.conf.in.h:1
 msgid "Fcitx XIM Frontend"
 msgstr "Fcitx XIM 前端"
@@ -963,6 +992,7 @@ msgid ""
 "code length"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/module/unicode/fcitx-unicode.desc:3
 #, fuzzy
 msgid "Key"
 msgstr "中止鍵"
@@ -1527,6 +1557,10 @@ msgstr "保存所有設定及輸入歷史"
 msgid "Scroll between Input Method"
 msgstr "在輸入法之間切換的快捷鍵"
 
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:229
+msgid "Search unicode"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Seconds sleep before fcitx really start"
 msgstr "Fcitx 真正啟動前延遲的秒數"
@@ -1824,6 +1858,10 @@ msgstr ""
 #, c-format
 msgid "UI: open %s fail %s"
 msgstr "使用者界面：開啟 %s 失敗 %s"
+
+# unknown
+msgid "Unicode"
+msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:2
 msgid "Unique Name for Table"

@@ -1,0 +1,7 @@
+[Unicode/Key]
+Type=Hotkey
+Description=Key
+DefaultValue=CTRL_ALT_SHIFT_U
+
+[DescriptionFile]
+LocaleDomain=fcitx

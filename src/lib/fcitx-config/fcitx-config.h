@@ -20,17 +20,17 @@
 
 /**
  * @defgroup FcitxConfig FcitxConfig
- * 
+ *
  * FcitxConfig includes a lot of configuration related macro and function.
  * Macro can be easily used to bind a struct with configuration
- * 
+ *
  * Fcitx configuration file can be easily mapped to corresponding user interface,
  * and you don't need to write any user interface at all.
- * 
+ *
  * FcitxConfig can be also used to implement native user interface.
- * 
+ *
  * Here is a common example for use macro binding with a struct
- * 
+ *
  * @code
  *    typedef struct _FcitxProfile {
  *        FcitxGenericConfig gconfig;
@@ -42,10 +42,10 @@
  *        char* imList;
  *    } FcitxProfile;
  * @endcode
- * 
+ *
  * A config struct need to put FcitxGenericConfig as first field.
  * Following code will define a function
- * 
+ *
  * @code
  * CONFIG_BINDING_BEGIN_WITH_ARG(FcitxProfile, FcitxInstance* instance)
  * CONFIG_BINDING_REGISTER("Profile", "FullWidth", bUseFullWidthChar)
@@ -56,27 +56,27 @@
  * CONFIG_BINDING_REGISTER_WITH_FILTER_ARG("Profile", "EnabledIMList", imList, FilterIMList, instance)
  * CONFIG_BINDING_END()
  * @endcode
- * 
+ *
  * Then you will get following function:
- * 
+ *
  * @code
  * void FcitxProfileConfigBind( FcitxProfile* config, FcitxConfigFile* cfile, FcitxConfigFileDesc* cfdesc, FcitxInstance* instance )
  * @endcode
- * 
+ *
  * If you need forward declaration, you can used
  * @code
  * CONFIG_BINDING_DECLARE_WITH_ARG(FcitxProfile, FcitxInstance* instance)
  * @endcode
- * 
+ *
  * The FcitxConfigFileDesc pointer is coresponding to the .desc file, which need to be placed
  * under share/fcitx/configdesc/
- * 
- * You can use following macro to define a define to load FcitxConfigFileDesc* pointer, 
+ *
+ * You can use following macro to define a define to load FcitxConfigFileDesc* pointer,
  * second argument is the .desc file name.
- * 
+ *
  * The FcitxConfigFileDesc pointer returned by this macro is a static variable, so it should not be
  * free'd, and will only load once.
- * 
+ *
  * @code
  * CONFIG_DESC_DEFINE(GetProfileDesc, "profile.desc")
  * @endcode
@@ -100,8 +100,11 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <errno.h>
 #include <fcitx-utils/uthash.h>
 #include <fcitx-utils/utils.h>
+#include <fcitx-utils/log.h>
+#include <fcitx-config/xdg.h>
 
 struct _FcitxHotkey;
 /**
@@ -397,6 +400,41 @@ extern "C"
         } \
         return configDesc; \
     }
+
+#define CONFIG_DEFINE_LOAD_AND_SAVE(name, type, config_name) \
+CONFIG_DESC_DEFINE(Get##name##Desc, config_name ".desc") \
+void name##SaveConfig(type* _cfg) \
+{ \
+    FcitxConfigFileDesc* configDesc = Get##name##Desc(); \
+    char *file; \
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "w", &file); \
+    FcitxLog(DEBUG, "Save Config to %s", file); \
+    FcitxConfigSaveConfigFileFp(fp, &_cfg->gconfig, configDesc); \
+    free(file); \
+    if (fp) \
+        fclose(fp); \
+} \
+boolean name##LoadConfig(type* _cfg) { \
+    FcitxConfigFileDesc* configDesc = Get##name##Desc(); \
+    if (configDesc == NULL) \
+        return false; \
+    \
+    FILE *fp; \
+    char *file; \
+    fp = FcitxXDGGetFileUserWithPrefix("conf", config_name ".config", "r", &file); \
+    FcitxLog(DEBUG, "Load Config File %s", file); \
+    free(file); \
+    if (!fp) { \
+        if (errno == ENOENT) \
+            name##SaveConfig(_cfg); \
+    } \
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc); \
+    type##ConfigBind(_cfg, cfile, configDesc); \
+    FcitxConfigBindSync((FcitxGenericConfig*)_cfg); \
+    if (fp) \
+        fclose(fp); \
+    return true; \
+} \
 
     /**
      * parse a config file with file name.

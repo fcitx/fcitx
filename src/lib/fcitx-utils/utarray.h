@@ -252,6 +252,10 @@ static const UT_icd ut_int_icd _UNUSED_ = {sizeof(int), NULL, NULL, NULL};
 
 #define utarray_custom_bsearch(key, a, acc, cmp) fcitx_utils_custom_bsearch((key), (a)->d, (a)->i, (a)->icd->sz, (acc), cmp )
 
+#define utarray_foreach(key, array, type) \
+    type* key; \
+    for(key = (type*) utarray_front(array) ; key != NULL; key = (type*) utarray_next((array), key))
+
 #endif /* UTARRAY_H */
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
