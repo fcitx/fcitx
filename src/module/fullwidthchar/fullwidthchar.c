@@ -163,7 +163,7 @@ char* ProcessFullWidthChar(void* arg, const char* str)
         const char* ps = str;
         ret[0] = '\0';
         for (; i < len; ++i) {
-            int wc;
+            unsigned int wc;
             int chr_len = fcitx_utf8_char_len(ps);
             char *nps;
             nps = fcitx_utf8_get_char(ps , &wc);

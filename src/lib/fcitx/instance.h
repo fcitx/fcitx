@@ -59,6 +59,22 @@ extern "C" {
      **/
     FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[]);
 
+
+    /**
+     * create new fcitx instance
+     *
+     * @param sem semaphore to notify the instance is end
+     * @param argc argc
+     * @param argv argv
+     * @param signal fd
+     * @return FcitxInstance*
+     *
+     * @see FcitxInstanceCreate
+     *
+     * @since 4.2.5
+     **/
+    FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd);
+
     /**
      * replace existing fcitx instance
      *

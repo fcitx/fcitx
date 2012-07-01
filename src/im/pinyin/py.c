@@ -2474,7 +2474,7 @@ void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 
     int i = 0;
     while (*strHZ) {
-        int chr;
+        unsigned int chr;
 
         sp = fcitx_utf8_get_char(strHZ, &chr);
         size_t len = sp - strHZ;

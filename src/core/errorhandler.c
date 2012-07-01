@@ -38,6 +38,7 @@
 #endif
 
 extern FcitxInstance* instance;
+extern int selfpipe[2];
 
 void SetMyExceptionHandler(void)
 {
@@ -61,13 +62,9 @@ void OnException(int signo)
     if (signo == SIGCHLD)
         return;
 
-    FcitxLog(INFO, _("FCITX -- Get Signal No.: %d"), signo);
+    FcitxLog(INFO, "FCITX -- Get Signal No.: %d", signo);
 
-    if (signo != SIGSEGV && signo != SIGCONT) {
-        if (instance) {
-            FcitxProfileSave(instance->profile);
-            FcitxInstanceSaveAllIM(instance);
-        }
+    if (signo != SIGSEGV && signo != SIGCONT && signo != SIGKILL) {
     }
 
     void *array[10];
@@ -106,16 +103,20 @@ void OnException(int signo)
     }
 
     switch (signo) {
-
-    case SIGHUP:
+    case SIGKILL:
+        break;
+    case SIGSEGV:
+        exit(1);
         break;
 
-    case SIGINT:
-    case SIGTERM:
-    case SIGSEGV:
-        exit(0);
-
     default:
+        {
+            uint8_t sig = 0;
+            if (signo < 0xff)
+                sig = (uint8_t)(signo & 0xff);
+            write(selfpipe[1], &sig, 1);
+            signal(signo, OnException);
+        }
         break;
     }
 }

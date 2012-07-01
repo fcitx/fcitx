@@ -28,6 +28,8 @@
 #include <semaphore.h>
 #include <getopt.h>
 #include <sys/time.h>
+#include <signal.h>
+#include <fcntl.h>
 
 #include "instance.h"
 #include "fcitx-utils/log.h"
@@ -106,6 +108,12 @@ void Version()
 FCITX_EXPORT_API
 FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
 {
+    return FcitxInstanceCreateWithFD(sem, argc, argv, 0);
+}
+
+FCITX_EXPORT_API
+FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int fd)
+{
     FcitxInstance* instance = fcitx_utils_malloc0(sizeof(FcitxInstance));
     FcitxAddonsInit(&instance->addons);
     FcitxInstanceInitIM(instance);
@@ -122,6 +130,10 @@ FcitxInstance* FcitxInstanceCreate(sem_t *sem, int argc, char* argv[])
     instance->config = fcitx_utils_malloc0(sizeof(FcitxGlobalConfig));
     instance->profile = fcitx_utils_malloc0(sizeof(FcitxProfile));
     instance->globalIMName = strdup("");
+    if (fd > 0) {
+        fcntl(fd, F_SETFL, O_NONBLOCK);
+        instance->fd = fd;
+    }
 
     if (!FcitxGlobalConfigLoad(instance->config))
         goto error_exit;
@@ -205,6 +217,11 @@ void* RunInstance(void* arg)
     int64_t curtime = 0;
     while (1) {
         FcitxAddon** pmodule;
+        uint8_t signo = 0;
+        while (read(instance->fd, &signo, sizeof(char)) > 0) {
+            if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT)
+                FcitxInstanceEnd(instance);
+        }
         do {
             instance->uiflag = UI_NONE;
             for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
@@ -250,6 +267,10 @@ void* RunInstance(void* arg)
         FD_ZERO(&instance->efds);
 
         instance->maxfd = 0;
+        if (instance->fd > 0) {
+            instance->maxfd = instance->fd;
+            FD_SET(instance->fd, &instance->rfds);
+        }
         for (pmodule = (FcitxAddon**) utarray_front(&instance->eventmodules);
                 pmodule != NULL;
                 pmodule = (FcitxAddon**) utarray_next(&instance->eventmodules, pmodule)) {

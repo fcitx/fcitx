@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <X11/Xlib.h>
+#include "fcitx/instance.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/ime.h"
 #include "x11stuff.h"
@@ -42,8 +43,7 @@ int FcitxXIOErrorHandler(Display *d)
     /* Do not log, because this is likely to happen while log out */
     FcitxInstanceSaveAllIM(x11handle->owner);
 
-    if (oldXIOErrorHandler)
-        oldXIOErrorHandler(d);
+    FcitxInstanceEnd(x11handle->owner);
     return 0;
 
 }
@@ -64,8 +64,7 @@ int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
     if (fp)
         fclose(fp);
     if (event->error_code != 3 && event->error_code != BadMatch) {  // xterm will generate 3
-        if (oldXErrorHandler)
-            oldXErrorHandler(dpy, event);
+        FcitxInstanceEnd(x11handle->owner);
     }
 
     return 0;

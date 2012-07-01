@@ -140,6 +140,7 @@ struct _FcitxInstance {
 
     UT_array icdata;
     boolean loadingFatalError;
+    int fd;
 };
 
 #endif

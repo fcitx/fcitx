@@ -30,6 +30,8 @@
 #include <libintl.h>
 #include <unistd.h>
 #include <semaphore.h>
+#include <signal.h>
+#include <fcntl.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -51,6 +53,7 @@
 #include "errorhandler.h"
 
 FcitxInstance* instance = NULL;
+int selfpipe[2];
 
 static void WaitForEnd(sem_t *sem, int count)
 {
@@ -68,6 +71,13 @@ int main(int argc, char* argv[])
     free(localedir);
     bind_textdomain_codeset("fcitx", "UTF-8");
     textdomain("fcitx");
+    if (pipe(selfpipe) < 0) {
+        fprintf(stderr, "Could not create self-pipe.\n");
+        exit(1);
+    }
+    fcntl(selfpipe[0], F_SETFL, O_NONBLOCK);
+    fcntl(selfpipe[1], F_SETFL, O_NONBLOCK);
+
     SetMyExceptionHandler();
 
     int instanceCount = 1;
@@ -75,8 +85,7 @@ int main(int argc, char* argv[])
     sem_t sem;
     sem_init(&sem, 0, 0);
 
-    instance = FcitxInstanceCreate(&sem, argc, argv);
-
+    instance = FcitxInstanceCreateWithFD(&sem, argc, argv, selfpipe[0]);
     WaitForEnd(&sem, instanceCount);
 
     if (instance->loadingFatalError) {
