@@ -47,7 +47,6 @@ void SetMyExceptionHandler(void)
     for (signo = SIGHUP; signo < SIGUNUSED; signo++) {
         if (signo != SIGALRM
             && signo != SIGPIPE
-            && signo != SIGUSR1
             && signo != SIGUSR2
             && signo != SIGWINCH
         )
@@ -63,9 +62,6 @@ void OnException(int signo)
         return;
 
     FcitxLog(INFO, "FCITX -- Get Signal No.: %d", signo);
-
-    if (signo != SIGSEGV && signo != SIGCONT && signo != SIGKILL) {
-    }
 
     void *array[10];
 
@@ -105,6 +101,7 @@ void OnException(int signo)
     switch (signo) {
     case SIGKILL:
         break;
+    case SIGABRT:
     case SIGSEGV:
         exit(1);
         break;

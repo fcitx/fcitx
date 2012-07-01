@@ -221,6 +221,10 @@ void* RunInstance(void* arg)
         while (read(instance->fd, &signo, sizeof(char)) > 0) {
             if (signo == SIGINT || signo == SIGTERM || signo == SIGQUIT)
                 FcitxInstanceEnd(instance);
+            else if (signo == SIGHUP)
+                fcitx_utils_launch_restart();
+            else if (signo == SIGUSR1)
+                FcitxInstanceReloadConfig(instance);
         }
         do {
             instance->uiflag = UI_NONE;

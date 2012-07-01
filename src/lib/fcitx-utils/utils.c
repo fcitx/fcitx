@@ -112,16 +112,24 @@ void fcitx_utils_init_as_daemon()
         exit(0);
     }
     setsid();
-    signal(SIGINT, SIG_IGN);
-    signal(SIGHUP, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGTTOU, SIG_IGN);
-    signal(SIGTTIN, SIG_IGN);
-    signal(SIGCHLD, SIG_IGN);
+    sighandler_t oldint = signal(SIGINT, SIG_IGN);
+    sighandler_t oldhup  =signal(SIGHUP, SIG_IGN);
+    sighandler_t oldquit = signal(SIGQUIT, SIG_IGN);
+    sighandler_t oldpipe = signal(SIGPIPE, SIG_IGN);
+    sighandler_t oldttou = signal(SIGTTOU, SIG_IGN);
+    sighandler_t oldttin = signal(SIGTTIN, SIG_IGN);
+    sighandler_t oldchld = signal(SIGCHLD, SIG_IGN);
     if (fork() > 0)
         exit(0);
     chdir("/");
+
+    signal(SIGINT, oldint);
+    signal(SIGHUP, oldhup);
+    signal(SIGQUIT, oldquit);
+    signal(SIGPIPE, oldpipe);
+    signal(SIGTTOU, oldttou);
+    signal(SIGTTIN, oldttin);
+    signal(SIGCHLD, oldchld);
 }
 
 FCITX_EXPORT_API

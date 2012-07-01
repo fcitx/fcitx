@@ -104,7 +104,7 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         if (!uni->enable)
             break;
 
-        FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), 10);
+        FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), fc->iMaxCandWord);
         FcitxCandidateWordSetChooseAndModifier(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE, FcitxKeyState_Alt);
 
         const FcitxHotkey* hkPrevPage = FcitxInstanceGetContextHotkey(uni->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY);

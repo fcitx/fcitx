@@ -30,7 +30,6 @@
 #include <libintl.h>
 #include <unistd.h>
 #include <semaphore.h>
-#include <signal.h>
 #include <fcntl.h>
 
 #ifdef HAVE_UNISTD_H
