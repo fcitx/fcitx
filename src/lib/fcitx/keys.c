@@ -165,6 +165,12 @@ FcitxHotkey FCITX_SPACE[2] = {
 };
 
 FCITX_EXPORT_API
+FcitxHotkey FCITX_TAB[2] = {
+    {NULL, FcitxKey_Tab, FcitxKeyState_None},
+    {NULL, 0, 0},
+};
+
+FCITX_EXPORT_API
 FcitxHotkey FCITX_CTRL_5[2] = {
     {NULL, FcitxKey_5, FcitxKeyState_Ctrl},
     {NULL, 0, 0},

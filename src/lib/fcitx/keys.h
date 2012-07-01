@@ -60,6 +60,7 @@ extern "C" {
     extern FcitxHotkey FCITX_SEMICOLON[2];
     extern FcitxHotkey FCITX_SPACE[2];
     extern FcitxHotkey FCITX_SHIFT_SPACE[2];
+    extern FcitxHotkey FCITX_TAB[2];
     extern FcitxHotkey FCITX_COMMA[2];
     extern FcitxHotkey FCITX_PERIOD[2];
     extern FcitxHotkey FCITX_CTRL_5[2];
