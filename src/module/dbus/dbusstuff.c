@@ -137,9 +137,10 @@ void* DBusCreate(FcitxInstance* instance)
                 DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
                 dbus_connection_send(dbusmodule->conn, message, NULL);
                 /* synchronize call here */
-                DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 0, &err);
+                DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 2000, &err);
 
                 if (dbus_error_is_set(&err)) {
+                    FcitxLog(ERROR, _("Restart (%s)"), err.message);
                     dbus_error_free(&err);
                     dbus_error_init(&err);
                 }
