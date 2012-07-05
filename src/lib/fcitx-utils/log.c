@@ -93,7 +93,7 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 
         iconv(iconvW, &inp, &len, &outp, &wlen);
 
-        fprintf(stderr, "%lu %lu", fcitx_utf8_strlen(buffer), wcslen(wmessage));
+        fprintf(stderr, "%zu %zu", fcitx_utf8_strlen(buffer), wcslen(wmessage));
 
         fprintf(stderr, "%ls\n", wmessage);
 

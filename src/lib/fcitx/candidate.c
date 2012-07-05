@@ -50,6 +50,22 @@ void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWo
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordMove(FcitxCandidateWordList* candList, int from, int to)
+{
+    if (from < 0 || to < 0)
+        return;
+    utarray_move(&candList->candWords, from, to);
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordMoveByWord(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int to)
+{
+    int from = utarray_eltidx(&candList->candWords, candWord);
+    FcitxCandidateWordMove(candList, from, to);
+}
+
+
+FCITX_EXPORT_API
 void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
 {
     int idx = utarray_eltidx(&candList->candWords, candWord);

@@ -138,6 +138,24 @@ typedef struct {
         (a)->i++;                                                                   \
     } while(0)
 
+#define utarray_move(a,f,t) do {                                                    \
+        if (f >= (a)->i) break;                                                     \
+        if (t >= (a)->i) break;                                                     \
+        if (f == t) break;                                                          \
+        char* _temp = malloc((a)->icd->sz);                                         \
+        if (f > t) {                                                                \
+            memcpy(_temp, _utarray_eltptr(a, f), (a)->icd->sz);                     \
+            memmove(_utarray_eltptr(a, (t)+1), _utarray_eltptr(a, t), (a)->icd->sz *(f - t));       \
+            memcpy(_utarray_eltptr(a, t), _temp, (a)->icd->sz);                     \
+        }                                                                           \
+        else {                                                                      \
+            memcpy(_temp, _utarray_eltptr(a, f), (a)->icd->sz);                     \
+            memmove(_utarray_eltptr(a, f), _utarray_eltptr(a, (f)+1), (a)->icd->sz *(t - f));       \
+            memcpy(_utarray_eltptr(a, t), _temp, (a)->icd->sz);                     \
+        }                                                                           \
+        free(_temp);                                                                \
+    } while(0)
+
 #define utarray_inserta(a,w,j) do {                                           \
         if (utarray_len(w) == 0) break;                                             \
         if (j > (a)->i) break;                                                      \

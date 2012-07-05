@@ -103,6 +103,31 @@ extern "C" {
 
     void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
 
+
+    /**
+     * move candidate word via shift policy, for example
+     * 1, 2, 3, move from 0 to 2, result is 2, 3, 1
+     * 1, 2, 3, move from 2 to 0, result is 3, 1, 2
+     *
+     * @param candList candidate word list
+     * @param from from position
+     * @param to to position
+     *
+     * @since 4.2.5
+     **/
+    void FcitxCandidateWordMove(FcitxCandidateWordList* candList, int from, int to);
+
+    /**
+     * @param candList candidate word list
+     * @param from from position
+     * @param to to position
+     *
+     * @see FcitxCandidateWordMove
+     *
+     * @since 4.2.5
+     **/
+    void FcitxCandidateWordMoveByWord(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int to);
+
     /**
      * add a candidate word at last
      *
