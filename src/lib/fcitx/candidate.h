@@ -100,9 +100,16 @@ extern "C" {
      * @param position position to insert
      * @return void
      **/
-
     void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
 
+    /**
+     * Insert non-display place holder candidate to position
+     *
+     * @param candList candidate word list
+     * @param position position to insert
+     * @return void
+     **/
+    void FcitxCandidateWordInsertPlaceHolder(struct _FcitxCandidateWordList* candList, int position);
 
     /**
      * move candidate word via shift policy, for example

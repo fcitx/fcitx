@@ -722,6 +722,9 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
         if (instance->config->bPointAfterNumber)
             strTemp[1] = '.';
 
+        if (candWord->strWord == NULL)
+            continue;
+
         unsigned int mod = FcitxCandidateWordGetModifier(input->candList);
 
         FcitxMessagesAddMessageAtLast(msgDown, MSG_INDEX, "%s%s%s%s%s",

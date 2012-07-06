@@ -49,6 +49,20 @@ void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWo
     utarray_insert(&candList->candWords, candWord, position);
 }
 
+INPUT_RETURN_VALUE DummyHandler(void* arg, FcitxCandidateWord* candWord)
+{
+    return IRV_DO_NOTHING;
+}
+
+FCITX_EXPORT_API
+void FcitxCandidateWordInsertPlaceHolder(FcitxCandidateWordList* candList, int position)
+{
+    FcitxCandidateWord candWord;
+    memset(&candWord, 0, sizeof(FcitxCandidateWord));
+    candWord.callback = DummyHandler;
+    utarray_insert(&candList->candWords, &candWord, position);
+}
+
 FCITX_EXPORT_API
 void FcitxCandidateWordMove(FcitxCandidateWordList* candList, int from, int to)
 {
