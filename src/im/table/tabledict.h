@@ -69,6 +69,13 @@ typedef struct _SINGLE_HZ {
     char            strHZ[UTF8_MAX_LENGTH + 1];
 } SINGLE_HZ;
 
+typedef enum _ChooseModifier {
+    CM_NONE,
+    CM_ALT,
+    CM_CTRL,
+    CM_SHIFT,
+} ChooseModifier;
+
 typedef struct _TableMetaData {
     FcitxGenericConfig   config;
     char           *uniqueName;
@@ -95,6 +102,7 @@ typedef struct _TableMetaData {
     char           *strSymbol;
     char           *strSymbolFile;
     char           *strChoose;      //设置选择键
+    ChooseModifier  chooseModifier;
     char           *langCode;
     char           *kbdlayout;
     boolean         customPrompt;

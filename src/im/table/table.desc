@@ -122,6 +122,16 @@ Description=Choose
 Type=String
 DefaultValue=1234567890
 
+[CodeTable/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=None
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
 [CodeTable/LangCode]
 Description=Language Code for this table
 Type=String

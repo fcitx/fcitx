@@ -261,7 +261,11 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     char* strCodeInput = FcitxInputStateGetRawInputBuffer(input);
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
-    FcitxCandidateWordSetChoose(candList, table->strChoose);
+    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
+    if (table->chooseModifier > CM_CTRL)
+        table->chooseModifier = CM_CTRL;
+
+    FcitxCandidateWordSetChooseAndModifier(candList, table->strChoose, cmodtable[table->chooseModifier]);
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
 
     tbl->iTableIMIndex = utarray_eltidx(tbl->table, table);
@@ -648,9 +652,7 @@ INPUT_RETURN_VALUE _TableGetCandWord(TableMetaData* table, TABLECANDWORD* tableC
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxProfile *profile = FcitxInstanceGetProfile(instance);
 
-    if (table->strSymbol
-        && strlen(table->strSymbol) > 0
-        && strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol) == 0)
+    if (tableCandWord->flag == CT_FH)
         return TableGetFHCandWord(table, tableCandWord);
 
     FcitxInputStateSetIsInRemind(input, false);
@@ -873,8 +875,9 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
                         totallen += 1;
                 }
 
-                candWord.strExtra = fcitx_utils_malloc0(sizeof(char) * (totallen + 2));
-                candWord.strExtra[0] = ' ';
+                candWord.strExtra = fcitx_utils_malloc0(sizeof(char) * (totallen + 1 + 3));
+                if (codelen)
+                    strcpy(candWord.strExtra, "\xef\xbd\x9e");
                 for (i = 0; i < codelen; i ++) {
                     RECORD* rec = table->tableDict->promptCode[(uint8_t) pstr[i]];
                     if (rec) {
@@ -1172,7 +1175,6 @@ INPUT_RETURN_VALUE TableGetFHCandWord(TableMetaData* table, TABLECANDWORD* table
     FcitxTableState* tbl = table->owner;
     FcitxInstance *instance = tbl->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
-    FcitxInstanceCleanInputWindowDown(instance);
 
     strcpy(FcitxInputStateGetOutputString(input), table->tableDict->fh[tableCandWord->candWord.iFHIndex].strFH);
     return IRV_COMMIT_STRING;

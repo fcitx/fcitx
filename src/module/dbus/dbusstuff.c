@@ -140,7 +140,7 @@ void* DBusCreate(FcitxInstance* instance)
                 DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 2000, &err);
 
                 if (dbus_error_is_set(&err)) {
-                    FcitxLog(ERROR, _("Restart (%s)"), err.message);
+                    FcitxLog(ERROR, "Restart (%s)", err.message);
                     dbus_error_free(&err);
                     dbus_error_init(&err);
                 }

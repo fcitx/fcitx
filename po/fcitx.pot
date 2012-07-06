@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-30 15:03+0800\n"
+"POT-Creation-Date: 2012-07-07 06:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -382,47 +382,51 @@ msgid "Choose"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:126
-msgid "Language Code for this table"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:131
-msgid "Enable"
+msgid "Choose key modifier"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:136
-msgid "Use Custom Prompt String defined in table"
+msgid "Language Code for this table"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:141
-msgid "Keyboard Layout to be used"
+msgid "Enable"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:146
+msgid "Use Custom Prompt String defined in table"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:151
-msgid "Alternative Prev Page Key"
+msgid "Keyboard Layout to be used"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:156
-msgid "Alternative Next Page Key"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:161
-msgid "First Candidate Display as Preedit"
+msgid "Alternative Prev Page Key"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:166
-msgid "Commit and pass when invalid key of this table pressed"
+msgid "Alternative Next Page Key"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:171
-msgid "Commit key for select first candidate"
+msgid "First Candidate Display as Preedit"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:176
-msgid "Commit string when there is no match"
+msgid "Commit and pass when invalid key of this table pressed"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:181
+msgid "Commit key for select first candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:186
+msgid "Commit string when there is no match"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:191
 msgid "Ignore Punctuation"
 msgstr ""
 
@@ -937,6 +941,10 @@ msgid "All"
 msgstr ""
 
 #: unknown
+msgid "Alt"
+msgstr ""
+
+#: unknown
 msgid "ALT Both"
 msgstr ""
 
@@ -978,6 +986,10 @@ msgstr ""
 
 #: unknown
 msgid "Copy"
+msgstr ""
+
+#: unknown
+msgid "Ctrl"
 msgstr ""
 
 #: unknown
@@ -1061,6 +1073,10 @@ msgid "No"
 msgstr ""
 
 #: unknown
+msgid "None"
+msgstr ""
+
+#: unknown
 msgid "Nothing"
 msgstr ""
 
@@ -1102,6 +1118,10 @@ msgstr ""
 
 #: unknown
 msgid "SharedLibrary"
+msgstr ""
+
+#: unknown
+msgid "Shift"
 msgstr ""
 
 #: unknown
@@ -1429,11 +1449,6 @@ msgstr ""
 msgid "Clear local input method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:163
-#, c-format
-msgid "%s"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:188
 msgid "English (US)"
 msgstr ""
@@ -1644,11 +1659,6 @@ msgstr ""
 msgid "Toggle Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/core/errorhandler.c:64
-#, c-format
-msgid "FCITX -- Get Signal No.: %d"
-msgstr ""
-
 #. 读入码表
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:34
 msgid "Loading Table Dict"
@@ -1690,45 +1700,45 @@ msgstr ""
 msgid "Table Config %s is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:466
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:470
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:492
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:496
 msgid "Pinyin: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:494
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:498
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:546
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:550
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:554
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:558
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:562
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:566
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1107
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1110
 msgid "Remind:"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1211
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1213
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1214
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1216
 msgid "Code is "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1216
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1218
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -1848,22 +1858,22 @@ msgstr ""
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
 msgid "Use remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:169
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:394
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
 msgid "No remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:170
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:182
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
 msgid "Toggle Remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:370
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
 msgid "pthread mutex init failed"
 msgstr ""
 

@@ -160,7 +160,7 @@ void FcitxXkbDBusGetLayouts(FcitxXkbDBus* xkbdbus, DBusMessage* message)
             layoutInfo = (FcitxXkbLayoutInfo*) utarray_next(rules->layoutInfos, layoutInfo))
         {
             char* description;
-            asprintf(&description, _("%s"),
+            asprintf(&description, "%s",
                      dgettext("xkeyboard-config", layoutInfo->description));
 
             GET_LANG;
