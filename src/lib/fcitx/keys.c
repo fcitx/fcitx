@@ -285,5 +285,11 @@ FcitxHotkey FCITX_SHIFT_SPACE[2] = {
     {NULL, 0, 0},
 };
 
+FCITX_EXPORT_API
+FcitxHotkey FCITX_SHIFT_ENTER[2] = {
+    {NULL, FcitxKey_Return, FcitxKeyState_Shift},
+    {NULL, FcitxKey_KP_Enter, FcitxKeyState_Shift},
+};
+
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

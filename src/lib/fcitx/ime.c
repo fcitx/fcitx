@@ -1720,6 +1720,7 @@ INPUT_RETURN_VALUE FcitxStandardKeyBlocker(FcitxInputState* input, FcitxKeySym k
         || FcitxHotkeyIsHotkeyCursorMove(key, state)
         || FcitxHotkeyIsHotKey(key, state, FCITX_SHIFT_SPACE)
         || FcitxHotkeyIsHotKey(key, state, FCITX_TAB)
+        || FcitxHotkeyIsHotKey(key, state, FCITX_SHIFT_ENTER)
         ))
         return IRV_DO_NOTHING;
     else
