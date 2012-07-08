@@ -3,6 +3,16 @@ Type=Boolean
 DefaultValue=False
 Description=Commit with extra space when choose candidate word
 
+[Keyboard/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=Alt
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
 [Keyboard/HotkeyToggleWordHint]
 Type=Hotkey
 DefaultValue=CTRL_ALT_H

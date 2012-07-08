@@ -521,7 +521,6 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
     if (IsDictAvailable(keyboard) && enableWordHint) {
         FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
-        struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
 #ifdef ENCHANT_FOUND
         if (FcitxHotkeyIsHotKey(sym, state, layout->owner->config.hkAddToUserDict))
@@ -533,6 +532,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
             }
         }
 #endif
+
 
         if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) || IsValidSym(sym, state))
         {
@@ -561,9 +561,6 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
                 return IRV_DISPLAY_CANDWORDS;
             }
-            if (FcitxHotkeyIsHotKeyDigit(sym, state) && FcitxCandidateWordGetListSize(candList) != 0) {
-                return IRV_TO_PROCESS;
-            }
         }
         else {
             if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE))
@@ -582,6 +579,16 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                         return IRV_DO_NOTHING;
                 }
             }
+        }
+
+        FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+        if (FcitxCandidateWordGetListSize(candList)) {
+            int index = FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
+                                                  FcitxCandidateWordGetChoose(candList),
+                                                  FcitxCandidateWordGetModifier(candList)
+                                                 );
+            if (index >= 0)
+                return IRV_TO_PROCESS;
         }
 
         if (strlen(keyboard->buffer) > 0) {
@@ -624,18 +631,19 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInstance* instance = layout->owner->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
-    FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
+
+    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
+    if (keyboard->config.chooseModifier > CM_CTRL)
+        keyboard->config.chooseModifier = CM_CTRL;
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
-    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    FcitxCandidateWordSetChooseAndModifier(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE, cmodtable[keyboard->config.chooseModifier]);
     size_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    if (FcitxInstanceICSupportPreedit(instance, currentIC))
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
-    else
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 

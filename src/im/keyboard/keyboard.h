@@ -41,6 +41,13 @@
 #define FCITX_KEYBOARD_MAX_BUFFER 20
 #define FCITX_MAX_COMPOSE_LEN 7
 
+typedef enum _ChooseModifier {
+    CM_NONE,
+    CM_ALT,
+    CM_CTRL,
+    CM_SHIFT,
+} ChooseModifier;
+
 typedef enum _EnchantProvider {
     EP_Default = 0,
     EP_Aspell = 1,
@@ -56,6 +63,7 @@ typedef struct _FcitxKeyboardConfig {
     FcitxHotkey hkAddToUserDict[2];
     int minimumHintLength;
     EnchantProvider provider;
+    ChooseModifier chooseModifier;
 } FcitxKeyboardConfig;
 
 typedef struct _FcitxKeyboard {
