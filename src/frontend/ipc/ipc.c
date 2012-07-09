@@ -576,6 +576,7 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         FcitxInstanceCreateIC(ipc->owner, ipc->frontendid, msg);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Exit")) {
+        FcitxLog(INFO, "Receive message ask for quit");
         DBusMessage *reply = dbus_message_new_method_return(msg);
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
