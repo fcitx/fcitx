@@ -62,7 +62,7 @@ extern "C" {
 /**
  * a convenient macro for log, it will automatically printed current file and code line number.
  */
-#define FcitxLog(e, fmt...) FcitxLogFunc(e, __FILE__, __LINE__, fmt)
+#define FcitxLog(e, fmt...) FcitxLogFunc(e, __func__, __LINE__, fmt)
 
     /**
      * print a log string to stderr, should use FcitxLog instead of this function

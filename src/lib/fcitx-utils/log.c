@@ -49,25 +49,25 @@ void FcitxLogFunc(ErrorLevel e, const char* filename, const int line, const char
 #endif
     switch (e) {
     case INFO:
-        fprintf(stderr, "[INFO]");
+        fprintf(stderr, "(INFO-");
         break;
     case ERROR:
-        fprintf(stderr, "[ERROR]");
+        fprintf(stderr, "(ERROR-");
         break;
     case DEBUG:
-        fprintf(stderr, "[DEBUG]");
+        fprintf(stderr, "(DEBUG-");
         break;
     case WARNING:
-        fprintf(stderr, "[WARN]");
+        fprintf(stderr, "(WARN-");
         break;
     case FATAL:
-        fprintf(stderr, "[FATAL]");
+        fprintf(stderr, "(FATAL-");
         break;
     }
 
     char *buffer = NULL;
     va_list ap;
-    fprintf(stderr, " %s:%u-", filename, line);
+    fprintf(stderr, "%d %s:%u) ", getpid(), filename, line);
     va_start(ap, fmt);
     vasprintf(&buffer, fmt, ap);
     va_end(ap);
