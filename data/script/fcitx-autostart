@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# dirty hack, but useful
-sleep 5
-
 # test DISPLAY
 if [ "x$DISPLAY" != "x" ]; then
     number=`echo $DISPLAY | sed 's|\:\([0-9]\+\)\(\..*\)\?|\1|g'`
@@ -25,7 +22,7 @@ fi
 "${DBUS_SEND}" --print-reply --type=method_call --session --dest=org.fcitx.Fcitx-$number /inputmethod org.freedesktop.DBus.Introspectable.Introspect > /dev/null 2>&1
 
 if [ $? == "1" ]; then
-    echo "Cannot communicate fcitx with DBus."
+    echo "Fcitx seems is not running"
     fcitx
 else
     echo "Fcitx is running correctly."
