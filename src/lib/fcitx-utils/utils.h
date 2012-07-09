@@ -300,6 +300,15 @@ extern "C" {
     void fcitx_utils_start_process(char** args);
 
     /**
+     * @brief output backtrace to stderr
+     *
+     * @return void
+     *
+     * @since 4.2.5
+     **/
+    void fcitx_utils_backtrace();
+
+    /**
      * if obj is null, free it, after that, if str is NULL set it with NULL,
      * if str is not NULL, set it with strdup(str)
      *

@@ -63,13 +63,13 @@ void OnException(int signo)
 
     FcitxLog(INFO, "FCITX -- Get Signal No.: %d", signo);
 
-    void *array[10];
+    void *array[20];
 
     size_t size;
     char **strings = NULL;
     size_t i;
 
-    size = backtrace(array, 10);
+    size = backtrace(array, 20);
     strings = backtrace_symbols(array, size);
 
     if (strings) {

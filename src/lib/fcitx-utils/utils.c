@@ -38,6 +38,7 @@
 #include <limits.h>
 #include <libgen.h>
 #include <ctype.h>
+#include <execinfo.h>
 #include <stdarg.h>
 
 #include "config.h"
@@ -573,6 +574,30 @@ void fcitx_utils_start_process(char** args)
     } else {                              /* parent process */
         int status;
         waitpid(child_pid, &status, 0);
+    }
+}
+
+FCITX_EXPORT_API
+void
+fcitx_utils_backtrace()
+{
+    void *array[20];
+
+    size_t size;
+    char **strings = NULL;
+    size_t i;
+
+    size = backtrace(array, 20);
+    strings = backtrace_symbols(array, size);
+
+    if (strings) {
+        fprintf(stderr, "Obtained %zd stack frames.\n", size);
+
+        for (i = 0; i < size; i++) {
+            fprintf(stderr, "%s\n", strings[i]);
+        }
+
+        free(strings);
     }
 }
 
