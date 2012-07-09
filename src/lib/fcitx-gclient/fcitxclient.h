@@ -122,18 +122,6 @@ int fcitx_client_process_key_sync(FcitxClient* client, guint32 keyval, guint32 k
 void fcitx_client_process_key(FcitxClient* client, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
 
 /**
- * fcitx_client_process_key_finished:
- *
- * @client A FcitxClient
- * @res Async result
- * @user_data User Data
- * @error error
- *
- * @returns: key need to be forward or not, less-equal than zero means need to be forwarded.
- **/
-int fcitx_client_process_key_finished(FcitxClient *self, GAsyncResult *res, GError** error, gpointer user_data);
-
-/**
  * fcitx_client_focus_in:
  *
  * @client A FcitxClient

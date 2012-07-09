@@ -265,20 +265,6 @@ void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointe
 }
 
 FCITX_EXPORT_API
-int fcitx_client_process_key_finished(FcitxClient *self,
-                                      GAsyncResult *res,
-                                      GError** error,
-                                      gpointer user_data)
-{
-    int ret = -1;
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(self), res, error);
-    if (result) {
-        g_variant_get(result, "(i)", &ret);
-    }
-    return ret;
-}
-
-FCITX_EXPORT_API
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
