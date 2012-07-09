@@ -658,7 +658,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
             }
             const char *str = lua_tostring(lua, -1);
             if (str == NULL) {
-                FcitxLog(WARNING, "function %s() result[%d] is not string", i);
+                FcitxLog(WARNING, "function %s() result[%d] is not string", function_name, i);
             } else {
                 LuaResultItem r;
                 r.result = (char *)str;
