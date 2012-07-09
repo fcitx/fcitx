@@ -230,6 +230,12 @@ void fcitx_client_set_capacity(FcitxClient* self, guint flags)
 FCITX_EXPORT_API
 void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h)
 {
+    fcitx_client_set_cursor_rect(self, x, y, w, h);
+}
+
+FCITX_EXPORT_API
+void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h)
+{
     if (self->priv->icproxy) {
         g_dbus_proxy_call(self->priv->icproxy, "SetCursorRect", g_variant_new("(iiii)", x, y, w, h), G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
@@ -256,6 +262,20 @@ void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointe
                           cb,
                           user_data);
     }
+}
+
+FCITX_EXPORT_API
+int fcitx_client_process_key_finished(FcitxClient *self,
+                                      GAsyncResult *res,
+                                      GError** error,
+                                      gpointer user_data)
+{
+    int ret = -1;
+    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(self), res, error);
+    if (result) {
+        g_variant_get(result, "(i)", &ret);
+    }
+    return ret;
 }
 
 FCITX_EXPORT_API

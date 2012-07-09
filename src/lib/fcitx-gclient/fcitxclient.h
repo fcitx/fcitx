@@ -122,6 +122,18 @@ int fcitx_client_process_key_sync(FcitxClient* client, guint32 keyval, guint32 k
 void fcitx_client_process_key(FcitxClient* client, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
 
 /**
+ * fcitx_client_process_key_finished:
+ *
+ * @client A FcitxClient
+ * @res Async result
+ * @user_data User Data
+ * @error error
+ *
+ * @returns: key need to be forward or not, less-equal than zero means need to be forwarded.
+ **/
+int fcitx_client_process_key_finished(FcitxClient *self, GAsyncResult *res, GError** error, gpointer user_data);
+
+/**
  * fcitx_client_focus_in:
  *
  * @client A FcitxClient
@@ -151,6 +163,19 @@ void fcitx_client_focus_out(FcitxClient* client);
  * tell fcitx current client's cursor geometry info
  **/
 void fcitx_client_set_cusor_rect(FcitxClient* client, int x, int y, int w, int h);
+
+/**
+ * fcitx_client_set_cusor_rect:
+ *
+ * @client A FcitxClient
+ * @x x of cursor
+ * @y y of cursor
+ * @w width of cursor
+ * @h height of cursor
+ *
+ * tell fcitx current client's cursor geometry info
+ **/
+void fcitx_client_set_cursor_rect(FcitxClient* client, int x, int y, int w, int h);
 
 /**
  * fcitx_client_set_surrounding_text:

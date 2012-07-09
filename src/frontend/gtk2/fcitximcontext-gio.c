@@ -543,13 +543,9 @@ _fcitx_im_context_process_key_cb (GObject *source_object,
     ProcessKeyStruct* pks = user_data;
     GdkEventKey* event = pks->event;
     GError* error = NULL;
-    int ret = -1;
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
+    int ret = fcitx_client_process_key_finished(FCITX_CLIENT(source_object), res, &error, user_data);
     if (error) {
         g_error_free(error);
-    }
-    else if (result) {
-        g_variant_get(result, "(i)", &ret);
     }
     if (ret <= 0) {
         event->state |= FcitxKeyState_IgnoredMask;
@@ -806,7 +802,7 @@ _set_cursor_location_internal(FcitxIMContext *fcitxcontext)
     }
 #endif
 
-    fcitx_client_set_cusor_rect(fcitxcontext->client, area.x, area.y, area.width, area.height);
+    fcitx_client_set_cursor_rect(fcitxcontext->client, area.x, area.y, area.width, area.height);
     return FALSE;
 }
 
