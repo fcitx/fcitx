@@ -3,6 +3,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${PROJECT_SOURCE_DIR}/src/im/pinyin)
 include_directories(${PROJECT_SOURCE_DIR}/src/module/unicode)
 
+add_executable(testbacktrace testbacktrace.c)
+target_link_libraries(testbacktrace fcitx-utils)
+
 add_executable(testconfig testconfig.c)
 target_link_libraries(testconfig fcitx-config)
 
@@ -35,6 +38,9 @@ add_test(NAME testconfig
 
 add_test(NAME testmessage
          COMMAND testmessage)
+
+add_test(NAME testbacktrace
+         COMMAND testbacktrace)
 
 add_test(NAME testpinyin
          COMMAND testpinyin)
