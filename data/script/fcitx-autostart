@@ -26,7 +26,7 @@ fi
 
 if [ $? == "1" ]; then
     echo "Cannot communicate fcitx with DBus."
-    fcitx -r
+    fcitx
 else
     echo "Fcitx is running correctly."
 fi
