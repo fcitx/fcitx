@@ -119,8 +119,10 @@ void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFu
                 break;
             }
         }
-        if (!flag)
+        if (!flag && !addon->addonInstance) {
             FcitxInstanceLoadIM(addon->owner, addon);
+            FcitxInstanceUpdateIMList(addon->owner);
+        }
     }
 
     FcitxModuleFunction* func = (FcitxModuleFunction*) utarray_eltptr(&addon->functionList, functionId);
