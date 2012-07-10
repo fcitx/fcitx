@@ -132,9 +132,22 @@ void X11SetFD(void* arg)
 }
 
 
+void X11DelayedCompositeTest(void* arg)
+{
+    FcitxX11* x11priv = arg;
+
+    if (X11GetCompositeManager(x11priv))
+        X11HandlerComposite(x11priv, true);
+}
+
+
 void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxX11* x11priv = arg;
+    if (!x11priv->firstRun) {
+        x11priv->firstRun = true;
+        FcitxInstanceAddTimeout(x11priv->owner, 5000, X11DelayedCompositeTest, x11priv);
+    }
     XEvent event;
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
