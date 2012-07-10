@@ -216,6 +216,19 @@ void TableResetStatus(void* arg)
     //bSingleHZMode = false;
 }
 
+boolean TableCheckNoMatch(TableMetaData* table, const char* code)
+{
+    FcitxInstance *instance = table->owner->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    if (!table->bTableExactMatch) {
+        return FcitxCandidateWordGetListSize(candList) == 0;
+    }
+    else {
+        return (FcitxCandidateWordGetListSize(candList) == 0) && TableFindFirstMatchCode(table, code, false, false) == -1;
+    }
+}
+
 INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 {
     TableMetaData* table = (TableMetaData*) arg;
@@ -286,7 +299,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 /* length is not too large */
                 if (((FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iCodeLength)
                     || (table->tableDict->bHasPinyin && FcitxInputStateGetRawInputBufferSize(input) < table->tableDict->iPYCodeLength)
-                    || (((FcitxCandidateWordPageCount(candList) == 0
+                    || (((TableCheckNoMatch(table, FcitxInputStateGetRawInputBuffer(input))
                         && table->bNoMatchDontCommit) || !table->bUseAutoSend)
                         && FcitxInputStateGetRawInputBufferSize(input) >= table->tableDict->iCodeLength
                     ))
@@ -346,7 +359,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                                    && table->iTableAutoSendToClientWhenNone
                                    && (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING))
                                    && (FcitxInputStateGetRawInputBufferSize(input) >= (table->iTableAutoSendToClientWhenNone + 1))
-                                   && FcitxCandidateWordPageCount(candList) == 0) {
+                                   && TableCheckNoMatch(table, FcitxInputStateGetRawInputBuffer(input))) {
                             if (strLastFirstCand && (lastFirstCandType != CT_AUTOPHRASE)) {
                                 FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), strLastFirstCand);
                             } else if (table->bSendRawPreedit) {
@@ -749,7 +762,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     if (FcitxInputStateGetRawInputBuffer(input)[0] == table->cPinyin && table->bUsePY)
         return TableGetPinyinCandWords(table);
 
-    if (TableFindFirstMatchCode(table, FcitxInputStateGetRawInputBuffer(input)) == -1 && !table->tableDict->iAutoPhrase) {
+    if (TableFindFirstMatchCode(table, FcitxInputStateGetRawInputBuffer(input), table->bTableExactMatch, true) == -1 && !table->tableDict->iAutoPhrase) {
         if (FcitxInputStateGetRawInputBufferSize(input)) {
             FcitxMessagesSetMessageCount(FcitxInputStateGetPreedit(input), 0);
             FcitxMessagesSetMessageCount(FcitxInputStateGetClientPreedit(input), 0);
@@ -773,7 +786,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     while (table->tableDict->currentRecord && table->tableDict->currentRecord != table->tableDict->recordHead) {
         if (table->tableDict->currentRecord->type != RECORDTYPE_CONSTRUCT &&
             table->tableDict->currentRecord->type != RECORDTYPE_PROMPT &&
-            !TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->currentRecord->strCode)) {
+            !TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->currentRecord->strCode, table->bTableExactMatch)) {
             TABLECANDWORD* tableCandWord = fcitx_utils_malloc0(sizeof(TABLECANDWORD));
             TableAddCandWord(table->tableDict->currentRecord, tableCandWord);
             utarray_push_back(&candTemp, &tableCandWord);
@@ -850,7 +863,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
 
     if (table->tableDict->bRule && table->bAutoPhrase && FcitxInputStateGetRawInputBufferSize(input) == table->tableDict->iCodeLength) {
         for (i = table->tableDict->iAutoPhrase - 1; i >= 0; i--) {
-            if (!TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->autoPhrase[i].strCode)) {
+            if (!TableCompareCode(table, FcitxInputStateGetRawInputBuffer(input), table->tableDict->autoPhrase[i].strCode, table->bTableExactMatch)) {
                 if (TableHasPhrase(table->tableDict, table->tableDict->autoPhrase[i].strCode, table->tableDict->autoPhrase[i].strHZ)) {
                     TABLECANDWORD* tableCandWord = fcitx_utils_malloc0(sizeof(TABLECANDWORD));
                     TableAddAutoCandWord(table, i, tableCandWord);

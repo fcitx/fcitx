@@ -624,17 +624,16 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
 
     gchar* str = g_string_free(gstr, FALSE);
 
-    context->preedit_string = g_strdup(str);
+    context->preedit_string = str;
     char* tempstr = g_strndup(str, cursor_pos);
     context->cursor_pos =  fcitx_utf8_strlen(tempstr);
     g_free(tempstr);
 
-    gboolean new_visible = false;
+    gboolean new_visible = FALSE;
 
-    if (context->preedit_string != NULL) {
-        if (strlen(context->preedit_string) != 0)
-            new_visible = true;
-    }
+    if (context->preedit_string != NULL && context->preedit_string[0] != 0)
+        new_visible = true;
+
     gboolean flag = new_visible != visible;
 
     if (new_visible) {
