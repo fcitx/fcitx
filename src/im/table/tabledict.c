@@ -624,7 +624,7 @@ void TableUpdateHitFrequency(TableMetaData* tableMetaData, RECORD * record)
     }
 }
 
-int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict)
+int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict, boolean exactMatch)
 {
     int             i;
 
@@ -636,7 +636,7 @@ int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, co
                 return (strUser[i] - strDict[i]);
         }
     }
-    if (tableMetaData->bTableExactMatch) {
+    if (exactMatch) {
         if (strlen(strUser) != strlen(strDict))
             return -999;    //随意的一个值
     }
@@ -644,7 +644,7 @@ int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, co
     return 0;
 }
 
-int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput)
+int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput, boolean exactMatch, boolean cacheCurrentRecord)
 {
     int             i = 0;
     TableDict      *tableDict = tableMetaData->tableDict;
@@ -661,15 +661,20 @@ int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInp
             i++;
         }
     }
-    tableDict->currentRecord = tableDict->recordIndex[i].record;
-    if (!tableDict->currentRecord)
+    RECORD* record = NULL;
+    RECORD** pRecord = &record;
+    if (cacheCurrentRecord)
+        pRecord = &tableDict->currentRecord;
+
+    *pRecord = tableDict->recordIndex[i].record;
+    if (!*pRecord)
         return -1;
 
-    while (tableDict->currentRecord != tableDict->recordHead) {
-        if (!TableCompareCode(tableMetaData, strCodeInput, tableDict->currentRecord->strCode)) {
+    while (*pRecord != tableDict->recordHead) {
+        if (!TableCompareCode(tableMetaData, strCodeInput, (*pRecord)->strCode, exactMatch)) {
             return i;
         }
-        tableDict->currentRecord = tableDict->currentRecord->next;
+        (*pRecord) = (*pRecord)->next;
         i++;
     }
 

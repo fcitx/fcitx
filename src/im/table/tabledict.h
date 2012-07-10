@@ -163,8 +163,8 @@ RECORD *TableHasPhrase(const TableDict* tableDict, const char *strCode, const ch
 void TableDelPhraseByHZ(TableDict* tableDict, const char *strHZ);
 void TableDelPhrase(TableDict* tableDict, RECORD * record);
 void TableUpdateHitFrequency(TableMetaData* tableMetaData, RECORD * record);
-int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, const char *strDict);
-int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput);
+int TableCompareCode(const TableMetaData* tableMetaData, const char* strUser, const char* strDict, boolean exactMatch);
+int TableFindFirstMatchCode(TableMetaData* tableMetaData, const char* strCodeInput, boolean exactMatch, boolean cacheCurrentRecord);
 void TableResetFlags(TableDict* tableDict);
 
 boolean IsInputKey(const TableDict* tableDict, int iKey);
