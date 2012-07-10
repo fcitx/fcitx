@@ -87,6 +87,7 @@ typedef struct _FcitxX11 {
     struct _FcitxAddon* xim;
     double dpif;
     int dpi;
+    boolean firstRun;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {
