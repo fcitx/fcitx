@@ -120,7 +120,7 @@ void* DBusCreate(FcitxInstance* instance)
 
         // request a name on the bus
         int ret = dbus_bus_request_name(conn, servicename,
-                                        DBUS_NAME_FLAG_REPLACE_EXISTING | DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                        DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                         &err);
         if (dbus_error_is_set(&err)) {
             FcitxLog(WARNING, _("Name Error (%s)"), err.message);
@@ -135,7 +135,6 @@ void* DBusCreate(FcitxInstance* instance)
             if (FcitxInstanceIsTryReplace(instance)) {
                 FcitxInstanceResetTryReplace(instance);
                 DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
-                dbus_connection_send(dbusmodule->conn, message, NULL);
                 /* synchronize call here */
                 DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 0, &err);
 
