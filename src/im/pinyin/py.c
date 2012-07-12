@@ -1273,8 +1273,9 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
         PYFAList[pycandWord->cand.base.iPYFA].pyBase[pycandWord->cand.base.iBase].iHit++;
         pystate->iOrderCount++;
         break;
-    case PY_CAND_SYSPHRASE:    //是系统词组
     case PY_CAND_USERPHRASE:   //是用户词组
+        pystate->iNewPYPhraseCount++; // fall through
+    case PY_CAND_SYSPHRASE:    //是系统词组
         pBase = PYFAList[pycandWord->cand.phrase.iPYFA].pyBase[pycandWord->cand.phrase.iBase].strHZ;
         pBaseMap = PYFAList[pycandWord->cand.phrase.iPYFA].strMap;
         pPhrase = pycandWord->cand.phrase.phrase->strPhrase;
