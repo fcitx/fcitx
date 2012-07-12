@@ -83,7 +83,6 @@ typedef struct _FcitxX11 {
     int screenCount;
     int defaultScreen;
     struct _FcitxAddon* xim;
-    boolean firstRun;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {
