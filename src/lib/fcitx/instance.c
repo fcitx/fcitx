@@ -340,7 +340,8 @@ boolean ProcessOption(FcitxInstance* instance, int argc, char* argv[])
     struct option longOptions[] = {
         {"ui", 1, 0, 0},
         {"replace", 0, 0, 0},
-        {"help", 0, 0, 0}
+        {"help", 0, 0, 0},
+        {NULL, 0, 0, 0}
     };
 
     int optionIndex = 0;
