@@ -59,21 +59,6 @@ static const int XKeyRelease = KeyRelease;
 #define Q_UNLIKELY(x) (x)
 #endif
 
-typedef struct _FcitxComposeTableCompact FcitxComposeTableCompact;
-struct _FcitxComposeTableCompact {
-    const quint32 *data;
-    int max_seq_len;
-    int n_index_size;
-    int n_index_stride;
-};
-
-static const FcitxComposeTableCompact fcitx_compose_table_compact = {
-    fcitx_compose_seqs_compact,
-    5,
-    23,
-    6
-};
-
 static int
 compare_seq_index(const void *key, const void *value)
 {
@@ -765,7 +750,7 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
                 CASE(grave, 0x0300);
                 CASE(acute, 0x0301);
                 CASE(circumflex, 0x0302);
-                CASE(tilde, 0x0303);  /* Also used with perispomeni, 0x342. */
+                CASE(tilde, 0x0303);   /* Also used with perispomeni, 0x342. */
                 CASE(macron, 0x0304);
                 CASE(breve, 0x0306);
                 CASE(abovedot, 0x0307);
@@ -774,25 +759,24 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
                 CASE(abovering, 0x030A);
                 CASE(doubleacute, 0x030B);
                 CASE(caron, 0x030C);
-                CASE(abovecomma, 0x0313);  /* Equivalent to psili */
-                CASE(abovereversedcomma, 0x0314);  /* Equivalent to dasia */
-                CASE(horn, 0x031B);  /* Legacy use for psili, 0x313 (or 0x343). */
+                CASE(abovecomma, 0x0313);         /* Equivalent to psili */
+                CASE(abovereversedcomma, 0x0314); /* Equivalent to dasia */
+                CASE(horn, 0x031B);    /* Legacy use for psili, 0x313 (or 0x343). */
                 CASE(belowdot, 0x0323);
                 CASE(cedilla, 0x0327);
                 CASE(ogonek, 0x0328);  /* Legacy use for dasia, 0x314.*/
                 CASE(iota, 0x0345);
-                CASE(voiced_sound, 0x3099);  /* Per Markus Kuhn keysyms.txt file. */
-                CASE(semivoiced_sound, 0x309A);  /* Per Markus Kuhn keysyms.txt file. */
+                CASE(voiced_sound, 0x3099);    /* Per Markus Kuhn keysyms.txt file. */
+                CASE(semivoiced_sound, 0x309A);    /* Per Markus Kuhn keysyms.txt file. */
+
                 /* The following cases are to be removed once xkeyboard-config,
                 * xorg are fully updated.
-                **/
-                /* Workaround for typo in 1.4.x xserver-xorg */
-            case 0xfe66:
-                combination_buffer[i + 1] = 0x314;
-                break;
-                /* CASE (dasia, 0x314); */
-                /* CASE (perispomeni, 0x342); */
-                /* CASE (psili, 0x343); */
+                */
+                    /* Workaround for typo in 1.4.x xserver-xorg */
+                case 0xfe66: combination_buffer[i+1] = 0x314; break;
+                /* CASE(dasia, 0x314); */
+                /* CASE(perispomeni, 0x342); */
+                /* CASE(psili, 0x343); */
 #undef CASE
             default:
                 combination_buffer[i + 1] = FcitxKeySymToUnicode((FcitxKeySym) m_compose_buffer[i]);

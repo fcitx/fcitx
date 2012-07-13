@@ -3,6 +3,7 @@ build/*
 .*
 !.git*
 .git/
+src/lib/fcitx-utils/keysymdef.h
 data/pinyin.tar.gz
 data/pinyin.tar.gz.md5
 data/table/table.tar.gz
