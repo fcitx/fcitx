@@ -815,12 +815,16 @@ static void FcitxXkbApplyCustomScript(FcitxXkb* xkb)
         && xkb->config.customXModmapScript && xkb->config.customXModmapScript[0]))
         return;
 
+    char* customXModmapScript = NULL;
+    FcitxXDGGetFileUserWithPrefix("data", xkb->config.customXModmapScript, NULL, &customXModmapScript);
+
     char* args[] = {
         xkb->config.xmodmapCommand,
-        xkb->config.customXModmapScript,
+        customXModmapScript,
         0
     };
     fcitx_utils_start_process(args);
+    free(customXModmapScript);
 }
 
 static inline void LayoutOverrideFree(LayoutOverride* item) {
