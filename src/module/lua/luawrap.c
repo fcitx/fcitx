@@ -236,15 +236,13 @@ static void LuaResultItemCopy(void *_dst, const void *_src) {
     LuaResultItem *src = (LuaResultItem *)_src;
     dst->result = src->result ? strdup(src->result) : NULL;
     dst->help = src->help ? strdup(src->help) : NULL;
+    dst->tip = src->tip ? strdup(src->tip) : NULL;
 }
 static void LuaResultItemDtor(void *_elt) {
     LuaResultItem *elt = (LuaResultItem *)_elt;
-    if (elt->result) {
-        free(elt->result);
-    }
-    if (elt->help) {
-        free(elt->help);
-    }
+    fcitx_utils_free(elt->result);
+    fcitx_utils_free(elt->help);
+    fcitx_utils_free(elt->tip);
 }
 
 static void FreeTrigger(TriggerItem **triggers, LuaExtension *extension) {
@@ -636,7 +634,8 @@ static UT_array * LuaCallFunction(lua_State *lua,
         const char *str = lua_tostring(lua, -1);
         if (str) {
             utarray_new(result, &LuaResultItem_icd);
-            LuaResultItem r = {.result = (char *)str, .help = NULL};
+            /* str is ok for now and it will be copied by utarray */
+            LuaResultItem r = {.result = (char *)str, .help = NULL, .tip =  NULL};
             utarray_push_back(result, &r);
         } else {
             FcitxLog(WARNING, "lua function return return null");
@@ -656,25 +655,40 @@ static UT_array * LuaCallFunction(lua_State *lua,
                 lua_pushstring(lua, "help");
                 lua_gettable(lua, -2);
             }
+            LuaResultItem r = {NULL, NULL, NULL};
             const char *str = lua_tostring(lua, -1);
             if (str == NULL) {
                 FcitxLog(WARNING, "function %s() result[%d] is not string", function_name, i);
             } else {
-                LuaResultItem r;
-                r.result = (char *)str;
+                r.result = strdup(str);
+            }
+            lua_pop(lua, 1);
+
+            if (r.result) {
                 if (istable) {
+                    const char* p;
                     lua_pushstring(lua, "suggest");
-                    lua_gettable(lua, -3);
-                    r.help = (char *)lua_tostring(lua, -1);
+                    lua_gettable(lua, -2);
+                    p = lua_tostring(lua, -1);
+                    if (p)
+                        r.help = strdup(p);
+                    lua_pop(lua, 1);
+
+                    lua_pushstring(lua, "tip");
+                    lua_gettable(lua, -2);
+                    p = lua_tostring(lua, -1);
+                    if (p)
+                        r.tip = strdup(p);
+                    lua_pop(lua, 1);
                 } else {
                     r.help = NULL;
+                    r.tip = NULL;
                 }
                 utarray_push_back(result, &r);
             }
+            LuaResultItemDtor(&r);
             if (istable) {
-                lua_pop(lua, 3);
-            } else {
-                lua_pop(lua, 1);
+                lua_pop(lua, 2);
             }
         }
         if (utarray_len(result) == 0) {

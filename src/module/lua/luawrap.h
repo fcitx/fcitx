@@ -26,6 +26,7 @@
 typedef struct _LuaResultItem {
     char *result;
     char *help;
+    char *tip;
 } LuaResultItem;
 
 typedef struct _LuaModule LuaModule;

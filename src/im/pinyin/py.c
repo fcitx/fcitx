@@ -34,22 +34,23 @@
 #include "fcitx/ime.h"
 #include "fcitx/keys.h"
 #include "fcitx/ui.h"
-#include "py.h"
-#include "PYFA.h"
-#include "pyParser.h"
-#include "sp.h"
-#include "fcitx-utils/utf8.h"
-#include "fcitx/profile.h"
-#include "fcitx/configfile.h"
-#include "fcitx-utils/log.h"
-#include "fcitx-config/xdg.h"
-#include "pyconfig.h"
 #include "fcitx/instance.h"
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"
 #include "fcitx/candidate.h"
 #include "fcitx/context.h"
+#include "fcitx/profile.h"
+#include "fcitx/configfile.h"
+#include "fcitx-config/xdg.h"
+#include "fcitx-utils/utf8.h"
+#include "fcitx-utils/log.h"
+#include "py.h"
+#include "PYFA.h"
+#include "pyParser.h"
+#include "sp.h"
+#include "pyconfig.h"
 #include "spdata.h"
+#include "module/quickphrase/quickphrase.h"
 
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 #define PINYIN_TEMP_FILE "pinyin_XXXXXX"
@@ -611,6 +612,18 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             }
 
             val = i = strlen(pystate->strFindString);
+
+            if (!pystate->bSP) {
+                if (i == 0 && FcitxHotkeyIsKey(sym, state, FcitxKey_v, FcitxKeyState_None)) {
+                    FcitxModuleFunctionArg args;
+                    int key = sym;
+                    boolean useDup = false;
+                    args.args[0] = &key;
+                    args.args[1] = &useDup;
+                    if (InvokeFunction(pystate->owner, FCITX_QUICKPHRASE, LAUNCHQUICKPHRASE, args))
+                        return IRV_DISPLAY_MESSAGE;
+                }
+            }
 
             /* do the insert */
             for (; i > pystate->iPYInsertPoint; i--)

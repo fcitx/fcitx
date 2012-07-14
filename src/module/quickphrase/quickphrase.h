@@ -17,18 +17,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef _QUICKPHRASE_H
-#define _QUICKPHRASE_H
+#ifndef _FCITX_MODULE_QUICKPHRASE_H
+#define _FCITX_MODULE_QUICKPHRASE_H
 
-#include "fcitx/ime.h"
 
-#define QUICKPHRASE_CODE_LEN    20
-#define QUICKPHRASE_PHRASE_LEN  40
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-typedef struct _QUICK_PHRASE {
-    char strCode[QUICKPHRASE_CODE_LEN + 1];
-    char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1];
-} QUICK_PHRASE;
+#define FCITX_QUICKPHRASE_NAME "fcitx-quickphrase"
+#define FCITX_QUICKPHRASE_LAUNCHQUICKPHRASE 0
+#define FCITX_QUICKPHRASE_LAUNCHQUICKPHRASE_RETURNTYPE intptr_t
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

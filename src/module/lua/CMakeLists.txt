@@ -9,5 +9,6 @@ set(FCITX_LUA_SOURCES
 
 fcitx_add_addon(fcitx-lua ${FCITX_LUA_SOURCES})
 fcitx_add_addon_conf_file(fcitx-lua.conf)
+fcitx_add_addon_header(lua luamod.h)
 
 target_link_libraries(fcitx-lua ${LUA_LIBRARIES})

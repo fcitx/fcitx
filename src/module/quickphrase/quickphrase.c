@@ -25,7 +25,7 @@
 
 #include "fcitx/fcitx.h"
 
-#include "QuickPhrase.h"
+#include "quickphrase.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/utarray.h"
@@ -40,6 +40,15 @@
 #include "module/punc/punc.h"
 #include "module/lua/luamod.h"
 
+#include "fcitx/ime.h"
+
+#define QUICKPHRASE_CODE_LEN    20
+#define QUICKPHRASE_PHRASE_LEN  40
+
+typedef struct _QUICK_PHRASE {
+    char strCode[QUICKPHRASE_CODE_LEN + 1];
+    char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1];
+} QUICK_PHRASE;
 
 typedef enum _QuickPhraseTriggerKey
 {
@@ -57,6 +66,8 @@ typedef struct _QuickPhraseState {
     boolean enabled;
     FcitxInstance* owner;
     char buffer[MAX_USER_INPUT * UTF8_MAX_LENGTH + 1];
+    FcitxHotkey curTriggerKey[2];
+    boolean useDupKeyInput;
 } QuickPhraseState;
 
 typedef struct _QuickPhraseCand {
@@ -83,7 +94,9 @@ static boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                                     unsigned int state,
                                     INPUT_RETURN_VALUE *retval
                                    );
-static  void QuickPhraseReset(void* arg);
+static void QuickPhraseReset(void* arg);
+static void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args);
+static void _QuickPhraseLaunch(QuickPhraseState* qpstate);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -157,7 +170,45 @@ void * QuickPhraseCreate(FcitxInstance *instance)
 
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_QUICKPHRASE, FCT_Boolean, FCF_ResetOnInputMethodChange);
 
+    FcitxAddon* addon = FcitxAddonsGetAddonByName(
+            FcitxInstanceGetAddons(instance),
+            FCITX_QUICKPHRASE_NAME);
+    AddFunction(addon, QuickPhraseLaunch);
+
     return qpstate;
+}
+
+void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args)
+{
+    int* key = args.args[0];
+    boolean* useDup = args.args[1];
+    QuickPhraseState *qpstate = (QuickPhraseState*) arg;
+    qpstate->curTriggerKey[0].sym = *key;
+    qpstate->useDupKeyInput = *useDup;
+    _QuickPhraseLaunch(qpstate);
+    FcitxUIUpdateInputWindow(qpstate->owner);
+
+    return (void*) true;
+}
+
+void _QuickPhraseLaunch(QuickPhraseState* qpstate)
+{
+    FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
+
+    FcitxInstanceCleanInputWindow(qpstate->owner);
+    FcitxInputStateSetShowCursor(input, true);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));
+    FcitxInputStateSetCursorPos(input, 0);
+
+    char c[2] = { (char) (qpstate->curTriggerKey[0].sym & 0xff), '\0'};
+    FcitxModuleFunctionArg farg;
+    FcitxKeySym s = qpstate->curTriggerKey[0].sym;
+    farg.args[0] = &s;
+    char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
+    const char* full = strTemp ? strTemp : c;
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
+
+    qpstate->enabled = true;
 }
 
 /**
@@ -261,10 +312,10 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
             *retval = QuickPhraseDoInput(qpstate, keymain, state);
             if (*retval == IRV_TO_PROCESS) {
                 if (strlen(qpstate->buffer) == 0
-                    && (FcitxHotkeyIsHotKey(keymain, state, QuickPhraseTriggerKeys[qpstate->triggerKey]) || FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
-                    char c[2] = { (char) (QuickPhraseTriggerKeys[qpstate->triggerKey][0].sym & 0xff), '\0'};
+                    && ((qpstate->useDupKeyInput && FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) || FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
+                    char c[2] = { (char) (qpstate->curTriggerKey[0].sym & 0xff), '\0'};
                     FcitxModuleFunctionArg farg;
-                    FcitxKeySym s = QuickPhraseTriggerKeys[qpstate->triggerKey][0].sym;
+                    FcitxKeySym s = qpstate->curTriggerKey[0].sym;
                     farg.args[0] = &s;
                     char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
                     strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
@@ -297,7 +348,7 @@ boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                 QuickPhraseReset(qpstate);
                 *retval = IRV_COMMIT_STRING;
             } else {
-                char c[2] = { (char) (QuickPhraseTriggerKeys[qpstate->triggerKey][0].sym & 0xff), '\0'};
+                char c[2] = { (char) (qpstate->curTriggerKey[0].sym & 0xff), '\0'};
                 strcpy(FcitxInputStateGetOutputString(input), c);
                 *retval = IRV_COMMIT_STRING;
             }
@@ -331,20 +382,10 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
         && qpstate->buffer[0] == '\0'
         && FcitxInputStateGetRawInputBufferSize(input) == 0
         && FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
-        FcitxInstanceCleanInputWindow(qpstate->owner);
-        FcitxInputStateSetShowCursor(input, true);
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, "%s", _("Quick Phrase: "));
-        FcitxInputStateSetCursorPos(input, 0);
+        qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->triggerKey][0];
+        qpstate->useDupKeyInput = true;
 
-        char c[2] = { (char) (QuickPhraseTriggerKeys[qpstate->triggerKey][0].sym & 0xff), '\0'};
-        FcitxModuleFunctionArg farg;
-        FcitxKeySym s = QuickPhraseTriggerKeys[qpstate->triggerKey][0].sym;
-        farg.args[0] = &s;
-        char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
-        const char* full = strTemp ? strTemp : c;
-        FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
-
-        qpstate->enabled = true;
+        _QuickPhraseLaunch(qpstate);
         *retval = IRV_DISPLAY_MESSAGE;
 
         return true;
@@ -357,6 +398,8 @@ void QuickPhraseReset(void* arg)
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     qpstate->enabled = false;
     qpstate->buffer[0] = '\0';
+    qpstate->useDupKeyInput = false;
+    memset(qpstate->curTriggerKey, 0, sizeof(FcitxHotkey) * 2);
 }
 INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
 {
@@ -468,8 +511,8 @@ INPUT_RETURN_VALUE QuickPhraseGetLuaCandWord(void* arg, FcitxCandidateWord* cand
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
-    if (candWord->strExtra) {
-        strcat(qpstate->buffer, candWord->strExtra);
+    if (candWord->priv) {
+        strcat(qpstate->buffer, (char*) candWord->priv);
         ShowQuickPhraseMessage(qpstate);
         return QuickPhraseGetCandWords(qpstate);
     }

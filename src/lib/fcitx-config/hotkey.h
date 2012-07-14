@@ -186,6 +186,19 @@ extern "C"
     boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, unsigned int state, const FcitxHotkey * hotkey);
 
     /**
+     * check the key is this key or not
+     *
+     * @param sym keysym
+     * @param state key state
+     * @param symcmp keysym to compare
+     * @param statecmp key state to compare
+     * @return boolean
+     *
+     * @since 4.2.5
+     **/
+    boolean FcitxHotkeyIsKey(FcitxKeySym sym, unsigned int state, FcitxKeySym symcmp, unsigned int statecmp);
+
+    /**
      * is key will make cursor move, include left, right, home, end, and so on.
      *
      * @param sym keyval

@@ -519,6 +519,12 @@ boolean FcitxHotkeyIsHotKeyLAZ(FcitxKeySym sym, unsigned int state)
     return false;
 }
 
+FCITX_EXPORT_API
+boolean FcitxHotkeyIsKey(FcitxKeySym sym, unsigned int state, FcitxKeySym symcmp, unsigned int statecmp)
+{
+    FcitxHotkey key[2] = { {0, symcmp, statecmp }, {0, 0, 0} };
+    return FcitxHotkeyIsHotKey(sym ,state, key);
+}
 
 FCITX_EXPORT_API
 boolean FcitxHotkeyIsHotKey(FcitxKeySym sym, unsigned int state, const FcitxHotkey * hotkey)
