@@ -21,6 +21,9 @@ target_link_libraries(testarray fcitx-utils)
 add_executable(testutf8 testutf8.c)
 target_link_libraries(testutf8 fcitx-utils)
 
+add_executable(testxdg testxdg.c)
+target_link_libraries(testxdg fcitx-config fcitx-utils)
+
 add_executable(testunicode testunicode.c ../src/module/unicode/charselectdata.c)
 target_link_libraries(testunicode fcitx-utils fcitx-config)
 
@@ -53,6 +56,9 @@ add_test(NAME testarray
 
 add_test(NAME testutf8
          COMMAND testutf8)
+
+add_test(NAME testxdg
+         COMMAND testxdg)
 
 add_test(NAME testunicode
          COMMAND testunicode ${PROJECT_SOURCE_DIR}/src/module/unicode/charselectdata)
