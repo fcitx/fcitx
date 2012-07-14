@@ -138,7 +138,8 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_
     /* check absolute path */
 
     if (strlen(fileName) > 0 && fileName[0] == '/') {
-        fp = fopen(fileName, mode);
+        if (mode)
+            fp = fopen(fileName, mode);
 
         if (retFile)
             *retFile = strdup(fileName);
@@ -310,10 +311,10 @@ FcitxStringHashSet* FcitxXDGGetFiles(
         free(pathBuf);
         if (dir == NULL)
             continue;
-        
+
         size_t suffixlen = 0;
         size_t prefixlen = 0;
-        
+
         if (suffix) suffixlen = strlen(suffix);
         if (prefix) prefixlen = strlen(prefix);
 
