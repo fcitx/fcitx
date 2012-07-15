@@ -25,6 +25,14 @@
 #include "fcitxclient.h"
 #include "marshall.h"
 
+typedef struct _ProcessKeyStruct ProcessKeyStruct;
+
+struct _ProcessKeyStruct {
+    FcitxClient* self;
+    GAsyncReadyCallback callback;
+    void* user_data;
+};
+
 struct _FcitxClientPrivate {
     GDBusProxy* improxy;
     GDBusProxy* icproxy;
@@ -261,6 +269,68 @@ void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointe
                           -1, NULL,
                           cb,
                           user_data);
+    }
+}
+
+FCITX_EXPORT_API
+gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res)
+{
+    gint ret = -1;
+    GError* error = NULL;
+    GVariant* result = g_dbus_proxy_call_finish(client->priv->icproxy, res, &error);
+    if (error) {
+        g_error_free(error);
+    }
+    else if (result) {
+        g_variant_get(result, "(i)", &ret);
+    }
+    return ret;
+}
+
+void _process_key_data_free(ProcessKeyStruct* pk)
+{
+    g_object_unref(pk->self);
+    g_free(pk);
+}
+
+void
+_fcitx_client_process_key_cb(GObject *source_object,
+                             GAsyncResult *res,
+                             gpointer user_data)
+{
+    ProcessKeyStruct* pk = user_data;
+    pk->callback(G_OBJECT(pk->self), res, pk->user_data);
+    _process_key_data_free(pk);
+}
+
+void _fcitx_client_process_key_cancelled(GCancellable* cancellable, gpointer user_data)
+{
+    ProcessKeyStruct* pk = user_data;
+    _process_key_data_free(pk);
+}
+
+FCITX_EXPORT_API
+void fcitx_client_process_key_async(FcitxClient* self,
+                                    guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t,
+                                    gint timeout_msec,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data)
+{
+    int itype = type;
+    if (self->priv->icproxy) {
+        ProcessKeyStruct* pk = g_new(ProcessKeyStruct, 1);
+        pk->self = g_object_ref(self);
+        pk->callback = callback;
+        pk->user_data = user_data;
+        g_dbus_proxy_call(self->priv->icproxy,
+                          "ProcessKeyEvent",
+                          g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
+                          G_DBUS_CALL_FLAGS_NONE,
+                          timeout_msec,
+                          cancellable,
+                          _fcitx_client_process_key_cb,
+                          pk);
     }
 }
 

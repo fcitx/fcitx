@@ -518,14 +518,17 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
-            fcitx_client_process_key(fcitxcontext->client,
-                                     _fcitx_im_context_process_key_cb,
-                                     pks,
-                                     event->keyval,
-                                     event->hardware_keycode,
-                                     event->state,
-                                     (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
-                                     event->time);
+            fcitx_client_process_key_async(fcitxcontext->client,
+                                           event->keyval,
+                                           event->hardware_keycode,
+                                           event->state,
+                                           (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
+                                           event->time,
+                                           -1,
+                                           NULL,
+                                           _fcitx_im_context_process_key_cb,
+                                           pks
+                                          );
             event->state |= FcitxKeyState_HandledMask;
             return TRUE;
         }
@@ -542,15 +545,7 @@ _fcitx_im_context_process_key_cb (GObject *source_object,
 {
     ProcessKeyStruct* pks = user_data;
     GdkEventKey* event = pks->event;
-    GError* error = NULL;
-    int ret = -1;
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
-    if (error) {
-        g_error_free(error);
-    }
-    else if (result) {
-        g_variant_get(result, "(i)", &ret);
-    }
+    int ret = fcitx_client_process_key_finish(FCITX_CLIENT(source_object), res);
     if (ret <= 0) {
         event->state |= FcitxKeyState_IgnoredMask;
         gdk_event_put((GdkEvent *)event);
@@ -601,6 +596,8 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
             gboolean hasColor;
             GdkColor fg;
             GdkColor bg;
+            memset(&fg, 0, sizeof(GdkColor));
+            memset(&bg, 0, sizeof(GdkColor));
 
             if (context->client_window) {
                 GtkWidget *widget;
@@ -1387,14 +1384,18 @@ _key_snooper_cb (GtkWidget   *widget,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
-            fcitx_client_process_key(fcitxcontext->client,
-                                     _fcitx_im_context_process_key_cb,
-                                     pks,
-                                     event->keyval,
-                                     event->hardware_keycode,
-                                     event->state,
-                                     (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
-                                     event->time);
+
+            fcitx_client_process_key_async(fcitxcontext->client,
+                                           event->keyval,
+                                           event->hardware_keycode,
+                                           event->state,
+                                           (event->type == GDK_KEY_PRESS) ? (FCITX_PRESS_KEY) : (FCITX_RELEASE_KEY),
+                                           event->time,
+                                           -1,
+                                           NULL,
+                                           _fcitx_im_context_process_key_cb,
+                                           pks
+                                          );
             retval = TRUE;
         }
     } while(0);

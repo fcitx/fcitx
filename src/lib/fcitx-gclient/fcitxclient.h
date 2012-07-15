@@ -117,9 +117,46 @@ int fcitx_client_process_key_sync(FcitxClient* client, guint32 keyval, guint32 k
  * @type event type
  * @t timestamp
  *
- * send a key event to fcitx asynchronizely
+ * @deprecated
+ *
+ * send a key event to fcitx asynchronizely, you need to use g_dbus_proxy_call_finish with this function
  **/
 void fcitx_client_process_key(FcitxClient* client, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t);
+
+/**
+ * fcitx_client_process_key_async:
+ *
+ * @client A FcitxClient
+ * @keyval key value
+ * @keycode hardware key code
+ * @state key state
+ * @type event type
+ * @t timestamp
+ * @cancellable cancellable
+ * @cb callback
+ * @user_data user data
+ *
+ * use this function with fcitx_client_process_key_finish
+ * @see fcitx_client_process_key_finish
+ **/
+void fcitx_client_process_key_async(FcitxClient* self,
+                                    guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t,
+                                    gint timeout_msec,
+                                    GCancellable *cancellable,
+                                    GAsyncReadyCallback callback,
+                                    gpointer user_data);
+/**
+ * fcitx_client_process_key_finish:
+ *
+ * @client A FcitxClient
+ * @res result
+ *
+ * @returns process key result
+ *
+ * use this function with fcitx_client_process_key_async
+ * @see fcitx_client_process_key_async
+ **/
+gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res);
 
 /**
  * fcitx_client_focus_in:

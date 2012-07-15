@@ -1,4 +1,6 @@
 #include <fcitx-gclient/fcitxkbd.h>
+#include <fcitx-gclient/fcitxclient.h>
+#include <fcitx-utils/keysym.h>
 
 static gboolean
 timeout_cb (gpointer data)
@@ -26,7 +28,6 @@ foreach_cb(gpointer data, gpointer user_data)
 static void
 test_keyboard (void)
 {
-    run_loop_with_timeout (1000);
     FcitxKbd* kbd = fcitx_kbd_new(G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, 0, NULL, NULL);
 
     GPtrArray* layouts = fcitx_kbd_get_layouts(kbd);
@@ -38,12 +39,38 @@ test_keyboard (void)
     g_object_unref(G_OBJECT(kbd));
 }
 
+static void
+_process_cb(GObject* obj,
+            GAsyncResult* res,
+            gpointer user_data)
+{
+}
+
+static void
+_connect_cb(FcitxClient* client, void* user_data)
+{
+    GCancellable* cancellable = g_cancellable_new();
+    fcitx_client_process_key_async(client, FcitxKey_a, 0, 0, 0, 0, -1, cancellable, _process_cb, NULL);
+    g_cancellable_cancel(cancellable);
+    g_object_unref(cancellable);
+    fcitx_client_process_key_async(client, FcitxKey_a, 0, 0, 0, 0, -1, NULL, _process_cb, NULL);
+}
+
+static void
+test_client (void)
+{
+    FcitxClient* client = fcitx_client_new();
+    g_signal_connect(client, "connected", G_CALLBACK(_connect_cb), NULL);
+    run_loop_with_timeout (1000);
+}
+
 int main(int argc, char* argv[])
 {
     g_type_init();
     g_test_init (&argc, &argv, NULL);
 
     g_test_add_func ("/fcitx/keyboard", test_keyboard);
+    g_test_add_func ("/fcitx/client", test_client);
 
     return g_test_run ();
 }
