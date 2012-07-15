@@ -3,7 +3,7 @@
 # test DISPLAY
 if [ "x$DISPLAY" != "x" ]; then
     number=`echo $DISPLAY | sed 's|\:\([0-9]\+\)\(\..*\)\?|\1|g'`
-    if [ "x$number" == "x" ]; then
+    if [ "x$number" = "x" ]; then
         exit 1
     fi
 else
@@ -21,7 +21,7 @@ fi
 # use dbus-send to check fcitx is running or not
 "${DBUS_SEND}" --print-reply --type=method_call --session --dest=org.fcitx.Fcitx-$number /inputmethod org.freedesktop.DBus.Introspectable.Introspect > /dev/null 2>&1
 
-if [ $? == "1" ]; then
+if [ $? = "1" ]; then
     echo "Fcitx seems is not running"
     fcitx
 else
