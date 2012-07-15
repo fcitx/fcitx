@@ -12,10 +12,11 @@ function download_file()
 }
 
 XKEYSYM=http://cgit.freedesktop.org/xorg/proto/xproto/plain/keysymdef.h
+KEYSYMGEN_HEADER=keysymgen.h
 
 download_file keysymdef.h $XKEYSYM
 
-cat > keysym.h <<EOF
+cat > $KEYSYMGEN_HEADER <<EOF
 /***************************************************************************
  *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
@@ -36,8 +37,8 @@ cat > keysym.h <<EOF
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_UTILS_KEYSYM_H
-#define FCITX_UTILS_KEYSYM_H
+#ifndef FCITX_UTILS_KEYSYMGEN_H
+#define FCITX_UTILS_KEYSYMGEN_H
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,8 +48,8 @@ typedef enum _FcitxKeySym
 FcitxKey_None = 0x0,
 EOF
 
-grep '^#define' keysymdef.h | sed 's|^#define XK_\([a-zA-Z_0-9]\+\) \+0x\([0-9A-Fa-f]\+\)\(.*\)$|FcitxKey_\1 = 0x\2,\3|g' >> keysym.h
-cat >> keysym.h <<EOF
+grep '^#define' keysymdef.h | sed 's|^#define XK_\([a-zA-Z_0-9]\+\) \+0x\([0-9A-Fa-f]\+\)\(.*\)$|FcitxKey_\1 = 0x\2,\3|g' >> $KEYSYMGEN_HEADER
+cat >> $KEYSYMGEN_HEADER <<EOF
 } FcitxKeySym;
 
 #ifdef __cplusplus

@@ -58,32 +58,6 @@ extern "C"
     } FcitxHotkey;
 
     /**
-     * fcitx key state (modifier keys)
-     **/
-    typedef enum _FcitxKeyState {
-        FcitxKeyState_None = 0,
-        FcitxKeyState_Shift = 1 << 0,
-        FcitxKeyState_CapsLock = 1 << 1,
-        FcitxKeyState_Ctrl = 1 << 2,
-        FcitxKeyState_Alt = 1 << 3,
-        FcitxKeyState_Alt_Shift = FcitxKeyState_Alt | FcitxKeyState_Shift,
-        FcitxKeyState_Ctrl_Shift = FcitxKeyState_Ctrl | FcitxKeyState_Shift,
-        FcitxKeyState_Ctrl_Alt = FcitxKeyState_Ctrl | FcitxKeyState_Alt,
-        FcitxKeyState_Ctrl_Alt_Shift = FcitxKeyState_Ctrl | FcitxKeyState_Alt | FcitxKeyState_Shift,
-        FcitxKeyState_NumLock = 1 << 4,
-        FcitxKeyState_Super = 1 << 6,
-        FcitxKeyState_ScrollLock = 1 << 7,
-        FcitxKeyState_MousePressed = 1 << 8,
-        FcitxKeyState_HandledMask = 1 << 24,
-        FcitxKeyState_IgnoredMask = 1 << 25,
-        FcitxKeyState_Super2    = 1 << 26,
-        FcitxKeyState_Hyper    = 1 << 27,
-        FcitxKeyState_Meta     = 1 << 28,
-        FcitxKeyState_UsedMask = 0x5c001fff,
-        FcitxKeyState_SimpleMask = FcitxKeyState_Ctrl_Alt_Shift | FcitxKeyState_Super | FcitxKeyState_Super2 | FcitxKeyState_Hyper | FcitxKeyState_Meta,
-    } FcitxKeyState;
-
-    /**
      * Set the hotkey with a string
      *
      * @param strKey key string
