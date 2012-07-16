@@ -423,9 +423,9 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
         if (qpstate->useDupKeyInput) {
             *retval = IRV_DISPLAY_MESSAGE;
             _QuickPhraseLaunch(qpstate);
-        }
 
-        return true;
+            return true;
+        }
     }
     return false;
 }
