@@ -641,8 +641,13 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
 
     gboolean new_visible = FALSE;
 
-    if (context->preedit_string != NULL && context->preedit_string[0] != 0)
-        new_visible = true;
+    if (context->preedit_string != NULL && context->preedit_string[0] == 0) {
+        g_free(context->preedit_string);
+        context->preedit_string = NULL;
+    }
+
+    if (context->preedit_string != NULL)
+        new_visible = TRUE;
 
     gboolean flag = new_visible != visible;
 
