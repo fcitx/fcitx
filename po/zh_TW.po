@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-16 10:22+0800\n"
-"PO-Revision-Date: 2012-07-16 10:23+0800\n"
+"PO-Revision-Date: 2012-07-16 10:53+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_TW\n"
@@ -1223,7 +1223,7 @@ msgstr ""
 
 #: unknown
 msgid "None"
-msgstr ""
+msgstr "無"
 
 #: unknown
 msgid "Nothing"
