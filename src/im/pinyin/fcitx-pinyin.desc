@@ -17,6 +17,11 @@ Type=Boolean
 DefaultValue=False
 Description=Fix preedit cursor at head
 
+[Pinyin/UseVForQuickPhrase]
+Type=Boolean
+DefaultValue=True
+Description=Use V to trigger quickphrase
+
 [Pinyin/UseCompletePinyin]
 Type=Boolean
 DefaultValue=False
