@@ -138,12 +138,14 @@ QFcitxInputContext::QFcitxInputContext()
       m_dbusproxy(0),
       m_improxy(0),
       m_icproxy(0),
+      m_capacity(0),
       m_id(0),
       m_path(""),
       m_has_focus(false),
       m_n_compose(0),
       m_cursorPos(0),
-      m_useSurroundingText(false)
+      m_useSurroundingText(false),
+      m_syncMode(true)
 {
     FcitxFormattedPreedit::registerMetaType();
 
@@ -387,12 +389,13 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
 
 void QFcitxInputContext::widgetDestroyed(QWidget* w)
 {
+    if (isValid()) {
+        if (w == focusWidget())
+            m_icproxy->FocusOut();
+        update();
+    }
+
     QInputContext::widgetDestroyed(w);
-    if (!isValid())
-        return;
-    if (w == focusWidget())
-        m_icproxy->FocusOut();
-    update();
 }
 
 
