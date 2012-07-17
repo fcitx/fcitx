@@ -501,6 +501,7 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
     if (i == tableDict->iCodeLength - 1)
         return true;
 
+    int codeIdx = 0;
     for (i1 = 0; i1 < tableDict->iCodeLength; i1++) {
         int clen;
         char* ps;
@@ -527,7 +528,11 @@ boolean TableCreatePhraseCode(TableDict* tableDict, char *strHZ)
             break;
         }
 
-        tableDict->strNewPhraseCode[i1] = recTemp->strCode[tableDict->rule[i].rule[i1].iIndex - 1];
+        if (strlen(recTemp->strCode) >= tableDict->rule[i].rule[i1].iIndex) {
+            tableDict->strNewPhraseCode[codeIdx] = recTemp->strCode[tableDict->rule[i].rule[i1].iIndex - 1];
+            codeIdx++;
+        }
+
     }
 
     return bCanntFindCode;

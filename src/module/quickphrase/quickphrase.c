@@ -402,12 +402,11 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
     if (*retval != IRV_TO_PROCESS)
         return false;
 
-    if (!disableQuickPhrase
-        && !qpstate->enabled
+    if (!qpstate->enabled
         && qpstate->buffer[0] == '\0'
         && FcitxInputStateGetRawInputBufferSize(input) == 0
     ) {
-        if (FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
+        if (!disableQuickPhrase && FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
             qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->triggerKey][0];
             qpstate->useDupKeyInput = true;
         }
