@@ -58,10 +58,10 @@ enum {
 
 static guint signals[LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE(FcitxInputMethod, fcitx_input_method, G_TYPE_DBUS_PROXY);
-
 FCITX_EXPORT_API
 GType        fcitx_input_method_get_type(void) G_GNUC_CONST;
+
+G_DEFINE_TYPE(FcitxInputMethod, fcitx_input_method, G_TYPE_DBUS_PROXY);
 
 static GDBusInterfaceInfo * _fcitx_input_method_get_interface_info(void);
 static void _fcitx_im_item_foreach_cb(gpointer data, gpointer user_data);

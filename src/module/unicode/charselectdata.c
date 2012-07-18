@@ -4,7 +4,11 @@
  * original file is licensed under GPLv2+
  */
 
+#if defined(__linux__)
 #include <endian.h>
+#else
+#include <sys/endian.h>
+#endif
 #include <ctype.h>
 #include <libintl.h>
 #include <fcitx-utils/uthash.h>

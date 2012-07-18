@@ -44,11 +44,10 @@ static const gchar introspection_xml[] =
 "    </interface>"
 "</node>";
 
-
-G_DEFINE_TYPE(FcitxKbd, fcitx_kbd, G_TYPE_DBUS_PROXY);
-
 FCITX_EXPORT_API
 GType        fcitx_kbd_get_type(void) G_GNUC_CONST;
+
+G_DEFINE_TYPE(FcitxKbd, fcitx_kbd, G_TYPE_DBUS_PROXY);
 
 static GDBusInterfaceInfo * _fcitx_kbd_get_interface_info(void);
 
