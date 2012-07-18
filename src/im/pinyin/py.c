@@ -1063,31 +1063,30 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     }
 
     /* if it is symbol mode, all word will be take care */
-    if (!(pCurFreq && pCurFreq->bIsSym)) {
-
-        if (pystate->pyconfig.bPYCreateAuto)
-            PYCreateAuto(pystate);
-
-        if (pystate->strPYAuto[0]) {
-            FcitxCandidateWord candWord;
-            PYCandWord* pycandword = fcitx_utils_malloc0(sizeof(PYCandWord));
-            pycandword->iWhich = PY_CAND_AUTO;
-            candWord.owner = pystate;
-            candWord.callback = PYGetCandWord;
-            candWord.priv = pycandword;
-            candWord.strWord = strdup(pystate->strPYAuto);
-            candWord.strExtra = NULL;
-            candWord.wordType = MSG_OTHER;
-            FcitxCandidateWordAppend(candList, &candWord);
-        }
-
-        PYGetPhraseCandWords(pystate);
-        if (pCurFreq)
-            PYGetFreqCandWords(pystate, pCurFreq);
-        PYGetBaseCandWords(pystate, pCurFreq);
-    } else {
+    if (pCurFreq && pCurFreq->bIsSym) {
         PYGetSymCandWords(pystate, pCurFreq);
     }
+
+    if (pystate->pyconfig.bPYCreateAuto)
+        PYCreateAuto(pystate);
+
+    if (pystate->strPYAuto[0]) {
+        FcitxCandidateWord candWord;
+        PYCandWord* pycandword = fcitx_utils_malloc0(sizeof(PYCandWord));
+        pycandword->iWhich = PY_CAND_AUTO;
+        candWord.owner = pystate;
+        candWord.callback = PYGetCandWord;
+        candWord.priv = pycandword;
+        candWord.strWord = strdup(pystate->strPYAuto);
+        candWord.strExtra = NULL;
+        candWord.wordType = MSG_OTHER;
+        FcitxCandidateWordAppend(candList, &candWord);
+    }
+
+    PYGetPhraseCandWords(pystate);
+    if (pCurFreq)
+        PYGetFreqCandWords(pystate, pCurFreq);
+    PYGetBaseCandWords(pystate, pCurFreq);
 
     if (FcitxCandidateWordPageCount(candList) != 0) {
         FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(candList);
