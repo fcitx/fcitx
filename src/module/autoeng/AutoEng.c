@@ -187,6 +187,10 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
             ResetAutoEng(autoEngState);
             *retval = IRV_COMMIT_STRING;
         }
+        if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
+            *retval = IRV_DO_NOTHING;
+            return true;
+        }
         ShowAutoEngMessage(autoEngState);
         return true;
     }
