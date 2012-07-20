@@ -410,11 +410,17 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
             qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->triggerKey][0];
             qpstate->useDupKeyInput = true;
         }
-        else if (FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[0].sym, qpstate->alternativeTriggerKey[0].state)) {
+        else if (
+            (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state) ) &&
+            FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[0].sym, qpstate->alternativeTriggerKey[0].state)
+        ) {
             qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[0];
             qpstate->useDupKeyInput = true;
         }
-        else if (FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[1].sym, qpstate->alternativeTriggerKey[1].state)) {
+        else if (
+            (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state)) &&
+            FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[1].sym, qpstate->alternativeTriggerKey[1].state)
+        ) {
             qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[1];
             qpstate->useDupKeyInput = true;
         }
