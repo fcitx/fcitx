@@ -22,6 +22,7 @@ option(ENABLE_SNOOPER "Enable Key Snooper for gtk app" On)
 option(ENABLE_GIR "Enable GObject Introspection" On)
 option(ENABLE_ENCHANT "Enable enchant for word predication" On)
 option(ENABLE_PRESAGE "Enable presage for word predication" On)
+option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" Off)
 
 if (NOT NO_SNOOPER_APPS)
 set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")
