@@ -128,6 +128,10 @@ SpellCreate(FcitxInstance *instance)
 #ifdef PRESAGE_FOUND
     presage_new(FcitxSpellGetPastStream, spell,
                 FcitxSpellGetFutureStream, spell, &spell->presage);
+    if (!spell->presage) {
+        SpellDestroy(spell);
+        return NULL;
+    }
 #endif
 #ifdef ENCHANT_FOUND
     spell->broker = enchant_broker_init();
@@ -173,6 +177,12 @@ SpellDestroy(void *arg)
     }
     /* if (spell->enchantLanguages) */
     /*     fcitx_utils_free_string_list(spell->enchantLanguages); */
+#endif
+#ifdef PRESAGE_FOUND
+    if (spell->presage) {
+        presage_free(spell->presage);
+        spell->presage = NULL;
+    }
 #endif
     free(arg);
 }
