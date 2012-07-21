@@ -36,7 +36,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 
-#include "spell.h"
+#include "spell-internal.h"
 
 static CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
 static void *SpellCreate(FcitxInstance *instance);

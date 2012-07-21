@@ -20,16 +20,6 @@
 #ifndef _FCITX_MODULE_SPELL_H
 #define _FCITX_MODULE_SPELL_H
 
-#include "config.h"
-#include <fcitx-config/fcitx-config.h>
-#ifdef ENCHANT_FOUND
-#include <enchant/enchant.h>
-#endif
-
-#ifdef PRESAGE_FOUND
-#include <presage.h>
-#endif
-
 typedef enum {
     EP_Default = 0,
     EP_Aspell = 1,
@@ -48,44 +38,6 @@ enum {
     FCITX_SPELL_ADD_PERSONAL,
     FCITX_SPELL_DICT_AVAILABLE,
 };
-
-typedef struct {
-    FcitxGenericConfig gconfig;
-#ifdef PRESAGE_FOUND
-    boolean usePresage;
-#endif
-#ifdef ENCHANT_FOUND
-    EnchantProvider provider;
-#endif
-} FcitxSpellConfig;
-
-typedef struct {
-    struct _FcitxInstance *owner;
-    FcitxSpellConfig config;
-    char *dictLang;
-    const char *before_str;
-    const char *current_str;
-    const char *after_str;
-#ifdef ENCHANT_FOUND
-    EnchantBroker* broker;
-    // UT_array* enchantLanguages;
-    EnchantDict* dict;
-#endif
-#ifdef PRESAGE_FOUND
-    presage_t presage;
-    boolean presage_support;
-    char *past_stm;
-#endif
-} FcitxSpell;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-    CONFIG_BINDING_DECLARE(FcitxSpellConfig);
-#ifdef __cplusplus
-}
-#endif
-
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
