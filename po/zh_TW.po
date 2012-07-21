@@ -771,7 +771,7 @@ msgstr "模糊 an 和 ang"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
 msgid "Fuzzy c and ch"
-msgstr ""
+msgstr "模糊 c 和 ch"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
 msgid "Fuzzy en and eng"
@@ -779,7 +779,7 @@ msgstr "模糊 en 和 eng"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
 msgid "Fuzzy f and h"
-msgstr ""
+msgstr "模糊 f 和 h"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
 msgid "Fuzzy ian and iang"
@@ -791,23 +791,23 @@ msgstr "模糊 in 和 ing"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy l and n"
-msgstr ""
+msgstr "模糊 l 和 n"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy ou and u"
-msgstr ""
+msgstr "模糊 ou 和 u"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy s and sh"
-msgstr ""
+msgstr "模糊 s 和 sh"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy uan and uang"
-msgstr ""
+msgstr "模糊 uan 和 uang"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fuzzy z and zh"
-msgstr ""
+msgstr "模糊 z 和 zh"
 
 #: /home/saber/Develop/fcitx/data/config.desc:163
 msgid "Give the tips of Phrase"
