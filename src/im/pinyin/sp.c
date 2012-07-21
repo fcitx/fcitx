@@ -215,6 +215,13 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
     strQP[0] = '\0';
     const char aeiou[] = "aeiou";
 
+    /*
+     * this part of code is to check xiaohe special rule
+     * First, Xiaohe's C rule it like this.
+     * if C length is 1, nonS is same as C, for example, aa is a
+     * if C length is 2, type it as the same of QuanPin, for example, an is an
+     * no nonS case for C length is 3.
+     */
     boolean checkXiaoheNonS = false;
     do {
         if (pyconfig->cNonS != '*')
@@ -266,7 +273,7 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
                 break;
             }
 
-            if (pyconfig->cNonS == '*' && SPMap_C[iIndex2].strQP[0] != strSP[0])
+            if (checkXiaoheNonS && SPMap_C[iIndex2].strQP[0] != strSP[0])
                 continue;
 
             strcpy(str_QP, strQP);
