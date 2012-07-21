@@ -46,6 +46,7 @@ typedef struct {
 enum {
     FCITX_SPELL_HINT_WORDS,
     FCITX_SPELL_ADD_PERSONAL,
+    FCITX_SPELL_DICT_AVAILABLE,
 };
 
 typedef struct {

@@ -43,8 +43,10 @@ static void *SpellCreate(FcitxInstance *instance);
 static void SpellDestroy(void *arg);
 static void SpellReloadConfig(void *arg);
 static void SpellSetLang(FcitxSpell *spell, const char *lang);
+
 static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
+static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 const FcitxModule module = {
@@ -153,6 +155,7 @@ SpellCreate(FcitxInstance *instance)
                                       FCITX_SPELL_NAME);
     AddFunction(addon, FcitxSpellHintWords);
     AddFunction(addon, FcitxSpellAddPersonal);
+    AddFunction(addon, FcitxSpellDictAvailable);
     return spell;
 }
 
@@ -196,6 +199,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
 #ifdef ENCHANT_FOUND
     if (spell->dict) {
         enchant_broker_free_dict(spell->broker, spell->dict);
+        spell->dict = NULL;
     }
     spell->dict = enchant_broker_request_dict(spell->broker, lang);
 #endif
@@ -317,17 +321,19 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
         goto out;
 #endif
 #ifdef ENCHANT_FOUND
-    do {
-        char **suggestions = NULL;
-        size_t number = 0;
-        suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
-                                           strlen(current_str), &number);
-        if (!suggestions)
-            break;
-        number = number > len_limit ? len_limit : number;
-        res = SpellHintList(number, suggestions, NULL);
-        enchant_dict_free_string_list(spell->dict, suggestions);
-    } while(0);
+    if (spell->dict) {
+        do {
+            char **suggestions = NULL;
+            size_t number = 0;
+            suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
+                                               strlen(current_str), &number);
+            if (!suggestions)
+                break;
+            number = number > len_limit ? len_limit : number;
+            res = SpellHintList(number, suggestions, NULL);
+            enchant_dict_free_string_list(spell->dict, suggestions);
+        } while(0);
+    }
 #endif
 out:
     spell->before_str = NULL;
@@ -373,4 +379,21 @@ FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args)
     const char *lang = args.args[1];
     SpellAddPersonal(spell, new_word, lang);
     return NULL;
+}
+
+static void*
+FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    const char *lang = args.args[0];
+    SpellSetLang(spell, lang);
+#ifdef ENCHANT_FOUND
+    if (spell->dict)
+        return (void*)true;
+#endif
+#ifdef PRESAGE_FOUND
+    if (spell->config.usePresage && spell->presage && spell->presage_support)
+        return (void*)true;
+#endif
+    return (void*)false;
 }
