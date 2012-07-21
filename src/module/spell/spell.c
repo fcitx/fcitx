@@ -190,7 +190,6 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
 {
     if (!lang || !lang[0])
         return;
-    printf("%s: x%sx\n", __func__, lang);
     if (spell->dictLang) {
         if (!strcmp(spell->dictLang, lang))
             return;
