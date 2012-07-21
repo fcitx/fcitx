@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-16 10:22+0800\n"
+"POT-Creation-Date: 2012-07-21 16:51-0400\n"
 "PO-Revision-Date: 2012-07-16 10:53+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
@@ -26,23 +26,23 @@ msgstr " Ctrl+Delete 删除"
 msgid "/min  Time Used: "
 msgstr "/分  经过时间: "
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:590
 msgid "<Low Surrogate>"
 msgstr "<低半代理区>"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
 msgid "<Non Private Use High Surrogate>"
 msgstr "<非专用高半代理区>"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
 msgid "<Private Use High Surrogate>"
 msgstr "<专用高半代理区>"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:592
 msgid "<Private Use>"
 msgstr "<专用区>"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:620
 msgid "<not assigned>"
 msgstr "<未指派>"
 
@@ -118,7 +118,7 @@ msgstr "添加 Unicode 输入支持"
 msgid "Add Watch Function Error"
 msgstr "增加监听函数错误"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:48
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:34
 msgid "Add current input buffer to user dictionary"
 msgstr "当前输入内容加入用户词典"
 
@@ -131,8 +131,8 @@ msgstr "附加组件"
 msgid "Addon Config %s is %s"
 msgstr "Addon Config %s is %s"
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
 msgid "Adjust Order"
 msgstr "输入顺序"
 
@@ -290,17 +290,17 @@ msgstr "候选词个数"
 msgid "Cangjie"
 msgstr "仓颉"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1857
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1856
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr "无法保存词频: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1930
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1929
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr "无法保存拼音索引: %s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1793
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1792
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr "无法保存用户拼音词库: %s"
@@ -980,18 +980,18 @@ msgid "Key Color On Virutal Keyboard"
 msgstr "软键盘按键文字颜色"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:406
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:382
 msgid "Keyboard"
 msgstr "键盘"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:372
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:348
 #, c-format
 msgid "Keyboard - %s"
 msgstr "键盘 - %s"
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:395
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:371
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr "键盘 - %s - %s"
@@ -1130,7 +1130,7 @@ msgstr "菜单字体"
 msgid "Menu Font Size"
 msgstr "菜单字体大小"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2321
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2320
 msgid "Migrate the old file path to the new one"
 msgstr "迁移老文件路径到新文件路径"
 
@@ -1321,8 +1321,9 @@ msgstr "候选词表的位置或偏移"
 msgid "Position or offset of Preedit"
 msgstr "预编辑文本的位置或偏移"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
-msgid "Preferred Enchant Provider (Need Restart)"
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:13
+#, fuzzy
+msgid "Preferred Enchant provider (Need Restart)"
 msgstr "首选的Enchant后端 (需要重启)"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:815
@@ -1335,7 +1336,7 @@ msgstr "按下 1 删除常用字表中的 %s (ESC 取消)"
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr "按下 1-%d 来删除常用字表中的 %s (ESC 取消)"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:316
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:387
 msgid "Press Enter to input text"
 msgstr "按下回车输入文本"
@@ -1453,7 +1454,7 @@ msgstr "注册输入法方法"
 msgid "Remind:"
 msgstr "联想："
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2188
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2187
 msgid "Remind: "
 msgstr "联想："
 
@@ -1689,6 +1690,10 @@ msgstr "特殊符号"
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
+#, fuzzy
+msgid "Spell Hint"
+msgstr "设置提示"
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:247
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
@@ -1791,7 +1796,7 @@ msgstr "切换来禁用或启用"
 msgid "Toggle the word hint"
 msgstr "切换单词提示"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:263
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:267
 msgid "Too long item for AutoEng"
 msgstr "自动英文条目过长"
 
@@ -1901,8 +1906,9 @@ msgstr "使用回车确认已输入字符串"
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用额外切换键取消激活后才使用它进行切换"
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:34
-msgid "Use presage to predict if possible."
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:4
+#, fuzzy
+msgid "Use presage to provide spell hint if possible."
 msgstr "如果可以则使用 presage 增强单词提示功能"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
@@ -2123,9 +2129,6 @@ msgstr "当前字体为: %s"
 #, fuzzy
 #~ msgid "Restart (%s)"
 #~ msgstr "重新启动"
-
-#~ msgid "Setting Hint"
-#~ msgstr "设置提示"
 
 #~ msgid "Show Point After Index"
 #~ msgstr "序号后加点"

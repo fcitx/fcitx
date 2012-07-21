@@ -28,20 +28,6 @@ Type=Boolean
 DefaultValue=True
 Description=Use enter to commit the existing string
 
-[Keyboard/UsePresage]
-Type=Boolean
-DefaultValue=False
-Description=Use presage to predict if possible.
-
-[Keyboard/PreferredEnchantProvider]
-Type=Enum
-DefaultValue=Myspell
-EnumCount=3
-Enum0=Default
-Enum1=Aspell
-Enum2=Myspell
-Description=Preferred Enchant Provider (Need Restart)
-
 [Keyboard/HotkeyAddToUserDict]
 Type=Hotkey
 DefaultValue=CTRL_ALT_N

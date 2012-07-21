@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-16 10:22+0800\n"
+"POT-Creation-Date: 2012-07-21 16:51-0400\n"
 "PO-Revision-Date: 2012-04-28 13:17+0000\n"
 "Last-Translator: csslayer <wengxt@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
@@ -26,23 +26,23 @@ msgstr ""
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:590
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:582
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:586
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:584
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:588
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:592
 msgid "<Private Use>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:616
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:620
 msgid "<not assigned>"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Add Watch Function Error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:48
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:34
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -131,8 +131,8 @@ msgstr ""
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
 msgid "Adjust Order"
 msgstr ""
 
@@ -291,17 +291,17 @@ msgstr ""
 msgid "Cangjie"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1857
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1856
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1930
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1929
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1793
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1792
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
@@ -982,16 +982,16 @@ msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:406
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:382
 msgid "Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:372
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:348
 #, c-format
 msgid "Keyboard - %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:395
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:371
 #, c-format
 msgid "Keyboard - %s - %s"
 msgstr ""
@@ -1129,7 +1129,7 @@ msgstr ""
 msgid "Menu Font Size"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2321
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2320
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1320,8 +1320,8 @@ msgstr ""
 msgid "Position or offset of Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:43
-msgid "Preferred Enchant Provider (Need Restart)"
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:13
+msgid "Preferred Enchant provider (Need Restart)"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:815
@@ -1334,7 +1334,7 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:316
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:387
 msgid "Press Enter to input text"
 msgstr ""
@@ -1452,7 +1452,7 @@ msgstr ""
 msgid "Remind:"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2188
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2187
 msgid "Remind: "
 msgstr ""
 
@@ -1688,6 +1688,10 @@ msgstr ""
 msgid "Special Icon position"
 msgstr ""
 
+# unknown
+msgid "Spell Hint"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:247
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
@@ -1790,7 +1794,7 @@ msgstr ""
 msgid "Toggle the word hint"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:263
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:267
 msgid "Too long item for AutoEng"
 msgstr ""
 
@@ -1900,8 +1904,8 @@ msgstr ""
 msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:34
-msgid "Use presage to predict if possible."
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:4
+msgid "Use presage to provide spell hint if possible."
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
