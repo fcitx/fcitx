@@ -328,3 +328,18 @@ out:
     spell->after_str = NULL;
     return res;
 }
+
+static void
+SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
+{
+    size_t len;
+    if (!new_word)
+        return;
+    len = strlen(new_word);
+    if (!len)
+        return;
+    SpellSetLang(spell, lang);
+#ifdef ENCHANT_FOUND
+    enchant_dict_add_to_personal(spell->dict, new_word, len);
+#endif
+}
