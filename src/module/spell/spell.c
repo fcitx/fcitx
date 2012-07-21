@@ -43,6 +43,8 @@ static void *SpellCreate(FcitxInstance *instance);
 static void SpellDestroy(void *arg);
 static void SpellReloadConfig(void *arg);
 static void SpellSetLang(FcitxSpell *spell, const char *lang);
+static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
+static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
 
 FCITX_EXPORT_API
 const FcitxModule module = {
@@ -114,6 +116,7 @@ static void*
 SpellCreate(FcitxInstance *instance)
 {
     FcitxSpell *spell = fcitx_utils_new(FcitxSpell);
+    FcitxAddon* addon;
     spell->owner = instance;
     if (!LoadSpellConfig(&spell->config)) {
         free(spell);
@@ -146,6 +149,10 @@ SpellCreate(FcitxInstance *instance)
     /* spell->enchantLanguages = fcitx_utils_new_string_list(); */
 #endif
     SpellSetLang(spell, "en");
+    addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                      FCITX_SPELL_NAME);
+    AddFunction(addon, FcitxSpellHintWords);
+    AddFunction(addon, FcitxSpellAddPersonal);
     return spell;
 }
 
@@ -329,6 +336,20 @@ out:
     return res;
 }
 
+static void*
+FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    const char *before_str = args.args[0];
+    const char *current_str = args.args[1];
+    const char *after_str = args.args[2];
+    /* from GPOINTER_TO_UINT */
+    unsigned int len_limit = (unsigned int)(unsigned long)args.args[3];
+    const char *lang = args.args[4];
+    return SpellGetSpellHintWords(spell, before_str, current_str, after_str,
+                                  len_limit, lang);
+}
+
 static void
 SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
 {
@@ -342,4 +363,14 @@ SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
 #ifdef ENCHANT_FOUND
     enchant_dict_add_to_personal(spell->dict, new_word, len);
 #endif
+}
+
+static void*
+FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    const char *new_word = args.args[0];
+    const char *lang = args.args[1];
+    SpellAddPersonal(spell, new_word, lang);
+    return NULL;
 }

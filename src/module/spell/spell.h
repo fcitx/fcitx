@@ -41,6 +41,13 @@ typedef struct {
     char *commit;
 } SpellHint;
 
+#define FCITX_SPELL_NAME "fcitx-spell"
+
+enum {
+    FCITX_SPELL_HINT_WORDS,
+    FCITX_SPELL_ADD_PERSONAL,
+};
+
 typedef struct {
     FcitxGenericConfig gconfig;
 #ifdef PRESAGE_FOUND
