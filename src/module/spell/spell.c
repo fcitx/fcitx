@@ -283,7 +283,7 @@ SpellPresageResult(FcitxSpell *spell, char **suggestions)
         if (!result)
             continue;
         tmp_str = fcitx_utils_trim(result);
-        free(result);
+        presage_free_string(result);
         asprintf(&result, "%s%s", spell->current_str, tmp_str);
         free(tmp_str);
         commits[count] = result;
