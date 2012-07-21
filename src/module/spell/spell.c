@@ -38,11 +38,11 @@
 
 #include "spell.h"
 
-CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
+static CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
 static void *SpellCreate(FcitxInstance *instance);
-// static void LoadSpell(FcitxSpell *spell);
 static void SpellDestroy(void *arg);
 static void SpellReloadConfig(void *arg);
+static void SpellSetLang(FcitxSpell *spell, const char *lang);
 
 FCITX_EXPORT_API
 const FcitxModule module = {
@@ -93,22 +93,27 @@ LoadSpellConfig(FcitxSpellConfig *config)
 
 #ifdef PRESAGE_FOUND
 static const char*
-FcitxSpellGetPastStream(void* arg)
+FcitxSpellGetPastStream(void *arg)
 {
-    return "";
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    if (!spell->past_stm)
+        asprintf(&spell->past_stm, "%s%s",
+                 spell->before_str, spell->current_str);
+    return spell->past_stm;
 }
 
 static const char*
-FcitxSpellGetFutureStream(void* arg)
+FcitxSpellGetFutureStream(void *arg)
 {
-    return "";
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    return spell->after_str;
 }
 #endif
 
 static void*
 SpellCreate(FcitxInstance *instance)
 {
-    FcitxSpell* spell = fcitx_utils_malloc0(sizeof(FcitxSpell));
+    FcitxSpell *spell = fcitx_utils_new(FcitxSpell);
     spell->owner = instance;
     if (!LoadSpellConfig(&spell->config)) {
         free(spell);
@@ -121,6 +126,10 @@ SpellCreate(FcitxInstance *instance)
 #endif
 #ifdef ENCHANT_FOUND
     spell->broker = enchant_broker_init();
+    if (!spell->broker) {
+        SpellDestroy(spell);
+        return NULL;
+    }
     switch (spell->config.provider) {
         case EP_Aspell:
             enchant_broker_set_ordering(spell->broker, "*",
@@ -134,14 +143,28 @@ SpellCreate(FcitxInstance *instance)
         default:
             break;
     }
-    spell->enchantLanguages = fcitx_utils_new_string_list();
+    /* spell->enchantLanguages = fcitx_utils_new_string_list(); */
 #endif
+    SpellSetLang(spell, "en");
     return spell;
 }
 
 static void
 SpellDestroy(void *arg)
 {
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    if (spell->dictLang)
+        free(spell->dictLang);
+#ifdef ENCHANT_FOUND
+    if (spell->broker) {
+        if (spell->dict)
+            enchant_broker_free_dict(spell->broker, spell->dict);
+        enchant_broker_free(spell->broker);
+    }
+    /* if (spell->enchantLanguages) */
+    /*     fcitx_utils_free_string_list(spell->enchantLanguages); */
+#endif
+    free(arg);
 }
 
 static void
@@ -149,4 +172,159 @@ SpellReloadConfig(void* arg)
 {
     FcitxSpell *spell = (FcitxSpell*)arg;
     LoadSpellConfig(&spell->config);
+    /* ApplySpellConfig(spell); */
+}
+
+static void
+SpellSetLang(FcitxSpell *spell, const char *lang)
+{
+    if (!lang)
+        return;
+    if (spell->dictLang) {
+        if (!strcmp(spell->dictLang, lang))
+            return;
+        free(spell->dictLang);
+    }
+    spell->dictLang = strdup(lang);
+#ifdef ENCHANT_FOUND
+    if (spell->dict) {
+        enchant_broker_free_dict(spell->broker, spell->dict);
+    }
+    spell->dict = enchant_broker_request_dict(spell->broker, lang);
+#endif
+#ifdef PRESAGE_FOUND
+    if (!strcmp(lang, "en")) {
+        spell->presage_support = true;
+    } else {
+        spell->presage_support = false;
+    }
+#endif
+}
+
+static int
+SpellCalListSize(char **list, int count)
+{
+    int i;
+    if (!list)
+        return 0;
+    if (count >= 0)
+        return count;
+    for (i = 0;list[i];i++) {
+    }
+    return i;
+}
+
+static SpellHint*
+SpellHintList(int count, char **displays, char **commits)
+{
+    SpellHint *res;
+    void *p;
+    int i;
+    count = SpellCalListSize(displays, count);
+    int lens[count][2];
+    int total_l = 0;
+    for (i = 0;i < count;i++) {
+        total_l += lens[i][0] = strlen(displays[i]) + 1;
+        total_l += lens[i][1] = ((commits && commits[i]) ?
+                                 (strlen(commits[i]) + 1) : 0);
+    }
+    res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * count);
+    p = res + count;
+    for (i = 0;i < count;i++) {
+        memcpy(p, displays[i], lens[i][0]);
+        res[i].display = p;
+        p += lens[i][0];
+        if (!lens[i][1]) {
+            res[i].commit = res[i].display;
+            continue;
+        }
+        memcpy(p, commits[i], lens[i][1]);
+        res[i].commit = p;
+        p += lens[i][1];
+    }
+    return res;
+}
+
+#ifdef PRESAGE_FOUND
+static SpellHint*
+SpellPresageResult(FcitxSpell *spell, char **suggestions)
+{
+    int i;
+    int count = 0;
+    int len = SpellCalListSize(suggestions, -1);
+    char *commits[len];
+    char *displays[len];
+    SpellHint *res;
+    for (i = 0;i < len;i++) {
+        char *result = NULL;
+        char *tmp_str = NULL;
+        presage_completion(spell->presage, suggestions[i], &result);
+        if (!result)
+            continue;
+        tmp_str = fcitx_utils_trim(result);
+        free(result);
+        asprintf(&result, "%s%s", spell->current_str, tmp_str);
+        free(tmp_str);
+        commits[count] = result;
+        displays[count] = suggestions[i];
+        count++;
+    }
+    res = SpellHintList(count, displays, commits);
+    for (i = 0;i < count;i++) {
+        free(commits[i]);
+    }
+    return res;
+}
+#endif
+
+static SpellHint*
+SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
+                       const char *current_str, const char *after_str,
+                       unsigned int len_limit, const char *lang)
+{
+    SpellHint *res = NULL;
+    SpellSetLang(spell, lang);
+    spell->before_str = before_str ? before_str : "";
+    spell->current_str = current_str ? current_str : "";
+    spell->after_str = after_str ? after_str : "";
+#ifdef PRESAGE_FOUND
+    if (spell->config.usePresage && spell->presage && spell->presage_support) {
+        do {
+            char **suggestions = NULL;
+            char buf[(int)(sizeof(unsigned int) * 5.545177444479562) + 1];
+            sprintf(buf, "%u", len_limit);
+            presage_config_set(spell->presage,
+                               "Presage.Selector.SUGGESTIONS", buf);
+            presage_predict(spell->presage, &suggestions);
+            if (!suggestions)
+                break;
+            res = SpellPresageResult(spell, suggestions);
+            presage_free_string_array(suggestions);
+        } while(0);
+        if (spell->past_stm) {
+            free(spell->past_stm);
+            spell->past_stm = NULL;
+        }
+    }
+    if (res)
+        goto out;
+#endif
+#ifdef ENCHANT_FOUND
+    do {
+        char **suggestions = NULL;
+        size_t number = 0;
+        suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
+                                           strlen(current_str), &number);
+        if (!suggestions)
+            break;
+        number = number > len_limit ? len_limit : number;
+        res = SpellHintList(number, suggestions, NULL);
+        enchant_dict_free_string_list(spell->dict, suggestions);
+    } while(0);
+#endif
+out:
+    spell->before_str = NULL;
+    spell->current_str = NULL;
+    spell->after_str = NULL;
+    return res;
 }

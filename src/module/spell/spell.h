@@ -37,6 +37,11 @@ typedef enum {
 } EnchantProvider;
 
 typedef struct {
+    char *display;
+    char *commit;
+} SpellHint;
+
+typedef struct {
     FcitxGenericConfig gconfig;
 #ifdef PRESAGE_FOUND
     boolean usePresage;
@@ -49,14 +54,19 @@ typedef struct {
 typedef struct {
     struct _FcitxInstance *owner;
     FcitxSpellConfig config;
-    char dictLang[6];
+    char *dictLang;
+    const char *before_str;
+    const char *current_str;
+    const char *after_str;
 #ifdef ENCHANT_FOUND
     EnchantBroker* broker;
-    UT_array* enchantLanguages;
+    // UT_array* enchantLanguages;
     EnchantDict* dict;
 #endif
 #ifdef PRESAGE_FOUND
     presage_t presage;
+    boolean presage_support;
+    char *past_stm;
 #endif
 } FcitxSpell;
 
