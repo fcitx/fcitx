@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-21 16:51-0400\n"
-"PO-Revision-Date: 2012-07-21 18:24-0400\n"
+"POT-Creation-Date: 2012-07-21 17:49-0400\n"
+"PO-Revision-Date: 2012-07-21 17:51-0400\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -676,6 +676,10 @@ msgstr "Fcitx 的 Lua 支持"
 #: ../..//src/ui/classic/fcitx-skin-installer.desktop.in.h:1
 msgid "Fcitx Skin Installer"
 msgstr "Fcitx 皮肤安装器"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:2
+msgid "Fcitx Spelling Hint/Completion Support"
+msgstr "Fcitx 的拼写提示/补全支持"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
 msgid "Fcitx Unicode Typing Support"
@@ -1688,6 +1692,10 @@ msgstr "特殊符号"
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:132
 msgid "Special Icon position"
 msgstr "特殊图标位置"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:1
+msgid "Spell"
+msgstr "拼写"
 
 msgid "Spell Hint"
 msgstr "拼写提示"

@@ -1,7 +1,7 @@
 [Addon]
 Name=fcitx-spell
 _GeneralName=Spell
-_Comment=
+_Comment=Fcitx Spelling Hint/Completion Support
 Category=Module
 Enabled=True
 Library=fcitx-spell.so
