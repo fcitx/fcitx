@@ -188,8 +188,9 @@ SpellReloadConfig(void* arg)
 static void
 SpellSetLang(FcitxSpell *spell, const char *lang)
 {
-    if (!lang)
+    if (!lang || !lang[0])
         return;
+    printf("%s: x%sx\n", __func__, lang);
     if (spell->dictLang) {
         if (!strcmp(spell->dictLang, lang))
             return;
@@ -239,8 +240,8 @@ SpellHintList(int count, char **displays, char **commits)
         total_l += lens[i][1] = ((commits && commits[i]) ?
                                  (strlen(commits[i]) + 1) : 0);
     }
-    res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * count);
-    p = res + count;
+    res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * (count + 1));
+    p = res + count + 1;
     for (i = 0;i < count;i++) {
         memcpy(p, displays[i], lens[i][0]);
         res[i].display = p;
@@ -356,19 +357,23 @@ FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
                                   len_limit, lang);
 }
 
-static void
+static boolean
 SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
 {
     size_t len;
     if (!new_word)
-        return;
+        return false;
     len = strlen(new_word);
     if (!len)
-        return;
+        return false;
     SpellSetLang(spell, lang);
 #ifdef ENCHANT_FOUND
-    enchant_dict_add_to_personal(spell->dict, new_word, len);
+    if (spell->dict) {
+        enchant_dict_add_to_personal(spell->dict, new_word, len);
+        return true;
+    }
 #endif
+    return false;
 }
 
 static void*
@@ -377,8 +382,7 @@ FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args)
     FcitxSpell *spell = (FcitxSpell*)arg;
     const char *new_word = args.args[0];
     const char *lang = args.args[1];
-    SpellAddPersonal(spell, new_word, lang);
-    return NULL;
+    return (void*)(unsigned long)SpellAddPersonal(spell, new_word, lang);
 }
 
 static void*

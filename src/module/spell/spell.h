@@ -38,6 +38,11 @@ enum {
     FCITX_SPELL_ADD_PERSONAL,
     FCITX_SPELL_DICT_AVAILABLE,
 };
+
+typedef SpellHint* FCITX_SPELL_HINT_WORDS_RETURNTYPE;
+#define FCITX_SPELL_ADD_PERSONAL_RETURNTYPE unsigned long
+#define FCITX_SPELL_DICT_AVAILABLE_RETURNTYPE unsigned long
+
 #endif
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
