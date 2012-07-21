@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 16:51-0400\n"
-"PO-Revision-Date: 2012-07-21 16:57-0400\n"
+"PO-Revision-Date: 2012-07-21 18:24-0400\n"
 "Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -2070,9 +2070,6 @@ msgstr "当前字体为: %s"
 
 #~ msgid "Enable word hint if available"
 #~ msgstr "如果可用则使用单词提示"
-
-#~ msgid "Disabled"
-#~ msgstr "禁用"
 
 #~ msgid "FCITX -- Get Signal No.: %d"
 #~ msgstr "Fcitx接收到信号: %d"

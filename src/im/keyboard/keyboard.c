@@ -500,9 +500,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 size_t charlen = strlen(buf);
 
                 if (strlen(keyboard->buffer) >= FCITX_KEYBOARD_MAX_BUFFER) {
-                    FcitxInstanceCommitString(
-                        instance, FcitxInstanceGetCurrentIC(instance),
-                        keyboard->buffer);
+                    FcitxInstanceCommitString(instance, currentIC,
+                                              keyboard->buffer);
                     keyboard->cursorPos = 0;
                     keyboard->buffer[0] = '\0';
                 }
@@ -552,14 +551,13 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
                 irv = 0;
             }
-            strcpy(FcitxInputStateGetOutputString(input), keyboard->buffer);
+            FcitxInstanceCommitString(instance, currentIC, keyboard->buffer);
 
             if (result) {
-                FcitxInputState *input = FcitxInstanceGetInputState(instance);
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
                 Ucs4ToUtf8(keyboard->iconv, result, buf);
-                strcat(FcitxInputStateGetOutputString(input), buf);
+                FcitxInstanceCommitString(instance, currentIC, buf);
                 irv = 0;
             }
             irv |= IRV_COMMIT_STRING;
@@ -569,11 +567,10 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         FcitxUICloseInputWindow(instance);
     }
     if (result) {
-        FcitxInputState *input = FcitxInstanceGetInputState(instance);
         char buf[UTF8_MAX_LENGTH + 1];
         memset(buf, 0, sizeof(buf));
         Ucs4ToUtf8(keyboard->iconv, result, buf);
-        strcpy(FcitxInputStateGetOutputString(input), buf);
+        FcitxInstanceCommitString(instance, currentIC, buf);
         return IRV_COMMIT_STRING;
     }
     return IRV_TO_PROCESS;
@@ -711,9 +708,9 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
             enableWordHint = PTR_FALSE;
         FcitxInstanceSetICData(keyboard->owner, currentIC, keyboard->dataSlot, enableWordHint);
         return IRV_DO_NOTHING;
-    }
-    else
+    } else {
         return IRV_TO_PROCESS;
+    }
 }
 
 static const uint32_t validSym[] =
