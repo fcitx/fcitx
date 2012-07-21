@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 16:51-0400\n"
-"PO-Revision-Date: 2012-07-16 10:53+0800\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"PO-Revision-Date: 2012-07-21 16:57-0400\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -1322,7 +1322,6 @@ msgid "Position or offset of Preedit"
 msgstr "预编辑文本的位置或偏移"
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:13
-#, fuzzy
 msgid "Preferred Enchant provider (Need Restart)"
 msgstr "首选的Enchant后端 (需要重启)"
 
@@ -1690,9 +1689,8 @@ msgstr "特殊符号"
 msgid "Special Icon position"
 msgstr "特殊图标位置"
 
-#, fuzzy
 msgid "Spell Hint"
-msgstr "设置提示"
+msgstr "拼写提示"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:247
 #, c-format
@@ -1907,7 +1905,6 @@ msgid "Use extra trigger key only after using it to inactivate"
 msgstr "只在用额外切换键取消激活后才使用它进行切换"
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:4
-#, fuzzy
 msgid "Use presage to provide spell hint if possible."
 msgstr "如果可以则使用 presage 增强单词提示功能"
 
@@ -2074,8 +2071,7 @@ msgstr "当前字体为: %s"
 #~ msgid "Enable word hint if available"
 #~ msgstr "如果可用则使用单词提示"
 
-#, fuzzy
-#~ msgid "Enum11=Disabled"
+#~ msgid "Disabled"
 #~ msgstr "禁用"
 
 #~ msgid "FCITX -- Get Signal No.: %d"
