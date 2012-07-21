@@ -154,7 +154,8 @@ FcitxIMClass ime = {
 FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
 
-const char* FcitxKeyboardGetPastStream   (void* arg)
+#if 0
+static const char* FcitxKeyboardGetPastStream(void* arg)
 {
     FcitxKeyboard* keyboard = arg;
     /* buggy surrounding text will cause trouble */
@@ -190,7 +191,7 @@ const char* FcitxKeyboardGetPastStream   (void* arg)
     return keyboard->buffer;
 }
 
-const char* FcitxKeyboardGetFutureStream (void* arg)
+static const char* FcitxKeyboardGetFutureStream(void* arg)
 {
     const char* result = "";
 #if 0
@@ -220,6 +221,7 @@ const char* FcitxKeyboardGetFutureStream (void* arg)
 #endif
     return result;
 }
+#endif
 
 
 void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
