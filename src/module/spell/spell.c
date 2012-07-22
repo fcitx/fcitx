@@ -358,6 +358,27 @@ typedef struct {
     SpellHintProviderFunc func;
 } SpellHintProvider;
 
+static char*
+SpellParseNextProvider(char *str, char **name, int *len)
+{
+    char *p;
+    if (!name || !len)
+        return str;
+    if (!str || !str[0]) {
+        *name = NULL;
+        *len = 0;
+        return NULL;
+    }
+    *name = str;
+    p = index(str, ',');
+    if (!p) {
+        *len = -1;
+        return NULL;
+    }
+    *len = p - str;
+    return p + 1;
+}
+
 static SpellHintProvider hint_provider[] = {
 #ifdef ENCHANT_FOUND
     {"enchant", "en", SpellEnchantHintWords},
@@ -396,25 +417,24 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
 {
     SpellHint *res = NULL;
     SpellHintProviderFunc provider_func;
+    char *iter;
+    char *name = NULL;
+    int len = 0;
     SpellSetLang(spell, lang);
     spell->before_str = before_str ? before_str : "";
     spell->current_str = current_str ? current_str : "";
     spell->after_str = after_str ? after_str : "";
-#ifdef PRESAGE_FOUND
-    provider_func = SpellFindHintProvider("pre", -1);
-    if (provider_func)
-        res = provider_func(spell, len_limit);
-    if (res)
-        goto out;
-#endif
-#ifdef ENCHANT_FOUND
-    provider_func = SpellFindHintProvider("en", -1);
-    if (provider_func)
-        res = provider_func(spell, len_limit);
-    if (res)
-        goto out;
-#endif
-out:
+    for (iter = SpellParseNextProvider(spell->config.provider_order,
+                                       &name, &len);;
+         iter = SpellParseNextProvider(iter, &name, &len)) {
+        if (!name)
+            break;
+        provider_func = SpellFindHintProvider(name, len);
+        if (provider_func)
+            res = provider_func(spell, len_limit);
+        if (res)
+            break;
+    }
     spell->before_str = NULL;
     spell->current_str = NULL;
     spell->after_str = NULL;
