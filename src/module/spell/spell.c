@@ -358,8 +358,8 @@ typedef struct {
     SpellHintProviderFunc func;
 } SpellHintProvider;
 
-static char*
-SpellParseNextProvider(char *str, char **name, int *len)
+static const char*
+SpellParseNextProvider(const char *str, const char **name, int *len)
 {
     char *p;
     if (!name || !len)
@@ -417,16 +417,15 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
 {
     SpellHint *res = NULL;
     SpellHintProviderFunc provider_func;
-    char *iter;
-    char *name = NULL;
+    const char *iter = providers ? providers : spell->config.provider_order;
+    const char *name = NULL;
     int len = 0;
     SpellSetLang(spell, lang);
     spell->before_str = before_str ? before_str : "";
     spell->current_str = current_str ? current_str : "";
     spell->after_str = after_str ? after_str : "";
-    for (iter = SpellParseNextProvider(spell->config.provider_order,
-                                       &name, &len);;
-         iter = SpellParseNextProvider(iter, &name, &len)) {
+    while (true) {
+        iter = SpellParseNextProvider(iter, &name, &len);
         if (!name)
             break;
         provider_func = SpellFindHintProvider(name, len);

@@ -613,6 +613,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[2] = NULL;
     func_arg.args[3] = (void*)(long)config->iMaxCandWord;
     func_arg.args[4] = keyboard->dictLang;
+    func_arg.args[5] = NULL;
     SpellHint *hints = InvokeFunction(instance, FCITX_SPELL, HINT_WORDS,
                                       func_arg);
     if (!hints)
