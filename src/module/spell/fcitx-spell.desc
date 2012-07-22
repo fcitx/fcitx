@@ -12,5 +12,10 @@ Enum1=Aspell
 Enum2=Myspell
 Description=Preferred Enchant provider (Need Restart)
 
+[Spell Hint/HintProvidersOrder]
+Description=Order of Spell Hint Providers
+Type=String
+DefaultValue=presage,enchant
+
 [DescriptionFile]
 LocaleDomain=fcitx

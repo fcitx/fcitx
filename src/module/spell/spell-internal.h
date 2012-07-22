@@ -38,8 +38,9 @@ typedef struct {
     boolean usePresage;
 #endif
 #ifdef ENCHANT_FOUND
-    EnchantProvider provider;
+    EnchantProvider enchant_provider;
 #endif
+    char *provider_order;
 } FcitxSpellConfig;
 
 typedef struct {

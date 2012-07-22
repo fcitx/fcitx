@@ -139,7 +139,7 @@ SpellCreate(FcitxInstance *instance)
         SpellDestroy(spell);
         return NULL;
     }
-    switch (spell->config.provider) {
+    switch (spell->config.enchant_provider) {
         case EP_Aspell:
             enchant_broker_set_ordering(spell->broker, "*",
                                         "aspell,myspell,ispell");
