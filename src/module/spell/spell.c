@@ -188,11 +188,17 @@ SpellDestroy(void *arg)
 }
 
 static void
+ApplySpellConfig(FcitxSpell *spell)
+{
+
+}
+
+static void
 SpellReloadConfig(void* arg)
 {
     FcitxSpell *spell = (FcitxSpell*)arg;
     LoadSpellConfig(&spell->config);
-    /* ApplySpellConfig(spell); */
+    ApplySpellConfig(spell);
 }
 
 static void
@@ -343,23 +349,68 @@ SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
 }
 #endif
 
+typedef SpellHint *(*SpellHintProviderFunc)(FcitxSpell *spell,
+                                            unsigned int len_limit);
+
+typedef struct {
+    const char *name;
+    const char *short_name;
+    SpellHintProviderFunc func;
+} SpellHintProvider;
+
+static SpellHintProvider hint_provider[] = {
+#ifdef ENCHANT_FOUND
+    {"enchant", "en", SpellEnchantHintWords},
+#endif
+#ifdef PRESAGE_FOUND
+    {"presage", "pre", SpellPresageHintWords},
+#endif
+    {NULL, NULL, NULL}
+};
+
+static SpellHintProviderFunc
+SpellFindHintProvider(const char *str, int len)
+{
+    int i;
+    if (!str)
+        return NULL;
+    if (len < 0)
+        len = strlen(str);
+    if (!len)
+        return NULL;
+    for (i = 0;hint_provider[i].func;i++) {
+        if ((strlen(hint_provider[i].name) == len &&
+             !strncasecmp(str, hint_provider[i].name, len)) ||
+            (strlen(hint_provider[i].short_name) == len &&
+             !strncasecmp(str, hint_provider[i].short_name, len)))
+            return hint_provider[i].func;
+    }
+    return NULL;
+}
+
 static SpellHint*
 SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
                        const char *current_str, const char *after_str,
-                       unsigned int len_limit, const char *lang)
+                       unsigned int len_limit, const char *lang,
+                       const char *providers)
 {
     SpellHint *res = NULL;
+    SpellHintProviderFunc provider_func;
     SpellSetLang(spell, lang);
     spell->before_str = before_str ? before_str : "";
     spell->current_str = current_str ? current_str : "";
     spell->after_str = after_str ? after_str : "";
 #ifdef PRESAGE_FOUND
-    res = SpellPresageHintWords(spell, len_limit);
+    provider_func = SpellFindHintProvider("pre", -1);
+    if (provider_func)
+        res = provider_func(spell, len_limit);
     if (res)
         goto out;
 #endif
 #ifdef ENCHANT_FOUND
-    res = SpellEnchantHintWords(spell, len_limit);
+    provider_func = SpellFindHintProvider("en", -1);
+    if (provider_func)
+        res = provider_func(spell, len_limit);
     if (res)
         goto out;
 #endif
@@ -380,8 +431,9 @@ FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
     /* from GPOINTER_TO_UINT */
     unsigned int len_limit = (unsigned int)(unsigned long)args.args[3];
     const char *lang = args.args[4];
+    const char *providers = args.args[5];
     return SpellGetSpellHintWords(spell, before_str, current_str, after_str,
-                                  len_limit, lang);
+                                  len_limit, lang, providers);
 }
 
 static boolean
