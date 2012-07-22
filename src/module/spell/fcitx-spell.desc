@@ -5,7 +5,7 @@ EnumCount=3
 Enum0=Default
 Enum1=Aspell
 Enum2=Myspell
-Description=Preferred Enchant provider (Need Restart)
+Description=Preferred Enchant provider
 
 [Spell Hint/HintProvidersOrder]
 Description=Order of Spell Hint Providers

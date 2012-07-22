@@ -22,8 +22,8 @@
 
 typedef enum {
     EP_Default = 0,
-    EP_Aspell = 1,
-    EP_Myspell = 2
+    EP_Aspell,
+    EP_Myspell
 } EnchantProvider;
 
 typedef struct {

@@ -128,6 +128,7 @@ SpellCreate(FcitxInstance *instance)
 #endif
 #ifdef ENCHANT_FOUND
     spell->broker = enchant_broker_init();
+    spell->cur_enchant_provider = EP_Default;
 #endif
 
     if (!LoadSpellConfig(&spell->config)) {
@@ -137,22 +138,9 @@ SpellCreate(FcitxInstance *instance)
     ApplySpellConfig(spell);
 
 #ifdef ENCHANT_FOUND
-    if (spell->broker) {
-        switch (spell->config.enchant_provider) {
-        case EP_Aspell:
-            enchant_broker_set_ordering(spell->broker, "*",
-                                        "aspell,myspell,ispell");
-            break;
-        case EP_Myspell:
-            enchant_broker_set_ordering(spell->broker, "*",
-                                        "myspell,aspell,ispell");
-            break;
-        case EP_Default:
-        default:
-            break;
-        }
-        /* spell->enchantLanguages = fcitx_utils_new_string_list(); */
-    }
+    /* if (spell->broker) { */
+    /*     spell->enchantLanguages = fcitx_utils_new_string_list(); */
+    /* } */
 #endif
     SpellSetLang(spell, "en");
     addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
@@ -187,6 +175,49 @@ SpellDestroy(void *arg)
     free(arg);
 }
 
+#ifdef ENCHANT_FOUND
+static void
+ApplyEnchantConfig(FcitxSpell *spell)
+{
+    if (!spell->broker) {
+        spell->broker = enchant_broker_init();
+        spell->cur_enchant_provider = EP_Default;
+        if (!spell->broker)
+            return;
+    }
+    if (spell->cur_enchant_provider == spell->config.enchant_provider)
+        return;
+    if (spell->config.enchant_provider == EP_Default) {
+        if (spell->dict) {
+            enchant_broker_free_dict(spell->broker, spell->dict);
+            spell->dict = NULL;
+        }
+        enchant_broker_free(spell->broker);
+        spell->broker = enchant_broker_init();
+        spell->cur_enchant_provider = EP_Default;
+        if (!spell->broker)
+            return;
+    }
+    switch (spell->config.enchant_provider) {
+    case EP_Aspell:
+        enchant_broker_set_ordering(spell->broker, "*",
+                                    "aspell,myspell,ispell");
+        break;
+    case EP_Myspell:
+        enchant_broker_set_ordering(spell->broker, "*",
+                                    "myspell,aspell,ispell");
+        break;
+    default:
+        break;
+    }
+    spell->cur_enchant_provider = spell->config.enchant_provider;
+    if (!spell->dict && spell->dictLang && spell->dictLang[0]) {
+        spell->dict = enchant_broker_request_dict(spell->broker,
+                                                  spell->dictLang);
+    }
+}
+#endif
+
 static void
 ApplySpellConfig(FcitxSpell *spell)
 {
@@ -195,6 +226,9 @@ ApplySpellConfig(FcitxSpell *spell)
     } else {
         spell->provider_order = "presage,enchant";
     }
+#ifdef ENCHANT_FOUND
+    ApplyEnchantConfig(spell);
+#endif
 }
 
 static void
@@ -288,6 +322,8 @@ SpellPresageResult(FcitxSpell *spell, char **suggestions)
     char *commits[len];
     char *displays[len];
     SpellHint *res;
+    if (!len)
+        return NULL;
     for (i = 0;i < len;i++) {
         char *result = NULL;
         char *tmp_str = NULL;

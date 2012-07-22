@@ -52,6 +52,7 @@ typedef struct {
     const char *provider_order;
 #ifdef ENCHANT_FOUND
     EnchantBroker* broker;
+    EnchantProvider cur_enchant_provider;
     // UT_array* enchantLanguages;
     EnchantDict* dict;
 #endif
