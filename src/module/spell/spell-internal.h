@@ -35,7 +35,6 @@
 typedef struct {
     FcitxGenericConfig gconfig;
 #ifdef PRESAGE_FOUND
-    boolean usePresage;
 #endif
 #ifdef ENCHANT_FOUND
     EnchantProvider enchant_provider;

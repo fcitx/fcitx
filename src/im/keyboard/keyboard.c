@@ -441,6 +441,7 @@ boolean IsDictAvailable(FcitxKeyboard* keyboard)
         return false;
     FcitxModuleFunctionArg arg;
     arg.args[0] = keyboard->dictLang;
+    arg.args[1] = keyboard->config.bUsePresage ? "pre,en" : "en";
     return InvokeFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE, arg);
 }
 
@@ -613,7 +614,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[2] = NULL;
     func_arg.args[3] = (void*)(long)config->iMaxCandWord;
     func_arg.args[4] = keyboard->dictLang;
-    func_arg.args[5] = NULL;
+    func_arg.args[5] = keyboard->config.bUsePresage ? "pre,en" : "en";
     SpellHint *hints = InvokeFunction(instance, FCITX_SPELL, HINT_WORDS,
                                       func_arg);
     if (!hints)

@@ -45,6 +45,7 @@ typedef struct _FcitxKeyboardConfig {
     FcitxGenericConfig gconfig;
     boolean bCommitWithExtraSpace;
     boolean bUseEnterToCommit;
+    boolean bUsePresage;
     FcitxHotkey hkToggleWordHint[2];
     FcitxHotkey hkAddToUserDict[2];
     int minimumHintLength;

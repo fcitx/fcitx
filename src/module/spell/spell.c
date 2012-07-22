@@ -319,7 +319,7 @@ static SpellHint*
 SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
     SpellHint *res = NULL;
-    if (!(spell->config.usePresage && spell->presage && spell->presage_support))
+    if (!(spell->presage && spell->presage_support))
         return NULL;
     do {
         char **suggestions = NULL;
@@ -338,6 +338,14 @@ SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
         spell->past_stm = NULL;
     }
     return res;
+}
+
+static boolean
+SpellPresageCheck(FcitxSpell *spell)
+{
+    if (spell->presage && spell->presage_support)
+        return true;
+    return false;
 }
 #endif
 
@@ -359,15 +367,25 @@ SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
     enchant_dict_free_string_list(spell->dict, suggestions);
     return res;
 }
+
+static boolean
+SpellEnchantCheck(FcitxSpell *spell)
+{
+    if (spell->dict)
+        return true;
+    return false;
+}
 #endif
 
-typedef SpellHint *(*SpellHintProviderFunc)(FcitxSpell *spell,
+typedef SpellHint *(*SpellProviderHintFunc)(FcitxSpell *spell,
                                             unsigned int len_limit);
+typedef boolean (*SpellProviderCheckFunc)(FcitxSpell *spell);
 
 typedef struct {
     const char *name;
     const char *short_name;
-    SpellHintProviderFunc func;
+    SpellProviderHintFunc hint_func;
+    SpellProviderCheckFunc check_func;
 } SpellHintProvider;
 
 static const char*
@@ -393,15 +411,15 @@ SpellParseNextProvider(const char *str, const char **name, int *len)
 
 static SpellHintProvider hint_provider[] = {
 #ifdef ENCHANT_FOUND
-    {"enchant", "en", SpellEnchantHintWords},
+    {"enchant", "en", SpellEnchantHintWords, SpellEnchantCheck},
 #endif
 #ifdef PRESAGE_FOUND
-    {"presage", "pre", SpellPresageHintWords},
+    {"presage", "pre", SpellPresageHintWords, SpellPresageCheck},
 #endif
-    {NULL, NULL, NULL}
+    {NULL, NULL, NULL, NULL}
 };
 
-static SpellHintProviderFunc
+static SpellHintProvider*
 SpellFindHintProvider(const char *str, int len)
 {
     int i;
@@ -411,12 +429,12 @@ SpellFindHintProvider(const char *str, int len)
         len = strlen(str);
     if (!len)
         return NULL;
-    for (i = 0;hint_provider[i].func;i++) {
+    for (i = 0;hint_provider[i].hint_func;i++) {
         if ((strlen(hint_provider[i].name) == len &&
              !strncasecmp(str, hint_provider[i].name, len)) ||
             (strlen(hint_provider[i].short_name) == len &&
              !strncasecmp(str, hint_provider[i].short_name, len)))
-            return hint_provider[i].func;
+            return hint_provider + i;
     }
     return NULL;
 }
@@ -443,7 +461,7 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
                        const char *providers)
 {
     SpellHint *res = NULL;
-    SpellHintProviderFunc provider_func;
+    SpellHintProvider *hint_provider;
     const char *iter = providers ? providers : spell->provider_order;
     const char *name = NULL;
     int len = 0;
@@ -455,9 +473,9 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
         iter = SpellParseNextProvider(iter, &name, &len);
         if (!name)
             break;
-        provider_func = SpellFindHintProvider(name, len);
-        if (provider_func)
-            res = provider_func(spell, len_limit);
+        hint_provider = SpellFindHintProvider(name, len);
+        if (hint_provider)
+            res = hint_provider->hint_func(spell, len_limit);
         if (res)
             break;
     }
@@ -515,14 +533,21 @@ FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
 {
     FcitxSpell *spell = (FcitxSpell*)arg;
     const char *lang = args.args[0];
+    const char *providers = args.args[1];
+    const char *iter = providers ? providers : spell->provider_order;
+    SpellHintProvider *hint_provider;
+    const char *name = NULL;
+    int len = 0;
     SpellSetLang(spell, lang);
-#ifdef ENCHANT_FOUND
-    if (spell->dict)
-        return (void*)true;
-#endif
-#ifdef PRESAGE_FOUND
-    if (spell->config.usePresage && spell->presage && spell->presage_support)
-        return (void*)true;
-#endif
+    while (true) {
+        iter = SpellParseNextProvider(iter, &name, &len);
+        if (!name)
+            break;
+        hint_provider = SpellFindHintProvider(name, len);
+        if (hint_provider && hint_provider->check_func) {
+            if (hint_provider->check_func(spell))
+                return (void*)true;
+        }
+    }
     return (void*)false;
 }

@@ -28,6 +28,11 @@ Type=Boolean
 DefaultValue=True
 Description=Use enter to commit the existing string
 
+[Keyboard/UsePresage]
+Type=Boolean
+DefaultValue=False
+Description=Use presage to provide spell hint if possible.
+
 [Keyboard/HotkeyAddToUserDict]
 Type=Hotkey
 DefaultValue=CTRL_ALT_N

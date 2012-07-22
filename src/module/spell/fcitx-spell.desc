@@ -1,8 +1,3 @@
-[Spell Hint/UsePresage]
-Type=Boolean
-DefaultValue=False
-Description=Use presage to provide spell hint if possible.
-
 [Spell Hint/PreferredEnchantProvider]
 Type=Enum
 DefaultValue=Myspell
