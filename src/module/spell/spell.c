@@ -296,6 +296,51 @@ SpellPresageResult(FcitxSpell *spell, char **suggestions)
     }
     return res;
 }
+
+static SpellHint*
+SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
+{
+    SpellHint *res = NULL;
+    if (!(spell->config.usePresage && spell->presage && spell->presage_support))
+        return NULL;
+    do {
+        char **suggestions = NULL;
+        char buf[(int)(sizeof(unsigned int) * 5.545177444479562) + 1];
+        sprintf(buf, "%u", len_limit);
+        presage_config_set(spell->presage,
+                           "Presage.Selector.SUGGESTIONS", buf);
+        presage_predict(spell->presage, &suggestions);
+        if (!suggestions)
+            break;
+        res = SpellPresageResult(spell, suggestions);
+        presage_free_string_array(suggestions);
+    } while(0);
+    if (spell->past_stm) {
+        free(spell->past_stm);
+        spell->past_stm = NULL;
+    }
+    return res;
+}
+#endif
+
+#ifdef ENCHANT_FOUND
+static SpellHint*
+SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
+{
+    SpellHint *res = NULL;
+    if (!spell->dict)
+        return NULL;
+    char **suggestions = NULL;
+    size_t number = 0;
+    suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
+                                       strlen(spell->current_str), &number);
+    if (!suggestions)
+        return NULL;
+    number = number > len_limit ? len_limit : number;
+    res = SpellHintList(number, suggestions, NULL);
+    enchant_dict_free_string_list(spell->dict, suggestions);
+    return res;
+}
 #endif
 
 static SpellHint*
@@ -309,41 +354,14 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
     spell->current_str = current_str ? current_str : "";
     spell->after_str = after_str ? after_str : "";
 #ifdef PRESAGE_FOUND
-    if (spell->config.usePresage && spell->presage && spell->presage_support) {
-        do {
-            char **suggestions = NULL;
-            char buf[(int)(sizeof(unsigned int) * 5.545177444479562) + 1];
-            sprintf(buf, "%u", len_limit);
-            presage_config_set(spell->presage,
-                               "Presage.Selector.SUGGESTIONS", buf);
-            presage_predict(spell->presage, &suggestions);
-            if (!suggestions)
-                break;
-            res = SpellPresageResult(spell, suggestions);
-            presage_free_string_array(suggestions);
-        } while(0);
-        if (spell->past_stm) {
-            free(spell->past_stm);
-            spell->past_stm = NULL;
-        }
-    }
+    res = SpellPresageHintWords(spell, len_limit);
     if (res)
         goto out;
 #endif
 #ifdef ENCHANT_FOUND
-    if (spell->dict) {
-        do {
-            char **suggestions = NULL;
-            size_t number = 0;
-            suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
-                                               strlen(current_str), &number);
-            if (!suggestions)
-                break;
-            number = number > len_limit ? len_limit : number;
-            res = SpellHintList(number, suggestions, NULL);
-            enchant_dict_free_string_list(spell->dict, suggestions);
-        } while(0);
-    }
+    res = SpellEnchantHintWords(spell, len_limit);
+    if (res)
+        goto out;
 #endif
 out:
     spell->before_str = NULL;
