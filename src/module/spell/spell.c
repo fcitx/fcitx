@@ -159,8 +159,8 @@ SpellDestroy(void *arg)
         free(spell->dictLang);
 #ifdef ENCHANT_FOUND
     if (spell->broker) {
-        if (spell->dict)
-            enchant_broker_free_dict(spell->broker, spell->dict);
+        if (spell->enchant_dict)
+            enchant_broker_free_dict(spell->broker, spell->enchant_dict);
         enchant_broker_free(spell->broker);
     }
     /* if (spell->enchantLanguages) */
@@ -188,9 +188,9 @@ ApplyEnchantConfig(FcitxSpell *spell)
     if (spell->cur_enchant_provider == spell->config.enchant_provider)
         return;
     if (spell->config.enchant_provider == EP_Default) {
-        if (spell->dict) {
-            enchant_broker_free_dict(spell->broker, spell->dict);
-            spell->dict = NULL;
+        if (spell->enchant_dict) {
+            enchant_broker_free_dict(spell->broker, spell->enchant_dict);
+            spell->enchant_dict = NULL;
         }
         enchant_broker_free(spell->broker);
         spell->broker = enchant_broker_init();
@@ -211,9 +211,9 @@ ApplyEnchantConfig(FcitxSpell *spell)
         break;
     }
     spell->cur_enchant_provider = spell->config.enchant_provider;
-    if (!spell->dict && spell->dictLang && spell->dictLang[0]) {
-        spell->dict = enchant_broker_request_dict(spell->broker,
-                                                  spell->dictLang);
+    if (!spell->enchant_dict && spell->dictLang && spell->dictLang[0]) {
+        spell->enchant_dict = enchant_broker_request_dict(spell->broker,
+                                                          spell->dictLang);
     }
 }
 #endif
@@ -252,11 +252,11 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     spell->dictLang = strdup(lang);
 #ifdef ENCHANT_FOUND
     if (spell->broker) {
-        if (spell->dict) {
-            enchant_broker_free_dict(spell->broker, spell->dict);
-            spell->dict = NULL;
+        if (spell->enchant_dict) {
+            enchant_broker_free_dict(spell->broker, spell->enchant_dict);
+            spell->enchant_dict = NULL;
         }
-        spell->dict = enchant_broker_request_dict(spell->broker, lang);
+        spell->enchant_dict = enchant_broker_request_dict(spell->broker, lang);
     }
 #endif
 #ifdef PRESAGE_FOUND
@@ -384,24 +384,24 @@ static SpellHint*
 SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
     SpellHint *res = NULL;
-    if (!spell->dict)
+    if (!spell->enchant_dict)
         return NULL;
     char **suggestions = NULL;
     size_t number = 0;
-    suggestions = enchant_dict_suggest(spell->dict, spell->current_str,
+    suggestions = enchant_dict_suggest(spell->enchant_dict, spell->current_str,
                                        strlen(spell->current_str), &number);
     if (!suggestions)
         return NULL;
     number = number > len_limit ? len_limit : number;
     res = SpellHintList(number, suggestions, NULL);
-    enchant_dict_free_string_list(spell->dict, suggestions);
+    enchant_dict_free_string_list(spell->enchant_dict, suggestions);
     return res;
 }
 
 static boolean
 SpellEnchantCheck(FcitxSpell *spell)
 {
-    if (spell->dict)
+    if (spell->enchant_dict)
         return true;
     return false;
 }
@@ -543,8 +543,8 @@ SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
     SpellSetLang(spell, lang);
     /* enchant is the only one that support personal dict now (AFAIK) */
 #ifdef ENCHANT_FOUND
-    if (spell->dict) {
-        enchant_dict_add_to_personal(spell->dict, new_word, len);
+    if (spell->enchant_dict) {
+        enchant_dict_add_to_personal(spell->enchant_dict, new_word, len);
         return true;
     }
 #endif

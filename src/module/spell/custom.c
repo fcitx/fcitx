@@ -30,13 +30,94 @@
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 #include "spell-internal.h"
+#define EN_DIC_FILE "/data/en_dic.txt"
+
+static void
+SpellCustomMapDict(FcitxSpell *spell)
+{
+    /* Ignore dictLang for now. */
+    int fd;
+    struct stat stat_buf;
+    char *path;
+    char *fname;
+    char *content;
+    off_t flen;
+    if (spell->custom_map) {
+        munmap(spell->custom_map, spell->custom_map_len);
+        spell->custom_map = NULL;
+        spell->custom_map_len = 0;
+    }
+    path = fcitx_utils_get_fcitx_path("pkgdatadir");
+    asprintf(&fname, "%s"EN_DIC_FILE, path);
+    free(path);
+    fd = open(fname, O_RDONLY);
+    free(fname);
+    if (fd == -1)
+        return;
+    if (fstat(fd, &stat_buf) == -1) {
+        close(fd);
+        return;
+    }
+    flen = stat_buf.st_size;
+    content = mmap(NULL, flen, PROT_READ, MAP_PRIVATE, fd, 0);
+    close(fd);
+    if (content == MAP_FAILED)
+        return;
+    spell->custom_map = content;
+    spell->custom_map_len = flen;
+}
+
+/* static for now */
+static void
+SpellCustomLoadDict(FcitxSpell *spell)
+{
+    int i;
+    boolean empty_line = true;
+    int lcount = 0;
+    SpellCustomMapDict(spell);
+    if (!spell->custom_map) {
+        if (spell->custom_words) {
+            free(spell->custom_words);
+            spell->custom_words = NULL;
+        }
+        return;
+    }
+    for (i = 0;i < spell->custom_map_len;i++) {
+        switch (spell->custom_map[i]) {
+        case '\n':
+            empty_line = true;
+            break;
+        case ' ':
+        case '\t':
+        case '\r':
+            break;
+        default:
+            if (empty_line) {
+                empty_line = false;
+                lcount++;
+            }
+        }
+    }
+    if (!spell->custom_map) {
+        spell->custom_map = malloc(lcount * sizeof(SpellCustomWord));
+    } else {
+        spell->custom_map = realloc(spell->custom_map,
+                                    lcount * sizeof(SpellCustomWord));
+    }
+    if (!spell->custom_map)
+        return;
+}
 
 boolean
 SpellCustomInit(FcitxSpell *spell)
 {
-    return false;
+    SpellCustomLoadDict(spell);
+    return true;
 }
 
 SpellHint*

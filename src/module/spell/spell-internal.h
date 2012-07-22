@@ -43,6 +43,16 @@ typedef struct {
 } FcitxSpellConfig;
 
 typedef struct {
+    char *word;
+    float dist;
+} SpellCustomCWord;
+
+typedef struct {
+    char *word;
+    int lenth;
+} SpellCustomWord;
+
+typedef struct {
     struct _FcitxInstance *owner;
     FcitxSpellConfig config;
     char *dictLang;
@@ -54,13 +64,17 @@ typedef struct {
     EnchantBroker* broker;
     EnchantProvider cur_enchant_provider;
     // UT_array* enchantLanguages;
-    EnchantDict* dict;
+    EnchantDict* enchant_dict;
 #endif
 #ifdef PRESAGE_FOUND
     presage_t presage;
     boolean presage_support;
     char *past_stm;
 #endif
+    char *custom_map;
+    off_t custom_map_len;
+    SpellCustomWord *custom_words;
+    int custom_words_count;
 } FcitxSpell;
 
 #ifdef __cplusplus
