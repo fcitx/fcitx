@@ -172,6 +172,7 @@ SpellDestroy(void *arg)
         spell->presage = NULL;
     }
 #endif
+    SpellCustomDestroy(spell);
     free(arg);
 }
 

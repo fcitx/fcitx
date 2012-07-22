@@ -28,6 +28,7 @@ extern "C" {
     boolean SpellCustomInit(FcitxSpell *spell);
     SpellHint *SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit);
     boolean SpellCustomCheck(FcitxSpell *spell);
+    void SpellCustomDestroy(FcitxSpell *spell);
 #ifdef __cplusplus
 }
 #endif

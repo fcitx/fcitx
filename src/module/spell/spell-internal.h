@@ -48,11 +48,6 @@ typedef struct {
 } SpellCustomCWord;
 
 typedef struct {
-    char *word;
-    int lenth;
-} SpellCustomWord;
-
-typedef struct {
     struct _FcitxInstance *owner;
     FcitxSpellConfig config;
     char *dictLang;
@@ -73,7 +68,7 @@ typedef struct {
 #endif
     char *custom_map;
     off_t custom_map_len;
-    SpellCustomWord *custom_words;
+    char **custom_words;
     int custom_words_count;
 } FcitxSpell;
 
