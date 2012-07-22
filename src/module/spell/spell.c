@@ -23,10 +23,6 @@
 
 #include <libintl.h>
 #include <errno.h>
-#include <iconv.h>
-#include <ctype.h>
-
-#include <unicode/unorm.h>
 
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
@@ -37,6 +33,7 @@
 #include "fcitx-utils/log.h"
 
 #include "spell-internal.h"
+#include "custom.h"
 
 static CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
 static void *SpellCreate(FcitxInstance *instance);
@@ -124,20 +121,13 @@ SpellCreate(FcitxInstance *instance)
     FcitxAddon* addon;
     spell->owner = instance;
 
+    SpellCustomInit(spell);
 #ifdef PRESAGE_FOUND
     presage_new(FcitxSpellGetPastStream, spell,
                 FcitxSpellGetFutureStream, spell, &spell->presage);
-    if (!spell->presage) {
-        SpellDestroy(spell);
-        return NULL;
-    }
 #endif
 #ifdef ENCHANT_FOUND
     spell->broker = enchant_broker_init();
-    if (!spell->broker) {
-        SpellDestroy(spell);
-        return NULL;
-    }
 #endif
 
     if (!LoadSpellConfig(&spell->config)) {
@@ -147,7 +137,8 @@ SpellCreate(FcitxInstance *instance)
     ApplySpellConfig(spell);
 
 #ifdef ENCHANT_FOUND
-    switch (spell->config.enchant_provider) {
+    if (spell->broker) {
+        switch (spell->config.enchant_provider) {
         case EP_Aspell:
             enchant_broker_set_ordering(spell->broker, "*",
                                         "aspell,myspell,ispell");
@@ -159,8 +150,9 @@ SpellCreate(FcitxInstance *instance)
         case EP_Default:
         default:
             break;
+        }
+        /* spell->enchantLanguages = fcitx_utils_new_string_list(); */
     }
-    /* spell->enchantLanguages = fcitx_utils_new_string_list(); */
 #endif
     SpellSetLang(spell, "en");
     addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
@@ -225,11 +217,13 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     }
     spell->dictLang = strdup(lang);
 #ifdef ENCHANT_FOUND
-    if (spell->dict) {
-        enchant_broker_free_dict(spell->broker, spell->dict);
-        spell->dict = NULL;
+    if (spell->broker) {
+        if (spell->dict) {
+            enchant_broker_free_dict(spell->broker, spell->dict);
+            spell->dict = NULL;
+        }
+        spell->dict = enchant_broker_request_dict(spell->broker, lang);
     }
-    spell->dict = enchant_broker_request_dict(spell->broker, lang);
 #endif
 #ifdef PRESAGE_FOUND
     if (!strcmp(lang, "en")) {
@@ -416,6 +410,7 @@ static SpellHintProvider hint_provider[] = {
 #ifdef PRESAGE_FOUND
     {"presage", "pre", SpellPresageHintWords, SpellPresageCheck},
 #endif
+    {"custom", "cus", SpellCustomHintWords, SpellCustomCheck},
     {NULL, NULL, NULL, NULL}
 };
 
@@ -510,6 +505,7 @@ SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
     if (!len)
         return false;
     SpellSetLang(spell, lang);
+    /* enchant is the only one that support personal dict now (AFAIK) */
 #ifdef ENCHANT_FOUND
     if (spell->dict) {
         enchant_dict_add_to_personal(spell->dict, new_word, len);
