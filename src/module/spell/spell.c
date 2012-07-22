@@ -225,7 +225,7 @@ ApplySpellConfig(FcitxSpell *spell)
     if (SpellOrderHasValidProvider(spell->config.provider_order)) {
         spell->provider_order = spell->config.provider_order;
     } else {
-        spell->provider_order = "presage,enchant";
+        spell->provider_order = "presage,custom,enchant";
     }
 #ifdef ENCHANT_FOUND
     ApplyEnchantConfig(spell);

@@ -10,7 +10,7 @@ Description=Preferred Enchant provider
 [Spell Hint/HintProvidersOrder]
 Description=Order of Spell Hint Providers
 Type=String
-DefaultValue=presage,enchant
+DefaultValue=presage,custom,enchant
 
 [DescriptionFile]
 LocaleDomain=fcitx

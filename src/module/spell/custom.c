@@ -67,15 +67,13 @@ SpellCustomMapDict(FcitxSpell *spell)
         close(fd);
         return;
     }
-    while (flen < stat_buf.st_size) {
+    do {
         int c;
         c = read(fd, spell->custom_map, stat_buf.st_size - flen);
         if (c <= 0)
             break;
         flen += c;
-        if (flen >= stat_buf.st_size)
-            break;
-    }
+    } while (flen < stat_buf.st_size);
     if (!flen) {
         close(fd);
         free(spell->custom_map);
