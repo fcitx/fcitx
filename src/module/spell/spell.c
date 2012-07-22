@@ -43,10 +43,13 @@ static void *SpellCreate(FcitxInstance *instance);
 static void SpellDestroy(void *arg);
 static void SpellReloadConfig(void *arg);
 static void SpellSetLang(FcitxSpell *spell, const char *lang);
+static void ApplySpellConfig(FcitxSpell *spell);
 
 static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
+
+static boolean SpellOrderHasValidProvider(const char *providers);
 
 FCITX_EXPORT_API
 const FcitxModule module = {
@@ -120,10 +123,6 @@ SpellCreate(FcitxInstance *instance)
     FcitxSpell *spell = fcitx_utils_new(FcitxSpell);
     FcitxAddon* addon;
     spell->owner = instance;
-    if (!LoadSpellConfig(&spell->config)) {
-        free(spell);
-        return NULL;
-    }
 
 #ifdef PRESAGE_FOUND
     presage_new(FcitxSpellGetPastStream, spell,
@@ -139,6 +138,15 @@ SpellCreate(FcitxInstance *instance)
         SpellDestroy(spell);
         return NULL;
     }
+#endif
+
+    if (!LoadSpellConfig(&spell->config)) {
+        SpellDestroy(spell);
+        return NULL;
+    }
+    ApplySpellConfig(spell);
+
+#ifdef ENCHANT_FOUND
     switch (spell->config.enchant_provider) {
         case EP_Aspell:
             enchant_broker_set_ordering(spell->broker, "*",
@@ -190,7 +198,11 @@ SpellDestroy(void *arg)
 static void
 ApplySpellConfig(FcitxSpell *spell)
 {
-
+    if (SpellOrderHasValidProvider(spell->config.provider_order)) {
+        spell->provider_order = spell->config.provider_order;
+    } else {
+        spell->provider_order = "presage,enchant";
+    }
 }
 
 static void
@@ -409,6 +421,21 @@ SpellFindHintProvider(const char *str, int len)
     return NULL;
 }
 
+static boolean
+SpellOrderHasValidProvider(const char *providers)
+{
+    const char *name = NULL;
+    int len = 0;
+    while (true) {
+        providers = SpellParseNextProvider(providers, &name, &len);
+        if (!name)
+            break;
+        if (SpellFindHintProvider(name, len))
+            return true;
+    }
+    return false;
+}
+
 static SpellHint*
 SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
                        const char *current_str, const char *after_str,
@@ -417,7 +444,7 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
 {
     SpellHint *res = NULL;
     SpellHintProviderFunc provider_func;
-    const char *iter = providers ? providers : spell->config.provider_order;
+    const char *iter = providers ? providers : spell->provider_order;
     const char *name = NULL;
     int len = 0;
     SpellSetLang(spell, lang);

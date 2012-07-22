@@ -50,6 +50,7 @@ typedef struct {
     const char *before_str;
     const char *current_str;
     const char *after_str;
+    const char *provider_order;
 #ifdef ENCHANT_FOUND
     EnchantBroker* broker;
     // UT_array* enchantLanguages;
