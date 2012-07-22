@@ -562,7 +562,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 FcitxInstanceCommitString(instance, currentIC, buf);
                 irv = 0;
             }
-            irv |= IRV_COMMIT_STRING;
+            irv |= IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
             return irv;
         }
     } else {
@@ -573,7 +573,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         memset(buf, 0, sizeof(buf));
         Ucs4ToUtf8(keyboard->iconv, result, buf);
         FcitxInstanceCommitString(instance, currentIC, buf);
-        return IRV_COMMIT_STRING;
+        return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
     }
     return IRV_TO_PROCESS;
 }
@@ -650,7 +650,7 @@ FcitxKeyboardGetCandWord(void* arg, FcitxCandidateWord* candWord)
                               FcitxInstanceGetCurrentIC(instance), str);
     free(keyboard->hints);
     keyboard->hints = NULL;
-    return IRV_COMMIT_STRING;
+    return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
 }
 
 void  FcitxKeyboardSave(void *arg)
