@@ -76,6 +76,7 @@ typedef struct {
 extern "C" {
 #endif
     CONFIG_BINDING_DECLARE(FcitxSpellConfig);
+    SpellHint *SpellHintList(int count, char **displays, char **commits);
 #ifdef __cplusplus
 }
 #endif

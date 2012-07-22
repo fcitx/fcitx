@@ -179,15 +179,103 @@ SpellCustomInit(FcitxSpell *spell)
     return true;
 }
 
+#define SHORT_WORD_LEN 6
+
+static float
+SpellCustomDistance(const char *s1, const char *s2,
+                    const int max_offset, int len2)
+{
+    int len1 = strlen(s1);
+    if (len2 < 0)
+        len2 = strlen(s2);
+    if (!len1)
+        return len2;
+    if (!len2)
+        return len1;
+    int c = 0;
+    int offset1 = 0;
+    int offset2 = 0;
+    int lcs = 0;
+    while ((c + offset1 < len1) && (c + offset2 < len2)) {
+        if (s1[c + offset1] == s2[c + offset2]) {
+            lcs++;
+        } else {
+            offset1 = 0;
+            offset2 = 0;
+            int i;
+            for (i = 0; i < max_offset; i++) {
+                if ((c + i < len1)
+                    && (s1[c + i] == s2[c])) {
+                    offset1 = i;
+                    break;
+                }
+                if ((c + i < len2)
+                    && (s1[c] == s2[c + i])) {
+                    offset2 = i;
+                    break;
+                }
+            }
+        }
+        c++;
+    }
+    float avg = (len1 + len2) / 2.;
+    return (avg - lcs) / avg;
+}
+
+static int
+SpellCustomCWordCompare(const void *a, const void *b)
+{
+    return (int)(((SpellCustomCWord*)a)->dist - ((SpellCustomCWord*)b)->dist);
+}
+
+static boolean
+SpellCustomGoodMatch(const char *current, const char *dict_word)
+{
+    int buf_len = strlen(current);
+    if (buf_len <= SHORT_WORD_LEN) {
+        return strncasecmp(current, dict_word, buf_len) == 0;
+    } else {
+        int dict_len = strlen(dict_word);
+        if (dict_len < buf_len - 2 || dict_len > buf_len + 2)
+            return false;
+        /* search around 3 chars */
+        return SpellCustomDistance(current, dict_word, 2, buf_len) < 0.33;
+    }
+}
+
 SpellHint*
 SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    return NULL;
+    SpellCustomCWord clist[len_limit];
+    int i;
+    int num = 0;
+    for (i = 0;i < spell->custom_words_count;i++) {
+        if (SpellCustomGoodMatch(spell->current_str,
+                                 spell->custom_words[i])) {
+            clist[num].word = spell->custom_words[i];
+            // search around 3 chars
+            clist[num].dist = SpellCustomDistance(spell->current_str,
+                                                  spell->custom_words[i],
+                                                  2, -1);
+            if (++num >= len_limit)
+                break;
+        }
+    }
+    if (strlen(spell->current_str) > SHORT_WORD_LEN)
+        qsort((void*)clist, num, sizeof(SpellCustomCWord),
+              SpellCustomCWordCompare);
+    char *res_buff[num];
+    for (i = 0;i < num;i++)
+        res_buff[i] = clist[i].word;
+    return SpellHintList(num, res_buff, NULL);
 }
 
 boolean
 SpellCustomCheck(FcitxSpell *spell)
 {
+    if (spell->custom_map && spell->custom_words &&
+        !strcmp(spell->dictLang, "en"))
+        return true;
     return false;
 }
 

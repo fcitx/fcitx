@@ -282,7 +282,7 @@ SpellCalListSize(char **list, int count)
     return i;
 }
 
-static SpellHint*
+SpellHint*
 SpellHintList(int count, char **displays, char **commits)
 {
     SpellHint *res;
