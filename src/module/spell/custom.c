@@ -35,6 +35,7 @@
 #include <time.h>
 
 #include "spell-internal.h"
+#include "custom.h"
 #define EN_DICT_FORMAT "%s/data/%s_dict.txt"
 
 /**
@@ -311,6 +312,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     SpellCustomCWord clist[len_limit];
     int i;
     int num = 0;
+    if (!SpellCustomCheck(spell))
+        return NULL;
     for (i = 0;i < spell->custom_words_count;i++) {
         if (SpellCustomGoodMatch(spell->current_str,
                                  spell->custom_words[i])) {
@@ -336,7 +339,7 @@ boolean
 SpellCustomCheck(FcitxSpell *spell)
 {
     if (spell->custom_map && spell->custom_words &&
-        !strcmp(spell->dictLang, "en"))
+        !spell->custom_saved_lang)
         return true;
     return false;
 }
