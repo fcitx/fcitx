@@ -113,8 +113,8 @@ try_save:
         return 0;
     if (!spell->custom_map)
         return 0;
-    /* Actually shouldn't reatch.... */
-    if (!spell->custom_words) {
+    /* Actually shouldn't reach.... */
+    if (!spell->custom_words || !spell->dictLang) {
         free(spell->custom_map);
         spell->custom_map = NULL;
         return 0;
@@ -246,6 +246,9 @@ SpellCustomInit(FcitxSpell *spell)
 
 #define SHORT_WORD_LEN 6
 
+/**
+ * (from fcitx-en)
+ **/
 static float
 SpellCustomDistance(const char *s1, const char *s2,
                     const int max_offset, int len2)
@@ -287,12 +290,18 @@ SpellCustomDistance(const char *s1, const char *s2,
     return (avg - lcs) / avg;
 }
 
+/**
+ * (from fcitx-en)
+ **/
 static int
 SpellCustomCWordCompare(const void *a, const void *b)
 {
     return (int)(((SpellCustomCWord*)a)->dist - ((SpellCustomCWord*)b)->dist);
 }
 
+/**
+ * (from fcitx-en)
+ **/
 static boolean
 SpellCustomGoodMatch(const char *current, const char *dict_word)
 {

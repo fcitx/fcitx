@@ -261,6 +261,10 @@ SpellEnchantSetLang(FcitxSpell *spell, const char *lang)
     }
     enchant_dict = enchant_broker_request_dict(spell->broker, lang);
     if (enchant_dict) {
+        if (spell->enchant_saved_lang) {
+            free(spell->enchant_saved_lang);
+            spell->enchant_saved_lang = NULL;
+        }
         if (spell->enchant_dict)
             enchant_broker_free_dict(spell->broker, spell->enchant_dict);
         spell->enchant_dict = enchant_dict;
