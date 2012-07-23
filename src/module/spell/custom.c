@@ -362,4 +362,6 @@ SpellCustomDestroy(FcitxSpell *spell)
         free(spell->custom_map);
     if (spell->custom_words)
         free(spell->custom_words);
+    if (spell->custom_saved_lang)
+        free(spell->custom_saved_lang);
 }
