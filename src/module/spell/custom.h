@@ -29,6 +29,7 @@ extern "C" {
     SpellHint *SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit);
     boolean SpellCustomCheck(FcitxSpell *spell);
     void SpellCustomDestroy(FcitxSpell *spell);
+    boolean SpellCustomLoadDict(FcitxSpell *spell, const char *lang);
 #ifdef __cplusplus
 }
 #endif

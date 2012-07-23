@@ -250,7 +250,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
             return;
         free(spell->dictLang);
     }
-    spell->dictLang = strdup(lang);
+    SpellCustomLoadDict(spell, lang);
 #ifdef ENCHANT_FOUND
     if (spell->broker) {
         if (spell->enchant_dict) {
@@ -267,6 +267,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
         spell->presage_support = false;
     }
 #endif
+    spell->dictLang = strdup(lang);
 }
 
 static int
@@ -289,6 +290,8 @@ SpellHintList(int count, char **displays, char **commits)
     void *p;
     int i;
     count = SpellCalListSize(displays, count);
+    if (!count)
+        return NULL;
     int lens[count][2];
     int total_l = 0;
     for (i = 0;i < count;i++) {

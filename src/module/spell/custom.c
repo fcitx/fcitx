@@ -35,37 +35,58 @@
 #include <time.h>
 
 #include "spell-internal.h"
-#define EN_DIC_FILE "/data/en_dic.txt"
+#define EN_DICT_FORMAT "%s/data/%s_dict.txt"
 
-static void
-SpellCustomMapDict(FcitxSpell *spell)
+/**
+ * Open the dict file, return -1 if failed.
+ **/
+static int
+SpellCustomGetDictFile(FcitxSpell *spell, const char *lang)
 {
-    /* Ignore dictLang for now. */
     int fd;
-    struct stat stat_buf;
     char *path;
-    char *fname;
-    off_t flen = 0;
-    if (spell->custom_map) {
-        free(spell->custom_map);
-        spell->custom_map = NULL;
-        spell->custom_map_len = 0;
-    }
+    char *fname = NULL;
     path = fcitx_utils_get_fcitx_path("pkgdatadir");
-    asprintf(&fname, "%s"EN_DIC_FILE, path);
+    asprintf(&fname, EN_DICT_FORMAT, path, lang);
     free(path);
     fd = open(fname, O_RDONLY);
     free(fname);
+    return fd;
+}
+
+/**
+ * Try to read the who dict file into memory.... similiar to mmap but won't be
+ * affected if the file is modified on disk. (can also write to this memory
+ * area, e.g. to remove white spaces, with no side effect). If the dictionary
+ * file is not found, try to keep whatever dictionary successfully loaded.
+ **/
+static off_t
+SpellCustomMapDict(FcitxSpell *spell, const char *lang)
+{
+    int fd;
+    struct stat stat_buf;
+    off_t flen = 0;
+    fd = SpellCustomGetDictFile(spell, lang);
+
+    /* try to save whatever loaded. */
     if (fd == -1)
-        return;
+        goto try_save;
     if (fstat(fd, &stat_buf) == -1) {
         close(fd);
-        return;
+        goto try_save;
+    }
+    if (spell->custom_map) {
+        free(spell->custom_map);
+        spell->custom_map = NULL;
+    }
+    if (spell->custom_saved_lang) {
+        free(spell->custom_saved_lang);
+        spell->custom_saved_lang = NULL;
     }
     spell->custom_map = fcitx_utils_malloc0(stat_buf.st_size + 1);
     if (!spell->custom_map) {
         close(fd);
-        return;
+        return 0;
     }
     do {
         int c;
@@ -78,13 +99,28 @@ SpellCustomMapDict(FcitxSpell *spell)
         close(fd);
         free(spell->custom_map);
         spell->custom_map = NULL;
-        return;
+        return 0;
     } else if (flen < stat_buf.st_size) {
         spell->custom_map = realloc(spell->custom_map, flen + 1);
-        spell->custom_map_len = flen;
+        return flen;
     } else {
-        spell->custom_map_len = stat_buf.st_size;
+        return stat_buf.st_size;
     }
+
+try_save:
+    if (spell->custom_saved_lang)
+        return 0;
+    if (!spell->custom_map)
+        return 0;
+    /* Actually shouldn't reatch.... */
+    if (!spell->custom_words) {
+        free(spell->custom_map);
+        spell->custom_map = NULL;
+        return 0;
+    }
+    /* NOTE: dictLang is still the old language here */
+    spell->custom_saved_lang = strdup(spell->dictLang);
+    return 0;
 }
 
 static int
@@ -93,8 +129,7 @@ spell_strchomp(char *str)
     int len;
     int i;
     i = len = strlen(str);
-    /* ok since the result string will never be empty in our case */
-    while (--i) {
+    while (i--) {
         switch (str[i]) {
         case ' ':
         case '\r':
@@ -109,23 +144,39 @@ spell_strchomp(char *str)
     return len;
 }
 
-/* static for now */
-static void
-SpellCustomLoadDict(FcitxSpell *spell)
+/**
+ * update custom dict, if the dictionary of that language
+ * cannot be found, keep the current one until the next successful loading.
+ **/
+boolean
+SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
 {
     int i;
     int j;
-    boolean empty_line = true;
-    int lcount = 0;
-    SpellCustomMapDict(spell);
-    if (!spell->custom_map) {
-        if (spell->custom_words) {
-            free(spell->custom_words);
-            spell->custom_words = NULL;
-        }
-        return;
+    off_t map_len;
+    boolean empty_line;
+    int lcount;
+    if (!lang || !lang[0])
+        return false;
+    /* Use the saved dictionary */
+    if (spell->custom_saved_lang &&
+        !strcmp(spell->custom_saved_lang, lang)) {
+        free(spell->custom_saved_lang);
+        spell->custom_saved_lang = NULL;
+        return true;
     }
-    for (i = 0;i < spell->custom_map_len;i++) {
+    map_len = SpellCustomMapDict(spell, lang);
+    /* current state saved */
+    if (spell->custom_saved_lang)
+        return false;
+    /* fail */
+    if (!spell->custom_map)
+        goto free_all;
+
+    /* count line */
+    empty_line = true;
+    lcount = 0;
+    for (i = 0;i < map_len;i++) {
         switch (spell->custom_map[i]) {
         case '\n':
             spell->custom_map[i] = '\0';
@@ -145,16 +196,22 @@ SpellCustomLoadDict(FcitxSpell *spell)
             }
         }
     }
+    /* no words found.... */
+    if (!lcount)
+        goto free_all;
     if (!spell->custom_words) {
         spell->custom_words = malloc(lcount * sizeof(char*));
     } else {
         spell->custom_words = realloc(spell->custom_words,
                                       lcount * sizeof(char*));
     }
+    /* well, no likely though. */
     if (!spell->custom_words)
-        return;
+        goto free_all;
+
+    /* save words pointers. */
     empty_line = true;
-    for (i = 0, j = 0;i < spell->custom_map_len && j < lcount;i++) {
+    for (i = 0, j = 0;i < map_len && j < lcount;i++) {
         if (!spell->custom_map[i])
             continue;
         spell->custom_words[j] = spell->custom_map + i;
@@ -162,18 +219,25 @@ SpellCustomLoadDict(FcitxSpell *spell)
         i += spell_strchomp(spell->custom_map + i);
     }
     spell->custom_words_count = j;
+    return true;
+
+free_all:
+    if (spell->custom_map) {
+        free(spell->custom_map);
+        spell->custom_map = NULL;
+    }
+    if (spell->custom_words) {
+        free(spell->custom_words);
+        spell->custom_words = NULL;
+    }
+    spell->custom_words_count = 0;
+    return false;
 }
 
+/* Init work is done in set lang, nothing else to init here */
 boolean
 SpellCustomInit(FcitxSpell *spell)
 {
-    /* struct timespec start, end; */
-    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
-    SpellCustomLoadDict(spell);
-    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
-    /* int t = ((end.tv_sec - start.tv_sec) * 1000000000) */
-    /*     + end.tv_nsec - start.tv_nsec; */
-    /* printf("%s, %d\n", __func__, t); */
     return true;
 }
 
@@ -201,7 +265,7 @@ SpellCustomDistance(const char *s1, const char *s2,
             offset1 = 0;
             offset2 = 0;
             int i;
-            for (i = 0; i < max_offset; i++) {
+            for (i = 0;i < max_offset;i++) {
                 if ((c + i < len1)
                     && (s1[c + i] == s2[c])) {
                     offset1 = i;

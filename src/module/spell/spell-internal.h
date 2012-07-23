@@ -66,8 +66,8 @@ typedef struct {
     boolean presage_support;
     char *past_stm;
 #endif
+    char *custom_saved_lang;
     char *custom_map;
-    off_t custom_map_len;
     char **custom_words;
     int custom_words_count;
 } FcitxSpell;
