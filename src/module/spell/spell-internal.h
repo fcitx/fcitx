@@ -56,10 +56,11 @@ typedef struct {
     const char *after_str;
     const char *provider_order;
 #ifdef ENCHANT_FOUND
-    EnchantBroker* broker;
+    EnchantBroker *broker;
     EnchantProvider cur_enchant_provider;
+    char *enchant_saved_lang;
     // UT_array* enchantLanguages;
-    EnchantDict* enchant_dict;
+    EnchantDict *enchant_dict;
 #endif
 #ifdef PRESAGE_FOUND
     presage_t presage;
