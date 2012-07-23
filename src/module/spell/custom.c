@@ -183,18 +183,20 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
             spell->custom_map[i] = '\0';
         case '\0':
             empty_line = true;
-            break;
+            continue;
         case ' ':
         case '\t':
         case '\r':
             if (empty_line) {
                 spell->custom_map[i] = '\0';
             }
+            continue;
         default:
             if (empty_line) {
                 empty_line = false;
                 lcount++;
             }
+            continue;
         }
     }
     /* no words found.... */
