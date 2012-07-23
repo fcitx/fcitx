@@ -248,7 +248,6 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     if (spell->dictLang) {
         if (!strcmp(spell->dictLang, lang))
             return;
-        free(spell->dictLang);
     }
     SpellCustomLoadDict(spell, lang);
 #ifdef ENCHANT_FOUND
@@ -267,6 +266,8 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
         spell->presage_support = false;
     }
 #endif
+    if (spell->dictLang)
+        free(spell->dictLang);
     spell->dictLang = strdup(lang);
 }
 
