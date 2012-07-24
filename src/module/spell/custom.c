@@ -84,6 +84,8 @@ SpellCustomMapDict(FcitxSpell *spell, const char *lang)
         free(spell->custom_saved_lang);
         spell->custom_saved_lang = NULL;
     }
+    if (!stat_buf.st_size)
+        return 0;
     spell->custom_map = fcitx_utils_malloc0(stat_buf.st_size + 1);
     if (!spell->custom_map) {
         close(fd);
@@ -124,27 +126,6 @@ try_save:
     return 0;
 }
 
-static int
-spell_strchomp(char *str)
-{
-    int len;
-    int i;
-    i = len = strlen(str);
-    while (i--) {
-        switch (str[i]) {
-        case ' ':
-        case '\r':
-        case '\t':
-            str[i] = '\0';
-            continue;
-        default:
-            break;
-        }
-        break;
-    }
-    return len;
-}
-
 /**
  * update custom dict, if the dictionary of that language
  * cannot be found, keep the current one until the next successful loading.
@@ -155,7 +136,6 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
     int i;
     int j;
     off_t map_len;
-    boolean empty_line;
     int lcount;
     if (!lang || !lang[0])
         return false;
@@ -175,33 +155,16 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
         goto free_all;
 
     /* count line */
-    empty_line = true;
     lcount = 0;
     for (i = 0;i < map_len;i++) {
-        switch (spell->custom_map[i]) {
-        case '\n':
-            spell->custom_map[i] = '\0';
-        case '\0':
-            empty_line = true;
+        int l = strlen(spell->custom_map + i);
+        if (!l)
             continue;
-        case ' ':
-        case '\t':
-        case '\r':
-            if (empty_line) {
-                spell->custom_map[i] = '\0';
-            }
-            continue;
-        default:
-            if (empty_line) {
-                empty_line = false;
-                lcount++;
-            }
-            continue;
-        }
+        lcount++;
+        i += l;
     }
-    /* no words found.... */
-    if (!lcount)
-        goto free_all;
+    if (spell->custom_map[i])
+        lcount++;
     if (!spell->custom_words) {
         spell->custom_words = malloc(lcount * sizeof(char*));
     } else {
@@ -213,13 +176,12 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
         goto free_all;
 
     /* save words pointers. */
-    empty_line = true;
     for (i = 0, j = 0;i < map_len && j < lcount;i++) {
-        if (!spell->custom_map[i])
+        int l = strlen(spell->custom_map + i);
+        if (!l)
             continue;
-        spell->custom_words[j] = spell->custom_map + i;
-        j++;
-        i += spell_strchomp(spell->custom_map + i);
+        spell->custom_words[j++] = spell->custom_map + i;
+        i += l;
     }
     spell->custom_words_count = j;
     return true;
