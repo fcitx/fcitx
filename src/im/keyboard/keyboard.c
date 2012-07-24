@@ -711,13 +711,19 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
     FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(keyboard->owner);
     if (!currentIC)
         return IRV_TO_PROCESS;
-    if (im && strncmp(im->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
-        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner, currentIC, keyboard->dataSlot);
-        if (!enableWordHint)
+    if (im && strncmp(im->uniqueName, "fcitx-keyboard",
+                      sizeof("fcitx-keyboard") - 1) == 0) {
+        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner,
+                                                      currentIC,
+                                                      keyboard->dataSlot);
+        if (!enableWordHint) {
             enableWordHint = PTR_TRUE;
-        else
+            IsDictAvailable(keyboard);
+        } else {
             enableWordHint = PTR_FALSE;
-        FcitxInstanceSetICData(keyboard->owner, currentIC, keyboard->dataSlot, enableWordHint);
+        }
+        FcitxInstanceSetICData(keyboard->owner, currentIC,
+                               keyboard->dataSlot, enableWordHint);
         return IRV_DO_NOTHING;
     } else {
         return IRV_TO_PROCESS;

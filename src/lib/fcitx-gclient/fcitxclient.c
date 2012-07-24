@@ -194,7 +194,7 @@ fcitx_client_finalize(GObject *object)
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
- 
+
     GDBusProxy* icproxy = self->priv->icproxy;
     GDBusProxy* improxy = self->priv->improxy;
     self->priv->icproxy = NULL;
@@ -413,7 +413,7 @@ fcitx_client_init(FcitxClient *self)
     self->priv = FCITX_CLIENT_GET_PRIVATE(self);
 
     sprintf(self->priv->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
-    
+
     self->priv->improxy = NULL;
     self->priv->icproxy = NULL;
 
@@ -814,4 +814,3 @@ fcitx_client_is_valid(FcitxClient* self)
 }
 
 // kate: indent-mode cstyle; replace-tabs on;
-
