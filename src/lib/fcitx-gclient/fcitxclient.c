@@ -189,6 +189,12 @@ fcitx_client_finalize(GObject *object)
         g_dbus_proxy_call(self->priv->icproxy, "DestroyIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
     g_bus_unwatch_name(self->priv->watch_id);
+    if (self->priv->cancellable) {
+        g_cancellable_cancel (self->priv->cancellable);
+        g_object_unref (self->priv->cancellable);
+        self->priv->cancellable = NULL;
+    }
+ 
     GDBusProxy* icproxy = self->priv->icproxy;
     GDBusProxy* improxy = self->priv->improxy;
     self->priv->icproxy = NULL;
@@ -407,6 +413,9 @@ fcitx_client_init(FcitxClient *self)
     self->priv = FCITX_CLIENT_GET_PRIVATE(self);
 
     sprintf(self->priv->servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+    
+    self->priv->improxy = NULL;
+    self->priv->icproxy = NULL;
 
     self->priv->watch_id = g_bus_watch_name(
                        G_BUS_TYPE_SESSION,
@@ -417,8 +426,6 @@ fcitx_client_init(FcitxClient *self)
                        self,
                        NULL
                    );
-    self->priv->improxy = NULL;
-    self->priv->icproxy = NULL;
 }
 
 static void
