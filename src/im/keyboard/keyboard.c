@@ -445,6 +445,12 @@ boolean IsDictAvailable(FcitxKeyboard* keyboard)
     return InvokeFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE, arg);
 }
 
+/* a little bit funny here LOL.... */
+static const FcitxHotkey FCITX_HYPHEN_APOS[2] = {
+    {NULL, FcitxKey_minus, FcitxKeyState_None},
+    {NULL, FcitxKey_apostrophe, FcitxKeyState_None}
+};
+
 INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
@@ -493,7 +499,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) ||
             IsValidSym(sym, state)) {
             if (IsValidChar(result) || FcitxHotkeyIsHotKeyLAZ(sym, state) ||
-                FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state)) {
+                FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state) ||
+                FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS)) {
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
                 if (result)
