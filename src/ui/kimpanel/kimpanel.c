@@ -725,7 +725,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s0 , DBUS_TYPE_INVALID)) {
-            size_t len = strlen("/Fcitx/");
+            size_t len = sizeof("/Fcitx/") - 1;
             if (strlen(s0) > len) {
                 s0 += len;
                 if (strcmp("logo", s0) == 0) {
@@ -738,8 +738,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     while (len --)
                         free(prop[len]);
                     free(prop);
-                } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
-                    s0 += strlen("logo/");
+                } else if (strncmp("logo/", s0, sizeof("logo/") - 1) == 0) {
+                    s0 += sizeof("logo/") - 1;
                     if (strcmp(s0, "toggle") == 0)
                         FcitxInstanceChangeIMState(instance, FcitxInstanceGetCurrentIC(instance));
                     else if (strcmp(s0, "configureim") == 0) {
@@ -754,11 +754,12 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                         fcitx_utils_launch_restart();
                     }
                 } else if (strcmp("keyboard", s0) == 0) {
-                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-                } else if (strncmp("im/", s0, strlen("im/")) == 0) {
-                    s0 += strlen("im/");
+                    FcitxInstanceCloseIM(instance,
+                                         FcitxInstanceGetCurrentIC(instance));
+                } else if (strncmp("im/", s0, sizeof("im/") - 1) == 0) {
+                    s0 += sizeof("im/") - 1;
                     FcitxInstanceSwitchIMByName(instance, s0);
-                } else if (strncmp("im", s0, strlen("im")) == 0) {
+                } else if (strncmp("im", s0, sizeof("im") - 1) == 0) {
                     UT_array* imes = FcitxInstanceGetIMEs(instance);
                     FcitxIM* pim;
                     int index = 0;
