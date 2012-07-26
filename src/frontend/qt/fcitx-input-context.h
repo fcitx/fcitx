@@ -20,6 +20,8 @@
 #ifndef __FCITX_INPUT_CONTEXT_H_
 #define __FCITX_INPUT_CONTEXT_H_
 
+#include "config.h"
+
 #include <QInputContext>
 #include <QList>
 #include <QDBusConnection>
@@ -76,7 +78,7 @@ public:
 
     virtual void widgetDestroyed(QWidget *w);
 
-#if defined(Q_WS_X11)
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
     virtual bool x11FilterEvent(QWidget *keywidget, XEvent *event);
 #endif // Q_WS_X11
     virtual bool filterEvent(const QEvent* event);
@@ -90,7 +92,7 @@ private Q_SLOTS:
     void deleteSurroundingText(int offset, uint nchar);
     void createInputContextFinished(QDBusPendingCallWatcher* watcher);
     void updateIM();
-#if defined(Q_WS_X11)
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
 #endif
 private:
@@ -98,7 +100,7 @@ private:
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
     bool checkAlgorithmically();
     bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
-#if defined(Q_WS_X11)
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
     bool x11FilterEventFallback(XEvent *event , KeySym sym);
     XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
 #endif // Q_WS_X11

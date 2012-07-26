@@ -55,6 +55,11 @@ link_directories(
     ${DBUS_LIBRARY_DIRS}
 )
 
+if (ENABLE_X11)
+    include_directories(${X11_INCLUDE_DIRS})
+    link_directories(${X11_LIBRARY_DIRS})
+endif (ENABLE_X11)
+
 set(
     qtim_fcitx_SRCS
     fcitx-plugin.cpp
@@ -110,10 +115,13 @@ target_link_libraries(
     optimized ${QT_QTCORE_LIBRARY_RELEASE}
     optimized ${QT_QTDBUS_LIBRARY_RELEASE}
     optimized ${QT_QTGUI_LIBRARY_RELEASE}
-    ${X11_LIBRARIES}
     ${ICU_LIBRARIES}
     fcitx-config
 )
+
+if (ENABLE_X11)
+    target_link_libraries(qtim-fcitx ${X11_LIBRARIES})
+endif (ENABLE_X11)
 
 install(
     TARGETS qtim-fcitx
