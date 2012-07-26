@@ -607,16 +607,16 @@ char* FcitxHotkeyGetKeyString(FcitxKeySym sym, unsigned int state)
     size_t len = 0;
 
     if (state & FcitxKeyState_Ctrl)
-        len += strlen("CTRL_");
+        len += sizeof("CTRL_") - 1;
 
     if (state & FcitxKeyState_Alt)
-        len += strlen("ALT_");
+        len += sizeof("ALT_") - 1;
 
     if (state & FcitxKeyState_Shift)
-        len += strlen("SHIFT_");
+        len += sizeof("SHIFT_") - 1;
 
     if (state & FcitxKeyState_Super)
-        len += strlen("SUPER_");
+        len += sizeof("SUPER_") - 1;
 
     char *key = FcitxHotkeyGetKeyListString(sym);
 
@@ -657,22 +657,22 @@ boolean FcitxHotkeyParseKey(const char *strKey, FcitxKeySym* sym, unsigned int* 
 
     if (strstr(p, "CTRL_")) {
         iKeyState |= FcitxKeyState_Ctrl;
-        p += strlen("CTRL_");
+        p += sizeof("CTRL_") - 1;
     }
 
     if (strstr(p, "ALT_")) {
         iKeyState |= FcitxKeyState_Alt;
-        p += strlen("ALT_");
+        p += sizeof("ALT_") - 1;
     }
 
     if (strstr(strKey, "SHIFT_")) {
         iKeyState |= FcitxKeyState_Shift;
-        p += strlen("SHIFT_");
+        p += sizeof("SHIFT_") - 1;
     }
 
     if (strstr(strKey, "SUPER_")) {
         iKeyState |= FcitxKeyState_Super;
-        p += strlen("SUPER_");
+        p += sizeof("SUPER_") - 1;
     }
 
     iKey = FcitxHotkeyGetKeyList(p);
