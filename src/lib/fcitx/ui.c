@@ -183,7 +183,7 @@ boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
 
         fclose(fp);
 
-        handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+        handle = dlopen(modulePath, RTLD_NOW | RTLD_GLOBAL);
 
         if (!handle) {
             FcitxLog(ERROR, _("UI: open %s fail %s") , modulePath , dlerror());

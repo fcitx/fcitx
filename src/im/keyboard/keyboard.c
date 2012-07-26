@@ -45,7 +45,9 @@
 
 #include "xkb.h"
 #include "keyboard.h"
+#if defined(ENABLE_ISOCODES)
 #include "isocodes.h"
+#endif
 #include "fcitx-compose-data.h"
 
 #define INVALID_COMPOSE_RESULT 0xffffffff

@@ -522,7 +522,7 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
                 if (!fp)
                     break;
                 fclose(fp);
-                handle = dlopen(modulePath, RTLD_LAZY | RTLD_GLOBAL);
+                handle = dlopen(modulePath, RTLD_NOW | RTLD_GLOBAL);
                 if (!handle) {
                     FcitxLog(ERROR, _("Frontend: open %s fail %s") , modulePath , dlerror());
                     break;

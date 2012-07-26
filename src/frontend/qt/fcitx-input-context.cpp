@@ -246,16 +246,16 @@ bool QFcitxInputContext::isComposing() const
 
 bool QFcitxInputContext::filterEvent(const QEvent* event)
 {
-#ifndef Q_WS_X11
+#if not (defined(Q_WS_X11) && defined(ENABLE_X11))
     QWidget* keywidget = focusWidget();
 
     if (key_filtered)
         return false;
 
-    if (!keywidget->testAttribute(Qt::WA_WState_Created))
+    if (!keywidget || !keywidget->testAttribute(Qt::WA_WState_Created))
         return false;
 
-    if (!keywidget || keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
+    if (keywidget->inputMethodHints() & (Qt::ImhExclusiveInputMask | Qt::ImhHiddenText))
         addCapacity(CAPACITY_PASSWORD);
     else
         removeCapacity(CAPACITY_PASSWORD);
@@ -265,18 +265,6 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
     }
 
     const QKeyEvent *key_event = static_cast<const QKeyEvent*>(event);
-    if (!m_enable) {
-        FcitxKeySym fcitxsym;
-        uint fcitxstate;
-        GetKey((FcitxKeySym) key_event->nativeVirtualKey(), key_event->nativeModifiers(), &fcitxsym, &fcitxstate);
-        if (!FcitxIsHotKey(fcitxsym, fcitxstate, m_triggerKey)) {
-            if (m_slave && m_slave->filterEvent(event))
-                return true;
-            else
-                return QInputContext::filterEvent(event);
-        }
-
-    }
     m_icproxy->FocusIn();
 
     struct timeval current_time;
@@ -399,7 +387,7 @@ void QFcitxInputContext::widgetDestroyed(QWidget* w)
 }
 
 
-#if defined(Q_WS_X11)
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
 
 bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 {
@@ -633,7 +621,7 @@ void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
     QWidget* widget = focusWidget();
     if (Q_LIKELY(widget != NULL)) {
         key_filtered = true;
-#ifdef Q_WS_X11
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
         const WId window_id = widget->winId();
         Display* x11_display = QX11Info::display();
 
@@ -649,7 +637,7 @@ void QFcitxInputContext::forwardKey(uint keyval, uint state, int type)
     }
 }
 
-#ifdef Q_WS_X11
+#if defined(Q_WS_X11) && defined(ENABLE_X11)
 XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type)
 {
     XEvent* xevent = static_cast<XEvent*>(malloc(sizeof(XEvent)));
