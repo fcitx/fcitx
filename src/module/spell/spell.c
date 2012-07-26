@@ -33,7 +33,7 @@
 #include "fcitx-utils/log.h"
 
 #include "spell-internal.h"
-#include "custom.h"
+#include "spell-custom.h"
 
 static CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
 static void *SpellCreate(FcitxInstance *instance);

@@ -35,7 +35,7 @@
 #include <time.h>
 
 #include "spell-internal.h"
-#include "custom.h"
+#include "spell-custom.h"
 #define EN_DICT_FORMAT "%s/data/%s_dict.txt"
 
 /**
