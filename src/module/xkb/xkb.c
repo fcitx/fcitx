@@ -564,7 +564,8 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
     FcitxXkb* xkb = (FcitxXkb*) arg;
     FcitxIM* currentIM = FcitxInstanceGetCurrentIM(xkb->owner);
     if (xkb->config.bIgnoreInputMethodLayoutRequest
-        && (!currentIM || strncmp(currentIM->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0))
+        && (!currentIM || strncmp(currentIM->uniqueName, "fcitx-keyboard",
+                                  sizeof("fcitx-keyboard") - 1) != 0))
     {
         FcitxXkbRetrieveCloseGroup(xkb);
         return;
@@ -733,7 +734,9 @@ static boolean FcitxXkbEventHandler(void* arg, XEvent* event)
             FcitxIM* currentIM = FcitxInstanceGetCurrentIM(xkb->owner);
             if (FcitxInstanceGetCurrentStatev2(xkb->owner) != IS_ACTIVE
                 || (xkb->config.bIgnoreInputMethodLayoutRequest
-                    && (!currentIM || strncmp(currentIM->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0)))
+                    && (!currentIM ||
+                        strncmp(currentIM->uniqueName, "fcitx-keyboard",
+                                sizeof("fcitx-keyboard") - 1) != 0)))
                 FcitxXkbSaveCloseGroup(xkb);
         }
 
@@ -869,7 +872,8 @@ void LoadLayoutOverride(FcitxXkb* xkb)
         LayoutOverride* override = NULL;
         HASH_FIND_STR(xkb->layoutOverride, imString, override);
         /* if rule exists or the rule is for fcitx-keyboard, skip it */
-        if (override || strncmp(imString, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
+        if (override || strncmp(imString, "fcitx-keyboard",
+                                sizeof("fcitx-keyboard") - 1) == 0) {
             continue;
         }
 
@@ -977,7 +981,8 @@ void* FcitxXkbSetLayoutOverride(void* arg, FcitxModuleFunctionArg args)
         LayoutOverrideFree(item);
     }
 
-    if (layout && layout[0] != '\0' && strncmp(imname, "fcitx-keyboard", strlen("fcitx-keyboard")) != 0) {
+    if (layout && layout[0] != '\0' &&
+        strncmp(imname, "fcitx-keyboard", sizeof("fcitx-keyboard") - 1) != 0) {
         item = fcitx_utils_new(LayoutOverride);
         item->im = strdup(imname);
         item->layout = strdup(layout);
