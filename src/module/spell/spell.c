@@ -34,6 +34,7 @@
 
 #include "spell-internal.h"
 #include "spell-custom.h"
+#include "spell-presage.h"
 
 static CONFIG_DESC_DEFINE(GetSpellConfigDesc, "fcitx-spell.desc");
 static void *SpellCreate(FcitxInstance *instance);
@@ -95,25 +96,6 @@ LoadSpellConfig(FcitxSpellConfig *config)
     return true;
 }
 
-#ifdef PRESAGE_FOUND
-static const char*
-FcitxSpellGetPastStream(void *arg)
-{
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    if (!spell->past_stm)
-        asprintf(&spell->past_stm, "%s%s",
-                 spell->before_str, spell->current_str);
-    return spell->past_stm;
-}
-
-static const char*
-FcitxSpellGetFutureStream(void *arg)
-{
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    return spell->after_str;
-}
-#endif
-
 static void*
 SpellCreate(FcitxInstance *instance)
 {
@@ -123,8 +105,7 @@ SpellCreate(FcitxInstance *instance)
 
     SpellCustomInit(spell);
 #ifdef PRESAGE_FOUND
-    presage_new(FcitxSpellGetPastStream, spell,
-                FcitxSpellGetFutureStream, spell, &spell->presage);
+    SpellPresageInit(spell);
 #endif
 #ifdef ENCHANT_FOUND
     spell->broker = enchant_broker_init();
@@ -169,10 +150,7 @@ SpellDestroy(void *arg)
     /*     fcitx_utils_free_string_list(spell->enchantLanguages); */
 #endif
 #ifdef PRESAGE_FOUND
-    if (spell->presage) {
-        presage_free(spell->presage);
-        spell->presage = NULL;
-    }
+    SpellPresageDestroy(spell);
 #endif
     SpellCustomDestroy(spell);
     free(arg);
@@ -292,18 +270,14 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     SpellEnchantSetLang(spell, lang);
 #endif
 #ifdef PRESAGE_FOUND
-    if (!strcmp(lang, "en")) {
-        spell->presage_support = true;
-    } else {
-        spell->presage_support = false;
-    }
+    SpellPresageLoadDict(spell, lang);
 #endif
     if (spell->dictLang)
         free(spell->dictLang);
     spell->dictLang = strdup(lang);
 }
 
-static int
+int
 SpellCalListSize(char **list, int count)
 {
     int i;
@@ -348,73 +322,6 @@ SpellHintList(int count, char **displays, char **commits)
     }
     return res;
 }
-
-#ifdef PRESAGE_FOUND
-static SpellHint*
-SpellPresageResult(FcitxSpell *spell, char **suggestions)
-{
-    int i;
-    int count = 0;
-    int len = SpellCalListSize(suggestions, -1);
-    char *commits[len];
-    char *displays[len];
-    SpellHint *res;
-    if (!len)
-        return NULL;
-    for (i = 0;i < len;i++) {
-        char *result = NULL;
-        char *tmp_str = NULL;
-        presage_completion(spell->presage, suggestions[i], &result);
-        if (!result)
-            continue;
-        tmp_str = fcitx_utils_trim(result);
-        presage_free_string(result);
-        asprintf(&result, "%s%s", spell->current_str, tmp_str);
-        free(tmp_str);
-        commits[count] = result;
-        displays[count] = suggestions[i];
-        count++;
-    }
-    res = SpellHintList(count, displays, commits);
-    for (i = 0;i < count;i++) {
-        free(commits[i]);
-    }
-    return res;
-}
-
-static SpellHint*
-SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
-{
-    SpellHint *res = NULL;
-    if (!(spell->presage && spell->presage_support))
-        return NULL;
-    do {
-        char **suggestions = NULL;
-        char buf[(int)(sizeof(unsigned int) * 5.545177444479562) + 1];
-        sprintf(buf, "%u", len_limit);
-        presage_config_set(spell->presage,
-                           "Presage.Selector.SUGGESTIONS", buf);
-        presage_predict(spell->presage, &suggestions);
-        if (!suggestions)
-            break;
-        res = SpellPresageResult(spell, suggestions);
-        presage_free_string_array(suggestions);
-    } while(0);
-    if (spell->past_stm) {
-        free(spell->past_stm);
-        spell->past_stm = NULL;
-    }
-    return res;
-}
-
-static boolean
-SpellPresageCheck(FcitxSpell *spell)
-{
-    if (spell->presage && spell->presage_support)
-        return true;
-    return false;
-}
-#endif
 
 #ifdef ENCHANT_FOUND
 static SpellHint*

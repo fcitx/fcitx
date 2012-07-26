@@ -3,6 +3,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 set(FCITX_SPELL_SOURCES
     spell.c
     spell-custom.c
+    spell-presage.c
     spellconfig.c
 )
 

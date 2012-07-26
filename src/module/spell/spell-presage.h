@@ -17,68 +17,19 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef _FCITX_MODULE_SPELL_INTERNAL_H
-#define _FCITX_MODULE_SPELL_INTERNAL_H
+#ifndef _FCITX_MODULE_SPELL_PRESAGE_H
+#define _FCITX_MODULE_SPELL_PRESAGE_H
 
-#include "config.h"
-#include <fcitx-config/fcitx-config.h>
-#ifdef ENCHANT_FOUND
-#include <enchant/enchant.h>
-#endif
-
-#ifdef PRESAGE_FOUND
-#include <presage.h>
-#endif
-
-#include "spell.h"
-
-typedef struct {
-    FcitxGenericConfig gconfig;
-#ifdef PRESAGE_FOUND
-#endif
-#ifdef ENCHANT_FOUND
-    EnchantProvider enchant_provider;
-#endif
-    char *provider_order;
-} FcitxSpellConfig;
-
-typedef struct {
-    char *word;
-    float dist;
-} SpellCustomCWord;
-
-typedef struct {
-    struct _FcitxInstance *owner;
-    FcitxSpellConfig config;
-    char *dictLang;
-    const char *before_str;
-    const char *current_str;
-    const char *after_str;
-    const char *provider_order;
-#ifdef ENCHANT_FOUND
-    EnchantBroker *broker;
-    EnchantProvider cur_enchant_provider;
-    char *enchant_saved_lang;
-    // UT_array* enchantLanguages;
-    EnchantDict *enchant_dict;
-#endif
-#ifdef PRESAGE_FOUND
-    presage_t presage;
-    boolean presage_support;
-    char *past_stm;
-#endif
-    char *custom_saved_lang;
-    char *custom_map;
-    char **custom_words;
-    int custom_words_count;
-} FcitxSpell;
+#include "spell-internal.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    CONFIG_BINDING_DECLARE(FcitxSpellConfig);
-    SpellHint *SpellHintList(int count, char **displays, char **commits);
-    int SpellCalListSize(char **list, int count);
+    boolean SpellPresageInit(FcitxSpell *spell);
+    SpellHint *SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit);
+    boolean SpellPresageCheck(FcitxSpell *spell);
+    void SpellPresageDestroy(FcitxSpell *spell);
+    boolean SpellPresageLoadDict(FcitxSpell *spell, const char *lang);
 #ifdef __cplusplus
 }
 #endif
