@@ -45,7 +45,7 @@
 
 #include "xkb.h"
 #include "keyboard.h"
-#if defined(ENABLE_ISOCODES)
+#if defined(ENABLE_LIBXML2)
 #include "isocodes.h"
 #endif
 #include "fcitx-compose-data.h"
@@ -343,7 +343,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     FcitxModuleFunctionArg args;
     FcitxXkbRules* rules = InvokeFunction(instance, FCITX_XKB, GETRULES, args);
     keyboard->rules = rules;
-    FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
+#if defined(ENABLE_LIBXML2)
+#endif
 
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
@@ -354,7 +355,9 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
 
+#if defined(ENABLE_LIBXML2)
     if (rules) {
+        FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
         FcitxXkbLayoutInfo* layoutInfo;
         for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rules->layoutInfos);
             layoutInfo != NULL;
@@ -402,8 +405,11 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                 free(description);
             }
         }
+        FcitxIsoCodesFree(isocodes);
     }
-    else {
+    else
+#endif
+    {
         char* description;
         asprintf(&description, _("Keyboard"));
 
@@ -411,7 +417,6 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         free(description);
     }
 
-    FcitxIsoCodesFree(isocodes);
     keyboard->lastLength = 10;
     keyboard->tempBuffer = fcitx_utils_malloc0(keyboard->lastLength);
 
