@@ -40,6 +40,7 @@
 static void* RemoteCreate(FcitxInstance* instance);
 static void RemoteProcessEvent(void* arg);
 static void RemoteSetFD(void* arg);
+static void RemoteDestroy(void* arg);
 static int CreateSocket(const char *name);
 
 FCITX_EXPORT_API
@@ -47,7 +48,7 @@ FcitxModule module = {
     RemoteCreate,
     RemoteSetFD,
     RemoteProcessEvent,
-    NULL,
+    RemoteDestroy,
     NULL
 };
 
@@ -94,6 +95,9 @@ int CreateSocket(const char *name)
     if (fd < 0) {
         return fd;
     }
+
+    int opt = 1;
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (void*) &opt, sizeof(opt));
 
     /* setup address struct */
     memset(&uds_addr, 0, sizeof(uds_addr));
@@ -184,6 +188,13 @@ void RemoteSetFD(void* arg)
     FD_SET(remote->socket_fd, FcitxInstanceGetReadFDSet(remote->owner));
     if (FcitxInstanceGetMaxFD(remote->owner) < remote->socket_fd)
         FcitxInstanceSetMaxFD(remote->owner, remote->socket_fd);
+}
+
+void RemoteDestroy(void* arg)
+{
+    FcitxRemote* remote = (FcitxRemote*) arg;
+    close(remote->socket_fd);
+    free(remote);
 }
 
 

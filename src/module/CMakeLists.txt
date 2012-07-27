@@ -1,7 +1,14 @@
 if (ENABLE_X11)
 add_subdirectory(x11)
-add_subdirectory(xkb)
 endif (ENABLE_X11)
+
+if (ENABLE_X11 AND ENABLE_LIBXML2)
+add_subdirectory(xkb)
+endif (ENABLE_X11 AND ENABLE_LIBXML2)
+
+if (_ENABLE_DBUS AND ENABLE_X11 AND ENABLE_LIBXML2)
+    add_subdirectory(xkbdbus)
+endif (_ENABLE_DBUS AND ENABLE_X11 AND ENABLE_LIBXML2)
 
 add_subdirectory(chttrans)
 add_subdirectory(punc)
@@ -17,9 +24,6 @@ endif (_ENABLE_CAIRO)
 
 if (_ENABLE_DBUS)
     add_subdirectory(dbus)
-    if (ENABLE_X11)
-        add_subdirectory(xkbdbus)
-    endif (ENABLE_X11)
 endif (_ENABLE_DBUS)
 
 if (ENABLE_LUA)
