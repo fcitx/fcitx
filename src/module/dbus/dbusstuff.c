@@ -115,6 +115,9 @@ void* DBusCreate(FcitxInstance* instance)
     boolean request_retry = false;
     char* servicename = NULL;
     asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+
+    int replaceCountdown = FcitxInstanceIsTryReplace(instance) ? 3 : 0;
+    FcitxInstanceResetTryReplace(instance);
     do {
         request_retry = false;
 
@@ -132,8 +135,8 @@ void* DBusCreate(FcitxInstance* instance)
         if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
             FcitxLog(WARNING, "DBus Service Already Exists");
 
-            if (FcitxInstanceIsTryReplace(instance)) {
-                FcitxInstanceResetTryReplace(instance);
+            if (replaceCountdown > 0) {
+                replaceCountdown --;
                 DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
                 /* synchronize call here */
                 DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 2000, &err);

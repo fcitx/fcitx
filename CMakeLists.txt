@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 
 project(fcitx)
 
-set(version 4.2.5)
+set(version 4.2.6)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
@@ -58,13 +58,13 @@ find_package(Pthread REQUIRED)
 find_package(Libexecinfo REQUIRED)
 find_package(Libkvm)
 find_package(DL REQUIRED)
-find_package(XkbFile REQUIRED)
 if (ENABLE_ENCHANT)
     find_package(Enchant)
 endif (ENABLE_ENCHANT)
 if (ENABLE_LIBXML2)
     find_package(LibXml2 REQUIRED)
     find_package(IsoCodes REQUIRED)
+    find_package(XkbFile REQUIRED)
 endif (ENABLE_LIBXML2)
 if (ENABLE_PRESAGE)
     find_package(Presage)
