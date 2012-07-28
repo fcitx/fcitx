@@ -48,6 +48,13 @@ typedef struct {
 } SpellCustomCWord;
 
 typedef struct {
+    char *saved_lang;
+    char *map;
+    char **words;
+    int words_count;
+} SpellCustom;
+
+typedef struct {
     struct _FcitxInstance *owner;
     FcitxSpellConfig config;
     char *dictLang;
@@ -67,10 +74,7 @@ typedef struct {
     boolean presage_support;
     char *past_stm;
 #endif
-    char *custom_saved_lang;
-    char *custom_map;
-    char **custom_words;
-    int custom_words_count;
+    SpellCustom custom;
 } FcitxSpell;
 
 #ifdef __cplusplus

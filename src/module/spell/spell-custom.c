@@ -67,6 +67,7 @@ SpellCustomMapDict(FcitxSpell *spell, const char *lang)
     int fd;
     struct stat stat_buf;
     off_t flen = 0;
+    SpellCustom *custom = &spell->custom;
     fd = SpellCustomGetDictFile(spell, lang);
 
     /* try to save whatever loaded. */
@@ -76,53 +77,53 @@ SpellCustomMapDict(FcitxSpell *spell, const char *lang)
         close(fd);
         goto try_save;
     }
-    if (spell->custom_map) {
-        free(spell->custom_map);
-        spell->custom_map = NULL;
+    if (custom->map) {
+        free(custom->map);
+        custom->map = NULL;
     }
-    if (spell->custom_saved_lang) {
-        free(spell->custom_saved_lang);
-        spell->custom_saved_lang = NULL;
+    if (custom->saved_lang) {
+        free(custom->saved_lang);
+        custom->saved_lang = NULL;
     }
     if (!stat_buf.st_size)
         return 0;
-    spell->custom_map = fcitx_utils_malloc0(stat_buf.st_size + 1);
-    if (!spell->custom_map) {
+    custom->map = fcitx_utils_malloc0(stat_buf.st_size + 1);
+    if (!custom->map) {
         close(fd);
         return 0;
     }
     do {
         int c;
-        c = read(fd, spell->custom_map, stat_buf.st_size - flen);
+        c = read(fd, custom->map, stat_buf.st_size - flen);
         if (c <= 0)
             break;
         flen += c;
     } while (flen < stat_buf.st_size);
     if (!flen) {
         close(fd);
-        free(spell->custom_map);
-        spell->custom_map = NULL;
+        free(custom->map);
+        custom->map = NULL;
         return 0;
     } else if (flen < stat_buf.st_size) {
-        spell->custom_map = realloc(spell->custom_map, flen + 1);
+        custom->map = realloc(custom->map, flen + 1);
         return flen;
     } else {
         return stat_buf.st_size;
     }
 
 try_save:
-    if (spell->custom_saved_lang)
+    if (custom->saved_lang)
         return 0;
-    if (!spell->custom_map)
+    if (!custom->map)
         return 0;
     /* Actually shouldn't reach.... */
-    if (!spell->custom_words || !spell->dictLang) {
-        free(spell->custom_map);
-        spell->custom_map = NULL;
+    if (!custom->words || !spell->dictLang) {
+        free(custom->map);
+        custom->map = NULL;
         return 0;
     }
     /* NOTE: dictLang is still the old language here */
-    spell->custom_saved_lang = strdup(spell->dictLang);
+    custom->saved_lang = strdup(spell->dictLang);
     return 0;
 }
 
@@ -137,65 +138,66 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
     int j;
     off_t map_len;
     int lcount;
+    SpellCustom *custom = &spell->custom;
     if (!lang || !lang[0])
         return false;
     /* Use the saved dictionary */
-    if (spell->custom_saved_lang &&
-        !strcmp(spell->custom_saved_lang, lang)) {
-        free(spell->custom_saved_lang);
-        spell->custom_saved_lang = NULL;
+    if (custom->saved_lang &&
+        !strcmp(custom->saved_lang, lang)) {
+        free(custom->saved_lang);
+        custom->saved_lang = NULL;
         return true;
     }
     map_len = SpellCustomMapDict(spell, lang);
     /* current state saved */
-    if (spell->custom_saved_lang)
+    if (custom->saved_lang)
         return false;
     /* fail */
-    if (!spell->custom_map)
+    if (!custom->map)
         goto free_all;
 
     /* count line */
     lcount = 0;
     for (i = 0;i < map_len;i++) {
-        int l = strlen(spell->custom_map + i);
+        int l = strlen(custom->map + i);
         if (!l)
             continue;
         lcount++;
         i += l;
     }
-    if (spell->custom_map[i])
+    if (custom->map[i])
         lcount++;
-    if (!spell->custom_words) {
-        spell->custom_words = malloc(lcount * sizeof(char*));
+    if (!custom->words) {
+        custom->words = malloc(lcount * sizeof(char*));
     } else {
-        spell->custom_words = realloc(spell->custom_words,
-                                      lcount * sizeof(char*));
+        custom->words = realloc(custom->words,
+                                lcount * sizeof(char*));
     }
     /* well, no likely though. */
-    if (!spell->custom_words)
+    if (!custom->words)
         goto free_all;
 
     /* save words pointers. */
     for (i = 0, j = 0;i < map_len && j < lcount;i++) {
-        int l = strlen(spell->custom_map + i);
+        int l = strlen(custom->map + i);
         if (!l)
             continue;
-        spell->custom_words[j++] = spell->custom_map + i;
+        custom->words[j++] = custom->map + i;
         i += l;
     }
-    spell->custom_words_count = j;
+    custom->words_count = j;
     return true;
 
 free_all:
-    if (spell->custom_map) {
-        free(spell->custom_map);
-        spell->custom_map = NULL;
+    if (custom->map) {
+        free(custom->map);
+        custom->map = NULL;
     }
-    if (spell->custom_words) {
-        free(spell->custom_words);
-        spell->custom_words = NULL;
+    if (custom->words) {
+        free(custom->words);
+        custom->words = NULL;
     }
-    spell->custom_words_count = 0;
+    custom->words_count = 0;
     return false;
 }
 
@@ -285,15 +287,16 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     SpellCustomCWord clist[len_limit];
     int i;
     int num = 0;
+    SpellCustom *custom = &spell->custom;
     if (!SpellCustomCheck(spell))
         return NULL;
-    for (i = 0;i < spell->custom_words_count;i++) {
+    for (i = 0;i < custom->words_count;i++) {
         if (SpellCustomGoodMatch(spell->current_str,
-                                 spell->custom_words[i])) {
-            clist[num].word = spell->custom_words[i];
+                                 custom->words[i])) {
+            clist[num].word = custom->words[i];
             // search around 3 chars
             clist[num].dist = SpellCustomDistance(spell->current_str,
-                                                  spell->custom_words[i],
+                                                  custom->words[i],
                                                   2, -1);
             if (++num >= len_limit)
                 break;
@@ -311,8 +314,9 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 boolean
 SpellCustomCheck(FcitxSpell *spell)
 {
-    if (spell->custom_map && spell->custom_words &&
-        !spell->custom_saved_lang)
+    SpellCustom *custom = &spell->custom;
+    if (custom->map && custom->words &&
+        !custom->saved_lang)
         return true;
     return false;
 }
@@ -320,10 +324,11 @@ SpellCustomCheck(FcitxSpell *spell)
 void
 SpellCustomDestroy(FcitxSpell *spell)
 {
-    if (spell->custom_map)
-        free(spell->custom_map);
-    if (spell->custom_words)
-        free(spell->custom_words);
-    if (spell->custom_saved_lang)
-        free(spell->custom_saved_lang);
+    SpellCustom *custom = &spell->custom;
+    if (custom->map)
+        free(custom->map);
+    if (custom->words)
+        free(custom->words);
+    if (custom->saved_lang)
+        free(custom->saved_lang);
 }

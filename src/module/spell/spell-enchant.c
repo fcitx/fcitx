@@ -116,8 +116,8 @@ SpellEnchantLoadDict(FcitxSpell *spell, const char *lang)
     return false;
 }
 
-static void
-SpellEnchanApplyConfig(FcitxSpell *spell)
+void
+SpellEnchantApplyConfig(FcitxSpell *spell)
 {
     if (!spell->broker) {
         spell->broker = enchant_broker_init();
