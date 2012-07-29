@@ -64,3 +64,7 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_CURRENT
 if (_ENABLE_DBUS AND ENABLE_XDGAUTOSTART)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-autostart.desktop DESTINATION /etc/xdg/autostart)
 endif (_ENABLE_DBUS AND ENABLE_XDGAUTOSTART)
+
+if (_ENABLE_DBUS)
+install(FILES daemon.conf DESTINATION share/fcitx/dbus/)
+endif (_ENABLE_DBUS)

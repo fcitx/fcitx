@@ -2,8 +2,10 @@ _pkgconfig_invoke("glib-2.0" GLIB2 GLIB_GENMARSHAL "" "--variable=glib_genmarsha
 FIND_PROGRAM(GLIB_GENMARSHAL ${GLIB2_GLIB_GENMARSHAL})
 
 include_directories(${GIO2_INCLUDE_DIRS})
+include_directories(${DBUS_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 link_directories(${GIO2_LIBRARY_DIRS})
+link_directories(${DBUS_LIBRARY_DIRS})
 
 add_custom_command(OUTPUT marshall.c
                    COMMAND ${GLIB_GENMARSHAL} --body --prefix=fcitx_marshall ${PROJECT_SOURCE_DIR}/src/frontend/gtk-common/marshall.list > marshall.c
@@ -41,7 +43,7 @@ set_target_properties(fcitx-gclient
                       COMPILE_FLAGS "-fvisibility=hidden"
                       LINK_FLAGS "-Wl,--no-undefined"
 )
-target_link_libraries(fcitx-gclient ${GIO2_LIBRARIES} fcitx-utils)
+target_link_libraries(fcitx-gclient ${GIO2_LIBRARIES} ${DBUS_LIBRARIES} fcitx-utils)
 
 configure_file(fcitx-gclient.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc)
 
