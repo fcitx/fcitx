@@ -154,6 +154,7 @@ typedef struct _TableDict {
 boolean LoadTableDict(TableMetaData* tableMetaData);
 void SaveTableDict(TableMetaData* tableMetaData);
 void FreeTableDict(TableMetaData* tableMetaData);
+void UpdateTableMetaData(TableMetaData* tableMetaData);
 
 void TableInsertPhrase(TableDict* tableDict, const char *strCode, const char *strHZ);
 RECORD *TableFindPhrase(const TableDict* tableDict, const char *strHZ);
