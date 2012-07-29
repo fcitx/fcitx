@@ -281,8 +281,8 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     FcitxCandidateWordSetChooseAndModifier(candList, table->strChoose, cmodtable[table->chooseModifier]);
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
 
-    tbl->iTableIMIndex = utarray_eltidx(tbl->table, table);
-    if (tbl->iTableIMIndex != tbl->iCurrentTableLoaded) {
+    int iTableIMIndex = utarray_eltidx(tbl->table, table);
+    if (iTableIMIndex != tbl->iCurrentTableLoaded) {
         TableMetaData* previousTable = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iCurrentTableLoaded);
         if (previousTable)
             FreeTableDict(previousTable);
@@ -291,7 +291,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
     if (tbl->iCurrentTableLoaded == -1) {
         LoadTableDict(table);
-        tbl->iCurrentTableLoaded = tbl->iTableIMIndex;
+        tbl->iCurrentTableLoaded = iTableIMIndex;
     }
 
     if (FcitxHotkeyIsHotKeyModifierCombine(sym, state))
@@ -1368,6 +1368,11 @@ void ReloadTableConfig(void* arg)
     if (cfile) {
         TableMetaDataConfigBind(table, cfile, GetTableConfigDesc());
         FcitxConfigBindSync((FcitxGenericConfig*)table);
+
+        int iTableIMIndex = utarray_eltidx(table->owner->table, table);
+        if (iTableIMIndex == table->owner->iCurrentTableLoaded) {
+            UpdateTableMetaData(table);
+        }
     }
     for (i = 0; i < len ; i ++) {
         free(paths[i]);

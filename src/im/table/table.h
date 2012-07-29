@@ -59,7 +59,6 @@ typedef struct _FcitxTableState {
 
     TableConfig config;
 
-    char            iTableIMIndex;
     char            iTableCount;
 
     char            iCurrentTableLoaded;

@@ -13,6 +13,17 @@
 #define TABLE_TEMP_FILE "table_XXXXXX"
 const int iInternalVersion = INTERNAL_VERSION;
 
+void UpdateTableMetaData(TableMetaData* tableMetaData)
+{
+    if (!tableMetaData->tableDict)
+        return;
+    TableDict* tableDict = tableMetaData->tableDict;
+    if (tableMetaData->iTableAutoSendToClient == -1)
+        tableMetaData->iTableAutoSendToClient = tableDict->iCodeLength;
+    if (tableMetaData->iTableAutoSendToClientWhenNone == -1)
+        tableMetaData->iTableAutoSendToClientWhenNone = tableDict->iCodeLength;
+}
+
 boolean LoadTableDict(TableMetaData* tableMetaData)
 {
     char            strCode[MAX_CODE_LENGTH + 1];
@@ -59,10 +70,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     /* ********************************************************************** */
 
     fread(&(tableDict->iCodeLength), sizeof(unsigned char), 1, fpDict);
-    if (tableMetaData->iTableAutoSendToClient == -1)
-        tableMetaData->iTableAutoSendToClient = tableDict->iCodeLength;
-    if (tableMetaData->iTableAutoSendToClientWhenNone == -1)
-        tableMetaData->iTableAutoSendToClientWhenNone = tableDict->iCodeLength;
+    UpdateTableMetaData(tableMetaData);
 
     if (!iVersion)
         fread(&(tableDict->iPYCodeLength), sizeof(unsigned char), 1, fpDict);
