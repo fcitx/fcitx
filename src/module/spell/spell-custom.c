@@ -208,103 +208,81 @@ SpellCustomInit(FcitxSpell *spell)
     return true;
 }
 
-#define SHORT_WORD_LEN 6
-
-/**
- * (from fcitx-en)
- **/
-static float
-SpellCustomDistance(const char *s1, const char *s2,
-                    const int max_offset, int len2)
+static int
+SpellCustomGetDistance(const char *word, const char *dict)
 {
-    int len1 = strlen(s1);
-    if (len2 < 0)
-        len2 = strlen(s2);
-    if (!len1)
-        return len2;
-    if (!len2)
-        return len1;
-    int c = 0;
-    int offset1 = 0;
-    int offset2 = 0;
-    int lcs = 0;
-    while ((c + offset1 < len1) && (c + offset2 < len2)) {
-        if (s1[c + offset1] == s2[c + offset2]) {
-            lcs++;
-        } else {
-            offset1 = 0;
-            offset2 = 0;
-            int i;
-            for (i = 0;i < max_offset;i++) {
-                if ((c + i < len1)
-                    && (s1[c + i] == s2[c])) {
-                    offset1 = i;
-                    break;
-                }
-                if ((c + i < len2)
-                    && (s1[c] == s2[c + i])) {
-                    offset2 = i;
-                    break;
-                }
+    int word_len;
+    int distance = 0;
+    int maxdiff;
+    word_len = strlen(word);
+    maxdiff = word_len / 4;
+    while (distance <= maxdiff) {
+        if (!word[0])
+            return distance * 2 + strlen(dict);
+        if (!dict[0]) {
+            if (word[1]) {
+                return -1;
+            } else {
+                return (distance + 1) * 2;
             }
         }
-        c++;
+        if (word[0] == dict[0]) {
+            word++;
+            dict++;
+            continue;
+        }
+        if (word[1] == dict[1]) {
+            word += 2;
+            dict += 2;
+            distance++;
+            continue;
+        }
+        if (word[1] == dict[0]) {
+            word += 2;
+            dict++;
+            distance++;
+            continue;
+        }
+        if (word[0] == dict[1]) {
+            word++;
+            dict += 2;
+            distance++;
+            continue;
+        }
+        break;
     }
-    float avg = (len1 + len2) / 2.;
-    return (avg - lcs) / avg;
+    return -1;
 }
 
-/**
- * (from fcitx-en)
- **/
 static int
 SpellCustomCWordCompare(const void *a, const void *b)
 {
     return (int)(((SpellCustomCWord*)a)->dist - ((SpellCustomCWord*)b)->dist);
 }
 
-/**
- * (from fcitx-en)
- **/
-static boolean
-SpellCustomGoodMatch(const char *current, const char *dict_word)
-{
-    int buf_len = strlen(current);
-    if (buf_len <= SHORT_WORD_LEN) {
-        return strncasecmp(current, dict_word, buf_len) == 0;
-    } else {
-        int dict_len = strlen(dict_word);
-        if (dict_len < buf_len - 2 || dict_len > buf_len + 2)
-            return false;
-        /* search around 3 chars */
-        return SpellCustomDistance(current, dict_word, 2, buf_len) < 0.33;
-    }
-}
-
 SpellHint*
 SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    SpellCustomCWord clist[len_limit];
+    int list_len = len_limit * 2;
+    SpellCustomCWord clist[list_len];
     int i;
     int num = 0;
     SpellCustom *custom = &spell->custom;
     if (!SpellCustomCheck(spell))
         return NULL;
     for (i = 0;i < custom->words_count;i++) {
-        if (SpellCustomGoodMatch(spell->current_str,
-                                 custom->words[i])) {
+        int dist;
+        if ((dist = SpellCustomGetDistance(spell->current_str,
+                                           custom->words[i])) >= 0) {
             clist[num].word = custom->words[i];
-            // search around 3 chars
-            clist[num].dist = SpellCustomDistance(spell->current_str,
-                                                  custom->words[i],
-                                                  2, -1);
-            if (++num >= len_limit)
+            clist[num].dist = dist;
+            if (++num >= list_len)
                 break;
         }
     }
-    if (strlen(spell->current_str) > SHORT_WORD_LEN)
-        qsort((void*)clist, num, sizeof(SpellCustomCWord),
-              SpellCustomCWordCompare);
+    qsort((void*)clist, num, sizeof(SpellCustomCWord),
+          SpellCustomCWordCompare);
+    num = num > len_limit ? len_limit : num;
     return SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
                                  NULL, 0);
 }

@@ -44,7 +44,7 @@ typedef struct {
 
 typedef struct {
     char *word;
-    float dist;
+    int dist;
 } SpellCustomCWord;
 
 typedef struct {
