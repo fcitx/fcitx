@@ -101,15 +101,17 @@ UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const cha
 uint32_t FromLittleEndian32(const char* d)
 {
     const uint8_t* data = (const uint8_t*) d;
-    uint32_t* t = (uint32_t*) (data);
-    return le32toh(*t);
+    uint32_t t;
+    memcpy(&t, data, sizeof(t));
+    return le32toh(t);
 }
 
 uint16_t FromLittleEndian16(const char* d)
 {
     const uint8_t* data = (const uint8_t*) d;
-    uint16_t* t = (uint16_t*) (data);
-    return le16toh(*t);
+    uint16_t t;
+    memcpy(&t, data, sizeof(t));
+    return le16toh(t);
 }
 
 CharSelectData* CharSelectDataCreate()
