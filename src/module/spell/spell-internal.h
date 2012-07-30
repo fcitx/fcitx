@@ -81,8 +81,20 @@ typedef struct {
 extern "C" {
 #endif
     CONFIG_BINDING_DECLARE(FcitxSpellConfig);
-    SpellHint *SpellHintList(int count, char **displays, char **commits);
-    int SpellCalListSize(char **list, int count);
+    SpellHint *SpellHintListWithSize(int count, char **displays, int sized,
+                                     char **commits, int sizec);
+    static inline SpellHint*
+    SpellHintList(int count, char **displays, char **commits)
+    {
+        return SpellHintListWithSize(count, displays, sizeof(char*),
+                                     commits, sizeof(char*));
+    }
+    int SpellCalListSizeWithSize(char **list, int count, int size);
+    static inline int
+    SpellCalListSize(char **list, int count)
+    {
+        return SpellCalListSizeWithSize(list, count, sizeof(char*));
+    }
 #ifdef __cplusplus
 }
 #endif

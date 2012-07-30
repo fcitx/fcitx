@@ -305,10 +305,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     if (strlen(spell->current_str) > SHORT_WORD_LEN)
         qsort((void*)clist, num, sizeof(SpellCustomCWord),
               SpellCustomCWordCompare);
-    char *res_buff[num];
-    for (i = 0;i < num;i++)
-        res_buff[i] = clist[i].word;
-    return SpellHintList(num, res_buff, NULL);
+    return SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
+                                 NULL, 0);
 }
 
 boolean

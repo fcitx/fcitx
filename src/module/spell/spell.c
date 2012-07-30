@@ -189,46 +189,49 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
     spell->dictLang = strdup(lang);
 }
 
+#define GET_NTH(p, size, i) (*((typeof(p))(((void*)p) + size * i)))
+
 int
-SpellCalListSize(char **list, int count)
+SpellCalListSizeWithSize(char **list, int count, int size)
 {
     int i;
     if (!list)
         return 0;
     if (count >= 0)
         return count;
-    for (i = 0;list[i];i++) {
+    for (i = 0;GET_NTH(list, size, i);i++) {
     }
     return i;
 }
 
 SpellHint*
-SpellHintList(int count, char **displays, char **commits)
+SpellHintListWithSize(int count, char **displays, int sized,
+                      char **commits, int sizec)
 {
     SpellHint *res;
     void *p;
     int i;
-    count = SpellCalListSize(displays, count);
+    count = SpellCalListSizeWithSize(displays, count, sized);
     if (!count)
         return NULL;
     int lens[count][2];
     int total_l = 0;
     for (i = 0;i < count;i++) {
-        total_l += lens[i][0] = strlen(displays[i]) + 1;
-        total_l += lens[i][1] = ((commits && commits[i]) ?
-                                 (strlen(commits[i]) + 1) : 0);
+        total_l += lens[i][0] = strlen(GET_NTH(displays, i, sized)) + 1;
+        total_l += lens[i][1] = ((commits && GET_NTH(commits, i, sizec)) ?
+                                 (strlen(GET_NTH(commits, i, sizec)) + 1) : 0);
     }
     res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * (count + 1));
     p = res + count + 1;
     for (i = 0;i < count;i++) {
-        memcpy(p, displays[i], lens[i][0]);
+        memcpy(p, GET_NTH(displays, i, sized), lens[i][0]);
         res[i].display = p;
         p += lens[i][0];
         if (!lens[i][1]) {
             res[i].commit = res[i].display;
             continue;
         }
-        memcpy(p, commits[i], lens[i][1]);
+        memcpy(p, GET_NTH(commits, i, sizec), lens[i][1]);
         res[i].commit = p;
         p += lens[i][1];
     }
