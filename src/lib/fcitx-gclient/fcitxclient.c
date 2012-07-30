@@ -482,6 +482,8 @@ _fcitx_client_connection_closed(GDBusConnection *connection,
 {
     FcitxClient* self = (FcitxClient*) user_data;
     _fcitx_client_clean_up(self);
+
+    _fcitx_client_create_ic(self);
 }
 
 static void
