@@ -524,6 +524,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
+            g_object_ref(fcitxcontext);
             fcitx_client_process_key_async(fcitxcontext->client,
                                            event->keyval,
                                            event->hardware_keycode,
