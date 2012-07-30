@@ -415,21 +415,27 @@ fcitx_im_context_finalize(GObject *obj)
 
     fcitx_im_context_set_client_window(GTK_IM_CONTEXT(context), NULL);
 
-    g_object_unref(context->client);
-    context->client = NULL;
+    if (context->client) {
+        g_signal_handlers_disconnect_by_data(context->client, context);
+        g_object_unref(context->client);
+        context->client = NULL;
+    }
 
     if (context->slave) {
+        g_signal_handlers_disconnect_by_data(context->slave, context);
         g_object_unref(context->slave);
         context->slave = NULL;
     }
 
-    if (context->preedit_string)
+    if (context->preedit_string) {
         g_free(context->preedit_string);
-    context->preedit_string = NULL;
+        context->preedit_string = NULL;
+    }
 
-    if (context->attrlist)
+    if (context->attrlist) {
         pango_attr_list_unref(context->attrlist);
-    context->attrlist = NULL;
+        context->attrlist = NULL;
+    }
 
     G_OBJECT_CLASS(parent_class)->finalize (obj);
 }
@@ -544,6 +550,7 @@ _fcitx_im_context_process_key_cb (GObject *source_object,
                                   gpointer user_data)
 {
     ProcessKeyStruct* pks = user_data;
+    FcitxIMContext* context = pks->context;
     GdkEventKey* event = pks->event;
     int ret = fcitx_client_process_key_finish(FCITX_CLIENT(source_object), res);
     if (ret <= 0) {
@@ -552,6 +559,7 @@ _fcitx_im_context_process_key_cb (GObject *source_object,
     }
     gdk_event_free((GdkEvent *)event);
     g_free(pks);
+    g_object_unref(context);
 }
 
 static void
@@ -1389,7 +1397,7 @@ _key_snooper_cb (GtkWidget   *widget,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
-
+            g_object_ref(fcitxcontext);
             fcitx_client_process_key_async(fcitxcontext->client,
                                            event->keyval,
                                            event->hardware_keycode,
