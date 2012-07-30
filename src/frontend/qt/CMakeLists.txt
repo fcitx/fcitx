@@ -82,12 +82,6 @@ FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
     org.fcitx.Fcitx.InputMethod
 )
 
-FCITX_QT4_ADD_DBUS_INTERFACE(qtim_fcitx_SRCS
-    org.freedesktop.DBus.xml
-    org.freedesktop.DBus
-)
-
-
 set(
     qtim_fcitx_MOC_HDRS
     fcitx-input-context.h

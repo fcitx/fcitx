@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2010~2010 by CSSlayer                                   *
+ *   Copyright (C) 2012~2012 by CSSlayer                                   *
  *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,26 +18,61 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _FCITX_DBUS_H
-#define _FCITX_DBUS_H
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <signal.h>
+#include "dbuslauncher.h"
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef DBUS_LAUNCH
+#define DBUS_LAUNCH "dbus-launch"
 #endif
 
-#include <fcitx-config/fcitx-config.h>
+#define BUFSIZE 1024
 
-#define FCITX_DBUS_NAME "fcitx-dbus"
-#define FCITX_DBUS_GETCONNECTION 0
-#define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
-#define FCITX_DBUS_GETPRIVCONNECTION 1
-#define FCITX_DBUS_GETPRIVCONNECTION_RETURNTYPE DBusConnection*
+DBusDaemonProperty DBusLaunch(const char* configFile)
+{
+    char* command = NULL;
+    asprintf(&command, "%s --binary-syntax %s%s", 
+            DBUS_LAUNCH, 
+            (configFile ? "--config-file=" : ""),
+            (configFile ? configFile : ""));
 
-#define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
+    DBusDaemonProperty result = {0, NULL};
+    FILE* fp = popen(command, "r");
 
-#ifdef __cplusplus
+    do {
+        if (!fp)
+            break;
+
+        char buffer[BUFSIZE];
+        size_t sz = fread(buffer, sizeof(char), BUFSIZE, fp);
+        if (sz == 0)
+            break;
+        char* p = buffer;
+        while(*p)
+            p++;
+        size_t addrlen = p - buffer;
+        if (sz != addrlen + sizeof(pid_t) + sizeof(long) + 1)
+            break;
+
+        /* skip \0 */
+        p++;
+        pid_t *pid = (pid_t*) p;
+        result.pid = *pid;
+        result.address = strdup(buffer);
+    } while(0);
+
+    if (fp)
+        pclose(fp);
+
+    return result;
 }
-#endif
 
-#endif // _FCITX_DBUS_H
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+int DBusKill(DBusDaemonProperty* prop)
+{
+    if (prop->pid)
+        return kill(prop->pid, SIGTERM);
+    else
+        return 0;
+}
