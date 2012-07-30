@@ -448,8 +448,6 @@ fcitx_client_init(FcitxClient *self)
 static void
 _fcitx_client_create_ic(FcitxClient *self)
 {
-    g_warning("create_ic %p", self);
-
     _fcitx_client_clean_up(self);
     self->priv->cancellable = g_cancellable_new ();
 
@@ -566,7 +564,7 @@ _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object,
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
-    GError* error;
+    GError* error = NULL;
     GDBusConnection* connection = g_dbus_connection_new_for_address_finish(res, &error);
     if (error) {
         // g_warning ("Connect to daemon failed: %s.", error->message);
