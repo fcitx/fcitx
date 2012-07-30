@@ -234,15 +234,11 @@ QFcitxInputContext::QFcitxInputContext()
 
 QFcitxInputContext::~QFcitxInputContext()
 {
-    if (m_improxy)
-        delete m_improxy;
-    if (m_icproxy) {
-        if (m_icproxy->isValid()) {
-            m_icproxy->DestroyIC();
-        }
-
-        delete m_icproxy;
+    if (m_icproxy && m_icproxy->isValid()) {
+        m_icproxy->DestroyIC();
     }
+
+    cleanUp();
 }
 
 void QFcitxInputContext::socketFileChanged()
