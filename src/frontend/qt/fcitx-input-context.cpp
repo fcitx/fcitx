@@ -227,6 +227,7 @@ QFcitxInputContext::QFcitxInputContext()
     }
 
     connect(&m_watcher, SIGNAL(fileChanged(QString)), this, SLOT(socketFileChanged()));
+    connect(&m_watcher, SIGNAL(directoryChanged(QString)), this, SLOT(socketFileChanged()));
 
     createConnection();
 }
