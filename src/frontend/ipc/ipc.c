@@ -473,10 +473,14 @@ void IPCDestroyIC(void* arg, FcitxInputContext* context)
     FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
     FcitxIPCIC* ipcic = GetIPCIC(context);
 
-    if (ipc->_conn)
-        dbus_connection_unregister_object_path(ipc->_conn, GetIPCIC(context)->path);
-    if (ipc->_privconn)
-        dbus_connection_unregister_object_path(ipc->_privconn, GetIPCIC(context)->path);
+    if (!ipcic->isPriv) {
+        if (ipc->_conn)
+            dbus_connection_unregister_object_path(ipc->_conn, GetIPCIC(context)->path);
+    }
+    else {
+        if (ipc->_privconn)
+            dbus_connection_unregister_object_path(ipc->_privconn, GetIPCIC(context)->path);
+    }
     if (ipcic->appname)
         free(ipcic->appname);
     if (ipcic->surroundingText)
