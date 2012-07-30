@@ -27,7 +27,6 @@
 #include <QDBusConnection>
 #include <QDir>
 #include <QApplication>
-#include "org.freedesktop.DBus.h"
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
 #include "fcitx-config/hotkey.h"
@@ -84,7 +83,12 @@ public:
     virtual bool filterEvent(const QEvent* event);
     virtual void mouseHandler(int x, QMouseEvent* event);
 
+Q_SIGNALS:
+    void dbusDisconnected();
+
 private Q_SLOTS:
+    void socketFileChanged();
+    void dbusDisconnect();
     void imChanged(const QString& service, const QString& oldowner, const QString& newowner);
     void commitString(const QString& str);
     void updateFormattedPreedit(const FcitxFormattedPreeditList& preeditList, int cursorPos);
@@ -96,6 +100,10 @@ private Q_SLOTS:
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
 #endif
 private:
+    static QString socketFile();
+    static QString address();
+    void cleanUp();
+    void createConnection();
     void createInputContext();
     bool processCompose(uint keyval, uint state, FcitxKeyEventType event);
     bool checkAlgorithmically();
@@ -128,8 +136,9 @@ private:
     void updateCapacity();
     void commitPreedit();
 
-    QDBusConnection m_connection;
-    org::freedesktop::DBus* m_dbusproxy;
+    QFileSystemWatcher m_watcher;
+    QDBusServiceWatcher m_serviceWatcher;
+    QDBusConnection* m_connection;
     org::fcitx::Fcitx::InputMethod* m_improxy;
     org::fcitx::Fcitx::InputContext* m_icproxy;
     QFlags<FcitxCapacityFlags> m_capacity;

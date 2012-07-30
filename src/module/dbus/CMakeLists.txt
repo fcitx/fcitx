@@ -4,7 +4,8 @@ include_directories(${DBUS_INCLUDE_DIRS})
 link_directories(${DBUS_LIBRARY_DIRS})
 
 set(FCITX_DBUS_SOURCES
-	dbusstuff.c
+    dbusstuff.c
+    dbuslauncher.c
 )
 
 fcitx_add_addon(fcitx-dbus ${FCITX_DBUS_SOURCES})

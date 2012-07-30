@@ -2,6 +2,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${PROJECT_SOURCE_DIR}/src/im/pinyin)
 include_directories(${PROJECT_SOURCE_DIR}/src/module/unicode)
+include_directories(${PROJECT_SOURCE_DIR}/src/module/dbus)
 
 add_executable(testbacktrace testbacktrace.c)
 target_link_libraries(testbacktrace fcitx-utils)
@@ -34,7 +35,12 @@ add_executable(testpinyin
     ../src/im/pinyin/sp.c
     testpinyin.c
 )
+
 target_link_libraries(testpinyin fcitx-config)
+
+add_executable(testdbuslaunch testdbuslaunch.c
+               ../src/module/dbus/dbuslauncher.c
+               )
 
 add_test(NAME testconfig
          COMMAND testconfig ${CMAKE_CURRENT_SOURCE_DIR}/test.desc ${CMAKE_CURRENT_SOURCE_DIR}/test.conf ${CMAKE_CURRENT_BINARY_DIR}/test.conf)
@@ -62,3 +68,6 @@ add_test(NAME testxdg
 
 add_test(NAME testunicode
          COMMAND testunicode ${PROJECT_SOURCE_DIR}/src/module/unicode/charselectdata)
+
+add_test(NAME testdbuslaunch
+         COMMAND testdbuslaunch)

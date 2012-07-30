@@ -61,7 +61,7 @@ test_client (void)
 {
     FcitxClient* client = fcitx_client_new();
     g_signal_connect(client, "connected", G_CALLBACK(_connect_cb), NULL);
-    run_loop_with_timeout (1000);
+    run_loop_with_timeout (10000);
 }
 
 int main(int argc, char* argv[])

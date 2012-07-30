@@ -18,26 +18,18 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _FCITX_DBUS_H
-#define _FCITX_DBUS_H
+#ifndef FCITX_DBUS_LAUNCHER_H
+#define FCITX_DBUS_LAUNCHER_H
 
-#ifdef __cplusplus
-extern "C" {
+#include <unistd.h>
+
+typedef struct _DBusDaemonProperty
+{
+    pid_t pid;
+    char* address;
+} DBusDaemonProperty;
+
+DBusDaemonProperty DBusLaunch(const char* configFile);
+int DBusKill(DBusDaemonProperty* prop);
+
 #endif
-
-#include <fcitx-config/fcitx-config.h>
-
-#define FCITX_DBUS_NAME "fcitx-dbus"
-#define FCITX_DBUS_GETCONNECTION 0
-#define FCITX_DBUS_GETCONNECTION_RETURNTYPE DBusConnection*
-#define FCITX_DBUS_GETPRIVCONNECTION 1
-#define FCITX_DBUS_GETPRIVCONNECTION_RETURNTYPE DBusConnection*
-
-#define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // _FCITX_DBUS_H
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

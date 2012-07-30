@@ -108,6 +108,11 @@ void OnException(int signo)
 
     default:
         {
+            if (!instance->initialized) {
+                exit(1);
+                break;
+            }
+
             uint8_t sig = 0;
             if (signo < 0xff)
                 sig = (uint8_t)(signo & 0xff);
