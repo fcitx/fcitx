@@ -249,7 +249,8 @@ void QFcitxInputContext::socketFileChanged()
 {
     QFileInfo info(socketFile());
     if (info.exists()) {
-        m_watcher.addPath(info.filePath());
+        if (m_watcher.files().indexOf(info.filePath()) == -1)
+            m_watcher.addPath(info.filePath());
     }
 
     QString addr = address();
@@ -313,6 +314,7 @@ void QFcitxInputContext::dbusDisconnect()
 {
     cleanUp();
     emit dbusDisconnected();
+    createConnection();
 }
 
 QString QFcitxInputContext::identifierName()
@@ -418,7 +420,6 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
                                        key_event->nativeModifiers(),
                                        (event->type() == QEvent::KeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY,
                                        time);
-
     {
         QEventLoop loop;
         QDBusPendingCallWatcher watcher(result);
@@ -633,8 +634,10 @@ void QFcitxInputContext::imChanged(const QString& service, const QString& oldown
             cleanUp();
 
         /* new rise */
-        if (newowner.length() > 0)
+        if (newowner.length() > 0) {
+            cleanUp();
             createConnection();
+        }
     }
 }
 
