@@ -448,8 +448,6 @@ fcitx_client_init(FcitxClient *self)
 static void
 _fcitx_client_create_ic(FcitxClient *self)
 {
-    g_warning("create_ic %p", self);
-
     _fcitx_client_clean_up(self);
     self->priv->cancellable = g_cancellable_new ();
 
