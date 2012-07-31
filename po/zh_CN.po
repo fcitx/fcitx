@@ -2128,6 +2128,10 @@ msgstr "当前字体为: %s"
 #~ msgstr "请检查你的环境变量的设置"
 
 #, fuzzy
+#~ msgid "Private Name Error (%s)"
+#~ msgstr "名称错误 (%s)"
+
+#, fuzzy
 #~ msgid "Restart (%s)"
 #~ msgstr "重新启动"
 

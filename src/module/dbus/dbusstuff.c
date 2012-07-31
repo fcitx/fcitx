@@ -32,12 +32,7 @@
 #include "frontend/ipc/ipc.h"
 #include "dbusstuff.h"
 #include "dbuslauncher.h"
-
-
-typedef struct _FcitxDBusWatch {
-    DBusWatch *watch;
-    struct _FcitxDBusWatch *next;
-} FcitxDBusWatch;
+#include "dbussocket.h"
 
 typedef struct _FcitxDBus {
     DBusConnection *conn;
@@ -56,9 +51,6 @@ static void DBusProcessEvent(void* arg);
 static void DBusDestroy(void* arg);
 static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
 static void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args);
-static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data);
-static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data);
-static void DBusProcessEventForConnection(FcitxDBus* dbusmodule, DBusConnection* connection);
 
 FCITX_EXPORT_API
 FcitxModule module = {
@@ -71,6 +63,23 @@ FcitxModule module = {
 
 FCITX_EXPORT_API
 int ABI_VERSION = FCITX_ABI_VERSION;
+
+DBusHandlerResult DBusModuleFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
+{
+    FCITX_UNUSED(connection);
+
+#if 0
+    if (dbus_message_get_type(msg) == DBUS_MESSAGE_TYPE_METHOD_CALL ||
+        dbus_message_get_type(msg) == DBUS_MESSAGE_TYPE_SIGNAL)
+        FcitxLog(INFO, "%s %s %s", dbus_message_get_interface(msg), dbus_message_get_member(msg), dbus_message_get_path(msg));
+#endif
+    FcitxDBus* dbusmodule = (FcitxDBus*) user_data;
+    if (dbus_message_is_signal(msg, DBUS_INTERFACE_LOCAL, "Disconnected")) {
+        FcitxInstanceEnd(dbusmodule->owner);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+}
 
 void* DBusCreate(FcitxInstance* instance)
 {
@@ -116,9 +125,12 @@ void* DBusCreate(FcitxInstance* instance)
         if (NULL == conn) {
             break;
         }
+    
+        if (!dbus_connection_add_filter(conn, DBusModuleFilter, dbusmodule, NULL))
+            break;
 
-        if (!dbus_connection_set_watch_functions(conn, FcitxDBusAddWatch, FcitxDBusRemoveWatch,
-                NULL, dbusmodule, NULL)) {
+        if (!dbus_connection_set_watch_functions(conn, DBusAddWatch, DBusRemoveWatch,
+                NULL, &dbusmodule->watches, NULL)) {
             FcitxLog(WARNING, _("Add Watch Function Error"));
             dbus_error_free(&err);
             dbus_error_init(&err);
@@ -128,6 +140,7 @@ void* DBusCreate(FcitxInstance* instance)
         }
 
         /* from here we know dbus connection is successful, now we need to register the service */
+        dbus_connection_set_exit_on_disconnect(conn, FALSE);
         dbusmodule->conn = conn;
 
         boolean request_retry = false;
@@ -228,8 +241,11 @@ void* DBusCreate(FcitxInstance* instance)
             break;
         }
 
-        if (!dbus_connection_set_watch_functions(privconn, FcitxDBusAddWatch, FcitxDBusRemoveWatch,
-                NULL, dbusmodule, NULL)) {
+        if (!dbus_connection_add_filter(privconn, DBusModuleFilter, dbusmodule, NULL))
+            break;
+        
+        if (!dbus_connection_set_watch_functions(privconn, DBusAddWatch, DBusRemoveWatch,
+                NULL, &dbusmodule->watches, NULL)) {
             FcitxLog(WARNING, _("Add Watch Function Error"));
             break;
         }
@@ -252,6 +268,19 @@ void* DBusCreate(FcitxInstance* instance)
         fclose(fp);
 
         dbusmodule->privconn = privconn;
+
+        char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-dbus-watcher");
+        char* pidstring = NULL;
+        asprintf(&pidstring, "%d", dbusmodule->daemon.pid);
+        char* args[] = {
+            command,
+            dbusmodule->daemon.address,
+            pidstring,
+            NULL
+        };
+        fcitx_utils_start_process(args);
+        free(command);
+        free(pidstring);
 
     } while(0);
 
@@ -298,98 +327,29 @@ void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args)
     return dbusmodule->privconn;
 }
 
-static dbus_bool_t FcitxDBusAddWatch(DBusWatch *watch, void *data)
-{
-    FcitxDBusWatch *w;
-    FcitxDBus* dbusmodule = (FcitxDBus*) data;
-
-    for (w = dbusmodule->watches; w; w = w->next)
-        if (w->watch == watch)
-            return TRUE;
-
-    if (!(w = fcitx_utils_malloc0(sizeof(FcitxDBusWatch))))
-        return FALSE;
-
-    w->watch = watch;
-    w->next = dbusmodule->watches;
-    dbusmodule->watches = w;
-    return TRUE;
-}
-
-static void FcitxDBusRemoveWatch(DBusWatch *watch, void *data)
-{
-    FcitxDBusWatch **up, *w;
-    FcitxDBus* dbusmodule = (FcitxDBus*) data;
-
-    for (up = &(dbusmodule->watches), w = dbusmodule->watches; w; w = w->next) {
-        if (w->watch == watch) {
-            *up = w->next;
-            free(w);
-        } else
-            up = &(w->next);
-    }
-}
-
 void DBusSetFD(void* arg)
 {
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
-    FcitxDBusWatch *w;
     FcitxInstance* instance = dbusmodule->owner;
+    fd_set *rfds =  FcitxInstanceGetReadFDSet(instance);
+    fd_set *wfds =  FcitxInstanceGetWriteFDSet(instance);
+    fd_set *efds =  FcitxInstanceGetExceptFDSet(instance);
 
-    for (w = dbusmodule->watches; w; w = w->next)
-        if (dbus_watch_get_enabled(w->watch)) {
-            unsigned int flags = dbus_watch_get_flags(w->watch);
-            int fd = dbus_watch_get_unix_fd(w->watch);
-
-            if (FcitxInstanceGetMaxFD(instance) < fd)
-                FcitxInstanceSetMaxFD(instance, fd);
-
-            if (flags & DBUS_WATCH_READABLE)
-                FD_SET(fd, FcitxInstanceGetReadFDSet(instance));
-
-            if (flags & DBUS_WATCH_WRITABLE)
-                FD_SET(fd, FcitxInstanceGetWriteFDSet(instance));
-
-            FD_SET(fd, FcitxInstanceGetExceptFDSet(instance));
-        }
+    DBusUpdateFDSet(dbusmodule->watches, rfds, wfds, efds);
 }
 
 
 void DBusProcessEvent(void* arg)
 {
     FcitxDBus* dbusmodule = (FcitxDBus*) arg;
-    DBusProcessEventForConnection(dbusmodule, dbusmodule->conn);
-    DBusProcessEventForConnection(dbusmodule, dbusmodule->privconn);
-}
-
-void DBusProcessEventForConnection(FcitxDBus* dbusmodule, DBusConnection* connection)
-{
     FcitxInstance* instance = dbusmodule->owner;
-    FcitxDBusWatch *w;
+    fd_set *rfds =  FcitxInstanceGetReadFDSet(instance);
+    fd_set *wfds =  FcitxInstanceGetWriteFDSet(instance);
+    fd_set *efds =  FcitxInstanceGetExceptFDSet(instance);
 
-    for (w = dbusmodule->watches; w; w = w->next) {
-        if (dbus_watch_get_enabled(w->watch)) {
-            unsigned int flags = 0;
-            int fd = dbus_watch_get_unix_fd(w->watch);
-
-            if (FD_ISSET(fd, FcitxInstanceGetReadFDSet(instance)))
-                flags |= DBUS_WATCH_READABLE;
-
-            if (FD_ISSET(fd, FcitxInstanceGetWriteFDSet(instance)))
-                flags |= DBUS_WATCH_WRITABLE;
-
-            if (FD_ISSET(fd, FcitxInstanceGetExceptFDSet(instance)))
-                flags |= DBUS_WATCH_ERROR;
-
-            if (flags != 0)
-                dbus_watch_handle(w->watch, flags);
-        }
-    }
-
-    if (connection) {
-        dbus_connection_ref(connection);
-        while (dbus_connection_dispatch(connection) == DBUS_DISPATCH_DATA_REMAINS);
-        dbus_connection_unref(connection);
-    }
+    DBusProcessEventForWatches(dbusmodule->watches, rfds, wfds, efds);
+    DBusProcessEventForConnection(dbusmodule->conn);
+    DBusProcessEventForConnection(dbusmodule->privconn);
 }
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

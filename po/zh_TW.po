@@ -2050,3 +2050,7 @@ msgstr ""
 
 #~ msgid "FCITX -- Get Signal No.: %d"
 #~ msgstr "Fcitx 接收到信號：%d"
+
+#, fuzzy
+#~ msgid "Private Name Error (%s)"
+#~ msgstr "名稱錯誤（%s）"
