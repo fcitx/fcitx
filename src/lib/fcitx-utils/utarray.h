@@ -165,7 +165,7 @@ typedef struct {
                     _utarray_eltptr(a,j),                                             \
                     ((a)->i - (j))*((a)->icd->sz));                                   \
         }                                                                           \
-        if (a->icd->copy) {                                                         \
+        if ((a)->icd->copy) {                                           \
             size_t _ut_i;                                                             \
             for(_ut_i=0;_ut_i<(w)->i;_ut_i++) {                                       \
                 (a)->icd->copy(_utarray_eltptr(a,j+_ut_i), _utarray_eltptr(w,_ut_i));   \
