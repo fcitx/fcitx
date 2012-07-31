@@ -156,25 +156,28 @@ typedef struct {
         free(_temp);                                                                \
     } while(0)
 
-#define utarray_inserta(a,w,j) do {                                           \
-        if (utarray_len(w) == 0) break;                                             \
-        if (j > (a)->i) break;                                                      \
-        utarray_reserve(a,utarray_len(w));                                          \
-        if ((j) < (a)->i) {                                                         \
-            memmove(_utarray_eltptr(a,(j)+utarray_len(w)),                            \
-                    _utarray_eltptr(a,j),                                             \
-                    ((a)->i - (j))*((a)->icd->sz));                                   \
-        }                                                                           \
+#define utarray_inserta(a,w,j) do {                                     \
+        if (utarray_len(w) == 0)                                        \
+            break;                                                      \
+        if (j > (a)->i)                                                 \
+            break;                                                      \
+        utarray_reserve(a,utarray_len(w));                              \
+        if ((j) < (a)->i) {                                             \
+            memmove(_utarray_eltptr(a,(j)+utarray_len(w)),              \
+                    _utarray_eltptr(a,j),                               \
+                    ((a)->i - (j))*((a)->icd->sz));                     \
+        }                                                               \
         if ((a)->icd->copy) {                                           \
-            size_t _ut_i;                                                             \
-            for(_ut_i=0;_ut_i<(w)->i;_ut_i++) {                                       \
-                (a)->icd->copy(_utarray_eltptr(a,j+_ut_i), _utarray_eltptr(w,_ut_i));   \
-            }                                                                         \
-        } else {                                                                    \
-            memcpy(_utarray_eltptr(a,j), _utarray_eltptr(w,0),                        \
-                   utarray_len(w)*((a)->icd->sz));                                    \
-        }                                                                           \
-        (a)->i += utarray_len(w);                                                   \
+            size_t _ut_i;                                               \
+            for(_ut_i=0;_ut_i<(w)->i;_ut_i++) {                         \
+                (a)->icd->copy(_utarray_eltptr(a,j+_ut_i),              \
+                               _utarray_eltptr(w,_ut_i));               \
+            }                                                           \
+        } else {                                                        \
+            memcpy(_utarray_eltptr(a,j), _utarray_eltptr(w,0),          \
+                   utarray_len(w)*((a)->icd->sz));                      \
+        }                                                               \
+        (a)->i += utarray_len(w);                                       \
     } while(0)
 
 #define utarray_resize(dst,num) do {                                          \
