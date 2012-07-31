@@ -1,6 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env perl
 
-sed -i"$2" $1 -e 's/^[[:blank:]]*//' \
-    -e 's/[[:blank:]]*$//' \
-    -e '/^[[:blank:]]*$/d' \
-    -e ':a;N;$!ba;s/\n/\x0/g'
+use strict;
+
+$^I = ".bak";
+
+while (<>) {
+    s/\n/\0/g;
+    print;
+}
