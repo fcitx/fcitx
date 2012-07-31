@@ -348,7 +348,7 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
     int distance = 0;
     int maxdiff;
     word_len = strlen(word);
-    maxdiff = word_len / 4;
+    maxdiff = word_len / 3;
     while (distance <= maxdiff) {
         if (!word[0])
             return distance * 2 + strlen(dict);
