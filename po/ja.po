@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
+# mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-16 10:22+0800\n"
-"PO-Revision-Date: 2012-04-28 13:17+0000\n"
-"Last-Translator: csslayer <wengxt@gmail.com>\n"
-"Language-Team: Japanese (http://www.transifex.net/projects/p/fcitx/language/"
+"PO-Revision-Date: 2012-07-23 14:12+0000\n"
+"Last-Translator: mongrelP＠一応求職中 木村 <kimi.nicoco@gmail.com>\n"
+"Language-Team: Japanese (http://www.transifex.com/projects/p/fcitx/language/"
 "ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -124,7 +125,7 @@ msgstr ""
 
 # unknown
 msgid "Addon"
-msgstr ""
+msgstr "アドオン"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:108
 #, c-format
@@ -150,15 +151,16 @@ msgstr ""
 
 #: unknown
 msgid "All"
-msgstr ""
+msgstr "すべて"
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
 msgid "Allow to Override System XKB Settings"
 msgstr ""
 
 #: unknown
+#, fuzzy
 msgid "Alt"
-msgstr ""
+msgstr "すべて"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:166
 msgid "Alternative Next Page Key"
@@ -175,7 +177,7 @@ msgstr ""
 
 # unknown
 msgid "Appearance"
-msgstr ""
+msgstr "見た目"
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
 msgid "Apply this custom xmodmap script after layout change"
@@ -191,7 +193,7 @@ msgstr ""
 
 #: unknown
 msgid "Auto"
-msgstr ""
+msgstr "自動"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-autoeng.conf.in.h:2
 msgid "Auto Change to English Mode while Input Specific String"
@@ -234,7 +236,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:137
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:217
 msgid "Background Image"
-msgstr ""
+msgstr "背景"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/qxm.conf.in.h:1
 msgid "Bingchan"
@@ -312,11 +314,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:22
 msgid "Category"
-msgstr ""
+msgstr "カテゴリー"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:121
 msgid "Choose"
-msgstr ""
+msgstr "選択"
 
 #: /home/saber/Develop/fcitx/data/config.desc:97
 msgid "Choose Second and Third Candidate Word"
@@ -385,11 +387,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:157
 msgid "Color of Cursor"
-msgstr ""
+msgstr "カーソルの色"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:12
 msgid "Comment"
-msgstr ""
+msgstr "コメント"
 
 #: unknown
 msgid "Commit"
@@ -412,9 +414,8 @@ msgid "Commit with extra space when choose candidate word"
 msgstr ""
 
 #: unknown
-#, fuzzy
 msgid "ConfigFile"
-msgstr "設定"
+msgstr "設定ファイル"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:484
 msgid "Configure"
@@ -433,7 +434,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:86
 #, c-format
 msgid "Connection Error (%s)"
-msgstr ""
+msgstr "接続エラー(%s)"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-quickphrase.conf.in.h:2
 msgid "Conveniently Input English or User-Defined Simple Table"
@@ -455,7 +456,7 @@ msgstr ""
 
 #: unknown
 msgid "Copy"
-msgstr ""
+msgstr "コピー"
 
 #: unknown
 msgid "Ctrl"
@@ -463,16 +464,16 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/profile.desc:22
 msgid "Current Enabled Input Method List"
-msgstr ""
+msgstr "現在使えるIMのリスト"
 
 #: /home/saber/Develop/fcitx/data/profile.desc:17
 msgid "Current Input Method Name"
-msgstr ""
+msgstr "現在のIM"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
-#, c-format
+#, fuzzy, c-format
 msgid "Current local input method is %s"
-msgstr ""
+msgstr "現在使えるIMのリスト"
 
 #: unknown
 msgid "DBus"
@@ -512,7 +513,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:43
 msgid "Dependency"
-msgstr ""
+msgstr "依存関係"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:15
 msgid "Description of Skin"
@@ -591,7 +592,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:77
 msgid "English Mode Icon"
-msgstr ""
+msgstr "英語モードのアイコン"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:375
 msgid "Enum Option is invalid, take it as string"
@@ -618,7 +619,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:49
 msgid "Error: Load fontconfig failed"
-msgstr ""
+msgstr "エラー:fontconfigが読み込めません"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/fcitx-skin-installer.sh:78
 msgid "Error: skin failed to install"
@@ -720,7 +721,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:14
 msgid "Font"
-msgstr ""
+msgstr "フォント"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:24
 msgid "Font Locale to display"
@@ -749,13 +750,15 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:118
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:195
+#, fuzzy
 msgid "Full width Character"
-msgstr ""
+msgstr "全角文字を使用"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:141
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/punc/punc.c:485
+#, fuzzy
 msgid "Full width punct"
-msgstr ""
+msgstr "全角文字を使用"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:52
 msgid "Fullwidth"
@@ -827,12 +830,13 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:118
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:195
+#, fuzzy
 msgid "Half width Character"
-msgstr ""
+msgstr "全角文字を使用"
 
 #: unknown
 msgid "Hide"
-msgstr ""
+msgstr "隠す"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:59
 msgid "Hiragana"
@@ -840,7 +844,7 @@ msgstr ""
 
 # unknown
 msgid "Hotkey"
-msgstr ""
+msgstr "ホットキー"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:43
 msgid "Hotkey of Adding Frequent Word"
@@ -881,16 +885,18 @@ msgid "IconName"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:9
+#, fuzzy
 msgid "Ignore Input Method Layout Request"
-msgstr ""
+msgstr "現在のIM"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:191
 msgid "Ignore Punctuation"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:37
+#, fuzzy
 msgid "Inactivate Input Method"
-msgstr ""
+msgstr "現在のIM"
 
 #: unknown
 msgid "Inactive"
@@ -914,11 +920,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:19
 msgid "Input Font Size"
-msgstr ""
+msgstr "入力時のフォントの大きさ"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:37
 msgid "Input Message Color"
-msgstr ""
+msgstr "入力メッセージの色"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1389
 #: ../..//data/fcitx.desktop.in.h:2
@@ -981,10 +987,10 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
-# unknown
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:406
+#, fuzzy
 msgid "Keyboard"
-msgstr ""
+msgstr "仮想キーボード"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:372
 #, c-format
@@ -1018,11 +1024,11 @@ msgstr ""
 
 #: unknown
 msgid "L_CTRL"
-msgstr ""
+msgstr "左Control"
 
 #: unknown
 msgid "L_SHIFT"
-msgstr ""
+msgstr "左Shift"
 
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:19
 msgid "LangCode"
@@ -1095,7 +1101,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:73
 msgid "Logo Icon"
-msgstr ""
+msgstr "ロゴ"
 
 #: unknown
 msgid "MS"
@@ -1103,15 +1109,15 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:38
 msgid "Main Window Hide Mode"
-msgstr ""
+msgstr "メインウインドウを非表示"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:2
 msgid "Main Window Position X"
-msgstr ""
+msgstr "メインウインドウのX方向の位置"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:7
 msgid "Main Window Position Y"
-msgstr ""
+msgstr "メインウインドウのY方向の位置"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:73
 msgid "Matching Key"
@@ -1123,11 +1129,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:19
 msgid "Menu Font"
-msgstr ""
+msgstr "メニューのフォント"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:23
 msgid "Menu Font Size"
-msgstr ""
+msgstr "メニューのフォントの大きさ"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2321
 msgid "Migrate the old file path to the new one"
@@ -1152,7 +1158,7 @@ msgstr ""
 
 #: unknown
 msgid "Module"
-msgstr ""
+msgstr "モジュール"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/module.c:76
 msgid "Module: bad module"
@@ -1170,7 +1176,7 @@ msgstr ""
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:7
 #: /home/saber/Develop/fcitx/data/addon.desc:3
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/dbus/dbusstuff.c:126
 #, c-format
@@ -1179,7 +1185,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:7
 msgid "Name that can be display in UI"
-msgstr ""
+msgstr "表示名"
 
 #: unknown
 msgid "Native"
@@ -1187,7 +1193,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:92
 msgid "Next Page"
-msgstr ""
+msgstr "次のページ"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:173
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:181
@@ -1271,7 +1277,7 @@ msgstr ""
 
 # unknown
 msgid "Output"
-msgstr ""
+msgstr "出力"
 
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:23
 msgid "Parent"
@@ -1353,7 +1359,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:87
 msgid "Prev Page"
-msgstr ""
+msgstr "前のページ"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:169
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:177
@@ -1363,11 +1369,11 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:15
 msgid "Priority"
-msgstr ""
+msgstr "優先度"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:48
 msgid "Priority of addon"
-msgstr ""
+msgstr "アドオンの優先度"
 
 # unknown
 msgid "Profile"
@@ -1438,11 +1444,11 @@ msgstr ""
 
 #: unknown
 msgid "R_CTRL"
-msgstr ""
+msgstr "右Control"
 
 #: unknown
 msgid "R_SHIFT"
-msgstr ""
+msgstr "右Shift"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:58
 msgid "Register IM"
@@ -1466,7 +1472,7 @@ msgstr ""
 
 #: unknown
 msgid "Resize"
-msgstr ""
+msgstr "リサイズ"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:97
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:153
@@ -1519,7 +1525,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:38
 msgid "Save Auto Created Phrase"
-msgstr ""
+msgstr "自動生成されたフレーズを保存"
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:102
 msgid "Save Auto Phrase"
@@ -1534,8 +1540,9 @@ msgid "Saving All Config and Input History"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:52
+#, fuzzy
 msgid "Scroll between Input Method"
-msgstr ""
+msgstr "現在のIM"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:229
 msgid "Search unicode"
@@ -1632,24 +1639,24 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:11
 msgid "Skin Author"
-msgstr ""
+msgstr "スキンの作者"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:48
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:3
 msgid "Skin Name"
-msgstr ""
+msgstr "スキン名"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:7
 msgid "Skin Version"
-msgstr ""
+msgstr "スキンのバージョン"
 
 # unknown
 msgid "SkinFont"
-msgstr ""
+msgstr "スキンのフォント"
 
 # unknown
 msgid "SkinInfo"
-msgstr ""
+msgstr "スキンの情報"
 
 # unknown
 msgid "SkinInputBar"
@@ -1665,11 +1672,11 @@ msgstr ""
 
 # unknown
 msgid "SkinMenu"
-msgstr ""
+msgstr "スキンメニュー"
 
 # unknown
 msgid "SkinTrayIcon"
-msgstr ""
+msgstr "スキントレイアイコン"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:241
 msgid "Space Line Color"
@@ -1695,7 +1702,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/addon.desc:53
 msgid "Sub Configuration for Module"
-msgstr ""
+msgstr "モジュールの設定"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/fcitx-skin-installer.sh:81
 msgid "Successfully Installed skin"
@@ -1761,12 +1768,14 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:119
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:196
+#, fuzzy
 msgid "Toggle Half/Full width Character"
-msgstr ""
+msgstr "全角文字を使用"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:734
+#, fuzzy
 msgid "Toggle Input Method"
-msgstr ""
+msgstr "現在のIM"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:182
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
@@ -1779,8 +1788,9 @@ msgid "Toggle Simp/Trad Chinese Conversion"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:158
+#, fuzzy
 msgid "Toggle Virtual Keyboard"
-msgstr ""
+msgstr "仮想キーボード"
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:17
 msgid "Toggle for enable or disable"
@@ -1803,8 +1813,9 @@ msgid "TraditionalChinese"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:4
+#, fuzzy
 msgid "Trigger Input Method"
-msgstr ""
+msgstr "現在のIM"
 
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
@@ -1862,7 +1873,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/data/profile.desc:2
 msgid "Use Full Width Character"
-msgstr ""
+msgstr "全角文字を使用"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-keyboard.conf.in.h:2
 msgid "Use Keyboard Layout as Input Method"
@@ -1882,7 +1893,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:29
 msgid "Use System Tray Icon"
-msgstr ""
+msgstr "システムトレイアイコンを使う"
 
 #: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:23
 msgid "Use V to trigger quickphrase"
@@ -1935,7 +1946,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:179
 msgid "Virtual Keyboard"
-msgstr ""
+msgstr "仮想キーボード"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:261
 msgid "Virtual Keyboard Image"
@@ -1957,9 +1968,9 @@ msgstr ""
 msgid "WubiPinyin"
 msgstr ""
 
-# unknown
+#, fuzzy
 msgid "X Keyboard"
-msgstr ""
+msgstr "仮想キーボード"
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-xkb.conf.in.h:1
 msgid "X Keyboard Integration"
@@ -1984,7 +1995,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:140
 msgid "X11 not initialized"
-msgstr ""
+msgstr "X11が初期化されていません"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:164
 msgid "XMODIFIERS Error."
@@ -2021,7 +2032,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:106
 msgid "no valid font."
-msgstr ""
+msgstr "正しいフォントではありません"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
 msgid "pthread mutex init failed"
@@ -2034,7 +2045,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/cairostuff/font.c:90
 #, c-format
 msgid "your current font is: %s"
-msgstr ""
+msgstr "あなたの現在のフォントは %s です"
 
-#~ msgid "About Fcitx"
-#~ msgstr "Fcitxについて"
+#~ msgid "Close"
+#~ msgstr "閉じる"
+
+#~ msgid "Unable to create process"
+#~ msgstr "プロセスが生成できません"
