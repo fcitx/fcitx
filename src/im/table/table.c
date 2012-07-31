@@ -58,14 +58,16 @@ static void *TableCreate(FcitxInstance* instance);
 static int TableCandCmp(const void* a, const void* b, void* arg);
 static INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int state);
 
-FCITX_EXPORT_API
-FcitxIMClass ime = {
+FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
     TableCreate,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 static boolean LoadTableConfig(TableConfig* config);
 static void SaveTableConfig(TableConfig* config);

@@ -115,17 +115,13 @@ boolean            SwitchToEng(FcitxAutoEngState* autoEngState, char* str);
  **/
 void ShowAutoEngMessage(FcitxAutoEngState* autoEngState);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_autoeng, module ,FcitxModule) = {
     AutoEngCreate,
     NULL,
     NULL,
     FreeAutoEng,
     ReloadAutoEng
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* AutoEngCreate(FcitxInstance *instance)
 {

@@ -43,17 +43,13 @@ static void RemoteSetFD(void* arg);
 static void RemoteDestroy(void* arg);
 static int CreateSocket(const char *name);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_remote, module, FcitxModule) = {
     RemoteCreate,
     RemoteSetFD,
     RemoteProcessEvent,
     RemoteDestroy,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 typedef struct _FcitxRemote {
     FcitxInstance* owner;

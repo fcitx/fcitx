@@ -528,13 +528,13 @@ boolean FcitxInstanceLoadFrontend(FcitxInstance* instance)
                     break;
                 }
 
-                if (!CheckABIVersion(handle)) {
+                if (!FcitxCheckABIVersion(handle, addon->name)) {
                     FcitxLog(ERROR, "%s ABI Version Error", addon->name);
                     dlclose(handle);
                     break;
                 }
 
-                frontend = dlsym(handle, "frontend");
+                frontend = FcitxGetSymbol(handle, addon->name, "frontend");
                 if (!frontend || !frontend->Create) {
                     FcitxLog(ERROR, _("Frontend: bad frontend"));
                     dlclose(handle);

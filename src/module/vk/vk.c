@@ -131,17 +131,13 @@ static void SelectVK(FcitxVKState* vkstate, int vkidx);
 
 static FcitxConfigColor blackColor = {0, 0, 0};
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_vk, module, FcitxModule) = {
     VKCreate,
     NULL,
     NULL,
     NULL,
     ReloadVK
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void *VKCreate(FcitxInstance* instance)
 {

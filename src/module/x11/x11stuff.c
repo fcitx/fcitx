@@ -64,17 +64,13 @@ static inline int RectHeight(FcitxRect r);
 const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
 const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Create,
     X11SetFD,
     X11ProcessEvent,
     NULL,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* X11Create(FcitxInstance* instance)
 {

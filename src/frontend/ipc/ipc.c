@@ -283,8 +283,7 @@ const char * ic_introspection_xml =
     "  </interface>\n"
     "</node>\n";
 
-FCITX_EXPORT_API
-FcitxFrontend frontend = {
+FCITX_DEFINE_PLUGIN(fcitx_ipc, frontend, FcitxFrontend) = {
     IPCCreate,
     IPCDestroy,
     IPCCreateIC,
@@ -304,9 +303,6 @@ FcitxFrontend frontend = {
     IPCDeleteSurroundingText,
     IPCGetSurroundingText
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* IPCCreate(FcitxInstance* instance, int frontendid)
 {

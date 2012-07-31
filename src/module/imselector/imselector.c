@@ -55,17 +55,13 @@ static boolean LoadIMSelectorConfig(IMSelector* imselector);
 static void SaveIMSelectorConfig(IMSelector* imselector);
 static void IMSelectorGetCands(IMSelector* imselector);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_imselector, module, FcitxModule) = {
     IMSelectorCreate,
     NULL,
     NULL,
     NULL,
     IMSelectorReload
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 CONFIG_BINDING_BEGIN(IMSelector)
 CONFIG_BINDING_REGISTER("IMSelector", "LocalInputMethodSelectKey", localKey)

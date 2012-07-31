@@ -154,14 +154,10 @@ void Ucs4ToUtf8(iconv_t conv, uint32_t ucs4, char* utf8)
 
 CONFIG_DESC_DEFINE(GetKeyboardConfigDesc, "fcitx-keyboard.desc")
 
-FCITX_EXPORT_API
-FcitxIMClass ime = {
+FCITX_DEFINE_PLUGIN(fcitx_keyboard, ime, FcitxIMClass) = {
     FcitxKeyboardCreate,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 const char* FcitxKeyboardGetPastStream   (void* arg)
 {

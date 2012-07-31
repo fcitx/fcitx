@@ -88,17 +88,13 @@ typedef struct _FcitxPuncState {
     WidePunc* curPunc;
 } FcitxPuncState;
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_punc, module, FcitxModule) = {
     PuncCreate,
     NULL,
     NULL,
     NULL,
     ReloadPunc
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* PuncCreate(FcitxInstance* instance)
 {

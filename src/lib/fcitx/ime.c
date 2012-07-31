@@ -269,7 +269,7 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         char* modulePath;
         FILE *fp = FcitxXDGGetLibFile(addon->library, "r", &modulePath);
         void *handle;
-        FcitxIMClass * imclass;
+        FcitxIMClass2 * imclass2;
         if (!fp) {
             free(modulePath);
             return;
@@ -283,26 +283,32 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         }
         free(modulePath);
 
-        if (!CheckABIVersion(handle)) {
+        if (!FcitxCheckABIVersion(handle, addon->name)) {
             FcitxLog(ERROR, "%s ABI Version Error", addon->name);
             dlclose(handle);
             return;
         }
 
-        imclass = dlsym(handle, "ime");
-        if (!imclass || !imclass->Create) {
+        boolean isIMClass2 = false;
+        imclass2 = FcitxGetSymbol(handle, addon->name, "ime2");
+        if (!imclass2)
+            imclass2 = FcitxGetSymbol(handle, addon->name, "ime");
+        else
+            isIMClass2 = true;
+        if (!imclass2 || !imclass2->Create) {
             FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
             dlclose(handle);
             return;
         }
 
+        addon->isIMClass2 = isIMClass2;
         instance->currentIMAddon = addon;
-        if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
+        if ((addon->addonInstance = imclass2->Create(instance)) == NULL) {
             dlclose(handle);
             return;
         }
         instance->currentIMAddon = NULL;
-        addon->imclass = imclass;
+        addon->imclass2 = imclass2;
         utarray_push_back(&instance->imeclasses, &addon);
     }
 }
