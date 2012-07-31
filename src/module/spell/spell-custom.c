@@ -345,18 +345,28 @@ static int
 SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
 {
     int word_len;
+    int replace = 0;
+    int insert = 0;
+    int remove = 0;
     int distance = 0;
     int maxdiff;
+    int maxremove;
     word_len = strlen(word);
     maxdiff = word_len / 3;
-    while (distance <= maxdiff) {
+    maxremove = (word_len - 2) / 3;
+    while ((distance = replace + insert + remove) <= maxdiff &&
+           remove <= maxremove) {
         if (!word[0])
             return distance * 2 + strlen(dict);
         if (!dict[0]) {
             if (word[1]) {
                 return -1;
             } else {
-                return (distance + 1) * 2;
+                remove++;
+                distance++;
+                if (distance <= maxdiff && remove <= maxremove)
+                    return distance * 2;
+                return -1;
             }
         }
         if (word[0] == dict[0] || custom->word_comp_func(word[0], dict[0])) {
@@ -367,19 +377,19 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
         if (word[1] == dict[0] || custom->word_comp_func(word[1], dict[0])) {
             word += 2;
             dict++;
-            distance++;
+            remove++;
             continue;
         }
         if (word[0] == dict[1] || custom->word_comp_func(word[0], dict[1])) {
             word++;
             dict += 2;
-            distance++;
+            insert++;
             continue;
         }
         if (word[1] == dict[1] || custom->word_comp_func(word[1], dict[1])) {
             word += 2;
             dict += 2;
-            distance++;
+            replace++;
             continue;
         }
         break;

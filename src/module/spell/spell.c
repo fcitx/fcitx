@@ -336,8 +336,10 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
         if (!name)
             break;
         hint_provider = SpellFindHintProvider(name, len);
-        if (hint_provider)
+        if (hint_provider) {
             res = hint_provider->hint_func(spell, len_limit);
+            /* printf("%s, %s\n", __func__, hint_provider->name); */
+        }
         if (res)
             break;
     }
