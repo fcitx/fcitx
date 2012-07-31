@@ -991,7 +991,7 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:406
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:382
 #, fuzzy
 msgid "Keyboard"
 msgstr "仮想キーボード"
