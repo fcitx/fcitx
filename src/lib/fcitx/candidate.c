@@ -54,6 +54,8 @@ void
 FcitxCandidateWordInserta(FcitxCandidateWordList* candList,
                           FcitxCandidateWordList* newList, int position)
 {
+    if (!newList || position < 0)
+        return;
     utarray_inserta(&candList->candWords, &newList->candWords, position);
 }
 
@@ -62,6 +64,8 @@ void
 FcitxCandidateWordConcat(FcitxCandidateWordList* candList,
                          FcitxCandidateWordList* newList)
 {
+    if (!newList)
+        return;
     utarray_concat(&candList->candWords, &newList->candWords);
 }
 
