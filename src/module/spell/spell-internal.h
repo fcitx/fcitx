@@ -53,6 +53,8 @@ typedef struct {
     char **words;
     int words_count;
     boolean (*word_comp_func)(char, char);
+    int (*word_check_func)(const char*);
+    void (*hint_cmplt_func)(SpellHint*, int);
 } SpellCustom;
 
 typedef struct {

@@ -50,6 +50,7 @@ SpellCustomEnglishCompare(char c1, char c2)
     switch (c1) {
     case 'A' ... 'Z':
         c1 += 'a' - 'A';
+        break;
     case 'a' ... 'z':
         break;
     default:
@@ -58,12 +59,106 @@ SpellCustomEnglishCompare(char c1, char c2)
     switch (c2) {
     case 'A' ... 'Z':
         c2 += 'a' - 'A';
+        break;
     case 'a' ... 'z':
         break;
     default:
         break;
     }
     return c1 == c2;
+}
+
+static boolean
+SpellCustomEnglishIsFirstCapital(const char *str)
+{
+    if (!str || !*str)
+        return false;
+    switch (*str) {
+    case 'A' ... 'Z':
+        break;
+    default:
+        return false;
+    }
+    while (*(++str)) {
+        switch (*str) {
+        case 'a' ... 'z':
+            continue;
+        default:
+            return false;
+        }
+    }
+    return true;
+}
+
+static boolean
+SpellCustomEnglishIsAllCapital(const char *str)
+{
+    if (!str || !*str)
+        return false;
+    do {
+        switch (*str) {
+        case 'A' ... 'Z':
+            continue;
+        default:
+            return false;
+        }
+    } while (*(++str));
+    return true;
+}
+
+enum {
+    CUSTOM_DEFAULT,
+    CUSTOM_FIRST_CAPITAL,
+    CUSTOM_ALL_CAPITAL,
+};
+
+static int
+SpellCustomEnglishCheck(const char *str)
+{
+    if (SpellCustomEnglishIsFirstCapital(str))
+        return CUSTOM_FIRST_CAPITAL;
+    if (SpellCustomEnglishIsAllCapital(str))
+        return CUSTOM_ALL_CAPITAL;
+    return CUSTOM_DEFAULT;
+}
+
+static void
+SpellUpperString(char *str)
+{
+    if (!str || !*str)
+        return;
+    do {
+        switch (*str) {
+        case 'a' ... 'z':
+            *str += 'A' - 'a';
+            break;
+        default:
+            break;
+        }
+    } while (*(++str));
+}
+
+static void
+SpellCustomEnglishComplete(SpellHint *hint, int type)
+{
+    switch (type) {
+    case CUSTOM_ALL_CAPITAL:
+        for (;hint->commit;hint++)
+            SpellUpperString(hint->commit);
+        break;
+    case CUSTOM_FIRST_CAPITAL:
+        for (;hint->commit;hint++) {
+            switch (*hint->commit) {
+            case 'a' ... 'z':
+                *hint->commit += 'A' - 'a';
+                break;
+            default:
+                break;
+            }
+        }
+    default:
+        break;
+    }
 }
 
 /**
@@ -171,8 +266,12 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
         return false;
     if (SpellLangIsLang(lang, "en")) {
         spell->custom.word_comp_func = SpellCustomEnglishCompare;
+        spell->custom.word_check_func = SpellCustomEnglishCheck;
+        spell->custom.hint_cmplt_func = SpellCustomEnglishComplete;
     } else {
         spell->custom.word_comp_func = SpellCustomSimpleCompare;
+        spell->custom.word_check_func = NULL;
+        spell->custom.hint_cmplt_func = NULL;
     }
     /* Use the saved dictionary */
     if (custom->saved_lang &&
@@ -301,12 +400,18 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     SpellCustomCWord clist[list_len];
     int i;
     int num = 0;
+    int word_type = 0;
     SpellCustom *custom = &spell->custom;
+    const char *word;
+    SpellHint *res;
     if (!SpellCustomCheck(spell))
         return NULL;
+    word = spell->current_str;
+    if (custom->word_check_func)
+        word_type = custom->word_check_func(word);
     for (i = 0;i < custom->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(&spell->custom, spell->current_str,
+        if ((dist = SpellCustomGetDistance(&spell->custom, word,
                                            custom->words[i])) >= 0) {
             clist[num].word = custom->words[i];
             clist[num].dist = dist;
@@ -317,8 +422,13 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     qsort((void*)clist, num, sizeof(SpellCustomCWord),
           SpellCustomCWordCompare);
     num = num > len_limit ? len_limit : num;
-    return SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
-                                 NULL, 0);
+    res = SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
+                                NULL, 0);
+    if (!res)
+        return NULL;
+    if (custom->hint_cmplt_func)
+        custom->hint_cmplt_func(res, word_type);
+    return res;
 }
 
 boolean
