@@ -52,6 +52,7 @@ typedef struct {
     char *map;
     char **words;
     int words_count;
+    boolean (*word_comp_func)(char, char);
 } SpellCustom;
 
 typedef struct {
@@ -95,6 +96,7 @@ extern "C" {
     {
         return SpellCalListSizeWithSize(list, count, sizeof(char*));
     }
+    boolean SpellLangIsLang(const char *full_lang, const char *lang);
 #ifdef __cplusplus
 }
 #endif

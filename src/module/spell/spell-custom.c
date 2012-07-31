@@ -38,6 +38,34 @@
 #include "spell-custom.h"
 #define EN_DICT_FORMAT "%s/data/%s_dict.txt"
 
+static boolean
+SpellCustomSimpleCompare(char c1, char c2)
+{
+    return c1 == c2;
+}
+
+static boolean
+SpellCustomEnglishCompare(char c1, char c2)
+{
+    switch (c1) {
+    case 'A' ... 'Z':
+        c1 += 'a' - 'A';
+    case 'a' ... 'z':
+        break;
+    default:
+        return c1 == c2;
+    }
+    switch (c2) {
+    case 'A' ... 'Z':
+        c2 += 'a' - 'A';
+    case 'a' ... 'z':
+        break;
+    default:
+        break;
+    }
+    return c1 == c2;
+}
+
 /**
  * Open the dict file, return -1 if failed.
  **/
@@ -141,6 +169,11 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
     SpellCustom *custom = &spell->custom;
     if (!lang || !lang[0])
         return false;
+    if (SpellLangIsLang(lang, "en")) {
+        spell->custom.word_comp_func = SpellCustomEnglishCompare;
+    } else {
+        spell->custom.word_comp_func = SpellCustomSimpleCompare;
+    }
     /* Use the saved dictionary */
     if (custom->saved_lang &&
         !strcmp(custom->saved_lang, lang)) {
@@ -205,11 +238,12 @@ free_all:
 boolean
 SpellCustomInit(FcitxSpell *spell)
 {
+    spell->custom.word_comp_func = SpellCustomSimpleCompare;
     return true;
 }
 
 static int
-SpellCustomGetDistance(const char *word, const char *dict)
+SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
 {
     int word_len;
     int distance = 0;
@@ -226,25 +260,25 @@ SpellCustomGetDistance(const char *word, const char *dict)
                 return (distance + 1) * 2;
             }
         }
-        if (word[0] == dict[0]) {
+        if (word[0] == dict[0] || custom->word_comp_func(word[0], dict[0])) {
             word++;
             dict++;
             continue;
         }
-        if (word[1] == dict[1]) {
+        if (word[1] == dict[0] || custom->word_comp_func(word[1], dict[0])) {
             word += 2;
+            dict++;
+            distance++;
+            continue;
+        }
+        if (word[0] == dict[1] || custom->word_comp_func(word[0], dict[1])) {
+            word++;
             dict += 2;
             distance++;
             continue;
         }
-        if (word[1] == dict[0]) {
+        if (word[1] == dict[1] || custom->word_comp_func(word[1], dict[1])) {
             word += 2;
-            dict++;
-            distance++;
-            continue;
-        }
-        if (word[0] == dict[1]) {
-            word++;
             dict += 2;
             distance++;
             continue;
@@ -272,7 +306,7 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
         return NULL;
     for (i = 0;i < custom->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(spell->current_str,
+        if ((dist = SpellCustomGetDistance(&spell->custom, spell->current_str,
                                            custom->words[i])) >= 0) {
             clist[num].word = custom->words[i];
             clist[num].dist = dist;

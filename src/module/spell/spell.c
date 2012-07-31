@@ -406,3 +406,22 @@ FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
     }
     return (void*)false;
 }
+
+boolean
+SpellLangIsLang(const char *full_lang, const char *lang)
+{
+    int len;
+    if (!full_lang || !lang || !*full_lang || !*lang)
+        return false;
+    len = strlen(lang);
+    if (strncmp(full_lang, lang, len))
+        return false;
+    switch (full_lang[len]) {
+    case '\0':
+    case '_':
+        return true;
+    default:
+        break;
+    }
+    return false;
+}

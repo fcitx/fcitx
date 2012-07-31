@@ -139,7 +139,7 @@ SpellPresageDestroy(FcitxSpell *spell)
 boolean
 SpellPresageLoadDict(FcitxSpell *spell, const char *lang)
 {
-    if (!strcmp(lang, "en") || !strncmp(lang, "en_", sizeof("en_") - 1)) {
+    if (SpellLangIsLang(lang, "en")) {
         spell->presage_support = true;
     } else {
         spell->presage_support = false;
