@@ -51,6 +51,7 @@ static void ApplySpellConfig(FcitxSpell *spell);
 static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
+static void *FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args);
 
 static boolean SpellOrderHasValidProvider(const char *providers);
 
@@ -128,6 +129,7 @@ SpellCreate(FcitxInstance *instance)
     AddFunction(addon, FcitxSpellHintWords);
     AddFunction(addon, FcitxSpellAddPersonal);
     AddFunction(addon, FcitxSpellDictAvailable);
+    AddFunction(addon, FcitxSpellGetCandWords);
     return spell;
 }
 
@@ -349,6 +351,8 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
     return res;
 }
 
+#define HINT_WORDS_ARGC 6
+
 static void*
 FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args)
 {
@@ -426,4 +430,65 @@ SpellLangIsLang(const char *full_lang, const char *lang)
         break;
     }
     return false;
+}
+
+typedef boolean (*GetCandWordCb)(void *arg, const char *commit);
+typedef struct {
+    GetCandWordCb cb;
+    void *arg;
+} GetCandWordsArgs;
+
+static INPUT_RETURN_VALUE
+FcitxSpellGetCandWord(void* arg, FcitxCandidateWord* candWord)
+{
+    FcitxSpell *spell = (FcitxSpell*)arg;
+    FcitxInstance *instance = spell->owner;
+    char *commit = candWord->priv + sizeof(GetCandWordsArgs);
+    GetCandWordsArgs *args = candWord->priv;
+    if (!args->cb || !args->cb(args->arg, commit))
+        FcitxInstanceCommitString(instance,
+                                  FcitxInstanceGetCurrentIC(instance), commit);
+    return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
+}
+
+static void*
+SpellNewGetCandWordArgs(GetCandWordCb cb, void *arg, const char *commit)
+{
+    int len;
+    void *res;
+    GetCandWordsArgs *args;
+    len = strlen(commit);
+    args = res = fcitx_utils_malloc0(len + sizeof(GetCandWordsArgs) + 1);
+    args->cb = cb;
+    args->arg = arg;
+    memcpy(args + 1, commit, len);
+    return res;
+}
+
+static void*
+FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args)
+{
+    SpellHint *hints;
+    int i;
+    FcitxCandidateWordList* cand_list;
+    GetCandWordCb get_cand_word_cb = args.args[HINT_WORDS_ARGC]; // 6
+    void *get_cand_word_arg = args.args[HINT_WORDS_ARGC + 1]; // 7
+    hints = FcitxSpellHintWords(arg, args);
+    if (!hints)
+        return NULL;
+    cand_list =  FcitxCandidateWordNewList();
+    for (i = 0;hints[i].display;i++) {
+        FcitxCandidateWord candWord;
+        candWord.callback = FcitxSpellGetCandWord;
+        candWord.owner = arg;
+        candWord.strWord = strdup(hints[i].display);
+        candWord.strExtra = NULL;
+        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb,
+                                                get_cand_word_arg,
+                                                hints[i].commit);
+        candWord.wordType = MSG_OTHER;
+        FcitxCandidateWordAppend(cand_list, &candWord);
+    }
+    free(hints);
+    return cand_list;
 }

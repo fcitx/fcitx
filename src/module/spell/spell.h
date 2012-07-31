@@ -20,6 +20,8 @@
 #ifndef _FCITX_MODULE_SPELL_H
 #define _FCITX_MODULE_SPELL_H
 
+#include "fcitx/candidate.h"
+
 typedef enum {
     EP_Default = 0,
     EP_Aspell,
@@ -37,11 +39,13 @@ enum {
     FCITX_SPELL_HINT_WORDS,
     FCITX_SPELL_ADD_PERSONAL,
     FCITX_SPELL_DICT_AVAILABLE,
+    FCITX_SPELL_GET_CANDWORDS,
 };
 
 typedef SpellHint* FCITX_SPELL_HINT_WORDS_RETURNTYPE;
-#define FCITX_SPELL_ADD_PERSONAL_RETURNTYPE unsigned long
-#define FCITX_SPELL_DICT_AVAILABLE_RETURNTYPE unsigned long
+typedef unsigned long FCITX_SPELL_ADD_PERSONAL_RETURNTYPE;
+typedef unsigned long FCITX_SPELL_DICT_AVAILABLE_RETURNTYPE;
+typedef FcitxCandidateWordList* FCITX_SPELL_GET_CANDWORDS_RETURNTYPE;
 
 #endif
 

@@ -58,7 +58,6 @@ static INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym, unsigned 
 static void  FcitxKeyboardSave(void *arg);
 static void  FcitxKeyboardReloadConfig(void *arg);
 INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg);
-INPUT_RETURN_VALUE FcitxKeyboardGetCandWord (void* arg, FcitxCandidateWord* candWord);
 static void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
                                       const char* name,
                                       const char* langCode,
@@ -588,6 +587,21 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
     return IRV_TO_PROCESS;
 }
 
+static boolean
+FcitxKeyboardGetCandWordCb(void *arg, const char *commit)
+{
+    FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
+    FcitxKeyboard *keyboard = layout->owner;
+    FcitxInstance *instance = keyboard->owner;
+    char str[strlen(commit) + 2];
+    strcpy(str, commit);
+    if (keyboard->config.bCommitWithExtraSpace)
+        strcat(str, " ");
+    FcitxInstanceCommitString(instance,
+                              FcitxInstanceGetCurrentIC(instance), str);
+    return true;
+}
+
 INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
@@ -624,40 +638,12 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[3] = (void*)(long)config->iMaxCandWord;
     func_arg.args[4] = keyboard->dictLang;
     func_arg.args[5] = keyboard->config.bUsePresage ? "pre,cus,en" : "cus,en";
-    SpellHint *hints = InvokeFunction(instance, FCITX_SPELL, HINT_WORDS,
-                                      func_arg);
-    if (!hints)
-        return IRV_DISPLAY_CANDWORDS;
-    int i;
-    for (i = 0;hints[i].display;i++) {
-        FcitxCandidateWord candWord;
-        candWord.callback = FcitxKeyboardGetCandWord;
-        candWord.owner = layout;
-        candWord.priv = strdup(hints[i].commit);
-        candWord.strExtra = NULL;
-        candWord.strWord = strdup(hints[i].display);
-        candWord.wordType = MSG_OTHER;
-        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input),
-                                 &candWord);
-    }
-    free(hints);
+    func_arg.args[6] = FcitxKeyboardGetCandWordCb;
+    func_arg.args[7] = layout;
+    FcitxCandidateWordList *candList =
+        InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
+    FcitxCandidateWordConcat(FcitxInputStateGetCandidateList(input), candList);
     return IRV_DISPLAY_CANDWORDS;
-}
-
-INPUT_RETURN_VALUE
-FcitxKeyboardGetCandWord(void* arg, FcitxCandidateWord* candWord)
-{
-    FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
-    FcitxKeyboard *keyboard = layout->owner;
-    FcitxInstance *instance = keyboard->owner;
-    char *commit = candWord->priv;
-    char str[strlen(commit) + 2];
-    strcpy(str, commit);
-    if (keyboard->config.bCommitWithExtraSpace)
-        strcat(str, " ");
-    FcitxInstanceCommitString(instance,
-                              FcitxInstanceGetCurrentIC(instance), str);
-    return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
 }
 
 void  FcitxKeyboardSave(void *arg)
