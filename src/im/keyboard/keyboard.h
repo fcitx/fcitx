@@ -67,7 +67,6 @@ typedef struct _FcitxKeyboard {
     char *tempBuffer;
     int lastLength;
     int dataSlot;
-    SpellHint *hints;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {

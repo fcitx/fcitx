@@ -81,10 +81,10 @@ SpellCustomEnglishIsFirstCapital(const char *str)
     }
     while (*(++str)) {
         switch (*str) {
-        case 'a' ... 'z':
-            continue;
-        default:
+        case 'A' ... 'Z':
             return false;
+        default:
+            continue;
         }
     }
     return true;
@@ -97,10 +97,10 @@ SpellCustomEnglishIsAllCapital(const char *str)
         return false;
     do {
         switch (*str) {
-        case 'A' ... 'Z':
-            continue;
-        default:
+        case 'a' ... 'z':
             return false;
+        default:
+            continue;
         }
     } while (*(++str));
     return true;

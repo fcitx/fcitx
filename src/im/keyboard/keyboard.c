@@ -434,10 +434,6 @@ void  FcitxKeyboardResetIM(void *arg)
     keyboard->cursorPos = 0;
     keyboard->composeBuffer[0] = 0;
     keyboard->n_compose = 0;
-    if (keyboard->hints) {
-        free(keyboard->hints);
-        keyboard->hints = NULL;
-    }
 }
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
@@ -632,20 +628,19 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
                                       func_arg);
     if (!hints)
         return IRV_DISPLAY_CANDWORDS;
-    keyboard->hints = hints;
     int i;
     for (i = 0;hints[i].display;i++) {
         FcitxCandidateWord candWord;
         candWord.callback = FcitxKeyboardGetCandWord;
         candWord.owner = layout;
-        candWord.priv = fcitx_utils_new(int);
-        *(int*)candWord.priv = i;
+        candWord.priv = strdup(hints[i].commit);
         candWord.strExtra = NULL;
         candWord.strWord = strdup(hints[i].display);
         candWord.wordType = MSG_OTHER;
         FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input),
                                  &candWord);
     }
+    free(hints);
     return IRV_DISPLAY_CANDWORDS;
 }
 
@@ -655,16 +650,13 @@ FcitxKeyboardGetCandWord(void* arg, FcitxCandidateWord* candWord)
     FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
     FcitxKeyboard *keyboard = layout->owner;
     FcitxInstance *instance = keyboard->owner;
-    int i = *(int*)candWord->priv;
-    char *commit = keyboard->hints[i].commit;
+    char *commit = candWord->priv;
     char str[strlen(commit) + 2];
     strcpy(str, commit);
     if (keyboard->config.bCommitWithExtraSpace)
         strcat(str, " ");
     FcitxInstanceCommitString(instance,
                               FcitxInstanceGetCurrentIC(instance), str);
-    free(keyboard->hints);
-    keyboard->hints = NULL;
     return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
 }
 
