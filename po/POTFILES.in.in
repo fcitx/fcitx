@@ -19,6 +19,7 @@
 @REL_SOURCE_ROOT@/src/module/fullwidthchar/fcitx-fullwidth-char.conf.in
 @REL_SOURCE_ROOT@/src/module/quickphrase/fcitx-quickphrase.conf.in
 @REL_SOURCE_ROOT@/src/module/spell/fcitx-spell.conf.in
+@REL_SOURCE_ROOT@/src/module/pinyin-enhance/fcitx-pinyin-enhance.conf.in
 @REL_SOURCE_ROOT@/src/ui/classic/fcitx-classic-ui.conf.in
 @REL_SOURCE_ROOT@/src/ui/kimpanel/fcitx-kimpanel-ui.conf.in
 @REL_SOURCE_ROOT@/src/im/table/fcitx-table.conf.in
