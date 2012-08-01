@@ -742,9 +742,6 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 retVal = IRV_DISPLAY_CANDWORDS;
             }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-            if (pystate->findMap.iMode == PARSE_ERROR)
-                return IRV_DO_NOTHING;
-
             if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
                 if (FcitxInputStateGetRawInputBufferSize(input) == 0)
                     return IRV_TO_PROCESS;
@@ -1016,6 +1013,9 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxMessages* msgClientPreedit = FcitxInputStateGetClientPreedit(input);
     struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
+    FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
+    FcitxCandidateWordSetChoose(candList, DIGIT_STR_CHOOSE);
+
     /* update preedit string */
     int i;
     FcitxMessagesSetMessageCount(msgPreedit, 0);
@@ -1038,18 +1038,23 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     if (pystate->findMap.iMode == PARSE_ERROR) {
         for (i = 0; i < pystate->findMap.iHZCount; i++) {
             FcitxMessagesAddMessageAtLast(msgClientPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
-            if (i < pystate->findMap.iHZCount - 1)
-                FcitxMessagesMessageConcat(msgClientPreedit, FcitxMessagesGetMessageCount(msgClientPreedit) - 1, " ");
         }
+        char* errorAuto = FcitxUIMessagesToCString(msgClientPreedit);
         FcitxInstanceCleanInputWindowDown(pystate->owner);
-        return IRV_DISPLAY_MESSAGE;
+
+        FcitxCandidateWord candWord;
+        candWord.owner = pystate;
+        candWord.callback = PYGetCandWord;
+        candWord.priv = NULL;
+        candWord.strWord = strdup(errorAuto);
+        candWord.strExtra = NULL;
+        candWord.wordType = MSG_OTHER;
+        FcitxCandidateWordAppend(candList, &candWord);
+        return IRV_DISPLAY_CANDWORDS;
     }
 
     if (FcitxInputStateGetIsInRemind(input))
         return PYGetRemindCandWords(pystate);
-
-    FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
-    FcitxCandidateWordSetChoose(candList, DIGIT_STR_CHOOSE);
 
     pystate->iYCDZ = 0;
 
@@ -1258,6 +1263,13 @@ void PYCreateAuto(FcitxPinyinState* pystate)
 INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
+
+    if (candWord->priv == NULL) {
+        strcpy(FcitxInputStateGetOutputString(input), candWord->strWord);
+        return IRV_COMMIT_STRING;
+    }
+
     char *pBase = NULL, *pPhrase = NULL;
     char *pBaseMap = NULL, *pPhraseMap = NULL;
     uint *pIndex = NULL;
@@ -1265,7 +1277,6 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
     int i;
     char strHZString[MAX_WORDS_USER_INPUT * UTF8_MAX_LENGTH + 1];
     int iLen;
-    FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
     PYFA* PYFAList = pystate->PYFAList;
     FcitxInstance* instance = pystate->owner;
     PYCandWord* pycandWord = candWord->priv;
