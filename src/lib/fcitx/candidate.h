@@ -112,30 +112,19 @@ extern "C" {
                                   FcitxCandidateWord* candWord, int position);
 
     /**
-     * Insert a candidates list to position
+     * Merge newList into candList at a certain position
+     * (newList will be cleared)
      *
      * @param candList candidate words list
      * @param newList candidate words list to be inserted
-     * @param position position to insert
+     * @param position position to insert (less than 0 to append)
      * @return void
      *
      * @since 4.2.6
      **/
-    void FcitxCandidateWordInserta(FcitxCandidateWordList* candList,
+    void FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
                                    FcitxCandidateWordList* newList,
                                    int position);
-
-    /**
-     * Append a candidates list to the end
-     *
-     * @param candList candidate words list
-     * @param newList candidate words list to be appended
-     * @return void
-     *
-     * @since 4.2.6
-     **/
-    void FcitxCandidateWordConcat(FcitxCandidateWordList* candList,
-                                  FcitxCandidateWordList* newList);
     /**
      * Insert non-display place holder candidate to position
      *
