@@ -100,8 +100,34 @@ extern "C" {
      * @param position position to insert
      * @return void
      **/
-    void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
+    void FcitxCandidateWordInsert(FcitxCandidateWordList* candList,
+                                  FcitxCandidateWord* candWord, int position);
 
+    /**
+     * Insert a candidates list to position
+     *
+     * @param candList candidate words list
+     * @param newList candidate words list to be inserted
+     * @param position position to insert
+     * @return void
+     *
+     * @since 4.2.6
+     **/
+    void FcitxCandidateWordInserta(FcitxCandidateWordList* candList,
+                                   FcitxCandidateWordList* newList,
+                                   int position);
+
+    /**
+     * Append a candidates list to the end
+     *
+     * @param candList candidate words list
+     * @param newList candidate words list to be appended
+     * @return void
+     *
+     * @since 4.2.6
+     **/
+    void FcitxCandidateWordConcat(FcitxCandidateWordList* candList,
+                                  FcitxCandidateWordList* newList);
     /**
      * Insert non-display place holder candidate to position
      *
