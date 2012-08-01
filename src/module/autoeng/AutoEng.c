@@ -155,18 +155,17 @@ static INPUT_RETURN_VALUE
 AutoEngCheckSelect(FcitxAutoEngState* autoEngState,
                    FcitxKeySym sym, unsigned int state)
 {
-    int iKey = FcitxHotkeyCheckChooseKey(sym, state, DIGIT_STR_CHOOSE);
+    FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(
+        FcitxInstanceGetInputState(autoEngState->owner));
+    int iKey = FcitxCandidateWordCheckChooseKey(candList, sym, state);
     if (iKey >= 0)
-        return FcitxCandidateWordChooseByIndex(
-            FcitxInputStateGetCandidateList(
-                FcitxInstanceGetInputState(autoEngState->owner)), iKey);
+        return FcitxCandidateWordChooseByIndex(candList, iKey);
     return 0;
 }
 
 static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
                                       unsigned int state,
-                                      INPUT_RETURN_VALUE *retval
-                                     )
+                                      INPUT_RETURN_VALUE *retval)
 {
     FcitxAutoEngState* autoEngState = (FcitxAutoEngState*)arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
