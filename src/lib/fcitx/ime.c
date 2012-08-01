@@ -698,12 +698,11 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
         /* check choose key first, because it might trigger update candidates */
         if (!input->bIsDoInputOnly && retVal == IRV_TO_PROCESS) {
-            int index = FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
-                                                  FcitxCandidateWordGetChoose(input->candList),
-                                                  FcitxCandidateWordGetModifier(input->candList)
-                                                 );
+            int index = FcitxCandidateWordCheckChooseKey(input->candList,
+                                                         sym, state);
             if (index >= 0)
-                retVal = FcitxCandidateWordChooseByIndex(input->candList, index);
+                retVal = FcitxCandidateWordChooseByIndex(input->candList,
+                                                         index);
         }
     }
 
