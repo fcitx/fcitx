@@ -417,6 +417,19 @@ extern "C" {
      **/
     FcitxCandidateWord* FcitxCandidateWordGetNext(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
+    /**
+     * check is choose key or not, if so, return the choose index
+     *
+     * @param candList candidate words
+     * @param sym keysym
+     * @param state keystate
+     * @return int
+     *
+     * @since 4.2.6
+     **/
+    int FcitxCandidateWordCheckChooseKey(FcitxCandidateWordList *candList,
+                                         FcitxKeySym sym, unsigned int state);
+
 /** convinient string for candidate word */
 #define DIGIT_STR_CHOOSE "1234567890"
 

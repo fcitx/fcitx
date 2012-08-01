@@ -332,4 +332,15 @@ FcitxCandidateWord* FcitxCandidateWordGetNext(FcitxCandidateWordList* candList, 
 {
     return (FcitxCandidateWord*) utarray_next(&candList->candWords, candWord);
 }
+
+FCITX_EXPORT_API
+int
+FcitxCandidateWordCheckChooseKey(FcitxCandidateWordList *candList,
+                                 FcitxKeySym sym, unsigned int state)
+{
+    return FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
+                                                candList->strChoose,
+                                                candList->candiateModifier);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
