@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "fcitx/instance.h"
 #include "fcitx/candidate.h"
 #include "fcitx/instance-internal.h"
@@ -24,9 +25,14 @@ int main()
     }
 
     char* result = FcitxUICandidateWordToCString(instance);
-    if (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0) {
-        return 0;
-    }
+    assert (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0);
+    free(result);
 
-    return 1;
+    FcitxCandidateWordFreeList(instance->input->candList);
+    free(instance->config);
+    free(instance->input);
+    free(instance);
+
+
+    return 0;
 }

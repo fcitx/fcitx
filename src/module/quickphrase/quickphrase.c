@@ -100,17 +100,13 @@ static void QuickPhraseReset(void* arg);
 static void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args);
 static void _QuickPhraseLaunch(QuickPhraseState* qpstate);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_quickphrase, module, FcitxModule) = {
     QuickPhraseCreate,
     NULL,
     NULL,
     FreeQuickPhrase,
     ReloadQuickPhrase
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 static const FcitxHotkey FCITX_QP_GRACE[2] = {
     {NULL, FcitxKey_grave, FcitxKeyState_None},

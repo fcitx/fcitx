@@ -97,6 +97,7 @@ extern "C" {
             struct _FcitxFrontend *frontend;
             struct _FcitxModule *module;
             struct _FcitxIMClass* imclass;
+            struct _FcitxIMClass2* imclass2;
             struct _FcitxUI* ui;
         };
         void *addonInstance; /**< addon private pointer */
@@ -109,6 +110,11 @@ extern "C" {
         union {
             boolean advance; /**< a hint for GUI */
             void* dummy;
+        };
+
+        union {
+            boolean isIMClass2;
+            void* dummy2;
         };
 
         void* padding[8]; /**< padding */

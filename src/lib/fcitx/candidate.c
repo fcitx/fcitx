@@ -44,6 +44,13 @@ FcitxCandidateWordList* FcitxCandidateWordNewList()
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordFreeList(FcitxCandidateWordList* list)
+{
+    utarray_done(&list->candWords);
+    free(list);
+}
+
+FCITX_EXPORT_API
 void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position)
 {
     utarray_insert(&candList->candWords, candWord, position);

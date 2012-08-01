@@ -106,17 +106,13 @@ typedef struct _LayoutOverride {
     UT_hash_handle hh;
 } LayoutOverride;
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_xkb, module, FcitxModule) = {
     FcitxXkbCreate,
     NULL,
     NULL,
     FcitxXkbDestroy,
     FcitxXkbReloadConfig
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 boolean FcitxXkbSupported(FcitxXkb* xkb, int* xkbOpcode)
 {

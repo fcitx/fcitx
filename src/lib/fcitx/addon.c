@@ -68,6 +68,24 @@ void FcitxAddonsInit(UT_array* addons)
     utarray_init(addons, &addon_icd);
 }
 
+void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
+{
+    char* escapedAddonName; 
+    asprintf(&escapedAddonName, "%s_%s", addonName, symbolName);
+    char* p = escapedAddonName;
+    while (*p) {
+        if (*p == '-') {
+            *p = '_';
+        }
+        p++;
+    }
+    void* result = dlsym(handle, escapedAddonName);
+    if (!result)
+        result = dlsym(handle, symbolName);
+
+    return result;
+}
+
 /**
  * Load Addon Info
  */
@@ -270,9 +288,9 @@ void FcitxAddonFree(void* v)
     free(addon->subconfig);
 }
 
-boolean CheckABIVersion(void* handle)
+boolean FcitxCheckABIVersion(void* handle, const char* addonName)
 {
-    int* version = (int*) dlsym(handle, "ABI_VERSION");
+    int* version = (int*) FcitxGetSymbol(handle, addonName, "ABI_VERSION");
     if (!version)
         return false;
     if (*version < FCITX_ABI_VERSION)

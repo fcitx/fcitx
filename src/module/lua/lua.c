@@ -33,17 +33,13 @@ static void* LuaCreate(FcitxInstance* instance);
 static void LuaReloadConfig(void* arg);
 static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_lua, module, FcitxModule) = {
     LuaCreate,
     NULL,
     NULL,
     NULL,
     LuaReloadConfig
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 static int LoadLuaConfig(LuaModule *luamodule) {
     int count = 0;

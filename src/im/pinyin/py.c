@@ -55,8 +55,7 @@
 #define PY_INDEX_MAGIC_NUMBER 0xf7462e34
 #define PINYIN_TEMP_FILE "pinyin_XXXXXX"
 
-FCITX_EXPORT_API
-FcitxIMClass ime = {
+FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     PYCreate,
     NULL
 };

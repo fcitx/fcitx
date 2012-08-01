@@ -46,17 +46,13 @@ void UnicodeReset(void* arg);
 INPUT_RETURN_VALUE UnicodeHotkey(void* arg);
 INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_unicode, module, FcitxModule) = {
     UnicodeCreate,
     NULL,
     NULL,
     NULL,
     UnicodeReloadConfig
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 CONFIG_BINDING_BEGIN(UnicodeModule)
 CONFIG_BINDING_REGISTER("Unicode", "Key", key)

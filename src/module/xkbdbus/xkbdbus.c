@@ -36,17 +36,13 @@ typedef struct _FcitxXkbDBus {
     FcitxIsoCodes* isocodes;
 } FcitxXkbDBus;
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_xkbdbus, module, FcitxModule) = {
     FcitxXkbDBusCreate,
     NULL,
     NULL,
     NULL,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 static DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
                                                    DBusMessage     *message,

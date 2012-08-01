@@ -65,13 +65,13 @@ void FcitxModuleLoad(FcitxInstance* instance)
                     break;
                 }
 
-                if (!CheckABIVersion(handle)) {
+                if (!FcitxCheckABIVersion(handle, addon->name)) {
                     FcitxLog(ERROR, "%s ABI Version Error", addon->name);
                     dlclose(handle);
                     break;
                 }
 
-                module = dlsym(handle, "module");
+                module = FcitxGetSymbol(handle, addon->name, "module");
                 if (!module || !module->Create) {
                     FcitxLog(ERROR, _("Module: bad module"));
                     dlclose(handle);

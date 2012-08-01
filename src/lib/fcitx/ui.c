@@ -190,13 +190,13 @@ boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
             break;
         }
 
-        if (!CheckABIVersion(handle)) {
+        if (!FcitxCheckABIVersion(handle, addon->name)) {
             FcitxLog(ERROR, "%s ABI Version Error", addon->name);
             dlclose(handle);
             break;
         }
 
-        addon->ui = dlsym(handle, "ui");
+        addon->ui = FcitxGetSymbol(handle, addon->name, "ui");
 
         if (!addon->ui || !addon->ui->Create) {
             FcitxLog(ERROR, _("UI: bad ui"));
