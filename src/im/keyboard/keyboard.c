@@ -439,7 +439,7 @@ boolean IsDictAvailable(FcitxKeyboard* keyboard)
         return false;
     FcitxModuleFunctionArg arg;
     arg.args[0] = keyboard->dictLang;
-    arg.args[1] = keyboard->config.bUsePresage ? "pre,en" : "en";
+    arg.args[1] = NULL;
     return InvokeFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE, arg);
 }
 
@@ -634,7 +634,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[2] = NULL;
     func_arg.args[3] = (void*)(long)config->iMaxCandWord;
     func_arg.args[4] = keyboard->dictLang;
-    func_arg.args[5] = keyboard->config.bUsePresage ? "pre,cus,en" : "cus,en";
+    func_arg.args[5] = NULL;
     func_arg.args[6] = FcitxKeyboardGetCandWordCb;
     func_arg.args[7] = layout;
     FcitxCandidateWordList *candList =
