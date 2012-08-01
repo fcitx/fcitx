@@ -25,17 +25,17 @@
 #define CONT(i)   ISUTF8_CB(in[i])
 #define VAL(i, s) ((in[i]&0x3f) << s)
 
-#define UTF8_LENGTH(Char)              \
-    ((Char) < 0x80 ? 1 :                 \
-     ((Char) < 0x800 ? 2 :               \
-      ((Char) < 0x10000 ? 3 :            \
-       ((Char) < 0x200000 ? 4 :          \
+#define UTF8_LENGTH(Char)                       \
+    ((Char) < 0x80 ? 1 :                        \
+     ((Char) < 0x800 ? 2 :                      \
+      ((Char) < 0x10000 ? 3 :                   \
+       ((Char) < 0x200000 ? 4 :                 \
         ((Char) < 0x4000000 ? 5 : 6)))))
 
-#define UNICODE_VALID(Char)                   \
-    ((Char) < 0x110000 &&                     \
-     (((Char) & 0xFFFFF800) != 0xD800) &&     \
-     ((Char) < 0xFDD0 || (Char) > 0xFDEF) &&  \
+#define UNICODE_VALID(Char)                     \
+    ((Char) < 0x110000 &&                       \
+     (((Char) & 0xFFFFF800) != 0xD800) &&       \
+     ((Char) < 0xFDD0 || (Char) > 0xFDEF) &&    \
      ((Char) & 0xFFFE) != 0xFFFE)
 
 FCITX_EXPORT_API
@@ -94,7 +94,7 @@ int fcitx_ucs4_char_len(unsigned int c)
         return 3;
     } else if (c < 0x200000) {
         return 4;
-    // below is not in UCS4 but in 32bit int.
+        // below is not in UCS4 but in 32bit int.
     } else if (c < 0x8000000) {
         return 5;
     } else {
@@ -127,7 +127,7 @@ int fcitx_ucs4_to_utf8(unsigned int c, char* output)
         output[3] = (char) (0x80 + (c & 0x3F));
         output[4] = '\0';
         return 4;
-    // below is not in UCS4 but in 32bit int.
+        // below is not in UCS4 but in 32bit int.
     } else if (c < 0x8000000) {
         output[0] = (char) (0xF8 + ((c >> 24) & 0x03));
         output[1] = (char) (0x80 + ((c >> 18) & 0x3F));
@@ -242,7 +242,7 @@ char* fcitx_utf8_get_nth_char(char* s, unsigned int n)
 FCITX_EXPORT_API
 int
 fcitx_utf8_get_char_extended(const char *s,
-                       int max_len)
+                             int max_len)
 {
     const unsigned char*p = (const unsigned char*)s;
     int i, len;
@@ -303,7 +303,7 @@ fcitx_utf8_get_char_extended(const char *s,
 
 FCITX_EXPORT_API
 int fcitx_utf8_get_char_validated(const char *p,
-                            int max_len)
+                                  int max_len)
 {
     int result;
 
@@ -358,7 +358,6 @@ void fcitx_utf8_strncpy(char* str, const char* s, size_t byte)
     }
 }
 
-
 FCITX_EXPORT_API
 size_t fcitx_utf8_strnlen(const char* str, size_t byte)
 {
@@ -377,6 +376,19 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte)
         len ++ ;
     }
     return len;
+}
+
+FCITX_EXPORT_API
+char*
+fcitx_utils_get_ascii_part(char *string)
+{
+    if (!string)
+        return NULL;
+
+    char *s = string + strlen(string);
+    while ((--s) >= string && !(*s & 0x80)) {
+    }
+    return s + 1;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
