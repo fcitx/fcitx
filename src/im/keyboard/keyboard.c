@@ -38,6 +38,7 @@
 #include "fcitx/hook.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
+#include "module/spell/spell.h"
 
 #include "xkb.h"
 #include "keyboard.h"

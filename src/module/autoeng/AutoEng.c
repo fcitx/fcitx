@@ -35,6 +35,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-config/xdg.h"
+#include "module/spell/spell.h"
 
 #include "AutoEng.h"
 
@@ -113,7 +114,8 @@ boolean            SwitchToEng(FcitxAutoEngState* autoEngState, char* str);
  *
  * @return void
  **/
-void ShowAutoEngMessage(FcitxAutoEngState* autoEngState);
+static void ShowAutoEngMessage(FcitxAutoEngState* autoEngState,
+                               INPUT_RETURN_VALUE *retval);
 
 FCITX_DEFINE_PLUGIN(fcitx_autoeng, module ,FcitxModule) = {
     AutoEngCreate,
@@ -168,26 +170,27 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
                 autoEngState->index++;
                 autoEngState->buf[autoEngState->index] = '\0';
                 *retval = IRV_DISPLAY_MESSAGE;
-            } else
+            } else {
                 *retval = IRV_DO_NOTHING;
+            }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
-            autoEngState->index -- ;
+            autoEngState->index--;
             autoEngState->buf[autoEngState->index] = '\0';
             if (autoEngState->index == 0) {
                 ResetAutoEng(autoEngState);
                 *retval = IRV_CLEAN;
-            } else
+            } else {
                 *retval = IRV_DISPLAY_MESSAGE;
+            }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
             strcpy(FcitxInputStateGetOutputString(input), autoEngState->buf);
             ResetAutoEng(autoEngState);
             *retval = IRV_COMMIT_STRING;
-        }
-        if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
+        } else if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
             *retval = IRV_DO_NOTHING;
             return true;
         }
-        ShowAutoEngMessage(autoEngState);
+        ShowAutoEngMessage(autoEngState, retval);
         return true;
     }
     if (FcitxHotkeyIsHotKeySimple(sym, state)) {
@@ -196,7 +199,7 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
             return false;
 
         autoEngState->index = strlen(autoEngState->buf);
-        autoEngState->buf[autoEngState->index ++ ] = sym;
+        autoEngState->buf[autoEngState->index++] = sym;
         autoEngState->buf[autoEngState->index] = '\0';
 
         if (SwitchToEng(autoEngState, autoEngState->buf)) {
@@ -204,7 +207,7 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
             FcitxInputStateSetShowCursor(input, false);
             autoEngState->index = strlen(autoEngState->buf);
             autoEngState->active = true;
-            ShowAutoEngMessage(autoEngState);
+            ShowAutoEngMessage(autoEngState, retval);
             return true;
         }
     }
@@ -225,10 +228,10 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         FcitxInputStateSetShowCursor(input, false);
         strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
         autoEngState->index = strlen(autoEngState->buf);
-        autoEngState->buf[autoEngState->index ++ ] = sym;
+        autoEngState->buf[autoEngState->index++] = sym;
         autoEngState->buf[autoEngState->index] = '\0';
         autoEngState->active = true;
-        ShowAutoEngMessage(autoEngState);
+        ShowAutoEngMessage(autoEngState, retval);
         return true;
     }
 
@@ -293,23 +296,48 @@ boolean SwitchToEng(FcitxAutoEngState* autoEngState, char *str)
     return false;
 }
 
-void ShowAutoEngMessage(FcitxAutoEngState* autoEngState)
+static void
+ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
 {
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
-
+    FcitxGlobalConfig* config;
     FcitxInstanceCleanInputWindow(autoEngState->owner);
-
     if (autoEngState->buf[0] == '\0')
         return;
 
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", autoEngState->buf);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", autoEngState->buf);
+    config = FcitxInstanceGetGlobalConfig(autoEngState->owner);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input),
+                                  MSG_INPUT, "%s", autoEngState->buf);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
+                                  MSG_INPUT, "%s", autoEngState->buf);
     strcpy(FcitxInputStateGetRawInputBuffer(input), autoEngState->buf);
     FcitxInputStateSetRawInputBufferSize(input, strlen(autoEngState->buf));
-    FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
-    FcitxInputStateSetClientCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
+    FcitxInputStateSetCursorPos(
+        input, FcitxInputStateGetRawInputBufferSize(input));
+    FcitxInputStateSetClientCursorPos(
+        input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetShowCursor(input, true);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Press Enter to input text"));
+
+    FcitxModuleFunctionArg func_arg;
+    func_arg.args[0] = NULL;
+    func_arg.args[1] = autoEngState->buf;
+    func_arg.args[2] = NULL;
+    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
+    func_arg.args[4] = "en";
+    func_arg.args[5] = NULL;
+    func_arg.args[6] = NULL;
+    func_arg.args[7] = NULL;
+    FcitxCandidateWordList *candList =
+        InvokeFunction(autoEngState->owner, FCITX_SPELL,
+                       GET_CANDWORDS, func_arg);
+    if (candList) {
+        FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),
+                                candList, -1);
+        FcitxCandidateWordFreeList(candList);
+    }
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input),
+                                  MSG_TIPS, _("Press Enter to input text"));
+    *retval |= IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
 void ReloadAutoEng(void* arg)
