@@ -23,7 +23,7 @@ CONFIG_BINDING_BEGIN(FcitxSpellConfig);
 #ifdef PRESAGE_FOUND
 /* CONFIG_BINDING_REGISTER("Spell Hint", "UsePresage", usePresage); */
 #endif
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
 CONFIG_BINDING_REGISTER("Spell Hint", "PreferredEnchantProvider",
                         enchant_provider);
 #endif

@@ -22,9 +22,6 @@
 
 #include "config.h"
 #include <fcitx-config/fcitx-config.h>
-#ifdef ENCHANT_FOUND
-#include <enchant/enchant.h>
-#endif
 
 #ifdef PRESAGE_FOUND
 #include <presage.h>
@@ -34,9 +31,7 @@
 
 typedef struct {
     FcitxGenericConfig gconfig;
-#ifdef PRESAGE_FOUND
-#endif
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     EnchantProvider enchant_provider;
 #endif
     char *provider_order;
@@ -65,12 +60,12 @@ typedef struct {
     const char *current_str;
     const char *after_str;
     const char *provider_order;
-#ifdef ENCHANT_FOUND
-    EnchantBroker *broker;
+#ifdef ENABLE_ENCHANT
+    void *broker;
     EnchantProvider cur_enchant_provider;
     char *enchant_saved_lang;
     // UT_array* enchantLanguages;
-    EnchantDict *enchant_dict;
+    void *enchant_dict;
 #endif
 #ifdef PRESAGE_FOUND
     presage_t presage;

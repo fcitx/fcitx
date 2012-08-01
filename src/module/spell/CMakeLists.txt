@@ -6,19 +6,18 @@ set(FCITX_SPELL_SOURCES
     spellconfig.c
 )
 
-if(ENCHANT_FOUND)
-  include_directories(${ENCHANT_INCLUDE_DIR})
+if(ENABLE_ENCHANT)
   set(FCITX_SPELL_SOURCES ${FCITX_SPELL_SOURCES} spell-enchant.c)
-endif(ENCHANT_FOUND)
+endif()
 if(PRESAGE_FOUND)
   include_directories(${PRESAGE_INCLUDE_DIR})
   set(FCITX_SPELL_SOURCES ${FCITX_SPELL_SOURCES} spell-presage.c)
 endif(PRESAGE_FOUND)
 
+link_directories(${DL_LIBRARY_DIRS})
+
 fcitx_add_addon(fcitx-spell ${FCITX_SPELL_SOURCES})
-if(ENCHANT_FOUND)
-  target_link_libraries(fcitx-spell ${ENCHANT_LIBRARIES})
-endif(ENCHANT_FOUND)
+target_link_libraries(fcitx-spell ${DL_LIBRARIES})
 if(PRESAGE_FOUND)
   target_link_libraries(fcitx-spell ${PRESAGE_LIBRARIES})
 endif(PRESAGE_FOUND)

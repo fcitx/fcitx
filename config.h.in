@@ -22,6 +22,7 @@
 #cmakedefine XKB_RULES_XML_FILE "${XKB_RULES_XML_FILE}"
 #cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
 #cmakedefine ENCHANT_FOUND
+#cmakedefine ENABLE_ENCHANT
 #cmakedefine PRESAGE_FOUND
 
 #define PACKAGE "@package@"
