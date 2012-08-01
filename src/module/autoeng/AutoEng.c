@@ -151,12 +151,24 @@ void* AutoEngCreate(FcitxInstance *instance)
     return autoEngState;
 }
 
+static INPUT_RETURN_VALUE
+AutoEngCheckSelect(FcitxAutoEngState* autoEngState,
+                   FcitxKeySym sym, unsigned int state)
+{
+    int iKey = FcitxHotkeyCheckChooseKey(sym, state, DIGIT_STR_CHOOSE);
+    if (iKey >= 0)
+        return FcitxCandidateWordChooseByIndex(
+            FcitxInputStateGetCandidateList(
+                FcitxInstanceGetInputState(autoEngState->owner)), iKey);
+    return 0;
+}
+
 static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
                                       unsigned int state,
                                       INPUT_RETURN_VALUE *retval
                                      )
 {
-    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*) arg;
+    FcitxAutoEngState* autoEngState = (FcitxAutoEngState*)arg;
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
     boolean disableCheckUAZ = FcitxInstanceGetContextBoolean(autoEngState->owner, CONTEXT_DISABLE_AUTOENG);
     if (disableCheckUAZ)
@@ -164,7 +176,9 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
 
     if (autoEngState->active) {
         FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
-        if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
+        if ((*retval = AutoEngCheckSelect(autoEngState, sym, state))) {
+            return true;
+        } else if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
             if (autoEngState->index < MAX_USER_INPUT) {
                 autoEngState->buf[autoEngState->index] = keymain;
                 autoEngState->index++;
