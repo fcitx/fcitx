@@ -136,17 +136,20 @@ SpellPresageResult(FcitxSpell *spell, char **suggestions)
 boolean
 SpellPresageInit(FcitxSpell *spell)
 {
+    if (spell->presage)
+        return true;
     if (!SpellPresageLoadLib())
         return false;
     _presage_new(FcitxSpellGetPastStream, spell,
                  FcitxSpellGetFutureStream, spell, &spell->presage);
-    return true;
+    spell->presage_support = false;
+    return !!(spell->presage);
 }
 
 SpellHint*
 SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    if (!SpellPresageLoadLib())
+    if (!SpellPresageInit())
         return NULL;
     SpellHint *res = NULL;
     if (!(spell->presage && spell->presage_support))
@@ -173,7 +176,7 @@ SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
 boolean
 SpellPresageCheck(FcitxSpell *spell)
 {
-    if (!SpellPresageLoadLib())
+    if (!SpellPresageInit())
         return false;
     if (spell->presage && spell->presage_support)
         return true;
@@ -183,8 +186,6 @@ SpellPresageCheck(FcitxSpell *spell)
 void
 SpellPresageDestroy(FcitxSpell *spell)
 {
-    if (!SpellPresageLoadLib())
-        return;
     if (spell->presage) {
         _presage_free(spell->presage);
         spell->presage = NULL;
@@ -194,7 +195,7 @@ SpellPresageDestroy(FcitxSpell *spell)
 boolean
 SpellPresageLoadDict(FcitxSpell *spell, const char *lang)
 {
-    if (!SpellPresageLoadLib())
+    if (!SpellPresageInit())
         return false;
     if (SpellLangIsLang(lang, "en")) {
         spell->presage_support = true;
