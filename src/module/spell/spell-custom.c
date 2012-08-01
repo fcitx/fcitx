@@ -38,6 +38,16 @@
 #include "spell-custom.h"
 #define EN_DICT_FORMAT "%s/data/%s_dict.txt"
 
+#define case_a_z case 'a': case 'b': case 'c': case 'd': case 'e':      \
+case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':   \
+case 'm': case 'n': case 'o': case 'p': case 'q': case 'r': case 's':   \
+case 't': case 'u': case 'v': case 'w': case 'x': case 'y': case 'z'
+
+#define case_A_Z case 'A': case 'B': case 'C': case 'D': case 'E':      \
+case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
+case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
+case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
+
 static boolean
 SpellCustomSimpleCompare(char c1, char c2)
 {
@@ -48,19 +58,19 @@ static boolean
 SpellCustomEnglishCompare(char c1, char c2)
 {
     switch (c1) {
-    case 'A' ... 'Z':
+    case_A_Z:
         c1 += 'a' - 'A';
         break;
-    case 'a' ... 'z':
+    case_a_z:
         break;
     default:
         return c1 == c2;
     }
     switch (c2) {
-    case 'A' ... 'Z':
+    case_A_Z:
         c2 += 'a' - 'A';
         break;
-    case 'a' ... 'z':
+    case_a_z:
         break;
     default:
         break;
@@ -74,14 +84,14 @@ SpellCustomEnglishIsFirstCapital(const char *str)
     if (!str || !*str)
         return false;
     switch (*str) {
-    case 'A' ... 'Z':
+    case_A_Z:
         break;
     default:
         return false;
     }
     while (*(++str)) {
         switch (*str) {
-        case 'A' ... 'Z':
+        case_A_Z:
             return false;
         default:
             continue;
@@ -97,7 +107,7 @@ SpellCustomEnglishIsAllCapital(const char *str)
         return false;
     do {
         switch (*str) {
-        case 'a' ... 'z':
+        case_a_z:
             return false;
         default:
             continue;
@@ -129,7 +139,7 @@ SpellUpperString(char *str)
         return;
     do {
         switch (*str) {
-        case 'a' ... 'z':
+        case_a_z:
             *str += 'A' - 'a';
             break;
         default:
@@ -149,7 +159,7 @@ SpellCustomEnglishComplete(SpellHint *hint, int type)
     case CUSTOM_FIRST_CAPITAL:
         for (;hint->commit;hint++) {
             switch (*hint->commit) {
-            case 'a' ... 'z':
+            case_a_z:
                 *hint->commit += 'A' - 'a';
                 break;
             default:
