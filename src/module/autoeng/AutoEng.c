@@ -39,16 +39,38 @@
 
 #include "AutoEng.h"
 
+typedef enum {
+    AECM_NONE,
+    AECM_ALT,
+    AECM_CTRL,
+    AECM_SHIFT,
+} AutoEngChooseModifier;
+
+typedef struct {
+    FcitxGenericConfig gconfig;
+    AutoEngChooseModifier chooseModifier;
+} FcitxAutoEngConfig;
+
 typedef struct _FcitxAutoEngState {
     UT_array* autoEng;
     char buf[MAX_USER_INPUT + 1];
     int index;
     boolean active;
     FcitxInstance *owner;
+    FcitxAutoEngConfig config;
 } FcitxAutoEngState;
+
+static const unsigned int cmodtable[] = {
+    FcitxKeyState_None,
+    FcitxKeyState_Alt,
+    FcitxKeyState_Ctrl,
+    FcitxKeyState_Shift};
 
 static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 
+CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
+CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);
+CONFIG_BINDING_END();
 
 /**
  * Initialize for Auto English
@@ -127,7 +149,7 @@ FCITX_DEFINE_PLUGIN(fcitx_autoeng, module ,FcitxModule) = {
 
 void* AutoEngCreate(FcitxInstance *instance)
 {
-    FcitxAutoEngState* autoEngState = fcitx_utils_malloc0(sizeof(FcitxAutoEngState));
+    FcitxAutoEngState* autoEngState = fcitx_utils_new(FcitxAutoEngState);
     autoEngState->owner = instance;
     LoadAutoEng(autoEngState);
 
@@ -152,7 +174,7 @@ void* AutoEngCreate(FcitxInstance *instance)
 }
 
 static INPUT_RETURN_VALUE
-AutoEngCheckSelect(FcitxAutoEngState* autoEngState,
+AutoEngCheckSelect(FcitxAutoEngState *autoEngState,
                    FcitxKeySym sym, unsigned int state)
 {
     FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(
@@ -260,12 +282,52 @@ void ResetAutoEng(void* arg)
     autoEngState->active = false;
 }
 
+static CONFIG_DESC_DEFINE(GetAutoEngConfigDesc, "fcitx-autoeng.desc");
+
+static void
+SaveAutoEngConfig(FcitxAutoEngConfig* fs)
+{
+    FcitxConfigFileDesc *configDesc = GetAutoEngConfigDesc();
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-autoeng.config",
+                                             "w", NULL);
+    FcitxConfigSaveConfigFileFp(fp, &fs->gconfig, configDesc);
+    if (fp)
+        fclose(fp);
+}
+
+static boolean
+LoadAutoEngConfig(FcitxAutoEngConfig *config)
+{
+    FcitxConfigFileDesc *configDesc = GetAutoEngConfigDesc();
+    if (configDesc == NULL)
+        return false;
+
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-autoeng.config",
+                                             "r", NULL);
+
+    if (!fp) {
+        if (errno == ENOENT)
+            SaveAutoEngConfig(config);
+    }
+    FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
+    FcitxAutoEngConfigConfigBind(config, cfile, configDesc);
+    FcitxConfigBindSync(&config->gconfig);
+    if (config->chooseModifier > AECM_CTRL)
+        config->chooseModifier = AECM_CTRL;
+
+    if (fp)
+        fclose(fp);
+
+    return true;
+}
+
 void LoadAutoEng(FcitxAutoEngState* autoEngState)
 {
     FILE    *fp;
     char    *buf = NULL;
     size_t   length = 0;
 
+    LoadAutoEngConfig(&autoEngState->config);
     fp = FcitxXDGGetFileWithPrefix("data", "AutoEng.dat", "r", NULL);
     if (!fp)
         return;
@@ -344,8 +406,11 @@ ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
         InvokeFunction(autoEngState->owner, FCITX_SPELL,
                        GET_CANDWORDS, func_arg);
     if (candList) {
-        FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),
-                                candList, -1);
+        FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);
+        FcitxCandidateWordSetChooseAndModifier(
+            iList, DIGIT_STR_CHOOSE,
+            cmodtable[autoEngState->config.chooseModifier]);
+        FcitxCandidateWordMerge(iList, candList, -1);
         FcitxCandidateWordFreeList(candList);
     }
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input),

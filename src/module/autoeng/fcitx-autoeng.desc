@@ -1,0 +1,12 @@
+[Auto English/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=Alt
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
+[DescriptionFile]
+LocaleDomain=fcitx
