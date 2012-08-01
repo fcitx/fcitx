@@ -59,7 +59,7 @@ SpellEnchantLoadLib()
 {
     if (_enchant_handle)
         return true;
-    _enchant_handle = dlopen("libenchant.so", RTLD_NOW | RTLD_GLOBAL);
+    _enchant_handle = dlopen(ENCHANT_LIBRARY_FILENAME, RTLD_NOW | RTLD_GLOBAL);
     if (!_enchant_handle)
         goto fail;
 #define ENCHANT_LOAD_SYMBOL(sym) do {            \

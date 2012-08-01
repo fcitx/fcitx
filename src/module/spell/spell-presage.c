@@ -54,13 +54,12 @@ static int (*_presage_predict)(void *prsg, char ***result) = NULL;
 static void (*_presage_free_string_array)(char **str) = NULL;
 static void (*_presage_free)(void *prsg) = NULL;
 
-
 static boolean
 SpellPresageLoadLib()
 {
     if (_presage_handle)
         return true;
-    _presage_handle = dlopen("libpresage.so", RTLD_NOW | RTLD_GLOBAL);
+    _presage_handle = dlopen(PRESAGE_LIBRARY_FILENAME, RTLD_NOW | RTLD_GLOBAL);
     if (!_presage_handle)
         goto fail;
 #define PRESAGE_LOAD_SYMBOL(sym) do {            \
