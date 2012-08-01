@@ -34,10 +34,10 @@
 
 #include "spell-internal.h"
 #include "spell-custom.h"
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
 #  include "spell-presage.h"
 #endif
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
 #  include "spell-enchant.h"
 #endif
 
@@ -106,10 +106,10 @@ SpellCreate(FcitxInstance *instance)
     spell->owner = instance;
 
     SpellCustomInit(spell);
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageInit(spell);
 #endif
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     SpellEnchantInit(spell);
 #endif
 
@@ -135,10 +135,10 @@ SpellDestroy(void *arg)
     FcitxSpell *spell = (FcitxSpell*)arg;
     if (spell->dictLang)
         free(spell->dictLang);
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     SpellEnchantDestroy(spell);
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageDestroy(spell);
 #endif
     SpellCustomDestroy(spell);
@@ -153,7 +153,7 @@ ApplySpellConfig(FcitxSpell *spell)
     } else {
         spell->provider_order = "presage,custom,enchant";
     }
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     SpellEnchantApplyConfig(spell);
 #endif
 }
@@ -176,10 +176,10 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
             return;
     }
     SpellCustomLoadDict(spell, lang);
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     SpellEnchantLoadDict(spell, lang);
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageLoadDict(spell, lang);
 #endif
     if (spell->dictLang)
@@ -269,10 +269,10 @@ SpellParseNextProvider(const char *str, const char **name, int *len)
 }
 
 static SpellHintProvider hint_provider[] = {
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     {"enchant", "en", SpellEnchantHintWords, SpellEnchantCheck},
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     {"presage", "pre", SpellPresageHintWords, SpellPresageCheck},
 #endif
     {"custom", "cus", SpellCustomHintWords, SpellCustomCheck},
@@ -370,7 +370,7 @@ SpellAddPersonal(FcitxSpell *spell, const char *new_word, const char *lang)
     if (!new_word || !new_word[0])
         return false;
     SpellSetLang(spell, lang);
-#ifdef ENCHANT_FOUND
+#ifdef ENABLE_ENCHANT
     SpellEnchantAddPersonal(spell, new_word);
 #endif
     return false;
