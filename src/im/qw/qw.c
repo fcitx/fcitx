@@ -49,14 +49,10 @@ INPUT_RETURN_VALUE QWGetCandWord(void *arg, FcitxCandidateWord* candWord);
 char           *GetQuWei(FcitxQWState* qwstate, int iQu, int iWei);
 boolean QWInit(void *arg);
 
-FCITX_EXPORT_API
-FcitxIMClass ime = {
+FCITX_DEFINE_PLUGIN(fcitx_qw, ime, FcitxIMClass) = {
     QWCreate,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* QWCreate(struct _FcitxInstance* instance)
 {

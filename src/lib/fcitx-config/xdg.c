@@ -131,7 +131,6 @@ FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, co
 FCITX_EXPORT_API
 FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
 {
-    char* buf = NULL;
     size_t i;
     FILE *fp = NULL;
 
@@ -165,16 +164,16 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_
         return NULL;
     }
 
+    char* buf = NULL;
     for (i = 0; i < len; i++) {
+        fcitx_utils_free(buf);
+        buf = NULL;
         asprintf(&buf, "%s/%s", path[i], fileName);
 
         fp = fopen(buf, mode);
 
         if (fp)
             break;
-
-        free(buf);
-        buf = NULL;
     }
 
     if (!fp) {

@@ -81,8 +81,7 @@ static XIMStyle OnTheSpot_Styles [] = {
     0
 };
 
-FCITX_EXPORT_API
-FcitxFrontend frontend = {
+FCITX_DEFINE_PLUGIN(fcitx_xim, frontend, FcitxFrontend) = {
     XimCreate,
     XimDestroy,
     XimCreateIC,
@@ -102,9 +101,6 @@ FcitxFrontend frontend = {
     NULL,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 FcitxXimFrontend *ximfrontend;
 

@@ -79,17 +79,13 @@ typedef struct _FcitxFullWidthChar {
     FcitxInstance* owner;
 } FcitxFullWidthChar;
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_fullwidth_char, module, FcitxModule) = {
     FullWidthCharCreate,
     NULL,
     NULL,
     NULL,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* FullWidthCharCreate(FcitxInstance* instance)
 {

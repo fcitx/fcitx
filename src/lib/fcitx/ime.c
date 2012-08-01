@@ -269,7 +269,7 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         char* modulePath;
         FILE *fp = FcitxXDGGetLibFile(addon->library, "r", &modulePath);
         void *handle;
-        FcitxIMClass * imclass;
+        FcitxIMClass2 * imclass2;
         if (!fp) {
             free(modulePath);
             return;
@@ -283,26 +283,32 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
         }
         free(modulePath);
 
-        if (!CheckABIVersion(handle)) {
+        if (!FcitxCheckABIVersion(handle, addon->name)) {
             FcitxLog(ERROR, "%s ABI Version Error", addon->name);
             dlclose(handle);
             return;
         }
 
-        imclass = dlsym(handle, "ime");
-        if (!imclass || !imclass->Create) {
+        boolean isIMClass2 = false;
+        imclass2 = FcitxGetSymbol(handle, addon->name, "ime2");
+        if (!imclass2)
+            imclass2 = FcitxGetSymbol(handle, addon->name, "ime");
+        else
+            isIMClass2 = true;
+        if (!imclass2 || !imclass2->Create) {
             FcitxLog(ERROR, _("IM: bad im %s"), addon->name);
             dlclose(handle);
             return;
         }
 
+        addon->isIMClass2 = isIMClass2;
         instance->currentIMAddon = addon;
-        if ((addon->addonInstance = imclass->Create(instance)) == NULL) {
+        if ((addon->addonInstance = imclass2->Create(instance)) == NULL) {
             dlclose(handle);
             return;
         }
         instance->currentIMAddon = NULL;
-        addon->imclass = imclass;
+        addon->imclass2 = imclass2;
         utarray_push_back(&instance->imeclasses, &addon);
     }
 }
@@ -865,6 +871,8 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
     FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, name);
     if (im) {
         int idx = FcitxInstanceGetIMIndexByName(instance, name);
+        if (idx < 0)
+            return;
         if (idx == 0)
             FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
         else {
@@ -907,6 +915,18 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
             FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
         }
     }
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceUnregisterIM(FcitxInstance* instance, const char* name)
+{
+    FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, name);
+    if (!im)
+        return;
+    
+    int index = utarray_eltidx(&instance->availimes, im);
+    utarray_erase(&instance->availimes, index, 1);
+    FcitxInstanceUpdateIMList(instance);
 }
 
 void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
@@ -1115,6 +1135,18 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
                 addon->addonInstance) {
             if (addon->frontend->ReloadConfig)
                 addon->frontend->ReloadConfig(addon->addonInstance);
+        }
+    }
+
+    for (addon = (FcitxAddon *) utarray_front(addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->category == AC_INPUTMETHOD &&
+                addon->bEnabled &&
+                addon->addonInstance &&
+                addon->isIMClass2) {
+            if (addon->imclass2->ReloadConfig)
+                addon->imclass2->ReloadConfig(addon->addonInstance);
         }
     }
 
@@ -1568,7 +1600,7 @@ int FcitxInstanceGetIMIndexByName(FcitxInstance* instance, const char* imName)
 {
     UT_array* imes = &instance->imes;
     FcitxIM *pim;
-    int index = 0, i = 0;
+    int index = -1, i = 0;
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {

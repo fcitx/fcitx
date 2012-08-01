@@ -90,17 +90,13 @@ CONFIG_BINDING_REGISTER("TraditionalChinese", "Enabled", enabled)
 CONFIG_BINDING_REGISTER("TraditionalChinese", "Hotkey", hkToggle)
 CONFIG_BINDING_END()
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_chttrans, module, FcitxModule) = {
     ChttransCreate,
     NULL,
     NULL,
     NULL,
     ReloadChttrans
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* ChttransCreate(FcitxInstance* instance)
 {

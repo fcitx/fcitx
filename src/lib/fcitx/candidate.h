@@ -86,11 +86,19 @@ extern "C" {
     } FcitxCandidateWord;
 
     /**
-     * Initialize a word list, should only used by runtime
+     * Initialize a word list
      *
-     * @return _FcitxCandidateWordList*
+     * @return Word List
      **/
     struct _FcitxCandidateWordList* FcitxCandidateWordNewList();
+
+    /**
+     * Free a word list
+     *
+     * @param list list to free
+     * @return void
+     */
+    void FcitxCandidateWordFreeList(struct _FcitxCandidateWordList* list);
 
     /**
      * Insert a candidate to position
@@ -100,8 +108,23 @@ extern "C" {
      * @param position position to insert
      * @return void
      **/
-    void FcitxCandidateWordInsert(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position);
+    void FcitxCandidateWordInsert(FcitxCandidateWordList* candList,
+                                  FcitxCandidateWord* candWord, int position);
 
+    /**
+     * Merge newList into candList at a certain position
+     * (newList will be cleared)
+     *
+     * @param candList candidate words list
+     * @param newList candidate words list to be inserted
+     * @param position position to insert (less than 0 to append)
+     * @return void
+     *
+     * @since 4.2.6
+     **/
+    void FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
+                                   FcitxCandidateWordList* newList,
+                                   int position);
     /**
      * Insert non-display place holder candidate to position
      *

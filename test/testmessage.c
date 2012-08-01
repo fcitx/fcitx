@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "fcitx/instance.h"
 #include "fcitx/candidate.h"
 #include "fcitx/instance-internal.h"
@@ -7,6 +8,7 @@ int main()
 {
     char* words[] = { "a", "b", "c" , "d", "e" };
     char* extras[] = { "A", "B", "C" , "D", "E" };
+    FcitxCandidateWordList* candList = FcitxCandidateWordNewList();
     FcitxInstance* instance = fcitx_utils_malloc0(sizeof(FcitxInstance));
     instance->input = fcitx_utils_malloc0(sizeof(FcitxInputState));
     instance->input->candList = FcitxCandidateWordNewList();
@@ -22,11 +24,29 @@ int main()
         word.strExtra = strdup(extras[i]);
         FcitxCandidateWordAppend(instance->input->candList, &word);
     }
-
-    char* result = FcitxUICandidateWordToCString(instance);
-    if (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0) {
-        return 0;
+    for (i = 0; i < 4; i ++) {
+        word.strWord = strdup(words[i]);
+        word.strExtra = strdup(extras[i]);
+        FcitxCandidateWordAppend(candList, &word);
     }
 
-    return 1;
+    char* result = FcitxUICandidateWordToCString(instance);
+    assert (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0);
+    free(result);
+
+    FcitxCandidateWordSetPageSize(instance->input->candList, 10);
+    FcitxCandidateWordMerge(instance->input->candList, candList, 2);
+    result = FcitxUICandidateWordToCString(instance);
+    assert (strcmp(result, "1.aA 2.bB 3.aA 4.bB 5.cC 6.dD "
+                   "7.cC 8.dD 9.eE ") == 0);
+    free(result);
+
+    FcitxCandidateWordFreeList(instance->input->candList);
+    FcitxCandidateWordFreeList(candList);
+    free(instance->config);
+    free(instance->input);
+    free(instance);
+
+
+    return 0;
 }

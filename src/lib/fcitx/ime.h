@@ -135,6 +135,22 @@ extern "C" {
         void  (*Destroy)(void *arg); /**< interface for destroy all input method created by this class */
     } FcitxIMClass;
 
+    /**
+     * Fcitx Input Method class, it can register more than one input
+     *        method in create function
+     **/
+    typedef struct _FcitxIMClass2 {
+        void* (*Create)(struct _FcitxInstance* instance); /**< interface for create a input method */
+        void  (*Destroy)(void *arg); /**< interface for destroy all input method created by this class */
+        void  (*ReloadConfig)(void *arg); /**< interface for destroy all input method created by this class */
+        void  (*padding1)(void *arg); /**< padding */
+        void  (*padding2)(void *arg); /**< padding */
+        void  (*padding3)(void *arg); /**< padding */
+        void  (*padding4)(void *arg); /**< padding */
+        void  (*padding5)(void *arg); /**< padding */
+    } FcitxIMClass2;
+
+
     typedef boolean(*FcitxIMInit)(void *arg); /**< FcitxIMInit */
     typedef void (*FcitxIMResetIM)(void *arg); /**< FcitxIMResetIM */
     typedef INPUT_RETURN_VALUE(*FcitxIMDoInput)(void *arg, FcitxKeySym, unsigned int); /**< FcitxIMDoInput */
@@ -826,11 +842,23 @@ extern "C" {
     /**
      * set local input method name
      *
-     * @param ic name
+     * @param instance Fcitx Instance
+     * @param ic input context
      * @param imname im name
      * @return void
      **/
     void FcitxInstanceSetLocalIMName(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, const char* imname);
+
+    /**
+     * unregister an im entry
+     *
+     * @param instance Fcitx Instance
+     * @param name imname
+     * @return void
+     *
+     * @since 4.2.6
+     */
+    void FcitxInstanceUnregisterIM(struct _FcitxInstance* instance, const char* name);
 
 #ifdef __cplusplus
 }

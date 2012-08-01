@@ -44,9 +44,33 @@ FcitxCandidateWordList* FcitxCandidateWordNewList()
 }
 
 FCITX_EXPORT_API
+void FcitxCandidateWordFreeList(FcitxCandidateWordList* list)
+{
+    utarray_done(&list->candWords);
+    free(list);
+}
+
+FCITX_EXPORT_API
 void FcitxCandidateWordInsert(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord, int position)
 {
     utarray_insert(&candList->candWords, candWord, position);
+}
+
+FCITX_EXPORT_API
+void
+FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
+                        FcitxCandidateWordList* newList, int position)
+{
+    void *p;
+    if (!newList)
+        return;
+    if (position >= 0) {
+        utarray_inserta(&candList->candWords, &newList->candWords, position);
+    } else {
+        utarray_concat(&candList->candWords, &newList->candWords);
+    }
+    utarray_steal(&newList->candWords, p);
+    free(p);
 }
 
 INPUT_RETURN_VALUE DummyHandler(void* arg, FcitxCandidateWord* candWord)

@@ -52,17 +52,13 @@ static void DBusDestroy(void* arg);
 static void* DBusGetConnection(void* arg, FcitxModuleFunctionArg args);
 static void* DBusGetPrivateConnection(void* arg, FcitxModuleFunctionArg args);
 
-FCITX_EXPORT_API
-FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_dbus, module, FcitxModule) = {
     DBusCreate,
     DBusSetFD,
     DBusProcessEvent,
     DBusDestroy,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 DBusHandlerResult DBusModuleFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
 {

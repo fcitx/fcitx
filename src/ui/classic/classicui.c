@@ -77,8 +77,7 @@ static void* ClassicUILoadImage(void *arg, FcitxModuleFunctionArg args);
 static void* ClassicUIGetKeyBoardFontColor(void* arg, FcitxModuleFunctionArg args);
 static void* ClassicUIGetFont(void *arg, FcitxModuleFunctionArg args);
 
-FCITX_EXPORT_API
-FcitxUI ui = {
+FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
     ClassicUICreate,
     ClassicUICloseInputWindow,
     ClassicUIShowInputWindow,
@@ -100,9 +99,6 @@ FcitxUI ui = {
     ClassicUIUpdateComplexStatus,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* ClassicUICreate(FcitxInstance* instance)
 {

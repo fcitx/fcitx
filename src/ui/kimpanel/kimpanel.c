@@ -168,8 +168,7 @@ static void KimpanelIntrospectCallback(DBusPendingCall *call, void *data);
 
 #define KIMPANEL_BUFFER_SIZE 4096
 
-FCITX_EXPORT_API
-FcitxUI ui = {
+FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
     KimpanelCreate,
     KimpanelCloseInputWindow,
     KimpanelShowInputWindow,
@@ -191,9 +190,6 @@ FcitxUI ui = {
     KimpanelUpdateComplexStatus,
     NULL
 };
-
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
 
 void* KimpanelCreate(FcitxInstance* instance)
 {

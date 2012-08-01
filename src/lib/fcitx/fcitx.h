@@ -65,6 +65,10 @@ extern "C" {
 /** fcitx addon ABI version, need to be used with addon */
 #define FCITX_ABI_VERSION 5
 
+#define FCITX_DEFINE_PLUGIN(name, category, type) \
+FCITX_EXPORT_API int name##_ABI_VERSION = FCITX_ABI_VERSION; \
+FCITX_EXPORT_API type name##_##category 
+
 #ifdef __cplusplus
 }
 #endif
