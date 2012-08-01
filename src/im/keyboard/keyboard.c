@@ -638,7 +638,11 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[7] = layout;
     FcitxCandidateWordList *candList =
         InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
-    FcitxCandidateWordConcat(FcitxInputStateGetCandidateList(input), candList);
+    if (!candList)
+        return IRV_DISPLAY_CANDWORDS;
+    FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),
+                            candList, -1);
+    FcitxCandidateWordFreeList(candList);
     return IRV_DISPLAY_CANDWORDS;
 }
 
