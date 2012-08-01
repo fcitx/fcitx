@@ -86,11 +86,19 @@ extern "C" {
     } FcitxCandidateWord;
 
     /**
-     * Initialize a word list, should only used by runtime
+     * Initialize a word list
      *
-     * @return _FcitxCandidateWordList*
+     * @return Word List
      **/
     struct _FcitxCandidateWordList* FcitxCandidateWordNewList();
+
+    /**
+     * Free a word list
+     *
+     * @param list list to free
+     * @return void
+     */
+    void FcitxCandidateWordFreeList(struct _FcitxCandidateWordList* list);
 
     /**
      * Insert a candidate to position
