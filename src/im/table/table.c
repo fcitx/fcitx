@@ -61,7 +61,7 @@ static INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned i
 FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
     TableCreate,
     NULL,
-    NULL,
+    ReloadTableConfig,
     NULL,
     NULL,
     NULL,
@@ -128,7 +128,7 @@ void *TableCreate(FcitxInstance* instance)
             TableGetCandWords,
             TablePhraseTips,
             SaveTableIM,
-            ReloadTableConfig,
+            ReloadPerTableConfig,
             TableKeyBlocker,
             table->iPriority,
             table->langCode
@@ -292,7 +292,10 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
 
     if (tbl->iCurrentTableLoaded == -1) {
-        LoadTableDict(table);
+        if (!LoadTableDict(table)) {
+            FcitxInstanceUnregisterIM(instance, table->uniqueName);
+            return IRV_DONOT_PROCESS;
+        }
         tbl->iCurrentTableLoaded = iTableIMIndex;
     }
 
@@ -1349,14 +1352,19 @@ INPUT_RETURN_VALUE TableKeyBlocker(void* arg, FcitxKeySym sym, unsigned int stat
     return FcitxStandardKeyBlocker(input, sym, state);
 }
 
-/* we should try not to break the existing on even if the config file is not exist anymore */
 void ReloadTableConfig(void* arg)
+{
+    FcitxTableState* tbl = arg;
+    LoadTableConfig(&tbl->config);
+}
+
+/* we should try not to break the existing on even if the config file is not exist anymore */
+void ReloadPerTableConfig(void* arg)
 {
     TableMetaData* table = arg;
     size_t len = 0;
     int i = 0;
     char** tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
-    LoadTableConfig(&table->owner->config);
 
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)

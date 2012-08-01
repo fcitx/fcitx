@@ -89,6 +89,7 @@ void            LoadTableInfo(FcitxTableState* tbl);
 boolean         TableInit(void* arg);
 void            SaveTableIM(void* arg);
 void            ReloadTableConfig(void* arg);
+void            ReloadPerTableConfig(void* arg);
 
 INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state);
 INPUT_RETURN_VALUE TableGetCandWords(void* arg);

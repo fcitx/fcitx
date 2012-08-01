@@ -842,11 +842,23 @@ extern "C" {
     /**
      * set local input method name
      *
-     * @param ic name
+     * @param instance Fcitx Instance
+     * @param ic input context
      * @param imname im name
      * @return void
      **/
     void FcitxInstanceSetLocalIMName(struct _FcitxInstance* instance, struct _FcitxInputContext* ic, const char* imname);
+
+    /**
+     * unregister an im entry
+     *
+     * @param instance Fcitx Instance
+     * @param name imname
+     * @return void
+     *
+     * @since 4.2.6
+     */
+    void FcitxInstanceUnregisterIM(struct _FcitxInstance* instance, const char* name);
 
 #ifdef __cplusplus
 }

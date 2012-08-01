@@ -871,6 +871,8 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
     FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, name);
     if (im) {
         int idx = FcitxInstanceGetIMIndexByName(instance, name);
+        if (idx < 0)
+            return;
         if (idx == 0)
             FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
         else {
@@ -913,6 +915,18 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
             FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
         }
     }
+}
+
+FCITX_EXPORT_API
+void FcitxInstanceUnregisterIM(FcitxInstance* instance, const char* name)
+{
+    FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, name);
+    if (!im)
+        return;
+    
+    int index = utarray_eltidx(&instance->availimes, im);
+    utarray_erase(&instance->availimes, index, 1);
+    FcitxInstanceUpdateIMList(instance);
 }
 
 void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
@@ -1121,6 +1135,18 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
                 addon->addonInstance) {
             if (addon->frontend->ReloadConfig)
                 addon->frontend->ReloadConfig(addon->addonInstance);
+        }
+    }
+
+    for (addon = (FcitxAddon *) utarray_front(addons);
+            addon != NULL;
+            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+        if (addon->category == AC_INPUTMETHOD &&
+                addon->bEnabled &&
+                addon->addonInstance &&
+                addon->isIMClass2) {
+            if (addon->imclass2->ReloadConfig)
+                addon->imclass2->ReloadConfig(addon->addonInstance);
         }
     }
 
@@ -1574,7 +1600,7 @@ int FcitxInstanceGetIMIndexByName(FcitxInstance* instance, const char* imName)
 {
     UT_array* imes = &instance->imes;
     FcitxIM *pim;
-    int index = 0, i = 0;
+    int index = -1, i = 0;
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {

@@ -35,18 +35,18 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     char            cChar = 0, cTemp;
     char            iVersion = 1;
     int             iRecordIndex;
-    char           *pstr;
     TableDict      *tableDict;
-    tableMetaData->tableDict = fcitx_utils_malloc0(sizeof(TableDict));
-    tableDict = tableMetaData->tableDict;
-    tableDict->pool = fcitx_memory_pool_create();
 
     //读入码表
     FcitxLog(DEBUG, _("Loading Table Dict"));
 
-    fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", &pstr);
-    FcitxLog(INFO, _("Load Table Dict from %s"), pstr);
-    free(pstr);
+    fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", NULL);
+    if (!fpDict)
+        return false;
+
+    tableMetaData->tableDict = fcitx_utils_malloc0(sizeof(TableDict));
+    tableDict = tableMetaData->tableDict;
+    tableDict->pool = fcitx_memory_pool_create();
 
     //先读取码表的信息
     //判断版本信息
