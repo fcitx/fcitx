@@ -54,7 +54,7 @@ static void (*_enchant_broker_set_ordering)(void *broker,
 static void (*_enchant_dict_add_to_personal)(void *dict, const char *const word,
                                              ssize_t len) = NULL;
 
-boolean
+static boolean
 SpellEnchantLoadLib()
 {
     if (_enchant_handle)

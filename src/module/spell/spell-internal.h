@@ -23,10 +23,6 @@
 #include "config.h"
 #include <fcitx-config/fcitx-config.h>
 
-#ifdef PRESAGE_FOUND
-#include <presage.h>
-#endif
-
 #include "spell.h"
 
 typedef struct {
@@ -67,8 +63,8 @@ typedef struct {
     // UT_array* enchantLanguages;
     void *enchant_dict;
 #endif
-#ifdef PRESAGE_FOUND
-    presage_t presage;
+#ifdef ENABLE_PRESAGE
+    void *presage;
     boolean presage_support;
     char *past_stm;
 #endif

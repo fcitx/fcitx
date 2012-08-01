@@ -34,7 +34,7 @@
 
 #include "spell-internal.h"
 #include "spell-custom.h"
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
 #  include "spell-presage.h"
 #endif
 #ifdef ENABLE_ENCHANT
@@ -106,7 +106,7 @@ SpellCreate(FcitxInstance *instance)
     spell->owner = instance;
 
     SpellCustomInit(spell);
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageInit(spell);
 #endif
 #ifdef ENABLE_ENCHANT
@@ -138,7 +138,7 @@ SpellDestroy(void *arg)
 #ifdef ENABLE_ENCHANT
     SpellEnchantDestroy(spell);
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageDestroy(spell);
 #endif
     SpellCustomDestroy(spell);
@@ -179,7 +179,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
 #ifdef ENABLE_ENCHANT
     SpellEnchantLoadDict(spell, lang);
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     SpellPresageLoadDict(spell, lang);
 #endif
     if (spell->dictLang)
@@ -272,7 +272,7 @@ static SpellHintProvider hint_provider[] = {
 #ifdef ENABLE_ENCHANT
     {"enchant", "en", SpellEnchantHintWords, SpellEnchantCheck},
 #endif
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
     {"presage", "pre", SpellPresageHintWords, SpellPresageCheck},
 #endif
     {"custom", "cus", SpellCustomHintWords, SpellCustomCheck},

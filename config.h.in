@@ -24,6 +24,7 @@
 #cmakedefine ENCHANT_FOUND
 #cmakedefine ENABLE_ENCHANT
 #cmakedefine PRESAGE_FOUND
+#cmakedefine ENABLE_PRESAGE
 
 #define PACKAGE "@package@"
 #ifdef FCITX_USE_INTERNAL_PATH

@@ -20,7 +20,7 @@
 #include "spell-internal.h"
 
 CONFIG_BINDING_BEGIN(FcitxSpellConfig);
-#ifdef PRESAGE_FOUND
+#ifdef ENABLE_PRESAGE
 /* CONFIG_BINDING_REGISTER("Spell Hint", "UsePresage", usePresage); */
 #endif
 #ifdef ENABLE_ENCHANT
