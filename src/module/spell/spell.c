@@ -55,17 +55,13 @@ static void *FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args);
 
 static boolean SpellOrderHasValidProvider(const char *providers);
 
-FCITX_EXPORT_API
-const FcitxModule module = {
+FCITX_DEFINE_PLUGIN(fcitx_spell, module, FcitxModule) = {
     .Create = SpellCreate,
     .Destroy = SpellDestroy,
     .SetFD = NULL,
     .ProcessEvent = NULL,
     .ReloadConfig = SpellReloadConfig
 };
-
-FCITX_EXPORT_API
-const int ABI_VERSION = FCITX_ABI_VERSION;
 
 static void
 SaveSpellConfig(FcitxSpellConfig* fs)
