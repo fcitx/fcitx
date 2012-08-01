@@ -149,7 +149,7 @@ SpellPresageInit(FcitxSpell *spell)
 SpellHint*
 SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    if (!SpellPresageInit())
+    if (!SpellPresageInit(spell))
         return NULL;
     SpellHint *res = NULL;
     if (!(spell->presage && spell->presage_support))
@@ -176,7 +176,7 @@ SpellPresageHintWords(FcitxSpell *spell, unsigned int len_limit)
 boolean
 SpellPresageCheck(FcitxSpell *spell)
 {
-    if (!SpellPresageInit())
+    if (!SpellPresageInit(spell))
         return false;
     if (spell->presage && spell->presage_support)
         return true;
@@ -195,7 +195,7 @@ SpellPresageDestroy(FcitxSpell *spell)
 boolean
 SpellPresageLoadDict(FcitxSpell *spell, const char *lang)
 {
-    if (!SpellPresageInit())
+    if (!SpellPresageInit(spell))
         return false;
     if (SpellLangIsLang(lang, "en")) {
         spell->presage_support = true;

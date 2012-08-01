@@ -87,6 +87,8 @@ fail:
 boolean
 SpellEnchantInit(FcitxSpell *spell)
 {
+    if (spell->broker)
+        return true;
     if (!SpellEnchantLoadLib())
         return false;
     spell->broker = _enchant_broker_init();
@@ -98,7 +100,7 @@ SpellHint*
 SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
     SpellHint *res = NULL;
-    if (!SpellEnchantLoadLib())
+    if (!SpellEnchantInit(spell))
         return NULL;
     if (!spell->enchant_dict || spell->enchant_saved_lang)
         return NULL;
@@ -117,7 +119,7 @@ SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
 boolean
 SpellEnchantCheck(FcitxSpell *spell)
 {
-    if (!SpellEnchantLoadLib())
+    if (!SpellEnchantInit(spell))
         return false;
     if (spell->enchant_dict && !spell->enchant_saved_lang)
         return true;
@@ -127,8 +129,6 @@ SpellEnchantCheck(FcitxSpell *spell)
 void
 SpellEnchantDestroy(FcitxSpell *spell)
 {
-    if (!SpellEnchantLoadLib())
-        return;
     if (spell->broker) {
         if (spell->enchant_dict)
             _enchant_broker_free_dict(spell->broker, spell->enchant_dict);
@@ -144,7 +144,7 @@ boolean
 SpellEnchantLoadDict(FcitxSpell *spell, const char *lang)
 {
     void *enchant_dict;
-    if (!SpellEnchantLoadLib())
+    if (!SpellEnchantInit(spell))
         return false;
     if (!spell->broker)
         return false;
@@ -176,7 +176,7 @@ SpellEnchantLoadDict(FcitxSpell *spell, const char *lang)
 void
 SpellEnchantApplyConfig(FcitxSpell *spell)
 {
-    if (!SpellEnchantLoadLib())
+    if (!SpellEnchantInit(spell))
         return;
     if (!spell->broker) {
         spell->broker = _enchant_broker_init();
@@ -223,7 +223,7 @@ SpellEnchantApplyConfig(FcitxSpell *spell)
 void
 SpellEnchantAddPersonal(FcitxSpell *spell, const char *new_word)
 {
-    if (!SpellEnchantLoadLib())
+    if (!SpellEnchantInit(spell))
         return;
     if (spell->enchant_dict && !spell->enchant_saved_lang) {
         _enchant_dict_add_to_personal(spell->enchant_dict, new_word,
