@@ -143,7 +143,11 @@ SpellPresageInit(FcitxSpell *spell)
     _presage_new(FcitxSpellGetPastStream, spell,
                  FcitxSpellGetFutureStream, spell, &spell->presage);
     spell->presage_support = false;
-    return !!(spell->presage);
+    if (!spell->presage)
+        return false;
+    if (spell->dictLang)
+        SpellPresageLoadDict(spell, spell->dictLang);
+    return true;
 }
 
 SpellHint*

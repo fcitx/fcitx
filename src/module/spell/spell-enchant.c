@@ -93,7 +93,11 @@ SpellEnchantInit(FcitxSpell *spell)
         return false;
     spell->broker = _enchant_broker_init();
     spell->cur_enchant_provider = EP_Default;
-    return !!(spell->broker);
+    if (!spell->broker)
+        return false;
+    if (spell->dictLang)
+        SpellEnchantLoadDict(spell, spell->dictLang);
+    return true;
 }
 
 SpellHint*
