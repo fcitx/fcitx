@@ -34,7 +34,8 @@ int main()
     assert (strcmp(result, "1.aA 2.bB 3.cC 4.dD 5.eE ") == 0);
     free(result);
 
-    FcitxCandidateWordMerge(instance->input->candList, candList, 1);
+    FcitxCandidateWordSetPageSize(instance->input->candList, 10);
+    FcitxCandidateWordMerge(instance->input->candList, candList, 2);
     result = FcitxUICandidateWordToCString(instance);
     assert (strcmp(result, "1.aA 2.bB 3.aA 4.bB 5.cC 6.dD "
                    "7.cC 8.dD 9.eE ") == 0);
