@@ -75,6 +75,15 @@ typedef struct {
         (a)->n=0;                                                                   \
     } while(0)
 
+#define utarray_steal(a, p) do {                \
+        if (!(a)->n) {                          \
+            p = NULL;                           \
+            break;                              \
+        }                                       \
+        (a)->n = 0;                             \
+        p = (a)->d;                             \
+    } while(0)
+
 #define utarray_new(a,_icd) do {                                              \
         a=(UT_array*)malloc(sizeof(UT_array));                                      \
         utarray_init(a,_icd);                                                       \
