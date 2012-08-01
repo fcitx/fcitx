@@ -571,10 +571,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
         if (FcitxCandidateWordGetListSize(candList)) {
-            int index = FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
-                                                  FcitxCandidateWordGetChoose(candList),
-                                                  FcitxCandidateWordGetModifier(candList)
-                                                 );
+            int index = FcitxCandidateWordCheckChooseKey(candList, sym, state);
             if (index >= 0)
                 return IRV_TO_PROCESS;
         }

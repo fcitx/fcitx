@@ -131,9 +131,7 @@ boolean UnicodePreFilter(void* arg, FcitxKeySym sym, unsigned int state,
         }
 
         if (retVal == IRV_TO_PROCESS) {
-            int index = FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
-                                                            FcitxCandidateWordGetChoose(candList),
-                                                            FcitxCandidateWordGetModifier(candList));
+            int index = FcitxCandidateWordCheckChooseKey(candList, sym, state);
             if (index >= 0)
                 retVal = FcitxCandidateWordChooseByIndex(candList, index);
         }
