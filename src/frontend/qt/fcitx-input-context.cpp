@@ -424,7 +424,7 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
         loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
     }
 
-    if (!m_connection || result.isError() || result.value() <= 0)
+    if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
     else {
         update();
@@ -571,7 +571,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
         loop.connect(this, SIGNAL(dbusDisconnected()), SLOT(quit()));
         loop.exec(QEventLoop::ExcludeUserInputEvents);
 
-        if (!m_connection || result.isError() || result.value() <= 0) {
+        if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0) {
             QTimer::singleShot(0, this, SLOT(updateIM()));
             return x11FilterEventFallback(event, sym);
         } else {
