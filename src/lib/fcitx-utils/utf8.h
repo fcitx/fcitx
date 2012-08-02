@@ -165,7 +165,6 @@ int fcitx_ucs4_char_len(unsigned int c);
  **/
 int fcitx_ucs4_to_utf8(unsigned int c, char* output);
 
-
 /**
  * @brief get the ascii part at the end of a utf8 string
  *
@@ -175,6 +174,17 @@ int fcitx_ucs4_to_utf8(unsigned int c, char* output);
  * @since 4.2.6
  **/
 char *fcitx_utils_get_ascii_part(char *string);
+
+/**
+ * @brief get the ascii part at the end of a utf8 string (with a given size)
+ *
+ * @param string a utf8 string
+ * @param len the length of the string
+ * @return string pointer to the ascii part
+ *
+ * @since 4.2.6
+ **/
+char *fcitx_utils_get_ascii_partn(char *string, ssize_t len);
 #ifdef __cplusplus
 }
 #endif
