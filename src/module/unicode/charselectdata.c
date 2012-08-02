@@ -720,7 +720,7 @@ UnicodeSet* UnicodeSetIntersect(UnicodeSet* left, UnicodeSet* right)
 
 UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
 {
-    UnicodeSet* result;
+    UnicodeSet *result = NULL;
 
     UT_array* returnRes;
     utarray_new(returnRes, &int16_icd);
