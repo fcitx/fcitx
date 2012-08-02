@@ -46,6 +46,7 @@
 
 #define case_vowel case 'a': case 'e': case 'i': case 'o':      \
 case 'u': case 'A': case 'E': case 'I': case 'O': case 'U'
+
 #define case_consonant case 'B': case 'C': case 'D':          \
 case 'F': case 'G': case 'H': case 'J': case 'K': case 'L':   \
 case 'M': case 'N': case 'P': case 'Q': case 'R': case 'S':   \
@@ -121,20 +122,24 @@ FcitxPYEnhanceGetCandWordCb(void *arg, const char *commit)
 }
 
 static boolean
-PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string)
+PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string,
+                          int position, int len_limit)
 {
     FcitxInstance *instance = pyenhance->owner;
     FcitxInputState *input;
     FcitxCandidateWordList *candList;
     FcitxCandidateWordList *newList;
-    int len_limit;
     input = FcitxInstanceGetInputState(instance);
     if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(instance),
                                      FCITX_SPELL_NAME))
         return false;
     candList = FcitxInputStateGetCandidateList(input);
-    len_limit = FcitxCandidateWordGetPageSize(candList) / 2;
-    len_limit = len_limit > 0 ? len_limit : 1;
+    if (len_limit <= 0) {
+        len_limit = FcitxCandidateWordGetPageSize(candList) / 2;
+        len_limit = len_limit > 0 ? len_limit : 1;
+    }
+    if (position <= 0)
+        position = 1;
     FcitxModuleFunctionArg func_arg;
     func_arg.args[0] = NULL;
     func_arg.args[1] = (void*)string;
@@ -147,16 +152,14 @@ PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string)
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
-    FcitxCandidateWordMerge(candList, newList, 1);
+    FcitxCandidateWordMerge(candList, newList, position);
     FcitxCandidateWordFreeList(newList);
     return true;
 }
 
 static boolean
-PinyinEnhanceGetStrings(PinyinEnhance *pyenhance,
-                        char **ret_selected, char **ret_pinyin)
+PinyinEnhanceSpellHint(PinyinEnhance *pyenhance)
 {
-    FcitxIM *im;
     FcitxInputState *input;
     char *string;
     char *pinyin;
@@ -164,16 +167,12 @@ PinyinEnhanceGetStrings(PinyinEnhance *pyenhance,
     int spaces = 0;
     int vowels = 0;
     int letters = 0;
-    im = FcitxInstanceGetCurrentIM(pyenhance->owner);
-    *ret_selected = NULL;
-    *ret_pinyin = NULL;
-    if (!im)
-        return false;
+    boolean res = false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
     string = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
     pinyin = fcitx_utils_get_ascii_part(string);
     if (pinyin != string)
-        *ret_selected = strndup(string, pinyin - string);
+        pyenhance->selected = strndup(string, pinyin - string);
     p = pinyin;
     do {
         switch (*p) {
@@ -189,20 +188,20 @@ PinyinEnhanceGetStrings(PinyinEnhance *pyenhance,
             break;
         }
     } while (*(p++));
-    *ret_pinyin = strdup(pinyin);
-    free(string);
     // pretty random numbers here,
     // just want to add all possible parameters (that I can think of) which can
     // show the difference between Chinese and English.
-    return (letters >= 4) &&
+    if ((letters >= 4) &&
         (spaces * 2 > letters ||
-         (spaces * 3 >= letters && vowels * 3 >= letters));
+         (spaces * 3 >= letters && vowels * 3 >= letters)))
+        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, -1, -1);
+    free(string);
+    return res;
 }
 
 static void
 PinyinEnhanceAddCandidateWord(void *arg)
 {
-    char *pinyin = NULL;
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
 
@@ -213,11 +212,7 @@ PinyinEnhanceAddCandidateWord(void *arg)
     /* check whether the current im is pinyin */
     if (!CHECK_VALID_IM(im))
         return;
-    if (PinyinEnhanceGetStrings(pyenhance, &pyenhance->selected, &pinyin)) {
-        PinyinEnhanceGetCandWords(pyenhance, pinyin);
-    }
-    if (pinyin)
-        free(pinyin);
+    PinyinEnhanceSpellHint(pyenhance);
     return;
 }
 
