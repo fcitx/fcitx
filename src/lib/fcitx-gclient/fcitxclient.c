@@ -128,13 +128,14 @@ G_DEFINE_TYPE(FcitxClient, fcitx_client, G_TYPE_OBJECT);
     (G_TYPE_INSTANCE_GET_PRIVATE((obj), FCITX_TYPE_CLIENT, FcitxClientPrivate))
 
 enum {
-    CONNTECTED_SIGNAL,
+    CONNECTED_SIGNAL,
     ENABLE_IM_SIGNAL,
     CLOSE_IM_SIGNAL,
     FORWARD_KEY_SIGNAL,
     COMMIT_STRING_SIGNAL,
     DELETE_SURROUNDING_TEXT_SIGNAL,
     UPDATED_FORMATTED_PREEDIT_SIGNAL,
+    DISCONNECTED_SIGNAL,
     LAST_SIGNAL
 };
 
@@ -156,7 +157,7 @@ static void _fcitx_client_socket_file_changed_cb (GFileMonitor *monitor, GFile *
 static gchar* _fcitx_get_address ();
 static void _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
-static void _fcitx_client_clean_up(FcitxClient* self);
+static void _fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn);
 static void _fcitx_client_unwatch(FcitxClient* self);
 static void _fcitx_client_watch(FcitxClient* self);
 
@@ -217,7 +218,7 @@ fcitx_client_dispose(GObject *object)
     }
     _fcitx_client_unwatch(self);
 
-    _fcitx_client_clean_up(self);
+    _fcitx_client_clean_up(self, TRUE);
 
     if (G_OBJECT_CLASS(fcitx_client_parent_class)->dispose != NULL)
         G_OBJECT_CLASS(fcitx_client_parent_class)->dispose(object);
@@ -401,7 +402,7 @@ _fcitx_client_vanish (GDBusConnection *connection,
                       gpointer         user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    _fcitx_client_clean_up(self);
+    _fcitx_client_clean_up(self, FALSE);
 }
 
 static gchar*
@@ -448,7 +449,7 @@ fcitx_client_init(FcitxClient *self)
 static void
 _fcitx_client_create_ic(FcitxClient *self)
 {
-    _fcitx_client_clean_up(self);
+    _fcitx_client_clean_up(self, FALSE);
     self->priv->cancellable = g_cancellable_new ();
 
     gchar* address = _fcitx_get_address();
@@ -481,7 +482,7 @@ _fcitx_client_connection_closed(GDBusConnection *connection,
                                 gpointer         user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    _fcitx_client_clean_up(self);
+    _fcitx_client_clean_up(self, FALSE);
 
     _fcitx_client_create_ic(self);
 }
@@ -736,7 +737,7 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
 
     if (self->priv->icproxy) {
         g_signal_connect(self->priv->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), self);
-        g_signal_emit(user_data, signals[CONNTECTED_SIGNAL], 0);
+        g_signal_emit(user_data, signals[CONNECTED_SIGNAL], 0);
     }
 
     /* unref for _fcitx_client_create_ic_cb */
@@ -821,10 +822,28 @@ fcitx_client_class_init(FcitxClientClass *klass)
      *
      * @client: A FcitxClient
      *
-     * Emit when connected to fcitx
+     * Emit when connected to fcitx and created ic
      */
-    signals[CONNTECTED_SIGNAL] = g_signal_new(
+    signals[CONNECTED_SIGNAL] = g_signal_new(
                                      "connected",
+                                     FCITX_TYPE_CLIENT,
+                                     G_SIGNAL_RUN_LAST,
+                                     0,
+                                     NULL,
+                                     NULL,
+                                     g_cclosure_marshal_VOID__VOID,
+                                     G_TYPE_NONE,
+                                     0);
+
+    /**
+     * FcitxClient::disconnected
+     *
+     * @client: A FcitxClient
+     *
+     * Emit when disconnected from fcitx
+     */
+    signals[DISCONNECTED_SIGNAL] = g_signal_new(
+                                     "disconnected",
                                      FCITX_TYPE_CLIENT,
                                      G_SIGNAL_RUN_LAST,
                                      0,
@@ -1037,7 +1056,7 @@ _fcitx_get_address ()
 }
 
 static void
-_fcitx_client_clean_up(FcitxClient* self)
+_fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn)
 {
     if (self->priv->connection) {
         g_signal_handlers_disconnect_by_func(self->priv->connection,
@@ -1071,6 +1090,8 @@ _fcitx_client_clean_up(FcitxClient* self)
                                              self);
         g_object_unref(self->priv->icproxy);
         self->priv->icproxy = NULL;
+        if (!dont_emit_disconn)
+            g_signal_emit(self, signals[DISCONNECTED_SIGNAL], 0);
     }
 
 }
