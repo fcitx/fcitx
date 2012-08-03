@@ -175,7 +175,14 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
         if (!strcmp(spell->dictLang, lang))
             return;
     }
+    struct timespec start, end;
+    /* int t; */
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
     SpellCustomLoadDict(spell, lang);
+    /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+    /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+    /*     + end.tv_nsec - start.tv_nsec; */
+    /* printf("%s, %d\n", __func__, t); */
 #ifdef ENABLE_ENCHANT
     SpellEnchantLoadDict(spell, lang);
 #endif

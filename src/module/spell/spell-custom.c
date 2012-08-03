@@ -33,6 +33,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
+#include <endian.h>
 
 #include "spell-internal.h"
 #include "spell-custom.h"
@@ -47,6 +48,12 @@ case 't': case 'u': case 'v': case 'w': case 'x': case 'y': case 'z'
 case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
 case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
 case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
+
+static inline uint32_t
+load_le32(const void* p)
+{
+    return le32toh(*(uint32_t*)p);
+}
 
 static boolean
 SpellCustomSimpleCompare(char c1, char c2)
@@ -206,7 +213,7 @@ SpellCustomMapDict(FcitxSpell *spell, const char *lang)
     /* try to save whatever loaded. */
     if (fd == -1)
         goto try_save;
-    if (fstat(fd, &stat_buf) == -1) {
+    if (fstat(fd, &stat_buf) == -1 || stat_buf.st_size <= sizeof(uint32_t)) {
         close(fd);
         goto try_save;
     }
@@ -298,17 +305,7 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
     if (!custom->map)
         goto free_all;
 
-    /* count line */
-    lcount = 0;
-    for (i = 0;i < map_len;i++) {
-        int l = strlen(custom->map + i);
-        if (!l)
-            continue;
-        lcount++;
-        i += l;
-    }
-    if (custom->map[i])
-        lcount++;
+    lcount = load_le32(custom->map);
     if (!custom->words) {
         custom->words = malloc(lcount * sizeof(char*));
     } else {
@@ -320,7 +317,8 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
         goto free_all;
 
     /* save words pointers. */
-    for (i = 0, j = 0;i < map_len && j < lcount;i++) {
+    for (i = sizeof(uint32_t) * 2, j = 0;i < map_len && j < lcount;
+         i += sizeof(uint32_t) + 1) {
         int l = strlen(custom->map + i);
         if (!l)
             continue;
