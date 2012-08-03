@@ -175,7 +175,7 @@ SpellSetLang(FcitxSpell *spell, const char *lang)
         if (!strcmp(spell->dictLang, lang))
             return;
     }
-    struct timespec start, end;
+    /* struct timespec start, end; */
     /* int t; */
     /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
     SpellCustomLoadDict(spell, lang);
