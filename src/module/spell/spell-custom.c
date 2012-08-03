@@ -30,6 +30,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
+#include "fcitx-utils/utf8.h"
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
@@ -56,13 +57,7 @@ load_le32(const void* p)
 }
 
 static boolean
-SpellCustomSimpleCompare(char c1, char c2)
-{
-    return c1 == c2;
-}
-
-static boolean
-SpellCustomEnglishCompare(char c1, char c2)
+SpellCustomEnglishCompare(unsigned int c1, unsigned int c2)
 {
     switch (c1) {
     case_A_Z:
@@ -286,7 +281,7 @@ SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
         spell->custom.word_check_func = SpellCustomEnglishCheck;
         spell->custom.hint_cmplt_func = SpellCustomEnglishComplete;
     } else {
-        spell->custom.word_comp_func = SpellCustomSimpleCompare;
+        spell->custom.word_comp_func = NULL;
         spell->custom.word_check_func = NULL;
         spell->custom.hint_cmplt_func = NULL;
     }
@@ -345,7 +340,6 @@ free_all:
 boolean
 SpellCustomInit(FcitxSpell *spell)
 {
-    spell->custom.word_comp_func = SpellCustomSimpleCompare;
     return true;
 }
 
@@ -359,15 +353,22 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
     int distance = 0;
     int maxdiff;
     int maxremove;
+    unsigned int cur_word_c;
+    unsigned int cur_dict_c;
+    unsigned int next_word_c;
+    unsigned int next_dict_c;
     word_len = strlen(word);
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
+    word = fcitx_utf8_get_char(word, &cur_word_c);
+    dict = fcitx_utf8_get_char(dict, &cur_dict_c);
     while ((distance = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
-        if (!word[0])
+        if (!cur_word_c)
             return distance * 2 + strlen(dict);
-        if (!dict[0]) {
-            if (word[1]) {
+        word = fcitx_utf8_get_char(word, &next_word_c);
+        if (!cur_dict_c) {
+            if (next_word_c) {
                 return -1;
             } else {
                 remove++;
@@ -377,26 +378,31 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
                 return -1;
             }
         }
-        if (word[0] == dict[0] || custom->word_comp_func(word[0], dict[0])) {
-            word++;
-            dict++;
+        dict = fcitx_utf8_get_char(dict, &next_dict_c);
+        if (cur_word_c == cur_dict_c || !custom->word_comp_func ||
+            custom->word_comp_func(cur_word_c, cur_dict_c)) {
+            cur_word_c = next_word_c;
+            cur_dict_c = next_dict_c;
             continue;
         }
-        if (word[1] == dict[0] || custom->word_comp_func(word[1], dict[0])) {
-            word += 2;
-            dict++;
+        if (next_word_c == cur_dict_c || !custom->word_comp_func ||
+            custom->word_comp_func(next_word_c, cur_dict_c)) {
+            word = fcitx_utf8_get_char(word, &cur_word_c);
+            cur_dict_c = next_dict_c;
             remove++;
             continue;
         }
-        if (word[0] == dict[1] || custom->word_comp_func(word[0], dict[1])) {
-            word++;
-            dict += 2;
+        if (cur_word_c == next_dict_c || !custom->word_comp_func ||
+            custom->word_comp_func(cur_word_c, next_dict_c)) {
+            cur_word_c = next_word_c;
+            dict = fcitx_utf8_get_char(dict, &cur_dict_c);
             insert++;
             continue;
         }
-        if (word[1] == dict[1] || custom->word_comp_func(word[1], dict[1])) {
-            word += 2;
-            dict += 2;
+        if (next_word_c == next_dict_c || !custom->word_comp_func ||
+            custom->word_comp_func(next_word_c, next_dict_c)) {
+            dict = fcitx_utf8_get_char(dict, &cur_dict_c);
+            word = fcitx_utf8_get_char(word, &cur_word_c);
             replace++;
             continue;
         }
