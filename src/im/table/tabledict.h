@@ -20,6 +20,12 @@
 
 struct _FcitxTableState;
 
+typedef enum _TableStatus {
+    TABLE_NEW = 0, // thus fcitx_utils_new will set this to default value
+    TABLE_PENDING = 1,
+    TABLE_REGISTERED = 2
+} TableStatus;
+
 typedef enum _ADJUSTORDER {
     AD_NO = 0,
     AD_FAST = 1,
@@ -120,10 +126,12 @@ typedef struct _TableMetaData {
     struct _TableDict* tableDict;
     boolean bUseAutoSend;
     char* confName;
+    TableStatus status;
+
+    UT_hash_handle hh;
 } TableMetaData;
 
 typedef struct _TableDict {
-
     char* strInputCode;
     RECORD_INDEX* recordIndex;
     unsigned char iCodeLength;

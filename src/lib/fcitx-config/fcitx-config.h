@@ -155,7 +155,8 @@ extern "C"
      **/
     typedef enum _FcitxConfigSync {
         Raw2Value,
-        Value2Raw
+        Value2Raw,
+        ValueFree
     } FcitxConfigSync;
 
     /**
@@ -679,6 +680,13 @@ boolean name##LoadConfig(type* _cfg) { \
      * @return void
      **/
     void FcitxConfigBindValue(FcitxConfigFile* cfile, const char *groupName, const char *optionName, void* var, FcitxSyncFilter filter, void *arg);
+
+    /**
+     * free a binded config struct with all related value
+     * @param config config
+     * @return void
+     */
+    void FcitxConfigFree(FcitxGenericConfig* config);
 
 #ifdef __cplusplus
 }

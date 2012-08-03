@@ -616,7 +616,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxCandidateWordSetChooseAndModifier(
         FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
         cmodtable[keyboard->config.chooseModifier]);
-    size_t bufferlen = strlen(keyboard->buffer);
+    ssize_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
@@ -625,6 +625,9 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
                                   "%s", keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
+
+    if (bufferlen < keyboard->config.minimumHintLength)
+        return IRV_DISPLAY_CANDWORDS;
 
     FcitxModuleFunctionArg func_arg;
     func_arg.args[0] = NULL;

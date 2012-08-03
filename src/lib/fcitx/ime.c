@@ -922,10 +922,9 @@ void FcitxInstanceUnregisterIM(FcitxInstance* instance, const char* name)
     FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, name);
     if (!im)
         return;
-    
+
     int index = utarray_eltidx(&instance->availimes, im);
     utarray_erase(&instance->availimes, index, 1);
-    FcitxInstanceUpdateIMList(instance);
 }
 
 void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean skipZero, boolean updateGlobal)
