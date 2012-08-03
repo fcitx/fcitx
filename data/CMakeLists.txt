@@ -19,6 +19,7 @@ set(FCITX_DATA_FILES
     punc.mb.zh_HK
     punc.mb.zh_TW
     vk.conf
+    ${CMAKE_CURRENT_BINARY_DIR}/en_dict.txt
 )
 
 set(FCITX_PY_FILES
@@ -68,3 +69,14 @@ endif (_ENABLE_DBUS AND ENABLE_XDGAUTOSTART)
 if (_ENABLE_DBUS)
 install(FILES daemon.conf DESTINATION share/fcitx/dbus/)
 endif (_ENABLE_DBUS)
+
+set(SPELL_EN_DICT en_dict.txt)
+set(SPELL_EN_DICT_TAR en_dict.tar.gz)
+set(SPELL_EN_DICT_URL https://github.com/downloads/fcitx/fcitx/en_dict.tar.gz)
+
+add_custom_target(spell_en_dict ALL DEPENDS ${SPELL_EN_DICT})
+add_custom_command(
+  OUTPUT ${SPELL_EN_DICT}
+  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/download.sh "${WGET}"
+  "${SPELL_EN_DICT_URL}" "${SPELL_EN_DICT_TAR}"
+  COMMAND "${TAR}" xzmvf "${SPELL_EN_DICT_TAR}")
