@@ -626,6 +626,9 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 
+    if (bufferlen < keyboard->config.minimumHintLength)
+        return IRV_DISPLAY_CANDWORDS;
+
     FcitxModuleFunctionArg func_arg;
     func_arg.args[0] = NULL;
     func_arg.args[1] = keyboard->buffer;
