@@ -26,7 +26,9 @@
 #include <iconv.h>
 #include <ctype.h>
 
+#if defined(ENABLE_ICU)
 #include <unicode/unorm.h>
+#endif
 
 #ifdef ENCHANT_FOUND
 #include <enchant/enchant.h>
@@ -2707,6 +2709,7 @@ checkCompactTable(FcitxKeyboardLayout* layout, const FcitxComposeTableCompact *t
 uint32_t
 checkAlgorithmically(FcitxKeyboardLayout* layout)
 {
+#if defined(ENABLE_ICU)
     int i;
     UChar combination_buffer[FCITX_MAX_COMPOSE_LEN];
     FcitxKeyboard* keyboard = layout->owner;
@@ -2796,5 +2799,6 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
             return result[0];
         }
     }
+#endif
     return 0;
 }

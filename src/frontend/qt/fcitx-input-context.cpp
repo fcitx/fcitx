@@ -23,7 +23,6 @@
 #include <QTextCharFormat>
 
 #include <sys/time.h>
-#include <unicode/unorm.h>
 
 #include "fcitx/ui.h"
 #include "fcitx/ime.h"
@@ -547,15 +546,18 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 
     if (Q_UNLIKELY(event->xkey.state & FcitxKeyState_IgnoredMask))
         return false;
-
-    if (Q_UNLIKELY(!isValid() || (event->type != XKeyRelease && event->type != XKeyPress))) {
-        return x11FilterEventFallback(event, 0);
-    }
+    
+    if (Q_UNLIKELY(event->type != XKeyRelease && event->type != XKeyPress))
+        return false;
 
     KeySym sym = 0;
     char strbuf[64];
     memset(strbuf, 0, 64);
     XLookupString(&event->xkey, strbuf, 64, &sym, NULL);
+
+    if (Q_UNLIKELY(!isValid())) {
+        return x11FilterEventFallback(event, sym);
+    }
 
     QDBusPendingReply< int > result = this->m_icproxy->ProcessKeyEvent(
                                           sym,
@@ -865,7 +867,7 @@ bool
 QFcitxInputContext::checkAlgorithmically()
 {
     int i;
-    UChar combination_buffer[FCITX_MAX_COMPOSE_LEN];
+    uint32_t combination_buffer[FCITX_MAX_COMPOSE_LEN];
 
     if (m_n_compose >= FCITX_MAX_COMPOSE_LEN)
         return false;
@@ -939,15 +941,14 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
             return TRUE;
         }
 #endif
-        UErrorCode state = U_ZERO_ERROR;
-        UChar result[FCITX_MAX_COMPOSE_LEN + 1];
-        i = unorm_normalize(combination_buffer, m_n_compose, UNORM_NFC, 0, result, FCITX_MAX_COMPOSE_LEN + 1, &state);
+        QString s(QString::fromUcs4(combination_buffer, m_n_compose));
+        s = s.normalized(QString::NormalizationForm_C);
 
-        // qDebug () << "combination_buffer = " << QString::fromUtf16(combination_buffer) << "m_n_compose" << m_n_compose;
-        // qDebug () << "result = " << QString::fromUtf16(result) << "i = " << i << state;
+        // qDebug () << "combination_buffer = " << QString::fromUcs4(combination_buffer, m_n_compose) << "m_n_compose" << m_n_compose;
+        // qDebug () << "result = " << s << "i = " << s.length();
 
-        if (i == 1) {
-            commitString(QString(QChar(result[0])));
+        if (s.length() == 1) {
+            commitString(QString(s[0]));
             m_compose_buffer[0] = 0;
             m_n_compose = 0;
             return true;

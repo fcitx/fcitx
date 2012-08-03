@@ -45,7 +45,6 @@ include_directories(
     ${QT_QTDBUS_INCLUDE_DIR}
     ${X11_INCLUDE_DIRS}
     ${DBUS_INCLUDE_DIRS}
-    ${ICU_INCLUDE_DIRS}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -109,7 +108,6 @@ target_link_libraries(
     optimized ${QT_QTCORE_LIBRARY_RELEASE}
     optimized ${QT_QTDBUS_LIBRARY_RELEASE}
     optimized ${QT_QTGUI_LIBRARY_RELEASE}
-    ${ICU_LIBRARIES}
     fcitx-config
 )
 
