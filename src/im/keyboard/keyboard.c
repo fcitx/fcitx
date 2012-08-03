@@ -616,7 +616,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxCandidateWordSetChooseAndModifier(
         FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
         cmodtable[keyboard->config.chooseModifier]);
-    size_t bufferlen = strlen(keyboard->buffer);
+    ssize_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
