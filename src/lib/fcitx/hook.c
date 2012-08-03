@@ -41,6 +41,7 @@ typedef struct _HookStack {
         FcitxKeyFilterHook keyfilter;
         FcitxStringFilterHook stringfilter;
         FcitxIMEventHook eventhook;
+        FcitxICEventHook ichook;
         FcitxHotkeyHook hotkey;
     };
     /**
@@ -85,6 +86,7 @@ DEFINE_HOOK(InputFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(InputUnFocusHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateCandidateWordHook, FcitxIMEventHook, eventhook);
 DEFINE_HOOK(UpdateIMListHook, FcitxIMEventHook, eventhook);
+DEFINE_HOOK(ICStateChangedHook, FcitxICEventHook, ichook);
 
 void FcitxInstanceProcessPreInputFilter(FcitxInstance* instance, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retval)
 {
@@ -215,6 +217,16 @@ void FcitxInstanceProcessUpdateIMListHook(FcitxInstance* instance)
     stack = stack->next;
     while (stack) {
         stack->eventhook.func(stack->eventhook.arg);
+        stack = stack->next;
+    }
+}
+
+void FcitxInstanceProcessICStateChangedHook(FcitxInstance* instance, FcitxInputContext* ic)
+{
+    HookStack* stack = GetICStateChangedHook(instance);
+    stack = stack->next;
+    while (stack) {
+        stack->ichook.func(stack->ichook.arg, ic);
         stack = stack->next;
     }
 }

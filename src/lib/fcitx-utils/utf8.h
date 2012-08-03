@@ -35,6 +35,7 @@
 
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,7 +62,7 @@ size_t fcitx_utf8_strlen(const char *s);
  * @param chr return unicode
  * @return next char pointer
  **/
-char*  fcitx_utf8_get_char(const char *in, unsigned int *chr);
+char*  fcitx_utf8_get_char(const char *in, uint32_t *chr);
 
 /**
  * compare utf8 string, with utf8 string length n
@@ -91,7 +92,7 @@ int    fcitx_utf8_char_len(const char *in);
  * @param n index
  * @return next n character pointer
  **/
-char*  fcitx_utf8_get_nth_char(char* s, unsigned int n);
+char*  fcitx_utf8_get_nth_char(char* s, size_t n);
 
 /**
  * check utf8 string is valid or not, valid is 1, invalid is 0
@@ -151,7 +152,7 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte);
  *
  * @since 4.2.5
  **/
-int fcitx_ucs4_char_len(unsigned int c);
+int fcitx_ucs4_char_len(uint32_t c);
 
 
 /**
@@ -163,7 +164,7 @@ int fcitx_ucs4_char_len(unsigned int c);
  *
  * @since 4.2.5
  **/
-int fcitx_ucs4_to_utf8(unsigned int c, char* output);
+int fcitx_ucs4_to_utf8(uint32_t c, char* output);
 
 /**
  * @brief get the ascii part at the end of a utf8 string

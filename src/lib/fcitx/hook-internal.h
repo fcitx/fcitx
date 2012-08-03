@@ -112,4 +112,6 @@ void FcitxInstanceProcessUpdateCandidates(struct _FcitxInstance* instance);
  **/
 void FcitxInstanceProcessUpdateIMListHook(struct _FcitxInstance* instance);
 
+void FcitxInstanceProcessICStateChangedHook(struct _FcitxInstance* instance, struct _FcitxInputContext* ic);
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

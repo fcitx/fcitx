@@ -58,6 +58,11 @@ extern "C" {
     typedef void (*FcitxIMEventHookFunc)(void* arg);
 
     /**
+     * ic event hook function
+     **/
+    typedef void (*FcitxICEventHookFunc)(void* arg, struct _FcitxInputContext* ic);
+
+    /**
      * Hotkey process struct
      **/
     typedef struct _FcitxHotkeyHook {
@@ -113,6 +118,13 @@ extern "C" {
         void *arg; /**< argument for callback */
     } FcitxIMEventHook;
 
+    /**
+     * IC Event hook
+     **/
+    typedef struct _FcitxICEventHook {
+        FcitxICEventHookFunc func; /**< callback function */
+        void *arg; /**< argument for callback */
+    } FcitxICEventHook;
     /**
      * register pre input filter
      *
@@ -221,7 +233,7 @@ extern "C" {
      * @return char*
      **/
     char* FcitxInstanceProcessCommitFilter(struct _FcitxInstance* instance, const char *in);
-    
+
     /**
      * register ouput string filter
      *
@@ -233,6 +245,16 @@ extern "C" {
      **/
     void FcitxInstanceRegisterCommitFilter(struct _FcitxInstance* instance, FcitxStringFilterHook hook);
 
+    /**
+     * register a hook for watching when ic status changed
+     *
+     * @param instance fcitx instance
+     * @param hook new hook
+     * @return void
+     *
+     * @since 4.2.6
+     **/
+    void FcitxInstanceRegisterICStateChangedHook(struct _FcitxInstance* instance, FcitxICEventHook hook);
 
 #ifdef __cplusplus
 }

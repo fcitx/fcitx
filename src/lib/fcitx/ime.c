@@ -1170,6 +1170,14 @@ FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
     return pcurrentIM;
 }
 
+static inline void FcitxInstanceSetICStatus(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState state)
+{
+    if (ic->state != state) {
+        ic->state = state;
+        FcitxInstanceProcessICStateChangedHook(instance, ic);
+    }
+}
+
 FCITX_EXPORT_API
 void FcitxInstanceSetLocalIMName(FcitxInstance* instance, FcitxInputContext* ic, const char* imname)
 {
@@ -1277,7 +1285,7 @@ void FcitxInstanceEnableIMInternal(FcitxInstance* instance, FcitxInputContext* i
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
     FcitxContextState oldstate = ic->state;
-    ic->state = IS_ACTIVE;
+    FcitxInstanceSetICStatus(instance, ic, IS_ACTIVE);
     if (oldstate == IS_CLOSED)
         frontend->EnableIM((*pfrontend)->addonInstance, ic);
 
@@ -1335,7 +1343,7 @@ void FcitxInstanceCloseIMInternal(FcitxInstance* instance, FcitxInputContext* ic
     if (pfrontend == NULL)
         return;
     FcitxFrontend* frontend = (*pfrontend)->frontend;
-    ic->state = IS_CLOSED;
+    FcitxInstanceSetICStatus(instance, ic, IS_CLOSED);
     frontend->CloseIM((*pfrontend)->addonInstance, ic);
 
     if (ic == instance->CurrentIC) {
@@ -1399,7 +1407,7 @@ void FcitxInstanceChangeIMStateInternal(FcitxInstance* instance, FcitxInputConte
         return;
     if (ic->state == objectState)
         return;
-    ic->state = objectState;
+    FcitxInstanceSetICStatus(instance, ic, objectState);
     FcitxInputContext2* ic2 = (FcitxInputContext2*) ic;
     ic2->switchBySwitchKey = withSwitchKey;
     if (ic == instance->CurrentIC) {
