@@ -156,7 +156,7 @@ SpellEnchantLoadDict(FcitxSpell *spell, const char *lang)
         !strcmp(spell->enchant_saved_lang, lang)) {
         free(spell->enchant_saved_lang);
         spell->enchant_saved_lang = NULL;
-        return false;
+        return true;
     }
     enchant_dict = _enchant_broker_request_dict(spell->broker, lang);
     if (enchant_dict) {
