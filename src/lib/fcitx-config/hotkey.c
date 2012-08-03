@@ -855,6 +855,8 @@ void FcitxHotkeyFree(FcitxHotkey* hotkey)
         free(hotkey[0].desc);
     if (hotkey[1].desc)
         free(hotkey[1].desc);
+    hotkey[0].desc = NULL;
+    hotkey[1].desc = NULL;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

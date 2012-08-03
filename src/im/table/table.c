@@ -47,8 +47,7 @@
 
 #define MAX_TABLE_INPUT 50
 
-static void FreeTableConfig(void *v);
-const UT_icd table_icd = {sizeof(TableMetaData), NULL , NULL, FreeTableConfig};
+static void TableMetaDataFree(TableMetaData *table);
 const UT_icd tableCand_icd = {sizeof(TABLECANDWORD*), NULL, NULL, NULL };
 typedef struct _TableCandWordSortContext {
     ADJUSTORDER order;
@@ -112,28 +111,6 @@ void *TableCreate(FcitxInstance* instance)
         return NULL;
     }
     LoadTableInfo(tbl);
-    TableMetaData* table;
-    for (table = (TableMetaData*) utarray_front(tbl->table);
-            table != NULL;
-            table = (TableMetaData*) utarray_next(tbl->table, table)) {
-        FcitxInstanceRegisterIM(
-            instance,
-            table,
-            (strlen(table->uniqueName) == 0) ? table->strIconName : table->uniqueName,
-            table->strName,
-            table->strIconName,
-            TableInit,
-            TableResetStatus,
-            DoTableInput,
-            TableGetCandWords,
-            TablePhraseTips,
-            SaveTableIM,
-            ReloadPerTableConfig,
-            TableKeyBlocker,
-            table->iPriority,
-            table->langCode
-        );
-    }
 
 
     return tbl;
@@ -149,6 +126,71 @@ void SaveTableIM(void *arg)
         SaveTableDict(table);
 }
 
+inline char* TableMetaDataGetName(TableMetaData* table)
+{
+    return (strlen(table->uniqueName) == 0) ? table->strIconName : table->uniqueName;
+}
+
+inline void TableMetaDataInsert(TableMetaData** tableSet, TableMetaData* table)
+{
+    char* name = TableMetaDataGetName(table);
+    HASH_ADD_KEYPTR(hh, *tableSet, name, strlen(name), table);
+}
+
+inline TableMetaData* TableMetaDataFind(TableMetaData* table, const char* name)
+{
+    TableMetaData* result = NULL;
+    HASH_FIND_STR(table, name, result);
+    return result;
+}
+
+inline void TableMetaDataUnlink(TableMetaData** tableSet, TableMetaData* table)
+{
+    HASH_DEL(*tableSet, table);
+}
+
+inline void TableMetaDataRemove(TableMetaData** tableSet, TableMetaData* table)
+{
+    HASH_DEL(*tableSet, table);
+    TableMetaDataFree(table);
+}
+
+inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
+{
+    if (table->status == TABLE_REGISTERED)
+        return;
+
+    table->status = TABLE_REGISTERED;
+    FcitxInstanceRegisterIM(
+        tbl->owner,
+        table,
+        TableMetaDataGetName(table),
+        table->strName,
+        table->strIconName,
+        TableInit,
+        TableResetStatus,
+        DoTableInput,
+        TableGetCandWords,
+        TablePhraseTips,
+        SaveTableIM,
+        NULL,
+        TableKeyBlocker,
+        table->iPriority,
+        table->langCode
+    );
+}
+
+inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
+{
+    FcitxConfigOption* option = FcitxConfigFileGetOption(cfile, "CodeTable", "UniqueName");
+    if (option && strlen(option->rawValue) != 0)
+        return option->rawValue;
+
+    option = FcitxConfigFileGetOption(cfile, "CodeTable", "IconName");
+    if (option)
+        return option->rawValue;
+    return NULL;
+}
 
 /*
  * 读取码表输入法的名称和文件路径
@@ -161,18 +203,22 @@ void LoadTableInfo(FcitxTableState *tbl)
 
     FcitxStringHashSet* sset = NULL;
     tbl->bTablePhraseTips = false;
-    tbl->iCurrentTableLoaded = -1;
-
-    if (tbl->table) {
-        utarray_free(tbl->table);
-        tbl->table = NULL;
+    if (tbl->curLoadedTable) {
+        FreeTableDict(tbl->curLoadedTable);
+        tbl->curLoadedTable = NULL;
     }
-
-    tbl->iTableCount = 0;
-    utarray_new(tbl->table, &table_icd);
 
     tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
     sset = FcitxXDGGetFiles("table", NULL, ".conf");
+
+    {
+        TableMetaData* titer = tbl->tables;
+        while(titer)
+        {
+            titer->status = TABLE_PENDING;
+            titer = titer->hh.next;
+        }
+    }
 
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
@@ -186,22 +232,39 @@ void LoadTableInfo(FcitxTableState *tbl)
             asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
         }
-        FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
+        // FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, GetTableConfigDesc());
         if (cfile) {
-            utarray_extend_back(tbl->table);
-            TableMetaData *t = (TableMetaData*)utarray_back(tbl->table);
-            TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
-            FcitxConfigBindSync((FcitxGenericConfig*)t);
-            FcitxLog(DEBUG, _("Table Config %s is %s"), string->name, (t->bEnabled) ? "Enabled" : "Disabled");
-            if (t->bEnabled) {
-                t->confName = strdup(string->name);
-                t->owner = tbl;
-                tbl->iTableCount ++;
-            }
-            else {
-                utarray_pop_back(tbl->table);
-            }
+            do {
+                char* tableName = TableConfigStealTableName(cfile);
+                boolean needunregister = true;
+                if (!tableName)
+                    break;
+                TableMetaData* t = TableMetaDataFind(tbl->tables, tableName);
+                if (!t) {
+                    t = fcitx_utils_new(TableMetaData);
+                    needunregister = false;
+                }
+                else {
+                    TableMetaDataUnlink(&tbl->tables, t);
+                }
+                TableMetaDataConfigBind(t, cfile, GetTableConfigDesc());
+                FcitxConfigBindSync((FcitxGenericConfig*)t);
+                if (t->bEnabled) {
+                    t->confName = strdup(string->name);
+                    t->owner = tbl;
+                    TableMetaDataInsert(&tbl->tables, t);
+                    if (needunregister)
+                        t->status = TABLE_REGISTERED;
+                    else
+                        t->status = TABLE_NEW;
+                }
+                else {
+                    if (needunregister)
+                        FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(t));
+                    TableMetaDataFree(t);
+                }
+            } while(0);
         }
 
         for (i = 0; i < len ; i ++) {
@@ -213,6 +276,30 @@ void LoadTableInfo(FcitxTableState *tbl)
     free(paths);
     FcitxXDGFreePath(tablePath);
     fcitx_utils_free_string_hash_set(sset);
+
+    {
+        TableMetaData* titer = tbl->tables;
+        while(titer)
+        {
+            /*
+             * if it's this case, the configuration file may already gone
+             * thus let's remove it
+             */
+            if (titer->status == TABLE_PENDING) {
+                TableMetaData* cur = titer;
+                titer = titer->hh.next;
+                FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(cur));
+                TableMetaDataRemove(&tbl->tables, cur);
+            }
+            else {
+                FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
+                TableMetaDataRegister(tbl, titer);
+                titer = titer->hh.next;
+            }
+        }
+    }
+
+    tbl->iTableCount = HASH_COUNT(tbl->tables);
 }
 
 CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
@@ -283,20 +370,18 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     FcitxCandidateWordSetChooseAndModifier(candList, table->strChoose, cmodtable[table->chooseModifier]);
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
 
-    int iTableIMIndex = utarray_eltidx(tbl->table, table);
-    if (iTableIMIndex != tbl->iCurrentTableLoaded) {
-        TableMetaData* previousTable = (TableMetaData*) utarray_eltptr(tbl->table, tbl->iCurrentTableLoaded);
-        if (previousTable)
-            FreeTableDict(previousTable);
-        tbl->iCurrentTableLoaded = -1;
+    if (table != tbl->curLoadedTable && tbl->curLoadedTable) {
+        FreeTableDict(tbl->curLoadedTable);
+        tbl->curLoadedTable = NULL;
     }
 
-    if (tbl->iCurrentTableLoaded == -1) {
+    if (tbl->curLoadedTable == NULL) {
         if (!LoadTableDict(table)) {
-            FcitxInstanceUnregisterIM(instance, table->uniqueName);
+            FcitxInstanceUnregisterIM(instance, TableMetaDataGetName(table));
+            FcitxInstanceUpdateIMList(instance);
             return IRV_DONOT_PROCESS;
         }
-        tbl->iCurrentTableLoaded = iTableIMIndex;
+        tbl->curLoadedTable = table;
     }
 
     if (FcitxHotkeyIsHotKeyModifierCombine(sym, state))
@@ -1269,23 +1354,13 @@ void UpdateHZLastInput(TableMetaData* table, char *str)
         TableCreateAutoPhrase(table, (char)(fcitx_utf8_strlen(str)));
 }
 
-void FreeTableConfig(void *v)
+void TableMetaDataFree(TableMetaData *table)
 {
-    TableMetaData *table = (TableMetaData*) v;
     if (!table)
         return;
-    FcitxConfigFreeConfigFile(table->config.configFile);
-    FcitxHotkeyFree(table->hkAlternativePrevPage);
-    FcitxHotkeyFree(table->hkAlternativeNextPage);
-    free(table->strPath);
-    free(table->strSymbolFile);
-    free(table->uniqueName);
-    free(table->strName);
-    free(table->strIconName);
-    free(table->strEndCode);
-    free(table->strSymbol);
-    free(table->strChoose);
+    FcitxConfigFree(&table->config);
     fcitx_utils_free(table->confName);
+    free(table);
 }
 
 int TableCandCmp(const void* a, const void* b, void *arg)
@@ -1356,41 +1431,8 @@ void ReloadTableConfig(void* arg)
 {
     FcitxTableState* tbl = arg;
     LoadTableConfig(&tbl->config);
-}
-
-/* we should try not to break the existing on even if the config file is not exist anymore */
-void ReloadPerTableConfig(void* arg)
-{
-    TableMetaData* table = arg;
-    size_t len = 0;
-    int i = 0;
-    char** tablePath = FcitxXDGGetPathWithPrefix(&len, "table");
-
-    char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
-    for (i = 0; i < len ; i ++)
-        paths[i] = NULL;
-
-    for (i = len - 1; i >= 0; i--) {
-        asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], table->confName);
-        FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
-    }
-    FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, GetTableConfigDesc());
-    if (cfile) {
-        TableMetaDataConfigBind(table, cfile, GetTableConfigDesc());
-        FcitxConfigBindSync((FcitxGenericConfig*)table);
-
-        int iTableIMIndex = utarray_eltidx(table->owner->table, table);
-        if (iTableIMIndex == table->owner->iCurrentTableLoaded) {
-            UpdateTableMetaData(table);
-        }
-    }
-    for (i = 0; i < len ; i ++) {
-        free(paths[i]);
-        paths[i] = NULL;
-    }
-
-    free(paths);
-    FcitxXDGFreePath(tablePath);
+    LoadTableInfo(tbl);
+    FcitxInstanceUpdateIMList(tbl->owner);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
