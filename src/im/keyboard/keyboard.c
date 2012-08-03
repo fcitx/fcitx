@@ -560,7 +560,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 {
                     if (keyboard->cursorPos > 0) {
                         size_t len = fcitx_utf8_strlen(keyboard->buffer);
-                        char* pos = fcitx_utf8_get_nth_char(keyboard->buffer, len - 1);
+                        char *pos = fcitx_utf8_get_nth_char(keyboard->buffer, len - 1);
                         keyboard->cursorPos = pos - keyboard->buffer;
                         memset(keyboard->buffer + keyboard->cursorPos, 0, sizeof(char) * (slen - keyboard->cursorPos));
                         return IRV_DISPLAY_CANDWORDS;

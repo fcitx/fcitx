@@ -45,7 +45,7 @@ fcitx_utf8_strlen(const char *s)
     unsigned int l = 0;
 
     while (*s) {
-        unsigned int chr;
+        uint32_t chr;
 
         s = fcitx_utf8_get_char(s, &chr);
         l++;
@@ -84,7 +84,7 @@ int fcitx_utf8_char_len(const char *in)
 }
 
 FCITX_EXPORT_API
-int fcitx_ucs4_char_len(unsigned int c)
+int fcitx_ucs4_char_len(uint32_t c)
 {
     if (c < 0x00080) {
         return 1;
@@ -103,7 +103,7 @@ int fcitx_ucs4_char_len(unsigned int c)
 }
 
 FCITX_EXPORT_API
-int fcitx_ucs4_to_utf8(unsigned int c, char* output)
+int fcitx_ucs4_to_utf8(uint32_t c, char* output)
 {
     if (c < 0x00080) {
         output[0] = (char) (c & 0xFF);
@@ -151,7 +151,7 @@ int fcitx_ucs4_to_utf8(unsigned int c, char* output)
 
 FCITX_EXPORT_API
 char *
-fcitx_utf8_get_char(const char *i, unsigned int *chr)
+fcitx_utf8_get_char(const char *i, uint32_t *chr)
 {
     const unsigned char* in = (const unsigned char *)i;
     if (!(in[0] & 0x80)) {
@@ -198,7 +198,7 @@ FCITX_EXPORT_API
 int fcitx_utf8_strncmp(const char *s1, const char *s2, int n)
 {
     // Seems to work.
-    unsigned int c1, c2;
+    uint32_t c1, c2;
     int i;
 
     for (i = 0; i < n; i++) {
@@ -225,12 +225,12 @@ int fcitx_utf8_strncmp(const char *s1, const char *s2, int n)
 }
 
 FCITX_EXPORT_API
-char* fcitx_utf8_get_nth_char(char* s, unsigned int n)
+char* fcitx_utf8_get_nth_char(char* s, size_t n)
 {
     unsigned int l = 0;
 
     while (*s && l < n) {
-        unsigned int chr;
+        uint32_t chr;
 
         s = fcitx_utf8_get_char(s, &chr);
         l++;
@@ -324,7 +324,7 @@ FCITX_EXPORT_API
 int fcitx_utf8_check_string(const char *s)
 {
     while (*s) {
-        unsigned int chr;
+        uint32_t chr;
 
         if (fcitx_utf8_get_char_validated(s, 6) < 0)
             return 0;
@@ -339,7 +339,7 @@ FCITX_EXPORT_API
 void fcitx_utf8_strncpy(char* str, const char* s, size_t byte)
 {
     while (*s) {
-        unsigned int chr;
+        uint32_t chr;
 
         const char* next = fcitx_utf8_get_char(s, &chr);
         size_t diff = next - s;
@@ -363,7 +363,7 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte)
 {
     size_t len = 0;
     while (*str && byte > 0) {
-        unsigned int chr;
+        uint32_t chr;
 
         const char* next = fcitx_utf8_get_char(str, &chr);
         size_t diff = next - str;
