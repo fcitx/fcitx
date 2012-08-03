@@ -78,23 +78,7 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
     int ret = 0;
     if (sc->config.configFile) {
         utarray_done(&sc->skinMainBar.skinPlacement);
-        FcitxConfigFreeConfigFile(sc->config.configFile);
-        free(sc->skinInfo.skinName);
-        free(sc->skinInfo.skinVersion);
-        free(sc->skinInfo.skinAuthor);
-        free(sc->skinInfo.skinDesc);
-        free(sc->skinMainBar.backImg);
-        free(sc->skinMainBar.logo);
-        free(sc->skinMainBar.eng);
-        free(sc->skinMainBar.active);
-        free(sc->skinMainBar.placement);
-        free(sc->skinInputBar.backImg);
-        free(sc->skinInputBar.backArrow);
-        free(sc->skinInputBar.forwardArrow);
-        free(sc->skinTrayIcon.active);
-        free(sc->skinTrayIcon.inactive);
-        free(sc->skinMenu.backImg);
-        free(sc->skinKeyboard.backImg);
+        FcitxConfigFree(&sc->config);
         UnloadImage(sc);
     }
     memset(sc, 0, sizeof(FcitxSkin));

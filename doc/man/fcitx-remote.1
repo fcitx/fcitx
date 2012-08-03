@@ -7,19 +7,22 @@ fcitx-remote \- Tool for control fcitx state via console
 .SH OPTIONS
 .TP
 \fB\-c\fR
-close input method
+inactivate input method
 .TP
 \fB\-o\fR
-open input method
+activate input method
 .TP
 \fB\-r\fR
 reload fcitx config
 .TP
+\fB\-t\fR
+switch between active/inactive
+.TP
 [\fIno option\fR]
-display fcitx state, 0 for close, 1 for english, 2 for chinese
+display fcitx state, 0 for close, 1 for inactive, 2 for active
 .TP
 \fB\-h\fR
-display this help and exit
+display help and exit
 .SH FILES
 fcitx will create socket at \fI/tmp/fcitx-socket-<displayname>\fR, so user must have permission to access \fI/tmp\fR folder.
 .SH SEE ALSO

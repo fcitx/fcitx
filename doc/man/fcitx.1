@@ -12,17 +12,26 @@ command.
 \fBfcitx\fP is a Chinese IME for XIM intentionally designed not to depend on any Desktop Environment. It includes Pinyin and Table for input by default, but it can also support other Input Method.
 .SH OPTIONS
 .TP
+\fB\-r\fR
+replace existing fcitx
+.TP
 \fB\-d\fR
 run as daemon(default)
 .TP
 \fB\-D\fR
 don't run as daemon
 .TP
-\fB\-n\fR[\fIim name\fR]
-run as specified name
-.TP
 \fB\-s\fR[\fIsleep time\fR]
 override delay start time in config file, 0 for immediate start
+.TP
+\fB\-u, --ui\fR[\fIui name\fR]
+force to use specified user interface
+.TP
+\fB\--enable\fR[\fIaddon A,addon B\fR]
+specify a comma separated list for addon that will override the enable option
+.TP
+\fB\--disable\fR[\fIaddon A,addon B\fR]
+specify a comma separated list for addon that will explicitly disabled, priority is higher than --enable
 .TP
 \fB\-v\fR
 display the version information and exit
@@ -34,7 +43,7 @@ display help and exit
 .B XMODIFIERS
 If
 .RB $ XMODIFIERS
-is set and fcitx is not run with option \fB\-n\fR, fcitx will run with the name that specified in
+is set, fcitx will run with the name that specified in
 .RB $ XMODIFIERS
 , otherwise it will run with im name fcitx.
 .SH SEE ALSO

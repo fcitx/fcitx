@@ -417,6 +417,9 @@ FcitxConfigSyncResult FcitxConfigOptionInteger(FcitxConfigOption *option, FcitxC
         asprintf(&option->rawValue, "%d", *option->value.integer);
 
         return SyncSuccess;
+
+    case ValueFree:
+        return SyncSuccess;
     }
 
     return SyncInvalid;
@@ -444,6 +447,9 @@ FcitxConfigSyncResult FcitxConfigOptionBoolean(FcitxConfigOption *option, FcitxC
         else
             fcitx_utils_string_swap(&option->rawValue, "False");
 
+        return SyncSuccess;
+
+    case ValueFree:
         return SyncSuccess;
     }
 
@@ -481,6 +487,9 @@ FcitxConfigSyncResult FcitxConfigOptionEnum(FcitxConfigOption *option, FcitxConf
 
         fcitx_utils_string_swap(&option->rawValue, cenum->enumDesc[*option->value.enumerate]);
 
+        return SyncSuccess;
+
+    case ValueFree:
         return SyncSuccess;
     }
 
@@ -526,6 +535,9 @@ FcitxConfigSyncResult FcitxConfigOptionColor(FcitxConfigOption *option, FcitxCon
         asprintf(&option->rawValue, "%d %d %d", r, g , b);
 
         return SyncSuccess;
+
+    case ValueFree:
+        return SyncSuccess;
     }
 
     return SyncInvalid;
@@ -548,6 +560,11 @@ FcitxConfigSyncResult FcitxConfigOptionString(FcitxConfigOption *option, FcitxCo
         fcitx_utils_string_swap(&option->rawValue, *option->value.string);
 
         return SyncSuccess;
+
+    case ValueFree:
+        fcitx_utils_free(*option->value.string);
+        *option->value.string = NULL;
+        return SyncSuccess;
     }
 
     return SyncInvalid;
@@ -567,6 +584,11 @@ FcitxConfigSyncResult FcitxConfigOptionI18NString(FcitxConfigOption *option, Fci
 
     case Value2Raw:
         /* read only */
+        return SyncSuccess;
+
+    case ValueFree:
+        fcitx_utils_free(*option->value.string);
+        *option->value.string = NULL;
         return SyncSuccess;
     }
 
@@ -625,6 +647,9 @@ FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConf
         asprintf(&option->rawValue, "%c", *option->value.chr);
 
         return SyncSuccess;
+
+    case ValueFree:
+        return SyncSuccess;
     }
 
     return SyncInvalid;
@@ -647,7 +672,7 @@ FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxCo
 
         if (option->value.hotkey[1].desc) {
             free(option->value.hotkey[1].desc);
-            option->value.hotkey[0].desc = NULL;
+            option->value.hotkey[1].desc = NULL;
         }
 
         FcitxHotkeySetKey(option->rawValue, option->value.hotkey);
@@ -666,6 +691,10 @@ FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxCo
         } else
             option->rawValue = strdup("");
 
+        return SyncSuccess;
+
+    case ValueFree:
+        FcitxHotkeyFree(option->value.hotkey);
         return SyncSuccess;
     }
 
@@ -961,6 +990,40 @@ boolean FcitxConfigSaveConfigFile(char *filename, FcitxGenericConfig *cfile, Fci
     fclose(fp);
 
     return result;
+}
+
+FCITX_EXPORT_API
+void FcitxConfigFree(FcitxGenericConfig* config)
+{
+    FcitxConfigFile *cfile = config->configFile;
+    FcitxConfigFileDesc *cdesc = NULL;
+    FcitxConfigGroupDesc* groupdesc = NULL;
+
+    if (!cfile)
+        return;
+
+    cdesc = cfile->fileDesc;
+
+    for (groupdesc = cdesc->groupsDesc;
+            groupdesc != NULL;
+            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
+        FcitxConfigOptionDesc *optiondesc;
+        FcitxConfigGroup *group = NULL;
+        HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
+
+        for (optiondesc = groupdesc->optionsDesc;
+                optiondesc != NULL;
+                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+            FcitxConfigOption *option = NULL;
+
+            if (group)
+                HASH_FIND_STR(group->options, optiondesc->optionName, option);
+
+            FcitxConfigSyncValue(config, group, option, ValueFree);
+        }
+    }
+
+    FcitxConfigFreeConfigFile(cfile);
 }
 
 FCITX_EXPORT_API

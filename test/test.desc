@@ -1,3 +1,28 @@
 [Test/Name]
 Type=I18NString
 Description=Test Name
+
+[Test/Hotkey]
+Type=Hotkey
+Description=Test Hotkey
+DefaultValue=CTRL_A
+
+[Test/String]
+Type=String
+Description=Test String
+DefaultValue=CTRL_A
+
+[Test/Integer]
+Type=Integer
+Description=Test Integer
+DefaultValue=1
+
+[Test/Char]
+Type=Char
+Description=Test Char
+DefaultValue=a
+
+[Test/Boolean]
+Type=Boolean
+Description=Test Boolean
+DefaultValue=True
