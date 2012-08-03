@@ -300,7 +300,7 @@ extern "C" {
     void fcitx_utils_start_process(char** args);
 
     /**
-     * @brief output backtrace to stderr
+     * output backtrace to stderr, need to enable backtrace
      *
      * @return void
      *
