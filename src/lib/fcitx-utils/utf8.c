@@ -225,7 +225,7 @@ int fcitx_utf8_strncmp(const char *s1, const char *s2, int n)
 }
 
 FCITX_EXPORT_API
-char* fcitx_utf8_get_nth_char(char* s, size_t n)
+char* fcitx_utf8_get_nth_char(char* s, uint32_t n)
 {
     unsigned int l = 0;
 

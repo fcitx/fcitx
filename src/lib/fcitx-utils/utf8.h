@@ -92,7 +92,7 @@ int    fcitx_utf8_char_len(const char *in);
  * @param n index
  * @return next n character pointer
  **/
-char*  fcitx_utf8_get_nth_char(char* s, size_t n);
+char*  fcitx_utf8_get_nth_char(char* s, uint32_t n);
 
 /**
  * check utf8 string is valid or not, valid is 1, invalid is 0
