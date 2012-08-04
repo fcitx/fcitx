@@ -30,6 +30,7 @@
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
+#include "fcitx-utils/utf8.h"
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
@@ -37,235 +38,7 @@
 
 #include "spell-internal.h"
 #include "spell-custom.h"
-#define EN_DICT_FORMAT "%s/data/%s_dict.txt"
-
-#define case_a_z case 'a': case 'b': case 'c': case 'd': case 'e':      \
-case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':   \
-case 'm': case 'n': case 'o': case 'p': case 'q': case 'r': case 's':   \
-case 't': case 'u': case 'v': case 'w': case 'x': case 'y': case 'z'
-
-#define case_A_Z case 'A': case 'B': case 'C': case 'D': case 'E':      \
-case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
-case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
-case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
-
-static inline uint32_t
-load_le32(const void* p)
-{
-    return le32toh(*(uint32_t*)p);
-}
-
-static boolean
-SpellCustomSimpleCompare(char c1, char c2)
-{
-    return c1 == c2;
-}
-
-static boolean
-SpellCustomEnglishCompare(char c1, char c2)
-{
-    switch (c1) {
-    case_A_Z:
-        c1 += 'a' - 'A';
-        break;
-    case_a_z:
-        break;
-    default:
-        return c1 == c2;
-    }
-    switch (c2) {
-    case_A_Z:
-        c2 += 'a' - 'A';
-        break;
-    case_a_z:
-        break;
-    default:
-        break;
-    }
-    return c1 == c2;
-}
-
-static boolean
-SpellCustomEnglishIsFirstCapital(const char *str)
-{
-    if (!str || !*str)
-        return false;
-    switch (*str) {
-    case_A_Z:
-        break;
-    default:
-        return false;
-    }
-    while (*(++str)) {
-        switch (*str) {
-        case_A_Z:
-            return false;
-        default:
-            continue;
-        }
-    }
-    return true;
-}
-
-static boolean
-SpellCustomEnglishIsAllCapital(const char *str)
-{
-    if (!str || !*str)
-        return false;
-    do {
-        switch (*str) {
-        case_a_z:
-            return false;
-        default:
-            continue;
-        }
-    } while (*(++str));
-    return true;
-}
-
-enum {
-    CUSTOM_DEFAULT,
-    CUSTOM_FIRST_CAPITAL,
-    CUSTOM_ALL_CAPITAL,
-};
-
-static int
-SpellCustomEnglishCheck(const char *str)
-{
-    if (SpellCustomEnglishIsFirstCapital(str))
-        return CUSTOM_FIRST_CAPITAL;
-    if (SpellCustomEnglishIsAllCapital(str))
-        return CUSTOM_ALL_CAPITAL;
-    return CUSTOM_DEFAULT;
-}
-
-static void
-SpellUpperString(char *str)
-{
-    if (!str || !*str)
-        return;
-    do {
-        switch (*str) {
-        case_a_z:
-            *str += 'A' - 'a';
-            break;
-        default:
-            break;
-        }
-    } while (*(++str));
-}
-
-static void
-SpellCustomEnglishComplete(SpellHint *hint, int type)
-{
-    switch (type) {
-    case CUSTOM_ALL_CAPITAL:
-        for (;hint->commit;hint++)
-            SpellUpperString(hint->commit);
-        break;
-    case CUSTOM_FIRST_CAPITAL:
-        for (;hint->commit;hint++) {
-            switch (*hint->commit) {
-            case_a_z:
-                *hint->commit += 'A' - 'a';
-                break;
-            default:
-                break;
-            }
-        }
-    default:
-        break;
-    }
-}
-
-/**
- * Open the dict file, return -1 if failed.
- **/
-static int
-SpellCustomGetDictFile(FcitxSpell *spell, const char *lang)
-{
-    int fd;
-    char *path;
-    char *fname = NULL;
-    path = fcitx_utils_get_fcitx_path("pkgdatadir");
-    asprintf(&fname, EN_DICT_FORMAT, path, lang);
-    free(path);
-    fd = open(fname, O_RDONLY);
-    free(fname);
-    return fd;
-}
-
-/**
- * Try to read the who dict file into memory.... similiar to mmap but won't be
- * affected if the file is modified on disk. (can also write to this memory
- * area, e.g. to remove white spaces, with no side effect). If the dictionary
- * file is not found, try to keep whatever dictionary successfully loaded.
- **/
-static off_t
-SpellCustomMapDict(FcitxSpell *spell, const char *lang)
-{
-    int fd;
-    struct stat stat_buf;
-    off_t flen = 0;
-    SpellCustom *custom = &spell->custom;
-    fd = SpellCustomGetDictFile(spell, lang);
-
-    /* try to save whatever loaded. */
-    if (fd == -1)
-        goto try_save;
-    if (fstat(fd, &stat_buf) == -1 || stat_buf.st_size <= sizeof(uint32_t)) {
-        close(fd);
-        goto try_save;
-    }
-    if (custom->map) {
-        free(custom->map);
-        custom->map = NULL;
-    }
-    if (custom->saved_lang) {
-        free(custom->saved_lang);
-        custom->saved_lang = NULL;
-    }
-    if (!stat_buf.st_size)
-        return 0;
-    custom->map = fcitx_utils_malloc0(stat_buf.st_size + 1);
-    if (!custom->map) {
-        close(fd);
-        return 0;
-    }
-    do {
-        int c;
-        c = read(fd, custom->map, stat_buf.st_size - flen);
-        if (c <= 0)
-            break;
-        flen += c;
-    } while (flen < stat_buf.st_size);
-    if (!flen) {
-        close(fd);
-        free(custom->map);
-        custom->map = NULL;
-        return 0;
-    } else if (flen < stat_buf.st_size) {
-        custom->map = realloc(custom->map, flen + 1);
-        return flen;
-    } else {
-        return stat_buf.st_size;
-    }
-
-try_save:
-    if (custom->saved_lang)
-        return 0;
-    if (!custom->map)
-        return 0;
-    /* Actually shouldn't reach.... */
-    if (!custom->words || !spell->dictLang) {
-        free(custom->map);
-        custom->map = NULL;
-        return 0;
-    }
-    /* NOTE: dictLang is still the old language here */
-    custom->saved_lang = strdup(spell->dictLang);
-    return 0;
-}
+#include "spell-custom-dict.h"
 
 /**
  * update custom dict, if the dictionary of that language
@@ -274,70 +47,29 @@ try_save:
 boolean
 SpellCustomLoadDict(FcitxSpell *spell, const char *lang)
 {
-    int i;
-    int j;
-    off_t map_len;
-    int lcount;
-    SpellCustom *custom = &spell->custom;
-    if (!lang || !lang[0])
+    SpellCustomDict *custom_dict;
+    if (spell->custom_saved_lang &&
+        !strcmp(spell->custom_saved_lang, lang)) {
+        free(spell->custom_saved_lang);
+        spell->custom_saved_lang = NULL;
         return false;
-    if (SpellLangIsLang(lang, "en")) {
-        spell->custom.word_comp_func = SpellCustomEnglishCompare;
-        spell->custom.word_check_func = SpellCustomEnglishCheck;
-        spell->custom.hint_cmplt_func = SpellCustomEnglishComplete;
-    } else {
-        spell->custom.word_comp_func = SpellCustomSimpleCompare;
-        spell->custom.word_check_func = NULL;
-        spell->custom.hint_cmplt_func = NULL;
     }
-    /* Use the saved dictionary */
-    if (custom->saved_lang &&
-        !strcmp(custom->saved_lang, lang)) {
-        free(custom->saved_lang);
-        custom->saved_lang = NULL;
+    custom_dict = SpellCustomNewDict(spell, lang);
+    if (custom_dict) {
+        if (spell->custom_saved_lang) {
+            free(spell->custom_saved_lang);
+            spell->custom_saved_lang = NULL;
+        }
+        if (spell->custom_dict)
+            SpellCustomFreeDict(spell, spell->custom_dict);
+        spell->custom_dict = custom_dict;
         return true;
     }
-    map_len = SpellCustomMapDict(spell, lang);
-    /* current state saved */
-    if (custom->saved_lang)
+    if (!spell->custom_dict || !spell->dictLang)
         return false;
-    /* fail */
-    if (!custom->map)
-        goto free_all;
-
-    lcount = load_le32(custom->map);
-    if (!custom->words) {
-        custom->words = malloc(lcount * sizeof(char*));
-    } else {
-        custom->words = realloc(custom->words,
-                                lcount * sizeof(char*));
-    }
-    /* well, no likely though. */
-    if (!custom->words)
-        goto free_all;
-
-    /* save words pointers. */
-    for (i = sizeof(uint32_t) * 2, j = 0;i < map_len && j < lcount;
-         i += sizeof(uint32_t) + 1) {
-        int l = strlen(custom->map + i);
-        if (!l)
-            continue;
-        custom->words[j++] = custom->map + i;
-        i += l;
-    }
-    custom->words_count = j;
-    return true;
-
-free_all:
-    if (custom->map) {
-        free(custom->map);
-        custom->map = NULL;
-    }
-    if (custom->words) {
-        free(custom->words);
-        custom->words = NULL;
-    }
-    custom->words_count = 0;
+    if (spell->custom_saved_lang)
+        return false;
+    spell->custom_saved_lang = strdup(spell->dictLang);
     return false;
 }
 
@@ -345,12 +77,12 @@ free_all:
 boolean
 SpellCustomInit(FcitxSpell *spell)
 {
-    spell->custom.word_comp_func = SpellCustomSimpleCompare;
     return true;
 }
 
 static int
-SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
+SpellCustomGetDistance(SpellCustomDict *custom_dict,
+                       const char *word, const char *dict)
 {
     int word_len;
     int replace = 0;
@@ -359,15 +91,22 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
     int distance = 0;
     int maxdiff;
     int maxremove;
+    unsigned int cur_word_c;
+    unsigned int cur_dict_c;
+    unsigned int next_word_c;
+    unsigned int next_dict_c;
     word_len = strlen(word);
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
+    word = fcitx_utf8_get_char(word, &cur_word_c);
+    dict = fcitx_utf8_get_char(dict, &cur_dict_c);
     while ((distance = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
-        if (!word[0])
+        if (!cur_word_c)
             return distance * 2 + strlen(dict);
-        if (!dict[0]) {
-            if (word[1]) {
+        word = fcitx_utf8_get_char(word, &next_word_c);
+        if (!cur_dict_c) {
+            if (next_word_c) {
                 return -1;
             } else {
                 remove++;
@@ -377,26 +116,31 @@ SpellCustomGetDistance(SpellCustom *custom, const char *word, const char *dict)
                 return -1;
             }
         }
-        if (word[0] == dict[0] || custom->word_comp_func(word[0], dict[0])) {
-            word++;
-            dict++;
+        dict = fcitx_utf8_get_char(dict, &next_dict_c);
+        if (cur_word_c == cur_dict_c || !custom_dict->word_comp_func ||
+            custom_dict->word_comp_func(cur_word_c, cur_dict_c)) {
+            cur_word_c = next_word_c;
+            cur_dict_c = next_dict_c;
             continue;
         }
-        if (word[1] == dict[0] || custom->word_comp_func(word[1], dict[0])) {
-            word += 2;
-            dict++;
+        if (next_word_c == cur_dict_c || !custom_dict->word_comp_func ||
+            custom_dict->word_comp_func(next_word_c, cur_dict_c)) {
+            word = fcitx_utf8_get_char(word, &cur_word_c);
+            cur_dict_c = next_dict_c;
             remove++;
             continue;
         }
-        if (word[0] == dict[1] || custom->word_comp_func(word[0], dict[1])) {
-            word++;
-            dict += 2;
+        if (cur_word_c == next_dict_c || !custom_dict->word_comp_func ||
+            custom_dict->word_comp_func(cur_word_c, next_dict_c)) {
+            cur_word_c = next_word_c;
+            dict = fcitx_utf8_get_char(dict, &cur_dict_c);
             insert++;
             continue;
         }
-        if (word[1] == dict[1] || custom->word_comp_func(word[1], dict[1])) {
-            word += 2;
-            dict += 2;
+        if (next_word_c == next_dict_c || !custom_dict->word_comp_func ||
+            custom_dict->word_comp_func(next_word_c, next_dict_c)) {
+            dict = fcitx_utf8_get_char(dict, &cur_dict_c);
+            word = fcitx_utf8_get_char(word, &cur_word_c);
             replace++;
             continue;
         }
@@ -419,19 +163,19 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     int i;
     int num = 0;
     int word_type = 0;
-    SpellCustom *custom = &spell->custom;
+    SpellCustomDict *dict = spell->custom_dict;
     const char *word;
     SpellHint *res;
     if (!SpellCustomCheck(spell))
         return NULL;
     word = spell->current_str;
-    if (custom->word_check_func)
-        word_type = custom->word_check_func(word);
-    for (i = 0;i < custom->words_count;i++) {
+    if (dict->word_check_func)
+        word_type = dict->word_check_func(word);
+    for (i = 0;i < dict->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(&spell->custom, word,
-                                           custom->words[i])) >= 0) {
-            clist[num].word = custom->words[i];
+        if ((dist = SpellCustomGetDistance(dict, word,
+                                           dict->words[i])) >= 0) {
+            clist[num].word = dict->words[i];
             clist[num].dist = dist;
             if (++num >= list_len)
                 break;
@@ -444,17 +188,15 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
                                 NULL, 0);
     if (!res)
         return NULL;
-    if (custom->hint_cmplt_func)
-        custom->hint_cmplt_func(res, word_type);
+    if (dict->hint_cmplt_func)
+        dict->hint_cmplt_func(res, word_type);
     return res;
 }
 
 boolean
 SpellCustomCheck(FcitxSpell *spell)
 {
-    SpellCustom *custom = &spell->custom;
-    if (custom->map && custom->words &&
-        !custom->saved_lang)
+    if (spell->custom_dict && !spell->custom_saved_lang)
         return true;
     return false;
 }
@@ -462,11 +204,8 @@ SpellCustomCheck(FcitxSpell *spell)
 void
 SpellCustomDestroy(FcitxSpell *spell)
 {
-    SpellCustom *custom = &spell->custom;
-    if (custom->map)
-        free(custom->map);
-    if (custom->words)
-        free(custom->words);
-    if (custom->saved_lang)
-        free(custom->saved_lang);
+    if (spell->custom_dict)
+        SpellCustomFreeDict(spell, spell->custom_dict);
+    if (spell->custom_saved_lang)
+        free(spell->custom_saved_lang);
 }

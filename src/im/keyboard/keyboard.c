@@ -26,7 +26,9 @@
 #include <iconv.h>
 #include <ctype.h>
 
+#if defined(ENABLE_ICU)
 #include <unicode/unorm.h>
+#endif
 
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
@@ -531,7 +533,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
                 if (slen > 0) {
                     if (keyboard->cursorPos > 0) {
                         size_t len = fcitx_utf8_strlen(keyboard->buffer);
-                        char* pos = fcitx_utf8_get_nth_char(keyboard->buffer,
+                        char *pos = fcitx_utf8_get_nth_char(keyboard->buffer,
                                                             len - 1);
                         keyboard->cursorPos = pos - keyboard->buffer;
                         memset(keyboard->buffer + keyboard->cursorPos,
@@ -2624,6 +2626,7 @@ checkCompactTable(FcitxKeyboardLayout* layout, const FcitxComposeTableCompact *t
 uint32_t
 checkAlgorithmically(FcitxKeyboardLayout* layout)
 {
+#if defined(ENABLE_ICU)
     int i;
     UChar combination_buffer[FCITX_MAX_COMPOSE_LEN];
     FcitxKeyboard* keyboard = layout->owner;
@@ -2713,5 +2716,6 @@ case FcitxKey_dead_##keysym: combination_buffer[i + 1] = unicode; break
             return result[0];
         }
     }
+#endif
     return 0;
 }

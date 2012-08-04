@@ -34,21 +34,6 @@ typedef struct {
 } FcitxSpellConfig;
 
 typedef struct {
-    char *word;
-    int dist;
-} SpellCustomCWord;
-
-typedef struct {
-    char *saved_lang;
-    char *map;
-    char **words;
-    int words_count;
-    boolean (*word_comp_func)(char, char);
-    int (*word_check_func)(const char*);
-    void (*hint_cmplt_func)(SpellHint*, int);
-} SpellCustom;
-
-typedef struct {
     struct _FcitxInstance *owner;
     FcitxSpellConfig config;
     char *dictLang;
@@ -68,7 +53,8 @@ typedef struct {
     boolean presage_support;
     char *past_stm;
 #endif
-    SpellCustom custom;
+    void *custom_dict;
+    char *custom_saved_lang;
 } FcitxSpell;
 
 #ifdef __cplusplus

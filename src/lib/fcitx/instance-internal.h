@@ -101,6 +101,7 @@ struct _FcitxInstance {
     struct _HookStack* hookUpdateCandidateWordHook;
     struct _HookStack* hookUpdateIMListHook;
     struct _HookStack* hookCommitFilter;
+    struct _HookStack* hookICStateChangedHook;
 
     FcitxUIFlag uiflag;
 

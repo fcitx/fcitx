@@ -18,13 +18,17 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+#include "fcitx/fcitx.h"
+
 #include <signal.h>
-#include <execinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
 
-#include "fcitx/fcitx.h"
+#if defined(ENABLE_BACKTRACE)
+#include <execinfo.h>
+#endif
+
 #include "fcitx/instance-internal.h"
 #include "fcitx/ime-internal.h"
 #include "fcitx/configfile.h"
@@ -63,6 +67,7 @@ void OnException(int signo)
 
     FcitxLog(INFO, "FCITX -- Get Signal No.: %d", signo);
 
+#if defined(ENABLE_BACKTRACE)
     void *array[20];
 
     size_t size;
@@ -97,6 +102,7 @@ void OnException(int signo)
 
         free(strings);
     }
+#endif
 
     switch (signo) {
     case SIGKILL:

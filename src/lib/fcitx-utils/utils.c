@@ -28,9 +28,10 @@
 
 #define FCITX_USE_INTERNAL_PATH
 
+#include "config.h"
+
 #include <pthread.h>
 #include <stdio.h>
-#include <libintl.h>
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -38,10 +39,12 @@
 #include <limits.h>
 #include <libgen.h>
 #include <ctype.h>
-#include <execinfo.h>
 #include <stdarg.h>
 
-#include "config.h"
+#if defined(ENABLE_BACKTRACE)
+#include <execinfo.h>
+#endif
+
 #include "fcitx/fcitx.h"
 #include "utils.h"
 #include "utf8.h"
@@ -581,6 +584,7 @@ FCITX_EXPORT_API
 void
 fcitx_utils_backtrace()
 {
+#if defined(ENABLE_BACKTRACE)
     void *array[20];
 
     size_t size;
@@ -599,6 +603,7 @@ fcitx_utils_backtrace()
 
         free(strings);
     }
+#endif
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

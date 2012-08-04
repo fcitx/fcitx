@@ -109,7 +109,7 @@ private:
     bool checkAlgorithmically();
     bool checkCompactTable(const struct _FcitxComposeTableCompact *table);
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
-    bool x11FilterEventFallback(XEvent *event , KeySym sym);
+    bool x11FilterEventFallback(XEvent *event, KeySym sym);
     XEvent* createXEvent(Display* dpy, WId wid, uint keyval, uint state, int type);
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);

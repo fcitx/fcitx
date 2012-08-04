@@ -37,6 +37,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
+#include "fcitx-utils/bitset.h"
 
 /**
  * @file punc.c
@@ -49,11 +50,15 @@
 
 struct _FcitxPuncState;
 typedef struct _WidePunc {
-    int             ASCII;
+    char            ASCII;
     char            strWidePunc[MAX_PUNC_NO][MAX_PUNC_LENGTH * UTF8_MAX_LENGTH + 1];
     unsigned        iCount: 2;
-    unsigned        iWhich: 2;
 } WidePunc;
+
+typedef struct _PuncWhich {
+    FcitxBitSet* bitset;
+    WidePunc* lastPunc;
+} PuncWhich;
 
 typedef struct _FcitxPunc {
     char* langCode;
@@ -80,12 +85,18 @@ static void ResetPuncWhichStatus(void* arg);
 static boolean IsHotKeyPunc(FcitxKeySym sym, unsigned int state);
 static void PuncLanguageChanged(void* arg, const void* value);
 
+static void* PuncWhichAlloc(void* arg);
+static void* PuncWhichCopy(void* arg, void* data, void* src);
+static void PuncWhichFree(void* arg, void* data);
+
+
 typedef struct _FcitxPuncState {
     char cLastIsAutoConvert;
     boolean bLastIsNumber;
     FcitxInstance* owner;
     FcitxPunc* puncSet;
     WidePunc* curPunc;
+    int slot;
 } FcitxPuncState;
 
 FCITX_DEFINE_PLUGIN(fcitx_punc, module, FcitxModule) = {
@@ -137,9 +148,36 @@ void* PuncCreate(FcitxInstance* instance)
                           profile->bUseWidePunc ? _("Full width punct") :  _("Latin punct"),
                           _("Toggle Full Width Punctuation"), TogglePuncState, GetPuncState);
 
+    puncState->slot = FcitxInstanceAllocDataForIC(instance, PuncWhichAlloc, PuncWhichCopy, PuncWhichFree, puncState);
+
     AddFunction(puncaddon, PuncGetPunc);
     AddFunction(puncaddon, PuncGetPunc2);
     return puncState;
+}
+
+void* PuncWhichAlloc(void* arg)
+{
+    FcitxPunc* puncState = arg;
+    PuncWhich* which = fcitx_utils_new(PuncWhich);
+    which->lastPunc = puncState->curPunc;
+    which->bitset = fcitx_bitset_new(256);
+    return which;
+}
+
+void* PuncWhichCopy(void* arg, void* data, void* src)
+{
+    PuncWhich* which = data;
+    PuncWhich* whichsrc = src;
+    which->lastPunc = whichsrc->lastPunc;
+    memcpy(which->bitset, whichsrc->bitset, fcitx_bitset_size(256));
+    return data;
+}
+
+void PuncWhichFree(void* arg, void* data)
+{
+    PuncWhich* which = data;
+    free(which->bitset);
+    free(data);
 }
 
 void PuncLanguageChanged(void* arg, const void* value)
@@ -208,12 +246,11 @@ void ResetPuncWhichStatus(void* arg)
     if (!curPunc)
         return;
 
-    int iIndex = 0;
-
-    while (curPunc[iIndex].ASCII) {
-        curPunc[iIndex].iWhich = 0;
-        iIndex++;
-    }
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(puncState->owner);
+    if (!ic)
+        return;
+    FcitxBitSet* puncWhich = FcitxInstanceGetICData(puncState->owner, ic, puncState->slot);
+    fcitx_bitset_clear(puncWhich);
 }
 
 boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
@@ -391,7 +428,6 @@ FcitxPunc* LoadPuncFile(const char* filename)
                 pstr++;
 
             punc[iRecordNo].iCount = 0;      // 该符号有几个转化，比如英文"就可以转换成“和”
-            punc[iRecordNo].iWhich = 0;      // 标示该符号的输入状态，即处于第几个转换。如"，iWhich标示是转换成“还是”
             // 依次将该ASCII码所对应的符号放入到结构中
             while (*pstr) {
                 i = 0;
@@ -443,6 +479,39 @@ void FreePunc(FcitxPuncState* puncState)
     }
 }
 
+static inline int GetPuncWhich(FcitxPuncState* puncState, WidePunc* punc)
+{
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(puncState->owner);
+    if (!ic)
+        return 0;
+    PuncWhich* puncWhich = FcitxInstanceGetICData(puncState->owner, ic, puncState->slot);
+    if (puncWhich->lastPunc != puncState->curPunc) {
+        fcitx_bitset_clear(puncWhich->bitset);
+        puncWhich->lastPunc = puncState->curPunc;
+    }
+    int result = fcitx_bitset_isset(puncWhich->bitset, punc->ASCII) ? 1 : 0;
+    if (result >= punc->iCount)
+        result = 0;
+    return result;
+}
+
+static inline void SetPuncWhich(FcitxPuncState* puncState, WidePunc* punc)
+{
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(puncState->owner);
+    if (!ic)
+        return;
+    PuncWhich* puncWhich = FcitxInstanceGetICData(puncState->owner, ic, puncState->slot);
+    FcitxBitSet* bitset = puncWhich->bitset;
+    if (punc->iCount == 1)
+        fcitx_bitset_unset(bitset, punc->ASCII);
+    else {
+        if (fcitx_bitset_isset(bitset, punc->ASCII))
+            fcitx_bitset_unset(bitset, punc->ASCII);
+        else
+            fcitx_bitset_set(bitset, punc->ASCII);
+    }
+}
+
 /*
  * 根据字符得到相应的标点符号
  * 如果该字符不在标点符号集中，则返回NULL
@@ -458,10 +527,8 @@ char           *GetPunc(FcitxPuncState* puncState, int iKey)
 
     while (curPunc[iIndex].ASCII) {
         if (curPunc[iIndex].ASCII == iKey) {
-            pPunc = curPunc[iIndex].strWidePunc[curPunc[iIndex].iWhich];
-            curPunc[iIndex].iWhich++;
-            if (curPunc[iIndex].iWhich >= curPunc[iIndex].iCount)
-                curPunc[iIndex].iWhich = 0;
+            pPunc = curPunc[iIndex].strWidePunc[GetPuncWhich(puncState, &curPunc[iIndex])];
+            SetPuncWhich(puncState, &curPunc[iIndex]);
             return pPunc;
         }
         iIndex++;
