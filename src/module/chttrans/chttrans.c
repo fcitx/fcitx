@@ -258,7 +258,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
             while (getline(&strBuf, &bufLen, fp) != -1) {
                 simple2trad_t *s2t;
                 char *ps;
-                unsigned int wc;
+                uint32_t wc;
 
                 ps = fcitx_utf8_get_char(strBuf, &wc);
                 s2t = (simple2trad_t*) malloc(sizeof(simple2trad_t));
@@ -280,7 +280,7 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {
-            unsigned int wc;
+            uint32_t wc;
             simple2trad_t *s2t = NULL;
             int chr_len = fcitx_utf8_char_len(ps);
             char *nps;
@@ -360,7 +360,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
             while (getline(&strBuf, &bufLen, fp) != -1) {
                 simple2trad_t *t2s;
                 char *ps;
-                unsigned int wc;
+                uint32_t wc;
 
                 ps = fcitx_utf8_get_char(strBuf, &wc);
                 t2s = (simple2trad_t*) malloc(sizeof(simple2trad_t));
@@ -384,7 +384,7 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
         ps = strHZ;
         ret[0] = '\0';
         for (; i < len; ++i) {
-            unsigned int wc;
+            uint32_t wc;
             simple2trad_t *t2s = NULL;
             int chr_len = fcitx_utf8_char_len(ps);
             char *nps;
