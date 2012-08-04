@@ -47,6 +47,8 @@ static void FilterScreenSizeX(FcitxGenericConfig* config, FcitxConfigGroup *grou
         break;
     case Value2Raw:
         break;
+    case ValueFree:
+        break;
     }
 
 }
@@ -66,6 +68,8 @@ static void FilterScreenSizeY(FcitxGenericConfig* config, FcitxConfigGroup *grou
             *Y = 0;
         break;
     case Value2Raw:
+        break;
+    case ValueFree:
         break;
     }
 

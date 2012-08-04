@@ -18,24 +18,38 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef FCITX_XKB_H
-#define FCITX_XKB_H
+#ifndef _FCITX_XKB_XKB_INTERNAL_H_
+#define _FCITX_XKB_XKB_INTERNAL_H_
 
-#include "fcitx/instance.h"
-#define FCITX_XKB_NAME "fcitx-xkb"
-#define FCITX_XKB_GETRULES 0
-#define FCITX_XKB_GETRULES_RETURNTYPE FcitxXkbRules*
-#define FCITX_XKB_GETCURRENTLAYOUT 1
-#define FCITX_XKB_GETCURRENTLAYOUT_RETURNTYPE void
-#define FCITX_XKB_LAYOUTEXISTS 2
-#define FCITX_XKB_LAYOUTEXISTS_RETURNTYPE void
-#define FCITX_XKB_GETLAYOUTOVERRIDE 3
-#define FCITX_XKB_GETLAYOUTOVERRIDE_RETURNTYPE void
-#define FCITX_XKB_SETLAYOUTOVERRIDE 4
-#define FCITX_XKB_SETLAYOUTOVERRIDE_RETURNTYPE void
-#define FCITX_XKB_SETDEFAULTLAYOUT 5
-#define FCITX_XKB_SETDEFAULTLAYOUT_RETURNTYPE void
+#include "rules.h"
 
-#define FCITX_XKB_PATH "/keyboard"
-#define FCITX_XKB_INTERFACE "org.fcitx.Fcitx.Keyboard"
+#include <X11/Xlib.h>
+
+typedef struct _FcitxXkbConfig {
+    FcitxGenericConfig gconfig;
+    boolean bOverrideSystemXKBSettings;
+    boolean bIgnoreInputMethodLayoutRequest;
+    char* xmodmapCommand;
+    char* customXModmapScript;
+} FcitxXkbConfig;
+
+typedef struct _FcitxXkb
+{
+    Display* dpy;
+    UT_array *defaultLayouts;
+    UT_array *defaultModels;
+    UT_array *defaultOptions;
+    UT_array* defaultVariants;
+    struct _FcitxInstance* owner;
+    char *closeLayout;
+    char *closeVariant;
+    FcitxXkbRules* rules;
+    FcitxXkbConfig config;
+    int xkbOpcode;
+    struct _LayoutOverride* layoutOverride;
+} FcitxXkb;
+
+
+CONFIG_BINDING_DECLARE(FcitxXkbConfig);
+
 #endif

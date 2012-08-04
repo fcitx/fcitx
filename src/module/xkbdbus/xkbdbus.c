@@ -24,6 +24,7 @@
 
 #include "libintl.h"
 #include "module/xkb/xkb.h"
+#include "module/xkb/rules.h"
 #include "module/dbus/dbusstuff.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/module.h"

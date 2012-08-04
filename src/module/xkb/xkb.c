@@ -41,6 +41,7 @@
 
 #include "config.h"
 #include "xkb.h"
+#include "xkb-internal.h"
 #include "rules.h"
 
 #ifndef XKB_RULES_XML_FILE
