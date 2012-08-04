@@ -444,11 +444,11 @@ typedef struct {
 static INPUT_RETURN_VALUE
 FcitxSpellGetCandWord(void* arg, FcitxCandidateWord* candWord)
 {
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    FcitxInstance *instance = spell->owner;
-    char *commit = candWord->priv + sizeof(GetCandWordsArgs);
     GetCandWordsArgs *args = candWord->priv;
-    if (!args->cb || !args->cb(args->arg, commit))
+    FcitxSpell *spell = (FcitxSpell*)args->arg;
+    FcitxInstance *instance = spell->owner;
+    char *commit = (void*)(args + 1);
+    if (!args->cb || !args->cb(arg, commit))
         FcitxInstanceCommitString(instance,
                                   FcitxInstanceGetCurrentIC(instance), commit);
     return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
@@ -483,11 +483,10 @@ FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args)
     for (i = 0;hints[i].display;i++) {
         FcitxCandidateWord candWord;
         candWord.callback = FcitxSpellGetCandWord;
-        candWord.owner = arg;
+        candWord.owner = get_cand_word_arg;
         candWord.strWord = strdup(hints[i].display);
         candWord.strExtra = NULL;
-        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb,
-                                                get_cand_word_arg,
+        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb, arg,
                                                 hints[i].commit);
         candWord.wordType = MSG_OTHER;
         FcitxCandidateWordAppend(cand_list, &candWord);
