@@ -16,6 +16,7 @@ set(FCITX_UTILS_HEADERS
     memory.h
     keysym.h
     keysymgen.h
+    bitset.h
 )
 
 if (LIBKVM_FOUND)

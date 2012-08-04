@@ -292,7 +292,7 @@ void LoadTableInfo(FcitxTableState *tbl)
                 TableMetaDataRemove(&tbl->tables, cur);
             }
             else {
-                FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
+                // FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
                 TableMetaDataRegister(tbl, titer);
                 titer = titer->hh.next;
             }
