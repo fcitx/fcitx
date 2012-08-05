@@ -35,38 +35,36 @@ static int
 compile_dict(int ifd, int ofd)
 {
     struct stat istat_buf;
-    off_t iflen;
-    off_t off = 0;
     uint32_t wcount = 0;
-    char *icontent;
-    if (fstat(ifd, &istat_buf) == -1 ||
-        (iflen = istat_buf.st_size) <= 3) {
+    char *p;
+    char *ifend;
+    if (fstat(ifd, &istat_buf) == -1)
         return 1;
-    }
-    icontent = mmap(NULL, iflen + 1, PROT_READ, MAP_PRIVATE, ifd, 0);
+    p = mmap(NULL, istat_buf.st_size + 1, PROT_READ, MAP_PRIVATE, ifd, 0);
+    ifend = istat_buf.st_size + p;
+    close(ifd);
     write(ofd, DICT_BIN_MAGIC, strlen(DICT_BIN_MAGIC));
     lseek(ofd, sizeof(uint32_t), SEEK_CUR);
-    while (off < iflen) {
-        char *p;
-        char *end;
+    while (p < ifend) {
+        char *start;
         long int ceff;
         uint16_t ceff_buff;
-        ceff = strtol(icontent + off, &p, 10);
-        if (icontent + off == p || *p != ' ')
+        ceff = strtol(p, &p, 10);
+        if (*p != ' ')
             return 1;
-        if (ceff > UINT16_MAX)
-            ceff = UINT16_MAX;
-        ceff_buff = htole16(ceff);
+        ceff_buff = htole16(ceff > UINT16_MAX ? UINT16_MAX : ceff);
         write(ofd, &ceff_buff, sizeof(uint16_t));
-        p++;
-        end = strchrnul(p, '\n');
-        write(ofd, p, end - p);
+        start = ++p;
+        p = strchrnul(p, '\n');
+        write(ofd, start, p - start);
         write(ofd, &null_byte, 1);
-        off = p + 1 - icontent;
+        wcount++;
+        p++;
     }
     lseek(ofd, strlen(DICT_BIN_MAGIC), SEEK_SET);
     wcount = htole32(wcount);
     write(ofd, &wcount, sizeof(uint32_t));
+    close(ofd);
     return 0;
 }
 
@@ -76,14 +74,10 @@ main(int argc, char *argv[])
 {
     int ifd;
     int ofd;
-    const char *ifname;
-    const char *ofname;
     if (argc != 3)
         exit(1);
-    ifname = argv[0];
-    ofname = argv[1];
-    ifd = open(ifname, O_RDONLY);
-    ofd = open(ofname, O_WRONLY | O_CREAT, 0644);
+    ifd = open(argv[1], O_RDONLY);
+    ofd = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
     if (ifd < 0 || ofd < 0)
         return 1;
     return compile_dict(ifd, ofd);

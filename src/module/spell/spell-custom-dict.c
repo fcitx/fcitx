@@ -40,7 +40,7 @@
 #include "spell-custom.h"
 #include "spell-custom-dict.h"
 
-#define EN_DICT_FORMAT "%s/data/%s_dict.txt"
+#define EN_DICT_FORMAT "%s/data/%s_dict.fscd"
 
 #define case_a_z case 'a': case 'b': case 'c': case 'd': case 'e':      \
 case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':   \
@@ -51,6 +51,8 @@ case 't': case 'u': case 'v': case 'w': case 'x': case 'y': case 'z'
 case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
 case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
 case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
+
+#define DICT_BIN_MAGIC "FSCD0000"
 
 static inline uint32_t
 load_le32(const void* p)
@@ -252,17 +254,17 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
     }
     map_len = SpellCustomMapDict(spell, dict, lang);
     /* fail */
-    if (map_len <= sizeof(uint32_t))
+    if (map_len <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
         return false;
 
-    lcount = load_le32(dict->map);
+    lcount = load_le32(dict->map + strlen(DICT_BIN_MAGIC));
     dict->words = malloc(lcount * sizeof(char*));
     /* well, not likely though. */
     if (!dict->words)
         return false;
 
     /* save words pointers. */
-    for (i = sizeof(uint16_t) + sizeof(uint32_t), j = 0;
+    for (i = sizeof(uint16_t) + sizeof(uint32_t) + strlen(DICT_BIN_MAGIC), j = 0;
          i < map_len && j < lcount;i += sizeof(uint16_t) + 1) {
         int l = strlen(dict->map + i);
         if (!l)
