@@ -63,6 +63,9 @@ extern "C" {
     CONFIG_BINDING_DECLARE(FcitxSpellConfig);
     SpellHint *SpellHintListWithSize(int count, char **displays, int sized,
                                      char **commits, int sizec);
+    SpellHint *SpellHintListWithPrefix(int count, const char *prefix,
+                                       int prefix_len,
+                                       char **commits, int sizec);
     static inline SpellHint*
     SpellHintList(int count, char **displays, char **commits)
     {

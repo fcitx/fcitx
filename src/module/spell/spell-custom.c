@@ -165,15 +165,27 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     int word_type = 0;
     SpellCustomDict *dict = spell->custom_dict;
     const char *word;
+    const char *prefix = NULL;
+    int prefix_len = 0;
+    const char *real_word;
     SpellHint *res;
     if (!SpellCustomCheck(spell))
         return NULL;
     word = spell->current_str;
+    real_word = word;
+    if (dict->delim && *dict->delim) {
+        size_t delta;
+        while (real_word[delta = strcspn(real_word, dict->delim)]) {
+            prefix = word;
+            real_word += delta + 1;
+        }
+        prefix_len = prefix ? real_word - prefix : 0;
+    }
     if (dict->word_check_func)
-        word_type = dict->word_check_func(word);
+        word_type = dict->word_check_func(real_word);
     for (i = 0;i < dict->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(dict, word,
+        if ((dist = SpellCustomGetDistance(dict, real_word,
                                            dict->words[i])) >= 0) {
             clist[num].word = dict->words[i];
             clist[num].dist = dist;
@@ -184,8 +196,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     qsort((void*)clist, num, sizeof(SpellCustomCWord),
           SpellCustomCWordCompare);
     num = num > len_limit ? len_limit : num;
-    res = SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
-                                NULL, 0);
+    res = SpellHintListWithPrefix(num, prefix, prefix_len,
+                                  &clist->word, sizeof(SpellCustomCWord));
     if (!res)
         return NULL;
     if (dict->hint_cmplt_func)

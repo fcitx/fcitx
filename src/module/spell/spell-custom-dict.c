@@ -167,14 +167,14 @@ SpellCustomEnglishComplete(SpellHint *hint, int type)
 {
     switch (type) {
     case CUSTOM_ALL_CAPITAL:
-        for (;hint->commit;hint++)
-            SpellCustomEnglishUpperString(hint->commit);
+        for (;hint->display;hint++)
+            SpellCustomEnglishUpperString(hint->display);
         break;
     case CUSTOM_FIRST_CAPITAL:
-        for (;hint->commit;hint++) {
-            switch (*hint->commit) {
+        for (;hint->display;hint++) {
+            switch (*hint->display) {
             case_a_z:
-                *hint->commit += 'A' - 'a';
+                *hint->display += 'A' - 'a';
                 break;
             default:
                 break;
@@ -255,6 +255,7 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
         dict->word_check_func = NULL;
         dict->hint_cmplt_func = NULL;
     }
+    dict->delim = " _-,./?!%";
     map_len = SpellCustomMapDict(spell, dict, lang);
     /* fail */
     if (map_len <= sizeof(uint32_t))
