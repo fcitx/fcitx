@@ -52,12 +52,19 @@ case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
 case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
 case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
 
-
 static inline uint32_t
 load_le32(const void* p)
 {
     return le32toh(*(uint32_t*)p);
 }
+
+#if 0
+static inline uint16_t
+load_le16(const void* p)
+{
+    return le16toh(*(uint16_t*)p);
+}
+#endif
 
 static boolean
 SpellCustomEnglishCompare(unsigned int c1, unsigned int c2)
@@ -255,8 +262,8 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
         return false;
 
     /* save words pointers. */
-    for (i = sizeof(uint32_t) * 2, j = 0;i < map_len && j < lcount;
-         i += sizeof(uint32_t) + 1) {
+    for (i = sizeof(uint16_t) + sizeof(uint32_t), j = 0;
+         i < map_len && j < lcount;i += sizeof(uint16_t) + 1) {
         int l = strlen(dict->map + i);
         if (!l)
             continue;
