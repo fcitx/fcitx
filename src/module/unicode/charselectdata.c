@@ -9,6 +9,7 @@
 #else
 #include <sys/endian.h>
 #endif
+#include <stdint.h>
 #include <ctype.h>
 #include <libintl.h>
 #include <fcitx-utils/uthash.h>
@@ -95,7 +96,7 @@ int index_search_a_cmp(const void* a, const void* b) {
 
 UT_array* SplitString(const char* s);
 
-char* FormatCode(ushort code, int length, const char* prefix);
+char* FormatCode(uint16_t code, int length, const char* prefix);
 UnicodeSet* CharSelectDataGetMatchingChars(CharSelectData* charselect, const char* s);
 
 uint32_t FromLittleEndian32(const char* d)
@@ -409,7 +410,7 @@ QChar::Category KCharSelectData::category(CharSelectData* charselect, uint16_t u
         return c.category();
     }
 
-    ushort unicode = c.unicode();
+    uint16_t unicode = c.unicode();
 
 
     const char* data = charselect->dataFile;
@@ -940,7 +941,7 @@ UT_array* CharSelectDataApproximateEquivalents(CharSelectData* charselect, uint1
 }
 
 
-char* FormatCode(ushort code, int length, const char* prefix)
+char* FormatCode(uint16_t code, int length, const char* prefix)
 {
     char* s = NULL;
     char* fmt = NULL;

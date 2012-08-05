@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <fcitx-config/fcitx-config.h>
-#include "xkb.h"
+#include "xkb-internal.h"
 
 CONFIG_BINDING_BEGIN(FcitxXkbConfig);
 CONFIG_BINDING_REGISTER("X Keyboard", "OverrideSystemXKBSettings", bOverrideSystemXKBSettings);
