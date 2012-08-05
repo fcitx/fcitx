@@ -209,6 +209,21 @@ SpellCalListSizeWithSize(char **list, int count, int size)
     return i;
 }
 
+static int
+SpellHintStrLengths(int count, char **strs, int sizes, int *lens)
+{
+    int i;
+    int total = 0;
+    if (!strs) {
+        memset(lens, 0, sizeof(int) * count);
+        return 0;
+    }
+    for (i = 0;i < count;i++)
+        total += lens[i] = ((GET_NTH(strs, i, sizes)) ?
+                            (strlen(GET_NTH(strs, i, sizes)) + 1) : 0);
+    return total;
+}
+
 SpellHint*
 SpellHintListWithSize(int count, char **displays, int sized,
                       char **commits, int sizec)
@@ -216,29 +231,66 @@ SpellHintListWithSize(int count, char **displays, int sized,
     SpellHint *res;
     void *p;
     int i;
+    if (!displays && commits) {
+        displays = commits;
+        sized = sizec;
+        commits = NULL;
+        sizec = 0;
+    }
     count = SpellCalListSizeWithSize(displays, count, sized);
     if (!count)
         return NULL;
-    int lens[count][2];
+    int lens[2][count];
     int total_l = 0;
-    for (i = 0;i < count;i++) {
-        total_l += lens[i][0] = strlen(GET_NTH(displays, i, sized)) + 1;
-        total_l += lens[i][1] = ((commits && GET_NTH(commits, i, sizec)) ?
-                                 (strlen(GET_NTH(commits, i, sizec)) + 1) : 0);
-    }
+    total_l += SpellHintStrLengths(count, displays, sized, lens[0]);
+    total_l += SpellHintStrLengths(count, commits, sizec, lens[1]);
     res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * (count + 1));
     p = res + count + 1;
     for (i = 0;i < count;i++) {
-        memcpy(p, GET_NTH(displays, i, sized), lens[i][0]);
+        memcpy(p, GET_NTH(displays, i, sized), lens[0][i]);
         res[i].display = p;
-        p += lens[i][0];
-        if (!lens[i][1]) {
+        p += lens[0][i];
+        if (!lens[1][i]) {
             res[i].commit = res[i].display;
             continue;
         }
-        memcpy(p, GET_NTH(commits, i, sizec), lens[i][1]);
+        memcpy(p, GET_NTH(commits, i, sizec), lens[1][i]);
         res[i].commit = p;
-        p += lens[i][1];
+        p += lens[1][i];
+    }
+    return res;
+}
+
+SpellHint*
+SpellHintListWithPrefix(int count, const char *prefix, int prefix_len,
+                        char **commits, int sizec)
+{
+    SpellHint *res;
+    void *p;
+    int i;
+    count = SpellCalListSizeWithSize(commits, count, sizec);
+    if (!count)
+        return NULL;
+    if (!prefix) {
+        prefix_len = 0;
+    } else if (prefix_len < 0) {
+        prefix_len = strlen(prefix);
+    }
+    int lens[count];
+    int total_l = 0;
+    total_l += SpellHintStrLengths(count, commits, sizec, lens);
+    total_l += prefix_len * count;
+    res = fcitx_utils_malloc0(total_l + sizeof(SpellHint) * (count + 1));
+    p = res + count + 1;
+    for (i = 0;i < count;i++) {
+        res[i].commit = p;
+        if (prefix_len) {
+            memcpy(p, prefix, prefix_len);
+            p += prefix_len;
+        }
+        res[i].display = p;
+        memcpy(p, GET_NTH(commits, i, sizec), lens[i]);
+        p += lens[i];
     }
     return res;
 }
@@ -342,8 +394,14 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
             break;
         hint_provider = SpellFindHintProvider(name, len);
         if (hint_provider) {
+            /* struct timespec start, end; */
+            /* int t; */
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
             res = hint_provider->hint_func(spell, len_limit);
-            /* printf("%s, %s\n", __func__, hint_provider->name); */
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+            /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+            /*     + end.tv_nsec - start.tv_nsec; */
+            /* printf("%s, %s, %d\n", __func__, hint_provider->name, t); */
         }
         if (res)
             break;
@@ -444,11 +502,11 @@ typedef struct {
 static INPUT_RETURN_VALUE
 FcitxSpellGetCandWord(void* arg, FcitxCandidateWord* candWord)
 {
-    FcitxSpell *spell = (FcitxSpell*)arg;
-    FcitxInstance *instance = spell->owner;
-    char *commit = candWord->priv + sizeof(GetCandWordsArgs);
     GetCandWordsArgs *args = candWord->priv;
-    if (!args->cb || !args->cb(args->arg, commit))
+    FcitxSpell *spell = (FcitxSpell*)args->arg;
+    FcitxInstance *instance = spell->owner;
+    char *commit = (void*)(args + 1);
+    if (!args->cb || !args->cb(arg, commit))
         FcitxInstanceCommitString(instance,
                                   FcitxInstanceGetCurrentIC(instance), commit);
     return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
@@ -483,11 +541,10 @@ FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args)
     for (i = 0;hints[i].display;i++) {
         FcitxCandidateWord candWord;
         candWord.callback = FcitxSpellGetCandWord;
-        candWord.owner = arg;
+        candWord.owner = get_cand_word_arg;
         candWord.strWord = strdup(hints[i].display);
         candWord.strExtra = NULL;
-        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb,
-                                                get_cand_word_arg,
+        candWord.priv = SpellNewGetCandWordArgs(get_cand_word_cb, arg,
                                                 hints[i].commit);
         candWord.wordType = MSG_OTHER;
         FcitxCandidateWordAppend(cand_list, &candWord);

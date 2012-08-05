@@ -40,7 +40,7 @@
 #include "spell-custom.h"
 #include "spell-custom-dict.h"
 
-#define EN_DICT_FORMAT "%s/data/%s_dict.txt"
+#define EN_DICT_FORMAT "%s/data/%s_dict.fscd"
 
 #define case_a_z case 'a': case 'b': case 'c': case 'd': case 'e':      \
 case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':   \
@@ -52,12 +52,21 @@ case 'F': case 'G': case 'H': case 'I': case 'J': case 'K': case 'L':   \
 case 'M': case 'N': case 'O': case 'P': case 'Q': case 'R': case 'S':   \
 case 'T': case 'U': case 'V': case 'W': case 'X': case 'Y': case 'Z'
 
+#define DICT_BIN_MAGIC "FSCD0000"
 
 static inline uint32_t
 load_le32(const void* p)
 {
     return le32toh(*(uint32_t*)p);
 }
+
+#if 0
+static inline uint16_t
+load_le16(const void* p)
+{
+    return le16toh(*(uint16_t*)p);
+}
+#endif
 
 static boolean
 SpellCustomEnglishCompare(unsigned int c1, unsigned int c2)
@@ -158,14 +167,14 @@ SpellCustomEnglishComplete(SpellHint *hint, int type)
 {
     switch (type) {
     case CUSTOM_ALL_CAPITAL:
-        for (;hint->commit;hint++)
-            SpellCustomEnglishUpperString(hint->commit);
+        for (;hint->display;hint++)
+            SpellCustomEnglishUpperString(hint->display);
         break;
     case CUSTOM_FIRST_CAPITAL:
-        for (;hint->commit;hint++) {
-            switch (*hint->commit) {
+        for (;hint->display;hint++) {
+            switch (*hint->display) {
             case_a_z:
-                *hint->commit += 'A' - 'a';
+                *hint->display += 'A' - 'a';
                 break;
             default:
                 break;
@@ -199,29 +208,32 @@ SpellCustomMapDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
     int fd;
     struct stat stat_buf;
     off_t flen = 0;
+    off_t total_len;
+    char magic_buff[strlen(DICT_BIN_MAGIC)];
     fd = SpellCustomGetSysDictFile(spell, lang);
 
-    /* try to save whatever loaded. */
     if (fd == -1)
         return 0;
-    if (fstat(fd, &stat_buf) == -1 || stat_buf.st_size <= sizeof(uint32_t)) {
-        close(fd);
-        return 0;
-    }
-    dict->map = malloc(stat_buf.st_size + 1);
-    if (!dict->map) {
-        close(fd);
-        return 0;
-    }
+    if (fstat(fd, &stat_buf) == -1 ||
+        stat_buf.st_size <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
+        goto out;
+    read(fd, magic_buff, strlen(DICT_BIN_MAGIC));
+    if (memcmp(DICT_BIN_MAGIC, magic_buff, strlen(DICT_BIN_MAGIC)))
+        goto out;
+    total_len = stat_buf.st_size - strlen(DICT_BIN_MAGIC);
+    dict->map = malloc(total_len + 1);
+    if (!dict->map)
+        goto out;
     do {
         int c;
-        c = read(fd, dict->map, stat_buf.st_size - flen);
+        c = read(fd, dict->map, total_len - flen);
         if (c <= 0)
             break;
         flen += c;
-    } while (flen < stat_buf.st_size);
-    close(fd);
+    } while (flen < total_len);
     dict->map[flen] = '\0';
+out:
+    close(fd);
     return flen;
 }
 
@@ -243,6 +255,7 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
         dict->word_check_func = NULL;
         dict->hint_cmplt_func = NULL;
     }
+    dict->delim = " _-,./?!%";
     map_len = SpellCustomMapDict(spell, dict, lang);
     /* fail */
     if (map_len <= sizeof(uint32_t))
@@ -255,8 +268,8 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
         return false;
 
     /* save words pointers. */
-    for (i = sizeof(uint32_t) * 2, j = 0;i < map_len && j < lcount;
-         i += sizeof(uint32_t) + 1) {
+    for (i = sizeof(uint32_t), j = 0;i < map_len && j < lcount;i += 1) {
+        i += sizeof(uint16_t);
         int l = strlen(dict->map + i);
         if (!l)
             continue;

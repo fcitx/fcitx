@@ -95,15 +95,19 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     unsigned int cur_dict_c;
     unsigned int next_word_c;
     unsigned int next_dict_c;
-    word_len = strlen(word);
+    word_len = fcitx_utf8_strlen(word);
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
     word = fcitx_utf8_get_char(word, &cur_word_c);
     dict = fcitx_utf8_get_char(dict, &cur_dict_c);
     while ((distance = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
+        /* cur_word_c and cur_dict_c are the current characters
+         * and dict and word are pointing to the next one.
+         */
         if (!cur_word_c)
-            return distance * 2 + strlen(dict);
+            return (distance * 2 +
+                    cur_dict_c ? (fcitx_utf8_strlen(dict) + 1) : 0);
         word = fcitx_utf8_get_char(word, &next_word_c);
         if (!cur_dict_c) {
             if (next_word_c) {
@@ -165,15 +169,27 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     int word_type = 0;
     SpellCustomDict *dict = spell->custom_dict;
     const char *word;
+    const char *prefix = NULL;
+    int prefix_len = 0;
+    const char *real_word;
     SpellHint *res;
     if (!SpellCustomCheck(spell))
         return NULL;
     word = spell->current_str;
+    real_word = word;
+    if (dict->delim && *dict->delim) {
+        size_t delta;
+        while (real_word[delta = strcspn(real_word, dict->delim)]) {
+            prefix = word;
+            real_word += delta + 1;
+        }
+        prefix_len = prefix ? real_word - prefix : 0;
+    }
     if (dict->word_check_func)
-        word_type = dict->word_check_func(word);
+        word_type = dict->word_check_func(real_word);
     for (i = 0;i < dict->words_count;i++) {
         int dist;
-        if ((dist = SpellCustomGetDistance(dict, word,
+        if ((dist = SpellCustomGetDistance(dict, real_word,
                                            dict->words[i])) >= 0) {
             clist[num].word = dict->words[i];
             clist[num].dist = dist;
@@ -184,8 +200,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     qsort((void*)clist, num, sizeof(SpellCustomCWord),
           SpellCustomCWordCompare);
     num = num > len_limit ? len_limit : num;
-    res = SpellHintListWithSize(num, &clist->word, sizeof(SpellCustomCWord),
-                                NULL, 0);
+    res = SpellHintListWithPrefix(num, prefix, prefix_len,
+                                  &clist->word, sizeof(SpellCustomCWord));
     if (!res)
         return NULL;
     if (dict->hint_cmplt_func)
