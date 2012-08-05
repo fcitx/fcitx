@@ -1,2 +1,7 @@
+[Pinyin Enhance/ShortAsEnglish]
+Type=Boolean
+DefaultValue=False
+Description=Treating abbreviated Pinyin as English (useful when you hardle ever use abbreviated pinyin.)
+
 [DescriptionFile]
 LocaleDomain=fcitx
