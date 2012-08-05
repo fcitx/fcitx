@@ -394,8 +394,14 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
             break;
         hint_provider = SpellFindHintProvider(name, len);
         if (hint_provider) {
+            /* struct timespec start, end; */
+            /* int t; */
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start); */
             res = hint_provider->hint_func(spell, len_limit);
-            /* printf("%s, %s\n", __func__, hint_provider->name); */
+            /* clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end); */
+            /* t = ((end.tv_sec - start.tv_sec) * 1000000000) */
+            /*     + end.tv_nsec - start.tv_nsec; */
+            /* printf("%s, %s, %d\n", __func__, hint_provider->name, t); */
         }
         if (res)
             break;

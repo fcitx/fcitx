@@ -399,7 +399,7 @@ ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
     func_arg.args[2] = NULL;
     func_arg.args[3] = (void*)(long)config->iMaxCandWord;
     func_arg.args[4] = "en";
-    func_arg.args[5] = NULL;
+    func_arg.args[5] = "cus";
     func_arg.args[6] = NULL;
     func_arg.args[7] = NULL;
     FcitxCandidateWordList *candList =
