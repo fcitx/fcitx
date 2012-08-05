@@ -208,29 +208,32 @@ SpellCustomMapDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
     int fd;
     struct stat stat_buf;
     off_t flen = 0;
+    off_t total_len;
+    char magic_buff[strlen(DICT_BIN_MAGIC)];
     fd = SpellCustomGetSysDictFile(spell, lang);
 
-    /* try to save whatever loaded. */
     if (fd == -1)
         return 0;
-    if (fstat(fd, &stat_buf) == -1 || stat_buf.st_size <= sizeof(uint32_t)) {
-        close(fd);
-        return 0;
-    }
-    dict->map = malloc(stat_buf.st_size + 1);
-    if (!dict->map) {
-        close(fd);
-        return 0;
-    }
+    if (fstat(fd, &stat_buf) == -1 ||
+        stat_buf.st_size <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
+        goto out;
+    read(fd, magic_buff, strlen(DICT_BIN_MAGIC));
+    if (memcmp(DICT_BIN_MAGIC, magic_buff, strlen(DICT_BIN_MAGIC)))
+        goto out;
+    total_len = stat_buf.st_size - strlen(DICT_BIN_MAGIC);
+    dict->map = malloc(total_len + 1);
+    if (!dict->map)
+        goto out;
     do {
         int c;
-        c = read(fd, dict->map, stat_buf.st_size - flen);
+        c = read(fd, dict->map, total_len - flen);
         if (c <= 0)
             break;
         flen += c;
-    } while (flen < stat_buf.st_size);
-    close(fd);
+    } while (flen < total_len);
     dict->map[flen] = '\0';
+out:
+    close(fd);
     return flen;
 }
 
@@ -254,18 +257,18 @@ SpellCustomInitDict(FcitxSpell *spell, SpellCustomDict *dict, const char *lang)
     }
     map_len = SpellCustomMapDict(spell, dict, lang);
     /* fail */
-    if (map_len <= sizeof(uint32_t) + strlen(DICT_BIN_MAGIC))
+    if (map_len <= sizeof(uint32_t))
         return false;
 
-    lcount = load_le32(dict->map + strlen(DICT_BIN_MAGIC));
+    lcount = load_le32(dict->map);
     dict->words = malloc(lcount * sizeof(char*));
     /* well, not likely though. */
     if (!dict->words)
         return false;
 
     /* save words pointers. */
-    for (i = sizeof(uint16_t) + sizeof(uint32_t) + strlen(DICT_BIN_MAGIC), j = 0;
-         i < map_len && j < lcount;i += sizeof(uint16_t) + 1) {
+    for (i = sizeof(uint32_t), j = 0;i < map_len && j < lcount;i += 1) {
+        i += sizeof(uint16_t);
         int l = strlen(dict->map + i);
         if (!l)
             continue;
