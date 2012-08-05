@@ -95,7 +95,7 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     unsigned int cur_dict_c;
     unsigned int next_word_c;
     unsigned int next_dict_c;
-    word_len = strlen(word);
+    word_len = fcitx_utf8_strlen(word);
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
     word = fcitx_utf8_get_char(word, &cur_word_c);
@@ -103,7 +103,8 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     while ((distance = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
         if (!cur_word_c)
-            return distance * 2 + strlen(dict);
+            return (distance * 2 +
+                    cur_dict_c ? (fcitx_utf8_strlen(dict) + 1) : 0);
         word = fcitx_utf8_get_char(word, &next_word_c);
         if (!cur_dict_c) {
             if (next_word_c) {
