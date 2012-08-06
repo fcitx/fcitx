@@ -645,6 +645,10 @@ void QFcitxInputContext::createInputContext()
         return;
 
     m_rect = QRect();
+    if (m_improxy) {
+        delete m_improxy;
+        m_improxy = NULL;
+    }
     m_improxy = new org::fcitx::Fcitx::InputMethod(m_serviceName, FCITX_IM_DBUS_PATH, *m_connection, this);
 
     if (!m_improxy->isValid())
@@ -663,15 +667,18 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
 
     do {
         if (result.isError()) {
-            qWarning() << result.error();
             break;
         }
 
         if (!m_connection)
             break;
-        
+
         this->m_id = qdbus_cast<int>(result.argumentAt(0));
         this->m_path = QString(FCITX_IC_DBUS_PATH_QSTRING).arg(m_id);
+        if (m_icproxy) {
+            delete m_icproxy;
+            m_icproxy = NULL;
+        }
         m_icproxy = new org::fcitx::Fcitx::InputContext(m_serviceName, m_path, *m_connection, this);
         connect(m_icproxy, SIGNAL(CommitString(QString)), this, SLOT(commitString(QString)));
         connect(m_icproxy, SIGNAL(ForwardKey(uint, uint, int)), this, SLOT(forwardKey(uint, uint, int)));
