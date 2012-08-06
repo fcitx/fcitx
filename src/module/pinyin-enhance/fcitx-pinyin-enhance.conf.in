@@ -6,5 +6,5 @@ Category=Module
 Enabled=True
 Library=fcitx-pinyin-enhance.so
 Type=SharedLibrary
-Dependency=fcitx-spell
+Dependency=
 Priority=80

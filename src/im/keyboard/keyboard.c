@@ -436,9 +436,6 @@ void  FcitxKeyboardResetIM(void *arg)
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-    if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(keyboard->owner),
-                                     FCITX_SPELL_NAME))
-        return false;
     FcitxModuleFunctionArg arg;
     arg.args[0] = keyboard->dictLang;
     arg.args[1] = NULL;
