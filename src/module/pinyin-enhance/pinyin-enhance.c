@@ -76,6 +76,7 @@ case 'x': case 'y': case 'z'
 typedef struct {
     FcitxGenericConfig gconfig;
     boolean short_as_english;
+    boolean allow_replace_first;
 } PinyinEnhanceConfig;
 
 typedef struct {
@@ -91,6 +92,8 @@ static void PinyinEnhanceAddCandidateWord(void *arg);
 
 CONFIG_BINDING_BEGIN(PinyinEnhanceConfig)
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
+                        allow_replace_first);
 CONFIG_BINDING_END()
 
 CONFIG_DEFINE_LOAD_AND_SAVE(PinyinEnhance, PinyinEnhanceConfig,
@@ -155,8 +158,10 @@ PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string,
         len_limit = FcitxCandidateWordGetPageSize(candList) / 2;
         len_limit = len_limit > 0 ? len_limit : 1;
     }
-    if (position < 0)
+    if (position < 0 ||
+        (position < 1 && pyenhance->config.allow_replace_first)) {
         position = 1;
+    }
     FcitxModuleFunctionArg func_arg;
     func_arg.args[0] = NULL;
     func_arg.args[1] = (void*)string;
@@ -200,7 +205,7 @@ PinyinGetWordType(const char *str, int len)
         break;
     }
     for (i = 1;i < len;i++) {
-        switch (*str) {
+        switch (str[i]) {
         case '\0':
             return PY_TYPE_SHORT;
         case 'a':
@@ -249,6 +254,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
                 if (word_len > 0)
                     words_type[words_count++] = PinyinGetWordType(last_start,
                                                                   word_len);
+                last_start = last_start + word_len;
             }
             spaces++;
             continue;
@@ -319,7 +325,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if ((letters >= 4) &&
         (spaces * 2 > letters ||
          (spaces * 3 >= letters && vowels * 3 >= letters))) {
-        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, -1, len_limit);
+        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, 1, len_limit);
         goto out;
     }
     if (len_limit > 0) {

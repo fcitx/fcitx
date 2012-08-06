@@ -162,7 +162,8 @@ SpellCustomCWordCompare(const void *a, const void *b)
 SpellHint*
 SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    int list_len = len_limit * 2;
+    int list_len = len_limit * 3;
+    list_len = list_len >= 24 ? list_len : 24;
     SpellCustomCWord clist[list_len];
     int i;
     int num = 0;
