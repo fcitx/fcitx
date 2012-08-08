@@ -195,6 +195,10 @@ void* DBusCreate(FcitxInstance* instance)
 
     DBusConnection* privconn = NULL;
     do {
+        int noPrivateDBus = fcitx_utils_get_boolean_env("FCITX_NO_PRIVATE_DBUS", false);
+        if (noPrivateDBus)
+            break;
+
         char* file;
         FILE* dbusfp = FcitxXDGGetFileWithPrefix("dbus", "daemon.conf", "r", &file);
         if (dbusfp) {
