@@ -61,7 +61,10 @@ static guint signals[LAST_SIGNAL] = {0};
 FCITX_EXPORT_API
 GType        fcitx_input_method_get_type(void) G_GNUC_CONST;
 
-G_DEFINE_TYPE(FcitxInputMethod, fcitx_input_method, G_TYPE_DBUS_PROXY);
+FCITX_EXPORT_API
+GType        fcitx_im_item_get_type(void) G_GNUC_CONST;
+
+G_DEFINE_TYPE(FcitxInputMethod, fcitx_input_method, G_TYPE_DBUS_PROXY)
 
 static GDBusInterfaceInfo * _fcitx_input_method_get_interface_info(void);
 static void _fcitx_im_item_foreach_cb(gpointer data, gpointer user_data);
@@ -131,14 +134,10 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
     }
 
     if (value) {
-        array = g_ptr_array_new_with_free_func(fcitx_im_item_free);
+        array = g_ptr_array_new_with_free_func((GDestroyNotify) fcitx_im_item_free);
         g_variant_get(value, "a(sssb)", &iter);
         while (g_variant_iter_next(iter, "(sssb)", &name, &unique_name, &langcode, &enable, NULL)) {
-            FcitxIMItem* item = g_malloc0(sizeof(FcitxIMItem));
-            item->enable = enable;
-            item->name = g_strdup(name);
-            item->unique_name = g_strdup(unique_name);
-            item->langcode = g_strdup(langcode);
+            FcitxIMItem* item = fcitx_im_item_new(name, unique_name, langcode, enable);
             g_ptr_array_add(array, item);
             g_free(name);
             g_free(unique_name);
@@ -277,14 +276,34 @@ fcitx_input_method_new(GBusType             bus_type,
 }
 
 FCITX_EXPORT_API
-void fcitx_im_item_free(gpointer data)
+FcitxIMItem* fcitx_im_item_new(const gchar* name, const gchar* unique_name, const gchar* langcode, gboolean enable)
+{
+    FcitxIMItem* item = g_slice_new(FcitxIMItem);
+    item->name = g_strdup(name);
+    item->unique_name = g_strdup(unique_name);
+    item->langcode = g_strdup(langcode);
+    item->enable = enable;
+    return item;
+}
+
+static
+FcitxIMItem*
+fcitx_im_item_copy(FcitxIMItem* src)
+{
+    return fcitx_im_item_new(src->name, src->unique_name, src->langcode, src->enable);
+}
+
+FCITX_EXPORT_API
+void fcitx_im_item_free(FcitxIMItem* data)
 {
     FcitxIMItem* item = data;
     g_free(item->name);
     g_free(item->unique_name);
     g_free(item->langcode);
-    g_free(data);
+    g_slice_free(FcitxIMItem, data);
 }
+
+G_DEFINE_BOXED_TYPE(FcitxIMItem, fcitx_im_item, fcitx_im_item_copy, fcitx_im_item_free)
 
 void _fcitx_im_item_foreach_cb(gpointer       data,
                                    gpointer       user_data)
