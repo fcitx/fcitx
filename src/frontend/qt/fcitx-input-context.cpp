@@ -89,25 +89,6 @@ compare_seq(const void *key, const void *value)
     return 0;
 }
 
-static boolean
-get_boolean_env(const char *name,
-                 boolean defval)
-{
-    const char *value = getenv(name);
-
-    if (value == NULL)
-        return defval;
-
-    if (strcmp(value, "") == 0 ||
-        strcmp(value, "0") == 0 ||
-        strcmp(value, "false") == 0 ||
-        strcmp(value, "False") == 0 ||
-        strcmp(value, "FALSE") == 0)
-        return false;
-
-    return true;
-}
-
 static const uint fcitx_compose_ignore[] = {
     FcitxKey_Shift_L,
     FcitxKey_Shift_R,
@@ -692,11 +673,11 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
         flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
-        m_useSurroundingText = get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
+        m_useSurroundingText = fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
         if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 
-        m_syncMode = get_boolean_env("FCITX_QT_USE_SYNC", true);
+        m_syncMode = fcitx_utils_get_boolean_env("FCITX_QT_USE_SYNC", true);
 
         addCapacity(flag, true);
     } while(0);

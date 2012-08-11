@@ -606,4 +606,24 @@ fcitx_utils_backtrace()
 #endif
 }
 
+FCITX_EXPORT_API
+int
+fcitx_utils_get_boolean_env(const char *name,
+                            int defval)
+{
+    const char *value = getenv(name);
+
+    if (value == NULL)
+        return defval;
+
+    if (strcmp(value, "") == 0 ||
+        strcmp(value, "0") == 0 ||
+        strcmp(value, "false") == 0 ||
+        strcmp(value, "False") == 0 ||
+        strcmp(value, "FALSE") == 0)
+        return 0;
+
+    return 1;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

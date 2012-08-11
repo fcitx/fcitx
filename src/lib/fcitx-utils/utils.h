@@ -309,6 +309,18 @@ extern "C" {
     void fcitx_utils_backtrace();
 
     /**
+     * @brief get bool environment var for convinience.
+     *
+     * @param name var name
+     * @param defval default value
+     *
+     * @return value of var
+     * 
+     * @since 4.2.6
+     */
+    int fcitx_utils_get_boolean_env(const char *name, int defval);
+
+    /**
      * if obj is null, free it, after that, if str is NULL set it with NULL,
      * if str is not NULL, set it with strdup(str)
      *

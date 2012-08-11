@@ -212,7 +212,6 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
     SP_S* SPMap_S = pyconfig->SPMap_S;
 
     strTmp[1] = '\0';
-    strQP[0] = '\0';
     const char aeiou[] = "aeiou";
 
     /*
@@ -248,7 +247,8 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
         }
     } while(0);
 
-
+recheck_sp:
+    strQP[0] = '\0';
     if (strSP[0] != pyconfig->cNonS
         && !checkXiaoheNonS) {
         iIndex1 = GetSPIndexJP_S(pyconfig, *strSP);
@@ -287,8 +287,15 @@ void SP2QP(FcitxPinyinConfig* pyconfig, char *strSP, char *strQP)
         }
     }
 
-    if (FindPYFAIndex(pyconfig, strQP, false) != -1)
+    if (FindPYFAIndex(pyconfig, strQP, false) != -1) {
         iIndex2 = 0;        //这只是将iIndex2置为非-1,以免后面的判断
+    }
+    else {
+        if (checkXiaoheNonS) {
+            checkXiaoheNonS = false;
+            goto recheck_sp;
+        }
+    }
 
     strTmp[0] = strSP[0];
 

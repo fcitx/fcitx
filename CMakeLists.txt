@@ -27,7 +27,7 @@ option(ENABLE_ENCHANT "Enable enchant for word predication" On)
 option(ENABLE_PRESAGE "Enable presage for word predication" On)
 option(ENABLE_ICU "Enable icu for qt/keyboard compose" On)
 option(ENABLE_BACKTRACE "Enable backtrace support" On)
-option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" Off)
+option(ENABLE_XDGAUTOSTART "Enable xdg autostart desktop file installion" On)
 
 if (NOT NO_SNOOPER_APPS)
 set(NO_SNOOPER_APPS ".*chrome.*,.*chromium.*,firefox.*,Do.*" CACHE STRING "Disable Key Snooper for following app")

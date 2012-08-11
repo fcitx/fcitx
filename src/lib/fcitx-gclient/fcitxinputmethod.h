@@ -26,6 +26,8 @@
  * Type macros
  */
 
+#define FCITX_TYPE_IM_ITEM (fcitx_im_item_get_type())
+
 /* define GOBJECT macros */
 #define FCITX_TYPE_INPUT_METHOD          (fcitx_input_method_get_type ())
 #define FCITX_INPUT_METHOD(object) \
@@ -61,6 +63,14 @@ struct _FcitxInputMethodClass {
     /* padding */
 };
 
+/**
+ * FcitxIMItem:
+ * A FcitxIMItem contains some metadata for an input method in fcitx
+ * @name: name of im
+ * @unique_name: unique_name of im
+ * @langcode: language code
+ * @enable: enabled or not
+ */
 struct _FcitxIMItem {
     gchar* name;
     gchar* unique_name;
@@ -69,6 +79,7 @@ struct _FcitxIMItem {
 };
 
 GType        fcitx_input_method_get_type(void) G_GNUC_CONST;
+GType        fcitx_im_item_get_type(void) G_GNUC_CONST;
 
 /**
  * fcitx_input_method_new
@@ -93,7 +104,7 @@ fcitx_input_method_new(GBusType             bus_type,
  * fcitx_input_method_get_imlist:
  *
  * @im: A FcitxInputMethod
- * @returns: (transfer full) (element-type FcitxIMItem): A FcitxIMItem List
+ * @returns: (element-type FcitxIMItem) (transfer container): A FcitxIMItem List
  *
  * Get Fcitx all im list
  **/
@@ -190,13 +201,24 @@ gchar*       fcitx_input_method_get_current_im(FcitxInputMethod* im);
 void         fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname);
 
 /**
- * fcitx_im_item_free
+ * fcitx_im_item_new:
+ * @name: name of im
+ * @unique_name: unique_name of im
+ * @langcode: language code
+ * @enable: enabled or not
+ *
+ * @returns: the new #FcitxIMItem
+ */
+FcitxIMItem* fcitx_im_item_new(const gchar* name, const gchar* unique_name, const gchar* langcode, gboolean enable);
+
+/**
+ * fcitx_im_item_free:
  *
  * @data: A FcitxIMItem
  *
  * free an im_item
  **/
-void fcitx_im_item_free(gpointer data);
+void fcitx_im_item_free(FcitxIMItem* data);
 
 G_END_DECLS
 

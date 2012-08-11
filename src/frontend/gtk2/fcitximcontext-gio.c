@@ -164,10 +164,6 @@ _key_snooper_cb (GtkWidget   *widget,
                  GdkEventKey *event,
                  gpointer     user_data);
 
-static gboolean
-_get_boolean_env(const gchar *name,
-                 gboolean defval);
-
 static GType _fcitx_type_im_context = 0;
 static GtkIMContextClass *parent_class = NULL;
 
@@ -307,8 +303,8 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
         g_signal_lookup("retrieve-surrounding", G_TYPE_FROM_CLASS(klass));
     g_assert(_signal_retrieve_surrounding_id != 0);
 
-    _use_key_snooper = !_get_boolean_env ("IBUS_DISABLE_SNOOPER", !(_ENABLE_SNOOPER))
-                       && !_get_boolean_env("FCITX_DISABLE_SNOOPER", !(_ENABLE_SNOOPER));
+    _use_key_snooper = !fcitx_utils_get_boolean_env ("IBUS_DISABLE_SNOOPER", !(_ENABLE_SNOOPER))
+                       && !fcitx_utils_get_boolean_env("FCITX_DISABLE_SNOOPER", !(_ENABLE_SNOOPER));
     /* env IBUS_DISABLE_SNOOPER does not exist */
     if (_use_key_snooper) {
         /* disable snooper if app is in _no_snooper_apps */
@@ -331,8 +327,8 @@ fcitx_im_context_class_init(FcitxIMContextClass *klass)
     }
 
     /* make ibus fix benefits us */
-    _use_sync_mode = _get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
-                     || _get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
+    _use_sync_mode = fcitx_utils_get_boolean_env("IBUS_ENABLE_SYNC_MODE", FALSE)
+                     || fcitx_utils_get_boolean_env("FCITX_ENABLE_SYNC_MODE", FALSE);
     /* always install snooper */
     if (_key_snooper_id == 0)
         _key_snooper_id = gtk_key_snooper_install (_key_snooper_cb, NULL);
@@ -1423,25 +1419,6 @@ _key_snooper_cb (GtkWidget   *widget,
     }
 
     return retval;
-}
-
-static gboolean
-_get_boolean_env(const gchar *name,
-                 gboolean defval)
-{
-    const char *value = getenv(name);
-
-    if (value == NULL)
-        return defval;
-
-    if (strcmp(value, "") == 0 ||
-            strcmp(value, "0") == 0 ||
-            strcmp(value, "false") == 0 ||
-            strcmp(value, "False") == 0 ||
-            strcmp(value, "FALSE") == 0)
-        return FALSE;
-
-    return TRUE;
 }
 
 // kate: indent-mode cstyle; replace-tabs on;
