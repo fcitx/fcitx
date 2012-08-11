@@ -107,6 +107,8 @@ void *fcitx_utils_custom_bsearch(const void *key, const void *base,
     }
 }
 
+typedef void (*_fcitx_sighandler_t) (int);
+
 FCITX_EXPORT_API
 void fcitx_utils_init_as_daemon()
 {
@@ -116,13 +118,13 @@ void fcitx_utils_init_as_daemon()
         exit(0);
     }
     setsid();
-    sighandler_t oldint = signal(SIGINT, SIG_IGN);
-    sighandler_t oldhup  =signal(SIGHUP, SIG_IGN);
-    sighandler_t oldquit = signal(SIGQUIT, SIG_IGN);
-    sighandler_t oldpipe = signal(SIGPIPE, SIG_IGN);
-    sighandler_t oldttou = signal(SIGTTOU, SIG_IGN);
-    sighandler_t oldttin = signal(SIGTTIN, SIG_IGN);
-    sighandler_t oldchld = signal(SIGCHLD, SIG_IGN);
+    _fcitx_sighandler_t oldint = signal(SIGINT, SIG_IGN);
+    _fcitx_sighandler_t oldhup  =signal(SIGHUP, SIG_IGN);
+    _fcitx_sighandler_t oldquit = signal(SIGQUIT, SIG_IGN);
+    _fcitx_sighandler_t oldpipe = signal(SIGPIPE, SIG_IGN);
+    _fcitx_sighandler_t oldttou = signal(SIGTTOU, SIG_IGN);
+    _fcitx_sighandler_t oldttin = signal(SIGTTIN, SIG_IGN);
+    _fcitx_sighandler_t oldchld = signal(SIGCHLD, SIG_IGN);
     if (fork() > 0)
         exit(0);
     chdir("/");
