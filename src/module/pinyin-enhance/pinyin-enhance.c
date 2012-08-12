@@ -57,6 +57,7 @@ check_im_type(FcitxIM *im)
     if (strcmp(im->uniqueName, "shuangpin-libpinyin") == 0 ||
         strcmp(im->uniqueName, "shuangpin") == 0)
         return PY_IM_SHUANGPIN;
+    // TODO .... so what are other zh{,_TW} im that can be supported .....
     return PY_IM_INVALID;
 }
 
@@ -281,14 +282,20 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     int words_type[strlen(p) / 2 + 1];
     do {
         switch (*p) {
-        case ' ':
-            if (im_type == PY_IM_PINYIN) {
-                int word_len = p - spaces - last_start;
-                if (word_len > 0)
+        case ' ': {
+            int word_len = p - spaces - last_start;
+            if (word_len > 0) {
+                if (im_type == PY_IM_PINYIN) {
                     words_type[words_count++] = PinyinGetWordType(last_start,
                                                                   word_len);
-                last_start = last_start + word_len;
+                } else if (im_type == PY_IM_SHUANGPIN) {
+                    words_type[words_count++] = (word_len == 2 ?
+                                                 PY_TYPE_FULL :
+                                                 PY_TYPE_INVALID);
+                }
             }
+            last_start = last_start + word_len;
+        }
             spaces++;
             continue;
         case_vowel:
@@ -300,10 +307,15 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             break;
         }
     } while (*(p++));
-    if (im_type == PY_IM_PINYIN) {
-        /* not at the end of the string */
-        if (*last_start)
+    /* not at the end of the string */
+    if (*last_start) {
+        if (im_type == PY_IM_PINYIN) {
             words_type[words_count++] = PinyinGetWordType(last_start, -1);
+        } else if (im_type == PY_IM_SHUANGPIN) {
+            words_type[words_count++] = (strlen(last_start) == 2 ?
+                                         PY_TYPE_FULL :
+                                         PY_TYPE_INVALID);
+        }
     }
     cand_word = FcitxCandidateWordGetFirst(cand_list);
     if (!cand_word || !cand_word->strWord || !*cand_word->strWord
@@ -319,7 +331,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             len_limit = len_limit > page_size / 2 ? len_limit : page_size / 2;
         }
     }
-    if (im_type == PY_IM_PINYIN) {
+    if (im_type == PY_IM_PINYIN || im_type == PY_IM_SHUANGPIN) {
         int eng_ness = 5;
         int py_invalid = 0;
         int py_full = 0;
