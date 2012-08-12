@@ -856,6 +856,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HASH_COUNT(head) HASH_CNT(hh,head)
 #define HASH_CNT(hh,head) (head?(head->hh.tbl->num_items):0)
 
+#define HASH_FOREACH(key, head, type) \
+    type* key; \
+    for(key = (type*) head ; key != NULL; key = (type*) key->hh.next)
+
 typedef struct UT_hash_bucket {
     struct UT_hash_handle *hh_head;
     unsigned count;

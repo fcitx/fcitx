@@ -193,9 +193,13 @@ extern "C"
 
     typedef struct _FcitxConfigOptionDesc FcitxConfigOptionDesc; /**< FcitxConfigOptionDesc */
 
+    typedef struct _FcitxConfigOptionDesc2 FcitxConfigOptionDesc2; /**< FcitxConfigOptionDesc2 */
+
     typedef struct _FcitxGenericConfig FcitxGenericConfig; /**< FcitxGenericConfig */
 
     typedef struct _FcitxConfigOptionSubkey FcitxConfigOptionSubkey; /**< FcitxConfigOptionSubkey */
+
+    typedef union _FcitxConfigConstrain FcitxConfigConstrain /** < FcitxConfigConstrain */;
 
     /**
      * sync filter function
@@ -248,6 +252,30 @@ extern "C"
         UT_hash_handle hh; /**< hash handle */
     };
 
+    union _FcitxConfigConstrain {
+        struct {
+            int min;
+            int max;
+        } integerConstrain;
+
+        struct {
+            size_t maxLength;
+        } stringConstrain;
+
+        void* padding[10];
+    };
+
+    /**
+     * Config option description v2
+     */
+    struct _FcitxConfigOptionDesc2 {
+        struct _FcitxConfigOptionDesc optionDesc;
+        boolean advance;
+        FcitxConfigConstrain constrain;
+        char* longDesc;
+        void* padding[16];
+    };
+
     /**
      * Config Group Description, it describe a [Gruop] in config file
      **/
@@ -275,7 +303,10 @@ extern "C"
         FcitxConfigValueType value; /**< value type */
         FcitxSyncFilter filter; /**< filter function */
         void *filterArg; /**< argument for filter function */
-        FcitxConfigOptionDesc *optionDesc; /**< option description pointer */
+        union {
+            FcitxConfigOptionDesc *optionDesc; /**< option description pointer */
+            FcitxConfigOptionDesc2 *optionDesc2; /**< option description pointer */
+        };
         FcitxConfigOptionSubkey *subkey; /**< subkey which only used with I18NString */
         UT_hash_handle hh; /**< hash handle */
     } ;

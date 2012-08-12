@@ -57,6 +57,12 @@ extern "C"
         unsigned int state;
     } FcitxHotkey;
 
+
+
+    typedef struct _FcitxHotkeys{
+        FcitxHotkey hotkey[2];
+    } FcitxHotkeys;
+
     /**
      * Set the hotkey with a string
      *
@@ -130,15 +136,6 @@ extern "C"
      * @return boolean
      **/
     boolean FcitxHotkeyIsHotKeySimple(FcitxKeySym sym, unsigned int state);
-
-    /**
-     * is hotkey upper case
-     *
-     * @param sym keyval
-     * @param state keystate
-     * @return boolean
-     **/
-    boolean FcitxHotkeyIsHotKeyCapital(FcitxKeySym sym, unsigned int state);
 
     /**
      * hotkey have combine modifier

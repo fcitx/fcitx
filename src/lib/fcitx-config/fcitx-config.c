@@ -29,13 +29,14 @@
 #include <string.h>
 #include <search.h>
 #include <libintl.h>
+#include <limits.h>
+#include <locale.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx-config.h"
 #include "fcitx-utils/log.h"
 #include "hotkey.h"
 #include "fcitx-utils/utils.h"
-#include <locale.h>
 
 
 #define IsColorValid(c) ((c) >=0 && (c) <= 255)
@@ -151,12 +152,7 @@ boolean FcitxConfigCheckConfigFile(FcitxConfigFile *cfile, FcitxConfigFileDesc* 
     if (!cfile)
         return false;
 
-    FcitxConfigGroupDesc *cgdesc = NULL;
-
-    for (cgdesc = cfdesc->groupsDesc;
-            cgdesc != NULL;
-            cgdesc = (FcitxConfigGroupDesc*)cgdesc->hh.next) {
-        FcitxConfigOptionDesc *codesc = NULL;
+    HASH_FOREACH(cgdesc, cfdesc->groupsDesc, FcitxConfigGroupDesc) {
         FcitxConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
@@ -168,9 +164,7 @@ boolean FcitxConfigCheckConfigFile(FcitxConfigFile *cfile, FcitxConfigFileDesc* 
             HASH_ADD_KEYPTR(hh, cfile->groups, group->groupName, strlen(group->groupName), group);
         }
 
-        for (codesc = cgdesc->optionsDesc;
-                codesc != NULL;
-                codesc = (FcitxConfigOptionDesc*)codesc->hh.next) {
+        HASH_FOREACH(codesc, cgdesc->optionsDesc, FcitxConfigOptionDesc) {
             FcitxConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 
@@ -279,7 +273,8 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
         } else
             free(groupName);
 
-        FcitxConfigOptionDesc *codesc = fcitx_utils_malloc0(sizeof(FcitxConfigOptionDesc));
+        FcitxConfigOptionDesc2 *codesc2 = fcitx_utils_new(FcitxConfigOptionDesc2);
+        FcitxConfigOptionDesc *codesc = (FcitxConfigOptionDesc*) codesc2;
 
         codesc->optionName = optionName;
 
@@ -287,25 +282,62 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
 
         HASH_ADD_KEYPTR(hh, cgdesc->optionsDesc, codesc->optionName, optionNameLen, codesc);
 
-        HASH_FIND_STR(options, "Description", option);
+        HASH_FIND_STR(options, "Advance", option);
+        if (option && strcmp(option->rawValue, "True") == 0)
+            codesc2->advance = true;
+        else
+            codesc2->advance = false;
 
+        HASH_FIND_STR(options, "Description", option);
         if (option)
             codesc->desc = strdup(option->rawValue);
         else
             codesc->desc = strdup("");
 
+        HASH_FIND_STR(options, "LongDescription", option);
+        if (option)
+            codesc2->longDesc = strdup(option->rawValue);
+        else
+            codesc2->longDesc = strdup("");
+
+
         /* Processing Type */
         HASH_FIND_STR(options, "Type", option);
 
         if (option) {
-            if (!strcmp(option->rawValue, "Integer"))
+            if (!strcmp(option->rawValue, "Integer")) {
                 codesc->type = T_Integer;
+                FcitxConfigOption* coption;
+                coption = NULL;
+                HASH_FIND_STR(options, "Min", coption);
+                if (coption) {
+                    codesc2->constrain.integerConstrain.min = atoi(coption->rawValue);
+                }
+                else {
+                    codesc2->constrain.integerConstrain.min = INT_MIN;
+                }
+                coption = NULL;
+                HASH_FIND_STR(options, "Max", coption);
+                if (coption) {
+                    codesc2->constrain.integerConstrain.max = atoi(coption->rawValue);
+                }
+                else {
+                    codesc2->constrain.integerConstrain.max = INT_MAX;
+                }
+            }
             else if (!strcmp(option->rawValue, "Color"))
                 codesc->type = T_Color;
             else if (!strcmp(option->rawValue, "Char"))
                 codesc->type = T_Char;
-            else if (!strcmp(option->rawValue, "String"))
+            else if (!strcmp(option->rawValue, "String")) {
                 codesc->type = T_String;
+                FcitxConfigOption* coption;
+                coption = NULL;
+                HASH_FIND_STR(options, "MaxLength", coption);
+                if (coption) {
+                    codesc2->constrain.stringConstrain.maxLength = atoi(coption->rawValue);
+                }
+            }
             else if (!strcmp(option->rawValue, "I18NString"))
                 codesc->type = T_I18NString;
             else if (!strcmp(option->rawValue, "Boolean"))
@@ -405,11 +437,17 @@ FcitxConfigSyncResult FcitxConfigOptionInteger(FcitxConfigOption *option, FcitxC
 
     switch (sync) {
 
-    case Raw2Value:
-        *option->value.integer = atoi(option->rawValue);
+    case Raw2Value: {
+        int value = atoi(option->rawValue);
+        if (value > option->optionDesc2->constrain.integerConstrain.max || value < option->optionDesc2->constrain.integerConstrain.min)
+            return SyncInvalid;
+        *option->value.integer = value;
         return SyncSuccess;
+    }
 
     case Value2Raw:
+        if (*option->value.integer > option->optionDesc2->constrain.integerConstrain.max || *option->value.integer < option->optionDesc2->constrain.integerConstrain.min)
+            return SyncInvalid;
 
         if (option->rawValue)
             free(option->rawValue);
@@ -552,11 +590,17 @@ FcitxConfigSyncResult FcitxConfigOptionString(FcitxConfigOption *option, FcitxCo
     switch (sync) {
 
     case Raw2Value:
+        if (option->optionDesc2->constrain.stringConstrain.maxLength
+            && strlen(option->rawValue) > option->optionDesc2->constrain.stringConstrain.maxLength)
+            return SyncInvalid;
         fcitx_utils_string_swap(option->value.string, option->rawValue);
 
         return SyncSuccess;
 
     case Value2Raw:
+        if (option->optionDesc2->constrain.stringConstrain.maxLength
+            && strlen(*option->value.string) > option->optionDesc2->constrain.stringConstrain.maxLength)
+            return SyncInvalid;
         fcitx_utils_string_swap(&option->rawValue, *option->value.string);
 
         return SyncSuccess;
@@ -792,6 +836,7 @@ void FcitxConfigFreeConfigOption(FcitxConfigOption *option)
 FCITX_EXPORT_API
 void FcitxConfigFreeConfigOptionDesc(FcitxConfigOptionDesc *codesc)
 {
+    FcitxConfigOptionDesc2* codesc2 = (FcitxConfigOptionDesc2*) codesc;
     free(codesc->optionName);
 
     if (codesc->configEnum.enumCount > 0) {
@@ -808,6 +853,7 @@ void FcitxConfigFreeConfigOptionDesc(FcitxConfigOptionDesc *codesc)
         free(codesc->rawDefaultValue);
 
     free(codesc->desc);
+    free (codesc2->longDesc);
 
     free(codesc);
 }
@@ -997,23 +1043,16 @@ void FcitxConfigFree(FcitxGenericConfig* config)
 {
     FcitxConfigFile *cfile = config->configFile;
     FcitxConfigFileDesc *cdesc = NULL;
-    FcitxConfigGroupDesc* groupdesc = NULL;
 
     if (!cfile)
         return;
 
     cdesc = cfile->fileDesc;
 
-    for (groupdesc = cdesc->groupsDesc;
-            groupdesc != NULL;
-            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
-        FcitxConfigOptionDesc *optiondesc;
+    HASH_FOREACH(groupdesc, cdesc->groupsDesc, FcitxConfigGroupDesc) {
         FcitxConfigGroup *group = NULL;
         HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
-
-        for (optiondesc = groupdesc->optionsDesc;
-                optiondesc != NULL;
-                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+        HASH_FOREACH(optiondesc, groupdesc->optionsDesc, FcitxConfigOptionDesc) {
             FcitxConfigOption *option = NULL;
 
             if (group)
@@ -1031,23 +1070,17 @@ void FcitxConfigBindSync(FcitxGenericConfig* config)
 {
     FcitxConfigFile *cfile = config->configFile;
     FcitxConfigFileDesc *cdesc = NULL;
-    FcitxConfigGroupDesc* groupdesc = NULL;
 
     if (!cfile)
         return;
 
     cdesc = cfile->fileDesc;
 
-    for (groupdesc = cdesc->groupsDesc;
-            groupdesc != NULL;
-            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
-        FcitxConfigOptionDesc *optiondesc;
+    HASH_FOREACH(groupdesc, cdesc->groupsDesc, FcitxConfigGroupDesc) {
         FcitxConfigGroup *group = NULL;
         HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
 
-        for (optiondesc = groupdesc->optionsDesc;
-                optiondesc != NULL;
-                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+        HASH_FOREACH(optiondesc, groupdesc->optionsDesc, FcitxConfigOptionDesc) {
             FcitxConfigOption *option = NULL;
 
             if (group)
@@ -1149,12 +1182,7 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
 
     FcitxConfigFile* cfile = config->configFile;
 
-    FcitxConfigGroupDesc* groupdesc = NULL;
-
-    for (groupdesc = cdesc->groupsDesc;
-            groupdesc != NULL;
-            groupdesc = (FcitxConfigGroupDesc*)groupdesc->hh.next) {
-        FcitxConfigOptionDesc *optiondesc;
+    HASH_FOREACH(groupdesc, cdesc->groupsDesc, FcitxConfigGroupDesc) {
         fprintf(fp, "[%s]\n", groupdesc->groupName);
 
         FcitxConfigGroup *group = NULL;
@@ -1162,9 +1190,7 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
         if (cfile)
             HASH_FIND_STR(cfile->groups, groupdesc->groupName, group);
 
-        for (optiondesc = groupdesc->optionsDesc;
-                optiondesc != NULL;
-                optiondesc = (FcitxConfigOptionDesc*)optiondesc->hh.next) {
+        HASH_FOREACH(optiondesc, groupdesc->optionsDesc, FcitxConfigOptionDesc) {
             FcitxConfigOption *option = NULL;
 
             if (group)
@@ -1200,11 +1226,7 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
             } else {
                 FcitxConfigSyncValue(config, group, option, Value2Raw);
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
-                FcitxConfigOptionSubkey* subkey;
-
-                for (subkey = option->subkey;
-                        subkey != NULL;
-                        subkey = subkey->hh.next) {
+                HASH_FOREACH(subkey, option->subkey, FcitxConfigOptionSubkey) {
                     fprintf(fp, "%s[%s]=%s\n", option->optionName, subkey->subkeyName, subkey->rawValue);
                 }
             }
@@ -1348,12 +1370,7 @@ void FcitxConfigResetConfigToDefaultValue(FcitxGenericConfig* config)
     if (!cfdesc)
         return;
 
-    FcitxConfigGroupDesc *cgdesc = NULL;
-
-    for (cgdesc = cfdesc->groupsDesc;
-            cgdesc != NULL;
-            cgdesc = (FcitxConfigGroupDesc*)cgdesc->hh.next) {
-        FcitxConfigOptionDesc *codesc = NULL;
+    HASH_FOREACH(cgdesc, cfdesc->groupsDesc, FcitxConfigGroupDesc) {
         FcitxConfigGroup* group;
         HASH_FIND_STR(cfile->groups, cgdesc->groupName, group);
 
@@ -1362,9 +1379,7 @@ void FcitxConfigResetConfigToDefaultValue(FcitxGenericConfig* config)
             continue;
         }
 
-        for (codesc = cgdesc->optionsDesc;
-                codesc != NULL;
-                codesc = (FcitxConfigOptionDesc*)codesc->hh.next) {
+        HASH_FOREACH(codesc, cgdesc->optionsDesc, FcitxConfigOptionDesc) {
             FcitxConfigOption *option;
             HASH_FIND_STR(group->options, codesc->optionName, option);
 

@@ -223,10 +223,8 @@ void LoadTableInfo(FcitxTableState *tbl)
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
         paths[i] = NULL;
-    FcitxStringHashSet* string;
-    for (string = sset;
-            string != NULL;
-            string = (FcitxStringHashSet*)string->hh.next) {
+
+    HASH_FOREACH(string, sset, FcitxStringHashSet) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
             asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], string->name);

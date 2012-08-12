@@ -302,8 +302,7 @@ static void FreeConverter(ConverterItem **converters, LuaExtension *extension) {
 
 static void UpdateShortestInputTriggerKeyLength(LuaModule *module) {
     size_t length = UINT_MAX;
-    TriggerItem *trigger;
-    for (trigger = module->input_triggers; trigger; trigger = trigger->hh.next) {
+    HASH_FOREACH(trigger, module->input_triggers, TriggerItem) {
         size_t keylen = strlen(trigger->key);
         if (keylen < length) {
             length = keylen;
@@ -410,8 +409,7 @@ static LuaExtension * FindExtension(lua_State *lua) {
         FcitxLog(ERROR, "LuaModule not found");
         return NULL;
     }
-    LuaExtension *e;
-    for (e = module->extensions; e != NULL; e = e->hh.next) {
+    HASH_FOREACH(e, module->extensions, LuaExtension) {
         if (e->lua == lua) {
             return e;
         }

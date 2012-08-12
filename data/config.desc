@@ -7,6 +7,7 @@ Description=Trigger Input Method
 Type=Boolean
 DefaultValue=True
 Description=Use extra trigger key only after using it to inactivate
+Advance=True
 
 [Hotkey/SwitchKey]
 Type=Enum
@@ -30,11 +31,13 @@ Description=Extra key for trigger input method
 Type=Hotkey
 DefaultValue=
 Description=Activate input method
+Advance=True
 
 [Hotkey/InactivateKey]
 Type=Hotkey
 DefaultValue=
 Description=Inactivate Input Method
+Advance=True
 
 [Hotkey/IMSwitchKey]
 Type=Boolean
@@ -55,31 +58,37 @@ Description=Scroll between Input Method
 Type=Boolean
 DefaultValue=False
 Description=Press Switch Key twice to Change Mode
+Advance=True
 
 [Hotkey/TimeInterval]
 Type=Integer
 DefaultValue=250
 Description=Interval of Two Key Input
+Advance=True
 
 [Hotkey/VKSwitchKey]
 Type=Hotkey
 DefaultValue=CTRL_ALT_B
 Description=Switching Virtual Keyboard
+Advance=True
 
 [Hotkey/RemindSwitchKey]
 Type=Hotkey
 DefaultValue=
 Description=Switching Remind Mode
+Advance=True
 
 [Hotkey/FullWidthSwitchKey]
 Type=Hotkey
 DefaultValue=
 Description=Switching Full Width Character Mode
+Advance=True
 
 [Hotkey/PuncSwitchKey]
 Type=Hotkey
 DefaultValue=CTRL_.
 Description=Switch Full Width Punc Mode
+Advance=True
 
 [Hotkey/PrevPageKey]
 Type=Hotkey
@@ -95,21 +104,25 @@ Description=Next Page
 Type=String
 DefaultValue=
 Description=Choose Second and Third Candidate Word
+Advance=True
 
 [Hotkey/SaveAllKey]
 Type=Hotkey
 DefaultValue=CTRL_ALT_S
 Description=Saving All Config and Input History
+Advance=True
 
 [Hotkey/SwitchPreedit]
 Type=Hotkey
 DefaultValue=CTRL_ALT_P
 Description=Switch Embeded Preedit
+Advance=True
 
 [Program/DelayStart]
 Type=Integer
 DefaultValue=0
 Description=Seconds sleep before fcitx really start
+Advance=True
 
 [Program/ShareStateAmongWindow]
 Type=Enum
@@ -127,11 +140,13 @@ EnumCount=2
 Enum0=Inactive
 Enum1=Active
 Description=Default Input Method State
+Advance=True
 
 [Output/HalfPuncAfterNumber]
 Type=Boolean
 DefaultValue=True
 Description=Type half width Punc After a Number
+Advance=True
 
 [Output/EnterAction]
 Type=Enum
@@ -141,11 +156,13 @@ Enum1=Clean
 Enum2=Commit
 DefaultValue=Commit
 Description=Action after press enter
+Advance=True
 
 [Output/RemindModeDisablePaging]
 Type=Boolean
 DefaultValue=True
 Description=Disable Paging in Remind Mode
+Advance=True
 
 [Output/SendTextWhenSwitchEng]
 Type=Boolean
@@ -156,51 +173,62 @@ Description=Send typed raw text if Switch to inactive Mode
 Type=Integer
 DefaultValue=5
 Description=Candidate Word Number
+Min=1
+Max=10
 
 [Output/PhraseTips]
 Type=Boolean
 DefaultValue=True
 Description=Give the tips of Phrase
+Advance=True
 
 [Output/DontCommitPreeditWhenUnfocus]
 Type=Boolean
 DefaultValue=False
 Description=Do not commit preedit text when unfocus a window
+Advance=True
 
 [Appearance/ShowInputWindowAfterTriggering]
 Type=Boolean
 DefaultValue=True
 Description=Show Input Method Hint After Input method changed
+Advance=True
 
 [Appearance/ShowInputWindowWhenFocusIn]
 Type=Boolean
 DefaultValue=False
 Description=Show Input Method Hint After Input method changed and Focus in
+Advance=True
 
 [Appearance/ShowInputWindowOnlyWhenActive]
 Type=Boolean
 DefaultValue=True
 Description=Input Method Hint will be only shown when state is active
+Advance=True
 
 [Appearance/ShowInputSpeed]
 Type=Boolean
 DefaultValue=False
 Description=Show Input Speed
+Advance=True
 
 [Appearance/ShowVersion]
 Type=Boolean
 DefaultValue=False
 Description=Show Version
+Advance=True
 
 [Appearance/HideInputWindowWhenOnlyPreeditString]
 Type=Boolean
 DefaultValue=False
 Description=Do not show input window if there is only preedit string
+Advance=True
 
 [Appearance/HideInputWindowWhenOnlyOneCandidate]
 Type=Boolean
 DefaultValue=False
 Description=Do not show input window if there is only one candidate and preedit
+Advance=True
 
 [DescriptionFile]
 LocaleDomain=fcitx
