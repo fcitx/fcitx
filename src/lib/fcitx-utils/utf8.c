@@ -395,6 +395,8 @@ FCITX_EXPORT_API
 char*
 fcitx_utils_get_ascii_part(char *string)
 {
+    if (!string)
+        return NULL;
     return fcitx_utils_get_ascii_partn(string, strlen(string));
 }
 
