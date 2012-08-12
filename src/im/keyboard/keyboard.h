@@ -25,14 +25,6 @@
 
 #include <iconv.h>
 
-#ifdef ENCHANT_FOUND
-#include <enchant/enchant.h>
-#endif
-
-#ifdef PRESAGE_FOUND
-#include <presage.h>
-#endif
-
 #include <fcitx/ime.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
@@ -48,53 +40,37 @@ typedef enum _ChooseModifier {
     CM_SHIFT,
 } ChooseModifier;
 
-typedef enum _EnchantProvider {
-    EP_Default = 0,
-    EP_Aspell = 1,
-    EP_Myspell = 2
-} EnchantProvider;
-
 typedef struct _FcitxKeyboardConfig {
     FcitxGenericConfig gconfig;
     boolean bCommitWithExtraSpace;
     boolean bUseEnterToCommit;
-    boolean bUsePresage;
     FcitxHotkey hkToggleWordHint[2];
     FcitxHotkey hkAddToUserDict[2];
     int minimumHintLength;
-    EnchantProvider provider;
     ChooseModifier chooseModifier;
 } FcitxKeyboardConfig;
 
 typedef struct _FcitxKeyboard {
     struct _FcitxInstance* owner;
     char dictLang[6];
-#ifdef ENCHANT_FOUND
-    EnchantBroker* broker;
-    UT_array* enchantLanguages;
-    EnchantDict* dict;
-#endif
     FcitxKeyboardConfig config;
     FcitxXkbRules* rules;
     iconv_t iconv;
-    char* initialLayout;
-    char* initialVariant;
-#ifdef PRESAGE_FOUND
-    presage_t presage;
-#endif
+    char *initialLayout;
+    char *initialVariant;
     char buffer[FCITX_KEYBOARD_MAX_BUFFER + UTF8_MAX_LENGTH + 1];
     int cursorPos;
     uint composeBuffer[FCITX_MAX_COMPOSE_LEN + 1];
     int n_compose;
-    char* tempBuffer;
+    char *tempBuffer;
     int lastLength;
     int dataSlot;
 } FcitxKeyboard;
 
 typedef struct _FcitxKeyboardLayout {
-    FcitxKeyboard* owner;
-    char* layoutString;
-    char* variantString;
+    FcitxKeyboard *owner;
+    char *layoutString;
+    char *variantString;
 } FcitxKeyboardLayout;
 
 CONFIG_BINDING_DECLARE(FcitxKeyboardConfig);

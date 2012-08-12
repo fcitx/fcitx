@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-spell
+_GeneralName=Spell
+_Comment=Fcitx Spelling Hint/Completion Support
+Category=Module
+Enabled=True
+Library=fcitx-spell.so
+Type=SharedLibrary
+Priority=40

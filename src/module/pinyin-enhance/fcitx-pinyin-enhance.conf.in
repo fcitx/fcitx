@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-pinyin-enhance
+_GeneralName=Enchance pinyin input in Fcitx
+_Comment=Provide extra feature for pinyin in Fcitx
+Category=Module
+Enabled=True
+Library=fcitx-pinyin-enhance.so
+Type=SharedLibrary
+Dependency=
+Priority=80

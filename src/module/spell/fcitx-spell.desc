@@ -1,0 +1,16 @@
+[Spell Hint/PreferredEnchantProvider]
+Type=Enum
+DefaultValue=Myspell
+EnumCount=3
+Enum0=Default
+Enum1=Aspell
+Enum2=Myspell
+Description=Preferred Enchant provider
+
+[Spell Hint/HintProvidersOrder]
+Description=Order of Spell Hint Providers
+Type=String
+DefaultValue=presage,custom,enchant
+
+[DescriptionFile]
+LocaleDomain=fcitx

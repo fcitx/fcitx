@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,25 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "keyboard.h"
+#ifndef _FCITX_MODULE_SPELL_DICT_H
+#define _FCITX_MODULE_SPELL_DICT_H
 
-CONFIG_BINDING_BEGIN(FcitxKeyboardConfig);
-CONFIG_BINDING_REGISTER("Keyboard", "CommitWithExtraSpace", bCommitWithExtraSpace);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyToggleWordHint", hkToggleWordHint);
-CONFIG_BINDING_REGISTER("Keyboard", "MinimumHintLength", minimumHintLength);
-CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyAddToUserDict", hkAddToUserDict);
-CONFIG_BINDING_REGISTER("Keyboard", "ChooseModifier", chooseModifier);
-CONFIG_BINDING_END();
+typedef struct {
+    char *word;
+    int dist;
+} SpellCustomCWord;
+
+typedef struct {
+    char *map;
+    char **words;
+    int words_count;
+    const char *delim;
+    boolean (*word_comp_func)(unsigned int, unsigned int);
+    int (*word_check_func)(const char*);
+    void (*hint_cmplt_func)(SpellHint*, int);
+} SpellCustomDict;
+
+SpellCustomDict *SpellCustomNewDict(FcitxSpell *spell, const char *lang);
+void SpellCustomFreeDict(FcitxSpell *spell, SpellCustomDict *dict);
+
+#endif /* _FCITX_MODULE_SPELL_DICT_H */

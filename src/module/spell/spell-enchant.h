@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "keyboard.h"
+#ifndef _FCITX_MODULE_SPELL_ENCHANT_H
+#define _FCITX_MODULE_SPELL_ENCHANT_H
 
-CONFIG_BINDING_BEGIN(FcitxKeyboardConfig);
-CONFIG_BINDING_REGISTER("Keyboard", "CommitWithExtraSpace", bCommitWithExtraSpace);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyToggleWordHint", hkToggleWordHint);
-CONFIG_BINDING_REGISTER("Keyboard", "MinimumHintLength", minimumHintLength);
-CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyAddToUserDict", hkAddToUserDict);
-CONFIG_BINDING_REGISTER("Keyboard", "ChooseModifier", chooseModifier);
-CONFIG_BINDING_END();
+#include "spell-internal.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    boolean SpellEnchantInit(FcitxSpell *spell);
+    SpellHint *SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit);
+    void SpellEnchantApplyConfig(FcitxSpell *spell);
+    boolean SpellEnchantCheck(FcitxSpell *spell);
+    void SpellEnchantDestroy(FcitxSpell *spell);
+    boolean SpellEnchantLoadDict(FcitxSpell *spell, const char *lang);
+    void SpellEnchantAddPersonal(FcitxSpell *spell, const char *new_word);
+#ifdef __cplusplus
+}
+#endif
+#endif

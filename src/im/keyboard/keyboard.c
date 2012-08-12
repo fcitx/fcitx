@@ -30,10 +30,6 @@
 #include <unicode/unorm.h>
 #endif
 
-#ifdef ENCHANT_FOUND
-#include <enchant/enchant.h>
-#endif
-
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
 #include "fcitx/context.h"
@@ -44,6 +40,7 @@
 #include "fcitx/hook.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
+#include "module/spell/spell.h"
 
 #include "xkb.h"
 #include "keyboard.h"
@@ -64,10 +61,6 @@ static INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym, unsigned 
 static void  FcitxKeyboardSave(void *arg);
 static void  FcitxKeyboardReloadConfig(void *arg);
 INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg);
-#ifdef PRESAGE_FOUND
-INPUT_RETURN_VALUE FcitxKeyboardGetPresageCandWord (void* arg, FcitxCandidateWord* candWord);
-#endif
-INPUT_RETURN_VALUE FcitxKeyboardGetCandWord (void* arg, FcitxCandidateWord* candWord);
 static void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
                                       const char* name,
                                       const char* langCode,
@@ -161,7 +154,8 @@ FCITX_DEFINE_PLUGIN(fcitx_keyboard, ime, FcitxIMClass) = {
     NULL
 };
 
-const char* FcitxKeyboardGetPastStream   (void* arg)
+#if 0
+static const char* FcitxKeyboardGetPastStream(void* arg)
 {
     FcitxKeyboard* keyboard = arg;
     /* buggy surrounding text will cause trouble */
@@ -197,7 +191,7 @@ const char* FcitxKeyboardGetPastStream   (void* arg)
     return keyboard->buffer;
 }
 
-const char* FcitxKeyboardGetFutureStream (void* arg)
+static const char* FcitxKeyboardGetFutureStream(void* arg)
 {
     const char* result = "";
 #if 0
@@ -227,6 +221,7 @@ const char* FcitxKeyboardGetFutureStream (void* arg)
 #endif
     return result;
 }
+#endif
 
 
 void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
@@ -285,7 +280,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     free(uniqueName);
 }
 
-void* SimpleCopy(void* arg, void* dest, void* src) {
+void* SimpleCopy(void* arg, void* dest, void* src)
+{
     return src;
 }
 
@@ -311,25 +307,6 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         keyboard->iconv = iconv_open("utf-8", "ucs-4be");
     else
         keyboard->iconv = iconv_open("utf-8", "ucs-4le");
-#ifdef PRESAGE_FOUND
-    presage_new(FcitxKeyboardGetPastStream, keyboard, FcitxKeyboardGetFutureStream, keyboard, &keyboard->presage);
-#endif
-#ifdef ENCHANT_FOUND
-    keyboard->broker = enchant_broker_init();
-    /* new option, since hunspell/myspell is really toooo slow */
-    switch (keyboard->config.provider) {
-        case EP_Aspell:
-            enchant_broker_set_ordering(keyboard->broker, "*", "aspell,myspell,ispell");
-            break;
-        case EP_Myspell:
-            enchant_broker_set_ordering(keyboard->broker, "*", "myspell,aspell,ispell");
-            break;
-        case EP_Default:
-        default:
-            break;
-    }
-    keyboard->enchantLanguages = fcitx_utils_new_string_list();
-#endif
 
     FcitxHotkeyHook hk;
     hk.arg = keyboard;
@@ -427,50 +404,57 @@ boolean FcitxKeyboardInit(void *arg)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
     boolean flag = true;
-    FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_AUTOENG, &flag);
-    FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_QUICKPHRASE, &flag);
-    FcitxInstanceSetContext(layout->owner->owner, CONTEXT_DISABLE_FULLWIDTH, &flag);
+    FcitxInstanceSetContext(layout->owner->owner,
+                            CONTEXT_DISABLE_AUTOENG, &flag);
+    FcitxInstanceSetContext(layout->owner->owner,
+                            CONTEXT_DISABLE_QUICKPHRASE, &flag);
+    FcitxInstanceSetContext(layout->owner->owner,
+                            CONTEXT_DISABLE_FULLWIDTH, &flag);
     if (layout->variantString) {
         char* string;
         asprintf(&string, "%s,%s", layout->layoutString, layout->variantString);
-        FcitxInstanceSetContext(layout->owner->owner, CONTEXT_IM_KEYBOARD_LAYOUT, string);
+        FcitxInstanceSetContext(layout->owner->owner,
+                                CONTEXT_IM_KEYBOARD_LAYOUT, string);
         free(string);
-    }
-    else {
-        FcitxInstanceSetContext(layout->owner->owner, CONTEXT_IM_KEYBOARD_LAYOUT, layout->layoutString);
+    } else {
+        FcitxInstanceSetContext(layout->owner->owner,
+                                CONTEXT_IM_KEYBOARD_LAYOUT,
+                                layout->layoutString);
     }
     return true;
 }
 
 void  FcitxKeyboardResetIM(void *arg)
 {
-    FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
-    layout->owner->buffer[0] = '\0';
-    layout->owner->cursorPos = 0;
-    layout->owner->composeBuffer[0] = 0;
-    layout->owner->n_compose = 0;
+    FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
+    FcitxKeyboard *keyboard = layout->owner;
+    keyboard->buffer[0] = '\0';
+    keyboard->cursorPos = 0;
+    keyboard->composeBuffer[0] = 0;
+    keyboard->n_compose = 0;
 }
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-#ifdef ENCHANT_FOUND
-    if (keyboard->dict)
-        return true;
-#endif
-#ifdef PRESAGE_FOUND
-    if (keyboard->config.bUsePresage && keyboard->presage && strcmp(keyboard->dictLang, "en") == 0) {
-        return true;
-    }
-#endif
-    return false;
+    FcitxModuleFunctionArg arg;
+    arg.args[0] = keyboard->dictLang;
+    arg.args[1] = NULL;
+    return InvokeFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE, arg);
 }
+
+/* a little bit funny here LOL.... */
+static const FcitxHotkey FCITX_HYPHEN_APOS[2] = {
+    {NULL, FcitxKey_minus, FcitxKeyState_None},
+    {NULL, FcitxKey_apostrophe, FcitxKeyState_None}
+};
 
 INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int state)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
     FcitxKeyboard* keyboard = layout->owner;
     FcitxInstance* instance = keyboard->owner;
-    const char* currentLang = FcitxInstanceGetContextString(instance, CONTEXT_IM_LANGUAGE);
+    const char* currentLang = FcitxInstanceGetContextString(instance,
+                                                            CONTEXT_IM_LANGUAGE);
     if (currentLang == NULL)
         currentLang = "";
 
@@ -479,9 +463,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         || sym == FcitxKey_Control_L || sym == FcitxKey_Control_R
         || sym == FcitxKey_Super_L || sym == FcitxKey_Super_R
     )
-    {
         return IRV_TO_PROCESS;
-    }
 
     uint32_t result = processCompose(layout, sym, state);
     if (result == INVALID_COMPOSE_RESULT)
@@ -493,57 +475,48 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
     }
 
     FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(instance);
-    void* enableWordHint = FcitxInstanceGetICData(instance, currentIC, keyboard->dataSlot);
-    /* performance seems not trouble here, so we only keep one dict */
-    if (enableWordHint && strcmp(keyboard->dictLang, currentLang) != 0) {
-#ifdef ENCHANT_FOUND
-        if (keyboard->dict) {
-            enchant_broker_free_dict(keyboard->broker, keyboard->dict);
-            keyboard->dict = NULL;
-        }
-#endif
-
+    void* enableWordHint = FcitxInstanceGetICData(instance, currentIC,
+                                                  keyboard->dataSlot);
+    if (enableWordHint && strcmp(keyboard->dictLang, currentLang) != 0)
         strncpy(keyboard->dictLang, currentLang, LANGCODE_LENGTH);
-#ifdef ENCHANT_FOUND
-        keyboard->dict = enchant_broker_request_dict(keyboard->broker, keyboard->dictLang);
-#endif
-    }
 
+    /* dict is set and loaded as a side effect */
     if (IsDictAvailable(keyboard) && enableWordHint) {
-        FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
+        FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
-#ifdef ENCHANT_FOUND
-        if (FcitxHotkeyIsHotKey(sym, state, layout->owner->config.hkAddToUserDict))
-        {
-            size_t len = strlen(keyboard->buffer);
-            if (len != 0) {
-                enchant_dict_add_to_personal(keyboard->dict, keyboard->buffer, len);
+        if (FcitxHotkeyIsHotKey(sym, state,
+                                keyboard->config.hkAddToUserDict)) {
+            FcitxModuleFunctionArg arg;
+            arg.args[0] = keyboard->buffer;
+            arg.args[1] = keyboard->dictLang;
+            if (InvokeFunction(instance, FCITX_SPELL, ADD_PERSONAL, arg))
                 return IRV_DO_NOTHING;
-            }
         }
-#endif
 
-
-        if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) || IsValidSym(sym, state))
-        {
-            if (IsValidChar(result) || FcitxHotkeyIsHotKeyLAZ(sym, state) || FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state)) {
+        if (IsValidChar(result) || FcitxHotkeyIsHotKeySimple(sym, state) ||
+            IsValidSym(sym, state)) {
+            if (IsValidChar(result) || FcitxHotkeyIsHotKeyLAZ(sym, state) ||
+                FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state) ||
+                FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS)) {
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
                 if (result)
-                    Ucs4ToUtf8(layout->owner->iconv, result, buf);
+                    Ucs4ToUtf8(keyboard->iconv, result, buf);
                 else
-                    Ucs4ToUtf8(layout->owner->iconv, FcitxKeySymToUnicode(sym), buf);
+                    Ucs4ToUtf8(keyboard->iconv, FcitxKeySymToUnicode(sym), buf);
                 size_t charlen = strlen(buf);
 
                 if (strlen(keyboard->buffer) >= FCITX_KEYBOARD_MAX_BUFFER) {
-                    FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance), keyboard->buffer);
+                    FcitxInstanceCommitString(instance, currentIC,
+                                              keyboard->buffer);
                     keyboard->cursorPos = 0;
                     keyboard->buffer[0] = '\0';
                 }
                 size_t len = strlen(keyboard->buffer);
-                if (keyboard->buffer[keyboard->cursorPos] != 0)
-                {
-                    memmove(keyboard->buffer + keyboard->cursorPos + charlen, keyboard->buffer + keyboard->cursorPos, len - keyboard->cursorPos);
+                if (keyboard->buffer[keyboard->cursorPos] != 0) {
+                    memmove(keyboard->buffer + keyboard->cursorPos + charlen,
+                            keyboard->buffer + keyboard->cursorPos,
+                            len - keyboard->cursorPos);
                 }
                 keyboard->buffer[len + charlen] = 0;
                 strncpy(&keyboard->buffer[keyboard->cursorPos], buf, charlen);
@@ -551,22 +524,21 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
                 return IRV_DISPLAY_CANDWORDS;
             }
-        }
-        else {
-            if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE))
-            {
+        } else {
+            if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
                 size_t slen = strlen(keyboard->buffer);
-                if (slen > 0)
-                {
+                if (slen > 0) {
                     if (keyboard->cursorPos > 0) {
                         size_t len = fcitx_utf8_strlen(keyboard->buffer);
-                        char *pos = fcitx_utf8_get_nth_char(keyboard->buffer, len - 1);
+                        char *pos = fcitx_utf8_get_nth_char(keyboard->buffer,
+                                                            len - 1);
                         keyboard->cursorPos = pos - keyboard->buffer;
-                        memset(keyboard->buffer + keyboard->cursorPos, 0, sizeof(char) * (slen - keyboard->cursorPos));
+                        memset(keyboard->buffer + keyboard->cursorPos,
+                               0, sizeof(char) * (slen - keyboard->cursorPos));
                         return IRV_DISPLAY_CANDWORDS;
-                    }
-                    else
+                    } else {
                         return IRV_DO_NOTHING;
+                    }
                 }
             }
         }
@@ -580,164 +552,100 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         if (strlen(keyboard->buffer) > 0) {
             INPUT_RETURN_VALUE irv = IRV_FLAG_FORWARD_KEY;
-            if (layout->owner->config.bUseEnterToCommit && FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+            if (keyboard->config.bUseEnterToCommit &&
+                FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
                 irv = 0;
             }
-            strcpy(FcitxInputStateGetOutputString(input), keyboard->buffer);
+            FcitxInstanceCommitString(instance, currentIC, keyboard->buffer);
 
             if (result) {
-                FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
-                Ucs4ToUtf8(layout->owner->iconv, result, buf);
-                strcat(FcitxInputStateGetOutputString(input), buf);
+                Ucs4ToUtf8(keyboard->iconv, result, buf);
+                FcitxInstanceCommitString(instance, currentIC, buf);
                 irv = 0;
             }
-            irv |= IRV_COMMIT_STRING;
+            irv |= IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
             return irv;
         }
-    }
-    else {
+    } else {
         FcitxUICloseInputWindow(instance);
     }
     if (result) {
-        FcitxInputState *input = FcitxInstanceGetInputState(layout->owner->owner);
         char buf[UTF8_MAX_LENGTH + 1];
         memset(buf, 0, sizeof(buf));
-        Ucs4ToUtf8(layout->owner->iconv, result, buf);
-        strcpy(FcitxInputStateGetOutputString(input), buf);
-        return IRV_COMMIT_STRING;
+        Ucs4ToUtf8(keyboard->iconv, result, buf);
+        FcitxInstanceCommitString(instance, currentIC, buf);
+        return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
     }
     return IRV_TO_PROCESS;
+}
+
+static boolean
+FcitxKeyboardGetCandWordCb(void *arg, const char *commit)
+{
+    FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
+    FcitxKeyboard *keyboard = layout->owner;
+    FcitxInstance *instance = keyboard->owner;
+    char str[strlen(commit) + 2];
+    strcpy(str, commit);
+    if (keyboard->config.bCommitWithExtraSpace)
+        strcat(str, " ");
+    FcitxInstanceCommitString(instance,
+                              FcitxInstanceGetCurrentIC(instance), str);
+    return true;
 }
 
 INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
 {
     FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
     FcitxKeyboard* keyboard = layout->owner;
-    FcitxInstance* instance = layout->owner->owner;
+    FcitxInstance* instance = keyboard->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
 
-    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
+    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt,
+                                FcitxKeyState_Ctrl, FcitxKeyState_Shift};
     if (keyboard->config.chooseModifier > CM_CTRL)
         keyboard->config.chooseModifier = CM_CTRL;
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
-    FcitxCandidateWordSetChooseAndModifier(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE, cmodtable[keyboard->config.chooseModifier]);
-    size_t bufferlen = strlen(keyboard->buffer);
+    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input),
+                                  config->iMaxCandWord);
+    FcitxCandidateWordSetChooseAndModifier(
+        FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
+        cmodtable[keyboard->config.chooseModifier]);
+    ssize_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", keyboard->buffer);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
+                                  MSG_INPUT, "%s", keyboard->buffer);
+    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT,
+                                  "%s", keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 
-
-#ifdef PRESAGE_FOUND
-    if (keyboard->config.bUsePresage && keyboard->presage && strcmp(keyboard->dictLang, "en") == 0) {
-        do {
-            char **suggestions = NULL;
-            char buf[20];
-            sprintf(buf, "%d", config->iMaxCandWord);
-            presage_config_set(keyboard->presage, "Presage.Selector.SUGGESTIONS", buf);
-            presage_error_code_t error;
-            error = presage_predict(keyboard->presage, &suggestions);
-            if (error != PRESAGE_OK) {
-                break;
-            }
-            if (suggestions) {
-                int i = 0;
-                while(suggestions[i]) {
-                    FcitxCandidateWord candWord;
-                    candWord.callback = FcitxKeyboardGetPresageCandWord;
-                    candWord.owner = layout;
-                    candWord.priv = NULL;
-                    candWord.strExtra = NULL;
-                    candWord.strWord = strdup(suggestions[i]);
-                    candWord.wordType = MSG_OTHER;
-
-                    FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
-                    i++;
-                }
-                presage_free_string_array(suggestions);
-            }
-        } while(0);
+    if (bufferlen < keyboard->config.minimumHintLength)
         return IRV_DISPLAY_CANDWORDS;
-    }
-#endif
-#ifdef ENCHANT_FOUND
-    {
-        char **suggestions = NULL;
-        if (bufferlen < keyboard->config.minimumHintLength)
-            return IRV_DISPLAY_CANDWORDS;
-        size_t number = 0;
-        int count = 0;
-        suggestions = enchant_dict_suggest(keyboard->dict, keyboard->buffer, bufferlen, &number);
-        int i;
-        for (i = 0 ;i < number && count < config->iMaxCandWord; i ++)
-        {
-            FcitxCandidateWord candWord;
-            candWord.callback = FcitxKeyboardGetCandWord;
-            candWord.owner = layout;
-            candWord.priv = NULL;
-            candWord.strExtra = NULL;
-            candWord.strWord = strdup(suggestions[i]);
-            candWord.wordType = MSG_OTHER;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
-            count ++;
-        }
 
-        if (suggestions && number)
-            enchant_dict_free_string_list(keyboard->dict, suggestions);
-    }
-#endif
+    FcitxModuleFunctionArg func_arg;
+    func_arg.args[0] = NULL;
+    func_arg.args[1] = keyboard->buffer;
+    func_arg.args[2] = NULL;
+    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
+    func_arg.args[4] = keyboard->dictLang;
+    func_arg.args[5] = NULL;
+    func_arg.args[6] = FcitxKeyboardGetCandWordCb;
+    func_arg.args[7] = layout;
+    FcitxCandidateWordList *candList =
+        InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
+    if (!candList)
+        return IRV_DISPLAY_CANDWORDS;
+    FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),
+                            candList, -1);
+    FcitxCandidateWordFreeList(candList);
     return IRV_DISPLAY_CANDWORDS;
 }
-
-INPUT_RETURN_VALUE FcitxKeyboardGetCandWord (void* arg, FcitxCandidateWord* candWord)
-{
-    FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
-    FcitxInstance* instance = layout->owner->owner;
-    FcitxInputState* input = FcitxInstanceGetInputState(instance);
-    char* strGet = FcitxInputStateGetOutputString(input);
-    strncpy(strGet, candWord->strWord, MAX_USER_INPUT);
-    strGet[MAX_USER_INPUT] = '\0';
-    if (layout->owner->config.bCommitWithExtraSpace && strlen(strGet) < MAX_USER_INPUT)
-        strcat(strGet, " ");
-    return IRV_COMMIT_STRING;
-}
-
-#ifdef PRESAGE_FOUND
-INPUT_RETURN_VALUE FcitxKeyboardGetPresageCandWord(void* arg, FcitxCandidateWord* candWord)
-{
-    FcitxKeyboardLayout* layout = (FcitxKeyboardLayout*) arg;
-    FcitxKeyboard* keyboard = layout->owner;
-    char* result = NULL;
-    INPUT_RETURN_VALUE irv = IRV_DO_NOTHING;
-    do {
-        presage_error_code_t error = presage_completion(keyboard->presage, candWord->strWord, &result);
-        if (error != PRESAGE_OK)
-            break;
-        FcitxInputState* input = FcitxInstanceGetInputState(keyboard->owner);
-        char* strGet = FcitxInputStateGetOutputString(input);
-        char* nr = fcitx_utils_trim(result);
-        snprintf(strGet, MAX_USER_INPUT, "%s%s", keyboard->buffer, nr);
-        free(nr);
-        if (layout->owner->config.bCommitWithExtraSpace && strlen(strGet) < MAX_USER_INPUT)
-            strcat(strGet, " ");
-
-        irv = IRV_COMMIT_STRING;
-    } while(0);
-
-    if (result)
-        free(result);
-
-    return irv;
-}
-#endif
-
 
 void  FcitxKeyboardSave(void *arg)
 {
@@ -788,17 +696,23 @@ INPUT_RETURN_VALUE FcitxKeyboardHotkeyToggleWordHint(void* arg)
     FcitxInputContext* currentIC = FcitxInstanceGetCurrentIC(keyboard->owner);
     if (!currentIC)
         return IRV_TO_PROCESS;
-    if (im && strncmp(im->uniqueName, "fcitx-keyboard", strlen("fcitx-keyboard")) == 0) {
-        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner, currentIC, keyboard->dataSlot);
-        if (!enableWordHint)
+    if (im && strncmp(im->uniqueName, "fcitx-keyboard",
+                      strlen("fcitx-keyboard")) == 0) {
+        void* enableWordHint = FcitxInstanceGetICData(keyboard->owner,
+                                                      currentIC,
+                                                      keyboard->dataSlot);
+        if (!enableWordHint) {
             enableWordHint = PTR_TRUE;
-        else
+            IsDictAvailable(keyboard);
+        } else {
             enableWordHint = PTR_FALSE;
-        FcitxInstanceSetICData(keyboard->owner, currentIC, keyboard->dataSlot, enableWordHint);
+        }
+        FcitxInstanceSetICData(keyboard->owner, currentIC,
+                               keyboard->dataSlot, enableWordHint);
         return IRV_DO_NOTHING;
-    }
-    else
+    } else {
         return IRV_TO_PROCESS;
+    }
 }
 
 static const uint32_t validSym[] =

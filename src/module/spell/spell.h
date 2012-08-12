@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2012~2012 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,36 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#include "keyboard.h"
+#ifndef _FCITX_MODULE_SPELL_H
+#define _FCITX_MODULE_SPELL_H
 
-CONFIG_BINDING_BEGIN(FcitxKeyboardConfig);
-CONFIG_BINDING_REGISTER("Keyboard", "CommitWithExtraSpace", bCommitWithExtraSpace);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyToggleWordHint", hkToggleWordHint);
-CONFIG_BINDING_REGISTER("Keyboard", "MinimumHintLength", minimumHintLength);
-CONFIG_BINDING_REGISTER("Keyboard", "UseEnterToCommit", bUseEnterToCommit);
-CONFIG_BINDING_REGISTER("Keyboard", "HotkeyAddToUserDict", hkAddToUserDict);
-CONFIG_BINDING_REGISTER("Keyboard", "ChooseModifier", chooseModifier);
-CONFIG_BINDING_END();
+#include "fcitx/candidate.h"
+
+typedef enum {
+    EP_Default = 0,
+    EP_Aspell,
+    EP_Myspell
+} EnchantProvider;
+
+typedef struct {
+    char *display;
+    char *commit;
+} SpellHint;
+
+#define FCITX_SPELL_NAME "fcitx-spell"
+
+enum {
+    FCITX_SPELL_HINT_WORDS,
+    FCITX_SPELL_ADD_PERSONAL,
+    FCITX_SPELL_DICT_AVAILABLE,
+    FCITX_SPELL_GET_CANDWORDS,
+};
+
+typedef SpellHint* FCITX_SPELL_HINT_WORDS_RETURNTYPE;
+typedef unsigned long FCITX_SPELL_ADD_PERSONAL_RETURNTYPE;
+typedef unsigned long FCITX_SPELL_DICT_AVAILABLE_RETURNTYPE;
+typedef FcitxCandidateWordList* FCITX_SPELL_GET_CANDWORDS_RETURNTYPE;
+
+#endif
+
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

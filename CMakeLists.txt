@@ -191,6 +191,15 @@ set(FCITX4_ADDON_CONFIG_INSTALL_DIR ${addonconfigdir})
 set(FCITX4_INPUTMETHOD_CONFIG_INSTALL_DIR ${imconfigdir})
 set(FCITX4_PACKAGE_NAME ${package})
 
+if(NOT DEFINED ENCHANT_LIBRARY_FILENAME)
+  set(ENCHANT_LIBRARY_FILENAME
+    "${CMAKE_SHARED_LIBRARY_PREFIX}enchant${CMAKE_SHARED_LIBRARY_SUFFIX}")
+endif()
+if(NOT DEFINED PRESAGE_LIBRARY_FILENAME)
+  set(PRESAGE_LIBRARY_FILENAME
+    "${CMAKE_SHARED_LIBRARY_PREFIX}presage${CMAKE_SHARED_LIBRARY_SUFFIX}")
+endif()
+
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-sign-compare -Wno-unused-parameter -fvisibility=hidden ${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-sign-compare -Wno-unused-parameter -fvisibility=hidden ${CMAKE_CXX_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed ${CMAKE_SHARED_LINKER_FLAGS}")

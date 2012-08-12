@@ -527,7 +527,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
 
     if (Q_UNLIKELY(event->xkey.state & FcitxKeyState_IgnoredMask))
         return false;
-    
+
     if (Q_UNLIKELY(event->type != XKeyRelease && event->type != XKeyPress))
         return false;
 

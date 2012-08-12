@@ -750,7 +750,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                         fcitx_utils_launch_restart();
                     }
                 } else if (strcmp("keyboard", s0) == 0) {
-                    FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+                    FcitxInstanceCloseIM(instance,
+                                         FcitxInstanceGetCurrentIC(instance));
                 } else if (strncmp("im/", s0, strlen("im/")) == 0) {
                     s0 += strlen("im/");
                     FcitxInstanceSwitchIMByName(instance, s0);

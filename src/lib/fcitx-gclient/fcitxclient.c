@@ -1097,4 +1097,3 @@ _fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn)
 }
 
 // kate: indent-mode cstyle; replace-tabs on;
-

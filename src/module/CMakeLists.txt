@@ -12,6 +12,8 @@ endif (_ENABLE_DBUS AND ENABLE_X11 AND ENABLE_LIBXML2)
 
 add_subdirectory(chttrans)
 add_subdirectory(punc)
+add_subdirectory(spell)
+add_subdirectory(pinyin-enhance)
 add_subdirectory(quickphrase)
 add_subdirectory(autoeng)
 add_subdirectory(fullwidthchar)

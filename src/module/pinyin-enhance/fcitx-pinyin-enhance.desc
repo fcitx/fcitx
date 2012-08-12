@@ -1,0 +1,12 @@
+[Pinyin Enhance/ShortAsEnglish]
+Type=Boolean
+DefaultValue=False
+Description=Treating abbreviated Pinyin as English (useful when you hardle ever use abbreviated pinyin.)
+
+[Pinyin Enhance/AllowReplaceFirst]
+Type=Boolean
+DefaultValue=True
+Description=Allow Pinyin Enhance to replace the first candidate word when the input string is very closed to English.
+
+[DescriptionFile]
+LocaleDomain=fcitx
