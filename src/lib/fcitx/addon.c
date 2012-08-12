@@ -70,7 +70,7 @@ void FcitxAddonsInit(UT_array* addons)
 
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
 {
-    char* escapedAddonName; 
+    char* escapedAddonName;
     asprintf(&escapedAddonName, "%s_%s", addonName, symbolName);
     char* p = escapedAddonName;
     while (*p) {
@@ -106,10 +106,7 @@ void FcitxAddonsLoad(UT_array* addons)
     char **paths = malloc(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
         paths[i] = NULL;
-    FcitxStringHashSet* string;
-    for (string = sset;
-            string != NULL;
-            string = (FcitxStringHashSet*)string->hh.next) {
+    HASH_FOREACH(string, sset, FcitxStringHashSet) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
             asprintf(&paths[i], "%s/%s", addonPath[len - i - 1], string->name);
