@@ -39,6 +39,7 @@
 #include "fcitx/context.h"
 #include "module/punc/punc.h"
 #include "module/lua/luamod.h"
+#include "module/spell/spell.h"
 
 #include "fcitx/ime.h"
 
@@ -469,6 +470,35 @@ INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
     return retVal;
 }
 
+static void
+QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
+{
+    FcitxInputState *input;
+    FcitxCandidateWordList *cand_list;
+    FcitxCandidateWordList *new_list;
+    FcitxModuleFunctionArg func_arg;
+    input = FcitxInstanceGetInputState(qpstate->owner);
+    cand_list = FcitxInputStateGetCandidateList(input);
+    int space_left = (FcitxCandidateWordGetPageSize(cand_list)
+                      - FcitxCandidateWordGetListSize(cand_list));
+    if (space_left <= 0)
+        return;
+    func_arg.args[0] = NULL;
+    func_arg.args[1] = qpstate->buffer;
+    func_arg.args[2] = NULL;
+    func_arg.args[3] = (void*)(long)space_left;
+    func_arg.args[4] = "en";
+    func_arg.args[5] = "cus";
+    func_arg.args[6] = NULL;
+    func_arg.args[7] = NULL;
+    new_list = InvokeFunction(qpstate->owner, FCITX_SPELL,
+                              GET_CANDWORDS, func_arg);
+    if (new_list) {
+        FcitxCandidateWordMerge(cand_list, new_list, -1);
+        FcitxCandidateWordFreeList(new_list);
+    }
+}
+
 INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 {
     int iInputLen;
@@ -494,9 +524,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
     }
 
+    /* TODO Not sure whether I should add spell hint here */
     if (!qpstate->quickPhrases)
         return IRV_DISPLAY_MESSAGE;
-
     iInputLen = strlen(qpstate->buffer);
     if (iInputLen > QUICKPHRASE_CODE_LEN)
         return IRV_DISPLAY_MESSAGE;
@@ -510,6 +540,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     if (iLastQuickPhrase < 0)
         iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
     if (!currentQuickPhrase || strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
+        QuickPhraseGetSpellHint(qpstate);
         return IRV_DISPLAY_MESSAGE;
     }
 
@@ -532,6 +563,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         }
     }
 
+    QuickPhraseGetSpellHint(qpstate);
     return IRV_DISPLAY_MESSAGE;
 }
 
