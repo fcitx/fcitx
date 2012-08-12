@@ -39,6 +39,7 @@
 #include "fcitx/context.h"
 #include "module/punc/punc.h"
 #include "module/lua/luamod.h"
+#include "module/spell/spell.h"
 
 #include "fcitx/ime.h"
 
@@ -62,8 +63,6 @@ typedef struct _QuickPhraseState {
     QuickPhraseTriggerKey triggerKey;
     unsigned int uQuickPhraseCount;
     UT_array *quickPhrases ;
-    int iFirstQuickPhrase;
-    int iLastQuickPhrase;
     boolean enabled;
     FcitxInstance* owner;
     char buffer[MAX_USER_INPUT * UTF8_MAX_LENGTH + 1];
@@ -144,7 +143,6 @@ int PhraseCmpA(const void* a, const void* b)
 void * QuickPhraseCreate(FcitxInstance *instance)
 {
     QuickPhraseState *qpstate = fcitx_utils_malloc0(sizeof(QuickPhraseState));
-    qpstate->iFirstQuickPhrase = -1;
     qpstate->owner = instance;
     qpstate->enabled = false;
 
@@ -252,8 +250,6 @@ void LoadQuickPhrase(QuickPhraseState * qpstate)
     if (!fp)
         return;
 
-    // 这儿的处理比较简单。因为是单索引对单值。
-    // 应该注意的是，它在内存中是以单链表保存的。
     utarray_new(qpstate->quickPhrases, &qp_icd);
     while (getline(&buf, &len, fp) != -1) {
         if (buf1)
@@ -474,6 +470,35 @@ INPUT_RETURN_VALUE QuickPhraseDoInput(void* arg, FcitxKeySym sym, int state)
     return retVal;
 }
 
+static void
+QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
+{
+    FcitxInputState *input;
+    FcitxCandidateWordList *cand_list;
+    FcitxCandidateWordList *new_list;
+    FcitxModuleFunctionArg func_arg;
+    input = FcitxInstanceGetInputState(qpstate->owner);
+    cand_list = FcitxInputStateGetCandidateList(input);
+    int space_left = (FcitxCandidateWordGetPageSize(cand_list)
+                      - FcitxCandidateWordGetListSize(cand_list));
+    if (space_left <= 0)
+        return;
+    func_arg.args[0] = NULL;
+    func_arg.args[1] = qpstate->buffer;
+    func_arg.args[2] = NULL;
+    func_arg.args[3] = (void*)(long)space_left;
+    func_arg.args[4] = "en";
+    func_arg.args[5] = "cus";
+    func_arg.args[6] = NULL;
+    func_arg.args[7] = NULL;
+    new_list = InvokeFunction(qpstate->owner, FCITX_SPELL,
+                              GET_CANDWORDS, func_arg);
+    if (new_list) {
+        FcitxCandidateWordMerge(cand_list, new_list, -1);
+        FcitxCandidateWordFreeList(new_list);
+    }
+}
+
 INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 {
     int iInputLen;
@@ -481,6 +506,8 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
     FcitxInstance *instance = qpstate->owner;
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
+    int iLastQuickPhrase;
+    int iFirstQuickPhrase;
     FcitxInstanceCleanInputWindowDown(qpstate->owner);
 
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
@@ -497,9 +524,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
     }
 
+    /* TODO Not sure whether I should add spell hint here */
     if (!qpstate->quickPhrases)
         return IRV_DISPLAY_MESSAGE;
-
     iInputLen = strlen(qpstate->buffer);
     if (iInputLen > QUICKPHRASE_CODE_LEN)
         return IRV_DISPLAY_MESSAGE;
@@ -507,18 +534,18 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     strcpy(searchKey.strCode, qpstate->buffer);
 
     currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
-    qpstate->iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
+    iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
     lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
-    qpstate->iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
-    if (qpstate->iLastQuickPhrase < 0)
-        qpstate->iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
+    iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
+    if (iLastQuickPhrase < 0)
+        iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
     if (!currentQuickPhrase || strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
-        currentQuickPhrase = NULL;
+        QuickPhraseGetSpellHint(qpstate);
         return IRV_DISPLAY_MESSAGE;
     }
 
-    for (currentQuickPhrase = (QUICK_PHRASE*) utarray_eltptr(qpstate->quickPhrases,
-                              qpstate->iFirstQuickPhrase);
+    for (currentQuickPhrase = (QUICK_PHRASE*)utarray_eltptr(qpstate->quickPhrases,
+                                                            iFirstQuickPhrase);
             currentQuickPhrase != NULL;
             currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
         if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
@@ -536,6 +563,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         }
     }
 
+    QuickPhraseGetSpellHint(qpstate);
     return IRV_DISPLAY_MESSAGE;
 }
 

@@ -178,6 +178,17 @@ extern "C" {
      **/
     void FcitxCandidateWordRemove(struct _FcitxCandidateWordList* candList, FcitxCandidateWord* candWord);
 
+    /**
+     * remove a candidate word at certain index from list
+     *
+     * @param candList candidate word list
+     * @param idx index of the word to be removed
+     * @return void
+     *
+     * @since 4.2.6
+     **/
+    void FcitxCandidateWordRemoveByIndex(FcitxCandidateWordList *candList,
+                                         int idx);
 
     /**
      * set page by index
