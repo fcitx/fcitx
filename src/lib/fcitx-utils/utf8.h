@@ -185,7 +185,7 @@ char *fcitx_utils_get_ascii_part(char *string);
  *
  * @since 4.2.6
  **/
-char *fcitx_utils_get_ascii_partn(char *string, ssize_t len);
+char *fcitx_utils_get_ascii_partn(char *string, size_t len);
 #ifdef __cplusplus
 }
 #endif

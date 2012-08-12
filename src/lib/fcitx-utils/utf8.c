@@ -380,13 +380,11 @@ size_t fcitx_utf8_strnlen(const char* str, size_t byte)
 
 FCITX_EXPORT_API
 char*
-fcitx_utils_get_ascii_partn(char *string, ssize_t len)
+fcitx_utils_get_ascii_partn(char *string, size_t len)
 {
     if (!string)
         return NULL;
 
-    if (len < 0)
-        len = strlen(string);
     char *s = string + len;
     while ((--s) >= string && !(*s & 0x80)) {
     }
@@ -397,7 +395,7 @@ FCITX_EXPORT_API
 char*
 fcitx_utils_get_ascii_part(char *string)
 {
-    return fcitx_utils_get_ascii_partn(string, -1);
+    return fcitx_utils_get_ascii_partn(string, strlen(string));
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
