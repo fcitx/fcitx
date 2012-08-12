@@ -313,14 +313,14 @@ void FcitxInstanceLoadIM(FcitxInstance* instance, FcitxAddon* addon)
     }
 }
 
-void FcitxRegisterEmptyEntry(FcitxInstance *instance,
-                             const char* name,
-                             const char* uniqueName,
-                             const char* iconName,
-                             int priority,
-                             const char *langCode,
-                             FcitxAddon* addon
-                            )
+void FcitxInstanceRegisterEmptyIMEntry(FcitxInstance *instance,
+                                       const char* name,
+                                       const char* uniqueName,
+                                       const char* iconName,
+                                       int priority,
+                                       const char *langCode,
+                                       FcitxAddon* addon
+                                      )
 {
     UT_array* imes = &instance->availimes ;
     FcitxIM* entry = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, uniqueName);
@@ -467,7 +467,7 @@ boolean FcitxInstanceLoadAllIM(FcitxInstance* instance)
                 && addon->category == AC_INPUTMETHOD
                 && addon->registerMethod == IMRM_CONFIGFILE
                ) {
-                FcitxRegisterEmptyEntry(instance,
+                FcitxInstanceRegisterEmptyIMEntry(instance,
                                         entry->name,
                                         entry->uniqueName,
                                         entry->iconName,

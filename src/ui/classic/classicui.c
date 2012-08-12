@@ -503,7 +503,7 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
     } else if (index == length - 4) { /* Configuration */
         FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
         if (im && im->owner) {
-            fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
+            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
         }
         else {
             fcitx_utils_launch_configure_tool();

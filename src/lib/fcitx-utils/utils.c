@@ -524,7 +524,6 @@ void fcitx_utils_launch_configure_tool()
     free(command);
 }
 
-
 FCITX_EXPORT_API
 void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon)
 {

@@ -167,6 +167,16 @@ void         fcitx_input_method_configure(FcitxInputMethod* im);
 void         fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon);
 
 /**
+ * fcitx_input_method_configure_im:
+ *
+ * @im: A FcitxInputMethod
+ * @imname: im name
+ *
+ * Send configure im command to fcitx
+ **/
+void         fcitx_input_method_configure_im(FcitxInputMethod* im, gchar* imname);
+
+/**
  * fcitx_input_method_get_im_addon:
  *
  * @im: A FcitxInputMethod
