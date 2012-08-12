@@ -45,8 +45,9 @@ enum {
 static inline int
 check_im_type(FcitxIM *im)
 {
-    /* TODO handle zh_TW also? */
-    if (!im || strcmp(im->langCode, "zh_CN"))
+    if (!im || !(strncmp(im->langCode, "zh", strlen("zh")) == 0 &&
+                 (im->langCode[strlen("zh")] == '\0' ||
+                  im->langCode[strlen("zh")] == '_')))
         return PY_IM_INVALID;
     if (strcmp(im->uniqueName, "pinyin") == 0 ||
         strcmp(im->uniqueName, "pinyin-libpinyin") == 0 ||
@@ -141,6 +142,39 @@ FcitxPYEnhanceGetCandWordCb(void *arg, const char *commit)
     return false;
 }
 
+static void
+PinyinEnhanceMergeCandList(FcitxCandidateWordList *candList,
+                           FcitxCandidateWordList *newList, int position)
+{
+    int i1;
+    int n1;
+    int i2;
+    int n2;
+    FcitxCandidateWord *word1;
+    FcitxCandidateWord *word2;
+    n1 = FcitxCandidateWordGetPageSize(candList);
+    for (i1 = 0;i1 < n1 &&
+             (word1 = FcitxCandidateWordGetByTotalIndex(candList, i1));i1++) {
+        if (!word1->strWord)
+            continue;
+        n2 = FcitxCandidateWordGetListSize(newList);
+        for (i2 = n2 - 1;i2 >= 0;i2--) {
+            word2 = FcitxCandidateWordGetByTotalIndex(newList, i2);
+            if (!word2->strWord) {
+                FcitxCandidateWordRemoveByIndex(newList, i2);
+                continue;
+            }
+            if (strcasecmp(word1->strWord, word2->strWord))
+                continue;
+            FcitxCandidateWordRemoveByIndex(newList, i2);
+            if (i1 == position)
+                position++;
+        }
+    }
+    FcitxCandidateWordMerge(candList, newList, position);
+    FcitxCandidateWordFreeList(newList);
+}
+
 static boolean
 PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string,
                           int position, int len_limit)
@@ -174,8 +208,7 @@ PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string,
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
-    FcitxCandidateWordMerge(candList, newList, position);
-    FcitxCandidateWordFreeList(newList);
+    PinyinEnhanceMergeCandList(candList, newList, position);
     return true;
 }
 

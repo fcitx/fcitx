@@ -102,14 +102,20 @@ void FcitxCandidateWordMoveByWord(FcitxCandidateWordList* candList, FcitxCandida
     FcitxCandidateWordMove(candList, from, to);
 }
 
-
-FCITX_EXPORT_API
-void FcitxCandidateWordRemove(FcitxCandidateWordList* candList, FcitxCandidateWord* candWord)
+FCITX_EXPORT_API void
+FcitxCandidateWordRemoveByIndex(FcitxCandidateWordList *candList, int idx)
 {
-    int idx = utarray_eltidx(&candList->candWords, candWord);
     if (idx < 0 || idx >= utarray_len(&candList->candWords))
         return;
     utarray_erase(&candList->candWords, idx, 1);
+}
+
+FCITX_EXPORT_API void
+FcitxCandidateWordRemove(FcitxCandidateWordList *candList,
+                         FcitxCandidateWord *candWord)
+{
+    int idx = utarray_eltidx(&candList->candWords, candWord);
+    FcitxCandidateWordRemoveByIndex(candList, idx);
 }
 
 FCITX_EXPORT_API
