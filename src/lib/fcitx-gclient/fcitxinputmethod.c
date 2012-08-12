@@ -357,6 +357,20 @@ void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
 }
 
 FCITX_EXPORT_API
+void fcitx_input_method_configure_im(FcitxInputMethod* im, gchar* imname)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "ConfigureIM",
+                      g_variant_new("(s)", imname),
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+FCITX_EXPORT_API
 gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
 {
     GError* error = NULL;

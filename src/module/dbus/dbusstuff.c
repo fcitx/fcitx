@@ -20,7 +20,6 @@
 
 #include <unistd.h>
 #include <dbus/dbus.h>
-#include <libintl.h>
 
 #include "fcitx/fcitx.h"
 #include "fcitx/module.h"
@@ -105,7 +104,7 @@ void* DBusCreate(FcitxInstance* instance)
         while (1) {
             conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
             if (dbus_error_is_set(&err)) {
-                FcitxLog(WARNING, _("Connection Error (%s)"), err.message);
+                FcitxLog(WARNING, "Connection Error (%s)", err.message);
                 dbus_error_free(&err);
                 dbus_error_init(&err);
             }
@@ -121,13 +120,13 @@ void* DBusCreate(FcitxInstance* instance)
         if (NULL == conn) {
             break;
         }
-    
+
         if (!dbus_connection_add_filter(conn, DBusModuleFilter, dbusmodule, NULL))
             break;
 
         if (!dbus_connection_set_watch_functions(conn, DBusAddWatch, DBusRemoveWatch,
                 NULL, &dbusmodule->watches, NULL)) {
-            FcitxLog(WARNING, _("Add Watch Function Error"));
+            FcitxLog(WARNING, "Add Watch Function Error");
             dbus_error_free(&err);
             dbus_error_init(&err);
             dbus_connection_unref(conn);
@@ -151,7 +150,7 @@ void* DBusCreate(FcitxInstance* instance)
                                             DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                             &err);
             if (dbus_error_is_set(&err)) {
-                FcitxLog(WARNING, _("Name Error (%s)"), err.message);
+                FcitxLog(WARNING, "Name Error (%s)", err.message);
                 goto dbus_init_failed;
             }
             if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
@@ -233,7 +232,7 @@ void* DBusCreate(FcitxInstance* instance)
                                         &err);
 
         if (dbus_error_is_set(&err)) {
-            FcitxLog(WARNING, _("Private Name Error (%s)"), err.message);
+            FcitxLog(WARNING, "Private Name Error (%s)", err.message);
             break;
         }
         if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
@@ -243,10 +242,10 @@ void* DBusCreate(FcitxInstance* instance)
 
         if (!dbus_connection_add_filter(privconn, DBusModuleFilter, dbusmodule, NULL))
             break;
-        
+
         if (!dbus_connection_set_watch_functions(privconn, DBusAddWatch, DBusRemoveWatch,
                 NULL, &dbusmodule->watches, NULL)) {
-            FcitxLog(WARNING, _("Add Watch Function Error"));
+            FcitxLog(WARNING, "Add Watch Function Error");
             break;
         }
 

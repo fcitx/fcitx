@@ -741,7 +741,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     else if (strcmp(s0, "configureim") == 0) {
                         FcitxIM* im = FcitxInstanceGetCurrentIM(kimpanel->owner);
                         if (im && im->owner) {
-                            fcitx_utils_launch_configure_tool_for_addon(im->owner->name);
+                            fcitx_utils_launch_configure_tool_for_addon(im->uniqueName);
                         }
                         else
                             fcitx_utils_launch_configure_tool();

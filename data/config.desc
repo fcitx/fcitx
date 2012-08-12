@@ -167,7 +167,8 @@ Advance=True
 [Output/SendTextWhenSwitchEng]
 Type=Boolean
 DefaultValue=False
-Description=Send typed raw text if Switch to inactive Mode
+Description=Commit when toggle state
+LongDescription=Send typed raw text if Switch to inactive Mode
 
 [Output/CandidateWordNumber]
 Type=Integer

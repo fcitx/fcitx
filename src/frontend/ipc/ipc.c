@@ -185,6 +185,9 @@ const char * im_introspection_xml =
     "    <method name=\"ConfigureAddon\">\n"
     "      <arg name=\"addon\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"ConfigureIM\">\n"
+    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <method name=\"GetIMAddon\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
@@ -631,9 +634,9 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         dbus_error_init(&error);
         char* imname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
-            FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, imname);
+            FcitxIM* im = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, imname);
             const char* name = "";
-            if (im)
+            if (im && im->owner)
                 name = im->owner->name;
             DBusMessage *reply = dbus_message_new_method_return(msg);
             dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
@@ -658,6 +661,20 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_message_unref(reply);
             if (addonname) {
                 fcitx_utils_launch_configure_tool_for_addon(addonname);
+            }
+        }
+        dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureIM")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* imname = NULL;
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
+            DBusMessage *reply = dbus_message_new_method_return(msg);
+            dbus_connection_send(connection, reply, NULL);
+            dbus_message_unref(reply);
+            if (imname) {
+                fcitx_utils_launch_configure_tool_for_addon(imname);
             }
         }
         dbus_error_free(&error);
