@@ -537,44 +537,44 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
         InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
     }
 
-    /* TODO Not sure whether I should add spell hint here */
-    if (!qpstate->quickPhrases)
-        return IRV_DISPLAY_MESSAGE;
-    iInputLen = strlen(qpstate->buffer);
-    if (iInputLen > QUICKPHRASE_CODE_LEN)
-        return IRV_DISPLAY_MESSAGE;
+    do {
+        if (!qpstate->quickPhrases)
+            break;
+        iInputLen = strlen(qpstate->buffer);
+        if (iInputLen > QUICKPHRASE_CODE_LEN)
+            break;
 
-    strcpy(searchKey.strCode, qpstate->buffer);
+        strcpy(searchKey.strCode, qpstate->buffer);
 
-    currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
-    iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
-    lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
-    iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
-    if (iLastQuickPhrase < 0)
-        iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
-    if (!currentQuickPhrase || strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
-        QuickPhraseGetSpellHint(qpstate);
-        return IRV_DISPLAY_MESSAGE;
-    }
-
-    for (currentQuickPhrase = (QUICK_PHRASE*)utarray_eltptr(qpstate->quickPhrases,
-                                                            iFirstQuickPhrase);
-            currentQuickPhrase != NULL;
-            currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
-        if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
-            QuickPhraseCand* qpcand = fcitx_utils_malloc0(sizeof(QuickPhraseCand));
-            qpcand->cand = currentQuickPhrase;
-            FcitxCandidateWord candWord;
-            candWord.callback = QuickPhraseGetCandWord;
-            candWord.owner = qpstate;
-            candWord.priv = qpcand;
-            candWord.strExtra = strdup(currentQuickPhrase->strCode + iInputLen);
-            candWord.strWord = strdup(currentQuickPhrase->strPhrase);
-            candWord.wordType = MSG_OTHER;
-            candWord.extraType = MSG_CODE;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        currentQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmp);
+        iFirstQuickPhrase = utarray_eltidx(qpstate->quickPhrases, currentQuickPhrase);
+        lastQuickPhrase = utarray_custom_bsearch(pKey, qpstate->quickPhrases, false, PhraseCmpA);
+        iLastQuickPhrase = utarray_eltidx(qpstate->quickPhrases, lastQuickPhrase);
+        if (iLastQuickPhrase < 0)
+            iLastQuickPhrase = utarray_len(qpstate->quickPhrases);
+        if (!currentQuickPhrase || strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
+            break;
         }
-    }
+
+        for (currentQuickPhrase = (QUICK_PHRASE*)utarray_eltptr(qpstate->quickPhrases,
+                                                                iFirstQuickPhrase);
+                currentQuickPhrase != NULL;
+                currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
+            if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
+                QuickPhraseCand* qpcand = fcitx_utils_malloc0(sizeof(QuickPhraseCand));
+                qpcand->cand = currentQuickPhrase;
+                FcitxCandidateWord candWord;
+                candWord.callback = QuickPhraseGetCandWord;
+                candWord.owner = qpstate;
+                candWord.priv = qpcand;
+                candWord.strExtra = strdup(currentQuickPhrase->strCode + iInputLen);
+                candWord.strWord = strdup(currentQuickPhrase->strPhrase);
+                candWord.wordType = MSG_OTHER;
+                candWord.extraType = MSG_CODE;
+                FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+            }
+        }
+    } while(0);
 
     QuickPhraseGetSpellHint(qpstate);
     return IRV_DISPLAY_MESSAGE;

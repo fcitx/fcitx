@@ -45,9 +45,7 @@ enum {
 static inline int
 check_im_type(FcitxIM *im)
 {
-    if (!im || !(strncmp(im->langCode, "zh", strlen("zh")) == 0 &&
-                 (im->langCode[strlen("zh")] == '\0' ||
-                  im->langCode[strlen("zh")] == '_')))
+    if (!im)
         return PY_IM_INVALID;
     if (strcmp(im->uniqueName, "pinyin") == 0 ||
         strcmp(im->uniqueName, "pinyin-libpinyin") == 0 ||
@@ -57,7 +55,6 @@ check_im_type(FcitxIM *im)
     if (strcmp(im->uniqueName, "shuangpin-libpinyin") == 0 ||
         strcmp(im->uniqueName, "shuangpin") == 0)
         return PY_IM_SHUANGPIN;
-    // TODO .... so what are other zh{,_TW} im that can be supported .....
     return PY_IM_INVALID;
 }
 
