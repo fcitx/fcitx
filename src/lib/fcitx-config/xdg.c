@@ -81,12 +81,7 @@ FCITX_EXPORT_API
 FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char *prefixpath;
-    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char* datadir = fcitx_utils_get_fcitx_path("datadir");
-    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , datadir, prefixpath);
-    free(datadir);
-    free(prefixpath);
+    char ** path = FcitxXDGGetPathWithPrefix(&len, prefix);
 
     FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
 
@@ -116,10 +111,7 @@ FCITX_EXPORT_API
 FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
 {
     size_t len;
-    char *prefixpath;
-    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char ** path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", prefixpath , NULL, NULL);
-    free(prefixpath);
+    char ** path = FcitxXDGGetPathUserWithPrefix(&len, prefix);
 
     FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
 
@@ -267,6 +259,16 @@ char **FcitxXDGGetPath(
 }
 
 FCITX_EXPORT_API
+char** FcitxXDGGetPathUserWithPrefix(size_t* len, const char* prefix)
+{
+    char *prefixpath;
+    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
+    char** xdgPath = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config" , prefixpath , NULL , NULL);
+    free(prefixpath);
+    return xdgPath;
+}
+
+FCITX_EXPORT_API
 char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
 {
     char *prefixpath;
@@ -296,12 +298,7 @@ FcitxStringHashSet* FcitxXDGGetFiles(
 
     FcitxStringHashSet* sset = NULL;
 
-    char *prefixpath;
-    asprintf(&prefixpath, "%s/%s", PACKAGE, path);
-    char* datadir = fcitx_utils_get_fcitx_path("datadir");
-    xdgPath = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config" , prefixpath , datadir , prefixpath);
-    free(datadir);
-    free(prefixpath);
+    xdgPath = FcitxXDGGetPathWithPrefix(&len, path);
 
     for (i = 0; i < len; i++) {
         asprintf(&pathBuf, "%s", xdgPath[i]);
