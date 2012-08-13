@@ -2,11 +2,13 @@
 Description=Main Window Position X
 Type=Integer
 DefaultValue=500
+Advance=True
 
 [ClassicUI/MainWindowOffsetY]
 Description=Main Window Position Y
 Type=Integer
 DefaultValue=40
+Advance=True
 
 [ClassicUI/Font]
 Type=Font
@@ -22,6 +24,7 @@ Description=Menu Font
 Type=String
 DefaultValue=zh_CN.UTF-8
 Description=Font Locale to display
+Advance=True
 
 [ClassicUI/UseTray]
 Type=Boolean
@@ -46,6 +49,7 @@ Description=Vertical Candidate Word List
 Type=String
 DefaultValue=default
 Description=Skin Name
+Advance=True
 
 [DescriptionFile]
 LocaleDomain=fcitx

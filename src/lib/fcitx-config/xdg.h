@@ -50,7 +50,7 @@ extern "C"
      * @return FILE*
      **/
     FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile);
-    
+
 #ifdef FCITX_CONFIG_XDG_DEPRECATED
     /**
      * get a xdg file pointer with given path, if mode contains "w", it will create necessary parent folder,
@@ -61,13 +61,13 @@ extern "C"
      * @param len length of path
      * @param retFile return file name
      * @return FILE*
-     * 
+     *
      * @deprecated
-     * 
+     *
      * @see FcitxXDGGetPath
      **/
     FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile);
-    
+
     /**
      * get xdg path with given arguement, do not use this directly
      *
@@ -77,9 +77,9 @@ extern "C"
      * @param suffixHome suffixHome
      * @param dirsDefault dirsDefault
      * @param suffixGlobal suffixGlobal
-     * 
+     *
      * @deprecated
-     * 
+     *
      * @return char**
      **/
     char **FcitxXDGGetPath(
@@ -90,18 +90,32 @@ extern "C"
         const char* dirsDefault,
         const char* suffixGlobal);
 #endif
-    
+
     /**
      * get xdg path with prefix
      *
      * @param len return array size
      * @param prefix prefix
-     * 
+     *
      * @return char**
-     * 
+     *
      * @since 4.2.1
      **/
     char **FcitxXDGGetPathWithPrefix(
+        size_t *len,
+        const char* prefix);
+
+    /**
+     * get xdg user path with prefix
+     *
+     * @param len return array size
+     * @param prefix prefix
+     *
+     * @return char**
+     *
+     * @since 4.2.6
+     **/
+    char **FcitxXDGGetPathUserWithPrefix(
         size_t *len,
         const char* prefix);
 
