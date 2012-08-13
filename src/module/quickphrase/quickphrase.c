@@ -481,10 +481,21 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     cand_list = FcitxInputStateGetCandidateList(input);
     int space_left = (FcitxCandidateWordGetPageSize(cand_list)
                       - FcitxCandidateWordGetListSize(cand_list));
+
+    char c[2];
+    QuickPhraseFillKeyString(qpstate, c);
+    char* search;
+    char* needfree = NULL;
+    if (qpstate->append) {
+        asprintf(&search, "%s%s", c, qpstate->buffer);
+        needfree = search;
+    }
+    else
+        search = qpstate->buffer;
     if (space_left <= 0)
         return;
     func_arg.args[0] = NULL;
-    func_arg.args[1] = qpstate->buffer;
+    func_arg.args[1] = search;
     func_arg.args[2] = NULL;
     func_arg.args[3] = (void*)(long)space_left;
     func_arg.args[4] = "en";
@@ -497,6 +508,8 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
         FcitxCandidateWordMerge(cand_list, new_list, -1);
         FcitxCandidateWordFreeList(new_list);
     }
+
+    fcitx_utils_free(needfree);
 }
 
 INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
