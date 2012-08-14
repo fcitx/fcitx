@@ -224,6 +224,9 @@ static boolean PreInputProcessAutoEng(void* arg, FcitxKeySym sym,
         } else if (FcitxHotkeyIsHotkeyCursorMove(sym, state)) {
             *retval = IRV_DO_NOTHING;
             return true;
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+            *retval = IRV_CLEAN;
+            return true;
         }
         ShowAutoEngMessage(autoEngState, retval);
         return true;
