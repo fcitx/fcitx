@@ -40,6 +40,21 @@ if(ENCHANT_INCLUDE_DIR AND ENCHANT_LIBRARIES)
   #include <stddef.h>
   #include <string.h>
   #include <enchant/enchant.h>
+
+  EnchantBroker *enchant_broker_init();
+  char **enchant_dict_suggest(EnchantDict *dict, const char *str,
+                              ssize_t len, size_t *out_n);
+  void enchant_dict_free_string_list(EnchantDict *dict, char **str_list);
+  void enchant_broker_free_dict(EnchantBroker *broker, EnchantDict *dict);
+  void enchant_broker_free(EnchantBroker *broker);
+  EnchantDict *enchant_broker_request_dict(EnchantBroker *broker,
+                                           const char *const tag);
+  void enchant_broker_set_ordering(EnchantBroker *broker,
+                                   const char *const tag,
+                                   const char *const ordering);
+  void enchant_dict_add_to_personal(EnchantDict *dict, const char *const word,
+                                    ssize_t len);
+
   int main()
   {
       void *enchant;
