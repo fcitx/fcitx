@@ -50,11 +50,23 @@ check_im_type(FcitxIM *im)
     if (strcmp(im->uniqueName, "pinyin") == 0 ||
         strcmp(im->uniqueName, "pinyin-libpinyin") == 0 ||
         strcmp(im->uniqueName, "googlepinyin") == 0 ||
-        strcmp(im->uniqueName, "sunpinyin") == 0)
+        strcmp(im->uniqueName, "shuangpin-libpinyin") == 0)
         return PY_IM_PINYIN;
-    if (strcmp(im->uniqueName, "shuangpin-libpinyin") == 0 ||
-        strcmp(im->uniqueName, "shuangpin") == 0)
+    if (strcmp(im->uniqueName, "shuangpin") == 0)
         return PY_IM_SHUANGPIN;
+    if (strcmp(im->uniqueName, "sunpinyin") == 0) {
+        FcitxModuleFunctionArg arg;
+        boolean sp = false;
+        arg.args[0] = "";
+        arg.args[1] = &sp;
+        FcitxModuleInvokeFunctionByName(im->owner->owner,
+                                        "fcitx-sunpinyin", 0, arg);
+        if (sp) {
+            return PY_IM_SHUANGPIN;
+        } else {
+            return PY_IM_PINYIN;
+        }
+    }
     return PY_IM_INVALID;
 }
 
@@ -311,8 +323,11 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         } else if (im_type == PY_IM_SHUANGPIN) {
             words_type[words_count++] = (strlen(last_start) == 2 ?
                                          PY_TYPE_FULL :
-                                         PY_TYPE_INVALID);
+                                         PY_TYPE_SHORT);
         }
+    } else if (im_type == PY_IM_SHUANGPIN) {
+        if (words_type[words_count - 1] != PY_TYPE_FULL)
+            words_type[words_count - 1] = PY_TYPE_SHORT;
     }
     cand_word = FcitxCandidateWordGetFirst(cand_list);
     if (!cand_word || !cand_word->strWord || !*cand_word->strWord
