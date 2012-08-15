@@ -84,11 +84,15 @@ static int
 SpellCustomGetDistance(SpellCustomDict *custom_dict,
                        const char *word, const char *dict)
 {
+#define REPLACE_WEIGHT 3
+#define INSERT_WEIGHT 3
+#define REMOVE_WEIGHT 3
+#define END_WEIGHT 1
     int word_len;
     int replace = 0;
     int insert = 0;
     int remove = 0;
-    int distance = 0;
+    int diff = 0;
     int maxdiff;
     int maxremove;
     unsigned int cur_word_c;
@@ -100,23 +104,27 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     maxremove = (word_len - 2) / 3;
     word = fcitx_utf8_get_char(word, &cur_word_c);
     dict = fcitx_utf8_get_char(dict, &cur_dict_c);
-    while ((distance = replace + insert + remove) <= maxdiff &&
+    while ((diff = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
         /* cur_word_c and cur_dict_c are the current characters
          * and dict and word are pointing to the next one.
          */
-        if (!cur_word_c)
-            return (distance * 2 +
-                    cur_dict_c ? (fcitx_utf8_strlen(dict) + 1) : 0);
+        if (!cur_word_c) {
+            return ((replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                     + remove * REMOVE_WEIGHT) +
+                    (cur_dict_c ?
+                     (fcitx_utf8_strlen(dict) + 1) * END_WEIGHT : 0));
+        }
         word = fcitx_utf8_get_char(word, &next_word_c);
         if (!cur_dict_c) {
             if (next_word_c) {
                 return -1;
             } else {
                 remove++;
-                distance++;
-                if (distance <= maxdiff && remove <= maxremove)
-                    return distance * 2;
+                if (diff <= maxdiff && remove <= maxremove) {
+                    return (replace * REPLACE_WEIGHT + insert * INSERT_WEIGHT
+                            + remove * REMOVE_WEIGHT);
+                }
                 return -1;
             }
         }
