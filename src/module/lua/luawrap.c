@@ -646,11 +646,14 @@ static UT_array * LuaCallFunction(lua_State *lua,
         utarray_new(result, &LuaResultItem_icd);
         for (i = 1; i <= len; ++i) {
             lua_pushinteger(lua, i);
+            /* stack, table, integer */
             lua_gettable(lua, -2);
             char istable = 0;
             if (lua_type(lua, -1) == LUA_TTABLE) {
                 istable = 1;
+                /* stack, table, result-item */
                 lua_pushstring(lua, "help");
+                /* stack, table, result-item, "help" */
                 lua_gettable(lua, -2);
             }
             LuaResultItem r = {NULL, NULL, NULL};
@@ -660,24 +663,32 @@ static UT_array * LuaCallFunction(lua_State *lua,
             } else {
                 r.result = strdup(str);
             }
+            /* stack, table, result-item, string */
             lua_pop(lua, 1);
+            /* stack, table, result-item */
 
             if (r.result) {
                 if (istable) {
                     const char* p;
+                    /* stack, table, result-item, "suggest" */
                     lua_pushstring(lua, "suggest");
                     lua_gettable(lua, -2);
+                    /* stack, table, result-item, suggest-string */
                     p = lua_tostring(lua, -1);
                     if (p)
                         r.help = strdup(p);
                     lua_pop(lua, 1);
+                    /* stack, table, result-item */
 
+                    /* stack, table, result-item, "tip" */
                     lua_pushstring(lua, "tip");
                     lua_gettable(lua, -2);
+                    /* stack, table, result-item, tip string */
                     p = lua_tostring(lua, -1);
                     if (p)
                         r.tip = strdup(p);
                     lua_pop(lua, 1);
+                    /* stack, table, result-item */
                 } else {
                     r.help = NULL;
                     r.tip = NULL;
@@ -686,7 +697,7 @@ static UT_array * LuaCallFunction(lua_State *lua,
             }
             LuaResultItemDtor(&r);
             if (istable) {
-                lua_pop(lua, 2);
+                lua_pop(lua, 1);
             }
         }
         if (utarray_len(result) == 0) {
