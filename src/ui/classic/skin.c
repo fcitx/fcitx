@@ -558,7 +558,10 @@ void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
         inputWindow->c_font[i] = cairo_create(inputWindow->cs_input_bar);
         fcitx_cairo_set_color(inputWindow->c_font[i], &sc->skinFont.fontColor[i]);
 #ifndef _ENABLE_PANGO
-        SetFontContext(inputWindow->c_font[i], font, sc->skinFont.fontSize, dpi);
+        SetFontContext(inputWindow->c_font[i],
+                       font,
+                       inputWindow->owner->fontSize > 0 ? inputWindow->owner->fontSize : sc->skinFont.fontSize,
+                       dpi);
 #endif
     }
     inputWindow->c_font[7] = inputWindow->c_font[0];
@@ -625,7 +628,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
     int dpi = sc->skinFont.respectDPI? classicui->dpi : 0;
     FCITX_UNUSED(dpi);
 #ifdef _ENABLE_PANGO /* special case which only macro unable to handle */
-    SetFontContext(dummy, inputWindow->owner->font, sc->skinFont.fontSize, dpi);
+    SetFontContext(dummy, inputWindow->owner->font, inputWindow->owner->fontSize > 0 ? inputWindow->owner->fontSize : sc->skinFont.fontSize, dpi);
 #endif
 
     int fontHeight = FontHeightWithContext(inputWindow->c_font[0], dpi);

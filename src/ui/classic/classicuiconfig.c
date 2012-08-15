@@ -8,6 +8,7 @@ static void FilterScreenSizeY(FcitxGenericConfig* config, FcitxConfigGroup *grou
 CONFIG_BINDING_BEGIN(FcitxClassicUI)
 CONFIG_BINDING_REGISTER_WITH_FILTER("ClassicUI", "MainWindowOffsetX", iMainWindowOffsetX, FilterScreenSizeX)
 CONFIG_BINDING_REGISTER_WITH_FILTER("ClassicUI", "MainWindowOffsetY", iMainWindowOffsetY, FilterScreenSizeY)
+CONFIG_BINDING_REGISTER("ClassicUI", "FontSize", fontSize)
 CONFIG_BINDING_REGISTER("ClassicUI", "Font", font)
 CONFIG_BINDING_REGISTER("ClassicUI", "MenuFont", menuFont)
 #ifndef _ENABLE_PANGO

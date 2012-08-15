@@ -10,6 +10,13 @@ Type=Integer
 DefaultValue=40
 Advance=True
 
+[ClassicUI/FontSize]
+Type=Integer
+DefaultValue=0
+Description=Font Size
+Min=0
+LongDescription=Override the skin font size
+
 [ClassicUI/Font]
 Type=Font
 DefaultValue=

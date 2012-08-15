@@ -256,12 +256,11 @@ OutputStringWithContextReal(cairo_t * c, const char *str, int x, int y)
 PangoFontDescription* GetPangoFontDescription(const char* font, int size, int dpi)
 {
     PangoFontDescription* desc;
-    desc = pango_font_description_new();
+    desc = pango_font_description_from_string(font);
     if (dpi)
         pango_font_description_set_size(desc, size * PANGO_SCALE);
     else
         pango_font_description_set_absolute_size(desc, size * PANGO_SCALE);
-    pango_font_description_set_family(desc, font);
     return desc;
 }
 #endif
