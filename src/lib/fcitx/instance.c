@@ -310,6 +310,7 @@ void FcitxInstanceEnd(FcitxInstance* instance)
 {
     if (!instance->initialized) {
         if (!instance->loadingFatalError) {
+            FcitxLog(ERROR, "Exiting.");
             instance->loadingFatalError = true;
             sem_post(instance->sem);
         }
