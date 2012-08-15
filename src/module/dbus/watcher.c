@@ -8,6 +8,7 @@
 #include <dbus/dbus.h>
 #include "dbusstuff.h"
 #include "dbussocket.h"
+#include "fcitx-utils/utils.h"
     
 static char* servicename = NULL;
 enum {
@@ -52,7 +53,9 @@ int main (int argc, char* argv[])
     pid_t pid = atoi(argv[2]);
     if (pid <= 0)
         return 1;
-    
+
+    fcitx_utils_init_as_daemon();
+
     asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
 
     DBusError err;
@@ -67,11 +70,11 @@ int main (int argc, char* argv[])
     if (!dbus_connection_set_watch_functions(conn, DBusAddWatch, DBusRemoveWatch, NULL, &watches, NULL)) {
         goto some_error;
     }
-        
+
     dbus_connection_set_exit_on_disconnect(conn, TRUE);
     if (!dbus_bus_register(conn, NULL))
         goto some_error;
-    
+
     dbus_bus_add_match(conn,
             "type='signal',"
             "interface='" DBUS_INTERFACE_DBUS "',"
@@ -81,7 +84,7 @@ int main (int argc, char* argv[])
 
     if (dbus_error_is_set(&err))
         goto some_error;
-        
+
     if (!dbus_connection_add_filter(conn, WatcherDBusFilter, NULL, NULL))
         goto some_error;
 
