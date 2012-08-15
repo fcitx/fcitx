@@ -73,11 +73,13 @@ endif (_ENABLE_DBUS)
 set(SPELL_EN_DICT en_dict.fscd)
 set(SPELL_EN_DICT_SRC en_dict.txt)
 set(SPELL_EN_DICT_TAR en_dict-20120815.tar.gz)
-set(SPELL_EN_DICT_URL https://github.com/downloads/fcitx/fcitx/en_dict.tar.gz)
+set(SPELL_EN_DICT_URL
+  https://github.com/downloads/fcitx/fcitx/en_dict-20120815.tar.gz)
 
 add_custom_target(spell_en_dict ALL DEPENDS ${SPELL_EN_DICT})
 add_custom_command(
   OUTPUT ${SPELL_EN_DICT_SRC}
+  DEPENDS ${SPELL_EN_DICT_TAR}
   COMMAND "${TAR}" xzmvf "${SPELL_EN_DICT_TAR}")
 add_custom_command(
   OUTPUT ${SPELL_EN_DICT_TAR}
