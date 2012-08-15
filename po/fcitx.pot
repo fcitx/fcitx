@@ -38,7 +38,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid ""
-"Treating abbreviated Pinyin as English (useful when you hardle ever use "
+"Treating abbreviated Pinyin as English (useful when you hardly ever use "
 "abbreviated pinyin.)"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgid "Preferred Enchant provider"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:11
-msgid "Order of Spell Hint Providers"
+msgid "Default Spell Hint Backends Order"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:6

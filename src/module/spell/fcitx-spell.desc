@@ -8,9 +8,10 @@ Enum2=Myspell
 Description=Preferred Enchant provider
 
 [Spell Hint/HintProvidersOrder]
-Description=Order of Spell Hint Providers
+Description=Default Spell Hint Backends Order
 Type=String
 DefaultValue=presage,custom,enchant
+LongDescription=Possible Providers: presage, custom, enchant (separate with comma)
 
 [DescriptionFile]
 LocaleDomain=fcitx
