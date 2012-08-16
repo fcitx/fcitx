@@ -41,7 +41,7 @@ done
 # Extract LongDescription
 for f in $descfiles
 do
-    awk '/^[\t ]*LongDescription=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
+    awk '/^[\t ]*LongDescription=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 17)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
 done
 
 # Extract Group Name
