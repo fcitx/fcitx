@@ -39,6 +39,7 @@ typedef struct _FcitxDBus {
     FcitxInstance* owner;
     FcitxDBusWatch* watches;
     DBusDaemonProperty daemon;
+    char* serviceName;
 } FcitxDBus;
 
 #define RETRY_INTERVAL 2
@@ -294,7 +295,7 @@ void* DBusCreate(FcitxInstance* instance)
     AddFunction(dbusaddon, DBusGetPrivateConnection);
     dbus_error_free(&err);
 
-    free(servicename);
+    dbusmodule->serviceName = servicename;
 
     return dbusmodule;
 
@@ -310,7 +311,14 @@ dbus_init_failed:
 
 void DBusDestroy(void* arg) {
     FcitxDBus* dbusmodule = (FcitxDBus*)arg;
+    if (dbusmodule->conn) {
+        dbus_bus_release_name(dbusmodule->conn, dbusmodule->serviceName, NULL);
+    }
+    if (dbusmodule->privconn) {
+        dbus_bus_release_name(dbusmodule->privconn, dbusmodule->serviceName, NULL);
+    }
     DBusKill(&dbusmodule->daemon);
+    free(dbusmodule->serviceName);
     free(dbusmodule);
 }
 
