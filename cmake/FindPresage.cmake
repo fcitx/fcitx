@@ -37,6 +37,25 @@ if(PRESAGE_INCLUDE_DIR AND PRESAGE_LIBRARIES)
   check_c_source_compiles("
   #include <stdlib.h>
   #include <presage.h>
+
+    presage_error_code_t presage_new(_presage_callback_get_past_stream past_stream_cb,
+                                     void* past_stream_cb_arg,
+                                     _presage_callback_get_future_stream future_stream_cb,
+                                     void* future_stream_cb_arg,
+                                     presage_t* result);
+    void                 presage_free                (presage_t prsg);
+    void                 presage_free_string         (char* str);
+    void                 presage_free_string_array   (char** str);
+    presage_error_code_t presage_config_set          (presage_t prsg,
+                                                      const char* variable,
+                                                      const char* value);
+    presage_error_code_t presage_predict             (presage_t prsg,
+                                                      char*** result);
+    presage_error_code_t presage_completion          (presage_t prsg,
+                                                      const char* token,
+                                                      char** result);
+
+
   const char *get_stream(void *arg)
   {
       return \"a\";

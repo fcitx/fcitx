@@ -513,6 +513,10 @@ msgstr ""
 msgid "Default Shuangpin Schema"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:11
+msgid "Default Spell Hint Backends Order"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
 msgid "Delete Phrase"
 msgstr ""
@@ -1262,10 +1266,6 @@ msgstr ""
 msgid "Order of Code Table"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:11
-msgid "Order of Spell Hint Providers"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:57
 msgid "Other Color"
 msgstr ""
@@ -1808,7 +1808,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid ""
-"Treating abbreviated Pinyin as English (useful when you hardle ever use "
+"Treating abbreviated Pinyin as English (useful when you hardly ever use "
 "abbreviated pinyin.)"
 msgstr ""
 
