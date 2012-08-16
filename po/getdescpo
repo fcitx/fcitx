@@ -38,6 +38,12 @@ do
     awk '/^[\t ]*Description=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
 done
 
+# Extract LongDescription
+for f in $descfiles
+do
+    awk '/^[\t ]*LongDescription=/ { print "\n#: '$f':" NR"\n" "msgid \"" substr($0, 13)"\"\n" "msgstr \"\""}' "$f" >> "$outdir/$filename"
+done
+
 # Extract Group Name
 grep -nH '^\[' $descfiles | grep -v 'DescriptionFile' | awk ' "^[" { split($0, a, ":"); split(a[3], b, "/"); print substr(b[1], 2); }'  | sort | uniq | awk '{ print "# unknown\nmsgid \""$0"\"\nmsgstr \"\"\n"; }' >> "$outdir/$filename"
 
