@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-13 23:23+0800\n"
+"POT-Creation-Date: 2012-08-16 11:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,15 +37,11 @@ msgid "Global Input Method SelectKey"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
-msgid ""
-"Treating abbreviated Pinyin as English (useful when you hardly ever use "
-"abbreviated pinyin.)"
+msgid "Treating abbreviated Pinyin as English"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:9
-msgid ""
-"Allow Pinyin Enhance to replace the first candidate word when the input "
-"string is very closed to English."
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
+msgid "Allow replacing the first candidate"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
@@ -101,30 +97,34 @@ msgid "Main Window Position Y"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:16
+msgid "Font Size"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:21
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:26
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:32
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:41
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:48
 msgid "Main Window Hide Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:46
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:53
 msgid "Vertical Candidate Word List"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:51
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:58
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr ""
@@ -1202,7 +1202,7 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:928
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:931
 msgid "Skin"
 msgstr ""
 
@@ -1312,6 +1312,22 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-quickphrase.conf.in.h:2
 msgid "Conveniently Input English or User-Defined Simple Table"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:1
+msgid "Spell"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:2
+msgid "Fcitx Spelling Hint/Completion Support"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin-enhance.conf.in.h:1
+msgid "Enchance pinyin input in Fcitx"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin-enhance.conf.in.h:2
+msgid "Provide extra feature for pinyin in Fcitx"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-classic-ui.conf.in.h:1
@@ -1448,12 +1464,12 @@ msgstr ""
 msgid "Can't open punc file."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:341
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:344
 msgid "Too long item for AutoEng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:417
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:383
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:379
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1587,12 +1603,12 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:225
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:223
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:316
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:312
 #, c-format
 msgid "Quick Phrase: %s"
 msgstr ""
@@ -1864,21 +1880,21 @@ msgid "min Num of Characters: "
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
 msgid "Use remind"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
 msgid "No remind"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:182
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:421
 msgid "Toggle Remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:396
 msgid "pthread mutex init failed"
 msgstr ""
 

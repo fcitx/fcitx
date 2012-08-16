@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-13 23:23+0800\n"
+"POT-Creation-Date: 2012-08-16 11:02+0800\n"
 "PO-Revision-Date: 2012-07-16 10:53+0800\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -150,10 +150,8 @@ msgstr "不調整"
 msgid "All"
 msgstr "所有"
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:9
-msgid ""
-"Allow Pinyin Enhance to replace the first candidate word when the input "
-"string is very closed to English."
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
+msgid "Allow replacing the first candidate"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
@@ -591,6 +589,10 @@ msgstr "啟用"
 msgid "Enabled in input"
 msgstr "輸入中啟用"
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin-enhance.conf.in.h:1
+msgid "Enchance pinyin input in Fcitx"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:63
 msgid "End Key"
 msgstr "中止鍵"
@@ -688,6 +690,10 @@ msgstr ""
 msgid "Fcitx Skin Installer"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:2
+msgid "Fcitx Spelling Hint/Completion Support"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
 msgid "Fcitx Unicode Typing Support"
 msgstr ""
@@ -728,13 +734,18 @@ msgstr ""
 msgid "Fix preedit cursor at head"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:16
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:23
 msgid "Font"
 msgstr "字型"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:26
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:33
 msgid "Font Locale to display"
 msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:16
+#, fuzzy
+msgid "Font Size"
+msgstr "字型"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
@@ -1101,7 +1112,7 @@ msgstr ""
 msgid "MS"
 msgstr "微軟"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:41
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:48
 msgid "Main Window Hide Mode"
 msgstr "主視窗隱藏模式"
 
@@ -1121,7 +1132,7 @@ msgstr "模糊鍵"
 msgid "Math"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:21
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
 msgstr "選單字型"
 
@@ -1212,7 +1223,7 @@ msgid "No local input method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
 msgid "No remind"
 msgstr ""
 
@@ -1333,8 +1344,8 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:417
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:383
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:379
 msgid "Press Enter to input text"
 msgstr "按下 Enter 輸入文字"
 
@@ -1384,6 +1395,10 @@ msgstr "提示碼表編碼"
 msgid "Prompt the phrases after input"
 msgstr "輸入後提示字詞"
 
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin-enhance.conf.in.h:2
+msgid "Provide extra feature for pinyin in Fcitx"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-dbus.conf.in.h:2
 msgid "Provides DBus Support (Used by other Addon)"
 msgstr "提供 DBus 支援（給其他附加元件使用）"
@@ -1408,7 +1423,7 @@ msgstr "標點支援"
 msgid "Quick Phrase List"
 msgstr "快速字詞清單"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:316
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:312
 #, c-format
 msgid "Quick Phrase: %s"
 msgstr "快速字詞：%s"
@@ -1621,7 +1636,7 @@ msgstr "Fcitx 簡單的拼音支援"
 msgid "Simplified Chinese To Traditional Chinese"
 msgstr "繁簡轉換"
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:928
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:931
 msgid "Skin"
 msgstr "皮膚"
 
@@ -1629,7 +1644,7 @@ msgstr "皮膚"
 msgid "Skin Author"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:51
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:58
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:3
 msgid "Skin Name"
 msgstr "皮膚名稱"
@@ -1670,7 +1685,7 @@ msgstr ""
 msgid "Space Line Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:225
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:223
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr "空格輸入 %s，Enter 輸入 %s"
@@ -1681,6 +1696,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:132
 msgid "Special Icon position"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-spell.conf.in.h:1
+msgid "Spell"
 msgstr ""
 
 # unknown
@@ -1763,7 +1782,7 @@ msgid "Toggle Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:182
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:421
 msgid "Toggle Remind"
 msgstr ""
 
@@ -1784,7 +1803,7 @@ msgstr "啟用停用切換鍵"
 msgid "Toggle the word hint"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:341
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:344
 msgid "Too long item for AutoEng"
 msgstr "自動英文條目過長"
 
@@ -1797,9 +1816,7 @@ msgid "TraditionalChinese"
 msgstr "正體中文"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
-msgid ""
-"Treating abbreviated Pinyin as English (useful when you hardly ever use "
-"abbreviated pinyin.)"
+msgid "Treating abbreviated Pinyin as English"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:4
@@ -1880,7 +1897,7 @@ msgstr "對 XIM 使用 On The Spot 風格（無法在執行時切換）"
 msgid "Use Pinyin"
 msgstr "使用拼音"
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:32
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
 msgstr "使用系統匣圖示"
 
@@ -1901,7 +1918,7 @@ msgid "Use extra trigger key only after using it to inactivate"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
 msgid "Use remind"
 msgstr ""
 
@@ -1917,7 +1934,7 @@ msgstr "使用者定義"
 msgid "User Phrase Color"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:46
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:53
 msgid "Vertical Candidate Word List"
 msgstr "垂直候選字清單"
 
@@ -2019,7 +2036,7 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:395
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:396
 msgid "pthread mutex init failed"
 msgstr ""
 
