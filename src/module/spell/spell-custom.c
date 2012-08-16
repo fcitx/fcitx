@@ -88,6 +88,20 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
 #define INSERT_WEIGHT 3
 #define REMOVE_WEIGHT 3
 #define END_WEIGHT 1
+    /*
+     * three kinds of error, replace, insert and remove
+     * replace means apple vs aplle
+     * insert means apple vs applee
+     * remove means apple vs aple
+     *
+     * each error need to follow a correct match.
+     *
+     * number of "remove error" shoud be no more than "maxremove"
+     * while maxremove equals to (length - 2) / 3
+     *
+     * and the total error number should be no more than "maxdiff"
+     * while maxdiff equales to length / 3.
+     */
     int word_len;
     int replace = 0;
     int insert = 0;
@@ -106,7 +120,8 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     dict = fcitx_utf8_get_char(dict, &cur_dict_c);
     while ((diff = replace + insert + remove) <= maxdiff &&
            remove <= maxremove) {
-        /* cur_word_c and cur_dict_c are the current characters
+        /*
+         * cur_word_c and cur_dict_c are the current characters
          * and dict and word are pointing to the next one.
          */
         if (!cur_word_c) {
@@ -116,6 +131,8 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
                      (fcitx_utf8_strlen(dict) + 1) * END_WEIGHT : 0));
         }
         word = fcitx_utf8_get_char(word, &next_word_c);
+
+        /* check remove error */
         if (!cur_dict_c) {
             if (next_word_c) {
                 return -1;
@@ -142,6 +159,8 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
             remove++;
             continue;
         }
+
+        /* check insert error */
         if (cur_word_c == next_dict_c || !custom_dict->word_comp_func ||
             custom_dict->word_comp_func(cur_word_c, next_dict_c)) {
             cur_word_c = next_word_c;
@@ -149,6 +168,8 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
             insert++;
             continue;
         }
+
+        /* check replace error */
         if (next_word_c == next_dict_c || !custom_dict->word_comp_func ||
             custom_dict->word_comp_func(next_word_c, next_dict_c)) {
             dict = fcitx_utf8_get_char(dict, &cur_dict_c);
