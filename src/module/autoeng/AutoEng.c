@@ -50,6 +50,7 @@ typedef struct {
     FcitxGenericConfig gconfig;
     AutoEngChooseModifier chooseModifier;
     boolean disableSpell;
+    boolean maxHintLength;
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {
@@ -73,6 +74,7 @@ static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
 CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);
 CONFIG_BINDING_REGISTER("Auto English", "DisableSpell", disableSpell);
+CONFIG_BINDING_REGISTER("Auto English", "MaximumHintLength", maxHintLength);
 CONFIG_BINDING_END();
 
 /**
@@ -379,16 +381,14 @@ static void
 AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
 {
     FcitxModuleFunctionArg func_arg;
-    FcitxGlobalConfig* config;
     FcitxCandidateWordList *candList;
     if (autoEngState->config.disableSpell)
         return;
-    config = FcitxInstanceGetGlobalConfig(autoEngState->owner);
 
     func_arg.args[0] = NULL;
     func_arg.args[1] = autoEngState->buf;
     func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
+    func_arg.args[3] = (void*)(long)autoEngState->config.maxHintLength;
     func_arg.args[4] = "en";
     func_arg.args[5] = "cus";
     func_arg.args[6] = NULL;

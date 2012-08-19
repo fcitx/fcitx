@@ -14,5 +14,14 @@ Type=Boolean
 DefaultValue=False
 Advance=True
 
+[Auto English/MaximumHintLength]
+Type=Integer
+DefaultValue=2
+Min=1
+Max=10
+Description=Maximum hint length
+LongDescription=Maximum length of spell hint list for Auto English
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx
