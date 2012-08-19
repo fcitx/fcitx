@@ -81,8 +81,8 @@ SpellCustomInit(FcitxSpell *spell)
 }
 
 static int
-SpellCustomGetDistance(SpellCustomDict *custom_dict,
-                       const char *word, const char *dict)
+SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
+                       const char *dict, int word_len)
 {
 #define REPLACE_WEIGHT 3
 #define INSERT_WEIGHT 3
@@ -102,7 +102,6 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
      * and the total error number should be no more than "maxdiff"
      * while maxdiff equales to length / 3.
      */
-    int word_len;
     int replace = 0;
     int insert = 0;
     int remove = 0;
@@ -113,7 +112,6 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     unsigned int cur_dict_c;
     unsigned int next_word_c;
     unsigned int next_dict_c;
-    word_len = fcitx_utf8_strlen(word);
     maxdiff = word_len / 3;
     maxremove = (word_len - 2) / 3;
     word = fcitx_utf8_get_char(word, &cur_word_c);
@@ -202,6 +200,7 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     int prefix_len = 0;
     const char *real_word;
     SpellHint *res;
+    int word_len;
     if (!SpellCustomCheck(spell))
         return NULL;
     if (!*spell->current_str)
@@ -220,10 +219,11 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
         return NULL;
     if (dict->word_check_func)
         word_type = dict->word_check_func(real_word);
+    word_len = fcitx_utf8_strlen(real_word);
     for (i = 0;i < dict->words_count;i++) {
         int dist;
         if ((dist = SpellCustomGetDistance(dict, real_word,
-                                           dict->words[i])) >= 0) {
+                                           dict->words[i], word_len)) >= 0) {
             int j = num;
             clist[j].word = dict->words[i];
             clist[j].dist = dist;
