@@ -63,11 +63,16 @@ typedef enum {
     QPCM_SHIFT,
 } QuickPhraseChooseModifier;
 
-typedef struct _QuickPhraseState {
+typedef struct {
     FcitxGenericConfig gconfig;
     FcitxHotkey alternativeTriggerKey[2];
     QuickPhraseTriggerKey triggerKey;
     QuickPhraseChooseModifier chooseModifier;
+    boolean disableSpell;
+} QuickPhraseConfig;
+
+typedef struct {
+    QuickPhraseConfig config;
     unsigned int uQuickPhraseCount;
     UT_array *quickPhrases ;
     boolean enabled;
@@ -78,11 +83,11 @@ typedef struct _QuickPhraseState {
     boolean append;
 } QuickPhraseState;
 
-typedef struct _QuickPhraseCand {
+typedef struct {
     QUICK_PHRASE* cand;
 } QuickPhraseCand;
 
-static void * QuickPhraseCreate(FcitxInstance *instance);
+static void *QuickPhraseCreate(FcitxInstance *instance);
 static void LoadQuickPhrase(QuickPhraseState* qpstate);
 static void FreeQuickPhrase(void* arg);
 static void ReloadQuickPhrase(void* arg);
@@ -92,8 +97,8 @@ static UT_icd qp_icd = {sizeof(QUICK_PHRASE), NULL, NULL, NULL};
 static void ShowQuickPhraseMessage(QuickPhraseState *qpstate);
 static INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWord);
 static INPUT_RETURN_VALUE QuickPhraseGetLuaCandWord(void* arg, FcitxCandidateWord* candWord);
-static boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate);
-static void SaveQuickPhraseConfig(QuickPhraseState* qpstate);
+static boolean LoadQuickPhraseConfig(QuickPhraseConfig *qpconfig);
+static void SaveQuickPhraseConfig(QuickPhraseConfig *qpconfig);
 static boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                                      unsigned int state,
                                      INPUT_RETURN_VALUE *retval
@@ -132,11 +137,12 @@ static const unsigned int cmodtable[] = {
     FcitxKeyState_Shift
 };
 
-CONFIG_BINDING_BEGIN(QuickPhraseState)
+CONFIG_BINDING_BEGIN(QuickPhraseConfig)
 CONFIG_BINDING_REGISTER("QuickPhrase", "QuickPhraseTriggerKey", triggerKey)
 CONFIG_BINDING_REGISTER("QuickPhrase", "AlternativeTriggerKey",
                         alternativeTriggerKey)
 CONFIG_BINDING_REGISTER("QuickPhrase", "ChooseModifier", chooseModifier)
+CONFIG_BINDING_REGISTER("QuickPhrase", "DisableSpell", disableSpell)
 CONFIG_BINDING_END()
 
 int PhraseCmp(const void* a, const void* b)
@@ -162,7 +168,7 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     qpstate->owner = instance;
     qpstate->enabled = false;
 
-    if (!LoadQuickPhraseConfig(qpstate)) {
+    if (!LoadQuickPhraseConfig(&qpstate->config)) {
         free(qpstate);
         return NULL;
     }
@@ -419,22 +425,23 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
         && qpstate->buffer[0] == '\0'
         && FcitxInputStateGetRawInputBufferSize(input) == 0
         ) {
-        if (!disableQuickPhrase && FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
-            qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->triggerKey][0];
+        if (!disableQuickPhrase &&
+            FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->config.triggerKey])) {
+            qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->config.triggerKey][0];
             qpstate->useDupKeyInput = true;
         }
         else if (
             (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state) ) &&
-            FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[0].sym, qpstate->alternativeTriggerKey[0].state)
+            FcitxHotkeyIsKey(sym, state, qpstate->config.alternativeTriggerKey[0].sym, qpstate->config.alternativeTriggerKey[0].state)
             ) {
-            qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[0];
+            qpstate->curTriggerKey[0] = qpstate->config.alternativeTriggerKey[0];
             qpstate->useDupKeyInput = true;
         }
         else if (
             (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state)) &&
-            FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[1].sym, qpstate->alternativeTriggerKey[1].state)
+            FcitxHotkeyIsKey(sym, state, qpstate->config.alternativeTriggerKey[1].sym, qpstate->config.alternativeTriggerKey[1].state)
             ) {
-            qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[1];
+            qpstate->curTriggerKey[0] = qpstate->config.alternativeTriggerKey[1];
             qpstate->useDupKeyInput = true;
         }
 
@@ -498,6 +505,8 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     FcitxCandidateWordList *cand_list;
     FcitxCandidateWordList *new_list;
     FcitxModuleFunctionArg func_arg;
+    if (qpstate->config.disableSpell)
+        return;
     input = FcitxInstanceGetInputState(qpstate->owner);
     cand_list = FcitxInputStateGetCandidateList(input);
     int space_left = (FcitxCandidateWordGetPageSize(cand_list)
@@ -547,7 +556,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
     FcitxCandidateWordSetChooseAndModifier(
-        candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->chooseModifier]);
+        candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->config.chooseModifier]);
 
     pKey = &searchKey;
 
@@ -608,7 +617,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 void ReloadQuickPhrase(void* arg)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
-    LoadQuickPhraseConfig(qpstate);
+    LoadQuickPhraseConfig(&qpstate->config);
     FreeQuickPhrase(arg);
     LoadQuickPhrase(qpstate);
 }
@@ -639,7 +648,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWord(void* arg, FcitxCandidateWord* candWor
 
 CONFIG_DESC_DEFINE(GetQuickPhraseConfigDesc, "fcitx-quickphrase.desc")
 
-boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate)
+boolean LoadQuickPhraseConfig(QuickPhraseConfig *qpconfig)
 {
     FcitxConfigFileDesc* configDesc = GetQuickPhraseConfigDesc();
     if (configDesc == NULL)
@@ -647,20 +656,22 @@ boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate)
 
     FILE *fp;
     char *file;
-    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "r", &file);
+    fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config",
+                                       "r", &file);
     FcitxLog(DEBUG, "Load Config File %s", file);
     free(file);
     if (!fp) {
-        if (errno == ENOENT)
-            SaveQuickPhraseConfig(qpstate);
+        if (errno == ENOENT) {
+            SaveQuickPhraseConfig(qpconfig);
+        }
     }
 
     FcitxConfigFile *cfile = FcitxConfigParseConfigFileFp(fp, configDesc);
 
-    QuickPhraseStateConfigBind(qpstate, cfile, configDesc);
-    FcitxConfigBindSync((FcitxGenericConfig*)qpstate);
-    if (qpstate->chooseModifier > QPCM_CTRL)
-        qpstate->chooseModifier = QPCM_CTRL;
+    QuickPhraseConfigConfigBind(qpconfig, cfile, configDesc);
+    FcitxConfigBindSync(&qpconfig->gconfig);
+    if (qpconfig->chooseModifier > QPCM_CTRL)
+        qpconfig->chooseModifier = QPCM_CTRL;
 
     if (fp)
         fclose(fp);
@@ -668,17 +679,17 @@ boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate)
     return true;
 }
 
-void SaveQuickPhraseConfig(QuickPhraseState* qpstate)
+void SaveQuickPhraseConfig(QuickPhraseConfig* qpconfig)
 {
     FcitxConfigFileDesc* configDesc = GetQuickPhraseConfigDesc();
     char *file;
-    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config", "w", &file);
+    FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-quickphrase.config",
+                                             "w", &file);
     FcitxLog(DEBUG, "Save Config to %s", file);
-    FcitxConfigSaveConfigFileFp(fp, &qpstate->gconfig, configDesc);
+    FcitxConfigSaveConfigFileFp(fp, &qpconfig->gconfig, configDesc);
     free(file);
     if (fp)
         fclose(fp);
 }
-
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

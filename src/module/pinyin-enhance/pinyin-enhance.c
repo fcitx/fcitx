@@ -88,6 +88,7 @@ typedef struct {
     FcitxGenericConfig gconfig;
     boolean short_as_english;
     boolean allow_replace_first;
+    boolean disable_spell;
 } PinyinEnhanceConfig;
 
 typedef struct {
@@ -105,6 +106,7 @@ CONFIG_BINDING_BEGIN(PinyinEnhanceConfig)
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
 CONFIG_BINDING_END()
 
 CONFIG_DEFINE_LOAD_AND_SAVE(PinyinEnhance, PinyinEnhanceConfig,
@@ -186,7 +188,7 @@ PinyinEnhanceMergeCandList(FcitxCandidateWordList *candList,
 }
 
 static boolean
-PinyinEnhanceGetCandWords(PinyinEnhance *pyenhance, const char *string,
+PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
                           int position, int len_limit)
 {
     FcitxInstance *instance = pyenhance->owner;
@@ -279,6 +281,8 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     boolean res = false;
     FcitxCandidateWordList *cand_list;
     FcitxCandidateWord *cand_word;
+    if (pyenhance->config.disable_spell)
+        return false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
     string = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
     pinyin = fcitx_utils_get_ascii_part(string);
@@ -333,7 +337,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if (!cand_word || !cand_word->strWord || !*cand_word->strWord
         || isascii(cand_word->strWord[0])) {
         len_limit = FcitxCandidateWordGetPageSize(cand_list) - 1;
-        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, 0, len_limit);
+        res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 0, len_limit);
         goto out;
     } else {
         int page_size = FcitxCandidateWordGetPageSize(cand_list);
@@ -369,12 +373,13 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
                 break;
         }
         if (py_invalid || (py_short && pyenhance->config.short_as_english)) {
-            res = PinyinEnhanceGetCandWords(pyenhance, pinyin,
+            res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin,
                                             eng_ness > 10 ? 0 : 1, len_limit);
             goto out;
         }
         if (eng_ness > 10) {
-            res = PinyinEnhanceGetCandWords(pyenhance, pinyin, 1, len_limit);
+            res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin,
+                                                 1, len_limit);
             goto out;
         }
     }
@@ -382,11 +387,11 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if ((letters >= 4) &&
         (spaces * 2 > letters ||
          (spaces * 3 >= letters && vowels * 3 >= letters))) {
-        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, 1, len_limit);
+        res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 1, len_limit);
         goto out;
     }
     if (len_limit > 0) {
-        res = PinyinEnhanceGetCandWords(pyenhance, pinyin, 2, len_limit);
+        res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 2, len_limit);
         goto out;
     }
 out:

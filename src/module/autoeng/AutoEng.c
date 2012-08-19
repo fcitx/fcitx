@@ -49,6 +49,7 @@ typedef enum {
 typedef struct {
     FcitxGenericConfig gconfig;
     AutoEngChooseModifier chooseModifier;
+    boolean disableSpell;
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {
@@ -71,6 +72,7 @@ static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 
 CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
 CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);
+CONFIG_BINDING_REGISTER("Auto English", "DisableSpell", disableSpell);
 CONFIG_BINDING_END();
 
 /**
@@ -98,14 +100,12 @@ static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
 static boolean PreInputProcessAutoEng(void* arg,
                                       FcitxKeySym sym,
                                       unsigned int state,
-                                      INPUT_RETURN_VALUE *retval
-                                     );
+                                      INPUT_RETURN_VALUE *retval);
 
 static boolean PostInputProcessAutoEng(void* arg,
-                                      FcitxKeySym sym,
-                                      unsigned int state,
-                                      INPUT_RETURN_VALUE *retval
-                                     );
+                                       FcitxKeySym sym,
+                                       unsigned int state,
+                                       INPUT_RETURN_VALUE *retval);
 
 /**
  * clean the cache while reset input
@@ -262,7 +262,7 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         return false;
     if (FcitxHotkeyIsHotKeyUAZ(sym, state)
         && (FcitxInputStateGetRawInputBufferSize(input) != 0
-        || (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0)) {
+            || (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0)) {
         *retval = IRV_DISPLAY_MESSAGE;
         FcitxInputStateSetShowCursor(input, false);
         strncpy(autoEngState->buf, FcitxInputStateGetRawInputBuffer(input), MAX_USER_INPUT);
@@ -367,8 +367,8 @@ boolean SwitchToEng(FcitxAutoEngState* autoEngState, char *str)
 {
     AUTO_ENG*       autoeng;
     for (autoeng = (AUTO_ENG *) utarray_front(autoEngState->autoEng);
-            autoeng != NULL;
-            autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
+         autoeng != NULL;
+         autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
         if (!strcmp(str, autoeng->str))
             return true;
 
@@ -376,15 +376,44 @@ boolean SwitchToEng(FcitxAutoEngState* autoEngState, char *str)
 }
 
 static void
+AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
+{
+    FcitxModuleFunctionArg func_arg;
+    FcitxGlobalConfig* config;
+    FcitxCandidateWordList *candList;
+    if (autoEngState->config.disableSpell)
+        return;
+    config = FcitxInstanceGetGlobalConfig(autoEngState->owner);
+
+    func_arg.args[0] = NULL;
+    func_arg.args[1] = autoEngState->buf;
+    func_arg.args[2] = NULL;
+    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
+    func_arg.args[4] = "en";
+    func_arg.args[5] = "cus";
+    func_arg.args[6] = NULL;
+    func_arg.args[7] = NULL;
+    candList = InvokeFunction(autoEngState->owner, FCITX_SPELL,
+                              GET_CANDWORDS, func_arg);
+    if (candList) {
+        FcitxInputState *input = FcitxInstanceGetInputState(autoEngState->owner);
+        FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);
+        FcitxCandidateWordSetChooseAndModifier(
+            iList, DIGIT_STR_CHOOSE,
+            cmodtable[autoEngState->config.chooseModifier]);
+        FcitxCandidateWordMerge(iList, candList, -1);
+        FcitxCandidateWordFreeList(candList);
+    }
+}
+
+static void
 ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
 {
     FcitxInputState* input = FcitxInstanceGetInputState(autoEngState->owner);
-    FcitxGlobalConfig* config;
     FcitxInstanceCleanInputWindow(autoEngState->owner);
     if (autoEngState->buf[0] == '\0')
         return;
 
-    config = FcitxInstanceGetGlobalConfig(autoEngState->owner);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input),
                                   MSG_INPUT, "%s", autoEngState->buf);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
@@ -397,26 +426,7 @@ ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
         input, FcitxInputStateGetRawInputBufferSize(input));
     FcitxInputStateSetShowCursor(input, true);
 
-    FcitxModuleFunctionArg func_arg;
-    func_arg.args[0] = NULL;
-    func_arg.args[1] = autoEngState->buf;
-    func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
-    func_arg.args[4] = "en";
-    func_arg.args[5] = "cus";
-    func_arg.args[6] = NULL;
-    func_arg.args[7] = NULL;
-    FcitxCandidateWordList *candList =
-        InvokeFunction(autoEngState->owner, FCITX_SPELL,
-                       GET_CANDWORDS, func_arg);
-    if (candList) {
-        FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);
-        FcitxCandidateWordSetChooseAndModifier(
-            iList, DIGIT_STR_CHOOSE,
-            cmodtable[autoEngState->config.chooseModifier]);
-        FcitxCandidateWordMerge(iList, candList, -1);
-        FcitxCandidateWordFreeList(candList);
-    }
+    AutoEngGetSpellHint(autoEngState);
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input),
                                   MSG_TIPS, _("Press Enter to input text"));
     *retval |= IRV_FLAG_UPDATE_INPUT_WINDOW;

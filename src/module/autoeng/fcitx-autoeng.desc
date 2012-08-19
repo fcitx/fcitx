@@ -8,5 +8,11 @@ Enum1=Alt
 Enum2=Ctrl
 Enum3=Shift
 
+[Auto English/DisableSpell]
+Description=Do not show spell hint
+Type=Boolean
+DefaultValue=False
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx
