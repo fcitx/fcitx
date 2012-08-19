@@ -205,6 +205,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
     SpellHint *res;
     if (!SpellCustomCheck(spell))
         return NULL;
+    if (!*spell->current_str)
+        return NULL;
     word = spell->current_str;
     real_word = word;
     if (dict->delim && *dict->delim) {
@@ -215,6 +217,8 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
         }
         prefix_len = prefix ? real_word - prefix : 0;
     }
+    if (!*real_word)
+        return NULL;
     if (dict->word_check_func)
         word_type = dict->word_check_func(real_word);
     for (i = 0;i < dict->words_count;i++) {

@@ -110,6 +110,8 @@ SpellEnchantHintWords(FcitxSpell *spell, unsigned int len_limit)
         return NULL;
     char **suggestions = NULL;
     size_t number = 0;
+    if (!*spell->current_str)
+        return NULL;
     suggestions = _enchant_dict_suggest(spell->enchant_dict, spell->current_str,
                                         strlen(spell->current_str), &number);
     if (!suggestions)

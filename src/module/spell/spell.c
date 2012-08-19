@@ -388,6 +388,8 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
     spell->before_str = before_str ? before_str : "";
     spell->current_str = current_str ? current_str : "";
     spell->after_str = after_str ? after_str : "";
+    if (!(*spell->before_str || *spell->current_str || *spell->after_str))
+        return NULL;
     while (true) {
         iter = SpellParseNextProvider(iter, &name, &len);
         if (!name)
