@@ -602,7 +602,6 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     FcitxKeyboard* keyboard = layout->owner;
     FcitxInstance* instance = keyboard->owner;
     FcitxInputState* input = FcitxInstanceGetInputState(instance);
-    FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     if (keyboard->buffer[0] == '\0')
         return IRV_CLEAN;
 
@@ -611,7 +610,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     if (keyboard->config.chooseModifier > CM_CTRL)
         keyboard->config.chooseModifier = CM_CTRL;
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input),
-                                  config->iMaxCandWord);
+                                  keyboard->config.maximumHintLength);
     FcitxCandidateWordSetChooseAndModifier(
         FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE,
         cmodtable[keyboard->config.chooseModifier]);
@@ -632,7 +631,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     func_arg.args[0] = NULL;
     func_arg.args[1] = keyboard->buffer;
     func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)config->iMaxCandWord;
+    func_arg.args[3] = (void*)(long)keyboard->config.maximumHintLength;
     func_arg.args[4] = keyboard->dictLang;
     func_arg.args[5] = NULL;
     func_arg.args[6] = FcitxKeyboardGetCandWordCb;

@@ -21,7 +21,17 @@ Description=Toggle the word hint
 [Keyboard/MinimumHintLength]
 Type=Integer
 DefaultValue=1
-Description=Minimum Length to trigger word hint
+Min=0
+Description=Minimum length to trigger word hint
+
+[Keyboard/MaximumHintLength]
+Type=Integer
+DefaultValue=5
+Min=1
+Max=10
+Description=Maximum length of spell hint list
+LongDescription=A different value from the global one may be useful when using horizontal candidate list
+Advance=True
 
 [Keyboard/UseEnterToCommit]
 Type=Boolean

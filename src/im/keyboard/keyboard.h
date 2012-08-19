@@ -47,6 +47,7 @@ typedef struct _FcitxKeyboardConfig {
     FcitxHotkey hkToggleWordHint[2];
     FcitxHotkey hkAddToUserDict[2];
     int minimumHintLength;
+    int maximumHintLength;
     ChooseModifier chooseModifier;
 } FcitxKeyboardConfig;
 
