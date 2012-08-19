@@ -28,5 +28,14 @@ Type=Boolean
 DefaultValue=False
 Advance=True
 
+[QuickPhrase/MaximumHintLength]
+Type=Integer
+DefaultValue=2
+Min=1
+Max=10
+Description=Maximum hint length
+LongDescription=Maximum length of spell hint list for Quick Phrase
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx

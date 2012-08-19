@@ -68,6 +68,7 @@ typedef struct {
     FcitxHotkey alternativeTriggerKey[2];
     QuickPhraseTriggerKey triggerKey;
     QuickPhraseChooseModifier chooseModifier;
+    int maxHintLength;
     boolean disableSpell;
 } QuickPhraseConfig;
 
@@ -143,6 +144,7 @@ CONFIG_BINDING_REGISTER("QuickPhrase", "AlternativeTriggerKey",
                         alternativeTriggerKey)
 CONFIG_BINDING_REGISTER("QuickPhrase", "ChooseModifier", chooseModifier)
 CONFIG_BINDING_REGISTER("QuickPhrase", "DisableSpell", disableSpell)
+CONFIG_BINDING_REGISTER("QuickPhrase", "MaximumHintLength", maxHintLength)
 CONFIG_BINDING_END()
 
 int PhraseCmp(const void* a, const void* b)
@@ -511,7 +513,10 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     cand_list = FcitxInputStateGetCandidateList(input);
     int space_left = (FcitxCandidateWordGetPageSize(cand_list)
                       - FcitxCandidateWordGetListSize(cand_list));
-
+    if (space_left <= 0)
+        return;
+    if (space_left > qpstate->config.maxHintLength)
+        space_left = qpstate->config.maxHintLength;
     char c[2];
     QuickPhraseFillKeyString(qpstate, c);
     char* search;
@@ -519,11 +524,9 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     if (qpstate->append) {
         asprintf(&search, "%s%s", c, qpstate->buffer);
         needfree = search;
-    }
-    else
+    } else {
         search = qpstate->buffer;
-    if (space_left <= 0)
-        return;
+    }
     func_arg.args[0] = NULL;
     func_arg.args[1] = search;
     func_arg.args[2] = NULL;

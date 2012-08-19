@@ -1145,7 +1145,7 @@ msgid "Migrate the old file path to the new one"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
-msgid "Minimum Length to trigger word hint"
+msgid "Minimum length to trigger word hint"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:53
