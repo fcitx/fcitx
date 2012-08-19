@@ -12,5 +12,15 @@ Type=Hotkey
 DefaultValue=
 Description=Alternative Trigger Key for QuickPhrase
 
+[QuickPhrase/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=None
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
 [DescriptionFile]
 LocaleDomain=fcitx

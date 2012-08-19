@@ -46,21 +46,28 @@
 #define QUICKPHRASE_CODE_LEN    20
 #define QUICKPHRASE_PHRASE_LEN  40
 
-typedef struct _QUICK_PHRASE {
+typedef struct {
     char strCode[QUICKPHRASE_CODE_LEN + 1];
     char strPhrase[QUICKPHRASE_PHRASE_LEN * UTF8_MAX_LENGTH + 1];
 } QUICK_PHRASE;
 
-typedef enum _QuickPhraseTriggerKey
-{
+typedef enum {
     QPTK_Semicolon,
     QPTK_Grave,
 } QuickPhraseTriggerKey;
+
+typedef enum {
+    QPCM_NONE,
+    QPCM_ALT,
+    QPCM_CTRL,
+    QPCM_SHIFT,
+} QuickPhraseChooseModifier;
 
 typedef struct _QuickPhraseState {
     FcitxGenericConfig gconfig;
     FcitxHotkey alternativeTriggerKey[2];
     QuickPhraseTriggerKey triggerKey;
+    QuickPhraseChooseModifier chooseModifier;
     unsigned int uQuickPhraseCount;
     UT_array *quickPhrases ;
     boolean enabled;
@@ -90,11 +97,11 @@ static void SaveQuickPhraseConfig(QuickPhraseState* qpstate);
 static boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                                      unsigned int state,
                                      INPUT_RETURN_VALUE *retval
-                                    );
+    );
 static boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
                                     unsigned int state,
                                     INPUT_RETURN_VALUE *retval
-                                   );
+    );
 static void QuickPhraseReset(void* arg);
 static void* QuickPhraseLaunch(void* arg, FcitxModuleFunctionArg args);
 static void _QuickPhraseLaunch(QuickPhraseState* qpstate);
@@ -118,9 +125,18 @@ static const FcitxHotkey* QuickPhraseTriggerKeys[] = {
     FCITX_QP_GRACE
 };
 
+static const unsigned int cmodtable[] = {
+    FcitxKeyState_None,
+    FcitxKeyState_Alt,
+    FcitxKeyState_Ctrl,
+    FcitxKeyState_Shift
+};
+
 CONFIG_BINDING_BEGIN(QuickPhraseState)
 CONFIG_BINDING_REGISTER("QuickPhrase", "QuickPhraseTriggerKey", triggerKey)
-CONFIG_BINDING_REGISTER("QuickPhrase", "AlternativeTriggerKey", alternativeTriggerKey)
+CONFIG_BINDING_REGISTER("QuickPhrase", "AlternativeTriggerKey",
+                        alternativeTriggerKey)
+CONFIG_BINDING_REGISTER("QuickPhrase", "ChooseModifier", chooseModifier)
 CONFIG_BINDING_END()
 
 int PhraseCmp(const void* a, const void* b)
@@ -169,8 +185,8 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     FcitxInstanceRegisterWatchableContext(instance, CONTEXT_DISABLE_QUICKPHRASE, FCT_Boolean, FCF_ResetOnInputMethodChange);
 
     FcitxAddon* addon = FcitxAddonsGetAddonByName(
-            FcitxInstanceGetAddons(instance),
-            FCITX_QUICKPHRASE_NAME);
+        FcitxInstanceGetAddons(instance),
+        FCITX_QUICKPHRASE_NAME);
     AddFunction(addon, QuickPhraseLaunch);
 
     return qpstate;
@@ -314,78 +330,83 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s%s", (qpstate->append) ? c : "", qpstate->buffer);
 }
 
-boolean QuickPhrasePreFilter(void* arg, FcitxKeySym sym,
+boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
                              unsigned int state,
-                             INPUT_RETURN_VALUE *retval
-                            )
+                             INPUT_RETURN_VALUE *retval)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
-    if (qpstate->enabled) {
-        char c[2];
-        QuickPhraseFillKeyString(qpstate, c);
-        FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
-        if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
-            *retval = QuickPhraseDoInput(qpstate, keymain, state);
-            if (*retval == IRV_TO_PROCESS) {
-                if (c[0] && strlen(qpstate->buffer) == 0
-                    && ((qpstate->useDupKeyInput && FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) || FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
-                    FcitxModuleFunctionArg farg;
-                    FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-                    farg.args[0] = &s;
-                    char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
-                    strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
-                    *retval = IRV_COMMIT_STRING;
-                } else {
-                    char buf[2];
-                    buf[0] = keymain;
-                    buf[1] = '\0';
-                    if (strlen(qpstate->buffer) < MAX_USER_INPUT)
-                        strcat(qpstate->buffer, buf);
-                    ShowQuickPhraseMessage(qpstate);
-                    *retval = QuickPhraseGetCandWords(qpstate);
-                }
-            } else
-                return true;
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
-            size_t len = strlen(qpstate->buffer);
-            if (len > 0)
-                qpstate->buffer[--len] = '\0';
-            if (len == 0) {
-                *retval = IRV_CLEAN;
-            } else {
-                ShowQuickPhraseMessage(qpstate);
-                *retval = QuickPhraseGetCandWords(qpstate);
-            }
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
-            if (strlen(qpstate->buffer) > 0) {
-                if (qpstate->append)
-                    sprintf(FcitxInputStateGetOutputString(input), "%s%s", c, qpstate->buffer);
-                else
-                    strcpy(FcitxInputStateGetOutputString(input), qpstate->buffer);
-                QuickPhraseReset(qpstate);
-                *retval = IRV_COMMIT_STRING;
-            } else {
-                strcpy(FcitxInputStateGetOutputString(input), c);
-                *retval = IRV_COMMIT_STRING;
-            }
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
-            *retval = IRV_CLEAN;
-        } else
-            *retval = IRV_DO_NOTHING;
-        if (*retval == IRV_DISPLAY_MESSAGE) {
-            FcitxMessagesSetMessageCount(FcitxInputStateGetAuxDown(input), 0);
-            if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0)
-                FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, "%s", _("Press Enter to input text"));
-        }
+    if (!qpstate->enabled)
+        return false;
+    char c[2];
+    QuickPhraseFillKeyString(qpstate, c);
+    FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
+    *retval = QuickPhraseDoInput(qpstate, keymain, state);
+    if (*retval != IRV_TO_PROCESS)
         return true;
+    if (FcitxHotkeyIsHotKeySimple(keymain, state)) {
+        if (c[0] && strlen(qpstate->buffer) == 0 &&
+            ((qpstate->useDupKeyInput &&
+              FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
+             FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
+            FcitxModuleFunctionArg farg;
+            FcitxKeySym s = qpstate->curTriggerKey[0].sym;
+            farg.args[0] = &s;
+            char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC,
+                                           GETPUNC, farg);
+            strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
+            *retval = IRV_COMMIT_STRING;
+        } else {
+            char buf[2];
+            buf[0] = keymain;
+            buf[1] = '\0';
+            if (strlen(qpstate->buffer) < MAX_USER_INPUT)
+                strcat(qpstate->buffer, buf);
+            ShowQuickPhraseMessage(qpstate);
+            *retval = QuickPhraseGetCandWords(qpstate);
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
+        size_t len = strlen(qpstate->buffer);
+        if (len > 0)
+            qpstate->buffer[--len] = '\0';
+        if (len == 0) {
+            *retval = IRV_CLEAN;
+        } else {
+            ShowQuickPhraseMessage(qpstate);
+            *retval = QuickPhraseGetCandWords(qpstate);
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+        if (strlen(qpstate->buffer) > 0) {
+            if (qpstate->append) {
+                sprintf(FcitxInputStateGetOutputString(input),
+                        "%s%s", c, qpstate->buffer);
+            } else {
+                strcpy(FcitxInputStateGetOutputString(input),
+                       qpstate->buffer);
+            }
+            QuickPhraseReset(qpstate);
+            *retval = IRV_COMMIT_STRING;
+        } else {
+            strcpy(FcitxInputStateGetOutputString(input), c);
+            *retval = IRV_COMMIT_STRING;
+        }
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+        *retval = IRV_CLEAN;
+    } else {
+        *retval = IRV_DO_NOTHING;
     }
-    return false;
+    if (*retval == IRV_DISPLAY_MESSAGE) {
+        FcitxMessagesSetMessageCount(FcitxInputStateGetAuxDown(input), 0);
+        if (!FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)))
+            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input),
+                                          MSG_TIPS, "%s",
+                                          _("Press Enter to input text"));
+    }
+    return true;
 }
 boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
                               unsigned int state,
-                              INPUT_RETURN_VALUE *retval
-                             )
+                              INPUT_RETURN_VALUE *retval)
 {
     QuickPhraseState *qpstate = (QuickPhraseState*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
@@ -397,7 +418,7 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
     if (!qpstate->enabled
         && qpstate->buffer[0] == '\0'
         && FcitxInputStateGetRawInputBufferSize(input) == 0
-    ) {
+        ) {
         if (!disableQuickPhrase && FcitxHotkeyIsHotKey(sym, state, QuickPhraseTriggerKeys[qpstate->triggerKey])) {
             qpstate->curTriggerKey[0] = QuickPhraseTriggerKeys[qpstate->triggerKey][0];
             qpstate->useDupKeyInput = true;
@@ -405,14 +426,14 @@ boolean QuickPhrasePostFilter(void* arg, FcitxKeySym sym,
         else if (
             (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state) ) &&
             FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[0].sym, qpstate->alternativeTriggerKey[0].state)
-        ) {
+            ) {
             qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[0];
             qpstate->useDupKeyInput = true;
         }
         else if (
             (!disableQuickPhrase || !FcitxHotkeyIsHotKeySimple(sym, state)) &&
             FcitxHotkeyIsKey(sym, state, qpstate->alternativeTriggerKey[1].sym, qpstate->alternativeTriggerKey[1].state)
-        ) {
+            ) {
             qpstate->curTriggerKey[0] = qpstate->alternativeTriggerKey[1];
             qpstate->useDupKeyInput = true;
         }
@@ -517,14 +538,16 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     int iInputLen;
     QUICK_PHRASE searchKey, *pKey, *currentQuickPhrase, *lastQuickPhrase;
     FcitxInputState *input = FcitxInstanceGetInputState(qpstate->owner);
+    FcitxCandidateWordList *candList = FcitxInputStateGetCandidateList(input);
     FcitxInstance *instance = qpstate->owner;
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     int iLastQuickPhrase;
     int iFirstQuickPhrase;
     FcitxInstanceCleanInputWindowDown(qpstate->owner);
 
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
-    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
+    FcitxCandidateWordSetChooseAndModifier(
+        candList, DIGIT_STR_CHOOSE, cmodtable[qpstate->chooseModifier]);
 
     pKey = &searchKey;
 
@@ -558,16 +581,18 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
         for (currentQuickPhrase = (QUICK_PHRASE*)utarray_eltptr(qpstate->quickPhrases,
                                                                 iFirstQuickPhrase);
-                currentQuickPhrase != NULL;
-                currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
-            if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode, iInputLen)) {
-                QuickPhraseCand* qpcand = fcitx_utils_malloc0(sizeof(QuickPhraseCand));
+             currentQuickPhrase != NULL;
+             currentQuickPhrase = (QUICK_PHRASE*) utarray_next(qpstate->quickPhrases, currentQuickPhrase)) {
+            if (!strncmp(qpstate->buffer, currentQuickPhrase->strCode,
+                         iInputLen)) {
+                QuickPhraseCand *qpcand = fcitx_utils_new(QuickPhraseCand);
                 qpcand->cand = currentQuickPhrase;
                 FcitxCandidateWord candWord;
                 candWord.callback = QuickPhraseGetCandWord;
                 candWord.owner = qpstate;
                 candWord.priv = qpcand;
-                candWord.strExtra = strdup(currentQuickPhrase->strCode + iInputLen);
+                candWord.strExtra = strdup(currentQuickPhrase->strCode +
+                                           iInputLen);
                 candWord.strWord = strdup(currentQuickPhrase->strPhrase);
                 candWord.wordType = MSG_OTHER;
                 candWord.extraType = MSG_CODE;
@@ -634,6 +659,8 @@ boolean LoadQuickPhraseConfig(QuickPhraseState* qpstate)
 
     QuickPhraseStateConfigBind(qpstate, cfile, configDesc);
     FcitxConfigBindSync((FcitxGenericConfig*)qpstate);
+    if (qpstate->chooseModifier > QPCM_CTRL)
+        qpstate->chooseModifier = QPCM_CTRL;
 
     if (fp)
         fclose(fp);

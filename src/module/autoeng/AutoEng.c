@@ -64,7 +64,8 @@ static const unsigned int cmodtable[] = {
     FcitxKeyState_None,
     FcitxKeyState_Alt,
     FcitxKeyState_Ctrl,
-    FcitxKeyState_Shift};
+    FcitxKeyState_Shift
+};
 
 static const UT_icd autoeng_icd = { sizeof(AUTO_ENG), 0, 0, 0 };
 
