@@ -327,7 +327,7 @@ SpellParseNextProvider(const char *str, const char **name, int *len)
     return p + 1;
 }
 
-static SpellHintProvider hint_provider[] = {
+static const SpellHintProvider hint_provider[] = {
 #ifdef ENABLE_ENCHANT
     {"enchant", "en", SpellEnchantHintWords, SpellEnchantCheck},
 #endif
@@ -338,7 +338,7 @@ static SpellHintProvider hint_provider[] = {
     {NULL, NULL, NULL, NULL}
 };
 
-static SpellHintProvider*
+static const SpellHintProvider*
 SpellFindHintProvider(const char *str, int len)
 {
     int i;
@@ -380,7 +380,7 @@ SpellGetSpellHintWords(FcitxSpell *spell, const char *before_str,
                        const char *providers)
 {
     SpellHint *res = NULL;
-    SpellHintProvider *hint_provider;
+    const SpellHintProvider *hint_provider;
     const char *iter = providers ? providers : spell->provider_order;
     const char *name = NULL;
     int len = 0;
@@ -459,7 +459,7 @@ FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args)
     const char *lang = args.args[0];
     const char *providers = args.args[1];
     const char *iter = providers ? providers : spell->provider_order;
-    SpellHintProvider *hint_provider;
+    const SpellHintProvider *hint_provider;
     const char *name = NULL;
     int len = 0;
     SpellSetLang(spell, lang);

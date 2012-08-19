@@ -182,6 +182,7 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict,
     return -1;
 }
 
+// TODO add frequency
 static int
 SpellCustomCWordCompare(const void *a, const void *b)
 {
@@ -191,9 +192,7 @@ SpellCustomCWordCompare(const void *a, const void *b)
 SpellHint*
 SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
 {
-    int list_len = len_limit * 3;
-    list_len = list_len >= 24 ? list_len : 24;
-    SpellCustomCWord clist[list_len];
+    SpellCustomCWord clist[len_limit + 1];
     int i;
     int num = 0;
     int word_type = 0;
@@ -225,15 +224,22 @@ SpellCustomHintWords(FcitxSpell *spell, unsigned int len_limit)
         int dist;
         if ((dist = SpellCustomGetDistance(dict, real_word,
                                            dict->words[i])) >= 0) {
-            clist[num].word = dict->words[i];
-            clist[num].dist = dist;
-            if (++num >= list_len)
+            int j = num;
+            clist[j].word = dict->words[i];
+            clist[j].dist = dist;
+            if (num < len_limit)
+                num++;
+            for (;j > 0;j--) {
+                if (SpellCustomCWordCompare(clist + j - 1, clist + j) > 0) {
+                    SpellCustomCWord tmp = clist[j];
+                    clist[j] = clist[j - 1];
+                    clist[j - 1] = tmp;
+                    continue;
+                }
                 break;
+            }
         }
     }
-    qsort((void*)clist, num, sizeof(SpellCustomCWord),
-          SpellCustomCWordCompare);
-    num = num > len_limit ? len_limit : num;
     res = SpellHintListWithPrefix(num, prefix, prefix_len,
                                   &clist->word, sizeof(SpellCustomCWord));
     if (!res)

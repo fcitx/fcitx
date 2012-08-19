@@ -481,7 +481,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
         strncpy(keyboard->dictLang, currentLang, LANGCODE_LENGTH);
 
     /* dict is set and loaded as a side effect */
-    if (IsDictAvailable(keyboard) && enableWordHint) {
+    if (enableWordHint && IsDictAvailable(keyboard)) {
         FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
         if (FcitxHotkeyIsHotKey(sym, state,
