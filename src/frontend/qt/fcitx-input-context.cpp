@@ -155,7 +155,7 @@ QFcitxInputContext::address()
         p++;
     size_t addrlen = p - buffer;
     if (sz != addrlen + 2 * sizeof(pid_t) + 1)
-        return NULL;
+        return QString();
 
     /* skip '\0' */
     p++;
@@ -165,7 +165,7 @@ QFcitxInputContext::address()
 
     if (!fcitx_utils_pid_exists(daemonpid)
         || !fcitx_utils_pid_exists(fcitxpid))
-        return NULL;
+        return QString();
 
     addr = QLatin1String(buffer);
 
@@ -264,16 +264,22 @@ void QFcitxInputContext::createConnection()
 {
     m_serviceWatcher.disconnect(SIGNAL(serviceOwnerChanged(QString,QString,QString)));
     QString addr = address();
+    // qDebug() << addr;
     if (!addr.isNull()) {
         QDBusConnection connection(QDBusConnection::connectToBus(addr, "fcitx"));
         if (connection.isConnected()) {
+            // qDebug() << "craete private";
             m_connection = new QDBusConnection(connection);
         }
     }
 
+    bool needCreate = true;
     if (!m_connection) {
         m_connection = new QDBusConnection(QDBusConnection::sessionBus());
         connect(&m_serviceWatcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(imChanged(QString,QString,QString)));
+        QDBusReply<bool> registered = m_connection->interface()->isServiceRegistered(m_serviceName);
+        if (!registered.isValid() || !registered.value())
+            needCreate = false;
     }
 
     m_connection->connect ("org.freedesktop.DBus.Local",
@@ -283,7 +289,8 @@ void QFcitxInputContext::createConnection()
                            this,
                            SLOT (dbusDisconnect ()));
 
-    createInputContext();
+    if (needCreate)
+        createInputContext();
 }
 
 void QFcitxInputContext::dbusDisconnect()
@@ -614,9 +621,16 @@ void QFcitxInputContext::imChanged(const QString& service, const QString& oldown
 
         /* new rise */
         if (newowner.length() > 0) {
-            cleanUp();
-            createConnection();
+            QTimer::singleShot(100, this, SLOT(newServiceApper()));
         }
+    }
+}
+
+void QFcitxInputContext::newServiceApper()
+{
+    if (!isConnected()) {
+        cleanUp();
+        createConnection();
     }
 }
 
@@ -624,6 +638,8 @@ void QFcitxInputContext::createInputContext()
 {
     if (!m_connection)
         return;
+
+    // qDebug() << "create Input Context" << m_connection->name();
 
     m_rect = QRect();
     if (m_improxy) {
@@ -802,6 +818,11 @@ XEvent* QFcitxInputContext::createXEvent(Display* dpy, WId wid, uint keyval, uin
     return xevent;
 }
 #endif
+
+bool QFcitxInputContext::isConnected()
+{
+    return m_connection != NULL && m_connection->isConnected();
+}
 
 bool QFcitxInputContext::isValid()
 {

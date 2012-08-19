@@ -98,6 +98,7 @@ private Q_SLOTS:
     void updateIM();
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
+    void newServiceApper();
 #endif
 private:
     static QString socketFile();
@@ -114,6 +115,7 @@ private:
 #endif // Q_WS_X11
     QKeyEvent* createKeyEvent(uint keyval, uint state, int type);
     bool isValid();
+    bool isConnected();
 
     void addCapacity(QFlags<FcitxCapacityFlags> capacity, bool forceUpdage = false)
     {
