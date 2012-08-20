@@ -220,7 +220,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     if (len_limit > pyenhance->config.max_hint_length)
         len_limit = pyenhance->config.max_hint_length + 1;
     if (position < 0 ||
-        (position < 1 && pyenhance->config.allow_replace_first)) {
+        (position < 1 && !pyenhance->config.allow_replace_first)) {
         position = 1;
     }
     FcitxModuleFunctionArg func_arg;
