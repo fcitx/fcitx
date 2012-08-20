@@ -186,6 +186,11 @@ PinyinEnhanceMergeSpellCandList(PinyinEnhance *pyenhance,
                 position++;
         }
     }
+    /**
+     * Check if we have the right number of candidate words,
+     * there might be one more because we have raised the limit by one just now.
+     * TODO: also do the trick for limit set by PinyinEnhanceSpellHint ?
+     **/
     if ((n2 = FcitxCandidateWordGetListSize(newList)) >
         pyenhance->config.max_hint_length) {
         FcitxCandidateWordRemoveByIndex(newList, n2 - 1);
@@ -208,6 +213,10 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         len_limit = FcitxCandidateWordGetPageSize(candList) / 2;
         len_limit = len_limit > 0 ? len_limit : 1;
     }
+    /**
+     * Set the limit to one more than the maximum length in case one of the
+     * result is removed because of duplicate
+     **/
     if (len_limit > pyenhance->config.max_hint_length)
         len_limit = pyenhance->config.max_hint_length + 1;
     if (position < 0 ||
