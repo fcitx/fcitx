@@ -73,13 +73,13 @@ check_im_type(FcitxIM *im)
 #define case_vowel case 'a': case 'e': case 'i': case 'o':      \
 case 'u': case 'A': case 'E': case 'I': case 'O': case 'U'
 
-#define case_consonant case 'B': case 'C': case 'D':          \
-case 'F': case 'G': case 'H': case 'J': case 'K': case 'L':   \
-case 'M': case 'N': case 'P': case 'Q': case 'R': case 'S':   \
-case 'T': case 'V': case 'W': case 'X': case 'Y': case 'Z':   \
-case 'b': case 'c': case 'd': case 'f': case 'g': case 'h':   \
-case 'j': case 'k': case 'l': case 'm': case 'n': case 'p':   \
-case 'q': case 'r': case 's': case 't': case 'v': case 'w':   \
+#define case_consonant case 'B': case 'C': case 'D':            \
+case 'F': case 'G': case 'H': case 'J': case 'K': case 'L':     \
+case 'M': case 'N': case 'P': case 'Q': case 'R': case 'S':     \
+case 'T': case 'V': case 'W': case 'X': case 'Y': case 'Z':     \
+case 'b': case 'c': case 'd': case 'f': case 'g': case 'h':     \
+case 'j': case 'k': case 'l': case 'm': case 'n': case 'p':     \
+case 'q': case 'r': case 's': case 't': case 'v': case 'w':     \
 case 'x': case 'y': case 'z'
 
 #define LOGLEVEL DEBUG
@@ -89,6 +89,7 @@ typedef struct {
     boolean short_as_english;
     boolean allow_replace_first;
     boolean disable_spell;
+    int max_hint_length;
 } PinyinEnhanceConfig;
 
 typedef struct {
@@ -107,6 +108,7 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_END()
 
 CONFIG_DEFINE_LOAD_AND_SAVE(PinyinEnhance, PinyinEnhanceConfig,
@@ -140,7 +142,7 @@ PinyinEnhanceCreate(FcitxInstance *instance)
 }
 
 static boolean
-FcitxPYEnhanceGetCandWordCb(void *arg, const char *commit)
+FcitxPYEnhanceGetSpellCandWordCb(void *arg, const char *commit)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     FcitxInstance *instance = pyenhance->owner;
@@ -155,8 +157,9 @@ FcitxPYEnhanceGetCandWordCb(void *arg, const char *commit)
 }
 
 static void
-PinyinEnhanceMergeCandList(FcitxCandidateWordList *candList,
-                           FcitxCandidateWordList *newList, int position)
+PinyinEnhanceMergeSpellCandList(PinyinEnhance *pyenhance,
+                                FcitxCandidateWordList *candList,
+                                FcitxCandidateWordList *newList, int position)
 {
     int i1;
     int n1;
@@ -183,27 +186,30 @@ PinyinEnhanceMergeCandList(FcitxCandidateWordList *candList,
                 position++;
         }
     }
+    if ((n2 = FcitxCandidateWordGetListSize(newList)) >
+        pyenhance->config.max_hint_length) {
+        FcitxCandidateWordRemoveByIndex(newList, n2 - 1);
+    }
     FcitxCandidateWordMerge(candList, newList, position);
     FcitxCandidateWordFreeList(newList);
 }
 
 static boolean
 PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
-                          int position, int len_limit)
+                               int position, int len_limit)
 {
     FcitxInstance *instance = pyenhance->owner;
     FcitxInputState *input;
     FcitxCandidateWordList *candList;
     FcitxCandidateWordList *newList;
     input = FcitxInstanceGetInputState(instance);
-    if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(instance),
-                                     FCITX_SPELL_NAME))
-        return false;
     candList = FcitxInputStateGetCandidateList(input);
     if (len_limit <= 0) {
         len_limit = FcitxCandidateWordGetPageSize(candList) / 2;
         len_limit = len_limit > 0 ? len_limit : 1;
     }
+    if (len_limit > pyenhance->config.max_hint_length)
+        len_limit = pyenhance->config.max_hint_length + 1;
     if (position < 0 ||
         (position < 1 && pyenhance->config.allow_replace_first)) {
         position = 1;
@@ -215,12 +221,12 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     func_arg.args[3] = (void*)(long)len_limit;
     func_arg.args[4] = "en";
     func_arg.args[5] = "cus";
-    func_arg.args[6] = FcitxPYEnhanceGetCandWordCb;
+    func_arg.args[6] = FcitxPYEnhanceGetSpellCandWordCb;
     func_arg.args[7] = pyenhance;
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
-    PinyinEnhanceMergeCandList(candList, newList, position);
+    PinyinEnhanceMergeSpellCandList(pyenhance, candList, newList, position);
     return true;
 }
 
@@ -281,6 +287,9 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     boolean res = false;
     FcitxCandidateWordList *cand_list;
     FcitxCandidateWord *cand_word;
+    if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(pyenhance->owner),
+                                     FCITX_SPELL_NAME))
+        return false;
     if (pyenhance->config.disable_spell)
         return false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
@@ -374,7 +383,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         }
         if (py_invalid || (py_short && pyenhance->config.short_as_english)) {
             res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin,
-                                            eng_ness > 10 ? 0 : 1, len_limit);
+                                                 eng_ness > 10 ? 0 : 1, len_limit);
             goto out;
         }
         if (eng_ness > 10) {

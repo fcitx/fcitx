@@ -50,7 +50,7 @@ typedef struct {
     FcitxGenericConfig gconfig;
     AutoEngChooseModifier chooseModifier;
     boolean disableSpell;
-    boolean maxHintLength;
+    int maxHintLength;
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {

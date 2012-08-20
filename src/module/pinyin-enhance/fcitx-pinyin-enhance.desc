@@ -16,5 +16,14 @@ Type=Boolean
 DefaultValue=False
 Advance=True
 
+[Pinyin Enhance/MaximumHintLength]
+Type=Integer
+DefaultValue=1
+Min=1
+Max=10
+Description=Maximum hint length
+LongDescription=Maximum length of spell hint list for Pinyin Enhance
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx
