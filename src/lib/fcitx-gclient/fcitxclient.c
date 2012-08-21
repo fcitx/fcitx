@@ -299,6 +299,10 @@ gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res)
 {
     gint ret = -1;
     GError* error = NULL;
+
+    if (!self->priv->icproxy)
+        return -1;
+
     GVariant* result = g_dbus_proxy_call_finish(client->priv->icproxy, res, &error);
     if (error) {
         g_error_free(error);
@@ -371,12 +375,9 @@ int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 key
                             &error);
 
         if (error)
-        {
             g_error_free(error);
-        }
-        else {
+        else
             g_variant_get(result, "(i)", &ret);
-        }
     }
 
     return ret;
