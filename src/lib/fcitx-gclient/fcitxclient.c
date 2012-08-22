@@ -295,7 +295,7 @@ void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointe
 }
 
 FCITX_EXPORT_API
-gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res)
+gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res)
 {
     gint ret = -1;
     GError* error = NULL;
@@ -303,7 +303,7 @@ gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res)
     if (!self->priv->icproxy)
         return -1;
 
-    GVariant* result = g_dbus_proxy_call_finish(client->priv->icproxy, res, &error);
+    GVariant* result = g_dbus_proxy_call_finish(self->priv->icproxy, res, &error);
     if (error) {
         g_error_free(error);
     }
