@@ -251,6 +251,8 @@ PinyinGetWordType(const char *str, int len)
     int i;
     if (len <= 0)
         len = strlen(str);
+    if (!strncmp(str, "ng", strlen("ng")))
+        return PY_TYPE_FULL;
     switch (*str) {
     case 'a':
     case 'e':
