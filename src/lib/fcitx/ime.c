@@ -580,11 +580,11 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
                     input->keyReleased = KR_OTHER;
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
-                    if (input->keyReleased == KR_SWITCH_IM) {
+                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && input->keyReleased == KR_SWITCH_IM) {
                         FcitxInstanceSwitchIMByIndex(instance, -1);
                     }
                 } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
-                    if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
+                    if (FcitxInstanceGetCurrentState(instance) == IS_ACTIVE && input->keyReleased == KR_SWITCH_IM_REVERSE) {
                         FcitxInstanceSwitchIMByIndex(instance, -2);
                     }
                 } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
@@ -896,15 +896,17 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
     if (index < -2 || index >= iIMCount)
         return;
     else if (index == -2) {
-        if (instance->iIMIndex > 0)
+        /*if (instance->iIMIndex > 0)
             index = instance->iIMIndex -1;
         else
-            index = iIMCount - 1;
+            index = iIMCount - 1;*/
+        index = (instance->iIMIndex - 1) % iIMCount + 1;
     } else if (index == -1) {
-        if (instance->iIMIndex >= (iIMCount - 1))
+        /*if (instance->iIMIndex >= (iIMCount - 1))
             index = 0;
         else
-            index = instance->iIMIndex + 1;
+            index = instance->iIMIndex + 1;*/
+        index = (instance->iIMIndex + 1) % iIMCount + 1;
     }
     if (index == 0)
         FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
