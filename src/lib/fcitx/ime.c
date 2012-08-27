@@ -579,11 +579,17 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                     }
 
                     input->keyReleased = KR_OTHER;
-                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))) {
+                } else if (fc->bIMSwitchKey
+                           && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
+                           && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))
+                       ) {
                     if (input->keyReleased == KR_SWITCH_IM) {
                         FcitxInstanceSwitchIMByIndex(instance, -1);
                     }
-                } else if (fc->bIMSwitchKey && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))) {
+                } else if (fc->bIMSwitchKey
+                           && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
+                           && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))
+                        ) {
                     if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
                         FcitxInstanceSwitchIMByIndex(instance, -2);
                     }
@@ -896,13 +902,16 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
     if (index < -2 || index >= iIMCount)
         return;
     else if (index == -2) {
-        if (instance->iIMIndex > 0)
+        if (instance->iIMIndex > 0) {
             index = instance->iIMIndex -1;
+            if (index == 0 && !instance->config->bIMSwitchIncludeInactive)
+                index = iIMCount - 1;
+        }
         else
             index = iIMCount - 1;
     } else if (index == -1) {
         if (instance->iIMIndex >= (iIMCount - 1))
-            index = 0;
+            index = instance->config->bIMSwitchIncludeInactive ? 0 : 1;
         else
             index = instance->iIMIndex + 1;
     }

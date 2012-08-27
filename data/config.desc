@@ -44,6 +44,12 @@ Type=Boolean
 DefaultValue=True
 Description=Enable Hotkey to scroll Between Input Method
 
+[Hotkey/IMSwitchIncludeInactive]
+Type=Boolean
+DefaultValue=False
+Description=Include Inactivate when scrolling between Input Method
+Advance=True
+
 [Hotkey/IMSwitchHotkey]
 Type=Enum
 EnumCount=4
