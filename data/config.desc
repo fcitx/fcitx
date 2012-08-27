@@ -44,6 +44,12 @@ Type=Boolean
 DefaultValue=True
 Description=Enable Hotkey to scroll Between Input Method
 
+[Hotkey/IMSwitchIncludeInactive]
+Type=Boolean
+DefaultValue=False
+Description=Include Inactivate when scrolling between Input Method
+Advance=True
+
 [Hotkey/IMSwitchHotkey]
 Type=Enum
 EnumCount=4
@@ -187,12 +193,6 @@ Advance=True
 Type=Boolean
 DefaultValue=False
 Description=Do not commit preedit text when unfocus a window
-Advance=True
-
-[Output/SwitchIncludeInactive]
-Type=Boolean
-DefaultValue=False
-Description=Include Inactivate state when scrolling between Input Method
 Advance=True
 
 [Appearance/ShowInputWindowAfterTriggering]

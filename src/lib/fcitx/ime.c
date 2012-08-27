@@ -580,14 +580,14 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
 
                     input->keyReleased = KR_OTHER;
                 } else if (fc->bIMSwitchKey
-                           && (fc->bSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
+                           && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
                            && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))
                        ) {
                     if (input->keyReleased == KR_SWITCH_IM) {
                         FcitxInstanceSwitchIMByIndex(instance, -1);
                     }
                 } else if (fc->bIMSwitchKey
-                           && (fc->bSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
+                           && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
                            && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))
                         ) {
                     if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
@@ -904,14 +904,14 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
     else if (index == -2) {
         if (instance->iIMIndex > 0) {
             index = instance->iIMIndex -1;
-            if (index == 0 && !instance->config->bSwitchIncludeInactive)
+            if (index == 0 && !instance->config->bIMSwitchIncludeInactive)
                 index = iIMCount - 1;
         }
         else
             index = iIMCount - 1;
     } else if (index == -1) {
         if (instance->iIMIndex >= (iIMCount - 1))
-            index = instance->config->bSwitchIncludeInactive ? 0 : 1;
+            index = instance->config->bIMSwitchIncludeInactive ? 0 : 1;
         else
             index = instance->iIMIndex + 1;
     }
