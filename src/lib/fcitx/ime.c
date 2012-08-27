@@ -963,29 +963,56 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
     FcitxUIUpdateInputWindow(instance);
 
     FcitxIM* lastIM, *newIM;
+    FcitxInputContext2 *currentIC2 = (FcitxInputContext2*)instance->CurrentIC;
+    FcitxGlobalConfig *fc = instance->config;
 
-    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
+    if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0) {
         lastIM = NULL;
-    else {
+    } else {
         lastIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
     }
 
-    if (index >= iIMCount)
+    if (index >= iIMCount) {
         instance->iIMIndex = iIMCount - 1;
-    else if (index < -2)
+    } else if (index < -2) {
         instance->iIMIndex = 0;
-    else if (index == -2) {
-        if (instance->iIMIndex > 0)
-            instance->iIMIndex--;
-        else
-            instance->iIMIndex = iIMCount - 1;
+    } else if (index == -2) {
+        if (fc->bIMSwitchIncludeInactive) {
+            instance->iIMIndex = (instance->iIMIndex > 0) ?
+                (instance->iIMIndex - 1) : (iIMCount - 1);
+        } else {
+            if (instance->iIMIndex == 0) {
+                if (!(currentIC2->switchBySwitchKey ||
+                      fc->bUseExtraTriggerKeyOnlyWhenUseItToInactivate))
+                    return;
+                FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC,
+                                                  true);
+                if (instance->iIMIndex == 0)
+                    return;
+            }
+            instance->iIMIndex = (instance->iIMIndex > 1) ?
+                (instance->iIMIndex - 1) : (iIMCount - 1);
+        }
     } else if (index == -1) {
-        if (instance->iIMIndex >= (iIMCount - 1))
-            instance->iIMIndex = 0;
-        else
-            instance->iIMIndex++;
-    } else if (index >= 0)
+        if (fc->bIMSwitchIncludeInactive) {
+            instance->iIMIndex = (instance->iIMIndex >= (iIMCount - 1)) ?
+                0 : (instance->iIMIndex + 1);
+        } else {
+            if (instance->iIMIndex == 0) {
+                if (!(currentIC2->switchBySwitchKey ||
+                      fc->bUseExtraTriggerKeyOnlyWhenUseItToInactivate))
+                    return;
+                FcitxInstanceChangeIMStateWithKey(instance, instance->CurrentIC,
+                                                  true);
+                if (instance->iIMIndex == 0)
+                    return;
+            }
+            instance->iIMIndex = (instance->iIMIndex >= (iIMCount - 1)) ?
+                1 : (instance->iIMIndex + 1);
+        }
+    } else if (index >= 0) {
         instance->iIMIndex = index;
+    }
 
     if (skipZero && instance->iIMIndex == 0) {
         if (index == -2)
