@@ -495,7 +495,7 @@ SpellLangIsLang(const char *full_lang, const char *lang)
     return false;
 }
 
-typedef boolean (*GetCandWordCb)(void *arg, const char *commit);
+typedef INPUT_RETURN_VALUE (*GetCandWordCb)(void *arg, const char *commit);
 typedef struct {
     GetCandWordCb cb;
     void *arg;
@@ -508,10 +508,15 @@ FcitxSpellGetCandWord(void* arg, FcitxCandidateWord* candWord)
     FcitxSpell *spell = (FcitxSpell*)args->arg;
     FcitxInstance *instance = spell->owner;
     char *commit = (void*)(args + 1);
-    if (!args->cb || !args->cb(arg, commit))
+    INPUT_RETURN_VALUE res = IRV_TO_PROCESS;
+    if (!args->cb || !(res = args->cb(arg, commit))) {
         FcitxInstanceCommitString(instance,
                                   FcitxInstanceGetCurrentIC(instance), commit);
-    return IRV_FLAG_UPDATE_INPUT_WINDOW | IRV_FLAG_RESET_INPUT;
+        res = IRV_FLAG_RESET_INPUT;
+    } else {
+        res &= ~IRV_DO_NOTHING;
+    }
+    return IRV_FLAG_UPDATE_INPUT_WINDOW | res;
 }
 
 static void*

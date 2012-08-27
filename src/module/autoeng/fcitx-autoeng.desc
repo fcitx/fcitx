@@ -23,5 +23,19 @@ Description=Maximum hint length
 LongDescription=Maximum length of spell hint list for Auto English
 Advance=True
 
+[Auto English/MaximumKeep]
+Type=Integer
+DefaultValue=3
+Min=-1
+Description=Maximum words number kept in preedit
+LongDescription=0 for commit immediately, -1 for keep all words
+Advance=True
+
+[Auto English/SelectAddSpace]
+Type=Boolean
+DefaultValue=True
+Description=Add Extra space when selecting a candidate word
+Advance=True
+
 [DescriptionFile]
 LocaleDomain=fcitx

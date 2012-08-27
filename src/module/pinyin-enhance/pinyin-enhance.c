@@ -141,7 +141,7 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     return pyenhance;
 }
 
-static boolean
+static INPUT_RETURN_VALUE
 FcitxPYEnhanceGetSpellCandWordCb(void *arg, const char *commit)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
@@ -153,7 +153,7 @@ FcitxPYEnhanceGetSpellCandWordCb(void *arg, const char *commit)
         free(pyenhance->selected);
         pyenhance->selected = NULL;
     }
-    return false;
+    return IRV_TO_PROCESS;
 }
 
 static void
@@ -251,6 +251,8 @@ PinyinGetWordType(const char *str, int len)
     int i;
     if (len <= 0)
         len = strlen(str);
+    if (!strncmp(str, "ng", strlen("ng")))
+        return PY_TYPE_FULL;
     switch (*str) {
     case 'a':
     case 'e':
