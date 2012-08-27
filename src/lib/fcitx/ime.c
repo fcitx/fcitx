@@ -898,7 +898,7 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
     if (index < -2 || index >= iIMCount) {
         return;
     } else if (index == -2) {
-        if (fc->bIMSwitchIncludeEng) {
+        if (fc->bIMSwitchIncludeInactive) {
             index = (instance->iIMIndex > 0) ?
                 (instance->iIMIndex - 1) : (iIMCount - 1);
         } else {
@@ -915,7 +915,7 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
                 (instance->iIMIndex - 1) : (iIMCount - 1);
         }
     } else if (index == -1) {
-        if (fc->bIMSwitchIncludeEng) {
+        if (fc->bIMSwitchIncludeInactive) {
             index = (instance->iIMIndex >= (iIMCount - 1)) ?
                 0 : (instance->iIMIndex + 1);
         } else {

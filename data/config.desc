@@ -54,7 +54,7 @@ Enum3=ALT_SUPER
 DefaultValue=CTRL_SHIFT
 Description=Scroll between Input Method
 
-[Hotkey/IMSwitchIncludeEng]
+[Hotkey/IMSwitchIncludeInactive]
 Type=Boolean
 DefaultValue=False
 Description=Include Inactivate when scrolling between Input Method
