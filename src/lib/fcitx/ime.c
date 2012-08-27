@@ -584,14 +584,14 @@ INPUT_RETURN_VALUE FcitxInstanceProcessKey(
                            && (FcitxHotkeyIsHotKey(sym, state, imSWNextKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWNextKey2[fc->iIMSwitchKey]))
                        ) {
                     if (input->keyReleased == KR_SWITCH_IM) {
-                        FcitxInstanceSwitchIMByIndex(instance, -1);
+                        FcitxInstanceSwitchIMByIndex(instance, fc->bIMSwitchIncludeInactive ? -1 : -3);
                     }
                 } else if (fc->bIMSwitchKey
                            && (fc->bIMSwitchIncludeInactive || FcitxInstanceGetCurrentState(instance) == IS_ACTIVE)
                            && (FcitxHotkeyIsHotKey(sym, state, imSWPrevKey1[fc->iIMSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, imSWPrevKey2[fc->iIMSwitchKey]))
                         ) {
                     if (input->keyReleased == KR_SWITCH_IM_REVERSE) {
-                        FcitxInstanceSwitchIMByIndex(instance, -2);
+                        FcitxInstanceSwitchIMByIndex(instance, fc->bIMSwitchIncludeInactive ? -2 : -4);
                     }
                 } else if ((FcitxHotkeyIsHotKey(sym, state, switchKey1[fc->iSwitchKey]) || FcitxHotkeyIsHotKey(sym, state, switchKey2[fc->iSwitchKey])) && input->keyReleased == KR_SWITCH && !fc->bDoubleSwitchKey) {
                     retVal = IRV_DONOT_PROCESS;
@@ -863,11 +863,7 @@ void FcitxInstanceForwardKey(FcitxInstance* instance, FcitxInputContext *ic, Fci
 FCITX_EXPORT_API
 void FcitxInstanceSwitchIM(FcitxInstance* instance, int index)
 {
-    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
-    if (ic)
-        FcitxInstanceSetLocalIMName(instance, ic, NULL);
-    FcitxInstanceSwitchIMInternal(instance, index, true, true);
-    FcitxInstanceShowInputSpeed(instance);
+    FcitxInstanceSwitchIMByIndex(instance, index);
 }
 
 FCITX_EXPORT_API
@@ -878,14 +874,7 @@ void FcitxInstanceSwitchIMByName(FcitxInstance* instance, const char* name)
         int idx = FcitxInstanceGetIMIndexByName(instance, name);
         if (idx < 0)
             return;
-        if (idx == 0)
-            FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
-        else {
-            FcitxInstanceSwitchIM(instance, idx);
-            if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-                FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-            }
-        }
+        FcitxInstanceSwitchIMByIndex(instance, idx);
     }
 }
 
@@ -899,26 +888,33 @@ void FcitxInstanceSwitchIMByIndex(FcitxInstance* instance, int index)
      * -1 scroll forward
      * 0~positive select
      */
-    if (index < -2 || index >= iIMCount)
+    if (index < -4 || index >= iIMCount)
         return;
-    else if (index == -2) {
+
+    boolean skipZero = (index == -3 || index == -4);
+    if (index == -2 || index == -4) {
         if (instance->iIMIndex > 0) {
             index = instance->iIMIndex -1;
-            if (index == 0 && !instance->config->bIMSwitchIncludeInactive)
+            if (index == 0 && skipZero)
                 index = iIMCount - 1;
         }
         else
             index = iIMCount - 1;
-    } else if (index == -1) {
+    } else if (index == -1 || index == -3) {
         if (instance->iIMIndex >= (iIMCount - 1))
-            index = instance->config->bIMSwitchIncludeInactive ? 0 : 1;
+            index = skipZero ? 1 : 0;
         else
             index = instance->iIMIndex + 1;
     }
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
     if (index == 0)
-        FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
+        FcitxInstanceCloseIM(instance, ic);
     else {
-        FcitxInstanceSwitchIM(instance, index);
+        if (ic)
+            FcitxInstanceSetLocalIMName(instance, ic, NULL);
+        FcitxInstanceSwitchIMInternal(instance, index, true, true);
+        FcitxInstanceShowInputSpeed(instance);
+
         if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
             FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
         }
@@ -955,26 +951,13 @@ void FcitxInstanceSwitchIMInternal(FcitxInstance* instance, int index, boolean s
 
     if (index >= iIMCount)
         instance->iIMIndex = iIMCount - 1;
-    else if (index < -2)
+    else if (index < 0)
         instance->iIMIndex = 0;
-    else if (index == -2) {
-        if (instance->iIMIndex > 0)
-            instance->iIMIndex--;
-        else
-            instance->iIMIndex = iIMCount - 1;
-    } else if (index == -1) {
-        if (instance->iIMIndex >= (iIMCount - 1))
-            instance->iIMIndex = 0;
-        else
-            instance->iIMIndex++;
-    } else if (index >= 0)
+    else if (index >= 0)
         instance->iIMIndex = index;
 
     if (skipZero && instance->iIMIndex == 0) {
-        if (index == -2)
-            instance->iIMIndex = iIMCount -1;
-        else
-            instance->iIMIndex = 1;
+        instance->iIMIndex = 1;
     }
 
     if (instance->iIMIndex >= iIMCount || instance->iIMIndex < 0)
@@ -1445,14 +1428,7 @@ boolean IMMenuAction(FcitxUIMenu *menu, int index)
 {
     FcitxInstance* instance = (FcitxInstance*) menu->priv;
 
-    if (index == 0)
-        FcitxInstanceCloseIM(instance, instance->CurrentIC);
-    else {
-        FcitxInstanceSwitchIM(instance, index);
-        if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE) {
-            FcitxInstanceEnableIM(instance, instance->CurrentIC, false);
-        }
-    }
+    FcitxInstanceSwitchIMByIndex(instance, index);
     return true;
 }
 

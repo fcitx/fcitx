@@ -174,7 +174,7 @@ INPUT_RETURN_VALUE IMSelectorGetCand(void* arg, FcitxCandidateWord* candWord)
         FcitxInstanceCloseIM(instance, FcitxInstanceGetCurrentIC(instance));
     else {
         if (imselector->global)
-            FcitxInstanceSwitchIM(instance, index);
+            FcitxInstanceSwitchIMByIndex(instance, index);
         else
             FcitxInstanceSetLocalIMName(instance, FcitxInstanceGetCurrentIC(instance), (char*) candWord->priv);
 

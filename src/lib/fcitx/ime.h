@@ -523,7 +523,7 @@ extern "C" {
      * @param index input method index
      * @return void
      **/
-    void FcitxInstanceSwitchIM(struct _FcitxInstance* instance, int index);
+    FCITX_DEPRECATED void FcitxInstanceSwitchIM(struct _FcitxInstance* instance, int index);
 
 
     /**
@@ -541,7 +541,8 @@ extern "C" {
     /**
      * switch to a input method by index, index need to be valid, otherwise it have no effect
      * And if the object index is zero, the state will automatically change to inactive
-     * -1 means scroll forward, and -2 means scroll back.
+     * -1 means scroll forward, and -2 means scroll backward.
+     * -3 means scroll forward without first one, -4 mean scroll backward without first one.
      *
      *
      * @param instance fcitx instance
