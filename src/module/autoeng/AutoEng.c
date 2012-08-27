@@ -481,7 +481,23 @@ boolean SwitchToEng(FcitxAutoEngState* autoEngState, const char *str)
 static INPUT_RETURN_VALUE
 AutoEngGetCandWordCb(FcitxAutoEngState *autoEngState, const char *commit)
 {
-    return IRV_TO_PROCESS;
+    INPUT_RETURN_VALUE res = IRV_DO_NOTHING;
+    if (autoEngState->config.maxKeep == 0 &&
+        !autoEngState->config.selectAddSpace) {
+        return IRV_TO_PROCESS;
+    }
+    AutoEngSetBuff(autoEngState, commit, '\0');
+    if (autoEngState->config.selectAddSpace) {
+        autoEngState->auto_space = false;
+        res |= AutoEngPushKey(autoEngState, ' ');
+        if (!(res & IRV_FLAG_RESET_INPUT)) {
+            autoEngState->auto_space = true;
+        }
+    }
+    if (!(res & IRV_FLAG_RESET_INPUT)) {
+        ShowAutoEngMessage(autoEngState, &res);
+    }
+    return res;
 }
 
 static void
