@@ -581,7 +581,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
     return IRV_TO_PROCESS;
 }
 
-static boolean
+static INPUT_RETURN_VALUE
 FcitxKeyboardGetCandWordCb(void *arg, const char *commit)
 {
     FcitxKeyboardLayout *layout = (FcitxKeyboardLayout*) arg;
@@ -593,7 +593,7 @@ FcitxKeyboardGetCandWordCb(void *arg, const char *commit)
         strcat(str, " ");
     FcitxInstanceCommitString(instance,
                               FcitxInstanceGetCurrentIC(instance), str);
-    return true;
+    return IRV_FLAG_RESET_INPUT;
 }
 
 INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)

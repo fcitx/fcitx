@@ -478,6 +478,12 @@ boolean SwitchToEng(FcitxAutoEngState* autoEngState, const char *str)
     return false;
 }
 
+static INPUT_RETURN_VALUE
+AutoEngGetCandWordCb(FcitxAutoEngState *autoEngState, const char *commit)
+{
+    return IRV_TO_PROCESS;
+}
+
 static void
 AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
 {
@@ -492,8 +498,8 @@ AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
     func_arg.args[3] = (void*)(long)autoEngState->config.maxHintLength;
     func_arg.args[4] = "en";
     func_arg.args[5] = "cus";
-    func_arg.args[6] = NULL;
-    func_arg.args[7] = NULL;
+    func_arg.args[6] = AutoEngGetCandWordCb;
+    func_arg.args[7] = autoEngState;
     candList = InvokeFunction(autoEngState->owner, FCITX_SPELL,
                               GET_CANDWORDS, func_arg);
     if (candList) {
