@@ -321,9 +321,6 @@ FCITX_EXPORT_API
 void FcitxUIUpdateInputWindow(FcitxInstance *instance)
 {
     instance->uiflag |= UI_UPDATE;
-
-    if (FcitxMessagesIsMessageChanged(instance->input->msgClientPreedit))
-        FcitxInstanceUpdatePreedit(instance, FcitxInstanceGetCurrentIC(instance));
 }
 
 void FcitxUIShowInputWindow(FcitxInstance* instance)
@@ -853,6 +850,8 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
         return;
     }
 
+    FcitxInstanceUpdatePreedit(instance, ic);
+
     boolean toshow = false;
 
     if (FcitxMessagesGetMessageCount(input->msgAuxUp) != 0
@@ -872,7 +871,6 @@ void FcitxUIUpdateInputWindowReal(FcitxInstance *instance)
         toshow = true;
 
     if (!toshow) {
-        FcitxInstanceUpdatePreedit(instance, ic);
         if (UI_FUNC_IS_VALID(CloseInputWindow))
             instance->ui->ui->CloseInputWindow(instance->ui->addonInstance);
     } else
