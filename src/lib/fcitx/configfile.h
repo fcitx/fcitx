@@ -131,7 +131,8 @@ extern "C" {
 
         boolean bShowInputWindowOnlyWhenActive;
 
-        int padding[40]; /**< padding */
+        boolean bIMSwitchIncludeEng;
+        int padding[39]; /**< padding */
     } FcitxGlobalConfig;
 
     /**
