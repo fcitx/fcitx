@@ -38,6 +38,9 @@
 #include "module/spell/spell.h"
 
 #include "AutoEng.h"
+#define AUTOSPACE_REPLACE " ,.:;?!\"'"
+#define case_autoeng_replace case ' ': case ',': case '.': case ':':    \
+case ';': case '?': case '!': case '"': case '\''
 
 typedef enum {
     AECM_NONE,
@@ -57,8 +60,8 @@ typedef struct {
     AutoEngChooseModifier chooseModifier;
     boolean disableSpell;
     int maxHintLength;
-    AutoEngSelectAction selectAction;
     boolean selectAddSpace;
+    int maxKeep;
 } FcitxAutoEngConfig;
 
 typedef struct _FcitxAutoEngState {
@@ -67,6 +70,7 @@ typedef struct _FcitxAutoEngState {
     int index;
     size_t buff_size;
     boolean active;
+    boolean auto_space;
     FcitxInstance *owner;
     FcitxAutoEngConfig config;
 } FcitxAutoEngState;
@@ -84,6 +88,8 @@ CONFIG_BINDING_BEGIN(FcitxAutoEngConfig);
 CONFIG_BINDING_REGISTER("Auto English", "ChooseModifier", chooseModifier);
 CONFIG_BINDING_REGISTER("Auto English", "DisableSpell", disableSpell);
 CONFIG_BINDING_REGISTER("Auto English", "MaximumHintLength", maxHintLength);
+CONFIG_BINDING_REGISTER("Auto English", "MaximumKeep", maxKeep);
+CONFIG_BINDING_REGISTER("Auto English", "SelectAddSpace", selectAddSpace);
 CONFIG_BINDING_END();
 
 /**
@@ -172,6 +178,7 @@ AutoEngSetBuffLen(FcitxAutoEngState* autoEngState, size_t len)
         autoEngState->buff_size = size;
     }
     autoEngState->buf[len] = '\0';
+    autoEngState->auto_space = false;
 }
 
 static void
@@ -188,12 +195,66 @@ AutoEngSetBuff(FcitxAutoEngState* autoEngState, const char *str, char extra)
     }
 }
 
-static INPUT_RETURN_VALUE
-AutoEngPushKey(FcitxAutoEngState* autoEngState, char key)
+static boolean
+AutoEngCheckAutoSpace(FcitxAutoEngState *autoEngState, char key)
 {
+    autoEngState->auto_space = false;
+    if (autoEngState->buf[autoEngState->index - 1] != ' ') {
+        return false;
+    }
+    switch (key) {
+    case_autoeng_replace:
+        autoEngState->buf[autoEngState->index - 1] = key;
+        break;
+    default:
+        return false;
+    }
+    return true;
+}
+
+static INPUT_RETURN_VALUE
+AutoEngPushKey(FcitxAutoEngState *autoEngState, char key)
+{
+    INPUT_RETURN_VALUE res = IRV_DISPLAY_MESSAGE;
+
+    if (autoEngState->auto_space) {
+        if (AutoEngCheckAutoSpace(autoEngState, key)) {
+            return res;
+        }
+    }
+
+    if (autoEngState->config.maxKeep == 0) {
+        if (key == ' ') {
+            FcitxInstance *instance = autoEngState->owner;
+            FcitxInputContext *currentIC = FcitxInstanceGetCurrentIC(instance);
+            FcitxInstanceCommitString(instance, currentIC, autoEngState->buf);
+            FcitxInstanceCommitString(instance, currentIC, " ");
+            ResetAutoEng(autoEngState);
+            return res | IRV_CLEAN;
+        }
+    } else if (autoEngState->config.maxKeep > 0) {
+        char *found = autoEngState->buf + autoEngState->index;
+        int i = autoEngState->config.maxKeep;
+        do {
+            found = memrchr(autoEngState->buf, ' ', found - autoEngState->buf);
+            if (!found) {
+                break;
+            }
+        } while (--i > 0);
+        if (found && found != autoEngState->buf) {
+            FcitxInstance *instance = autoEngState->owner;
+            FcitxInputContext *currentIC = FcitxInstanceGetCurrentIC(instance);
+            *found = '\0';
+            FcitxInstanceCommitString(instance, currentIC, autoEngState->buf);
+            autoEngState->index = (autoEngState->buf + autoEngState->index
+                                   - found);
+            memmove(autoEngState->buf + 1, found + 1, autoEngState->index);
+            *autoEngState->buf = ' ';
+        }
+    }
     autoEngState->buf[autoEngState->index++] = key;
     AutoEngSetBuffLen(autoEngState, autoEngState->index);
-    return IRV_DISPLAY_MESSAGE;
+    return res;
 }
 
 void *AutoEngCreate(FcitxInstance *instance)
