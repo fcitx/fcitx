@@ -627,11 +627,7 @@ boolean MainWindowEventHandler(void *arg, XEvent* event)
                     SaveClassicUIConfig(classicui);
                 } else if (IsInRspArea(event->xbutton.x, event->xbutton.y, &mainWindow->imiconstat)) {
                     mouse = &mainWindow->imiconstat.mouse;
-                    /* if close, we enable it, if enabled, we scroll it */
-                    if (FcitxInstanceGetCurrentState(instance) != IS_ACTIVE)
-                        FcitxInstanceEnableIM(instance, FcitxInstanceGetCurrentIC(instance), false);
-                    else
-                        FcitxInstanceSwitchIM(instance, -1);
+                    FcitxInstanceSwitchIMByIndex(instance, -1);
                 } else {
                     FcitxUIComplexStatus *compstatus;
                     UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);

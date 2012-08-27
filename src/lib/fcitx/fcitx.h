@@ -69,6 +69,13 @@ extern "C" {
 FCITX_EXPORT_API int name##_ABI_VERSION = FCITX_ABI_VERSION; \
 FCITX_EXPORT_API type name##_##category 
 
+#if defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 301)
+# define FCITX_DEPRECATED  __attribute__((deprecated))
+#else /* not gcc >= 3.1 */
+# define FCITX_DEPRECATED
+#endif
+
+
 #ifdef __cplusplus
 }
 #endif
