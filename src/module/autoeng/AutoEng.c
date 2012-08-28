@@ -50,12 +50,6 @@ typedef enum {
     AECM_SHIFT,
 } AutoEngChooseModifier;
 
-typedef enum {
-    AESA_APPEND,
-    AESA_COMMIT,
-    AESA_KEEP,
-} AutoEngSelectAction;
-
 typedef struct {
     FcitxGenericConfig gconfig;
     AutoEngChooseModifier chooseModifier;
@@ -105,7 +99,7 @@ static void* AutoEngCreate(FcitxInstance *instance);
  *
  * @return void
  **/
-static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
+static void LoadAutoEng(FcitxAutoEngState *autoEngState);
 
 /**
  * Cache the input key for autoeng, only simple key without combine key will be record
