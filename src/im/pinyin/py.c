@@ -582,7 +582,6 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     int i = 0;
     int val;
     INPUT_RETURN_VALUE retVal;
-    char strTemp[MAX_USER_INPUT + 1];
 
     if (sym == 0 && state == 0)
         sym = -1;
@@ -597,8 +596,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     /* is not in py special state */
     if (!pystate->bIsPYAddFreq && !pystate->bIsPYDelFreq && !pystate->bIsPYDelUserPhr) {
         if ((FcitxHotkeyIsHotKeyLAZ(sym, state)
-                || FcitxHotkeyIsHotKey(sym, state, FCITX_SEPARATOR)
-                || (pystate->bSP && FcitxInputStateGetRawInputBufferSize(input) > 0 && pystate->bSP_UseSemicolon && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)))) {
+             || FcitxHotkeyIsHotKey(sym, state, FCITX_SEPARATOR)
+             || (pystate->bSP && FcitxInputStateGetRawInputBufferSize(input) > 0 && pystate->bSP_UseSemicolon && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)))) {
             FcitxInputStateSetIsInRemind(input, false);
             FcitxInputStateSetShowCursor(input, true);
 
@@ -657,32 +656,21 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else if (pystate->iPYInsertPoint) {
+                char *move_src = (pystate->strFindString
+                                  + pystate->iPYInsertPoint);
                 /* we cannot delete it if cursor is at the first */
                 val = ((pystate->iPYInsertPoint > 1)
-                       && (pystate->strFindString[pystate->iPYInsertPoint - 2] == PY_SEPARATOR)) ? 2 : 1;
-                int len = strlen(pystate->strFindString + pystate->iPYInsertPoint), i = 0;
-                /* 这里使用<=而不是<是因为还有'\0'需要拷贝 */
-                for (i = 0; i <= len; i++)
-                    pystate->strFindString[i + pystate->iPYInsertPoint - val] = pystate->strFindString[i + pystate->iPYInsertPoint];
-                ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
+                       && (move_src[-2] == PY_SEPARATOR)) ? 2 : 1;
+                memmove(move_src - val, move_src, strlen(move_src) + 1);
+                ParsePY(&pystate->pyconfig, pystate->strFindString,
+                        &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
                 pystate->iPYInsertPoint -= val;
 
-                if (!strlen(pystate->strFindString)) {
-                    if (!pystate->iPYSelected)
-                        return IRV_CLEAN;
-
-                    val = strlen(pystate->strFindString);
-                    strcpy(strTemp, pystate->pySelected[pystate->iPYSelected - 1].strPY);
-                    strcat(strTemp, pystate->strFindString);
-                    strcpy(pystate->strFindString, strTemp);
-                    pystate->iPYInsertPoint = strlen(pystate->strFindString) - val;
-                    pystate->iPYSelected--;
-                    ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
-                }
-
+                if (!strlen(pystate->strFindString))
+                    return IRV_CLEAN;
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else {
-                if (strlen(pystate->strFindString) == 0)
+                if (!strlen(pystate->strFindString))
                     return IRV_TO_PROCESS;
                 else
                     return IRV_DO_NOTHING;
@@ -691,13 +679,13 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             if (FcitxInputStateGetRawInputBufferSize(input)) {
                 if (pystate->iPYInsertPoint == strlen(pystate->strFindString))
                     return IRV_DO_NOTHING;
-                val = (pystate->strFindString[pystate->iPYInsertPoint + 1] == PY_SEPARATOR) ? 2 : 1;
-                int len = strlen(pystate->strFindString + pystate->iPYInsertPoint + val), i = 0;
-                /* 这里使用<=而不是<是因为还有'\0'需要拷贝 */
-                for (i = 0; i <= len; i++)
-                    pystate->strFindString[i + pystate->iPYInsertPoint] = pystate->strFindString[i + pystate->iPYInsertPoint + val];
+                char *move_dst = (pystate->strFindString
+                                  + pystate->iPYInsertPoint);
+                val = (move_dst[1] == PY_SEPARATOR) ? 2 : 1;
+                memmove(move_dst, move_dst + val, strlen(move_dst + val) + 1);
 
-                ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
+                ParsePY(&pystate->pyconfig, pystate->strFindString,
+                        &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
                 if (!strlen(pystate->strFindString))
                     return IRV_CLEAN;
                 retVal = IRV_DISPLAY_CANDWORDS;
