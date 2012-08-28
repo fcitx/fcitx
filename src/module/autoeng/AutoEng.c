@@ -38,7 +38,6 @@
 #include "module/spell/spell.h"
 
 #include "AutoEng.h"
-#define AUTOSPACE_REPLACE " ,.:;?!\"'"
 #define case_autoeng_replace case ' ': case '\''
 #define case_autoeng_exchange case ',': case '.': case ':': case ';':   \
 case '?': case '!'
