@@ -235,6 +235,15 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
+    if (position == 0) {
+        const char *commit_str;
+        FcitxMessages *message = FcitxInputStateGetClientPreedit(input);
+        func_arg.args[0] = FcitxCandidateWordGetFirst(newList);
+        commit_str = InvokeFunction(instance, FCITX_SPELL,
+                                    CANDWORD_GET_COMMIT, func_arg);
+        FcitxMessagesSetMessageCount(message, 0);
+        FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s", commit_str);
+    }
     PinyinEnhanceMergeSpellCandList(pyenhance, candList, newList, position);
     return true;
 }
