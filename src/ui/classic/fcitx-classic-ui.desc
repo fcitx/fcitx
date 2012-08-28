@@ -49,7 +49,7 @@ Description=Main Window Hide Mode
 
 [ClassicUI/VerticalList]
 Type=Boolean
-DefaultValue=True
+DefaultValue=False
 Description=Vertical Candidate Word List
 
 [ClassicUI/SkinType]
