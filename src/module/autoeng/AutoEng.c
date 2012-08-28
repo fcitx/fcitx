@@ -39,8 +39,9 @@
 
 #include "AutoEng.h"
 #define AUTOSPACE_REPLACE " ,.:;?!\"'"
-#define case_autoeng_replace case ' ': case ',': case '.': case ':':    \
-case ';': case '?': case '!': case '"': case '\''
+#define case_autoeng_replace case ' ': case '\''
+#define case_autoeng_exchange case ',': case '.': case ':': case ';':   \
+case '?': case '!'
 
 typedef enum {
     AECM_NONE,
@@ -205,6 +206,12 @@ AutoEngCheckAutoSpace(FcitxAutoEngState *autoEngState, char key)
     switch (key) {
     case_autoeng_replace:
         autoEngState->buf[autoEngState->index - 1] = key;
+        break;
+    case_autoeng_exchange:
+        autoEngState->buf[autoEngState->index - 1] = key;
+        autoEngState->buf[autoEngState->index] = ' ';
+        AutoEngSetBuffLen(autoEngState, ++autoEngState->index);
+        autoEngState->auto_space = true;
         break;
     default:
         return false;
