@@ -65,7 +65,7 @@ int ABI_VERSION = FCITX_ABI_VERSION;
 
 const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
 
-typedef struct _PYCandWordSortContext {
+typedef struct {
     PY_CAND_WORD_TYPE type;
     ADJUSTORDER order;
     FcitxPinyinState* pystate;
@@ -582,7 +582,6 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     int i = 0;
     int val;
     INPUT_RETURN_VALUE retVal;
-    char strTemp[MAX_USER_INPUT + 1];
 
     if (sym == 0 && state == 0)
         sym = -1;
@@ -597,8 +596,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     /* is not in py special state */
     if (!pystate->bIsPYAddFreq && !pystate->bIsPYDelFreq && !pystate->bIsPYDelUserPhr) {
         if ((FcitxHotkeyIsHotKeyLAZ(sym, state)
-                || FcitxHotkeyIsHotKey(sym, state, FCITX_SEPARATOR)
-                || (pystate->bSP && FcitxInputStateGetRawInputBufferSize(input) > 0 && pystate->bSP_UseSemicolon && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)))) {
+             || FcitxHotkeyIsHotKey(sym, state, FCITX_SEPARATOR)
+             || (pystate->bSP && FcitxInputStateGetRawInputBufferSize(input) > 0 && pystate->bSP_UseSemicolon && FcitxHotkeyIsHotKey(sym, state, FCITX_SEMICOLON)))) {
             FcitxInputStateSetIsInRemind(input, false);
             FcitxInputStateSetShowCursor(input, true);
 
@@ -657,32 +656,21 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else if (pystate->iPYInsertPoint) {
+                char *move_src = (pystate->strFindString
+                                  + pystate->iPYInsertPoint);
                 /* we cannot delete it if cursor is at the first */
                 val = ((pystate->iPYInsertPoint > 1)
-                       && (pystate->strFindString[pystate->iPYInsertPoint - 2] == PY_SEPARATOR)) ? 2 : 1;
-                int len = strlen(pystate->strFindString + pystate->iPYInsertPoint), i = 0;
-                /* 这里使用<=而不是<是因为还有'\0'需要拷贝 */
-                for (i = 0; i <= len; i++)
-                    pystate->strFindString[i + pystate->iPYInsertPoint - val] = pystate->strFindString[i + pystate->iPYInsertPoint];
-                ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
+                       && (move_src[-2] == PY_SEPARATOR)) ? 2 : 1;
+                memmove(move_src - val, move_src, strlen(move_src) + 1);
+                ParsePY(&pystate->pyconfig, pystate->strFindString,
+                        &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
                 pystate->iPYInsertPoint -= val;
 
-                if (!strlen(pystate->strFindString)) {
-                    if (!pystate->iPYSelected)
-                        return IRV_CLEAN;
-
-                    val = strlen(pystate->strFindString);
-                    strcpy(strTemp, pystate->pySelected[pystate->iPYSelected - 1].strPY);
-                    strcat(strTemp, pystate->strFindString);
-                    strcpy(pystate->strFindString, strTemp);
-                    pystate->iPYInsertPoint = strlen(pystate->strFindString) - val;
-                    pystate->iPYSelected--;
-                    ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
-                }
-
+                if (!strlen(pystate->strFindString))
+                    return IRV_CLEAN;
                 retVal = IRV_DISPLAY_CANDWORDS;
             } else {
-                if (strlen(pystate->strFindString) == 0)
+                if (!strlen(pystate->strFindString))
                     return IRV_TO_PROCESS;
                 else
                     return IRV_DO_NOTHING;
@@ -691,13 +679,13 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             if (FcitxInputStateGetRawInputBufferSize(input)) {
                 if (pystate->iPYInsertPoint == strlen(pystate->strFindString))
                     return IRV_DO_NOTHING;
-                val = (pystate->strFindString[pystate->iPYInsertPoint + 1] == PY_SEPARATOR) ? 2 : 1;
-                int len = strlen(pystate->strFindString + pystate->iPYInsertPoint + val), i = 0;
-                /* 这里使用<=而不是<是因为还有'\0'需要拷贝 */
-                for (i = 0; i <= len; i++)
-                    pystate->strFindString[i + pystate->iPYInsertPoint] = pystate->strFindString[i + pystate->iPYInsertPoint + val];
+                char *move_dst = (pystate->strFindString
+                                  + pystate->iPYInsertPoint);
+                val = (move_dst[1] == PY_SEPARATOR) ? 2 : 1;
+                memmove(move_dst, move_dst + val, strlen(move_dst + val) + 1);
 
-                ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
+                ParsePY(&pystate->pyconfig, pystate->strFindString,
+                        &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
                 if (!strlen(pystate->strFindString))
                     return IRV_CLEAN;
                 retVal = IRV_DISPLAY_CANDWORDS;
@@ -742,20 +730,25 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 retVal = IRV_DISPLAY_CANDWORDS;
             }
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
-            if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) == 0) {
+            FcitxCandidateWordList *candList;
+            candList = FcitxInputStateGetCandidateList(input);
+            if (FcitxCandidateWordPageCount(candList) == 0) {
                 if (FcitxInputStateGetRawInputBufferSize(input) == 0)
                     return IRV_TO_PROCESS;
                 else
                     return IRV_DO_NOTHING;
             }
 
-            retVal = FcitxCandidateWordChooseByIndex(FcitxInputStateGetCandidateList(input), 0);
+            retVal = FcitxCandidateWordChooseByIndex(candList, 0);
         } else if (FcitxHotkeyIsHotKey(sym, state, pystate->pyconfig.hkPYDelUserPhr)) {
             if (!pystate->bIsPYDelUserPhr) {
+                int i;
+                FcitxCandidateWordList *candList;
                 FcitxCandidateWord* candWord = NULL;
-                for (candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
-                        candWord != NULL;
-                        candWord = FcitxCandidateWordGetCurrentWindowNext(FcitxInputStateGetCandidateList(input), candWord)) {
+                candList = FcitxInputStateGetCandidateList(input);
+                for (i = 0;
+                     (candWord = FcitxCandidateWordGetByIndex(candList, i));
+                     i++) {
                     if (candWord->owner == pystate) {
                         PYCandWord* pycandWord = candWord->priv;
                         if (pycandWord->iWhich == PY_CAND_USERPHRASE)
@@ -789,16 +782,17 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
         } else if (FcitxHotkeyIsHotKey(sym, state, pystate->pyconfig.hkPYDelFreq)) {
             if (!pystate->bIsPYDelFreq) {
                 val = 0;
-                int index = 0;
+                int i;
                 FcitxCandidateWord* candWord = NULL;
-                for (candWord = FcitxCandidateWordGetCurrentWindow(FcitxInputStateGetCandidateList(input));
-                        candWord != NULL;
-                        candWord = FcitxCandidateWordGetCurrentWindowNext(FcitxInputStateGetCandidateList(input), candWord)) {
-                    index ++ ;
+                FcitxCandidateWordList *candList;
+                candList = FcitxInputStateGetCandidateList(input);
+                for (i = 0;
+                     (candWord = FcitxCandidateWordGetByIndex(candList, i));
+                     i++) {
                     if (candWord->owner == pystate) {
                         PYCandWord* pycandWord = candWord->priv;
                         if (pycandWord->iWhich == PY_CAND_FREQ) {
-                            val = index;
+                            val = i + 1;
                         }
                     }
                 }
@@ -823,12 +817,13 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
     }
 
     if (retVal == IRV_TO_PROCESS) {
-        if (FcitxHotkeyIsHotKeyDigit(sym, state)) {
-            int iKey = sym - FcitxKey_0;
-            if (iKey == 0)
-                iKey = 10;
-
-            FcitxCandidateWord* candWord = FcitxCandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), iKey - 1);
+        FcitxCandidateWordList *candList;
+        int iKey;
+        candList = FcitxInputStateGetCandidateList(input);
+        iKey = FcitxCandidateWordCheckChooseKey(candList, sym, state);
+        if (iKey >= 0) {
+            FcitxCandidateWord *candWord;
+            candWord = FcitxCandidateWordGetByIndex(candList, iKey);
             if (!FcitxInputStateGetIsInRemind(input)) {
                 if (!FcitxInputStateGetRawInputBufferSize(input))
                     return IRV_TO_PROCESS;
@@ -860,16 +855,19 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             ParsePY(&pystate->pyconfig, pystate->strFindString, &pystate->findMap, PY_PARSE_INPUT_USER, pystate->bSP);
             pystate->iPYInsertPoint = 0;
             retVal = IRV_DISPLAY_CANDWORDS;
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE))
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
             return IRV_TO_PROCESS;
-        else {
-            if (pystate->bIsPYAddFreq || pystate->bIsPYDelFreq || pystate->bIsPYDelUserPhr)
+        } else {
+            if (pystate->bIsPYAddFreq || pystate->bIsPYDelFreq ||
+                pystate->bIsPYDelUserPhr)
                 return IRV_DO_NOTHING;
 
             //下面实现以词定字
-            if (FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)) != 0) {
+            if (FcitxCandidateWordPageCount(candList)) {
                 if (state == FcitxKeyState_None && (sym == pystate->pyconfig.cPYYCDZ[0] || sym == pystate->pyconfig.cPYYCDZ[1])) {
-                    FcitxCandidateWord* candWord = FcitxCandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), pystate->iYCDZ);
+                    FcitxCandidateWord *candWord;
+                    candWord = FcitxCandidateWordGetByIndex(candList,
+                                                            pystate->iYCDZ);
                     if (candWord->owner == pystate) {
                         PYCandWord* pycandWord = candWord->priv;
                         if (pycandWord->iWhich == PY_CAND_USERPHRASE || pycandWord->iWhich == PY_CAND_SYSPHRASE) {
@@ -917,7 +915,8 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                         break;
                     }
 
-                    if (val != -1 && FcitxCandidateWordGetByIndex(FcitxInputStateGetCandidateList(input), val)) {
+                    if (val != -1 &&
+                        FcitxCandidateWordGetByIndex(candList, val)) {
                         pystate->iYCDZ = val;
                         return IRV_DISPLAY_CANDWORDS;
                     }
@@ -1011,7 +1010,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(pystate->owner);
     FcitxMessages* msgPreedit = FcitxInputStateGetPreedit(input);
     FcitxMessages* msgClientPreedit = FcitxInputStateGetClientPreedit(input);
-    struct _FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
     FcitxCandidateWordSetChoose(candList, DIGIT_STR_CHOOSE);
