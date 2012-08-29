@@ -99,6 +99,7 @@ private Q_SLOTS:
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
     void newServiceApper();
+    void updateCursor();
 #endif
 private:
     static QString socketFile();

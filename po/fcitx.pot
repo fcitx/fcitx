@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-16 11:02+0800\n"
+"POT-Creation-Date: 2012-08-29 18:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,9 +23,30 @@ msgid "Key"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:2
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:16
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:126
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:7
 msgid "Choose key modifier"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:12
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:26
+msgid "Do not show spell hint"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:22
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:36
+msgid "Maximum hint length"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:30
+msgid "Maximum words number kept in preedit"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:37
+msgid "Add Extra space when selecting a candidate word"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:4
@@ -580,15 +601,19 @@ msgstr ""
 msgid "Toggle the word hint"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:24
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:25
 msgid "Minimum length to trigger word hint"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:29
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:32
+msgid "Maximum length of spell hint list"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:39
 msgid "Use enter to commit the existing string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:34
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:44
 msgid "Add current input buffer to user dictionary"
 msgstr ""
 
@@ -721,120 +746,168 @@ msgstr ""
 msgid "Enable Hotkey to scroll Between Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:55
+#: /home/saber/Develop/fcitx/data/config.desc:50
+msgid "Include Inactivate when scrolling between Input Method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:61
 msgid "Scroll between Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:60
+#: /home/saber/Develop/fcitx/data/config.desc:66
 msgid "Press Switch Key twice to Change Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:66
+#: /home/saber/Develop/fcitx/data/config.desc:72
 msgid "Interval of Two Key Input"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:72
+#: /home/saber/Develop/fcitx/data/config.desc:78
 msgid "Switching Virtual Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:78
+#: /home/saber/Develop/fcitx/data/config.desc:84
 msgid "Switching Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:84
+#: /home/saber/Develop/fcitx/data/config.desc:90
 msgid "Switching Full Width Character Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:90
+#: /home/saber/Develop/fcitx/data/config.desc:96
 msgid "Switch Full Width Punc Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:96
+#: /home/saber/Develop/fcitx/data/config.desc:102
 msgid "Prev Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:101
+#: /home/saber/Develop/fcitx/data/config.desc:107
 msgid "Next Page"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:106
+#: /home/saber/Develop/fcitx/data/config.desc:112
 msgid "Choose Second and Third Candidate Word"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:112
+#: /home/saber/Develop/fcitx/data/config.desc:118
 msgid "Saving All Config and Input History"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:118
+#: /home/saber/Develop/fcitx/data/config.desc:124
 msgid "Switch Embeded Preedit"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:124
+#: /home/saber/Develop/fcitx/data/config.desc:130
 msgid "Seconds sleep before fcitx really start"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:134
+#: /home/saber/Develop/fcitx/data/config.desc:140
 msgid "Share State Among Window"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:142
+#: /home/saber/Develop/fcitx/data/config.desc:148
 msgid "Default Input Method State"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:148
+#: /home/saber/Develop/fcitx/data/config.desc:154
 msgid "Type half width Punc After a Number"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:158
+#: /home/saber/Develop/fcitx/data/config.desc:164
 msgid "Action after press enter"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:164
+#: /home/saber/Develop/fcitx/data/config.desc:170
 msgid "Disable Paging in Remind Mode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:170
+#: /home/saber/Develop/fcitx/data/config.desc:176
 msgid "Commit when toggle state"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:176
+#: /home/saber/Develop/fcitx/data/config.desc:182
 msgid "Candidate Word Number"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:183
+#: /home/saber/Develop/fcitx/data/config.desc:189
 msgid "Give the tips of Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:189
+#: /home/saber/Develop/fcitx/data/config.desc:195
 msgid "Do not commit preedit text when unfocus a window"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:195
+#: /home/saber/Develop/fcitx/data/config.desc:201
 msgid "Show Input Method Hint After Input method changed"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:201
+#: /home/saber/Develop/fcitx/data/config.desc:207
 msgid "Show Input Method Hint After Input method changed and Focus in"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:207
+#: /home/saber/Develop/fcitx/data/config.desc:213
 msgid "Input Method Hint will be only shown when state is active"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:213
+#: /home/saber/Develop/fcitx/data/config.desc:219
 msgid "Show Input Speed"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:219
+#: /home/saber/Develop/fcitx/data/config.desc:225
 msgid "Show Version"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:225
+#: /home/saber/Develop/fcitx/data/config.desc:231
 msgid "Do not show input window if there is only preedit string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/data/config.desc:231
+#: /home/saber/Develop/fcitx/data/config.desc:237
 msgid "Do not show input window if there is only one candidate and preedit"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:23
+msgid "Maximum length of spell hint list for Auto English"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:31
+msgid "0 for commit immediately, -1 for keep all words"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
+msgid "Useful when you hardly ever use abbreviated pinyin."
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:11
+msgid ""
+"Allow Pinyin Enhance to replace the first candidate word when the input "
+"string is very closed to English."
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:25
+msgid "Maximum length of spell hint list for Pinyin Enhance"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:14
+msgid "Possible Providers: presage, custom, enchant (separate with comma)"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:37
+msgid "Maximum length of spell hint list for Quick Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:18
+msgid "Override the skin font size"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:33
+msgid ""
+"A different value from the global one may be useful when using horizontal "
+"candidate list"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/config.desc:177
+msgid "Send typed raw text if Switch to inactive Mode"
 msgstr ""
 
 # unknown
@@ -1464,12 +1537,12 @@ msgstr ""
 msgid "Can't open punc file."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:344
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:464
 msgid "Too long item for AutoEng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:420
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:379
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:589
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:411
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1603,12 +1676,12 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:223
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:247
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:312
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:336
 #, c-format
 msgid "Quick Phrase: %s"
 msgstr ""
@@ -1776,44 +1849,44 @@ msgstr ""
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:773
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:766
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:784
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:777
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:811
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:805
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:813
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:807
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1802
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1801
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1866
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1865
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1939
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1938
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2197
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2196
 msgid "Remind: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2330
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2329
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1862,20 +1935,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1427
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1419
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1522
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1507
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1524
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1509
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1526
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1511
 msgid "min Num of Characters: "
 msgstr ""
 
