@@ -70,6 +70,7 @@ FcitxCandidateWordMerge(FcitxCandidateWordList* candList,
         utarray_concat(&candList->candWords, &newList->candWords);
     }
     utarray_steal(&newList->candWords, p);
+    newList->currentPage = 0;
     free(p);
 }
 

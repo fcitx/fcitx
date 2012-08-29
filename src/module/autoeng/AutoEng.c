@@ -38,9 +38,10 @@
 #include "module/spell/spell.h"
 
 #include "AutoEng.h"
-#define AUTOSPACE_REPLACE " ,.:;?!\"'"
-#define case_autoeng_replace case ' ': case ',': case '.': case ':':    \
-case ';': case '?': case '!': case '"': case '\''
+#define case_autoeng_replace case ' ': case '\'': case '-': case '_':   \
+case '/'
+#define case_autoeng_exchange case ',': case '.': case ':': case ';':   \
+case '?': case '!'
 
 typedef enum {
     AECM_NONE,
@@ -48,12 +49,6 @@ typedef enum {
     AECM_CTRL,
     AECM_SHIFT,
 } AutoEngChooseModifier;
-
-typedef enum {
-    AESA_APPEND,
-    AESA_COMMIT,
-    AESA_KEEP,
-} AutoEngSelectAction;
 
 typedef struct {
     FcitxGenericConfig gconfig;
@@ -104,7 +99,7 @@ static void* AutoEngCreate(FcitxInstance *instance);
  *
  * @return void
  **/
-static void            LoadAutoEng(FcitxAutoEngState* autoEngState);
+static void LoadAutoEng(FcitxAutoEngState *autoEngState);
 
 /**
  * Cache the input key for autoeng, only simple key without combine key will be record
@@ -206,6 +201,12 @@ AutoEngCheckAutoSpace(FcitxAutoEngState *autoEngState, char key)
     case_autoeng_replace:
         autoEngState->buf[autoEngState->index - 1] = key;
         break;
+    case_autoeng_exchange:
+        autoEngState->buf[autoEngState->index - 1] = key;
+        autoEngState->buf[autoEngState->index] = ' ';
+        AutoEngSetBuffLen(autoEngState, ++autoEngState->index);
+        autoEngState->auto_space = true;
+        break;
     default:
         return false;
     }
@@ -255,6 +256,20 @@ AutoEngPushKey(FcitxAutoEngState *autoEngState, char key)
     autoEngState->buf[autoEngState->index++] = key;
     AutoEngSetBuffLen(autoEngState, autoEngState->index);
     return res;
+}
+
+static boolean
+AutoEngCheckPreedit(FcitxAutoEngState *autoEngState)
+{
+    FcitxInputState *input;
+    char *preedit;
+    input = FcitxInstanceGetInputState(autoEngState->owner);
+    preedit = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    if (preedit && *fcitx_utils_get_ascii_end(preedit)) {
+        free(preedit);
+        return false;
+    }
+    return true;
 }
 
 void *AutoEngCreate(FcitxInstance *instance)
@@ -367,7 +382,8 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         return false;
     if (FcitxHotkeyIsHotKeyUAZ(sym, state) &&
         (FcitxInputStateGetRawInputBufferSize(input) != 0 ||
-         (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0)) {
+         (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0) &&
+        AutoEngCheckPreedit(autoEngState)) {
         *retval = IRV_DISPLAY_MESSAGE;
         FcitxInputStateSetShowCursor(input, false);
         AutoEngSetBuff(autoEngState, FcitxInputStateGetRawInputBuffer(input),
@@ -466,12 +482,14 @@ void FreeAutoEng(void* arg)
     }
 }
 
-boolean SwitchToEng(FcitxAutoEngState* autoEngState, const char *str)
+boolean SwitchToEng(FcitxAutoEngState *autoEngState, const char *str)
 {
-    AUTO_ENG*       autoeng;
-    for (autoeng = (AUTO_ENG *) utarray_front(autoEngState->autoEng);
+    AUTO_ENG *autoeng;
+    if (!AutoEngCheckPreedit(autoEngState))
+        return false;
+    for (autoeng = (AUTO_ENG*)utarray_front(autoEngState->autoEng);
          autoeng != NULL;
-         autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
+         autoeng = (AUTO_ENG*)utarray_next(autoEngState->autoEng, autoeng))
         if (!strcmp(str, autoeng->str))
             return true;
 
