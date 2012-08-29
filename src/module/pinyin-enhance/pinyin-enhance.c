@@ -294,7 +294,6 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     char *pinyin;
     char *p;
     int spaces = 0;
-    int vowels = 0;
     int letters = 0;
     int len_limit = -1;
     boolean res = false;
@@ -337,7 +336,6 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             spaces++;
             continue;
         case_vowel:
-            vowels++;
         case_consonant:
             letters++;
         default:
@@ -409,9 +407,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         }
     }
     /* pretty random numbers here. */
-    if ((letters >= 4) &&
-        (spaces * 2 > letters ||
-         (spaces * 3 >= letters && vowels * 3 >= letters))) {
+    if ((letters >= 4) && (spaces * 2 > letters)) {
         res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 1, len_limit);
         goto out;
     }
