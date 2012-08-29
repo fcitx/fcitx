@@ -258,6 +258,20 @@ AutoEngPushKey(FcitxAutoEngState *autoEngState, char key)
     return res;
 }
 
+static boolean
+AutoEngCheckPreedit(FcitxAutoEngState *autoEngState)
+{
+    FcitxInputState *input;
+    char *preedit;
+    input = FcitxInstanceGetInputState(autoEngState->owner);
+    preedit = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    if (preedit && *fcitx_utils_get_ascii_end(preedit)) {
+        free(preedit);
+        return false;
+    }
+    return true;
+}
+
 void *AutoEngCreate(FcitxInstance *instance)
 {
     FcitxAutoEngState* autoEngState = fcitx_utils_new(FcitxAutoEngState);
@@ -368,7 +382,8 @@ boolean PostInputProcessAutoEng(void* arg, FcitxKeySym sym, unsigned int state, 
         return false;
     if (FcitxHotkeyIsHotKeyUAZ(sym, state) &&
         (FcitxInputStateGetRawInputBufferSize(input) != 0 ||
-         (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0)) {
+         (FcitxInputStateGetKeyState(input) & FcitxKeyState_CapsLock) == 0) &&
+        AutoEngCheckPreedit(autoEngState)) {
         *retval = IRV_DISPLAY_MESSAGE;
         FcitxInputStateSetShowCursor(input, false);
         AutoEngSetBuff(autoEngState, FcitxInputStateGetRawInputBuffer(input),
@@ -467,12 +482,14 @@ void FreeAutoEng(void* arg)
     }
 }
 
-boolean SwitchToEng(FcitxAutoEngState* autoEngState, const char *str)
+boolean SwitchToEng(FcitxAutoEngState *autoEngState, const char *str)
 {
-    AUTO_ENG*       autoeng;
-    for (autoeng = (AUTO_ENG *) utarray_front(autoEngState->autoEng);
+    AUTO_ENG *autoeng;
+    if (!AutoEngCheckPreedit(autoEngState))
+        return false;
+    for (autoeng = (AUTO_ENG*)utarray_front(autoEngState->autoEng);
          autoeng != NULL;
-         autoeng = (AUTO_ENG *) utarray_next(autoEngState->autoEng, autoeng))
+         autoeng = (AUTO_ENG*)utarray_next(autoEngState->autoEng, autoeng))
         if (!strcmp(str, autoeng->str))
             return true;
 
