@@ -57,15 +57,14 @@ check_im_type(FcitxIM *im)
     if (strcmp(im->uniqueName, "sunpinyin") == 0) {
         FcitxModuleFunctionArg arg;
         boolean sp = false;
+        char *str;
         arg.args[0] = "";
         arg.args[1] = &sp;
-        FcitxModuleInvokeFunctionByName(im->owner->owner,
-                                        "fcitx-sunpinyin", 0, arg);
-        if (sp) {
-            return PY_IM_SHUANGPIN;
-        } else {
-            return PY_IM_PINYIN;
-        }
+        str = FcitxModuleInvokeFunctionByName(im->owner->owner,
+                                              "fcitx-sunpinyin", 0, arg);
+        if (str)
+            free(str);
+        return sp ? PY_IM_SHUANGPIN : PY_IM_PINYIN;
     }
     return PY_IM_INVALID;
 }
