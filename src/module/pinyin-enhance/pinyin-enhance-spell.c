@@ -49,7 +49,7 @@ case 'q': case 'r': case 's': case 't': case 'v': case 'w':     \
 case 'x': case 'y': case 'z'
 
 static inline void
-py_check_input_string(PinyinEnhance *pyenhance, char *str, int len)
+py_fix_input_string(PinyinEnhance *pyenhance, char *str, int len)
 {
     FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
     if ((!im) || strcmp(im->uniqueName, "shuangpin-libpinyin"))
@@ -219,8 +219,6 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(pyenhance->owner),
                                      FCITX_SPELL_NAME))
         return false;
-    if (pyenhance->config.disable_spell)
-        return false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
     pinyin = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
     if (!pinyin)
@@ -262,7 +260,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         }
     } while (*(p++));
     /* for linpinyin-shuangpin only */
-    py_check_input_string(pyenhance, pinyin, pinyin_len);
+    py_fix_input_string(pyenhance, pinyin, pinyin_len);
     /* not at the end of the string */
     if (*last_start) {
         if (im_type == PY_IM_PINYIN) {

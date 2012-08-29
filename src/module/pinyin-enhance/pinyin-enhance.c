@@ -53,7 +53,7 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin_enhance, module, FcitxModule) = {
     .ReloadConfig = PinyinEnhanceReloadConfig
 };
 
-static inline int
+static int
 check_im_type(FcitxIM *im)
 {
     if (!im)
@@ -109,7 +109,8 @@ PinyinEnhanceAddCandidateWord(void *arg)
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(im)))
         return;
-    PinyinEnhanceSpellHint(pyenhance, im_type);
+    if (!pyenhance->config.disable_spell)
+        PinyinEnhanceSpellHint(pyenhance, im_type);
     return;
 }
 
