@@ -400,4 +400,33 @@ fcitx_utils_get_ascii_part(char *string)
     return fcitx_utils_get_ascii_partn(string, strlen(string));
 }
 
+static inline int
+is_valid_ascii(char c)
+{
+    return (!(c & 0x80)) && c;
+}
+
+FCITX_EXPORT_API
+char*
+fcitx_utils_get_ascii_endn(const char *string, size_t len)
+{
+    if (!string)
+        return NULL;
+    const char *end = string + len;
+    for (;string < end && is_valid_ascii(*string);string++) {
+    }
+    return (char*)string;
+}
+
+FCITX_EXPORT_API
+char*
+fcitx_utils_get_ascii_end(const char *string)
+{
+    if (!string)
+        return NULL;
+    for (;is_valid_ascii(*string);string++) {
+    }
+    return (char*)string;
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -42,34 +42,6 @@ enum {
     PY_IM_SHUANGPIN,
 };
 
-static inline int
-check_im_type(FcitxIM *im)
-{
-    if (!im)
-        return PY_IM_INVALID;
-    if (strcmp(im->uniqueName, "pinyin") == 0 ||
-        strcmp(im->uniqueName, "pinyin-libpinyin") == 0 ||
-        strcmp(im->uniqueName, "googlepinyin") == 0 ||
-        strcmp(im->uniqueName, "shuangpin-libpinyin") == 0)
-        return PY_IM_PINYIN;
-    if (strcmp(im->uniqueName, "shuangpin") == 0)
-        return PY_IM_SHUANGPIN;
-    if (strcmp(im->uniqueName, "sunpinyin") == 0) {
-        FcitxModuleFunctionArg arg;
-        boolean sp = false;
-        arg.args[0] = "";
-        arg.args[1] = &sp;
-        FcitxModuleInvokeFunctionByName(im->owner->owner,
-                                        "fcitx-sunpinyin", 0, arg);
-        if (sp) {
-            return PY_IM_SHUANGPIN;
-        } else {
-            return PY_IM_PINYIN;
-        }
-    }
-    return PY_IM_INVALID;
-}
-
 #define case_vowel case 'a': case 'e': case 'i': case 'o':      \
 case 'u': case 'A': case 'E': case 'I': case 'O': case 'U'
 
@@ -95,7 +67,7 @@ typedef struct {
 typedef struct {
     PinyinEnhanceConfig config;
     FcitxInstance *owner;
-    char *selected;
+    /* char *selected; */
 } PinyinEnhance;
 
 static void *PinyinEnhanceCreate(FcitxInstance *instance);
@@ -122,6 +94,47 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin_enhance, module, FcitxModule) = {
     .ReloadConfig = PinyinEnhanceReloadConfig
 };
 
+static inline int
+check_im_type(FcitxIM *im)
+{
+    if (!im)
+        return PY_IM_INVALID;
+    if (strcmp(im->uniqueName, "pinyin") == 0 ||
+        strcmp(im->uniqueName, "pinyin-libpinyin") == 0 ||
+        strcmp(im->uniqueName, "googlepinyin") == 0 ||
+        strcmp(im->uniqueName, "shuangpin-libpinyin") == 0)
+        return PY_IM_PINYIN;
+    if (strcmp(im->uniqueName, "shuangpin") == 0)
+        return PY_IM_SHUANGPIN;
+    if (strcmp(im->uniqueName, "sunpinyin") == 0) {
+        FcitxModuleFunctionArg arg;
+        boolean sp = false;
+        char *str;
+        arg.args[0] = "";
+        arg.args[1] = &sp;
+        str = FcitxModuleInvokeFunctionByName(im->owner->owner,
+                                              "fcitx-sunpinyin", 0, arg);
+        if (str)
+            free(str);
+        return sp ? PY_IM_SHUANGPIN : PY_IM_PINYIN;
+    }
+    return PY_IM_INVALID;
+}
+
+static inline void
+py_check_input_string(PinyinEnhance *pyenhance, char *str, int len)
+{
+    FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
+    if ((!im) || strcmp(im->uniqueName, "shuangpin-libpinyin"))
+        return;
+    FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
+    /**
+     * hopefully the input string (shuang-pin) is shorter than
+     * the buffer (which is longer than the full pinyin)
+     **/
+    strncpy(str, FcitxInputStateGetRawInputBuffer(input), len);
+}
+
 static void*
 PinyinEnhanceCreate(FcitxInstance *instance)
 {
@@ -141,20 +154,15 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     return pyenhance;
 }
 
+#if 0
 static INPUT_RETURN_VALUE
 FcitxPYEnhanceGetSpellCandWordCb(void *arg, const char *commit)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     FcitxInstance *instance = pyenhance->owner;
-    if (pyenhance->selected) {
-        FcitxInstanceCommitString(instance,
-                                  FcitxInstanceGetCurrentIC(instance),
-                                  pyenhance->selected);
-        free(pyenhance->selected);
-        pyenhance->selected = NULL;
-    }
     return IRV_TO_PROCESS;
 }
+#endif
 
 static void
 PinyinEnhanceMergeSpellCandList(PinyinEnhance *pyenhance,
@@ -230,11 +238,20 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     func_arg.args[3] = (void*)(long)len_limit;
     func_arg.args[4] = "en";
     func_arg.args[5] = "cus";
-    func_arg.args[6] = FcitxPYEnhanceGetSpellCandWordCb;
+    func_arg.args[6] = NULL;
     func_arg.args[7] = pyenhance;
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
+    if (position == 0) {
+        const char *commit_str;
+        FcitxMessages *message = FcitxInputStateGetClientPreedit(input);
+        func_arg.args[0] = FcitxCandidateWordGetFirst(newList);
+        commit_str = InvokeFunction(instance, FCITX_SPELL,
+                                    CANDWORD_GET_COMMIT, func_arg);
+        FcitxMessagesSetMessageCount(message, 0);
+        FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s", commit_str);
+    }
     PinyinEnhanceMergeSpellCandList(pyenhance, candList, newList, position);
     return true;
 }
@@ -288,14 +305,13 @@ static boolean
 PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
 {
     FcitxInputState *input;
-    char *string;
     char *pinyin;
     char *p;
     int spaces = 0;
-    int vowels = 0;
     int letters = 0;
     int len_limit = -1;
     boolean res = false;
+    int pinyin_len;
     FcitxCandidateWordList *cand_list;
     FcitxCandidateWord *cand_word;
     if (!FcitxAddonsIsAddonAvailable(FcitxInstanceGetAddons(pyenhance->owner),
@@ -304,15 +320,19 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if (pyenhance->config.disable_spell)
         return false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
-    string = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
-    pinyin = fcitx_utils_get_ascii_part(string);
+    pinyin = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    if (!pinyin)
+        return false;
+    if (*fcitx_utils_get_ascii_end(pinyin)) {
+        free(pinyin);
+        return false;
+    }
+    pinyin_len = strlen(pinyin);
     cand_list = FcitxInputStateGetCandidateList(input);
-    if (pinyin != string)
-        pyenhance->selected = strndup(string, pinyin - string);
     p = pinyin;
     char *last_start = p;
     int words_count = 0;
-    int words_type[strlen(p) / 2 + 1];
+    int words_type[pinyin_len / 2 + 1];
     do {
         switch (*p) {
         case ' ': {
@@ -332,7 +352,6 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             spaces++;
             continue;
         case_vowel:
-            vowels++;
         case_consonant:
             letters++;
         default:
@@ -340,6 +359,8 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             break;
         }
     } while (*(p++));
+    /* for linpinyin-shuangpin only */
+    py_check_input_string(pyenhance, pinyin, pinyin_len);
     /* not at the end of the string */
     if (*last_start) {
         if (im_type == PY_IM_PINYIN) {
@@ -404,9 +425,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         }
     }
     /* pretty random numbers here. */
-    if ((letters >= 4) &&
-        (spaces * 2 > letters ||
-         (spaces * 3 >= letters && vowels * 3 >= letters))) {
+    if ((letters >= 4) && (spaces * 2 > letters)) {
         res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 1, len_limit);
         goto out;
     }
@@ -415,7 +434,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         goto out;
     }
 out:
-    free(string);
+    free(pinyin);
     return res;
 }
 
@@ -426,10 +445,6 @@ PinyinEnhanceAddCandidateWord(void *arg)
     FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
     int im_type;
 
-    if (pyenhance->selected) {
-        free(pyenhance->selected);
-        pyenhance->selected = NULL;
-    }
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(im)))
         return;
@@ -440,9 +455,7 @@ PinyinEnhanceAddCandidateWord(void *arg)
 static void
 PinyinEnhanceDestroy(void *arg)
 {
-    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
-    if (pyenhance->selected)
-        free(pyenhance->selected);
+    /* PinyinEnhance *pyenhance = (PinyinEnhance*)arg; */
 }
 
 static void

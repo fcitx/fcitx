@@ -186,6 +186,29 @@ char *fcitx_utils_get_ascii_part(char *string);
  * @since 4.2.6
  **/
 char *fcitx_utils_get_ascii_partn(char *string, size_t len);
+
+/**
+ * @brief get the position of the first non-ascii character in a string (with a size limit)
+ *
+ * @param string a utf8 string
+ * @param len the length of the string
+ * @return string pointer to the position of the first non-ascii character or the end of string
+ *
+ * @since 4.2.6
+ **/
+char *fcitx_utils_get_ascii_endn(const char *string, size_t len);
+
+/**
+ * @brief get the position of the first non-ascii character in a string
+ *
+ * @param string a utf8 string
+ * @param len the length of the string
+ * @return string pointer to the position of the first non-ascii character or the end of string
+ *
+ * @since 4.2.6
+ **/
+char *fcitx_utils_get_ascii_end(const char *string);
+
 #ifdef __cplusplus
 }
 #endif
