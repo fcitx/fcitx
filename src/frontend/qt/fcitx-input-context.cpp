@@ -354,6 +354,16 @@ void QFcitxInputContext::update()
         }
     }
 
+    QTimer::singleShot(0, this, SLOT(updateCursor()));
+}
+
+void QFcitxInputContext::updateCursor()
+{
+    QWidget* widget = focusWidget();
+    if (widget == NULL || !isValid()) {
+        return;
+    }
+
     QRect rect = widget->inputMethodQuery(Qt::ImMicroFocus).toRect();
 
     QPoint topleft = widget->mapToGlobal(QPoint(0, 0));
@@ -364,7 +374,6 @@ void QFcitxInputContext::update()
         m_icproxy->SetCursorRect(rect.x(), rect.y(), rect.width(), rect.height());
     }
 }
-
 
 bool QFcitxInputContext::isComposing() const
 {
