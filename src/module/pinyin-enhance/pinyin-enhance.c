@@ -94,7 +94,7 @@ typedef struct {
 typedef struct {
     PinyinEnhanceConfig config;
     FcitxInstance *owner;
-    char *selected;
+    /* char *selected; */
 } PinyinEnhance;
 
 static void *PinyinEnhanceCreate(FcitxInstance *instance);
@@ -140,20 +140,15 @@ PinyinEnhanceCreate(FcitxInstance *instance)
     return pyenhance;
 }
 
+#if 0
 static INPUT_RETURN_VALUE
 FcitxPYEnhanceGetSpellCandWordCb(void *arg, const char *commit)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     FcitxInstance *instance = pyenhance->owner;
-    if (pyenhance->selected) {
-        FcitxInstanceCommitString(instance,
-                                  FcitxInstanceGetCurrentIC(instance),
-                                  pyenhance->selected);
-        free(pyenhance->selected);
-        pyenhance->selected = NULL;
-    }
     return IRV_TO_PROCESS;
 }
+#endif
 
 static void
 PinyinEnhanceMergeSpellCandList(PinyinEnhance *pyenhance,
@@ -229,7 +224,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     func_arg.args[3] = (void*)(long)len_limit;
     func_arg.args[4] = "en";
     func_arg.args[5] = "cus";
-    func_arg.args[6] = FcitxPYEnhanceGetSpellCandWordCb;
+    func_arg.args[6] = NULL;
     func_arg.args[7] = pyenhance;
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
@@ -241,13 +236,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         commit_str = InvokeFunction(instance, FCITX_SPELL,
                                     CANDWORD_GET_COMMIT, func_arg);
         FcitxMessagesSetMessageCount(message, 0);
-        if (pyenhance->selected) {
-            FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s%s",
-                                          pyenhance->selected, commit_str);
-        } else {
-            FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s",
-                                          commit_str);
-        }
+        FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s", commit_str);
     }
     PinyinEnhanceMergeSpellCandList(pyenhance, candList, newList, position);
     return true;
@@ -299,10 +288,21 @@ PinyinGetWordType(const char *str, int len)
 }
 
 static boolean
+CheckAsciiString(const char *str)
+{
+    const signed char *sstr;
+    for (sstr = (typeof(sstr))str;*sstr;sstr++) {
+        if (*sstr < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static boolean
 PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
 {
     FcitxInputState *input;
-    char *string;
     char *pinyin;
     char *p;
     int spaces = 0;
@@ -318,11 +318,14 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     if (pyenhance->config.disable_spell)
         return false;
     input = FcitxInstanceGetInputState(pyenhance->owner);
-    string = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
-    pinyin = fcitx_utils_get_ascii_part(string);
+    pinyin = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    if (!pinyin)
+        return false;
+    if (!CheckAsciiString(pinyin)) {
+        free(pinyin);
+        return false;
+    }
     cand_list = FcitxInputStateGetCandidateList(input);
-    if (pinyin != string)
-        pyenhance->selected = strndup(string, pinyin - string);
     p = pinyin;
     char *last_start = p;
     int words_count = 0;
@@ -429,7 +432,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
         goto out;
     }
 out:
-    free(string);
+    free(pinyin);
     return res;
 }
 
@@ -440,10 +443,6 @@ PinyinEnhanceAddCandidateWord(void *arg)
     FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
     int im_type;
 
-    if (pyenhance->selected) {
-        free(pyenhance->selected);
-        pyenhance->selected = NULL;
-    }
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(im)))
         return;
@@ -454,9 +453,7 @@ PinyinEnhanceAddCandidateWord(void *arg)
 static void
 PinyinEnhanceDestroy(void *arg)
 {
-    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
-    if (pyenhance->selected)
-        free(pyenhance->selected);
+    /* PinyinEnhance *pyenhance = (PinyinEnhance*)arg; */
 }
 
 static void
