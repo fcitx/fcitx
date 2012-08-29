@@ -288,18 +288,6 @@ PinyinGetWordType(const char *str, int len)
 }
 
 static boolean
-CheckAsciiString(const char *str)
-{
-    const signed char *sstr;
-    for (sstr = (typeof(sstr))str;*sstr;sstr++) {
-        if (*sstr < 0) {
-            return false;
-        }
-    }
-    return true;
-}
-
-static boolean
 PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
 {
     FcitxInputState *input;
@@ -321,7 +309,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
     pinyin = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
     if (!pinyin)
         return false;
-    if (!CheckAsciiString(pinyin)) {
+    if (*fcitx_utils_get_ascii_end(pinyin)) {
         free(pinyin);
         return false;
     }
