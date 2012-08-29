@@ -52,6 +52,8 @@ static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args);
+static const char *FcitxSpellCandWordGetCommit(void *arg,
+                                               FcitxModuleFunctionArg args);
 
 static boolean SpellOrderHasValidProvider(const char *providers);
 
@@ -126,6 +128,7 @@ SpellCreate(FcitxInstance *instance)
     AddFunction(addon, FcitxSpellAddPersonal);
     AddFunction(addon, FcitxSpellDictAvailable);
     AddFunction(addon, FcitxSpellGetCandWords);
+    AddFunction(addon, FcitxSpellCandWordGetCommit);
     return spell;
 }
 
@@ -501,8 +504,18 @@ typedef struct {
     void *arg;
 } GetCandWordsArgs;
 
+static const char*
+FcitxSpellCandWordGetCommit(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxCandidateWord *candWord = args.args[0];
+    GetCandWordsArgs *cand_word_args = candWord->priv;
+    if (cand_word_args->arg != arg)
+        return NULL;
+    return (void*)(cand_word_args + 1);
+}
+
 static INPUT_RETURN_VALUE
-FcitxSpellGetCandWord(void* arg, FcitxCandidateWord* candWord)
+FcitxSpellGetCandWord(void *arg, FcitxCandidateWord *candWord)
 {
     GetCandWordsArgs *args = candWord->priv;
     FcitxSpell *spell = (FcitxSpell*)args->arg;
