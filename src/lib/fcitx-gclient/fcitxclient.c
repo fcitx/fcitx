@@ -409,8 +409,10 @@ _fcitx_client_vanish (GDBusConnection *connection,
 static gchar*
 _fcitx_get_socket_path()
 {
+    char* machineId = dbus_get_local_machine_id();
     gchar* path;
-    gchar* addressFile = g_strdup_printf("%s-%d", dbus_get_local_machine_id(), fcitx_utils_get_display_number());
+    gchar* addressFile = g_strdup_printf("%s-%d", machineId, fcitx_utils_get_display_number());
+    dbus_free(machineId);
 
     path = g_build_filename (g_get_user_config_dir (),
             "fcitx",
@@ -1023,6 +1025,7 @@ _fcitx_get_address ()
 
     gchar* path = _fcitx_get_socket_path();
     FILE* fp = fopen(path, "r");
+    g_free(path);
 
     if (!fp)
         return NULL;

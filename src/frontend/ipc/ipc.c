@@ -192,6 +192,15 @@ const char * im_introspection_xml =
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"ActivateIM\">\n"
+    "    </method>\n"
+    "    <method name=\"InactivateIM\">\n"
+    "    </method>\n"
+    "    <method name=\"ToggleIM\">\n"
+    "    </method>\n"
+    "    <method name=\"GetCurrentState\">\n"
+    "      <arg name=\"state\" direction=\"out\" type=\"i\"/>\n"
+    "    </method>\n"
     "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">\n"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>\n"
@@ -650,6 +659,33 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         dbus_connection_send(connection, reply, NULL);
         dbus_message_unref(reply);
         fcitx_utils_launch_configure_tool();
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ActivateIM")) {
+        FcitxInstanceEnableIM(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner), false);
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "InactivateIM")) {
+        FcitxInstanceCloseIM(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner));
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ToggleIM")) {
+        FcitxInstanceChangeIMState(ipc->owner, FcitxInstanceGetCurrentIC(ipc->owner));
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentState")) {
+        int r = FcitxInstanceGetCurrentState(ipc->owner);
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_message_append_args(reply,
+                                 DBUS_TYPE_INT32, &r,
+                                 DBUS_TYPE_INVALID);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "ConfigureAddon")) {
         DBusError error;
