@@ -85,6 +85,11 @@ void* DBusCreate(FcitxInstance* instance)
 
     DBusError err;
 
+    if (FcitxInstanceIsTryReplace(instance)) {
+        fcitx_utils_launch_tool("fcitx-remote", "-e");
+        sleep(1);
+    }
+
     dbus_threads_init_default();
 
     // first init dbus
@@ -159,19 +164,7 @@ void* DBusCreate(FcitxInstance* instance)
 
                 if (replaceCountdown > 0) {
                     replaceCountdown --;
-                    DBusMessage* message = dbus_message_new_method_call(servicename, FCITX_IM_DBUS_PATH, FCITX_IM_DBUS_INTERFACE, "Exit");
-                    /* synchronize call here */
-                    DBusMessage* reply = dbus_connection_send_with_reply_and_block(dbusmodule->conn, message, 2000, &err);
-
-                    if (dbus_error_is_set(&err)) {
-                        FcitxLog(ERROR, "Restart (%s)", err.message);
-                        dbus_error_free(&err);
-                        dbus_error_init(&err);
-                    }
-
-                    if (reply)
-                        dbus_message_unref(reply);
-                    dbus_message_unref(message);
+                    fcitx_utils_launch_tool("fcitx-remote", "-e");
 
                     /* sleep for a while and retry */
                     sleep(1);
