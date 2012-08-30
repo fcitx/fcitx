@@ -159,6 +159,24 @@ void fcitx_client_process_key_async(FcitxClient* self,
 gint fcitx_client_process_key_finish(FcitxClient* client, GAsyncResult* res);
 
 /**
+ * fcitx_client_enable_ic:
+ *
+ * @client A FcitxClient
+ *
+ * tell fcitx activate current ic
+ **/
+void fcitx_client_enable_ic(FcitxClient* self);
+
+/**
+ * fcitx_client_focus_in:
+ *
+ * @client A FcitxClient
+ *
+ * tell fcitx inactivate current ic
+ **/
+void fcitx_client_close_ic(FcitxClient* self);
+
+/**
  * fcitx_client_focus_in:
  *
  * @client A FcitxClient

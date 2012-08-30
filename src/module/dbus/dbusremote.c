@@ -80,7 +80,7 @@ void usage()
            "\t-o\t\tactivate input method\n"
            "\t-r\t\treload fcitx config\n"
            "\t-t,-T\t\tswitch Active/Inactive\n"
-           "\t-e\t\tAsk fcitx to quit\n"
+           "\t-e\t\tAsk fcitx to exit\n"
            "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
            "\t-h\t\tdisplay this help and exit\n",
            IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
@@ -102,6 +102,7 @@ int main (int argc, char* argv[])
     DBusMessage* message = NULL;
     DBusConnection* conn = NULL;
     int c;
+    int ret = 0;
     int messageType = FCITX_DBUS_GET_CURRENT_STATE;
     while ((c = getopt(argc, argv, "chortTe")) != -1) {
         switch (c) {
@@ -149,10 +150,13 @@ int main (int argc, char* argv[])
         CASE(GET_CURRENT_STATE, GetCurrentState);
 
         default:
+            ret = 1;
             goto some_error;
     };
-    if (!message)
+    if (!message) {
+        ret = 1;
         goto some_error;
+    }
     address = _fcitx_get_address();
     do {
         if (!address)
@@ -170,8 +174,10 @@ int main (int argc, char* argv[])
     if (!conn) {
         conn = dbus_bus_get(DBUS_BUS_SESSION, NULL);
 
-        if (!conn)
+        if (!conn) {
+            ret = 1;
             goto some_error;
+        }
 
         dbus_connection_set_exit_on_disconnect(conn, FALSE);
     }
@@ -181,8 +187,10 @@ int main (int argc, char* argv[])
         int result = 0;
         if (reply && dbus_message_get_args(reply, NULL, DBUS_TYPE_INT32, &result, DBUS_TYPE_INVALID))
             printf("%d\n", result);
-        else
+        else {
+            ret = 1;
             fprintf(stderr, "Not get reply\n");
+        }
     }
     else
         dbus_connection_send(conn, message, NULL);
@@ -195,5 +203,5 @@ some_error:
         dbus_connection_unref(conn);
     fcitx_utils_free(address);
     fcitx_utils_free(servicename);
-    return 1;
+    return ret;
 }

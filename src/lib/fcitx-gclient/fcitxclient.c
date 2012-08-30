@@ -67,6 +67,10 @@ static const gchar introspection_xml[] =
 static const gchar ic_introspection_xml[] =
     "<node>\n"
     "  <interface name=\"" FCITX_IC_DBUS_INTERFACE "\">\n"
+    "    <method name=\"EnableIC\">\n"
+    "    </method>\n"
+    "    <method name=\"CloseIC\">\n"
+    "    </method>\n"
     "    <method name=\"FocusIn\">\n"
     "    </method>\n"
     "    <method name=\"FocusOut\">\n"
@@ -112,6 +116,14 @@ static const gchar ic_introspection_xml[] =
     "      <arg name=\"str\" type=\"a(si)\"/>\n"
     "      <arg name=\"cursorpos\" type=\"i\"/>\n"
     "    </signal>\n"
+    "    <signal name=\"UpdateClientSideUI\">\n"
+    "      <arg name=\"auxup\" type=\"s\"/>\n"
+    "      <arg name=\"auxdown\" type=\"s\"/>\n"
+    "      <arg name=\"preedit\" type=\"s\"/>\n"
+    "      <arg name=\"candidateword\" type=\"s\"/>\n"
+    "      <arg name=\"imname\" type=\"s\"/>\n"
+    "      <arg name=\"cursorpos\" type=\"i\"/>\n"
+    "    </signal>\n"
     "    <signal name=\"ForwardKey\">\n"
     "      <arg name=\"keyval\" type=\"u\"/>\n"
     "      <arg name=\"state\" type=\"u\"/>\n"
@@ -136,6 +148,7 @@ enum {
     DELETE_SURROUNDING_TEXT_SIGNAL,
     UPDATED_FORMATTED_PREEDIT_SIGNAL,
     DISCONNECTED_SIGNAL,
+    UPDATE_CLIENT_SIDE_UI_SIGNAL,
     LAST_SIGNAL
 };
 
@@ -222,6 +235,22 @@ fcitx_client_dispose(GObject *object)
 
     if (G_OBJECT_CLASS(fcitx_client_parent_class)->dispose != NULL)
         G_OBJECT_CLASS(fcitx_client_parent_class)->dispose(object);
+}
+
+FCITX_EXPORT_API
+void fcitx_client_enable_ic(FcitxClient* self)
+{
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "EnableIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    }
+}
+
+FCITX_EXPORT_API
+void fcitx_client_close_ic(FcitxClient* self)
+{
+    if (self->priv->icproxy) {
+        g_dbus_proxy_call(self->priv->icproxy, "CloseIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+    }
 }
 
 FCITX_EXPORT_API
@@ -787,6 +816,12 @@ _fcitx_client_g_signal(GDBusProxy *proxy,
         g_variant_get(parameters, "(iu)", &offset, &nchar);
         g_signal_emit(user_data, signals[DELETE_SURROUNDING_TEXT_SIGNAL], 0, offset, nchar);
     }
+    else if (strcmp(signal_name, "UpdateClientSideUI") == 0) {
+        const gchar* auxup, *auxdown, *preedit, *candidate, *imname;
+        int cursor;
+        g_variant_get(parameters, "(sssssi)", &auxup, &auxdown, &preedit, &candidate, &imname, &cursor);
+        g_signal_emit(user_data, signals[UPDATE_CLIENT_SIDE_UI_SIGNAL], 0, auxup, auxdown, preedit, candidate, imname, cursor);
+    }
     else if (strcmp(signal_name, "UpdateFormattedPreedit") == 0) {
         int cursor_pos;
         GPtrArray* array = g_ptr_array_new_with_free_func(_item_free);
@@ -954,6 +989,31 @@ fcitx_client_class_init(FcitxClientClass *klass)
                 2,
                 G_TYPE_INT, G_TYPE_UINT
             );
+
+    /**
+     * FcitxClient::update-client-side-ui
+     *
+     * @client: A FcitxClient
+     * @auxup: (transfer none): Aux up string
+     * @auxdown: (transfer none): Aux down string
+     * @preedit: (transfer none): preedit string
+     * @candidateword: (transfer none): candidateword in one line
+     * @imname: (transfer none): input method name
+     * @cursor_pos: cursor position
+     *
+     * Emit when input method need to update client side ui
+     */
+    signals[UPDATE_CLIENT_SIDE_UI_SIGNAL] = g_signal_new(
+            "update-client-side-ui",
+            FCITX_TYPE_CLIENT,
+            G_SIGNAL_RUN_LAST,
+            0,
+            NULL,
+            NULL,
+            fcitx_marshall_VOID__STRING_STRING_STRING_STRING_STRING_INT,
+            G_TYPE_NONE,
+            6,
+            G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 
     /**
      * FcitxClient::update-formatted-preedit
