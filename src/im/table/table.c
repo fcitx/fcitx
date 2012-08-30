@@ -71,6 +71,15 @@ FCITX_DEFINE_PLUGIN(fcitx_table, ime2, FcitxIMClass2) =  {
 static boolean LoadTableConfig(TableConfig* config);
 static void SaveTableConfig(TableConfig* config);
 
+static inline unsigned int GetTableMod(TableMetaData* table)
+{
+    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
+    if (table->chooseModifier > CM_CTRL)
+        table->chooseModifier = CM_CTRL;
+
+    return cmodtable[table->chooseModifier];
+}
+
 boolean LoadTableConfig(TableConfig* config)
 {
     FcitxConfigFileDesc* configDesc = GetTableGlobalConfigDesc();
@@ -361,11 +370,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
     char* strCodeInput = FcitxInputStateGetRawInputBuffer(input);
     FcitxCandidateWordList* candList = FcitxInputStateGetCandidateList(input);
 
-    unsigned int cmodtable[] = {FcitxKeyState_None, FcitxKeyState_Alt, FcitxKeyState_Ctrl, FcitxKeyState_Shift};
-    if (table->chooseModifier > CM_CTRL)
-        table->chooseModifier = CM_CTRL;
-
-    FcitxCandidateWordSetChooseAndModifier(candList, table->strChoose, cmodtable[table->chooseModifier]);
+    FcitxCandidateWordSetChooseAndModifier(candList, table->strChoose, GetTableMod(table));
     FcitxCandidateWordSetPageSize(candList, config->iMaxCandWord);
 
     if (table != tbl->curLoadedTable && tbl->curLoadedTable) {
@@ -412,6 +417,17 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
         /* it's not in special state */
         if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder && !tbl->bIsTableClearFreq) {
+            if (FcitxHotkeyCheckChooseKeyAndModifier(sym, state, table->strChoose, GetTableMod(table)) >= 0) {
+                char *buf1 = strndup(strCodeInput, FcitxInputStateGetRawInputBufferSize(input));
+                char* buf = NULL;
+                asprintf(&buf, "%s%c", buf1, (char) sym);
+                boolean result = (TableFindFirstMatchCode(table, buf, false, false) == -1);
+                free(buf);
+                free(buf1);
+                if (result)
+                    return IRV_TO_PROCESS;
+            }
+
             /* check we use Pinyin or Not */
             if (strCodeInput[0] == table->cPinyin && table->bUsePY) {
                 if (FcitxInputStateGetRawInputBufferSize(input) != (MAX_PY_LENGTH * 5 + 1)) {
