@@ -38,8 +38,6 @@ CONFIG_BINDING_BEGIN(PinyinEnhanceConfig)
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
-CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplacePreedit",
-                        allow_replace_preedit);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_END()
