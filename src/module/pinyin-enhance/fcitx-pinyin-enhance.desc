@@ -10,6 +10,11 @@ DefaultValue=True
 Description=Allow replacing the first candidate
 LongDescription=Allow Pinyin Enhance to replace the first candidate word when the input string is very closed to English.
 
+[Pinyin Enhance/AllowReplacePreedit]
+Type=Boolean
+DefaultValue=False
+Description=Allow replacing preedit word
+LongDescription=Also replace preedit word when the first candidate word is replaced
 [Pinyin Enhance/DisableSpell]
 Description=Do not show spell hint
 Type=Boolean

@@ -35,6 +35,7 @@ typedef struct {
     FcitxGenericConfig gconfig;
     boolean short_as_english;
     boolean allow_replace_first;
+    boolean allow_replace_preedit;
     boolean disable_spell;
     int max_hint_length;
 } PinyinEnhanceConfig;

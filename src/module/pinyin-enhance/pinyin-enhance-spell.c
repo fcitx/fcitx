@@ -151,7 +151,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
     if (!newList)
         return false;
-    if (position == 0) {
+    if (position == 0 && pyenhance->config.allow_replace_preedit) {
         const char *commit_str;
         FcitxMessages *message = FcitxInputStateGetClientPreedit(input);
         func_arg.args[0] = FcitxCandidateWordGetFirst(newList);
