@@ -49,10 +49,8 @@ _fcitx_get_address ()
     char buffer[BUFSIZE];
     size_t sz = fread(buffer, sizeof(char), BUFSIZE, fp);
     fclose(fp);
-    if (sz == 0)
-        return NULL;
-    char *p = rawmemchr(buffer, '\0');
-    if (sz != p - buffer + 2 * sizeof(pid_t) + 1)
+    char *p = memchr(buffer, '\0', sz);
+    if (!(p && sz == p - buffer + 2 * sizeof(pid_t) + 1))
         return NULL;
 
     /* skip '\0' */
