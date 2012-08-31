@@ -51,11 +51,8 @@ _fcitx_get_address ()
     fclose(fp);
     if (sz == 0)
         return NULL;
-    char* p = buffer;
-    while(*p)
-        p++;
-    size_t addrlen = p - buffer;
-    if (sz != addrlen + 2 * sizeof(pid_t) + 1)
+    char *p = rawmemchr(buffer, '\0');
+    if (sz != p - buffer + 2 * sizeof(pid_t) + 1)
         return NULL;
 
     /* skip '\0' */
@@ -98,11 +95,11 @@ enum {
 int main (int argc, char* argv[])
 {
     char* servicename = NULL;
-    char *address;
+    char *address = NULL;
     DBusMessage* message = NULL;
     DBusConnection* conn = NULL;
     int c;
-    int ret = 0;
+    int ret = 1;
     int messageType = FCITX_DBUS_GET_CURRENT_STATE;
     while ((c = getopt(argc, argv, "chortTe")) != -1) {
         switch (c) {
@@ -150,11 +147,9 @@ int main (int argc, char* argv[])
         CASE(GET_CURRENT_STATE, GetCurrentState);
 
         default:
-            ret = 1;
             goto some_error;
     };
     if (!message) {
-        ret = 1;
         goto some_error;
     }
     address = _fcitx_get_address();
@@ -175,7 +170,6 @@ int main (int argc, char* argv[])
         conn = dbus_bus_get(DBUS_BUS_SESSION, NULL);
 
         if (!conn) {
-            ret = 1;
             goto some_error;
         }
 
@@ -185,16 +179,17 @@ int main (int argc, char* argv[])
     if (messageType == FCITX_DBUS_GET_CURRENT_STATE) {
         DBusMessage* reply = dbus_connection_send_with_reply_and_block(conn, message, 1000, NULL);
         int result = 0;
-        if (reply && dbus_message_get_args(reply, NULL, DBUS_TYPE_INT32, &result, DBUS_TYPE_INVALID))
+        if (reply && dbus_message_get_args(reply, NULL, DBUS_TYPE_INT32, &result, DBUS_TYPE_INVALID)) {
             printf("%d\n", result);
-        else {
-            ret = 1;
+            ret = 0;
+        } else {
             fprintf(stderr, "Not get reply\n");
         }
-    }
-    else
+    } else {
         dbus_connection_send(conn, message, NULL);
-    dbus_connection_flush(conn);
+        dbus_connection_flush(conn);
+        ret = 0;
+    }
 
 some_error:
     if (message)
