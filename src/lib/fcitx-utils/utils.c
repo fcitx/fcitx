@@ -513,43 +513,38 @@ void fcitx_utils_string_swap(char** obj, const char* str)
 }
 
 FCITX_EXPORT_API
-void fcitx_utils_launch_configure_tool()
+void fcitx_utils_launch_tool(const char* name, const char* arg)
 {
-    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
+    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", name);
+    char* darg = NULL;
+    if (arg)
+        darg = strdup(arg);
     char* args[] = {
         command,
+        darg,
         0
     };
     fcitx_utils_start_process(args);
+    fcitx_utils_free(darg);
     free(command);
+}
+
+FCITX_EXPORT_API
+void fcitx_utils_launch_configure_tool()
+{
+    fcitx_utils_launch_tool("fcitx-configtool", NULL);
 }
 
 FCITX_EXPORT_API
 void fcitx_utils_launch_configure_tool_for_addon(const char* imaddon)
 {
-    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx-configtool");
-    char* dimaddon = strdup(imaddon);
-    char* args[] = {
-        command,
-        dimaddon,
-        0
-    };
-    fcitx_utils_start_process(args);
-    free(dimaddon);
-    free(command);
+    fcitx_utils_launch_tool("fcitx-configtool", imaddon);
 }
 
 FCITX_EXPORT_API
 void fcitx_utils_launch_restart()
 {
-    char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", "/fcitx");
-    char* args[] = {
-        command,
-        "-r",
-        0
-    };
-    fcitx_utils_start_process(args);
-    free(command);
+    fcitx_utils_launch_tool("fcitx", "-r");
 }
 
 FCITX_EXPORT_API

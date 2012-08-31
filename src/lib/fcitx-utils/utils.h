@@ -269,6 +269,18 @@ extern "C" {
     char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* filename);
 
     /**
+     * lanunch fcitx's tool
+     *
+     * @param name tool's name
+     * @param arg single arg
+     *
+     * @return void
+     *
+     * @since 4.2.6
+     */
+    void fcitx_utils_launch_tool(const char* name, const char* arg);
+
+    /**
      * launch fcitx-configtool
      *
      * @return void
@@ -315,7 +327,7 @@ extern "C" {
      * @param defval default value
      *
      * @return value of var
-     * 
+     *
      * @since 4.2.6
      */
     int fcitx_utils_get_boolean_env(const char *name, int defval);
