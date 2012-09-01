@@ -1573,17 +1573,8 @@ int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, co
     if (state != candState)
         return -1;
 
-    sym = FcitxHotkeyPadToMain(sym);
-
-    int i = 0;
-
-    while (strChoose[i]) {
-        if (sym == strChoose[i])
-            return i;
-        i++;
-    }
-
-    return -1;
+    char *p = strchr(strChoose, FcitxHotkeyPadToMain(sym));
+    return p ? p - strChoose : -1;
 }
 
 FCITX_EXPORT_API

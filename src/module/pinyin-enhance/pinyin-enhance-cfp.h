@@ -34,6 +34,7 @@ extern "C" {
                                            FcitxKeySym sym, unsigned int state,
                                            INPUT_RETURN_VALUE *retval);
     void PinyinEnhanceCharFromPhraseCandidate(PinyinEnhance *pyenhance);
+    void PinyinEnhanceCharFromPhraseReset(PinyinEnhance *pyenhance);
 
 #ifdef __cplusplus
 }

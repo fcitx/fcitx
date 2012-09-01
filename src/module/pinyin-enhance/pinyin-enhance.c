@@ -34,6 +34,7 @@ static void *PinyinEnhanceCreate(FcitxInstance *instance);
 static void PinyinEnhanceDestroy(void *arg);
 static void PinyinEnhanceReloadConfig(void *arg);
 static void PinyinEnhanceAddCandidateWord(void *arg);
+static void PinyinEnhanceResetHook(void *arg);
 static boolean PinyinEnhancePostInput(void *arg, FcitxKeySym sym,
                                       unsigned int state,
                                       INPUT_RETURN_VALUE *retval);
@@ -103,12 +104,13 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         return NULL;
     }
 
-    FcitxIMEventHook cand_hook = {
+    FcitxIMEventHook event_hook = {
         .arg = pyenhance,
         .func = PinyinEnhanceAddCandidateWord,
     };
-
-    FcitxInstanceRegisterUpdateCandidateWordHook(instance, cand_hook);
+    FcitxInstanceRegisterUpdateCandidateWordHook(instance, event_hook);
+    event_hook.func = PinyinEnhanceResetHook;
+    FcitxInstanceRegisterResetInputHook(instance, event_hook);
 
     FcitxKeyFilterHook key_hook = {
         .arg = pyenhance,
@@ -187,5 +189,12 @@ PinyinEnhanceGetSelected(PinyinEnhance *pyenhance)
      **/
     *fcitx_utils_get_ascii_part(string) = '\0';
     return string;
+}
+
+static void
+PinyinEnhanceResetHook(void *arg)
+{
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    PinyinEnhanceCharFromPhraseReset(pyenhance);
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
