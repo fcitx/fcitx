@@ -62,9 +62,12 @@ CharFromPhraseStringCommit(PinyinEnhance *pyenhance, FcitxKeySym sym)
     }
     FcitxCandidateWord *cand_word =
         FcitxCandidateWordGetByIndex(cand_list, pyenhance->cfp_cur_word);
-    if (!(cand_word && cand_word->strWord &&
-          *(p = fcitx_utf8_get_nth_char(cand_word->strWord, index))))
+    if (!(cand_word && cand_word->strWord))
         return IRV_TO_PROCESS;
+
+    if (!(*fcitx_utils_get_ascii_end(cand_word->strWord) &&
+          *(p = fcitx_utf8_get_nth_char(cand_word->strWord, index))))
+        return IRV_DO_NOTHING;
 
     int len;
     uint32_t chr;
