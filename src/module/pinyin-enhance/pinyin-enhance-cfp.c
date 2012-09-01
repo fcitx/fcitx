@@ -89,6 +89,7 @@ CharFromPhraseStringCommit(PinyinEnhance *pyenhance, FcitxKeySym sym)
 static INPUT_RETURN_VALUE
 CharFromPhraseStringSelect(PinyinEnhance *pyenhance, FcitxKeySym sym)
 {
+    /* FcitxInputStateGetIsInRemind(input) ?? */
 #define SET_CUR_WORD(key, index) case key:      \
     pyenhance->cfp_cur_word = index; break
 
