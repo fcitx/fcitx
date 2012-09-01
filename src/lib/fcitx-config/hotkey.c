@@ -787,8 +787,7 @@ void FcitxHotkeySetKey(const char *str, FcitxHotkey * hotkey)
 FCITX_EXPORT_API
 FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
 {
-    FcitxKeySym res;
-#define PAD_TO_MAIN(keypad, keymain) case keypad: res = keymain; break
+#define PAD_TO_MAIN(keypad, keymain) case keypad: return keymain
     switch (sym) {
         PAD_TO_MAIN(FcitxKey_KP_Space, FcitxKey_space);
         PAD_TO_MAIN(FcitxKey_KP_Tab, FcitxKey_Tab);
@@ -828,11 +827,10 @@ FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
 
         PAD_TO_MAIN(FcitxKey_KP_Equal, FcitxKey_equal);
     default:
-        res = sym;
         break;
     }
 #undef PAD_TO_MAIN
-    return res;
+    return sym;
 }
 
 FCITX_EXPORT_API
