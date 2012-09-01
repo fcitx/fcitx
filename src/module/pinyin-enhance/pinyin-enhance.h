@@ -37,12 +37,15 @@ typedef struct {
     boolean allow_replace_first;
     boolean disable_spell;
     int max_hint_length;
+    char *char_from_phrase_str;
+    FcitxHotkey char_from_phrase_key[2];
 } PinyinEnhanceConfig;
 
 typedef struct {
     PinyinEnhanceConfig config;
     FcitxInstance *owner;
     /* char *selected; */
+    boolean cfp_active; /* for "char from phrase" */
 } PinyinEnhance;
 
 enum {

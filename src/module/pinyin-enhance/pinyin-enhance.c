@@ -26,6 +26,7 @@
 #include <libintl.h>
 #include "pinyin-enhance.h"
 #include "pinyin-enhance-spell.h"
+#include "pinyin-enhance-cfp.h"
 
 #define LOGLEVEL DEBUG
 
@@ -33,6 +34,12 @@ static void *PinyinEnhanceCreate(FcitxInstance *instance);
 static void PinyinEnhanceDestroy(void *arg);
 static void PinyinEnhanceReloadConfig(void *arg);
 static void PinyinEnhanceAddCandidateWord(void *arg);
+static boolean PinyinEnhancePostInput(void *arg, FcitxKeySym sym,
+                                      unsigned int state,
+                                      INPUT_RETURN_VALUE *retval);
+static boolean PinyinEnhancePreInput(void *arg, FcitxKeySym sym,
+                                     unsigned int state,
+                                     INPUT_RETURN_VALUE *retval);
 
 CONFIG_BINDING_BEGIN(PinyinEnhanceConfig)
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
@@ -91,12 +98,42 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         return NULL;
     }
 
-    FcitxIMEventHook hook;
-    hook.arg = pyenhance;
-    hook.func = PinyinEnhanceAddCandidateWord;
+    FcitxIMEventHook cand_hook = {
+        .arg = pyenhance,
+        .func = PinyinEnhanceAddCandidateWord,
+    };
 
-    FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
+    FcitxInstanceRegisterUpdateCandidateWordHook(instance, cand_hook);
+
+    FcitxKeyFilterHook key_hook = {
+        .arg = pyenhance,
+        .func = PinyinEnhancePostInput
+    };
+    FcitxInstanceRegisterPostInputFilter(pyenhance->owner, key_hook);
+    key_hook.func = PinyinEnhancePreInput;
+    FcitxInstanceRegisterPreInputFilter(pyenhance->owner, key_hook);
+
     return pyenhance;
+}
+
+static boolean
+PinyinEnhancePreInput(void *arg, FcitxKeySym sym, unsigned int state,
+                      INPUT_RETURN_VALUE *retval)
+{
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    if (PinyinEnhanceCharFromPhrasePre(pyenhance, sym, state, retval))
+        return true;
+    return false;
+}
+
+static boolean
+PinyinEnhancePostInput(void *arg, FcitxKeySym sym, unsigned int state,
+                       INPUT_RETURN_VALUE *retval)
+{
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    if (PinyinEnhanceCharFromPhrasePost(pyenhance, sym, state, retval))
+        return true;
+    return false;
 }
 
 static void

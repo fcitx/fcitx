@@ -18,19 +18,40 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_SPELL_H
-#define _PINYIN_ENHANCE_SPELL_H
+#include <errno.h>
+#include <iconv.h>
+#include <unistd.h>
+#include <ctype.h>
 
-#include "pinyin-enhance.h"
+#include <libintl.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "pinyin-enhance-cfp.h"
 
-    boolean PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type);
+#include "config.h"
 
-#ifdef __cplusplus
+static INPUT_RETURN_VALUE
+CharFromParseString(PinyinEnhance *pyenhance,
+                    FcitxKeySym sym, unsigned int state)
+{
+    if (!FcitxHotkeyIsHotKeySimple(sym, state))
+        return IRV_TO_PROCESS;
+    return IRV_TO_PROCESS;
 }
-#endif
 
-#endif /* _PINYIN_ENHANCE_SPELL_H */
+boolean
+PinyinEnhanceCharFromPhrasePost(PinyinEnhance *pyenhance, FcitxKeySym sym,
+                                unsigned int state, INPUT_RETURN_VALUE *retval)
+{
+    if (*retval)
+        return false;
+    if ((*retval = CharFromParseString(pyenhance, sym, state)))
+        return true;
+    return false;
+}
+
+boolean
+PinyinEnhanceCharFromPhrasePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
+                               unsigned int state, INPUT_RETURN_VALUE *retval)
+{
+    return false;
+}

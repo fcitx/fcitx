@@ -18,8 +18,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_SPELL_H
-#define _PINYIN_ENHANCE_SPELL_H
+#ifndef _PINYIN_ENHANCE_CFP_H
+#define _PINYIN_ENHANCE_CFP_H
 
 #include "pinyin-enhance.h"
 
@@ -27,10 +27,15 @@
 extern "C" {
 #endif
 
-    boolean PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type);
+    boolean PinyinEnhanceCharFromPhrasePost(PinyinEnhance *pyenhance,
+                                            FcitxKeySym sym, unsigned int state,
+                                            INPUT_RETURN_VALUE *retval);
+    boolean PinyinEnhanceCharFromPhrasePre(PinyinEnhance *pyenhance,
+                                           FcitxKeySym sym, unsigned int state,
+                                           INPUT_RETURN_VALUE *retval);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _PINYIN_ENHANCE_SPELL_H */
+#endif /* _PINYIN_ENHANCE_CFP_H */
