@@ -33,9 +33,44 @@ static INPUT_RETURN_VALUE
 CharFromParseString(PinyinEnhance *pyenhance,
                     FcitxKeySym sym, unsigned int state)
 {
-    if (!FcitxHotkeyIsHotKeySimple(sym, state))
+    FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
+    char *p;
+    int index;
+
+    if (!(pyenhance->config.char_from_phrase_str &&
+          FcitxHotkeyIsHotKeySimple(keymain, state)))
         return IRV_TO_PROCESS;
-    return IRV_TO_PROCESS;
+    p = strchr(pyenhance->config.char_from_phrase_str, keymain);
+    if (!p)
+        return IRV_TO_PROCESS;
+    index = p - pyenhance->config.char_from_phrase_str;
+
+    FcitxInstance *instance = pyenhance->owner;
+    FcitxInputState *input;
+    FcitxCandidateWordList *cand_list;
+    FcitxCandidateWord *cand_word;
+    input = FcitxInstanceGetInputState(instance);
+    cand_list = FcitxInputStateGetCandidateList(input);
+    cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+    if (!(cand_word && cand_word->strWord &&
+          *(p = fcitx_utf8_get_nth_char(cand_word->strWord, index))))
+        return IRV_TO_PROCESS;
+
+    uint32_t chr;
+    char buff[UTF8_MAX_LENGTH + 1];
+    FcitxInputContext *cur_ic = FcitxInstanceGetCurrentIC(instance);
+    char *selected;
+    int len;
+    strncpy(buff, p, UTF8_MAX_LENGTH);
+    *fcitx_utf8_get_char(buff, &chr) = '\0';
+    selected = PinyinEnhanceGetSelected(pyenhance);
+    /* only commit once */
+    len = strlen(selected);
+    selected = realloc(selected, len + UTF8_MAX_LENGTH + 1);
+    strcpy(selected + len, buff);
+    FcitxInstanceCommitString(instance, cur_ic, selected);
+    free(selected);
+    return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
 boolean
@@ -44,8 +79,6 @@ PinyinEnhanceCharFromPhrasePost(PinyinEnhance *pyenhance, FcitxKeySym sym,
 {
     if (*retval)
         return false;
-    if ((*retval = CharFromParseString(pyenhance, sym, state)))
-        return true;
     return false;
 }
 
@@ -53,5 +86,7 @@ boolean
 PinyinEnhanceCharFromPhrasePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
                                unsigned int state, INPUT_RETURN_VALUE *retval)
 {
+    if ((*retval = CharFromParseString(pyenhance, sym, state)))
+        return true;
     return false;
 }

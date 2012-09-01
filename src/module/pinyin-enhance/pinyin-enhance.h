@@ -54,4 +54,14 @@ enum {
     PY_IM_SHUANGPIN,
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _PINYIN_ENHANCE_H */

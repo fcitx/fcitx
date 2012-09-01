@@ -47,6 +47,10 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseString",
+                        char_from_phrase_str);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseKey",
+                        char_from_phrase_key);
 CONFIG_BINDING_END()
 
 CONFIG_DEFINE_LOAD_AND_SAVE(PinyinEnhance, PinyinEnhanceConfig,
@@ -162,5 +166,22 @@ PinyinEnhanceReloadConfig(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceLoadConfig(&pyenhance->config);
+}
+
+char*
+PinyinEnhanceGetSelected(PinyinEnhance *pyenhance)
+{
+    FcitxInputState *input;
+    char *string;
+    input = FcitxInstanceGetInputState(pyenhance->owner);
+    string = FcitxUIMessagesToCString(FcitxInputStateGetPreedit(input));
+    /**
+     * Haven't found a way to handle the case when the word before the current
+     * one is not handled by im-engine (e.g. a invalid pinyin in sunpinyin).
+     * (a possible solution is to deal with different im-engine separately).
+     * Not very important though....
+     **/
+    *fcitx_utils_get_ascii_part(string) = '\0';
+    return string;
 }
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
