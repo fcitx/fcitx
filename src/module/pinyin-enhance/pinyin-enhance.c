@@ -65,8 +65,9 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin_enhance, module, FcitxModule) = {
 };
 
 static int
-check_im_type(FcitxIM *im)
+check_im_type(PinyinEnhance *pyenhance)
 {
+    FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
     if (!im)
         return PY_IM_INVALID;
     if (strcmp(im->uniqueName, "pinyin") == 0 ||
@@ -125,6 +126,8 @@ PinyinEnhancePreInput(void *arg, FcitxKeySym sym, unsigned int state,
                       INPUT_RETURN_VALUE *retval)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    if (!check_im_type(pyenhance))
+        return false;
     if (PinyinEnhanceCharFromPhrasePre(pyenhance, sym, state, retval))
         return true;
     return false;
@@ -135,6 +138,8 @@ PinyinEnhancePostInput(void *arg, FcitxKeySym sym, unsigned int state,
                        INPUT_RETURN_VALUE *retval)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    if (!check_im_type(pyenhance))
+        return false;
     if (PinyinEnhanceCharFromPhrasePost(pyenhance, sym, state, retval))
         return true;
     return false;
@@ -144,11 +149,10 @@ static void
 PinyinEnhanceAddCandidateWord(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
-    FcitxIM *im = FcitxInstanceGetCurrentIM(pyenhance->owner);
     int im_type;
-
+    PinyinEnhanceCharFromPhraseCandidate(pyenhance);
     /* check whether the current im is pinyin */
-    if (!(im_type = check_im_type(im)))
+    if (!(im_type = check_im_type(pyenhance)))
         return;
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);

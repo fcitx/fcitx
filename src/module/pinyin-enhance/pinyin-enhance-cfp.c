@@ -29,38 +29,48 @@
 
 #include "config.h"
 
-static INPUT_RETURN_VALUE
-CharFromParseString(PinyinEnhance *pyenhance,
-                    FcitxKeySym sym, unsigned int state)
+static void
+CharFromPhraseCheckPage(PinyinEnhance *pyenhance)
 {
-    FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
+    if (pyenhance->cfp_cur_word == 0)
+        return;
+    FcitxInstance *instance = pyenhance->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    if (FcitxCandidateWordGetCurrentPage(cand_list) == pyenhance->cfp_cur_page)
+        return;
+    pyenhance->cfp_cur_word = 0;
+}
+
+static INPUT_RETURN_VALUE
+CharFromPhraseStringCommit(PinyinEnhance *pyenhance, FcitxKeySym sym)
+{
     char *p;
     int index;
 
-    if (!(pyenhance->config.char_from_phrase_str &&
-          FcitxHotkeyIsHotKeySimple(keymain, state)))
-        return IRV_TO_PROCESS;
-    p = strchr(pyenhance->config.char_from_phrase_str, keymain);
+    p = strchr(pyenhance->config.char_from_phrase_str, sym);
     if (!p)
         return IRV_TO_PROCESS;
     index = p - pyenhance->config.char_from_phrase_str;
 
     FcitxInstance *instance = pyenhance->owner;
-    FcitxInputState *input;
-    FcitxCandidateWordList *cand_list;
-    FcitxCandidateWord *cand_word;
-    input = FcitxInstanceGetInputState(instance);
-    cand_list = FcitxInputStateGetCandidateList(input);
-    cand_word = FcitxCandidateWordGetCurrentWindow(cand_list);
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    if (FcitxCandidateWordGetCurrentWindowSize(cand_list)
+        <= pyenhance->cfp_cur_word) {
+        pyenhance->cfp_cur_word = 0;
+    }
+    FcitxCandidateWord *cand_word =
+        FcitxCandidateWordGetByIndex(cand_list, pyenhance->cfp_cur_word);
     if (!(cand_word && cand_word->strWord &&
           *(p = fcitx_utf8_get_nth_char(cand_word->strWord, index))))
         return IRV_TO_PROCESS;
 
+    int len;
     uint32_t chr;
+    char *selected;
     char buff[UTF8_MAX_LENGTH + 1];
     FcitxInputContext *cur_ic = FcitxInstanceGetCurrentIC(instance);
-    char *selected;
-    int len;
     strncpy(buff, p, UTF8_MAX_LENGTH);
     *fcitx_utf8_get_char(buff, &chr) = '\0';
     selected = PinyinEnhanceGetSelected(pyenhance);
@@ -73,10 +83,64 @@ CharFromParseString(PinyinEnhance *pyenhance,
     return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
+static INPUT_RETURN_VALUE
+CharFromPhraseStringSelect(PinyinEnhance *pyenhance, FcitxKeySym sym)
+{
+#define SET_CUR_WORD(key, index) case key:      \
+    pyenhance->cfp_cur_word = index; break
+
+    switch (sym) {
+        SET_CUR_WORD(FcitxKey_parenright, 9);
+        SET_CUR_WORD(FcitxKey_parenleft, 8);
+        SET_CUR_WORD(FcitxKey_asterisk, 7);
+        SET_CUR_WORD(FcitxKey_ampersand, 6);
+        SET_CUR_WORD(FcitxKey_asciicircum, 5);
+        SET_CUR_WORD(FcitxKey_percent, 4);
+        SET_CUR_WORD(FcitxKey_dollar, 3);
+        SET_CUR_WORD(FcitxKey_numbersign, 2);
+        SET_CUR_WORD(FcitxKey_at, 1);
+        SET_CUR_WORD(FcitxKey_exclam, 0);
+    default:
+        return IRV_TO_PROCESS;
+    }
+#undef SET_CUR_WORD
+
+    FcitxInstance *instance = pyenhance->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    if (FcitxCandidateWordGetCurrentWindowSize(cand_list)
+        <= pyenhance->cfp_cur_word) {
+        pyenhance->cfp_cur_word = 0;
+        return IRV_TO_PROCESS;
+    }
+    pyenhance->cfp_cur_page = FcitxCandidateWordGetCurrentPage(cand_list);
+    return IRV_DO_NOTHING;
+}
+
+static INPUT_RETURN_VALUE
+CharFromPhraseString(PinyinEnhance *pyenhance,
+                    FcitxKeySym sym, unsigned int state)
+{
+    FcitxKeySym keymain = FcitxHotkeyPadToMain(sym);
+    INPUT_RETURN_VALUE retval;
+
+    if (!(pyenhance->config.char_from_phrase_str &&
+          *pyenhance->config.char_from_phrase_str))
+        return IRV_TO_PROCESS;
+    if (!FcitxHotkeyIsHotKeySimple(keymain, state))
+        return IRV_TO_PROCESS;
+    if ((retval = CharFromPhraseStringCommit(pyenhance, keymain)))
+        return retval;
+    if ((retval = CharFromPhraseStringSelect(pyenhance, keymain)))
+        return retval;
+    return IRV_TO_PROCESS;
+}
+
 boolean
 PinyinEnhanceCharFromPhrasePost(PinyinEnhance *pyenhance, FcitxKeySym sym,
                                 unsigned int state, INPUT_RETURN_VALUE *retval)
 {
+    CharFromPhraseCheckPage(pyenhance);
     if (*retval)
         return false;
     return false;
@@ -86,7 +150,15 @@ boolean
 PinyinEnhanceCharFromPhrasePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
                                unsigned int state, INPUT_RETURN_VALUE *retval)
 {
-    if ((*retval = CharFromParseString(pyenhance, sym, state)))
+    CharFromPhraseCheckPage(pyenhance);
+    if ((*retval = CharFromPhraseString(pyenhance, sym, state)))
         return true;
     return false;
+}
+
+void
+PinyinEnhanceCharFromPhraseCandidate(PinyinEnhance *pyenhance)
+{
+    pyenhance->cfp_cur_word = 0;
+    pyenhance->cfp_cur_page = 0;
 }

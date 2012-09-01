@@ -44,8 +44,9 @@ typedef struct {
 typedef struct {
     PinyinEnhanceConfig config;
     FcitxInstance *owner;
-    /* char *selected; */
     boolean cfp_active; /* for "char from phrase" */
+    int cfp_cur_word;
+    int cfp_cur_page;
 } PinyinEnhance;
 
 enum {

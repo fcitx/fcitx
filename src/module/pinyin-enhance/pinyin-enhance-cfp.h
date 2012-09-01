@@ -33,6 +33,7 @@ extern "C" {
     boolean PinyinEnhanceCharFromPhrasePre(PinyinEnhance *pyenhance,
                                            FcitxKeySym sym, unsigned int state,
                                            INPUT_RETURN_VALUE *retval);
+    void PinyinEnhanceCharFromPhraseCandidate(PinyinEnhance *pyenhance);
 
 #ifdef __cplusplus
 }
