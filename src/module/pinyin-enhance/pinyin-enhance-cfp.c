@@ -201,7 +201,10 @@ CharFromPhraseStringCommit(PinyinEnhance *pyenhance, FcitxKeySym sym)
 static INPUT_RETURN_VALUE
 CharFromPhraseStringSelect(PinyinEnhance *pyenhance, FcitxKeySym sym)
 {
-    /* FcitxInputStateGetIsInRemind(input) ?? */
+    FcitxInstance *instance = pyenhance->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    if (FcitxInputStateGetIsInRemind(input))
+        return IRV_TO_PROCESS;
 #define SET_CUR_WORD(key, index) case key:      \
     pyenhance->cfp_cur_word = index; break
 
@@ -221,8 +224,6 @@ CharFromPhraseStringSelect(PinyinEnhance *pyenhance, FcitxKeySym sym)
     }
 #undef SET_CUR_WORD
 
-    FcitxInstance *instance = pyenhance->owner;
-    FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     if (FcitxCandidateWordGetCurrentWindowSize(cand_list)
         <= pyenhance->cfp_cur_word) {
