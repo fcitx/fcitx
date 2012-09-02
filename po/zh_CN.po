@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-29 18:06-0400\n"
-"PO-Revision-Date: 2012-08-16 11:04+0800\n"
-"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"PO-Revision-Date: 2012-08-29 18:45-0400\n"
+"Last-Translator: Yichao Yu <yyc1992@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "/分  经过时间: "
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
-msgstr ""
+msgstr "0 代表立即提交, -1 代表保留全部已选单词."
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:593
 msgid "<Low Surrogate>"
@@ -54,7 +54,7 @@ msgstr "<未指派>"
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
-msgstr ""
+msgstr "如果您使用横排候选词, 一个与全局不同的设定可能会有所帮助"
 
 #: unknown
 msgid "ABC"
@@ -113,7 +113,6 @@ msgid "Active Tray Icon"
 msgstr "活动输入法图标"
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:37
-#, fuzzy
 msgid "Add Extra space when selecting a candidate word"
 msgstr "选择候选词时输入额外空格"
 
@@ -167,7 +166,7 @@ msgstr "所有"
 msgid ""
 "Allow Pinyin Enhance to replace the first candidate word when the input "
 "string is very closed to English."
-msgstr ""
+msgstr "允许在输入字符串十分接近英文的时候替换第一个候选词"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
@@ -586,9 +585,8 @@ msgstr "只有预编辑字符串时不显示输入窗口"
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:12
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:26
-#, fuzzy
 msgid "Do not show spell hint"
-msgstr "不在图形界面显示"
+msgstr "不显示拼写提示"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:926
 #, c-format
@@ -952,9 +950,8 @@ msgid "Inactive Text Icon Color"
 msgstr "非活动的文本图标颜色"
 
 #: /home/saber/Develop/fcitx/data/config.desc:50
-#, fuzzy
 msgid "Include Inactivate when scrolling between Input Method"
-msgstr "启用输入法间切换"
+msgstr "输入法间切换时包含未激活状态"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:213
 msgid "Inctive Tray Icon"
@@ -1169,28 +1166,27 @@ msgstr "数学符号"
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:36
 msgid "Maximum hint length"
-msgstr ""
+msgstr "拼写提示候选词最大个数"
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:32
-#, fuzzy
 msgid "Maximum length of spell hint list"
-msgstr "最小触发单词提示长度"
+msgstr "拼写提示候选词最大个数"
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
-msgstr ""
+msgstr "自动英文的拼写提示候选词最大个数"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:25
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
+msgstr "拼音增强的拼写提示候选词最大个数"
 
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:37
 msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr ""
+msgstr "快速输入的拼写提示候选词最大个数"
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:30
 msgid "Maximum words number kept in preedit"
-msgstr ""
+msgstr "在预编辑中保留的最大单词数"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:28
 msgid "Menu Font"
@@ -1341,7 +1337,7 @@ msgstr "输出"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:18
 msgid "Override the skin font size"
-msgstr ""
+msgstr "覆盖皮肤的字号设置"
 
 #: /home/saber/Develop/fcitx/data/inputmethod.desc:23
 msgid "Parent"
@@ -1395,7 +1391,7 @@ msgstr "预编辑文本的位置或偏移"
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:14
 msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
+msgstr "可选的后端: presage, custom, enchant (用英文逗号分隔)"
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:8
 msgid "Preferred Enchant provider"
@@ -1887,7 +1883,7 @@ msgstr "繁体中文"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
 msgid "Treating abbreviated Pinyin as English"
-msgstr "简拼将被当作英文"
+msgstr "将简拼视为英文"
 
 #: /home/saber/Develop/fcitx/data/config.desc:4
 msgid "Trigger Input Method"
@@ -1997,9 +1993,8 @@ msgid "Used by fcitx-remote to change Fcitx state from console"
 msgstr "fcitx-remote 通过它来从命令行改变 Fcitx 的状态"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
-#, fuzzy
 msgid "Useful when you hardly ever use abbreviated pinyin."
-msgstr "将简拼视为英文(适用于很少使用简拼的情况)"
+msgstr "适用于很少使用简拼的情况"
 
 #: unknown
 msgid "User Defined"
