@@ -76,6 +76,7 @@ void usage()
            "\t-r\t\treload fcitx config\n"
            "\t-t,-T\t\tswitch Active/Inactive\n"
            "\t-e\t\tAsk fcitx to exit\n"
+           "\t-a\t\tprint fcitx's dbus address\n"
            "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
            "\t-h\t\tdisplay this help and exit\n",
            IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
@@ -99,7 +100,7 @@ int main (int argc, char* argv[])
     int c;
     int ret = 1;
     int messageType = FCITX_DBUS_GET_CURRENT_STATE;
-    while ((c = getopt(argc, argv, "chortTe")) != -1) {
+    while ((c = getopt(argc, argv, "chortTea")) != -1) {
         switch (c) {
         case 'o':
             messageType = FCITX_DBUS_ACTIVATE;
@@ -120,6 +121,16 @@ int main (int argc, char* argv[])
 
         case 'e':
             messageType = FCITX_DBUS_EXIT;
+            break;
+
+        case 'a':
+            address = _fcitx_get_address();
+            if (address) {
+                printf("%s\n", address);
+                return 0;
+            }
+            else
+                return 1;
             break;
 
         case 'h':
