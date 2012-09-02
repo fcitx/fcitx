@@ -34,7 +34,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
+#if defined(__linux__)
 #include <endian.h>
+#else
+#include <sys/endian.h>
+#endif
 
 #include "spell-internal.h"
 #include "spell-custom.h"

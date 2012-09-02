@@ -411,6 +411,11 @@ fcitx_im_context_finalize(GObject *obj)
 
     fcitx_im_context_set_client_window(GTK_IM_CONTEXT(context), NULL);
 
+#ifndef g_signal_handlers_disconnect_by_data
+#define g_signal_handlers_disconnect_by_data(instance, data) \
+    g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
+#endif
+
     if (context->client) {
         g_signal_handlers_disconnect_by_data(context->client, context);
         g_object_unref(context->client);
