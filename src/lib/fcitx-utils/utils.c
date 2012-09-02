@@ -58,6 +58,10 @@
 #include <sys/user.h>
 #endif
 
+#if defined(__linux__)
+#include <sys/prctl.h>
+#endif
+
 FCITX_EXPORT_API
 int fcitx_utils_calculate_record_number(FILE* fpDict)
 {
@@ -361,26 +365,36 @@ FCITX_EXPORT_API
 char* fcitx_utils_get_process_name()
 {
 #if defined(__linux__)
-    do {
-        FILE* fp = fopen("/proc/self/stat", "r");
-        if (!fp)
-            break;
+    #define _PR_GET_NAME_MAX 16
+    char name[_PR_GET_NAME_MAX + 1];
+    if (prctl(PR_GET_NAME, (unsigned long)name, 0, 0, 0))
+        return strdup("");
+    name[_PR_GET_NAME_MAX] = '\0';
+    return strdup(name);
+    /**
+     * Keep the old code here in case we want to get the name of
+     * another process with known pid sometime.
+     **/
+    /* do { */
+    /*     FILE* fp = fopen("/proc/self/stat", "r"); */
+    /*     if (!fp) */
+    /*         break; */
 
-        const size_t bufsize = 1024;
-        char buf[bufsize];
-        fgets(buf, bufsize, fp);
-        fclose(fp);
+    /*     const size_t bufsize = 1024; */
+    /*     char buf[bufsize]; */
+    /*     fgets(buf, bufsize, fp); */
+    /*     fclose(fp); */
 
-        char* S = strchr(buf, '(');
-        if (!S)
-            break;
-        char* E = strchr(S, ')');
-        if (!E)
-            break;
+    /*     char* S = strchr(buf, '('); */
+    /*     if (!S) */
+    /*         break; */
+    /*     char* E = strchr(S, ')'); */
+    /*     if (!E) */
+    /*         break; */
 
-        return strndup(S+1, E-S-1);
-    } while(0);
-    return strdup("");
+    /*     return strndup(S+1, E-S-1); */
+    /* } while(0); */
+    /* return strdup(""); */
 #elif defined(LIBKVM_FOUND)
     kvm_t *vm = kvm_open(0, "/dev/null", 0, O_RDONLY, NULL);
     if (vm == 0)
