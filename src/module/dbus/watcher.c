@@ -2,7 +2,7 @@
 
 #include <limits.h>
 #include <unistd.h>
-#include <sys/signal.h>
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <dbus/dbus.h>
@@ -88,6 +88,9 @@ int main (int argc, char* argv[])
     if (!dbus_connection_add_filter(conn, WatcherDBusFilter, NULL, NULL))
         goto some_error;
 
+#ifndef NZERO
+#define NZERO 20
+#endif
     nice(NZERO - 1);
 
     fd_set rfds, wfds, efds;
