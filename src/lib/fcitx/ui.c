@@ -601,7 +601,7 @@ void FcitxUIOnInputUnFocus(struct _FcitxInstance* instance)
 }
 
 FCITX_EXPORT_API
-void FcitxUICommitPreedit(struct _FcitxInstance* instance)
+void FcitxUICommitPreedit(FcitxInstance* instance)
 {
     if (instance->CurrentIC
         && !instance->config->bDontCommitPreeditWhenUnfocus
@@ -756,14 +756,21 @@ char* FcitxUIMessagesToCString(FcitxMessages* messages)
 {
     int length = 0;
     int i = 0;
+    int count = FcitxMessagesGetMessageCount(messages);
+    char *message_strs[count];
+    int msg_count = 0;
 
-    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++)
-        length += strlen(FcitxMessagesGetMessageString(messages, i));
+    for (i = 0;i < count;i++) {
+        char *msg_str = FcitxMessagesGetMessageString(messages, i);
+        message_strs[msg_count++] = msg_str;
+        length += strlen(msg_str);
+    }
 
-    char* str = fcitx_utils_malloc0(sizeof(char) * (length + 1));
+    char *str = fcitx_utils_malloc0(sizeof(char) * (length + 1));
 
-    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++)
-        strcat(str, FcitxMessagesGetMessageString(messages, i));
+    for (i = 0;i < msg_count;i++) {
+        strcat(str, message_strs[i]);
+    }
 
     return str;
 }
@@ -772,17 +779,23 @@ char* FcitxUIMessagesToCStringForCommit(FcitxMessages* messages)
 {
     int length = 0;
     int i = 0;
+    int count = FcitxMessagesGetMessageCount(messages);
+    char *message_strs[count];
+    int msg_count = 0;
 
-    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++) {
-        if ((FcitxMessagesGetClientMessageType(messages, i) & MSG_DONOT_COMMIT_WHEN_UNFOCUS) == 0)
-            length += strlen(FcitxMessagesGetMessageString(messages, i));
+    for (i = 0;i < count;i++) {
+        if ((FcitxMessagesGetClientMessageType(messages, i) &
+             MSG_DONOT_COMMIT_WHEN_UNFOCUS) == 0) {
+            char *msg_str = FcitxMessagesGetMessageString(messages, i);
+            message_strs[msg_count++] = msg_str;
+            length += strlen(msg_str);
+        }
     }
 
     char* str = fcitx_utils_malloc0(sizeof(char) * (length + 1));
 
-    for (i = 0; i < FcitxMessagesGetMessageCount(messages) ; i ++) {
-        if ((FcitxMessagesGetClientMessageType(messages, i) & MSG_DONOT_COMMIT_WHEN_UNFOCUS) == 0)
-            strcat(str, FcitxMessagesGetMessageString(messages, i));
+    for (i = 0;i < msg_count;i++) {
+        strcat(str, message_strs[i]);
     }
 
     return str;

@@ -37,12 +37,21 @@ typedef struct {
     boolean allow_replace_first;
     boolean disable_spell;
     int max_hint_length;
+    char *char_from_phrase_str;
+    FcitxHotkey char_from_phrase_key[2];
 } PinyinEnhanceConfig;
 
 typedef struct {
     PinyinEnhanceConfig config;
     FcitxInstance *owner;
-    /* char *selected; */
+    boolean cfp_active; /* for "char from phrase" */
+    int cfp_cur_word;
+    int cfp_cur_page;
+
+    char *cfp_mode_selected;
+    int cfp_mode_cur;
+    int cfp_mode_count;
+    char ***cfp_mode_lists;
 } PinyinEnhance;
 
 enum {
@@ -50,5 +59,15 @@ enum {
     PY_IM_PINYIN,
     PY_IM_SHUANGPIN,
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _PINYIN_ENHANCE_H */

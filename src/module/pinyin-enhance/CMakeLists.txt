@@ -3,6 +3,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 set(FCITX_PYENHANCE_SOURCES
   pinyin-enhance.c
   pinyin-enhance-spell.c
+  pinyin-enhance-cfp.c
 )
 
 fcitx_add_addon(fcitx-pinyin-enhance ${FCITX_PYENHANCE_SOURCES})

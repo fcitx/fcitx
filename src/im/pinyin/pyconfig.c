@@ -30,8 +30,9 @@
 #include <stdlib.h>
 #include <errno.h>
 
-static void FilterGetWordFromPhrase(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
-static void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg);
+static void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group,
+                        FcitxConfigOption *option, void* value,
+                        FcitxConfigSync sync, void* arg);
 static FcitxConfigFileDesc* GetPYConfigDesc();
 
 CONFIG_BINDING_BEGIN(FcitxPinyinConfig)
@@ -44,11 +45,11 @@ CONFIG_BINDING_REGISTER("Pinyin", "SaveAutoPhrase", bPYSaveAutoAsPhrase)
 CONFIG_BINDING_REGISTER("Pinyin", "AddFreqWordKey", hkPYAddFreq)
 CONFIG_BINDING_REGISTER("Pinyin", "DeleteFreqWordKey", hkPYDelFreq)
 CONFIG_BINDING_REGISTER("Pinyin", "DeleteUserPhraseKey", hkPYDelUserPhr)
-CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "InputWordFromPhraseKey", strPYGetWordFromPhrase, FilterGetWordFromPhrase)
 CONFIG_BINDING_REGISTER("Pinyin", "BaseOrder", baseOrder)
 CONFIG_BINDING_REGISTER("Pinyin", "PhraseOrder", phraseOrder)
 CONFIG_BINDING_REGISTER("Pinyin", "FreqOrder", freqOrder)
-CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "FuzzyAnAng", MHPY_C[0].bMode, FilterAnAng)
+CONFIG_BINDING_REGISTER_WITH_FILTER("Pinyin", "FuzzyAnAng", MHPY_C[0].bMode,
+                                    FilterAnAng)
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyEnEng", MHPY_C[1].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyIanIang", MHPY_C[2].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "FuzzyInIng", MHPY_C[3].bMode)
@@ -62,22 +63,6 @@ CONFIG_BINDING_REGISTER("Pinyin", "FuzzyZZH", MHPY_S[4].bMode)
 CONFIG_BINDING_REGISTER("Pinyin", "Misstype", bMisstypeNGGN)
 CONFIG_BINDING_REGISTER("Pinyin", "MisstypeVU", MHPY_C[6].bMode)
 CONFIG_BINDING_END()
-
-void FilterGetWordFromPhrase(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
-{
-    char *pstr = *(char**) value;
-    FcitxPinyinConfig* pyconfig = (FcitxPinyinConfig*) config;
-    if (sync == Raw2Value) {
-        char a = '\0';
-        char b = '\0';
-        if (strlen(pstr) >= 1)
-            a = pstr[0];
-        if (strlen(pstr) >= 2)
-            b = pstr[1];
-        pyconfig->cPYYCDZ[0] = a;
-        pyconfig->cPYYCDZ[1] = b;
-    }
-}
 
 void FilterAnAng(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxConfigOption *option, void* value, FcitxConfigSync sync, void* arg)
 {

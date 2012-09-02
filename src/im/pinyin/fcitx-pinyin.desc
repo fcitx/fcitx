@@ -52,11 +52,6 @@ Type=Hotkey
 DefaultValue=CTRL_DELETE
 Description=Hotkey of Delete User Phrase
 
-[Pinyin/InputWordFromPhraseKey]
-Type=String
-DefaultValue=[]
-Description=Hotkey of Inputing Word From Phrase
-
 [Pinyin/BaseOrder]
 Type=Enum
 EnumCount=3
