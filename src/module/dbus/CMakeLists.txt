@@ -21,6 +21,7 @@ set(FCITX_DBUS_WATCHER_SOURCES
 
 add_executable(fcitx-dbus-watcher ${FCITX_DBUS_WATCHER_SOURCES})
 target_link_libraries( fcitx-dbus-watcher ${DBUS_LIBRARIES} fcitx-utils)
+install(TARGETS fcitx-dbus-watcher DESTINATION ${bindir})
 
 set(FCITX_DBUS_REMOTE_SOURCES
     dbusremote.c
