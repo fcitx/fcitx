@@ -47,6 +47,11 @@ typedef struct {
     boolean cfp_active; /* for "char from phrase" */
     int cfp_cur_word;
     int cfp_cur_page;
+
+    char *cfp_mode_selected;
+    int cfp_mode_cur;
+    int cfp_mode_count;
+    char ***cfp_mode_lists;
 } PinyinEnhance;
 
 enum {

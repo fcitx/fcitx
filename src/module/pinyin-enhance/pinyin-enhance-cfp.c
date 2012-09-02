@@ -28,6 +28,118 @@
 #include "pinyin-enhance-cfp.h"
 
 #include "config.h"
+#include "fcitx/keys.h"
+
+static void CharFromPhraseFreeStrList(char **list)
+{
+    char **p;
+    for (p = list;*p;p++)
+        free(*p);
+    free(list);
+}
+
+static void
+CharFromPhraseModeReset(PinyinEnhance *pyenhance)
+{
+    if (pyenhance->cfp_mode_lists) {
+        int i;
+        for (i = 0;i < pyenhance->cfp_mode_count;i++)
+            CharFromPhraseFreeStrList(pyenhance->cfp_mode_lists[i]);
+        free(pyenhance->cfp_mode_lists);
+        pyenhance->cfp_mode_lists = NULL;
+    }
+    if (pyenhance->cfp_mode_selected) {
+        free(pyenhance->cfp_mode_selected);
+        pyenhance->cfp_mode_selected = NULL;
+    }
+    pyenhance->cfp_mode_cur = 0;
+    pyenhance->cfp_mode_count = 0;
+}
+
+static INPUT_RETURN_VALUE
+CharFromPhraseModeGetCandCb(void *arg, FcitxCandidateWord *cand_word)
+{
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    int len = strlen(pyenhance->cfp_mode_selected);
+    pyenhance->cfp_mode_selected = realloc(pyenhance->cfp_mode_selected,
+                                           len + UTF8_MAX_LENGTH + 1);
+    strcpy(pyenhance->cfp_mode_selected + len, cand_word->strWord);
+    FcitxInstanceCommitString(pyenhance->owner,
+                              FcitxInstanceGetCurrentIC(pyenhance->owner),
+                              pyenhance->cfp_mode_selected);
+    return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
+}
+
+static void
+CharFromPhraseModeInitCandword(PinyinEnhance *pyenhance,
+                               FcitxCandidateWord *cand_word)
+{
+    cand_word->strWord = malloc(UTF8_MAX_LENGTH + 1);
+    cand_word->strWord[UTF8_MAX_LENGTH] = '\0';
+    cand_word->strExtra = NULL;
+    cand_word->callback = CharFromPhraseModeGetCandCb;
+    cand_word->wordType = MSG_OTHER;
+    cand_word->owner = pyenhance;
+    cand_word->priv = NULL;
+}
+
+static boolean
+CandwordIsCharFromPhrase(PinyinEnhance *pyenhance,
+                         FcitxCandidateWord *cand_word)
+{
+    return (cand_word->callback == CharFromPhraseModeGetCandCb &&
+            cand_word->owner == pyenhance);
+}
+
+static void
+CharFromPhraseModeUpdateUI(PinyinEnhance *pyenhance)
+{
+    FcitxInstance *instance = pyenhance->owner;
+    FcitxInputState *input = FcitxInstanceGetInputState(instance);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
+    FcitxMessages *preedit = FcitxInputStateGetPreedit(input);
+    char **cur_list = pyenhance->cfp_mode_lists[pyenhance->cfp_mode_cur];
+    FcitxCandidateWordSetPage(cand_list, 0);
+    FcitxMessagesSetMessageCount(preedit, 0);
+    FcitxMessagesSetMessageCount(client_preedit, 0);
+    FcitxMessagesAddMessageAtLast(preedit, MSG_INPUT, "%s (%s)",
+                                  pyenhance->cfp_mode_selected,
+                                  cur_list[0]);
+    FcitxMessagesAddMessageAtLast(client_preedit, MSG_INPUT, "%s%s",
+                                  pyenhance->cfp_mode_selected,
+                                  *(++cur_list));
+    int i;
+    FcitxCandidateWord *cand_word;
+    /* use existing cand_word added before if they exist */
+    for (i = 0;(cand_word = FcitxCandidateWordGetByTotalIndex(cand_list, i));
+         i++) {
+        if (CandwordIsCharFromPhrase(pyenhance, cand_word)) {
+            strncpy(cand_word->strWord, *cur_list, UTF8_MAX_LENGTH);
+            cur_list++;
+            if (!*cur_list) {
+                break;
+            }
+        }
+    }
+    if (*cur_list) {
+        FcitxCandidateWord new_word;
+        for (;*cur_list;cur_list++) {
+            CharFromPhraseModeInitCandword(pyenhance, &new_word);
+            strncpy(new_word.strWord, *cur_list, UTF8_MAX_LENGTH);
+            FcitxCandidateWordAppend(cand_list, &new_word);
+        }
+    } else {
+        for (i++;
+             (cand_word = FcitxCandidateWordGetByTotalIndex(cand_list, i));) {
+            if (!CandwordIsCharFromPhrase(pyenhance, cand_word)) {
+                i++;
+                continue;
+            }
+            FcitxCandidateWordRemoveByIndex(cand_list, i);
+        }
+    }
+}
 
 static void
 CharFromPhraseCheckPage(PinyinEnhance *pyenhance)
@@ -149,9 +261,61 @@ CharFromPhraseModePre(PinyinEnhance *pyenhance, FcitxKeySym sym,
     FcitxInstance *instance = pyenhance->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxGlobalConfig *config = FcitxInstanceGetGlobalConfig(instance);
+
+    int index = FcitxCandidateWordCheckChooseKey(cand_list, sym, state);
+    if (index >= 0)
+        return FcitxCandidateWordChooseByIndex(cand_list, index);
+    if (FcitxHotkeyIsHotKey(sym, state, config->hkPrevPage)) {
+        if (FcitxCandidateWordHasPrev(cand_list)) {
+            FcitxCandidateWordGoPrevPage(cand_list);
+            return IRV_FLAG_UPDATE_INPUT_WINDOW;
+        }
+        if (pyenhance->cfp_mode_cur > 0) {
+            pyenhance->cfp_mode_cur--;
+            CharFromPhraseModeUpdateUI(pyenhance);
+            return IRV_FLAG_UPDATE_INPUT_WINDOW;
+        }
+        return IRV_DO_NOTHING;
+    } else if (FcitxHotkeyIsHotKey(sym, state, config->hkNextPage)) {
+        if (FcitxCandidateWordHasNext(cand_list)) {
+            FcitxCandidateWordGoNextPage(cand_list);
+            return IRV_FLAG_UPDATE_INPUT_WINDOW;
+        }
+        if (pyenhance->cfp_mode_cur < (pyenhance->cfp_mode_count - 1)) {
+            pyenhance->cfp_mode_cur++;
+            CharFromPhraseModeUpdateUI(pyenhance);
+            return IRV_FLAG_UPDATE_INPUT_WINDOW;
+        }
+        return IRV_DO_NOTHING;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_HOME)) {
+        pyenhance->cfp_mode_cur = 0;
+        CharFromPhraseModeUpdateUI(pyenhance);
+        return IRV_FLAG_UPDATE_INPUT_WINDOW;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_END)) {
+        pyenhance->cfp_mode_cur = pyenhance->cfp_mode_count - 1;
+        CharFromPhraseModeUpdateUI(pyenhance);
+        return IRV_FLAG_UPDATE_INPUT_WINDOW;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
+        int len = strlen(pyenhance->cfp_mode_selected);
+        char *cur_full = *pyenhance->cfp_mode_lists[pyenhance->cfp_mode_cur];
+        pyenhance->cfp_mode_selected = realloc(pyenhance->cfp_mode_selected,
+                                               len + strlen(cur_full) + 1);
+        strcpy(pyenhance->cfp_mode_selected + len, cur_full);
+        FcitxInstanceCommitString(pyenhance->owner,
+                                  FcitxInstanceGetCurrentIC(pyenhance->owner),
+                                  pyenhance->cfp_mode_selected);
+        return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+        return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
+    }
+
     return IRV_DO_NOTHING;
 }
 
+/**
+ * First element is the original string with ascii characters removed (if any)
+ **/
 static char**
 CharFromPhraseModeListFromWord(const char *word)
 {
@@ -160,14 +324,17 @@ CharFromPhraseModeListFromWord(const char *word)
     int n = 0;
     uint32_t chr;
     char *p;
-    char *buff[strlen(word) / 2];
-    int len;
+    int len = strlen(word);
+    char *buff[len / 2];
+    char full[len + 1];
+    full[0] = '\0';
     p = fcitx_utf8_get_char(word, &chr);
     if (!*p)
         return NULL;
     do {
         if ((len = p - word) > 1) {
             buff[n] = malloc(len + 1);
+            strncat(full, word, len);
             memcpy(buff[n], word, len);
             buff[n][len] = '\0';
             n++;
@@ -186,16 +353,17 @@ CharFromPhraseModeListFromWord(const char *word)
         return NULL;
     }
 
-    char **res = malloc(sizeof(char*) * (n + 1));
-    res[n] = NULL;
-    for (n--;n >= 0;n--) {
-        res[n] = buff[n];
+    char **res = malloc(sizeof(char*) * (n + 2));
+    res[0] = strdup(full);
+    res[n + 1] = NULL;
+    for (;n > 0;n--) {
+        res[n] = buff[n - 1];
     }
     return res;
 }
 
-static FcitxCandidateWordList**
-CharFromPhraseModeGetCandLists(PinyinEnhance *pyenhance, int *cur)
+static boolean
+CharFromPhraseModeGetCandLists(PinyinEnhance *pyenhance)
 {
     FcitxInstance *instance = pyenhance->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
@@ -205,7 +373,7 @@ CharFromPhraseModeGetCandLists(PinyinEnhance *pyenhance, int *cur)
     int n = 0;
     int i;
     FcitxCandidateWord *cand_word;
-    *cur = 0;
+    int cur = 0;
     for (i = 0;i < size;i++) {
         cand_word = FcitxCandidateWordGetByIndex(cand_list, i);
         /* try to turn a candidate word into string list */
@@ -213,25 +381,18 @@ CharFromPhraseModeGetCandLists(PinyinEnhance *pyenhance, int *cur)
             (lists[n] = CharFromPhraseModeListFromWord(cand_word->strWord))) {
             /* use the same current word index as cfp_string */
             if (i == pyenhance->cfp_cur_word)
-                *cur = n;
+                cur = n;
             n++;
         }
     }
     if (!n)
-        return NULL;
+        return false;
 
-    FcitxCandidateWordList **res;
-    FcitxCandidateWord new_word = {
-        .callback = NULL, // TODO
-        .owner = pyenhance,
-        .strExtra = NULL,
-        .priv = NULL,
-        .wordType = MSG_OTHER
-    };
-    res = fcitx_utils_malloc0(sizeof(FcitxCandidateWordList*) * (n + 1));
-    for (i = 0;i < n;i++) {
-        res[i] = FcitxCandidateWordNewList();
-    }
+    pyenhance->cfp_mode_cur = cur;
+    pyenhance->cfp_mode_count = n;
+    pyenhance->cfp_mode_lists = malloc(sizeof(char**) * n);
+    memcpy(pyenhance->cfp_mode_lists, lists, sizeof(char**) * n);
+    return true;
 }
 
 static INPUT_RETURN_VALUE
@@ -241,7 +402,12 @@ CharFromPhraseModePost(PinyinEnhance *pyenhance, FcitxKeySym sym,
     if (!FcitxHotkeyIsHotKey(sym, state,
                              pyenhance->config.char_from_phrase_key))
         return IRV_TO_PROCESS;
-
+    if (!CharFromPhraseModeGetCandLists(pyenhance))
+        return IRV_TO_PROCESS;
+    pyenhance->cfp_mode_selected = PinyinEnhanceGetSelected(pyenhance);
+    pyenhance->cfp_active = true;
+    FcitxInstanceCleanInputWindow(pyenhance->owner);
+    CharFromPhraseModeUpdateUI(pyenhance);
     return IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
@@ -250,6 +416,7 @@ PinyinEnhanceCharFromPhrasePost(PinyinEnhance *pyenhance, FcitxKeySym sym,
                                 unsigned int state, INPUT_RETURN_VALUE *retval)
 {
     CharFromPhraseCheckPage(pyenhance);
+    CharFromPhraseModeReset(pyenhance);
     if (*retval)
         return false;
     if ((*retval = CharFromPhraseModePost(pyenhance, sym, state)))
@@ -274,6 +441,7 @@ PinyinEnhanceCharFromPhraseCandidate(PinyinEnhance *pyenhance)
 {
     pyenhance->cfp_cur_word = 0;
     pyenhance->cfp_cur_page = 0;
+    CharFromPhraseModeReset(pyenhance);
 }
 
 void
@@ -282,4 +450,5 @@ PinyinEnhanceCharFromPhraseReset(PinyinEnhance *pyenhance)
     pyenhance->cfp_cur_word = 0;
     pyenhance->cfp_cur_page = 0;
     pyenhance->cfp_active = false;
+    CharFromPhraseModeReset(pyenhance);
 }

@@ -154,7 +154,6 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
     if (position == 0) {
         const char *preedit_str;
         FcitxMessages *message = FcitxInputStateGetClientPreedit(input);
-        func_arg.args[0] = FcitxCandidateWordGetFirst(newList);
         preedit_str = FcitxInputStateGetRawInputBuffer(input);
         FcitxMessagesSetMessageCount(message, 0);
         FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s", preedit_str);
