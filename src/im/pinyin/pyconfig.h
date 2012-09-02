@@ -61,7 +61,6 @@ typedef struct _FcitxPinyinConfig {
     FcitxHotkey hkPYDelFreq[2];
     FcitxHotkey hkPYDelUserPhr[2];
     char* strPYGetWordFromPhrase;
-    char cPYYCDZ[3];
     struct _MHPY *MHPY_C;
     struct _MHPY *MHPY_S;
     boolean bMisstypeNGGN;

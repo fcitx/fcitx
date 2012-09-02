@@ -80,8 +80,9 @@ typedef struct {
             p = NULL;                           \
             break;                              \
         }                                       \
-        (a)->n = 0;                             \
         p = (a)->d;                             \
+        (a)->d = NULL;                          \
+        (a)->n = (a)->i = 0;                    \
     } while(0)
 
 #define utarray_new(a,_icd) do {                                              \

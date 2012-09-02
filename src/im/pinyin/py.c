@@ -857,71 +857,9 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
             retVal = IRV_DISPLAY_CANDWORDS;
         } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
             return IRV_TO_PROCESS;
-        } else {
-            if (pystate->bIsPYAddFreq || pystate->bIsPYDelFreq ||
-                pystate->bIsPYDelUserPhr)
-                return IRV_DO_NOTHING;
-
-            //下面实现以词定字
-            if (FcitxCandidateWordPageCount(candList)) {
-                if (state == FcitxKeyState_None && (sym == pystate->pyconfig.cPYYCDZ[0] || sym == pystate->pyconfig.cPYYCDZ[1])) {
-                    FcitxCandidateWord *candWord;
-                    candWord = FcitxCandidateWordGetByIndex(candList,
-                                                            pystate->iYCDZ);
-                    if (candWord->owner == pystate) {
-                        PYCandWord* pycandWord = candWord->priv;
-                        if (pycandWord->iWhich == PY_CAND_USERPHRASE || pycandWord->iWhich == PY_CAND_SYSPHRASE) {
-                            char *pBase, *pPhrase;
-
-                            pBase = pystate->PYFAList[pycandWord->cand.phrase.iPYFA].pyBase[pycandWord->cand.phrase.iBase].strHZ;
-                            pPhrase = pycandWord->cand.phrase.phrase->strPhrase;
-
-                            if (sym == pystate->pyconfig.cPYYCDZ[0])
-                                strcpy(FcitxInputStateGetOutputString(input), pBase);
-                            else {
-                                int8_t clen;
-                                clen = fcitx_utf8_char_len(pPhrase);
-                                strncpy(FcitxInputStateGetOutputString(input), pPhrase, clen);
-                                FcitxInputStateGetOutputString(input)[clen] = '\0';
-                            }
-                            FcitxMessagesSetMessageCount(FcitxInputStateGetAuxDown(input), 0);
-                            return IRV_COMMIT_STRING;
-                        }
-                    }
-                } else if (!FcitxInputStateGetIsInRemind(input)) {
-                    val = -1;
-                    switch (sym) {
-                    case FcitxKey_parenright:
-                        val++;
-                    case FcitxKey_parenleft:
-                        val++;
-                    case FcitxKey_asterisk:
-                        val++;
-                    case FcitxKey_ampersand:
-                        val++;
-                    case FcitxKey_asciicircum:
-                        val++;
-                    case FcitxKey_percent:
-                        val++;
-                    case FcitxKey_dollar:
-                        val++;
-                    case FcitxKey_numbersign:
-                        val++;
-                    case FcitxKey_at:
-                        val++;
-                    case FcitxKey_exclam:
-                        val++;
-                    default:
-                        break;
-                    }
-
-                    if (val != -1 &&
-                        FcitxCandidateWordGetByIndex(candList, val)) {
-                        pystate->iYCDZ = val;
-                        return IRV_DISPLAY_CANDWORDS;
-                    }
-                }
-            }
+        } else if (pystate->bIsPYAddFreq || pystate->bIsPYDelFreq ||
+                   pystate->bIsPYDelUserPhr) {
+            return IRV_DO_NOTHING;
         }
     }
 
@@ -1054,8 +992,6 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
 
     if (FcitxInputStateGetIsInRemind(input))
         return PYGetRemindCandWords(pystate);
-
-    pystate->iYCDZ = 0;
 
     //判断是不是要输入常用字或符号
     PyFreq* pCurFreq = pystate->pyFreq->next;

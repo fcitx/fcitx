@@ -25,5 +25,15 @@ Description=Maximum hint length
 LongDescription=Maximum length of spell hint list for Pinyin Enhance
 Advance=True
 
+[Pinyin Enhance/InputCharFromPhraseString]
+Type=String
+DefaultValue=[]
+Description=Hotkey for Inputing Character From Phrase
+
+[Pinyin Enhance/InputCharFromPhraseKey]
+Type=Hotkey
+DefaultValue=
+Description=Hotkey for switching to Inputing Character From Phrase mode
+
 [DescriptionFile]
 LocaleDomain=fcitx

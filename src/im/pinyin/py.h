@@ -184,8 +184,6 @@ typedef struct _FcitxPinyinState {
     int  iOrderCount;
     int iNewFreqCount;
 
-    int8_t iYCDZ;
-
     boolean bIsPYAddFreq;
     boolean bIsPYDelFreq;
     boolean bIsPYDelUserPhr;

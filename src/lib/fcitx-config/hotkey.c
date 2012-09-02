@@ -784,68 +784,53 @@ void FcitxHotkeySetKey(const char *str, FcitxHotkey * hotkey)
     free(strKeys);
 }
 
-struct KeyPadTable {
-    FcitxKeySym keypad;
-    FcitxKeySym keymain;
-};
-
-static int key_table_cmp(const void* a, const void* b)
-{
-    const struct KeyPadTable* ka = a;
-    const struct KeyPadTable* kb = b;
-    return ka->keypad - kb->keypad;
-}
-
 FCITX_EXPORT_API
 FcitxKeySym FcitxHotkeyPadToMain(FcitxKeySym sym)
 {
-    static struct KeyPadTable keytable[] = {
-        {FcitxKey_KP_Space, FcitxKey_space},
-        {FcitxKey_KP_Tab, FcitxKey_Tab},
-        {FcitxKey_KP_Enter, FcitxKey_Return},
-        {FcitxKey_KP_F1, FcitxKey_F1},
-        {FcitxKey_KP_F2, FcitxKey_F2},
-        {FcitxKey_KP_F3, FcitxKey_F3},
-        {FcitxKey_KP_F4, FcitxKey_F4},
-        {FcitxKey_KP_Home, FcitxKey_Home},
-        {FcitxKey_KP_Left, FcitxKey_Left},
-        {FcitxKey_KP_Up, FcitxKey_Up},
-        {FcitxKey_KP_Right, FcitxKey_Right},
-        {FcitxKey_KP_Down, FcitxKey_Down},
-        {FcitxKey_KP_Page_Up, FcitxKey_Page_Up},
-        {FcitxKey_KP_Page_Down, FcitxKey_Page_Down},
-        {FcitxKey_KP_End, FcitxKey_End},
-        {FcitxKey_KP_Begin, FcitxKey_Begin},
-        {FcitxKey_KP_Insert, FcitxKey_Insert},
-        {FcitxKey_KP_Delete, FcitxKey_Delete},
-        {FcitxKey_KP_Multiply, FcitxKey_asterisk},
-        {FcitxKey_KP_Add, FcitxKey_plus},
-        {FcitxKey_KP_Separator, FcitxKey_comma},
-        {FcitxKey_KP_Subtract, FcitxKey_minus},
-        {FcitxKey_KP_Decimal, FcitxKey_period},
-        {FcitxKey_KP_Divide, FcitxKey_slash},
+#define PAD_TO_MAIN(keypad, keymain) case keypad: return keymain
+    switch (sym) {
+        PAD_TO_MAIN(FcitxKey_KP_Space, FcitxKey_space);
+        PAD_TO_MAIN(FcitxKey_KP_Tab, FcitxKey_Tab);
+        PAD_TO_MAIN(FcitxKey_KP_Enter, FcitxKey_Return);
+        PAD_TO_MAIN(FcitxKey_KP_F1, FcitxKey_F1);
+        PAD_TO_MAIN(FcitxKey_KP_F2, FcitxKey_F2);
+        PAD_TO_MAIN(FcitxKey_KP_F3, FcitxKey_F3);
+        PAD_TO_MAIN(FcitxKey_KP_F4, FcitxKey_F4);
+        PAD_TO_MAIN(FcitxKey_KP_Home, FcitxKey_Home);
+        PAD_TO_MAIN(FcitxKey_KP_Left, FcitxKey_Left);
+        PAD_TO_MAIN(FcitxKey_KP_Up, FcitxKey_Up);
+        PAD_TO_MAIN(FcitxKey_KP_Right, FcitxKey_Right);
+        PAD_TO_MAIN(FcitxKey_KP_Down, FcitxKey_Down);
+        PAD_TO_MAIN(FcitxKey_KP_Page_Up, FcitxKey_Page_Up);
+        PAD_TO_MAIN(FcitxKey_KP_Page_Down, FcitxKey_Page_Down);
+        PAD_TO_MAIN(FcitxKey_KP_End, FcitxKey_End);
+        PAD_TO_MAIN(FcitxKey_KP_Begin, FcitxKey_Begin);
+        PAD_TO_MAIN(FcitxKey_KP_Insert, FcitxKey_Insert);
+        PAD_TO_MAIN(FcitxKey_KP_Delete, FcitxKey_Delete);
+        PAD_TO_MAIN(FcitxKey_KP_Multiply, FcitxKey_asterisk);
+        PAD_TO_MAIN(FcitxKey_KP_Add, FcitxKey_plus);
+        PAD_TO_MAIN(FcitxKey_KP_Separator, FcitxKey_comma);
+        PAD_TO_MAIN(FcitxKey_KP_Subtract, FcitxKey_minus);
+        PAD_TO_MAIN(FcitxKey_KP_Decimal, FcitxKey_period);
+        PAD_TO_MAIN(FcitxKey_KP_Divide, FcitxKey_slash);
 
-        {FcitxKey_KP_0, FcitxKey_0},
-        {FcitxKey_KP_1, FcitxKey_1},
-        {FcitxKey_KP_2, FcitxKey_2},
-        {FcitxKey_KP_3, FcitxKey_3},
-        {FcitxKey_KP_4, FcitxKey_4},
-        {FcitxKey_KP_5, FcitxKey_5},
-        {FcitxKey_KP_6, FcitxKey_6},
-        {FcitxKey_KP_7, FcitxKey_7},
-        {FcitxKey_KP_8, FcitxKey_8},
-        {FcitxKey_KP_9, FcitxKey_9},
+        PAD_TO_MAIN(FcitxKey_KP_0, FcitxKey_0);
+        PAD_TO_MAIN(FcitxKey_KP_1, FcitxKey_1);
+        PAD_TO_MAIN(FcitxKey_KP_2, FcitxKey_2);
+        PAD_TO_MAIN(FcitxKey_KP_3, FcitxKey_3);
+        PAD_TO_MAIN(FcitxKey_KP_4, FcitxKey_4);
+        PAD_TO_MAIN(FcitxKey_KP_5, FcitxKey_5);
+        PAD_TO_MAIN(FcitxKey_KP_6, FcitxKey_6);
+        PAD_TO_MAIN(FcitxKey_KP_7, FcitxKey_7);
+        PAD_TO_MAIN(FcitxKey_KP_8, FcitxKey_8);
+        PAD_TO_MAIN(FcitxKey_KP_9, FcitxKey_9);
 
-        {FcitxKey_KP_Equal, FcitxKey_equal},
-    };
-
-    struct KeyPadTable key = { sym, FcitxKey_None };
-
-    struct KeyPadTable *result = bsearch(&key, keytable, sizeof(keytable) / sizeof(struct KeyPadTable) , sizeof(struct KeyPadTable), key_table_cmp);
-    if (result == NULL)
-        return sym;
-    else
-        return result->keymain;
+        PAD_TO_MAIN(FcitxKey_KP_Equal, FcitxKey_equal);
+    default:
+        break;
+    }
+#undef PAD_TO_MAIN
+    return sym;
 }
 
 FCITX_EXPORT_API
