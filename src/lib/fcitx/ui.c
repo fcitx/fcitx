@@ -226,8 +226,8 @@ boolean FcitxUILoadInternal(FcitxInstance* instance, FcitxAddon* addon)
             FcitxUIComplexStatus *status;
 
             for (status = (FcitxUIComplexStatus *) utarray_front(uicompstats);
-                    status != NULL;
-                    status = (FcitxUIComplexStatus *) utarray_next(uicompstats, status))
+                 status != NULL;
+                 status = (FcitxUIComplexStatus *) utarray_next(uicompstats, status))
                 addon->ui->RegisterComplexStatus(addon->addonInstance, status);
         }
 

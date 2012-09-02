@@ -165,6 +165,8 @@ extern "C" {
 
     fd_set* FcitxInstanceGetExceptFDSet(FcitxInstance* instance);
 
+    struct _FcitxAddon* FcitxInstanceGetCurrentUI(FcitxInstance* instance);
+
     int FcitxInstanceGetMaxFD(FcitxInstance* instance);
 
     void FcitxInstanceSetMaxFD(FcitxInstance* instance, int maxfd);
