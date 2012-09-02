@@ -188,6 +188,9 @@ const char * im_introspection_xml =
     "    <method name=\"ConfigureIM\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"GetCurrentUI\">\n"
+    "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <method name=\"GetIMAddon\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
@@ -653,6 +656,17 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             dbus_message_unref(reply);
         }
         dbus_error_free(&error);
+        return DBUS_HANDLER_RESULT_HANDLED;
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "GetCurrentUI")) {
+        const char* name = "";
+        FcitxAddon* uiaddon  = FcitxInstanceGetCurrentUI(instance);
+        if (uiaddon) {
+            name = uiaddon->name;
+        }
+        DBusMessage *reply = dbus_message_new_method_return(msg);
+        dbus_message_append_args(reply, DBUS_TYPE_STRING, &name, DBUS_TYPE_INVALID);
+        dbus_connection_send(connection, reply, NULL);
+        dbus_message_unref(reply);
         return DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "Configure")) {
         DBusMessage *reply = dbus_message_new_method_return(msg);
