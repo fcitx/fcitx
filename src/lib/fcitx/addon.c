@@ -250,13 +250,13 @@ void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxA
                 }
             }
         }
-    }
 
-    for (addon = startAddon;
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon)) {
-        if (addon->category == AC_UI && addon != uiaddon && addon != uifallbackaddon) {
-            addon->bEnabled = false;
+        for (addon = startAddon;
+                addon != NULL;
+                addon = (FcitxAddon *) utarray_next(addons, addon)) {
+            if (addon->category == AC_UI && addon != uiaddon && addon != uifallbackaddon) {
+                addon->bEnabled = false;
+            }
         }
     }
 
