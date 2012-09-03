@@ -239,10 +239,8 @@ void QFcitxInputContext::socketFileChanged()
 
 void QFcitxInputContext::cleanUp()
 {
+    QDBusConnection::disconnectFromBus("fcitx");
     if (m_connection) {
-        if (m_connection->name() == "fcitx") {
-            QDBusConnection::disconnectFromBus("fcitx");
-        }
         delete m_connection;
         m_connection = NULL;
     }

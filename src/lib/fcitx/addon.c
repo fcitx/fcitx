@@ -137,7 +137,7 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
                     error = true;
             }
             /* if loaded, don't touch the old one */
-            if (FcitxAddonsGetAddonByName(addons, a->name) != a)
+            if (FcitxAddonsGetAddonByNameInternal(addons, a->name, true) != a)
                 error = true;
 
             if (error)
@@ -302,16 +302,23 @@ boolean FcitxAddonsIsAddonAvailable(UT_array* addons, const char* name)
 }
 
 FCITX_EXPORT_API
-FcitxAddon* FcitxAddonsGetAddonByName(UT_array* addons, const char* name)
+FcitxAddon* FcitxAddonsGetAddonByNameInternal(UT_array* addons, const char* name, boolean checkDisabled)
 {
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
-        if (addon->bEnabled && strcmp(name, addon->name) == 0)
+        if ((checkDisabled || addon->bEnabled) && strcmp(name, addon->name) == 0)
             return addon;
     }
     return NULL;
+}
+
+
+FCITX_EXPORT_API
+FcitxAddon* FcitxAddonsGetAddonByName(UT_array* addons, const char* name)
+{
+    return FcitxAddonsGetAddonByNameInternal(addons, name, false);
 }
 
 /**

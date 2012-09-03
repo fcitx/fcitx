@@ -29,5 +29,6 @@ void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName
 FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM);
 void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxAddon* startAddon);
 void FcitxInstanceFillAddonOwner(FcitxInstance* instance, FcitxAddon* addonHead);
+FcitxAddon* FcitxAddonsGetAddonByNameInternal(UT_array* addons, const char* name, boolean checkDisabled);
 
 #endif
