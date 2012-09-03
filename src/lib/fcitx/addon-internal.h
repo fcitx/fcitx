@@ -21,8 +21,13 @@
 #ifndef _FCITX_ADDON_INTERNAL_H_
 #define _FCITX_ADDON_INTERNAL_H_
 #include "fcitx-config/fcitx-config.h"
+#include "addon.h"
+#include "instance.h"
 
 boolean FcitxCheckABIVersion(void* handle, const char* addonName);
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName);
+FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM);
+void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxAddon* startAddon);
+void FcitxInstanceFillAddonOwner(FcitxInstance* instance, FcitxAddon* addonHead);
 
 #endif

@@ -251,6 +251,12 @@ typedef struct {
         qsort((a)->d, (a)->i, (a)->icd->sz, cmp);                                   \
     } while(0)
 
+#define utarray_sort_range(a, cmp, from, to) do {                                              \
+        if ((from) >= (to) || (from) >= (a)->i || (to) >= (a)->i) \
+            break; \
+        qsort(_utarray_eltptr(a, from), (to) - (from), (a)->icd->sz, cmp);                                   \
+    } while(0)
+
 void fcitx_qsort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *thunk);
 void fcitx_msort_r(void *base_, size_t nmemb, size_t size, int (*compar)(const void *, const void *, void *), void *thunk);
 

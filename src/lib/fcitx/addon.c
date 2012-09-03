@@ -92,10 +92,19 @@ void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName
 FCITX_EXPORT_API
 void FcitxAddonsLoad(UT_array* addons)
 {
+    FcitxAddonsLoadInternal(addons, false);
+}
+
+FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
+{
     char **addonPath;
     size_t len;
-    size_t i = 0;
-    utarray_clear(addons);
+    size_t k = 0;
+    size_t start;
+    if (!reloadIM)
+        utarray_clear(addons);
+
+    start = utarray_len(addons);
 
     FcitxStringHashSet* sset = FcitxXDGGetFiles(
                               "addon",
@@ -104,15 +113,16 @@ void FcitxAddonsLoad(UT_array* addons)
                           );
     addonPath = FcitxXDGGetPathWithPrefix(&len, "addon");
     char **paths = malloc(sizeof(char*) * len);
-    for (i = 0; i < len ; i ++)
-        paths[i] = NULL;
+    for (k = 0; k < len ; k ++)
+        paths[k] = NULL;
+
+
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
         int i = 0;
         for (i = len - 1; i >= 0; i--) {
             asprintf(&paths[i], "%s/%s", addonPath[len - i - 1], string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
-        FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, FcitxAddonGetConfigDesc());
         if (cfile) {
             utarray_extend_back(addons);
@@ -121,6 +131,19 @@ void FcitxAddonsLoad(UT_array* addons)
             FcitxAddonConfigBind(a, cfile, FcitxAddonGetConfigDesc());
             FcitxConfigBindSync((FcitxGenericConfig*)a);
             FcitxLog(DEBUG, _("Addon Config %s is %s"), string->name, (a->bEnabled) ? "Enabled" : "Disabled");
+            boolean error = false;
+            if (reloadIM) {
+                if (a->category !=  AC_INPUTMETHOD)
+                    error = true;
+            }
+            /* if loaded, don't touch the old one */
+            if (FcitxAddonsGetAddonByName(addons, a->name) != a)
+                error = true;
+
+            if (error)
+                utarray_pop_back(addons);
+            else
+                FcitxLog(INFO, _("Load Addon Config File:%s"), string->name);
         }
 
         for (i = 0; i < len ; i ++) {
@@ -134,19 +157,46 @@ void FcitxAddonsLoad(UT_array* addons)
 
     fcitx_utils_free_string_hash_set(sset);
 
-    utarray_sort(addons, AddonPriorityCmp);
+    size_t to = utarray_len(addons);
+    utarray_sort_range(addons, AddonPriorityCmp, start, to);
+
+    return (FcitxAddon*) utarray_eltptr(addons, start);
+}
+
+void FcitxInstanceFillAddonOwner(FcitxInstance* instance, FcitxAddon* addonHead)
+{
+    /* FIXME: a walkaround for not have instance in function FcitxModuleInvokeFunction */
+    FcitxAddon* addon;
+    if (addonHead)
+        addon = addonHead;
+    else
+        addon = (FcitxAddon *) utarray_front(&instance->addons);
+    for (; addon != NULL; addon = (FcitxAddon *) utarray_next(&instance->addons, addon)) {
+        addon->owner = instance;
+    }
 }
 
 FCITX_EXPORT_API
 void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
 {
+    FcitxInstanceResolveAddonDependencyInternal(instance, NULL);
+}
+
+void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxAddon* startAddon)
+{
     UT_array* addons = &instance->addons;
     boolean remove = true;
     FcitxAddon *addon;
     FcitxAddon *uiaddon = NULL, *uifallbackaddon = NULL;
+    boolean reloadIM = true;
+
+    if (!startAddon) {
+        startAddon = (FcitxAddon*) utarray_front(addons);
+        reloadIM = false;
+    }
 
     /* override the enable and disable option */
-    for (addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = startAddon;
          addon != NULL;
          addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (instance->disableList && fcitx_utils_string_list_contains(instance->disableList, addon->name))
@@ -155,52 +205,54 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
             addon->bEnabled = true;
     }
 
-    /* choose ui */
-    for (addon = (FcitxAddon *) utarray_front(addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon)) {
-        if (addon->category == AC_UI) {
-            if (instance->uiname == NULL) {
-                if (addon->bEnabled) {
-                    uiaddon = addon;
-                    break;
+    if (!reloadIM) {
+        /* choose ui */
+        for (addon = startAddon;
+             addon != NULL;
+             addon = (FcitxAddon *) utarray_next(addons, addon)) {
+            if (addon->category == AC_UI) {
+                if (instance->uiname == NULL) {
+                    if (addon->bEnabled) {
+                        uiaddon = addon;
+                        break;
+                    }
+                } else {
+                    if (strcmp(instance->uiname, addon->name) == 0) {
+                        addon->bEnabled = true;
+                        uiaddon = addon;
+                        break;
+                    }
                 }
-            } else {
-                if (strcmp(instance->uiname, addon->name) == 0) {
-                    addon->bEnabled = true;
-                    uiaddon = addon;
+            }
+        }
+
+        if (uiaddon && uiaddon->uifallback) {
+            for (addon = startAddon;
+                 addon != NULL;
+                 addon = (FcitxAddon *) utarray_next(addons, addon)) {
+                if (addon->category == AC_UI && addon->bEnabled && strcmp(uiaddon->uifallback, addon->name) == 0) {
+                    FcitxAddon temp;
+                    int uiidx = utarray_eltidx(addons, uiaddon);
+                    int fallbackidx = utarray_eltidx(addons, addon);
+                    if (fallbackidx < uiidx) {
+                        temp = *uiaddon;
+                        *uiaddon = *addon;
+                        *addon = temp;
+
+                        /* they swapped, addon is normal ui, and ui addon is fallback */
+                        uifallbackaddon = uiaddon;
+                        uiaddon = addon;
+                    }
+                    else {
+                        uifallbackaddon = addon;
+                    }
                     break;
                 }
             }
         }
     }
 
-    if (uiaddon && uiaddon->uifallback) {
-        for (addon = (FcitxAddon *) utarray_front(addons);
-                addon != NULL;
-                addon = (FcitxAddon *) utarray_next(addons, addon)) {
-            if (addon->category == AC_UI && addon->bEnabled && strcmp(uiaddon->uifallback, addon->name) == 0) {
-                FcitxAddon temp;
-                int uiidx = utarray_eltidx(addons, uiaddon);
-                int fallbackidx = utarray_eltidx(addons, addon);
-                if (fallbackidx < uiidx) {
-                    temp = *uiaddon;
-                    *uiaddon = *addon;
-                    *addon = temp;
-
-                    /* they swapped, addon is normal ui, and ui addon is fallback */
-                    uifallbackaddon = uiaddon;
-                    uiaddon = addon;
-                }
-                else {
-                    uifallbackaddon = addon;
-                }
-                break;
-            }
-        }
-    }
-
-    for (addon = (FcitxAddon *) utarray_front(addons);
+    for (addon = startAddon;
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_UI && addon != uiaddon && addon != uifallbackaddon) {
@@ -210,7 +262,7 @@ void FcitxInstanceResolveAddonDependency(FcitxInstance* instance)
 
     while (remove) {
         remove = false;
-        for (addon = (FcitxAddon *) utarray_front(addons);
+        for (addon = startAddon;
                 addon != NULL;
                 addon = (FcitxAddon *) utarray_next(addons, addon)) {
             if (!addon->bEnabled)

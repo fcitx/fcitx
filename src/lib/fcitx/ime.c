@@ -325,7 +325,6 @@ void FcitxInstanceRegisterEmptyIMEntry(FcitxInstance *instance,
     UT_array* imes = &instance->availimes ;
     FcitxIM* entry = FcitxInstanceGetIMFromIMList(instance, IMAS_Disable, uniqueName);
     if (entry) {
-        FcitxLog(ERROR, "%s already exists", uniqueName);
         return;
     } else {
         utarray_extend_back(imes);
@@ -488,7 +487,11 @@ boolean FcitxInstanceLoadAllIM(FcitxInstance* instance)
     for (addon = (FcitxAddon *) utarray_front(addons);
             addon != NULL;
             addon = (FcitxAddon *) utarray_next(addons, addon)) {
-        if (addon->bEnabled && addon->category == AC_INPUTMETHOD) {
+        /*
+         * since we want to use this function to do some "reload"
+         * we need to check addon->addonInstance
+         */
+        if (addon->bEnabled && addon->category == AC_INPUTMETHOD && !addon->addonInstance) {
             switch (addon->type) {
             case AT_SHAREDLIBRARY: {
                 if (addon->registerMethod == IMRM_SELF)
@@ -1107,8 +1110,8 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
 
     FcitxAddon *addon;
     for (addon = (FcitxAddon *) utarray_front(addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_MODULE &&
                 addon->bEnabled &&
                 addon->addonInstance) {
@@ -1118,8 +1121,8 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
     }
 
     for (addon = (FcitxAddon *) utarray_front(addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_FRONTEND &&
                 addon->bEnabled &&
                 addon->addonInstance) {
@@ -1129,8 +1132,8 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
     }
 
     for (addon = (FcitxAddon *) utarray_front(addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(addons, addon)) {
+         addon != NULL;
+         addon = (FcitxAddon *) utarray_next(addons, addon)) {
         if (addon->category == AC_INPUTMETHOD &&
                 addon->bEnabled &&
                 addon->addonInstance &&
@@ -1152,6 +1155,11 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
 
     if (instance->ui && instance->ui->ui->ReloadConfig)
         instance->ui->ui->ReloadConfig(instance->ui->addonInstance);
+
+    FcitxAddon* addonHead = FcitxAddonsLoadInternal(&instance->addons, true);
+    FcitxInstanceFillAddonOwner(instance, addonHead);
+    FcitxInstanceResolveAddonDependencyInternal(instance, addonHead);
+    FcitxInstanceLoadAllIM(instance);
 }
 
 FCITX_EXPORT_API
