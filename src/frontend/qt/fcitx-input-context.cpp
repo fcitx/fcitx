@@ -269,6 +269,8 @@ void QFcitxInputContext::createConnection()
             // qDebug() << "craete private";
             m_connection = new QDBusConnection(connection);
         }
+        else
+            QDBusConnection::disconnectFromBus("fcitx");
     }
 
     bool needCreate = true;
