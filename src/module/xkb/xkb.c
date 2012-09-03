@@ -165,47 +165,52 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
     char* rulesName = FcitxXkbGetRulesName(xkb);
 
     if ( rulesName != NULL ) {
-        char* xkbParentDir = NULL;
-
-        const char* base = XLIBDIR;
-
-        int count = 0, i = 0;
-        while(base[i]) {
-            if (base[i] == '/')
-                count++;
-            i ++;
+        if (rulesName[0] == '/') {
+            asprintf(&rulesFile, "%s.xml", rulesName);
         }
+        else {
+            char* xkbParentDir = NULL;
 
-        if( count >= 3 ) {
-            // .../usr/lib/X11 -> /usr/share/X11/xkb vs .../usr/X11/lib -> /usr/X11/share/X11/xkb
-            const char* delta = StringEndsWith(base, "X11") ? "/../../share/X11" : "/../share/X11";
-            char* dirPath;
-            asprintf(&dirPath, "%s%s", base, delta);
+            const char* base = XLIBDIR;
 
-            DIR* dir = opendir(dirPath);
-            if( dir ) {
-                closedir(dir);
-                xkbParentDir = realpath(dirPath, NULL);
-                free(dirPath);
+            int count = 0, i = 0;
+            while(base[i]) {
+                if (base[i] == '/')
+                    count++;
+                i ++;
             }
-            else {
-                free(dirPath);
-                asprintf(&dirPath, "%s/X11", base);
+
+            if( count >= 3 ) {
+                // .../usr/lib/X11 -> /usr/share/X11/xkb vs .../usr/X11/lib -> /usr/X11/share/X11/xkb
+                const char* delta = StringEndsWith(base, "X11") ? "/../../share/X11" : "/../share/X11";
+                char* dirPath;
+                asprintf(&dirPath, "%s%s", base, delta);
+
                 DIR* dir = opendir(dirPath);
                 if( dir ) {
                     closedir(dir);
                     xkbParentDir = realpath(dirPath, NULL);
+                    free(dirPath);
                 }
-                free(dirPath);
+                else {
+                    free(dirPath);
+                    asprintf(&dirPath, "%s/X11", base);
+                    DIR* dir = opendir(dirPath);
+                    if( dir ) {
+                        closedir(dir);
+                        xkbParentDir = realpath(dirPath, NULL);
+                    }
+                    free(dirPath);
+                }
             }
-        }
 
-        if( xkbParentDir == NULL || strlen(xkbParentDir) == 0 ) {
-            xkbParentDir = strdup("/usr/share/X11");
-        }
+            if( xkbParentDir == NULL || strlen(xkbParentDir) == 0 ) {
+                xkbParentDir = strdup("/usr/share/X11");
+            }
 
-        asprintf(&rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
-        fcitx_utils_free(xkbParentDir);
+            asprintf(&rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
+            fcitx_utils_free(xkbParentDir);
+        }
     }
 
     fcitx_utils_free(rulesName);
@@ -269,7 +274,10 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     XkbComponentNamesRec rnames;
     XkbDescPtr xkbDesc;
 
-    rulesPath = strdup("./rules/evdev");
+    if (rules_file[0] != '/')
+        asprintf(&rulesPath, "./rules/%s", rules_file);
+    else
+        rulesPath = strdup(rules_file);
     rules = XkbRF_Load (rulesPath, "C", True, True);
     if (rules == NULL) {
         free (rulesPath);
@@ -461,10 +469,10 @@ FcitxXkbSetLayout  (FcitxXkb* xkb,
     model_line = fcitx_utils_join_string_list(xkb->defaultModels, ',');
 
     retval = FcitxXkbSetRules(xkb,
-                              "evdev", model_line,
+                              FcitxXkbGetRulesName(xkb), model_line,
                               layouts_line, variants_line, options_line);
     FcitxXkbUpdateProperties(xkb,
-                             "evdev", model_line,
+                             FcitxXkbGetRulesName(xkb), model_line,
                              layouts_line, variants_line, options_line);
     free (layouts_line);
     free (variants_line);

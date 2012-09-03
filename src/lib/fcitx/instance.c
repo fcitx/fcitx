@@ -44,6 +44,7 @@
 #include "fcitx-internal.h"
 #include "instance-internal.h"
 #include "module-internal.h"
+#include "addon-internal.h"
 
 #define CHECK_ENV(env, value, icase) (!getenv(env) \
                                       || (icase ? \
@@ -157,14 +158,7 @@ FcitxInstance* FcitxInstanceCreateWithFD(sem_t *sem, int argc, char* argv[], int
         goto error_exit;
 
     FcitxAddonsLoad(&instance->addons);
-
-    /* FIXME: a walkaround for not have instance in function FcitxModuleInvokeFunction */
-    FcitxAddon* addon;
-    for (addon = (FcitxAddon *) utarray_front(&instance->addons);
-            addon != NULL;
-            addon = (FcitxAddon *) utarray_next(&instance->addons, addon)) {
-        addon->owner = instance;
-    }
+    FcitxInstanceFillAddonOwner(instance, NULL);
     FcitxInstanceResolveAddonDependency(instance);
     FcitxInstanceInitBuiltInHotkey(instance);
     FcitxInstanceInitBuiltContext(instance);
