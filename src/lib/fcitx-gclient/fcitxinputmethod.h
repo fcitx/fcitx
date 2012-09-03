@@ -199,6 +199,17 @@ gchar*       fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname
  **/
 gchar*       fcitx_input_method_get_current_im(FcitxInputMethod* im);
 
+/**
+ * fcitx_input_method_get_current_ui:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * @returns: (transfer full): get ui name
+ *
+ * Get im name
+ **/
+gchar*       fcitx_input_method_get_current_ui(FcitxInputMethod* im);
+
 
 /**
  * fcitx_input_method_set_current_im:

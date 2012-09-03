@@ -28,6 +28,9 @@ static const gchar introspection_xml[] =
     "    <method name=\"GetCurrentIM\">\n"
     "      <arg name=\"im\" direction=\"out\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"GetCurrentUI\">\n"
+    "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <method name=\"SetCurrentIM\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
@@ -376,6 +379,32 @@ gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
     GError* error = NULL;
     GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
                                                "GetCurrentIM",
+                                               NULL,
+                                               G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                               -1,
+                                               NULL,
+                                               &error
+                                              );
+
+    gchar* result = NULL;
+
+    if (error) {
+        g_warning("%s", error->message);
+        g_error_free(error);
+    } else if (variant) {
+        g_variant_get(variant, "(s)", &result);
+        g_variant_unref(variant);
+    }
+
+    return result;
+}
+
+FCITX_EXPORT_API
+gchar* fcitx_input_method_get_current_ui(FcitxInputMethod* im)
+{
+    GError* error = NULL;
+    GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
+                                               "GetCurrentUI",
                                                NULL,
                                                G_DBUS_CALL_FLAGS_NO_AUTO_START,
                                                -1,
