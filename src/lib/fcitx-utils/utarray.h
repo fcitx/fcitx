@@ -252,7 +252,7 @@ typedef struct {
     } while(0)
 
 #define utarray_sort_range(a, cmp, from, to) do {                                              \
-        if ((from) >= (to) || (from) >= (a)->i || (to) >= (a)->i) \
+        if ((from) >= (to) || (from) >= (a)->i || (to) > (a)->i) \
             break; \
         qsort(_utarray_eltptr(a, from), (to) - (from), (a)->icd->sz, cmp);                                   \
     } while(0)

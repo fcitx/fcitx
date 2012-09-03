@@ -331,7 +331,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         keyboard->initialLayout = strdup("us");
 
 #if defined(ENABLE_LIBXML2)
-    if (rules) {
+    if (rules && utarray_len(rules->layoutInfos)) {
         FcitxIsoCodes* isocodes = FcitxXkbReadIsoCodes(ISOCODES_ISO639_XML, ISOCODES_ISO3166_XML);
         FcitxXkbLayoutInfo* layoutInfo;
         for (layoutInfo = (FcitxXkbLayoutInfo*) utarray_front(rules->layoutInfos);
@@ -388,6 +388,10 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
         char* description;
         asprintf(&description, _("Keyboard"));
 
+        fcitx_utils_free(keyboard->initialLayout);
+        keyboard->initialLayout = strdup("us");
+        fcitx_utils_free(keyboard->initialVariant);
+        keyboard->initialVariant = NULL;
         FcitxKeyboardLayoutCreate(keyboard, description, "en", "us", NULL);
         free(description);
     }
