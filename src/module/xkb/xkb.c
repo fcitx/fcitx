@@ -274,6 +274,9 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     XkbComponentNamesRec rnames;
     XkbDescPtr xkbDesc;
 
+    if (!rules_file)
+        return False;
+
     if (rules_file[0] != '/')
         asprintf(&rulesPath, "./rules/%s", rules_file);
     else
