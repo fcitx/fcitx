@@ -617,7 +617,7 @@ static XIMAttribute *MakeIMAttributeList(Xi18n i18n_core,
     int list_len = i18n_core->address.im_attr_num;
     register int i;
     register int j;
-    int value_length;
+    int value_length = 0;
     int number_ret = 0;
 
     *length = 0;
