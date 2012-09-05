@@ -98,7 +98,7 @@ private Q_SLOTS:
     void updateIM();
 #if defined(Q_WS_X11) && defined(ENABLE_X11)
     void x11ProcessKeyEventCallback(QDBusPendingCallWatcher* watcher);
-    void newServiceApper();
+    void newServiceAppear();
     void updateCursor();
 #endif
 private:
