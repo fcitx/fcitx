@@ -502,6 +502,7 @@ void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_activate(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -515,6 +516,7 @@ void fcitx_input_method_activate(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_inactivate(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -528,6 +530,7 @@ void fcitx_input_method_inactivate(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 void fcitx_input_method_toggle(FcitxInputMethod* im)
 {
     g_dbus_proxy_call(G_DBUS_PROXY(im),
@@ -541,6 +544,7 @@ void fcitx_input_method_toggle(FcitxInputMethod* im)
                      );
 }
 
+FCITX_EXPORT_API
 gint fcitx_input_method_get_current_state(FcitxInputMethod* im)
 {
     GError* error = NULL;
