@@ -47,6 +47,15 @@ static const gchar introspection_xml[] =
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "      <arg name=\"addon\" direction=\"out\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"ActivateIM\">\n"
+    "    </method>\n"
+    "    <method name=\"InactivateIM\">\n"
+    "    </method>\n"
+    "    <method name=\"ToggleIM\">\n"
+    "    </method>\n"
+    "    <method name=\"GetCurrentState\">\n"
+    "      <arg name=\"state\" direction=\"out\" type=\"i\"/>\n"
+    "    </method>\n"
     "    <property access=\"readwrite\" type=\"a(sssb)\" name=\"IMList\">"
     "      <annotation name=\"org.freedesktop.DBus.Property.EmitsChangedSignal\" value=\"true\"/>"
     "    </property>"
@@ -491,4 +500,68 @@ void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
                       NULL,
                       NULL
                      );
+}
+
+void fcitx_input_method_activate(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "ActivateIM",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_inactivate(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "InactivateIM",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+void fcitx_input_method_toggle(FcitxInputMethod* im)
+{
+    g_dbus_proxy_call(G_DBUS_PROXY(im),
+                      "ToggleIM",
+                      NULL,
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                      0,
+                      NULL,
+                      NULL,
+                      NULL
+                     );
+}
+
+gint fcitx_input_method_get_current_state(FcitxInputMethod* im)
+{
+    GError* error = NULL;
+    GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(im),
+                                               "GetCurrentState",
+                                               NULL,
+                                               G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                               -1,
+                                               NULL,
+                                               &error
+                                              );
+
+    gint result = -1;
+
+    if (error) {
+        g_warning("%s", error->message);
+        g_error_free(error);
+    } else if (variant) {
+        g_variant_get(variant, "(i)", &result);
+        g_variant_unref(variant);
+    }
+
+    return result;
 }
