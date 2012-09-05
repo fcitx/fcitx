@@ -266,7 +266,7 @@ void QFcitxInputContext::createConnection()
     if (!addr.isNull()) {
         QDBusConnection connection(QDBusConnection::connectToBus(addr, "fcitx"));
         if (connection.isConnected()) {
-            // qDebug() << "craete private";
+            // qDebug() << "create private";
             m_connection = new QDBusConnection(connection);
         }
         else
@@ -630,12 +630,12 @@ void QFcitxInputContext::imChanged(const QString& service, const QString& oldown
 
         /* new rise */
         if (newowner.length() > 0) {
-            QTimer::singleShot(100, this, SLOT(newServiceApper()));
+            QTimer::singleShot(100, this, SLOT(newServiceAppear()));
         }
     }
 }
 
-void QFcitxInputContext::newServiceApper()
+void QFcitxInputContext::newServiceAppear()
 {
     if (!isConnected()) {
         cleanUp();

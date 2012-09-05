@@ -26,6 +26,10 @@
 #include "fcitxclient.h"
 #include "marshall.h"
 
+#define fcitx_gclient_debug(...) g_log ("fcitx-client",       \
+                                      G_LOG_LEVEL_DEBUG,    \
+                                      __VA_ARGS__)
+
 typedef struct _ProcessKeyStruct ProcessKeyStruct;
 
 struct _ProcessKeyStruct {
@@ -156,7 +160,7 @@ static guint signals[LAST_SIGNAL] = {0};
 
 static GDBusInterfaceInfo *_fcitx_client_get_interface_info(void);
 static GDBusInterfaceInfo *_fcitx_client_get_clientic_info(void);
-static void _fcitx_client_create_ic(FcitxClient* self);
+static void _fcitx_client_create_ic(FcitxClient* self, gboolean use_session_bus);
 static void _fcitx_client_create_ic_phase1_finished(GObject* source_object, GAsyncResult* res, gpointer user_data);
 static void _fcitx_client_create_ic_cb(GObject *source_object, GAsyncResult *res, gpointer user_data);
 static void _fcitx_client_create_ic_phase2_finished(GObject *source_object, GAsyncResult *res, gpointer user_data);
@@ -327,17 +331,13 @@ FCITX_EXPORT_API
 gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res)
 {
     gint ret = -1;
-    GError* error = NULL;
-
     if (!self->priv->icproxy)
         return -1;
 
-    GVariant* result = g_dbus_proxy_call_finish(self->priv->icproxy, res, &error);
-    if (error) {
-        g_error_free(error);
-    }
-    else if (result) {
+    GVariant* result = g_dbus_proxy_call_finish(self->priv->icproxy, res, NULL);
+    if (result) {
         g_variant_get(result, "(i)", &ret);
+        g_variant_unref(result);
     }
     return ret;
 }
@@ -393,7 +393,6 @@ FCITX_EXPORT_API
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
     int itype = type;
-    GError *error = NULL;
     int ret = -1;
     if (self->priv->icproxy) {
         GVariant* result =  g_dbus_proxy_call_sync(self->priv->icproxy,
@@ -401,17 +400,25 @@ int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 key
                             g_variant_new("(uuuiu)", keyval, keycode, state, itype, t),
                             G_DBUS_CALL_FLAGS_NONE,
                             -1, NULL,
-                            &error);
+                            NULL);
 
-        if (error)
-            g_error_free(error);
-        else
+        if (result) {
             g_variant_get(result, "(i)", &ret);
+            g_variant_unref(result);
+        }
     }
 
     return ret;
 }
 
+static gboolean
+_fcitx_client_new_service_appear(gpointer user_data)
+{
+    FcitxClient* self = (FcitxClient*) user_data;
+    if (!self->priv->connection || g_dbus_connection_is_closed(self->priv->connection))
+        _fcitx_client_create_ic(self, FALSE);
+    return FALSE;
+}
 
 static void
 _fcitx_client_appear (GDBusConnection *connection,
@@ -422,7 +429,11 @@ _fcitx_client_appear (GDBusConnection *connection,
     FcitxClient* self = (FcitxClient*) user_data;
     gboolean new_owner_good = name_owner && (name_owner[0] != '\0');
     if (new_owner_good) {
-        _fcitx_client_create_ic(self);
+        g_timeout_add_full(G_PRIORITY_DEFAULT,
+                           100,
+                           _fcitx_client_new_service_appear,
+                           g_object_ref(self),
+                           g_object_unref);
     }
 }
 
@@ -475,36 +486,40 @@ fcitx_client_init(FcitxClient *self)
     g_object_unref(file);
     g_free(path);
 
-    _fcitx_client_create_ic(self);
+    _fcitx_client_create_ic(self, FALSE);
 }
 
 static void
-_fcitx_client_create_ic(FcitxClient *self)
+_fcitx_client_create_ic(FcitxClient *self, gboolean use_session_bus)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic");
+    _fcitx_client_unwatch(self);
     _fcitx_client_clean_up(self, FALSE);
     self->priv->cancellable = g_cancellable_new ();
 
-    gchar* address = _fcitx_get_address();
-    /* a trick for prevent cancellable being called after finalize */
     g_object_ref(self);
-    if (address) {
-        /* since we have a possible valid address here */
-        _fcitx_client_unwatch(self);
-        g_dbus_connection_new_for_address(address,
-                G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT | G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION,
-                NULL,
-                self->priv->cancellable,
-                _fcitx_client_create_ic_phase0_connection_finished,
-                self);
-    }
-    else {
-        g_bus_get(G_BUS_TYPE_SESSION,
-                  self->priv->cancellable,
-                  _fcitx_client_create_ic_phase0_bus_finished,
-                  self
-                );
+    if (!use_session_bus) {
+        gchar* address = _fcitx_get_address();
+        /* a trick for prevent cancellable being called after finalize */
+        if (address) {
+            /* since we have a possible valid address here */
+            g_dbus_connection_new_for_address(address,
+                    G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT | G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION,
+                    NULL,
+                    self->priv->cancellable,
+                    _fcitx_client_create_ic_phase0_connection_finished,
+                    self);
+            g_free(address);
+            return;
+        }
     }
 
+    _fcitx_client_watch(self);
+    g_bus_get(G_BUS_TYPE_SESSION,
+              self->priv->cancellable,
+              _fcitx_client_create_ic_phase0_bus_finished,
+              self
+            );
 };
 
 static void
@@ -513,10 +528,11 @@ _fcitx_client_connection_closed(GDBusConnection *connection,
                                 GError          *error,
                                 gpointer         user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_connection_closed");
     FcitxClient* self = (FcitxClient*) user_data;
     _fcitx_client_clean_up(self, FALSE);
 
-    _fcitx_client_create_ic(self);
+    _fcitx_client_watch(self);
 }
 
 static void
@@ -524,6 +540,7 @@ _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object,
                                             GAsyncResult *res,
                                             gpointer user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase0_bus_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
 
@@ -532,18 +549,16 @@ _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object,
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
-    GError* error = NULL;
-    GDBusConnection* connection = g_bus_get_finish(res, &error);
-    if (error) {
-        // g_warning ("Connect to daemon failed: %s.", error->message);
-        g_error_free(error);
-    }
+
+    GDBusConnection* connection = g_bus_get_finish(res, NULL);
 
     if (!connection) {
         /* unref for _fcitx_client_create_ic */
         g_object_unref(self);
         return;
     }
+
+    _fcitx_client_clean_up(self, FALSE);
     self->priv->connection = connection;
     self->priv->connection_is_bus = TRUE;
     g_signal_connect(connection, "closed", G_CALLBACK(_fcitx_client_connection_closed), self);
@@ -566,6 +581,7 @@ _fcitx_client_watch(FcitxClient* self)
 {
     if (self->priv->watch_id)
         return;
+    fcitx_gclient_debug("_fcitx_client_watch");
 
     self->priv->watch_id = g_bus_watch_name(
                        G_BUS_TYPE_SESSION,
@@ -592,6 +608,7 @@ _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object,
                                                    gpointer user_data)
 
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase0_connection_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
@@ -599,21 +616,32 @@ _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object,
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
+
     GError* error = NULL;
     GDBusConnection* connection = g_dbus_connection_new_for_address_finish(res, &error);
+
+    gboolean is_cancel = FALSE;
     if (error) {
-        // g_warning ("Connect to daemon failed: %s.", error->message);
+        if (g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+            is_cancel = TRUE;
         g_error_free(error);
     }
 
     /* hey! if we failed here. we'd try traditional dbus way */
     if (!connection || g_dbus_connection_is_closed(connection)) {
-        _fcitx_client_watch(self);
+        if (connection)
+            g_object_unref(connection);
+
+        if (!is_cancel)
+            _fcitx_client_create_ic(self, TRUE);
         /* unref for _fcitx_client_create_ic */
         g_object_unref(self);
         return;
     }
 
+    g_dbus_connection_set_exit_on_close(connection, FALSE);
+
+    _fcitx_client_clean_up(self, FALSE);
     self->priv->connection = connection;
     self->priv->connection_is_bus = FALSE;
     g_signal_connect(self->priv->connection, "closed", G_CALLBACK(_fcitx_client_connection_closed), self);
@@ -637,21 +665,17 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase1_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
     if (self->priv->improxy)
         g_object_unref(self->priv->improxy);
-    self->priv->improxy = g_dbus_proxy_new_finish(res, &error);
-    if (error) {
-        // g_warning ("Create fcitx input method proxy failed: %s.", error->message);
-        g_error_free(error);
-    }
+    self->priv->improxy = g_dbus_proxy_new_finish(res, NULL);
 
     do {
         if (!self->priv->improxy) {
@@ -697,15 +721,13 @@ _fcitx_client_create_ic_cb(GObject *source_object,
                            gpointer user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
+    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, NULL);
 
-    if (error) {
-        g_error_free(error);
+    if (!result) {
         /* unref for _fcitx_client_phase1_finish */
         g_object_unref(self);
         return;
@@ -714,6 +736,7 @@ _fcitx_client_create_ic_cb(GObject *source_object,
     gboolean enable;
     guint32 key1, state1, key2, state2;
     g_variant_get(result, "(ibuuuu)", &self->priv->id, &enable, &key1, &state1, &key2, &state2);
+    g_variant_unref(result);
 
     sprintf(self->priv->icname, FCITX_IC_DBUS_PATH, self->priv->id);
 
@@ -740,18 +763,13 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
     if (self->priv->icproxy)
         g_object_unref(self->priv->icproxy);
-    self->priv->icproxy = g_dbus_proxy_new_finish(res, &error);
-
-    if (error) {
-        g_error_free(error);
-    }
+    self->priv->icproxy = g_dbus_proxy_new_finish(res, NULL);
 
     do {
         if (!self->priv->icproxy)
@@ -1072,7 +1090,7 @@ _fcitx_client_socket_file_changed_cb (GFileMonitor       *monitor,
         event_type != G_FILE_MONITOR_EVENT_DELETED)
         return;
 
-    _fcitx_client_create_ic(client);
+    _fcitx_client_create_ic(client, FALSE);
 }
 
 static gchar*
@@ -1134,10 +1152,6 @@ _fcitx_client_clean_up(FcitxClient* self, gboolean dont_emit_disconn)
     }
 
     if (self->priv->cancellable) {
-        g_signal_handlers_disconnect_matched (
-                self->priv->cancellable,
-                G_SIGNAL_MATCH_DATA,
-                0, 0, NULL, NULL, self);
         g_cancellable_cancel (self->priv->cancellable);
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;

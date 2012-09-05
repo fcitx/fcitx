@@ -221,6 +221,45 @@ gchar*       fcitx_input_method_get_current_ui(FcitxInputMethod* im);
  **/
 void         fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname);
 
+
+/**
+ * fcitx_input_method_activate:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * Activate fcitx
+ **/
+void         fcitx_input_method_activate(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_activate:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * Inactivate fcitx
+ **/
+void         fcitx_input_method_inactivate(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_activate:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * toggle fcitx state
+ **/
+void         fcitx_input_method_toggle(FcitxInputMethod* im);
+
+/**
+ * fcitx_input_method_get_current_state:
+ *
+ * @im: A FcitxInputMethod
+ *
+ * @returns: current state, -1 for error
+ *
+ * Get current state
+ **/
+gint         fcitx_input_method_get_current_state(FcitxInputMethod* im);
+
 /**
  * fcitx_im_item_new:
  * @name: name of im

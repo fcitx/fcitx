@@ -19,12 +19,12 @@ LongDescription=Override the skin font size
 
 [ClassicUI/Font]
 Type=Font
-DefaultValue=
+DefaultValue=Sans
 Description=Font
 
 [ClassicUI/MenuFont]
 Type=Font
-DefaultValue=
+DefaultValue=Sans
 Description=Menu Font
 
 [ClassicUI/FontLocale]
