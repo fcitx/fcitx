@@ -26,6 +26,10 @@
 #include "fcitxclient.h"
 #include "marshall.h"
 
+#define fcitx_gclient_debug(...) g_log ("fcitx-client",       \
+                                      G_LOG_LEVEL_DEBUG,    \
+                                      __VA_ARGS__)
+
 typedef struct _ProcessKeyStruct ProcessKeyStruct;
 
 struct _ProcessKeyStruct {
@@ -481,6 +485,7 @@ fcitx_client_init(FcitxClient *self)
 static void
 _fcitx_client_create_ic(FcitxClient *self)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic");
     _fcitx_client_clean_up(self, FALSE);
     self->priv->cancellable = g_cancellable_new ();
 
@@ -513,6 +518,7 @@ _fcitx_client_connection_closed(GDBusConnection *connection,
                                 GError          *error,
                                 gpointer         user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_connection_closed");
     FcitxClient* self = (FcitxClient*) user_data;
     _fcitx_client_clean_up(self, FALSE);
 
@@ -524,6 +530,7 @@ _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object,
                                             GAsyncResult *res,
                                             gpointer user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase0_bus_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
 
@@ -544,6 +551,7 @@ _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object,
         g_object_unref(self);
         return;
     }
+    _fcitx_client_watch(self);
     self->priv->connection = connection;
     self->priv->connection_is_bus = TRUE;
     g_signal_connect(connection, "closed", G_CALLBACK(_fcitx_client_connection_closed), self);
@@ -564,6 +572,7 @@ _fcitx_client_create_ic_phase0_bus_finished(GObject *source_object,
 static void
 _fcitx_client_watch(FcitxClient* self)
 {
+    fcitx_gclient_debug("_fcitx_client_watch");
     if (self->priv->watch_id)
         return;
 
@@ -592,6 +601,7 @@ _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object,
                                                    gpointer user_data)
 
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase0_connection_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
@@ -613,6 +623,8 @@ _fcitx_client_create_ic_phase0_connection_finished(GObject *source_object,
         g_object_unref(self);
         return;
     }
+
+    g_dbus_connection_set_exit_on_close(connection, FALSE);
 
     self->priv->connection = connection;
     self->priv->connection_is_bus = FALSE;
@@ -637,6 +649,7 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
                                         GAsyncResult *res,
                                         gpointer user_data)
 {
+    fcitx_gclient_debug("_fcitx_client_create_ic_phase1_finished");
     g_return_if_fail (user_data != NULL);
     g_return_if_fail (FCITX_IS_CLIENT(user_data));
     FcitxClient* self = (FcitxClient*) user_data;
