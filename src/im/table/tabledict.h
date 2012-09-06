@@ -33,7 +33,7 @@ typedef enum _ADJUSTORDER {
 } ADJUSTORDER;
 
 typedef struct _FH {
-    char            strFH[FH_MAX_LENGTH * 2 + 1];
+    char            strFH[FH_MAX_LENGTH * UTF8_MAX_LENGTH + 1];
 } FH;
 
 typedef struct _RULE_RULE {
