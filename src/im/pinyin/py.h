@@ -64,8 +64,8 @@ typedef enum _PY_CAND_WORD_TYPE {
 typedef struct _HZ {
     char            strHZ[MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH + 1];
     int             iPYFA;
-    unsigned int            iHit;
-    unsigned int            iIndex;
+    uint32_t        iHit;
+    uint32_t        iIndex;
     struct _HZ     *next;
 } HZ;
 
