@@ -310,18 +310,24 @@ FcitxXkbSetRules (FcitxXkb* xkb,
                                 XkbGBN_AllComponentsMask,
                                 XkbGBN_AllComponentsMask &
                                 (~XkbGBN_GeometryMask), True);
+
+    Bool result = True;
     if (!xkbDesc) {
         FcitxLog (WARNING, "Cannot load new keyboard description.");
-        return False;
+        result = False;
     }
-    XkbRF_SetNamesProp (dpy, rulesPath, &rdefs);
+    else {
+       char* tempstr = strdup(rules_file);
+       XkbRF_SetNamesProp (dpy, tempstr, &rdefs);
+       free (tempstr);
+    }
     free (rulesPath);
     free (rdefs.model);
     free (rdefs.layout);
     free (rdefs.variant);
     free (rdefs.options);
 
-    return True;
+    return result;
 }
 
 static Bool
