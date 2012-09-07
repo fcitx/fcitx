@@ -11,6 +11,7 @@
 #cmakedefine _ENABLE_OPENCC
 #cmakedefine LIBKVM_FOUND
 #cmakedefine HAVE_XINERAMA
+#cmakedefine HAVE_XFIXES
 #cmakedefine LIBICONV_SECOND_ARGUMENT_IS_CONST
 #cmakedefine ENABLE_SNOOPER
 #cmakedefine ENABLE_X11

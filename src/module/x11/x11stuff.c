@@ -30,11 +30,15 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
 #include "fcitx/module.h"
 #include "fcitx-utils/log.h"
-#include "x11stuff.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
+#include "x11stuff.h"
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
@@ -51,10 +55,10 @@ static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
-static void InitComposite(FcitxX11* x11stuff);
+static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
-static boolean X11GetCompositeManager(FcitxX11* x11stuff);
-static void X11InitScreen(FcitxX11* x11stuff);
+static boolean X11GetCompositeManager(FcitxX11* x11priv);
+static void X11InitScreen(FcitxX11* x11priv);
 static void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args);
 
 static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
@@ -79,7 +83,7 @@ void* X11Create(FcitxInstance* instance)
     x11priv->dpy = XOpenDisplay(NULL);
     x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
     if (x11priv->dpy == NULL)
-        return false;
+        return NULL;
 
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);
@@ -105,7 +109,16 @@ void* X11Create(FcitxInstance* instance)
     AddFunction(x11addon, X11ScreenGeometry);
     AddFunction(x11addon, X11ProcessEventReal);
     AddFunction(x11addon, X11GetDPI);
-    InitComposite(x11priv);
+
+#ifdef HAVE_XFIXES
+    int ignore;
+    if (XFixesQueryExtension (x11priv->dpy,
+                              &x11priv->xfixesEventBase,
+                              &ignore))
+        x11priv->hasXfixes = true;
+#endif
+
+    X11InitComposite(x11priv);
 
     X11InitScreen(x11priv);
 
@@ -163,6 +176,12 @@ void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
                 if (event.xconfigure.window == DefaultRootWindow(x11priv->dpy))
                     X11InitScreen(x11priv);
             }
+#ifdef HAVE_XFIXES
+            else if (event.type - x11priv->xfixesEventBase == XFixesSelectionNotify) {
+                boolean result = X11InitComposite(x11priv);
+                X11HandlerComposite(x11priv, result);
+            }
+#endif
 
             FcitxXEventHandler* handler;
             for (handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
@@ -226,30 +245,42 @@ void* X11RemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
     return NULL;
 }
 
-void InitComposite(FcitxX11* x11stuff)
+boolean X11InitComposite(FcitxX11* x11priv)
 {
     char *atom_names = NULL;
-    asprintf(&atom_names, "_NET_WM_CM_S%d", x11stuff->iScreen);
-    x11stuff->compManagerAtom = XInternAtom(x11stuff->dpy, atom_names, False);
+    asprintf(&atom_names, "_NET_WM_CM_S%d", x11priv->iScreen);
+    x11priv->compManagerAtom = XInternAtom(x11priv->dpy, atom_names, False);
 
     free(atom_names);
-    X11GetCompositeManager(x11stuff);
+
+#ifdef HAVE_XFIXES
+    if (x11priv->hasXfixes) {
+       XFixesSelectSelectionInput (x11priv->dpy,
+                                   DefaultRootWindow(x11priv->dpy),
+                                   x11priv->compManagerAtom,
+                                   XFixesSetSelectionOwnerNotifyMask |
+                                   XFixesSelectionWindowDestroyNotifyMask |
+                                   XFixesSelectionClientCloseNotifyMask);
+    }
+#endif
+
+    return X11GetCompositeManager(x11priv);
 }
 
 void*
 X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxX11* x11stuff = (FcitxX11*)arg;
+    FcitxX11* x11priv = (FcitxX11*)arg;
     XVisualInfo *xvi;
     XVisualInfo temp;
     int         nvi;
     int         i;
     XRenderPictFormat   *format;
     Visual      *visual;
-    Display*    dpy = x11stuff->dpy;
-    int         scr = x11stuff->iScreen;
+    Display*    dpy = x11priv->dpy;
+    int         scr = x11priv->iScreen;
 
-    if (x11stuff->compManager == None)
+    if (x11priv->compManager == None)
         return NULL;
 
     temp.screen = scr;
@@ -415,6 +446,10 @@ X11MouseClick(void *arg, FcitxModuleFunctionArg args)
 
 void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
 {
+    if (x11priv->isComposite == enable)
+        return;
+
+    x11priv->isComposite = enable;
 
     if (enable) {
         x11priv->compManager = XGetSelectionOwner(x11priv->dpy, x11priv->compManagerAtom);
@@ -435,23 +470,23 @@ void X11HandlerComposite(FcitxX11* x11priv, boolean enable)
         handler->eventHandler(handler->instance, enable);
 }
 
-boolean X11GetCompositeManager(FcitxX11* x11stuff)
+boolean X11GetCompositeManager(FcitxX11* x11priv)
 {
-    x11stuff->compManager = XGetSelectionOwner(x11stuff->dpy, x11stuff->compManagerAtom);
+    x11priv->compManager = XGetSelectionOwner(x11priv->dpy, x11priv->compManagerAtom);
 
-    if (x11stuff->compManager) {
+    if (x11priv->compManager) {
         XSetWindowAttributes attrs;
         attrs.event_mask = StructureNotifyMask;
-        XChangeWindowAttributes(x11stuff->dpy, x11stuff->compManager, CWEventMask, &attrs);
+        XChangeWindowAttributes(x11priv->dpy, x11priv->compManager, CWEventMask, &attrs);
         return true;
     } else
         return false;
 }
 
-void X11InitScreen(FcitxX11* x11stuff)
+void X11InitScreen(FcitxX11* x11priv)
 {
     // get the screen count
-    int newScreenCount = ScreenCount(x11stuff->dpy);
+    int newScreenCount = ScreenCount(x11priv->dpy);
 #ifdef HAVE_XINERAMA
 
     XineramaScreenInfo *xinerama_screeninfo = 0;
@@ -460,35 +495,35 @@ void X11InitScreen(FcitxX11* x11stuff)
     // using traditional multi-screen (with multiple root windows)
     if (newScreenCount == 1) {
         int unused;
-        x11stuff->bUseXinerama = (XineramaQueryExtension(x11stuff->dpy, &unused, &unused)
-                                  && XineramaIsActive(x11stuff->dpy));
+        x11priv->bUseXinerama = (XineramaQueryExtension(x11priv->dpy, &unused, &unused)
+                                  && XineramaIsActive(x11priv->dpy));
     }
 
-    if (x11stuff->bUseXinerama) {
+    if (x11priv->bUseXinerama) {
         xinerama_screeninfo =
-            XineramaQueryScreens(x11stuff->dpy, &newScreenCount);
+            XineramaQueryScreens(x11priv->dpy, &newScreenCount);
     }
 
     if (xinerama_screeninfo) {
-        x11stuff->defaultScreen = 0;
+        x11priv->defaultScreen = 0;
     } else
 #endif // HAVE_XINERAMA
     {
-        x11stuff->defaultScreen = DefaultScreen(x11stuff->dpy);
-        newScreenCount = ScreenCount(x11stuff->dpy);
-        x11stuff->bUseXinerama = false;
+        x11priv->defaultScreen = DefaultScreen(x11priv->dpy);
+        newScreenCount = ScreenCount(x11priv->dpy);
+        x11priv->bUseXinerama = false;
     }
 
-    if (x11stuff->rects)
-        free(x11stuff->rects);
-    x11stuff->rects = fcitx_utils_malloc0(sizeof(FcitxRect) * newScreenCount);
+    if (x11priv->rects)
+        free(x11priv->rects);
+    x11priv->rects = fcitx_utils_malloc0(sizeof(FcitxRect) * newScreenCount);
 
     // get the geometry of each screen
     int i, j, x, y, w, h;
     for (i = 0, j = 0; i < newScreenCount; i++, j++) {
 
 #ifdef HAVE_XINERAMA
-        if (x11stuff->bUseXinerama) {
+        if (x11priv->bUseXinerama) {
             x = xinerama_screeninfo[i].x_org;
             y = xinerama_screeninfo[i].y_org;
             w = xinerama_screeninfo[i].width;
@@ -498,8 +533,8 @@ void X11InitScreen(FcitxX11* x11stuff)
         {
             x = 0;
             y = 0;
-            w = WidthOfScreen(ScreenOfDisplay(x11stuff->dpy, i));
-            h = HeightOfScreen(ScreenOfDisplay(x11stuff->dpy, i));
+            w = WidthOfScreen(ScreenOfDisplay(x11priv->dpy, i));
+            h = HeightOfScreen(ScreenOfDisplay(x11priv->dpy, i));
         }
 
         FcitxRect rect;
@@ -508,23 +543,23 @@ void X11InitScreen(FcitxX11* x11stuff)
         rect.x2 = x + w - 1;
         rect.y2 = y + h - 1;
 
-        x11stuff->rects[j] = rect;
+        x11priv->rects[j] = rect;
 
-        if (x11stuff->bUseXinerama && j > 0 && RectIntersects(x11stuff->rects[j - 1], x11stuff->rects[j])) {
+        if (x11priv->bUseXinerama && j > 0 && RectIntersects(x11priv->rects[j - 1], x11priv->rects[j])) {
             // merge a "cloned" screen with the previous, hiding all crtcs
             // that are currently showing a sub-rect of the previous screen
-            if ((RectWidth(x11stuff->rects[j])* RectHeight(x11stuff->rects[j])) >
-                    (RectWidth(x11stuff->rects[j - 1])*RectHeight(x11stuff->rects[j - 1])))
-                x11stuff->rects[j - 1] = x11stuff->rects[j];
+            if ((RectWidth(x11priv->rects[j])* RectHeight(x11priv->rects[j])) >
+                    (RectWidth(x11priv->rects[j - 1])*RectHeight(x11priv->rects[j - 1])))
+                x11priv->rects[j - 1] = x11priv->rects[j];
             j--;
         }
     }
 
-    x11stuff->screenCount = j;
+    x11priv->screenCount = j;
 
 #ifdef HAVE_XINERAMA
-    if (x11stuff->bUseXinerama && x11stuff->screenCount == 1)
-        x11stuff->bUseXinerama = false;
+    if (x11priv->bUseXinerama && x11priv->screenCount == 1)
+        x11priv->bUseXinerama = false;
 
     if (xinerama_screeninfo)
         XFree(xinerama_screeninfo);
@@ -600,7 +635,7 @@ int PointToRect(int x, int y, FcitxRect r)
 
 void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxX11* x11stuff = (FcitxX11*)arg;
+    FcitxX11* x11priv = (FcitxX11*)arg;
     int x = *(int*) args.args[0];
     int y = *(int*) args.args[1];
     FcitxRect* rect = (FcitxRect*) args.args[2];
@@ -608,27 +643,27 @@ void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args)
     int closestScreen = -1;
     int shortestDistance = INT_MAX;
     int i;
-    for (i = 0; i < x11stuff->screenCount; ++i) {
-        int thisDistance = PointToRect(x, y, x11stuff->rects[i]);
+    for (i = 0; i < x11priv->screenCount; ++i) {
+        int thisDistance = PointToRect(x, y, x11priv->rects[i]);
         if (thisDistance < shortestDistance) {
             shortestDistance = thisDistance;
             closestScreen = i;
         }
     }
 
-    if (closestScreen < 0 || closestScreen >= x11stuff->screenCount)
-        closestScreen = x11stuff->defaultScreen;
+    if (closestScreen < 0 || closestScreen >= x11priv->screenCount)
+        closestScreen = x11priv->defaultScreen;
 
-    *rect = x11stuff->rects[closestScreen];
+    *rect = x11priv->rects[closestScreen];
 
     return NULL;
 }
 
 void* X11GetDPI(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxX11* x11stuff = (FcitxX11*)arg;
-    if (!x11stuff->dpi) {
-        char* v = XGetDefault(x11stuff->dpy, "Xft", "dpi");
+    FcitxX11* x11priv = (FcitxX11*)arg;
+    if (!x11priv->dpi) {
+        char* v = XGetDefault(x11priv->dpy, "Xft", "dpi");
         char* e = NULL;
         double value;
         if (v) {
@@ -637,29 +672,29 @@ void* X11GetDPI(void* arg, FcitxModuleFunctionArg args)
 
         /* NULL == NULL is also handle here */
         if (e == v) {
-            double width = DisplayWidth(x11stuff->dpy, x11stuff->iScreen);
-            double height = DisplayHeight(x11stuff->dpy, x11stuff->iScreen);
-            double widthmm = DisplayWidthMM(x11stuff->dpy, x11stuff->iScreen);
-            double heightmm = DisplayHeightMM(x11stuff->dpy, x11stuff->iScreen);
+            double width = DisplayWidth(x11priv->dpy, x11priv->iScreen);
+            double height = DisplayHeight(x11priv->dpy, x11priv->iScreen);
+            double widthmm = DisplayWidthMM(x11priv->dpy, x11priv->iScreen);
+            double heightmm = DisplayHeightMM(x11priv->dpy, x11priv->iScreen);
             value = ((width * 25.4) / widthmm + (height * 25.4) / heightmm) / 2;
         }
-        x11stuff->dpi = (int) value;
-        if (!x11stuff->dpi) {
-            x11stuff->dpi = 96;
+        x11priv->dpi = (int) value;
+        if (!x11priv->dpi) {
+            x11priv->dpi = 96;
             value = 96.0;
         }
-        x11stuff->dpif = value;
+        x11priv->dpif = value;
 
-        FcitxLog(DEBUG, "DPI: %d %lf", x11stuff->dpi, x11stuff->dpif);
+        FcitxLog(DEBUG, "DPI: %d %lf", x11priv->dpi, x11priv->dpif);
     }
 
     if (args.args[0]) {
         int* i = (int*) args.args[0];
-        *i = x11stuff->dpi;
+        *i = x11priv->dpi;
     }
     if (args.args[1]) {
         double* d = (double*) args.args[1];
-        *d = x11stuff->dpif;
+        *d = x11priv->dpif;
     }
     return NULL;
 }

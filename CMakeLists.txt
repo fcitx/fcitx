@@ -163,6 +163,10 @@ if (X11_Xinerama_FOUND)
     set(HAVE_XINERAMA 1)
 endif (X11_Xinerama_FOUND)
 
+if (X11_Xfixes_FOUND)
+    set(HAVE_XFIXES 1)
+endif (X11_Xfixes_FOUND)
+
 if(ENABLE_DEBUG)
     set(_DEBUG)
 endif(ENABLE_DEBUG)
