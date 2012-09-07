@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-29 18:06-0400\n"
+"POT-Creation-Date: 2012-09-07 08:33-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,14 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
 msgid "Allow replacing the first candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:31
+msgid "Hotkey for Inputing Character From Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:36
+msgid "Hotkey for switching to Inputing Character From Phrase mode"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
@@ -525,71 +533,67 @@ msgstr ""
 msgid "Hotkey of Delete User Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:58
-msgid "Hotkey of Inputing Word From Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:67
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:62
 msgid "Rule of Candidate Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:76
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:71
 msgid "Rule of Candidate Phrase Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:85
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:80
 msgid "Rule of Frequent Word Order"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:90
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:85
 msgid "Fuzzy an and ang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:90
 msgid "Fuzzy en and eng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
 msgid "Fuzzy ian and iang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:105
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
 msgid "Fuzzy in and ing"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:105
 msgid "Fuzzy ou and u"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
 msgid "Fuzzy uan and uang"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
 msgid "Fuzzy c and ch"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
 msgid "Fuzzy f and h"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
 msgid "Fuzzy l and n"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
 msgid "Fuzzy s and sh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
 msgid "Fuzzy z and zh"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:145
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
 msgid "Fix misstype gn/ng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:150
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:145
 msgid "Fix misstype v/u"
 msgstr ""
 
@@ -1773,66 +1777,66 @@ msgstr ""
 msgid "Loading Table Dict"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:184
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:243
 msgid "Load Table Dict OK"
 msgstr ""
 
 #. 读取上次保存的自动词组信息
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:211
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:281
 msgid "Loading Autophrase."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:251
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:336
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:282
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:367
 msgid "Save dict error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:338
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:423
 msgid "Rename OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:571
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:587
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:597
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:613
 msgid "Pinyin: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:599
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:615
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:651
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:667
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:659
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:675
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:667
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:683
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1211
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1227
 msgid "Remind:"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1314
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1330
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1317
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1333
 msgid "Code is "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1319
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1335
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
@@ -1867,26 +1871,26 @@ msgstr ""
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1801
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1737
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1865
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1801
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1938
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1874
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2196
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2132
 msgid "Remind: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2329
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2265
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
@@ -1931,43 +1935,43 @@ msgstr ""
 msgid "IM: bad im %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:505
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:508
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1419
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1427
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1507
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1515
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1509
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1517
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1511
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1519
 msgid "min Num of Characters: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:176
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:415
 msgid "Use remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:181
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:420
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:176
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:415
 msgid "No remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:182
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:421
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:177
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:416
 msgid "Toggle Remind"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:396
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/instance.c:391
 msgid "pthread mutex init failed"
 msgstr ""
 
@@ -2002,17 +2006,17 @@ msgstr ""
 msgid "Module: bad module"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:115
-#, c-format
-msgid "Load Addon Config File:%s"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:123
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:133
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:232
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:146
+#, c-format
+msgid "Load Addon Config File:%s"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:284
 #, c-format
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
