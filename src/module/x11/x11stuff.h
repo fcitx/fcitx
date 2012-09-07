@@ -88,6 +88,9 @@ typedef struct _FcitxX11 {
     double dpif;
     int dpi;
     boolean firstRun;
+    boolean hasXfixes;
+    int xfixesEventBase;
+    boolean isComposite;
 } FcitxX11;
 
 typedef enum _FcitxXWindowType {
