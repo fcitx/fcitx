@@ -325,8 +325,6 @@ boolean TableInit(void *arg)
     }
     FcitxAddon* pyaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(tbl->owner), "fcitx-pinyin");
     tbl->pyaddon = pyaddon;
-    if (pyaddon == NULL)
-        return false;
     tbl->PYBaseOrder = AD_FREQ;
 
     Table_ResetPY(tbl->pyaddon);
@@ -595,7 +593,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                 retVal = IRV_TO_PROCESS;
 
             return retVal;
-        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_CTRL_ALT_E)) {
+        } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_CTRL_ALT_E) && tbl->pyaddon) {
             char            strPY[100];
 
             //如果拼音单字字库没有读入，则读入它
@@ -846,6 +844,10 @@ INPUT_RETURN_VALUE TableGetPinyinCandWords(TableMetaData* table)
 {
     FcitxTableState* tbl = table->owner;
     FcitxInstance *instance = tbl->owner;
+
+    if (!tbl->pyaddon)
+        return IRV_DISPLAY_CANDWORDS;
+
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
 
     strcpy(Table_PYGetFindString(tbl->pyaddon), FcitxInputStateGetRawInputBuffer(input) + 1);
@@ -912,7 +914,7 @@ INPUT_RETURN_VALUE TableGetCandWords(void* arg)
     if (!strcmp(FcitxInputStateGetRawInputBuffer(input), table->strSymbol))
         return TableGetFHCandWords(table);
 
-    if (FcitxInputStateGetRawInputBuffer(input)[0] == table->cPinyin && table->bUsePY)
+    if (FcitxInputStateGetRawInputBuffer(input)[0] == table->cPinyin && table->bUsePY && tbl->pyaddon)
         return TableGetPinyinCandWords(table);
 
     if (TableFindFirstMatchCode(table, FcitxInputStateGetRawInputBuffer(input), table->bTableExactMatch, true) == -1 && !table->tableDict->iAutoPhrase) {
