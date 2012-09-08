@@ -83,14 +83,22 @@ PinyinEnhanceGetSym(PinyinEnhance *pyenhance, const char *sym)
     return NULL;
 }
 
-boolean
-PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
+static void
+PySymClearDict(PinyinEnhance *pyenhance)
 {
-    pyenhance->sym_table = NULL;
-    pyenhance->sym_pool = fcitx_memory_pool_create();
-    if (!pyenhance->sym_pool)
-        return false;
+    if (pyenhance->sym_table) {
+        HASH_CLEAR(hh, pyenhance->sym_table);
+        pyenhance->sym_table = NULL;
+    }
+    if (pyenhance->sym_pool) {
+        fcitx_memory_pool_destroy(pyenhance->sym_pool);
+        pyenhance->sym_pool = NULL;
+    }
+}
 
+static boolean
+PySymLoadDict(PinyinEnhance *pyenhance)
+{
     FILE *fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
     if (!fp)
         return false;
@@ -126,6 +134,30 @@ PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
     return true;
 }
 
+boolean
+PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
+{
+    pyenhance->sym_table = NULL;
+    if (pyenhance->config.disable_sym) {
+        pyenhance->sym_pool = NULL;
+        return false;
+    }
+    pyenhance->sym_pool = fcitx_memory_pool_create();
+    if (!pyenhance->sym_pool)
+        return false;
+    return PySymLoadDict(pyenhance);
+}
+
+void
+PinyinEnhanceReloadDict(PinyinEnhance *pyenhance)
+{
+    PySymClearDict(pyenhance);
+    if (pyenhance->config.disable_sym)
+        return;
+    pyenhance->sym_pool = fcitx_memory_pool_create();
+    PySymLoadDict(pyenhance);
+}
+
 static INPUT_RETURN_VALUE
 PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
 {
@@ -140,7 +172,7 @@ boolean
 PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
 {
     PySymTable *table = pyenhance->sym_table;
-    if (!table)
+    if ((!table) || pyenhance->config.disable_sym)
         return false;
     FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
     char *sym = FcitxInputStateGetRawInputBuffer(input);
@@ -170,6 +202,5 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
 void
 PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance)
 {
-    HASH_CLEAR(hh, pyenhance->sym_table);
-    fcitx_memory_pool_destroy(pyenhance->sym_pool);
+    PySymClearDict(pyenhance);
 }

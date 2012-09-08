@@ -30,6 +30,7 @@ extern "C" {
     boolean PinyinEnhanceSymInit(PinyinEnhance *pyenhance);
     boolean PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance);
     void PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance);
+    void PinyinEnhanceReloadDict(PinyinEnhance *pyenhance);
 #ifdef __cplusplus
 }
 #endif
