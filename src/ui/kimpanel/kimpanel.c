@@ -210,9 +210,17 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
     char* imname;
     char* description;
     char temp[LANGCODE_LENGTH + 1] = { '\0', };
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
+    FCITX_UNUSED(temp);
+    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
+    if (ic == NULL) {
+        icon = "kbd";
+        imname = _("No input window");
+        description = _("No input window");
+    }
+    else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
         FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
         if (im) {
+#if 0
             if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
                 icon = "";
                 if (*im->langCode) {
@@ -224,7 +232,9 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
                     imname = im->uniqueName + strlen("fcitx-keyboard");
                 }
             }
-            else {
+            else
+#endif
+            {
                 icon = im->strIconName;
                 imname = im->strName;
             }
