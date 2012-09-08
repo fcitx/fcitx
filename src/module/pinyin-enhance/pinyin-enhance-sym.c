@@ -35,15 +35,25 @@
 typedef struct _PySymWord PySymWord;
 
 struct _PySymWord {
-    char *word;
     PySymWord *next;
 };
 
+static inline void*
+sym_word(PySymWord *word)
+{
+    return ((void*)word) + sizeof(PySymWord);
+}
+
 struct _PySymTable {
-    char *sym;
     PySymWord *words;
     UT_hash_handle hh;
 };
+
+static inline void*
+table_sym(PySymTable *table)
+{
+    return (void*)table + sizeof(PySymTable);
+}
 
 #define SYM_BLANK " \t\b\r\n"
 
@@ -52,23 +62,27 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
                     const char *word, int word_l)
 {
     PySymTable *table;
-    PySymWord *py_word = fcitx_memory_pool_alloc(pyenhance->sym_pool,
-                                                 sizeof(PySymWord));
+    PySymWord *py_word;
     word_l++;
-    py_word->word = fcitx_memory_pool_alloc(pyenhance->sym_pool, word_l);
-    memcpy(py_word->word, word, word_l);
+    py_word = fcitx_memory_pool_alloc(pyenhance->sym_pool,
+                                      sizeof(PySymWord) + word_l);
+    memcpy(sym_word(py_word), word, word_l);
     HASH_FIND_STR(pyenhance->sym_table, sym, table);
     if (table) {
         py_word->next = table->words;
         table->words = py_word;
     } else {
+        /**
+         * the + 1 here is actually not necessary,
+         * just to make printing easier
+         **/
         table = fcitx_memory_pool_alloc(pyenhance->sym_pool,
-                                        sizeof(PySymTable));
-        table->sym = fcitx_memory_pool_alloc(pyenhance->sym_pool, sym_l + 1);
+                                        sizeof(PySymTable) + sym_l + 1);
         table->words = py_word;
         py_word->next = NULL;
-        memcpy(table->sym, sym, sym_l + 1);
-        HASH_ADD_KEYPTR(hh, pyenhance->sym_table, table->sym, sym_l, table);
+        memcpy(table_sym(table), sym, sym_l + 1);
+        HASH_ADD_KEYPTR(hh, pyenhance->sym_table,
+                        table_sym(table), sym_l, table);
     }
 }
 
@@ -190,7 +204,7 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
     for (;words;words = words->next) {
-        cand_word.strWord = strdup(words->word);
+        cand_word.strWord = strdup(sym_word(words));
         FcitxCandidateWordInsert(cand_list, &cand_word, 0);
     }
     FcitxMessagesSetMessageCount(client_preedit, 0);
