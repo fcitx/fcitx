@@ -438,7 +438,6 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
         for (i = 0; i < pystate->iPYFreqCount; i++) {
             pyFreqTemp = (PyFreq *) fcitx_utils_malloc0(sizeof(PyFreq));
             pyFreqTemp->next = NULL;
-            pyFreqTemp->bIsSym = false;
 
             fread(pyFreqTemp->strPY, sizeof(char) * 11, 1, fp);
             fread(&j, sizeof(int), 1, fp);
@@ -470,79 +469,6 @@ boolean LoadPYOtherDict(FcitxPinyinState* pystate)
 
         fclose(fp);
     }
-    //下面读取特殊符号表
-    fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
-    if (fp) {
-        char* buf = NULL, *buf1 = NULL;
-        size_t len;
-
-        while (getline(&buf, &len, fp) != -1) {
-            if (buf1)
-                free(buf1);
-            buf1 = fcitx_utils_trim(buf);
-            char *p = buf1;
-
-            while (*p && !isspace(*p))
-                p ++;
-            if (*p == '\0' || *p == '#')
-                continue;
-
-            while (isspace(*p)) {
-                *p = '\0';
-                p ++;
-            }
-
-            if (strlen(buf1) >= MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH)
-                continue;
-
-            if (strlen(p) >= MAX_PY_PHRASE_LENGTH * UTF8_MAX_LENGTH)
-                continue;
-
-            //首先看看str1是否已经在列表中
-            pyFreqTemp = pystate->pyFreq->next;
-            pPyFreq = pystate->pyFreq;
-            while (pyFreqTemp) {
-                if (!strcmp(pyFreqTemp->strPY, buf1))
-                    break;
-                pPyFreq = pPyFreq->next;
-                pyFreqTemp = pyFreqTemp->next;
-            }
-
-            if (!pyFreqTemp) {
-                pyFreqTemp = (PyFreq *) fcitx_utils_malloc0(sizeof(PyFreq));
-                strcpy(pyFreqTemp->strPY, buf1);
-                pyFreqTemp->next = NULL;
-                pyFreqTemp->iCount = 0;
-                pyFreqTemp->bIsSym = true;
-                pyFreqTemp->HZList = (HZ *) fcitx_utils_malloc0(sizeof(HZ));
-                pyFreqTemp->HZList->next = NULL;
-                pPyFreq->next = pyFreqTemp;
-                pystate->iPYFreqCount++;
-            } else {
-                if (!pyFreqTemp->bIsSym)        //不能与常用字的编码相同
-                    continue;
-            }
-
-            HZTemp = (HZ *) fcitx_utils_malloc0(sizeof(HZ));
-            strcpy(HZTemp->strHZ, p);
-            HZTemp->next = NULL;
-            pyFreqTemp->iCount++;
-
-            pHZ = pyFreqTemp->HZList;
-            while (pHZ->next)
-                pHZ = pHZ->next;
-
-            pHZ->next = HZTemp;
-        }
-
-        if (buf)
-            free(buf);
-        if (buf1)
-            free(buf1);
-
-        fclose(fp);
-    }
-
     return true;
 }
 
@@ -1001,11 +927,6 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
         pCurFreq = pCurFreq->next;
     }
 
-    /* if it is symbol mode, all word will be take care */
-    if (pCurFreq && pCurFreq->bIsSym) {
-        PYGetSymCandWords(pystate, pCurFreq);
-    }
-
     if (pystate->pyconfig.bPYCreateAuto)
         PYCreateAuto(pystate);
 
@@ -1248,10 +1169,6 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
         pIndex = &(pycandWord->cand.freq.hz->iIndex);
         pystate->iNewFreqCount++;
         break;
-    case PY_CAND_SYMBOL:       //是特殊符号
-        pBase = pycandWord->cand.freq.hz->strHZ;
-        bAddNewPhrase = false;
-        break;
     case PY_CAND_REMIND: {
         strcpy(pystate->strPYRemindSource, pycandWord->cand.remind.phrase->strPhrase + pycandWord->cand.remind.iLength);
         strcpy(pystate->strPYRemindMap, pycandWord->cand.remind.phrase->strMap + pycandWord->cand.remind.iLength);
@@ -1279,7 +1196,7 @@ INPUT_RETURN_VALUE PYGetCandWord(void* arg, FcitxCandidateWord* candWord)
     if (pPhrase)
         strcat(strHZString, pPhrase);
     iLen = fcitx_utf8_strlen(strHZString);
-    if (iLen == pystate->findMap.iHZCount || pycandWord->iWhich == PY_CAND_SYMBOL) {
+    if (iLen == pystate->findMap.iHZCount) {
         pystate->strPYAuto[0] = '\0';
         for (iLen = 0; iLen < pystate->iPYSelected; iLen++)
             strcat(pystate->strPYAuto, pystate->pySelected[iLen].strHZ);
@@ -1445,41 +1362,6 @@ boolean PYAddPhraseCandWord(FcitxPinyinState* pystate, PYCandIndex pos, PyPhrase
     return true;
 }
 
-//********************************************
-void PYGetSymCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
-{
-    int i;
-    HZ *hz;
-    FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
-
-    if (pCurFreq && pCurFreq->bIsSym) {
-        hz = pCurFreq->HZList->next;
-        for (i = 0; i < pCurFreq->iCount; i++) {
-            PYCandWord* pycandWord = fcitx_utils_malloc0(sizeof(PYCandWord));
-            PYAddSymCandWord(hz, pycandWord);
-            FcitxCandidateWord candWord;
-            candWord.callback = PYGetCandWord;
-            candWord.owner = pystate;
-            candWord.priv = pycandWord;
-            candWord.strExtra = NULL;
-            candWord.strWord = strdup(hz->strHZ);
-            candWord.wordType = MSG_OTHER;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
-            hz = hz->next;
-        }
-    }
-}
-
-/*
- * 将一个符号加入到候选列表的合适位置中
- * 符号不需进行频率调整
- */
-void PYAddSymCandWord(HZ * hz, PYCandWord* pycandWord)
-{
-    pycandWord->iWhich = PY_CAND_SYMBOL;
-    pycandWord->cand.sym.hz = hz;
-}
-
 //*****************************************************
 
 void PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
@@ -1552,7 +1434,7 @@ void PYGetFreqCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq)
     FcitxInputState* input = FcitxInstanceGetInputState(pystate->owner);
     utarray_init(&candtemp, &pycand_icd);
 
-    if (pCurFreq && !pCurFreq->bIsSym) {
+    if (pCurFreq) {
         hz = pCurFreq->HZList->next;
         for (i = 0; i < pCurFreq->iCount; i++) {
             PYCandWord* pycandWord = fcitx_utils_malloc0(sizeof(PYCandWord));
@@ -1806,35 +1688,31 @@ void SavePYFreq(FcitxPinyinState *pystate)
     i = 0;
     pPyFreq = pystate->pyFreq->next;
     while (pPyFreq) {
-        if (!pPyFreq->bIsSym)
-            i++;
+        i++;
         pPyFreq = pPyFreq->next;
     }
     fwrite(&i, sizeof(uint), 1, fp);
     pPyFreq = pystate->pyFreq->next;
     while (pPyFreq) {
-        if (!pPyFreq->bIsSym) {
-            fwrite(pPyFreq->strPY, sizeof(char) * 11, 1, fp);
-            j = pPyFreq->iCount;
+        fwrite(pPyFreq->strPY, sizeof(char) * 11, 1, fp);
+        j = pPyFreq->iCount;
+        fwrite(&j, sizeof(int), 1, fp);
+        hz = pPyFreq->HZList->next;
+        for (k = 0; k < pPyFreq->iCount; k++) {
+            char slen = strlen(hz->strHZ);
+            fwrite(&slen, sizeof(char), 1, fp);
+            fwrite(hz->strHZ, sizeof(char) * slen, 1, fp);
+
+            j = hz->iPYFA;
             fwrite(&j, sizeof(int), 1, fp);
-            hz = pPyFreq->HZList->next;
-            for (k = 0; k < pPyFreq->iCount; k++) {
 
-                char slen = strlen(hz->strHZ);
-                fwrite(&slen, sizeof(char), 1, fp);
-                fwrite(hz->strHZ, sizeof(char) * slen, 1, fp);
+            j = hz->iHit;
+            fwrite(&j, sizeof(int), 1, fp);
 
-                j = hz->iPYFA;
-                fwrite(&j, sizeof(int), 1, fp);
+            j = hz->iIndex;
+            fwrite(&j, sizeof(int), 1, fp);
 
-                j = hz->iHit;
-                fwrite(&j, sizeof(int), 1, fp);
-
-                j = hz->iIndex;
-                fwrite(&j, sizeof(int), 1, fp);
-
-                hz = hz->next;
-            }
+            hz = hz->next;
         }
         pPyFreq = pPyFreq->next;
     }
@@ -1974,7 +1852,6 @@ void PYAddFreq(FcitxPinyinState* pystate, PYCandWord* pycandWord)
         strcpy(freq->strPY, pystate->strFindString);
         freq->next = NULL;
         freq->iCount = 0;
-        freq->bIsSym = false;
         pCurFreq = pystate->pyFreq;
         for (i = 0; i < pystate->iPYFreqCount; i++)
             pCurFreq = pCurFreq->next;
@@ -2033,7 +1910,7 @@ boolean PYIsInFreq(PyFreq* pCurFreq, char *strHZ)
     HZ *hz;
     int i;
 
-    if (!pCurFreq || pCurFreq->bIsSym)
+    if (!pCurFreq)
         return false;
     hz = pCurFreq->HZList->next;
     for (i = 0; i < pCurFreq->iCount; i++) {
