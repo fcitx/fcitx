@@ -125,3 +125,44 @@ PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
     fclose(fp);
     return true;
 }
+
+static INPUT_RETURN_VALUE
+PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
+{
+    PinyinEnhance *pyenhance = arg;
+    FcitxInstanceCommitString(pyenhance->owner,
+                              FcitxInstanceGetCurrentIC(pyenhance->owner),
+                              cand_word->strWord);
+    return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
+}
+
+boolean
+PinyinEnhanceFindSym(PinyinEnhance *pyenhance)
+{
+    PySymTable *table = pyenhance->sym_table;
+    if (!table)
+        return false;
+    FcitxInputState *input = FcitxInstanceGetInputState(pyenhance->owner);
+    char *sym = FcitxInputStateGetRawInputBuffer(input);
+    PySymWord *words = PinyinEnhanceGetSym(pyenhance, sym);
+    if (!words)
+        return false;
+    FcitxCandidateWord cand_word = {
+        .strWord = NULL,
+        .strExtra = NULL,
+        .callback = PySymGetCandCb,
+        .wordType = MSG_OTHER,
+        .owner = pyenhance,
+        .priv = NULL,
+    };
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
+    for (;words;words = words->next) {
+        cand_word.strWord = strdup(words->word);
+        FcitxCandidateWordInsert(cand_list, &cand_word, 0);
+    }
+    FcitxMessagesSetMessageCount(client_preedit, 0);
+    FcitxMessagesAddMessageAtLast(client_preedit, MSG_INPUT, "%s",
+                                  cand_word.strWord);
+    return true;
+}

@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
     boolean PinyinEnhanceSymInit(PinyinEnhance *pyenhance);
+    boolean PinyinEnhanceFindSym(PinyinEnhance *pyenhance);
 
 #ifdef __cplusplus
 }
