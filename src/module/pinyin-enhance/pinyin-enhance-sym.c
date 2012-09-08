@@ -137,7 +137,7 @@ PySymGetCandCb(void *arg, FcitxCandidateWord *cand_word)
 }
 
 boolean
-PinyinEnhanceFindSym(PinyinEnhance *pyenhance)
+PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
 {
     PySymTable *table = pyenhance->sym_table;
     if (!table)
@@ -165,4 +165,11 @@ PinyinEnhanceFindSym(PinyinEnhance *pyenhance)
     FcitxMessagesAddMessageAtLast(client_preedit, MSG_INPUT, "%s",
                                   cand_word.strWord);
     return true;
+}
+
+void
+PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance)
+{
+    HASH_CLEAR(hh, pyenhance->sym_table);
+    fcitx_memory_pool_destroy(pyenhance->sym_pool);
 }

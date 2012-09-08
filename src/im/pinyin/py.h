@@ -48,7 +48,6 @@ typedef enum _FIND_MODE {
     FIND_PHRASE,
     FIND_BASE,
     FIND_FREQ,
-    FIND_SYM
 } FINDMODE;
 
 typedef enum _PY_CAND_WORD_TYPE {
@@ -128,7 +127,6 @@ typedef struct _PYREMINDCANDWORD {
 } PYRemindCandWord;
 
 typedef union _PCand {
-    PYFreqCandWord  sym;
     PYFreqCandWord  freq;
     PYBaseCandWord  base;
     PYPhraseCandWord phrase;

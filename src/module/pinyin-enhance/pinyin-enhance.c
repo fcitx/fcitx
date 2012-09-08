@@ -159,7 +159,7 @@ PinyinEnhanceAddCandidateWord(void *arg)
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(pyenhance)))
         return;
-    if (PinyinEnhanceFindSym(pyenhance))
+    if (PinyinEnhanceSymCandWords(pyenhance))
         return;
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);
@@ -169,7 +169,8 @@ PinyinEnhanceAddCandidateWord(void *arg)
 static void
 PinyinEnhanceDestroy(void *arg)
 {
-    /* PinyinEnhance *pyenhance = (PinyinEnhance*)arg; */
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    PinyinEnhanceSymDestroy(pyenhance);
 }
 
 static void
