@@ -40,6 +40,7 @@
 #include <libgen.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <errno.h>
 
 #if defined(ENABLE_BACKTRACE)
 #include <execinfo.h>
@@ -358,7 +359,7 @@ int fcitx_utils_pid_exists(pid_t pid)
 {
     if (pid <= 0)
         return 0;
-    return !kill(pid, 0);
+    return !(kill(pid, 0) && (errno == ESRCH));
 }
 
 FCITX_EXPORT_API

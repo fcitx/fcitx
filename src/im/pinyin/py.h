@@ -48,12 +48,10 @@ typedef enum _FIND_MODE {
     FIND_PHRASE,
     FIND_BASE,
     FIND_FREQ,
-    FIND_SYM
 } FINDMODE;
 
 typedef enum _PY_CAND_WORD_TYPE {
     PY_CAND_AUTO,
-    PY_CAND_SYMBOL,
     PY_CAND_BASE,
     PY_CAND_SYSPHRASE,
     PY_CAND_USERPHRASE,
@@ -73,7 +71,6 @@ typedef struct _PYFREQ {
     HZ             *HZList;
     char            strPY[MAX_PY_PHRASE_LENGTH * MAX_PY_LENGTH + 1];
     unsigned int            iCount;
-    boolean            bIsSym;  //For special symbols
     struct _PYFREQ  *next;
 } PyFreq;
 
@@ -130,7 +127,6 @@ typedef struct _PYREMINDCANDWORD {
 } PYRemindCandWord;
 
 typedef union _PCand {
-    PYFreqCandWord  sym;
     PYFreqCandWord  freq;
     PYBaseCandWord  base;
     PYPhraseCandWord phrase;
@@ -211,8 +207,6 @@ void            CalculateCursorPosition(struct _FcitxPinyinState* pystate);
 void            PYCreateAuto(struct _FcitxPinyinState* pystate);
 INPUT_RETURN_VALUE PYGetCandWords(void* arg);
 INPUT_RETURN_VALUE PYGetCandWord(void* arg, struct _FcitxCandidateWord* pycandWord);
-void            PYGetSymCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq);
-void PYAddSymCandWord(HZ* hz, PYCandWord* pycandWord);
 void            PYGetBaseCandWords(FcitxPinyinState* pystate, PyFreq* pCurFreq);
 void PYAddBaseCandWord(PYCandIndex pos, PYCandWord* pycandWord);
 void            PYGetFreqCandWords(struct _FcitxPinyinState* pystate, PyFreq* pyFreq);

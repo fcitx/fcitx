@@ -27,6 +27,7 @@
 #include "pinyin-enhance.h"
 #include "pinyin-enhance-spell.h"
 #include "pinyin-enhance-cfp.h"
+#include "pinyin-enhance-sym.h"
 
 #define LOGLEVEL DEBUG
 
@@ -47,6 +48,7 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSym", disable_sym);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseString",
                         char_from_phrase_str);
@@ -104,6 +106,8 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         return NULL;
     }
 
+    PinyinEnhanceSymInit(pyenhance);
+
     FcitxIMEventHook event_hook = {
         .arg = pyenhance,
         .func = PinyinEnhanceAddCandidateWord,
@@ -156,6 +160,8 @@ PinyinEnhanceAddCandidateWord(void *arg)
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(pyenhance)))
         return;
+    if (PinyinEnhanceSymCandWords(pyenhance))
+        return;
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);
     return;
@@ -164,7 +170,8 @@ PinyinEnhanceAddCandidateWord(void *arg)
 static void
 PinyinEnhanceDestroy(void *arg)
 {
-    /* PinyinEnhance *pyenhance = (PinyinEnhance*)arg; */
+    PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
+    PinyinEnhanceSymDestroy(pyenhance);
 }
 
 static void
@@ -172,6 +179,7 @@ PinyinEnhanceReloadConfig(void *arg)
 {
     PinyinEnhance *pyenhance = (PinyinEnhance*)arg;
     PinyinEnhanceLoadConfig(&pyenhance->config);
+    PinyinEnhanceReloadDict(pyenhance);
 }
 
 char*
