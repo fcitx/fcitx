@@ -18,63 +18,19 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _PINYIN_ENHANCE_H
-#define _PINYIN_ENHANCE_H
+#ifndef _PINYIN_ENHANCE_SYM_H
+#define _PINYIN_ENHANCE_SYM_H
 
-#include <fcitx/fcitx.h>
-#include <fcitx/module.h>
-#include <fcitx/instance.h>
-#include <fcitx/hook.h>
-#include <fcitx-utils/log.h>
-#include <fcitx-utils/memory.h>
-#include <fcitx/candidate.h>
-#include <fcitx-config/xdg.h>
-
-#include "config.h"
-
-typedef struct _PySymTable PySymTable;
-
-typedef struct {
-    FcitxGenericConfig gconfig;
-    boolean short_as_english;
-    boolean allow_replace_first;
-    boolean disable_spell;
-    int max_hint_length;
-    char *char_from_phrase_str;
-    FcitxHotkey char_from_phrase_key[2];
-} PinyinEnhanceConfig;
-
-typedef struct {
-    PinyinEnhanceConfig config;
-    FcitxInstance *owner;
-
-    boolean cfp_active; /* for "char from phrase" */
-    int cfp_cur_word;
-    int cfp_cur_page;
-
-    char *cfp_mode_selected;
-    int cfp_mode_cur;
-    int cfp_mode_count;
-    char ***cfp_mode_lists;
-
-    PySymTable *sym_table;
-    FcitxMemoryPool *sym_pool;
-} PinyinEnhance;
-
-enum {
-    PY_IM_INVALID = 0,
-    PY_IM_PINYIN,
-    PY_IM_SHUANGPIN,
-};
+#include "pinyin-enhance.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    char *PinyinEnhanceGetSelected(PinyinEnhance *pyenhance);
+    boolean PinyinEnhanceSymInit(PinyinEnhance *pyenhance);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _PINYIN_ENHANCE_H */
+#endif /* _PINYIN_ENHANCE_SYM_H */

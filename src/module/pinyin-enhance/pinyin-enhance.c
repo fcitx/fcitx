@@ -27,6 +27,7 @@
 #include "pinyin-enhance.h"
 #include "pinyin-enhance-spell.h"
 #include "pinyin-enhance-cfp.h"
+#include "pinyin-enhance-sym.h"
 
 #define LOGLEVEL DEBUG
 
@@ -103,6 +104,8 @@ PinyinEnhanceCreate(FcitxInstance *instance)
         free(pyenhance);
         return NULL;
     }
+
+    PinyinEnhanceSymInit(pyenhance);
 
     FcitxIMEventHook event_hook = {
         .arg = pyenhance,

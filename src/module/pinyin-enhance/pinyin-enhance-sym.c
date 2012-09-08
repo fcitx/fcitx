@@ -1,0 +1,127 @@
+/***************************************************************************
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
+ ***************************************************************************/
+
+#include <errno.h>
+#include <iconv.h>
+#include <unistd.h>
+#include <ctype.h>
+
+#include <libintl.h>
+
+#include "fcitx-utils/uthash.h"
+#include "pinyin-enhance-sym.h"
+
+#include "config.h"
+
+#define PY_SYMBOL_FILE  "pySym.mb"
+
+typedef struct _PySymWord PySymWord;
+
+struct _PySymWord {
+    char *word;
+    PySymWord *next;
+};
+
+struct _PySymTable {
+    char *sym;
+    PySymWord *words;
+    UT_hash_handle hh;
+};
+
+#define SYM_BLANK " \t\b\r\n"
+
+static void
+PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
+                    const char *word, int word_l)
+{
+    PySymTable *table;
+    PySymWord *py_word = fcitx_memory_pool_alloc(pyenhance->sym_pool,
+                                                 sizeof(PySymWord));
+    word_l++;
+    py_word->word = fcitx_memory_pool_alloc(pyenhance->sym_pool, word_l);
+    memcpy(py_word->word, word, word_l);
+    HASH_FIND_STR(pyenhance->sym_table, sym, table);
+    if (table) {
+        py_word->next = table->words;
+        table->words = py_word;
+    } else {
+        table = fcitx_memory_pool_alloc(pyenhance->sym_pool,
+                                        sizeof(PySymTable));
+        table->sym = fcitx_memory_pool_alloc(pyenhance->sym_pool, sym_l + 1);
+        table->words = py_word;
+        py_word->next = NULL;
+        memcpy(table->sym, sym, sym_l + 1);
+        HASH_ADD_KEYPTR(hh, pyenhance->sym_table, table->sym, sym_l, table);
+    }
+}
+
+static PySymWord*
+PinyinEnhanceGetSym(PinyinEnhance *pyenhance, const char *sym)
+{
+    PySymTable *table;
+    HASH_FIND_STR(pyenhance->sym_table, sym, table);
+    if (table) {
+        return table->words;
+    }
+    return NULL;
+}
+
+boolean
+PinyinEnhanceSymInit(PinyinEnhance *pyenhance)
+{
+    pyenhance->sym_table = NULL;
+    pyenhance->sym_pool = fcitx_memory_pool_create();
+    if (!pyenhance->sym_pool)
+        return false;
+
+    FILE *fp = FcitxXDGGetFileWithPrefix("pinyin", PY_SYMBOL_FILE, "r", NULL);
+    if (!fp)
+        return false;
+    char *buff = NULL;
+    char *sym;
+    char *word;
+    int sym_l;
+    int word_l;
+    size_t len;
+    while (getline(&buff, &len, fp) != -1) {
+        /* remove leading spaces */
+        sym = buff + strspn(buff, SYM_BLANK);
+        /* empty line or comment */
+        if (*sym == '\0' || *sym == '#')
+            continue;
+        /* find delimiter */
+        sym_l = strcspn(sym, SYM_BLANK);
+        word = sym + sym_l;
+        *word = '\0';
+        word++;
+        /* find start of word */
+        word = word + strspn(word, SYM_BLANK);
+        word_l = strcspn(word, SYM_BLANK);
+        if (!(word_l && sym_l))
+            continue;
+        word[word_l] = '\0';
+        PinyinEnhanceAddSym(pyenhance, sym, sym_l, word, word_l);
+    }
+
+    if (buff)
+        free(buff);
+    fclose(fp);
+    return true;
+}
