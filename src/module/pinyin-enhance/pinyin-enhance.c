@@ -48,6 +48,7 @@ CONFIG_BINDING_REGISTER("Pinyin Enhance", "ShortAsEnglish", short_as_english);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "AllowReplaceFirst",
                         allow_replace_first);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSpell", disable_spell);
+CONFIG_BINDING_REGISTER("Pinyin Enhance", "DisableSym", disable_sym);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "MaximumHintLength", max_hint_length);
 CONFIG_BINDING_REGISTER("Pinyin Enhance", "InputCharFromPhraseString",
                         char_from_phrase_str);
@@ -159,7 +160,7 @@ PinyinEnhanceAddCandidateWord(void *arg)
     /* check whether the current im is pinyin */
     if (!(im_type = check_im_type(pyenhance)))
         return;
-    if (PinyinEnhanceSymCandWords(pyenhance))
+    if ((!pyenhance->config.disable_sym) && PinyinEnhanceSymCandWords(pyenhance))
         return;
     if (!pyenhance->config.disable_spell)
         PinyinEnhanceSpellHint(pyenhance, im_type);

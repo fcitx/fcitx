@@ -14,7 +14,6 @@ LongDescription=Allow Pinyin Enhance to replace the first candidate word when th
 Description=Do not show spell hint
 Type=Boolean
 DefaultValue=False
-Advance=True
 
 [Pinyin Enhance/MaximumHintLength]
 Type=Integer
@@ -34,6 +33,11 @@ Description=Hotkey for Inputing Character From Phrase
 Type=Hotkey
 DefaultValue=
 Description=Hotkey for switching to Inputing Character From Phrase mode
+
+[Pinyin Enhance/DisableSym]
+Type=Boolean
+DefaultValue=False
+Description=Disable Pinyin Symbol
 
 [DescriptionFile]
 LocaleDomain=fcitx

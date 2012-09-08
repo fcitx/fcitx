@@ -6,5 +6,6 @@ Category=Module
 Enabled=True
 Library=fcitx-pinyin-enhance.so
 Type=SharedLibrary
+SubConfig=Symbol:native:pinyin/pySym.mb,fcitx:domain
 Dependency=
 Priority=80
