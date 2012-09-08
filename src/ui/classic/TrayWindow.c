@@ -146,7 +146,7 @@ void DrawTrayWindow(TrayWindow* trayWindow)
 
     /* 画png */
     if (f_state) {
-        image = GetIMIcon(classicui->owner, sc, sc->skinTrayIcon.active, 2, true);
+        image = GetIMIcon(classicui, sc, sc->skinTrayIcon.active, 2, true);
     } else {
         image = LoadImage(sc, sc->skinTrayIcon.inactive, true);
     }

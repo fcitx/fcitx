@@ -37,6 +37,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <libintl.h>
+#include <ctype.h>
 
 #include "fcitx/fcitx.h"
 
@@ -144,13 +145,14 @@ reload:
 
 SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const char* name, const char* text, int w, int h, boolean active)
 {
-    if (!text || strlen(text) == 0)
+    if (!text || *text == '\0')
         return NULL;
 
     UnloadSingleImage(sc, name);
 
-
     int len = fcitx_utf8_char_len(text);
+    if (len == 1 && text[len] && fcitx_utf8_char_len(text + len) == 1)
+        len = 2;
 
     char* iconText = strndup(text, len);
 
@@ -990,15 +992,35 @@ void ParsePlacement(UT_array* sps, char* placment)
     utarray_free(array);
 }
 
-SkinImage* GetIMIcon(FcitxInstance* instance, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
+SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
-    FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+    FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
     char* path;
     if (im->strIconName[0] == '/')
         path = strdup(im->strIconName);
     else
         asprintf(&path, "%s.png", im->strIconName);
-    SkinImage* imicon = LoadImage(sc, path, flag);
+
+    SkinImage* imicon = NULL;
+
+    if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
+        SkinImage* activeIcon = LoadImage(sc, fallbackIcon, fallbackToDefault);
+        char temp[LANGCODE_LENGTH + 1] = { '\0', };
+        char* iconText = 0;
+        if (*im->langCode) {
+            strncpy(temp, im->langCode, LANGCODE_LENGTH);
+            iconText = temp;
+            iconText[0] = toupper(iconText[0]);
+        }
+        else
+            iconText = im->uniqueName + strlen("fcitx-keyboard-");
+        imicon = LoadImageWithText(classicui, sc, path, iconText,
+                    cairo_image_surface_get_width(activeIcon->image),
+                    cairo_image_surface_get_height(activeIcon->image), true);
+    }
+
+    if (imicon == NULL)
+        imicon = LoadImage(sc, path, flag);
     if (imicon == NULL)
         imicon = LoadImage(sc, fallbackIcon, fallbackToDefault);
     else {

@@ -191,6 +191,61 @@ FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
     NULL
 };
 
+
+static void SetIMMenu(FcitxIM* pim, char** prop)
+{
+    const char *icon = "";
+    if (strncmp(pim->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) != 0)
+        icon = pim->strIconName;
+
+    if (icon[0] == '\0' || icon[0] == '/')
+        asprintf(prop, "/Fcitx/im/%s:%s:%s:%s", pim->uniqueName, pim->strName, icon, pim->strName);
+    else
+        asprintf(prop, "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, pim->strName, icon, pim->strName);
+}
+
+static void SetIMIcon(FcitxInstance* instance, char** prop)
+{
+    char* icon;
+    char* imname;
+    char* description;
+    char temp[LANGCODE_LENGTH + 1] = { '\0', };
+    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
+        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
+        if (im) {
+            if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
+                icon = "";
+                if (*im->langCode) {
+                    strncpy(temp, im->langCode, LANGCODE_LENGTH);
+                    imname = temp;
+                    imname[0] = toupper(imname[0]);
+                }
+                else {
+                    imname = im->uniqueName + strlen("fcitx-keyboard");
+                }
+            }
+            else {
+                icon = im->strIconName;
+                imname = im->strName;
+            }
+            description = im->strName;
+        } else {
+            icon = "kbd";
+            imname = _("Disabled");
+            description = _("Input Method Disabled");
+        }
+    } else {
+        icon = "kbd";
+        imname = _("Disabled");
+        description = _("Input Method Disabled");
+    }
+    /* add fcitx- prefix, unless icon name is an absolute path */
+    if (icon[0] == '\0' || icon[0] == '/')
+        asprintf(prop, "/Fcitx/im:%s:%s:%s", imname, icon, description);
+    else
+        asprintf(prop, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
+}
+
 void* KimpanelCreate(FcitxInstance* instance)
 {
     FcitxKimpanelUI *kimpanel = fcitx_utils_malloc0(sizeof(FcitxKimpanelUI));
@@ -293,30 +348,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
     asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
 
-    char* icon;
-    char* imname;
-    char* description;
-    if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
-        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
-        if (im) {
-            icon = im->strIconName;
-            imname = im->strName;
-            description = im->strName;
-        } else {
-            icon = "kbd";
-            imname = _("Disabled");
-            description = _("Input Method Disabled");
-        }
-    } else {
-        icon = "kbd";
-        imname = _("Disabled");
-        description = _("Input Method Disabled");
-    }
-    /* add fcitx- prefix, unless icon name is an absolute path */
-    if (icon[0] == '/')
-        asprintf(&prop[1], "/Fcitx/im:%s:%s:%s", imname, icon, description);
-    else
-        asprintf(&prop[1], "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
+    SetIMIcon(instance, &prop[1]);
 
     int count = 2;
 
@@ -352,37 +384,8 @@ void KimpanelSetIMStatus(FcitxKimpanelUI* kimpanel)
 {
     FcitxInstance* instance = kimpanel->owner;
     char* status = NULL;
-    char* icon;
-    char* imname;
-    char* description;
-    FcitxInputContext* ic = FcitxInstanceGetCurrentIC(instance);
-    if (ic == NULL) {
-        icon = "kbd";
-        imname = _("No input window");
-        description = _("No input window");
-    }
-    else if (FcitxInstanceGetCurrentStatev2(instance) == IS_ACTIVE) {
-        FcitxIM* im = FcitxInstanceGetCurrentIM(instance);
-        if (im) {
-            icon = im->strIconName;
-            imname = im->strName;
-            description = im->strName;
-        } else {
-            icon = "kbd";
-            imname = _("Disabled");
-            description = _("Input Method Disabled");
-        }
-    } else {
-        icon = "kbd";
-        imname = _("Disabled");
-        description = _("Input Method Disabled");
-    }
-    /* add fcitx- prefix */
-    if (icon[0] == '/')
-        asprintf(&status, "/Fcitx/im:%s:%s:%s", imname, icon, description);
-    else
-        asprintf(&status, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
 
+    SetIMIcon(instance, &status);
     KimUpdateProperty(kimpanel, status);
     free(status);
 }
@@ -765,10 +768,7 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                             pim != NULL;
                             pim = (FcitxIM *) utarray_next(imes, pim)) {
 
-                        if (pim->strIconName[0] == '/')
-                            asprintf(&prop[index], "/Fcitx/im/%s:%s:%s:%s", pim->uniqueName, pim->strName, pim->strIconName, pim->strName);
-                        else
-                            asprintf(&prop[index], "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, pim->strName, pim->strIconName, pim->strName);
+                        SetIMMenu(pim, &prop[index]);
                         index ++;
                     }
                     KimExecMenu(kimpanel, prop, len);

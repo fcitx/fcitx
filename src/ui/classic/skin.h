@@ -182,7 +182,7 @@ void LoadInputMessage(FcitxSkin* sc, struct _InputWindow* inputWindow, const cha
 void InitSkinMenu(struct _FcitxClassicUI* classicui);
 void DisplaySkin(struct _FcitxClassicUI* classicui, char * skinname);
 void ParsePlacement(UT_array* sps, char* placment);
-SkinImage* GetIMIcon(struct _FcitxInstance* instance, FcitxSkin* sc, const char* fallbackIcon, int flag, boolean fallbackToDefault);
+SkinImage* GetIMIcon(struct _FcitxClassicUI* classicui, FcitxSkin* sc, const char* fallbackIcon, int flag, boolean fallbackToDefault);
 void DrawResizableBackground(cairo_t *c,
                              cairo_surface_t *background,
                              int height,

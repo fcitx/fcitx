@@ -216,7 +216,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
                         imicon = LoadImage(sc, sc->skinMainBar.eng, false);
                     else {
-                        imicon = GetIMIcon(instance, sc, sc->skinMainBar.active, 3, false);
+                        imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
                     }
 
                     if (imicon) {
@@ -285,7 +285,7 @@ void DrawMainWindow(MainWindow* mainWindow)
             if (FcitxInstanceGetCurrentStatev2(instance) != IS_ACTIVE || FcitxInstanceGetCurrentIM(instance) == NULL)
                 imicon = LoadImage(sc, sc->skinMainBar.eng, false);
             else {
-                imicon = GetIMIcon(instance, sc, sc->skinMainBar.active, 3, false);
+                imicon = GetIMIcon(classicui, sc, sc->skinMainBar.active, 3, false);
             }
 
             if (imicon) {
