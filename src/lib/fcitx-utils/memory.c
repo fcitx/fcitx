@@ -28,9 +28,9 @@
 #define FCITX_MEMORY_CHUNK_FULL_SIZE (16)
 
 typedef struct _FcitxMemoryChunk {
-    void* memory;
-    size_t size;
-    size_t freeOff;
+    void *cur;
+    void *end;
+    void *memory;
 } FcitxMemoryChunk;
 
 struct _FcitxMemoryPool {
@@ -64,28 +64,27 @@ void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
     FcitxMemoryChunk* chunk;
     for(chunk = (FcitxMemoryChunk*) utarray_front(pool->chunks);
         chunk != NULL;
-        chunk = (FcitxMemoryChunk*) utarray_next(pool->chunks, chunk))
-    {
-        if (chunk->freeOff + size <= chunk->size)
+        chunk = (FcitxMemoryChunk*) utarray_next(pool->chunks, chunk)) {
+        if (chunk->cur + size <= chunk->end) {
             break;
+        }
     }
 
     if (chunk == NULL) {
         size_t chunkSize = ((size + FCITX_MEMORY_POOL_PAGE_SIZE - 1) / FCITX_MEMORY_POOL_PAGE_SIZE) * FCITX_MEMORY_POOL_PAGE_SIZE;
         FcitxMemoryChunk c;
-        c.freeOff = 0;
-        c.size = chunkSize;
-        c.memory = fcitx_utils_malloc0(chunkSize);
+        c.cur = fcitx_utils_malloc0(chunkSize);
+        c.end = c.cur + chunkSize;
+        c.memory = c.cur;
 
         utarray_push_back(pool->chunks, &c);
         chunk = (FcitxMemoryChunk*) utarray_back(pool->chunks);
     }
 
-    void* result = chunk->memory + chunk->freeOff;
-    chunk->freeOff += size;
+    void* result = chunk->cur;
+    chunk->cur += size;
 
-    if (chunk->size - chunk->freeOff <= FCITX_MEMORY_CHUNK_FULL_SIZE)
-    {
+    if (chunk->end - chunk->cur <= FCITX_MEMORY_CHUNK_FULL_SIZE) {
         utarray_push_back(pool->fullchunks, chunk);
         int idx = utarray_eltidx(pool->chunks, chunk);
         utarray_remove_quick(pool->chunks, idx);
