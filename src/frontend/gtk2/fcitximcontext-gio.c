@@ -1324,6 +1324,8 @@ void _fcitx_im_context_connect_cb(FcitxClient* im, void* user_data)
 {
     FcitxIMContext* context =  FCITX_IM_CONTEXT(user_data);
     _fcitx_im_context_set_capacity(context, TRUE);
+    if (context->has_focus && _focus_im_context == (GtkIMContext*) context && fcitx_client_is_valid(context->client))
+        fcitx_client_focus_in(context->client);
     /* set_cursor_location_internal() will get origin from X server,
      * it blocks UI. So delay it to idle callback. */
     g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
