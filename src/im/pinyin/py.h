@@ -39,9 +39,6 @@
 #define AUTOSAVE_ORDER_COUNT    1024
 #define AUTOSAVE_FREQ_COUNT     32
 
-struct MHPY;
-struct MHPY_TEMPLATE;
-
 typedef enum {
     FIND_PHRASE,
     FIND_BASE,
