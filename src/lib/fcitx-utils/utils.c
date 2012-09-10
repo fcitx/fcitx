@@ -623,4 +623,42 @@ fcitx_utils_write_uint32(FILE *fp, uint32_t i)
     i = htole32(i);
     return fwrite(&i, sizeof(uint32_t), 1, fp);
 }
+
+FCITX_EXPORT_API
+size_t
+fcitx_utils_read_uint16(FILE *fp, uint16_t *p)
+{
+    uint16_t res = 0;
+    size_t size;
+    size = fread(&res, sizeof(uint16_t), 1, fp);
+    *p = le16toh(res);
+    return size;
+}
+
+FCITX_EXPORT_API
+size_t
+fcitx_utils_write_uint16(FILE *fp, uint16_t i)
+{
+    i = htole16(i);
+    return fwrite(&i, sizeof(uint16_t), 1, fp);
+}
+
+FCITX_EXPORT_API
+size_t
+fcitx_utils_read_uint64(FILE *fp, uint64_t *p)
+{
+    uint64_t res = 0;
+    size_t size;
+    size = fread(&res, sizeof(uint64_t), 1, fp);
+    *p = le64toh(res);
+    return size;
+}
+
+FCITX_EXPORT_API
+size_t
+fcitx_utils_write_uint64(FILE *fp, uint64_t i)
+{
+    i = htole64(i);
+    return fwrite(&i, sizeof(uint64_t), 1, fp);
+}
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
