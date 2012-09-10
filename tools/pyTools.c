@@ -51,7 +51,7 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 
         fseek(fi, sizeof(char) * clen, SEEK_CUR);
 
-        fread(&t, sizeof(int), 1, fi);
+        fcitx_utils_read_int32(fi, &t);
 
         for (i = 0; i < t; ++i) {
             int iLen;
