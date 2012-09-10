@@ -56,7 +56,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         if (!fpDict)
             return false;
 
-        tableMetaData->tableDict = fcitx_utils_malloc0(sizeof(TableDict));
+        tableMetaData->tableDict = fcitx_utils_new(TableDict);
 
         tableDict = tableMetaData->tableDict;
         tableDict->pool = fcitx_memory_pool_create();
@@ -65,24 +65,24 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         //先读取码表的信息
         //判断版本信息
         size_t size;
-        size = fread(&iTemp, sizeof(uint32_t), 1, fpDict);
+        size = fcitx_utils_read_uint32(fpDict, &iTemp);
         CHECK_LOAD_TABLE_ERROR(1);
 
         if (!iTemp) {
             size = fread(&iVersion, sizeof(int8_t), 1, fpDict);
             CHECK_LOAD_TABLE_ERROR(1);
             iVersion = (iVersion < INTERNAL_VERSION);
-            size = fread(&iTemp, sizeof(uint32_t), 1, fpDict);
+            size = fcitx_utils_read_uint32(fpDict, &iTemp);
             CHECK_LOAD_TABLE_ERROR(1);
         }
 
-        tableDict->strInputCode = (char *) realloc(tableDict->strInputCode, sizeof(char) * (iTemp + 1));
+        tableDict->strInputCode = (char*)realloc(tableDict->strInputCode, sizeof(char) * (iTemp + 1));
         size = fread(tableDict->strInputCode, sizeof(char), iTemp + 1, fpDict);
         CHECK_LOAD_TABLE_ERROR(iTemp + 1);
         /*
          * 建立索引，加26是为了为拼音编码预留空间
          */
-        tableDict->recordIndex = (RECORD_INDEX *) fcitx_memory_pool_alloc(tableDict->pool, (strlen(tableDict->strInputCode) + 26) * sizeof(RECORD_INDEX));
+        tableDict->recordIndex = (RECORD_INDEX*)fcitx_memory_pool_alloc(tableDict->pool, (strlen(tableDict->strInputCode) + 26) * sizeof(RECORD_INDEX));
         for (iTemp = 0; iTemp < strlen(tableDict->strInputCode) + 26; iTemp++) {
             tableDict->recordIndex[iTemp].cCode = 0;
             tableDict->recordIndex[iTemp].record = NULL;
@@ -100,9 +100,9 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         else
             tableDict->iPYCodeLength = tableDict->iCodeLength;
 
-        size = fread(&iTemp, sizeof(uint32_t), 1, fpDict);
+        size = fcitx_utils_read_uint32(fpDict, &iTemp);
         CHECK_LOAD_TABLE_ERROR(1);
-        tableDict->strIgnoreChars = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (iTemp + 1));
+        tableDict->strIgnoreChars = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (iTemp + 1));
         size = fread(tableDict->strIgnoreChars, sizeof(char), iTemp + 1, fpDict);
         CHECK_LOAD_TABLE_ERROR(iTemp + 1);
 
@@ -110,13 +110,13 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         CHECK_LOAD_TABLE_ERROR(1);
 
         if (tableDict->bRule) { //表示有组词规则
-            tableDict->rule = (RULE *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RULE) * (tableDict->iCodeLength - 1));
+            tableDict->rule = (RULE*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(RULE) * (tableDict->iCodeLength - 1));
             for (i = 0; i < tableDict->iCodeLength - 1; i++) {
                 size = fread(&(tableDict->rule[i].iFlag), sizeof(unsigned char), 1, fpDict);
                 CHECK_LOAD_TABLE_ERROR(1);
                 size = fread(&(tableDict->rule[i].iWords), sizeof(unsigned char), 1, fpDict);
                 CHECK_LOAD_TABLE_ERROR(1);
-                tableDict->rule[i].rule = (RULE_RULE *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RULE_RULE) * tableDict->iCodeLength);
+                tableDict->rule[i].rule = (RULE_RULE*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(RULE_RULE) * tableDict->iCodeLength);
                 for (iTemp = 0; iTemp < tableDict->iCodeLength; iTemp++) {
                     size = fread(&(tableDict->rule[i].rule[iTemp].iFlag), sizeof(unsigned char), 1, fpDict);
                     CHECK_LOAD_TABLE_ERROR(1);
@@ -128,16 +128,15 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
             }
         }
 
-        tableDict->recordHead = (RECORD *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
+        tableDict->recordHead = (RECORD*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
         tableDict->currentRecord = tableDict->recordHead;
 
-        size = fread(&(tableDict->iRecordCount), sizeof(unsigned int), 1, fpDict);
+        size = fcitx_utils_read_uint32(fpDict, &tableDict->iRecordCount);
         CHECK_LOAD_TABLE_ERROR(1);
 
-        for (i = 0; i < SINGLE_HZ_COUNT; i++)
-        {
-            tableDict->tableSingleHZ[i] = (RECORD *) NULL;
-            tableDict->tableSingleHZCons[i] = (RECORD *) NULL;
+        for (i = 0; i < SINGLE_HZ_COUNT; i++) {
+            tableDict->tableSingleHZ[i] = (RECORD*)NULL;
+            tableDict->tableSingleHZCons[i] = (RECORD*)NULL;
         }
 
         iRecordIndex = 0;
@@ -145,7 +144,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         for (i = 0; i < tableDict->iRecordCount; i++) {
             size = fread(strCode, sizeof(int8_t), tableDict->iPYCodeLength + 1, fpDict);
             CHECK_LOAD_TABLE_ERROR(tableDict->iPYCodeLength + 1);
-            size = fread(&iTemp, sizeof(uint32_t), 1, fpDict);
+            size = fcitx_utils_read_uint32(fpDict, &iTemp);
             CHECK_LOAD_TABLE_ERROR(1);
             if (iTemp > PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH) {
                 error = true;
@@ -157,11 +156,11 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
             }
             size = fread(strHZ, sizeof(int8_t), iTemp, fpDict);
             CHECK_LOAD_TABLE_ERROR(iTemp);
-            recTemp = (RECORD *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
-            recTemp->strCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iPYCodeLength + 1));
+            recTemp = (RECORD*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
+            recTemp->strCode = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iPYCodeLength + 1));
             memset(recTemp->strCode, 0, sizeof(char) * (tableDict->iPYCodeLength + 1));
             strcpy(recTemp->strCode, strCode);
-            recTemp->strHZ = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * iTemp);
+            recTemp->strHZ = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * iTemp);
             strcpy(recTemp->strHZ, strHZ);
 
             if (!iVersion) {
@@ -170,9 +169,9 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
                 recTemp->type = cTemp;
             }
 
-            size = fread(&(recTemp->iHit), sizeof(uint32_t), 1, fpDict);
+            size = fcitx_utils_read_uint32(fpDict, &recTemp->iHit);
             CHECK_LOAD_TABLE_ERROR(1);
-            size = fread(&(recTemp->iIndex), sizeof(uint32_t), 1, fpDict);
+            size = fcitx_utils_read_uint32(fpDict, &recTemp->iIndex);
             CHECK_LOAD_TABLE_ERROR(1);
             if (recTemp->iIndex > tableDict->iTableIndex)
                 tableDict->iTableIndex = recTemp->iIndex;
@@ -247,7 +246,7 @@ table_load_error:
 
     if (fpDict) {
         tableDict->iFH = fcitx_utils_calculate_record_number(fpDict);
-        tableDict->fh = (FH *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(FH) * tableDict->iFH);
+        tableDict->fh = (FH*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(FH) * tableDict->iFH);
 
         char* strBuf = NULL;
         size_t bufLen = 0;
@@ -269,13 +268,13 @@ table_load_error:
         fclose(fpDict);
     }
 
-    tableDict->strNewPhraseCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
+    tableDict->strNewPhraseCode = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
     tableDict->strNewPhraseCode[tableDict->iCodeLength] = '\0';
 
     tableDict->iAutoPhrase = 0;
     if (tableMetaData->bAutoPhrase) {
         //为自动词组分配空间
-        tableDict->autoPhrase = (AUTOPHRASE *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(AUTOPHRASE) * AUTO_PHRASE_COUNT);
+        tableDict->autoPhrase = (AUTOPHRASE*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
@@ -286,11 +285,11 @@ table_load_error:
         free(temppath);
         i = 0;
         if (fpDict) {
-            size_t size = fread(&tableDict->iAutoPhrase, sizeof(uint32_t), 1, fpDict);
+            size_t size = fcitx_utils_read_int32(fpDict, &tableDict->iAutoPhrase);
             if (size == 1) {
                 for (; i < tableDict->iAutoPhrase; i++) {
-                    tableDict->autoPhrase[i].strCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
-                    tableDict->autoPhrase[i].strHZ = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
+                    tableDict->autoPhrase[i].strCode = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
+                    tableDict->autoPhrase[i].strHZ = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
                     size = fread(tableDict->autoPhrase[i].strCode, tableDict->iCodeLength + 1, 1, fpDict);
                     if (size != 1) {
                         tableDict->iAutoPhrase = i;
@@ -302,7 +301,7 @@ table_load_error:
                         tableDict->iAutoPhrase = i;
                         break;
                     }
-                    size = fread(&iTempCount, sizeof(uint32_t), 1, fpDict);
+                    size = fcitx_utils_read_uint32(fpDict, &iTempCount);
                     if (size != 1) {
                         tableDict->iAutoPhrase = i;
                         break;
@@ -319,8 +318,8 @@ table_load_error:
         }
 
         for (; i < AUTO_PHRASE_COUNT; i++) {
-            tableDict->autoPhrase[i].strCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
-            tableDict->autoPhrase[i].strHZ = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
+            tableDict->autoPhrase[i].strCode = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
+            tableDict->autoPhrase[i].strHZ = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1));
             tableDict->autoPhrase[i].iSelected = 0;
             if (i == AUTO_PHRASE_COUNT - 1)
                 tableDict->autoPhrase[i].next = &tableDict->autoPhrase[0];
@@ -345,7 +344,7 @@ void SaveTableDict(TableMetaData *tableMetaData)
     RECORD         *recTemp;
     char           *pstr, *tempfile;
     FILE           *fpDict;
-    unsigned int    iTemp;
+    uint32_t    iTemp;
     unsigned int    i;
     int             fd;
     int8_t          cTemp;
@@ -370,17 +369,16 @@ void SaveTableDict(TableMetaData *tableMetaData)
     }
 
     // write version number
-    iTemp = 0;
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_write_uint32(fpDict, 0);
     fwrite(&iInternalVersion, sizeof(char), 1, fpDict);
 
     iTemp = strlen(tableDict->strInputCode);
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_write_uint32(fpDict, iTemp);
     fwrite(tableDict->strInputCode, sizeof(char), iTemp + 1, fpDict);
     fwrite(&(tableDict->iCodeLength), sizeof(char), 1, fpDict);
     fwrite(&(tableDict->iPYCodeLength), sizeof(char), 1, fpDict);
     iTemp = strlen(tableDict->strIgnoreChars);
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_write_uint32(fpDict, iTemp);
     fwrite(tableDict->strIgnoreChars, sizeof(char), iTemp + 1, fpDict);
 
     fwrite(&(tableDict->bRule), sizeof(unsigned char), 1, fpDict);
@@ -396,19 +394,19 @@ void SaveTableDict(TableMetaData *tableMetaData)
         }
     }
 
-    fwrite(&(tableDict->iRecordCount), sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_write_uint32(fpDict, tableDict->iRecordCount);
     recTemp = tableDict->recordHead->next;
     while (recTemp != tableDict->recordHead) {
         fwrite(recTemp->strCode, sizeof(char), tableDict->iPYCodeLength + 1, fpDict);
 
         iTemp = strlen(recTemp->strHZ) + 1;
-        fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+        fcitx_utils_write_uint32(fpDict, iTemp);
         fwrite(recTemp->strHZ, sizeof(char), iTemp, fpDict);
 
         cTemp = recTemp->type;
         fwrite(&cTemp, sizeof(int8_t), 1, fpDict);
-        fwrite(&(recTemp->iHit), sizeof(unsigned int), 1, fpDict);
-        fwrite(&(recTemp->iIndex), sizeof(unsigned int), 1, fpDict);
+        fcitx_utils_write_uint32(fpDict, recTemp->iHit);
+        fcitx_utils_write_uint32(fpDict, recTemp->iIndex);
         recTemp = recTemp->next;
     }
 
@@ -436,12 +434,12 @@ void SaveTableDict(TableMetaData *tableMetaData)
             fpDict = fdopen(fd, "w");
 
         if (fpDict) {
-            fwrite(&tableDict->iAutoPhrase, sizeof(int), 1, fpDict);
+            fcitx_utils_write_uint32(fpDict, tableDict->iAutoPhrase);
             for (i = 0; i < tableDict->iAutoPhrase; i++) {
                 fwrite(tableDict->autoPhrase[i].strCode, tableDict->iCodeLength + 1, 1, fpDict);
                 fwrite(tableDict->autoPhrase[i].strHZ, PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH + 1, 1, fpDict);
-                iTemp = tableDict->autoPhrase[i].iSelected;
-                fwrite(&iTemp, sizeof(unsigned int), 1, fpDict);
+                fcitx_utils_write_int32(
+                    fpDict, tableDict->autoPhrase[i].iSelected);
             }
             fclose(fpDict);
         }
@@ -519,7 +517,7 @@ void TableCreateAutoPhrase(TableMetaData* tableMetaData, char iCount)
     if (!tableDict->autoPhrase)
         return;
 
-    strHZ = (char *)fcitx_utils_malloc0((tableMetaData->iAutoPhraseLength * UTF8_MAX_LENGTH + 1) * sizeof(char));
+    strHZ = (char*)fcitx_utils_malloc0((tableMetaData->iAutoPhraseLength * UTF8_MAX_LENGTH + 1) * sizeof(char));
     /*
      * 为了提高效率，此处只重新生成新录入字构成的词组
      */
@@ -668,11 +666,11 @@ void TableInsertPhrase(TableDict* tableDict, const char *strCode, const char *st
     if (!insertPoint)
         return;
 
-    dictNew = (RECORD *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
-    dictNew->strCode = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
+    dictNew = (RECORD*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(RECORD));
+    dictNew->strCode = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (tableDict->iCodeLength + 1));
     dictNew->type = RECORDTYPE_NORMAL;
     strcpy(dictNew->strCode, strCode);
-    dictNew->strHZ = (char *) fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (strlen(strHZ) + 1));
+    dictNew->strHZ = (char*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(char) * (strlen(strHZ) + 1));
     strcpy(dictNew->strHZ, strHZ);
     dictNew->iHit = 0;
     dictNew->iIndex = tableDict->iTableIndex;

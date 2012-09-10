@@ -192,7 +192,7 @@ boolean LoadPYBaseDict(FcitxPinyinState *pystate)
         fread(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
         PYFAList[i].strMap[2] = '\0';
 
-        fcitx_utils_read_int32(fp, &(PYFAList[i].iBase));
+        fcitx_utils_read_int32(fp, &PYFAList[i].iBase);
         PYFAList[i].pyBase = (PyBase*)fcitx_utils_malloc0(sizeof(PyBase) * PYFAList[i].iBase);
         for (j = 0; j < PYFAList[i].iBase; j++) {
             int8_t len;

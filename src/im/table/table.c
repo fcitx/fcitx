@@ -33,7 +33,6 @@
 #include "fcitx/ui.h"
 #include "fcitx/profile.h"
 #include "fcitx-utils/log.h"
-#include "fcitx/instance.h"
 #include "fcitx/module.h"
 #include "fcitx/frontend.h"
 #include "fcitx/candidate.h"
@@ -49,7 +48,7 @@
 
 static void TableMetaDataFree(TableMetaData *table);
 const UT_icd tableCand_icd = {sizeof(TABLECANDWORD*), NULL, NULL, NULL };
-typedef struct _TableCandWordSortContext {
+typedef struct {
     ADJUSTORDER order;
 } TableCandWordSortContext;
 

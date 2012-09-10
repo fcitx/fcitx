@@ -25,28 +25,27 @@
 #include "fcitx-utils/utarray.h"
 #include "tabledict.h"
 #include "fcitx/candidate.h"
+#include "fcitx/instance.h"
 
-struct _FcitxInstance;
-
-typedef union _CANDWORD {
+typedef union {
     AUTOPHRASE     *autoPhrase;
     RECORD         *record;
     int             iFHIndex;
 } CANDWORD;
 
-typedef enum _CANDTYPE {
+typedef enum {
     CT_NORMAL = 0,
     CT_AUTOPHRASE,
     CT_REMIND,
     CT_FH
 } CANDTYPE;
 
-typedef struct _TABLECANDWORD {
+typedef struct {
     CANDTYPE        flag;   //指示该候选字/词是自动组的词还是正常的字/词
     CANDWORD        candWord;
 } TABLECANDWORD;
 
-typedef struct _TableConfig {
+typedef struct {
     FcitxGenericConfig   config;
     FcitxHotkey     hkTableDelPhrase[HOT_KEY_COUNT];
     FcitxHotkey     hkTableAdjustOrder[HOT_KEY_COUNT];
@@ -80,8 +79,8 @@ typedef struct _FcitxTableState {
     ADJUSTORDER     PYBaseOrder;
     boolean         isSavingTableDic;
 
-    struct _FcitxInstance* owner;
-    struct _FcitxAddon* pyaddon;
+    FcitxInstance *owner;
+    FcitxAddon *pyaddon;
     FcitxCandidateWordCommitCallback pygetcandword;
 } FcitxTableState;
 
