@@ -349,12 +349,27 @@ extern "C" {
     } while(0)
 
     /**
+     * read a little endian 32bit unsigned int from a file
+     *
+     * @param fp FILE* to read from
+     * @return result in host endian
+     * @since 4.2.6
+     **/
+    size_t fcitx_utils_read_uint32(FILE *fp, uint32_t *p);
+
+
+    /**
      * read a little endian 32bit int from a file
      *
      * @param fp FILE* to read from
      * @return result in host endian
+     * @since 4.2.6
      **/
-    size_t fcitx_utils_read_uint32(FILE *fp, uint32_t *p);
+    static inline size_t
+    fcitx_utils_read_int32(FILE *fp, int32_t *p)
+    {
+        return fcitx_utils_read_uint32(fp, (uint32_t*)p);
+    }
 
     /**
      * write a little endian 32bit int to a file
@@ -362,15 +377,19 @@ extern "C" {
      * @param fp FILE* to read from
      * @param i int to write in host endian
      * @return void
+     * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint32(FILE *fp, uint32_t i);
 
-    static inline size_t
-    fcitx_utils_read_int32(FILE *fp, int32_t *p)
-    {
-        return fcitx_utils_read_uint32(fp, (uint32_t*)p);
-    }
 
+    /**
+     * write a little endian 32bit unsigned int to a file
+     *
+     * @param fp FILE* to read from
+     * @param i int to write in host endian
+     * @return void
+     * @since 4.2.6
+     **/
     static inline size_t
     fcitx_utils_write_int32(FILE *fp, int32_t i)
     {
