@@ -273,8 +273,7 @@ PinyinEnhanceSpellHint(PinyinEnhance *pyenhance, int im_type)
             words_type[words_count - 1] = PY_TYPE_SHORT;
     }
     cand_word = FcitxCandidateWordGetFirst(cand_list);
-    if (!cand_word || !cand_word->strWord || !*cand_word->strWord
-        || isascii(cand_word->strWord[0])) {
+    if (!(cand_word && cand_word->strWord && (*cand_word->strWord & 0x80))) {
         len_limit = FcitxCandidateWordGetPageSize(cand_list) - 1;
         res = PinyinEnhanceGetSpellCandWords(pyenhance, pinyin, 0, len_limit);
         goto out;
