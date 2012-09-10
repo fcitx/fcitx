@@ -58,14 +58,26 @@ FcitxMemoryPool* fcitx_memory_pool_create()
     return pool;
 }
 
+static inline void*
+memory_align_ptr(void *p)
+{
+    intptr_t res = (intptr_t)p;
+    int left;
+    if ((left = res % sizeof(int)))
+        return p + sizeof(int) - left;
+    return p;
+}
+
 FCITX_EXPORT_API
 void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int align)
 {
     FcitxMemoryChunk* chunk;
+    void *result;
     for(chunk = (FcitxMemoryChunk*) utarray_front(pool->chunks);
         chunk != NULL;
         chunk = (FcitxMemoryChunk*) utarray_next(pool->chunks, chunk)) {
-        if (chunk->cur + size <= chunk->end) {
+        result = align ? memory_align_ptr(chunk->cur) : chunk->cur;
+        if (result + size <= chunk->end) {
             break;
         }
     }
@@ -76,21 +88,12 @@ void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int alig
         c.cur = fcitx_utils_malloc0(chunkSize);
         c.end = c.cur + chunkSize;
         c.memory = c.cur;
+        /* should be properly aligned already */
+        result = c.cur;
 
         utarray_push_back(pool->chunks, &c);
         chunk = (FcitxMemoryChunk*) utarray_back(pool->chunks);
     }
-
-    void* result = chunk->cur;
-    if (align) {
-        intptr_t p = (intptr_t) result;
-        if (p % sizeof(int)) {
-            p = (p / sizeof(int)) * sizeof(int);
-            p += sizeof(int);
-        }
-        result = (void*) p;
-    }
-
     chunk->cur += size;
 
     if (chunk->end - chunk->cur <= FCITX_MEMORY_CHUNK_FULL_SIZE) {
