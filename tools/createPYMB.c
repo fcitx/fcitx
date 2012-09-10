@@ -81,14 +81,14 @@ boolean LoadPY(void)
     if (!fp)
         return false;
 
-    fread(&iPYFACount, sizeof(int), 1, fp);
+    fcitx_utils_read_int32(fp, &iPYFACount);
 
     PYFAList = (__PYFA *) malloc(sizeof(__PYFA) * iPYFACount);
 
     for (i = 0; i < iPYFACount; i++) {
         fread(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
         PYFAList[i].strMap[2] = '\0';
-        fread(&(PYFAList[i].iHZCount), sizeof(int), 1, fp);
+        fcitx_utils_read_int32(fp, &(PYFAList[i].iHZCount));
         PYFAList[i].pyBase = (_PyBase *) malloc(sizeof(_PyBase) * PYFAList[i].iHZCount);
 
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
@@ -127,17 +127,17 @@ boolean LoadPY(void)
     if (!fp)
         return false;
 
-    fwrite(&iPYFACount, sizeof(int), 1, fp);
+    fcitx_utils_write_int32(fp, iPYFACount);
 
     for (i = 0; i < iPYFACount; i++) {
         fwrite(PYFAList[i].strMap, sizeof(char) * 2, 1, fp);
-        fwrite(&(PYFAList[i].iHZCount), sizeof(int), 1, fp);
+        fcitx_utils_write_int32(fp, PYFAList[i].iHZCount);
 
         for (j = 0; j < PYFAList[i].iHZCount; j++) {
             int8_t len = strlen(PYFAList[i].pyBase[j].strHZ);
             fwrite(&len, sizeof(int8_t), 1, fp);
             fwrite(PYFAList[i].pyBase[j].strHZ, sizeof(char) * len, 1, fp);
-            fwrite(&(PYFAList[i].pyBase[j].iIndex), sizeof(int), 1, fp);
+            fcitx_utils_write_int32(fp, PYFAList[i].pyBase[j].iIndex);
         }
     }
 
@@ -152,12 +152,12 @@ void CreatePYPhrase(void)
     char            strPhrase[256];
     char            strMap[256];
     ParsePYStruct   strTemp;
-    int             iIndex, i, s1, s2, j, k;
+    int32_t         iIndex, i, s1, s2, j, k;
     _PyPhrase      *phrase, *t, *tt;
     FILE           *f = fopen("pyERROR", "w");
     FILE           *fg = fopen("pyPhrase.ok", "w");
     int             kkk;
-    unsigned int    uIndex, uTemp;
+    uint32_t        uIndex, uTemp;
     FcitxPinyinConfig pyconfig;
 
     memset(&pyconfig, 0 , sizeof(pyconfig));
@@ -250,22 +250,22 @@ void CreatePYPhrase(void)
 
             if (iIndex) {
                 int8_t clen = strlen(PYFAList[i].pyBase[j].strHZ);
-                fwrite(&i, sizeof(int), 1, fp2);
+                fcitx_utils_write_int32(fp2, i);
                 fwrite(&clen, sizeof(int8_t), 1, fp2);
                 fwrite(PYFAList[i].pyBase[j].strHZ, sizeof(char) * clen, 1, fp2);
 
-                fwrite(&iIndex, sizeof(int), 1, fp2);
+                fcitx_utils_write_int32(fp2, iIndex);
                 t = PYFAList[i].pyBase[j].phrase->next;
 
                 for (k = 0; k < PYFAList[i].pyBase[j].iPhraseCount; k++) {
-                    int slen = strlen(t->strPhrase);
+                    int32_t slen = strlen(t->strPhrase);
                     iIndex = strlen(t->strMap);
-                    fwrite(&iIndex, sizeof(int), 1, fp2);
+                    fcitx_utils_write_int32(fp2, iIndex);
                     fwrite(t->strMap, sizeof(char), iIndex, fp2);
-                    fwrite(&slen, sizeof(int), 1, fp2);
+                    fcitx_utils_write_int32(fp2, slen);
                     fwrite(t->strPhrase, sizeof(char), strlen(t->strPhrase), fp2);
                     uTemp = uIndex - 1 - t->uIndex;
-                    fwrite(&uTemp, sizeof(unsigned int), 1, fp2);
+                    fcitx_utils_write_uint32(fp2, uTemp);
                     t = t->next;
                 }
             }
@@ -282,10 +282,10 @@ void CreatePYBase(void)
 {
     _PyStruct      *head, *pyList, *temp, *t;
     char            strPY[7], strHZ[UTF8_MAX_LENGTH * 80 + 1], strMap[3];
-    int             iIndex, iCount, i;
-    int             iBaseCount;
-    int             s = 0;
-    int             tt = 0;
+    int32_t         iIndex, iCount, i;
+    int32_t         iBaseCount;
+    int32_t         s = 0;
+    int32_t         tt = 0;
 
     head = (_PyStruct *) malloc(sizeof(_PyStruct));
     head->prev = head;
@@ -348,7 +348,7 @@ void CreatePYBase(void)
             iCount++;
     }
 
-    fwrite(&iCount, sizeof(int), 1, fp1);
+    fcitx_utils_write_uint32(fp1, iCount);
 
     printf("Groups: %d\n", iCount);
     iAllCount = iIndex;
@@ -365,7 +365,7 @@ void CreatePYBase(void)
         } else {
             tt++;
             fwrite(strPY, sizeof(char) * 2, 1, fp1);
-            fwrite(&iCount, sizeof(int), 1, fp1);
+            fcitx_utils_write_uint32(fp1, iCount);
 
             for (i = 0; i < iCount; i++) {
                 int8_t len = strlen(t->strHZ);
@@ -387,7 +387,7 @@ void CreatePYBase(void)
 
     fwrite(strPY, sizeof(char) * 2, 1, fp1);
 
-    fwrite(&iCount, sizeof(int), 1, fp1);
+    fcitx_utils_write_uint32(fp1, iCount);
 
     for (i = 0; i < iCount; i++) {
         int8_t len = strlen(t->strHZ);

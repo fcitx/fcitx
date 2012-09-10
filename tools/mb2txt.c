@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
     char            strHZ[100];
     FILE           *fpDict;
     unsigned int    i = 0;
-    unsigned int    iTemp;
-    unsigned int    j;
+    uint32_t        iTemp;
+    uint32_t        j;
     unsigned char   iLen;
     unsigned char   iRule;
     unsigned char   iPYLen;
@@ -145,12 +145,12 @@ int main(int argc, char *argv[])
     }
 
     //先读取码表的信息
-    fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_read_uint32(fpDict, &iTemp);
 
     if (iTemp == 0) {
         fread(&iVersion, sizeof(char), 1, fpDict);
         printf(templ[TEMPL_VERNEW], iVersion);
-        fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+        fcitx_utils_read_uint32(fpDict, &iTemp);
     } else
         printf("%s", templ[TEMPL_VEROLD]);
 
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
         printf(templ[TEMPL_CONSTRUCTPHRASE], cPhrase);
     }
 
-    fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_read_uint32(fpDict, &iTemp);
 
     fread(strCode, sizeof(char), iTemp + 1, fpDict);
 
@@ -231,14 +231,14 @@ int main(int argc, char *argv[])
 
     printf("%s", templ[TEMPL_DATA]);
 
-    fread(&j, sizeof(unsigned int), 1, fpDict);
+    fcitx_utils_read_uint32(fpDict, &j);
 
     if (iVersion)
         iLen = iPYLen;
 
     for (i = 0; i < j; i++) {
         fread(strCode, sizeof(char), iLen + 1, fpDict);
-        fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+        fcitx_utils_read_uint32(fpDict, &iTemp);
         fread(strHZ, sizeof(unsigned char), iTemp, fpDict);
 
         if (iVersion) {
@@ -265,9 +265,8 @@ int main(int argc, char *argv[])
                 printf("%s %s\n", strCode, strHZ);
         }
 
-        fread(&iTemp, sizeof(unsigned int), 1, fpDict);
-
-        fread(&iTemp, sizeof(unsigned int), 1, fpDict);
+        fcitx_utils_read_uint32(fpDict, &iTemp);
+        fcitx_utils_read_uint32(fpDict, &iTemp);
     }
 
     fclose(fpDict);

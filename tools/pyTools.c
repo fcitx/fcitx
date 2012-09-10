@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdint.h>
 
+#include "fcitx-utils/utils.h"
 #include "pyTools.h"
 
 void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
@@ -39,7 +40,7 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 
     while (1) {
         int8_t clen;
-        r = fread(&t, sizeof(int), 1, fi);
+        r = fcitx_utils_read_int32(fi, &t);
 
         if (!r)
             break;
@@ -54,14 +55,14 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 
         for (i = 0; i < t; ++i) {
             int iLen;
-            fread(&iLen, sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &iLen);
             fseek(fi , sizeof(char) * iLen, SEEK_CUR);
-            fread(&iLen, sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &iLen);
             fseek(fi , sizeof(char) * iLen, SEEK_CUR);
-            fread(&iLen, sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &iLen);
 
             if (isUser)
-                fread(&iLen, sizeof(int), 1, fi);
+                fcitx_utils_read_int32(fi, &iLen);
         }
     }
 
@@ -72,35 +73,35 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
     *pPYMB = PYMB = malloc(sizeof(*PYMB) * (n + 1));
 
     for (i = 0; i < n; ++i) {
-        r = fread(&(PYMB[i].PYFAIndex), sizeof(int), 1, fi);
+        r = fcitx_utils_read_int32(fi, &(PYMB[i].PYFAIndex));
 
         int8_t clen;
         fread(&clen, sizeof(int8_t), 1, fi);
         fread(PYMB[i].HZ, sizeof(char) * clen, 1, fi);
         PYMB[i].HZ[clen] = '\0';
 
-        fread(&(PYMB[i].UserPhraseCount), sizeof(int), 1, fi);
+        fcitx_utils_read_int32(fi, &(PYMB[i].UserPhraseCount));
         PYMB[i].UserPhrase = malloc(sizeof(*(PYMB[i].UserPhrase)) * PYMB[i].UserPhraseCount);
 
 #define PU(i,j) (PYMB[(i)].UserPhrase[(j)])
 
         for (j = 0; j < PYMB[i].UserPhraseCount; ++j) {
-            fread(&(PU(i, j).Length), sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &(PU(i, j).Length));
 
             PU(i, j).Map = malloc(sizeof(char) * PU(i, j).Length + 1);
             fread(PU(i, j).Map, sizeof(char) * PU(i, j).Length, 1, fi);
             PU(i, j).Map[PU(i, j).Length] = '\0';
 
-            int iLen;
-            fread(&iLen, sizeof(int), 1, fi);
+            int32_t iLen;
+            fcitx_utils_read_int32(fi, &iLen);
             PU(i, j).Phrase = malloc(sizeof(char) * iLen + 1);
             fread(PU(i, j).Phrase, sizeof(char) * iLen, 1, fi);
             PU(i, j).Phrase[iLen] = '\0';
 
-            fread(&(PU(i, j).Index), sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &(PU(i, j).Index));
 
             if (isUser)
-                fread(&(PU(i, j).Hit), sizeof(int), 1, fi);
+                fcitx_utils_read_int32(fi, &(PU(i, j).Hit));
             else
                 PU(i, j).Hit = 0;
         }
@@ -115,11 +116,11 @@ void LoadPYMB(FILE *fi, struct _PYMB **pPYMB, int isUser)
 
 int LoadPYBase(FILE *fi, struct _HZMap **pHZMap)
 {
-    int i, j, r, PYFACount;
+    int32_t i, j, r, PYFACount;
 
     struct _HZMap *HZMap;
 
-    r = fread(&PYFACount, sizeof(int), 1, fi);
+    r = fcitx_utils_read_int32(fi, &PYFACount);
 
     if (!r)
         return 0;
@@ -130,7 +131,7 @@ int LoadPYBase(FILE *fi, struct _HZMap **pHZMap)
         fread(HZMap[i].Map, sizeof(char) * 2, 1, fi);
         HZMap[i].Map[2] = '\0';
 
-        fread(&(HZMap[i].BaseCount), sizeof(int), 1, fi);
+        fcitx_utils_read_int32(fi, &(HZMap[i].BaseCount));
         HZMap[i].HZ = malloc(sizeof(char *) * HZMap[i].BaseCount);
         HZMap[i].Index = malloc(sizeof(int) * HZMap[i].BaseCount);
 
@@ -140,7 +141,7 @@ int LoadPYBase(FILE *fi, struct _HZMap **pHZMap)
             HZMap[i].HZ[j] = malloc(sizeof(char) * (clen + 1));
             fread(HZMap[i].HZ[j], sizeof(char) * clen, 1, fi);
             HZMap[i].HZ[j][clen] = '\0';
-            fread(&HZMap[i].Index[j], sizeof(int), 1, fi);
+            fcitx_utils_read_int32(fi, &HZMap[i].Index[j]);
         }
     }
 

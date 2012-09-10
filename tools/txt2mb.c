@@ -95,9 +95,9 @@ int main(int argc, char *argv[])
 {
     FILE           *fpDict, *fpNew;
     RECORD         *temp, *head, *newRec, *current;
-    unsigned int    s = 0;
+    uint32_t        s = 0;
     int             i;
-    unsigned int    iTemp;
+    uint32_t        iTemp;
     char           *pstr = 0;
     char            strTemp[10];
     unsigned char   bRule;
@@ -496,16 +496,16 @@ int main(int argc, char *argv[])
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号
     iTemp = 0;
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fcitx_utils_write_uint32(fpNew, iTemp);
     fwrite(&iInternalVersion, sizeof(int8_t), 1, fpNew);
 
     iTemp = (unsigned int) strlen(strInputCode);
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fcitx_utils_write_uint32(fpNew, iTemp);
     fwrite(strInputCode, sizeof(char), iTemp + 1, fpNew);
     fwrite(&iCodeLength, sizeof(unsigned char), 1, fpNew);
     fwrite(&iPYCodeLength, sizeof(unsigned char), 1, fpNew);
     iTemp = (unsigned int) strlen(strIgnoreChars);
-    fwrite(&iTemp, sizeof(unsigned int), 1, fpNew);
+    fcitx_utils_write_uint32(fpNew, iTemp);
     fwrite(strIgnoreChars, sizeof(char), iTemp + 1, fpNew);
 
     fwrite(&bRule, sizeof(unsigned char), 1, fpNew);
@@ -523,18 +523,18 @@ int main(int argc, char *argv[])
         }
     }
 
-    fwrite(&s, sizeof(unsigned int), 1, fpNew);
+    fcitx_utils_write_uint32(fpNew, s);
 
     current = head->next;
 
     while (current != head) {
         fwrite(current->strCode, sizeof(char), iPYCodeLength + 1, fpNew);
         s = strlen(current->strHZ) + 1;
-        fwrite(&s, sizeof(unsigned int), 1, fpNew);
+        fcitx_utils_write_uint32(fpNew, s);
         fwrite(current->strHZ, sizeof(char), s, fpNew);
         fwrite(&(current->type), sizeof(int8_t), 1, fpNew);
-        fwrite(&(current->iHit), sizeof(unsigned int), 1, fpNew);
-        fwrite(&(current->iIndex), sizeof(unsigned int), 1, fpNew);
+        fcitx_utils_write_uint32(fpNew, current->iHit);
+        fcitx_utils_write_uint32(fpNew, current->iIndex);
         current = current->next;
     }
 
