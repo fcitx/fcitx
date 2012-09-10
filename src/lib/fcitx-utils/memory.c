@@ -59,7 +59,7 @@ FcitxMemoryPool* fcitx_memory_pool_create()
 }
 
 FCITX_EXPORT_API
-void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
+void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int align)
 {
     FcitxMemoryChunk* chunk;
     for(chunk = (FcitxMemoryChunk*) utarray_front(pool->chunks);
@@ -82,6 +82,15 @@ void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
     }
 
     void* result = chunk->cur;
+    if (align) {
+        intptr_t p = (intptr_t) result;
+        if (p % sizeof(int)) {
+            p = (p / sizeof(int)) * sizeof(int);
+            p += sizeof(int);
+        }
+        result = (void*) p;
+    }
+
     chunk->cur += size;
 
     if (chunk->end - chunk->cur <= FCITX_MEMORY_CHUNK_FULL_SIZE) {
@@ -91,6 +100,12 @@ void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
     }
 
     return result;
+}
+
+FCITX_EXPORT_API
+void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size)
+{
+    return fcitx_memory_pool_alloc_align(pool, size, 0);
 }
 
 FCITX_EXPORT_API

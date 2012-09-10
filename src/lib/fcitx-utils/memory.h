@@ -66,6 +66,8 @@ FcitxMemoryPool* fcitx_memory_pool_create();
  **/
 void* fcitx_memory_pool_alloc(FcitxMemoryPool* pool, size_t size);
 
+void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int align);
+
 /**
  * free memory pool and free all the memory inside the pool
  *
