@@ -63,6 +63,12 @@
 #include <sys/prctl.h>
 #endif
 
+#if defined(__linux__)
+#include <endian.h>
+#else
+#include <sys/endian.h>
+#endif
+
 FCITX_EXPORT_API
 int fcitx_utils_calculate_record_number(FILE* fpDict)
 {
@@ -591,14 +597,30 @@ fcitx_utils_get_boolean_env(const char *name,
     if (value == NULL)
         return defval;
 
-    if (strcmp(value, "") == 0 ||
+    if ((!*value) ||
         strcmp(value, "0") == 0 ||
-        strcmp(value, "false") == 0 ||
-        strcmp(value, "False") == 0 ||
-        strcmp(value, "FALSE") == 0)
+        strcasecmp(value, "false") == 0)
         return 0;
 
     return 1;
 }
 
+FCITX_EXPORT_API
+size_t
+fcitx_utils_read_uint32(FILE *fp, uint32_t *p)
+{
+    uint32_t res = 0;
+    size_t size;
+    size = fread(&res, sizeof(uint32_t), 1, fp);
+    *p = le32toh(res);
+    return size;
+}
+
+FCITX_EXPORT_API
+size_t
+fcitx_utils_write_uint32(FILE *fp, uint32_t i)
+{
+    i = htole32(i);
+    return fwrite(&i, sizeof(uint32_t), 1, fp);
+}
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

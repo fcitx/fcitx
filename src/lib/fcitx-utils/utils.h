@@ -348,6 +348,34 @@ extern "C" {
             free(ptr); \
     } while(0)
 
+    /**
+     * read a little endian 32bit int from a file
+     *
+     * @param fp FILE* to read from
+     * @return result in host endian
+     **/
+    size_t fcitx_utils_read_uint32(FILE *fp, uint32_t *p);
+
+    /**
+     * write a little endian 32bit int to a file
+     *
+     * @param fp FILE* to read from
+     * @param i int to write in host endian
+     * @return void
+     **/
+    size_t fcitx_utils_write_uint32(FILE *fp, uint32_t i);
+
+    static inline size_t
+    fcitx_utils_read_int32(FILE *fp, int32_t *p)
+    {
+        return fcitx_utils_read_uint32(fp, (uint32_t*)p);
+    }
+
+    static inline size_t
+    fcitx_utils_write_int32(FILE *fp, int32_t i)
+    {
+        return fcitx_utils_write_uint32(fp, (uint32_t)i);
+    }
 #ifdef __cplusplus
 }
 #endif
