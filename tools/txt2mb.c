@@ -495,16 +495,15 @@ int main(int argc, char *argv[])
     int8_t iInternalVersion = INTERNAL_VERSION;
 
     //写入版本号--如果第一个字为0,表示后面那个字节为版本号
-    iTemp = 0;
-    fcitx_utils_write_uint32(fpNew, iTemp);
+    fcitx_utils_write_uint32(fpNew, 0);
     fwrite(&iInternalVersion, sizeof(int8_t), 1, fpNew);
 
-    iTemp = (unsigned int) strlen(strInputCode);
+    iTemp = (uint32_t)strlen(strInputCode);
     fcitx_utils_write_uint32(fpNew, iTemp);
     fwrite(strInputCode, sizeof(char), iTemp + 1, fpNew);
     fwrite(&iCodeLength, sizeof(unsigned char), 1, fpNew);
     fwrite(&iPYCodeLength, sizeof(unsigned char), 1, fpNew);
-    iTemp = (unsigned int) strlen(strIgnoreChars);
+    iTemp = (uint32_t)strlen(strIgnoreChars);
     fcitx_utils_write_uint32(fpNew, iTemp);
     fwrite(strIgnoreChars, sizeof(char), iTemp + 1, fpNew);
 

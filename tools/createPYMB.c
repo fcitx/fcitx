@@ -157,7 +157,7 @@ void CreatePYPhrase(void)
     FILE           *f = fopen("pyERROR", "w");
     FILE           *fg = fopen("pyPhrase.ok", "w");
     int             kkk;
-    uint32_t        uIndex, uTemp;
+    uint32_t        uIndex;
     FcitxPinyinConfig pyconfig;
 
     memset(&pyconfig, 0 , sizeof(pyconfig));
@@ -264,8 +264,7 @@ void CreatePYPhrase(void)
                     fwrite(t->strMap, sizeof(char), iIndex, fp2);
                     fcitx_utils_write_int32(fp2, slen);
                     fwrite(t->strPhrase, sizeof(char), strlen(t->strPhrase), fp2);
-                    uTemp = uIndex - 1 - t->uIndex;
-                    fcitx_utils_write_uint32(fp2, uTemp);
+                    fcitx_utils_write_uint32(fp2, uIndex - 1 - t->uIndex);
                     t = t->next;
                 }
             }
