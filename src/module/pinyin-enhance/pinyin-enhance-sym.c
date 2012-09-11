@@ -65,8 +65,7 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
     PySymWord *py_word;
     word_l++;
     py_word = fcitx_memory_pool_alloc_align(pyenhance->sym_pool,
-                                            sizeof(PySymWord) + word_l,
-                                            1);
+                                            sizeof(PySymWord) + word_l, 1);
     memcpy(sym_word(py_word), word, word_l);
     HASH_FIND_STR(pyenhance->sym_table, sym, table);
     if (table) {

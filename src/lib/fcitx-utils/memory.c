@@ -77,7 +77,9 @@ void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int alig
         chunk != NULL;
         chunk = (FcitxMemoryChunk*) utarray_next(pool->chunks, chunk)) {
         result = align ? memory_align_ptr(chunk->cur) : chunk->cur;
-        if (result + size <= chunk->end) {
+        void *new = result + size;
+        if (new <= chunk->end) {
+            chunk->cur = new;
             break;
         }
     }
@@ -85,16 +87,15 @@ void* fcitx_memory_pool_alloc_align(FcitxMemoryPool* pool, size_t size, int alig
     if (chunk == NULL) {
         size_t chunkSize = ((size + FCITX_MEMORY_POOL_PAGE_SIZE - 1) / FCITX_MEMORY_POOL_PAGE_SIZE) * FCITX_MEMORY_POOL_PAGE_SIZE;
         FcitxMemoryChunk c;
-        c.cur = fcitx_utils_malloc0(chunkSize);
-        c.end = c.cur + chunkSize;
-        c.memory = c.cur;
         /* should be properly aligned already */
-        result = c.cur;
+        result = fcitx_utils_malloc0(chunkSize);
+        c.end = result + chunkSize;
+        c.memory = result;
+        c.cur = result + size;
 
         utarray_push_back(pool->chunks, &c);
-        chunk = (FcitxMemoryChunk*) utarray_back(pool->chunks);
+        chunk = (FcitxMemoryChunk*)utarray_back(pool->chunks);
     }
-    chunk->cur += size;
 
     if (chunk->end - chunk->cur <= FCITX_MEMORY_CHUNK_FULL_SIZE) {
         utarray_push_back(pool->fullchunks, chunk);
