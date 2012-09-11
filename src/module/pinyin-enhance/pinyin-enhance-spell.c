@@ -139,7 +139,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         (position < 1 && !pyenhance->config.allow_replace_first)) {
         position = 1;
     }
-    newList = CallFunction(instance, FCITX_SPELL, GET_CANDWORDS,
+    newList = InvokeVaArgs(instance, FCITX_SPELL, GET_CANDWORDS,
                            NULL, (void*)string, NULL, (void*)(long)len_limit,
                            "en", "cus", NULL, pyenhance);
     if (!newList)

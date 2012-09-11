@@ -113,13 +113,13 @@ void* ClassicUICreate(FcitxInstance* instance)
         free(classicui);
         return NULL;
     }
-    classicui->dpy = CallFunction(instance, FCITX_X11, GETDISPLAY);
+    classicui->dpy = InvokeVaArgs(instance, FCITX_X11, GETDISPLAY);
     if (classicui->dpy == NULL) {
         free(classicui);
         return NULL;
     }
 
-    CallFunction(instance, FCITX_X11, GETDPI, &classicui->dpi, NULL);
+    InvokeVaArgs(instance, FCITX_X11, GETDPI, &classicui->dpi, NULL);
     if (classicui->dpi <= 0)
         classicui->dpi = 96;
 
@@ -169,7 +169,7 @@ void* ClassicUICreate(FcitxInstance* instance)
 
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
 {
-    CallFunction(classicui->owner, FCITX_X11, SETWINDOWPROP,
+    InvokeVaArgs(classicui->owner, FCITX_X11, SETWINDOWPROP,
                  &window, &type, windowTitle);
 }
 
@@ -299,13 +299,13 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
 {
-    CallFunction(classicui->owner, FCITX_X11, GETSCREENSIZE, width, height);
+    InvokeVaArgs(classicui->owner, FCITX_X11, GETSCREENSIZE, width, height);
 }
 
 FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y)
 {
     FcitxRect result = { 0, 0 , 0 , 0 };
-    CallFunction(classicui->owner, FCITX_X11, GETSCREENGEOMETRY,
+    InvokeVaArgs(classicui->owner, FCITX_X11, GETSCREENGEOMETRY,
                  &x, &y, &result);
     return result;
 }
@@ -358,7 +358,7 @@ boolean
 ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y)
 {
     boolean bMoved = false;
-    CallFunction(classicui->owner, FCITX_X11, MOUSECLICK,
+    InvokeVaArgs(classicui->owner, FCITX_X11, MOUSECLICK,
                  &window, x, y, &bMoved);
     return bMoved;
 }
@@ -504,13 +504,13 @@ ClassicUIInitWindowAttribute(FcitxClassicUI *classicui, Visual **vs,
                              Colormap *cmap, XSetWindowAttributes *attrib,
                              unsigned long *attribmask, int *depth)
 {
-    CallFunction(classicui->owner, FCITX_X11, INITWINDOWATTR,
+    InvokeVaArgs(classicui->owner, FCITX_X11, INITWINDOWATTR,
                    vs, cmap, attrib, attribmask, depth);
 }
 
 Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui)
 {
-    return CallFunction(classicui->owner, FCITX_X11, FINDARGBVISUAL);
+    return InvokeVaArgs(classicui->owner, FCITX_X11, FINDARGBVISUAL);
 }
 
 void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)

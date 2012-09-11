@@ -240,7 +240,7 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
 
     if (c[0]) {
         FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-        char *strTemp = CallFunction(qpstate->owner, FCITX_PUNC, GETPUNC, &s);
+        char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC, GETPUNC, &s);
         const char* full = strTemp ? strTemp : c;
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
     }
@@ -356,7 +356,7 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
               FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
              FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
             FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-            char *strTemp = CallFunction(qpstate->owner, FCITX_PUNC,
+            char *strTemp = InvokeVaArgs(qpstate->owner, FCITX_PUNC,
                                          GETPUNC, &s);
             strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
             *retval = IRV_COMMIT_STRING;
@@ -522,7 +522,7 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     } else {
         search = qpstate->buffer;
     }
-    new_list = CallFunction(qpstate->owner, FCITX_SPELL, GET_CANDWORDS,
+    new_list = InvokeVaArgs(qpstate->owner, FCITX_SPELL, GET_CANDWORDS,
                             NULL, search, NULL, (void*)(long)space_left,
                             "en", "cus", NULL, NULL);
     if (new_list) {
@@ -553,7 +553,7 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
 
     {
         char *text = qpstate->buffer;
-        CallFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND,
+        InvokeVaArgs(qpstate->owner, FCITX_LUA, CALLCOMMAND,
                      text, QuickPhraseGetLuaCandWord, qpstate);
     }
 

@@ -524,7 +524,7 @@ AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
     FcitxCandidateWordList *candList;
     if (autoEngState->config.disableSpell)
         return;
-    candList = CallFunction(autoEngState->owner, FCITX_SPELL, GET_CANDWORDS,
+    candList = InvokeVaArgs(autoEngState->owner, FCITX_SPELL, GET_CANDWORDS,
                             NULL, autoEngState->buf, NULL,
                             (void*)(long)autoEngState->config.maxHintLength,
                             "en", "cus", AutoEngGetCandWordCb, autoEngState);

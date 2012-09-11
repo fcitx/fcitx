@@ -264,7 +264,7 @@ void* KimpanelCreate(FcitxInstance* instance)
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
-    kimpanel->conn = CallFunction(instance, FCITX_DBUS, GETCONNECTION);
+    kimpanel->conn = InvokeVaArgs(instance, FCITX_DBUS, GETCONNECTION);
 
     DBusError err;
     dbus_error_init(&err);

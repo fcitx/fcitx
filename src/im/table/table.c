@@ -474,7 +474,7 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
                         retVal = TableGetCandWords(table);
                         int key = FcitxInputStateGetRawInputBuffer(input)[0];
                         if (!table->bIgnorePunc)
-                            strTemp = CallFunction(instance, FCITX_PUNC,
+                            strTemp = InvokeVaArgs(instance, FCITX_PUNC,
                                                    GETPUNC, &key);
                         else
                             strTemp = NULL;

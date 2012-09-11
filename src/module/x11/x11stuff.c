@@ -202,7 +202,7 @@ void X11ProcessEvent(void *arg)
 {
     FcitxX11 *x11priv = (FcitxX11*)arg;
     X11ProcessEventRealInternal(x11priv);
-    FcitxModuleCallFunction(x11priv->xim, 0);
+    FcitxModuleInvokeVaArgs(x11priv->xim, 0);
 }
 
 void* X11GetDisplay(void* arg, FcitxModuleFunctionArg args)

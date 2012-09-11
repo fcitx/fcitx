@@ -541,7 +541,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 int key = sym;
                 boolean useDup = false;
                 boolean append = true;
-                if (CallFunction(pystate->owner, FCITX_QUICKPHRASE,
+                if (InvokeVaArgs(pystate->owner, FCITX_QUICKPHRASE,
                                  LAUNCHQUICKPHRASE, &key, &useDup, &append))
                     return IRV_DISPLAY_MESSAGE;
             }

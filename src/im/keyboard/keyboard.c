@@ -250,7 +250,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     }
     else {
         boolean result = false;
-        CallFunction(keyboard->owner, FCITX_XKB, LAYOUTEXISTS,
+        InvokeVaArgs(keyboard->owner, FCITX_XKB, LAYOUTEXISTS,
                      (void*)layoutString, (void*)variantString, &result);
         if (result)
             iPriority = 50;
@@ -312,7 +312,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
 
-    FcitxXkbRules* rules = CallFunction(instance, FCITX_XKB, GETRULES);
+    FcitxXkbRules* rules = InvokeVaArgs(instance, FCITX_XKB, GETRULES);
     keyboard->rules = rules;
 #if defined(ENABLE_LIBXML2)
 #endif
@@ -320,7 +320,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
 
-    CallFunction(instance, FCITX_XKB, GETCURRENTLAYOUT,
+    InvokeVaArgs(instance, FCITX_XKB, GETCURRENTLAYOUT,
                  &keyboard->initialLayout, &keyboard->initialVariant);
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
@@ -435,7 +435,7 @@ void  FcitxKeyboardResetIM(void *arg)
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-    return CallFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE,
+    return InvokeVaArgs(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE,
                         keyboard->dictLang, NULL);
 }
 
@@ -483,7 +483,7 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
-            if (CallFunction(instance, FCITX_SPELL, ADD_PERSONAL,
+            if (InvokeVaArgs(instance, FCITX_SPELL, ADD_PERSONAL,
                              keyboard->buffer, keyboard->dictLang))
                 return IRV_DO_NOTHING;
         }
@@ -623,7 +623,7 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
         return IRV_DISPLAY_CANDWORDS;
 
     FcitxCandidateWordList *candList;
-    candList = CallFunction(instance, FCITX_SPELL, GET_CANDWORDS,
+    candList = InvokeVaArgs(instance, FCITX_SPELL, GET_CANDWORDS,
                             NULL, keyboard->buffer, NULL,
                             (void*)(long)keyboard->config.maximumHintLength,
                             keyboard->dictLang, NULL,

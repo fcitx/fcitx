@@ -325,8 +325,8 @@ void* IPCCreate(FcitxInstance* instance, int frontendid)
     ipc->frontendid = frontendid;
     ipc->owner = instance;
 
-    ipc->_conn = CallFunction(instance, FCITX_DBUS, GETCONNECTION);
-    ipc->_privconn = CallFunction(instance, FCITX_DBUS, GETPRIVCONNECTION);
+    ipc->_conn = InvokeVaArgs(instance, FCITX_DBUS, GETCONNECTION);
+    ipc->_privconn = InvokeVaArgs(instance, FCITX_DBUS, GETPRIVCONNECTION);
 
     if (ipc->_conn == NULL && ipc->_privconn == NULL) {
         FcitxLog(ERROR, "DBus Not initialized");

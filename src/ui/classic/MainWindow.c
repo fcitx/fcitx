@@ -119,9 +119,9 @@ MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
     mainWindow->owner = classicui;
     InitMainWindow(mainWindow);
 
-    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
                  MainWindowEventHandler, mainWindow);
-    CallFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
+    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
                  ReloadMainWindow, mainWindow);
     return mainWindow;
 }

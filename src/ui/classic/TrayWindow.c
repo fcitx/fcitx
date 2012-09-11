@@ -103,7 +103,7 @@ TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
 {
     TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
-    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
                  TrayEventHandler, trayWindow);
     InitTrayWindow(trayWindow);
     return trayWindow;

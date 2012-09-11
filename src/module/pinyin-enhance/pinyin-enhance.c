@@ -83,7 +83,7 @@ check_im_type(PinyinEnhance *pyenhance)
     if (strcmp(im->uniqueName, "sunpinyin") == 0) {
         boolean sp = false;
         char *str;
-        str = FcitxModuleCallFunctionByName(im->owner->owner,
+        str = FcitxModuleInvokeVaArgsByName(im->owner->owner,
                                             "fcitx-sunpinyin", 0, "", &sp);
         if (str)
             free(str);

@@ -129,7 +129,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     char *imname = NULL;
     char *p;
 
-    xim->display = CallFunction(instance, FCITX_X11, GETDISPLAY);
+    xim->display = InvokeVaArgs(instance, FCITX_X11, GETDISPLAY);
 
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));

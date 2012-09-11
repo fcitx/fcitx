@@ -25,32 +25,32 @@
 
 void Table_LoadPYBaseDict(FcitxAddon* pyaddon)
 {
-    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_LOADBASEDICT);
+    FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_LOADBASEDICT);
 }
 
 void Table_PYGetPYByHZ(FcitxAddon* pyaddon, char *a, char* b)
 {
-    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETPYBYHZ, a, b);
+    FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_PYGETPYBYHZ, a, b);
 }
 
 void Table_DoPYInput(FcitxAddon* pyaddon, FcitxKeySym sym, unsigned int state)
 {
-    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_DOPYINPUT, &sym, &state);
+    FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_DOPYINPUT, &sym, &state);
 }
 
 void Table_PYGetCandWords(FcitxAddon* pyaddon)
 {
-    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETCANDWORDS);
+    FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_PYGETCANDWORDS);
 }
 
 void Table_ResetPY(FcitxAddon* pyaddon)
 {
-    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYRESET);
+    FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_PYRESET);
 }
 
 char *Table_PYGetFindString(FcitxAddon* pyaddon)
 {
-    return FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETFINDSTRING);
+    return FcitxModuleInvokeVaArgs(pyaddon, FCITX_PINYIN_PYGETFINDSTRING);
 }
 
 INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, FcitxCandidateWord* candidateWord)

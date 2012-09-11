@@ -89,7 +89,7 @@ extern "C" {
      * @return void*
      **/
     void* FcitxModuleInvokeFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
-#define FcitxModuleCallFunction(addon, functionId, ARGV...)             \
+#define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
@@ -103,7 +103,7 @@ extern "C" {
      * @return void*
      **/
     void* FcitxModuleInvokeFunctionByName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
-#define FcitxModuleCallFunctionByName(instance, name, functionId, ARGV...) \
+#define FcitxModuleInvokeVaArgsByName(instance, name, functionId, ARGV...) \
     (FcitxModuleInvokeFunctionByName(instance, name, functionId,        \
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
@@ -111,7 +111,7 @@ extern "C" {
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
 
-#define CallFunction(INST, MODULE, FUNC, ARGV...)                       \
+#define InvokeVaArgs(INST, MODULE, FUNC, ARGV...)                       \
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
         INST, MODULE##_NAME, MODULE##_##FUNC,                           \
         (FcitxModuleFunctionArg){ .args = {ARGV} }))

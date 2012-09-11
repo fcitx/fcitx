@@ -113,9 +113,9 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     inputWindow->owner = classicui;
     InitInputWindow(inputWindow);
 
-    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
                  InputWindowEventHandler, inputWindow);
-    CallFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
+    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
                    ReloadInputWindow, inputWindow);
 
     inputWindow->msgUp = FcitxMessagesNew();
