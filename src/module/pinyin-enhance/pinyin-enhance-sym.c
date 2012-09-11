@@ -105,10 +105,8 @@ PySymClearDict(PinyinEnhance *pyenhance)
         HASH_CLEAR(hh, pyenhance->sym_table);
         pyenhance->sym_table = NULL;
     }
-    if (pyenhance->sym_pool) {
-        fcitx_memory_pool_destroy(pyenhance->sym_pool);
-        pyenhance->sym_pool = NULL;
-    }
+    if (pyenhance->sym_pool)
+        fcitx_memory_pool_clear(pyenhance->sym_pool);
 }
 
 static boolean
@@ -169,7 +167,6 @@ PinyinEnhanceReloadDict(PinyinEnhance *pyenhance)
     PySymClearDict(pyenhance);
     if (pyenhance->config.disable_sym)
         return;
-    pyenhance->sym_pool = fcitx_memory_pool_create();
     PySymLoadDict(pyenhance);
 }
 
@@ -218,4 +215,6 @@ void
 PinyinEnhanceSymDestroy(PinyinEnhance *pyenhance)
 {
     PySymClearDict(pyenhance);
+    if (pyenhance->sym_pool)
+        fcitx_memory_pool_destroy(pyenhance->sym_pool);
 }

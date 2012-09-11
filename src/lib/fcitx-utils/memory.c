@@ -119,3 +119,11 @@ void fcitx_memory_pool_destroy(FcitxMemoryPool* pool)
     utarray_free(pool->chunks);
     free(pool);
 }
+
+FCITX_EXPORT_API
+void
+fcitx_memory_pool_clear(FcitxMemoryPool *pool)
+{
+    utarray_clear(pool->fullchunks);
+    utarray_clear(pool->chunks);
+}
