@@ -103,10 +103,8 @@ TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
 {
     TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = TrayEventHandler;
-    arg.args[1] = trayWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+                 TrayEventHandler, trayWindow);
     InitTrayWindow(trayWindow);
     return trayWindow;
 }

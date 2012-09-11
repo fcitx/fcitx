@@ -240,7 +240,7 @@ extern "C" {
      * @param instance fcitx instance
      * @param hook new hook
      * @return void
-     * 
+     *
      * @since 4.2.0
      **/
     void FcitxInstanceRegisterCommitFilter(struct _FcitxInstance* instance, FcitxStringFilterHook hook);

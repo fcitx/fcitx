@@ -259,13 +259,12 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
 void* KimpanelCreate(FcitxInstance* instance)
 {
     FcitxKimpanelUI *kimpanel = fcitx_utils_malloc0(sizeof(FcitxKimpanelUI));
-    FcitxModuleFunctionArg arg;
 
     kimpanel->lastCursor = -2;
     kimpanel->version = 1;
     kimpanel->iCursorPos = 0;
     kimpanel->owner = instance;
-    kimpanel->conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
+    kimpanel->conn = CallFunction(instance, FCITX_DBUS, GETCONNECTION);
 
     DBusError err;
     dbus_error_init(&err);

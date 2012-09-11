@@ -272,15 +272,14 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
     Colormap cmap;
     Visual * vs;
     int depth;
-    FcitxModuleFunctionArg arg;
-    VKWindow* vkWindow = fcitx_utils_malloc0(sizeof(VKWindow));
+    VKWindow* vkWindow = fcitx_utils_new(VKWindow);
     vkWindow->owner = vkstate;
 
     LoadVKImage(vkWindow);
 
     vs = VKFindARGBVisual(vkstate);
     VKInitWindowAttribute(vkstate, &vs, &cmap, &attrib, &attribmask, &depth);
-    vkWindow->dpy = InvokeFunction(vkstate->owner, FCITX_X11, GETDISPLAY, arg);
+    vkWindow->dpy = CallFunction(vkstate->owner, FCITX_X11, GETDISPLAY);
 
     vkWindow->fontSize = 12;
     vkWindow->defaultFont = strdup("sans");
@@ -302,10 +301,8 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
 
     VKSetWindowProperty(vkstate, vkWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
-    FcitxModuleFunctionArg arg2;
-    arg2.args[0] = VKWindowEventHandler;
-    arg2.args[1] = vkWindow;
-    InvokeFunction(vkstate->owner, FCITX_X11, ADDXEVENTHANDLER, arg2);
+    CallFunction(vkstate->owner, FCITX_X11, ADDXEVENTHANDLER,
+                 VKWindowEventHandler, vkWindow);
 
     return vkWindow;
 }
@@ -341,12 +338,10 @@ boolean VKWindowEventHandler(void* arg, XEvent* event)
 cairo_surface_t* LoadVKImage(VKWindow* vkWindow)
 {
     FcitxVKState* vkstate = vkWindow->owner;
-    FcitxModuleFunctionArg arg;
     boolean fallback = true;
     char vkimage[] = "keyboard.png";
-    arg.args[0] = vkimage;
-    arg.args[1] = &fallback;
-    cairo_surface_t* image = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, LOADIMAGE, arg);
+    cairo_surface_t *image = CallFunction(vkstate->owner, FCITX_CLASSIC_UI,
+                                          LOADIMAGE, vkimage, &fallback);
 
     if (image)
         return image;
@@ -378,9 +373,9 @@ void DrawVKWindow(VKWindow* vkWindow)
     FcitxVKState *vkstate = vkWindow->owner;
     VKS *vks = vkstate->vks;
 
-    FcitxModuleFunctionArg arg;
-    FcitxConfigColor* fontColor = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETKEYBOARDFONTCOLOR, arg);
-    char** font = InvokeFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT, arg);
+    FcitxConfigColor *fontColor = CallFunction(vkstate->owner, FCITX_CLASSIC_UI,
+                                               GETKEYBOARDFONTCOLOR);
+    char **font = CallFunction(vkstate->owner, FCITX_CLASSIC_UI, GETFONT);
 
     if (!fontColor || !font) {
         fontColor = &blackColor;
@@ -717,10 +712,8 @@ void SwitchVK(FcitxVKState *vkstate)
     if (vkstate->bVK) {
         int             x, y;
         int dwidth, dheight;
-        FcitxModuleFunctionArg arg;
-        arg.args[0] = &dwidth;
-        arg.args[1] = &dheight;
-        InvokeFunction(vkstate->owner, FCITX_X11, GETSCREENSIZE, arg);
+        CallFunction(vkstate->owner, FCITX_X11, GETSCREENSIZE,
+                     &dwidth, &dheight);
 
         if (!FcitxUISupportMainWindow(instance)) {
             x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
@@ -773,41 +766,26 @@ VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
                       XSetWindowAttributes * attrib,
                       unsigned long *attribmask, int *depth)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = vs;
-    arg.args[1] = cmap;
-    arg.args[2] = attrib;
-    arg.args[3] = attribmask;
-    arg.args[4] = depth;
-    InvokeFunction(vkstate->owner, FCITX_X11, INITWINDOWATTR, arg);
+    CallFunction(vkstate->owner, FCITX_X11, INITWINDOWATTR,
+                 vs, cmap, attrib, attribmask, depth);
 }
 
 Visual * VKFindARGBVisual(FcitxVKState* vkstate)
 {
-    FcitxModuleFunctionArg arg;
-    return InvokeFunction(vkstate->owner, FCITX_X11, FINDARGBVISUAL, arg);
+    return CallFunction(vkstate->owner, FCITX_X11, FINDARGBVISUAL);
 }
 
 void VKSetWindowProperty(FcitxVKState* vkstate, Window window, FcitxXWindowType type, char *windowTitle)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = &type;
-    arg.args[2] = windowTitle;
-    InvokeFunction(vkstate->owner, FCITX_X11, SETWINDOWPROP, arg);
+    CallFunction(vkstate->owner, FCITX_X11, SETWINDOWPROP,
+                 &window, &type, windowTitle);
 }
 
 boolean
 VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y)
 {
-    boolean            bMoved = false;
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = x;
-    arg.args[2] = y;
-    arg.args[3] = &bMoved;
-    InvokeFunction(vkstate->owner, FCITX_X11, MOUSECLICK, arg);
-
+    boolean bMoved = false;
+    CallFunction(vkstate->owner, FCITX_X11, MOUSECLICK, &window, x, y, &bMoved);
     return bMoved;
 }
 

@@ -128,9 +128,8 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     XIMEncodings *encodings;
     char *imname = NULL;
     char *p;
-    FcitxModuleFunctionArg arg;
 
-    xim->display = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
+    xim->display = CallFunction(instance, FCITX_X11, GETDISPLAY);
 
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));

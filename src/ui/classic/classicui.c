@@ -103,7 +103,6 @@ FCITX_DEFINE_PLUGIN(fcitx_classic_ui, ui, FcitxUI) = {
 void* ClassicUICreate(FcitxInstance* instance)
 {
     FcitxAddon* classicuiaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_CLASSIC_UI_NAME);
-    FcitxModuleFunctionArg arg;
     FcitxClassicUI* classicui = fcitx_utils_malloc0(sizeof(FcitxClassicUI));
     classicui->owner = instance;
     if (!LoadClassicUIConfig(classicui)) {
@@ -114,16 +113,13 @@ void* ClassicUICreate(FcitxInstance* instance)
         free(classicui);
         return NULL;
     }
-    classicui->dpy = InvokeFunction(instance, FCITX_X11, GETDISPLAY, arg);
+    classicui->dpy = CallFunction(instance, FCITX_X11, GETDISPLAY);
     if (classicui->dpy == NULL) {
         free(classicui);
         return NULL;
     }
 
-    arg.args[0] = &classicui->dpi;
-    arg.args[1] = NULL;
-
-    InvokeFunction(instance, FCITX_X11, GETDPI, arg);
+    CallFunction(instance, FCITX_X11, GETDPI, &classicui->dpi, NULL);
     if (classicui->dpi <= 0)
         classicui->dpi = 96;
 
@@ -173,11 +169,8 @@ void* ClassicUICreate(FcitxInstance* instance)
 
 void ClassicUISetWindowProperty(FcitxClassicUI* classicui, Window window, FcitxXWindowType type, char *windowTitle)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = &type;
-    arg.args[2] = windowTitle;
-    InvokeFunction(classicui->owner, FCITX_X11, SETWINDOWPROP, arg);
+    CallFunction(classicui->owner, FCITX_X11, SETWINDOWPROP,
+                 &window, &type, windowTitle);
 }
 
 static void ClassicUIInputReset(void *arg)
@@ -306,21 +299,14 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
 
 void GetScreenSize(FcitxClassicUI* classicui, int* width, int* height)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = width;
-    arg.args[1] = height;
-    InvokeFunction(classicui->owner, FCITX_X11, GETSCREENSIZE, arg);
+    CallFunction(classicui->owner, FCITX_X11, GETSCREENSIZE, width, height);
 }
 
 FcitxRect GetScreenGeometry(FcitxClassicUI* classicui, int x, int y)
 {
-    FcitxModuleFunctionArg arg;
     FcitxRect result = { 0, 0 , 0 , 0 };
-    arg.args[0] = &x;
-    arg.args[1] = &y;
-    arg.args[2] = &result;
-    InvokeFunction(classicui->owner, FCITX_X11, GETSCREENGEOMETRY, arg);
-
+    CallFunction(classicui->owner, FCITX_X11, GETSCREENGEOMETRY,
+                 &x, &y, &result);
     return result;
 }
 
@@ -371,14 +357,9 @@ boolean IsInRspArea(int x0, int y0, FcitxClassicUIStatus* status)
 boolean
 ClassicUIMouseClick(FcitxClassicUI* classicui, Window window, int *x, int *y)
 {
-    boolean            bMoved = false;
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = &window;
-    arg.args[1] = x;
-    arg.args[2] = y;
-    arg.args[3] = &bMoved;
-    InvokeFunction(classicui->owner, FCITX_X11, MOUSECLICK, arg);
-
+    boolean bMoved = false;
+    CallFunction(classicui->owner, FCITX_X11, MOUSECLICK,
+                 &window, x, y, &bMoved);
     return bMoved;
 }
 
@@ -519,23 +500,17 @@ boolean MainMenuAction(FcitxUIMenu* menu, int index)
 }
 
 void
-ClassicUIInitWindowAttribute(FcitxClassicUI* classicui, Visual ** vs, Colormap * cmap,
-                             XSetWindowAttributes * attrib,
+ClassicUIInitWindowAttribute(FcitxClassicUI *classicui, Visual **vs,
+                             Colormap *cmap, XSetWindowAttributes *attrib,
                              unsigned long *attribmask, int *depth)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = vs;
-    arg.args[1] = cmap;
-    arg.args[2] = attrib;
-    arg.args[3] = attribmask;
-    arg.args[4] = depth;
-    InvokeFunction(classicui->owner, FCITX_X11, INITWINDOWATTR, arg);
+    CallFunction(classicui->owner, FCITX_X11, INITWINDOWATTR,
+                   vs, cmap, attrib, attribmask, depth);
 }
 
 Visual * ClassicUIFindARGBVisual(FcitxClassicUI* classicui)
 {
-    FcitxModuleFunctionArg arg;
-    return InvokeFunction(classicui->owner, FCITX_X11, FINDARGBVISUAL, arg);
+    return CallFunction(classicui->owner, FCITX_X11, FINDARGBVISUAL);
 }
 
 void ClassicUIMainWindowSizeHint(void* arg, int* x, int* y, int* w, int* h)

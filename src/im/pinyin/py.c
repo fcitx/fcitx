@@ -535,15 +535,14 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
 
             val = i = strlen(pystate->strFindString);
 
-            if (!pystate->bSP && pystate->pyconfig.bUseVForQuickPhrase && i == 0 && FcitxHotkeyIsKey(sym, state, FcitxKey_v, FcitxKeyState_None)) {
-                FcitxModuleFunctionArg args;
+            if (!pystate->bSP &&
+                pystate->pyconfig.bUseVForQuickPhrase && i == 0 &&
+                FcitxHotkeyIsKey(sym, state, FcitxKey_v, FcitxKeyState_None)) {
                 int key = sym;
                 boolean useDup = false;
                 boolean append = true;
-                args.args[0] = &key;
-                args.args[1] = &useDup;
-                args.args[2] = &append;
-                if (InvokeFunction(pystate->owner, FCITX_QUICKPHRASE, LAUNCHQUICKPHRASE, args))
+                if (CallFunction(pystate->owner, FCITX_QUICKPHRASE,
+                                 LAUNCHQUICKPHRASE, &key, &useDup, &append))
                     return IRV_DISPLAY_MESSAGE;
             }
 

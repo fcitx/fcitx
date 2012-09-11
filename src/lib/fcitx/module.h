@@ -105,6 +105,16 @@ extern "C" {
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \
     ((MODULE##_##FUNC##_RETURNTYPE) FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
 
+#define CallFunction(INST, MODULE, FUNC, ARGV...)                       \
+    ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
+        INST, MODULE##_NAME, MODULE##_##FUNC,                           \
+        (FcitxModuleFunctionArg){ .args = {ARGV} }))
+/**
+ * NOTE: (int)(sizeof((void*[]){ARGV}) / sizeof(void*)) can be used to get
+ * the number of arguements. (can be useful for removing the argument number
+ * limit) as well as directly call the function without a FunctionArg wrapper.
+ **/
+
 /** add a function to current addon */
 #define AddFunction(ADDON, Realname) \
     do { \

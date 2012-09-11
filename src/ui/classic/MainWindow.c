@@ -119,14 +119,10 @@ MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
     mainWindow->owner = classicui;
     InitMainWindow(mainWindow);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = MainWindowEventHandler;
-    arg.args[1] = mainWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
-
-    arg.args[0] = ReloadMainWindow;
-    arg.args[1] = mainWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
+    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+                 MainWindowEventHandler, mainWindow);
+    CallFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
+                 ReloadMainWindow, mainWindow);
     return mainWindow;
 }
 

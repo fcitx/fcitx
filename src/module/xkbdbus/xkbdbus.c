@@ -84,8 +84,8 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
     FcitxXkbDBus* xkbdbus = fcitx_utils_new(FcitxXkbDBus);
     xkbdbus->owner = instance;
     do {
-        FcitxModuleFunctionArg arg;
-        DBusConnection* conn = InvokeFunction(instance, FCITX_DBUS, GETCONNECTION, arg);
+        DBusConnection *conn = CallFunction(instance, FCITX_DBUS,
+                                            GETCONNECTION);
         if (conn == NULL) {
             FcitxLog(ERROR, "DBus Not initialized");
             break;
@@ -98,8 +98,7 @@ void* FcitxXkbDBusCreate(FcitxInstance* instance)
             FcitxLog(ERROR, "No memory");
             break;
         }
-        FcitxModuleFunctionArg args;
-        FcitxXkbRules* rules = InvokeFunction(instance, FCITX_XKB, GETRULES, args);
+        FcitxXkbRules *rules = CallFunction(instance, FCITX_XKB, GETRULES);
 
         if (!rules)
             break;
@@ -214,11 +213,8 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_error_init(&error);
         char* im, *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
-            FcitxModuleFunctionArg args;
-            args.args[0] = im;
-            args.args[1] = layout;
-            args.args[2] = variant;
-            InvokeFunction(xkbdbus->owner, FCITX_XKB, SETLAYOUTOVERRIDE, args);
+            CallFunction(xkbdbus->owner, FCITX_XKB, SETLAYOUTOVERRIDE,
+                         im, layout, variant);
         }
         DBusMessage *reply = dbus_message_new_method_return(message);
         dbus_connection_send(connection, reply, NULL);
@@ -230,10 +226,8 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_error_init(&error);
         char *layout, *variant;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &layout, DBUS_TYPE_STRING, &variant, DBUS_TYPE_INVALID)) {
-            FcitxModuleFunctionArg args;
-            args.args[0] = layout;
-            args.args[1] = variant;
-            InvokeFunction(xkbdbus->owner, FCITX_XKB, SETDEFAULTLAYOUT, args);
+            CallFunction(xkbdbus->owner, FCITX_XKB, SETDEFAULTLAYOUT,
+                           layout, variant);
         }
         DBusMessage *reply = dbus_message_new_method_return(message);
         dbus_connection_send(connection, reply, NULL);
@@ -245,11 +239,8 @@ DBusHandlerResult FcitxXkbDBusEventHandler (DBusConnection  *connection,
         dbus_error_init(&error);
         char* im = NULL, *layout = NULL, *variant = NULL;
         if (dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &im, DBUS_TYPE_INVALID)) {
-            FcitxModuleFunctionArg args;
-            args.args[0] = im;
-            args.args[1] = &layout;
-            args.args[2] = &variant;
-            InvokeFunction(xkbdbus->owner, FCITX_XKB, GETLAYOUTOVERRIDE, args);
+            CallFunction(xkbdbus->owner, FCITX_XKB, GETLAYOUTOVERRIDE,
+                         im, &layout, &variant);
 
             if (!layout)
                 layout = "";

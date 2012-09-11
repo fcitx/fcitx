@@ -139,16 +139,9 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         (position < 1 && !pyenhance->config.allow_replace_first)) {
         position = 1;
     }
-    FcitxModuleFunctionArg func_arg;
-    func_arg.args[0] = NULL;
-    func_arg.args[1] = (void*)string;
-    func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)len_limit;
-    func_arg.args[4] = "en";
-    func_arg.args[5] = "cus";
-    func_arg.args[6] = NULL;
-    func_arg.args[7] = pyenhance;
-    newList = InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
+    newList = CallFunction(instance, FCITX_SPELL, GET_CANDWORDS,
+                           NULL, (void*)string, NULL, (void*)(long)len_limit,
+                           "en", "cus", NULL, pyenhance);
     if (!newList)
         return false;
     if (position == 0) {

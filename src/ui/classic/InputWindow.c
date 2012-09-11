@@ -113,14 +113,10 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     inputWindow->owner = classicui;
     InitInputWindow(inputWindow);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = InputWindowEventHandler;
-    arg.args[1] = inputWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
-
-    arg.args[0] = ReloadInputWindow;
-    arg.args[1] = inputWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER, arg);
+    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+                 InputWindowEventHandler, inputWindow);
+    CallFunction(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
+                   ReloadInputWindow, inputWindow);
 
     inputWindow->msgUp = FcitxMessagesNew();
     inputWindow->msgDown = FcitxMessagesNew();

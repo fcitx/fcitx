@@ -521,21 +521,13 @@ AutoEngGetCandWordCb(FcitxAutoEngState *autoEngState, const char *commit)
 static void
 AutoEngGetSpellHint(FcitxAutoEngState *autoEngState)
 {
-    FcitxModuleFunctionArg func_arg;
     FcitxCandidateWordList *candList;
     if (autoEngState->config.disableSpell)
         return;
-
-    func_arg.args[0] = NULL;
-    func_arg.args[1] = autoEngState->buf;
-    func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)autoEngState->config.maxHintLength;
-    func_arg.args[4] = "en";
-    func_arg.args[5] = "cus";
-    func_arg.args[6] = AutoEngGetCandWordCb;
-    func_arg.args[7] = autoEngState;
-    candList = InvokeFunction(autoEngState->owner, FCITX_SPELL,
-                              GET_CANDWORDS, func_arg);
+    candList = CallFunction(autoEngState->owner, FCITX_SPELL, GET_CANDWORDS,
+                            NULL, autoEngState->buf, NULL,
+                            (void*)(long)autoEngState->config.maxHintLength,
+                            "en", "cus", AutoEngGetCandWordCb, autoEngState);
     if (candList) {
         FcitxInputState *input = FcitxInstanceGetInputState(autoEngState->owner);
         FcitxCandidateWordList *iList = FcitxInputStateGetCandidateList(input);

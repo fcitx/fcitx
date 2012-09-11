@@ -250,11 +250,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
     }
     else {
         boolean result = false;
-        FcitxModuleFunctionArg args;
-        args.args[0] = (void*) layoutString;
-        args.args[1] = (void*) variantString;
-        args.args[2] = &result;
-        InvokeFunction(keyboard->owner, FCITX_XKB, LAYOUTEXISTS, args);
+        CallFunction(keyboard->owner, FCITX_XKB, LAYOUTEXISTS,
+                     (void*)layoutString, (void*)variantString, &result);
         if (result)
             iPriority = 50;
     }
@@ -315,8 +312,7 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
 
     FcitxInstanceRegisterHotkeyFilter(instance, hk);
 
-    FcitxModuleFunctionArg args;
-    FcitxXkbRules* rules = InvokeFunction(instance, FCITX_XKB, GETRULES, args);
+    FcitxXkbRules* rules = CallFunction(instance, FCITX_XKB, GETRULES);
     keyboard->rules = rules;
 #if defined(ENABLE_LIBXML2)
 #endif
@@ -324,9 +320,8 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     keyboard->initialLayout = NULL;
     keyboard->initialVariant = NULL;
 
-    args.args[0] = &keyboard->initialLayout;
-    args.args[1] = &keyboard->initialVariant;
-    InvokeFunction(instance, FCITX_XKB, GETCURRENTLAYOUT, args);
+    CallFunction(instance, FCITX_XKB, GETCURRENTLAYOUT,
+                 &keyboard->initialLayout, &keyboard->initialVariant);
     if (!keyboard->initialLayout)
         keyboard->initialLayout = strdup("us");
 
@@ -440,10 +435,8 @@ void  FcitxKeyboardResetIM(void *arg)
 
 boolean IsDictAvailable(FcitxKeyboard* keyboard)
 {
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = keyboard->dictLang;
-    arg.args[1] = NULL;
-    return InvokeFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE, arg);
+    return CallFunction(keyboard->owner, FCITX_SPELL, DICT_AVAILABLE,
+                        keyboard->dictLang, NULL);
 }
 
 /* a little bit funny here LOL.... */
@@ -490,10 +483,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
 
         if (FcitxHotkeyIsHotKey(sym, state,
                                 keyboard->config.hkAddToUserDict)) {
-            FcitxModuleFunctionArg arg;
-            arg.args[0] = keyboard->buffer;
-            arg.args[1] = keyboard->dictLang;
-            if (InvokeFunction(instance, FCITX_SPELL, ADD_PERSONAL, arg))
+            if (CallFunction(instance, FCITX_SPELL, ADD_PERSONAL,
+                             keyboard->buffer, keyboard->dictLang))
                 return IRV_DO_NOTHING;
         }
 
@@ -631,17 +622,12 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     if (bufferlen < keyboard->config.minimumHintLength)
         return IRV_DISPLAY_CANDWORDS;
 
-    FcitxModuleFunctionArg func_arg;
-    func_arg.args[0] = NULL;
-    func_arg.args[1] = keyboard->buffer;
-    func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)keyboard->config.maximumHintLength;
-    func_arg.args[4] = keyboard->dictLang;
-    func_arg.args[5] = NULL;
-    func_arg.args[6] = FcitxKeyboardGetCandWordCb;
-    func_arg.args[7] = layout;
-    FcitxCandidateWordList *candList =
-        InvokeFunction(instance, FCITX_SPELL, GET_CANDWORDS, func_arg);
+    FcitxCandidateWordList *candList;
+    candList = CallFunction(instance, FCITX_SPELL, GET_CANDWORDS,
+                            NULL, keyboard->buffer, NULL,
+                            (void*)(long)keyboard->config.maximumHintLength,
+                            keyboard->dictLang, NULL,
+                            FcitxKeyboardGetCandWordCb, layout);
     if (!candList)
         return IRV_DISPLAY_CANDWORDS;
     FcitxCandidateWordMerge(FcitxInputStateGetCandidateList(input),

@@ -677,12 +677,9 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
     FcitxXkb* xkb = (FcitxXkb*) fcitx_utils_malloc0(sizeof(FcitxXkb));
     xkb->owner = instance;
     do {
-
-        FcitxModuleFunctionArg args;
-        xkb->dpy = InvokeFunction(xkb->owner, FCITX_X11, GETDISPLAY, args);
+        xkb->dpy = CallFunction(xkb->owner, FCITX_X11, GETDISPLAY);
         if (!xkb->dpy)
             break;
-
 
         if (!FcitxXkbSupported(xkb, &xkb->xkbOpcode))
             break;
@@ -701,10 +698,8 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         int eventMask = XkbNewKeyboardNotifyMask | XkbStateNotifyMask;
         XkbSelectEvents(xkb->dpy, XkbUseCoreKbd, eventMask, eventMask);
 
-        FcitxModuleFunctionArg arg2;
-        arg2.args[0] = FcitxXkbEventHandler;
-        arg2.args[1] = xkb;
-        InvokeFunction(xkb->owner, FCITX_X11, ADDXEVENTHANDLER, arg2);
+        CallFunction(xkb->owner, FCITX_X11, ADDXEVENTHANDLER,
+                     FcitxXkbEventHandler, xkb);
 
         FcitxInstanceWatchContext(instance, CONTEXT_IM_KEYBOARD_LAYOUT, FcitxXkbIMKeyboardLayoutChanged, xkb);
 

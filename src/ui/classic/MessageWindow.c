@@ -63,10 +63,8 @@ MessageWindow* CreateMessageWindow(FcitxClassicUI * classicui)
     InitMessageWindowProperty(messageWindow);
     XSelectInput(dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
 
-    FcitxModuleFunctionArg arg;
-    arg.args[0] = MessageWindowEventHandler;
-    arg.args[1] = messageWindow;
-    InvokeFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER, arg);
+    CallFunction(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
+                 MessageWindowEventHandler, messageWindow);
 
     return messageWindow;
 }

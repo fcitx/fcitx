@@ -239,10 +239,8 @@ void _QuickPhraseLaunch(QuickPhraseState* qpstate)
     ShowQuickPhraseMessage(qpstate);
 
     if (c[0]) {
-        FcitxModuleFunctionArg farg;
         FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-        farg.args[0] = &s;
-        char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC, GETPUNC, farg);
+        char *strTemp = CallFunction(qpstate->owner, FCITX_PUNC, GETPUNC, &s);
         const char* full = strTemp ? strTemp : c;
         FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input), MSG_TIPS, _("Space for %s Enter for %s") , full, c);
     }
@@ -357,11 +355,9 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
             ((qpstate->useDupKeyInput &&
               FcitxHotkeyIsHotKey(keymain, state, qpstate->curTriggerKey)) ||
              FcitxHotkeyIsHotKey(keymain, state, FCITX_SPACE))) {
-            FcitxModuleFunctionArg farg;
             FcitxKeySym s = qpstate->curTriggerKey[0].sym;
-            farg.args[0] = &s;
-            char* strTemp = InvokeFunction(qpstate->owner, FCITX_PUNC,
-                                           GETPUNC, farg);
+            char *strTemp = CallFunction(qpstate->owner, FCITX_PUNC,
+                                         GETPUNC, &s);
             strcpy(FcitxInputStateGetOutputString(input), strTemp ? strTemp : c);
             *retval = IRV_COMMIT_STRING;
         } else {
@@ -506,7 +502,6 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     FcitxInputState *input;
     FcitxCandidateWordList *cand_list;
     FcitxCandidateWordList *new_list;
-    FcitxModuleFunctionArg func_arg;
     if (qpstate->config.disableSpell)
         return;
     input = FcitxInstanceGetInputState(qpstate->owner);
@@ -527,16 +522,9 @@ QuickPhraseGetSpellHint(QuickPhraseState* qpstate)
     } else {
         search = qpstate->buffer;
     }
-    func_arg.args[0] = NULL;
-    func_arg.args[1] = search;
-    func_arg.args[2] = NULL;
-    func_arg.args[3] = (void*)(long)space_left;
-    func_arg.args[4] = "en";
-    func_arg.args[5] = "cus";
-    func_arg.args[6] = NULL;
-    func_arg.args[7] = NULL;
-    new_list = InvokeFunction(qpstate->owner, FCITX_SPELL,
-                              GET_CANDWORDS, func_arg);
+    new_list = CallFunction(qpstate->owner, FCITX_SPELL, GET_CANDWORDS,
+                            NULL, search, NULL, (void*)(long)space_left,
+                            "en", "cus", NULL, NULL);
     if (new_list) {
         FcitxCandidateWordMerge(cand_list, new_list, -1);
         FcitxCandidateWordFreeList(new_list);
@@ -564,12 +552,9 @@ INPUT_RETURN_VALUE QuickPhraseGetCandWords(QuickPhraseState* qpstate)
     pKey = &searchKey;
 
     {
-        FcitxModuleFunctionArg arg;
         char *text = qpstate->buffer;
-        arg.args[0] = text;
-        arg.args[1] = QuickPhraseGetLuaCandWord;
-        arg.args[2] = qpstate;
-        InvokeFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND, arg);
+        CallFunction(qpstate->owner, FCITX_LUA, CALLCOMMAND,
+                     text, QuickPhraseGetLuaCandWord, qpstate);
     }
 
     do {
