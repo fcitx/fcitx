@@ -89,6 +89,9 @@ extern "C" {
      * @return void*
      **/
     void* FcitxModuleInvokeFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+#define FcitxModuleCallFunction(addon, functionId, ARGV...)             \
+    (FcitxModuleInvokeFunction(addon, functionId,                       \
+                               (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
     /**
      * invoke inter module function with addon name, returns NULL when fails (the function itself can also return NULL)
@@ -100,6 +103,9 @@ extern "C" {
      * @return void*
      **/
     void* FcitxModuleInvokeFunctionByName(struct _FcitxInstance* instance, const char* name, int functionId, FcitxModuleFunctionArg args);
+#define FcitxModuleCallFunctionByName(instance, name, functionId, ARGV...) \
+    (FcitxModuleInvokeFunctionByName(instance, name, functionId,        \
+                               (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
 /** call a function provides by other addon */
 #define InvokeFunction(INST, MODULE, FUNC, ARG)  \

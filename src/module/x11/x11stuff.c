@@ -151,18 +151,17 @@ void X11DelayedCompositeTest(void* arg)
         X11HandlerComposite(x11priv, true);
 }
 
-
-void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
+static void
+X11ProcessEventRealInternal(FcitxX11 *x11priv)
 {
-    FcitxX11* x11priv = arg;
     if (!x11priv->firstRun) {
         x11priv->firstRun = true;
-        FcitxInstanceAddTimeout(x11priv->owner, 5000, X11DelayedCompositeTest, x11priv);
+        FcitxInstanceAddTimeout(x11priv->owner, 5000,
+                                X11DelayedCompositeTest, x11priv);
     }
     XEvent event;
     while (XPending(x11priv->dpy)) {
-        XNextEvent(x11priv->dpy, &event);  //等待一个事件发生
-        /* 处理X事件 */
+        XNextEvent(x11priv->dpy, &event);
         if (XFilterEvent(&event, None) == False) {
             if (event.type == DestroyNotify) {
                 if (event.xany.window == x11priv->compManager)
@@ -184,23 +183,26 @@ void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
 #endif
 
             FcitxXEventHandler* handler;
-            for (handler = (FcitxXEventHandler *) utarray_front(&x11priv->handlers);
-                    handler != NULL;
-                    handler = (FcitxXEventHandler *) utarray_next(&x11priv->handlers, handler))
+            for (handler = (FcitxXEventHandler*)utarray_front(&x11priv->handlers);
+                 handler != NULL;
+                 handler = (FcitxXEventHandler*)utarray_next(&x11priv->handlers, handler))
                 if (handler->eventHandler(handler->instance, &event))
                     break;
         }
     }
 }
 
-void X11ProcessEvent(void* arg)
+
+void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
 {
-    FcitxX11* x11priv = (FcitxX11*)arg;
+    X11ProcessEventRealInternal((FcitxX11*)arg);
+}
 
-    FcitxModuleFunctionArg args;
-    X11ProcessEventReal(x11priv, args);
-
-    FcitxModuleInvokeFunction(x11priv->xim, 0, args);
+void X11ProcessEvent(void *arg)
+{
+    FcitxX11 *x11priv = (FcitxX11*)arg;
+    X11ProcessEventRealInternal(x11priv);
+    FcitxModuleCallFunction(x11priv->xim, 0);
 }
 
 void* X11GetDisplay(void* arg, FcitxModuleFunctionArg args)

@@ -25,50 +25,40 @@
 
 void Table_LoadPYBaseDict(FcitxAddon* pyaddon)
 {
-    FcitxModuleFunctionArg args;
-    FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_LOADBASEDICT, args);
+    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_LOADBASEDICT);
 }
 
 void Table_PYGetPYByHZ(FcitxAddon* pyaddon, char *a, char* b)
 {
-    FcitxModuleFunctionArg args;
-    args.args[0] = a;
-    args.args[1] = b;
-    FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_PYGETPYBYHZ, args);
+    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETPYBYHZ, a, b);
 }
 
 void Table_DoPYInput(FcitxAddon* pyaddon, FcitxKeySym sym, unsigned int state)
 {
-    FcitxModuleFunctionArg args;
-    args.args[0] = &sym;
-    args.args[1] = &state;
-    FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_DOPYINPUT, args);
+    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_DOPYINPUT, &sym, &state);
 }
 
 void Table_PYGetCandWords(FcitxAddon* pyaddon)
 {
-    FcitxModuleFunctionArg args;
-    FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_PYGETCANDWORDS, args);
+    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETCANDWORDS);
 }
 
 void Table_ResetPY(FcitxAddon* pyaddon)
 {
-    FcitxModuleFunctionArg args;
-    FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_PYRESET, args);
+    FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYRESET);
 }
 
-char* Table_PYGetFindString(FcitxAddon* pyaddon)
+char *Table_PYGetFindString(FcitxAddon* pyaddon)
 {
-    FcitxModuleFunctionArg args;
-    char * str = FcitxModuleInvokeFunction(pyaddon, FCITX_PINYIN_PYGETFINDSTRING, args);
-    return str;
+    return FcitxModuleCallFunction(pyaddon, FCITX_PINYIN_PYGETFINDSTRING);
 }
 
 INPUT_RETURN_VALUE Table_PYGetCandWord(void* arg, FcitxCandidateWord* candidateWord)
 {
     TableMetaData* table = arg;
     FcitxTableState* tbl = table->owner;
-    INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance, candidateWord);
+    INPUT_RETURN_VALUE retVal = tbl->pygetcandword(tbl->pyaddon->addonInstance,
+                                                   candidateWord);
     Table_ResetPY(tbl->pyaddon);
     if (!(retVal & IRV_FLAG_PENDING_COMMIT_STRING)) {
         strcpy(FcitxInputStateGetOutputString(FcitxInstanceGetInputState(tbl->owner)), candidateWord->strWord);
