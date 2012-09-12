@@ -420,7 +420,7 @@ void DrawVKWindow(VKWindow* vkWindow)
         iPos += 24;
     }
 
-    cairo_destroy(cr);
+    _CAIRO_DESTROY(cr);
 }
 
 /*

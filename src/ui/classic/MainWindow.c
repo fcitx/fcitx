@@ -457,8 +457,8 @@ void DrawMainWindow(MainWindow* mainWindow)
             }
         }
 
-        cairo_destroy(c);
-        cairo_xlib_surface_set_size(mainWindow->cs_x_main_bar,
+        _CAIRO_DESTROY(c);
+        _CAIRO_SETSIZE(mainWindow->cs_x_main_bar,
                                     width,
                                     height);
 
@@ -468,7 +468,7 @@ void DrawMainWindow(MainWindow* mainWindow)
         cairo_rectangle(c, 0, 0, width, height);
         cairo_clip(c);
         cairo_paint(c);
-        cairo_destroy(c);
+        _CAIRO_DESTROY(c);
 
         XMapRaised(mainWindow->dpy, mainWindow->window);
     } else

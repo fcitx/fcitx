@@ -322,7 +322,7 @@ void DrawXlibMenu(XlibMenu * menu)
                                 sc->skinMenu.fillH
                             );
 
-        cairo_destroy(cr);
+        _CAIRO_DESTROY(cr);
     }
 
     iPosY = sc->skinMenu.marginTop;
@@ -341,7 +341,7 @@ void DrawXlibMenu(XlibMenu * menu)
         }
     }
     XResizeWindow(dpy, menu->menuWindow, menu->width, menu->height);
-    cairo_xlib_surface_set_size(menu->menu_x_cs,
+    _CAIRO_SETSIZE(menu->menu_x_cs,
                                 menu->width, menu->height);
     cairo_t* c = cairo_create(menu->menu_x_cs);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
@@ -349,7 +349,7 @@ void DrawXlibMenu(XlibMenu * menu)
     cairo_rectangle(c, 0, 0, menu->width, menu->height);
     cairo_clip(c);
     cairo_paint(c);
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
     XFreeGC(dpy, gc);
 }
 
@@ -373,7 +373,7 @@ void DrawDivLine(XlibMenu * menu, int line_y)
     cairo_move_to(cr, marginLeft + 3, line_y + 3);
     cairo_line_to(cr, menu->width - marginRight - 3, line_y + 3);
     cairo_stroke(cr);
-    cairo_destroy(cr);
+    _CAIRO_DESTROY(cr);
 }
 
 void MenuMark(XlibMenu * menu, int y, int i)
@@ -391,7 +391,7 @@ void MenuMark(XlibMenu * menu, int y, int i)
     cairo_translate(cr, marginLeft + 7, y + (sc->skinFont.menuFontSize / 2.0));
     cairo_arc(cr, 0, 0, size , 0., 2 * M_PI);
     cairo_fill(cr);
-    cairo_destroy(cr);
+    _CAIRO_DESTROY(cr);
 }
 
 /*
@@ -424,7 +424,7 @@ void DisplayText(XlibMenu * menu, int shellindex, int line_y, int fontHeight)
         OutputStringWithContext(cr, dpi, GetMenuItem(menu->menushell, shellindex)->tipstr , 15 + marginLeft , line_y);
     }
     ResetFontContext();
-    cairo_destroy(cr);
+    _CAIRO_DESTROY(cr);
 }
 
 void DrawArrow(XlibMenu *menu, int line_y)
@@ -439,7 +439,7 @@ void DrawArrow(XlibMenu *menu, int line_y)
     cairo_line_to(cr, menu->width - marginRight - 1, line_y + size + offset);
     cairo_line_to(cr, menu->width - marginRight - 1 - size , line_y + offset);
     cairo_fill(cr);
-    cairo_destroy(cr);
+    _CAIRO_DESTROY(cr);
 }
 
 /**

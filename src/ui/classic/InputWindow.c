@@ -171,7 +171,7 @@ void DrawInputWindow(InputWindow* inputWindow)
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight) {
-        cairo_xlib_surface_set_size(inputWindow->cs_x_input_bar,
+        _CAIRO_SETSIZE(inputWindow->cs_x_input_bar,
                                     inputWindow->iInputWindowWidth,
                                     inputWindow->iInputWindowHeight);
         MoveInputWindowInternal(inputWindow);
@@ -188,7 +188,7 @@ void DrawInputWindow(InputWindow* inputWindow)
     cairo_rectangle(c, 0, 0, inputWindow->iInputWindowWidth, inputWindow->iInputWindowHeight);
     cairo_clip(c);
     cairo_paint(c);
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
 
     XFlush(inputWindow->dpy);
 }
@@ -235,14 +235,14 @@ void ReloadInputWindow(void* arg, boolean enabled)
     InputWindow* inputWindow = (InputWindow*) arg;
     boolean visable = WindowIsVisable(inputWindow->dpy, inputWindow->window);
     int i = 0;
-    cairo_destroy(inputWindow->c_back);
+    _CAIRO_DESTROY(inputWindow->c_back);
     inputWindow->c_back = NULL;
 
     for (i = 0 ; i < 7; i ++) {
-        cairo_destroy(inputWindow->c_font[i]);
+        _CAIRO_DESTROY(inputWindow->c_font[i]);
         inputWindow->c_font[i] = NULL;
     }
-    cairo_destroy(inputWindow->c_cursor);
+    _CAIRO_DESTROY(inputWindow->c_cursor);
     inputWindow->c_cursor = NULL;
 
     cairo_surface_destroy(inputWindow->cs_input_bar);

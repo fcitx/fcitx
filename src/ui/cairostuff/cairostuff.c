@@ -69,7 +69,7 @@ void StringSizeStrict(const char* str, const char* font, int fontSize, int dpi, 
 #endif
     ResetFontContext();
 
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
     cairo_surface_destroy(surface);
 }
 
@@ -88,7 +88,7 @@ StringWidth(const char *str, const char *font, int fontSize, int dpi)
     StringSizeWithContext(c, dpi, str, &width, NULL);
     ResetFontContext();
 
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
     cairo_surface_destroy(surface);
 
     return width;
@@ -157,7 +157,7 @@ FontHeight(const char *font, int fontSize, int dpi)
     int             height = FontHeightWithContext(c, dpi);
     ResetFontContext();
 
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
     cairo_surface_destroy(surface);
     return height;
 }
