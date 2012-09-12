@@ -59,7 +59,7 @@ static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11priv);
 static void X11InitScreen(FcitxX11* x11priv);
-static void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args);
+static void *X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args);
 
 static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
@@ -193,9 +193,11 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
 }
 
 
-void X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
+void*
+X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
 {
     X11ProcessEventRealInternal((FcitxX11*)arg);
+    return NULL;
 }
 
 void X11ProcessEvent(void *arg)

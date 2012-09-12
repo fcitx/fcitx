@@ -81,7 +81,7 @@ static void PinyinMigration();
 static int PYCandWordCmp(const void* b, const void* a, void* arg);
 static void* PYSP2QP(void* arg, FcitxModuleFunctionArg args);
 static boolean PYGetPYMapByHZ(FcitxPinyinState*pystate, char *strHZ, char* mapHint, char *strMap);
-static void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args);
+static void *PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args);
 
 void *PYCreate(FcitxInstance* instance)
 {
@@ -2262,14 +2262,15 @@ boolean PYGetPYMapByHZ(FcitxPinyinState* pystate, char* strHZ, char* mapHint, ch
     return false;
 }
 
-void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
+void*
+PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 {
     FcitxPinyinState *pystate = (FcitxPinyinState*)arg;
     char* strHZ = args.args[0], *sp, *pivot;
     char singleHZ[UTF8_MAX_LENGTH + 1];
     char strMap[3];
     if (!fcitx_utf8_check_string(strHZ))
-        return;
+        return NULL;
 
     pivot = strHZ;
     size_t hzCount = fcitx_utf8_strlen(strHZ);
@@ -2284,7 +2285,7 @@ void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 
     /* in order not to get a wrong one, use strict check */
     if (hzCountLocal != hzCount || hzCount > MAX_PY_PHRASE_LENGTH)
-        return;
+        return NULL;
     char *totalMap = fcitx_utils_malloc0(sizeof(char) * (1 + 2 * hzCount));
 
     if (pystate->iPYSelected) {
@@ -2305,7 +2306,7 @@ void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
 
         if (!PYGetPYMapByHZ(pystate, singleHZ, pystate->findMap.strMap[i], strMap)) {
             free(totalMap);
-            return;
+            return NULL;
         }
 
         strncat(totalMap, strMap, 2);
@@ -2317,7 +2318,7 @@ void PYAddUserPhraseFromCString(void* arg, FcitxModuleFunctionArg args)
     PYAddUserPhrase(pystate, pivot, totalMap, true);
     free(totalMap);
 
-    return;
+    return NULL;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

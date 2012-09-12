@@ -52,8 +52,8 @@ static void *FcitxSpellHintWords(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellAddPersonal(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellDictAvailable(void *arg, FcitxModuleFunctionArg args);
 static void *FcitxSpellGetCandWords(void *arg, FcitxModuleFunctionArg args);
-static const char *FcitxSpellCandWordGetCommit(void *arg,
-                                               FcitxModuleFunctionArg args);
+static void *FcitxSpellCandWordGetCommit(void *arg,
+                                         FcitxModuleFunctionArg args);
 
 static boolean SpellOrderHasValidProvider(const char *providers);
 
@@ -504,7 +504,7 @@ typedef struct {
     void *arg;
 } GetCandWordsArgs;
 
-static const char*
+static void*
 FcitxSpellCandWordGetCommit(void *arg, FcitxModuleFunctionArg args)
 {
     FcitxCandidateWord *candWord = args.args[0];
