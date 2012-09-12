@@ -126,7 +126,7 @@ extern "C" {
     static inline void
     AddFunction(struct _FcitxAddon *addon, FcitxModuleFunction func)
     {
-        void *temp = func;
+        void *temp = (void*)func;
         utarray_push_back(&addon->functionList, &temp);
     }
 

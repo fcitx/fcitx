@@ -343,10 +343,12 @@ extern "C" {
     void fcitx_utils_string_swap(char** obj, const char* str);
 
     /** free a pointer if it's not NULL */
-#define fcitx_utils_free(ptr) do { \
-        if (ptr) \
-            free(ptr); \
-    } while(0)
+    static inline void
+    fcitx_utils_free(void *ptr)
+    {
+        if (ptr)
+            free(ptr);
+    }
 
 #define fcitx_utils_read(fp, p, type)           \
     fcitx_utils_read_ ## type(fp, p)
