@@ -33,7 +33,6 @@
 #include "ime-internal.h"
 
 static UT_icd  module_icd = {sizeof(FcitxAddon*), NULL, NULL, NULL};
-typedef void*(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
 void InitFcitxModules(UT_array* modules)
 {

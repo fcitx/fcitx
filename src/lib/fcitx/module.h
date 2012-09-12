@@ -27,13 +27,13 @@
 #define _FCITX_MODULE_H
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx-utils/utarray.h>
+#include <fcitx/addon.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
     struct _FcitxInstance;
-    struct _FcitxAddon;
 
     /**
      * A misc module in Fcitx, it can register hook, or add it's own event
@@ -71,6 +71,7 @@ extern "C" {
          **/
         void* args[10];
     } FcitxModuleFunctionArg;
+    typedef void *(*FcitxModuleFunction)(void *arg, FcitxModuleFunctionArg);
 
     /**
      * load all modules
@@ -123,10 +124,10 @@ extern "C" {
 
 /** add a function to current addon */
 #define AddFunction(ADDON, Realname) \
-    do { \
-        void *temp = Realname; \
-        utarray_push_back(&ADDON->functionList, &temp); \
-    } while(0)
+   do { \
+       void *temp = Realname; \
+       utarray_push_back(&ADDON->functionList, &temp); \
+   } while(0)
 
 #ifdef __cplusplus
 }

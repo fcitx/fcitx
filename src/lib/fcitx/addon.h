@@ -40,6 +40,8 @@ extern "C" {
 #endif
 
     struct _FcitxInstance;
+    struct _FcitxModule;
+
     /**
      * Addon Category Definition
      **/
