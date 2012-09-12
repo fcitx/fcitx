@@ -359,7 +359,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint32(FILE *fp, uint32_t *p);
@@ -369,7 +369,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
@@ -383,7 +383,7 @@ extern "C" {
      *
      * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint32(FILE *fp, uint32_t i);
@@ -393,7 +393,7 @@ extern "C" {
      *
      * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
@@ -408,7 +408,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint64(FILE *fp, uint64_t *p);
@@ -418,7 +418,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
@@ -432,7 +432,7 @@ extern "C" {
      *
      * @param fp FILE* to write
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint64(FILE *fp, uint64_t i);
@@ -442,7 +442,7 @@ extern "C" {
      *
      * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
@@ -457,7 +457,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint16(FILE *fp, uint16_t *p);
@@ -467,7 +467,7 @@ extern "C" {
      *
      * @param fp FILE* to read from
      * @param p return the integer read
-     * @return bytes actually read from file
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
@@ -481,7 +481,7 @@ extern "C" {
      *
      * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint16(FILE *fp, uint16_t i);
@@ -491,7 +491,7 @@ extern "C" {
      *
      * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return bytes written
+     * @return 1 on success, 0 on error
      * @since 4.2.6
      **/
     static inline size_t
