@@ -358,7 +358,8 @@ extern "C" {
      * read a little endian 32bit unsigned int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint32(FILE *fp, uint32_t *p);
@@ -367,7 +368,8 @@ extern "C" {
      * read a little endian 32bit int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     static inline size_t
@@ -379,9 +381,9 @@ extern "C" {
     /**
      * write a little endian 32bit int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint32(FILE *fp, uint32_t i);
@@ -389,9 +391,9 @@ extern "C" {
     /**
      * write a little endian 32bit unsigned int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     static inline size_t
@@ -405,7 +407,8 @@ extern "C" {
      * read a little endian 64bit unsigned int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint64(FILE *fp, uint64_t *p);
@@ -414,7 +417,8 @@ extern "C" {
      * read a little endian 64bit int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     static inline size_t
@@ -426,9 +430,9 @@ extern "C" {
     /**
      * write a little endian 64bit int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint64(FILE *fp, uint64_t i);
@@ -436,9 +440,9 @@ extern "C" {
     /**
      * write a little endian 64bit unsigned int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     static inline size_t
@@ -452,7 +456,8 @@ extern "C" {
      * read a little endian 16bit unsigned int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     size_t fcitx_utils_read_uint16(FILE *fp, uint16_t *p);
@@ -461,7 +466,8 @@ extern "C" {
      * read a little endian 16bit int from a file
      *
      * @param fp FILE* to read from
-     * @return result in host endian
+     * @param p return the integer read
+     * @return bytes actually read from file
      * @since 4.2.6
      **/
     static inline size_t
@@ -473,9 +479,9 @@ extern "C" {
     /**
      * write a little endian 16bit int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     size_t fcitx_utils_write_uint16(FILE *fp, uint16_t i);
@@ -483,9 +489,9 @@ extern "C" {
     /**
      * write a little endian 16bit unsigned int to a file
      *
-     * @param fp FILE* to read from
+     * @param fp FILE* to write to
      * @param i int to write in host endian
-     * @return void
+     * @return bytes written
      * @since 4.2.6
      **/
     static inline size_t
