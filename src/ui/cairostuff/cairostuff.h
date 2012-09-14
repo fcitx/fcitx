@@ -24,6 +24,30 @@
 #include "fcitx-config/fcitx-config.h"
 #include <cairo.h>
 
+#define _CAIRO_DESTROY(X) \
+  do { \
+      cairo_surface_t *_surface = cairo_get_target(X); \
+      cairo_destroy(X); \
+      cairo_surface_flush(_surface); \
+  } while(0)
+
+#if 0
+#define _CAIRO_SETSIZE(X, Y, Z) \
+  do { \
+      cairo_surface_t* _surface = cairo_xlib_surface_create( \
+          cairo_xlib_surface_get_display(X), \
+          cairo_xlib_surface_get_drawable(X), \
+          cairo_xlib_surface_get_visual(X), \
+          (Y), \
+          (Z) \
+          ); \
+      cairo_surface_destroy(X); \
+      X = _surface; \
+  } while(0)
+#else
+    #define _CAIRO_SETSIZE(X, Y, Z) cairo_xlib_surface_set_size(X, Y, Z);
+#endif
+
 int StringWidth(const char* str, const char* font, int fontSize, int dpi);
 int FontHeight(const char *font, int fontSize, int dpi);
 void OutputString(cairo_t* c, const char* str, const char* font, int fontSize, int dpi, int x, int y, FcitxConfigColor* color);

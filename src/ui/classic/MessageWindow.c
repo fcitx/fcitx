@@ -174,7 +174,7 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
 
     messageWindow->width += MESSAGE_WINDOW_MARGIN * 2;
     XResizeWindow(dpy, messageWindow->window, messageWindow->width, messageWindow->height);
-    cairo_xlib_surface_set_size(messageWindow->surface, messageWindow->width, messageWindow->height);
+    _CAIRO_SETSIZE(messageWindow->surface, messageWindow->width, messageWindow->height);
 
     cairo_t *c = cairo_create(messageWindow->surface);
     cairo_set_source_rgb(c, messageWindow->color.r, messageWindow->color.g, messageWindow->color.b);
@@ -195,7 +195,7 @@ void DrawMessageWindow(MessageWindow* messageWindow, char *title, char **msg, in
     }
 
     ResetFontContext();
-    cairo_destroy(c);
+    _CAIRO_DESTROY(c);
 
     ActivateWindow(dpy, classicui->iScreen, messageWindow->window);
 }
