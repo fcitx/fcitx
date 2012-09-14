@@ -43,6 +43,7 @@ typedef struct _FcitxIPCIC {
     char* surroundingText;
     unsigned int anchor;
     unsigned int cursor;
+    boolean lastPreeditIsEmpty;
 } FcitxIPCIC;
 
 typedef struct _FcitxIPCFrontend {
@@ -349,6 +350,7 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
 
     ipcic->id = ipc->maxid;
     ipc->maxid ++;
+    ipcic->lastPreeditIsEmpty = false;
     sprintf(ipcic->path, FCITX_IC_DBUS_PATH, ipcic->id);
 
     uint32_t arg1, arg2, arg3, arg4;
@@ -930,6 +932,23 @@ static void IPCICSetCursorRect(FcitxIPCFrontend* ipc, FcitxInputContext* ic, int
 
 void IPCUpdatePreedit(void* arg, FcitxInputContext* ic)
 {
+    FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
+    FcitxInputState* input = FcitxInstanceGetInputState(ipc->owner);
+    FcitxMessages* clientPreedit = FcitxInputStateGetClientPreedit(input);
+    int i = 0;
+    for (i = 0; i < FcitxMessagesGetMessageCount(clientPreedit) ; i ++) {
+        char* str = FcitxMessagesGetMessageString(clientPreedit, i);
+        if (!fcitx_utf8_check_string(str))
+            return;
+    }
+
+    /* a small optimization, don't need to update empty preedit */
+    FcitxIPCIC* ipcic = GetIPCIC(ic);
+    if (ipcic->lastPreeditIsEmpty && FcitxMessagesGetMessageCount(clientPreedit) == 0)
+        return;
+
+    ipcic->lastPreeditIsEmpty = (FcitxMessagesGetMessageCount(clientPreedit) == 0);
+
     if (ic->contextCaps & CAPACITY_FORMATTED_PREEDIT) {
         FcitxIPCFrontend* ipc = (FcitxIPCFrontend*) arg;
         dbus_uint32_t serial = 0; // unique number to associate replies with requests
