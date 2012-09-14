@@ -421,6 +421,7 @@ void DrawVKWindow(VKWindow* vkWindow)
     }
 
     cairo_destroy(cr);
+    cairo_surface_flush(vkWindow->surface);
 }
 
 /*

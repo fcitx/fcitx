@@ -58,9 +58,6 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     NULL
 };
 
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
-
 const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
 
 typedef struct {

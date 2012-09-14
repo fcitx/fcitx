@@ -171,9 +171,9 @@ void DrawInputWindow(InputWindow* inputWindow)
 
     /* Resize Window will produce Expose Event, so there is no need to draw right now */
     if (lastW != inputWindow->iInputWindowWidth || lastH != inputWindow->iInputWindowHeight) {
-        cairo_xlib_surface_set_size(inputWindow->cs_x_input_bar,
-                                    inputWindow->iInputWindowWidth,
-                                    inputWindow->iInputWindowHeight);
+        _CAIRO_SETSIZE(inputWindow->cs_x_input_bar,
+                       inputWindow->iInputWindowWidth,
+                       inputWindow->iInputWindowHeight);
         MoveInputWindowInternal(inputWindow);
         XResizeWindow(
             inputWindow->dpy,
@@ -189,6 +189,7 @@ void DrawInputWindow(InputWindow* inputWindow)
     cairo_clip(c);
     cairo_paint(c);
     cairo_destroy(c);
+    cairo_surface_flush(inputWindow->cs_x_input_bar);
 
     XFlush(inputWindow->dpy);
 }

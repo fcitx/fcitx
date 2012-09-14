@@ -102,8 +102,8 @@ void InitMainWindow(MainWindow* mainWindow)
                                     MAIN_BAR_MAX_WIDTH,
                                     MAIN_BAR_MAX_HEIGHT);
     mainWindow->cs_main_bar = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                              MAIN_BAR_MAX_WIDTH,
-                              MAIN_BAR_MAX_HEIGHT);
+                                                         MAIN_BAR_MAX_WIDTH,
+                                                         MAIN_BAR_MAX_HEIGHT);
 
     XChangeWindowAttributes(dpy, mainWindow->window, attribmask, &attrib);
     XSelectInput(dpy, mainWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask | LeaveWindowMask);
@@ -458,9 +458,7 @@ void DrawMainWindow(MainWindow* mainWindow)
         }
 
         cairo_destroy(c);
-        cairo_xlib_surface_set_size(mainWindow->cs_x_main_bar,
-                                    width,
-                                    height);
+        _CAIRO_SETSIZE(mainWindow->cs_x_main_bar, width, height);
 
         c = cairo_create(mainWindow->cs_x_main_bar);
         cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
@@ -469,6 +467,7 @@ void DrawMainWindow(MainWindow* mainWindow)
         cairo_clip(c);
         cairo_paint(c);
         cairo_destroy(c);
+        cairo_surface_flush(mainWindow->cs_x_main_bar);
 
         XMapRaised(mainWindow->dpy, mainWindow->window);
     } else

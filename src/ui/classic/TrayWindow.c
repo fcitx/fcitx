@@ -206,6 +206,7 @@ void DrawTrayWindow(TrayWindow* trayWindow)
     cairo_clip(c);
     cairo_paint(c);
     cairo_destroy(c);
+    cairo_surface_flush(trayWindow->cs_x);
 }
 
 boolean TrayEventHandler(void *arg, XEvent* event)

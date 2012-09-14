@@ -341,8 +341,7 @@ void DrawXlibMenu(XlibMenu * menu)
         }
     }
     XResizeWindow(dpy, menu->menuWindow, menu->width, menu->height);
-    cairo_xlib_surface_set_size(menu->menu_x_cs,
-                                menu->width, menu->height);
+    _CAIRO_SETSIZE(menu->menu_x_cs, menu->width, menu->height);
     cairo_t* c = cairo_create(menu->menu_x_cs);
     cairo_set_operator(c, CAIRO_OPERATOR_SOURCE);
     cairo_set_source_surface(c, menu->menu_cs, 0, 0);
@@ -350,6 +349,7 @@ void DrawXlibMenu(XlibMenu * menu)
     cairo_clip(c);
     cairo_paint(c);
     cairo_destroy(c);
+    cairo_surface_flush(menu->menu_x_cs);
     XFreeGC(dpy, gc);
 }
 
