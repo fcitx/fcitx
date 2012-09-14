@@ -187,7 +187,7 @@ void DrawTrayWindow(TrayWindow* trayWindow)
         }
     } while(0);
 
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
 
     XVisualInfo* vi = trayWindow->visual.visual ? &trayWindow->visual : NULL;
     if (!(vi && vi->visual)) {
@@ -205,7 +205,8 @@ void DrawTrayWindow(TrayWindow* trayWindow)
     cairo_rectangle(c, 0, 0, trayWindow->size, trayWindow->size);
     cairo_clip(c);
     cairo_paint(c);
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
+    cairo_surface_flush(trayWindow->cs_x);
 }
 
 boolean TrayEventHandler(void *arg, XEvent* event)

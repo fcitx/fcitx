@@ -24,6 +24,7 @@
 #include "fcitx-config/fcitx-config.h"
 #include <cairo.h>
 
+#if 0
 #define _CAIRO_DESTROY(X) \
   do { \
       cairo_surface_t *_surface = cairo_get_target(X); \
@@ -31,7 +32,6 @@
       cairo_surface_flush(_surface); \
   } while(0)
 
-#if 0
 #define _CAIRO_SETSIZE(X, Y, Z) \
   do { \
       cairo_surface_t* _surface = cairo_xlib_surface_create( \

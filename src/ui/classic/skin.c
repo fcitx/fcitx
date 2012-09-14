@@ -183,7 +183,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
 
     OutputString(c, iconText, classicui->font, min, false, (w - textw) * 0.5, 0, &color);
 
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
     image->name = strdup(name);
     image->image = newsurface;
@@ -537,19 +537,19 @@ void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
     FcitxConfigColor cursorColor = sc->skinInputBar.cursorColor;
 
     if (inputWindow->c_back) {
-        _CAIRO_DESTROY(inputWindow->c_back);
+        cairo_destroy(inputWindow->c_back);
         inputWindow->c_back = NULL;
     }
 
     for (i = 0; i < 7 ; i ++) {
         if (inputWindow->c_font[i]) {
-            _CAIRO_DESTROY(inputWindow->c_font[i]);
+            cairo_destroy(inputWindow->c_font[i]);
             inputWindow->c_font[i] = NULL;
         }
     }
     inputWindow->c_font[7] = NULL;
     if (inputWindow->c_cursor) {
-        _CAIRO_DESTROY(inputWindow->c_cursor);
+        cairo_destroy(inputWindow->c_cursor);
         inputWindow->c_cursor = NULL;
     }
 
@@ -741,7 +741,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
                                 sc->skinInputBar.fillV,
                                 sc->skinInputBar.fillH
                                );
-        _CAIRO_DESTROY(c);
+        cairo_destroy(c);
     }
 
     c = cairo_create(inputWindow->cs_input_bar);
@@ -809,7 +809,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
 
     ResetFontContext();
 
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
     FcitxMessagesSetMessageChanged(msgup, false);
     FcitxMessagesSetMessageChanged(msgdown, false);
 }

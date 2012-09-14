@@ -619,7 +619,7 @@ void ResizeSurface(cairo_surface_t** surface, int w, int h)
     cairo_rectangle(c, 0, 0, ow, oh);
     cairo_clip(c);
     cairo_paint(c);
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
 
     cairo_surface_destroy(*surface);
 
