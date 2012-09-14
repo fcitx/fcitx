@@ -67,7 +67,7 @@ extern "C" {
 
 #define FCITX_DEFINE_PLUGIN(name, category, type) \
 FCITX_EXPORT_API int name##_ABI_VERSION = FCITX_ABI_VERSION; \
-FCITX_EXPORT_API type name##_##category 
+FCITX_EXPORT_API type name##_##category
 
 #if defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 301)
 # define FCITX_DEPRECATED  __attribute__((deprecated))

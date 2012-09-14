@@ -122,6 +122,10 @@ extern "C" {
  * limit) as well as directly call the function without a FunctionArg wrapper.
  **/
 
+#ifdef __cplusplus
+}
+#endif
+
 /** add a function to current addon */
     static inline void
     AddFunction(struct _FcitxAddon *addon, FcitxModuleFunction func)
@@ -129,9 +133,13 @@ extern "C" {
         void *temp = (void*)func;
         utarray_push_back(&addon->functionList, &temp);
     }
-
 #ifdef __cplusplus
-}
+    FCITX_DEPRECATED static inline void
+    AddFunction(struct _FcitxAddon *addon, void *func)
+    {
+        void *temp = (void*)func;
+        utarray_push_back(&addon->functionList, &temp);
+    }
 #endif
 
 #endif
