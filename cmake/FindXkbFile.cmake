@@ -20,12 +20,12 @@ pkg_check_modules(PC_LIBXKBFILE xkbfile)
 
 find_path(XKBFILE_MAIN_INCLUDE_DIR
           NAMES XKBfile.h
-          HINTS ${PC_LIBXKBFILE_INCLUDEDIR}
+          HINTS ${PC_LIBXKBFILE_INCLUDE_DIRS}
           PATH_SUFFIXES "X11/extensions")
 
 find_library(XKBFILE_LIBRARIES
              NAMES xkbfile
-             HINTS ${PC_LIBXKBFILE_LIBDIR})
+             HINTS ${PC_LIBXKBFILE_LIBRARY_DIRS})
 
 set(XKBFILE_INCLUDE_DIR "${XKBFILE_MAIN_INCLUDE_DIR}")
 

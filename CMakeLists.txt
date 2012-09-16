@@ -18,6 +18,8 @@ option(ENABLE_GTK2_IM_MODULE "Enable GTK2 IM Module" ON)
 option(ENABLE_GTK3_IM_MODULE "Enable GTK3 IM Module" OFF)
 option(ENABLE_QT_IM_MODULE "Enable Qt IM Module" OFF)
 option(ENABLE_OPENCC "Enable OpenCC for Chinese Transform" ON)
+option(FORCE_OPENCC
+  "Enable opencc even if the library is not found at compile time" Off)
 option(ENABLE_LUA "Enable Lua support" OFF)
 option(ENABLE_STATIC "Build Static Library" OFF)
 option(ENABLE_TEST "Test build" OFF)
@@ -150,12 +152,11 @@ if (ENABLE_DBUS)
     endif (DBUS_FOUND)
 endif (ENABLE_DBUS)
 
-set(_ENABLE_OPENCC 0)
 if (ENABLE_OPENCC)
-    PKG_CHECK_MODULES(OPENCC "opencc>=0.1.1" )
-    if (OPENCC_FOUND)
-        set(_ENABLE_OPENCC 1)
-    endif (OPENCC_FOUND)
+    find_package(OpenCC)
+    if (NOT (OPENCC_FOUND OR FORCE_PRESAGE))
+        set(ENABLE_OPENCC Off)
+    endif (NOT (OPENCC_FOUND OR FORCE_PRESAGE))
 endif (ENABLE_OPENCC)
 
 set(HAVE_XINERAMA 0)
@@ -204,6 +205,11 @@ set(FCITX4_CONFIGDESC_INSTALL_DIR ${configdescdir})
 set(FCITX4_ADDON_CONFIG_INSTALL_DIR ${addonconfigdir})
 set(FCITX4_INPUTMETHOD_CONFIG_INSTALL_DIR ${imconfigdir})
 set(FCITX4_PACKAGE_NAME ${package})
+
+if (NOT DEFINED OPENCC_LIBRARY_FILENAME)
+  set(OPENCC_LIBRARY_FILENAME
+    "${CMAKE_SHARED_LIBRARY_PREFIX}opencc${CMAKE_SHARED_LIBRARY_SUFFIX}")
+endif()
 
 if(NOT DEFINED ENCHANT_LIBRARY_FILENAME)
   set(ENCHANT_LIBRARY_FILENAME

@@ -21,10 +21,6 @@
 #include "fcitx/fcitx.h"
 #include "config.h"
 
-#ifdef _ENABLE_OPENCC
-#include <opencc.h>
-#endif
-
 #include <libintl.h>
 #include <errno.h>
 
@@ -39,35 +35,12 @@
 #include "fcitx/context.h"
 #include "fcitx-utils/utils.h"
 #include "chttrans.h"
+#include "chttrans_p.h"
+#ifdef ENABLE_OPENCC
+#include "chttrans-opencc.h"
+#endif
 
 #define TABLE_GBKS2T "gbks2t.tab"
-
-typedef struct _simple2trad_t {
-    int wc;
-    char str[UTF8_MAX_LENGTH + 1];
-    size_t len;
-    UT_hash_handle hh;
-} simple2trad_t;
-
-typedef enum _ChttransEngine {
-    ENGINE_NATIVE,
-    ENGINE_OPENCC
-} ChttransEngine;
-
-
-typedef struct _FcitxChttrans {
-    FcitxGenericConfig gconfig;
-    boolean enabled;
-    ChttransEngine engine;
-    FcitxHotkey hkToggle[2];
-    simple2trad_t* s2t_table;
-    simple2trad_t* t2s_table;
-#ifdef _ENABLE_OPENCC
-    opencc_t ods2t;
-    opencc_t odt2s;
-#endif
-    FcitxInstance* owner;
-} FcitxChttrans;
 
 static void* ChttransCreate(FcitxInstance* instance);
 static char* ChttransOutputFilter(void* arg, const char* strin);
@@ -218,20 +191,18 @@ char *ConvertGBKSimple2Tradition(FcitxChttrans* transState, const char *strHZ)
 
     switch (transState->engine) {
     case ENGINE_OPENCC:
-#ifdef _ENABLE_OPENCC
+#ifdef ENABLE_OPENCC
         {
             if (transState->ods2t == NULL) {
-                transState->ods2t = opencc_open(OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
+                OpenCCInit(transState);
                 if (transState->ods2t == NULL) {
-                    opencc_perror(_("OpenCC initialization error"));
                     return NULL;
                 }
             }
 
-            char * res = opencc_convert_utf8(transState->ods2t, strHZ, (size_t) - 1);
+            char * res = OpenCCConvert(transState->ods2t, strHZ, (size_t) - 1);
 
-            if (res == (char *) - 1) {
-                opencc_perror(_("OpenCC error"));
+            if (!res || res == (char *) - 1) {
                 return NULL;
             }
 
@@ -320,20 +291,18 @@ char *ConvertGBKTradition2Simple(FcitxChttrans* transState, const char *strHZ)
 
     switch (transState->engine) {
     case ENGINE_OPENCC:
-#ifdef _ENABLE_OPENCC
+#ifdef ENABLE_OPENCC
         {
             if (transState->odt2s == NULL) {
-                transState->odt2s = opencc_open(OPENCC_DEFAULT_CONFIG_TRAD_TO_SIMP);
+                OpenCCInit(transState);
                 if (transState->odt2s == NULL) {
-                    opencc_perror(_("OpenCC initialization error"));
                     return NULL;
                 }
             }
 
-            char * res = opencc_convert_utf8(transState->odt2s, strHZ, (size_t) - 1);
+            char * res = OpenCCConvert(transState->odt2s, strHZ, (size_t) - 1);
 
             if (res == (char *) - 1) {
-                opencc_perror(_("OpenCC error"));
                 return NULL;
             }
 
