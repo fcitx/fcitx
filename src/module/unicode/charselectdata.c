@@ -728,7 +728,7 @@ UT_array* CharSelectDataFind(CharSelectData* charselect, const char* needle)
     char* simplified = Simplified(needle);
     UT_array* searchStrings = SplitString(simplified);
 
-    if(strlen(simplified) == 1) {
+    if (strlen(simplified) == 1) {
         // search for hex representation of the character
         utarray_clear(searchStrings);
         char* format = FormatCode(simplified[0], 4, "U+");

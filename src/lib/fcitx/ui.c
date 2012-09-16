@@ -742,8 +742,9 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
 
         FcitxMessagesAddMessageAtLast(msgDown, type, "%s", candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
-            FcitxMessagesAddMessageAtLast(msgDown, candWord->extraType, "%s", candWord->strExtra);
+        if (candWord->strExtra && strlen(candWord->strExtra))
+            FcitxMessagesAddMessageAtLast(msgDown, candWord->extraType,
+                                          "%s", candWord->strExtra);
 
         FcitxMessagesAddMessageAtLast(msgDown, MSG_OTHER, " ");
     }
@@ -821,10 +822,10 @@ char* FcitxUICandidateWordToCString(FcitxInstance* instance)
         len += strlen(strTemp);
         len += strlen(candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+        if (candWord->strExtra && strlen(candWord->strExtra))
             len += strlen(candWord->strExtra);
 
-        len ++;
+        len++;
     }
 
     char *result = fcitx_utils_malloc0(sizeof(char) * (len + 1));
@@ -841,7 +842,7 @@ char* FcitxUICandidateWordToCString(FcitxInstance* instance)
         strcat(result, strTemp);
         strcat(result, candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+        if (candWord->strExtra && strlen(candWord->strExtra))
             strcat(result, candWord->strExtra);
 
         strcat(result, " ");

@@ -309,8 +309,10 @@ FcitxStringHashSet* FcitxXDGGetFiles(char *path, char *prefix, char *suffix)
         size_t suffixlen = 0;
         size_t prefixlen = 0;
 
-        if (suffix) suffixlen = strlen(suffix);
-        if (prefix) prefixlen = strlen(prefix);
+        if (suffix)
+            suffixlen = strlen(suffix);
+        if (prefix)
+            prefixlen = strlen(prefix);
 
         /* collect all *.conf files */
         while ((drt = readdir(dir)) != NULL) {

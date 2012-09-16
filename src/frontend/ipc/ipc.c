@@ -400,10 +400,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
         else {
-            if (strlen(appname) == 0)
+            if (strlen(appname) == 0) {
                 ipcic->appname = NULL;
-            else
+            } else {
                 ipcic->appname = strdup(appname);
+            }
         }
 
         if (config->shareState == ShareState_PerProgram)
@@ -429,10 +430,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
         else {
-            if (strlen(appname) == 0)
+            if (strlen(appname) == 0) {
                 ipcic->appname = NULL;
-            else
+            } else {
                 ipcic->appname = strdup(appname);
+            }
         }
         ipcic->pid = icpid;
 

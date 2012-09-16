@@ -136,7 +136,8 @@ void SaveTableIM(void *arg)
 
 inline char* TableMetaDataGetName(TableMetaData* table)
 {
-    return (strlen(table->uniqueName) == 0) ? table->strIconName : table->uniqueName;
+    return (strlen(table->uniqueName) == 0) ?
+        table->strIconName : table->uniqueName;
 }
 
 inline void TableMetaDataInsert(TableMetaData** tableSet, TableMetaData* table)
@@ -190,8 +191,9 @@ inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
 
 inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
 {
-    FcitxConfigOption* option = FcitxConfigFileGetOption(cfile, "CodeTable", "UniqueName");
-    if (option && strlen(option->rawValue) != 0)
+    FcitxConfigOption* option = FcitxConfigFileGetOption(cfile, "CodeTable",
+                                                         "UniqueName");
+    if (option && strlen(option->rawValue))
         return option->rawValue;
 
     option = FcitxConfigFileGetOption(cfile, "CodeTable", "IconName");
@@ -1132,8 +1134,10 @@ void TableAdjustOrderByIndex(TableMetaData* table, TABLECANDWORD* tableCandWord)
 
     //需要的话，更新索引
     if (tableCandWord->candWord.record->strCode[1] == '\0') {
-        for (iTemp = 0; iTemp < strlen(table->tableDict->strInputCode); iTemp++) {
-            if (tbl->recordIndex[iTemp].cCode == tableCandWord->candWord.record->strCode[0]) {
+        size_t tmp_len = strlen(table->tableDict->strInputCode);
+        for (iTemp = 0; iTemp < tmp_len; iTemp++) {
+            if (tbl->recordIndex[iTemp].cCode ==
+                tableCandWord->candWord.record->strCode[0]) {
                 tbl->recordIndex[iTemp].record = tableCandWord->candWord.record;
                 break;
             }

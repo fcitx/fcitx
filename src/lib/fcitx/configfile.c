@@ -96,14 +96,14 @@ void Filter2nd3rdKey(FcitxGenericConfig* config, FcitxConfigGroup *group, FcitxC
             fc->i3rdSelectKey[0].state = FcitxKeyState_Ctrl ;        //左SHIFT的扫描码
             fc->i3rdSelectKey[1].state = FcitxKeyState_None;
         } else {
-            if (strlen(pstr) >= 1 && pstr[0] && pstr[0] != '\0') {
+            if (pstr[0]) {
                 fc->i2ndSelectKey[0].sym = pstr[0] & 0xFF;
                 fc->i2ndSelectKey[0].state = FcitxKeyState_None;
             } else {
                 fc->i2ndSelectKey[0].sym = 0;
                 fc->i2ndSelectKey[0].state = FcitxKeyState_None;
             }
-            if (strlen(pstr) >= 2 && pstr[1] && pstr[1] != '\0') {
+            if (pstr[0] && pstr[1]) {
                 fc->i3rdSelectKey[0].sym = pstr[1] & 0xFF;
                 fc->i3rdSelectKey[0].state = FcitxKeyState_None;
             } else {

@@ -170,20 +170,22 @@ char* ChttransOutputFilter(void* arg, const char *strin)
     FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
 
     /* don't trans for "zh" */
-    if (!im || strncmp(im->langCode, "zh", 2) != 0 || strlen(im->langCode) == 2)
+    if (!im || strcmp(im->langCode, "zh") != 0)
         return NULL;
 
     if (transState->enabled) {
-        if (im && (strcmp(im->langCode, "zh_HK") == 0 || strcmp(im->langCode, "zh_TW") == 0))
+        if (strcmp(im->langCode, "zh_HK") == 0 ||
+            strcmp(im->langCode, "zh_TW") == 0) {
             return NULL;
-        else
+        } else {
             return ConvertGBKSimple2Tradition(transState, strin);
-    }
-    else {
-        if (im && strcmp(im->langCode, "zh_CN") == 0)
+        }
+    } else {
+        if (strcmp(im->langCode, "zh_CN") == 0) {
             return NULL;
-        else
+        } else {
             return ConvertGBKTradition2Simple(transState, strin);
+        }
     }
     return NULL;
 }
@@ -474,7 +476,7 @@ void ChttransLanguageChanged(void* arg, const void* value)
     FcitxChttrans* transState = (FcitxChttrans*) arg;
     const char* lang = (const char*) value;
     boolean visible = false;
-    if (lang && strncmp(lang, "zh", 2) == 0 && strlen(lang) > 2)
+    if (lang && strncmp(lang, "zh", 2) == 0 && lang[2])
         visible = true;
 
     FcitxUISetStatusVisable(transState->owner, "chttrans", visible);

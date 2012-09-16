@@ -82,12 +82,13 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         /*
          * 建立索引，加26是为了为拼音编码预留空间
          */
-        tableDict->recordIndex = (RECORD_INDEX*)fcitx_memory_pool_alloc(tableDict->pool, (strlen(tableDict->strInputCode) + 26) * sizeof(RECORD_INDEX));
-        for (iTemp = 0; iTemp < strlen(tableDict->strInputCode) + 26; iTemp++) {
+        size_t tmp_len = strlen(tableDict->strInputCode) + 26;
+        tableDict->recordIndex = (RECORD_INDEX*)fcitx_memory_pool_alloc(tableDict->pool, tmp_len * sizeof(RECORD_INDEX));
+        for (iTemp = 0; iTemp < tmp_len; iTemp++) {
             tableDict->recordIndex[iTemp].cCode = 0;
             tableDict->recordIndex[iTemp].record = NULL;
         }
-        /* ********************************************************************** */
+        /********************************************************************/
 
         size = fread(&(tableDict->iCodeLength), sizeof(uint8_t), 1, fpDict);
         CHECK_LOAD_TABLE_ERROR(1);
@@ -724,7 +725,8 @@ int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, co
 {
     int             i;
 
-    for (i = 0; i < strlen(strUser); i++) {
+    size_t tmp_len = strlen(strUser);
+    for (i = 0; i < tmp_len; i++) {
         if (!strDict[i])
             return strUser[i];
         if (strUser[i] != tableMetaData->cMatchingKey || !tableMetaData->bUseMatchingKey) {

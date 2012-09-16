@@ -9,7 +9,7 @@
 #include "dbusstuff.h"
 #include "dbussocket.h"
 #include "fcitx-utils/utils.h"
-    
+
 static char* servicename = NULL;
 enum {
     FCITX_DIE = 0x2,
@@ -22,7 +22,7 @@ int status = WATCHER_WAITING;
 DBusHandlerResult WatcherDBusFilter(DBusConnection* connection, DBusMessage* msg, void* user_data)
 {
     if (dbus_message_is_signal(msg, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
-        const char* service, *oldowner, *newowner;
+        const char *service, *oldowner, *newowner;
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error,
@@ -31,8 +31,7 @@ DBusHandlerResult WatcherDBusFilter(DBusConnection* connection, DBusMessage* msg
                                   DBUS_TYPE_STRING, &newowner ,
                                   DBUS_TYPE_INVALID)) {
             /* old die */
-            if (strcmp(service, servicename) == 0
-                    && strlen(oldowner) > 0)
+            if (strcmp(service, servicename) == 0 && *oldowner)
                 status |= FCITX_DIE;
         }
         dbus_error_free(&error);
