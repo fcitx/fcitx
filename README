@@ -1,2 +1,9 @@
-Please read http://fcitx.github.com/handbook/
-Developer may want to read doc/Develop_Readme to get an overview of source code.
+Please read http://fcitx-im.org for further help.
+
+All source in fcitx are released under GPLv2+, but for all addon running inside
+Fcitx, you don't need to obey GPLv2+. GPLv2+ will only protect the modification
+and redistribution on code inside fcitx, which means you can use any license for
+addon running in Fcitx.
+
+And fcitx also provides some way to do inter-process-communication (IPC), using
+these interfaces also don't bring any limitation to your code.
