@@ -8,7 +8,7 @@
 #cmakedefine _DEBUG
 #cmakedefine _ENABLE_DBUS
 #cmakedefine _ENABLE_PANGO
-#cmakedefine _ENABLE_OPENCC
+#cmakedefine ENABLE_OPENCC
 #cmakedefine LIBKVM_FOUND
 #cmakedefine HAVE_XINERAMA
 #cmakedefine HAVE_XFIXES
@@ -30,6 +30,7 @@
 #cmakedefine ENABLE_PRESAGE
 #define PRESAGE_LIBRARY_FILENAME "@PRESAGE_LIBRARY_FILENAME@"
 #define ENCHANT_LIBRARY_FILENAME "@ENCHANT_LIBRARY_FILENAME@"
+#define OPENCC_LIBRARY_FILENAME "@OPENCC_LIBRARY_FILENAME@"
 
 #define PACKAGE "@package@"
 #ifdef FCITX_USE_INTERNAL_PATH
