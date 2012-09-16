@@ -1141,11 +1141,9 @@ void FcitxConfigSyncValue(FcitxGenericConfig* config, FcitxConfigGroup* group, F
 
     if (r == SyncInvalid) {
         if (codesc->rawDefaultValue) {
-            FcitxLog(WARNING, _("Option %s is Invalid, Use Default Value %s"), option->optionName, codesc->rawDefaultValue);
-
-            if (option->rawValue)
-                free(option->rawValue);
-
+            FcitxLog(WARNING, _("Option %s is Invalid, Use Default Value %s"),
+                     option->optionName, codesc->rawDefaultValue);
+            fcitx_utils_free(option->rawValue);
             option->rawValue = strdup(codesc->rawDefaultValue);
 
             if (sync == Raw2Value)
