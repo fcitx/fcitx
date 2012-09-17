@@ -1220,9 +1220,11 @@ boolean FcitxConfigSaveConfigFileFp(FILE* fp, FcitxGenericConfig *config, FcitxC
 
             if (!option) {
                 if (optiondesc->rawDefaultValue)
-                    fprintf(fp, "%s=%s\n", optiondesc->optionName, optiondesc->rawDefaultValue);
+                    fprintf(fp, "%s=%s\n", optiondesc->optionName,
+                            optiondesc->rawDefaultValue);
                 else
-                    FcitxLog(FATAL, _("no default option for %s/%s"), groupdesc->groupName, optiondesc->optionName);
+                    FcitxLog(FATAL, _("no default option for %s/%s"),
+                             groupdesc->groupName, optiondesc->optionName);
             } else {
                 FcitxConfigSyncValue(config, group, option, Value2Raw);
                 fprintf(fp, "%s=%s\n", option->optionName, option->rawValue);
@@ -1389,7 +1391,8 @@ void FcitxConfigResetConfigToDefaultValue(FcitxGenericConfig* config)
             }
 
             if (!codesc->rawDefaultValue) {
-                /* ignore it, actually if it doesn't have a default value, the reset is meaning less */
+                /* ignore it, actually the reset is meaningless
+                 * if it doesn't have a default value. */
                 continue;
             }
 
