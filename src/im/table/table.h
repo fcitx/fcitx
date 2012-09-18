@@ -84,7 +84,7 @@ typedef struct _FcitxTableState {
     FcitxCandidateWordCommitCallback pygetcandword;
 } FcitxTableState;
 
-void            LoadTableInfo(FcitxTableState* tbl);
+boolean         LoadTableInfo(FcitxTableState* tbl);
 boolean         TableInit(void* arg);
 void            SaveTableIM(void* arg);
 void            ReloadTableConfig(void* arg);

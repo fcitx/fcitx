@@ -685,6 +685,34 @@ fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
         out += size_list[i];
     }
     *out = '\0';
+
+FCITX_EXPORT_API
+int
+fcitx_utils_strcmp0(const char* a, const char* b)
+{
+    if (a == NULL && b == NULL)
+        return 0;
+    if (a == NULL && b)
+        return -1;
+    if (a && b == NULL)
+        return 1;
+    return strcmp(a, b);
+
+}
+
+FCITX_EXPORT_API
+int
+fcitx_utils_strcmp_empty(const char* a, const char* b)
+{
+    int isemptya = (a == NULL || (*a) == 0);
+    int isemptyb = (b == NULL || (*b) == 0);
+    if (isemptya && isemptyb)
+        return 0;
+    if (isemptya && !isemptyb)
+        return -1;
+    if (!isemptya && isemptyb)
+        return 1;
+    return strcmp(a, b);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;
