@@ -1629,11 +1629,9 @@ void KimpanelDestroy(void* arg)
     dbus_connection_unregister_object_path(kimpanel->conn, FCITX_KIMPANEL_PATH);
     dbus_connection_remove_filter(kimpanel->conn, KimpanelDBusFilter, kimpanel);
 
-    DBusError err;
-    dbus_error_init(&err);
     dbus_bus_remove_match(kimpanel->conn,
                           "type='signal',interface='org.kde.impanel'",
-                          &err);
+                          NULL);
     dbus_connection_flush(kimpanel->conn);
 
     dbus_bus_remove_match(kimpanel->conn,
@@ -1641,10 +1639,9 @@ void KimpanelDestroy(void* arg)
                         "interface='" DBUS_INTERFACE_DBUS "',"
                         "path='" DBUS_PATH_DBUS "',"
                         "member='NameOwnerChanged'",
-                        &err);
+                        NULL);
 
     dbus_connection_flush(kimpanel->conn);
-    dbus_error_free(&err);
 
     free(kimpanel->messageUp);
     free(kimpanel->messageDown);
