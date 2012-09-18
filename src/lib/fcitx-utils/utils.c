@@ -661,4 +661,35 @@ fcitx_utils_write_uint64(FILE *fp, uint64_t i)
     i = htole64(i);
     return fwrite(&i, sizeof(uint64_t), 1, fp);
 }
+
+FCITX_EXPORT_API
+int
+fcitx_utils_strcmp0(const char* a, const char* b)
+{
+    if (a == NULL && b == NULL)
+        return 0;
+    if (a == NULL && b)
+        return -1;
+    if (a && b == NULL)
+        return 1;
+    return strcmp(a, b);
+
+}
+
+FCITX_EXPORT_API
+int
+fcitx_utils_strcmp_empty(const char* a, const char* b)
+{
+    int isemptya = (a == NULL || (*a) == 0);
+    int isemptyb = (b == NULL || (*b) == 0);
+    if (isemptya && isemptyb)
+        return 0;
+    if (isemptya && !isemptyb)
+        return -1;
+    if (!isemptya && isemptyb)
+        return 1;
+    return strcmp(a, b);
+
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

@@ -166,9 +166,6 @@ inline void TableMetaDataRemove(TableMetaData** tableSet, TableMetaData* table)
 
 inline void TableMetaDataRegister(FcitxTableState* tbl, TableMetaData* table)
 {
-    if (table->status == TABLE_REGISTERED)
-        return;
-
     table->status = TABLE_REGISTERED;
     FcitxInstanceRegisterIM(
         tbl->owner,
@@ -203,9 +200,10 @@ inline char* TableConfigStealTableName(FcitxConfigFile* cfile)
 }
 
 /*
- * 读取码表输入法的名称和文件路径
+ * Read table configuration
+ * and returns whether table im is really changed.
  */
-void LoadTableInfo(FcitxTableState *tbl)
+boolean LoadTableInfo(FcitxTableState *tbl)
 {
     char **tablePath;
     size_t len;
@@ -230,6 +228,7 @@ void LoadTableInfo(FcitxTableState *tbl)
         }
     }
 
+    boolean imchanged = false;
     char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
     for (i = 0; i < len ; i ++)
         paths[i] = NULL;
@@ -268,8 +267,10 @@ void LoadTableInfo(FcitxTableState *tbl)
                         t->status = TABLE_NEW;
                 }
                 else {
-                    if (needunregister)
+                    if (needunregister) {
                         FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(t));
+                        imchanged = true;
+                    }
                     TableMetaDataFree(t);
                 }
             } while(0);
@@ -295,19 +296,24 @@ void LoadTableInfo(FcitxTableState *tbl)
              */
             if (titer->status == TABLE_PENDING) {
                 TableMetaData* cur = titer;
-                titer = titer->hh.next;
                 FcitxInstanceUnregisterIM(tbl->owner, TableMetaDataGetName(cur));
                 TableMetaDataRemove(&tbl->tables, cur);
+                imchanged = true;
             }
             else {
-                // FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
-                TableMetaDataRegister(tbl, titer);
+                if (titer->status != TABLE_REGISTERED) {
+                    // FcitxLog(INFO, "register %s", TableMetaDataGetName(titer));
+                    TableMetaDataRegister(tbl, titer);
+                    imchanged = true;
+                }
                 titer = titer->hh.next;
             }
         }
     }
 
     tbl->iTableCount = HASH_COUNT(tbl->tables);
+
+    return imchanged;
 }
 
 CONFIG_DESC_DEFINE(GetTableConfigDesc, "table.desc")
@@ -1449,8 +1455,8 @@ void ReloadTableConfig(void* arg)
 {
     FcitxTableState* tbl = arg;
     LoadTableConfig(&tbl->config);
-    LoadTableInfo(tbl);
-    FcitxInstanceUpdateIMList(tbl->owner);
+    if (LoadTableInfo(tbl))
+        FcitxInstanceUpdateIMList(tbl->owner);
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

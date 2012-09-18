@@ -76,17 +76,6 @@ static uint32_t checkCompactTable(FcitxKeyboardLayout* layout, const FcitxCompos
 static uint32_t checkAlgorithmically(FcitxKeyboardLayout* layout);
 static uint32_t processCompose(FcitxKeyboardLayout* layout, uint32_t keyval, uint32_t state);
 
-static int fcitx_keyboard_strcmp0(const char* a, const char* b)
-{
-    if (a == NULL && b == NULL)
-        return 0;
-    if (a == NULL && b)
-        return -1;
-    if (a && b == NULL)
-        return 1;
-    return strcmp(a, b);
-}
-
 static int
 compare_seq_index(const void *key, const void *value)
 {
@@ -245,7 +234,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
 
     int iPriority = 100;
     if (strcmp(keyboard->initialLayout, layoutString) == 0
-        && fcitx_keyboard_strcmp0(keyboard->initialVariant, variantString) == 0) {
+        && fcitx_utils_strcmp0(keyboard->initialVariant, variantString) == 0) {
         iPriority = PRIORITY_MAGIC_FIRST;
     }
     else {
