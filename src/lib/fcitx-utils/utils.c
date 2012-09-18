@@ -685,6 +685,7 @@ fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
         out += size_list[i];
     }
     *out = '\0';
+}
 
 FCITX_EXPORT_API
 int
