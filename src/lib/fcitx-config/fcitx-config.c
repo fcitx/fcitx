@@ -728,13 +728,15 @@ FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxCo
         if (option->rawValue)
             free(option->rawValue);
 
-        if (option->value.hotkey[1].desc)
-            asprintf(&option->rawValue, "%s %s", option->value.hotkey[0].desc, option->value.hotkey[1].desc);
-        else if (option->value.hotkey[0].desc) {
+        if (option->value.hotkey[1].desc) {
+            fcitx_alloc_cat_strings(option->rawValue,
+                                    option->value.hotkey[0].desc,
+                                    " ", option->value.hotkey[1].desc);
+        } else if (option->value.hotkey[0].desc) {
             option->rawValue = strdup(option->value.hotkey[0].desc);
-        } else
+        } else {
             option->rawValue = strdup("");
-
+        }
         return SyncSuccess;
 
     case ValueFree:

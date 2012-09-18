@@ -1378,10 +1378,13 @@ void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
         dbus_message_iter_next(&ssub);
 
         char* newresult;
-        if (result == NULL)
-            asprintf(&newresult, "%s:%s", uniqueName, enable ? "True" : "False");
-        else
-            asprintf(&newresult, "%s,%s:%s", result, uniqueName, enable ? "True" : "False");
+        if (!result) {
+            fcitx_alloc_cat_strings(newresult, uniqueName, ":",
+                                    enable ? "True" : "False");
+        } else {
+            fcitx_alloc_cat_strings(newresult, result, ":", uniqueName, ":",
+                                    enable ? "True" : "False");
+        }
         if (result)
             free(result);
         result = newresult;

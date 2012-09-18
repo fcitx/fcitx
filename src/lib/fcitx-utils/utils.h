@@ -501,6 +501,29 @@ extern "C" {
     {
         return fcitx_utils_write_uint16(fp, (uint16_t)i);
     }
+
+    size_t fcitx_utils_str_lens(size_t n, const char **str_list,
+                                size_t *size_list);
+    void fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
+                                 const size_t *size_list);
+#define fcitx_local_cat_strings(dest, strs...)                          \
+    const char *__str_list_##dest[] = {strs};                           \
+    size_t __size_list_##dest[sizeof(__str_list_##dest) / sizeof(char*)]; \
+    char dest[fcitx_utils_str_lens(sizeof(__str_list_##dest) / sizeof(char*), \
+                                   __str_list_##dest, __size_list_##dest)]; \
+    fcitx_utils_cat_strings(dest, sizeof(__str_list_##dest) / sizeof(char*), \
+                            __str_list_##dest, __size_list_##dest)
+#define fcitx_alloc_cat_strings(dest, strs...) do {                     \
+        const char *__str_list[] = {strs};                              \
+        size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \
+        size_t __size_list[__cat_str_n];                                \
+        size_t __total_size = fcitx_utils_str_lens(__cat_str_n,         \
+                                                   __str_list, __size_list); \
+        dest = malloc(__total_size);                                    \
+        fcitx_utils_cat_strings(dest, sizeof(__str_list) / sizeof(char*), \
+                                __str_list, __size_list);               \
+    } while (0)
+
 #ifdef __cplusplus
 }
 #endif

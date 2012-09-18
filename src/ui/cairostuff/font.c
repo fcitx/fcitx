@@ -58,9 +58,8 @@ void GetValidFont(const char* strUserLocale, char **font)
     locale[2] = '\0';
 reloadfont:
     if (strcmp(*font, "") == 0) {
-        FcChar8 strpat[9];
-        sprintf((char*)strpat, ":lang=%s", locale);
-        pat = FcNameParse(strpat);
+        fcitx_local_cat_strings(strpat, ":lang=", locale);
+        pat = FcNameParse((FcChar8*)strpat);
     } else {
         pat = FcNameParse((FcChar8*)(*font));
     }

@@ -192,16 +192,21 @@ FCITX_DEFINE_PLUGIN(fcitx_kimpanel_ui, ui, FcitxUI) = {
 };
 
 
-static void SetIMMenu(FcitxIM* pim, char** prop)
+static void SetIMMenu(FcitxIM *pim, char** prop)
 {
     const char *icon = "";
-    if (strncmp(pim->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) != 0)
+    if (strncmp(pim->uniqueName, "fcitx-keyboard-",
+                strlen("fcitx-keyboard-")) != 0)
         icon = pim->strIconName;
 
-    if (icon[0] == '\0' || icon[0] == '/')
-        asprintf(prop, "/Fcitx/im/%s:%s:%s:%s", pim->uniqueName, pim->strName, icon, pim->strName);
-    else
-        asprintf(prop, "/Fcitx/im/%s:%s:fcitx-%s:%s", pim->uniqueName, pim->strName, icon, pim->strName);
+    char *icon_prefix;
+    if (icon[0] == '\0' || icon[0] == '/') {
+        icon_prefix = ":";
+    } else {
+        icon_prefix = ":fcitx-";
+    }
+    fcitx_alloc_cat_strings(*prop, "/Fcitx/im/", pim->uniqueName, ":",
+                            pim->strName, icon_prefix, icon, ":", pim->strName);
 }
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
@@ -250,10 +255,15 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
         description = _("Input Method Disabled");
     }
     /* add fcitx- prefix, unless icon name is an absolute path */
-    if (icon[0] == '\0' || icon[0] == '/')
-        asprintf(prop, "/Fcitx/im:%s:%s:%s", imname, icon, description);
-    else
-        asprintf(prop, "/Fcitx/im:%s:fcitx-%s:%s", imname, icon, description);
+
+    char *icon_prefix;
+    if (icon[0] == '\0' || icon[0] == '/') {
+        icon_prefix = ":";
+    } else {
+        icon_prefix = ":fcitx-";
+    }
+    fcitx_alloc_cat_strings(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
+                            ":", description);
 }
 
 void* KimpanelCreate(FcitxInstance* instance)
@@ -355,8 +365,9 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     UT_array* uistats = FcitxInstanceGetUIStats(instance);
     UT_array* uicompstats = FcitxInstanceGetUIComplexStats(instance);
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
-    asprintf(&prop[0], "/Fcitx/logo:%s:%s:%s", _("Fcitx"), "fcitx", _("Fcitx"));
 
+    char *fcitx = _("Fcitx");
+    fcitx_alloc_cat_strings(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx);
     SetIMIcon(instance, &prop[1]);
 
     int count = 2;
@@ -482,15 +493,12 @@ void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
 
 char* Status2String(FcitxUIStatus* status)
 {
-    char *result = NULL;
-    asprintf(&result, "/Fcitx/%s:%s:fcitx-%s-%s:%s",
-             status->name,
-             status->shortDescription,
-             status->name,
-             ((status->getCurrentStatus(status->arg)) ? "active" : "inactive"),
-             status->longDescription
-            );
-
+    char *result;
+    fcitx_alloc_cat_strings(result, "/Fcitx/", status->name, ":",
+                            status->shortDescription, ":fcitx-", status->name,
+                            ((status->getCurrentStatus(status->arg)) ?
+                             "-active:" : "-inactive:"),
+                            status->longDescription);
     return result;
 }
 
@@ -498,28 +506,16 @@ char* Status2String(FcitxUIStatus* status)
 char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
     const char* iconName = status->getIconName(status->arg);
-
-    const char* templ;
-    switch(iconName[0]) {
-        case '/':
-            templ = "/Fcitx/%s:%s:%s:%s";
-            break;
-        case '\0':
-            templ = "/Fcitx/%s:%s:%s:%s";
-            break;
-        default:
-            templ = "/Fcitx/%s:%s:fcitx-%s:%s";
-            break;
+    char *icon_prefix;
+    if (iconName[0] == '\0' || iconName[0] == '/') {
+        icon_prefix = ":";
+    } else {
+        icon_prefix = ":fcitx-";
     }
-
-    char *result = NULL;
-    asprintf(&result, templ,
-             status->name,
-             status->shortDescription,
-             iconName,
-             status->longDescription
-            );
-
+    char *result;
+    fcitx_alloc_cat_strings(result, "/Fcitx/", status->name, ":",
+                            status->shortDescription, icon_prefix,
+                            iconName, ":", status->longDescription);
     return result;
 }
 
@@ -733,19 +729,22 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
         DBusError error;
         dbus_error_init(&error);
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &s0 , DBUS_TYPE_INVALID)) {
-            size_t len = strlen("/Fcitx/");
-            if (strlen(s0) > len) {
-                s0 += len;
+            if (strlen(s0) > strlen("/Fcitx/")) {
+                s0 += strlen("/Fcitx/");
                 if (strcmp("logo", s0) == 0) {
-                    size_t len = 3;
-                    char **prop = fcitx_utils_malloc0(len * sizeof(char*));
-                    asprintf(&prop[0], "/Fcitx/logo/toggle:%s::%s", _("Toggle Input Method"), _("Toggle Input Method"));
-                    asprintf(&prop[1], "/Fcitx/logo/configureim:%s:configure:%s", _("Configure Current Input Method"), _("Configure Current Input Method"));
-                    asprintf(&prop[2], "/Fcitx/logo/restart:%s:view-refresh:%s",_("Restart"), _("Restart"));
-                    KimExecMenu(kimpanel, prop, len );
-                    while (len --)
-                        free(prop[len]);
-                    free(prop);
+                    char *trans_str = _("Toggle Input Method");
+                    fcitx_local_cat_strings(prop0, "/Fcitx/logo/toggle:",
+                                            trans_str, "::", trans_str);
+                    trans_str = _("Configure Current Input Method");
+                    fcitx_local_cat_strings(prop1, "/Fcitx/logo/configureim:",
+                                            trans_str, ":configure:",
+                                            trans_str);
+                    trans_str = _("Restart");
+                    fcitx_local_cat_strings(prop2, "/Fcitx/logo/restart:",
+                                            trans_str, ":view-refresh:",
+                                            trans_str);
+                    char *prop[3] = {prop0, prop1, prop2};
+                    KimExecMenu(kimpanel, prop, 3);
                 } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
                     s0 += strlen("logo/");
                     if (strcmp(s0, "toggle") == 0)
@@ -803,17 +802,18 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                             menu->UpdateMenu(menu);
 
                             int i = 0, index = 0;
-                            char **prop = fcitx_utils_malloc0(utarray_len(&menu->shell) * sizeof(char*));
-                            for (i = 0; i < utarray_len(&menu->shell); i++) {
-                                if (GetMenuItem(menu, i)->type == MENUTYPE_SIMPLE) {
+                            int len = utarray_len(&menu->shell);
+                            char *prop[len];
+                            for (i = 0; i < len; i++) {
+                                if (GetMenuItem(menu, i)->type ==
+                                    MENUTYPE_SIMPLE) {
                                     asprintf(&prop[index], "/Fcitx/%s/%d:%s::%s", s0, index, GetMenuItem(menu, i)->tipstr, GetMenuItem(menu, i)->tipstr);
-                                    index ++;
+                                    index++;
                                 }
                             }
                             KimExecMenu(kimpanel, prop, index);
-                            while (index --)
+                            while (index--)
                                 free(prop[index]);
-                            free(prop);
                         }
                         else
                             FcitxUIUpdateStatus(instance, s0);

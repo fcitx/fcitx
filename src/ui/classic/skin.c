@@ -89,11 +89,8 @@ reload:
     //获取配置文件的绝对路径
     {
         if (!isreload) {
-            char* buf;
-            asprintf(&buf, "%s/fcitx_skin.conf", *skinType);
-
+            fcitx_local_cat_strings(buf, *skinType, "/fcitx_skin.conf");
             fp = FcitxXDGGetFileWithPrefix("skin", buf, "r", NULL);
-            free(buf);
         } else {
             char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "/skin/default/fcitx_skin.conf");
             fp = fopen(path, "r");
@@ -196,8 +193,7 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
 {
     cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
-    char* buf = NULL;
-    asprintf(&buf, "skin/%s", skinType);
+    fcitx_local_cat_strings(buf, "skin/", skinType);
     const char* fallbackChainNoFallback[] = { buf };
     const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
@@ -251,7 +247,6 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
                 break;
         }
     }
-    free(buf);
 
     if (png != NULL) {
         image = fcitx_utils_malloc0(sizeof(SkinImage));
@@ -885,7 +880,6 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
     struct dirent *drt;
     struct stat fileStat;
     size_t len;
-    char *pathBuf;
     char **skinPath = FcitxXDGGetPathWithPrefix(&len, "skin");
     for (i = 0; i < len; i++) {
         dir = opendir(skinPath[i]);
@@ -893,12 +887,11 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
             continue;
 
         while ((drt = readdir(dir)) != NULL) {
-            if (strcmp(drt->d_name , ".") == 0 || strcmp(drt->d_name, "..") == 0)
+            if (strcmp(drt->d_name , ".") == 0 ||
+                strcmp(drt->d_name, "..") == 0)
                 continue;
-            asprintf(&pathBuf, "%s/%s", skinPath[i], drt->d_name);
-
+            fcitx_local_cat_strings(pathBuf, skinPath[i], "/", drt->d_name);
             int statresult = stat(pathBuf, &fileStat);
-            free(pathBuf);
             if (statresult == -1) {
                 continue;
             }
@@ -995,15 +988,16 @@ void ParsePlacement(UT_array* sps, char* placment)
 SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
-    char* path;
-    if (im->strIconName[0] == '/')
-        path = strdup(im->strIconName);
-    else
-        asprintf(&path, "%s.png", im->strIconName);
-
+    char *icon_suffix;
+    if (im->strIconName[0] == '/') {
+        icon_suffix = "";
+    } else {
+        icon_suffix = ".png";
+    }
+    fcitx_local_cat_strings(path, im->strIconName, icon_suffix);
     SkinImage* imicon = NULL;
-
-    if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
+    if (strncmp(im->uniqueName, "fcitx-keyboard-",
+                strlen("fcitx-keyboard-")) == 0) {
         SkinImage* activeIcon = LoadImage(sc, fallbackIcon, fallbackToDefault);
         char temp[LANGCODE_LENGTH + 1] = { '\0', };
         char* iconText = 0;
@@ -1031,7 +1025,6 @@ SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallb
                           cairo_image_surface_get_height(activeIcon->image));
         }
     }
-    free(path);
     return imicon;
 }
 

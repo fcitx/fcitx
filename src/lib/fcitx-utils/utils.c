@@ -438,35 +438,35 @@ char* fcitx_utils_get_fcitx_path(const char* type)
     char* result = NULL;
     if (strcmp(type, "datadir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/share", fcitxdir);
-        }
-        else
+            fcitx_alloc_cat_strings(result, fcitxdir, "/share");
+        } else {
             result = strdup(DATADIR);
+        }
     }
     else if (strcmp(type, "pkgdatadir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/share/" PACKAGE, fcitxdir);
-        }
-        else
+            fcitx_alloc_cat_strings(result, fcitxdir, "/share/"PACKAGE);
+        } else {
             result = strdup(PKGDATADIR);
+        }
     }
     else if (strcmp(type, "bindir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/bin", fcitxdir);
+            fcitx_alloc_cat_strings(result, fcitxdir, "/bin");
         }
         else
             result = strdup(BINDIR);
     }
     else if (strcmp(type, "libdir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/lib", fcitxdir);
+            fcitx_alloc_cat_strings(result, fcitxdir, "/lib");
         }
         else
             result = strdup(LIBDIR);
     }
     else if (strcmp(type, "localedir") == 0) {
         if (fcitxdir) {
-            asprintf(&result, "%s/share/locale", fcitxdir);
+            fcitx_alloc_cat_strings(result, fcitxdir, "/share/locale");
         }
         else
             result = strdup(LOCALEDIR);
@@ -480,8 +480,8 @@ char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* fil
     char* path = fcitx_utils_get_fcitx_path(type);
     if (path == NULL)
         return NULL;
-    char* result;
-    asprintf(&result, "%s/%s", path, filename);
+    char *result;
+    fcitx_alloc_cat_strings(result, path, "/", filename);
     free(path);
     return result;
 }
@@ -661,4 +661,30 @@ fcitx_utils_write_uint64(FILE *fp, uint64_t i)
     i = htole64(i);
     return fwrite(&i, sizeof(uint64_t), 1, fp);
 }
+
+FCITX_EXPORT_API size_t
+fcitx_utils_str_lens(size_t n, const char **str_list, size_t *size_list)
+{
+    size_t i;
+    size_t total = 0;
+    for (i = 0;i < n;i++) {
+        total += (size_list[i] = str_list[i] ? strlen(str_list[i]) : 0);
+    }
+    return total + 1;
+}
+
+FCITX_EXPORT_API void
+fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
+                        const size_t *size_list)
+{
+    size_t i = 0;
+    for (i = 0;i < n;i++) {
+        if (!size_list[i])
+            continue;
+        memcpy(out, str_list[i], size_list[i]);
+        out += size_list[i];
+    }
+    *out = '\0';
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

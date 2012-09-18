@@ -536,8 +536,11 @@ void InitPYSplitData(FcitxPinyinConfig* pyconfig)
     size_t size = sizeof(pySplitData) / sizeof(pySplitData[0]);
     int i = 0;
     for (i = 0; i < size; i ++) {
-        PYMappedSplitData* data = fcitx_utils_malloc0(sizeof(PYMappedSplitData));
-        sprintf(data->py, "%s %s", pySplitData[i].py1, pySplitData[i].py2);
+        PYMappedSplitData *data = fcitx_utils_new(PYMappedSplitData);
+        const char *strs[] = {pySplitData[i].py1, " ", pySplitData[i].py2};
+        size_t sizes[] = {strlen(pySplitData[i].py1), strlen(" "),
+                          strlen(pySplitData[i].py2)};
+        fcitx_utils_cat_strings(data->py, 2, strs, sizes);
         data->freq = pySplitData[i].freq;
         HASH_ADD_STR(pyconfig->splitData, py, data);
     }
@@ -545,13 +548,11 @@ void InitPYSplitData(FcitxPinyinConfig* pyconfig)
 
 double LookupPYFreq(FcitxPinyinConfig* pyconfig, int index1, int index2)
 {
-    char py[MAX_PY_LENGTH * 2 + 2];
     if (index1 < 0 || index2 < 0)
         return 0;
-
-    sprintf(py, "%s %s", pyconfig->PYTable[index1].strPY, pyconfig->PYTable[index2].strPY);
-
-    PYMappedSplitData* s = NULL;
+    fcitx_local_cat_strings(py, pyconfig->PYTable[index1].strPY, " ",
+                            pyconfig->PYTable[index2].strPY);
+    PYMappedSplitData *s = NULL;
     HASH_FIND_STR(pyconfig->splitData, py, s);
 
     if (s == NULL)

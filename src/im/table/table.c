@@ -209,7 +209,6 @@ void LoadTableInfo(FcitxTableState *tbl)
 {
     char **tablePath;
     size_t len;
-    int i = 0;
 
     FcitxStringHashSet* sset = NULL;
     tbl->bTablePhraseTips = false;
@@ -230,14 +229,12 @@ void LoadTableInfo(FcitxTableState *tbl)
         }
     }
 
-    char **paths = fcitx_utils_malloc0(sizeof(char*) * len);
-    for (i = 0; i < len ; i ++)
-        paths[i] = NULL;
-
+    char *paths[len];
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
-        int i = 0;
+        int i;
         for (i = len - 1; i >= 0; i--) {
-            asprintf(&paths[i], "%s/%s", tablePath[len - i - 1], string->name);
+            fcitx_alloc_cat_strings(paths[i], tablePath[len - i - 1],
+                                    "/", string->name);
             FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
         }
         // FcitxLog(INFO, _("Load Table Config File:%s"), string->name);
@@ -274,14 +271,10 @@ void LoadTableInfo(FcitxTableState *tbl)
                 }
             } while(0);
         }
-
         for (i = 0; i < len ; i ++) {
             free(paths[i]);
-            paths[i] = NULL;
         }
     }
-
-    free(paths);
     FcitxXDGFreePath(tablePath);
     fcitx_utils_free_string_hash_set(sset);
 
@@ -416,14 +409,17 @@ INPUT_RETURN_VALUE DoTableInput(void* arg, FcitxKeySym sym, unsigned int state)
 
         /* it's not in special state */
         if (!tbl->bIsTableAddPhrase && !tbl->bIsTableDelPhrase && !tbl->bIsTableAdjustOrder && !tbl->bIsTableClearFreq) {
-            if (FcitxHotkeyCheckChooseKeyAndModifier(sym, state, table->strChoose, GetTableMod(table)) >= 0) {
-                char *buf1 = strndup(strCodeInput, FcitxInputStateGetRawInputBufferSize(input));
-                char* buf = NULL;
-                asprintf(&buf, "%s%c", buf1, (char) sym);
-                boolean result = (TableFindFirstMatchCode(table, buf, false, false) == -1);
-                free(buf);
-                free(buf1);
-                if (result)
+            if (FcitxHotkeyCheckChooseKeyAndModifier(sym, state,
+                                                     table->strChoose,
+                                                     GetTableMod(table)) >= 0) {
+                size_t len1 = strlen(strCodeInput);
+                size_t len2 = FcitxInputStateGetRawInputBufferSize(input);
+                size_t len = len1 > len2 ? len2 : len1;
+                char buf[len + 2];
+                memcpy(buf, strCodeInput, len);
+                buf[len] = (char)sym;
+                buf[len + 1] = '\0';
+                if (TableFindFirstMatchCode(table, buf, false, false) == -1)
                     return IRV_TO_PROCESS;
             }
 

@@ -237,11 +237,8 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
 
-    char* uniqueName;
-    if (variantString)
-        asprintf(&uniqueName, "fcitx-keyboard-%s-%s", layoutString, variantString);
-    else
-        asprintf(&uniqueName, "fcitx-keyboard-%s", layoutString);
+    fcitx_local_cat_strings(uniqueName, "fcitx-keyboard-", layoutString,
+                            variantString ? "-" : NULL, variantString);
 
     int iPriority = 100;
     if (strcmp(keyboard->initialLayout, layoutString) == 0
@@ -273,8 +270,6 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         iPriority,
         langCode
     );
-
-    free(uniqueName);
 }
 
 void* SimpleCopy(void* arg, void* dest, void* src)

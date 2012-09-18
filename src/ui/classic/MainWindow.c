@@ -227,17 +227,20 @@ void DrawMainWindow(MainWindow* mainWindow)
                             continue;
 
                         boolean active = status->getCurrentStatus(status->arg);
-                        char* path;
-                        if (active)
-                            asprintf(&path, "%s_active.png", status->name);
-                        else
-                            asprintf(&path, "%s_inactive.png", status->name);
+                        char *icon_suffix;
+                        if (active) {
+                            icon_suffix = "_active.png";
+                        } else {
+                            icon_suffix = "_inactive.png";
+                        }
+                        fcitx_local_cat_strings(path, status->name,
+                                                icon_suffix);
                         SkinImage* statusicon = LoadImage(sc, path, false);
-                        free(path);
                         if (statusicon == NULL)
                             continue;
                         privstat->avail = true;
-                        DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
+                        DrawImage(c, statusicon->image, sp->x, sp->y,
+                                  privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
 
@@ -248,17 +251,21 @@ void DrawMainWindow(MainWindow* mainWindow)
                             continue;
 
                         const char* icon = compstatus->getIconName(compstatus->arg);
-                        char* path;
-                        if (icon[0] != '/')
-                            asprintf(&path, "%s.png", compstatus->name);
-                        else
-                            path = strdup(icon);
-                        SkinImage* statusicon = LoadImage(sc, path, false);
-                        free(path);
+                        const char *tmp_strs[2];
+                        if (icon[0] != '/') {
+                            tmp_strs[0] = compstatus->name;
+                            tmp_strs[1] = ".png";
+                        } else {
+                            tmp_strs[0] = icon;
+                            tmp_strs[1] = "";
+                        }
+                        fcitx_local_cat_strings(path, tmp_strs[0], tmp_strs[1]);
+                        SkinImage *statusicon = LoadImage(sc, path, false);
                         if (statusicon == NULL)
                             continue;
                         privstat->avail = true;
-                        DrawImage(c, statusicon->image, sp->x, sp->y, privstat->mouse);
+                        DrawImage(c, statusicon->image, sp->x, sp->y,
+                                  privstat->mouse);
                         UpdateStatusGeometry(privstat, statusicon, sp->x, sp->y);
                     }
                 }
@@ -300,16 +307,21 @@ void DrawMainWindow(MainWindow* mainWindow)
                 ) {
                 if (!compstatus->visible)
                     continue;
-                const char* icon = compstatus->getIconName(compstatus->arg);
-                char* path;
+                const char *icon = compstatus->getIconName(compstatus->arg);
+                const char *tmp_strs[2];
                 if (icon[0] != '/') {
-                    if (icon[0] == '\0')
-                        asprintf(&path, "%s", compstatus->shortDescription);
-                    else
-                        asprintf(&path, "%s.png", icon);
+                    if (icon[0] == '\0') {
+                        tmp_strs[0] = compstatus->name;
+                        tmp_strs[1] = "";
+                    } else {
+                        tmp_strs[0] = icon;
+                        tmp_strs[1] = ".png";
+                    }
+                } else {
+                    tmp_strs[0] = icon;
+                    tmp_strs[1] = "";
                 }
-                else
-                    path = strdup(icon);
+                fcitx_local_cat_strings(path, tmp_strs[0], tmp_strs[1]);
                 SkinImage* statusicon = NULL;
                 if (icon[0] != '\0')
                     statusicon = LoadImage(sc, path, false);
@@ -329,8 +341,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                                         cairo_image_surface_get_height(activeIcon->image));
                     }
                 }
-                free(path);
-
                 if (statusicon == NULL)
                     continue;
 
@@ -348,11 +358,13 @@ void DrawMainWindow(MainWindow* mainWindow)
                 if (!status->visible)
                     continue;
                 boolean active = status->getCurrentStatus(status->arg);
-                char *path;
-                if (active)
-                    asprintf(&path, "%s_active.png", status->name);
-                else
-                    asprintf(&path, "%s_inactive.png", status->name);
+                const char *icon_suffix;
+                if (active) {
+                    icon_suffix = "_active.png";
+                } else {
+                    icon_suffix = "_inactive.png";
+                }
+                fcitx_local_cat_strings(path, status->name, icon_suffix);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL || statusicon->textIcon) {
                     if (activeIcon) {
@@ -363,7 +375,6 @@ void DrawMainWindow(MainWindow* mainWindow)
                                                       );
                     }
                 }
-                free(path);
                 if (statusicon == NULL)
                     continue;
                 currentX += cairo_image_surface_get_width(statusicon->image);
@@ -410,18 +421,22 @@ void DrawMainWindow(MainWindow* mainWindow)
                     continue;
                 if (!compstatus->visible)
                     continue;
-                const char* icon = compstatus->getIconName(compstatus->arg);
-                char* path;
+                const char *icon = compstatus->getIconName(compstatus->arg);
+                const char *tmp_strs[2];
                 if (icon[0] != '/') {
-                    if (icon[0] == '\0')
-                        asprintf(&path, "%s", compstatus->shortDescription);
-                    else
-                        asprintf(&path, "%s.png", compstatus->name);
+                    if (icon[0] == '\0') {
+                        tmp_strs[0] = compstatus->shortDescription;
+                        tmp_strs[1] = "";
+                    } else {
+                        tmp_strs[0] = compstatus->name;
+                        tmp_strs[1] = ".png";
+                    }
+                } else {
+                    tmp_strs[0] = icon;
+                    tmp_strs[1] = "";
                 }
-                else
-                    path = strdup(icon);
+                fcitx_local_cat_strings(path, tmp_strs[0], tmp_strs[1]);
                 SkinImage* statusicon = LoadImage(sc, path, false);
-                free(path);
                 if (statusicon == NULL)
                     continue;
                 privstat->avail = true;
@@ -431,9 +446,8 @@ void DrawMainWindow(MainWindow* mainWindow)
             }
 
             for (status = (FcitxUIStatus*) utarray_front(uistats);
-                    status != NULL;
-                    status = (FcitxUIStatus*) utarray_next(uistats, status)
-                ) {
+                 status != NULL;
+                 status = (FcitxUIStatus*) utarray_next(uistats, status)) {
                 FcitxClassicUIStatus* privstat = GetPrivateStatus(status);
                 if (privstat == NULL)
                     continue;
@@ -441,13 +455,14 @@ void DrawMainWindow(MainWindow* mainWindow)
                     continue;
                 /* reset status */
                 boolean active =  status->getCurrentStatus(status->arg);
-                char *path;
-                if (active)
-                    asprintf(&path, "%s_active.png", status->name);
-                else
-                    asprintf(&path, "%s_inactive.png", status->name);
+                char *icon_suffix;
+                if (active) {
+                    icon_suffix = "_active.png";
+                } else {
+                    icon_suffix = "_inactive.png";
+                }
+                fcitx_local_cat_strings(path, status->name, icon_suffix);
                 SkinImage* statusicon = LoadImage(sc, path, false);
-                free(path);
                 if (statusicon == NULL)
                     continue;
                 privstat->avail = true;

@@ -380,10 +380,12 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
             *retval = QuickPhraseGetCandWords(qpstate);
         }
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
-        if (strlen(qpstate->buffer) > 0) {
+        size_t len = strlen(qpstate->buffer);
+        if (len > 0) {
             if (qpstate->append) {
-                sprintf(FcitxInputStateGetOutputString(input),
-                        "%s%s", c, qpstate->buffer);
+                fcitx_utils_cat_strings(FcitxInputStateGetOutputString(input),
+                                        2, (const char*[]){c, qpstate->buffer},
+                                        (size_t[]){strlen(c), len});
             } else {
                 strcpy(FcitxInputStateGetOutputString(input),
                        qpstate->buffer);

@@ -1325,8 +1325,9 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
             candWord.wordType = MSG_OTHER;
         const char* pBase = PYFAList[(*pcand)->cand.phrase.iPYFA].pyBase[(*pcand)->cand.phrase.iBase].strHZ;
         const char* pPhrase = (*pcand)->cand.phrase.phrase->strPhrase;
-        asprintf(&candWord.strWord, "%s%s", pBase, pPhrase);
-        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        fcitx_alloc_cat_strings(candWord.strWord, pBase, pPhrase);
+        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input),
+                                 &candWord);
     }
 
     utarray_done(&candtemp);

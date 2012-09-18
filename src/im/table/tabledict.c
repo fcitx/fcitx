@@ -46,10 +46,8 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         if (!reload)
             fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", NULL);
         else {
-            char* temppath;
-            asprintf(&temppath, "table/%s", tableMetaData->strPath);
+            fcitx_local_cat_strings(temppath, "table/", tableMetaData->strPath);
             char* tablepath = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", temppath);
-            free(temppath);
             fpDict = fopen(tablepath, "r");
             free(tablepath);
         }
@@ -280,10 +278,9 @@ table_load_error:
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
 
-        char* temppath;
-        asprintf(&temppath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
+        fcitx_local_cat_strings(temppath, tableMetaData->uniqueName,
+                                "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileWithPrefix("table", temppath, "r", NULL);
-        free(temppath);
         i = 0;
         if (fpDict) {
             size_t size = fcitx_utils_read_int32(fpDict, &tableDict->iAutoPhrase);
@@ -445,10 +442,9 @@ void SaveTableDict(TableMetaData *tableMetaData)
             fclose(fpDict);
         }
 
-        char* strPath;
-        asprintf(&strPath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
+        fcitx_local_cat_strings(strPath, tableMetaData->uniqueName,
+                                "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
-        free(strPath);
         if (access(pstr, F_OK))
             unlink(pstr);
         rename(tempfile, pstr);

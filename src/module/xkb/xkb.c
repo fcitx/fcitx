@@ -164,9 +164,9 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
     char* rulesFile = NULL;
     char* rulesName = FcitxXkbGetRulesName(xkb);
 
-    if ( rulesName != NULL ) {
+    if (rulesName != NULL) {
         if (rulesName[0] == '/') {
-            asprintf(&rulesFile, "%s.xml", rulesName);
+            fcitx_alloc_cat_strings(rulesFile, rulesName, ".xml");
         }
         else {
             char* xkbParentDir = NULL;
@@ -182,33 +182,30 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
 
             if( count >= 3 ) {
                 // .../usr/lib/X11 -> /usr/share/X11/xkb vs .../usr/X11/lib -> /usr/X11/share/X11/xkb
-                const char* delta = StringEndsWith(base, "X11") ? "/../../share/X11" : "/../share/X11";
-                char* dirPath;
-                asprintf(&dirPath, "%s%s", base, delta);
-
-                DIR* dir = opendir(dirPath);
-                if( dir ) {
+                const char* delta = StringEndsWith(base, "X11") ?
+                    "/../../share/X11" : "/../share/X11";
+                fcitx_local_cat_strings(dir_path1, base, delta);
+                DIR* dir = opendir(dir_path1);
+                if(dir) {
                     closedir(dir);
-                    xkbParentDir = realpath(dirPath, NULL);
-                    free(dirPath);
+                    xkbParentDir = realpath(dir_path1, NULL);
                 }
                 else {
-                    free(dirPath);
-                    asprintf(&dirPath, "%s/X11", base);
-                    DIR* dir = opendir(dirPath);
-                    if( dir ) {
+                    fcitx_local_cat_strings(dir_path2, base, "/X11");
+                    DIR* dir = opendir(dir_path2);
+                    if(dir) {
                         closedir(dir);
-                        xkbParentDir = realpath(dirPath, NULL);
+                        xkbParentDir = realpath(dir_path2, NULL);
                     }
-                    free(dirPath);
                 }
             }
 
-            if( xkbParentDir == NULL || strlen(xkbParentDir) == 0 ) {
+            if(xkbParentDir == NULL || strlen(xkbParentDir) == 0) {
                 xkbParentDir = strdup("/usr/share/X11");
             }
 
-            asprintf(&rulesFile, "%s/xkb/rules/%s.xml", xkbParentDir, rulesName);
+            fcitx_alloc_cat_strings(rulesFile, xkbParentDir, "/xkb/rules/",
+                                    rulesName, ".xml");
             fcitx_utils_free(xkbParentDir);
         }
     }
@@ -235,7 +232,8 @@ FcitxXkbInitDefaultLayout (FcitxXkb* xkb)
 
     if (!XkbRF_GetNamesProp(dpy, &tmp, &vd) || !tmp)
     {
-        FcitxLog(WARNING, "Couldn't interpret %s property", _XKB_RF_NAMES_PROP_ATOM);
+        FcitxLog(WARNING, "Couldn't interpret %s property",
+                 _XKB_RF_NAMES_PROP_ATOM);
         return;
     }
     if (!vd.model || !vd.layout) {
@@ -268,7 +266,7 @@ FcitxXkbSetRules (FcitxXkb* xkb,
              const char *all_options)
 {
     Display* dpy = xkb->dpy;
-    char *rulesPath;
+    char *prefix;
     XkbRF_RulesPtr rules = NULL;
     XkbRF_VarDefsRec rdefs;
     XkbComponentNamesRec rnames;
@@ -277,39 +275,38 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     if (!rules_file)
         return False;
 
-    if (rules_file[0] != '/')
-        asprintf(&rulesPath, "./rules/%s", rules_file);
-    else
-        rulesPath = strdup(rules_file);
-    rules = XkbRF_Load (rulesPath, "C", True, True);
+    if (rules_file[0] != '/') {
+        prefix = "./rules/";
+    } else {
+        prefix = "";
+    }
+    fcitx_local_cat_strings(rules_path1, prefix, rules_file);
+    rules = XkbRF_Load(rules_path1, "C", True, True);
     if (rules == NULL) {
-        free (rulesPath);
-
-        rulesPath = FcitxXkbFindXkbRulesFile(xkb);
-        if (strcmp (rulesPath + strlen(rulesPath) - 4, ".xml") == 0) {
-            char* old = rulesPath;
-            rulesPath = strndup (rulesPath,
-                                 strlen (rulesPath) - 4);
+        char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);
+        size_t rulesBaseLen = strlen(rulesPath) - strlen(".xml");
+        if (strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
+            char *old = rulesPath;
+            rulesPath = strndup(rulesPath, rulesBaseLen);
             free(old);
         }
-        rules = XkbRF_Load (rulesPath, "C", True, True);
-    }
-    if (rules == NULL) {
+        rules = XkbRF_Load(rulesPath, "C", True, True);
         free(rulesPath);
-        return False;
     }
+    if (rules == NULL)
+        return False;
 
-    memset (&rdefs, 0, sizeof (XkbRF_VarDefsRec));
-    memset (&rnames, 0, sizeof (XkbComponentNamesRec));
-    rdefs.model = model ? strdup (model) : NULL;
-    rdefs.layout = all_layouts ? strdup (all_layouts) : NULL;
-    rdefs.variant = all_variants ? strdup (all_variants) : NULL;
-    rdefs.options = all_options ? strdup (all_options) : NULL;
-    XkbRF_GetComponents (rules, &rdefs, &rnames);
-    xkbDesc = XkbGetKeyboardByName (dpy, XkbUseCoreKbd, &rnames,
-                                XkbGBN_AllComponentsMask,
-                                XkbGBN_AllComponentsMask &
-                                (~XkbGBN_GeometryMask), True);
+    memset(&rdefs, 0, sizeof(XkbRF_VarDefsRec));
+    memset(&rnames, 0, sizeof(XkbComponentNamesRec));
+    rdefs.model = model ? strdup(model) : NULL;
+    rdefs.layout = all_layouts ? strdup(all_layouts) : NULL;
+    rdefs.variant = all_variants ? strdup(all_variants) : NULL;
+    rdefs.options = all_options ? strdup(all_options) : NULL;
+    XkbRF_GetComponents(rules, &rdefs, &rnames);
+    xkbDesc = XkbGetKeyboardByName(dpy, XkbUseCoreKbd, &rnames,
+                                   XkbGBN_AllComponentsMask,
+                                   XkbGBN_AllComponentsMask &
+                                   (~XkbGBN_GeometryMask), True);
 
     Bool result = True;
     if (!xkbDesc) {
@@ -318,23 +315,22 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     }
     else {
        char* tempstr = strdup(rules_file);
-       XkbRF_SetNamesProp (dpy, tempstr, &rdefs);
+       XkbRF_SetNamesProp(dpy, tempstr, &rdefs);
        free (tempstr);
     }
-    free (rulesPath);
-    free (rdefs.model);
-    free (rdefs.layout);
-    free (rdefs.variant);
-    free (rdefs.options);
+    free(rdefs.model);
+    free(rdefs.layout);
+    free(rdefs.variant);
+    free(rdefs.options);
 
     return result;
 }
 
 static Bool
-FcitxXkbUpdateProperties (FcitxXkb* xkb,
-                     const char *rules_file, const char *model,
-                     const char *all_layouts, const char *all_variants,
-                     const char *all_options)
+FcitxXkbUpdateProperties(FcitxXkb* xkb,
+                         const char *rules_file, const char *model,
+                         const char *all_layouts, const char *all_variants,
+                         const char *all_options)
 {
     Display *dpy = xkb->dpy;
     int len;
