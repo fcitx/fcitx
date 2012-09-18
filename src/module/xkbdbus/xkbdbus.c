@@ -167,7 +167,7 @@ void FcitxXkbDBusGetLayouts(FcitxXkbDBus* xkbdbus, DBusMessage* message)
                 variantInfo != NULL;
                 variantInfo = (FcitxXkbVariantInfo*) utarray_next(layoutInfo->variantInfos, variantInfo))
             {
-                fcitx_local_cat_strings(
+                fcitx_utils_local_cat_str(
                     description,
                     dgettext("xkeyboard-config", layoutInfo->description),
                     " - ",

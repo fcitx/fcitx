@@ -435,7 +435,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int found;
     int forse = False;
 
-    fcitx_local_cat_strings(buf, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -521,7 +521,7 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     int i, ret;
     int found;
 
-    fcitx_local_cat_strings(buf, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -636,7 +636,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
         str_ptrs[0] = "@transport=";
         str_ptrs[1] = i18n_core->address.im_addr;
     }
-    fcitx_local_cat_stringsv(buf, 2, str_ptrs);
+    fcitx_utils_local_cat_strv(buf, 2, str_ptrs);
     /*endif*/
     XChangeProperty(dpy,
                     event.xselection.requestor,

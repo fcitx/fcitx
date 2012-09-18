@@ -584,9 +584,10 @@ char* CharSelectDataName(CharSelectData* charselect, uint16_t unicode)
             VIndex = (SIndex % NCount) / TCount;
             TIndex = SIndex % TCount;
 
-            fcitx_alloc_cat_strings(result, "HANGUL SYLLABLE ",
-                                    JAMO_L_TABLE[LIndex], JAMO_V_TABLE[VIndex],
-                                    JAMO_T_TABLE[TIndex]);
+            fcitx_utils_alloc_cat_str(result, "HANGUL SYLLABLE ",
+                                      JAMO_L_TABLE[LIndex],
+                                      JAMO_V_TABLE[VIndex],
+                                      JAMO_T_TABLE[TIndex]);
         } else if (unicode >= 0xD800 && unicode <= 0xDB7F)
             result = strdup(_("<Non Private Use High Surrogate>"));
         else if (unicode >= 0xDB80 && unicode <= 0xDBFF)

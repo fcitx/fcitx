@@ -180,7 +180,7 @@ FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group,
         }
         name_lens[count - 1]--;
         *imList = malloc(res_len);
-        fcitx_utils_cat_strings(*imList, count, names, name_lens);
+        fcitx_utils_cat_str(*imList, count, names, name_lens);
 #undef ADD_IM_NAME
     }
 }

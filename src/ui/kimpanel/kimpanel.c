@@ -198,9 +198,10 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
     if (strncmp(pim->uniqueName, "fcitx-keyboard-",
                 strlen("fcitx-keyboard-")) != 0)
         icon = pim->strIconName;
-    fcitx_alloc_cat_strings(*prop, "/Fcitx/im/", pim->uniqueName, ":",
-                            pim->strName, (icon[0] == '\0' || icon[0] == '/') ?
-                            ":" : ":fcitx-", icon, ":", pim->strName);
+    fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im/", pim->uniqueName, ":",
+                              pim->strName,
+                              (icon[0] == '\0' || icon[0] == '/') ?
+                              ":" : ":fcitx-", icon, ":", pim->strName);
 }
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
@@ -256,8 +257,8 @@ static void SetIMIcon(FcitxInstance* instance, char** prop)
     } else {
         icon_prefix = ":fcitx-";
     }
-    fcitx_alloc_cat_strings(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
-                            ":", description);
+    fcitx_utils_alloc_cat_str(*prop, "/Fcitx/im:", imname, icon_prefix, icon,
+                              ":", description);
 }
 
 void* KimpanelCreate(FcitxInstance* instance)
@@ -332,8 +333,8 @@ void* KimpanelCreate(FcitxInstance* instance)
 
         DBusPendingCall* call = NULL;
         dbus_bool_t reply = dbus_connection_send_with_reply(kimpanel->conn, message,
-                            &call,
-                            0);
+                                                            &call,
+                                                            0);
         if (reply == TRUE) {
             dbus_pending_call_set_notify(call,
                                          KimpanelServiceExistCallback,
@@ -361,7 +362,7 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
     char **prop = fcitx_utils_malloc0(sizeof(char*) * (2 + utarray_len(uistats) + utarray_len(uicompstats)));
 
     char *fcitx = _("Fcitx");
-    fcitx_alloc_cat_strings(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx);
+    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo:", fcitx, ":fcitx:", fcitx);
     SetIMIcon(instance, &prop[1]);
 
     int count = 2;
@@ -378,8 +379,8 @@ void KimpanelRegisterAllStatus(FcitxKimpanelUI* kimpanel)
 
     FcitxUIStatus *status;
     for (status = (FcitxUIStatus *) utarray_front(uistats);
-            status != NULL;
-            status = (FcitxUIStatus *) utarray_next(uistats, status)) {
+         status != NULL;
+         status = (FcitxUIStatus *) utarray_next(uistats, status)) {
         if (!status->visible)
             continue;
         prop[count] = Status2String(status);
@@ -488,11 +489,11 @@ void KimpanelRegisterComplexStatus(void* arg, FcitxUIComplexStatus* status)
 char* Status2String(FcitxUIStatus* status)
 {
     char *result;
-    fcitx_alloc_cat_strings(result, "/Fcitx/", status->name, ":",
-                            status->shortDescription, ":fcitx-", status->name,
-                            ((status->getCurrentStatus(status->arg)) ?
-                             "-active:" : "-inactive:"),
-                            status->longDescription);
+    fcitx_utils_alloc_cat_str(result, "/Fcitx/", status->name, ":",
+                              status->shortDescription, ":fcitx-", status->name,
+                              ((status->getCurrentStatus(status->arg)) ?
+                               "-active:" : "-inactive:"),
+                              status->longDescription);
     return result;
 }
 
@@ -501,11 +502,11 @@ char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
     const char* iconName = status->getIconName(status->arg);
     char *result;
-    fcitx_alloc_cat_strings(result, "/Fcitx/", status->name, ":",
-                            status->shortDescription,
-                            (iconName[0] == '\0' || iconName[0] == '/') ?
-                            ":" : ":fcitx-", iconName, ":",
-                            status->longDescription);
+    fcitx_utils_alloc_cat_str(result, "/Fcitx/", status->name, ":",
+                              status->shortDescription,
+                              (iconName[0] == '\0' || iconName[0] == '/') ?
+                              ":" : ":fcitx-", iconName, ":",
+                              status->longDescription);
     return result;
 }
 
@@ -723,16 +724,16 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                 s0 += strlen("/Fcitx/");
                 if (strcmp("logo", s0) == 0) {
                     char *trans_str = _("Toggle Input Method");
-                    fcitx_local_cat_strings(prop0, "/Fcitx/logo/toggle:",
-                                            trans_str, "::", trans_str);
+                    fcitx_utils_local_cat_str(prop0, "/Fcitx/logo/toggle:",
+                                              trans_str, "::", trans_str);
                     trans_str = _("Configure Current Input Method");
-                    fcitx_local_cat_strings(prop1, "/Fcitx/logo/configureim:",
-                                            trans_str, ":configure:",
-                                            trans_str);
+                    fcitx_utils_local_cat_str(prop1, "/Fcitx/logo/configureim:",
+                                              trans_str, ":configure:",
+                                              trans_str);
                     trans_str = _("Restart");
-                    fcitx_local_cat_strings(prop2, "/Fcitx/logo/restart:",
-                                            trans_str, ":view-refresh:",
-                                            trans_str);
+                    fcitx_utils_local_cat_str(prop2, "/Fcitx/logo/restart:",
+                                              trans_str, ":view-refresh:",
+                                              trans_str);
                     char *prop[3] = {prop0, prop1, prop2};
                     KimExecMenu(kimpanel, prop, 3);
                 } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
@@ -763,8 +764,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                     size_t len = utarray_len(imes);
                     char **prop = fcitx_utils_malloc0(len * sizeof(char*));
                     for (pim = (FcitxIM *) utarray_front(imes);
-                            pim != NULL;
-                            pim = (FcitxIM *) utarray_next(imes, pim)) {
+                         pim != NULL;
+                         pim = (FcitxIM *) utarray_next(imes, pim)) {
 
                         SetIMMenu(pim, &prop[index]);
                         index ++;
@@ -853,8 +854,8 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
                                   DBUS_TYPE_INVALID)) {
             /* old die and no new one */
             if (strcmp(service, "org.kde.impanel") == 0
-                    && strlen(oldowner) > 0
-                    && strlen(newowner) == 0)
+                && strlen(oldowner) > 0
+                && strlen(newowner) == 0)
                 FcitxUISwitchToFallback(instance);
             /*
              * since if new rise, it will send PanelCreated,
@@ -1445,22 +1446,22 @@ void KimSetSpotRect(FcitxKimpanelUI* kimpanel, int x, int y, int w, int h)
 
     // create a signal and check for errors
     msg = dbus_message_new_method_call("org.kde.impanel",
-                                  "/org/kde/impanel",
-                                  "org.kde.impanel2",
-                                  "SetSpotRect"); // name of the signal
+                                       "/org/kde/impanel",
+                                       "org.kde.impanel2",
+                                       "SetSpotRect"); // name of the signal
     if (NULL == msg) {
         FcitxLog(DEBUG, "Message Null");
         return;
     }
 
     if (!dbus_message_append_args(
-        msg,
-        DBUS_TYPE_INT32, &x,
-        DBUS_TYPE_INT32, &y,
-        DBUS_TYPE_INT32, &w,
-        DBUS_TYPE_INT32, &h,
-        DBUS_TYPE_INVALID
-    )) {
+            msg,
+            DBUS_TYPE_INT32, &x,
+            DBUS_TYPE_INT32, &y,
+            DBUS_TYPE_INT32, &w,
+            DBUS_TYPE_INT32, &h,
+            DBUS_TYPE_INVALID
+            )) {
         FcitxLog(DEBUG, "Out Of Memory!");
     }
 
@@ -1569,13 +1570,13 @@ void KimpanelIntrospect(FcitxKimpanelUI* kimpanel)
 
     DBusPendingCall* call = NULL;
     dbus_bool_t reply = dbus_connection_send_with_reply(kimpanel->conn, message,
-                        &call,
-                        0);
+                                                        &call,
+                                                        0);
     if (reply == TRUE) {
         dbus_pending_call_set_notify(call,
-                                    KimpanelIntrospectCallback,
-                                    kimpanel,
-                                    NULL);
+                                     KimpanelIntrospectCallback,
+                                     kimpanel,
+                                     NULL);
     }
     dbus_connection_flush(kimpanel->conn);
     dbus_message_unref(message);
@@ -1625,11 +1626,11 @@ void KimpanelDestroy(void* arg)
     dbus_connection_flush(kimpanel->conn);
 
     dbus_bus_remove_match(kimpanel->conn,
-                        "type='signal',"
-                        "interface='" DBUS_INTERFACE_DBUS "',"
-                        "path='" DBUS_PATH_DBUS "',"
-                        "member='NameOwnerChanged'",
-                        NULL);
+                          "type='signal',"
+                          "interface='" DBUS_INTERFACE_DBUS "',"
+                          "path='" DBUS_PATH_DBUS "',"
+                          "member='NameOwnerChanged'",
+                          NULL);
 
     dbus_connection_flush(kimpanel->conn);
 

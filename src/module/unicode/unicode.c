@@ -184,7 +184,7 @@ INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni)
         candWord.wordType = MSG_CODE;
         candWord.strWord = s;
         char* name = CharSelectDataName(uni->charselectdata, *c);
-        fcitx_alloc_cat_strings(candWord.strExtra, " ", name);
+        fcitx_utils_alloc_cat_str(candWord.strExtra, " ", name);
         free(name);
         FcitxCandidateWordAppend(candList, &candWord);
     }

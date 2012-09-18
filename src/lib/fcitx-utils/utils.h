@@ -531,43 +531,43 @@ extern "C" {
 
     size_t fcitx_utils_str_lens(size_t n, const char **str_list,
                                 size_t *size_list);
-    void fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
-                                 const size_t *size_list);
+    void fcitx_utils_cat_str(char *out, size_t n, const char **str_list,
+                             const size_t *size_list);
     static inline void
-    fcitx_utils_cat_strings_simple(char *out, size_t n, const char **str_list)
+    fcitx_utils_cat_str_simple(char *out, size_t n, const char **str_list)
     {
         size_t size_list[n];
         fcitx_utils_str_lens(n, str_list, size_list);
-        fcitx_utils_cat_strings(out, n, str_list, size_list);
+        fcitx_utils_cat_str(out, n, str_list, size_list);
     }
 
-#define fcitx_local_cat_strings(dest, strs...)                          \
-    fcitx_local_cat_stringsn(dest,                                      \
-                             sizeof((const char*[]){strs}) / sizeof(char*), \
-                             strs)
+#define fcitx_utils_local_cat_str(dest, strs...)                        \
+    fcitx_utils_local_cat_nstr(dest,                                    \
+                               sizeof((const char*[]){strs}) / sizeof(char*), \
+                               strs)
 
-#define fcitx_local_cat_stringsn(dest, n, strs...)                      \
-    const char *__tmp_str_list_##dest[] = {strs};                       \
-    fcitx_local_cat_stringsv(dest, n, __tmp_str_list_##dest)
+#define fcitx_utils_local_cat_nstr(dest, n, strs...)            \
+    const char *__tmp_str_list_##dest[] = {strs};               \
+    fcitx_utils_local_cat_strv(dest, n, __tmp_str_list_##dest)
 
-#define fcitx_local_cat_stringsv(dest, n, strsv)                        \
+#define fcitx_utils_local_cat_strv(dest, n, strsv)                      \
     size_t __str_count_##dest = (n);                                    \
     const char **__str_list_##dest = strsv;                             \
     size_t __size_list_##dest[__str_count_##dest];                      \
     char dest[fcitx_utils_str_lens(__str_count_##dest,                  \
                                    __str_list_##dest, __size_list_##dest)]; \
-    fcitx_utils_cat_strings(dest, __str_count_##dest,                   \
-                            __str_list_##dest, __size_list_##dest)
+    fcitx_utils_cat_str(dest, __str_count_##dest,                       \
+                        __str_list_##dest, __size_list_##dest)
 
-#define fcitx_alloc_cat_strings(dest, strs...) do {                     \
+#define fcitx_utils_alloc_cat_str(dest, strs...) do {                   \
         const char *__str_list[] = {strs};                              \
         size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \
         size_t __size_list[__cat_str_n];                                \
         size_t __total_size = fcitx_utils_str_lens(__cat_str_n,         \
                                                    __str_list, __size_list); \
         dest = malloc(__total_size);                                    \
-        fcitx_utils_cat_strings(dest, sizeof(__str_list) / sizeof(char*), \
-                                __str_list, __size_list);               \
+        fcitx_utils_cat_str(dest, sizeof(__str_list) / sizeof(char*),   \
+                            __str_list, __size_list);                   \
     } while (0)
 
 #ifdef __cplusplus

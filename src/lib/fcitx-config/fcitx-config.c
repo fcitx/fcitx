@@ -729,9 +729,9 @@ FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxCo
             free(option->rawValue);
 
         if (option->value.hotkey[1].desc) {
-            fcitx_alloc_cat_strings(option->rawValue,
-                                    option->value.hotkey[0].desc,
-                                    " ", option->value.hotkey[1].desc);
+            fcitx_utils_alloc_cat_str(option->rawValue,
+                                      option->value.hotkey[0].desc,
+                                      " ", option->value.hotkey[1].desc);
         } else if (option->value.hotkey[0].desc) {
             option->rawValue = strdup(option->value.hotkey[0].desc);
         } else {

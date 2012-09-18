@@ -70,7 +70,7 @@ void FcitxAddonsInit(UT_array* addons)
 
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
 {
-    fcitx_local_cat_strings(escapedAddonName, addonName, "_", symbolName);
+    fcitx_utils_local_cat_str(escapedAddonName, addonName, "_", symbolName);
     char *p;
     for (p = escapedAddonName;*p;p++) {
         if (*p == '-') {
@@ -108,8 +108,8 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
         int i;
         for (i = len - 1; i >= 0; i--) {
-            fcitx_alloc_cat_strings(paths[i], addonPath[len - i - 1],
-                                    "/", string->name);
+            fcitx_utils_alloc_cat_str(paths[i], addonPath[len - i - 1],
+                                      "/", string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, FcitxAddonGetConfigDesc());

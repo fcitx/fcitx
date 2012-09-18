@@ -232,8 +232,8 @@ boolean LoadTableInfo(FcitxTableState *tbl)
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
         int i;
         for (i = len - 1; i >= 0; i--) {
-            fcitx_alloc_cat_strings(paths[i], tablePath[len - i - 1],
-                                    "/", string->name);
+            fcitx_utils_alloc_cat_str(paths[i], tablePath[len - i - 1],
+                                      "/", string->name);
             FcitxLog(DEBUG, "Load Table Config File:%s", paths[i]);
         }
         // FcitxLog(INFO, _("Load Table Config File:%s"), string->name);

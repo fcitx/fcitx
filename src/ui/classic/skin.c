@@ -89,7 +89,7 @@ reload:
     //获取配置文件的绝对路径
     {
         if (!isreload) {
-            fcitx_local_cat_strings(buf, *skinType, "/fcitx_skin.conf");
+            fcitx_utils_local_cat_str(buf, *skinType, "/fcitx_skin.conf");
             fp = FcitxXDGGetFileWithPrefix("skin", buf, "r", NULL);
         } else {
             char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "/skin/default/fcitx_skin.conf");
@@ -193,7 +193,7 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
 {
     cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
-    fcitx_local_cat_strings(buf, "skin/", skinType);
+    fcitx_utils_local_cat_str(buf, "skin/", skinType);
     const char* fallbackChainNoFallback[] = { buf };
     const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
@@ -890,7 +890,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
             if (strcmp(drt->d_name , ".") == 0 ||
                 strcmp(drt->d_name, "..") == 0)
                 continue;
-            fcitx_local_cat_strings(pathBuf, skinPath[i], "/", drt->d_name);
+            fcitx_utils_local_cat_str(pathBuf, skinPath[i], "/", drt->d_name);
             int statresult = stat(pathBuf, &fileStat);
             if (statresult == -1) {
                 continue;
@@ -989,7 +989,7 @@ SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallb
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
     const char *strs[] = {im->strIconName, ".png"};
-    fcitx_local_cat_stringsv(path, im->strIconName[0] == '/' ? 1 : 2, strs);
+    fcitx_utils_local_cat_strv(path, im->strIconName[0] == '/' ? 1 : 2, strs);
     SkinImage* imicon = NULL;
     if (strncmp(im->uniqueName, "fcitx-keyboard-",
                 strlen("fcitx-keyboard-")) == 0) {

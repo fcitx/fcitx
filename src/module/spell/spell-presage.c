@@ -88,8 +88,8 @@ FcitxSpellGetPastStream(void *arg)
 {
     FcitxSpell *spell = (FcitxSpell*)arg;
     if (!spell->past_stm) {
-        fcitx_alloc_cat_strings(spell->past_stm, spell->before_str,
-                                spell->current_str);
+        fcitx_utils_alloc_cat_str(spell->past_stm, spell->before_str,
+                                  spell->current_str);
     }
     return spell->past_stm;
 }
@@ -120,7 +120,7 @@ SpellPresageResult(FcitxSpell *spell, char **suggestions)
             continue;
         tmp_str = fcitx_utils_trim(result);
         _presage_free_string(result);
-        fcitx_alloc_cat_strings(result, spell->current_str, tmp_str);
+        fcitx_utils_alloc_cat_str(result, spell->current_str, tmp_str);
         free(tmp_str);
         commits[count] = result;
         displays[count] = suggestions[i];

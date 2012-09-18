@@ -166,7 +166,7 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
 
     if (rulesName != NULL) {
         if (rulesName[0] == '/') {
-            fcitx_alloc_cat_strings(rulesFile, rulesName, ".xml");
+            fcitx_utils_alloc_cat_str(rulesFile, rulesName, ".xml");
         }
         else {
             char* xkbParentDir = NULL;
@@ -184,14 +184,14 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
                 // .../usr/lib/X11 -> /usr/share/X11/xkb vs .../usr/X11/lib -> /usr/X11/share/X11/xkb
                 const char* delta = StringEndsWith(base, "X11") ?
                     "/../../share/X11" : "/../share/X11";
-                fcitx_local_cat_strings(dir_path1, base, delta);
+                fcitx_utils_local_cat_str(dir_path1, base, delta);
                 DIR* dir = opendir(dir_path1);
                 if(dir) {
                     closedir(dir);
                     xkbParentDir = realpath(dir_path1, NULL);
                 }
                 else {
-                    fcitx_local_cat_strings(dir_path2, base, "/X11");
+                    fcitx_utils_local_cat_str(dir_path2, base, "/X11");
                     DIR* dir = opendir(dir_path2);
                     if(dir) {
                         closedir(dir);
@@ -204,8 +204,8 @@ static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
                 xkbParentDir = strdup("/usr/share/X11");
             }
 
-            fcitx_alloc_cat_strings(rulesFile, xkbParentDir, "/xkb/rules/",
-                                    rulesName, ".xml");
+            fcitx_utils_alloc_cat_str(rulesFile, xkbParentDir, "/xkb/rules/",
+                                      rulesName, ".xml");
             fcitx_utils_free(xkbParentDir);
         }
     }
@@ -280,7 +280,7 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     } else {
         prefix = "";
     }
-    fcitx_local_cat_strings(rules_path1, prefix, rules_file);
+    fcitx_utils_local_cat_str(rules_path1, prefix, rules_file);
     rules = XkbRF_Load(rules_path1, "C", True, True);
     if (rules == NULL) {
         char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);

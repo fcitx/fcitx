@@ -41,8 +41,8 @@ DBusDaemonProperty DBusLaunch(const char* configFile)
         config_file_args[0] = "";
         config_file_args[1] = "";
     }
-    fcitx_local_cat_strings(command, DBUS_LAUNCH" --binary-syntax ",
-                            config_file_args[0], config_file_args[1]);
+    fcitx_utils_local_cat_str(command, DBUS_LAUNCH" --binary-syntax ",
+                              config_file_args[0], config_file_args[1]);
     DBusDaemonProperty result = {0, NULL};
     FILE *fp = popen(command, "r");
 

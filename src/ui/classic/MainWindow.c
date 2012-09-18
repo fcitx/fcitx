@@ -227,8 +227,9 @@ void DrawMainWindow(MainWindow* mainWindow)
                             continue;
 
                         boolean active = status->getCurrentStatus(status->arg);
-                        fcitx_local_cat_strings(path, status->name, active ?
-                                                "_active.png" : "_inactive.png");
+                        fcitx_utils_local_cat_str(path, status->name, active ?
+                                                  "_active.png" :
+                                                  "_inactive.png");
                         SkinImage* statusicon = LoadImage(sc, path, false);
                         if (statusicon == NULL)
                             continue;
@@ -255,7 +256,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                             tmp_strs[0] = icon;
                             num = 1;
                         }
-                        fcitx_local_cat_stringsv(path, num, tmp_strs);
+                        fcitx_utils_local_cat_strv(path, num, tmp_strs);
                         SkinImage *statusicon = LoadImage(sc, path, false);
                         if (statusicon == NULL)
                             continue;
@@ -319,7 +320,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     tmp_strs[0] = icon;
                     num = 1;
                 }
-                fcitx_local_cat_stringsv(path, num, tmp_strs);
+                fcitx_utils_local_cat_strv(path, num, tmp_strs);
                 SkinImage* statusicon = NULL;
                 if (icon[0] != '\0')
                     statusicon = LoadImage(sc, path, false);
@@ -356,8 +357,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                 if (!status->visible)
                     continue;
                 boolean active = status->getCurrentStatus(status->arg);
-                fcitx_local_cat_strings(path, status->name, active ?
-                                        "_active.png" : "_inactive.png");
+                fcitx_utils_local_cat_str(path, status->name, active ?
+                                          "_active.png" : "_inactive.png");
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL || statusicon->textIcon) {
                     if (activeIcon) {
@@ -430,7 +431,7 @@ void DrawMainWindow(MainWindow* mainWindow)
                     tmp_strs[0] = icon;
                     num = 1;
                 }
-                fcitx_local_cat_stringsv(path, num, tmp_strs);
+                fcitx_utils_local_cat_strv(path, num, tmp_strs);
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL)
                     continue;
@@ -450,8 +451,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                     continue;
                 /* reset status */
                 boolean active =  status->getCurrentStatus(status->arg);
-                fcitx_local_cat_strings(path, status->name, active ?
-                                        "_active.png" : "_inactive.png");
+                fcitx_utils_local_cat_str(path, status->name, active ?
+                                          "_active.png" : "_inactive.png");
                 SkinImage* statusicon = LoadImage(sc, path, false);
                 if (statusicon == NULL)
                     continue;

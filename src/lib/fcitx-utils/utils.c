@@ -438,35 +438,35 @@ char* fcitx_utils_get_fcitx_path(const char* type)
     char* result = NULL;
     if (strcmp(type, "datadir") == 0) {
         if (fcitxdir) {
-            fcitx_alloc_cat_strings(result, fcitxdir, "/share");
+            fcitx_utils_alloc_cat_str(result, fcitxdir, "/share");
         } else {
             result = strdup(DATADIR);
         }
     }
     else if (strcmp(type, "pkgdatadir") == 0) {
         if (fcitxdir) {
-            fcitx_alloc_cat_strings(result, fcitxdir, "/share/"PACKAGE);
+            fcitx_utils_alloc_cat_str(result, fcitxdir, "/share/"PACKAGE);
         } else {
             result = strdup(PKGDATADIR);
         }
     }
     else if (strcmp(type, "bindir") == 0) {
         if (fcitxdir) {
-            fcitx_alloc_cat_strings(result, fcitxdir, "/bin");
+            fcitx_utils_alloc_cat_str(result, fcitxdir, "/bin");
         }
         else
             result = strdup(BINDIR);
     }
     else if (strcmp(type, "libdir") == 0) {
         if (fcitxdir) {
-            fcitx_alloc_cat_strings(result, fcitxdir, "/lib");
+            fcitx_utils_alloc_cat_str(result, fcitxdir, "/lib");
         }
         else
             result = strdup(LIBDIR);
     }
     else if (strcmp(type, "localedir") == 0) {
         if (fcitxdir) {
-            fcitx_alloc_cat_strings(result, fcitxdir, "/share/locale");
+            fcitx_utils_alloc_cat_str(result, fcitxdir, "/share/locale");
         }
         else
             result = strdup(LOCALEDIR);
@@ -481,7 +481,7 @@ char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* fil
     if (path == NULL)
         return NULL;
     char *result;
-    fcitx_alloc_cat_strings(result, path, "/", filename);
+    fcitx_utils_alloc_cat_str(result, path, "/", filename);
     free(path);
     return result;
 }
@@ -674,7 +674,7 @@ fcitx_utils_str_lens(size_t n, const char **str_list, size_t *size_list)
 }
 
 FCITX_EXPORT_API void
-fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
+fcitx_utils_cat_str(char *out, size_t n, const char **str_list,
                         const size_t *size_list)
 {
     size_t i = 0;

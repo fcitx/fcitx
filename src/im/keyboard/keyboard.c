@@ -226,9 +226,9 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
 
-    fcitx_local_cat_stringsn(uniqueName, variantString ? 4 : 2,
-                             "fcitx-keyboard-", layoutString,
-                             "-", variantString);
+    fcitx_utils_local_cat_nstr(uniqueName, variantString ? 4 : 2,
+                               "fcitx-keyboard-", layoutString,
+                               "-", variantString);
     int iPriority = 100;
     if (strcmp(keyboard->initialLayout, layoutString) == 0
         && fcitx_utils_strcmp0(keyboard->initialVariant, variantString) == 0) {

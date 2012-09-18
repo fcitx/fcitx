@@ -1379,11 +1379,11 @@ void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
 
         char* newresult;
         if (!result) {
-            fcitx_alloc_cat_strings(newresult, uniqueName, ":",
-                                    enable ? "True" : "False");
+            fcitx_utils_alloc_cat_str(newresult, uniqueName, ":",
+                                      enable ? "True" : "False");
         } else {
-            fcitx_alloc_cat_strings(newresult, result, ":", uniqueName, ":",
-                                    enable ? "True" : "False");
+            fcitx_utils_alloc_cat_str(newresult, result, ":", uniqueName, ":",
+                                      enable ? "True" : "False");
         }
         if (result)
             free(result);
