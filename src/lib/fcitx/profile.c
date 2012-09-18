@@ -67,7 +67,17 @@ boolean FcitxProfileLoad(FcitxProfile* profile, FcitxInstance* instance)
     if (fp)
         fclose(fp);
 
-    FcitxInstanceUpdateIMList(instance);
+    /*
+     * Do we need to load im list here? No!
+     * There is only two place call this function.
+     *
+     * 1. in initialize phase, this function is useless, due to
+     * im is not loaded. (See the FcitxInstanceUpdateIMList impl
+     * and check imLoaded boolean)
+     * 2. in reload phase, this function is useless too, due to
+     * LoadAllIM will be called anyway.
+     */
+    // FcitxInstanceUpdateIMList(instance);
 
     return true;
 }
