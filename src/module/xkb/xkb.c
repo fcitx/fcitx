@@ -621,17 +621,6 @@ static void FcitxXkbIMKeyboardLayoutChanged(void* arg, const void* value)
     }
 }
 
-static boolean strcmp0(const char* a, const char* b)
-{
-    boolean isemptya = !(a && *a);
-    boolean isemptyb = !(b && *b);
-    if (isemptya && isemptyb)
-        return true;
-    if (isemptya ^ isemptyb)
-        return false;
-    return strcmp(a, b) == 0;
-}
-
 static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char* variant)
 {
     char** layoutName;
@@ -645,7 +634,7 @@ static int FcitxXkbFindLayoutIndex(FcitxXkb* xkb, const char* layout, const char
         layoutName = (char**) utarray_eltptr(xkb->defaultLayouts, i);
         pVariantName = (char**) utarray_eltptr(xkb->defaultVariants, i);
         variantName = pVariantName ? *pVariantName : NULL;
-        if (strcmp(*layoutName, layout) == 0 && strcmp0(variantName, variant)) {
+        if (strcmp(*layoutName, layout) == 0 && fcitx_utils_strcmp_empty(variantName, variant) == 0) {
             return i;
         }
     }

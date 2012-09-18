@@ -32,6 +32,12 @@
  * only need to free them at once.
  *
  * Some log function, which prints the current file number, with printf format.
+ *
+ * Why Fcitx do not use GLib?
+ *
+ * The answer is glib contains a lot of function that fcitx don't need, and
+ * in order to keep dependencies of fcitx-core only depends on libc, we
+ * provide some function that equivalent to glib in fcitx-utils.
  */
 
 /**
@@ -341,6 +347,27 @@ extern "C" {
      * @return void
      **/
     void fcitx_utils_string_swap(char** obj, const char* str);
+
+    /**
+     * similar with strcmp, but can handle the case that a or b is null.
+     * NULL < not NULL and NULL == NULL
+     *
+     * @param a string a
+     * @param b string b
+     * @return same as rule of strcmp
+     */
+    int fcitx_utils_strcmp0(const char* a, const char* b);
+
+    /**
+     * similiar with fcitx_utils_strcmp0, but empty string will be considered
+     * equals to NULL in this case.
+     * NULL == empty, and empty < not empty
+     *
+     * @param a string a
+     * @param b string b
+     * @return same as rule of strcmp
+     */
+    int fcitx_utils_strcmp_empty(const char* a, const char* b);
 
     /** free a pointer if it's not NULL */
 #define fcitx_utils_free(ptr) do { \
