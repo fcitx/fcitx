@@ -286,9 +286,7 @@ FcitxXkbSetRules (FcitxXkb* xkb,
         char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         size_t rulesBaseLen = strlen(rulesPath) - strlen(".xml");
         if (strcmp(rulesPath + rulesBaseLen, ".xml") == 0) {
-            char *old = rulesPath;
-            rulesPath = strndup(rulesPath, rulesBaseLen);
-            free(old);
+            rulesPath[rulesBaseLen] = '\0';
         }
         rules = XkbRF_Load(rulesPath, "C", True, True);
         free(rulesPath);

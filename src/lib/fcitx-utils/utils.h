@@ -506,13 +506,32 @@ extern "C" {
                                 size_t *size_list);
     void fcitx_utils_cat_strings(char *out, size_t n, const char **str_list,
                                  const size_t *size_list);
+    static inline void
+    fcitx_utils_cat_strings_simple(char *out, size_t n, const char **str_list)
+    {
+        size_t size_list[n];
+        fcitx_utils_str_lens(n, str_list, size_list);
+        fcitx_utils_cat_strings(out, n, str_list, size_list);
+    }
+
 #define fcitx_local_cat_strings(dest, strs...)                          \
-    const char *__str_list_##dest[] = {strs};                           \
-    size_t __size_list_##dest[sizeof(__str_list_##dest) / sizeof(char*)]; \
-    char dest[fcitx_utils_str_lens(sizeof(__str_list_##dest) / sizeof(char*), \
+    fcitx_local_cat_stringsn(dest,                                      \
+                             sizeof((const char*[]){strs}) / sizeof(char*), \
+                             strs)
+
+#define fcitx_local_cat_stringsn(dest, n, strs...)                      \
+    const char *__tmp_str_list_##dest[] = {strs};                       \
+    fcitx_local_cat_stringsv(dest, n, __tmp_str_list_##dest)
+
+#define fcitx_local_cat_stringsv(dest, n, strsv)                        \
+    size_t __str_count_##dest = (n);                                    \
+    const char **__str_list_##dest = strsv;                             \
+    size_t __size_list_##dest[__str_count_##dest];                      \
+    char dest[fcitx_utils_str_lens(__str_count_##dest,                  \
                                    __str_list_##dest, __size_list_##dest)]; \
-    fcitx_utils_cat_strings(dest, sizeof(__str_list_##dest) / sizeof(char*), \
+    fcitx_utils_cat_strings(dest, __str_count_##dest,                   \
                             __str_list_##dest, __size_list_##dest)
+
 #define fcitx_alloc_cat_strings(dest, strs...) do {                     \
         const char *__str_list[] = {strs};                              \
         size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \

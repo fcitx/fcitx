@@ -628,7 +628,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
     event.xselection.target = ev->target;
     event.xselection.time = ev->time;
     event.xselection.property = ev->property;
-    char *str_ptrs[2];
+    const char *str_ptrs[2];
     if (ev->target == i18n_core->address.Localename) {
         str_ptrs[0] = "@locale=";
         str_ptrs[1] = i18n_core->address.im_locale;
@@ -636,7 +636,7 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
         str_ptrs[0] = "@transport=";
         str_ptrs[1] = i18n_core->address.im_addr;
     }
-    fcitx_local_cat_strings(buf, str_ptrs[0], str_ptrs[1]);
+    fcitx_local_cat_stringsv(buf, 2, str_ptrs);
     /*endif*/
     XChangeProperty(dpy,
                     event.xselection.requestor,

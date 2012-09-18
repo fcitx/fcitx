@@ -538,9 +538,7 @@ void InitPYSplitData(FcitxPinyinConfig* pyconfig)
     for (i = 0; i < size; i ++) {
         PYMappedSplitData *data = fcitx_utils_new(PYMappedSplitData);
         const char *strs[] = {pySplitData[i].py1, " ", pySplitData[i].py2};
-        size_t sizes[] = {strlen(pySplitData[i].py1), strlen(" "),
-                          strlen(pySplitData[i].py2)};
-        fcitx_utils_cat_strings(data->py, 2, strs, sizes);
+        fcitx_utils_cat_strings_simple(data->py, 3, strs);
         data->freq = pySplitData[i].freq;
         HASH_ADD_STR(pyconfig->splitData, py, data);
     }

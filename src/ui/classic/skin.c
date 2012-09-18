@@ -988,13 +988,8 @@ void ParsePlacement(UT_array* sps, char* placment)
 SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
-    char *icon_suffix;
-    if (im->strIconName[0] == '/') {
-        icon_suffix = "";
-    } else {
-        icon_suffix = ".png";
-    }
-    fcitx_local_cat_strings(path, im->strIconName, icon_suffix);
+    const char *strs[] = {im->strIconName, ".png"};
+    fcitx_local_cat_stringsv(path, im->strIconName[0] == '/' ? 1 : 2, strs);
     SkinImage* imicon = NULL;
     if (strncmp(im->uniqueName, "fcitx-keyboard-",
                 strlen("fcitx-keyboard-")) == 0) {

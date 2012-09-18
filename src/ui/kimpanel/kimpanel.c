@@ -198,15 +198,9 @@ static void SetIMMenu(FcitxIM *pim, char** prop)
     if (strncmp(pim->uniqueName, "fcitx-keyboard-",
                 strlen("fcitx-keyboard-")) != 0)
         icon = pim->strIconName;
-
-    char *icon_prefix;
-    if (icon[0] == '\0' || icon[0] == '/') {
-        icon_prefix = ":";
-    } else {
-        icon_prefix = ":fcitx-";
-    }
     fcitx_alloc_cat_strings(*prop, "/Fcitx/im/", pim->uniqueName, ":",
-                            pim->strName, icon_prefix, icon, ":", pim->strName);
+                            pim->strName, (icon[0] == '\0' || icon[0] == '/') ?
+                            ":" : ":fcitx-", icon, ":", pim->strName);
 }
 
 static void SetIMIcon(FcitxInstance* instance, char** prop)
@@ -506,16 +500,12 @@ char* Status2String(FcitxUIStatus* status)
 char* ComplexStatus2String(FcitxUIComplexStatus* status)
 {
     const char* iconName = status->getIconName(status->arg);
-    char *icon_prefix;
-    if (iconName[0] == '\0' || iconName[0] == '/') {
-        icon_prefix = ":";
-    } else {
-        icon_prefix = ":fcitx-";
-    }
     char *result;
     fcitx_alloc_cat_strings(result, "/Fcitx/", status->name, ":",
-                            status->shortDescription, icon_prefix,
-                            iconName, ":", status->longDescription);
+                            status->shortDescription,
+                            (iconName[0] == '\0' || iconName[0] == '/') ?
+                            ":" : ":fcitx-", iconName, ":",
+                            status->longDescription);
     return result;
 }
 
