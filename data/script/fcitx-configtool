@@ -32,7 +32,7 @@ run_kde()
             exec $command kcm_fcitx
         fi
     else
-        run_gtk $1
+        run_gtk3 $1
     fi
 }
 
