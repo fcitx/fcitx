@@ -584,8 +584,6 @@ _fcitx_im_context_update_preedit_cb(DBusGProxy* proxy, char* str, int cursor_pos
             /* do nothing */
         }
     }
-
-    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
 static void
@@ -695,8 +693,6 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
             /* do nothing */
         }
     }
-
-    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
 ///

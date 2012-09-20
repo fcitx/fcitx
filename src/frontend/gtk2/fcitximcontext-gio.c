@@ -652,8 +652,6 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
             /* do nothing */
         }
     }
-
-    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
 ///
