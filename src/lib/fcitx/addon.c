@@ -80,6 +80,7 @@ void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName
         p++;
     }
     void* result = dlsym(handle, escapedAddonName);
+    free(escapedAddonName);
     if (!result)
         result = dlsym(handle, symbolName);
 

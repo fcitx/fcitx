@@ -20,6 +20,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 #include "dbuslauncher.h"
@@ -40,6 +41,7 @@ DBusDaemonProperty DBusLaunch(const char* configFile)
 
     DBusDaemonProperty result = {0, NULL};
     FILE* fp = popen(command, "r");
+    free(command);
 
     do {
         if (!fp)

@@ -170,6 +170,7 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_
 
     if (!fp) {
         if (strchr(mode, 'w') || strchr(mode, 'a')) {
+            fcitx_utils_free(buf);
             asprintf(&buf, "%s/%s", path[0], fileName);
 
             char *dirc = strdup(buf);
