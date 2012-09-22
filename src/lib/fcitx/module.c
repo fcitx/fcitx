@@ -145,4 +145,12 @@ void* FcitxModuleInvokeFunctionByName(FcitxInstance* instance, const char* name,
     else
         return FcitxModuleInvokeFunction(module, functionId, args);
 }
+
+FCITX_EXPORT_API void
+FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func)
+{
+    void *temp = (void*)func;
+    utarray_push_back(&addon->functionList, &temp);
+}
+
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

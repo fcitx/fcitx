@@ -435,7 +435,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int found;
     int forse = False;
 
-    fcitx_utils_local_cat_str(buf, 257, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 256, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -521,7 +521,7 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     int i, ret;
     int found;
 
-    fcitx_utils_local_cat_str(buf, 257, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 256, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -628,13 +628,13 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
     event.xselection.target = ev->target;
     event.xselection.time = ev->time;
     event.xselection.property = ev->property;
-    char *buf;
+    char buf[256];
     if (ev->target == i18n_core->address.Localename) {
-        fcitx_utils_alloc_cat_str(buf, "@locale=",
-                                  i18n_core->address.im_locale);
+        const char *tmp_strlist[] = {"@locale=", i18n_core->address.im_locale};
+        fcitx_utils_cat_str_simple_with_len(buf, sizeof(buf), 2, tmp_strlist);
     } else if (ev->target == i18n_core->address.Transportname) {
-        fcitx_utils_alloc_cat_str(buf, "@transport=",
-                                  i18n_core->address.im_addr);
+        const char *tmp_strlist[] = {"@transport=", i18n_core->address.im_addr};
+        fcitx_utils_cat_str_simple_with_len(buf, sizeof(buf), 2, tmp_strlist);
     }
     XChangeProperty(dpy,
                     event.xselection.requestor,
@@ -644,7 +644,6 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
                     PropModeReplace,
                     (unsigned char*)buf,
                     strlen(buf));
-    free(buf);
     XSendEvent(dpy, event.xselection.requestor, False, NoEventMask, &event);
     XFlush(i18n_core->address.dpy);
 }

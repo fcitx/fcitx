@@ -122,24 +122,24 @@ extern "C" {
  * limit) as well as directly call the function without a FunctionArg wrapper.
  **/
 
+/** add a function to a addon */
+#define AddFunction(ADDON, Realname)                   \
+    do {                                               \
+       void *temp = (void*)Realname;                   \
+       utarray_push_back(&ADDON->functionList, &temp); \
+   } while(0)
+
+    /**
+     * add a function to a addon
+     *
+     * @param addon
+     * @param func
+     **/
+    void FcitxModuleAddFunction(struct _FcitxAddon *addon,
+                                FcitxModuleFunction func);
+
 #ifdef __cplusplus
 }
-#endif
-
-/** add a function to current addon */
-    static inline void
-    AddFunction(struct _FcitxAddon *addon, FcitxModuleFunction func)
-    {
-        void *temp = (void*)func;
-        utarray_push_back(&addon->functionList, &temp);
-    }
-#ifdef __cplusplus
-    FCITX_DEPRECATED static inline void
-    AddFunction(struct _FcitxAddon *addon, void *func)
-    {
-        void *temp = (void*)func;
-        utarray_push_back(&addon->functionList, &temp);
-    }
 #endif
 
 #endif

@@ -488,7 +488,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
 
             /* set_cursor_location_internal() will get origin from X server,
             * it blocks UI. So delay it to idle callback. */
-            g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
+            gdk_threads_add_idle_full(G_PRIORITY_DEFAULT_IDLE,
                             (GSourceFunc) _set_cursor_location_internal,
                             g_object_ref(fcitxcontext),
                             (GDestroyNotify) g_object_unref);
@@ -677,8 +677,6 @@ _fcitx_im_context_update_formatted_preedit_cb(FcitxClient* im, GPtrArray* array,
             /* do nothing */
         }
     }
-
-    g_signal_emit(context, _signal_preedit_changed_id, 0);
 }
 
 ///
@@ -709,7 +707,7 @@ fcitx_im_context_focus_in(GtkIMContext *context)
 
     /* set_cursor_location_internal() will get origin from X server,
      * it blocks UI. So delay it to idle callback. */
-    g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
+    gdk_threads_add_idle_full(G_PRIORITY_DEFAULT_IDLE,
                     (GSourceFunc) _set_cursor_location_internal,
                     g_object_ref(fcitxcontext),
                     (GDestroyNotify) g_object_unref);
