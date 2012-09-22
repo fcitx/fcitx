@@ -70,14 +70,16 @@ void FcitxAddonsInit(UT_array* addons)
 
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
 {
-    fcitx_utils_local_cat_str(escapedAddonName, addonName, "_", symbolName);
     char *p;
+    char *escapedAddonName;
+    fcitx_utils_alloc_cat_str(escapedAddonName, addonName, "_", symbolName);
     for (p = escapedAddonName;*p;p++) {
         if (*p == '-') {
             *p = '_';
         }
     }
-    void* result = dlsym(handle, escapedAddonName);
+    void *result = dlsym(handle, escapedAddonName);
+    free(escapedAddonName);
     if (!result)
         return dlsym(handle, symbolName);
     return result;

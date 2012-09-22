@@ -435,7 +435,7 @@ static int SetXi18nSelectionOwner(Xi18n i18n_core)
     int found;
     int forse = False;
 
-    fcitx_utils_local_cat_str(buf, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 257, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -521,7 +521,7 @@ static int DeleteXi18nAtom(Xi18n i18n_core)
     int i, ret;
     int found;
 
-    fcitx_utils_local_cat_str(buf, "@server=", i18n_core->address.im_name);
+    fcitx_utils_local_cat_str(buf, 257, "@server=", i18n_core->address.im_name);
     if ((atom = XInternAtom(dpy, buf, False)) == 0)
         return False;
     i18n_core->address.selection = atom;
@@ -628,24 +628,23 @@ static void ReturnSelectionNotify(Xi18n i18n_core, XSelectionRequestEvent *ev)
     event.xselection.target = ev->target;
     event.xselection.time = ev->time;
     event.xselection.property = ev->property;
-    const char *str_ptrs[2];
+    char *buf;
     if (ev->target == i18n_core->address.Localename) {
-        str_ptrs[0] = "@locale=";
-        str_ptrs[1] = i18n_core->address.im_locale;
+        fcitx_utils_alloc_cat_str(buf, "@locale=",
+                                  i18n_core->address.im_locale);
     } else if (ev->target == i18n_core->address.Transportname) {
-        str_ptrs[0] = "@transport=";
-        str_ptrs[1] = i18n_core->address.im_addr;
+        fcitx_utils_alloc_cat_str(buf, "@transport=",
+                                  i18n_core->address.im_addr);
     }
-    fcitx_utils_local_cat_strv(buf, 2, str_ptrs);
-    /*endif*/
     XChangeProperty(dpy,
                     event.xselection.requestor,
                     ev->target,
                     ev->target,
                     8,
                     PropModeReplace,
-                    (unsigned char *) buf,
+                    (unsigned char*)buf,
                     strlen(buf));
+    free(buf);
     XSendEvent(dpy, event.xselection.requestor, False, NoEventMask, &event);
     XFlush(i18n_core->address.dpy);
 }

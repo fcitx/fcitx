@@ -686,6 +686,26 @@ fcitx_utils_cat_str(char *out, size_t n, const char **str_list,
     }
     *out = '\0';
 }
+FCITX_EXPORT_API void
+fcitx_utils_cat_str_with_len(char *out, size_t len, size_t n,
+                             const char **str_list, const size_t *size_list)
+{
+    char *limit = out + len - 1;
+    char *tmp = out;
+    size_t i = 0;
+    for (i = 0;i < n;i++) {
+        if (!size_list[i])
+            continue;
+        tmp += size_list[i];
+        if (tmp > limit) {
+            memcpy(out, str_list[i], limit - out);
+            out = limit;
+        }
+        memcpy(out, str_list[i], size_list[i]);
+        out = tmp;
+    }
+    *out = '\0';
+}
 
 FCITX_EXPORT_API
 int

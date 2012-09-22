@@ -89,7 +89,6 @@ FcitxConfigFile *FcitxConfigParseMultiConfigFile(char **filename, int len, Fcitx
     int i = 0;
 
     for (i = 0 ; i < len ; i++) {
-        fp[i] = NULL;
         fp[i] = fopen(filename[i], "r");
     }
 

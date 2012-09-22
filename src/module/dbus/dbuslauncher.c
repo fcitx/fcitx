@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <signal.h>
+#include <limits.h>
 #include "dbuslauncher.h"
 #include "fcitx-utils/utils.h"
 
@@ -33,18 +34,17 @@
 
 DBusDaemonProperty DBusLaunch(const char* configFile)
 {
-    const char *config_file_args[2];
+    FILE *fp;
     if (configFile) {
-        config_file_args[0] = "--config-file=";
-        config_file_args[1] = configFile;
+        char *cmd;
+        fcitx_utils_alloc_cat_str(cmd, DBUS_LAUNCH" --binary-syntax"
+                                  " --config-file=", configFile);
+        fp = popen(cmd, "r");
+        free(cmd);
     } else {
-        config_file_args[0] = "";
-        config_file_args[1] = "";
+        fp = popen(DBUS_LAUNCH" --binary-syntax", "r");
     }
-    fcitx_utils_local_cat_str(command, DBUS_LAUNCH" --binary-syntax ",
-                              config_file_args[0], config_file_args[1]);
     DBusDaemonProperty result = {0, NULL};
-    FILE *fp = popen(command, "r");
 
     do {
         if (!fp)

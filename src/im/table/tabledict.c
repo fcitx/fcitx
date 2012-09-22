@@ -43,12 +43,18 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     int reload = 0;
     do {
         boolean error = false;
-        if (!reload)
-            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", NULL);
-        else {
-            fcitx_utils_local_cat_str(temppath, "table/",
+        if (!reload) {
+            /**
+             * kcm saves a absolute path here but it is then interpreted as
+             * a relative path?
+             **/
+            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath,
+                                               "r", NULL);
+        } else {
+            char *tablepath;
+            char *path = fcitx_utils_get_fcitx_path("pkgdatadir");
+            fcitx_utils_alloc_cat_str(tablepath, path, "/table/",
                                       tableMetaData->strPath);
-            char* tablepath = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", temppath);
             fpDict = fopen(tablepath, "r");
             free(tablepath);
         }
@@ -183,7 +189,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
                 tableDict->recordIndex[iRecordIndex].record = recTemp;
                 iRecordIndex++;
             }
-            /* **************************************************************** */
+            /******************************************************************/
             /** 为单字生成一个表   */
             if (fcitx_utf8_strlen(recTemp->strHZ) == 1 && !IsIgnoreChar(tableDict, strCode[0]))
             {
@@ -273,15 +279,16 @@ table_load_error:
 
     tableDict->iAutoPhrase = 0;
     if (tableMetaData->bAutoPhrase) {
-        //为自动词组分配空间
         tableDict->autoPhrase = (AUTOPHRASE*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
 
-        fcitx_utils_local_cat_str(temppath, tableMetaData->uniqueName,
+        char *temppath;
+        fcitx_utils_alloc_cat_str(temppath, tableMetaData->uniqueName,
                                   "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileWithPrefix("table", temppath, "r", NULL);
+        free(temppath);
         i = 0;
         if (fpDict) {
             size_t size = fcitx_utils_read_int32(fpDict, &tableDict->iAutoPhrase);
@@ -443,9 +450,11 @@ void SaveTableDict(TableMetaData *tableMetaData)
             fclose(fpDict);
         }
 
-        fcitx_utils_local_cat_str(strPath, tableMetaData->uniqueName,
+        char *strPath;
+        fcitx_utils_alloc_cat_str(strPath, tableMetaData->uniqueName,
                                   "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
+        free(strPath);
         if (access(pstr, F_OK))
             unlink(pstr);
         rename(tempfile, pstr);

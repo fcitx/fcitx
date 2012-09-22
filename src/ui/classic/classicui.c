@@ -232,10 +232,15 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
     status->uipriv[classicui->isfallback] = fcitx_utils_new(FcitxClassicUIStatus);
-    fcitx_utils_local_cat_str(activename, status->name, "_active.png");
-    fcitx_utils_local_cat_str(inactivename, status->name, "_inactive.png");
-    LoadImage(sc, activename, false);
-    LoadImage(sc, inactivename, false);
+    char *name;
+
+    fcitx_utils_alloc_cat_str(name, status->name, "_active.png");
+    LoadImage(sc, name, false);
+    free(name);
+
+    fcitx_utils_alloc_cat_str(name, status->name, "_inactive.png");
+    LoadImage(sc, name, false);
+    free(name);
 }
 
 static void ClassicUIOnInputFocus(void *arg)

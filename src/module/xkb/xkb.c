@@ -23,6 +23,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <limits.h>
 #include <libintl.h>
 
 #include <X11/Xlib.h>
@@ -154,67 +155,57 @@ static char* FcitxXkbGetRulesName(FcitxXkb* xkb)
     if (XkbRF_GetNamesProp(xkb->dpy, &tmp, &vd) && tmp != NULL ) {
         return strdup(tmp);
     }
-
     return NULL;
 }
 
 
 static char* FcitxXkbFindXkbRulesFile(FcitxXkb* xkb)
 {
-    char* rulesFile = NULL;
-    char* rulesName = FcitxXkbGetRulesName(xkb);
+    char *rulesFile = NULL;
+    char *rulesName = FcitxXkbGetRulesName(xkb);
 
-    if (rulesName != NULL) {
+    if (rulesName) {
         if (rulesName[0] == '/') {
             fcitx_utils_alloc_cat_str(rulesFile, rulesName, ".xml");
-        }
-        else {
-            char* xkbParentDir = NULL;
-
-            const char* base = XLIBDIR;
-
+        } else {
             int count = 0, i = 0;
-            while(base[i]) {
+            const char* base = XLIBDIR;
+            while (base[i]) {
                 if (base[i] == '/')
                     count++;
-                i ++;
+                i++;
             }
 
-            if( count >= 3 ) {
-                // .../usr/lib/X11 -> /usr/share/X11/xkb vs .../usr/X11/lib -> /usr/X11/share/X11/xkb
+            if (count >= 3) {
+                // .../usr/lib/X11 -> /usr/share/X11/xkb vs
+                // .../usr/X11/lib -> /usr/X11/share/X11/xkb
                 const char* delta = StringEndsWith(base, "X11") ?
                     "/../../share/X11" : "/../share/X11";
-                fcitx_utils_local_cat_str(dir_path1, base, delta);
-                DIR* dir = opendir(dir_path1);
-                if(dir) {
-                    closedir(dir);
-                    xkbParentDir = realpath(dir_path1, NULL);
-                }
-                else {
-                    fcitx_utils_local_cat_str(dir_path2, base, "/X11");
-                    DIR* dir = opendir(dir_path2);
-                    if(dir) {
-                        closedir(dir);
-                        xkbParentDir = realpath(dir_path2, NULL);
+                char *tmppath;
+                fcitx_utils_alloc_cat_str(tmppath, base, delta,
+                                          "/xkb/rules/", rulesName, ".xml");
+                if(fcitx_utils_isreg(tmppath)) {
+                    rulesFile = realpath(tmppath, NULL);
+                    free(tmppath);
+                } else {
+                    fcitx_utils_alloc_cat_str(tmppath, base, "/X11/xkb/rules/",
+                                              rulesName, ".xml");
+                    if(fcitx_utils_isreg(tmppath)) {
+                        rulesFile = realpath(tmppath, NULL);
+                        free(tmppath);
                     }
                 }
             }
-
-            if(xkbParentDir == NULL || strlen(xkbParentDir) == 0) {
-                xkbParentDir = strdup("/usr/share/X11");
+            if(!rulesFile) {
+                fcitx_utils_alloc_cat_str(rulesFile,
+                                          "/usr/share/X11/xkb/rules/",
+                                          rulesName, ".xml");
             }
-
-            fcitx_utils_alloc_cat_str(rulesFile, xkbParentDir, "/xkb/rules/",
-                                      rulesName, ".xml");
-            fcitx_utils_free(xkbParentDir);
         }
+        free(rulesName);
+    } else {
+        return strdup(XKB_RULES_XML_FILE);
     }
-
-    fcitx_utils_free(rulesName);
-
-    if (rulesFile == NULL)
-        rulesFile = strdup(XKB_RULES_XML_FILE);
-
     return rulesFile;
 }
 
@@ -280,8 +271,10 @@ FcitxXkbSetRules (FcitxXkb* xkb,
     } else {
         prefix = "";
     }
-    fcitx_utils_local_cat_str(rules_path1, prefix, rules_file);
+    char *rules_path1;
+    fcitx_utils_alloc_cat_str(rules_path1, prefix, rules_file);
     rules = XkbRF_Load(rules_path1, "C", True, True);
+    free(rules_path1);
     if (rules == NULL) {
         char *rulesPath = FcitxXkbFindXkbRulesFile(xkb);
         size_t rulesBaseLen = strlen(rulesPath) - strlen(".xml");

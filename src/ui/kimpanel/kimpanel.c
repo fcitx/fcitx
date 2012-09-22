@@ -723,19 +723,24 @@ DBusHandlerResult KimpanelDBusFilter(DBusConnection* connection, DBusMessage* ms
             if (strlen(s0) > strlen("/Fcitx/")) {
                 s0 += strlen("/Fcitx/");
                 if (strcmp("logo", s0) == 0) {
+                    char *prop[3];
                     char *trans_str = _("Toggle Input Method");
-                    fcitx_utils_local_cat_str(prop0, "/Fcitx/logo/toggle:",
+                    fcitx_utils_alloc_cat_str(prop[0], "/Fcitx/logo/toggle:",
                                               trans_str, "::", trans_str);
                     trans_str = _("Configure Current Input Method");
-                    fcitx_utils_local_cat_str(prop1, "/Fcitx/logo/configureim:",
+                    fcitx_utils_alloc_cat_str(prop[1],
+                                              "/Fcitx/logo/configureim:",
                                               trans_str, ":configure:",
                                               trans_str);
                     trans_str = _("Restart");
-                    fcitx_utils_local_cat_str(prop2, "/Fcitx/logo/restart:",
+                    fcitx_utils_alloc_cat_str(prop[2], "/Fcitx/logo/restart:",
                                               trans_str, ":view-refresh:",
                                               trans_str);
-                    char *prop[3] = {prop0, prop1, prop2};
                     KimExecMenu(kimpanel, prop, 3);
+                    int i;
+                    for (i = 0;i < 3;i++) {
+                        free(prop[i]);
+                    }
                 } else if (strncmp("logo/", s0, strlen("logo/")) == 0) {
                     s0 += strlen("logo/");
                     if (strcmp(s0, "toggle") == 0)

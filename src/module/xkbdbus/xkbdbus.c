@@ -167,7 +167,8 @@ void FcitxXkbDBusGetLayouts(FcitxXkbDBus* xkbdbus, DBusMessage* message)
                 variantInfo != NULL;
                 variantInfo = (FcitxXkbVariantInfo*) utarray_next(layoutInfo->variantInfos, variantInfo))
             {
-                fcitx_utils_local_cat_str(
+                char *description;
+                fcitx_utils_alloc_cat_str(
                     description,
                     dgettext("xkeyboard-config", layoutInfo->description),
                     " - ",
@@ -175,11 +176,12 @@ void FcitxXkbDBusGetLayouts(FcitxXkbDBus* xkbdbus, DBusMessage* message)
                 GET_LANG;
                 FcitxXkbDBusAppendLayout(&sub, layoutInfo->name,
                                          variantInfo->name, description, lang);
+                free(description);
             }
         }
     }
     else {
-        char* description = dgettext("xkeyboard-config", "English (US)");
+        char *description = dgettext("xkeyboard-config", "English (US)");
         FcitxXkbDBusAppendLayout(&sub, "us", "", description, "en");
     }
     dbus_message_iter_close_container(&iter, &sub);

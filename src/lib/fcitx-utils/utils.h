@@ -60,6 +60,7 @@
 #include <unistd.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-utils/uthash.h>
+#include <sys/stat.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -533,42 +534,61 @@ extern "C" {
                                 size_t *size_list);
     void fcitx_utils_cat_str(char *out, size_t n, const char **str_list,
                              const size_t *size_list);
-    static inline void
-    fcitx_utils_cat_str_simple(char *out, size_t n, const char **str_list)
-    {
-        size_t size_list[n];
-        fcitx_utils_str_lens(n, str_list, size_list);
-        fcitx_utils_cat_str(out, n, str_list, size_list);
-    }
+    void fcitx_utils_cat_str_with_len(char *out, size_t len, size_t n,
+                                      const char **str_list,
+                                      const size_t *size_list);
+#define fcitx_utils_cat_str_simple(out, n, str_list) do {       \
+        size_t __tmp_size_list[n];                              \
+        fcitx_utils_str_lens(n, str_list, __tmp_size_list);     \
+        fcitx_utils_cat_str(out, n, str_list, __tmp_size_list); \
+    } while (0)
 
-#define fcitx_utils_local_cat_str(dest, strs...)                        \
-    fcitx_utils_local_cat_nstr(dest,                                    \
-                               sizeof((const char*[]){strs}) / sizeof(char*), \
-                               strs)
+#define fcitx_utils_cat_str_simple_with_len(out, len, n, str_list) do { \
+        size_t __tmp_size_list[n];                                      \
+        fcitx_utils_str_lens(n, str_list, __tmp_size_list);             \
+        fcitx_utils_cat_str_with_len(out, len, n, str_list, __tmp_size_list); \
+    } while (0)
 
-#define fcitx_utils_local_cat_nstr(dest, n, strs...)            \
-    const char *__tmp_str_list_##dest[] = {strs};               \
-    fcitx_utils_local_cat_strv(dest, n, __tmp_str_list_##dest)
-
-#define fcitx_utils_local_cat_strv(dest, n, strsv)                      \
-    size_t __str_count_##dest = (n);                                    \
-    const char **__str_list_##dest = strsv;                             \
-    size_t __size_list_##dest[__str_count_##dest];                      \
-    char dest[fcitx_utils_str_lens(__str_count_##dest,                  \
-                                   __str_list_##dest, __size_list_##dest)]; \
-    fcitx_utils_cat_str(dest, __str_count_##dest,                       \
-                        __str_list_##dest, __size_list_##dest)
+#define fcitx_utils_local_cat_str(dest, len, strs...)                   \
+    const char *__str_list_##dest[] = {strs};                           \
+    size_t __size_list_##dest[sizeof((const char*[]){strs}) / sizeof(char*)]; \
+    fcitx_utils_str_lens(sizeof((const char*[]){strs}) / sizeof(char*), \
+                         __str_list_##dest, __size_list_##dest);        \
+    char dest[len];                                                     \
+    fcitx_utils_cat_str_with_len(dest, len,                             \
+                                 sizeof((const char*[]){strs}) / sizeof(char*), \
+                                 __str_list_##dest, __size_list_##dest)
 
 #define fcitx_utils_alloc_cat_str(dest, strs...) do {                   \
         const char *__str_list[] = {strs};                              \
         size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \
-        size_t __size_list[__cat_str_n];                                \
+        size_t __size_list[sizeof(__str_list) / sizeof(char*)];         \
         size_t __total_size = fcitx_utils_str_lens(__cat_str_n,         \
                                                    __str_list, __size_list); \
         dest = malloc(__total_size);                                    \
-        fcitx_utils_cat_str(dest, sizeof(__str_list) / sizeof(char*),   \
+        fcitx_utils_cat_str(dest, __cat_str_n,                          \
                             __str_list, __size_list);                   \
     } while (0)
+
+    static inline int fcitx_utils_isdir(const char *path)
+    {
+        struct stat stats;
+        return (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode) &&
+                access(path, R_OK | X_OK));
+    }
+
+    static inline int fcitx_utils_isreg(const char *path)
+    {
+        struct stat stats;
+        return (stat(path, &stats) == 0 && S_ISREG(stats.st_mode) &&
+                access(path, R_OK));
+    }
+
+    static inline int fcitx_utils_islnk(const char *path)
+    {
+        struct stat stats;
+        return stat(path, &stats) == 0 && S_ISLNK(stats.st_mode);
+    }
 
 #ifdef __cplusplus
 }

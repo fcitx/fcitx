@@ -538,7 +538,8 @@ void InitPYSplitData(FcitxPinyinConfig* pyconfig)
     for (i = 0; i < size; i ++) {
         PYMappedSplitData *data = fcitx_utils_new(PYMappedSplitData);
         const char *strs[] = {pySplitData[i].py1, " ", pySplitData[i].py2};
-        fcitx_utils_cat_str_simple(data->py, 3, strs);
+        fcitx_utils_cat_str_simple_with_len(data->py, MAX_PY_LENGTH * 2 + 2,
+                                            3, strs);
         data->freq = pySplitData[i].freq;
         HASH_ADD_STR(pyconfig->splitData, py, data);
     }
@@ -548,8 +549,8 @@ double LookupPYFreq(FcitxPinyinConfig* pyconfig, int index1, int index2)
 {
     if (index1 < 0 || index2 < 0)
         return 0;
-    fcitx_utils_local_cat_str(py, pyconfig->PYTable[index1].strPY, " ",
-                              pyconfig->PYTable[index2].strPY);
+    fcitx_utils_local_cat_str(py, 6 * 2 + 2, pyconfig->PYTable[index1].strPY,
+                              " ", pyconfig->PYTable[index2].strPY);
     PYMappedSplitData *s = NULL;
     HASH_FIND_STR(pyconfig->splitData, py, s);
 
