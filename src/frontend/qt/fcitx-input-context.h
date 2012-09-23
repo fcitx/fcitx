@@ -102,6 +102,7 @@ private Q_SLOTS:
     void updateCursor();
 #endif
 private:
+    static QByteArray localMachineId();
     static QString socketFile();
     static QString address();
     void cleanUp();

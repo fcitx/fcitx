@@ -113,11 +113,37 @@ typedef QInputMethodEvent::Attribute QAttribute;
 
 static bool key_filtered = false;
 
+QByteArray QFcitxInputContext::localMachineId()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0)
+    return QDBusConnection::localMachineId();
+#else
+    QFile file1("/var/lib/dbus/machine-id");
+    QFile file2("/etc/machine-id");
+    QFile* fileToRead = NULL;
+    if (file1.open(QIODevice::ReadOnly)) {
+        fileToRead = &file1;
+    }
+    else if (file2.open(QIODevice::ReadOnly)) {
+        fileToRead = &file2;
+    }
+    if (fileToRead) {
+        QByteArray result = fileToRead->readLine(1024);
+        fileToRead->close();
+        result = result.trimmed();
+        if (!result.isEmpty())
+            return result;
+    }
+    return "machine-id";
+#endif
+}
+
 QString
 QFcitxInputContext::socketFile()
 {
     char* addressFile = NULL;
-    asprintf(&addressFile, "%s-%d", QDBusConnection::localMachineId().data(), fcitx_utils_get_display_number());
+
+    asprintf(&addressFile, "%s-%d", localMachineId().data(), fcitx_utils_get_display_number());
 
     char* file = NULL;
 
