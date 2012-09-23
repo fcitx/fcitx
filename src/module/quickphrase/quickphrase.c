@@ -331,9 +331,14 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     FcitxInputStateSetCursorPos(input, strlen(qpstate->buffer));
     FcitxInputStateSetClientCursorPos(input, strlen(qpstate->buffer) + strlen(c));
     FcitxInstanceCleanInputWindowUp(qpstate->owner);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Quick Phrase: %s"), (qpstate->append) ? c : "");
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", qpstate->buffer);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input), MSG_INPUT, "%s%s", (qpstate->append) ? c : "", qpstate->buffer);
+    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxUp(input),
+                                         MSG_TIPS, _("Quick Phrase: "),
+                                         (qpstate->append) ? c : "");
+    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+                                         MSG_INPUT, qpstate->buffer);
+    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetClientPreedit(input),
+                                         MSG_INPUT, (qpstate->append) ? c : "",
+                                         qpstate->buffer);
 }
 
 boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
@@ -404,9 +409,9 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
     if (*retval == IRV_DISPLAY_MESSAGE) {
         FcitxMessagesSetMessageCount(FcitxInputStateGetAuxDown(input), 0);
         if (!FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)))
-            FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxDown(input),
-                                          MSG_TIPS, "%s",
-                                          _("Press Enter to input text"));
+            FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxDown(input),
+                                                 MSG_TIPS,
+                                                 _("Press Enter to input text"));
     }
     return true;
 }

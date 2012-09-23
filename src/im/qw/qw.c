@@ -140,16 +140,17 @@ INPUT_RETURN_VALUE QWGetCandWord(void *arg, FcitxCandidateWord* candWord)
 
 INPUT_RETURN_VALUE QWGetCandWords(void *arg)
 {
-    FcitxQWState* qwstate = (FcitxQWState*) arg;
-    FcitxInputState* input = FcitxInstanceGetInputState(qwstate->owner);
-    int             iQu, iWei;
-    int             i;
+    FcitxQWState* qwstate = (FcitxQWState*)arg;
+    FcitxInputState *input = FcitxInstanceGetInputState(qwstate->owner);
+    int iQu, iWei, i;
 
-    FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), 10);
-    FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxCandidateWordSetPageSize(cand_list, 10);
+    FcitxCandidateWordSetChoose(cand_list, DIGIT_STR_CHOOSE);
+    char *raw_buff = FcitxInputStateGetRawInputBuffer(input);
     if (FcitxInputStateGetRawInputBufferSize(input) == 3) {
-        iQu = (FcitxInputStateGetRawInputBuffer(input)[0] - '0') * 10 + FcitxInputStateGetRawInputBuffer(input)[1] - '0';
-        iWei = (FcitxInputStateGetRawInputBuffer(input)[2] - '0') * 10;
+        iQu = (raw_buff[0] - '0') * 10 + raw_buff[1] - '0';
+        iWei = (raw_buff[2] - '0') * 10;
 
         for (i = 0; i < 10; i++) {
             FcitxCandidateWord candWord;
@@ -159,17 +160,19 @@ INPUT_RETURN_VALUE QWGetCandWords(void *arg)
             candWord.strExtra = NULL;
             candWord.strWord = strdup(GetQuWei(qwstate, iQu, iWei + i + 1));
             candWord.wordType = MSG_OTHER;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+            FcitxCandidateWordAppend(cand_list, &candWord);
         }
     }
-    FcitxInputStateSetCursorPos(input, FcitxInputStateGetRawInputBufferSize(input));
-    FcitxMessagesSetMessageCount(FcitxInputStateGetPreedit(input), 0);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT, "%s", FcitxInputStateGetRawInputBuffer(input));
+    FcitxInputStateSetCursorPos(input,
+                                FcitxInputStateGetRawInputBufferSize(input));
+    FcitxMessages *preedit = FcitxInputStateGetPreedit(input);
+    FcitxMessagesSetMessageCount(preedit, 0);
+    FcitxMessagesAddMessageAtLastStrings(preedit, MSG_INPUT, raw_buff);
 
     return IRV_DISPLAY_CANDWORDS;
 }
 
-char           *GetQuWei(FcitxQWState* qwstate, int iQu, int iWei)
+char *GetQuWei(FcitxQWState* qwstate, int iQu, int iWei)
 {
     IconvStr inbuf;
     char *outbuf;

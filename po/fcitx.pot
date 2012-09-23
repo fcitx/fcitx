@@ -1687,7 +1687,7 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:336
 #, c-format
-msgid "Quick Phrase: %s"
+msgid "Quick Phrase: "
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/tray.c:164

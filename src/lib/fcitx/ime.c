@@ -842,8 +842,11 @@ void FcitxInstanceProcessInputReturnValue(
 
     if (retVal & IRV_FLAG_DISPLAY_LAST) {
         FcitxInstanceCleanInputWindow(instance);
-        FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_INPUT, "%c", FcitxInputStateGetRawInputBuffer(input)[0]);
-        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_TIPS, "%s", FcitxInputStateGetLastCommitString(input));
+        char str[2] = {FcitxInputStateGetRawInputBuffer(input)[0], '\0'};
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_INPUT, str);
+        FcitxMessagesAddMessageAtLastStrings(
+            input->msgAuxDown, MSG_TIPS,
+            FcitxInputStateGetLastCommitString(input));
     }
 
     if (retVal & IRV_FLAG_UPDATE_INPUT_WINDOW)
@@ -1499,10 +1502,12 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
         return;
 
     if (instance->config->bShowVersion) {
-        FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, "FCITX " VERSION " ");
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_TIPS,
+                                             "FCITX " VERSION " ");
     }
     if (im) {
-        FcitxMessagesAddMessageAtLast(input->msgAuxUp, MSG_TIPS, "%s", im->strName);
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_TIPS,
+                                             im->strName);
     }
 
     //显示打字速度
@@ -1514,13 +1519,15 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
             timePassed = 1.0;
 
         FcitxMessagesSetMessageCount(input->msgAuxDown, 0);
-        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("Input Speed: "));
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+                                             _("Input Speed: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int)(instance->iHZInputed * 60 / timePassed));
-        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("/min  Time Used: "));
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+                                             _("/min  Time Used: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) timePassed / 60);
-        FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_OTHER, _("min Num of Characters: "));
+        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+                                             _("min Num of Characters: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%u", instance->iHZInputed);
-
     }
 
     FcitxUIUpdateInputWindow(instance);
