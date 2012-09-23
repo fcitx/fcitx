@@ -190,6 +190,7 @@ extern "C" {
     uint64_t FcitxInstanceAddTimeout(FcitxInstance* instance, long int milli, FcitxTimeoutCallback callback , void* arg);
 
     boolean FcitxInstanceCheckTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
+    boolean FcitxInstanceCheckTimeoutById(FcitxInstance *instance, uint64_t id);
 
     boolean FcitxInstanceRemoveTimeoutByFunc(FcitxInstance* instance, FcitxTimeoutCallback callback);
 
