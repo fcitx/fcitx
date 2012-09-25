@@ -480,7 +480,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
             IsValidSym(sym, state)) {
             if (IsValidChar(result) || FcitxHotkeyIsHotKeyLAZ(sym, state) ||
                 FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state) ||
-                FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS)) {
+                (*keyboard->buffer &&
+                 FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS))) {
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
                 if (result)
