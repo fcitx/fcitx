@@ -684,11 +684,9 @@ FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConf
         return SyncSuccess;
 
     case Value2Raw:
-        if (option->rawValue)
-            free(option->rawValue);
-
-        asprintf(&option->rawValue, "%c", *option->value.chr);
-
+        option->rawValue = realloc(option->rawValue, 2);
+        option->rawValue[0] = *option->value.chr;
+        option->rawValue[1] = '\0';
         return SyncSuccess;
 
     case ValueFree:

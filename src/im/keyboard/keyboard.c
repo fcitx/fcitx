@@ -331,11 +331,12 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                         lang = entry->iso_639_1_code;
                     }
                 }
-                char* description;
-                asprintf(&description, _("Keyboard - %s"),
-                        dgettext("xkeyboard-config", layoutInfo->description));
-
-                FcitxKeyboardLayoutCreate(keyboard, description, lang, layoutInfo->name, NULL);
+                char *description;
+                fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                          dgettext("xkeyboard-config",
+                                                   layoutInfo->description));
+                FcitxKeyboardLayoutCreate(keyboard, description,
+                                          lang, layoutInfo->name, NULL);
                 free(description);
             }
             FcitxXkbVariantInfo* variantInfo;
@@ -354,12 +355,15 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                         lang = entry->iso_639_1_code;
                     }
                 }
-                char* description;
-                asprintf(&description, _("Keyboard - %s - %s"),
-                        dgettext("xkeyboard-config", layoutInfo->description),
-                        dgettext("xkeyboard-config", variantInfo->description));
-
-                FcitxKeyboardLayoutCreate(keyboard, description, lang, layoutInfo->name, variantInfo->name);
+                char *description;
+                fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                          dgettext("xkeyboard-config",
+                                                   layoutInfo->description),
+                                          " - ",
+                                          dgettext("xkeyboard-config",
+                                                   variantInfo->description));
+                FcitxKeyboardLayoutCreate(keyboard, description, lang,
+                                          layoutInfo->name, variantInfo->name);
                 free(description);
             }
         }
@@ -368,15 +372,11 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     else
 #endif
     {
-        char* description;
-        asprintf(&description, _("Keyboard"));
-
         fcitx_utils_free(keyboard->initialLayout);
         keyboard->initialLayout = strdup("us");
         fcitx_utils_free(keyboard->initialVariant);
         keyboard->initialVariant = NULL;
-        FcitxKeyboardLayoutCreate(keyboard, description, "en", "us", NULL);
-        free(description);
+        FcitxKeyboardLayoutCreate(keyboard, _("Keyboard"), "en", "us", NULL);
     }
 
     keyboard->lastLength = 10;
@@ -398,8 +398,9 @@ boolean FcitxKeyboardInit(void *arg)
     FcitxInstanceSetContext(layout->owner->owner,
                             CONTEXT_DISABLE_FULLWIDTH, &flag);
     if (layout->variantString) {
-        char* string;
-        asprintf(&string, "%s,%s", layout->layoutString, layout->variantString);
+        char *string;
+        fcitx_utils_alloc_cat_str(string, layout->layoutString, ",",
+                                  layout->variantString);
         FcitxInstanceSetContext(layout->owner->owner,
                                 CONTEXT_IM_KEYBOARD_LAYOUT, string);
         free(string);
