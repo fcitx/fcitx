@@ -287,8 +287,8 @@ void* DBusCreate(FcitxInstance* instance)
         }
     }
 
-    AddFunction(dbusaddon, DBusGetConnection);
-    AddFunction(dbusaddon, DBusGetPrivateConnection);
+    FcitxModuleAddFunction(dbusaddon, DBusGetConnection);
+    FcitxModuleAddFunction(dbusaddon, DBusGetPrivateConnection);
     dbus_error_free(&err);
 
     dbusmodule->serviceName = servicename;

@@ -195,7 +195,7 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     FcitxAddon* addon = FcitxAddonsGetAddonByName(
         FcitxInstanceGetAddons(instance),
         FCITX_QUICKPHRASE_NAME);
-    AddFunction(addon, QuickPhraseLaunch);
+    FcitxModuleAddFunction(addon, QuickPhraseLaunch);
 
     return qpstate;
 }

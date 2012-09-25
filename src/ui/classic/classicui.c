@@ -160,9 +160,9 @@ void* ClassicUICreate(FcitxInstance* instance)
     DisplaySkin(classicui, classicui->skinType);
 
     /* ensure order ! */
-    AddFunction(classicuiaddon, ClassicUILoadImage);
-    AddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
-    AddFunction(classicuiaddon, ClassicUIGetFont);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUILoadImage);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetFont);
 
     return classicui;
 }

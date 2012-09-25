@@ -135,14 +135,14 @@ void *PYCreate(FcitxInstance* instance)
     pystate->owner = instance;
 
     /* ensure the order! */
-    AddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
-    AddFunction(pyaddon, PYGetPYByHZWrapper); // 1
-    AddFunction(pyaddon, DoPYInputWrapper); // 2
-    AddFunction(pyaddon, PYGetCandWordsWrapper); // 3
-    AddFunction(pyaddon, PYGetFindStringWrapper); // 4
-    AddFunction(pyaddon, PYResetWrapper); // 5
-    AddFunction(pyaddon, PYSP2QP); // 6
-    AddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
+    FcitxModuleAddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
+    FcitxModuleAddFunction(pyaddon, PYGetPYByHZWrapper); // 1
+    FcitxModuleAddFunction(pyaddon, DoPYInputWrapper); // 2
+    FcitxModuleAddFunction(pyaddon, PYGetCandWordsWrapper); // 3
+    FcitxModuleAddFunction(pyaddon, PYGetFindStringWrapper); // 4
+    FcitxModuleAddFunction(pyaddon, PYResetWrapper); // 5
+    FcitxModuleAddFunction(pyaddon, PYSP2QP); // 6
+    FcitxModuleAddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
     return pystate;
 }
 

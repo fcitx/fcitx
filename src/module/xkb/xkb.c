@@ -690,12 +690,12 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         hk.func = FcitxXkbCurrentStateChangedTriggerOn;
         FcitxInstanceRegisterTriggerOnHook(instance, hk);
 
-        AddFunction(addon, FcitxXkbGetRules);
-        AddFunction(addon, FcitxXkbGetCurrentLayout);
-        AddFunction(addon, FcitxXkbLayoutExists);
-        AddFunction(addon, FcitxXkbGetLayoutOverride);
-        AddFunction(addon, FcitxXkbSetLayoutOverride);
-        AddFunction(addon, FcitxXkbSetDefaultLayout);
+        FcitxModuleAddFunction(addon, FcitxXkbGetRules);
+        FcitxModuleAddFunction(addon, FcitxXkbGetCurrentLayout);
+        FcitxModuleAddFunction(addon, FcitxXkbLayoutExists);
+        FcitxModuleAddFunction(addon, FcitxXkbGetLayoutOverride);
+        FcitxModuleAddFunction(addon, FcitxXkbSetLayoutOverride);
+        FcitxModuleAddFunction(addon, FcitxXkbSetDefaultLayout);
 
         if (xkb->config.bOverrideSystemXKBSettings)
             FcitxXkbSetLayout(xkb, NULL, NULL, NULL);

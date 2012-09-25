@@ -156,9 +156,8 @@ void* LuaCreate(FcitxInstance* instance) {
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
     FcitxAddon* luaAddon = FcitxAddonsGetAddonByName(
-            FcitxInstanceGetAddons(instance),
-            FCITX_LUA_NAME);
-    AddFunction(luaAddon, LuaCallCommand);
+        FcitxInstanceGetAddons(instance), FCITX_LUA_NAME);
+    FcitxModuleAddFunction(luaAddon, LuaCallCommand);
 
     return luamodule;
 err:

@@ -150,8 +150,8 @@ void* PuncCreate(FcitxInstance* instance)
 
     puncState->slot = FcitxInstanceAllocDataForIC(instance, PuncWhichAlloc, PuncWhichCopy, PuncWhichFree, puncState);
 
-    AddFunction(puncaddon, PuncGetPunc);
-    AddFunction(puncaddon, PuncGetPunc2);
+    FcitxModuleAddFunction(puncaddon, PuncGetPunc);
+    FcitxModuleAddFunction(puncaddon, PuncGetPunc2);
     return puncState;
 }
 

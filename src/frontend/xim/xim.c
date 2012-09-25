@@ -245,7 +245,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
-    AddFunction(ximaddon, XimConsumeQueue);
+    FcitxModuleAddFunction(ximaddon, XimConsumeQueue);
 
     return xim;
 }

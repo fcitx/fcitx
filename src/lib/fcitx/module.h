@@ -89,7 +89,7 @@ extern "C" {
      * @param args arguments
      * @return void*
      **/
-    void* FcitxModuleInvokeFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+    void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
@@ -109,8 +109,8 @@ extern "C" {
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
 /** call a function provides by other addon */
-#define InvokeFunction(INST, MODULE, FUNC, ARG)  \
-    ((MODULE##_##FUNC##_RETURNTYPE) FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
+#define InvokeFunction(INST, MODULE, FUNC, ARG)                         \
+    ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
 
 #define InvokeVaArgs(INST, MODULE, FUNC, ARGV...)                       \
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
@@ -135,8 +135,7 @@ extern "C" {
      * @param addon
      * @param func
      **/
-    void FcitxModuleAddFunction(struct _FcitxAddon *addon,
-                                FcitxModuleFunction func);
+    void FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func);
 
 #ifdef __cplusplus
 }

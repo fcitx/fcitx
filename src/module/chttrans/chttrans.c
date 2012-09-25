@@ -101,8 +101,8 @@ void* ChttransCreate(FcitxInstance* instance)
 
     FcitxInstanceWatchContext(instance, CONTEXT_IM_LANGUAGE, ChttransLanguageChanged, transState);
 
-    AddFunction(transAddon, ChttransS2T);
-    AddFunction(transAddon, ChttransT2S);
+    FcitxModuleAddFunction(transAddon, ChttransS2T);
+    FcitxModuleAddFunction(transAddon, ChttransT2S);
 
     return transState;
 }

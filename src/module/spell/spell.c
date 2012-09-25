@@ -124,11 +124,11 @@ SpellCreate(FcitxInstance *instance)
     SpellSetLang(spell, "en");
     addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
                                       FCITX_SPELL_NAME);
-    AddFunction(addon, FcitxSpellHintWords);
-    AddFunction(addon, FcitxSpellAddPersonal);
-    AddFunction(addon, FcitxSpellDictAvailable);
-    AddFunction(addon, FcitxSpellGetCandWords);
-    AddFunction(addon, FcitxSpellCandWordGetCommit);
+    FcitxModuleAddFunction(addon, FcitxSpellHintWords);
+    FcitxModuleAddFunction(addon, FcitxSpellAddPersonal);
+    FcitxModuleAddFunction(addon, FcitxSpellDictAvailable);
+    FcitxModuleAddFunction(addon, FcitxSpellGetCandWords);
+    FcitxModuleAddFunction(addon, FcitxSpellCandWordGetCommit);
     return spell;
 }
 
