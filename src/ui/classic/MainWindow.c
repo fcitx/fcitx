@@ -137,6 +137,7 @@ void DrawMainWindow(MainWindow* mainWindow)
     FcitxClassicUI* classicui = mainWindow->owner;
     FcitxSkin *sc = &mainWindow->owner->skin;
     FcitxInstance *instance = mainWindow->owner->owner;
+    FcitxInputContext2* ic2 = (FcitxInputContext2*) FcitxInstanceGetCurrentIC(classicui->owner);
 
     FcitxLog(DEBUG, _("DRAW MainWindow"));
 
@@ -170,7 +171,8 @@ void DrawMainWindow(MainWindow* mainWindow)
         privstat->avail = false;
     }
 
-    if (mainWindow->owner->hideMainWindow == HM_SHOW || (mainWindow->owner->hideMainWindow == HM_AUTO && (FcitxInstanceGetCurrentState(mainWindow->owner->owner) == IS_ACTIVE))) {
+    if (mainWindow->owner->hideMainWindow == HM_SHOW
+        || (mainWindow->owner->hideMainWindow == HM_AUTO && ((ic2 && ic2->switchBySwitchKey) || FcitxInstanceGetCurrentState(mainWindow->owner->owner) == IS_ACTIVE))) {
         SkinImage* activeIcon = LoadImage(sc, sc->skinMainBar.active, false);
         cairo_t *c;
 
