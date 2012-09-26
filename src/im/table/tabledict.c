@@ -146,7 +146,10 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
             CHECK_LOAD_TABLE_ERROR(tableDict->iPYCodeLength + 1);
             size = fcitx_utils_read_uint32(fpDict, &iTemp);
             CHECK_LOAD_TABLE_ERROR(1);
-            if (iTemp > PHRASE_MAX_LENGTH * UTF8_MAX_LENGTH) {
+            /* we don't actually have such limit, but sometimes, broken table
+             * may break this, so we need to give a limitation.
+             */
+            if (iTemp > UTF8_MAX_LENGTH * 30) {
                 error = true;
                 goto table_load_error;
             }
