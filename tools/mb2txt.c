@@ -106,7 +106,7 @@ void usage()
 int main(int argc, char *argv[])
 {
     char            strCode[100];
-    char            strHZ[100];
+    char            strHZ[UTF8_MAX_LENGTH * 31];
     FILE           *fpDict;
     unsigned int    i = 0;
     uint32_t        iTemp;
@@ -239,6 +239,8 @@ int main(int argc, char *argv[])
     for (i = 0; i < j; i++) {
         fread(strCode, sizeof(char), iLen + 1, fpDict);
         fcitx_utils_read_uint32(fpDict, &iTemp);
+        if (iTemp > UTF8_MAX_LENGTH * 30)
+            break;
         fread(strHZ, sizeof(unsigned char), iTemp, fpDict);
 
         if (iVersion) {
