@@ -1382,7 +1382,7 @@ void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
             fcitx_utils_alloc_cat_str(newresult, uniqueName, ":",
                                       enable ? "True" : "False");
         } else {
-            fcitx_utils_alloc_cat_str(newresult, result, ":", uniqueName, ":",
+            fcitx_utils_alloc_cat_str(newresult, result, ",", uniqueName, ":",
                                       enable ? "True" : "False");
         }
         if (result)
