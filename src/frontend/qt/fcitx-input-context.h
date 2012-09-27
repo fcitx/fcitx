@@ -27,6 +27,8 @@
 #include <QDBusConnection>
 #include <QDir>
 #include <QApplication>
+#include <QWeakPointer>
+
 #include "org.fcitx.Fcitx.InputMethod.h"
 #include "org.fcitx.Fcitx.InputContext.h"
 #include "fcitx-config/hotkey.h"
@@ -140,7 +142,7 @@ private:
     void updateCapacity();
     void commitPreedit();
 
-    QFileSystemWatcher m_watcher;
+    QWeakPointer<QFileSystemWatcher> m_watcher;
     QDBusServiceWatcher m_serviceWatcher;
     QDBusConnection* m_connection;
     org::fcitx::Fcitx::InputMethod* m_improxy;

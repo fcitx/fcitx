@@ -200,7 +200,7 @@ QFcitxInputContext::address()
 }
 
 QFcitxInputContext::QFcitxInputContext()
-    : m_watcher(this),
+    : m_watcher(new QFileSystemWatcher(this)),
       m_connection(0),
       m_improxy(0),
       m_icproxy(0),
@@ -227,14 +227,16 @@ QFcitxInputContext::QFcitxInputContext()
         QDir rt(QDir::root());
         rt.mkpath(info.path());
     }
-    m_watcher.addPath(info.path());
+    m_watcher.data()->addPath(info.path());
     if (info.exists()) {
-        m_watcher.addPath(info.filePath());
+        m_watcher.data()->addPath(info.filePath());
     }
 
-    connect(&m_watcher, SIGNAL(fileChanged(QString)), this, SLOT(socketFileChanged()));
-    connect(&m_watcher, SIGNAL(directoryChanged(QString)), this, SLOT(socketFileChanged()));
-
+    connect(m_watcher.data(), SIGNAL(fileChanged(QString)), this, SLOT(socketFileChanged()));
+    connect(m_watcher.data(), SIGNAL(directoryChanged(QString)), this, SLOT(socketFileChanged()));
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 0)
+    connect(qApp, SIGNAL(aboutToQuit()), m_watcher.data(), SLOT(deleteLater()));
+#endif
     createConnection();
 }
 
@@ -245,14 +247,20 @@ QFcitxInputContext::~QFcitxInputContext()
     }
 
     cleanUp();
+
+    if (!m_watcher.isNull())
+        delete m_watcher.data();
 }
 
 void QFcitxInputContext::socketFileChanged()
 {
+    if (m_watcher.isNull())
+        return;
+
     QFileInfo info(socketFile());
     if (info.exists()) {
-        if (m_watcher.files().indexOf(info.filePath()) == -1)
-            m_watcher.addPath(info.filePath());
+        if (m_watcher.data()->files().indexOf(info.filePath()) == -1)
+            m_watcher.data()->addPath(info.filePath());
     }
 
     QString addr = address();
