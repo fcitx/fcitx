@@ -149,7 +149,7 @@ PinyinEnhanceGetSpellCandWords(PinyinEnhance *pyenhance, const char *string,
         FcitxMessages *message = FcitxInputStateGetClientPreedit(input);
         preedit_str = FcitxInputStateGetRawInputBuffer(input);
         FcitxMessagesSetMessageCount(message, 0);
-        FcitxMessagesAddMessageAtLast(message, MSG_INPUT, "%s", preedit_str);
+        FcitxMessagesAddMessageAtLastStrings(message, MSG_INPUT, preedit_str);
     }
     PinyinEnhanceMergeSpellCandList(pyenhance, candList, newList, position);
     return true;

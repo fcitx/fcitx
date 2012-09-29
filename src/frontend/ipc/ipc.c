@@ -400,10 +400,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
         else {
-            if (strlen(appname) == 0)
+            if (strlen(appname) == 0) {
                 ipcic->appname = NULL;
-            else
+            } else {
                 ipcic->appname = strdup(appname);
+            }
         }
 
         if (config->shareState == ShareState_PerProgram)
@@ -429,10 +430,11 @@ void IPCCreateIC(void* arg, FcitxInputContext* context, void* priv)
         if (!dbus_message_get_args(message, &error, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INT32, &icpid, DBUS_TYPE_INVALID))
             ipcic->appname = NULL;
         else {
-            if (strlen(appname) == 0)
+            if (strlen(appname) == 0) {
                 ipcic->appname = NULL;
-            else
+            } else {
                 ipcic->appname = strdup(appname);
+            }
         }
         ipcic->pid = icpid;
 
@@ -1376,10 +1378,13 @@ void IPCSetPropertyIMList(void* arg, DBusMessageIter* args)
         dbus_message_iter_next(&ssub);
 
         char* newresult;
-        if (result == NULL)
-            asprintf(&newresult, "%s:%s", uniqueName, enable ? "True" : "False");
-        else
-            asprintf(&newresult, "%s,%s:%s", result, uniqueName, enable ? "True" : "False");
+        if (!result) {
+            fcitx_utils_alloc_cat_str(newresult, uniqueName, ":",
+                                      enable ? "True" : "False");
+        } else {
+            fcitx_utils_alloc_cat_str(newresult, result, ",", uniqueName, ":",
+                                      enable ? "True" : "False");
+        }
         if (result)
             free(result);
         result = newresult;

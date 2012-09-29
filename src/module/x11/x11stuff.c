@@ -97,18 +97,18 @@ void* X11Create(FcitxInstance* instance)
     utarray_init(&x11priv->comphandlers, &comphandler_icd);
 
     /* ensure the order ! */
-    AddFunction(x11addon, X11GetDisplay);
-    AddFunction(x11addon, X11AddEventHandler);
-    AddFunction(x11addon, X11RemoveEventHandler);
-    AddFunction(x11addon, X11FindARGBVisual);
-    AddFunction(x11addon, X11InitWindowAttribute);
-    AddFunction(x11addon, X11SetWindowProperty);
-    AddFunction(x11addon, X11GetScreenSize);
-    AddFunction(x11addon, X11MouseClick);
-    AddFunction(x11addon, X11AddCompositeHandler);
-    AddFunction(x11addon, X11ScreenGeometry);
-    AddFunction(x11addon, X11ProcessEventReal);
-    AddFunction(x11addon, X11GetDPI);
+    FcitxModuleAddFunction(x11addon, X11GetDisplay);
+    FcitxModuleAddFunction(x11addon, X11AddEventHandler);
+    FcitxModuleAddFunction(x11addon, X11RemoveEventHandler);
+    FcitxModuleAddFunction(x11addon, X11FindARGBVisual);
+    FcitxModuleAddFunction(x11addon, X11InitWindowAttribute);
+    FcitxModuleAddFunction(x11addon, X11SetWindowProperty);
+    FcitxModuleAddFunction(x11addon, X11GetScreenSize);
+    FcitxModuleAddFunction(x11addon, X11MouseClick);
+    FcitxModuleAddFunction(x11addon, X11AddCompositeHandler);
+    FcitxModuleAddFunction(x11addon, X11ScreenGeometry);
+    FcitxModuleAddFunction(x11addon, X11ProcessEventReal);
+    FcitxModuleAddFunction(x11addon, X11GetDPI);
 
 #ifdef HAVE_XFIXES
     int ignore;

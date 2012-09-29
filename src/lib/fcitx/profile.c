@@ -120,62 +120,68 @@ void FcitxProfileSave(FcitxProfile* profile)
     } while(0);
 }
 
-void FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group, FcitxConfigOption* option, void* value, FcitxConfigSync sync, void* arg)
+void
+FilterIMList(FcitxGenericConfig* config, FcitxConfigGroup* group,
+             FcitxConfigOption* option, void* value,
+             FcitxConfigSync sync, void* arg)
 {
     FcitxInstance* instance = arg;
     if (sync == Value2Raw) {
-        char* result = NULL;
-        FcitxIM* ime;
-        for (ime = (FcitxIM*) utarray_front(&instance->imes);
-                ime != NULL;
-                ime = (FcitxIM*) utarray_next(&instance->imes, ime)) {
-            char* newresult;
-            if (result == NULL)
-                asprintf(&newresult, "%s:True", ime->uniqueName);
-            else
-                asprintf(&newresult, "%s,%s:True", result, ime->uniqueName);
-            if (result)
-                free(result);
-            result = newresult;
-        }
+        size_t imes_len = utarray_len(&instance->imes);
+        size_t avail_len = utarray_len(&instance->availimes);
+        size_t count = (imes_len + avail_len +
+                        HASH_COUNT(instance->unusedItem)) * 2;
+        const char *names[count];
+        size_t name_lens[count];
+        count = 0;
+        size_t res_len = 0;
+        int i;
+        FcitxIM *ime;
+#define ADD_IM_NAME(imname, state, state_len)  do {             \
+            names[count] = imname;                              \
+            res_len += (name_lens[count] = strlen(imname));     \
+            count++;                                            \
+            names[count] = state;                               \
+            res_len += (name_lens[count] = state_len);          \
+            count++;                                            \
+        } while (0)
 
-        for (ime = (FcitxIM*) utarray_front(&instance->availimes);
-                ime != NULL;
-                ime = (FcitxIM*) utarray_next(&instance->availimes, ime)) {
-            if (!FcitxInstanceGetIMFromIMList(instance, IMAS_Enable, ime->uniqueName)) {
-                char* newresult;
-                if (result == NULL)
-                    asprintf(&newresult, "%s:False", ime->uniqueName);
-                else
-                    asprintf(&newresult, "%s,%s:False", result, ime->uniqueName);
-                if (result)
-                    free(result);
-                result = newresult;
-            }
+        for (i = 0;i < imes_len;i++) {
+            ime = (FcitxIM*)_utarray_eltptr(&instance->imes, i);
+            ADD_IM_NAME(ime->uniqueName, ":True,", strlen(":True,"));
         }
-
+        for (i = 0;i < avail_len;i++) {
+            ime = (FcitxIM*)_utarray_eltptr(&instance->availimes, i);
+            if (FcitxInstanceGetIMFromIMList(instance, IMAS_Enable,
+                                             ime->uniqueName))
+                continue;
+            ADD_IM_NAME(ime->uniqueName, ":False,", strlen(":False,"));
+        }
         UnusedIMItem* item = instance->unusedItem;
         while(item) {
-            char* newresult;
-            const char* status = item->status ? "True" : "False";
-            if (result == NULL)
-                asprintf(&newresult, "%s:%s", item->name, status);
-            else
-                asprintf(&newresult, "%s,%s:%s", result, item->name, status);
-            if (result)
-                free(result);
-            result = newresult;
+            char *status;
+            size_t s_len;
+            if (item->status) {
+                status = ":True,";
+                s_len = strlen(":True,");
+            } else {
+                status = ":False,";
+                s_len = strlen(":False,");
+            }
+            ADD_IM_NAME(item->name, status, s_len);
             item = item->hh.next;
         }
-
-        char** imList = (char**) value;
-
+        char** imList = (char**)value;
         if (*imList)
             free(*imList);
-        if (result)
-            *imList = result;
-        else
+        if (!count) {
             *imList = strdup("");
+            return;
+        }
+        name_lens[count - 1]--;
+        *imList = malloc(res_len);
+        fcitx_utils_cat_str(*imList, count, names, name_lens);
+#undef ADD_IM_NAME
     }
 }
 

@@ -1492,8 +1492,8 @@ msgstr "快速输入列表"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:336
 #, c-format
-msgid "Quick Phrase: %s"
-msgstr "快速输入: %s"
+msgid "Quick Phrase: "
+msgstr "快速输入: "
 
 # unknown
 msgid "QuickPhrase"

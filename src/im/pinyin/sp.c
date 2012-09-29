@@ -91,7 +91,7 @@ void LoadSPData(FcitxPinyinState *pystate)
         i = 0;
 
         while (SPMap_C[i].strQP[0]) {
-            if (strlen(SPMap_C[i].strQP) == 1)
+            if (!SPMap_C[i].strQP[1])
                 SPMap_C[i].cJP = SPMap_C[i].strQP[0];
             i ++ ;
         }
@@ -112,7 +112,7 @@ void LoadSPData(FcitxPinyinState *pystate)
             if (*pstr == ' ' || *pstr == '\t')
                 pstr++;
 
-            if (!strlen(pstr) || pstr[0] == '#')
+            if (*pstr == '\0' || *pstr == '#')
                 continue;
 
             if (!strncmp(pstr, cstr(NAME), cstrlen(NAME))) {

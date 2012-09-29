@@ -89,7 +89,7 @@ extern "C" {
      * @param args arguments
      * @return void*
      **/
-    void* FcitxModuleInvokeFunction(struct _FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
+    void* FcitxModuleInvokeFunction(FcitxAddon* addon, int functionId, FcitxModuleFunctionArg args);
 #define FcitxModuleInvokeVaArgs(addon, functionId, ARGV...)             \
     (FcitxModuleInvokeFunction(addon, functionId,                       \
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
@@ -109,8 +109,8 @@ extern "C" {
                                (FcitxModuleFunctionArg){ .args = {ARGV} }))
 
 /** call a function provides by other addon */
-#define InvokeFunction(INST, MODULE, FUNC, ARG)  \
-    ((MODULE##_##FUNC##_RETURNTYPE) FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
+#define InvokeFunction(INST, MODULE, FUNC, ARG)                         \
+    ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(INST, MODULE##_NAME, MODULE##_##FUNC, ARG))
 
 #define InvokeVaArgs(INST, MODULE, FUNC, ARGV...)                       \
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
@@ -122,12 +122,20 @@ extern "C" {
  * limit) as well as directly call the function without a FunctionArg wrapper.
  **/
 
-/** add a function to current addon */
-#define AddFunction(ADDON, Realname) \
-   do { \
-       void *temp = Realname; \
+/** add a function to a addon */
+#define AddFunction(ADDON, Realname)                   \
+    do {                                               \
+       void *temp = (void*)Realname;                   \
        utarray_push_back(&ADDON->functionList, &temp); \
    } while(0)
+
+    /**
+     * add a function to a addon
+     *
+     * @param addon
+     * @param func
+     **/
+    void FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func);
 
 #ifdef __cplusplus
 }

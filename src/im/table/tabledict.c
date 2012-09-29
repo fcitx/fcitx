@@ -43,13 +43,18 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
     int reload = 0;
     do {
         boolean error = false;
-        if (!reload)
-            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath, "r", NULL);
-        else {
-            char* temppath;
-            asprintf(&temppath, "table/%s", tableMetaData->strPath);
-            char* tablepath = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", temppath);
-            free(temppath);
+        if (!reload) {
+            /**
+             * kcm saves a absolute path here but it is then interpreted as
+             * a relative path?
+             **/
+            fpDict = FcitxXDGGetFileWithPrefix("table", tableMetaData->strPath,
+                                               "r", NULL);
+        } else {
+            char *tablepath;
+            char *path = fcitx_utils_get_fcitx_path("pkgdatadir");
+            fcitx_utils_alloc_cat_str(tablepath, path, "/table/",
+                                      tableMetaData->strPath);
             fpDict = fopen(tablepath, "r");
             free(tablepath);
         }
@@ -82,12 +87,13 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
         /*
          * 建立索引，加26是为了为拼音编码预留空间
          */
-        tableDict->recordIndex = (RECORD_INDEX*)fcitx_memory_pool_alloc(tableDict->pool, (strlen(tableDict->strInputCode) + 26) * sizeof(RECORD_INDEX));
-        for (iTemp = 0; iTemp < strlen(tableDict->strInputCode) + 26; iTemp++) {
+        size_t tmp_len = strlen(tableDict->strInputCode) + 26;
+        tableDict->recordIndex = (RECORD_INDEX*)fcitx_memory_pool_alloc(tableDict->pool, tmp_len * sizeof(RECORD_INDEX));
+        for (iTemp = 0; iTemp < tmp_len; iTemp++) {
             tableDict->recordIndex[iTemp].cCode = 0;
             tableDict->recordIndex[iTemp].record = NULL;
         }
-        /* ********************************************************************** */
+        /********************************************************************/
 
         size = fread(&(tableDict->iCodeLength), sizeof(uint8_t), 1, fpDict);
         CHECK_LOAD_TABLE_ERROR(1);
@@ -186,7 +192,7 @@ boolean LoadTableDict(TableMetaData* tableMetaData)
                 tableDict->recordIndex[iRecordIndex].record = recTemp;
                 iRecordIndex++;
             }
-            /* **************************************************************** */
+            /******************************************************************/
             /** 为单字生成一个表   */
             if (fcitx_utf8_strlen(recTemp->strHZ) == 1 && !IsIgnoreChar(tableDict, strCode[0]))
             {
@@ -276,14 +282,14 @@ table_load_error:
 
     tableDict->iAutoPhrase = 0;
     if (tableMetaData->bAutoPhrase) {
-        //为自动词组分配空间
         tableDict->autoPhrase = (AUTOPHRASE*)fcitx_memory_pool_alloc(tableDict->pool, sizeof(AUTOPHRASE) * AUTO_PHRASE_COUNT);
 
         //读取上次保存的自动词组信息
         FcitxLog(DEBUG, _("Loading Autophrase."));
 
-        char* temppath;
-        asprintf(&temppath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
+        char *temppath;
+        fcitx_utils_alloc_cat_str(temppath, tableMetaData->uniqueName,
+                                  "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileWithPrefix("table", temppath, "r", NULL);
         free(temppath);
         i = 0;
@@ -447,8 +453,9 @@ void SaveTableDict(TableMetaData *tableMetaData)
             fclose(fpDict);
         }
 
-        char* strPath;
-        asprintf(&strPath, "%s_LastAutoPhrase.tmp", tableMetaData->uniqueName);
+        char *strPath;
+        fcitx_utils_alloc_cat_str(strPath, tableMetaData->uniqueName,
+                                  "_LastAutoPhrase.tmp");
         fpDict = FcitxXDGGetFileUserWithPrefix("table", strPath, NULL, &pstr);
         free(strPath);
         if (access(pstr, F_OK))
@@ -727,7 +734,8 @@ int TableCompareCode(const TableMetaData* tableMetaData, const char *strUser, co
 {
     int             i;
 
-    for (i = 0; i < strlen(strUser); i++) {
+    size_t tmp_len = strlen(strUser);
+    for (i = 0; i < tmp_len; i++) {
         if (!strDict[i])
             return strUser[i];
         if (strUser[i] != tableMetaData->cMatchingKey || !tableMetaData->bUseMatchingKey) {

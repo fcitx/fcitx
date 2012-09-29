@@ -98,7 +98,8 @@ void* DBusCreate(FcitxInstance* instance)
     int retry = 0;
     DBusConnection* conn = NULL;
     char* servicename = NULL;
-    asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE, fcitx_utils_get_display_number());
+    asprintf(&servicename, "%s-%d", FCITX_DBUS_SERVICE,
+             fcitx_utils_get_display_number());
 
     /* do session dbus initialize */
     do {
@@ -210,7 +211,8 @@ void* DBusCreate(FcitxInstance* instance)
         privconn = dbus_connection_open(dbusmodule->daemon.address, &err);
 
         if (dbus_error_is_set(&err)) {
-            FcitxLog(ERROR, "Private dbus daemon connection error (%s)", err.message);
+            FcitxLog(ERROR, "Private dbus daemon connection error (%s)",
+                     err.message);
             break;
         }
 
@@ -245,7 +247,8 @@ void* DBusCreate(FcitxInstance* instance)
 
         char* addressFile = NULL;
         char* localMachineId = dbus_get_local_machine_id();
-        asprintf(&addressFile, "%s-%d", localMachineId, fcitx_utils_get_display_number());
+        asprintf(&addressFile, "%s-%d", localMachineId,
+                 fcitx_utils_get_display_number());
         dbus_free(localMachineId);
 
         FILE* fp = FcitxXDGGetFileUserWithPrefix("dbus", addressFile, "w", NULL);
@@ -284,8 +287,8 @@ void* DBusCreate(FcitxInstance* instance)
         }
     }
 
-    AddFunction(dbusaddon, DBusGetConnection);
-    AddFunction(dbusaddon, DBusGetPrivateConnection);
+    FcitxModuleAddFunction(dbusaddon, DBusGetConnection);
+    FcitxModuleAddFunction(dbusaddon, DBusGetPrivateConnection);
     dbus_error_free(&err);
 
     dbusmodule->serviceName = servicename;

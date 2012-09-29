@@ -268,6 +268,19 @@ void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type
     }
 }
 
+FCITX_EXPORT_API void
+FcitxMessagesAddMessageAtLastStringsReal(FcitxMessages *message,
+                                         FcitxMessageType type, size_t n,
+                                         const char **strs)
+{
+    if (message->msgCount < MAX_MESSAGE_COUNT) {
+        FcitxMessagesSetMessageStringsReal(message, message->msgCount,
+                                           type, n, strs);
+        message->msgCount ++;
+        message->changed = true;
+    }
+}
+
 FCITX_EXPORT_API
 void FcitxMessagesSetMessage(FcitxMessages* message, int position, int type, const char* fmt, ...)
 {
@@ -286,6 +299,14 @@ void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const cha
     va_end(ap);
 }
 
+FCITX_EXPORT_API void
+FcitxMessagesSetMessageTextStringsReal(FcitxMessages *message, int position,
+                                       size_t n, const char **strs)
+{
+    FcitxMessagesSetMessageStringsReal(message, position,
+                                       message->msg[position].type, n, strs);
+}
+
 FCITX_EXPORT_API
 void FcitxMessagesSetMessageV(FcitxMessages* message, int position, int type, const char* fmt, va_list ap)
 {
@@ -297,9 +318,22 @@ void FcitxMessagesSetMessageV(FcitxMessages* message, int position, int type, co
 }
 
 FCITX_EXPORT_API
+void FcitxMessagesSetMessageStringsReal(FcitxMessages *message, int position,
+                                        int type, size_t n, const char **strs)
+{
+    if (position < MAX_MESSAGE_COUNT) {
+        fcitx_utils_cat_str_simple_with_len(message->msg[position].strMsg,
+                                            MESSAGE_MAX_LENGTH + 1, n, strs);
+        message->msg[position].type = type;
+        message->changed = true;
+    }
+}
+
+FCITX_EXPORT_API
 void FcitxMessagesMessageConcatLast(FcitxMessages* message, const char* text)
 {
-    strncat(message->msg[message->msgCount - 1].strMsg, text, MESSAGE_MAX_LENGTH);
+    strncat(message->msg[message->msgCount - 1].strMsg,
+            text, MESSAGE_MAX_LENGTH);
     message->changed = true;
 }
 
@@ -698,15 +732,15 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
     FcitxMessagesSetMessageCount(msgDown, 0);
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxUp) ; i ++) {
-        FcitxMessagesAddMessageAtLast(msgUp, FcitxMessagesGetMessageType(input->msgAuxUp, i), "%s", FcitxMessagesGetMessageString(input->msgAuxUp, i));
+        FcitxMessagesAddMessageAtLastStrings(msgUp, FcitxMessagesGetMessageType(input->msgAuxUp, i), FcitxMessagesGetMessageString(input->msgAuxUp, i));
         extraLength += strlen(FcitxMessagesGetMessageString(input->msgAuxUp, i));
     }
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgPreedit) ; i ++)
-        FcitxMessagesAddMessageAtLast(msgUp, FcitxMessagesGetMessageType(input->msgPreedit, i), "%s", FcitxMessagesGetMessageString(input->msgPreedit, i));
+        FcitxMessagesAddMessageAtLastStrings(msgUp, FcitxMessagesGetMessageType(input->msgPreedit, i), FcitxMessagesGetMessageString(input->msgPreedit, i));
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxDown) ; i ++)
-        FcitxMessagesAddMessageAtLast(msgDown, FcitxMessagesGetMessageType(input->msgAuxDown, i), "%s", FcitxMessagesGetMessageString(input->msgAuxDown, i));
+        FcitxMessagesAddMessageAtLastStrings(msgDown, FcitxMessagesGetMessageType(input->msgAuxDown, i), FcitxMessagesGetMessageString(input->msgAuxDown, i));
 
     FcitxCandidateWord* candWord = NULL;
 
@@ -724,12 +758,11 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
 
         unsigned int mod = FcitxCandidateWordGetModifier(input->candList);
 
-        FcitxMessagesAddMessageAtLast(msgDown, MSG_INDEX, "%s%s%s%s%s",
-                                      (mod & FcitxKeyState_Super) ? "M-" : "",
-                                      (mod & FcitxKeyState_Ctrl) ? "C-" : "",
-                                      (mod & FcitxKeyState_Alt) ? "A-" : "",
-                                      (mod & FcitxKeyState_Shift) ? "S-" : "",
-                                      strTemp);
+        FcitxMessagesAddMessageAtLastStrings(
+            msgDown, MSG_INDEX, (mod & FcitxKeyState_Super) ? "M-" : "",
+            (mod & FcitxKeyState_Ctrl) ? "C-" : "",
+            (mod & FcitxKeyState_Alt) ? "A-" : "",
+            (mod & FcitxKeyState_Shift) ? "S-" : "", strTemp);
 
         FcitxMessageType type = candWord->wordType;
 
@@ -740,12 +773,13 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
         )
             type = MSG_FIRSTCAND;
 
-        FcitxMessagesAddMessageAtLast(msgDown, type, "%s", candWord->strWord);
+        FcitxMessagesAddMessageAtLastStrings(msgDown, type, candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
-            FcitxMessagesAddMessageAtLast(msgDown, candWord->extraType, "%s", candWord->strExtra);
+        if (candWord->strExtra && strlen(candWord->strExtra))
+            FcitxMessagesAddMessageAtLastStrings(msgDown, candWord->extraType,
+                                                 candWord->strExtra);
 
-        FcitxMessagesAddMessageAtLast(msgDown, MSG_OTHER, " ");
+        FcitxMessagesAddMessageAtLastStrings(msgDown, MSG_OTHER, " ");
     }
 
     return extraLength;
@@ -821,10 +855,10 @@ char* FcitxUICandidateWordToCString(FcitxInstance* instance)
         len += strlen(strTemp);
         len += strlen(candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+        if (candWord->strExtra && strlen(candWord->strExtra))
             len += strlen(candWord->strExtra);
 
-        len ++;
+        len++;
     }
 
     char *result = fcitx_utils_malloc0(sizeof(char) * (len + 1));
@@ -841,7 +875,7 @@ char* FcitxUICandidateWordToCString(FcitxInstance* instance)
         strcat(result, strTemp);
         strcat(result, candWord->strWord);
 
-        if (candWord->strExtra && strlen(candWord->strExtra) != 0)
+        if (candWord->strExtra && strlen(candWord->strExtra))
             strcat(result, candWord->strExtra);
 
         strcat(result, " ");

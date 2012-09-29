@@ -58,9 +58,6 @@ FCITX_DEFINE_PLUGIN(fcitx_pinyin, ime, FcitxIMClass) = {
     NULL
 };
 
-FCITX_EXPORT_API
-int ABI_VERSION = FCITX_ABI_VERSION;
-
 const UT_icd pycand_icd = {sizeof(PYCandWord*) , NULL, NULL, NULL };
 
 typedef struct {
@@ -138,14 +135,14 @@ void *PYCreate(FcitxInstance* instance)
     pystate->owner = instance;
 
     /* ensure the order! */
-    AddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
-    AddFunction(pyaddon, PYGetPYByHZWrapper); // 1
-    AddFunction(pyaddon, DoPYInputWrapper); // 2
-    AddFunction(pyaddon, PYGetCandWordsWrapper); // 3
-    AddFunction(pyaddon, PYGetFindStringWrapper); // 4
-    AddFunction(pyaddon, PYResetWrapper); // 5
-    AddFunction(pyaddon, PYSP2QP); // 6
-    AddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
+    FcitxModuleAddFunction(pyaddon, LoadPYBaseDictWrapper); // 0
+    FcitxModuleAddFunction(pyaddon, PYGetPYByHZWrapper); // 1
+    FcitxModuleAddFunction(pyaddon, DoPYInputWrapper); // 2
+    FcitxModuleAddFunction(pyaddon, PYGetCandWordsWrapper); // 3
+    FcitxModuleAddFunction(pyaddon, PYGetFindStringWrapper); // 4
+    FcitxModuleAddFunction(pyaddon, PYResetWrapper); // 5
+    FcitxModuleAddFunction(pyaddon, PYSP2QP); // 6
+    FcitxModuleAddFunction(pyaddon, PYAddUserPhraseFromCString); // 6
     return pystate;
 }
 
@@ -686,7 +683,9 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
                 FcitxInstanceCleanInputWindowUp(pystate->owner);
-                FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press index to delete user phrase (ESC for cancel)"));
+                FcitxMessagesAddMessageAtLastStrings(
+                    FcitxInputStateGetAuxUp(input), MSG_TIPS,
+                    _("Press index to delete user phrase (ESC for cancel)"));
                 FcitxInputStateSetShowCursor(input, false);
 
                 return IRV_DISPLAY_MESSAGE;
@@ -697,7 +696,9 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
                 FcitxInstanceCleanInputWindowUp(pystate->owner);
-                FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press number to make word in frequent list"), pystate->strFindString);
+                FcitxMessagesAddMessageAtLastStrings(
+                    FcitxInputStateGetAuxUp(input), MSG_TIPS,
+                    _("Press number to make word in frequent list"));
                 FcitxInputStateSetShowCursor(input, false);
 
                 return IRV_DISPLAY_MESSAGE;
@@ -724,10 +725,11 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                     return IRV_DO_NOTHING;
 
                 FcitxInstanceCleanInputWindowUp(pystate->owner);
-                if (val == 1)
+                if (val == 1) {
                     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press 1 to delete %s in frequent list (ESC for cancel)"), pystate->strFindString);
-                else
+                } else {
                     FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Press 1-%d to delete %s in frequent list (ESC for cancel)"), val, pystate->strFindString);
+                }
 
                 pystate->bIsPYDelFreq = true;
                 FcitxInputStateSetIsDoInputOnly(input, true);
@@ -881,8 +883,8 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxMessagesSetMessageCount(msgPreedit, 0);
     FcitxMessagesSetMessageCount(msgClientPreedit, 0);
     if (pystate->iPYSelected) {
-        FcitxMessagesAddMessageAtLast(msgPreedit, MSG_OTHER, "");
-        FcitxMessagesAddMessageAtLast(msgClientPreedit, MSG_OTHER, "");
+        FcitxMessagesAddMessageAtLastStrings(msgPreedit, MSG_OTHER, "");
+        FcitxMessagesAddMessageAtLastStrings(msgClientPreedit, MSG_OTHER, "");
         for (i = 0; i < pystate->iPYSelected; i++) {
             FcitxMessagesMessageConcat(msgPreedit, FcitxMessagesGetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
             FcitxMessagesMessageConcat(msgClientPreedit, FcitxMessagesGetMessageCount(msgClientPreedit) - 1, pystate->pySelected[i].strHZ);
@@ -890,14 +892,16 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     }
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
-        FcitxMessagesAddMessageAtLast(msgPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
+        FcitxMessagesAddMessageAtLastStrings(msgPreedit, MSG_CODE,
+                                             pystate->findMap.strPYParsed[i]);
         if (i < pystate->findMap.iHZCount - 1)
             FcitxMessagesMessageConcat(msgPreedit, FcitxMessagesGetMessageCount(msgPreedit) - 1, " ");
     }
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
         for (i = 0; i < pystate->findMap.iHZCount; i++) {
-            FcitxMessagesAddMessageAtLast(msgClientPreedit, MSG_CODE, "%s", pystate->findMap.strPYParsed[i]);
+            FcitxMessagesAddMessageAtLastStrings(
+                msgClientPreedit, MSG_CODE, pystate->findMap.strPYParsed[i]);
         }
         char* errorAuto = FcitxUIMessagesToCString(msgClientPreedit);
         FcitxInstanceCleanInputWindowDown(pystate->owner);
@@ -946,8 +950,9 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     PYGetBaseCandWords(pystate, pCurFreq);
 
     if (FcitxCandidateWordPageCount(candList) != 0) {
-        FcitxCandidateWord* candWord = FcitxCandidateWordGetCurrentWindow(candList);
-        FcitxMessagesAddMessageAtLast(msgClientPreedit, MSG_INPUT, "%s", candWord->strWord);
+        FcitxCandidateWord *candWord = FcitxCandidateWordGetCurrentWindow(candList);
+        FcitxMessagesAddMessageAtLastStrings(msgClientPreedit, MSG_INPUT,
+                                             candWord->strWord);
     }
 
     return IRV_DISPLAY_CANDWORDS;
@@ -1328,8 +1333,9 @@ void PYGetPhraseCandWords(FcitxPinyinState* pystate)
             candWord.wordType = MSG_OTHER;
         const char* pBase = PYFAList[(*pcand)->cand.phrase.iPYFA].pyBase[(*pcand)->cand.phrase.iBase].strHZ;
         const char* pPhrase = (*pcand)->cand.phrase.phrase->strPhrase;
-        asprintf(&candWord.strWord, "%s%s", pBase, pPhrase);
-        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &candWord);
+        fcitx_utils_alloc_cat_str(candWord.strWord, pBase, pPhrase);
+        FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input),
+                                 &candWord);
     }
 
     utarray_done(&candtemp);
@@ -1992,9 +1998,11 @@ _HIT:
         phrase = USER_PHRASE_NEXT(phrase);
     }
 
-    FcitxMessagesSetMessageCount(FcitxInputStateGetAuxUp(input), 0);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_TIPS, _("Remind: "));
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetAuxUp(input), MSG_INPUT, "%s", pystate->strPYRemindSource);
+    FcitxMessages *msg_up = FcitxInputStateGetAuxUp(input);
+    FcitxMessagesSetMessageCount(msg_up, 0);
+    FcitxMessagesAddMessageAtLastStrings(msg_up, MSG_TIPS, _("Remind: "));
+    FcitxMessagesAddMessageAtLastStrings(msg_up, MSG_INPUT,
+                                         pystate->strPYRemindSource);
 
     PYCandWord** pcand = NULL;
     for (pcand = (PYCandWord**) utarray_front(&candtemp);

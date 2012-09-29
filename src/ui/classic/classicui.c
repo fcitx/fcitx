@@ -160,9 +160,9 @@ void* ClassicUICreate(FcitxInstance* instance)
     DisplaySkin(classicui, classicui->skinType);
 
     /* ensure order ! */
-    AddFunction(classicuiaddon, ClassicUILoadImage);
-    AddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
-    AddFunction(classicuiaddon, ClassicUIGetFont);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUILoadImage);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetKeyBoardFontColor);
+    FcitxModuleAddFunction(classicuiaddon, ClassicUIGetFont);
 
     return classicui;
 }
@@ -231,16 +231,16 @@ static void ClassicUIRegisterStatus(void *arg, FcitxUIStatus* status)
 {
     FcitxClassicUI* classicui = (FcitxClassicUI*) arg;
     FcitxSkin* sc = &classicui->skin;
-    status->uipriv[classicui->isfallback] = fcitx_utils_malloc0(sizeof(FcitxClassicUIStatus));
-    char* activename, *inactivename;
-    asprintf(&activename, "%s_active.png", status->name);
-    asprintf(&inactivename, "%s_inactive.png", status->name);
+    status->uipriv[classicui->isfallback] = fcitx_utils_new(FcitxClassicUIStatus);
+    char *name;
 
-    LoadImage(sc, activename, false);
-    LoadImage(sc, inactivename, false);
+    fcitx_utils_alloc_cat_str(name, status->name, "_active.png");
+    LoadImage(sc, name, false);
+    free(name);
 
-    free(activename);
-    free(inactivename);
+    fcitx_utils_alloc_cat_str(name, status->name, "_inactive.png");
+    LoadImage(sc, name, false);
+    free(name);
 }
 
 static void ClassicUIOnInputFocus(void *arg)
@@ -619,7 +619,7 @@ void ResizeSurface(cairo_surface_t** surface, int w, int h)
     cairo_rectangle(c, 0, 0, ow, oh);
     cairo_clip(c);
     cairo_paint(c);
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
 
     cairo_surface_destroy(*surface);
 

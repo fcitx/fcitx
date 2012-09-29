@@ -5,75 +5,114 @@
 
 # from xdg-open
 
-detectDE()
-{
-    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
-    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
-    elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
-    elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+detectDE() {
+    # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
+    unset GREP_OPTIONS
+
+    if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
+      case "${XDG_CURRENT_DESKTOP}" in
+         GNOME)
+           DE=gnome;
+           ;;
+         KDE)
+           DE=kde;
+           ;;
+         LXDE)
+           DE=lxde;
+           ;;
+         XFCE)
+           DE=xfce
+      esac
+    fi
+
+    if [ x"$DE" = x"" ]; then
+      # classic fallbacks
+      if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+      elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+      elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then DE=mate;
+      elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
+      elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE=xfce
+      fi
+    fi
+
+    if [ x"$DE" = x"" ]; then
+      # fallback to checking $DESKTOP_SESSION
+      case "$DESKTOP_SESSION" in
+         gnome)
+           DE=gnome;
+           ;;
+         LXDE|Lubuntu)
+           DE=lxde;
+           ;;
+         xfce|xfce4|'Xfce Session')
+           DE=xfce;
+           ;;
+      esac
+    fi
+
+    if [ x"$DE" = x"" ]; then
+      # fallback to uname output for other platforms
+      case "$(uname 2>/dev/null)" in
+        Darwin)
+          DE=darwin;
+          ;;
+      esac
+    fi
+
+    if [ x"$DE" = x"gnome" ]; then
+      # gnome-default-applications-properties is only available in GNOME 2.x
+      # but not in GNOME 3.x
+      which gnome-default-applications-properties > /dev/null 2>&1  || DE="gnome3"
     fi
 }
 
-run_kde()
-{
-    command=`which kcmshell4 2>&1`
-    haskde=0
-    if [ $? -eq 0 ]; then
-        checkinstalled=`$command --list | grep -c kcm_fcitx`
-        if [ "x$checkinstalled" != "x0" ]; then
-            haskde=1
-        fi
-    fi
-
-    if [ $haskde = "1" ]; then
+run_kde() {
+    if (kcmshell4 --list 2>/dev/null | grep ^kcm_fcitx &>/dev/null); then
         if [ x"$1" != x ]; then
-            exec $command kcm_fcitx --args $1
+            exec kcmshell4 kcm_fcitx --args "$1"
         else
-            exec $command kcm_fcitx
+            exec kcmshell4 kcm_fcitx
         fi
-    else
-        run_gtk3 $1
     fi
 }
 
-run_gtk()
-{
-    command=`which fcitx-config-gtk 2>&1`
-    if [ $? -eq 0 ]; then
-        exec $command
-    else
-        run_xdg
+run_gtk() {
+    if which fcitx-config-gtk &>/dev/null; then
+        exec fcitx-config-gtk "$1"
     fi
 }
 
-run_gtk3()
-{
-    command=`which fcitx-config-gtk3 2>&1`
-    if [ $? -eq 0 ]; then
-        exec $command $1
-    else
-        run_gtk $1
+run_gtk3() {
+    if which fcitx-config-gtk3 &>/dev/null; then
+        exec fcitx-config-gtk3 "$1"
     fi
 }
 
-run_xdg()
-{
-    command=`which xdg-open`
-    if [ $? -eq 0 ]; then
+run_xdg() {
+    if command="$(which xdg-open 2>/dev/null)"; then
         if [ x"$1" != x ]; then
             exec $command "$HOME/.config/fcitx/conf/$1.config"
         else
             exec $command "$HOME/.config/fcitx/config"
         fi
-    else
-        exit 0
     fi
 }
 
-if [ ! -n "$DISPLAY" ]; then
-    [ -n "$EDITOR" ] && which $EDITOR > /dev/null 2>&1 && exec $EDITOR $HOME/.config/fcitx/config
-    [ -n "$VISUAL" ] && which $VISUAL > /dev/null 2>&1 && exec $VISUAL $HOME/.config/fcitx/config
-    echo 'Please run it under X, or set $EDITOR or $VISUAL'
+run_editor() {
+    if command="$(which "${EDITOR}" 2>/dev/null)" ||
+        command="$(which "${VISUAL}" 2>/dev/null)"; then
+        if [ x"$1" != x ]; then
+            exec $command "$HOME/.config/fcitx/conf/$1.config"
+        else
+            exec $command "$HOME/.config/fcitx/config"
+        fi
+    fi
+}
+
+if [ ! -n "$DISPLAY" ] && [ ! -n "$WAYLAND_DISPLAY" ]; then
+    run_editor "$1"
+    echo 'Please run it under X, or set $EDITOR or $VISUAL' >&2
     exit 0
 fi
 
@@ -81,9 +120,15 @@ detectDE
 
 case "$DE" in
     kde)
-        run_kde $1
+        order="kde gtk3 gtk xdg editor"
         ;;
     *)
-        run_gtk3 $1
+        order="gtk3 gtk xdg editor"
         ;;
 esac
+
+for cmd in $order; do
+    run_${cmd} "$1"
+done
+
+echo 'Cannot find a command to run.' >&2

@@ -23,7 +23,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <limits.h>
 #include "dbuslauncher.h"
+#include "fcitx-utils/utils.h"
 
 #ifndef DBUS_LAUNCH
 #define DBUS_LAUNCH "dbus-launch"
@@ -33,15 +35,17 @@
 
 DBusDaemonProperty DBusLaunch(const char* configFile)
 {
-    char* command = NULL;
-    asprintf(&command, "%s --binary-syntax %s%s", 
-            DBUS_LAUNCH, 
-            (configFile ? "--config-file=" : ""),
-            (configFile ? configFile : ""));
-
+    FILE *fp;
+    if (configFile) {
+        char *cmd;
+        fcitx_utils_alloc_cat_str(cmd, DBUS_LAUNCH" --binary-syntax"
+                                  " --config-file=", configFile);
+        fp = popen(cmd, "r");
+        free(cmd);
+    } else {
+        fp = popen(DBUS_LAUNCH" --binary-syntax", "r");
+    }
     DBusDaemonProperty result = {0, NULL};
-    FILE* fp = popen(command, "r");
-    free(command);
 
     do {
         if (!fp)

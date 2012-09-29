@@ -1494,8 +1494,8 @@ msgstr "快速字詞清單"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:336
 #, c-format
-msgid "Quick Phrase: %s"
-msgstr "快速字詞：%s"
+msgid "Quick Phrase: "
+msgstr "快速字詞："
 
 # unknown
 msgid "QuickPhrase"

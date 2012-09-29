@@ -43,24 +43,31 @@
 #include "fcitx-utils/utils.h"
 #include "xdg.h"
 
-static void make_path(const char *path);
+static inline void
+combine_path_with_len(char *dest, const char *str1, size_t len1,
+                      const char *str2, size_t len2)
+{
+    const char *str_list[] = {str1, "/", str2};
+    size_t size_list[] = {len1, 1, len2};
+    fcitx_utils_cat_str(dest, 3, str_list, size_list);
+}
 
-void
+static void
 make_path(const char *path)
 {
-    char *opath;
     char *p;
-    size_t len;
-
-    opath = strdup(path);
-    len = strlen(opath);
+    if (fcitx_utils_isdir(path))
+        return;
+    size_t len = strlen(path);
+    char opath[len + 1];
+    memcpy(opath, path, len + 1);
 
     while (opath[len - 1] == '/') {
         opath[len - 1] = '\0';
         len --;
     }
 
-    for (p = opath; *p; p++)
+    for (p = opath; *p; p++) {
         if (*p == '/') {
             *p = '\0';
 
@@ -69,24 +76,22 @@ make_path(const char *path)
 
             *p = '/';
         }
+    }
 
     if (access(opath, F_OK))        /* if path is not terminated with / */
         mkdir(opath, S_IRWXU);
-
-    free(opath);
 }
 
 
 FCITX_EXPORT_API
-FILE *FcitxXDGGetFileWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile)
+FILE *FcitxXDGGetFileWithPrefix(const char *prefix, const char *fileName,
+                                const char *mode, char **retFile)
 {
     size_t len;
-    char ** path = FcitxXDGGetPathWithPrefix(&len, prefix);
-
-    FILE* fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
+    char **path = FcitxXDGGetPathWithPrefix(&len, prefix);
+    FILE *fp = FcitxXDGGetFile(fileName, path, mode, len, retFile);
 
     FcitxXDGFreePath(path);
-
     return fp;
 }
 
@@ -94,17 +99,15 @@ FCITX_EXPORT_API
 FILE *FcitxXDGGetLibFile(const char *filename, const char *mode, char **retFile)
 {
     size_t len;
-    char ** path;
-    char* libdir = fcitx_utils_get_fcitx_path("libdir");
-    path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config", PACKAGE "/lib" , libdir, PACKAGE);
+    char **path;
+    char *libdir = fcitx_utils_get_fcitx_path("libdir");
+    path = FcitxXDGGetPath(&len, "XDG_CONFIG_HOME", ".config",
+                           PACKAGE "/lib" , libdir, PACKAGE);
     free(libdir);
 
     FILE* fp = FcitxXDGGetFile(filename, path, mode, len, retFile);
-
     FcitxXDGFreePath(path);
-
     return fp;
-
 }
 
 FCITX_EXPORT_API
@@ -121,14 +124,15 @@ FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, co
 }
 
 FCITX_EXPORT_API
-FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_t len, char **retFile)
+FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode,
+                      size_t len, char **retFile)
 {
     size_t i;
     FILE *fp = NULL;
 
     /* check absolute path */
 
-    if (strlen(fileName) > 0 && fileName[0] == '/') {
+    if (fileName[0] == '/') {
         if (mode)
             fp = fopen(fileName, mode);
 
@@ -142,50 +146,49 @@ FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode, size_
         return NULL;
 
     if (!mode && retFile) {
-        asprintf(retFile, "%s/%s", path[0], fileName);
-
+        fcitx_utils_alloc_cat_str(*retFile, path[0], "/", fileName);
         return NULL;
     }
 
-    if (strlen(fileName) == 0) {
-        if (retFile)
-            asprintf(retFile, "%s", path[0]);
+    if (!fileName[0]) {
+        if (retFile) {
+            *retFile = strdup(path[0]);
+        }
         if (strchr(mode, 'w') || strchr(mode, 'a')) {
             make_path(path[0]);
         }
         return NULL;
     }
 
-    char* buf = NULL;
+    char *buf = NULL;
     for (i = 0; i < len; i++) {
-        fcitx_utils_free(buf);
-        buf = NULL;
-        asprintf(&buf, "%s/%s", path[i], fileName);
-
+        fcitx_utils_alloc_cat_str(buf, path[i], "/", fileName);
         fp = fopen(buf, mode);
-
-        if (fp)
+        if (fp) {
             break;
+        } else {
+            free(buf);
+        }
     }
 
     if (!fp) {
         if (strchr(mode, 'w') || strchr(mode, 'a')) {
-            fcitx_utils_free(buf);
-            asprintf(&buf, "%s/%s", path[0], fileName);
-
+            fcitx_utils_alloc_cat_str(buf, path[0], "/", fileName);
             char *dirc = strdup(buf);
             char *dir = dirname(dirc);
             make_path(dir);
-            fp = fopen(buf, mode);
             free(dirc);
+            fp = fopen(buf, mode);
+        } else {
+            buf = NULL;
         }
     }
 
-    if (retFile)
+    if (retFile) {
         *retFile = buf;
-    else if (buf)
+    } else if (buf) {
         free(buf);
-
+    }
     return fp;
 }
 
@@ -196,66 +199,60 @@ void FcitxXDGFreePath(char **path)
     free(path);
 }
 
-FCITX_EXPORT_API
-char **FcitxXDGGetPath(
-    size_t *len,
-    const char* homeEnv,
-    const char* homeDefault,
-    const char* suffixHome,
-    const char* dirsDefault,
-    const char* suffixGlobal)
+FCITX_EXPORT_API char**
+FcitxXDGGetPath(size_t *len, const char* homeEnv, const char* homeDefault,
+                const char* suffixHome, const char* dirsDefault,
+                const char* suffixGlobal)
 {
-    char* dirHome;
+    const char *dirHome;
     const char *xdgDirHome = getenv(homeEnv);
+    size_t dh_len, he_len, hd_len;
+    const char *env_home;
 
     if (xdgDirHome && xdgDirHome[0]) {
-        dirHome = strdup(xdgDirHome);
+        dirHome = xdgDirHome;
+        dh_len = 0;
     } else {
-        const char *home = getenv("HOME");
-        dirHome = malloc(strlen(home) + 1 + strlen(homeDefault) + 1);
-        sprintf(dirHome, "%s/%s", home, homeDefault);
+        env_home = getenv("HOME");
+        if (!(env_home && env_home[0]))
+            return NULL;
+        he_len = strlen(env_home);
+        hd_len = strlen(homeDefault);
+        dh_len = he_len + hd_len + 1;
+    }
+
+    char *home_buff = NULL;
+    if (dh_len) {
+        home_buff = malloc(dh_len + 1);
+        dirHome = home_buff;
+        combine_path_with_len(home_buff, env_home, he_len, homeDefault, hd_len);
+    } else {
+        dh_len = strlen(dirHome);
     }
 
     char *dirs;
-
-    if (dirsDefault)
-        asprintf(&dirs, "%s/%s:%s/%s", dirHome, suffixHome , dirsDefault, suffixGlobal);
-    else
-        asprintf(&dirs, "%s/%s", dirHome, suffixHome);
-
-    free(dirHome);
-
-    /* count dirs and change ':' to '\0' */
-    size_t dirsCount = 1;
-
-    char *tmp = dirs;
-
-    while (*tmp) {
-        if (*tmp == ':') {
-            *tmp = '\0';
-            dirsCount++;
-        }
-
-        tmp++;
+    char **dirsArray;
+    size_t sh_len = strlen(suffixHome);
+    size_t orig_len1 = dh_len + sh_len;
+    if (dirsDefault) {
+        size_t dd_len = strlen(dirsDefault);
+        size_t sg_len = strlen(suffixGlobal);
+        *len = 2;
+        dirs = malloc(orig_len1 + dd_len + sg_len + 4);
+        dirsArray = malloc(2 * sizeof(char*));
+        dirsArray[0] = dirs;
+        dirsArray[1] = dirs + orig_len1 + 2;
+        combine_path_with_len(dirs, dirHome, dh_len, suffixHome, sh_len);
+        combine_path_with_len(dirsArray[1], dirsDefault, dd_len,
+                              suffixGlobal, sg_len);
+    } else {
+        *len = 1;
+        dirs = malloc(orig_len1 + 2);
+        dirsArray = malloc(sizeof(char*));
+        dirsArray[0] = dirs;
+        combine_path_with_len(dirs, dirHome, dh_len, suffixHome, sh_len);
     }
-
-    /* alloc char pointer array and puts locations */
-    size_t i;
-
-    char **dirsArray = malloc(dirsCount * sizeof(char*));
-
-    for (i = 0; i < dirsCount; ++i) {
-        dirsArray[i] = dirs;
-
-        while (*dirs) {
-            dirs++;
-        }
-
-        dirs++;
-    }
-
-    *len = dirsCount;
-
+    fcitx_utils_free(home_buff);
     return dirsArray;
 }
 
@@ -263,19 +260,22 @@ FCITX_EXPORT_API
 char** FcitxXDGGetPathUserWithPrefix(size_t* len, const char* prefix)
 {
     char *prefixpath;
-    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char** xdgPath = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config" , prefixpath , NULL , NULL);
+    char **result;
+    fcitx_utils_alloc_cat_str(prefixpath, PACKAGE, "/", prefix);
+    result = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config",
+                             prefixpath, NULL, NULL);
     free(prefixpath);
-    return xdgPath;
+    return result;
 }
 
 FCITX_EXPORT_API
 char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
 {
     char *prefixpath;
-    asprintf(&prefixpath, "%s/%s", PACKAGE, prefix);
-    char* datadir = fcitx_utils_get_fcitx_path("datadir");
-    char** xdgPath = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config" , prefixpath , datadir , prefixpath);
+    fcitx_utils_alloc_cat_str(prefixpath, PACKAGE, "/", prefix);
+    char *datadir = fcitx_utils_get_fcitx_path("datadir");
+    char **xdgPath = FcitxXDGGetPath(len, "XDG_CONFIG_HOME", ".config",
+                                     prefixpath, datadir, prefixpath);
     free(datadir);
     free(prefixpath);
     return xdgPath;
@@ -283,15 +283,10 @@ char** FcitxXDGGetPathWithPrefix(size_t* len, const char* prefix)
 
 
 FCITX_EXPORT_API
-FcitxStringHashSet* FcitxXDGGetFiles(
-    char* path,
-    char* prefix,
-    char* suffix
-)
+FcitxStringHashSet* FcitxXDGGetFiles(char *path, char *prefix, char *suffix)
 {
     char **xdgPath;
     size_t len;
-    char *pathBuf;
     size_t i = 0;
     DIR *dir;
     struct dirent *drt;
@@ -302,18 +297,17 @@ FcitxStringHashSet* FcitxXDGGetFiles(
     xdgPath = FcitxXDGGetPathWithPrefix(&len, path);
 
     for (i = 0; i < len; i++) {
-        asprintf(&pathBuf, "%s", xdgPath[i]);
-
-        dir = opendir(pathBuf);
-        free(pathBuf);
+        dir = opendir(xdgPath[i]);
         if (dir == NULL)
             continue;
 
         size_t suffixlen = 0;
         size_t prefixlen = 0;
 
-        if (suffix) suffixlen = strlen(suffix);
-        if (prefix) prefixlen = strlen(prefix);
+        if (suffix)
+            suffixlen = strlen(suffix);
+        if (prefix)
+            prefixlen = strlen(prefix);
 
         /* collect all *.conf files */
         while ((drt = readdir(dir)) != NULL) {
@@ -325,10 +319,11 @@ FcitxStringHashSet* FcitxXDGGetFiles(
                 continue;
             if (prefix && strncmp(drt->d_name, prefix, prefixlen) != 0)
                 continue;
-            asprintf(&pathBuf, "%s/%s", xdgPath[i], drt->d_name);
-
-            int statresult = stat(pathBuf, &fileStat);
-            free(pathBuf);
+            size_t len1 = strlen(xdgPath[i]);
+            char path_buf[nameLen + len1 + 2];
+            combine_path_with_len(path_buf, xdgPath[i], len1,
+                                  drt->d_name, nameLen);
+            int statresult = stat(path_buf, &fileStat);
             if (statresult == -1)
                 continue;
 
@@ -337,10 +332,10 @@ FcitxStringHashSet* FcitxXDGGetFiles(
                 HASH_FIND_STR(sset, drt->d_name, string);
                 if (!string) {
                     char *bStr = strdup(drt->d_name);
-                    string = malloc(sizeof(FcitxStringHashSet));
-                    memset(string, 0, sizeof(FcitxStringHashSet));
+                    string = fcitx_utils_new(FcitxStringHashSet);
                     string->name = bStr;
-                    HASH_ADD_KEYPTR(hh, sset, string->name, strlen(string->name), string);
+                    HASH_ADD_KEYPTR(hh, sset, string->name,
+                                    strlen(string->name), string);
                 }
             }
         }

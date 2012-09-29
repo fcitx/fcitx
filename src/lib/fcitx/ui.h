@@ -393,6 +393,24 @@ extern "C" {
     void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type, const char *fmt, ...);
 
     /**
+     * add a message string at last, cat strings version
+     *
+     * @param message message
+     * @param type message type
+     * @return void
+     **/
+    void FcitxMessagesAddMessageAtLastStringsReal(FcitxMessages *message,
+                                                  FcitxMessageType type,
+                                                  size_t n, const char **strs);
+#define FcitxMessagesAddMessageAtLastStrings(message, type, strs...) do { \
+        const char *__msg_str_lst[] = {strs};                           \
+        size_t __msg_str_count = sizeof(__msg_str_lst) / sizeof(char*); \
+        FcitxMessagesAddMessageAtLastStringsReal(message, type,         \
+                                                 __msg_str_count,       \
+                                                 __msg_str_lst);        \
+    } while (0)
+
+    /**
      * set a message string at position
      *
      * @param message message
@@ -413,6 +431,28 @@ extern "C" {
      * @return void
      **/
     void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const char* fmt, ...);
+    /**
+     * set only message string, cat string version
+     *
+     * @param message message
+     * @param position position
+     * @param fmt printf format
+     * @param  ...
+     * @return void
+     *
+     * @since 4.2.7
+     **/
+    void FcitxMessagesSetMessageTextStringsReal(FcitxMessages *message,
+                                                int position, size_t n,
+                                                const char **strs);
+#define FcitxMessagesSetMessageTextStrings(message, position, strs...) do { \
+        const char *__msg_str_lst[] = {strs};                           \
+        size_t __msg_str_count = sizeof(__msg_str_lst) / sizeof(char*); \
+        FcitxMessagesSetMessageTextStringsReal(message, position,       \
+                                               __msg_str_count,         \
+                                               __msg_str_lst);          \
+    } while (0)
+
     /**
      * concat a string to message string at position
      *
@@ -441,6 +481,26 @@ extern "C" {
      * @return void
      **/
     void FcitxMessagesSetMessageV(FcitxMessages* message, int position, int type, const char* fmt, va_list ap);
+    /**
+     * set message string cat strings version
+     *
+     * @param message message
+     * @param position position
+     * @param type message type
+     * @param n number of strings
+     * @param strs list of strings
+     * @return void
+     **/
+    void FcitxMessagesSetMessageStringsReal(FcitxMessages *message,
+                                            int position, int type,
+                                            size_t n, const char **strs);
+#define FcitxMessagesSetMessageStrings(message, position, type, strs...) do { \
+        const char *__msg_str_lst[] = {strs};                           \
+        size_t __msg_str_count = sizeof(__msg_str_lst) / sizeof(char*); \
+        FcitxMessagesSetMessageStringsReal(message, position, type,     \
+                                           __msg_str_count, __msg_str_lst); \
+    } while (0)
+
     /**
      * set message count
      *

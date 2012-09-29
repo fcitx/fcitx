@@ -95,10 +95,12 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
     xmlSAXUserParseFile(&handle, &ruleshandler, file);
     utarray_free(ruleshandler.path);
 
-    if (strcmp (file + strlen(file) - 4, ".xml") == 0) {
-        char* extra = strndup (file, strlen (file) - 4), *extrafile;
-        asprintf(&extrafile, "%s.extras.xml", extra);
-        FcitxXkbRules* rulesextra = (FcitxXkbRules*) fcitx_utils_malloc0(sizeof(FcitxXkbRules));
+    size_t extra_len = strlen(file) - strlen(".xml");
+    if (strcmp(file + extra_len, ".xml") == 0) {
+        char extrafile[extra_len + strlen(".extras.xml") + 1];
+        memcpy(extrafile, file, extra_len);
+        memcpy(extrafile + extra_len, ".extras.xml", sizeof(".extras.xml"));
+        FcitxXkbRules *rulesextra = fcitx_utils_new(FcitxXkbRules);
         utarray_new(rulesextra->layoutInfos, &layout_icd);
         utarray_new(rulesextra->modelInfos, &model_icd);
         utarray_new(rulesextra->optionGroupInfos, &option_group_icd);
@@ -106,9 +108,6 @@ FcitxXkbRules* FcitxXkbReadRules(const char* file)
         ruleshandler.path = fcitx_utils_new_string_list();
         xmlSAXUserParseFile(&handle, &ruleshandler, extrafile);
         utarray_free(ruleshandler.path);
-        free(extra);
-        free(extrafile);
-
         MergeRules(rules, rulesextra);
     }
 

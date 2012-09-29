@@ -70,20 +70,18 @@ void FcitxAddonsInit(UT_array* addons)
 
 void* FcitxGetSymbol(void* handle, const char* addonName, const char* symbolName)
 {
-    char* escapedAddonName;
-    asprintf(&escapedAddonName, "%s_%s", addonName, symbolName);
-    char* p = escapedAddonName;
-    while (*p) {
+    char *p;
+    char *escapedAddonName;
+    fcitx_utils_alloc_cat_str(escapedAddonName, addonName, "_", symbolName);
+    for (p = escapedAddonName;*p;p++) {
         if (*p == '-') {
             *p = '_';
         }
-        p++;
     }
-    void* result = dlsym(handle, escapedAddonName);
+    void *result = dlsym(handle, escapedAddonName);
     free(escapedAddonName);
     if (!result)
-        result = dlsym(handle, symbolName);
-
+        return dlsym(handle, symbolName);
     return result;
 }
 
@@ -100,28 +98,20 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
 {
     char **addonPath;
     size_t len;
-    size_t k = 0;
     size_t start;
     if (!reloadIM)
         utarray_clear(addons);
 
     start = utarray_len(addons);
 
-    FcitxStringHashSet* sset = FcitxXDGGetFiles(
-                              "addon",
-                              NULL,
-                              ".conf"
-                          );
+    FcitxStringHashSet* sset = FcitxXDGGetFiles("addon", NULL, ".conf");
     addonPath = FcitxXDGGetPathWithPrefix(&len, "addon");
-    char **paths = malloc(sizeof(char*) * len);
-    for (k = 0; k < len ; k ++)
-        paths[k] = NULL;
-
-
+    char *paths[len];
     HASH_FOREACH(string, sset, FcitxStringHashSet) {
-        int i = 0;
+        int i;
         for (i = len - 1; i >= 0; i--) {
-            asprintf(&paths[i], "%s/%s", addonPath[len - i - 1], string->name);
+            fcitx_utils_alloc_cat_str(paths[i], addonPath[len - i - 1],
+                                      "/", string->name);
             FcitxLog(DEBUG, "Load Addon Config File:%s", paths[i]);
         }
         FcitxConfigFile* cfile = FcitxConfigParseMultiConfigFile(paths, len, FcitxAddonGetConfigDesc());
@@ -149,11 +139,8 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
 
         for (i = 0; i < len ; i ++) {
             free(paths[i]);
-            paths[i] = NULL;
         }
     }
-    free(paths);
-
     FcitxXDGFreePath(addonPath);
 
     fcitx_utils_free_string_hash_set(sset);
@@ -161,7 +148,7 @@ FcitxAddon* FcitxAddonsLoadInternal(UT_array* addons, boolean reloadIM)
     size_t to = utarray_len(addons);
     utarray_sort_range(addons, AddonPriorityCmp, start, to);
 
-    return (FcitxAddon*) utarray_eltptr(addons, start);
+    return (FcitxAddon*)utarray_eltptr(addons, start);
 }
 
 void FcitxInstanceFillAddonOwner(FcitxInstance* instance, FcitxAddon* addonHead)

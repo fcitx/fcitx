@@ -732,7 +732,7 @@ UT_array * InputCommand(LuaModule *module, const char *input) {
 
 UT_array * InputTrigger(LuaModule *module, const char *input) {
     if (module->shortest_input_trigger_key_length == 0
-            || strlen(input) < module->shortest_input_trigger_key_length) {
+        || strlen(input) < module->shortest_input_trigger_key_length) {
         return NULL;
     }
     TriggerItem *trigger;

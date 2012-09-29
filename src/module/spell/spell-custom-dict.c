@@ -44,8 +44,6 @@
 #include "spell-custom.h"
 #include "spell-custom-dict.h"
 
-#define EN_DICT_FORMAT "%s/data/%s_dict.fscd"
-
 #define case_a_z case 'a': case 'b': case 'c': case 'd': case 'e':      \
 case 'f': case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':   \
 case 'm': case 'n': case 'o': case 'p': case 'q': case 'r': case 's':   \
@@ -197,9 +195,9 @@ SpellCustomGetSysDictFile(FcitxSpell *spell, const char *lang)
 {
     int fd;
     char *path;
-    char *fname = NULL;
+    char *fname;
     path = fcitx_utils_get_fcitx_path("pkgdatadir");
-    asprintf(&fname, EN_DICT_FORMAT, path, lang);
+    fcitx_utils_alloc_cat_str(fname, path, "/data/", lang, "_dict.fscd");
     free(path);
     fd = open(fname, O_RDONLY);
     free(fname);

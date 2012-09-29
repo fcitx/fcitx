@@ -89,7 +89,6 @@ FcitxConfigFile *FcitxConfigParseMultiConfigFile(char **filename, int len, Fcitx
     int i = 0;
 
     for (i = 0 ; i < len ; i++) {
-        fp[i] = NULL;
         fp[i] = fopen(filename[i], "r");
     }
 
@@ -685,11 +684,9 @@ FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConf
         return SyncSuccess;
 
     case Value2Raw:
-        if (option->rawValue)
-            free(option->rawValue);
-
-        asprintf(&option->rawValue, "%c", *option->value.chr);
-
+        option->rawValue = realloc(option->rawValue, 2);
+        option->rawValue[0] = *option->value.chr;
+        option->rawValue[1] = '\0';
         return SyncSuccess;
 
     case ValueFree:
@@ -728,13 +725,15 @@ FcitxConfigSyncResult FcitxConfigOptionHotkey(FcitxConfigOption *option, FcitxCo
         if (option->rawValue)
             free(option->rawValue);
 
-        if (option->value.hotkey[1].desc)
-            asprintf(&option->rawValue, "%s %s", option->value.hotkey[0].desc, option->value.hotkey[1].desc);
-        else if (option->value.hotkey[0].desc) {
+        if (option->value.hotkey[1].desc) {
+            fcitx_utils_alloc_cat_str(option->rawValue,
+                                      option->value.hotkey[0].desc,
+                                      " ", option->value.hotkey[1].desc);
+        } else if (option->value.hotkey[0].desc) {
             option->rawValue = strdup(option->value.hotkey[0].desc);
-        } else
+        } else {
             option->rawValue = strdup("");
-
+        }
         return SyncSuccess;
 
     case ValueFree:

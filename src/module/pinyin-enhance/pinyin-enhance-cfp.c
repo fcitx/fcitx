@@ -99,8 +99,8 @@ CharFromPhraseSetClientPreedit(PinyinEnhance *pyenhance, const char *str)
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxMessages *client_preedit = FcitxInputStateGetClientPreedit(input);
     FcitxMessagesSetMessageCount(client_preedit, 0);
-    FcitxMessagesAddMessageAtLast(client_preedit, MSG_INPUT, "%s%s",
-                                  pyenhance->cfp_mode_selected, str);
+    FcitxMessagesAddMessageAtLastStrings(client_preedit, MSG_INPUT,
+                                         pyenhance->cfp_mode_selected, str);
 }
 
 static void
@@ -113,9 +113,9 @@ CharFromPhraseModeUpdateUI(PinyinEnhance *pyenhance)
     char **cur_list = pyenhance->cfp_mode_lists[pyenhance->cfp_mode_cur];
     FcitxCandidateWordSetPage(cand_list, 0);
     FcitxMessagesSetMessageCount(preedit, 0);
-    FcitxMessagesAddMessageAtLast(preedit, MSG_INPUT, "%s (%s)",
-                                  pyenhance->cfp_mode_selected,
-                                  cur_list[0]);
+    FcitxMessagesAddMessageAtLastStrings(preedit, MSG_INPUT,
+                                         pyenhance->cfp_mode_selected, " (",
+                                         cur_list[0], ")");
     CharFromPhraseSetClientPreedit(pyenhance, *(++cur_list));
     int i;
     FcitxCandidateWord *cand_word;

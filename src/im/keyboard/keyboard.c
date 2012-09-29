@@ -226,15 +226,9 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         layout->variantString = strdup(variantString);
     layout->owner = keyboard;
 
-    char* uniqueName;
-    if (variantString)
-        asprintf(&uniqueName, "fcitx-keyboard-%s-%s", layoutString, variantString);
-    else
-        asprintf(&uniqueName, "fcitx-keyboard-%s", layoutString);
-
     int iPriority = 100;
-    if (strcmp(keyboard->initialLayout, layoutString) == 0
-        && fcitx_utils_strcmp0(keyboard->initialVariant, variantString) == 0) {
+    if (strcmp(keyboard->initialLayout, layoutString) == 0 &&
+        fcitx_utils_strcmp0(keyboard->initialVariant, variantString) == 0) {
         iPriority = PRIORITY_MAGIC_FIRST;
     }
     else {
@@ -245,6 +239,13 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
             iPriority = 50;
     }
 
+    char *uniqueName;
+    if (variantString) {
+        fcitx_utils_alloc_cat_str(uniqueName, "fcitx-keyboard-", layoutString,
+                                  "-", variantString);
+    } else {
+        fcitx_utils_alloc_cat_str(uniqueName, "fcitx-keyboard-", layoutString);
+    }
     FcitxInstanceRegisterIM(
         keyboard->owner,
         layout,
@@ -260,9 +261,7 @@ void FcitxKeyboardLayoutCreate(FcitxKeyboard* keyboard,
         FcitxKeyboardReloadConfig,
         NULL,
         iPriority,
-        langCode
-    );
-
+        langCode);
     free(uniqueName);
 }
 
@@ -332,11 +331,12 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                         lang = entry->iso_639_1_code;
                     }
                 }
-                char* description;
-                asprintf(&description, _("Keyboard - %s"),
-                        dgettext("xkeyboard-config", layoutInfo->description));
-
-                FcitxKeyboardLayoutCreate(keyboard, description, lang, layoutInfo->name, NULL);
+                char *description;
+                fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                          dgettext("xkeyboard-config",
+                                                   layoutInfo->description));
+                FcitxKeyboardLayoutCreate(keyboard, description,
+                                          lang, layoutInfo->name, NULL);
                 free(description);
             }
             FcitxXkbVariantInfo* variantInfo;
@@ -355,12 +355,15 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
                         lang = entry->iso_639_1_code;
                     }
                 }
-                char* description;
-                asprintf(&description, _("Keyboard - %s - %s"),
-                        dgettext("xkeyboard-config", layoutInfo->description),
-                        dgettext("xkeyboard-config", variantInfo->description));
-
-                FcitxKeyboardLayoutCreate(keyboard, description, lang, layoutInfo->name, variantInfo->name);
+                char *description;
+                fcitx_utils_alloc_cat_str(description, _("Keyboard"), " - ",
+                                          dgettext("xkeyboard-config",
+                                                   layoutInfo->description),
+                                          " - ",
+                                          dgettext("xkeyboard-config",
+                                                   variantInfo->description));
+                FcitxKeyboardLayoutCreate(keyboard, description, lang,
+                                          layoutInfo->name, variantInfo->name);
                 free(description);
             }
         }
@@ -369,15 +372,11 @@ void* FcitxKeyboardCreate(FcitxInstance* instance)
     else
 #endif
     {
-        char* description;
-        asprintf(&description, _("Keyboard"));
-
         fcitx_utils_free(keyboard->initialLayout);
         keyboard->initialLayout = strdup("us");
         fcitx_utils_free(keyboard->initialVariant);
         keyboard->initialVariant = NULL;
-        FcitxKeyboardLayoutCreate(keyboard, description, "en", "us", NULL);
-        free(description);
+        FcitxKeyboardLayoutCreate(keyboard, _("Keyboard"), "en", "us", NULL);
     }
 
     keyboard->lastLength = 10;
@@ -399,8 +398,9 @@ boolean FcitxKeyboardInit(void *arg)
     FcitxInstanceSetContext(layout->owner->owner,
                             CONTEXT_DISABLE_FULLWIDTH, &flag);
     if (layout->variantString) {
-        char* string;
-        asprintf(&string, "%s,%s", layout->layoutString, layout->variantString);
+        char *string;
+        fcitx_utils_alloc_cat_str(string, layout->layoutString, ",",
+                                  layout->variantString);
         FcitxInstanceSetContext(layout->owner->owner,
                                 CONTEXT_IM_KEYBOARD_LAYOUT, string);
         free(string);
@@ -481,7 +481,8 @@ INPUT_RETURN_VALUE FcitxKeyboardDoInput(void *arg, FcitxKeySym sym, unsigned int
             IsValidSym(sym, state)) {
             if (IsValidChar(result) || FcitxHotkeyIsHotKeyLAZ(sym, state) ||
                 FcitxHotkeyIsHotKeyUAZ(sym, state) || IsValidSym(sym, state) ||
-                FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS)) {
+                (*keyboard->buffer &&
+                 FcitxHotkeyIsHotKey(sym, state, FCITX_HYPHEN_APOS))) {
                 char buf[UTF8_MAX_LENGTH + 1];
                 memset(buf, 0, sizeof(buf));
                 if (result)
@@ -601,10 +602,10 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     ssize_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetClientPreedit(input),
-                                  MSG_INPUT, "%s", keyboard->buffer);
-    FcitxMessagesAddMessageAtLast(FcitxInputStateGetPreedit(input), MSG_INPUT,
-                                  "%s", keyboard->buffer);
+    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetClientPreedit(input),
+                                         MSG_INPUT, keyboard->buffer);
+    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+                                         MSG_INPUT, keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);
 

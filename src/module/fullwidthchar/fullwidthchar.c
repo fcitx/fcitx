@@ -140,7 +140,7 @@ boolean FullWidthPostFilter(void* arg, FcitxKeySym sym,
 
     FcitxUIStatus *status = FcitxUIGetStatusByName(fwchar->owner, "fullwidth");
     if (profile->bUseFullWidthChar && status->visible && FcitxHotkeyIsHotKeySimple(sym, state)) {
-        sprintf(FcitxInputStateGetOutputString(FcitxInstanceGetInputState(fwchar->owner)), "%s", sCornerTrans[sym - 32]);
+        strcpy(FcitxInputStateGetOutputString(FcitxInstanceGetInputState(fwchar->owner)), sCornerTrans[sym - 32]);
         *retval = IRV_COMMIT_STRING;
         return true;
     }

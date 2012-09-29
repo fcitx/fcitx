@@ -86,19 +86,16 @@ int LoadSkinConfig(FcitxSkin* sc, char** skinType)
     utarray_init(&sc->skinMainBar.skinPlacement, &place_icd);
 
 reload:
-    //获取配置文件的绝对路径
-    {
-        if (!isreload) {
-            char* buf;
-            asprintf(&buf, "%s/fcitx_skin.conf", *skinType);
-
-            fp = FcitxXDGGetFileWithPrefix("skin", buf, "r", NULL);
-            free(buf);
-        } else {
-            char* path = fcitx_utils_get_fcitx_path_with_filename("pkgdatadir", "/skin/default/fcitx_skin.conf");
-            fp = fopen(path, "r");
-            free(path);
-        }
+    if (!isreload) {
+        char *buf;
+        fcitx_utils_alloc_cat_str(buf, *skinType, "/fcitx_skin.conf");
+        fp = FcitxXDGGetFileWithPrefix("skin", buf, "r", NULL);
+        free(buf);
+    } else {
+        char *path = fcitx_utils_get_fcitx_path_with_filename(
+            "pkgdatadir", "/skin/default/fcitx_skin.conf");
+        fp = fopen(path, "r");
+        free(path);
     }
 
     if (fp) {
@@ -183,7 +180,7 @@ SkinImage* LoadImageWithText(FcitxClassicUI* classicui, FcitxSkin* sc, const cha
 
     OutputString(c, iconText, classicui->font, min, false, (w - textw) * 0.5, 0, &color);
 
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
     SkinImage* image = fcitx_utils_malloc0(sizeof(SkinImage));
     image->name = strdup(name);
     image->image = newsurface;
@@ -196,8 +193,8 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
 {
     cairo_surface_t *png = NULL;
     SkinImage *image = NULL;
-    char* buf = NULL;
-    asprintf(&buf, "skin/%s", skinType);
+    char *buf;
+    fcitx_utils_alloc_cat_str(buf, "skin/", skinType);
     const char* fallbackChainNoFallback[] = { buf };
     const char* fallbackChainPanel[] = { buf, "skin/default" };
     const char* fallbackChainTray[] = { "imicon" };
@@ -205,6 +202,7 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
 
     HASH_FIND_STR(*imageTable, name, image);
     if (image != NULL) {
+        free(buf);
         return image;
     }
 
@@ -246,7 +244,6 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
             }
 
             free(filename);
-
             if (png)
                 break;
         }
@@ -254,10 +251,11 @@ SkinImage* LoadImageFromTable(SkinImage** imageTable, const char* skinType, cons
     free(buf);
 
     if (png != NULL) {
-        image = fcitx_utils_malloc0(sizeof(SkinImage));
+        image = fcitx_utils_new(SkinImage);
         image->name = strdup(name);
         image->image = png;
-        HASH_ADD_KEYPTR(hh, *imageTable, image->name, strlen(image->name), image);
+        HASH_ADD_KEYPTR(hh, *imageTable, image->name,
+                        strlen(image->name), image);
         return image;
     }
     return NULL;
@@ -537,19 +535,19 @@ void LoadInputMessage(FcitxSkin* sc, InputWindow* inputWindow, const char* font)
     FcitxConfigColor cursorColor = sc->skinInputBar.cursorColor;
 
     if (inputWindow->c_back) {
-        _CAIRO_DESTROY(inputWindow->c_back);
+        cairo_destroy(inputWindow->c_back);
         inputWindow->c_back = NULL;
     }
 
     for (i = 0; i < 7 ; i ++) {
         if (inputWindow->c_font[i]) {
-            _CAIRO_DESTROY(inputWindow->c_font[i]);
+            cairo_destroy(inputWindow->c_font[i]);
             inputWindow->c_font[i] = NULL;
         }
     }
     inputWindow->c_font[7] = NULL;
     if (inputWindow->c_cursor) {
-        _CAIRO_DESTROY(inputWindow->c_cursor);
+        cairo_destroy(inputWindow->c_cursor);
         inputWindow->c_cursor = NULL;
     }
 
@@ -741,7 +739,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
                                 sc->skinInputBar.fillV,
                                 sc->skinInputBar.fillH
                                );
-        _CAIRO_DESTROY(c);
+        cairo_destroy(c);
     }
 
     c = cairo_create(inputWindow->cs_input_bar);
@@ -809,7 +807,7 @@ void DrawInputBar(FcitxSkin* sc, InputWindow* inputWindow, int iCursorPos, Fcitx
 
     ResetFontContext();
 
-    _CAIRO_DESTROY(c);
+    cairo_destroy(c);
     FcitxMessagesSetMessageChanged(msgup, false);
     FcitxMessagesSetMessageChanged(msgdown, false);
 }
@@ -885,7 +883,6 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
     struct dirent *drt;
     struct stat fileStat;
     size_t len;
-    char *pathBuf;
     char **skinPath = FcitxXDGGetPathWithPrefix(&len, "skin");
     for (i = 0; i < len; i++) {
         dir = opendir(skinPath[i]);
@@ -893,16 +890,16 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
             continue;
 
         while ((drt = readdir(dir)) != NULL) {
-            if (strcmp(drt->d_name , ".") == 0 || strcmp(drt->d_name, "..") == 0)
+            if (strcmp(drt->d_name , ".") == 0 ||
+                strcmp(drt->d_name, "..") == 0)
                 continue;
-            asprintf(&pathBuf, "%s/%s", skinPath[i], drt->d_name);
-
+            char *pathBuf;
+            fcitx_utils_alloc_cat_str(pathBuf, skinPath[i], "/", drt->d_name);
             int statresult = stat(pathBuf, &fileStat);
             free(pathBuf);
-            if (statresult == -1) {
+            if (statresult == -1)
                 continue;
-            }
-            if (fileStat.st_mode & S_IFDIR) {
+            if (S_ISDIR(fileStat.st_mode)) {
                 /* check duplicate name */
                 int j = 0;
                 for (; j < skinBuf->i; j++) {
@@ -995,15 +992,17 @@ void ParsePlacement(UT_array* sps, char* placment)
 SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallbackIcon, int flag, boolean fallbackToDefault)
 {
     FcitxIM* im = FcitxInstanceGetCurrentIM(classicui->owner);
-    char* path;
-    if (im->strIconName[0] == '/')
-        path = strdup(im->strIconName);
-    else
-        asprintf(&path, "%s.png", im->strIconName);
-
-    SkinImage* imicon = NULL;
-
-    if (strncmp(im->uniqueName, "fcitx-keyboard-", strlen("fcitx-keyboard-")) == 0) {
+    const char *path;
+    char *tmpstr = NULL;
+    if (im->strIconName[0] == '/') {
+        path = im->strIconName;
+    } else {
+        fcitx_utils_alloc_cat_str(tmpstr, im->strIconName, ".png");
+        path = tmpstr;
+    }
+    SkinImage *imicon = NULL;
+    if (strncmp(im->uniqueName, "fcitx-keyboard-",
+                strlen("fcitx-keyboard-")) == 0) {
         SkinImage* activeIcon = LoadImage(sc, fallbackIcon, fallbackToDefault);
         char temp[LANGCODE_LENGTH + 1] = { '\0', };
         char* iconText = 0;
@@ -1011,19 +1010,21 @@ SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallb
             strncpy(temp, im->langCode, LANGCODE_LENGTH);
             iconText = temp;
             iconText[0] = toupper(iconText[0]);
-        }
-        else
+        } else {
             iconText = im->uniqueName + strlen("fcitx-keyboard-");
-        imicon = LoadImageWithText(classicui, sc, path, iconText,
-                    cairo_image_surface_get_width(activeIcon->image),
-                    cairo_image_surface_get_height(activeIcon->image), true);
+        }
+        imicon = LoadImageWithText(
+            classicui, sc, path, iconText,
+            cairo_image_surface_get_width(activeIcon->image),
+            cairo_image_surface_get_height(activeIcon->image), true);
     }
 
     if (imicon == NULL)
         imicon = LoadImage(sc, path, flag);
-    if (imicon == NULL)
+    fcitx_utils_free(tmpstr);
+    if (imicon == NULL) {
         imicon = LoadImage(sc, fallbackIcon, fallbackToDefault);
-    else {
+    } else {
         SkinImage* activeIcon = LoadImage(sc, fallbackIcon, fallbackToDefault);
         if (activeIcon) {
             ResizeSurface(&imicon->image,
@@ -1031,7 +1032,6 @@ SkinImage* GetIMIcon(FcitxClassicUI* classicui, FcitxSkin *sc, const char* fallb
                           cairo_image_surface_get_height(activeIcon->image));
         }
     }
-    free(path);
     return imicon;
 }
 

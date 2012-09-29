@@ -73,8 +73,9 @@ static int LoadLuaConfig(LuaModule *luamodule) {
 
 static INPUT_RETURN_VALUE LuaGetCandWord(void* arg, FcitxCandidateWord* candWord) {
     LuaModule *luamodule = (LuaModule *)candWord->owner;
-    FcitxInputState* input = FcitxInstanceGetInputState(GetFcitx(luamodule));
-    snprintf(FcitxInputStateGetOutputString(input), MAX_USER_INPUT, "%s", candWord->strWord);
+    FcitxInputState *input = FcitxInstanceGetInputState(GetFcitx(luamodule));
+    strncpy(FcitxInputStateGetOutputString(input),
+            candWord->strWord, MAX_USER_INPUT);
     return IRV_COMMIT_STRING;
 }
 
@@ -96,7 +97,10 @@ static void* LuaCallCommand(void* arg, FcitxModuleFunctionArg args) {
             }
             candWord.priv = p->help ? strdup(p->help) : NULL;
             if (p->help || p->tip) {
-                asprintf(&candWord.strExtra, "%s%s%s", p->help ? p->help : "", p->help && p->tip ? " " : "", p->tip ? p->tip : "");
+                fcitx_utils_alloc_cat_str(candWord.strExtra,
+                                          p->help ? p->help : "",
+                                          p->help && p->tip ? " " : "",
+                                          p->tip ? p->tip : "");
             } else {
                 candWord.strExtra = NULL;
             }
@@ -152,9 +156,8 @@ void* LuaCreate(FcitxInstance* instance) {
     FcitxInstanceRegisterUpdateCandidateWordHook(instance, hook);
 
     FcitxAddon* luaAddon = FcitxAddonsGetAddonByName(
-            FcitxInstanceGetAddons(instance),
-            FCITX_LUA_NAME);
-    AddFunction(luaAddon, LuaCallCommand);
+        FcitxInstanceGetAddons(instance), FCITX_LUA_NAME);
+    FcitxModuleAddFunction(luaAddon, LuaCallCommand);
 
     return luamodule;
 err:

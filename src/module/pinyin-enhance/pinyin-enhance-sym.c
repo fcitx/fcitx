@@ -206,8 +206,8 @@ PinyinEnhanceSymCandWords(PinyinEnhance *pyenhance)
         FcitxCandidateWordInsert(cand_list, &cand_word, 0);
     }
     FcitxMessagesSetMessageCount(client_preedit, 0);
-    FcitxMessagesAddMessageAtLast(client_preedit, MSG_INPUT, "%s",
-                                  cand_word.strWord);
+    FcitxMessagesAddMessageAtLastStrings(client_preedit, MSG_INPUT,
+                                         cand_word.strWord);
     return true;
 }
 
