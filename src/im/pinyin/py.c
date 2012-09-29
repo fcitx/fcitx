@@ -683,7 +683,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
                 FcitxInstanceCleanInputWindowUp(pystate->owner);
-                FcitxMessagesAddMessageAtLastStrings(
+                FcitxMessagesAddMessageStringsAtLast(
                     FcitxInputStateGetAuxUp(input), MSG_TIPS,
                     _("Press index to delete user phrase (ESC for cancel)"));
                 FcitxInputStateSetShowCursor(input, false);
@@ -696,7 +696,7 @@ INPUT_RETURN_VALUE DoPYInput(void* arg, FcitxKeySym sym, unsigned int state)
                 FcitxInputStateSetIsDoInputOnly(input, true);
 
                 FcitxInstanceCleanInputWindowUp(pystate->owner);
-                FcitxMessagesAddMessageAtLastStrings(
+                FcitxMessagesAddMessageStringsAtLast(
                     FcitxInputStateGetAuxUp(input), MSG_TIPS,
                     _("Press number to make word in frequent list"));
                 FcitxInputStateSetShowCursor(input, false);
@@ -883,8 +883,8 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     FcitxMessagesSetMessageCount(msgPreedit, 0);
     FcitxMessagesSetMessageCount(msgClientPreedit, 0);
     if (pystate->iPYSelected) {
-        FcitxMessagesAddMessageAtLastStrings(msgPreedit, MSG_OTHER, "");
-        FcitxMessagesAddMessageAtLastStrings(msgClientPreedit, MSG_OTHER, "");
+        FcitxMessagesAddMessageStringsAtLast(msgPreedit, MSG_OTHER, "");
+        FcitxMessagesAddMessageStringsAtLast(msgClientPreedit, MSG_OTHER, "");
         for (i = 0; i < pystate->iPYSelected; i++) {
             FcitxMessagesMessageConcat(msgPreedit, FcitxMessagesGetMessageCount(msgPreedit) - 1, pystate->pySelected[i].strHZ);
             FcitxMessagesMessageConcat(msgClientPreedit, FcitxMessagesGetMessageCount(msgClientPreedit) - 1, pystate->pySelected[i].strHZ);
@@ -892,7 +892,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
     }
 
     for (i = 0; i < pystate->findMap.iHZCount; i++) {
-        FcitxMessagesAddMessageAtLastStrings(msgPreedit, MSG_CODE,
+        FcitxMessagesAddMessageStringsAtLast(msgPreedit, MSG_CODE,
                                              pystate->findMap.strPYParsed[i]);
         if (i < pystate->findMap.iHZCount - 1)
             FcitxMessagesMessageConcat(msgPreedit, FcitxMessagesGetMessageCount(msgPreedit) - 1, " ");
@@ -900,7 +900,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
 
     if (pystate->findMap.iMode == PARSE_ERROR) {
         for (i = 0; i < pystate->findMap.iHZCount; i++) {
-            FcitxMessagesAddMessageAtLastStrings(
+            FcitxMessagesAddMessageStringsAtLast(
                 msgClientPreedit, MSG_CODE, pystate->findMap.strPYParsed[i]);
         }
         char* errorAuto = FcitxUIMessagesToCString(msgClientPreedit);
@@ -951,7 +951,7 @@ INPUT_RETURN_VALUE PYGetCandWords(void* arg)
 
     if (FcitxCandidateWordPageCount(candList) != 0) {
         FcitxCandidateWord *candWord = FcitxCandidateWordGetCurrentWindow(candList);
-        FcitxMessagesAddMessageAtLastStrings(msgClientPreedit, MSG_INPUT,
+        FcitxMessagesAddMessageStringsAtLast(msgClientPreedit, MSG_INPUT,
                                              candWord->strWord);
     }
 
@@ -2000,8 +2000,8 @@ _HIT:
 
     FcitxMessages *msg_up = FcitxInputStateGetAuxUp(input);
     FcitxMessagesSetMessageCount(msg_up, 0);
-    FcitxMessagesAddMessageAtLastStrings(msg_up, MSG_TIPS, _("Remind: "));
-    FcitxMessagesAddMessageAtLastStrings(msg_up, MSG_INPUT,
+    FcitxMessagesAddMessageStringsAtLast(msg_up, MSG_TIPS, _("Remind: "));
+    FcitxMessagesAddMessageStringsAtLast(msg_up, MSG_INPUT,
                                          pystate->strPYRemindSource);
 
     PYCandWord** pcand = NULL;

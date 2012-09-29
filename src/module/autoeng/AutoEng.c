@@ -561,23 +561,23 @@ ShowAutoEngMessage(FcitxAutoEngState *autoEngState, INPUT_RETURN_VALUE *retval)
         FcitxInputStateSetRawInputBufferSize(input, buff_len);
     }
     if (buff_len > AUTOENG_MAX_PREEDIT) {
-        FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
                                              MSG_INPUT, autoEngState->buf +
                                              buff_len - AUTOENG_MAX_PREEDIT);
         FcitxInputStateSetCursorPos(input, AUTOENG_MAX_PREEDIT);
     } else {
-        FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
                                              MSG_INPUT, autoEngState->buf);
         FcitxInputStateSetCursorPos(input, autoEngState->index);
     }
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetClientPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, autoEngState->buf);
 
     FcitxInputStateSetClientCursorPos(input, autoEngState->index);
     FcitxInputStateSetShowCursor(input, true);
 
     AutoEngGetSpellHint(autoEngState);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxDown(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxDown(input),
                                          MSG_TIPS,
                                          _("Press Enter to input text"));
     *retval |= IRV_FLAG_UPDATE_INPUT_WINDOW;

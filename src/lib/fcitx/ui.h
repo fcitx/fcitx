@@ -399,13 +399,13 @@ extern "C" {
      * @param type message type
      * @return void
      **/
-    void FcitxMessagesAddMessageAtLastStringsReal(FcitxMessages *message,
+    void FcitxMessagesAddMessageVStringAtLast(FcitxMessages *message,
                                                   FcitxMessageType type,
                                                   size_t n, const char **strs);
-#define FcitxMessagesAddMessageAtLastStrings(message, type, strs...) do { \
+#define FcitxMessagesAddMessageStringsAtLast(message, type, strs...) do { \
         const char *__msg_str_lst[] = {strs};                           \
         size_t __msg_str_count = sizeof(__msg_str_lst) / sizeof(char*); \
-        FcitxMessagesAddMessageAtLastStringsReal(message, type,         \
+        FcitxMessagesAddMessageVStringAtLast(message, type,         \
                                                  __msg_str_count,       \
                                                  __msg_str_lst);        \
     } while (0)
@@ -431,24 +431,27 @@ extern "C" {
      * @return void
      **/
     void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const char* fmt, ...);
+
     /**
-     * set only message string, cat string version
+     * set only message string, it doesn't insert string into position,
+     * it concat all the string in strs, then replace the string at
+     * position
      *
      * @param message message
      * @param position position
-     * @param fmt printf format
-     * @param  ...
+     * @param n strs length
+     * @param strs string array
      * @return void
      *
      * @since 4.2.7
      **/
-    void FcitxMessagesSetMessageTextStringsReal(FcitxMessages *message,
-                                                int position, size_t n,
-                                                const char **strs);
+    void FcitxMessagesSetMessageTextVString(FcitxMessages *message,
+                                            int position, size_t n,
+                                            const char **strs);
 #define FcitxMessagesSetMessageTextStrings(message, position, strs...) do { \
         const char *__msg_str_lst[] = {strs};                           \
         size_t __msg_str_count = sizeof(__msg_str_lst) / sizeof(char*); \
-        FcitxMessagesSetMessageTextStringsReal(message, position,       \
+        FcitxMessagesSetMessageTextVString(message, position,       \
                                                __msg_str_count,         \
                                                __msg_str_lst);          \
     } while (0)

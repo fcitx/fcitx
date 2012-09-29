@@ -200,7 +200,7 @@ void IMSelectorGetCands(IMSelector* imselector)
     if (!ic)
         return;
 
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxUp(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
                                          MSG_TIPS, imselector->global ?
                                          _("Select global input method: ") :
                                          _("Select local input method: "));
@@ -212,7 +212,7 @@ void IMSelectorGetCands(IMSelector* imselector)
         }
     }
     else {
-        FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxUp(input),
+        FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
                                              MSG_TIPS,
                                              _("No local input method"));
     }

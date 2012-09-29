@@ -167,7 +167,7 @@ INPUT_RETURN_VALUE QWGetCandWords(void *arg)
                                 FcitxInputStateGetRawInputBufferSize(input));
     FcitxMessages *preedit = FcitxInputStateGetPreedit(input);
     FcitxMessagesSetMessageCount(preedit, 0);
-    FcitxMessagesAddMessageAtLastStrings(preedit, MSG_INPUT, raw_buff);
+    FcitxMessagesAddMessageStringsAtLast(preedit, MSG_INPUT, raw_buff);
 
     return IRV_DISPLAY_CANDWORDS;
 }

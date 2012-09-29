@@ -331,12 +331,12 @@ void ShowQuickPhraseMessage(QuickPhraseState *qpstate)
     FcitxInputStateSetCursorPos(input, strlen(qpstate->buffer));
     FcitxInputStateSetClientCursorPos(input, strlen(qpstate->buffer) + strlen(c));
     FcitxInstanceCleanInputWindowUp(qpstate->owner);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxUp(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
                                          MSG_TIPS, _("Quick Phrase: "),
                                          (qpstate->append) ? c : "");
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
                                          MSG_INPUT, qpstate->buffer);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetClientPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, (qpstate->append) ? c : "",
                                          qpstate->buffer);
 }
@@ -409,7 +409,7 @@ boolean QuickPhrasePreFilter(void *arg, FcitxKeySym sym,
     if (*retval == IRV_DISPLAY_MESSAGE) {
         FcitxMessagesSetMessageCount(FcitxInputStateGetAuxDown(input), 0);
         if (!FcitxCandidateWordPageCount(FcitxInputStateGetCandidateList(input)))
-            FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxDown(input),
+            FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxDown(input),
                                                  MSG_TIPS,
                                                  _("Press Enter to input text"));
     }

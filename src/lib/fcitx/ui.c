@@ -269,7 +269,7 @@ void FcitxMessagesAddMessageAtLast(FcitxMessages* message, FcitxMessageType type
 }
 
 FCITX_EXPORT_API void
-FcitxMessagesAddMessageAtLastStringsReal(FcitxMessages *message,
+FcitxMessagesAddMessageVStringAtLast(FcitxMessages *message,
                                          FcitxMessageType type, size_t n,
                                          const char **strs)
 {
@@ -300,7 +300,7 @@ void FcitxMessagesSetMessageText(FcitxMessages* message, int position, const cha
 }
 
 FCITX_EXPORT_API void
-FcitxMessagesSetMessageTextStringsReal(FcitxMessages *message, int position,
+FcitxMessagesSetMessageTextVString(FcitxMessages *message, int position,
                                        size_t n, const char **strs)
 {
     FcitxMessagesSetMessageStringsReal(message, position,
@@ -732,15 +732,15 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
     FcitxMessagesSetMessageCount(msgDown, 0);
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxUp) ; i ++) {
-        FcitxMessagesAddMessageAtLastStrings(msgUp, FcitxMessagesGetMessageType(input->msgAuxUp, i), FcitxMessagesGetMessageString(input->msgAuxUp, i));
+        FcitxMessagesAddMessageStringsAtLast(msgUp, FcitxMessagesGetMessageType(input->msgAuxUp, i), FcitxMessagesGetMessageString(input->msgAuxUp, i));
         extraLength += strlen(FcitxMessagesGetMessageString(input->msgAuxUp, i));
     }
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgPreedit) ; i ++)
-        FcitxMessagesAddMessageAtLastStrings(msgUp, FcitxMessagesGetMessageType(input->msgPreedit, i), FcitxMessagesGetMessageString(input->msgPreedit, i));
+        FcitxMessagesAddMessageStringsAtLast(msgUp, FcitxMessagesGetMessageType(input->msgPreedit, i), FcitxMessagesGetMessageString(input->msgPreedit, i));
 
     for (i = 0; i < FcitxMessagesGetMessageCount(input->msgAuxDown) ; i ++)
-        FcitxMessagesAddMessageAtLastStrings(msgDown, FcitxMessagesGetMessageType(input->msgAuxDown, i), FcitxMessagesGetMessageString(input->msgAuxDown, i));
+        FcitxMessagesAddMessageStringsAtLast(msgDown, FcitxMessagesGetMessageType(input->msgAuxDown, i), FcitxMessagesGetMessageString(input->msgAuxDown, i));
 
     FcitxCandidateWord* candWord = NULL;
 
@@ -758,7 +758,7 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
 
         unsigned int mod = FcitxCandidateWordGetModifier(input->candList);
 
-        FcitxMessagesAddMessageAtLastStrings(
+        FcitxMessagesAddMessageStringsAtLast(
             msgDown, MSG_INDEX, (mod & FcitxKeyState_Super) ? "M-" : "",
             (mod & FcitxKeyState_Ctrl) ? "C-" : "",
             (mod & FcitxKeyState_Alt) ? "A-" : "",
@@ -773,13 +773,13 @@ int FcitxUINewMessageToOldStyleMessage(FcitxInstance* instance, FcitxMessages* m
         )
             type = MSG_FIRSTCAND;
 
-        FcitxMessagesAddMessageAtLastStrings(msgDown, type, candWord->strWord);
+        FcitxMessagesAddMessageStringsAtLast(msgDown, type, candWord->strWord);
 
         if (candWord->strExtra && strlen(candWord->strExtra))
-            FcitxMessagesAddMessageAtLastStrings(msgDown, candWord->extraType,
+            FcitxMessagesAddMessageStringsAtLast(msgDown, candWord->extraType,
                                                  candWord->strExtra);
 
-        FcitxMessagesAddMessageAtLastStrings(msgDown, MSG_OTHER, " ");
+        FcitxMessagesAddMessageStringsAtLast(msgDown, MSG_OTHER, " ");
     }
 
     return extraLength;

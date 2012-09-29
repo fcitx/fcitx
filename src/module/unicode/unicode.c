@@ -165,7 +165,7 @@ INPUT_RETURN_VALUE UnicodeGetCandWords(UnicodeModule* uni)
 {
     FcitxInputState *input = FcitxInstanceGetInputState(uni->owner);
     FcitxInstanceCleanInputWindow(uni->owner);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
                                          MSG_INPUT, uni->buffer);
     FcitxInputStateSetShowCursor(input, true);
     FcitxInputStateSetCursorPos(input, strlen(uni->buffer));
@@ -221,7 +221,7 @@ INPUT_RETURN_VALUE UnicodeHotkey(void* arg)
     FcitxInstanceCleanInputWindow(uni->owner);
     FcitxInputState *input = FcitxInstanceGetInputState(uni->owner);
     FcitxInputStateSetShowCursor(input, false);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetAuxUp(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetAuxUp(input),
                                          MSG_TIPS, _("Search unicode"));
     return IRV_DISPLAY_MESSAGE;
 }

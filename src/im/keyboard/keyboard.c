@@ -602,9 +602,9 @@ INPUT_RETURN_VALUE FcitxKeyboardGetCandWords(void* arg)
     ssize_t bufferlen = strlen(keyboard->buffer);
     strcpy(FcitxInputStateGetRawInputBuffer(input), keyboard->buffer);
     FcitxInputStateSetRawInputBufferSize(input, bufferlen);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetClientPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetClientPreedit(input),
                                          MSG_INPUT, keyboard->buffer);
-    FcitxMessagesAddMessageAtLastStrings(FcitxInputStateGetPreedit(input),
+    FcitxMessagesAddMessageStringsAtLast(FcitxInputStateGetPreedit(input),
                                          MSG_INPUT, keyboard->buffer);
     FcitxInputStateSetClientCursorPos(input, keyboard->cursorPos);
     FcitxInputStateSetCursorPos(input, keyboard->cursorPos);

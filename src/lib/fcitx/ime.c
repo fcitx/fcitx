@@ -850,8 +850,8 @@ void FcitxInstanceProcessInputReturnValue(
     if (retVal & IRV_FLAG_DISPLAY_LAST) {
         FcitxInstanceCleanInputWindow(instance);
         char str[2] = {FcitxInputStateGetRawInputBuffer(input)[0], '\0'};
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_INPUT, str);
-        FcitxMessagesAddMessageAtLastStrings(
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxUp, MSG_INPUT, str);
+        FcitxMessagesAddMessageStringsAtLast(
             input->msgAuxDown, MSG_TIPS,
             FcitxInputStateGetLastCommitString(input));
     }
@@ -1516,11 +1516,11 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
         return;
 
     if (instance->config->bShowVersion) {
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_TIPS,
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxUp, MSG_TIPS,
                                              "FCITX " VERSION " ");
     }
     if (im) {
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxUp, MSG_TIPS,
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxUp, MSG_TIPS,
                                              im->strName);
     }
 
@@ -1533,13 +1533,13 @@ void FcitxInstanceShowInputSpeed(FcitxInstance* instance)
             timePassed = 1.0;
 
         FcitxMessagesSetMessageCount(input->msgAuxDown, 0);
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxDown, MSG_OTHER,
                                              _("Input Speed: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int)(instance->iHZInputed * 60 / timePassed));
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxDown, MSG_OTHER,
                                              _("/min  Time Used: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%d", (int) timePassed / 60);
-        FcitxMessagesAddMessageAtLastStrings(input->msgAuxDown, MSG_OTHER,
+        FcitxMessagesAddMessageStringsAtLast(input->msgAuxDown, MSG_OTHER,
                                              _("min Num of Characters: "));
         FcitxMessagesAddMessageAtLast(input->msgAuxDown, MSG_CODE, "%u", instance->iHZInputed);
     }
