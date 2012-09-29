@@ -143,7 +143,7 @@ char* ChttransOutputFilter(void* arg, const char *strin)
     FcitxIM* im = FcitxInstanceGetCurrentIM(transState->owner);
 
     /* don't trans for "zh" */
-    if (!im || strcmp(im->langCode, "zh") != 0)
+    if (!im || strcmp(im->langCode, "zh") == 0)
         return NULL;
 
     if (transState->enabled) {
