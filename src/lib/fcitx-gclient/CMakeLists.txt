@@ -20,6 +20,7 @@ set(FCITX_GCLIENT_SOURCES
     fcitxclient.c
     fcitxinputmethod.c
     fcitxkbd.c
+    fcitxconnection.c
 )
 
 set(FCITX_GCLIENT_BUILT_SOURCES
