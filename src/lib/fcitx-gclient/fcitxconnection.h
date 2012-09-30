@@ -43,7 +43,6 @@ G_BEGIN_DECLS
 typedef struct _FcitxConnection        FcitxConnection;
 typedef struct _FcitxConnectionClass   FcitxConnectionClass;
 typedef struct _FcitxConnectionPrivate FcitxConnectionPrivate;
-typedef struct _FcitxPreeditItem   FcitxPreeditItem;
 
 /**
  * FcitxConnection:

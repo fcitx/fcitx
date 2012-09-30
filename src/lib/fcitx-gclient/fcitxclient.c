@@ -216,6 +216,11 @@ fcitx_client_dispose(GObject *object)
     if (self->priv->icproxy) {
         g_dbus_proxy_call(self->priv->icproxy, "DestroyIC", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
     }
+
+#ifndef g_signal_handlers_disconnect_by_data
+#define g_signal_handlers_disconnect_by_data(instance, data) \
+    g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
+#endif
     g_signal_handlers_disconnect_by_data(self->priv->connection,
                                          self);
     g_object_unref(self->priv->connection);
