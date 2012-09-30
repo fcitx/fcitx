@@ -574,14 +574,14 @@ extern "C" {
     {
         struct stat stats;
         return (stat(path, &stats) == 0 && S_ISDIR(stats.st_mode) &&
-                access(path, R_OK | X_OK));
+                access(path, R_OK | X_OK) == 0);
     }
 
     static inline int fcitx_utils_isreg(const char *path)
     {
         struct stat stats;
         return (stat(path, &stats) == 0 && S_ISREG(stats.st_mode) &&
-                access(path, R_OK));
+                access(path, R_OK) == 0);
     }
 
     static inline int fcitx_utils_islnk(const char *path)
