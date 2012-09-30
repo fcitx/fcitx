@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2010~2012 by CSSlayer                                   *
+ *   wengxt@gmail.com                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,12 +18,42 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef XERRORHANDLER_H
-#define XERRORHANDLER_H
+#ifndef X11STUFF_INTERNAL_H
+#define X11STUFF_INTERNAL_H
 
-#include "x11stuff-internal.h"
+#include "x11stuff.h"
 
-void InitXErrorHandler(FcitxX11*);
+typedef struct {
+    Display *dpy;
+    UT_array handlers;
+    UT_array comphandlers;
+    FcitxInstance* owner;
+    Window compManager;
+    Window rootWindow;
+    Window eventWindow;
+    Atom compManagerAtom;
+    Atom primaryAtom;
+    Atom clipboardAtom;
+    int iScreen;
+    Atom typeMenuAtom;
+    Atom windowTypeAtom;
+    Atom typeDialogAtom;
+    Atom typeDockAtom;
+    Atom pidAtom;
+    boolean bUseXinerama;
+    FcitxRect* rects;
+    int screenCount;
+    int defaultScreen;
+    FcitxAddon* xim;
+    double dpif;
+    int dpi;
+    boolean firstRun;
+#ifdef HAVE_XFIXES
+    boolean hasXfixes;
+    int xfixesEventBase;
+#endif
+    boolean isComposite;
+} FcitxX11;
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

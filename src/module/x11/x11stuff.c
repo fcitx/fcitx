@@ -38,7 +38,7 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
-#include "x11stuff.h"
+#include "x11stuff-internal.h"
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
@@ -94,6 +94,9 @@ void* X11Create(FcitxInstance* instance)
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);
     x11priv->rootWindow = DefaultRootWindow(x11priv->dpy);
+    x11priv->eventWindow = XCreateWindow(x11priv->dpy, x11priv->rootWindow,
+                                         0, 0, 1, 1, 0, 0, InputOnly,
+                                         CopyFromParent, 0, NULL);
     X11InitAtoms(x11priv);
 
     utarray_init(&x11priv->handlers, &handler_icd);
@@ -195,7 +198,7 @@ X11InitXFixesSelection(FcitxX11 *x11priv)
     };
     int i;
     for (i = 0;i < sizeof(select_atoms) / sizeof(Atom);i++) {
-        XFixesSelectSelectionInput(x11priv->dpy, x11priv->rootWindow,
+        XFixesSelectSelectionInput(x11priv->dpy, x11priv->eventWindow,
                                    select_atoms[i],
                                    XFixesSetSelectionOwnerNotifyMask |
                                    XFixesSelectionWindowDestroyNotifyMask |

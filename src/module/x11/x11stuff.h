@@ -52,7 +52,6 @@
 #define FCITX_X11_GETDPI 11
 #define FCITX_X11_GETDPI_RETURNTYPE void
 
-
 typedef struct _FcitxXEventHandler {
     boolean(*eventHandler)(void* instance, XEvent* event);
     void* instance;
@@ -66,37 +65,6 @@ typedef struct _FcitxCompositeChangedHandler {
 typedef struct _FcitxRect {
     int x1, y1, x2, y2;
 } FcitxRect;
-
-typedef struct _FcitxX11 {
-    Display *dpy;
-    UT_array handlers;
-    UT_array comphandlers;
-    FcitxInstance* owner;
-    Window compManager;
-    Window rootWindow;
-    Atom compManagerAtom;
-    Atom primaryAtom;
-    Atom clipboardAtom;
-    int iScreen;
-    Atom typeMenuAtom;
-    Atom windowTypeAtom;
-    Atom typeDialogAtom;
-    Atom typeDockAtom;
-    Atom pidAtom;
-    boolean bUseXinerama;
-    FcitxRect* rects;
-    int screenCount;
-    int defaultScreen;
-    FcitxAddon* xim;
-    double dpif;
-    int dpi;
-    boolean firstRun;
-#ifdef HAVE_XFIXES
-    boolean hasXfixes;
-    int xfixesEventBase;
-#endif
-    boolean isComposite;
-} FcitxX11;
 
 typedef enum _FcitxXWindowType {
     FCITX_WINDOW_UNKNOWN,
