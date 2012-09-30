@@ -23,6 +23,8 @@
 #include <X11/Xlib.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
+#include <fcitx/instance.h>
+#include <fcitx/addon.h>
 
 #define FCITX_X11_NAME "fcitx-x11"
 #define FCITX_X11_GETDISPLAY 0
@@ -51,8 +53,6 @@
 #define FCITX_X11_GETDPI_RETURNTYPE void
 
 
-struct _FcitxInstance;
-
 typedef struct _FcitxXEventHandler {
     boolean(*eventHandler)(void* instance, XEvent* event);
     void* instance;
@@ -71,9 +71,12 @@ typedef struct _FcitxX11 {
     Display *dpy;
     UT_array handlers;
     UT_array comphandlers;
-    struct _FcitxInstance* owner;
+    FcitxInstance* owner;
     Window compManager;
+    Window rootWindow;
     Atom compManagerAtom;
+    Atom primaryAtom;
+    Atom clipboardAtom;
     int iScreen;
     Atom typeMenuAtom;
     Atom windowTypeAtom;
@@ -84,12 +87,14 @@ typedef struct _FcitxX11 {
     FcitxRect* rects;
     int screenCount;
     int defaultScreen;
-    struct _FcitxAddon* xim;
+    FcitxAddon* xim;
     double dpif;
     int dpi;
     boolean firstRun;
+#ifdef HAVE_XFIXES
     boolean hasXfixes;
     int xfixesEventBase;
+#endif
     boolean isComposite;
 } FcitxX11;
 
