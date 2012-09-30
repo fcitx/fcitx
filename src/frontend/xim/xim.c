@@ -118,14 +118,12 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 {
     if (ximfrontend != NULL)
         return NULL;
-    FcitxXimFrontend* xim = fcitx_utils_malloc0(sizeof(FcitxXimFrontend));
+    FcitxXimFrontend *xim = fcitx_utils_new(FcitxXimFrontend);
     if (xim == NULL)
         return NULL;
 
     ximfrontend = xim;
 
-    XIMStyles *input_styles;
-    XIMEncodings *encodings;
     char *imname = NULL;
     char *p;
 
@@ -197,18 +195,21 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
             fclose(fp);
     }
 
-    input_styles = (XIMStyles *) malloc(sizeof(XIMStyles));
+    XIMStyles input_styles;
     if (xim->bUseOnTheSpotStyle) {
-        input_styles->count_styles = sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
-        input_styles->supported_styles = OnTheSpot_Styles;
+        input_styles.count_styles =
+            sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles.supported_styles = OnTheSpot_Styles;
     } else {
-        input_styles->count_styles = sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
-        input_styles->supported_styles = OverTheSpot_Styles;
+        input_styles.count_styles =
+            sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles.supported_styles = OverTheSpot_Styles;
     }
 
-    encodings = (XIMEncodings *) malloc(sizeof(XIMEncodings));
-    encodings->count_encodings = sizeof(zhEncodings) / sizeof(XIMEncoding) - 1;
-    encodings->supported_encodings = zhEncodings;
+    XIMEncodings encodings = {
+        .count_encodings = sizeof(zhEncodings) / sizeof(XIMEncoding) - 1,
+        .supported_encodings = zhEncodings
+    };
 
     p = getenv("LC_CTYPE");
     if (!p) {
@@ -229,14 +230,11 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
                         IMServerName, imname,
                         IMLocale, strLocale,
                         IMServerTransport, "X/",
-                        IMInputStyles, input_styles,
-                        IMEncodingList, encodings,
+                        IMInputStyles, &input_styles,
+                        IMEncodingList, &encodings,
                         IMProtocolHandler, XimProtocolHandler,
                         IMFilterEventMask, KeyPressMask | KeyReleaseMask,
                         NULL);
-
-    free(input_styles);
-    free(encodings);
 
     if (xim->ims == (XIMS) NULL) {
         FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
