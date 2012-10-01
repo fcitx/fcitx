@@ -29,9 +29,8 @@
 #ifndef _FCITX_HOTKEY_H_
 #define _FCITX_HOTKEY_H_
 
-#include <stdint.h>
-#include <fcitx-config/fcitx-config.h>
 #include <fcitx-utils/keysym.h>
+#include <fcitx-utils/utils.h>
 
 #ifdef __cplusplus
 extern "C"

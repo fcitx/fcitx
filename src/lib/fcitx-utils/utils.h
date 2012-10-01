@@ -57,10 +57,24 @@
 #define _FCITX_UTILS_H_
 
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-utils/uthash.h>
 #include <sys/stat.h>
+
+/**
+ * fcitx boolean
+ **/
+typedef int32_t boolean;
+/**
+ * fcitx true
+ */
+#define true (1)
+/**
+ * fcitx false
+ */
+#define false (0)
 
 #ifdef __cplusplus
 extern "C" {
