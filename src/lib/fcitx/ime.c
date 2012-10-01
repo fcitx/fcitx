@@ -394,7 +394,7 @@ void FcitxInstanceRegisterIMv2(FcitxInstance *instance,
                        const char *langCode
                       )
 {
-    if (priority < 0)
+    if (priority <= 0)
         return ;
 
     if (priority == PRIORITY_MAGIC_FIRST)
