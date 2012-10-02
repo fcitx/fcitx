@@ -1385,7 +1385,7 @@ _key_snooper_cb (GtkWidget   *widget,
         g_object_add_weak_pointer ((GObject *) fcitxcontext,
                                    (gpointer *) &fcitxcontext);
         _request_surrounding_text (fcitxcontext);
-        if (G_UNLIKELY(fcitxcontext))
+        if (G_UNLIKELY(!fcitxcontext))
             return FALSE;
         else
             g_object_remove_weak_pointer ((GObject *) fcitxcontext,

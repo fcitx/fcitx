@@ -459,6 +459,13 @@ fcitx_im_context_set_client_window(GtkIMContext          *context,
     set_ic_client_window(fcitxcontext, client_window);
 }
 
+static void
+process_key_data_free(gpointer p)
+{
+    // ProcessKeyStruct* pks = p;
+    g_free(p);
+}
+
 ///
 static gboolean
 fcitx_im_context_filter_keypress(GtkIMContext *context,
@@ -512,11 +519,10 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
-            g_object_ref(fcitxcontext);
             FcitxIMClientProcessKey(fcitxcontext->client,
                                     _fcitx_im_context_process_key_cb,
                                     pks,
-                                    g_free,
+                                    process_key_data_free,
                                     event->keyval,
                                     event->hardware_keycode,
                                     event->state,
@@ -546,7 +552,6 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
         gdk_event_put((GdkEvent *)event);
     }
     gdk_event_free((GdkEvent *)event);
-    g_object_unref(context);
 }
 
 static void
@@ -1444,7 +1449,7 @@ _key_snooper_cb (GtkWidget   *widget,
         g_object_add_weak_pointer ((GObject *) fcitxcontext,
                                    (gpointer *) &fcitxcontext);
         _request_surrounding_text (fcitxcontext);
-        if (G_UNLIKELY(fcitxcontext))
+        if (G_UNLIKELY(!fcitxcontext))
             return FALSE;
         else
             g_object_remove_weak_pointer ((GObject *) fcitxcontext,
@@ -1468,7 +1473,6 @@ _key_snooper_cb (GtkWidget   *widget,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
-            g_object_ref(fcitxcontext);
             FcitxIMClientProcessKey(fcitxcontext->client,
                                     _fcitx_im_context_process_key_cb,
                                     pks,
