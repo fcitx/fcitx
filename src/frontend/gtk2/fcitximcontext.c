@@ -462,7 +462,9 @@ fcitx_im_context_set_client_window(GtkIMContext          *context,
 static void
 process_key_data_free(gpointer p)
 {
-    // ProcessKeyStruct* pks = p;
+    ProcessKeyStruct* pks = p;
+    g_object_unref(pks->context);
+    gdk_event_free((GdkEvent *)pks->event);
     g_free(p);
 }
 
@@ -516,7 +518,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             }
         } else {
             ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
-            pks->context = fcitxcontext;
+            pks->context = g_object_ref(fcitxcontext);
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
             FcitxIMClientProcessKey(fcitxcontext->client,
@@ -551,7 +553,6 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
         event->state |= FcitxKeyState_IgnoredMask;
         gdk_event_put((GdkEvent *)event);
     }
-    gdk_event_free((GdkEvent *)event);
 }
 
 static void
@@ -1470,13 +1471,13 @@ _key_snooper_cb (GtkWidget   *widget,
                 retval = TRUE;
         } else {
             ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
-            pks->context = fcitxcontext;
+            pks->context = g_object_ref(fcitxcontext);
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
             FcitxIMClientProcessKey(fcitxcontext->client,
                                     _fcitx_im_context_process_key_cb,
                                     pks,
-                                    g_free,
+                                    process_key_data_free,
                                     event->keyval,
                                     event->hardware_keycode,
                                     event->state,
