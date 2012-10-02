@@ -1418,6 +1418,9 @@ _key_snooper_cb (GtkWidget   *widget,
 
     FcitxIMContext *fcitxcontext = (FcitxIMContext *) _focus_im_context;
 
+    if (G_UNLIKELY(!_use_key_snooper))
+        return FALSE;
+
     if (fcitxcontext == NULL || !fcitxcontext->has_focus)
         return FALSE;
 
