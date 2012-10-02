@@ -42,6 +42,8 @@ add_executable(testdbuslaunch testdbuslaunch.c
                ../src/module/dbus/dbuslauncher.c
                )
 
+target_link_libraries(testdbuslaunch fcitx-utils)
+
 add_test(NAME testconfig
          COMMAND testconfig ${CMAKE_CURRENT_SOURCE_DIR}/test.desc ${CMAKE_CURRENT_SOURCE_DIR}/test.conf ${CMAKE_CURRENT_BINARY_DIR}/test.conf)
 
