@@ -1336,8 +1336,7 @@ void _fcitx_im_context_connect_cb(FcitxClient* im, void* user_data)
 static void
 _request_surrounding_text (FcitxIMContext *context)
 {
-    if (context &&
-            fcitx_client_is_valid(context->client)) {
+    if (context && fcitx_client_is_valid(context->client)) {
         gboolean return_value;
         FcitxLog(LOG_LEVEL, "requesting surrounding text");
         g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
@@ -1365,6 +1364,9 @@ _key_snooper_cb (GtkWidget   *widget,
 
     FcitxIMContext *fcitxcontext = (FcitxIMContext *) _focus_im_context;
 
+    if (G_UNLIKELY(!_use_key_snooper))
+        return FALSE;
+
     if (fcitxcontext == NULL || !fcitxcontext->has_focus)
         return FALSE;
 
@@ -1379,7 +1381,15 @@ _key_snooper_cb (GtkWidget   *widget,
             break;
         }
 
+        /* according to RH#859879, something bad could happen here. */
+        g_object_add_weak_pointer ((GObject *) fcitxcontext,
+                                   (gpointer *) &fcitxcontext);
         _request_surrounding_text (fcitxcontext);
+        if (G_UNLIKELY(fcitxcontext))
+            return FALSE;
+        else
+            g_object_remove_weak_pointer ((GObject *) fcitxcontext,
+                                          (gpointer *) &fcitxcontext);
         fcitxcontext->time = event->time;
 
         if (_use_sync_mode) {
