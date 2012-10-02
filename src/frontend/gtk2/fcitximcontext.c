@@ -1372,10 +1372,10 @@ void _fcitx_im_context_connect_cb(FcitxIMClient* client, void* user_data)
 
         /* set_cursor_location_internal() will get origin from X server,
          * it blocks UI. So delay it to idle callback. */
-        g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
-                       (GSourceFunc) _set_cursor_location_internal,
-                       g_object_ref(context),
-                       (GDestroyNotify) g_object_unref);
+        gdk_threads_add_idle_full(G_PRIORITY_DEFAULT_IDLE,
+                                  (GSourceFunc) _set_cursor_location_internal,
+                                  g_object_ref(context),
+                                  (GDestroyNotify) g_object_unref);
 
     }
 
