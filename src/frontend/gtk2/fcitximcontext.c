@@ -415,17 +415,14 @@ fcitx_im_context_finalize(GObject *obj)
         context->slave = NULL;
     }
 
-    if (context->preedit_string)
+    if (context->preedit_string) {
         g_free(context->preedit_string);
-    context->preedit_string = NULL;
+        context->preedit_string = NULL;
+    }
 
-    if (context->attrlist)
+    if (context->attrlist) {
         pango_attr_list_unref(context->attrlist);
-    context->attrlist = NULL;
-
-    if (_key_snooper_id != 0) {
-        gtk_key_snooper_remove (_key_snooper_id);
-        _key_snooper_id = 0;
+        context->attrlist = NULL;
     }
 
     G_OBJECT_CLASS(parent_class)->finalize (obj);
@@ -515,6 +512,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
+            g_object_ref(fcitxcontext);
             FcitxIMClientProcessKey(fcitxcontext->client,
                                     _fcitx_im_context_process_key_cb,
                                     pks,
@@ -548,6 +546,7 @@ _fcitx_im_context_process_key_cb(DBusGProxy *proxy,
         gdk_event_put((GdkEvent *)event);
     }
     gdk_event_free((GdkEvent *)event);
+    g_object_unref(context);
 }
 
 static void
@@ -641,6 +640,8 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
             gboolean hasColor;
             GdkColor fg;
             GdkColor bg;
+            memset(&fg, 0, sizeof(GdkColor));
+            memset(&bg, 0, sizeof(GdkColor));
 
             if (context->client_window) {
                 GtkWidget *widget;
@@ -677,17 +678,21 @@ _fcitx_im_context_update_formatted_preedit_cb(DBusGProxy* proxy, GPtrArray* arra
 
     gchar* str = g_string_free(gstr, FALSE);
 
-    context->preedit_string = g_strdup(str);
+    context->preedit_string = str;
     char* tempstr = g_strndup(str, cursor_pos);
     context->cursor_pos =  fcitx_utf8_strlen(tempstr);
     g_free(tempstr);
 
-    gboolean new_visible = false;
+    gboolean new_visible = FALSE;
 
-    if (context->preedit_string != NULL) {
-        if (strlen(context->preedit_string) != 0)
-            new_visible = true;
+    if (context->preedit_string != NULL && context->preedit_string[0] == 0) {
+        g_free(context->preedit_string);
+        context->preedit_string = NULL;
     }
+
+    if (context->preedit_string != NULL)
+        new_visible = TRUE;
+
     gboolean flag = new_visible != visible;
 
     if (new_visible) {
@@ -1435,7 +1440,15 @@ _key_snooper_cb (GtkWidget   *widget,
             break;
         }
 
+        /* according to RH#859879, something bad could happen here. */
+        g_object_add_weak_pointer ((GObject *) fcitxcontext,
+                                   (gpointer *) &fcitxcontext);
         _request_surrounding_text (fcitxcontext);
+        if (G_UNLIKELY(fcitxcontext))
+            return FALSE;
+        else
+            g_object_remove_weak_pointer ((GObject *) fcitxcontext,
+                                          (gpointer *) &fcitxcontext);
         fcitxcontext->time = event->time;
 
         if (_use_sync_mode) {
@@ -1455,6 +1468,7 @@ _key_snooper_cb (GtkWidget   *widget,
             pks->context = fcitxcontext;
             pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
 
+            g_object_ref(fcitxcontext);
             FcitxIMClientProcessKey(fcitxcontext->client,
                                     _fcitx_im_context_process_key_cb,
                                     pks,
