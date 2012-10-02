@@ -1395,7 +1395,7 @@ _key_snooper_cb (GtkWidget   *widget,
                                    (gpointer *) &fcitxcontext);
         _request_surrounding_text (fcitxcontext);
         fcitxcontext->time = event->time;
-        if (G_UNLIKELY(fcitxcontext))
+        if (G_UNLIKELY(!fcitxcontext))
             return FALSE;
         else
             g_object_remove_weak_pointer ((GObject *) fcitxcontext,
