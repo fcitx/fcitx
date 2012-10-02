@@ -362,6 +362,7 @@ _fcitx_client_create_ic(FcitxClient *self)
         g_object_unref(self->priv->icproxy);
         self->priv->icproxy = NULL;
     }
+    g_object_ref(self);
     self->priv->cancellable = g_cancellable_new ();
     g_dbus_proxy_new_for_bus(
         G_BUS_TYPE_SESSION,
@@ -382,29 +383,33 @@ _fcitx_client_create_ic_phase1_finished(GObject *source_object,
                                         gpointer user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
     if (self->priv->improxy)
         g_object_unref(self->priv->improxy);
-    self->priv->improxy = g_dbus_proxy_new_for_bus_finish(res, &error);
-    if (error) {
-        g_warning ("Create fcitx input method proxy failed: %s.", error->message);
-        g_error_free(error);
-    }
-    if (!self->priv->improxy)
-        return;
+    self->priv->improxy = g_dbus_proxy_new_for_bus_finish(res, NULL);
 
-    gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->improxy);
+    do {
+        if (!self->priv->improxy)
+            break;
 
-    if (!owner_name) {
-        g_object_unref(self->priv->improxy);
-        self->priv->improxy = NULL;
+        gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->improxy);
+
+        if (!owner_name) {
+            g_object_unref(self->priv->improxy);
+            self->priv->improxy = NULL;
+            break;
+        }
+        g_free(owner_name);
+    } while(0);
+
+    if (!self->priv->improxy) {
+        /* unref for create_ic */
+        g_object_unref(self);
         return;
     }
-    g_free(owner_name);
 
     self->priv->cancellable = g_cancellable_new ();
     char* appname = fcitx_utils_get_process_name();
@@ -429,21 +434,22 @@ _fcitx_client_create_ic_cb(GObject *source_object,
                            gpointer user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
-    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, &error);
+    GVariant* result = g_dbus_proxy_call_finish(G_DBUS_PROXY(source_object), res, NULL);
 
-    if (error) {
-        g_error_free(error);
+    if (!result) {
+        /* unref for _fcitx_client_phase1_finish */
+        g_object_unref(self);
         return;
     }
 
     gboolean enable;
     guint32 key1, state1, key2, state2;
     g_variant_get(result, "(ibuuuu)", &self->priv->id, &enable, &key1, &state1, &key2, &state2);
+    g_variant_unref(result);
 
     sprintf(self->priv->icname, FCITX_IC_DBUS_PATH, self->priv->id);
 
@@ -468,33 +474,34 @@ _fcitx_client_create_ic_phase2_finished(GObject *source_object,
                                         gpointer user_data)
 {
     FcitxClient* self = (FcitxClient*) user_data;
-    GError* error = NULL;
     if (self->priv->cancellable) {
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
     }
     if (self->priv->icproxy)
         g_object_unref(self->priv->icproxy);
-    self->priv->icproxy = g_dbus_proxy_new_for_bus_finish(res, &error);
+    self->priv->icproxy = g_dbus_proxy_new_for_bus_finish(res, NULL);
 
-    if (error) {
-        g_error_free(error);
+    do {
+        if (!self->priv->icproxy)
+            break;
+
+        gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->icproxy);
+
+        if (!owner_name) {
+            g_object_unref(self->priv->icproxy);
+            self->priv->icproxy = NULL;
+            break;
+        }
+        g_free(owner_name);
+    } while(0);
+
+    if (self->priv->icproxy) {
+        g_signal_connect(self->priv->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), self);
+        g_signal_emit(user_data, signals[CONNTECTED_SIGNAL], 0);
     }
-
-    if (!self->priv->icproxy)
-        return;
-
-    gchar* owner_name = g_dbus_proxy_get_name_owner(self->priv->icproxy);
-
-    if (!owner_name) {
-        g_object_unref(self->priv->icproxy);
-        self->priv->icproxy = NULL;
-        return;
-    }
-    g_free(owner_name);
-
-    g_signal_connect(self->priv->icproxy, "g-signal", G_CALLBACK(_fcitx_client_g_signal), self);
-    g_signal_emit(user_data, signals[CONNTECTED_SIGNAL], 0);
+    /* unref for _fcitx_client_create_ic_cb */
+    g_object_unref(self);
 }
 
 static void
