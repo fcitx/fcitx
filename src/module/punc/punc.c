@@ -249,8 +249,8 @@ void ResetPuncWhichStatus(void* arg)
     FcitxInputContext* ic = FcitxInstanceGetCurrentIC(puncState->owner);
     if (!ic)
         return;
-    FcitxBitSet* puncWhich = FcitxInstanceGetICData(puncState->owner, ic, puncState->slot);
-    fcitx_bitset_clear(puncWhich);
+    PuncWhich* puncWhich = FcitxInstanceGetICData(puncState->owner, ic, puncState->slot);
+    fcitx_bitset_clear(puncWhich->bitset);
 }
 
 boolean PuncPreFilter(void* arg, FcitxKeySym sym, unsigned int state, INPUT_RETURN_VALUE* retVal)
