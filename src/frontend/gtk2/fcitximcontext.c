@@ -162,7 +162,7 @@ static gboolean
 _key_is_modifier(guint keyval);
 
 static void
-_request_surrounding_text (FcitxIMContext *context);
+_request_surrounding_text (FcitxIMContext **context);
 
 static gint
 _key_snooper_cb (GtkWidget   *widget,
@@ -498,7 +498,9 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
 
     if (IsFcitxIMClientValid(fcitxcontext->client) && fcitxcontext->has_focus) {
-        _request_surrounding_text (fcitxcontext);
+        _request_surrounding_text (&fcitxcontext);
+        if (G_UNLIKELY(!fcitxcontext))
+            return FALSE;
 
         fcitxcontext->time = event->time;
 
@@ -752,7 +754,9 @@ fcitx_im_context_focus_in(GtkIMContext *context)
                     g_object_ref(fcitxcontext),
                     (GDestroyNotify) g_object_unref);
 
-    _request_surrounding_text (fcitxcontext);
+    _request_surrounding_text (&fcitxcontext);
+    if (G_UNLIKELY(!fcitxcontext))
+        return;
 
     g_object_add_weak_pointer ((GObject *) context,
                                (gpointer *) &_focus_im_context);
@@ -1398,22 +1402,32 @@ void _fcitx_im_context_destroy_cb(FcitxIMClient* client, void* user_data)
 }
 
 static void
-_request_surrounding_text (FcitxIMContext *context)
+_request_surrounding_text (FcitxIMContext **context)
 {
-    if (context &&
-        IsFcitxIMClientValid(context->client)) {
+    if (*context &&
+        IsFcitxIMClientValid((*context)->client)) {
         gboolean return_value;
         FcitxLog(LOG_LEVEL, "requesting surrounding text");
-        g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
+
+        /* according to RH#859879, something bad could happen here. */
+        g_object_add_weak_pointer ((GObject *) *context,
+                                   (gpointer *) context);
+        /* some unref can happen here */
+        g_signal_emit (*context, _signal_retrieve_surrounding_id, 0,
                        &return_value);
+        if (context)
+            g_object_remove_weak_pointer ((GObject *) *context,
+                                          (gpointer *) context);
+        else
+            return;
         if (return_value) {
-            context->capacity |= CAPACITY_SURROUNDING_TEXT;
-            _fcitx_im_context_set_capacity (context,
+            (*context)->capacity |= CAPACITY_SURROUNDING_TEXT;
+            _fcitx_im_context_set_capacity (*context,
                                             FALSE);
         }
         else {
-            context->capacity &= ~CAPACITY_SURROUNDING_TEXT;
-            _fcitx_im_context_set_capacity (context,
+            (*context)->capacity &= ~CAPACITY_SURROUNDING_TEXT;
+            _fcitx_im_context_set_capacity (*context,
                                             FALSE);
         }
     }
@@ -1446,15 +1460,9 @@ _key_snooper_cb (GtkWidget   *widget,
             break;
         }
 
-        /* according to RH#859879, something bad could happen here. */
-        g_object_add_weak_pointer ((GObject *) fcitxcontext,
-                                   (gpointer *) &fcitxcontext);
-        _request_surrounding_text (fcitxcontext);
+        _request_surrounding_text (&fcitxcontext);
         if (G_UNLIKELY(!fcitxcontext))
             return FALSE;
-        else
-            g_object_remove_weak_pointer ((GObject *) fcitxcontext,
-                                          (gpointer *) &fcitxcontext);
         fcitxcontext->time = event->time;
 
         if (_use_sync_mode) {
