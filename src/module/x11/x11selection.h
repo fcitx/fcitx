@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010~2012 by CSSlayer                                   *
- *   wengxt@gmail.com                                                      *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,46 +18,16 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef X11STUFF_INTERNAL_H
-#define X11STUFF_INTERNAL_H
+#ifndef X11SELECTION_H
+#define X11SELECTION_H
 
-#include "config.h"
-#include "fcitx/fcitx.h"
-#include "x11stuff.h"
-#include "x11handlertable.h"
-
-typedef struct {
-    Display *dpy;
-    UT_array handlers;
-    UT_array comphandlers;
-    FcitxInstance* owner;
-    Window compManager;
-    Window rootWindow;
-    Window eventWindow;
-    Atom compManagerAtom;
-    Atom primaryAtom;
-    Atom clipboardAtom;
-    int iScreen;
-    Atom typeMenuAtom;
-    Atom windowTypeAtom;
-    Atom typeDialogAtom;
-    Atom typeDockAtom;
-    Atom pidAtom;
-    boolean bUseXinerama;
-    FcitxRect* rects;
-    int screenCount;
-    int defaultScreen;
-    FcitxAddon* xim;
-    double dpif;
-    int dpi;
-    boolean firstRun;
-#ifdef HAVE_XFIXES
-    boolean hasXfixes;
-    int xfixesEventBase;
-    FcitxHandlerTable *selectionNotify;
-#endif
-    boolean isComposite;
-} FcitxX11;
+#include "x11stuff-internal.h"
+void X11InitSelection(FcitxX11 *x11priv);
+void X11ProcessXFixesSelectionNotifyEvent(
+    FcitxX11 *x11priv, XFixesSelectionNotifyEvent *notify_event);
+unsigned int X11SelectionNotifyRegister(
+    FcitxX11 *x11priv, Atom selection, void *owner,
+    X11SelectionNotifyCallback cb, void *data, FcitxDestroyNotify destroy);
+void X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

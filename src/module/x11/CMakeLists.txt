@@ -3,7 +3,9 @@ include_directories(${X11_X11_INCLUDE_PATH})
 
 set(FCITX_X11_SOURCES
     xerrorhandler.c
+    x11handlertable.c
     x11stuff.c
+    x11selection.c
 )
 
 fcitx_add_addon(fcitx-x11 ${FCITX_X11_SOURCES})

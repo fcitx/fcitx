@@ -73,5 +73,9 @@ typedef enum _FcitxXWindowType {
     FCITX_WINDOW_DIALOG
 } FcitxXWindowType;
 
+typedef void (*FcitxDestroyNotify)(void*);
+typedef void (*X11SelectionNotifyCallback)(void *owner, Atom selection,
+                                           int subtype, void *data);
+
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

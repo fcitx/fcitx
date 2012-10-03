@@ -20,7 +20,6 @@
 
 #include "config.h"
 #include "fcitx/fcitx.h"
-
 #include <limits.h>
 #include <unistd.h>
 #include <X11/extensions/Xrender.h>
@@ -39,6 +38,8 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "x11stuff-internal.h"
+#include "x11handlertable.h"
+#include "x11selection.h"
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
@@ -55,11 +56,8 @@ static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
-// static boolean X11InitComposite(FcitxX11* x11priv);
+static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11InitAtoms(FcitxX11* x11priv);
-#ifdef HAVE_XFIXES
-static void X11InitXFixesSelection(FcitxX11* x11priv);
-#endif
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11priv);
 static void X11InitScreen(FcitxX11* x11priv);
@@ -119,13 +117,11 @@ void* X11Create(FcitxInstance* instance)
 #ifdef HAVE_XFIXES
     int ignore;
     if (XFixesQueryExtension(x11priv->dpy, &x11priv->xfixesEventBase,
-                             &ignore)) {
+                             &ignore))
         x11priv->hasXfixes = true;
-        X11InitXFixesSelection(x11priv);
-    }
 #endif
-
-    X11GetCompositeManager(x11priv);
+    X11InitSelection(x11priv);
+    X11InitComposite(x11priv);
     X11InitScreen(x11priv);
 
     XWindowAttributes attr;
@@ -159,22 +155,6 @@ void X11DelayedCompositeTest(void* arg)
 }
 
 #ifdef HAVE_XFIXES
-static void
-X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
-                                     XFixesSelectionNotifyEvent *notify_event)
-{
-    if (notify_event->selection == x11priv->compManagerAtom) {
-        X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
-        return;
-    }
-    /* switch (notify_event->subtype) { */
-    /* case XFixesSetSelectionOwnerNotify: */
-    /* case XFixesSelectionWindowDestroyNotify: */
-    /* case XFixesSelectionClientCloseNotify: */
-    /*     break; */
-    /* } */
-}
-
 static boolean
 X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
 {
@@ -187,23 +167,12 @@ X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
     return false;
 }
 
-/* Already have haxXfixes = true */
 static void
-X11InitXFixesSelection(FcitxX11 *x11priv)
+X11CompManagerSelectionNotify(void *owner, Atom selection, int subtype,
+                              void *data)
 {
-    Atom select_atoms[] = {
-        x11priv->compManagerAtom,
-        x11priv->primaryAtom,
-        x11priv->clipboardAtom
-    };
-    int i;
-    for (i = 0;i < sizeof(select_atoms) / sizeof(Atom);i++) {
-        XFixesSelectSelectionInput(x11priv->dpy, x11priv->eventWindow,
-                                   select_atoms[i],
-                                   XFixesSetSelectionOwnerNotifyMask |
-                                   XFixesSelectionWindowDestroyNotifyMask |
-                                   XFixesSelectionClientCloseNotifyMask);
-    }
+    FcitxX11 *x11priv = owner;
+    X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
 }
 #endif
 
@@ -330,10 +299,15 @@ X11InitAtoms(FcitxX11 *x11priv)
     free(atom_names);
 }
 
-/* boolean X11InitComposite(FcitxX11* x11priv) */
-/* { */
-/*     return X11GetCompositeManager(x11priv); */
-/* } */
+static boolean
+X11InitComposite(FcitxX11* x11priv)
+{
+#ifdef HAVE_XFIXES
+    X11SelectionNotifyRegister(x11priv, x11priv->clipboardAtom, x11priv,
+                               X11CompManagerSelectionNotify, NULL, NULL);
+#endif
+    return X11GetCompositeManager(x11priv);
+}
 
 void*
 X11FindARGBVisual(void* arg, FcitxModuleFunctionArg args)
