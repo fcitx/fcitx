@@ -66,11 +66,6 @@ struct _FcitxIMContext {
     PangoAttrList* attrlist;
 };
 
-typedef struct _ProcessKeyStruct {
-    FcitxIMContext* context;
-    GdkEventKey* event;
-} ProcessKeyStruct;
-
 struct _FcitxIMContextClass {
     GtkIMContextClass parent;
     /* klass members */
@@ -157,7 +152,7 @@ static gboolean
 _key_is_modifier(guint keyval);
 
 static void
-_request_surrounding_text (FcitxIMContext *context);
+_request_surrounding_text (FcitxIMContext **context);
 
 static gint
 _key_snooper_cb (GtkWidget   *widget,
@@ -502,7 +497,9 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
         return gtk_im_context_filter_keypress(fcitxcontext->slave, event);
 
     if (fcitx_client_is_valid(fcitxcontext->client) && fcitxcontext->has_focus) {
-        _request_surrounding_text (fcitxcontext);
+        _request_surrounding_text (&fcitxcontext);
+        if (G_UNLIKELY(!fcitxcontext))
+            return FALSE;
 
         fcitxcontext->time = event->time;
 
@@ -521,11 +518,6 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                 return TRUE;
             }
         } else {
-            ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
-            pks->context = fcitxcontext;
-            pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
-
-            g_object_ref(fcitxcontext);
             fcitx_client_process_key_async(fcitxcontext->client,
                                            event->keyval,
                                            event->hardware_keycode,
@@ -535,7 +527,7 @@ fcitx_im_context_filter_keypress(GtkIMContext *context,
                                            -1,
                                            NULL,
                                            _fcitx_im_context_process_key_cb,
-                                           pks
+                                           gdk_event_copy((GdkEvent *) event)
                                           );
             event->state |= FcitxKeyState_HandledMask;
             return TRUE;
@@ -551,17 +543,13 @@ _fcitx_im_context_process_key_cb (GObject *source_object,
                                   GAsyncResult *res,
                                   gpointer user_data)
 {
-    ProcessKeyStruct* pks = user_data;
-    FcitxIMContext* context = pks->context;
-    GdkEventKey* event = pks->event;
+    GdkEventKey* event = user_data;
     int ret = fcitx_client_process_key_finish(FCITX_CLIENT(source_object), res);
     if (ret <= 0) {
         event->state |= FcitxKeyState_IgnoredMask;
         gdk_event_put((GdkEvent *)event);
     }
     gdk_event_free((GdkEvent *)event);
-    g_free(pks);
-    g_object_unref(context);
 }
 
 static void
@@ -712,7 +700,9 @@ fcitx_im_context_focus_in(GtkIMContext *context)
                     g_object_ref(fcitxcontext),
                     (GDestroyNotify) g_object_unref);
 
-    _request_surrounding_text (fcitxcontext);
+    _request_surrounding_text (&fcitxcontext);
+    if (G_UNLIKELY(!fcitxcontext))
+        return;
 
     g_object_add_weak_pointer ((GObject *) context,
                                (gpointer *) &_focus_im_context);
@@ -1334,21 +1324,31 @@ void _fcitx_im_context_connect_cb(FcitxClient* im, void* user_data)
 
 
 static void
-_request_surrounding_text (FcitxIMContext *context)
+_request_surrounding_text (FcitxIMContext **context)
 {
-    if (context && fcitx_client_is_valid(context->client)) {
+    if (*context && fcitx_client_is_valid((*context)->client)) {
         gboolean return_value;
         FcitxLog(LOG_LEVEL, "requesting surrounding text");
-        g_signal_emit (context, _signal_retrieve_surrounding_id, 0,
+
+        /* according to RH#859879, something bad could happen here. */
+        g_object_add_weak_pointer ((GObject *) *context,
+                                   (gpointer *) context);
+        /* some unref can happen here */
+        g_signal_emit (*context, _signal_retrieve_surrounding_id, 0,
                        &return_value);
+        if (context)
+            g_object_remove_weak_pointer ((GObject *) *context,
+                                          (gpointer *) context);
+        else
+            return;
         if (return_value) {
-            context->capacity |= CAPACITY_SURROUNDING_TEXT;
-            _fcitx_im_context_set_capacity (context,
+            (*context)->capacity |= CAPACITY_SURROUNDING_TEXT;
+            _fcitx_im_context_set_capacity (*context,
                                             FALSE);
         }
         else {
-            context->capacity &= ~CAPACITY_SURROUNDING_TEXT;
-            _fcitx_im_context_set_capacity (context,
+            (*context)->capacity &= ~CAPACITY_SURROUNDING_TEXT;
+            _fcitx_im_context_set_capacity (*context,
                                             FALSE);
         }
     }
@@ -1381,15 +1381,9 @@ _key_snooper_cb (GtkWidget   *widget,
             break;
         }
 
-        /* according to RH#859879, something bad could happen here. */
-        g_object_add_weak_pointer ((GObject *) fcitxcontext,
-                                   (gpointer *) &fcitxcontext);
-        _request_surrounding_text (fcitxcontext);
+        _request_surrounding_text (&fcitxcontext);
         if (G_UNLIKELY(!fcitxcontext))
             return FALSE;
-        else
-            g_object_remove_weak_pointer ((GObject *) fcitxcontext,
-                                          (gpointer *) &fcitxcontext);
         fcitxcontext->time = event->time;
 
         if (_use_sync_mode) {
@@ -1405,11 +1399,6 @@ _key_snooper_cb (GtkWidget   *widget,
             else
                 retval = TRUE;
         } else {
-            ProcessKeyStruct* pks = g_malloc0(sizeof(ProcessKeyStruct));
-            pks->context = fcitxcontext;
-            pks->event = (GdkEventKey *)  gdk_event_copy((GdkEvent *) event);
-
-            g_object_ref(fcitxcontext);
             fcitx_client_process_key_async(fcitxcontext->client,
                                            event->keyval,
                                            event->hardware_keycode,
@@ -1419,7 +1408,7 @@ _key_snooper_cb (GtkWidget   *widget,
                                            -1,
                                            NULL,
                                            _fcitx_im_context_process_key_cb,
-                                           pks
+                                           gdk_event_copy((GdkEvent *) event)
                                           );
             retval = TRUE;
         }
