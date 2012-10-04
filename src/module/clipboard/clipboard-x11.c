@@ -42,14 +42,13 @@ void
 ClipboardInitX11(FcitxClipboard *clipboard)
 {
     FcitxInstance *instance = clipboard->owner;
-    UT_array *addons = FcitxInstanceGetAddons(instance);
-    clipboard->x11 = FcitxAddonsGetAddonByName(addons, "fcitx-x11");
+    clipboard->x11 = FcitxX11GetAddon(instance);
     if (!clipboard->x11)
         return;
-    clipboard->x11_primary_notify_id = (intptr_t)FcitxModuleInvokeVaArgs(
-        clipboard->x11, FCITX_X11_REG_SELECT_NOTIFY, "PRIMARY", clipboard,
+    clipboard->x11_primary_notify_id = FcitxX11RegSelectNotify(
+        instance, "PRIMARY", clipboard,
         _X11ClipboardPrimaryNotifyCb, NULL, NULL);
-    clipboard->x11_clipboard_notify_id = (intptr_t)FcitxModuleInvokeVaArgs(
-        clipboard->x11, FCITX_X11_REG_SELECT_NOTIFY, "CLIPBOARD", clipboard,
+    clipboard->x11_clipboard_notify_id = FcitxX11RegSelectNotify(
+        instance, "CLIPBOARD", clipboard,
         _X11ClipboardClipboardNotifyCb, NULL, NULL);
 }

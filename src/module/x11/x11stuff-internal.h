@@ -67,5 +67,22 @@ typedef void (*X11SelectionNotifyInternalCallback)(
     FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
     void *data, FcitxCallBack func);
 
+typedef struct {
+    void *owner;
+    void *data;
+    X11SelectionNotifyInternalCallback cb;
+    FcitxDestroyNotify destroy;
+    FcitxCallBack func;
+} X11SelectionNotify;
+
+typedef struct {
+    void *owner;
+    void *data;
+    Atom target;
+    X11ConvertSelectionInternalCallback cb;
+    FcitxDestroyNotify destroy;
+    FcitxCallBack func;
+} X11ConvertSelection;
+
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

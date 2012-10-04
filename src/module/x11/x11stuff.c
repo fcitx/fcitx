@@ -86,7 +86,7 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
 void* X11Create(FcitxInstance* instance)
 {
     FcitxX11 *x11priv = fcitx_utils_new(FcitxX11);
-    FcitxAddon* x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
+    FcitxAddon *x11addon = FcitxX11GetAddon(instance);
     x11priv->dpy = XOpenDisplay(NULL);
     x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
                                              "fcitx-xim");

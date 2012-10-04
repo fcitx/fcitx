@@ -128,9 +128,8 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     char *p;
 
     UT_array *addons = FcitxInstanceGetAddons(instance);
-    FcitxAddon *x11addon = FcitxAddonsGetAddonByName(addons, "fcitx-x11");
     FcitxAddon *ximaddon = FcitxAddonsGetAddonByName(addons, "fcitx-xim");
-    xim->display = FcitxModuleInvokeVaArgs(x11addon, FCITX_X11_GETDISPLAY);
+    xim->display = FcitxX11GetDisplay(instance);
 
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));
@@ -141,8 +140,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
-    Window xim_window = (intptr_t)FcitxModuleInvokeVaArgs(
-        x11addon, FCITX_X11_DEFAULT_EVENT_WINDOW);
+    Window xim_window = FcitxX11DefaultEventWindow(instance);
     if (!xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);

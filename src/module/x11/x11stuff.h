@@ -26,6 +26,7 @@
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx/instance.h>
 #include <fcitx/addon.h>
+#include <fcitx/module.h>
 
 #define FCITX_X11_NAME "fcitx-x11"
 #define FCITX_X11_GETDISPLAY 0
@@ -85,6 +86,45 @@ typedef void (*FcitxDestroyNotify)(void*);
 //                                             int subtype, void *data);
 typedef void (*X11SelectionNotifyCallback)(void *owner, const char *sel_str,
                                            int subtype, void *data);
+
+// Well won't work if there are multiple instances, but that will also break
+// lots of other things as well.
+static inline FcitxAddon*
+FcitxX11GetAddon(FcitxInstance *instance)
+{
+    static FcitxAddon *addon = NULL;
+    if (!addon) {
+        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                          FCITX_X11_NAME);
+    }
+    return addon;
+}
+
+static inline Display*
+FcitxX11GetDisplay(FcitxInstance *instance)
+{
+    return (Display*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_GETDISPLAY);
+}
+
+static inline unsigned int
+FcitxX11RegSelectNotify(FcitxInstance *instance,
+                        const char *arg0, void *arg1,
+                        X11SelectionNotifyCallback arg2,
+                        void *arg3, FcitxDestroyNotify arg4)
+{
+    return (unsigned int)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_REG_SELECT_NOTIFY,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2,
+        (void*)(intptr_t)arg3, (void*)(intptr_t)arg4);
+}
+
+static inline Window
+FcitxX11DefaultEventWindow(FcitxInstance *instance)
+{
+    return (Window)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_DEFAULT_EVENT_WINDOW);
+}
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

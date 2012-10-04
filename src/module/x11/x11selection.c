@@ -36,23 +36,6 @@
 
 #define FCITX_X11_SEL "FCITX_X11_SEL_"
 
-typedef struct {
-    void *owner;
-    void *data;
-    X11SelectionNotifyInternalCallback cb;
-    FcitxDestroyNotify destroy;
-    FcitxCallBack func;
-} X11SelectionNotify;
-
-typedef struct {
-    void *owner;
-    void *data;
-    Atom target;
-    X11ConvertSelectionInternalCallback cb;
-    FcitxDestroyNotify destroy;
-    FcitxCallBack func;
-} X11ConvertSelection;
-
 static void X11SelectionNotifyFreeFunc(void *obj);
 static void X11ConvertSelectionFreeFunc(void *obj);
 
