@@ -25,9 +25,10 @@
 void X11InitSelection(FcitxX11 *x11priv);
 void X11ProcessXFixesSelectionNotifyEvent(
     FcitxX11 *x11priv, XFixesSelectionNotifyEvent *notify_event);
-unsigned int X11SelectionNotifyRegister(
+unsigned int X11SelectionNotifyRegisterInternal(
     FcitxX11 *x11priv, Atom selection, void *owner,
-    X11SelectionNotifyCallback cb, void *data, FcitxDestroyNotify destroy);
+    X11SelectionNotifyInternalCallback cb, void *data,
+    FcitxDestroyNotify destroy, void (*func)());
 void X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id);
 
 #endif

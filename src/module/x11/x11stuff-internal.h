@@ -35,8 +35,6 @@ typedef struct {
     Window rootWindow;
     Window eventWindow;
     Atom compManagerAtom;
-    Atom primaryAtom;
-    Atom clipboardAtom;
     int iScreen;
     Atom typeMenuAtom;
     Atom windowTypeAtom;
@@ -57,7 +55,15 @@ typedef struct {
     FcitxHandlerTable *selectionNotify;
 #endif
     boolean isComposite;
+    FcitxHandlerTable *convertSelection;
 } FcitxX11;
+
+typedef void (*X11ConvertSelectionInternalCallback)(
+    FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
+    void *data, void (*func)());
+typedef void (*X11SelectionNotifyInternalCallback)(
+    FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
+    void *data, void (*func)());
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

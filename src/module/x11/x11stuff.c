@@ -168,10 +168,9 @@ X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
 }
 
 static void
-X11CompManagerSelectionNotify(void *owner, Atom selection, int subtype,
-                              void *data)
+X11CompManagerSelectionNotify(FcitxX11 *x11priv, void *owner, Atom selection,
+                              int subtype, void *data, void (*func)())
 {
-    FcitxX11 *x11priv = owner;
     X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
 }
 #endif
@@ -292,8 +291,6 @@ X11InitAtoms(FcitxX11 *x11priv)
     x11priv->typeDockAtom = XInternAtom(x11priv->dpy,
                                         "_NET_WM_WINDOW_TYPE_DOCK", False);
     x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
-    x11priv->primaryAtom = XInternAtom(x11priv->dpy, "PRIMARY", False);
-    x11priv->clipboardAtom = XInternAtom(x11priv->dpy, "CLIPBOARD", False);
     asprintf(&atom_names, "_NET_WM_CM_S%d", x11priv->iScreen);
     x11priv->compManagerAtom = XInternAtom(x11priv->dpy, atom_names, False);
     free(atom_names);
@@ -303,8 +300,9 @@ static boolean
 X11InitComposite(FcitxX11* x11priv)
 {
 #ifdef HAVE_XFIXES
-    X11SelectionNotifyRegister(x11priv, x11priv->clipboardAtom, x11priv,
-                               X11CompManagerSelectionNotify, NULL, NULL);
+    X11SelectionNotifyRegisterInternal(
+        x11priv, x11priv->compManagerAtom, x11priv,
+        X11CompManagerSelectionNotify, NULL, NULL, NULL);
 #endif
     return X11GetCompositeManager(x11priv);
 }

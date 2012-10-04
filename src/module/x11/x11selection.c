@@ -37,12 +37,19 @@
 typedef struct {
     void *owner;
     void *data;
-    X11SelectionNotifyCallback cb;
+    X11SelectionNotifyInternalCallback cb;
     FcitxDestroyNotify destroy;
+    void (*func)();
 } X11SelectionNotify;
 
-static void X11ClipboardSelectionNotify(void *owner, Atom selection,
-                                        int subtype, void *data);
+typedef struct {
+    void *owner;
+    void *data;
+    X11ConvertSelectionInternalCallback cb;
+    FcitxDestroyNotify destroy;
+    void (*func)();
+} X11ConvertSelection;
+
 static void X11SelectionNotifyFreeFunc(void *obj);
 
 void
@@ -52,16 +59,6 @@ X11InitSelection(FcitxX11 *x11priv)
     if (x11priv->hasXfixes) {
         x11priv->selectionNotify = fcitx_handler_table_new(
             sizeof(X11SelectionNotify), X11SelectionNotifyFreeFunc);
-        Atom select_atoms[] = {
-            x11priv->primaryAtom,
-            x11priv->clipboardAtom
-        };
-        int i;
-        for (i = 0;i < sizeof(select_atoms) / sizeof(Atom);i++) {
-            X11SelectionNotifyRegister(x11priv, select_atoms[i], x11priv,
-                                       X11ClipboardSelectionNotify,
-                                       NULL, NULL);
-        }
     }
 #endif
 }
@@ -86,38 +83,22 @@ X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
                                        &notify_event->selection);
     for (;notify;notify = fcitx_handler_table_next(x11priv->selectionNotify,
                                                    notify)) {
-        notify->cb(notify->owner, notify_event->selection,
-                   notify_event->subtype, notify->data);
+        notify->cb(x11priv, notify->owner, notify_event->selection,
+                   notify_event->subtype, notify->data, notify->func);
     }
 #endif
 }
 
-#ifdef HAVE_XFIXES
-static void
-X11ClipboardSelectionNotify(void *owner, Atom selection, int subtype, void *data)
-{
-    /* FcitxX11 *x11priv = owner; */
-    /* char *name = XGetAtomName(x11priv->dpy, selection); */
-    /* printf("%s, selection name, %s\n", __func__, name); */
-    /* XFree(name); */
-    /* switch (subtype) { */
-    /* case XFixesSetSelectionOwnerNotify: */
-    /* case XFixesSelectionWindowDestroyNotify: */
-    /* case XFixesSelectionClientCloseNotify: */
-    /*     break; */
-    /* } */
-}
-#endif
-
 unsigned int
-X11SelectionNotifyRegister(FcitxX11 *x11priv, Atom selection, void *owner,
-                           X11SelectionNotifyCallback cb, void *data,
-                           FcitxDestroyNotify destroy)
+X11SelectionNotifyRegisterInternal(
+    FcitxX11 *x11priv, Atom selection, void *owner,
+    X11SelectionNotifyInternalCallback cb, void *data,
+    FcitxDestroyNotify destroy, void (*func)())
 {
 #ifdef HAVE_XFIXES
     if (!(x11priv->hasXfixes && cb))
         return INVALID_ID;
-    //TODO catch bad atom
+    //TODO catch bad atom?
     XFixesSelectSelectionInput(x11priv->dpy, x11priv->eventWindow,
                                selection,
                                XFixesSetSelectionOwnerNotifyMask |
@@ -127,10 +108,11 @@ X11SelectionNotifyRegister(FcitxX11 *x11priv, Atom selection, void *owner,
         .owner = owner,
         .data = data,
         .cb = cb,
-        .destroy = destroy
+        .destroy = destroy,
+        .func = func
     };
     return fcitx_handler_table_append(x11priv->selectionNotify,
-                                    sizeof(Atom), &selection, &notify);
+                                      sizeof(Atom), &selection, &notify);
 #else
     return INVALID_ID;
 #endif
