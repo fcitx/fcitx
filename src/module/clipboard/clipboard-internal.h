@@ -35,6 +35,7 @@ typedef struct {
     FcitxInstance *owner;
     FcitxClipboardConfig config;
 #ifdef ENABLE_X11
+    FcitxAddon *x11;
     unsigned int x11_primary_notify_id;
     unsigned int x11_clipboard_notify_id;
 #endif

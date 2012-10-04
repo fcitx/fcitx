@@ -27,11 +27,11 @@
 #include "fcitx/frontend.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
-#ifdef ENABLE_X11
-#include "module/x11/x11stuff.h"
-#endif
 
 #include "clipboard-internal.h"
+#ifdef ENABLE_X11
+#include "clipboard-x11.h"
+#endif
 
 CONFIG_DEFINE_LOAD_AND_SAVE(FcitxClipboard, FcitxClipboardConfig,
                             "fcitx-clipboard");
@@ -49,39 +49,17 @@ FCITX_DEFINE_PLUGIN(fcitx_clipboard, module, FcitxModule) = {
     .ReloadConfig = ClipboardReloadConfig
 };
 
-#ifdef ENABLE_X11
-static void
-_X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
-                         int subtype, void *data)
-{
-    printf("%s, %s\n", __func__, sel_str);
-}
-
-static void
-_X11ClipboardClipboardNotifyCb(void *owner, const char *sel_str,
-                         int subtype, void *data)
-{
-    printf("%s, %s\n", __func__, sel_str);
-}
-#endif
-
 static void*
 ClipboardCreate(FcitxInstance *instance)
 {
     FcitxClipboard *clipboard = fcitx_utils_new(FcitxClipboard);
+    clipboard->owner = instance;
 
     if (!FcitxClipboardLoadConfig(&clipboard->config)) {
         ClipboardDestroy(clipboard);
         return NULL;
     }
-#ifdef ENABLE_X11
-    clipboard->x11_primary_notify_id = InvokeVaArgs(
-        instance, FCITX_X11, REG_SELECT_NOTIFY, "PRIMARY", clipboard,
-        _X11ClipboardPrimaryNotifyCb, NULL, NULL);
-    clipboard->x11_clipboard_notify_id = InvokeVaArgs(
-        instance, FCITX_X11, REG_SELECT_NOTIFY, "CLIPBOARD", clipboard,
-        _X11ClipboardClipboardNotifyCb, NULL, NULL);
-#endif
+    ClipboardInitX11(clipboard);
     ApplyClipboardConfig(clipboard);
     return clipboard;
 }
