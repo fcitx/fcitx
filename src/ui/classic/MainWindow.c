@@ -455,8 +455,8 @@ void DrawMainWindow(MainWindow* mainWindow)
                 char *path;
                 fcitx_utils_alloc_cat_str(path, status->name, active ?
                                           "_active.png" : "_inactive.png");
-                free(path);
                 SkinImage* statusicon = LoadImage(sc, path, false);
+                free(path);
                 if (statusicon == NULL)
                     continue;
                 privstat->avail = true;
