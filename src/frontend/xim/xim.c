@@ -127,7 +127,10 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     char *imname = NULL;
     char *p;
 
-    xim->display = InvokeVaArgs(instance, FCITX_X11, GETDISPLAY);
+    UT_array *addons = FcitxInstanceGetAddons(instance);
+    FcitxAddon *x11addon = FcitxAddonsGetAddonByName(addons, "fcitx-x11");
+    FcitxAddon *ximaddon = FcitxAddonsGetAddonByName(addons, "fcitx-xim");
+    xim->display = FcitxModuleInvokeVaArgs(x11addon, FCITX_X11_GETDISPLAY);
 
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));
@@ -135,12 +138,11 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
-    FcitxAddon* ximaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
-    xim->x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-x11");
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
-    Window xim_window = InvokeVaArgs(instance, FCITX_X11, DEFAULT_EVENT_WINDOW);
+    Window xim_window = (intptr_t)FcitxModuleInvokeVaArgs(
+        x11addon, FCITX_X11_DEFAULT_EVENT_WINDOW);
     if (!xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);
@@ -150,9 +152,9 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     if (!imname) {
         imname = getenv("XMODIFIERS");
         if (imname) {
-            if (strstr(imname, "@im="))
+            if (!strncmp(imname, "@im=", strlen("@im="))) {
                 imname += 4;
-            else {
+            } else {
                 FcitxLog(WARNING, _("XMODIFIERS Error."));
                 imname = DEFAULT_IMNAME;
             }
