@@ -1,0 +1,55 @@
+/***************************************************************************
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
+ ***************************************************************************/
+
+#include "fcitx/fcitx.h"
+#include "config.h"
+#include "clipboard-internal.h"
+#include "fcitx/module.h"
+#include "module/x11/x11stuff.h"
+
+static void
+_X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
+                             int subtype, void *data)
+{
+    printf("%s, %s\n", __func__, sel_str);
+}
+
+static void
+_X11ClipboardClipboardNotifyCb(void *owner, const char *sel_str,
+                               int subtype, void *data)
+{
+    printf("%s, %s\n", __func__, sel_str);
+}
+
+void
+ClipboardInitX11(FcitxClipboard *clipboard)
+{
+    FcitxInstance *instance = clipboard->owner;
+    UT_array *addons = FcitxInstanceGetAddons(instance);
+    clipboard->x11 = FcitxAddonsGetAddonByName(addons, "fcitx-x11");
+    if (!clipboard->x11)
+        return;
+    clipboard->x11_primary_notify_id = (intptr_t)FcitxModuleInvokeVaArgs(
+        clipboard->x11, FCITX_X11_REG_SELECT_NOTIFY, "PRIMARY", clipboard,
+        _X11ClipboardPrimaryNotifyCb, NULL, NULL);
+    clipboard->x11_clipboard_notify_id = (intptr_t)FcitxModuleInvokeVaArgs(
+        clipboard->x11, FCITX_X11_REG_SELECT_NOTIFY, "CLIPBOARD", clipboard,
+        _X11ClipboardClipboardNotifyCb, NULL, NULL);
+}
