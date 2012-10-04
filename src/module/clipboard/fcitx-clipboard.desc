@@ -1,0 +1,7 @@
+[Clipboard/SaveHistoryToFile]
+Type=Boolean
+DefaultValue=True
+Description=Save Clipboard History To File
+
+[DescriptionFile]
+LocaleDomain=fcitx

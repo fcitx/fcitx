@@ -21,6 +21,7 @@
 #ifndef X11STUFF_H
 #define X11STUFF_H
 #include <X11/Xlib.h>
+#include <stdint.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
 #include <fcitx/instance.h>
@@ -51,6 +52,10 @@
 #define FCITX_X11_PROCESSREMAINEVENT_RETURNTYPE void
 #define FCITX_X11_GETDPI 11
 #define FCITX_X11_GETDPI_RETURNTYPE void
+#define FCITX_X11_REG_SELECT_NOTIFY 12
+#define FCITX_X11_REG_SELECT_NOTIFY_RETURNTYPE intptr_t
+#define FCITX_X11_REMOVE_SELECT_NOTIFY 13
+#define FCITX_X11_REMOVE_SELECT_NOTIFY_RETURNTYPE void
 
 typedef struct _FcitxXEventHandler {
     boolean(*eventHandler)(void* instance, XEvent* event);
