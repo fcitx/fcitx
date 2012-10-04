@@ -34,7 +34,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <time.h>
-#if defined(__linux__)
+#if defined(__linux__) || defined(__GLIBC__)
 #include <endian.h>
 #else
 #include <sys/endian.h>

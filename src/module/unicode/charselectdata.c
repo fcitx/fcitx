@@ -4,11 +4,6 @@
  * original file is licensed under GPLv2+
  */
 
-#if defined(__linux__)
-#include <endian.h>
-#else
-#include <sys/endian.h>
-#endif
 #include <stdint.h>
 #include <ctype.h>
 #include <libintl.h>
@@ -16,6 +11,11 @@
 #include <fcitx-utils/utils.h>
 #include <fcitx-config/xdg.h>
 #include <fcitx/fcitx.h>
+#if defined(__linux__) || defined(__GLIBC__)
+#include <endian.h>
+#else
+#include <sys/endian.h>
+#endif
 #include "charselectdata.h"
 
 /* constants for hangul (de)composition, see UAX #15 */
