@@ -155,3 +155,10 @@ X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id)
     fcitx_handler_table_remove_by_id(x11priv->selectionNotify, id);
 #endif
 }
+
+void
+X11ProcessSelectionNotifyEvent(FcitxX11 *x11priv,
+                               XSelectionEvent *selection_event)
+{
+
+}

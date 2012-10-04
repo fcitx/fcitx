@@ -209,6 +209,10 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
                 if (event.xconfigure.window == x11priv->rootWindow)
                     X11InitScreen(x11priv);
                 break;
+            case SelectionNotify:
+                X11ProcessSelectionNotifyEvent(x11priv,
+                                               (XSelectionEvent*)&event);
+                break;
             default:
 #ifdef HAVE_XFIXES
                 if (x11priv->hasXfixes &&
