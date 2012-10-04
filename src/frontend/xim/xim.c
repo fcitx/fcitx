@@ -140,9 +140,8 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
-
-    xim->ximWindow = XCreateSimpleWindow(xim->display, DefaultRootWindow(xim->display), 0, 0, 1, 1, 1, 0, 0);
-    if (xim->ximWindow == (Window) NULL) {
+    Window xim_window = InvokeVaArgs(instance, FCITX_X11, DEFAULT_EVENT_WINDOW);
+    if (!xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);
         return NULL;
@@ -226,7 +225,7 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     xim->ims = IMOpenIM(xim->display,
                         IMModifiers, "Xi18n",
-                        IMServerWindow, xim->ximWindow,
+                        IMServerWindow, xim_window,
                         IMServerName, imname,
                         IMLocale, strLocale,
                         IMServerTransport, "X/",

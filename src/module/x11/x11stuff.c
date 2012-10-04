@@ -59,6 +59,7 @@ static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
 static void *_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args);
 static void *_X11SelectionNotifyRegister(void *arg,
                                          FcitxModuleFunctionArg args);
+static void *X11EventWindow(void *arg, FcitxModuleFunctionArg args);
 static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11InitAtoms(FcitxX11* x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
@@ -118,6 +119,7 @@ void* X11Create(FcitxInstance* instance)
     FcitxModuleAddFunction(x11addon, X11GetDPI);
     FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRegister);
     FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRemove);
+    FcitxModuleAddFunction(x11addon, X11EventWindow);
 
 #ifdef HAVE_XFIXES
     int ignore;
@@ -232,6 +234,13 @@ _X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args)
     unsigned int id = ((unsigned int)(intptr_t)args.args[0]) - 1;
     X11SelectionNotifyRemove(arg, id);
     return NULL;
+}
+
+static void*
+X11EventWindow(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    return (void*)(intptr_t)x11priv->eventWindow;
 }
 
 static void*

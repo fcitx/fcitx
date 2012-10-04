@@ -56,6 +56,8 @@
 #define FCITX_X11_REG_SELECT_NOTIFY_RETURNTYPE intptr_t
 #define FCITX_X11_REMOVE_SELECT_NOTIFY 13
 #define FCITX_X11_REMOVE_SELECT_NOTIFY_RETURNTYPE void
+#define FCITX_X11_DEFAULT_EVENT_WINDOW 14
+#define FCITX_X11_DEFAULT_EVENT_WINDOW_RETURNTYPE Window
 
 typedef struct _FcitxXEventHandler {
     boolean(*eventHandler)(void* instance, XEvent* event);

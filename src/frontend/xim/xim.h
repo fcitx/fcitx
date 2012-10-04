@@ -35,7 +35,6 @@
 typedef struct _FcitxXimFrontend {
     FcitxGenericConfig gconfig;
     boolean bUseOnTheSpotStyle;
-    Window ximWindow;
     Display* display;
     int iScreen;
     int iTriggerKeyCount;
