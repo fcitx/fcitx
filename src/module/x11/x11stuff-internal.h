@@ -60,9 +60,9 @@ typedef struct {
 
 typedef void (*FcitxCallBack)();
 
-// typedef void (*X11ConvertSelectionInternalCallback)(
-//     FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
-//     void *data, FcitxCallBack func);
+typedef void (*X11ConvertSelectionInternalCallback)(
+    FcitxX11 *x11priv, void *owner, Atom selection, Atom target, int format,
+    size_t nitems, const void *buff, void *data, FcitxCallBack func);
 typedef void (*X11SelectionNotifyInternalCallback)(
     FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
     void *data, FcitxCallBack func);

@@ -34,6 +34,8 @@
 #include "x11handlertable.h"
 #include "x11selection.h"
 
+#define FCITX_X11_SEL "FCITX_X11_SEL_"
+
 typedef struct {
     void *owner;
     void *data;
@@ -42,15 +44,17 @@ typedef struct {
     FcitxCallBack func;
 } X11SelectionNotify;
 
-/* typedef struct { */
-/*     void *owner; */
-/*     void *data; */
-/*     X11ConvertSelectionInternalCallback cb; */
-/*     FcitxDestroyNotify destroy; */
-/*     FcitxCallBack func; */
-/* } X11ConvertSelection; */
+typedef struct {
+    void *owner;
+    void *data;
+    Atom target;
+    X11ConvertSelectionInternalCallback cb;
+    FcitxDestroyNotify destroy;
+    FcitxCallBack func;
+} X11ConvertSelection;
 
 static void X11SelectionNotifyFreeFunc(void *obj);
+static void X11ConvertSelectionFreeFunc(void *obj);
 
 void
 X11InitSelection(FcitxX11 *x11priv)
@@ -61,6 +65,8 @@ X11InitSelection(FcitxX11 *x11priv)
             sizeof(X11SelectionNotify), X11SelectionNotifyFreeFunc);
     }
 #endif
+    x11priv->convertSelection = fcitx_handler_table_new(
+        sizeof(X11ConvertSelection), X11ConvertSelectionFreeFunc);
 }
 
 #ifdef HAVE_XFIXES
@@ -72,6 +78,14 @@ X11SelectionNotifyFreeFunc(void *obj)
         notify->destroy(notify->data);
 }
 #endif
+
+static void
+X11ConvertSelectionFreeFunc(void *obj)
+{
+    X11ConvertSelection *convert = obj;
+    if (convert->destroy)
+        convert->destroy(convert->data);
+}
 
 void
 X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
@@ -156,9 +170,88 @@ X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id)
 #endif
 }
 
+unsigned int
+X11ConvertSelectionInternal(
+    FcitxX11 *x11priv, const char *sel_str, Atom selection, Atom target,
+    void *owner, X11ConvertSelectionInternalCallback cb, void *data,
+    FcitxDestroyNotify destroy, FcitxCallBack func)
+{
+    fcitx_utils_local_cat_str(prop_str, 256, FCITX_X11_SEL, sel_str);
+    Atom prop = XInternAtom(x11priv->dpy, prop_str, False);
+    //TODO catch bad atom?
+    XDeleteProperty(x11priv->dpy, x11priv->eventWindow, prop);
+    XConvertSelection(x11priv->dpy, selection, target, prop,
+                      x11priv->eventWindow, CurrentTime);
+    X11ConvertSelection convert = {
+        .owner = owner,
+        .data = data,
+        .target = target,
+        .cb = cb,
+        .destroy = destroy,
+        .func = func
+    };
+    return fcitx_handler_table_append(x11priv->convertSelection,
+                                      sizeof(Atom), &selection, &convert);
+}
+
 void
 X11ProcessSelectionNotifyEvent(FcitxX11 *x11priv,
                                XSelectionEvent *selection_event)
 {
+    X11ConvertSelection *convert;
+    convert = fcitx_handler_table_first(x11priv->convertSelection, sizeof(Atom),
+                                       &selection_event->selection);
+    if (!convert)
+        return;
+    unsigned char *buff = NULL;
+    unsigned long nitems = 0;
+    int ret_format = 0;
+    Atom ret_type = None;
+#define GET_PROP_FAIL do {                      \
+        if (buff) {                             \
+            XFree(buff);                        \
+            buff = NULL;                        \
+        }                                       \
+        nitems = 0;                             \
+        ret_format = 0;                         \
+        ret_type = None;                        \
+        goto get_fail;                          \
+    } while (0)
 
+    if (selection_event->property != None) {
+        int res;
+        unsigned long bytes_left = 0;
+        res = XGetWindowProperty(x11priv->dpy, x11priv->eventWindow,
+                                 selection_event->property, 0, 0x1FFFFFFF,
+                                 False, AnyPropertyType, &ret_type,
+                                 &ret_format, &nitems, &bytes_left, &buff);
+        if (res != Success || ret_type == None)
+            GET_PROP_FAIL;
+        switch (ret_format) {
+        case 8:
+        case 16:
+        case 32:
+            break;
+        default:
+            // Shouldn't reach
+            GET_PROP_FAIL;
+        }
+        if (bytes_left)
+            FcitxLog(WARNING, "Selection is too long.");
+    }
+get_fail:
+#undef GET_PROP_FAIL
+
+    for (;convert;convert = fcitx_handler_table_next(x11priv->convertSelection,
+                                                     convert)) {
+        convert->cb(x11priv, convert->owner, selection_event->selection,
+                    ret_type, ret_format, nitems, buff, convert->data,
+                    convert->func);
+    }
+    fcitx_handler_table_remove(x11priv->convertSelection, sizeof(Atom),
+                               &selection_event->selection);
+    if (buff) {
+        XFree(buff);
+        buff = NULL;
+    }
 }
