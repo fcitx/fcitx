@@ -700,6 +700,7 @@ fcitx_utils_cat_str_with_len(char *out, size_t len, size_t n,
         if (tmp > limit) {
             memcpy(out, str_list[i], limit - out);
             out = limit;
+            break;
         }
         memcpy(out, str_list[i], size_list[i]);
         out = tmp;
