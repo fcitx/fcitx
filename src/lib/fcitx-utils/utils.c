@@ -63,7 +63,7 @@
 #include <sys/prctl.h>
 #endif
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__GLIBC__)
 #include <endian.h>
 #else
 #include <sys/endian.h>

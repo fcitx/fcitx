@@ -25,7 +25,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <unistd.h>
-#if defined(__linux__)
+#if defined(__linux__) || defined(__GLIBC__)
 #include <endian.h>
 #else
 #include <sys/endian.h>
