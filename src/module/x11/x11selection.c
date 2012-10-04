@@ -106,11 +106,15 @@ X11SelectionNotifyRegister(
     FcitxX11 *x11priv, const char *sel_str, void *owner,
     X11SelectionNotifyCallback cb, void *data, FcitxDestroyNotify destroy)
 {
+#ifdef HAVE_XFIXES
     if (!cb)
         return INVALID_ID;
     return X11SelectionNotifyRegisterInternal(
         x11priv, XInternAtom(x11priv->dpy, sel_str, False), owner,
         X11SelectionNotifyHelper, data, destroy, (FcitxCallBack)cb);
+#else
+    return INVALID_ID;
+#endif
 }
 
 unsigned int
