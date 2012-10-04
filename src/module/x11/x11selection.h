@@ -29,6 +29,10 @@ unsigned int X11SelectionNotifyRegisterInternal(
     FcitxX11 *x11priv, Atom selection, void *owner,
     X11SelectionNotifyInternalCallback cb, void *data,
     FcitxDestroyNotify destroy, void (*func)());
+unsigned int X11SelectionNotifyRegister(
+    FcitxX11 *x11priv, const char *sel_str, void *owner,
+    X11SelectionNotifyCallback cb, void *data,
+    FcitxDestroyNotify destroy);
 void X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id);
 
 #endif

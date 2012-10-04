@@ -39,16 +39,16 @@ typedef struct {
     void *data;
     X11SelectionNotifyInternalCallback cb;
     FcitxDestroyNotify destroy;
-    void (*func)();
+    FcitxCallBack func;
 } X11SelectionNotify;
 
-typedef struct {
-    void *owner;
-    void *data;
-    X11ConvertSelectionInternalCallback cb;
-    FcitxDestroyNotify destroy;
-    void (*func)();
-} X11ConvertSelection;
+/* typedef struct { */
+/*     void *owner; */
+/*     void *data; */
+/*     X11ConvertSelectionInternalCallback cb; */
+/*     FcitxDestroyNotify destroy; */
+/*     FcitxCallBack func; */
+/* } X11ConvertSelection; */
 
 static void X11SelectionNotifyFreeFunc(void *obj);
 
@@ -89,11 +89,35 @@ X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
 #endif
 }
 
+void
+X11SelectionNotifyHelper(FcitxX11 *x11priv, void *owner, Atom selection,
+                         int subtype, void *data, FcitxCallBack func)
+{
+#ifdef HAVE_XFIXES
+    X11SelectionNotifyCallback cb = (X11SelectionNotifyCallback)func;
+    char *name = XGetAtomName(x11priv->dpy, selection);
+    cb(owner, name, subtype, data);
+    XFree(name);
+#endif
+}
+
+unsigned int
+X11SelectionNotifyRegister(
+    FcitxX11 *x11priv, const char *sel_str, void *owner,
+    X11SelectionNotifyCallback cb, void *data, FcitxDestroyNotify destroy)
+{
+    if (!cb)
+        return INVALID_ID;
+    return X11SelectionNotifyRegisterInternal(
+        x11priv, XInternAtom(x11priv->dpy, sel_str, False), owner,
+        X11SelectionNotifyHelper, data, destroy, (FcitxCallBack)cb);
+}
+
 unsigned int
 X11SelectionNotifyRegisterInternal(
     FcitxX11 *x11priv, Atom selection, void *owner,
     X11SelectionNotifyInternalCallback cb, void *data,
-    FcitxDestroyNotify destroy, void (*func)())
+    FcitxDestroyNotify destroy, FcitxCallBack func)
 {
 #ifdef HAVE_XFIXES
     if (!(x11priv->hasXfixes && cb))

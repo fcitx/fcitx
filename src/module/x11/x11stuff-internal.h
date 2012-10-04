@@ -58,12 +58,14 @@ typedef struct {
     FcitxHandlerTable *convertSelection;
 } FcitxX11;
 
-typedef void (*X11ConvertSelectionInternalCallback)(
-    FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
-    void *data, void (*func)());
+typedef void (*FcitxCallBack)();
+
+// typedef void (*X11ConvertSelectionInternalCallback)(
+//     FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
+//     void *data, FcitxCallBack func);
 typedef void (*X11SelectionNotifyInternalCallback)(
     FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
-    void *data, void (*func)());
+    void *data, FcitxCallBack func);
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

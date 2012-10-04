@@ -74,10 +74,10 @@ typedef enum _FcitxXWindowType {
 } FcitxXWindowType;
 
 typedef void (*FcitxDestroyNotify)(void*);
-typedef void (*X11ConvertSelectionCallback)(void *owner, const char *selection,
-                                            int subtype, void *data);
-// typedef void (*X11SelectionNotifyCallback)(void *owner, const char *selection,
-//                                            int subtype, void *data);
+// typedef void (*X11ConvertSelectionCallback)(void *owner, const char *selection,
+//                                             int subtype, void *data);
+typedef void (*X11SelectionNotifyCallback)(void *owner, const char *sel_str,
+                                           int subtype, void *data);
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

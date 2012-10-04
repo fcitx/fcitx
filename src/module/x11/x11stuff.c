@@ -56,6 +56,9 @@ static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
+static void *_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args);
+static void *_X11SelectionNotifyRegister(void *arg,
+                                         FcitxModuleFunctionArg args);
 static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11InitAtoms(FcitxX11* x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
@@ -113,6 +116,8 @@ void* X11Create(FcitxInstance* instance)
     FcitxModuleAddFunction(x11addon, X11ScreenGeometry);
     FcitxModuleAddFunction(x11addon, X11ProcessEventReal);
     FcitxModuleAddFunction(x11addon, X11GetDPI);
+    FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRemove);
+    FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRegister);
 
 #ifdef HAVE_XFIXES
     int ignore;
@@ -169,7 +174,7 @@ X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
 
 static void
 X11CompManagerSelectionNotify(FcitxX11 *x11priv, void *owner, Atom selection,
-                              int subtype, void *data, void (*func)())
+                              int subtype, void *data, FcitxCallBack func)
 {
     X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
 }
@@ -221,9 +226,30 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
     }
 }
 
+static void*
+_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args)
+{
+    unsigned int id = (unsigned int)(intptr_t)args.args[0];
+    X11SelectionNotifyRemove(arg, id);
+    return NULL;
+}
+
+static void*
+_X11SelectionNotifyRegister(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    const char *sel_str = args.args[0];
+    void *owner = args.args[1];
+    X11SelectionNotifyCallback cb = args.args[2];
+    void *data = args.args[3];
+    FcitxDestroyNotify destroy = args.args[4];
+    unsigned int id = X11SelectionNotifyRegister(x11priv, sel_str,
+                                                 owner, cb, data, destroy);
+    return (void*)(intptr_t)id;
+}
 
 void*
-X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
+X11ProcessEventReal(void *arg, FcitxModuleFunctionArg args)
 {
     X11ProcessEventRealInternal((FcitxX11*)arg);
     return NULL;
