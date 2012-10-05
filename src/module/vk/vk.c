@@ -279,7 +279,7 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
 
     vs = VKFindARGBVisual(vkstate);
     VKInitWindowAttribute(vkstate, &vs, &cmap, &attrib, &attribmask, &depth);
-    vkWindow->dpy = InvokeVaArgs(vkstate->owner, FCITX_X11, GETDISPLAY);
+    vkWindow->dpy = FcitxX11GetDisplay(vkstate->owner);
 
     vkWindow->fontSize = 12;
     vkWindow->defaultFont = strdup("sans");
@@ -301,8 +301,7 @@ VKWindow* CreateVKWindow(FcitxVKState* vkstate)
 
     VKSetWindowProperty(vkstate, vkWindow->window, FCITX_WINDOW_DOCK, strWindowName);
 
-    InvokeVaArgs(vkstate->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 VKWindowEventHandler, vkWindow);
+    FcitxX11AddXEventHandler(vkstate->owner, VKWindowEventHandler, vkWindow);
 
     return vkWindow;
 }
@@ -713,8 +712,7 @@ void SwitchVK(FcitxVKState *vkstate)
     if (vkstate->bVK) {
         int             x, y;
         int dwidth, dheight;
-        InvokeVaArgs(vkstate->owner, FCITX_X11, GETSCREENSIZE,
-                     &dwidth, &dheight);
+        FcitxX11GetScreenSize(vkstate->owner, &dwidth, &dheight);
 
         if (!FcitxUISupportMainWindow(instance)) {
             x = dwidth / 2 - VK_WINDOW_WIDTH / 2;
@@ -767,26 +765,25 @@ VKInitWindowAttribute(FcitxVKState* vkstate, Visual ** vs, Colormap * cmap,
                       XSetWindowAttributes * attrib,
                       unsigned long *attribmask, int *depth)
 {
-    InvokeVaArgs(vkstate->owner, FCITX_X11, INITWINDOWATTR,
-                 vs, cmap, attrib, attribmask, depth);
+    FcitxX11InitWindowAttribute(vkstate->owner,
+                                vs, cmap, attrib, attribmask, depth);
 }
 
 Visual * VKFindARGBVisual(FcitxVKState* vkstate)
 {
-    return InvokeVaArgs(vkstate->owner, FCITX_X11, FINDARGBVISUAL);
+    return FcitxX11FindARGBVisual(vkstate->owner);
 }
 
 void VKSetWindowProperty(FcitxVKState* vkstate, Window window, FcitxXWindowType type, char *windowTitle)
 {
-    InvokeVaArgs(vkstate->owner, FCITX_X11, SETWINDOWPROP,
-                 &window, &type, windowTitle);
+    FcitxX11SetWindowProp(vkstate->owner, &window, &type, windowTitle);
 }
 
 boolean
 VKMouseClick(FcitxVKState* vkstate, Window window, int *x, int *y)
 {
     boolean bMoved = false;
-    InvokeVaArgs(vkstate->owner, FCITX_X11, MOUSECLICK, &window, x, y, &bMoved);
+    FcitxX11MouseClick(vkstate->owner, &window, x, y, &bMoved);
     return bMoved;
 }
 

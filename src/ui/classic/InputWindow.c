@@ -113,10 +113,10 @@ InputWindow* CreateInputWindow(FcitxClassicUI *classicui)
     inputWindow->owner = classicui;
     InitInputWindow(inputWindow);
 
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 InputWindowEventHandler, inputWindow);
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
-                   ReloadInputWindow, inputWindow);
+    FcitxX11AddXEventHandler(classicui->owner,
+                             InputWindowEventHandler, inputWindow);
+    FcitxX11AddCompositeHandler(classicui->owner,
+                                ReloadInputWindow, inputWindow);
 
     inputWindow->msgUp = FcitxMessagesNew();
     inputWindow->msgDown = FcitxMessagesNew();

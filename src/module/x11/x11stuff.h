@@ -60,15 +60,8 @@
 #define FCITX_X11_DEFAULT_EVENT_WINDOW 14
 #define FCITX_X11_DEFAULT_EVENT_WINDOW_RETURNTYPE Window
 
-typedef struct _FcitxXEventHandler {
-    boolean(*eventHandler)(void* instance, XEvent* event);
-    void* instance;
-} FcitxXEventHandler;
-
-typedef struct _FcitxCompositeChangedHandler {
-    void (*eventHandler)(void* instance, boolean enable);
-    void *instance;
-} FcitxCompositeChangedHandler;
+typedef boolean (*FcitxX11XEventHandler)(void *instance, XEvent *event);
+typedef void (*FcitxX11CompositeHandler)(void *instance, boolean enable);
 
 typedef struct _FcitxRect {
     int x1, y1, x2, y2;
@@ -105,6 +98,114 @@ FcitxX11GetDisplay(FcitxInstance *instance)
 {
     return (Display*)(intptr_t)FcitxModuleInvokeVaArgs(
         FcitxX11GetAddon(instance), FCITX_X11_GETDISPLAY);
+}
+
+static inline void
+FcitxX11AddXEventHandler(FcitxInstance *instance,
+                         FcitxX11XEventHandler arg0, void *arg1)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_ADDXEVENTHANDLER,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
+
+static inline void
+FcitxX11RemoveXEventHandler(FcitxInstance *instance,
+                            void *arg0)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_REMOVEXEVENTHANDLER,
+        (void*)(intptr_t)arg0);
+}
+
+static inline Visual*
+FcitxX11FindARGBVisual(FcitxInstance *instance)
+{
+    return (Visual*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_FINDARGBVISUAL);
+}
+
+static inline void
+FcitxX11InitWindowAttribute(FcitxInstance *instance,
+                            Visual **arg0, Colormap *arg1,
+                            XSetWindowAttributes *arg2,
+                            unsigned long *arg3, int *arg4)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_INITWINDOWATTR,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2,
+        (void*)(intptr_t)arg3, (void*)(intptr_t)arg4);
+}
+
+static inline void
+FcitxX11SetWindowProp(FcitxInstance *instance,
+                      Window *arg0, FcitxXWindowType *arg1, char *arg2)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_SETWINDOWPROP,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2);
+}
+
+static inline void
+FcitxX11GetScreenSize(FcitxInstance *instance,
+                      int *arg0, int *arg1)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_GETSCREENSIZE,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
+
+static inline void
+FcitxX11MouseClick(FcitxInstance *instance,
+                   Window *arg0, int *arg1, int *arg2, boolean *arg3)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_MOUSECLICK,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2,
+        (void*)(intptr_t)arg3);
+}
+
+static inline void
+FcitxX11AddCompositeHandler(FcitxInstance *instance,
+                            FcitxX11CompositeHandler arg0, void *arg1)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_ADDCOMPOSITEHANDLER,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
+
+static inline void
+FcitxX11GetScreenGeometry(FcitxInstance *instance,
+                          int *arg0, int *arg1, FcitxRect *arg2)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_GETSCREENGEOMETRY,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2);
+}
+
+static inline void
+FcitxX11ProcessRemainEvent(FcitxInstance *instance)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_PROCESSREMAINEVENT);
+}
+
+static inline void
+FcitxX11GetDPI(FcitxInstance *instance,
+               int *arg0, int *arg1)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_GETDPI,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
+
+static inline void
+FcitxX11RemoveSelectNotify(FcitxInstance *instance,
+                           unsigned int arg0)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), FCITX_X11_REMOVE_SELECT_NOTIFY,
+        (void*)(intptr_t)arg0);
 }
 
 static inline unsigned int

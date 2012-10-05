@@ -27,6 +27,16 @@
 #include "x11handlertable.h"
 
 typedef struct {
+    FcitxX11XEventHandler eventHandler;
+    void *instance;
+} FcitxXEventHandler;
+
+typedef struct {
+    FcitxX11CompositeHandler eventHandler;
+    void *instance;
+} FcitxCompositeChangedHandler;
+
+typedef struct {
     Display *dpy;
     UT_array handlers;
     UT_array comphandlers;

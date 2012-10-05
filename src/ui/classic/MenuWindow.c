@@ -259,10 +259,8 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
     menu->owner = classicui;
     InitXlibMenu(menu);
 
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 MenuWindowEventHandler, menu);
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
-                 ReloadXlibMenu, menu);
+    FcitxX11AddXEventHandler(classicui->owner, MenuWindowEventHandler, menu);
+    FcitxX11AddCompositeHandler(classicui->owner, ReloadXlibMenu, menu);
     return menu;
 }
 
