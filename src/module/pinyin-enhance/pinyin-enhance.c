@@ -83,10 +83,9 @@ check_im_type(PinyinEnhance *pyenhance)
     if (strcmp(im->uniqueName, "sunpinyin") == 0) {
         boolean sp = false;
         char *str;
-        str = FcitxModuleInvokeVaArgsByName(im->owner->owner,
-                                            "fcitx-sunpinyin", 0, "", &sp);
-        if (str)
-            free(str);
+        MODULE_ARGS(args, "", &sp);
+        str = FcitxModuleInvokeByPrefix(im->owner->owner, SunPinyin, 0, args);
+        fcitx_utils_free(str);
         return sp ? PY_IM_SHUANGPIN : PY_IM_PINYIN;
     }
     return PY_IM_INVALID;

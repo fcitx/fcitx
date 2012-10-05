@@ -72,15 +72,6 @@ void ClipboardPushClipboard(FcitxClipboard *clipboard,
                             uint32_t len, const char *str);
 CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
 
-static inline FcitxAddon*
-FcitxClipboardGetAddon(FcitxInstance *instance)
-{
-    static FcitxAddon *addon = NULL;
-    if (!addon) {
-        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
-                                          "fcitx-clipboard");
-    }
-    return addon;
-}
+DEFINE_GET_ADDON("fcitx-clipboard", Clipboard)
 
 #endif

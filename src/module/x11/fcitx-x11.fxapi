@@ -1,6 +1,6 @@
 [FcitxAddon]
 Name=fcitx-x11
-Prefix=FcitxX11
+Prefix=X11
 Function0=GetDisplay
 Function1=AddXEventHandler
 Function2=RemoveXEventHandler
