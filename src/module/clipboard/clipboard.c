@@ -83,3 +83,12 @@ ClipboardReloadConfig(void* arg)
     FcitxClipboardLoadConfig(&clipboard->config);
     ApplyClipboardConfig(clipboard);
 }
+
+void
+ClipboardSetPrimary(FcitxClipboard *clipboard, size_t len, const char *str)
+{
+    clipboard->primary_str = realloc(clipboard->primary_str, len + 1);
+    memcpy(clipboard->primary_str, str, len);
+    clipboard->primary_str[len] = '\0';
+    clipboard->primary_len = len;
+}

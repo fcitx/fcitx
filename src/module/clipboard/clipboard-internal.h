@@ -34,6 +34,8 @@ typedef struct {
 typedef struct {
     FcitxInstance *owner;
     FcitxClipboardConfig config;
+    char *primary_str;
+    size_t primary_len;
 #ifdef ENABLE_X11
     FcitxAddon *x11;
     unsigned int x11_primary_notify_id;
@@ -41,11 +43,8 @@ typedef struct {
 #endif
 } FcitxClipboard;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-    CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
-#ifdef __cplusplus
-}
-#endif
+void ClipboardSetPrimary(FcitxClipboard *clipboard,
+                         size_t len, const char *str);
+CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
+
 #endif

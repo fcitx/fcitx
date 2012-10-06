@@ -29,7 +29,10 @@ _X11ClipboardPrimaryConvertCb(
     void *owner, const char *sel_str, const char *tgt_str, int format,
     size_t nitems, const void *buff, void *data)
 {
-    printf("%s, primary, %s, %s, %s\n", __func__, sel_str, tgt_str, (char*)buff);
+    FcitxClipboard *clipboard = owner;
+    if (!(nitems && buff && format == 8))
+        return;
+    ClipboardSetPrimary(clipboard, nitems, buff);
 }
 
 static void
@@ -37,7 +40,6 @@ _X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
                              int subtype, void *data)
 {
     FcitxClipboard *clipboard = owner;
-    printf("%s, %s\n", __func__, sel_str);
     FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", "UTF8_STRING",
                                  clipboard, _X11ClipboardPrimaryConvertCb,
                                  NULL, NULL);
