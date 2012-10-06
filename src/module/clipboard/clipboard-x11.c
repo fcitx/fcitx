@@ -25,17 +25,41 @@
 #include "module/x11/x11stuff.h"
 
 static void
+_X11ClipboardPrimaryConvertCb(
+    void *owner, const char *sel_str, const char *tgt_str, int format,
+    size_t nitems, const void *buff, void *data)
+{
+    printf("%s, primary, %s, %s, %s\n", __func__, sel_str, tgt_str, (char*)buff);
+}
+
+static void
 _X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
                              int subtype, void *data)
 {
+    FcitxClipboard *clipboard = owner;
     printf("%s, %s\n", __func__, sel_str);
+    FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", "UTF8_STRING",
+                                 clipboard, _X11ClipboardPrimaryConvertCb,
+                                 NULL, NULL);
+}
+
+static void
+_X11ClipboardClipboardConvertCb(
+    void *owner, const char *sel_str, const char *tgt_str, int format,
+    size_t nitems, const void *buff, void *data)
+{
+    printf("%s, clipboard, %s, %s, %s\n", __func__, sel_str, tgt_str, (char*)buff);
 }
 
 static void
 _X11ClipboardClipboardNotifyCb(void *owner, const char *sel_str,
                                int subtype, void *data)
 {
+    FcitxClipboard *clipboard = owner;
     printf("%s, %s\n", __func__, sel_str);
+    FcitxX11RequestConvertSelect(clipboard->owner, "CLIPBOARD", "UTF8_STRING",
+                                 clipboard, _X11ClipboardClipboardConvertCb,
+                                 NULL, NULL);
 }
 
 void

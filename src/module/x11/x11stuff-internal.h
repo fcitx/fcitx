@@ -51,6 +51,9 @@ typedef struct {
     Atom typeDialogAtom;
     Atom typeDockAtom;
     Atom pidAtom;
+    Atom utf8Atom;
+    Atom stringAtom;
+    Atom compTextAtom;
     boolean bUseXinerama;
     FcitxRect* rects;
     int screenCount;

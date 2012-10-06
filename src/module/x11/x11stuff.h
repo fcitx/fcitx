@@ -53,12 +53,6 @@
 #define FCITX_X11_PROCESSREMAINEVENT_RETURNTYPE void
 #define FCITX_X11_GETDPI 11
 #define FCITX_X11_GETDPI_RETURNTYPE void
-#define FCITX_X11_REG_SELECT_NOTIFY 12
-#define FCITX_X11_REG_SELECT_NOTIFY_RETURNTYPE intptr_t
-#define FCITX_X11_REMOVE_SELECT_NOTIFY 13
-#define FCITX_X11_REMOVE_SELECT_NOTIFY_RETURNTYPE void
-#define FCITX_X11_DEFAULT_EVENT_WINDOW 14
-#define FCITX_X11_DEFAULT_EVENT_WINDOW_RETURNTYPE Window
 
 typedef boolean (*FcitxX11XEventHandler)(void *instance, XEvent *event);
 typedef void (*FcitxX11CompositeHandler)(void *instance, boolean enable);
@@ -75,10 +69,11 @@ typedef enum _FcitxXWindowType {
 } FcitxXWindowType;
 
 typedef void (*FcitxDestroyNotify)(void*);
-// typedef void (*X11ConvertSelectionCallback)(void *owner, const char *selection,
-//                                             int subtype, void *data);
-typedef void (*X11SelectionNotifyCallback)(void *owner, const char *sel_str,
+typedef void (*X11SelectionNotifyCallback)(void *owner, const char *selection,
                                            int subtype, void *data);
+typedef void (*X11ConvertSelectionCallback)(
+    void *owner, const char *sel_str, const char *tgt_str, int format,
+    size_t nitems, const void *buff, void *data);
 
 // Well won't work if there are multiple instances, but that will also break
 // lots of other things as well.
@@ -199,15 +194,6 @@ FcitxX11GetDPI(FcitxInstance *instance,
         (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
 }
 
-static inline void
-FcitxX11RemoveSelectNotify(FcitxInstance *instance,
-                           unsigned int arg0)
-{
-    FcitxModuleInvokeVaArgs(
-        FcitxX11GetAddon(instance), FCITX_X11_REMOVE_SELECT_NOTIFY,
-        (void*)(intptr_t)arg0);
-}
-
 static inline unsigned int
 FcitxX11RegSelectNotify(FcitxInstance *instance,
                         const char *arg0, void *arg1,
@@ -215,16 +201,38 @@ FcitxX11RegSelectNotify(FcitxInstance *instance,
                         void *arg3, FcitxDestroyNotify arg4)
 {
     return (unsigned int)(intptr_t)FcitxModuleInvokeVaArgs(
-        FcitxX11GetAddon(instance), FCITX_X11_REG_SELECT_NOTIFY,
+        FcitxX11GetAddon(instance), 12,
         (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2,
         (void*)(intptr_t)arg3, (void*)(intptr_t)arg4);
+}
+
+static inline void
+FcitxX11RemoveSelectNotify(FcitxInstance *instance,
+                           unsigned int arg0)
+{
+    FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), 13,
+        (void*)(intptr_t)arg0);
 }
 
 static inline Window
 FcitxX11DefaultEventWindow(FcitxInstance *instance)
 {
     return (Window)(intptr_t)FcitxModuleInvokeVaArgs(
-        FcitxX11GetAddon(instance), FCITX_X11_DEFAULT_EVENT_WINDOW);
+        FcitxX11GetAddon(instance), 14);
+}
+
+
+static inline unsigned int
+FcitxX11RequestConvertSelect(FcitxInstance *instance,
+                             const char *arg0, const char *arg1, void *arg2,
+                             X11ConvertSelectionCallback arg3,
+                             void *arg4, FcitxDestroyNotify arg5)
+{
+    return (unsigned int)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxX11GetAddon(instance), 15,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1, (void*)(intptr_t)arg2,
+        (void*)(intptr_t)arg3, (void*)(intptr_t)arg4, (void*)(intptr_t)arg5);
 }
 
 #endif

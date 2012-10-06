@@ -59,6 +59,7 @@ static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
 static void *_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args);
 static void *_X11SelectionNotifyRegister(void *arg,
                                          FcitxModuleFunctionArg args);
+static void *_X11RequestConvertSelection(void *arg, FcitxModuleFunctionArg args);
 static void *X11EventWindow(void *arg, FcitxModuleFunctionArg args);
 static boolean X11InitComposite(FcitxX11* x11priv);
 static void X11InitAtoms(FcitxX11* x11priv);
@@ -120,6 +121,7 @@ void* X11Create(FcitxInstance* instance)
     FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRegister);
     FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRemove);
     FcitxModuleAddFunction(x11addon, X11EventWindow);
+    FcitxModuleAddFunction(x11addon, _X11RequestConvertSelection);
 
 #ifdef HAVE_XFIXES
     int ignore;
@@ -261,6 +263,21 @@ _X11SelectionNotifyRegister(void *arg, FcitxModuleFunctionArg args)
     return (void*)(intptr_t)(id + 1);
 }
 
+static void*
+_X11RequestConvertSelection(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    const char *sel_str = args.args[0];
+    const char *tgt_str = args.args[1];
+    void *owner = args.args[2];;
+    X11ConvertSelectionCallback cb = args.args[3];
+    void *data = args.args[4];
+    FcitxDestroyNotify destroy = args.args[5];
+    unsigned int id = X11RequestConvertSelection(x11priv, sel_str, tgt_str,
+                                                 owner, cb, data, destroy);
+    return (void*)(intptr_t)(id + 1);
+}
+
 void*
 X11ProcessEventReal(void *arg, FcitxModuleFunctionArg args)
 {
@@ -330,6 +347,9 @@ X11InitAtoms(FcitxX11 *x11priv)
     x11priv->typeDockAtom = XInternAtom(x11priv->dpy,
                                         "_NET_WM_WINDOW_TYPE_DOCK", False);
     x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
+    x11priv->utf8Atom = XInternAtom(x11priv->dpy, "UTF8_STRING", False);
+    x11priv->stringAtom = XInternAtom(x11priv->dpy, "STRING", False);
+    x11priv->compTextAtom = XInternAtom(x11priv->dpy, "COMPOUND_TEXT", False);
     asprintf(&atom_names, "_NET_WM_CM_S%d", x11priv->iScreen);
     x11priv->compManagerAtom = XInternAtom(x11priv->dpy, atom_names, False);
     free(atom_names);

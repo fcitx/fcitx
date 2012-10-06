@@ -91,7 +91,8 @@ X11SelectionNotifyHelper(FcitxX11 *x11priv, Atom selection, int subtype,
                          X11SelectionNotify *notify)
 {
 #ifdef HAVE_XFIXES
-    X11SelectionNotifyCallback cb = (X11SelectionNotifyCallback)notify->cb;
+    X11SelectionNotifyCallback cb;
+    cb = (X11SelectionNotifyCallback)notify->func;
     char *name = XGetAtomName(x11priv->dpy, selection);
     cb(notify->owner, name, subtype, notify->data);
     XFree(name);
@@ -153,8 +154,22 @@ X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id)
 #endif
 }
 
-unsigned int
-X11ConvertSelectionInternal(
+void
+X11ConvertSelectionHelper(
+    FcitxX11 *x11priv, Atom selection, Atom target, int format,
+    size_t nitems, const void *buff, X11ConvertSelection *convert)
+{
+    X11ConvertSelectionCallback cb;
+    cb = (X11ConvertSelectionCallback)convert->func;
+    char *sel_str = XGetAtomName(x11priv->dpy, selection);
+    char *tgt_str = XGetAtomName(x11priv->dpy, target);
+    cb(convert->owner, sel_str, tgt_str, format, nitems, buff, convert->data);
+    XFree(sel_str);
+    XFree(tgt_str);
+}
+
+static unsigned int
+X11RequestConvertSelectionInternal(
     FcitxX11 *x11priv, const char *sel_str, Atom selection, Atom target,
     void *owner, X11ConvertSelectionInternalCallback cb, void *data,
     FcitxDestroyNotify destroy, FcitxCallBack func)
@@ -177,13 +192,41 @@ X11ConvertSelectionInternal(
                                       sizeof(Atom), &selection, &convert);
 }
 
+static unsigned int
+X11RequestConvertSelectionReal(
+    FcitxX11 *x11priv, const char *sel_str, const char *tgt_str,
+    void *owner, X11ConvertSelectionCallback cb, void *data,
+    FcitxDestroyNotify destroy)
+{
+    if (!cb)
+        return INVALID_ID;
+    return X11RequestConvertSelectionInternal(
+        x11priv, sel_str, XInternAtom(x11priv->dpy, sel_str, False),
+        XInternAtom(x11priv->dpy, tgt_str, False), owner,
+        X11ConvertSelectionHelper, data, destroy, (FcitxCallBack)cb);
+}
+
+unsigned int
+X11RequestConvertSelection(
+    FcitxX11 *x11priv, const char *sel_str, const char *tgt_str,
+    void *owner, X11ConvertSelectionCallback cb, void *data,
+    FcitxDestroyNotify destroy)
+{
+    /* TODO: use this for text */
+    if (!(tgt_str && *tgt_str))
+        return INVALID_ID;
+    return X11RequestConvertSelectionReal(x11priv, sel_str, tgt_str, owner, cb,
+                                          data, destroy);
+
+}
+
 void
 X11ProcessSelectionNotifyEvent(FcitxX11 *x11priv,
                                XSelectionEvent *selection_event)
 {
     X11ConvertSelection *convert;
     convert = fcitx_handler_table_first(x11priv->convertSelection, sizeof(Atom),
-                                       &selection_event->selection);
+                                        &selection_event->selection);
     if (!convert)
         return;
     unsigned char *buff = NULL;
