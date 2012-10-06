@@ -175,8 +175,8 @@ X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
 }
 
 static void
-X11CompManagerSelectionNotify(FcitxX11 *x11priv, void *owner, Atom selection,
-                              int subtype, void *data, FcitxCallBack func)
+X11CompManagerSelectionNotify(FcitxX11 *x11priv, Atom selection, int subtype,
+                              X11SelectionNotify *notify)
 {
     X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
 }

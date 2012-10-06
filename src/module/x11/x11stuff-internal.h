@@ -70,29 +70,31 @@ typedef struct {
 
 typedef void (*FcitxCallBack)();
 
-typedef void (*X11ConvertSelectionInternalCallback)(
-    FcitxX11 *x11priv, void *owner, Atom selection, Atom target, int format,
-    size_t nitems, const void *buff, void *data, FcitxCallBack func);
-typedef void (*X11SelectionNotifyInternalCallback)(
-    FcitxX11 *x11priv, void *owner, Atom selection, int subtype,
-    void *data, FcitxCallBack func);
+typedef struct _X11SelectionNotify X11SelectionNotify;
+typedef struct _X11ConvertSelection X11ConvertSelection;
 
-typedef struct {
+typedef void (*X11SelectionNotifyInternalCallback)(
+    FcitxX11 *x11priv, Atom selection, int subtype, X11SelectionNotify *notify);
+typedef void (*X11ConvertSelectionInternalCallback)(
+    FcitxX11 *x11priv, Atom selection, Atom target, int format,
+    size_t nitems, const void *buff, X11ConvertSelection *convert);
+
+struct _X11SelectionNotify {
     void *owner;
     void *data;
     X11SelectionNotifyInternalCallback cb;
     FcitxDestroyNotify destroy;
     FcitxCallBack func;
-} X11SelectionNotify;
+};
 
-typedef struct {
+struct _X11ConvertSelection {
     void *owner;
     void *data;
     Atom target;
     X11ConvertSelectionInternalCallback cb;
     FcitxDestroyNotify destroy;
     FcitxCallBack func;
-} X11ConvertSelection;
+};
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

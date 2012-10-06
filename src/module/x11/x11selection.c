@@ -80,20 +80,20 @@ X11ProcessXFixesSelectionNotifyEvent(FcitxX11 *x11priv,
                                        &notify_event->selection);
     for (;notify;notify = fcitx_handler_table_next(x11priv->selectionNotify,
                                                    notify)) {
-        notify->cb(x11priv, notify->owner, notify_event->selection,
-                   notify_event->subtype, notify->data, notify->func);
+        notify->cb(x11priv, notify_event->selection,
+                   notify_event->subtype, notify);
     }
 #endif
 }
 
 void
-X11SelectionNotifyHelper(FcitxX11 *x11priv, void *owner, Atom selection,
-                         int subtype, void *data, FcitxCallBack func)
+X11SelectionNotifyHelper(FcitxX11 *x11priv, Atom selection, int subtype,
+                         X11SelectionNotify *notify)
 {
 #ifdef HAVE_XFIXES
-    X11SelectionNotifyCallback cb = (X11SelectionNotifyCallback)func;
+    X11SelectionNotifyCallback cb = (X11SelectionNotifyCallback)notify->cb;
     char *name = XGetAtomName(x11priv->dpy, selection);
-    cb(owner, name, subtype, data);
+    cb(notify->owner, name, subtype, notify->data);
     XFree(name);
 #endif
 }
@@ -227,9 +227,8 @@ get_fail:
 
     for (;convert;convert = fcitx_handler_table_next(x11priv->convertSelection,
                                                      convert)) {
-        convert->cb(x11priv, convert->owner, selection_event->selection,
-                    ret_type, ret_format, nitems, buff, convert->data,
-                    convert->func);
+        convert->cb(x11priv, selection_event->selection,
+                    ret_type, ret_format, nitems, buff, convert);
     }
     fcitx_handler_table_remove(x11priv->convertSelection, sizeof(Atom),
                                &selection_event->selection);
