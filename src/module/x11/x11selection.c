@@ -162,7 +162,8 @@ X11ConvertSelectionHelper(
     X11ConvertSelectionCallback cb;
     cb = (X11ConvertSelectionCallback)convert->func;
     char *sel_str = XGetAtomName(x11priv->dpy, selection);
-    char *tgt_str = XGetAtomName(x11priv->dpy, target);
+    char *tgt_str;
+    tgt_str = (target != None) ? XGetAtomName(x11priv->dpy, target) : NULL;
     cb(convert->owner, sel_str, tgt_str, format, nitems, buff, convert->data);
     XFree(sel_str);
     XFree(tgt_str);

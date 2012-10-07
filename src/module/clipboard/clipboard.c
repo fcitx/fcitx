@@ -67,7 +67,8 @@ ClipboardCreate(FcitxInstance *instance)
 static void
 ClipboardDestroy(void *arg)
 {
-    /* FcitxClipboard *clipboard = (FcitxClipboard*)arg; */
+    FcitxClipboard *clipboard = (FcitxClipboard*)arg;
+    fcitx_utils_free(clipboard->primary_str);
     free(arg);
 }
 
@@ -88,7 +89,8 @@ void
 ClipboardSetPrimary(FcitxClipboard *clipboard, size_t len, const char *str)
 {
     clipboard->primary_str = realloc(clipboard->primary_str, len + 1);
-    memcpy(clipboard->primary_str, str, len);
+    if (len)
+        memcpy(clipboard->primary_str, str, len);
     clipboard->primary_str[len] = '\0';
     clipboard->primary_len = len;
 }
