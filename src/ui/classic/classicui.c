@@ -282,7 +282,9 @@ void ActivateWindow(Display *dpy, int iScreen, Window window)
 
     memset(&ev, 0, sizeof(ev));
 
-    Atom _NET_ACTIVE_WINDOW = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
+    static Atom _NET_ACTIVE_WINDOW;
+    if (_NET_ACTIVE_WINDOW == None)
+        _NET_ACTIVE_WINDOW = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 
     ev.xclient.type = ClientMessage;
     ev.xclient.window = window;

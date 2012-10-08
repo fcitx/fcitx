@@ -327,7 +327,7 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb,
     int len;
     char *pval;
     char *next;
-    Atom rules_atom;
+    static Atom rules_atom = None;
     Window root_window;
 
     len = (rules_file ? strlen (rules_file) : 0);
@@ -341,7 +341,8 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb,
     }
     len += 5; /* trailing NULs */
 
-    rules_atom = XInternAtom (dpy, _XKB_RF_NAMES_PROP_ATOM, False);
+    if (rules_atom == None)
+        rules_atom = XInternAtom (dpy, _XKB_RF_NAMES_PROP_ATOM, False);
     root_window = XDefaultRootWindow (dpy);
     pval = next = (char*) fcitx_utils_malloc0 (sizeof(char) *(len + 1));
     if (!pval) {
