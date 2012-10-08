@@ -50,6 +50,10 @@ _X11ClipboardClipboardConvertCb(
     void *owner, const char *sel_str, const char *tgt_str, int format,
     size_t nitems, const void *buff, void *data)
 {
+    FcitxClipboard *clipboard = owner;
+    if (!(nitems && buff && format == 8))
+        return;
+    ClipboardPushClipboard(clipboard, nitems, buff);
 }
 
 static void

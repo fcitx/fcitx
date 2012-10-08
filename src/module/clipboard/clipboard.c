@@ -68,13 +68,23 @@ static void
 ClipboardDestroy(void *arg)
 {
     FcitxClipboard *clipboard = (FcitxClipboard*)arg;
-    fcitx_utils_free(clipboard->primary_str);
+    fcitx_utils_free(clipboard->primary.str);
     free(arg);
 }
 
 static void
 ApplyClipboardConfig(FcitxClipboard *clipboard)
 {
+    FcitxClipboardConfig *config = &clipboard->config;
+    if (config->history_len < 1) {
+        config->history_len = 1;
+    } else if (config->history_len > CLIPBOARD_MAX_LEN) {
+        config->history_len = CLIPBOARD_MAX_LEN;
+    }
+    while (clipboard->clp_hist_len > config->history_len) {
+        char *str = clipboard->clp_hist_lst[--clipboard->clp_hist_len].str;
+        fcitx_utils_free(str);
+    }
 }
 
 static void
@@ -88,9 +98,35 @@ ClipboardReloadConfig(void* arg)
 void
 ClipboardSetPrimary(FcitxClipboard *clipboard, size_t len, const char *str)
 {
-    clipboard->primary_str = realloc(clipboard->primary_str, len + 1);
-    if (len)
-        memcpy(clipboard->primary_str, str, len);
-    clipboard->primary_str[len] = '\0';
-    clipboard->primary_len = len;
+    if (!(len && str))
+        return;
+    clipboard->primary.str = realloc(clipboard->primary.str, len + 1);
+    memcpy(clipboard->primary.str, str, len);
+    clipboard->primary.str[len] = '\0';
+    clipboard->primary.len = len;
+}
+
+void
+ClipboardPushClipboard(FcitxClipboard *clipboard, size_t len, const char *str)
+{
+    if (!(len && str))
+        return;
+    if (clipboard->clp_hist_len &&
+        len == clipboard->clp_hist_lst->len &&
+        !memcmp(clipboard->clp_hist_lst->str, str, len))
+        return;
+    char *new_str;
+    if (clipboard->clp_hist_len < clipboard->config.history_len) {
+        clipboard->clp_hist_len++;
+        new_str = NULL;
+    } else {
+        new_str = clipboard->clp_hist_lst[clipboard->clp_hist_len - 1].str;
+    }
+    memmove(clipboard->clp_hist_lst + 1, clipboard->clp_hist_lst,
+            (clipboard->clp_hist_len - 1) * sizeof(ClipboardSelectionStr));
+    new_str = realloc(new_str, len + 1);
+    memcpy(new_str, str, len);
+    new_str[len] = '\0';
+    clipboard->clp_hist_lst->len = len;
+    clipboard->clp_hist_lst->str = new_str;
 }

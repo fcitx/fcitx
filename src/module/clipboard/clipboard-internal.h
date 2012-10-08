@@ -26,16 +26,25 @@
 
 #include "clipboard.h"
 
+#define CLIPBOARD_MAX_LEN 16
+
 typedef struct {
     FcitxGenericConfig gconfig;
     boolean save_history;
+    int history_len;
 } FcitxClipboardConfig;
+
+typedef struct {
+    size_t len;
+    char *str;
+} ClipboardSelectionStr;
 
 typedef struct {
     FcitxInstance *owner;
     FcitxClipboardConfig config;
-    char *primary_str;
-    size_t primary_len;
+    ClipboardSelectionStr primary;
+    size_t clp_hist_len;
+    ClipboardSelectionStr clp_hist_lst[CLIPBOARD_MAX_LEN];
 #ifdef ENABLE_X11
     FcitxAddon *x11;
     unsigned int x11_primary_notify_id;
@@ -45,6 +54,8 @@ typedef struct {
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,
                          size_t len, const char *str);
+void ClipboardPushClipboard(FcitxClipboard *clipboard,
+                            size_t len, const char *str);
 CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
 
 #endif

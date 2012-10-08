@@ -3,5 +3,12 @@ Type=Boolean
 DefaultValue=True
 Description=Save Clipboard History To File
 
+[Clipboard/HistoryLength]
+Type=Integer
+DefaultValue=10
+Min=1
+Max=16
+Description=Length of Clipboard History to Save
+
 [DescriptionFile]
 LocaleDomain=fcitx
