@@ -22,7 +22,7 @@
 #include "config.h"
 #include "clipboard-internal.h"
 #include "fcitx/module.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 
 static void
 _X11ClipboardPrimaryConvertCb(

@@ -31,7 +31,6 @@
 #include "fcitx/fcitx.h"
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
-#include "module/x11/x11stuff.h"
 
 #include "classicui.h"
 #include "classicuiinterface.h"

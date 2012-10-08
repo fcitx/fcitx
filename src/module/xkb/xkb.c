@@ -35,7 +35,7 @@
 #include "fcitx/hook.h"
 #include "fcitx/addon.h"
 #include "fcitx/module.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"

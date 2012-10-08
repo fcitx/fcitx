@@ -40,7 +40,7 @@
 #include "xim.h"
 #include "ximhandler.h"
 #include "ximqueue.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/hook.h"
 

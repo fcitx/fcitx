@@ -99,5 +99,16 @@ struct _X11ConvertSelection {
     FcitxCallBack func;
 };
 
+static inline FcitxAddon*
+FcitxX11GetAddon(FcitxInstance *instance)
+{
+    static FcitxAddon *addon = NULL;
+    if (!addon) {
+        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                          FCITX_X11_NAME);
+    }
+    return addon;
+}
+
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

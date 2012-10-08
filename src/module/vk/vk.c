@@ -35,7 +35,7 @@
 #include "fcitx-config/xdg.h"
 #include "fcitx/hook.h"
 #include "fcitx-utils/utils.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 #include "ui/cairostuff/cairostuff.h"
 #include "ui/cairostuff/font.h"
 #include "ui/classic/classicuiinterface.h"

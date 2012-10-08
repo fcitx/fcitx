@@ -33,7 +33,6 @@
 #include "tray.h"
 #include "skin.h"
 #include "classicui.h"
-#include "module/x11/x11stuff.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"

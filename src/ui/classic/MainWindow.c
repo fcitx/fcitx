@@ -40,7 +40,6 @@
 
 #include "MainWindow.h"
 #include "fcitx-utils/log.h"
-#include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
 #include "MenuWindow.h"

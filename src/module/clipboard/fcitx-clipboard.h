@@ -17,7 +17,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
-#ifndef _FCITX_MODULE_CLIPBOARD_H
-#define _FCITX_MODULE_CLIPBOARD_H
+#ifndef _FCITX_MODULE_FCITX_CLIPBOARD_H
+#define _FCITX_MODULE_FCITX_CLIPBOARD_H
+
+#include <fcitx/addon.h>
+#include <fcitx/module.h>
+#include <stdint.h>
+#include <module/clipboard/clipboard.h>
+
+static inline FcitxAddon*
+FcitxClipboardGetAddon(FcitxInstance *instance)
+{
+    static FcitxAddon *addon = NULL;
+    if (!addon) {
+        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                          "fcitx-clipboard");
+    }
+    return addon;
+}
+
+static inline const char*
+FcitxClipboardGetPrimarySelection(FcitxInstance *instance,
+                                  unsigned int *arg0)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 0,
+        (void*)(intptr_t)arg0);
+}
+
+static inline const char*
+FcitxClipboardGetClipboardHistory(FcitxInstance *instance,
+                                  unsigned int arg0, unsigned int *arg1)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 1,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
 
 #endif
