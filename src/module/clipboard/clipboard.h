@@ -20,6 +20,37 @@
 #ifndef _FCITX_MODULE_CLIPBOARD_H
 #define _FCITX_MODULE_CLIPBOARD_H
 
-#define FCITX_CLIPBOARD_NAME "fcitx-clipboard"
+#include "fcitx/addon.h"
+#include "fcitx/module.h"
+#include "stdint.h"
+
+static inline FcitxAddon*
+FcitxClipboardGetAddon(FcitxInstance *instance)
+{
+    static FcitxAddon *addon = NULL;
+    if (!addon) {
+        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                          "fcitx-clipboard");
+    }
+    return addon;
+}
+
+static inline const char*
+FcitxClipboardGetPrimarySelection(FcitxInstance *instance,
+                                  unsigned int *arg0)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 0,
+        (void*)(intptr_t)arg0);
+}
+
+static inline const char*
+FcitxClipboardGetClipboardHistory(FcitxInstance *instance,
+                                  unsigned int arg0, unsigned int *arg1)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 1,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
 
 #endif

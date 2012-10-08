@@ -53,6 +53,33 @@ FCITX_DEFINE_PLUGIN(fcitx_clipboard, module, FcitxModule) = {
     .ReloadConfig = ClipboardReloadConfig
 };
 
+static void*
+ClipboardGetPrimary(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxClipboard *clipboard = arg;
+    unsigned int *len = args.args[0];
+    if (len)
+        *len = clipboard->primary.len;
+    return clipboard->primary.str;
+}
+
+static void*
+ClipboardGetClipboard(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxClipboard *clipboard = arg;
+    unsigned int index = (intptr_t)args.args[0];
+    unsigned int *len = args.args[1];
+    if (index >= clipboard->clp_hist_len) {
+        if (len)
+            *len = 0;
+        return NULL;
+    }
+    ClipboardSelectionStr *selection = clipboard->clp_hist_lst + index;
+    if (len)
+        *len = selection->len;
+    return selection->str;
+}
+
 static void
 ClipboardWriteHistory(FcitxClipboard *clipboard)
 {
@@ -311,7 +338,9 @@ ClipboardCreate(FcitxInstance *instance)
         .func = ClipboardReset
     };
     FcitxInstanceRegisterResetInputHook(instance, reset_hook);
-
+    FcitxAddon *self = FcitxClipboardGetAddon(instance);
+    FcitxModuleAddFunction(self, ClipboardGetPrimary);
+    FcitxModuleAddFunction(self, ClipboardGetClipboard);
     return clipboard;
 }
 
