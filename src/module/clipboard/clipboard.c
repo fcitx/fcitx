@@ -114,9 +114,8 @@ ClipboardCommitCallback(void *arg, FcitxCandidateWord *cand_word)
 {
     FcitxClipboard *clipboard = arg;
     FcitxInstance *instance = clipboard->owner;
-    char *commit = cand_word->priv ? cand_word->priv : cand_word->strWord;
     FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance),
-                              commit);
+                              cand_word->priv);
     return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_CANDIDATE_WORDS;
 }
 
@@ -264,7 +263,7 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
         ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
-    if (clipboard->primary.len) {
+    if (clipboard->primary.len && clipboard->config.use_primary) {
         ClipboardSetCandWord(&cand_word, &clipboard->primary);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }

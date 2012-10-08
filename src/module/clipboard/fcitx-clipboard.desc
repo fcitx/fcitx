@@ -5,7 +5,7 @@ Description=Save Clipboard History To File
 
 [Clipboard/HistoryLength]
 Type=Integer
-DefaultValue=10
+DefaultValue=5
 Min=1
 Max=16
 Description=Length of Clipboard History to Save
@@ -13,7 +13,14 @@ Description=Length of Clipboard History to Save
 [Clipboard/TriggerKey]
 Type=Hotkey
 DefaultValue=
-Description=Trigger Key for Clipboard History List.
+Description=Trigger Key for Clipboard History List
+
+[Clipboard/UsePrimary]
+Type=Boolean
+DefaultValue=True
+Description=Use Selection Text
+LongDescription=Include the text currently selected in clipboard history.
+Advance=True
 
 [DescriptionFile]
 LocaleDomain=fcitx

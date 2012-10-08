@@ -34,6 +34,7 @@ typedef struct {
     boolean save_history;
     int history_len;
     FcitxHotkey trigger_key[2];
+    boolean use_primary;
 } FcitxClipboardConfig;
 
 typedef struct {
