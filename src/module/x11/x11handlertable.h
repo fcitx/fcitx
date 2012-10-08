@@ -37,14 +37,23 @@ unsigned int fcitx_handler_table_append(FcitxHandlerTable *table,
 unsigned int fcitx_handler_table_prepend(FcitxHandlerTable *table,
                                          size_t keysize, const void *key,
                                          const void *obj);
+void *fcitx_handler_table_get_by_id(FcitxHandlerTable *table, unsigned int id);
 void *fcitx_handler_table_first(FcitxHandlerTable *table, size_t keysize,
                                 const void *key);
 void *fcitx_handler_table_last(FcitxHandlerTable *table, size_t keysize,
                                const void *key);
 void *fcitx_handler_table_next(FcitxHandlerTable *table, const void *obj);
 void *fcitx_handler_table_prev(FcitxHandlerTable *table, const void *obj);
-void fcitx_handler_table_remove(FcitxHandlerTable *table, size_t keysize,
-                                const void *key);
+unsigned int fcitx_handler_table_first_id(FcitxHandlerTable *table,
+                                          size_t keysize, const void *key);
+unsigned int fcitx_handler_table_last_id(FcitxHandlerTable *table,
+                                         size_t keysize, const void *key);
+unsigned int fcitx_handler_table_next_id(FcitxHandlerTable *table,
+                                         const void *obj);
+unsigned int fcitx_handler_table_prev_id(FcitxHandlerTable *table,
+                                         const void *obj);
+void fcitx_handler_table_remove_key(FcitxHandlerTable *table, size_t keysize,
+                                    const void *key);
 void fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, unsigned int id);
 void fcitx_handler_table_free(FcitxHandlerTable *table);
 

@@ -78,7 +78,7 @@ typedef struct _X11ConvertSelection X11ConvertSelection;
 
 typedef void (*X11SelectionNotifyInternalCallback)(
     FcitxX11 *x11priv, Atom selection, int subtype, X11SelectionNotify *notify);
-typedef void (*X11ConvertSelectionInternalCallback)(
+typedef boolean (*X11ConvertSelectionInternalCallback)(
     FcitxX11 *x11priv, Atom selection, Atom target, int format,
     size_t nitems, const void *buff, X11ConvertSelection *convert);
 

@@ -40,7 +40,7 @@ _X11ClipboardPrimaryNotifyCb(void *owner, const char *sel_str,
                              int subtype, void *data)
 {
     FcitxClipboard *clipboard = owner;
-    FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", "UTF8_STRING",
+    FcitxX11RequestConvertSelect(clipboard->owner, "PRIMARY", NULL,
                                  clipboard, _X11ClipboardPrimaryConvertCb,
                                  NULL, NULL);
 }
@@ -61,7 +61,7 @@ _X11ClipboardClipboardNotifyCb(void *owner, const char *sel_str,
                                int subtype, void *data)
 {
     FcitxClipboard *clipboard = owner;
-    FcitxX11RequestConvertSelect(clipboard->owner, "CLIPBOARD", "UTF8_STRING",
+    FcitxX11RequestConvertSelect(clipboard->owner, "CLIPBOARD", NULL,
                                  clipboard, _X11ClipboardClipboardConvertCb,
                                  NULL, NULL);
 }

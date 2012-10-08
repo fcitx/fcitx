@@ -156,7 +156,7 @@ fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
     unsigned int new_id;
     new_id = fcitx_obj_pool_alloc(&table->objs);
     FcitxHandlerObj *obj_struct;
-    obj_struct = fcitx_obj_pool_get(&table->objs, new_id);
+    obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
     obj_struct->next = INVALID_ID;
     memcpy(obj_struct + 1, obj, table->obj_size);
@@ -181,14 +181,14 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
     unsigned int new_id;
     new_id = fcitx_obj_pool_alloc(&table->objs);
     FcitxHandlerObj *obj_struct;
-    obj_struct = fcitx_obj_pool_get(&table->objs, new_id);
+    obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
     obj_struct->prev = INVALID_ID;
     memcpy(obj_struct + 1, obj, table->obj_size);
     unsigned int id = key_struct->first;
     if (id == INVALID_ID) {
         key_struct->last = key_struct->first = new_id;
-        obj_struct->prev = INVALID_ID;
+        obj_struct->next = INVALID_ID;
     } else {
         key_struct->first = new_id;
         obj_struct->next = id;
@@ -197,50 +197,80 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
     return new_id;
 }
 
-static void*
+void*
 fcitx_handler_table_get_by_id(FcitxHandlerTable *table, unsigned int id)
 {
     if (id == INVALID_ID)
         return NULL;
     FcitxHandlerObj *obj_struct;
-    obj_struct = fcitx_obj_pool_get(&table->objs, id);
+    obj_struct = fcitx_handler_table_get_obj(table, id);
     return obj_struct + 1;
+}
+
+unsigned int
+fcitx_handler_table_first_id(FcitxHandlerTable *table, size_t keysize,
+                             const void *key)
+{
+    FcitxHandlerKey *key_struct;
+    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
+    if (!key_struct)
+        return INVALID_ID;
+    return key_struct->first;
+}
+
+unsigned int
+fcitx_handler_table_last_id(FcitxHandlerTable *table, size_t keysize,
+                            const void *key)
+{
+    FcitxHandlerKey *key_struct;
+    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
+    if (!key_struct)
+        return INVALID_ID;
+    return key_struct->last;
+}
+
+unsigned int
+fcitx_handler_table_next_id(FcitxHandlerTable *table, const void *obj)
+{
+    const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
+    return obj_struct->next;
+}
+
+unsigned int
+fcitx_handler_table_prev_id(FcitxHandlerTable *table, const void *obj)
+{
+    const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
+    return obj_struct->prev;
 }
 
 void*
 fcitx_handler_table_first(FcitxHandlerTable *table, size_t keysize,
                           const void *key)
 {
-    FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
-    if (!key_struct)
-        return NULL;
-    return fcitx_handler_table_get_by_id(table, key_struct->first);
+    unsigned int id = fcitx_handler_table_first_id(table, keysize, key);
+    return fcitx_handler_table_get_by_id(table, id);
 }
 
 void*
 fcitx_handler_table_last(FcitxHandlerTable *table, size_t keysize,
                          const void *key)
 {
-    FcitxHandlerKey *key_struct;
-    key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
-    if (!key_struct)
-        return NULL;
-    return fcitx_handler_table_get_by_id(table, key_struct->last);
+    unsigned int id = fcitx_handler_table_last_id(table, keysize, key);
+    return fcitx_handler_table_get_by_id(table, id);
 }
 
 void*
 fcitx_handler_table_next(FcitxHandlerTable *table, const void *obj)
 {
-    const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
-    return fcitx_handler_table_get_by_id(table, obj_struct->next);
+    unsigned int id = fcitx_handler_table_next_id(table, obj);
+    return fcitx_handler_table_get_by_id(table, id);
 }
 
 void*
 fcitx_handler_table_prev(FcitxHandlerTable *table, const void *obj)
 {
-    const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
-    return fcitx_handler_table_get_by_id(table, obj_struct->prev);
+    unsigned int id = fcitx_handler_table_prev_id(table, obj);
+    return fcitx_handler_table_get_by_id(table, id);
 }
 
 void
@@ -249,7 +279,7 @@ fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, unsigned int id)
     if (id == INVALID_ID)
         return;
     FcitxHandlerObj *obj_struct;
-    obj_struct = fcitx_obj_pool_get(&table->objs, id);
+    obj_struct = fcitx_handler_table_get_obj(table, id);
     unsigned int prev = obj_struct->prev;
     unsigned int next = obj_struct->next;
     if (prev == INVALID_ID) {
@@ -275,7 +305,7 @@ fcitx_handler_table_free_key(FcitxHandlerTable *table,
     unsigned int next_id;
     FcitxHandlerObj *obj_struct;
     for (id = key_struct->first;id != INVALID_ID;id = next_id) {
-        obj_struct = fcitx_obj_pool_get(&table->objs, id);
+        obj_struct = fcitx_handler_table_get_obj(table, id);
         next_id = obj_struct->next;
         if (table->free_func)
             table->free_func(obj_struct + 1);
@@ -286,8 +316,8 @@ fcitx_handler_table_free_key(FcitxHandlerTable *table,
 }
 
 void
-fcitx_handler_table_remove(FcitxHandlerTable *table, size_t keysize,
-                           const void *key)
+fcitx_handler_table_remove_key(FcitxHandlerTable *table, size_t keysize,
+                               const void *key)
 {
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
