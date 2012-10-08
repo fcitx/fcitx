@@ -10,5 +10,10 @@ Min=1
 Max=16
 Description=Length of Clipboard History to Save
 
+[Clipboard/TriggerKey]
+Type=Hotkey
+DefaultValue=
+Description=Trigger Key for Clipboard History List.
+
 [DescriptionFile]
 LocaleDomain=fcitx

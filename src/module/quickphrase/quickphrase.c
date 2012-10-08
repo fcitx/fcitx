@@ -178,7 +178,7 @@ void * QuickPhraseCreate(FcitxInstance *instance)
     LoadQuickPhrase(qpstate);
 
     FcitxKeyFilterHook hk;
-    hk.arg = qpstate ;
+    hk.arg = qpstate;
     hk.func = QuickPhrasePostFilter;
     FcitxInstanceRegisterPostInputFilter(instance, hk);
 

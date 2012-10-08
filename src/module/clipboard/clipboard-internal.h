@@ -23,6 +23,7 @@
 #include "config.h"
 #include "fcitx/instance.h"
 #include "fcitx-config/fcitx-config.h"
+#include <stdint.h>
 
 #include "clipboard.h"
 
@@ -32,18 +33,20 @@ typedef struct {
     FcitxGenericConfig gconfig;
     boolean save_history;
     int history_len;
+    FcitxHotkey trigger_key[2];
 } FcitxClipboardConfig;
 
 typedef struct {
-    size_t len;
+    uint32_t len;
     char *str;
 } ClipboardSelectionStr;
 
 typedef struct {
     FcitxInstance *owner;
     FcitxClipboardConfig config;
+    boolean active;
     ClipboardSelectionStr primary;
-    size_t clp_hist_len;
+    uint32_t clp_hist_len;
     ClipboardSelectionStr clp_hist_lst[CLIPBOARD_MAX_LEN];
 #ifdef ENABLE_X11
     FcitxAddon *x11;
@@ -53,9 +56,9 @@ typedef struct {
 } FcitxClipboard;
 
 void ClipboardSetPrimary(FcitxClipboard *clipboard,
-                         size_t len, const char *str);
+                         uint32_t len, const char *str);
 void ClipboardPushClipboard(FcitxClipboard *clipboard,
-                            size_t len, const char *str);
+                            uint32_t len, const char *str);
 CONFIG_BINDING_DECLARE(FcitxClipboardConfig);
 
 #endif

@@ -47,6 +47,32 @@ extern "C" {
 /** check utf8 character */
 #define ISUTF8_CB(c)  (((c)&0xc0) == 0x80)
 
+    static inline int
+    fcitx_utf8_type(char c)
+    {
+        if (!(c & 0x80))
+            return 1;
+        if (!(c & 0x40))
+            return 0;
+        if (!(c & 0x20))
+            return 2;
+        if (!(c & 0x10))
+            return 3;
+        if (!(c & 0x08))
+            return 4;
+        if (!(c & 0x04))
+        return 5;
+        if (!(c & 0x02))
+            return 6;
+        return -1;
+    }
+
+    static inline int
+    fcitx_utf8_valid_start(char c)
+    {
+        return fcitx_utf8_type(c) > 0;
+    }
+
 /**
  * Get utf8 string length
  *
