@@ -1,5 +1,3 @@
-include_directories(${PROJECT_SOURCE_DIR}/src)
-include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${LIBINTL_INCLUDE_DIR})
 include_directories(${LIBICONV_INCLUDE_DIR})
 include_directories(${LIBEXECINFO_INCLUDE_DIR})

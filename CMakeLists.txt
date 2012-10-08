@@ -246,6 +246,9 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/FcitxConfigVersion.cmake.in"
 )
 
 include_directories(${PROJECT_BINARY_DIR})
+include_directories(${PROJECT_BINARY_DIR}/src/)
+include_directories(${PROJECT_SOURCE_DIR}/src/)
+include_directories(${PROJECT_SOURCE_DIR}/src/lib/)
 
 add_subdirectory(src)
 add_subdirectory(doc)

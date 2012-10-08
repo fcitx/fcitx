@@ -24,6 +24,7 @@
 #include "fcitx/instance.h"
 #include "fcitx-config/fcitx-config.h"
 #include <stdint.h>
+#include <fcitx/module.h>
 
 #include "clipboard.h"
 
