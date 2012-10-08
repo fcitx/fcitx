@@ -1,7 +1,7 @@
 [FcitxAddon]
 Name=fcitx-x11
 Prefix=X11
-Include0="module/x11/x11stuff.h"
+Include0=<module/x11/x11stuff.h>
 Function0=GetDisplay
 Function1=AddXEventHandler
 Function2=RemoveXEventHandler
