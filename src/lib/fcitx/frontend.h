@@ -70,6 +70,14 @@ extern "C" {
         CAPACITY_URL = (1 << 12),
         CAPACITY_DIALABLE = (1 << 13),
         CAPACITY_NUMBER = (1 << 14),
+        CAPACITY_NO_ON_SCREEN_KEYBOARD = (1 << 15),
+        CAPACITY_SPELLCHECK = (1 << 16),
+        CAPACITY_NO_SPELLCHECK = (1 << 17),
+        CAPACITY_WORD_COMPLETION = (1 << 18),
+        CAPACITY_UPPERCASE_WORDS = (1 << 19),
+        CAPACITY_UPPERCASE_SENTENCES = (1 << 20),
+        CAPACITY_ALPHA = (1 << 21),
+        CAPACITY_NAME = (1 << 22)
     } FcitxCapacityFlags;
 
     /**

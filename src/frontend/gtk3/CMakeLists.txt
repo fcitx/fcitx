@@ -17,8 +17,8 @@ include_directories(${GIO2_INCLUDE_DIRS})
 link_directories(${GIO2_LIBRARY_DIRS})
 
 set(FCITX_GTK3_IM_MODULE_SOURCES
-    ../gtk2/fcitxim.c
-    ../gtk2/fcitximcontext-gio.c
+    fcitxim.c
+    fcitximcontext-gio.c
 )
 else (GIO2_FOUND)
 include_directories(${DBUS_GLIB_INCLUDE_DIRS})
@@ -34,9 +34,9 @@ add_custom_command(OUTPUT marshall.h
 )
 
 set(FCITX_GTK3_IM_MODULE_SOURCES
-    ../gtk2/fcitxim.c
-    ../gtk2/fcitximcontext.c
-    ../gtk2/client.c
+    fcitxim.c
+    fcitximcontext.c
+    client.c
     ${CMAKE_CURRENT_BINARY_DIR}/marshall.c
     ${CMAKE_CURRENT_BINARY_DIR}/marshall.h
 )

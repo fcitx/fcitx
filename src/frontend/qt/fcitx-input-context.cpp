@@ -368,6 +368,24 @@ void QFcitxInputContext::update()
         return;
     }
 
+#define CHECK_HINTS(_HINTS, _CAPACITY) \
+    if (widget->inputMethodHints() & _HINTS) \
+        addCapacity(_CAPACITY); \
+    else \
+        removeCapacity(_CAPACITY);
+
+    CHECK_HINTS(Qt::ImhNoAutoUppercase, CAPACITY_NOAUTOUPPERCASE)
+    CHECK_HINTS(Qt::ImhPreferNumbers, CAPACITY_NUMBER)
+    CHECK_HINTS(Qt::ImhPreferUppercase, CAPACITY_UPPERCASE)
+    CHECK_HINTS(Qt::ImhPreferLowercase, CAPACITY_LOWERCASE)
+    CHECK_HINTS(Qt::ImhNoPredictiveText, CAPACITY_NO_SPELLCHECK)
+    CHECK_HINTS(Qt::ImhDigitsOnly, CAPACITY_DIGIT)
+    CHECK_HINTS(Qt::ImhFormattedNumbersOnly, CAPACITY_NUMBER)
+    CHECK_HINTS(Qt::ImhUppercaseOnly, CAPACITY_UPPERCASE)
+    CHECK_HINTS(Qt::ImhLowercaseOnly, CAPACITY_LOWERCASE)
+    CHECK_HINTS(Qt::ImhDialableCharactersOnly, CAPACITY_DIALABLE)
+    CHECK_HINTS(Qt::ImhEmailCharactersOnly, CAPACITY_EMAIL)
+
     if (m_useSurroundingText) {
         QVariant var = widget->inputMethodQuery(Qt::ImSurroundingText);
         QVariant var1 = widget->inputMethodQuery(Qt::ImCursorPosition);
@@ -732,7 +750,7 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
         flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
-        m_useSurroundingText = fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
+        m_useSurroundingText = fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", true);
         if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 

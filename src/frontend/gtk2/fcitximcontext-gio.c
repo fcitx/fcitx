@@ -140,6 +140,19 @@ _fcitx_im_context_process_key_cb(GObject* source_object, GAsyncResult* res, gpoi
 static void
 _fcitx_im_context_set_capacity(FcitxIMContext* fcitxcontext, gboolean force);
 
+#if GTK_CHECK_VERSION(3, 6, 0)
+
+static void
+_fcitx_im_context_input_hints_changed_cb(GObject    *gobject,
+                                         GParamSpec *pspec,
+                                         gpointer    user_data);
+static void
+_fcitx_im_context_input_purpose_changed_cb(GObject    *gobject,
+                                         GParamSpec *pspec,
+                                         gpointer    user_data);
+#endif
+
+
 static GdkEventKey *
 _create_gdk_event(FcitxIMContext *fcitxcontext,
                   guint keyval,
@@ -385,6 +398,11 @@ fcitx_im_context_init(FcitxIMContext *context)
                      "delete-surrounding",
                      G_CALLBACK(_slave_delete_surrounding_cb),
                      context);
+
+#if GTK_CHECK_VERSION(3, 6, 0)
+    g_signal_connect(context, "notify::input-hints", G_CALLBACK(_fcitx_im_context_input_hints_changed_cb), NULL);
+    g_signal_connect(context, "notify::input-purpose", G_CALLBACK(_fcitx_im_context_input_purpose_changed_cb), NULL);
+#endif
 
     context->time = GDK_CURRENT_TIME;
 
@@ -1424,5 +1442,85 @@ _key_snooper_cb (GtkWidget   *widget,
 
     return retval;
 }
+
+#if GTK_CHECK_VERSION(3, 6, 0)
+
+void _fcitx_im_context_input_purpose_changed_cb(GObject* gobject, GParamSpec* pspec, gpointer user_data)
+{
+    FcitxIMContext* fcitxcontext = FCITX_IM_CONTEXT(gobject);
+
+    GtkInputPurpose purpose;
+    g_object_get(gobject, "input-purpose", &purpose, NULL);
+
+    const FcitxCapacityFlags related_capacity =
+        CAPACITY_ALPHA |
+        CAPACITY_DIGIT |
+        CAPACITY_NUMBER |
+        CAPACITY_DIALABLE |
+        CAPACITY_URL |
+        CAPACITY_EMAIL |
+        CAPACITY_PASSWORD;
+
+    fcitxcontext->capacity &= ~related_capacity;
+
+#define CASE_PURPOSE(_PURPOSE, _CAPACITY) \
+    case _PURPOSE: \
+        fcitxcontext->capacity |= _CAPACITY; \
+        break;
+
+    switch(purpose) {
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_ALPHA, CAPACITY_ALPHA)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_DIGITS, CAPACITY_DIGIT);
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_NUMBER, CAPACITY_NUMBER)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_PHONE, CAPACITY_DIALABLE)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_URL, CAPACITY_URL)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_EMAIL, CAPACITY_EMAIL)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_NAME, CAPACITY_NAME)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_PASSWORD, CAPACITY_PASSWORD)
+        CASE_PURPOSE(GTK_INPUT_PURPOSE_PIN, CAPACITY_PASSWORD | CAPACITY_DIGIT)
+        case GTK_INPUT_PURPOSE_FREE_FORM:
+        default:
+            break;
+    }
+
+    _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
+}
+
+void _fcitx_im_context_input_hints_changed_cb(GObject* gobject, GParamSpec* pspec, gpointer user_data)
+{
+    FcitxIMContext* fcitxcontext = FCITX_IM_CONTEXT(gobject);
+
+    GtkInputHints hints;
+    g_object_get(gobject, "input-hints", &hints, NULL);
+
+    const FcitxCapacityFlags related_capacity =
+        CAPACITY_SPELLCHECK |
+        CAPACITY_NO_SPELLCHECK |
+        CAPACITY_WORD_COMPLETION |
+        CAPACITY_LOWERCASE |
+        CAPACITY_UPPERCASE |
+        CAPACITY_UPPERCASE_WORDS |
+        CAPACITY_UPPERCASE_SENTENCES |
+        CAPACITY_NO_ON_SCREEN_KEYBOARD;
+
+    fcitxcontext->capacity &= ~related_capacity;
+
+#define CHECK_HINTS(_HINTS, _CAPACITY) \
+    if (hints & _HINTS) \
+        fcitxcontext->capacity |= _CAPACITY;
+
+    CHECK_HINTS(GTK_INPUT_HINT_SPELLCHECK, CAPACITY_SPELLCHECK)
+    CHECK_HINTS(GTK_INPUT_HINT_NO_SPELLCHECK, CAPACITY_NO_SPELLCHECK);
+    CHECK_HINTS(GTK_INPUT_HINT_WORD_COMPLETION, CAPACITY_WORD_COMPLETION)
+    CHECK_HINTS(GTK_INPUT_HINT_LOWERCASE, CAPACITY_LOWERCASE)
+    CHECK_HINTS(GTK_INPUT_HINT_UPPERCASE_CHARS, CAPACITY_UPPERCASE)
+    CHECK_HINTS(GTK_INPUT_HINT_UPPERCASE_WORDS, CAPACITY_UPPERCASE_WORDS)
+    CHECK_HINTS(GTK_INPUT_HINT_UPPERCASE_SENTENCES, CAPACITY_UPPERCASE_SENTENCES)
+    CHECK_HINTS(GTK_INPUT_HINT_INHIBIT_OSK, CAPACITY_NO_ON_SCREEN_KEYBOARD)
+
+    _fcitx_im_context_set_capacity(fcitxcontext, FALSE);
+}
+
+#endif
 
 // kate: indent-mode cstyle; replace-tabs on;
