@@ -279,7 +279,7 @@ void FcitxInstanceResolveAddonDependencyInternal(FcitxInstance* instance, FcitxA
 FCITX_EXPORT_API
 boolean FcitxAddonsIsAddonAvailable(UT_array* addons, const char* name)
 {
-    return !!(FcitxAddonsGetAddonByNameInternal(addons, name, false));
+    return FcitxAddonsGetAddonByNameInternal(addons, name, false) != NULL;
 }
 
 FcitxAddon* FcitxAddonsGetAddonByNameInternal(UT_array* addons, const char* name, boolean checkDisabled)
