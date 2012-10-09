@@ -143,7 +143,7 @@ ClipboardCommitCallback(void *arg, FcitxCandidateWord *cand_word)
     FcitxInstance *instance = clipboard->owner;
     FcitxInstanceCommitString(instance, FcitxInstanceGetCurrentIC(instance),
                               cand_word->priv);
-    return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_CANDIDATE_WORDS;
+    return IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
 }
 
 static boolean
