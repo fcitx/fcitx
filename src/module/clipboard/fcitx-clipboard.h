@@ -40,18 +40,18 @@ static inline const char*
 FcitxClipboardGetPrimarySelection(FcitxInstance *instance,
                                   unsigned int *arg0)
 {
-    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
-        FcitxClipboardGetAddon(instance), 0,
-        (void*)(intptr_t)arg0);
+    MODULE_ARGS(args, (void*)(intptr_t)arg0);
+    return (const char*)(intptr_t)FcitxModuleInvokeFunction(
+        FcitxClipboardGetAddon(instance), 0, args);
 }
 
 static inline const char*
 FcitxClipboardGetClipboardHistory(FcitxInstance *instance,
                                   unsigned int arg0, unsigned int *arg1)
 {
-    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
-        FcitxClipboardGetAddon(instance), 1,
-        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+    return (const char*)(intptr_t)FcitxModuleInvokeFunction(
+        FcitxClipboardGetAddon(instance), 1, args);
 }
 
 #endif
