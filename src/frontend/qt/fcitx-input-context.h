@@ -107,6 +107,7 @@ private:
     static QByteArray localMachineId();
     static QString socketFile();
     static QString address();
+    QWidget* validFocusWidget();
     void cleanUp();
     void createConnection();
     void createInputContext();

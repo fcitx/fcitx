@@ -363,7 +363,7 @@ void QFcitxInputContext::reset()
 
 void QFcitxInputContext::update()
 {
-    QWidget* widget = focusWidget();
+    QWidget* widget = validFocusWidget();
     if (widget == NULL || !isValid()) {
         return;
     }
@@ -411,7 +411,7 @@ void QFcitxInputContext::update()
 
 void QFcitxInputContext::updateCursor()
 {
-    QWidget* widget = focusWidget();
+    QWidget* widget = validFocusWidget();
     if (widget == NULL || !isValid()) {
         return;
     }
@@ -435,7 +435,7 @@ bool QFcitxInputContext::isComposing() const
 bool QFcitxInputContext::filterEvent(const QEvent* event)
 {
 #if not (defined(Q_WS_X11) && defined(ENABLE_X11))
-    QWidget* keywidget = focusWidget();
+    QWidget* keywidget = validFocusWidget();
 
     if (key_filtered)
         return false;
@@ -539,7 +539,7 @@ QKeyEvent* QFcitxInputContext::createKeyEvent(uint keyval, uint state, int type)
 
 void QFcitxInputContext::setFocusWidget(QWidget* w)
 {
-    QWidget *oldFocus = focusWidget();
+    QWidget *oldFocus = validFocusWidget();
 
     if (oldFocus == w)
         return;
@@ -560,7 +560,7 @@ void QFcitxInputContext::setFocusWidget(QWidget* w)
     } else {
         m_icproxy->FocusOut();
     }
-    update();
+    QTimer::singleShot(0, this, SLOT(updateIM()));
 }
 
 void QFcitxInputContext::widgetDestroyed(QWidget* w)
@@ -568,7 +568,7 @@ void QFcitxInputContext::widgetDestroyed(QWidget* w)
     if (isValid()) {
         if (w == focusWidget())
             m_icproxy->FocusOut();
-        update();
+        QTimer::singleShot(0, this, SLOT(updateIM()));
     }
 
     QInputContext::widgetDestroyed(w);
@@ -796,8 +796,8 @@ void QFcitxInputContext::updateFormattedPreedit(const FcitxFormattedPreeditList&
         if (preedit.format() & MSG_HIGHLIGHT) {
             QBrush brush;
             QPalette palette;
-            if (focusWidget())
-                palette = focusWidget()->palette();
+            if (validFocusWidget())
+                palette = validFocusWidget()->palette();
             else
                 palette = QApplication::palette();
             format.setBackground(QBrush(QColor(palette.color(QPalette::Active, QPalette::Highlight))));
@@ -1085,6 +1085,13 @@ QFcitxInputContext::checkCompactTable(const FcitxComposeTableCompact *table)
         return true;
     }
     return false;
+}
+
+QWidget* QFcitxInputContext::validFocusWidget() {
+    QWidget* widget = focusWidget();
+    if (widget && !widget->testAttribute(Qt::WA_WState_Created))
+        widget = NULL;
+    return widget;
 }
 
 void QFcitxInputContext::updateIM()
