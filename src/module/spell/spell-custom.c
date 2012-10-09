@@ -148,14 +148,16 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
             }
         }
         dict = fcitx_utf8_get_char(dict, &next_dict_c);
-        if (cur_word_c == cur_dict_c || !custom_dict->word_comp_func ||
-            custom_dict->word_comp_func(cur_word_c, cur_dict_c)) {
+        if (cur_word_c == cur_dict_c ||
+            (custom_dict->word_comp_func &&
+             custom_dict->word_comp_func(cur_word_c, cur_dict_c))) {
             cur_word_c = next_word_c;
             cur_dict_c = next_dict_c;
             continue;
         }
-        if (next_word_c == cur_dict_c || !custom_dict->word_comp_func ||
-            custom_dict->word_comp_func(next_word_c, cur_dict_c)) {
+        if (next_word_c == cur_dict_c ||
+            (custom_dict->word_comp_func && next_word_c &&
+             custom_dict->word_comp_func(next_word_c, cur_dict_c))) {
             word = fcitx_utf8_get_char(word, &cur_word_c);
             cur_dict_c = next_dict_c;
             remove++;
@@ -163,8 +165,9 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
         }
 
         /* check insert error */
-        if (cur_word_c == next_dict_c || !custom_dict->word_comp_func ||
-            custom_dict->word_comp_func(cur_word_c, next_dict_c)) {
+        if (cur_word_c == next_dict_c ||
+            (custom_dict->word_comp_func && next_dict_c &&
+             custom_dict->word_comp_func(cur_word_c, next_dict_c))) {
             cur_word_c = next_word_c;
             dict = fcitx_utf8_get_char(dict, &cur_dict_c);
             insert++;
@@ -172,10 +175,16 @@ SpellCustomGetDistance(SpellCustomDict *custom_dict, const char *word,
         }
 
         /* check replace error */
-        if (next_word_c == next_dict_c || !custom_dict->word_comp_func ||
-            custom_dict->word_comp_func(next_word_c, next_dict_c)) {
-            dict = fcitx_utf8_get_char(dict, &cur_dict_c);
-            word = fcitx_utf8_get_char(word, &cur_word_c);
+        if (next_word_c == next_dict_c ||
+            (custom_dict->word_comp_func && next_word_c && next_dict_c &&
+             custom_dict->word_comp_func(next_word_c, next_dict_c))) {
+            if (next_word_c) {
+                dict = fcitx_utf8_get_char(dict, &cur_dict_c);
+                word = fcitx_utf8_get_char(word, &cur_word_c);
+            } else {
+                cur_word_c = 0;
+                cur_dict_c = 0;
+            }
             replace++;
             continue;
         }
