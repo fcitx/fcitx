@@ -124,6 +124,17 @@ FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, co
 }
 
 FCITX_EXPORT_API
+void FcitxXDGMakeDirUser(const char* prefix)
+{
+    size_t len;
+    char ** path = FcitxXDGGetPathUserWithPrefix(&len, prefix);
+
+    make_path(path[0]);
+
+    FcitxXDGFreePath(path);
+}
+
+FCITX_EXPORT_API
 FILE *FcitxXDGGetFile(const char *fileName, char **path, const char *mode,
                       size_t len, char **retFile)
 {

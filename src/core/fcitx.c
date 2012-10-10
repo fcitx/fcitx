@@ -53,6 +53,7 @@
 
 FcitxInstance* instance = NULL;
 int selfpipe[2];
+char* crashlog = NULL;
 
 static void WaitForEnd(sem_t *sem, int count)
 {
@@ -77,6 +78,9 @@ int main(int argc, char* argv[])
     fcntl(selfpipe[0], F_SETFL, O_NONBLOCK);
     fcntl(selfpipe[1], F_SETFL, O_NONBLOCK);
 
+    /* prepare filename first */
+    FcitxXDGMakeDirUser("log");
+    FcitxXDGGetFileUserWithPrefix("log", "crash.log", NULL, &crashlog);
     SetMyExceptionHandler();
 
     int instanceCount = 1;
@@ -87,6 +91,8 @@ int main(int argc, char* argv[])
     instance = FcitxInstanceCreateWithFD(&sem, argc, argv, selfpipe[0]);
     WaitForEnd(&sem, instanceCount);
 
+    free(crashlog);
+    crashlog = NULL;
     if (instance->loadingFatalError) {
         return 1;
     }

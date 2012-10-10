@@ -24,9 +24,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
+#include <time.h>
 
 #if defined(ENABLE_BACKTRACE)
 #include <execinfo.h>
+#include <fcntl.h>
 #endif
 
 #include "fcitx/instance-internal.h"
@@ -43,6 +45,14 @@
 
 extern FcitxInstance* instance;
 extern int selfpipe[2];
+extern char* crashlog;
+
+#define MINIMAL_BUFFER_SIZE 256
+
+typedef struct _MinimalBuffer {
+    char buffer[MINIMAL_BUFFER_SIZE];
+    int offset;
+} MinimalBuffer;
 
 void SetMyExceptionHandler(void)
 {
@@ -60,49 +70,97 @@ void SetMyExceptionHandler(void)
     }
 }
 
+inline void BufferReset(MinimalBuffer* buffer) {
+    buffer->offset = 0;
+}
+
+inline void BufferAppendUInt64(MinimalBuffer* buffer, uint64_t number, int radix) {
+    int i = 0;
+    while (buffer->offset + i < MINIMAL_BUFFER_SIZE) {
+        const int tmp = number % radix;
+        number /= radix;
+        buffer->buffer[buffer->offset + i] = (tmp < 10 ? '0' + tmp : 'a' + tmp - 10);
+        ++i;
+        if (number == 0) {
+            break;
+        }
+    }
+
+    if (i > 1) {
+        // reverse
+        int j = 0;
+        char* cursor = buffer->buffer + buffer->offset;
+        for (j = 0; j < i / 2; j ++) {
+            char temp = cursor[j];
+            cursor[j] = cursor[i - j - 1];
+            cursor[i - j - 1] = temp;
+        }
+    }
+    buffer->offset += i;
+
+}
+
 void OnException(int signo)
 {
     if (signo == SIGCHLD)
         return;
 
-    FcitxLog(INFO, "FCITX -- Get Signal No.: %d", signo);
+
+#define WRITE_STRING_LEN(STR, LEN) \
+    do { \
+        write(STDERR_FILENO, (STR), (LEN)); \
+        if (fd) \
+            write(fd, (STR), (LEN)); \
+    } while(0)
+
+#define WRITE_STRING(STR) \
+    WRITE_STRING_LEN(STR, (sizeof(STR) - sizeof(STR[0])))
+
+#define WRITE_BUFFER(BUFFER) \
+    WRITE_STRING_LEN((BUFFER).buffer, (BUFFER).offset)
+
+    MinimalBuffer buffer;
+
+    int fd = 0;
+
+    if (crashlog && (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL))
+        fd = open(crashlog, O_WRONLY | O_CREAT | O_TRUNC);
+
+    /* print signal info */
+    BufferReset(&buffer);
+    BufferAppendUInt64(&buffer, signo, 10);
+    WRITE_STRING("=========================\n");
+    WRITE_STRING("FCITX -- Get Signal No.: ");
+    WRITE_BUFFER(buffer);
+    WRITE_STRING("\n");
+
+    /* print time info */
+    time_t t = time(NULL);
+    BufferReset(&buffer);
+    BufferAppendUInt64(&buffer, t, 10);
+    WRITE_STRING("Date: try \"date -d @");
+    WRITE_BUFFER(buffer);
+    WRITE_STRING("\" if you are using GNU date ***\n");
+
+    /* print process info */
+    BufferReset(&buffer);
+    BufferAppendUInt64(&buffer, getpid(), 10);
+    WRITE_STRING("ProcessID: ");
+    WRITE_BUFFER(buffer);
+    WRITE_STRING("\n");
 
 #if defined(ENABLE_BACKTRACE)
-    void *array[20];
+#define BACKTRACE_SIZE 32
+    void *array[BACKTRACE_SIZE] = {NULL, };
 
-    size_t size;
-    char **strings = NULL;
-    size_t i;
-
-    size = backtrace(array, 20);
-    strings = backtrace_symbols(array, size);
-
-    if (strings) {
-        FILE *fp = NULL;
-
-        if (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL)
-            fp = FcitxXDGGetFileWithPrefix("log", "crash.log", "w", NULL);
-
-        printf("Obtained %zd stack frames.\n", size);
-
-        if (fp) {
-            fprintf(fp, "FCITX -- Get Signal No.: %d\n", signo);
-            fprintf(fp, "Obtained %zd stack frames.\n", size);
-        }
-
-        for (i = 0; i < size; i++) {
-            printf("%s\n", strings[i]);
-
-            if (fp)
-                fprintf(fp, "%s\n", strings[i]);
-        }
-
-        if (fp)
-            fclose(fp);
-
-        free(strings);
-    }
+    int size = backtrace(array, BACKTRACE_SIZE);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+    if (fd)
+        backtrace_symbols_fd(array, size, fd);
 #endif
+
+    if (fd)
+        close(fd);
 
     switch (signo) {
     case SIGKILL:

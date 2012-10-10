@@ -141,6 +141,18 @@ extern "C"
      *
      **/
     FILE *FcitxXDGGetFileUserWithPrefix(const char* prefix, const char *fileName, const char *mode, char **retFile);
+
+
+    /**
+     * make a dir with prefix under user, no return value indicates it's successful created or not.
+     *
+     * @param prefix
+     * @return void
+     *
+     * @since 4.2.7
+     **/
+    void FcitxXDGMakeDirUser(const char* prefix);
+
     /**
      * free xdg path return by FcitxXDGGetPath
      *
