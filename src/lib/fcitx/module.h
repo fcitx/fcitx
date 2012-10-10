@@ -93,7 +93,7 @@ extern "C" {
                                                 int func_id);
 
     void *FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
-                                   FcitxModuleFunctionArg args);
+                                   FcitxModuleFunctionArg *args);
     /**
      * invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
      *
@@ -180,7 +180,7 @@ extern "C" {
     {                                                                  \
         FcitxAddon *addon = Fcitx##prefix##GetAddon(instance);         \
         FcitxModuleFunction func = Fcitx##prefix##Find##suffix(addon); \
-        return FcitxModuleInvokeOnAddon(addon, func, args);            \
+        return FcitxModuleInvokeOnAddon(addon, func, &args);           \
     }
 
 #define MODULE_ARGS(var, ARGV...)                       \

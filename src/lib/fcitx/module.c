@@ -135,11 +135,11 @@ FcitxModuleFindFunction(FcitxAddon *addon, int func_id)
 FCITX_EXPORT_API
 void*
 FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
-                         FcitxModuleFunctionArg args)
+                         FcitxModuleFunctionArg *args)
 {
     if (!func)
         return NULL;
-    return func(addon->addonInstance, args);
+    return func(addon->addonInstance, *args);
 }
 
 FCITX_EXPORT_API
