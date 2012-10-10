@@ -390,25 +390,25 @@ void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
 void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    XEvent xEvent;
-    memset(&xEvent, 0, sizeof(xEvent));
+    Window win;
+    if (!(win = GetXimIC(ic)->focus_win))
+        win = GetXimIC(ic)->client_win;
+    XEvent xEvent = {
+        .xkey = {
+            .type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease,
+            .serial = xim->currentSerialNumberKey,
+            .send_event = False,
+            .display = xim->display,
+            .window = win,
+            .root = DefaultRootWindow(xim->display),
+            .subwindow = None,
+            .time = CurrentTime,
+            .state = state,
+            .keycode = XKeysymToKeycode(xim->display, sym),
+            .same_screen = False,
+        }
+    };
 
-    xEvent.xkey.type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease;
-    xEvent.xkey.display = xim->display;
-    xEvent.xkey.serial = xim->currentSerialNumberKey;
-    xEvent.xkey.send_event = False;
-    xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
-    xEvent.xkey.same_screen = False;
-    xEvent.xkey.subwindow = None;
-    xEvent.xkey.window = None;
-    xEvent.xkey.root = DefaultRootWindow(xim->display);
-    xEvent.xkey.state = state;
-    if (GetXimIC(ic)->focus_win)
-        xEvent.xkey.window = GetXimIC(ic)->focus_win;
-    else if (GetXimIC(ic)->client_win)
-        xEvent.xkey.window = GetXimIC(ic)->client_win;
-
-    xEvent.xkey.keycode = XKeysymToKeycode(xim->display, sym);
     XimForwardKeyInternal(xim, GetXimIC(ic), &xEvent);
 }
 
@@ -416,10 +416,8 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxXimIC* ximic = GetXimIC(ic);
-    Window window = None, dst;
-    if (ximic->focus_win)
-        window = ximic->focus_win;
-    else if (ximic->client_win)
+    Window window, dst;
+    if (!(window = ximic->focus_win))
         window = ximic->client_win;
 
     if (window != None) {
@@ -471,11 +469,9 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 pid_t XimGetPid(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    Window w = None;
+    Window w;
     FcitxXimIC* ximic = GetXimIC(ic);
-    if (ximic->focus_win)
-        w = ximic->focus_win;
-    else if (ximic->client_win)
+    if (!(w = ximic->focus_win))
         w = ximic->client_win;
 
     return XimFindApplicationPid(xim, w);
