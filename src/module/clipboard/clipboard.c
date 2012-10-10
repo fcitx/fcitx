@@ -182,6 +182,8 @@ ClipboardPreHook(void *arg, FcitxKeySym sym, unsigned int state,
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
         if (FcitxCandidateWordPageCount(cand_list) != 0)
             *ret_val = FcitxCandidateWordChooseByIndex(cand_list, 0);
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+        *ret_val = IRV_FLAG_RESET_INPUT | IRV_FLAG_UPDATE_INPUT_WINDOW;
     }
     return true;
 }
