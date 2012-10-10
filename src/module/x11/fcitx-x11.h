@@ -28,40 +28,41 @@
 
 DEFINE_GET_ADDON("fcitx-x11", X11)
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, GetDisplay, 0)
 static inline Display*
 FcitxX11GetDisplay(FcitxInstance *instance)
 {
     MODULE_ARGS(args);
-    return (Display*)(intptr_t)FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 0, args);
+    return (Display*)(intptr_t)FcitxX11InvokeGetDisplay(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, AddXEventHandler, 1)
 static inline void
 FcitxX11AddXEventHandler(FcitxInstance *instance,
                          FcitxX11XEventHandler arg0, void *arg1)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 1, args);
+    FcitxX11InvokeAddXEventHandler(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, RemoveXEventHandler, 2)
 static inline void
 FcitxX11RemoveXEventHandler(FcitxInstance *instance,
                             void *arg0)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 2, args);
+    FcitxX11InvokeRemoveXEventHandler(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, FindARGBVisual, 3)
 static inline Visual*
 FcitxX11FindARGBVisual(FcitxInstance *instance)
 {
     MODULE_ARGS(args);
-    return (Visual*)(intptr_t)FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 3, args);
+    return (Visual*)(intptr_t)FcitxX11InvokeFindARGBVisual(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, InitWindowAttribute, 4)
 static inline void
 FcitxX11InitWindowAttribute(FcitxInstance *instance,
                             Visual **arg0, Colormap *arg1,
@@ -71,75 +72,75 @@ FcitxX11InitWindowAttribute(FcitxInstance *instance,
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
                 (void*)(intptr_t)arg4);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 4, args);
+    FcitxX11InvokeInitWindowAttribute(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, SetWindowProp, 5)
 static inline void
 FcitxX11SetWindowProp(FcitxInstance *instance,
                       Window *arg0, FcitxXWindowType *arg1, char *arg2)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 5, args);
+    FcitxX11InvokeSetWindowProp(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, GetScreenSize, 6)
 static inline void
 FcitxX11GetScreenSize(FcitxInstance *instance,
                       int *arg0, int *arg1)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 6, args);
+    FcitxX11InvokeGetScreenSize(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, MouseClick, 7)
 static inline void
 FcitxX11MouseClick(FcitxInstance *instance,
                    Window *arg0, int *arg1, int *arg2, boolean *arg3)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2, (void*)(intptr_t)arg3);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 7, args);
+    FcitxX11InvokeMouseClick(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, AddCompositeHandler, 8)
 static inline void
 FcitxX11AddCompositeHandler(FcitxInstance *instance,
                             FcitxX11CompositeHandler arg0, void *arg1)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 8, args);
+    FcitxX11InvokeAddCompositeHandler(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, GetScreenGeometry, 9)
 static inline void
 FcitxX11GetScreenGeometry(FcitxInstance *instance,
                           int *arg0, int *arg1, FcitxRect *arg2)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 9, args);
+    FcitxX11InvokeGetScreenGeometry(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, ProcessRemainEvent, 10)
 static inline void
 FcitxX11ProcessRemainEvent(FcitxInstance *instance)
 {
     MODULE_ARGS(args);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 10, args);
+    FcitxX11InvokeProcessRemainEvent(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, GetDPI, 11)
 static inline void
 FcitxX11GetDPI(FcitxInstance *instance,
                int *arg0, int *arg1)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 11, args);
+    FcitxX11InvokeGetDPI(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, RegSelectNotify, 12)
 static inline unsigned int
 FcitxX11RegSelectNotify(FcitxInstance *instance,
                         const char *arg0, void *arg1,
@@ -149,28 +150,27 @@ FcitxX11RegSelectNotify(FcitxInstance *instance,
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
                 (void*)(intptr_t)arg4);
-    return (unsigned int)(intptr_t)FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 12, args);
+    return (unsigned int)(intptr_t)FcitxX11InvokeRegSelectNotify(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, RemoveSelectNotify, 13)
 static inline void
 FcitxX11RemoveSelectNotify(FcitxInstance *instance,
                            unsigned int arg0)
 {
     MODULE_ARGS(args, (void*)(intptr_t)arg0);
-    FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 13, args);
+    FcitxX11InvokeRemoveSelectNotify(instance, args);
 }
 
+DEFINE_GET_AND_INVOKE_FUNC(X11, DefaultEventWindow, 14)
 static inline Window
 FcitxX11DefaultEventWindow(FcitxInstance *instance)
 {
     MODULE_ARGS(args);
-    return (Window)(intptr_t)FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 14, args);
+    return (Window)(intptr_t)FcitxX11InvokeDefaultEventWindow(instance, args);
 }
 
-
+DEFINE_GET_AND_INVOKE_FUNC(X11, RequestConvertSelect, 15)
 static inline unsigned int
 FcitxX11RequestConvertSelect(FcitxInstance *instance,
                              const char *arg0, const char *arg1, void *arg2,
@@ -180,8 +180,7 @@ FcitxX11RequestConvertSelect(FcitxInstance *instance,
     MODULE_ARGS(args, (void*)(intptr_t)arg0, (void*)(intptr_t)arg1,
                 (void*)(intptr_t)arg2, (void*)(intptr_t)arg3,
                 (void*)(intptr_t)arg4, (void*)(intptr_t)arg5);
-    return (unsigned int)(intptr_t)FcitxModuleInvokeFunction(
-        FcitxX11GetAddon(instance), 15, args);
+    return (unsigned int)(intptr_t)FcitxX11InvokeRequestConvertSelect(instance, args);
 }
 
 #endif

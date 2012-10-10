@@ -24,19 +24,24 @@ Function18=
 Function19=
 
 [GetDisplay]
+Name=get-display
 Return=Display*
 
 [AddXEventHandler]
+Name=add-xevent-handler
 Arg0=FcitxX11XEventHandler
 Arg1=void*
 
 [RemoveXEventHandler]
+Name=remove-xevent-handler
 Arg0=void*
 
 [FindARGBVisual]
+Name=find-argb-visual
 Return=Visual*
 
 [InitWindowAttribute]
+Name=init-window-attribute
 Arg0=Viaual**
 Arg1=Colormap*
 Arg2=XSetWindowAttributes*
@@ -44,36 +49,44 @@ Arg3=unsigned long*
 Arg4=int*
 
 [SetWindowProp]
+Name=set-window-prop
 Arg0=Window*
 Arg1=FcitxXWindowType*
 Arg2=char*
 
 [GetScreenSize]
+Name=get-screen-size
 Arg0=int*
 Arg1=int*
 
 [MouseClick]
+Name=mouse-click
 Arg0=Window*
 Arg1=int*
 Arg2=int*
 Arg3=boolean*
 
 [AddCompositeHandler]
+Name=add-composite-handler
 Arg0=FcitxX11CompositeHandler
 Arg1=void*
 
 [GetScreenGeometry]
+Name=get-screen-geometry
 Arg0=int*
 Arg1=int*
 Arg2=FcitxRect*
 
 [ProcessRemainEvent]
+Name=process-remain-event
 
 [GetDPI]
+Name=get-dpi
 Arg0=int*
 Arg1=int*
 
 [RegSelectNotify]
+Name=reg-select-notify
 Return=unsigned int
 Arg0=const char*
 Arg1=void*
@@ -82,7 +95,9 @@ Arg3=void*
 Arg4=FcitxDestroyNotify
 
 [RemoveSelectNotify]
+Name=remove-select-notify
 Arg0=unsigned int
 
 [DefaultEventWindow]
+Name=default-event-window
 Return=Window

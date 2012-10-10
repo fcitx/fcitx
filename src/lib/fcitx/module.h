@@ -83,6 +83,18 @@ extern "C" {
     void FcitxModuleLoad(struct _FcitxInstance* instance);
 
     /**
+     * Find a exported function of a addon.
+     *
+     * @param addon addon
+     * @param functionId function index
+     * @return FcitxModuleFunction
+     **/
+    FcitxModuleFunction FcitxModuleFindFunction(FcitxAddon *addon,
+                                                int func_id);
+
+    void *FcitxModuleInvokeOnAddon(FcitxAddon *addon, FcitxModuleFunction func,
+                                   FcitxModuleFunctionArg args);
+    /**
      * invode inter module function wiht addon pointer, returns NULL when fails (the function itself can also return NULL)
      *
      * @param addon addon
@@ -134,21 +146,44 @@ extern "C" {
      **/
     void FcitxModuleAddFunction(FcitxAddon *addon, FcitxModuleFunction func);
 
- // Well won't work if there are multiple instances, but that will also break
- // lots of other things anyway.
- #define DEFINE_GET_ADDON(name, prefix)                          \
-     static inline FcitxAddon*                                   \
-     Fcitx##prefix##GetAddon(FcitxInstance *instance)            \
-     {                                                           \
-         static FcitxAddon *addon = NULL;                        \
-         if (!addon) {                                           \
-             addon = FcitxAddonsGetAddonByName(                  \
-                 FcitxInstanceGetAddons(instance), name);        \
-         }                                                       \
-         return addon;                                           \
-     }
+// Well won't work if there are multiple instances, but that will also break
+// lots of other things anyway.
+#define DEFINE_GET_ADDON(name, prefix)                           \
+    static inline FcitxAddon*                                    \
+    Fcitx##prefix##GetAddon(FcitxInstance *instance)             \
+    {                                                            \
+        static int _init = false;                                \
+        static FcitxAddon *addon = NULL;                         \
+        if (!_init) {                                            \
+            _init = true;                                        \
+            addon = FcitxAddonsGetAddonByName(                   \
+                FcitxInstanceGetAddons(instance), name);         \
+        }                                                        \
+        return addon;                                            \
+    }
 
-#define MODULE_ARGS(var, ARGV...)                                       \
+#define DEFINE_GET_AND_INVOKE_FUNC(prefix, suffix, id)                 \
+    static inline FcitxModuleFunction                                  \
+    Fcitx##prefix##Find##suffix(FcitxAddon *addon)                     \
+    {                                                                  \
+        static int _init = false;                                      \
+        static FcitxModuleFunction func = NULL;                        \
+        if (!_init) {                                                  \
+            _init = true;                                              \
+            func = FcitxModuleFindFunction(addon, id);                 \
+        }                                                              \
+        return func;                                                   \
+    }                                                                  \
+    static inline void*                                                \
+    Fcitx##prefix##Invoke##suffix(FcitxInstance *instance,             \
+                                  FcitxModuleFunctionArg args)         \
+    {                                                                  \
+        FcitxAddon *addon = Fcitx##prefix##GetAddon(instance);         \
+        FcitxModuleFunction func = Fcitx##prefix##Find##suffix(addon); \
+        return FcitxModuleInvokeOnAddon(addon, func, args);            \
+    }
+
+#define MODULE_ARGS(var, ARGV...)                       \
     FcitxModuleFunctionArg var = { .args = {ARGV} }
     /* void *__##var##_array[] = {ARGV};                                   \ */
     /* size_t __##var##_length = sizeof(__##var##_array) / sizeof(void*);  \ */
