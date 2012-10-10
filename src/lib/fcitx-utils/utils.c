@@ -566,24 +566,12 @@ void
 fcitx_utils_backtrace()
 {
 #if defined(ENABLE_BACKTRACE)
-    void *array[20];
+    void *array[32];
 
     size_t size;
-    char **strings = NULL;
-    size_t i;
 
-    size = backtrace(array, 20);
-    strings = backtrace_symbols(array, size);
-
-    if (strings) {
-        fprintf(stderr, "Obtained %zd stack frames.\n", size);
-
-        for (i = 0; i < size; i++) {
-            fprintf(stderr, "%s\n", strings[i]);
-        }
-
-        free(strings);
-    }
+    size = backtrace(array, 32);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
 #endif
 }
 

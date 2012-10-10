@@ -319,7 +319,9 @@ extern "C" {
     void fcitx_utils_start_process(char** args);
 
     /**
-     * output backtrace to stderr, need to enable backtrace
+     * output backtrace to stderr, need to enable backtrace, this function
+     * will be signal safe since 4.2.7, if you want to use it in debug,
+     * you'd better call fflush(stderr) before call to it.
      *
      * @return void
      *
