@@ -24,4 +24,5 @@ CONFIG_BINDING_REGISTER("Clipboard", "SaveHistoryToFile", save_history);
 CONFIG_BINDING_REGISTER("Clipboard", "HistoryLength", history_len);
 CONFIG_BINDING_REGISTER("Clipboard", "TriggerKey", trigger_key);
 CONFIG_BINDING_REGISTER("Clipboard", "UsePrimary", use_primary);
+CONFIG_BINDING_REGISTER("Clipboard", "ChooseModifier", choose_modifier);
 CONFIG_BINDING_END();

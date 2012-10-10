@@ -29,11 +29,19 @@
 
 #define CLIPBOARD_MAX_LEN 16
 
+typedef enum {
+    CBCM_NONE,
+    CBCM_ALT,
+    CBCM_CTRL,
+    CBCM_SHIFT,
+} ClipboardChooseModifier;
+
 typedef struct {
     FcitxGenericConfig gconfig;
     boolean save_history;
     int history_len;
     FcitxHotkey trigger_key[2];
+    ClipboardChooseModifier choose_modifier;
     boolean use_primary;
 } FcitxClipboardConfig;
 

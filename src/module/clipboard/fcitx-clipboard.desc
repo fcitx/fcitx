@@ -22,5 +22,15 @@ Description=Use Selection Text
 LongDescription=Include the text currently selected in clipboard history.
 Advance=True
 
+[Clipboard/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=None
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
 [DescriptionFile]
 LocaleDomain=fcitx

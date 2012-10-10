@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "fcitx/fcitx.h"
+#include <libintl.h>
 #include "config.h"
 #include "fcitx/ime.h"
 #include "fcitx/instance.h"
@@ -52,6 +53,15 @@ FCITX_DEFINE_PLUGIN(fcitx_clipboard, module, FcitxModule) = {
     .ProcessEvent = NULL,
     .ReloadConfig = ClipboardReloadConfig
 };
+
+static const unsigned int cmodifiers[] = {
+    FcitxKeyState_None,
+    FcitxKeyState_Alt,
+    FcitxKeyState_Ctrl,
+    FcitxKeyState_Shift
+};
+
+#define MODIFIERS_COUNT (sizeof(cmodifiers) / sizeof(unsigned int))
 
 static void*
 ClipboardGetPrimary(void *arg, FcitxModuleFunctionArg args)
@@ -274,28 +284,42 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
                   INPUT_RETURN_VALUE *ret_val)
 {
     FcitxClipboard *clipboard = arg;
-    if (!(clipboard->primary.len && clipboard->clp_hist_len))
+    FcitxClipboardConfig *config = &clipboard->config;
+    if (!((clipboard->primary.len && config->use_primary) ||
+          clipboard->clp_hist_len))
         return false;
-    if (!FcitxHotkeyIsHotKey(sym, state, clipboard->config.trigger_key))
+    if (!FcitxHotkeyIsHotKey(sym, state, config->trigger_key))
         return false;
     clipboard->active = true;
     FcitxInstance *instance = clipboard->owner;
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordList *cand_list = FcitxInputStateGetCandidateList(input);
+    FcitxGlobalConfig *gconfig = FcitxInstanceGetGlobalConfig(instance);
     FcitxCandidateWord cand_word = {
         .callback = ClipboardCommitCallback,
         .wordType = MSG_OTHER,
         .owner = clipboard
     };
-    FcitxCandidateWordReset(cand_list);
+    FcitxInstanceCleanInputWindow(instance);
+    FcitxCandidateWordSetPageSize(cand_list, gconfig->iMaxCandWord);
+    FcitxCandidateWordSetChooseAndModifier(
+        cand_list, DIGIT_STR_CHOOSE, cmodifiers[config->choose_modifier]);
+    char *preedit_str = NULL;
     if (clipboard->clp_hist_len) {
+        preedit_str = clipboard->clp_hist_lst[0].str;
         ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
-    if (clipboard->primary.len && clipboard->config.use_primary) {
+    if (clipboard->primary.len && config->use_primary) {
+        if (!preedit_str)
+            preedit_str = clipboard->primary.str;
         ClipboardSetCandWord(&cand_word, &clipboard->primary);
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
+    FcitxMessages *msg;
+    msg = FcitxInputStateGetClientPreedit(input);
+    FcitxMessagesSetMessageCount(msg, 0);
+    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT, _("[paste]"));
     int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
         ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst + i);
@@ -367,6 +391,9 @@ ApplyClipboardConfig(FcitxClipboard *clipboard)
     while (clipboard->clp_hist_len > config->history_len) {
         char *str = clipboard->clp_hist_lst[--clipboard->clp_hist_len].str;
         fcitx_utils_free(str);
+    }
+    if (config->choose_modifier >= MODIFIERS_COUNT) {
+        config->choose_modifier = MODIFIERS_COUNT - 1;
     }
     ClipboardWriteHistory(clipboard);
 }
