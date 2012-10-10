@@ -130,7 +130,7 @@ void OnException(int signo)
     BufferReset(&buffer);
     BufferAppendUInt64(&buffer, signo, 10);
     WRITE_STRING("=========================\n");
-    WRITE_STRING("FCITX -- Get Signal No.: ");
+    WRITE_STRING("FCITX " VERSION " -- Get Signal No.: ");
     WRITE_BUFFER(buffer);
     WRITE_STRING("\n");
 
