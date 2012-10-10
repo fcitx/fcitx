@@ -394,6 +394,7 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     XEvent xEvent;
+    memset(&xEvent, 0, sizeof(xEvent));
 
     xEvent.xkey.type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease;
     xEvent.xkey.display = xim->display;
