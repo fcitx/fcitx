@@ -867,24 +867,17 @@ FcitxConfigFile* FcitxConfigParseIni(char* filename, FcitxConfigFile* reuse)
 }
 
 FCITX_EXPORT_API
-FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile* reuse)
+FcitxConfigFile* FcitxConfigParseIniFp(FILE *fp, FcitxConfigFile *cfile)
 {
     char *line = NULL, *buf = NULL;
     size_t len = 0;
     int lineLen = 0;
-    FcitxConfigFile* cfile;
 
-    if (!fp) {
-        if (reuse)
-            return reuse;
-        else
-            return NULL;
-    }
+    if (!fp)
+        return cfile;
 
-    if (reuse)
-        cfile = reuse;
-    else
-        cfile = fcitx_utils_malloc0(sizeof(FcitxConfigFile));
+    if (!cfile)
+        cfile = fcitx_utils_new(FcitxConfigFile);
 
     FcitxConfigGroup* curGroup = NULL;
 
