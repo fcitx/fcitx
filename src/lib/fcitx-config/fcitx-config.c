@@ -673,14 +673,8 @@ FcitxConfigSyncResult FcitxConfigOptionChar(FcitxConfigOption *option, FcitxConf
         return SyncNoBinding;
 
     switch (sync) {
-
     case Raw2Value:
-
-        if (strlen(option->rawValue) == 0)
-            *option->value.chr = '\0';
-        else
-            *option->value.chr = option->rawValue[0];
-
+        *option->value.chr = *option->rawValue;
         return SyncSuccess;
 
     case Value2Raw:
