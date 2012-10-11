@@ -120,6 +120,8 @@ static void
 ClipboardInitReadHistory(FcitxClipboard *clipboard)
 {
     FILE *fp;
+    if (!clipboard->config.save_history)
+        return;
     fp = FcitxXDGGetFileUserWithPrefix("clipboard", "history.dat", "r", NULL);
     if (!fp)
         return;
