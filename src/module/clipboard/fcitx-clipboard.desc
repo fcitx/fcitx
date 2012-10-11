@@ -12,7 +12,7 @@ Description=Length of Clipboard History to Save
 
 [Clipboard/TriggerKey]
 Type=Hotkey
-DefaultValue=
+DefaultValue=CTRL_;
 Description=Trigger Key for Clipboard History List
 
 [Clipboard/UsePrimary]

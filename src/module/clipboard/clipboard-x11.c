@@ -30,7 +30,7 @@ _X11ClipboardPrimaryConvertCb(
     size_t nitems, const void *buff, void *data)
 {
     FcitxClipboard *clipboard = owner;
-    if (!(nitems && buff && format == 8))
+    if (format != 8)
         return;
     ClipboardSetPrimary(clipboard, nitems, buff);
 }
@@ -51,7 +51,7 @@ _X11ClipboardClipboardConvertCb(
     size_t nitems, const void *buff, void *data)
 {
     FcitxClipboard *clipboard = owner;
-    if (!(nitems && buff && format == 8))
+    if (format != 8)
         return;
     ClipboardPushClipboard(clipboard, nitems, buff);
 }

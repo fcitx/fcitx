@@ -97,19 +97,22 @@ ClipboardWriteHistory(FcitxClipboard *clipboard)
     fp = FcitxXDGGetFileUserWithPrefix("clipboard", "history.dat", "w", NULL);
     if (!fp)
         return;
+    if (!clipboard->config.save_history)
+        goto out;
     fcitx_utils_write_uint32(fp, clipboard->clp_hist_len);
     fcitx_utils_write_uint32(fp, clipboard->primary.len);
     int i;
     for (i = 0;i < clipboard->clp_hist_len;i++) {
         fcitx_utils_write_uint32(fp, clipboard->clp_hist_lst[i].len);
     }
-    if (clipboard->primary.str)
+    if (clipboard->primary.len)
         fwrite(clipboard->primary.str, 1, clipboard->primary.len, fp);
     for (i = 0;i < clipboard->clp_hist_len;i++) {
-        if (clipboard->clp_hist_lst[i].str)
+        if (clipboard->clp_hist_lst[i].len)
             fwrite(clipboard->clp_hist_lst[i].str, 1,
                    clipboard->clp_hist_lst[i].len, fp);
     }
+out:
     fclose(fp);
 }
 
@@ -121,7 +124,8 @@ ClipboardInitReadHistory(FcitxClipboard *clipboard)
     if (!fp)
         return;
     uint32_t len;
-    fcitx_utils_read_uint32(fp, &len);
+    if (!fcitx_utils_read_uint32(fp, &len))
+        goto out;
     fcitx_utils_read_uint32(fp, &clipboard->primary.len);
     int i;
     if (len > clipboard->config.history_len) {
@@ -129,20 +133,24 @@ ClipboardInitReadHistory(FcitxClipboard *clipboard)
     } else {
         clipboard->clp_hist_len = len;
     }
+    ClipboardSelectionStr *clp_hist_lst = clipboard->clp_hist_lst;
     for (i = 0;i < clipboard->clp_hist_len;i++) {
-        fcitx_utils_read_uint32(fp, &clipboard->clp_hist_lst[i].len);
+        fcitx_utils_read_uint32(fp, &clp_hist_lst[i].len);
     }
-    fseek(fp, (len + 2) * sizeof(uint32_t), SEEK_SET);
+    if (fseek(fp, (len + 2) * sizeof(uint32_t), SEEK_SET) < 0) {
+        clipboard->clp_hist_len = 0;
+        clipboard->primary.len = 0;
+        goto out;
+    }
     clipboard->primary.str = malloc(clipboard->primary.len + 1);
     fread(clipboard->primary.str, 1, clipboard->primary.len, fp);
     clipboard->primary.str[clipboard->primary.len] = '\0';
     for (i = 0;i < clipboard->clp_hist_len;i++) {
-        clipboard->clp_hist_lst[i].str = malloc(
-            clipboard->clp_hist_lst[i].len + 1);
-        fread(clipboard->clp_hist_lst[i].str, 1,
-              clipboard->clp_hist_lst[i].len, fp);
-        clipboard->clp_hist_lst[i].str[clipboard->clp_hist_lst[i].len] = '\0';
+        clp_hist_lst[i].str = malloc(clp_hist_lst[i].len + 1);
+        fread(clp_hist_lst[i].str, 1, clp_hist_lst[i].len, fp);
+        clp_hist_lst[i].str[clp_hist_lst[i].len] = '\0';
     }
+out:
     fclose(fp);
 }
 
@@ -319,7 +327,12 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     FcitxMessages *msg;
     msg = FcitxInputStateGetClientPreedit(input);
     FcitxMessagesSetMessageCount(msg, 0);
-    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT, _("[paste]"));
+    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
+                                         _("[select to paste]"));
+    msg = FcitxInputStateGetPreedit(input);
+    FcitxMessagesSetMessageCount(msg, 0);
+    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
+                                         _("[select to paste]"));
     int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
         ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst + i);
@@ -409,7 +422,7 @@ ClipboardReloadConfig(void* arg)
 void
 ClipboardSetPrimary(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
-    if (!(len && str))
+    if (!(len && str && *str))
         return;
     clipboard->primary.str = realloc(clipboard->primary.str, len + 1);
     memcpy(clipboard->primary.str, str, len);
@@ -420,7 +433,7 @@ ClipboardSetPrimary(FcitxClipboard *clipboard, uint32_t len, const char *str)
 void
 ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
-    if (!(len && str))
+    if (!(len && str && *str))
         return;
     if (clipboard->clp_hist_len &&
         len == clipboard->clp_hist_lst->len &&
