@@ -124,7 +124,7 @@ void OnException(int signo)
     int fd = 0;
 
     if (crashlog && (signo == SIGSEGV || signo == SIGABRT || signo == SIGKILL))
-        fd = open(crashlog, O_WRONLY | O_CREAT | O_TRUNC);
+        fd = open(crashlog, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
     /* print signal info */
     BufferReset(&buffer);
