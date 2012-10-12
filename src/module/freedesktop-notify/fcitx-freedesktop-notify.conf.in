@@ -1,0 +1,10 @@
+[Addon]
+Name=fcitx-freedesktop-notify
+_GeneralName=Freedesktop.org Notification Support
+_Comment=Provides Freedesktop.org Notification Support (Used by other Addon)
+Category=Module
+Enabled=True
+Library=fcitx-freedesktop-notify.so
+Type=SharedLibrary
+Advance=True
+Dependency=fcitx-dbus

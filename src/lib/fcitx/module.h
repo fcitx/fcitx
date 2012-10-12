@@ -115,7 +115,7 @@ extern "C" {
 #define InvokeVaArgs(INST, MODULE, FUNC, ARGV...)                       \
     ((MODULE##_##FUNC##_RETURNTYPE)FcitxModuleInvokeFunctionByName(     \
         INST, MODULE##_NAME, MODULE##_##FUNC,                           \
-        (FcitxModuleFunctionArg){ .args = {ARGV} }))
+        (FcitxModuleFunctionArg){ {ARGV} }))
 /**
  * NOTE: (int)(sizeof((void*[]){ARGV}) / sizeof(void*)) can be used to get
  * the number of arguements. (can be useful for removing the argument number
