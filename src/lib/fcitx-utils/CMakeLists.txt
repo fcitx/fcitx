@@ -7,6 +7,7 @@ set(FCITX_UTILS_SOURCES
     memory.c
     handler-table.c
     objpool.c
+    desktop-parse.c
 )
 
 set(FCITX_UTILS_HEADERS
@@ -21,6 +22,7 @@ set(FCITX_UTILS_HEADERS
     bitset.h
     handler-table.h
     objpool.h
+    desktop-parse.h
 )
 
 if (LIBKVM_FOUND)

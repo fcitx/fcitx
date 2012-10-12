@@ -921,7 +921,7 @@ void LoadSkinDirectory(FcitxClassicUI* classicui)
 
 void InitSkinMenu(FcitxClassicUI* classicui)
 {
-    utarray_init(&classicui->skinBuf, &ut_str_icd);
+    utarray_init(&classicui->skinBuf, fcitx_str_icd);
     FcitxMenuInit(&classicui->skinMenu);
     classicui->skinMenu.candStatusBind = NULL;
     classicui->skinMenu.name =  strdup(_("Skin"));
