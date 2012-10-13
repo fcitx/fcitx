@@ -54,9 +54,9 @@ struct _FcitxDesktopGroup {
     FcitxDesktopGroup *prev;
     FcitxDesktopGroup *next;
     UT_hash_handle hh;
-    char *name;
+    char *name; /* DO NOT touch */
     UT_array comments; /* comment before the group name */
-    uint32_t flags;
+    uint32_t flags; /* private */
     void *padding[3];
 };
 
@@ -65,10 +65,10 @@ struct _FcitxDesktopEntry {
     FcitxDesktopEntry *prev;
     FcitxDesktopEntry *next;
     UT_hash_handle hh;
-    char *name;
+    char *name; /* DO NOT touch */
     char *value;
     UT_array comments; /* comment before the entry */
-    uint32_t flags;
+    uint32_t flags; /* private */
     void *padding[3];
 };
 
@@ -81,6 +81,22 @@ extern "C" {
     void fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp);
     void fcitx_desktop_file_done(FcitxDesktopFile *file);
     void fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp);
+    FcitxDesktopGroup *fcitx_desktop_file_find_group_with_len(
+        FcitxDesktopFile *file, const char *name, size_t name_len);
+    static inline FcitxDesktopGroup*
+    fcitx_desktop_file_find_group(FcitxDesktopFile *file, const char *name)
+    {
+        return fcitx_desktop_file_find_group_with_len(file, name,
+                                                      strlen(name));
+    }
+    FcitxDesktopEntry *fcitx_desktop_group_find_entry_with_len(
+        FcitxDesktopGroup *group, const char *name, size_t name_len);
+    static inline FcitxDesktopEntry*
+    fcitx_desktop_group_find_entry(FcitxDesktopGroup *group, const char *name)
+    {
+        return fcitx_desktop_group_find_entry_with_len(group, name,
+                                                       strlen(name));
+    }
 
 #ifdef __cplusplus
 }

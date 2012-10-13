@@ -26,8 +26,7 @@
 #include "log.h"
 #include "desktop-parse.h"
 
-#define case_blank case ' ': case '\t': case '\b': case '\n': case '\f': \
-case '\v': case '\r'
+#define blank_chars " \t\b\n\f\v\r"
 
 enum {
     FX_DESKTOP_GROUP_UPDATED = 1 << 0,
@@ -94,15 +93,7 @@ fcitx_desktop_file_init(FcitxDesktopFile *file, FcitxDesktopVTable *vtable)
 static char*
 _find_none_blank(char *str)
 {
-    for (;*str;str++) {
-        switch (*str) {
-        case_blank:
-            continue;
-        default:
-            return str;
-        }
-    }
-    return str;
+    return str + strspn(str, blank_chars);
 }
 
 static void
@@ -136,33 +127,30 @@ fcitx_desktop_file_reset(FcitxDesktopFile *file)
 static size_t
 fcitx_desktop_group_name_len(const char *str)
 {
-    const char *end;
-    for (end = str;*end;end++) {
-        switch (*end) {
-        case '[':
-            return 0;
-        case ']':
-            return end - str;
-        default:
-            continue;
-        }
-    }
+    size_t res = strcspn(str, "[]");
+    if (str[res] == ']')
+        return res;
     return 0;
 }
 
 static size_t
 fcitx_desktop_entry_key_len(const char *str)
 {
-    const char *end;
-    for (end = str;*end;end++) {
-        switch (*end) {
-        case '=':
-            return end - str;
-        default:
+    size_t res = strcspn(str, "=");
+    if (str[res] != '=')
+        return 0;
+    for (;res > 0;res--) {
+        switch (str[res - 1]) {
+        case ' ':
+        case '\r':
+        case '\t':
+        case '\f':
+        case '\v':
             continue;
         }
+        break;
     }
-    return 0;
+    return res;
 }
 
 static void
@@ -239,6 +227,50 @@ fcitx_desktop_file_clean(FcitxDesktopFile *file)
     }
 }
 
+FCITX_EXPORT_API FcitxDesktopGroup*
+fcitx_desktop_file_find_group_with_len(FcitxDesktopFile *file,
+                                       const char *name, size_t name_len)
+{
+    FcitxDesktopGroup *group = NULL;
+    HASH_FIND(hh, file->groups, name, name_len, group);
+    return group;
+}
+
+static FcitxDesktopGroup*
+fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
+                                  const char *name, size_t name_len)
+{
+    FcitxDesktopGroup *new_group;
+    new_group = fcitx_desktop_parse_new_group(file->vtable);
+    new_group->name = malloc(name_len + 1);
+    memcpy(new_group->name, name, name_len);
+    new_group->name[name_len] = '\0';
+    HASH_ADD_KEYPTR(hh, file->groups, new_group->name, name_len, new_group);
+    return new_group;
+}
+
+FCITX_EXPORT_API FcitxDesktopEntry*
+fcitx_desktop_group_find_entry_with_len(FcitxDesktopGroup *group,
+                                        const char *name, size_t name_len)
+{
+    FcitxDesktopEntry *entry = NULL;
+    HASH_FIND(hh, group->entries, name, name_len, entry);
+    return entry;
+}
+
+static FcitxDesktopEntry*
+fcitx_desktop_group_hash_new_entry(FcitxDesktopGroup *group,
+                                   const char *name, size_t name_len)
+{
+    FcitxDesktopEntry *new_entry;
+    new_entry = fcitx_desktop_parse_new_entry(group->vtable);
+    new_entry->name = malloc(name_len + 1);
+    memcpy(new_entry->name, name, name_len);
+    new_entry->name[name_len] = '\0';
+    HASH_ADD_KEYPTR(hh, group->entries, new_entry->name, name_len, new_entry);
+    return new_entry;
+}
+
 FCITX_EXPORT_API void
 fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
 {
@@ -253,11 +285,8 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
     FcitxDesktopGroup *cur_group = NULL;
 
     while (getline(&buff, &buff_len, fp) != -1) {
-        size_t line_len = strlen(buff);
-        if (buff[line_len - 1] == '\n') {
-            line_len--;
-            buff[line_len] = '\0';
-        }
+        size_t line_len = strcspn(buff, "\n");
+        buff[line_len] = '\0';
         lineno++;
         char *line = _find_none_blank(buff);
         switch (*line) {
@@ -274,16 +303,12 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
                          lineno, line - 1);
                 continue;
             }
-            FcitxDesktopGroup *new_group = NULL;
-            HASH_FIND(hh, file->groups, line, name_len, new_group);
-            if (!new_group) {
-                new_group = fcitx_desktop_parse_new_group(file->vtable);
-                new_group->name = malloc(name_len + 1);
-                memcpy(new_group->name, line, name_len);
-                new_group->name[name_len] = '\0';
-                HASH_ADD_KEYPTR(hh, file->groups, new_group->name,
-                                name_len, new_group);
-            }
+            FcitxDesktopGroup *new_group;
+            new_group = fcitx_desktop_file_find_group_with_len(file, line,
+                                                               name_len);
+            if (!new_group)
+                new_group = fcitx_desktop_file_hash_new_group(file, line,
+                                                              name_len);
             new_group->flags |= FX_DESKTOP_GROUP_UPDATED;
             new_group->first = NULL;
             new_group->last = NULL;
@@ -312,16 +337,12 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
             FcitxLog(ERROR, _("Invalid entry line @ line %d %s"), lineno, line);
             continue;
         }
-        FcitxDesktopEntry *new_entry = NULL;
-        HASH_FIND(hh, cur_group->entries, line, key_len, new_entry);
-        if (!new_entry) {
-            new_entry = fcitx_desktop_parse_new_entry(file->vtable);
-            new_entry->name = malloc(key_len + 1);
-            memcpy(new_entry->name, line, key_len);
-            new_entry->name[key_len] = '\0';
-            HASH_ADD_KEYPTR(hh, cur_group->entries, new_entry->name,
-                            key_len, new_entry);
-        }
+        FcitxDesktopEntry *new_entry;
+        new_entry = fcitx_desktop_group_find_entry_with_len(cur_group,
+                                                            line, key_len);
+        if (!new_entry)
+            new_entry = fcitx_desktop_group_hash_new_entry(cur_group,
+                                                           line, key_len);
         new_entry->flags |= FX_DESKTOP_ENTRY_UPDATED;
         if (!cur_group->first)
             cur_group->first = new_entry;
@@ -348,19 +369,36 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
     fcitx_desktop_file_clean(file);
 }
 
-static inline void
+static inline size_t
+_write_len(FILE *fp, char *str, size_t len)
+{
+    if (!(str && len))
+        return 0;
+    return fwrite(str, len, 1, fp);
+}
+
+static inline size_t
 _write_str(FILE *fp, char *str)
 {
-    if (str) {
-        fwrite(str, strlen(str), 1, fp);
-    }
+    return _write_len(fp, str, strlen(str));
+}
+
+static size_t
+_check_single_line(char *str)
+{
+    if (!str)
+        return 0;
+    size_t len = strcspn(str, "\n");
+    if (str[len])
+        FcitxLog(ERROR, "Not a single line, ignore.");
+    return len;
 }
 
 static void
 fcitx_desktop_write_comments(FILE *fp, UT_array *comments)
 {
     utarray_foreach(comment, comments, char*) {
-        size_t len = *comment ? strlen(*comment) : 0;
+        size_t len = _check_single_line(*comment);
         if (!len)
             continue;
         if (**comment == ' ') {
@@ -368,30 +406,70 @@ fcitx_desktop_write_comments(FILE *fp, UT_array *comments)
         } else {
             _write_str(fp, "# ");
         }
-        fwrite(*comment, len, 1, fp);
-        if ((*comment)[len - 1] != '\n') {
-            _write_str(fp, "\n");
-        }
+        _write_len(fp, *comment, len);
+        _write_str(fp, "\n");
     }
+}
+
+static size_t
+_check_entry_key(char *str)
+{
+    if (!str)
+        return 0;
+    size_t len = strcspn(str, "=\n");
+    if (str[len]) {
+        FcitxLog(ERROR, "Not a valid key, skip.");
+        return 0;
+    }
+    switch (str[len - 1]) {
+    case ' ':
+    case '\r':
+    case '\t':
+    case '\f':
+    case '\v':
+        FcitxLog(ERROR, "Not a valid key, skip.");
+        return 0;
+    }
+    return len;
 }
 
 static void
 fcitx_desktop_entry_write_fp(FcitxDesktopEntry *entry, FILE *fp)
 {
+    size_t key_len = _check_entry_key(entry->name);
+    if (!key_len)
+        return;
+    size_t value_len = _check_single_line(entry->value);
     fcitx_desktop_write_comments(fp, &entry->comments);
-    _write_str(fp, entry->name);
+    _write_len(fp, entry->name, key_len);
     _write_str(fp, "=");
-    _write_str(fp, entry->value);
+    _write_len(fp, entry->value, value_len);
     _write_str(fp, "\n");
+}
+
+static size_t
+_check_group_name(char *str)
+{
+    if (!str)
+        return 0;
+    size_t len = strcspn(str, "[]\n");
+    if (str[len]) {
+        FcitxLog(ERROR, "Not a valid group name, skip.");
+        return 0;
+    }
+    return len;
 }
 
 static void
 fcitx_desktop_group_write_fp(FcitxDesktopGroup *group, FILE *fp)
 {
     FcitxDesktopEntry *entry;
+    size_t name_len = _check_group_name(group->name);
+    if (!name_len)
+        return;
     fcitx_desktop_write_comments(fp, &group->comments);
     _write_str(fp, "[");
-    _write_str(fp, group->name);
+    _write_len(fp, group->name, name_len);
     _write_str(fp, "]\n");
     for (entry = group->first;entry;entry = entry->next) {
         fcitx_desktop_entry_write_fp(entry, fp);
