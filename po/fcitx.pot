@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-07 08:33-0400\n"
+"POT-Creation-Date: 2012-10-13 08:59-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
+msgid "Allow to Override System XKB Settings"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:9
+msgid "Ignore Input Method Layout Request"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:14
+msgid "xmodmap command"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
+msgid "Apply this custom xmodmap script after layout change"
+msgstr ""
 
 # unknown
 #: /home/saber/Develop/fcitx/src/module/unicode/fcitx-unicode.desc:3
@@ -30,14 +46,14 @@ msgid "Choose key modifier"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:12
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:26
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:14
 msgid "Do not show spell hint"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:22
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:36
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:23
 msgid "Maximum hint length"
 msgstr ""
 
@@ -57,36 +73,53 @@ msgstr ""
 msgid "Global Input Method SelectKey"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
-msgid "Treating abbreviated Pinyin as English"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:14
+msgid "Clear local Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
-msgid "Allow replacing the first candidate"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:19
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:64
+msgid "Switch to First Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:31
-msgid "Hotkey for Inputing Character From Phrase"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:24
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:69
+msgid "Switch to Second Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:36
-msgid "Hotkey for switching to Inputing Character From Phrase mode"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:29
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:74
+msgid "Switch to Third Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:4
-msgid "Allow to Override System XKB Settings"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:34
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:79
+msgid "Switch to Fourth Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:9
-msgid "Ignore Input Method Layout Request"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:39
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:84
+msgid "Switch to Fifth Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:14
-msgid "xmodmap command"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:44
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:89
+msgid "Switch to Sixth Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/xkb/fcitx-xkb.desc:19
-msgid "Apply this custom xmodmap script after layout change"
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:49
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:94
+msgid "Switch to Seventh Input Method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:54
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:99
+msgid "Switch to Eighth Input Method"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:59
+#: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:104
+msgid "Switch to Nighth Input Method"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:8
@@ -95,6 +128,34 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:11
 msgid "Default Spell Hint Backends Order"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:8
+msgid "Trigger Key for QuickPhrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:13
+msgid "Alternative Trigger Key for QuickPhrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:4
+msgid "Treating abbreviated Pinyin as English"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:10
+msgid "Allow replacing the first candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:30
+msgid "Hotkey for Inputing Character From Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:35
+msgid "Hotkey for switching to Inputing Character From Phrase mode"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
+msgid "Disable Pinyin Symbol"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/chttrans/fcitx-chttrans.desc:6
@@ -109,12 +170,293 @@ msgstr ""
 msgid "Toggle for enable or disable"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:8
-msgid "Trigger Key for QuickPhrase"
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
+msgid "Add Phrase"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:13
-msgid "Alternative Trigger Key for QuickPhrase"
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
+msgid "Delete Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
+msgid "Adjust Order"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:19
+msgid "Clear Frequency"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:2
+msgid "Unique Name for Table"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:7
+msgid "Code Table Name"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:11
+msgid "Icon Name"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:15
+msgid "Code Table File"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:28
+msgid "Order of Code Table"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:33
+msgid "Use Pinyin"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:38
+msgid "Pinyin Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:43
+msgid "Auto Send Candidate Word"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:48
+msgid "Minimum length trigger auto send candidate word when only one candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:53
+msgid ""
+"Minimum length trigger auto send candidate when there will be no candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:58
+msgid "Send Raw Preedit"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:63
+msgid "End Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:68
+msgid "Use Matching Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:73
+msgid "Matching Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:78
+msgid "Exact Match"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:82
+msgid "Auto Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:87
+msgid ""
+"Keep current buffer when there is no match item and input length is equal "
+"code length"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:92
+msgid "Auto Phrase Length"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:97
+msgid "Auto Phrase Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:102
+msgid "Save Auto Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:107
+msgid "Prompt Table Code"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:111 unknown
+msgid "Symbol"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:116
+msgid "Symbol File"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:121
+msgid "Choose"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:136
+msgid "Language Code for this table"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:141
+msgid "Enable"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:146
+msgid "Use Custom Prompt String defined in table"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:151
+msgid "Keyboard Layout to be used"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:156
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:161
+msgid "Alternative Prev Page Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:166
+msgid "Alternative Next Page Key"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:171
+msgid "First Candidate Display as Preedit"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:176
+msgid "Commit and pass when invalid key of this table pressed"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:181
+msgid "Commit key for select first candidate"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:186
+msgid "Commit string when there is no match"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/table/table.desc:191
+msgid "Ignore Punctuation"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:13
+msgid "Default Shuangpin Schema"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:18
+msgid "Fix preedit cursor at head"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:23
+msgid "Use V to trigger quickphrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:28
+msgid "Use Complete Pinyin"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:33
+msgid "Auto Create Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:38
+msgid "Save Auto Created Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:43
+msgid "Hotkey of Adding Frequent Word"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:48
+msgid "Hotkey of Deleting Frequent Word"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:53
+msgid "Hotkey of Delete User Phrase"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:62
+msgid "Rule of Candidate Word Order"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:71
+msgid "Rule of Candidate Phrase Order"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:80
+msgid "Rule of Frequent Word Order"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:85
+msgid "Fuzzy an and ang"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:90
+msgid "Fuzzy en and eng"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
+msgid "Fuzzy ian and iang"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
+msgid "Fuzzy in and ing"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:105
+msgid "Fuzzy ou and u"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
+msgid "Fuzzy uan and uang"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
+msgid "Fuzzy c and ch"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
+msgid "Fuzzy f and h"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
+msgid "Fuzzy l and n"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
+msgid "Fuzzy s and sh"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
+msgid "Fuzzy z and zh"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
+msgid "Fix misstype gn/ng"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:145
+msgid "Fix misstype v/u"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:4
+msgid "Commit with extra space when choose candidate word"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
+msgid "Toggle the word hint"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:25
+msgid "Minimum length to trigger word hint"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:32
+msgid "Maximum length of spell hint list"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:39
+msgid "Use enter to commit the existing string"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:44
+msgid "Add current input buffer to user dictionary"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/frontend/xim/fcitx-xim.desc:4
+msgid "Use On The Spot Style for XIM (Can not change during running)"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:2
@@ -336,396 +678,6 @@ msgstr ""
 msgid "Key Color On Virutal Keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:2
-msgid "Unique Name for Table"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:7
-msgid "Code Table Name"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:11
-msgid "Icon Name"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:15
-msgid "Code Table File"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:19
-#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:14
-msgid "Adjust Order"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:28
-msgid "Order of Code Table"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:33
-msgid "Use Pinyin"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:38
-msgid "Pinyin Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:43
-msgid "Auto Send Candidate Word"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:48
-msgid "Minimum length trigger auto send candidate word when only one candidate"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:53
-msgid ""
-"Minimum length trigger auto send candidate when there will be no candidate"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:58
-msgid "Send Raw Preedit"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:63
-msgid "End Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:68
-msgid "Use Matching Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:73
-msgid "Matching Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:78
-msgid "Exact Match"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:82
-msgid "Auto Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:87
-msgid ""
-"Keep current buffer when there is no match item and input length is equal "
-"code length"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:92
-msgid "Auto Phrase Length"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:97
-msgid "Auto Phrase Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:102
-msgid "Save Auto Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:107
-msgid "Prompt Table Code"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:111 unknown
-msgid "Symbol"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:116
-msgid "Symbol File"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:121
-msgid "Choose"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:136
-msgid "Language Code for this table"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:141
-msgid "Enable"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:146
-msgid "Use Custom Prompt String defined in table"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:151
-msgid "Keyboard Layout to be used"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:156
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:161
-msgid "Alternative Prev Page Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:166
-msgid "Alternative Next Page Key"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:171
-msgid "First Candidate Display as Preedit"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:176
-msgid "Commit and pass when invalid key of this table pressed"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:181
-msgid "Commit key for select first candidate"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:186
-msgid "Commit string when there is no match"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/table.desc:191
-msgid "Ignore Punctuation"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:4
-msgid "Add Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:9
-msgid "Delete Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/table/fcitx-table.desc:19
-msgid "Clear Frequency"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:13
-msgid "Default Shuangpin Schema"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:18
-msgid "Fix preedit cursor at head"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:23
-msgid "Use V to trigger quickphrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:28
-msgid "Use Complete Pinyin"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:33
-msgid "Auto Create Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:38
-msgid "Save Auto Created Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:43
-msgid "Hotkey of Adding Frequent Word"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:48
-msgid "Hotkey of Deleting Frequent Word"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:53
-msgid "Hotkey of Delete User Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:62
-msgid "Rule of Candidate Word Order"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:71
-msgid "Rule of Candidate Phrase Order"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:80
-msgid "Rule of Frequent Word Order"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:85
-msgid "Fuzzy an and ang"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:90
-msgid "Fuzzy en and eng"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:95
-msgid "Fuzzy ian and iang"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:100
-msgid "Fuzzy in and ing"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:105
-msgid "Fuzzy ou and u"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:110
-msgid "Fuzzy uan and uang"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:115
-msgid "Fuzzy c and ch"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:120
-msgid "Fuzzy f and h"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:125
-msgid "Fuzzy l and n"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:130
-msgid "Fuzzy s and sh"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:135
-msgid "Fuzzy z and zh"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:140
-msgid "Fix misstype gn/ng"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/pinyin/fcitx-pinyin.desc:145
-msgid "Fix misstype v/u"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:4
-msgid "Commit with extra space when choose candidate word"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:19
-msgid "Toggle the word hint"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:25
-msgid "Minimum length to trigger word hint"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:32
-msgid "Maximum length of spell hint list"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:39
-msgid "Use enter to commit the existing string"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:44
-msgid "Add current input buffer to user dictionary"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/frontend/xim/fcitx-xim.desc:4
-msgid "Use On The Spot Style for XIM (Can not change during running)"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:2
-msgid "Use Full Width Character"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:7
-msgid "Use Wide Punctuation"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:12
-msgid "Prompt the phrases after input"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:17
-msgid "Current Input Method Name"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:22
-msgid "Current Enabled Input Method List"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/profile.desc:29
-msgid "Show Preedit String in Client Window"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:3
-msgid "UniqueName"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:7
-#: /home/saber/Develop/fcitx/data/addon.desc:3
-msgid "Name"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:11
-msgid "IconName"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:15
-msgid "Priority"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:19
-msgid "LangCode"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/inputmethod.desc:23
-msgid "Parent"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:7
-msgid "Name that can be display in UI"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:12
-msgid "Comment"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:22
-msgid "Category"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:27
-msgid "Enabled"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:31
-msgid "Library"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:38
-msgid "Type"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:43
-msgid "Dependency"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:48
-msgid "Priority of addon"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:53
-msgid "Sub Configuration for Module"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:58
-msgid "Register IM"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:67
-msgid "Argument for InputMethod Register"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:72
-msgid "Fallback UI Addon"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/data/addon.desc:77
-msgid "Do not show in GUI"
-msgstr ""
-
 #: /home/saber/Develop/fcitx/data/config.desc:4
 msgid "Trigger Input Method"
 msgstr ""
@@ -870,12 +822,121 @@ msgstr ""
 msgid "Do not show input window if there is only one candidate and preedit"
 msgstr ""
 
+#: /home/saber/Develop/fcitx/data/addon.desc:3
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:7
+msgid "Name"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:7
+msgid "Name that can be display in UI"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:12
+msgid "Comment"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:22
+msgid "Category"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:27
+msgid "Enabled"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:31
+msgid "Library"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:38
+msgid "Type"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:43
+msgid "Dependency"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:48
+msgid "Priority of addon"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:53
+msgid "Sub Configuration for Module"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:58
+msgid "Register IM"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:67
+msgid "Argument for InputMethod Register"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:72
+msgid "Fallback UI Addon"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/addon.desc:77
+msgid "Do not show in GUI"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:2
+msgid "Use Full Width Character"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:7
+msgid "Use Wide Punctuation"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:12
+msgid "Prompt the phrases after input"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:17
+msgid "Current Input Method Name"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:22
+msgid "Current Enabled Input Method List"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/profile.desc:29
+msgid "Show Preedit String in Client Window"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:3
+msgid "UniqueName"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:11
+msgid "IconName"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:15
+msgid "Priority"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:19
+msgid "LangCode"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/data/inputmethod.desc:23
+msgid "Parent"
+msgstr ""
+
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:23
 msgid "Maximum length of spell hint list for Auto English"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:31
 msgid "0 for commit immediately, -1 for keep all words"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:14
+msgid "Possible Providers: presage, custom, enchant (separate with comma)"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:37
+msgid "Maximum length of spell hint list for Quick Phrase"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:5
@@ -888,26 +949,18 @@ msgid ""
 "string is very closed to English."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:25
+#: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:24
 msgid "Maximum length of spell hint list for Pinyin Enhance"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/module/spell/fcitx-spell.desc:14
-msgid "Possible Providers: presage, custom, enchant (separate with comma)"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:37
-msgid "Maximum length of spell hint list for Quick Phrase"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:18
-msgid "Override the skin font size"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/im/keyboard/fcitx-keyboard.desc:33
 msgid ""
 "A different value from the global one may be useful when using horizontal "
 "candidate list"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:18
+msgid "Override the skin font size"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/data/config.desc:177
@@ -935,6 +988,10 @@ msgid "CodeTable"
 msgstr ""
 
 # unknown
+msgid "GlobalSelector"
+msgstr ""
+
+# unknown
 msgid "Hotkey"
 msgstr ""
 
@@ -948,8 +1005,14 @@ msgid "InputMethod"
 msgstr ""
 
 # unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:389
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:335
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:359
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:379
 msgid "Keyboard"
+msgstr ""
+
+# unknown
+msgid "LocalSelector"
 msgstr ""
 
 # unknown
@@ -959,7 +1022,7 @@ msgstr ""
 # unknown
 #: /home/saber/Develop/fcitx/build/po/tmp/pinyin.conf.in.h:1
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-pinyin.conf.in.h:1
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:111
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:106
 msgid "Pinyin"
 msgstr ""
 
@@ -1124,10 +1187,8 @@ msgid "Default"
 msgstr ""
 
 #: unknown
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:307
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:312
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:372
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:377
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:244
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:249
 msgid "Disabled"
 msgstr ""
 
@@ -1279,16 +1340,16 @@ msgstr ""
 msgid "Quick Phrase List"
 msgstr ""
 
-#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:931
-msgid "Skin"
-msgstr ""
-
 #: unknown /home/saber/Develop/fcitx/build/po/tmp/fcitx-table.conf.in.h:1
 msgid "Table"
 msgstr ""
 
 #: unknown
 msgid "Shuang Pin Schema"
+msgstr ""
+
+#: unknown /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:930
+msgid "Skin"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-unicode.conf.in.h:1
@@ -1438,7 +1499,7 @@ msgid "Quwei Input Method for Fcitx"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/tmp/shuangpin.conf.in.h:1
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:127
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:122
 msgid "Shuangpin"
 msgstr ""
 
@@ -1498,27 +1559,27 @@ msgstr ""
 msgid "Cangjie"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:223
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/unicode.c:225
 msgid "Search unicode"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:589
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:592
 msgid "<Non Private Use High Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:591
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:594
 msgid "<Private Use High Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:593
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:596
 msgid "<Low Surrogate>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:595
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:598
 msgid "<Private Use>"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:623
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/unicode/charselectdata.c:626
 msgid "<not assigned>"
 msgstr ""
 
@@ -1545,8 +1606,8 @@ msgstr ""
 msgid "Too long item for AutoEng"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:589
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:411
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/autoeng/AutoEng.c:582
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:414
 msgid "Press Enter to input text"
 msgstr ""
 
@@ -1555,28 +1616,28 @@ msgstr ""
 msgid "Can't open socket %s: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:203
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:304
 msgid "Select global input method: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:203
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:305
 msgid "Select local input method: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:208
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:310
 #, c-format
 msgid "Current local input method is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:212
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:316
 msgid "No local input method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:223
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:327
 msgid "Clear local input method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:185
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/xkbdbus/xkbdbus.c:184
 msgid "English (US)"
 msgstr ""
 
@@ -1640,29 +1701,19 @@ msgstr ""
 msgid "Close virtual keyboard"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:124
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:155
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:97
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:128
 msgid "Convert to Traditional Chinese"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:124
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:155
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:97
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:128
 msgid "Convert to Simplified Chinese"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:125
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:156
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:98
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:129
 msgid "Toggle Simp/Trad Chinese Conversion"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:226
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:328
-msgid "OpenCC initialization error"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:234
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/chttrans/chttrans.c:336
-msgid "OpenCC error"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/fullwidthchar/fullwidthchar.c:114
@@ -1680,13 +1731,12 @@ msgstr ""
 msgid "Toggle Half/Full width Character"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:247
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:245
 #, c-format
 msgid "Space for %s Enter for %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:336
-#, c-format
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:335
 msgid "Quick Phrase: "
 msgstr ""
 
@@ -1695,46 +1745,46 @@ msgstr ""
 msgid "X error %i on opcode send"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:123
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:121
 msgid "Can not load default skin, is installion correct?"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:128
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/skin.c:126
 #, c-format
 msgid "Can not load skin %s, return to default"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:166
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:162
 msgid "DISPLAY InputWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:135
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:131
 msgid "DISPLAY MainWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:145
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:142
 msgid "DRAW MainWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:416
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:397
 msgid "Online Help"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:479
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:731
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:730
 msgid "Configure Current Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:480
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:461
 msgid "Configure"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:481
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:732
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:462
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:735
 msgid "Restart"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:482
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:463
 msgid "Exit"
 msgstr ""
 
@@ -1751,24 +1801,22 @@ msgstr ""
 msgid "no valid font."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:294
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:217
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:218
+msgid "No input window"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:245
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:250
+msgid "Input Method Disabled"
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:364
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:308
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:313
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:373
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:378
-msgid "Input Method Disabled"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:361
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:362
-msgid "No input window"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:730
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:727
 msgid "Toggle Input Method"
 msgstr ""
 
@@ -1777,150 +1825,140 @@ msgstr ""
 msgid "Loading Table Dict"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:243
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:251
 msgid "Load Table Dict OK"
 msgstr ""
 
 #. 读取上次保存的自动词组信息
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:281
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:288
 msgid "Loading Autophrase."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:336
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:344
 msgid "Load Autophrase OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:367
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:375
 msgid "Save dict error"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:423
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:430
 msgid "Rename OK"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:587
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:601
 msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:613
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:629
 msgid "Pinyin: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:615
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:633
 msgid "Cannot found Pinyin"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:667
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:690
 msgid "Choose the phrase to be put in the front, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:675
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:698
 msgid "Choose the phrase to be deleted, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:683
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:706
 msgid "Choose the phrase to clear typing history, Press Escape to Cancel"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1227
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1268
 msgid "Remind:"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1330
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1376
 msgid "Phrase is already in Dict "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1333
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1380
 msgid "Code is "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1335
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/table/table.c:1384
 msgid " Ctrl+Delete To Delete"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:360
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:359
 msgid "Can not find System Database of Pinyin!"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:376
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:375
 #, c-format
 msgid "Load extra dict: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:426
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:425
 msgid "Pinyin Index Magic Number Doesn't match"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:766
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:688
 msgid "Press index to delete user phrase (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:777
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:701
 msgid "Press number to make word in frequent list"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:805
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:729
 #, c-format
 msgid "Press 1 to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:807
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:731
 #, c-format
 msgid "Press 1-%d to delete %s in frequent list (ESC for cancel)"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1737
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1622
 #, c-format
 msgid "Cannot Save User Pinyin Database: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1801
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1685
 #, c-format
 msgid "Cannot Save Frequent word: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1874
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:1747
 #, c-format
 msgid "Cannot Save Pinyin Index: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2132
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2003
 msgid "Remind: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2265
+#: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:2137
 msgid "Migrate the old file path to the new one"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:352
-#, c-format
-msgid "Keyboard - %s"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/im/keyboard/keyboard.c:375
-#, c-format
-msgid "Keyboard - %s - %s"
-msgstr ""
-
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:136
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:135
 msgid "X11 not initialized"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:149
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
 msgid "Can't Create imWindow"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:160
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
 msgid "XMODIFIERS Error."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:164
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:163
 msgid "Please set XMODIFIERS."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:243
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:242
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr ""
@@ -1939,20 +1977,20 @@ msgstr ""
 msgid "No available Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1427
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1438
 #: ../..//data/fcitx.desktop.in.h:2
 msgid "Input Method"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1515
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1529
 msgid "Input Speed: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1517
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1532
 msgid "/min  Time Used: "
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1519
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/ime.c:1535
 msgid "min Num of Characters: "
 msgstr ""
 
@@ -1997,83 +2035,83 @@ msgstr ""
 msgid "No available frontend"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/module.c:64
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/module.c:63
 #, c-format
 msgid "Module: open %s fail %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/module.c:76
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/module.c:75
 msgid "Module: bad module"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:133
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:124
 #, c-format
 msgid "Addon Config %s is %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:146
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:137
 #, c-format
 msgid "Load Addon Config File:%s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:284
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:272
 #, c-format
 msgid "Disable addon %s, dependency %s can not be satisfied."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:380
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:379
 msgid "Enum option duplicated."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:393
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:392
 msgid "Enum option number must larger than 0"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:407
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:406
 msgid "Enum Option is invalid, take it as string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:413
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:412
 #, c-format
 msgid "Unknown type, take it as string: %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:417
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:416
 msgid "Missing type, take it as string"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:914
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:913
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:926
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:925
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:944
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:943
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:990
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:989
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1158
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1157
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1168
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1167
 #, c-format
 msgid "Option %s is Invalid."
 msgstr ""
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1204
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1213
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1203
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1212
 msgid "Available Value:"
 msgstr ""
 

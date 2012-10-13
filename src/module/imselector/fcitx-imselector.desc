@@ -11,97 +11,97 @@ Description=Global Input Method SelectKey
 [IMSelector/ClearLocal]
 Type=Hotkey
 DefaultValue=
-Description=Clear local input method
+Description=Clear local Input Method
 
 [GlobalSelector/IM1]
 Type=Hotkey
 DefaultValue=
-Description=Switch to First input method globally
+Description=Switch to First Input Method
 
 [GlobalSelector/IM2]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Second input method globally
+Description=Switch to Second Input Method
 
 [GlobalSelector/IM3]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Third input method globally
+Description=Switch to Third Input Method
 
 [GlobalSelector/IM4]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Fourth input method globally
+Description=Switch to Fourth Input Method
 
 [GlobalSelector/IM5]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Fifth input method globally
+Description=Switch to Fifth Input Method
 
 [GlobalSelector/IM6]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Sixth input method globally
+Description=Switch to Sixth Input Method
 
 [GlobalSelector/IM7]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Seventh input method globally
+Description=Switch to Seventh Input Method
 
 [GlobalSelector/IM8]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Eighth input method globally
+Description=Switch to Eighth Input Method
 
 [GlobalSelector/IM9]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Nighth input method globally
+Description=Switch to Nighth Input Method
 
 [LocalSelector/IM1]
 Type=Hotkey
 DefaultValue=
-Description=Switch to First input method localily
+Description=Switch to First Input Method
 
 [LocalSelector/IM2]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Second input method localily
+Description=Switch to Second Input Method
 
 [LocalSelector/IM3]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Third input method localily
+Description=Switch to Third Input Method
 
 [LocalSelector/IM4]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Fourth input method localily
+Description=Switch to Fourth Input Method
 
 [LocalSelector/IM5]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Fifth input method localily
+Description=Switch to Fifth Input Method
 
 [LocalSelector/IM6]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Sixth input method localily
+Description=Switch to Sixth Input Method
 
 [LocalSelector/IM7]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Seventh input method localily
+Description=Switch to Seventh Input Method
 
 [LocalSelector/IM8]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Eighth input method localily
+Description=Switch to Eighth Input Method
 
 [LocalSelector/IM9]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Nighth input method localily
+Description=Switch to Nighth Input Method
 
 [DescriptionFile]
 LocaleDomain=fcitx
