@@ -33,21 +33,21 @@
  * The input method is key event centric application. When a key event comes to fcitx,
  * the process handling the keyboard event can be separated into 7 phases, PreInput, DoInput, Update Candidates, Prev/Next Page
  * PostInput, Hotkey, and key blocker.
- * 
+ *
  * The input method engine process key event inside "DoInput".
- * 
+ *
  * Each phase will change the INPUT_RETURN_VALUE, if INPUT_RETURN_VALUE is non-zero (non IRV_TO_PROCESS), the following
  * phases will not run.
- * 
+ *
  * If a key event goes through all phase and still the state is IRV_TO_PROCESS, it will be forwarded.
- * 
+ *
  * When it comes to update candidates, if the flag contains IRV_FLAG_UPDATE_CANDIDATE_WORDS, it will trigger the GetCandWords
  * of input method engine and clean up all stiring in the input window, after that, it will trigger update candidates hook.
- * 
+ *
  * Key blocker is useful if you want to post input phase to do something, but you don't want forward key if they do nothing.
  * There is an default implemention inside fcitx, it will blocks key when raw input buffer is not empty. Those keys
  * contains direction key(left/right..), key will cause something input (a,b,c...), key will cause cursor move (home/end...).
- * 
+ *
  * DoInput, Update Candidates, Key Blocker are belongs to input method engine, other can be registered by other addon.
  */
 #ifndef _FCITX_IME_H_
@@ -304,6 +304,39 @@ extern "C" {
      * @return _FcitxIM*
      **/
     struct _FcitxIM* FcitxInstanceGetCurrentIM(struct _FcitxInstance *instance);
+
+    /**
+     * get input method by name
+     *
+     * @param instance fcitx instance
+     * @param index index
+     * @return _FcitxIM*
+     *
+     * @since 4.2.7
+     **/
+    struct _FcitxIM* FcitxInstanceGetIMByIndex(struct _FcitxInstance* instance, int index);
+
+    /**
+     * get im index by im name
+     *
+     * @param instance fcitx instance
+     * @param imName im name
+     * @return int im index
+     *
+     * @since 4.2
+     **/
+    int FcitxInstanceGetIMIndexByName(struct _FcitxInstance* instance, const char* imName);
+
+    /**
+     * get im index by im name
+     *
+     * @param instance fcitx instance
+     * @param imName im name
+     * @return int im index
+     *
+     * @since 4.2.7
+     **/
+    struct _FcitxIM* FcitxInstanceGetIMByName(struct _FcitxInstance* instance, const char* imName);
 
     /**
      * enable im
@@ -573,17 +606,6 @@ extern "C" {
      * @return int
      **/
     int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, const char* strChoose, int candState);
-
-    /**
-     * get im index by im name
-     *
-     * @param instance fcitx instance
-     * @param imName im name
-     * @return int im index
-     *
-     * @since 4.2
-     **/
-    int FcitxInstanceGetIMIndexByName(struct _FcitxInstance* instance, const char* imName);
 
     /**
      * ...

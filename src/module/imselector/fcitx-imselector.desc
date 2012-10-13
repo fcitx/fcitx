@@ -8,5 +8,100 @@ Type=Hotkey
 DefaultValue=
 Description=Global Input Method SelectKey
 
+[IMSelector/ClearLocal]
+Type=Hotkey
+DefaultValue=
+Description=Clear local input method
+
+[GlobalSelector/IM1]
+Type=Hotkey
+DefaultValue=
+Description=Switch to First input method globally
+
+[GlobalSelector/IM2]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Second input method globally
+
+[GlobalSelector/IM3]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Third input method globally
+
+[GlobalSelector/IM4]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Fourth input method globally
+
+[GlobalSelector/IM5]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Fifth input method globally
+
+[GlobalSelector/IM6]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Sixth input method globally
+
+[GlobalSelector/IM7]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Seventh input method globally
+
+[GlobalSelector/IM8]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Eighth input method globally
+
+[GlobalSelector/IM9]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Nighth input method globally
+
+[LocalSelector/IM1]
+Type=Hotkey
+DefaultValue=
+Description=Switch to First input method localily
+
+[LocalSelector/IM2]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Second input method localily
+
+[LocalSelector/IM3]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Third input method localily
+
+[LocalSelector/IM4]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Fourth input method localily
+
+[LocalSelector/IM5]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Fifth input method localily
+
+[LocalSelector/IM6]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Sixth input method localily
+
+[LocalSelector/IM7]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Seventh input method localily
+
+[LocalSelector/IM8]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Eighth input method localily
+
+[LocalSelector/IM9]
+Type=Hotkey
+DefaultValue=
+Description=Switch to Nighth input method localily
+
 [DescriptionFile]
 LocaleDomain=fcitx

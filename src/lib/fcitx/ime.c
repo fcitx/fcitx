@@ -1181,14 +1181,6 @@ void FcitxInstanceReloadConfig(FcitxInstance *instance)
     FcitxInstanceLoadAllIM(instance);
 }
 
-FCITX_EXPORT_API
-FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
-{
-    UT_array* imes = &instance->imes;
-    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
-    return pcurrentIM;
-}
-
 static inline void FcitxInstanceSetICStatus(FcitxInstance* instance, FcitxInputContext* ic, FcitxContextState state)
 {
     if (ic->state != state) {
@@ -1609,22 +1601,48 @@ int FcitxHotkeyCheckChooseKeyAndModifier(FcitxKeySym sym, unsigned int state, co
 }
 
 FCITX_EXPORT_API
+FcitxIM* FcitxInstanceGetCurrentIM(FcitxInstance* instance)
+{
+    UT_array* imes = &instance->imes;
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, instance->iIMIndex);
+    return pcurrentIM;
+}
+
+FCITX_EXPORT_API
+FcitxIM* FcitxInstanceGetIMByIndex(FcitxInstance* instance, int index)
+{
+    UT_array* imes = &instance->imes;
+    /* utarray helps us to check the overflow */
+    FcitxIM* pcurrentIM = (FcitxIM*) utarray_eltptr(imes, index);
+    return pcurrentIM;
+}
+
+FCITX_EXPORT_API
 int FcitxInstanceGetIMIndexByName(FcitxInstance* instance, const char* imName)
 {
     UT_array* imes = &instance->imes;
+    FcitxIM *pim = FcitxInstanceGetIMByName(instance, imName);
+    if (!pim)
+        return -1;
+    else
+        return utarray_eltidx(imes, pim);
+}
+
+FCITX_EXPORT_API
+FcitxIM* FcitxInstanceGetIMByName(FcitxInstance* instance, const char* imName)
+{
+    UT_array* imes = &instance->imes;
     FcitxIM *pim;
-    int index = -1, i = 0;
     for (pim = (FcitxIM *) utarray_front(imes);
             pim != NULL;
             pim = (FcitxIM *) utarray_next(imes, pim)) {
         if (strcmp(imName, pim->uniqueName) == 0) {
-            index = i;
-            break;
+            return pim;
         }
-        i ++;
     }
-    return index;
+    return NULL;
 }
+
 
 FCITX_EXPORT_API
 void FcitxInstanceNotifyUpdateSurroundingText(FcitxInstance* instance, FcitxInputContext* ic)

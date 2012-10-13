@@ -237,7 +237,21 @@ INPUT_RETURN_VALUE FcitxInstanceProcessHotkey(FcitxInstance* instance, FcitxKeyS
     stack = stack->next;
     INPUT_RETURN_VALUE out = IRV_TO_PROCESS;
     while (stack) {
-        if (FcitxHotkeyIsHotKey(keysym, state, stack->hotkey.hotkey)) {
+        /* a little bit hack here, but safer */
+        FcitxHotkey tempKey[2];
+        FcitxHotkeyGetKey(
+            stack->hotkey.hotkey[0].sym,
+            stack->hotkey.hotkey[0].state,
+            &tempKey[0].sym,
+            &tempKey[0].state
+        );
+        FcitxHotkeyGetKey(
+            stack->hotkey.hotkey[1].sym,
+            stack->hotkey.hotkey[1].state,
+            &tempKey[1].sym,
+            &tempKey[1].state
+        );
+        if (FcitxHotkeyIsHotKey(keysym, state, tempKey)) {
             out = stack->hotkey.hotkeyhandle(stack->hotkey.arg);
             break;
         }
