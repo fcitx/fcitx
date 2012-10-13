@@ -327,14 +327,11 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
         FcitxCandidateWordAppend(cand_list, &cand_word);
     }
     FcitxMessages *msg;
-    msg = FcitxInputStateGetClientPreedit(input);
+    msg = FcitxInputStateGetAuxUp(input);
+    FcitxInputStateSetShowCursor(input, false);
     FcitxMessagesSetMessageCount(msg, 0);
     FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
-                                         _("[select to paste]"));
-    msg = FcitxInputStateGetPreedit(input);
-    FcitxMessagesSetMessageCount(msg, 0);
-    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
-                                         _("[select to paste]"));
+                                         _("Select to paste"));
     int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
         ClipboardSetCandWord(&cand_word, clipboard->clp_hist_lst + i);

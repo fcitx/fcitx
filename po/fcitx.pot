@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 11:40-0400\n"
+"POT-Creation-Date: 2012-10-13 11:48-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1768,6 +1768,10 @@ msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/quickphrase/quickphrase.c:335
 msgid "Quick Phrase: "
+msgstr ""
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/clipboard/clipboard.c:334
+msgid "Select to paste"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/tray.c:164

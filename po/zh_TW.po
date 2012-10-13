@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 11:40-0400\n"
+"POT-Creation-Date: 2012-10-13 11:48-0400\n"
 "PO-Revision-Date: 2012-10-13 11:14-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -1651,6 +1651,10 @@ msgstr ""
 #: /home/saber/Develop/fcitx/build/po/tmp/fcitx-imselector.conf.in.h:2
 msgid "Select specific input method via keyboard"
 msgstr "透過鍵盤選擇特定的輸入法"
+
+#: /home/saber/Develop/fcitx/build/po/../..//src/module/clipboard/clipboard.c:334
+msgid "Select to paste"
+msgstr ""
 
 #: unknown
 msgid "Self"

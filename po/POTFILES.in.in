@@ -57,6 +57,7 @@
 @REL_SOURCE_ROOT@/src/module/chttrans/chttrans.c
 @REL_SOURCE_ROOT@/src/module/fullwidthchar/fullwidthchar.c
 @REL_SOURCE_ROOT@/src/module/quickphrase/quickphrase.c
+@REL_SOURCE_ROOT@/src/module/clipboard/clipboard.c
 @REL_SOURCE_ROOT@/src/ui/classic/MessageWindow.c
 @REL_SOURCE_ROOT@/src/ui/classic/classicuiconfig.c
 @REL_SOURCE_ROOT@/src/ui/classic/tray.c
