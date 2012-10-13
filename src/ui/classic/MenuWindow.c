@@ -26,7 +26,6 @@
 #include <cairo-xlib.h>
 #include "fcitx/ui.h"
 #include "fcitx/module.h"
-#include <module/x11/x11stuff.h>
 
 #include "skin.h"
 #include "classicui.h"
@@ -259,10 +258,8 @@ XlibMenu* CreateXlibMenu(FcitxClassicUI *classicui)
     menu->owner = classicui;
     InitXlibMenu(menu);
 
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 MenuWindowEventHandler, menu);
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
-                 ReloadXlibMenu, menu);
+    FcitxX11AddXEventHandler(classicui->owner, MenuWindowEventHandler, menu);
+    FcitxX11AddCompositeHandler(classicui->owner, ReloadXlibMenu, menu);
     return menu;
 }
 

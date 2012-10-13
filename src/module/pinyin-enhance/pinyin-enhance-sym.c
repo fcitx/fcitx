@@ -32,6 +32,9 @@
 
 #define PY_SYMBOL_FILE  "pySym.mb"
 
+#undef uthash_alloc
+#undef uthash_free
+
 typedef struct _PySymWord PySymWord;
 
 struct _PySymWord {
@@ -63,8 +66,11 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
 {
     PySymTable *table;
     PySymWord *py_word;
+    FcitxMemoryPool *pool = pyenhance->sym_pool;
+#define uthash_alloc(sz) fcitx_memory_pool_alloc_align(pool, sz)
+#define uthash_free(ptr)
     word_l++;
-    py_word = fcitx_memory_pool_alloc_align(pyenhance->sym_pool,
+    py_word = fcitx_memory_pool_alloc_align(pool,
                                             sizeof(PySymWord) + word_l, 1);
     memcpy(sym_word(py_word), word, word_l);
     HASH_FIND_STR(pyenhance->sym_table, sym, table);
@@ -76,7 +82,7 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
          * the + 1 here is actually not necessary,
          * just to make printing easier
          **/
-        table = fcitx_memory_pool_alloc_align(pyenhance->sym_pool,
+        table = fcitx_memory_pool_alloc_align(pool,
                                               sizeof(PySymTable) + sym_l + 1,
                                               1);
         table->words = py_word;
@@ -85,6 +91,8 @@ PinyinEnhanceAddSym(PinyinEnhance *pyenhance, const char *sym, int sym_l,
         HASH_ADD_KEYPTR(hh, pyenhance->sym_table,
                         table_sym(table), sym_l, table);
     }
+#undef uthash_alloc
+#undef uthash_free
 }
 
 static PySymWord*
@@ -101,10 +109,7 @@ PinyinEnhanceGetSym(PinyinEnhance *pyenhance, const char *sym)
 static void
 PySymClearDict(PinyinEnhance *pyenhance)
 {
-    if (pyenhance->sym_table) {
-        HASH_CLEAR(hh, pyenhance->sym_table);
-        pyenhance->sym_table = NULL;
-    }
+    pyenhance->sym_table = NULL;
     if (pyenhance->sym_pool)
         fcitx_memory_pool_clear(pyenhance->sym_pool);
 }

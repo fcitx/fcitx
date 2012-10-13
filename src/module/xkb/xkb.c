@@ -35,7 +35,7 @@
 #include "fcitx/hook.h"
 #include "fcitx/addon.h"
 #include "fcitx/module.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
@@ -327,7 +327,7 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb,
     int len;
     char *pval;
     char *next;
-    Atom rules_atom;
+    static Atom rules_atom = None;
     Window root_window;
 
     len = (rules_file ? strlen (rules_file) : 0);
@@ -341,7 +341,8 @@ FcitxXkbUpdateProperties(FcitxXkb* xkb,
     }
     len += 5; /* trailing NULs */
 
-    rules_atom = XInternAtom (dpy, _XKB_RF_NAMES_PROP_ATOM, False);
+    if (rules_atom == None)
+        rules_atom = XInternAtom (dpy, _XKB_RF_NAMES_PROP_ATOM, False);
     root_window = XDefaultRootWindow (dpy);
     pval = next = (char*) fcitx_utils_malloc0 (sizeof(char) *(len + 1));
     if (!pval) {
@@ -653,7 +654,7 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
     FcitxXkb* xkb = (FcitxXkb*) fcitx_utils_malloc0(sizeof(FcitxXkb));
     xkb->owner = instance;
     do {
-        xkb->dpy = InvokeVaArgs(xkb->owner, FCITX_X11, GETDISPLAY);
+        xkb->dpy = FcitxX11GetDisplay(xkb->owner);
         if (!xkb->dpy)
             break;
 
@@ -674,8 +675,7 @@ static void* FcitxXkbCreate(FcitxInstance* instance)
         int eventMask = XkbNewKeyboardNotifyMask | XkbStateNotifyMask;
         XkbSelectEvents(xkb->dpy, XkbUseCoreKbd, eventMask, eventMask);
 
-        InvokeVaArgs(xkb->owner, FCITX_X11, ADDXEVENTHANDLER,
-                     FcitxXkbEventHandler, xkb);
+        FcitxX11AddXEventHandler(xkb->owner, FcitxXkbEventHandler, xkb);
 
         FcitxInstanceWatchContext(instance, CONTEXT_IM_KEYBOARD_LAYOUT, FcitxXkbIMKeyboardLayoutChanged, xkb);
 

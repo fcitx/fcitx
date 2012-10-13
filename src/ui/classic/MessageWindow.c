@@ -30,9 +30,7 @@
 #include "fcitx/module.h"
 #include <cairo-xlib.h>
 #include <X11/Xutil.h>
-#include "module/x11/x11stuff.h"
 #include "fcitx-utils/utils.h"
-
 
 #define MESSAGE_WINDOW_MARGIN 20
 #define MESSAGE_WINDOW_LINESPACE 2
@@ -63,8 +61,8 @@ MessageWindow* CreateMessageWindow(FcitxClassicUI * classicui)
     InitMessageWindowProperty(messageWindow);
     XSelectInput(dpy, messageWindow->window, ExposureMask | ButtonPressMask | ButtonReleaseMask  | PointerMotionMask);
 
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 MessageWindowEventHandler, messageWindow);
+    FcitxX11AddXEventHandler(classicui->owner,
+                             MessageWindowEventHandler, messageWindow);
 
     return messageWindow;
 }

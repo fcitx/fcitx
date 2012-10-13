@@ -140,12 +140,9 @@ void SetTrackPos(FcitxXimFrontend* xim, FcitxInputContext* ic, IMChangeICStruct 
         }
     }
 
-    Window window = None;
-    if (ximic->focus_win)
-        window = ximic->focus_win;
-    else if (ximic->client_win)
+    Window window;
+    if (!(window = ximic->focus_win))
         window = ximic->client_win;
-
 
     if (window != None) {
         Window dst;

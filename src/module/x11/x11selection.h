@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,12 +18,27 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef XERRORHANDLER_H
-#define XERRORHANDLER_H
+#ifndef X11SELECTION_H
+#define X11SELECTION_H
 
 #include "x11stuff-internal.h"
-
-void InitXErrorHandler(FcitxX11*);
+void X11InitSelection(FcitxX11 *x11priv);
+void X11ProcessXFixesSelectionNotifyEvent(
+    FcitxX11 *x11priv, XFixesSelectionNotifyEvent *notify_event);
+void X11ProcessSelectionNotifyEvent(
+    FcitxX11 *x11priv, XSelectionEvent *selection_event);
+unsigned int X11SelectionNotifyRegisterInternal(
+    FcitxX11 *x11priv, Atom selection, void *owner,
+    X11SelectionNotifyInternalCallback cb, void *data,
+    FcitxDestroyNotify destroy, FcitxCallBack func);
+unsigned int X11SelectionNotifyRegister(
+    FcitxX11 *x11priv, const char *sel_str, void *owner,
+    X11SelectionNotifyCallback cb, void *data,
+    FcitxDestroyNotify destroy);
+void X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id);
+unsigned int X11RequestConvertSelection(
+    FcitxX11 *x11priv, const char *sel_str, const char *tgt_str,
+    void *owner, X11ConvertSelectionCallback cb, void *data,
+    FcitxDestroyNotify destroy);
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

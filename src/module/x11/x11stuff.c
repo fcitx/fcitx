@@ -20,7 +20,6 @@
 
 #include "config.h"
 #include "fcitx/fcitx.h"
-
 #include <limits.h>
 #include <unistd.h>
 #include <X11/extensions/Xrender.h>
@@ -38,7 +37,8 @@
 #include "fcitx-utils/log.h"
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
-#include "x11stuff.h"
+#include "x11stuff-internal.h"
+#include "x11selection.h"
 #include "xerrorhandler.h"
 
 static void* X11Create(FcitxInstance* instance);
@@ -55,7 +55,13 @@ static void* X11MouseClick(void *arg, FcitxModuleFunctionArg args);
 static void* X11AddCompositeHandler(void* arg, FcitxModuleFunctionArg args);
 static void* X11ScreenGeometry(void* arg, FcitxModuleFunctionArg args);
 static void* X11GetDPI(void* arg, FcitxModuleFunctionArg args);
+static void *_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args);
+static void *_X11SelectionNotifyRegister(void *arg,
+                                         FcitxModuleFunctionArg args);
+static void *_X11RequestConvertSelection(void *arg, FcitxModuleFunctionArg args);
+static void *X11EventWindow(void *arg, FcitxModuleFunctionArg args);
 static boolean X11InitComposite(FcitxX11* x11priv);
+static void X11InitAtoms(FcitxX11* x11priv);
 static void X11HandlerComposite(FcitxX11* x11priv, boolean enable);
 static boolean X11GetCompositeManager(FcitxX11* x11priv);
 static void X11InitScreen(FcitxX11* x11priv);
@@ -65,8 +71,9 @@ static inline boolean RectIntersects(FcitxRect rt1, FcitxRect rt2);
 static inline int RectWidth(FcitxRect r);
 static inline int RectHeight(FcitxRect r);
 
-const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
-const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler), 0, 0, 0};
+static const UT_icd handler_icd = {sizeof(FcitxXEventHandler), 0, 0, 0};
+static const UT_icd comphandler_icd = {sizeof(FcitxCompositeChangedHandler),
+                                       0, 0, 0};
 
 FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
     X11Create,
@@ -78,20 +85,21 @@ FCITX_DEFINE_PLUGIN(fcitx_x11, module, FcitxModule) = {
 
 void* X11Create(FcitxInstance* instance)
 {
-    FcitxX11* x11priv = fcitx_utils_malloc0(sizeof(FcitxX11));
-    FcitxAddon* x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), FCITX_X11_NAME);
+    FcitxX11 *x11priv = fcitx_utils_new(FcitxX11);
+    FcitxAddon *x11addon = FcitxX11GetAddon(instance);
     x11priv->dpy = XOpenDisplay(NULL);
-    x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
+    x11priv->xim = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                             "fcitx-xim");
     if (x11priv->dpy == NULL)
         return NULL;
 
     x11priv->owner = instance;
     x11priv->iScreen = DefaultScreen(x11priv->dpy);
-    x11priv->windowTypeAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE", False);
-    x11priv->typeMenuAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_MENU", False);
-    x11priv->typeDialogAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-    x11priv->typeDockAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE_DOCK", False);
-    x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
+    x11priv->rootWindow = DefaultRootWindow(x11priv->dpy);
+    x11priv->eventWindow = XCreateWindow(x11priv->dpy, x11priv->rootWindow,
+                                         0, 0, 1, 1, 0, 0, InputOnly,
+                                         CopyFromParent, 0, NULL);
+    X11InitAtoms(x11priv);
 
     utarray_init(&x11priv->handlers, &handler_icd);
     utarray_init(&x11priv->comphandlers, &comphandler_icd);
@@ -109,23 +117,26 @@ void* X11Create(FcitxInstance* instance)
     FcitxModuleAddFunction(x11addon, X11ScreenGeometry);
     FcitxModuleAddFunction(x11addon, X11ProcessEventReal);
     FcitxModuleAddFunction(x11addon, X11GetDPI);
+    FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRegister);
+    FcitxModuleAddFunction(x11addon, _X11SelectionNotifyRemove);
+    FcitxModuleAddFunction(x11addon, X11EventWindow);
+    FcitxModuleAddFunction(x11addon, _X11RequestConvertSelection);
 
 #ifdef HAVE_XFIXES
     int ignore;
-    if (XFixesQueryExtension (x11priv->dpy,
-                              &x11priv->xfixesEventBase,
-                              &ignore))
+    if (XFixesQueryExtension(x11priv->dpy, &x11priv->xfixesEventBase,
+                             &ignore))
         x11priv->hasXfixes = true;
 #endif
-
+    X11InitSelection(x11priv);
     X11InitComposite(x11priv);
-
     X11InitScreen(x11priv);
 
     XWindowAttributes attr;
-    XGetWindowAttributes(x11priv->dpy, DefaultRootWindow(x11priv->dpy), &attr);
+    XGetWindowAttributes(x11priv->dpy, x11priv->rootWindow, &attr);
     if ((attr.your_event_mask & StructureNotifyMask) != StructureNotifyMask) {
-        XSelectInput(x11priv->dpy, DefaultRootWindow(x11priv->dpy), attr.your_event_mask | StructureNotifyMask);
+        XSelectInput(x11priv->dpy, x11priv->rootWindow,
+                     attr.your_event_mask | StructureNotifyMask);
     }
 
     InitXErrorHandler(x11priv);
@@ -151,6 +162,27 @@ void X11DelayedCompositeTest(void* arg)
         X11HandlerComposite(x11priv, true);
 }
 
+#ifdef HAVE_XFIXES
+static boolean
+X11ProcessXFixesEvent(FcitxX11 *x11priv, XEvent *xevent)
+{
+    switch (xevent->type - x11priv->xfixesEventBase) {
+    case XFixesSelectionNotify:
+        X11ProcessXFixesSelectionNotifyEvent(
+            x11priv, (XFixesSelectionNotifyEvent*)xevent);
+        return true;
+    }
+    return false;
+}
+
+static void
+X11CompManagerSelectionNotify(FcitxX11 *x11priv, Atom selection, int subtype,
+                              X11SelectionNotify *notify)
+{
+    X11HandlerComposite(x11priv, X11GetCompositeManager(x11priv));
+}
+#endif
+
 static void
 X11ProcessEventRealInternal(FcitxX11 *x11priv)
 {
@@ -163,24 +195,33 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
     while (XPending(x11priv->dpy)) {
         XNextEvent(x11priv->dpy, &event);
         if (XFilterEvent(&event, None) == False) {
-            if (event.type == DestroyNotify) {
+            switch (event.type) {
+            case DestroyNotify:
                 if (event.xany.window == x11priv->compManager)
                     X11HandlerComposite(x11priv, false);
-            } else if (event.type == ClientMessage) {
+                break;
+            case ClientMessage:
                 if (event.xclient.data.l[1] == x11priv->compManagerAtom) {
                     if (X11GetCompositeManager(x11priv))
                         X11HandlerComposite(x11priv, true);
                 }
-            } else if (event.type == ConfigureNotify) {
-                if (event.xconfigure.window == DefaultRootWindow(x11priv->dpy))
+                break;
+            case ConfigureNotify:
+                if (event.xconfigure.window == x11priv->rootWindow)
                     X11InitScreen(x11priv);
-            }
+                break;
+            case SelectionNotify:
+                X11ProcessSelectionNotifyEvent(x11priv,
+                                               (XSelectionEvent*)&event);
+                break;
+            default:
 #ifdef HAVE_XFIXES
-            else if (event.type - x11priv->xfixesEventBase == XFixesSelectionNotify) {
-                boolean result = X11InitComposite(x11priv);
-                X11HandlerComposite(x11priv, result);
-            }
+                if (x11priv->hasXfixes &&
+                    X11ProcessXFixesEvent(x11priv, &event))
+                    break;
 #endif
+                break;
+            }
 
             FcitxXEventHandler* handler;
             for (handler = (FcitxXEventHandler*)utarray_front(&x11priv->handlers);
@@ -192,9 +233,52 @@ X11ProcessEventRealInternal(FcitxX11 *x11priv)
     }
 }
 
+static void*
+_X11SelectionNotifyRemove(void *arg, FcitxModuleFunctionArg args)
+{
+    unsigned int id = ((unsigned int)(intptr_t)args.args[0]) - 1;
+    X11SelectionNotifyRemove(arg, id);
+    return NULL;
+}
+
+static void*
+X11EventWindow(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    return (void*)(intptr_t)x11priv->eventWindow;
+}
+
+static void*
+_X11SelectionNotifyRegister(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    const char *sel_str = args.args[0];
+    void *owner = args.args[1];
+    X11SelectionNotifyCallback cb = args.args[2];
+    void *data = args.args[3];
+    FcitxDestroyNotify destroy = args.args[4];
+    unsigned int id = X11SelectionNotifyRegister(x11priv, sel_str,
+                                                 owner, cb, data, destroy);
+    return (void*)(intptr_t)(id + 1);
+}
+
+static void*
+_X11RequestConvertSelection(void *arg, FcitxModuleFunctionArg args)
+{
+    FcitxX11 *x11priv = arg;
+    const char *sel_str = args.args[0];
+    const char *tgt_str = args.args[1];
+    void *owner = args.args[2];;
+    X11ConvertSelectionCallback cb = args.args[3];
+    void *data = args.args[4];
+    FcitxDestroyNotify destroy = args.args[5];
+    unsigned int id = X11RequestConvertSelection(x11priv, sel_str, tgt_str,
+                                                 owner, cb, data, destroy);
+    return (void*)(intptr_t)(id + 1);
+}
 
 void*
-X11ProcessEventReal(void* arg, FcitxModuleFunctionArg args)
+X11ProcessEventReal(void *arg, FcitxModuleFunctionArg args)
 {
     X11ProcessEventRealInternal((FcitxX11*)arg);
     return NULL;
@@ -249,25 +333,35 @@ void* X11RemoveEventHandler(void* arg, FcitxModuleFunctionArg args)
     return NULL;
 }
 
-boolean X11InitComposite(FcitxX11* x11priv)
+static void
+X11InitAtoms(FcitxX11 *x11priv)
 {
-    char *atom_names = NULL;
+    char *atom_names;
+    x11priv->windowTypeAtom = XInternAtom(x11priv->dpy, "_NET_WM_WINDOW_TYPE",
+                                          False);
+    x11priv->typeMenuAtom = XInternAtom(x11priv->dpy,
+                                        "_NET_WM_WINDOW_TYPE_MENU", False);
+    x11priv->typeDialogAtom = XInternAtom(x11priv->dpy,
+                                          "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    x11priv->typeDockAtom = XInternAtom(x11priv->dpy,
+                                        "_NET_WM_WINDOW_TYPE_DOCK", False);
+    x11priv->pidAtom = XInternAtom(x11priv->dpy, "_NET_WM_PID", False);
+    x11priv->utf8Atom = XInternAtom(x11priv->dpy, "UTF8_STRING", False);
+    x11priv->stringAtom = XInternAtom(x11priv->dpy, "STRING", False);
+    x11priv->compTextAtom = XInternAtom(x11priv->dpy, "COMPOUND_TEXT", False);
     asprintf(&atom_names, "_NET_WM_CM_S%d", x11priv->iScreen);
     x11priv->compManagerAtom = XInternAtom(x11priv->dpy, atom_names, False);
-
     free(atom_names);
+}
 
+static boolean
+X11InitComposite(FcitxX11* x11priv)
+{
 #ifdef HAVE_XFIXES
-    if (x11priv->hasXfixes) {
-       XFixesSelectSelectionInput (x11priv->dpy,
-                                   DefaultRootWindow(x11priv->dpy),
-                                   x11priv->compManagerAtom,
-                                   XFixesSetSelectionOwnerNotifyMask |
-                                   XFixesSelectionWindowDestroyNotifyMask |
-                                   XFixesSelectionClientCloseNotifyMask);
-    }
+    X11SelectionNotifyRegisterInternal(
+        x11priv, x11priv->compManagerAtom, x11priv,
+        X11CompManagerSelectionNotify, NULL, NULL, NULL);
 #endif
-
     return X11GetCompositeManager(x11priv);
 }
 

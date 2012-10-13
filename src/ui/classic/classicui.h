@@ -34,7 +34,7 @@
 #endif
 
 #include "skin.h"
-#include <module/x11/x11stuff.h>
+#include <module/x11/fcitx-x11.h>
 
 struct _MainWindow;
 struct _AboutWindow;

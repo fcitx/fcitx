@@ -1,0 +1,36 @@
+[Clipboard/SaveHistoryToFile]
+Type=Boolean
+DefaultValue=True
+Description=Save Clipboard History To File
+
+[Clipboard/HistoryLength]
+Type=Integer
+DefaultValue=5
+Min=1
+Max=16
+Description=Length of Clipboard History to Save
+
+[Clipboard/TriggerKey]
+Type=Hotkey
+DefaultValue=CTRL_;
+Description=Trigger Key for Clipboard History List
+
+[Clipboard/UsePrimary]
+Type=Boolean
+DefaultValue=True
+Description=Use Selection Text
+LongDescription=Include the text currently selected in clipboard history.
+Advance=True
+
+[Clipboard/ChooseModifier]
+Description=Choose key modifier
+Type=Enum
+EnumCount=4
+DefaultValue=None
+Enum0=None
+Enum1=Alt
+Enum2=Ctrl
+Enum3=Shift
+
+[DescriptionFile]
+LocaleDomain=fcitx

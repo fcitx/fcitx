@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,41 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+#ifndef _FCITX_MODULE_FCITX_CLIPBOARD_H
+#define _FCITX_MODULE_FCITX_CLIPBOARD_H
 
-#ifndef XERRORHANDLER_H
-#define XERRORHANDLER_H
+#include <fcitx/addon.h>
+#include <fcitx/module.h>
+#include <stdint.h>
+#include <module/clipboard/clipboard.h>
 
-#include "x11stuff-internal.h"
+static inline FcitxAddon*
+FcitxClipboardGetAddon(FcitxInstance *instance)
+{
+    static FcitxAddon *addon = NULL;
+    if (!addon) {
+        addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance),
+                                          "fcitx-clipboard");
+    }
+    return addon;
+}
 
-void InitXErrorHandler(FcitxX11*);
+static inline const char*
+FcitxClipboardGetPrimarySelection(FcitxInstance *instance,
+                                  unsigned int *arg0)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 0,
+        (void*)(intptr_t)arg0);
+}
+
+static inline const char*
+FcitxClipboardGetClipboardHistory(FcitxInstance *instance,
+                                  unsigned int arg0, unsigned int *arg1)
+{
+    return (const char*)(intptr_t)FcitxModuleInvokeVaArgs(
+        FcitxClipboardGetAddon(instance), 1,
+        (void*)(intptr_t)arg0, (void*)(intptr_t)arg1);
+}
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;

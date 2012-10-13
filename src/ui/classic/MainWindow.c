@@ -40,7 +40,6 @@
 
 #include "MainWindow.h"
 #include "fcitx-utils/log.h"
-#include "module/x11/x11stuff.h"
 #include "classicui.h"
 #include "skin.h"
 #include "MenuWindow.h"
@@ -119,10 +118,10 @@ MainWindow* CreateMainWindow(FcitxClassicUI* classicui)
     mainWindow->owner = classicui;
     InitMainWindow(mainWindow);
 
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 MainWindowEventHandler, mainWindow);
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDCOMPOSITEHANDLER,
-                 ReloadMainWindow, mainWindow);
+    FcitxX11AddXEventHandler(classicui->owner,
+                             MainWindowEventHandler, mainWindow);
+    FcitxX11AddCompositeHandler(classicui->owner,
+                                ReloadMainWindow, mainWindow);
     return mainWindow;
 }
 
