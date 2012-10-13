@@ -583,12 +583,6 @@ void FcitxHotkeyGetKey(FcitxKeySym keysym, unsigned int iKeyState, FcitxKeySym* 
     if (iKeyState) {
         if (iKeyState != FcitxKeyState_Shift && FcitxHotkeyIsHotKeyLAZ(keysym, 0))
             keysym = keysym + FcitxKey_A - FcitxKey_a;
-
-        FcitxLog(INFO, "%d", (
-                ((FcitxHotkeyIsHotKeySimple(keysym, 0) || FcitxKeySymToUnicode(keysym) != 0)
-                 && keysym != FcitxKey_space && keysym != FcitxKey_Return)
-                || (keysym >= FcitxKey_KP_0 && keysym <= FcitxKey_KP_9)
-               ));
         /*
          * alt shift 1 shoud be alt + !
          * shift+s should be S
