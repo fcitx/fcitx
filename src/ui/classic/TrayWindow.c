@@ -33,7 +33,6 @@
 #include "tray.h"
 #include "skin.h"
 #include "classicui.h"
-#include "module/x11/x11stuff.h"
 #include "fcitx-utils/log.h"
 #include "fcitx/frontend.h"
 #include "fcitx/module.h"
@@ -103,8 +102,7 @@ TrayWindow* CreateTrayWindow(FcitxClassicUI *classicui)
 {
     TrayWindow *trayWindow = fcitx_utils_malloc0(sizeof(TrayWindow));
     trayWindow->owner = classicui;
-    InvokeVaArgs(classicui->owner, FCITX_X11, ADDXEVENTHANDLER,
-                 TrayEventHandler, trayWindow);
+    FcitxX11AddXEventHandler(classicui->owner, TrayEventHandler, trayWindow);
     InitTrayWindow(trayWindow);
     return trayWindow;
 }

@@ -1,0 +1,9 @@
+[Addon]
+Name=fcitx-clipboard
+_GeneralName=Clipboard
+_Comment=Fcitx Clipboard access
+Category=Module
+Enabled=True
+Library=fcitx-clipboard.so
+Type=SharedLibrary
+Priority=40

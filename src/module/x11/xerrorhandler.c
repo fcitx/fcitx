@@ -22,7 +22,7 @@
 #include "fcitx/instance.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/ime.h"
-#include "x11stuff.h"
+#include "xerrorhandler.h"
 
 static XErrorHandler   oldXErrorHandler;
 static XIOErrorHandler oldXIOErrorHandler;
@@ -45,7 +45,6 @@ int FcitxXIOErrorHandler(Display *d)
 
     FcitxInstanceEnd(x11handle->owner);
     return 0;
-
 }
 
 int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
@@ -63,7 +62,8 @@ int FcitxXErrorHandler(Display * dpy, XErrorEvent * event)
 
     if (fp)
         fclose(fp);
-    if (event->error_code != 3 && event->error_code != BadMatch) {  // xterm will generate 3
+    if (event->error_code != 3 && event->error_code != BadMatch) {
+        // xterm will generate 3
         FcitxInstanceEnd(x11handle->owner);
     }
 

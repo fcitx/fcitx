@@ -5,6 +5,7 @@ set(FCITX_UTILS_SOURCES
     qsort_r.c
     msort_r.c
     memory.c
+    handler-table.c
 )
 
 set(FCITX_UTILS_HEADERS
@@ -17,6 +18,7 @@ set(FCITX_UTILS_HEADERS
     keysym.h
     keysymgen.h
     bitset.h
+    handler-table.h
 )
 
 if (LIBKVM_FOUND)

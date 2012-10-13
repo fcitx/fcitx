@@ -21,8 +21,12 @@
 #ifndef X11STUFF_H
 #define X11STUFF_H
 #include <X11/Xlib.h>
+#include <stdint.h>
 #include <fcitx-utils/utarray.h>
 #include <fcitx-config/fcitx-config.h>
+#include <fcitx/instance.h>
+#include <fcitx/addon.h>
+#include <fcitx/module.h>
 
 #define FCITX_X11_NAME "fcitx-x11"
 #define FCITX_X11_GETDISPLAY 0
@@ -50,48 +54,12 @@
 #define FCITX_X11_GETDPI 11
 #define FCITX_X11_GETDPI_RETURNTYPE void
 
-
-struct _FcitxInstance;
-
-typedef struct _FcitxXEventHandler {
-    boolean(*eventHandler)(void* instance, XEvent* event);
-    void* instance;
-} FcitxXEventHandler;
-
-typedef struct _FcitxCompositeChangedHandler {
-    void (*eventHandler)(void* instance, boolean enable);
-    void *instance;
-} FcitxCompositeChangedHandler;
+typedef boolean (*FcitxX11XEventHandler)(void *instance, XEvent *event);
+typedef void (*FcitxX11CompositeHandler)(void *instance, boolean enable);
 
 typedef struct _FcitxRect {
     int x1, y1, x2, y2;
 } FcitxRect;
-
-typedef struct _FcitxX11 {
-    Display *dpy;
-    UT_array handlers;
-    UT_array comphandlers;
-    struct _FcitxInstance* owner;
-    Window compManager;
-    Atom compManagerAtom;
-    int iScreen;
-    Atom typeMenuAtom;
-    Atom windowTypeAtom;
-    Atom typeDialogAtom;
-    Atom typeDockAtom;
-    Atom pidAtom;
-    boolean bUseXinerama;
-    FcitxRect* rects;
-    int screenCount;
-    int defaultScreen;
-    struct _FcitxAddon* xim;
-    double dpif;
-    int dpi;
-    boolean firstRun;
-    boolean hasXfixes;
-    int xfixesEventBase;
-    boolean isComposite;
-} FcitxX11;
 
 typedef enum _FcitxXWindowType {
     FCITX_WINDOW_UNKNOWN,
@@ -99,6 +67,12 @@ typedef enum _FcitxXWindowType {
     FCITX_WINDOW_MENU,
     FCITX_WINDOW_DIALOG
 } FcitxXWindowType;
+
+typedef void (*X11SelectionNotifyCallback)(void *owner, const char *selection,
+                                           int subtype, void *data);
+typedef void (*X11ConvertSelectionCallback)(
+    void *owner, const char *sel_str, const char *tgt_str, int format,
+    size_t nitems, const void *buff, void *data);
 
 #endif
 // kate: indent-mode cstyle; space-indent on; indent-width 0;

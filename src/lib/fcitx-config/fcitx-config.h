@@ -105,20 +105,7 @@
 #include <fcitx-utils/utils.h>
 #include <fcitx-utils/log.h>
 #include <fcitx-config/xdg.h>
-
-struct _FcitxHotkey;
-/**
- * fcitx boolean
- **/
-typedef int32_t boolean;
-/**
- * fcitx true
- */
-#define true (1)
-/**
- * fcitx false
- */
-#define false (0)
+#include <fcitx-config/hotkey.h>
 
 #ifdef __cplusplus
 extern "C"

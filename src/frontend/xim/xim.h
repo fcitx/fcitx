@@ -35,7 +35,6 @@
 typedef struct _FcitxXimFrontend {
     FcitxGenericConfig gconfig;
     boolean bUseOnTheSpotStyle;
-    Window ximWindow;
     Display* display;
     int iScreen;
     int iTriggerKeyCount;
@@ -49,7 +48,7 @@ typedef struct _FcitxXimFrontend {
     long unsigned int currentSerialNumberKey;
     XIMFeedback *feedback;
     int feedback_len;
-    FcitxAddon* x11addon;
+    // FcitxAddon* x11addon;
     UT_array* queue;
 } FcitxXimFrontend;
 

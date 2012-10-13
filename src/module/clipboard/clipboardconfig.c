@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002~2005 by Yuking                                     *
- *   yuking_net@sohu.com                                                   *
+ *   Copyright (C) 2012~2012 by Yichao Yu                                  *
+ *   yyc1992@gmail.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,13 +17,12 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
+#include "clipboard-internal.h"
 
-#ifndef XERRORHANDLER_H
-#define XERRORHANDLER_H
-
-#include "x11stuff-internal.h"
-
-void InitXErrorHandler(FcitxX11*);
-
-#endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+CONFIG_BINDING_BEGIN(FcitxClipboardConfig);
+CONFIG_BINDING_REGISTER("Clipboard", "SaveHistoryToFile", save_history);
+CONFIG_BINDING_REGISTER("Clipboard", "HistoryLength", history_len);
+CONFIG_BINDING_REGISTER("Clipboard", "TriggerKey", trigger_key);
+CONFIG_BINDING_REGISTER("Clipboard", "UsePrimary", use_primary);
+CONFIG_BINDING_REGISTER("Clipboard", "ChooseModifier", choose_modifier);
+CONFIG_BINDING_END();

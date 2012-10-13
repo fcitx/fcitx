@@ -40,7 +40,7 @@
 #include "xim.h"
 #include "ximhandler.h"
 #include "ximqueue.h"
-#include "module/x11/x11stuff.h"
+#include "module/x11/fcitx-x11.h"
 #include "fcitx-config/xdg.h"
 #include "fcitx/hook.h"
 
@@ -118,18 +118,18 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 {
     if (ximfrontend != NULL)
         return NULL;
-    FcitxXimFrontend* xim = fcitx_utils_malloc0(sizeof(FcitxXimFrontend));
+    FcitxXimFrontend *xim = fcitx_utils_new(FcitxXimFrontend);
     if (xim == NULL)
         return NULL;
 
     ximfrontend = xim;
 
-    XIMStyles *input_styles;
-    XIMEncodings *encodings;
     char *imname = NULL;
     char *p;
 
-    xim->display = InvokeVaArgs(instance, FCITX_X11, GETDISPLAY);
+    UT_array *addons = FcitxInstanceGetAddons(instance);
+    FcitxAddon *ximaddon = FcitxAddonsGetAddonByName(addons, "fcitx-xim");
+    xim->display = FcitxX11GetDisplay(instance);
 
     if (xim->display == NULL) {
         FcitxLog(FATAL, _("X11 not initialized"));
@@ -137,14 +137,11 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
         return NULL;
     }
 
-    FcitxAddon* ximaddon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-xim");
-    xim->x11addon = FcitxAddonsGetAddonByName(FcitxInstanceGetAddons(instance), "fcitx-x11");
     xim->iScreen = DefaultScreen(xim->display);
     xim->owner = instance;
     xim->frontendid = frontendid;
-
-    xim->ximWindow = XCreateSimpleWindow(xim->display, DefaultRootWindow(xim->display), 0, 0, 1, 1, 1, 0, 0);
-    if (xim->ximWindow == (Window) NULL) {
+    Window xim_window = FcitxX11DefaultEventWindow(instance);
+    if (!xim_window) {
         FcitxLog(FATAL, _("Can't Create imWindow"));
         free(xim);
         return NULL;
@@ -153,9 +150,9 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
     if (!imname) {
         imname = getenv("XMODIFIERS");
         if (imname) {
-            if (strstr(imname, "@im="))
+            if (!strncmp(imname, "@im=", strlen("@im="))) {
                 imname += 4;
-            else {
+            } else {
                 FcitxLog(WARNING, _("XMODIFIERS Error."));
                 imname = DEFAULT_IMNAME;
             }
@@ -197,18 +194,21 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
             fclose(fp);
     }
 
-    input_styles = (XIMStyles *) malloc(sizeof(XIMStyles));
+    XIMStyles input_styles;
     if (xim->bUseOnTheSpotStyle) {
-        input_styles->count_styles = sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
-        input_styles->supported_styles = OnTheSpot_Styles;
+        input_styles.count_styles =
+            sizeof(OnTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles.supported_styles = OnTheSpot_Styles;
     } else {
-        input_styles->count_styles = sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
-        input_styles->supported_styles = OverTheSpot_Styles;
+        input_styles.count_styles =
+            sizeof(OverTheSpot_Styles) / sizeof(XIMStyle) - 1;
+        input_styles.supported_styles = OverTheSpot_Styles;
     }
 
-    encodings = (XIMEncodings *) malloc(sizeof(XIMEncodings));
-    encodings->count_encodings = sizeof(zhEncodings) / sizeof(XIMEncoding) - 1;
-    encodings->supported_encodings = zhEncodings;
+    XIMEncodings encodings = {
+        .count_encodings = sizeof(zhEncodings) / sizeof(XIMEncoding) - 1,
+        .supported_encodings = zhEncodings
+    };
 
     p = getenv("LC_CTYPE");
     if (!p) {
@@ -225,18 +225,15 @@ void* XimCreate(FcitxInstance* instance, int frontendid)
 
     xim->ims = IMOpenIM(xim->display,
                         IMModifiers, "Xi18n",
-                        IMServerWindow, xim->ximWindow,
+                        IMServerWindow, xim_window,
                         IMServerName, imname,
                         IMLocale, strLocale,
                         IMServerTransport, "X/",
-                        IMInputStyles, input_styles,
-                        IMEncodingList, encodings,
+                        IMInputStyles, &input_styles,
+                        IMEncodingList, &encodings,
                         IMProtocolHandler, XimProtocolHandler,
                         IMFilterEventMask, KeyPressMask | KeyReleaseMask,
                         NULL);
-
-    free(input_styles);
-    free(encodings);
 
     if (xim->ims == (XIMS) NULL) {
         FcitxLog(ERROR, _("Start XIM error. Another XIM daemon named %s is running?"), imname);
@@ -393,25 +390,25 @@ void XimCommitString(void* arg, FcitxInputContext* ic, const char* str)
 void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, FcitxKeySym sym, unsigned int state)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    XEvent xEvent;
-    memset(&xEvent, 0, sizeof(xEvent));
+    Window win;
+    if (!(win = GetXimIC(ic)->focus_win))
+        win = GetXimIC(ic)->client_win;
+    XEvent xEvent = {
+        .xkey = {
+            .type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease,
+            .serial = xim->currentSerialNumberKey,
+            .send_event = False,
+            .display = xim->display,
+            .window = win,
+            .root = DefaultRootWindow(xim->display),
+            .subwindow = None,
+            .time = CurrentTime,
+            .state = state,
+            .keycode = XKeysymToKeycode(xim->display, sym),
+            .same_screen = False,
+        }
+    };
 
-    xEvent.xkey.type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease;
-    xEvent.xkey.display = xim->display;
-    xEvent.xkey.serial = xim->currentSerialNumberKey;
-    xEvent.xkey.send_event = False;
-    xEvent.xkey.x = xEvent.xkey.y = xEvent.xkey.x_root = xEvent.xkey.y_root = 0;
-    xEvent.xkey.same_screen = False;
-    xEvent.xkey.subwindow = None;
-    xEvent.xkey.window = None;
-    xEvent.xkey.root = DefaultRootWindow(xim->display);
-    xEvent.xkey.state = state;
-    if (GetXimIC(ic)->focus_win)
-        xEvent.xkey.window = GetXimIC(ic)->focus_win;
-    else if (GetXimIC(ic)->client_win)
-        xEvent.xkey.window = GetXimIC(ic)->client_win;
-
-    xEvent.xkey.keycode = XKeysymToKeycode(xim->display, sym);
     XimForwardKeyInternal(xim, GetXimIC(ic), &xEvent);
 }
 
@@ -419,10 +416,8 @@ void XimSetWindowOffset(void* arg, FcitxInputContext* ic, int x, int y)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
     FcitxXimIC* ximic = GetXimIC(ic);
-    Window window = None, dst;
-    if (ximic->focus_win)
-        window = ximic->focus_win;
-    else if (ximic->client_win)
+    Window window, dst;
+    if (!(window = ximic->focus_win))
         window = ximic->client_win;
 
     if (window != None) {
@@ -474,11 +469,9 @@ void XimUpdatePreedit(void* arg, FcitxInputContext* ic)
 pid_t XimGetPid(void* arg, FcitxInputContext* ic)
 {
     FcitxXimFrontend* xim = (FcitxXimFrontend*) arg;
-    Window w = None;
+    Window w;
     FcitxXimIC* ximic = GetXimIC(ic);
-    if (ximic->focus_win)
-        w = ximic->focus_win;
-    else if (ximic->client_win)
+    if (!(w = ximic->focus_win))
         w = ximic->client_win;
 
     return XimFindApplicationPid(xim, w);
