@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 09:42-0400\n"
-"PO-Revision-Date: 2012-10-13 09:01-0400\n"
+"POT-Creation-Date: 2012-10-13 11:11-0400\n"
+"PO-Revision-Date: 2012-10-13 11:14-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
 "Language: zh_TW\n"
@@ -223,7 +223,6 @@ msgstr "在輸入特定字串時自動切換到英文模式"
 msgid "Auto Create Phrase"
 msgstr ""
 
-#, fuzzy
 msgid "Auto English"
 msgstr "自動英文模式"
 
@@ -388,9 +387,8 @@ msgid "Clear Frequency"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:14
-#, fuzzy
 msgid "Clear local Input Method"
-msgstr "無可用輸入法"
+msgstr "清空局部輸入法"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:327
 msgid "Clear local input method"
@@ -566,9 +564,8 @@ msgid "Disable Paging in Remind Mode"
 msgstr "聯想模式停用翻頁"
 
 #: /home/saber/Develop/fcitx/src/module/pinyin-enhance/fcitx-pinyin-enhance.desc:40
-#, fuzzy
 msgid "Disable Pinyin Symbol"
-msgstr "聯想模式停用翻頁"
+msgstr "禁用拼音特殊符號"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx/addon.c:272
 #, c-format
@@ -783,9 +780,8 @@ msgid "Font Locale to display"
 msgstr ""
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:16
-#, fuzzy
 msgid "Font Size"
-msgstr "字型"
+msgstr "字型大小"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:28
 msgid "Font size repect dpi setting"
@@ -879,9 +875,8 @@ msgid "Global Input Method SelectKey"
 msgstr "全域輸入法選擇鍵"
 
 # unknown
-#, fuzzy
 msgid "GlobalSelector"
-msgstr "輸入法選擇器"
+msgstr "全局選擇"
 
 #: unknown
 msgid "Grave"
@@ -1156,9 +1151,8 @@ msgid "Local Input Method SelectKey"
 msgstr "局部輸入法選擇鍵"
 
 # unknown
-#, fuzzy
 msgid "LocalSelector"
-msgstr "輸入法選擇器"
+msgstr "局部選擇"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:73
 msgid "Logo Icon"
@@ -1374,9 +1368,8 @@ msgstr "字詞已在碼表中"
 msgid "Pinyin"
 msgstr "拼音"
 
-#, fuzzy
 msgid "Pinyin Enhance"
-msgstr "拼音鍵"
+msgstr "拼音增強"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/pinyin/py.c:425
 msgid "Pinyin Index Magic Number Doesn't match"
@@ -1816,47 +1809,47 @@ msgstr "切換全形標點符號"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:54
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:99
-msgid "Switch to Eighth Input Method"
+msgid "Switch to the Eighth Input Method"
 msgstr "切換至第8個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:39
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:84
-msgid "Switch to Fifth Input Method"
+msgid "Switch to the Fifth Input Method"
 msgstr "切換至第5個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:19
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:64
-msgid "Switch to First Input Method"
+msgid "Switch to the First Input Method"
 msgstr "切換至第1個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:34
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:79
-msgid "Switch to Fourth Input Method"
+msgid "Switch to the Fourth Input Method"
 msgstr "切換至第4個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:59
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:104
-msgid "Switch to Nineth Input Method"
+msgid "Switch to the Ninth Input Method"
 msgstr "切換至第9個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:24
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:69
-msgid "Switch to Second Input Method"
+msgid "Switch to the Second Input Method"
 msgstr "切換至第2個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:49
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:94
-msgid "Switch to Seventh Input Method"
+msgid "Switch to the Seventh Input Method"
 msgstr "切換至第7個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:44
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:89
-msgid "Switch to Sixth Input Method"
+msgid "Switch to the Sixth Input Method"
 msgstr "切換至第6個輸入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:29
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:74
-msgid "Switch to Third Input Method"
+msgid "Switch to the Third Input Method"
 msgstr "切換至第3個輸入法"
 
 #: /home/saber/Develop/fcitx/data/config.desc:90

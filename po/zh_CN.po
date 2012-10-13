@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 09:42-0400\n"
-"PO-Revision-Date: 2012-10-13 09:43-0400\n"
+"POT-Creation-Date: 2012-10-13 11:11-0400\n"
+"PO-Revision-Date: 2012-10-13 11:12-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1807,47 +1807,47 @@ msgstr "切换全角标点"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:54
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:99
-msgid "Switch to Eighth Input Method"
+msgid "Switch to the Eighth Input Method"
 msgstr "切换至第8个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:39
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:84
-msgid "Switch to Fifth Input Method"
+msgid "Switch to the Fifth Input Method"
 msgstr "切换至第5个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:19
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:64
-msgid "Switch to First Input Method"
+msgid "Switch to the First Input Method"
 msgstr "切换至第1个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:34
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:79
-msgid "Switch to Fourth Input Method"
+msgid "Switch to the Fourth Input Method"
 msgstr "切换至第4个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:59
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:104
-msgid "Switch to Nineth Input Method"
+msgid "Switch to the Ninth Input Method"
 msgstr "切换至第9个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:24
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:69
-msgid "Switch to Second Input Method"
+msgid "Switch to the Second Input Method"
 msgstr "切换至第2个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:49
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:94
-msgid "Switch to Seventh Input Method"
+msgid "Switch to the Seventh Input Method"
 msgstr "切换至第7个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:44
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:89
-msgid "Switch to Sixth Input Method"
+msgid "Switch to the Sixth Input Method"
 msgstr "切换至第6个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:29
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:74
-msgid "Switch to Third Input Method"
+msgid "Switch to the Third Input Method"
 msgstr "切换至第3个输入法"
 
 #: /home/saber/Develop/fcitx/data/config.desc:90
