@@ -217,17 +217,8 @@ case '\v': case '\r'
 static char*
 ClipboardSelectionStrip(const char *str, uint32_t len)
 {
-    const char *begin = str;
+    const char *begin = str + strspn(str, " \t\b\n\f\v\r");
     const char *end = str + len;
-    for (;begin < end;begin++) {
-        switch (*begin) {
-        case_blank:
-            continue;
-        default:
-            break;
-        }
-        break;
-    }
     for (;end >= begin;end--) {
         switch (*(end - 1)) {
         case_blank:
