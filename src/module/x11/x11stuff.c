@@ -38,7 +38,6 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "x11stuff-internal.h"
-#include "x11handlertable.h"
 #include "x11selection.h"
 #include "xerrorhandler.h"
 

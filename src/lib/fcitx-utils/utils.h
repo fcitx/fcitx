@@ -81,6 +81,16 @@ extern "C" {
 #endif
 
     /**
+     * Function used to free the pointer
+     **/
+    typedef void (*FcitxDestroyNotify)(void*);
+    /**
+     * Function used to free the content of a structure,
+     * DO NOT free the pointer itself
+     **/
+    typedef void (*FcitxFreeContentFunc)(void*);
+    typedef void (*FcitxCallBack)();
+    /**
      * A hash set for string
      **/
     typedef struct _FcitxStringHashSet {

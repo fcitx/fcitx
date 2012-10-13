@@ -68,7 +68,6 @@ typedef enum _FcitxXWindowType {
     FCITX_WINDOW_DIALOG
 } FcitxXWindowType;
 
-typedef void (*FcitxDestroyNotify)(void*);
 typedef void (*X11SelectionNotifyCallback)(void *owner, const char *selection,
                                            int subtype, void *data);
 typedef void (*X11ConvertSelectionCallback)(

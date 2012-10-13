@@ -31,7 +31,7 @@
 #include "fcitx-utils/utils.h"
 #include "fcitx/instance.h"
 #include "x11stuff-internal.h"
-#include "x11handlertable.h"
+#include "fcitx-utils/handler-table.h"
 #include "x11selection.h"
 
 #define FCITX_X11_SEL "FCITX_X11_SEL_"

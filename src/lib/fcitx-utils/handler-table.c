@@ -18,19 +18,12 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#include "fcitx-utils/utils.h"
+#include "config.h"
+#include "fcitx/fcitx.h"
 #include "fcitx-utils/uthash.h"
-#include "x11handlertable.h"
+#include "handler-table.h"
 
 #define OBJ_POOL_INIT_SIZE (4)
-
-typedef struct {
-    void *array;
-    unsigned int alloc;
-    unsigned int size;
-    unsigned int ele_size;
-    unsigned int last_empty;
-} FcitxObjPool;
 
 typedef struct {
     unsigned int first;
@@ -51,19 +44,7 @@ struct _FcitxHandlerTable {
     FcitxObjPool objs;
 };
 
-static inline unsigned int
-fcitx_obj_pool_offset(FcitxObjPool *pool, unsigned int i)
-{
-    return i * pool->ele_size;
-}
-
-static inline void*
-fcitx_obj_pool_get(FcitxObjPool *pool, unsigned int i)
-{
-    return pool->array + fcitx_obj_pool_offset(pool, i) + sizeof(int);
-}
-
-static void
+FCITX_EXPORT_API void
 fcitx_obj_pool_init(FcitxObjPool *pool, unsigned int size)
 {
     unsigned int rem = size % sizeof(int);
@@ -79,8 +60,8 @@ fcitx_obj_pool_init(FcitxObjPool *pool, unsigned int size)
     pool->array = malloc(pool->alloc);
 }
 
-static unsigned int
-fcitx_obj_pool_alloc(FcitxObjPool *pool)
+FCITX_EXPORT_API unsigned int
+fcitx_obj_pool_alloc_id(FcitxObjPool *pool)
 {
     unsigned int offset;
     for (offset = fcitx_obj_pool_offset(pool, pool->last_empty);
@@ -100,8 +81,8 @@ found:
     return pool->last_empty;
 }
 
-static void
-fcitx_obj_pool_free(FcitxObjPool *pool, unsigned int i)
+FCITX_EXPORT_API void
+fcitx_obj_pool_free_id(FcitxObjPool *pool, unsigned int i)
 {
     unsigned int offset = fcitx_obj_pool_offset(pool, i);
     if (offset >= pool->size)
@@ -109,13 +90,7 @@ fcitx_obj_pool_free(FcitxObjPool *pool, unsigned int i)
     *(int*)(pool->array + offset) = 0;
 }
 
-static void
-fcitx_obj_pool_done(FcitxObjPool *pool)
-{
-    free(pool->array);
-}
-
-FcitxHandlerTable*
+FCITX_EXPORT_API FcitxHandlerTable*
 fcitx_handler_table_new(size_t obj_size, FcitxFreeContentFunc free_func)
 {
     FcitxHandlerTable *table = fcitx_utils_new(FcitxHandlerTable);
@@ -147,14 +122,14 @@ fcitx_handler_table_get_obj(FcitxHandlerTable *table, unsigned int id)
     return fcitx_obj_pool_get(&table->objs, id);
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
                            const void *key, const void *obj)
 {
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
     unsigned int new_id;
-    new_id = fcitx_obj_pool_alloc(&table->objs);
+    new_id = fcitx_obj_pool_alloc_id(&table->objs);
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
@@ -172,14 +147,14 @@ fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
     return new_id;
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
                             const void *key, const void *obj)
 {
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
     unsigned int new_id;
-    new_id = fcitx_obj_pool_alloc(&table->objs);
+    new_id = fcitx_obj_pool_alloc_id(&table->objs);
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
@@ -197,7 +172,7 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
     return new_id;
 }
 
-void*
+FCITX_EXPORT_API void*
 fcitx_handler_table_get_by_id(FcitxHandlerTable *table, unsigned int id)
 {
     if (id == INVALID_ID)
@@ -207,7 +182,7 @@ fcitx_handler_table_get_by_id(FcitxHandlerTable *table, unsigned int id)
     return obj_struct + 1;
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_first_id(FcitxHandlerTable *table, size_t keysize,
                              const void *key)
 {
@@ -218,7 +193,7 @@ fcitx_handler_table_first_id(FcitxHandlerTable *table, size_t keysize,
     return key_struct->first;
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_last_id(FcitxHandlerTable *table, size_t keysize,
                             const void *key)
 {
@@ -229,21 +204,21 @@ fcitx_handler_table_last_id(FcitxHandlerTable *table, size_t keysize,
     return key_struct->last;
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_next_id(FcitxHandlerTable *table, const void *obj)
 {
     const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
     return obj_struct->next;
 }
 
-unsigned int
+FCITX_EXPORT_API unsigned int
 fcitx_handler_table_prev_id(FcitxHandlerTable *table, const void *obj)
 {
     const FcitxHandlerObj *obj_struct = obj - sizeof(FcitxHandlerObj);
     return obj_struct->prev;
 }
 
-void*
+FCITX_EXPORT_API void*
 fcitx_handler_table_first(FcitxHandlerTable *table, size_t keysize,
                           const void *key)
 {
@@ -251,7 +226,7 @@ fcitx_handler_table_first(FcitxHandlerTable *table, size_t keysize,
     return fcitx_handler_table_get_by_id(table, id);
 }
 
-void*
+FCITX_EXPORT_API void*
 fcitx_handler_table_last(FcitxHandlerTable *table, size_t keysize,
                          const void *key)
 {
@@ -259,21 +234,21 @@ fcitx_handler_table_last(FcitxHandlerTable *table, size_t keysize,
     return fcitx_handler_table_get_by_id(table, id);
 }
 
-void*
+FCITX_EXPORT_API void*
 fcitx_handler_table_next(FcitxHandlerTable *table, const void *obj)
 {
     unsigned int id = fcitx_handler_table_next_id(table, obj);
     return fcitx_handler_table_get_by_id(table, id);
 }
 
-void*
+FCITX_EXPORT_API void*
 fcitx_handler_table_prev(FcitxHandlerTable *table, const void *obj)
 {
     unsigned int id = fcitx_handler_table_prev_id(table, obj);
     return fcitx_handler_table_get_by_id(table, id);
 }
 
-void
+FCITX_EXPORT_API void
 fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, unsigned int id)
 {
     if (id == INVALID_ID)
@@ -294,7 +269,7 @@ fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, unsigned int id)
     }
     if (table->free_func)
         table->free_func(obj_struct + 1);
-    fcitx_obj_pool_free(&table->objs, id);
+    fcitx_obj_pool_free_id(&table->objs, id);
 }
 
 static void
@@ -309,13 +284,13 @@ fcitx_handler_table_free_key(FcitxHandlerTable *table,
         next_id = obj_struct->next;
         if (table->free_func)
             table->free_func(obj_struct + 1);
-        fcitx_obj_pool_free(&table->objs, id);
+        fcitx_obj_pool_free_id(&table->objs, id);
     }
     HASH_DELETE(hh, table->keys, key_struct);
     free(key_struct);
 }
 
-void
+FCITX_EXPORT_API void
 fcitx_handler_table_remove_key(FcitxHandlerTable *table, size_t keysize,
                                const void *key)
 {
@@ -326,7 +301,7 @@ fcitx_handler_table_remove_key(FcitxHandlerTable *table, size_t keysize,
     fcitx_handler_table_free_key(table, key_struct);
 }
 
-void
+FCITX_EXPORT_API void
 fcitx_handler_table_free(FcitxHandlerTable *table)
 {
     FcitxHandlerKey* key_struct;

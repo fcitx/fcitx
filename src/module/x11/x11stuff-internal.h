@@ -24,7 +24,7 @@
 #include "config.h"
 #include "fcitx/fcitx.h"
 #include "x11stuff.h"
-#include "x11handlertable.h"
+#include "fcitx-utils/handler-table.h"
 
 typedef struct {
     FcitxX11XEventHandler eventHandler;
@@ -70,8 +70,6 @@ typedef struct {
     boolean isComposite;
     FcitxHandlerTable *convertSelection;
 } FcitxX11;
-
-typedef void (*FcitxCallBack)();
 
 typedef struct _X11SelectionNotify X11SelectionNotify;
 typedef struct _X11ConvertSelection X11ConvertSelection;
