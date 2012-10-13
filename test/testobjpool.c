@@ -28,12 +28,15 @@ int main()
         id[i] = fcitx_obj_pool_alloc_id(pool);
         assert(id[i] >= 0);
         int32_t* data = (int32_t*) fcitx_obj_pool_get(pool, id[i]);
-        *data = i;
+        *data = 32 - i;
     }
 
-    for (i = 1; i < 32; i+=2) {
+    for (i = 0; i < 32; i++) {
         int32_t* data = (int32_t*) fcitx_obj_pool_get(pool, id[i]);
-        assert(*data == i);
+        if (i % 2)
+            assert(*data == i);
+        else
+            assert(*data == 32 - i);
         assert(fcitx_obj_pool_free_id(pool, id[i]));
     }
 
