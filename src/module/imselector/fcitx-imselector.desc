@@ -56,7 +56,7 @@ Description=Switch to Eighth Input Method
 [GlobalSelector/IM9]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Nighth Input Method
+Description=Switch to Nineth Input Method
 
 [LocalSelector/IM1]
 Type=Hotkey
@@ -101,7 +101,7 @@ Description=Switch to Eighth Input Method
 [LocalSelector/IM9]
 Type=Hotkey
 DefaultValue=
-Description=Switch to Nighth Input Method
+Description=Switch to Nineth Input Method
 
 [DescriptionFile]
 LocaleDomain=fcitx

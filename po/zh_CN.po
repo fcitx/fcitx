@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 08:59-0400\n"
-"PO-Revision-Date: 2012-10-13 09:00-0400\n"
+"POT-Creation-Date: 2012-10-13 09:42-0400\n"
+"PO-Revision-Date: 2012-10-13 09:43-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -248,8 +248,8 @@ msgstr "词组参与自动造词"
 msgid "Auto Send Candidate Word"
 msgstr "自动上屏"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1203
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1212
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1190
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1199
 msgid "Available Value:"
 msgstr "可选值："
 
@@ -288,7 +288,7 @@ msgstr "无法加载默认皮肤，安装是否正确？"
 msgid "Can not load skin %s, return to default"
 msgstr "无法加载皮肤%s，回到默认皮肤"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:148
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:145
 msgid "Can't Create imWindow"
 msgstr "无法创建输入法窗口"
 
@@ -344,6 +344,7 @@ msgstr "选择键"
 msgid "Choose Second and Third Candidate Word"
 msgstr "选择第二第三候选词"
 
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:26
 #: /home/saber/Develop/fcitx/src/module/autoeng/fcitx-autoeng.desc:2
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:16
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:126
@@ -390,6 +391,10 @@ msgstr "清除局部输入法"
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/imselector/imselector.c:327
 msgid "Clear local input method"
 msgstr "清除局部输入法"
+
+# unknown
+msgid "Clipboard"
+msgstr "剪贴板"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/module/vk/vk.c:208
 msgid "Close virtual keyboard"
@@ -447,16 +452,16 @@ msgstr "选择候选词时输入额外空格"
 msgid "ConfigFile"
 msgstr "配置文件"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:461
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:459
 msgid "Configure"
 msgstr "配置"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:458
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:730
 msgid "Configure Current Input Method"
 msgstr "配置当前输入法"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:913
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:900
 #, c-format
 msgid "Configure group name error: line %d"
 msgstr "配置组名错误: 行%d"
@@ -509,15 +514,15 @@ msgstr "DBus"
 msgid "DBus Support"
 msgstr "DBus 支持"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:162
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/InputWindow.c:161
 msgid "DISPLAY InputWindow"
 msgstr "DISPLAY InputWindow"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:131
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:130
 msgid "DISPLAY MainWindow"
 msgstr "DISPLAY MainWindow"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:142
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/MainWindow.c:141
 msgid "DRAW MainWindow"
 msgstr "DRAW MainWindow"
 
@@ -594,12 +599,12 @@ msgstr "只有预编辑字符串时不显示输入窗口"
 msgid "Do not show spell hint"
 msgstr "不显示拼写提示"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:925
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:912
 #, c-format
 msgid "Duplicate group name, merge with the previous: %s :line %d"
 msgstr "组名重复，和之前的组合并: %s :行 %d"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:989
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:976
 #, c-format
 msgid "Duplicate option, overwrite: line %d"
 msgstr "重复的配置项，覆盖: 行%d"
@@ -683,7 +688,7 @@ msgstr "精确匹配"
 msgid "Exec"
 msgstr "Exec"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:463
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:461
 msgid "Exit"
 msgstr "退出"
 
@@ -967,6 +972,10 @@ msgstr "非活动的文本图标颜色"
 msgid "Include Inactivate when scrolling between Input Method"
 msgstr "输入法间切换时包含未激活状态"
 
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:22
+msgid "Include the text currently selected in clipboard history."
+msgstr "当前选中文字加入剪切板历史"
+
 #: /home/saber/Develop/fcitx/src/ui/classic/skin.desc:213
 msgid "Inctive Tray Icon"
 msgstr "非活动输入法图标"
@@ -1018,7 +1027,7 @@ msgstr "Fcitx 皮肤的安装器"
 msgid "Interval of Two Key Input"
 msgstr "输入间隔"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:943
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:930
 #, c-format
 msgid "Invalid Entry: line %d missing '='"
 msgstr "配置项不合法:  行%d 缺少'='"
@@ -1099,6 +1108,10 @@ msgid ""
 "Left/Right to choose selected character, Press Enter to confirm, Press "
 "Escape to Cancel"
 msgstr "按左/右选择单字，按回车确认，按Escape 取消"
+
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:11
+msgid "Length of Clipboard History to Save"
+msgstr "剪切板历史长度"
 
 #: /home/saber/Develop/fcitx/data/addon.desc:31
 msgid "Library"
@@ -1301,7 +1314,7 @@ msgstr "无操作"
 msgid "Number"
 msgstr "数字"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:397
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:395
 msgid "Online Help"
 msgstr "在线帮助"
 
@@ -1309,12 +1322,12 @@ msgstr "在线帮助"
 msgid "OpenCC"
 msgstr "OpenCC"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1157
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1144
 #, c-format
 msgid "Option %s is Invalid, Use Default Value %s"
 msgstr "配置项%s不合法，使用默认值%s"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1167
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1154
 #, c-format
 msgid "Option %s is Invalid."
 msgstr "配置项%s不合法"
@@ -1373,7 +1386,7 @@ msgstr "拼音："
 msgid "PinyinJiaJia"
 msgstr "拼音加加"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:163
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:160
 msgid "Please set XMODIFIERS."
 msgstr "请设置环境变量XMODIFIERS"
 
@@ -1564,7 +1577,7 @@ msgstr "右边距"
 msgid "Resize Margin Top"
 msgstr "上边距"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:462
+#: /home/saber/Develop/fcitx/build/po/../..//src/ui/classic/classicui.c:460
 #: /home/saber/Develop/fcitx/build/po/../..//src/ui/kimpanel/kimpanel.c:735
 msgid "Restart"
 msgstr "重新启动"
@@ -1596,6 +1609,10 @@ msgstr "保存自动词组"
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:102
 msgid "Save Auto Phrase"
 msgstr "保存自动词组"
+
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:4
+msgid "Save Clipboard History To File"
+msgstr "将剪贴板历史保存为文件"
 
 #: /home/saber/Develop/fcitx/build/po/../..//src/im/table/tabledict.c:375
 msgid "Save dict error"
@@ -1767,7 +1784,7 @@ msgstr "拼写"
 msgid "Spell Hint"
 msgstr "拼写提示"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:242
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:239
 #, c-format
 msgid "Start XIM error. Another XIM daemon named %s is running?"
 msgstr "XIM启动错误。是否有另一个名为%s的XIM守护程序正在运行？"
@@ -1810,7 +1827,7 @@ msgstr "切换至第4个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:59
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:104
-msgid "Switch to Nighth Input Method"
+msgid "Switch to Nineth Input Method"
 msgstr "切换至第9个输入法"
 
 #: /home/saber/Develop/fcitx/src/module/imselector/fcitx-imselector.desc:24
@@ -1929,6 +1946,10 @@ msgstr "将简拼视为英文"
 msgid "Trigger Input Method"
 msgstr "切换激活/非激活输入法"
 
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:16
+msgid "Trigger Key for Clipboard History List"
+msgstr "剪贴板历史快捷键"
+
 #: /home/saber/Develop/fcitx/src/module/quickphrase/fcitx-quickphrase.desc:8
 msgid "Trigger Key for QuickPhrase"
 msgstr "快速输入的触发键"
@@ -2002,6 +2023,10 @@ msgstr "对XIM使用On The Spot风格（无法在运行时切换）"
 #: /home/saber/Develop/fcitx/src/im/table/table.desc:33
 msgid "Use Pinyin"
 msgstr "使用拼音"
+
+#: /home/saber/Develop/fcitx/src/module/clipboard/fcitx-clipboard.desc:21
+msgid "Use Selection Text"
+msgstr "使用选区文字"
 
 #: /home/saber/Develop/fcitx/src/ui/classic/fcitx-classic-ui.desc:39
 msgid "Use System Tray Icon"
@@ -2110,7 +2135,7 @@ msgstr "由其他插件使用的 X11 工具函数"
 msgid "X11 not initialized"
 msgstr "X11 未初始化"
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:159
+#: /home/saber/Develop/fcitx/build/po/../..//src/frontend/xim/xim.c:156
 msgid "XMODIFIERS Error."
 msgstr "XMODIFIERS Error."
 
@@ -2138,7 +2163,7 @@ msgstr "自然码"
 msgid "min Num of Characters: "
 msgstr "分 字符数: "
 
-#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1225
+#: /home/saber/Develop/fcitx/build/po/../..//src/lib/fcitx-config/fcitx-config.c:1212
 #, c-format
 msgid "no default option for %s/%s"
 msgstr "选项%s/%s没有默认选项"

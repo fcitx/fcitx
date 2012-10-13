@@ -23,59 +23,11 @@
 
 #include <fcitx-utils/utils.h>
 
-typedef struct _FcitxHandlerTable FcitxHandlerTable;
-
-/* 0 is a valid id, instead, -1 is not */
-#define INVALID_ID ((unsigned int)-1)
-
-typedef struct {
-    void *array;
-    unsigned int alloc;
-    unsigned int size;
-    unsigned int ele_size;
-    unsigned int last_empty;
-} FcitxObjPool;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    void fcitx_obj_pool_init(FcitxObjPool *pool, unsigned int size);
-    unsigned int fcitx_obj_pool_alloc_id(FcitxObjPool *pool);
-    void fcitx_obj_pool_free_id(FcitxObjPool *pool, unsigned int i);
-
-    static inline unsigned int
-    fcitx_obj_pool_offset(FcitxObjPool *pool, unsigned int i)
-    {
-        return i * pool->ele_size;
-    }
-
-    static inline void*
-    fcitx_obj_pool_get(FcitxObjPool *pool, unsigned int i)
-    {
-        return pool->array + fcitx_obj_pool_offset(pool, i) + sizeof(int);
-    }
-
-    static inline void
-    fcitx_obj_pool_done(FcitxObjPool *pool)
-    {
-        free(pool->array);
-    }
-
-    static inline FcitxObjPool*
-    fcitx_obj_pool_new(unsigned int size)
-    {
-        FcitxObjPool *pool = fcitx_utils_new(FcitxObjPool);
-        fcitx_obj_pool_init(pool, size);
-        return pool;
-    }
-
-    static inline void
-    fcitx_obj_pool_free(FcitxObjPool *pool)
-    {
-        fcitx_obj_pool_done(pool);
-        free(pool);
-    }
+typedef struct _FcitxHandlerTable FcitxHandlerTable;
 
     FcitxHandlerTable *fcitx_handler_table_new(size_t obj_size,
                                                FcitxFreeContentFunc free_func);

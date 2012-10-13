@@ -28,6 +28,9 @@ target_link_libraries(testxdg fcitx-config fcitx-utils)
 add_executable(testunicode testunicode.c ../src/module/unicode/charselectdata.c)
 target_link_libraries(testunicode fcitx-utils fcitx-config)
 
+add_executable(testobjpool testobjpool.c)
+target_link_libraries(testobjpool fcitx-utils)
+
 add_executable(testpinyin
     ../src/im/pinyin/pyParser.c
     ../src/im/pinyin/pyMapTable.c
@@ -61,6 +64,9 @@ add_test(NAME teststring
 
 add_test(NAME testarray
          COMMAND testarray)
+
+add_test(NAME testobjpool
+         COMMAND testobjpool)
 
 add_test(NAME testutf8
          COMMAND testutf8)

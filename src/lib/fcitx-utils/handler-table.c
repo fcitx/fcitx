@@ -22,8 +22,7 @@
 #include "fcitx/fcitx.h"
 #include "fcitx-utils/uthash.h"
 #include "handler-table.h"
-
-#define OBJ_POOL_INIT_SIZE (4)
+#include "objpool.h"
 
 typedef struct {
     unsigned int first;
@@ -41,54 +40,8 @@ struct _FcitxHandlerTable {
     size_t obj_size;
     FcitxFreeContentFunc free_func;
     FcitxHandlerKey *keys;
-    FcitxObjPool objs;
+    FcitxObjPool* objs;
 };
-
-FCITX_EXPORT_API void
-fcitx_obj_pool_init(FcitxObjPool *pool, unsigned int size)
-{
-    unsigned int rem = size % sizeof(int);
-    if (rem) {
-        size += 2 * sizeof(int) - rem;
-    } else {
-        size += sizeof(int);
-    }
-    pool->ele_size = size;
-    pool->size = 0;
-    pool->last_empty = 0;
-    pool->alloc = size * OBJ_POOL_INIT_SIZE;
-    pool->array = malloc(pool->alloc);
-}
-
-FCITX_EXPORT_API unsigned int
-fcitx_obj_pool_alloc_id(FcitxObjPool *pool)
-{
-    unsigned int offset;
-    for (offset = fcitx_obj_pool_offset(pool, pool->last_empty);
-         offset < pool->size;
-         pool->last_empty++, offset += pool->ele_size) {
-        if (!*(int*)(pool->array + offset)) {
-            goto found;
-        }
-    }
-    pool->size += pool->ele_size;
-    if (pool->size >= pool->alloc) {
-        pool->alloc *= 2;
-        pool->array = realloc(pool->array, pool->alloc);
-    }
-found:
-    *(int*)(pool->array + offset) = 1;
-    return pool->last_empty;
-}
-
-FCITX_EXPORT_API void
-fcitx_obj_pool_free_id(FcitxObjPool *pool, unsigned int i)
-{
-    unsigned int offset = fcitx_obj_pool_offset(pool, i);
-    if (offset >= pool->size)
-        return;
-    *(int*)(pool->array + offset) = 0;
-}
 
 FCITX_EXPORT_API FcitxHandlerTable*
 fcitx_handler_table_new(size_t obj_size, FcitxFreeContentFunc free_func)
@@ -96,7 +49,7 @@ fcitx_handler_table_new(size_t obj_size, FcitxFreeContentFunc free_func)
     FcitxHandlerTable *table = fcitx_utils_new(FcitxHandlerTable);
     table->obj_size = obj_size;
     table->free_func = free_func;
-    fcitx_obj_pool_init(&table->objs, obj_size + sizeof(FcitxHandlerObj));
+    table->objs = fcitx_obj_pool_new(obj_size + sizeof(FcitxHandlerObj));
     return table;
 }
 
@@ -109,7 +62,7 @@ fcitx_handler_table_key_struct(FcitxHandlerTable *table, size_t keysize,
     if (key_struct || !create)
         return key_struct;
     key_struct = malloc(sizeof(FcitxHandlerKey) + keysize);
-    key_struct->first = key_struct->last = INVALID_ID;
+    key_struct->first = key_struct->last = FCITX_OBJECT_POOL_INVALID_ID;
     memcpy(key_struct + 1, key, keysize);
     key = key_struct + 1;
     HASH_ADD_KEYPTR(hh, table->keys, key, keysize, key_struct);
@@ -119,7 +72,7 @@ fcitx_handler_table_key_struct(FcitxHandlerTable *table, size_t keysize,
 static inline FcitxHandlerObj*
 fcitx_handler_table_get_obj(FcitxHandlerTable *table, unsigned int id)
 {
-    return fcitx_obj_pool_get(&table->objs, id);
+    return fcitx_obj_pool_get(table->objs, id);
 }
 
 FCITX_EXPORT_API unsigned int
@@ -129,16 +82,16 @@ fcitx_handler_table_append(FcitxHandlerTable *table, size_t keysize,
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
     unsigned int new_id;
-    new_id = fcitx_obj_pool_alloc_id(&table->objs);
+    new_id = fcitx_obj_pool_alloc_id(table->objs);
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
-    obj_struct->next = INVALID_ID;
+    obj_struct->next = FCITX_OBJECT_POOL_INVALID_ID;
     memcpy(obj_struct + 1, obj, table->obj_size);
     unsigned int id = key_struct->last;
-    if (id == INVALID_ID) {
+    if (id == FCITX_OBJECT_POOL_INVALID_ID) {
         key_struct->last = key_struct->first = new_id;
-        obj_struct->prev = INVALID_ID;
+        obj_struct->prev = FCITX_OBJECT_POOL_INVALID_ID;
     } else {
         key_struct->last = new_id;
         obj_struct->prev = id;
@@ -154,16 +107,16 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, true);
     unsigned int new_id;
-    new_id = fcitx_obj_pool_alloc_id(&table->objs);
+    new_id = fcitx_obj_pool_alloc_id(table->objs);
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, new_id);
     obj_struct->key = key_struct;
-    obj_struct->prev = INVALID_ID;
+    obj_struct->prev = FCITX_OBJECT_POOL_INVALID_ID;
     memcpy(obj_struct + 1, obj, table->obj_size);
     unsigned int id = key_struct->first;
-    if (id == INVALID_ID) {
+    if (id == FCITX_OBJECT_POOL_INVALID_ID) {
         key_struct->last = key_struct->first = new_id;
-        obj_struct->next = INVALID_ID;
+        obj_struct->next = FCITX_OBJECT_POOL_INVALID_ID;
     } else {
         key_struct->first = new_id;
         obj_struct->next = id;
@@ -175,7 +128,7 @@ fcitx_handler_table_prepend(FcitxHandlerTable *table, size_t keysize,
 FCITX_EXPORT_API void*
 fcitx_handler_table_get_by_id(FcitxHandlerTable *table, unsigned int id)
 {
-    if (id == INVALID_ID)
+    if (id == FCITX_OBJECT_POOL_INVALID_ID)
         return NULL;
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, id);
@@ -189,7 +142,7 @@ fcitx_handler_table_first_id(FcitxHandlerTable *table, size_t keysize,
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
     if (!key_struct)
-        return INVALID_ID;
+        return FCITX_OBJECT_POOL_INVALID_ID;
     return key_struct->first;
 }
 
@@ -200,7 +153,7 @@ fcitx_handler_table_last_id(FcitxHandlerTable *table, size_t keysize,
     FcitxHandlerKey *key_struct;
     key_struct = fcitx_handler_table_key_struct(table, keysize, key, false);
     if (!key_struct)
-        return INVALID_ID;
+        return FCITX_OBJECT_POOL_INVALID_ID;
     return key_struct->last;
 }
 
@@ -251,25 +204,25 @@ fcitx_handler_table_prev(FcitxHandlerTable *table, const void *obj)
 FCITX_EXPORT_API void
 fcitx_handler_table_remove_by_id(FcitxHandlerTable *table, unsigned int id)
 {
-    if (id == INVALID_ID)
+    if (id == FCITX_OBJECT_POOL_INVALID_ID)
         return;
     FcitxHandlerObj *obj_struct;
     obj_struct = fcitx_handler_table_get_obj(table, id);
     unsigned int prev = obj_struct->prev;
     unsigned int next = obj_struct->next;
-    if (prev == INVALID_ID) {
+    if (prev == FCITX_OBJECT_POOL_INVALID_ID) {
         obj_struct->key->first = next;
     } else {
         fcitx_handler_table_get_obj(table, prev)->next = next;
     }
-    if (next == INVALID_ID) {
+    if (next == FCITX_OBJECT_POOL_INVALID_ID) {
         obj_struct->key->last = prev;
     } else {
         fcitx_handler_table_get_obj(table, next)->prev = prev;
     }
     if (table->free_func)
         table->free_func(obj_struct + 1);
-    fcitx_obj_pool_free_id(&table->objs, id);
+    fcitx_obj_pool_free_id(table->objs, id);
 }
 
 static void
@@ -279,12 +232,12 @@ fcitx_handler_table_free_key(FcitxHandlerTable *table,
     unsigned int id;
     unsigned int next_id;
     FcitxHandlerObj *obj_struct;
-    for (id = key_struct->first;id != INVALID_ID;id = next_id) {
+    for (id = key_struct->first;id != FCITX_OBJECT_POOL_INVALID_ID;id = next_id) {
         obj_struct = fcitx_handler_table_get_obj(table, id);
         next_id = obj_struct->next;
         if (table->free_func)
             table->free_func(obj_struct + 1);
-        fcitx_obj_pool_free_id(&table->objs, id);
+        fcitx_obj_pool_free_id(table->objs, id);
     }
     HASH_DELETE(hh, table->keys, key_struct);
     free(key_struct);
@@ -310,6 +263,6 @@ fcitx_handler_table_free(FcitxHandlerTable *table)
         next_key = key_struct->hh.next;
         fcitx_handler_table_free_key(table, key_struct);
     }
-    fcitx_obj_pool_done(&table->objs);
+    fcitx_obj_pool_free(table->objs);
     free(table);
 }

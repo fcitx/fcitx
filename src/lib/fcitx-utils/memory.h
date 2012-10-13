@@ -47,6 +47,10 @@
 
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** memory pool private struct */
 typedef struct _FcitxMemoryPool FcitxMemoryPool;
 
@@ -83,6 +87,10 @@ void fcitx_memory_pool_destroy(FcitxMemoryPool* pool);
  * @since 4.2.6
  **/
 void fcitx_memory_pool_clear(FcitxMemoryPool* pool);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

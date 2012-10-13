@@ -32,6 +32,7 @@
 #include "fcitx/instance.h"
 #include "x11stuff-internal.h"
 #include "fcitx-utils/handler-table.h"
+#include "fcitx-utils/objpool.h"
 #include "x11selection.h"
 
 #define FCITX_X11_SEL "FCITX_X11_SEL_"
@@ -110,12 +111,12 @@ X11SelectionNotifyRegister(
 {
 #ifdef HAVE_XFIXES
     if (!cb)
-        return INVALID_ID;
+        return FCITX_OBJECT_POOL_INVALID_ID;
     return X11SelectionNotifyRegisterInternal(
         x11priv, XInternAtom(x11priv->dpy, sel_str, False), owner,
         X11SelectionNotifyHelper, data, destroy, (FcitxCallBack)cb);
 #else
-    return INVALID_ID;
+    return FCITX_OBJECT_POOL_INVALID_ID;
 #endif
 }
 
@@ -127,7 +128,7 @@ X11SelectionNotifyRegisterInternal(
 {
 #ifdef HAVE_XFIXES
     if (!(x11priv->hasXfixes && cb))
-        return INVALID_ID;
+        return FCITX_OBJECT_POOL_INVALID_ID;
     //TODO catch bad atom?
     XFixesSelectSelectionInput(x11priv->dpy, x11priv->eventWindow,
                                selection,
@@ -144,7 +145,7 @@ X11SelectionNotifyRegisterInternal(
     return fcitx_handler_table_append(x11priv->selectionNotify,
                                       sizeof(Atom), &selection, &notify);
 #else
-    return INVALID_ID;
+    return FCITX_OBJECT_POOL_INVALID_ID;
 #endif
 }
 
@@ -152,7 +153,7 @@ void
 X11SelectionNotifyRemove(FcitxX11 *x11priv, unsigned int id)
 {
 #ifdef HAVE_XFIXES
-    if (!(x11priv->hasXfixes && id != INVALID_ID))
+    if (!(x11priv->hasXfixes && id != FCITX_OBJECT_POOL_INVALID_ID))
         return;
     fcitx_handler_table_remove_by_id(x11priv->selectionNotify, id);
 #endif
@@ -240,7 +241,7 @@ X11RequestConvertSelection(
     FcitxDestroyNotify destroy)
 {
     if (!cb)
-        return INVALID_ID;
+        return FCITX_OBJECT_POOL_INVALID_ID;
     X11ConvertSelectionInternalCallback intern_cb;
     Atom tgt_atom;
     if (tgt_str && *tgt_str) {
@@ -299,7 +300,7 @@ X11ProcessSelectionNotifyEvent(FcitxX11 *x11priv,
     FcitxHandlerTable *table = x11priv->convertSelection;
     id = fcitx_handler_table_first_id(table, sizeof(Atom),
                                       &selection_event->selection);
-    if (id == INVALID_ID)
+    if (id == FCITX_OBJECT_POOL_INVALID_ID)
         return;
     unsigned long nitems;
     int ret_format;
