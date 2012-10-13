@@ -70,7 +70,12 @@ extern "C" {
     static inline int
     fcitx_utf8_valid_start(char c)
     {
-        return fcitx_utf8_type(c) > 0;
+        unsigned char uc = (unsigned char)c;
+        if (!(uc & 0x80))
+            return 1;
+        if (!(uc & 0x40))
+            return 0;
+        return uc < 0xfe;
     }
 
 /**
