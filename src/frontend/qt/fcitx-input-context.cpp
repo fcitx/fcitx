@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include <QApplication>
-#include <QEventLoop>
 #include <QInputContextFactory>
 #include <QTextCharFormat>
 
@@ -464,13 +463,8 @@ bool QFcitxInputContext::filterEvent(const QEvent* event)
                                        key_event->nativeModifiers(),
                                        (event->type() == QEvent::KeyPress) ? FCITX_PRESS_KEY : FCITX_RELEASE_KEY,
                                        time);
-    {
-        QEventLoop loop;
-        QDBusPendingCallWatcher watcher(result);
-        loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
-        loop.connect(this, SIGNAL(dbusDisconnected()), SLOT(quit()));
-        loop.exec(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
-    }
+
+    result.waitForFinished();
 
     if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0)
         return QInputContext::filterEvent(event);
@@ -616,11 +610,7 @@ bool QFcitxInputContext::x11FilterEvent(QWidget* keywidget, XEvent* event)
                                           event->xkey.time
                                       );
     if (Q_LIKELY(m_syncMode)) {
-        QEventLoop loop;
-        QDBusPendingCallWatcher watcher(result);
-        loop.connect(&watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(quit()));
-        loop.connect(this, SIGNAL(dbusDisconnected()), SLOT(quit()));
-        loop.exec(QEventLoop::ExcludeUserInputEvents);
+        result.waitForFinished();
 
         if (!m_connection || !result.isFinished() || result.isError() || result.value() <= 0) {
             QTimer::singleShot(0, this, SLOT(updateIM()));
@@ -750,11 +740,23 @@ void QFcitxInputContext::createInputContextFinished(QDBusPendingCallWatcher* wat
         flag |= CAPACITY_PREEDIT;
         flag |= CAPACITY_FORMATTED_PREEDIT;
         flag |= CAPACITY_CLIENT_UNFOCUS_COMMIT;
+        /*
+         * The only problem I found with surrounding text is Katepart, which I fixed in
+         * KDE 4.9. However, we cannot test KDE version that "will" insttalled on the system.
+         * So we use "Qt" version to "Guess" that what's the newest KDE version avaiable.
+         */
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 2)
+        m_useSurroundingText = fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", false);
+#else
         m_useSurroundingText = fcitx_utils_get_boolean_env("FCITX_QT_ENABLE_SURROUNDING_TEXT", true);
+#endif
         if (m_useSurroundingText)
             flag |= CAPACITY_SURROUNDING_TEXT;
 
-        m_syncMode = fcitx_utils_get_boolean_env("FCITX_QT_USE_SYNC", true);
+        /*
+         * event loop will cause some problem, so we tries to use async way.
+         */
+        m_syncMode = fcitx_utils_get_boolean_env("FCITX_QT_USE_SYNC", false);
 
         addCapacity(flag, true);
     } while(0);
