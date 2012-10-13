@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 11:11-0400\n"
+"POT-Creation-Date: 2012-10-13 11:40-0400\n"
 "PO-Revision-Date: 2012-10-13 11:14-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <kde-i18n-doc@kde.org>\n"
@@ -395,6 +395,7 @@ msgid "Clear local input method"
 msgstr ""
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-clipboard.conf.in.h:1
 msgid "Clipboard"
 msgstr ""
 
@@ -705,6 +706,10 @@ msgstr ""
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr "Fcitx"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-clipboard.conf.in.h:2
+msgid "Fcitx Clipboard access"
+msgstr ""
 
 #. kate: indent-mode cstyle; space-indent on; indent-width 4;
 #: ../..//data/fcitx-configtool.desktop.in.h:1

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-13 11:11-0400\n"
-"PO-Revision-Date: 2012-10-13 11:12-0400\n"
+"POT-Creation-Date: 2012-10-13 11:40-0400\n"
+"PO-Revision-Date: 2012-10-13 11:41-0400\n"
 "Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
 "Language-Team: Chinese Simplified <fcitx-dev@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -393,6 +393,7 @@ msgid "Clear local input method"
 msgstr "清除局部输入法"
 
 # unknown
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-clipboard.conf.in.h:1
 msgid "Clipboard"
 msgstr "剪贴板"
 
@@ -704,6 +705,10 @@ msgstr "备选界面附加组件"
 #: ../..//data/fcitx.desktop.in.h:1
 msgid "Fcitx"
 msgstr "Fcitx"
+
+#: /home/saber/Develop/fcitx/build/po/tmp/fcitx-clipboard.conf.in.h:2
+msgid "Fcitx Clipboard access"
+msgstr "Fcitx 的剪贴板访问支持"
 
 #. kate: indent-mode cstyle; space-indent on; indent-width 4;
 #: ../..//data/fcitx-configtool.desktop.in.h:1
