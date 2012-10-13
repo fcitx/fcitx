@@ -321,7 +321,7 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     msg = FcitxInputStateGetAuxUp(input);
     FcitxInputStateSetShowCursor(input, false);
     FcitxMessagesSetMessageCount(msg, 0);
-    FcitxMessagesAddMessageStringsAtLast(msg, MSG_INPUT,
+    FcitxMessagesAddMessageStringsAtLast(msg, MSG_TIPS,
                                          _("Select to paste"));
     int i;
     for (i = 1;i < clipboard->clp_hist_len;i++) {
