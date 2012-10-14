@@ -365,10 +365,8 @@ CharFromPhraseModeListFromWord(const char *word)
         return NULL;
     do {
         if ((len = p - word) > 1) {
-            buff[n] = malloc(len + 1);
+            buff[n] = fcitx_utils_set_str_with_len(NULL, word, len);
             strncat(full, word, len);
-            memcpy(buff[n], word, len);
-            buff[n][len] = '\0';
             n++;
         }
         if (!*p)

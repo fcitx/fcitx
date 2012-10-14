@@ -294,8 +294,7 @@ char* fcitx_utils_trim(const char* s)
 {
     register const char *end;
 
-    while (isspace(*s))                 /* skip leading space */
-        ++s;
+    s += strspn(s, "\f\n\r\t\v ");
     end = s + (strlen(s) - 1);
     while (end >= s && isspace(*end))               /* skip trailing space */
         --end;
