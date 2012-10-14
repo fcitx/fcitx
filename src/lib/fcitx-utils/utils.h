@@ -637,7 +637,13 @@ extern "C" {
     char *fcitx_utils_set_unescape_str(char *res, const char *str);
 #define FCITX_CHAR_NEED_ESCAPE "\a\b\f\n\r\t\e\v\'\"\\"
     char fcitx_utils_escape_char(char c);
-    char *fcitx_utils_set_escape_str(char *res, const char *str);
+    char *fcitx_utils_set_escape_str_with_set(char *res, const char *str,
+                                              const char *set);
+    static inline char*
+    fcitx_utils_set_escape_str(char *res, const char *str)
+    {
+        return fcitx_utils_set_escape_str_with_set(res, str, NULL);
+    }
     UT_array *fcitx_utils_append_split_string(UT_array *list, const char* str,
                                               const char *delm);
     static inline UT_array*
@@ -645,7 +651,9 @@ extern "C" {
     {
         return fcitx_utils_append_split_string(list, str, "\n");
     }
-
+    UT_array *fcitx_utils_string_list_append_no_copy(UT_array *list, char *str);
+    UT_array *fcitx_utils_string_list_append_len(UT_array *list,
+                                                 const char *str, size_t len);
 #ifdef __cplusplus
 }
 #endif

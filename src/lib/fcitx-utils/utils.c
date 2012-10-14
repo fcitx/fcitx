@@ -72,7 +72,7 @@
 const UT_icd *const fcitx_str_icd = &ut_str_icd;
 const UT_icd *const fcitx_int_icd = &ut_int_icd;
 
-static UT_array*
+FCITX_EXPORT_API UT_array*
 fcitx_utils_string_list_append_no_copy(UT_array *list, char *str)
 {
     utarray_extend_back(list);
@@ -80,7 +80,7 @@ fcitx_utils_string_list_append_no_copy(UT_array *list, char *str)
     return list;
 }
 
-static UT_array*
+FCITX_EXPORT_API UT_array*
 fcitx_utils_string_list_append_len(UT_array *list, const char *str, size_t len)
 {
     char *buff = fcitx_utils_set_str_with_len(NULL, str, len);
@@ -764,7 +764,7 @@ fcitx_utils_unescape_str_inplace(char *str)
     char *pos;
     size_t len;
     while ((len = strcspn(src, "\\")), *(pos = src + len)) {
-        if (dest != src)
+        if (dest != src && len)
             memmove(dest, src, len);
         dest += len;
         src = pos + 1;
@@ -813,17 +813,16 @@ fcitx_utils_escape_char(char c)
         CASE_ESCAPE('t', '\t');
         CASE_ESCAPE('e', '\e');
         CASE_ESCAPE('v', '\v');
-        CASE_ESCAPE('\'', '\'');
-        CASE_ESCAPE('\"', '\"');
-        CASE_ESCAPE('\\', '\\');
 #undef CASE_ESCAPE
     }
-    return '\0';
+    return c;
 }
 
 FCITX_EXPORT_API char*
-fcitx_utils_set_escape_str(char *res, const char *str)
+fcitx_utils_set_escape_str_with_set(char *res, const char *str, const char *set)
 {
+    if (!set)
+        set = FCITX_CHAR_NEED_ESCAPE;
     res = realloc(res, strlen(str) * 2 + 1);
     char *dest = res;
     const char *src = str;
