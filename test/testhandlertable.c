@@ -83,6 +83,15 @@ int main()
         assert(free_count == i + 13);
     }
     assert(i == 12);
+    assert(free_count == 24);
+    assert(fcitx_handler_table_first_id_strkey(table, KEY2) ==
+           FCITX_OBJECT_POOL_INVALID_ID);
+    assert(fcitx_handler_table_last_id_strkey(table, KEY2) ==
+           FCITX_OBJECT_POOL_INVALID_ID);
+    assert(fcitx_handler_table_first_strkey(table, KEY_NOT_EXIST) == NULL);
+    assert(fcitx_handler_table_last_strkey(table, KEY_NOT_EXIST) == NULL);
+    fcitx_handler_table_remove_by_id(table, FCITX_OBJECT_POOL_INVALID_ID);
+    fcitx_handler_table_remove_key_strkey(table, KEY_NOT_EXIST);
 
     fcitx_handler_table_free(table);
     return 0;
