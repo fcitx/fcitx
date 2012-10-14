@@ -63,6 +63,25 @@ static const unsigned int cmodifiers[] = {
 
 #define MODIFIERS_COUNT (sizeof(cmodifiers) / sizeof(unsigned int))
 
+static boolean
+ClipboardSelectionEqual(ClipboardSelectionStr *sel, const char *str, size_t len)
+{
+    return len == sel->len && !memcmp(sel->str, str, len);
+}
+
+static boolean
+ClipboardSelectionInClipboard(FcitxClipboard *clipboard,
+                              const char *str, size_t len)
+{
+    int i;
+    for (i = 0;i < clipboard->clp_hist_len;i++) {
+        if (ClipboardSelectionEqual(clipboard->clp_hist_lst + i, str, len)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 static void*
 ClipboardGetPrimary(void *arg, FcitxModuleFunctionArg args)
 {
@@ -311,10 +330,9 @@ ClipboardPostHook(void *arg, FcitxKeySym sym, unsigned int state,
     if (clipboard->primary.len && config->use_primary) {
         if (!preedit_str) {
             preedit_str = clipboard->primary.str;
-        } else if (clipboard->primary.len == clipboard->clp_hist_lst->len &&
-                   memcmp(clipboard->clp_hist_lst->str,
-                          clipboard->primary.str,
-                          clipboard->primary.len) == 0) {
+        } else if (ClipboardSelectionInClipboard(clipboard,
+                                                 clipboard->primary.str,
+                                                 clipboard->primary.len)) {
             goto skip_primary;
         }
         ClipboardSetCandWord(clipboard, &cand_word, &clipboard->primary);
@@ -437,9 +455,7 @@ ClipboardPushClipboard(FcitxClipboard *clipboard, uint32_t len, const char *str)
 {
     if (!(len && str && *str))
         return;
-    if (clipboard->clp_hist_len &&
-        len == clipboard->clp_hist_lst->len &&
-        !memcmp(clipboard->clp_hist_lst->str, str, len))
+    if (ClipboardSelectionInClipboard(clipboard, str, len))
         return;
     char *new_str;
     if (clipboard->clp_hist_len < clipboard->config.history_len) {
