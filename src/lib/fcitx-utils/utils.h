@@ -635,6 +635,13 @@ extern "C" {
 #define FCITX_CHAR_NEED_ESCAPE "\a\b\f\n\r\t\e\v\'\"\\"
     char fcitx_utils_escape_char(char c);
     char *fcitx_utils_set_escape_str(char *res, const char *str);
+    UT_array *fcitx_utils_append_split_string(UT_array *list, const char* str,
+                                              const char *delm);
+    static inline UT_array*
+    fcitx_utils_append_lines(UT_array *list, const char* str)
+    {
+        return fcitx_utils_append_split_string(list, str, "\n");
+    }
 
 #ifdef __cplusplus
 }
