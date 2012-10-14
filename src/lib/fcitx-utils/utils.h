@@ -88,6 +88,9 @@ typedef int32_t boolean;
 extern "C" {
 #endif
 
+    extern const UT_icd *const fcitx_str_icd;
+    extern const UT_icd *const fcitx_int_icd;
+
     /**
      * Function used to free the pointer
      **/

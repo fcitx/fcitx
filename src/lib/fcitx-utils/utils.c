@@ -69,8 +69,8 @@
 #include <sys/endian.h>
 #endif
 
-const UT_icd const *fcitx_str_icd = &ut_str_icd;
-const UT_icd const *fcitx_int_icd = &ut_int_icd;
+const UT_icd *const fcitx_str_icd = &ut_str_icd;
+const UT_icd *const fcitx_int_icd = &ut_int_icd;
 
 static UT_array*
 fcitx_utils_string_list_append_no_copy(UT_array *list, char *str)
