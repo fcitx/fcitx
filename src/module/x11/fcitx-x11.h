@@ -24,7 +24,7 @@
 #include <stdint.h>
 #include <fcitx/addon.h>
 #include <fcitx/module.h>
-#include <module/x11/x11stuff.h>
+#include "x11stuff.h"
 
 static inline FcitxAddon*
 FcitxX11GetAddon(FcitxInstance *instance)
