@@ -834,7 +834,7 @@ fcitx_utils_set_escape_str(char *res, const char *str)
         dest += len;
         *dest = '\\';
         dest++;
-        *dest = fcitx_utils_unescape_char(*pos);
+        *dest = fcitx_utils_escape_char(*pos);
         dest++;
         src = pos + 1;
     }
