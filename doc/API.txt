@@ -1,11 +1,10 @@
+            IM Server Developers Kit - C Language Interface
 
-	    IM Server Developers Kit - C Language Interface
+                            Hidetoshi Tajima
 
-			    Hidetoshi Tajima
+                    X11R6 Xi18n Implementation Group
 
-		    X11R6 Xi18n Implementation Group
-
-			      May 15, 1994
+                              May 15, 1994
 
 1.   Functions List
 
@@ -13,10 +12,10 @@
 
 XIMS IMOpenIM(Display display,...)
 
-display		specifies the connection to the X server.
-...		specifies the variable length argument list to set
-		IMValues. For further information, see the Section 2
-		"IMValues".
+display                specifies the connection to the X server.
+...                specifies the variable length argument list to set
+                IMValues. For further information, see the Section 2
+                "IMValues".
 
    IMOpenIM initializes the connection for the Input Method Service, and
 also sets one or more IMValues which are specified by a variable length
@@ -31,15 +30,15 @@ with the IMProtocol model as below, however, you don't have to pay much
 attention to such difference, because IMOpenIM encapsulates it.
 
     Preconnection for R5 Ximp
-	IMserver must create the selection owner window of the ATOM for
-	the string, such as "_XIMP_%locale" or something, which are used
-	by clients to search for the IMserver.
+        IMserver must create the selection owner window of the ATOM for
+        the string, such as "_XIMP_%locale" or something, which are used
+        by clients to search for the IMserver.
     Preconnection for R6 IMProtocol
-	IMserver must create the selection owner window of the ATOM for
-	the string, such as "@server=%im_name", and registers the ATOM
-	with the list of "XIM_SERVERS" property of the default root
-	window, which contains a list of ATOMs, each of which represents
-	each available IMservers on the display.
+        IMserver must create the selection owner window of the ATOM for
+        the string, such as "@server=%im_name", and registers the ATOM
+        with the list of "XIM_SERVERS" property of the default root
+        window, which contains a list of ATOMs, each of which represents
+        each available IMservers on the display.
 
    Second, IMOpenIM initialize a transport connection on which clients
 and the IMserver can send and receive IMProtocols with each other. The
@@ -49,20 +48,20 @@ attention to such difference, either, because IMOpenIM also encapsulates
 it.
 
     Transport connection for X
-	IMserver must intern a number of ATOMs for the properties which
-	are used to set some IMserver specific feature and
-	characteristic.
+        IMserver must intern a number of ATOMs for the properties which
+        are used to set some IMserver specific feature and
+        characteristic.
     Transport connection for TCP/IP
-	IMserver must open a listening socket to wait for connection
-	request from clients.
+        IMserver must open a listening socket to wait for connection
+        request from clients.
 
 1.2.   Set IM Attributes
 
 char *IMSetIMValues(XIMS ims,...)
 
-ims		specifies the input method service.
-...		specifies the variable length argument list to set
-		IMValues.
+ims                specifies the input method service.
+...                specifies the variable length argument list to set
+                IMValues.
 
    IMSetIMValues registers one or more IMValues, which are specified by
 a variable length argument list programming interface, with the XIMS
@@ -76,9 +75,9 @@ not be registered.
 
 char *IMGetIMValues(XIMS ims,...)
 
-ims		specifies the input method service.
-...		specifies the variable length argument list to get
-		IMValues.
+ims                specifies the input method service.
+...                specifies the variable length argument list to get
+                IMValues.
 
    IMGetIMValues gets one or more IMValues, which are specified by a
 variable length argument list programming interface, from the XIMS
@@ -91,7 +90,7 @@ not be obtained.
 
 void IMCloseIM(XIMS ims)
 
-ims		specifies the input method service to be closed.
+ims                specifies the input method service to be closed.
 
    IMCloseIM closes the connection which was opened by IMOpenIM.
 IMCloseIM frees all the allocated data in the XIMS structure, then frees
@@ -101,8 +100,8 @@ the XIMS itself.
 
 int IMPreeditStart(XIMS ims, XPointer im_protocol)
 
-ims		specifies the input method service.
-im_protocol	specifies the Input Protocol data.
+ims                specifies the input method service.
+im_protocol        specifies the Input Protocol data.
 
    IMPreeditStart is used to start preeditting in case of Dynamic Event
 Flow.
@@ -111,28 +110,28 @@ The structure for im_protocol varies with the IMProtocol models:
 
 /* R5 Ximp */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
 } XIMPPreeditStateStruct;
 
 /* R6 IMProtocol */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;
 } IMPreeditStateStruct;
 
 1.6.   Stop Preediting
 
 int IMPreeditEnd(XIMS ims, XPointer im_protocol)
 
-ims		specifies the input method service.
-im_protocol	specifies the Input Protocol data.
+ims                specifies the input method service.
+im_protocol        specifies the Input Protocol data.
 
    IMPreeditEnd is used to stop preeditting in case of Dynamic Event
 Flow. However, if you registered off-keys list using IMOffKeysList
@@ -145,8 +144,8 @@ IMPreeditEnd only when you did *NOT* register any off-keys list.
 
 void IMForwardEvent(XIMS ims, XPointer im_protocol)
 
-ims		specifies the input method service.
-im_protocol	specifies the Input Protocol data.
+ims                specifies the input method service.
+im_protocol        specifies the Input Protocol data.
 
    IMForwardEvent is used to send back a non-filtered
 KeyPress/KeyRelease Event.
@@ -154,34 +153,34 @@ KeyPress/KeyRelease Event.
 
 /* R5 Ximp */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
-    CARD32	keycode;
-    CARD32	state;
-    CARD32	time;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
+    CARD32        keycode;
+    CARD32        state;
+    CARD32        time;
 } XIMPKeyEventStruct;
 
 /* R6 IMProtocol */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;		/* input context ID */
-    BITMASK16	sync_bit;	/* precessed synchronously or not */
-    CARD16	serial_number;
-    XEvent	event;		/* X event to be filtered */
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;                /* input context ID */
+    BITMASK16        sync_bit;        /* precessed synchronously or not */
+    CARD16        serial_number;
+    XEvent        event;                /* X event to be filtered */
 } IMForwardEventStruct;
 
 1.8.   Commit Conversion String
 
 void IMCommitString(XIMS ims, XPointer im_protocol)
 
-ims		specifies the input method service.
-im_protocol	specifies the Input Protocol data.
+ims                specifies the input method service.
+im_protocol        specifies the Input Protocol data.
 
    IMCommitString is used to send a committed string, which may contain
 a localized text converted by the IMserver.
@@ -189,38 +188,38 @@ a localized text converted by the IMserver.
 
 /* R5 Ximp */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
-    char	*ctext;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
+    char        *ctext;
 } XIMPCommitStringStruct;
 
 /* R6 IMProtocol */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;		/* input context ID */
-    CARD16	flag;
-	/* bit combination to tell the receiver what to do */
-		#0001	: process it synchroously, return XIM_SYNC_REPLY
-		#0002	: Lookup Chars
-		#0004	: Lookup KeySym
-		#0006	: Lookup Both = Lookup Chars and KeySym
-	 */
-    KeySym	keysym;		/* returned keysym */
-    char	*commit_string;	/* string to commit to XIM client */
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;                /* input context ID */
+    CARD16        flag;
+        /* bit combination to tell the receiver what to do */
+                #0001        : process it synchroously, return XIM_SYNC_REPLY
+                #0002        : Lookup Chars
+                #0004        : Lookup KeySym
+                #0006        : Lookup Both = Lookup Chars and KeySym
+         */
+    KeySym        keysym;                /* returned keysym */
+    char        *commit_string;        /* string to commit to XIM client */
 } IMCommitStruct;
 
 1.9.   Call Callback
 
 int IMCallCallback(XIMS ims, XPointer im_protocol)
 
-ims		specifies the input method service.
-im_protocol	specifies the Input Protocol data.
+ims                specifies the input method service.
+im_protocol        specifies the Input Protocol data.
 
    IMCallCallback is used for your IMserver to send a callback request
 asynchronously with the previous IMProtocol request. The type of the
@@ -234,44 +233,44 @@ a new IMProtocol structure before you begin the callback requests.
 minor_code members in the IMProtocol structure, e.g., you can start
 geometry management callback as follows;
 
-	IMGeometryCBStruct geometry;
-	...
-	geometry.major_code = XIM_GEOMETRY;
-	geometry.connect_id = previous_request->any.connect_id;
-	...
-	IMCallCallback(ims, (IMProtocol)&geometry);
+        IMGeometryCBStruct geometry;
+        ...
+        geometry.major_code = XIM_GEOMETRY;
+        geometry.connect_id = previous_request->any.connect_id;
+        ...
+        IMCallCallback(ims, (IMProtocol)&geometry);
 
    The structures for R6 IMProtocol callbacks contain:
 
 /* for Geometry Callback */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;
 } IMGeometryCBStruct;
 
 /* for Preedit Callback */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;
     union {
-	int	return_value;			/* PreeditStart */
-	XIMPreeditDrawCallbackStruct draw;	/* PreeditDraw */
-	XIMPreeditCaretCallbackStruct caret; 	/* PreeditCaret */
+        int        return_value;                        /* PreeditStart */
+        XIMPreeditDrawCallbackStruct draw;        /* PreeditDraw */
+        XIMPreeditCaretCallbackStruct caret;         /* PreeditCaret */
     } todo;
 } IMPreeditCBStruct;
 
 /* for Status Callback */
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
-    CARD16	icid;
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
+    CARD16        icid;
     union {
-	XIMStatusDrawCallbackStruct draw;
+        XIMStatusDrawCallbackStruct draw;
     } todo;
 } IMStatusCBStruct;
 
@@ -279,39 +278,39 @@ typedef struct {
 
 /* for Geometry Callback */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
 } XIMPAnyStruct;
 
 /* for Preedit Callback */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
     union {
-	int	return_value;			/* PreeditStart */
-	XIMPreeditDrawCallbackStruct draw;	/* PreeditDraw */
-	XIMPreeditCaretCallbackStruct caret; 	/* PreeditCaret */
+        int        return_value;                        /* PreeditStart */
+        XIMPreeditDrawCallbackStruct draw;        /* PreeditDraw */
+        XIMPreeditCaretCallbackStruct caret;         /* PreeditCaret */
     } todo;
 } XIMPPreeditCBStruct;
 
 /* for Status Callback */
 typedef struct {
-    INT32	type;
-    CARD32	icid;
-    Window	focus_win;
-    long	fwin_sel_mask;
-    CARD32	ximp_type_mask;
-    Window	client_win;
+    INT32        type;
+    CARD32        icid;
+    Window        focus_win;
+    long        fwin_sel_mask;
+    CARD32        ximp_type_mask;
+    Window        client_win;
     union {
-	XIMStatusDrawCallbackStruct draw;	/* StatusDraw */
+        XIMStatusDrawCallbackStruct draw;        /* StatusDraw */
     } todo;
 } XIMPStatusCBStruct;
 
@@ -322,8 +321,8 @@ typedef struct {
    The IMModifiers argument, of type string, specifies the name of the
 IMProtocol model. At the current release, only three names are accepted
 by IMdkit.
-	"Xi18n"		specifies the R6 standard IMProtocol model
-	"XIMP"		specifies the R5 Ximp model.
+        "Xi18n"                specifies the R6 standard IMProtocol model
+        "XIMP"                specifies the R5 Ximp model.
 
    The IMModifiers argument must be set only once when IMOpenIM is
 called, and never be changed on the fly.
@@ -370,33 +369,33 @@ TCP/IP Names
 ------------
    Syntax for Internet domain names:
 
-	<TCP name> ::= "tcp/"<hostname>":"<ipportnumber>
+        <TCP name> ::= "tcp/"<hostname>":"<ipportnumber>
 
-   	where <hostname> is either symbolic or numeric decimal form of
-	the host machine name, and <ipportnumber> is the port on which
-	the IMserver is listening for connections.
+           where <hostname> is either symbolic or numeric decimal form of
+        the host machine name, and <ipportnumber> is the port on which
+        the IMserver is listening for connections.
 
    Syntax for system internal domain names:
 
-	<local name> ::= "locale/"<hostname>":"<pathname>
+        <local name> ::= "locale/"<hostname>":"<pathname>
 
-	where <pathname> is a path name of socket address.
+        where <pathname> is a path name of socket address.
 
 DECnet Names
 ------------
    Syntax for DECnet names:
 
-	<DECnet name> ::= "decnet/"<nodename>"::IMSERVER$"<objname>
+        <DECnet name> ::= "decnet/"<nodename>"::IMSERVER$"<objname>
 
-	where <nodename> is either symbolic or numeric decimal form of
-	the DECnet address, and <objname> is normal, case-insensitive
-	DECnet object name.
+        where <nodename> is either symbolic or numeric decimal form of
+        the DECnet address, and <objname> is normal, case-insensitive
+        DECnet object name.
 
 X Names
 -------
    Syntax for X names:
 
-	<X name> ::= "X/"
+        <X name> ::= "X/"
 
    The IMServerTransport argument must be set only once when IMOpenIM is
 called, and never be changed on the fly.
@@ -423,7 +422,7 @@ int ProtocolHandlerProc(ims, call_data)
 XIMS ims;
 XPointer call_data;
 
-call_data	points to a IMProtocol structure.
+call_data        points to a IMProtocol structure.
 
 2.8.   IMOnKeysList
 
@@ -437,9 +436,9 @@ and Static Event Flow model will be used.
    XIMTriggerKeys structure is defined by IMdkit as follows:
 
 typedef struct {
-    CARD32	keysym;
-    CARD32	modifier;
-    CARD32	modifier_mask;
+    CARD32        keysym;
+    CARD32        modifier;
+    CARD32        modifier_mask;
 } XIMTriggerKey;
 
 typedef struct {
@@ -501,10 +500,10 @@ XIMPVersion
 
    The XIMPVersion argument, of type string, specifies the version of R5
 Ximp model.
-	value		meaning
-	---------------------------------------------
-	"3.5"		supports Ximp version 3.5 model
-	"4.0"		supports Ximp version 4.0 model
+        value                meaning
+        ---------------------------------------------
+        "3.5"                supports Ximp version 3.5 model
+        "4.0"                supports Ximp version 4.0 model
 
 XIMPType
 
@@ -517,25 +516,25 @@ appeared in the list are defined as follows.(*)
 the X Window System, Version 11", which contains in X11R5 contribuion.
 
   XIMP_BE_TYPE1
-	back-end type, which IMlibrary recognizes registered keys and
-	notifies a server to start processing key events.
+        back-end type, which IMlibrary recognizes registered keys and
+        notifies a server to start processing key events.
   XIMP_FE_TYPE1
-	front-end type, which IMlibrary recognizes registered keys and
-	notifies a server to start processing key events.
+        front-end type, which IMlibrary recognizes registered keys and
+        notifies a server to start processing key events.
   XIMP_BE_TYPE2
-	back-end type, which IMlibrary does not recognize any registered
-	keys and. IMserver will always the first to process key events.
+        back-end type, which IMlibrary does not recognize any registered
+        keys and. IMserver will always the first to process key events.
   XIMP_FE_TYPE2
-	front-end type, which IMlibrary does not recognize any
-	registered keys and. IMserver will always the first to process
-	key events.
+        front-end type, which IMlibrary does not recognize any
+        registered keys and. IMserver will always the first to process
+        key events.
   XIMP_FE_TYPE3
-	front-end type, which key events are always passed to both
-	IMserver and IMlibrary. Both of them recognize registered keys.
+        front-end type, which key events are always passed to both
+        IMserver and IMlibrary. Both of them recognize registered keys.
   XIMP_SYNC_BE_TYPE1
-	XIMP_BE_TYPE1 & KeyPress is transfered synchronously.
+        XIMP_BE_TYPE1 & KeyPress is transfered synchronously.
   XIMP_SYNC_BE_TYPE2
-	XIMP_BE_TYPE2 & KeyPress is transfered synchronously.
+        XIMP_BE_TYPE2 & KeyPress is transfered synchronously.
 
 XIMPExtension
 
@@ -546,17 +545,17 @@ pre-registered extensins appeared in the XIMPExtension list are defined
 as below.
 
   XIMPExtStatusWin
-	If it is appeared in the list, the XNExtXimp_StatusWindow input
-	context	attribute is valid to set the status window. The
-	attribute value	isn't evaluated.
+        If it is appeared in the list, the XNExtXimp_StatusWindow input
+        context        attribute is valid to set the status window. The
+        attribute value        isn't evaluated.
   XIMPExtBackFront
-	If it is appeared in the list, the XNExtXimp_Backfront input
-	context is valid to select the front-end method or back-end
-	method. The attribute value isn't evaluated.
+        If it is appeared in the list, the XNExtXimp_Backfront input
+        context is valid to select the front-end method or back-end
+        method. The attribute value isn't evaluated.
   XIMPExtConversion
-	If it is appeared in the list, the XNExtXimp_Conversion input
-	context is valid to set the input mode. The attribute value
-	isn't evaluated.
+        If it is appeared in the list, the XNExtXimp_Conversion input
+        context is valid to set the input mode. The attribute value
+        isn't evaluated.
 
 3.   X IMProtocol Strucutures
 
@@ -572,9 +571,9 @@ defines all for R5 Ximp model.
 following common members:
 
 typedef struct {
-    int major_code;	/* major code of last IMProtocol */
-    int minor_code;	/* minor code of last IMProtocol */
-    CARD16 connect_id;	/* client connection ID */
+    int major_code;        /* major code of last IMProtocol */
+    int minor_code;        /* minor code of last IMProtocol */
+    CARD16 connect_id;        /* client connection ID */
 } IMAnyStruct;
 
    The major_code and minor_code specify the IMProtocol type constant
@@ -585,7 +584,7 @@ declared for each IMProtocol type. Depending on the type, you should
 access members of each IMProtocol by using the IMProtocol union.
 
 typedef union _IMProtocol {
-    int	major_code;
+    int        major_code;
     IMAnyStruct any;
     IMConnectStruct imconnect;
     IMDisConnectStruct imdisconnect;
@@ -625,23 +624,23 @@ IMdkit can determin the answer to such IMProtocol requests only by
 using the IMValues which you have set in the XIMS structure.
    At this release, the following four IMProtocol requests is processed
 in IMdkit itself, and wouldn't forward to your IMserver:
-	o XIM_CONNECT		-> XIM_CONNECT_REPLY
-	o XIM_DISCONNECT	-> XIM_DISCONNECT_REPLY
-	o XIM_QUERY_EXTENSION	-> XIM_QUERY_EXTENSION_REPLY
-	o XIM_GET_IM_VALUES	-> XIM_GET_IM_VALUES_REPLY
+        o XIM_CONNECT                -> XIM_CONNECT_REPLY
+        o XIM_DISCONNECT        -> XIM_DISCONNECT_REPLY
+        o XIM_QUERY_EXTENSION        -> XIM_QUERY_EXTENSION_REPLY
+        o XIM_GET_IM_VALUES        -> XIM_GET_IM_VALUES_REPLY
    So, you don't have to know the details of the corresponding
 IMProtocol structures for these IMProtocol requests.
 
    On the other hand, you will need to deal with the following requests
 for yourselves:
-	o XIM_OPEN
-	o XIM_CLOSE
-	o XIM_SET_IC_FOCUS and XIM_UNSET_IC_FOCUS
-	o XIM_DESTROY_IC
-	o XIM_RESET_IC
-	o XIM_CREATE_IC, XIM_SET_IC_VALUES and XIM_GET_IC_VALUES
-	o XIM_TRIGGER_NOTIFY
-	o XIM_FORWARD_EVENT
+        o XIM_OPEN
+        o XIM_CLOSE
+        o XIM_SET_IC_FOCUS and XIM_UNSET_IC_FOCUS
+        o XIM_DESTROY_IC
+        o XIM_RESET_IC
+        o XIM_CREATE_IC, XIM_SET_IC_VALUES and XIM_GET_IC_VALUES
+        o XIM_TRIGGER_NOTIFY
+        o XIM_FORWARD_EVENT
    However, you don't have to receive any raw packets, but can receive
 the corresponding IMProtocol structures in your IMProtocolHandler
 callback function. Further, you don't have to send a reply for
@@ -680,9 +679,9 @@ IMCloseStruct
 requests. The structure contains:
 
 typedef struct {
-    int		major_code;
-    int		minor_code;
-    CARD16	connect_id;
+    int                major_code;
+    int                minor_code;
+    CARD16        connect_id;
 } IMCloseStruct;
 
    Your IMserver should check connect_id member to know which input
@@ -697,7 +696,7 @@ typedef struct {
     int major_code;
     int minor_code;
     CARD16 connect_id;
-    CARD16 icid;	/* input context ID to change focus */
+    CARD16 icid;        /* input context ID to change focus */
 } IMChangeFocusStruct;
 
    Your IMserver should check icid member to know which input context
@@ -712,7 +711,7 @@ typedef struct {
     int major_code;
     int minor_code;
     CARD16 connect_id;
-    CARD16 icid;	/* input context ID to destroy */
+    CARD16 icid;        /* input context ID to destroy */
 } IMDestroyICStruct;
 
    Your IMserver should check icid member to know which input context
@@ -727,8 +726,8 @@ typedef struct {
     int major_code;
     int minor_code;
     CARD16 connect_id;
-    CARD16 icid;	/* input context ID to reset */
-    CARD16 length;	/* length of committed string below */
+    CARD16 icid;        /* input context ID to reset */
+    CARD16 length;        /* length of committed string below */
     char *commit_string; /* string to commit to XIM client */
 } IMResetICStruct;
 
@@ -744,29 +743,29 @@ contain:
 /*
  *  value type for IC defined in XimProto.h
  */
-#define	XimType_SeparatorOfNestedList	 0
-#define	XimType_CARD8			 1
-#define	XimType_CARD16			 2
-#define	XimType_CARD32			 3
-#define	XimType_STRING8			 4
-#define	XimType_Window			 5
-#define	XimType_XIMStyles		10
-#define	XimType_XRectangle		11
-#define	XimType_XPoint			12
-#define XimType_XFontSet		13
-#define XimType_XIMOptions		14
-#define XimType_XIMHotKeyTriggers	15
-#define XimType_XIMHotKeyState		16
-#define XimType_XIMStringConversion	17
-#define	XimType_NEST			0x7fff
+#define        XimType_SeparatorOfNestedList         0
+#define        XimType_CARD8                         1
+#define        XimType_CARD16                         2
+#define        XimType_CARD32                         3
+#define        XimType_STRING8                         4
+#define        XimType_Window                         5
+#define        XimType_XIMStyles                10
+#define        XimType_XRectangle                11
+#define        XimType_XPoint                        12
+#define XimType_XFontSet                13
+#define XimType_XIMOptions                14
+#define XimType_XIMHotKeyTriggers        15
+#define XimType_XIMHotKeyState                16
+#define XimType_XIMStringConversion        17
+#define        XimType_NEST                        0x7fff
 
 typedef struct {
-    int attribute_id;	/* ID for this IC */
-    CARD16 name_length;	/* length of IC name below */
-    char *name;		/* IC name */
-    int value_length;	/* length of IC value below */
-    void *value;	/* IC value */
-    int type;		/* value type for IC, see above */
+    int attribute_id;        /* ID for this IC */
+    CARD16 name_length;        /* length of IC name below */
+    char *name;                /* IC name */
+    int value_length;        /* length of IC value below */
+    void *value;        /* IC value */
+    int type;                /* value type for IC, see above */
 } XICAttribute;
 
 typedef struct {
@@ -774,23 +773,23 @@ typedef struct {
     int minor_code;
     CARD16 connect_id;
     CARD16 icid;
-	/* input context ID:
-	   for each CREATE, different ID is expected to be returned.
-	   for each SET, it shows the ID to set.
-	   for each GET, it shows the ID to get.
-	 */
-    CARD16 preedit_attr_num;	/* number of preedit_attr list below */
-    CARD16 status_attr_num;	/* number of preedit_attr list below */
-    CARD16 ic_attr_num;		/* number of ic_attr list below */
-    XICAttribute *preedit_attr;	/* IC values for preedit attribute */
-    XICAttribute *status_attr;	/* IC values for status attribute */
-    XICAttribute *ic_attr;	/* IC values for other attributes */
+        /* input context ID:
+           for each CREATE, different ID is expected to be returned.
+           for each SET, it shows the ID to set.
+           for each GET, it shows the ID to get.
+         */
+    CARD16 preedit_attr_num;        /* number of preedit_attr list below */
+    CARD16 status_attr_num;        /* number of preedit_attr list below */
+    CARD16 ic_attr_num;                /* number of ic_attr list below */
+    XICAttribute *preedit_attr;        /* IC values for preedit attribute */
+    XICAttribute *status_attr;        /* IC values for status attribute */
+    XICAttribute *ic_attr;        /* IC values for other attributes */
 } IMChangeICStruct;
 
    When XIM_SET_IC_VALUES or XIM_GET_IC_VALUES, your IMserver should
 check icid member to know which input context should be specified. When
 XIM_CREATE_IC, your IMserver should set icid member to identify the
-input context newly created. 
+input context newly created.
 
 IMTriggerNotifyStruct
 ---------------------
@@ -816,10 +815,10 @@ typedef struct {
     int major_code;
     int minor_code;
     CARD16 connect_id;
-    CARD16 icid;	/* input context ID */
-    BITMASK16 sync_bit;	/* precessed synchronously or not */
+    CARD16 icid;        /* input context ID */
+    BITMASK16 sync_bit;        /* precessed synchronously or not */
     CARD16 serial_number;
-    XEvent event;	/* X event to be filtered */
+    XEvent event;        /* X event to be filtered */
 } IMForwardEventStruct;
 
 3.2.   R5 Ximp IMProtocol
@@ -830,12 +829,12 @@ typedef struct {
 following common members:
 
 typedef struct {
-    INT32 type;		/* message type */
-    CARD32 icid;	/* input context ID */
-    Window focus_win;	/* focus window */
+    INT32 type;                /* message type */
+    CARD32 icid;        /* input context ID */
+    Window focus_win;        /* focus window */
     long fwin_sel_mask; /* focus window select-mask */
     CARD32 ximp_type_mask; /* Ximp event flow type */
-    Window client_win;	/* client window */
+    Window client_win;        /* client window */
 } XIMPAnyStruct;
 
    The type member specifies the Ximp IMProtocol type constant name that
@@ -847,29 +846,29 @@ on the type, you should access members of each Ximp IMProtocol by using
 the XIMProtocol union.
 
 typedef union _IMPProtocol {
-    int				type;
-    XIMPAnyStruct		any;
-    XIMPKeyEventStruct		keyevent;
-    XIMPICValuesStruct		create;
-    XIMPICValuesStruct		setvalue;
-    XIMPICValuesStruct		getvalue;
-    XIMPAnyStruct		destroy;
-    XIMPAnyStruct		regkey;
-    XIMPAnyStruct		setfocus;
-    XIMPAnyStruct		unsetfocus;
-    XIMPClientWindowStruct	clientwin;
-    XIMPFocusWindowStruct	focuswin;
-    XIMPMoveStruct		move;
-    XIMPEventMaskNotifyStruct	evmasknotify;
-    XIMPExtensionStruct		extension;
-    XIMPReadPropStruct		readprop;
-    XIMPResetStruct		reset;
-    XIMPCommitStringStruct	commitstring;
-    XIMPErrorStruct		error;
-    XIMPAnyStruct		geometry_cb;
-    XIMPPreeditCBStruct		preedit_cb;
-    XIMPStatusCBStruct		status_cb;
-    long			pad[24];
+    int                                type;
+    XIMPAnyStruct                any;
+    XIMPKeyEventStruct                keyevent;
+    XIMPICValuesStruct                create;
+    XIMPICValuesStruct                setvalue;
+    XIMPICValuesStruct                getvalue;
+    XIMPAnyStruct                destroy;
+    XIMPAnyStruct                regkey;
+    XIMPAnyStruct                setfocus;
+    XIMPAnyStruct                unsetfocus;
+    XIMPClientWindowStruct        clientwin;
+    XIMPFocusWindowStruct        focuswin;
+    XIMPMoveStruct                move;
+    XIMPEventMaskNotifyStruct        evmasknotify;
+    XIMPExtensionStruct                extension;
+    XIMPReadPropStruct                readprop;
+    XIMPResetStruct                reset;
+    XIMPCommitStringStruct        commitstring;
+    XIMPErrorStruct                error;
+    XIMPAnyStruct                geometry_cb;
+    XIMPPreeditCBStruct                preedit_cb;
+    XIMPStatusCBStruct                status_cb;
+    long                        pad[24];
 } IMPProtocol;
 
    The first entry of any XIMProtocol structure is always the
@@ -911,11 +910,11 @@ your IMserver performs the following:
    function, then sit in a loop processing events as follows.
 
     for (;;) {
-	XEvent event;
-	XNextEvent(your_display, &event);
-	if (XFilterEvent(&event, NULL) == True)
-	  continue;
-	YourXEventHandler(&event);
+        XEvent event;
+        XNextEvent(your_display, &event);
+        if (XFilterEvent(&event, NULL) == True)
+          continue;
+        YourXEventHandler(&event);
     }
 
    Here, all the IMProtocols you need are passed to your IMProtocol
@@ -926,4 +925,4 @@ your IMserver performs the following:
    8. Link your IMserver with libXimd (the IMdkit library) and libX11
    (the core X library). The following provides a sample command line:
 
-	cc -o sampleIM sampleIM.c -lXimd -lX11
+        cc -o sampleIM sampleIM.c -lXimd -lX11

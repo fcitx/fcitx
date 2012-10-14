@@ -84,7 +84,7 @@ extern "C" {
      *
      * @param profile profile
      * @param instance instance
-     * 
+     *
      * @return boolean loading successful
      **/
     boolean FcitxProfileLoad(FcitxProfile* profile, struct _FcitxInstance* instance);

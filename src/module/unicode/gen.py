@@ -94,12 +94,12 @@
 # 32bit: offset to unihan_strings for Korean
 # 32bit: offset to unihan_strings for JapaneseKun
 # 32bit: offset to unihan_strings for JapaneseOn
- 
+
 from struct import *
 import sys
 import re
 import StringIO
- 
+
 # based on http://www.unicode.org/charts/
 sectiondata = '''
 SECTION European Alphabets
@@ -288,7 +288,7 @@ Specials
 Variation Selectors
 '''
 # TODO: rename "Other Scripts" to "American Scripts"
- 
+
 categoryMap = { # same values as QChar::Category
     "Mn": 1,
     "Mc": 2,
@@ -321,15 +321,15 @@ categoryMap = { # same values as QChar::Category
     "Sk":  29,
     "So":  30
 }
- 
- 
+
+
 class Names:
     def __init__(self):
         self.names = []
         self.controlpos = -1
     def addName(self, uni, name, category):
         self.names.append([uni, name, category])
- 
+
     def calculateStringSize(self):
         size = 0
         hadcontrol = False
@@ -341,10 +341,10 @@ class Names:
             else:
                 size += len(entry[1]) + 2
         return size
- 
+
     def calculateOffsetSize(self):
         return len(self.names)*6
- 
+
     def writeStrings(self, out, pos):
         hadcontrol = False
         for entry in self.names:
@@ -366,13 +366,13 @@ class Names:
                 entry[1] = pos
                 pos += size
         return pos
- 
+
     def writeOffsets(self, out, pos):
         for entry in self.names:
             out.write(pack("=HI", int(entry[0], 16), entry[1]))
             pos += 6
         return pos
- 
+
 class Details:
     def __init__(self):
         self.details = {}
@@ -382,7 +382,7 @@ class Details:
         if not self.details[char].has_key(category):
             self.details[char][category] = []
         self.details[char][category].append(text)
- 
+
     def calculateStringSize(self):
         size = 0
         for char in self.details.values():
@@ -393,10 +393,10 @@ class Details:
                     else:
                         size += 2
         return size
- 
+
     def calculateOffsetSize(self):
         return len(self.details)*27
- 
+
     def writeStrings(self, out, pos):
         for char in self.details.values():
             for cat in char.values():
@@ -411,7 +411,7 @@ class Details:
                     cat[i] = pos
                     pos += size
         return pos
- 
+
     def writeOffsets(self, out, pos):
         for char in self.details.keys():
             alias = 0
@@ -427,53 +427,53 @@ class Details:
             if self.details[char].has_key("alias"):
                 alias = self.details[char]["alias"][0]
                 alias_count = len(self.details[char]["alias"])
- 
+
             if self.details[char].has_key("note"):
                 note = self.details[char]["note"][0]
                 note_count = len(self.details[char]["note"])
- 
+
             if self.details[char].has_key("approxEquiv"):
                 approxEquiv = self.details[char]["approxEquiv"][0]
                 approxEquiv_count = len(self.details[char]["approxEquiv"])
- 
+
             if self.details[char].has_key("equiv"):
                 equiv = self.details[char]["equiv"][0]
                 equiv_count = len(self.details[char]["equiv"])
- 
+
             if self.details[char].has_key("seeAlso"):
                 seeAlso = self.details[char]["seeAlso"][0]
                 seeAlso_count = len(self.details[char]["seeAlso"])
- 
+
             out.write(pack("=HIbIbIbIbIb", char, alias, alias_count, note, note_count, approxEquiv, approxEquiv_count, equiv, equiv_count, seeAlso, seeAlso_count))
             pos += 27
- 
+
         return pos
- 
+
 class SectionsBlocks:
     def __init__(self):
         self.sections = []
         self.blocks = []
         self.blockList = []
         self.sectionList = []
- 
+
     def addBlock(self, begin, end, name):
         self.blocks.append([begin, end, name])
         self.blockList.append(name)
- 
+
     def addSection(self, section, block):
         self.sections.append([section, block])
         if not section in self.sectionList:
             self.sectionList.append(section)
- 
+
     def calculateBlockStringSize(self):
         size = 0
         for block in self.blocks:
             size += len(block[2]) + 1
         return size
- 
+
     def calculateBlockOffsetSize(self):
         return len(self.blocks) * 4
- 
+
     def calculateSectionStringSize(self):
         size = 0
         lastsection = ""
@@ -482,10 +482,10 @@ class SectionsBlocks:
                 size += len(section[0]) + 1
                 lastsection = section[0]
         return size
- 
+
     def calculateSectionOffsetSize(self):
         return len(self.sections) * 4
- 
+
     def writeBlockStrings(self, out, pos):
         index = 0
         for block in self.blocks:
@@ -505,13 +505,13 @@ class SectionsBlocks:
             pos += size
             index += 1
         return pos
- 
+
     def writeBlockOffsets(self, out, pos):
         for block in self.blocks:
             out.write(pack("=HH", int(block[0], 16), int(block[1], 16)))
             pos += 4
         return pos
- 
+
     def writeSectionStrings(self, out, pos):
         lastsection = ""
         lastpos = 0
@@ -528,24 +528,24 @@ class SectionsBlocks:
             else:
                 section[0] = index
         return pos
- 
+
     def writeSectionOffsets(self, out, pos):
         print self.sections
         for section in self.sections:
             out.write(pack("=HH", section[0], section[1]))
             pos += 4
         return pos
- 
+
     def getBlockList(self):
         return self.blockList
-    
+
     def getSectionList(self):
         return self.sectionList
- 
+
 class Unihan:
     def __init__(self):
         self.unihan = {}
- 
+
     def addUnihan(self, uni, category, value):
         uni = int(uni, 16)
         if category != "kDefinition" and category != "kCantonese" and category != "kMandarin" and category != "kTang" and category != "kKorean" and category != "kJapaneseKun" and category != "kJapaneseOn":
@@ -566,7 +566,7 @@ class Unihan:
             self.unihan[uni][5] = value
         elif category == "kJapaneseOn":
             self.unihan[uni][6] = value
- 
+
     def calculateStringSize(self):
         size = 0
         for char in self.unihan.keys():
@@ -574,10 +574,10 @@ class Unihan:
                 if entry != None:
                     size += len(entry) + 1
         return size
- 
+
     def calculateOffsetSize(self):
         return len(self.unihan) * 30
- 
+
     def writeStrings(self, out, pos):
         for char in self.unihan.keys():
             for i in range(0, 7):
@@ -587,7 +587,7 @@ class Unihan:
                     self.unihan[char][i] = pos
                     pos += size
         return pos
- 
+
     def writeOffsets(self, out, pos):
         for char in self.unihan.keys():
             out.write(pack("=H", char))
@@ -598,7 +598,7 @@ class Unihan:
                     out.write(pack("=I", 0))
             pos += 30
         return pos
- 
+
 class Parser:
     def parseUnicodeData(self, inUnicodeData, names):
         regexp = re.compile(r'^([^;]+);([^;]+);([^;]+)')
@@ -613,20 +613,20 @@ class Parser:
             if len(uni) > 4:
                 continue
             names.addName(uni, name, categoryMap[category])
- 
+
     def parseDetails(self, inNamesList, details):
         invalidRegexp = re.compile(r'^@')
         unicodeRegexp = re.compile(r'^([0-9A-F]+)')
- 
+
         aliasRegexp = re.compile(r'^\s+=\s+(.+)$') #equal
         seeAlsoRegexp = re.compile(r'^\s+x\s+.*([0-9A-F]{4,6})\)$') #ex
         noteRegexp = re.compile(r'^\s+\*\s+(.+)$') #star
         approxEquivalentRegexp = re.compile(r'^\s+#\s+(.+)$') #pound
         equivalentRegexp = re.compile(r'^\s+:\s+(.+)$') #colon
- 
+
         drop = 0
         currChar = 0
- 
+
         for line in inNamesList:
             line = line[:-1]
             m1 = unicodeRegexp.match(line)
@@ -696,53 +696,53 @@ class Parser:
                 continue
             if len(m.group(1)) <= 4:
                 unihan.addUnihan(m.group(1), m.group(2), m.group(3))
- 
+
 def writeTranslationDummy(out, data):
     out.write("""/* This file is part of the KDE libraries
- 
+
    Copyright (C) 2007 Daniel Laidig <d.laidig@gmx.de>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
- 
+
    This file is autogenerated by kdeutils/kcharselect/kcharselect-generate-datafile.py
 */\n\n""")
     for group in data:
         for entry in group[1]:
             out.write("I18N_NOOP2(\""+group[0]+"\", \""+entry+"\");\n")
- 
+
 out = open("kcharselect-data", "wb")
 outTranslationDummy = open("kcharselect-translation.cpp", "wb")
- 
+
 inUnicodeData = open("UnicodeData.txt", "r")
 inNamesList = open("NamesList.txt", "r")
 inBlocks = open("Blocks.txt", "r")
 inSections = StringIO.StringIO(sectiondata)
 inUnihan = open("Unihan_Readings.txt", "r")
- 
+
 if calcsize('=H') != 2 or calcsize('=I') != 4:
     print "Error: Sizes of ushort and uint are not 16 and 32 bit as expected"
     sys.exit(1)
- 
+
 names = Names()
 details = Details()
 sectionsBlocks = SectionsBlocks()
 unihan = Unihan()
- 
+
 parser = Parser()
- 
+
 print "========== parsing files ==================="
 parser.parseUnicodeData(inUnicodeData, names)
 print ".",; sys.stdout.flush()
@@ -754,59 +754,59 @@ parser.parseSections(inSections, sectionsBlocks)
 print "\b.",; sys.stdout.flush()
 parser.parseUnihan(inUnihan, unihan)
 print "\b.",; sys.stdout.flush()
- 
+
 print "done."
- 
+
 pos = 0
- 
+
 #write header, size: 40 bytes
 print "========== writing header =================="
 out.write(pack("=I", 40))
 print "names strings begin", 40
- 
+
 namesOffsetBegin = names.calculateStringSize() + 40
 out.write(pack("=I", namesOffsetBegin))
 print "names offsets begin", namesOffsetBegin
- 
+
 detailsStringBegin = namesOffsetBegin + names.calculateOffsetSize()
 out.write(pack("=I", detailsStringBegin))
 print "details strings begin", detailsStringBegin
- 
+
 detailsOffsetBegin = detailsStringBegin + details.calculateStringSize()
 out.write(pack("=I", detailsOffsetBegin))
 print "details offsets begin", detailsOffsetBegin
- 
+
 blocksStringBegin = detailsOffsetBegin + details.calculateOffsetSize()
 out.write(pack("=I", blocksStringBegin))
 print "block strings begin", blocksStringBegin
- 
+
 blocksOffsetBegin = blocksStringBegin + sectionsBlocks.calculateBlockStringSize()
 out.write(pack("=I", blocksOffsetBegin))
 print "block offsets begin", blocksOffsetBegin
- 
+
 sectionStringBegin = blocksOffsetBegin + sectionsBlocks.calculateBlockOffsetSize()
 out.write(pack("=I", sectionStringBegin))
 print "section strings begin", sectionStringBegin
- 
+
 sectionOffsetBegin = sectionStringBegin + sectionsBlocks.calculateSectionStringSize()
 out.write(pack("=I", sectionOffsetBegin))
 print "section offsets begin", sectionOffsetBegin
- 
+
 unihanStringBegin = sectionOffsetBegin + sectionsBlocks.calculateSectionOffsetSize()
 out.write(pack("=I", unihanStringBegin))
 print "unihan strings begin", unihanStringBegin
- 
+
 unihanOffsetBegin = unihanStringBegin + unihan.calculateStringSize()
 out.write(pack("=I", unihanOffsetBegin))
 print "unihan offsets begin", unihanOffsetBegin
- 
+
 end = unihanOffsetBegin + unihan.calculateOffsetSize()
 print "end should be", end
- 
+
 pos += 40
- 
+
 print "========== writing data ===================="
- 
+
 pos = names.writeStrings(out, pos)
 print "names strings written, position", pos
 pos = names.writeOffsets(out, pos)
@@ -828,9 +828,8 @@ pos = unihan.writeStrings(out, pos)
 print "unihan strings written, position", pos
 pos = unihan.writeOffsets(out, pos)
 print "unihan offsets written, position", pos
- 
+
 print "========== writing translation dummy  ======"
 translationData = [["KCharSelect section name", sectionsBlocks.getSectionList()], ["KCharselect unicode block name",sectionsBlocks.getBlockList()]]
 writeTranslationDummy(outTranslationDummy, translationData)
 print "done. make sure to copy both kcharselect-data and kcharselect-translation.cpp."
-  

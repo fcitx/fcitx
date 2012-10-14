@@ -55,4 +55,3 @@ endif (GIO2_FOUND)
 install(TARGETS im-fcitx-gtk3 DESTINATION ${GTK3_IM_MODULEDIR})
 
 endif(ENABLE_GTK3_IM_MODULE)
-

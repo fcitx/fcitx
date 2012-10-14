@@ -487,7 +487,7 @@
 	* 去掉自动隐藏输入条的选项，改为总是自动隐藏
 
 2007-01-23: Yuking <yuking_net@sohu.com>
- 	* src/tools.c: 修改设置文件，去掉“是否”(unicom_2@linuxsir)
+	* src/tools.c: 修改设置文件，去掉“是否”(unicom_2@linuxsir)
 	* src/table.c: 修正临时拼音时的一个显示错误
 	* src/table.c: 修改翻页键的行为
 
