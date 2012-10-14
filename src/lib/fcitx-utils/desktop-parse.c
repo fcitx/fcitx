@@ -383,11 +383,11 @@ fcitx_desktop_group_link_entry_before(FcitxDesktopGroup *group,
     fcitx_desktop_entry_set_link(new_entry, &group->first, next_p);
 }
 
-FCITX_EXPORT_API void
+FCITX_EXPORT_API boolean
 fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
 {
     if (!(file && fp))
-        return;
+        return false;
     char *buff = NULL;
     size_t buff_len = 0;
     int lineno = 0;
@@ -485,6 +485,18 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
     }
     file->comments = comments;
     fcitx_desktop_file_clean(file);
+    return true;
+}
+
+boolean
+fcitx_desktop_file_load(FcitxDesktopFile *file, const char *name)
+{
+    boolean res;
+    FILE *fp = fopen(name, "r");
+    res = fcitx_desktop_file_load_fp(file, fp);
+    if (fp)
+        fclose(fp);
+    return res;
 }
 
 static inline size_t
@@ -594,16 +606,28 @@ fcitx_desktop_group_write_fp(FcitxDesktopGroup *group, FILE *fp)
     }
 }
 
-FCITX_EXPORT_API void
+FCITX_EXPORT_API boolean
 fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp)
 {
     if (!(file && fp))
-        return;
+        return false;
     FcitxDesktopGroup *group;
     for (group = file->first;group;group = group->next) {
         fcitx_desktop_group_write_fp(group, fp);
     }
     fcitx_desktop_write_comments(fp, &file->comments);
+    return true;
+}
+
+boolean
+fcitx_desktop_file_write(FcitxDesktopFile *file, const char *name)
+{
+    boolean res;
+    FILE *fp = fopen(name, "w");
+    res = fcitx_desktop_file_write_fp(file, fp);
+    if (fp)
+        fclose(fp);
+    return res;
 }
 
 static boolean

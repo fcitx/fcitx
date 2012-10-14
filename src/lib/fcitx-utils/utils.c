@@ -489,16 +489,27 @@ char* fcitx_utils_get_fcitx_path_with_filename(const char* type, const char* fil
 FCITX_EXPORT_API
 void fcitx_utils_string_swap(char** obj, const char* str)
 {
-    if (!str) {
-        fcitx_utils_free(*obj);
+    if (str) {
+        *obj = fcitx_utils_set_str(*obj, str);
+    } else if (*obj) {
+        free(*obj);
         *obj = NULL;
-        return;
     }
-    *obj = fcitx_utils_set_str(*obj, str);
 }
 
 FCITX_EXPORT_API
-void fcitx_utils_launch_tool(const char* name, const char* arg)
+void fcitx_utils_string_swap_with_len(char** obj, const char* str, size_t len)
+{
+    if (str) {
+        *obj = fcitx_utils_set_str_with_len(*obj, str, len);
+    } else if (*obj) {
+        free(*obj);
+        *obj = NULL;
+    }
+}
+
+FCITX_EXPORT_API void
+fcitx_utils_launch_tool(const char* name, const char* arg)
 {
     char* command = fcitx_utils_get_fcitx_path_with_filename("bindir", name);
     char* args[] = {

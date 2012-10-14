@@ -80,9 +80,11 @@ extern "C" {
 
     boolean fcitx_desktop_file_init(FcitxDesktopFile *file,
                                     FcitxDesktopVTable *vtable, void *owner);
-    void fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp);
+    boolean fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp);
+    boolean fcitx_desktop_file_load(FcitxDesktopFile *file, const char *name);
     void fcitx_desktop_file_done(FcitxDesktopFile *file);
-    void fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp);
+    boolean fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp);
+    boolean fcitx_desktop_file_write(FcitxDesktopFile *file, const char *name);
     FcitxDesktopGroup *fcitx_desktop_file_find_group_with_len(
         FcitxDesktopFile *file, const char *name, size_t name_len);
     static inline FcitxDesktopGroup*
@@ -236,6 +238,19 @@ extern "C" {
     {
         return fcitx_desktop_group_add_entry_before_with_len(
             group, entry, name, strlen(name), move);
+    }
+    static inline FcitxDesktopEntry*
+    fcitx_desktop_entry_set_value_with_len(FcitxDesktopEntry *entry,
+                                           const char *value, size_t len)
+    {
+        fcitx_utils_string_swap_with_len(&entry->value, value, len);
+        return entry;
+    }
+    static inline FcitxDesktopEntry*
+    fcitx_desktop_entry_set_value(FcitxDesktopEntry *entry, const char *value)
+    {
+        fcitx_utils_string_swap(&entry->value, value);
+        return entry;
     }
 
 #ifdef __cplusplus

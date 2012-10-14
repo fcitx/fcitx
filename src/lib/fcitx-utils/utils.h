@@ -385,6 +385,8 @@ extern "C" {
      * @return void
      **/
     void fcitx_utils_string_swap(char** obj, const char* str);
+    void fcitx_utils_string_swap_with_len(char** obj,
+                                          const char* str, size_t len);
 
     /**
      * similar with strcmp, but can handle the case that a or b is null.
