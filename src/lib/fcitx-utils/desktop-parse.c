@@ -52,40 +52,44 @@ fcitx_desktop_parse_check_vtable(FcitxDesktopVTable *vtable)
 }
 
 static FcitxDesktopGroup*
-fcitx_desktop_parse_new_group(FcitxDesktopVTable *vtable)
+fcitx_desktop_parse_new_group(FcitxDesktopVTable *vtable, void *owner)
 {
     FcitxDesktopGroup *group;
     if (vtable && vtable->new_group) {
-        group = vtable->new_group(vtable->priv);
+        group = vtable->new_group(owner);
         memset(group, 0, sizeof(FcitxDesktopGroup));
     } else {
         group = fcitx_utils_new(FcitxDesktopGroup);
     }
     group->vtable = vtable;
+    group->owner = owner;
     return group;
 }
 
 static FcitxDesktopEntry*
-fcitx_desktop_parse_new_entry(FcitxDesktopVTable *vtable)
+fcitx_desktop_parse_new_entry(FcitxDesktopVTable *vtable, void *owner)
 {
     FcitxDesktopEntry *entry;
     if (vtable && vtable->new_entry) {
-        entry = vtable->new_entry(vtable->priv);
+        entry = vtable->new_entry(owner);
         memset(entry, 0, sizeof(FcitxDesktopEntry));
     } else {
         entry = fcitx_utils_new(FcitxDesktopEntry);
     }
     entry->vtable = vtable;
+    entry->owner = owner;
     return entry;
 }
 
 FCITX_EXPORT_API boolean
-fcitx_desktop_file_init(FcitxDesktopFile *file, FcitxDesktopVTable *vtable)
+fcitx_desktop_file_init(FcitxDesktopFile *file, FcitxDesktopVTable *vtable,
+                        void *owner)
 {
     if (!fcitx_desktop_parse_check_vtable(vtable))
         return false;
     memset(file, 0, sizeof(FcitxDesktopFile));
     file->vtable = vtable;
+    file->owner = owner;
     utarray_init(&file->comments, fcitx_str_icd);
     return true;
 }
@@ -160,7 +164,7 @@ fcitx_desktop_entry_free(FcitxDesktopEntry *entry)
     fcitx_utils_free(entry->value);
     utarray_done(&entry->comments);
     if (entry->vtable && entry->vtable->free_entry) {
-        entry->vtable->free_entry(entry->vtable->priv, entry);
+        entry->vtable->free_entry(entry->owner, entry);
     }
 }
 
@@ -177,7 +181,7 @@ fcitx_desktop_group_free(FcitxDesktopGroup *group)
     free(group->name);
     utarray_done(&group->comments);
     if (group->vtable && group->vtable->free_group) {
-        group->vtable->free_group(entry->vtable->priv, group);
+        group->vtable->free_group(entry->owner, group);
     }
 }
 
@@ -241,7 +245,7 @@ fcitx_desktop_file_hash_new_group(FcitxDesktopFile *file,
                                   const char *name, size_t name_len)
 {
     FcitxDesktopGroup *new_group;
-    new_group = fcitx_desktop_parse_new_group(file->vtable);
+    new_group = fcitx_desktop_parse_new_group(file->vtable, file->owner);
     new_group->name = malloc(name_len + 1);
     memcpy(new_group->name, name, name_len);
     new_group->name[name_len] = '\0';
@@ -263,12 +267,120 @@ fcitx_desktop_group_hash_new_entry(FcitxDesktopGroup *group,
                                    const char *name, size_t name_len)
 {
     FcitxDesktopEntry *new_entry;
-    new_entry = fcitx_desktop_parse_new_entry(group->vtable);
+    new_entry = fcitx_desktop_parse_new_entry(group->vtable, group->owner);
     new_entry->name = malloc(name_len + 1);
     memcpy(new_entry->name, name, name_len);
     new_entry->name[name_len] = '\0';
     HASH_ADD_KEYPTR(hh, group->entries, new_entry->name, name_len, new_entry);
     return new_entry;
+}
+
+static void
+fcitx_desktop_group_set_link(FcitxDesktopGroup *new_group,
+                             FcitxDesktopGroup **prev_p,
+                             FcitxDesktopGroup **next_p)
+{
+    new_group->next = *prev_p;
+    new_group->prev = *next_p;
+    *prev_p = new_group;
+    *next_p = new_group;
+}
+
+static void
+fcitx_desktop_group_unlink(FcitxDesktopFile *file, FcitxDesktopGroup *group)
+{
+    if (group->prev) {
+        group->prev->next = group->next;
+    } else {
+        file->first = group->next;
+    }
+    if (group->next) {
+        group->next->prev = group->prev;
+    } else {
+        file->last = group->prev;
+    }
+}
+
+static void
+fcitx_desktop_file_link_group_after(FcitxDesktopFile *file,
+                                    FcitxDesktopGroup *prev_group,
+                                    FcitxDesktopGroup *new_group)
+{
+    FcitxDesktopGroup **prev_p;
+    if (!prev_group) {
+        prev_p = &file->first;
+    } else {
+        prev_p = &prev_group->next;
+    }
+    fcitx_desktop_group_set_link(new_group, prev_p, &file->last);
+}
+
+static void
+fcitx_desktop_file_link_group_before(FcitxDesktopFile *file,
+                                     FcitxDesktopGroup *next_group,
+                                     FcitxDesktopGroup *new_group)
+{
+    FcitxDesktopGroup **next_p;
+    if (!next_group) {
+        next_p = &file->last;
+    } else {
+        next_p = &next_group->prev;
+    }
+    fcitx_desktop_group_set_link(new_group, &file->first, next_p);
+}
+
+static void
+fcitx_desktop_entry_set_link(FcitxDesktopEntry *new_entry,
+                             FcitxDesktopEntry **prev_p,
+                             FcitxDesktopEntry **next_p)
+{
+    new_entry->next = *prev_p;
+    new_entry->prev = *next_p;
+    *prev_p = new_entry;
+    *next_p = new_entry;
+}
+
+static void
+fcitx_desktop_entry_unlink(FcitxDesktopGroup *group, FcitxDesktopEntry *entry)
+{
+    if (entry->prev) {
+        entry->prev->next = entry->next;
+    } else {
+        group->first = entry->next;
+    }
+    if (entry->next) {
+        entry->next->prev = entry->prev;
+    } else {
+        group->last = entry->prev;
+    }
+}
+
+static void
+fcitx_desktop_group_link_entry_after(FcitxDesktopGroup *group,
+                                     FcitxDesktopEntry *prev_entry,
+                                     FcitxDesktopEntry *new_entry)
+{
+    FcitxDesktopEntry **prev_p;
+    if (!prev_entry) {
+        prev_p = &group->first;
+    } else {
+        prev_p = &prev_entry->next;
+    }
+    fcitx_desktop_entry_set_link(new_entry, prev_p, &group->last);
+}
+
+static void
+fcitx_desktop_group_link_entry_before(FcitxDesktopGroup *group,
+                                      FcitxDesktopEntry *next_entry,
+                                      FcitxDesktopEntry *new_entry)
+{
+    FcitxDesktopEntry **next_p;
+    if (!next_entry) {
+        next_p = &group->last;
+    } else {
+        next_p = &next_entry->prev;
+    }
+    fcitx_desktop_entry_set_link(new_entry, &group->first, next_p);
 }
 
 FCITX_EXPORT_API void
@@ -306,19 +418,24 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
             FcitxDesktopGroup *new_group;
             new_group = fcitx_desktop_file_find_group_with_len(file, line,
                                                                name_len);
-            if (!new_group)
+            if (!new_group) {
                 new_group = fcitx_desktop_file_hash_new_group(file, line,
                                                               name_len);
+            } else {
+                if (new_group->flags & FX_DESKTOP_GROUP_UPDATED) {
+                    FcitxLog(ERROR, _("Duplicate group %s in a desktop file,"
+                                      "@ line %d, override previous one."),
+                             new_group->name, lineno);
+                    if (new_group == cur_group)
+                        cur_group = new_group->prev;
+                    fcitx_desktop_group_unlink(file, new_group);
+                    fcitx_desktop_group_reset(new_group);
+                }
+                new_group->first = NULL;
+                new_group->last = NULL;
+            }
             new_group->flags |= FX_DESKTOP_GROUP_UPDATED;
-            new_group->first = NULL;
-            new_group->last = NULL;
-            if (!file->first)
-                file->first = new_group;
-            if (cur_group)
-                cur_group->next = new_group;
-            new_group->prev = cur_group;
-            new_group->next = NULL;
-            file->last = new_group;
+            fcitx_desktop_file_link_group_after(file, cur_group, new_group);
             new_group->comments = comments;
             utarray_init(&comments, fcitx_str_icd);
             cur_group = new_group;
@@ -340,18 +457,19 @@ fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp)
         FcitxDesktopEntry *new_entry;
         new_entry = fcitx_desktop_group_find_entry_with_len(cur_group,
                                                             line, key_len);
-        if (!new_entry)
+        if (!new_entry) {
             new_entry = fcitx_desktop_group_hash_new_entry(cur_group,
                                                            line, key_len);
+        } else if (new_entry->flags & FX_DESKTOP_ENTRY_UPDATED) {
+            FcitxLog(ERROR, _("Duplicate entry %s in group %s,"
+                              "@ line %d, override previous one."),
+                     new_entry->name, cur_group->name, lineno);
+            fcitx_desktop_entry_unlink(cur_group, new_entry);
+            fcitx_desktop_entry_reset(new_entry);
+        }
         new_entry->flags |= FX_DESKTOP_ENTRY_UPDATED;
-        if (!cur_group->first)
-            cur_group->first = new_entry;
-        FcitxDesktopEntry *prev = cur_group->last;
-        if (prev)
-            prev->next = new_entry;
-        new_entry->prev = prev;
-        new_entry->next = NULL;
-        cur_group->last = new_entry;
+        fcitx_desktop_group_link_entry_after(cur_group, cur_group->last,
+                                             new_entry);
         new_entry->comments = comments;
         utarray_init(&comments, fcitx_str_icd);
         char *value = line + key_len + 1;
@@ -401,7 +519,7 @@ fcitx_desktop_write_comments(FILE *fp, UT_array *comments)
         size_t len = _check_single_line(*comment);
         if (!len)
             continue;
-        if (**comment == ' ') {
+        if (**comment == ' ' || **comment == '#') {
             _write_str(fp, "#");
         } else {
             _write_str(fp, "# ");
@@ -486,4 +604,128 @@ fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp)
         fcitx_desktop_group_write_fp(group, fp);
     }
     fcitx_desktop_write_comments(fp, &file->comments);
+}
+
+static boolean
+fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
+{
+    FcitxDesktopGroup *group_found;
+    group_found = fcitx_desktop_file_find_group(file, group->name);
+    return group_found == group;
+}
+
+FCITX_EXPORT_API FcitxDesktopGroup*
+fcitx_desktop_file_add_group_after_with_len(
+    FcitxDesktopFile *file, FcitxDesktopGroup *group,
+    const char *name, size_t name_len, boolean move)
+{
+    FcitxDesktopGroup *new_group;
+    if (group) {
+        if (!fcitx_desktop_file_has_group(file, group)) {
+            FcitxLog(ERROR,
+                     "The given group doesn't belong to the given file.");
+            return NULL;
+        }
+    } else {
+        group = file->last;
+    }
+    new_group =  fcitx_desktop_file_find_group_with_len(file, name, name_len);
+    if (!new_group) {
+        new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
+        fcitx_desktop_file_link_group_after(file, group, new_group);
+        utarray_init(&new_group->comments, fcitx_str_icd);
+    } else if (move && !(new_group == group)) {
+        fcitx_desktop_group_unlink(file, new_group);
+        fcitx_desktop_file_link_group_after(file, group, new_group);
+    }
+    return new_group;
+}
+
+FCITX_EXPORT_API FcitxDesktopGroup*
+fcitx_desktop_file_add_group_before_with_len(
+    FcitxDesktopFile *file, FcitxDesktopGroup *group,
+    const char *name, size_t name_len, boolean move)
+{
+    FcitxDesktopGroup *new_group;
+    if (group) {
+        if (!fcitx_desktop_file_has_group(file, group)) {
+            FcitxLog(ERROR,
+                     "The given group doesn't belong to the given file.");
+            return NULL;
+        }
+    } else {
+        group = file->first;
+    }
+    new_group =  fcitx_desktop_file_find_group_with_len(file, name, name_len);
+    if (!new_group) {
+        new_group = fcitx_desktop_file_hash_new_group(file, name, name_len);
+        fcitx_desktop_file_link_group_before(file, group, new_group);
+        utarray_init(&new_group->comments, fcitx_str_icd);
+    } else if (move && !(new_group == group)) {
+        fcitx_desktop_group_unlink(file, new_group);
+        fcitx_desktop_file_link_group_before(file, group, new_group);
+    }
+    return new_group;
+}
+
+static boolean
+fcitx_desktop_group_has_entry(FcitxDesktopGroup *group, FcitxDesktopEntry *entry)
+{
+    FcitxDesktopEntry *entry_found;
+    entry_found = fcitx_desktop_group_find_entry(group, entry->name);
+    return entry_found == entry;
+}
+
+FCITX_EXPORT_API FcitxDesktopEntry*
+fcitx_desktop_group_add_entry_after_with_len(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+    const char *name, size_t name_len, boolean move)
+{
+    FcitxDesktopEntry *new_entry;
+    if (entry) {
+        if (!fcitx_desktop_group_has_entry(group, entry)) {
+            FcitxLog(ERROR,
+                     "The given entry doesn't belong to the given group.");
+            return NULL;
+        }
+    } else {
+        entry = group->last;
+    }
+    new_entry =  fcitx_desktop_group_find_entry_with_len(group, name, name_len);
+    if (!new_entry) {
+        new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
+        fcitx_desktop_group_link_entry_after(group, entry, new_entry);
+        utarray_init(&new_entry->comments, fcitx_str_icd);
+    } else if (move && !(new_entry == entry)) {
+        fcitx_desktop_entry_unlink(group, new_entry);
+        fcitx_desktop_group_link_entry_after(group, entry, new_entry);
+    }
+    return new_entry;
+}
+
+FCITX_EXPORT_API FcitxDesktopEntry*
+fcitx_desktop_group_add_entry_before_with_len(
+    FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+    const char *name, size_t name_len, boolean move)
+{
+    FcitxDesktopEntry *new_entry;
+    if (entry) {
+        if (!fcitx_desktop_group_has_entry(group, entry)) {
+            FcitxLog(ERROR,
+                     "The given entry doesn't belong to the given group.");
+            return NULL;
+        }
+    } else {
+        entry = group->first;
+    }
+    new_entry =  fcitx_desktop_group_find_entry_with_len(group, name, name_len);
+    if (!new_entry) {
+        new_entry = fcitx_desktop_group_hash_new_entry(group, name, name_len);
+        fcitx_desktop_group_link_entry_before(group, entry, new_entry);
+        utarray_init(&new_entry->comments, fcitx_str_icd);
+    } else if (move && !(new_entry == entry)) {
+        fcitx_desktop_entry_unlink(group, new_entry);
+        fcitx_desktop_group_link_entry_before(group, entry, new_entry);
+    }
+    return new_entry;
 }

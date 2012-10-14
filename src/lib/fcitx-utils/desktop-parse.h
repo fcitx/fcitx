@@ -29,11 +29,10 @@ typedef struct _FcitxDesktopEntry FcitxDesktopEntry;
 #define DESKTOP_PADDING_LEN 6
 
 typedef struct {
-    void *priv;
-    FcitxDesktopGroup *(*new_group)(void *priv);
-    void (*free_group)(void *priv, FcitxDesktopGroup *group);
-    FcitxDesktopEntry *(*new_entry)(void *priv);
-    void (*free_entry)(void *priv, FcitxDesktopEntry *entry);
+    FcitxDesktopGroup *(*new_group)(void *owner);
+    void (*free_group)(void *owner, FcitxDesktopGroup *group);
+    FcitxDesktopEntry *(*new_entry)(void *owner);
+    void (*free_entry)(void *owner, FcitxDesktopEntry *entry);
     void *padding[DESKTOP_PADDING_LEN];
 } FcitxDesktopVTable;
 
@@ -43,6 +42,7 @@ struct _FcitxDesktopFile {
     FcitxDesktopGroup *first;
     FcitxDesktopGroup *last;
     UT_array comments; /* comment at the end of the file */
+    void *owner;
     void *padding[3];
 };
 
@@ -57,6 +57,7 @@ struct _FcitxDesktopGroup {
     char *name; /* DO NOT touch */
     UT_array comments; /* comment before the group name */
     uint32_t flags; /* private */
+    void *owner;
     void *padding[3];
 };
 
@@ -69,6 +70,7 @@ struct _FcitxDesktopEntry {
     char *value;
     UT_array comments; /* comment before the entry */
     uint32_t flags; /* private */
+    void *owner;
     void *padding[3];
 };
 
@@ -77,7 +79,7 @@ extern "C" {
 #endif
 
     boolean fcitx_desktop_file_init(FcitxDesktopFile *file,
-                                    FcitxDesktopVTable *vtable);
+                                    FcitxDesktopVTable *vtable, void *owner);
     void fcitx_desktop_file_load_fp(FcitxDesktopFile *file, FILE *fp);
     void fcitx_desktop_file_done(FcitxDesktopFile *file);
     void fcitx_desktop_file_write_fp(FcitxDesktopFile *file, FILE *fp);
@@ -96,6 +98,144 @@ extern "C" {
     {
         return fcitx_desktop_group_find_entry_with_len(group, name,
                                                        strlen(name));
+    }
+
+    FcitxDesktopGroup *fcitx_desktop_file_add_group_after_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopGroup*
+    fcitx_desktop_file_ensure_group_with_len(
+        FcitxDesktopFile *file, const char *name, size_t name_len)
+    {
+        return fcitx_desktop_file_add_group_after_with_len(
+            file, NULL, name, name_len, false);
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_ensure_group(FcitxDesktopFile *file, const char *name)
+    {
+        return fcitx_desktop_file_ensure_group_with_len(
+            file, name, strlen(name));
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_move_group_after_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_file_add_group_after_with_len(
+            file, group, name, name_len, true);
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_move_group_after(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_file_move_group_after_with_len(
+            file, group, name, strlen(name));
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_add_group_after(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, boolean move)
+    {
+        return fcitx_desktop_file_add_group_after_with_len(
+            file, group, name, strlen(name), move);
+    }
+
+    FcitxDesktopGroup *fcitx_desktop_file_add_group_before_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopGroup*
+    fcitx_desktop_file_move_group_before_with_len(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_file_add_group_before_with_len(
+            file, group, name, name_len, true);
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_move_group_before(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_file_move_group_before_with_len(
+            file, group, name, strlen(name));
+    }
+    FcitxDesktopGroup*
+    fcitx_desktop_file_add_group_before(
+        FcitxDesktopFile *file, FcitxDesktopGroup *group,
+        const char *name, boolean move)
+    {
+        return fcitx_desktop_file_add_group_before_with_len(
+            file, group, name, strlen(name), move);
+    }
+
+    FcitxDesktopEntry *fcitx_desktop_group_add_entry_after_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopEntry*
+    fcitx_desktop_group_ensure_entry_with_len(
+        FcitxDesktopGroup *group, const char *name, size_t name_len)
+    {
+        return fcitx_desktop_group_add_entry_after_with_len(
+            group, NULL, name, name_len, false);
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_ensure_entry(FcitxDesktopGroup *group, const char *name)
+    {
+        return fcitx_desktop_group_ensure_entry_with_len(
+            group, name, strlen(name));
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_move_entry_after_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_group_add_entry_after_with_len(
+            group, entry, name, name_len, true);
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_move_entry_after(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_group_move_entry_after_with_len(
+            group, entry, name, strlen(name));
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_add_entry_after(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, boolean move)
+    {
+        return fcitx_desktop_group_add_entry_after_with_len(
+            group, entry, name, strlen(name), move);
+    }
+
+    FcitxDesktopEntry *fcitx_desktop_group_add_entry_before_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len, boolean move);
+    FcitxDesktopEntry*
+    fcitx_desktop_group_move_entry_before_with_len(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_group_add_entry_before_with_len(
+            group, entry, name, name_len, true);
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_move_entry_before(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, size_t name_len)
+    {
+        return fcitx_desktop_group_move_entry_before_with_len(
+            group, entry, name, strlen(name));
+    }
+    FcitxDesktopEntry*
+    fcitx_desktop_group_add_entry_before(
+        FcitxDesktopGroup *group, FcitxDesktopEntry *entry,
+        const char *name, boolean move)
+    {
+        return fcitx_desktop_group_add_entry_before_with_len(
+            group, entry, name, strlen(name), move);
     }
 
 #ifdef __cplusplus
