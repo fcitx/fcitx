@@ -117,6 +117,7 @@ CharFromPhraseModeUpdateUI(PinyinEnhance *pyenhance)
                                          pyenhance->cfp_mode_selected, " (",
                                          cur_list[0], ")");
     CharFromPhraseSetClientPreedit(pyenhance, *(++cur_list));
+    FcitxInputStateSetShowCursor(input, false);
     int i;
     FcitxCandidateWord *cand_word;
     /* use existing cand_word added before if they exist */
