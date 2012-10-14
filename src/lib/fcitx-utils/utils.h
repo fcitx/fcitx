@@ -623,6 +623,18 @@ extern "C" {
         struct stat stats;
         return stat(path, &stats) == 0 && S_ISLNK(stats.st_mode);
     }
+    char *fcitx_utils_set_str_with_len(char *res, const char *str, size_t len);
+    static inline char*
+    fcitx_utils_set_str(char *res, const char *str)
+    {
+        return fcitx_utils_set_str_with_len(res, str, strlen(str));
+    }
+    char fcitx_utils_unescape_char(char c);
+    char *fcitx_utils_unescape_str_inplace(char *str);
+    char *fcitx_utils_set_unescape_str(char *res, const char *str);
+#define FCITX_CHAR_NEED_ESCAPE "\a\b\f\n\r\t\e\v\'\"\\"
+    char fcitx_utils_escape_char(char c);
+    char *fcitx_utils_set_escape_str(char *res, const char *str);
 
 #ifdef __cplusplus
 }
