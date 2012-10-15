@@ -252,7 +252,10 @@ extern "C" {
         fcitx_utils_string_swap(&entry->value, value);
         return entry;
     }
-
+    boolean fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
+                                            FcitxDesktopGroup *group);
+    boolean fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
+                                             FcitxDesktopEntry *entry);
 #ifdef __cplusplus
 }
 #endif

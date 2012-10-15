@@ -158,8 +158,8 @@ fcitx_desktop_entry_key_len(const char *str)
 }
 
 static void
-fcitx_desktop_group_remove_entry(FcitxDesktopGroup *group,
-                                  FcitxDesktopEntry *entry)
+fcitx_desktop_group_hash_remove_entry(FcitxDesktopGroup *group,
+                                      FcitxDesktopEntry *entry)
 {
     HASH_DEL(group->entries, entry);
     free(entry->name);
@@ -167,24 +167,28 @@ fcitx_desktop_group_remove_entry(FcitxDesktopGroup *group,
     utarray_done(&entry->comments);
     if (entry->vtable && entry->vtable->free_entry) {
         entry->vtable->free_entry(entry->owner, entry);
+    } else {
+        free(entry);
     }
 }
 
 static void
-fcitx_desktop_file_remove_group(FcitxDesktopFile *file,
-                                FcitxDesktopGroup *group)
+fcitx_desktop_file_hash_remove_group(FcitxDesktopFile *file,
+                                     FcitxDesktopGroup *group)
 {
     FcitxDesktopEntry *entry;
     FcitxDesktopEntry *next;
     HASH_DEL(file->groups, group);
     for (entry = group->entries;entry;entry = next) {
         next = entry->hh.next;
-        fcitx_desktop_group_remove_entry(group, entry);
+        fcitx_desktop_group_hash_remove_entry(group, entry);
     }
     free(group->name);
     utarray_done(&group->comments);
     if (group->vtable && group->vtable->free_group) {
         group->vtable->free_group(entry->owner, group);
+    } else {
+        free(group);
     }
 }
 
@@ -195,7 +199,7 @@ fcitx_desktop_file_done(FcitxDesktopFile *file)
     FcitxDesktopGroup *next;
     for (group = file->groups;group;group = next) {
         next = group->hh.next;
-        fcitx_desktop_file_remove_group(file, group);
+        fcitx_desktop_file_hash_remove_group(file, group);
     }
     utarray_done(&file->comments);
 }
@@ -210,7 +214,7 @@ fcitx_desktop_group_clean(FcitxDesktopGroup *group)
         if (entry->flags & FX_DESKTOP_ENTRY_UPDATED) {
             entry->flags &= ~(FX_DESKTOP_ENTRY_UPDATED);
         } else {
-            fcitx_desktop_group_remove_entry(group, entry);
+            fcitx_desktop_group_hash_remove_entry(group, entry);
         }
     }
 }
@@ -226,7 +230,7 @@ fcitx_desktop_file_clean(FcitxDesktopFile *file)
             group->flags &= ~(FX_DESKTOP_GROUP_UPDATED);
             fcitx_desktop_group_clean(group);
         } else {
-            fcitx_desktop_file_remove_group(file, group);
+            fcitx_desktop_file_hash_remove_group(file, group);
         }
     }
 }
@@ -633,9 +637,20 @@ fcitx_desktop_file_write(FcitxDesktopFile *file, const char *name)
 static boolean
 fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
 {
-    if (!file->groups)
+    if (!file->groups || !group)
         return false;
     return file->groups->hh.tbl == group->hh.tbl;
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_file_delete_group(FcitxDesktopFile *file,
+                                FcitxDesktopGroup *group)
+{
+    if (!fcitx_desktop_file_has_group(file, group))
+        return false;
+    fcitx_desktop_group_unlink(file, group);
+    fcitx_desktop_file_hash_remove_group(file, group);
+    return true;
 }
 
 FCITX_EXPORT_API FcitxDesktopGroup*
@@ -695,9 +710,20 @@ fcitx_desktop_file_add_group_before_with_len(
 static boolean
 fcitx_desktop_group_has_entry(FcitxDesktopGroup *group, FcitxDesktopEntry *entry)
 {
-    if (!group->entries)
+    if (!group->entries || !entry)
         return false;
     return group->entries->hh.tbl == entry->hh.tbl;
+}
+
+FCITX_EXPORT_API boolean
+fcitx_desktop_group_delete_entry(FcitxDesktopGroup *group,
+                                 FcitxDesktopEntry *entry)
+{
+    if (!fcitx_desktop_group_has_entry(group, entry))
+        return false;
+    fcitx_desktop_entry_unlink(group, entry);
+    fcitx_desktop_group_hash_remove_entry(group, entry);
+    return true;
 }
 
 FCITX_EXPORT_API FcitxDesktopEntry*
