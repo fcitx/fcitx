@@ -633,9 +633,9 @@ fcitx_desktop_file_write(FcitxDesktopFile *file, const char *name)
 static boolean
 fcitx_desktop_file_has_group(FcitxDesktopFile *file, FcitxDesktopGroup *group)
 {
-    FcitxDesktopGroup *group_found;
-    group_found = fcitx_desktop_file_find_group(file, group->name);
-    return group_found == group;
+    if (!file->groups)
+        return false;
+    return file->groups->hh.tbl == group->hh.tbl;
 }
 
 FCITX_EXPORT_API FcitxDesktopGroup*
@@ -695,9 +695,9 @@ fcitx_desktop_file_add_group_before_with_len(
 static boolean
 fcitx_desktop_group_has_entry(FcitxDesktopGroup *group, FcitxDesktopEntry *entry)
 {
-    FcitxDesktopEntry *entry_found;
-    entry_found = fcitx_desktop_group_find_entry(group, entry->name);
-    return entry_found == entry;
+    if (!group->entries)
+        return false;
+    return group->entries->hh.tbl == entry->hh.tbl;
 }
 
 FCITX_EXPORT_API FcitxDesktopEntry*
