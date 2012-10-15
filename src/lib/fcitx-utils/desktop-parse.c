@@ -158,8 +158,10 @@ fcitx_desktop_entry_key_len(const char *str)
 }
 
 static void
-fcitx_desktop_entry_free(FcitxDesktopEntry *entry)
+fcitx_desktop_group_remove_entry(FcitxDesktopGroup *group,
+                                  FcitxDesktopEntry *entry)
 {
+    HASH_DEL(group->entries, entry);
     free(entry->name);
     fcitx_utils_free(entry->value);
     utarray_done(&entry->comments);
@@ -169,14 +171,15 @@ fcitx_desktop_entry_free(FcitxDesktopEntry *entry)
 }
 
 static void
-fcitx_desktop_group_free(FcitxDesktopGroup *group)
+fcitx_desktop_file_remove_group(FcitxDesktopFile *file,
+                                FcitxDesktopGroup *group)
 {
     FcitxDesktopEntry *entry;
     FcitxDesktopEntry *next;
+    HASH_DEL(file->groups, group);
     for (entry = group->entries;entry;entry = next) {
         next = entry->hh.next;
-        HASH_DEL(group->entries, entry);
-        fcitx_desktop_entry_free(entry);
+        fcitx_desktop_group_remove_entry(group, entry);
     }
     free(group->name);
     utarray_done(&group->comments);
@@ -192,8 +195,7 @@ fcitx_desktop_file_done(FcitxDesktopFile *file)
     FcitxDesktopGroup *next;
     for (group = file->groups;group;group = next) {
         next = group->hh.next;
-        HASH_DEL(file->groups, group);
-        fcitx_desktop_group_free(group);
+        fcitx_desktop_file_remove_group(file, group);
     }
     utarray_done(&file->comments);
 }
@@ -208,8 +210,7 @@ fcitx_desktop_group_clean(FcitxDesktopGroup *group)
         if (entry->flags & FX_DESKTOP_ENTRY_UPDATED) {
             entry->flags &= ~(FX_DESKTOP_ENTRY_UPDATED);
         } else {
-            HASH_DEL(group->entries, entry);
-            fcitx_desktop_entry_free(entry);
+            fcitx_desktop_group_remove_entry(group, entry);
         }
     }
 }
@@ -225,8 +226,7 @@ fcitx_desktop_file_clean(FcitxDesktopFile *file)
             group->flags &= ~(FX_DESKTOP_GROUP_UPDATED);
             fcitx_desktop_group_clean(group);
         } else {
-            HASH_DEL(file->groups, group);
-            fcitx_desktop_group_free(group);
+            fcitx_desktop_file_remove_group(file, group);
         }
     }
 }
