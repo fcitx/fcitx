@@ -355,16 +355,8 @@ char* fcitx_utils_get_current_langcode()
         if (!p)
             p = getenv("LANG");
     }
-    if (p) {
-        char* result = strdup(p);
-        char* m;
-        m = strchr(result, '.');
-        if (m) *m = '\0';
-
-        m = strchr(result, '@');
-        if (m) *m= '\0';
-        return result;
-    }
+    if (p)
+        return fcitx_utils_set_str_with_len(NULL, p, strcspn(p, ".@"));
     return strdup("C");
 }
 
