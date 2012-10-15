@@ -358,18 +358,13 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                     int ecount = atoi(eoption->rawValue);
 
                     if (ecount > 0) {
-                        char *enumname;
-                        /* trick, max length is enough */
-                        asprintf(&enumname, "Enum%d", ecount);
-
+                        char enumname[FCITX_INT_LEN + strlen("Enum") + 1];
+                        memcpy(enumname, "Enum", strlen("Enum"));
                         codesc->configEnum.enumDesc = malloc(sizeof(char*) * ecount);
-
                         codesc->configEnum.enumCount = ecount;
-
                         size_t nel = 0;
-
                         for (i = 0; i < ecount; i++) {
-                            sprintf(enumname, "Enum%d", i);
+                            sprintf(enumname + strlen("Enum"), "%d", i);
                             HASH_FIND_STR(options, enumname, eoption);
 
                             if (eoption) {
@@ -382,12 +377,9 @@ FcitxConfigFileDesc *FcitxConfigParseConfigFileDescFp(FILE *fp)
                                 codesc->configEnum.enumDesc[i] = strdup(eoption->rawValue);
                             } else {
                                 enumError = true;
-                                free(enumname);
                                 goto config_enum_final;
                             }
                         }
-
-                        free(enumname);
                     } else {
                         FcitxLog(WARNING, _("Enum option number must larger than 0"));
                         enumError = true;
