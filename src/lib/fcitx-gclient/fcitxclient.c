@@ -27,10 +27,14 @@
 #include "fcitxconnection.h"
 #include "marshall.h"
 
+#ifdef _DEBUG
 #define fcitx_gclient_debug(...) g_log ("fcitx-client",       \
                                       G_LOG_LEVEL_DEBUG,    \
                                       __VA_ARGS__)
 
+#else
+#define fcitx_gclient_debug(...)
+#endif
 typedef struct _ProcessKeyStruct ProcessKeyStruct;
 
 struct _ProcessKeyStruct {
