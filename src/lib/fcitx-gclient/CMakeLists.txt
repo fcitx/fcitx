@@ -49,7 +49,7 @@ target_link_libraries(fcitx-gclient ${GIO2_LIBRARIES} ${DBUS_LIBRARIES} fcitx-ut
 configure_file(fcitx-gclient.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc)
 
 install(TARGETS fcitx-gclient LIBRARY DESTINATION "${libdir}")
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc DESTINATION "${libdir}/pkgconfig")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-gclient.pc DESTINATION "${pkgconfdir}")
 install(FILES ${FCITX_GCLIENT_HEADERS} DESTINATION "${includedir}/fcitx-gclient")
 
 if (ENABLE_GIR)
