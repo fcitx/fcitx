@@ -26,7 +26,7 @@ set_target_properties(fcitx-config
 configure_file(fcitx-config.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-config.pc)
 
 install(TARGETS fcitx-config DESTINATION ${libdir})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-config.pc DESTINATION "${libdir}/pkgconfig")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-config.pc DESTINATION "${pkgconfdir}")
 install(FILES ${FCITX_CONFIG_HEADERS} DESTINATION "${includedir}/fcitx-config")
 
 if (ENABLE_STATIC)

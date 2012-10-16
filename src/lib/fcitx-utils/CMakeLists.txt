@@ -43,7 +43,7 @@ endif (LIBKVM_FOUND)
 configure_file(fcitx-utils.pc.in ${CMAKE_CURRENT_BINARY_DIR}/fcitx-utils.pc)
 
 install(TARGETS fcitx-utils LIBRARY DESTINATION "${libdir}")
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-utils.pc DESTINATION "${libdir}/pkgconfig")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx-utils.pc DESTINATION "${pkgconfdir}")
 install(FILES ${FCITX_UTILS_HEADERS} DESTINATION "${includedir}/fcitx-utils")
 
 if (ENABLE_STATIC)

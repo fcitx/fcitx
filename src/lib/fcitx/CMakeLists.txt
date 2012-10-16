@@ -44,7 +44,7 @@ target_link_libraries(fcitx-core fcitx-config fcitx-utils
   ${DL_LIBRARIES} ${PTHREAD_LIBRARIES})
 install(TARGETS fcitx-core LIBRARY DESTINATION "${libdir}")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fcitx.pc
-  DESTINATION "${libdir}/pkgconfig")
+  DESTINATION "${pkgconfdir}")
 install(FILES ${FCITX_HEADERS} DESTINATION "${includedir}/fcitx")
 
 if(ENABLE_STATIC)
