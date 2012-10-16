@@ -17,7 +17,9 @@ int main()
 
     char* cat = NULL;
     fcitx_utils_alloc_cat_str(cat, join, ",e");
-    assert(strcmp(cat, "a,b,c,d,e") == 0);
+    assert(strcmp(cat, TEST_STR",e") == 0);
+    fcitx_utils_set_cat_str(cat, join, ",e,", join);
+    assert(strcmp(cat, TEST_STR",e,"TEST_STR) == 0);
     join = fcitx_utils_set_str(join, join2);
     assert(strcmp(join, join2) == 0);
 

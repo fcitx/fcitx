@@ -607,6 +607,17 @@ extern "C" {
                             __str_list, __size_list);                   \
     } while (0)
 
+#define fcitx_utils_set_cat_str(dest, strs...) do {                     \
+        const char *__str_list[] = {strs};                              \
+        size_t __cat_str_n = sizeof(__str_list) / sizeof(char*);        \
+        size_t __size_list[sizeof(__str_list) / sizeof(char*)];         \
+        size_t __total_size = fcitx_utils_str_lens(__cat_str_n,         \
+                                                   __str_list, __size_list); \
+        dest = realloc(dest, __total_size);                             \
+        fcitx_utils_cat_str(dest, __cat_str_n,                          \
+                            __str_list, __size_list);                   \
+    } while (0)
+
     static inline int fcitx_utils_isdir(const char *path)
     {
         struct stat stats;
