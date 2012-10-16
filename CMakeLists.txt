@@ -174,7 +174,7 @@ if (X11_Xfixes_FOUND)
 endif (X11_Xfixes_FOUND)
 
 if(ENABLE_DEBUG)
-    set(_DEBUG)
+    set(_DEBUG ON)
 endif(ENABLE_DEBUG)
 
 set(package     fcitx)
