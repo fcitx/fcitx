@@ -137,12 +137,54 @@ QByteArray QFcitxInputContext::localMachineId()
 #endif
 }
 
+int QFcitxInputContext::displayNumber() {
+    if (m_displayNumber >= 0)
+        return m_displayNumber;
+    Display * dpy = QX11Info::display();
+    int displayNumber = 0;
+    if (dpy) {
+        char* display = XDisplayString(dpy);
+        if (display) {
+            char* strDisplayNumber = NULL;
+            display = strdup(display);
+            char* p = display;
+            for (; *p != ':' && *p != '\0'; p++);
+
+            if (*p == ':') {
+                *p = '\0';
+                p++;
+                strDisplayNumber = p;
+            }
+            for (; *p != '.' && *p != '\0'; p++);
+
+            if (*p == '.') {
+                *p = '\0';
+            }
+
+            if (strDisplayNumber) {
+                displayNumber = atoi(strDisplayNumber);
+            }
+
+            free(display);
+        }
+    }
+    else
+        displayNumber = fcitx_utils_get_display_number();
+
+    m_displayNumber = displayNumber;
+
+    return displayNumber;
+}
+
 QString
 QFcitxInputContext::socketFile()
 {
+    if (!m_socketFile.isEmpty())
+        return m_socketFile;
+
     char* addressFile = NULL;
 
-    asprintf(&addressFile, "%s-%d", localMachineId().data(), fcitx_utils_get_display_number());
+    asprintf(&addressFile, "%s-%d", localMachineId().data(), displayNumber());
 
     char* file = NULL;
 
@@ -152,7 +194,9 @@ QFcitxInputContext::socketFile()
     free(file);
     free(addressFile);
 
-    return path;
+    m_socketFile = path;
+
+    return m_socketFile;
 
 }
 
@@ -210,13 +254,14 @@ QFcitxInputContext::QFcitxInputContext()
       m_n_compose(0),
       m_cursorPos(0),
       m_useSurroundingText(false),
-      m_syncMode(true)
+      m_syncMode(true),
+      m_displayNumber(-1)
 {
     FcitxFormattedPreedit::registerMetaType();
 
     memset(m_compose_buffer, 0, sizeof(uint) * (FCITX_MAX_COMPOSE_LEN + 1));
 
-    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(fcitx_utils_get_display_number());
+    m_serviceName = QString("%1-%2").arg(FCITX_DBUS_SERVICE).arg(displayNumber());
     m_serviceWatcher.setConnection(QDBusConnection::sessionBus());
     m_serviceWatcher.addWatchedService(m_serviceName);
 

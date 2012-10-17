@@ -105,8 +105,8 @@ private Q_SLOTS:
 #endif
 private:
     static QByteArray localMachineId();
-    static QString socketFile();
-    static QString address();
+    QString socketFile();
+    QString address();
     QWidget* validFocusWidget();
     void cleanUp();
     void createConnection();
@@ -143,6 +143,8 @@ private:
     void updateCapacity();
     void commitPreedit();
 
+    int displayNumber();
+
     QWeakPointer<QFileSystemWatcher> m_watcher;
     QDBusServiceWatcher m_serviceWatcher;
     QDBusConnection* m_connection;
@@ -162,6 +164,8 @@ private:
     boolean m_useSurroundingText;
     boolean m_syncMode;
     QRect m_rect;
+    int m_displayNumber;
+    QString m_socketFile;
 };
 
 #endif //__FCITX_INPUT_CONTEXT_H_
