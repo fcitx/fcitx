@@ -393,21 +393,19 @@ void XimForwardKey(void *arg, FcitxInputContext* ic, FcitxKeyEventType event, Fc
     Window win;
     if (!(win = GetXimIC(ic)->focus_win))
         win = GetXimIC(ic)->client_win;
-    XEvent xEvent = {
-        .xkey = {
-            .type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease,
-            .serial = xim->currentSerialNumberKey,
-            .send_event = False,
-            .display = xim->display,
-            .window = win,
-            .root = DefaultRootWindow(xim->display),
-            .subwindow = None,
-            .time = CurrentTime,
-            .state = state,
-            .keycode = XKeysymToKeycode(xim->display, sym),
-            .same_screen = False,
-        }
-    };
+    XEvent xEvent;
+    memset(&xEvent, 0, sizeof(xEvent));
+    xEvent.xkey.type = (event == FCITX_PRESS_KEY) ? KeyPress : KeyRelease;
+    xEvent.xkey.serial = xim->currentSerialNumberKey;
+    xEvent.xkey.send_event = False;
+    xEvent.xkey.display = xim->display;
+    xEvent.xkey.window = win;
+    xEvent.xkey.root = DefaultRootWindow(xim->display);
+    xEvent.xkey.subwindow = None;
+    xEvent.xkey.time = CurrentTime;
+    xEvent.xkey.state = state;
+    xEvent.xkey.keycode = XKeysymToKeycode(xim->display, sym);
+    xEvent.xkey.same_screen = False;
 
     XimForwardKeyInternal(xim, GetXimIC(ic), &xEvent);
 }

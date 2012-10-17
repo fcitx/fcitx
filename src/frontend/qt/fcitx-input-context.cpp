@@ -390,15 +390,17 @@ void QFcitxInputContext::update()
         QVariant var1 = widget->inputMethodQuery(Qt::ImCursorPosition);
         QVariant var2 = widget->inputMethodQuery(Qt::ImAnchorPosition);
         if (var.isValid() && var1.isValid() && !m_capacity.testFlag(CAPACITY_PASSWORD) ) {
-            addCapacity(CAPACITY_SURROUNDING_TEXT);
             QString text = var.toString();
-            int cursor = var1.toInt();
-            int anchor;
-            if (var2.isValid())
-                anchor = var2.toInt();
-            else
-                anchor = cursor;
-            m_icproxy->SetSurroundingText(text, cursor, anchor);
+            if (fcitx_utf8_check_string(text.toUtf8().data())) {
+                addCapacity(CAPACITY_SURROUNDING_TEXT);
+                int cursor = var1.toInt();
+                int anchor;
+                if (var2.isValid())
+                    anchor = var2.toInt();
+                else
+                    anchor = cursor;
+                m_icproxy->SetSurroundingText(text, cursor, anchor);
+            }
         }
         else {
             removeCapacity(CAPACITY_SURROUNDING_TEXT);
