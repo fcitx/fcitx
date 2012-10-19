@@ -430,24 +430,30 @@ void QFcitxInputContext::update()
     CHECK_HINTS(Qt::ImhDialableCharactersOnly, CAPACITY_DIALABLE)
     CHECK_HINTS(Qt::ImhEmailCharactersOnly, CAPACITY_EMAIL)
 
+    bool setSurrounding = false;
     if (m_useSurroundingText) {
         QVariant var = widget->inputMethodQuery(Qt::ImSurroundingText);
         QVariant var1 = widget->inputMethodQuery(Qt::ImCursorPosition);
         QVariant var2 = widget->inputMethodQuery(Qt::ImAnchorPosition);
         if (var.isValid() && var1.isValid() && !m_capacity.testFlag(CAPACITY_PASSWORD) ) {
             QString text = var.toString();
-            if (fcitx_utf8_check_string(text.toUtf8().data())) {
-                addCapacity(CAPACITY_SURROUNDING_TEXT);
-                int cursor = var1.toInt();
-                int anchor;
-                if (var2.isValid())
-                    anchor = var2.toInt();
-                else
-                    anchor = cursor;
-                m_icproxy->SetSurroundingText(text, cursor, anchor);
+            /* we don't want to waste too much memory here */
+#define SURROUNDING_THRESHOLD 4096
+            if (text.length() < SURROUNDING_THRESHOLD) {
+                if (fcitx_utf8_check_string(text.toUtf8().data())) {
+                    addCapacity(CAPACITY_SURROUNDING_TEXT);
+                    int cursor = var1.toInt();
+                    int anchor;
+                    if (var2.isValid())
+                        anchor = var2.toInt();
+                    else
+                        anchor = cursor;
+                    m_icproxy->SetSurroundingText(text, cursor, anchor);
+                    setSurrounding = true;
+                }
             }
         }
-        else {
+        if (!setSurrounding) {
             removeCapacity(CAPACITY_SURROUNDING_TEXT);
         }
     }
