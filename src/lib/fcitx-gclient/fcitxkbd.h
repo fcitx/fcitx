@@ -36,6 +36,9 @@
         (G_TYPE_CHECK_CLASS_CAST((klass), FCITX_TYPE_KBD, FcitxKbdClass))
 #define FCITX_KBD_GET_CLASS(object)\
         (G_TYPE_INSTANCE_GET_CLASS ((object), FCITX_TYPE_KBD, FcitxKbdClass))
+#define FCITX_TYPE_LAYOUT_ITEM (fcitx_layout_item_get_type())
+#define FCITX_VALUE_HOLDS_LAYOUT_ITEM(x)                \
+    (G_VALUE_HOLDS((x), FCITX_TYPE_LAYOUT_ITEM))
 
 G_BEGIN_DECLS
 
@@ -43,11 +46,6 @@ typedef struct _FcitxKbd FcitxKbd;
 typedef struct _FcitxKbdClass FcitxKbdClass;
 typedef struct _FcitxLayoutItem FcitxLayoutItem;
 
-/**
- * FcitxKbd:
- *
- * A FcitxKbd allow you to control fcitx via DBus.
- */
 struct _FcitxKbd {
     GDBusProxy parent;
     /* instance members */
@@ -68,82 +66,20 @@ struct _FcitxLayoutItem {
     gchar* langcode;
 };
 
-GType        fcitx_kbd_get_type(void) G_GNUC_CONST;
+GType fcitx_kbd_get_type(void) G_GNUC_CONST;
+GType fcitx_layout_item_get_type() G_GNUC_CONST;
 
-/**
- * fcitx_kbd_new
- * @bus_type: #GBusType
- * @flags:  #GDBusProxyFlags
- * @display_number: display_number
- * @cancellable: A #GCancellable or %NULL
- * @error: Error or %NULL
- *
- * @returns: A newly allocated FcitxKbd.
- *
- * New a FcitxKbd.
- */
 FcitxKbd*
 fcitx_kbd_new(GBusType             bus_type,
               GDBusProxyFlags      flags,
               gint                 display_number,
               GCancellable        *cancellable,
               GError             **error);
-
-/**
- * fcitx_kbd_get_layouts:
- *
- * @kbd: A FcitxKbd
- * @returns: (transfer full) (element-type FcitxLayoutItem): A FcitxLayoutItem List
- *
- * Get Fcitx all im list
- **/
 GPtrArray*   fcitx_kbd_get_layouts(FcitxKbd* kbd);
-
-/**
- * fcitx_kbd_get_layout_for_im:
- *
- * @kbd: A FcitxKbd
- * @imname: input method name
- * @layout: return'd layout
- * @variant: return'd variant
- *
- * Get a layout binding with input method
- **/
+GPtrArray*   fcitx_kbd_get_layouts_nofree(FcitxKbd* kbd);
 void        fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gchar** layout, gchar** variant);
-
-/**
- * fcitx_kbd_get_layout_for_im:
- *
- * @kbd: A FcitxKbd
- * @imname: input method name
- * @layout: layout
- * @variant: variant
- *
- * Get a layout binding with input method
- **/
 void         fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar* layout, const gchar* variant);
-
-
-/**
- * fcitx_kbd_set_default_layout:
- *
- * @kbd: A FcitxKbd
- * @layout: layout
- * @variant: variant
- *
- * Get a layout binding with the state when there is no input method
- **/
 void         fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant);
-
-
-/**
- * fcitx_layout_item_free
- *
- * @data: A FcitxLayoutItem
- *
- * free an im_item
- **/
-void fcitx_layout_item_free(gpointer data);
 
 G_END_DECLS
 

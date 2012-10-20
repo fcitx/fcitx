@@ -31,6 +31,7 @@ set(FCITX_GCLIENT_HEADERS
     fcitxclient.h
     fcitxinputmethod.h
     fcitxkbd.h
+    fcitxconnection.h
 )
 
 set(FCITX_GCLIENT_BUILT_HEADERS
@@ -66,6 +67,7 @@ gobject_introspection(
     COMPILER_ARGS "--includedir=${CMAKE_CURRENT_SOURCE_DIR}"
     SYMBOL_PREFIXES fcitx
     SOURCES ${FCITX_GCLIENT_SOURCES} ${FCITX_GCLIENT_HEADERS}
+    QUIET
 )
 
 

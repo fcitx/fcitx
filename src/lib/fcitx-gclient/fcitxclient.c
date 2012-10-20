@@ -37,6 +37,12 @@
 #endif
 typedef struct _ProcessKeyStruct ProcessKeyStruct;
 
+/**
+ * FcitxClient:
+ *
+ * A #FcitxClient allow to create a input context via DBus
+ */
+
 struct _ProcessKeyStruct {
     FcitxClient* self;
     GAsyncReadyCallback callback;
@@ -234,6 +240,12 @@ fcitx_client_dispose(GObject *object)
         G_OBJECT_CLASS(fcitx_client_parent_class)->dispose(object);
 }
 
+/**
+ * fcitx_client_enable_ic:
+ * @self: A #FcitxClient
+ *
+ * tell fcitx activate current ic
+ **/
 FCITX_EXPORT_API
 void fcitx_client_enable_ic(FcitxClient* self)
 {
@@ -242,6 +254,12 @@ void fcitx_client_enable_ic(FcitxClient* self)
     }
 }
 
+/**
+ * fcitx_client_close_ic:
+ * @self: A #FcitxClient
+ *
+ * tell fcitx inactivate current ic
+ **/
 FCITX_EXPORT_API
 void fcitx_client_close_ic(FcitxClient* self)
 {
@@ -250,6 +268,12 @@ void fcitx_client_close_ic(FcitxClient* self)
     }
 }
 
+/**
+ * fcitx_client_focus_in:
+ * @self: A #FcitxClient
+ *
+ * tell fcitx current client has focus
+ **/
 FCITX_EXPORT_API
 void fcitx_client_focus_in(FcitxClient* self)
 {
@@ -258,6 +282,12 @@ void fcitx_client_focus_in(FcitxClient* self)
     }
 }
 
+/**
+ * fcitx_client_focus_out:
+ * @self: A #FcitxClient
+ *
+ * tell fcitx current client has lost focus
+ **/
 FCITX_EXPORT_API
 void fcitx_client_focus_out(FcitxClient* self)
 {
@@ -266,6 +296,12 @@ void fcitx_client_focus_out(FcitxClient* self)
     }
 }
 
+/**
+ * fcitx_client_reset:
+ * @self: A #FcitxClient
+ *
+ * tell fcitx current client is reset from client side
+ **/
 FCITX_EXPORT_API
 void fcitx_client_reset(FcitxClient* self)
 {
@@ -274,6 +310,13 @@ void fcitx_client_reset(FcitxClient* self)
     }
 }
 
+/**
+ * fcitx_client_set_capacity:
+ * @self: A #FcitxClient
+ * @flags: capacity
+ *
+ * set client capacity of Fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_client_set_capacity(FcitxClient* self, guint flags)
 {
@@ -283,12 +326,34 @@ void fcitx_client_set_capacity(FcitxClient* self, guint flags)
     }
 }
 
+/**
+ * fcitx_client_set_cusor_rect:
+ * @self A #FcitxClient
+ * @x x of cursor
+ * @y y of cursor
+ * @w width of cursor
+ * @h height of cursor
+ *
+ * Deprecated:
+ *
+ * tell fcitx current client's cursor geometry info
+ **/
 FCITX_EXPORT_API
 void fcitx_client_set_cusor_rect(FcitxClient* self, int x, int y, int w, int h)
 {
     fcitx_client_set_cursor_rect(self, x, y, w, h);
 }
 
+/**
+ * fcitx_client_set_cursor_rect:
+ * @self: A #FcitxClient
+ * @x: x of cursor
+ * @y: y of cursor
+ * @w: width of cursor
+ * @h: height of cursor
+ *
+ * tell fcitx current client's cursor geometry info
+ **/
 FCITX_EXPORT_API
 void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h)
 {
@@ -297,6 +362,13 @@ void fcitx_client_set_cursor_rect(FcitxClient* self, int x, int y, int w, int h)
     }
 }
 
+/**
+ * fcitx_client_set_surrounding_text:
+ * @self: A #FcitxClient
+ * @text: (transfer none): surroundng text
+ * @cursor: cursor position coresponding to text
+ * @anchor: anchor position coresponding to text
+ **/
 FCITX_EXPORT_API
 void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cursor, guint anchor)
 {
@@ -305,6 +377,21 @@ void fcitx_client_set_surrounding_text(FcitxClient* self, gchar* text, guint cur
     }
 }
 
+/**
+ * fcitx_client_process_key:
+ * @self: A #FcitxClient
+ * @cb: callback
+ * @user_data: user data
+ * @keyval: key value
+ * @keycode: hardware key code
+ * @state: key state
+ * @type: event type
+ * @t: timestamp
+ *
+ * Deprecated:
+ *
+ * send a key event to fcitx asynchronizely, you need to use #g_dbus_proxy_call_finish with this function
+ **/
 FCITX_EXPORT_API
 void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointer user_data, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
@@ -320,6 +407,15 @@ void fcitx_client_process_key(FcitxClient* self, GAsyncReadyCallback cb, gpointe
     }
 }
 
+/**
+ * fcitx_client_process_key_finish:
+ * @self: A #FcitxClient
+ * @res: result
+ *
+ * use this function with #fcitx_client_process_key_async
+ *
+ * Returns: process key result
+ **/
 FCITX_EXPORT_API
 gint fcitx_client_process_key_finish(FcitxClient* self, GAsyncResult* res)
 {
@@ -357,9 +453,25 @@ void _fcitx_client_process_key_cancelled(GCancellable* cancellable, gpointer use
     _process_key_data_free(pk);
 }
 
+/**
+ * fcitx_client_process_key_async:
+ * @self: A #FcitxClient
+ * @keyval: key value
+ * @keycode: hardware key code
+ * @state: key state
+ * @type: event type
+ * @t: timestamp
+ * @timeout_msec: timeout in millisecond
+ * @cancellable: cancellable
+ * @callback: (scope async) (closure user_data): callback
+ * @user_data: (closure): user data
+ *
+ * use this function with #fcitx_client_process_key_finish
+ **/
 FCITX_EXPORT_API
 void fcitx_client_process_key_async(FcitxClient* self,
-                                    guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t,
+                                    guint32 keyval, guint32 keycode,
+                                    guint32 state, gint type, guint32 t,
                                     gint timeout_msec,
                                     GCancellable *cancellable,
                                     GAsyncReadyCallback callback,
@@ -382,6 +494,19 @@ void fcitx_client_process_key_async(FcitxClient* self,
     }
 }
 
+/**
+ * fcitx_client_process_key_sync:
+ * @self: A #FcitxClient
+ * @keyval: key value
+ * @keycode: hardware key code
+ * @state: key state
+ * @type: event type
+ * @t: timestamp
+ *
+ * send a key event to fcitx synchronizely
+ *
+ * Returns: the key is processed or not
+ */
 FCITX_EXPORT_API
 int fcitx_client_process_key_sync(FcitxClient* self, guint32 keyval, guint32 keycode, guint32 state, gint type, guint32 t)
 {
@@ -665,9 +790,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
 
     /* install signals */
     /**
-     * FcitxClient::connected
-     *
-     * @client: A FcitxClient
+     * FcitxClient::connected:
+     * @self: A #FcitxClient
      *
      * Emit when connected to fcitx and created ic
      */
@@ -683,9 +807,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                      0);
 
     /**
-     * FcitxClient::disconnected
-     *
-     * @client: A FcitxClient
+     * FcitxClient::disconnected:
+     * @self: A #FcitxClient
      *
      * Emit when disconnected from fcitx
      */
@@ -701,9 +824,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                      0);
 
     /**
-     * FcitxClient::enable-im
-     *
-     * @client: A FcitxClient
+     * FcitxClient::enable-im:
+     * @self: A #FcitxClient
      *
      * Emit when input method is enabled
      */
@@ -718,9 +840,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                     G_TYPE_NONE,
                                     0);
     /**
-     * FcitxClient::enable-im
-     *
-     * @client: A FcitxClient
+     * FcitxClient::close-im:
+     * @self: A #FcitxClient
      *
      * Emit when input method is closed
      */
@@ -735,9 +856,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                    G_TYPE_NONE,
                                    0);
     /**
-     * FcitxClient::enable-im
-     *
-     * @client: A FcitxClient
+     * FcitxClient::forward-key:
+     * @self: A #FcitxClient
      * @keyval: key value
      * @state: key state
      * @type: event type
@@ -757,9 +877,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                       G_TYPE_UINT, G_TYPE_INT, G_TYPE_INT
                                   );
     /**
-     * FcitxClient::commit-string
-     *
-     * @client: A FcitxClient
+     * FcitxClient::commit-string:
+     * @self: A #FcitxClient
      * @string: string to be commited
      *
      * Emit when input method commit one string
@@ -778,9 +897,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
                                     );
 
     /**
-     * FcitxClient::delete-surrounding-text
-     *
-     * @client: A FcitxClient
+     * FcitxClient::delete-surrounding-text:
+     * @self: A #FcitxClient
      * @cursor: deletion start
      * @len: deletion length
      *
@@ -800,9 +918,8 @@ fcitx_client_class_init(FcitxClientClass *klass)
             );
 
     /**
-     * FcitxClient::update-client-side-ui
-     *
-     * @client: A FcitxClient
+     * FcitxClient::update-client-side-ui:
+     * @self: A #FcitxClient
      * @auxup: (transfer none): Aux up string
      * @auxdown: (transfer none): Aux down string
      * @preedit: (transfer none): preedit string
@@ -825,10 +942,9 @@ fcitx_client_class_init(FcitxClientClass *klass)
             G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 
     /**
-     * FcitxClient::update-formatted-preedit
-     *
-     * @client: A FcitxClient
-     * @preedit: (transfer none) (element-type FcitxPreeditItem): An FcitxPreeditItem List
+     * FcitxClient::update-formatted-preedit:
+     * @self: A #FcitxClient
+     * @preedit: (transfer none) (element-type FcitxPreeditItem): An #FcitxPreeditItem List
      * @cursor: cursor postion by utf8 byte
      *
      * Emit when input method need to delete surrounding text
@@ -847,20 +963,29 @@ fcitx_client_class_init(FcitxClientClass *klass)
             );
 }
 
+/**
+ * fcitx_client_new:
+ *
+ * New a #FcitxClient
+ *
+ * Returns: A newly allocated #FcitxClient
+ **/
 FCITX_EXPORT_API
 FcitxClient*
 fcitx_client_new()
 {
     FcitxClient* self = g_object_new(FCITX_TYPE_CLIENT, NULL);
-
-    if (self != NULL) {
-        return FCITX_CLIENT(self);
-    }
-    else
-        return NULL;
-    return self;
+    return FCITX_CLIENT(self);
 }
 
+/**
+ * fcitx_client_is_valid:
+ * @self: A #FcitxClient
+ *
+ * Check #FcitxClient is valid to communicate with Fcitx
+ *
+ * Returns: #FcitxClient is valid or not
+ **/
 FCITX_EXPORT_API
 gboolean
 fcitx_client_is_valid(FcitxClient* self)

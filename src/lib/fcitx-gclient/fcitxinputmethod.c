@@ -22,6 +22,21 @@
 #include "frontend/ipc/ipc.h"
 #include "fcitxinputmethod.h"
 
+/**
+ * FcitxInputMethod:
+ *
+ * A #FcitxInputMethod allow you to control fcitx via DBus.
+ */
+/**
+ * FcitxIMItem:
+ * @name: name of im
+ * @unique_name: unique_name of im
+ * @langcode: language code
+ * @enable: enabled or not
+ *
+ * A #FcitxIMItem contains some metadata for an input method in fcitx
+ */
+
 static const gchar introspection_xml[] =
     "<node>"
     "  <interface name=\"org.fcitx.Fcitx.InputMethod\">"
@@ -111,9 +126,32 @@ fcitx_input_method_init(FcitxInputMethod *im)
     g_dbus_proxy_set_interface_info(G_DBUS_PROXY(im), _fcitx_input_method_get_interface_info());
 }
 
+/**
+ * fcitx_input_method_get_imlist: (skip)
+ **/
 FCITX_EXPORT_API
-GPtrArray *
+GPtrArray*
 fcitx_input_method_get_imlist(FcitxInputMethod* im)
+{
+    GPtrArray *array = fcitx_input_method_get_imlist_nofree(im);
+    if (array)
+        g_ptr_array_set_free_func(array, (GDestroyNotify)fcitx_im_item_free);
+    return array;
+}
+
+/**
+ * fcitx_input_method_get_imlist_nofree:
+ * @im: A #FcitxInputMethod
+ *
+ * Get Fcitx all im list
+ *
+ * Returns: (transfer full) (element-type FcitxIMItem): A #FcitxIMItem List
+ *
+ * Rename to: fcitx_input_method_get_imlist
+ **/
+FCITX_EXPORT_API
+GPtrArray*
+fcitx_input_method_get_imlist_nofree(FcitxInputMethod* im)
 {
     GPtrArray *array = NULL;
     GVariant* value;
@@ -146,14 +184,15 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
     }
 
     if (value) {
-        array = g_ptr_array_new_with_free_func((GDestroyNotify) fcitx_im_item_free);
+        array = g_ptr_array_new();
         g_variant_get(value, "a(sssb)", &iter);
         while (g_variant_iter_next(iter, "(sssb)", &name, &unique_name, &langcode, &enable, NULL)) {
-            FcitxIMItem* item = fcitx_im_item_new(name, unique_name, langcode, enable);
+            FcitxIMItem *item = g_slice_new(FcitxIMItem);
+            item->name = name;
+            item->unique_name = unique_name;
+            item->langcode = langcode;
+            item->enable = enable;
             g_ptr_array_add(array, item);
-            g_free(name);
-            g_free(unique_name);
-            g_free(langcode);
         }
         g_variant_iter_free(iter);
 
@@ -163,6 +202,13 @@ fcitx_input_method_get_imlist(FcitxInputMethod* im)
     return array;
 }
 
+/**
+ * fcitx_input_method_set_imlist:
+ * @im: A #FcitxInputMethod
+ * @array: (element-type FcitxIMItem) (transfer none): A #FcitxIMItem List
+ *
+ * Set Fcitx all im list
+ **/
 FCITX_EXPORT_API
 void
 fcitx_input_method_set_imlist(FcitxInputMethod *im, GPtrArray* array)
@@ -194,8 +240,8 @@ fcitx_input_method_set_imlist(FcitxInputMethod *im, GPtrArray* array)
 
 static void
 fcitx_input_method_g_properties_changed(GDBusProxy          *proxy,
-                                             GVariant            *changed_properties,
-                                             const gchar* const  *invalidated_properties)
+                                        GVariant            *changed_properties,
+                                        const gchar* const  *invalidated_properties)
 {
     FcitxInputMethod *user = FCITX_INPUT_METHOD(proxy);
     GVariantIter *iter;
@@ -243,9 +289,8 @@ fcitx_input_method_class_init(FcitxInputMethodClass *klass)
 
     /* install signals */
     /**
-     * FcitxInputMethod::imlist-changed
-     *
-     * @im: A FcitxInputMethod
+     * FcitxInputMethod::imlist-changed:
+     * @im: A #FcitxInputMethod
      *
      * Emit when input method list changed
      */
@@ -260,6 +305,18 @@ fcitx_input_method_class_init(FcitxInputMethodClass *klass)
                                      0);
 }
 
+/**
+ * fcitx_input_method_new:
+ * @bus_type: #GBusType
+ * @flags:  #GDBusProxyFlags
+ * @display_number: display_number
+ * @cancellable: A #GCancellable or %NULL
+ * @error: Error or %NULL
+ *
+ * New a #fcitxInputMethod.
+ *
+ * Returns: A newly allocated #FcitxInputMethod.
+ */
 FCITX_EXPORT_API
 FcitxInputMethod*
 fcitx_input_method_new(GBusType             bus_type,
@@ -281,12 +338,18 @@ fcitx_input_method_new(GBusType             bus_type,
                                            "g-object-path", FCITX_IM_DBUS_PATH,
                                            "g-interface-name", FCITX_IM_DBUS_INTERFACE,
                                            NULL);
-
-    if (im != NULL)
-        return FCITX_INPUT_METHOD(im);
-    return NULL;
+    return FCITX_INPUT_METHOD(im);
 }
 
+/**
+ * fcitx_im_item_new:
+ * @name: name of im
+ * @unique_name: unique_name of im
+ * @langcode: language code
+ * @enable: enabled or not
+ *
+ * Returns: the new #FcitxIMItem
+ */
 FCITX_EXPORT_API
 FcitxIMItem* fcitx_im_item_new(const gchar* name, const gchar* unique_name, const gchar* langcode, gboolean enable)
 {
@@ -302,9 +365,16 @@ static
 FcitxIMItem*
 fcitx_im_item_copy(FcitxIMItem* src)
 {
-    return fcitx_im_item_new(src->name, src->unique_name, src->langcode, src->enable);
+    return fcitx_im_item_new(src->name, src->unique_name,
+                             src->langcode, src->enable);
 }
 
+/**
+ * fcitx_im_item_free: (skip)
+ * @data: A #FcitxIMItem
+ *
+ * free an im_item
+ **/
 FCITX_EXPORT_API
 void fcitx_im_item_free(FcitxIMItem* data)
 {
@@ -315,7 +385,8 @@ void fcitx_im_item_free(FcitxIMItem* data)
     g_slice_free(FcitxIMItem, data);
 }
 
-G_DEFINE_BOXED_TYPE(FcitxIMItem, fcitx_im_item, fcitx_im_item_copy, fcitx_im_item_free)
+G_DEFINE_BOXED_TYPE(FcitxIMItem, fcitx_im_item, fcitx_im_item_copy,
+                    fcitx_im_item_free)
 
 void _fcitx_im_item_foreach_cb(gpointer       data,
                                    gpointer       user_data)
@@ -326,6 +397,12 @@ void _fcitx_im_item_foreach_cb(gpointer       data,
     g_variant_builder_add(builder, "(sssb)", item->name, item->unique_name, item->langcode, item->enable);
 }
 
+/**
+ * fcitx_input_method_exit:
+ * @im: A #FcitxInputMethod
+ *
+ * Send exit command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_exit(FcitxInputMethod* im)
 {
@@ -340,6 +417,12 @@ void fcitx_input_method_exit(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_configure:
+ * @im: A #FcitxInputMethod
+ *
+ * Send configure command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_configure(FcitxInputMethod* im)
 {
@@ -354,6 +437,13 @@ void fcitx_input_method_configure(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_configure_addon:
+ * @im: A #FcitxInputMethod
+ * @addon: (transfer none): addon name
+ *
+ * Send configure addon command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
 {
@@ -368,6 +458,13 @@ void fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon)
                      );
 }
 
+/**
+ * fcitx_input_method_configure_im:
+ * @im: A #FcitxInputMethod
+ * @imname: (transfer none): im name
+ *
+ * Send configure im command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_configure_im(FcitxInputMethod* im, gchar* imname)
 {
@@ -382,6 +479,14 @@ void fcitx_input_method_configure_im(FcitxInputMethod* im, gchar* imname)
                      );
 }
 
+/**
+ * fcitx_input_method_get_current_im:
+ * @im: A #FcitxInputMethod
+ *
+ * Get im name
+ *
+ * Returns: (transfer full): get im name
+ **/
 FCITX_EXPORT_API
 gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
 {
@@ -408,6 +513,14 @@ gchar* fcitx_input_method_get_current_im(FcitxInputMethod* im)
     return result;
 }
 
+/**
+ * fcitx_input_method_get_current_ui:
+ * @im: A #FcitxInputMethod
+ *
+ * Get im name
+ *
+ * Returns: (transfer full): get ui name
+ **/
 FCITX_EXPORT_API
 gchar* fcitx_input_method_get_current_ui(FcitxInputMethod* im)
 {
@@ -434,6 +547,15 @@ gchar* fcitx_input_method_get_current_ui(FcitxInputMethod* im)
     return result;
 }
 
+/**
+ * fcitx_input_method_get_im_addon:
+ * @im: A #FcitxInputMethod
+ * @imname: (transfer none): imname
+ *
+ * Get addon name by im
+ *
+ * Returns: (transfer full): get addon name
+ **/
 FCITX_EXPORT_API
 gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
 {
@@ -460,6 +582,12 @@ gchar* fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname)
     return result;
 }
 
+/**
+ * fcitx_input_method_reload_config:
+ * @im: A #FcitxInputMethod
+ *
+ * Send reload config command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_reload_config(FcitxInputMethod* im)
 {
@@ -474,6 +602,12 @@ void fcitx_input_method_reload_config(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_restart:
+ * @im: A #FcitxInputMethod
+ *
+ * Send restart command to fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_restart(FcitxInputMethod* im)
 {
@@ -488,6 +622,13 @@ void fcitx_input_method_restart(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_set_current_im:
+ * @im: A #FcitxInputMethod
+ * @imname: (transfer none): set im name
+ *
+ * Set im name
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
 {
@@ -502,6 +643,12 @@ void fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname)
                      );
 }
 
+/**
+ * fcitx_input_method_activate:
+ * @im: A #FcitxInputMethod
+ *
+ * Activate fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_activate(FcitxInputMethod* im)
 {
@@ -516,6 +663,12 @@ void fcitx_input_method_activate(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_inactivate:
+ * @im: A #FcitxInputMethod
+ *
+ * Inactivate fcitx
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_inactivate(FcitxInputMethod* im)
 {
@@ -530,6 +683,12 @@ void fcitx_input_method_inactivate(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_toggle:
+ * @im: A #FcitxInputMethod
+ *
+ * toggle fcitx state
+ **/
 FCITX_EXPORT_API
 void fcitx_input_method_toggle(FcitxInputMethod* im)
 {
@@ -544,6 +703,14 @@ void fcitx_input_method_toggle(FcitxInputMethod* im)
                      );
 }
 
+/**
+ * fcitx_input_method_get_current_state:
+ * @im: A #FcitxInputMethod
+ *
+ * Get current state
+ *
+ * Returns: current state, -1 for error
+ **/
 FCITX_EXPORT_API
 gint fcitx_input_method_get_current_state(FcitxInputMethod* im)
 {

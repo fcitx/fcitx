@@ -45,11 +45,6 @@ typedef struct _FcitxInputMethod FcitxInputMethod;
 typedef struct _FcitxInputMethodClass FcitxInputMethodClass;
 typedef struct _FcitxIMItem FcitxIMItem;
 
-/**
- * FcitxInputMethod:
- *
- * A FcitxInputMethod allow you to control fcitx via DBus.
- */
 struct _FcitxInputMethod {
     GDBusProxy parent;
     /* instance members */
@@ -63,14 +58,6 @@ struct _FcitxInputMethodClass {
     /* padding */
 };
 
-/**
- * FcitxIMItem:
- * A FcitxIMItem contains some metadata for an input method in fcitx
- * @name: name of im
- * @unique_name: unique_name of im
- * @langcode: language code
- * @enable: enabled or not
- */
 struct _FcitxIMItem {
     gchar* name;
     gchar* unique_name;
@@ -81,203 +68,30 @@ struct _FcitxIMItem {
 GType        fcitx_input_method_get_type(void) G_GNUC_CONST;
 GType        fcitx_im_item_get_type(void) G_GNUC_CONST;
 
-/**
- * fcitx_input_method_new
- * @bus_type: #GBusType
- * @flags:  #GDBusProxyFlags
- * @display_number: display_number
- * @cancellable: A #GCancellable or %NULL
- * @error: Error or %NULL
- *
- * @returns: A newly allocated FcitxInputMethod.
- *
- * New a FcitxInputMethod.
- */
 FcitxInputMethod*
 fcitx_input_method_new(GBusType             bus_type,
                        GDBusProxyFlags      flags,
                        gint                 display_number,
                        GCancellable        *cancellable,
                        GError             **error);
-
-/**
- * fcitx_input_method_get_imlist:
- *
- * @im: A FcitxInputMethod
- * @returns: (element-type FcitxIMItem) (transfer container): A FcitxIMItem List
- *
- * Get Fcitx all im list
- **/
 GPtrArray*   fcitx_input_method_get_imlist(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_set_imlist:
- *
- * @im: A FcitxInputMethod
- * @array: A FcitxIMItem List
- *
- * Set Fcitx all im list
- **/
+GPtrArray*   fcitx_input_method_get_imlist_nofree(FcitxInputMethod* im);
 void         fcitx_input_method_set_imlist(FcitxInputMethod* im, GPtrArray* array);
-
-/**
- * fcitx_input_method_exit:
- *
- * @im: A FcitxInputMethod
- *
- * Send exit command to fcitx
- **/
 void         fcitx_input_method_exit(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_restart:
- *
- * @im: A FcitxInputMethod
- *
- * Send restart command to fcitx
- **/
 void         fcitx_input_method_restart(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_reload_config:
- *
- * @im: A FcitxInputMethod
- *
- * Send reload config command to fcitx
- **/
 void         fcitx_input_method_reload_config(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_configure:
- *
- * @im: A FcitxInputMethod
- *
- * Send configure command to fcitx
- **/
 void         fcitx_input_method_configure(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_configure_addon:
- *
- * @im: A FcitxInputMethod
- * @addon: addon name
- *
- * Send configure addon command to fcitx
- **/
 void         fcitx_input_method_configure_addon(FcitxInputMethod* im, gchar* addon);
-
-/**
- * fcitx_input_method_configure_im:
- *
- * @im: A FcitxInputMethod
- * @imname: im name
- *
- * Send configure im command to fcitx
- **/
 void         fcitx_input_method_configure_im(FcitxInputMethod* im, gchar* imname);
-
-/**
- * fcitx_input_method_get_im_addon:
- *
- * @im: A FcitxInputMethod
- * @imname: imname
- *
- * @returns: (transfer full): get addon name
- *
- * Get addon name by im
- **/
 gchar*       fcitx_input_method_get_im_addon(FcitxInputMethod* im, gchar* imname);
-
-/**
- * fcitx_input_method_get_current_im:
- *
- * @im: A FcitxInputMethod
- *
- * @returns: (transfer full): get im name
- *
- * Get im name
- **/
 gchar*       fcitx_input_method_get_current_im(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_get_current_ui:
- *
- * @im: A FcitxInputMethod
- *
- * @returns: (transfer full): get ui name
- *
- * Get im name
- **/
 gchar*       fcitx_input_method_get_current_ui(FcitxInputMethod* im);
-
-
-/**
- * fcitx_input_method_set_current_im:
- *
- * @im: A FcitxInputMethod
- * @imname: set im name
- *
- * Set im name
- **/
 void         fcitx_input_method_set_current_im(FcitxInputMethod* im, gchar* imname);
-
-
-/**
- * fcitx_input_method_activate:
- *
- * @im: A FcitxInputMethod
- *
- * Activate fcitx
- **/
 void         fcitx_input_method_activate(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_activate:
- *
- * @im: A FcitxInputMethod
- *
- * Inactivate fcitx
- **/
 void         fcitx_input_method_inactivate(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_activate:
- *
- * @im: A FcitxInputMethod
- *
- * toggle fcitx state
- **/
 void         fcitx_input_method_toggle(FcitxInputMethod* im);
-
-/**
- * fcitx_input_method_get_current_state:
- *
- * @im: A FcitxInputMethod
- *
- * @returns: current state, -1 for error
- *
- * Get current state
- **/
 gint         fcitx_input_method_get_current_state(FcitxInputMethod* im);
-
-/**
- * fcitx_im_item_new:
- * @name: name of im
- * @unique_name: unique_name of im
- * @langcode: language code
- * @enable: enabled or not
- *
- * @returns: the new #FcitxIMItem
- */
 FcitxIMItem* fcitx_im_item_new(const gchar* name, const gchar* unique_name, const gchar* langcode, gboolean enable);
-
-/**
- * fcitx_im_item_free:
- *
- * @data: A FcitxIMItem
- *
- * free an im_item
- **/
 void fcitx_im_item_free(FcitxIMItem* data);
 
 G_END_DECLS

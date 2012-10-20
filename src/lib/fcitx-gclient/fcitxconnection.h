@@ -28,7 +28,7 @@
  */
 
 /* define GOBJECT macros */
-#define FCITX_TYPE_CONNECTION         (fcitx_connection_get_type ())
+#define FCITX_TYPE_CONNECTION (fcitx_connection_get_type())
 #define FCITX_CONNECTION(o) \
         (G_TYPE_CHECK_INSTANCE_CAST ((o), FCITX_TYPE_CONNECTION, FcitxConnection))
 #define FCITX_IS_CONNECTION(object) \
@@ -44,11 +44,6 @@ typedef struct _FcitxConnection        FcitxConnection;
 typedef struct _FcitxConnectionClass   FcitxConnectionClass;
 typedef struct _FcitxConnectionPrivate FcitxConnectionPrivate;
 
-/**
- * FcitxConnection:
- *
- * A FcitxConnection allow to create a input context via DBus
- */
 struct _FcitxConnection {
     GObject parent_instance;
     /* instance member */
@@ -64,34 +59,8 @@ struct _FcitxConnectionClass {
 };
 
 GType        fcitx_connection_get_type(void) G_GNUC_CONST;
-
-/**
- * fcitx_connection_new
- *
- * @returns: A newly allocated FcitxConnection
- *
- * New a FcitxConnection
- **/
 FcitxConnection* fcitx_connection_new();
-
-/**
- * fcitx_connection_is_valid:
- *
- * @connection: A FcitxConnection
- * @returns: FcitxConnection is valid or not
- *
- * Check FcitxConnection is valid to communicate with Fcitx
- **/
 gboolean fcitx_connection_is_valid(FcitxConnection* connection);
-
-/**
- * fcitx_connection_get_g_dbus_connection:
- *
- * @connection: A FcitxConnection
- * @returns: (transfer none): GDBusConnection for current connection
- *
- * Return the current GDBusConnection
- **/
 GDBusConnection* fcitx_connection_get_g_dbus_connection(FcitxConnection* connection);
 
 G_END_DECLS

@@ -21,6 +21,12 @@
 #include "module/dbus/dbusstuff.h"
 #include "fcitxkbd.h"
 
+/**
+ * FcitxKbd:
+ *
+ * A #FcitxKbd allow you to control fcitx via DBus.
+ */
+
 static const gchar introspection_xml[] =
 "<node>"
 "    <interface name=\"org.fcitx.Fcitx.Keyboard\">"
@@ -46,10 +52,13 @@ static const gchar introspection_xml[] =
 
 FCITX_EXPORT_API
 GType        fcitx_kbd_get_type(void) G_GNUC_CONST;
+FCITX_EXPORT_API
+GType        fcitx_layout_item_get_type() G_GNUC_CONST;
 
 G_DEFINE_TYPE(FcitxKbd, fcitx_kbd, G_TYPE_DBUS_PROXY);
 
 static GDBusInterfaceInfo * _fcitx_kbd_get_interface_info(void);
+static void fcitx_layout_item_free(gpointer data);
 
 static GDBusInterfaceInfo *
 _fcitx_kbd_get_interface_info(void)
@@ -91,6 +100,18 @@ fcitx_kbd_class_init(FcitxKbdClass *klass)
 
 }
 
+/**
+ * fcitx_kbd_new:
+ * @bus_type: #GBusType
+ * @flags:  #GDBusProxyFlags
+ * @display_number: display_number
+ * @cancellable: A #GCancellable or %NULL
+ * @error: Error or %NULL
+ *
+ * New a #fcitxKbd.
+ *
+ * Returns: A newly allocated #FcitxKbd.
+ */
 FCITX_EXPORT_API
 FcitxKbd*
 fcitx_kbd_new(GBusType             bus_type,
@@ -113,13 +134,20 @@ fcitx_kbd_new(GBusType             bus_type,
                                    "g-interface-name", "org.fcitx.Fcitx.Keyboard",
                                    NULL);
 
-    if (im != NULL)
-        return FCITX_KBD(im);
-    return NULL;
+    return FCITX_KBD(im);
 }
 
+/**
+ * fcitx_kbd_get_layouts_nofree:
+ * @kbd: A #FcitxKbd
+ *
+ * Get Fcitx all im list
+ *
+ * Returns: (transfer full) (element-type FcitxLayoutItem): A #FcitxLayoutItem List
+ * Rename to: fcitx_kbd_get_layouts
+ **/
 FCITX_EXPORT_API
-GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
+GPtrArray* fcitx_kbd_get_layouts_nofree(FcitxKbd* kbd)
 {
     GError* error = NULL;
     GVariant* variant = g_dbus_proxy_call_sync(G_DBUS_PROXY(kbd),
@@ -128,8 +156,7 @@ GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
                                                G_DBUS_CALL_FLAGS_NO_AUTO_START,
                                                -1,
                                                NULL,
-                                               &error
-                                              );
+                                               &error);
 
     GPtrArray* array = NULL;
 
@@ -137,21 +164,17 @@ GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
         g_warning("%s", error->message);
         g_error_free(error);
     } else if (variant) {
-        array = g_ptr_array_new_with_free_func(fcitx_layout_item_free);
+        array = g_ptr_array_new();
         GVariantIter *iter;
         gchar *layout, *kbdvariant, *name, *langcode;
         g_variant_get(variant, "(a(ssss))", &iter);
         while (g_variant_iter_next(iter, "(ssss)", &layout, &kbdvariant, &name, &langcode, NULL)) {
             FcitxLayoutItem* item = g_malloc0(sizeof(FcitxLayoutItem));
-            item->layout = g_strdup(layout);
-            item->variant = g_strdup(kbdvariant);
-            item->name = g_strdup(name);
-            item->langcode = g_strdup(langcode);
+            item->layout = layout;
+            item->variant = kbdvariant;
+            item->name = name;
+            item->langcode = langcode;
             g_ptr_array_add(array, item);
-            g_free(name);
-            g_free(kbdvariant);
-            g_free(layout);
-            g_free(langcode);
         }
         g_variant_iter_free(iter);
     }
@@ -159,30 +182,59 @@ GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
     return array;
 }
 
+/**
+ * fcitx_kbd_get_layouts: (skip)
+ **/
+FCITX_EXPORT_API
+GPtrArray* fcitx_kbd_get_layouts(FcitxKbd* kbd)
+{
+    GPtrArray* array = fcitx_kbd_get_layouts_nofree(kbd);
+    if (array)
+        g_ptr_array_set_free_func(array, fcitx_layout_item_free);
+    return array;
+}
+
+/**
+ * fcitx_kbd_get_layout_for_im:
+ * @kbd: A #FcitxKbd
+ * @imname: input method name
+ * @layout: (out) (allow-none): return'd layout
+ * @variant: (out) (allow-none): return'd variant
+ *
+ * Get a layout binding with input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_get_layout_for_im(FcitxKbd* kbd, const gchar* imname, gchar** layout, gchar** variant)
 {
     GError* error = NULL;
     GVariant* v = g_dbus_proxy_call_sync(G_DBUS_PROXY(kbd),
-                                               "GetLayoutForIM",
-                                               g_variant_new("(s)", imname),
-                                               G_DBUS_CALL_FLAGS_NO_AUTO_START,
-                                               -1,
-                                               NULL,
-                                               &error
-                                              );
-
+                                         "GetLayoutForIM",
+                                         g_variant_new("(s)", imname),
+                                         G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                         -1,
+                                         NULL,
+                                         &error);
 
     if (error) {
         g_warning("%s", error->message);
         g_error_free(error);
+        *layout = NULL;
+        *variant = NULL;
     } else if (v) {
         g_variant_get(v, "(ss)", layout, variant);
         g_variant_unref(v);
     }
-
 }
 
+/**
+ * fcitx_kbd_set_layout_for_im:
+ * @kbd: A #FcitxKbd
+ * @imname: input method name
+ * @layout: layout
+ * @variant: variant
+ *
+ * Set a layout binding with input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar* layout, const gchar* variant)
 {
@@ -197,6 +249,14 @@ void fcitx_kbd_set_layout_for_im(FcitxKbd* kbd, const gchar* imname, const gchar
                      );
 }
 
+/**
+ * fcitx_kbd_set_default_layout:
+ * @kbd: A #FcitxKbd
+ * @layout: layout
+ * @variant: variant
+ *
+ * Set a layout binding with the state when there is no input method
+ **/
 FCITX_EXPORT_API
 void fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gchar* variant)
 {
@@ -211,7 +271,8 @@ void fcitx_kbd_set_default_layout(FcitxKbd* kbd, const gchar* layout, const gcha
                      );
 }
 
-void fcitx_layout_item_free(gpointer data)
+static void
+fcitx_layout_item_free(gpointer data)
 {
     FcitxLayoutItem* item = data;
     g_free(item->langcode);
@@ -220,3 +281,17 @@ void fcitx_layout_item_free(gpointer data)
     g_free(item->layout);
     g_free(data);
 }
+
+static FcitxLayoutItem*
+fcitx_layout_item_copy(FcitxLayoutItem* item)
+{
+    FcitxLayoutItem* new_item = g_malloc0(sizeof(FcitxLayoutItem));
+    new_item->layout = strdup(item->layout);
+    new_item->variant = strdup(item->variant);
+    new_item->name = strdup(item->name);
+    new_item->langcode = strdup(item->langcode);
+    return new_item;
+}
+
+G_DEFINE_BOXED_TYPE(FcitxLayoutItem, fcitx_layout_item,
+                    fcitx_layout_item_copy, fcitx_layout_item_free)
